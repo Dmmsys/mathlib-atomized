@@ -45,7 +45,16 @@ theorem Normal.exists_isSplittingField
   refine
     ⟨∏ x, minpoly F (s x), Polynomial.map_prod (algebraMap F K) _ _ ▸
       Splits.prod fun x _ => h.splits (s x), Subalgebra.toSubmodule.injective ?_⟩
-  rw [Algebra.top_toSubmodule]; rw [eq_top_iff]; rw [← s.span_eq]; rw [Submodule.s
+  rw [Algebra.top_toSubmodule]; rw [eq_top_iff]; rw [← s.span_eq]; rw [Submodule.span_le]; rw [Set.range_subset_iff]
+  refine fun x =>
+    Algebra.subset_adjoin
+      (Multiset.mem_toFinset.mpr <|
+        (mem_roots <|
+mt (Polynomial.map_eq_zero <| algebraMap F K).1
+                Finset.prod_ne_zero_iff.2 fun x _ => ?_).2 ?_)
+  · exact minpoly.ne_zero (h.isIntegral (s x))
+  rw [IsRoot.def]; rw [eval_map_algebraMap]; rw [map_prod]
+  exact Finset.prod_eq_zero (Finset.mem_univ _) (minpoly.aeval _ _)
 
 中文:
 定理 正规.存在_isSplittingField
@@ -56,7 +65,16 @@ theorem Normal.exists_isSplittingField
   refine
     ⟨∏ x, minpoly F (s x), Polynomial.map_prod (algebraMap F K) _ _ ▸
       Splits.prod fun x _ => h.splits (s x), Subalgebra.toSubmodule.injective ?_⟩
-  rw [Algebra.top_toSubmodule]; rw [eq_top_iff]; rw [← s.span_eq]; rw [Submodule.s
+  rw [Algebra.top_toSubmodule]; rw [eq_top_iff]; rw [← s.span_eq]; rw [Submodule.span_le]; rw [Set.range_subset_iff]
+  refine fun x =>
+    Algebra.subset_adjoin
+      (Multiset.mem_toFinset.mpr <|
+        (mem_roots <|
+mt (Polynomial.map_eq_zero <| algebraMap F K).1
+                Finset.prod_ne_zero_iff.2 fun x _ => ?_).2 ?_)
+  · exact minpoly.ne_zero (h.isIntegral (s x))
+  rw [IsRoot.def]; rw [eval_map_algebraMap]; rw [map_prod]
+  exact Finset.prod_eq_zero (Finset.mem_univ _) (minpoly.aeval _ _)
 
 Depends on / 依赖: Algebra, Algebra.subset_adjoin, Algebra.top_toSubmodule, Finset, Finset.prod_ne_zero_iff, Module, Module.Basis.ofVectorSpace, Multiset, Multiset.mem_toFinset.mpr, Polynomial, Polynomial.map_eq_zero, Polynomial.map_prod, Set.range_subset_iff, Splits, Splits.prod, Subalgebra, Subalgebra.toSubmodule.injective, Submodule, Submodule.span_le, algebraMap
 -/
@@ -101,7 +119,23 @@ theorem Normal.of_isSplittingField
     exact Normal.of_algEquiv
       (AlgEquiv.ofBijective (Algebra.ofId F E) (Algebra.bijective_algebraMap_iff.2 this.symm))
   refine normal_iff.mpr fun x => ?_
-  have : F
+  have : FiniteDimensional F E := IsSplittingField.finiteDimensional E p
+  have hx := IsIntegral.of_finite F x
+  let L := (p * minpoly F x).SplittingField
+  have hL := SplittingField.splits (p * minpoly F x)
+  rw [Polynomial.map_mul]; rw [splits_mul _ (map_ne_zero (minpoly.ne_zero hx))] at hL
+  · obtain ⟨hL1, hL2⟩ := hL
+    let j : E ->ₐ[F] L := IsSplittingField.lift E p hL1
+    rw [← j.comp_algebraMap]; rw [← Polynomial.map_map] at hL2
+    refine ⟨hx, Splits.of_splits_map (j : E ->+* L) hL2 fun a ha => ?_⟩
+    rw [Polynomial.map_map]; rw [j.comp_algebraMap] at ha
+    let : Algebra F⟮x⟯ L := ((algHomAdjoinIntegralEquiv F hx).symm ⟨a, ha⟩).toRingHom.toAlgebra
+    let j' : E ->ₐ[F⟮x⟯] L := IsSplittingField.lift E (p.map (algebraMap F F⟮x⟯)) ?_
+    · change a in j.range
+      rw [← IsSplittingField.adjoin_rootSet_eq_range E p j]; rw [IsSplittingField.adjoin_rootSet_eq_range E p (j'.restrictScalars F)]
+      exact ⟨x, (j'.commutes _).trans (algHomAdjoinIntegralEquiv_symm_apply_gen F hx _)⟩
+    · rwa [Polynomial.map_map, ← IsScalarTower.algebraMap_eq]
+  · exact Polynomial.map_ne_zero hp
 
 中文:
 定理 正规.of_isSplittingField
@@ -114,7 +148,23 @@ theorem Normal.of_isSplittingField
     exact Normal.of_algEquiv
       (AlgEquiv.ofBijective (Algebra.ofId F E) (Algebra.bijective_algebraMap_iff.2 this.symm))
   refine normal_iff.mpr fun x => ?_
-  have : F
+  have : FiniteDimensional F E := IsSplittingField.finiteDimensional E p
+  have hx := IsIntegral.of_finite F x
+  let L := (p * minpoly F x).SplittingField
+  have hL := SplittingField.splits (p * minpoly F x)
+  rw [Polynomial.map_mul]; rw [splits_mul _ (map_ne_zero (minpoly.ne_zero hx))] at hL
+  · obtain ⟨hL1, hL2⟩ := hL
+    let j : E ->ₐ[F] L := IsSplittingField.lift E p hL1
+    rw [← j.comp_algebraMap]; rw [← Polynomial.map_map] at hL2
+    refine ⟨hx, Splits.of_splits_map (j : E ->+* L) hL2 fun a ha => ?_⟩
+    rw [Polynomial.map_map]; rw [j.comp_algebraMap] at ha
+    let : Algebra F⟮x⟯ L := ((algHomAdjoinIntegralEquiv F hx).symm ⟨a, ha⟩).toRingHom.toAlgebra
+    let j' : E ->ₐ[F⟮x⟯] L := IsSplittingField.lift E (p.map (algebraMap F F⟮x⟯)) ?_
+    · change a in j.range
+      rw [← IsSplittingField.adjoin_rootSet_eq_range E p j]; rw [IsSplittingField.adjoin_rootSet_eq_range E p (j'.restrictScalars F)]
+      exact ⟨x, (j'.commutes _).trans (algHomAdjoinIntegralEquiv_symm_apply_gen F hx _)⟩
+    · rwa [Polynomial.map_map, ← IsScalarTower.algebraMap_eq]
+  · exact Polynomial.map_ne_zero hp
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, Algebra, Algebra.adjoin_empty, Algebra.bijective_algebraMap_iff, Algebra.ofId, FiniteDimensional, IsIntegral, IsIntegral.of_finite, IsSplittingField, IsSplittingField.finiteDimensional, Normal, Normal.of_algEquiv, Polynomial, Polynomial.map_mul, SplittingField, SplittingField.splits, adjoin_empty, adjoin_rootSet, bijective_algebraMap_iff
 -/
@@ -176,7 +226,19 @@ instance normal_iSup
   obtain ⟨s, hx⟩ := exists_finset_of_mem_supr'' (fun i => (h i).1) x.2
   let E : IntermediateField F K := ⨆ i in s, adjoin F ((minpoly F (i.2 :)).rootSet K)
   have hF : Normal F E := by
-    have : IsSplittingF
+    have : IsSplittingField F E (∏ i in s, minpoly F i.snd) := by
+      refine isSplittingField_iSup ?_ fun i _ => adjoin_rootSet_isSplittingField ?_
+      · exact Finset.prod_ne_zero_iff.mpr fun i _ => minpoly.ne_zero ((h i.1).isIntegral i.2)
+      · simpa [Polynomial.map_map] using! ((h i.1).splits i.2).map (algebraMap (t i.1) K)
+    apply Normal.of_isSplittingField (∏ i in s, minpoly F i.2)
+  have hE : E <= ⨆ i, t i := by
+    refine iSup_le fun i => iSup_le fun _ => le_iSup_of_le i.1 ?_
+    rw [adjoin_le_iff]; rw [← ((h i.1).splits i.2).image_rootSet (t i.1).val]
+    exact fun _ ⟨a, _, h⟩ => h ▸ a.2
+  have := hF.splits ⟨x, hx⟩
+  rw [minpoly_eq]; rw [Subtype.coe_mk]; rw [← minpoly_eq] at this
+  have := this.map (inclusion hE).toRingHom -- necessary for performance reasons
+  rwa [Polynomial.map_map] at this
 
 中文:
 实例 normal_iSup
@@ -186,7 +248,19 @@ instance normal_iSup
   obtain ⟨s, hx⟩ := exists_finset_of_mem_supr'' (fun i => (h i).1) x.2
   let E : IntermediateField F K := ⨆ i in s, adjoin F ((minpoly F (i.2 :)).rootSet K)
   have hF : Normal F E := by
-    have : IsSplittingF
+    have : IsSplittingField F E (∏ i in s, minpoly F i.snd) := by
+      refine isSplittingField_iSup ?_ fun i _ => adjoin_rootSet_isSplittingField ?_
+      · exact Finset.prod_ne_zero_iff.mpr fun i _ => minpoly.ne_zero ((h i.1).isIntegral i.2)
+      · simpa [Polynomial.map_map] using! ((h i.1).splits i.2).map (algebraMap (t i.1) K)
+    apply Normal.of_isSplittingField (∏ i in s, minpoly F i.2)
+  have hE : E <= ⨆ i, t i := by
+    refine iSup_le fun i => iSup_le fun _ => le_iSup_of_le i.1 ?_
+    rw [adjoin_le_iff]; rw [← ((h i.1).splits i.2).image_rootSet (t i.1).val]
+    exact fun _ ⟨a, _, h⟩ => h ▸ a.2
+  have := hF.splits ⟨x, hx⟩
+  rw [minpoly_eq]; rw [Subtype.coe_mk]; rw [← minpoly_eq] at this
+  have := this.map (inclusion hE).toRingHom -- necessary for performance reasons
+  rwa [Polynomial.map_map] at this
 
 Depends on / 依赖: Finset, Finset.prod_ne_zero_iff.mpr, IntermediateField, IsSplittingField, Normal, adjoin, adjoin_rootSet_isSplittingField, exists_finset_of_mem_supr, i.snd, isAlgebraic_iSup, isIntegral, isSplittingField_iSup, minpoly, minpoly.ne_zero, ne_zero, prod_ne_zero_iff, rootSet, splits, toIsAlgebraic
 -/
@@ -224,7 +298,12 @@ theorem splits_of_mem_adjoin
   let E : IntermediateField F L := ⨆ x : S, adjoin F ((minpoly F x.val).rootSet L)
   have normal : Normal F E := normal_iSup (h := fun x =>
     Normal.of_isSplittingField (hFEp := adjoin_rootSet_isSplittingField (splits x x.2).2))
-  have : forall x in S, ((minpoly F x).map (algebraMap F E)).Split
+  have : forall x in S, ((minpoly F x).map (algebraMap F E)).Splits := fun x hx => splits_of_splits
+    (splits x hx).2 fun y hy => (le_iSup _ ⟨x, hx⟩ : _ <= E) (subset_adjoin F _ <| by exact hy)
+  obtain ⟨φ⟩ := nonempty_algHom_adjoin_of_splits fun x hx => ⟨(splits x hx).1, this x hx⟩
+  convert! (normal.splits <| φ ⟨x, hx⟩).map E.val.toRingHom
+  simp [minpoly.algHom_eq _ φ.injective, ← minpoly.algHom_eq _ (adjoin F S).val.injective,
+    Polynomial.map_map]
 
 中文:
 定理 splits_of_mem_adjoin
@@ -233,7 +312,12 @@ theorem splits_of_mem_adjoin
   let E : IntermediateField F L := ⨆ x : S, adjoin F ((minpoly F x.val).rootSet L)
   have normal : Normal F E := normal_iSup (h := fun x =>
     Normal.of_isSplittingField (hFEp := adjoin_rootSet_isSplittingField (splits x x.2).2))
-  have : forall x in S, ((minpoly F x).map (algebraMap F E)).Split
+  have : forall x in S, ((minpoly F x).map (algebraMap F E)).Splits := fun x hx => splits_of_splits
+    (splits x hx).2 fun y hy => (le_iSup _ ⟨x, hx⟩ : _ <= E) (subset_adjoin F _ <| by exact hy)
+  obtain ⟨φ⟩ := nonempty_algHom_adjoin_of_splits fun x hx => ⟨(splits x hx).1, this x hx⟩
+  convert! (normal.splits <| φ ⟨x, hx⟩).map E.val.toRingHom
+  simp [minpoly.algHom_eq _ φ.injective, ← minpoly.algHom_eq _ (adjoin F S).val.injective,
+    Polynomial.map_map]
 
 Depends on / 依赖: IntermediateField, Normal, Normal.of_isSplittingField, Splits, adjoin, adjoin_rootSet_isSplittingField, algebraMap, le_iSup, minpoly, nonempty_algHom_adjoin_of_splits, normal, normal_iSup, of_isSplittingField, rootSet, splits, splits_of_splits, subset_adjoin, x.val
 -/
@@ -282,7 +366,13 @@ instance normal_iInf
     exact Algebra.IsAlgebraic.of_injective f f.injective
   · have hx : forall i, Splits ((minpoly F x).map (algebraMap F (t i))) := by
       intro i
-      rw [← minpoly.algHom_eq (inclusion (iInf_l
+      rw [← minpoly.algHom_eq (inclusion (iInf_le t i)) (inclusion (iInf_le t i)).injective]
+      exact (h i).splits' (inclusion (iInf_le t i) x)
+    simp only [splits_iff_mem (Splits.of_isScalarTower K (hx hι.some))] at hx ⊢
+    rintro y hy - ⟨-, ⟨i, rfl⟩, rfl⟩
+    exact hx i y hy
+
+@[stacks 09HP]
 
 中文:
 实例 normal_iInf
@@ -293,7 +383,13 @@ instance normal_iInf
     exact Algebra.IsAlgebraic.of_injective f f.injective
   · have hx : forall i, Splits ((minpoly F x).map (algebraMap F (t i))) := by
       intro i
-      rw [← minpoly.algHom_eq (inclusion (iInf_l
+      rw [← minpoly.algHom_eq (inclusion (iInf_le t i)) (inclusion (iInf_le t i)).injective]
+      exact (h i).splits' (inclusion (iInf_le t i) x)
+    simp only [splits_iff_mem (Splits.of_isScalarTower K (hx hι.some))] at hx ⊢
+    rintro y hy - ⟨-, ⟨i, rfl⟩, rfl⟩
+    exact hx i y hy
+
+@[stacks 09HP]
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.of_injective, IsAlgebraic, Splits, Splits.of_isScalarTower, algHom_eq, algebraMap, f.injective, iInf_le, inclusion, injective, minpoly, minpoly.algHom_eq, of_injective, of_isScalarTower, splits, splits_iff_mem, toIsAlgebraic
 -/
@@ -387,7 +483,12 @@ definition AlgHom.liftNormal
 Nonempty.some
       @IntermediateField.nonempty_algHom_of_adjoin_splits _ _ _ _ _ _ _
         ((IsScalarTower.toAlgHom F K₂ E).comp ϕ).toRingHom.toAlgebra _
-        (fun x _ => ⟨(h.out x
+        (fun x _ => ⟨(h.out x).1.tower_top,
+          @IsIntegral.minpoly_splits_tower_top F K₁ E E _ _ _ _ _ _ _ _ x
+            (RingHom.toAlgebra _) _ _ (h.out x).1 (h.out x).2⟩)
+        (IntermediateField.adjoin_univ _ _)
+
+@[simp]
 
 中文:
 定义 代数态射.liftNormal
@@ -397,7 +498,12 @@ Nonempty.some
 Nonempty.some
       @IntermediateField.nonempty_algHom_of_adjoin_splits _ _ _ _ _ _ _
         ((IsScalarTower.toAlgHom F K₂ E).comp ϕ).toRingHom.toAlgebra _
-        (fun x _ => ⟨(h.out x
+        (fun x _ => ⟨(h.out x).1.tower_top,
+          @IsIntegral.minpoly_splits_tower_top F K₁ E E _ _ _ _ _ _ _ _ x
+            (RingHom.toAlgebra _) _ _ (h.out x).1 (h.out x).2⟩)
+        (IntermediateField.adjoin_univ _ _)
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.restrictScalars, FastIsEmpty, FastSubsingleton, IntermediateField, IntermediateField.adjoin_univ, IntermediateField.nonempty_algHom_of_adjoin_splits, IsIntegral, IsIntegral.minpoly_splits_tower_top, IsScalarTower, IsScalarTower.toAlgHom, Nonempty, Nonempty.some, RingHom, RingHom.toAlgebra, adjoin_univ, h.out, minpoly_splits_tower_top, nonempty_algHom_of_adjoin_splits, restrictScalars
 -/
@@ -596,7 +702,11 @@ theorem isSolvable_of_isScalarTower
         AlgEquiv.ofAlgHom (ϕ.toAlgHom.restrictScalars F) (ϕ.symm.toAlgHom.restrictScalars F)
           (AlgHom.ext fun x => ϕ.apply_symm_apply x) (AlgHom.ext fun x => ϕ.symm_apply_apply x)
       map_one' := AlgEquiv.ext fun _ => rfl
- 
+      map_mul' := fun _ _ => AlgEquiv.ext fun _ => rfl }
+  refine
+    Group.isSolvable_of_ker_le_range f (AlgEquiv.restrictNormalHom K₁) fun ϕ hϕ =>
+      ⟨{ ϕ with commutes' := fun x => ?_ }, AlgEquiv.ext fun _ => rfl⟩
+  exact Eq.trans (ϕ.restrictNormal_commutes K₁ x).symm (congr_arg _ (AlgEquiv.ext_iff.mp hϕ x))
 
 中文:
 定理 isSolvable_of_isScalarTower
@@ -607,7 +717,11 @@ theorem isSolvable_of_isScalarTower
         AlgEquiv.ofAlgHom (ϕ.toAlgHom.restrictScalars F) (ϕ.symm.toAlgHom.restrictScalars F)
           (AlgHom.ext fun x => ϕ.apply_symm_apply x) (AlgHom.ext fun x => ϕ.symm_apply_apply x)
       map_one' := AlgEquiv.ext fun _ => rfl
- 
+      map_mul' := fun _ _ => AlgEquiv.ext fun _ => rfl }
+  refine
+    Group.isSolvable_of_ker_le_range f (AlgEquiv.restrictNormalHom K₁) fun ϕ hϕ =>
+      ⟨{ ϕ with commutes' := fun x => ?_ }, AlgEquiv.ext fun _ => rfl⟩
+  exact Eq.trans (ϕ.restrictNormal_commutes K₁ x).symm (congr_arg _ (AlgEquiv.ext_iff.mp hϕ x))
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ext, AlgEquiv.ofAlgHom, AlgEquiv.restrictNormalHom, AlgHom, AlgHom.ext, Eq.trans, Group.isSolvable_of_ker_le_range, apply_symm_apply, commutes, inst.inst.false, isSolvable_of_ker_le_range, map_mul, map_one, ofAlgHom, restrictNor, restrictNormalHom, restrictScalars, symm.toAlgHom.restrictScalars, symm_apply_apply
 -/
@@ -642,7 +756,8 @@ theorem exists_algEquiv_of_root
   have hx : IsAlgebraic K x := ⟨minpoly K y, ne_zero hy.isIntegral, h_ev⟩
   set f : K⟮x⟯ ≃ₐ[K] K⟮y⟯ := algEquiv hx (eq_of_root hy h_ev)
   have hxy : (liftNormal f L) ((algebraMap (↥K⟮x⟯) L) (AdjoinSimple.gen K x)) = y := by
-    rw [liftNormal_commutes f L]; rw [algEquiv_apply]; rw [AdjoinSimple.a
+    rw [liftNormal_commutes f L]; rw [algEquiv_apply]; rw [AdjoinSimple.algebraMap_gen K y]
+  exact ⟨(liftNormal f L), hxy⟩
 
 中文:
 定理 存在_algEquiv_of_root
@@ -651,7 +766,8 @@ theorem exists_algEquiv_of_root
   have hx : IsAlgebraic K x := ⟨minpoly K y, ne_zero hy.isIntegral, h_ev⟩
   set f : K⟮x⟯ ≃ₐ[K] K⟮y⟯ := algEquiv hx (eq_of_root hy h_ev)
   have hxy : (liftNormal f L) ((algebraMap (↥K⟮x⟯) L) (AdjoinSimple.gen K x)) = y := by
-    rw [liftNormal_commutes f L]; rw [algEquiv_apply]; rw [AdjoinSimple.a
+    rw [liftNormal_commutes f L]; rw [algEquiv_apply]; rw [AdjoinSimple.algebraMap_gen K y]
+  exact ⟨(liftNormal f L), hxy⟩
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.algebraMap_gen, AdjoinSimple.gen, IsAlgebraic, algEquiv, algEquiv_apply, algebraMap, algebraMap_gen, eq_of_root, h_ev, hy.isIntegral, isIntegral, liftNormal, liftNormal_commutes, minpoly, ne_zero
 -/
@@ -703,7 +819,7 @@ instance Algebra.IsQuadraticExtension.normal
     obtain h | h := le_iff_lt_or_eq.mp (finrank_eq_two F K ▸ minpoly.natDegree_le x)
 · exact Splits.of_natDegree_le_one natDegree_map_le.trans (by rwa [Nat.le_iff_lt_add_one])
     · exact Splits.of_natDegree_eq_two ((natDegree_map _).trans h)
-        ((eval_map_algebraMap _ _).trans (
+        ((eval_map_algebraMap _ _).trans (minpoly.aeval F x))
 
 中文:
 实例 代数.是QuadraticExtension.normal
@@ -713,7 +829,7 @@ instance Algebra.IsQuadraticExtension.normal
     obtain h | h := le_iff_lt_or_eq.mp (finrank_eq_two F K ▸ minpoly.natDegree_le x)
 · exact Splits.of_natDegree_le_one natDegree_map_le.trans (by rwa [Nat.le_iff_lt_add_one])
     · exact Splits.of_natDegree_eq_two ((natDegree_map _).trans h)
-        ((eval_map_algebraMap _ _).trans (
+        ((eval_map_algebraMap _ _).trans (minpoly.aeval F x))
 
 Depends on / 依赖: Nat.le_iff_lt_add_one, Splits, Splits.of_natDegree_eq_two, Splits.of_natDegree_le_one, eval_map_algebraMap, finrank_eq_two, le_iff_lt_add_one, le_iff_lt_or_eq, le_iff_lt_or_eq.mp, minpoly, minpoly.aeval, minpoly.natDegree_le, natDegree_le, natDegree_map, natDegree_map_le, natDegree_map_le.trans, of_natDegree_eq_two, of_natDegree_le_one
 -/

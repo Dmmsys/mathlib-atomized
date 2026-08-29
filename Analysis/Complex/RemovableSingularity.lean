@@ -43,7 +43,9 @@ theorem analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
   replace hc : ContinuousOn f (closedBall c R) := by
     refine fun z hz => ContinuousAt.continuousWithinAt ?_
     rcases eq_or_ne z c with (rfl | hne)
-    exacts [hc, (hRs ⟨hz,
+    exacts [hc, (hRs ⟨hz, hne⟩).continuousAt]
+  exact (hasFPowerSeriesOnBall_of_differentiable_off_countable (countable_singleton c) hc
+    (fun z hz => hRs (sdiff_subset_sdiff_left ball_subset_closedBall hz)) hR0).analyticAt
 
 中文:
 定理 analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
@@ -54,7 +56,9 @@ theorem analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
   replace hc : ContinuousOn f (closedBall c R) := by
     refine fun z hz => ContinuousAt.continuousWithinAt ?_
     rcases eq_or_ne z c with (rfl | hne)
-    exacts [hc, (hRs ⟨hz,
+    exacts [hc, (hRs ⟨hz, hne⟩).continuousAt]
+  exact (hasFPowerSeriesOnBall_of_differentiable_off_countable (countable_singleton c) hc
+    (fun z hz => hRs (sdiff_subset_sdiff_left ball_subset_closedBall hz)) hR0).analyticAt
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.continuousWithinAt, ContinuousOn, analyticAt, ball_subset_closedBall, closedBall, continuousAt, continuousWithinAt, countable_singleton, eq_or_ne, exacts, hR0.le, hasFPowerSeriesOnBall_of_differentiable_off_countable, mem_iff, nhdsWithin_hasBasis, nhds_basis_closedBall, replace, sdiff_subset_sdiff_left
 -/
@@ -81,7 +85,10 @@ theorem differentiableOn_compl_singleton_and_continuousAt_iff
   rcases eq_or_ne x c with (rfl | hne)
   · refine (analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
       ?_ hc).differentiableAt.differentiableWithinAt
-    refine eventuall
+    refine eventually_nhdsWithin_iff.2 ((eventually_mem_nhds_iff.2 hs).mono fun z hz hzx => ?_)
+    exact hd.differentiableAt (inter_mem hz (isOpen_ne.mem_nhds hzx))
+  · simpa only [DifferentiableWithinAt, HasFDerivWithinAt, hne.nhdsWithin_sdiff_singleton] using
+      hd x ⟨hx, hne⟩
 
 中文:
 定理 differentiableOn_compl_singleton_and_continuousAt_iff
@@ -92,7 +99,10 @@ theorem differentiableOn_compl_singleton_and_continuousAt_iff
   rcases eq_or_ne x c with (rfl | hne)
   · refine (analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
       ?_ hc).differentiableAt.differentiableWithinAt
-    refine eventuall
+    refine eventually_nhdsWithin_iff.2 ((eventually_mem_nhds_iff.2 hs).mono fun z hz hzx => ?_)
+    exact hd.differentiableAt (inter_mem hz (isOpen_ne.mem_nhds hzx))
+  · simpa only [DifferentiableWithinAt, HasFDerivWithinAt, hne.nhdsWithin_sdiff_singleton] using
+      hd x ⟨hx, hne⟩
 
 Depends on / 依赖: DifferentiableWithinAt, FunLike, FunLike.module, HasFDerivWithinAt, analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt, continuousAt, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt, eq_or_ne, eventually_mem_nhds_iff, eventually_nhdsWithin_iff, fast_instance, hd.differentiableAt, hd.mono, hne.nhdsWithin_sdif, inter_mem, isOpen_ne, isOpen_ne.mem_nhds, mem_nhds
 -/
@@ -147,7 +157,15 @@ theorem differentiableOn_update_limUnder_of_isLittleO
   set F : Complex -> E := fun z => (z - c) • f z
   suffices DifferentiableOn Complex F (s \ {c}) ∧ ContinuousAt F c by
     rw [differentiableOn_compl_singleton_and_continuousAt_iff hc]; rw [← differentiableOn_dslope hc]; rw [dslope_sub_smul] at this
-    have hc : Tendsto f (𝓝[!=] c) (𝓝 (deriv F c
+    have hc : Tendsto f (𝓝[!=] c) (𝓝 (deriv F c)) :=
+      continuousAt_update_same.mp (this.continuousOn.continuousAt hc)
+    rwa [hc.limUnder_eq]
+  refine ⟨(differentiableOn_id.sub_const _).smul hd, ?_⟩
+  rw [← continuousWithinAt_compl_self]
+  have H := ho.tendsto_inv_smul_nhds_zero
+  have H' : Tendsto (fun z => (z - c) • f c) (𝓝[!=] c) (𝓝 (F c)) :=
+    (continuousWithinAt_id.tendsto.sub tendsto_const_nhds).smul tendsto_const_nhds
+  simpa [← smul_add, ContinuousWithinAt] using H.add H'
 
 中文:
 定理 differentiableOn_update_limUnder_of_isLittleO
@@ -156,7 +174,15 @@ theorem differentiableOn_update_limUnder_of_isLittleO
   set F : Complex -> E := fun z => (z - c) • f z
   suffices DifferentiableOn Complex F (s \ {c}) ∧ ContinuousAt F c by
     rw [differentiableOn_compl_singleton_and_continuousAt_iff hc]; rw [← differentiableOn_dslope hc]; rw [dslope_sub_smul] at this
-    have hc : Tendsto f (𝓝[!=] c) (𝓝 (deriv F c
+    have hc : Tendsto f (𝓝[!=] c) (𝓝 (deriv F c)) :=
+      continuousAt_update_same.mp (this.continuousOn.continuousAt hc)
+    rwa [hc.limUnder_eq]
+  refine ⟨(differentiableOn_id.sub_const _).smul hd, ?_⟩
+  rw [← continuousWithinAt_compl_self]
+  have H := ho.tendsto_inv_smul_nhds_zero
+  have H' : Tendsto (fun z => (z - c) • f c) (𝓝[!=] c) (𝓝 (F c)) :=
+    (continuousWithinAt_id.tendsto.sub tendsto_const_nhds).smul tendsto_const_nhds
+  simpa [← smul_add, ContinuousWithinAt] using H.add H'
 
 Depends on / 依赖: ContinuousAt, DifferentiableOn, Tendsto, continuousAt, continuousAt_update_same, continuousAt_update_same.mp, continuousOn, continuousWithinAt_compl_self, differentiableOn_compl_singleton_and_continuousAt_iff, differentiableOn_dslope, differentiableOn_id, differentiableOn_id.sub_const, dslope_sub_smul, hc.limUnder_eq, ho.tendsto_inv_smul, limUnder_eq, sub_const, tendsto_inv_smul, this.continuousOn.continuousAt
 -/
@@ -241,7 +267,7 @@ theorem tendsto_limUnder_of_differentiable_on_punctured_nhds_of_isLittleO
   have : DifferentiableOn Complex f ({z | z != c -> DifferentiableAt Complex f z} \ {c}) := fun z hz =>
     (hz.1 hz.2).differentiableWithinAt
   have H := differentiableOn_update_limUnder_of_isLittleO hd this ho
-  exact continuousAt_update_same.1 (H.differen
+  exact continuousAt_update_same.1 (H.differentiableAt hd).continuousAt
 
 中文:
 定理 tendsto_limUnder_of_differentiable_on_punctured_nhds_of_isLittleO
@@ -251,7 +277,7 @@ theorem tendsto_limUnder_of_differentiable_on_punctured_nhds_of_isLittleO
   have : DifferentiableOn Complex f ({z | z != c -> DifferentiableAt Complex f z} \ {c}) := fun z hz =>
     (hz.1 hz.2).differentiableWithinAt
   have H := differentiableOn_update_limUnder_of_isLittleO hd this ho
-  exact continuousAt_update_same.1 (H.differen
+  exact continuousAt_update_same.1 (H.differentiableAt hd).continuousAt
 
 Depends on / 依赖: DifferentiableAt, DifferentiableOn, H.differentiableAt, continuousAt, continuousAt_update_same, differentiableAt, differentiableOn_update_limUnder_of_isLittleO, differentiableWithinAt, eventually_nhdsWithin_iff
 -/
@@ -296,7 +322,25 @@ theorem two_pi_I_inv_smul_circleIntegral_sub_sq_inv_smul_of_differentiable
   -- We apply the removable singularity theorem and the Cauchy formula to `dslope f w₀`
   have hf' : DifferentiableOn Complex (dslope f w₀) U :=
     (differentiableOn_dslope (hU.mem_nhds ((ball_subset_closedBall.trans hc) hw₀))).mpr hf
-  have h0 := (hf'.diffContOnCl_ball hc).two_pi_i_inv_smul_cir
+  have h0 := (hf'.diffContOnCl_ball hc).two_pi_i_inv_smul_circleIntegral_sub_inv_smul hw₀
+  rw [← dslope_same]; rw [← h0]
+  congr 1
+  trans ∮ z in C(c, R), ((z - w₀) ^ 2)⁻¹ • (f z - f w₀)
+  · have h1 : ContinuousOn (fun z : Complex => ((z - w₀) ^ 2)⁻¹) (sphere c R) := by
+      refine ((continuous_id'.sub continuous_const).pow 2).continuousOn.inv₀ fun w hw h => ?_
+      exact sphere_disjoint_ball.ne_of_mem hw hw₀ (sub_eq_zero.mp (sq_eq_zero_iff.mp h))
+    have h2 : CircleIntegrable (fun z : Complex => ((z - w₀) ^ 2)⁻¹ • f z) c R := by
+      refine ContinuousOn.circleIntegrable (pos_of_mem_ball hw₀).le ?_
+      exact h1.smul (hf.continuousOn.mono (sphere_subset_closedBall.trans hc))
+    have h3 : CircleIntegrable (fun z : Complex => ((z - w₀) ^ 2)⁻¹ • f w₀) c R :=
+      ContinuousOn.circleIntegrable (pos_of_mem_ball hw₀).le (h1.smul continuousOn_const)
+    have h4 : (∮ z : Complex in C(c, R), ((z - w₀) ^ 2)⁻¹) = 0 := by
+      simpa using! circleIntegral.integral_sub_zpow_of_ne (by decide : (-2 : Int) != -1) c w₀ R
+    simp only [smul_sub, circleIntegral.integral_sub h2 h3, h4, circleIntegral.integral_smul_const,
+      zero_smul, sub_zero]
+  · refine circleIntegral.integral_congr (pos_of_mem_ball hw₀).le fun z hz => ?_
+    simp only [dslope_of_ne, Metric.sphere_disjoint_ball.ne_of_mem hz hw₀, slope, ← smul_assoc, sq,
+      mul_inv, Ne, not_false_iff, vsub_eq_sub, smul_eq_mul]
 
 中文:
 定理 two_pi_I_inv_smul_circle整数egral_sub_sq_inv_smul_of_differentiable
@@ -305,7 +349,25 @@ theorem two_pi_I_inv_smul_circleIntegral_sub_sq_inv_smul_of_differentiable
   -- We apply the removable singularity theorem and the Cauchy formula to `dslope f w₀`
   have hf' : DifferentiableOn Complex (dslope f w₀) U :=
     (differentiableOn_dslope (hU.mem_nhds ((ball_subset_closedBall.trans hc) hw₀))).mpr hf
-  have h0 := (hf'.diffContOnCl_ball hc).two_pi_i_inv_smul_cir
+  have h0 := (hf'.diffContOnCl_ball hc).two_pi_i_inv_smul_circleIntegral_sub_inv_smul hw₀
+  rw [← dslope_same]; rw [← h0]
+  congr 1
+  trans ∮ z in C(c, R), ((z - w₀) ^ 2)⁻¹ • (f z - f w₀)
+  · have h1 : ContinuousOn (fun z : Complex => ((z - w₀) ^ 2)⁻¹) (sphere c R) := by
+      refine ((continuous_id'.sub continuous_const).pow 2).continuousOn.inv₀ fun w hw h => ?_
+      exact sphere_disjoint_ball.ne_of_mem hw hw₀ (sub_eq_zero.mp (sq_eq_zero_iff.mp h))
+    have h2 : CircleIntegrable (fun z : Complex => ((z - w₀) ^ 2)⁻¹ • f z) c R := by
+      refine ContinuousOn.circleIntegrable (pos_of_mem_ball hw₀).le ?_
+      exact h1.smul (hf.continuousOn.mono (sphere_subset_closedBall.trans hc))
+    have h3 : CircleIntegrable (fun z : Complex => ((z - w₀) ^ 2)⁻¹ • f w₀) c R :=
+      ContinuousOn.circleIntegrable (pos_of_mem_ball hw₀).le (h1.smul continuousOn_const)
+    have h4 : (∮ z : Complex in C(c, R), ((z - w₀) ^ 2)⁻¹) = 0 := by
+      simpa using! circleIntegral.integral_sub_zpow_of_ne (by decide : (-2 : Int) != -1) c w₀ R
+    simp only [smul_sub, circleIntegral.integral_sub h2 h3, h4, circleIntegral.integral_smul_const,
+      zero_smul, sub_zero]
+  · refine circleIntegral.integral_congr (pos_of_mem_ball hw₀).le fun z hz => ?_
+    simp only [dslope_of_ne, Metric.sphere_disjoint_ball.ne_of_mem hz hw₀, slope, ← smul_assoc, sq,
+      mul_inv, Ne, not_false_iff, vsub_eq_sub, smul_eq_mul]
 -/
 theorem two_pi_I_inv_smul_circleIntegral_sub_sq_inv_smul_of_differentiable {U : Set Complex}
     (hU : IsOpen U) {c w₀ : Complex} {R : Real} {f : Complex -> E} (hc : closedBall c R subseteq U)

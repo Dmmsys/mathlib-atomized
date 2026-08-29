@@ -88,7 +88,11 @@ theorem map_inv_natCast_smul
     intro x
     rw [← inv_smul_smul₀ hS (f x)]; rw [← map_natCast_smul f R S]
     simp [hR, map_zero f]
-  · suffices forall y, f y = 0 b
+  · suffices forall y, f y = 0 by simp [this]
+    clear x
+    intro x
+    rw [← smul_inv_smul₀ hR x]; rw [map_natCast_smul f R S]; rw [hS]; rw [zero_smul]
+  · rw [← inv_smul_smul₀ hS (f _), ← map_natCast_smul f R S, smul_inv_smul₀ hR]
 
 中文:
 定理 map_inv_natCast_smul
@@ -101,7 +105,11 @@ theorem map_inv_natCast_smul
     intro x
     rw [← inv_smul_smul₀ hS (f x)]; rw [← map_natCast_smul f R S]
     simp [hR, map_zero f]
-  · suffices forall y, f y = 0 b
+  · suffices forall y, f y = 0 by simp [this]
+    clear x
+    intro x
+    rw [← smul_inv_smul₀ hR x]; rw [map_natCast_smul f R S]; rw [hS]; rw [zero_smul]
+  · rw [← inv_smul_smul₀ hS (f _), ← map_natCast_smul f R S, smul_inv_smul₀ hR]
 
 Depends on / 依赖: map_natCast_smul, map_zero, smul_zero, zero_smul
 -/

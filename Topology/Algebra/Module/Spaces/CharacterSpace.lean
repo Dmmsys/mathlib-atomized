@@ -385,7 +385,13 @@ instance instAlgHomClass
     have h₁ : φ 1 * (1 - φ 1) = 0 := by rw [mul_sub, sub_eq_zero, mul_one, ← map_mul φ, one_mul]
     rcases mul_eq_zero.mp h₁ with (h₂ | h₂)
     · have : forall a, φ (a * 1) = 0 := fun a => by simp only [map_mul φ, h₂, mul_zero]
-
+      exact False.elim (φ.prop.1 <| ContinuousLinearMap.ext <| by simpa only [mul_one] using! this)
+    · exact (sub_eq_zero.mp h₂).symm
+  { CharacterSpace.instNonUnitalAlgHomClass with
+    map_one := map_one'
+    commutes := fun φ r => by
+      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_self]; rw [RingHom.id_apply]
+      rw [map_smul]; rw [smul_eq_mul]; rw [map_one' φ]; rw [mul_one] }
 
 中文:
 实例 instAlgHomClass
@@ -394,7 +400,13 @@ instance instAlgHomClass
     have h₁ : φ 1 * (1 - φ 1) = 0 := by rw [mul_sub, sub_eq_zero, mul_one, ← map_mul φ, one_mul]
     rcases mul_eq_zero.mp h₁ with (h₂ | h₂)
     · have : forall a, φ (a * 1) = 0 := fun a => by simp only [map_mul φ, h₂, mul_zero]
-
+      exact False.elim (φ.prop.1 <| ContinuousLinearMap.ext <| by simpa only [mul_one] using! this)
+    · exact (sub_eq_zero.mp h₂).symm
+  { CharacterSpace.instNonUnitalAlgHomClass with
+    map_one := map_one'
+    commutes := fun φ r => by
+      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_self]; rw [RingHom.id_apply]
+      rw [map_smul]; rw [smul_eq_mul]; rw [map_one' φ]; rw [mul_one] }
 
 Depends on / 依赖: CharacterSpace, CharacterSpace.instNonUnitalAlgHomClass, ContinuousLinearMap, ContinuousLinearMap.ext, False.elim, characterSpace, commutes, instNonUnitalAlgHomClass, map_mul, map_one, mul_eq_zero, mul_eq_zero.mp, mul_one, mul_sub, mul_zero, one_mul, sub_eq_zero, sub_eq_zero.mp
 -/
@@ -615,7 +627,9 @@ definition gelfandTransform
       continuous_toFun := (eval_continuous a).comp continuous_induced_dom }
   map_one' := by ext a; simp only [coe_mk, coe_one, Pi.one_apply, map_one a]
   map_mul' a b := by ext; simp only [map_mul, coe_mk, coe_mul, Pi.mul_apply]
-  map_zero' := by ext; simp only [map_zero, co
+  map_zero' := by ext; simp only [map_zero, coe_mk, coe_zero, Pi.zero_apply]
+  map_add' a b := by ext; simp only [map_add, coe_mk, coe_add, Pi.add_apply]
+  commutes' k := by ext; simp [AlgHomClass.commutes]
 
 中文:
 定义 gelfandTransform
@@ -624,7 +638,9 @@ definition gelfandTransform
       continuous_toFun := (eval_continuous a).comp continuous_induced_dom }
   map_one' := by ext a; simp only [coe_mk, coe_one, Pi.one_apply, map_one a]
   map_mul' a b := by ext; simp only [map_mul, coe_mk, coe_mul, Pi.mul_apply]
-  map_zero' := by ext; simp only [map_zero, co
+  map_zero' := by ext; simp only [map_zero, coe_mk, coe_zero, Pi.zero_apply]
+  map_add' a b := by ext; simp only [map_add, coe_mk, coe_add, Pi.add_apply]
+  commutes' k := by ext; simp [AlgHomClass.commutes]
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, Pi.add_apply, Pi.mul_apply, Pi.one_apply, Pi.zero_apply, add_apply, coe_add, coe_mk, coe_mul, coe_one, coe_zero, commutes, continuous_induced_dom, continuous_toFun, eval_continuous, map_add, map_mul, map_one, map_zero
 -/

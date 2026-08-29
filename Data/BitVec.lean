@@ -43,7 +43,9 @@ theorem ofFin_intCast
     apply BitVec.eq_of_toInt_eq
     rw [toInt_ofFin]; rw [Fin.val_intCast]; rw [Int.natCast_pow]; rw [Nat.cast_ofNat]; rw [Int.ofNat_toNat]; rw [toInt_intCast]
     rw [Int.max_eq_left]
-    · have h : (2 ^ (w + 1) : Int) = (2 ^ (w + 
+    · have h : (2 ^ (w + 1) : Int) = (2 ^ (w + 1) : Nat) := by simp
+      rw [h]; rw [Int.emod_bmod]
+    · omega
 
 中文:
 定理 ofFin_intCast
@@ -57,7 +59,9 @@ theorem ofFin_intCast
     apply BitVec.eq_of_toInt_eq
     rw [toInt_ofFin]; rw [Fin.val_intCast]; rw [Int.natCast_pow]; rw [Nat.cast_ofNat]; rw [Int.ofNat_toNat]; rw [toInt_intCast]
     rw [Int.max_eq_left]
-    · have h : (2 ^ (w + 1) : Int) = (2 ^ (w + 
+    · have h : (2 ^ (w + 1) : Int) = (2 ^ (w + 1) : Nat) := by simp
+      rw [h]; rw [Int.emod_bmod]
+    · omega
 
 Depends on / 依赖: BitVec, BitVec.eq_of_toInt_eq, Fin.val_intCast, Int.emod_bmod, Int.max_eq_left, Int.natCast_pow, Int.ofNat_toNat, Nat.cast_ofNat, cast_ofNat, emod_bmod, eq_nil, eq_of_toInt_eq, max_eq_left, natCast_pow, ofNat_toNat, toInt_intCast, toInt_ofFin, val_intCast
 -/

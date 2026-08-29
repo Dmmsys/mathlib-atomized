@@ -196,7 +196,9 @@ definition coneOfConeUncurry
               { app := fun k => c.π.app (j, k)
                 naturality := fun k k' f => by
                   simpa using @NatTrans.naturality _ _ _ _ _ _ c.π (j, k) (j, k') (𝟙 j, f) } }
-      naturality :
+      naturality := fun j j' f =>
+        (Q j').hom_ext
+          (fun k => by simpa using @NatTrans.naturality _ _ _ _ _ _ c.π (j, k) (j', k) (f, 𝟙 k)) }
 
 中文:
 定义 coneOfConeUncurry
@@ -210,7 +212,9 @@ definition coneOfConeUncurry
               { app := fun k => c.π.app (j, k)
                 naturality := fun k k' f => by
                   simpa using @NatTrans.naturality _ _ _ _ _ _ c.π (j, k) (j, k') (𝟙 j, f) } }
-      naturality :
+      naturality := fun j j' f =>
+        (Q j').hom_ext
+          (fun k => by simpa using @NatTrans.naturality _ _ _ _ _ _ c.π (j, k) (j', k) (f, 𝟙 k)) }
 
 Depends on / 依赖: Localization, Localization.inverts, c.pt, inverts, z.hs
 -/
@@ -292,7 +296,22 @@ definition coconeOfCoconeUncurry
                 naturality := fun k k' f => by
                   dsimp; simp only [Category.comp_id]
                   conv_lhs =>
-                    arg 1; eq
+                    arg 1; equals (F.map (𝟙 _)).app _ ≫ (F.obj j).map f =>
+                      simp
+                  conv_lhs => arg 1; rw [← uncurry_obj_map F (𝟙 j ×ₘ f)]
+                  rw [c.w] } }
+      naturality := fun j j' f =>
+        (Q j).hom_ext
+          (by
+            dsimp
+            intro k
+            simp only [Limits.CoconeMorphism.w_assoc, Limits.Cocone.precompose_obj_ι,
+              Limits.IsColimit.fac, NatTrans.comp_app, Category.comp_id,
+              Category.assoc]
+            have := @NatTrans.naturality _ _ _ _ _ _ c.ι (j, k) (j', k) (f, 𝟙 k)
+            dsimp at this
+            simp only [Category.comp_id, CategoryTheory.Functor.map_id] at this
+            exact this) }
 
 中文:
 定义 coconeOfCoconeUncurry
@@ -307,7 +326,22 @@ definition coconeOfCoconeUncurry
                 naturality := fun k k' f => by
                   dsimp; simp only [Category.comp_id]
                   conv_lhs =>
-                    arg 1; eq
+                    arg 1; equals (F.map (𝟙 _)).app _ ≫ (F.obj j).map f =>
+                      simp
+                  conv_lhs => arg 1; rw [← uncurry_obj_map F (𝟙 j ×ₘ f)]
+                  rw [c.w] } }
+      naturality := fun j j' f =>
+        (Q j).hom_ext
+          (by
+            dsimp
+            intro k
+            simp only [Limits.CoconeMorphism.w_assoc, Limits.Cocone.precompose_obj_ι,
+              Limits.IsColimit.fac, NatTrans.comp_app, Category.comp_id,
+              Category.assoc]
+            have := @NatTrans.naturality _ _ _ _ _ _ c.ι (j, k) (j', k) (f, 𝟙 k)
+            dsimp at this
+            simp only [Category.comp_id, CategoryTheory.Functor.map_id] at this
+            exact this) }
 
 Depends on / 依赖: c.pt
 -/
@@ -396,7 +430,31 @@ definition coneOfConeUncurryIsLimit
               dsimp; simp only [Category.id_comp, Category.assoc]
               rcases p with ⟨j, k⟩
               rcases p' with ⟨j', k'⟩
-              r
+              rcases f with ⟨fj, fk⟩
+              dsimp
+              slice_rhs 3 4 => rw [← NatTrans.naturality]
+              slice_rhs 2 3 => rw [← (D.obj j).π.naturality]
+              simp only [Functor.const_obj_map, Category.id_comp, Category.assoc]
+              have w := (D.map fj).w k'
+              dsimp at w
+              rw [← w]
+              have n := s.π.naturality fj
+              dsimp at n
+              simp only [Category.id_comp] at n
+              rw [n]
+              simp } }
+  fac s j := by
+    apply (Q j).hom_ext
+    intro k
+    simp
+  uniq s m w := by
+    refine P.uniq
+      { pt := s.pt
+        π := _ } m ?_
+    rintro ⟨j, k⟩
+    dsimp
+    rw [← w j]
+    simp
 
 中文:
 定义 coneOfConeUncurryIsLimit
@@ -409,7 +467,31 @@ definition coneOfConeUncurryIsLimit
               dsimp; simp only [Category.id_comp, Category.assoc]
               rcases p with ⟨j, k⟩
               rcases p' with ⟨j', k'⟩
-              r
+              rcases f with ⟨fj, fk⟩
+              dsimp
+              slice_rhs 3 4 => rw [← NatTrans.naturality]
+              slice_rhs 2 3 => rw [← (D.obj j).π.naturality]
+              simp only [Functor.const_obj_map, Category.id_comp, Category.assoc]
+              have w := (D.map fj).w k'
+              dsimp at w
+              rw [← w]
+              have n := s.π.naturality fj
+              dsimp at n
+              simp only [Category.id_comp] at n
+              rw [n]
+              simp } }
+  fac s j := by
+    apply (Q j).hom_ext
+    intro k
+    simp
+  uniq s m w := by
+    refine P.uniq
+      { pt := s.pt
+        π := _ } m ?_
+    rintro ⟨j, k⟩
+    dsimp
+    rw [← w j]
+    simp
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, D.map, D.obj, Functor, Functor.const_obj_map, NatTrans, NatTrans.naturality, P.lift, const_obj_map, id_comp, naturality, s.pt, slice_rhs
 -/
@@ -464,7 +546,28 @@ definition IsLimit.ofConeOfConeUncurry
   letI S (s : Cone (uncurry.obj F)) : Cone D.conePoints :=
     { pt := s.pt
       π :=
-        { app j
+        { app j := (Q j).lift <|
+(Cone.postcompose (E j).hom).obj s.whisker (Prod.sectR j K)
+naturality {j' j} f := (Q j).hom_ext
+            fun k => by simpa [E] using s.π.naturality ((Prod.sectL J k).map f) } }
+  { lift s := P.lift (S s)
+    fac s p := by
+      have h1 := (Q p.1).fac ((Cone.postcompose (E p.1).hom).obj <|
+        s.whisker (Prod.sectR p.1 K)) p.2
+      simp only [Functor.comp_obj, Prod.sectR_obj, uncurry_obj_obj,
+        Cone.postcompose_obj_pt, Cone.whisker_pt, Cone.postcompose_obj_π,
+        Cone.whisker_π, NatTrans.comp_app, Functor.const_obj_obj, whiskerLeft_app,
+        NatIso.ofComponents_hom_app, Iso.refl_hom, Category.comp_id, E] at h1
+      have h2 := (P.fac (S s) p.1)
+      dsimp only [Functor.comp_obj, Prod.sectR_obj, uncurry_obj_obj, NatTrans.id_app,
+        Functor.const_obj_obj, DiagramOfCones.conePoints_obj, DiagramOfCones.conePoints_map,
+        Functor.const_obj_map, id_eq, Cone.postcompose_obj_pt, Cone.whisker_pt,
+        Cone.postcompose_obj_π, Cone.whisker_π, NatTrans.comp_app, whiskerLeft_app,
+        NatIso.ofComponents_hom_app, Iso.refl_hom, Prod.sectL_obj, Prod.sectL_map, eq_mp_eq_cast,
+        eq_mpr_eq_cast, coneOfConeUncurry_pt, coneOfConeUncurry_π_app, S, E] at h2 ⊢
+      simp [← h1, ← h2]
+uniq s f hf := P.uniq (s := S s) _
+fun j => (Q j).hom_ext fun k => by simpa [S, E] using hf (j, k) }
 
 中文:
 定义 是极限.ofConeOfConeUncurry
@@ -475,7 +578,28 @@ definition IsLimit.ofConeOfConeUncurry
   letI S (s : Cone (uncurry.obj F)) : Cone D.conePoints :=
     { pt := s.pt
       π :=
-        { app j
+        { app j := (Q j).lift <|
+(Cone.postcompose (E j).hom).obj s.whisker (Prod.sectR j K)
+naturality {j' j} f := (Q j).hom_ext
+            fun k => by simpa [E] using s.π.naturality ((Prod.sectL J k).map f) } }
+  { lift s := P.lift (S s)
+    fac s p := by
+      have h1 := (Q p.1).fac ((Cone.postcompose (E p.1).hom).obj <|
+        s.whisker (Prod.sectR p.1 K)) p.2
+      simp only [Functor.comp_obj, Prod.sectR_obj, uncurry_obj_obj,
+        Cone.postcompose_obj_pt, Cone.whisker_pt, Cone.postcompose_obj_π,
+        Cone.whisker_π, NatTrans.comp_app, Functor.const_obj_obj, whiskerLeft_app,
+        NatIso.ofComponents_hom_app, Iso.refl_hom, Category.comp_id, E] at h1
+      have h2 := (P.fac (S s) p.1)
+      dsimp only [Functor.comp_obj, Prod.sectR_obj, uncurry_obj_obj, NatTrans.id_app,
+        Functor.const_obj_obj, DiagramOfCones.conePoints_obj, DiagramOfCones.conePoints_map,
+        Functor.const_obj_map, id_eq, Cone.postcompose_obj_pt, Cone.whisker_pt,
+        Cone.postcompose_obj_π, Cone.whisker_π, NatTrans.comp_app, whiskerLeft_app,
+        NatIso.ofComponents_hom_app, Iso.refl_hom, Prod.sectL_obj, Prod.sectL_map, eq_mp_eq_cast,
+        eq_mpr_eq_cast, coneOfConeUncurry_pt, coneOfConeUncurry_π_app, S, E] at h2 ⊢
+      simp [← h1, ← h2]
+uniq s f hf := P.uniq (s := S s) _
+fun j => (Q j).hom_ext fun k => by simpa [S, E] using hf (j, k) }
 -/
 def IsLimit.ofConeOfConeUncurry {D : DiagramOfCones F} (Q : forall j, IsLimit (D.obj j))
     {c : Cone (uncurry.obj F)} (P : IsLimit (coneOfConeUncurry Q c)) : IsLimit c :=
@@ -524,7 +648,30 @@ definition coconeOfCoconeUncurryIsColimit
               dsimp; simp only [Category.assoc]
               rcases p with ⟨j, k⟩
               rcases p' with ⟨j', k'⟩
-              rcases f with ⟨fj, 
+              rcases f with ⟨fj, fk⟩
+              dsimp
+              slice_lhs 2 3 => rw [(D.obj j').ι.naturality]
+              simp only [Functor.const_obj_map, Category.assoc]
+              have w := (D.map fj).w k
+              dsimp at w
+              slice_lhs 1 2 => rw [← w]
+              have n := s.ι.naturality fj
+              dsimp at n
+              simp only [Category.comp_id] at n
+              rw [← n]
+              simp } }
+  fac s j := by
+    apply (Q j).hom_ext
+    intro k
+    simp
+  uniq s m w := by
+    refine P.uniq
+      { pt := s.pt
+        ι := _ } m ?_
+    rintro ⟨j, k⟩
+    dsimp
+    rw [← w j]
+    simp
 
 中文:
 定义 coconeOfCoconeUncurryIsColimit
@@ -537,7 +684,30 @@ definition coconeOfCoconeUncurryIsColimit
               dsimp; simp only [Category.assoc]
               rcases p with ⟨j, k⟩
               rcases p' with ⟨j', k'⟩
-              rcases f with ⟨fj, 
+              rcases f with ⟨fj, fk⟩
+              dsimp
+              slice_lhs 2 3 => rw [(D.obj j').ι.naturality]
+              simp only [Functor.const_obj_map, Category.assoc]
+              have w := (D.map fj).w k
+              dsimp at w
+              slice_lhs 1 2 => rw [← w]
+              have n := s.ι.naturality fj
+              dsimp at n
+              simp only [Category.comp_id] at n
+              rw [← n]
+              simp } }
+  fac s j := by
+    apply (Q j).hom_ext
+    intro k
+    simp
+  uniq s m w := by
+    refine P.uniq
+      { pt := s.pt
+        ι := _ } m ?_
+    rintro ⟨j, k⟩
+    dsimp
+    rw [← w j]
+    simp
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, D.map, D.obj, Functor, Functor.const_obj_map, P.desc, comp_id, const_obj_map, hom_ext, naturality, s.pt, slice_lhs
 -/
@@ -591,7 +761,28 @@ definition IsColimit.ofCoconeUncurry
   letI S (s : Cocone (uncurry.obj F)) : Cocone D.coconePoints :=
     { pt := s.pt
       ι :=
-       
+        { app j := (Q j).desc <|
+(Cocone.precompose (E j).inv).obj s.whisker (Prod.sectR j K)
+naturality {j j'} f := (Q j).hom_ext
+            fun k => by simpa [E] using s.ι.naturality ((Prod.sectL J k).map f) } }
+  { desc s := P.desc (S s)
+    fac s p := by
+      have h1 := (Q p.1).fac ((Cocone.precompose (E p.1).inv).obj <|
+        s.whisker (Prod.sectR p.1 K)) p.2
+      simp only [Functor.comp_obj, Prod.sectR_obj, uncurry_obj_obj,
+        Cocone.precompose_obj_pt, Cocone.whisker_pt, Functor.const_obj_obj,
+        Cocone.precompose_obj_ι, Cocone.whisker_ι, NatTrans.comp_app, NatIso.ofComponents_inv_app,
+        Iso.refl_inv, whiskerLeft_app, Category.id_comp, E] at h1
+      have h2 := (P.fac (S s) p.1)
+      dsimp only [DiagramOfCocones.coconePoints_obj, Functor.comp_obj, Prod.sectR_obj,
+        uncurry_obj_obj, NatTrans.id_app, Functor.const_obj_obj, DiagramOfCocones.coconePoints_map,
+        Functor.const_obj_map, id_eq, Cocone.precompose_obj_pt, Cocone.whisker_pt,
+        Cocone.precompose_obj_ι, Cocone.whisker_ι, NatTrans.comp_app, NatIso.ofComponents_inv_app,
+        Iso.refl_inv, whiskerLeft_app, Prod.sectL_obj, Prod.sectL_map, eq_mp_eq_cast,
+        eq_mpr_eq_cast, coconeOfCoconeUncurry_pt, coconeOfCoconeUncurry_ι_app, S, E] at h2 ⊢
+      simp [← h1, ← h2]
+uniq s f hf := P.uniq (s := S s) _
+fun j => (Q j).hom_ext fun k => by simpa [S, E] using hf (j, k) }
 
 中文:
 定义 是余极限.ofCoconeUncurry
@@ -602,7 +793,28 @@ definition IsColimit.ofCoconeUncurry
   letI S (s : Cocone (uncurry.obj F)) : Cocone D.coconePoints :=
     { pt := s.pt
       ι :=
-       
+        { app j := (Q j).desc <|
+(Cocone.precompose (E j).inv).obj s.whisker (Prod.sectR j K)
+naturality {j j'} f := (Q j).hom_ext
+            fun k => by simpa [E] using s.ι.naturality ((Prod.sectL J k).map f) } }
+  { desc s := P.desc (S s)
+    fac s p := by
+      have h1 := (Q p.1).fac ((Cocone.precompose (E p.1).inv).obj <|
+        s.whisker (Prod.sectR p.1 K)) p.2
+      simp only [Functor.comp_obj, Prod.sectR_obj, uncurry_obj_obj,
+        Cocone.precompose_obj_pt, Cocone.whisker_pt, Functor.const_obj_obj,
+        Cocone.precompose_obj_ι, Cocone.whisker_ι, NatTrans.comp_app, NatIso.ofComponents_inv_app,
+        Iso.refl_inv, whiskerLeft_app, Category.id_comp, E] at h1
+      have h2 := (P.fac (S s) p.1)
+      dsimp only [DiagramOfCocones.coconePoints_obj, Functor.comp_obj, Prod.sectR_obj,
+        uncurry_obj_obj, NatTrans.id_app, Functor.const_obj_obj, DiagramOfCocones.coconePoints_map,
+        Functor.const_obj_map, id_eq, Cocone.precompose_obj_pt, Cocone.whisker_pt,
+        Cocone.precompose_obj_ι, Cocone.whisker_ι, NatTrans.comp_app, NatIso.ofComponents_inv_app,
+        Iso.refl_inv, whiskerLeft_app, Prod.sectL_obj, Prod.sectL_map, eq_mp_eq_cast,
+        eq_mpr_eq_cast, coconeOfCoconeUncurry_pt, coconeOfCoconeUncurry_ι_app, S, E] at h2 ⊢
+      simp [← h1, ← h2]
+uniq s f hf := P.uniq (s := S s) _
+fun j => (Q j).hom_ext fun k => by simpa [S, E] using hf (j, k) }
 -/
 def IsColimit.ofCoconeUncurry {D : DiagramOfCocones F}
     (Q : forall j, IsColimit (D.obj j)) {c : Cocone (uncurry.obj F)}
@@ -726,7 +938,10 @@ definition coneOfHasLimitCurryCompLim
       naturality {x y} := fun ⟨f₁, f₂⟩ => by
         have := (Q.obj x.1).w f₂
         dsimp [Q] at this ⊢
-        rw [← 
+        rw [← limit.w (F := curry.obj G ⋙ lim) (f := f₁)]
+        dsimp
+        simp only [Category.assoc, Category.id_comp, Prod.fac (f₁, f₂),
+          G.map_comp, limMap_π, curry_obj_map_app, reassoc_of% this] } }
 
 中文:
 定义 coneOfHasLimitCurryCompLim
@@ -738,7 +953,10 @@ definition coneOfHasLimitCurryCompLim
       naturality {x y} := fun ⟨f₁, f₂⟩ => by
         have := (Q.obj x.1).w f₂
         dsimp [Q] at this ⊢
-        rw [← 
+        rw [← limit.w (F := curry.obj G ⋙ lim) (f := f₁)]
+        dsimp
+        simp only [Category.assoc, Category.id_comp, Prod.fac (f₁, f₂),
+          G.map_comp, limMap_π, curry_obj_map_app, reassoc_of% this] } }
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, DiagramOfCones, G.map_comp, Prod.fac, Q.obj, curry.obj, curry_obj_map_app, id_comp, limit.w, map_comp, mkOfHasLimits, naturality, reassoc_of, x.fst, x.snd
 -/
@@ -768,7 +986,9 @@ definition isLimitConeOfHasLimitCurryCompLim
   { lift c' := limit.lift (F := curry.obj G ⋙ lim) (coneOfConeCurry G Q' c')
     fac c' f := by simp [coneOfHasLimitCurryCompLim, Q, Q']
     uniq c' f h := by
-      dsimp [cone
+      dsimp [coneOfHasLimitCurryCompLim] at f h ⊢
+      refine limit.hom_ext (F := curry.obj G ⋙ lim) (fun j => limit.hom_ext (fun k => ?_))
+      simp [h ⟨j, k⟩, Q'] }
 
 中文:
 定义 isLimitConeOfHasLimitCurryCompLim
@@ -778,7 +998,9 @@ definition isLimitConeOfHasLimitCurryCompLim
   { lift c' := limit.lift (F := curry.obj G ⋙ lim) (coneOfConeCurry G Q' c')
     fac c' f := by simp [coneOfHasLimitCurryCompLim, Q, Q']
     uniq c' f h := by
-      dsimp [cone
+      dsimp [coneOfHasLimitCurryCompLim] at f h ⊢
+      refine limit.hom_ext (F := curry.obj G ⋙ lim) (fun j => limit.hom_ext (fun k => ?_))
+      simp [h ⟨j, k⟩, Q'] }
 
 Depends on / 依赖: DiagramOfCones, IsLimit, Q.obj, coneOfConeCurry, coneOfHasLimitCurryCompLim, curry.obj, hom_ext, isLimit, limit.hom_ext, limit.isLimit, limit.lift, mkOfHasLimits
 -/
@@ -831,7 +1053,7 @@ definition limitUncurryIsoLimitCompLim
   let Q : forall j, IsLimit (G.obj j) := fun j => limit.isLimit _
   have Q' := coneOfConeUncurryIsLimit Q P
   have Q'' := limit.isLimit (F ⋙ lim)
-  exact IsLimit.conePointUniqueU
+  exact IsLimit.conePointUniqueUpToIso Q' Q''
 
 中文:
 定义 limitUncurryIsoLimitCompLim
@@ -843,7 +1065,7 @@ definition limitUncurryIsoLimitCompLim
   let Q : forall j, IsLimit (G.obj j) := fun j => limit.isLimit _
   have Q' := coneOfConeUncurryIsLimit Q P
   have Q'' := limit.isLimit (F ⋙ lim)
-  exact IsLimit.conePointUniqueU
+  exact IsLimit.conePointUniqueUpToIso Q' Q''
 
 Depends on / 依赖: DiagramOfCones, DiagramOfCones.mkOfHasLimits, G.obj, IsLimit, IsLimit.conePointUniqueUpToIso, coneOfConeUncurryIsLimit, conePointUniqueUpToIso, isLimit, limit.cone, limit.isLimit, mkOfHasLimits, uncurry, uncurry.obj
 -/
@@ -1001,7 +1223,9 @@ definition coconeOfHasColimitCurryCompColim
       naturality {x y} := fun ⟨f₁, f₂⟩ => by
         have := (Q.obj y.1).w f₂
         dsimp [Q] at this ⊢
-  
+        rw [← colimit.w (F := curry.obj G ⋙ colim) (f := f₁)]; rw [Category.assoc]; rw [Category.comp_id]; rw [Prod.fac' (f₁]; rw [f₂)]; rw [G.map_comp_assoc]; rw [← curry_obj_map_app]; rw [← curry_obj_obj_map]
+        dsimp
+        simp [ι_colimMap_assoc, curry_obj_map_app, reassoc_of% this] } }
 
 中文:
 定义 coconeOfHasColimitCurryCompColim
@@ -1013,7 +1237,9 @@ definition coconeOfHasColimitCurryCompColim
       naturality {x y} := fun ⟨f₁, f₂⟩ => by
         have := (Q.obj y.1).w f₂
         dsimp [Q] at this ⊢
-  
+        rw [← colimit.w (F := curry.obj G ⋙ colim) (f := f₁)]; rw [Category.assoc]; rw [Category.comp_id]; rw [Prod.fac' (f₁]; rw [f₂)]; rw [G.map_comp_assoc]; rw [← curry_obj_map_app]; rw [← curry_obj_obj_map]
+        dsimp
+        simp [ι_colimMap_assoc, curry_obj_map_app, reassoc_of% this] } }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, DiagramOfCocones, G.map_comp_assoc, Prod.fac, Q.obj, colimit, colimit.w, comp_id, curry.obj, curry_obj_map_app, curry_obj_obj_map, map_comp_assoc, mkOfHasColimits, naturality, x.fst, x.snd
 -/
@@ -1042,7 +1268,10 @@ definition isColimitCoconeOfHasColimitCurryCompColim
   let Q' : forall j, IsColimit (Q.obj j) := fun j => colimit.isColimit _
   { desc c' := colimit.desc (F := curry.obj G ⋙ colim) (coconeOfCoconeCurry G Q' c')
     fac c' f := by simp [coconeOfHasColimitCurryCompColim, Q, Q']
-    uniq c' f h
+    uniq c' f h := by
+      dsimp [coconeOfHasColimitCurryCompColim] at f h ⊢
+      refine colimit.hom_ext (F := curry.obj G ⋙ colim) (fun j => colimit.hom_ext (fun k => ?_))
+      simp [← h ⟨j, k⟩, Q'] }
 
 中文:
 定义 isColimitCoconeOfHasColimitCurryCompColim
@@ -1051,7 +1280,10 @@ definition isColimitCoconeOfHasColimitCurryCompColim
   let Q' : forall j, IsColimit (Q.obj j) := fun j => colimit.isColimit _
   { desc c' := colimit.desc (F := curry.obj G ⋙ colim) (coconeOfCoconeCurry G Q' c')
     fac c' f := by simp [coconeOfHasColimitCurryCompColim, Q, Q']
-    uniq c' f h
+    uniq c' f h := by
+      dsimp [coconeOfHasColimitCurryCompColim] at f h ⊢
+      refine colimit.hom_ext (F := curry.obj G ⋙ colim) (fun j => colimit.hom_ext (fun k => ?_))
+      simp [← h ⟨j, k⟩, Q'] }
 
 Depends on / 依赖: DiagramOfCocones, IsColimit, Q.obj, coconeOfCoconeCurry, coconeOfHasColimitCurryCompColim, colimit, colimit.desc, colimit.hom_ext, colimit.isColimit, curry.obj, hom_ext, isColimit, mkOfHasColimits
 -/
@@ -1105,7 +1337,7 @@ definition colimitUncurryIsoColimitCompColim
   let Q : forall j, IsColimit (G.obj j) := fun j => colimit.isColimit _
   have Q' := coconeOfCoconeUncurryIsColimit Q P
   have Q'' := colimit.isColimit (F ⋙ colim)
-
+  exact IsColimit.coconePointUniqueUpToIso Q' Q''
 
 中文:
 定义 colimitUncurryIsoColimitCompColim
@@ -1117,7 +1349,7 @@ definition colimitUncurryIsoColimitCompColim
   let Q : forall j, IsColimit (G.obj j) := fun j => colimit.isColimit _
   have Q' := coconeOfCoconeUncurryIsColimit Q P
   have Q'' := colimit.isColimit (F ⋙ colim)
-
+  exact IsColimit.coconePointUniqueUpToIso Q' Q''
 
 Depends on / 依赖: DiagramOfCocones, DiagramOfCocones.mkOfHasColimits, G.obj, IsColimit, IsColimit.coconePointUniqueUpToIso, cocone, coconeOfCoconeUncurryIsColimit, coconePointUniqueUpToIso, colimit, colimit.cocone, colimit.isColimit, isColimit, mkOfHasColimits, uncurry, uncurry.obj
 -/
@@ -1398,7 +1630,7 @@ definition limitIsoLimitCurryCompLim
   haveI : Limits.HasLimit (uncurry.obj ((@curry J _ K _ C _).obj G)) := hasLimit_of_iso i
   trans limit (uncurry.obj ((@curry J _ K _ C _).obj G))
   · apply HasLimit.isoOfNatIso i
-  · exact limitUncurryIsoLimit
+  · exact limitUncurryIsoLimitCompLim ((@curry J _ K _ C _).obj G)
 
 中文:
 定义 limitIsoLimitCurryCompLim
@@ -1408,7 +1640,7 @@ definition limitIsoLimitCurryCompLim
   haveI : Limits.HasLimit (uncurry.obj ((@curry J _ K _ C _).obj G)) := hasLimit_of_iso i
   trans limit (uncurry.obj ((@curry J _ K _ C _).obj G))
   · apply HasLimit.isoOfNatIso i
-  · exact limitUncurryIsoLimit
+  · exact limitUncurryIsoLimitCompLim ((@curry J _ K _ C _).obj G)
 
 Depends on / 依赖: HasLimit, HasLimit.isoOfNatIso, Limits, Limits.HasLimit, currying, currying.symm.unitIso.app, hasLimit_of_iso, isoOfNatIso, limitUncurryIsoLimitCompLim, uncurry, uncurry.obj, unitIso
 -/
@@ -1486,7 +1718,7 @@ definition colimitIsoColimitCurryCompColim
   haveI : Limits.HasColimit (uncurry.obj ((@curry J _ K _ C _).obj G)) := hasColimit_of_iso i.symm
   trans colimit (uncurry.obj ((@curry J _ K _ C _).obj G))
   · apply HasColimit.isoOfNatIso i
-  · exact colimit
+  · exact colimitUncurryIsoColimitCompColim ((@curry J _ K _ C _).obj G)
 
 中文:
 定义 colimitIsoColimitCurryCompColim
@@ -1496,7 +1728,7 @@ definition colimitIsoColimitCurryCompColim
   haveI : Limits.HasColimit (uncurry.obj ((@curry J _ K _ C _).obj G)) := hasColimit_of_iso i.symm
   trans colimit (uncurry.obj ((@curry J _ K _ C _).obj G))
   · apply HasColimit.isoOfNatIso i
-  · exact colimit
+  · exact colimitUncurryIsoColimitCompColim ((@curry J _ K _ C _).obj G)
 
 Depends on / 依赖: HasColimit, HasColimit.isoOfNatIso, Limits, Limits.HasColimit, colimit, colimitUncurryIsoColimitCompColim, currying, currying.symm.unitIso.app, hasColimit_of_iso, i.symm, isoOfNatIso, uncurry, uncurry.obj, unitIso
 -/

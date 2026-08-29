@@ -1097,7 +1097,9 @@ instance mono_left
     rw [← cancel_mono sq]
     ext
     · exact h
-    · simp [this, ← Arrow
+    · simp [this, ← Arrow.w_mk_right, reassoc_of% h]
+
+@[to_dual (attr := reassoc (attr := simp))]
 
 中文:
 实例 mono_left
@@ -1112,7 +1114,9 @@ instance mono_left
     rw [← cancel_mono sq]
     ext
     · exact h
-    · simp [this, ← Arrow
+    · simp [this, ← Arrow.w_mk_right, reassoc_of% h]
+
+@[to_dual (attr := reassoc (attr := simp))]
 
 Depends on / 依赖: Arrow.mk, Arrow.w_mk_right, IsInitial, Limits, Limits.IsInitial.ofUnique, cancel_mono, f.hom, f.left, ofUnique, reassoc_of, w_mk_right
 -/

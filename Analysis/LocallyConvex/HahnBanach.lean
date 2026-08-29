@@ -85,7 +85,13 @@ theorem Module.Dual.exists_extension_of_le_seminorm
   let : IsScalarTower Real 𝕜 E := .restrictScalars _ _ _
   let fr : Dual Real S := reLm.comp (f.restrictScalars Real)
   obtain ⟨g, (hg : forall x : S, g x = fr x), hgp⟩ :=
-    fr.exists_extension_o
+    fr.exists_extension_of_le_seminorm_real (S.restrictScalars Real) (p := p.restrictScalars Real)
+      fun x => (re_le_norm (f x)).trans (hp x)
+  refine ⟨g.extendRCLike, fun x => ?_, fun x => ?_⟩
+  · rw [g.extendRCLike_apply, ← Submodule.coe_smul, hg, hg]
+    simp [fr, mul_comm I]
+  · apply norm_extendRCLike_le_seminorm
+    exact hgp
 
 中文:
 定理 模.对偶.存在_extension_of_le_seminorm
@@ -96,7 +102,13 @@ theorem Module.Dual.exists_extension_of_le_seminorm
   let : IsScalarTower Real 𝕜 E := .restrictScalars _ _ _
   let fr : Dual Real S := reLm.comp (f.restrictScalars Real)
   obtain ⟨g, (hg : forall x : S, g x = fr x), hgp⟩ :=
-    fr.exists_extension_o
+    fr.exists_extension_of_le_seminorm_real (S.restrictScalars Real) (p := p.restrictScalars Real)
+      fun x => (re_le_norm (f x)).trans (hp x)
+  refine ⟨g.extendRCLike, fun x => ?_, fun x => ?_⟩
+  · rw [g.extendRCLike_apply, ← Submodule.coe_smul, hg, hg]
+    simp [fr, mul_comm I]
+  · apply norm_extendRCLike_le_seminorm
+    exact hgp
 
 Depends on / 依赖: IsRCLikeNormedField, IsRCLikeNormedField.rclike, IsScalarTower, Module, RCLike, S.restrictScalars, Submodule, Submodule.coe_smul, coe_smul, exists_extension_of_le_seminorm_real, extendRCLike, extendRCLike_apply, f.restrictScalars, fr.exists_extension_of_le_seminorm_real, g.extendRCLike, g.extendRCLike_apply, p.restrictScalars, rclike, reLm.comp, re_le_norm
 -/
@@ -222,7 +234,10 @@ lemma ContinuousLinearMap.exist_extension_of_finiteDimensional_range
   let e := b.equivFunL
   let fi := fun i => (LinearMap.toContinuousLinearMap (b.coord i)).comp
     (f.codRestrict _ <| LinearMap.mem_range_self _)
-  choose gi hgf using fun i => StrongDual.exists_extension S (fi
+  choose gi hgf using fun i => StrongDual.exists_extension S (fi i)
+use f.range.subtypeL.comp e.symm.toContinuousLinearMap.comp (.pi gi)
+  ext x
+  simp [fi, e, hgf]
 
 中文:
 引理 连续线性映射.exist_extension_of_finiteDimensional_range
@@ -233,7 +248,10 @@ lemma ContinuousLinearMap.exist_extension_of_finiteDimensional_range
   let e := b.equivFunL
   let fi := fun i => (LinearMap.toContinuousLinearMap (b.coord i)).comp
     (f.codRestrict _ <| LinearMap.mem_range_self _)
-  choose gi hgf using fun i => StrongDual.exists_extension S (fi
+  choose gi hgf using fun i => StrongDual.exists_extension S (fi i)
+use f.range.subtypeL.comp e.symm.toContinuousLinearMap.comp (.pi gi)
+  ext x
+  simp [fi, e, hgf]
 
 Depends on / 依赖: IsRCLikeNormedField, IsRCLikeNormedField.rclike, LinearMap, LinearMap.mem_range_self, LinearMap.toContinuousLinearMap, Module, Module.finBasis, RCLike, StrongDual, StrongDual.exists_extension, b.coord, b.equivFunL, codRestrict, e.symm.toContinuousLinearMap.comp, equivFunL, exists_extension, f.codRestrict, f.range, f.range.subtypeL.comp, finBasis
 -/

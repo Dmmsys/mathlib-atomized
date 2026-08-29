@@ -139,7 +139,14 @@ instance :
   mul_one := by
     rintro (a | a)
     · exact congr_arg r (add_zero a)
-    · exact
+    · exact congr_arg sr (add_zero a)
+  inv := inv
+  inv_mul_cancel := by
+    rintro (a | a)
+    · exact congr_arg r (neg_add_cancel a)
+    · exact congr_arg r (sub_self a)
+
+@[simp]
 
 中文:
 实例 :
@@ -154,7 +161,14 @@ instance :
   mul_one := by
     rintro (a | a)
     · exact congr_arg r (add_zero a)
-    · exact
+    · exact congr_arg sr (add_zero a)
+  inv := inv
+  inv_mul_cancel := by
+    rintro (a | a)
+    · exact congr_arg r (neg_add_cancel a)
+    · exact congr_arg r (sub_self a)
+
+@[simp]
 -/
 instance : Group (DihedralGroup n) where
   mul := mul
@@ -671,7 +685,11 @@ theorem orderOf_r_one
   · apply (Nat.le_of_dvd (NeZero.pos n) <|
 orderOf_dvd_of_pow_eq_one @r_one_pow_n n).lt_or_eq.resolve_left
     intro h
-    have h1 :
+    have h1 : (r 1 : DihedralGroup n) ^ orderOf (r 1) = 1 := pow_orderOf_eq_one _
+    rw [r_one_pow] at h1
+    injection h1 with h2
+    rw [← ZMod.val_eq_zero]; rw [ZMod.val_natCast]; rw [Nat.mod_eq_of_lt h] at h2
+    exact absurd h2.symm (orderOf_pos _).ne
 
 中文:
 定理 orderOf_r_one
@@ -686,7 +704,11 @@ orderOf_dvd_of_pow_eq_one @r_one_pow_n n).lt_or_eq.resolve_left
   · apply (Nat.le_of_dvd (NeZero.pos n) <|
 orderOf_dvd_of_pow_eq_one @r_one_pow_n n).lt_or_eq.resolve_left
     intro h
-    have h1 :
+    have h1 : (r 1 : DihedralGroup n) ^ orderOf (r 1) = 1 := pow_orderOf_eq_one _
+    rw [r_one_pow] at h1
+    injection h1 with h2
+    rw [← ZMod.val_eq_zero]; rw [ZMod.val_natCast]; rw [Nat.mod_eq_of_lt h] at h2
+    exact absurd h2.symm (orderOf_pos _).ne
 
 Depends on / 依赖: DihedralGroup, Nat.le_of_dvd, Nat.mod_eq_of_lt, NeZero, NeZero.pos, ZMod.val_eq_zero, ZMod.val_natCast, absurd, eq_zero_or_neZero, h2.symm, hn.ne, injection, le_of_dvd, lt_or_eq, lt_or_eq.resolve_left, mod_eq_of_lt, one_def, orderOf, orderOf_dvd_of_pow_eq_one, orderOf_eq_zero_iff
 -/
@@ -744,7 +766,15 @@ theorem exponent
   · apply Monoid.exponent_dvd_of_forall_pow_eq_one
     rintro (m | m)
     · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_r]
-      refine Nat.dvd_trans ⟨gcd n m.val, ?_⟩
+      refine Nat.dvd_trans ⟨gcd n m.val, ?_⟩ (dvd_lcm_left n 2)
+      exact (Nat.div_mul_cancel (Nat.gcd_dvd_left n m.val)).symm
+    · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_sr]
+      exact dvd_lcm_right n 2
+  · apply lcm_dvd
+    · convert! Monoid.order_dvd_exponent (r (1 : ZMod n))
+      exact orderOf_r_one.symm
+    · convert! Monoid.order_dvd_exponent (sr (0 : ZMod n))
+      exact (orderOf_sr 0).symm
 
 中文:
 定理 exponent
@@ -756,7 +786,15 @@ theorem exponent
   · apply Monoid.exponent_dvd_of_forall_pow_eq_one
     rintro (m | m)
     · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_r]
-      refine Nat.dvd_trans ⟨gcd n m.val, ?_⟩
+      refine Nat.dvd_trans ⟨gcd n m.val, ?_⟩ (dvd_lcm_left n 2)
+      exact (Nat.div_mul_cancel (Nat.gcd_dvd_left n m.val)).symm
+    · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_sr]
+      exact dvd_lcm_right n 2
+  · apply lcm_dvd
+    · convert! Monoid.order_dvd_exponent (r (1 : ZMod n))
+      exact orderOf_r_one.symm
+    · convert! Monoid.order_dvd_exponent (sr (0 : ZMod n))
+      exact (orderOf_sr 0).symm
 
 Depends on / 依赖: Monoid, Monoid.exponent_dvd_of_forall_pow_eq_one, Monoid.exponent_eq_zero_of_order_zero, Monoid.order_dvd_exponent, Nat.div_mul_cancel, Nat.dvd_antisymm, Nat.dvd_trans, Nat.gcd_dvd_left, convert, div_mul_cancel, dvd_antisymm, dvd_lcm_left, dvd_lcm_right, dvd_trans, eq_zero_or_neZero, exponent_dvd_of_forall_pow_eq_one, exponent_eq_zero_of_order_zero, gcd_dvd_left, lcm_dvd, m.val
 -/
@@ -909,7 +947,32 @@ definition oddCommuteEquiv
   { toFun := fun
       | ⟨⟨sr i, r _⟩, _⟩ => Sum.inl i
       | ⟨⟨r _, sr j⟩, _⟩ => Sum.inr (Sum.inl j)
-      | ⟨⟨
+      | ⟨⟨sr i, sr j⟩, _⟩ => Sum.inr (Sum.inr (Sum.inl (i + j)))
+      | ⟨⟨r i, r j⟩, _⟩ => Sum.inr (Sum.inr (Sum.inr ⟨i, j⟩))
+    invFun := fun
+      | .inl i => ⟨⟨sr i, r 0⟩, congrArg sr ((add_zero i).trans (sub_zero i).symm)⟩
+      | .inr (.inl j) => ⟨⟨r 0, sr j⟩, congrArg sr ((sub_zero j).trans (add_zero j).symm)⟩
+      | .inr (.inr (.inl k)) => ⟨⟨sr (u⁻¹ * k), sr (u⁻¹ * k)⟩, rfl⟩
+      | .inr (.inr (.inr ⟨i, j⟩)) => ⟨⟨r i, r j⟩, congrArg r (add_comm i j)⟩
+    left_inv := fun
+      | ⟨⟨r _, r _⟩, _⟩ => rfl
+      | ⟨⟨r i, sr j⟩, h⟩ => by
+        simpa [-r_zero, sub_eq_add_neg, neg_eq_iff_add_eq_zero, hu, eq_comm (a := i) (b := 0)]
+          using h.eq
+      | ⟨⟨sr i, r j⟩, h⟩ => by
+        simpa [-r_zero, sub_eq_add_neg, eq_neg_iff_add_eq_zero, hu, eq_comm (a := j) (b := 0)]
+          using h.eq
+      | ⟨⟨sr i, sr j⟩, h⟩ => by
+        replace h := r.inj h
+        rw [← neg_sub]; rw [neg_eq_iff_add_eq_zero]; rw [hu]; rw [sub_eq_zero] at h
+        rw [Subtype.ext_iff]; rw [Prod.ext_iff]; rw [sr.injEq]; rw [sr.injEq]; rw [h]; rw [and_self]; rw [← two_mul]
+        exact u.inv_mul_cancel_left j
+    right_inv := fun
+      | .inl _ => rfl
+      | .inr (.inl _) => rfl
+      | .inr (.inr (.inl k)) =>
+congrArg (Sum.inr ∘ Sum.inr ∘ Sum.inl) two_mul (u⁻¹ * k) ▸ u.mul_inv_cancel_left k
+      | .inr (.inr (.inr ⟨_, _⟩)) => rfl }
 
 中文:
 定义 oddCommuteEquiv
@@ -919,7 +982,32 @@ definition oddCommuteEquiv
   { toFun := fun
       | ⟨⟨sr i, r _⟩, _⟩ => Sum.inl i
       | ⟨⟨r _, sr j⟩, _⟩ => Sum.inr (Sum.inl j)
-      | ⟨⟨
+      | ⟨⟨sr i, sr j⟩, _⟩ => Sum.inr (Sum.inr (Sum.inl (i + j)))
+      | ⟨⟨r i, r j⟩, _⟩ => Sum.inr (Sum.inr (Sum.inr ⟨i, j⟩))
+    invFun := fun
+      | .inl i => ⟨⟨sr i, r 0⟩, congrArg sr ((add_zero i).trans (sub_zero i).symm)⟩
+      | .inr (.inl j) => ⟨⟨r 0, sr j⟩, congrArg sr ((sub_zero j).trans (add_zero j).symm)⟩
+      | .inr (.inr (.inl k)) => ⟨⟨sr (u⁻¹ * k), sr (u⁻¹ * k)⟩, rfl⟩
+      | .inr (.inr (.inr ⟨i, j⟩)) => ⟨⟨r i, r j⟩, congrArg r (add_comm i j)⟩
+    left_inv := fun
+      | ⟨⟨r _, r _⟩, _⟩ => rfl
+      | ⟨⟨r i, sr j⟩, h⟩ => by
+        simpa [-r_zero, sub_eq_add_neg, neg_eq_iff_add_eq_zero, hu, eq_comm (a := i) (b := 0)]
+          using h.eq
+      | ⟨⟨sr i, r j⟩, h⟩ => by
+        simpa [-r_zero, sub_eq_add_neg, eq_neg_iff_add_eq_zero, hu, eq_comm (a := j) (b := 0)]
+          using h.eq
+      | ⟨⟨sr i, sr j⟩, h⟩ => by
+        replace h := r.inj h
+        rw [← neg_sub]; rw [neg_eq_iff_add_eq_zero]; rw [hu]; rw [sub_eq_zero] at h
+        rw [Subtype.ext_iff]; rw [Prod.ext_iff]; rw [sr.injEq]; rw [sr.injEq]; rw [h]; rw [and_self]; rw [← two_mul]
+        exact u.inv_mul_cancel_left j
+    right_inv := fun
+      | .inl _ => rfl
+      | .inr (.inl _) => rfl
+      | .inr (.inr (.inl k)) =>
+congrArg (Sum.inr ∘ Sum.inr ∘ Sum.inl) two_mul (u⁻¹ * k) ▸ u.mul_inv_cancel_left k
+      | .inr (.inr (.inr ⟨_, _⟩)) => rfl }
 
 Depends on / 依赖: Nat.prime_two.coprime_iff_not_dvd.mpr, Sum.inl, Sum.inr, ZMod.add_self_eq_zero_iff_eq_zero, ZMod.unitOfCoprime, add_self_eq_zero_iff_eq_zero, add_zero, coprime_iff_not_dvd, hn.not_two_dvd_nat, invFun, not_two_dvd_nat, prime_two, sub_zero, unitOfCoprime
 -/

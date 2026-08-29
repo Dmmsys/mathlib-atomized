@@ -284,7 +284,9 @@ theorem weightedVSubOfPoint_vadd_eq_of_sum_eq_one
     · skip
     · congr
       · skip
-      
+      · ext
+        rw [← smul_sub]; rw [vsub_sub_vsub_cancel_left]
+  rw [← sum_smul]; rw [h]; rw [one_smul]; rw [vsub_add_vsub_cancel]; rw [vsub_self]
 
 中文:
 定理 weightedVSubOfPoint_vadd_eq_of_sum_eq_one
@@ -297,7 +299,9 @@ theorem weightedVSubOfPoint_vadd_eq_of_sum_eq_one
     · skip
     · congr
       · skip
-      
+      · ext
+        rw [← smul_sub]; rw [vsub_sub_vsub_cancel_left]
+  rw [← sum_smul]; rw [h]; rw [one_smul]; rw [vsub_add_vsub_cancel]; rw [vsub_self]
 
 Depends on / 依赖: add_comm, add_sub_assoc, conv_lhs, one_smul, smul_sub, sum_smul, sum_sub_distrib, vadd_vsub_assoc, vsub_add_vsub_cancel, vsub_eq_zero_iff_eq, vsub_self, vsub_sub_vsub_cancel_left, vsub_vadd_eq_vsub_sub, weightedVSubOfPoint_apply
 -/
@@ -1275,7 +1279,8 @@ theorem affineCombination_of_eq_one_of_eq_zero
   refine sum_eq_zero ?_
   intro i2 hi2
   by_cases h : i2 = i
-  · si
+  · simp [h]
+  · simp [hw0 i2 hi2 h]
 
 中文:
 定理 affineCombination_of_eq_one_of_eq_zero
@@ -1287,7 +1292,8 @@ theorem affineCombination_of_eq_one_of_eq_zero
   refine sum_eq_zero ?_
   intro i2 hi2
   by_cases h : i2 = i
-  · si
+  · simp [h]
+  · simp [hw0 i2 hi2 h]
 
 Depends on / 依赖: False.elim, affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, convert, s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, sum_eq_single, sum_eq_zero, weightedVSubOfPoint_apply, zero_vadd
 -/
@@ -1449,7 +1455,7 @@ theorem affineCombination_eq_of_weightedVSub_eq_zero_of_eq_neg_one
     congr
     refine (affineCombination_of_eq_one_of_eq_zero _ _ _ (mem_singleton_self _) ?_ ?_).symm
     · simp [hwi]
-    
+    · simp
 
 中文:
 定理 affineCombination_eq_of_weightedVSub_eq_zero_of_eq_neg_one
@@ -1460,7 +1466,7 @@ theorem affineCombination_eq_of_weightedVSub_eq_zero_of_eq_neg_one
     congr
     refine (affineCombination_of_eq_one_of_eq_zero _ _ _ (mem_singleton_self _) ?_ ?_).symm
     · simp [hwi]
-    
+    · simp
 
 Depends on / 依赖: affineCombination_of_eq_one_of_eq_zero, affineCombination_sdiff_sub, classical, filter_ne, mem_singleton_self, s.affineCombination_sdiff_sub, sdiff_singleton_eq_erase, singleton_subset_iff, vsub_eq_zero_iff_eq
 -/
@@ -1533,7 +1539,8 @@ theorem eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
       exact ⟨fs.subtype (· in s), fun i => w i, sum_subtype_of_mem _ hfs,
         (sum_subtype_of_mem _ hfs).symm⟩
     · rintro ⟨fs, w, rfl, rfl⟩
-      refine ⟨fs.map (Function.Embedding.subtyp
+      refine ⟨fs.map (Function.Embedding.subtype _), map_subtype_subset _, fun i =>
+        if h : i in s then w ⟨i, h⟩ else 0, ?_, ?_⟩ <;> simp
 
 中文:
 定理 eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
@@ -1546,7 +1553,8 @@ theorem eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
       exact ⟨fs.subtype (· in s), fun i => w i, sum_subtype_of_mem _ hfs,
         (sum_subtype_of_mem _ hfs).symm⟩
     · rintro ⟨fs, w, rfl, rfl⟩
-      refine ⟨fs.map (Function.Embedding.subtyp
+      refine ⟨fs.map (Function.Embedding.subtype _), map_subtype_subset _, fun i =>
+        if h : i in s then w ⟨i, h⟩ else 0, ?_, ?_⟩ <;> simp
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.subtype, classical, fs.map, fs.subtype, map_subtype_subset, simp_rw, subtype, sum_subtype_of_mem, weightedVSubOfPoint_apply
 -/
@@ -1631,7 +1639,10 @@ theorem map_affineCombination
   proof: by
   have b := Classical.choice (inferInstance : AffineSpace V P).nonempty
   have b₂ := Classical.choice (inferInstance : AffineSpace V₂ P₂).nonempty
-  rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p hw b]; rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w (f 
+  rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p hw b]; rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w (f ∘ p) hw b₂]; rw [←
+    s.weightedVSubOfPoint_vadd_eq_of_sum_eq_one w (f ∘ p) hw (f b) b₂]
+  simp only [weightedVSubOfPoint_apply, RingHom.id_apply, AffineMap.map_vadd, map_smulₛₗ,
+    AffineMap.linearMap_vsub, map_sum, Function.comp_apply]
 
 中文:
 定理 map_affineCombination
@@ -1639,7 +1650,10 @@ theorem map_affineCombination
   证明: by
   have b := Classical.choice (inferInstance : AffineSpace V P).nonempty
   have b₂ := Classical.choice (inferInstance : AffineSpace V₂ P₂).nonempty
-  rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p hw b]; rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w (f 
+  rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p hw b]; rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w (f ∘ p) hw b₂]; rw [←
+    s.weightedVSubOfPoint_vadd_eq_of_sum_eq_one w (f ∘ p) hw (f b) b₂]
+  simp only [weightedVSubOfPoint_apply, RingHom.id_apply, AffineMap.map_vadd, map_smulₛₗ,
+    AffineMap.linearMap_vsub, map_sum, Function.comp_apply]
 
 Depends on / 依赖: AffineMap, AffineMap.linearMap_vsub, AffineMap.map_vadd, AffineSpace, Classical, Classical.choice, RingHom, RingHom.id_apply, affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, choice, id_apply, linearMap_vsub, map_su, map_vadd, nonempty, s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, s.weightedVSubOfPoint_vadd_eq_of_sum_eq_one, weightedVSubOfPoint_apply, weightedVSubOfPoint_vadd_eq_of_sum_eq_one
 -/
@@ -1664,7 +1678,8 @@ lemma affineCombination_apply_eq_lineMap_sum
   rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p h p₁]; rw [weightedVSubOfPoint_apply]; rw [← s.sum_inter_add_sum_sdiff s']; rw [AffineMap.lineMap_apply]; rw [vadd_right_cancel_iff]; rw [sum_smul]
   convert! add_zero _ with i hi
   · convert! Finset.sum_const_zero with i hi
-
+    simp [hp₁ i hi]
+  · exact (hp₂ i hi).symm
 
 中文:
 引理 affineCombination_apply_eq_lineMap_sum
@@ -1673,7 +1688,8 @@ lemma affineCombination_apply_eq_lineMap_sum
   rw [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p h p₁]; rw [weightedVSubOfPoint_apply]; rw [← s.sum_inter_add_sum_sdiff s']; rw [AffineMap.lineMap_apply]; rw [vadd_right_cancel_iff]; rw [sum_smul]
   convert! add_zero _ with i hi
   · convert! Finset.sum_const_zero with i hi
-
+    simp [hp₁ i hi]
+  · exact (hp₂ i hi).symm
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, Finset, Finset.sum_const_zero, add_zero, affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, convert, lineMap_apply, s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, s.sum_inter_add_sum_sdiff, sum_const_zero, sum_inter_add_sum_sdiff, sum_smul, vadd_right_cancel_iff, weightedVSubOfPoint_apply
 -/
@@ -2248,7 +2264,16 @@ theorem weightedVSub_mem_vectorSpan
     · simp [Finset.eq_empty_of_isEmpty s]
     · rw [vectorSpan_range_eq_span_range_vsub_right k p i0, ← Set.image_univ,
         Finsupp.mem_span_image_iff_linearCombination,
-        Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_e
+        Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero s w p h (p i0),
+        Finset.weightedVSubOfPoint_apply]
+      let w' := Set.indicator (↑s) w
+      have hwx : forall i, w' i != 0 -> i in s := fun i => Set.mem_of_indicator_ne_zero
+      use Finsupp.onFinset s w' hwx, Set.subset_univ _
+      rw [Finsupp.linearCombination_apply]; rw [Finsupp.onFinset_sum hwx]
+      · apply Finset.sum_congr rfl
+        intro i hi
+        simp [w', Set.indicator_apply, if_pos hi]
+      · exact fun _ => zero_smul k _
 
 中文:
 定理 weightedVSub_mem_vectorSpan
@@ -2259,7 +2284,16 @@ theorem weightedVSub_mem_vectorSpan
     · simp [Finset.eq_empty_of_isEmpty s]
     · rw [vectorSpan_range_eq_span_range_vsub_right k p i0, ← Set.image_univ,
         Finsupp.mem_span_image_iff_linearCombination,
-        Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_e
+        Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero s w p h (p i0),
+        Finset.weightedVSubOfPoint_apply]
+      let w' := Set.indicator (↑s) w
+      have hwx : forall i, w' i != 0 -> i in s := fun i => Set.mem_of_indicator_ne_zero
+      use Finsupp.onFinset s w' hwx, Set.subset_univ _
+      rw [Finsupp.linearCombination_apply]; rw [Finsupp.onFinset_sum hwx]
+      · apply Finset.sum_congr rfl
+        intro i hi
+        simp [w', Set.indicator_apply, if_pos hi]
+      · exact fun _ => zero_smul k _
 
 Depends on / 依赖: Finset, Finset.eq_empty_of_isEmpty, Finset.weightedVSubOfPoint_apply, Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero, Finsupp, Finsupp.mem_span_image_iff_linearCombination, Finsupp.onFinset, Set.image_univ, Set.indicator, Set.mem_of_indicator_ne_zero, Set.subset_univ, classical, eq_empty_of_isEmpty, image_univ, indicator, isEmpty_or_nonempty, mem_of_indicator_ne_zero, mem_span_image_iff_linearCombination, onFinset, subset_univ
 -/
@@ -2294,7 +2328,17 @@ theorem affineCombination_mem_affineSpan
     obtain ⟨i1, hi1⟩ := hn
     let w1 : ι -> k := Function.update (Function.const ι 0) i1 1
     have hw1 : ∑ i in s, w1 i = 1 := by
-      simp only [w1, Function.co
+      simp only [w1, Function.const_zero, Finset.sum_update_of_mem hi1, Pi.zero_apply,
+          Finset.sum_const_zero, add_zero]
+    have hw1s : s.affineCombination k p w1 = p i1 :=
+      s.affineCombination_of_eq_one_of_eq_zero w1 p hi1 (Function.update_self ..) fun _ _ hne =>
+        Function.update_of_ne hne ..
+    have hv : s.affineCombination k p w -ᵥ p i1 in (affineSpan k (Set.range p)).direction := by
+      rw [direction_affineSpan]; rw [← hw1s]; rw [Finset.affineCombination_vsub]
+      apply weightedVSub_mem_vectorSpan
+      simp [Pi.sub_apply, h, hw1]
+    rw [← vsub_vadd (s.affineCombination k p w) (p i1)]
+    exact AffineSubspace.vadd_mem_of_mem_direction hv (mem_affineSpan k (Set.mem_range_self _))
 
 中文:
 定理 affineCombination_mem_affineSpan
@@ -2306,7 +2350,17 @@ theorem affineCombination_mem_affineSpan
     obtain ⟨i1, hi1⟩ := hn
     let w1 : ι -> k := Function.update (Function.const ι 0) i1 1
     have hw1 : ∑ i in s, w1 i = 1 := by
-      simp only [w1, Function.co
+      simp only [w1, Function.const_zero, Finset.sum_update_of_mem hi1, Pi.zero_apply,
+          Finset.sum_const_zero, add_zero]
+    have hw1s : s.affineCombination k p w1 = p i1 :=
+      s.affineCombination_of_eq_one_of_eq_zero w1 p hi1 (Function.update_self ..) fun _ _ hne =>
+        Function.update_of_ne hne ..
+    have hv : s.affineCombination k p w -ᵥ p i1 in (affineSpan k (Set.range p)).direction := by
+      rw [direction_affineSpan]; rw [← hw1s]; rw [Finset.affineCombination_vsub]
+      apply weightedVSub_mem_vectorSpan
+      simp [Pi.sub_apply, h, hw1]
+    rw [← vsub_vadd (s.affineCombination k p w) (p i1)]
+    exact AffineSubspace.vadd_mem_of_mem_direction hv (mem_affineSpan k (Set.mem_range_self _))
 
 Depends on / 依赖: Finset, Finset.nonempty_of_sum_ne_zero, Finset.sum_const_zero, Finset.sum_update_of_mem, Function, Function.const, Function.const_zero, Function.update, Function.update_self, Nonempty, Pi.zero_apply, add_zero, affineCombination, affineCombination_of_eq_one_of_eq_zero, classical, const_zero, h.symm, nonempty_of_sum_ne_zero, one_ne_zero, s.Nonempty
 -/
@@ -2384,7 +2438,31 @@ theorem mem_vectorSpan_iff_eq_weightedVSub
           Finsupp.mem_span_image_iff_linearCombination]
         rintro ⟨l, _, hv⟩
         use insert i0 l.support
-        se
+        set w :=
+          (l : ι -> k) - Function.update (Function.const ι 0 : ι -> k) i0 (∑ i in l.support, l i) with
+          hwdef
+        use w
+        have hw : ∑ i in insert i0 l.support, w i = 0 := by
+          rw [hwdef]
+          simp_rw [Pi.sub_apply, Finset.sum_sub_distrib,
+            Finset.sum_update_of_mem (Finset.mem_insert_self _ _),
+            Finset.sum_insert_of_eq_zero_if_notMem Finsupp.notMem_support_iff.1]
+          simp only [Function.const_apply, Finset.sum_const_zero, add_zero, sub_self]
+        use hw
+        have hz : w i0 • (p i0 -ᵥ p i0 : V) = 0 := (vsub_self (p i0)).symm ▸ smul_zero _
+        change (fun i => w i • (p i -ᵥ p i0 : V)) i0 = 0 at hz
+        rw [Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero _ w p hw (p i0)]; rw [Finset.weightedVSubOfPoint_apply]; rw [← hv]; rw [Finsupp.linearCombination_apply]; rw [@Finset.sum_insert_zero _ _ l.support i0 _ _ _ hz]
+        change (∑ i in l.support, l i • _) = _
+        congr with i
+        by_cases h : i = i0
+        · simp [h]
+        · simp [hwdef, h]
+      · rw [Set.range_eq_empty, vectorSpan_empty, Submodule.mem_bot]
+        rintro rfl
+        use ∅
+        simp
+    · rintro ⟨s, w, hw, rfl⟩
+      exact weightedVSub_mem_vectorSpan hw p
 
 中文:
 定理 mem_vectorSpan_iff_eq_weightedVSub
@@ -2398,7 +2476,31 @@ theorem mem_vectorSpan_iff_eq_weightedVSub
           Finsupp.mem_span_image_iff_linearCombination]
         rintro ⟨l, _, hv⟩
         use insert i0 l.support
-        se
+        set w :=
+          (l : ι -> k) - Function.update (Function.const ι 0 : ι -> k) i0 (∑ i in l.support, l i) with
+          hwdef
+        use w
+        have hw : ∑ i in insert i0 l.support, w i = 0 := by
+          rw [hwdef]
+          simp_rw [Pi.sub_apply, Finset.sum_sub_distrib,
+            Finset.sum_update_of_mem (Finset.mem_insert_self _ _),
+            Finset.sum_insert_of_eq_zero_if_notMem Finsupp.notMem_support_iff.1]
+          simp only [Function.const_apply, Finset.sum_const_zero, add_zero, sub_self]
+        use hw
+        have hz : w i0 • (p i0 -ᵥ p i0 : V) = 0 := (vsub_self (p i0)).symm ▸ smul_zero _
+        change (fun i => w i • (p i -ᵥ p i0 : V)) i0 = 0 at hz
+        rw [Finset.weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero _ w p hw (p i0)]; rw [Finset.weightedVSubOfPoint_apply]; rw [← hv]; rw [Finsupp.linearCombination_apply]; rw [@Finset.sum_insert_zero _ _ l.support i0 _ _ _ hz]
+        change (∑ i in l.support, l i • _) = _
+        congr with i
+        by_cases h : i = i0
+        · simp [h]
+        · simp [hwdef, h]
+      · rw [Set.range_eq_empty, vectorSpan_empty, Submodule.mem_bot]
+        rintro rfl
+        use ∅
+        simp
+    · rintro ⟨s, w, hw, rfl⟩
+      exact weightedVSub_mem_vectorSpan hw p
 
 Depends on / 依赖: Finset, Finset.m, Finset.sum_sub_distrib, Finset.sum_update_of_mem, Finsupp, Finsupp.mem_span_image_iff_linearCombination, Function, Function.const, Function.update, Pi.sub_apply, Set.image_univ, classical, image_univ, insert, isEmpty_or_nonempty, l.support, mem_span_image_iff_linearCombination, simp_rw, sub_apply, sum_sub_distrib
 -/
@@ -2451,7 +2553,28 @@ theorem eq_affineCombination_of_mem_affineSpan
     rw [affineSpan_nonempty]; rw [Set.range_nonempty_iff_nonempty] at hn
     obtain ⟨i0⟩ := hn
     have h0 : p i0 in affineSpan k (Set.range p) := mem_affineSpan k (Set.mem_range_self i0)
-    have hd : p1 -ᵥ p i0 i
+    have hd : p1 -ᵥ p i0 in (affineSpan k (Set.range p)).direction :=
+      AffineSubspace.vsub_mem_direction h h0
+    rw [direction_affineSpan]; rw [mem_vectorSpan_iff_eq_weightedVSub] at hd
+    rcases hd with ⟨s, w, h, hs⟩
+    let s' := insert i0 s
+    let w' := Set.indicator (↑s) w
+    have h' : ∑ i in s', w' i = 0 := by
+      rw [← h]; rw [Finset.sum_indicator_subset _ (Finset.subset_insert i0 s)]
+    have hs' : s'.weightedVSub p w' = p1 -ᵥ p i0 := by
+      rw [hs]
+      exact (Finset.weightedVSub_indicator_subset _ _ (Finset.subset_insert i0 s)).symm
+    let w0 : ι -> k := Function.update (Function.const ι 0) i0 1
+    have hw0 : ∑ i in s', w0 i = 1 := by
+      rw [Finset.sum_update_of_mem (Finset.mem_insert_self _ _)]
+      simp only [Function.const_apply, Finset.sum_const_zero,
+        add_zero]
+    have hw0s : s'.affineCombination k p w0 = p i0 :=
+      s'.affineCombination_of_eq_one_of_eq_zero w0 p (Finset.mem_insert_self _ _)
+        (Function.update_self ..) fun _ _ hne => Function.update_of_ne hne _ _
+    refine ⟨s', w0 + w', ?_, ?_⟩
+    · simp [Pi.add_apply, Finset.sum_add_distrib, hw0, h']
+    · rw [add_comm, ← Finset.weightedVSub_vadd_affineCombination, hw0s, hs', vsub_vadd]
 
 中文:
 定理 eq_affineCombination_of_mem_affineSpan
@@ -2462,7 +2585,28 @@ theorem eq_affineCombination_of_mem_affineSpan
     rw [affineSpan_nonempty]; rw [Set.range_nonempty_iff_nonempty] at hn
     obtain ⟨i0⟩ := hn
     have h0 : p i0 in affineSpan k (Set.range p) := mem_affineSpan k (Set.mem_range_self i0)
-    have hd : p1 -ᵥ p i0 i
+    have hd : p1 -ᵥ p i0 in (affineSpan k (Set.range p)).direction :=
+      AffineSubspace.vsub_mem_direction h h0
+    rw [direction_affineSpan]; rw [mem_vectorSpan_iff_eq_weightedVSub] at hd
+    rcases hd with ⟨s, w, h, hs⟩
+    let s' := insert i0 s
+    let w' := Set.indicator (↑s) w
+    have h' : ∑ i in s', w' i = 0 := by
+      rw [← h]; rw [Finset.sum_indicator_subset _ (Finset.subset_insert i0 s)]
+    have hs' : s'.weightedVSub p w' = p1 -ᵥ p i0 := by
+      rw [hs]
+      exact (Finset.weightedVSub_indicator_subset _ _ (Finset.subset_insert i0 s)).symm
+    let w0 : ι -> k := Function.update (Function.const ι 0) i0 1
+    have hw0 : ∑ i in s', w0 i = 1 := by
+      rw [Finset.sum_update_of_mem (Finset.mem_insert_self _ _)]
+      simp only [Function.const_apply, Finset.sum_const_zero,
+        add_zero]
+    have hw0s : s'.affineCombination k p w0 = p i0 :=
+      s'.affineCombination_of_eq_one_of_eq_zero w0 p (Finset.mem_insert_self _ _)
+        (Function.update_self ..) fun _ _ hne => Function.update_of_ne hne _ _
+    refine ⟨s', w0 + w', ?_, ?_⟩
+    · simp [Pi.add_apply, Finset.sum_add_distrib, hw0, h']
+    · rw [add_comm, ← Finset.weightedVSub_vadd_affineCombination, hw0s, hs', vsub_vadd]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.vsub_mem_direction, Nonempty, Set.i, Set.mem_range_self, Set.range, Set.range_nonempty_iff_nonempty, affineSpan, affineSpan_nonempty, classical, direction, direction_affineSpan, insert, mem_affineSpan, mem_range_self, mem_vectorSpan_iff_eq_weightedVSub, range_nonempty_iff_nonempty, vsub_mem_direction
 -/
@@ -2546,7 +2690,8 @@ lemma eq_affineCombination_of_mem_affineSpan_image
   obtain ⟨fs', w', hw', rfl⟩ := eq_affineCombination_of_mem_affineSpan h
   refine ⟨fs'.map (Function.Embedding.subtype _), fun i => if hi : i in s then w' ⟨i, hi⟩ else 0,
     (by simp), (by simp [hw']), ?_⟩
-  simp only [Finset.affineCombination_map, Func
+  simp only [Finset.affineCombination_map, Function.Embedding.coe_subtype]
+  exact fs'.affineCombination_congr (by simp) (by simp)
 
 中文:
 引理 eq_affineCombination_of_mem_affineSpan_image
@@ -2557,7 +2702,8 @@ lemma eq_affineCombination_of_mem_affineSpan_image
   obtain ⟨fs', w', hw', rfl⟩ := eq_affineCombination_of_mem_affineSpan h
   refine ⟨fs'.map (Function.Embedding.subtype _), fun i => if hi : i in s then w' ⟨i, hi⟩ else 0,
     (by simp), (by simp [hw']), ?_⟩
-  simp only [Finset.affineCombination_map, Func
+  simp only [Finset.affineCombination_map, Function.Embedding.coe_subtype]
+  exact fs'.affineCombination_congr (by simp) (by simp)
 
 Depends on / 依赖: Embedding, Finset, Finset.affineCombination_map, Function, Function.Embedding.coe_subtype, Function.Embedding.subtype, Set.image_eq_range, affineCombination_congr, affineCombination_map, classical, coe_subtype, eq_affineCombination_of_mem_affineSpan, image_eq_range, subtype
 -/
@@ -2587,7 +2733,14 @@ lemma affineCombination_mem_affineSpan_image
     rw [← h]; rw [← Finset.sum_sdiff (s₁ := {x in s | x in s'}) (s₂ := s) (by simp)]; rw [right_eq_add]
     refine Finset.sum_eq_zero ?_
     intro i hi
-    simp only [Finset.m
+    simp only [Finset.mem_sdiff, Finset.mem_filter, not_and] at hi
+    exact hs' i hi.1 (hi.2 hi.1)
+  rw [← Finset.sum_subtype_eq_sum_filter] at h'
+  convert! affineCombination_mem_affineSpan h' (fun x => p x)
+  rw [Finset.affineCombination_subtype_eq_filter]; rw [Finset.affineCombination_indicator_subset w p
+    (Finset.filter_subset _ _)]
+  refine Finset.affineCombination_congr _ (fun i hi => ?_) (fun _ _ => rfl)
+  simp_all [Set.indicator_apply]
 
 中文:
 引理 affineCombination_mem_affineSpan_image
@@ -2600,7 +2753,14 @@ lemma affineCombination_mem_affineSpan_image
     rw [← h]; rw [← Finset.sum_sdiff (s₁ := {x in s | x in s'}) (s₂ := s) (by simp)]; rw [right_eq_add]
     refine Finset.sum_eq_zero ?_
     intro i hi
-    simp only [Finset.m
+    simp only [Finset.mem_sdiff, Finset.mem_filter, not_and] at hi
+    exact hs' i hi.1 (hi.2 hi.1)
+  rw [← Finset.sum_subtype_eq_sum_filter] at h'
+  convert! affineCombination_mem_affineSpan h' (fun x => p x)
+  rw [Finset.affineCombination_subtype_eq_filter]; rw [Finset.affineCombination_indicator_subset w p
+    (Finset.filter_subset _ _)]
+  refine Finset.affineCombination_congr _ (fun i hi => ?_) (fun _ _ => rfl)
+  simp_all [Set.indicator_apply]
 
 Depends on / 依赖: Finset, Finset.affineCombination_subtype_eq_filte, Finset.mem_filter, Finset.mem_sdiff, Finset.sum_eq_zero, Finset.sum_sdiff, Finset.sum_subtype_eq_sum_filter, Set.image_eq_range, affineCombination_mem_affineSpan, affineCombination_subtype_eq_filte, classical, convert, image_eq_range, mem_filter, mem_sdiff, not_and, right_eq_add, sum_eq_zero, sum_sdiff, sum_subtype_eq_sum_filter
 -/
@@ -2670,7 +2830,18 @@ theorem mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd
   · rintro ⟨s, w, rfl⟩
     classical
       let w' : ι -> k := Function.update w j (1 - (s \ {j}).sum w)
- 
+      have h₁ : (insert j s).sum w' = 1 := by
+        by_cases hj : j in s
+        · simp [w', Finset.sum_update_of_mem hj, Finset.insert_eq_of_mem hj]
+        · simp_rw [w', Finset.sum_insert hj, Finset.sum_update_of_notMem hj, Function.update_self,
+            ← Finset.erase_eq, Finset.erase_eq_of_notMem hj, sub_add_cancel]
+      have hww : forall i, i != j -> w i = w' i := by
+        intro i hij
+        simp [w', hij]
+      rw [s.weightedVSubOfPoint_eq_of_weights_eq p j w w' hww]; rw [←
+        s.weightedVSubOfPoint_insert w' p j]; rw [←
+        (insert j s).affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w' p h₁ (p j)]
+      exact affineCombination_mem_affineSpan h₁ p
 
 中文:
 定理 mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd
@@ -2683,7 +2854,18 @@ theorem mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd
   · rintro ⟨s, w, rfl⟩
     classical
       let w' : ι -> k := Function.update w j (1 - (s \ {j}).sum w)
- 
+      have h₁ : (insert j s).sum w' = 1 := by
+        by_cases hj : j in s
+        · simp [w', Finset.sum_update_of_mem hj, Finset.insert_eq_of_mem hj]
+        · simp_rw [w', Finset.sum_insert hj, Finset.sum_update_of_notMem hj, Function.update_self,
+            ← Finset.erase_eq, Finset.erase_eq_of_notMem hj, sub_add_cancel]
+      have hww : forall i, i != j -> w i = w' i := by
+        intro i hij
+        simp [w', hij]
+      rw [s.weightedVSubOfPoint_eq_of_weights_eq p j w w' hww]; rw [←
+        s.weightedVSubOfPoint_insert w' p j]; rw [←
+        (insert j s).affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w' p h₁ (p j)]
+      exact affineCombination_mem_affineSpan h₁ p
 
 Depends on / 依赖: Finset, Finset.insert_eq_of_mem, Finset.sum_insert, Finset.sum_update_of_mem, Finset.sum_update_of_notMem, Function, Function.update, Function.update_self, affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, classical, eq_affineCombination_of_mem_affineSpan, insert, insert_eq_of_mem, s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, simp_rw, sum_insert, sum_update_of_mem, sum_update_of_notMem, update, update_self
 -/
@@ -2728,7 +2910,8 @@ theorem affineSpan_eq_affineSpan_lineMap_units
     <;> rw [mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd k V _ (⟨p, hp⟩ : s) q] at hq ⊢
     <;> obtain ⟨t, μ, rfl⟩ := hq
     <;> use t
-    <;> [use fun x => μ x * ↑(w x); use fun 
+    <;> [use fun x => μ x * ↑(w x); use fun x => μ x * ↑(w x)⁻¹]
+    <;> simp [smul_smul]
 
 中文:
 定理 affineSpan_eq_affineSpan_lineMap_units
@@ -2742,7 +2925,8 @@ theorem affineSpan_eq_affineSpan_lineMap_units
     <;> rw [mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd k V _ (⟨p, hp⟩ : s) q] at hq ⊢
     <;> obtain ⟨t, μ, rfl⟩ := hq
     <;> use t
-    <;> [use fun x => μ x * ↑(w x); use fun 
+    <;> [use fun x => μ x * ↑(w x); use fun x => μ x * ↑(w x)⁻¹]
+    <;> simp [smul_smul]
 
 Depends on / 依赖: Set.range, conv_rhs, le_antisymm, mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd, smul_smul
 -/
@@ -2779,7 +2963,7 @@ definition weightedVSubOfPoint
   map_vadd' := by
     rintro ⟨p, b⟩ ⟨v, b'⟩
     simp [LinearMap.sum_apply, Finset.weightedVSubOfPoint, vsub_vadd_eq_vsub_sub,
-     vadd_vsub_assoc, ← sub_add_eq_add_s
+     vadd_vsub_assoc, ← sub_add_eq_add_sub, smul_add, Finset.sum_add_distrib]
 
 中文:
 定义 weightedVSubOfPoint
@@ -2789,7 +2973,7 @@ definition weightedVSubOfPoint
   map_vadd' := by
     rintro ⟨p, b⟩ ⟨v, b'⟩
     simp [LinearMap.sum_apply, Finset.weightedVSubOfPoint, vsub_vadd_eq_vsub_sub,
-     vadd_vsub_assoc, ← sub_add_eq_add_s
+     vadd_vsub_assoc, ← sub_add_eq_add_sub, smul_add, Finset.sum_add_distrib]
 
 Depends on / 依赖: p.fst, p.snd, s.weightedVSubOfPoint, weightedVSubOfPoint
 -/

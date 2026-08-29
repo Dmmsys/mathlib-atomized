@@ -88,7 +88,8 @@ definition elabDelta
     synthesizeSyntheticMVars
     let t ← instantiateMVars t
     let some t ← withoutExporting do delta? t | throwError "cannot delta reduce {t}"
-    pu
+    pure t
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 elabDelta
@@ -101,7 +102,8 @@ definition elabDelta
     synthesizeSyntheticMVars
     let t ← instantiateMVars t
     let some t ← withoutExporting do delta? t | throwError "cannot delta reduce {t}"
-    pu
+    pure t
+  | _ => throwUnsupportedSyntax
 
 Depends on / 依赖: expectedType
 -/
@@ -182,7 +184,9 @@ definition elabReduceProj
     synthesizeSyntheticMVars
     let t ← instantiateMVars t
     let t ← Lean.Core.transform t (post := fun e => do
-      return .continue (← Expr.
+      return .continue (← Expr.reduceProjStruct? e))
+    pure t
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 elabReduceProj
@@ -195,7 +199,9 @@ definition elabReduceProj
     synthesizeSyntheticMVars
     let t ← instantiateMVars t
     let t ← Lean.Core.transform t (post := fun e => do
-      return .continue (← Expr.
+      return .continue (← Expr.reduceProjStruct? e))
+    pure t
+  | _ => throwUnsupportedSyntax
 
 Depends on / 依赖: expectedType
 -/

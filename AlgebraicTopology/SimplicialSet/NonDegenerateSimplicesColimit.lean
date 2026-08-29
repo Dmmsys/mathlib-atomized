@@ -92,7 +92,17 @@ abbreviation desc
         dsimp
         rw [← Subfunctor.equalizer_eq_iff]
         have H (u : X.N) (t : X.N) (h : t.simplex in u.subcomplex.obj _) :
-            (s.ι.app u).ap
+            (s.ι.app u).app _ ⟨t.simplex, h⟩ =
+            (s.ι.app t).app _ ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩ :=
+          ConcreteCategory.congr_hom
+            (NatTrans.congr_app (s.w (homOfLE (by
+              rwa [N.le_iff, Subcomplex.ofSimplex_le_iff]))) _)
+            ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩
+        refine le_antisymm (Subfunctor.equalizer_le _ _) ?_
+        rw [Subcomplex.le_iff_contains_nonDegenerate]
+        intro n z hz
+        exact (Subfunctor.mem_equalizer_iff (x := ⟨_, hz⟩) ..).mpr
+          ((H x (N.mk _ z.prop) hz.1).trans (H y (N.mk _ z.prop) hz.2).symm))
 
 中文:
 缩写 desc
@@ -103,7 +113,17 @@ abbreviation desc
         dsimp
         rw [← Subfunctor.equalizer_eq_iff]
         have H (u : X.N) (t : X.N) (h : t.simplex in u.subcomplex.obj _) :
-            (s.ι.app u).ap
+            (s.ι.app u).app _ ⟨t.simplex, h⟩ =
+            (s.ι.app t).app _ ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩ :=
+          ConcreteCategory.congr_hom
+            (NatTrans.congr_app (s.w (homOfLE (by
+              rwa [N.le_iff, Subcomplex.ofSimplex_le_iff]))) _)
+            ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩
+        refine le_antisymm (Subfunctor.equalizer_le _ _) ?_
+        rw [Subcomplex.le_iff_contains_nonDegenerate]
+        intro n z hz
+        exact (Subfunctor.mem_equalizer_iff (x := ⟨_, hz⟩) ..).mpr
+          ((H x (N.mk _ z.prop) hz.1).trans (H y (N.mk _ z.prop) hz.2).symm))
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, IsColimit, Multicofork, Multicofork.IsColimit.desc, N.le_iff, NatTrans, NatTrans.congr_app, Subcomplex, Subcomplex.mem_ofSimplex_obj, Subcomplex.ofSimplex_le_iff, Subcomplex.topIso, Subfunctor, Subfunctor.equalizer_eq_iff, congr_app, congr_hom, equalizer_eq_iff, homOfLE, isColimit, le_iff
 -/

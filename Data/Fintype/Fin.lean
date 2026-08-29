@@ -240,7 +240,9 @@ theorem lt_card_filter_univ_iff_apply_of_imp
   by_contra! hc
   let q : Fin n -> Prop := (· < #{i | p i})
   have : univ.filter q = univ.filter p :=
-    eq_of_subset_of_card_le (by grind) (by rw
+    eq_of_subset_of_card_le (by grind) (by rw [card_filter_val_lt]; grind)
+  have : j in univ.filter p := by grind
+  grind
 
 中文:
 定理 lt_card_filter_univ_iff_apply_of_imp
@@ -253,7 +255,9 @@ theorem lt_card_filter_univ_iff_apply_of_imp
   by_contra! hc
   let q : Fin n -> Prop := (· < #{i | p i})
   have : univ.filter q = univ.filter p :=
-    eq_of_subset_of_card_le (by grind) (by rw
+    eq_of_subset_of_card_le (by grind) (by rw [card_filter_val_lt]; grind)
+  have : j in univ.filter p := by grind
+  grind
 
 Depends on / 依赖: Fin.card_Iio, card_Iio, card_filter_val_lt, card_le_card, eq_of_subset_of_card_le, filter, univ.filter
 -/

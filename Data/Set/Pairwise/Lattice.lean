@@ -209,7 +209,7 @@ theorem PairwiseDisjoint.biUnion
   · exact hg d hd (hcd ▸ ha) hb hab
   · exact (hs hc hd <| ne_of_apply_ne _ hcd).mono
       (le_iSup₂ (f := fun i _ => f i) a ha)
-      (le_i
+      (le_iSup₂ (f := fun i _ => f i) b hb)
 
 中文:
 定理 PairwiseDisjoint.biUnion
@@ -223,7 +223,7 @@ theorem PairwiseDisjoint.biUnion
   · exact hg d hd (hcd ▸ ha) hb hab
   · exact (hs hc hd <| ne_of_apply_ne _ hcd).mono
       (le_iSup₂ (f := fun i _ => f i) a ha)
-      (le_i
+      (le_iSup₂ (f := fun i _ => f i) b hb)
 
 Depends on / 依赖: Set.mem_iUnion, eq_or_ne, mem_iUnion, ne_of_apply_ne, simp_rw
 -/
@@ -253,7 +253,9 @@ theorem PairwiseDisjoint.prod_left
   · refine (ht hi.2 hj.2 <| (Prod.mk_right_injective _).ne_iff.1 h).mono ?_ ?_
     · convert! le_iSup₂ (α := α) i hi.1; rfl
     · convert! le_iSup₂ (α := α) i hj.1; rfl
-  · refine (hs hi.1 hj.1 hij).mono 
+  · refine (hs hi.1 hj.1 hij).mono ?_ ?_
+    · convert! le_iSup₂ (α := α) i' hi.2; rfl
+    · convert! le_iSup₂ (α := α) j' hj.2; rfl
 
 中文:
 定理 PairwiseDisjoint.prod_left
@@ -265,7 +267,9 @@ theorem PairwiseDisjoint.prod_left
   · refine (ht hi.2 hj.2 <| (Prod.mk_right_injective _).ne_iff.1 h).mono ?_ ?_
     · convert! le_iSup₂ (α := α) i hi.1; rfl
     · convert! le_iSup₂ (α := α) i hj.1; rfl
-  · refine (hs hi.1 hj.1 hij).mono 
+  · refine (hs hi.1 hj.1 hij).mono ?_ ?_
+    · convert! le_iSup₂ (α := α) i' hi.2; rfl
+    · convert! le_iSup₂ (α := α) j' hj.2; rfl
 
 Depends on / 依赖: Prod.mk_right_injective, convert, eq_or_ne, mem_prod, mk_right_injective, ne_iff
 -/
@@ -301,7 +305,7 @@ theorem pairwiseDisjoint_prod_left
     simp_rw [Function.onFun, iSup_disjoint_iff, disjoint_iSup_iff] <;>
     intro i' hi' j' hj'
   · exact h (mk_mem_prod hi hi') (mk_mem_prod hj hj') (ne_of_apply_ne Prod.fst hij)
-  · exact
+  · exact h (mk_mem_prod hi' hi) (mk_mem_prod hj' hj) (ne_of_apply_ne Prod.snd hij)
 
 中文:
 定理 pairwiseDisjoint_prod_left
@@ -312,7 +316,7 @@ theorem pairwiseDisjoint_prod_left
     simp_rw [Function.onFun, iSup_disjoint_iff, disjoint_iSup_iff] <;>
     intro i' hi' j' hj'
   · exact h (mk_mem_prod hi hi') (mk_mem_prod hj hj') (ne_of_apply_ne Prod.fst hij)
-  · exact
+  · exact h (mk_mem_prod hi' hi) (mk_mem_prod hj' hj) (ne_of_apply_ne Prod.snd hij)
 
 Depends on / 依赖: Function, Function.onFun, Prod.fst, Prod.snd, disjoint_iSup_iff, iSup_disjoint_iff, mk_mem_prod, ne_of_apply_ne, prod_left, simp_rw
 -/
@@ -342,7 +346,7 @@ theorem biUnion_sdiff_biUnion_eq
   rw [mem_iUnion₂]; rintro ⟨j, hj, haj⟩
   exact (h (Or.inl hi.1) (Or.inr hj) (ne_of_mem_of_not_mem hj hi.2).symm).le_bot ⟨ha, haj⟩
 
-@[deprecated (since := "
+@[deprecated (since := "2026-06-03")] alias biUnion_diff_biUnion_eq := biUnion_sdiff_biUnion_eq
 
 中文:
 定理 biUnion_sdiff_biUnion_eq
@@ -354,7 +358,7 @@ theorem biUnion_sdiff_biUnion_eq
   rw [mem_iUnion₂]; rintro ⟨j, hj, haj⟩
   exact (h (Or.inl hi.1) (Or.inr hj) (ne_of_mem_of_not_mem hj hi.2).symm).le_bot ⟨ha, haj⟩
 
-@[deprecated (since := "
+@[deprecated (since := "2026-06-03")] alias biUnion_diff_biUnion_eq := biUnion_sdiff_biUnion_eq
 
 Depends on / 依赖: Or.inl, Or.inr, antisymm, biUnion_sdiff_biUnion_subset, le_bot, mem_biUnion, mem_sdiff, ne_of_mem_of_not_mem
 -/

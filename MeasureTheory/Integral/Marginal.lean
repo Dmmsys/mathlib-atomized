@@ -205,7 +205,9 @@ theorem lmarginal_singleton
   calc (∫⋯∫⁻_{i}, f ∂μ) x
       = ∫⁻ (y : X (default : α)), f (updateFinset x {i} (e y)) ∂μ (default : α) := by
         simp_rw [lmarginal,
-.symm _ measurePreserving_piUnique (fun j : ({i} : 
+.symm _ measurePreserving_piUnique (fun j : ({i} : Finset δ) => μ j)
+.lintegral_map_equiv, e, α]
+    _ = ∫⁻ xᵢ, f (Function.update x i xᵢ) ∂μ i := by simp [update_eq_updateFinset]; rfl
 
 中文:
 定理 lmarginal_singleton
@@ -217,7 +219,9 @@ theorem lmarginal_singleton
   calc (∫⋯∫⁻_{i}, f ∂μ) x
       = ∫⁻ (y : X (default : α)), f (updateFinset x {i} (e y)) ∂μ (default : α) := by
         simp_rw [lmarginal,
-.symm _ measurePreserving_piUnique (fun j : ({i} : 
+.symm _ measurePreserving_piUnique (fun j : ({i} : Finset δ) => μ j)
+.lintegral_map_equiv, e, α]
+    _ = ∫⁻ xᵢ, f (Function.update x i xᵢ) ∂μ i := by simp [update_eq_updateFinset]; rfl
 
 Depends on / 依赖: Finset, Function, Function.update, MeasurableEquiv, MeasurableEquiv.piUnique, lintegral_map_equiv, lmarginal, measurePreserving_piUnique, piUnique, simp_rw, update, updateFinset, update_eq_updateFinset
 -/
@@ -269,7 +273,17 @@ theorem lmarginal_union
   calc (∫⋯∫⁻_s union t, f ∂μ) x
       = ∫⁻ (y : (i : ↥(s union t)) -> X i), f (updateFinset x (s union t) y)
           ∂.pi fun i' : ↥(s union t) => μ i' := rfl
-    _ = ∫⁻ (y : ((i : s) -> X i) × ((j : t) -> X j)), f (updateFinset x (s union
+    _ = ∫⁻ (y : ((i : s) -> X i) × ((j : t) -> X j)), f (updateFinset x (s union t) _)
+          ∂(Measure.pi fun i : s => μ i).prod (.pi fun j : t => μ j) := by
+        rw [measurePreserving_piFinsetUnion hst μ |>.lintegral_map_equiv]
+    _ = ∫⁻ (y : (i : s) -> X i), ∫⁻ (z : (j : t) -> X j), f (updateFinset x (s union t) (e (y, z)))
+          ∂.pi fun j : t => μ j ∂.pi fun i : s => μ i := by
+        apply lintegral_prod
+        apply Measurable.aemeasurable
+exact hf.comp measurable_updateFinset.comp e.measurable
+    _ = (∫⋯∫⁻_s, ∫⋯∫⁻_t, f ∂μ ∂μ) x := by
+        simp_rw [lmarginal, updateFinset_updateFinset hst]
+        rfl
 
 中文:
 定理 lmarginal_union
@@ -280,7 +294,17 @@ theorem lmarginal_union
   calc (∫⋯∫⁻_s union t, f ∂μ) x
       = ∫⁻ (y : (i : ↥(s union t)) -> X i), f (updateFinset x (s union t) y)
           ∂.pi fun i' : ↥(s union t) => μ i' := rfl
-    _ = ∫⁻ (y : ((i : s) -> X i) × ((j : t) -> X j)), f (updateFinset x (s union
+    _ = ∫⁻ (y : ((i : s) -> X i) × ((j : t) -> X j)), f (updateFinset x (s union t) _)
+          ∂(Measure.pi fun i : s => μ i).prod (.pi fun j : t => μ j) := by
+        rw [measurePreserving_piFinsetUnion hst μ |>.lintegral_map_equiv]
+    _ = ∫⁻ (y : (i : s) -> X i), ∫⁻ (z : (j : t) -> X j), f (updateFinset x (s union t) (e (y, z)))
+          ∂.pi fun j : t => μ j ∂.pi fun i : s => μ i := by
+        apply lintegral_prod
+        apply Measurable.aemeasurable
+exact hf.comp measurable_updateFinset.comp e.measurable
+    _ = (∫⋯∫⁻_s, ∫⋯∫⁻_t, f ∂μ ∂μ) x := by
+        simp_rw [lmarginal, updateFinset_updateFinset hst]
+        rfl
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.piFinsetUnion, Measure, Measure.pi, lintegral_map_equiv, measurePreserving_piFinsetUnion, piFinsetUnion, updateFinset
 -/
@@ -473,7 +497,8 @@ measurable_pi_iff.mpr fun i => measurable_pi_apply (e i)
   induction s using Finset.induction generalizing x with
   | empty => simp
   | insert _ _ hi ih =>
-    rw [image_insert]; rw [lmarginal_insert _ (hf.comp h) (he.mem_finset_image.not
+    rw [image_insert]; rw [lmarginal_insert _ (hf.comp h) (he.mem_finset_image.not.mpr hi)]; rw [lmarginal_insert _ hf hi]
+    simp_rw [ih, ← update_comp_eq_of_injective' x he]
 
 中文:
 定理 lmarginal_image
@@ -484,7 +509,8 @@ measurable_pi_iff.mpr fun i => measurable_pi_apply (e i)
   induction s using Finset.induction generalizing x with
   | empty => simp
   | insert _ _ hi ih =>
-    rw [image_insert]; rw [lmarginal_insert _ (hf.comp h) (he.mem_finset_image.not
+    rw [image_insert]; rw [lmarginal_insert _ (hf.comp h) (he.mem_finset_image.not.mpr hi)]; rw [lmarginal_insert _ hf hi]
+    simp_rw [ih, ← update_comp_eq_of_injective' x he]
 
 Depends on / 依赖: Finset, Finset.induction, Measurable, generalizing, he.mem_finset_image.not.mpr, hf.comp, image_insert, insert, lmarginal_insert, measurable_pi_apply, measurable_pi_iff, measurable_pi_iff.mpr, mem_finset_image, simp_rw, update_comp_eq_of_injective
 -/
@@ -511,7 +537,7 @@ theorem lmarginal_update_of_notMem
   | insert i' s hi' ih =>
     rw [lmarginal_insert _ hf hi']; rw [lmarginal_insert _ (hf.comp measurable_update_left) hi']
     have hii' : i != i' := mt (by rintro rfl; exact mem_insert_self i s) hi
-    simp_rw [update_com
+    simp_rw [update_comm hii', ih (mt Finset.mem_insert_of_mem hi)]
 
 中文:
 定理 lmarginal_update_of_notMem
@@ -522,7 +548,7 @@ theorem lmarginal_update_of_notMem
   | insert i' s hi' ih =>
     rw [lmarginal_insert _ hf hi']; rw [lmarginal_insert _ (hf.comp measurable_update_left) hi']
     have hii' : i != i' := mt (by rintro rfl; exact mem_insert_self i s) hi
-    simp_rw [update_com
+    simp_rw [update_comm hii', ih (mt Finset.mem_insert_of_mem hi)]
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, generalizing, hf.comp, insert, lmarginal_insert, measurable_update_left, mem_insert_of_mem, mem_insert_self, simp_rw, update_comm
 -/

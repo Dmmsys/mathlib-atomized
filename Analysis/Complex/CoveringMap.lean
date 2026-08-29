@@ -35,7 +35,9 @@ theorem isAddQuotientCoveringMap_exp
   refine Topology.IsQuotientMap.isAddQuotientCoveringMap_of_addSubgroup ?_
     _ ⟨NormedSpace.discreteTopology_zmultiples _⟩ fun {z _} => ?_
   · refine IsOpenMap.isQuotientMap ?_ (by fun_prop) fun z => ⟨_, Subtype.ext (exp_log z.2)⟩
-    exact (IsOpen.isOpenEmbedding_subtypeVal isClosed_singleton.
+    exact (IsOpen.isOpenEmbedding_subtypeVal isClosed_singleton.1).isOpenMap_iff.mpr isOpenMap_exp
+  · simp_rw [Subtype.ext_iff, eq_comm (a := exp z), exp_eq_exp_iff_exists_int,
+      AddSubgroup.mem_zmultiples_iff, eq_add_neg_iff_add_eq, eq_comm, add_comm, zsmul_eq_mul]
 
 中文:
 定理 isAddQuotientCoveringMap_exp
@@ -43,7 +45,9 @@ theorem isAddQuotientCoveringMap_exp
   refine Topology.IsQuotientMap.isAddQuotientCoveringMap_of_addSubgroup ?_
     _ ⟨NormedSpace.discreteTopology_zmultiples _⟩ fun {z _} => ?_
   · refine IsOpenMap.isQuotientMap ?_ (by fun_prop) fun z => ⟨_, Subtype.ext (exp_log z.2)⟩
-    exact (IsOpen.isOpenEmbedding_subtypeVal isClosed_singleton.
+    exact (IsOpen.isOpenEmbedding_subtypeVal isClosed_singleton.1).isOpenMap_iff.mpr isOpenMap_exp
+  · simp_rw [Subtype.ext_iff, eq_comm (a := exp z), exp_eq_exp_iff_exists_int,
+      AddSubgroup.mem_zmultiples_iff, eq_add_neg_iff_add_eq, eq_comm, add_comm, zsmul_eq_mul]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mem_zmultiples_iff, IsOpen, IsOpen.isOpenEmbedding_subtypeVal, IsOpenMap, IsOpenMap.isQuotientMap, IsQuotientMap, NormedSpace, NormedSpace.discreteTopology_zmultiples, Subtype, Subtype.ext, Subtype.ext_iff, Topology, Topology.IsQuotientMap.isAddQuotientCoveringMap_of_addSubgroup, add_comm, discreteTopology_zmultiples, eq_add_neg_iff_add_eq, eq_comm, exp_eq_exp_iff_exists_int, exp_log
 -/
@@ -113,7 +117,7 @@ theorem Polynomial.isCoveringMapOn_eval
       fun h => hx ⟨x, h, rfl⟩).mem_toOpenPartialHomeomorph_source, by simp⟩
   obtain rfl | ne := eq_or_ne p (C x)
   · simp at hx
-  · simpa only [
+  · simpa only [preimage_eval_singleton ne] using rootSet_finite ..
 
 中文:
 定理 多项式.isCoveringMapOn_eval
@@ -124,7 +128,7 @@ theorem Polynomial.isCoveringMapOn_eval
       fun h => hx ⟨x, h, rfl⟩).mem_toOpenPartialHomeomorph_source, by simp⟩
   obtain rfl | ne := eq_or_ne p (C x)
   · simp at hx
-  · simpa only [
+  · simpa only [preimage_eval_singleton ne] using rootSet_finite ..
 
 Depends on / 依赖: eq_or_ne, hasStrictDerivAt, hasStrictFDerivAt_equiv, isClosedMap_eval, isCoveringMapOn_of_isLocalHomeomorphOn, mem_toOpenPartialHomeomorph_source, p.hasStrictDerivAt, p.isClosedMap_eval.isCoveringMapOn_of_isLocalHomeomorphOn, preimage_eval_singleton, rootSet_finite
 -/
@@ -243,7 +247,7 @@ theorem isCoveringMapOn_zpow
   · convert isClosed_singleton (x := (0 : 𝕜)).isOpen_compl
     ext; simp [this]
   · convert! (isCoveringMap_zpow n hn).comp_homeomorph (.setCongr _) using 1
-    ext; sim
+    ext; simpa using! (this _).not
 
 中文:
 定理 isCoveringMapOn_zpow
@@ -254,7 +258,7 @@ theorem isCoveringMapOn_zpow
   · convert isClosed_singleton (x := (0 : 𝕜)).isOpen_compl
     ext; simp [this]
   · convert! (isCoveringMap_zpow n hn).comp_homeomorph (.setCongr _) using 1
-    ext; sim
+    ext; simpa using! (this _).not
 
 Depends on / 依赖: comp_homeomorph, convert, isClosed_singleton, isCoveringMap_zpow, isOpen_compl, of_isCoveringMap_restrictPreimage, setCongr, zpow_eq_zero_iff
 -/
@@ -282,7 +286,12 @@ theorem isQuotientCoveringMap_npow
     (by fun_prop) (.restrictPreimage _ surj)
   have : IsQuotientMap fun x : 𝕜ˣ => x ^ n := by
     let e := unitsHomeomorphNeZero (G₀ := 𝕜)
-    convert! (e.symm.isQuot
+    convert! (e.symm.isQuotientMap.comp this).comp (e.trans (.ofEqSubtypes _)).isQuotientMap
+    · exact (e.left_inv _).symm
+    · ext; simp [NeZero.ne]
+  refine this.isQuotientCoveringMap_of_subgroup _
+    (Set.Finite.isDiscrete <| inferInstanceAs (Finite (rootsOfUnity ..))) ?_
+  simp [mul_pow, mul_inv_eq_one, eq_comm]
 
 中文:
 定理 isQuotientCoveringMap_npow
@@ -294,7 +303,12 @@ theorem isQuotientCoveringMap_npow
     (by fun_prop) (.restrictPreimage _ surj)
   have : IsQuotientMap fun x : 𝕜ˣ => x ^ n := by
     let e := unitsHomeomorphNeZero (G₀ := 𝕜)
-    convert! (e.symm.isQuot
+    convert! (e.symm.isQuotientMap.comp this).comp (e.trans (.ofEqSubtypes _)).isQuotientMap
+    · exact (e.left_inv _).symm
+    · ext; simp [NeZero.ne]
+  refine this.isQuotientCoveringMap_of_subgroup _
+    (Set.Finite.isDiscrete <| inferInstanceAs (Finite (rootsOfUnity ..))) ?_
+  simp [mul_pow, mul_inv_eq_one, eq_comm]
 
 Depends on / 依赖: Finite, IsQuotientMap, NeZero, NeZero.ne, Set.Finite.isDiscrete, convert, e.left_inv, e.symm.isQuotientMap.comp, e.trans, fun_prop, inferInstanceA, isClosedMap_pow, isDiscrete, isQuotientCoveringMap_of_subgroup, isQuotientMap, left_inv, ofEqSubtypes, restrictPreimage, rootsOfUnity_eq_ker, this.isQuotientCoveringMap_of_subgroup
 -/
@@ -343,7 +357,7 @@ theorem isQuotientCoveringMap_zpow
   rw [show (zpowGroupHom (α := 𝕜ˣ) (-n)).ker = (powMonoidHom n).ker by ext; simp]
   convert (isQuotientCoveringMap_npow n (by aesop) _).homeomorph_comp (.inv 𝕜ˣ)
   · ext; simp
-  conv
+  convert! inv_involutive.surjective.comp surj; simp
 
 中文:
 定理 isQuotientCoveringMap_zpow
@@ -354,7 +368,7 @@ theorem isQuotientCoveringMap_zpow
   rw [show (zpowGroupHom (α := 𝕜ˣ) (-n)).ker = (powMonoidHom n).ker by ext; simp]
   convert (isQuotientCoveringMap_npow n (by aesop) _).homeomorph_comp (.inv 𝕜ˣ)
   · ext; simp
-  conv
+  convert! inv_involutive.surjective.comp surj; simp
 
 Depends on / 依赖: convert, eq_nat_or_neg, homeomorph_comp, inv_involutive, inv_involutive.surjective.comp, isQuotientCoveringMap_npow, n.eq_nat_or_neg, powMonoidHom, surjective, zpowGroupHom
 -/

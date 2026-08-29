@@ -35,7 +35,18 @@ let const lhsFun _ ← (getAppFn ∘ cleanupAnnotations) < > instantiateMVars (�
     -- If the user specified a lemma, use that one,
     | some e =>
       pure [e]
-    -- otherwi
+    -- otherwise, look up everything tagged `@[congr]`
+    | none =>
+      let congrTheorems ←
+(fun congrTheoremMap => congrTheoremMap.get lhsFun) < > getSimpCongrTheorems
+      congrTheorems.mapM (fun congrTheorem =>
+liftM mkConstWithFreshMVarLevels congrTheorem.theoremName)
+  if congrTheoremExprs == [] then
+    throwError "No matching congr lemmas found"
+  -- For every lemma:
+  liftMetaTactic fun mainGoal => congrTheoremExprs.firstM (fun congrTheoremExpr => do
+    let newGoals ← mainGoal.apply congrTheoremExpr { newGoals := .nonDependentOnly }
+newGoals.mapM fun newGoal => Prod.snd < > newGoal.intros)
 
 中文:
 定义 Lean.Elab.Tactic.applyCongr
@@ -48,7 +59,18 @@ let const lhsFun _ ← (getAppFn ∘ cleanupAnnotations) < > instantiateMVars (�
     -- If the user specified a lemma, use that one,
     | some e =>
       pure [e]
-    -- otherwi
+    -- otherwise, look up everything tagged `@[congr]`
+    | none =>
+      let congrTheorems ←
+(fun congrTheoremMap => congrTheoremMap.get lhsFun) < > getSimpCongrTheorems
+      congrTheorems.mapM (fun congrTheorem =>
+liftM mkConstWithFreshMVarLevels congrTheorem.theoremName)
+  if congrTheoremExprs == [] then
+    throwError "No matching congr lemmas found"
+  -- For every lemma:
+  liftMetaTactic fun mainGoal => congrTheoremExprs.firstM (fun congrTheoremExpr => do
+    let newGoals ← mainGoal.apply congrTheoremExpr { newGoals := .nonDependentOnly }
+newGoals.mapM fun newGoal => Prod.snd < > newGoal.intros)
 -/
 def Lean.Elab.Tactic.applyCongr (q : Option Expr) : TacticM Unit := do
 let const lhsFun _ ← (getAppFn ∘ cleanupAnnotations) < > instantiateMVars (← getLhs) |

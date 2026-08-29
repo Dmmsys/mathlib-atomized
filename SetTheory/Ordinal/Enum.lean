@@ -339,7 +339,7 @@ theorem range_enumOrd
     · intro b hb
       by_contra! hb'
       exact hb.not_ge (csInf_le' hb')
-    · exact csInf_mem (s := t) ⟨a, (en
+    · exact csInf_mem (s := t) ⟨a, (enumOrd_strictMono hs).id_le a⟩
 
 中文:
 定理 range_enumOrd
@@ -356,7 +356,7 @@ theorem range_enumOrd
     · intro b hb
       by_contra! hb'
       exact hb.not_ge (csInf_le' hb')
-    · exact csInf_mem (s := t) ⟨a, (en
+    · exact csInf_mem (s := t) ⟨a, (enumOrd_strictMono hs).id_le a⟩
 
 Depends on / 依赖: antisymm, csInf_le, csInf_mem, enumOrd, enumOrd_le_of_forall_lt, enumOrd_mem, enumOrd_strictMono, hb.not_ge, id_le, not_ge
 -/
@@ -491,7 +491,13 @@ theorem isNormal_enumOrd
   trans ⨆ b : Iio o, enumOrd s b
   · refine enumOrd_le_of_forall_lt ?_ (fun b hb => (enumOrd_strictMono hs (lt_succ b)).trans_le ?_)
     · have : Nonempty (Iio o) := ⟨0, ho.bot_lt⟩
-      apply H _ _ (range_nonempty _) bddAbove_o
+      apply H _ _ (range_nonempty _) bddAbove_of_small
+      rintro _ ⟨c, rfl⟩
+      exact enumOrd_mem hs c
+    · exact Ordinal.le_iSup _ (⟨_, ho.succ_lt hb⟩ : Iio o)
+  · exact Ordinal.iSup_le fun x => ha _ x.2
+
+@[simp]
 
 中文:
 定理 isNormal_enumOrd
@@ -501,7 +507,13 @@ theorem isNormal_enumOrd
   trans ⨆ b : Iio o, enumOrd s b
   · refine enumOrd_le_of_forall_lt ?_ (fun b hb => (enumOrd_strictMono hs (lt_succ b)).trans_le ?_)
     · have : Nonempty (Iio o) := ⟨0, ho.bot_lt⟩
-      apply H _ _ (range_nonempty _) bddAbove_o
+      apply H _ _ (range_nonempty _) bddAbove_of_small
+      rintro _ ⟨c, rfl⟩
+      exact enumOrd_mem hs c
+    · exact Ordinal.le_iSup _ (⟨_, ho.succ_lt hb⟩ : Iio o)
+  · exact Ordinal.iSup_le fun x => ha _ x.2
+
+@[simp]
 
 Depends on / 依赖: Nonempty, Ordinal, Ordinal.iSup_le, Ordinal.le_iSup, bddAbove_of_small, bot_lt, enumOrd, enumOrd_le_of_forall_lt, enumOrd_mem, enumOrd_strictMono, ho.bot_lt, ho.succ_lt, iSup_le, isNormal_iff, le_iSup, lt_succ, range_nonempty, succ_lt, trans_le
 -/

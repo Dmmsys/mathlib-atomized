@@ -451,7 +451,10 @@ theorem pred_true_of_uniformOn_eq_one
   have hsf := finite_of_uniformOn_ne_zero (by rw [h]; exact one_ne_zero)
   rw [uniformOn]; rw [cond_apply hsf.measurableSet]; rw [mul_comm] at h
   replace h := ENNReal.eq_inv_of_mul_eq_one_left h
-  rw [inv_inv]; rw [Measure.count_apply_finite _ hsf]; rw [Measure.count_apply_finite _ (hsf.inter_of
+  rw [inv_inv]; rw [Measure.count_apply_finite _ hsf]; rw [Measure.count_apply_finite _ (hsf.inter_of_left _)]; rw [Nat.cast_inj] at h
+  suffices s inter t = s by exact this ▸ fun x hx => hx.2
+  rw [← @Set.Finite.toFinset_inj _ _ _ (hsf.inter_of_left _) hsf]
+  exact Finset.eq_of_subset_of_card_le (Set.Finite.toFinset_mono s.inter_subset_left) h.ge
 
 中文:
 定理 pred_true_of_uniformOn_eq_one
@@ -461,7 +464,10 @@ theorem pred_true_of_uniformOn_eq_one
   have hsf := finite_of_uniformOn_ne_zero (by rw [h]; exact one_ne_zero)
   rw [uniformOn]; rw [cond_apply hsf.measurableSet]; rw [mul_comm] at h
   replace h := ENNReal.eq_inv_of_mul_eq_one_left h
-  rw [inv_inv]; rw [Measure.count_apply_finite _ hsf]; rw [Measure.count_apply_finite _ (hsf.inter_of
+  rw [inv_inv]; rw [Measure.count_apply_finite _ hsf]; rw [Measure.count_apply_finite _ (hsf.inter_of_left _)]; rw [Nat.cast_inj] at h
+  suffices s inter t = s by exact this ▸ fun x hx => hx.2
+  rw [← @Set.Finite.toFinset_inj _ _ _ (hsf.inter_of_left _) hsf]
+  exact Finset.eq_of_subset_of_card_le (Set.Finite.toFinset_mono s.inter_subset_left) h.ge
 
 Depends on / 依赖: ENNReal, ENNReal.eq_inv_of_mul_eq_one_left, Finite, Finset, Finset.eq_of_subset_of_card_le, Measure, Measure.count_apply_finite, Nat.cast_inj, Set.Finite.toFin, Set.Finite.toFinset_inj, cast_inj, cond_apply, count_apply_finite, eq_inv_of_mul_eq_one_left, eq_of_subset_of_card_le, finite_of_uniformOn_ne_zero, hsf.inter_of_left, hsf.measurableSet, inter_of_left, inv_inv
 -/
@@ -529,7 +535,9 @@ theorem uniformOn_inter
   by_cases hst : s inter t = ∅
   · rw [hst, uniformOn_empty_meas, Measure.coe_zero, Pi.zero_apply, zero_mul,
       uniformOn_eq_zero_iff hs, ← Set.inter_assoc, hst, Set.empty_inter]
-  rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply hs.measurableSet]; rw [cond_appl
+  rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply hs.measurableSet]; rw [cond_apply (hs.inter_of_left _).measurableSet]; rw [mul_comm _ (Measure.count (s inter t))]; rw [← mul_assoc]; rw [mul_comm _ (Measure.count (s inter t))]; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]; rw [mul_comm]; rw [Set.inter_assoc]
+  · rwa [← Measure.count_eq_zero_iff] at hst
+  · exact (Measure.count_apply_lt_top.2 <| hs.inter_of_left _).ne
 
 中文:
 定理 uniformOn_inter
@@ -538,7 +546,9 @@ theorem uniformOn_inter
   by_cases hst : s inter t = ∅
   · rw [hst, uniformOn_empty_meas, Measure.coe_zero, Pi.zero_apply, zero_mul,
       uniformOn_eq_zero_iff hs, ← Set.inter_assoc, hst, Set.empty_inter]
-  rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply hs.measurableSet]; rw [cond_appl
+  rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply hs.measurableSet]; rw [cond_apply (hs.inter_of_left _).measurableSet]; rw [mul_comm _ (Measure.count (s inter t))]; rw [← mul_assoc]; rw [mul_comm _ (Measure.count (s inter t))]; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]; rw [mul_comm]; rw [Set.inter_assoc]
+  · rwa [← Measure.count_eq_zero_iff] at hst
+  · exact (Measure.count_apply_lt_top.2 <| hs.inter_of_left _).ne
 
 Depends on / 依赖: ENNReal, ENNReal.mul_inv_cancel, Measure, Measure.coe_zero, Measure.count, Pi.zero_apply, Set.empty_inter, Set.inter_assoc, coe_zero, cond_apply, empty_inter, hs.inter_of_left, hs.measurableSet, inter_assoc, inter_of_left, measurableSet, mul_assoc, mul_comm, mul_inv_cancel, one_mul
 -/
@@ -631,7 +641,13 @@ theorem uniformOn_disjoint_union
   · simp
   · simp [uniformOn_self ht ht']
   · simp [uniformOn_self hs hs']
-  rw [uniformOn]; rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply ht.measurableSet]; rw [
+  rw [uniformOn]; rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply ht.measurableSet]; rw [cond_apply (hs.union ht).measurableSet]; rw [cond_apply (hs.union ht).measurableSet]; rw [cond_apply (hs.union ht).measurableSet]
+  conv_lhs =>
+    rw [Set.union_inter_cancel_left]; rw [Set.union_inter_cancel_right]; rw [mul_comm (Measure.count (s union t))⁻¹]; rw [mul_comm (Measure.count (s union t))⁻¹]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm _ (Measure.count s)]; rw [mul_comm _ (Measure.count t)]; rw [← mul_assoc]; rw [← mul_assoc]
+  rw [ENNReal.mul_inv_cancel]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]; rw [one_mul]; rw [← add_mul]; rw [← measure_union]; rw [Set.union_inter_distrib_right]; rw [mul_comm]
+  exacts [hst.mono inf_le_left inf_le_left, (ht.inter_of_left _).measurableSet,
+    Measure.count_ne_zero ht', (Measure.count_apply_lt_top.2 ht).ne, Measure.count_ne_zero hs',
+    (Measure.count_apply_lt_top.2 hs).ne]
 
 中文:
 定理 uniformOn_disjoint_union
@@ -641,7 +657,13 @@ theorem uniformOn_disjoint_union
   · simp
   · simp [uniformOn_self ht ht']
   · simp [uniformOn_self hs hs']
-  rw [uniformOn]; rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply ht.measurableSet]; rw [
+  rw [uniformOn]; rw [uniformOn]; rw [uniformOn]; rw [cond_apply hs.measurableSet]; rw [cond_apply ht.measurableSet]; rw [cond_apply (hs.union ht).measurableSet]; rw [cond_apply (hs.union ht).measurableSet]; rw [cond_apply (hs.union ht).measurableSet]
+  conv_lhs =>
+    rw [Set.union_inter_cancel_left]; rw [Set.union_inter_cancel_right]; rw [mul_comm (Measure.count (s union t))⁻¹]; rw [mul_comm (Measure.count (s union t))⁻¹]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm _ (Measure.count s)]; rw [mul_comm _ (Measure.count t)]; rw [← mul_assoc]; rw [← mul_assoc]
+  rw [ENNReal.mul_inv_cancel]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]; rw [one_mul]; rw [← add_mul]; rw [← measure_union]; rw [Set.union_inter_distrib_right]; rw [mul_comm]
+  exacts [hst.mono inf_le_left inf_le_left, (ht.inter_of_left _).measurableSet,
+    Measure.count_ne_zero ht', (Measure.count_apply_lt_top.2 ht).ne, Measure.count_ne_zero hs',
+    (Measure.count_apply_lt_top.2 hs).ne]
 
 Depends on / 依赖: Set.union_inter_cancel_left, Set.union_inter_cancel_right, cond_apply, conv_lhs, eq_empty_or_nonempty, hs.measurableSet, hs.union, ht.measurableSet, measurableSet, s.eq_empty_or_nonempty, t.eq_empty_or_nonempty, uniformOn, uniformOn_self, union_inter_cancel_left, union_inter_cancel_right
 -/
@@ -705,7 +727,7 @@ lemma uniformOn_pi
   lift t to ι -> Finset Ω using by simp [Set.toFinite]
   classical
   simp [← Fintype.coe_piFinset, uniformOn_apply_finset, ← Fintype.piFinset_inter,
-    ENNReal.prod_div_distrib_of_ne
+    ENNReal.prod_div_distrib_of_ne_top]
 
 中文:
 引理 uniformOn_pi
@@ -716,7 +738,7 @@ lemma uniformOn_pi
   lift t to ι -> Finset Ω using by simp [Set.toFinite]
   classical
   simp [← Fintype.coe_piFinset, uniformOn_apply_finset, ← Fintype.piFinset_inter,
-    ENNReal.prod_div_distrib_of_ne
+    ENNReal.prod_div_distrib_of_ne_top]
 
 Depends on / 依赖: ENNReal, ENNReal.prod_div_distrib_of_ne_top, Finset, Fintype, Fintype.coe_piFinset, Fintype.piFinset_inter, Measure, MeasureTheory, MeasureTheory.Measure.pi_eq, Set.toFinite, classical, coe_piFinset, piFinset_inter, pi_eq, prod_div_distrib_of_ne_top, toFinite, uniformOn_apply_finset
 -/

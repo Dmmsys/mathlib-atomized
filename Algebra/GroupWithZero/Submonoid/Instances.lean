@@ -108,7 +108,7 @@ instance [GroupWithZero
   mul_inv_cancel := by
     rintro ⟨a, ha⟩ h
     simp only [ne_eq, Subtype.ext_iff] at h
-    simpa using mul_inv_cance
+    simpa using mul_inv_cancel₀ h
 
 中文:
 实例 [带零群
@@ -122,7 +122,7 @@ instance [GroupWithZero
   mul_inv_cancel := by
     rintro ⟨a, ha⟩ h
     simp only [ne_eq, Subtype.ext_iff] at h
-    simpa using mul_inv_cance
+    simpa using mul_inv_cancel₀ h
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.ext_iff, exists_pair_ne, ext_iff, inv_zero, map_one, mul_inv_cancel, ne_eq, x.prop
 -/

@@ -649,7 +649,12 @@ definition ghostEquiv'
     apply_fun aeval x.coeff at this
     simpa +unfoldPartialApp only [aeval_bind₁, aeval_X, ghostFun,
       aeval_wittPolynomial]
-  right_inv := 
+  right_inv := by
+    intro x
+    ext n
+    have := bind₁_xInTermsOfW_wittPolynomial p R n
+    apply_fun aeval x at this
+    simpa only [aeval_bind₁, aeval_X, ghostFun, aeval_wittPolynomial]
 
 中文:
 定义 ghostEquiv'
@@ -663,7 +668,12 @@ definition ghostEquiv'
     apply_fun aeval x.coeff at this
     simpa +unfoldPartialApp only [aeval_bind₁, aeval_X, ghostFun,
       aeval_wittPolynomial]
-  right_inv := 
+  right_inv := by
+    intro x
+    ext n
+    have := bind₁_xInTermsOfW_wittPolynomial p R n
+    apply_fun aeval x at this
+    simpa only [aeval_bind₁, aeval_X, ghostFun, aeval_wittPolynomial]
 -/
 private def ghostEquiv' [Invertible (p : R)] : 𝕎 R ≃ (Nat -> R) where
   toFun := ghostFun
@@ -947,7 +957,15 @@ theorem pow_dvd_ghostComponent_of_dvd_coeff
   intro i hi
   simp only [Finset.mem_range] at hi
   have : (MvPolynomial.aeval x.coeff) ((MvPolynomial.monomial (R := Int)
-      (Finsupp.single i (p ^ (n - i)))) (p ^ i)) = ((p : R) ^ 
+      (Finsupp.single i (p ^ (n - i)))) (p ^ i)) = ((p : R) ^ i) * (x.coeff i) ^ (p ^ (n - i)) := by
+    simp [MvPolynomial.aeval_monomial, map_pow]
+  rw [this]; rw [show n + 1 = (n - i) + 1 + i by lia]; rw [pow_add]; rw [mul_comm]
+  gcongr
+  · exact hx i (Nat.le_of_lt_succ hi)
+  · exact ((n - i).lt_two_pow_self).succ_le.trans
+        (pow_left_mono (n - i) (Nat.Prime.two_le Fact.out))
+
+@[simp]
 
 中文:
 定理 pow_dvd_ghostComponent_of_dvd_coeff
@@ -958,7 +976,15 @@ theorem pow_dvd_ghostComponent_of_dvd_coeff
   intro i hi
   simp only [Finset.mem_range] at hi
   have : (MvPolynomial.aeval x.coeff) ((MvPolynomial.monomial (R := Int)
-      (Finsupp.single i (p ^ (n - i)))) (p ^ i)) = ((p : R) ^ 
+      (Finsupp.single i (p ^ (n - i)))) (p ^ i)) = ((p : R) ^ i) * (x.coeff i) ^ (p ^ (n - i)) := by
+    simp [MvPolynomial.aeval_monomial, map_pow]
+  rw [this]; rw [show n + 1 = (n - i) + 1 + i by lia]; rw [pow_add]; rw [mul_comm]
+  gcongr
+  · exact hx i (Nat.le_of_lt_succ hi)
+  · exact ((n - i).lt_two_pow_self).succ_le.trans
+        (pow_left_mono (n - i) (Nat.Prime.two_le Fact.out))
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.dvd_sum, Finset.mem_range, Finsupp, Finsupp.single, MvPolynomial, MvPolynomial.aeval, MvPolynomial.aeval_monomial, MvPolynomial.aeval_sum, MvPolynomial.monomial, Nat.le_of_lt_succ, WittVector, WittVector.ghostComponent_apply, a.toFiberBundle, a.totalSpaceTopology, aeval_monomial, aeval_sum, dvd_sum, ghostComponent_apply, le_of_lt_succ
 -/

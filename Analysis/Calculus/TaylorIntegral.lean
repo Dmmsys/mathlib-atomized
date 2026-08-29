@@ -122,7 +122,67 @@ theorem map_add_eq_sum_add_integral_iteratedFDeriv
     -- The base case follows from the fundamental theorem of calculus
     have h_eq : Set.EqOn (fun t => (fderiv Real f (x + t • y)) y) (deriv fun (s : Real) => f (x + s • y))
         (Set.uIcc 0 1) := by
-      intro t 
+      intro t ht
+      rw [DifferentiableAt.deriv_comp_add_smul]
+      exact (hf t ht).differentiableAt (by simp)
+    simp only [zero_add, Finset.range_one, Finset.sum_singleton, factorial_zero, cast_one, inv_one,
+      iteratedFDeriv_zero_apply, one_smul, pow_zero, reduceAdd, iteratedFDeriv_one_apply]
+    rw [← sub_eq_iff_eq_add']; rw [Eq.comm]; rw [intervalIntegral.integral_congr h_eq]
+    have hf' : forall (t : Real) (ht : t in Set.uIcc 0 1), DifferentiableAt Real (fun s => f (x + s • y)) t :=
+      fun t ht => ((hf t ht).differentiableAt (by simp)).comp t (by fun_prop)
+    have hint : IntervalIntegrable (deriv (fun s => f (x + s • y))) MeasureTheory.volume 0 1 := by
+      have h₁ : ContinuousOn (fderiv Real f) ((fun t => x + t • y) '' Set.uIcc (0 : Real) 1) := by
+        intro z ⟨t, ht, hz⟩
+        rw [← hz]
+        exact (((hf t ht).fderiv_right (le_refl _)).continuousAt (n := 0)).continuousWithinAt
+      have h₂ : ContinuousOn (fun x_1 => fderiv Real f (x + x_1 • y)) (Set.uIcc (0 : Real) 1) := by
+        apply h₁.comp (t := (fun t => x + t • y) '' (Set.uIcc (0 : Real) 1)) (by fun_prop)
+        intro t ht
+        use t
+      apply (ContinuousOn.congr _ h_eq.symm).intervalIntegrable
+      fun_prop
+    simpa using intervalIntegral.integral_deriv_eq_sub hf' hint
+  | succ n ih =>
+    -- We use the inductive hypothesis to cancel all lower order terms
+    specialize ih (fun t ht => (hf t ht).of_le (by simp))
+    rw [Finset.sum_range_succ]; rw [add_assoc]
+    convert ih using 2
+    -- We define the functions u and v that we will integrate by parts
+    set u := fun (k : Nat) (t : Real) => (k ! : Real)⁻¹ * (1 - t) ^ k
+    have hu : forall (t : Real), HasDerivAt (u (n + 1)) (-u n t) t := by
+      intro t
+      unfold u
+      have : (-((n ! : Real)⁻¹ * (1 - t) ^ n)) =
+          ((n + 1) ! : Real)⁻¹ * ((n + 1) * (1 - t) ^ n * (-1)) := by
+        field_simp
+        congr 1
+        rw [Nat.factorial_succ]
+        grind
+      rw [this]
+      apply HasDerivAt.const_mul
+      convert ((hasDerivAt_id t).const_sub 1).pow (n + 1)
+      all_goals norm_cast
+    have hu' : Continuous (u n) := by fun_prop
+    set v := fun (k : Nat) (t : Real) => iteratedFDeriv Real k f (x + t • y) (fun _ => y)
+    have hv : forall (t : Real) (ht : t in Set.uIcc 0 1), HasDerivAt (v (n + 1)) (v (n + 1 + 1) t) t := by
+      intro t ht
+      unfold v
+      rw [← (hf t ht).deriv_fderiv_add_smul]
+      have h_diff : DifferentiableAt Real (iteratedFDeriv Real (n + 1) f) (x + t • y) := by
+        apply (hf t ht).differentiableAt_iteratedFDeriv
+        norm_cast
+        grind
+      refine DifferentiableAt.hasDerivAt ?_
+      fun_prop
+    have hv' : ContinuousOn (v (n + 1 + 1)) (Set.uIcc 0 1) := by
+      intro t ht
+      have h_cont : ContinuousAt (iteratedFDeriv Real (n + 1 + 1) f) (x + t • y) :=
+        ((hf t ht).iteratedFDeriv_right (i := n + 1 + 1) (m := 0) (by simp)).continuousAt
+      exact (h_cont.comp (x := t) (by fun_prop)).continuousWithinAt.eval_const _
+    -- Now we apply integration by parts and simplify
+    simpa [← eq_neg_add_iff_add_eq, ← intervalIntegral.integral_smul, smul_smul, u, v] using
+      intervalIntegral.integral_smul_deriv_eq_deriv_smul (fun t _ => hu t) hv
+      (hu'.neg.intervalIntegrable _ _) hv'.intervalIntegrable
 
 中文:
 定理 map_add_eq_sum_add_integral_iteratedFDeriv
@@ -134,7 +194,67 @@ theorem map_add_eq_sum_add_integral_iteratedFDeriv
     -- The base case follows from the fundamental theorem of calculus
     have h_eq : Set.EqOn (fun t => (fderiv Real f (x + t • y)) y) (deriv fun (s : Real) => f (x + s • y))
         (Set.uIcc 0 1) := by
-      intro t 
+      intro t ht
+      rw [DifferentiableAt.deriv_comp_add_smul]
+      exact (hf t ht).differentiableAt (by simp)
+    simp only [zero_add, Finset.range_one, Finset.sum_singleton, factorial_zero, cast_one, inv_one,
+      iteratedFDeriv_zero_apply, one_smul, pow_zero, reduceAdd, iteratedFDeriv_one_apply]
+    rw [← sub_eq_iff_eq_add']; rw [Eq.comm]; rw [intervalIntegral.integral_congr h_eq]
+    have hf' : forall (t : Real) (ht : t in Set.uIcc 0 1), DifferentiableAt Real (fun s => f (x + s • y)) t :=
+      fun t ht => ((hf t ht).differentiableAt (by simp)).comp t (by fun_prop)
+    have hint : IntervalIntegrable (deriv (fun s => f (x + s • y))) MeasureTheory.volume 0 1 := by
+      have h₁ : ContinuousOn (fderiv Real f) ((fun t => x + t • y) '' Set.uIcc (0 : Real) 1) := by
+        intro z ⟨t, ht, hz⟩
+        rw [← hz]
+        exact (((hf t ht).fderiv_right (le_refl _)).continuousAt (n := 0)).continuousWithinAt
+      have h₂ : ContinuousOn (fun x_1 => fderiv Real f (x + x_1 • y)) (Set.uIcc (0 : Real) 1) := by
+        apply h₁.comp (t := (fun t => x + t • y) '' (Set.uIcc (0 : Real) 1)) (by fun_prop)
+        intro t ht
+        use t
+      apply (ContinuousOn.congr _ h_eq.symm).intervalIntegrable
+      fun_prop
+    simpa using intervalIntegral.integral_deriv_eq_sub hf' hint
+  | succ n ih =>
+    -- We use the inductive hypothesis to cancel all lower order terms
+    specialize ih (fun t ht => (hf t ht).of_le (by simp))
+    rw [Finset.sum_range_succ]; rw [add_assoc]
+    convert ih using 2
+    -- We define the functions u and v that we will integrate by parts
+    set u := fun (k : Nat) (t : Real) => (k ! : Real)⁻¹ * (1 - t) ^ k
+    have hu : forall (t : Real), HasDerivAt (u (n + 1)) (-u n t) t := by
+      intro t
+      unfold u
+      have : (-((n ! : Real)⁻¹ * (1 - t) ^ n)) =
+          ((n + 1) ! : Real)⁻¹ * ((n + 1) * (1 - t) ^ n * (-1)) := by
+        field_simp
+        congr 1
+        rw [Nat.factorial_succ]
+        grind
+      rw [this]
+      apply HasDerivAt.const_mul
+      convert ((hasDerivAt_id t).const_sub 1).pow (n + 1)
+      all_goals norm_cast
+    have hu' : Continuous (u n) := by fun_prop
+    set v := fun (k : Nat) (t : Real) => iteratedFDeriv Real k f (x + t • y) (fun _ => y)
+    have hv : forall (t : Real) (ht : t in Set.uIcc 0 1), HasDerivAt (v (n + 1)) (v (n + 1 + 1) t) t := by
+      intro t ht
+      unfold v
+      rw [← (hf t ht).deriv_fderiv_add_smul]
+      have h_diff : DifferentiableAt Real (iteratedFDeriv Real (n + 1) f) (x + t • y) := by
+        apply (hf t ht).differentiableAt_iteratedFDeriv
+        norm_cast
+        grind
+      refine DifferentiableAt.hasDerivAt ?_
+      fun_prop
+    have hv' : ContinuousOn (v (n + 1 + 1)) (Set.uIcc 0 1) := by
+      intro t ht
+      have h_cont : ContinuousAt (iteratedFDeriv Real (n + 1 + 1) f) (x + t • y) :=
+        ((hf t ht).iteratedFDeriv_right (i := n + 1 + 1) (m := 0) (by simp)).continuousAt
+      exact (h_cont.comp (x := t) (by fun_prop)).continuousWithinAt.eval_const _
+    -- Now we apply integration by parts and simplify
+    simpa [← eq_neg_add_iff_add_eq, ← intervalIntegral.integral_smul, smul_smul, u, v] using
+      intervalIntegral.integral_smul_deriv_eq_deriv_smul (fun t _ => hu t) hv
+      (hu'.neg.intervalIntegrable _ _) hv'.intervalIntegrable
 
 Depends on / 依赖: Set.uIcc_of_le, simp_rw, uIcc_of_le, zero_le_one
 -/

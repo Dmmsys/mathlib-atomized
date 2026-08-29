@@ -2505,7 +2505,12 @@ alias ⟨_, Disjoint.le_compl_right⟩ := le_compl_iff_disjoint_right
 alias ⟨_, Disjoint.le_compl_left⟩ := le_compl_iff_disjoint_left
 
 @[to_dual hnot_le_iff_hnot_le]
-alias le_compl_i
+alias le_compl_iff_le_compl := le_compl_comm
+
+@[to_dual hnot_le_of_hnot_le]
+alias ⟨le_compl_of_le_compl, _⟩ := le_compl_comm
+
+@[to_dual]
 
 中文:
 定理 le_compl_comm
@@ -2520,7 +2525,12 @@ alias ⟨_, Disjoint.le_compl_right⟩ := le_compl_iff_disjoint_right
 alias ⟨_, Disjoint.le_compl_left⟩ := le_compl_iff_disjoint_left
 
 @[to_dual hnot_le_iff_hnot_le]
-alias le_compl_i
+alias le_compl_iff_le_compl := le_compl_comm
+
+@[to_dual hnot_le_of_hnot_le]
+alias ⟨le_compl_of_le_compl, _⟩ := le_compl_comm
+
+@[to_dual]
 
 Depends on / 依赖: le_compl_iff_disjoint_left, le_compl_iff_disjoint_right
 -/
@@ -3141,7 +3151,9 @@ theorem compl_compl_inf_distrib
   proof: by
   refine ((compl_anti compl_sup_compl_le).trans (compl_sup_distrib _ _).le).antisymm ?_
   rw [le_compl_iff_disjoint_right]; rw [disjoint_assoc]; rw [disjoint_compl_compl_left_iff]; rw [disjoint_left_comm]; rw [disjoint_compl_compl_left_iff]; rw [← disjoint_assoc]; rw [inf_comm]
-  exact disjoint_c
+  exact disjoint_compl_right
+
+@[to_dual]
 
 中文:
 定理 compl_compl_inf_distrib
@@ -3150,7 +3162,9 @@ theorem compl_compl_inf_distrib
   证明: by
   refine ((compl_anti compl_sup_compl_le).trans (compl_sup_distrib _ _).le).antisymm ?_
   rw [le_compl_iff_disjoint_right]; rw [disjoint_assoc]; rw [disjoint_compl_compl_left_iff]; rw [disjoint_left_comm]; rw [disjoint_compl_compl_left_iff]; rw [← disjoint_assoc]; rw [inf_comm]
-  exact disjoint_c
+  exact disjoint_compl_right
+
+@[to_dual]
 
 Depends on / 依赖: antisymm, compl_anti, compl_sup_compl_le, compl_sup_distrib, disjoint_assoc, disjoint_compl_compl_left_iff, disjoint_compl_right, disjoint_left_comm, inf_comm, le_compl_iff_disjoint_right
 -/
@@ -3173,7 +3187,8 @@ theorem compl_compl_himp_distrib
     exact compl_anti (compl_anti himp_inf_le)
   · refine le_compl_comm.1 ((compl_anti compl_sup_le_himp).trans ?_)
     rw [compl_sup_distrib]; rw [le_compl_iff_disjoint_right]; rw [disjoint_right_comm]; rw [←
-      le_compl_iff_d
+      le_compl_iff_disjoint_right]
+    exact inf_himp_le
 
 中文:
 定理 compl_compl_himp_distrib
@@ -3185,7 +3200,8 @@ theorem compl_compl_himp_distrib
     exact compl_anti (compl_anti himp_inf_le)
   · refine le_compl_comm.1 ((compl_anti compl_sup_le_himp).trans ?_)
     rw [compl_sup_distrib]; rw [le_compl_iff_disjoint_right]; rw [disjoint_right_comm]; rw [←
-      le_compl_iff_d
+      le_compl_iff_disjoint_right]
+    exact inf_himp_le
 
 Depends on / 依赖: compl_anti, compl_compl_inf_distrib, compl_sup_distrib, compl_sup_le_himp, disjoint_right_comm, himp_inf_le, inf_himp_le, le_antisymm, le_compl_comm, le_compl_iff_disjoint_right, le_himp_iff
 -/
@@ -3552,7 +3568,13 @@ abbreviation LinearOrder.toBiheytingAlgebra
       split_ifs with h
       · exact iff_of_true le_top (inf_le_of_right_le h)
       · rw [inf_le_iff, or_iff_left h],
-    h
+    himp_bot := fun _ => if_congr le_bot_iff rfl rfl, sdiff := fun a b => if a <= b then ⊥ else a,
+    hnot := fun a => if a = ⊤ then ⊥ else ⊤,
+    sdiff_le_iff := fun a b c => by
+      split_ifs with h
+      · exact iff_of_true bot_le (le_sup_of_le_left h)
+      · rw [le_sup_iff, or_iff_right h],
+    top_sdiff := fun _ => if_congr top_le_iff rfl rfl }
 
 中文:
 缩写 线性序.toBiheytingAlgebra
@@ -3564,7 +3586,13 @@ abbreviation LinearOrder.toBiheytingAlgebra
       split_ifs with h
       · exact iff_of_true le_top (inf_le_of_right_le h)
       · rw [inf_le_iff, or_iff_left h],
-    h
+    himp_bot := fun _ => if_congr le_bot_iff rfl rfl, sdiff := fun a b => if a <= b then ⊥ else a,
+    hnot := fun a => if a = ⊤ then ⊥ else ⊤,
+    sdiff_le_iff := fun a b c => by
+      split_ifs with h
+      · exact iff_of_true bot_le (le_sup_of_le_left h)
+      · rw [le_sup_iff, or_iff_right h],
+    top_sdiff := fun _ => if_congr top_le_iff rfl rfl }
 
 Depends on / 依赖: BoundedOrder, LinearOrder, LinearOrder.toLattice, bot_le, himp_bot, if_congr, iff_of_true, inf_le_iff, inf_le_of_right_le, le_bot_iff, le_himp_iff, le_sup_of_le_left, le_top, or_iff_left, sdiff_le_iff, split_ifs, toLattice
 -/
@@ -3962,7 +3990,19 @@ instance instBiheytingAlgebra
     hnot := fun _ => unit,
     himp := fun _ _ => unit,
     le_top := fun _ => trivial,
-    le_sup_left := fun _ _ => t
+    le_sup_left := fun _ _ => trivial,
+    le_sup_right := fun _ _ => trivial,
+    sup_le := fun _ _ _ _ _ => trivial,
+    inf_le_left := fun _ _ => trivial,
+    inf_le_right := fun _ _ => trivial,
+    le_inf := fun _ _ _ _ _ => trivial,
+    bot_le := fun _ => trivial,
+    le_himp_iff := fun _ _ _ => Iff.rfl,
+    himp_bot := fun _ => rfl,
+    top_sdiff := fun _ => rfl,
+    sdiff_le_iff := fun _ _ _ => Iff.rfl }
+
+@[to_dual (attr := simp)]
 
 中文:
 实例 instBiheytingAlgebra
@@ -3977,7 +4017,19 @@ instance instBiheytingAlgebra
     hnot := fun _ => unit,
     himp := fun _ _ => unit,
     le_top := fun _ => trivial,
-    le_sup_left := fun _ _ => t
+    le_sup_left := fun _ _ => trivial,
+    le_sup_right := fun _ _ => trivial,
+    sup_le := fun _ _ _ _ _ => trivial,
+    inf_le_left := fun _ _ => trivial,
+    inf_le_right := fun _ _ => trivial,
+    le_inf := fun _ _ _ _ _ => trivial,
+    bot_le := fun _ => trivial,
+    le_himp_iff := fun _ _ _ => Iff.rfl,
+    himp_bot := fun _ => rfl,
+    top_sdiff := fun _ => rfl,
+    sdiff_le_iff := fun _ _ _ => Iff.rfl }
+
+@[to_dual (attr := simp)]
 
 Depends on / 依赖: PUnit.instLinearOrder, bot_le, inf_le_left, inf_le_right, instLinearOrder, le_himp_iff, le_inf, le_sup_left, le_sup_right, le_top, sup_le
 -/

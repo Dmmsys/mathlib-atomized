@@ -78,7 +78,12 @@ definition raiseCone
 π.app j := CostructuredArrow.homMk (c.π.app j) by
     let z : (Functor.const J).obj (K.obj c.pt) ⟶ _ :=
       (CategoryTheory.Functor.constComp J c.pt K).inv ≫ Functor.whiskerRight c.π K ≫
-      
+        natTransInCostructuredArrow F
+    convert! (nat_trans_from_is_connected z j (Classical.arbitrary J)) <;> simp [z]
+  π.naturality X Y f := by
+    apply CommaMorphism.ext
+    · simpa using (c.w f).symm
+    · simp
 
 中文:
 定义 raiseCone
@@ -88,7 +93,12 @@ definition raiseCone
 π.app j := CostructuredArrow.homMk (c.π.app j) by
     let z : (Functor.const J).obj (K.obj c.pt) ⟶ _ :=
       (CategoryTheory.Functor.constComp J c.pt K).inv ≫ Functor.whiskerRight c.π K ≫
-      
+        natTransInCostructuredArrow F
+    convert! (nat_trans_from_is_connected z j (Classical.arbitrary J)) <;> simp [z]
+  π.naturality X Y f := by
+    apply CommaMorphism.ext
+    · simpa using (c.w f).symm
+    · simp
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk
 -/
@@ -209,7 +219,11 @@ instance [IsConnected
     lift s := (CostructuredArrow.proj K B).map (hc.lift (CreatesConnected.raiseCone s))
     fac _ _ := by
       rw [Functor.mapCone_π_app]; rw [← Functor.map_comp]; rw [hc.fac]; rw [CreatesConnected.raiseCone_π_app]; rw [CostructuredArrow.proj_map]; rw [CostructuredArrow.homMk_left _ _]
-    uniq 
+    uniq s m fac :=
+      congrArg (CostructuredArrow.proj K B).map (hc.uniq (CreatesConnected.raiseCone s)
+        (CostructuredArrow.homMk m (by simp [← fac])) fun j =>
+          (CostructuredArrow.proj K B).map_injective (fac j))
+  }⟩
 
 中文:
 实例 [是连通
@@ -218,7 +232,11 @@ instance [IsConnected
     lift s := (CostructuredArrow.proj K B).map (hc.lift (CreatesConnected.raiseCone s))
     fac _ _ := by
       rw [Functor.mapCone_π_app]; rw [← Functor.map_comp]; rw [hc.fac]; rw [CreatesConnected.raiseCone_π_app]; rw [CostructuredArrow.proj_map]; rw [CostructuredArrow.homMk_left _ _]
-    uniq 
+    uniq s m fac :=
+      congrArg (CostructuredArrow.proj K B).map (hc.uniq (CreatesConnected.raiseCone s)
+        (CostructuredArrow.homMk m (by simp [← fac])) fun j =>
+          (CostructuredArrow.proj K B).map_injective (fac j))
+  }⟩
 -/
 instance [IsConnected J] {B : D} : PreservesLimitsOfShape J (CostructuredArrow.proj K B) where
   preservesLimit.preserves hc := ⟨{

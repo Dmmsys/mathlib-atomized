@@ -47,7 +47,15 @@ theorem continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt
   refine Uniform.continuousWithinAt_iff'_left.2 fun u₀ hu₀ => ?_
   obtain ⟨u₁, h₁, u₁₀⟩ : exists u in 𝓤 β, u ○ u subseteq u₀ := comp_mem_uniformity_sets hu₀
   obtain ⟨u₂, h₂, hsymm, u₂₁⟩ : exists u in 𝓤 β, (forall {a b}, (a, b) in u -> (b, a) in u) ∧ u ○ u subseteq u₁ :=
-    comp_symm_of_uniformi
+    comp_symm_of_uniformity h₁
+  rcases L u₂ h₂ with ⟨t, tx, F, hFc, hF⟩
+  have A : forallᶠ y in 𝓝[s] x, (f y, F y) in u₂ := Eventually.mono tx hF
+  have B : forallᶠ y in 𝓝[s] x, (F y, F x) in u₂ := Uniform.continuousWithinAt_iff'_left.1 hFc h₂
+  have C : forallᶠ y in 𝓝[s] x, (f y, F x) in u₁ :=
+    (A.and B).mono fun y hy => u₂₁ (prodMk_mem_comp hy.1 hy.2)
+  have : (F x, f x) in u₁ :=
+    u₂₁ (prodMk_mem_comp (refl_mem_uniformity h₂) (hsymm (A.self_of_nhdsWithin hx)))
+exact C.mono fun y hy => u₁₀ prodMk_mem_comp hy this
 
 中文:
 定理 continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt
@@ -56,7 +64,15 @@ theorem continuousWithinAt_of_locally_uniform_approx_of_continuousWithinAt
   refine Uniform.continuousWithinAt_iff'_left.2 fun u₀ hu₀ => ?_
   obtain ⟨u₁, h₁, u₁₀⟩ : exists u in 𝓤 β, u ○ u subseteq u₀ := comp_mem_uniformity_sets hu₀
   obtain ⟨u₂, h₂, hsymm, u₂₁⟩ : exists u in 𝓤 β, (forall {a b}, (a, b) in u -> (b, a) in u) ∧ u ○ u subseteq u₁ :=
-    comp_symm_of_uniformi
+    comp_symm_of_uniformity h₁
+  rcases L u₂ h₂ with ⟨t, tx, F, hFc, hF⟩
+  have A : forallᶠ y in 𝓝[s] x, (f y, F y) in u₂ := Eventually.mono tx hF
+  have B : forallᶠ y in 𝓝[s] x, (F y, F x) in u₂ := Uniform.continuousWithinAt_iff'_left.1 hFc h₂
+  have C : forallᶠ y in 𝓝[s] x, (f y, F x) in u₁ :=
+    (A.and B).mono fun y hy => u₂₁ (prodMk_mem_comp hy.1 hy.2)
+  have : (F x, f x) in u₁ :=
+    u₂₁ (prodMk_mem_comp (refl_mem_uniformity h₂) (hsymm (A.self_of_nhdsWithin hx)))
+exact C.mono fun y hy => u₁₀ prodMk_mem_comp hy this
 
 Depends on / 依赖: Eventually, Eventually.mono, Uniform, Uniform.continuousWithinAt_iff, _left, comp_mem_uniformity_sets, comp_symm_of_uniformity, continuousWithinAt_iff, subseteq
 -/
@@ -295,7 +311,8 @@ theorem tendsto_comp_of_locally_uniform_limit_within
   obtain ⟨u₁, h₁, u₁₀⟩ : exists u in 𝓤 β, u ○ u subseteq u₀ := comp_mem_uniformity_sets hu₀
   rcases hunif u₁ h₁ with ⟨s, sx, hs⟩
   have A : forallᶠ n in p, g n in s := hg sx
-  have B : forallᶠ n in p, (f x, f (g n)) in u₁ := hg (Uniform.cont
+  have B : forallᶠ n in p, (f x, f (g n)) in u₁ := hg (Uniform.continuousWithinAt_iff'_right.1 h h₁)
+exact B.mp A.mp hs.mono fun y H1 H2 H3 => u₁₀ prodMk_mem_comp H3 H1 _ H2
 
 中文:
 定理 tendsto_comp_of_locally_uniform_limit_within
@@ -305,7 +322,8 @@ theorem tendsto_comp_of_locally_uniform_limit_within
   obtain ⟨u₁, h₁, u₁₀⟩ : exists u in 𝓤 β, u ○ u subseteq u₀ := comp_mem_uniformity_sets hu₀
   rcases hunif u₁ h₁ with ⟨s, sx, hs⟩
   have A : forallᶠ n in p, g n in s := hg sx
-  have B : forallᶠ n in p, (f x, f (g n)) in u₁ := hg (Uniform.cont
+  have B : forallᶠ n in p, (f x, f (g n)) in u₁ := hg (Uniform.continuousWithinAt_iff'_right.1 h h₁)
+exact B.mp A.mp hs.mono fun y H1 H2 H3 => u₁₀ prodMk_mem_comp H3 H1 _ H2
 
 Depends on / 依赖: A.mp, B.mp, Uniform, Uniform.continuousWithinAt_iff, Uniform.tendsto_nhds_right, _right, comp_mem_uniformity_sets, continuousWithinAt_iff, hs.mono, prodMk_mem_comp, subseteq, tendsto_nhds_right
 -/
@@ -445,7 +463,7 @@ theorem uniformContinuousOn_of_uniform_approx_of_uniformContinuousOn
   obtain ⟨F, hF, hFv⟩ := h v hv
   filter_upwards [hF v hv] with x hx
 exact hvu prodMk_mem_comp (prodMk_mem_comp (hFv _ x.1.prop) hx)
- hvsy
+ hvsymm.symm (f x.2) (F x.2) hFv _ x.2.prop
 
 中文:
 定理 uniformContinuousOn_of_uniform_approx_of_uniformContinuousOn
@@ -456,7 +474,7 @@ exact hvu prodMk_mem_comp (prodMk_mem_comp (hFv _ x.1.prop) hx)
   obtain ⟨F, hF, hFv⟩ := h v hv
   filter_upwards [hF v hv] with x hx
 exact hvu prodMk_mem_comp (prodMk_mem_comp (hFv _ x.1.prop) hx)
- hvsy
+ hvsymm.symm (f x.2) (F x.2) hFv _ x.2.prop
 
 Depends on / 依赖: comp_comp_symm_mem_uniformity_sets, filter_upwards, hvsymm, hvsymm.symm, prodMk_mem_comp, simp_rw, uniformContinuousOn_iff_restrict, uniformContinuous_def
 -/

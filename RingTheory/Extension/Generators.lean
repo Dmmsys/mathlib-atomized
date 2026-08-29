@@ -592,7 +592,11 @@ definition localizationAway
     C a * X () ^ n
   aeval_val_σ' s := by
     rw [map_mul]; rw [algHom_C]; rw [map_pow]; rw [aeval_X]
-    simp only [← IsLocalization.Away.sec_spec, map_pow, 
+    simp only [← IsLocalization.Away.sec_spec, map_pow, IsLocalization.Away.invSelf]
+    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [← IsLocalization.mk'_one (M := Submonoid.powers r) S r]
+    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [mul_assoc]; rw [← IsLocalization.mk'_mul]
+    rw [mul_one]; rw [one_mul]; rw [IsLocalization.mk'_pow]
+    simp
 
 中文:
 定义 localizationAway
@@ -604,7 +608,11 @@ definition localizationAway
     C a * X () ^ n
   aeval_val_σ' s := by
     rw [map_mul]; rw [algHom_C]; rw [map_pow]; rw [aeval_X]
-    simp only [← IsLocalization.Away.sec_spec, map_pow, 
+    simp only [← IsLocalization.Away.sec_spec, map_pow, IsLocalization.Away.invSelf]
+    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [← IsLocalization.mk'_one (M := Submonoid.powers r) S r]
+    rw [← IsLocalization.mk'_pow]; rw [one_pow]; rw [mul_assoc]; rw [← IsLocalization.mk'_mul]
+    rw [mul_one]; rw [one_mul]; rw [IsLocalization.mk'_pow]
+    simp
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.invSelf, invSelf
 -/
@@ -642,7 +650,10 @@ definition comp
     rename .inr (P.σ r) * monomial (n.mapDomain .inl) 1
   aeval_val_σ' s := by
     have (x : P.Ring) : aeval (algebraMap S T ∘ P.val) x = algebraMap S T (aeval P.val x) := by
-      rw [map_aeval]; rw [
+      rw [map_aeval]; rw [aeval_def]; rw [coe_eval₂Hom]; rw [← IsScalarTower.algebraMap_eq]; rw [Function.comp_def]
+    conv_rhs => rw [← Q.aeval_val_σ s, (Q.σ s).as_sum]
+    simp [aeval_rename, this, aeval_monomial, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
+      Finsupp.sum, MvPolynomial.finsupp_support_eq_support, MvPolynomial.coeff]
 
 中文:
 定义 comp
@@ -652,7 +663,10 @@ definition comp
     rename .inr (P.σ r) * monomial (n.mapDomain .inl) 1
   aeval_val_σ' s := by
     have (x : P.Ring) : aeval (algebraMap S T ∘ P.val) x = algebraMap S T (aeval P.val x) := by
-      rw [map_aeval]; rw [
+      rw [map_aeval]; rw [aeval_def]; rw [coe_eval₂Hom]; rw [← IsScalarTower.algebraMap_eq]; rw [Function.comp_def]
+    conv_rhs => rw [← Q.aeval_val_σ s, (Q.σ s).as_sum]
+    simp [aeval_rename, this, aeval_monomial, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
+      Finsupp.sum, MvPolynomial.finsupp_support_eq_support, MvPolynomial.coeff]
 
 Depends on / 依赖: P.val, Q.val, Sum.elim, algebraMap
 -/
@@ -716,7 +730,21 @@ definition baseChange
   | tmul a b =>
     let X := P.σ b
     use a • MvPolynomial.map (algebraMap R T) X
-    simp only [LinearMapClass.map_smul, X, aeval_map_a
+    simp only [LinearMapClass.map_smul, X, aeval_map_algebraMap]
+    have : forall y : P.Ring,
+      aeval (fun x => (1 otimesₜ[R] P.val x : T otimes[R] S)) y = 1 otimesₜ aeval (fun x => P.val x) y := by
+      intro y
+      induction y using MvPolynomial.induction_on with
+      | C a =>
+        rw [aeval_C]; rw [aeval_C]; rw [TensorProduct.algebraMap_apply]; rw [algebraMap_eq_smul_one]; rw [smul_tmul]; rw [algebraMap_eq_smul_one]
+      | add p q hp hq => simp [map_add, tmul_add, hp, hq]
+      | mul_X p i hp => simp [hp]
+    rw [this]; rw [P.aeval_val_σ]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
+  | add x y ex ey =>
+    obtain ⟨a, ha⟩ := ex
+    obtain ⟨b, hb⟩ := ey
+    use (a + b)
+    rw [map_add]; rw [ha]; rw [hb]
 
 中文:
 定义 baseChange
@@ -729,7 +757,21 @@ definition baseChange
   | tmul a b =>
     let X := P.σ b
     use a • MvPolynomial.map (algebraMap R T) X
-    simp only [LinearMapClass.map_smul, X, aeval_map_a
+    simp only [LinearMapClass.map_smul, X, aeval_map_algebraMap]
+    have : forall y : P.Ring,
+      aeval (fun x => (1 otimesₜ[R] P.val x : T otimes[R] S)) y = 1 otimesₜ aeval (fun x => P.val x) y := by
+      intro y
+      induction y using MvPolynomial.induction_on with
+      | C a =>
+        rw [aeval_C]; rw [aeval_C]; rw [TensorProduct.algebraMap_apply]; rw [algebraMap_eq_smul_one]; rw [smul_tmul]; rw [algebraMap_eq_smul_one]
+      | add p q hp hq => simp [map_add, tmul_add, hp, hq]
+      | mul_X p i hp => simp [hp]
+    rw [this]; rw [P.aeval_val_σ]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
+  | add x y ex ey =>
+    obtain ⟨a, ha⟩ := ex
+    obtain ⟨b, hb⟩ := ey
+    use (a + b)
+    rw [map_add]; rw [ha]; rw [hb]
 
 Depends on / 依赖: Generators, Generators.ofSurjective, LinearMapClass, LinearMapClass.map_smul, MvPolynomial, MvPolynomial.induction_on, MvPolynomial.map, P.Ring, P.val, TensorProduct, TensorProduct.induction_on, aeval_C, aeval_map_algebraMap, algebraMap, induction_on, map_smul, map_zero, ofSurjective, otimes
 -/
@@ -1000,7 +1042,7 @@ definition naive
     conv_rhs => rw [← hs x, ← Ideal.Quotient.mkₐ_eq_mk R, aeval_unique (Ideal.Quotient.mkₐ _ I)]
     simp [Function.comp_def]
   algebra := inferInstance
-  algebraMap_eq := by ext x <;> simp [IsScalarTower.algebraMap_apply R (MvPolynomial σ R
+  algebraMap_eq := by ext x <;> simp [IsScalarTower.algebraMap_apply R (MvPolynomial σ R)]
 
 中文:
 定义 naive
@@ -1011,7 +1053,7 @@ definition naive
     conv_rhs => rw [← hs x, ← Ideal.Quotient.mkₐ_eq_mk R, aeval_unique (Ideal.Quotient.mkₐ _ I)]
     simp [Function.comp_def]
   algebra := inferInstance
-  algebraMap_eq := by ext x <;> simp [IsScalarTower.algebraMap_apply R (MvPolynomial σ R
+  algebraMap_eq := by ext x <;> simp [IsScalarTower.algebraMap_apply R (MvPolynomial σ R)]
 
 Depends on / 依赖: Function, Function.comp_def, Function.surjInv, Function.surjInv_eq, Generators, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.algebraMap_apply, MvPolynomial, Quotient, aeval_unique, algebra, algebraMap_apply, algebraMap_eq, comp_def, conv_rhs, mk_surjective, surjInv, surjInv_eq
 -/
@@ -1406,7 +1448,9 @@ definition Hom.comp
     induction g.val x using MvPolynomial.induction_on with
     | C r => simp [← IsScalarTower.algebraMap_apply]
     | add x y hx hy => simp only [map_add, hx, hy]
-    | mul_X p i hp => simp
+    | mul_X p i hp => simp only [map_mul, hp, aeval_X, aeval_val]
+
+@[simp]
 
 中文:
 定义 态射.comp
@@ -1417,7 +1461,9 @@ definition Hom.comp
     induction g.val x using MvPolynomial.induction_on with
     | C r => simp [← IsScalarTower.algebraMap_apply]
     | add x y hx hy => simp only [map_add, hx, hy]
-    | mul_X p i hp => simp
+    | mul_X p i hp => simp only [map_mul, hp, aeval_X, aeval_val]
+
+@[simp]
 -/
 noncomputable def Hom.comp [IsScalarTower R' R'' S''] [IsScalarTower R' S' S'']
     [IsScalarTower S S' S''] (f : Hom P' P'') (g : Hom P P') : Hom P P'' where
@@ -1584,7 +1630,7 @@ lemma ofComp_toAlgHom_monomial_sumElim
   rw [Finsupp.prod_sumElim]
   simp only [Function.comp_def, Sum.elim_inl, Sum.elim_inr, ← map_pow, ← map_finsuppProd,
     C_mul, Algebra.smul_def, MvPolynomial.algebraMap_apply, mul_assoc]
-  nth_rw 2 [mul_comm
+  nth_rw 2 [mul_comm]
 
 中文:
 引理 ofComp_toAlgHom_monomial_sumElim
@@ -1595,7 +1641,7 @@ lemma ofComp_toAlgHom_monomial_sumElim
   rw [Finsupp.prod_sumElim]
   simp only [Function.comp_def, Sum.elim_inl, Sum.elim_inr, ← map_pow, ← map_finsuppProd,
     C_mul, Algebra.smul_def, MvPolynomial.algebraMap_apply, mul_assoc]
-  nth_rw 2 [mul_comm
+  nth_rw 2 [mul_comm]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, C_mul, Finsupp, Finsupp.prod_sumElim, Function, Function.comp_def, Hom.toAlgHom_monomial, MvPolynomial, MvPolynomial.algebraMap_apply, Sum.elim_inl, Sum.elim_inr, aeval_monomial, algebraMap_apply, comp_def, elim_inl, elim_inr, map_finsuppProd, map_pow, monomial_eq
 -/
@@ -1690,7 +1736,18 @@ lemma toAlgHom_ofComp_surjective
       use MvPolynomial.rename Sum.inr (P.σ a)
       simp only [Hom.toAlgHom, ofComp, Generators.comp, MvPolynomial.aeval_rename,
         Sum.elim_comp_inr]
-      simp_rw [Function.comp_def, ← MvPolynomial.algebraMap_eq, ← IsS
+      simp_rw [Function.comp_def, ← MvPolynomial.algebraMap_eq, ← IsScalarTower.toAlgHom_apply R,
+        ← MvPolynomial.comp_aeval]
+      simp
+  | add p q hp hq =>
+      obtain ⟨p, rfl⟩ := hp
+      obtain ⟨q, rfl⟩ := hq
+      use p + q
+      simp
+  | mul_X p i hp =>
+      obtain ⟨(p : MvPolynomial (ι' oplus ι) R), rfl⟩ := hp
+      use p * MvPolynomial.X (R := R) (Sum.inl i)
+      simp [Algebra.Generators.ofComp, Algebra.Generators.Hom.toAlgHom]
 
 中文:
 引理 toAlgHom_ofComp_surjective
@@ -1702,7 +1759,18 @@ lemma toAlgHom_ofComp_surjective
       use MvPolynomial.rename Sum.inr (P.σ a)
       simp only [Hom.toAlgHom, ofComp, Generators.comp, MvPolynomial.aeval_rename,
         Sum.elim_comp_inr]
-      simp_rw [Function.comp_def, ← MvPolynomial.algebraMap_eq, ← IsS
+      simp_rw [Function.comp_def, ← MvPolynomial.algebraMap_eq, ← IsScalarTower.toAlgHom_apply R,
+        ← MvPolynomial.comp_aeval]
+      simp
+  | add p q hp hq =>
+      obtain ⟨p, rfl⟩ := hp
+      obtain ⟨q, rfl⟩ := hq
+      use p + q
+      simp
+  | mul_X p i hp =>
+      obtain ⟨(p : MvPolynomial (ι' oplus ι) R), rfl⟩ := hp
+      use p * MvPolynomial.X (R := R) (Sum.inl i)
+      simp [Algebra.Generators.ofComp, Algebra.Generators.Hom.toAlgHom]
 
 Depends on / 依赖: Function, Function.comp_def, Generators, Generators.comp, Hom.toAlgHom, IsScalarTower, IsScalarTower.toAlgHom_apply, MvPolynomial, MvPolynomial.aeval_rename, MvPolynomial.algebraMap_eq, MvPolynomial.comp_aeval, MvPolynomial.induction_on, MvPolynomial.rename, Sum.elim_comp_inr, Sum.inr, aeval_rename, algebraMap_eq, comp_aeval, comp_def, elim_comp_inr
 -/
@@ -1982,13 +2050,13 @@ English:
 lemma ker_ofAlgEquiv
   given: (P : Generators R S ι) {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
   proof: by
-  rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq
+  rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq_ker_aeval_val]
 
 中文:
 引理 ker_ofAlgEquiv
   条件: (P : 生成元 R S ι) {T : 类型} [交换环 T] [代数 R T] (e : S ≃ₐ[R] T)
   证明: by
-  rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq
+  rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq_ker_aeval_val]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_coe, AlgHom.comap_ker, AlgHom.ker_coe_equiv, AlgHomClass, AlgHomClass.toRingHom_toAlgHom, Function, Function.comp_def, MvPolynomial, MvPolynomial.comp_aeval, RingHom, RingHom.ker_coe_toRingHom, RingHom.ker_eq_comap_bot, coe_coe, comap_ker, comp_aeval, comp_def, ker_coe_equiv, ker_coe_toRingHom, ker_eq_comap_bot
 -/
@@ -2010,7 +2078,67 @@ lemma map_toComp_ker
     rintro x (hx : algebraMap P.Ring S x = 0)
     have : (Q.ofComp P).toAlgHom.comp (Q.toComp P).toAlgHom = IsScalarTower.toAlgHom R _ _ := by
       ext1; simp
-    simp only [Ideal.mem_com
+    simp only [Ideal.mem_comap,
+      RingHom.mem_ker, ← AlgHom.comp_apply, this, IsScalarTower.toAlgHom_apply]
+    rw [IsScalarTower.algebraMap_apply P.Ring S]; rw [hx]; rw [map_zero]
+  · rintro x (h₂ : (Q.ofComp P).toAlgHom x = 0)
+    let e : (ι' oplus ι ->₀ Nat) ≃+ (ι' ->₀ Nat) × (ι ->₀ Nat) :=
+      Finsupp.sumFinsuppAddEquivProdFinsupp
+    suffices ∑ v in (support x).map e, (monomial (e.symm v)) (coeff (e.symm v) x) in
+        Ideal.map (Q.toComp P).toAlgHom.toRingHom P.ker by
+      simpa only [AlgHom.toRingHom_eq_coe, Finset.sum_map, Equiv.coe_toEmbedding,
+        EquivLike.coe_coe, AddEquiv.symm_apply_apply, support_sum_monomial_coeff] using! this
+    rw [← Finset.sum_fiberwise_of_maps_to (fun i => Finset.mem_image_of_mem Prod.fst)]
+    refine sum_mem fun i hi => ?_
+    convert_to monomial (e.symm (i, 0)) 1 * (Q.toComp P).toAlgHom.toRingHom
+      (∑ j in (support x).map e.toEmbedding with j.1 = i, monomial j.2 (coeff (e.symm j) x)) in _
+    · rw [map_sum, Finset.mul_sum]
+      refine Finset.sum_congr rfl fun j hj => ?_
+      obtain rfl := (Finset.mem_filter.mp hj).2
+      obtain ⟨i, j⟩ := j
+      clear hj hi
+      have : (Q.toComp P).toAlgHom (monomial j (coeff (e.symm (i, j)) x)) =
+          monomial (e.symm (0, j)) (coeff (e.symm (i, j)) x) :=
+        toComp_toAlgHom_monomial ..
+      simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe,
+          this]
+      rw [monomial_mul]; rw [← map_add]; rw [Prod.mk_add_mk]; rw [add_zero]; rw [zero_add]; rw [one_mul]
+    · apply Ideal.mul_mem_left
+      refine Ideal.mem_map_of_mem _ ?_
+      simp only [ker_eq_ker_aeval_val, AddEquiv.toEquiv_eq_coe, RingHom.mem_ker, map_sum]
+      rw [← coeff_zero i]; rw [← h₂]
+      clear h₂ hi
+      have (x : (Q.comp P).Ring) : (Function.support fun a => if a.1 = i then aeval P.val
+          (monomial a.2 (coeff (e.symm a) x)) else 0) subseteq SetLike.coe ((support x).map e) := by
+        rw [← Set.compl_subset_compl]
+        intro j
+        obtain ⟨j, rfl⟩ := e.surjective j
+        simp_all
+      rw [Finset.sum_filter]; rw [← finsum_eq_sum_of_support_subset _ (this x)]
+      induction x using MvPolynomial.induction_on' with
+      | monomial v a =>
+        rw [finsum_eq_sum_of_support_subset _ (this _)]; rw [← Finset.sum_filter]
+        obtain ⟨v, rfl⟩ := e.symm.surjective v
+        -- Rewrite `e` in the right-hand side only.
+        conv_rhs => simp only [e, Finsupp.sumFinsuppAddEquivProdFinsupp,
+          Finsupp.sumFinsuppEquivProdFinsupp, AddEquiv.symm_mk, AddEquiv.coe_mk,
+          Equiv.coe_fn_symm_mk, ofComp_toAlgHom_monomial_sumElim]
+        classical
+        simp only [coeff_monomial, ← e.injective.eq_iff,
+          map_zero, AddEquiv.apply_symm_apply, apply_ite]
+        rw [← apply_ite]; rw [Finset.sum_ite_eq]
+        simp only [Finset.mem_filter, Finset.mem_map_equiv, AddEquiv.coe_toEquiv_symm,
+          mem_support_iff, coeff_monomial, ↓reduceIte, ne_eq, ite_and, ite_not]
+        split
+        · simp only [*, map_zero, ite_self]
+        · congr
+      | add p q hp hq =>
+        simp only [coeff_add, map_add, ite_add_zero]
+        rw [finsum_add_distrib]; rw [hp]; rw [hq]
+        · refine (((support p).map e).finite_toSet.subset ?_)
+          convert! this p
+        · refine (((support q).map e).finite_toSet.subset ?_)
+          convert! this q
 
 中文:
 引理 map_toComp_ker
@@ -2022,7 +2150,67 @@ lemma map_toComp_ker
     rintro x (hx : algebraMap P.Ring S x = 0)
     have : (Q.ofComp P).toAlgHom.comp (Q.toComp P).toAlgHom = IsScalarTower.toAlgHom R _ _ := by
       ext1; simp
-    simp only [Ideal.mem_com
+    simp only [Ideal.mem_comap,
+      RingHom.mem_ker, ← AlgHom.comp_apply, this, IsScalarTower.toAlgHom_apply]
+    rw [IsScalarTower.algebraMap_apply P.Ring S]; rw [hx]; rw [map_zero]
+  · rintro x (h₂ : (Q.ofComp P).toAlgHom x = 0)
+    let e : (ι' oplus ι ->₀ Nat) ≃+ (ι' ->₀ Nat) × (ι ->₀ Nat) :=
+      Finsupp.sumFinsuppAddEquivProdFinsupp
+    suffices ∑ v in (support x).map e, (monomial (e.symm v)) (coeff (e.symm v) x) in
+        Ideal.map (Q.toComp P).toAlgHom.toRingHom P.ker by
+      simpa only [AlgHom.toRingHom_eq_coe, Finset.sum_map, Equiv.coe_toEmbedding,
+        EquivLike.coe_coe, AddEquiv.symm_apply_apply, support_sum_monomial_coeff] using! this
+    rw [← Finset.sum_fiberwise_of_maps_to (fun i => Finset.mem_image_of_mem Prod.fst)]
+    refine sum_mem fun i hi => ?_
+    convert_to monomial (e.symm (i, 0)) 1 * (Q.toComp P).toAlgHom.toRingHom
+      (∑ j in (support x).map e.toEmbedding with j.1 = i, monomial j.2 (coeff (e.symm j) x)) in _
+    · rw [map_sum, Finset.mul_sum]
+      refine Finset.sum_congr rfl fun j hj => ?_
+      obtain rfl := (Finset.mem_filter.mp hj).2
+      obtain ⟨i, j⟩ := j
+      clear hj hi
+      have : (Q.toComp P).toAlgHom (monomial j (coeff (e.symm (i, j)) x)) =
+          monomial (e.symm (0, j)) (coeff (e.symm (i, j)) x) :=
+        toComp_toAlgHom_monomial ..
+      simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe,
+          this]
+      rw [monomial_mul]; rw [← map_add]; rw [Prod.mk_add_mk]; rw [add_zero]; rw [zero_add]; rw [one_mul]
+    · apply Ideal.mul_mem_left
+      refine Ideal.mem_map_of_mem _ ?_
+      simp only [ker_eq_ker_aeval_val, AddEquiv.toEquiv_eq_coe, RingHom.mem_ker, map_sum]
+      rw [← coeff_zero i]; rw [← h₂]
+      clear h₂ hi
+      have (x : (Q.comp P).Ring) : (Function.support fun a => if a.1 = i then aeval P.val
+          (monomial a.2 (coeff (e.symm a) x)) else 0) subseteq SetLike.coe ((support x).map e) := by
+        rw [← Set.compl_subset_compl]
+        intro j
+        obtain ⟨j, rfl⟩ := e.surjective j
+        simp_all
+      rw [Finset.sum_filter]; rw [← finsum_eq_sum_of_support_subset _ (this x)]
+      induction x using MvPolynomial.induction_on' with
+      | monomial v a =>
+        rw [finsum_eq_sum_of_support_subset _ (this _)]; rw [← Finset.sum_filter]
+        obtain ⟨v, rfl⟩ := e.symm.surjective v
+        -- Rewrite `e` in the right-hand side only.
+        conv_rhs => simp only [e, Finsupp.sumFinsuppAddEquivProdFinsupp,
+          Finsupp.sumFinsuppEquivProdFinsupp, AddEquiv.symm_mk, AddEquiv.coe_mk,
+          Equiv.coe_fn_symm_mk, ofComp_toAlgHom_monomial_sumElim]
+        classical
+        simp only [coeff_monomial, ← e.injective.eq_iff,
+          map_zero, AddEquiv.apply_symm_apply, apply_ite]
+        rw [← apply_ite]; rw [Finset.sum_ite_eq]
+        simp only [Finset.mem_filter, Finset.mem_map_equiv, AddEquiv.coe_toEquiv_symm,
+          mem_support_iff, coeff_monomial, ↓reduceIte, ne_eq, ite_and, ite_not]
+        split
+        · simp only [*, map_zero, ite_self]
+        · congr
+      | add p q hp hq =>
+        simp only [coeff_add, map_add, ite_add_zero]
+        rw [finsum_add_distrib]; rw [hp]; rw [hq]
+        · refine (((support p).map e).finite_toSet.subset ?_)
+          convert! this p
+        · refine (((support q).map e).finite_toSet.subset ?_)
+          convert! this q
 
 Depends on / 依赖: AlgHom, AlgHom.comp_apply, Classical, Classical.decEq, DecidableEq, Ideal.map_le_iff_le_comap, Ideal.mem_comap, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.toAlgHom, IsScalarTower.toAlgHom_apply, P.Ring, Q.ofComp, Q.toComp, RingHom, RingHom.mem_ker, algebraMap, algebraMap_apply, comp_apply, le_antisymm
 -/
@@ -2112,7 +2300,15 @@ definition kerCompPreimage
   · -- The use of `refine` is intentional to control the elaboration order
     -- so that the term has type `(Q.comp P).Ring` and not `MvPolynomial (Q.ι ⊕ P.ι) R`
     refine rename ?_ (P.σ r) * monomial ?_ 1
-    exacts [Sum.inr, n.mapD
+    exacts [Sum.inr, n.mapDomain Sum.inl]
+  · simp only [ker_eq_ker_aeval_val, RingHom.mem_ker]
+    conv_rhs => rw [← aeval_val_eq_zero x.2, ← x.1.support_sum_monomial_coeff]
+    simp only [Finsupp.sum, map_sum, map_mul, aeval_rename, Function.comp_def, comp_val,
+      Sum.elim_inr, aeval_monomial, map_one, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
+      Sum.elim_inl, one_mul]
+    congr! with v i
+    simp_rw [← IsScalarTower.toAlgHom_apply R, ← comp_aeval, AlgHom.comp_apply, P.aeval_val_σ,
+      coeff]
 
 中文:
 定义 kerCompPreimage
@@ -2122,7 +2318,15 @@ definition kerCompPreimage
   · -- The use of `refine` is intentional to control the elaboration order
     -- so that the term has type `(Q.comp P).Ring` and not `MvPolynomial (Q.ι ⊕ P.ι) R`
     refine rename ?_ (P.σ r) * monomial ?_ 1
-    exacts [Sum.inr, n.mapD
+    exacts [Sum.inr, n.mapDomain Sum.inl]
+  · simp only [ker_eq_ker_aeval_val, RingHom.mem_ker]
+    conv_rhs => rw [← aeval_val_eq_zero x.2, ← x.1.support_sum_monomial_coeff]
+    simp only [Finsupp.sum, map_sum, map_mul, aeval_rename, Function.comp_def, comp_val,
+      Sum.elim_inr, aeval_monomial, map_one, Finsupp.prod_mapDomain_index_inj Sum.inl_injective,
+      Sum.elim_inl, one_mul]
+    congr! with v i
+    simp_rw [← IsScalarTower.toAlgHom_apply R, ← comp_aeval, AlgHom.comp_apply, P.aeval_val_σ,
+      coeff]
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeff, control, elaboration, intentional
 -/
@@ -2155,7 +2359,12 @@ lemma ofComp_kerCompPreimage
   refine Finset.sum_congr rfl fun j _ => ?_
   simp only [map_mul, Hom.toAlgHom_monomial]
   rw [one_smul]; rw [Finsupp.prod_mapDomain_index_inj Sum.inl_injective]
-  rw [rename_eq_aeval
+  rw [rename_eq_aeval]; rw [← AlgHom.comp_apply]; rw [comp_aeval]
+  simp only [ofComp_val, Sum.elim_inr, Function.comp_apply,
+    Sum.elim_inl, monomial_eq, Hom.toAlgHom_X]
+  congr 1
+  rw [aeval_def]; rw [IsScalarTower.algebraMap_eq R S]; rw [← MvPolynomial.algebraMap_eq]; rw [← coe_eval₂Hom]; rw [← map_aeval]; rw [P.aeval_val_σ]
+  simp [coeff]
 
 中文:
 引理 ofComp_kerCompPreimage
@@ -2166,7 +2375,12 @@ lemma ofComp_kerCompPreimage
   refine Finset.sum_congr rfl fun j _ => ?_
   simp only [map_mul, Hom.toAlgHom_monomial]
   rw [one_smul]; rw [Finsupp.prod_mapDomain_index_inj Sum.inl_injective]
-  rw [rename_eq_aeval
+  rw [rename_eq_aeval]; rw [← AlgHom.comp_apply]; rw [comp_aeval]
+  simp only [ofComp_val, Sum.elim_inr, Function.comp_apply,
+    Sum.elim_inl, monomial_eq, Hom.toAlgHom_X]
+  congr 1
+  rw [aeval_def]; rw [IsScalarTower.algebraMap_eq R S]; rw [← MvPolynomial.algebraMap_eq]; rw [← coe_eval₂Hom]; rw [← map_aeval]; rw [P.aeval_val_σ]
+  simp [coeff]
 
 Depends on / 依赖: AlgHom, AlgHom.comp_apply, Finset, Finset.sum_congr, Finsupp, Finsupp.prod_mapDomain_index_inj, Finsupp.sum, Function, Function.comp_apply, Hom.toAlgHom_X, Hom.toAlgHom_monomial, IsScalarTower, IsScalarTower.algebraMap_eq, Sum.elim_inl, Sum.elim_inr, Sum.inl_injective, aeval_def, algebraMap_eq, comp_aeval, comp_apply
 -/
@@ -2199,7 +2413,7 @@ lemma map_ofComp_ker
       RingHom.mem_ker] at hx ⊢
     rw [← hx]; rw [Hom.algebraMap_toAlgHom]; rw [algebraMap_self_apply]
   · intro hx
-    exact ⟨_, (kerCompPr
+    exact ⟨_, (kerCompPreimage Q P ⟨x, hx⟩).2, ofComp_kerCompPreimage Q P ⟨x, hx⟩⟩
 
 中文:
 引理 map_ofComp_ker
@@ -2213,7 +2427,7 @@ lemma map_ofComp_ker
       RingHom.mem_ker] at hx ⊢
     rw [← hx]; rw [Hom.algebraMap_toAlgHom]; rw [algebraMap_self_apply]
   · intro hx
-    exact ⟨_, (kerCompPr
+    exact ⟨_, (kerCompPreimage Q P ⟨x, hx⟩).2, ofComp_kerCompPreimage Q P ⟨x, hx⟩⟩
 
 Depends on / 依赖: Hom.algebraMap_toAlgHom, Ideal.mem_map_iff_of_surjective, RingHom, RingHom.mem_ker, algebraMap_self_apply, algebraMap_toAlgHom, kerCompPreimage, ker_eq_ker_aeval_val, mem_ker, mem_map_iff_of_surjective, ofComp_kerCompPreimage, toAlgHom_ofComp_surjective
 -/
@@ -2239,7 +2453,11 @@ lemma ker_comp_eq_sup
   rw [← map_ofComp_ker Q P]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
   rw [← sup_assoc]; rw [Algebra.Generators.map_toComp_ker]; rw [← RingHom.ker_eq_comap_bot]
   apply le_antisymm (le_trans le_sup_right le_sup_left)
-  simp only [le_sup_left, sup_of_le_left, sup_le_i
+  simp only [le_sup_left, sup_of_le_left, sup_le_iff, le_refl, and_true]
+  intro x hx
+  simp only [RingHom.mem_ker] at hx
+  rw [Generators.ker_eq_ker_aeval_val]; rw [RingHom.mem_ker]; rw [← algebraMap_self_apply (MvPolynomial.aeval _ x)]
+  rw [← Generators.Hom.algebraMap_toAlgHom (Q.ofComp P)]; rw [hx]; rw [map_zero]
 
 中文:
 引理 ker_comp_eq_sup
@@ -2248,7 +2466,11 @@ lemma ker_comp_eq_sup
   rw [← map_ofComp_ker Q P]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
   rw [← sup_assoc]; rw [Algebra.Generators.map_toComp_ker]; rw [← RingHom.ker_eq_comap_bot]
   apply le_antisymm (le_trans le_sup_right le_sup_left)
-  simp only [le_sup_left, sup_of_le_left, sup_le_i
+  simp only [le_sup_left, sup_of_le_left, sup_le_iff, le_refl, and_true]
+  intro x hx
+  simp only [RingHom.mem_ker] at hx
+  rw [Generators.ker_eq_ker_aeval_val]; rw [RingHom.mem_ker]; rw [← algebraMap_self_apply (MvPolynomial.aeval _ x)]
+  rw [← Generators.Hom.algebraMap_toAlgHom (Q.ofComp P)]; rw [hx]; rw [map_zero]
 
 Depends on / 依赖: Algebra, Algebra.Generators.map_toComp_ker, Generators, Generators.Hom.algeb, Generators.ker_eq_ker_aeval_val, Ideal.comap_map_of_surjective, MvPolynomial, MvPolynomial.aeval, RingHom, RingHom.ker_eq_comap_bot, RingHom.mem_ker, algebraMap_self_apply, and_true, comap_map_of_surjective, ker_eq_comap_bot, ker_eq_ker_aeval_val, le_antisymm, le_refl, le_sup_left, le_sup_right
 -/

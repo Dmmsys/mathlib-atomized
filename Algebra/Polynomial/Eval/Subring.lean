@@ -48,7 +48,7 @@ theorem mem_map_rangeS
     intro i _hi
     rcases h i with ⟨c, hc⟩
     use C c * X ^ i
-    rw [coe_mapRingHom]; rw [Polyn
+    rw [coe_mapRingHom]; rw [Polynomial.map_mul]; rw [map_C]; rw [hc]; rw [Polynomial.map_pow]; rw [map_X]
 
 中文:
 定理 mem_map_rangeS
@@ -65,7 +65,7 @@ theorem mem_map_rangeS
     intro i _hi
     rcases h i with ⟨c, hc⟩
     use C c * X ^ i
-    rw [coe_mapRingHom]; rw [Polyn
+    rw [coe_mapRingHom]; rw [Polynomial.map_mul]; rw [map_C]; rw [hc]; rw [Polynomial.map_pow]; rw [map_X]
 
 Depends on / 依赖: Polynomial, Polynomial.map_mul, Polynomial.map_pow, Set.mem_range_self, as_sum_range_C_mul_X_pow, coe_mapRingHom, coeff_map, mapRingHom, map_C, map_X, map_mul, map_pow, mem_range_self, p.as_sum_range_C_mul_X_pow, rangeS, rangeS.sum_mem, sum_mem
 -/

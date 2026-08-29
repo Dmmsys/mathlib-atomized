@@ -130,7 +130,13 @@ theorem angle_side_angle
     grind only [collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi, angle_self_right,
       angle_self_left, dist_eq_zero, Set.insert_comm, Set.pair_comm]
   have ha₃ := angle_add_angle_add_angle_eq_pi b (ne₁₃_of_not_collinear h)
-  have ha₃' := an
+  have ha₃' := angle_add_angle_add_angle_eq_pi b' (ne₁₃_of_not_collinear h')
+  simp only [← ha₃', ha₁, ha₂, angle_comm b' c' a', add_right_cancel_iff] at ha₃
+  have h_bac : ¬Collinear Real {b, a, c} := by simpa [Set.insert_comm] using h
+  have h_bac' : ¬Collinear Real {b', a', c'} := by simpa [Set.insert_comm] using h'
+  have dist_ab_eq : dist a b = dist a' b' := by
+    rw [dist_comm a b]; rw [dist_comm a' b']; rw [dist_eq_dist_mul_sin_angle_div_sin_angle h_bac]; rw [dist_eq_dist_mul_sin_angle_div_sin_angle h_bac']; rw [dist_comm c b]; rw [dist_comm c' b']; rw [hd]; rw [angle_comm]; rw [ha₂]; rw [angle_comm b' c' a']; rw [angle_comm b a c]; rw [ha₃]; rw [angle_comm b' a' c']
+  exact side_angle_side ha₁ dist_ab_eq hd
 
 中文:
 定理 angle_side_angle
@@ -140,7 +146,13 @@ theorem angle_side_angle
     grind only [collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi, angle_self_right,
       angle_self_left, dist_eq_zero, Set.insert_comm, Set.pair_comm]
   have ha₃ := angle_add_angle_add_angle_eq_pi b (ne₁₃_of_not_collinear h)
-  have ha₃' := an
+  have ha₃' := angle_add_angle_add_angle_eq_pi b' (ne₁₃_of_not_collinear h')
+  simp only [← ha₃', ha₁, ha₂, angle_comm b' c' a', add_right_cancel_iff] at ha₃
+  have h_bac : ¬Collinear Real {b, a, c} := by simpa [Set.insert_comm] using h
+  have h_bac' : ¬Collinear Real {b', a', c'} := by simpa [Set.insert_comm] using h'
+  have dist_ab_eq : dist a b = dist a' b' := by
+    rw [dist_comm a b]; rw [dist_comm a' b']; rw [dist_eq_dist_mul_sin_angle_div_sin_angle h_bac]; rw [dist_eq_dist_mul_sin_angle_div_sin_angle h_bac']; rw [dist_comm c b]; rw [dist_comm c' b']; rw [hd]; rw [angle_comm]; rw [ha₂]; rw [angle_comm b' c' a']; rw [angle_comm b a c]; rw [ha₃]; rw [angle_comm b' a' c']
+  exact side_angle_side ha₁ dist_ab_eq hd
 
 Depends on / 依赖: Collinear, Set.insert_comm, Set.pair_comm, add_right_cancel_iff, angle_add_angle_add_angle_eq_pi, angle_comm, angle_self_left, angle_self_right, collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi, dist_eq_zero, h_bac, insert_comm, pair_comm
 -/
@@ -169,7 +181,13 @@ theorem angle_angle_side
   have h' : ¬Collinear Real {a', b', c'} := by
     grind only [collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi, angle_self_right,
       angle_self_left, dist_eq_zero, Set.insert_comm, Set.pair_comm]
-  have ha₃' := an
+  have ha₃' := angle_add_angle_add_angle_eq_pi b' (ne₁₃_of_not_collinear h')
+  simp only [← ha₃', ha₁, ha₂, angle_comm b' c' a', add_right_cancel_iff] at ha₃
+  have h_bca : ¬Collinear Real {b, c, a} := by rwa [Set.insert_comm, Set.pair_comm] at h
+  have h1 := angle_side_angle h_bca ha₂ hd ha₃
+  exact angle_side_angle h ha₁ (h1.dist_eq 0 1) ha₂
+
+include V₁ V₂
 
 中文:
 定理 angle_angle_side
@@ -179,7 +197,13 @@ theorem angle_angle_side
   have h' : ¬Collinear Real {a', b', c'} := by
     grind only [collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi, angle_self_right,
       angle_self_left, dist_eq_zero, Set.insert_comm, Set.pair_comm]
-  have ha₃' := an
+  have ha₃' := angle_add_angle_add_angle_eq_pi b' (ne₁₃_of_not_collinear h')
+  simp only [← ha₃', ha₁, ha₂, angle_comm b' c' a', add_right_cancel_iff] at ha₃
+  have h_bca : ¬Collinear Real {b, c, a} := by rwa [Set.insert_comm, Set.pair_comm] at h
+  have h1 := angle_side_angle h_bca ha₂ hd ha₃
+  exact angle_side_angle h ha₁ (h1.dist_eq 0 1) ha₂
+
+include V₁ V₂
 
 Depends on / 依赖: Collinear, Set.insert_comm, Set.pair_c, Set.pair_comm, add_right_cancel_iff, angle_add_angle_add_angle_eq_pi, angle_comm, angle_self_left, angle_self_right, collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi, dist_eq_zero, h_bca, insert_comm, pair_c, pair_comm
 -/

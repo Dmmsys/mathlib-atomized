@@ -442,7 +442,14 @@ theorem nhds_eq
   · intro a U U_in
     rcases GroupFilterBasis.mul U_in with ⟨V, V_in, hVU⟩
     filter_upwards [image_mem_map (B.mem_filter_of_mem V_in)]
-    rintro
+    rintro _ ⟨x, hx, rfl⟩
+    calc
+(a * x) • V in (a * x) • B.filter := smul_set_mem_smul_filter B.mem_filter_of_mem V_in
+.symm _ = a • x • V := smul_smul ..
+_ subseteq a • (V * V) := smul_set_mono smul_set_subset_smul hx
+      _ subseteq a • U := smul_set_mono hVU
+
+@[to_additive]
 
 中文:
 定理 nhds_eq
@@ -455,7 +462,14 @@ theorem nhds_eq
   · intro a U U_in
     rcases GroupFilterBasis.mul U_in with ⟨V, V_in, hVU⟩
     filter_upwards [image_mem_map (B.mem_filter_of_mem V_in)]
-    rintro
+    rintro _ ⟨x, hx, rfl⟩
+    calc
+(a * x) • V in (a * x) • B.filter := smul_set_mem_smul_filter B.mem_filter_of_mem V_in
+.symm _ = a • x • V := smul_smul ..
+_ subseteq a • (V * V) := smul_set_mono smul_set_subset_smul hx
+      _ subseteq a • U := smul_set_mono hVU
+
+@[to_additive]
 
 Depends on / 依赖: B.filter, B.mem_filter_of_mem, B.one, FilterBasis, FilterBasis.hasBasis, GroupFilterBasis, GroupFilterBasis.mul, TopologicalSpace, TopologicalSpace.nhds_mkOfNhds_of_hasBasis, U_in, V_in, filter, filter_upwards, hasBasis, image_mem_map, mem_filter_of_mem, mul_one, nhds_mkOfNhds_of_hasBasis, smul_set_mem_smul_filter, smul_set_mono
 -/
@@ -958,7 +972,14 @@ instance [DiscreteTopology
         rintro a ⟨x, -, m, rfl, rfl⟩
         simp only [smul_zero, mem_singleton_iff]
       smul_left' := by
-        rintro x₀ U (h : U in {{
+        rintro x₀ U (h : U in {{(0 : M)}})
+        rw [mem_singleton_iff] at h
+        use {0}, rfl
+        simp [h]
+      smul_right' := by
+        rintro m₀ U (h : U in (0 : Set (Set M)))
+        rw [Set.mem_zero] at h
+        simp [h, nhds_discrete] }⟩
 
 中文:
 实例 [离散拓扑
@@ -972,7 +993,14 @@ instance [DiscreteTopology
         rintro a ⟨x, -, m, rfl, rfl⟩
         simp only [smul_zero, mem_singleton_iff]
       smul_left' := by
-        rintro x₀ U (h : U in {{
+        rintro x₀ U (h : U in {{(0 : M)}})
+        rw [mem_singleton_iff] at h
+        use {0}, rfl
+        simp [h]
+      smul_right' := by
+        rintro m₀ U (h : U in (0 : Set (Set M)))
+        rw [Set.mem_zero] at h
+        simp [h, nhds_discrete] }⟩
 
 Depends on / 依赖: AddGroupFilterBasis, Set.mem_zero, mem_singleton_iff, mem_zero, nhds_discrete, smul_left, smul_right, smul_zero, univ_mem
 -/
@@ -1060,7 +1088,15 @@ theorem _root_.ContinuousSMul.of_basis_zero
     apply mem_of_superset (prod_mem_prod V_in <| h.mem_of_mem hj)
     rintro ⟨v, w⟩ ⟨v_in : v in V, w_in : w in b j⟩
     exact hVj (Set.smul_mem_smul v_in w_in)
-  · intro
+  · intro m₀
+    rw [h.tendsto_right_iff]
+    intro i hi
+    exact hsmul_right m₀ hi
+  · intro x₀
+    rw [h.tendsto_right_iff]
+    intro i hi
+    rcases hsmul_left x₀ hi with ⟨j, hj, hji⟩
+    exact mem_of_superset (h.mem_of_mem hj) hji
 
 中文:
 定理 _root_.连续标量乘法.of_basis_zero
@@ -1073,7 +1109,15 @@ theorem _root_.ContinuousSMul.of_basis_zero
     apply mem_of_superset (prod_mem_prod V_in <| h.mem_of_mem hj)
     rintro ⟨v, w⟩ ⟨v_in : v in V, w_in : w in b j⟩
     exact hVj (Set.smul_mem_smul v_in w_in)
-  · intro
+  · intro m₀
+    rw [h.tendsto_right_iff]
+    intro i hi
+    exact hsmul_right m₀ hi
+  · intro x₀
+    rw [h.tendsto_right_iff]
+    intro i hi
+    rcases hsmul_left x₀ hi with ⟨j, hj, hji⟩
+    exact mem_of_superset (h.mem_of_mem hj) hji
 
 Depends on / 依赖: ContinuousSMul, ContinuousSMul.of_nhds_zero, Set.smul_mem_smul, V_in, h.mem_of_mem, h.tendsto_right_iff, hsmul_left, hsmul_right, mem_of_mem, mem_of_superset, of_nhds_zero, prod_mem_prod, smul_mem_smul, tendsto_right_iff, v_in, w_in
 -/
@@ -1124,7 +1168,8 @@ definition ofBases
     smul_left' := smul_left
     smul_right' := by
       intro m₀ U U_in
-      rcases smul_right m₀ U_in with 
+      rcases smul_right m₀ U_in with ⟨V, V_in, H⟩
+      exact mem_of_superset (BR.toAddGroupFilterBasis.mem_nhds_zero V_in) H }
 
 中文:
 定义 ofBases
@@ -1138,7 +1183,8 @@ definition ofBases
     smul_left' := smul_left
     smul_right' := by
       intro m₀ U U_in
-      rcases smul_right m₀ U_in with 
+      rcases smul_right m₀ U_in with ⟨V, V_in, H⟩
+      exact mem_of_superset (BR.toAddGroupFilterBasis.mem_nhds_zero V_in) H }
 
 Depends on / 依赖: BR.toAddGroupFilterBasis.mem_nhds_zero, BR.topology, U_in, V_in, W_in, mem_nhds_zero, mem_of_superset, smul_left, smul_right, toAddGroupFilterBasis, topology
 -/

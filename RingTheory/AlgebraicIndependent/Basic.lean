@@ -161,7 +161,8 @@ theorem linearIndependent
     simp
   rw [this]
   refine (algebraicIndependent_iff_injective_aeval.mp hx).comp ?_
-  rw [← linea
+  rw [← linearIndependent_iff_injective_finsuppLinearCombination]
+  exact linearIndependent_X _ _
 
 中文:
 定理 linearIndependent
@@ -174,7 +175,8 @@ theorem linearIndependent
     simp
   rw [this]
   refine (algebraicIndependent_iff_injective_aeval.mp hx).comp ?_
-  rw [← linea
+  rw [← linearIndependent_iff_injective_finsuppLinearCombination]
+  exact linearIndependent_X _ _
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, MvPolynomial, MvPolynomial.aeval, algebraicIndependent_iff_injective_aeval, algebraicIndependent_iff_injective_aeval.mp, linearCombination, linearIndependent_X, linearIndependent_iff_injective_finsuppLinearCombination, toLinearMap, toLinearMap.comp
 -/
@@ -239,7 +241,11 @@ theorem map
     intro p
     rw [AlgHom.mem_range]
     refine ⟨MvPolynomial.rename (codRestrict x (range x) mem_range_self) p, ?_⟩
-    simp [Func
+    simp [Function.comp_def, aeval_rename]
+  intro x y hxy
+  rw [this] at hxy
+  rw [adjoin_eq_range] at hf_inj
+  exact hx (hf_inj (h x) (h y) hxy)
 
 中文:
 定理 map
@@ -250,7 +256,11 @@ theorem map
     intro p
     rw [AlgHom.mem_range]
     refine ⟨MvPolynomial.rename (codRestrict x (range x) mem_range_self) p, ?_⟩
-    simp [Func
+    simp [Function.comp_def, aeval_rename]
+  intro x y hxy
+  rw [this] at hxy
+  rw [adjoin_eq_range] at hf_inj
+  exact hx (hf_inj (h x) (h y) hxy)
 
 Depends on / 依赖: AlgHom, AlgHom.mem_range, Function, Function.comp_def, MvPolynomial, MvPolynomial.rename, adjoin_eq_range, aeval_rename, codRestrict, comp_def, f.comp, hf_inj, mem_range, mem_range_self
 -/
@@ -571,7 +581,7 @@ theorem AlgebraicIndependent.restrictScalars
     ext <;> simp [algebraMap_eq_smul_one]
   change Injective (aeval x).toRingHom
   rw [← this]; rw [RingHom.coe_comp]
-  exact Injective.c
+  exact Injective.comp ai (MvPolynomial.map_injective _ hinj)
 
 中文:
 定理 AlgebraicIndependent.restrictScalars
@@ -582,7 +592,7 @@ theorem AlgebraicIndependent.restrictScalars
     ext <;> simp [algebraMap_eq_smul_one]
   change Injective (aeval x).toRingHom
   rw [← this]; rw [RingHom.coe_comp]
-  exact Injective.c
+  exact Injective.comp ai (MvPolynomial.map_injective _ hinj)
 
 Depends on / 依赖: Injective, Injective.comp, MvPolynomial, MvPolynomial.map, MvPolynomial.map_injective, RingHom, RingHom.coe_comp, algebraMap, algebraMap_eq_smul_one, coe_comp, map_injective, toRingHom, toRingHom.comp
 -/
@@ -723,7 +733,10 @@ theorem algebraicIndependent_finset_map_embedding_subtype
       simp only [Subtype.coe_prop, Embedding.coe_subtype]⟩
   convert! AlgebraicIndependent.comp li f _
   rintro ⟨x, hx⟩ ⟨y, hy⟩
-  rw [Fi
+  rw [Finset.mem_map] at hx hy
+  obtain ⟨a, _, rfl⟩ := hx
+  obtain ⟨b, _, rfl⟩ := hy
+  simp only [f, imp_self, Subtype.mk_eq_mk]
 
 中文:
 定理 algebraicIndependent_finset_map_embedding_subtype
@@ -737,7 +750,10 @@ theorem algebraicIndependent_finset_map_embedding_subtype
       simp only [Subtype.coe_prop, Embedding.coe_subtype]⟩
   convert! AlgebraicIndependent.comp li f _
   rintro ⟨x, hx⟩ ⟨y, hy⟩
-  rw [Fi
+  rw [Finset.mem_map] at hx hy
+  obtain ⟨a, _, rfl⟩ := hx
+  obtain ⟨b, _, rfl⟩ := hy
+  simp only [f, imp_self, Subtype.mk_eq_mk]
 
 Depends on / 依赖: AlgebraicIndependent, AlgebraicIndependent.comp, Embedding, Embedding.coe_subtype, Embedding.subtype, Finset, Finset.mem_map, Subtype, Subtype.coe_prop, Subtype.mk_eq_mk, coe_prop, coe_subtype, convert, imp_self, mem_map, mk_eq_mk, subtype, t.map
 -/
@@ -932,7 +948,7 @@ lemma IsTranscendenceBasis.of_comp
   have := H.2 (f '' s)
     ((algebraicIndependent_image h.injOn).mp ((AlgHom.algebraicIndependent_iff f h).mpr hs))
     (by rw [Set.range_comp]; exact Set.image_mono hs')
-  rwa [Set.range_comp, (Set.image_injective.mpr h
+  rwa [Set.range_comp, (Set.image_injective.mpr h).eq_iff] at this
 
 中文:
 引理 IsTranscendenceBasis.of_comp
@@ -943,7 +959,7 @@ lemma IsTranscendenceBasis.of_comp
   have := H.2 (f '' s)
     ((algebraicIndependent_image h.injOn).mp ((AlgHom.algebraicIndependent_iff f h).mpr hs))
     (by rw [Set.range_comp]; exact Set.image_mono hs')
-  rwa [Set.range_comp, (Set.image_injective.mpr h
+  rwa [Set.range_comp, (Set.image_injective.mpr h).eq_iff] at this
 
 Depends on / 依赖: AlgHom, AlgHom.algebraicIndependent_iff, Set.image_injective.mpr, Set.image_mono, Set.range_comp, algebraicIndependent_iff, algebraicIndependent_image, eq_iff, h.injOn, image_injective, image_mono, range_comp
 -/
@@ -1221,7 +1237,8 @@ theorem algebraicIndependent_comp_subtype
   have : (aeval (x ∘ (↑) : s -> A) : _ ->ₐ[R] _) = (aeval x).comp (rename (↑)) := by ext; simp
   have : forall p : MvPolynomial s R, rename ((↑) : s -> ι) p = 0 ↔ p = 0 :=
     (injective_iff_map_eq_zero' (rename ((↑) : s -> ι) : MvPolynomial s R ->ₐ[R] _).toRingHom).1
-      (rename_injective _ Su
+      (rename_injective _ Subtype.val_injective)
+  simp [algebraicIndependent_iff, supported_eq_range_rename, *]
 
 中文:
 定理 algebraicIndependent_comp_subtype
@@ -1230,7 +1247,8 @@ theorem algebraicIndependent_comp_subtype
   have : (aeval (x ∘ (↑) : s -> A) : _ ->ₐ[R] _) = (aeval x).comp (rename (↑)) := by ext; simp
   have : forall p : MvPolynomial s R, rename ((↑) : s -> ι) p = 0 ↔ p = 0 :=
     (injective_iff_map_eq_zero' (rename ((↑) : s -> ι) : MvPolynomial s R ->ₐ[R] _).toRingHom).1
-      (rename_injective _ Su
+      (rename_injective _ Subtype.val_injective)
+  simp [algebraicIndependent_iff, supported_eq_range_rename, *]
 
 Depends on / 依赖: MvPolynomial, Subtype, Subtype.val_injective, algebraicIndependent_iff, injective_iff_map_eq_zero, rename_injective, supported_eq_range_rename, toRingHom, val_injective
 -/
@@ -1428,7 +1446,7 @@ theorem exists_maximal_algebraicIndependent
   refine zorn_subset_nonempty { u : Set A | AlgebraicIndependent R ((↑) : u -> A) ∧ u subseteq t}
     (fun c hc chainc hcn => ⟨⋃₀ c, ⟨?_, ?_⟩, fun _ => subset_sUnion_of_mem⟩) s ⟨hs, hst⟩
   · exact algebraicIndependent_sUnion_of_directed hcn chainc.directedOn (fun x hxc => (hc hxc).1)
-  exact fun 
+  exact fun x ⟨w, hyc, hwy⟩ => (hc hyc).2 hwy
 
 中文:
 定理 存在_maximal_algebraicIndependent
@@ -1437,7 +1455,7 @@ theorem exists_maximal_algebraicIndependent
   refine zorn_subset_nonempty { u : Set A | AlgebraicIndependent R ((↑) : u -> A) ∧ u subseteq t}
     (fun c hc chainc hcn => ⟨⋃₀ c, ⟨?_, ?_⟩, fun _ => subset_sUnion_of_mem⟩) s ⟨hs, hst⟩
   · exact algebraicIndependent_sUnion_of_directed hcn chainc.directedOn (fun x hxc => (hc hxc).1)
-  exact fun 
+  exact fun x ⟨w, hyc, hwy⟩ => (hc hyc).2 hwy
 
 Depends on / 依赖: AlgebraicIndependent, algebraicIndependent_sUnion_of_directed, chainc, chainc.directedOn, directedOn, subset_sUnion_of_mem, subseteq, zorn_subset_nonempty
 -/
@@ -1611,7 +1629,12 @@ theorem AlgebraicIndependent.aeval_comp_mvPolynomialOptionEquivPolynomialAdjoin
     simp only [RingHom.comp_apply, RingEquiv.toRingHom_eq_coe, RingEquiv.coe_toRingHom,
       AlgHom.coe_toRingHom, AlgHom.coe_toRingHom]
   · intro r
-    rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_C]; rw [aeval_C]; rw [Polynomial.aeval_C]; rw [IsSca
+    rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_C]; rw [aeval_C]; rw [Polynomial.aeval_C]; rw [IsScalarTower.algebraMap_apply R (adjoin R (range x)) A]
+  · rintro (⟨⟩ | ⟨i⟩)
+    · rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_X_none, aeval_X, Polynomial.aeval_X,
+        Option.elim]
+    · rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_X_some, Polynomial.aeval_C,
+        hx.algebraMap_aevalEquiv, aeval_X, aeval_X, Option.elim]
 
 中文:
 定理 AlgebraicIndependent.aeval_comp_mvPolynomialOptionEquivPolynomialAdjoin
@@ -1620,7 +1643,12 @@ theorem AlgebraicIndependent.aeval_comp_mvPolynomialOptionEquivPolynomialAdjoin
     simp only [RingHom.comp_apply, RingEquiv.toRingHom_eq_coe, RingEquiv.coe_toRingHom,
       AlgHom.coe_toRingHom, AlgHom.coe_toRingHom]
   · intro r
-    rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_C]; rw [aeval_C]; rw [Polynomial.aeval_C]; rw [IsSca
+    rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_C]; rw [aeval_C]; rw [Polynomial.aeval_C]; rw [IsScalarTower.algebraMap_apply R (adjoin R (range x)) A]
+  · rintro (⟨⟩ | ⟨i⟩)
+    · rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_X_none, aeval_X, Polynomial.aeval_X,
+        Option.elim]
+    · rw [hx.mvPolynomialOptionEquivPolynomialAdjoin_X_some, Polynomial.aeval_C,
+        hx.algebraMap_aevalEquiv, aeval_X, aeval_X, Option.elim]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, IsScalarTower, IsScalarTower.algebraMap_apply, MvPolynomial, MvPolynomial.ringHom_ext, Option.elim, Polynomial, Polynomial.aeval_C, Polynomial.aeval_X, RingEquiv, RingEquiv.coe_toRingHom, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.comp_apply, adjoin, aeval_C, aeval_X, algebraMap_apply, coe_toRingHom
 -/

@@ -182,7 +182,33 @@ definition ringCon
     | rel _ _ hab =>
       refine (Relation.EqvGen.rel _ _ hab.add_left).trans _ _ _ ?_
       induction hcd with
-      | rel _ _ hcd => exact Relation.EqvGen.rel
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.add_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | refl => induction hcd with
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.add_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | symm x y _ hxy => exact (hxy hcd.symm).symm
+    | trans x y z _ _ h h' => exact (h hcd).trans _ _ _ (h' <| Relation.EqvGen.refl _)
+  mul' {a b c d} hab hcd := by
+    induction hab generalizing c d with
+    | rel _ _ hab =>
+      refine (Relation.EqvGen.rel _ _ hab.mul_left).trans _ _ _ ?_
+      induction hcd with
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.mul_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | refl => induction hcd with
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.mul_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | symm x y _ hxy => exact (hxy hcd.symm).symm
+    | trans x y z _ _ h h' => exact (h hcd).trans _ _ _ (h' <| Relation.EqvGen.refl _)
 
 中文:
 定义 ringCon
@@ -194,7 +220,33 @@ definition ringCon
     | rel _ _ hab =>
       refine (Relation.EqvGen.rel _ _ hab.add_left).trans _ _ _ ?_
       induction hcd with
-      | rel _ _ hcd => exact Relation.EqvGen.rel
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.add_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | refl => induction hcd with
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.add_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | symm x y _ hxy => exact (hxy hcd.symm).symm
+    | trans x y z _ _ h h' => exact (h hcd).trans _ _ _ (h' <| Relation.EqvGen.refl _)
+  mul' {a b c d} hab hcd := by
+    induction hab generalizing c d with
+    | rel _ _ hab =>
+      refine (Relation.EqvGen.rel _ _ hab.mul_left).trans _ _ _ ?_
+      induction hcd with
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.mul_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | refl => induction hcd with
+      | rel _ _ hcd => exact Relation.EqvGen.rel _ _ hcd.mul_right
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ h => exact h.symm _ _
+      | trans _ _ _ _ _ h h' => exact h.trans _ _ _ h'
+    | symm x y _ hxy => exact (hxy hcd.symm).symm
+    | trans x y z _ _ h h' => exact (h hcd).trans _ _ _ (h' <| Relation.EqvGen.refl _)
 
 Depends on / 依赖: EqvGen, Relation, Relation.EqvGen
 -/
@@ -250,7 +302,18 @@ theorem eqvGen_rel_eq
       | of => exact RingConGen.Rel.of _ _ ‹_›
       | add_left _ h => exact h.add (RingConGen.Rel.refl _)
       | mul_left _ h => exact h.mul (RingConGen.Rel.refl _)
-      | mul_right _ h => exact (Ring
+      | mul_right _ h => exact (RingConGen.Rel.refl _).mul h
+    | refl => exact RingConGen.Rel.refl _
+    | symm => exact RingConGen.Rel.symm ‹_›
+    | trans => exact RingConGen.Rel.trans ‹_› ‹_›
+  · intro h
+    induction h with
+    | of => exact Relation.EqvGen.rel _ _ (Rel.of ‹_›)
+    | refl => exact (RingQuot.ringCon r).refl _
+    | symm => exact (RingQuot.ringCon r).symm ‹_›
+    | trans => exact (RingQuot.ringCon r).trans ‹_› ‹_›
+    | add => exact (RingQuot.ringCon r).add ‹_› ‹_›
+    | mul => exact (RingQuot.ringCon r).mul ‹_› ‹_›
 
 中文:
 定理 eqvGen_rel_eq
@@ -265,7 +328,18 @@ theorem eqvGen_rel_eq
       | of => exact RingConGen.Rel.of _ _ ‹_›
       | add_left _ h => exact h.add (RingConGen.Rel.refl _)
       | mul_left _ h => exact h.mul (RingConGen.Rel.refl _)
-      | mul_right _ h => exact (Ring
+      | mul_right _ h => exact (RingConGen.Rel.refl _).mul h
+    | refl => exact RingConGen.Rel.refl _
+    | symm => exact RingConGen.Rel.symm ‹_›
+    | trans => exact RingConGen.Rel.trans ‹_› ‹_›
+  · intro h
+    induction h with
+    | of => exact Relation.EqvGen.rel _ _ (Rel.of ‹_›)
+    | refl => exact (RingQuot.ringCon r).refl _
+    | symm => exact (RingQuot.ringCon r).symm ‹_›
+    | trans => exact (RingQuot.ringCon r).trans ‹_› ‹_›
+    | add => exact (RingQuot.ringCon r).add ‹_› ‹_›
+    | mul => exact (RingQuot.ringCon r).mul ‹_› ‹_›
 
 Depends on / 依赖: EqvGen, Rel.of, Relation, Relation.EqvGen.rel, RingConGen, RingConGen.Rel.of, RingConGen.Rel.refl, RingConGen.Rel.symm, RingConGen.Rel.trans, add_left, h.add, h.mul, mul_left, mul_right
 -/
@@ -428,7 +502,9 @@ instance :
       induction n with
       | zero => rw [pow_zero, pow_zero]
       | succ n ih =>
-        simpa +inst
+        simpa +instances [pow_succ, (· * ·), instMul, Quot.map₂_mk, mk.injEq] using
+          congr_arg₂ (fun x y => (⟨x⟩ : RingQuot r) * ⟨y⟩) ih (Quot.sound h))
+    a⟩⟩
 
 中文:
 实例 :
@@ -439,7 +515,9 @@ instance :
       induction n with
       | zero => rw [pow_zero, pow_zero]
       | succ n ih =>
-        simpa +inst
+        simpa +instances [pow_succ, (· * ·), instMul, Quot.map₂_mk, mk.injEq] using
+          congr_arg₂ (fun x y => (⟨x⟩ : RingQuot r) * ⟨y⟩) ih (Quot.sound h))
+    a⟩⟩
 -/
 @[no_expose] instance : NatPow (RingQuot r) :=
   ⟨fun ⟨a⟩ n => ⟨Quot.lift (fun a => Quot.mk (RingQuot.Rel r) (a ^ n))
@@ -682,7 +760,14 @@ instance instAddCommMonoid
   add_comm := by
     rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩
     simp only [add_quot, add_comm]
-  nsm
+  nsmul := (· • ·)
+  nsmul_zero := by
+    rintro ⟨⟨⟩⟩
+    simp only [smul_quot, zero_smul, zero_quot]
+  nsmul_succ := by
+    rintro n ⟨⟨⟩⟩
+    simp only [smul_quot, nsmul_eq_mul, Nat.cast_add, Nat.cast_one, add_mul, one_mul,
+               add_comm, add_quot]
 
 中文:
 实例 instAddCommMonoid
@@ -699,7 +784,14 @@ instance instAddCommMonoid
   add_comm := by
     rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩
     simp only [add_quot, add_comm]
-  nsm
+  nsmul := (· • ·)
+  nsmul_zero := by
+    rintro ⟨⟨⟩⟩
+    simp only [smul_quot, zero_smul, zero_quot]
+  nsmul_succ := by
+    rintro n ⟨⟨⟩⟩
+    simp only [smul_quot, nsmul_eq_mul, Nat.cast_add, Nat.cast_one, add_mul, one_mul,
+               add_comm, add_quot]
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, add_assoc, add_comm, add_mul, add_quot, add_zero, cast_add, cast_one, nsmul_eq_mul, nsmul_succ, nsmul_zero, one_mul, smul_quot, zero_add, zero_quot, zero_smul
 -/
@@ -742,7 +834,17 @@ instance instMonoidWithZero
     simp only [mul_quot, ← one_quot, mul_one]
   zero_mul := by
     rintro ⟨⟨⟩⟩
-    simp only [mul_quot, ← zero_quot, zero_mul
+    simp only [mul_quot, ← zero_quot, zero_mul]
+  mul_zero := by
+    rintro ⟨⟨⟩⟩
+    simp only [mul_quot, ← zero_quot, mul_zero]
+  npow n x := x ^ n
+  npow_zero := by
+    rintro ⟨⟨⟩⟩
+    simp only [pow_quot, ← one_quot, pow_zero]
+  npow_succ := by
+    rintro n ⟨⟨⟩⟩
+    simp only [pow_quot, mul_quot, pow_succ]
 
 中文:
 实例 instMonoidWithZero
@@ -758,7 +860,17 @@ instance instMonoidWithZero
     simp only [mul_quot, ← one_quot, mul_one]
   zero_mul := by
     rintro ⟨⟨⟩⟩
-    simp only [mul_quot, ← zero_quot, zero_mul
+    simp only [mul_quot, ← zero_quot, zero_mul]
+  mul_zero := by
+    rintro ⟨⟨⟩⟩
+    simp only [mul_quot, ← zero_quot, mul_zero]
+  npow n x := x ^ n
+  npow_zero := by
+    rintro ⟨⟨⟩⟩
+    simp only [pow_quot, ← one_quot, pow_zero]
+  npow_succ := by
+    rintro n ⟨⟨⟩⟩
+    simp only [pow_quot, mul_quot, pow_succ]
 
 Depends on / 依赖: mul_assoc, mul_one, mul_quot, mul_zero, npow_succ, npow_zero, one_mul, one_quot, pow_quot, pow_succ, pow_zero, zero_mul, zero_quot
 -/
@@ -799,7 +911,7 @@ instance instSemiring
     simp only [mul_quot, add_quot, left_distrib]
   right_distrib := by
     rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩ ⟨⟨⟩⟩
-    simp only [mul_
+    simp only [mul_quot, add_quot, right_distrib]
 
 中文:
 实例 instSemiring
@@ -811,7 +923,7 @@ instance instSemiring
     simp only [mul_quot, add_quot, left_distrib]
   right_distrib := by
     rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩ ⟨⟨⟩⟩
-    simp only [mul_
+    simp only [mul_quot, add_quot, right_distrib]
 
 Depends on / 依赖: add_quot, instNatCast, instances, left_distrib, mul_quot, natCast, natCast_succ, one_quot, right_distrib, zero_quot
 -/
@@ -861,7 +973,15 @@ instance instRing
     simp [smul_quot, ← zero_quot]
   zsmul_succ' := by
     rintro n ⟨⟨⟩⟩
-    simp [smul_quot, add_quot,
+    simp [smul_quot, add_quot, add_mul, add_comm]
+  zsmul_neg' := by
+    rintro n ⟨⟨⟩⟩
+    simp [smul_quot, neg_quot, add_mul]
+  intCast := intCast r
+intCast_ofNat := fun n => congrArg RingQuot.mk by
+    exact congrArg (Quot.mk _) (Int.cast_natCast _)
+intCast_negSucc := fun n => congrArg RingQuot.mk by
+    exact congrArg (Quot.mk _) (Int.cast_negSucc n)
 
 中文:
 实例 instRing
@@ -877,7 +997,15 @@ instance instRing
     simp [smul_quot, ← zero_quot]
   zsmul_succ' := by
     rintro n ⟨⟨⟩⟩
-    simp [smul_quot, add_quot,
+    simp [smul_quot, add_quot, add_mul, add_comm]
+  zsmul_neg' := by
+    rintro n ⟨⟨⟩⟩
+    simp [smul_quot, neg_quot, add_mul]
+  intCast := intCast r
+intCast_ofNat := fun n => congrArg RingQuot.mk by
+    exact congrArg (Quot.mk _) (Int.cast_natCast _)
+intCast_negSucc := fun n => congrArg RingQuot.mk by
+    exact congrArg (Quot.mk _) (Int.cast_negSucc n)
 
 Depends on / 依赖: Int.cast_natCast, Quot.mk, RingQuot, RingQuot.mk, add_comm, add_mul, add_quot, cast_natCast, intCast, intCast_negSucc, intCast_ofNat, neg_quot, smul_quot, sub_eq_add_neg, sub_quot, zero_quot, zsmul_neg, zsmul_succ, zsmul_zero
 -/
@@ -962,7 +1090,8 @@ instance instAlgebra
     rintro ⟨⟨a⟩⟩
     simp [Algebra.commutes, mul_quot]
   smul_def' r := by
-    rintro ⟨⟨
+    rintro ⟨⟨a⟩⟩
+    simp [smul_quot, Algebra.smul_def, mul_quot]
 
 中文:
 实例 instAlgebra
@@ -976,7 +1105,8 @@ instance instAlgebra
     rintro ⟨⟨a⟩⟩
     simp [Algebra.commutes, mul_quot]
   smul_def' r := by
-    rintro ⟨⟨
+    rintro ⟨⟨a⟩⟩
+    simp [smul_quot, Algebra.smul_def, mul_quot]
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.smul_def, Quot.mk, add_quot, algebraMap, commutes, map_add, map_mul, map_one, map_zero, mul_quot, one_quot, smul_def, smul_quot, zero_quot
 -/
@@ -1268,7 +1398,12 @@ definition idealQuotientToRingQuot
         rw [← sub_eq_iff_eq_add] at su
         rw [← su]; rw [map_sub]; rw [mkRingHom_rel h]; rw [sub_self]
       · simp
-      · 
+      · intro a b _ _ ha hb
+        simp [ha, hb]
+      · intro a x _ hx
+        simp [hx])
+
+@[simp]
 
 中文:
 定义 idealQuotientToRingQuot
@@ -1281,7 +1416,12 @@ definition idealQuotientToRingQuot
         rw [← sub_eq_iff_eq_add] at su
         rw [← su]; rw [map_sub]; rw [mkRingHom_rel h]; rw [sub_self]
       · simp
-      · 
+      · intro a b _ _ ha hb
+        simp [ha, hb]
+      · intro a x _ hx
+        simp [hx])
+
+@[simp]
 
 Depends on / 依赖: Ideal.Quotient.lift, Ideal.ofRel, Quotient, Submodule, Submodule.span_induction, map_sub, mkRingHom, mkRingHom_rel, span_induction, sub_eq_iff_eq_add, sub_self
 -/
@@ -1600,7 +1740,9 @@ definition algEquivQuotAlgEquiv
         apply RingQuot.mkAlgHom_rel
         simpa [Function.onFun]⟩)
     ((RingQuot.liftAlgHom S (s := rel on f.symm)
-      ⟨AlgHom.comp (RingQuot.mkAlgHom S 
+      ⟨AlgHom.comp (RingQuot.mkAlgHom S rel) f.symm,
+      fun x y h => by apply RingQuot.mkAlgHom_rel; simpa⟩))
+    (by ext b; simp) (by ext a; simp)
 
 中文:
 定义 algEquivQuotAlgEquiv
@@ -1612,7 +1754,9 @@ definition algEquivQuotAlgEquiv
         apply RingQuot.mkAlgHom_rel
         simpa [Function.onFun]⟩)
     ((RingQuot.liftAlgHom S (s := rel on f.symm)
-      ⟨AlgHom.comp (RingQuot.mkAlgHom S 
+      ⟨AlgHom.comp (RingQuot.mkAlgHom S rel) f.symm,
+      fun x y h => by apply RingQuot.mkAlgHom_rel; simpa⟩))
+    (by ext b; simp) (by ext a; simp)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgHom, AlgHom.comp, Function, Function.onFun, RingQuot, RingQuot.liftAlgHom, RingQuot.mkAlgHom, RingQuot.mkAlgHom_rel, f.symm, h_rel, liftAlgHom, mkAlgHom, mkAlgHom_rel, ofAlgHom
 -/

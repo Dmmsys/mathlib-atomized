@@ -381,7 +381,17 @@ definition walkingParallelPairOpEquiv
   counitIso :=
     NatIso.ofComponents (fun j => eqToIso (by
             induction j with | _ X
-            cases X 
+            cases X <;> rfl))
+      (fun {i} {j} f => by
+      induction i with | _ i
+      induction j with | _ j
+      let g := f.unop
+      have : f = g.op := rfl
+      rw [this]
+      cases i <;> cases j <;> cases g <;> rfl)
+  functor_unitIso_comp := fun j => by cases j <;> rfl
+
+@[simp]
 
 中文:
 定义 walkingParallelPairOpEquiv
@@ -394,7 +404,17 @@ definition walkingParallelPairOpEquiv
   counitIso :=
     NatIso.ofComponents (fun j => eqToIso (by
             induction j with | _ X
-            cases X 
+            cases X <;> rfl))
+      (fun {i} {j} f => by
+      induction i with | _ i
+      induction j with | _ j
+      let g := f.unop
+      have : f = g.op := rfl
+      rw [this]
+      cases i <;> cases j <;> cases g <;> rfl)
+  functor_unitIso_comp := fun j => by cases j <;> rfl
+
+@[simp]
 
 Depends on / 依赖: walkingParallelPairOp
 -/
@@ -3440,7 +3460,9 @@ definition isLimitPrecompFork
       · simp only [liftPrecomp, IsLimit.fac, PullbackCone.mk_π_app]
         apply hs.hom_ext
         apply Fork.equalizer_ext
- 
+        simp only [Fork.ι_ofι, precompFork] at h
+        simp [c.condition, reassoc_of% h]
+      · simpa [liftPrecomp] using! h)
 
 中文:
 定义 isLimitPrecompFork
@@ -3453,7 +3475,9 @@ definition isLimitPrecompFork
       · simp only [liftPrecomp, IsLimit.fac, PullbackCone.mk_π_app]
         apply hs.hom_ext
         apply Fork.equalizer_ext
- 
+        simp only [Fork.ι_ofι, precompFork] at h
+        simp [c.condition, reassoc_of% h]
+      · simpa [liftPrecomp] using! h)
 
 Depends on / 依赖: Fork.IsLimit.mk, Fork.equalizer_ext, IsLimit, IsLimit.fac, PullbackCone, PullbackCone.equalizer_ext, PullbackCone.mk_, c.condition, condition, equalizer_ext, hc.hom_ext, hom_ext, hs.hom_ext, liftPrecomp, precompFork, reassoc_of
 -/
@@ -4470,7 +4494,9 @@ definition isEqualizerCompMono
     IsLimit (Fork.ofι c.ι (by simp [this]) : Fork (f ≫ h) (g ≫ h)) :=
   Fork.IsLimit.mk' _ fun s =>
     let s' : Fork f g := Fork.ofι s.ι (by apply hm.right_cancellation; simp [s.condition])
-    let l := Fork.IsLimit.lift
+    let l := Fork.IsLimit.lift' i s'.ι s'.condition
+    ⟨l.1, l.2, fun hm => by
+      apply Fork.IsLimit.hom_ext i; rw [Fork.ι_ofι] at hm; rw [hm]; exact l.2.symm⟩
 
 中文:
 定义 isEqualizerCompMono
@@ -4481,7 +4507,9 @@ definition isEqualizerCompMono
     IsLimit (Fork.ofι c.ι (by simp [this]) : Fork (f ≫ h) (g ≫ h)) :=
   Fork.IsLimit.mk' _ fun s =>
     let s' : Fork f g := Fork.ofι s.ι (by apply hm.right_cancellation; simp [s.condition])
-    let l := Fork.IsLimit.lift
+    let l := Fork.IsLimit.lift' i s'.ι s'.condition
+    ⟨l.1, l.2, fun hm => by
+      apply Fork.IsLimit.hom_ext i; rw [Fork.ι_ofι] at hm; rw [hm]; exact l.2.symm⟩
 
 Depends on / 依赖: Category, Category.assoc, Fork.IsLimit.hom_ext, Fork.IsLimit.lift, Fork.IsLimit.mk, Fork.of, IsLimit, adj.unit.app, c.condition, condition, hm.right_cancellation, hom_ext, infer_instance, right_cancellation, s.condition
 -/
@@ -4696,7 +4724,9 @@ definition isCoequalizerEpiComp
   Cofork.IsColimit.mk' _ fun s =>
     let s' : Cofork f g :=
       Cofork.ofπ s.π (by apply hm.left_cancellation; simp_rw [← Category.assoc, s.condition])
-  
+    let l := Cofork.IsColimit.desc' i s'.π s'.condition
+    ⟨l.1, l.2, fun hm => by
+      apply Cofork.IsColimit.hom_ext i; rw [Cofork.π_ofπ] at hm; rw [hm]; exact l.2.symm⟩
 
 中文:
 定义 isCoequalizerEpiComp
@@ -4708,7 +4738,9 @@ definition isCoequalizerEpiComp
   Cofork.IsColimit.mk' _ fun s =>
     let s' : Cofork f g :=
       Cofork.ofπ s.π (by apply hm.left_cancellation; simp_rw [← Category.assoc, s.condition])
-  
+    let l := Cofork.IsColimit.desc' i s'.π s'.condition
+    ⟨l.1, l.2, fun hm => by
+      apply Cofork.IsColimit.hom_ext i; rw [Cofork.π_ofπ] at hm; rw [hm]; exact l.2.symm⟩
 
 Depends on / 依赖: Category, Category.assoc, Cofork, Cofork.IsColimit.desc, Cofork.IsColimit.hom_ext, Cofork.IsColimit.mk, Cofork.of, IsColimit, c.condition, condition, hm.left_cancellation, hom_ext, left_cancellation, s.condition, simp_rw
 -/

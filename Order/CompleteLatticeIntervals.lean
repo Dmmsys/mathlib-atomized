@@ -278,7 +278,11 @@ abbreviation subsetConditionallyCompleteLinearOrder
 isLUB_csSup t ht h_bdd := .of_image Subtype.coe_le_coe by
       rw [← subset_sSup_of_within s ht h_bdd (h_Sup ht h_bdd)]
       exact isLUB_csSup (ht.image _) ((Subtype.mono_coe _).map_bddAbove h_bdd)
-isG
+isGLB_csInf t ht h_bdd := .of_image Subtype.coe_le_coe by
+      rw [← subset_sInf_of_within s ht h_bdd (h_Inf ht h_bdd)]
+      exact isGLB_csInf (ht.image _) ((Subtype.mono_coe _).map_bddBelow h_bdd)
+    csSup_of_not_bddAbove := fun t ht => by simp [ht]
+    csInf_of_not_bddBelow := fun t ht => by simp [ht] }
 
 中文:
 缩写 subsetConditionallyCompleteLinearOrder
@@ -287,7 +291,11 @@ isG
 isLUB_csSup t ht h_bdd := .of_image Subtype.coe_le_coe by
       rw [← subset_sSup_of_within s ht h_bdd (h_Sup ht h_bdd)]
       exact isLUB_csSup (ht.image _) ((Subtype.mono_coe _).map_bddAbove h_bdd)
-isG
+isGLB_csInf t ht h_bdd := .of_image Subtype.coe_le_coe by
+      rw [← subset_sInf_of_within s ht h_bdd (h_Inf ht h_bdd)]
+      exact isGLB_csInf (ht.image _) ((Subtype.mono_coe _).map_bddBelow h_bdd)
+    csSup_of_not_bddAbove := fun t ht => by simp [ht]
+    csInf_of_not_bddBelow := fun t ht => by simp [ht] }
 
 Depends on / 依赖: DistribLattice, DistribLattice.toLattice, LinearOrder, Subtype, Subtype.coe_le_coe, Subtype.mono_coe, coe_le_coe, csSup_of_not_bddAbove, h_Inf, h_Sup, h_bdd, ht.image, isGLB_csInf, isLUB_csSup, map_bddAbove, map_bddBelow, mono_coe, of_image, subsetInfSet, subsetSupSet
 -/
@@ -415,7 +423,22 @@ instance Set.Icc.completeLattice
     rw [← Set.not_nonempty_iff_eq_empty]; rw [not_not] at hS
     refine ⟨?_, csSup_le (hS.image Subtype.val) (fun _ ⟨c, _, hc⟩ => hc ▸ c.2.2)⟩
     obtain ⟨c, hc⟩ := hS
-    exact c
+    exact c.2.1.trans (le_csSup ⟨b, fun _ ⟨d, _, hd⟩ => hd ▸ d.2.2⟩ ⟨c, hc, rfl⟩)⟩
+  isLUB_sSup S := by
+    split_ifs with hS
+    · subst hS; simp only [isLUB_empty_iff, isBot_iff_eq_bot]; rfl
+· exact .of_image Subtype.coe_le_coe isLUB_csSup ((Set.nonempty_iff_ne_empty.mpr hS).image _)
+        ((Subtype.mono_coe _).map_bddAbove (OrderTop.bddAbove S))
+  sInf S := if hS : S = ∅ then ⟨b, Fact.out, le_rfl⟩ else ⟨sInf ((↑) '' S), by
+    rw [← Set.not_nonempty_iff_eq_empty]; rw [not_not] at hS
+    refine ⟨le_csInf (hS.image Subtype.val) (fun _ ⟨c, _, hc⟩ => hc ▸ c.2.1), ?_⟩
+    obtain ⟨c, hc⟩ := hS
+    exact le_trans (csInf_le ⟨a, fun _ ⟨d, _, hd⟩ => hd ▸ d.2.1⟩ ⟨c, hc, rfl⟩) c.2.2⟩
+  isGLB_sInf S := by
+    split_ifs with hS
+    · subst hS; simp only [isGLB_empty_iff, isTop_iff_eq_top]; rfl
+· exact .of_image Subtype.coe_le_coe isGLB_csInf ((Set.nonempty_iff_ne_empty.mpr hS).image _)
+        ((Subtype.mono_coe _).map_bddBelow (OrderBot.bddBelow S))
 
 中文:
 实例 集合.闭区间.completeLattice
@@ -425,7 +448,22 @@ instance Set.Icc.completeLattice
     rw [← Set.not_nonempty_iff_eq_empty]; rw [not_not] at hS
     refine ⟨?_, csSup_le (hS.image Subtype.val) (fun _ ⟨c, _, hc⟩ => hc ▸ c.2.2)⟩
     obtain ⟨c, hc⟩ := hS
-    exact c
+    exact c.2.1.trans (le_csSup ⟨b, fun _ ⟨d, _, hd⟩ => hd ▸ d.2.2⟩ ⟨c, hc, rfl⟩)⟩
+  isLUB_sSup S := by
+    split_ifs with hS
+    · subst hS; simp only [isLUB_empty_iff, isBot_iff_eq_bot]; rfl
+· exact .of_image Subtype.coe_le_coe isLUB_csSup ((Set.nonempty_iff_ne_empty.mpr hS).image _)
+        ((Subtype.mono_coe _).map_bddAbove (OrderTop.bddAbove S))
+  sInf S := if hS : S = ∅ then ⟨b, Fact.out, le_rfl⟩ else ⟨sInf ((↑) '' S), by
+    rw [← Set.not_nonempty_iff_eq_empty]; rw [not_not] at hS
+    refine ⟨le_csInf (hS.image Subtype.val) (fun _ ⟨c, _, hc⟩ => hc ▸ c.2.1), ?_⟩
+    obtain ⟨c, hc⟩ := hS
+    exact le_trans (csInf_le ⟨a, fun _ ⟨d, _, hd⟩ => hd ▸ d.2.1⟩ ⟨c, hc, rfl⟩) c.2.2⟩
+  isGLB_sInf S := by
+    split_ifs with hS
+    · subst hS; simp only [isGLB_empty_iff, isTop_iff_eq_top]; rfl
+· exact .of_image Subtype.coe_le_coe isGLB_csInf ((Set.nonempty_iff_ne_empty.mpr hS).image _)
+        ((Subtype.mono_coe _).map_bddBelow (OrderBot.bddBelow S))
 
 Depends on / 依赖: BoundedOrder
 -/
@@ -577,7 +615,9 @@ instance instCompleteLattice
   isLUB_sSup _ := .of_image Subtype.coe_le_coe (isLUB_sSup _)
   isGLB_sInf _ :=
 ⟨fun _ hb => inf_le_of_right_le sInf_le mem_image_of_mem Subtype.val hb,
-      fun b hb => le_inf_iff.mpr ⟨b.property, le_sInf
+      fun b hb => le_inf_iff.mpr ⟨b.property, le_sInf fun _ ⟨_, hd, hd'⟩ => hd' ▸ hb hd⟩⟩
+  le_top := by simp
+  bot_le := by simp
 
 中文:
 实例 instCompleteLattice
@@ -587,7 +627,9 @@ instance instCompleteLattice
   isLUB_sSup _ := .of_image Subtype.coe_le_coe (isLUB_sSup _)
   isGLB_sInf _ :=
 ⟨fun _ hb => inf_le_of_right_le sInf_le mem_image_of_mem Subtype.val hb,
-      fun b hb => le_inf_iff.mpr ⟨b.property, le_sInf
+      fun b hb => le_inf_iff.mpr ⟨b.property, le_sInf fun _ ⟨_, hd, hd'⟩ => hd' ▸ hb hd⟩⟩
+  le_top := by simp
+  bot_le := by simp
 -/
 instance instCompleteLattice : CompleteLattice (Iic a) where
   sSup S := ⟨sSup ((↑) '' S), by simpa using fun b hb _ => hb⟩

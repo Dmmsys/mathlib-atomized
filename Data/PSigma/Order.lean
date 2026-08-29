@@ -100,7 +100,18 @@ instance preorder
       · left
         assumption
       · right
-        apply le_
+        apply le_trans
+        repeat' assumption,
+    lt_iff_le_not_ge := by
+      refine fun a b => ⟨fun hab => ⟨hab.mono_right fun i a b => le_of_lt, ?_⟩, ?_⟩
+      · rintro (⟨i, a, hji⟩ | ⟨i, hba⟩) <;> obtain ⟨_, _, hij⟩ | ⟨_, hab⟩ := hab
+        · exact hij.not_gt hji
+        · exact lt_irrefl _ hji
+        · exact lt_irrefl _ hij
+        · exact hab.not_ge hba
+      · rintro ⟨⟨j, b, hij⟩ | ⟨i, hab⟩, hba⟩
+        · exact Lex.left _ _ hij
+        · exact Lex.right _ (hab.lt_of_not_ge fun h => hba <| Lex.right _ h) }
 
 中文:
 实例 preorder
@@ -117,7 +128,18 @@ instance preorder
       · left
         assumption
       · right
-        apply le_
+        apply le_trans
+        repeat' assumption,
+    lt_iff_le_not_ge := by
+      refine fun a b => ⟨fun hab => ⟨hab.mono_right fun i a b => le_of_lt, ?_⟩, ?_⟩
+      · rintro (⟨i, a, hji⟩ | ⟨i, hba⟩) <;> obtain ⟨_, _, hij⟩ | ⟨_, hab⟩ := hab
+        · exact hij.not_gt hji
+        · exact lt_irrefl _ hji
+        · exact lt_irrefl _ hij
+        · exact hab.not_ge hba
+      · rintro ⟨⟨j, b, hij⟩ | ⟨i, hab⟩, hba⟩
+        · exact Lex.left _ _ hij
+        · exact Lex.right _ (hab.lt_of_not_ge fun h => hba <| Lex.right _ h) }
 
 Depends on / 依赖: Lex.le, Lex.lt, Lex.right, hab.mono_right, hij.not_gt, le_of_lt, le_refl, le_rfl, le_trans, lt_iff_le_not_ge, lt_irrefl, lt_trans, mono_right, not_gt, repeat
 -/
@@ -197,7 +219,9 @@ instance linearOrder
       · obtain hab | hba := le_total a b
         · exact Or.inl (Lex.right _ hab)
         · exact Or.inr (Lex.right _ hba)
-      · exact Or.
+      · exact Or.inr (Lex.left _ _ hji),
+    toDecidableEq := PSigma.decidableEq, toDecidableLE := Lex.decidable _ _,
+    toDecidableLT := Lex.decidable _ _ }
 
 中文:
 实例 linearOrder
@@ -210,7 +234,9 @@ instance linearOrder
       · obtain hab | hba := le_total a b
         · exact Or.inl (Lex.right _ hab)
         · exact Or.inr (Lex.right _ hba)
-      · exact Or.
+      · exact Or.inr (Lex.left _ _ hji),
+    toDecidableEq := PSigma.decidableEq, toDecidableLE := Lex.decidable _ _,
+    toDecidableLT := Lex.decidable _ _ }
 
 Depends on / 依赖: Lex.decidable, Lex.left, Lex.partialOrder, Lex.right, Or.inl, Or.inr, PSigma, PSigma.decidableEq, decidable, decidableEq, le_total, lt_trichotomy, partialOrder, toDecidableEq, toDecidableLE, toDecidableLT
 -/

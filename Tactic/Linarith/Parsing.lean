@@ -403,7 +403,26 @@ definition linearFormOfExpr
   match e.getAppFnArgs with
   | (``HMul.hMul, #[_, _, _, _, e1, e2]) => do
     let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormO
+    let (m2, comp2) ← linearFormOfExpr red m1 e2
+    return (m2, comp1.mul comp2)
+  | (``HAdd.hAdd, #[_, _, _, _, e1, e2]) => do
+    let (m1, comp1) ← linearFormOfExpr red m e1
+    let (m2, comp2) ← linearFormOfExpr red m1 e2
+    return (m2, comp1 + comp2)
+  | (``HSub.hSub, #[_, _, _, _, e1, e2]) => do
+    let (m1, comp1) ← linearFormOfExpr red m e1
+    let (m2, comp2) ← linearFormOfExpr red m1 e2
+    return (m2, comp1 + comp2.map (fun _ v => -v))
+  | (``Neg.neg, #[_, _, e]) => do
+    let (m1, comp) ← linearFormOfExpr red m e
+    return (m1, comp.map (fun _ v => -v))
+  | (``HPow.hPow, #[_, _, _, _, a, n]) => do
+    match n.numeral? with
+    | some n => do
+      let (m1, comp) ← linearFormOfExpr red m a
+      return (m1, comp.pow n)
+    | none => linearFormOfAtom red m e
+  | _ => linearFormOfAtom red m e
 
 中文:
 定义 linearFormOfExpr
@@ -417,7 +436,26 @@ definition linearFormOfExpr
   match e.getAppFnArgs with
   | (``HMul.hMul, #[_, _, _, _, e1, e2]) => do
     let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormO
+    let (m2, comp2) ← linearFormOfExpr red m1 e2
+    return (m2, comp1.mul comp2)
+  | (``HAdd.hAdd, #[_, _, _, _, e1, e2]) => do
+    let (m1, comp1) ← linearFormOfExpr red m e1
+    let (m2, comp2) ← linearFormOfExpr red m1 e2
+    return (m2, comp1 + comp2)
+  | (``HSub.hSub, #[_, _, _, _, e1, e2]) => do
+    let (m1, comp1) ← linearFormOfExpr red m e1
+    let (m2, comp2) ← linearFormOfExpr red m1 e2
+    return (m2, comp1 + comp2.map (fun _ v => -v))
+  | (``Neg.neg, #[_, _, e]) => do
+    let (m1, comp) ← linearFormOfExpr red m e
+    return (m1, comp.map (fun _ v => -v))
+  | (``HPow.hPow, #[_, _, _, _, a, n]) => do
+    match n.numeral? with
+    | some n => do
+      let (m1, comp) ← linearFormOfExpr red m a
+      return (m1, comp.pow n)
+    | none => linearFormOfAtom red m e
+  | _ => linearFormOfAtom red m e
 -/
 partial def linearFormOfExpr (red : TransparencyMode) (m : ExprMap) (e : Expr) :
     MetaM (ExprMap × Sum) := do

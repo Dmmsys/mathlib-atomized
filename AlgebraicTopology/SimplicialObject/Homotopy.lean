@@ -117,7 +117,16 @@ definition refl
   h_last_comp_δ_last n := by
     have := Y.δ_comp_σ_succ (i := Fin.last n)
     dsimp at this
-    simp onl
+    simp only [SimplicialObject.σ_naturality, Category.assoc, this, Category.comp_id]
+  h_succ_comp_δ_castSucc_of_lt i j hij := by simp [Y.δ_comp_σ_of_le hij]
+  h_succ_comp_δ_castSucc_succ j := by
+    have h₁ := Y.δ_comp_σ_self (i := j.succ)
+    have h₂ := Y.δ_comp_σ_succ (i := j.castSucc)
+    dsimp at h₁ h₂
+    simp only [SimplicialObject.σ_naturality, Category.assoc, h₁, Category.comp_id, h₂]
+  h_castSucc_comp_δ_succ_of_lt i j hji := by simp [Y.δ_comp_σ_of_gt hji]
+  h_comp_σ_castSucc_of_le i j hij := by simp [Y.σ_comp_σ hij]
+  h_comp_σ_succ_of_lt i j hji := by simp [Y.σ_comp_σ hji]
 
 中文:
 定义 refl
@@ -130,7 +139,16 @@ definition refl
   h_last_comp_δ_last n := by
     have := Y.δ_comp_σ_succ (i := Fin.last n)
     dsimp at this
-    simp onl
+    simp only [SimplicialObject.σ_naturality, Category.assoc, this, Category.comp_id]
+  h_succ_comp_δ_castSucc_of_lt i j hij := by simp [Y.δ_comp_σ_of_le hij]
+  h_succ_comp_δ_castSucc_succ j := by
+    have h₁ := Y.δ_comp_σ_self (i := j.succ)
+    have h₂ := Y.δ_comp_σ_succ (i := j.castSucc)
+    dsimp at h₁ h₂
+    simp only [SimplicialObject.σ_naturality, Category.assoc, h₁, Category.comp_id, h₂]
+  h_castSucc_comp_δ_succ_of_lt i j hji := by simp [Y.δ_comp_σ_of_gt hji]
+  h_comp_σ_castSucc_of_le i j hij := by simp [Y.σ_comp_σ hij]
+  h_comp_σ_succ_of_lt i j hji := by simp [Y.σ_comp_σ hji]
 
 Depends on / 依赖: f.app
 -/
@@ -169,7 +187,21 @@ definition whiskerRight
   h_last_comp_δ_last n := by
     simpa [SimplicialObject.δ] using!
       congrArg (fun k => F.map k) (H.h_last_comp_δ_last n)
-  h_succ_comp_δ_castSucc_of_lt i j
+  h_succ_comp_δ_castSucc_of_lt i j hij := by
+    simpa [SimplicialObject.δ] using!
+      congrArg (fun k => F.map k) (H.h_succ_comp_δ_castSucc_of_lt i j hij)
+  h_succ_comp_δ_castSucc_succ j := by
+    simpa [SimplicialObject.δ] using!
+      congrArg (fun k => F.map k) (H.h_succ_comp_δ_castSucc_succ j)
+  h_castSucc_comp_δ_succ_of_lt i j hji := by
+    simpa [SimplicialObject.δ] using!
+      congrArg (fun k => F.map k) (H.h_castSucc_comp_δ_succ_of_lt i j hji)
+  h_comp_σ_castSucc_of_le i j hij := by
+    simpa [SimplicialObject.σ] using!
+      congrArg (fun k => F.map k) (H.h_comp_σ_castSucc_of_le i j hij)
+  h_comp_σ_succ_of_lt i j hji := by
+    simpa [SimplicialObject.σ] using!
+      congrArg (fun k => F.map k) (H.h_comp_σ_succ_of_lt i j hji)
 
 中文:
 定义 whiskerRight
@@ -181,7 +213,21 @@ definition whiskerRight
   h_last_comp_δ_last n := by
     simpa [SimplicialObject.δ] using!
       congrArg (fun k => F.map k) (H.h_last_comp_δ_last n)
-  h_succ_comp_δ_castSucc_of_lt i j
+  h_succ_comp_δ_castSucc_of_lt i j hij := by
+    simpa [SimplicialObject.δ] using!
+      congrArg (fun k => F.map k) (H.h_succ_comp_δ_castSucc_of_lt i j hij)
+  h_succ_comp_δ_castSucc_succ j := by
+    simpa [SimplicialObject.δ] using!
+      congrArg (fun k => F.map k) (H.h_succ_comp_δ_castSucc_succ j)
+  h_castSucc_comp_δ_succ_of_lt i j hji := by
+    simpa [SimplicialObject.δ] using!
+      congrArg (fun k => F.map k) (H.h_castSucc_comp_δ_succ_of_lt i j hji)
+  h_comp_σ_castSucc_of_le i j hij := by
+    simpa [SimplicialObject.σ] using!
+      congrArg (fun k => F.map k) (H.h_comp_σ_castSucc_of_le i j hij)
+  h_comp_σ_succ_of_lt i j hji := by
+    simpa [SimplicialObject.σ] using!
+      congrArg (fun k => F.map k) (H.h_comp_σ_succ_of_lt i j hji)
 
 Depends on / 依赖: F.map
 -/
@@ -226,7 +272,15 @@ definition postcomp
   h_last_comp_δ_last n := by
     simpa [-h_last_comp_δ_last] using H.h_last_comp_δ_last n =≫ p.app _
   h_succ_comp_δ_castSucc_of_lt i j hij := by
-    simpa using H.h_succ_comp_δ_castS
+    simpa using H.h_succ_comp_δ_castSucc_of_lt i j hij =≫ p.app _
+  h_succ_comp_δ_castSucc_succ j := by
+    simpa using H.h_succ_comp_δ_castSucc_succ j =≫ p.app _
+  h_castSucc_comp_δ_succ_of_lt i j hji := by
+    simpa using H.h_castSucc_comp_δ_succ_of_lt i j hji =≫ p.app _
+  h_comp_σ_castSucc_of_le i j hij := by
+    simpa using H.h_comp_σ_castSucc_of_le i j hij =≫ p.app _
+  h_comp_σ_succ_of_lt i j hji := by
+    simpa using H.h_comp_σ_succ_of_lt i j hji =≫ p.app _
 
 中文:
 定义 postcomp
@@ -237,7 +291,15 @@ definition postcomp
   h_last_comp_δ_last n := by
     simpa [-h_last_comp_δ_last] using H.h_last_comp_δ_last n =≫ p.app _
   h_succ_comp_δ_castSucc_of_lt i j hij := by
-    simpa using H.h_succ_comp_δ_castS
+    simpa using H.h_succ_comp_δ_castSucc_of_lt i j hij =≫ p.app _
+  h_succ_comp_δ_castSucc_succ j := by
+    simpa using H.h_succ_comp_δ_castSucc_succ j =≫ p.app _
+  h_castSucc_comp_δ_succ_of_lt i j hji := by
+    simpa using H.h_castSucc_comp_δ_succ_of_lt i j hji =≫ p.app _
+  h_comp_σ_castSucc_of_le i j hij := by
+    simpa using H.h_comp_σ_castSucc_of_le i j hij =≫ p.app _
+  h_comp_σ_succ_of_lt i j hji := by
+    simpa using H.h_comp_σ_succ_of_lt i j hji =≫ p.app _
 
 Depends on / 依赖: p.app
 -/
@@ -273,7 +335,15 @@ definition precomp
   h_last_comp_δ_last n := by
     simpa [-h_last_comp_δ_last] using p.app _ ≫= H.h_last_comp_δ_last n
   h_succ_comp_δ_castSucc_of_lt i j hij := by
-    simpa using p.app _ ≫= H.h_succ_c
+    simpa using p.app _ ≫= H.h_succ_comp_δ_castSucc_of_lt i j hij
+  h_succ_comp_δ_castSucc_succ j := by
+    simpa using p.app _ ≫= H.h_succ_comp_δ_castSucc_succ j
+  h_castSucc_comp_δ_succ_of_lt i j hji := by
+    simpa using p.app _ ≫= H.h_castSucc_comp_δ_succ_of_lt i j hji
+  h_comp_σ_castSucc_of_le i j hij := by
+    simpa using p.app _ ≫= H.h_comp_σ_castSucc_of_le i j hij
+  h_comp_σ_succ_of_lt i j hji := by
+    simpa using p.app _ ≫= H.h_comp_σ_succ_of_lt i j hji
 
 中文:
 定义 precomp
@@ -284,7 +354,15 @@ definition precomp
   h_last_comp_δ_last n := by
     simpa [-h_last_comp_δ_last] using p.app _ ≫= H.h_last_comp_δ_last n
   h_succ_comp_δ_castSucc_of_lt i j hij := by
-    simpa using p.app _ ≫= H.h_succ_c
+    simpa using p.app _ ≫= H.h_succ_comp_δ_castSucc_of_lt i j hij
+  h_succ_comp_δ_castSucc_succ j := by
+    simpa using p.app _ ≫= H.h_succ_comp_δ_castSucc_succ j
+  h_castSucc_comp_δ_succ_of_lt i j hji := by
+    simpa using p.app _ ≫= H.h_castSucc_comp_δ_succ_of_lt i j hji
+  h_comp_σ_castSucc_of_le i j hij := by
+    simpa using p.app _ ≫= H.h_comp_σ_castSucc_of_le i j hij
+  h_comp_σ_succ_of_lt i j hji := by
+    simpa using p.app _ ≫= H.h_comp_σ_succ_of_lt i j hji
 
 Depends on / 依赖: p.app
 -/

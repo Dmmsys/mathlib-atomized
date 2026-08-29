@@ -241,7 +241,12 @@ theorem norm_comp_le
       ‖f.comp g 0‖ = ‖f (g 0)‖ := by simp
       _ = ‖f.contLinear (g 0) + f 0‖ := by rw [f.decomp]; simp
       _ <= ‖f.contLinear‖ * ‖g 0‖ + ‖f 0‖ := by grw [norm_add_le, f.contLinear.le_opNorm]
-      _ <= ‖f‖ * ‖g‖ + ‖f 0‖ := by grw [f.norm
+      _ <= ‖f‖ * ‖g‖ + ‖f 0‖ := by grw [f.norm_contLinear_le, g.norm_image_zero_le]
+  · calc
+      ‖(f.comp g).contLinear‖ <= ‖f.contLinear‖ * ‖g.contLinear‖ :=
+        (g.comp_contLinear f).symm ▸ f.contLinear.opNorm_comp_le _
+      _ <= ‖f‖ * ‖g‖ := by grw [f.norm_contLinear_le, g.norm_contLinear_le]
+      _ <= ‖f‖ * ‖g‖ + ‖f 0‖ := by rw [le_add_iff_nonneg_right]; apply norm_nonneg
 
 中文:
 定理 norm_comp_le
@@ -254,7 +259,12 @@ theorem norm_comp_le
       ‖f.comp g 0‖ = ‖f (g 0)‖ := by simp
       _ = ‖f.contLinear (g 0) + f 0‖ := by rw [f.decomp]; simp
       _ <= ‖f.contLinear‖ * ‖g 0‖ + ‖f 0‖ := by grw [norm_add_le, f.contLinear.le_opNorm]
-      _ <= ‖f‖ * ‖g‖ + ‖f 0‖ := by grw [f.norm
+      _ <= ‖f‖ * ‖g‖ + ‖f 0‖ := by grw [f.norm_contLinear_le, g.norm_image_zero_le]
+  · calc
+      ‖(f.comp g).contLinear‖ <= ‖f.contLinear‖ * ‖g.contLinear‖ :=
+        (g.comp_contLinear f).symm ▸ f.contLinear.opNorm_comp_le _
+      _ <= ‖f‖ * ‖g‖ := by grw [f.norm_contLinear_le, g.norm_contLinear_le]
+      _ <= ‖f‖ * ‖g‖ + ‖f 0‖ := by rw [le_add_iff_nonneg_right]; apply norm_nonneg
 
 Depends on / 依赖: comp_contLinear, contLinear, decomp, f.comp, f.contLinear, f.contLinear.le_opNorm, f.contLinear.opNorm_comp_le, f.decomp, f.norm_contLinear_le, g.comp_contLinear, g.contLinear, g.norm_contLinea, g.norm_image_zero_le, le_opNorm, max_le_iff, norm_add_le, norm_contLinea, norm_contLinear_le, norm_def, norm_image_zero_le
 -/

@@ -103,7 +103,7 @@ definition comap
     (OuterMeasure.comap f μ.toOuterMeasure).toMeasure fun s hs t => by
       simp only [OuterMeasure.comap_apply, image_inter hf.1, image_sdiff hf.1]
       exact (measure_inter_add_sdiff₀ _ (hf.2 s hs)).symm
-  else 
+  else 0
 
 中文:
 定义 comap
@@ -112,7 +112,7 @@ definition comap
     (OuterMeasure.comap f μ.toOuterMeasure).toMeasure fun s hs t => by
       simp only [OuterMeasure.comap_apply, image_inter hf.1, image_sdiff hf.1]
       exact (measure_inter_add_sdiff₀ _ (hf.2 s hs)).symm
-  else 
+  else 0
 
 Depends on / 依赖: Injective, MeasurableSet, NullMeasurableSet, OuterMeasure, OuterMeasure.comap, OuterMeasure.comap_apply, comap_apply, image_inter, image_sdiff, toMeasure, toOuterMeasure
 -/
@@ -301,7 +301,13 @@ theorem ae_eq_image_of_ae_eq_comap
     simp only [eq_iff_iff, mem_ofPred_eq, mem_union, Set.mem_sdiff]
     tauto
   have h_eq_β : { a : β | ¬(f '' s) a = (f '' t) a } = f '' s \ f '' t union f '' t \ f '' s := by
-  
+    ext1 x
+    simp only [eq_iff_iff, mem_ofPred_eq, mem_union, Set.mem_sdiff]
+    tauto
+  rw [← Set.image_sdiff hfi]; rw [← Set.image_sdiff hfi]; rw [← Set.image_union] at h_eq_β
+  rw [h_eq_β]
+  rw [h_eq_α] at hst
+  exact measure_image_eq_zero_of_comap_eq_zero f μ hfi hf hst
 
 中文:
 定理 ae_eq_image_of_ae_eq_comap
@@ -313,7 +319,13 @@ theorem ae_eq_image_of_ae_eq_comap
     simp only [eq_iff_iff, mem_ofPred_eq, mem_union, Set.mem_sdiff]
     tauto
   have h_eq_β : { a : β | ¬(f '' s) a = (f '' t) a } = f '' s \ f '' t union f '' t \ f '' s := by
-  
+    ext1 x
+    simp only [eq_iff_iff, mem_ofPred_eq, mem_union, Set.mem_sdiff]
+    tauto
+  rw [← Set.image_sdiff hfi]; rw [← Set.image_sdiff hfi]; rw [← Set.image_union] at h_eq_β
+  rw [h_eq_β]
+  rw [h_eq_α] at hst
+  exact measure_image_eq_zero_of_comap_eq_zero f μ hfi hf hst
 
 Depends on / 依赖: EventuallyEq, Set.image_sdiff, Set.image_union, Set.mem_sdiff, ae_iff, eq_iff_iff, image_sdiff, image_union, measure_image_eq_, mem_ofPred_eq, mem_sdiff, mem_union
 -/
@@ -346,7 +358,8 @@ theorem NullMeasurableSet.image
   swap
   · exact hf _ (measurableSet_toMeasurable _ _)
   have h : toMeasurable (comap f μ) s =ᵐ[comap f μ] s :=
-    NullMea
+    NullMeasurableSet.toMeasurable_ae_eq hs
+  exact ae_eq_image_of_ae_eq_comap f μ hfi hf h.symm
 
 中文:
 定理 NullMeasurableSet.像
@@ -357,7 +370,8 @@ theorem NullMeasurableSet.image
   swap
   · exact hf _ (measurableSet_toMeasurable _ _)
   have h : toMeasurable (comap f μ) s =ᵐ[comap f μ] s :=
-    NullMea
+    NullMeasurableSet.toMeasurable_ae_eq hs
+  exact ae_eq_image_of_ae_eq_comap f μ hfi hf h.symm
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.trans, NullMeasurableSet, NullMeasurableSet.toMeasurable_ae_eq, ae_eq_image_of_ae_eq_comap, h.symm, measurableSet_toMeasurable, toMeasurable, toMeasurable_ae_eq
 -/
@@ -466,7 +480,7 @@ lemma comap_comap
   by_cases hf : Injective f
   · ext s hs
     rw [comap_apply _ hf hf' _ hs]; rw [comap_apply _ hg hg' _ (hf' _ hs)]; rw [comap_apply _ (hg.comp hf) (fun t ht => image_comp g f _ ▸ hg' _ <| hf' _ ht) _ hs]; rw [image_comp]
-  · rw [comap, dif_neg <| mt And.left hf, comap, dif_neg fun h => hf h.1.of
+  · rw [comap, dif_neg <| mt And.left hf, comap, dif_neg fun h => hf h.1.of_comp]
 
 中文:
 引理 comap_comap
@@ -475,7 +489,7 @@ lemma comap_comap
   by_cases hf : Injective f
   · ext s hs
     rw [comap_apply _ hf hf' _ hs]; rw [comap_apply _ hg hg' _ (hf' _ hs)]; rw [comap_apply _ (hg.comp hf) (fun t ht => image_comp g f _ ▸ hg' _ <| hf' _ ht) _ hs]; rw [image_comp]
-  · rw [comap, dif_neg <| mt And.left hf, comap, dif_neg fun h => hf h.1.of
+  · rw [comap, dif_neg <| mt And.left hf, comap, dif_neg fun h => hf h.1.of_comp]
 
 Depends on / 依赖: And.left, Injective, comap_apply, dif_neg, hg.comp, image_comp, of_comp
 -/
@@ -499,7 +513,12 @@ lemma comap_smul
   · simp
   by_cases h : Function.Injective f ∧ forall s : Set α, MeasurableSet s -> NullMeasurableSet (f '' s) μ
   · ext s hs
-    rw [comap_apply₀ f _ h.1 _ hs.nullMeasurableSet]; rw [smul_apply]; rw [smul_apply]; rw [comap_apply₀ f μ h.1 h.2 hs.nullMeasurableSet
+    rw [comap_apply₀ f _ h.1 _ hs.nullMeasurableSet]; rw [smul_apply]; rw [smul_apply]; rw [comap_apply₀ f μ h.1 h.2 hs.nullMeasurableSet]
+    simpa [nullMeasurableSet_smul_measure_iff hc] using h.2
+  · have h' : ¬ (Function.Injective f ∧
+        forall (s : Set α), MeasurableSet s -> NullMeasurableSet (f '' s) (c • μ)) := by
+      simpa [nullMeasurableSet_smul_measure_iff hc] using h
+    simp [comap_undef, h, h']
 
 中文:
 引理 comap_smul
@@ -510,7 +529,12 @@ lemma comap_smul
   · simp
   by_cases h : Function.Injective f ∧ forall s : Set α, MeasurableSet s -> NullMeasurableSet (f '' s) μ
   · ext s hs
-    rw [comap_apply₀ f _ h.1 _ hs.nullMeasurableSet]; rw [smul_apply]; rw [smul_apply]; rw [comap_apply₀ f μ h.1 h.2 hs.nullMeasurableSet
+    rw [comap_apply₀ f _ h.1 _ hs.nullMeasurableSet]; rw [smul_apply]; rw [smul_apply]; rw [comap_apply₀ f μ h.1 h.2 hs.nullMeasurableSet]
+    simpa [nullMeasurableSet_smul_measure_iff hc] using h.2
+  · have h' : ¬ (Function.Injective f ∧
+        forall (s : Set α), MeasurableSet s -> NullMeasurableSet (f '' s) (c • μ)) := by
+      simpa [nullMeasurableSet_smul_measure_iff hc] using h
+    simp [comap_undef, h, h']
 
 Depends on / 依赖: Function, Function.Injective, Injective, MeasurableSet, NullMeasurableSet, eq_or_ne, hs.nullMeasurableSet, nullMeasurableSet, nullMeasurableSet_smul_measu, nullMeasurableSet_smul_measure_iff, smul_apply
 -/

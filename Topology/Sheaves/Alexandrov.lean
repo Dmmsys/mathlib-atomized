@@ -266,7 +266,18 @@ definition lowerCone
     naturality := by
       rintro x y e
       simp only [Functor.const_obj_obj, Functor.comp_obj, Functor.const_obj_map,
-        Functor.op_obj, Fu
+        Functor.op_obj, Functor.pointwiseRightKanExtension_obj,
+        Category.id_comp, Functor.comp_map, Category.assoc]
+      rw [← S.w ((projSup Us).map e)]; rw [Category.assoc]
+      congr 1
+      let xx : StructuredArrow (Opposite.op (principalOpen x.right)) (principals X) :=
+        ⟨.mk .unit, x.right, 𝟙 _⟩
+      let yy : StructuredArrow (Opposite.op (principalOpen x.right)) (principals X) :=
+⟨.mk .unit, y.right, .op LE.le.hom principalOpen_le e.right.le⟩
+      let ee : xx ⟶ yy := { left := 𝟙 _, right := e.right }
+      exact (limit.lift_π _ _).trans (limit.w
+        (StructuredArrow.proj _ (principals X) ⋙ F) ee).symm
+  }
 
 中文:
 定义 lowerCone
@@ -278,7 +289,18 @@ definition lowerCone
     naturality := by
       rintro x y e
       simp only [Functor.const_obj_obj, Functor.comp_obj, Functor.const_obj_map,
-        Functor.op_obj, Fu
+        Functor.op_obj, Functor.pointwiseRightKanExtension_obj,
+        Category.id_comp, Functor.comp_map, Category.assoc]
+      rw [← S.w ((projSup Us).map e)]; rw [Category.assoc]
+      congr 1
+      let xx : StructuredArrow (Opposite.op (principalOpen x.right)) (principals X) :=
+        ⟨.mk .unit, x.right, 𝟙 _⟩
+      let yy : StructuredArrow (Opposite.op (principalOpen x.right)) (principals X) :=
+⟨.mk .unit, y.right, .op LE.le.hom principalOpen_le e.right.le⟩
+      let ee : xx ⟶ yy := { left := 𝟙 _, right := e.right }
+      exact (limit.lift_π _ _).trans (limit.w
+        (StructuredArrow.proj _ (principals X) ⋙ F) ee).symm
+  }
 -/
 def lowerCone
     {α : Type v} (Us : α -> Opens X)
@@ -320,7 +342,29 @@ definition isLimit
     dsimp [forget, opensLeCoverCocone]
     ext ⟨_, x, f⟩
     simp only [Category.assoc, limit.lift_π, lowerCone_pt, lowerCone_π_app, const_obj_obj,
-      projSup_obj, StructuredArrow.map_obj_right, comp_obj, op_obj, pointwiseRightKanE
+      projSup_obj, StructuredArrow.map_obj_right, comp_obj, op_obj, pointwiseRightKanExtension_obj,
+      StructuredArrow.proj_obj]
+    have e : principalOpen x <= V := f.unop.le
+    let VV : OpensLeCover Us := ⟨V, i, hV⟩
+    let xx : OpensLeCover Us := ⟨principalOpen x, i, le_trans e hV⟩
+    let ee : xx ⟶ VV := ObjectProperty.homMk e.hom
+    rw [← S.w ee.op]; rw [Category.assoc]
+    congr 1
+    exact (limit.lift_π _ _).trans (by aesop)
+  uniq := by
+    intro S m hm
+    dsimp
+    symm
+    ext ⟨_, x, f⟩
+    simp only [lowerCone_pt, comp_obj, limit.lift_π, lowerCone_π_app, const_obj_obj, projSup_obj,
+      op_obj, pointwiseRightKanExtension_obj]
+    specialize hm ⟨principalOpen x, ?_⟩
+    · apply exists_le_of_le_sup
+      exact f.unop.le
+    · rw [← hm]
+      simp only [Category.assoc]
+      congr
+      apply limit.lift_π
 
 中文:
 定义 isLimit
@@ -331,7 +375,29 @@ definition isLimit
     dsimp [forget, opensLeCoverCocone]
     ext ⟨_, x, f⟩
     simp only [Category.assoc, limit.lift_π, lowerCone_pt, lowerCone_π_app, const_obj_obj,
-      projSup_obj, StructuredArrow.map_obj_right, comp_obj, op_obj, pointwiseRightKanE
+      projSup_obj, StructuredArrow.map_obj_right, comp_obj, op_obj, pointwiseRightKanExtension_obj,
+      StructuredArrow.proj_obj]
+    have e : principalOpen x <= V := f.unop.le
+    let VV : OpensLeCover Us := ⟨V, i, hV⟩
+    let xx : OpensLeCover Us := ⟨principalOpen x, i, le_trans e hV⟩
+    let ee : xx ⟶ VV := ObjectProperty.homMk e.hom
+    rw [← S.w ee.op]; rw [Category.assoc]
+    congr 1
+    exact (limit.lift_π _ _).trans (by aesop)
+  uniq := by
+    intro S m hm
+    dsimp
+    symm
+    ext ⟨_, x, f⟩
+    simp only [lowerCone_pt, comp_obj, limit.lift_π, lowerCone_π_app, const_obj_obj, projSup_obj,
+      op_obj, pointwiseRightKanExtension_obj]
+    specialize hm ⟨principalOpen x, ?_⟩
+    · apply exists_le_of_le_sup
+      exact f.unop.le
+    · rw [← hm]
+      simp only [Category.assoc]
+      congr
+      apply limit.lift_π
 
 Depends on / 依赖: limit.lift, lowerCone
 -/
@@ -414,7 +480,10 @@ theorem Topology.IsUpperSet.isSheaf_of_isRightKanExtension
     (principals X).pointwiseRightKanExtensionCounit F
   let _ : (principalsKanExtension F).IsRightKanExtension γ := inferInstance
   have : P ≅ principalsKanExtension F :=
-    @rightKanExtensionUnique _ _ _ _ _ _ _ _ _ _ (by assumption) _ _ 
+    @rightKanExtensionUnique _ _ _ _ _ _ _ _ _ _ (by assumption) _ _ (by assumption)
+  change TopCat.Presheaf.IsSheaf (X := TopCat.of X) P
+  rw [isSheaf_iso_iff this]
+  exact isSheaf_principalsKanExtension (X := TopCat.of X) F
 
 中文:
 定理 拓扑.是上集.isSheaf_of_isRightKanExtension
@@ -423,7 +492,10 @@ theorem Topology.IsUpperSet.isSheaf_of_isRightKanExtension
     (principals X).pointwiseRightKanExtensionCounit F
   let _ : (principalsKanExtension F).IsRightKanExtension γ := inferInstance
   have : P ≅ principalsKanExtension F :=
-    @rightKanExtensionUnique _ _ _ _ _ _ _ _ _ _ (by assumption) _ _ 
+    @rightKanExtensionUnique _ _ _ _ _ _ _ _ _ _ (by assumption) _ _ (by assumption)
+  change TopCat.Presheaf.IsSheaf (X := TopCat.of X) P
+  rw [isSheaf_iso_iff this]
+  exact isSheaf_principalsKanExtension (X := TopCat.of X) F
 
 Depends on / 依赖: IsRightKanExtension, IsSheaf, Presheaf, TopCat, TopCat.Presheaf.IsSheaf, TopCat.of, isSheaf_iso_iff, isSheaf_principalsKanExtension, pointwiseRightKanExtensionCounit, principals, principalsKanExtension, rightKanExtensionUnique
 -/

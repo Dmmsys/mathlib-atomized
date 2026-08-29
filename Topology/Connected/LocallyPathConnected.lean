@@ -484,7 +484,7 @@ theorem isOpen_isPathConnected_basis
   refine ⟨fun s => ⟨fun hs => ?_, fun ⟨u, hu⟩ => mem_nhds_iff.mpr ⟨u, hu.2, hu.1.1, hu.1.2.1⟩⟩⟩
   have ⟨u, hus, hu, hxu⟩ := mem_nhds_iff.mp hs
   exact ⟨pathComponentIn u x, ⟨hu.pathComponentIn _, ⟨mem_pathComponentIn_self hxu,
-    isPathConnected_pathComponentIn hxu⟩⟩, pathComponentIn_subset.tran
+    isPathConnected_pathComponentIn hxu⟩⟩, pathComponentIn_subset.trans hus⟩
 
 中文:
 定理 isOpen_isPathConnected_basis
@@ -493,7 +493,7 @@ theorem isOpen_isPathConnected_basis
   refine ⟨fun s => ⟨fun hs => ?_, fun ⟨u, hu⟩ => mem_nhds_iff.mpr ⟨u, hu.2, hu.1.1, hu.1.2.1⟩⟩⟩
   have ⟨u, hus, hu, hxu⟩ := mem_nhds_iff.mp hs
   exact ⟨pathComponentIn u x, ⟨hu.pathComponentIn _, ⟨mem_pathComponentIn_self hxu,
-    isPathConnected_pathComponentIn hxu⟩⟩, pathComponentIn_subset.tran
+    isPathConnected_pathComponentIn hxu⟩⟩, pathComponentIn_subset.trans hus⟩
 
 Depends on / 依赖: hu.pathComponentIn, isPathConnected_pathComponentIn, mem_nhds_iff, mem_nhds_iff.mp, mem_nhds_iff.mpr, mem_pathComponentIn_self, pathComponentIn, pathComponentIn_subset, pathComponentIn_subset.trans
 -/
@@ -516,6 +516,9 @@ he.basis_nhds pathConnected_subset_basis he.isOpen_range (mem_range_self _)
   .of_bases this fun x s ⟨_, hs, hse⟩ => by
     rwa [he.isPathConnected_iff, image_preimage_eq_of_subset hse]
 
+@[deprecated (since := "2026-06-21")]
+alias Topology.IsOpenEmbedding.locPathConnectedSpace :=
+  Topology.IsOpenEmbedding.locallyPathConnectedSpace
 
 中文:
 定理 拓扑.是开嵌入.locallyPathConnectedSpace
@@ -526,6 +529,9 @@ he.basis_nhds pathConnected_subset_basis he.isOpen_range (mem_range_self _)
   .of_bases this fun x s ⟨_, hs, hse⟩ => by
     rwa [he.isPathConnected_iff, image_preimage_eq_of_subset hse]
 
+@[deprecated (since := "2026-06-21")]
+alias Topology.IsOpenEmbedding.locPathConnectedSpace :=
+  Topology.IsOpenEmbedding.locallyPathConnectedSpace
 
 Depends on / 依赖: HasBasis, IsPathConnected, basis_nhds, he.basis_nhds, he.isOpen_range, he.isPathConnected_iff, image_preimage_eq_of_subset, isOpen_range, isPathConnected_iff, mem_range_self, of_bases, pathConnected_subset_basis, subseteq
 -/
@@ -636,7 +642,11 @@ lemma locallyPathConnectedSpace_iff_isOpen_pathComponentIn
     refine ⟨fun hs => ?_, fun ⟨_, ht⟩ => Filter.mem_of_superset ht.1.1 ht.2⟩
     let ⟨u, hu⟩ := mem_nhds_iff.mp hs
     exact ⟨pathComponentIn u x, ⟨(h x u hu.2.1).mem_nhds (mem_pathComponentIn_self hu.2.2),
-      isPathConnected_
+      isPathConnected_pathComponentIn hu.2.2⟩, pathComponentIn_subset.trans hu.1⟩⟩⟩⟩
+
+@[deprecated (since := "2026-06-21")]
+alias locPathConnectedSpace_iff_isOpen_pathComponentIn :=
+  locallyPathConnectedSpace_iff_isOpen_pathComponentIn
 
 中文:
 引理 locallyPathConnectedSpace_iff_isOpen_pathComponentIn
@@ -645,7 +655,11 @@ lemma locallyPathConnectedSpace_iff_isOpen_pathComponentIn
     refine ⟨fun hs => ?_, fun ⟨_, ht⟩ => Filter.mem_of_superset ht.1.1 ht.2⟩
     let ⟨u, hu⟩ := mem_nhds_iff.mp hs
     exact ⟨pathComponentIn u x, ⟨(h x u hu.2.1).mem_nhds (mem_pathComponentIn_self hu.2.2),
-      isPathConnected_
+      isPathConnected_pathComponentIn hu.2.2⟩, pathComponentIn_subset.trans hu.1⟩⟩⟩⟩
+
+@[deprecated (since := "2026-06-21")]
+alias locPathConnectedSpace_iff_isOpen_pathComponentIn :=
+  locallyPathConnectedSpace_iff_isOpen_pathComponentIn
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, hu.pathComponentIn, isPathConnected_pathComponentIn, mem_nhds, mem_nhds_iff, mem_nhds_iff.mp, mem_of_superset, mem_pathComponentIn_self, pathComponentIn, pathComponentIn_subset, pathComponentIn_subset.trans
 -/
@@ -673,7 +687,11 @@ lemma locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds
   refine forall_congr' fun u => imp_congr_right fun _ => ?_
   exact ⟨fun h x hxu => (h x).mem_nhds (mem_pathComponentIn_self hxu),
     fun h x => isOpen_iff_mem_nhds.mpr fun y hy =>
+pathComponentIn_congr hy ▸ h y pathComponentIn_subset hy⟩
 
+@[deprecated (since := "2026-06-21")]
+alias locPathConnectedSpace_iff_pathComponentIn_mem_nhds :=
+  locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds
 
 中文:
 引理 locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds
@@ -684,7 +702,11 @@ lemma locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds
   refine forall_congr' fun u => imp_congr_right fun _ => ?_
   exact ⟨fun h x hxu => (h x).mem_nhds (mem_pathComponentIn_self hxu),
     fun h x => isOpen_iff_mem_nhds.mpr fun y hy =>
+pathComponentIn_congr hy ▸ h y pathComponentIn_subset hy⟩
 
+@[deprecated (since := "2026-06-21")]
+alias locPathConnectedSpace_iff_pathComponentIn_mem_nhds :=
+  locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds
 
 Depends on / 依赖: forall_comm, forall_congr, imp_congr_right, imp_forall_iff, isOpen_iff_mem_nhds, isOpen_iff_mem_nhds.mpr, locallyPathConnectedSpace_iff_isOpen_pathComponentIn, mem_nhds, mem_pathComponentIn_self, pathComponentIn_congr, pathComponentIn_subset, simp_rw
 -/
@@ -713,7 +735,15 @@ lemma LocallyPathConnectedSpace.coinduced
   refine locallyPathConnectedSpace_iff_isOpen_pathComponentIn.mpr fun y u hu =>
 isOpen_coinduced.mpr isOpen_iff_mem_nhds.mpr fun x hx => ?_
   have hx' := preimage_mono pathComponentIn_subset hx
-  refin
+  refine mem_nhds_iff.mpr ⟨pathComponentIn (f ⁻¹' u) x, ?_,
+    (hu.preimage hf).pathComponentIn _, mem_pathComponentIn_self hx'⟩
+  rw [← image_subset_iff]; rw [← pathComponentIn_congr hx]
+  exact ((isPathConnected_pathComponentIn hx').image hf).subset_pathComponentIn
+⟨x, mem_pathComponentIn_self hx', rfl⟩
+(image_mono pathComponentIn_subset).trans u.image_preimage_subset f
+
+@[deprecated (since := "2026-06-21")]
+alias LocPathConnectedSpace.coinduced := LocallyPathConnectedSpace.coinduced
 
 中文:
 引理 LocallyPathConnected空间.coinduced
@@ -723,7 +753,15 @@ isOpen_coinduced.mpr isOpen_iff_mem_nhds.mpr fun x hx => ?_
   refine locallyPathConnectedSpace_iff_isOpen_pathComponentIn.mpr fun y u hu =>
 isOpen_coinduced.mpr isOpen_iff_mem_nhds.mpr fun x hx => ?_
   have hx' := preimage_mono pathComponentIn_subset hx
-  refin
+  refine mem_nhds_iff.mpr ⟨pathComponentIn (f ⁻¹' u) x, ?_,
+    (hu.preimage hf).pathComponentIn _, mem_pathComponentIn_self hx'⟩
+  rw [← image_subset_iff]; rw [← pathComponentIn_congr hx]
+  exact ((isPathConnected_pathComponentIn hx').image hf).subset_pathComponentIn
+⟨x, mem_pathComponentIn_self hx', rfl⟩
+(image_mono pathComponentIn_subset).trans u.image_preimage_subset f
+
+@[deprecated (since := "2026-06-21")]
+alias LocPathConnectedSpace.coinduced := LocallyPathConnectedSpace.coinduced
 
 Depends on / 依赖: Continuous, TopologicalSpace, TopologicalSpace.coinduced, coinduced, continuous_coinduced_rng, hu.preimage, image_subset_iff, isOpen_coinduced, isOpen_coinduced.mpr, isOpen_iff_mem_nhds, isOpen_iff_mem_nhds.mpr, isPathConnected_pathComp, locallyPathConnectedSpace_iff_isOpen_pathComponentIn, locallyPathConnectedSpace_iff_isOpen_pathComponentIn.mpr, mem_nhds_iff, mem_nhds_iff.mpr, mem_pathComponentIn_self, pathComponentIn, pathComponentIn_congr, pathComponentIn_subset
 -/
@@ -840,7 +878,21 @@ instance Sum.locallyPathConnectedSpace
   obtain x | y := x
   · refine ⟨Sum.inl '' pathComponentIn (Sum.inl ⁻¹' u) x, ?_, ?_, ?_⟩
     · apply IsPathConnected.subset_pathComponentIn
-      · exact (isPathConnected_pathComponentIn (by exact 
+      · exact (isPathConnected_pathComponentIn (by exact hxu)).image continuous_inl
+      · exact ⟨x, mem_pathComponentIn_self hxu, rfl⟩
+      · exact (image_mono pathComponentIn_subset).trans (u.image_preimage_subset _)
+· exact isOpenMap_inl _ (hu.preimage continuous_inl).pathComponentIn _
+    · exact ⟨x, mem_pathComponentIn_self hxu, rfl⟩
+  · refine ⟨Sum.inr '' pathComponentIn (Sum.inr ⁻¹' u) y, ?_, ?_, ?_⟩
+    · apply IsPathConnected.subset_pathComponentIn
+      · exact (isPathConnected_pathComponentIn (by exact hxu)).image continuous_inr
+      · exact ⟨y, mem_pathComponentIn_self hxu, rfl⟩
+      · exact (image_mono pathComponentIn_subset).trans (u.image_preimage_subset _)
+· exact isOpenMap_inr _ (hu.preimage continuous_inr).pathComponentIn _
+    · exact ⟨y, mem_pathComponentIn_self hxu, rfl⟩
+
+@[deprecated (since := "2026-06-21")]
+alias Sum.locPathConnectedSpace := Sum.locallyPathConnectedSpace
 
 中文:
 实例 和.locallyPathConnectedSpace
@@ -850,7 +902,21 @@ instance Sum.locallyPathConnectedSpace
   obtain x | y := x
   · refine ⟨Sum.inl '' pathComponentIn (Sum.inl ⁻¹' u) x, ?_, ?_, ?_⟩
     · apply IsPathConnected.subset_pathComponentIn
-      · exact (isPathConnected_pathComponentIn (by exact 
+      · exact (isPathConnected_pathComponentIn (by exact hxu)).image continuous_inl
+      · exact ⟨x, mem_pathComponentIn_self hxu, rfl⟩
+      · exact (image_mono pathComponentIn_subset).trans (u.image_preimage_subset _)
+· exact isOpenMap_inl _ (hu.preimage continuous_inl).pathComponentIn _
+    · exact ⟨x, mem_pathComponentIn_self hxu, rfl⟩
+  · refine ⟨Sum.inr '' pathComponentIn (Sum.inr ⁻¹' u) y, ?_, ?_, ?_⟩
+    · apply IsPathConnected.subset_pathComponentIn
+      · exact (isPathConnected_pathComponentIn (by exact hxu)).image continuous_inr
+      · exact ⟨y, mem_pathComponentIn_self hxu, rfl⟩
+      · exact (image_mono pathComponentIn_subset).trans (u.image_preimage_subset _)
+· exact isOpenMap_inr _ (hu.preimage continuous_inr).pathComponentIn _
+    · exact ⟨y, mem_pathComponentIn_self hxu, rfl⟩
+
+@[deprecated (since := "2026-06-21")]
+alias Sum.locPathConnectedSpace := Sum.locallyPathConnectedSpace
 
 Depends on / 依赖: IsPathConnected, IsPathConnected.subset_pathComponentIn, Sum.inl, continuous_inl, hu.preimage, image_mono, image_preimage_subset, isOpenMap_inl, isPathConnected_pathComponentIn, locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds, mem_nhds_iff, mem_pathComponentIn_self, pathCompone, pathComponentIn, pathComponentIn_subset, preimage, subset_pathComponentIn, u.image_preimage_subset
 -/
@@ -886,7 +952,14 @@ instance Sigma.locallyPathConnectedSpace
   rw [locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds]; intro x u hu hxu; rw [mem_nhds_iff]
   refine ⟨(Sigma.mk x.1) '' pathComponentIn ((Sigma.mk x.1) ⁻¹' u) x.2, ?_, ?_, ?_⟩
   · apply IsPathConnected.subset_pathComponentIn
-    · exact (isPathConnected_pathComponentIn (by exact hxu)).imag
+    · exact (isPathConnected_pathComponentIn (by exact hxu)).image continuous_sigmaMk
+    · exact ⟨x.2, mem_pathComponentIn_self hxu, rfl⟩
+    · exact (image_mono pathComponentIn_subset).trans (u.image_preimage_subset _)
+· exact isOpenMap_sigmaMk _ (hu.preimage continuous_sigmaMk).pathComponentIn _
+  · exact ⟨x.2, mem_pathComponentIn_self hxu, rfl⟩
+
+@[deprecated (since := "2026-06-21")]
+alias Sigma.locPathConnectedSpace := Sigma.locallyPathConnectedSpace
 
 中文:
 实例 依赖和类型.locallyPathConnectedSpace
@@ -895,7 +968,14 @@ instance Sigma.locallyPathConnectedSpace
   rw [locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds]; intro x u hu hxu; rw [mem_nhds_iff]
   refine ⟨(Sigma.mk x.1) '' pathComponentIn ((Sigma.mk x.1) ⁻¹' u) x.2, ?_, ?_, ?_⟩
   · apply IsPathConnected.subset_pathComponentIn
-    · exact (isPathConnected_pathComponentIn (by exact hxu)).imag
+    · exact (isPathConnected_pathComponentIn (by exact hxu)).image continuous_sigmaMk
+    · exact ⟨x.2, mem_pathComponentIn_self hxu, rfl⟩
+    · exact (image_mono pathComponentIn_subset).trans (u.image_preimage_subset _)
+· exact isOpenMap_sigmaMk _ (hu.preimage continuous_sigmaMk).pathComponentIn _
+  · exact ⟨x.2, mem_pathComponentIn_self hxu, rfl⟩
+
+@[deprecated (since := "2026-06-21")]
+alias Sigma.locPathConnectedSpace := Sigma.locallyPathConnectedSpace
 
 Depends on / 依赖: IsPathConnected, IsPathConnected.subset_pathComponentIn, Sigma.mk, continuous_sigmaMk, hu.preimage, image_mono, image_preimage_subset, isOpenMap_sigmaMk, isPathConnected_pathComponentIn, locallyPathConnectedSpace_iff_pathComponentIn_mem_nhds, mem_nhds_iff, mem_pathComponentIn_self, pathComponentIn, pathComponentIn_subset, preimage, subset_pathComponentIn, u.image_preimage_subset
 -/
@@ -924,7 +1004,9 @@ instance Prod.locallyPathConnectedSpace
     obtain ⟨u, hu, v, hv, huv⟩ := mem_nhds_prod_iff.mp hU
     exact ⟨pathComponentIn u x ×ˢ pathComponentIn v y,
       prod_mem_nhds (pathComponentIn_mem_nhds hu) (pathComponentIn_mem_nhds hv),
-      (isPathConnected_pathComponentIn (mem_of_mem_nhds hu)
+      (isPathConnected_pathComponentIn (mem_of_mem_nhds hu)).prod
+        (isPathConnected_pathComponentIn (mem_of_mem_nhds hv)),
+      (Set.prod_mono pathComponentIn_subset pathComponentIn_subset).trans huv⟩
 
 中文:
 实例 积类型.locallyPathConnectedSpace
@@ -933,7 +1015,9 @@ instance Prod.locallyPathConnectedSpace
     obtain ⟨u, hu, v, hv, huv⟩ := mem_nhds_prod_iff.mp hU
     exact ⟨pathComponentIn u x ×ˢ pathComponentIn v y,
       prod_mem_nhds (pathComponentIn_mem_nhds hu) (pathComponentIn_mem_nhds hv),
-      (isPathConnected_pathComponentIn (mem_of_mem_nhds hu)
+      (isPathConnected_pathComponentIn (mem_of_mem_nhds hu)).prod
+        (isPathConnected_pathComponentIn (mem_of_mem_nhds hv)),
+      (Set.prod_mono pathComponentIn_subset pathComponentIn_subset).trans huv⟩
 
 Depends on / 依赖: Set.prod_mono, hasBasis_self, hasBasis_self.mpr, isPathConnected_pathComponentIn, mem_nhds_prod_iff, mem_nhds_prod_iff.mp, mem_of_mem_nhds, pathComponentIn, pathComponentIn_mem_nhds, pathComponentIn_subset, prod_mem_nhds, prod_mono
 -/
@@ -958,7 +1042,17 @@ theorem Pi.locallyPathConnectedSpace_of_finite_not_pathConnectedSpace
     obtain ⟨J, hJ, t, ht, htU⟩ := hU
     let K := J union {i | ¬PathConnectedSpace (Z i)}
     refine ⟨K.pi fun i => pathComponentIn (t i) (x i),
-      set_pi_mem_nhds (hJ.union hfinite) fun i _ => pathComponentIn_mem_nhds (h
+      set_pi_mem_nhds (hJ.union hfinite) fun i _ => pathComponentIn_mem_nhds (ht i), ?_,
+      fun f hf => htU fun i hiJ => pathComponentIn_subset (hf i (mem_union_left _ hiJ))⟩
+    classical
+    rw [← univ_pi_piecewise_univ]
+    refine .pi fun i => ?_
+    by_cases hi : i in K
+    · rw [piecewise_eq_of_mem _ _ _ hi]
+      exact isPathConnected_pathComponentIn (mem_of_mem_nhds (ht i))
+    · rw [piecewise_eq_of_notMem _ _ _ hi]
+      have : PathConnectedSpace (Z i) := not_not.mp (not_or.1 hi).2
+      exact isPathConnected_univ
 
 中文:
 定理 依赖函数类型.locallyPathConnectedSpace_of_finite_not_pathConnectedSpace
@@ -968,7 +1062,17 @@ theorem Pi.locallyPathConnectedSpace_of_finite_not_pathConnectedSpace
     obtain ⟨J, hJ, t, ht, htU⟩ := hU
     let K := J union {i | ¬PathConnectedSpace (Z i)}
     refine ⟨K.pi fun i => pathComponentIn (t i) (x i),
-      set_pi_mem_nhds (hJ.union hfinite) fun i _ => pathComponentIn_mem_nhds (h
+      set_pi_mem_nhds (hJ.union hfinite) fun i _ => pathComponentIn_mem_nhds (ht i), ?_,
+      fun f hf => htU fun i hiJ => pathComponentIn_subset (hf i (mem_union_left _ hiJ))⟩
+    classical
+    rw [← univ_pi_piecewise_univ]
+    refine .pi fun i => ?_
+    by_cases hi : i in K
+    · rw [piecewise_eq_of_mem _ _ _ hi]
+      exact isPathConnected_pathComponentIn (mem_of_mem_nhds (ht i))
+    · rw [piecewise_eq_of_notMem _ _ _ hi]
+      have : PathConnectedSpace (Z i) := not_not.mp (not_or.1 hi).2
+      exact isPathConnected_univ
 
 Depends on / 依赖: Filter, Filter.mem_pi, K.pi, PathConnectedSpace, classical, hJ.union, hasBasis_self, hasBasis_self.mpr, hfinite, mem_pi, mem_union_left, nhds_pi, pathComponentIn, pathComponentIn_mem_nhds, pathComponentIn_subset, piecewise_eq_of_mem, set_pi_mem_nhds, univ_pi_piecewise_univ
 -/
@@ -1050,7 +1154,20 @@ theorem Pi.locallyPathConnectedSpace_iff
     classical
     have : forall i, Nonempty (Z i) := Classical.nonempty_pi.mp ⟨x⟩
     refine .inr ⟨fun i => ((isOpenMap_eval i).isQuotientMap (continuous_apply i)
-    
+      (surjective_eval i)).locallyPathConnectedSpace, ?_⟩
+    have hVn : pathComponent x in 𝓝 x :=
+      (IsOpen.pathComponent x).mem_nhds (mem_pathComponent_self x)
+    rw [nhds_pi]; rw [Filter.mem_pi] at hVn
+    obtain ⟨J, hJ, t, ht, htV⟩ := hVn
+    refine hJ.subset fun i hi => by_contra fun hiJ => hi ?_
+    suffices himg : eval i '' pathComponent x = univ from pathConnectedSpace_iff_univ.mpr
+      (himg ▸ isPathConnected_pathComponent.image (continuous_apply i))
+    refine (subset_univ _).antisymm fun z _ => ⟨update x i z, htV fun j hj => ?_, by simp⟩
+    rw [update_of_ne (ne_of_mem_of_not_mem hj hiJ)]
+    exact mem_of_mem_nhds (ht j)
+  · rintro (he | ⟨hloc, hfin⟩)
+    · exact ⟨he.elim⟩
+    · exact locallyPathConnectedSpace_of_finite_not_pathConnectedSpace hfin
 
 中文:
 定理 依赖函数类型.locallyPathConnectedSpace_iff
@@ -1063,7 +1180,20 @@ theorem Pi.locallyPathConnectedSpace_iff
     classical
     have : forall i, Nonempty (Z i) := Classical.nonempty_pi.mp ⟨x⟩
     refine .inr ⟨fun i => ((isOpenMap_eval i).isQuotientMap (continuous_apply i)
-    
+      (surjective_eval i)).locallyPathConnectedSpace, ?_⟩
+    have hVn : pathComponent x in 𝓝 x :=
+      (IsOpen.pathComponent x).mem_nhds (mem_pathComponent_self x)
+    rw [nhds_pi]; rw [Filter.mem_pi] at hVn
+    obtain ⟨J, hJ, t, ht, htV⟩ := hVn
+    refine hJ.subset fun i hi => by_contra fun hiJ => hi ?_
+    suffices himg : eval i '' pathComponent x = univ from pathConnectedSpace_iff_univ.mpr
+      (himg ▸ isPathConnected_pathComponent.image (continuous_apply i))
+    refine (subset_univ _).antisymm fun z _ => ⟨update x i z, htV fun j hj => ?_, by simp⟩
+    rw [update_of_ne (ne_of_mem_of_not_mem hj hiJ)]
+    exact mem_of_mem_nhds (ht j)
+  · rintro (he | ⟨hloc, hfin⟩)
+    · exact ⟨he.elim⟩
+    · exact locallyPathConnectedSpace_of_finite_not_pathConnectedSpace hfin
 
 Depends on / 依赖: Classical, Classical.nonempty_pi.mp, Filter, Filter.mem_pi, IsOpen, IsOpen.pathComponent, Nonempty, classical, continuous_apply, isEmpty_or_nonempty, isOpenMap_eval, isQuotientMap, locallyPathConnectedSpace, mem_nhds, mem_pathComponent_self, mem_pi, nhds_pi, nonempty_pi, pathComponent, surjective_eval
 -/
@@ -1108,7 +1238,8 @@ instance AlexandrovDiscrete.locallyPathConnectedSpace
   symm
   apply hy.joinedIn <;> rewrite [mem_nhdsKer_singleton] <;> [assumption; rfl]
 
-@[deprecated (since :
+@[deprecated (since := "2026-06-21")]
+alias AlexandrovDiscrete.locPathConnectedSpace := AlexandrovDiscrete.locallyPathConnectedSpace
 
 中文:
 实例 AlexandrovDiscrete.locallyPathConnectedSpace
@@ -1122,7 +1253,8 @@ instance AlexandrovDiscrete.locallyPathConnectedSpace
   symm
   apply hy.joinedIn <;> rewrite [mem_nhdsKer_singleton] <;> [assumption; rfl]
 
-@[deprecated (since :
+@[deprecated (since := "2026-06-21")]
+alias AlexandrovDiscrete.locPathConnectedSpace := AlexandrovDiscrete.locallyPathConnectedSpace
 
 Depends on / 依赖: IsPathConnected, LocallyPathConnectedSpace, LocallyPathConnectedSpace.of_bases, forall_const, hy.joinedIn, joinedIn, mem_nhdsKer_singleton, nhds_basis_nhdsKer_singleton, of_bases, rewrite, specializes_rfl
 -/

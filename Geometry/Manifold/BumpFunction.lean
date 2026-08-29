@@ -345,7 +345,10 @@ theorem image_eq_inter_preimage_of_subset_support
   apply Subset.antisymm
   · refine subset_inter (subset_inter (hsf.trans ball_subset_closedBall) ?_) ?_
     · rintro _ ⟨x, -, rfl⟩; exact mem_range_self _
- 
+    · rw [(extChartAt I c).image_eq_target_inter_inv_preimage hse]
+      exact inter_subset_right
+  · refine Subset.trans (inter_subset_inter_left _ f.closedBall_subset) ?_
+    rw [(extChartAt I c).image_eq_target_inter_inv_preimage hse]
 
 中文:
 定理 image_eq_inter_preimage_of_subset_support
@@ -356,7 +359,10 @@ theorem image_eq_inter_preimage_of_subset_support
   apply Subset.antisymm
   · refine subset_inter (subset_inter (hsf.trans ball_subset_closedBall) ?_) ?_
     · rintro _ ⟨x, -, rfl⟩; exact mem_range_self _
- 
+    · rw [(extChartAt I c).image_eq_target_inter_inv_preimage hse]
+      exact inter_subset_right
+  · refine Subset.trans (inter_subset_inter_left _ f.closedBall_subset) ?_
+    rw [(extChartAt I c).image_eq_target_inter_inv_preimage hse]
 
 Depends on / 依赖: Subset, Subset.antisymm, Subset.trans, antisymm, ball_subset_closedBall, closedBall_subset, extChartAt, extChartAt_source, f.closedBall_subset, hsf.trans, image_eq_target_inter_inv_preim, image_eq_target_inter_inv_preimage, image_subset_iff, inter_subset_inter_left, inter_subset_right, mem_range_self, subset_inter, subset_inter_iff, support_eq_inter_preimage
 -/
@@ -607,7 +613,8 @@ theorem nhdsWithin_range_basis
     (extChartAt_target_mem_nhdsWithin _)).to_hasBasis' ?_ ?_
   · rintro R ⟨hR0, hsub⟩
     exact ⟨⟨⟨R / 2, R, half_pos hR0, half_lt_self hR0⟩, hsub⟩, trivial, Subset.rfl⟩
-  · exact fun f _ => inter_mem (mem_nhdsWithin_of_mem_n
+  · exact fun f _ => inter_mem (mem_nhdsWithin_of_mem_nhds <| closedBall_mem_nhds _ f.rOut_pos)
+      self_mem_nhdsWithin
 
 中文:
 定理 nhdsWithin_range_basis
@@ -616,7 +623,8 @@ theorem nhdsWithin_range_basis
     (extChartAt_target_mem_nhdsWithin _)).to_hasBasis' ?_ ?_
   · rintro R ⟨hR0, hsub⟩
     exact ⟨⟨⟨R / 2, R, half_pos hR0, half_lt_self hR0⟩, hsub⟩, trivial, Subset.rfl⟩
-  · exact fun f _ => inter_mem (mem_nhdsWithin_of_mem_n
+  · exact fun f _ => inter_mem (mem_nhdsWithin_of_mem_nhds <| closedBall_mem_nhds _ f.rOut_pos)
+      self_mem_nhdsWithin
 
 Depends on / 依赖: Subset, Subset.rfl, closedBall_mem_nhds, extChartAt_target_mem_nhdsWithin, f.rOut_pos, half_lt_self, half_pos, inter_mem, mem_nhdsWithin_of_mem_nhds, nhdsWithin_hasBasis, nhds_basis_closedBall, rOut_pos, restrict_subset, self_mem_nhdsWithin, to_hasBasis
 -/
@@ -673,7 +681,7 @@ theorem exists_r_pos_lt_subset_ball
   have : IsClosed (e '' s) := f.isClosed_image_of_isClosed hsc hs
   rw [support_eq_inter_preimage]; rw [subset_inter_iff]; rw [← image_subset_iff] at hs
   rcases exists_pos_lt_subset_ball f.rOut_pos this hs.2 with ⟨r, hrR, hr⟩
-  exact ⟨r, hrR, subset_inter hs.1 (image_su
+  exact ⟨r, hrR, subset_inter hs.1 (image_subset_iff.1 hr)⟩
 
 中文:
 定理 存在_r_pos_lt_subset_ball
@@ -683,7 +691,7 @@ theorem exists_r_pos_lt_subset_ball
   have : IsClosed (e '' s) := f.isClosed_image_of_isClosed hsc hs
   rw [support_eq_inter_preimage]; rw [subset_inter_iff]; rw [← image_subset_iff] at hs
   rcases exists_pos_lt_subset_ball f.rOut_pos this hs.2 with ⟨r, hrR, hr⟩
-  exact ⟨r, hrR, subset_inter hs.1 (image_su
+  exact ⟨r, hrR, subset_inter hs.1 (image_subset_iff.1 hr)⟩
 
 Depends on / 依赖: IsClosed, exists_pos_lt_subset_ball, extChartAt, f.isClosed_image_of_isClosed, f.rOut_pos, image_subset_iff, isClosed_image_of_isClosed, rOut_pos, subset_inter, subset_inter_iff, support_eq_inter_preimage
 -/
@@ -813,7 +821,7 @@ theorem tsupport_subset_extChartAt_source
     tsupport f subseteq (extChartAt I c).symm '' (closedBall (extChartAt I c c) f.rOut inter range I) :=
       f.tsupport_subset_symm_image_closedBall
     _ subseteq (extChartAt I c).symm '' (extChartAt I c).target := image_mono f.closedBall_subset
-    _ = (extChartAt I c).source := (extChartAt
+    _ = (extChartAt I c).source := (extChartAt I c).symm_image_target_eq_source
 
 中文:
 定理 tsupport_subset_extChartAt_source
@@ -822,7 +830,7 @@ theorem tsupport_subset_extChartAt_source
     tsupport f subseteq (extChartAt I c).symm '' (closedBall (extChartAt I c c) f.rOut inter range I) :=
       f.tsupport_subset_symm_image_closedBall
     _ subseteq (extChartAt I c).symm '' (extChartAt I c).target := image_mono f.closedBall_subset
-    _ = (extChartAt I c).source := (extChartAt
+    _ = (extChartAt I c).source := (extChartAt I c).symm_image_target_eq_source
 
 Depends on / 依赖: closedBall, closedBall_subset, extChartAt, f.closedBall_subset, f.rOut, f.tsupport_subset_symm_image_closedBall, image_mono, source, subseteq, symm_image_target_eq_source, target, tsupport, tsupport_subset_symm_image_closedBall
 -/
@@ -884,7 +892,8 @@ theorem nhds_basis_tsupport
       (extChartAt I c).symm '' (closedBall (extChartAt I c c) f.rOut inter range I) := by
     rw [← map_extChartAt_symm_nhdsWithin_range (I := I) c]
     exact nhdsWithin_range_basis.map _
-  exact this.to_hasBasis' (fun 
+  exact this.to_hasBasis' (fun f _ => ⟨f, trivial, f.tsupport_subset_symm_image_closedBall⟩)
+    fun f _ => f.tsupport_mem_nhds
 
 中文:
 定理 nhds_basis_tsupport
@@ -894,7 +903,8 @@ theorem nhds_basis_tsupport
       (extChartAt I c).symm '' (closedBall (extChartAt I c c) f.rOut inter range I) := by
     rw [← map_extChartAt_symm_nhdsWithin_range (I := I) c]
     exact nhdsWithin_range_basis.map _
-  exact this.to_hasBasis' (fun 
+  exact this.to_hasBasis' (fun f _ => ⟨f, trivial, f.tsupport_subset_symm_image_closedBall⟩)
+    fun f _ => f.tsupport_mem_nhds
 
 Depends on / 依赖: HasBasis, SmoothBumpFunction, closedBall, extChartAt, f.rOut, f.tsupport_mem_nhds, f.tsupport_subset_symm_image_closedBall, map_extChartAt_symm_nhdsWithin_range, nhdsWithin_range_basis, nhdsWithin_range_basis.map, this.to_hasBasis, to_hasBasis, tsupport_mem_nhds, tsupport_subset_symm_image_closedBall
 -/
@@ -943,7 +953,7 @@ theorem contMDiff
   have : x in (chartAt H c).source := f.tsupport_subset_chartAt_source hx
 refine ContMDiffAt.congr_of_eventuallyEq ?_ f.eqOn_source.eventuallyEq_of_mem
     (chartAt H c).open_source.mem_nhds this
-  exact f.contDiffAt.contMDiffAt.comp _ (contMDiffAt_ex
+  exact f.contDiffAt.contMDiffAt.comp _ (contMDiffAt_extChartAt' this)
 
 中文:
 定理 contMDiff
@@ -953,7 +963,7 @@ refine ContMDiffAt.congr_of_eventuallyEq ?_ f.eqOn_source.eventuallyEq_of_mem
   have : x in (chartAt H c).source := f.tsupport_subset_chartAt_source hx
 refine ContMDiffAt.congr_of_eventuallyEq ?_ f.eqOn_source.eventuallyEq_of_mem
     (chartAt H c).open_source.mem_nhds this
-  exact f.contDiffAt.contMDiffAt.comp _ (contMDiffAt_ex
+  exact f.contDiffAt.contMDiffAt.comp _ (contMDiffAt_extChartAt' this)
 -/
 protected theorem contMDiff : CMDiff ∞ f := by
   refine contMDiff_of_tsupport fun x hx => ?_
@@ -1009,7 +1019,9 @@ theorem contMDiff_smul
   -- x ∈ tsupport fun x => f x • g x := hx
   -- _ ⊆ tsupport f := tsupport_smul_subset_left _ _
   -- _ ⊆ (chart_at _ c).source := f.tsupport_subset_chartAt_source
-  have : x in (chartAt H c).sour
+  have : x in (chartAt H c).source :=
+f.tsupport_subset_chartAt_source tsupport_smul_subset_left _ _ hx
+  exact f.contMDiffAt.smul ((hg _ this).contMDiffAt <| (chartAt _ _).open_source.mem_nhds this)
 
 中文:
 定理 contMDiff_smul
@@ -1021,7 +1033,9 @@ theorem contMDiff_smul
   -- x ∈ tsupport fun x => f x • g x := hx
   -- _ ⊆ tsupport f := tsupport_smul_subset_left _ _
   -- _ ⊆ (chart_at _ c).source := f.tsupport_subset_chartAt_source
-  have : x in (chartAt H c).sour
+  have : x in (chartAt H c).source :=
+f.tsupport_subset_chartAt_source tsupport_smul_subset_left _ _ hx
+  exact f.contMDiffAt.smul ((hg _ this).contMDiffAt <| (chartAt _ _).open_source.mem_nhds this)
 
 Depends on / 依赖: contMDiff_of_tsupport
 -/

@@ -312,7 +312,7 @@ lemma Scheme.Hom.isConstructible_preimage
     (quasiCompact_iff_isSpectralMap.mp
     (MorphismProperty.of_isPullback (P := @QuasiCompact)
     (isPullback_morphismRestrict f ⟨t, ht⟩)
-    (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralM
+    (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralMap_subtypeVal.mp ht'))))
 
 中文:
 引理 概形.态射.isConstructible_preimage
@@ -321,7 +321,7 @@ lemma Scheme.Hom.isConstructible_preimage
     (quasiCompact_iff_isSpectralMap.mp
     (MorphismProperty.of_isPullback (P := @QuasiCompact)
     (isPullback_morphismRestrict f ⟨t, ht⟩)
-    (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralM
+    (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralMap_subtypeVal.mp ht'))))
 
 Depends on / 依赖: IsRetrocompact_iff_isSpectralMap_subtypeVal, IsRetrocompact_iff_isSpectralMap_subtypeVal.mp, IsRetrocompact_iff_isSpectralMap_subtypeVal.mpr, MorphismProperty, MorphismProperty.of_isPullback, QuasiCompact, continuous, f.continuous, hs.preimage, isPullback_morphismRestrict, of_isPullback, preimage, quasiCompact_iff_isSpectralMap, quasiCompact_iff_isSpectralMap.mp, quasiCompact_iff_isSpectralMap.mpr
 -/

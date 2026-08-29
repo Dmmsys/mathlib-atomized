@@ -48,7 +48,13 @@ definition mayerVietorisSquare'
       · intro s
         apply homOfLE
         rw [h₁]; rw [le_inf_iff]
-        exact ⟨leOfHom s.fst, leOfHom s.snd
+        exact ⟨leOfHom s.fst, leOfHom s.snd⟩
+      all_goals intros; apply Subsingleton.elim))
+    (fun x hx => by
+      rw [h₄] at hx
+      obtain (hx | hx) := hx
+      · exact ⟨_, _, ⟨Sieve.ofArrows_mk _ _ WalkingPair.left, hx⟩⟩
+      · exact ⟨_, _, ⟨Sieve.ofArrows_mk _ _ WalkingPair.right, hx⟩⟩)
 
 中文:
 定义 mayerVietorisSquare'
@@ -60,7 +66,13 @@ definition mayerVietorisSquare'
       · intro s
         apply homOfLE
         rw [h₁]; rw [le_inf_iff]
-        exact ⟨leOfHom s.fst, leOfHom s.snd
+        exact ⟨leOfHom s.fst, leOfHom s.snd⟩
+      all_goals intros; apply Subsingleton.elim))
+    (fun x hx => by
+      rw [h₄] at hx
+      obtain (hx | hx) := hx
+      · exact ⟨_, _, ⟨Sieve.ofArrows_mk _ _ WalkingPair.left, hx⟩⟩
+      · exact ⟨_, _, ⟨Sieve.ofArrows_mk _ _ WalkingPair.right, hx⟩⟩)
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.MayerVietorisSquare.mk_of_isPullback, IsLimit, IsPullback, MayerVietorisSquare, Opens.grothendieckTopology, PullbackCone, PullbackCone.IsLimit.mk, Sieve.ofArrows_mk, Square, Square.IsPullback.mk, Subsingleton, Subsingleton.elim, WalkingPair, WalkingPair.left, WalkingPair.right, all_goals, grothendieckTopology, homOfLE, intros
 -/

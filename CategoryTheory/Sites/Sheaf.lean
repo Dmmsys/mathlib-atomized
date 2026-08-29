@@ -134,7 +134,13 @@ definition conesEquivSieveCompatibleFamily
         S.arrows.categoryMk f hf := ObjectProperty.homMk (Over.homMk _ rfl)
       simpa using! π.naturality φ.op⟩
   invFun x :=
-    { app := fun f => x.1 f.unop.1.hom f.
+    { app := fun f => x.1 f.unop.1.hom f.unop.2
+      naturality := fun f f' g => by
+        have := x.2 f.unop.1.hom g.unop.hom.left f.unop.2
+        dsimp at this ⊢
+        rw [id_comp]; rw [← this]
+        convert! rfl
+        simp only [Over.w] }
 
 中文:
 定义 conesEquivSieveCompatibleFamily
@@ -144,7 +150,13 @@ definition conesEquivSieveCompatibleFamily
         S.arrows.categoryMk f hf := ObjectProperty.homMk (Over.homMk _ rfl)
       simpa using! π.naturality φ.op⟩
   invFun x :=
-    { app := fun f => x.1 f.unop.1.hom f.
+    { app := fun f => x.1 f.unop.1.hom f.unop.2
+      naturality := fun f f' g => by
+        have := x.2 f.unop.1.hom g.unop.hom.left f.unop.2
+        dsimp at this ⊢
+        rw [id_comp]; rw [← this]
+        convert! rfl
+        simp only [Over.w] }
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.homMk, Over.homMk, Over.mk, Over.w, S.arrows.categoryMk, S.downward_closed, arrows, categoryMk, convert, downward_closed, f.unop, g.unop.hom.left, id_comp, invFun, naturality
 -/
@@ -227,7 +239,14 @@ theorem isLimit_iff_isSheafFor
   rw [Classical.nonempty_pi]; constructor
   · intro hu E x hx
     specialize hu hx.cone
-    rw [(homEquivAmalgamation hx).uniqueCongr.nonempty_c
+    rw [(homEquivAmalgamation hx).uniqueCongr.nonempty_congr] at hu
+    exact (unique_subtype_iff_existsUnique _).1 hu
+  · rintro h ⟨E, π⟩
+    let eqv := conesEquivSieveCompatibleFamily P S (op E)
+    rw [← eqv.left_inv π]
+    erw [(homEquivAmalgamation (eqv π).2).uniqueCongr.nonempty_congr]
+    rw [unique_subtype_iff_existsUnique]
+    exact h _ _ (eqv π).2
 
 中文:
 定理 isLimit_iff_isSheafFor
@@ -237,7 +256,14 @@ theorem isLimit_iff_isSheafFor
   rw [Classical.nonempty_pi]; constructor
   · intro hu E x hx
     specialize hu hx.cone
-    rw [(homEquivAmalgamation hx).uniqueCongr.nonempty_c
+    rw [(homEquivAmalgamation hx).uniqueCongr.nonempty_congr] at hu
+    exact (unique_subtype_iff_existsUnique _).1 hu
+  · rintro h ⟨E, π⟩
+    let eqv := conesEquivSieveCompatibleFamily P S (op E)
+    rw [← eqv.left_inv π]
+    erw [(homEquivAmalgamation (eqv π).2).uniqueCongr.nonempty_congr]
+    rw [unique_subtype_iff_existsUnique]
+    exact h _ _ (eqv π).2
 
 Depends on / 依赖: Classical, Classical.nonempty_pi, Cone.isLimitEquivIsTerminal, IsSheafFor, compatible_iff_sieveCompatible, conesEquivSieveCompatibleFamily, eqv.left_inv, homEquivAmalgamation, hx.cone, isLimitEquivIsTerminal, isTerminalEquivUnique, left_inv, nonempty_cong, nonempty_congr, nonempty_pi, simp_rw, specialize, uniqueCongr, uniqueCongr.nonempty_cong, uniqueCongr.nonempty_congr
 -/
@@ -271,7 +297,16 @@ theorem subsingleton_iff_isSeparatedFor
     specialize hs hx.cone
     rcases hs with ⟨hs⟩
     simpa only [Subtype.mk.injEq] using (show Subtype.mk t₁ h₁ = ⟨t₂, h₂⟩ from
-      (homEquivA
+      (homEquivAmalgamation hx).symm.injective (hs _ _))
+  · rintro h ⟨E, π⟩
+    let eqv := conesEquivSieveCompatibleFamily P S (op E)
+    constructor
+    rw [← eqv.left_inv π]
+    intro f₁ f₂
+    let eqv' := homEquivAmalgamation (eqv π).2
+    apply eqv'.injective
+    ext
+    apply h _ (eqv π).1 <;> exact (eqv' _).2
 
 中文:
 定理 subsingleton_iff_isSeparatedFor
@@ -283,7 +318,16 @@ theorem subsingleton_iff_isSeparatedFor
     specialize hs hx.cone
     rcases hs with ⟨hs⟩
     simpa only [Subtype.mk.injEq] using (show Subtype.mk t₁ h₁ = ⟨t₂, h₂⟩ from
-      (homEquivA
+      (homEquivAmalgamation hx).symm.injective (hs _ _))
+  · rintro h ⟨E, π⟩
+    let eqv := conesEquivSieveCompatibleFamily P S (op E)
+    constructor
+    rw [← eqv.left_inv π]
+    intro f₁ f₂
+    let eqv' := homEquivAmalgamation (eqv π).2
+    apply eqv'.injective
+    ext
+    apply h _ (eqv π).1 <;> exact (eqv' _).2
 
 Depends on / 依赖: Subtype, Subtype.mk, Subtype.mk.injEq, compatible_iff_sieveCompatible, conesEquivSieveCompatibleFamily, eqv.left_inv, homEquivAmalgamation, hx.cone, injective, is_compatible_of_exists_amalgamation, left_inv, specialize, symm.injective
 -/
@@ -1011,7 +1055,21 @@ theorem isSheaf_iff_isSheaf_of_type
   · intro hP X Y S hS z hz
     refine ⟨↾fun x => (hP S hS).amalgamate (fun Z f hf =>
       (ConcreteCategory.hom (z f hf)) x) ?_, ?_, ?_⟩
-    · intro 
+    · intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ h
+      exact (ConcreteCategory.congr_hom (hz g₁ g₂ hf₁ hf₂ h)) x
+    · intro Z f hf
+      apply ConcreteCategory.hom_ext
+      intro x
+      simp only [Functor.comp_obj, Functor.flip_obj_obj, yoneda_obj_obj, Functor.comp_map,
+        Functor.flip_obj_map, yoneda_map_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+        comp_apply]
+      apply Presieve.IsSheafFor.valid_glue
+    · intro y hy
+      apply ConcreteCategory.hom_ext
+      intro x
+      apply (hP S hS).isSeparatedFor.ext
+      intro Y' f hf
+      simp [Presieve.IsSheafFor.valid_glue _ _ _ hf, ← hy _ hf]
 
 中文:
 定理 isSheaf_iff_isSheaf_of_type
@@ -1024,7 +1082,21 @@ theorem isSheaf_iff_isSheaf_of_type
   · intro hP X Y S hS z hz
     refine ⟨↾fun x => (hP S hS).amalgamate (fun Z f hf =>
       (ConcreteCategory.hom (z f hf)) x) ?_, ?_, ?_⟩
-    · intro 
+    · intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ h
+      exact (ConcreteCategory.congr_hom (hz g₁ g₂ hf₁ hf₂ h)) x
+    · intro Z f hf
+      apply ConcreteCategory.hom_ext
+      intro x
+      simp only [Functor.comp_obj, Functor.flip_obj_obj, yoneda_obj_obj, Functor.comp_map,
+        Functor.flip_obj_map, yoneda_map_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+        comp_apply]
+      apply Presieve.IsSheafFor.valid_glue
+    · intro y hy
+      apply ConcreteCategory.hom_ext
+      intro x
+      apply (hP S hS).isSeparatedFor.ext
+      intro Y' f hf
+      simp [Presieve.IsSheafFor.valid_glue _ _ _ hf, ← hy _ hf]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom, ConcreteCategory.hom_ext, Coyoneda, Coyoneda.punitIso, Functor, Functor.comp_map, Functor.comp_obj, Functor.flip_obj_obj, Functor.isoWhiskerLeft, P.rightUnitor, Presieve, Presieve.isSheaf_iso, amalgamate, comp_map, comp_obj, congr_hom, flip_obj_obj, hom_ext
 -/
@@ -1395,6 +1467,14 @@ definition isLimitOfIsSheaf
     · rw [← E.w (WalkingMulticospan.Hom.fst b),
         ← (S.multifork P).w (WalkingMulticospan.Hom.fst b), ← assoc]
       congr 1
+      apply hP.amalgamate_map
+  uniq := by
+    rintro (E : Multifork _) m hm
+    apply hP.hom_ext S
+    intro I
+    erw [hm (WalkingMulticospan.left I)]
+    symm
+    apply hP.amalgamate_map
 
 中文:
 定义 isLimitOfIsSheaf
@@ -1407,6 +1487,14 @@ definition isLimitOfIsSheaf
     · rw [← E.w (WalkingMulticospan.Hom.fst b),
         ← (S.multifork P).w (WalkingMulticospan.Hom.fst b), ← assoc]
       congr 1
+      apply hP.amalgamate_map
+  uniq := by
+    rintro (E : Multifork _) m hm
+    apply hP.hom_ext S
+    intro I
+    erw [hm (WalkingMulticospan.left I)]
+    symm
+    apply hP.amalgamate_map
 
 Depends on / 依赖: Multifork, amalgamate, hP.amalgamate
 -/
@@ -1444,7 +1532,15 @@ theorem isSheaf_iff_multifork
   use hh.lift K
   dsimp; constructor
   · intro Y f hf
- 
+    apply hh.fac K (WalkingMulticospan.left ⟨Y, f, hf⟩)
+  · intro e he
+    apply hh.uniq K
+    rintro (a | b)
+    · apply he
+    · rw [← K.w (WalkingMulticospan.Hom.fst b), ←
+        (T.multifork P).w (WalkingMulticospan.Hom.fst b), ← assoc]
+      congr 1
+      apply he
 
 中文:
 定理 isSheaf_iff_multifork
@@ -1458,7 +1554,15 @@ theorem isSheaf_iff_multifork
   use hh.lift K
   dsimp; constructor
   · intro Y f hf
- 
+    apply hh.fac K (WalkingMulticospan.left ⟨Y, f, hf⟩)
+  · intro e he
+    apply hh.uniq K
+    rintro (a | b)
+    · apply he
+    · rw [← K.w (WalkingMulticospan.Hom.fst b), ←
+        (T.multifork P).w (WalkingMulticospan.Hom.fst b), ← assoc]
+      congr 1
+      apply he
 
 Depends on / 依赖: I.hf, I.r.w, J.Cover, Multifork, Multifork.of, T.index, T.multifork, WalkingMulticospan, WalkingMulticospan.Hom.fst, WalkingMulticospan.left, hh.fac, hh.lift, hh.uniq, isLimitOfIsSheaf, multifork
 -/
@@ -1521,7 +1625,11 @@ theorem isSheaf_iff_multiequalizer
       h.conePointUniqueUpToIso (limit.isLimit _)
     exact (inferInstance : IsIso e.hom)
   · intro h
-    refine ⟨IsLimit.ofIsoLimit (limit.isLimit _) (Co
+    refine ⟨IsLimit.ofIsoLimit (limit.isLimit _) (Cone.ext ?_ ?_)⟩
+    · apply (@asIso _ _ _ _ _ h).symm
+    · intro a
+      symm
+      simp
 
 中文:
 定理 isSheaf_iff_multiequalizer
@@ -1534,7 +1642,11 @@ theorem isSheaf_iff_multiequalizer
       h.conePointUniqueUpToIso (limit.isLimit _)
     exact (inferInstance : IsIso e.hom)
   · intro h
-    refine ⟨IsLimit.ofIsoLimit (limit.isLimit _) (Co
+    refine ⟨IsLimit.ofIsoLimit (limit.isLimit _) (Cone.ext ?_ ?_)⟩
+    · apply (@asIso _ _ _ _ _ h).symm
+    · intro a
+      symm
+      simp
 
 Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, P.obj, S.index, conePointUniqueUpToIso, e.hom, h.conePointUniqueUpToIso, isLimit, isSheaf_iff_multifork, limit.isLimit, multiequalizer, ofIsoLimit
 -/
@@ -1738,7 +1850,18 @@ definition isSheafForIsSheafFor'
     parallelPair (Equalizer.Presieve.firstMap (P ⋙ s) R)
       (Equalizer.Presieve.secondMap (P ⋙ s) R) := by
     refine parallelPair.ext (PreservesProduct.iso s _) ((PreservesProduct.iso s _))
-      (limit.hom_ext (fun j => 
+      (limit.hom_ext (fun j => ?_)) (limit.hom_ext (fun j => ?_))
+    · dsimp [Equalizer.Presieve.firstMap, firstMap]
+      simp only [map_lift_piComparison, Functor.map_comp, limit.lift_π, Fan.mk_pt,
+        Fan.mk_π_app, assoc, piComparison_comp_π_assoc]
+    · dsimp [Equalizer.Presieve.secondMap, secondMap]
+      simp only [map_lift_piComparison, Functor.map_comp, limit.lift_π, Fan.mk_pt,
+        Fan.mk_π_app, assoc, piComparison_comp_π_assoc]
+  refine Equiv.trans (isLimitMapConeForkEquiv _ _) ?_
+  refine (IsLimit.postcomposeHomEquiv e _).symm.trans
+    (IsLimit.equivIsoLimit (Fork.ext (Iso.refl _) ?_))
+  dsimp [Equalizer.forkMap, forkMap, e, Fork.ι]
+  simp only [id_comp, map_lift_piComparison]
 
 中文:
 定义 isSheafForIsSheafFor'
@@ -1748,7 +1871,18 @@ definition isSheafForIsSheafFor'
     parallelPair (Equalizer.Presieve.firstMap (P ⋙ s) R)
       (Equalizer.Presieve.secondMap (P ⋙ s) R) := by
     refine parallelPair.ext (PreservesProduct.iso s _) ((PreservesProduct.iso s _))
-      (limit.hom_ext (fun j => 
+      (limit.hom_ext (fun j => ?_)) (limit.hom_ext (fun j => ?_))
+    · dsimp [Equalizer.Presieve.firstMap, firstMap]
+      simp only [map_lift_piComparison, Functor.map_comp, limit.lift_π, Fan.mk_pt,
+        Fan.mk_π_app, assoc, piComparison_comp_π_assoc]
+    · dsimp [Equalizer.Presieve.secondMap, secondMap]
+      simp only [map_lift_piComparison, Functor.map_comp, limit.lift_π, Fan.mk_pt,
+        Fan.mk_π_app, assoc, piComparison_comp_π_assoc]
+  refine Equiv.trans (isLimitMapConeForkEquiv _ _) ?_
+  refine (IsLimit.postcomposeHomEquiv e _).symm.trans
+    (IsLimit.equivIsoLimit (Fork.ext (Iso.refl _) ?_))
+  dsimp [Equalizer.forkMap, forkMap, e, Fork.ι]
+  simp only [id_comp, map_lift_piComparison]
 
 Depends on / 依赖: Equalizer, Equalizer.Presieve.firstMap, Equalizer.Presieve.secondMap, Fan.mk_, Fan.mk_pt, Functor, Functor.map_comp, PreservesProduct, PreservesProduct.iso, Presieve, firstMap, hom_ext, limit.hom_ext, limit.lift_, map_comp, map_lift_piComparison, mk_pt, parallelPair, parallelPair.ext, s.map
 -/
@@ -1790,7 +1924,16 @@ theorem isSheaf_iff_isSheaf'
     have q : Presieve.IsSheafFor (P' ⋙ coyoneda.obj X) _ := h X.unop _ hR
     rw [← Presieve.isSheafFor_iff_generate] at q
     rw [Equalizer.Presieve.sheaf_condition] at q
-    replace q := Classic
+    replace q := Classical.choice q
+    apply (isSheafForIsSheafFor' _ _ _ _).symm q
+  · intro h U X S hS
+    rw [Equalizer.Presieve.sheaf_condition]
+    refine ⟨?_⟩
+    refine isSheafForIsSheafFor' _ _ _ _ ?_
+    letI := preservesSmallestLimits_of_preservesLimits (coyoneda.obj (op U))
+    apply isLimitOfPreserves
+    apply Classical.choice (h _ S.arrows _)
+    simpa
 
 中文:
 定理 isSheaf_iff_isSheaf'
@@ -1804,7 +1947,16 @@ theorem isSheaf_iff_isSheaf'
     have q : Presieve.IsSheafFor (P' ⋙ coyoneda.obj X) _ := h X.unop _ hR
     rw [← Presieve.isSheafFor_iff_generate] at q
     rw [Equalizer.Presieve.sheaf_condition] at q
-    replace q := Classic
+    replace q := Classical.choice q
+    apply (isSheafForIsSheafFor' _ _ _ _).symm q
+  · intro h U X S hS
+    rw [Equalizer.Presieve.sheaf_condition]
+    refine ⟨?_⟩
+    refine isSheafForIsSheafFor' _ _ _ _ ?_
+    letI := preservesSmallestLimits_of_preservesLimits (coyoneda.obj (op U))
+    apply isLimitOfPreserves
+    apply Classical.choice (h _ S.arrows _)
+    simpa
 
 Depends on / 依赖: Classical, Classical.choice, Equalizer, Equalizer.Presieve.sheaf_condition, IsSheafFor, Presieve, Presieve.IsSheafFor, Presieve.isSheafFor_iff_generate, X.unop, choice, coyoneda, coyoneda.obj, coyonedaJointlyReflectsLimits, isSheafForIsSheafFor, isSheafFor_iff_generate, preservesSmallestLimits_of_preservesLimits, replace, sheaf_condition
 -/

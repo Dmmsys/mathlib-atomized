@@ -286,7 +286,7 @@ definition seq1
     Stream'.Seq.tail
       -- create a sequence from `IntFractPair.stream`
       ⟨IntFractPair.stream v, -- the underlying stream
-        stream_isSeq v⟩⟩ -- the proof that th
+        stream_isSeq v⟩⟩ -- the proof that the stream is a sequence
 
 中文:
 定义 seq1
@@ -296,7 +296,7 @@ definition seq1
     Stream'.Seq.tail
       -- create a sequence from `IntFractPair.stream`
       ⟨IntFractPair.stream v, -- the underlying stream
-        stream_isSeq v⟩⟩ -- the proof that th
+        stream_isSeq v⟩⟩ -- the proof that the stream is a sequence
 -/
 protected def seq1 (v : K) : Stream'.Seq1 IntFractPair K :=
   ⟨IntFractPair.of v, -- the head
@@ -317,7 +317,7 @@ definition of
   body: let ⟨h, s⟩ := IntFractPair.seq1 v -- get the sequence of integer and fractional parts.
   ⟨h.b, -- the head is just the first integer part
     s.map fun p => ⟨1, p.b⟩⟩ -- the sequence consists of the remaining integer parts as the partial
-                            -- denominators; all partial numer
+                            -- denominators; all partial numerators are simply 1
 
 中文:
 定义 of
@@ -325,7 +325,7 @@ definition of
   定义体: let ⟨h, s⟩ := IntFractPair.seq1 v -- get the sequence of integer and fractional parts.
   ⟨h.b, -- the head is just the first integer part
     s.map fun p => ⟨1, p.b⟩⟩ -- the sequence consists of the remaining integer parts as the partial
-                            -- denominators; all partial numer
+                            -- denominators; all partial numerators are simply 1
 -/
 protected def of [DivisionRing K] [LinearOrder K] [FloorRing K] (v : K) : GenContFract K :=
   let ⟨h, s⟩ := IntFractPair.seq1 v -- get the sequence of integer and fractional parts.

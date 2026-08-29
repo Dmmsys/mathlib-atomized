@@ -2630,7 +2630,8 @@ lemma lowerHemicontinuousWithinAt_iff_frequently
   rw [← not_imp_not]
   simp [not_nonempty_iff_eq_empty, ← disjoint_iff_inter_eq_empty, disjoint_compl_right_iff_subset]
 
-alias ⟨LowerHemicontinuousWithinAt.fre
+alias ⟨LowerHemicontinuousWithinAt.frequently, LowerHemicontinuousWithinAt.of_frequently⟩ :=
+  lowerHemicontinuousWithinAt_iff_frequently
 
 中文:
 引理 lowerHemicontinuousWithinAt_iff_frequently
@@ -2641,7 +2642,8 @@ alias ⟨LowerHemicontinuousWithinAt.fre
   rw [← not_imp_not]
   simp [not_nonempty_iff_eq_empty, ← disjoint_iff_inter_eq_empty, disjoint_compl_right_iff_subset]
 
-alias ⟨LowerHemicontinuousWithinAt.fre
+alias ⟨LowerHemicontinuousWithinAt.frequently, LowerHemicontinuousWithinAt.of_frequently⟩ :=
+  lowerHemicontinuousWithinAt_iff_frequently
 
 Depends on / 依赖: compl_surjective, compl_surjective.forall, disjoint_compl_right_iff_subset, disjoint_iff_inter_eq_empty, isOpen_compl_iff, lowerHemicontinuousWithinAt_iff, not_imp_not, not_nonempty_iff_eq_empty
 -/
@@ -3120,7 +3122,7 @@ lemma upperHemicontinuousWithinAt_iff_frequently
   simp [← subset_interior_iff_mem_nhdsSet, not_subset, forall_isClosed_iff, inter_nonempty]
 
 alias ⟨UpperHemicontinuousWithinAt.frequently, UpperHemicontinuousWithinAt.of_frequently⟩ :=
-  
+  upperHemicontinuousWithinAt_iff_frequently
 
 中文:
 引理 upperHemicontinuousWithinAt_iff_frequently
@@ -3129,7 +3131,7 @@ alias ⟨UpperHemicontinuousWithinAt.frequently, UpperHemicontinuousWithinAt.of_
   simp [← subset_interior_iff_mem_nhdsSet, not_subset, forall_isClosed_iff, inter_nonempty]
 
 alias ⟨UpperHemicontinuousWithinAt.frequently, UpperHemicontinuousWithinAt.of_frequently⟩ :=
-  
+  upperHemicontinuousWithinAt_iff_frequently
 
 Depends on / 依赖: UpperHemicontinuousWithinAt, compl_surjective, compl_surjective.forall, forall_isClosed_iff, inter_nonempty, not_subset, semicontinuousWithinAt_iff_frequently, subset_interior_iff_mem_nhdsSet
 -/

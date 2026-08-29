@@ -174,7 +174,7 @@ definition mkContext
   let α0 ← Expr.ofNat α 0
   match cg with
   | some cg => return ⟨α, u, α0, true, cg⟩
-  
+  | _ => return ⟨α, u, α0, false, c⟩
 
 中文:
 定义 mkContext
@@ -188,7 +188,7 @@ definition mkContext
   let α0 ← Expr.ofNat α 0
   match cg with
   | some cg => return ⟨α, u, α0, true, cg⟩
-  
+  | _ => return ⟨α, u, α0, false, c⟩
 -/
 def mkContext (e : Expr) : MetaM Context := do
   let α ← inferType e
@@ -599,7 +599,12 @@ definition evalAdd
         let p ← mkEqTrans p₁ (← iapp ``zero_term #[x₁.2, a'])
         return (a', p)
       else return (← term' (n'.expr, k) x₁ a', p₁)
-    else if x₁.1 < x₂.1 t
+    else if x₁.1 < x₂.1 then do
+      let (a', h) ← evalAdd a₁ he₂
+      return (← term' n₁ x₁ a', ← iapp ``term_add_const #[n₁.1, x₁.2, a₁, e₂, a', h])
+    else do
+      let (a', h) ← evalAdd he₁ a₂
+      return (← term' n₂ x₂ a', ← iapp ``const_add_term #[e₁, n₂.1, x₂.2, a₂, a', h])
 
 中文:
 定义 evalAdd
@@ -611,7 +616,12 @@ definition evalAdd
         let p ← mkEqTrans p₁ (← iapp ``zero_term #[x₁.2, a'])
         return (a', p)
       else return (← term' (n'.expr, k) x₁ a', p₁)
-    else if x₁.1 < x₂.1 t
+    else if x₁.1 < x₂.1 then do
+      let (a', h) ← evalAdd a₁ he₂
+      return (← term' n₁ x₁ a', ← iapp ``term_add_const #[n₁.1, x₁.2, a₁, e₂, a', h])
+    else do
+      let (a', h) ← evalAdd he₁ a₂
+      return (← term' n₂ x₂ a', ← iapp ``const_add_term #[e₁, n₂.1, x₂.2, a₂, a', h])
 -/
 partial def evalAdd : NormalExpr -> NormalExpr -> M (NormalExpr × Expr)
   | zero _, e₂ => do
@@ -1103,7 +1113,16 @@ definition evalSMul'
     let c ← read
     let (e₂', p₂) ← eval e₂
     if c.isGroup = is_smulg then do
-      let (e', p) ← evalS
+      let (e', p) ← evalSMul (e₁', n) e₂'
+      return (e', ← iapp ``subst_into_smul #[e₁, e₂, e₁', e₂', e', p₁, p₂, p])
+    else do
+      if ¬ c.isGroup then throwError "Doesn't make sense to us `smulg` in a monoid. "
+      -- We are multiplying by a natural number in an additive group.
+      let zl ← Expr.ofInt q(Int) n
+      let p₁' ← mkEqRefl zl
+      let (e', p) ← evalSMul (zl, n) e₂'
+      return (e', c.app ``subst_into_smul_upcast c.inst #[e₁, e₂, e₁', zl, e₂', e', p₁, p₁', p₂, p])
+  | none => evalAtom orig
 
 中文:
 定义 evalSMul'
@@ -1117,7 +1136,16 @@ definition evalSMul'
     let c ← read
     let (e₂', p₂) ← eval e₂
     if c.isGroup = is_smulg then do
-      let (e', p) ← evalS
+      let (e', p) ← evalSMul (e₁', n) e₂'
+      return (e', ← iapp ``subst_into_smul #[e₁, e₂, e₁', e₂', e', p₁, p₂, p])
+    else do
+      if ¬ c.isGroup then throwError "Doesn't make sense to us `smulg` in a monoid. "
+      -- We are multiplying by a natural number in an additive group.
+      let zl ← Expr.ofInt q(Int) n
+      let p₁' ← mkEqRefl zl
+      let (e', p) ← evalSMul (zl, n) e₂'
+      return (e', c.app ``subst_into_smul_upcast c.inst #[e₁, e₂, e₁', zl, e₂', e', p₁, p₁', p₂, p])
+  | none => evalAtom orig
 -/
 def evalSMul' (eval : Expr -> M (NormalExpr × Expr))
     (is_smulg : Bool) (orig e₁ e₂ : Expr) : M (NormalExpr × Expr) := do
@@ -1154,7 +1182,42 @@ definition eval
     let (e₁', p₁) ← eval e₁
     let (e₂', p₂) ← eval e₂
     let (e', p') ← evalAdd e₁' e₂'
-    return (e', ← iapp ``subst_int
+    return (e', ← iapp ``subst_into_add #[e₁, e₂, e₁', e₂', e', p₁, p₂, p'])
+  | (``HSub.hSub, #[_, _, _, _, e₁, e₂]) => do
+    let e₂' ← mkAppM ``Neg.neg #[e₂]
+    let e ← mkAppM ``HAdd.hAdd #[e₁, e₂']
+    let (e', p) ← eval e
+    let p' ← (← read).mkApp ``unfold_sub ``SubtractionMonoid #[e₁, e₂, e', p]
+    return (e', p')
+  | (``Neg.neg, #[_, _, e]) => do
+    let (e₁, p₁) ← eval e
+    let (e₂, p₂) ← evalNeg e₁
+    return (e₂, ← iapp `Mathlib.Tactic.Abel.subst_into_neg #[e, e₁, e₂, p₁, p₂])
+  | (``NSMul.nsmul, #[_, _, e₁, e₂]) => do
+    let n ← if (← read).isGroup then mkAppM ``Int.ofNat #[e₁] else pure e₁
+let (e', p) ← eval ← iapp ``smul #[n, e₂]
+    return (e', ← iapp ``unfold_smul #[e₁, e₂, e', p])
+  | (``ZSMul.zsmul, #[_, _, e₁, e₂]) => do
+      if ¬ (← read).isGroup then failure
+let (e', p) ← eval ← iapp ``smul #[e₁, e₂]
+      return (e', (← read).app ``unfold_zsmul (← read).inst #[e₁, e₂, e', p])
+  | (``SMul.smul, #[.const ``Int _, _, _, e₁, e₂]) =>
+    evalSMul' eval true e e₁ e₂
+  | (``SMul.smul, #[.const ``Nat _, _, _, e₁, e₂]) =>
+    evalSMul' eval false e e₁ e₂
+  | (``HSMul.hSMul, #[.const ``Int _, _, _, _, e₁, e₂]) =>
+    evalSMul' eval true e e₁ e₂
+  | (``HSMul.hSMul, #[.const ``Nat _, _, _, _, e₁, e₂]) =>
+    evalSMul' eval false e e₁ e₂
+  | (``smul, #[_, _, e₁, e₂]) => evalSMul' eval false e e₁ e₂
+  | (``smulg, #[_, _, e₁, e₂]) => evalSMul' eval true e e₁ e₂
+  | (``OfNat.ofNat, #[_, .lit (.natVal 0), _])
+  | (``Zero.zero, #[_, _]) =>
+    if ← isDefEq e (← read).α0 then
+      pure (← zero', ← mkEqRefl (← read).α0)
+    else
+      evalAtom e
+  | _ => evalAtom e
 
 中文:
 定义 eval
@@ -1167,7 +1230,42 @@ definition eval
     let (e₁', p₁) ← eval e₁
     let (e₂', p₂) ← eval e₂
     let (e', p') ← evalAdd e₁' e₂'
-    return (e', ← iapp ``subst_int
+    return (e', ← iapp ``subst_into_add #[e₁, e₂, e₁', e₂', e', p₁, p₂, p'])
+  | (``HSub.hSub, #[_, _, _, _, e₁, e₂]) => do
+    let e₂' ← mkAppM ``Neg.neg #[e₂]
+    let e ← mkAppM ``HAdd.hAdd #[e₁, e₂']
+    let (e', p) ← eval e
+    let p' ← (← read).mkApp ``unfold_sub ``SubtractionMonoid #[e₁, e₂, e', p]
+    return (e', p')
+  | (``Neg.neg, #[_, _, e]) => do
+    let (e₁, p₁) ← eval e
+    let (e₂, p₂) ← evalNeg e₁
+    return (e₂, ← iapp `Mathlib.Tactic.Abel.subst_into_neg #[e, e₁, e₂, p₁, p₂])
+  | (``NSMul.nsmul, #[_, _, e₁, e₂]) => do
+    let n ← if (← read).isGroup then mkAppM ``Int.ofNat #[e₁] else pure e₁
+let (e', p) ← eval ← iapp ``smul #[n, e₂]
+    return (e', ← iapp ``unfold_smul #[e₁, e₂, e', p])
+  | (``ZSMul.zsmul, #[_, _, e₁, e₂]) => do
+      if ¬ (← read).isGroup then failure
+let (e', p) ← eval ← iapp ``smul #[e₁, e₂]
+      return (e', (← read).app ``unfold_zsmul (← read).inst #[e₁, e₂, e', p])
+  | (``SMul.smul, #[.const ``Int _, _, _, e₁, e₂]) =>
+    evalSMul' eval true e e₁ e₂
+  | (``SMul.smul, #[.const ``Nat _, _, _, e₁, e₂]) =>
+    evalSMul' eval false e e₁ e₂
+  | (``HSMul.hSMul, #[.const ``Int _, _, _, _, e₁, e₂]) =>
+    evalSMul' eval true e e₁ e₂
+  | (``HSMul.hSMul, #[.const ``Nat _, _, _, _, e₁, e₂]) =>
+    evalSMul' eval false e e₁ e₂
+  | (``smul, #[_, _, e₁, e₂]) => evalSMul' eval false e e₁ e₂
+  | (``smulg, #[_, _, e₁, e₂]) => evalSMul' eval true e e₁ e₂
+  | (``OfNat.ofNat, #[_, .lit (.natVal 0), _])
+  | (``Zero.zero, #[_, _]) =>
+    if ← isDefEq e (← read).α0 then
+      pure (← zero', ← mkEqRefl (← read).α0)
+    else
+      evalAtom e
+  | _ => evalAtom e
 -/
 partial def eval (e : Expr) : M (NormalExpr × Expr) := do
   trace[abel.detail] "running eval on {e}"
@@ -1228,7 +1326,18 @@ definition isAtom
   | (``ZSMul.zsmul, #[_, _, _, _])
   | (``SMul.smul, #[.const ``Int _, _, _, _, _])
   | (``SMul.smul, #[.const ``Nat _, _, _, _, _])
+  | (``HSMul.hSMul, #[.const ``Int _, _, _, _, _, _])
+  | (``HSMul.hSMul, #[.const ``Nat _, _, _, _, _, _])
+  | (``smul, #[_, _, _, _])
+  | (``smulg, #[_, _, _, _]) => false
+  /- The `OfNat.ofNat` and `Zero.zero` cases are deliberately omitted here: these two cases are not
+  strictly atoms for `abel`, but they are atom-like in that their handling by
+  `Mathlib.Tactic.Abel.eval` contains no recursive call. -/
+  -- | (``OfNat.ofNat, #[_, .lit (.natVal 0), _])
+  -- | (``Zero.zero, #[_, _])
+  | _ => true
 
+@[tactic_alt abel]
 
 中文:
 定义 isAtom
@@ -1241,7 +1350,18 @@ definition isAtom
   | (``ZSMul.zsmul, #[_, _, _, _])
   | (``SMul.smul, #[.const ``Int _, _, _, _, _])
   | (``SMul.smul, #[.const ``Nat _, _, _, _, _])
+  | (``HSMul.hSMul, #[.const ``Int _, _, _, _, _, _])
+  | (``HSMul.hSMul, #[.const ``Nat _, _, _, _, _, _])
+  | (``smul, #[_, _, _, _])
+  | (``smulg, #[_, _, _, _]) => false
+  /- The `OfNat.ofNat` and `Zero.zero` cases are deliberately omitted here: these two cases are not
+  strictly atoms for `abel`, but they are atom-like in that their handling by
+  `Mathlib.Tactic.Abel.eval` contains no recursive call. -/
+  -- | (``OfNat.ofNat, #[_, .lit (.natVal 0), _])
+  -- | (``Zero.zero, #[_, _])
+  | _ => true
 
+@[tactic_alt abel]
 
 Depends on / 依赖: HAdd.hAdd, HSMul.hSMul, HSub.hSub, MetricSpace, NSMul.nsmul, Neg.neg, SMul.smul, ZSMul.zsmul, _root_, _root_.MetricSpace.toIsCompletelyMetrizableSpace, e.getAppFnArgs, getAppFnArgs, toIsCompletelyMetrizableSpace
 -/
@@ -1400,7 +1520,9 @@ definition cleanup
     let thms := [``term_eq, ``termg_eq, ``add_zero, ``one_nsmul, ``one_zsmul, ``zsmul_zero]
     let ctx ← Simp.mkContext (config := { zetaDelta := cfg.zetaDelta })
       (simpTheorems := #[← thms.foldlM (·.addConst ·) {}])
-      (congrTheorems
+      (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+      r.mkEqTrans (← Simp.main r.expr ctx (methods := ← Lean.Meta.Simp.mkDefaultMethods)).1
 
 中文:
 定义 cleanup
@@ -1412,7 +1534,9 @@ definition cleanup
     let thms := [``term_eq, ``termg_eq, ``add_zero, ``one_nsmul, ``one_zsmul, ``zsmul_zero]
     let ctx ← Simp.mkContext (config := { zetaDelta := cfg.zetaDelta })
       (simpTheorems := #[← thms.foldlM (·.addConst ·) {}])
-      (congrTheorems
+      (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+      r.mkEqTrans (← Simp.main r.expr ctx (methods := ← Lean.Meta.Simp.mkDefaultMethods)).1
 -/
 def cleanup (cfg : AbelNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
   match cfg.mode with
@@ -1484,7 +1608,11 @@ definition elabAbelNFConv
     if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
     let s ← IO.mkRef {}
     Conv.applySimpResult
-      (← AtomM.recurse s cfg.toConfig (we
+      (← AtomM.recurse s cfg.toConfig (wellBehavedDischarge := true) evalExpr (cleanup cfg)
+        (← instantiateMVars (← Conv.getLhs)))
+  | _ => Elab.throwUnsupportedSyntax
+
+@[inherit_doc abel]
 
 中文:
 定义 elabAbelNFConv
@@ -1495,7 +1623,11 @@ definition elabAbelNFConv
     if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
     let s ← IO.mkRef {}
     Conv.applySimpResult
-      (← AtomM.recurse s cfg.toConfig (we
+      (← AtomM.recurse s cfg.toConfig (wellBehavedDischarge := true) evalExpr (cleanup cfg)
+        (← instantiateMVars (← Conv.getLhs)))
+  | _ => Elab.throwUnsupportedSyntax
+
+@[inherit_doc abel]
 -/
 def elabAbelNFConv : Tactic := fun stx => match stx with
   | `(conv| abel_nf $[!%$tk]? $cfg:optConfig) => withMainContext do

@@ -68,7 +68,16 @@ definition pullbackConeEquivBinaryFan
   body: .mk (Over.homMk (U := .mk (c.fst ≫ f)) (V := .mk f) c.fst rfl)
       (Over.homMk (U := .mk (c.fst ≫ f)) (V := .mk g) c.snd c.condition.symm)
   functor.map {c₁ c₂} a := { hom := Over.homMk a.hom, w := by rintro (_ | _) <;> cat_disch }
-  inverse.obj c := PullbackCone.mk c.fst.left c.snd.left (c.fst.w.
+  inverse.obj c := PullbackCone.mk c.fst.left c.snd.left (c.fst.w.trans c.snd.w.symm)
+  inverse.map {c₁ c₂} a := {
+    hom := a.hom.left
+    w := by rintro (_ | _ | _) <;> simp [← Over.comp_left_assoc, ← Over.comp_left]
+  }
+  unitIso := NatIso.ofComponents (fun c => c.eta) (by intros; ext; simp)
+  counitIso := NatIso.ofComponents (fun X => BinaryFan.ext (Over.isoMk (Iso.refl _)
+    (by simpa using X.fst.w.symm)) (by ext; simp) (by ext; simp))
+    (by intros; ext; simp [BinaryFan.ext])
+  functor_unitIso_comp c := by ext; simp [BinaryFan.ext]
 
 中文:
 定义 pullbackConeEquivBinaryFan
@@ -76,7 +85,16 @@ definition pullbackConeEquivBinaryFan
   定义体: .mk (Over.homMk (U := .mk (c.fst ≫ f)) (V := .mk f) c.fst rfl)
       (Over.homMk (U := .mk (c.fst ≫ f)) (V := .mk g) c.snd c.condition.symm)
   functor.map {c₁ c₂} a := { hom := Over.homMk a.hom, w := by rintro (_ | _) <;> cat_disch }
-  inverse.obj c := PullbackCone.mk c.fst.left c.snd.left (c.fst.w.
+  inverse.obj c := PullbackCone.mk c.fst.left c.snd.left (c.fst.w.trans c.snd.w.symm)
+  inverse.map {c₁ c₂} a := {
+    hom := a.hom.left
+    w := by rintro (_ | _ | _) <;> simp [← Over.comp_left_assoc, ← Over.comp_left]
+  }
+  unitIso := NatIso.ofComponents (fun c => c.eta) (by intros; ext; simp)
+  counitIso := NatIso.ofComponents (fun X => BinaryFan.ext (Over.isoMk (Iso.refl _)
+    (by simpa using X.fst.w.symm)) (by ext; simp) (by ext; simp))
+    (by intros; ext; simp [BinaryFan.ext])
+  functor_unitIso_comp c := by ext; simp [BinaryFan.ext]
 
 Depends on / 依赖: Over.homMk, c.fst
 -/
@@ -110,7 +128,13 @@ definition IsLimit.pullbackConeEquivBinaryFanFunctor
     -- TODO: Drop `BinaryFan.IsLimit.lift'`. Instead provide the lemmas it bundles separately.
     -- TODO: Define `abbrev BinaryFan.IsLimit (c : BinaryFan X Y) := IsLimit c` for dot notation?
     (fun s => Over.homMk (hc.lift <| pullbackConeEquivBinaryFan.inverse.obj s) <| by
-  
+      simpa using! s.fst.w)
+    (fun s => Over.OverMorphism.ext (hc.fac _ _)) (fun s => Over.OverMorphism.ext (hc.fac _ _))
+    fun s m e₁ e₂ => by
+      ext1
+      apply PullbackCone.IsLimit.hom_ext hc
+      · simpa using! congr(($e₁).left)
+      · simpa using! congr(($e₂).left)
 
 中文:
 定义 是极限.pullbackConeEquivBinaryFanFunctor
@@ -119,7 +143,13 @@ definition IsLimit.pullbackConeEquivBinaryFanFunctor
     -- TODO: Drop `BinaryFan.IsLimit.lift'`. Instead provide the lemmas it bundles separately.
     -- TODO: Define `abbrev BinaryFan.IsLimit (c : BinaryFan X Y) := IsLimit c` for dot notation?
     (fun s => Over.homMk (hc.lift <| pullbackConeEquivBinaryFan.inverse.obj s) <| by
-  
+      simpa using! s.fst.w)
+    (fun s => Over.OverMorphism.ext (hc.fac _ _)) (fun s => Over.OverMorphism.ext (hc.fac _ _))
+    fun s m e₁ e₂ => by
+      ext1
+      apply PullbackCone.IsLimit.hom_ext hc
+      · simpa using! congr(($e₁).left)
+      · simpa using! congr(($e₂).left)
 
 Depends on / 依赖: BinaryFan, BinaryFan.isLimitMk, isLimitMk
 -/
@@ -151,7 +181,11 @@ definition IsLimit.pullbackConeEquivBinaryFanInverse
     (fun s => by simpa only using! congr($(hc.fac _ _).left))
     (fun s => by simpa only using! congr($(hc.fac _ _).left))
  fun s m hm₁ hm₂ => by
-      change PullbackC
+      change PullbackCone f g at s
+      have := hc.uniq (pullbackConeEquivBinaryFan.functor.obj s) (Over.homMk m <| by
+        simp [← hm₁, dsimp% c.fst.w])
+        (by rintro (_ | _) <;> ext <;> simpa)
+      exact congr(($this).left)
 
 中文:
 定义 是极限.pullbackConeEquivBinaryFanInverse
@@ -162,7 +196,11 @@ definition IsLimit.pullbackConeEquivBinaryFanInverse
     (fun s => by simpa only using! congr($(hc.fac _ _).left))
     (fun s => by simpa only using! congr($(hc.fac _ _).left))
  fun s m hm₁ hm₂ => by
-      change PullbackC
+      change PullbackCone f g at s
+      have := hc.uniq (pullbackConeEquivBinaryFan.functor.obj s) (Over.homMk m <| by
+        simp [← hm₁, dsimp% c.fst.w])
+        (by rintro (_ | _) <;> ext <;> simpa)
+      exact congr(($this).left)
 
 Depends on / 依赖: IsLimit, Over.homMk, PullbackCone, PullbackCone.IsLimit.mk, c.fst.w, c.fst.w.trans, c.snd.w.symm, functor, hc.fac, hc.lift, hc.uniq, pullbackConeEquivBinaryFan, pullbackConeEquivBinaryFan.functor.obj
 -/
@@ -198,7 +236,16 @@ definition pushoutCoconeEquivBinaryCofan
   body: .mk (Under.homMk (U := .mk f) (V := .mk (f ≫ c.inl)) c.inl rfl)
       (Under.homMk (U := .mk g) (V := .mk (f ≫ c.inl)) c.inr c.condition.symm)
   functor.map {c₁ c₂} a := { hom := Under.homMk a.hom, w := by rintro (_ | _) <;> cat_disch }
-  inverse.obj c := .mk c.inl.right c.inr.right (c.inl.w.trans c
+  inverse.obj c := .mk c.inl.right c.inr.right (c.inl.w.trans c.inr.w.symm)
+  inverse.map {c₁ c₂} a := {
+    hom := a.hom.right
+    w := by rintro (_ | _ | _) <;> simp [← Under.comp_right]
+  }
+  unitIso := NatIso.ofComponents (fun c => c.eta) (fun f => by ext; simp)
+  counitIso := NatIso.ofComponents (fun X => BinaryCofan.ext (Under.isoMk (.refl _)
+    (by dsimp; simpa using X.inl.w)) (by ext; simp) (by ext; simp))
+    (by intros; ext; simp)
+  functor_unitIso_comp c := by ext; simp
 
 中文:
 定义 pushoutCoconeEquivBinaryCofan
@@ -206,7 +253,16 @@ definition pushoutCoconeEquivBinaryCofan
   定义体: .mk (Under.homMk (U := .mk f) (V := .mk (f ≫ c.inl)) c.inl rfl)
       (Under.homMk (U := .mk g) (V := .mk (f ≫ c.inl)) c.inr c.condition.symm)
   functor.map {c₁ c₂} a := { hom := Under.homMk a.hom, w := by rintro (_ | _) <;> cat_disch }
-  inverse.obj c := .mk c.inl.right c.inr.right (c.inl.w.trans c
+  inverse.obj c := .mk c.inl.right c.inr.right (c.inl.w.trans c.inr.w.symm)
+  inverse.map {c₁ c₂} a := {
+    hom := a.hom.right
+    w := by rintro (_ | _ | _) <;> simp [← Under.comp_right]
+  }
+  unitIso := NatIso.ofComponents (fun c => c.eta) (fun f => by ext; simp)
+  counitIso := NatIso.ofComponents (fun X => BinaryCofan.ext (Under.isoMk (.refl _)
+    (by dsimp; simpa using X.inl.w)) (by ext; simp) (by ext; simp))
+    (by intros; ext; simp)
+  functor_unitIso_comp c := by ext; simp
 
 Depends on / 依赖: Under.homMk, c.inl
 -/
@@ -244,7 +300,9 @@ definition IsColimit.pushoutCoconeEquivBinaryCofanFunctor
     (fun s => Under.UnderMorphism.ext (hc.fac _ _)) (fun s => Under.UnderMorphism.ext (hc.fac _ _))
       fun s m e₁ e₂ => by
     ext1
-
+    refine PushoutCocone.IsColimit.hom_ext hc ?_ ?_
+    · simpa using! congr(($e₁).right)
+    · simpa using! congr(($e₂).right)
 
 中文:
 定义 是余极限.pushoutCoconeEquivBinaryCofanFunctor
@@ -256,7 +314,9 @@ definition IsColimit.pushoutCoconeEquivBinaryCofanFunctor
     (fun s => Under.UnderMorphism.ext (hc.fac _ _)) (fun s => Under.UnderMorphism.ext (hc.fac _ _))
       fun s m e₁ e₂ => by
     ext1
-
+    refine PushoutCocone.IsColimit.hom_ext hc ?_ ?_
+    · simpa using! congr(($e₁).right)
+    · simpa using! congr(($e₂).right)
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.isColimitMk, IsColimit, PushoutCocone, PushoutCocone.IsColimit.hom_ext, PushoutCocone.mk, Under.UnderMorphism.ext, Under.homMk, UnderMorphism, hc.desc, hc.fac, hom_ext, isColimitMk, s.inl.right, s.inl.w, s.inl.w.trans, s.inr.right, s.inr.w.symm
 -/
@@ -288,7 +348,11 @@ definition IsColimit.pushoutCoconeEquivBinaryCofanInverse
     (fun s => by simpa only using! congr($(hc.fac _ _).right))
     (fun s => by simpa only using! congr($(hc.fac _ _).right))
  fun s m hm₁ hm₂ => by
-      change 
+      change PushoutCocone f g at s
+      have := hc.uniq (pushoutCoconeEquivBinaryCofan.functor.obj s) (Under.homMk m <| by
+        simp [← hm₁, dsimp% c.inl.w_assoc])
+        (by rintro (_ | _) <;> ext <;> simpa)
+      exact congr(($this).right)
 
 中文:
 定义 是余极限.pushoutCoconeEquivBinaryCofanInverse
@@ -299,7 +363,11 @@ definition IsColimit.pushoutCoconeEquivBinaryCofanInverse
     (fun s => by simpa only using! congr($(hc.fac _ _).right))
     (fun s => by simpa only using! congr($(hc.fac _ _).right))
  fun s m hm₁ hm₂ => by
-      change 
+      change PushoutCocone f g at s
+      have := hc.uniq (pushoutCoconeEquivBinaryCofan.functor.obj s) (Under.homMk m <| by
+        simp [← hm₁, dsimp% c.inl.w_assoc])
+        (by rintro (_ | _) <;> ext <;> simpa)
+      exact congr(($this).right)
 
 Depends on / 依赖: IsColimit, PushoutCocone, PushoutCocone.IsColimit.mk, Under.homMk, c.inl.w.trans, c.inl.w_assoc, c.inr.w.symm, functor, hc.desc, hc.fac, hc.uniq, pushoutCoconeEquivBinaryCofan, pushoutCoconeEquivBinaryCofan.functor.obj, w_assoc
 -/
@@ -487,7 +555,9 @@ definition conesEquivInverseObj
       -- `tidy` can do this using `case_bash`, but let's try to be a good `-T50000` citizen:
       naturality := fun X Y f => by
         dsimp; cases X <;> cases Y <;> cases f
-        · rw [Category.id_c
+        · rw [Category.id_comp, Category.comp_id]
+        · rw [Over.w, Category.id_comp]
+        · rw [Category.id_comp, Category.comp_id] }
 
 中文:
 定义 conesEquivInverseObj
@@ -498,7 +568,9 @@ definition conesEquivInverseObj
       -- `tidy` can do this using `case_bash`, but let's try to be a good `-T50000` citizen:
       naturality := fun X Y f => by
         dsimp; cases X <;> cases Y <;> cases f
-        · rw [Category.id_c
+        · rw [Category.id_comp, Category.comp_id]
+        · rw [Over.w, Category.id_comp]
+        · rw [Category.id_comp, Category.comp_id] }
 
 Depends on / 依赖: c.pt.left
 -/
@@ -577,7 +649,8 @@ definition conesEquivFunctor
       π :=
         { app := fun ⟨j⟩ => Over.homMk (c.π.app (some j)) (c.w (WidePullbackShape.Hom.term j))
           -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10888): added proof for `naturality`
-          naturality := fun ⟨X⟩ ⟨Y⟩ ⟨⟨f⟩⟩ =
+          naturality := fun ⟨X⟩ ⟨Y⟩ ⟨⟨f⟩⟩ => by dsimp at f ⊢; cat_disch } }
+  map f := { hom := Over.homMk f.hom }
 
 中文:
 定义 conesEquivFunctor
@@ -586,7 +659,8 @@ definition conesEquivFunctor
       π :=
         { app := fun ⟨j⟩ => Over.homMk (c.π.app (some j)) (c.w (WidePullbackShape.Hom.term j))
           -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10888): added proof for `naturality`
-          naturality := fun ⟨X⟩ ⟨Y⟩ ⟨⟨f⟩⟩ =
+          naturality := fun ⟨X⟩ ⟨Y⟩ ⟨⟨f⟩⟩ => by dsimp at f ⊢; cat_disch } }
+  map f := { hom := Over.homMk f.hom }
 
 Depends on / 依赖: Over.homMk, Over.mk, WidePullbackShape, WidePullbackShape.Hom.term
 -/

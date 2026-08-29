@@ -309,7 +309,18 @@ lemma apply_of_pow_eq_one
   obtain ⟨k, hk, hζ⟩ := IsPrimitiveRoot.exists_pos hζ hm
   have hk' : ↑k ∉ Q := fun h => hk' (Q.mem_of_dvd (Nat.cast_dvd_cast (hζ.2 m ‹_›)) h)
   have : NeZero k := ⟨hk.ne'⟩
-  obtain ⟨i, hi, e⟩ := hζ.eq_po
+  obtain ⟨i, hi, e⟩ := hζ.eq_pow_of_pow_eq_one (ξ := φ ζ) (by rw [← map_pow, hζ.1, map_one])
+  have (j : _) : 1 - ζ ^ ((q + k - i) * j) in Q := by
+    rw [← Ideal.mul_unit_mem_iff_mem _ ((hζ.isUnit NeZero.out).pow (i * j))]; rw [sub_mul]; rw [one_mul]; rw [← pow_add]; rw [← add_mul]; rw [tsub_add_cancel_of_le (by linarith)]; rw [add_mul]; rw [pow_add]; rw [pow_mul _ k]; rw [hζ.1]; rw [one_pow]; rw [mul_one]; rw [pow_mul]; rw [e]; rw [← map_pow]; rw [mul_comm]; rw [pow_mul]
+    exact H _
+  have h₁ := sum_mem (t := Finset.range k) fun j _ => this j
+  have h₂ := geom_sum_mul (ζ ^ (q + k - i)) k
+  rw [pow_right_comm]; rw [hζ.1]; rw [one_pow]; rw [sub_self]; rw [mul_eq_zero]; rw [sub_eq_zero] at h₂
+  rcases h₂ with h₂ | h₂
+  · simp [h₂, pow_mul, hk'] at h₁
+  replace h₂ := congr($h₂ * ζ ^ i)
+  rw [one_mul]; rw [← pow_add]; rw [tsub_add_cancel_of_le (by linarith)]; rw [pow_add]; rw [hζ.1]; rw [mul_one] at h₂
+  rw [h₂]; rw [e]
 
 中文:
 引理 apply_of_pow_eq_one
@@ -320,7 +331,18 @@ lemma apply_of_pow_eq_one
   obtain ⟨k, hk, hζ⟩ := IsPrimitiveRoot.exists_pos hζ hm
   have hk' : ↑k ∉ Q := fun h => hk' (Q.mem_of_dvd (Nat.cast_dvd_cast (hζ.2 m ‹_›)) h)
   have : NeZero k := ⟨hk.ne'⟩
-  obtain ⟨i, hi, e⟩ := hζ.eq_po
+  obtain ⟨i, hi, e⟩ := hζ.eq_pow_of_pow_eq_one (ξ := φ ζ) (by rw [← map_pow, hζ.1, map_one])
+  have (j : _) : 1 - ζ ^ ((q + k - i) * j) in Q := by
+    rw [← Ideal.mul_unit_mem_iff_mem _ ((hζ.isUnit NeZero.out).pow (i * j))]; rw [sub_mul]; rw [one_mul]; rw [← pow_add]; rw [← add_mul]; rw [tsub_add_cancel_of_le (by linarith)]; rw [add_mul]; rw [pow_add]; rw [pow_mul _ k]; rw [hζ.1]; rw [one_pow]; rw [mul_one]; rw [pow_mul]; rw [e]; rw [← map_pow]; rw [mul_comm]; rw [pow_mul]
+    exact H _
+  have h₁ := sum_mem (t := Finset.range k) fun j _ => this j
+  have h₂ := geom_sum_mul (ζ ^ (q + k - i)) k
+  rw [pow_right_comm]; rw [hζ.1]; rw [one_pow]; rw [sub_self]; rw [mul_eq_zero]; rw [sub_eq_zero] at h₂
+  rcases h₂ with h₂ | h₂
+  · simp [h₂, pow_mul, hk'] at h₁
+  replace h₂ := congr($h₂ * ζ ^ i)
+  rw [one_mul]; rw [← pow_add]; rw [tsub_add_cancel_of_le (by linarith)]; rw [pow_add]; rw [hζ.1]; rw [mul_one] at h₂
+  rw [h₂]; rw [e]
 
 Depends on / 依赖: Ideal.mul_unit_mem_iff_mem, IsPrimitiveRoot, IsPrimitiveRoot.exists_pos, Nat.card, Nat.cast_dvd_cast, NeZero, NeZero.out, Q.mem_of_dvd, Q.under, cast_dvd_cast, eq_pow_of_pow_eq_one, exists_pos, hk.ne, isUnit, map_one, map_pow, mem_of_dvd, mul_unit_mem_iff_mem, one_mu, sub_mul
 -/
@@ -414,7 +436,12 @@ lemma isArithFrobAt_localize
     congr 2
     rw [← Ideal.under_def]; rw [← Ideal.under_under (B := S)]; rw [Localization.AtPrime.under_maximalIdeal]
   intro x
-  obtain ⟨x, s, rfl⟩ := IsLocalization.
+  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq Q.primeCompl x
+  simp only [localize, coe_mk, Localization.localRingHom_mk', RingHom.coe_coe, h,
+    ← IsLocalization.mk'_pow]
+  rw [← IsLocalization.mk'_sub]; rw [IsLocalization.AtPrime.mk'_mem_maximal_iff (Localization.AtPrime Q) Q]
+  simp only [SubmonoidClass.coe_pow, ← Ideal.Quotient.eq_zero_iff_mem]
+  simp [H.mk_apply]
 
 中文:
 引理 isArithFrobAt_localize
@@ -426,7 +453,12 @@ lemma isArithFrobAt_localize
     congr 2
     rw [← Ideal.under_def]; rw [← Ideal.under_under (B := S)]; rw [Localization.AtPrime.under_maximalIdeal]
   intro x
-  obtain ⟨x, s, rfl⟩ := IsLocalization.
+  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq Q.primeCompl x
+  simp only [localize, coe_mk, Localization.localRingHom_mk', RingHom.coe_coe, h,
+    ← IsLocalization.mk'_pow]
+  rw [← IsLocalization.mk'_sub]; rw [IsLocalization.AtPrime.mk'_mem_maximal_iff (Localization.AtPrime Q) Q]
+  simp only [SubmonoidClass.coe_pow, ← Ideal.Quotient.eq_zero_iff_mem]
+  simp [H.mk_apply]
 
 Depends on / 依赖: AtPrime, Ideal.under_def, Ideal.under_under, IsLocalization, IsLocalization.AtPrime.mk, IsLocalization.exists_mk, IsLocalization.mk, Locali, Localization, Localization.AtPrime, Localization.AtPrime.under_maximalIdeal, Localization.localRingHom_mk, Nat.card, Q.primeCompl, Q.under, RingHom, RingHom.coe_coe, _mem_maximal_iff, _pow, _sub
 -/
@@ -455,7 +487,8 @@ lemma eq_of_isUnramifiedAt
     intro x
     rw [H.isArithFrobAt_localize.mk_apply]; rw [H'.isArithFrobAt_localize.mk_apply]
   ext x
-  apply IsLocaliza
+  apply IsLocalization.injective (Localization.AtPrime Q) hQ
+  rw [← H.localize_algebraMap]; rw [← H'.localize_algebraMap]; rw [this]
 
 中文:
 引理 eq_of_isUnramifiedAt
@@ -466,7 +499,8 @@ lemma eq_of_isUnramifiedAt
     intro x
     rw [H.isArithFrobAt_localize.mk_apply]; rw [H'.isArithFrobAt_localize.mk_apply]
   ext x
-  apply IsLocaliza
+  apply IsLocalization.injective (Localization.AtPrime Q) hQ
+  rw [← H.localize_algebraMap]; rw [← H'.localize_algebraMap]; rw [this]
 
 Depends on / 依赖: Algebra, Algebra.FormallyUnramified.ext_of_iInf, AtPrime, FormallyUnramified, H.isArithFrobAt_localize.mk_apply, H.localize, H.localize_algebraMap, Ideal.IsPrime.ne_top, Ideal.iInf_pow_eq_bot_of_isLocalRing, IsLocalization, IsLocalization.injective, IsPrime, Localization, Localization.AtPrime, ext_of_iInf, iInf_pow_eq_bot_of_isLocalRing, injective, isArithFrobAt_localize, isArithFrobAt_localize.mk_apply, localize
 -/
@@ -579,7 +613,8 @@ lemma conj
     rw [← Ideal.comap_symm]; rw [← Ideal.comap_coe]; rw [Ideal.under]; rw [Ideal.comap_comap]
     congr 1
     exact (MulSemiringAction.toAlgEquiv R S τ).symm.toAlgHom.comp_algebraMap
-  rw [Ideal.pointwise_s
+  rw [Ideal.pointwise_smul_eq_comap]; rw [Ideal.mem_comap]
+  simpa [smul_sub, mul_smul, this] using H (τ⁻¹ • x)
 
 中文:
 引理 conj
@@ -591,7 +626,8 @@ lemma conj
     rw [← Ideal.comap_symm]; rw [← Ideal.comap_coe]; rw [Ideal.under]; rw [Ideal.comap_comap]
     congr 1
     exact (MulSemiringAction.toAlgEquiv R S τ).symm.toAlgHom.comp_algebraMap
-  rw [Ideal.pointwise_s
+  rw [Ideal.pointwise_smul_eq_comap]; rw [Ideal.mem_comap]
+  simpa [smul_sub, mul_smul, this] using H (τ⁻¹ • x)
 
 Depends on / 依赖: Ideal.comap_coe, Ideal.comap_comap, Ideal.comap_symm, Ideal.mem_comap, Ideal.pointwise_smul_eq_comap, Ideal.under, MulSemiringAction, MulSemiringAction.toAlgEquiv, MulSemiringAction.toRingEquiv, Q.map, Q.under, comap_coe, comap_comap, comap_symm, comp_algebraMap, mem_comap, mul_smul, pointwise_smul_eq_comap, smul_sub, symm.toAlgHom.comp_algebraMap
 -/
@@ -621,7 +657,19 @@ lemma exists_of_isInvariant
   have : Q.IsMaximal := Ideal.Quotient.maximal_of_isField _ (Finite.isField_of_domain (S ⧸ Q))
   obtain ⟨p, hc⟩ := CharP.exists (R ⧸ P)
   have : Finite (R ⧸ P) := .of_injective _ Ideal.algebraMap_quotient_injective
-  cases nonemp
+  cases nonempty_fintype (R ⧸ P)
+  obtain ⟨k, hp, hk⟩ := FiniteField.card (R ⧸ P) p
+  have := CharP.of_ringHom_of_ne_zero (algebraMap (R ⧸ P) (S ⧸ Q)) p hp.ne_zero
+  have : ExpChar (S ⧸ Q) p := .prime hp
+  let l : (S ⧸ Q) ≃ₐ[R ⧸ P] S ⧸ Q :=
+    { __ := iterateFrobeniusEquiv (S ⧸ Q) p k,
+      commutes' r := by
+        dsimp [iterateFrobenius_def]
+        rw [← map_pow]; rw [← hk]; rw [FiniteField.pow_card] }
+  obtain ⟨σ, hσ⟩ := Ideal.Quotient.stabilizerHom_surjective G P Q l
+  refine ⟨σ, fun x => ?_⟩
+  rw [← Ideal.Quotient.eq]; rw [Nat.card_eq_fintype_card]; rw [hk]
+  exact DFunLike.congr_fun hσ (Ideal.Quotient.mk Q x)
 
 中文:
 引理 存在_of_isInvariant
@@ -633,7 +681,19 @@ lemma exists_of_isInvariant
   have : Q.IsMaximal := Ideal.Quotient.maximal_of_isField _ (Finite.isField_of_domain (S ⧸ Q))
   obtain ⟨p, hc⟩ := CharP.exists (R ⧸ P)
   have : Finite (R ⧸ P) := .of_injective _ Ideal.algebraMap_quotient_injective
-  cases nonemp
+  cases nonempty_fintype (R ⧸ P)
+  obtain ⟨k, hp, hk⟩ := FiniteField.card (R ⧸ P) p
+  have := CharP.of_ringHom_of_ne_zero (algebraMap (R ⧸ P) (S ⧸ Q)) p hp.ne_zero
+  have : ExpChar (S ⧸ Q) p := .prime hp
+  let l : (S ⧸ Q) ≃ₐ[R ⧸ P] S ⧸ Q :=
+    { __ := iterateFrobeniusEquiv (S ⧸ Q) p k,
+      commutes' r := by
+        dsimp [iterateFrobenius_def]
+        rw [← map_pow]; rw [← hk]; rw [FiniteField.pow_card] }
+  obtain ⟨σ, hσ⟩ := Ideal.Quotient.stabilizerHom_surjective G P Q l
+  refine ⟨σ, fun x => ?_⟩
+  rw [← Ideal.Quotient.eq]; rw [Nat.card_eq_fintype_card]; rw [hk]
+  exact DFunLike.congr_fun hσ (Ideal.Quotient.mk Q x)
 
 Depends on / 依赖: Algebra, Algebra.IsInvariant.isIntegral, CharP.exists, CharP.of_ringHom_of_ne_zero, ExpChar, Finite, Finite.isField_of_domain, FiniteField, FiniteField.card, Ideal.Quotient.maximal_of_isField, Ideal.algebraMap_quotient_injective, IsInvariant, IsMaximal, Q.IsMaximal, Q.under, Quotient, algebraMap, algebraMap_quotient_injective, hp.ne_zero, isField_of_domain
 -/
@@ -670,7 +730,8 @@ lemma exists_primesOver_isConj
     Algebra.IsInvariant.exists_smul_of_under_eq R S G _ _ (hQ₂.over.symm.trans Q'.2.2.over)
   choose τ hτ using this
   obtain ⟨σ, hσ⟩ := exists_of_isInvariant R G Q
-  refine ⟨fun Q' => τ Q' * σ 
+  refine ⟨fun Q' => τ Q' * σ * (τ Q')⁻¹, fun Q' => hτ Q' ▸ hσ.conj (τ Q'), fun Q₁ Q₂ =>
+    .trans (.symm (isConj_iff.mpr ⟨τ Q₁, rfl⟩)) (isConj_iff.mpr ⟨τ Q₂, rfl⟩)⟩
 
 中文:
 引理 存在_primesOver_isConj
@@ -681,7 +742,8 @@ lemma exists_primesOver_isConj
     Algebra.IsInvariant.exists_smul_of_under_eq R S G _ _ (hQ₂.over.symm.trans Q'.2.2.over)
   choose τ hτ using this
   obtain ⟨σ, hσ⟩ := exists_of_isInvariant R G Q
-  refine ⟨fun Q' => τ Q' * σ 
+  refine ⟨fun Q' => τ Q' * σ * (τ Q')⁻¹, fun Q' => hτ Q' ▸ hσ.conj (τ Q'), fun Q₁ Q₂ =>
+    .trans (.symm (isConj_iff.mpr ⟨τ Q₁, rfl⟩)) (isConj_iff.mpr ⟨τ Q₂, rfl⟩)⟩
 
 Depends on / 依赖: Algebra, Algebra.IsInvariant.exists_smul_of_under_eq, Ideal.primesOver, IsInvariant, exists_of_isInvariant, exists_smul_of_under_eq, isConj_iff, isConj_iff.mpr, over.symm.trans, primesOver
 -/
@@ -776,7 +838,7 @@ lemma _root_.isConj_arithFrobAt
     (exists_primesOver_isConj S G P ⟨⟨Q, ‹_›, ⟨h₁⟩⟩, ‹Finite (S ⧸ Q)›⟩).choose_spec.2 ⟨Q, ‹_›, ⟨h₁⟩⟩
       ⟨Q', ‹_›, ⟨h₂⟩⟩
   · subst h₁; rfl
-  · subst h₂;
+  · subst h₂; rfl
 
 中文:
 引理 _root_.isConj_arithFrobAt
@@ -787,7 +849,7 @@ lemma _root_.isConj_arithFrobAt
     (exists_primesOver_isConj S G P ⟨⟨Q, ‹_›, ⟨h₁⟩⟩, ‹Finite (S ⧸ Q)›⟩).choose_spec.2 ⟨Q, ‹_›, ⟨h₁⟩⟩
       ⟨Q', ‹_›, ⟨h₂⟩⟩
   · subst h₁; rfl
-  · subst h₂;
+  · subst h₂; rfl
 
 Depends on / 依赖: Finite, IsPrime, P.IsPrime, Q.under, choose_spec, convert, exists_primesOver_isConj
 -/

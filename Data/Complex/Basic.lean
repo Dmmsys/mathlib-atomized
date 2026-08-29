@@ -1539,7 +1539,12 @@ instance addCommGroup
   nsmul_zero := by intros; ext <;> simp [smul_re, smul_im]
   nsmul_succ := by intros; ext <;> simp [smul_re, smul_im] <;> ring
   zsmul_succ' := by intros; ext <;> simp [smul_re, smul_im] <;> ring
-  zsmul_neg' := by intros; ext <;> simp [smul_re, smul_im] <;
+  zsmul_neg' := by intros; ext <;> simp [smul_re, smul_im] <;> ring
+  add_assoc := by intros; ext <;> simp <;> ring
+  zero_add := by intros; ext <;> simp
+  add_zero := by intros; ext <;> simp
+  add_comm := by intros; ext <;> simp <;> ring
+  neg_add_cancel := by intros; ext <;> simp
 
 中文:
 实例 addCommGroup
@@ -1548,7 +1553,12 @@ instance addCommGroup
   nsmul_zero := by intros; ext <;> simp [smul_re, smul_im]
   nsmul_succ := by intros; ext <;> simp [smul_re, smul_im] <;> ring
   zsmul_succ' := by intros; ext <;> simp [smul_re, smul_im] <;> ring
-  zsmul_neg' := by intros; ext <;> simp [smul_re, smul_im] <;
+  zsmul_neg' := by intros; ext <;> simp [smul_re, smul_im] <;> ring
+  add_assoc := by intros; ext <;> simp <;> ring
+  zero_add := by intros; ext <;> simp
+  add_zero := by intros; ext <;> simp
+  add_comm := by intros; ext <;> simp <;> ring
+  neg_add_cancel := by intros; ext <;> simp
 
 Depends on / 依赖: add_assoc, add_comm, add_zero, intros, neg_add_cancel, nsmul_succ, nsmul_zero, smul_im, smul_re, zero_add, zsmul_neg, zsmul_succ
 -/
@@ -1960,7 +1970,12 @@ instance commRing
     add_comm := by intros; ext <;> simp <;> ring
     left_distrib := by intros; ext <;> simp [mul_re, mul_im] <;> ring
     right_distrib := by intros; ext <;> simp [mul_re, mul_im] <;> ring
-    zero_mul := by intros; ext <;> sim
+    zero_mul := by intros; ext <;> simp
+    mul_zero := by intros; ext <;> simp
+    mul_assoc := by intros; ext <;> simp <;> ring
+    one_mul := by intros; ext <;> simp
+    mul_one := by intros; ext <;> simp
+    mul_comm := by intros; ext <;> simp <;> ring }
 
 中文:
 实例 commRing
@@ -1970,7 +1985,12 @@ instance commRing
     add_comm := by intros; ext <;> simp <;> ring
     left_distrib := by intros; ext <;> simp [mul_re, mul_im] <;> ring
     right_distrib := by intros; ext <;> simp [mul_re, mul_im] <;> ring
-    zero_mul := by intros; ext <;> sim
+    zero_mul := by intros; ext <;> simp
+    mul_zero := by intros; ext <;> simp
+    mul_assoc := by intros; ext <;> simp <;> ring
+    one_mul := by intros; ext <;> simp
+    mul_one := by intros; ext <;> simp
+    mul_comm := by intros; ext <;> simp <;> ring }
 
 Depends on / 依赖: addGroupWithOne, add_comm, intros, left_distrib, mul_assoc, mul_comm, mul_im, mul_one, mul_re, mul_zero, npowRec, one_mul, right_distrib, zero_mul
 -/
@@ -3785,7 +3805,10 @@ instance instField
   qsmul := (· • ·)
   nnratCast_def q := by ext <;> simp [NNRat.cast_def, div_re, div_im, mul_div_mul_comm]
   ratCast_def q := by ext <;> simp [Rat.cast_def, div_re, div_im, mul_div_mul_comm]
-nnqsmul_def n z := Complex.ext_if
+nnqsmul_def n z := Complex.ext_iff.2 by simp [NNRat.smul_def, smul_re, smul_im]
+qsmul_def n z := Complex.ext_iff.2 by simp [Rat.smul_def, smul_re, smul_im]
+
+@[simp, norm_cast]
 
 中文:
 实例 instField
@@ -3796,7 +3819,10 @@ nnqsmul_def n z := Complex.ext_if
   qsmul := (· • ·)
   nnratCast_def q := by ext <;> simp [NNRat.cast_def, div_re, div_im, mul_div_mul_comm]
   ratCast_def q := by ext <;> simp [Rat.cast_def, div_re, div_im, mul_div_mul_comm]
-nnqsmul_def n z := Complex.ext_if
+nnqsmul_def n z := Complex.ext_iff.2 by simp [NNRat.smul_def, smul_re, smul_im]
+qsmul_def n z := Complex.ext_iff.2 by simp [Rat.smul_def, smul_re, smul_im]
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Complex.mul_inv_cancel, mul_inv_cancel
 -/
@@ -4601,7 +4627,8 @@ lemma verticalSegment_eq
   · intro hx
     simp only [equivRealProd_apply, singleton_prod, mem_image, Prod.mk.injEq,
       exists_eq_right_right, mem_preimage] at hx
-    o
+    obtain ⟨x₁, hx₁, hx₁', hx₁''⟩ := hx
+    refine ⟨x.im, x₁, by simp⟩
 
 中文:
 引理 verticalSegment_eq
@@ -4616,7 +4643,8 @@ lemma verticalSegment_eq
   · intro hx
     simp only [equivRealProd_apply, singleton_prod, mem_image, Prod.mk.injEq,
       exists_eq_right_right, mem_preimage] at hx
-    o
+    obtain ⟨x₁, hx₁, hx₁', hx₁''⟩ := hx
+    refine ⟨x.im, x₁, by simp⟩
 
 Depends on / 依赖: Prod.mk.injEq, equivRealProd_apply, exists_eq_right_right, mem_image, mem_preimage, mem_prod, preimage_equivRealProd_prod, singleton_prod, x.im
 -/

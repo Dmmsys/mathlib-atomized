@@ -144,7 +144,9 @@ lemma IsFlat.iInter
   refine ⟨fun I X hI hIX => subset_iInter fun i => ?_,
     (iInter_subset _ (Classical.arbitrary _)).trans (hFs _).subset_ground⟩
   obtain ⟨J, hIJ, hJ⟩ := hI.indep.subset_isBasis_of_subset (hI.subset.trans (iInter_subset _ i))
-  refine subset_union_right.trans ((hFs i).1 (X := Fs i union X) hIJ ?
+  refine subset_union_right.trans ((hFs i).1 (X := Fs i union X) hIJ ?_)
+  convert! hIJ.isBasis_union (hIX.isBasis_union_of_subset hIJ.indep hJ) using 1
+  rw [← union_assoc]; rw [union_eq_self_of_subset_right hIJ.subset]
 
 中文:
 引理 是平坦.i整数er
@@ -153,7 +155,9 @@ lemma IsFlat.iInter
   refine ⟨fun I X hI hIX => subset_iInter fun i => ?_,
     (iInter_subset _ (Classical.arbitrary _)).trans (hFs _).subset_ground⟩
   obtain ⟨J, hIJ, hJ⟩ := hI.indep.subset_isBasis_of_subset (hI.subset.trans (iInter_subset _ i))
-  refine subset_union_right.trans ((hFs i).1 (X := Fs i union X) hIJ ?
+  refine subset_union_right.trans ((hFs i).1 (X := Fs i union X) hIJ ?_)
+  convert! hIJ.isBasis_union (hIX.isBasis_union_of_subset hIJ.indep hJ) using 1
+  rw [← union_assoc]; rw [union_eq_self_of_subset_right hIJ.subset]
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, convert, hI.indep.subset_isBasis_of_subset, hI.subset.trans, hIJ.indep, hIJ.isBasis_union, hIJ.subset, hIX.isBasis_union_of_subset, iInter_subset, isBasis_union, isBasis_union_of_subset, subset, subset_ground, subset_iInter, subset_isBasis_of_subset, subset_union_right, subset_union_right.trans, union_assoc
 -/
@@ -329,7 +333,10 @@ lemma closure_eq_subtypeClosure
   suffices forall (x : α), (forall (t : Set α), M.IsFlat t -> X inter M.E subseteq t -> x in t) ↔
     (x in M.E ∧ forall a subseteq M.E, X inter M.E subseteq a -> M.IsFlat a -> x in a) by
     simpa [closure, subtypeClosure, Set.ext_iff]
-  exact fun x => ⟨fun h => ⟨h _ M.ground_isFlat inter_subset
+  exact fun x => ⟨fun h => ⟨h _ M.ground_isFlat inter_subset_right, fun F _ hXF hF => h F hF hXF⟩,
+    fun ⟨_, h⟩ F hF hXF => h F hF.subset_ground hXF hF⟩
+
+@[aesop unsafe 10% (rule_sets := [Matroid])]
 
 中文:
 引理 closure_eq_subtypeClosure
@@ -338,7 +345,10 @@ lemma closure_eq_subtypeClosure
   suffices forall (x : α), (forall (t : Set α), M.IsFlat t -> X inter M.E subseteq t -> x in t) ↔
     (x in M.E ∧ forall a subseteq M.E, X inter M.E subseteq a -> M.IsFlat a -> x in a) by
     simpa [closure, subtypeClosure, Set.ext_iff]
-  exact fun x => ⟨fun h => ⟨h _ M.ground_isFlat inter_subset
+  exact fun x => ⟨fun h => ⟨h _ M.ground_isFlat inter_subset_right, fun F _ hXF hF => h F hF hXF⟩,
+    fun ⟨_, h⟩ F hF hXF => h F hF.subset_ground hXF hF⟩
+
+@[aesop unsafe 10% (rule_sets := [Matroid])]
 
 Depends on / 依赖: IsFlat, M.IsFlat, M.ground_isFlat, Set.ext_iff, closure, ext_iff, ground_isFlat, hF.subset_ground, inter_subset_right, subset_ground, subseteq, subtypeClosure
 -/
@@ -1202,7 +1212,18 @@ lemma Indep.closure_eq_setOfPred_isBasis_insert
   have hIF : M.IsBasis I F := hI.isBasis_setOfPred_insert_isBasis
   have hF : M.IsFlat F := by
     refine ⟨fun J X hJF hJX e heX => show M.IsBasis _ _ from ?_, hIF.subset_ground⟩
-    exact (hIF.isBasis_of_isBasis_of_subset_of_subset (hJX.isBasis_union hJF
+    exact (hIF.isBasis_of_isBasis_of_subset_of_subset (hJX.isBasis_union hJF) hJF.subset
+      (hIF.subset.trans subset_union_right)).isBasis_subset (subset_insert _ _)
+      (insert_subset (Or.inl heX) (hIF.subset.trans subset_union_right))
+  rw [subset_antisymm_iff]; rw [closure_def]; rw [subset_sInter_iff]; rw [and_iff_right (sInter_subset_of_mem _)]
+  · rintro F' ⟨hF', hIF'⟩ e (he : M.IsBasis I (insert e I))
+    rw [inter_eq_left.mpr (hIF.subset.trans hIF.subset_ground)] at hIF'
+    obtain ⟨J, hJ, hIJ⟩ := hI.subset_isBasis_of_subset hIF' hF'.2
+    exact (hF'.1 hJ (he.isBasis_union_of_subset hJ.indep hIJ)) (Or.inr (mem_insert _ _))
+  exact ⟨hF, inter_subset_left.trans hIF.subset⟩
+
+@[deprecated (since := "2026-07-09")]
+alias Indep.closure_eq_setOf_isBasis_insert := Indep.closure_eq_setOfPred_isBasis_insert
 
 中文:
 引理 Indep.closure_eq_setOfPred_isBasis_insert
@@ -1212,7 +1233,18 @@ lemma Indep.closure_eq_setOfPred_isBasis_insert
   have hIF : M.IsBasis I F := hI.isBasis_setOfPred_insert_isBasis
   have hF : M.IsFlat F := by
     refine ⟨fun J X hJF hJX e heX => show M.IsBasis _ _ from ?_, hIF.subset_ground⟩
-    exact (hIF.isBasis_of_isBasis_of_subset_of_subset (hJX.isBasis_union hJF
+    exact (hIF.isBasis_of_isBasis_of_subset_of_subset (hJX.isBasis_union hJF) hJF.subset
+      (hIF.subset.trans subset_union_right)).isBasis_subset (subset_insert _ _)
+      (insert_subset (Or.inl heX) (hIF.subset.trans subset_union_right))
+  rw [subset_antisymm_iff]; rw [closure_def]; rw [subset_sInter_iff]; rw [and_iff_right (sInter_subset_of_mem _)]
+  · rintro F' ⟨hF', hIF'⟩ e (he : M.IsBasis I (insert e I))
+    rw [inter_eq_left.mpr (hIF.subset.trans hIF.subset_ground)] at hIF'
+    obtain ⟨J, hJ, hIJ⟩ := hI.subset_isBasis_of_subset hIF' hF'.2
+    exact (hF'.1 hJ (he.isBasis_union_of_subset hJ.indep hIJ)) (Or.inr (mem_insert _ _))
+  exact ⟨hF, inter_subset_left.trans hIF.subset⟩
+
+@[deprecated (since := "2026-07-09")]
+alias Indep.closure_eq_setOf_isBasis_insert := Indep.closure_eq_setOfPred_isBasis_insert
 
 Depends on / 依赖: IsBasis, IsFlat, M.IsBasis, M.IsFlat, Or.inl, closure_def, hI.isBasis_setOfPred_insert_isBasis, hIF.isBasis_of_isBasis_of_subset_of_subset, hIF.subset.trans, hIF.subset_ground, hJF.subset, hJX.isBasis_union, insert, insert_subset, isBasis_of_isBasis_of_subset_of_subset, isBasis_setOfPred_insert_isBasis, isBasis_subset, isBasis_union, subset, subset_antisymm_iff
 -/
@@ -1885,7 +1917,28 @@ lemma Indep.closure_sInter_eq_biInter_closure_of_forall_subset
   have hiI := hI.subset hiX
   refine ⟨ fun X hX => M.closure_subset_closure (sInter_subset_of_mem hX),
     fun e he => by_contra fun he' => ?_⟩
-  rw 
+  rw [mem_iInter₂] at he
+  have heEI : e in M.E \ I := by
+    refine ⟨M.closure_subset_ground _ (he _ hne.some_mem), fun heI => he' ?_⟩
+    refine mem_closure_of_mem _ (fun X hX' => ?_) hiI.subset_ground
+    rw [← hI.closure_inter_eq_self_of_subset (hIs X hX')]
+    exact ⟨he X hX', heI⟩
+  rw [hiI.notMem_closure_iff_of_notMem (notMem_subset hiX heEI.2)] at he'
+  obtain ⟨J, hJI, heJ⟩ := he'.subset_isBasis_of_subset (insert_subset_insert hiX)
+    (insert_subset heEI.1 hI.subset_ground)
+  have hIb : M.IsBasis I (insert e I) := by
+    rw [hI.insert_isBasis_iff_mem_closure]
+    exact (M.closure_subset_closure (hIs _ hne.some_mem)) (he _ hne.some_mem)
+  obtain ⟨f, hfIJ, hfb⟩ := hJI.exchange hIb ⟨heJ (mem_insert e _), heEI.2⟩
+  obtain rfl := hI.eq_of_isBasis (hfb.isBasis_subset (insert_subset hfIJ.1
+    (by (rw [sdiff_subset_iff, singleton_union]; exact hJI.subset))) (subset_insert _ _))
+  refine hfIJ.2 (heJ (mem_insert_of_mem _ fun X hX' => by_contra fun hfX => ?_))
+  obtain (hd | heX) := ((hI.subset (hIs X hX')).mem_closure_iff).mp (he _ hX')
+  · refine (hJI.indep.subset (insert_subset (heJ (mem_insert _ _)) ?_)).not_dep hd
+    specialize hIs _ hX'
+    rw [← singleton_union]; rw [← sdiff_subset_iff]; rw [sdiff_singleton_eq_self hfX] at hIs
+    exact hIs.trans sdiff_subset
+  exact heEI.2 (hIs _ hX' heX)
 
 中文:
 引理 Indep.closure_s整数er_eq_bi整数er_closure_of_对任意_subset
@@ -1896,7 +1949,28 @@ lemma Indep.closure_sInter_eq_biInter_closure_of_forall_subset
   have hiI := hI.subset hiX
   refine ⟨ fun X hX => M.closure_subset_closure (sInter_subset_of_mem hX),
     fun e he => by_contra fun he' => ?_⟩
-  rw 
+  rw [mem_iInter₂] at he
+  have heEI : e in M.E \ I := by
+    refine ⟨M.closure_subset_ground _ (he _ hne.some_mem), fun heI => he' ?_⟩
+    refine mem_closure_of_mem _ (fun X hX' => ?_) hiI.subset_ground
+    rw [← hI.closure_inter_eq_self_of_subset (hIs X hX')]
+    exact ⟨he X hX', heI⟩
+  rw [hiI.notMem_closure_iff_of_notMem (notMem_subset hiX heEI.2)] at he'
+  obtain ⟨J, hJI, heJ⟩ := he'.subset_isBasis_of_subset (insert_subset_insert hiX)
+    (insert_subset heEI.1 hI.subset_ground)
+  have hIb : M.IsBasis I (insert e I) := by
+    rw [hI.insert_isBasis_iff_mem_closure]
+    exact (M.closure_subset_closure (hIs _ hne.some_mem)) (he _ hne.some_mem)
+  obtain ⟨f, hfIJ, hfb⟩ := hJI.exchange hIb ⟨heJ (mem_insert e _), heEI.2⟩
+  obtain rfl := hI.eq_of_isBasis (hfb.isBasis_subset (insert_subset hfIJ.1
+    (by (rw [sdiff_subset_iff, singleton_union]; exact hJI.subset))) (subset_insert _ _))
+  refine hfIJ.2 (heJ (mem_insert_of_mem _ fun X hX' => by_contra fun hfX => ?_))
+  obtain (hd | heX) := ((hI.subset (hIs X hX')).mem_closure_iff).mp (he _ hX')
+  · refine (hJI.indep.subset (insert_subset (heJ (mem_insert _ _)) ?_)).not_dep hd
+    specialize hIs _ hX'
+    rw [← singleton_union]; rw [← sdiff_subset_iff]; rw [sdiff_singleton_eq_self hfX] at hIs
+    exact hIs.trans sdiff_subset
+  exact heEI.2 (hIs _ hX' heX)
 
 Depends on / 依赖: M.closure_subset_closure, M.closure_subset_ground, closure_inter_eq, closure_subset_closure, closure_subset_ground, hI.closure_inter_eq, hI.subset, hiI.subset_ground, hne.some_mem, mem_closure_of_mem, sInter_subset_of_mem, some_mem, subset, subset_antisymm_iff, subset_ground, subseteq
 -/
@@ -2064,7 +2138,7 @@ lemma Indep.inter_isBasis_biInter
   simp_rw [← biInter_inter hA,
   closure_biInter_eq_biInter_closure_of_biUnion_indep hA (I := fun i => (X i) inter I)
       (hI.subset (by simp)), subset_iInter_iff]
-  exact fun i hiA => (biInter_subset_of_mem hiA
+  exact fun i hiA => (biInter_subset_of_mem hiA).trans (h i hiA).subset_closure
 
 中文:
 引理 Indep.inter_isBasis_bi整数er
@@ -2074,7 +2148,7 @@ lemma Indep.inter_isBasis_biInter
   simp_rw [← biInter_inter hA,
   closure_biInter_eq_biInter_closure_of_biUnion_indep hA (I := fun i => (X i) inter I)
       (hI.subset (by simp)), subset_iInter_iff]
-  exact fun i hiA => (biInter_subset_of_mem hiA
+  exact fun i hiA => (biInter_subset_of_mem hiA).trans (h i hiA).subset_closure
 
 Depends on / 依赖: biInter_inter, biInter_subset_of_mem, closure_biInter_eq_biInter_closure_of_biUnion_indep, hI.inter_left, hI.subset, inter_left, inter_subset_left, isBasis_of_subset_of_subset_closure, simp_rw, subset, subset_closure, subset_iInter_iff
 -/
@@ -2425,7 +2499,10 @@ lemma indep_iff_forall_notMem_closure_sdiff
   convert! hJ.indep
   refine hJ.subset.antisymm' (fun e he => by_contra fun heJ => h he ?_)
   exact mem_of_mem_of_subset
-    (hJ.subset_closure he) (M
+    (hJ.subset_closure he) (M.closure_subset_closure (subset_sdiff_singleton hJ.subset heJ))
+
+@[deprecated (since := "2026-06-03")]
+alias indep_iff_forall_notMem_closure_diff := indep_iff_forall_notMem_closure_sdiff
 
 中文:
 引理 indep_iff_对任意_notMem_closure_sdiff
@@ -2437,7 +2514,10 @@ lemma indep_iff_forall_notMem_closure_sdiff
   convert! hJ.indep
   refine hJ.subset.antisymm' (fun e he => by_contra fun heJ => h he ?_)
   exact mem_of_mem_of_subset
-    (hJ.subset_closure he) (M
+    (hJ.subset_closure he) (M.closure_subset_closure (subset_sdiff_singleton hJ.subset heJ))
+
+@[deprecated (since := "2026-06-03")]
+alias indep_iff_forall_notMem_closure_diff := indep_iff_forall_notMem_closure_sdiff
 
 Depends on / 依赖: M.Indep, M.closure, M.closure_subset_closure, M.exists_isBasis, aesop_mat, antisymm, closure, closure_inter_eq_self_of_subset, closure_subset_closure, convert, exists_isBasis, h.closure_inter_eq_self_of_subset, hJ.indep, hJ.subset, hJ.subset.antisymm, hJ.subset_closure, mem_of_mem_of_subset, sdiff_subset, subset, subset_closure
 -/
@@ -2525,7 +2605,10 @@ lemma Indep.closure_insert_sdiff_eq_of_mem_closure
     exacts [hf, M.subset_closure _ hI.subset_ground haI]
   · intro a haI
     obtain rfl | ne := eq_or_ne a e
-    exacts [he,
+    exacts [he, M.mem_closure_of_mem' ⟨.inr haI, ne⟩ (hI.subset_ground haI)]
+
+@[deprecated (since := "2026-06-03")]
+alias Indep.closure_insert_diff_eq_of_mem_closure := Indep.closure_insert_sdiff_eq_of_mem_closure
 
 中文:
 引理 Indep.closure_insert_sdiff_eq_of_mem_closure
@@ -2537,7 +2620,10 @@ lemma Indep.closure_insert_sdiff_eq_of_mem_closure
     exacts [hf, M.subset_closure _ hI.subset_ground haI]
   · intro a haI
     obtain rfl | ne := eq_or_ne a e
-    exacts [he,
+    exacts [he, M.mem_closure_of_mem' ⟨.inr haI, ne⟩ (hI.subset_ground haI)]
+
+@[deprecated (since := "2026-06-03")]
+alias Indep.closure_insert_diff_eq_of_mem_closure := Indep.closure_insert_sdiff_eq_of_mem_closure
 
 Depends on / 依赖: M.mem_closure_of_mem, M.subset_closure, closure_subset_closure_of_subset_closure, eq_or_ne, exacts, hI.subset_ground, mem_closure_of_mem, mem_insert_iff, mem_sdiff, mem_singleton_iff, subset_antisymm, subset_closure, subset_def, subset_ground
 -/
@@ -2566,7 +2652,10 @@ lemma Indep.indep_insert_sdiff_of_mem_closure
   · exact hI.subset (by simp)
   rw [Indep.insert_sdiff_indep_iff (hI.subset (sdiff_subset ..)) heI]
   refine .inl ⟨mem_ground_of_mem_closure hfI, fun h => hI.notMem_closure_sdiff_of_mem heI ?_⟩
-  exact closure_insert_eq_of_mem_closure 
+  exact closure_insert_eq_of_mem_closure h ▸ M.closure_subset_closure (by intro; simp_all) he
+
+@[deprecated (since := "2026-06-03")]
+alias Indep.indep_insert_diff_of_mem_closure := Indep.indep_insert_sdiff_of_mem_closure
 
 中文:
 引理 Indep.indep_insert_sdiff_of_mem_closure
@@ -2577,7 +2666,10 @@ lemma Indep.indep_insert_sdiff_of_mem_closure
   · exact hI.subset (by simp)
   rw [Indep.insert_sdiff_indep_iff (hI.subset (sdiff_subset ..)) heI]
   refine .inl ⟨mem_ground_of_mem_closure hfI, fun h => hI.notMem_closure_sdiff_of_mem heI ?_⟩
-  exact closure_insert_eq_of_mem_closure 
+  exact closure_insert_eq_of_mem_closure h ▸ M.closure_subset_closure (by intro; simp_all) he
+
+@[deprecated (since := "2026-06-03")]
+alias Indep.indep_insert_diff_of_mem_closure := Indep.indep_insert_sdiff_of_mem_closure
 
 Depends on / 依赖: Indep.insert_sdiff_indep_iff, M.closure_subset_closure, closure_insert_eq_of_mem_closure, closure_subset_closure, hI.notMem_closure_sdiff_of_mem, hI.subset, insert_sdiff_indep_iff, mem_ground_of_mem_closure, mem_insert_iff, notMem_closure_sdiff_of_mem, sdiff_subset, subset
 -/
@@ -2607,7 +2699,7 @@ lemma IsBasis.isBasis_insert_sdiff_of_mem_closure
     (insert_subset hfX hB.2.2)⟩
 
 @[deprecated (since := "2026-06-03")]
-alias IsB
+alias IsBasis.isBasis_insert_diff_of_mem_closure := IsBasis.isBasis_insert_sdiff_of_mem_closure
 
 中文:
 引理 是基.isBasis_insert_sdiff_of_mem_closure
@@ -2619,7 +2711,7 @@ alias IsB
     (insert_subset hfX hB.2.2)⟩
 
 @[deprecated (since := "2026-06-03")]
-alias IsB
+alias IsBasis.isBasis_insert_diff_of_mem_closure := IsBasis.isBasis_insert_sdiff_of_mem_closure
 
 Depends on / 依赖: closure_insert_sdiff_eq_of_mem_closure, indep_insert_sdiff_of_mem_closure, insert_subset, isBasis_iff_indep_closure, sdiff_subset, sdiff_subset.trans, trans_eq
 -/
@@ -2647,7 +2739,10 @@ lemma IsBase.isBase_insert_sdiff_of_mem_closure
   obtain rfl | heB := heB
   · simpa [show e ∉ B from fun h => hf (hB.1.1.2 h)] using hB
   rw [← closure_inter_ground] at he
-  cases hB.indep.notMem_closure_sdiff_of_mem heB (M.c
+  cases hB.indep.notMem_closure_sdiff_of_mem heB (M.closure_subset_closure (by intro; aesop) he)
+
+@[deprecated (since := "2026-06-03")]
+alias IsBase.isBase_insert_diff_of_mem_closure := IsBase.isBase_insert_sdiff_of_mem_closure
 
 中文:
 引理 IsBase.isBase_insert_sdiff_of_mem_closure
@@ -2659,7 +2754,10 @@ lemma IsBase.isBase_insert_sdiff_of_mem_closure
   obtain rfl | heB := heB
   · simpa [show e ∉ B from fun h => hf (hB.1.1.2 h)] using hB
   rw [← closure_inter_ground] at he
-  cases hB.indep.notMem_closure_sdiff_of_mem heB (M.c
+  cases hB.indep.notMem_closure_sdiff_of_mem heB (M.closure_subset_closure (by intro; aesop) he)
+
+@[deprecated (since := "2026-06-03")]
+alias IsBase.isBase_insert_diff_of_mem_closure := IsBase.isBase_insert_sdiff_of_mem_closure
 
 Depends on / 依赖: M.closure_subset_closure, closure_inter_ground, closure_subset_closure, hB.indep.notMem_closure_sdiff_of_mem, hB.isBasis_insert_sdiff_of_mem_closure, isBasis_ground_iff, isBasis_insert_sdiff_of_mem_closure, notMem_closure_sdiff_of_mem
 -/
@@ -2687,7 +2785,12 @@ lemma indep_iff_forall_closure_sdiff_ne
   refine ⟨fun ⟨hIE, h⟩ e heI h_eq => h e heI (h_eq.symm.subset (M.mem_closure_of_mem heI)),
     fun h => ⟨fun e heI => by_contra fun heE => h heI ?_,fun e heI hin => h heI ?_⟩⟩
   · rw [← closure_inter_ground, inter_comm, inter_sdiff_distrib_left,
-    
+      inter_singleton_eq_empty.mpr heE, sdiff_empty, inter_comm, closure_inter_ground]
+  nth_rw 2 [show I = insert e (I \ {e}) by simp [heI]]
+  rw [← closure_insert_closure_eq_closure_insert]; rw [insert_eq_of_mem hin]; rw [closure_closure]
+
+@[deprecated (since := "2026-06-03")]
+alias indep_iff_forall_closure_diff_ne := indep_iff_forall_closure_sdiff_ne
 
 中文:
 引理 indep_iff_对任意_closure_sdiff_ne
@@ -2696,7 +2799,12 @@ lemma indep_iff_forall_closure_sdiff_ne
   refine ⟨fun ⟨hIE, h⟩ e heI h_eq => h e heI (h_eq.symm.subset (M.mem_closure_of_mem heI)),
     fun h => ⟨fun e heI => by_contra fun heE => h heI ?_,fun e heI hin => h heI ?_⟩⟩
   · rw [← closure_inter_ground, inter_comm, inter_sdiff_distrib_left,
-    
+      inter_singleton_eq_empty.mpr heE, sdiff_empty, inter_comm, closure_inter_ground]
+  nth_rw 2 [show I = insert e (I \ {e}) by simp [heI]]
+  rw [← closure_insert_closure_eq_closure_insert]; rw [insert_eq_of_mem hin]; rw [closure_closure]
+
+@[deprecated (since := "2026-06-03")]
+alias indep_iff_forall_closure_diff_ne := indep_iff_forall_closure_sdiff_ne
 
 Depends on / 依赖: M.mem_closure_of_mem, closure_insert_closure_eq_closure_insert, closure_inter_ground, h_eq, h_eq.symm.subset, indep_iff_forall_notMem_closure_sdiff, insert, insert_eq_of_mem, inter_comm, inter_sdiff_distrib_left, inter_singleton_eq_empty, inter_singleton_eq_empty.mpr, mem_closure_of_mem, nth_rw, sdiff_empty, subset
 -/
@@ -2723,7 +2831,16 @@ lemma Indep.union_indep_iff_forall_notMem_closure_right
   refine ⟨fun h e heJ hecl => h.notMem_closure_sdiff_of_mem (.inr heJ.1) ?_, fun h => ?_⟩
   · rwa [union_sdiff_distrib, sdiff_singleton_eq_self heJ.2]
   obtain ⟨K, hKIJ, hK⟩ := hI.subset_isBasis_of_subset (show I subseteq I union J from subset_union_left)
-  obtain rfl | hssu := hKIJ.subset.eq_or_
+  obtain rfl | hssu := hKIJ.subset.eq_or_ssubset
+  · exact hKIJ.indep
+  exfalso
+  obtain ⟨e, heI, heK⟩ := exists_of_ssubset hssu
+  have heJI : e in J \ I := by
+    rw [← union_sdiff_right]; rw [union_comm]
+    exact ⟨heI, notMem_subset hK heK⟩
+  refine h _ heJI ?_
+  rw [← sdiff_singleton_eq_self heJI.2]; rw [← union_sdiff_distrib]
+exact M.closure_subset_closure (subset_sdiff_singleton hKIJ.subset heK) hKIJ.subset_closure heI
 
 中文:
 引理 Indep.union_indep_iff_对任意_notMem_closure_right
@@ -2732,7 +2849,16 @@ lemma Indep.union_indep_iff_forall_notMem_closure_right
   refine ⟨fun h e heJ hecl => h.notMem_closure_sdiff_of_mem (.inr heJ.1) ?_, fun h => ?_⟩
   · rwa [union_sdiff_distrib, sdiff_singleton_eq_self heJ.2]
   obtain ⟨K, hKIJ, hK⟩ := hI.subset_isBasis_of_subset (show I subseteq I union J from subset_union_left)
-  obtain rfl | hssu := hKIJ.subset.eq_or_
+  obtain rfl | hssu := hKIJ.subset.eq_or_ssubset
+  · exact hKIJ.indep
+  exfalso
+  obtain ⟨e, heI, heK⟩ := exists_of_ssubset hssu
+  have heJI : e in J \ I := by
+    rw [← union_sdiff_right]; rw [union_comm]
+    exact ⟨heI, notMem_subset hK heK⟩
+  refine h _ heJI ?_
+  rw [← sdiff_singleton_eq_self heJI.2]; rw [← union_sdiff_distrib]
+exact M.closure_subset_closure (subset_sdiff_singleton hKIJ.subset heK) hKIJ.subset_closure heI
 
 Depends on / 依赖: eq_or_ssubset, exists_of_ssubset, h.notMem_closure_sdiff_of_mem, hI.subset_isBasis_of_subset, hKIJ.indep, hKIJ.subset.eq_or_ssubset, notMem_closure_sdiff_of_mem, notMem_subset, sdiff_singleton_eq_self, subset, subset_isBasis_of_subset, subset_union_left, subseteq, union_comm, union_sdiff_distrib, union_sdiff_right
 -/
@@ -2812,7 +2938,8 @@ lemma indep_iff_forall_closure_ssubset_of_ssubset
     fun h => (indep_iff_forall_notMem_closure_sdiff hI).2 fun e heI hecl => ?_⟩
   refine (h (sdiff_singleton_ssubset.2 heI)).ne ?_
   rw [show I = insert e (I \ {e}) by simp [heI], ← closure_insert_closure_eq_closure_insert,
-    insert_eq_of_mem hecl
+    insert_eq_of_mem hecl]
+  simp
 
 中文:
 引理 indep_iff_对任意_closure_ssubset_of_ssubset
@@ -2822,7 +2949,8 @@ lemma indep_iff_forall_closure_ssubset_of_ssubset
     fun h => (indep_iff_forall_notMem_closure_sdiff hI).2 fun e heI hecl => ?_⟩
   refine (h (sdiff_singleton_ssubset.2 heI)).ne ?_
   rw [show I = insert e (I \ {e}) by simp [heI], ← closure_insert_closure_eq_closure_insert,
-    insert_eq_of_mem hecl
+    insert_eq_of_mem hecl]
+  simp
 
 Depends on / 依赖: M.Indep, M.closure, aesop_mat, closure, closure_insert_closure_eq_closure_insert, closure_ssubset_closure, h.closure_ssubset_closure, indep_iff_forall_notMem_closure_sdiff, insert, insert_eq_of_mem, sdiff_singleton_ssubset
 -/
@@ -2915,7 +3043,13 @@ lemma mem_closure_insert
     by_contra! hfE; rw [insert_inter_of_notMem hfE] at hef; exact he hef
   have heE : e in M.E := (M.closure_subset_ground _) hef
   rw [insert_inter_of_mem hfE] at hef; rw [insert_inter_of_mem heE]
-  obtain ⟨I, hI⟩ := M.exists_isBasis
+  obtain ⟨I, hI⟩ := M.exists_isBasis (X inter M.E)
+  rw [← hI.closure_eq_closure]; rw [hI.indep.notMem_closure_iff] at he
+  rw [← closure_insert_closure_eq_closure_insert]; rw [← hI.closure_eq_closure]; rw [closure_insert_closure_eq_closure_insert]; rw [he.1.mem_closure_iff] at *
+  rw [or_iff_not_imp_left]; rw [dep_iff]; rw [insert_comm]; rw [and_iff_left (insert_subset heE (insert_subset hfE hI.indep.subset_ground))]; rw [not_not]
+  intro h
+  rw [(h.subset (subset_insert _ _)).mem_closure_iff]; rw [or_iff_right (h.not_dep)]; rw [mem_insert_iff]; rw [or_iff_left he.2] at hef
+  subst hef; apply mem_insert
 
 中文:
 引理 mem_closure_insert
@@ -2926,7 +3060,13 @@ lemma mem_closure_insert
     by_contra! hfE; rw [insert_inter_of_notMem hfE] at hef; exact he hef
   have heE : e in M.E := (M.closure_subset_ground _) hef
   rw [insert_inter_of_mem hfE] at hef; rw [insert_inter_of_mem heE]
-  obtain ⟨I, hI⟩ := M.exists_isBasis
+  obtain ⟨I, hI⟩ := M.exists_isBasis (X inter M.E)
+  rw [← hI.closure_eq_closure]; rw [hI.indep.notMem_closure_iff] at he
+  rw [← closure_insert_closure_eq_closure_insert]; rw [← hI.closure_eq_closure]; rw [closure_insert_closure_eq_closure_insert]; rw [he.1.mem_closure_iff] at *
+  rw [or_iff_not_imp_left]; rw [dep_iff]; rw [insert_comm]; rw [and_iff_left (insert_subset heE (insert_subset hfE hI.indep.subset_ground))]; rw [not_not]
+  intro h
+  rw [(h.subset (subset_insert _ _)).mem_closure_iff]; rw [or_iff_right (h.not_dep)]; rw [mem_insert_iff]; rw [or_iff_left he.2] at hef
+  subst hef; apply mem_insert
 
 Depends on / 依赖: M.closure_subset_ground, M.exists_isBasis, closure_eq_closure, closure_insert_closure_eq_closure_insert, closure_inter_ground, closure_subset_ground, exists_isBasis, hI.closure_eq_closure, hI.indep.notMem_closure_iff, insert_inter_of_mem, insert_inter_of_notMem, notMem_closure_iff
 -/
@@ -2992,14 +3132,14 @@ lemma closure_insert_congr
   given: (he : e in M.closure (insert f X) \ M.closure X)
   proof: by
   have hf := closure_exchange he
-  rw [eq_comm]; rw [← closure_closure]; rw [← insert_eq_of_mem he.1]; rw [closure_insert_closure_eq_closure_insert]; rw [insert_comm]; rw [← closure_closure]; rw [← closure_insert_closure_eq_closure_insert]; rw [insert_eq_of_mem hf.1]; rw [closure_closure]; rw [cl
+  rw [eq_comm]; rw [← closure_closure]; rw [← insert_eq_of_mem he.1]; rw [closure_insert_closure_eq_closure_insert]; rw [insert_comm]; rw [← closure_closure]; rw [← closure_insert_closure_eq_closure_insert]; rw [insert_eq_of_mem hf.1]; rw [closure_closure]; rw [closure_closure]
 
 中文:
 引理 closure_insert_congr
   条件: (he : e in M.closure (insert f X) \ M.closure X)
   证明: by
   have hf := closure_exchange he
-  rw [eq_comm]; rw [← closure_closure]; rw [← insert_eq_of_mem he.1]; rw [closure_insert_closure_eq_closure_insert]; rw [insert_comm]; rw [← closure_closure]; rw [← closure_insert_closure_eq_closure_insert]; rw [insert_eq_of_mem hf.1]; rw [closure_closure]; rw [cl
+  rw [eq_comm]; rw [← closure_closure]; rw [← insert_eq_of_mem he.1]; rw [closure_insert_closure_eq_closure_insert]; rw [insert_comm]; rw [← closure_closure]; rw [← closure_insert_closure_eq_closure_insert]; rw [insert_eq_of_mem hf.1]; rw [closure_closure]; rw [closure_closure]
 
 Depends on / 依赖: closure_closure, closure_exchange, closure_insert_closure_eq_closure_insert, eq_comm, insert_comm, insert_eq_of_mem
 -/
@@ -3808,7 +3948,9 @@ lemma ext_spanning
     refine (em (S subseteq M.E)).elim (fun hSE => by rw [hsp _ hSE])
       (fun hSE => iff_of_false (fun h => hSE h.subset_ground)
       (fun h' => hSE (h'.subset_ground.trans h.symm.subset)))
-  rw [← dual_inj]; rw [ext_iff_indep]; rw [dual_g
+  rw [← dual_inj]; rw [ext_iff_indep]; rw [dual_ground]; rw [dual_ground]; rw [and_iff_right h]
+  intro I hIE
+  rw [← coindep_def]; rw [← coindep_def]; rw [coindep_iff_compl_spanning]; rw [coindep_iff_compl_spanning]; rw [hsp']; rw [h]
 
 中文:
 引理 ext_spanning
@@ -3819,7 +3961,9 @@ lemma ext_spanning
     refine (em (S subseteq M.E)).elim (fun hSE => by rw [hsp _ hSE])
       (fun hSE => iff_of_false (fun h => hSE h.subset_ground)
       (fun h' => hSE (h'.subset_ground.trans h.symm.subset)))
-  rw [← dual_inj]; rw [ext_iff_indep]; rw [dual_g
+  rw [← dual_inj]; rw [ext_iff_indep]; rw [dual_ground]; rw [dual_ground]; rw [and_iff_right h]
+  intro I hIE
+  rw [← coindep_def]; rw [← coindep_def]; rw [coindep_iff_compl_spanning]; rw [coindep_iff_compl_spanning]; rw [hsp']; rw [h]
 
 Depends on / 依赖: M.Spanning, Spanning, and_iff_right, coindep_def, coindep_iff_compl_spanning, dual_ground, dual_inj, ext_iff_indep, h.subset_ground, h.symm.subset, iff_of_false, subset, subset_ground, subset_ground.trans, subseteq
 -/
@@ -3923,7 +4067,11 @@ lemma restrict_closure_eq'
   obtain ⟨I, hI⟩ := (M ↾ R).exists_isBasis' X
   obtain ⟨hI', hIR⟩ := isBasis'_restrict_iff.1 hI
   ext e
-  rw [← hI.closure_eq_closure]; rw [← hI'.closure_eq_closure]; rw [hI.indep.mem_closure_iff']; rw [mem_union]; rw [mem_inter_iff]; rw [hI'.indep.mem_closure_iff']; rw [restrict_ground_eq]; rw [
+  rw [← hI.closure_eq_closure]; rw [← hI'.closure_eq_closure]; rw [hI.indep.mem_closure_iff']; rw [mem_union]; rw [mem_inter_iff]; rw [hI'.indep.mem_closure_iff']; rw [restrict_ground_eq]; rw [restrict_indep_iff]; rw [mem_sdiff]
+  by_cases he : M.Indep (insert e I)
+  · simp [he, and_comm, insert_subset_iff, hIR, (he.subset_ground (mem_insert ..)),
+      imp_or_left_iff_true]
+  tauto
 
 中文:
 引理 restrict_closure_eq'
@@ -3932,7 +4080,11 @@ lemma restrict_closure_eq'
   obtain ⟨I, hI⟩ := (M ↾ R).exists_isBasis' X
   obtain ⟨hI', hIR⟩ := isBasis'_restrict_iff.1 hI
   ext e
-  rw [← hI.closure_eq_closure]; rw [← hI'.closure_eq_closure]; rw [hI.indep.mem_closure_iff']; rw [mem_union]; rw [mem_inter_iff]; rw [hI'.indep.mem_closure_iff']; rw [restrict_ground_eq]; rw [
+  rw [← hI.closure_eq_closure]; rw [← hI'.closure_eq_closure]; rw [hI.indep.mem_closure_iff']; rw [mem_union]; rw [mem_inter_iff]; rw [hI'.indep.mem_closure_iff']; rw [restrict_ground_eq]; rw [restrict_indep_iff]; rw [mem_sdiff]
+  by_cases he : M.Indep (insert e I)
+  · simp [he, and_comm, insert_subset_iff, hIR, (he.subset_ground (mem_insert ..)),
+      imp_or_left_iff_true]
+  tauto
 -/
 @[simp] lemma restrict_closure_eq' (M : Matroid α) (X R : Set α) :
     (M ↾ R).closure X = (M.closure (X inter R) inter R) union (R \ M.E) := by
@@ -4106,7 +4258,13 @@ lemma comap_closure_eq
   obtain ⟨I, hI⟩ := (M.comap f).exists_isBasis' X
   obtain ⟨hI', hIinj, -⟩ := comap_isBasis'_iff.1 hI
   simp_rw [← hI.closure_eq_closure, ← hI'.closure_eq_closure, Set.ext_iff,
-    hI.indep.mem_clo
+    hI.indep.mem_closure_iff', comap_ground_eq, mem_preimage, hI'.indep.mem_closure_iff',
+    comap_indep_iff, and_imp, mem_image, and_congr_right_iff, ← image_insert_eq]
+  -- the lemma now easily follows by considering elements/non-elements of `I` separately.
+  intro x hxE
+  by_cases hxI : x in I
+  · simp [hxI, show exists y in I, f y = f x from ⟨x, hxI, rfl⟩]
+  simp [hxI, injOn_insert hxI, hIinj]
 
 中文:
 引理 comap_closure_eq
@@ -4116,7 +4274,13 @@ lemma comap_closure_eq
   obtain ⟨I, hI⟩ := (M.comap f).exists_isBasis' X
   obtain ⟨hI', hIinj, -⟩ := comap_isBasis'_iff.1 hI
   simp_rw [← hI.closure_eq_closure, ← hI'.closure_eq_closure, Set.ext_iff,
-    hI.indep.mem_clo
+    hI.indep.mem_closure_iff', comap_ground_eq, mem_preimage, hI'.indep.mem_closure_iff',
+    comap_indep_iff, and_imp, mem_image, and_congr_right_iff, ← image_insert_eq]
+  -- the lemma now easily follows by considering elements/non-elements of `I` separately.
+  intro x hxE
+  by_cases hxI : x in I
+  · simp [hxI, show exists y in I, f y = f x from ⟨x, hxI, rfl⟩]
+  simp [hxI, injOn_insert hxI, hIinj]
 -/
 @[simp] lemma comap_closure_eq {β : Type*} (M : Matroid β) (f : α -> β) (X : Set α) :
     (M.comap f).closure X = f ⁻¹' M.closure (f '' X) := by
@@ -4142,7 +4306,23 @@ lemma map_closure_eq
   -- It is enough to prove that `map` and `closure` commute for `M`-independent sets.
   suffices aux : forall ⦃I⦄, M.Indep I -> (M.map f hf).closure (f '' I) = f '' (M.closure I) by
     obtain ⟨I, hI⟩ := M.exists_isBasis (f ⁻¹' X inter M.E)
-    rw [← closure_inter_ground]; rw [map_ground]; rw [← 
+    rw [← closure_inter_ground]; rw [map_ground]; rw [← M.closure_inter_ground]; rw [← hI.closure_eq_closure]; rw [← aux hI.indep]; rw [← image_preimage_inter]; rw [← (hI.map hf).closure_eq_closure]
+  -- Let `I` be independent, and transform the goal using closure/independence lemmas
+  refine fun I hI => Set.ext fun e => ?_
+  simp only [(hI.map f hf).mem_closure_iff', map_ground, mem_image, map_indep_iff,
+    forall_exists_index, and_imp, hI.mem_closure_iff']
+  -- The goal now easily follows from the invariance of independence under maps.
+  constructor
+  · rintro ⟨⟨x, hxE, rfl⟩, h2⟩
+    refine ⟨x, ⟨hxE, fun hI' => ?_⟩, rfl⟩
+    obtain ⟨y, hyI, hfy⟩ := h2 _ hI' image_insert_eq.symm
+    rw [hf.eq_iff (hI.subset_ground hyI) hxE] at hfy
+    rwa [← hfy]
+  rintro ⟨x, ⟨hxE, hxi⟩, rfl⟩
+  refine ⟨⟨x, hxE, rfl⟩, fun J hJ hJI => ⟨x, hxi ?_, rfl⟩⟩
+  replace hJ := hJ.map f hf
+  have hrw := image_insert_eq ▸ hJI
+  rwa [← hrw, map_image_indep_iff (insert_subset hxE hI.subset_ground)] at hJ
 
 中文:
 引理 map_closure_eq
@@ -4151,7 +4331,23 @@ lemma map_closure_eq
   -- It is enough to prove that `map` and `closure` commute for `M`-independent sets.
   suffices aux : forall ⦃I⦄, M.Indep I -> (M.map f hf).closure (f '' I) = f '' (M.closure I) by
     obtain ⟨I, hI⟩ := M.exists_isBasis (f ⁻¹' X inter M.E)
-    rw [← closure_inter_ground]; rw [map_ground]; rw [← 
+    rw [← closure_inter_ground]; rw [map_ground]; rw [← M.closure_inter_ground]; rw [← hI.closure_eq_closure]; rw [← aux hI.indep]; rw [← image_preimage_inter]; rw [← (hI.map hf).closure_eq_closure]
+  -- Let `I` be independent, and transform the goal using closure/independence lemmas
+  refine fun I hI => Set.ext fun e => ?_
+  simp only [(hI.map f hf).mem_closure_iff', map_ground, mem_image, map_indep_iff,
+    forall_exists_index, and_imp, hI.mem_closure_iff']
+  -- The goal now easily follows from the invariance of independence under maps.
+  constructor
+  · rintro ⟨⟨x, hxE, rfl⟩, h2⟩
+    refine ⟨x, ⟨hxE, fun hI' => ?_⟩, rfl⟩
+    obtain ⟨y, hyI, hfy⟩ := h2 _ hI' image_insert_eq.symm
+    rw [hf.eq_iff (hI.subset_ground hyI) hxE] at hfy
+    rwa [← hfy]
+  rintro ⟨x, ⟨hxE, hxi⟩, rfl⟩
+  refine ⟨⟨x, hxE, rfl⟩, fun J hJ hJI => ⟨x, hxi ?_, rfl⟩⟩
+  replace hJ := hJ.map f hf
+  have hrw := image_insert_eq ▸ hJI
+  rwa [← hrw, map_image_indep_iff (insert_subset hxE hI.subset_ground)] at hJ
 -/
 @[simp] lemma map_closure_eq {β : Type*} (M : Matroid α) (f : α -> β) (hf) (X : Set β) :
     (M.map f hf).closure X = f '' M.closure (f ⁻¹' X) := by

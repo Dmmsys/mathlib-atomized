@@ -322,6 +322,11 @@ definition posForm
   (fun ⟨x, hx⟩ ⟨y, hy⟩ => by
     apply LinearMap.BilinMap.apply_apply_mem_of_mem_span
       (s := range P.root) (t := range P.root)
+      (B := (LinearMap.restrictScalarsₗ S R _ _ _).comp (B.form.restrictScalars S))
+    · rintro - ⟨i, rfl⟩ - ⟨j, rfl⟩
+      simpa using B.exists_eq i j
+    · simpa
+    · simpa)
 
 中文:
 定义 posForm
@@ -331,6 +336,11 @@ definition posForm
   (fun ⟨x, hx⟩ ⟨y, hy⟩ => by
     apply LinearMap.BilinMap.apply_apply_mem_of_mem_span
       (s := range P.root) (t := range P.root)
+      (B := (LinearMap.restrictScalarsₗ S R _ _ _).comp (B.form.restrictScalars S))
+    · rintro - ⟨i, rfl⟩ - ⟨j, rfl⟩
+      simpa using B.exists_eq i j
+    · simpa
+    · simpa)
 
 Depends on / 依赖: Algebra, Algebra.linearMap, B.exists_eq, B.form, B.form.restrictScalars, BilinMap, FaithfulSMul, FaithfulSMul.algebraMap_injective, LinearMap, LinearMap.BilinMap.apply_apply_mem_of_mem_span, LinearMap.restrictScalars, LinearMap.restrictScalarsRange, P.root, algebraMap_injective, apply_apply_mem_of_mem_span, exists_eq, linearMap, restrictScalars, subtype
 -/
@@ -585,7 +595,12 @@ lemma zero_lt_apply_root_root_iff
   have : 2 * B.posForm ri rj = P.pairingIn S i j * B.posForm rj rj := by
     apply FaithfulSMul.algebraMap_injective S R
     simpa [map_ofNat] using B.toInvariantForm.two_mul_apply_root_root i j
+  calc 0 < B.posForm ri rj
+      ↔ 0 < 2 * B.posForm ri rj := by rw [mul_pos_iff_of_pos_left zero_lt_two]
+    _ ↔ 0 < P.pairingIn S i j * B.posForm rj rj := by rw [this]
+    _ ↔ 0 < P.pairingIn S i j := by rw [mul_pos_iff_of_pos_right (B.zero_lt_posForm_apply_root j)]
 
+@[simp]
 
 中文:
 引理 zero_lt_apply_root_root_iff
@@ -596,7 +611,12 @@ lemma zero_lt_apply_root_root_iff
   have : 2 * B.posForm ri rj = P.pairingIn S i j * B.posForm rj rj := by
     apply FaithfulSMul.algebraMap_injective S R
     simpa [map_ofNat] using B.toInvariantForm.two_mul_apply_root_root i j
+  calc 0 < B.posForm ri rj
+      ↔ 0 < 2 * B.posForm ri rj := by rw [mul_pos_iff_of_pos_left zero_lt_two]
+    _ ↔ 0 < P.pairingIn S i j * B.posForm rj rj := by rw [this]
+    _ ↔ 0 < P.pairingIn S i j := by rw [mul_pos_iff_of_pos_right (B.zero_lt_posForm_apply_root j)]
 
+@[simp]
 
 Depends on / 依赖: mem_range_self, subset_span
 -/

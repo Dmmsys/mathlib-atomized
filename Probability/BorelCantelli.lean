@@ -138,7 +138,33 @@ theorem measure_limsup_eq_one
   rw [measure_congr (eventuallyEq_set.2 (ae_mem_limsup_atTop_iff μ <|
     measurableSet_filtrationOfSet' hsm) : (limsup s atTop : Set Ω) =ᵐ[μ]
       {ω | Tendsto (fun n => ∑ k in Finset.range n,
-        (μ[(s (k + 1)).indicator (1 : Ω -> 
+        (μ[(s (k + 1)).indicator (1 : Ω -> Real)|filtrationOfSet hsm k]) ω) atTop atTop})]
+  suffices {ω | Tendsto (fun n => ∑ k in Finset.range n,
+      (μ[(s (k + 1)).indicator (1 : Ω -> Real)|filtrationOfSet hsm k]) ω) atTop atTop} =ᵐ[μ] Set.univ by
+    rw [measure_congr this]; rw [measure_univ]
+  have : forallᵐ ω ∂μ, forall n, (μ[(s (n + 1)).indicator (1 : Ω -> Real) | filtrationOfSet hsm n]) ω = _ :=
+    ae_all_iff.2 fun n => hs.condExp_indicator_filtrationOfSet_ae_eq hsm n.lt_succ_self
+  filter_upwards [this] with ω hω
+  refine eq_true (?_ : Tendsto _ _ _)
+  simp_rw [hω]
+  have htends : Tendsto (fun n => ∑ k in Finset.range n, μ (s (k + 1))) atTop (𝓝 ∞) := by
+    rw [← ENNReal.tsum_add_one_eq_top hs' (measure_ne_top _ _)]
+    exact ENNReal.tendsto_nat_tsum _
+  rw [ENNReal.tendsto_nhds_top_iff_nnreal] at htends
+  refine tendsto_atTop_atTop_of_monotone' ?_ ?_
+  · refine monotone_nat_of_le_succ fun n => ?_
+    rw [← sub_nonneg]; rw [Finset.sum_range_succ_sub_sum]
+    exact ENNReal.toReal_nonneg
+  · rintro ⟨B, hB⟩
+    refine not_eventually.2 (Frequently.of_forall fun n => ?_) (htends B.toNNReal)
+    rw [mem_upperBounds] at hB
+    specialize hB (∑ k in Finset.range n, μ (s (k + 1))).toReal _
+    · refine ⟨n, ?_⟩
+      rw [ENNReal.toReal_sum (by finiteness)]
+      rfl
+    · rwa [not_lt, ENNReal.ofNNReal_toNNReal, ENNReal.le_ofReal_iff_toReal_le]
+      · simp
+      · exact le_trans (by positivity) hB
 
 中文:
 定理 measure_limsup_eq_one
@@ -148,7 +174,33 @@ theorem measure_limsup_eq_one
   rw [measure_congr (eventuallyEq_set.2 (ae_mem_limsup_atTop_iff μ <|
     measurableSet_filtrationOfSet' hsm) : (limsup s atTop : Set Ω) =ᵐ[μ]
       {ω | Tendsto (fun n => ∑ k in Finset.range n,
-        (μ[(s (k + 1)).indicator (1 : Ω -> 
+        (μ[(s (k + 1)).indicator (1 : Ω -> Real)|filtrationOfSet hsm k]) ω) atTop atTop})]
+  suffices {ω | Tendsto (fun n => ∑ k in Finset.range n,
+      (μ[(s (k + 1)).indicator (1 : Ω -> Real)|filtrationOfSet hsm k]) ω) atTop atTop} =ᵐ[μ] Set.univ by
+    rw [measure_congr this]; rw [measure_univ]
+  have : forallᵐ ω ∂μ, forall n, (μ[(s (n + 1)).indicator (1 : Ω -> Real) | filtrationOfSet hsm n]) ω = _ :=
+    ae_all_iff.2 fun n => hs.condExp_indicator_filtrationOfSet_ae_eq hsm n.lt_succ_self
+  filter_upwards [this] with ω hω
+  refine eq_true (?_ : Tendsto _ _ _)
+  simp_rw [hω]
+  have htends : Tendsto (fun n => ∑ k in Finset.range n, μ (s (k + 1))) atTop (𝓝 ∞) := by
+    rw [← ENNReal.tsum_add_one_eq_top hs' (measure_ne_top _ _)]
+    exact ENNReal.tendsto_nat_tsum _
+  rw [ENNReal.tendsto_nhds_top_iff_nnreal] at htends
+  refine tendsto_atTop_atTop_of_monotone' ?_ ?_
+  · refine monotone_nat_of_le_succ fun n => ?_
+    rw [← sub_nonneg]; rw [Finset.sum_range_succ_sub_sum]
+    exact ENNReal.toReal_nonneg
+  · rintro ⟨B, hB⟩
+    refine not_eventually.2 (Frequently.of_forall fun n => ?_) (htends B.toNNReal)
+    rw [mem_upperBounds] at hB
+    specialize hB (∑ k in Finset.range n, μ (s (k + 1))).toReal _
+    · refine ⟨n, ?_⟩
+      rw [ENNReal.toReal_sum (by finiteness)]
+      rfl
+    · rwa [not_lt, ENNReal.ofNNReal_toNNReal, ENNReal.le_ofReal_iff_toReal_le]
+      · simp
+      · exact le_trans (by positivity) hB
 
 Depends on / 依赖: Finset, Finset.range, IsProbabilityMeasure, Set.univ, Tendsto, ae_mem_limsup_atTop_iff, eventuallyEq_set, filtrationOfSet, hs.isProbabilityMeasure, indicator, isProbabilityMeasure, limsup, measurableSet_filtrationOfSet, measure_congr
 -/

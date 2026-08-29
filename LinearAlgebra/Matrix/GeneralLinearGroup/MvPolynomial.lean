@@ -32,7 +32,13 @@ theorem eq_of_eval_eq_on_gl
     intro s
     rw [map_mul]; rw [map_sub]; rw [map_zero]; rw [Matrix.eval_det_mvPolynomialX]
     by_cases hs_det : Matrix.det (Matrix.of fun i j : m => s (i, j)) = 0
-    · rw [hs_det, mul_zer
+    · rw [hs_det, mul_zero]
+    · have hh : (eval s) p = (eval s) q :=
+        h (Matrix.GeneralLinearGroup.mkOfDetNeZero
+          (Matrix.of fun i j : m => s (i, j)) hs_det)
+      rw [hh]; rw [sub_self]; rw [zero_mul]
+  exact sub_eq_zero.mp
+    ((mul_eq_zero.mp hprod).resolve_right (Matrix.det_mvPolynomialX_ne_zero m k))
 
 中文:
 定理 eq_of_eval_eq_on_gl
@@ -43,7 +49,13 @@ theorem eq_of_eval_eq_on_gl
     intro s
     rw [map_mul]; rw [map_sub]; rw [map_zero]; rw [Matrix.eval_det_mvPolynomialX]
     by_cases hs_det : Matrix.det (Matrix.of fun i j : m => s (i, j)) = 0
-    · rw [hs_det, mul_zer
+    · rw [hs_det, mul_zero]
+    · have hh : (eval s) p = (eval s) q :=
+        h (Matrix.GeneralLinearGroup.mkOfDetNeZero
+          (Matrix.of fun i j : m => s (i, j)) hs_det)
+      rw [hh]; rw [sub_self]; rw [zero_mul]
+  exact sub_eq_zero.mp
+    ((mul_eq_zero.mp hprod).resolve_right (Matrix.det_mvPolynomialX_ne_zero m k))
 
 Depends on / 依赖: GeneralLinearGroup, Matrix, Matrix.GeneralLinearGroup.mkOfDetNeZero, Matrix.det, Matrix.eval_det_mvPolynomialX, Matrix.mvPolynomialX, Matrix.of, MvPolynomial, MvPolynomial.funext, eval_det_mvPolynomialX, hs_det, map_mul, map_sub, map_zero, mkOfDetNeZero, mul_eq_zero, mul_eq_zero.mp, mul_zero, mvPolynomialX, resolve_ri
 -/

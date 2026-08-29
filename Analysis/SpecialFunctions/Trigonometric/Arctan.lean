@@ -236,7 +236,16 @@ theorem continuousOn_tan_Ioo
   rcases le_or_gt 0 r with h | h
   · rw [lt_iff_not_ge] at hx_lt
     refine hx_lt ?_
-    rw [hxr_eq]; rw [← one_mul (π / 2)]; rw [mul_d
+    rw [hxr_eq]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [mul_le_mul_iff_left₀ (half_pos pi_pos)]
+    simp [h]
+  · rw [lt_iff_not_ge] at hx_gt
+    refine hx_gt ?_
+    rw [hxr_eq]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [neg_mul_eq_neg_mul]; rw [mul_le_mul_iff_left₀ (half_pos pi_pos)]
+    have hr_le : r <= -1 := by rwa [Int.lt_iff_add_one_le, ← le_neg_iff_add_nonpos_right] at h
+    rw [← le_sub_iff_add_le]; rw [mul_comm]; rw [← le_div_iff₀]
+    · norm_num
+      assumption_mod_cast
+    · exact zero_lt_two
 
 中文:
 定理 continuousOn_tan_Ioo
@@ -249,7 +258,16 @@ theorem continuousOn_tan_Ioo
   rcases le_or_gt 0 r with h | h
   · rw [lt_iff_not_ge] at hx_lt
     refine hx_lt ?_
-    rw [hxr_eq]; rw [← one_mul (π / 2)]; rw [mul_d
+    rw [hxr_eq]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [mul_le_mul_iff_left₀ (half_pos pi_pos)]
+    simp [h]
+  · rw [lt_iff_not_ge] at hx_gt
+    refine hx_gt ?_
+    rw [hxr_eq]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [neg_mul_eq_neg_mul]; rw [mul_le_mul_iff_left₀ (half_pos pi_pos)]
+    have hr_le : r <= -1 := by rwa [Int.lt_iff_add_one_le, ← le_neg_iff_add_nonpos_right] at h
+    rw [← le_sub_iff_add_le]; rw [mul_comm]; rw [← le_div_iff₀]
+    · norm_num
+      assumption_mod_cast
+    · exact zero_lt_two
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.mono, and_imp, continuousOn_tan, cos_eq_zero_iff, half_pos, hx_gt, hx_lt, hxr_eq, le_or_gt, lt_iff_not_ge, mem_Ioo, mem_ofPred_eq, mul_div_assoc, neg_mul_eq_neg_mul, one_mul, pi_pos
 -/
@@ -1281,7 +1299,7 @@ lemma arctan_ne_mul_pi_div_two
   obtain ⟨lb, ub⟩ := arctan_mem_Ioo x
   rw [h]; rw [neg_eq_neg_one_mul]; rw [mul_div_assoc]; rw [mul_lt_mul_iff_left₀ (by positivity)] at lb
   rw [h]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [mul_lt_mul_iff_left₀ (by positivity)] at ub
-  norm_cast at lb ub; change -1 < 
+  norm_cast at lb ub; change -1 < _ at lb; lia
 
 中文:
 引理 arctan_ne_mul_pi_div_two
@@ -1291,7 +1309,7 @@ lemma arctan_ne_mul_pi_div_two
   obtain ⟨lb, ub⟩ := arctan_mem_Ioo x
   rw [h]; rw [neg_eq_neg_one_mul]; rw [mul_div_assoc]; rw [mul_lt_mul_iff_left₀ (by positivity)] at lb
   rw [h]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [mul_lt_mul_iff_left₀ (by positivity)] at ub
-  norm_cast at lb ub; change -1 < 
+  norm_cast at lb ub; change -1 < _ at lb; lia
 
 Depends on / 依赖: arctan_mem_Ioo, mul_div_assoc, neg_eq_neg_one_mul, one_mul
 -/
@@ -1315,7 +1333,7 @@ lemma arctan_add_arctan_lt_pi_div_two
     exact add_lt_add_of_lt_of_le (arctan_lt_pi_div_two _) (tanOrderIso.symm.monotone hy)
   · rw [← lt_div_iff₀ hy, ← inv_eq_one_div] at h
     replace h : arctan x < arctan y⁻¹ := tanOrderIso.symm.strictMono h
-    rwa [a
+    rwa [arctan_inv_of_pos hy, lt_tsub_iff_right] at h
 
 中文:
 引理 arctan_add_arctan_lt_pi_div_two
@@ -1327,7 +1345,7 @@ lemma arctan_add_arctan_lt_pi_div_two
     exact add_lt_add_of_lt_of_le (arctan_lt_pi_div_two _) (tanOrderIso.symm.monotone hy)
   · rw [← lt_div_iff₀ hy, ← inv_eq_one_div] at h
     replace h : arctan x < arctan y⁻¹ := tanOrderIso.symm.strictMono h
-    rwa [a
+    rwa [arctan_inv_of_pos hy, lt_tsub_iff_right] at h
 
 Depends on / 依赖: add_lt_add_of_lt_of_le, add_zero, arctan, arctan_inv_of_pos, arctan_lt_pi_div_two, arctan_zero, inv_eq_one_div, le_or_gt, lt_tsub_iff_right, monotone, replace, strictMono, tanOrderIso, tanOrderIso.symm.monotone, tanOrderIso.symm.strictMono
 -/
@@ -1353,7 +1371,7 @@ theorem arctan_add
   · rw [neg_lt, neg_add, ← arctan_neg, ← arctan_neg]
     rw [← neg_mul_neg] at h
     exact arctan_add_arctan_lt_pi_div_two h
-  · e
+  · exact arctan_add_arctan_lt_pi_div_two h
 
 中文:
 定理 arctan_add
@@ -1366,7 +1384,7 @@ theorem arctan_add
   · rw [neg_lt, neg_add, ← arctan_neg, ← arctan_neg]
     rw [← neg_mul_neg] at h
     exact arctan_add_arctan_lt_pi_div_two h
-  · e
+  · exact arctan_add_arctan_lt_pi_div_two h
 
 Depends on / 依赖: Under.Hom, arctan_add_arctan_lt_pi_div_two, arctan_ne_mul_pi_div_two, arctan_neg, arctan_tan, conv_rhs, neg_add, neg_lt, neg_mul_neg, tan_add, tan_arctan
 -/
@@ -1392,7 +1410,8 @@ theorem arctan_add_eq_add_pi
     have := mul_pos_iff.mp (zero_lt_one.trans h)
     simpa [hx, hx.asymm]
   have k := arctan_add (mul_inv x y ▸ inv_lt_one_of_one_lt₀ h)
-  rw [arctan_inv_of_pos hx]; rw [arctan_inv_of_pos hy]; rw [show _ + _ = π - (arctan x + arctan y) by ring]; rw [sub_eq_iff_eq_add]; rw 
+  rw [arctan_inv_of_pos hx]; rw [arctan_inv_of_pos hy]; rw [show _ + _ = π - (arctan x + arctan y) by ring]; rw [sub_eq_iff_eq_add]; rw [← sub_eq_iff_eq_add']; rw [sub_eq_add_neg]; rw [← arctan_neg]; rw [add_comm] at k
+  grind
 
 中文:
 定理 arctan_add_eq_add_pi
@@ -1402,7 +1421,8 @@ theorem arctan_add_eq_add_pi
     have := mul_pos_iff.mp (zero_lt_one.trans h)
     simpa [hx, hx.asymm]
   have k := arctan_add (mul_inv x y ▸ inv_lt_one_of_one_lt₀ h)
-  rw [arctan_inv_of_pos hx]; rw [arctan_inv_of_pos hy]; rw [show _ + _ = π - (arctan x + arctan y) by ring]; rw [sub_eq_iff_eq_add]; rw 
+  rw [arctan_inv_of_pos hx]; rw [arctan_inv_of_pos hy]; rw [show _ + _ = π - (arctan x + arctan y) by ring]; rw [sub_eq_iff_eq_add]; rw [← sub_eq_iff_eq_add']; rw [sub_eq_add_neg]; rw [← arctan_neg]; rw [add_comm] at k
+  grind
 
 Depends on / 依赖: add_comm, arctan, arctan_add, arctan_inv_of_pos, arctan_neg, hx.asymm, mul_inv, mul_pos_iff, mul_pos_iff.mp, sub_eq_add_neg, sub_eq_iff_eq_add, zero_lt_one, zero_lt_one.trans
 -/
@@ -1794,7 +1814,10 @@ definition tanPartialHomeomorph
   right_inv' y _ := tan_arctan y
   open_source := isOpen_Ioo
   open_target := isOpen_univ
-  continuousOn_toFun :=
+  continuousOn_toFun := continuousOn_tan_Ioo
+  continuousOn_invFun := continuous_arctan.continuousOn
+
+@[simp]
 
 中文:
 定义 tanPartialHomeomorph
@@ -1809,7 +1832,10 @@ definition tanPartialHomeomorph
   right_inv' y _ := tan_arctan y
   open_source := isOpen_Ioo
   open_target := isOpen_univ
-  continuousOn_toFun :=
+  continuousOn_toFun := continuousOn_tan_Ioo
+  continuousOn_invFun := continuous_arctan.continuousOn
+
+@[simp]
 -/
 def tanPartialHomeomorph : OpenPartialHomeomorph Real Real where
   toFun := tan

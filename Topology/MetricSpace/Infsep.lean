@@ -770,7 +770,8 @@ theorem einfsep_insert
   · exact False.elim (hyz rfl)
   · exact Or.inl (iInf_le_of_le _ (iInf₂_le hz hyz))
   · rw [edist_comm]
-    exact Or.
+    exact Or.inl (iInf_le_of_le _ (iInf₂_le hy hyz.symm))
+  · exact Or.inr (einfsep_le_edist_of_mem hy hz hyz)
 
 中文:
 定理 einfsep_insert
@@ -782,7 +783,8 @@ theorem einfsep_insert
   · exact False.elim (hyz rfl)
   · exact Or.inl (iInf_le_of_le _ (iInf₂_le hz hyz))
   · rw [edist_comm]
-    exact Or.
+    exact Or.inl (iInf_le_of_le _ (iInf₂_le hy hyz.symm))
+  · exact Or.inr (einfsep_le_edist_of_mem hy hz hyz)
 
 Depends on / 依赖: False.elim, Or.inl, Or.inr, edist_comm, einfsep_anti, einfsep_insert_le, einfsep_le_edist_of_mem, hyz.symm, iInf_le_of_le, inf_le_iff, le_antisymm, le_einfsep_iff, le_min, mem_insert_iff, simp_rw, subset_insert
 -/
@@ -1577,7 +1579,9 @@ theorem infsep_eq_iInf
       rcases h with ⟨_, _, _, rfl⟩
       exact dist_nonneg
     refine eq_of_forall_le_iff fun _ => ?_
-    simp_rw [hs.le_inf
+    simp_rw [hs.le_infsep_iff, le_ciInf_set_iff (offDiag_nonempty.mpr hs) hb, imp_forall_iff,
+      mem_offDiag, Prod.forall, uncurry_apply_pair, and_imp]
+  · exact (not_nontrivial_iff.mp hs).infsep_zero
 
 中文:
 定理 infsep_eq_iInf
@@ -1590,7 +1594,9 @@ theorem infsep_eq_iInf
       rcases h with ⟨_, _, _, rfl⟩
       exact dist_nonneg
     refine eq_of_forall_le_iff fun _ => ?_
-    simp_rw [hs.le_inf
+    simp_rw [hs.le_infsep_iff, le_ciInf_set_iff (offDiag_nonempty.mpr hs) hb, imp_forall_iff,
+      mem_offDiag, Prod.forall, uncurry_apply_pair, and_imp]
+  · exact (not_nontrivial_iff.mp hs).infsep_zero
 
 Depends on / 依赖: BddBelow, Prod.exists, Prod.forall, and_imp, dist_nonneg, eq_of_forall_le_iff, hs.le_infsep_iff, imp_forall_iff, infsep_zero, le_ciInf_set_iff, le_infsep_iff, mem_image, mem_offDiag, not_nontrivial_iff, not_nontrivial_iff.mp, offDiag, offDiag_nonempty, offDiag_nonempty.mpr, s.offDiag, simp_rw
 -/
@@ -1757,7 +1763,7 @@ theorem _root_.Finset.coe_infsep
     rw [← Set.offDiag_nonempty]; rw [← Finset.coe_offDiag]; rw [Finset.coe_nonempty]
   split_ifs with hs
   · classical simp_rw [(H.mpr hs).infsep_of_fintype, ← Finset.coe_offDiag, Finset.toFinset_coe]
-  · exact (not_nontrivial_iff.mp (H
+  · exact (not_nontrivial_iff.mp (H.mp.mt hs)).infsep_zero
 
 中文:
 定理 _root_.有限集.coe_infsep
@@ -1768,7 +1774,7 @@ theorem _root_.Finset.coe_infsep
     rw [← Set.offDiag_nonempty]; rw [← Finset.coe_offDiag]; rw [Finset.coe_nonempty]
   split_ifs with hs
   · classical simp_rw [(H.mpr hs).infsep_of_fintype, ← Finset.coe_offDiag, Finset.toFinset_coe]
-  · exact (not_nontrivial_iff.mp (H
+  · exact (not_nontrivial_iff.mp (H.mp.mt hs)).infsep_zero
 
 Depends on / 依赖: Finset, Finset.coe_nonempty, Finset.coe_offDiag, Finset.toFinset_coe, H.mp.mt, H.mpr, Nonempty, Nontrivial, Set.offDiag_nonempty, classical, coe_nonempty, coe_offDiag, infsep_of_fintype, infsep_zero, not_nontrivial_iff, not_nontrivial_iff.mp, offDiag, offDiag_nonempty, s.offDiag.Nonempty, simp_rw
 -/

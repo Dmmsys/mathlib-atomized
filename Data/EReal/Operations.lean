@@ -1423,7 +1423,9 @@ theorem recENNReal_coe_ennreal
   obtain rfl : y.toENNReal = x := by simp [← hy]
   simp [recENNReal, H₁]
 
-proof_wanted recENNReal_neg_coe_ennreal {m
+proof_wanted recENNReal_neg_coe_ennreal {motive : EReal -> Sort*} (coe : forall x : Real>=0∞, motive x)
+    (neg_coe : forall x : Real>=0∞, 0 < x -> motive (-x)) {x : Real>=0∞} (hx : 0 < x) :
+    recENNReal coe neg_coe (-x) = neg_coe x hx
 
 中文:
 定理 recENN实数_coe_ennreal
@@ -1436,7 +1438,9 @@ proof_wanted recENNReal_neg_coe_ennreal {m
   obtain rfl : y.toENNReal = x := by simp [← hy]
   simp [recENNReal, H₁]
 
-proof_wanted recENNReal_neg_coe_ennreal {m
+proof_wanted recENNReal_neg_coe_ennreal {motive : EReal -> Sort*} (coe : forall x : Real>=0∞, motive x)
+    (neg_coe : forall x : Real>=0∞, 0 < x -> motive (-x)) {x : Real>=0∞} (hx : 0 < x) :
+    recENNReal coe neg_coe (-x) = neg_coe x hx
 
 Depends on / 依赖: coe_ennreal_nonneg, heq_iff_eq, heq_iff_eq.mp, motive, neg_coe, recENNReal, toENNReal, y.toENNReal
 -/
@@ -1807,7 +1811,9 @@ theorem coe_real_ereal_eq_coe_toNNReal_sub_coe_toNNReal
   · lift x to Real>=0 using h
     rw [Real.toNNReal_of_nonpos (neg_nonpos.mpr x.coe_nonneg)]; rw [Real.toNNReal_coe]; rw [ENNReal.coe_zero]; rw [coe_ennreal_zero]; rw [sub_zero]
     rfl
-  · rw [Real.toNNReal_of_nonpos h, ENNReal.coe_zero, coe_ennreal_zero, coe_n
+  · rw [Real.toNNReal_of_nonpos h, ENNReal.coe_zero, coe_ennreal_zero, coe_nnreal_eq_coe_real,
+      Real.coe_toNNReal, zero_sub, coe_neg, neg_neg]
+    exact neg_nonneg.2 h
 
 中文:
 定理 coe_real_ereal_eq_coe_toNN实数_sub_coe_toNN实数
@@ -1817,7 +1823,9 @@ theorem coe_real_ereal_eq_coe_toNNReal_sub_coe_toNNReal
   · lift x to Real>=0 using h
     rw [Real.toNNReal_of_nonpos (neg_nonpos.mpr x.coe_nonneg)]; rw [Real.toNNReal_coe]; rw [ENNReal.coe_zero]; rw [coe_ennreal_zero]; rw [sub_zero]
     rfl
-  · rw [Real.toNNReal_of_nonpos h, ENNReal.coe_zero, coe_ennreal_zero, coe_n
+  · rw [Real.toNNReal_of_nonpos h, ENNReal.coe_zero, coe_ennreal_zero, coe_nnreal_eq_coe_real,
+      Real.coe_toNNReal, zero_sub, coe_neg, neg_neg]
+    exact neg_nonneg.2 h
 
 Depends on / 依赖: ENNReal, ENNReal.coe_zero, Real.coe_toNNReal, Real.toNNReal_coe, Real.toNNReal_of_nonpos, coe_ennreal_zero, coe_neg, coe_nnreal_eq_coe_real, coe_nonneg, coe_toNNReal, coe_zero, le_total, neg_neg, neg_nonneg, neg_nonpos, neg_nonpos.mpr, sub_zero, toNNReal_coe, toNNReal_of_nonpos, x.coe_nonneg
 -/
@@ -1868,7 +1876,9 @@ lemma toENNReal_sub
   by_cases hxy : x <= y
   · rw [toENNReal_of_nonpos <| sub_nonpos.mpr <| EReal.coe_le_coe_iff.mpr hxy]
     exact (tsub_eq_zero_of_le <| toENNReal_le_toENNReal <| EReal.coe_le_coe_iff.mpr hxy).symm
-  · r
+  · rw [toENNReal_of_ne_top (ne_of_beq_false rfl).symm, ← coe_sub, toReal_coe,
+      ofReal_sub x (EReal.coe_nonneg.mp hy)]
+    simp
 
 中文:
 引理 toENN实数_sub
@@ -1879,7 +1889,9 @@ lemma toENNReal_sub
   by_cases hxy : x <= y
   · rw [toENNReal_of_nonpos <| sub_nonpos.mpr <| EReal.coe_le_coe_iff.mpr hxy]
     exact (tsub_eq_zero_of_le <| toENNReal_le_toENNReal <| EReal.coe_le_coe_iff.mpr hxy).symm
-  · r
+  · rw [toENNReal_of_ne_top (ne_of_beq_false rfl).symm, ← coe_sub, toReal_coe,
+      ofReal_sub x (EReal.coe_nonneg.mp hy)]
+    simp
 
 Depends on / 依赖: ENNReal, ENNReal.sub_top, EReal.coe_le_coe_iff.mpr, EReal.coe_nonneg.mp, coe_le_coe_iff, coe_nonneg, coe_sub, ne_of_beq_false, ofReal_sub, rename_i, sub_nonpos, sub_nonpos.mpr, sub_top, toENNReal_le_toENNReal, toENNReal_of_ne_top, toENNReal_of_nonpos, toReal_coe, tsub_eq_zero_of_le, zero_tsub
 -/
@@ -2048,7 +2060,10 @@ lemma le_sub_iff_add_le
   | coe b =>
     rw [← (addLECancellable_coe b).add_le_add_iff_right]; rw [sub_add_cancel]
   | top =>
-    simp only [ne_eq, not_true_eq_false, false_or, sub_t
+    simp only [ne_eq, not_true_eq_false, false_or, sub_top, le_bot_iff] at ht ⊢
+    refine ⟨fun h => h ▸ (bot_add ⊤).symm ▸ bot_le, fun h => ?_⟩
+    by_contra ha
+    exact (h.trans_lt (Ne.lt_top ht)).ne (add_top_iff_ne_bot.2 ha)
 
 中文:
 引理 le_sub_iff_add_le
@@ -2061,7 +2076,10 @@ lemma le_sub_iff_add_le
   | coe b =>
     rw [← (addLECancellable_coe b).add_le_add_iff_right]; rw [sub_add_cancel]
   | top =>
-    simp only [ne_eq, not_true_eq_false, false_or, sub_t
+    simp only [ne_eq, not_true_eq_false, false_or, sub_top, le_bot_iff] at ht ⊢
+    refine ⟨fun h => h ▸ (bot_add ⊤).symm ▸ bot_le, fun h => ?_⟩
+    by_contra ha
+    exact (h.trans_lt (Ne.lt_top ht)).ne (add_top_iff_ne_bot.2 ha)
 
 Depends on / 依赖: Ne.lt_top, addLECancellable_coe, add_bot, add_le_add_iff_right, add_top_iff_ne_bot, bot_add, bot_le, false_or, h.trans_lt, le_bot_iff, le_top, lt_top, ne_eq, not_true_eq_false, sub_add_cancel, sub_bot, sub_top, trans_lt
 -/
@@ -2295,7 +2313,15 @@ lemma sub_lt_sub_of_le_of_gt
     · exact ne_bot_of_le_ne_bot (by simp) (sub_pos.mpr h').le
   by_cases hxy : x = y
   · rw [hxy]
-    lift y to Real using 
+    lift y to Real using ⟨hy_top, hy_bot⟩
+    by_cases htz_top : t - z = ⊤
+    · simp_all
+    rw [← coe_toReal htz_top <| ne_bot_of_le_ne_bot (by simp) (sub_pos.mpr h').le]
+    norm_cast
+    refine lt_add_of_pos_right y ?_
+    exact EReal.toReal_pos (sub_pos.mpr h') htz_top
+  · rw [← add_zero x]
+    exact add_lt_add (by grind) (sub_pos.mpr h')
 
 中文:
 引理 sub_lt_sub_of_le_of_gt
@@ -2309,7 +2335,15 @@ lemma sub_lt_sub_of_le_of_gt
     · exact ne_bot_of_le_ne_bot (by simp) (sub_pos.mpr h').le
   by_cases hxy : x = y
   · rw [hxy]
-    lift y to Real using 
+    lift y to Real using ⟨hy_top, hy_bot⟩
+    by_cases htz_top : t - z = ⊤
+    · simp_all
+    rw [← coe_toReal htz_top <| ne_bot_of_le_ne_bot (by simp) (sub_pos.mpr h').le]
+    norm_cast
+    refine lt_add_of_pos_right y ?_
+    exact EReal.toReal_pos (sub_pos.mpr h') htz_top
+  · rw [← add_zero x]
+    exact add_lt_add (by grind) (sub_pos.mpr h')
 
 Depends on / 依赖: EReal.toReal_pos, add_comm, add_sub_assoc, coe_toReal, htz_to, htz_top, hx_top, hx_top.lt_top, hy_bot, hy_top, lt_add_of_pos_right, lt_top, ne_bot_of_le_ne_bot, sub_lt_of_lt_add, sub_pos, sub_pos.mpr, toReal_pos, top_add_of_ne_bot
 -/
@@ -2978,7 +3012,8 @@ lemma toReal_mul
   | coe_coe => norm_cast
   | top_pos _ h => simp [top_mul_coe_of_pos h]
   | top_neg _ h => simp [top_mul_coe_of_neg h]
-  | pos_bot _ h => simp [co
+  | pos_bot _ h => simp [coe_mul_bot_of_pos h]
+  | neg_bot _ h => simp [coe_mul_bot_of_neg h]
 
 中文:
 引理 to实数_mul
@@ -2991,7 +3026,8 @@ lemma toReal_mul
   | coe_coe => norm_cast
   | top_pos _ h => simp [top_mul_coe_of_pos h]
   | top_neg _ h => simp [top_mul_coe_of_neg h]
-  | pos_bot _ h => simp [co
+  | pos_bot _ h => simp [coe_mul_bot_of_pos h]
+  | neg_bot _ h => simp [coe_mul_bot_of_neg h]
 
 Depends on / 依赖: EReal.mul_comm, bot_bot, coe_coe, coe_mul_bot_of_neg, coe_mul_bot_of_pos, mul_comm, neg_bot, pos_bot, top_bot, top_mul_coe_of_neg, top_mul_coe_of_pos, top_neg, top_pos, top_top, top_zero, zero_bot
 -/
@@ -3018,7 +3054,11 @@ instance :
     · rcases lt_or_gt_of_ne h.2 with (h | h)
         <;> simp [EReal.bot_mul_of_neg, EReal.bot_mul_of_pos, h]
     · rcases lt_or_gt_of_ne h.1 with (h | h)
-        <;> simp [EReal.mul_bot_of_pos, EReal
+        <;> simp [EReal.mul_bot_of_pos, EReal.mul_bot_of_neg, h]
+    · rcases lt_or_gt_of_ne h.1 with (h | h)
+        <;> simp [EReal.mul_top_of_neg, EReal.mul_top_of_pos, h]
+    · rcases lt_or_gt_of_ne h.2 with (h | h)
+        <;> simp [EReal.top_mul_of_pos, EReal.top_mul_of_neg, h]
 
 中文:
 实例 :
@@ -3030,7 +3070,11 @@ instance :
     · rcases lt_or_gt_of_ne h.2 with (h | h)
         <;> simp [EReal.bot_mul_of_neg, EReal.bot_mul_of_pos, h]
     · rcases lt_or_gt_of_ne h.1 with (h | h)
-        <;> simp [EReal.mul_bot_of_pos, EReal
+        <;> simp [EReal.mul_bot_of_pos, EReal.mul_bot_of_neg, h]
+    · rcases lt_or_gt_of_ne h.1 with (h | h)
+        <;> simp [EReal.mul_top_of_neg, EReal.mul_top_of_pos, h]
+    · rcases lt_or_gt_of_ne h.2 with (h | h)
+        <;> simp [EReal.top_mul_of_pos, EReal.top_mul_of_neg, h]
 
 Depends on / 依赖: EReal.bot_mul_of_neg, EReal.bot_mul_of_pos, EReal.coe_mul, EReal.mul_bot_of_neg, EReal.mul_bot_of_pos, EReal.mul_top_of_neg, EReal.mul_top_of_pos, EReal.top_mul_of_neg, EReal.top_mul_of_pos, bot_mul_of_neg, bot_mul_of_pos, coe_mul, contrapose, lt_or_gt_of_ne, mul_bot_of_neg, mul_bot_of_pos, mul_top_of_neg, mul_top_of_pos, top_mul_of_neg, top_mul_of_pos
 -/
@@ -3063,7 +3107,11 @@ lemma mul_pos_iff
   | top_zero => simp
   | top_neg _ hx => simp [hx, EReal.top_mul_coe_of_neg hx, le_of_lt]
   | top_bot => simp
-  | pos_b
+  | pos_bot _ hx => simp [hx, EReal.coe_mul_bot_of_pos hx, le_of_lt]
+  | coe_coe x y => simp [← coe_mul, _root_.mul_pos_iff]
+  | zero_bot => simp
+  | neg_bot _ hx => simp [hx, EReal.coe_mul_bot_of_neg hx]
+  | bot_bot => simp
 
 中文:
 引理 mul_pos_iff
@@ -3077,7 +3125,11 @@ lemma mul_pos_iff
   | top_zero => simp
   | top_neg _ hx => simp [hx, EReal.top_mul_coe_of_neg hx, le_of_lt]
   | top_bot => simp
-  | pos_b
+  | pos_bot _ hx => simp [hx, EReal.coe_mul_bot_of_pos hx, le_of_lt]
+  | coe_coe x y => simp [← coe_mul, _root_.mul_pos_iff]
+  | zero_bot => simp
+  | neg_bot _ hx => simp [hx, EReal.coe_mul_bot_of_neg hx]
+  | bot_bot => simp
 
 Depends on / 依赖: EReal.coe_mul_bot_of_neg, EReal.coe_mul_bot_of_pos, EReal.induction, EReal.mul_comm, EReal.top_mul_coe_of_neg, EReal.top_mul_coe_of_pos, _root_, _root_.mul_pos_iff, and_comm, bot_bot, coe_coe, coe_mul, coe_mul_bot_of_neg, coe_mul_bot_of_pos, le_of_lt, mul_comm, mul_pos_iff, neg_bot, pos_bot, top_bot
 -/
@@ -3172,7 +3224,9 @@ lemma induction₂_neg_left
   proof: have : forall y, (forall x : Real, 0 < x -> P x y) -> forall x : Real, x < 0 -> P x y := fun _ h x hx =>
 neg_neg (x : EReal) ▸ neg_left h _ (neg_pos_of_neg hx)
   @induction₂ P top_top top_pos top_zero top_neg top_bot pos_top pos_bot zero_top
-    coe_coe zero_bot (this _ pos_top) (this _ pos_bot) (ne
+    coe_coe zero_bot (this _ pos_top) (this _ pos_bot) (neg_left top_top)
+    (fun x hx => neg_left <| top_pos x hx) (neg_left top_zero)
+    (fun x hx => neg_left <| top_neg x hx) (neg_left top_bot)
 
 中文:
 引理 induction₂_neg_left
@@ -3180,7 +3234,9 @@ neg_neg (x : EReal) ▸ neg_left h _ (neg_pos_of_neg hx)
   证明: have : forall y, (forall x : Real, 0 < x -> P x y) -> forall x : Real, x < 0 -> P x y := fun _ h x hx =>
 neg_neg (x : EReal) ▸ neg_left h _ (neg_pos_of_neg hx)
   @induction₂ P top_top top_pos top_zero top_neg top_bot pos_top pos_bot zero_top
-    coe_coe zero_bot (this _ pos_top) (this _ pos_bot) (ne
+    coe_coe zero_bot (this _ pos_top) (this _ pos_bot) (neg_left top_top)
+    (fun x hx => neg_left <| top_pos x hx) (neg_left top_zero)
+    (fun x hx => neg_left <| top_neg x hx) (neg_left top_bot)
 
 Depends on / 依赖: coe_coe, neg_left, neg_neg, neg_pos_of_neg, pos_bot, pos_top, top_bot, top_neg, top_pos, top_top, top_zero, zero_bot, zero_top
 -/
@@ -3210,7 +3266,9 @@ lemma induction₂_symm_neg
   proof: have neg_right : forall {x y}, P x y -> P x (-y) := fun h => symm neg_left symm h
   have : forall x, (forall y : Real, 0 < y -> P x y) -> forall y : Real, y < 0 -> P x y := fun _ h y hy =>
     neg_neg (y : EReal) ▸ neg_right (h _ (neg_pos_of_neg hy))
-  @induction₂_neg_left P neg_left top_top top_pos
+  @induction₂_neg_left P neg_left top_top top_pos top_zero (this _ top_pos) (neg_right top_top)
+    (symm top_zero) (symm <| neg_left top_zero) (fun x hx => symm <| top_pos x hx)
+    (fun x hx => symm <| neg_left <| top_pos x hx) coe_coe
 
 中文:
 引理 induction₂_symm_neg
@@ -3218,7 +3276,9 @@ lemma induction₂_symm_neg
   证明: have neg_right : forall {x y}, P x y -> P x (-y) := fun h => symm neg_left symm h
   have : forall x, (forall y : Real, 0 < y -> P x y) -> forall y : Real, y < 0 -> P x y := fun _ h y hy =>
     neg_neg (y : EReal) ▸ neg_right (h _ (neg_pos_of_neg hy))
-  @induction₂_neg_left P neg_left top_top top_pos
+  @induction₂_neg_left P neg_left top_top top_pos top_zero (this _ top_pos) (neg_right top_top)
+    (symm top_zero) (symm <| neg_left top_zero) (fun x hx => symm <| top_pos x hx)
+    (fun x hx => symm <| neg_left <| top_pos x hx) coe_coe
 
 Depends on / 依赖: coe_coe, neg_left, neg_neg, neg_pos_of_neg, neg_right, top_pos, top_top, top_zero
 -/
@@ -3247,7 +3307,12 @@ lemma neg_mul
   | top_top | top_bot => rfl
   | neg_left h => rw [h, neg_neg, neg_neg]
   | coe_coe => norm_cast; exact neg_mul _ _
-  | top_pos _ h => rw [top_mul_coe_of_pos h, neg_top, 
+  | top_pos _ h => rw [top_mul_coe_of_pos h, neg_top, bot_mul_coe_of_pos h]
+  | pos_top _ h => rw [coe_mul_top_of_pos h, neg_top, ← coe_neg,
+    coe_mul_top_of_neg (neg_neg_of_pos h)]
+  | top_neg _ h => rw [top_mul_coe_of_neg h, neg_top, bot_mul_coe_of_neg h, neg_bot]
+  | pos_bot _ h => rw [coe_mul_bot_of_pos h, neg_bot, ← coe_neg,
+    coe_mul_bot_of_neg (neg_neg_of_pos h)]
 
 中文:
 引理 neg_mul
@@ -3259,7 +3324,12 @@ lemma neg_mul
   | top_top | top_bot => rfl
   | neg_left h => rw [h, neg_neg, neg_neg]
   | coe_coe => norm_cast; exact neg_mul _ _
-  | top_pos _ h => rw [top_mul_coe_of_pos h, neg_top, 
+  | top_pos _ h => rw [top_mul_coe_of_pos h, neg_top, bot_mul_coe_of_pos h]
+  | pos_top _ h => rw [coe_mul_top_of_pos h, neg_top, ← coe_neg,
+    coe_mul_top_of_neg (neg_neg_of_pos h)]
+  | top_neg _ h => rw [top_mul_coe_of_neg h, neg_top, bot_mul_coe_of_neg h, neg_bot]
+  | pos_bot _ h => rw [coe_mul_bot_of_pos h, neg_bot, ← coe_neg,
+    coe_mul_bot_of_neg (neg_neg_of_pos h)]
 -/
 protected lemma neg_mul (x y : EReal) : -x * y = -(x * y) := by
   induction x, y using induction₂_neg_left with
@@ -3365,7 +3435,13 @@ lemma mul_eq_top
   | top_zero => simp
   | top_neg _ hx => simp [hx.le, EReal.top_mul_coe_of_neg hx]
   | top_bot => simp
-  | pos_bot _ hx => simp [hx
+  | pos_bot _ hx => simp [hx.le, EReal.coe_mul_bot_of_pos hx]
+  | coe_coe x y =>
+    simpa only [EReal.coe_ne_bot, EReal.coe_neg', false_and, and_false, EReal.coe_ne_top,
+      EReal.coe_pos, or_self, iff_false, EReal.coe_mul] using! EReal.coe_ne_top _
+  | zero_bot => simp
+  | neg_bot _ hx => simp [hx, EReal.coe_mul_bot_of_neg hx]
+  | bot_bot => simp
 
 中文:
 引理 mul_eq_top
@@ -3378,7 +3454,13 @@ lemma mul_eq_top
   | top_zero => simp
   | top_neg _ hx => simp [hx.le, EReal.top_mul_coe_of_neg hx]
   | top_bot => simp
-  | pos_bot _ hx => simp [hx
+  | pos_bot _ hx => simp [hx.le, EReal.coe_mul_bot_of_pos hx]
+  | coe_coe x y =>
+    simpa only [EReal.coe_ne_bot, EReal.coe_neg', false_and, and_false, EReal.coe_ne_top,
+      EReal.coe_pos, or_self, iff_false, EReal.coe_mul] using! EReal.coe_ne_top _
+  | zero_bot => simp
+  | neg_bot _ hx => simp [hx, EReal.coe_mul_bot_of_neg hx]
+  | bot_bot => simp
 
 Depends on / 依赖: EReal.coe_mul, EReal.coe_mul_bot_of_pos, EReal.coe_ne_bot, EReal.coe_ne_top, EReal.coe_neg, EReal.coe_pos, EReal.induction, EReal.mul_comm, EReal.top_mul_coe_of_neg, EReal.top_mul_coe_of_pos, and_false, coe_coe, coe_mul, coe_mul_bot_of_pos, coe_ne_bot, coe_ne_top, coe_neg, coe_pos, false_and, hx.le
 -/
@@ -3497,7 +3579,9 @@ lemma toENNReal_mul
     · simp_all [mul_top_of_pos hx]
   · rename_i a
     rcases lt_trichotomy a 0 with (ha | ha | ha)
-    · simp_all [le_of_lt, top_mul_of_neg 
+    · simp_all [le_of_lt, top_mul_of_neg (EReal.coe_neg'.mpr ha)]
+    · simp [ha]
+    · simp_all [top_mul_of_pos (EReal.coe_pos.mpr ha)]
 
 中文:
 引理 toENN实数_mul
@@ -3510,7 +3594,9 @@ lemma toENNReal_mul
     · simp_all [mul_top_of_pos hx]
   · rename_i a
     rcases lt_trichotomy a 0 with (ha | ha | ha)
-    · simp_all [le_of_lt, top_mul_of_neg 
+    · simp_all [le_of_lt, top_mul_of_neg (EReal.coe_neg'.mpr ha)]
+    · simp [ha]
+    · simp_all [top_mul_of_pos (EReal.coe_pos.mpr ha)]
 
 Depends on / 依赖: EReal.coe_neg, EReal.coe_pos.mpr, coe_mul, coe_neg, coe_pos, eq_or_lt_of_le, le_of_lt, lt_trichotomy, mul_nonpos_iff, mul_top_of_pos, ofReal_mul, rename_i, top_mul_of_neg, top_mul_of_pos
 -/
@@ -3561,7 +3647,7 @@ lemma right_distrib_of_nonneg
   | coe c => exact_mod_cast add_mul a b c
   | neg_coe c hc =>
     simp only [mul_neg, ← coe_ennreal_add, ← coe_ennreal_mul, add_mul]
-    rw [coe_ennreal_add]; rw [EReal.neg_add (.inl (coe_ennreal_ne_bot _)
+    rw [coe_ennreal_add]; rw [EReal.neg_add (.inl (coe_ennreal_ne_bot _)) (.inr (coe_ennreal_ne_bot _))]; rw [sub_eq_add_neg]
 
 中文:
 引理 right_distrib_of_nonneg
@@ -3573,7 +3659,7 @@ lemma right_distrib_of_nonneg
   | coe c => exact_mod_cast add_mul a b c
   | neg_coe c hc =>
     simp only [mul_neg, ← coe_ennreal_add, ← coe_ennreal_mul, add_mul]
-    rw [coe_ennreal_add]; rw [EReal.neg_add (.inl (coe_ennreal_ne_bot _)
+    rw [coe_ennreal_add]; rw [EReal.neg_add (.inl (coe_ennreal_ne_bot _)) (.inr (coe_ennreal_ne_bot _))]; rw [sub_eq_add_neg]
 
 Depends on / 依赖: EReal.neg_add, add_mul, coe_ennreal_add, coe_ennreal_mul, coe_ennreal_ne_bot, mul_neg, neg_add, neg_coe, recENNReal, sub_eq_add_neg
 -/

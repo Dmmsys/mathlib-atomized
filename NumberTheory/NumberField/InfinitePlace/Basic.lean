@@ -537,7 +537,31 @@ theorem mk_eq_iff
     -- inclusion or the complex conjugation using `Complex.uniformContinuous_ringHom_eq_id_or_conj`
     intro h₀
     obtain ⟨j, hiφ⟩ := (φ.injective).hasLeftInverse
-    let ι := Ring
+    let ι := RingEquiv.ofLeftInverse hiφ
+    have hlip : LipschitzWith 1 (RingHom.comp ψ ι.symm.toRingHom) := by
+      change LipschitzWith 1 (ψ ∘ ι.symm)
+      apply LipschitzWith.of_dist_le_mul
+      intro x y
+      rw [NNReal.coe_one]; rw [one_mul]; rw [dist_eq_norm]; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← map_sub]; rw [← map_sub]
+      apply le_of_eq
+      suffices ‖φ (ι.symm (x - y))‖ = ‖ψ (ι.symm (x - y))‖ by
+        rw [← this]; rw [← RingEquiv.ofLeftInverse_apply hiφ _]; rw [RingEquiv.apply_symm_apply ι _]; rw [dist_eq_norm]
+        rfl
+      exact congrFun (congrArg (↑) h₀) _
+    cases
+      Complex.uniformContinuous_ringHom_eq_id_or_conj φ.fieldRange hlip.uniformContinuous with
+    | inl h =>
+        left; ext1 x
+        conv_rhs => rw [← hiφ x]
+        exact (congrFun h (ι x)).symm
+    | inr h =>
+        right; ext1 x
+        conv_rhs => rw [← hiφ x]
+        exact (congrFun h (ι x)).symm
+  · rintro (⟨h⟩ | ⟨h⟩)
+    · exact congr_arg mk h
+    · rw [← mk_conjugate_eq]
+      exact congr_arg mk h
 
 中文:
 定理 mk_eq_iff
@@ -549,7 +573,31 @@ theorem mk_eq_iff
     -- inclusion or the complex conjugation using `Complex.uniformContinuous_ringHom_eq_id_or_conj`
     intro h₀
     obtain ⟨j, hiφ⟩ := (φ.injective).hasLeftInverse
-    let ι := Ring
+    let ι := RingEquiv.ofLeftInverse hiφ
+    have hlip : LipschitzWith 1 (RingHom.comp ψ ι.symm.toRingHom) := by
+      change LipschitzWith 1 (ψ ∘ ι.symm)
+      apply LipschitzWith.of_dist_le_mul
+      intro x y
+      rw [NNReal.coe_one]; rw [one_mul]; rw [dist_eq_norm]; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← map_sub]; rw [← map_sub]
+      apply le_of_eq
+      suffices ‖φ (ι.symm (x - y))‖ = ‖ψ (ι.symm (x - y))‖ by
+        rw [← this]; rw [← RingEquiv.ofLeftInverse_apply hiφ _]; rw [RingEquiv.apply_symm_apply ι _]; rw [dist_eq_norm]
+        rfl
+      exact congrFun (congrArg (↑) h₀) _
+    cases
+      Complex.uniformContinuous_ringHom_eq_id_or_conj φ.fieldRange hlip.uniformContinuous with
+    | inl h =>
+        left; ext1 x
+        conv_rhs => rw [← hiφ x]
+        exact (congrFun h (ι x)).symm
+    | inr h =>
+        right; ext1 x
+        conv_rhs => rw [← hiφ x]
+        exact (congrFun h (ι x)).symm
+  · rintro (⟨h⟩ | ⟨h⟩)
+    · exact congr_arg mk h
+    · rw [← mk_conjugate_eq]
+      exact congr_arg mk h
 
 Depends on / 依赖: between, continuous, either, uniform
 -/
@@ -1255,7 +1303,12 @@ theorem card_filter_mk_eq
     rw [← mk_embedding w]; rw [mk_eq_iff]; rw [ComplexEmbedding.conjugate]; rw [star_involutive.eq_iff]
   simp_rw [Finset.filter_or, Finset.filter_eq' _ (embedding w),
     Finset.filter_eq' _ (ComplexEmbedding.conjugate (embedding w)),
-    Finset.mem_univ, ite_
+    Finset.mem_univ, ite_true, mult]
+  split_ifs with hw
+  · rw [ComplexEmbedding.isReal_iff.mp (isReal_iff.mp hw), Finset.union_idempotent,
+      Finset.card_singleton]
+  · refine Finset.card_pair ?_
+    rwa [Ne, eq_comm, ← ComplexEmbedding.isReal_iff, ← isReal_iff]
 
 中文:
 定理 card_filter_mk_eq
@@ -1267,7 +1320,12 @@ theorem card_filter_mk_eq
     rw [← mk_embedding w]; rw [mk_eq_iff]; rw [ComplexEmbedding.conjugate]; rw [star_involutive.eq_iff]
   simp_rw [Finset.filter_or, Finset.filter_eq' _ (embedding w),
     Finset.filter_eq' _ (ComplexEmbedding.conjugate (embedding w)),
-    Finset.mem_univ, ite_
+    Finset.mem_univ, ite_true, mult]
+  split_ifs with hw
+  · rw [ComplexEmbedding.isReal_iff.mp (isReal_iff.mp hw), Finset.union_idempotent,
+      Finset.card_singleton]
+  · refine Finset.card_pair ?_
+    rwa [Ne, eq_comm, ← ComplexEmbedding.isReal_iff, ← isReal_iff]
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.conjugate, ComplexEmbedding.isReal_iff, ComplexEmbedding.isReal_iff.mp, Finset, Finset.card_pair, Finset.card_singleton, Finset.filter_eq, Finset.filter_or, Finset.mem_univ, Finset.union_idempotent, card_pair, card_singleton, conjugate, conv_lhs, embedding, eq_comm, eq_iff, filter_eq, filter_or
 -/
@@ -1472,7 +1530,11 @@ theorem prod_eq_abs_norm
   convert! (congr_arg (‖·‖) (Algebra.norm_eq_prod_embeddings Rat Complex x)).symm
   · rw [norm_prod, ← Fintype.prod_equiv (RingHom.equivRatAlgHom K Complex) (fun f => ‖f x‖)
       (fun φ => ‖φ x‖) fun _ => by simp [RingHom.equivRatAlgHom_apply]]
-    rw [← Finset.prod_fiberwise Finset.
+    rw [← Finset.prod_fiberwise Finset.univ mk (fun φ => ‖φ x‖)]
+    have (w : InfinitePlace K) (φ) (hφ : φ in ({φ | mk φ = w} : Finset _)) :
+        ‖φ x‖ = w x := by rw [← (Finset.mem_filter.mp hφ).2, apply]
+    simp_rw [Finset.prod_congr rfl (this _), Finset.prod_const, card_filter_mk_eq]
+  · rw [eq_ratCast, Rat.cast_abs, ← Real.norm_eq_abs, ← Complex.norm_real, Complex.ofReal_ratCast]
 
 中文:
 定理 prod_eq_abs_norm
@@ -1482,7 +1544,11 @@ theorem prod_eq_abs_norm
   convert! (congr_arg (‖·‖) (Algebra.norm_eq_prod_embeddings Rat Complex x)).symm
   · rw [norm_prod, ← Fintype.prod_equiv (RingHom.equivRatAlgHom K Complex) (fun f => ‖f x‖)
       (fun φ => ‖φ x‖) fun _ => by simp [RingHom.equivRatAlgHom_apply]]
-    rw [← Finset.prod_fiberwise Finset.
+    rw [← Finset.prod_fiberwise Finset.univ mk (fun φ => ‖φ x‖)]
+    have (w : InfinitePlace K) (φ) (hφ : φ in ({φ | mk φ = w} : Finset _)) :
+        ‖φ x‖ = w x := by rw [← (Finset.mem_filter.mp hφ).2, apply]
+    simp_rw [Finset.prod_congr rfl (this _), Finset.prod_const, card_filter_mk_eq]
+  · rw [eq_ratCast, Rat.cast_abs, ← Real.norm_eq_abs, ← Complex.norm_real, Complex.ofReal_ratCast]
 
 Depends on / 依赖: Algebra, Algebra.norm_eq_prod_embeddings, Finset, Finset.mem_filter.mp, Finset.prod_congr, Finset.prod_cons, Finset.prod_fiberwise, Finset.univ, Fintype, Fintype.prod_equiv, InfinitePlace, RingHom, RingHom.equivRatAlgHom, RingHom.equivRatAlgHom_apply, classical, congr_arg, convert, equivRatAlgHom, equivRatAlgHom_apply, mem_filter
 -/
@@ -1509,7 +1575,13 @@ theorem one_le_of_lt_one
     contrapose! this
     rw [← InfinitePlace.prod_eq_abs_norm]; rw [← Finset.prod_const_one]
     refine Finset.prod_lt_prod_of_nonempty (fun _ _ => ?_) (fun z _ => ?_) Finset.univ_nonempty
-    · exact pow_pos (pos_iff.mpr ((Subalgebra.coe_eq_
+    · exact pow_pos (pos_iff.mpr ((Subalgebra.coe_eq_zero _).not.mpr ha)) _
+    · refine pow_lt_one₀ (apply_nonneg _ _) ?_ (by rw [mult]; split_ifs <;> norm_num)
+      by_cases hz : z = w
+      · rwa [hz]
+      · exact h hz
+  rw [← Algebra.coe_norm_int]; rw [← Int.cast_one]; rw [← Int.cast_abs]; rw [Rat.cast_intCast]; rw [Int.cast_le]
+  exact Int.one_le_abs (Algebra.norm_ne_zero_iff.mpr ha)
 
 中文:
 定理 one_le_of_lt_one
@@ -1519,7 +1591,13 @@ theorem one_le_of_lt_one
     contrapose! this
     rw [← InfinitePlace.prod_eq_abs_norm]; rw [← Finset.prod_const_one]
     refine Finset.prod_lt_prod_of_nonempty (fun _ _ => ?_) (fun z _ => ?_) Finset.univ_nonempty
-    · exact pow_pos (pos_iff.mpr ((Subalgebra.coe_eq_
+    · exact pow_pos (pos_iff.mpr ((Subalgebra.coe_eq_zero _).not.mpr ha)) _
+    · refine pow_lt_one₀ (apply_nonneg _ _) ?_ (by rw [mult]; split_ifs <;> norm_num)
+      by_cases hz : z = w
+      · rwa [hz]
+      · exact h hz
+  rw [← Algebra.coe_norm_int]; rw [← Int.cast_one]; rw [← Int.cast_abs]; rw [Rat.cast_intCast]; rw [Int.cast_le]
+  exact Int.one_le_abs (Algebra.norm_ne_zero_iff.mpr ha)
 
 Depends on / 依赖: Algebra, Algebra.coe_norm_int, Algebra.norm, Finset, Finset.prod_const_one, Finset.prod_lt_prod_of_nonempty, Finset.univ_nonempty, InfinitePlace, InfinitePlace.prod_eq_abs_norm, Int.cast_abs, Int.cast_one, Subalgebra, Subalgebra.coe_eq_zero, apply_nonneg, cast_abs, cast_one, coe_eq_zero, coe_norm_int, contrapose, not.mpr
 -/
@@ -1550,7 +1628,26 @@ theorem _root_.NumberField.is_primitive_element_of_infinitePlace_lt
     have h : 1 <= w x := one_le_of_lt_one h₁ h₂
     have main : w = InfinitePlace.mk ψ.toRingHom := by
       simp only [RingHom.toRatAlgHom_apply] at hψ
-      rw [← norm_embedding_eq]; rw 
+      rw [← norm_embedding_eq]; rw [hψ] at h
+      contrapose! h
+      exact h₂ h.symm
+    rw [(mk_embedding w).symm]; rw [mk_eq_iff] at main
+    cases h₃ with
+    | inl hw =>
+      rw [conjugate_embedding_eq_of_isReal hw]; rw [or_self] at main
+      exact congr_arg RingHom.toRatAlgHom main
+    | inr hw =>
+      refine congr_arg RingHom.toRatAlgHom (main.resolve_right fun h' => hw.not_ge ?_)
+      have : (embedding w x).im = 0 := by
+        rw [← Complex.conj_eq_iff_im]
+        have := RingHom.congr_fun h' x
+        simp only [ComplexEmbedding.conjugate_coe_eq, AlgHom.toRingHom_eq_coe,
+          RingHom.coe_coe] at this
+        rw [this]
+        exact hψ.symm
+      rwa [← norm_embedding_eq, ← Complex.re_add_im (embedding w x), this, Complex.ofReal_zero,
+        zero_mul, add_zero, Complex.norm_real] at h
+  · exact fun x => IsAlgClosed.splits _
 
 中文:
 定理 _root_.数域.is_primitive_element_of_infinitePlace_lt
@@ -1561,7 +1658,26 @@ theorem _root_.NumberField.is_primitive_element_of_infinitePlace_lt
     have h : 1 <= w x := one_le_of_lt_one h₁ h₂
     have main : w = InfinitePlace.mk ψ.toRingHom := by
       simp only [RingHom.toRatAlgHom_apply] at hψ
-      rw [← norm_embedding_eq]; rw 
+      rw [← norm_embedding_eq]; rw [hψ] at h
+      contrapose! h
+      exact h₂ h.symm
+    rw [(mk_embedding w).symm]; rw [mk_eq_iff] at main
+    cases h₃ with
+    | inl hw =>
+      rw [conjugate_embedding_eq_of_isReal hw]; rw [or_self] at main
+      exact congr_arg RingHom.toRatAlgHom main
+    | inr hw =>
+      refine congr_arg RingHom.toRatAlgHom (main.resolve_right fun h' => hw.not_ge ?_)
+      have : (embedding w x).im = 0 := by
+        rw [← Complex.conj_eq_iff_im]
+        have := RingHom.congr_fun h' x
+        simp only [ComplexEmbedding.conjugate_coe_eq, AlgHom.toRingHom_eq_coe,
+          RingHom.coe_coe] at this
+        rw [this]
+        exact hψ.symm
+      rwa [← norm_embedding_eq, ← Complex.re_add_im (embedding w x), this, Complex.ofReal_zero,
+        zero_mul, add_zero, Complex.norm_real] at h
+  · exact fun x => IsAlgClosed.splits _
 
 Depends on / 依赖: Field.primitive_element_iff_algHom_eq_of_eval, InfinitePlace, InfinitePlace.mk, RingHom, RingHom.toRatAlgHom, RingHom.toRatAlgHom_apply, congr_arg, conjugate_embedding_eq_of_isReal, contrapose, embedding, h.symm, mk_embedding, mk_eq_iff, norm_embedding_eq, one_le_of_lt_one, or_self, primitive_element_iff_algHom_eq_of_eval, toRatAlgHom, toRatAlgHom_apply, toRingHom
 -/
@@ -1715,7 +1831,17 @@ theorem card_complex_embeddings
   suffices forall w : { w : InfinitePlace K // IsComplex w },
      #{φ : {φ //¬ ComplexEmbedding.IsReal φ} | mkComplex φ = w} = 2 by
     rw [Fintype.card]; rw [Finset.card_eq_sum_ones]; rw [← Finset.sum_fiberwise _ (fun φ => mkComplex φ)]
-    simp_rw [Finset.sum_const, this, smul_eq_mul, mul_one,
+    simp_rw [Finset.sum_const, this, smul_eq_mul, mul_one, Fintype.card, Finset.card_eq_sum_ones,
+      Finset.mul_sum, Finset.sum_const, smul_eq_mul, mul_one]
+  rintro ⟨w, hw⟩
+  convert! card_filter_mk_eq w
+  · rw [← Fintype.card_subtype, ← Fintype.card_subtype]
+    refine Fintype.card_congr (Equiv.ofBijective ?_ ⟨fun _ _ h => ?_, fun ⟨φ, hφ⟩ => ?_⟩)
+    · exact fun ⟨φ, hφ⟩ => ⟨φ.val, by rwa [Subtype.ext_iff] at hφ⟩
+    · rwa [Subtype.mk_eq_mk, ← Subtype.ext_iff, ← Subtype.ext_iff] at h
+    · refine ⟨⟨⟨φ, not_isReal_of_mk_isComplex (hφ.symm ▸ hw)⟩, ?_⟩, rfl⟩
+      rwa [Subtype.ext_iff, mkComplex_coe]
+  · simp_rw [mult, not_isReal_iff_isComplex.mpr hw, ite_false]
 
 中文:
 定理 card_complex_embeddings
@@ -1723,7 +1849,17 @@ theorem card_complex_embeddings
   suffices forall w : { w : InfinitePlace K // IsComplex w },
      #{φ : {φ //¬ ComplexEmbedding.IsReal φ} | mkComplex φ = w} = 2 by
     rw [Fintype.card]; rw [Finset.card_eq_sum_ones]; rw [← Finset.sum_fiberwise _ (fun φ => mkComplex φ)]
-    simp_rw [Finset.sum_const, this, smul_eq_mul, mul_one,
+    simp_rw [Finset.sum_const, this, smul_eq_mul, mul_one, Fintype.card, Finset.card_eq_sum_ones,
+      Finset.mul_sum, Finset.sum_const, smul_eq_mul, mul_one]
+  rintro ⟨w, hw⟩
+  convert! card_filter_mk_eq w
+  · rw [← Fintype.card_subtype, ← Fintype.card_subtype]
+    refine Fintype.card_congr (Equiv.ofBijective ?_ ⟨fun _ _ h => ?_, fun ⟨φ, hφ⟩ => ?_⟩)
+    · exact fun ⟨φ, hφ⟩ => ⟨φ.val, by rwa [Subtype.ext_iff] at hφ⟩
+    · rwa [Subtype.mk_eq_mk, ← Subtype.ext_iff, ← Subtype.ext_iff] at h
+    · refine ⟨⟨⟨φ, not_isReal_of_mk_isComplex (hφ.symm ▸ hw)⟩, ?_⟩, rfl⟩
+      rwa [Subtype.ext_iff, mkComplex_coe]
+  · simp_rw [mult, not_isReal_iff_isComplex.mpr hw, ite_false]
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.IsReal, Finset, Finset.card_eq_sum_ones, Finset.mul_sum, Finset.sum_const, Finset.sum_fiberwise, Fintype, Fintype.card, Fintype.card_c, Fintype.card_subtype, InfinitePlace, IsComplex, IsReal, card_c, card_eq_sum_ones, card_filter_mk_eq, card_subtype, convert, mkComplex
 -/
@@ -1778,13 +1914,13 @@ English:
 theorem ComplexEmbedding.conjugate_sign
   proof: by
   rw [Equiv.Perm.sign_of_pow_two_eq_one]; rw [Embeddings.card]; rw [← card_add_two_mul_card_eq_rank]; rw [← card_real_embeddings]; rw [Fintype.card]; rw [Fintype.card]; rw [Nat.add_sub_cancel_left]; rw [Nat.mul_div_cancel_left _ zero_lt_two]
-  exact Equiv.ext (ComplexEmbedding.involutive_conjugat
+  exact Equiv.ext (ComplexEmbedding.involutive_conjugate K).toPerm_involutive
 
 中文:
 定理 ComplexEmbedding.conjugate_sign
   证明: by
   rw [Equiv.Perm.sign_of_pow_two_eq_one]; rw [Embeddings.card]; rw [← card_add_two_mul_card_eq_rank]; rw [← card_real_embeddings]; rw [Fintype.card]; rw [Fintype.card]; rw [Nat.add_sub_cancel_left]; rw [Nat.mul_div_cancel_left _ zero_lt_two]
-  exact Equiv.ext (ComplexEmbedding.involutive_conjugat
+  exact Equiv.ext (ComplexEmbedding.involutive_conjugate K).toPerm_involutive
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.involutive_conjugate, Embeddings, Embeddings.card, Equiv.Perm.sign_of_pow_two_eq_one, Equiv.ext, Fintype, Fintype.card, Nat.add_sub_cancel_left, Nat.mul_div_cancel_left, add_sub_cancel_left, card_add_two_mul_card_eq_rank, card_real_embeddings, involutive_conjugate, mul_div_cancel_left, sign_of_pow_two_eq_one, toPerm_involutive, zero_lt_two
 -/
@@ -1886,7 +2022,20 @@ theorem nrRealPlaces_eq_zero_of_two_lt
   let f := w.embedding
   have hζ' : IsPrimitiveRoot (f ζ) k := hζ.map_of_injective f.injective
   have him : (f ζ).im = 0 := by
-    rw [← Complex.conj_eq_iff_im]; rw [← Number
+    rw [← Complex.conj_eq_iff_im]; rw [← NumberField.ComplexEmbedding.conjugate_coe_eq]
+    congr
+  have hre : (f ζ).re = 1 ∨ (f ζ).re = -1 := by
+    rw [← Complex.abs_re_eq_norm] at him
+    have := Complex.norm_eq_one_of_pow_eq_one hζ'.pow_eq_one (by lia)
+    rwa [← him, ← abs_one, abs_eq_abs] at this
+  cases hre with
+  | inl hone =>
+exact hζ'.ne_one (by lia) Complex.ext (by simp [hone]) (by simp [him])
+  | inr hnegone =>
+    replace hζ' := hζ'.eq_orderOf
+    simp only [show f ζ = -1 from Complex.ext (by simp [hnegone]) (by simp [him]),
+      orderOf_neg_one, ringChar.eq_zero] at hζ'
+    lia
 
 中文:
 定理 nr实数Places_eq_zero_of_two_lt
@@ -1897,7 +2046,20 @@ theorem nrRealPlaces_eq_zero_of_two_lt
   let f := w.embedding
   have hζ' : IsPrimitiveRoot (f ζ) k := hζ.map_of_injective f.injective
   have him : (f ζ).im = 0 := by
-    rw [← Complex.conj_eq_iff_im]; rw [← Number
+    rw [← Complex.conj_eq_iff_im]; rw [← NumberField.ComplexEmbedding.conjugate_coe_eq]
+    congr
+  have hre : (f ζ).re = 1 ∨ (f ζ).re = -1 := by
+    rw [← Complex.abs_re_eq_norm] at him
+    have := Complex.norm_eq_one_of_pow_eq_one hζ'.pow_eq_one (by lia)
+    rwa [← him, ← abs_one, abs_eq_abs] at this
+  cases hre with
+  | inl hone =>
+exact hζ'.ne_one (by lia) Complex.ext (by simp [hone]) (by simp [him])
+  | inr hnegone =>
+    replace hζ' := hζ'.eq_orderOf
+    simp only [show f ζ = -1 from Complex.ext (by simp [hnegone]) (by simp [him]),
+      orderOf_neg_one, ringChar.eq_zero] at hζ'
+    lia
 
 Depends on / 依赖: Complex.abs_re_eq_norm, Complex.conj_eq_iff_im, Complex.norm_eq_one_of_pow_eq_one, ComplexEmbedding, Fintype, Fintype.card_eq_zero_iff, InfinitePlace, IsPrimitiveRoot, NumberField, NumberField.ComplexEmbedding.conjugate_coe_eq, NumberField.InfinitePlace.isReal_iff, abs_, abs_re_eq_norm, card_eq_zero_iff, conj_eq_iff_im, conjugate_coe_eq, embedding, f.injective, hwreal, injective
 -/

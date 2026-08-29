@@ -476,7 +476,22 @@ theorem NormedAddGroupHom.ker_completion
   rw [SeminormedAddCommGroup.mem_closure_iff]
   intro ε ε_pos
   rcases h.exists_pos with ⟨C', C'_pos, hC'⟩
-  rcases exists_pos_mul_lt ε_pos (1 + C' * ‖f‖) wi
+  rcases exists_pos_mul_lt ε_pos (1 + C' * ‖f‖) with ⟨δ, δ_pos, hδ⟩
+  obtain ⟨_, ⟨g : G, rfl⟩, hg : ‖hatg - g‖ < δ⟩ :=
+    SeminormedAddCommGroup.mem_closure_iff.mp (Completion.isDenseInducing_coe.dense hatg) δ δ_pos
+  obtain ⟨g' : G, hgg' : f g' = f g, hfg : ‖g'‖ <= C' * ‖f g‖⟩ := hC' (f g) (mem_range_self _ g)
+  have mem_ker : g - g' in f.ker := by rw [f.mem_ker, map_sub, sub_eq_zero.mpr hgg'.symm]
+  refine ⟨_, ⟨⟨g - g', mem_ker⟩, rfl⟩, ?_⟩
+  have : ‖f g‖ <= ‖f‖ * δ := calc
+    ‖f g‖ <= ‖f‖ * ‖hatg - g‖ := by
+      simpa [map_sub, hatg_in] using f.completion.le_opNorm (hatg - g)
+    _ <= ‖f‖ * δ := by gcongr
+  calc ‖hatg - ↑(g - g')‖ = ‖hatg - g + g'‖ := by rw [Completion.coe_sub, sub_add]
+    _ <= ‖hatg - g‖ + ‖(g' : Completion G)‖ := norm_add_le _ _
+    _ = ‖hatg - g‖ + ‖g'‖ := by rw [Completion.norm_coe]
+    _ < δ + C' * ‖f g‖ := add_lt_add_of_lt_of_le hg hfg
+    _ <= δ + C' * (‖f‖ * δ) := by gcongr
+    _ < ε := by simpa only [add_mul, one_mul, mul_assoc] using hδ
 
 中文:
 定理 赋范加群态射.ker_completion
@@ -487,7 +502,22 @@ theorem NormedAddGroupHom.ker_completion
   rw [SeminormedAddCommGroup.mem_closure_iff]
   intro ε ε_pos
   rcases h.exists_pos with ⟨C', C'_pos, hC'⟩
-  rcases exists_pos_mul_lt ε_pos (1 + C' * ‖f‖) wi
+  rcases exists_pos_mul_lt ε_pos (1 + C' * ‖f‖) with ⟨δ, δ_pos, hδ⟩
+  obtain ⟨_, ⟨g : G, rfl⟩, hg : ‖hatg - g‖ < δ⟩ :=
+    SeminormedAddCommGroup.mem_closure_iff.mp (Completion.isDenseInducing_coe.dense hatg) δ δ_pos
+  obtain ⟨g' : G, hgg' : f g' = f g, hfg : ‖g'‖ <= C' * ‖f g‖⟩ := hC' (f g) (mem_range_self _ g)
+  have mem_ker : g - g' in f.ker := by rw [f.mem_ker, map_sub, sub_eq_zero.mpr hgg'.symm]
+  refine ⟨_, ⟨⟨g - g', mem_ker⟩, rfl⟩, ?_⟩
+  have : ‖f g‖ <= ‖f‖ * δ := calc
+    ‖f g‖ <= ‖f‖ * ‖hatg - g‖ := by
+      simpa [map_sub, hatg_in] using f.completion.le_opNorm (hatg - g)
+    _ <= ‖f‖ * δ := by gcongr
+  calc ‖hatg - ↑(g - g')‖ = ‖hatg - g + g'‖ := by rw [Completion.coe_sub, sub_add]
+    _ <= ‖hatg - g‖ + ‖(g' : Completion G)‖ := norm_add_le _ _
+    _ = ‖hatg - g‖ + ‖g'‖ := by rw [Completion.norm_coe]
+    _ < δ + C' * ‖f g‖ := add_lt_add_of_lt_of_le hg hfg
+    _ <= δ + C' * (‖f‖ * δ) := by gcongr
+    _ < ε := by simpa only [add_mul, one_mul, mul_assoc] using hδ
 
 Depends on / 依赖: Completion, Completion.isDenseInducing_coe.dense, SeminormedAddCommGroup, SeminormedAddCommGroup.mem_closure_iff, SeminormedAddCommGroup.mem_closure_iff.mp, _pos, closure_minimal, completion, exists_pos, exists_pos_mul_lt, f.completion, f.completion.isClosed_ker, f.ker_le_ker_completion, h.exists_pos, hatg_in, isClosed_ker, isDenseInducing_coe, ker_le_ker_completion, le_antisymm, mem_closure_iff
 -/

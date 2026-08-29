@@ -96,7 +96,10 @@ theorem isEquivalent_atTop_lead
       IsLittleO.add_isEquivalent
         (IsLittleO.fun_sum fun i hi =>
           IsLittleO.const_mul_left
-            ((IsLittleO.const_mul_right fun hz => h <| leadingCoef
+            ((IsLittleO.const_mul_right fun hz => h <| leadingCoeff_eq_zero.mp hz) <|
+              isLittleO_pow_pow_atTop_of_lt (mem_range.mp hi))
+            _)
+        IsEquivalent.refl
 
 中文:
 定理 isEquivalent_atTop_lead
@@ -108,7 +111,10 @@ theorem isEquivalent_atTop_lead
       IsLittleO.add_isEquivalent
         (IsLittleO.fun_sum fun i hi =>
           IsLittleO.const_mul_left
-            ((IsLittleO.const_mul_right fun hz => h <| leadingCoef
+            ((IsLittleO.const_mul_right fun hz => h <| leadingCoeff_eq_zero.mp hz) <|
+              isLittleO_pow_pow_atTop_of_lt (mem_range.mp hi))
+            _)
+        IsEquivalent.refl
 
 Depends on / 依赖: IsEquivalent, IsEquivalent.refl, IsLittleO, IsLittleO.add_isEquivalent, IsLittleO.const_mul_left, IsLittleO.const_mul_right, IsLittleO.fun_sum, Polynomial, Polynomial.eval_eq_sum_range, add_isEquivalent, const_mul_left, const_mul_right, eval_eq_sum_range, fun_sum, isLittleO_pow_pow_atTop_of_lt, leadingCoeff_eq_zero, leadingCoeff_eq_zero.mp, mem_range, mem_range.mp, sum_range_succ
 -/
@@ -160,7 +166,8 @@ theorem tendsto_atTop_iff_leadingCoeff_nonneg
   refine ⟨fun h => ?_, fun h => tendsto_atTop_of_leadingCoeff_nonneg P h.1 h.2⟩
   have : Tendsto (fun x => P.leadingCoeff * x ^ P.natDegree) atTop atTop :=
     (isEquivalent_atTop_lead P).tendsto_atTop h
-  rw [tendsto_const_mul_pow_atTop_iff]; rw [← pos_iff_ne_zero]; rw [natDegree_pos_iff_degree_
+  rw [tendsto_const_mul_pow_atTop_iff]; rw [← pos_iff_ne_zero]; rw [natDegree_pos_iff_degree_pos] at this
+  exact ⟨this.1, this.2.le⟩
 
 中文:
 定理 tendsto_atTop_iff_leadingCoeff_nonneg
@@ -168,7 +175,8 @@ theorem tendsto_atTop_iff_leadingCoeff_nonneg
   refine ⟨fun h => ?_, fun h => tendsto_atTop_of_leadingCoeff_nonneg P h.1 h.2⟩
   have : Tendsto (fun x => P.leadingCoeff * x ^ P.natDegree) atTop atTop :=
     (isEquivalent_atTop_lead P).tendsto_atTop h
-  rw [tendsto_const_mul_pow_atTop_iff]; rw [← pos_iff_ne_zero]; rw [natDegree_pos_iff_degree_
+  rw [tendsto_const_mul_pow_atTop_iff]; rw [← pos_iff_ne_zero]; rw [natDegree_pos_iff_degree_pos] at this
+  exact ⟨this.1, this.2.le⟩
 
 Depends on / 依赖: P.leadingCoeff, P.natDegree, Tendsto, isEquivalent_atTop_lead, leadingCoeff, natDegree, natDegree_pos_iff_degree_pos, pos_iff_ne_zero, tendsto_atTop, tendsto_atTop_of_leadingCoeff_nonneg, tendsto_const_mul_pow_atTop_iff
 -/
@@ -258,7 +266,9 @@ theorem isBoundedUnder_abs_atTop_iff
     (forall_imp (fun _ => le_of_eq) fun x => congr_arg abs <| _root_.trans (congr_arg (eval x)
     (eq_C_of_degree_le_zero h)) eval_C))⟩⟩
   contrapose! h
-  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto
+  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto_atTop P h)
+
+@[deprecated (since := "2026-02-05")] alias abs_isBoundedUnder_iff := isBoundedUnder_abs_atTop_iff
 
 中文:
 定理 isBoundedUnder_abs_atTop_iff
@@ -267,7 +277,9 @@ theorem isBoundedUnder_abs_atTop_iff
     (forall_imp (fun _ => le_of_eq) fun x => congr_arg abs <| _root_.trans (congr_arg (eval x)
     (eq_C_of_degree_le_zero h)) eval_C))⟩⟩
   contrapose! h
-  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto
+  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto_atTop P h)
+
+@[deprecated (since := "2026-02-05")] alias abs_isBoundedUnder_iff := isBoundedUnder_abs_atTop_iff
 
 Depends on / 依赖: Eventually, Eventually.of_forall, P.coeff, _root_, _root_.trans, abs_tendsto_atTop, congr_arg, contrapose, eq_C_of_degree_le_zero, eval_C, eventually_map, eventually_map.mpr, forall_imp, le_of_eq, not_isBoundedUnder_of_tendsto_atTop, of_forall
 -/
@@ -314,7 +326,12 @@ theorem tendsto_nhds_iff
     by_cases hP : P.leadingCoeff = 0
     · simp only [hP, zero_mul, tendsto_const_nhds_iff] at this
       exact ⟨_root_.trans hP this, by simp [leadingCoeff_eq_zero.1 hP]⟩
-    · rw [tendsto_const_mul_pow_nhds
+    · rw [tendsto_const_mul_pow_nhds_iff hP, natDegree_eq_zero_iff_degree_le_zero] at this
+      exact this.symm
+  · refine P.isEquivalent_atTop_lead.symm.tendsto_nhds ?_
+    have : P.natDegree = 0 := natDegree_eq_zero_iff_degree_le_zero.2 h.2
+    simp only [h.1, this, pow_zero, mul_one]
+    exact tendsto_const_nhds
 
 中文:
 定理 tendsto_nhds_iff
@@ -325,7 +342,12 @@ theorem tendsto_nhds_iff
     by_cases hP : P.leadingCoeff = 0
     · simp only [hP, zero_mul, tendsto_const_nhds_iff] at this
       exact ⟨_root_.trans hP this, by simp [leadingCoeff_eq_zero.1 hP]⟩
-    · rw [tendsto_const_mul_pow_nhds
+    · rw [tendsto_const_mul_pow_nhds_iff hP, natDegree_eq_zero_iff_degree_le_zero] at this
+      exact this.symm
+  · refine P.isEquivalent_atTop_lead.symm.tendsto_nhds ?_
+    have : P.natDegree = 0 := natDegree_eq_zero_iff_degree_le_zero.2 h.2
+    simp only [h.1, this, pow_zero, mul_one]
+    exact tendsto_const_nhds
 
 Depends on / 依赖: P.isEquivalent_atTop_lead.symm.tendsto_nhds, P.isEquivalent_atTop_lead.tendsto_nhds, P.leadingCoeff, P.natDegree, _root_, _root_.trans, isEquivalent_atTop_lead, leadingCoeff, leadingCoeff_eq_zero, natDegree, natDegree_eq_zero_iff_degree_le_zero, pow_, tendsto_const_mul_pow_nhds_iff, tendsto_const_nhds_iff, tendsto_nhds, this.symm, zero_mul
 -/
@@ -411,7 +433,7 @@ theorem isBoundedUnder_abs_atBot_iff
     (forall_imp (fun _ => le_of_eq) fun x => congr_arg abs <| _root_.trans (congr_arg (eval x)
     (eq_C_of_degree_le_zero h)) eval_C))⟩⟩
   contrapose! h
-  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto
+  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto_atBot P h)
 
 中文:
 定理 isBoundedUnder_abs_atBot_iff
@@ -420,7 +442,7 @@ theorem isBoundedUnder_abs_atBot_iff
     (forall_imp (fun _ => le_of_eq) fun x => congr_arg abs <| _root_.trans (congr_arg (eval x)
     (eq_C_of_degree_le_zero h)) eval_C))⟩⟩
   contrapose! h
-  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto
+  exact not_isBoundedUnder_of_tendsto_atTop (abs_tendsto_atBot P h)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, P.coeff, _root_, _root_.trans, abs_tendsto_atBot, congr_arg, contrapose, eq_C_of_degree_le_zero, eval_C, eventually_map, eventually_map.mpr, forall_imp, le_of_eq, not_isBoundedUnder_of_tendsto_atTop, of_forall
 -/
@@ -470,7 +492,7 @@ theorem isEquivalent_atTop_div
   refine
     (P.isEquivalent_atTop_lead.symm.div Q.isEquivalent_atTop_lead.symm).symm.trans
       (EventuallyEq.isEquivalent ((eventually_gt_atTop 0).mono fun x hx => ?_))
-  simp [← div_m
+  simp [← div_mul_div_comm, zpow_sub₀ hx.ne.symm]
 
 中文:
 定理 isEquivalent_atTop_div
@@ -482,7 +504,7 @@ theorem isEquivalent_atTop_div
   refine
     (P.isEquivalent_atTop_lead.symm.div Q.isEquivalent_atTop_lead.symm).symm.trans
       (EventuallyEq.isEquivalent ((eventually_gt_atTop 0).mono fun x hx => ?_))
-  simp [← div_m
+  simp [← div_mul_div_comm, zpow_sub₀ hx.ne.symm]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.isEquivalent, IsEquivalent, IsEquivalent.refl, P.isEquivalent_atTop_lead.symm.div, Q.isEquivalent_atTop_lead.symm, div_mul_div_comm, eventually_gt_atTop, hx.ne.symm, isEquivalent, isEquivalent_atTop_lead, symm.trans
 -/
@@ -514,7 +536,7 @@ theorem div_tendsto_atTop_zero_of_degree_lt
   lia
 
 @[deprecated (since := "2026-02-05")]
-alias div_tendsto_zero_of_degree_lt := div
+alias div_tendsto_zero_of_degree_lt := div_tendsto_atTop_zero_of_degree_lt
 
 中文:
 定理 div_tendsto_atTop_zero_of_degree_lt
@@ -529,7 +551,7 @@ alias div_tendsto_zero_of_degree_lt := div
   lia
 
 @[deprecated (since := "2026-02-05")]
-alias div_tendsto_zero_of_degree_lt := div
+alias div_tendsto_zero_of_degree_lt := div_tendsto_atTop_zero_of_degree_lt
 
 Depends on / 依赖: const_mul, isEquivalent_atTop_div, mul_zero, natDegree_lt_natDegree_iff, symm.tendsto_nhds, tendsto_nhds, tendsto_zpow_atTop_zero
 -/
@@ -558,7 +580,17 @@ theorem div_tendsto_atTop_zero_iff_degree_lt
   · simp only [div_eq_mul_inv, inv_eq_zero, mul_eq_zero] at hPQ
     rcases hPQ with hP0 | hQ0
     · rw [leadingCoeff_eq_zero.1 hP0, degree_zero]
-      exact bot_lt_iff_ne_bot.2 fun
+      exact bot_lt_iff_ne_bot.2 fun hQ' => hQ (degree_eq_bot.1 hQ')
+    · exact absurd (leadingCoeff_eq_zero.1 hQ0) hQ
+  · have := (isEquivalent_atTop_div P Q).tendsto_nhds h
+    rw [tendsto_const_mul_zpow_atTop_nhds_iff hPQ] at this
+    rcases this with h | h
+    · exact absurd h.2 hPQ
+    · rw [sub_lt_iff_lt_add, zero_add, Int.ofNat_lt] at h
+      exact degree_lt_degree h.1
+
+@[deprecated (since := "2026-02-05")]
+alias div_tendsto_zero_iff_degree_lt := div_tendsto_atTop_zero_iff_degree_lt
 
 中文:
 定理 div_tendsto_atTop_zero_iff_degree_lt
@@ -569,7 +601,17 @@ theorem div_tendsto_atTop_zero_iff_degree_lt
   · simp only [div_eq_mul_inv, inv_eq_zero, mul_eq_zero] at hPQ
     rcases hPQ with hP0 | hQ0
     · rw [leadingCoeff_eq_zero.1 hP0, degree_zero]
-      exact bot_lt_iff_ne_bot.2 fun
+      exact bot_lt_iff_ne_bot.2 fun hQ' => hQ (degree_eq_bot.1 hQ')
+    · exact absurd (leadingCoeff_eq_zero.1 hQ0) hQ
+  · have := (isEquivalent_atTop_div P Q).tendsto_nhds h
+    rw [tendsto_const_mul_zpow_atTop_nhds_iff hPQ] at this
+    rcases this with h | h
+    · exact absurd h.2 hPQ
+    · rw [sub_lt_iff_lt_add, zero_add, Int.ofNat_lt] at h
+      exact degree_lt_degree h.1
+
+@[deprecated (since := "2026-02-05")]
+alias div_tendsto_zero_iff_degree_lt := div_tendsto_atTop_zero_iff_degree_lt
 
 Depends on / 依赖: P.leadingCoeff, Q.leadingCoeff, absurd, bot_lt_iff_ne_bot, degree_eq_bot, degree_zero, div_eq_mul_inv, div_tendsto_atTop_zero_of_degree_lt, inv_eq_zero, isEquivalent_atTop_div, leadingCoeff, leadingCoeff_eq_zero, mul_eq_zero, tendsto_const_mul_zpow_atTop_nhds_iff, tendsto_nhds
 -/
@@ -717,7 +759,7 @@ theorem div_tendsto_atBot_of_degree_gt'
   refine (isEquivalent_atTop_div P Q).symm.tendsto_atBot ?_
   apply Tendsto.const_mul_atTop_of_neg hneg
   apply tendsto_zpow_atTop_atTop
-  l
+  lia
 
 中文:
 定理 div_tendsto_atBot_of_degree_gt'
@@ -730,7 +772,7 @@ theorem div_tendsto_atBot_of_degree_gt'
   refine (isEquivalent_atTop_div P Q).symm.tendsto_atBot ?_
   apply Tendsto.const_mul_atTop_of_neg hneg
   apply tendsto_zpow_atTop_atTop
-  l
+  lia
 
 Depends on / 依赖: Tendsto, Tendsto.const_mul_atTop_of_neg, const_mul_atTop_of_neg, div_zero, hneg.false, isEquivalent_atTop_div, leadingCoeff_zero, natDegree_lt_natDegree_iff, symm.tendsto_atBot, tendsto_atBot, tendsto_zpow_atTop_atTop
 -/
@@ -790,7 +832,7 @@ theorem abs_div_tendsto_atTop_atTop_of_degree_gt
   · exact tendsto_abs_atBot_atTop.comp (P.div_tendsto_atBot_of_degree_gt Q hdeg hQ h.le)
 
 @[deprecated (since := "2026-02-05")]
-alias abs_div_tendsto_atTop_of
+alias abs_div_tendsto_atTop_of_degree_gt := abs_div_tendsto_atTop_atTop_of_degree_gt
 
 中文:
 定理 abs_div_tendsto_atTop_atTop_of_degree_gt
@@ -801,7 +843,7 @@ alias abs_div_tendsto_atTop_of
   · exact tendsto_abs_atBot_atTop.comp (P.div_tendsto_atBot_of_degree_gt Q hdeg hQ h.le)
 
 @[deprecated (since := "2026-02-05")]
-alias abs_div_tendsto_atTop_of
+alias abs_div_tendsto_atTop_of_degree_gt := abs_div_tendsto_atTop_atTop_of_degree_gt
 
 Depends on / 依赖: P.div_tendsto_atBot_of_degree_gt, P.div_tendsto_atTop_of_degree_gt, P.leadingCoeff, Q.leadingCoeff, div_tendsto_atBot_of_degree_gt, div_tendsto_atTop_of_degree_gt, h.le, leadingCoeff, tendsto_abs_atBot_atTop, tendsto_abs_atBot_atTop.comp, tendsto_abs_atTop_atTop, tendsto_abs_atTop_atTop.comp
 -/
@@ -831,7 +873,7 @@ theorem isEquivalent_atBot_div
   refine
     (P.isEquivalent_atBot_lead.symm.div Q.isEquivalent_atBot_lead.symm).symm.trans
       (EventuallyEq.isEquivalent ((eventually_lt_atBot 0).mono fun x hx => ?_))
-  simp [← div_m
+  simp [← div_mul_div_comm, zpow_sub₀ hx.ne]
 
 中文:
 定理 isEquivalent_atBot_div
@@ -843,7 +885,7 @@ theorem isEquivalent_atBot_div
   refine
     (P.isEquivalent_atBot_lead.symm.div Q.isEquivalent_atBot_lead.symm).symm.trans
       (EventuallyEq.isEquivalent ((eventually_lt_atBot 0).mono fun x hx => ?_))
-  simp [← div_m
+  simp [← div_mul_div_comm, zpow_sub₀ hx.ne]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.isEquivalent, IsEquivalent, IsEquivalent.refl, P.isEquivalent_atBot_lead.symm.div, Q.isEquivalent_atBot_lead.symm, div_mul_div_comm, eventually_lt_atBot, hx.ne, isEquivalent, isEquivalent_atBot_lead, symm.trans
 -/
@@ -899,7 +941,8 @@ theorem div_tendsto_atBot_zero_iff_degree_lt
     rw [Ne]; rw [comp_eq_zero_iff]
     simp [hQ]
   rw [← div_tendsto_atTop_zero_iff_degree_lt _ _ hQ]
-  convert! h.comp tendsto_neg_atTop_
+  convert! h.comp tendsto_neg_atTop_atBot using 2
+  simp
 
 中文:
 定理 div_tendsto_atBot_zero_iff_degree_lt
@@ -911,7 +954,8 @@ theorem div_tendsto_atBot_zero_iff_degree_lt
     rw [Ne]; rw [comp_eq_zero_iff]
     simp [hQ]
   rw [← div_tendsto_atTop_zero_iff_degree_lt _ _ hQ]
-  convert! h.comp tendsto_neg_atTop_
+  convert! h.comp tendsto_neg_atTop_atBot using 2
+  simp
 
 Depends on / 依赖: P.degree_comp_neg_X, Q.comp, Q.degree_comp_neg_X, comp_eq_zero_iff, convert, degree_comp_neg_X, div_tendsto_atBot_zero_of_degree_lt, div_tendsto_atTop_zero_iff_degree_lt, h.comp, replace, tendsto_neg_atTop_atBot
 -/
@@ -1004,7 +1048,7 @@ theorem isLittleO_atTop_of_degree_lt
   · have hq : Q != 0 := ne_zero_of_degree_ge_degree h.le hp
     have hPQ : forallᶠ x in atTop, Q.eval x = 0 -> P.eval x = 0 :=
       mem_of_superset (eventually_atTop_not_isRoot Q hq) fun x h h' => absurd h' h
-    exact isLittleO_of_tendsto' hPQ (div_tendsto_at
+    exact isLittleO_of_tendsto' hPQ (div_tendsto_atTop_zero_of_degree_lt P Q h)
 
 中文:
 定理 isLittleO_atTop_of_degree_lt
@@ -1016,7 +1060,7 @@ theorem isLittleO_atTop_of_degree_lt
   · have hq : Q != 0 := ne_zero_of_degree_ge_degree h.le hp
     have hPQ : forallᶠ x in atTop, Q.eval x = 0 -> P.eval x = 0 :=
       mem_of_superset (eventually_atTop_not_isRoot Q hq) fun x h h' => absurd h' h
-    exact isLittleO_of_tendsto' hPQ (div_tendsto_at
+    exact isLittleO_of_tendsto' hPQ (div_tendsto_atTop_zero_of_degree_lt P Q h)
 
 Depends on / 依赖: P.eval, Q.eval, absurd, div_tendsto_atTop_zero_of_degree_lt, eventually_atTop_not_isRoot, h.le, isLittleO_of_tendsto, mem_of_superset, ne_zero_of_degree_ge_degree
 -/
@@ -1069,7 +1113,9 @@ theorem isBigO_atTop_of_degree_le
   · have hq : Q != 0 := ne_zero_of_degree_ge_degree h hp
     have hPQ : forallᶠ x in atTop, Q.eval x = 0 -> P.eval x = 0 :=
       mem_of_superset (eventually_atTop_not_isRoot Q hq) fun x h h' => absurd h' h
-    rcases le_iff_lt_o
+    rcases le_iff_lt_or_eq.mp h with h | h
+    · exact isBigO_of_div_tendsto_nhds hPQ 0 (div_tendsto_atTop_zero_of_degree_lt P Q h)
+    · exact isBigO_of_div_tendsto_nhds hPQ _ (div_tendsto_atTop_leadingCoeff_div_of_degree_eq P Q h)
 
 中文:
 定理 isBigO_atTop_of_degree_le
@@ -1081,7 +1127,9 @@ theorem isBigO_atTop_of_degree_le
   · have hq : Q != 0 := ne_zero_of_degree_ge_degree h hp
     have hPQ : forallᶠ x in atTop, Q.eval x = 0 -> P.eval x = 0 :=
       mem_of_superset (eventually_atTop_not_isRoot Q hq) fun x h h' => absurd h' h
-    rcases le_iff_lt_o
+    rcases le_iff_lt_or_eq.mp h with h | h
+    · exact isBigO_of_div_tendsto_nhds hPQ 0 (div_tendsto_atTop_zero_of_degree_lt P Q h)
+    · exact isBigO_of_div_tendsto_nhds hPQ _ (div_tendsto_atTop_leadingCoeff_div_of_degree_eq P Q h)
 
 Depends on / 依赖: P.eval, Q.eval, absurd, div_tendsto_atTop_leadingCoeff_div_of_degree_eq, div_tendsto_atTop_zero_of_degree_lt, eventually_atTop_not_isRoot, isBigO_of_div_tendsto_nhds, isBigO_zero, le_iff_lt_or_eq, le_iff_lt_or_eq.mp, mem_of_superset, ne_zero_of_degree_ge_degree
 -/
@@ -1165,7 +1213,7 @@ lemma isEquivalent_cobounded_leading_monomial
   · simp only [eval_eq_sum_range, sum_range_succ]
     exact (IsLittleO.fun_sum fun i hi =>
       ((isLittleO_pow_pow_cobounded_of_lt (mem_range.mp hi)).const_mul_right
-        (leadingCoeff_ne_zero.mpr h)).const_mul_left _).add_isEquivalent .re
+        (leadingCoeff_ne_zero.mpr h)).const_mul_left _).add_isEquivalent .refl
 
 中文:
 引理 isEquivalent_cobounded_leading_monomial
@@ -1175,7 +1223,7 @@ lemma isEquivalent_cobounded_leading_monomial
   · simp only [eval_eq_sum_range, sum_range_succ]
     exact (IsLittleO.fun_sum fun i hi =>
       ((isLittleO_pow_pow_cobounded_of_lt (mem_range.mp hi)).const_mul_right
-        (leadingCoeff_ne_zero.mpr h)).const_mul_left _).add_isEquivalent .re
+        (leadingCoeff_ne_zero.mpr h)).const_mul_left _).add_isEquivalent .refl
 
 Depends on / 依赖: IsEquivalent, IsEquivalent.refl, IsLittleO, IsLittleO.fun_sum, add_isEquivalent, const_mul_left, const_mul_right, eval_eq_sum_range, fun_sum, isLittleO_pow_pow_cobounded_of_lt, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, mem_range, mem_range.mp, sum_range_succ
 -/
@@ -1201,7 +1249,7 @@ theorem isLittleO_cobounded_of_degree_lt
       ((IsLittleO.const_mul_right ?_ ?_).const_mul_left _).trans_isEquivalent
         isEquivalent_cobounded_leading_monomial.symm
     · exact leadingCoeff_ne_zero.mpr (ne_zero_of_degree_gt h)
-   
+    · exact isLittleO_pow_pow_cobounded_of_lt (natDegree_lt_natDegree hP h)
 
 中文:
 定理 isLittleO_cobounded_of_degree_lt
@@ -1213,7 +1261,7 @@ theorem isLittleO_cobounded_of_degree_lt
       ((IsLittleO.const_mul_right ?_ ?_).const_mul_left _).trans_isEquivalent
         isEquivalent_cobounded_leading_monomial.symm
     · exact leadingCoeff_ne_zero.mpr (ne_zero_of_degree_gt h)
-   
+    · exact isLittleO_pow_pow_cobounded_of_lt (natDegree_lt_natDegree hP h)
 
 Depends on / 依赖: IsLittleO, IsLittleO.const_mul_right, const_mul_left, const_mul_right, isEquivalent_cobounded_leading_monomial, isEquivalent_cobounded_leading_monomial.symm, isEquivalent_cobounded_leading_monomial.trans_isLittleO, isLittleO_pow_pow_cobounded_of_lt, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, natDegree_lt_natDegree, ne_zero_of_degree_gt, trans_isEquivalent, trans_isLittleO
 -/
@@ -1239,7 +1287,7 @@ theorem isBigO_cobounded_of_degree_le
 · refine isEquivalent_cobounded_leading_monomial.trans_isBigO
       ((IsBigO.const_mul_right hQ ?_).const_mul_left _).trans_isEquivalent
         isEquivalent_cobounded_leading_monomial.symm
-    exact isBigO_pow_pow_cobounded_of_le (natDegree_le_natDegr
+    exact isBigO_pow_pow_cobounded_of_le (natDegree_le_natDegree h)
 
 中文:
 定理 isBigO_cobounded_of_degree_le
@@ -1250,7 +1298,7 @@ theorem isBigO_cobounded_of_degree_le
 · refine isEquivalent_cobounded_leading_monomial.trans_isBigO
       ((IsBigO.const_mul_right hQ ?_).const_mul_left _).trans_isEquivalent
         isEquivalent_cobounded_leading_monomial.symm
-    exact isBigO_pow_pow_cobounded_of_le (natDegree_le_natDegr
+    exact isBigO_pow_pow_cobounded_of_le (natDegree_le_natDegree h)
 
 Depends on / 依赖: IsBigO, IsBigO.const_mul_right, Q.leadingCoeff, const_mul_left, const_mul_right, isBigO_pow_pow_cobounded_of_le, isEquivalent_cobounded_leading_monomial, isEquivalent_cobounded_leading_monomial.symm, isEquivalent_cobounded_leading_monomial.trans_isBigO, leadingCoeff, natDegree_le_natDegree, trans_isBigO, trans_isEquivalent
 -/
@@ -1276,7 +1324,8 @@ lemma finite_abs_eval_le_of_degree_lt
   rw [IsOrderBornology.cobounded_eq]; rw [← Int.cofinite_eq] at o
   have nr := eventually_cofinite_not_isRoot (ne_zero_of_degree_gt h)
   have key := o.eventuallyLT_norm_of_eventually_pos (nr.congr (.of_forall (by simp)))
-  simp_rw [eventually_cofinit
+  simp_rw [eventually_cofinite, not_lt, Int.norm_eq_abs] at key
+  norm_cast at key
 
 中文:
 引理 finite_abs_eval_le_of_degree_lt
@@ -1286,7 +1335,8 @@ lemma finite_abs_eval_le_of_degree_lt
   rw [IsOrderBornology.cobounded_eq]; rw [← Int.cofinite_eq] at o
   have nr := eventually_cofinite_not_isRoot (ne_zero_of_degree_gt h)
   have key := o.eventuallyLT_norm_of_eventually_pos (nr.congr (.of_forall (by simp)))
-  simp_rw [eventually_cofinit
+  simp_rw [eventually_cofinite, not_lt, Int.norm_eq_abs] at key
+  norm_cast at key
 
 Depends on / 依赖: Int.cofinite_eq, Int.norm_eq_abs, IsOrderBornology, IsOrderBornology.cobounded_eq, cobounded_eq, cofinite_eq, eventuallyLT_norm_of_eventually_pos, eventually_cofinite, eventually_cofinite_not_isRoot, isLittleO_cobounded_of_degree_lt, ne_zero_of_degree_gt, norm_eq_abs, not_lt, nr.congr, o.eventuallyLT_norm_of_eventually_pos, of_forall, simp_rw
 -/
@@ -1311,7 +1361,9 @@ theorem dvd_of_infinite_eval_dvd_eval
   set R := P %ₘ Q
   apply eq_zero_of_infinite_isRoot
   refine (h.sdiff (finite_abs_eval_le_of_degree_lt degR)).mono fun x mx => ?_
-  simp only [Set.mem_sdiff, Set.mem_ofPred_eq, no
+  simp only [Set.mem_sdiff, Set.mem_ofPred_eq, not_le] at mx
+  rw [← eqR]; rw [eval_add]; rw [eval_mul]; rw [Int.dvd_add_self_mul]; rw [← abs_dvd] at mx
+  exact Int.eq_zero_of_abs_lt_dvd mx.1 mx.2
 
 中文:
 定理 dvd_of_infinite_eval_dvd_eval
@@ -1322,7 +1374,9 @@ theorem dvd_of_infinite_eval_dvd_eval
   set R := P %ₘ Q
   apply eq_zero_of_infinite_isRoot
   refine (h.sdiff (finite_abs_eval_le_of_degree_lt degR)).mono fun x mx => ?_
-  simp only [Set.mem_sdiff, Set.mem_ofPred_eq, no
+  simp only [Set.mem_sdiff, Set.mem_ofPred_eq, not_le] at mx
+  rw [← eqR]; rw [eval_add]; rw [eval_mul]; rw [Int.dvd_add_self_mul]; rw [← abs_dvd] at mx
+  exact Int.eq_zero_of_abs_lt_dvd mx.1 mx.2
 
 Depends on / 依赖: Int.dvd_add_self_mul, Int.eq_zero_of_abs_lt_dvd, Set.mem_ofPred_eq, Set.mem_sdiff, abs_dvd, degree_modByMonic_lt, dvd_add_self_mul, eq_zero_of_abs_lt_dvd, eq_zero_of_infinite_isRoot, eval_add, eval_mul, finite_abs_eval_le_of_degree_lt, h.sdiff, mem_ofPred_eq, mem_sdiff, modByMonic_add_div, modByMonic_eq_zero_iff_dvd, not_le
 -/

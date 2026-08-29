@@ -690,7 +690,13 @@ instance :
       let T₂ := { u : Unit // J.snd l = r' }
       let f : T₁ oplus T₂ -> (left l ⟶ right r') :=
         Sum.elim (fun ⟨_, h⟩ => by subst h; exact Hom.fst l)
-          (fun ⟨_, h⟩ => by subst h; exact H
+          (fun ⟨_, h⟩ => by subst h; exact Hom.snd l)
+      refine small_of_surjective (f := f) ?_
+      rintro (_ | _)
+      · exact ⟨Sum.inl ⟨⟨⟩, rfl⟩, rfl⟩
+      · exact ⟨Sum.inr ⟨⟨⟩, rfl⟩, rfl⟩
+    · infer_instance
+    · infer_instance
 
 中文:
 实例 :
@@ -702,7 +708,13 @@ instance :
       let T₂ := { u : Unit // J.snd l = r' }
       let f : T₁ oplus T₂ -> (left l ⟶ right r') :=
         Sum.elim (fun ⟨_, h⟩ => by subst h; exact Hom.fst l)
-          (fun ⟨_, h⟩ => by subst h; exact H
+          (fun ⟨_, h⟩ => by subst h; exact Hom.snd l)
+      refine small_of_surjective (f := f) ?_
+      rintro (_ | _)
+      · exact ⟨Sum.inl ⟨⟨⟩, rfl⟩, rfl⟩
+      · exact ⟨Sum.inr ⟨⟨⟩, rfl⟩, rfl⟩
+    · infer_instance
+    · infer_instance
 
 Depends on / 依赖: Hom.fst, Hom.snd, J.fst, J.snd, Sum.elim, Sum.inl, Sum.inr, infer_instance, small_of_surjective
 -/
@@ -769,7 +781,8 @@ definition arrowEquiv
     Sum.elim (fun X => Arrow.mk (𝟙 X))
       (Sum.elim (fun a => Arrow.mk (Hom.fst a : left _ ⟶ right _))
         (fun a => Arrow.mk (Hom.snd a : left _ ⟶ right _)))
-  left_i
+  left_inv := by rintro ⟨_, _, (_ | _ | _)⟩ <;> rfl
+  right_inv := by rintro (_ | _ | _) <;> rfl
 
 中文:
 定义 arrowEquiv
@@ -782,7 +795,8 @@ definition arrowEquiv
     Sum.elim (fun X => Arrow.mk (𝟙 X))
       (Sum.elim (fun a => Arrow.mk (Hom.fst a : left _ ⟶ right _))
         (fun a => Arrow.mk (Hom.snd a : left _ ⟶ right _)))
-  left_i
+  left_inv := by rintro ⟨_, _, (_ | _ | _)⟩ <;> rfl
+  right_inv := by rintro (_ | _ | _) <;> rfl
 
 Depends on / 依赖: f.hom
 -/
@@ -884,7 +898,12 @@ definition multicospan
     | _, _, WalkingMulticospan.Hom.id x => 𝟙 _
     | _, _, WalkingMulticospan.Hom.fst b => I.fst _
     | _, _, WalkingMulticospan.Hom.snd b => I.snd _
-  map_
+  map_id := by
+    rintro (_ | _) <;> rfl
+  map_comp := by
+    rintro (_ | _) (_ | _) (_ | _) (_ | _ | _) (_ | _ | _) <;> cat_disch
+
+@[simp]
 
 中文:
 定义 multicospan
@@ -897,7 +916,12 @@ definition multicospan
     | _, _, WalkingMulticospan.Hom.id x => 𝟙 _
     | _, _, WalkingMulticospan.Hom.fst b => I.fst _
     | _, _, WalkingMulticospan.Hom.snd b => I.snd _
-  map_
+  map_id := by
+    rintro (_ | _) <;> rfl
+  map_comp := by
+    rintro (_ | _) (_ | _) (_ | _) (_ | _ | _) (_ | _ | _) <;> cat_disch
+
+@[simp]
 
 Depends on / 依赖: I.fst, I.left, I.right, I.snd, WalkingMulticospan, WalkingMulticospan.Hom.fst, WalkingMulticospan.Hom.id, WalkingMulticospan.Hom.snd, WalkingMulticospan.left, WalkingMulticospan.right, cat_disch, map_comp, map_id
 -/
@@ -1243,7 +1267,11 @@ definition multispan
     | _, _, WalkingMultispan.Hom.fst b => I.fst _
     | _, _, WalkingMultispan.Hom.snd b => I.snd _
   map_id := by
- 
+    rintro (_ | _) <;> rfl
+  map_comp := by
+    rintro (_ | _) (_ | _) (_ | _) (_ | _ | _) (_ | _ | _) <;> cat_disch
+
+@[simp]
 
 中文:
 定义 multispan
@@ -1257,7 +1285,11 @@ definition multispan
     | _, _, WalkingMultispan.Hom.fst b => I.fst _
     | _, _, WalkingMultispan.Hom.snd b => I.snd _
   map_id := by
- 
+    rintro (_ | _) <;> rfl
+  map_comp := by
+    rintro (_ | _) (_ | _) (_ | _) (_ | _ | _) (_ | _ | _) <;> cat_disch
+
+@[simp]
 
 Depends on / 依赖: I.fst, I.left, I.right, I.snd, WalkingMultispan, WalkingMultispan.Hom.fst, WalkingMultispan.Hom.id, WalkingMultispan.Hom.snd, WalkingMultispan.left, WalkingMultispan.right, cat_disch, map_comp, map_id
 -/
@@ -1765,7 +1797,23 @@ definition ofι
         | WalkingMulticospan.right b => ι (J.fst b) ≫ I.fst b
       naturality := by
         #adaptation_note /-- Proof repaired after leanprover/lean4#13363.
-        The proof used to finish from this poi
+        The proof used to finish from this point as
+        ```
+        rintro (_ | _) (_ | _) (_ | _ | _) <;>
+          dsimp <;> simp only [Category.id_comp, Category.comp_id]
+        apply w
+        ```
+        The replacement proof is a short-term fix, and we request that the authors/maintainers of
+        this file review the proof, and either approve it by removing this note,
+        revise the proof or the prerequisites appropriately, or minimize a problem in lean4 that
+        still needs addressing. -/
+        rintro (_ | _) (_ | _) (_ | _ | _) <;>
+          simp only [WalkingMulticospan.Hom.id_eq_id,
+            Functor.map_id, Functor.const_obj_map, Category.comp_id] <;>
+          dsimp <;> simp only [Category.id_comp]
+        apply w }
+
+@[simp]
 
 中文:
 定义 ofι
@@ -1778,7 +1826,23 @@ definition ofι
         | WalkingMulticospan.right b => ι (J.fst b) ≫ I.fst b
       naturality := by
         #adaptation_note /-- Proof repaired after leanprover/lean4#13363.
-        The proof used to finish from this poi
+        The proof used to finish from this point as
+        ```
+        rintro (_ | _) (_ | _) (_ | _ | _) <;>
+          dsimp <;> simp only [Category.id_comp, Category.comp_id]
+        apply w
+        ```
+        The replacement proof is a short-term fix, and we request that the authors/maintainers of
+        this file review the proof, and either approve it by removing this note,
+        revise the proof or the prerequisites appropriately, or minimize a problem in lean4 that
+        still needs addressing. -/
+        rintro (_ | _) (_ | _) (_ | _ | _) <;>
+          simp only [WalkingMulticospan.Hom.id_eq_id,
+            Functor.map_id, Functor.const_obj_map, Category.comp_id] <;>
+          dsimp <;> simp only [Category.id_comp]
+        apply w }
+
+@[simp]
 -/
 def ofι {J : MulticospanShape.{w, w'}} (I : MulticospanIndex J C)
     (P : C) (ι : forall a, P ⟶ I.left a)
@@ -2444,7 +2508,11 @@ definition multiforkOfParallelHomsEquivFork
       (Fan.isLimitMkOfUnique (Iso.refl X) _) (Fan.isLimitMkOfUnique (Iso.refl Y) _)).trans
       (Fork.equivOfIsos (.refl _) (.refl _) ?_ ?_)
   · refine Fan.IsLimit.hom_ext (Fan.isLimitMkOfUnique (Iso.refl Y) J.R) _ _ fun _ => ?_
-    rw [Category.assoc]; 
+    rw [Category.assoc]; rw [Iso.refl_hom ((Fan.mk Y fun x => (Iso.refl Y).hom).pt)]; rw [Category.comp_id]; rw [fstPiMapOfIsLimit_proj]
+    simp
+  · refine Fan.IsLimit.hom_ext (Fan.isLimitMkOfUnique (Iso.refl Y) J.R) _ _ fun _ => ?_
+    rw [Category.assoc]; rw [Iso.refl_hom ((Fan.mk Y fun x => (Iso.refl Y).hom).pt)]; rw [Category.comp_id]; rw [sndPiMapOfIsLimit_proj]
+    simp
 
 中文:
 定义 multiforkOfParallelHomsEquivFork
@@ -2454,7 +2522,11 @@ definition multiforkOfParallelHomsEquivFork
       (Fan.isLimitMkOfUnique (Iso.refl X) _) (Fan.isLimitMkOfUnique (Iso.refl Y) _)).trans
       (Fork.equivOfIsos (.refl _) (.refl _) ?_ ?_)
   · refine Fan.IsLimit.hom_ext (Fan.isLimitMkOfUnique (Iso.refl Y) J.R) _ _ fun _ => ?_
-    rw [Category.assoc]; 
+    rw [Category.assoc]; rw [Iso.refl_hom ((Fan.mk Y fun x => (Iso.refl Y).hom).pt)]; rw [Category.comp_id]; rw [fstPiMapOfIsLimit_proj]
+    simp
+  · refine Fan.IsLimit.hom_ext (Fan.isLimitMkOfUnique (Iso.refl Y) J.R) _ _ fun _ => ?_
+    rw [Category.assoc]; rw [Iso.refl_hom ((Fan.mk Y fun x => (Iso.refl Y).hom).pt)]; rw [Category.comp_id]; rw [sndPiMapOfIsLimit_proj]
+    simp
 
 Depends on / 依赖: Category, Category.asso, Category.assoc, Category.comp_id, Fan.IsLimit.hom_ext, Fan.isLimitMkOfUnique, Fan.mk, Fork.equivOfIsos, IsLimit, Iso.refl, Iso.refl_hom, comp_id, equivOfIsos, fstPiMapOfIsLimit_proj, hom_ext, isLimitMkOfUnique, multiforkEquivPiForkOfIsLimit, refl_hom
 -/
@@ -2666,7 +2738,11 @@ definition ofπ
       naturality := by
         rintro (_ | _) (_ | _) (_ | _ | _) <;> dsimp <;>
           simp only [Functor.map_id, MultispanIndex.multispan_obj_left,
-   
+            Category.id_comp, Category.comp_id, MultispanIndex.multispan_obj_right]
+        symm
+        apply w }
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 ofπ
@@ -2680,7 +2756,11 @@ definition ofπ
       naturality := by
         rintro (_ | _) (_ | _) (_ | _ | _) <;> dsimp <;>
           simp only [Functor.map_id, MultispanIndex.multispan_obj_left,
-   
+            Category.id_comp, Category.comp_id, MultispanIndex.multispan_obj_right]
+        symm
+        apply w }
+
+@[reassoc (attr := simp)]
 -/
 def ofπ {J : MultispanShape.{w, w'}} (I : MultispanIndex J C)
     (P : C) (π : forall b, I.right b ⟶ P)
@@ -2940,7 +3020,10 @@ definition ofSigmaCofork
         rintro (_ | _) (_ | _) (_ | _ | _)
         · simp
         · simp
-        · simp
+        · simp [a.condition]
+        · simp }
+
+@[simp]
 
 中文:
 定义 ofSigmaCofork
@@ -2954,7 +3037,10 @@ definition ofSigmaCofork
         rintro (_ | _) (_ | _) (_ | _ | _)
         · simp
         · simp
-        · simp
+        · simp [a.condition]
+        · simp }
+
+@[simp]
 
 Depends on / 依赖: a.pt
 -/
@@ -3162,7 +3248,7 @@ definition multicoforkEquivSigmaCoforkOfIsColimit
     Cofork.ext (Iso.refl _)
       (by
         apply Cofan.IsColimit.hom_ext hd
-        
+        simp)
 
 中文:
 定义 multicoforkEquivSigmaCoforkOfIsColimit
@@ -3175,7 +3261,7 @@ definition multicoforkEquivSigmaCoforkOfIsColimit
     Cofork.ext (Iso.refl _)
       (by
         apply Cofan.IsColimit.hom_ext hd
-        
+        simp)
 
 Depends on / 依赖: toSigmaCoforkFunctor
 -/

@@ -117,7 +117,7 @@ theorem Orientation.measure_orthonormalBasis
   have A : ⇑b = b.reindex e ∘ e := by
     ext x
     simp only [OrthonormalBasis.coe_reindex, Function.comp_apply, Equiv.symm_apply_apply]
-  rw [A]; rw [parallelepiped_comp_equ
+  rw [A]; rw [parallelepiped_comp_equiv]; rw [AlternatingMap.measure_parallelepiped]; rw [o.abs_volumeForm_apply_of_orthonormal]; rw [ENNReal.ofReal_one]
 
 中文:
 定理 定向.measure_orthonormalBasis
@@ -129,7 +129,7 @@ theorem Orientation.measure_orthonormalBasis
   have A : ⇑b = b.reindex e ∘ e := by
     ext x
     simp only [OrthonormalBasis.coe_reindex, Function.comp_apply, Equiv.symm_apply_apply]
-  rw [A]; rw [parallelepiped_comp_equ
+  rw [A]; rw [parallelepiped_comp_equiv]; rw [AlternatingMap.measure_parallelepiped]; rw [o.abs_volumeForm_apply_of_orthonormal]; rw [ENNReal.ofReal_one]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.measure_parallelepiped, ENNReal, ENNReal.ofReal_one, Equiv.symm_apply_apply, Fintype, Fintype.equivFinOfCardEq, Function, Function.comp_apply, OrthonormalBasis, OrthonormalBasis.coe_reindex, _i.out, abs_volumeForm_apply_of_orthonormal, b.reindex, b.toBasis, coe_reindex, comp_apply, equivFinOfCardEq, finrank_eq_card_basis, measure_parallelepiped
 -/
@@ -154,7 +154,7 @@ theorem Orientation.measure_eq_volume
     Orientation.measure_orthonormalBasis o (stdOrthonormalBasis Real F)
   rw [addHaarMeasure_unique o.volumeForm.measure
     (stdOrthonormalBasis Real F).toBasis.parallelepiped]; rw [A]; rw [one_smul]
-  sim
+  simp only [volume, Basis.addHaar]
 
 中文:
 定理 定向.measure_eq_volume
@@ -164,7 +164,7 @@ theorem Orientation.measure_eq_volume
     Orientation.measure_orthonormalBasis o (stdOrthonormalBasis Real F)
   rw [addHaarMeasure_unique o.volumeForm.measure
     (stdOrthonormalBasis Real F).toBasis.parallelepiped]; rw [A]; rw [one_smul]
-  sim
+  simp only [volume, Basis.addHaar]
 
 Depends on / 依赖: Basis.addHaar, Orientation, Orientation.measure_orthonormalBasis, addHaar, addHaarMeasure_unique, measure, measure_orthonormalBasis, o.volumeForm.measure, one_smul, parallelepiped, stdOrthonormalBasis, toBasis, toBasis.parallelepiped, volume, volumeForm
 -/
@@ -332,14 +332,16 @@ theorem EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp
   proof: by
   suffices volume = map (MeasurableEquiv.toLp 2 (ι -> Real)) volume by
     convert! ((MeasurableEquiv.toLp 2 (ι -> Real)).measurable.measurePreserving _).symm
-  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar_def]; rw [MeasurableEquiv.coe_toLp]; rw [←
+  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar_def]; rw [MeasurableEquiv.coe_toLp]; rw [← PiLp.coe_symm_continuousLinearEquiv 2 Real]; rw [Basis.map_addHaar]
+  exact (EuclideanSpace.basisFun _ _).addHaar_eq_volume.symm
 
 中文:
 定理 EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp
   证明: by
   suffices volume = map (MeasurableEquiv.toLp 2 (ι -> Real)) volume by
     convert! ((MeasurableEquiv.toLp 2 (ι -> Real)).measurable.measurePreserving _).symm
-  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar_def]; rw [MeasurableEquiv.coe_toLp]; rw [←
+  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar_def]; rw [MeasurableEquiv.coe_toLp]; rw [← PiLp.coe_symm_continuousLinearEquiv 2 Real]; rw [Basis.map_addHaar]
+  exact (EuclideanSpace.basisFun _ _).addHaar_eq_volume.symm
 
 Depends on / 依赖: Basis.addHaar_def, Basis.map_addHaar, Basis.parallelepiped_basisFun, EuclideanSpace, EuclideanSpace.basisFun, MeasurableEquiv, MeasurableEquiv.coe_toLp, MeasurableEquiv.toLp, PiLp.coe_symm_continuousLinearEquiv, addHaarMeasure_eq_volume_pi, addHaar_def, addHaar_eq_volume, addHaar_eq_volume.symm, basisFun, coe_symm_continuousLinearEquiv, coe_toLp, convert, map_addHaar, measurable, measurable.measurePreserving
 -/
@@ -465,7 +467,16 @@ definition noncomputable
       (stdOrthonormalBasis Real U).repr
       (stdOrthonormalBasis Real V).repr).trans <|
     -- .. ≃ₗᵢ[ℝ] WithLp 2 (Fin (finrank ℝ U) ⊕ Fin (finrank ℝ V) → ℝ)
-    (PiLp.su
+    (PiLp.sumPiLpEquivProdLpPiLp 2 (fun _ => Real)).symm
+  ).toMeasurableEquiv.trans <|
+  -- .. ≃ᵐ Fin (finrank ℝ U) ⊕ Fin (finrank ℝ V) → ℝ
+(MeasurableEquiv.toLp 2 _).symm.trans
+  -- .. ≃ᵐ Fin (finrank ℝ U) → ℝ × Fin (finrank ℝ V) → ℝ
+(MeasurableEquiv.sumPiEquivProdPi (fun _ => Real)).trans
+  -- .. ≃ᵐ U × V
+  (MeasurableEquiv.prodCongr
+    ((MeasurableEquiv.toLp 2 _).trans (stdOrthonormalBasis Real U).repr.symm.toMeasurableEquiv)
+    ((MeasurableEquiv.toLp 2 _).trans (stdOrthonormalBasis Real V).repr.symm.toMeasurableEquiv))
 
 中文:
 定义 noncomputable
@@ -475,7 +486,16 @@ definition noncomputable
       (stdOrthonormalBasis Real U).repr
       (stdOrthonormalBasis Real V).repr).trans <|
     -- .. ≃ₗᵢ[ℝ] WithLp 2 (Fin (finrank ℝ U) ⊕ Fin (finrank ℝ V) → ℝ)
-    (PiLp.su
+    (PiLp.sumPiLpEquivProdLpPiLp 2 (fun _ => Real)).symm
+  ).toMeasurableEquiv.trans <|
+  -- .. ≃ᵐ Fin (finrank ℝ U) ⊕ Fin (finrank ℝ V) → ℝ
+(MeasurableEquiv.toLp 2 _).symm.trans
+  -- .. ≃ᵐ Fin (finrank ℝ U) → ℝ × Fin (finrank ℝ V) → ℝ
+(MeasurableEquiv.sumPiEquivProdPi (fun _ => Real)).trans
+  -- .. ≃ᵐ U × V
+  (MeasurableEquiv.prodCongr
+    ((MeasurableEquiv.toLp 2 _).trans (stdOrthonormalBasis Real U).repr.symm.toMeasurableEquiv)
+    ((MeasurableEquiv.toLp 2 _).trans (stdOrthonormalBasis Real V).repr.symm.toMeasurableEquiv))
 -/
 private noncomputable def volumePreservingSymmMeasurableEquivToLpProdAux :
     WithLp 2 (U × V) ≃ᵐ U × V :=
@@ -506,7 +526,13 @@ theorem WithLp.volume_preserving_symm_measurableEquiv_toLp_prod
     ext uv
     <;> simp [volumePreservingSymmMeasurableEquivToLpProdAux, MeasurableEquiv.coe_sumPiEquivProdPi,
       MeasurableEquiv.prodCongr]
-  refine (LinearIsometryEquiv.measurePreserving _)
+  refine (LinearIsometryEquiv.measurePreserving _).trans ?_
+  refine (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp _).trans ?_
+  refine (measurePreserving_sumPiEquivProdPi _).trans ?_
+  refine MeasurePreserving.prod ?_ ?_
+  all_goals
+  · refine (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp _).symm.trans ?_
+    exact (LinearIsometryEquiv.measurePreserving _)
 
 中文:
 定理 WithLp.volume_preserving_symm_measurableEquiv_toLp_prod
@@ -516,7 +542,13 @@ theorem WithLp.volume_preserving_symm_measurableEquiv_toLp_prod
     ext uv
     <;> simp [volumePreservingSymmMeasurableEquivToLpProdAux, MeasurableEquiv.coe_sumPiEquivProdPi,
       MeasurableEquiv.prodCongr]
-  refine (LinearIsometryEquiv.measurePreserving _)
+  refine (LinearIsometryEquiv.measurePreserving _).trans ?_
+  refine (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp _).trans ?_
+  refine (measurePreserving_sumPiEquivProdPi _).trans ?_
+  refine MeasurePreserving.prod ?_ ?_
+  all_goals
+  · refine (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp _).symm.trans ?_
+    exact (LinearIsometryEquiv.measurePreserving _)
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.volume_, EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp, LinearIsometryEquiv, LinearIsometryEquiv.measurePreserving, MeasurableEquiv, MeasurableEquiv.coe_sumPiEquivProdPi, MeasurableEquiv.prodCongr, MeasurePreserving, MeasurePreserving.prod, all_goals, coe_sumPiEquivProdPi, convert, measurePreserving, measurePreserving_sumPiEquivProdPi, prodCongr, volumePreservingSymmMeasurableEquivToLpProdAux, volume_, volume_preserving_symm_measurableEquiv_toLp
 -/
@@ -585,7 +617,15 @@ theorem MeasureTheory.volume_eq_of_finrank_eq_one
       rw [Submodule.span_singleton_eq_top_iff]
       apply exists_smul_eq_of_finrank_eq_one h
       simpa
-    let f : Real ≃ₗᵢ[Real] E := (LinearIsometryEquiv.toSpanUn
+    let f : Real ≃ₗᵢ[Real] E := (LinearIsometryEquiv.toSpanUnitSingleton (‖v‖⁻¹ • v)
+      (by simp [norm_smul, hv])).trans (LinearIsometryEquiv.ofTop E _ hv')
+    rw [map_map (by fun_prop) (by fun_prop)]
+    convert! f.measurePreserving.map_eq.symm
+    ext x
+    simp [f, mul_comm, smul_smul]
+  _ = ‖v‖ₑ • (volume : Measure Real).map (· • v) := by
+    rw [map_addHaar_smul _ (by simpa using hv)]
+    simp
 
 中文:
 定理 测度论.volume_eq_of_finrank_eq_one
@@ -596,7 +636,15 @@ theorem MeasureTheory.volume_eq_of_finrank_eq_one
       rw [Submodule.span_singleton_eq_top_iff]
       apply exists_smul_eq_of_finrank_eq_one h
       simpa
-    let f : Real ≃ₗᵢ[Real] E := (LinearIsometryEquiv.toSpanUn
+    let f : Real ≃ₗᵢ[Real] E := (LinearIsometryEquiv.toSpanUnitSingleton (‖v‖⁻¹ • v)
+      (by simp [norm_smul, hv])).trans (LinearIsometryEquiv.ofTop E _ hv')
+    rw [map_map (by fun_prop) (by fun_prop)]
+    convert! f.measurePreserving.map_eq.symm
+    ext x
+    simp [f, mul_comm, smul_smul]
+  _ = ‖v‖ₑ • (volume : Measure Real).map (· • v) := by
+    rw [map_addHaar_smul _ (by simpa using hv)]
+    simp
 -/
 theorem MeasureTheory.volume_eq_of_finrank_eq_one (h : Module.finrank Real E = 1) {v : E}
     (hv : v != 0) : (volume : Measure E) = ‖v‖ₑ • (volume : Measure Real).map (· • v) := calc

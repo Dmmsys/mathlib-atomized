@@ -60,7 +60,10 @@ lemma card_smul_inter_smul
     (by simp +contextual [Set.MapsTo, Set.mem_smul_set_iff_inv_smul_mem, mul_assoc])
     (by simp +contextual [Set.MapsTo, Set.mem_smul_set_iff_inv_smul_mem]
         simp +contextual [← eq_mul_inv_iff_mul_eq, mul_assoc])
-    (by simp [S
+    (by simp [Set.LeftInvOn])
+    (by simp +contextual [Set.LeftInvOn, ← eq_mul_inv_iff_mul_eq, mul_assoc])
+
+@[to_additive]
 
 中文:
 引理 card_smul_inter_smul
@@ -69,7 +72,10 @@ lemma card_smul_inter_smul
     (by simp +contextual [Set.MapsTo, Set.mem_smul_set_iff_inv_smul_mem, mul_assoc])
     (by simp +contextual [Set.MapsTo, Set.mem_smul_set_iff_inv_smul_mem]
         simp +contextual [← eq_mul_inv_iff_mul_eq, mul_assoc])
-    (by simp [S
+    (by simp [Set.LeftInvOn])
+    (by simp +contextual [Set.LeftInvOn, ← eq_mul_inv_iff_mul_eq, mul_assoc])
+
+@[to_additive]
 
 Depends on / 依赖: LeftInvOn, MapsTo, Set.LeftInvOn, Set.MapsTo, Set.mem_smul_set_iff_inv_smul_mem, card_nbij, contextual, eq_mul_inv_iff_mul_eq, mem_smul_set_iff_inv_smul_mem, mul_assoc
 -/

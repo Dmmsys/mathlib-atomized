@@ -166,7 +166,14 @@ theorem CycleType.count_def
   rw [cycleType]; rw [Multiset.count_eq_card_filter_eq]
   -- rewrite the `Fintype.card` as a `Finset.card`
   rw [Fintype.subtype_card]; rw [Finset.univ_eq_attach]; rw [Finset.filter_attach']; rw [Finset.card_map]; rw [Finset.card_attach]
-  simp only [Function.comp_apply, Fins
+  simp only [Function.comp_apply, Finset.card, Finset.filter_val,
+    Multiset.filter_map, Multiset.card_map]
+  congr 1
+  apply Multiset.filter_congr
+  intro d h
+  simp only [eq_comm, Finset.mem_val.mp h, exists_const]
+
+@[simp]
 
 中文:
 定理 CycleType.count_def
@@ -176,7 +183,14 @@ theorem CycleType.count_def
   rw [cycleType]; rw [Multiset.count_eq_card_filter_eq]
   -- rewrite the `Fintype.card` as a `Finset.card`
   rw [Fintype.subtype_card]; rw [Finset.univ_eq_attach]; rw [Finset.filter_attach']; rw [Finset.card_map]; rw [Finset.card_attach]
-  simp only [Function.comp_apply, Fins
+  simp only [Function.comp_apply, Finset.card, Finset.filter_val,
+    Multiset.filter_map, Multiset.card_map]
+  congr 1
+  apply Multiset.filter_congr
+  intro d h
+  simp only [eq_comm, Finset.mem_val.mp h, exists_const]
+
+@[simp]
 -/
 theorem CycleType.count_def {σ : Perm α} (n : Nat) :
     σ.cycleType.count n =
@@ -427,7 +441,9 @@ theorem cycleType_inv
     (fun σ hσ => by simp only [hσ.cycleType, hσ.inv.cycleType, support_inv])
     fun σ τ hστ _ hσ hτ => by
       simp only [mul_inv_rev, hστ.cycleType_mul, hστ.symm.inv_left.inv_right.cycleType_mul, hσ, hτ,
-        add_com
+        add_comm]
+
+@[simp]
 
 中文:
 定理 cycleType_inv
@@ -437,7 +453,9 @@ theorem cycleType_inv
     (fun σ hσ => by simp only [hσ.cycleType, hσ.inv.cycleType, support_inv])
     fun σ τ hστ _ hσ hτ => by
       simp only [mul_inv_rev, hστ.cycleType_mul, hστ.symm.inv_left.inv_right.cycleType_mul, hσ, hτ,
-        add_com
+        add_comm]
+
+@[simp]
 
 Depends on / 依赖: add_comm, cycleType, cycleType_mul, cycle_induction_on, inv.cycleType, inv_left, inv_right, mul_inv_rev, support_inv, symm.inv_left.inv_right.cycleType_mul
 -/
@@ -600,7 +618,9 @@ theorem sign_of_cycleType
   | empty => rfl
   | cons a s ihs =>
     rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [Multiset.sum_cons]; rw [Multiset.card_cons]; rw [ihs]
-    simp only [pow_add, pow_one, neg_mul, mul_neg, mul_assoc, mul_
+    simp only [pow_add, pow_one, neg_mul, mul_neg, mul_assoc, mul_one]
+
+@[simp]
 
 中文:
 定理 sign_of_cycleType
@@ -611,7 +631,9 @@ theorem sign_of_cycleType
   | empty => rfl
   | cons a s ihs =>
     rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [Multiset.sum_cons]; rw [Multiset.card_cons]; rw [ihs]
-    simp only [pow_add, pow_one, neg_mul, mul_neg, mul_assoc, mul_
+    simp only [pow_add, pow_one, neg_mul, mul_neg, mul_assoc, mul_one]
+
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.card_cons, Multiset.induction_on, Multiset.map_cons, Multiset.prod_cons, Multiset.sum_cons, card_cons, cycleType, f.cycleType, induction_on, map_cons, mul_assoc, mul_neg, mul_one, neg_mul, pow_add, pow_one, prod_cons, sign_of_cycleType, sum_cons
 -/
@@ -696,7 +718,7 @@ theorem orderOf_cycleOf_dvd_orderOf
     rw [cycleType]; rw [Multiset.mem_map]
     refine ⟨f.cycleOf x, ?_, ?_⟩
     · rwa [← Finset.mem_def, cycleOf_mem_cycleFactorsFinset_iff, mem_support]
-    · simp [(isCycle_cycleOf _ hx).
+    · simp [(isCycle_cycleOf _ hx).orderOf]
 
 中文:
 定理 orderOf_cycleOf_dvd_orderOf
@@ -710,7 +732,7 @@ theorem orderOf_cycleOf_dvd_orderOf
     rw [cycleType]; rw [Multiset.mem_map]
     refine ⟨f.cycleOf x, ?_, ?_⟩
     · rwa [← Finset.mem_def, cycleOf_mem_cycleFactorsFinset_iff, mem_support]
-    · simp [(isCycle_cycleOf _ hx).
+    · simp [(isCycle_cycleOf _ hx).orderOf]
 
 Depends on / 依赖: Finset, Finset.mem_def, Multiset, Multiset.mem_map, cycleOf, cycleOf_eq_one_iff, cycleOf_mem_cycleFactorsFinset_iff, cycleType, dvd_of_mem_cycleType, f.cycleOf, isCycle_cycleOf, mem_def, mem_map, mem_support, orderOf
 -/
@@ -771,7 +793,7 @@ theorem cycleType_prime_order
     rw [Nat.succ_le_iff]; rw [card_cycleType_pos]; rw [Ne]; rw [← orderOf_eq_one_iff]
     exact hσ.ne_one
   · exact (hσ.eq_one_or_self_of_dvd n (dvd_of_mem_cycleType hn)).resolve_left
-    
+      (one_lt_of_mem_cycleType hn).ne'
 
 中文:
 定理 cycleType_prime_order
@@ -782,7 +804,7 @@ theorem cycleType_prime_order
     rw [Nat.succ_le_iff]; rw [card_cycleType_pos]; rw [Ne]; rw [← orderOf_eq_one_iff]
     exact hσ.ne_one
   · exact (hσ.eq_one_or_self_of_dvd n (dvd_of_mem_cycleType hn)).resolve_left
-    
+      (one_lt_of_mem_cycleType hn).ne'
 
 Depends on / 依赖: Multiset, Multiset.card, Nat.succ_le_iff, card_cycleType_pos, cycleType, dvd_of_mem_cycleType, eq_one_or_self_of_dvd, eq_replicate, ne_one, one_lt_of_mem_cycleType, orderOf_eq_one_iff, resolve_left, succ_le_iff, tsub_add_cancel_of_le
 -/
@@ -856,7 +878,7 @@ theorem isCycle_of_prime_order
   proof: by
   obtain ⟨n, hn⟩ := cycleType_prime_order h1
   rw [← σ.sum_cycleType]; rw [hn]; rw [Multiset.sum_replicate]; rw [nsmul_eq_mul]; rw [Nat.cast_id]; rw [mul_lt_mul_iff_left₀ (orderOf_pos σ)]; rw [Nat.succ_lt_succ_iff]; rw [Nat.lt_succ_iff]; rw [Nat.le_zero] at h2
-  rw [← card_cycleType_eq_one]; rw [
+  rw [← card_cycleType_eq_one]; rw [hn]; rw [card_replicate]; rw [h2]
 
 中文:
 定理 isCycle_of_prime_order
@@ -864,7 +886,7 @@ theorem isCycle_of_prime_order
   证明: by
   obtain ⟨n, hn⟩ := cycleType_prime_order h1
   rw [← σ.sum_cycleType]; rw [hn]; rw [Multiset.sum_replicate]; rw [nsmul_eq_mul]; rw [Nat.cast_id]; rw [mul_lt_mul_iff_left₀ (orderOf_pos σ)]; rw [Nat.succ_lt_succ_iff]; rw [Nat.lt_succ_iff]; rw [Nat.le_zero] at h2
-  rw [← card_cycleType_eq_one]; rw [
+  rw [← card_cycleType_eq_one]; rw [hn]; rw [card_replicate]; rw [h2]
 
 Depends on / 依赖: Multiset, Multiset.sum_replicate, Nat.cast_id, Nat.le_zero, Nat.lt_succ_iff, Nat.succ_lt_succ_iff, card_cycleType_eq_one, card_replicate, cast_id, cycleType_prime_order, le_zero, lt_succ_iff, nsmul_eq_mul, orderOf_pos, succ_lt_succ_iff, sum_cycleType, sum_replicate
 -/
@@ -917,7 +939,12 @@ theorem Disjoint.cycleType_noncommProd
   | insert i s hi hrec =>
     have hs' : (s : Set ι).Pairwise fun i j => Disjoint (k i) (k j) :=
       hs.mono (by simp only [Finset.coe_insert, Set.subset_insert])
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; 
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; rw [Finset.sum_insert hi]
+    rw [Disjoint.cycleType_mul]; rw [hrec hs']
+    apply disjoint_noncommProd_right
+    intro j hj
+    apply hs _ _ (ne_of_mem_of_not_mem hj hi).symm <;>
+      simp only [Finset.coe_insert, Set.mem_insert_iff, Finset.mem_coe, hj, or_true, true_or]
 
 中文:
 定理 Disjoint.cycleType_noncommProd
@@ -929,7 +956,12 @@ theorem Disjoint.cycleType_noncommProd
   | insert i s hi hrec =>
     have hs' : (s : Set ι).Pairwise fun i j => Disjoint (k i) (k j) :=
       hs.mono (by simp only [Finset.coe_insert, Set.subset_insert])
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; 
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; rw [Finset.sum_insert hi]
+    rw [Disjoint.cycleType_mul]; rw [hrec hs']
+    apply disjoint_noncommProd_right
+    intro j hj
+    apply hs _ _ (ne_of_mem_of_not_mem hj hi).symm <;>
+      simp only [Finset.coe_insert, Set.mem_insert_iff, Finset.mem_coe, hj, or_true, true_or]
 
 Depends on / 依赖: Disjoint, Disjoint.cycleType_mul, Finset, Finset.coe_insert, Finset.induction_on, Finset.noncommProd_insert_of_notMem, Finset.sum_insert, Pairwise, Perm.Disjoint.commute, Set.subset_insert, classical, coe_insert, commute, cycleType, cycleType_mul, disjoint_noncommProd_right, hs.imp, hs.mono, induction_on, insert
 -/
@@ -989,7 +1021,23 @@ theorem isConj_of_cycleType_eq
     have hτ := card_cycleType_eq_one.2 hσ
     rw [h]; rw [card_cycleType_eq_one] at hτ
     apply hσ.isConj hτ
-    rwa [hσ
+    rwa [hσ.cycleType, hτ.cycleType, Multiset.singleton_inj] at h
+  | induction_disjoint σ π hd hc hσ hπ =>
+    rw [hd.cycleType_mul] at h
+    have h' : #σ.support in τ.cycleType := by
+      simp [← h, hc.cycleType]
+    obtain ⟨σ', hσ'l, hσ'⟩ := Multiset.mem_map.mp h'
+    have key : IsConj (σ' * τ * σ'⁻¹) τ := (isConj_iff.2 ⟨σ', rfl⟩).symm
+    refine IsConj.trans ?_ key
+    rw [mul_assoc]
+    have hs : σ.cycleType = σ'.cycleType := by
+      rw [← Finset.mem_def]; rw [mem_cycleFactorsFinset_iff] at hσ'l
+      rw [hc.cycleType]; rw [← hσ']; rw [hσ'l.left.cycleType]; rfl
+    refine hd.isConj_mul (hσ hs) (hπ ?_) ?_
+    · rw [cycleType_mul_inv_mem_cycleFactorsFinset_eq_sub, ← h, add_comm, hs,
+        add_tsub_cancel_right]
+      rwa [Finset.mem_def]
+    · exact (disjoint_mul_inv_of_mem_cycleFactorsFinset hσ'l).symm
 
 中文:
 定理 isConj_of_cycleType_eq
@@ -1004,7 +1052,23 @@ theorem isConj_of_cycleType_eq
     have hτ := card_cycleType_eq_one.2 hσ
     rw [h]; rw [card_cycleType_eq_one] at hτ
     apply hσ.isConj hτ
-    rwa [hσ
+    rwa [hσ.cycleType, hτ.cycleType, Multiset.singleton_inj] at h
+  | induction_disjoint σ π hd hc hσ hπ =>
+    rw [hd.cycleType_mul] at h
+    have h' : #σ.support in τ.cycleType := by
+      simp [← h, hc.cycleType]
+    obtain ⟨σ', hσ'l, hσ'⟩ := Multiset.mem_map.mp h'
+    have key : IsConj (σ' * τ * σ'⁻¹) τ := (isConj_iff.2 ⟨σ', rfl⟩).symm
+    refine IsConj.trans ?_ key
+    rw [mul_assoc]
+    have hs : σ.cycleType = σ'.cycleType := by
+      rw [← Finset.mem_def]; rw [mem_cycleFactorsFinset_iff] at hσ'l
+      rw [hc.cycleType]; rw [← hσ']; rw [hσ'l.left.cycleType]; rfl
+    refine hd.isConj_mul (hσ hs) (hπ ?_) ?_
+    · rw [cycleType_mul_inv_mem_cycleFactorsFinset_eq_sub, ← h, add_comm, hs,
+        add_tsub_cancel_right]
+      rwa [Finset.mem_def]
+    · exact (disjoint_mul_inv_of_mem_cycleFactorsFinset hσ'l).symm
 
 Depends on / 依赖: Multiset, Multiset.mem_ma, Multiset.singleton_inj, base_cycles, base_one, card_cycleType_eq_one, cycleType, cycleType_eq_zero, cycleType_mul, cycleType_one, cycle_induction_on, eq_comm, generalizing, hc.cycleType, hd.cycleType_mul, induction_disjoint, isConj, mem_ma, singleton_inj, support
 -/
@@ -1078,7 +1142,7 @@ theorem cycleType_extendDomain
   | base_cycles σ hσ =>
     rw [(hσ.extendDomain f).cycleType]; rw [hσ.cycleType]; rw [card_support_extend_domain]
   | induction_disjoint σ τ hd _ hσ hτ =>
-    rw [hd.cycleType_mul]; rw
+    rw [hd.cycleType_mul]; rw [← extendDomain_mul]; rw [(hd.extendDomain f).cycleType_mul]; rw [hσ]; rw [hτ]
 
 中文:
 定理 cycleType_extendDomain
@@ -1089,7 +1153,7 @@ theorem cycleType_extendDomain
   | base_cycles σ hσ =>
     rw [(hσ.extendDomain f).cycleType]; rw [hσ.cycleType]; rw [card_support_extend_domain]
   | induction_disjoint σ τ hd _ hσ hτ =>
-    rw [hd.cycleType_mul]; rw
+    rw [hd.cycleType_mul]; rw [← extendDomain_mul]; rw [(hd.extendDomain f).cycleType_mul]; rw [hσ]; rw [hτ]
 
 Depends on / 依赖: base_cycles, base_one, card_support_extend_domain, cycleType, cycleType_mul, cycleType_one, cycle_induction_on, extendDomain, extendDomain_mul, extendDomain_one, hd.cycleType_mul, hd.extendDomain, induction_disjoint
 -/
@@ -1136,7 +1200,11 @@ theorem mem_cycleType_iff
     rw [cycleType_eq _ rfl hlc hld]; rw [Multiset.mem_coe]; rw [List.mem_map] at h
     obtain ⟨c, cl, rfl⟩ := h
     rw [(List.perm_cons_erase cl).pairwise_iff symm] at hld
-    refine ⟨c, (l.erase c).prod, ?_, ?_, hlc _
+    refine ⟨c, (l.erase c).prod, ?_, ?_, hlc _ cl, rfl⟩
+    · rw [← List.prod_cons, (List.perm_cons_erase cl).symm.prod_eq' (hld.imp Disjoint.commute)]
+    · exact disjoint_prod_right _ fun g => List.rel_of_pairwise_cons hld
+  · rintro ⟨c, t, rfl, hd, hc, rfl⟩
+    simp [hd.cycleType_mul, hc.cycleType]
 
 中文:
 定理 mem_cycleType_iff
@@ -1148,7 +1216,11 @@ theorem mem_cycleType_iff
     rw [cycleType_eq _ rfl hlc hld]; rw [Multiset.mem_coe]; rw [List.mem_map] at h
     obtain ⟨c, cl, rfl⟩ := h
     rw [(List.perm_cons_erase cl).pairwise_iff symm] at hld
-    refine ⟨c, (l.erase c).prod, ?_, ?_, hlc _
+    refine ⟨c, (l.erase c).prod, ?_, ?_, hlc _ cl, rfl⟩
+    · rw [← List.prod_cons, (List.perm_cons_erase cl).symm.prod_eq' (hld.imp Disjoint.commute)]
+    · exact disjoint_prod_right _ fun g => List.rel_of_pairwise_cons hld
+  · rintro ⟨c, t, rfl, hd, hc, rfl⟩
+    simp [hd.cycleType_mul, hc.cycleType]
 
 Depends on / 依赖: Disjoint, Disjoint.commute, List.mem_map, List.perm_cons_erase, List.prod_cons, List.rel_of_pairwise_cons, Multiset, Multiset.mem_coe, commute, cycleType_, cycleType_eq, disjoint_prod_right, hd.cycleType_, hld.imp, l.erase, mem_coe, mem_map, pairwise_iff, perm_cons_erase, prod_cons
 -/
@@ -1196,7 +1268,7 @@ theorem cycleType_of_card_le_mem_cycleType_add_two
   suffices g'1 : g' = 1 by
     rw [hd.cycleType_mul]; rw [hc.cycleType]; rw [g'1]; rw [cycleType_one]; rw [add_zero]
   contrapose! hn2 with g'1
-  grw [← (c * g').support.card_le_univ, hd.card_support_mul, two_le_card_support_of_ne_one 
+  grw [← (c * g').support.card_le_univ, hd.card_support_mul, two_le_card_support_of_ne_one g'1]
 
 中文:
 定理 cycleType_of_card_le_mem_cycleType_add_two
@@ -1206,7 +1278,7 @@ theorem cycleType_of_card_le_mem_cycleType_add_two
   suffices g'1 : g' = 1 by
     rw [hd.cycleType_mul]; rw [hc.cycleType]; rw [g'1]; rw [cycleType_one]; rw [add_zero]
   contrapose! hn2 with g'1
-  grw [← (c * g').support.card_le_univ, hd.card_support_mul, two_le_card_support_of_ne_one 
+  grw [← (c * g').support.card_le_univ, hd.card_support_mul, two_le_card_support_of_ne_one g'1]
 
 Depends on / 依赖: add_zero, card_le_univ, card_support_mul, contrapose, cycleType, cycleType_mul, cycleType_one, hc.cycleType, hd.card_support_mul, hd.cycleType_mul, mem_cycleType_iff, support, support.card_le_univ, two_le_card_support_of_ne_one
 -/
@@ -1229,7 +1301,9 @@ theorem sign_of_cycleType_eq_replicate
   obtain h | h := Nat.even_or_odd n
   · rw [if_neg (Nat.not_odd_iff_even.mpr h), h.neg_one_pow, σ.card_fixedPoints,
       Nat.sub_sub_self σ.sum_cycleType_le,
-      show σ.cycleType.sum = σ.cycleType.car
+      show σ.cycleType.sum = σ.cycleType.card * n by rw [hσ]; simp,
+        Nat.mul_div_cancel _ hn]
+  · rw [if_pos h, h.neg_one_pow, neg_neg, one_pow]
 
 中文:
 定理 sign_of_cycleType_eq_replicate
@@ -1239,7 +1313,9 @@ theorem sign_of_cycleType_eq_replicate
   obtain h | h := Nat.even_or_odd n
   · rw [if_neg (Nat.not_odd_iff_even.mpr h), h.neg_one_pow, σ.card_fixedPoints,
       Nat.sub_sub_self σ.sum_cycleType_le,
-      show σ.cycleType.sum = σ.cycleType.car
+      show σ.cycleType.sum = σ.cycleType.card * n by rw [hσ]; simp,
+        Nat.mul_div_cancel _ hn]
+  · rw [if_pos h, h.neg_one_pow, neg_neg, one_pow]
 
 Depends on / 依赖: Multiset, Multiset.map_replicate, Multiset.prod_replicate, Nat.even_or_odd, Nat.mul_div_cancel, Nat.not_odd_iff_even.mpr, Nat.sub_sub_self, card_fixedPoints, cycleType, cycleType.card, cycleType.sum, even_or_odd, h.neg_one_pow, if_neg, if_pos, map_replicate, mul_div_cancel, neg_neg, neg_one_pow, not_odd_iff_even
 -/
@@ -1289,7 +1365,9 @@ theorem card_compl_support_modEq
   · refine Multiset.dvd_sum fun k hk => ?_
     obtain ⟨m, -, hm⟩ := (Nat.dvd_prime_pow hp.out).mp (orderOf_dvd_of_pow_eq_one hσ)
     obtain ⟨l, -, rfl⟩ := (Nat.dvd_prime_pow hp.out).mp
-      ((congr_arg _ 
+      ((congr_arg _ hm).mp (dvd_of_mem_cycleType hk))
+exact dvd_pow_self _ fun h => (one_lt_of_mem_cycleType hk).ne by rw [h, pow_zero]
+  · exact Finset.card_le_univ _
 
 中文:
 定理 card_compl_support_modEq
@@ -1299,7 +1377,9 @@ theorem card_compl_support_modEq
   · refine Multiset.dvd_sum fun k hk => ?_
     obtain ⟨m, -, hm⟩ := (Nat.dvd_prime_pow hp.out).mp (orderOf_dvd_of_pow_eq_one hσ)
     obtain ⟨l, -, rfl⟩ := (Nat.dvd_prime_pow hp.out).mp
-      ((congr_arg _ 
+      ((congr_arg _ hm).mp (dvd_of_mem_cycleType hk))
+exact dvd_pow_self _ fun h => (one_lt_of_mem_cycleType hk).ne by rw [h, pow_zero]
+  · exact Finset.card_le_univ _
 
 Depends on / 依赖: Finset, Finset.card_compl, Finset.card_le_univ, Multiset, Multiset.dvd_sum, Nat.dvd_prime_pow, Nat.modEq_iff_dvd, card_compl, card_le_univ, compl_compl, congr_arg, dvd_of_mem_cycleType, dvd_pow_self, dvd_prime_pow, dvd_sum, hp.out, modEq_iff_dvd, one_lt_of_mem_cycleType, orderOf_dvd_of_pow_eq_one, pow_zero
 -/
@@ -1326,7 +1406,13 @@ theorem card_fixedPoints_modEq
     leftInverse_iff_comp.mpr ((pow_sub_mul_pow f (Nat.one_le_pow n p hp.out.pos)).trans hf),
     leftInverse_iff_comp.mpr ((pow_mul_pow_sub f (Nat.one_le_pow n p hp.out.pos)).trans hf)⟩
   have hσ : σ ^ p ^ n = 1 := by
-    rw [DFunLike.ext'_iff]; rw [coe_pow
+    rw [DFunLike.ext'_iff]; rw [coe_pow]
+    exact (hom_coe_pow (fun g : Function.End α => g) rfl (fun g h => rfl) f (p ^ n)).symm.trans hf
+  suffices Fintype.card f.fixedPoints = (support σ)ᶜ.card from
+    this ▸ (card_compl_support_modEq hσ).symm
+  suffices f.fixedPoints = (support σ)ᶜ by
+    simp only [this]; apply Fintype.card_coe
+  simp [σ, Set.ext_iff, IsFixedPt]
 
 中文:
 定理 card_fixedPoints_modEq
@@ -1336,7 +1422,13 @@ theorem card_fixedPoints_modEq
     leftInverse_iff_comp.mpr ((pow_sub_mul_pow f (Nat.one_le_pow n p hp.out.pos)).trans hf),
     leftInverse_iff_comp.mpr ((pow_mul_pow_sub f (Nat.one_le_pow n p hp.out.pos)).trans hf)⟩
   have hσ : σ ^ p ^ n = 1 := by
-    rw [DFunLike.ext'_iff]; rw [coe_pow
+    rw [DFunLike.ext'_iff]; rw [coe_pow]
+    exact (hom_coe_pow (fun g : Function.End α => g) rfl (fun g h => rfl) f (p ^ n)).symm.trans hf
+  suffices Fintype.card f.fixedPoints = (support σ)ᶜ.card from
+    this ▸ (card_compl_support_modEq hσ).symm
+  suffices f.fixedPoints = (support σ)ᶜ by
+    simp only [this]; apply Fintype.card_coe
+  simp [σ, Set.ext_iff, IsFixedPt]
 
 Depends on / 依赖: DFunLike, DFunLike.ext, Fintype, Fintype.card, Function, Function.End, Nat.one_le_pow, _iff, card_compl_support_modEq, coe_pow, f.fixed, f.fixedPoints, fixedPoints, hom_coe_pow, hp.out.pos, leftInverse_iff_comp, leftInverse_iff_comp.mpr, one_le_pow, pow_mul_pow_sub, pow_sub_mul_pow
 -/
@@ -1399,7 +1491,9 @@ theorem exists_fixed_point_of_prime'
     have h : forall b : α, b in σ.supportᶜ ↔ σ b = b := fun b => by
       rw [Finset.mem_compl]; rw [mem_support]; rw [Classical.not_not]
     obtain ⟨b, hb1, hb2⟩ := Finset.exists_mem_ne (hp.out.one_lt.trans_le
-      (Nat.le_of_dvd (Finset.card_pos.mpr ⟨a, (h a).mpr ha⟩) (Nat.modEq_ze
+      (Nat.le_of_dvd (Finset.card_pos.mpr ⟨a, (h a).mpr ha⟩) (Nat.modEq_zero_iff_dvd.mp
+        ((card_compl_support_modEq hσ).trans (Nat.modEq_zero_iff_dvd.mpr hα))))) a
+    exact ⟨b, (h b).mp hb1, hb2⟩
 
 中文:
 定理 存在_fixed_point_of_prime'
@@ -1409,7 +1503,9 @@ theorem exists_fixed_point_of_prime'
     have h : forall b : α, b in σ.supportᶜ ↔ σ b = b := fun b => by
       rw [Finset.mem_compl]; rw [mem_support]; rw [Classical.not_not]
     obtain ⟨b, hb1, hb2⟩ := Finset.exists_mem_ne (hp.out.one_lt.trans_le
-      (Nat.le_of_dvd (Finset.card_pos.mpr ⟨a, (h a).mpr ha⟩) (Nat.modEq_ze
+      (Nat.le_of_dvd (Finset.card_pos.mpr ⟨a, (h a).mpr ha⟩) (Nat.modEq_zero_iff_dvd.mp
+        ((card_compl_support_modEq hσ).trans (Nat.modEq_zero_iff_dvd.mpr hα))))) a
+    exact ⟨b, (h b).mp hb1, hb2⟩
 
 Depends on / 依赖: Classical, Classical.not_not, Finset, Finset.card_pos.mpr, Finset.exists_mem_ne, Finset.mem_compl, Nat.le_of_dvd, Nat.modEq_zero_iff_dvd.mp, Nat.modEq_zero_iff_dvd.mpr, card_compl_support_modEq, card_pos, classical, exists_mem_ne, hp.out.one_lt.trans_le, le_of_dvd, mem_compl, mem_support, modEq_zero_iff_dvd, not_not, one_lt
 -/
@@ -1619,7 +1715,10 @@ definition vectorEquiv
 right_inv v := Subtype.ext
     calc
       v.1.tail.toList.prod⁻¹ ::ᵥ v.1.tail = v.1.head ::ᵥ v.1.tail :=
-congr_arg (· ::ᵥ
+congr_arg (· ::ᵥ v.1.tail) Eq.symm eq_inv_of_mul_eq_one_left by
+          rw [← List.prod_cons]; rw [← Vector.toList_cons]; rw [v.1.cons_head_tail]
+          exact v.2
+      _ = v.1 := v.1.cons_head_tail
 
 中文:
 定义 vectorEquiv
@@ -1631,7 +1730,10 @@ congr_arg (· ::ᵥ
 right_inv v := Subtype.ext
     calc
       v.1.tail.toList.prod⁻¹ ::ᵥ v.1.tail = v.1.head ::ᵥ v.1.tail :=
-congr_arg (· ::ᵥ
+congr_arg (· ::ᵥ v.1.tail) Eq.symm eq_inv_of_mul_eq_one_left by
+          rw [← List.prod_cons]; rw [← Vector.toList_cons]; rw [v.1.cons_head_tail]
+          exact v.2
+      _ = v.1 := v.1.cons_head_tail
 
 Depends on / 依赖: Eq.symm, List.prod_cons, Subtype, Subtype.ext, Vector, Vector.toList_cons, congr_arg, cons_head_tail, eq_inv_of_mul_eq_one_left, invFun, inv_mul_cancel, left_inv, mem_iff, prod_cons, right_inv, tail.toList.prod, tail_cons, toList, toList_cons, v.tail_cons
 -/
@@ -1792,7 +1894,30 @@ theorem _root_.exists_prime_orderOf_dvd_card
     calc
       p ∣ Fintype.card G ^ (p - 1) := hdvd.trans (dvd_pow (dvd_refl _) hp')
       _ = Fintype.card (vectorsProdEqOne G p) := (VectorsProdEqOne.card G p).symm
-  let f : Nat -> vectorsProdEqOn
+  let f : Nat -> vectorsProdEqOne G p -> vectorsProdEqOne G p := fun k v =>
+    VectorsProdEqOne.rotate v k
+  have hf1 : forall v, f 0 v = v := VectorsProdEqOne.rotate_zero
+  have hf2 : forall j k v, f k (f j v) = f (j + k) v := fun j k v =>
+    VectorsProdEqOne.rotate_rotate v j k
+  have hf3 : forall v, f p v = v := VectorsProdEqOne.rotate_length
+  let σ :=
+    Equiv.mk (f 1) (f (p - 1)) (fun s => by rw [hf2, add_tsub_cancel_of_le hp.out.one_lt.le, hf3])
+      fun s => by rw [hf2, tsub_add_cancel_of_le hp.out.one_lt.le, hf3]
+  have hσ : forall k v, (σ ^ k) v = f k v := fun k =>
+    Nat.rec (fun v => (hf1 v).symm) (fun k hk v => by
+      rw [pow_succ]; rw [Perm.mul_apply]; rw [hk (σ v)]; rw [Nat.succ_eq_one_add]; rw [← hf2 1 k]
+      simp only [σ, coe_fn_mk]) k
+  replace hσ : σ ^ p ^ 1 = 1 := Perm.ext fun v => by rw [pow_one, hσ, hf3, one_apply]
+  let v₀ : vectorsProdEqOne G p :=
+    ⟨List.Vector.replicate p 1, (List.prod_replicate p 1).trans (one_pow p)⟩
+  have hv₀ : σ v₀ = v₀ := Subtype.ext (Subtype.ext (List.rotate_replicate (1 : G) p 1))
+  obtain ⟨v, hv1, hv2⟩ := exists_fixed_point_of_prime' Scard hσ hv₀
+  refine
+    Exists.imp (fun g hg => orderOf_eq_prime ?_ fun hg' => hv2 ?_)
+      (List.rotate_one_eq_self_iff_eq_replicate.mp (Subtype.ext_iff.mp (Subtype.ext_iff.mp hv1)))
+  · rw [← List.prod_replicate, ← v.1.2, ← hg, show v.val.val.prod = 1 from v.2]
+  · rw [Subtype.ext_iff, Subtype.ext_iff, hg, hg', v.1.2]
+    simp only [v₀, List.Vector.replicate]
 
 中文:
 定理 _root_.存在_prime_orderOf_dvd_card
@@ -1803,7 +1928,30 @@ theorem _root_.exists_prime_orderOf_dvd_card
     calc
       p ∣ Fintype.card G ^ (p - 1) := hdvd.trans (dvd_pow (dvd_refl _) hp')
       _ = Fintype.card (vectorsProdEqOne G p) := (VectorsProdEqOne.card G p).symm
-  let f : Nat -> vectorsProdEqOn
+  let f : Nat -> vectorsProdEqOne G p -> vectorsProdEqOne G p := fun k v =>
+    VectorsProdEqOne.rotate v k
+  have hf1 : forall v, f 0 v = v := VectorsProdEqOne.rotate_zero
+  have hf2 : forall j k v, f k (f j v) = f (j + k) v := fun j k v =>
+    VectorsProdEqOne.rotate_rotate v j k
+  have hf3 : forall v, f p v = v := VectorsProdEqOne.rotate_length
+  let σ :=
+    Equiv.mk (f 1) (f (p - 1)) (fun s => by rw [hf2, add_tsub_cancel_of_le hp.out.one_lt.le, hf3])
+      fun s => by rw [hf2, tsub_add_cancel_of_le hp.out.one_lt.le, hf3]
+  have hσ : forall k v, (σ ^ k) v = f k v := fun k =>
+    Nat.rec (fun v => (hf1 v).symm) (fun k hk v => by
+      rw [pow_succ]; rw [Perm.mul_apply]; rw [hk (σ v)]; rw [Nat.succ_eq_one_add]; rw [← hf2 1 k]
+      simp only [σ, coe_fn_mk]) k
+  replace hσ : σ ^ p ^ 1 = 1 := Perm.ext fun v => by rw [pow_one, hσ, hf3, one_apply]
+  let v₀ : vectorsProdEqOne G p :=
+    ⟨List.Vector.replicate p 1, (List.prod_replicate p 1).trans (one_pow p)⟩
+  have hv₀ : σ v₀ = v₀ := Subtype.ext (Subtype.ext (List.rotate_replicate (1 : G) p 1))
+  obtain ⟨v, hv1, hv2⟩ := exists_fixed_point_of_prime' Scard hσ hv₀
+  refine
+    Exists.imp (fun g hg => orderOf_eq_prime ?_ fun hg' => hv2 ?_)
+      (List.rotate_one_eq_self_iff_eq_replicate.mp (Subtype.ext_iff.mp (Subtype.ext_iff.mp hv1)))
+  · rw [← List.prod_replicate, ← v.1.2, ← hg, show v.val.val.prod = 1 from v.2]
+  · rw [Subtype.ext_iff, Subtype.ext_iff, hg, hg', v.1.2]
+    simp only [v₀, List.Vector.replicate]
 
 Depends on / 依赖: Fintype, Fintype.card, VectorsProdEqOne, VectorsProdEqOne.card, VectorsProdEqOne.rot, VectorsProdEqOne.rotate, VectorsProdEqOne.rotate_zero, dvd_pow, dvd_refl, hdvd.trans, hp.out.one_lt, not_le_of_gt, one_lt, rotate, rotate_zero, tsub_eq_zero_iff_le, tsub_eq_zero_iff_le.mp, vectorsProdEqOne
 -/
@@ -1905,7 +2053,11 @@ theorem subgroup_eq_top_of_swap_mem
   obtain ⟨σ, hσ⟩ := exists_prime_orderOf_dvd_card (Fintype.card α) h1
   have hσ1 : orderOf (σ : Perm α) = Fintype.card α := (Subgroup.orderOf_coe σ).trans hσ
   have hσ2 : IsCycle ↑σ := isCycle_of_prime_order'' h0 hσ1
-  have hσ3 : (σ : Perm α).support =
+  have hσ3 : (σ : Perm α).support = ⊤ :=
+    Finset.eq_univ_of_card (σ : Perm α).support (hσ2.orderOf.symm.trans hσ1)
+  have hσ4 : Subgroup.closure {↑σ, τ} = ⊤ := closure_prime_cycle_swap h0 hσ2 hσ3 h3
+  rw [eq_top_iff]; rw [← hσ4]; rw [Subgroup.closure_le]; rw [Set.insert_subset_iff]; rw [Set.singleton_subset_iff]
+  exact ⟨Subtype.mem σ, h2⟩
 
 中文:
 定理 subgroup_eq_top_of_swap_mem
@@ -1915,7 +2067,11 @@ theorem subgroup_eq_top_of_swap_mem
   obtain ⟨σ, hσ⟩ := exists_prime_orderOf_dvd_card (Fintype.card α) h1
   have hσ1 : orderOf (σ : Perm α) = Fintype.card α := (Subgroup.orderOf_coe σ).trans hσ
   have hσ2 : IsCycle ↑σ := isCycle_of_prime_order'' h0 hσ1
-  have hσ3 : (σ : Perm α).support =
+  have hσ3 : (σ : Perm α).support = ⊤ :=
+    Finset.eq_univ_of_card (σ : Perm α).support (hσ2.orderOf.symm.trans hσ1)
+  have hσ4 : Subgroup.closure {↑σ, τ} = ⊤ := closure_prime_cycle_swap h0 hσ2 hσ3 h3
+  rw [eq_top_iff]; rw [← hσ4]; rw [Subgroup.closure_le]; rw [Set.insert_subset_iff]; rw [Set.singleton_subset_iff]
+  exact ⟨Subtype.mem σ, h2⟩
 
 Depends on / 依赖: Finset, Finset.eq_univ_of_card, Fintype, Fintype.card, IsCycle, Subgroup, Subgroup.closure, Subgroup.orderOf_coe, closure, closure_prime_cycle_swap, eq_top_iff, eq_univ_of_card, exists_prime_orderOf_dvd_card, isCycle_of_prime_order, orderOf, orderOf.symm.trans, orderOf_coe, support
 -/
@@ -1948,7 +2104,7 @@ definition partition
     · exact zero_lt_one.trans (one_lt_of_mem_cycleType hn)
     · exact lt_of_lt_of_le zero_lt_one (ge_of_eq (Multiset.eq_of_mem_replicate hn))
   parts_sum := by
-    rw [sum
+    rw [sum_add]; rw [sum_cycleType]; rw [Multiset.sum_replicate]; rw [nsmul_eq_mul]; rw [Nat.cast_id]; rw [mul_one]; rw [add_tsub_cancel_of_le σ.support.card_le_univ]
 
 中文:
 定义 partition
@@ -1959,7 +2115,7 @@ definition partition
     · exact zero_lt_one.trans (one_lt_of_mem_cycleType hn)
     · exact lt_of_lt_of_le zero_lt_one (ge_of_eq (Multiset.eq_of_mem_replicate hn))
   parts_sum := by
-    rw [sum
+    rw [sum_add]; rw [sum_cycleType]; rw [Multiset.sum_replicate]; rw [nsmul_eq_mul]; rw [Nat.cast_id]; rw [mul_one]; rw [add_tsub_cancel_of_le σ.support.card_le_univ]
 
 Depends on / 依赖: Fintype, Fintype.card, Multiset, Multiset.replicate, cycleType, replicate, support
 -/
@@ -2225,7 +2381,12 @@ theorem _root_.card_support_eq_three_iff
     exact (ne_of_lt zero_lt_three h).elim
   obtain ⟨n, hn⟩ := exists_mem_of_ne_zero h0
   by_cases h1 : σ.cycleType.erase n = 0
-  · rw [← sum_cycleType, ← cons_erase hn, h1
+  · rw [← sum_cycleType, ← cons_erase hn, h1, cons_zero, Multiset.sum_singleton] at h
+    rw [IsThreeCycle]; rw [← cons_erase hn]; rw [h1]; rw [h]; rw [← cons_zero]
+  obtain ⟨m, hm⟩ := exists_mem_of_ne_zero h1
+  rw [← sum_cycleType]; rw [← cons_erase hn]; rw [← cons_erase hm]; rw [Multiset.sum_cons]; rw [Multiset.sum_cons] at h
+  have : forall {k}, 2 <= m -> 2 <= n -> n + (m + k) = 3 -> False := by lia
+  cases this (two_le_of_mem_cycleType (mem_of_mem_erase hm)) (two_le_of_mem_cycleType hn) h
 
 中文:
 定理 _root_.card_support_eq_three_iff
@@ -2237,7 +2398,12 @@ theorem _root_.card_support_eq_three_iff
     exact (ne_of_lt zero_lt_three h).elim
   obtain ⟨n, hn⟩ := exists_mem_of_ne_zero h0
   by_cases h1 : σ.cycleType.erase n = 0
-  · rw [← sum_cycleType, ← cons_erase hn, h1
+  · rw [← sum_cycleType, ← cons_erase hn, h1, cons_zero, Multiset.sum_singleton] at h
+    rw [IsThreeCycle]; rw [← cons_erase hn]; rw [h1]; rw [h]; rw [← cons_zero]
+  obtain ⟨m, hm⟩ := exists_mem_of_ne_zero h1
+  rw [← sum_cycleType]; rw [← cons_erase hn]; rw [← cons_erase hm]; rw [Multiset.sum_cons]; rw [Multiset.sum_cons] at h
+  have : forall {k}, 2 <= m -> 2 <= n -> n + (m + k) = 3 -> False := by lia
+  cases this (two_le_of_mem_cycleType (mem_of_mem_erase hm)) (two_le_of_mem_cycleType hn) h
 
 Depends on / 依赖: IsThreeCycle, IsThreeCycle.card_support, Multiset, Multiset.sum_singleton, card_support, cons_e, cons_erase, cons_zero, cycleType, cycleType.erase, exists_mem_of_ne_zero, ne_of_lt, sum_cycleType, sum_singleton, sum_zero, zero_lt_three
 -/
@@ -2465,7 +2631,18 @@ theorem IsThreeCycle.support_eq_iff_mem_support
       apply Finset.insert_subset
       · rwa [Perm.apply_mem_support]
       simpa only [Finset.singleton_subset_iff, Perm.apply_mem_support]
-    · rw [hg3.card_
+    · rw [hg3.card_support]
+      simp only [mem_support, ne_eq] at ha
+      rw [Finset.card_insert_eq_ite]; rw [if_neg]
+      · rw [Finset.card_insert_eq_ite, if_neg]
+        · simp
+        · simpa using Ne.symm ha
+      · simp only [Finset.mem_insert, Finset.mem_singleton]
+        contrapose ha
+        rcases ha with ha | ha
+        · exact ha.symm
+        · suffices (g ^ 3) a = a by simpa [pow_succ, ← ha] using this
+          simp [← hg3.orderOf]
 
 中文:
 定理 IsThreeCycle.support_eq_iff_mem_support
@@ -2479,7 +2656,18 @@ theorem IsThreeCycle.support_eq_iff_mem_support
       apply Finset.insert_subset
       · rwa [Perm.apply_mem_support]
       simpa only [Finset.singleton_subset_iff, Perm.apply_mem_support]
-    · rw [hg3.card_
+    · rw [hg3.card_support]
+      simp only [mem_support, ne_eq] at ha
+      rw [Finset.card_insert_eq_ite]; rw [if_neg]
+      · rw [Finset.card_insert_eq_ite, if_neg]
+        · simp
+        · simpa using Ne.symm ha
+      · simp only [Finset.mem_insert, Finset.mem_singleton]
+        contrapose ha
+        rcases ha with ha | ha
+        · exact ha.symm
+        · suffices (g ^ 3) a = a by simpa [pow_succ, ← ha] using this
+          simp [← hg3.orderOf]
 
 Depends on / 依赖: Finset, Finset.card_insert_eq_ite, Finset.eq_of_subset_of_card_le, Finset.insert_subset, Finset.mem_insert, Finset.mem_singleton, Finset.singleton_subset_iff, Ne.symm, Perm.apply_mem_support, apply_mem_support, card_insert_eq_ite, card_support, contrapose, eq_of_subset_of_card_le, hg3.card_support, if_neg, insert_subset, mem_insert, mem_singleton, mem_support
 -/
@@ -2567,7 +2755,18 @@ theorem IsThreeCycle.eq_swap_mul_swap_iff_mem_support
   have ha'' := hg3.nodup_iff_mem_support.mpr ha
   ext x
   simp only [coe_mul, Function.comp_apply]
-  by_cases h : x in 
+  by_cases h : x in g.support
+  · simp only [ha', Finset.mem_insert, Finset.mem_singleton] at h
+    rcases h with rfl | (rfl | rfl)
+    · rw [swap_apply_of_ne_of_ne (x := x) (by grind) (by grind)]
+      simp
+    · rw [swap_apply_left, swap_apply_of_ne_of_ne (by grind) (by grind)]
+    · simp only [swap_apply_right]
+      suffices (g ^ 3) a = a by simpa
+      simp [← hg3.orderOf]
+  · rw [swap_apply_of_ne_of_ne (x := x) (by grind) (by grind)]
+    rw [swap_apply_of_ne_of_ne (x := x) (by grind) (by grind)]
+    simpa [notMem_support] using! h
 
 中文:
 定理 IsThreeCycle.eq_swap_mul_swap_iff_mem_support
@@ -2583,7 +2782,18 @@ theorem IsThreeCycle.eq_swap_mul_swap_iff_mem_support
   have ha'' := hg3.nodup_iff_mem_support.mpr ha
   ext x
   simp only [coe_mul, Function.comp_apply]
-  by_cases h : x in 
+  by_cases h : x in g.support
+  · simp only [ha', Finset.mem_insert, Finset.mem_singleton] at h
+    rcases h with rfl | (rfl | rfl)
+    · rw [swap_apply_of_ne_of_ne (x := x) (by grind) (by grind)]
+      simp
+    · rw [swap_apply_left, swap_apply_of_ne_of_ne (by grind) (by grind)]
+    · simp only [swap_apply_right]
+      suffices (g ^ 3) a = a by simpa
+      simp [← hg3.orderOf]
+  · rw [swap_apply_of_ne_of_ne (x := x) (by grind) (by grind)]
+    rw [swap_apply_of_ne_of_ne (x := x) (by grind) (by grind)]
+    simpa [notMem_support] using! h
 
 Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, Function, Function.comp_apply, coe_mul, comp_apply, g.support, hg3.isCycle.ne_one, hg3.nodup_iff_mem_support.mpr, hg3.support_eq_iff_mem_support.mpr, isCycle, mem_insert, mem_singleton, mem_support, ne_one, nodup_iff_mem_support, support, support_eq_iff_mem_support, swap_apply_left
 -/
@@ -2662,7 +2872,8 @@ theorem IsSwap.mul_mem_closure_three_cycles
     simp [swap_comm c a, mul_assoc]
   rw [h']
   exact
-  
+    mul_mem (swap_mul_swap_same_mem_closure_three_cycles ab ac)
+      (swap_mul_swap_same_mem_closure_three_cycles (Ne.symm ac) cd)
 
 中文:
 定理 IsSwap.mul_mem_closure_three_cycles
@@ -2677,7 +2888,8 @@ theorem IsSwap.mul_mem_closure_three_cycles
     simp [swap_comm c a, mul_assoc]
   rw [h']
   exact
-  
+    mul_mem (swap_mul_swap_same_mem_closure_three_cycles ab ac)
+      (swap_mul_swap_same_mem_closure_three_cycles (Ne.symm ac) cd)
 
 Depends on / 依赖: Ne.symm, mul_assoc, mul_mem, swap_comm, swap_mul_swap_same_mem_closure_three_cycles
 -/

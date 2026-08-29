@@ -158,7 +158,18 @@ instance :
   one_mul := by
     rintro (i | i)
     · exact congr_arg a (zero_add i)
-    · exact congr_arg xa (sub_zero i
+    · exact congr_arg xa (sub_zero i)
+  mul_one := by
+    rintro (i | i)
+    · exact congr_arg a (add_zero i)
+    · exact congr_arg xa (add_zero i)
+  inv := inv
+  inv_mul_cancel := by
+    rintro (i | i)
+    · exact congr_arg a (neg_add_cancel i)
+    · exact congr_arg a (sub_self (n + i))
+
+@[simp]
 
 中文:
 实例 :
@@ -173,7 +184,18 @@ instance :
   one_mul := by
     rintro (i | i)
     · exact congr_arg a (zero_add i)
-    · exact congr_arg xa (sub_zero i
+    · exact congr_arg xa (sub_zero i)
+  mul_one := by
+    rintro (i | i)
+    · exact congr_arg a (add_zero i)
+    · exact congr_arg xa (add_zero i)
+  inv := inv
+  inv_mul_cancel := by
+    rintro (i | i)
+    · exact congr_arg a (neg_add_cancel i)
+    · exact congr_arg a (sub_self (n + i))
+
+@[simp]
 -/
 instance : Group (QuaternionGroup n) where
   mul := mul
@@ -596,7 +618,9 @@ theorem orderOf_xa
     injection h with h'
     apply_fun ZMod.val at h'
     apply_fun (· / n) at h'
-    simp only [ZMod.val_natCast, ZMod.val_zero, Nat.zero_div, Nat.m
+    simp only [ZMod.val_natCast, ZMod.val_zero, Nat.zero_div, Nat.mod_mul_left_div_self,
+      Nat.div_self (NeZero.pos n), reduceCtorEq] at h'
+  · simp
 
 中文:
 定理 orderOf_xa
@@ -611,7 +635,9 @@ theorem orderOf_xa
     injection h with h'
     apply_fun ZMod.val at h'
     apply_fun (· / n) at h'
-    simp only [ZMod.val_natCast, ZMod.val_zero, Nat.zero_div, Nat.m
+    simp only [ZMod.val_natCast, ZMod.val_zero, Nat.zero_div, Nat.mod_mul_left_div_self,
+      Nat.div_self (NeZero.pos n), reduceCtorEq] at h'
+  · simp
 
 Depends on / 依赖: Fact.mk, Nat.Prime, Nat.div_self, Nat.mod_mul_left_div_self, Nat.prime_two, Nat.zero_div, NeZero, NeZero.pos, ZMod.val, ZMod.val_natCast, ZMod.val_zero, apply_fun, div_self, injection, mod_mul_left_div_self, orderOf_eq_prime_pow, pow_one, prime_two, reduceCtorEq, val_natCast
 -/
@@ -672,7 +698,13 @@ theorem orderOf_a_one
     have : CharZero (ZMod (2 * 0)) := ZMod.charZero
     simpa using h.ne'
   apply (Nat.le_of_dvd
-    (NeZero.pos _) (orderOf_dvd_of_pow_eq_one 
+    (NeZero.pos _) (orderOf_dvd_of_pow_eq_one (@a_one_pow_n n))).lt_or_eq.resolve_left
+  intro h
+  have h1 : (a 1 : QuaternionGroup n) ^ orderOf (a 1) = 1 := pow_orderOf_eq_one _
+  rw [a_one_pow] at h1
+  injection h1 with h2
+  rw [← ZMod.val_eq_zero]; rw [ZMod.val_natCast]; rw [Nat.mod_eq_of_lt h] at h2
+  exact absurd h2.symm (orderOf_pos _).ne
 
 中文:
 定理 orderOf_a_one
@@ -686,7 +718,13 @@ theorem orderOf_a_one
     have : CharZero (ZMod (2 * 0)) := ZMod.charZero
     simpa using h.ne'
   apply (Nat.le_of_dvd
-    (NeZero.pos _) (orderOf_dvd_of_pow_eq_one 
+    (NeZero.pos _) (orderOf_dvd_of_pow_eq_one (@a_one_pow_n n))).lt_or_eq.resolve_left
+  intro h
+  have h1 : (a 1 : QuaternionGroup n) ^ orderOf (a 1) = 1 := pow_orderOf_eq_one _
+  rw [a_one_pow] at h1
+  injection h1 with h2
+  rw [← ZMod.val_eq_zero]; rw [ZMod.val_natCast]; rw [Nat.mod_eq_of_lt h] at h2
+  exact absurd h2.symm (orderOf_pos _).ne
 
 Depends on / 依赖: CharZero, Nat.le_of_dvd, Nat.mod, NeZero, NeZero.pos, QuaternionGroup, ZMod.charZero, ZMod.val_eq_zero, ZMod.val_natCast, a.inj, a_one_pow, a_one_pow_n, charZero, eq_zero_or_neZero, h.ne, injection, le_of_dvd, lt_or_eq, lt_or_eq.resolve_left, mul_zero
 -/
@@ -744,7 +782,18 @@ theorem exponent
   · simp only [lcm_zero_left, mul_zero]
     exact Monoid.exponent_eq_zero_of_order_zero orderOf_a_one
   apply Nat.dvd_antisymm
-  · apply Monoid.exponent_dvd_of_fo
+  · apply Monoid.exponent_dvd_of_forall_pow_eq_one
+    rintro (m | m)
+    · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_a]
+      refine Nat.dvd_trans ⟨gcd (2 * n) m.val, ?_⟩ (dvd_lcm_left (2 * n) 4)
+      exact (Nat.div_mul_cancel (Nat.gcd_dvd_left (2 * n) m.val)).symm
+    · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_xa]
+      exact dvd_lcm_right (2 * n) 4
+  · apply lcm_dvd
+    · convert! Monoid.order_dvd_exponent (a 1)
+      exact orderOf_a_one.symm
+    · convert! Monoid.order_dvd_exponent (xa (0 : ZMod (2 * n)))
+      exact (orderOf_xa 0).symm
 
 中文:
 定理 exponent
@@ -756,7 +805,18 @@ theorem exponent
   · simp only [lcm_zero_left, mul_zero]
     exact Monoid.exponent_eq_zero_of_order_zero orderOf_a_one
   apply Nat.dvd_antisymm
-  · apply Monoid.exponent_dvd_of_fo
+  · apply Monoid.exponent_dvd_of_forall_pow_eq_one
+    rintro (m | m)
+    · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_a]
+      refine Nat.dvd_trans ⟨gcd (2 * n) m.val, ?_⟩ (dvd_lcm_left (2 * n) 4)
+      exact (Nat.div_mul_cancel (Nat.gcd_dvd_left (2 * n) m.val)).symm
+    · rw [← orderOf_dvd_iff_pow_eq_one, orderOf_xa]
+      exact dvd_lcm_right (2 * n) 4
+  · apply lcm_dvd
+    · convert! Monoid.order_dvd_exponent (a 1)
+      exact orderOf_a_one.symm
+    · convert! Monoid.order_dvd_exponent (xa (0 : ZMod (2 * n)))
+      exact (orderOf_xa 0).symm
 
 Depends on / 依赖: Monoid, Monoid.exponent_dvd_of_forall_pow_eq_one, Monoid.exponent_eq_zero_of_order_zero, Nat.div_mul_cancel, Nat.dvd_antisymm, Nat.dvd_trans, Nat.gcd_dvd_left, Nat.reduceMul, div_mul_cancel, dvd_antisymm, dvd_lcm_left, dvd_trans, eq_zero_or_neZero, exponent_dvd_of_forall_pow_eq_one, exponent_eq_zero_of_order_zero, gcd_dvd_left, lcm_mul_left, lcm_zero_left, m.val, mul_zero
 -/

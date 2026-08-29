@@ -43,7 +43,31 @@ instance functorCategoryLinear
       zero_smul := by
         intros
         ext
-        app
+        apply zero_smul
+      smul_zero := by
+        intros
+        ext
+        apply smul_zero
+      add_smul := by
+        intros
+        ext
+        apply add_smul
+      smul_add := by
+        intros
+        ext
+        apply smul_add
+      mul_smul := by
+        intros
+        ext
+        apply mul_smul }
+  smul_comp := by
+    intros
+    ext
+    apply smul_comp
+  comp_smul := by
+    intros
+    ext
+    apply comp_smul
 
 中文:
 实例 functorCategoryLinear
@@ -60,7 +84,31 @@ instance functorCategoryLinear
       zero_smul := by
         intros
         ext
-        app
+        apply zero_smul
+      smul_zero := by
+        intros
+        ext
+        apply smul_zero
+      add_smul := by
+        intros
+        ext
+        apply add_smul
+      smul_add := by
+        intros
+        ext
+        apply smul_add
+      mul_smul := by
+        intros
+        ext
+        apply mul_smul }
+  smul_comp := by
+    intros
+    ext
+    apply smul_comp
+  comp_smul := by
+    intros
+    ext
+    apply comp_smul
 
 Depends on / 依赖: add_smul, comp_smul, intros, mul_smul, naturality, one_smul, smul_add, smul_comp, smul_zero, zero_smul
 -/

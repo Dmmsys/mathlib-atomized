@@ -62,7 +62,9 @@ theorem IsAffineOpen.fromSpecStalk_eq
     Opens.isBasis_iff_nbhd.mp X.isBasis_affineOpens (show x in U ⊓ V from ⟨hxU, hxV⟩)
   transitivity fromSpecStalk h₁ h₂
   · delta fromSpecStalk
-    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Pr
+    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
+  · delta fromSpecStalk
+    rw [← hV.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_right).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
 
 中文:
 定理 是仿射开集.fromSpecStalk_eq
@@ -72,7 +74,9 @@ theorem IsAffineOpen.fromSpecStalk_eq
     Opens.isBasis_iff_nbhd.mp X.isBasis_affineOpens (show x in U ⊓ V from ⟨hxU, hxV⟩)
   transitivity fromSpecStalk h₁ h₂
   · delta fromSpecStalk
-    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Pr
+    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
+  · delta fromSpecStalk
+    rw [← hV.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_right).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
 
 Depends on / 依赖: Opens.isBasis_iff_nbhd.mp, Presheaf, Spec.map_comp_assoc, TopCat, TopCat.Presheaf.germ_res, X.isBasis_affineOpens, fromSpecStalk, germ_res, hU.map_fromSpec, hV.map_fromSpec, homOfLE, inf_le_left, inf_le_right, isBasis_affineOpens, isBasis_iff_nbhd, map_comp_assoc, map_fromSpec, transitivity
 -/
@@ -148,7 +152,9 @@ instance IsAffineOpen.fromSpecStalk_isPreimmersion
   have : IsPreimmersion (Spec.map (X.presheaf.germ U x hx)) :=
     letI : Algebra Γ(X, U) (X.presheaf.stalk x) := (X.presheaf.germ U x hx).hom.toAlgebra
     haveI := hU.isLocalization_stalk ⟨x, hx⟩
-    IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.pr
+    IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.presheaf.stalk x)
+      (hU.primeIdealOf ⟨x, hx⟩).asIdeal.primeCompl
+  apply IsPreimmersion.comp
 
 中文:
 实例 是仿射开集.fromSpecStalk_isPreimmersion
@@ -158,7 +164,9 @@ instance IsAffineOpen.fromSpecStalk_isPreimmersion
   have : IsPreimmersion (Spec.map (X.presheaf.germ U x hx)) :=
     letI : Algebra Γ(X, U) (X.presheaf.stalk x) := (X.presheaf.germ U x hx).hom.toAlgebra
     haveI := hU.isLocalization_stalk ⟨x, hx⟩
-    IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.pr
+    IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.presheaf.stalk x)
+      (hU.primeIdealOf ⟨x, hx⟩).asIdeal.primeCompl
+  apply IsPreimmersion.comp
 
 Depends on / 依赖: Algebra, IsAffineOpen, IsAffineOpen.fromSpecStalk, IsPreimmersion, IsPreimmersion.comp, IsPreimmersion.of_isLocalization, Spec.map, X.presheaf.germ, X.presheaf.stalk, asIdeal, asIdeal.primeCompl, fromSpecStalk, hU.isLocalization_stalk, hU.primeIdealOf, hom.toAlgebra, isLocalization_stalk, of_isLocalization, presheaf, primeCompl, primeIdealOf
 -/
@@ -234,6 +242,7 @@ lemma fromSpecStalk_app
   obtain ⟨_, ⟨V : X.Opens, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
     hxU U.2
   rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_app]; rw [hV.fromSpec_app_of_le _ hVU]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]
+  simp [Category.assoc, ← ΓSpecIso_inv_naturality_assoc]
 
 中文:
 引理 fromSpecStalk_app
@@ -242,6 +251,7 @@ lemma fromSpecStalk_app
   obtain ⟨_, ⟨V : X.Opens, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
     hxU U.2
   rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_app]; rw [hV.fromSpec_app_of_le _ hVU]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]
+  simp [Category.assoc, ← ΓSpecIso_inv_naturality_assoc]
 
 Depends on / 依赖: Category, Category.assoc, IsAffineOpen, IsAffineOpen.fromSpecStalk, Scheme, Scheme.Hom.comp_app, X.Opens, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.germ_res, comp_app, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, fromSpec_app_of_le, germ_res, hV.fromSpecStalk_eq_fromSpecStalk, hV.fromSpec_app_of_le, homOfLE, isBasis_affineOpens, presheaf
 -/
@@ -289,7 +299,7 @@ lemma SpecMap_stalkSpecializes_fromSpecStalk
   obtain ⟨_, ⟨U, hU, rfl⟩, hyU, -⟩ :=
     X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ y) isOpen_univ
   have hxU : x in U := h.mem_open U.2 hyU
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU]; rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAff
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU]; rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpecStalk]; rw [← Category.assoc]; rw [← Spec.map_comp]; rw [TopCat.Presheaf.germ_stalkSpecializes]
 
 中文:
 引理 SpecMap_stalkSpecializes_fromSpecStalk
@@ -298,7 +308,7 @@ lemma SpecMap_stalkSpecializes_fromSpecStalk
   obtain ⟨_, ⟨U, hU, rfl⟩, hyU, -⟩ :=
     X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ y) isOpen_univ
   have hxU : x in U := h.mem_open U.2 hyU
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU]; rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAff
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU]; rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpecStalk]; rw [← Category.assoc]; rw [← Spec.map_comp]; rw [TopCat.Presheaf.germ_stalkSpecializes]
 
 Depends on / 依赖: Category, Category.assoc, IsAffineOpen, IsAffineOpen.fromSpecStalk, Presheaf, Set.mem_univ, Spec.map_comp, TopCat, TopCat.Presheaf.germ_stalkSpecializes, X.isBasis_affineOpens.exists_subset_of_mem_open, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, germ_stalkSpecializes, h.mem_open, hU.fromSpecStalk_eq_fromSpecStalk, isBasis_affineOpens, isOpen_univ, map_comp, mem_open
 -/
@@ -324,7 +334,11 @@ lemma SpecMap_stalkMap_fromSpecStalk
     (Set.mem_univ (f x)) isOpen_univ
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
     hxU (f ⁻¹ᵁ U).2
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [← hV.fromSpecS
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [Scheme.Hom.germ_stalkMap f _ x hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [Spec.map_comp_assoc]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]; rw [Spec.map_comp_assoc]; rw [Category.assoc]; rw [← Spec.map_comp_assoc (f.app _)]; rw [Hom.app_eq_appLE]; rw [Hom.appLE_map]; rw [IsAffineOpen.SpecMap_appLE_fromSpec]
+
+.IsOver Y where instance [X.Over Y] {x} : Spec.map ((X ↘ Y).stalkMap x)
+
+@[stacks 01J7]
 
 中文:
 引理 SpecMap_stalkMap_fromSpecStalk
@@ -334,7 +348,11 @@ lemma SpecMap_stalkMap_fromSpecStalk
     (Set.mem_univ (f x)) isOpen_univ
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
     hxU (f ⁻¹ᵁ U).2
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [← hV.fromSpecS
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [Scheme.Hom.germ_stalkMap f _ x hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [Spec.map_comp_assoc]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]; rw [Spec.map_comp_assoc]; rw [Category.assoc]; rw [← Spec.map_comp_assoc (f.app _)]; rw [Hom.app_eq_appLE]; rw [Hom.appLE_map]; rw [IsAffineOpen.SpecMap_appLE_fromSpec]
+
+.IsOver Y where instance [X.Over Y] {x} : Spec.map ((X ↘ Y).stalkMap x)
+
+@[stacks 01J7]
 
 Depends on / 依赖: IsAffineOpen, IsAffineOpen.fromSpecStalk, Scheme, Scheme.Hom.germ_stalkMap, Set.mem_univ, Spec.map_comp_assoc, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.germ_res, Y.isBasis_affineOpens.exists_subset_of_mem_open, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, germ_res, germ_stalkMap, hU.fromSpecStalk_eq_fromSpecStalk, hV.fromSpecStalk_eq_fromSpecStalk, isBasis_affineOpens, isOpen_univ, map_comp_assoc, mem_univ
 -/
@@ -363,7 +381,8 @@ lemma range_fromSpecStalk
       (specializes_of_eq fromSpecStalk_closedPoint)
   · rintro (hy : y ⤳ x)
     have := fromSpecStalk_closedPoint (x := y)
-    rw [← SpecMap_stalkSpecializes_from
+    rw [← SpecMap_stalkSpecializes_fromSpecStalk hy] at this
+    exact ⟨_, this⟩
 
 中文:
 引理 range_fromSpecStalk
@@ -376,7 +395,8 @@ lemma range_fromSpecStalk
       (specializes_of_eq fromSpecStalk_closedPoint)
   · rintro (hy : y ⤳ x)
     have := fromSpecStalk_closedPoint (x := y)
-    rw [← SpecMap_stalkSpecializes_from
+    rw [← SpecMap_stalkSpecializes_fromSpecStalk hy] at this
+    exact ⟨_, this⟩
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.specializes_closedPoint, SpecMap_stalkSpecializes_fromSpecStalk, X.fromSpecStalk, continuous, fromSpecStalk, fromSpecStalk_closedPoint, specializes_closedPoint, specializes_of_eq
 -/
@@ -481,7 +501,8 @@ lemma Opens.fromSpecStalkOfMem_toSpecΓ
   congr 1
   rw [IsIso.comp_inv_eq]; rw [Iso.inv_comp_eq]
   erw [Hom.germ_stalkMap U.ι U ⟨x, hxU⟩]
-  rw [Opens.ι_app]; rw [Opens.topIso_hom]; rw [← Funct
+  rw [Opens.ι_app]; rw [Opens.topIso_hom]; rw [← Functor.map_comp_assoc]
+  exact (U.toScheme.presheaf.germ_res (homOfLE le_top) ⟨x, hxU⟩ (U := U.ι ⁻¹ᵁ U) hxU).symm
 
 中文:
 引理 Opens.fromSpecStalkOfMem_toSpecΓ
@@ -491,7 +512,8 @@ lemma Opens.fromSpecStalkOfMem_toSpecΓ
   congr 1
   rw [IsIso.comp_inv_eq]; rw [Iso.inv_comp_eq]
   erw [Hom.germ_stalkMap U.ι U ⟨x, hxU⟩]
-  rw [Opens.ι_app]; rw [Opens.topIso_hom]; rw [← Funct
+  rw [Opens.ι_app]; rw [Opens.topIso_hom]; rw [← Functor.map_comp_assoc]
+  exact (U.toScheme.presheaf.germ_res (homOfLE le_top) ⟨x, hxU⟩ (U := U.ι ⁻¹ᵁ U) hxU).symm
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp_assoc, Hom.germ_stalkMap, IsIso.comp_inv_eq, Iso.inv_comp_eq, Opens.toSpec, Opens.topIso_hom, Spec.map_comp, U.toScheme.presheaf.germ_res, comp_inv_eq, fromSpecStalkOfMem, germ_res, germ_stalkMap, homOfLE, inv_comp_eq, le_top, map_comp, map_comp_assoc
 -/
@@ -878,7 +900,10 @@ lemma germ_stalkClosedPointTo_Spec_fromSpecStalk
     rw [Hom.comp_apply]; rw [Spec_closedPoint]; rw [fromSpecStalk_closedPoint]
   have : x in U := this ▸ hU
   simp only [germ_stalkClosedPointTo, Hom.comp_app,
-    fromSpecStalk_app (X := X) (x := x) this, Category.assoc, Iso.tra
+    fromSpecStalk_app (X := X) (x := x) this, Category.assoc, Iso.trans_hom, Functor.mapIso_hom,
+      (Spec.map f).app_eq_appLE, Hom.appLE_map_assoc, Hom.map_appLE_assoc]
+  simp_rw [← Opens.map_top (Spec.map f).base]
+  rw [← (Spec.map f).app_eq_appLE]; rw [ΓSpecIso_naturality]; rw [Iso.inv_hom_id_assoc]
 
 中文:
 引理 germ_stalkClosedPointTo_Spec_fromSpecStalk
@@ -887,7 +912,10 @@ lemma germ_stalkClosedPointTo_Spec_fromSpecStalk
     rw [Hom.comp_apply]; rw [Spec_closedPoint]; rw [fromSpecStalk_closedPoint]
   have : x in U := this ▸ hU
   simp only [germ_stalkClosedPointTo, Hom.comp_app,
-    fromSpecStalk_app (X := X) (x := x) this, Category.assoc, Iso.tra
+    fromSpecStalk_app (X := X) (x := x) this, Category.assoc, Iso.trans_hom, Functor.mapIso_hom,
+      (Spec.map f).app_eq_appLE, Hom.appLE_map_assoc, Hom.map_appLE_assoc]
+  simp_rw [← Opens.map_top (Spec.map f).base]
+  rw [← (Spec.map f).app_eq_appLE]; rw [ΓSpecIso_naturality]; rw [Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.mapIso_hom, Hom.appLE_map_assoc, Hom.comp_app, Hom.comp_apply, Hom.map_appLE_assoc, Iso.inv_h, Iso.trans_hom, Opens.map_top, Spec.map, Spec_closedPoint, X.fromSpecStalk, appLE_map_assoc, app_eq_appLE, closedPoint, comp_app, comp_apply, fromSpecStalk
 -/
@@ -915,7 +943,7 @@ lemma stalkClosedPointTo_fromSpecStalk
   refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
   simp only [TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes]
   have : X.fromSpecStalk x = Spec.map (𝟙 (X.presheaf.stalk x)) ≫ X.fromSpecStalk x := by simp
-  convert! germ_stalkClosedPointTo_Spec_fromSpecStalk (𝟙 (X.pr
+  convert! germ_stalkClosedPointTo_Spec_fromSpecStalk (𝟙 (X.presheaf.stalk x)) U hxU
 
 中文:
 引理 stalkClosedPointTo_fromSpecStalk
@@ -924,7 +952,7 @@ lemma stalkClosedPointTo_fromSpecStalk
   refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
   simp only [TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes]
   have : X.fromSpecStalk x = Spec.map (𝟙 (X.presheaf.stalk x)) ≫ X.fromSpecStalk x := by simp
-  convert! germ_stalkClosedPointTo_Spec_fromSpecStalk (𝟙 (X.pr
+  convert! germ_stalkClosedPointTo_Spec_fromSpecStalk (𝟙 (X.presheaf.stalk x)) U hxU
 
 Depends on / 依赖: Presheaf, Spec.map, TopCat, TopCat.Presheaf.germ_stalkSpecializes, TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.stalk_hom_ext, X.fromSpecStalk, X.presheaf.stalk, convert, fromSpecStalk, germ_stalkClosedPointTo_Spec_fromSpecStalk, germ_stalkSpecializes, presheaf, stalkCongr_hom, stalk_hom_ext
 -/
@@ -948,7 +976,10 @@ lemma Spec_stalkClosedPointTo_fromSpecStalk
     (Set.mem_univ (f (closedPoint R))) isOpen_univ
   have := IsAffineOpen.SpecMap_appLE_fromSpec f hU (isAffineOpen_top _)
     (preimage_eq_top_of_closedPoint_mem f hxU).ge
-  rw [IsAffineOpen.fromSpec_top]; rw [
+  rw [IsAffineOpen.fromSpec_top]; rw [Iso.eq_inv_comp]; rw [isoSpec_Spec_hom] at this
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [germ_stalkClosedPointTo]
+  simpa only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Category.assoc,
+    Hom.app_eq_appLE, Hom.appLE_map_assoc, Spec.map_comp_assoc]
 
 中文:
 引理 Spec_stalkClosedPointTo_fromSpecStalk
@@ -957,7 +988,10 @@ lemma Spec_stalkClosedPointTo_fromSpecStalk
     (Set.mem_univ (f (closedPoint R))) isOpen_univ
   have := IsAffineOpen.SpecMap_appLE_fromSpec f hU (isAffineOpen_top _)
     (preimage_eq_top_of_closedPoint_mem f hxU).ge
-  rw [IsAffineOpen.fromSpec_top]; rw [
+  rw [IsAffineOpen.fromSpec_top]; rw [Iso.eq_inv_comp]; rw [isoSpec_Spec_hom] at this
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [germ_stalkClosedPointTo]
+  simpa only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Category.assoc,
+    Hom.app_eq_appLE, Hom.appLE_map_assoc, Spec.map_comp_assoc]
 
 Depends on / 依赖: IsAffineOpen, IsAffineOpen.SpecMap_appLE_fromSpec, IsAffineOpen.fromSpecStalk, IsAffineOpen.fromSpec_top, Iso.eq_inv_comp, Iso.trans_hom, Set.mem_univ, Spec.map_comp_assoc, SpecMap_appLE_fromSpec, X.isBasis_affineOpens.exists_subset_of_mem_open, closedPoint, eq_inv_comp, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, fromSpec_top, germ_stalkClosedPointTo, hU.fromSpecStalk_eq_fromSpecStalk, isAffineOpen_top, isBasis_affineOpens
 -/
@@ -1035,7 +1069,11 @@ definition SpecToEquivOfLocalRing
     obtain ⟨x, ⟨f, hf⟩⟩ := xf
     symm
     refine SpecToEquivOfLocalRing_eq_iff.mpr ⟨?_, ?_⟩
-    · sim
+    · simp only [Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply, Spec_closedPoint,
+        Scheme.fromSpecStalk_closedPoint]
+    · refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
+      simp only [Scheme.germ_stalkClosedPointTo_Spec_fromSpecStalk,
+        TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes_assoc]
 
 中文:
 定义 SpecToEquivOfLocalRing
@@ -1047,7 +1085,11 @@ definition SpecToEquivOfLocalRing
     obtain ⟨x, ⟨f, hf⟩⟩ := xf
     symm
     refine SpecToEquivOfLocalRing_eq_iff.mpr ⟨?_, ?_⟩
-    · sim
+    · simp only [Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply, Spec_closedPoint,
+        Scheme.fromSpecStalk_closedPoint]
+    · refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
+      simp only [Scheme.germ_stalkClosedPointTo_Spec_fromSpecStalk,
+        TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes_assoc]
 
 Depends on / 依赖: Scheme, Scheme.stalkClosedPointTo, closedPoint, stalkClosedPointTo
 -/

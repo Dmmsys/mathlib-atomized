@@ -47,7 +47,42 @@ theorem max_aleph0_card_le_rank_fun_nat
   obtain card_K | card_K := le_or_gt #K ℵ₀
   · exact card_K.trans aleph0_le
   by_contra!
-  obtain
+  obtain ⟨⟨ιK, bK⟩⟩ := Module.Free.exists_basis (R := K) (M := Nat -> K)
+  let L := Subfield.closure (Set.range (fun i : ιK × Nat => bK i.1 i.2))
+  have hLK : #L < #K := by
+    refine (Subfield.cardinalMk_closure_le_max _).trans_lt
+      (max_lt_iff.mpr ⟨mk_range_le.trans_lt ?_, card_K⟩)
+    rwa [mk_prod, ← aleph0, lift_uzero, bK.mk_eq_rank'', mul_aleph0_eq aleph0_le]
+  let := Module.compHom K (RingHom.op L.subtype)
+  obtain ⟨⟨ιL, bL⟩⟩ := Module.Free.exists_basis (R := Lᵐᵒᵖ) (M := K)
+  have card_ιL : ℵ₀ <= #ιL := by
+    contrapose! hLK
+    have := @Fintype.ofFinite _ (lt_aleph0_iff_finite.mp hLK)
+    rw [bL.repr.toEquiv.cardinal_eq]; rw [mk_finsupp_of_fintype]; rw [← MulOpposite.opEquiv.cardinal_eq] at card_K ⊢
+    apply power_nat_le
+    contrapose! card_K
+    exact (power_lt_aleph0 card_K natCast_lt_aleph0).le
+  obtain ⟨e⟩ := lift_mk_le'.mp (card_ιL.trans_eq (lift_uzero #ιL).symm)
+  have rep_e := bK.linearCombination_repr (bL ∘ e)
+  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum] at rep_e
+  set c := bK.repr (bL ∘ e)
+  set s := c.support
+  let f i (j : s) : L := ⟨bK j i, Subfield.subset_closure ⟨(j, i), rfl⟩⟩
+  have : ¬LinearIndependent Lᵐᵒᵖ f := fun h => by
+    have := h.cardinal_lift_le_rank
+    rw [lift_uzero]; rw [(LinearEquiv.piCongrRight fun _ => MulOpposite.opLinearEquiv Lᵐᵒᵖ).rank_eq]; rw [rank_fun'] at this
+    exact natCast_lt_aleph0.not_ge this
+  obtain ⟨t, g, eq0, i, hi, hgi⟩ := not_linearIndependent_iff.mp this
+  refine hgi (linearIndependent_iff'.mp (bL.linearIndependent.comp e e.injective) t g ?_ i hi)
+  clear_value c s
+  simp_rw [← rep_e, Finset.sum_apply, Pi.smul_apply, Finset.smul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_eq_zero fun i hi => ?_
+  replace eq0 := congr_arg L.subtype (congr_fun eq0 ⟨i, hi⟩)
+  rw [Finset.sum_apply]; rw [map_sum] at eq0
+  have : SMulCommClass Lᵐᵒᵖ K K := ⟨fun _ _ _ => mul_assoc _ _ _⟩
+  simp_rw [smul_comm _ (c i), ← Finset.smul_sum]
+  erw [eq0, smul_zero]
 
 中文:
 定理 max_aleph0_card_le_rank_fun_nat
@@ -59,7 +94,42 @@ theorem max_aleph0_card_le_rank_fun_nat
   obtain card_K | card_K := le_or_gt #K ℵ₀
   · exact card_K.trans aleph0_le
   by_contra!
-  obtain
+  obtain ⟨⟨ιK, bK⟩⟩ := Module.Free.exists_basis (R := K) (M := Nat -> K)
+  let L := Subfield.closure (Set.range (fun i : ιK × Nat => bK i.1 i.2))
+  have hLK : #L < #K := by
+    refine (Subfield.cardinalMk_closure_le_max _).trans_lt
+      (max_lt_iff.mpr ⟨mk_range_le.trans_lt ?_, card_K⟩)
+    rwa [mk_prod, ← aleph0, lift_uzero, bK.mk_eq_rank'', mul_aleph0_eq aleph0_le]
+  let := Module.compHom K (RingHom.op L.subtype)
+  obtain ⟨⟨ιL, bL⟩⟩ := Module.Free.exists_basis (R := Lᵐᵒᵖ) (M := K)
+  have card_ιL : ℵ₀ <= #ιL := by
+    contrapose! hLK
+    have := @Fintype.ofFinite _ (lt_aleph0_iff_finite.mp hLK)
+    rw [bL.repr.toEquiv.cardinal_eq]; rw [mk_finsupp_of_fintype]; rw [← MulOpposite.opEquiv.cardinal_eq] at card_K ⊢
+    apply power_nat_le
+    contrapose! card_K
+    exact (power_lt_aleph0 card_K natCast_lt_aleph0).le
+  obtain ⟨e⟩ := lift_mk_le'.mp (card_ιL.trans_eq (lift_uzero #ιL).symm)
+  have rep_e := bK.linearCombination_repr (bL ∘ e)
+  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum] at rep_e
+  set c := bK.repr (bL ∘ e)
+  set s := c.support
+  let f i (j : s) : L := ⟨bK j i, Subfield.subset_closure ⟨(j, i), rfl⟩⟩
+  have : ¬LinearIndependent Lᵐᵒᵖ f := fun h => by
+    have := h.cardinal_lift_le_rank
+    rw [lift_uzero]; rw [(LinearEquiv.piCongrRight fun _ => MulOpposite.opLinearEquiv Lᵐᵒᵖ).rank_eq]; rw [rank_fun'] at this
+    exact natCast_lt_aleph0.not_ge this
+  obtain ⟨t, g, eq0, i, hi, hgi⟩ := not_linearIndependent_iff.mp this
+  refine hgi (linearIndependent_iff'.mp (bL.linearIndependent.comp e e.injective) t g ?_ i hi)
+  clear_value c s
+  simp_rw [← rep_e, Finset.sum_apply, Pi.smul_apply, Finset.smul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_eq_zero fun i hi => ?_
+  replace eq0 := congr_arg L.subtype (congr_fun eq0 ⟨i, hi⟩)
+  rw [Finset.sum_apply]; rw [map_sum] at eq0
+  have : SMulCommClass Lᵐᵒᵖ K K := ⟨fun _ _ _ => mul_assoc _ _ _⟩
+  simp_rw [smul_comm _ (c i), ← Finset.smul_sum]
+  erw [eq0, smul_zero]
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, Finsupp, Finsupp.lcoeFun.rank_le_of_injective, Module, Module.Free.exists_basis, Module.rank, Set.range, Subfield, Subfield.cardinalMk_closure_le_max, Subfield.closure, aleph0_le, card_K, card_K.trans, cardinalMk_closure_le_max, closure, coe_injective, exists_basis, lcoeFun, le_or_gt
 -/
@@ -122,7 +192,13 @@ theorem rank_fun_infinite
   obtain ⟨e⟩ := lift_mk_le'.mp ((aleph0_le_mk_iff.mpr hι).trans_eq (lift_uzero #ι).symm)
 have := LinearMap.lift_rank_le_of_injective _
     LinearMap.funLeft_injective_of_surjective K K _ (invFun_surjective e.injective)
-  rw [l
+  rw [lift_umax.{u]; rw [v}]; rw [lift_id'.{u]; rw [v}] at this
+  have key := (lift_le.{v}.mpr <| max_aleph0_card_le_rank_fun_nat K).trans this
+  rw [lift_max]; rw [lift_aleph0]; rw [max_le_iff] at key
+  have : Infinite ιK := by
+    rw [← aleph0_le_mk_iff]; rw [bK.mk_eq_rank'']; exact key.1
+  rw [bK.repr.toEquiv.cardinal_eq]; rw [mk_finsupp_lift_of_infinite]; rw [lift_umax.{u]; rw [v}]; rw [lift_id'.{u]; rw [v}]; rw [bK.mk_eq_rank'']; rw [eq_comm]; rw [max_eq_left]
+  exact key.2
 
 中文:
 定理 rank_fun_infinite
@@ -133,7 +209,13 @@ have := LinearMap.lift_rank_le_of_injective _
   obtain ⟨e⟩ := lift_mk_le'.mp ((aleph0_le_mk_iff.mpr hι).trans_eq (lift_uzero #ι).symm)
 have := LinearMap.lift_rank_le_of_injective _
     LinearMap.funLeft_injective_of_surjective K K _ (invFun_surjective e.injective)
-  rw [l
+  rw [lift_umax.{u]; rw [v}]; rw [lift_id'.{u]; rw [v}] at this
+  have key := (lift_le.{v}.mpr <| max_aleph0_card_le_rank_fun_nat K).trans this
+  rw [lift_max]; rw [lift_aleph0]; rw [max_le_iff] at key
+  have : Infinite ιK := by
+    rw [← aleph0_le_mk_iff]; rw [bK.mk_eq_rank'']; exact key.1
+  rw [bK.repr.toEquiv.cardinal_eq]; rw [mk_finsupp_lift_of_infinite]; rw [lift_umax.{u]; rw [v}]; rw [lift_id'.{u]; rw [v}]; rw [bK.mk_eq_rank'']; rw [eq_comm]; rw [max_eq_left]
+  exact key.2
 
 Depends on / 依赖: Infinite, LinearMap, LinearMap.funLeft_injective_of_surjective, LinearMap.lift_rank_le_of_injective, Module, Module.Free.exists_basis, aleph0_le_mk_iff, aleph0_le_mk_iff.mpr, e.injective, exists_basis, funLeft_injective_of_surjective, injective, invFun_surjective, lift_aleph0, lift_id, lift_le, lift_max, lift_mk_le, lift_rank_le_of_injective, lift_umax
 -/
@@ -162,7 +244,7 @@ theorem rank_dual_eq_card_dual_of_aleph0_le_rank'
   have e := (b.constr Kᵐᵒᵖ (M' := K)).symm.trans
     (LinearEquiv.piCongrRight fun _ => MulOpposite.opLinearEquiv Kᵐᵒᵖ)
   rw [e.rank_eq]; rw [e.toEquiv.cardinal_eq]
-  apply rank_fun
+  apply rank_fun_infinite
 
 中文:
 定理 rank_dual_eq_card_dual_of_aleph0_le_rank'
@@ -173,7 +255,7 @@ theorem rank_dual_eq_card_dual_of_aleph0_le_rank'
   have e := (b.constr Kᵐᵒᵖ (M' := K)).symm.trans
     (LinearEquiv.piCongrRight fun _ => MulOpposite.opLinearEquiv Kᵐᵒᵖ)
   rw [e.rank_eq]; rw [e.toEquiv.cardinal_eq]
-  apply rank_fun
+  apply rank_fun_infinite
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.piCongrRight, Module, Module.Free.exists_basis, MulOpposite, MulOpposite.opLinearEquiv, aleph0_le_mk_iff, b.constr, b.mk_eq_rank, cardinal_eq, constr, e.rank_eq, e.toEquiv.cardinal_eq, exists_basis, mk_eq_rank, opLinearEquiv, piCongrRight, rank_eq, rank_fun_infinite, symm.trans
 -/

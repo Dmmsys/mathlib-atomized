@@ -184,7 +184,11 @@ definition conditionallyCompleteLatticeOfsSup
   body: Lattice.ofIsLUBofIsGLB (fun a b => sSup {a, b}) (fun a b => sSup (lowerBounds {a, b}))
     (fun a b => isLUB_sSup {a, b} (bddAbove_pair a b) (insert_nonempty _ _))
     (fun a b => isLUB_lowerBounds.mp <| isLUB_sSup (lowerBounds {a, b})
-      (insert_nonempty _ _).bddAbove_lowerBounds (bddBelow_pair 
+      (insert_nonempty _ _).bddAbove_lowerBounds (bddBelow_pair a b))
+  __ := H2
+  sInf s := sSup (lowerBounds s)
+  isLUB_csSup _ hn hb := isLUB_sSup _ hb hn
+  isGLB_csInf _ hn hb := isLUB_lowerBounds.mp (isLUB_sSup _ hn.bddAbove_lowerBounds hb)
 
 中文:
 定义 conditionallyCompleteLatticeOfsSup
@@ -192,7 +196,11 @@ definition conditionallyCompleteLatticeOfsSup
   定义体: Lattice.ofIsLUBofIsGLB (fun a b => sSup {a, b}) (fun a b => sSup (lowerBounds {a, b}))
     (fun a b => isLUB_sSup {a, b} (bddAbove_pair a b) (insert_nonempty _ _))
     (fun a b => isLUB_lowerBounds.mp <| isLUB_sSup (lowerBounds {a, b})
-      (insert_nonempty _ _).bddAbove_lowerBounds (bddBelow_pair 
+      (insert_nonempty _ _).bddAbove_lowerBounds (bddBelow_pair a b))
+  __ := H2
+  sInf s := sSup (lowerBounds s)
+  isLUB_csSup _ hn hb := isLUB_sSup _ hb hn
+  isGLB_csInf _ hn hb := isLUB_lowerBounds.mp (isLUB_sSup _ hn.bddAbove_lowerBounds hb)
 
 Depends on / 依赖: Lattice, Lattice.ofIsLUBofIsGLB, lowerBounds, ofIsLUBofIsGLB
 -/
@@ -264,6 +272,11 @@ abbreviation WellFoundedLT.conditionallyCompleteLinearOrderBot
     conditionallyCompleteLatticeOfLatticeOfsInf _ fun s _ hn => by
       simp only [dif_pos hn]
       exact IsLeast.isGLB ⟨h.wf.min_mem s hn, fun _ hx => h.wf.min_le hx⟩
+  csSup_empty := by simp [sSup, bot_unique (WellFounded.min_le _ (mem_univ _))]
+  csSup_of_not_bddAbove s H := by
+    rw [BddAbove] at H
+    simp [sSup, H, bot_unique (WellFounded.min_le _ (mem_univ _))]
+  csInf_of_not_bddBelow s H := (H (OrderBot.bddBelow s)).elim
 
 中文:
 缩写 WellFoundedLT.conditionallyCompleteLinearOrderBot
@@ -276,6 +289,11 @@ abbreviation WellFoundedLT.conditionallyCompleteLinearOrderBot
     conditionallyCompleteLatticeOfLatticeOfsInf _ fun s _ hn => by
       simp only [dif_pos hn]
       exact IsLeast.isGLB ⟨h.wf.min_mem s hn, fun _ hx => h.wf.min_le hx⟩
+  csSup_empty := by simp [sSup, bot_unique (WellFounded.min_le _ (mem_univ _))]
+  csSup_of_not_bddAbove s H := by
+    rw [BddAbove] at H
+    simp [sSup, H, bot_unique (WellFounded.min_le _ (mem_univ _))]
+  csInf_of_not_bddBelow s H := (H (OrderBot.bddBelow s)).elim
 -/
 noncomputable abbrev WellFoundedLT.conditionallyCompleteLinearOrderBot (α : Type*)
     [i₁ : LinearOrder α] [i₂ : OrderBot α] [h : WellFoundedLT α] :

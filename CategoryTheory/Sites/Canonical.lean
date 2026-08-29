@@ -70,7 +70,16 @@ definition finestTopologySingle
     rw [← pullback_comp]
     apply hS
   transitive' X S hS R hR Z g := by
-    -- This is the 
+    -- This is the hard part of the construction, showing that the given set of sieves satisfies
+    -- the transitivity axiom.
+    refine Presieve.isSheafFor_trans P (pullback g S) _ (hS Z g) ?_ ?_
+    · intro Y f _
+      rw [← pullback_comp]
+      apply (hS _ _).isSeparatedFor
+    · intro Y f hf
+      have := hR hf _ (𝟙 _)
+      rw [pullback_id]; rw [pullback_comp] at this
+      apply this
 
 中文:
 定义 finestTopologySingle
@@ -83,7 +92,16 @@ definition finestTopologySingle
     rw [← pullback_comp]
     apply hS
   transitive' X S hS R hR Z g := by
-    -- This is the 
+    -- This is the hard part of the construction, showing that the given set of sieves satisfies
+    -- the transitivity axiom.
+    refine Presieve.isSheafFor_trans P (pullback g S) _ (hS Z g) ?_ ?_
+    · intro Y f _
+      rw [← pullback_comp]
+      apply (hS _ _).isSeparatedFor
+    · intro Y f hf
+      have := hR hf _ (𝟙 _)
+      rw [pullback_id]; rw [pullback_comp] at this
+      apply this
 
 Depends on / 依赖: IsSheafFor, Presieve, Presieve.IsSheafFor, S.pullback, pullback
 -/
@@ -250,7 +268,7 @@ theorem isSheaf_of_isRepresentable
   rw [← isSheaf_iff_isSheaf_of_type]
   refine GrothendieckTopology.HasSheafCompose.isSheaf _ ?_
   rw [isSheaf_iff_isSheaf_of_type]
-  exact isSheaf_yone
+  exact isSheaf_yoneda_obj _
 
 中文:
 定理 isSheaf_of_isRepresentable
@@ -261,7 +279,7 @@ theorem isSheaf_of_isRepresentable
   rw [← isSheaf_iff_isSheaf_of_type]
   refine GrothendieckTopology.HasSheafCompose.isSheaf _ ?_
   rw [isSheaf_iff_isSheaf_of_type]
-  exact isSheaf_yone
+  exact isSheaf_yoneda_obj _
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.HasSheafCompose.isSheaf, HasSheafCompose, Presieve, Presieve.isSheaf_comp_uliftFunctor_iff, Presieve.isSheaf_iso, canonicalTopology, isSheaf, isSheaf_comp_uliftFunctor_iff, isSheaf_iff_isSheaf_of_type, isSheaf_iso, isSheaf_yoneda_obj, uliftFunctor, uliftYonedaReprXIso
 -/

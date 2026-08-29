@@ -91,7 +91,7 @@ lemma Homotopy.mapMultiforkOfIsLimit_eq
   have heq := d.condition ⟨⟨(f.s₀ a), (g.s₀ a)⟩, H.H a⟩
   simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
     multicospanIndex_fst, multicospanShape_snd, multicospanIndex_snd] at heq
-  simp [-Homotopy.wl, -Homotopy.
+  simp [-Homotopy.wl, -Homotopy.wr, ← H.wl, ← H.wr, reassoc_of% heq]
 
 中文:
 引理 同伦.mapMultiforkOfIsLimit_eq
@@ -100,7 +100,7 @@ lemma Homotopy.mapMultiforkOfIsLimit_eq
   have heq := d.condition ⟨⟨(f.s₀ a), (g.s₀ a)⟩, H.H a⟩
   simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
     multicospanIndex_fst, multicospanShape_snd, multicospanIndex_snd] at heq
-  simp [-Homotopy.wl, -Homotopy.
+  simp [-Homotopy.wl, -Homotopy.wr, ← H.wl, ← H.wr, reassoc_of% heq]
 
 Depends on / 依赖: H.wl, H.wr, Homotopy, Homotopy.wl, Homotopy.wr, IsLimit, Multifork, Multifork.IsLimit.hom_ext, condition, d.condition, hom_ext, multicospanIndex_fst, multicospanIndex_left, multicospanIndex_right, multicospanIndex_snd, multicospanShape_fst, multicospanShape_snd, reassoc_of
 -/
@@ -132,7 +132,17 @@ definition Homotopy.isLimitMultifork
     simp only [Category.assoc, ← Functor.map_comp, ← op_comp]
     rw [← f.w₁₁]; rw [← f.w₁₂]
     simp only [op_comp, Functor.map_comp]
-   
+    exact t.condition_assoc ⟨(f.s₀ b.1.1, f.s₀ b.1.2), f.s₁ b.2⟩ _
+  · intro t i
+    simp only [multicospanIndex_left, multicospanShape_L, multifork_ι]
+    have h1 := hgf.wl i
+    have h2 := t.condition ⟨⟨_, _⟩, hgf.H i⟩
+    dsimp at h1 h2
+    rw [← g.w₀]; rw [op_comp]; rw [Functor.map_comp]; rw [← E.multifork_ι]; rw [Multifork.IsLimit.fac_assoc]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← h1]; rw [op_comp]; rw [Functor.map_comp]; rw [reassoc_of% h2]; rw [← Functor.map_comp]; rw [← op_comp]; rw [hgf.wr i]
+    simp
+  · intro t m hm
+    refine Multifork.IsLimit.hom_ext hE fun i => ?_
+    rw [Multifork.IsLimit.fac]; rw [multifork_ι]; rw [← f.w₀]; rw [op_comp]; rw [Functor.map_comp]; rw [← F.multifork_ι]; rw [reassoc_of% hm]
 
 中文:
 定义 同伦.isLimitMultifork
@@ -146,7 +156,17 @@ definition Homotopy.isLimitMultifork
     simp only [Category.assoc, ← Functor.map_comp, ← op_comp]
     rw [← f.w₁₁]; rw [← f.w₁₂]
     simp only [op_comp, Functor.map_comp]
-   
+    exact t.condition_assoc ⟨(f.s₀ b.1.1, f.s₀ b.1.2), f.s₁ b.2⟩ _
+  · intro t i
+    simp only [multicospanIndex_left, multicospanShape_L, multifork_ι]
+    have h1 := hgf.wl i
+    have h2 := t.condition ⟨⟨_, _⟩, hgf.H i⟩
+    dsimp at h1 h2
+    rw [← g.w₀]; rw [op_comp]; rw [Functor.map_comp]; rw [← E.multifork_ι]; rw [Multifork.IsLimit.fac_assoc]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← h1]; rw [op_comp]; rw [Functor.map_comp]; rw [reassoc_of% h2]; rw [← Functor.map_comp]; rw [← op_comp]; rw [hgf.wr i]
+    simp
+  · intro t m hm
+    refine Multifork.IsLimit.hom_ext hE fun i => ?_
+    rw [Multifork.IsLimit.fac]; rw [multifork_ι]; rw [← f.w₀]; rw [op_comp]; rw [Functor.map_comp]; rw [← F.multifork_ι]; rw [reassoc_of% hm]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, G.map, IsLimit, Multifork, Multifork.IsLimit.lift, Multifork.IsLimit.mk, condition, condition_assoc, hgf.H, hgf.wl, map_comp, multicospanIndex_left, multicospanShape_L, op_comp, t.condition, t.condition_assoc
 -/
@@ -265,7 +285,11 @@ definition cylinder
     pullback
       (pullback.map (cylinderf f g p.2)
         (cylinderf f g q.2) _ _ (pullback.fst _ _) (pullback.fst _ _) (𝟙 S) (by simp)
-        (by
+        (by simp))
+      (pullback.lift _ _ (E.w k.down))
+  p₁ {p q} k := pullback.fst _ _ ≫ pullback.fst _ _
+  p₂ {p q} k := pullback.fst _ _ ≫ pullback.snd _ _
+  w {_ _} k := by simp [pullback.condition]
 
 中文:
 定义 cylinder
@@ -278,7 +302,11 @@ definition cylinder
     pullback
       (pullback.map (cylinderf f g p.2)
         (cylinderf f g q.2) _ _ (pullback.fst _ _) (pullback.fst _ _) (𝟙 S) (by simp)
-        (by
+        (by simp))
+      (pullback.lift _ _ (E.w k.down))
+  p₁ {p q} k := pullback.fst _ _ ≫ pullback.fst _ _
+  p₂ {p q} k := pullback.fst _ _ ≫ pullback.snd _ _
+  w {_ _} k := by simp [pullback.condition]
 -/
 noncomputable def cylinder (f g : E.Hom F) : PreOneHypercover.{max w w'} S where
   I₀ := Σ (i : E.I₀), F.I₁ (f.s₀ i) (g.s₀ i)
@@ -331,7 +359,10 @@ lemma sieve₀_cylinder
     refine ⟨_, 𝟙 _, (cylinder f g).f _, ⟨_, _, ?_⟩, by simp⟩
     simp only [Sieve.pullback_apply, pullback.condition]
     exact Sieve.downward_closed _ (Sieve.ofArrows_mk _ _ _) _
-  · rw [Sieve.
+  · rw [Sieve.generate_le_iff, PreZeroHypercover.sieve₀]
+    rintro Z u ⟨i, v, ⟨W, o, o', ⟨j⟩, hoo'⟩⟩
+    exact ⟨_, pullback.lift v o hoo'.symm, (cylinder f g).f ⟨i, j⟩, Presieve.ofArrows.mk _,
+      by simp⟩
 
 中文:
 引理 sieve₀_cylinder
@@ -342,7 +373,10 @@ lemma sieve₀_cylinder
     refine ⟨_, 𝟙 _, (cylinder f g).f _, ⟨_, _, ?_⟩, by simp⟩
     simp only [Sieve.pullback_apply, pullback.condition]
     exact Sieve.downward_closed _ (Sieve.ofArrows_mk _ _ _) _
-  · rw [Sieve.
+  · rw [Sieve.generate_le_iff, PreZeroHypercover.sieve₀]
+    rintro Z u ⟨i, v, ⟨W, o, o', ⟨j⟩, hoo'⟩⟩
+    exact ⟨_, pullback.lift v o hoo'.symm, (cylinder f g).f ⟨i, j⟩, Presieve.ofArrows.mk _,
+      by simp⟩
 
 Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.sieve, Presieve, Presieve.ofArrows.mk, Sieve.downward_closed, Sieve.generate_le_iff, Sieve.ofArrows_mk, Sieve.pullback_apply, condition, cylinder, downward_closed, generate_le_iff, le_antisymm, ofArrows, ofArrows_mk, pullback, pullback.condition, pullback.lift, pullback_apply
 -/
@@ -377,7 +411,13 @@ lemma sieve₁'_cylinder
     rintro - - ⟨k⟩
     refine ⟨E.Y k.down, pullback.snd _ _, E.toPullback k.down, Presieve.ofArrows.mk k.down, ?_⟩
     simp only [cylinder_Y, cylinder_f, toPullback_cylinder, pullback.condition]
-  · rw [sieve₁', Si
+  · rw [sieve₁', Sieve.ofArrows, ← Sieve.pullbackArrows_comm, Sieve.generate_le_iff]
+    rintro Z u ⟨W, v, ⟨k⟩⟩
+    simp_rw [← pullbackSymmetry_inv_comp_fst]
+    apply (((cylinder f g).sieve₁' i j)).downward_closed
+    rw [sieve₁']
+    convert! Sieve.ofArrows_mk _ _ (ULift.up k)
+    simp [toPullback_cylinder f g ⟨k⟩]
 
 中文:
 引理 sieve₁'_cylinder
@@ -388,7 +428,13 @@ lemma sieve₁'_cylinder
     rintro - - ⟨k⟩
     refine ⟨E.Y k.down, pullback.snd _ _, E.toPullback k.down, Presieve.ofArrows.mk k.down, ?_⟩
     simp only [cylinder_Y, cylinder_f, toPullback_cylinder, pullback.condition]
-  · rw [sieve₁', Si
+  · rw [sieve₁', Sieve.ofArrows, ← Sieve.pullbackArrows_comm, Sieve.generate_le_iff]
+    rintro Z u ⟨W, v, ⟨k⟩⟩
+    simp_rw [← pullbackSymmetry_inv_comp_fst]
+    apply (((cylinder f g).sieve₁' i j)).downward_closed
+    rw [sieve₁']
+    convert! Sieve.ofArrows_mk _ _ (ULift.up k)
+    simp [toPullback_cylinder f g ⟨k⟩]
 
 Depends on / 依赖: E.toPullback, Presieve, Presieve.ofArrows.mk, Sieve.generate_le_iff, Sieve.ofArro, Sieve.ofArrows, Sieve.pullbackArrows_comm, condition, convert, cylinder, cylinder_Y, cylinder_f, downward_closed, generate_le_iff, k.down, le_antisymm, ofArro, ofArrows, pullback, pullback.condition
 -/
@@ -429,7 +475,11 @@ definition cylinderHom
     rw [← pullback.condition_assoc]
     simp
   w₁₂ {p q} k := by
-    have : E.p₂ k.down = pullback.
+    have : E.p₂ k.down = pullback.lift _ _ (E.w k.down) ≫ pullback.snd _ _ := by simp
+    nth_rw 2 [this]
+    rw [← pullback.condition_assoc]
+    simp
+  w₀ := by simp
 
 中文:
 定义 cylinderHom
@@ -444,7 +494,11 @@ definition cylinderHom
     rw [← pullback.condition_assoc]
     simp
   w₁₂ {p q} k := by
-    have : E.p₂ k.down = pullback.
+    have : E.p₂ k.down = pullback.lift _ _ (E.w k.down) ≫ pullback.snd _ _ := by simp
+    nth_rw 2 [this]
+    rw [← pullback.condition_assoc]
+    simp
+  w₀ := by simp
 -/
 noncomputable def cylinderHom : (cylinder f g).Hom E where
   s₀ p := p.1
@@ -480,7 +534,12 @@ definition cylinderHomotopy
     simp
   wr p := by
     have : g.h₀ p.fst = pullback.lift (f.h₀ p.fst) (g.h₀ p.fst) (by simp) ≫
-        pullback.snd 
+        pullback.snd (F.f _) (F.f _) := by simp
+    dsimp only [cylinder_X, Hom.comp_s₀, cylinder_I₀, Function.comp_apply, cylinderHom_s₀,
+      Hom.comp_h₀, cylinderHom_h₀]
+    nth_rw 3 [this]
+    rw [pullback.condition_assoc]
+    simp
 
 中文:
 定义 cylinderHomotopy
@@ -494,7 +553,12 @@ definition cylinderHomotopy
     simp
   wr p := by
     have : g.h₀ p.fst = pullback.lift (f.h₀ p.fst) (g.h₀ p.fst) (by simp) ≫
-        pullback.snd 
+        pullback.snd (F.f _) (F.f _) := by simp
+    dsimp only [cylinder_X, Hom.comp_s₀, cylinder_I₀, Function.comp_apply, cylinderHom_s₀,
+      Hom.comp_h₀, cylinderHom_h₀]
+    nth_rw 3 [this]
+    rw [pullback.condition_assoc]
+    simp
 -/
 noncomputable def cylinderHomotopy :
     Homotopy ((cylinderHom f g).comp f) ((cylinderHom f g).comp g) where
@@ -566,7 +630,7 @@ definition cylinder
       exact J.pullback_stable _ (mem_sieve₁' F _ _))
     (fun i j => by
       rw [PreOneHypercover.sieve₁'_cylinder]
-      exact J.pu
+      exact J.pullback_stable _ (mem_sieve₁' E _ _))
 
 中文:
 定义 cylinder
@@ -579,7 +643,7 @@ definition cylinder
       exact J.pullback_stable _ (mem_sieve₁' F _ _))
     (fun i j => by
       rw [PreOneHypercover.sieve₁'_cylinder]
-      exact J.pu
+      exact J.pullback_stable _ (mem_sieve₁' E _ _))
 
 Depends on / 依赖: E.mem, J.bindOfArrows, J.pullback_stable, PreOneHypercover, PreOneHypercover.cylinder, PreOneHypercover.sieve, Sieve.generate_sieve, _cylinder, bindOfArrows, cylinder, generate_sieve, pullback_stable
 -/
@@ -724,7 +788,10 @@ instance isCofiltered_of_hasPullbacks
   cone_maps {X Y} f g := by
     obtain ⟨(f : X.1 ⟶ Y.1), rfl⟩ := (toHOneHypercover J S).map_surjective f
     obtain ⟨(g : X.1 ⟶ Y.1), rfl⟩ := (toHOneHypercover J S).map_surjective g
-    
+    obtain ⟨W, h, ⟨H⟩⟩ := OneHypercover.exists_nonempty_homotopy f g
+    use (toHOneHypercover J S).obj W, (toHOneHypercover J S).map h
+    rw [← Functor.map_comp]; rw [← Functor.map_comp]
+    exact H.map_eq_map
 
 中文:
 实例 isCofiltered_of_hasPullbacks
@@ -734,7 +801,10 @@ instance isCofiltered_of_hasPullbacks
   cone_maps {X Y} f g := by
     obtain ⟨(f : X.1 ⟶ Y.1), rfl⟩ := (toHOneHypercover J S).map_surjective f
     obtain ⟨(g : X.1 ⟶ Y.1), rfl⟩ := (toHOneHypercover J S).map_surjective g
-    
+    obtain ⟨W, h, ⟨H⟩⟩ := OneHypercover.exists_nonempty_homotopy f g
+    use (toHOneHypercover J S).obj W, (toHOneHypercover J S).map h
+    rw [← Functor.map_comp]; rw [← Functor.map_comp]
+    exact H.map_eq_map
 
 Depends on / 依赖: Functor, Functor.map_comp, H.map_eq_map, OneHypercover, OneHypercover.exists_nonempty_homotopy, PreOneHypercover, PreOneHypercover.interFst, PreOneHypercover.interSnd, Quot.mk, cone_maps, exists_nonempty_homotopy, interFst, interSnd, map_comp, map_eq_map, map_surjective, toHOneHypercover
 -/

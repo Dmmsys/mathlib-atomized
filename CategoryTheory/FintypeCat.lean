@@ -690,7 +690,16 @@ Nonempty.intro
             intro a
             change ULift.down _ = _
             rw [ULift.up_down]
-            change ((h.hom ≫ h.inv) _).
+            change ((h.hom ≫ h.inv) _).down = _
+            simp
+            rfl
+          right_inv := by
+            intro a
+            change ULift.down _ = _
+            rw [ULift.up_down]
+            change ((h.inv ≫ h.hom) _).down = _
+            simp
+            rfl }
 
 中文:
 定理 is_skeletal
@@ -705,7 +714,16 @@ Nonempty.intro
             intro a
             change ULift.down _ = _
             rw [ULift.up_down]
-            change ((h.hom ≫ h.inv) _).
+            change ((h.hom ≫ h.inv) _).down = _
+            simp
+            rfl
+          right_inv := by
+            intro a
+            change ULift.down _ = _
+            rw [ULift.up_down]
+            change ((h.inv ≫ h.hom) _).down = _
+            simp
+            rfl }
 -/
 theorem is_skeletal : Skeletal Skeleton.{u} := fun X Y ⟨h⟩ =>
 ext _ _
@@ -1038,7 +1056,8 @@ definition uSwitchEquivalence
   counitIso := NatIso.ofComponents (fun X => equivEquivIso <|
     (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv)
   functor_unitIso_comp X := by
- 
+    ext x
+    simp [← uSwitchEquiv_naturality]
 
 中文:
 定义 uSwitchEquivalence
@@ -1050,7 +1069,8 @@ definition uSwitchEquivalence
   counitIso := NatIso.ofComponents (fun X => equivEquivIso <|
     (uSwitch.obj X).uSwitchEquiv.trans X.uSwitchEquiv)
   functor_unitIso_comp X := by
- 
+    ext x
+    simp [← uSwitchEquiv_naturality]
 
 Depends on / 依赖: uSwitch
 -/

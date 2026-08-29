@@ -585,7 +585,7 @@ definition Homotopy.smul
   comm₃ := by
     dsimp
     rw [h.comm₃]
-    simp only
+    simp only [smul_add, Linear.smul_comp]
 
 中文:
 定义 同伦.smul
@@ -605,7 +605,7 @@ definition Homotopy.smul
   comm₃ := by
     dsimp
     rw [h.comm₃]
-    simp only
+    simp only [smul_add, Linear.smul_comp]
 -/
 def Homotopy.smul {φ₁ φ₂ : S₁ ⟶ S₂} (h : Homotopy φ₁ φ₂) (a : R) :
     Homotopy (a • φ₁) (a • φ₂) where

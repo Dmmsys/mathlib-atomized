@@ -38,7 +38,17 @@ instance pseudoMetricSpacePi
     the uniformity is the same as the product uniformity, but we register nevertheless a nice
     formula for the distance -/
   let i := PseudoEMetricSpace.toPseudoMetricSpaceOfDist
-    (fun f g : fo
+    (fun f g : forall b, X b => ((sup univ fun b => nndist (f b) (g b) : Real>=0) : Real))
+    (fun f g => NNReal.zero_le_coe)
+    (fun f g => by simp [edist_pi_def])
+  refine i.replaceBornology fun s => ?_
+  simp only [isBounded_iff_eventually, ← forall_isBounded_image_eval_iff,
+    forall_mem_image, ← Filter.eventually_all, @dist_nndist (X _)]
+  refine eventually_congr ((eventually_ge_atTop 0).mono fun C hC => ?_)
+  lift C to Real>=0 using hC
+refine ⟨fun H x hx y hy => NNReal.coe_le_coe.2 Finset.sup_le fun b _ => H b hx hy,
+    fun H b x hx y hy => NNReal.coe_le_coe.2 ?_⟩
+  exact Finset.sup_le_iff.1 (NNReal.coe_le_coe.1 <| H hx hy) b (Finset.mem_univ b)
 
 中文:
 实例 pseudoMetricSpacePi
@@ -48,7 +58,17 @@ instance pseudoMetricSpacePi
     the uniformity is the same as the product uniformity, but we register nevertheless a nice
     formula for the distance -/
   let i := PseudoEMetricSpace.toPseudoMetricSpaceOfDist
-    (fun f g : fo
+    (fun f g : forall b, X b => ((sup univ fun b => nndist (f b) (g b) : Real>=0) : Real))
+    (fun f g => NNReal.zero_le_coe)
+    (fun f g => by simp [edist_pi_def])
+  refine i.replaceBornology fun s => ?_
+  simp only [isBounded_iff_eventually, ← forall_isBounded_image_eval_iff,
+    forall_mem_image, ← Filter.eventually_all, @dist_nndist (X _)]
+  refine eventually_congr ((eventually_ge_atTop 0).mono fun C hC => ?_)
+  lift C to Real>=0 using hC
+refine ⟨fun H x hx y hy => NNReal.coe_le_coe.2 Finset.sup_le fun b _ => H b hx hy,
+    fun H b x hx y hy => NNReal.coe_le_coe.2 ?_⟩
+  exact Finset.sup_le_iff.1 (NNReal.coe_le_coe.1 <| H hx hy) b (Finset.mem_univ b)
 -/
 instance pseudoMetricSpacePi : PseudoMetricSpace (forall b, X b) := by
   /- we construct the instance from the pseudoemetric space instance to avoid checking again that
@@ -515,7 +535,12 @@ lemma sphere_pi
     refine subset_iUnion_of_subset default ?_
     intro x hx
     replace hx := hx.le
-    rw [dist_pi_le_iff l
+    rw [dist_pi_le_iff le_rfl] at hx
+    exact le_antisymm (hx default) dist_nonneg
+  · ext
+    simp [dist_pi_eq_iff hr, dist_pi_le_iff hr.le]
+
+@[simp]
 
 中文:
 引理 sphere_pi
@@ -529,7 +554,12 @@ lemma sphere_pi
     refine subset_iUnion_of_subset default ?_
     intro x hx
     replace hx := hx.le
-    rw [dist_pi_le_iff l
+    rw [dist_pi_le_iff le_rfl] at hx
+    exact le_antisymm (hx default) dist_nonneg
+  · ext
+    simp [dist_pi_eq_iff hr, dist_pi_le_iff hr.le]
+
+@[simp]
 
 Depends on / 依赖: Set.inter_eq_right, closedBall_eq_sphere_of_nonpos, dist_nonneg, dist_pi_eq_iff, dist_pi_le_iff, eq_comm, h.resolve_left, hr.le, hx.le, inhabit, inter_eq_right, le_antisymm, le_rfl, lt_irrefl, lt_trichotomy, replace, resolve_left, subset_iUnion_of_subset
 -/
@@ -607,7 +637,7 @@ lemma nndist_single_single
   · simp only [Pi.single_apply]
     by_cases hki : k = i <;> by_cases hkj : k = j <;> simp_all [nndist_comm]
   · simpa [h] using nndist_le_pi_nndist (Pi.single i a : β -> Y) (Pi.single j b) i
-  · simpa [h, nndist_comm] using nnd
+  · simpa [h, nndist_comm] using nndist_le_pi_nndist (Pi.single i a : β -> Y) (Pi.single j b) j
 
 中文:
 引理 nndist_single_single
@@ -617,7 +647,7 @@ lemma nndist_single_single
   · simp only [Pi.single_apply]
     by_cases hki : k = i <;> by_cases hkj : k = j <;> simp_all [nndist_comm]
   · simpa [h] using nndist_le_pi_nndist (Pi.single i a : β -> Y) (Pi.single j b) i
-  · simpa [h, nndist_comm] using nnd
+  · simpa [h, nndist_comm] using nndist_le_pi_nndist (Pi.single i a : β -> Y) (Pi.single j b) j
 
 Depends on / 依赖: Pi.single, Pi.single_apply, le_antisymm, max_le, nndist_comm, nndist_le_pi_nndist, nndist_pi_le_iff, single, single_apply
 -/

@@ -364,7 +364,11 @@ theorem count_modEq_card_eq_ceil
   rw [count_eq_card_filter_range]; rw [← Ico_zero_eq_range]; rw [Ico_filter_modEq_card _ _ hr]; rw [max_eq_left (sub_nonneg.mpr <| by gcongr; positivity)]
   conv_lhs =>
     rw [← div_add_mod v r]; rw [cast_add]; rw [cast_mul]; rw [add_comm]
-    tactic =
+    tactic => simp_rw [← sub_sub, sub_div (_ - _), mul_div_cancel_left₀ _ hr'.ne',
+      Int.ceil_sub_natCast]
+    rw [sub_sub_sub_cancel_right]; rw [cast_zero]; rw [zero_sub]
+  rw [sub_eq_self]; rw [ceil_eq_zero_iff]; rw [Set.mem_Ioc]; rw [div_le_iff₀ hr']; rw [lt_div_iff₀ hr']; rw [neg_one_mul]; rw [zero_mul]; rw [neg_lt_neg_iff]; rw [cast_lt]
+  exact ⟨mod_lt _ hr, by simp⟩
 
 中文:
 定理 count_modEq_card_eq_ceil
@@ -374,7 +378,11 @@ theorem count_modEq_card_eq_ceil
   rw [count_eq_card_filter_range]; rw [← Ico_zero_eq_range]; rw [Ico_filter_modEq_card _ _ hr]; rw [max_eq_left (sub_nonneg.mpr <| by gcongr; positivity)]
   conv_lhs =>
     rw [← div_add_mod v r]; rw [cast_add]; rw [cast_mul]; rw [add_comm]
-    tactic =
+    tactic => simp_rw [← sub_sub, sub_div (_ - _), mul_div_cancel_left₀ _ hr'.ne',
+      Int.ceil_sub_natCast]
+    rw [sub_sub_sub_cancel_right]; rw [cast_zero]; rw [zero_sub]
+  rw [sub_eq_self]; rw [ceil_eq_zero_iff]; rw [Set.mem_Ioc]; rw [div_le_iff₀ hr']; rw [lt_div_iff₀ hr']; rw [neg_one_mul]; rw [zero_mul]; rw [neg_lt_neg_iff]; rw [cast_lt]
+  exact ⟨mod_lt _ hr, by simp⟩
 
 Depends on / 依赖: Ico_filter_modEq_card, Ico_zero_eq_range, Int.ceil_sub_natCast, Set.mem_Ioc, add_comm, cast_add, cast_mul, cast_zero, ceil_eq_zero_iff, ceil_sub_natCast, conv_lhs, count_eq_card_filter_range, div_add_mod, max_eq_left, mem_Ioc, simp_rw, sub_div, sub_eq_self, sub_nonneg, sub_nonneg.mpr
 -/
@@ -402,7 +410,13 @@ theorem count_modEq_card
   conv_lhs => rw [← div_add_mod b r, cast_add, cast_mul, ← add_sub, _root_.add_div,
     mul_div_cancel_left₀ _ hr'.ne', add_comm, Int.ceil_add_natCast, add_comm]
   rw [add_right_inj]
-
+  split_ifs with h
+  · rw [← cast_sub h.le, Int.ceil_eq_iff, div_le_iff₀ hr', lt_div_iff₀ hr', cast_one, Int.cast_one,
+      sub_self, zero_mul, cast_pos, tsub_pos_iff_lt, one_mul, cast_le, tsub_le_iff_right]
+    exact ⟨h, ((mod_lt _ hr).trans_le (by simp)).le⟩
+  · rw [cast_zero, ceil_eq_zero_iff, Set.mem_Ioc, div_le_iff₀ hr', lt_div_iff₀ hr', zero_mul,
+      tsub_nonpos, ← neg_eq_neg_one_mul, neg_lt_sub_iff_lt_add, ← cast_add, cast_lt, cast_le]
+    exact ⟨(mod_lt _ hr).trans_le (by simp), not_lt.mp h⟩
 
 中文:
 定理 count_modEq_card
@@ -413,7 +427,13 @@ theorem count_modEq_card
   conv_lhs => rw [← div_add_mod b r, cast_add, cast_mul, ← add_sub, _root_.add_div,
     mul_div_cancel_left₀ _ hr'.ne', add_comm, Int.ceil_add_natCast, add_comm]
   rw [add_right_inj]
-
+  split_ifs with h
+  · rw [← cast_sub h.le, Int.ceil_eq_iff, div_le_iff₀ hr', lt_div_iff₀ hr', cast_one, Int.cast_one,
+      sub_self, zero_mul, cast_pos, tsub_pos_iff_lt, one_mul, cast_le, tsub_le_iff_right]
+    exact ⟨h, ((mod_lt _ hr).trans_le (by simp)).le⟩
+  · rw [cast_zero, ceil_eq_zero_iff, Set.mem_Ioc, div_le_iff₀ hr', lt_div_iff₀ hr', zero_mul,
+      tsub_nonpos, ← neg_eq_neg_one_mul, neg_lt_sub_iff_lt_add, ← cast_add, cast_lt, cast_le]
+    exact ⟨(mod_lt _ hr).trans_le (by simp), not_lt.mp h⟩
 
 Depends on / 依赖: Int.cast_one, Int.ceil_add_natCast, Int.ceil_eq_iff, _root_, _root_.add_div, add_comm, add_div, add_right_inj, add_sub, cast_add, cast_le, cast_mul, cast_one, cast_pos, cast_sub, ceil_add_natCast, ceil_eq_iff, conv_lhs, count_modEq_card_eq_ceil, div_add_mod
 -/

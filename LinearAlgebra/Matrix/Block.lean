@@ -884,7 +884,8 @@ theorem det_toBlock
   generalize hy : σ x = y
   cases x <;> cases y <;>
     simp only [Matrix.reindex_apply, toBlock_apply, Equiv.symm_symm, Equiv.sumCompl_apply_inr,
-      Equiv.sumCompl_apply_
+      Equiv.sumCompl_apply_inl, fromBlocks_apply₁₁, fromBlocks_apply₁₂, fromBlocks_apply₂₁,
+      fromBlocks_apply₂₂, Matrix.submatrix_apply]
 
 中文:
 定理 det_toBlock
@@ -896,7 +897,8 @@ theorem det_toBlock
   generalize hy : σ x = y
   cases x <;> cases y <;>
     simp only [Matrix.reindex_apply, toBlock_apply, Equiv.symm_symm, Equiv.sumCompl_apply_inr,
-      Equiv.sumCompl_apply_
+      Equiv.sumCompl_apply_inl, fromBlocks_apply₁₁, fromBlocks_apply₁₂, fromBlocks_apply₂₁,
+      fromBlocks_apply₂₂, Matrix.submatrix_apply]
 
 Depends on / 依赖: Equiv.sumCompl, Equiv.sumCompl_apply_inl, Equiv.sumCompl_apply_inr, Equiv.symm_symm, Matrix, Matrix.det_reindex_self, Matrix.reindex_apply, Matrix.submatrix_apply, det_apply, det_reindex_self, generalize, reindex_apply, submatrix_apply, sumCompl, sumCompl_apply_inl, sumCompl_apply_inr, symm_symm, toBlock_apply
 -/
@@ -995,7 +997,29 @@ theorem BlockTriangular.det
   subst hs
   cases isEmpty_or_nonempty m
   · simp
-  let k := (univ.image b).max' (univ_
+  let k := (univ.image b).max' (univ_nonempty.image _)
+  rw [twoBlockTriangular_det' M fun i => b i = k]
+  · have : univ.image b = insert k ((univ.image b).erase k) := by
+      rw [insert_erase]
+      apply max'_mem
+    rw [this]; rw [prod_insert (notMem_erase _ _)]
+    refine congr_arg _ ?_
+    let b' := fun i : { a // b a != k } => b ↑i
+    have h' : BlockTriangular (M.toSquareBlockProp fun i => b i != k) b' := hM.submatrix
+    have hb' : image b' univ = (image b univ).erase k := by
+      convert! image_subtype_ne_univ_eq_image_erase k b
+    rw [ih _ (max'_mem _ _) h' hb']
+    refine Finset.prod_congr rfl fun l hl => ?_
+    let he : { a // b' a = l } ≃ { a // b a = l } :=
+      haveI hc : forall i, b i = l -> b i != k := fun i hi => ne_of_eq_of_ne hi (ne_of_mem_erase hl)
+      Equiv.subtypeSubtypeEquivSubtype @hc
+    rw [toSquareBlock_def]; rw [← Matrix.det_reindex_self he.symm]
+    rfl
+  · intro i hi j hj
+    apply hM
+    rw [hi]
+    apply lt_of_le_of_ne _ hj
+    exact Finset.le_max' (univ.image b) _ (mem_image_of_mem _ (mem_univ _))
 
 中文:
 定理 BlockTriangular.det
@@ -1008,7 +1032,29 @@ theorem BlockTriangular.det
   subst hs
   cases isEmpty_or_nonempty m
   · simp
-  let k := (univ.image b).max' (univ_
+  let k := (univ.image b).max' (univ_nonempty.image _)
+  rw [twoBlockTriangular_det' M fun i => b i = k]
+  · have : univ.image b = insert k ((univ.image b).erase k) := by
+      rw [insert_erase]
+      apply max'_mem
+    rw [this]; rw [prod_insert (notMem_erase _ _)]
+    refine congr_arg _ ?_
+    let b' := fun i : { a // b a != k } => b ↑i
+    have h' : BlockTriangular (M.toSquareBlockProp fun i => b i != k) b' := hM.submatrix
+    have hb' : image b' univ = (image b univ).erase k := by
+      convert! image_subtype_ne_univ_eq_image_erase k b
+    rw [ih _ (max'_mem _ _) h' hb']
+    refine Finset.prod_congr rfl fun l hl => ?_
+    let he : { a // b' a = l } ≃ { a // b a = l } :=
+      haveI hc : forall i, b i = l -> b i != k := fun i hi => ne_of_eq_of_ne hi (ne_of_mem_erase hl)
+      Equiv.subtypeSubtypeEquivSubtype @hc
+    rw [toSquareBlock_def]; rw [← Matrix.det_reindex_self he.symm]
+    rfl
+  · intro i hi j hj
+    apply hM
+    rw [hi]
+    apply lt_of_le_of_ne _ hj
+    exact Finset.le_max' (univ.image b) _ (mem_image_of_mem _ (mem_univ _))
 -/
 protected theorem BlockTriangular.det [DecidableEq α] [LinearOrder α] (hM : BlockTriangular M b) :
     M.det = ∏ a in univ.image b, (M.toSquareBlock b a).det := by
@@ -1202,7 +1248,9 @@ theorem BlockTriangular.toBlock_inverse_mul_toBlock_eq_one
       1 := by
     rw [← toBlock_mul_eq_add]; rw [inv_mul_of_invertible M]; rw [toBlock_one_self]
   have h_zero : M.toBlock (fun i => ¬p i) p = 0 := by
-  
+    ext i j
+    simpa using hM (lt_of_lt_of_le j.2 (le_of_not_gt i.2))
+  simpa [h_zero] using h_sum
 
 中文:
 定理 BlockTriangular.toBlock_inverse_mul_toBlock_eq_one
@@ -1215,7 +1263,9 @@ theorem BlockTriangular.toBlock_inverse_mul_toBlock_eq_one
       1 := by
     rw [← toBlock_mul_eq_add]; rw [inv_mul_of_invertible M]; rw [toBlock_one_self]
   have h_zero : M.toBlock (fun i => ¬p i) p = 0 := by
-  
+    ext i j
+    simpa using hM (lt_of_lt_of_le j.2 (le_of_not_gt i.2))
+  simpa [h_zero] using h_sum
 
 Depends on / 依赖: M.toBlock, h_sum, h_zero, inv_mul_of_invertible, le_of_not_gt, lt_of_lt_of_le, toBlock, toBlock_mul_eq_add, toBlock_one_self
 -/
@@ -1293,7 +1343,15 @@ theorem toBlock_inverse_eq_zero
     rw [← toBlock_mul_eq_add]; rw [inv_mul_of_invertible M]; rw [toBlock_one_disjoint]
     rw [disjoint_iff_inf_le]
     exact fun i h => h.1 h.2
-  have h_zero : M.
+  have h_zero : M.toBlock q p = 0 := by
+    ext i j
+    simpa using hM (lt_of_lt_of_le j.2 <| le_of_not_gt i.2)
+  have h_mul_eq_zero : M⁻¹.toBlock q p * M.toBlock p p = 0 := by simpa [h_zero] using h_sum
+  have : Invertible (M.toBlock p p) := hM.invertibleToBlock k
+  have : (fun i => k <= b i) = q := by
+    ext
+    exact not_lt.symm
+  rw [this]; rw [← Matrix.zero_mul (M.toBlock p p)⁻¹]; rw [← h_mul_eq_zero]; rw [mul_inv_cancel_right_of_invertible]
 
 中文:
 定理 toBlock_inverse_eq_zero
@@ -1305,7 +1363,15 @@ theorem toBlock_inverse_eq_zero
     rw [← toBlock_mul_eq_add]; rw [inv_mul_of_invertible M]; rw [toBlock_one_disjoint]
     rw [disjoint_iff_inf_le]
     exact fun i h => h.1 h.2
-  have h_zero : M.
+  have h_zero : M.toBlock q p = 0 := by
+    ext i j
+    simpa using hM (lt_of_lt_of_le j.2 <| le_of_not_gt i.2)
+  have h_mul_eq_zero : M⁻¹.toBlock q p * M.toBlock p p = 0 := by simpa [h_zero] using h_sum
+  have : Invertible (M.toBlock p p) := hM.invertibleToBlock k
+  have : (fun i => k <= b i) = q := by
+    ext
+    exact not_lt.symm
+  rw [this]; rw [← Matrix.zero_mul (M.toBlock p p)⁻¹]; rw [← h_mul_eq_zero]; rw [mul_inv_cancel_right_of_invertible]
 
 Depends on / 依赖: Invertible, M.toBlock, disjoint_iff_inf_le, hM.inve, h_mul_eq_zero, h_sum, h_zero, inv_mul_of_invertible, le_of_not_gt, lt_of_lt_of_le, toBlock, toBlock_mul_eq_add, toBlock_one_disjoint
 -/
@@ -1341,7 +1407,19 @@ theorem blockTriangular_inv_of_blockTriangular
   intro i j hij
   have : Inhabited m := ⟨i⟩
   let k := (univ.image b).max' (univ_nonempty.image _)
-  l
+  let b' := fun i : { a // b a < k } => b ↑i
+  let A := M.toBlock (fun i => b i < k) fun j => b j < k
+  obtain hbi | hi : b i = k ∨ _ := (le_max' _ (b i) <| mem_image_of_mem _ <| mem_univ _).eq_or_lt
+  · have : M⁻¹.toBlock (fun i => k <= b i) (fun i => b i < k) ⟨i, hbi.ge⟩ ⟨j, hbi ▸ hij⟩ = 0 := by
+      simp only [toBlock_inverse_eq_zero hM k, Matrix.zero_apply]
+    simp [this.symm]
+  have : Invertible A := hM.invertibleToBlock _
+  have hA : A.BlockTriangular b' := hM.submatrix
+  have hb' : image b' univ ⊂ image b univ := by
+    convert! image_subtype_univ_ssubset_image_univ k b _ (fun a => a < k) (lt_irrefl _)
+    convert! max'_mem (α := α) _ _
+  have hij' : b' ⟨j, hij.trans hi⟩ < b' ⟨i, hi⟩ := by simp_rw [b', hij]
+  simp [A, hM.inv_toBlock k, (ih (image b' univ) hb' hA rfl hij').symm]
 
 中文:
 定理 blockTriangular_inv_of_blockTriangular
@@ -1354,7 +1432,19 @@ theorem blockTriangular_inv_of_blockTriangular
   intro i j hij
   have : Inhabited m := ⟨i⟩
   let k := (univ.image b).max' (univ_nonempty.image _)
-  l
+  let b' := fun i : { a // b a < k } => b ↑i
+  let A := M.toBlock (fun i => b i < k) fun j => b j < k
+  obtain hbi | hi : b i = k ∨ _ := (le_max' _ (b i) <| mem_image_of_mem _ <| mem_univ _).eq_or_lt
+  · have : M⁻¹.toBlock (fun i => k <= b i) (fun i => b i < k) ⟨i, hbi.ge⟩ ⟨j, hbi ▸ hij⟩ = 0 := by
+      simp only [toBlock_inverse_eq_zero hM k, Matrix.zero_apply]
+    simp [this.symm]
+  have : Invertible A := hM.invertibleToBlock _
+  have hA : A.BlockTriangular b' := hM.submatrix
+  have hb' : image b' univ ⊂ image b univ := by
+    convert! image_subtype_univ_ssubset_image_univ k b _ (fun a => a < k) (lt_irrefl _)
+    convert! max'_mem (α := α) _ _
+  have hij' : b' ⟨j, hij.trans hi⟩ < b' ⟨i, hi⟩ := by simp_rw [b', hij]
+  simp [A, hM.inv_toBlock k, (ih (image b' univ) hb' hA rfl hij').symm]
 
 Depends on / 依赖: BlockTriangular, Finset, Finset.strongInduction, Inhabited, M.toBlock, eq_or_lt, generalizing, le_max, mem_image_of_mem, mem_univ, strongInduction, toBlock, univ.image, univ_nonempty, univ_nonempty.image
 -/

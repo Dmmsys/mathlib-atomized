@@ -83,7 +83,9 @@ lemma _root_.PresheafOfModules.Sheafify.app_eq_of_isLocallyInjective
     · exact Presheaf.equalizerSieve_mem J α _ _ hr₀
     · exact Presheaf.equalizerSieve_mem J φ _ _ hm₀
   · intro Z g hg
-    rw [← NatTrans.naturality_apply (D
+    rw [← NatTrans.naturality_apply (D := Ab)]; rw [← NatTrans.naturality_apply (D := Ab)]
+    erw [M₀.map_smul, M₀.map_smul, hg.1, hg.2]
+    rfl
 
 中文:
 引理 _root_.预模层.Sheafify.app_eq_of_isLocallyInjective
@@ -94,7 +96,9 @@ lemma _root_.PresheafOfModules.Sheafify.app_eq_of_isLocallyInjective
     · exact Presheaf.equalizerSieve_mem J α _ _ hr₀
     · exact Presheaf.equalizerSieve_mem J φ _ _ hm₀
   · intro Z g hg
-    rw [← NatTrans.naturality_apply (D
+    rw [← NatTrans.naturality_apply (D := Ab)]; rw [← NatTrans.naturality_apply (D := Ab)]
+    erw [M₀.map_smul, M₀.map_smul, hg.1, hg.2]
+    rfl
 
 Depends on / 依赖: J.intersection_covering, NatTrans, NatTrans.naturality_apply, Presheaf, Presheaf.equalizerSieve, Presheaf.equalizerSieve_mem, equalizerSieve, equalizerSieve_mem, intersection_covering, map_smul, naturality_apply, presheaf
 -/
@@ -126,7 +130,8 @@ lemma isCompatible_map_smul_aux
     (M₀.map g.op m₀) m₀']; rw [M₀.map_smul]
   · rw [hr₀', R.map_comp, RingCat.comp_apply, ← hr₀, ← RingCat.comp_apply, NatTrans.naturality,
       RingCat.comp_apply]
-  · rw [hm₀', A.map_comp, AddCommGrpCat
+  · rw [hm₀', A.map_comp, AddCommGrpCat.coe_comp, Function.comp_apply, ← hm₀]
+    erw [NatTrans.naturality_apply φ]
 
 中文:
 引理 isCompatible_map_smul_aux
@@ -136,7 +141,8 @@ lemma isCompatible_map_smul_aux
     (M₀.map g.op m₀) m₀']; rw [M₀.map_smul]
   · rw [hr₀', R.map_comp, RingCat.comp_apply, ← hr₀, ← RingCat.comp_apply, NatTrans.naturality,
       RingCat.comp_apply]
-  · rw [hm₀', A.map_comp, AddCommGrpCat
+  · rw [hm₀', A.map_comp, AddCommGrpCat.coe_comp, Function.comp_apply, ← hm₀]
+    erw [NatTrans.naturality_apply φ]
 
 Depends on / 依赖: A.map_comp, AddCommGrpCat, AddCommGrpCat.coe_comp, Function, Function.comp_apply, NatTrans, NatTrans.naturality, NatTrans.naturality_apply, PresheafOfModules, PresheafOfModules.Sheafify.app_eq_of_isLocallyInjective, R.map_comp, RingCat, RingCat.comp_apply, Sheafify, app_eq_of_isLocallyInjective, coe_comp, comp_apply, g.op, map_comp, map_smul
 -/
@@ -172,7 +178,22 @@ lemma isCompatible_map_smul
   let a₀ := R₀.map g₁.op a₁
   let b₀ := M₀.map g₁.op b₁
   have ha₁ : (α.app (Opposite.op Y₁)) a₁ = (R.map f₁.op) r := (hr₀ f₁ h₁).symm
-  have ha₂ : (α.app (Opposite.op Y₂)) a₂
+  have ha₂ : (α.app (Opposite.op Y₂)) a₂ = (R.map f₂.op) r := (hr₀ f₂ h₂).symm
+  have hb₁ : (φ.app (Opposite.op Y₁)) b₁ = (A.map f₁.op) m := (hm₀ f₁ h₁).symm
+  have hb₂ : (φ.app (Opposite.op Y₂)) b₂ = (A.map f₂.op) m := (hm₀ f₂ h₂).symm
+  have ha₀ : (α.app (Opposite.op Z)) a₀ = (R.map (f₁.op ≫ g₁.op)) r := by
+    rw [← RingCat.comp_apply]; rw [NatTrans.naturality]; rw [RingCat.comp_apply]; rw [ha₁]; rw [Functor.map_comp]; rw [RingCat.comp_apply]
+  have hb₀ : (φ.app (Opposite.op Z)) b₀ = (A.map (f₁.op ≫ g₁.op)) m := by
+    dsimp [b₀]
+    erw [NatTrans.naturality_apply φ, hb₁, Functor.map_comp, ConcreteCategory.comp_apply]
+  have ha₀' : (α.app (Opposite.op Z)) a₀ = (R.map (f₂.op ≫ g₂.op)) r := by
+    rw [ha₀]; rw [← op_comp]; rw [fac]; rw [op_comp]
+  have hb₀' : (φ.app (Opposite.op Z)) b₀ = (A.map (f₂.op ≫ g₂.op)) m := by
+    rw [hb₀]; rw [← op_comp]; rw [fac]; rw [op_comp]
+  dsimp
+  erw [← NatTrans.naturality_apply φ, ← NatTrans.naturality_apply φ]
+  exact (isCompatible_map_smul_aux α φ hA r m f₁ g₁ a₁ a₀ b₁ b₀ ha₁ ha₀ hb₁ hb₀).trans
+    (isCompatible_map_smul_aux α φ hA r m f₂ g₂ a₂ a₀ b₂ b₀ ha₂ ha₀' hb₂ hb₀').symm
 
 中文:
 引理 isCompatible_map_smul
@@ -186,7 +207,22 @@ lemma isCompatible_map_smul
   let a₀ := R₀.map g₁.op a₁
   let b₀ := M₀.map g₁.op b₁
   have ha₁ : (α.app (Opposite.op Y₁)) a₁ = (R.map f₁.op) r := (hr₀ f₁ h₁).symm
-  have ha₂ : (α.app (Opposite.op Y₂)) a₂
+  have ha₂ : (α.app (Opposite.op Y₂)) a₂ = (R.map f₂.op) r := (hr₀ f₂ h₂).symm
+  have hb₁ : (φ.app (Opposite.op Y₁)) b₁ = (A.map f₁.op) m := (hm₀ f₁ h₁).symm
+  have hb₂ : (φ.app (Opposite.op Y₂)) b₂ = (A.map f₂.op) m := (hm₀ f₂ h₂).symm
+  have ha₀ : (α.app (Opposite.op Z)) a₀ = (R.map (f₁.op ≫ g₁.op)) r := by
+    rw [← RingCat.comp_apply]; rw [NatTrans.naturality]; rw [RingCat.comp_apply]; rw [ha₁]; rw [Functor.map_comp]; rw [RingCat.comp_apply]
+  have hb₀ : (φ.app (Opposite.op Z)) b₀ = (A.map (f₁.op ≫ g₁.op)) m := by
+    dsimp [b₀]
+    erw [NatTrans.naturality_apply φ, hb₁, Functor.map_comp, ConcreteCategory.comp_apply]
+  have ha₀' : (α.app (Opposite.op Z)) a₀ = (R.map (f₂.op ≫ g₂.op)) r := by
+    rw [ha₀]; rw [← op_comp]; rw [fac]; rw [op_comp]
+  have hb₀' : (φ.app (Opposite.op Z)) b₀ = (A.map (f₂.op ≫ g₂.op)) m := by
+    rw [hb₀]; rw [← op_comp]; rw [fac]; rw [op_comp]
+  dsimp
+  erw [← NatTrans.naturality_apply φ, ← NatTrans.naturality_apply φ]
+  exact (isCompatible_map_smul_aux α φ hA r m f₁ g₁ a₁ a₀ b₁ b₀ ha₁ ha₀ hb₁ hb₀).trans
+    (isCompatible_map_smul_aux α φ hA r m f₂ g₂ a₂ a₀ b₂ b₀ ha₂ ha₀' hb₂ hb₀').symm
 
 Depends on / 依赖: A.map, Opposi, Opposite, Opposite.op, R.map
 -/
@@ -273,6 +309,15 @@ definition SMulCandidate.mk'
     dsimp at hg
     rw [← ConcreteCategory.comp_apply]; rw [← A.obj.map_comp]; rw [← NatTrans.naturality_apply (D := Ab)]
     erw [M₀.map_smul] -- Mismatch between `M₀.map` and `M₀.presheaf.map`
+    refine (ha _ hg).trans (app_eq_of_isLocallyInjective α φ A.isSeparated _ _ _ _ ?_ ?_)
+    · rw [← RingCat.comp_apply, NatTrans.naturality, RingCat.comp_apply, ha₀]
+      apply (hr₀ _ hg).symm.trans
+      simp
+    · erw [NatTrans.naturality_apply φ, hb₀]
+      apply (hm₀ _ hg).symm.trans
+      dsimp
+      rw [Functor.map_comp]
+      rfl
 
 中文:
 定义 SMulCandidate.mk'
@@ -284,6 +329,15 @@ definition SMulCandidate.mk'
     dsimp at hg
     rw [← ConcreteCategory.comp_apply]; rw [← A.obj.map_comp]; rw [← NatTrans.naturality_apply (D := Ab)]
     erw [M₀.map_smul] -- Mismatch between `M₀.map` and `M₀.presheaf.map`
+    refine (ha _ hg).trans (app_eq_of_isLocallyInjective α φ A.isSeparated _ _ _ _ ?_ ?_)
+    · rw [← RingCat.comp_apply, NatTrans.naturality, RingCat.comp_apply, ha₀]
+      apply (hr₀ _ hg).symm.trans
+      simp
+    · erw [NatTrans.naturality_apply φ, hb₀]
+      apply (hm₀ _ hg).symm.trans
+      dsimp
+      rw [Functor.map_comp]
+      rfl
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents, restrictScalarsId
 -/
@@ -326,7 +380,19 @@ instance :
     all_goals apply Presheaf.imageSieve_mem
   have h₁ : S <= Presheaf.imageSieve α r := fun _ _ h => h.1
   have h₂ : S <= Presheaf.imageSieve φ m := fun _ _ h => h.2
-  let 
+  let r₀ := (Presieve.FamilyOfElements.localPreimage (whiskerRight α (forget _)) r).restrict h₁
+  let m₀ := (Presieve.FamilyOfElements.localPreimage (whiskerRight φ (forget _)) m).restrict h₂
+  have hr₀ : (r₀.map (whiskerRight α (forget _))).IsAmalgamation r := by
+    rw [Presieve.FamilyOfElements.restrict_map]
+    apply Presieve.isAmalgamation_restrict
+    apply Presieve.FamilyOfElements.isAmalgamation_map_localPreimage
+  have hm₀ : (m₀.map (whiskerRight φ (forget _))).IsAmalgamation m := by
+    rw [Presieve.FamilyOfElements.restrict_map]
+    apply Presieve.isAmalgamation_restrict
+    apply Presieve.FamilyOfElements.isAmalgamation_map_localPreimage
+  exact SMulCandidate.mk' α φ r m S hS r₀ m₀ hr₀ hm₀ _ (Presieve.IsSheafFor.isAmalgamation
+    (((sheafCompose J (forget _)).obj A).2.isSheafFor S hS)
+    (Presieve.FamilyOfElements.isCompatible_map_smul α φ A.isSeparated r m r₀ m₀ hr₀ hm₀))⟩
 
 中文:
 实例 :
@@ -338,7 +404,19 @@ instance :
     all_goals apply Presheaf.imageSieve_mem
   have h₁ : S <= Presheaf.imageSieve α r := fun _ _ h => h.1
   have h₂ : S <= Presheaf.imageSieve φ m := fun _ _ h => h.2
-  let 
+  let r₀ := (Presieve.FamilyOfElements.localPreimage (whiskerRight α (forget _)) r).restrict h₁
+  let m₀ := (Presieve.FamilyOfElements.localPreimage (whiskerRight φ (forget _)) m).restrict h₂
+  have hr₀ : (r₀.map (whiskerRight α (forget _))).IsAmalgamation r := by
+    rw [Presieve.FamilyOfElements.restrict_map]
+    apply Presieve.isAmalgamation_restrict
+    apply Presieve.FamilyOfElements.isAmalgamation_map_localPreimage
+  have hm₀ : (m₀.map (whiskerRight φ (forget _))).IsAmalgamation m := by
+    rw [Presieve.FamilyOfElements.restrict_map]
+    apply Presieve.isAmalgamation_restrict
+    apply Presieve.FamilyOfElements.isAmalgamation_map_localPreimage
+  exact SMulCandidate.mk' α φ r m S hS r₀ m₀ hr₀ hm₀ _ (Presieve.IsSheafFor.isAmalgamation
+    (((sheafCompose J (forget _)).obj A).2.isSheafFor S hS)
+    (Presieve.FamilyOfElements.isCompatible_map_smul α φ A.isSeparated r m r₀ m₀ hr₀ hm₀))⟩
 
 Depends on / 依赖: FamilyOfElements, J.intersection_covering, Presheaf, Presheaf.imageSieve, Presheaf.imageSieve_mem, Presieve, Presieve.FamilyOfElements.localPreimage, all_goals, forget, hom.naturality, imageSieve, imageSieve_mem, intersection_covering, localPreimage, naturality, restrict, restrictScalarsId, whiskerRight
 -/
@@ -377,7 +455,8 @@ instance :
       apply J.intersection_covering
       all_goals apply Presheaf.imageSieve_mem
     apply A.isSeparated _ _ hS
-    intro Y f ⟨⟨r₀, hr
+    intro Y f ⟨⟨r₀, hr₀⟩, ⟨m₀, hm₀⟩⟩
+    rw [h₁ f.op r₀ hr₀ m₀ hm₀]; rw [h₂ f.op r₀ hr₀ m₀ hm₀]
 
 中文:
 实例 :
@@ -390,7 +469,8 @@ instance :
       apply J.intersection_covering
       all_goals apply Presheaf.imageSieve_mem
     apply A.isSeparated _ _ hS
-    intro Y f ⟨⟨r₀, hr
+    intro Y f ⟨⟨r₀, hr₀⟩, ⟨m₀, hm₀⟩⟩
+    rw [h₁ f.op r₀ hr₀ m₀ hm₀]; rw [h₂ f.op r₀ hr₀ m₀ hm₀]
 
 Depends on / 依赖: A.isSeparated, J.intersection_covering, Presheaf, Presheaf.imageSieve, Presheaf.imageSieve_mem, SMulCandidate, SMulCandidate.mk.injEq, all_goals, f.op, imageSieve, imageSieve_mem, intersection_covering, inv.naturality, isSeparated, naturality, restrictScalarsId
 -/
@@ -566,7 +646,11 @@ lemma smul_add
     refine J.intersection_covering (J.intersection_covering ?_ ?_) ?_
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
-  rintro Y f ⟨⟨⟨r₀, hr₀⟩, ⟨m₀ : M₀
+  rintro Y f ⟨⟨⟨r₀, hr₀⟩, ⟨m₀ : M₀.obj _, hm₀ : (φ.app _) _ = _⟩⟩,
+    ⟨m₀' : M₀.obj _, hm₀' : (φ.app _) _ = _⟩⟩
+  rw [(A.obj.map f.op).hom.map_add]; rw [map_smul_eq α φ r m f.op r₀ hr₀ m₀ hm₀]; rw [map_smul_eq α φ r m' f.op r₀ hr₀ m₀' hm₀']; rw [map_smul_eq α φ r (m + m') f.op r₀ hr₀ (m₀ + m₀')
+      (by rw [_root_.map_add]; rw [_root_.map_add]; rw [hm₀]; rw [hm₀']),
+    smul_add, _root_.map_add]
 
 中文:
 引理 smul_add
@@ -577,7 +661,11 @@ lemma smul_add
     refine J.intersection_covering (J.intersection_covering ?_ ?_) ?_
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
-  rintro Y f ⟨⟨⟨r₀, hr₀⟩, ⟨m₀ : M₀
+  rintro Y f ⟨⟨⟨r₀, hr₀⟩, ⟨m₀ : M₀.obj _, hm₀ : (φ.app _) _ = _⟩⟩,
+    ⟨m₀' : M₀.obj _, hm₀' : (φ.app _) _ = _⟩⟩
+  rw [(A.obj.map f.op).hom.map_add]; rw [map_smul_eq α φ r m f.op r₀ hr₀ m₀ hm₀]; rw [map_smul_eq α φ r m' f.op r₀ hr₀ m₀' hm₀']; rw [map_smul_eq α φ r (m + m') f.op r₀ hr₀ (m₀ + m₀')
+      (by rw [_root_.map_add]; rw [_root_.map_add]; rw [hm₀]; rw [hm₀']),
+    smul_add, _root_.map_add]
 -/
 protected lemma smul_add : smul α φ r (m + m') = smul α φ r m + smul α φ r m' := by
   let S := Presheaf.imageSieve α r ⊓ Presheaf.imageSieve φ m ⊓ Presheaf.imageSieve φ m'
@@ -604,7 +692,10 @@ lemma add_smul
     refine J.intersection_covering (J.intersection_covering ?_ ?_) ?_
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
-  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr
+  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr₀ : (α.app (Opposite.op Y)) r₀ = (R.obj.map f.op) r)⟩,
+    ⟨r₀' : R₀.obj _, (hr₀' : (α.app (Opposite.op Y)) r₀' = (R.obj.map f.op) r')⟩⟩, ⟨m₀, hm₀⟩⟩
+  rw [(A.obj.map f.op).hom.map_add]; rw [map_smul_eq α φ r m f.op r₀ hr₀ m₀ hm₀]; rw [map_smul_eq α φ r' m f.op r₀' hr₀' m₀ hm₀]; rw [map_smul_eq α φ (r + r') m f.op (r₀ + r₀') (by rw [_root_.map_add]; rw [_root_.map_add]; rw [hr₀]; rw [hr₀'])
+      m₀ hm₀, add_smul, _root_.map_add]
 
 中文:
 引理 add_smul
@@ -615,7 +706,10 @@ lemma add_smul
     refine J.intersection_covering (J.intersection_covering ?_ ?_) ?_
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
-  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr
+  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr₀ : (α.app (Opposite.op Y)) r₀ = (R.obj.map f.op) r)⟩,
+    ⟨r₀' : R₀.obj _, (hr₀' : (α.app (Opposite.op Y)) r₀' = (R.obj.map f.op) r')⟩⟩, ⟨m₀, hm₀⟩⟩
+  rw [(A.obj.map f.op).hom.map_add]; rw [map_smul_eq α φ r m f.op r₀ hr₀ m₀ hm₀]; rw [map_smul_eq α φ r' m f.op r₀' hr₀' m₀ hm₀]; rw [map_smul_eq α φ (r + r') m f.op (r₀ + r₀') (by rw [_root_.map_add]; rw [_root_.map_add]; rw [hr₀]; rw [hr₀'])
+      m₀ hm₀, add_smul, _root_.map_add]
 -/
 protected lemma add_smul : smul α φ (r + r') m = smul α φ r m + smul α φ r' m := by
   let S := Presheaf.imageSieve α r ⊓ Presheaf.imageSieve α r' ⊓ Presheaf.imageSieve φ m
@@ -640,7 +734,13 @@ lemma mul_smul
     refine J.intersection_covering (J.intersection_covering ?_ ?_) ?_
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
-  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr
+  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr₀ : (α.app (Opposite.op Y)) r₀ = (R.obj.map f.op) r)⟩,
+    ⟨r₀' : R₀.obj _, (hr₀' : (α.app (Opposite.op Y)) r₀' = (R.obj.map f.op) r')⟩⟩,
+    ⟨m₀ : M₀.obj _, hm₀⟩⟩
+  rw [map_smul_eq α φ (r * r') m f.op (r₀ * r₀')
+    (by rw [map_mul]; rw [map_mul]; rw [hr₀]; rw [hr₀']) m₀ hm₀, mul_smul,
+    map_smul_eq α φ r (smul α φ r' m) f.op r₀ hr₀ (r₀' • m₀)
+      (map_smul_eq α φ r' m f.op r₀' hr₀' m₀ hm₀).symm]
 
 中文:
 引理 mul_smul
@@ -651,7 +751,13 @@ lemma mul_smul
     refine J.intersection_covering (J.intersection_covering ?_ ?_) ?_
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
-  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr
+  rintro Y f ⟨⟨⟨r₀ : R₀.obj _, (hr₀ : (α.app (Opposite.op Y)) r₀ = (R.obj.map f.op) r)⟩,
+    ⟨r₀' : R₀.obj _, (hr₀' : (α.app (Opposite.op Y)) r₀' = (R.obj.map f.op) r')⟩⟩,
+    ⟨m₀ : M₀.obj _, hm₀⟩⟩
+  rw [map_smul_eq α φ (r * r') m f.op (r₀ * r₀')
+    (by rw [map_mul]; rw [map_mul]; rw [hr₀]; rw [hr₀']) m₀ hm₀, mul_smul,
+    map_smul_eq α φ r (smul α φ r' m) f.op r₀ hr₀ (r₀' • m₀)
+      (map_smul_eq α φ r' m f.op r₀' hr₀' m₀ hm₀).symm]
 -/
 protected lemma mul_smul : smul α φ (r * r') m = smul α φ r (smul α φ r' m) := by
   let S := Presheaf.imageSieve α r ⊓ Presheaf.imageSieve α r' ⊓ Presheaf.imageSieve φ m
@@ -718,7 +824,11 @@ lemma map_smul
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
   rintro Y f ⟨⟨r₀,
-    (hr₀ : (α.app (Opposite.op Y)).hom r₀ = (R.obj
+    (hr₀ : (α.app (Opposite.op Y)).hom r₀ = (R.obj.map f.op).hom ((R.obj.map π).hom r))⟩,
+    ⟨m₀, (hm₀ : (φ.app _) _ = _)⟩⟩
+  rw [← ConcreteCategory.comp_apply]; rw [← Functor.map_comp]; rw [map_smul_eq α φ r m (π ≫ f.op) r₀ (by rw [hr₀]; rw [Functor.map_comp]; rw [RingCat.comp_apply]) m₀
+      (by rw [hm₀, Functor.map_comp, ConcreteCategory.comp_apply]),
+    map_smul_eq α φ (R.obj.map π r) (A.obj.map π m) f.op r₀ hr₀ m₀ hm₀]
 
 中文:
 引理 map_smul
@@ -729,7 +839,11 @@ lemma map_smul
     all_goals apply Presheaf.imageSieve_mem
   apply A.isSeparated _ _ hS
   rintro Y f ⟨⟨r₀,
-    (hr₀ : (α.app (Opposite.op Y)).hom r₀ = (R.obj
+    (hr₀ : (α.app (Opposite.op Y)).hom r₀ = (R.obj.map f.op).hom ((R.obj.map π).hom r))⟩,
+    ⟨m₀, (hm₀ : (φ.app _) _ = _)⟩⟩
+  rw [← ConcreteCategory.comp_apply]; rw [← Functor.map_comp]; rw [map_smul_eq α φ r m (π ≫ f.op) r₀ (by rw [hr₀]; rw [Functor.map_comp]; rw [RingCat.comp_apply]) m₀
+      (by rw [hm₀, Functor.map_comp, ConcreteCategory.comp_apply]),
+    map_smul_eq α φ (R.obj.map π r) (A.obj.map π m) f.op r₀ hr₀ m₀ hm₀]
 
 Depends on / 依赖: commutes, congr_arg, f.commutes, g.hom
 -/
@@ -990,7 +1104,9 @@ definition sheafifyMap
     let f := (sheafifyHomEquiv' α φ (by exact A'.property)).symm (τ₀ ≫ toSheafify α φ')
     suffices τ.hom = (toPresheaf _).map f by simpa only [this] using! (f.app X).hom.map_smul r m
     apply ((J.W_of_isLocallyBijective φ).homEquiv _ A'.property).injective
-    dsimp [
+    dsimp [f]
+    erw [comp_toPresheaf_map_sheafifyHomEquiv'_symm_hom]
+    rw [← fac]; rw [Functor.map_comp]; rw [toPresheaf_map_toSheafify])
 
 中文:
 定义 sheafifyMap
@@ -999,7 +1115,9 @@ definition sheafifyMap
     let f := (sheafifyHomEquiv' α φ (by exact A'.property)).symm (τ₀ ≫ toSheafify α φ')
     suffices τ.hom = (toPresheaf _).map f by simpa only [this] using! (f.app X).hom.map_smul r m
     apply ((J.W_of_isLocallyBijective φ).homEquiv _ A'.property).injective
-    dsimp [
+    dsimp [f]
+    erw [comp_toPresheaf_map_sheafifyHomEquiv'_symm_hom]
+    rw [← fac]; rw [Functor.map_comp]; rw [toPresheaf_map_toSheafify])
 
 Depends on / 依赖: Functor, Functor.map_comp, J.W_of_isLocallyBijective, W_of_isLocallyBijective, _symm_hom, comp_toPresheaf_map_sheafifyHomEquiv, f.app, hom.map_smul, homEquiv, injective, map_comp, map_smul, property, sheafifyHomEquiv, toPresheaf, toPresheaf_map_toSheafify, toSheafify
 -/

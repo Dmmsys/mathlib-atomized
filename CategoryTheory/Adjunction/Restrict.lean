@@ -45,7 +45,17 @@ definition restrictFullyFaithful
           (L.obj X ⟶ Y) ≃ (iD.obj (L.obj X) ⟶ iD.obj Y) := hiD.homEquiv
           _ ≃ (L'.obj (iC.obj X) ⟶ iD.obj Y) := Iso.homCongr (comm1.symm.app X) (Iso.refl _)
           _ ≃ (iC.obj X ⟶ R'.obj (iD.obj Y)) := adj.homEquiv _ _
-    
+          _ ≃ (iC.obj X ⟶ iC.obj (R.obj Y)) := Iso.homCongr (Iso.refl _) (comm2.app Y)
+          _ ≃ (X ⟶ R.obj Y) := hiC.homEquiv.symm
+
+      homEquiv_naturality_left_symm := fun {X' X Y} f g => by
+        apply hiD.map_injective
+        simpa [Trans.trans] using (comm1.inv.naturality_assoc f _).symm
+      homEquiv_naturality_right := fun {X Y' Y} f g => by
+        apply hiC.map_injective
+        suffices R'.map (iD.map g) ≫ comm2.hom.app Y = comm2.hom.app Y' ≫ iC.map (R.map g) by
+          simp [Trans.trans, this]
+        apply comm2.hom.naturality g }
 
 中文:
 定义 restrictFullyFaithful
@@ -56,7 +66,17 @@ definition restrictFullyFaithful
           (L.obj X ⟶ Y) ≃ (iD.obj (L.obj X) ⟶ iD.obj Y) := hiD.homEquiv
           _ ≃ (L'.obj (iC.obj X) ⟶ iD.obj Y) := Iso.homCongr (comm1.symm.app X) (Iso.refl _)
           _ ≃ (iC.obj X ⟶ R'.obj (iD.obj Y)) := adj.homEquiv _ _
-    
+          _ ≃ (iC.obj X ⟶ iC.obj (R.obj Y)) := Iso.homCongr (Iso.refl _) (comm2.app Y)
+          _ ≃ (X ⟶ R.obj Y) := hiC.homEquiv.symm
+
+      homEquiv_naturality_left_symm := fun {X' X Y} f g => by
+        apply hiD.map_injective
+        simpa [Trans.trans] using (comm1.inv.naturality_assoc f _).symm
+      homEquiv_naturality_right := fun {X Y' Y} f g => by
+        apply hiC.map_injective
+        suffices R'.map (iD.map g) ≫ comm2.hom.app Y = comm2.hom.app Y' ≫ iC.map (R.map g) by
+          simp [Trans.trans, this]
+        apply comm2.hom.naturality g }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Iso.homCongr, Iso.refl, L.obj, R.obj, adj.homEquiv, comm1.symm.app, comm2.app, hiC.homEquiv.symm, hiD.homEquiv, homCongr, homEquiv, iC.obj, iD.obj, mkOfHomEquiv
 -/
@@ -141,7 +161,8 @@ lemma restrictFullyFaithful_homEquiv_apply
   apply hiC.map_injective
   simp only [homEquiv_apply, Functor.map_comp, map_restrictFullyFaithful_unit_app,
     Functor.id_obj, assoc, Functor.FullyFaithful.map_preimage]
-  
+  congr 2
+  exact (comm2.hom.naturality _).symm
 
 中文:
 引理 restrictFullyFaithful_homEquiv_apply
@@ -151,7 +172,8 @@ lemma restrictFullyFaithful_homEquiv_apply
   apply hiC.map_injective
   simp only [homEquiv_apply, Functor.map_comp, map_restrictFullyFaithful_unit_app,
     Functor.id_obj, assoc, Functor.FullyFaithful.map_preimage]
-  
+  congr 2
+  exact (comm2.hom.naturality _).symm
 -/
 lemma restrictFullyFaithful_homEquiv_apply {X : C} {Y : D} (f : L.obj X ⟶ Y) :
     (adj.restrictFullyFaithful hiC hiD comm1 comm2).homEquiv X Y f =

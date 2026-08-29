@@ -320,7 +320,19 @@ theorem Prod.continuous_to_fun
   let f₁ : TotalSpace (F₁ × F₂) (E₁ ×ᵇ E₂) -> TotalSpace F₁ E₁ × TotalSpace F₂ E₂ :=
     fun p => ((⟨p.1, p.2.1⟩ : TotalSpace F₁ E₁), (⟨p.1, p.2.2⟩ : TotalSpace F₂ E₂))
   let f₂ : TotalSpace F₁ E₁ × TotalSpace F₂ E₂ -> (B × F₁) × B × F₂ := fun p => ⟨e₁ p.1, e₂ p.2⟩
-  let f₃ : (B × F₁) × B × F₂ ->
+  let f₃ : (B × F₁) × B × F₂ -> B × F₁ × F₂ := fun p => ⟨p.1.1, p.1.2, p.2.2⟩
+  have hf₁ : Continuous f₁ := (Prod.isInducing_diag F₁ E₁ F₂ E₂).continuous
+  have hf₂ : ContinuousOn f₂ (e₁.source ×ˢ e₂.source) :=
+    e₁.toOpenPartialHomeomorph.continuousOn.prodMap e₂.toOpenPartialHomeomorph.continuousOn
+  have hf₃ : Continuous f₃ := by fun_prop
+  refine ((hf₃.comp_continuousOn hf₂).comp hf₁.continuousOn ?_).congr ?_
+  · rw [e₁.source_eq, e₂.source_eq]
+    exact mapsTo_preimage _ _
+  rintro ⟨b, v₁, v₂⟩ ⟨hb₁, _⟩
+  simp only [f₁, f₂, f₃, Prod.toFun', Prod.mk_inj, Function.comp_apply, and_true]
+  rw [e₁.coe_fst]
+  rw [e₁.source_eq]; rw [mem_preimage]
+  exact hb₁
 
 中文:
 定理 积类型.continuous_to_fun
@@ -329,7 +341,19 @@ theorem Prod.continuous_to_fun
   let f₁ : TotalSpace (F₁ × F₂) (E₁ ×ᵇ E₂) -> TotalSpace F₁ E₁ × TotalSpace F₂ E₂ :=
     fun p => ((⟨p.1, p.2.1⟩ : TotalSpace F₁ E₁), (⟨p.1, p.2.2⟩ : TotalSpace F₂ E₂))
   let f₂ : TotalSpace F₁ E₁ × TotalSpace F₂ E₂ -> (B × F₁) × B × F₂ := fun p => ⟨e₁ p.1, e₂ p.2⟩
-  let f₃ : (B × F₁) × B × F₂ ->
+  let f₃ : (B × F₁) × B × F₂ -> B × F₁ × F₂ := fun p => ⟨p.1.1, p.1.2, p.2.2⟩
+  have hf₁ : Continuous f₁ := (Prod.isInducing_diag F₁ E₁ F₂ E₂).continuous
+  have hf₂ : ContinuousOn f₂ (e₁.source ×ˢ e₂.source) :=
+    e₁.toOpenPartialHomeomorph.continuousOn.prodMap e₂.toOpenPartialHomeomorph.continuousOn
+  have hf₃ : Continuous f₃ := by fun_prop
+  refine ((hf₃.comp_continuousOn hf₂).comp hf₁.continuousOn ?_).congr ?_
+  · rw [e₁.source_eq, e₂.source_eq]
+    exact mapsTo_preimage _ _
+  rintro ⟨b, v₁, v₂⟩ ⟨hb₁, _⟩
+  simp only [f₁, f₂, f₃, Prod.toFun', Prod.mk_inj, Function.comp_apply, and_true]
+  rw [e₁.coe_fst]
+  rw [e₁.source_eq]; rw [mem_preimage]
+  exact hb₁
 
 Depends on / 依赖: Continuous, ContinuousOn, Prod.isInducing_diag, TotalSpace, continu, continuous, isInducing_diag, source, toOpenPartialHomeomorph, toOpenPartialHomeomorph.continu
 -/
@@ -475,7 +499,21 @@ definition prod
   map_source' _ h := ⟨h, Set.mem_univ _⟩
   map_target' _ h := h.1
   left_inv' _ := Prod.left_inv
-  right_inv' _ := Prod.right_in
+  right_inv' _ := Prod.right_inv
+  open_source := by
+    convert!
+      (e₁.open_source.prod e₂.open_source).preimage
+        (FiberBundle.Prod.isInducing_diag F₁ E₁ F₂ E₂).continuous
+    ext x
+    simp only [Trivialization.source_eq, mfld_simps]
+  open_target := (e₁.open_baseSet.inter e₂.open_baseSet).prod isOpen_univ
+  continuousOn_toFun := Prod.continuous_to_fun
+  continuousOn_invFun := Prod.continuous_inv_fun
+  baseSet := e₁.baseSet inter e₂.baseSet
+  open_baseSet := e₁.open_baseSet.inter e₂.open_baseSet
+  source_eq := rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
 
 中文:
 定义 乘积
@@ -487,7 +525,21 @@ definition prod
   map_source' _ h := ⟨h, Set.mem_univ _⟩
   map_target' _ h := h.1
   left_inv' _ := Prod.left_inv
-  right_inv' _ := Prod.right_in
+  right_inv' _ := Prod.right_inv
+  open_source := by
+    convert!
+      (e₁.open_source.prod e₂.open_source).preimage
+        (FiberBundle.Prod.isInducing_diag F₁ E₁ F₂ E₂).continuous
+    ext x
+    simp only [Trivialization.source_eq, mfld_simps]
+  open_target := (e₁.open_baseSet.inter e₂.open_baseSet).prod isOpen_univ
+  continuousOn_toFun := Prod.continuous_to_fun
+  continuousOn_invFun := Prod.continuous_inv_fun
+  baseSet := e₁.baseSet inter e₂.baseSet
+  open_baseSet := e₁.open_baseSet.inter e₂.open_baseSet
+  source_eq := rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
 
 Depends on / 依赖: Prod.toFun
 -/
@@ -549,7 +601,13 @@ instance FiberBundle.prod
     exact (totalSpaceMk_isInducing F₁ E₁ b).prodMap (totalSpaceMk_isInducing F₂ E₂ b)
   trivializationAtlas' := { e |
     exists (e₁ : Trivialization F₁ (π F₁ E₁)) (e₂ : Trivialization F₂ (π F₂ E₂))
-      (_ : MemTrivializationAtlas e₁) (_
+      (_ : MemTrivializationAtlas e₁) (_ : MemTrivializationAtlas e₂),
+      e = Trivialization.prod e₁ e₂ }
+  trivializationAt' b := (trivializationAt F₁ E₁ b).prod (trivializationAt F₂ E₂ b)
+  mem_baseSet_trivializationAt' b :=
+    ⟨mem_baseSet_trivializationAt F₁ E₁ b, mem_baseSet_trivializationAt F₂ E₂ b⟩
+  trivialization_mem_atlas' b :=
+    ⟨trivializationAt F₁ E₁ b, trivializationAt F₂ E₂ b, inferInstance, inferInstance, rfl⟩
 
 中文:
 实例 纤维丛.乘积
@@ -559,7 +617,13 @@ instance FiberBundle.prod
     exact (totalSpaceMk_isInducing F₁ E₁ b).prodMap (totalSpaceMk_isInducing F₂ E₂ b)
   trivializationAtlas' := { e |
     exists (e₁ : Trivialization F₁ (π F₁ E₁)) (e₂ : Trivialization F₂ (π F₂ E₂))
-      (_ : MemTrivializationAtlas e₁) (_
+      (_ : MemTrivializationAtlas e₁) (_ : MemTrivializationAtlas e₂),
+      e = Trivialization.prod e₁ e₂ }
+  trivializationAt' b := (trivializationAt F₁ E₁ b).prod (trivializationAt F₂ E₂ b)
+  mem_baseSet_trivializationAt' b :=
+    ⟨mem_baseSet_trivializationAt F₁ E₁ b, mem_baseSet_trivializationAt F₂ E₂ b⟩
+  trivialization_mem_atlas' b :=
+    ⟨trivializationAt F₁ E₁ b, trivializationAt F₂ E₂ b, inferInstance, inferInstance, rfl⟩
 -/
 @[simps] noncomputable instance FiberBundle.prod : FiberBundle (F₁ × F₂) (E₁ ×ᵇ E₂) where
   totalSpaceMk_isInducing' b := by
@@ -767,7 +831,37 @@ definition Bundle.Trivialization.pullback
   target := (f ⁻¹' e.baseSet) ×ˢ univ
   map_source' x h := by
     simp_rw [e.source_eq, mem_preimage, Pullback.lift_proj] at h
-    simp_rw
+    simp_rw [prodMk_mem_set_prod_eq, mem_univ, and_true, mem_preimage, h]
+  map_target' y h := by
+    rw [mem_prod]; rw [mem_preimage] at h
+    simp_rw [e.source_eq, mem_preimage, Pullback.lift_proj, h.1]
+  left_inv' x h := by
+    simp_rw [mem_preimage, e.mem_source, Pullback.lift_proj] at h
+    simp_rw [Pullback.lift, e.symm_apply_apply_mk h]
+  right_inv' x h := by
+    simp_rw [mem_prod, mem_preimage, mem_univ, and_true] at h
+    simp_rw [Pullback.lift_mk, e.apply_mk_symm h]
+  open_source := by
+    simp_rw [e.source_eq, ← preimage_comp]
+    exact e.open_baseSet.preimage ((map_continuous f).comp <| Pullback.continuous_proj F E f)
+  open_target := ((map_continuous f).isOpen_preimage _ e.open_baseSet).prod isOpen_univ
+  open_baseSet := (map_continuous f).isOpen_preimage _ e.open_baseSet
+  continuousOn_toFun :=
+    (Pullback.continuous_proj F E f).continuousOn.prodMk
+      (continuous_snd.comp_continuousOn <|
+        e.continuousOn.comp (Pullback.continuous_lift F E f).continuousOn Subset.rfl)
+  continuousOn_invFun := by
+    simp_rw [(inducing_pullbackTotalSpaceEmbedding F E f).continuousOn_iff, Function.comp_def,
+      pullbackTotalSpaceEmbedding]
+    exact continuousOn_fst.prodMk
+      (e.continuousOn_symm.comp ((map_continuous f).prodMap continuous_id).continuousOn Subset.rfl)
+  source_eq := by
+    rw [e.source_eq]
+    rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
+
+@[simps]
 
 中文:
 定义 Bundle.Trivialization.pullback
@@ -779,7 +873,37 @@ definition Bundle.Trivialization.pullback
   target := (f ⁻¹' e.baseSet) ×ˢ univ
   map_source' x h := by
     simp_rw [e.source_eq, mem_preimage, Pullback.lift_proj] at h
-    simp_rw
+    simp_rw [prodMk_mem_set_prod_eq, mem_univ, and_true, mem_preimage, h]
+  map_target' y h := by
+    rw [mem_prod]; rw [mem_preimage] at h
+    simp_rw [e.source_eq, mem_preimage, Pullback.lift_proj, h.1]
+  left_inv' x h := by
+    simp_rw [mem_preimage, e.mem_source, Pullback.lift_proj] at h
+    simp_rw [Pullback.lift, e.symm_apply_apply_mk h]
+  right_inv' x h := by
+    simp_rw [mem_prod, mem_preimage, mem_univ, and_true] at h
+    simp_rw [Pullback.lift_mk, e.apply_mk_symm h]
+  open_source := by
+    simp_rw [e.source_eq, ← preimage_comp]
+    exact e.open_baseSet.preimage ((map_continuous f).comp <| Pullback.continuous_proj F E f)
+  open_target := ((map_continuous f).isOpen_preimage _ e.open_baseSet).prod isOpen_univ
+  open_baseSet := (map_continuous f).isOpen_preimage _ e.open_baseSet
+  continuousOn_toFun :=
+    (Pullback.continuous_proj F E f).continuousOn.prodMk
+      (continuous_snd.comp_continuousOn <|
+        e.continuousOn.comp (Pullback.continuous_lift F E f).continuousOn Subset.rfl)
+  continuousOn_invFun := by
+    simp_rw [(inducing_pullbackTotalSpaceEmbedding F E f).continuousOn_iff, Function.comp_def,
+      pullbackTotalSpaceEmbedding]
+    exact continuousOn_fst.prodMk
+      (e.continuousOn_symm.comp ((map_continuous f).prodMap continuous_id).continuousOn Subset.rfl)
+  source_eq := by
+    rw [e.source_eq]
+    rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
+
+@[simps]
 
 Depends on / 依赖: Pullback, Pullback.lift, z.proj
 -/
@@ -833,7 +957,9 @@ instance FiberBundle.pullback
       (Pullback.continuous_lift F E f)
   trivializationAtlas' :=
     { ef | exists (e : Trivialization F (π F E)) (_ : MemTrivializationAtlas e), ef = e.pullback f }
-  trivializationAt' x := (trivializationAt F E (f x
+  trivializationAt' x := (trivializationAt F E (f x)).pullback f
+  mem_baseSet_trivializationAt' x := mem_baseSet_trivializationAt F E (f x)
+  trivialization_mem_atlas' x := ⟨trivializationAt F E (f x), inferInstance, rfl⟩
 
 中文:
 实例 纤维丛.pullback
@@ -842,7 +968,9 @@ instance FiberBundle.pullback
       (Pullback.continuous_lift F E f)
   trivializationAtlas' :=
     { ef | exists (e : Trivialization F (π F E)) (_ : MemTrivializationAtlas e), ef = e.pullback f }
-  trivializationAt' x := (trivializationAt F E (f x
+  trivializationAt' x := (trivializationAt F E (f x)).pullback f
+  mem_baseSet_trivializationAt' x := mem_baseSet_trivializationAt F E (f x)
+  trivialization_mem_atlas' x := ⟨trivializationAt F E (f x), inferInstance, rfl⟩
 
 Depends on / 依赖: MemTrivializationAtlas, Pullback, Pullback.continuous_lift, Pullback.continuous_totalSpaceMk, Trivialization, continuous_lift, continuous_totalSpaceMk, e.pullback, mem_baseSet_trivializationAt, of_comp, pullback, totalSpaceMk_isInducing, trivializationAt, trivializationAtlas, trivialization_mem_atlas
 -/

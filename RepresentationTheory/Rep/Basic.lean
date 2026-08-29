@@ -2211,7 +2211,7 @@ instance :
     ⟨Rep.of (X := A.V × B.V) (A.ρ.prod B.ρ), Rep.ofHom (.fst k A.ρ B.ρ), Rep.ofHom (.snd k A.ρ B.ρ),
       Rep.ofHom (.inl k A.ρ B.ρ), Rep.ofHom (.inr k A.ρ B.ρ), by ext1; simp,
 by ext1; simp [zero_hom], by ext1; simp [zero_hom], by ext1; simp⟩ by
-    ext1; simp [R
+    ext1; simp [Rep.add_hom]
 
 中文:
 实例 :
@@ -2220,7 +2220,7 @@ by ext1; simp [zero_hom], by ext1; simp [zero_hom], by ext1; simp⟩ by
     ⟨Rep.of (X := A.V × B.V) (A.ρ.prod B.ρ), Rep.ofHom (.fst k A.ρ B.ρ), Rep.ofHom (.snd k A.ρ B.ρ),
       Rep.ofHom (.inl k A.ρ B.ρ), Rep.ofHom (.inr k A.ρ B.ρ), by ext1; simp,
 by ext1; simp [zero_hom], by ext1; simp [zero_hom], by ext1; simp⟩ by
-    ext1; simp [R
+    ext1; simp [Rep.add_hom]
 
 Depends on / 依赖: Limits, Limits.hasBinaryBiproduct_of_total, hasBinaryBiproduct_of_total
 -/
@@ -2622,7 +2622,14 @@ instance :
   tensorHom f g := ofHom (f.hom.tensor g.hom)
   associator X Y Z := Rep.mkIso (assoc X.ρ Y.ρ Z.ρ)
   leftUnitor X := Rep.mkIso (lid k X.ρ)
-  rightUni
+  rightUnitor X := Rep.mkIso (rid k X.ρ)
+  associator_naturality _ _ _ := by ext; simp
+  leftUnitor_naturality _ := by ext; simp [trivial_V]
+  rightUnitor_naturality _ := by ext; simp [trivial_V]
+  pentagon _ _ _ _ := by ext; simp
+  triangle X Y := by ext; simp
+
+@[simp]
 
 中文:
 实例 :
@@ -2634,7 +2641,14 @@ instance :
   tensorHom f g := ofHom (f.hom.tensor g.hom)
   associator X Y Z := Rep.mkIso (assoc X.ρ Y.ρ Z.ρ)
   leftUnitor X := Rep.mkIso (lid k X.ρ)
-  rightUni
+  rightUnitor X := Rep.mkIso (rid k X.ρ)
+  associator_naturality _ _ _ := by ext; simp
+  leftUnitor_naturality _ := by ext; simp [trivial_V]
+  rightUnitor_naturality _ := by ext; simp [trivial_V]
+  pentagon _ _ _ _ := by ext; simp
+  triangle X Y := by ext; simp
+
+@[simp]
 -/
 instance : MonoidalCategory (Rep.{u} k G) where
   tensorObj X Y := of (X.ρ.tprod Y.ρ)
@@ -3026,7 +3040,14 @@ instance :
   hexagon_forward _ _ _ := by
     ext : 2
 exact TensorProduct.ext_threefold fun _ _ _ => by simp
-  hexago
+  hexagon_reverse X Y Z := by
+    ext : 2
+    simp only [tensor_V, tensor_ρ, hom_comp, hom_inv_associator, mkIso_hom_hom, comp_toLinearMap,
+      assoc_symm_toLinearMap, toLinearMap_comm, LinearEquiv.comp_coe, hom_whiskerRight,
+      hom_whiskerLeft, toLinearMap_rTensor, toLinearMap_lTensor]
+    ext; simp
+
+@[simp]
 
 中文:
 实例 :
@@ -3037,7 +3058,14 @@ exact TensorProduct.ext_threefold fun _ _ _ => by simp
   hexagon_forward _ _ _ := by
     ext : 2
 exact TensorProduct.ext_threefold fun _ _ _ => by simp
-  hexago
+  hexagon_reverse X Y Z := by
+    ext : 2
+    simp only [tensor_V, tensor_ρ, hom_comp, hom_inv_associator, mkIso_hom_hom, comp_toLinearMap,
+      assoc_symm_toLinearMap, toLinearMap_comm, LinearEquiv.comp_coe, hom_whiskerRight,
+      hom_whiskerLeft, toLinearMap_rTensor, toLinearMap_lTensor]
+    ext; simp
+
+@[simp]
 
 Depends on / 依赖: Rep.mkIso, Representation, Representation.TensorProduct.comm, TensorProduct
 -/
@@ -3171,7 +3199,13 @@ definition tensorHomEquiv
     simp only [tensor_V, tensor_ρ, LinearMap.coe_comp, Function.comp_apply, LinearMap.flip_apply,
       TensorProduct.curry_apply, Representation.IntertwiningMap.toLinearMap_apply,
       Representation.linHom_apply]
-   
+    have := by simpa using (hom_comm_apply f g (A.ρ g⁻¹ y otimesₜ[k] x)).symm
+    simp [this]⟩
+  invFun f := Rep.ofHom ⟨TensorProduct.uncurry (.id k) _ _ _
+    f.hom.toLinearMap.flip, fun g => TensorProduct.ext' fun x y => by
+    simpa using LinearMap.ext_iff.1 (hom_comm_apply f g y) (A.ρ g x)⟩
+left_inv _ := Rep.Hom.ext Representation.IntertwiningMap.ext
+    TensorProduct.ext' fun _ _ => rfl
 
 中文:
 定义 tensorHomEquiv
@@ -3181,7 +3215,13 @@ definition tensorHomEquiv
     simp only [tensor_V, tensor_ρ, LinearMap.coe_comp, Function.comp_apply, LinearMap.flip_apply,
       TensorProduct.curry_apply, Representation.IntertwiningMap.toLinearMap_apply,
       Representation.linHom_apply]
-   
+    have := by simpa using (hom_comm_apply f g (A.ρ g⁻¹ y otimesₜ[k] x)).symm
+    simp [this]⟩
+  invFun f := Rep.ofHom ⟨TensorProduct.uncurry (.id k) _ _ _
+    f.hom.toLinearMap.flip, fun g => TensorProduct.ext' fun x y => by
+    simpa using LinearMap.ext_iff.1 (hom_comm_apply f g y) (A.ρ g x)⟩
+left_inv _ := Rep.Hom.ext Representation.IntertwiningMap.ext
+    TensorProduct.ext' fun _ _ => rfl
 
 Depends on / 依赖: Function, Function.comp_apply, IntertwiningMap, LinearMap, LinearMap.coe_comp, LinearMap.flip_apply, Rep.ofHom, Representation, Representation.IntertwiningMap.toLinearMap_apply, Representation.linHom_apply, TensorProduct, TensorProduct.curry, TensorProduct.curry_apply, TensorProduct.ext, TensorProduct.uncurry, coe_comp, comp_apply, curry_apply, f.hom.toLinearMap, f.hom.toLinearMap.flip
 -/
@@ -3213,7 +3253,10 @@ instance :
 homEquiv_naturality_left_symm := fun _ _ => Rep.hom_ext
 Representation.IntertwiningMap.ext TensorProduct.ext' fun _ _ => rfl
 homEquiv_naturality_right _ _ := Rep.hom_ext
-Representation.Intertwin
+Representation.IntertwiningMap.ext
+            LinearMap.ext fun _ => LinearMap.ext fun _ => rfl }) }
+
+@[simp]
 
 中文:
 实例 :
@@ -3224,7 +3267,10 @@ Representation.Intertwin
 homEquiv_naturality_left_symm := fun _ _ => Rep.hom_ext
 Representation.IntertwiningMap.ext TensorProduct.ext' fun _ _ => rfl
 homEquiv_naturality_right _ _ := Rep.hom_ext
-Representation.Intertwin
+Representation.IntertwiningMap.ext
+            LinearMap.ext fun _ => LinearMap.ext fun _ => rfl }) }
+
+@[simp]
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, IntertwiningMap, LinearMap, LinearMap.ext, Rep.hom_ext, Rep.ihom, Rep.tensorHomEquiv, Representation, Representation.IntertwiningMap.ext, TensorProduct, TensorProduct.ext, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, hom_ext, mkOfHomEquiv, rightAdj, tensorHomEquiv
 -/
@@ -3824,7 +3870,7 @@ instance :
 δ_natural_right Z f := hom_ext lTensor_comp_δ Z f
 oplax_associativity X Y Z := hom_ext by simpa using assoc_comp_δ X Y Z (k := k)
 oplax_left_unitality X := hom_ext leftUnitor_δ X
-oplax_right_unitality X := hom_ex
+oplax_right_unitality X := hom_ext rightUnitor_δ X
 
 中文:
 实例 :
@@ -3835,7 +3881,7 @@ oplax_right_unitality X := hom_ex
 δ_natural_right Z f := hom_ext lTensor_comp_δ Z f
 oplax_associativity X Y Z := hom_ext by simpa using assoc_comp_δ X Y Z (k := k)
 oplax_left_unitality X := hom_ext leftUnitor_δ X
-oplax_right_unitality X := hom_ex
+oplax_right_unitality X := hom_ext rightUnitor_δ X
 -/
 instance : (linearization k G).OplaxMonoidal where
   η := ofHom (η k G)

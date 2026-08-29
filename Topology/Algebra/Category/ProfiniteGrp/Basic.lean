@@ -1083,7 +1083,12 @@ abbreviation limitCone
       map_one' := rfl
       map_mul' := fun x y => rfl
       continuous_toFun := by
-        exact (continuous_apply j).comp (continuous_iff_le_induced.mpr fun U a =
+        exact (continuous_apply j).comp (continuous_iff_le_induced.mpr fun U a => a) }⟩
+    naturality := fun i j f => by
+      simp only [Functor.const_obj_obj, Functor.comp_obj,
+        Functor.const_obj_map, Category.id_comp, Functor.comp_map]
+      congr
+      exact funext fun x => (x.2 f).symm }
 
 中文:
 缩写 limitCone
@@ -1095,7 +1100,12 @@ abbreviation limitCone
       map_one' := rfl
       map_mul' := fun x y => rfl
       continuous_toFun := by
-        exact (continuous_apply j).comp (continuous_iff_le_induced.mpr fun U a =
+        exact (continuous_apply j).comp (continuous_iff_le_induced.mpr fun U a => a) }⟩
+    naturality := fun i j f => by
+      simp only [Functor.const_obj_obj, Functor.comp_obj,
+        Functor.const_obj_map, Category.id_comp, Functor.comp_map]
+      congr
+      exact funext fun x => (x.2 f).symm }
 
 Depends on / 依赖: Profinite, Profinite.limitCone, ProfiniteGrp, limitCone, ofProfinite
 -/
@@ -1126,7 +1136,16 @@ definition limitConeIsLimit
     { ((Profinite.limitConeIsLimit (F ⋙ (forget₂ ProfiniteGrp Profinite))).lift
         ((forget₂ ProfiniteGrp Profinite).mapCone cone)).hom.hom with
       map_one' := Subtype.ext (funext fun j => map_one (cone.π.app j).hom)
-      -- TODO: investigate whether it's possible to set up `ext` lemm
+      -- TODO: investigate whether it's possible to set up `ext` lemmas for the `TopCat`-related
+      -- categories so that `by ext j; exact map_one (cone.π.app j)` works here, similarly below.
+      map_mul' := fun _ _ => Subtype.ext (funext fun j => map_mul (cone.π.app j).hom _ _) }
+  uniq cone m h := by
+    apply (forget₂ ProfiniteGrp Profinite).map_injective
+    simpa using! (Profinite.limitConeIsLimit (F ⋙ (forget₂ ProfiniteGrp Profinite))).uniq
+      ((forget₂ ProfiniteGrp Profinite).mapCone cone) ((forget₂ ProfiniteGrp Profinite).map m)
+      (fun j => congrArg (forget₂ ProfiniteGrp Profinite).map (h j))
+
+@[to_additive]
 
 中文:
 定义 limitConeIsLimit
@@ -1135,7 +1154,16 @@ definition limitConeIsLimit
     { ((Profinite.limitConeIsLimit (F ⋙ (forget₂ ProfiniteGrp Profinite))).lift
         ((forget₂ ProfiniteGrp Profinite).mapCone cone)).hom.hom with
       map_one' := Subtype.ext (funext fun j => map_one (cone.π.app j).hom)
-      -- TODO: investigate whether it's possible to set up `ext` lemm
+      -- TODO: investigate whether it's possible to set up `ext` lemmas for the `TopCat`-related
+      -- categories so that `by ext j; exact map_one (cone.π.app j)` works here, similarly below.
+      map_mul' := fun _ _ => Subtype.ext (funext fun j => map_mul (cone.π.app j).hom _ _) }
+  uniq cone m h := by
+    apply (forget₂ ProfiniteGrp Profinite).map_injective
+    simpa using! (Profinite.limitConeIsLimit (F ⋙ (forget₂ ProfiniteGrp Profinite))).uniq
+      ((forget₂ ProfiniteGrp Profinite).mapCone cone) ((forget₂ ProfiniteGrp Profinite).map m)
+      (fun j => congrArg (forget₂ ProfiniteGrp Profinite).map (h j))
+
+@[to_additive]
 -/
 def limitConeIsLimit : Limits.IsLimit (limitCone F) where
   lift cone := ofHom

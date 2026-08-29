@@ -53,7 +53,9 @@ smul_def' c x := unop_injective by
     simp only [unop_smul, RingHom.toOpposite_apply, Function.comp_apply, unop_mul,
       Algebra.smul_def, Algebra.commutes, unop_op]
   commutes' r := MulOpposite.rec' fun x => by
-    simp only [RingHom.to
+    simp only [RingHom.toOpposite_apply, Function.comp_apply, ← op_mul, Algebra.commutes]
+
+@[simp]
 
 中文:
 实例 instAlgebra
@@ -63,7 +65,9 @@ smul_def' c x := unop_injective by
     simp only [unop_smul, RingHom.toOpposite_apply, Function.comp_apply, unop_mul,
       Algebra.smul_def, Algebra.commutes, unop_op]
   commutes' r := MulOpposite.rec' fun x => by
-    simp only [RingHom.to
+    simp only [RingHom.toOpposite_apply, Function.comp_apply, ← op_mul, Algebra.commutes]
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.commutes, algebraMap, commutes, toOpposite
 -/

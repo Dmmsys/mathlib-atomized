@@ -400,7 +400,11 @@ theorem mem_divisorsAntidiagonal
     Option.ite_none_right_eq_some, Option.some.injEq, Prod.ext_iff, and_left_comm, exists_eq_left]
   constructor
   · rintro ⟨han, ⟨ha, han'⟩, rfl⟩
-    simp [Nat.mul_div_eq_iff_d
+    simp [Nat.mul_div_eq_iff_dvd, han]
+    lia
+  · rintro ⟨rfl, hab⟩
+    rw [mul_ne_zero_iff] at hab
+    simpa [hab.1, hab.2] using Nat.le_mul_of_pos_right _ hab.2.bot_lt
 
 中文:
 定理 mem_divisorsAntidiagonal
@@ -411,7 +415,11 @@ theorem mem_divisorsAntidiagonal
     Option.ite_none_right_eq_some, Option.some.injEq, Prod.ext_iff, and_left_comm, exists_eq_left]
   constructor
   · rintro ⟨han, ⟨ha, han'⟩, rfl⟩
-    simp [Nat.mul_div_eq_iff_d
+    simp [Nat.mul_div_eq_iff_dvd, han]
+    lia
+  · rintro ⟨rfl, hab⟩
+    rw [mul_ne_zero_iff] at hab
+    simpa [hab.1, hab.2] using Nat.le_mul_of_pos_right _ hab.2.bot_lt
 
 Depends on / 依赖: Nat.le_mul_of_pos_right, Nat.mul_div_eq_iff_dvd, Option.ite_none_right_eq_some, Option.some.injEq, Prod.ext_iff, and_left_comm, bot_lt, divisorsAntidiagonal, exists_eq_left, ext_iff, ite_none_right_eq_some, le_mul_of_pos_right, mem_Icc, mem_filterMap, mul_div_eq_iff_dvd, mul_ne_zero_iff, one_le_iff_ne_zero
 -/
@@ -526,7 +534,7 @@ lemma pairwise_divisorsAntidiagonalList_snd
   simp only [Option.ite_none_right_eq_some, Option.some.injEq, gt_iff_lt,
     and_imp, Prod.forall, Prod.mk.injEq]
   rintro a b hab _ _ ha rfl rfl _ _ hb rfl rfl
-  rwa [Nat.div_l
+  rwa [Nat.div_lt_div_left hn ⟨_, hb.symm⟩ ⟨_, ha.symm⟩]
 
 中文:
 引理 pairwise_divisorsAntidiagonalList_snd
@@ -538,7 +546,7 @@ lemma pairwise_divisorsAntidiagonalList_snd
   simp only [Option.ite_none_right_eq_some, Option.some.injEq, gt_iff_lt,
     and_imp, Prod.forall, Prod.mk.injEq]
   rintro a b hab _ _ ha rfl rfl _ _ hb rfl rfl
-  rwa [Nat.div_l
+  rwa [Nat.div_lt_div_left hn ⟨_, hb.symm⟩ ⟨_, ha.symm⟩]
 
 Depends on / 依赖: List.sortedLT_range, Nat.div_lt_div_left, Nat.one_ne_zero, Option.ite_none_right_eq_some, Option.some.injEq, Prod.forall, Prod.mk.injEq, and_imp, div_lt_div_left, eq_or_ne, filterMap, gt_iff_lt, ha.symm, hb.symm, ite_none_right_eq_some, one_ne_zero, pairwise, pairwise.filterMap, sortedLT_range
 -/
@@ -691,7 +699,8 @@ lemma reverse_divisorsAntidiagonalList
   have : Std.Asymm (α := Nat × Nat) (·.snd < ·.snd) := ⟨fun _ _ => lt_asymm⟩
   refine List.Perm.eq_of_pairwise' pairwise_divisorsAntidiagonalList_snd.reverse
     (pairwise_divisorsAntidiagonalList_fst.map _ fun _ _ => id) ?_
-  simp [List.reverse_perm', List.perm_ext_iff_of_nodup nodup_divisorsAnt
+  simp [List.reverse_perm', List.perm_ext_iff_of_nodup nodup_divisorsAntidiagonalList
+    (nodup_divisorsAntidiagonalList.map Prod.swap_injective), mul_comm]
 
 中文:
 引理 reverse_divisorsAntidiagonalList
@@ -700,7 +709,8 @@ lemma reverse_divisorsAntidiagonalList
   have : Std.Asymm (α := Nat × Nat) (·.snd < ·.snd) := ⟨fun _ _ => lt_asymm⟩
   refine List.Perm.eq_of_pairwise' pairwise_divisorsAntidiagonalList_snd.reverse
     (pairwise_divisorsAntidiagonalList_fst.map _ fun _ _ => id) ?_
-  simp [List.reverse_perm', List.perm_ext_iff_of_nodup nodup_divisorsAnt
+  simp [List.reverse_perm', List.perm_ext_iff_of_nodup nodup_divisorsAntidiagonalList
+    (nodup_divisorsAntidiagonalList.map Prod.swap_injective), mul_comm]
 
 Depends on / 依赖: List.Perm.eq_of_pairwise, List.perm_ext_iff_of_nodup, List.reverse_perm, Prod.swap_injective, Std.Asymm, eq_of_pairwise, lt_asymm, mul_comm, nodup_divisorsAntidiagonalList, nodup_divisorsAntidiagonalList.map, pairwise_divisorsAntidiagonalList_fst, pairwise_divisorsAntidiagonalList_fst.map, pairwise_divisorsAntidiagonalList_snd, pairwise_divisorsAntidiagonalList_snd.reverse, perm_ext_iff_of_nodup, reverse, reverse_perm, swap_injective
 -/
@@ -1576,7 +1586,8 @@ theorem map_div_right_divisors
   · rintro ⟨⟨⟨k, rfl⟩, hn⟩, rfl⟩
     rw [Nat.mul_div_cancel_left _ (left_ne_zero_of_mul hn).bot_lt]
     exact ⟨rfl, hn⟩
-  · rintr
+  · rintro ⟨rfl, hn⟩
+    exact ⟨⟨dvd_mul_right _ _, hn⟩, Nat.mul_div_cancel_left _ (left_ne_zero_of_mul hn).bot_lt⟩
 
 中文:
 定理 map_div_right_divisors
@@ -1588,7 +1599,8 @@ theorem map_div_right_divisors
   · rintro ⟨⟨⟨k, rfl⟩, hn⟩, rfl⟩
     rw [Nat.mul_div_cancel_left _ (left_ne_zero_of_mul hn).bot_lt]
     exact ⟨rfl, hn⟩
-  · rintr
+  · rintro ⟨rfl, hn⟩
+    exact ⟨⟨dvd_mul_right _ _, hn⟩, Nat.mul_div_cancel_left _ (left_ne_zero_of_mul hn).bot_lt⟩
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, Nat.mul_div_cancel_left, Prod.ext_iff, and_left_comm, bot_lt, coeFn_mk, dvd_mul_right, exists_eq_left, ext_iff, left_ne_zero_of_mul, mem_divisors, mem_divisorsAntidiagonal, mem_map, mul_div_cancel_left
 -/
@@ -1883,7 +1895,12 @@ theorem eq_properDivisors_of_subset_of_sum_eq_sum
     rw [← sdiff_eq_empty_iff_subset]
     contrapose! h
     apply ne_of_lt
-    rw [← zero_add (∑ x in s]; rw [x)]; rw [← add_assoc]; rw [add
+    rw [← zero_add (∑ x in s]; rw [x)]; rw [← add_assoc]; rw [add_zero]
+    gcongr
+    have hlt :=
+      sum_lt_sum_of_nonempty h fun x hx => pos_of_mem_properDivisors (sdiff_subset hx)
+    simp only [sum_const_zero] at hlt
+    apply hlt
 
 中文:
 定理 eq_properDivisors_of_subset_of_sum_eq_sum
@@ -1899,7 +1916,12 @@ theorem eq_properDivisors_of_subset_of_sum_eq_sum
     rw [← sdiff_eq_empty_iff_subset]
     contrapose! h
     apply ne_of_lt
-    rw [← zero_add (∑ x in s]; rw [x)]; rw [← add_assoc]; rw [add
+    rw [← zero_add (∑ x in s]; rw [x)]; rw [← add_assoc]; rw [add_zero]
+    gcongr
+    have hlt :=
+      sum_lt_sum_of_nonempty h fun x hx => pos_of_mem_properDivisors (sdiff_subset hx)
+    simp only [sum_const_zero] at hlt
+    apply hlt
 
 Depends on / 依赖: Subset, Subset.antisymm, add_assoc, add_zero, antisymm, classical, contrapose, ne_of_lt, pos_of_mem_properDivisors, properDivisors_zero, sdiff_eq_empty_iff_subset, sdiff_subset, subset_empty, sum_const_zero, sum_lt_sum_of_nonempty, sum_sdiff, zero_add
 -/
@@ -1938,7 +1960,11 @@ theorem sum_properDivisors_dvd
       have hlt : ∑ x in n.succ.succ.properDivisors, x < n.succ.succ :=
         lt_of_le_of_ne (Nat.le_of_dvd (Nat.succ_pos _) h) ne_n
       symm
-      rw [← mem_singleton]; rw [
+      rw [← mem_singleton]; rw [eq_properDivisors_of_subset_of_sum_eq_sum (singleton_subset_iff.2
+        (mem_properDivisors.2 ⟨h]; rw [hlt⟩)) (sum_singleton _ _)]; rw [mem_properDivisors]
+      exact ⟨one_dvd _, Nat.succ_lt_succ (Nat.succ_pos _)⟩
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 sum_properDivisors_dvd
@@ -1953,7 +1979,11 @@ theorem sum_properDivisors_dvd
       have hlt : ∑ x in n.succ.succ.properDivisors, x < n.succ.succ :=
         lt_of_le_of_ne (Nat.le_of_dvd (Nat.succ_pos _) h) ne_n
       symm
-      rw [← mem_singleton]; rw [
+      rw [← mem_singleton]; rw [eq_properDivisors_of_subset_of_sum_eq_sum (singleton_subset_iff.2
+        (mem_properDivisors.2 ⟨h]; rw [hlt⟩)) (sum_singleton _ _)]; rw [mem_properDivisors]
+      exact ⟨one_dvd _, Nat.succ_lt_succ (Nat.succ_pos _)⟩
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Nat.le_of_dvd, Nat.succ_lt_succ, Nat.succ_pos, eq_properDivisors_of_subset_of_sum_eq_sum, le_of_dvd, lt_of_le_of_ne, mem_properDivisors, mem_singleton, n.succ.succ, n.succ.succ.properDivisors, ne_n, one_dvd, or_iff_not_imp_right, properDivisors, singleton_subset_iff, succ_lt_succ, succ_pos, sum_singleton
 -/
@@ -2064,7 +2094,10 @@ theorem sum_properDivisors_eq_one_iff_prime
       refine ⟨fun h => ?_, fun h => h.symm ▸ sum_singleton _ _⟩
       rw [@eq_comm (Finset Nat) _ _]
       apply
-        eq_properDivisors_of_subse
+        eq_properDivisors_of_subset_of_sum_eq_sum
+          (singleton_subset_iff.2
+            (one_mem_properDivisors_iff_one_lt.2 (succ_lt_succ (Nat.succ_pos _))))
+          ((sum_singleton _ _).trans h.symm)
 
 中文:
 定理 sum_properDivisors_eq_one_iff_prime
@@ -2078,7 +2111,10 @@ theorem sum_properDivisors_eq_one_iff_prime
       refine ⟨fun h => ?_, fun h => h.symm ▸ sum_singleton _ _⟩
       rw [@eq_comm (Finset Nat) _ _]
       apply
-        eq_properDivisors_of_subse
+        eq_properDivisors_of_subset_of_sum_eq_sum
+          (singleton_subset_iff.2
+            (one_mem_properDivisors_iff_one_lt.2 (succ_lt_succ (Nat.succ_pos _))))
+          ((sum_singleton _ _).trans h.symm)
 
 Depends on / 依赖: BoundedLatticeHomClass, BoundedLatticeHomClass.toBoundedOrderHomClass, Finset, Lattice, Nat.not_prime_one, Nat.not_prime_zero, Nat.succ_pos, eq_comm, eq_properDivisors_of_subset_of_sum_eq_sum, h.symm, not_prime_one, not_prime_zero, one_mem_properDivisors_iff_one_lt, properDivisors_eq_singleton_one_iff_prime, singleton_subset_iff, succ_lt_succ, succ_pos, sum_singleton, toBoundedOrderHomClass
 -/
@@ -2424,7 +2460,8 @@ lemma divisorsAntidiagonal_eq_prod_filter_of_le
     grw [← hn]
     simp (disch := lia) only [le_mul_iff_one_le_right, le_mul_iff_one_le_left, and_true]
     lia
-  · intro ⟨⟨hn1, hn2⟩, h
+  · intro ⟨⟨hn1, hn2⟩, hn3⟩
+    exact ⟨hn3, n_ne_zero⟩
 
 中文:
 引理 divisorsAntidiagonal_eq_prod_filter_of_le
@@ -2438,7 +2475,8 @@ lemma divisorsAntidiagonal_eq_prod_filter_of_le
     grw [← hn]
     simp (disch := lia) only [le_mul_iff_one_le_right, le_mul_iff_one_le_left, and_true]
     lia
-  · intro ⟨⟨hn1, hn2⟩, h
+  · intro ⟨⟨hn1, hn2⟩, hn3⟩
+    exact ⟨hn3, n_ne_zero⟩
 
 Depends on / 依赖: Finset, Finset.mem_Ioc, Finset.mem_filter, Finset.mem_product, Nat.mem_divisorsAntidiagonal, and_true, le_mul_iff_one_le_left, le_mul_iff_one_le_right, mem_Ioc, mem_divisorsAntidiagonal, mem_filter, mem_product, n_ne_zero, ne_eq
 -/
@@ -2530,7 +2568,8 @@ definition divisorsAntidiag
       simp +contextual [s, disjoint_left, eq_comm]
   | negSucc n =>
     let s : Finset (Nat × Nat) := (n + 1).divisorsAntidiagonal
-(s.map <| .prodMap natCast negNatCast).disjUnion (s.map
+(s.map <| .prodMap natCast negNatCast).disjUnion (s.map <| .prodMap negNatCast natCast) by
+      simp +contextual [s, disjoint_left, eq_comm, forall_comm (α := _ * _ = _)]
 
 中文:
 定义 divisorsAntidiag
@@ -2540,7 +2579,8 @@ definition divisorsAntidiag
       simp +contextual [s, disjoint_left, eq_comm]
   | negSucc n =>
     let s : Finset (Nat × Nat) := (n + 1).divisorsAntidiagonal
-(s.map <| .prodMap natCast negNatCast).disjUnion (s.map
+(s.map <| .prodMap natCast negNatCast).disjUnion (s.map <| .prodMap negNatCast natCast) by
+      simp +contextual [s, disjoint_left, eq_comm, forall_comm (α := _ * _ = _)]
 
 Depends on / 依赖: divisorsAntidiagonal, n.divisorsAntidiagonal
 -/

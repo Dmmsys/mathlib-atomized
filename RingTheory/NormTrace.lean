@@ -29,7 +29,8 @@ lemma Algebra.norm_one_add_smul
   have : Fintype ι := inferInstance
   clear_value ι b
   simp_rw [Algebra.norm_eq_matrix_det b, Algebra.trace_eq_matrix_trace b]
-  simp only [map_add, map_one, map_smul, Matrix.det_one_add_
+  simp only [map_add, map_one, map_smul, Matrix.det_one_add_smul a]
+  exact ⟨_, rfl⟩
 
 中文:
 引理 代数.norm_one_add_smul
@@ -41,7 +42,8 @@ lemma Algebra.norm_one_add_smul
   have : Fintype ι := inferInstance
   clear_value ι b
   simp_rw [Algebra.norm_eq_matrix_det b, Algebra.trace_eq_matrix_trace b]
-  simp only [map_add, map_one, map_smul, Matrix.det_one_add_
+  simp only [map_add, map_one, map_smul, Matrix.det_one_add_smul a]
+  exact ⟨_, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.norm_eq_matrix_det, Algebra.trace_eq_matrix_trace, ChooseBasisIndex, Fintype, Matrix, Matrix.det_one_add_smul, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, chooseBasis, classical, clear_value, det_one_add_smul, map_add, map_one, map_smul, norm_eq_matrix_det, simp_rw, trace_eq_matrix_trace
 -/

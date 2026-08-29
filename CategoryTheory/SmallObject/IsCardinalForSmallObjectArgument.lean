@@ -358,7 +358,10 @@ lemma succStruct_prop_le_propArrow
   constructor
   · nth_rw 1 [← I.ofHoms_homFamily]
     apply pushouts_mk _ (functorObj_isPushout I.homFamily (F.obj f).hom)
-    exact coproducts_of_small _ _ (co
+    exact coproducts_of_small _ _ (colimitsOfShape_colimMap _ (by rintro ⟨j⟩; constructor))
+  · rw [MorphismProperty.isomorphisms.iff]
+    dsimp [succStruct]
+    infer_instance
 
 中文:
 引理 succStruct_prop_le_propArrow
@@ -371,7 +374,10 @@ lemma succStruct_prop_le_propArrow
   constructor
   · nth_rw 1 [← I.ofHoms_homFamily]
     apply pushouts_mk _ (functorObj_isPushout I.homFamily (F.obj f).hom)
-    exact coproducts_of_small _ _ (co
+    exact coproducts_of_small _ _ (colimitsOfShape_colimMap _ (by rintro ⟨j⟩; constructor))
+  · rw [MorphismProperty.isomorphisms.iff]
+    dsimp [succStruct]
+    infer_instance
 
 Depends on / 依赖: F.obj, I.homFamily, I.ofHoms_homFamily, MorphismProperty, MorphismProperty.isomorphisms.iff, colimitsOfShape_colimMap, coproducts_of_small, functorObj_isPushout, hasColimitsOfShape_discrete, hasPushouts, homFamily, infer_instance, isSmall, isomorphisms, locallySmall, nth_rw, ofHoms_homFamily, pushouts_mk, succStruct
 -/
@@ -506,7 +512,7 @@ definition transfiniteCompositionOfShapeιIterationAppRight
   let h := transfiniteCompositionOfShapeSuccStructPropιIteration I κ
   { toTransfiniteCompositionOfShape :=
       h.toTransfiniteCompositionOfShape.map ((evaluation _ _).obj f ⋙ Arrow.rightFunc)
-    map_mem j hj := ((succStruct_prop_le_propArrow I κ _ (h.map_mem j hj
+    map_mem j hj := ((succStruct_prop_le_propArrow I κ _ (h.map_mem j hj)) f).2 }
 
 中文:
 定义 transfiniteCompositionOfShapeιIterationAppRight
@@ -515,7 +521,7 @@ definition transfiniteCompositionOfShapeιIterationAppRight
   let h := transfiniteCompositionOfShapeSuccStructPropιIteration I κ
   { toTransfiniteCompositionOfShape :=
       h.toTransfiniteCompositionOfShape.map ((evaluation _ _).obj f ⋙ Arrow.rightFunc)
-    map_mem j hj := ((succStruct_prop_le_propArrow I κ _ (h.map_mem j hj
+    map_mem j hj := ((succStruct_prop_le_propArrow I κ _ (h.map_mem j hj)) f).2 }
 
 Depends on / 依赖: Arrow.rightFunc, evaluation, h.map_mem, h.toTransfiniteCompositionOfShape.map, hasIterationOfShape, map_mem, rightFunc, succStruct_prop_le_propArrow, toTransfiniteCompositionOfShape
 -/
@@ -643,7 +649,17 @@ definition iterationFunctorMapSuccAppArrowIso
     Arrow.mk (((iterationFunctor I κ).map (homOfLE (Order.le_succ j))).app f) ≅
       (ε I.homFamily).app (((iterationFunctor I κ).obj j).obj f) :=
   have := hasIterationOfShape I κ
-  have := Cardinal.noMaxOrder (Fact.elim inferInstance : κ
+  have := Cardinal.noMaxOrder (Fact.elim inferInstance : κ.IsRegular).aleph0_le
+  Arrow.isoMk (Iso.refl _)
+    (((evaluation _ _).obj f).mapIso
+      ((succStruct I κ).iterationFunctorObjSuccIso j (not_isMax j))) (by
+    have := NatTrans.congr_app ((succStruct I κ).iterationFunctor_map_succ j (not_isMax j)) f
+    dsimp at this
+    dsimp [iterationFunctor]
+    rw [id_comp]; rw [this]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [comp_id]
+    dsimp [succStruct])
+
+@[simp]
 
 中文:
 定义 iterationFunctorMapSuccAppArrowIso
@@ -653,7 +669,17 @@ definition iterationFunctorMapSuccAppArrowIso
     Arrow.mk (((iterationFunctor I κ).map (homOfLE (Order.le_succ j))).app f) ≅
       (ε I.homFamily).app (((iterationFunctor I κ).obj j).obj f) :=
   have := hasIterationOfShape I κ
-  have := Cardinal.noMaxOrder (Fact.elim inferInstance : κ
+  have := Cardinal.noMaxOrder (Fact.elim inferInstance : κ.IsRegular).aleph0_le
+  Arrow.isoMk (Iso.refl _)
+    (((evaluation _ _).obj f).mapIso
+      ((succStruct I κ).iterationFunctorObjSuccIso j (not_isMax j))) (by
+    have := NatTrans.congr_app ((succStruct I κ).iterationFunctor_map_succ j (not_isMax j)) f
+    dsimp at this
+    dsimp [iterationFunctor]
+    rw [id_comp]; rw [this]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [comp_id]
+    dsimp [succStruct])
+
+@[simp]
 
 Depends on / 依赖: hasColimitsOfShape_discrete
 -/
@@ -827,7 +853,7 @@ definition relativeCellComplexιObj
   { toTransfiniteCompositionOfShape :=
       h.toTransfiniteCompositionOfShape.map ((evaluation _ _).obj f ⋙ Arrow.leftFunc)
     attachCells j hj :=
-      attachCellsOfSuccStructProp I κ
+      attachCellsOfSuccStructProp I κ (h.map_mem j hj) f }
 
 中文:
 定义 relativeCellComplexιObj
@@ -839,7 +865,7 @@ definition relativeCellComplexιObj
   { toTransfiniteCompositionOfShape :=
       h.toTransfiniteCompositionOfShape.map ((evaluation _ _).obj f ⋙ Arrow.leftFunc)
     attachCells j hj :=
-      attachCellsOfSuccStructProp I κ
+      attachCellsOfSuccStructProp I κ (h.map_mem j hj) f }
 
 Depends on / 依赖: Arrow.leftFunc, attachCells, attachCellsOfSuccStructProp, evaluation, h.map_mem, h.toTransfiniteCompositionOfShape.map, hasIterationOfShape, leftFunc, map_mem, toTransfiniteCompositionOfShape
 -/
@@ -943,7 +969,7 @@ lemma ιFunctorObj_eq
     ιFunctorObj I.homFamily (((iterationFunctor I κ).obj j).obj (Arrow.mk f)).hom =
       (relativeCellComplexιObj I κ f).F.map (homOfLE (Order.le_succ j)) ≫
         (relativeCellComplexιObjFObjSuccIso I κ f j).hom := by
-  simpa using! Arro
+  simpa using! Arrow.leftFunc.congr_map (iterationFunctorMapSuccAppArrowIso I κ f j).hom.w
 
 中文:
 引理 ιFunctorObj_eq
@@ -953,7 +979,7 @@ lemma ιFunctorObj_eq
     ιFunctorObj I.homFamily (((iterationFunctor I κ).obj j).obj (Arrow.mk f)).hom =
       (relativeCellComplexιObj I κ f).F.map (homOfLE (Order.le_succ j)) ≫
         (relativeCellComplexιObjFObjSuccIso I κ f j).hom := by
-  simpa using! Arro
+  simpa using! Arrow.leftFunc.congr_map (iterationFunctorMapSuccAppArrowIso I κ f j).hom.w
 
 Depends on / 依赖: hasColimitsOfShape_discrete
 -/
@@ -978,7 +1004,18 @@ lemma πFunctorObj_eq
     πFunctorObj I.homFamily (((iterationFunctor I κ).obj j).obj (Arrow.mk f)).hom =
       (relativeCellComplexιObjFObjSuccIso I κ f j).inv ≫
       (relativeCellComplexιObj I κ f).incl.app (Order.succ j) ≫
-      πObj I κ f ≫ (iterationFuncto
+      πObj I κ f ≫ (iterationFunctorObjObjRightIso I κ (Arrow.mk f) j).inv := by
+  have h₁ := (iterationFunctorMapSuccAppArrowIso I κ f j).hom.right.w
+  have h₂ := (transfiniteCompositionOfShapeSuccStructPropιIteration I κ).incl.naturality
+    (homOfLE (Order.le_succ j))
+  dsimp at h₁ h₂
+  rw [comp_id] at h₂
+  rw [← cancel_mono (iterationFunctorObjObjRightIso I κ (Arrow.mk f) j).hom]; rw [← cancel_mono ((ιIteration I κ).app f).right]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [πObj_ιIteration_app_right]; rw [iterationFunctorObjObjRightIso_ιIteration_app_right]; rw [← cancel_epi (relativeCellComplexιObjFObjSuccIso I κ f j).hom]; rw [Iso.hom_inv_id_assoc]
+  dsimp [relativeCellComplexιObjFObjSuccIso,
+    relativeCellComplexιObj, transfiniteCompositionOfShapeιIterationAppRight]
+  simp only [reassoc_of% h₁, comp_id, comp_id, Arrow.w_mk_right, ← h₂,
+    NatTrans.comp_app, Arrow.comp_right,
+    iterationFunctorMapSuccAppArrowIso_hom_right_right_comp_assoc]
 
 中文:
 引理 πFunctorObj_eq
@@ -988,7 +1025,18 @@ lemma πFunctorObj_eq
     πFunctorObj I.homFamily (((iterationFunctor I κ).obj j).obj (Arrow.mk f)).hom =
       (relativeCellComplexιObjFObjSuccIso I κ f j).inv ≫
       (relativeCellComplexιObj I κ f).incl.app (Order.succ j) ≫
-      πObj I κ f ≫ (iterationFuncto
+      πObj I κ f ≫ (iterationFunctorObjObjRightIso I κ (Arrow.mk f) j).inv := by
+  have h₁ := (iterationFunctorMapSuccAppArrowIso I κ f j).hom.right.w
+  have h₂ := (transfiniteCompositionOfShapeSuccStructPropιIteration I κ).incl.naturality
+    (homOfLE (Order.le_succ j))
+  dsimp at h₁ h₂
+  rw [comp_id] at h₂
+  rw [← cancel_mono (iterationFunctorObjObjRightIso I κ (Arrow.mk f) j).hom]; rw [← cancel_mono ((ιIteration I κ).app f).right]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [πObj_ιIteration_app_right]; rw [iterationFunctorObjObjRightIso_ιIteration_app_right]; rw [← cancel_epi (relativeCellComplexιObjFObjSuccIso I κ f j).hom]; rw [Iso.hom_inv_id_assoc]
+  dsimp [relativeCellComplexιObjFObjSuccIso,
+    relativeCellComplexιObj, transfiniteCompositionOfShapeιIterationAppRight]
+  simp only [reassoc_of% h₁, comp_id, comp_id, Arrow.w_mk_right, ← h₂,
+    NatTrans.comp_app, Arrow.comp_right,
+    iterationFunctorMapSuccAppArrowIso_hom_right_right_comp_assoc]
 
 Depends on / 依赖: hasColimitsOfShape_discrete
 -/
@@ -1026,7 +1074,23 @@ lemma hasRightLiftingProperty_πObj
   intro g b sq
   obtain ⟨j, t, ht⟩ := Types.jointly_surjective _
     (isColimitOfPreserves (coyoneda.obj (Opposite.op A))
-      (relativeCellComplexιObj I κ f
+      (relativeCellComplexιObj I κ f).isColimit) g
+  dsimp at g b sq t ht
+  obtain ⟨l, hl₁, hl₂⟩ := ιFunctorObj_extension' I.homFamily
+    ((relativeCellComplexιObj I κ f).incl.app j ≫ πObj I κ f)
+    ((relativeCellComplexιObj I κ f).F.map (homOfLE (Order.le_succ j)))
+    ((relativeCellComplexιObj I κ f).incl.app (Order.succ j) ≫ πObj I κ f) (by simp) (Iso.refl _)
+    (iterationFunctorObjObjRightIso I κ (Arrow.mk f) j).symm
+    (relativeCellComplexιObjFObjSuccIso I κ f j)
+    (by dsimp; rw [ιFunctorObj_eq, id_comp])
+    (by dsimp; rw [πFunctorObj_eq, assoc, Iso.hom_inv_id_assoc])
+    (i := ⟨i, hi⟩) t b (by rw [reassoc_of% ht, sq.w]; dsimp)
+  dsimp at hl₁
+  exact ⟨⟨{
+    l := l ≫ (relativeCellComplexιObj I κ f).incl.app (Order.succ j)
+    fac_left := by simp [reassoc_of% hl₁, ← ht]
+    fac_right := by rw [assoc, hl₂]
+  }⟩⟩⟩
 
 中文:
 引理 hasRightLiftingProperty_πObj
@@ -1038,7 +1102,23 @@ lemma hasRightLiftingProperty_πObj
   intro g b sq
   obtain ⟨j, t, ht⟩ := Types.jointly_surjective _
     (isColimitOfPreserves (coyoneda.obj (Opposite.op A))
-      (relativeCellComplexιObj I κ f
+      (relativeCellComplexιObj I κ f).isColimit) g
+  dsimp at g b sq t ht
+  obtain ⟨l, hl₁, hl₂⟩ := ιFunctorObj_extension' I.homFamily
+    ((relativeCellComplexιObj I κ f).incl.app j ≫ πObj I κ f)
+    ((relativeCellComplexιObj I κ f).F.map (homOfLE (Order.le_succ j)))
+    ((relativeCellComplexιObj I κ f).incl.app (Order.succ j) ≫ πObj I κ f) (by simp) (Iso.refl _)
+    (iterationFunctorObjObjRightIso I κ (Arrow.mk f) j).symm
+    (relativeCellComplexιObjFObjSuccIso I κ f j)
+    (by dsimp; rw [ιFunctorObj_eq, id_comp])
+    (by dsimp; rw [πFunctorObj_eq, assoc, Iso.hom_inv_id_assoc])
+    (i := ⟨i, hi⟩) t b (by rw [reassoc_of% ht, sq.w]; dsimp)
+  dsimp at hl₁
+  exact ⟨⟨{
+    l := l ≫ (relativeCellComplexιObj I κ f).incl.app (Order.succ j)
+    fac_left := by simp [reassoc_of% hl₁, ← ht]
+    fac_right := by rw [assoc, hl₂]
+  }⟩⟩⟩
 
 Depends on / 依赖: F.map, I.homFamily, Opposite, Opposite.op, Order.le_succ, Types.jointly_surjective, coyoneda, coyoneda.obj, hasColimitsOfShape_discrete, hasPushouts, homFamily, homOfLE, incl.app, isColimit, isColimitOfPreserves, jointly_surjective, le_succ, preservesColimit
 -/
@@ -1201,7 +1281,13 @@ lemma πObj_naturality
   change _ ≫ _ ≫ e₂.inv = (_ ≫ e₁.inv) ≫ _
   have h₁ := ((iteration I κ).map φ).w =≫ e₂.inv
   have h₂ : φ.right ≫ e₂.hom = e₁.hom ≫ ((iteration I κ).map φ).right :=
-    
+    ((Functor.whiskerRight (ιIteration I κ) Arrow.rightFunc).naturality φ)
+  dsimp at h₁
+  rw [assoc] at h₁
+  apply h₁.trans
+  simp only [← cancel_mono e₂.hom, assoc, e₂.inv_hom_id, h₂, e₁.inv_hom_id_assoc]
+  rw [← assoc]
+  apply comp_id
 
 中文:
 引理 πObj_naturality
@@ -1212,7 +1298,13 @@ lemma πObj_naturality
   change _ ≫ _ ≫ e₂.inv = (_ ≫ e₁.inv) ≫ _
   have h₁ := ((iteration I κ).map φ).w =≫ e₂.inv
   have h₂ : φ.right ≫ e₂.hom = e₁.hom ≫ ((iteration I κ).map φ).right :=
-    
+    ((Functor.whiskerRight (ιIteration I κ) Arrow.rightFunc).naturality φ)
+  dsimp at h₁
+  rw [assoc] at h₁
+  apply h₁.trans
+  simp only [← cancel_mono e₂.hom, assoc, e₂.inv_hom_id, h₂, e₁.inv_hom_id_assoc]
+  rw [← assoc]
+  apply comp_id
 
 Depends on / 依赖: Arrow.mk, Arrow.rightFunc, Functor, Functor.whiskerRight, cancel_mono, f.hom, g.hom, inv_hom_id, inv_hom_id_assoc, iteration, naturality, rightFunc, whiskerRight
 -/
@@ -1302,7 +1394,11 @@ lemma llp_rlp_of_isCardinalForSmallObjectArgument'
   have sq : CommSq (ιObj I κ f) f (πObj I κ f) (𝟙 _) := ⟨by simp⟩
   have := hf _ (rlp_πObj I κ f)
   refine ⟨_, _, _, ?_, transfiniteCompositionsOfShape_ιObj I κ f⟩
+  exact
+    { i := Arrow.homMk (𝟙 _) sq.lift
+      r := Arrow.homMk (𝟙 _) (πObj I κ f) }
 
+omit κ in
 
 中文:
 引理 llp_rlp_of_isCardinalForSmallObjectArgument'
@@ -1313,7 +1409,11 @@ lemma llp_rlp_of_isCardinalForSmallObjectArgument'
   have sq : CommSq (ιObj I κ f) f (πObj I κ f) (𝟙 _) := ⟨by simp⟩
   have := hf _ (rlp_πObj I κ f)
   refine ⟨_, _, _, ?_, transfiniteCompositionsOfShape_ιObj I κ f⟩
+  exact
+    { i := Arrow.homMk (𝟙 _) sq.lift
+      r := Arrow.homMk (𝟙 _) (πObj I κ f) }
 
+omit κ in
 
 Depends on / 依赖: Arrow.homMk, CommSq, ToType, le_antisymm, ord.ToType, retracts_transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp, sq.lift
 -/
@@ -1342,7 +1442,7 @@ lemma llp_rlp_of_isCardinalForSmallObjectArgument_aleph0
   let e : Nat ≃o Cardinal.aleph0.{w}.ord.ToType :=
     ULift.orderIso.{w}.symm.trans
       (OrderIso.ofRelIsoLT (Nonempty.some (by simp [← Ordinal.type_eq])))
-  rw [SmallObject.llp_rlp_of_isCardinalForSmallObjectArgument' _ Cardinal.aleph0]; rw [MorphismProperty.transfiniteCompositionsOfShape_eq_
+  rw [SmallObject.llp_rlp_of_isCardinalForSmallObjectArgument' _ Cardinal.aleph0]; rw [MorphismProperty.transfiniteCompositionsOfShape_eq_of_orderIso _ e]
 
 中文:
 引理 llp_rlp_of_isCardinalForSmallObjectArgument_aleph0
@@ -1350,7 +1450,7 @@ lemma llp_rlp_of_isCardinalForSmallObjectArgument_aleph0
   let e : Nat ≃o Cardinal.aleph0.{w}.ord.ToType :=
     ULift.orderIso.{w}.symm.trans
       (OrderIso.ofRelIsoLT (Nonempty.some (by simp [← Ordinal.type_eq])))
-  rw [SmallObject.llp_rlp_of_isCardinalForSmallObjectArgument' _ Cardinal.aleph0]; rw [MorphismProperty.transfiniteCompositionsOfShape_eq_
+  rw [SmallObject.llp_rlp_of_isCardinalForSmallObjectArgument' _ Cardinal.aleph0]; rw [MorphismProperty.transfiniteCompositionsOfShape_eq_of_orderIso _ e]
 
 Depends on / 依赖: Cardinal, Cardinal.aleph0, MorphismProperty, MorphismProperty.transfiniteCompositionsOfShape_eq_of_orderIso, Nonempty, Nonempty.some, OrderIso, OrderIso.ofRelIsoLT, Ordinal, Ordinal.type_eq, SmallObject, SmallObject.llp_rlp_of_isCardinalForSmallObjectArgument, ToType, ULift.orderIso, aleph0, llp_rlp_of_isCardinalForSmallObjectArgument, ofRelIsoLT, ord.ToType, orderIso, symm.trans
 -/

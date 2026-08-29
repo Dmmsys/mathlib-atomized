@@ -181,7 +181,7 @@ lemma exp_strictMono
     · simp
   · exact (not_top_lt h).elim
 
-
+@[gcongr]
 
 中文:
 引理 exp_strictMono
@@ -198,7 +198,7 @@ lemma exp_strictMono
     · simp
   · exact (not_top_lt h).elim
 
-
+@[gcongr]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_lt_ofReal_iff, Real.exp_pos, Real.exp_strictMono, exp_bot, exp_coe, exp_eq_zero_iff, exp_pos, exp_strictMono, h.ne, mod_cast, ne_eq, not_top_lt, ofReal_lt_ofReal_iff, pos_iff_ne_zero, simp_rw
 -/
@@ -427,6 +427,10 @@ lemma exp_add
       simp [Real.exp_pos]
   · induction y
     · simp
+    · simp only [EReal.top_add_coe, exp_top, exp_coe]
+      rw [ENNReal.top_mul]
+      simp [Real.exp_pos]
+    · simp
 
 中文:
 引理 exp_add
@@ -443,6 +447,10 @@ lemma exp_add
       rw [ENNReal.mul_top]
       simp [Real.exp_pos]
   · induction y
+    · simp
+    · simp only [EReal.top_add_coe, exp_top, exp_coe]
+      rw [ENNReal.top_mul]
+      simp [Real.exp_pos]
     · simp
 
 Depends on / 依赖: ENNReal, ENNReal.mul_top, ENNReal.ofReal_mul, ENNReal.top_mul, EReal.coe_add, EReal.coe_add_top, EReal.top_add_coe, Real.exp_add, Real.exp_nonneg, Real.exp_pos, coe_add, coe_add_top, exp_add, exp_coe, exp_nonneg, exp_pos, exp_top, mul_top, ofReal_mul, top_add_coe

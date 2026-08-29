@@ -196,7 +196,9 @@ theorem mem_span_pow'
     ext n
     simp_rw [Set.mem_range, Set.mem_image, Finset.mem_coe, Finset.mem_range]
     exact ⟨fun ⟨⟨i, hi⟩, hy⟩ => ⟨i, hi, hy⟩, fun ⟨i, hi, hy⟩ => ⟨⟨i, hi⟩, hy⟩⟩
-  simp [this, mem_span_imag
+  simp [this, mem_span_image_iff_linearCombination, degree_lt_iff_coeff_zero, eq_comm,
+    exists_iff_exists_finsupp, coeff, aeval_def, eval₂_eq_sum, Polynomial.sum, mem_supported',
+    Finsupp.sum, linearCombination, Algebra.smul_def, AddMonoidAlgebra.coeffEquiv.exists_congr_left]
 
 中文:
 定理 mem_span_pow'
@@ -206,7 +208,9 @@ theorem mem_span_pow'
     ext n
     simp_rw [Set.mem_range, Set.mem_image, Finset.mem_coe, Finset.mem_range]
     exact ⟨fun ⟨⟨i, hi⟩, hy⟩ => ⟨i, hi, hy⟩, fun ⟨i, hi, hy⟩ => ⟨⟨i, hi⟩, hy⟩⟩
-  simp [this, mem_span_imag
+  simp [this, mem_span_image_iff_linearCombination, degree_lt_iff_coeff_zero, eq_comm,
+    exists_iff_exists_finsupp, coeff, aeval_def, eval₂_eq_sum, Polynomial.sum, mem_supported',
+    Finsupp.sum, linearCombination, Algebra.smul_def, AddMonoidAlgebra.coeffEquiv.exists_congr_left]
 
 Depends on / 依赖: AddMonoidAlgebr, Algebra, Algebra.smul_def, Finset, Finset.mem_coe, Finset.mem_range, Finset.range, Finsupp, Finsupp.sum, Polynomial, Polynomial.sum, Set.mem_image, Set.mem_range, Set.range, aeval_def, degree_lt_iff_coeff_zero, eq_comm, exists_iff_exists_finsupp, linearCombination, mem_coe
 -/
@@ -235,7 +239,7 @@ theorem mem_span_pow
     by_cases hf : f = 0
     · simp only [hf, natDegree_zero, Polynomial.degree_zero] at h ⊢
       first | exact lt_of_le_of_ne (Nat.zero_le d) hd.symm | exact WithBot.bot_lt_coe d
-    simpa [degree_eq_natDegree hf
+    simpa [degree_eq_natDegree hf] using h
 
 中文:
 定理 mem_span_pow
@@ -248,7 +252,7 @@ theorem mem_span_pow
     by_cases hf : f = 0
     · simp only [hf, natDegree_zero, Polynomial.degree_zero] at h ⊢
       first | exact lt_of_le_of_ne (Nat.zero_le d) hd.symm | exact WithBot.bot_lt_coe d
-    simpa [degree_eq_natDegree hf
+    simpa [degree_eq_natDegree hf] using h
 
 Depends on / 依赖: Nat.zero_le, Polynomial, Polynomial.degree_zero, WithBot, WithBot.bot_lt_coe, bot_lt_coe, degree_eq_natDegree, degree_zero, hd.symm, lt_of_le_of_ne, mem_span_pow, natDegree_zero, zero_le
 -/
@@ -391,7 +395,16 @@ theorem exists_smodEq
   refine ⟨pb.basis.repr b ⟨0, pb.dim_pos⟩, ?_⟩
   have H := pb.basis.sum_repr b
   rw [← insert_erase (mem_univ ⟨0]; rw [pb.dim_pos⟩)]; rw [sum_insert (notMem_erase _ _)] at H
-  rw [SModEq]; rw [← 
+  rw [SModEq]; rw [← add_zero (algebraMap _ _ _)]; rw [Quotient.mk_add]
+  nth_rewrite 1 [← H]
+  rw [Quotient.mk_add]
+  congr 1
+  · simp [Algebra.algebraMap_eq_smul_one ((pb.basis.repr b) _)]
+  · rw [Quotient.mk_zero, Quotient.mk_eq_zero, coe_basis]
+    refine sum_mem _ (fun i hi => ?_)
+    rw [Algebra.smul_def']
+refine Ideal.mul_mem_left _ _ Ideal.pow_mem_of_mem _ (Ideal.subset_span (by simp)) _
+Nat.pos_of_ne_zero fun h => notMem_erase i univ Fin.eq_mk_iff_val_eq.2 h ▸ hi
 
 中文:
 定理 存在_smodEq
@@ -402,7 +415,16 @@ theorem exists_smodEq
   refine ⟨pb.basis.repr b ⟨0, pb.dim_pos⟩, ?_⟩
   have H := pb.basis.sum_repr b
   rw [← insert_erase (mem_univ ⟨0]; rw [pb.dim_pos⟩)]; rw [sum_insert (notMem_erase _ _)] at H
-  rw [SModEq]; rw [← 
+  rw [SModEq]; rw [← add_zero (algebraMap _ _ _)]; rw [Quotient.mk_add]
+  nth_rewrite 1 [← H]
+  rw [Quotient.mk_add]
+  congr 1
+  · simp [Algebra.algebraMap_eq_smul_one ((pb.basis.repr b) _)]
+  · rw [Quotient.mk_zero, Quotient.mk_eq_zero, coe_basis]
+    refine sum_mem _ (fun i hi => ?_)
+    rw [Algebra.smul_def']
+refine Ideal.mul_mem_left _ _ Ideal.pow_mem_of_mem _ (Ideal.subset_span (by simp)) _
+Nat.pos_of_ne_zero fun h => notMem_erase i univ Fin.eq_mk_iff_val_eq.2 h ▸ hi
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Quotient, Quotient.mk_add, Quotient.mk_eq_zero, Quotient.mk_zero, SModEq, Subsingleton, Subsingleton.eq_zero, add_zero, algebraMap, algebraMap_eq_smul_one, coe_b, dim_pos, eq_zero, insert_erase, map_zero, mem_univ, mk_add, mk_eq_zero
 -/
@@ -480,7 +502,7 @@ theorem aeval_minpolyGen
   simp_rw [minpolyGen, map_sub, map_sum, map_mul, map_pow, aeval_C, ← Algebra.smul_def, aeval_X]
   refine sub_eq_zero.mpr ((pb.basis.linearCombination_repr (pb.gen ^ pb.dim)).symm.trans ?_)
   rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype] <;>
-    simp only [pb.coe_basis, zero_smul
+    simp only [pb.coe_basis, zero_smul, imp_true_iff]
 
 中文:
 定理 aeval_minpolyGen
@@ -490,7 +512,7 @@ theorem aeval_minpolyGen
   simp_rw [minpolyGen, map_sub, map_sum, map_mul, map_pow, aeval_C, ← Algebra.smul_def, aeval_X]
   refine sub_eq_zero.mpr ((pb.basis.linearCombination_repr (pb.gen ^ pb.dim)).symm.trans ?_)
   rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype] <;>
-    simp only [pb.coe_basis, zero_smul
+    simp only [pb.coe_basis, zero_smul, imp_true_iff]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Finsupp, Finsupp.linearCombination_apply, Finsupp.sum_fintype, aeval_C, aeval_X, coe_basis, imp_true_iff, linearCombination_apply, linearCombination_repr, map_mul, map_pow, map_sub, map_sum, minpolyGen, pb.basis.linearCombination_repr, pb.coe_basis, pb.dim, pb.gen
 -/
@@ -543,7 +565,7 @@ theorem dim_le_natDegree_of_root
   refine Fintype.sum_eq_zero _ fun i => ?_
   simp_rw [aeval_eq_sum_range' hlt, Finset.sum_range, ← pb.basis_eq_pow] at root
   have := Fintype.linearIndependent_iff.1 pb.basis.linearIndependent _ root
- 
+  rw [this]; rw [monomial_zero_right]
 
 中文:
 定理 dim_le_natDegree_of_root
@@ -554,7 +576,7 @@ theorem dim_le_natDegree_of_root
   refine Fintype.sum_eq_zero _ fun i => ?_
   simp_rw [aeval_eq_sum_range' hlt, Finset.sum_range, ← pb.basis_eq_pow] at root
   have := Fintype.linearIndependent_iff.1 pb.basis.linearIndependent _ root
- 
+  rw [this]; rw [monomial_zero_right]
 
 Depends on / 依赖: Finset, Finset.sum_range, Fintype, Fintype.linearIndependent_iff, Fintype.sum_eq_zero, aeval_eq_sum_range, as_sum_range, basis_eq_pow, le_of_not_gt, linearIndependent, linearIndependent_iff, monomial_zero_right, ne_zero, p.as_sum_range, pb.basis.linearIndependent, pb.basis_eq_pow, simp_rw, sum_eq_zero, sum_range
 -/
@@ -752,7 +774,15 @@ theorem leftMulMatrix
   refine pb.basis.ext fun k => ?_
   simp_rw [Matrix.toLin_self, Matrix.of_apply, pb.basis_eq_pow]
   apply (pow_succ' _ _).symm.trans
-  split_ifs 
+  split_ifs with h
+  · simp_rw [h, neg_smul, Finset.sum_neg_distrib, eq_neg_iff_add_eq_zero]
+    convert! pb.aeval_minpolyGen
+    rw [add_comm]; rw [aeval_eq_sum_range]; rw [Finset.sum_range_succ]; rw [← leadingCoeff]; rw [pb.minpolyGen_monic.leadingCoeff]; rw [one_smul]; rw [natDegree_minpolyGen]; rw [Finset.sum_range]
+  · rw [Fintype.sum_eq_single (⟨(k : Nat) + 1, lt_of_le_of_ne k.2 h⟩ : Fin pb.dim), if_pos, one_smul]
+    · rfl
+    intro x hx
+    rw [if_neg]; rw [zero_smul]
+    apply mt Fin.ext hx
 
 中文:
 定理 leftMulMatrix
@@ -764,7 +794,15 @@ theorem leftMulMatrix
   refine pb.basis.ext fun k => ?_
   simp_rw [Matrix.toLin_self, Matrix.of_apply, pb.basis_eq_pow]
   apply (pow_succ' _ _).symm.trans
-  split_ifs 
+  split_ifs with h
+  · simp_rw [h, neg_smul, Finset.sum_neg_distrib, eq_neg_iff_add_eq_zero]
+    convert! pb.aeval_minpolyGen
+    rw [add_comm]; rw [aeval_eq_sum_range]; rw [Finset.sum_range_succ]; rw [← leadingCoeff]; rw [pb.minpolyGen_monic.leadingCoeff]; rw [one_smul]; rw [natDegree_minpolyGen]; rw [Finset.sum_range]
+  · rw [Fintype.sum_eq_single (⟨(k : Nat) + 1, lt_of_le_of_ne k.2 h⟩ : Fin pb.dim), if_pos, one_smul]
+    · rfl
+    intro x hx
+    rw [if_neg]; rw [zero_smul]
+    apply mt Fin.ext hx
 -/
 protected theorem leftMulMatrix (pb : PowerBasis A S) : Algebra.leftMulMatrix pb.basis pb.gen =
     @Matrix.of (Fin pb.dim) (Fin pb.dim) _ fun i j =>
@@ -802,7 +840,16 @@ theorem constr_pow_aeval
   rw [← aeval_modByMonic_eq_self_of_root (minpoly.aeval _ _)]; rw [← aeval_modByMonic_eq_self_of_root hy]
   by_cases hf : f %ₘ minpoly A pb.gen = 0
   · simp only [hf, map_zero]
-  have :
+  have : (f %ₘ minpoly A pb.gen).natDegree < pb.dim := by
+    rw [← pb.natDegree_minpoly]
+    apply natDegree_lt_natDegree hf
+    exact degree_modByMonic_lt _ (minpoly.monic pb.isIntegral_gen)
+  rw [aeval_eq_sum_range' this]; rw [aeval_eq_sum_range' this]; rw [map_sum]
+  refine Finset.sum_congr rfl fun i (hi : i in Finset.range pb.dim) => ?_
+  rw [Finset.mem_range] at hi
+  rw [map_smul]
+  congr
+  rw [← Fin.val_mk hi]; rw [← pb.basis_eq_pow ⟨i]; rw [hi⟩]; rw [Basis.constr_basis]
 
 中文:
 定理 constr_pow_aeval
@@ -813,7 +860,16 @@ theorem constr_pow_aeval
   rw [← aeval_modByMonic_eq_self_of_root (minpoly.aeval _ _)]; rw [← aeval_modByMonic_eq_self_of_root hy]
   by_cases hf : f %ₘ minpoly A pb.gen = 0
   · simp only [hf, map_zero]
-  have :
+  have : (f %ₘ minpoly A pb.gen).natDegree < pb.dim := by
+    rw [← pb.natDegree_minpoly]
+    apply natDegree_lt_natDegree hf
+    exact degree_modByMonic_lt _ (minpoly.monic pb.isIntegral_gen)
+  rw [aeval_eq_sum_range' this]; rw [aeval_eq_sum_range' this]; rw [map_sum]
+  refine Finset.sum_congr rfl fun i (hi : i in Finset.range pb.dim) => ?_
+  rw [Finset.mem_range] at hi
+  rw [map_smul]
+  congr
+  rw [← Fin.val_mk hi]; rw [← pb.basis_eq_pow ⟨i]; rw [hi⟩]; rw [Basis.constr_basis]
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, aeval_eq_sum_range, aeval_modByMonic_eq_self_of_root, aeval_zero, degree_modByMonic_lt, isIntegral_gen, map_zero, minpoly, minpoly.aeval, minpoly.monic, natDegree, natDegree_lt_natDegree, natDegree_minpoly, pb.dim, pb.gen, pb.isIntegral_gen, pb.natDegree_minpoly, subsingleton_or_nontrivial
 -/
@@ -917,6 +973,7 @@ definition lift
     map_mul' := pb.constr_pow_mul hy
     commutes' := pb.constr_pow_algebraMap hy }
 
+@[simp]
 
 中文:
 定义 lift
@@ -927,6 +984,7 @@ definition lift
     map_mul' := pb.constr_pow_mul hy
     commutes' := pb.constr_pow_algebraMap hy }
 
+@[simp]
 
 Depends on / 依赖: commutes, constr, constr_pow_algebraMap, constr_pow_mul, convert, map_mul, map_one, map_zero, pb.basis.constr, pb.constr_pow_algebraMap, pb.constr_pow_mul
 -/
@@ -1318,7 +1376,12 @@ theorem linearIndependent_pow
     exact linearIndependent_empty_type
   refine Fintype.linearIndependent_iff.2 fun g hg i => ?_
   simp_rw [Algebra.smul_def, ← aeval_monomial, ← map_sum] at hg
-  apply (fun hn0 => (minpoly.degree_le_of_ne_zero K x (mt
+  apply (fun hn0 => (minpoly.degree_le_of_ne_zero K x (mt (fun h0 => ?_) hn0) hg).not_gt).mtr
+  · simp_rw [← C_mul_X_pow_eq_monomial]
+    exact (degree_eq_natDegree <| minpoly.ne_zero h).symm ▸ degree_sum_fin_lt _
+  · apply_fun lcoeff K i at h0
+    simp_rw [map_sum, lcoeff_apply, coeff_monomial, Fin.val_eq_val, Finset.sum_ite_eq'] at h0
+    exact (if_pos <| Finset.mem_univ _).symm.trans h0
 
 中文:
 定理 linearIndependent_pow
@@ -1329,7 +1392,12 @@ theorem linearIndependent_pow
     exact linearIndependent_empty_type
   refine Fintype.linearIndependent_iff.2 fun g hg i => ?_
   simp_rw [Algebra.smul_def, ← aeval_monomial, ← map_sum] at hg
-  apply (fun hn0 => (minpoly.degree_le_of_ne_zero K x (mt
+  apply (fun hn0 => (minpoly.degree_le_of_ne_zero K x (mt (fun h0 => ?_) hn0) hg).not_gt).mtr
+  · simp_rw [← C_mul_X_pow_eq_monomial]
+    exact (degree_eq_natDegree <| minpoly.ne_zero h).symm ▸ degree_sum_fin_lt _
+  · apply_fun lcoeff K i at h0
+    simp_rw [map_sum, lcoeff_apply, coeff_monomial, Fin.val_eq_val, Finset.sum_ite_eq'] at h0
+    exact (if_pos <| Finset.mem_univ _).symm.trans h0
 
 Depends on / 依赖: Algebra, Algebra.smul_def, C_mul_X_pow_eq_monomial, Fintype, Fintype.linearIndependent_iff, IsIntegral, aeval_monomial, apply_fun, degree_eq_natDegree, degree_le_of_ne_zero, degree_sum_fin_lt, eq_zero, lcoeff, lcoeff_apply, linearIndependent_empty_type, linearIndependent_iff, map_sum, minpoly, minpoly.degree_le_of_ne_zero, minpoly.eq_zero
 -/

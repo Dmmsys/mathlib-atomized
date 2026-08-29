@@ -66,7 +66,16 @@ definition CommandStart.endPos
     if let some ind := cmd.find? (·.isOfKind ``Parser.Command.inductive) then
       match ind.find? (·.isOfKind ``Parser.Command.optDeclSig) with
       | none => dbg_trace "unreachable?"; none
-      | some
+      | some sig => sig.getTailPos?
+    else
+    match cmd.find? (·.isOfKind ``Parser.Term.typeSpec) with
+      | some s => s[0].getTailPos? -- `s[0]` is the `:` separating hypotheses and the type
+      | none => match cmd.find? (·.isOfKind ``Parser.Command.declValSimple) with
+        | some s => s.getPos?
+        | none => none
+  else if stx.isOfKind ``Parser.Command.variable || stx.isOfKind ``Parser.Command.omit then
+    stx.getTailPos?
+  else none
 
 中文:
 定义 CommandStart.endPos
@@ -75,7 +84,16 @@ definition CommandStart.endPos
     if let some ind := cmd.find? (·.isOfKind ``Parser.Command.inductive) then
       match ind.find? (·.isOfKind ``Parser.Command.optDeclSig) with
       | none => dbg_trace "unreachable?"; none
-      | some
+      | some sig => sig.getTailPos?
+    else
+    match cmd.find? (·.isOfKind ``Parser.Term.typeSpec) with
+      | some s => s[0].getTailPos? -- `s[0]` is the `:` separating hypotheses and the type
+      | none => match cmd.find? (·.isOfKind ``Parser.Command.declValSimple) with
+        | some s => s.getPos?
+        | none => none
+  else if stx.isOfKind ``Parser.Command.variable || stx.isOfKind ``Parser.Command.omit then
+    stx.getTailPos?
+  else none
 
 Depends on / 依赖: Command, Parser, Parser.Comm, Parser.Command.declaration, Parser.Command.inductive, Parser.Command.optDeclSig, Parser.Term.typeSpec, cmd.find, contains, dbg_trace, declaration, getKind, getTailPos, hypotheses, ind.find, inductive, isOfKind, optDeclSig, separating, sig.getTailPos
 -/
@@ -207,7 +225,8 @@ definition pushFormatError
   let back := fs.back!
   -- If the latest error is of a different kind than the new one, we simply add the new one.
   if back.msg != f.msg || back.srcNat - back.length != f.srcNat then fs.push f else
-  
+  -- Otherwise, we are adding a further error of the same kind and we therefore merge the two.
+  fs.pop.push {back with length := back.length + f.length, srcStartPos := f.srcEndPos}
 
 中文:
 定义 pushFormatError
@@ -217,7 +236,8 @@ definition pushFormatError
   let back := fs.back!
   -- If the latest error is of a different kind than the new one, we simply add the new one.
   if back.msg != f.msg || back.srcNat - back.length != f.srcNat then fs.push f else
-  
+  -- Otherwise, we are adding a further error of the same kind and we therefore merge the two.
+  fs.pop.push {back with length := back.length + f.length, srcStartPos := f.srcEndPos}
 -/
 def pushFormatError (fs : Array FormatError) (f : FormatError) : Array FormatError :=
   -- If there are no errors already, we simply add the new one.
@@ -247,7 +267,64 @@ definition parallelScanAux
   if M.trimAscii.isEmpty then as else
   -- We try as hard as possible to scan the strings one character at a time.
   -- However, single line comments introduced with `--` pretty-print differently than `/--`.
-  -- So, we first look ahead for `/--`: the linter will later ignore doc-strings, 
+  -- So, we first look ahead for `/--`: the linter will later ignore doc-strings, so it does not
+  -- matter too much what we do here and we simply drop `/--` from the original string and the
+  -- pretty-printed one, before continuing.
+  -- Next, if we already dealt with `/--`, finding a `--` means that this is a single line comment
+  -- (or possibly a comment embedded in a doc-string, which is ok, since we eventually discard
+  -- doc-strings). In this case, we drop everything until the following line break in the
+  -- original syntax, and for the same amount of characters in the pretty-printed one, since the
+  -- pretty-printer *erases* the line break at the end of a single line comment.
+  if let (some newL, some newM) := (L.dropPrefix? "/--", M.dropPrefix? "/--") then
+    parallelScanAux as newL newM
+  else if L.startsWith "--" then
+    let (pos, diff) := Id.run do
+      let mut diff := 0
+      for ⟨pos, h⟩ in L.positions do
+        if pos.get h == '\n' then
+          return (pos, diff)
+        diff := diff + 1
+      return (L.endPos, diff)
+
+    let newL := L.sliceFrom pos
+    -- Assumption: if `L` contains an embedded inline comment, so does `M`
+    -- (modulo additional whitespace).
+    -- This holds because we call this function with `M` being a pretty-printed version of `L`.
+    -- If the pretty-printer changes in the future, this code may need to be adjusted.
+    let newM := M.dropWhile (· != '-') |>.drop diff
+    parallelScanAux as newL.trimAsciiStart newM.trimAsciiStart
+  else if let some newL := L.dropPrefix? "-/" then
+    let newL := newL.trimAsciiStart
+.trimAsciiStart let newM := M.drop 2
+    parallelScanAux as newL newM
+  else
+    let ls := L.drop 1
+    let ms := M.drop 1
+    let m := M.front
+    match L.front with
+    | ' ' =>
+      if m.isWhitespace then
+        parallelScanAux as ls ms.trimAsciiStart
+      else
+        parallelScanAux (pushFormatError as (mkFormatError L.copy M.copy "extra space")) ls M
+    | '\n' =>
+      if m.isWhitespace then
+        parallelScanAux as ls.trimAsciiStart ms.trimAsciiStart
+      else
+        parallelScanAux
+          (pushFormatError as (mkFormatError L.copy M.copy "remove line break")) ls.trimAsciiStart M
+    | l => -- `l` is not whitespace
+      if l == m then
+        parallelScanAux as ls ms
+      else if m.isWhitespace then
+        parallelScanAux
+          (pushFormatError as (mkFormatError L.copy M.copy "missing space")) L ms.trimAsciiStart
+      else
+        -- If this code is reached, then `L` and `M` differ by something other than whitespace.
+        -- This should not happen in practice.
+        pushFormatError as (mkFormatError ls.copy ms.copy "Oh no! (Unreachable?)")
+
+@[inherit_doc parallelScanAux]
 
 中文:
 定义 parallelScanAux
@@ -256,7 +333,64 @@ definition parallelScanAux
   if M.trimAscii.isEmpty then as else
   -- We try as hard as possible to scan the strings one character at a time.
   -- However, single line comments introduced with `--` pretty-print differently than `/--`.
-  -- So, we first look ahead for `/--`: the linter will later ignore doc-strings, 
+  -- So, we first look ahead for `/--`: the linter will later ignore doc-strings, so it does not
+  -- matter too much what we do here and we simply drop `/--` from the original string and the
+  -- pretty-printed one, before continuing.
+  -- Next, if we already dealt with `/--`, finding a `--` means that this is a single line comment
+  -- (or possibly a comment embedded in a doc-string, which is ok, since we eventually discard
+  -- doc-strings). In this case, we drop everything until the following line break in the
+  -- original syntax, and for the same amount of characters in the pretty-printed one, since the
+  -- pretty-printer *erases* the line break at the end of a single line comment.
+  if let (some newL, some newM) := (L.dropPrefix? "/--", M.dropPrefix? "/--") then
+    parallelScanAux as newL newM
+  else if L.startsWith "--" then
+    let (pos, diff) := Id.run do
+      let mut diff := 0
+      for ⟨pos, h⟩ in L.positions do
+        if pos.get h == '\n' then
+          return (pos, diff)
+        diff := diff + 1
+      return (L.endPos, diff)
+
+    let newL := L.sliceFrom pos
+    -- Assumption: if `L` contains an embedded inline comment, so does `M`
+    -- (modulo additional whitespace).
+    -- This holds because we call this function with `M` being a pretty-printed version of `L`.
+    -- If the pretty-printer changes in the future, this code may need to be adjusted.
+    let newM := M.dropWhile (· != '-') |>.drop diff
+    parallelScanAux as newL.trimAsciiStart newM.trimAsciiStart
+  else if let some newL := L.dropPrefix? "-/" then
+    let newL := newL.trimAsciiStart
+.trimAsciiStart let newM := M.drop 2
+    parallelScanAux as newL newM
+  else
+    let ls := L.drop 1
+    let ms := M.drop 1
+    let m := M.front
+    match L.front with
+    | ' ' =>
+      if m.isWhitespace then
+        parallelScanAux as ls ms.trimAsciiStart
+      else
+        parallelScanAux (pushFormatError as (mkFormatError L.copy M.copy "extra space")) ls M
+    | '\n' =>
+      if m.isWhitespace then
+        parallelScanAux as ls.trimAsciiStart ms.trimAsciiStart
+      else
+        parallelScanAux
+          (pushFormatError as (mkFormatError L.copy M.copy "remove line break")) ls.trimAsciiStart M
+    | l => -- `l` is not whitespace
+      if l == m then
+        parallelScanAux as ls ms
+      else if m.isWhitespace then
+        parallelScanAux
+          (pushFormatError as (mkFormatError L.copy M.copy "missing space")) L ms.trimAsciiStart
+      else
+        -- If this code is reached, then `L` and `M` differ by something other than whitespace.
+        -- This should not happen in practice.
+        pushFormatError as (mkFormatError ls.copy ms.copy "Oh no! (Unreachable?)")
+
+@[inherit_doc parallelScanAux]
 
 Depends on / 依赖: Id.run
 -/
@@ -356,7 +490,38 @@ abbreviation unlintedNodes
   `«term{_}»,
   -- empty set, the pretty-printer prefers `{ }`
   ``«term{}»,
-  -- set builder
+  -- set builder notation, the pretty-printer prefers `{ a : X | p a }`
+  `Mathlib.Meta.setBuilder,
+
+  -- # misc exceptions
+
+  -- We ignore literal strings.
+  `str,
+
+  -- list notation, the pretty-printer prefers `a :: b`
+  ``«term_::_»,
+
+  -- negation, the pretty-printer prefers `¬a`
+  ``«term¬_»,
+
+  -- declaration name, avoids dealing with guillemets pairs `«»`
+  ``Parser.Command.declId,
+
+  `Mathlib.Tactic.superscriptTerm, `Mathlib.Tactic.subscript,
+
+  -- notation for `Bundle.TotalSpace.proj`, the total space of a bundle
+  -- the pretty-printer prefers `π FE` over `π F E` (which we want)
+  `Bundle.termπ__,
+
+  -- notation for `Finset.slice`, the pretty-printer prefers `𝒜 #r` over `𝒜 # r` (mathlib style)
+  `Finset.«term_#_»,
+
+  -- The docString linter already takes care of formatting doc-strings.
+  ``Parser.Command.docComment,
+
+  -- The pretty-printer adds a space between the backticks and the actual name.
+  ``Parser.Term.doubleQuotedName,
+  ]
 
 中文:
 缩写 unlintedNodes
@@ -369,7 +534,38 @@ abbreviation unlintedNodes
   `«term{_}»,
   -- empty set, the pretty-printer prefers `{ }`
   ``«term{}»,
-  -- set builder
+  -- set builder notation, the pretty-printer prefers `{ a : X | p a }`
+  `Mathlib.Meta.setBuilder,
+
+  -- # misc exceptions
+
+  -- We ignore literal strings.
+  `str,
+
+  -- list notation, the pretty-printer prefers `a :: b`
+  ``«term_::_»,
+
+  -- negation, the pretty-printer prefers `¬a`
+  ``«term¬_»,
+
+  -- declaration name, avoids dealing with guillemets pairs `«»`
+  ``Parser.Command.declId,
+
+  `Mathlib.Tactic.superscriptTerm, `Mathlib.Tactic.subscript,
+
+  -- notation for `Bundle.TotalSpace.proj`, the total space of a bundle
+  -- the pretty-printer prefers `π FE` over `π F E` (which we want)
+  `Bundle.termπ__,
+
+  -- notation for `Finset.slice`, the pretty-printer prefers `𝒜 #r` over `𝒜 # r` (mathlib style)
+  `Finset.«term_#_»,
+
+  -- The docString linter already takes care of formatting doc-strings.
+  ``Parser.Command.docComment,
+
+  -- The pretty-printer adds a space between the backticks and the actual name.
+  ``Parser.Term.doubleQuotedName,
+  ]
 -/
 abbrev unlintedNodes := #[
   -- # set-like notations, have extra spaces around the braces `{` `}`
@@ -426,7 +622,11 @@ definition getUnlintedRanges
       new
   -- We special case `where` statements, since they may be followed by an indented doc-string.
   | curr, .atom info "where" =>
-    if let some 
+    if let some trail := info.getRangeWithTrailing? then
+      curr.insert trail
+    else
+      curr
+  | curr, _ => curr
 
 中文:
 定义 getUnlintedRanges
@@ -438,7 +638,11 @@ definition getUnlintedRanges
       new
   -- We special case `where` statements, since they may be followed by an indented doc-string.
   | curr, .atom info "where" =>
-    if let some 
+    if let some trail := info.getRangeWithTrailing? then
+      curr.insert trail
+    else
+      curr
+  | curr, _ => curr
 
 Depends on / 依赖: args.foldl, getUnlintedRanges
 -/
@@ -508,7 +712,59 @@ definition whitespaceLinter
 .isSome then if stx.find? (·.isOfKind ``runCmd)
     return
   -- If a command does not start on the first column, emit a warning.
-  i
+  if let some pos := stx.getPos? then
+    let colStart := ((← getFileMap).toPosition pos).column
+    if colStart != 0 then
+      Linter.logLint linter.style.whitespace stx
+        m!"'{stx}' starts on column {colStart}, \
+          but all commands should start at the beginning of the line."
+  -- We skip `macro_rules`, since they cause parsing issues.
+.isSome then if stx.find? (·.isOfKind `Lean.Parser.Command.macro_rules)
+    return
+  let some upTo := CommandStart.endPos stx | return
+
+  let fmt : Option Format ←
+      try
+liftCoreM some < > PrettyPrinter.ppCategory `command stx
+      catch _ =>
+        Linter.logLintIf linter.style.whitespace.verbose (stx.getHead?.getD stx)
+          m!"The `whitespace` linter had some parsing issues: \
+            feel free to silence it and report this error!"
+        pure none
+  if let some fmt := fmt then
+    let st := fmt.pretty
+    let origSubstring := stx.getSubstring?.getD default
+    let orig := origSubstring.toString
+
+    let scan := parallelScan orig st
+
+.getD default let docStringEnd := stx.find? (·.isOfKind ``Parser.Command.docComment)
+.getD default let docStringEnd := docStringEnd.getTailPos?
+    let forbidden := getUnlintedRanges unlintedNodes ∅ stx
+    for s in scan do
+      let center := origSubstring.stopPos.unoffsetBy s.srcEndPos
+      let rg : Lean.Syntax.Range :=
+.increaseBy 1⟩ .unoffsetBy s.srcStartPos .offsetBy s.srcEndPos ⟨center, center
+      if s.msg.startsWith "Oh no" then
+        Linter.logLintIf linter.style.whitespace.verbose (.ofRange rg)
+          m!"This should not have happened: please report this issue!"
+        Linter.logLintIf linter.style.whitespace.verbose (.ofRange rg)
+          m!"Formatted string:\n{fmt}\nOriginal string:\n{origSubstring}"
+        continue
+      unless isOutside forbidden rg do
+        continue
+      unless rg.stop <= upTo do return
+      unless docStringEnd <= rg.start do return
+
+      let ctx := 4 -- the number of characters after the mismatch that linter prints
+      let srcWindow := mkWindow orig s.srcNat (ctx + s.length)
+      let expectedWindow := mkWindow st s.fmtPos (ctx + (1))
+      Linter.logLint linter.style.whitespace (.ofRange rg)
+        m!"{s.msg} in the source\n\n\
+          This part of the code\n '{srcWindow}'\n\
+          should be written as\n '{expectedWindow}'\n"
+      Linter.logLintIf linter.style.whitespace.verbose (.ofRange rg)
+        m!"Formatted string:\n{fmt}\nOriginal string:\n{origSubstring}"
 
 中文:
 定义 whitespaceLinter
@@ -521,7 +777,59 @@ definition whitespaceLinter
 .isSome then if stx.find? (·.isOfKind ``runCmd)
     return
   -- If a command does not start on the first column, emit a warning.
-  i
+  if let some pos := stx.getPos? then
+    let colStart := ((← getFileMap).toPosition pos).column
+    if colStart != 0 then
+      Linter.logLint linter.style.whitespace stx
+        m!"'{stx}' starts on column {colStart}, \
+          but all commands should start at the beginning of the line."
+  -- We skip `macro_rules`, since they cause parsing issues.
+.isSome then if stx.find? (·.isOfKind `Lean.Parser.Command.macro_rules)
+    return
+  let some upTo := CommandStart.endPos stx | return
+
+  let fmt : Option Format ←
+      try
+liftCoreM some < > PrettyPrinter.ppCategory `command stx
+      catch _ =>
+        Linter.logLintIf linter.style.whitespace.verbose (stx.getHead?.getD stx)
+          m!"The `whitespace` linter had some parsing issues: \
+            feel free to silence it and report this error!"
+        pure none
+  if let some fmt := fmt then
+    let st := fmt.pretty
+    let origSubstring := stx.getSubstring?.getD default
+    let orig := origSubstring.toString
+
+    let scan := parallelScan orig st
+
+.getD default let docStringEnd := stx.find? (·.isOfKind ``Parser.Command.docComment)
+.getD default let docStringEnd := docStringEnd.getTailPos?
+    let forbidden := getUnlintedRanges unlintedNodes ∅ stx
+    for s in scan do
+      let center := origSubstring.stopPos.unoffsetBy s.srcEndPos
+      let rg : Lean.Syntax.Range :=
+.increaseBy 1⟩ .unoffsetBy s.srcStartPos .offsetBy s.srcEndPos ⟨center, center
+      if s.msg.startsWith "Oh no" then
+        Linter.logLintIf linter.style.whitespace.verbose (.ofRange rg)
+          m!"This should not have happened: please report this issue!"
+        Linter.logLintIf linter.style.whitespace.verbose (.ofRange rg)
+          m!"Formatted string:\n{fmt}\nOriginal string:\n{origSubstring}"
+        continue
+      unless isOutside forbidden rg do
+        continue
+      unless rg.stop <= upTo do return
+      unless docStringEnd <= rg.start do return
+
+      let ctx := 4 -- the number of characters after the mismatch that linter prints
+      let srcWindow := mkWindow orig s.srcNat (ctx + s.length)
+      let expectedWindow := mkWindow st s.fmtPos (ctx + (1))
+      Linter.logLint linter.style.whitespace (.ofRange rg)
+        m!"{s.msg} in the source\n\n\
+          This part of the code\n '{srcWindow}'\n\
+          should be written as\n '{expectedWindow}'\n"
+      Linter.logLintIf linter.style.whitespace.verbose (.ofRange rg)
+        m!"Formatted string:\n{fmt}\nOriginal string:\n{origSubstring}"
 
 Depends on / 依赖: withSetOptionIn
 -/

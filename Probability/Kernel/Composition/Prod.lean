@@ -472,7 +472,9 @@ nonrec instance IsZeroOrMarkovKernel.prod (κ : Kernel α β) [h : IsZeroOrMarko
     (η : Kernel α γ) [IsZeroOrMarkovKernel η] : IsZeroOrMarkovKernel (κ ×ₖ η) := by
   rcases eq_zero_or_isMarkovKernel κ with rfl | h
   · simp only [prod]; infer_instance
-  rc
+  rcases eq_zero_or_isMarkovKernel η with rfl | h'
+  · simp only [prod]; infer_instance
+  infer_instance
 
 中文:
 实例 是MarkovKernel.乘积
@@ -483,7 +485,9 @@ nonrec instance IsZeroOrMarkovKernel.prod (κ : Kernel α β) [h : IsZeroOrMarko
     (η : Kernel α γ) [IsZeroOrMarkovKernel η] : IsZeroOrMarkovKernel (κ ×ₖ η) := by
   rcases eq_zero_or_isMarkovKernel κ with rfl | h
   · simp only [prod]; infer_instance
-  rc
+  rcases eq_zero_or_isMarkovKernel η with rfl | h'
+  · simp only [prod]; infer_instance
+  infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prod, infer_instance
 -/
@@ -665,7 +669,8 @@ lemma comap_prod_swap
   swap; · fun_prop
   simp only [prodMkRight_apply, Prod.fst_swap, Prod.swap_prod_mk, lintegral_prodMkLeft,
     Prod.snd_swap]
-  refine (lintegral_
+  refine (lintegral_lintegral_swap ?_).symm
+  fun_prop
 
 中文:
 引理 comap_prod_swap
@@ -677,7 +682,8 @@ lemma comap_prod_swap
   swap; · fun_prop
   simp only [prodMkRight_apply, Prod.fst_swap, Prod.swap_prod_mk, lintegral_prodMkLeft,
     Prod.snd_swap]
-  refine (lintegral_
+  refine (lintegral_lintegral_swap ?_).symm
+  fun_prop
 
 Depends on / 依赖: Prod.fst_swap, Prod.snd_swap, Prod.swap_prod_mk, ext_fun_iff, fst_swap, fun_prop, lintegral_comap, lintegral_lintegral_swap, lintegral_map, lintegral_prod, lintegral_prodMkLeft, measurable_swap, prodMkRight_apply, snd_swap, swap_prod_mk
 -/

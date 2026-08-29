@@ -93,7 +93,11 @@ theorem smul_diff_smul'
         ⟨g.unop⁻¹ * h * g.unop,
           hH.mem_comm ((congr_arg (· in H) (mul_inv_cancel_left _ _)).mpr (SetLike.coe_mem _))⟩
       map_one' := by rw [Subtype.ext_iff, coe_mk, coe_one, mul_one, inv_mul_cancel]
-
+      map_mul' := fun h₁ h₂ => by
+        simp only [Subtype.ext_iff, coe_mul, mul_assoc, mul_inv_cancel_left] }
+  refine (Fintype.prod_equiv (MulAction.toPerm g).symm _ _ fun x => ?_).trans (map_prod ϕ _ _).symm
+  simp only [ϕ, smul_apply_eq_smul_apply_inv_smul, smul_eq_mul_unop, mul_inv_rev, mul_assoc,
+    MonoidHom.id_apply, toPerm_symm_apply, MonoidHom.coe_mk, OneHom.coe_mk]
 
 中文:
 定理 smul_diff_smul'
@@ -105,7 +109,11 @@ theorem smul_diff_smul'
         ⟨g.unop⁻¹ * h * g.unop,
           hH.mem_comm ((congr_arg (· in H) (mul_inv_cancel_left _ _)).mpr (SetLike.coe_mem _))⟩
       map_one' := by rw [Subtype.ext_iff, coe_mk, coe_one, mul_one, inv_mul_cancel]
-
+      map_mul' := fun h₁ h₂ => by
+        simp only [Subtype.ext_iff, coe_mul, mul_assoc, mul_inv_cancel_left] }
+  refine (Fintype.prod_equiv (MulAction.toPerm g).symm _ _ fun x => ?_).trans (map_prod ϕ _ _).symm
+  simp only [ϕ, smul_apply_eq_smul_apply_inv_smul, smul_eq_mul_unop, mul_inv_rev, mul_assoc,
+    MonoidHom.id_apply, toPerm_symm_apply, MonoidHom.coe_mk, OneHom.coe_mk]
 
 Depends on / 依赖: Fintype, Fintype.prod_equiv, H.fintypeQuotientOfFiniteIndex, MulAction, MulAction.toPerm, SetLike, SetLike.coe_mem, Subtype, Subtype.ext_iff, coe_mem, coe_mk, coe_mul, coe_one, congr_arg, ext_iff, fintypeQuotientOfFiniteIndex, g.unop, hH.mem_comm, inv_mul_cancel, map_mul
 -/
@@ -141,7 +149,10 @@ instance :
             coe_one, ← Subtype.ext_iff])
   mul_smul g₁ g₂ q :=
     Quotient.inductionOn' q fun T =>
-      congr_arg Quotient.mk'' (by 
+      congr_arg Quotient.mk'' (by rw [mul_inv_rev]; exact mul_smul (op g₁⁻¹) (op g₂⁻¹) T)
+  one_smul q :=
+    Quotient.inductionOn' q fun T =>
+      congr_arg Quotient.mk'' (by rw [inv_one]; apply one_smul Gᵐᵒᵖ T)
 
 中文:
 实例 :
@@ -153,7 +164,10 @@ instance :
             coe_one, ← Subtype.ext_iff])
   mul_smul g₁ g₂ q :=
     Quotient.inductionOn' q fun T =>
-      congr_arg Quotient.mk'' (by 
+      congr_arg Quotient.mk'' (by rw [mul_inv_rev]; exact mul_smul (op g₁⁻¹) (op g₂⁻¹) T)
+  one_smul q :=
+    Quotient.inductionOn' q fun T =>
+      congr_arg Quotient.mk'' (by rw [inv_one]; apply one_smul Gᵐᵒᵖ T)
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.map, Quotient.mk, Subtype, Subtype.ext, Subtype.ext_iff, coe_mk, coe_one, congr_arg, ext_iff, inductionOn, inv_one, mul_eq_left, mul_eq_one_iff_eq_inv, mul_inv_rev, mul_smul, one_smul, smul_diff_smul
 -/
@@ -181,7 +195,9 @@ theorem smul_diff'
   let := H.fintypeQuotientOfFiniteIndex
   rw [diff]; rw [diff]; rw [index_eq_card]; rw [Nat.card_eq_fintype_card]; rw [← Finset.card_univ]; rw [← Finset.prod_const]; rw [← Finset.prod_mul_distrib]
   refine Finset.prod_congr rfl fun q _ => ?_
-  simp_rw [Subtype.ext_iff, MonoidHom.id_apply, coe_mul
+  simp_rw [Subtype.ext_iff, MonoidHom.id_apply, coe_mul, mul_assoc, mul_right_inj]
+  rw [smul_apply_eq_smul_apply_inv_smul]; rw [smul_eq_mul_unop]; rw [MulOpposite.unop_op]; rw [mul_left_inj]; rw [← Subtype.ext_iff]; rw [Equiv.apply_eq_iff_eq]; rw [inv_smul_eq_iff]
+  exact left_eq_mul.mpr ((QuotientGroup.eq_one_iff _).mpr h.2)
 
 中文:
 定理 smul_diff'
@@ -190,7 +206,9 @@ theorem smul_diff'
   let := H.fintypeQuotientOfFiniteIndex
   rw [diff]; rw [diff]; rw [index_eq_card]; rw [Nat.card_eq_fintype_card]; rw [← Finset.card_univ]; rw [← Finset.prod_const]; rw [← Finset.prod_mul_distrib]
   refine Finset.prod_congr rfl fun q _ => ?_
-  simp_rw [Subtype.ext_iff, MonoidHom.id_apply, coe_mul
+  simp_rw [Subtype.ext_iff, MonoidHom.id_apply, coe_mul, mul_assoc, mul_right_inj]
+  rw [smul_apply_eq_smul_apply_inv_smul]; rw [smul_eq_mul_unop]; rw [MulOpposite.unop_op]; rw [mul_left_inj]; rw [← Subtype.ext_iff]; rw [Equiv.apply_eq_iff_eq]; rw [inv_smul_eq_iff]
+  exact left_eq_mul.mpr ((QuotientGroup.eq_one_iff _).mpr h.2)
 
 Depends on / 依赖: Equiv.apply_eq_iff_eq, Finset, Finset.card_univ, Finset.prod_congr, Finset.prod_const, Finset.prod_mul_distrib, H.fintypeQuotientOfFiniteIndex, MonoidHom, MonoidHom.id_apply, MulOpposite, MulOpposite.unop_op, Nat.card_eq_fintype_card, Subtype, Subtype.ext_iff, apply_eq_iff_eq, card_eq_fintype_card, card_univ, coe_mul, ext_iff, fintypeQuotientOfFiniteIndex
 -/
@@ -214,7 +232,7 @@ theorem eq_one_of_smul_eq_one
       calc
         h ^ H.index = diff (MonoidHom.id H) (op ((h⁻¹ : H) : G) • α) α := by
           rw [← diff_inv]; rw [smul_diff']; rw [diff_self]; rw [one_mul]; rw [inv_pow]; rw [inv_inv]
-        _ = 1 ^ H.index := (Quotient.exact' hα).t
+        _ = 1 ^ H.index := (Quotient.exact' hα).trans (one_pow H.index).symm
 
 中文:
 定理 eq_one_of_smul_eq_one
@@ -224,7 +242,7 @@ theorem eq_one_of_smul_eq_one
       calc
         h ^ H.index = diff (MonoidHom.id H) (op ((h⁻¹ : H) : G) • α) α := by
           rw [← diff_inv]; rw [smul_diff']; rw [diff_self]; rw [one_mul]; rw [inv_pow]; rw [inv_inv]
-        _ = 1 ^ H.index := (Quotient.exact' hα).t
+        _ = 1 ^ H.index := (Quotient.exact' hα).trans (one_pow H.index).symm
 
 Depends on / 依赖: H.index, MonoidHom, MonoidHom.id, Quotient, Quotient.exact, Quotient.inductionOn, diff_inv, diff_self, inductionOn, injective, inv_inv, inv_pow, one_mul, one_pow, powCoprime, smul_diff
 -/
@@ -249,7 +267,8 @@ theorem exists_smul_eq
         ⟨(powCoprime hH).symm (diff (MonoidHom.id H) β α),
           (diff_inv _ _ _).symm.trans
             (inv_eq_one.mpr
-              ((smul_diff' β α ((powCoprime hH).symm (diff (MonoidH
+              ((smul_diff' β α ((powCoprime hH).symm (diff (MonoidHom.id H) β α))⁻¹).trans
+                (by rw [inv_pow, ← powCoprime_apply hH, Equiv.apply_symm_apply, mul_inv_cancel])))⟩)
 
 中文:
 定理 存在_smul_eq
@@ -260,7 +279,8 @@ theorem exists_smul_eq
         ⟨(powCoprime hH).symm (diff (MonoidHom.id H) β α),
           (diff_inv _ _ _).symm.trans
             (inv_eq_one.mpr
-              ((smul_diff' β α ((powCoprime hH).symm (diff (MonoidH
+              ((smul_diff' β α ((powCoprime hH).symm (diff (MonoidHom.id H) β α))⁻¹).trans
+                (by rw [inv_pow, ← powCoprime_apply hH, Equiv.apply_symm_apply, mul_inv_cancel])))⟩)
 
 Depends on / 依赖: Equiv.apply_symm_apply, Exists, Exists.imp, MonoidHom, MonoidHom.id, Quotient, Quotient.inductionOn, Quotient.sound, apply_symm_apply, diff_inv, inductionOn, inv_eq_one, inv_eq_one.mpr, inv_pow, mul_inv_cancel, powCoprime, powCoprime_apply, smul_diff, symm.trans
 -/
@@ -384,7 +404,19 @@ theorem step1
   have h5 : Nat.card K < Nat.card G := by
     rw [← K.index_mul_card]
     exact lt_mul_of_one_lt_left Nat.card_pos (one_lt_index_of_ne_top h3)
+  have h6 : Nat.Coprime (Nat.card (N.comap K.subtype)) (N.comap K.subtype).index := by
+    rw [h4]
+    exact h1.coprime_dvd_left (card_comap_dvd_of_injective N K.subtype Subtype.coe_injective)
+  obtain ⟨H, hH⟩ := h2 K h5 h6
+  replace hH : Nat.card (H.map K.subtype) = N.index := by
+    rw [← relIndex_bot_left]; rw [← relIndex_comap]; rw [MonoidHom.comap_bot]; rw [Subgroup.ker_subtype]; rw [relIndex_bot_left]; rw [← IsComplement'.index_eq_card (IsComplement'.symm hH)]; rw [index_comap]; rw [range_subtype]; rw [← relIndex_sup_right]; rw [hK]; rw [relIndex_top_right]
+  have h7 : Nat.card N * Nat.card (H.map K.subtype) = Nat.card G := by
+    rw [hH]; rw [← N.index_mul_card]; rw [mul_comm]
+  have h8 : (Nat.card N).Coprime (Nat.card (H.map K.subtype)) := by
+    rwa [hH]
+  exact ⟨H.map K.subtype, isComplement'_of_coprime h7 h8⟩
 
+include h2 in
 
 中文:
 定理 step1
@@ -398,7 +430,19 @@ theorem step1
   have h5 : Nat.card K < Nat.card G := by
     rw [← K.index_mul_card]
     exact lt_mul_of_one_lt_left Nat.card_pos (one_lt_index_of_ne_top h3)
+  have h6 : Nat.Coprime (Nat.card (N.comap K.subtype)) (N.comap K.subtype).index := by
+    rw [h4]
+    exact h1.coprime_dvd_left (card_comap_dvd_of_injective N K.subtype Subtype.coe_injective)
+  obtain ⟨H, hH⟩ := h2 K h5 h6
+  replace hH : Nat.card (H.map K.subtype) = N.index := by
+    rw [← relIndex_bot_left]; rw [← relIndex_comap]; rw [MonoidHom.comap_bot]; rw [Subgroup.ker_subtype]; rw [relIndex_bot_left]; rw [← IsComplement'.index_eq_card (IsComplement'.symm hH)]; rw [index_comap]; rw [range_subtype]; rw [← relIndex_sup_right]; rw [hK]; rw [relIndex_top_right]
+  have h7 : Nat.card N * Nat.card (H.map K.subtype) = Nat.card G := by
+    rw [hH]; rw [← N.index_mul_card]; rw [mul_comm]
+  have h8 : (Nat.card N).Coprime (Nat.card (H.map K.subtype)) := by
+    rwa [hH]
+  exact ⟨H.map K.subtype, isComplement'_of_coprime h7 h8⟩
 
+include h2 in
 -/
 private theorem step1 (K : Subgroup G) (hK : K ⊔ N = ⊤) : K = ⊤ := by
   contrapose! h3
@@ -435,7 +479,28 @@ theorem step2
   have h5 : Nat.card (G ⧸ K) < Nat.card G := by
     rw [← index_eq_card]; rw [← K.index_mul_card]
     refine
-      lt_mul_of_one_lt_right (Nat.pos_of_ne_zero index_ne_zero_o
+      lt_mul_of_one_lt_right (Nat.pos_of_ne_zero index_ne_zero_of_finite)
+        (K.one_lt_card_iff_ne_bot.mpr h4.1)
+  have h6 :
+    (Nat.card (N.map (QuotientGroup.mk' K))).Coprime (N.map (QuotientGroup.mk' K)).index := by
+    have index_map := N.index_map_eq this (by rwa [QuotientGroup.ker_mk'])
+    have index_pos : 0 < N.index := Nat.pos_of_ne_zero index_ne_zero_of_finite
+    rw [index_map]
+    refine h1.coprime_dvd_left ?_
+    rw [← Nat.mul_dvd_mul_iff_left index_pos]; rw [index_mul_card]; rw [← index_map]; rw [index_mul_card]
+    exact K.card_quotient_dvd_card
+  obtain ⟨H, hH⟩ := h2 (G ⧸ K) h5 h6
+  refine ⟨H.comap (QuotientGroup.mk' K), ?_, ?_⟩
+  · have key : (N.map (QuotientGroup.mk' K)).comap (QuotientGroup.mk' K) = N := by
+      refine comap_map_eq_self ?_
+      rwa [QuotientGroup.ker_mk']
+    rwa [← key, comap_sup_eq, hH.symm.sup_eq_top, comap_top]
+  · rw [← comap_top (QuotientGroup.mk' K)]
+    intro hH'
+    rw [comap_injective this hH']; rw [isComplement'_top_right]; rw [map_eq_bot_iff]; rw [QuotientGroup.ker_mk'] at hH
+    exact h4.2 (le_antisymm hK hH)
+
+include h2 in
 
 中文:
 定理 step2
@@ -448,7 +513,28 @@ theorem step2
   have h5 : Nat.card (G ⧸ K) < Nat.card G := by
     rw [← index_eq_card]; rw [← K.index_mul_card]
     refine
-      lt_mul_of_one_lt_right (Nat.pos_of_ne_zero index_ne_zero_o
+      lt_mul_of_one_lt_right (Nat.pos_of_ne_zero index_ne_zero_of_finite)
+        (K.one_lt_card_iff_ne_bot.mpr h4.1)
+  have h6 :
+    (Nat.card (N.map (QuotientGroup.mk' K))).Coprime (N.map (QuotientGroup.mk' K)).index := by
+    have index_map := N.index_map_eq this (by rwa [QuotientGroup.ker_mk'])
+    have index_pos : 0 < N.index := Nat.pos_of_ne_zero index_ne_zero_of_finite
+    rw [index_map]
+    refine h1.coprime_dvd_left ?_
+    rw [← Nat.mul_dvd_mul_iff_left index_pos]; rw [index_mul_card]; rw [← index_map]; rw [index_mul_card]
+    exact K.card_quotient_dvd_card
+  obtain ⟨H, hH⟩ := h2 (G ⧸ K) h5 h6
+  refine ⟨H.comap (QuotientGroup.mk' K), ?_, ?_⟩
+  · have key : (N.map (QuotientGroup.mk' K)).comap (QuotientGroup.mk' K) = N := by
+      refine comap_map_eq_self ?_
+      rwa [QuotientGroup.ker_mk']
+    rwa [← key, comap_sup_eq, hH.symm.sup_eq_top, comap_top]
+  · rw [← comap_top (QuotientGroup.mk' K)]
+    intro hH'
+    rw [comap_injective this hH']; rw [isComplement'_top_right]; rw [map_eq_bot_iff]; rw [QuotientGroup.ker_mk'] at hH
+    exact h4.2 (le_antisymm hK hH)
+
+include h2 in
 -/
 private theorem step2 (K : Subgroup G) [K.Normal] (hK : K <= N) : K = ⊥ ∨ K = N := by
   have : Function.Surjective (QuotientGroup.mk' K) := Quotient.mk''_surjective
@@ -576,7 +662,9 @@ theorem step6
   rw [← MonoidHom.range_eq_top]; rw [range_subtype]
   have : (P.1.map N.subtype).Normal :=
     normalizer_eq_top_iff.mp (step1 h1 h2 h3 _ P.normalizer_sup_eq_top)
-  exac
+  exact (step3 h1 h2 h3 P.1).resolve_left (step5 h1 h3)
+
+include h2 in
 
 中文:
 定理 step6
@@ -587,7 +675,9 @@ theorem step6
   rw [← MonoidHom.range_eq_top]; rw [range_subtype]
   have : (P.1.map N.subtype).Normal :=
     normalizer_eq_top_iff.mp (step1 h1 h2 h3 _ P.normalizer_sup_eq_top)
-  exac
+  exact (step3 h1 h2 h3 P.1).resolve_left (step5 h1 h3)
+
+include h2 in
 -/
 private theorem step6 : IsPGroup (Nat.card N).minFac N := by
   have : Fact (Nat.card N).minFac.Prime := ⟨step4 h1 h3⟩
@@ -646,7 +736,7 @@ theorem exists_right_complement'_of_coprime_aux'
   rintro G _ _ rfl N _ hN
   refine not_forall_not.mp fun h3 => ?_
   have := SchurZassenhausInduction.step7 hN (fun G' _ _ hG' => by apply ih _ hG'; rfl) h3
-  exact not_exists_of_forall_not h3 (exists_right_complement'_of_coprime
+  exact not_exists_of_forall_not h3 (exists_right_complement'_of_coprime_aux hN)
 
 中文:
 定理 存在_right_complement'_of_coprime_aux'
@@ -657,7 +747,7 @@ theorem exists_right_complement'_of_coprime_aux'
   rintro G _ _ rfl N _ hN
   refine not_forall_not.mp fun h3 => ?_
   have := SchurZassenhausInduction.step7 hN (fun G' _ _ hG' => by apply ih _ hG'; rfl) h3
-  exact not_exists_of_forall_not h3 (exists_right_complement'_of_coprime
+  exact not_exists_of_forall_not h3 (exists_right_complement'_of_coprime_aux hN)
 -/
 private theorem exists_right_complement'_of_coprime_aux' [Finite G] (hG : Nat.card G = n)
     {N : Subgroup G} [N.Normal] (hN : Nat.Coprime (Nat.card N) N.index) :
@@ -684,7 +774,12 @@ theorem exists_right_complement'_of_coprime
   · rw [hN2, Nat.coprime_zero_right, Nat.card_eq_one_iff_unique] at hN
     have := hN.1
     rw [N.eq_bot_of_subsingleton]
-    exact
+    exact ⟨⊤, isComplement'_bot_top⟩
+  have hN3 : Finite G := by
+    apply Nat.finite_of_card_ne_zero
+    rw [← N.card_mul_index]
+    exact mul_ne_zero hN1 hN2
+  exact exists_right_complement'_of_coprime_aux' rfl hN
 
 中文:
 定理 存在_right_complement'_of_coprime
@@ -698,7 +793,12 @@ theorem exists_right_complement'_of_coprime
   · rw [hN2, Nat.coprime_zero_right, Nat.card_eq_one_iff_unique] at hN
     have := hN.1
     rw [N.eq_bot_of_subsingleton]
-    exact
+    exact ⟨⊤, isComplement'_bot_top⟩
+  have hN3 : Finite G := by
+    apply Nat.finite_of_card_ne_zero
+    rw [← N.card_mul_index]
+    exact mul_ne_zero hN1 hN2
+  exact exists_right_complement'_of_coprime_aux' rfl hN
 
 Depends on / 依赖: Finite, N.card_mul_index, N.eq_bot_of_subsingleton, N.index, Nat.card, Nat.card_eq_one_iff_unique, Nat.coprime_zero_left, Nat.coprime_zero_right, Nat.finite_of_card_ne_zero, _bot_top, _of_coprime_aux, _top_bot, card_eq_one_iff_unique, card_mul_index, coprime_zero_left, coprime_zero_right, eq_bot_of_subsingleton, exists_right_complement, finite_of_card_ne_zero, index_eq_one
 -/

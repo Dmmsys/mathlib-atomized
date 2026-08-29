@@ -760,7 +760,8 @@ lemma divConst_le_mulConst_sq
   refine le_of_mul_le_mul_right ?_ (by positivity : (0 : Rat>=0) < #A * #A)
   calc
     _ = #(A / A) * (#A : Rat>=0) := by rw [← mul_assoc, divConst_mul_card]
-    _ <= #(A * A) * #(A * A) := by norm_cast; exact ruzsa_triangle_inequality_div_mul
+    _ <= #(A * A) * #(A * A) := by norm_cast; exact ruzsa_triangle_inequality_div_mul_mul ..
+    _ = _ := by rw [← mulConst_mul_card]; ring
 
 中文:
 引理 divConst_le_mulConst_sq
@@ -771,7 +772,8 @@ lemma divConst_le_mulConst_sq
   refine le_of_mul_le_mul_right ?_ (by positivity : (0 : Rat>=0) < #A * #A)
   calc
     _ = #(A / A) * (#A : Rat>=0) := by rw [← mul_assoc, divConst_mul_card]
-    _ <= #(A * A) * #(A * A) := by norm_cast; exact ruzsa_triangle_inequality_div_mul
+    _ <= #(A * A) * #(A * A) := by norm_cast; exact ruzsa_triangle_inequality_div_mul_mul ..
+    _ = _ := by rw [← mulConst_mul_card]; ring
 
 Depends on / 依赖: A.eq_empty_or_nonempty, divConst_mul_card, eq_empty_or_nonempty, le_of_mul_le_mul_right, mulConst_mul_card, mul_assoc, ruzsa_triangle_inequality_div_mul_mul
 -/
@@ -860,7 +862,8 @@ lemma mulConst_le_divConst_sq
   refine le_of_mul_le_mul_right ?_ (by positivity : (0 : Rat>=0) < #A * #A)
   calc
     _ = #(A * A) * (#A : Rat>=0) := by rw [← mul_assoc, mulConst_mul_card]
-    _ <= #(A / A) * #(A / A) := by norm_cast; exact ruzsa_triangle_inequality_mul_div
+    _ <= #(A / A) * #(A / A) := by norm_cast; exact ruzsa_triangle_inequality_mul_div_div ..
+    _ = _ := by rw [← divConst_mul_card]; ring
 
 中文:
 引理 mulConst_le_divConst_sq
@@ -871,7 +874,8 @@ lemma mulConst_le_divConst_sq
   refine le_of_mul_le_mul_right ?_ (by positivity : (0 : Rat>=0) < #A * #A)
   calc
     _ = #(A * A) * (#A : Rat>=0) := by rw [← mul_assoc, mulConst_mul_card]
-    _ <= #(A / A) * #(A / A) := by norm_cast; exact ruzsa_triangle_inequality_mul_div
+    _ <= #(A / A) * #(A / A) := by norm_cast; exact ruzsa_triangle_inequality_mul_div_div ..
+    _ = _ := by rw [← divConst_mul_card]; ring
 
 Depends on / 依赖: A.eq_empty_or_nonempty, divConst_mul_card, eq_empty_or_nonempty, le_of_mul_le_mul_right, mulConst_mul_card, mul_assoc, ruzsa_triangle_inequality_mul_div_div
 -/

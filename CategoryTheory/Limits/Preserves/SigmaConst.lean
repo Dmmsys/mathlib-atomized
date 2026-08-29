@@ -41,7 +41,19 @@ instance [HasCoproducts.{w}
     let coconeTypes (s : Cocone (K ⋙ sigmaConst.obj R)) : K.CoconeTypes :=
       { pt := R ⟶ s.pt
         ι j k := Sigma.ι (fun _ => R) k ≫ s.ι.app j
-        ι_naturality g := by ext; simp [← s.w g]
+        ι_naturality g := by ext; simp [← s.w g] }
+    exact {
+      desc s := Sigma.desc (hc.desc (coconeTypes s))
+      fac s j := by
+        dsimp
+        ext k
+        simp [dsimp% hc.fac_apply, dsimp% Sigma.ι_desc (hc.desc (coconeTypes s)), coconeTypes]
+      uniq s m hm := by
+        dsimp
+        ext x
+        obtain ⟨j, k, rfl⟩ := Functor.CoconeTypes.IsColimit.ι_jointly_surjective hc x
+        simp [coconeTypes, ← hm, dsimp% hc.fac_apply,
+          dsimp% Sigma.ι_desc (hc.desc (coconeTypes s))] }⟩⟩⟩
 
 中文:
 实例 [HasCoproducts.{w}
@@ -51,7 +63,19 @@ instance [HasCoproducts.{w}
     let coconeTypes (s : Cocone (K ⋙ sigmaConst.obj R)) : K.CoconeTypes :=
       { pt := R ⟶ s.pt
         ι j k := Sigma.ι (fun _ => R) k ≫ s.ι.app j
-        ι_naturality g := by ext; simp [← s.w g]
+        ι_naturality g := by ext; simp [← s.w g] }
+    exact {
+      desc s := Sigma.desc (hc.desc (coconeTypes s))
+      fac s j := by
+        dsimp
+        ext k
+        simp [dsimp% hc.fac_apply, dsimp% Sigma.ι_desc (hc.desc (coconeTypes s)), coconeTypes]
+      uniq s m hm := by
+        dsimp
+        ext x
+        obtain ⟨j, k, rfl⟩ := Functor.CoconeTypes.IsColimit.ι_jointly_surjective hc x
+        simp [coconeTypes, ← hm, dsimp% hc.fac_apply,
+          dsimp% Sigma.ι_desc (hc.desc (coconeTypes s))] }⟩⟩⟩
 
 Depends on / 依赖: Cocone, CoconeTypes, Functor, K.CoconeTypes, Sigma.desc, Types.isColimit_iff_coconeTypesIsColimit, coconeTypes, fac_apply, hc.desc, hc.fac_apply, isColimit_iff_coconeTypesIsColimit, replace, s.pt, sigmaConst, sigmaConst.obj
 -/
@@ -189,7 +213,11 @@ definition isColimitSigmaConstCokernelCofork
       by_cases hb : b in Set.range f
       · obtain ⟨a, rfl⟩ := hb
         simpa [-CokernelCofork.condition] using Sigma.ι (fun _ => R) a ≫= s.condition.symm
-      · simp [ι_sigm
+      · simp [ι_sigmaConstCokernelCofork_π_assoc _ _ _ hb])
+    (fun s m hm => by
+      dsimp
+      ext ⟨b, hb⟩
+      rw [Sigma.ι_desc]; rw [← hm]; rw [ι_sigmaConstCokernelCofork_π_assoc])
 
 中文:
 定义 isColimitSigmaConstCokernelCofork
@@ -201,7 +229,11 @@ definition isColimitSigmaConstCokernelCofork
       by_cases hb : b in Set.range f
       · obtain ⟨a, rfl⟩ := hb
         simpa [-CokernelCofork.condition] using Sigma.ι (fun _ => R) a ≫= s.condition.symm
-      · simp [ι_sigm
+      · simp [ι_sigmaConstCokernelCofork_π_assoc _ _ _ hb])
+    (fun s m hm => by
+      dsimp
+      ext ⟨b, hb⟩
+      rw [Sigma.ι_desc]; rw [← hm]; rw [ι_sigmaConstCokernelCofork_π_assoc])
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.mk, CokernelCofork, CokernelCofork.condition, IsColimit, Set.range, Sigma.desc, condition, s.condition.symm
 -/

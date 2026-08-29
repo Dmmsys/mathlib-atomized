@@ -32,7 +32,16 @@ lemma eq_finite_iUnion_of_isTopologicalBasis_of_isCompact_open
   obtain ⟨t, ht⟩ :=
     hUc.elim_finite_subcover (b ∘ f') (fun i => hb.isOpen (Set.mem_range_self _)) (by rw [e])
   classical
-  refine ⟨t.image f', Set.toFinite _, le_antisymm ?
+  refine ⟨t.image f', Set.toFinite _, le_antisymm ?_ ?_⟩
+  · refine Set.Subset.trans ht ?_
+    simp only [Set.iUnion_subset_iff]
+    intro i hi
+    simpa using subset_iUnion₂ (s := fun i _ => b (f' i)) i hi
+  · apply Set.iUnion₂_subset
+    rintro i hi
+    obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hi
+    rw [e]
+    exact Set.subset_iUnion (b ∘ f') j
 
 中文:
 引理 eq_finite_iUnion_of_isTopologicalBasis_of_isCompact_open
@@ -45,7 +54,16 @@ lemma eq_finite_iUnion_of_isTopologicalBasis_of_isCompact_open
   obtain ⟨t, ht⟩ :=
     hUc.elim_finite_subcover (b ∘ f') (fun i => hb.isOpen (Set.mem_range_self _)) (by rw [e])
   classical
-  refine ⟨t.image f', Set.toFinite _, le_antisymm ?
+  refine ⟨t.image f', Set.toFinite _, le_antisymm ?_ ?_⟩
+  · refine Set.Subset.trans ht ?_
+    simp only [Set.iUnion_subset_iff]
+    intro i hi
+    simpa using subset_iUnion₂ (s := fun i _ => b (f' i)) i hi
+  · apply Set.iUnion₂_subset
+    rintro i hi
+    obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hi
+    rw [e]
+    exact Set.subset_iUnion (b ∘ f') j
 
 Depends on / 依赖: Finset, Finset.mem_imag, Set.Subset.trans, Set.iUnion, Set.iUnion_subset_iff, Set.mem_range_self, Set.toFinite, Subset, classical, elim_finite_subcover, hUc.elim_finite_subcover, hb.isOpen, hb.open_eq_iUnion, iUnion_subset_iff, isOpen, le_antisymm, mem_imag, mem_range_self, open_eq_iUnion, t.image
 -/

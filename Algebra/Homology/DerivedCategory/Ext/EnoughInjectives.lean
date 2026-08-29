@@ -49,7 +49,18 @@ lemma isSplitMono_from_singleFunctor_obj_of_injective
     ((L.isZero_of_isStrictlyGE i (i - 1) (by simp)).eq_of_src _ _)
   let α := (singleObjHomologySelfIso _ _ _).inv ≫ homologyMap ι i ≫ L.homologyι i ≫ e.inv
   have : ι.f i = (singleObjXSelf (ComplexShape.up Int) i I).hom ≫ α := by
-    rw [← cancel_mon
+    rw [← cancel_mono e.hom]
+    dsimp [α, e]
+    rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [pOpcyclesIso_inv_hom_id]; rw [comp_id]; rw [homologyι_naturality]
+    dsimp [singleFunctor, singleFunctors]
+    rw [singleObjHomologySelfIso_inv_homologyι_assoc]; rw [← pOpcycles_singleObjOpcyclesSelfIso_inv_assoc]; rw [Iso.inv_hom_id_assoc]; rw [p_opcyclesMap]
+  exact ⟨⟨{
+    retraction := mkHomToSingle (Injective.factorThru (𝟙 I) α) (by
+      rintro j rfl
+      apply (L.isZero_of_isStrictlyGE (j + 1) j (by simp)).eq_of_src)
+    id := by
+      apply HomologicalComplex.to_single_hom_ext
+      rw [comp_f]; rw [mkHomToSingle_f]; rw [id_f]; rw [this]; rw [assoc]; rw [Injective.comp_factorThru_assoc]; rw [id_comp]; rw [Iso.hom_inv_id] }⟩⟩
 
 中文:
 引理 isSplitMono_from_singleFunctor_obj_of_injective
@@ -58,7 +69,18 @@ lemma isSplitMono_from_singleFunctor_obj_of_injective
     ((L.isZero_of_isStrictlyGE i (i - 1) (by simp)).eq_of_src _ _)
   let α := (singleObjHomologySelfIso _ _ _).inv ≫ homologyMap ι i ≫ L.homologyι i ≫ e.inv
   have : ι.f i = (singleObjXSelf (ComplexShape.up Int) i I).hom ≫ α := by
-    rw [← cancel_mon
+    rw [← cancel_mono e.hom]
+    dsimp [α, e]
+    rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [pOpcyclesIso_inv_hom_id]; rw [comp_id]; rw [homologyι_naturality]
+    dsimp [singleFunctor, singleFunctors]
+    rw [singleObjHomologySelfIso_inv_homologyι_assoc]; rw [← pOpcycles_singleObjOpcyclesSelfIso_inv_assoc]; rw [Iso.inv_hom_id_assoc]; rw [p_opcyclesMap]
+  exact ⟨⟨{
+    retraction := mkHomToSingle (Injective.factorThru (𝟙 I) α) (by
+      rintro j rfl
+      apply (L.isZero_of_isStrictlyGE (j + 1) j (by simp)).eq_of_src)
+    id := by
+      apply HomologicalComplex.to_single_hom_ext
+      rw [comp_f]; rw [mkHomToSingle_f]; rw [id_f]; rw [this]; rw [assoc]; rw [Injective.comp_factorThru_assoc]; rw [id_comp]; rw [Iso.hom_inv_id] }⟩⟩
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, L.homology, L.isZero_of_isStrictlyGE, L.pOpcyclesIso, cancel_mono, comp_id, e.hom, e.inv, eq_of_src, homologyMap, isZero_of_isStrictlyGE, pOpcyclesIso, pOpcyclesIso_inv_hom_id, singleFunctor, singleFunctors, singleObjHomologySelfIso, singleObjHomologySelfIso_inv_hom, singleObjXSelf
 -/
@@ -101,7 +123,11 @@ lemma to_singleFunctor_obj_eq_zero_of_injective
     rw [isIso_Q_map_iff_quasiIso] at h
     exact CochainComplex.isSplitMono_from_singleFunctor_obj_of_injective ι
   have h₁ : inv (Q.map ι) = Q.map (retraction ι) := by
-    rw [← cancel_epi (Q.map ι)]; r
+    rw [← cancel_epi (Q.map ι)]; rw [IsIso.hom_inv_id]; rw [← Q.map_comp]; rw [IsSplitMono.id]; rw [Q.map_id]
+  have h₂ : g ≫ retraction ι = 0 := by
+    apply HomologicalComplex.to_single_hom_ext
+    apply (K.isZero_of_isStrictlyGE n i hn).eq_of_src
+  rw [h₁]; rw [← Q.map_comp]; rw [h₂]; rw [Q.map_zero]
 
 中文:
 引理 to_singleFunctor_obj_eq_zero_of_injective
@@ -112,7 +138,11 @@ lemma to_singleFunctor_obj_eq_zero_of_injective
     rw [isIso_Q_map_iff_quasiIso] at h
     exact CochainComplex.isSplitMono_from_singleFunctor_obj_of_injective ι
   have h₁ : inv (Q.map ι) = Q.map (retraction ι) := by
-    rw [← cancel_epi (Q.map ι)]; r
+    rw [← cancel_epi (Q.map ι)]; rw [IsIso.hom_inv_id]; rw [← Q.map_comp]; rw [IsSplitMono.id]; rw [Q.map_id]
+  have h₂ : g ≫ retraction ι = 0 := by
+    apply HomologicalComplex.to_single_hom_ext
+    apply (K.isZero_of_isStrictlyGE n i hn).eq_of_src
+  rw [h₁]; rw [← Q.map_comp]; rw [h₂]; rw [Q.map_zero]
 
 Depends on / 依赖: CochainComplex, CochainComplex.isSplitMono_from_singleFunctor_obj_of_injective, HomologicalComplex, HomologicalComplex.to_single_hom_ext, IsIso.hom_inv_id, IsSplitMono, IsSplitMono.id, K.isZero_of_isStrictlyGE, Q.map, Q.map_comp, Q.map_id, cancel_epi, eq_of_src, hom_inv_id, isIso_Q_map_iff_quasiIso, isSplitMono_from_singleFunctor_obj_of_injective, isZero_of_isStrictlyGE, left_fac_of_isStrictlyGE, map_comp, map_id
 -/
@@ -158,7 +188,7 @@ lemma eq_zero_of_injective
   apply homEquiv.injective
   simp only [← cancel_mono (((singleFunctors C).shiftIso (n + 1) (-(n + 1)) 0
     (by lia)).hom.app _), zero_hom, Limits.zero_comp]
-
+  exact to_singleFunctor_obj_eq_zero_of_injective (K := K) (n := -n) _ (by lia)
 
 中文:
 引理 eq_zero_of_injective
@@ -170,7 +200,7 @@ lemma eq_zero_of_injective
   apply homEquiv.injective
   simp only [← cancel_mono (((singleFunctors C).shiftIso (n + 1) (-(n + 1)) 0
     (by lia)).hom.app _), zero_hom, Limits.zero_comp]
-
+  exact to_singleFunctor_obj_eq_zero_of_injective (K := K) (n := -n) _ (by lia)
 
 Depends on / 依赖: CochainComplex, CochainComplex.singleFunctor, HasDerivedCategory, HasDerivedCategory.standard, K.isStrictlyGE_of_ge, Limits, Limits.zero_comp, cancel_mono, hom.app, homEquiv, homEquiv.injective, injective, isStrictlyGE_of_ge, shiftIso, singleFunctor, singleFunctors, standard, to_singleFunctor_obj_eq_zero_of_injective, zero_comp, zero_hom
 -/
@@ -226,7 +256,12 @@ lemma hasExt_of_enoughInjectives
       rw [small_congr Ext.homEquiv₀]
       infer_instance
     | succ n hn =>
-      let S := ShortComplex.mk _ _
+      let S := ShortComplex.mk _ _ (cokernel.condition (Injective.ι Y))
+      have hS : S.ShortExact :=
+        { exact := ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel S.f) }
+      have : Function.Surjective (Ext.postcomp hS.extClass X (rfl : n + 1 = _)) :=
+        fun y₁ => Ext.covariant_sequence_exact₁ X hS y₁ (Ext.eq_zero_of_injective _) rfl
+      exact small_of_surjective.{w} this
 
 中文:
 引理 hasExt_of_enoughInjectives
@@ -242,7 +277,12 @@ lemma hasExt_of_enoughInjectives
       rw [small_congr Ext.homEquiv₀]
       infer_instance
     | succ n hn =>
-      let S := ShortComplex.mk _ _
+      let S := ShortComplex.mk _ _ (cokernel.condition (Injective.ι Y))
+      have hS : S.ShortExact :=
+        { exact := ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel S.f) }
+      have : Function.Surjective (Ext.postcomp hS.extClass X (rfl : n + 1 = _)) :=
+        fun y₁ => Ext.covariant_sequence_exact₁ X hS y₁ (Ext.eq_zero_of_injective _) rfl
+      exact small_of_surjective.{w} this
 
 Depends on / 依赖: Ext.covariant_seque, Ext.homEquiv, Ext.postcomp, Function, Function.Surjective, HasDerivedCategory, HasDerivedCategory.standard, Injective, S.ShortExact, ShortComplex, ShortComplex.exact_of_g_is_cokernel, ShortComplex.mk, ShortExact, Surjective, cokernel, cokernel.condition, cokernelIsCokernel, condition, covariant_seque, exact_of_g_is_cokernel
 -/

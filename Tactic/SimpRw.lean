@@ -35,7 +35,15 @@ definition withSimpRWRulesSeq
   let numRules := (rules.size + 1) / 2
   for i in [:numRules] do
     let rule := rules[i * 2]!
-    let sep := rules.getD (i * 2 + 1) Syntax.mis
+    let sep := rules.getD (i * 2 + 1) Syntax.missing
+    -- show rule state up to (incl.) next `,`
+    withTacticInfoContext (mkNullNode #[rule, sep]) do
+      -- show errors on rule
+      withRef rule do
+        let symm := !rule[0].isNone
+        let term := rule[1]
+        -- let processId (id : Syntax) : TacticM Unit := do
+        x symm term
 
 中文:
 定义 withSimpRWRulesSeq
@@ -48,7 +56,15 @@ definition withSimpRWRulesSeq
   let numRules := (rules.size + 1) / 2
   for i in [:numRules] do
     let rule := rules[i * 2]!
-    let sep := rules.getD (i * 2 + 1) Syntax.mis
+    let sep := rules.getD (i * 2 + 1) Syntax.missing
+    -- show rule state up to (incl.) next `,`
+    withTacticInfoContext (mkNullNode #[rule, sep]) do
+      -- show errors on rule
+      withRef rule do
+        let symm := !rule[0].isNone
+        let term := rule[1]
+        -- let processId (id : Syntax) : TacticM Unit := do
+        x symm term
 -/
 def withSimpRWRulesSeq (rwRulesSeqStx : Syntax)
     (x : (symm : Bool) -> (term : Syntax) -> TacticM Unit) : TacticM Unit := do

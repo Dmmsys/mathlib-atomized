@@ -83,7 +83,7 @@ definition pullbackLimitCone
     PullbackCone.isLimitAux _ (fun s => ↾fun x => ⟨⟨s.fst x, s.snd x⟩, congr_hom s.condition x⟩)
       (by aesop) (by aesop) fun _ _ w =>
 ConcreteCategory.ext TypeCat.Fun.ext funext fun x => Subtype.ext
-        Prod.ext (congr_hom (w WalkingCospan.left) x) (congr_hom (w
+        Prod.ext (congr_hom (w WalkingCospan.left) x) (congr_hom (w WalkingCospan.right) x)
 
 中文:
 定义 pullbackLimitCone
@@ -93,7 +93,7 @@ ConcreteCategory.ext TypeCat.Fun.ext funext fun x => Subtype.ext
     PullbackCone.isLimitAux _ (fun s => ↾fun x => ⟨⟨s.fst x, s.snd x⟩, congr_hom s.condition x⟩)
       (by aesop) (by aesop) fun _ _ w =>
 ConcreteCategory.ext TypeCat.Fun.ext funext fun x => Subtype.ext
-        Prod.ext (congr_hom (w WalkingCospan.left) x) (congr_hom (w
+        Prod.ext (congr_hom (w WalkingCospan.left) x) (congr_hom (w WalkingCospan.right) x)
 
 Depends on / 依赖: pullbackCone
 -/
@@ -480,7 +480,9 @@ lemma range_fst_of_isPullback
     ext p
     suffices fst p = pullback.fst f g (h.isoPullback.hom p) by simpa
     rw [← comp_apply h.isoPullback.hom (pullback.fst f g)]; rw [IsPullback.isoPullback_hom_fst]
-  rw 
+  rw [this]; rw [Set.range_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr (surjective_of_epi e.hom)]
+  ext
+  simp [eq_comm]
 
 中文:
 引理 range_fst_of_isPullback
@@ -491,7 +493,9 @@ lemma range_fst_of_isPullback
     ext p
     suffices fst p = pullback.fst f g (h.isoPullback.hom p) by simpa
     rw [← comp_apply h.isoPullback.hom (pullback.fst f g)]; rw [IsPullback.isoPullback_hom_fst]
-  rw 
+  rw [this]; rw [Set.range_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr (surjective_of_epi e.hom)]
+  ext
+  simp [eq_comm]
 
 Depends on / 依赖: IsPullback, IsPullback.isoPullback_hom_fst, Projective, Projective.factorThru, Quiver, Quiver.Hom.unop_inj, Set.range_comp, Set.range_eq_univ.mpr, Subtype, Subtype.val, Types.pullbackIsoPullback, _root_, _root_.Prod.fst, comp_apply, e.hom, eq_comm, f.unop, factorThru, g.unop, h.isoPullback
 -/
@@ -649,7 +653,14 @@ lemma isPullback_iff
     have hφ : IsIso φ := by
       rw [isIso_iff_bijective]
       constructor
-    
+      · intro _ _ h
+        simp [φ] at h
+        grind
+      · intro x
+        obtain ⟨a, ha⟩ := h₂ x.1.1 x.1.2 (by grind)
+        cat_disch
+    exact ⟨⟨w⟩, ⟨IsLimit.ofIsoLimit ((Types.pullbackLimitCone r b).isLimit)
+      (PullbackCone.ext (asIso φ)).symm⟩⟩
 
 中文:
 引理 isPullback_iff
@@ -662,7 +673,14 @@ lemma isPullback_iff
     have hφ : IsIso φ := by
       rw [isIso_iff_bijective]
       constructor
-    
+      · intro _ _ h
+        simp [φ] at h
+        grind
+      · intro x
+        obtain ⟨a, ha⟩ := h₂ x.1.1 x.1.2 (by grind)
+        cat_disch
+    exact ⟨⟨w⟩, ⟨IsLimit.ofIsoLimit ((Types.pullbackLimitCone r b).isLimit)
+      (PullbackCone.ext (asIso φ)).symm⟩⟩
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, PullbackCone, PullbackCone.ext, PullbackObj, Types.pullbackLimitCone, cat_disch, congr_hom, exists_of_isPullback, ext_of_isPullback, isIso_iff_bijective, isLimit, ofIsoLimit, pullbackLimitCone
 -/

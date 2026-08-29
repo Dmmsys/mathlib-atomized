@@ -109,7 +109,9 @@ definition upperCentralSeriesStep
   inv_mem' {x} hx y := by
     specialize hx y⁻¹
     rw [commutatorElement_def]; rw [mul_assoc]; rw [inv_inv] at hx ⊢
-    exact Subg
+    exact Subgroup.Normal.mem_comm inferInstance hx
+
+@[to_additive]
 
 中文:
 定义 upperCentralSeriesStep
@@ -122,7 +124,9 @@ definition upperCentralSeriesStep
   inv_mem' {x} hx y := by
     specialize hx y⁻¹
     rw [commutatorElement_def]; rw [mul_assoc]; rw [inv_inv] at hx ⊢
-    exact Subg
+    exact Subgroup.Normal.mem_comm inferInstance hx
+
+@[to_additive]
 -/
 def upperCentralSeriesStep : Subgroup G where
   carrier := { x : G | forall y : G, ⁅x, y⁆ in N }
@@ -172,7 +176,7 @@ theorem upperCentralSeriesStep_eq_comap_center
   rw [coe_mk']; rw [← QuotientGroup.mk_mul]; rw [← QuotientGroup.mk_mul]; rw [eq_comm]; rw [eq_iff_div_mem]; rw [div_eq_mul_inv]; rw [mul_inv_rev]; rw [commutatorElement_def]
   simp_rw [mul_assoc]
 
-@[to
+@[to_additive]
 
 中文:
 定理 upperCentralSeriesStep_eq_comap_center
@@ -183,7 +187,7 @@ theorem upperCentralSeriesStep_eq_comap_center
   rw [coe_mk']; rw [← QuotientGroup.mk_mul]; rw [← QuotientGroup.mk_mul]; rw [eq_comm]; rw [eq_iff_div_mem]; rw [div_eq_mul_inv]; rw [mul_inv_rev]; rw [commutatorElement_def]
   simp_rw [mul_assoc]
 
-@[to
+@[to_additive]
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk_mul, coe_mk, commutatorElement_def, div_eq_mul_inv, eq_comm, eq_iff_div_mem, forall_congr, forall_mk, mem_center_iff, mem_comap, mk_mul, mul_assoc, mul_inv_rev, simp_rw
 -/
@@ -351,7 +355,7 @@ theorem upperCentralSeries_one
   simp only [upperCentralSeries, upperCentralSeriesAux, upperCentralSeriesStep, mem_bot, mem_mk,
     Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_ofPred_eq, mem_center_iff]
   exact forall_congr' fun y => by
-    rw [commutatorElement_def]; rw [mul_inv_eq_one]; rw [mul_inv_eq_iff_eq_mul]; r
+    rw [commutatorElement_def]; rw [mul_inv_eq_one]; rw [mul_inv_eq_iff_eq_mul]; rw [eq_comm]
 
 中文:
 定理 upperCentralSeries_one
@@ -361,7 +365,7 @@ theorem upperCentralSeries_one
   simp only [upperCentralSeries, upperCentralSeriesAux, upperCentralSeriesStep, mem_bot, mem_mk,
     Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_ofPred_eq, mem_center_iff]
   exact forall_congr' fun y => by
-    rw [commutatorElement_def]; rw [mul_inv_eq_one]; rw [mul_inv_eq_iff_eq_mul]; r
+    rw [commutatorElement_def]; rw [mul_inv_eq_one]; rw [mul_inv_eq_iff_eq_mul]; rw [eq_comm]
 
 Depends on / 依赖: Set.mem_ofPred_eq, Submonoid, Submonoid.mem_mk, Subsemigroup, Subsemigroup.mem_mk, commutatorElement_def, eq_comm, forall_congr, mem_bot, mem_center_iff, mem_mk, mem_ofPred_eq, mul_inv_eq_iff_eq_mul, mul_inv_eq_one, upperCentralSeries, upperCentralSeriesAux, upperCentralSeriesStep
 -/
@@ -384,7 +388,7 @@ theorem _root_.AddSubgroup.upperCentralSeries_one
     AddSubgroup.upperCentralSeriesStep, AddSubgroup.mem_bot, AddSubgroup.mem_mk,
     AddSubmonoid.mem_mk, AddSubsemigroup.mem_mk, Set.mem_ofPred_eq, AddSubgroup.mem_center_iff]
   exact forall_congr' fun y => by
-
+    rw [addCommutatorElement_def]; rw [add_neg_eq_zero]; rw [add_neg_eq_iff_eq_add]; rw [eq_comm]
 
 中文:
 定理 _root_.加法子群.upperCentralSeries_one
@@ -395,7 +399,7 @@ theorem _root_.AddSubgroup.upperCentralSeries_one
     AddSubgroup.upperCentralSeriesStep, AddSubgroup.mem_bot, AddSubgroup.mem_mk,
     AddSubmonoid.mem_mk, AddSubsemigroup.mem_mk, Set.mem_ofPred_eq, AddSubgroup.mem_center_iff]
   exact forall_congr' fun y => by
-
+    rw [addCommutatorElement_def]; rw [add_neg_eq_zero]; rw [add_neg_eq_iff_eq_add]; rw [eq_comm]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mem_bot, AddSubgroup.mem_center_iff, AddSubgroup.mem_mk, AddSubgroup.upperCentralSeries, AddSubgroup.upperCentralSeriesAux, AddSubgroup.upperCentralSeriesStep, AddSubmonoid, AddSubmonoid.mem_mk, AddSubsemigroup, AddSubsemigroup.mem_mk, Set.mem_ofPred_eq, addCommutatorElement_def, add_neg_eq_iff_eq_add, add_neg_eq_zero, eq_comm, forall_congr, mem_bot, mem_center_iff, mem_mk
 -/
@@ -843,7 +847,9 @@ theorem is_descending_rev_series_of_is_ascending
     exact Subgroup.one_mem _
   · apply hH
     convert! hx using 1
-    rw [tsub_add_eq_add_t
+    rw [tsub_add_eq_add_tsub (Nat.succ_le_of_lt hm)]; rw [Nat.succ_eq_add_one]; rw [Nat.add_sub_add_right]
+
+@[to_additive]
 
 中文:
 定理 is_descending_rev_series_of_is_ascending
@@ -859,7 +865,9 @@ theorem is_descending_rev_series_of_is_ascending
     exact Subgroup.one_mem _
   · apply hH
     convert! hx using 1
-    rw [tsub_add_eq_add_t
+    rw [tsub_add_eq_add_tsub (Nat.succ_le_of_lt hm)]; rw [Nat.succ_eq_add_one]; rw [Nat.add_sub_add_right]
+
+@[to_additive]
 
 Depends on / 依赖: Nat.add_sub_add_right, Nat.succ_eq_add_one, Nat.succ_le_of_lt, Subgroup, Subgroup.mem_bot, Subgroup.one_mem, add_sub_add_right, commutatorElement_one_left, convert, mem_bot, one_mem, succ_eq_add_one, succ_le_of_lt, tsub_add_eq_add_tsub, tsub_eq_zero_of_le
 -/
@@ -893,7 +901,7 @@ theorem is_ascending_rev_series_of_is_descending
     rw [hnm]; rw [h0]
     exact mem_top _
   · convert! hH x _ hx g using 1
-    rw [tsub_add_eq_add_tsub (Nat.succ_le_of_lt hm)]; rw [Nat
+    rw [tsub_add_eq_add_tsub (Nat.succ_le_of_lt hm)]; rw [Nat.succ_eq_add_one]; rw [Nat.add_sub_add_right]
 
 中文:
 定理 is_ascending_rev_series_of_is_descending
@@ -907,7 +915,7 @@ theorem is_ascending_rev_series_of_is_descending
     rw [hnm]; rw [h0]
     exact mem_top _
   · convert! hH x _ hx g using 1
-    rw [tsub_add_eq_add_tsub (Nat.succ_le_of_lt hm)]; rw [Nat
+    rw [tsub_add_eq_add_tsub (Nat.succ_le_of_lt hm)]; rw [Nat.succ_eq_add_one]; rw [Nat.add_sub_add_right]
 
 Depends on / 依赖: Nat.add_sub_add_right, Nat.succ_eq_add_one, Nat.succ_le_of_lt, add_sub_add_right, convert, mem_top, succ_eq_add_one, succ_le_of_lt, tsub_add_eq_add_tsub, tsub_eq_zero_iff_le, tsub_eq_zero_iff_le.mpr
 -/
@@ -941,7 +949,10 @@ theorem nilpotent_iff_finite_descending_central_series
     rw [tsub_self]
     exact hH.1
   · rintro ⟨n, H, hH, hn⟩
-    refine ⟨n, fun m => H (n - m), is_as
+    refine ⟨n, fun m => H (n - m), is_ascending_rev_series_of_is_descending G hn hH, ?_⟩
+    dsimp only
+    rw [tsub_self]
+    exact hH.1
 
 中文:
 定理 nilpotent_iff_finite_descending_central_series
@@ -954,7 +965,10 @@ theorem nilpotent_iff_finite_descending_central_series
     rw [tsub_self]
     exact hH.1
   · rintro ⟨n, H, hH, hn⟩
-    refine ⟨n, fun m => H (n - m), is_as
+    refine ⟨n, fun m => H (n - m), is_ascending_rev_series_of_is_descending G hn hH, ?_⟩
+    dsimp only
+    rw [tsub_self]
+    exact hH.1
 
 Depends on / 依赖: is_ascending_rev_series_of_is_descending, is_descending_rev_series_of_is_ascending, nilpotent_iff_finite_ascending_central_series, tsub_self
 -/
@@ -1313,7 +1327,9 @@ theorem isNilpotent_iff_lowerCentralSeries
     have h1 := descending_central_series_ge_lower H hH n
     rw [hn]; rw [le_bot_iff] at h1
     rw [← top_subtype_lowerCentralSeries]; rw [h1]; rw [Subgroup.map_bot]
-  · rintro ⟨n,
+  · rintro ⟨n, hn⟩
+    refine ⟨n, lowerCentralSeries ⊤, lowerCentralSeries_isDescendingCentralSeries, ?_⟩
+    rwa [← map_subtype_inj, map_bot, top_subtype_lowerCentralSeries]
 
 中文:
 定理 isNilpotent_iff_lowerCentralSeries
@@ -1325,7 +1341,9 @@ theorem isNilpotent_iff_lowerCentralSeries
     have h1 := descending_central_series_ge_lower H hH n
     rw [hn]; rw [le_bot_iff] at h1
     rw [← top_subtype_lowerCentralSeries]; rw [h1]; rw [Subgroup.map_bot]
-  · rintro ⟨n,
+  · rintro ⟨n, hn⟩
+    refine ⟨n, lowerCentralSeries ⊤, lowerCentralSeries_isDescendingCentralSeries, ?_⟩
+    rwa [← map_subtype_inj, map_bot, top_subtype_lowerCentralSeries]
 
 Depends on / 依赖: Subgroup, Subgroup.map_bot, descending_central_series_ge_lower, le_bot_iff, lowerCentralSeries, lowerCentralSeries_isDescendingCentralSeries, map_bot, map_subtype_inj, nilpotent_iff_finite_descending_central_series, top_subtype_lowerCentralSeries
 -/
@@ -1571,7 +1589,11 @@ theorem least_descending_central_series_length_eq_nilpotencyClass
     dsimp only
     rw [tsub_self]
     exact hH.1
-  · rintro
+  · rintro n ⟨H, ⟨hH, hn⟩⟩
+    refine ⟨fun m => H (n - m), is_ascending_rev_series_of_is_descending G hn hH, ?_⟩
+    dsimp only
+    rw [tsub_self]
+    exact hH.1
 
 中文:
 定理 least_descending_central_series_length_eq_nilpotencyClass
@@ -1583,7 +1605,11 @@ theorem least_descending_central_series_length_eq_nilpotencyClass
     dsimp only
     rw [tsub_self]
     exact hH.1
-  · rintro
+  · rintro n ⟨H, ⟨hH, hn⟩⟩
+    refine ⟨fun m => H (n - m), is_ascending_rev_series_of_is_descending G hn hH, ?_⟩
+    dsimp only
+    rw [tsub_self]
+    exact hH.1
 
 Depends on / 依赖: Nat.find_mono, find_mono, is_ascending_rev_series_of_is_descending, is_descending_rev_series_of_is_ascending, le_antisymm, least_ascending_central_series_length_eq_nilpotencyClass, tsub_self
 -/
@@ -1619,7 +1645,9 @@ theorem lowerCentralSeries_length_eq_nilpotencyClass
     rw [← le_bot_iff]; rw [← hn]
     exact descending_central_series_ge_lower H hH n
   · rintro n h
-    exact ⟨lowerCentralSeries ⊤, ⟨lowerCentr
+    exact ⟨lowerCentralSeries ⊤, ⟨lowerCentralSeries_isDescendingCentralSeries, h⟩⟩
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 lowerCentralSeries_length_eq_nilpotencyClass
@@ -1630,7 +1658,9 @@ theorem lowerCentralSeries_length_eq_nilpotencyClass
     rw [← le_bot_iff]; rw [← hn]
     exact descending_central_series_ge_lower H hH n
   · rintro n h
-    exact ⟨lowerCentralSeries ⊤, ⟨lowerCentr
+    exact ⟨lowerCentralSeries ⊤, ⟨lowerCentralSeries_isDescendingCentralSeries, h⟩⟩
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Nat.find_mono, descending_central_series_ge_lower, find_mono, le_antisymm, le_bot_iff, least_descending_central_series_length_eq_nilpotencyClass, lowerCentralSeries, lowerCentralSeries_isDescendingCentralSeries
 -/
@@ -1737,7 +1767,8 @@ theorem lowerCentralSeries_eq_bot_iff_upperCentralSeries_eq_top
     rwa [upperCentralSeries_eq_top_iff_nilpotencyClass_le,
       ← lowerCentralSeries_eq_bot_iff_nilpotencyClass_le]
   · have : IsNilpotent G := ⟨n, h⟩
-    rwa [lowerCentralSeries_eq_bot_if
+    rwa [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le,
+      ← upperCentralSeries_eq_top_iff_nilpotencyClass_le]
 
 中文:
 定理 lowerCentralSeries_eq_bot_iff_upperCentralSeries_eq_top
@@ -1748,7 +1779,8 @@ theorem lowerCentralSeries_eq_bot_iff_upperCentralSeries_eq_top
     rwa [upperCentralSeries_eq_top_iff_nilpotencyClass_le,
       ← lowerCentralSeries_eq_bot_iff_nilpotencyClass_le]
   · have : IsNilpotent G := ⟨n, h⟩
-    rwa [lowerCentralSeries_eq_bot_if
+    rwa [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le,
+      ← upperCentralSeries_eq_top_iff_nilpotencyClass_le]
 
 Depends on / 依赖: IsNilpotent, lowerCentralSeries_eq_bot_iff_nilpotencyClass_le, nilpotent_iff_lowerCentralSeries, nilpotent_iff_lowerCentralSeries.mpr, upperCentralSeries, upperCentralSeries_eq_top_iff_nilpotencyClass_le
 -/
@@ -2150,7 +2182,7 @@ theorem isNilpotent_of_ker_le_center
   refine ⟨n + 1, lowerCentralSeries_succ_eq_bot ⊤
     (le_trans ((Subgroup.map_eq_bot_iff _).mp ?_) hf1)⟩
   rw [map_lowerCentralSeries]; rw [← le_bot_iff]
-  exact hn ▸ Subgroup.lowerCentralSeries
+  exact hn ▸ Subgroup.lowerCentralSeries_mono n le_top
 
 中文:
 定理 isNilpotent_of_ker_le_center
@@ -2161,7 +2193,7 @@ theorem isNilpotent_of_ker_le_center
   refine ⟨n + 1, lowerCentralSeries_succ_eq_bot ⊤
     (le_trans ((Subgroup.map_eq_bot_iff _).mp ?_) hf1)⟩
   rw [map_lowerCentralSeries]; rw [← le_bot_iff]
-  exact hn ▸ Subgroup.lowerCentralSeries
+  exact hn ▸ Subgroup.lowerCentralSeries_mono n le_top
 
 Depends on / 依赖: Subgroup, Subgroup.lowerCentralSeries_mono, Subgroup.map_eq_bot_iff, le_bot_iff, le_top, le_trans, lowerCentralSeries_mono, lowerCentralSeries_succ_eq_bot, map_eq_bot_iff, map_lowerCentralSeries, nilpotent_iff_lowerCentralSeries, nilpotent_iff_lowerCentralSeries.mp
 -/
@@ -2191,7 +2223,8 @@ theorem nilpotencyClass_le_of_ker_le_center
   classical apply Nat.find_min'
   refine lowerCentralSeries_succ_eq_bot ⊤
     (le_trans ((Subgroup.map_eq_bot_iff _).mp ?_) hf1)
-  rw [map_lowerCentralSeries]; rw [← le_bot_iff]; rw 
+  rw [map_lowerCentralSeries]; rw [← le_bot_iff]; rw [← lowerCentralSeries_nilpotencyClass (G := H)]
+  exact Subgroup.lowerCentralSeries_mono _ le_top
 
 中文:
 定理 nilpotencyClass_le_of_ker_le_center
@@ -2202,7 +2235,8 @@ theorem nilpotencyClass_le_of_ker_le_center
   classical apply Nat.find_min'
   refine lowerCentralSeries_succ_eq_bot ⊤
     (le_trans ((Subgroup.map_eq_bot_iff _).mp ?_) hf1)
-  rw [map_lowerCentralSeries]; rw [← le_bot_iff]; rw 
+  rw [map_lowerCentralSeries]; rw [← le_bot_iff]; rw [← lowerCentralSeries_nilpotencyClass (G := H)]
+  exact Subgroup.lowerCentralSeries_mono _ le_top
 
 Depends on / 依赖: IsNilpotent, Nat.find_min, Subgroup, Subgroup.lowerCentralSeries_mono, Subgroup.map_eq_bot_iff, classical, find_min, isNilpotent_of_ker_le_center, le_bot_iff, le_top, le_trans, lowerCentralSeries_length_eq_nilpotencyClass, lowerCentralSeries_mono, lowerCentralSeries_nilpotencyClass, lowerCentralSeries_succ_eq_bot, map_eq_bot_iff, map_lowerCentralSeries
 -/
@@ -2234,7 +2268,7 @@ theorem nilpotent_of_surjective
     ⊤ = f.range := symm (f.range_eq_top_of_surjective hf)
     _ = Subgroup.map f ⊤ := MonoidHom.range_eq_map _
     _ = Subgroup.map f (upperCentralSeries G n) := by rw [hn]
-    _ <= upperCentralSeries G' n := upperCentralSeries.map hf 
+    _ <= upperCentralSeries G' n := upperCentralSeries.map hf n
 
 中文:
 定理 nilpotent_of_surjective
@@ -2247,7 +2281,7 @@ theorem nilpotent_of_surjective
     ⊤ = f.range := symm (f.range_eq_top_of_surjective hf)
     _ = Subgroup.map f ⊤ := MonoidHom.range_eq_map _
     _ = Subgroup.map f (upperCentralSeries G n) := by rw [hn]
-    _ <= upperCentralSeries G' n := upperCentralSeries.map hf 
+    _ <= upperCentralSeries G' n := upperCentralSeries.map hf n
 
 Depends on / 依赖: MonoidHom, MonoidHom.range_eq_map, Subgroup, Subgroup.map, eq_top_iff, eq_top_iff.mpr, f.range, f.range_eq_top_of_surjective, range_eq_map, range_eq_top_of_surjective, upperCentralSeries, upperCentralSeries.map
 -/
@@ -2281,7 +2315,8 @@ theorem nilpotencyClass_le_of_surjective
   calc
     ⊤ = f.range := symm (f.range_eq_top_of_surjective hf)
     _ = Subgroup.map f ⊤ := MonoidHom.range_eq_map _
-    _ = Subgroup.map f (
+    _ = Subgroup.map f (upperCentralSeries G n) := by rw [hn]
+    _ <= upperCentralSeries G' n := upperCentralSeries.map hf n
 
 中文:
 定理 nilpotencyClass_le_of_surjective
@@ -2295,7 +2330,8 @@ theorem nilpotencyClass_le_of_surjective
   calc
     ⊤ = f.range := symm (f.range_eq_top_of_surjective hf)
     _ = Subgroup.map f ⊤ := MonoidHom.range_eq_map _
-    _ = Subgroup.map f (
+    _ = Subgroup.map f (upperCentralSeries G n) := by rw [hn]
+    _ <= upperCentralSeries G' n := upperCentralSeries.map hf n
 
 Depends on / 依赖: MonoidHom, MonoidHom.range_eq_map, Nat.find_mono, Subgroup, Subgroup.map, classical, eq_top_iff, f.range, f.range_eq_top_of_surjective, find_mono, nilpotencyClass_def, nilpotent_of_surjective, range_eq_map, range_eq_top_of_surjective, upperCentralSeries, upperCentralSeries.map
 -/
@@ -2421,7 +2457,14 @@ theorem comap_upperCentralSeries_quotient_center
     let Hn := upperCentralSeries (G ⧸ center G) n
     calc
       comap (mk' (center G)) (upperCentralSeriesStep Hn) =
-          comap (mk' (
+          comap (mk' (center G)) (comap (mk' Hn) (center ((G ⧸ center G) ⧸ Hn))) := by
+        rw [upperCentralSeriesStep_eq_comap_center]
+      _ = comap (mk' (comap (mk' (center G)) Hn)) (center (G ⧸ comap (mk' (center G)) Hn)) :=
+        QuotientGroup.comap_comap_center
+      _ = comap (mk' (upperCentralSeries G n.succ)) (center (G ⧸ upperCentralSeries G n.succ)) :=
+        (comap_center_subst ih)
+      _ = upperCentralSeriesStep (upperCentralSeries G n.succ) :=
+        symm (upperCentralSeriesStep_eq_comap_center _)
 
 中文:
 定理 comap_upperCentralSeries_quotient_center
@@ -2435,7 +2478,14 @@ theorem comap_upperCentralSeries_quotient_center
     let Hn := upperCentralSeries (G ⧸ center G) n
     calc
       comap (mk' (center G)) (upperCentralSeriesStep Hn) =
-          comap (mk' (
+          comap (mk' (center G)) (comap (mk' Hn) (center ((G ⧸ center G) ⧸ Hn))) := by
+        rw [upperCentralSeriesStep_eq_comap_center]
+      _ = comap (mk' (comap (mk' (center G)) Hn)) (center (G ⧸ comap (mk' (center G)) Hn)) :=
+        QuotientGroup.comap_comap_center
+      _ = comap (mk' (upperCentralSeries G n.succ)) (center (G ⧸ upperCentralSeries G n.succ)) :=
+        (comap_center_subst ih)
+      _ = upperCentralSeriesStep (upperCentralSeries G n.succ) :=
+        symm (upperCentralSeriesStep_eq_comap_center _)
 
 Depends on / 依赖: MonoidHom, MonoidHom.comap_bot, QuotientGroup, QuotientGroup.comap_comap_center, center, comap_bot, comap_comap_center, ker_mk, upperCentralSeries, upperCentralSeriesStep, upperCentralSeriesStep_eq_comap_center, upperCentralSeries_one, upperCentralSeries_zero
 -/
@@ -2530,7 +2580,19 @@ theorem nilpotencyClass_quotient_center
     exact mt of_quotient_center_nilpotent hH
   generalize hn : Group.nilpotencyClass G = n
   rcases n with (rfl | n)
-  · simp only [nilpotencyClass_zero_iff_subsingleton, 
+  · simp only [nilpotencyClass_zero_iff_subsingleton, zero_tsub] at *
+    exact Quotient.instSubsingletonQuotient (leftRel (center G))
+  · suffices Group.nilpotencyClass (G ⧸ center G) = n by simpa
+    apply le_antisymm
+    · apply upperCentralSeries_eq_top_iff_nilpotencyClass_le.mp
+      apply comap_injective (f := (mk' (center G))) Quot.mk_surjective
+      rw [comap_upperCentralSeries_quotient_center]; rw [comap_top]; rw [Nat.succ_eq_add_one]; rw [← hn]
+      exact upperCentralSeries_nilpotencyClass
+    · apply le_of_add_le_add_right
+      calc
+        n + 1 = Group.nilpotencyClass G := hn.symm
+        _ <= Group.nilpotencyClass (G ⧸ center G) + 1 :=
+          nilpotencyClass_le_of_ker_le_center _ (le_of_eq (ker_mk' _))
 
 中文:
 定理 nilpotencyClass_quotient_center
@@ -2540,7 +2602,19 @@ theorem nilpotencyClass_quotient_center
     exact mt of_quotient_center_nilpotent hH
   generalize hn : Group.nilpotencyClass G = n
   rcases n with (rfl | n)
-  · simp only [nilpotencyClass_zero_iff_subsingleton, 
+  · simp only [nilpotencyClass_zero_iff_subsingleton, zero_tsub] at *
+    exact Quotient.instSubsingletonQuotient (leftRel (center G))
+  · suffices Group.nilpotencyClass (G ⧸ center G) = n by simpa
+    apply le_antisymm
+    · apply upperCentralSeries_eq_top_iff_nilpotencyClass_le.mp
+      apply comap_injective (f := (mk' (center G))) Quot.mk_surjective
+      rw [comap_upperCentralSeries_quotient_center]; rw [comap_top]; rw [Nat.succ_eq_add_one]; rw [← hn]
+      exact upperCentralSeries_nilpotencyClass
+    · apply le_of_add_le_add_right
+      calc
+        n + 1 = Group.nilpotencyClass G := hn.symm
+        _ <= Group.nilpotencyClass (G ⧸ center G) + 1 :=
+          nilpotencyClass_le_of_ker_le_center _ (le_of_eq (ker_mk' _))
 
 Depends on / 依赖: Group.nilpotencyClass, IsNilpotent, Quotient, Quotient.instSubsingletonQuotient, center, generalize, instSubsingletonQuotient, le_antisymm, leftRel, nilpotencyClass, nilpotencyClass_of_not_nilpotent, nilpotencyClass_zero_iff_subsingleton, of_quotient_center_nilpotent, upperCentralSeries_eq_top_iff_nilpotencyClass_le, upperCentralSeries_eq_top_iff_nilpotencyClass_le.m, zero_tsub
 -/
@@ -2624,7 +2698,8 @@ theorem nilpotent_center_quotient_ind
     exact hbase _
   | succ n ih =>
     have hn : Group.nilpotencyClass (G ⧸ center G) = n := by
-      simp [nilpotencyClass_quot
+      simp [nilpotencyClass_quotient_center, h]
+    exact hstep _ (ih _ hn)
 
 中文:
 定理 nilpotent_center_quotient_ind
@@ -2637,7 +2712,8 @@ theorem nilpotent_center_quotient_ind
     exact hbase _
   | succ n ih =>
     have hn : Group.nilpotencyClass (G ⧸ center G) = n := by
-      simp [nilpotencyClass_quot
+      simp [nilpotencyClass_quotient_center, h]
+    exact hstep _ (ih _ hn)
 
 Depends on / 依赖: Group.nilpotencyClass, center, generalizing, nilpotencyClass, nilpotencyClass_quotient_center, nilpotencyClass_zero_iff_subsingleton, nilpotencyClass_zero_iff_subsingleton.mp
 -/
@@ -2981,7 +3057,10 @@ lemma upperCentralSeries.StrictMonoOn
     · exact upperCentralSeries_mono _ ab.le
     · grind only [IsNilpotent.nilpotent', IsNilpotent.nilpotent, eq_top,
         upperCentralSeries_eq_top_iff_nilpotencyClass_le]
-  · rw
+  · rw [nilpotencyClass_of_not_nilpotent hG, ← Nat.bot_eq_zero, Set.Iic_bot]
+    apply Set.strictMonoOn_singleton
+
+@[to_additive]
 
 中文:
 引理 upperCentralSeries.StrictMonoOn
@@ -2993,7 +3072,10 @@ lemma upperCentralSeries.StrictMonoOn
     · exact upperCentralSeries_mono _ ab.le
     · grind only [IsNilpotent.nilpotent', IsNilpotent.nilpotent, eq_top,
         upperCentralSeries_eq_top_iff_nilpotencyClass_le]
-  · rw
+  · rw [nilpotencyClass_of_not_nilpotent hG, ← Nat.bot_eq_zero, Set.Iic_bot]
+    apply Set.strictMonoOn_singleton
+
+@[to_additive]
 
 Depends on / 依赖: Iic_bot, IsNilpotent, IsNilpotent.nilpotent, Nat.bot_eq_zero, Set.Iic_bot, Set.mem_Iic, Set.strictMonoOn_singleton, ab.le, bot_eq_zero, eq_top, intros, lt_of_le_of_ne, mem_Iic, nilpotencyClass_of_not_nilpotent, nilpotent, strictMonoOn_singleton, upperCentralSeries_eq_top_iff_nilpotencyClass_le, upperCentralSeries_mono
 -/
@@ -3136,7 +3218,7 @@ instance Group.isNilpotent_prod
   body: by
   rw [nilpotent_iff_lowerCentralSeries]
   refine ⟨max (Group.nilpotencyClass G₁) (Group.nilpotencyClass G₂), ?_⟩
-  rw [top_lowerCentralSeries_prod]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_left _ _)]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_right 
+  rw [top_lowerCentralSeries_prod]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_left _ _)]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_right _ _)]; rw [bot_prod_bot]
 
 中文:
 实例 群.isNilpotent_prod
@@ -3144,7 +3226,7 @@ instance Group.isNilpotent_prod
   定义体: by
   rw [nilpotent_iff_lowerCentralSeries]
   refine ⟨max (Group.nilpotencyClass G₁) (Group.nilpotencyClass G₂), ?_⟩
-  rw [top_lowerCentralSeries_prod]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_left _ _)]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_right 
+  rw [top_lowerCentralSeries_prod]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_left _ _)]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_right _ _)]; rw [bot_prod_bot]
 
 Depends on / 依赖: Group.nilpotencyClass, bot_prod_bot, le_max_left, le_max_right, lowerCentralSeries_eq_bot_iff_nilpotencyClass_le, lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr, nilpotencyClass, nilpotent_iff_lowerCentralSeries, top_lowerCentralSeries_prod
 -/
@@ -3361,7 +3443,7 @@ instance Group.isNilpotent_pi
   rw [top_lowerCentralSeries_pi_of_finite]; rw [pi_eq_bot_iff]
   intro i
   rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le]
-  exact Finset.le_sup (f := fun 
+  exact Finset.le_sup (f := fun i => Group.nilpotencyClass (Gs i)) (Finset.mem_univ i)
 
 中文:
 实例 群.isNilpotent_pi
@@ -3373,7 +3455,7 @@ instance Group.isNilpotent_pi
   rw [top_lowerCentralSeries_pi_of_finite]; rw [pi_eq_bot_iff]
   intro i
   rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le]
-  exact Finset.le_sup (f := fun 
+  exact Finset.le_sup (f := fun i => Group.nilpotencyClass (Gs i)) (Finset.mem_univ i)
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.mem_univ, Finset.univ.sup, Group.nilpotencyClass, le_sup, lowerCentralSeries_eq_bot_iff_nilpotencyClass_le, mem_univ, nilpotencyClass, nilpotent_iff_lowerCentralSeries, nonempty_fintype, pi_eq_bot_iff, top_lowerCentralSeries_pi_of_finite
 -/
@@ -3495,7 +3577,18 @@ theorem normalizerCondition_of_isNilpotent
   rw [normalizerCondition_iff_only_full_group_self_normalizing]
   apply @nilpotent_center_quotient_ind _ G _ _ <;> clear! G
   · intro G _ _ H _
-    exact @Subsingleton.elim _ Unique.instSubsingleton _
+    exact @Subsingleton.elim _ Unique.instSubsingleton _ _
+  · intro G _ _ ih H hH
+.trans (le_of_eq hH) have hch : center G <= H := Subgroup.center_le_normalizer H
+    have hkh : (mk' (center G)).ker <= H := by simpa using hch
+    have hsur : Function.Surjective (mk' (center G)) := Quot.mk_surjective
+    let H' := H.map (mk' (center G))
+    have hH' : normalizer H' = H' := by
+      apply comap_injective hsur
+      rw [comap_normalizer_eq_of_surjective _ hsur]; rw [comap_map_eq_self hkh]
+      exact hH
+    apply map_injective_of_ker_le (mk' (center G)) hkh le_top
+    exact (ih H' hH').trans (symm (map_top_of_surjective _ hsur))
 
 中文:
 定理 normalizerCondition_of_isNilpotent
@@ -3506,7 +3599,18 @@ theorem normalizerCondition_of_isNilpotent
   rw [normalizerCondition_iff_only_full_group_self_normalizing]
   apply @nilpotent_center_quotient_ind _ G _ _ <;> clear! G
   · intro G _ _ H _
-    exact @Subsingleton.elim _ Unique.instSubsingleton _
+    exact @Subsingleton.elim _ Unique.instSubsingleton _ _
+  · intro G _ _ ih H hH
+.trans (le_of_eq hH) have hch : center G <= H := Subgroup.center_le_normalizer H
+    have hkh : (mk' (center G)).ker <= H := by simpa using hch
+    have hsur : Function.Surjective (mk' (center G)) := Quot.mk_surjective
+    let H' := H.map (mk' (center G))
+    have hH' : normalizer H' = H' := by
+      apply comap_injective hsur
+      rw [comap_normalizer_eq_of_surjective _ hsur]; rw [comap_map_eq_self hkh]
+      exact hH
+    apply map_injective_of_ker_le (mk' (center G)) hkh le_top
+    exact (ih H' hH').trans (symm (map_top_of_surjective _ hsur))
 -/
 theorem normalizerCondition_of_isNilpotent [h : IsNilpotent G] : NormalizerCondition G := by
   -- roughly based on https://groupprops.subwiki.org/wiki/Nilpotent_implies_normalizer_condition
@@ -3548,7 +3652,10 @@ theorem IsPGroup.isNilpotent
   | hstep G ih =>
     have hcq : Nat.card (G ⧸ center G) < Nat.card G := by
       rw [card_eq_card_quotient_mul_card_subgroup (center G)]
-      apply lt_mul_of_one_lt_right Nat.card_po
+      apply lt_mul_of_one_lt_right Nat.card_pos
+      exact (Subgroup.one_lt_card_iff_ne_bot _).mpr (ne_of_gt h.bot_lt_center)
+    have hnq : IsNilpotent (G ⧸ center G) := ih _ hcq (h.to_quotient (center G))
+    exact of_quotient_center_nilpotent hnq
 
 中文:
 定理 是p群.isNilpotent
@@ -3559,7 +3666,10 @@ theorem IsPGroup.isNilpotent
   | hstep G ih =>
     have hcq : Nat.card (G ⧸ center G) < Nat.card G := by
       rw [card_eq_card_quotient_mul_card_subgroup (center G)]
-      apply lt_mul_of_one_lt_right Nat.card_po
+      apply lt_mul_of_one_lt_right Nat.card_pos
+      exact (Subgroup.one_lt_card_iff_ne_bot _).mpr (ne_of_gt h.bot_lt_center)
+    have hnq : IsNilpotent (G ⧸ center G) := ih _ hcq (h.to_quotient (center G))
+    exact of_quotient_center_nilpotent hnq
 
 Depends on / 依赖: Finite, Finite.induction_subsingleton_or_nontrivial, IsNilpotent, Nat.card, Nat.card_pos, Subgroup, Subgroup.one_lt_card_iff_ne_bot, bot_lt_center, card_eq_card_quotient_mul_card_subgroup, card_pos, center, generalizing, h.bot_lt_center, h.to_quotient, induction_subsingleton_or_nontrivial, infer_instance, lt_mul_of_one_lt_right, ne_of_gt, of_quotient_center_nilpotent, one_lt_card_iff_ne_bot
 -/
@@ -3624,7 +3734,10 @@ theorem Group.isNilpotent_of_finite_tfae
   tfae_have 3 -> 4
   | h, p, _, P => Sylow.normal_of_all_max_subgroups_normal h _
   tfae_have 4 -> 5
-  | h => Nonempty.intro (Sylow.directProductOfNormal fun {p hp
+  | h => Nonempty.intro (Sylow.directProductOfNormal fun {p hp hP} => h p hp hP)
+  tfae_have 5 -> 1
+  | ⟨e⟩ => isNilpotent_of_product_of_sylow_group e
+  tfae_finish
 
 中文:
 定理 群.isNilpotent_of_finite_tfae
@@ -3635,7 +3748,10 @@ theorem Group.isNilpotent_of_finite_tfae
   tfae_have 3 -> 4
   | h, p, _, P => Sylow.normal_of_all_max_subgroups_normal h _
   tfae_have 4 -> 5
-  | h => Nonempty.intro (Sylow.directProductOfNormal fun {p hp
+  | h => Nonempty.intro (Sylow.directProductOfNormal fun {p hp hP} => h p hp hP)
+  tfae_have 5 -> 1
+  | ⟨e⟩ => isNilpotent_of_product_of_sylow_group e
+  tfae_finish
 
 Depends on / 依赖: Nonempty, Nonempty.intro, NormalizerCondition, NormalizerCondition.normal_of_coatom, Sylow.directProductOfNormal, Sylow.normal_of_all_max_subgroups_normal, directProductOfNormal, isNilpotent_of_product_of_sylow_group, normal_of_all_max_subgroups_normal, normal_of_coatom, normalizerCondition_of_isNilpotent, tfae_finish, tfae_have
 -/

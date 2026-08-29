@@ -59,7 +59,9 @@ lemma monotoneOn_nnrpow_Ioo
       (fun a : A => ∫ t in Ioi 0, cfcₙ (rpowIntegrand₀₁ p t) a ∂μ) :=
     fun a ha => (hμ a ha).2
   refine MonotoneOn.congr ?_ h₃'.symm
-  refine integral_monotoneOn_o
+  refine integral_monotoneOn_of_integrand_ae ?_ fun a ha => (hμ a ha).1
+  filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+  exact monotoneOn_cfcₙ_rpowIntegrand₀₁ hp ht
 
 中文:
 引理 monotoneOn_nnrpow_Ioo
@@ -70,7 +72,9 @@ lemma monotoneOn_nnrpow_Ioo
       (fun a : A => ∫ t in Ioi 0, cfcₙ (rpowIntegrand₀₁ p t) a ∂μ) :=
     fun a ha => (hμ a ha).2
   refine MonotoneOn.congr ?_ h₃'.symm
-  refine integral_monotoneOn_o
+  refine integral_monotoneOn_of_integrand_ae ?_ fun a ha => (hμ a ha).1
+  filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+  exact monotoneOn_cfcₙ_rpowIntegrand₀₁ hp ht
 -/
 private lemma monotoneOn_nnrpow_Ioo {p : Real>=0} (hp : p in Ioo 0 1) :
     MonotoneOn (fun a : A => a ^ p) (Ici 0) := by
@@ -98,7 +102,9 @@ lemma monotone_nnrpow
     obtain (hp | hp) | hp := hp
     · exact monotoneOn_nnrpow_Ioo hp ha hb hab
     · simp_all [mem_singleton_iff]
-    ·
+    · simp_all [mem_singleton_iff, nnrpow_one a, nnrpow_one b]
+  · have : a ^ p = 0 := cfcₙ_apply_of_not_predicate a ha
+    simp [this]
 
 中文:
 引理 monotone_nnrpow
@@ -112,7 +118,9 @@ lemma monotone_nnrpow
     obtain (hp | hp) | hp := hp
     · exact monotoneOn_nnrpow_Ioo hp ha hb hab
     · simp_all [mem_singleton_iff]
-    ·
+    · simp_all [mem_singleton_iff, nnrpow_one a, nnrpow_one b]
+  · have : a ^ p = 0 := cfcₙ_apply_of_not_predicate a ha
+    simp [this]
 
 Depends on / 依赖: ha.trans, mem_singleton_iff, monotoneOn_nnrpow_Ioo, nnrpow_one
 -/
@@ -219,7 +227,9 @@ lemma concaveOn_nnrpow_Ioo
       (fun a : A => ∫ t in Ioi 0, cfcₙ (rpowIntegrand₀₁ p t) a ∂μ) :=
     fun a ha => (hμ a ha).2
   refine ConcaveOn.congr ?_ h₃'.symm
-  refine integral_concaveOn_of_
+  refine integral_concaveOn_of_integrand_ae (convex_Ici _) ?_ fun a ha => (hμ a ha).1
+  filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+  exact concaveOn_cfcₙ_rpowIntegrand₀₁ hp ht
 
 中文:
 引理 concaveOn_nnrpow_Ioo
@@ -230,7 +240,9 @@ lemma concaveOn_nnrpow_Ioo
       (fun a : A => ∫ t in Ioi 0, cfcₙ (rpowIntegrand₀₁ p t) a ∂μ) :=
     fun a ha => (hμ a ha).2
   refine ConcaveOn.congr ?_ h₃'.symm
-  refine integral_concaveOn_of_
+  refine integral_concaveOn_of_integrand_ae (convex_Ici _) ?_ fun a ha => (hμ a ha).1
+  filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+  exact concaveOn_cfcₙ_rpowIntegrand₀₁ hp ht
 -/
 private lemma concaveOn_nnrpow_Ioo {p : Real>=0} (hp : p in Ioo 0 1) :
     ConcaveOn Real (Ici (0 : A)) (fun a : A => a ^ p) := by
@@ -257,7 +269,9 @@ lemma concaveOn_nnrpow
   · simp only [mem_singleton_iff] at hp
     simp only [hp, nnrpow_zero]
     exact concaveOn_const _ (convex_Ici _)
-  · simp only [mem_s
+  · simp only [mem_singleton_iff] at hp
+    simp only [hp]
+    exact ConcaveOn.congr (concaveOn_id (convex_Ici _)) nnrpow_one_eqOn.symm
 
 中文:
 引理 concaveOn_nnrpow
@@ -270,7 +284,9 @@ lemma concaveOn_nnrpow
   · simp only [mem_singleton_iff] at hp
     simp only [hp, nnrpow_zero]
     exact concaveOn_const _ (convex_Ici _)
-  · simp only [mem_s
+  · simp only [mem_singleton_iff] at hp
+    simp only [hp]
+    exact ConcaveOn.congr (concaveOn_id (convex_Ici _)) nnrpow_one_eqOn.symm
 
 Depends on / 依赖: ConcaveOn, ConcaveOn.congr, concaveOn_const, concaveOn_id, concaveOn_nnrpow_Ioo, convex_Ici, mem_singleton_iff, nnrpow_one_eqOn, nnrpow_one_eqOn.symm, nnrpow_zero
 -/
@@ -335,7 +351,12 @@ lemma monotone_rpow
     by_cases ha : 0 <= a
     · have hb : 0 <= b := ha.trans hab
       simp [CFC.rpow_zero a, CFC.rpow_zero b]
-    · have : a ^ (0 : Real) = 0 := cfc_ap
+    · have : a ^ (0 : Real) = 0 := cfc_apply_of_not_predicate a ha
+      simp [this]
+  · simp_rw [← CFC.nnrpow_eq_rpow hq]
+    exact monotone_nnrpow hp
+
+@[gcongr]
 
 中文:
 引理 monotone_rpow
@@ -350,7 +371,12 @@ lemma monotone_rpow
     by_cases ha : 0 <= a
     · have hb : 0 <= b := ha.trans hab
       simp [CFC.rpow_zero a, CFC.rpow_zero b]
-    · have : a ^ (0 : Real) = 0 := cfc_ap
+    · have : a ^ (0 : Real) = 0 := cfc_apply_of_not_predicate a ha
+      simp [this]
+  · simp_rw [← CFC.nnrpow_eq_rpow hq]
+    exact monotone_nnrpow hp
+
+@[gcongr]
 
 Depends on / 依赖: CFC.nnrpow_eq_rpow, CFC.rpow_zero, Monotone, cfc_apply_of_not_predicate, eq_zero_or_pos, ha.trans, monotone_nnrpow, nnrpow_eq_rpow, rpow_zero, simp_rw
 -/
@@ -400,7 +426,7 @@ lemma concaveOn_rpow
   · simp only [hq, NNReal.coe_zero]
     exact ConcaveOn.congr (concaveOn_const _ (convex_Ici _)) rpow_zero_eqOn.symm
   · simp_rw [← CFC.nnrpow_eq_rpow hq]
-    ex
+    exact concaveOn_nnrpow hp
 
 中文:
 引理 concaveOn_rpow
@@ -412,7 +438,7 @@ lemma concaveOn_rpow
   · simp only [hq, NNReal.coe_zero]
     exact ConcaveOn.congr (concaveOn_const _ (convex_Ici _)) rpow_zero_eqOn.symm
   · simp_rw [← CFC.nnrpow_eq_rpow hq]
-    ex
+    exact concaveOn_nnrpow hp
 
 Depends on / 依赖: CFC.nnrpow_eq_rpow, ConcaveOn, ConcaveOn.congr, NNReal, NNReal.coe_zero, coe_zero, concaveOn_const, concaveOn_nnrpow, convex_Ici, eq_zero_or_pos, nnrpow_eq_rpow, rpow_zero_eqOn, rpow_zero_eqOn.symm, simp_rw
 -/

@@ -78,7 +78,19 @@ theorem max_comm'
 
 Use the `(reorder := ...)` syntax to reorder the arguments compared to the dual declaration.
 This is specified using cycle notation. For example `(reorder := α β, 5 6)` swaps the arguments
-`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` wil
+`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` will move
+the fifth argument before the third argument. For example, this is used when tagging `LE.le`
+with `to_dual self (reorder := 3 4)`, so that `a <= b` gets transformed into `b <= a`.
+
+Use the `to_dual self` syntax to mark the lemma as its own dual. This is needed if the lemma is
+its own dual, up to a reordering of its arguments. `to_dual self` (and `to_dual existing`) tries to
+autogenerate the `(reorder := ...)` argument, so it is usually not necessary to give it explicitly.
+
+Use the `to_dual existing` syntax to use an existing dual declaration,
+instead of automatically generating it.
+
+Use the `(attr := ...)` syntax to apply attributes to both the original and the dual version:
+```
 
 中文:
 定理 max_comm'
@@ -89,7 +101,19 @@ This is specified using cycle notation. For example `(reorder := α β, 5 6)` sw
 
 Use the `(reorder := ...)` syntax to reorder the arguments compared to the dual declaration.
 This is specified using cycle notation. For example `(reorder := α β, 5 6)` swaps the arguments
-`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` wil
+`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` will move
+the fifth argument before the third argument. For example, this is used when tagging `LE.le`
+with `to_dual self (reorder := 3 4)`, so that `a <= b` gets transformed into `b <= a`.
+
+Use the `to_dual self` syntax to mark the lemma as its own dual. This is needed if the lemma is
+its own dual, up to a reordering of its arguments. `to_dual self` (and `to_dual existing`) tries to
+autogenerate the `(reorder := ...)` argument, so it is usually not necessary to give it explicitly.
+
+Use the `to_dual existing` syntax to use an existing dual declaration,
+instead of automatically generating it.
+
+Use the `(attr := ...)` syntax to apply attributes to both the original and the dual version:
+```
 -/
 theorem max_comm' {α} [LinearOrder α] (x y : α) : max x y = max y x := max_comm x y
 ```
@@ -216,7 +240,92 @@ definition nameDict
   ("min", ["Max"]),
   ("max", ["Min"]),
   ("min?", ["Max?"]),
-  ("max?", [
+  ("max?", ["Min?"]),
+  ("argmin", ["Argmax"]),
+  ("argmax", ["Argmin"]),
+  ("minimum", ["Maximum"]),
+  ("maximum", ["Minimum"]),
+  ("minimal", ["Maximal"]),
+  ("maximal", ["Minimal"]),
+  ("lower", ["Upper"]),
+  ("upper", ["Lower"]),
+  ("below", ["Above"]),
+  ("above", ["Below"]),
+  ("least", ["Greatest"]),
+  ("greatest", ["Least"]),
+  ("glb", ["LUB"]),
+  ("lub", ["GLB"]),
+  ("cofinal", ["Coinitial"]),
+  ("coinitial", ["Cofinal"]),
+  ("succ", ["Pred"]),
+  ("pred", ["Succ"]),
+  ("disjoint", ["Codisjoint"]),
+  ("codisjoint", ["Disjoint"]),
+  ("atom", ["Coatom"]),
+  ("coatom", ["Atom"]),
+  ("lfp", ["Gfp"]),
+  ("gfp", ["Lfp"]),
+  ("ioi", ["Iio"]),
+  ("iio", ["Ioi"]),
+  ("ici", ["Iic"]),
+  ("iic", ["Ici"]),
+  ("ioc", ["Ico"]),
+  ("ico", ["Ioc"]),
+  ("next", ["Prev"]),
+  ("prev", ["Next"]),
+  ("heyting", ["Coheyting"]),
+  ("coheyting", ["Heyting"]),
+  ("frame", ["Coframe"]),
+  ("coframe", ["Frame"]),
+  ("epigraph", ["Hypograph"]),
+  ("hypograph", ["Epigraph"]),
+
+  ("epi", ["Mono"]),
+  /- `mono` can also refer to monotone, so we don't translate it. -/
+  -- ("mono", ["Epi"]),
+  ("epimorphisms", ["Monomorphisms"]),
+  ("monomorphisms", ["Epimorphisms"]),
+  ("terminal", ["Initial"]),
+  ("initial", ["Terminal"]),
+  ("precompose", ["Postcompose"]),
+  ("postcompose", ["Precompose"]),
+  ("cone", ["Cocone"]),
+  ("cocone", ["Cone"]),
+  ("cones", ["Cocones"]),
+  ("cocones", ["Cones"]),
+  ("fan", ["Cofan"]),
+  ("cofan", ["Fan"]),
+  ("limit", ["Colimit"]),
+  ("colimit", ["Limit"]),
+  ("lim", ["Colim"]),
+  ("colim", ["Lim"]),
+  ("limits", ["Colimits"]),
+  ("colimits", ["Limits"]),
+  ("product", ["Coproduct"]),
+  ("coproduct", ["Product"]),
+  ("products", ["Coproducts"]),
+  ("coproducts", ["Products"]),
+  ("pushout", ["Pullback"]),
+  ("pullback", ["Pushout"]),
+  ("pushouts", ["Pullbacks"]),
+  ("pullbacks", ["Pushouts"]),
+  ("span", ["Cospan"]),
+  ("cospan", ["Span"]),
+  ("kernel", ["Cokernel"]),
+  ("cokernel", ["Kernel"]),
+  ("kernels", ["Cokernels"]),
+  ("cokernels", ["Kernels"]),
+  ("unit", ["Counit"]),
+  ("counit", ["Unit"]),
+  ("monad", ["Comonad"]),
+  ("comonad", ["Monad"]),
+  ("monadic", ["Comonadic"]),
+  ("comonadic", ["Monadic"]),
+  ("section", ["Retraction"]),
+  ("retraction", ["Section"]),
+]
+
+@[inherit_doc GuessName.GuessNameData.abbreviationDict]
 
 中文:
 定义 nameDict
@@ -235,7 +344,92 @@ definition nameDict
   ("min", ["Max"]),
   ("max", ["Min"]),
   ("min?", ["Max?"]),
-  ("max?", [
+  ("max?", ["Min?"]),
+  ("argmin", ["Argmax"]),
+  ("argmax", ["Argmin"]),
+  ("minimum", ["Maximum"]),
+  ("maximum", ["Minimum"]),
+  ("minimal", ["Maximal"]),
+  ("maximal", ["Minimal"]),
+  ("lower", ["Upper"]),
+  ("upper", ["Lower"]),
+  ("below", ["Above"]),
+  ("above", ["Below"]),
+  ("least", ["Greatest"]),
+  ("greatest", ["Least"]),
+  ("glb", ["LUB"]),
+  ("lub", ["GLB"]),
+  ("cofinal", ["Coinitial"]),
+  ("coinitial", ["Cofinal"]),
+  ("succ", ["Pred"]),
+  ("pred", ["Succ"]),
+  ("disjoint", ["Codisjoint"]),
+  ("codisjoint", ["Disjoint"]),
+  ("atom", ["Coatom"]),
+  ("coatom", ["Atom"]),
+  ("lfp", ["Gfp"]),
+  ("gfp", ["Lfp"]),
+  ("ioi", ["Iio"]),
+  ("iio", ["Ioi"]),
+  ("ici", ["Iic"]),
+  ("iic", ["Ici"]),
+  ("ioc", ["Ico"]),
+  ("ico", ["Ioc"]),
+  ("next", ["Prev"]),
+  ("prev", ["Next"]),
+  ("heyting", ["Coheyting"]),
+  ("coheyting", ["Heyting"]),
+  ("frame", ["Coframe"]),
+  ("coframe", ["Frame"]),
+  ("epigraph", ["Hypograph"]),
+  ("hypograph", ["Epigraph"]),
+
+  ("epi", ["Mono"]),
+  /- `mono` can also refer to monotone, so we don't translate it. -/
+  -- ("mono", ["Epi"]),
+  ("epimorphisms", ["Monomorphisms"]),
+  ("monomorphisms", ["Epimorphisms"]),
+  ("terminal", ["Initial"]),
+  ("initial", ["Terminal"]),
+  ("precompose", ["Postcompose"]),
+  ("postcompose", ["Precompose"]),
+  ("cone", ["Cocone"]),
+  ("cocone", ["Cone"]),
+  ("cones", ["Cocones"]),
+  ("cocones", ["Cones"]),
+  ("fan", ["Cofan"]),
+  ("cofan", ["Fan"]),
+  ("limit", ["Colimit"]),
+  ("colimit", ["Limit"]),
+  ("lim", ["Colim"]),
+  ("colim", ["Lim"]),
+  ("limits", ["Colimits"]),
+  ("colimits", ["Limits"]),
+  ("product", ["Coproduct"]),
+  ("coproduct", ["Product"]),
+  ("products", ["Coproducts"]),
+  ("coproducts", ["Products"]),
+  ("pushout", ["Pullback"]),
+  ("pullback", ["Pushout"]),
+  ("pushouts", ["Pullbacks"]),
+  ("pullbacks", ["Pushouts"]),
+  ("span", ["Cospan"]),
+  ("cospan", ["Span"]),
+  ("kernel", ["Cokernel"]),
+  ("cokernel", ["Kernel"]),
+  ("kernels", ["Cokernels"]),
+  ("cokernels", ["Kernels"]),
+  ("unit", ["Counit"]),
+  ("counit", ["Unit"]),
+  ("monad", ["Comonad"]),
+  ("comonad", ["Monad"]),
+  ("monadic", ["Comonadic"]),
+  ("comonadic", ["Monadic"]),
+  ("section", ["Retraction"]),
+  ("retraction", ["Section"]),
+]
+
+@[inherit_doc GuessName.GuessNameData.abbreviationDict]
 
 Depends on / 依赖: ofList
 -/
@@ -355,7 +549,24 @@ definition abbreviationDict
   ("relIsoLT", "RelIsoGT"),
   ("relIsoGT", "RelIsoLT"),
   ("succColimit", "SuccLimit"),
-  ("predColimit", "PredLimit")
+  ("predColimit", "PredLimit"),
+  ("codirectedOrder", "DirectedOrder"),
+  ("directedOrder", "CodirectedOrder"),
+  ("galoisInsertion", "GaloisCoinsertion"),
+  ("galoisCoinsertion", "GaloisInsertion"),
+  ("leftOrdContinuous", "RightOrdContinuous"),
+  ("rightOrdContinuous", "LeftOrdContinuous"),
+  ("bihimp", "SymmDiff"),
+  ("symmDiff", "Bihimp"),
+
+  -- Revert translations if they should not happen in certain word combinations:
+  ("neTop", "NeBot"),
+  ("decidableSucc", "DecidablePred"),
+  ("ofSucc", "OfPred"),
+  ("maximalAxioms", "MinimalAxioms"),
+]
+
+@[inherit_doc GuessName.GuessNameExt]
 
 中文:
 定义 abbreviationDict
@@ -370,7 +581,24 @@ definition abbreviationDict
   ("relIsoLT", "RelIsoGT"),
   ("relIsoGT", "RelIsoLT"),
   ("succColimit", "SuccLimit"),
-  ("predColimit", "PredLimit")
+  ("predColimit", "PredLimit"),
+  ("codirectedOrder", "DirectedOrder"),
+  ("directedOrder", "CodirectedOrder"),
+  ("galoisInsertion", "GaloisCoinsertion"),
+  ("galoisCoinsertion", "GaloisInsertion"),
+  ("leftOrdContinuous", "RightOrdContinuous"),
+  ("rightOrdContinuous", "LeftOrdContinuous"),
+  ("bihimp", "SymmDiff"),
+  ("symmDiff", "Bihimp"),
+
+  -- Revert translations if they should not happen in certain word combinations:
+  ("neTop", "NeBot"),
+  ("decidableSucc", "DecidablePred"),
+  ("ofSucc", "OfPred"),
+  ("maximalAxioms", "MinimalAxioms"),
+]
+
+@[inherit_doc GuessName.GuessNameExt]
 
 Depends on / 依赖: ofList
 -/

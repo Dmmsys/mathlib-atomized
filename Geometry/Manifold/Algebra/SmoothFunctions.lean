@@ -373,7 +373,7 @@ instance group
     div := fun f g => ⟨f / g, f.contMDiff.div g.contMDiff⟩
     div_eq_mul_inv := fun f g => by ext; exact div_eq_mul_inv _ _ }
 
-@[to_additive (attr := simp
+@[to_additive (attr := simp)]
 
 中文:
 实例 group
@@ -384,7 +384,7 @@ instance group
     div := fun f g => ⟨f / g, f.contMDiff.div g.contMDiff⟩
     div_eq_mul_inv := fun f g => by ext; exact div_eq_mul_inv _ _ }
 
-@[to_additive (attr := simp
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.monoid, contMDiff, div_eq_mul_inv, f.contMDiff.div, f.contMDiff.inv, g.contMDiff, inv_mul_cancel, monoid
 -/
@@ -919,7 +919,7 @@ instance module'
   mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)
   one_smul f := by ext x; exact one_smul 𝕜 (f x)
   zero_smul f := by ext x; exact zero_smul _ _
-  smul_zero r := by ext x; 
+  smul_zero r := by ext x; exact smul_zero _
 
 中文:
 实例 module'
@@ -929,7 +929,7 @@ instance module'
   mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)
   one_smul f := by ext x; exact one_smul 𝕜 (f x)
   zero_smul f := by ext x; exact zero_smul _ _
-  smul_zero r := by ext x; 
+  smul_zero r := by ext x; exact smul_zero _
 
 Depends on / 依赖: add_smul, mul_smul, one_smul, smul_add, smul_zero, zero_smul
 -/

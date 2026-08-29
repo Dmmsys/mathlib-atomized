@@ -164,7 +164,13 @@ protected nonrec theorem ContinuousAt.coeFun (hf : ContinuousAt f z) :
     ContinuousAt (fun z => ⇑(f z)) z :=
   hf.coeFun
 
-pr
+protected nonrec theorem ContinuousWithinAt.eval_const (hf : ContinuousWithinAt f s z) (x : α) :
+    ContinuousWithinAt (f · x) s z :=
+  hf.eval_const x
+
+protected nonrec theorem ContinuousWithinAt.coeFun (hf : ContinuousWithinAt f s z) :
+    ContinuousWithinAt (fun z => ⇑(f z)) s z :=
+  hf.coeFun
 
 中文:
 定理 滤子.收敛.coeFun
@@ -179,7 +185,13 @@ protected nonrec theorem ContinuousAt.coeFun (hf : ContinuousAt f z) :
     ContinuousAt (fun z => ⇑(f z)) z :=
   hf.coeFun
 
-pr
+protected nonrec theorem ContinuousWithinAt.eval_const (hf : ContinuousWithinAt f s z) (x : α) :
+    ContinuousWithinAt (f · x) s z :=
+  hf.eval_const x
+
+protected nonrec theorem ContinuousWithinAt.coeFun (hf : ContinuousWithinAt f s z) :
+    ContinuousWithinAt (fun z => ⇑(f z)) s z :=
+  hf.coeFun
 -/
 protected theorem Filter.Tendsto.coeFun {ι : Type*} {l : Filter ι} {f : ι -> F} {g : F}
     (hf : Tendsto f l (𝓝 g)) : Tendsto (fun i => ⇑(f i)) l (𝓝 ⇑g) :=

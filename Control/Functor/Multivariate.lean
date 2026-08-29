@@ -434,7 +434,8 @@ theorem LiftP_PredLast_iff
     rw [MvFunctor.map_map]
     dsimp +unfoldPartialApp [(· ⊚ ·)]
     suffices (fun i => Subtype.val) = (fun i x => (MvFunctor.f P n α i x).val) by rw [this]
-    ext
+    ext i ⟨x, _⟩
+    cases i <;> rfl
 
 中文:
 定理 LiftP_PredLast_iff
@@ -448,7 +449,8 @@ theorem LiftP_PredLast_iff
     rw [MvFunctor.map_map]
     dsimp +unfoldPartialApp [(· ⊚ ·)]
     suffices (fun i => Subtype.val) = (fun i x => (MvFunctor.f P n α i x).val) by rw [this]
-    ext
+    ext i ⟨x, _⟩
+    cases i <;> rfl
 
 Depends on / 依赖: MvFunctor, MvFunctor.f, MvFunctor.map_map, Subtype, Subtype.val, exists_iff_exists_of_mono, intros, map_map, unfoldPartialApp
 -/
@@ -524,7 +526,7 @@ theorem LiftR_RelLast_iff
   · intros
     simp +unfoldPartialApp only [map_map, TypeVec.comp]
     apply iff_of_eq -- Switch to `eq` so we can use `ext`
-    congr <;> ext i ⟨x, _⟩ <;> cases i <;>
+    congr <;> ext i ⟨x, _⟩ <;> cases i <;> rfl
 
 中文:
 定理 LiftR_RelLast_iff
@@ -537,7 +539,7 @@ theorem LiftR_RelLast_iff
   · intros
     simp +unfoldPartialApp only [map_map, TypeVec.comp]
     apply iff_of_eq -- Switch to `eq` so we can use `ext`
-    congr <;> ext i ⟨x, _⟩ <;> cases i <;>
+    congr <;> ext i ⟨x, _⟩ <;> cases i <;> rfl
 
 Depends on / 依赖: Switch, TypeVec, TypeVec.comp, exists_iff_exists_of_mono, iff_of_eq, intros, map_map, unfoldPartialApp
 -/

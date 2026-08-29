@@ -132,7 +132,8 @@ theorem exact_of_isLocalized_maximal
   rw [← LinearMap.range_localizedMap_eq_localized₀_range _ (f J) (g J) F]; rw [← LinearMap.ker_localizedMap_eq_localized₀_ker J.primeCompl (g J) (h J) G]
 have := SetLike.ext_iff.mp H J
   ext x
-  simp on
+  simp only [mem_range, mem_ker] at this ⊢
+  exact this x
 
 中文:
 定理 exact_of_isLocalized_maximal
@@ -144,7 +145,8 @@ have := SetLike.ext_iff.mp H J
   rw [← LinearMap.range_localizedMap_eq_localized₀_range _ (f J) (g J) F]; rw [← LinearMap.ker_localizedMap_eq_localized₀_ker J.primeCompl (g J) (h J) G]
 have := SetLike.ext_iff.mp H J
   ext x
-  simp on
+  simp only [mem_range, mem_ker] at this ⊢
+  exact this x
 
 Depends on / 依赖: J.primeCompl, LinearMap, LinearMap.exact_iff, LinearMap.ker_localizedMap_eq_localized, LinearMap.range_localizedMap_eq_localized, SetLike, SetLike.ext_iff.mp, exact_iff, ext_iff, mem_ker, mem_range, primeCompl
 -/
@@ -371,7 +373,9 @@ lemma exact_of_isLocalized_span
   rw [← LinearMap.range_localizedMap_eq_localized₀_range _ (f r) (g r) F]
   rw [← LinearMap.ker_localizedMap_eq_localized₀_ker (.powers r.1) (g r) (h r) G]
 have := SetLike.ext_iff.mp H r
-  ext 
+  ext x
+  simp only [mem_range, mem_ker] at this ⊢
+  exact this x
 
 中文:
 引理 exact_of_isLocalized_span
@@ -383,7 +387,9 @@ have := SetLike.ext_iff.mp H r
   rw [← LinearMap.range_localizedMap_eq_localized₀_range _ (f r) (g r) F]
   rw [← LinearMap.ker_localizedMap_eq_localized₀_ker (.powers r.1) (g r) (h r) G]
 have := SetLike.ext_iff.mp H r
-  ext 
+  ext x
+  simp only [mem_range, mem_ker] at this ⊢
+  exact this x
 
 Depends on / 依赖: LinearMap, LinearMap.exact_iff, LinearMap.ker_localizedMap_eq_localized, LinearMap.range_localizedMap_eq_localized, SetLike, SetLike.ext_iff.mp, Submodule, Submodule.eq_of_isLocalized, exact_iff, ext_iff, mem_ker, mem_range, powers
 -/
@@ -524,7 +530,8 @@ lemma IsLocalizedModule.map_linearMap_of_isLocalization
   ext
   simp only [LinearMap.coe_comp, Function.comp_apply, Algebra.linearMap_apply, map_one,
     LinearMap.coe_restrictScalars]
-  rw [show 1 = Algebra.linearMap R Rₚ 1 b
+  rw [show 1 = Algebra.linearMap R Rₚ 1 by simp]; rw [IsLocalizedModule.map_apply]
+  simp
 
 中文:
 引理 是Localized模.map_linearMap_of_isLocalization
@@ -535,7 +542,8 @@ lemma IsLocalizedModule.map_linearMap_of_isLocalization
   ext
   simp only [LinearMap.coe_comp, Function.comp_apply, Algebra.linearMap_apply, map_one,
     LinearMap.coe_restrictScalars]
-  rw [show 1 = Algebra.linearMap R Rₚ 1 b
+  rw [show 1 = Algebra.linearMap R Rₚ 1 by simp]; rw [IsLocalizedModule.map_apply]
+  simp
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Algebra.linearMap_apply, Function, Function.comp_apply, IsLocalizedModule, IsLocalizedModule.linearMap_ext, IsLocalizedModule.map_apply, IsScalarTower, IsScalarTower.toAlgHom, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, coe_comp, coe_restrictScalars, comp_apply, linearMap, linearMap_apply, linearMap_ext, map_apply
 -/
@@ -565,7 +573,9 @@ lemma injective_of_isLocalization_isMaximal
     (fun P _ => Sₚ P) (fun P _ => IsScalarTower.toAlgHom R S (Sₚ P)) (Algebra.linearMap R S) _
   intro p hp
   convert_to Function.Injective ((Algebra.linearMap (Rₚ p) (Sₚ p)).restrictScalars R)
-  · rw [D
+  · rw [DFunLike.coe_fn_eq]
+    apply IsLocalizedModule.map_linearMap_of_isLocalization
+  · exact H p
 
 中文:
 引理 injective_of_isLocalization_isMaximal
@@ -574,7 +584,9 @@ lemma injective_of_isLocalization_isMaximal
     (fun P _ => Sₚ P) (fun P _ => IsScalarTower.toAlgHom R S (Sₚ P)) (Algebra.linearMap R S) _
   intro p hp
   convert_to Function.Injective ((Algebra.linearMap (Rₚ p) (Sₚ p)).restrictScalars R)
-  · rw [D
+  · rw [DFunLike.coe_fn_eq]
+    apply IsLocalizedModule.map_linearMap_of_isLocalization
+  · exact H p
 
 Depends on / 依赖: Algebra, Algebra.linearMap, DFunLike, DFunLike.coe_fn_eq, Function, Function.Injective, Injective, IsLocalizedModule, IsLocalizedModule.map_linearMap_of_isLocalization, IsScalarTower, IsScalarTower.toAlgHom, coe_fn_eq, convert_to, injective_of_isLocalized_maximal, linearMap, map_linearMap_of_isLocalization, restrictScalars, toAlgHom
 -/
@@ -599,7 +611,9 @@ lemma surjective_of_isLocalization_isMaximal
     (fun P _ => Sₚ P) (fun P _ => IsScalarTower.toAlgHom R S (Sₚ P)) (Algebra.linearMap R S) _
   intro p hp
   convert_to Function.Surjective ((Algebra.linearMap (Rₚ p) (Sₚ p)).restrictScalars R)
-  · rw 
+  · rw [DFunLike.coe_fn_eq]
+    apply IsLocalizedModule.map_linearMap_of_isLocalization
+  · exact H p
 
 中文:
 引理 surjective_of_isLocalization_isMaximal
@@ -608,7 +622,9 @@ lemma surjective_of_isLocalization_isMaximal
     (fun P _ => Sₚ P) (fun P _ => IsScalarTower.toAlgHom R S (Sₚ P)) (Algebra.linearMap R S) _
   intro p hp
   convert_to Function.Surjective ((Algebra.linearMap (Rₚ p) (Sₚ p)).restrictScalars R)
-  · rw 
+  · rw [DFunLike.coe_fn_eq]
+    apply IsLocalizedModule.map_linearMap_of_isLocalization
+  · exact H p
 
 Depends on / 依赖: Algebra, Algebra.linearMap, DFunLike, DFunLike.coe_fn_eq, Function, Function.Surjective, IsLocalizedModule, IsLocalizedModule.map_linearMap_of_isLocalization, IsScalarTower, IsScalarTower.toAlgHom, Surjective, coe_fn_eq, convert_to, linearMap, map_linearMap_of_isLocalization, restrictScalars, surjective_of_isLocalized_maximal, toAlgHom
 -/
@@ -667,7 +683,12 @@ lemma injective_of_isLocalization_of_span_eq_top
 .toAlgebra let (r : s) : Algebra R (Sᵣ r) := (algebraMap S (Sᵣ r)).comp f
   have (r : s) : IsScalarTower R S (Sᵣ r) := IsScalarTower.of_algebraMap_eq' rfl
   have : forall r, IsLocalization.Away (algebraMap R S r.val) (Sᵣ r) := ‹_›
-  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localiza
+  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localizationAlgebra (.powers r.val) S
+  have (r : s) : IsScalarTower R (Rᵣ r) (Sᵣ r) :=
+.of_algebraMap_eq by simp [RingHom.algebraMap_toAlgebra]
+  apply injective_of_isLocalized_span s hs Rᵣ (fun r : s => Algebra.linearMap _ _) _
+    (fun r : s => ((IsScalarTower.toAlgHom R S (Sᵣ r)).toLinearMap)) (Algebra.linearMap R S)
+  simpa [IsLocalization.map_linearMap_eq_toLinearMap_mapₐ] using! h
 
 中文:
 引理 injective_of_isLocalization_of_span_eq_top
@@ -676,7 +697,12 @@ lemma injective_of_isLocalization_of_span_eq_top
 .toAlgebra let (r : s) : Algebra R (Sᵣ r) := (algebraMap S (Sᵣ r)).comp f
   have (r : s) : IsScalarTower R S (Sᵣ r) := IsScalarTower.of_algebraMap_eq' rfl
   have : forall r, IsLocalization.Away (algebraMap R S r.val) (Sᵣ r) := ‹_›
-  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localiza
+  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localizationAlgebra (.powers r.val) S
+  have (r : s) : IsScalarTower R (Rᵣ r) (Sᵣ r) :=
+.of_algebraMap_eq by simp [RingHom.algebraMap_toAlgebra]
+  apply injective_of_isLocalized_span s hs Rᵣ (fun r : s => Algebra.linearMap _ _) _
+    (fun r : s => ((IsScalarTower.toAlgHom R S (Sᵣ r)).toLinearMap)) (Algebra.linearMap R S)
+  simpa [IsLocalization.map_linearMap_eq_toLinearMap_mapₐ] using! h
 
 Depends on / 依赖: Algebra, Algebra.linearM, IsLocalization, IsLocalization.Away, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_toAlgebra, algebraize, injective_of_isLocalized_span, linearM, localizationAlgebra, of_algebraMap_eq, powers, r.val, toAlgebra
 -/
@@ -704,7 +730,12 @@ lemma surjective_of_isLocalization_of_span_eq_top
 .toAlgebra let (r : s) : Algebra R (Sᵣ r) := (algebraMap S (Sᵣ r)).comp f
   have (r : s) : IsScalarTower R S (Sᵣ r) := IsScalarTower.of_algebraMap_eq' rfl
   have : forall r, IsLocalization.Away (algebraMap R S r.val) (Sᵣ r) := ‹_›
-  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localiza
+  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localizationAlgebra (.powers r.val) S
+  have (r : s) : IsScalarTower R (Rᵣ r) (Sᵣ r) :=
+.of_algebraMap_eq by simp [RingHom.algebraMap_toAlgebra]
+  apply surjective_of_isLocalized_span s hs Rᵣ (fun r : s => Algebra.linearMap _ _) _
+    (fun r : s => ((IsScalarTower.toAlgHom R S (Sᵣ r)).toLinearMap)) (Algebra.linearMap R S)
+  simpa [IsLocalization.map_linearMap_eq_toLinearMap_mapₐ] using! h
 
 中文:
 引理 surjective_of_isLocalization_of_span_eq_top
@@ -713,7 +744,12 @@ lemma surjective_of_isLocalization_of_span_eq_top
 .toAlgebra let (r : s) : Algebra R (Sᵣ r) := (algebraMap S (Sᵣ r)).comp f
   have (r : s) : IsScalarTower R S (Sᵣ r) := IsScalarTower.of_algebraMap_eq' rfl
   have : forall r, IsLocalization.Away (algebraMap R S r.val) (Sᵣ r) := ‹_›
-  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localiza
+  let (r : s) : Algebra (Rᵣ r) (Sᵣ r) := localizationAlgebra (.powers r.val) S
+  have (r : s) : IsScalarTower R (Rᵣ r) (Sᵣ r) :=
+.of_algebraMap_eq by simp [RingHom.algebraMap_toAlgebra]
+  apply surjective_of_isLocalized_span s hs Rᵣ (fun r : s => Algebra.linearMap _ _) _
+    (fun r : s => ((IsScalarTower.toAlgHom R S (Sᵣ r)).toLinearMap)) (Algebra.linearMap R S)
+  simpa [IsLocalization.map_linearMap_eq_toLinearMap_mapₐ] using! h
 
 Depends on / 依赖: Algebra, Algebra.linear, IsLocalization, IsLocalization.Away, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_toAlgebra, algebraize, linear, localizationAlgebra, of_algebraMap_eq, powers, r.val, surjective_of_isLocalized_span, toAlgebra
 -/

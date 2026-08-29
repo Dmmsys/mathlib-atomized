@@ -118,7 +118,59 @@ theorem weight_vector_multiplication
     LieModuleHom.coe_toLinearMap, Function.comp_apply, exists_imp, Module.End.mem_maxGenEigenspace]
   rintro t rfl
   -- Set up some notation.
-  let F : Module.End R M₃ :=
+  let F : Module.End R M₃ := toEnd R L M₃ x - (χ₁ + χ₂) • ↑1
+  -- The goal is linear in `t` so use induction to reduce to the case that `t` is a pure tensor.
+  refine t.induction_on ?_ ?_ ?_
+  · use 0; simp only [map_zero]
+  swap
+  · rintro t₁ t₂ ⟨k₁, hk₁⟩ ⟨k₂, hk₂⟩; use max k₁ k₂
+    simp only [map_add, Module.End.pow_map_zero_of_le (le_max_left k₁ k₂) hk₁,
+      Module.End.pow_map_zero_of_le (le_max_right k₁ k₂) hk₂, add_zero]
+  -- Now the main argument: pure tensors.
+  rintro ⟨m₁, hm₁⟩ ⟨m₂, hm₂⟩
+  change exists k, (F ^ k) ((g : M₁ otimes[R] M₂ ->ₗ[R] M₃) (m₁ otimesₜ m₂)) = (0 : M₃)
+  -- Eliminate `g` from the picture.
+  let f₁ : Module.End R (M₁ otimes[R] M₂) := (toEnd R L M₁ x - χ₁ • ↑1).rTensor M₂
+  let f₂ : Module.End R (M₁ otimes[R] M₂) := (toEnd R L M₂ x - χ₂ • ↑1).lTensor M₁
+  have h_comm_square : F ∘ₗ ↑g = (g : M₁ otimes[R] M₂ ->ₗ[R] M₃).comp (f₁ + f₂) := by
+    ext m₁ m₂
+    simp only [f₁, f₂, F, ← g.map_lie x (m₁ otimesₜ m₂), add_smul, sub_tmul, tmul_sub, smul_tmul,
+      lie_tmul_right, tmul_smul, toEnd_apply_apply, map_smul, Module.End.one_apply,
+      LieModuleHom.coe_toLinearMap, LinearMap.smul_apply, Function.comp_apply, LinearMap.coe_comp,
+      LinearMap.rTensor_tmul, map_add, LinearMap.add_apply, map_sub, LinearMap.sub_apply,
+      LinearMap.lTensor_tmul, AlgebraTensorModule.curry_apply, TensorProduct.curry_apply,
+      LinearMap.coe_restrictScalars]
+    abel
+  rsuffices ⟨k, hk⟩ : exists k : Nat, ((f₁ + f₂) ^ k) (m₁ otimesₜ m₂) = 0
+  · use k
+    rw [← LinearMap.comp_apply]; rw [Module.End.commute_pow_left_of_commute h_comm_square]; rw [LinearMap.comp_apply]; rw [hk]; rw [map_zero]
+  -- Unpack the information we have about `m₁`, `m₂`.
+  simp only [Module.End.mem_maxGenEigenspace] at hm₁ hm₂
+  obtain ⟨k₁, hk₁⟩ := hm₁
+  obtain ⟨k₂, hk₂⟩ := hm₂
+  have hf₁ : (f₁ ^ k₁) (m₁ otimesₜ m₂) = 0 := by
+    simp only [f₁, hk₁, zero_tmul, LinearMap.rTensor_tmul, LinearMap.rTensor_pow]
+  have hf₂ : (f₂ ^ k₂) (m₁ otimesₜ m₂) = 0 := by
+    simp only [f₂, hk₂, tmul_zero, LinearMap.lTensor_tmul, LinearMap.lTensor_pow]
+  -- It's now just an application of the binomial theorem.
+  use k₁ + k₂ - 1
+  have hf_comm : Commute f₁ f₂ := by
+    ext m₁ m₂
+    simp only [f₁, f₂, Module.End.mul_apply, LinearMap.rTensor_tmul, LinearMap.lTensor_tmul,
+      AlgebraTensorModule.curry_apply, LinearMap.lTensor_tmul, TensorProduct.curry_apply,
+      LinearMap.coe_restrictScalars]
+  rw [hf_comm.add_pow']
+  simp only [Finset.sum_apply, LinearMap.coe_sum, LinearMap.smul_apply]
+  -- The required sum is zero because each individual term is zero.
+  apply Finset.sum_eq_zero
+  rintro ⟨i, j⟩ hij
+  -- Eliminate the binomial coefficients from the picture.
+  suffices (f₁ ^ i * f₂ ^ j) (m₁ otimesₜ m₂) = 0 by rw [this]; apply smul_zero
+  -- Finish off with appropriate case analysis.
+  rcases Nat.le_or_le_of_add_eq_add_pred (Finset.mem_antidiagonal.mp hij) with hi | hj
+  · rw [(hf_comm.pow_pow i j).eq, Module.End.mul_apply, Module.End.pow_map_zero_of_le hi hf₁,
+      map_zero]
+  · rw [Module.End.mul_apply, Module.End.pow_map_zero_of_le hj hf₂, map_zero]
 
 中文:
 定理 weight_vector_multiplication
@@ -130,7 +182,59 @@ theorem weight_vector_multiplication
     LieModuleHom.coe_toLinearMap, Function.comp_apply, exists_imp, Module.End.mem_maxGenEigenspace]
   rintro t rfl
   -- Set up some notation.
-  let F : Module.End R M₃ :=
+  let F : Module.End R M₃ := toEnd R L M₃ x - (χ₁ + χ₂) • ↑1
+  -- The goal is linear in `t` so use induction to reduce to the case that `t` is a pure tensor.
+  refine t.induction_on ?_ ?_ ?_
+  · use 0; simp only [map_zero]
+  swap
+  · rintro t₁ t₂ ⟨k₁, hk₁⟩ ⟨k₂, hk₂⟩; use max k₁ k₂
+    simp only [map_add, Module.End.pow_map_zero_of_le (le_max_left k₁ k₂) hk₁,
+      Module.End.pow_map_zero_of_le (le_max_right k₁ k₂) hk₂, add_zero]
+  -- Now the main argument: pure tensors.
+  rintro ⟨m₁, hm₁⟩ ⟨m₂, hm₂⟩
+  change exists k, (F ^ k) ((g : M₁ otimes[R] M₂ ->ₗ[R] M₃) (m₁ otimesₜ m₂)) = (0 : M₃)
+  -- Eliminate `g` from the picture.
+  let f₁ : Module.End R (M₁ otimes[R] M₂) := (toEnd R L M₁ x - χ₁ • ↑1).rTensor M₂
+  let f₂ : Module.End R (M₁ otimes[R] M₂) := (toEnd R L M₂ x - χ₂ • ↑1).lTensor M₁
+  have h_comm_square : F ∘ₗ ↑g = (g : M₁ otimes[R] M₂ ->ₗ[R] M₃).comp (f₁ + f₂) := by
+    ext m₁ m₂
+    simp only [f₁, f₂, F, ← g.map_lie x (m₁ otimesₜ m₂), add_smul, sub_tmul, tmul_sub, smul_tmul,
+      lie_tmul_right, tmul_smul, toEnd_apply_apply, map_smul, Module.End.one_apply,
+      LieModuleHom.coe_toLinearMap, LinearMap.smul_apply, Function.comp_apply, LinearMap.coe_comp,
+      LinearMap.rTensor_tmul, map_add, LinearMap.add_apply, map_sub, LinearMap.sub_apply,
+      LinearMap.lTensor_tmul, AlgebraTensorModule.curry_apply, TensorProduct.curry_apply,
+      LinearMap.coe_restrictScalars]
+    abel
+  rsuffices ⟨k, hk⟩ : exists k : Nat, ((f₁ + f₂) ^ k) (m₁ otimesₜ m₂) = 0
+  · use k
+    rw [← LinearMap.comp_apply]; rw [Module.End.commute_pow_left_of_commute h_comm_square]; rw [LinearMap.comp_apply]; rw [hk]; rw [map_zero]
+  -- Unpack the information we have about `m₁`, `m₂`.
+  simp only [Module.End.mem_maxGenEigenspace] at hm₁ hm₂
+  obtain ⟨k₁, hk₁⟩ := hm₁
+  obtain ⟨k₂, hk₂⟩ := hm₂
+  have hf₁ : (f₁ ^ k₁) (m₁ otimesₜ m₂) = 0 := by
+    simp only [f₁, hk₁, zero_tmul, LinearMap.rTensor_tmul, LinearMap.rTensor_pow]
+  have hf₂ : (f₂ ^ k₂) (m₁ otimesₜ m₂) = 0 := by
+    simp only [f₂, hk₂, tmul_zero, LinearMap.lTensor_tmul, LinearMap.lTensor_pow]
+  -- It's now just an application of the binomial theorem.
+  use k₁ + k₂ - 1
+  have hf_comm : Commute f₁ f₂ := by
+    ext m₁ m₂
+    simp only [f₁, f₂, Module.End.mul_apply, LinearMap.rTensor_tmul, LinearMap.lTensor_tmul,
+      AlgebraTensorModule.curry_apply, LinearMap.lTensor_tmul, TensorProduct.curry_apply,
+      LinearMap.coe_restrictScalars]
+  rw [hf_comm.add_pow']
+  simp only [Finset.sum_apply, LinearMap.coe_sum, LinearMap.smul_apply]
+  -- The required sum is zero because each individual term is zero.
+  apply Finset.sum_eq_zero
+  rintro ⟨i, j⟩ hij
+  -- Eliminate the binomial coefficients from the picture.
+  suffices (f₁ ^ i * f₂ ^ j) (m₁ otimesₜ m₂) = 0 by rw [this]; apply smul_zero
+  -- Finish off with appropriate case analysis.
+  rcases Nat.le_or_le_of_add_eq_add_pred (Finset.mem_antidiagonal.mp hij) with hi | hj
+  · rw [(hf_comm.pow_pow i j).eq, Module.End.mul_apply, Module.End.pow_map_zero_of_le hi hf₁,
+      map_zero]
+  · rw [Module.End.mul_apply, Module.End.pow_map_zero_of_le hj hf₂, map_zero]
 -/
 protected theorem weight_vector_multiplication (M₁ M₂ M₃ : Type*)
     [AddCommGroup M₁] [Module R M₁] [LieRingModule L M₁] [LieModule R L M₁] [AddCommGroup M₂]
@@ -208,7 +312,7 @@ lemma lie_mem_maxGenEigenspace_toEnd
   simp only [LieModuleHom.coe_toLinearMap, Function.comp_apply, LinearMap.coe_comp,
     TensorProduct.mapIncl, LinearMap.mem_range]
   use ⟨y, hy⟩ otimesₜ ⟨m, hm⟩
-  simp only [Submodule.subtype_apply, toModuleHom_apply,
+  simp only [Submodule.subtype_apply, toModuleHom_apply, TensorProduct.map_tmul]
 
 中文:
 引理 lie_mem_maxGenEigenspace_toEnd
@@ -217,7 +321,7 @@ lemma lie_mem_maxGenEigenspace_toEnd
   simp only [LieModuleHom.coe_toLinearMap, Function.comp_apply, LinearMap.coe_comp,
     TensorProduct.mapIncl, LinearMap.mem_range]
   use ⟨y, hy⟩ otimesₜ ⟨m, hm⟩
-  simp only [Submodule.subtype_apply, toModuleHom_apply,
+  simp only [Submodule.subtype_apply, toModuleHom_apply, TensorProduct.map_tmul]
 
 Depends on / 依赖: Function, Function.comp_apply, IsLocalizedModule, IsLocalizedModule.mk, LieModule, LieModule.weight_vector_multiplication, LieModuleHom, LieModuleHom.coe_toLinearMap, LinearMap, LinearMap.coe_comp, LinearMap.mem_range, Submodule, Submodule.subtype_apply, TensorProduct, TensorProduct.mapIncl, TensorProduct.map_tmul, _smul_mk, coe_comp, coe_toLinearMap, comp_apply
 -/
@@ -1008,7 +1112,11 @@ lemma isNilpotent_toEnd_sub_algebraMap
         (fun m hm => sub_mem (LieSubmodule.lie_mem _ hm) (Submodule.smul_mem _ _ hm)) := by
     rfl
   obtain ⟨k, hk⟩ := exists_genWeightSpace_le_ker_of_isNoetherian M χ x
-  use
+  use k
+  ext ⟨m, hm⟩
+  simp only [this, Module.End.pow_restrict _, LinearMap.zero_apply, ZeroMemClass.coe_zero,
+    ZeroMemClass.coe_eq_zero]
+  exact ZeroMemClass.coe_eq_zero.mp (hk hm)
 
 中文:
 引理 isNilpotent_toEnd_sub_algebraMap
@@ -1019,7 +1127,11 @@ lemma isNilpotent_toEnd_sub_algebraMap
         (fun m hm => sub_mem (LieSubmodule.lie_mem _ hm) (Submodule.smul_mem _ _ hm)) := by
     rfl
   obtain ⟨k, hk⟩ := exists_genWeightSpace_le_ker_of_isNoetherian M χ x
-  use
+  use k
+  ext ⟨m, hm⟩
+  simp only [this, Module.End.pow_restrict _, LinearMap.zero_apply, ZeroMemClass.coe_zero,
+    ZeroMemClass.coe_eq_zero]
+  exact ZeroMemClass.coe_eq_zero.mp (hk hm)
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lie_mem, LinearMap, LinearMap.zero_apply, Module, Module.End.pow_restrict, Submodule, Submodule.smul_mem, ZeroMemClass, ZeroMemClass.coe_eq_zero, ZeroMemClass.coe_eq_zero.mp, ZeroMemClass.coe_zero, algebraMap, coe_eq_zero, coe_zero, exists_genWeightSpace_le_ker_of_isNoetherian, genWeightSpace, lie_mem, pow_restrict, restrict
 -/
@@ -1185,7 +1297,20 @@ definition posFittingCompOf
       intro y m hm
       simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
         Submodule.mem_toAddSubmonoid, Submodule.mem_iInf, LinearMap.mem_range] at hm ⊢
-      intr
+      intro k
+      obtain ⟨N, hN⟩ := LieAlgebra.nilpotent_ad_of_nilpotent_algebra R L
+      obtain ⟨m, rfl⟩ := hm (N + k)
+      let f₁ : Module.End R (L otimes[R] M) := (LieAlgebra.ad R L x).rTensor M
+      let f₂ : Module.End R (L otimes[R] M) := φ.lTensor L
+      replace hN : f₁ ^ N = 0 := by ext; simp [f₁, hN]
+      have h₁ : Commute f₁ f₂ := by ext; simp [f₁, f₂]
+      have h₂ : φ ∘ₗ toModuleHom R L M = toModuleHom R L M ∘ₗ (f₁ + f₂) := by ext; simp [φ, f₁, f₂]
+      obtain ⟨q, hq⟩ := h₁.add_pow_dvd_pow_of_pow_eq_zero_right (N + k).le_succ hN
+      use toModuleHom R L M (q (y otimesₜ m))
+      change (φ ^ k).comp ((toModuleHom R L M : L otimes[R] M ->ₗ[R] M)) _ = _
+      simp [φ, f₁, f₂, Module.End.commute_pow_left_of_commute h₂,
+        LinearMap.comp_apply (g := (f₁ + f₂) ^ k), ← LinearMap.comp_apply (g := q),
+        ← Module.End.mul_eq_comp, ← hq] }
 
 中文:
 定义 posFittingCompOf
@@ -1196,7 +1321,20 @@ definition posFittingCompOf
       intro y m hm
       simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
         Submodule.mem_toAddSubmonoid, Submodule.mem_iInf, LinearMap.mem_range] at hm ⊢
-      intr
+      intro k
+      obtain ⟨N, hN⟩ := LieAlgebra.nilpotent_ad_of_nilpotent_algebra R L
+      obtain ⟨m, rfl⟩ := hm (N + k)
+      let f₁ : Module.End R (L otimes[R] M) := (LieAlgebra.ad R L x).rTensor M
+      let f₂ : Module.End R (L otimes[R] M) := φ.lTensor L
+      replace hN : f₁ ^ N = 0 := by ext; simp [f₁, hN]
+      have h₁ : Commute f₁ f₂ := by ext; simp [f₁, f₂]
+      have h₂ : φ ∘ₗ toModuleHom R L M = toModuleHom R L M ∘ₗ (f₁ + f₂) := by ext; simp [φ, f₁, f₂]
+      obtain ⟨q, hq⟩ := h₁.add_pow_dvd_pow_of_pow_eq_zero_right (N + k).le_succ hN
+      use toModuleHom R L M (q (y otimesₜ m))
+      change (φ ^ k).comp ((toModuleHom R L M : L otimes[R] M ->ₗ[R] M)) _ = _
+      simp [φ, f₁, f₂, Module.End.commute_pow_left_of_commute h₂,
+        LinearMap.comp_apply (g := (f₁ + f₂) ^ k), ← LinearMap.comp_apply (g := q),
+        ← Module.End.mul_eq_comp, ← hq] }
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_toSubsemigroup, AddSubsemigroup, AddSubsemigroup.mem_carrier, LieAlgebra, LieAlgebra.ad, LieAlgebra.nilpotent_ad_of_nilpotent_algebra, LinearMap, LinearMap.mem_range, LinearMap.range, Module, Module.End, Submodule, Submodule.mem_iInf, Submodule.mem_toAddSubmonoid, lTensor, lie_mem, mem_carrier, mem_iInf, mem_range
 -/
@@ -1259,7 +1397,8 @@ lemma posFittingCompOf_le_lowerCentralSeries
   induction l with
   | zero => simp
   | succ l ih =>
-    simp only [lowerCentralSeries_succ, pow_succ', Module.En
+    simp only [lowerCentralSeries_succ, pow_succ', Module.End.mul_apply]
+    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x) ih
 
 中文:
 引理 posFittingCompOf_le_lowerCentralSeries
@@ -1273,7 +1412,8 @@ lemma posFittingCompOf_le_lowerCentralSeries
   induction l with
   | zero => simp
   | succ l ih =>
-    simp only [lowerCentralSeries_succ, pow_succ', Module.En
+    simp only [lowerCentralSeries_succ, pow_succ', Module.End.mul_apply]
+    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x) ih
 -/
 @[simp] lemma posFittingCompOf_le_lowerCentralSeries (x : L) (k : Nat) :
     posFittingCompOf R M x <= lowerCentralSeries R L M k := by
@@ -1401,7 +1541,17 @@ lemma iInf_lowerCentralSeries_eq_posFittingComp
   obtain ⟨k, hk⟩ := Filter.eventually_atTop.mp (toEnd R L M x).eventually_iInf_range_pow_eq
   use k
   ext ⟨m⟩
-  set F := po
+  set F := posFittingComp R L M
+  replace hk : (toEnd R L M x ^ k) m in F := by
+    apply posFittingCompOf_le_posFittingComp R L M x
+    simp_rw [← LieSubmodule.mem_toSubmodule, posFittingCompOf, hk k (le_refl k)]
+    apply LinearMap.mem_range_self
+  suffices (toEnd R L (M ⧸ F) x ^ k) (LieSubmodule.Quotient.mk (N := F) m) =
+    LieSubmodule.Quotient.mk (N := F) ((toEnd R L M x ^ k) m)
+      by simpa [Submodule.Quotient.quot_mk_eq_mk, this]
+  have := LinearMap.congr_fun (Module.End.commute_pow_left_of_commute
+    (LieSubmodule.Quotient.toEnd_comp_mk' F x) k) m
+  simpa using this
 
 中文:
 引理 iInf_lowerCentralSeries_eq_posFittingComp
@@ -1413,7 +1563,17 @@ lemma iInf_lowerCentralSeries_eq_posFittingComp
   obtain ⟨k, hk⟩ := Filter.eventually_atTop.mp (toEnd R L M x).eventually_iInf_range_pow_eq
   use k
   ext ⟨m⟩
-  set F := po
+  set F := posFittingComp R L M
+  replace hk : (toEnd R L M x ^ k) m in F := by
+    apply posFittingCompOf_le_posFittingComp R L M x
+    simp_rw [← LieSubmodule.mem_toSubmodule, posFittingCompOf, hk k (le_refl k)]
+    apply LinearMap.mem_range_self
+  suffices (toEnd R L (M ⧸ F) x ^ k) (LieSubmodule.Quotient.mk (N := F) m) =
+    LieSubmodule.Quotient.mk (N := F) ((toEnd R L M x ^ k) m)
+      by simpa [Submodule.Quotient.quot_mk_eq_mk, this]
+  have := LinearMap.congr_fun (Module.End.commute_pow_left_of_commute
+    (LieSubmodule.Quotient.toEnd_comp_mk' F x) k) m
+  simpa using this
 -/
 @[simp] lemma iInf_lowerCentralSeries_eq_posFittingComp
     [IsNoetherian R M] [IsArtinian R M] :
@@ -1475,7 +1635,7 @@ lemma map_posFittingComp_le
   intro k
   obtain ⟨n, hn⟩ := hm k
   use f n
- 
+  rw [LieModule.toEnd_pow_apply_map]; rw [hn]
 
 中文:
 引理 map_posFittingComp_le
@@ -1487,7 +1647,7 @@ lemma map_posFittingComp_le
   intro k
   obtain ⟨n, hn⟩ := hm k
   use f n
- 
+  rw [LieModule.toEnd_pow_apply_map]; rw [hn]
 
 Depends on / 依赖: LieModule, LieModule.toEnd_pow_apply_map, LieSubmodule, LieSubmodule.map_iSup, LieSubmodule.map_le_iff_le_comap.mpr, LieSubmodule.mem_comap, iSup_mono, map_iSup, map_le_iff_le_comap, mem_comap, mem_posFittingCompOf, posFittingComp, toEnd_pow_apply_map
 -/
@@ -1516,7 +1676,7 @@ lemma map_genWeightSpace_le
     ext; simp
   obtain ⟨k, h⟩ := (mem_genWeightSpace _ _ _).mp hm x
   refine ⟨k, ?_⟩
-  simpa [h
+  simpa [h] using LinearMap.congr_fun (Module.End.commute_pow_left_of_commute this k) m
 
 中文:
 引理 map_genWeightSpace_le
@@ -1529,7 +1689,7 @@ lemma map_genWeightSpace_le
     ext; simp
   obtain ⟨k, h⟩ := (mem_genWeightSpace _ _ _).mp hm x
   refine ⟨k, ?_⟩
-  simpa [h
+  simpa [h] using LinearMap.congr_fun (Module.End.commute_pow_left_of_commute this k) m
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.map_le_iff_le_comap, LieSubmodule.mem_comap, LinearMap, LinearMap.congr_fun, Module, Module.End.commute_pow_left_of_commute, commute_pow_left_of_commute, congr_fun, map_le_iff_le_comap, mem_comap, mem_genWeightSpace
 -/
@@ -1561,7 +1721,12 @@ lemma comap_genWeightSpace_eq_of_injective
     have h : (toEnd R L M₂ x - χ x • ↑1) ∘ₗ f =
              f ∘ₗ (toEnd R L M x - χ x • ↑1) := by ext; simp
     obtain ⟨k, hk⟩ := hm x
-    use 
+    use k
+    suffices f (((toEnd R L M x - χ x • ↑1) ^ k) m) = 0 by
+      rw [← map_zero f] at this; exact hf this
+    simpa [hk] using (LinearMap.congr_fun (Module.End.commute_pow_left_of_commute h k) m).symm
+  · rw [← LieSubmodule.map_le_iff_le_comap]
+    exact map_genWeightSpace_le f
 
 中文:
 引理 comap_genWeightSpace_eq_of_injective
@@ -1574,7 +1739,12 @@ lemma comap_genWeightSpace_eq_of_injective
     have h : (toEnd R L M₂ x - χ x • ↑1) ∘ₗ f =
              f ∘ₗ (toEnd R L M x - χ x • ↑1) := by ext; simp
     obtain ⟨k, hk⟩ := hm x
-    use 
+    use k
+    suffices f (((toEnd R L M x - χ x • ↑1) ^ k) m) = 0 by
+      rw [← map_zero f] at this; exact hf this
+    simpa [hk] using (LinearMap.congr_fun (Module.End.commute_pow_left_of_commute h k) m).symm
+  · rw [← LieSubmodule.map_le_iff_le_comap]
+    exact map_genWeightSpace_le f
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.map_le_iff_le_comap, LieSubmodule.mem_comap, LinearMap, LinearMap.congr_fun, Module, Module.End.commute_pow_left_of_commute, commute_pow_left_of_commute, congr_fun, le_antisymm, map_le_iff_le_comap, map_zero, mem_comap, mem_genWeightSpace
 -/
@@ -1702,7 +1872,9 @@ obtain ⟨l, hl⟩ := Filter.eventually_atTop.mp
     (eventually_iInf_lowerCentralSeries_eq R L N₂).and
     (eventually_iInf_lowerCentralSeries_eq R L M)
   obtain ⟨hl₁, hl₂, hl₃⟩ := hl l (le_refl _)
-  simp_rw [← iInf_lowerCentralSeries_eq_posFittingC
+  simp_rw [← iInf_lowerCentralSeries_eq_posFittingComp, hl₁, hl₂, hl₃,
+    LieSubmodule.lowerCentralSeries_map_eq_lcs, ← LieSubmodule.lcs_sup, lowerCentralSeries,
+    h.eq_top]
 
 中文:
 引理 posFittingComp_map_incl_sup_of_codisjoint
@@ -1713,7 +1885,9 @@ obtain ⟨l, hl⟩ := Filter.eventually_atTop.mp
     (eventually_iInf_lowerCentralSeries_eq R L N₂).and
     (eventually_iInf_lowerCentralSeries_eq R L M)
   obtain ⟨hl₁, hl₂, hl₃⟩ := hl l (le_refl _)
-  simp_rw [← iInf_lowerCentralSeries_eq_posFittingC
+  simp_rw [← iInf_lowerCentralSeries_eq_posFittingComp, hl₁, hl₂, hl₃,
+    LieSubmodule.lowerCentralSeries_map_eq_lcs, ← LieSubmodule.lcs_sup, lowerCentralSeries,
+    h.eq_top]
 
 Depends on / 依赖: Filter, Filter.eventually_atTop.mp, LieSubmodule, LieSubmodule.lcs_sup, LieSubmodule.lowerCentralSeries_map_eq_lcs, eq_top, eventually_atTop, eventually_iInf_lowerCentralSeries_eq, h.eq_top, iInf_lowerCentralSeries_eq_posFittingComp, lcs_sup, le_refl, lowerCentralSeries, lowerCentralSeries_map_eq_lcs, simp_rw
 -/
@@ -1771,7 +1945,7 @@ lemma isCompl_genWeightSpaceOf_zero_posFittingCompOf
   simpa only [isCompl_iff, codisjoint_iff, disjoint_iff, ← LieSubmodule.toSubmodule_inj,
     LieSubmodule.sup_toSubmodule, LieSubmodule.inf_toSubmodule,
     LieSubmodule.top_toSubmodule, LieSubmodule.bot_toSubmodule, coe_genWeightSpaceOf_zero] using!
-    (toEnd R L M x).isCompl_iSup_ker_pow_iInf_
+    (toEnd R L M x).isCompl_iSup_ker_pow_iInf_range_pow
 
 中文:
 引理 isCompl_genWeightSpaceOf_zero_posFittingCompOf
@@ -1780,7 +1954,7 @@ lemma isCompl_genWeightSpaceOf_zero_posFittingCompOf
   simpa only [isCompl_iff, codisjoint_iff, disjoint_iff, ← LieSubmodule.toSubmodule_inj,
     LieSubmodule.sup_toSubmodule, LieSubmodule.inf_toSubmodule,
     LieSubmodule.top_toSubmodule, LieSubmodule.bot_toSubmodule, coe_genWeightSpaceOf_zero] using!
-    (toEnd R L M x).isCompl_iSup_ker_pow_iInf_
+    (toEnd R L M x).isCompl_iSup_ker_pow_iInf_range_pow
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.bot_toSubmodule, LieSubmodule.inf_toSubmodule, LieSubmodule.sup_toSubmodule, LieSubmodule.toSubmodule_inj, LieSubmodule.top_toSubmodule, bot_toSubmodule, codisjoint_iff, coe_genWeightSpaceOf_zero, disjoint_iff, inf_toSubmodule, isCompl_iSup_ker_pow_iInf_range_pow, isCompl_iff, sup_toSubmodule, toSubmodule_inj, top_toSubmodule
 -/
@@ -1802,7 +1976,28 @@ lemma isCompl_genWeightSpace_zero_posFittingComp_aux
   rcases forall_or_exists_not (fun (x : L) => genWeightSpaceOf M (0 : R) x = ⊤)
     with h | ⟨x, hx : genWeightSpaceOf M (0 : R) x != ⊤⟩
   · suffices IsNilpotent L M by simp [M₀, M₁, isCompl_top_bot]
-    replace h : M₀ = ⊤
+    replace h : M₀ = ⊤ := by simpa [M₀, genWeightSpace]
+    rw [← LieModule.isNilpotent_of_top_iff' (R := R)]; rw [← h]
+    infer_instance
+  · set M₀ₓ := genWeightSpaceOf M (0 : R) x
+    set M₁ₓ := posFittingCompOf R M x
+    set M₀ₓ₀ := genWeightSpace M₀ₓ (0 : L -> R)
+    set M₀ₓ₁ := posFittingComp R L M₀ₓ
+    have h₁ : IsCompl M₀ₓ M₁ₓ := isCompl_genWeightSpaceOf_zero_posFittingCompOf R L M x
+    have h₂ : IsCompl M₀ₓ₀ M₀ₓ₁ := h M₀ₓ hx.lt_top
+    have h₃ : M₀ₓ₀.map M₀ₓ.incl = M₀ := by
+      rw [map_genWeightSpace_eq_of_injective M₀ₓ.injective_incl]; rw [inf_eq_left]; rw [LieSubmodule.range_incl]
+      exact iInf_le _ x
+    have h₄ : M₀ₓ₁.map M₀ₓ.incl ⊔ M₁ₓ = M₁ := by
+apply le_antisymm sup_le_iff.mpr
+        ⟨map_posFittingComp_le _, posFittingCompOf_le_posFittingComp R L M x⟩
+      rw [← posFittingComp_map_incl_sup_of_codisjoint h₁.codisjoint]
+      exact sup_le_sup_left LieSubmodule.map_incl_le _
+    rw [← h₃]; rw [← h₄]
+    apply Disjoint.isCompl_sup_right_of_isCompl_sup_left
+    · rw [disjoint_iff, ← LieSubmodule.map_inf M₀ₓ.injective_incl, h₂.inf_eq_bot,
+        LieSubmodule.map_bot]
+    · rwa [← LieSubmodule.map_sup, h₂.sup_eq_top, LieModuleHom.map_top, LieSubmodule.range_incl]
 
 中文:
 引理 isCompl_genWeightSpace_zero_posFittingComp_aux
@@ -1812,7 +2007,28 @@ lemma isCompl_genWeightSpace_zero_posFittingComp_aux
   rcases forall_or_exists_not (fun (x : L) => genWeightSpaceOf M (0 : R) x = ⊤)
     with h | ⟨x, hx : genWeightSpaceOf M (0 : R) x != ⊤⟩
   · suffices IsNilpotent L M by simp [M₀, M₁, isCompl_top_bot]
-    replace h : M₀ = ⊤
+    replace h : M₀ = ⊤ := by simpa [M₀, genWeightSpace]
+    rw [← LieModule.isNilpotent_of_top_iff' (R := R)]; rw [← h]
+    infer_instance
+  · set M₀ₓ := genWeightSpaceOf M (0 : R) x
+    set M₁ₓ := posFittingCompOf R M x
+    set M₀ₓ₀ := genWeightSpace M₀ₓ (0 : L -> R)
+    set M₀ₓ₁ := posFittingComp R L M₀ₓ
+    have h₁ : IsCompl M₀ₓ M₁ₓ := isCompl_genWeightSpaceOf_zero_posFittingCompOf R L M x
+    have h₂ : IsCompl M₀ₓ₀ M₀ₓ₁ := h M₀ₓ hx.lt_top
+    have h₃ : M₀ₓ₀.map M₀ₓ.incl = M₀ := by
+      rw [map_genWeightSpace_eq_of_injective M₀ₓ.injective_incl]; rw [inf_eq_left]; rw [LieSubmodule.range_incl]
+      exact iInf_le _ x
+    have h₄ : M₀ₓ₁.map M₀ₓ.incl ⊔ M₁ₓ = M₁ := by
+apply le_antisymm sup_le_iff.mpr
+        ⟨map_posFittingComp_le _, posFittingCompOf_le_posFittingComp R L M x⟩
+      rw [← posFittingComp_map_incl_sup_of_codisjoint h₁.codisjoint]
+      exact sup_le_sup_left LieSubmodule.map_incl_le _
+    rw [← h₃]; rw [← h₄]
+    apply Disjoint.isCompl_sup_right_of_isCompl_sup_left
+    · rw [disjoint_iff, ← LieSubmodule.map_inf M₀ₓ.injective_incl, h₂.inf_eq_bot,
+        LieSubmodule.map_bot]
+    · rwa [← LieSubmodule.map_sup, h₂.sup_eq_top, LieModuleHom.map_top, LieSubmodule.range_incl]
 -/
 private lemma isCompl_genWeightSpace_zero_posFittingComp_aux
     (h : forall N < (⊤ : LieSubmodule R L M), IsCompl (genWeightSpace N 0) (posFittingComp R L N)) :
@@ -1856,7 +2072,14 @@ lemma isCompl_genWeightSpace_zero_posFittingComp
     let e := LieModuleEquiv.ofTop R L M
     rw [← map_genWeightSpace_eq e]; rw [← map_posFittingComp_eq e]
     exact (LieSubmodule.orderIsoMapComap e).isCompl_iff.mp this
-  induc
+  induction (⊤ : LieSubmodule R L M) using
+    (LieSubmodule.wellFoundedLT_of_isArtinian R L M).induction with | ind N hN
+  refine isCompl_genWeightSpace_zero_posFittingComp_aux R L N fun N' hN' => ?_
+  suffices IsCompl (genWeightSpace (N'.map N.incl) 0) (posFittingComp R L (N'.map N.incl)) by
+    let e := LieSubmodule.equivMapOfInjective N' N.injective_incl
+    rw [← map_genWeightSpace_eq e]; rw [← map_posFittingComp_eq e] at this
+    exact (LieSubmodule.orderIsoMapComap e).isCompl_iff.mpr this
+  exact hN _ (LieSubmodule.map_incl_lt_iff_lt_top.mpr hN')
 
 中文:
 引理 isCompl_genWeightSpace_zero_posFittingComp
@@ -1866,7 +2089,14 @@ lemma isCompl_genWeightSpace_zero_posFittingComp
     let e := LieModuleEquiv.ofTop R L M
     rw [← map_genWeightSpace_eq e]; rw [← map_posFittingComp_eq e]
     exact (LieSubmodule.orderIsoMapComap e).isCompl_iff.mp this
-  induc
+  induction (⊤ : LieSubmodule R L M) using
+    (LieSubmodule.wellFoundedLT_of_isArtinian R L M).induction with | ind N hN
+  refine isCompl_genWeightSpace_zero_posFittingComp_aux R L N fun N' hN' => ?_
+  suffices IsCompl (genWeightSpace (N'.map N.incl) 0) (posFittingComp R L (N'.map N.incl)) by
+    let e := LieSubmodule.equivMapOfInjective N' N.injective_incl
+    rw [← map_genWeightSpace_eq e]; rw [← map_posFittingComp_eq e] at this
+    exact (LieSubmodule.orderIsoMapComap e).isCompl_iff.mpr this
+  exact hN _ (LieSubmodule.map_incl_lt_iff_lt_top.mpr hN')
 
 Depends on / 依赖: IsCompl, LieModuleEquiv, LieModuleEquiv.ofTop, LieSubmodule, LieSubmodule.orderIsoMapComap, LieSubmodule.wellFoundedLT_of_isArtinian, genWeightSpa, genWeightSpace, isCompl_genWeightSpace_zero_posFittingComp_aux, isCompl_iff, isCompl_iff.mp, map_genWeightSpace_eq, map_posFittingComp_eq, orderIsoMapComap, posFittingComp, wellFoundedLT_of_isArtinian
 -/
@@ -2264,7 +2494,8 @@ lemma trace_toEnd_genWeightSpace
     replace this := (isNilpotent_trace_of_isNilpotent this).eq_zero
     rwa [map_sub, map_smul, trace_id, sub_eq_zero, smul_eq_mul, mul_comm,
       ← nsmul_eq_mul] at this
-  rw [← Module.algebraMap_end_eq_s
+  rw [← Module.algebraMap_end_eq_smul_id]
+  exact isNilpotent_toEnd_sub_algebraMap M χ x
 
 中文:
 引理 trace_toEnd_genWeightSpace
@@ -2274,7 +2505,8 @@ lemma trace_toEnd_genWeightSpace
     replace this := (isNilpotent_trace_of_isNilpotent this).eq_zero
     rwa [map_sub, map_smul, trace_id, sub_eq_zero, smul_eq_mul, mul_comm,
       ← nsmul_eq_mul] at this
-  rw [← Module.algebraMap_end_eq_s
+  rw [← Module.algebraMap_end_eq_smul_id]
+  exact isNilpotent_toEnd_sub_algebraMap M χ x
 
 Depends on / 依赖: IsNilpotent, LinearMap, LinearMap.id, Module, Module.algebraMap_end_eq_smul_id, _root_, _root_.IsNilpotent, algebraMap_end_eq_smul_id, eq_zero, genWeightSpace, isNilpotent_toEnd_sub_algebraMap, isNilpotent_trace_of_isNilpotent, map_smul, map_sub, mul_comm, nsmul_eq_mul, replace, smul_eq_mul, sub_eq_zero, trace_id
 -/
@@ -2328,7 +2560,8 @@ lemma iSup_genWeightSpace_eq_top
   simp only [← LieSubmodule.toSubmodule_inj, LieSubmodule.iSup_toSubmodule,
     LieSubmodule.iInf_toSubmodule, LieSubmodule.top_toSubmodule, genWeightSpace]
   refine Module.End.iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo (toEnd K L M)
-    (fun x y φ z => (genWeightSpaceOf M φ y).lie_mem) ?
+    (fun x y φ z => (genWeightSpaceOf M φ y).lie_mem) ?_
+  apply IsTriangularizable.maxGenEigenspace_eq_top
 
 中文:
 引理 iSup_genWeightSpace_eq_top
@@ -2337,7 +2570,8 @@ lemma iSup_genWeightSpace_eq_top
   simp only [← LieSubmodule.toSubmodule_inj, LieSubmodule.iSup_toSubmodule,
     LieSubmodule.iInf_toSubmodule, LieSubmodule.top_toSubmodule, genWeightSpace]
   refine Module.End.iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo (toEnd K L M)
-    (fun x y φ z => (genWeightSpaceOf M φ y).lie_mem) ?
+    (fun x y φ z => (genWeightSpaceOf M φ y).lie_mem) ?_
+  apply IsTriangularizable.maxGenEigenspace_eq_top
 
 Depends on / 依赖: IsTriangularizable, IsTriangularizable.maxGenEigenspace_eq_top, LieSubmodule, LieSubmodule.iInf_toSubmodule, LieSubmodule.iSup_toSubmodule, LieSubmodule.toSubmodule_inj, LieSubmodule.top_toSubmodule, Module, Module.End.iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo, genWeightSpace, genWeightSpaceOf, iInf_toSubmodule, iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo, iSup_toSubmodule, lie_mem, maxGenEigenspace_eq_top, toSubmodule_inj, top_toSubmodule
 -/
@@ -2387,7 +2621,10 @@ lemma eq_iSup_inf_genWeightSpace
   conv_lhs => rw [← N.map_incl_top, ← iSup_genWeightSpace_eq_top' K L N, LieSubmodule.map_iSup]
   refine iSup_le fun χ_N => ?_
   have hN := (LieSubmodule.map_mono (le_top : genWeightSpace N χ_N <= ⊤)).trans N.map_incl_top.le
-exact (le_inf hN 
+exact (le_inf hN (map_genWeightSpace_le _)).trans by
+    by_cases h : genWeightSpace M (χ_N : L -> K) = ⊥
+    · simp [h]
+    · exact le_iSup_of_le ⟨_, h⟩ le_rfl
 
 中文:
 引理 eq_iSup_inf_genWeightSpace
@@ -2397,7 +2634,10 @@ exact (le_inf hN
   conv_lhs => rw [← N.map_incl_top, ← iSup_genWeightSpace_eq_top' K L N, LieSubmodule.map_iSup]
   refine iSup_le fun χ_N => ?_
   have hN := (LieSubmodule.map_mono (le_top : genWeightSpace N χ_N <= ⊤)).trans N.map_incl_top.le
-exact (le_inf hN 
+exact (le_inf hN (map_genWeightSpace_le _)).trans by
+    by_cases h : genWeightSpace M (χ_N : L -> K) = ⊥
+    · simp [h]
+    · exact le_iSup_of_le ⟨_, h⟩ le_rfl
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.map_iSup, LieSubmodule.map_mono, N.map_incl_top, N.map_incl_top.le, conv_lhs, genWeightSpace, iSup_genWeightSpace_eq_top, iSup_le, inf_le_left, le_antisymm, le_iSup_of_le, le_inf, le_rfl, le_top, map_genWeightSpace_le, map_iSup, map_incl_top, map_mono
 -/

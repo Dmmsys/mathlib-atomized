@@ -122,7 +122,9 @@ lemma hull_finsetInf
       inf_empty]
     by_contra hf
     rw [← Set.not_nonempty_iff_eq_empty]; rw [not_not] at hf
-    obtain ⟨x, hx⟩ :
+    obtain ⟨x, hx⟩ := hf
+    exact (hT x (Subtype.coe_prop x)).1 (isMax_iff_eq_top.mpr (eq_top_iff.mpr hx))
+  | cons a F' _ I4 => simp [hull_inf hT, I4]
 
 中文:
 引理 hull_finsetInf
@@ -135,7 +137,9 @@ lemma hull_finsetInf
       inf_empty]
     by_contra hf
     rw [← Set.not_nonempty_iff_eq_empty]; rw [not_not] at hf
-    obtain ⟨x, hx⟩ :
+    obtain ⟨x, hx⟩ := hf
+    exact (hT x (Subtype.coe_prop x)).1 (isMax_iff_eq_top.mpr (eq_top_iff.mpr hx))
+  | cons a F' _ I4 => simp [hull_inf hT, I4]
 
 Depends on / 依赖: Finset, Finset.cons_induction, Set.not_nonempty_iff_eq_empty, Set.preimage_empty, Subtype, Subtype.coe_prop, coe_empty, coe_prop, coe_upperClosure, cons_induction, eq_top_iff, eq_top_iff.mpr, hull_inf, iUnion_empty, iUnion_of_empty, inf_empty, isMax_iff_eq_top, isMax_iff_eq_top.mpr, mem_empty_iff_false, not_nonempty_iff_eq_empty
 -/
@@ -189,7 +193,16 @@ lemma isTopologicalBasis_relativeLower
   constructor <;> intro ha
   · obtain ⟨a, ha'⟩ := ha
     use {a}
-    rw [← (Function.Injective.preimage_i
+    rw [← (Function.Injective.preimage_image Subtype.val_injective R)]; rw [← ha']
+    simp only [finite_singleton, upperClosure_singleton, UpperSet.coe_Ici, image_val_compl,
+      Subtype.image_preimage_coe, sdiff_self_inter, preimage_sdiff, Subtype.coe_preimage_self,
+      true_and]
+    exact compl_eq_univ_sdiff (Subtype.val ⁻¹' Ici a)
+  · obtain ⟨F, hF⟩ := ha
+    lift F to Finset α using hF.1
+    use Finset.inf F id
+    ext
+    simp [hull_finsetInf hT, ← hF.2]
 
 中文:
 引理 isTopologicalBasis_relativeLower
@@ -201,7 +214,16 @@ lemma isTopologicalBasis_relativeLower
   constructor <;> intro ha
   · obtain ⟨a, ha'⟩ := ha
     use {a}
-    rw [← (Function.Injective.preimage_i
+    rw [← (Function.Injective.preimage_image Subtype.val_injective R)]; rw [← ha']
+    simp only [finite_singleton, upperClosure_singleton, UpperSet.coe_Ici, image_val_compl,
+      Subtype.image_preimage_coe, sdiff_self_inter, preimage_sdiff, Subtype.coe_preimage_self,
+      true_and]
+    exact compl_eq_univ_sdiff (Subtype.val ⁻¹' Ici a)
+  · obtain ⟨F, hF⟩ := ha
+    lift F to Finset α using hF.1
+    use Finset.inf F id
+    ext
+    simp [hull_finsetInf hT, ← hF.2]
 
 Depends on / 依赖: Function, Function.Injective.preimage_image, Injective, IsLower, IsLower.lowerBasis, Subtype, Subtype.coe_preimage_self, Subtype.image_preimage_coe, Subtype.val_injective, Topology, Topology.IsLower.isTopologicalBasis, UpperSet, UpperSet.coe_Ici, coe_Ici, coe_preimage_self, convert, exists_exists_and_eq_and, finite_singleton, image_preimage_coe, image_val_compl
 -/
@@ -504,7 +526,9 @@ lemma closedsGC_closureOperator
   · exact fun ⦃a⦄ a => a (hull T (kernel S)) ⟨(isClosed_iff hT).mpr ⟨kernel S, rfl⟩,
       image_subset_iff.mp (fun _ hbS => sInf_le hbS)⟩
   · simp_rw [subset_sInter_iff]
-    intro R 
+    intro R hR
+    rw [← (hull_kernel_of_isClosed hT hG hR.1)]; rw [← gc_closureOperator]
+    exact ClosureOperator.monotone _ hR.2
 
 中文:
 引理 closedsGC_closureOperator
@@ -515,7 +539,9 @@ lemma closedsGC_closureOperator
   · exact fun ⦃a⦄ a => a (hull T (kernel S)) ⟨(isClosed_iff hT).mpr ⟨kernel S, rfl⟩,
       image_subset_iff.mp (fun _ hbS => sInf_le hbS)⟩
   · simp_rw [subset_sInter_iff]
-    intro R 
+    intro R hR
+    rw [← (hull_kernel_of_isClosed hT hG hR.1)]; rw [← gc_closureOperator]
+    exact ClosureOperator.monotone _ hR.2
 
 Depends on / 依赖: Closeds, Closeds.coe_closure, ClosureOperator, ClosureOperator.monotone, GaloisConnection, GaloisConnection.closureOperator_apply, closure, closureOperator, closureOperator_apply, coe_closure, gc_closureOperator, hull_kernel_of_isClosed, image_subset_iff, image_subset_iff.mp, isClosed_iff, kernel, le_antisymm_iff, monotone, sInf_le, simp_rw
 -/

@@ -761,7 +761,7 @@ theorem Summable.tsum_mul_tsum_eq_tsum_sum_antidiagonal
   conv_rhs => congr; ext; rw [← Finset.sum_finset_coe, ← tsum_fintype (L := .unconditional _)]
   rw [hf.tsum_mul_tsum hg hfg]; rw [← HasAntidiagonal.sigmaAntidiagonalEquivProd.tsum_eq (_ : A × A -> α)]
   exact (summable_mul_prod_iff_summable_mul_sigma_antidiagonal.mp hfg).tsum_sigma'
-    (fun n =
+    (fun n => (hasSum_fintype _).summable)
 
 中文:
 定理 Summable.tsum_mul_tsum_eq_tsum_sum_antidiagonal
@@ -770,7 +770,7 @@ theorem Summable.tsum_mul_tsum_eq_tsum_sum_antidiagonal
   conv_rhs => congr; ext; rw [← Finset.sum_finset_coe, ← tsum_fintype (L := .unconditional _)]
   rw [hf.tsum_mul_tsum hg hfg]; rw [← HasAntidiagonal.sigmaAntidiagonalEquivProd.tsum_eq (_ : A × A -> α)]
   exact (summable_mul_prod_iff_summable_mul_sigma_antidiagonal.mp hfg).tsum_sigma'
-    (fun n =
+    (fun n => (hasSum_fintype _).summable)
 -/
 protected theorem Summable.tsum_mul_tsum_eq_tsum_sum_antidiagonal (hf : Summable f)
     (hg : Summable g) (hfg : Summable fun x : A × A => f x.1 * g x.2) :
@@ -995,7 +995,12 @@ theorem tprod_one_add_ordered
   unfold HasProd at hx
   conv at hx in fun _ => _ => ext _; rw [prod_one_add_ordered] -- simp_rw would cause loop
   rw [ha.tsum_eq]
-  refine (tendsto_nhds_unique (hx.comp t
+  refine (tendsto_nhds_unique (hx.comp tendsto_finset_Iic_atTop_atTop) ?_).symm
+  apply Tendsto.const_add
+  convert! ha.comp tendsto_finset_Iic_atTop_atTop using 2 with s
+  refine sum_congr rfl (fun i hi => ?_)
+  congr
+  grind
 
 中文:
 定理 tprod_one_add_ordered
@@ -1009,7 +1014,12 @@ theorem tprod_one_add_ordered
   unfold HasProd at hx
   conv at hx in fun _ => _ => ext _; rw [prod_one_add_ordered] -- simp_rw would cause loop
   rw [ha.tsum_eq]
-  refine (tendsto_nhds_unique (hx.comp t
+  refine (tendsto_nhds_unique (hx.comp tendsto_finset_Iic_atTop_atTop) ?_).symm
+  apply Tendsto.const_add
+  convert! ha.comp tendsto_finset_Iic_atTop_atTop using 2 with s
+  refine sum_congr rfl (fun i hi => ?_)
+  congr
+  grind
 
 Depends on / 依赖: HasProd, Tendsto, Tendsto.const_add, const_add, convert, ha.comp, ha.tsum_eq, hx.comp, hx.tprod_eq, isEmpty_or_nonempty, prod_one_add_ordered, simp_rw, sum_congr, tendsto_finset_Iic_atTop_atTop, tendsto_nhds_unique, tprod_eq, tsum_eq
 -/

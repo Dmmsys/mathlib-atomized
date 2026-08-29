@@ -190,7 +190,11 @@ lemma pullHom_pullHom'
   dsimp [pullHom]
   simp only [Functor.map_comp, Category.assoc]
   rw [F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc
-    _ _ _ _ _ _ (by rw [← Qui
+    _ _ _ _ _ _ (by rw [← Quiver.Hom.comp_toLoc]; rw [← op_comp]; rw [IsPullback.lift_fst])
+    rfl (by cat_disch),
+    F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _
+      (by rw [← Quiver.Hom.comp_toLoc, ← op_comp, IsPullback.lift_snd]) rfl (by cat_disch)]
+  simp
 
 中文:
 引理 pullHom_pullHom'
@@ -202,7 +206,11 @@ lemma pullHom_pullHom'
   dsimp [pullHom]
   simp only [Functor.map_comp, Category.assoc]
   rw [F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc
-    _ _ _ _ _ _ (by rw [← Qui
+    _ _ _ _ _ _ (by rw [← Quiver.Hom.comp_toLoc]; rw [← op_comp]; rw [IsPullback.lift_fst])
+    rfl (by cat_disch),
+    F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _
+      (by rw [← Quiver.Hom.comp_toLoc, ← op_comp, IsPullback.lift_snd]) rfl (by cat_disch)]
+  simp
 
 Depends on / 依赖: Category, Category.assoc, F.mapComp, Functor, Functor.map_comp, _eq_pullHom, _hom_whiskerRight_app, cat_disch, isPullback, isPullback.lift, mapComp, map_comp, pullHom
 -/
@@ -285,14 +293,18 @@ lemma comp_pullHom''
   statement: (hom_comp : forall (i₁ i₂ i₃ : ι),
   proof: by
   obtain ⟨φ, _, _, _⟩ := (sq₃ i₁ i₂ i₃).exists_lift f₁ f₂ f₃ q hf₁ hf₂ hf₃
-  rw [← pullHom_pullHom'_assoc hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₂ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₂ (sq₃ i₁ i₂ i₃).p₃ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ 
+  rw [← pullHom_pullHom'_assoc hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₂ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₂ (sq₃ i₁ i₂ i₃).p₃ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₃ _ _]
+  dsimp [pullHom]
+  simp [← Functor.map_comp_assoc, hom_comp]
 
 中文:
 引理 comp_pullHom''
   结论: (hom_comp : 对任意 (i₁ i₂ i₃ : ι),
   证明: by
   obtain ⟨φ, _, _, _⟩ := (sq₃ i₁ i₂ i₃).exists_lift f₁ f₂ f₃ q hf₁ hf₂ hf₃
-  rw [← pullHom_pullHom'_assoc hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₂ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₂ (sq₃ i₁ i₂ i₃).p₃ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ 
+  rw [← pullHom_pullHom'_assoc hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₂ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₂ (sq₃ i₁ i₂ i₃).p₃ _ _]; rw [← pullHom_pullHom' hom φ (sq₃ i₁ i₂ i₃).p _ (sq₃ i₁ i₂ i₃).p₁ (sq₃ i₁ i₂ i₃).p₃ _ _]
+  dsimp [pullHom]
+  simp [← Functor.map_comp_assoc, hom_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp_assoc, _assoc, exists_lift, hom_comp, map_comp_assoc, pullHom, pullHom_pullHom
 -/
@@ -535,7 +547,11 @@ lemma comm
   proof: by
   obtain ⟨p, _, _⟩ := (sq i₁ i₂).isPullback.exists_lift f₁ f₂ (by cat_disch)
   rw [← pullHom_pullHom' D₂.hom p (sq i₁ i₂).p q (sq i₁ i₂).p₁ (sq i₁ i₂).p₂ f₁ f₂]; rw [← pullHom_pullHom' D₁.hom p (sq i₁ i₂).p q (sq i₁ i₂).p₁ (sq i₁ i₂).p₂ f₁ f₂]; rw [pullHom'_p₁_p₂]; rw [pullHom'_p₁_p₂]
-  dsimp onl
+  dsimp only [pullHom]
+  rw [NatTrans.naturality_assoc]
+  dsimp
+  rw [← Functor.map_comp_assoc]; rw [φ.comm]; rw [Functor.map_comp_assoc]; rw [mapComp'_inv_naturality]
+  simp only [Category.assoc]
 
 中文:
 引理 comm
@@ -543,7 +559,11 @@ lemma comm
   证明: by
   obtain ⟨p, _, _⟩ := (sq i₁ i₂).isPullback.exists_lift f₁ f₂ (by cat_disch)
   rw [← pullHom_pullHom' D₂.hom p (sq i₁ i₂).p q (sq i₁ i₂).p₁ (sq i₁ i₂).p₂ f₁ f₂]; rw [← pullHom_pullHom' D₁.hom p (sq i₁ i₂).p q (sq i₁ i₂).p₁ (sq i₁ i₂).p₂ f₁ f₂]; rw [pullHom'_p₁_p₂]; rw [pullHom'_p₁_p₂]
-  dsimp onl
+  dsimp only [pullHom]
+  rw [NatTrans.naturality_assoc]
+  dsimp
+  rw [← Functor.map_comp_assoc]; rw [φ.comm]; rw [Functor.map_comp_assoc]; rw [mapComp'_inv_naturality]
+  simp only [Category.assoc]
 
 Depends on / 依赖: F.map, cat_disch, exists_lift, isPullback, isPullback.exists_lift, op.toLoc, pullHom, pullHom_pullHom, toFunctor, toFunctor.map
 -/
@@ -572,7 +592,7 @@ definition isoMk
   hom.comm := comm
   inv.hom i := (e i).inv
   inv.comm i₁ i₂ := by
-    rw [← cancel_mono ((F.map _).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map _).toFunctor.map (e i₁).hom)]; rw [Iso.map_hom_
+    rw [← cancel_mono ((F.map _).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map _).toFunctor.map (e i₁).hom)]; rw [Iso.map_hom_inv_id_assoc]; rw [comm i₁ i₂]
 
 中文:
 定义 isoMk
@@ -581,7 +601,7 @@ definition isoMk
   hom.comm := comm
   inv.hom i := (e i).inv
   inv.comm i₁ i₂ := by
-    rw [← cancel_mono ((F.map _).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map _).toFunctor.map (e i₁).hom)]; rw [Iso.map_hom_
+    rw [← cancel_mono ((F.map _).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map _).toFunctor.map (e i₁).hom)]; rw [Iso.map_hom_inv_id_assoc]; rw [comm i₁ i₂]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, F.map, Iso.map_hom_inv_id_assoc, Iso.map_inv_hom_id, cancel_epi, cancel_mono, cat_disch, comp_id, hom.comm, hom.hom, inv.comm, inv.hom, map_hom_inv_id_assoc, map_inv_hom_id, toFunctor, toFunctor.map
 -/
@@ -638,7 +658,11 @@ definition ofDescentData
   pullHom'_hom_self i := by
     obtain ⟨p, h₁, h₂⟩ := (sq i i).isPullback.exists_lift (𝟙 _) (𝟙 _) (by simp)
     have : p ≫ (sq i i).p = f i := by rw [← (sq i i).hp₁, reassoc_of% h₁]
-    rw [pullHom'_eq_pullHom _ _ _ _ p]; rw [D.pull
+    rw [pullHom'_eq_pullHom _ _ _ _ p]; rw [D.pullHom_hom _ _ (f i)]; rw [D.hom_self (f i) (𝟙 _)]
+    all_goals cat_disch
+  pullHom'_hom_comp i₁ i₂ i₃ := by
+    rw [pullHom'_eq_pullHom _ _ _ _ (sq₃ i₁ i₂ i₃).p₁₂]; rw [pullHom'_eq_pullHom _ _ _ _ (sq₃ i₁ i₂ i₃).p₂₃]; rw [pullHom'_eq_pullHom _ _ _ _ (sq₃ i₁ i₂ i₃).p₁₃]; rw [D.pullHom_hom _ _ (sq₃ i₁ i₂ i₃).p]; rw [D.pullHom_hom _ _ (sq₃ i₁ i₂ i₃).p]; rw [D.pullHom_hom _ _ (sq₃ i₁ i₂ i₃).p]; rw [D.hom_comp]
+    all_goals cat_disch
 
 中文:
 定义 ofDescentData
@@ -648,7 +672,11 @@ definition ofDescentData
   pullHom'_hom_self i := by
     obtain ⟨p, h₁, h₂⟩ := (sq i i).isPullback.exists_lift (𝟙 _) (𝟙 _) (by simp)
     have : p ≫ (sq i i).p = f i := by rw [← (sq i i).hp₁, reassoc_of% h₁]
-    rw [pullHom'_eq_pullHom _ _ _ _ p]; rw [D.pull
+    rw [pullHom'_eq_pullHom _ _ _ _ p]; rw [D.pullHom_hom _ _ (f i)]; rw [D.hom_self (f i) (𝟙 _)]
+    all_goals cat_disch
+  pullHom'_hom_comp i₁ i₂ i₃ := by
+    rw [pullHom'_eq_pullHom _ _ _ _ (sq₃ i₁ i₂ i₃).p₁₂]; rw [pullHom'_eq_pullHom _ _ _ _ (sq₃ i₁ i₂ i₃).p₂₃]; rw [pullHom'_eq_pullHom _ _ _ _ (sq₃ i₁ i₂ i₃).p₁₃]; rw [D.pullHom_hom _ _ (sq₃ i₁ i₂ i₃).p]; rw [D.pullHom_hom _ _ (sq₃ i₁ i₂ i₃).p]; rw [D.pullHom_hom _ _ (sq₃ i₁ i₂ i₃).p]; rw [D.hom_comp]
+    all_goals cat_disch
 
 Depends on / 依赖: D.obj
 -/

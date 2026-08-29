@@ -254,7 +254,7 @@ theorem zpow_log_le_self
     rw [zpow_natCast]; rw [← Nat.cast_pow]; rw [← Nat.le_floor_iff hr.le]
     exact Nat.pow_log_le_self b (Nat.floor_pos.mpr hr1).ne'
   · rw [log_of_right_le_one _ hr1, zpow_neg]
-    exact_mod_cast inv_le_of_inv_le₀ hr (Nat.c
+    exact_mod_cast inv_le_of_inv_le₀ hr (Nat.ceil_le.1 <| Nat.le_pow_clog hb _)
 
 中文:
 定理 zpow_log_le_self
@@ -266,7 +266,7 @@ theorem zpow_log_le_self
     rw [zpow_natCast]; rw [← Nat.cast_pow]; rw [← Nat.le_floor_iff hr.le]
     exact Nat.pow_log_le_self b (Nat.floor_pos.mpr hr1).ne'
   · rw [log_of_right_le_one _ hr1, zpow_neg]
-    exact_mod_cast inv_le_of_inv_le₀ hr (Nat.c
+    exact_mod_cast inv_le_of_inv_le₀ hr (Nat.ceil_le.1 <| Nat.le_pow_clog hb _)
 
 Depends on / 依赖: Nat.cast_pow, Nat.ceil_le, Nat.floor_pos.mpr, Nat.le_floor_iff, Nat.le_pow_clog, Nat.pow_log_le_self, cast_pow, ceil_le, floor_pos, hr.le, le_floor_iff, le_pow_clog, le_total, log_of_one_le_right, log_of_right_le_one, pow_log_le_self, zpow_natCast, zpow_neg
 -/
@@ -291,7 +291,16 @@ theorem lt_zpow_succ_log_self
     exact hr.trans_lt (zero_lt_one.trans_le <| mod_cast hb.le)
   rcases le_or_gt 1 r with hr1 | hr1
   · rw [log_of_one_le_right _ hr1, Int.ofNat_add_one_out]
-exact_mod_cast Nat.lt_of_floor_lt Nat.lt_pow_succ
+exact_mod_cast Nat.lt_of_floor_lt Nat.lt_pow_succ_log_self hb _
+  · rw [log_of_right_le_one _ hr1.le]
+    have hcri : 1 < r⁻¹ := (one_lt_inv₀ hr).2 hr1
+    have : 1 <= Nat.clog b ⌈r⁻¹⌉₊ :=
+      Nat.succ_le_of_lt (Nat.clog_pos hb <| Nat.one_lt_cast.1 <| hcri.trans_le (Nat.le_ceil _))
+    rw [neg_add_eq_sub]; rw [← neg_sub]; rw [← Int.ofNat_one]; rw [← Int.ofNat_sub this]; rw [zpow_neg]; rw [zpow_natCast]; rw [lt_inv_comm₀ hr (pow_pos (Nat.cast_pos.mpr <| zero_lt_one.trans hb) _)]; rw [← Nat.cast_pow]
+    refine Nat.lt_ceil.1 ?_
+exact Nat.pow_pred_clog_lt_self hb Nat.one_lt_cast.1 hcri.trans_le Nat.le_ceil _
+
+@[simp]
 
 中文:
 定理 lt_zpow_succ_log_self
@@ -303,7 +312,16 @@ exact_mod_cast Nat.lt_of_floor_lt Nat.lt_pow_succ
     exact hr.trans_lt (zero_lt_one.trans_le <| mod_cast hb.le)
   rcases le_or_gt 1 r with hr1 | hr1
   · rw [log_of_one_le_right _ hr1, Int.ofNat_add_one_out]
-exact_mod_cast Nat.lt_of_floor_lt Nat.lt_pow_succ
+exact_mod_cast Nat.lt_of_floor_lt Nat.lt_pow_succ_log_self hb _
+  · rw [log_of_right_le_one _ hr1.le]
+    have hcri : 1 < r⁻¹ := (one_lt_inv₀ hr).2 hr1
+    have : 1 <= Nat.clog b ⌈r⁻¹⌉₊ :=
+      Nat.succ_le_of_lt (Nat.clog_pos hb <| Nat.one_lt_cast.1 <| hcri.trans_le (Nat.le_ceil _))
+    rw [neg_add_eq_sub]; rw [← neg_sub]; rw [← Int.ofNat_one]; rw [← Int.ofNat_sub this]; rw [zpow_neg]; rw [zpow_natCast]; rw [lt_inv_comm₀ hr (pow_pos (Nat.cast_pos.mpr <| zero_lt_one.trans hb) _)]; rw [← Nat.cast_pow]
+    refine Nat.lt_ceil.1 ?_
+exact Nat.pow_pred_clog_lt_self hb Nat.one_lt_cast.1 hcri.trans_le Nat.le_ceil _
+
+@[simp]
 
 Depends on / 依赖: Int.ofNat_add_one_out, Nat.clog, Nat.clog_pos, Nat.le_c, Nat.lt_of_floor_lt, Nat.lt_pow_succ_log_self, Nat.one_lt_cast, Nat.succ_le_of_lt, clog_pos, hb.le, hcri.trans_le, hr.trans_lt, hr1.le, le_c, le_or_gt, log_of_one_le_right, log_of_right_le_one, log_of_right_le_zero, lt_of_floor_lt, lt_pow_succ_log_self
 -/
@@ -448,7 +466,10 @@ theorem log_zpow
   · rw [log_of_one_le_right _ (one_le_zpow₀ (mod_cast hb.le) <| Int.natCast_nonneg _), zpow_natCast,
       ← Nat.cast_pow, Nat.floor_natCast, Nat.log_pow hb]
   · rw [log_of_right_le_one _ (zpow_le_one_of_nonpos₀ (mod_cast hb.le) <|
-      neg_nonpos.2
+      neg_nonpos.2 (Int.natCast_nonneg _)),
+      zpow_neg, inv_inv, zpow_natCast, ← Nat.cast_pow, Nat.ceil_natCast, Nat.clog_pow _ _ hb]
+
+@[mono, gcongr]
 
 中文:
 定理 log_zpow
@@ -459,7 +480,10 @@ theorem log_zpow
   · rw [log_of_one_le_right _ (one_le_zpow₀ (mod_cast hb.le) <| Int.natCast_nonneg _), zpow_natCast,
       ← Nat.cast_pow, Nat.floor_natCast, Nat.log_pow hb]
   · rw [log_of_right_le_one _ (zpow_le_one_of_nonpos₀ (mod_cast hb.le) <|
-      neg_nonpos.2
+      neg_nonpos.2 (Int.natCast_nonneg _)),
+      zpow_neg, inv_inv, zpow_natCast, ← Nat.cast_pow, Nat.ceil_natCast, Nat.clog_pow _ _ hb]
+
+@[mono, gcongr]
 
 Depends on / 依赖: Int.eq_nat_or_neg, Int.natCast_nonneg, Nat.cast_pow, Nat.ceil_natCast, Nat.clog_pow, Nat.floor_natCast, Nat.log_pow, cast_pow, ceil_natCast, clog_pow, eq_nat_or_neg, floor_natCast, hb.le, inv_inv, log_of_one_le_right, log_of_right_le_one, log_pow, mod_cast, natCast_nonneg, neg_nonpos
 -/
@@ -484,7 +508,12 @@ theorem log_mono_right
   · have h₀' : 0 < r₂ := lt_of_lt_of_le h₀ h
     rw [log_of_right_le_one _ h₁]; rw [log_of_right_le_one _ h₂]; rw [neg_le_neg_iff]; rw [Nat.cast_le]
 exact Nat.clog_mono_right b Nat.ceil_mono (inv_le_inv₀ h₀' h₀).2 h
-  · rw 
+  · rw [log_of_right_le_one _ h₁, log_of_one_le_right _ h₂]
+    exact (neg_nonpos.mpr (Int.natCast_nonneg _)).trans (Int.natCast_nonneg _)
+  · obtain rfl := le_antisymm h (h₂.trans h₁)
+    rfl
+  · rw [log_of_one_le_right _ h₁, log_of_one_le_right _ h₂, Nat.cast_le]
+    exact Nat.log_mono_right (Nat.floor_mono h)
 
 中文:
 定理 log_mono_right
@@ -495,7 +524,12 @@ exact Nat.clog_mono_right b Nat.ceil_mono (inv_le_inv₀ h₀' h₀).2 h
   · have h₀' : 0 < r₂ := lt_of_lt_of_le h₀ h
     rw [log_of_right_le_one _ h₁]; rw [log_of_right_le_one _ h₂]; rw [neg_le_neg_iff]; rw [Nat.cast_le]
 exact Nat.clog_mono_right b Nat.ceil_mono (inv_le_inv₀ h₀' h₀).2 h
-  · rw 
+  · rw [log_of_right_le_one _ h₁, log_of_one_le_right _ h₂]
+    exact (neg_nonpos.mpr (Int.natCast_nonneg _)).trans (Int.natCast_nonneg _)
+  · obtain rfl := le_antisymm h (h₂.trans h₁)
+    rfl
+  · rw [log_of_one_le_right _ h₁, log_of_one_le_right _ h₂, Nat.cast_le]
+    exact Nat.log_mono_right (Nat.floor_mono h)
 
 Depends on / 依赖: Int.natCast_nonneg, Nat.cast_le, Nat.ceil_mono, Nat.clog_mono_right, cast_le, ceil_mono, clog_mono_right, le_antisymm, le_total, log_of_one_le_right, log_of_right_le_one, lt_of_lt_of_le, natCast_nonneg, neg_le_neg_iff, neg_nonpos, neg_nonpos.mpr
 -/
@@ -664,7 +698,9 @@ theorem clog_of_right_le_zero
   rcases le_or_gt b 1 with hb | hb
   · exact Or.inr hb
   · refine Or.inl (lt_of_le_of_lt ?_ hb)
-    exact Nat.floor_le_one_of_le_one ((inv_nonpos.2 hr).trans zero_le_one
+    exact Nat.floor_le_one_of_le_one ((inv_nonpos.2 hr).trans zero_le_one)
+
+@[simp]
 
 中文:
 定理 clog_of_right_le_zero
@@ -675,7 +711,9 @@ theorem clog_of_right_le_zero
   rcases le_or_gt b 1 with hb | hb
   · exact Or.inr hb
   · refine Or.inl (lt_of_le_of_lt ?_ hb)
-    exact Nat.floor_le_one_of_le_one ((inv_nonpos.2 hr).trans zero_le_one
+    exact Nat.floor_le_one_of_le_one ((inv_nonpos.2 hr).trans zero_le_one)
+
+@[simp]
 
 Depends on / 依赖: Int.natCast_eq_zero, Nat.floor_le_one_of_le_one, Nat.log_eq_zero_iff, Or.inl, Or.inr, floor_le_one_of_le_one, hr.trans_lt, if_neg, inv_nonpos, le_or_gt, log_eq_zero_iff, lt_of_le_of_lt, natCast_eq_zero, neg_eq_zero, not_ge, trans_lt, zero_le_one, zero_lt_one
 -/
@@ -699,7 +737,9 @@ theorem clog_inv
   · obtain hr | hr := le_total 1 r
     · rw [clog_of_right_le_one _ (inv_le_one_of_one_le₀ hr), log_of_one_le_right _ hr, inv_inv]
     · rw [clog_of_one_le_right _ ((one_le_inv₀ hrp).2 hr), log_of_right_le_one _ hr, neg_neg]
-  · rw [clog_of_right_le_zero _ (in
+  · rw [clog_of_right_le_zero _ (inv_nonpos.mpr hrp), log_of_right_le_zero _ hrp, neg_zero]
+
+@[simp]
 
 中文:
 定理 clog_inv
@@ -710,7 +750,9 @@ theorem clog_inv
   · obtain hr | hr := le_total 1 r
     · rw [clog_of_right_le_one _ (inv_le_one_of_one_le₀ hr), log_of_one_le_right _ hr, inv_inv]
     · rw [clog_of_one_le_right _ ((one_le_inv₀ hrp).2 hr), log_of_right_le_one _ hr, neg_neg]
-  · rw [clog_of_right_le_zero _ (in
+  · rw [clog_of_right_le_zero _ (inv_nonpos.mpr hrp), log_of_right_le_zero _ hrp, neg_zero]
+
+@[simp]
 
 Depends on / 依赖: clog_of_one_le_right, clog_of_right_le_one, clog_of_right_le_zero, inv_inv, inv_nonpos, inv_nonpos.mpr, le_total, log_of_one_le_right, log_of_right_le_one, log_of_right_le_zero, lt_or_ge, neg_neg, neg_zero
 -/

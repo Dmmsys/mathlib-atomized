@@ -200,7 +200,11 @@ theorem Pi.cons_injective
       funext fun h =>
         have :
           Pi.cons s a b e₁ e (by simpa only [Multiset.mem_cons, mem_insert] using! h) =
-            Pi.cons s a b e₂ e (by simpa only [Multiset.mem_cons, mem_insert] using! h) :=
+            Pi.cons s a b e₂ e (by simpa only [Multiset.mem_cons, mem_insert] using! h) := by
+          rw [eq]
+        this
+
+@[simp]
 
 中文:
 定理 依赖函数类型.cons_injective
@@ -211,7 +215,11 @@ theorem Pi.cons_injective
       funext fun h =>
         have :
           Pi.cons s a b e₁ e (by simpa only [Multiset.mem_cons, mem_insert] using! h) =
-            Pi.cons s a b e₂ e (by simpa only [Multiset.mem_cons, mem_insert] using! h) :=
+            Pi.cons s a b e₂ e (by simpa only [Multiset.mem_cons, mem_insert] using! h) := by
+          rw [eq]
+        this
+
+@[simp]
 -/
 theorem Pi.cons_injective {a : α} {b : δ a} {s : Finset α} (hs : a ∉ s) :
     Function.Injective (Pi.cons s a b) := fun e₁ e₂ eq =>
@@ -323,7 +331,12 @@ theorem pi_insert
             dedup
               ((t a).1.bind fun b =>
 dedup
-                  (Multiset.pi s.1 fun a : α => (t a).val).map fun f a
+                  (Multiset.pi s.1 fun a : α => (t a).val).map fun f a' h' =>
+                    Multiset.Pi.cons s.1 a b f a' (h ▸ h'))))
+      _ (insert_val_of_notMem ha)
+  subst s'; rw [pi_cons]
+  congr; funext b
+  exact ((pi s t).nodup.map <| Multiset.Pi.cons_injective ha).dedup.symm
 
 中文:
 定理 pi_insert
@@ -338,7 +351,12 @@ dedup
             dedup
               ((t a).1.bind fun b =>
 dedup
-                  (Multiset.pi s.1 fun a : α => (t a).val).map fun f a
+                  (Multiset.pi s.1 fun a : α => (t a).val).map fun f a' h' =>
+                    Multiset.Pi.cons s.1 a b f a' (h ▸ h'))))
+      _ (insert_val_of_notMem ha)
+  subst s'; rw [pi_cons]
+  congr; funext b
+  exact ((pi s t).nodup.map <| Multiset.Pi.cons_injective ha).dedup.symm
 
 Depends on / 依赖: Multiset, Multiset.Pi.cons, Multiset.Pi.cons_injective, Multiset.pi, cons_injective, dedup.symm, eq_of_veq, insert, insert_val_of_notMem, nodup.map, pi_cons
 -/

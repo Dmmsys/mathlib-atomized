@@ -158,7 +158,10 @@ theorem eq_top_of_disjoint
     rw [hdisjoint]; rw [finrank_bot]
   apply eq_top_of_finrank_eq
   replace hdim : finrank K V = finrank K s + finrank K t :=
-    le_antisymm hdim (finrank_add_finrank_le_of_disjoint hdi
+    le_antisymm hdim (finrank_add_finrank_le_of_disjoint hdisjoint)
+  rw [hdim]
+  convert! s.finrank_sup_add_finrank_inf_eq t
+  rw [h_finrank_inf]; rw [add_zero]
 
 中文:
 定理 eq_top_of_disjoint
@@ -169,7 +172,10 @@ theorem eq_top_of_disjoint
     rw [hdisjoint]; rw [finrank_bot]
   apply eq_top_of_finrank_eq
   replace hdim : finrank K V = finrank K s + finrank K t :=
-    le_antisymm hdim (finrank_add_finrank_le_of_disjoint hdi
+    le_antisymm hdim (finrank_add_finrank_le_of_disjoint hdisjoint)
+  rw [hdim]
+  convert! s.finrank_sup_add_finrank_inf_eq t
+  rw [h_finrank_inf]; rw [add_zero]
 
 Depends on / 依赖: add_zero, convert, disjoint_iff_inf_le, eq_top_of_finrank_eq, finrank, finrank_add_finrank_le_of_disjoint, finrank_bot, finrank_sup_add_finrank_inf_eq, h_finrank_inf, hdisjoint, le_antisymm, le_bot_iff, replace, s.finrank_sup_add_finrank_inf_eq
 -/
@@ -216,7 +222,17 @@ theorem sup_span_singleton_eq_top_iff
   · suffices W ⊓ span K {v} = ⊥ by
       have hv₀ : v != 0 := by aesop
       have aux := finrank_sup_add_finrank_inf_eq W (span K {v})
-      rw [hW]; rw [finrank_span_singleton hv₀]; rw [this]; rw [finrank_bot]; rw [finrank_top]; rw [← finrank_quotient_add_fi
+      rw [hW]; rw [finrank_span_singleton hv₀]; rw [this]; rw [finrank_bot]; rw [finrank_top]; rw [← finrank_quotient_add_finrank W] at aux
+      lia
+    refine (Submodule.eq_bot_iff _).mpr fun w hw => ?_
+    obtain ⟨ht, t, rfl⟩ : w in W ∧ exists t : K, t • v = w := by simpa [mem_span_singleton] using hw
+    rcases eq_or_ne t 0 with rfl | ht₀; · simp
+    rw [Submodule.smul_mem_iff _ ht₀] at ht
+    contradiction
+  · apply Submodule.eq_top_of_disjoint
+    · rw [← W.finrank_quotient_add_finrank, add_comm, add_le_add_iff_left, hW]
+      aesop
+    · exact Submodule.disjoint_span_singleton_of_notMem hv
 
 中文:
 定理 sup_span_singleton_eq_top_iff
@@ -226,7 +242,17 @@ theorem sup_span_singleton_eq_top_iff
   · suffices W ⊓ span K {v} = ⊥ by
       have hv₀ : v != 0 := by aesop
       have aux := finrank_sup_add_finrank_inf_eq W (span K {v})
-      rw [hW]; rw [finrank_span_singleton hv₀]; rw [this]; rw [finrank_bot]; rw [finrank_top]; rw [← finrank_quotient_add_fi
+      rw [hW]; rw [finrank_span_singleton hv₀]; rw [this]; rw [finrank_bot]; rw [finrank_top]; rw [← finrank_quotient_add_finrank W] at aux
+      lia
+    refine (Submodule.eq_bot_iff _).mpr fun w hw => ?_
+    obtain ⟨ht, t, rfl⟩ : w in W ∧ exists t : K, t • v = w := by simpa [mem_span_singleton] using hw
+    rcases eq_or_ne t 0 with rfl | ht₀; · simp
+    rw [Submodule.smul_mem_iff _ ht₀] at ht
+    contradiction
+  · apply Submodule.eq_top_of_disjoint
+    · rw [← W.finrank_quotient_add_finrank, add_comm, add_le_add_iff_left, hW]
+      aesop
+    · exact Submodule.disjoint_span_singleton_of_notMem hv
 
 Depends on / 依赖: Submodu, Submodule, Submodule.eq_bot_iff, eq_bot_iff, eq_or_ne, finrank_bot, finrank_quotient_add_finrank, finrank_span_singleton, finrank_sup_add_finrank_inf_eq, finrank_top, mem_span_singleton
 -/
@@ -259,7 +285,10 @@ theorem finrank_sup_span_singleton
   intro x
   simp only [mem_inf, mem_span_singleton]
   rintro ⟨hx, ⟨a, hx'⟩⟩
- 
+  rw [← hx'] at hx
+  suffices a = 0 by simp [← hx', this]
+  contrapose hv
+  simpa [smul_mem_iff p hv] using hx
 
 中文:
 定理 finrank_sup_span_singleton
@@ -269,7 +298,10 @@ theorem finrank_sup_span_singleton
   intro x
   simp only [mem_inf, mem_span_singleton]
   rintro ⟨hx, ⟨a, hx'⟩⟩
- 
+  rw [← hx'] at hx
+  suffices a = 0 by simp [← hx', this]
+  contrapose hv
+  simpa [smul_mem_iff p hv] using hx
 
 Depends on / 依赖: Nat.add_left_cancel_iff, Nat.add_left_inj, Nat.left_eq_add, Submodule, Submodule.finrank_eq_zero, add_assoc, add_left_cancel_iff, add_left_inj, contrapose, eq_bot_iff, finrank_eq_zero, finrank_span_singleton, finrank_sup_add_finrank_inf_eq, left_eq_add, mem_inf, mem_span_singleton, smul_mem_iff
 -/
@@ -463,7 +495,7 @@ theorem injective_iff_surjective_of_finrank_eq_finrank
   · rw [h, finrank_bot, add_zero, H] at this
     exact eq_top_of_finrank_eq this
   · rw [h, finrank_top, H] at this
-    exact Submodule.finrank_eq_zero.1 (add_right_injective _ th
+    exact Submodule.finrank_eq_zero.1 (add_right_injective _ this)
 
 中文:
 定理 injective_iff_surjective_of_finrank_eq_finrank
@@ -474,7 +506,7 @@ theorem injective_iff_surjective_of_finrank_eq_finrank
   · rw [h, finrank_bot, add_zero, H] at this
     exact eq_top_of_finrank_eq this
   · rw [h, finrank_top, H] at this
-    exact Submodule.finrank_eq_zero.1 (add_right_injective _ th
+    exact Submodule.finrank_eq_zero.1 (add_right_injective _ this)
 
 Depends on / 依赖: Submodule, Submodule.finrank_eq_zero, add_right_injective, add_zero, eq_top_of_finrank_eq, finrank_bot, finrank_eq_zero, finrank_range_add_finrank_ker, finrank_top, ker_eq_bot, range_eq_top
 -/
@@ -965,7 +997,7 @@ theorem is_simple_module_of_finrank_eq_one
   rw [← restrictScalars_inj K] at hn ⊢
   have : FiniteDimensional _ _ := .of_finrank_eq_succ h
   refine eq_top_of_finrank_eq ((Submodule.finrank_le _).antisymm ?_)
-  simpa only [h, finrank_bot] using!
+  simpa only [h, finrank_bot] using! Submodule.finrank_strictMono (Ne.bot_lt hn)
 
 中文:
 定理 is_simple_module_of_finrank_eq_one
@@ -976,7 +1008,7 @@ theorem is_simple_module_of_finrank_eq_one
   rw [← restrictScalars_inj K] at hn ⊢
   have : FiniteDimensional _ _ := .of_finrank_eq_succ h
   refine eq_top_of_finrank_eq ((Submodule.finrank_le _).antisymm ?_)
-  simpa only [h, finrank_bot] using!
+  simpa only [h, finrank_bot] using! Submodule.finrank_strictMono (Ne.bot_lt hn)
 
 Depends on / 依赖: FiniteDimensional, Ne.bot_lt, Submodule, Submodule.finrank_le, Submodule.finrank_strictMono, antisymm, bot_lt, eq_top_of_finrank_eq, finrank_bot, finrank_le, finrank_strictMono, nontrivial_of_finrank_eq_succ, of_finrank_eq_succ, or_iff_not_imp_left, restrictScalars_inj
 -/
@@ -1011,7 +1043,17 @@ theorem Subalgebra.isSimpleOrder_of_finrank
     eq_bot_or_eq_top := by
       intro S
       have : FiniteDimensional F E := .of_finrank_eq_succ hr
-      have : Fini
+      have : FiniteDimensional F S :=
+        FiniteDimensional.finiteDimensional_submodule (Subalgebra.toSubmodule S)
+      have : finrank F S <= 2 := hr ▸ S.toSubmodule.finrank_le
+      have : 0 < finrank F S := finrank_pos_iff.mpr inferInstance
+      interval_cases h : finrank F { x // x in S }
+      · left
+        exact Subalgebra.eq_bot_of_finrank_one h
+      · right
+        rw [← hr] at h
+        rw [← Algebra.toSubmodule_eq_top]
+        exact eq_top_of_finrank_eq h }
 
 中文:
 定理 子代数.isSimpleOrder_of_finrank
@@ -1022,7 +1064,17 @@ theorem Subalgebra.isSimpleOrder_of_finrank
     eq_bot_or_eq_top := by
       intro S
       have : FiniteDimensional F E := .of_finrank_eq_succ hr
-      have : Fini
+      have : FiniteDimensional F S :=
+        FiniteDimensional.finiteDimensional_submodule (Subalgebra.toSubmodule S)
+      have : finrank F S <= 2 := hr ▸ S.toSubmodule.finrank_le
+      have : 0 < finrank F S := finrank_pos_iff.mpr inferInstance
+      interval_cases h : finrank F { x // x in S }
+      · left
+        exact Subalgebra.eq_bot_of_finrank_one h
+      · right
+        rw [← hr] at h
+        rw [← Algebra.toSubmodule_eq_top]
+        exact eq_top_of_finrank_eq h }
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.finiteDimensional_submodule, S.toSubmodule.finrank_le, Subalgebra, Subalgebra.bot_eq_top_iff_finrank_eq_one, Subalgebra.toSubmodule, bot_eq_top_iff_finrank_eq_one, eq_bot_or_eq_top, finiteDimensional_submodule, finrank, finrank_le, finrank_pos_iff, finrank_pos_iff.mpr, hr.symm, hr.symm.trans, interval_cases, nontrivial_of_finrank_pos, of_finrank_eq_succ, toNontrivial, toSubmodule
 -/
@@ -1069,7 +1121,20 @@ theorem exists_ker_pow_eq_ker_pow_succ
     induction n with
     | zero => exact zero_le
     | succ n ih =>
-      have h_ker_lt_ker : LinearM
+      have h_ker_lt_ker : LinearMap.ker (f ^ n) < LinearMap.ker (f ^ n.succ) := by
+        refine lt_of_le_of_ne ?_ (h_contra n (Nat.le_of_succ_le_succ hn))
+        rw [pow_succ']
+        apply LinearMap.ker_le_ker_comp
+      have h_finrank_lt_finrank :
+          finrank K (LinearMap.ker (f ^ n)) < finrank K (LinearMap.ker (f ^ n.succ)) := by
+        apply Submodule.finrank_lt_finrank_of_lt h_ker_lt_ker
+      calc
+        n.succ <= (finrank K ↑(LinearMap.ker (f ^ n))).succ :=
+          Nat.succ_le_succ (ih (Nat.le_of_succ_le hn))
+        _ <= finrank K ↑(LinearMap.ker (f ^ n.succ)) := Nat.succ_le_of_lt h_finrank_lt_finrank
+  have h_any_n_lt : forall n, n <= (finrank K V).succ -> n <= finrank K V := fun n hn =>
+    (h_le_ker_pow n hn).trans (Submodule.finrank_le _)
+  exact Nat.not_succ_le_self _ (h_any_n_lt (finrank K V).succ (finrank K V).succ.le_refl)
 
 中文:
 定理 存在_ker_pow_eq_ker_pow_succ
@@ -1083,7 +1148,20 @@ theorem exists_ker_pow_eq_ker_pow_succ
     induction n with
     | zero => exact zero_le
     | succ n ih =>
-      have h_ker_lt_ker : LinearM
+      have h_ker_lt_ker : LinearMap.ker (f ^ n) < LinearMap.ker (f ^ n.succ) := by
+        refine lt_of_le_of_ne ?_ (h_contra n (Nat.le_of_succ_le_succ hn))
+        rw [pow_succ']
+        apply LinearMap.ker_le_ker_comp
+      have h_finrank_lt_finrank :
+          finrank K (LinearMap.ker (f ^ n)) < finrank K (LinearMap.ker (f ^ n.succ)) := by
+        apply Submodule.finrank_lt_finrank_of_lt h_ker_lt_ker
+      calc
+        n.succ <= (finrank K ↑(LinearMap.ker (f ^ n))).succ :=
+          Nat.succ_le_succ (ih (Nat.le_of_succ_le hn))
+        _ <= finrank K ↑(LinearMap.ker (f ^ n.succ)) := Nat.succ_le_of_lt h_finrank_lt_finrank
+  have h_any_n_lt : forall n, n <= (finrank K V).succ -> n <= finrank K V := fun n hn =>
+    (h_le_ker_pow n hn).trans (Submodule.finrank_le _)
+  exact Nat.not_succ_le_self _ (h_any_n_lt (finrank K V).succ (finrank K V).succ.le_refl)
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_le_ker_comp, Nat.le_of_succ_le_succ, finrank, h_contra, h_finrank_lt_finrank, h_ker_lt_ker, h_le_ker_pow, ker_le_ker_comp, le_of_succ_le_succ, lt_of_le_of_ne, n.succ, not_and, not_exists, pow_succ, simp_rw, zero_le
 -/
@@ -1125,7 +1203,9 @@ theorem ker_pow_eq_ker_pow_finrank_of_le
   calc
     LinearMap.ker (f ^ m) = LinearMap.ker (f ^ (k + (m - k))) := by
       rw [add_tsub_cancel_of_le (h_k_le.trans hm)]
-    _ = LinearMap.ke
+    _ = LinearMap.ker (f ^ k) := by rw [ker_pow_constant hk _]
+    _ = LinearMap.ker (f ^ (k + (finrank K V - k))) := ker_pow_constant hk (finrank K V - k)
+    _ = LinearMap.ker (f ^ finrank K V) := by rw [add_tsub_cancel_of_le h_k_le]
 
 中文:
 定理 ker_pow_eq_ker_pow_finrank_of_le
@@ -1137,7 +1217,9 @@ theorem ker_pow_eq_ker_pow_finrank_of_le
   calc
     LinearMap.ker (f ^ m) = LinearMap.ker (f ^ (k + (m - k))) := by
       rw [add_tsub_cancel_of_le (h_k_le.trans hm)]
-    _ = LinearMap.ke
+    _ = LinearMap.ker (f ^ k) := by rw [ker_pow_constant hk _]
+    _ = LinearMap.ker (f ^ (k + (finrank K V - k))) := ker_pow_constant hk (finrank K V - k)
+    _ = LinearMap.ker (f ^ finrank K V) := by rw [add_tsub_cancel_of_le h_k_le]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, add_tsub_cancel_of_le, exists_ker_pow_eq_ker_pow_succ, finrank, h_k_le, h_k_le.trans, k.succ, ker_pow_constant
 -/

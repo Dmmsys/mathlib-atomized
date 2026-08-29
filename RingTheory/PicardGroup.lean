@@ -302,7 +302,8 @@ theorem bijective_curry
   have : curry e.toLinearMap = ((TensorProduct.lid R N).congrLeft _ R ≪≫ₗ e.congrRight) ∘ₗ
       rTensorHom N ∘ₗ (ringLmapEquivSelf R R M).symm.toLinearMap := by
     rw [← LinearEquiv.toLinearMap_symm_comp_eq]; ext
-    simp [LinearEquiv.congrLeft, LinearEquiv.congrRight, LinearEquiv.arrowCongrAdd
+    simp [LinearEquiv.congrLeft, LinearEquiv.congrRight, LinearEquiv.arrowCongrAddEquiv]
+  simpa [this] using! (rTensorEquiv R M <| TensorProduct.comm R N M ≪≫ₗ e).bijective
 
 中文:
 定理 bijective_curry
@@ -311,7 +312,8 @@ theorem bijective_curry
   have : curry e.toLinearMap = ((TensorProduct.lid R N).congrLeft _ R ≪≫ₗ e.congrRight) ∘ₗ
       rTensorHom N ∘ₗ (ringLmapEquivSelf R R M).symm.toLinearMap := by
     rw [← LinearEquiv.toLinearMap_symm_comp_eq]; ext
-    simp [LinearEquiv.congrLeft, LinearEquiv.congrRight, LinearEquiv.arrowCongrAdd
+    simp [LinearEquiv.congrLeft, LinearEquiv.congrRight, LinearEquiv.arrowCongrAddEquiv]
+  simpa [this] using! (rTensorEquiv R M <| TensorProduct.comm R N M ≪≫ₗ e).bijective
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.arrowCongrAddEquiv, LinearEquiv.congrLeft, LinearEquiv.congrRight, LinearEquiv.toLinearMap_symm_comp_eq, TensorProduct, TensorProduct.comm, TensorProduct.lid, arrowCongrAddEquiv, bijective, congrLeft, congrRight, e.congrRight, e.toLinearMap, rTensorEquiv, rTensorHom, ringLmapEquivSelf, symm.toLinearMap, toLinearMap, toLinearMap_symm_comp_eq
 -/
@@ -476,7 +478,19 @@ theorem finite_projective
   have ⟨S, hS⟩ := TensorProduct.exists_finset (e.symm 1)
   let f : (S ->₀ N) ->ₗ[R] R := Finsupp.lsum R fun i => e.toLinearMap ∘ₗ TensorProduct.mk R M N i.1.1
   have : Function.Surjective f := by
-    
+    rw [← LinearMap.range_eq_top]; rw [Ideal.eq_top_iff_one]
+    use Finsupp.equivFunOnFinite.symm fun i => i.1.2
+    simp_rw [f, Finsupp.coe_lsum]
+    rw [Finsupp.sum_fintype _ _ fun _ => map_zero _]
+    rwa [e.symm_apply_eq, map_sum, ← Finset.sum_coe_sort, eq_comm] at hS
+  have ⟨g, hg⟩ := projective_lifting_property f .id this
+  classical
+  let aux := finsuppRight R _ M N S ≪≫ₗ Finsupp.mapRange.linearEquiv e
+  let f' : (S ->₀ R) ->ₗ[R] M := TensorProduct.rid R M ∘ₗ f.lTensor M ∘ₗ aux.symm
+  let g' : M ->ₗ[R] S ->₀ R := aux ∘ₗ g.lTensor M ∘ₗ (TensorProduct.rid R M).symm
+  have : Function.Surjective f' := by simpa [f'] using LinearMap.lTensor_surjective _ this
+refine ⟨.of_surjective f' this, .of_split g' f' LinearMap.ext fun m => ?_⟩
+  simp [f', g', show f (g 1) = 1 from DFunLike.congr_fun hg 1]
 
 中文:
 定理 finite_projective
@@ -487,7 +501,19 @@ theorem finite_projective
   have ⟨S, hS⟩ := TensorProduct.exists_finset (e.symm 1)
   let f : (S ->₀ N) ->ₗ[R] R := Finsupp.lsum R fun i => e.toLinearMap ∘ₗ TensorProduct.mk R M N i.1.1
   have : Function.Surjective f := by
-    
+    rw [← LinearMap.range_eq_top]; rw [Ideal.eq_top_iff_one]
+    use Finsupp.equivFunOnFinite.symm fun i => i.1.2
+    simp_rw [f, Finsupp.coe_lsum]
+    rw [Finsupp.sum_fintype _ _ fun _ => map_zero _]
+    rwa [e.symm_apply_eq, map_sum, ← Finset.sum_coe_sort, eq_comm] at hS
+  have ⟨g, hg⟩ := projective_lifting_property f .id this
+  classical
+  let aux := finsuppRight R _ M N S ≪≫ₗ Finsupp.mapRange.linearEquiv e
+  let f' : (S ->₀ R) ->ₗ[R] M := TensorProduct.rid R M ∘ₗ f.lTensor M ∘ₗ aux.symm
+  let g' : M ->ₗ[R] S ->₀ R := aux ∘ₗ g.lTensor M ∘ₗ (TensorProduct.rid R M).symm
+  have : Function.Surjective f' := by simpa [f'] using LinearMap.lTensor_surjective _ this
+refine ⟨.of_surjective f' this, .of_split g' f' LinearMap.ext fun m => ?_⟩
+  simp [f', g', show f (g 1) = 1 from DFunLike.congr_fun hg 1]
 -/
 private theorem finite_projective : Module.Finite R M ∧ Projective R M := by
   let N := Dual R M
@@ -703,7 +729,11 @@ theorem free_iff_linearEquiv
   have e := (Free.chooseBasis R M).repr
 have := card_eq_of_linearEquiv R
     (finsuppTensorFinsupp' .. ≪≫ₗ linearEquivFunOnFinite R R _).symm ≪≫ₗ TensorProduct.congr
-      (linearEquivFunOnFinite R R _ ≪≫ₗ llift R R R _ ≪≫ₗ e.d
+      (linearEquivFunOnFinite R R _ ≪≫ₗ llift R R R _ ≪≫ₗ e.dualMap)
+      e.symm ≪≫ₗ linearEquiv R M ≪≫ₗ (.symm <| .funUnique Unit R R)
+  have : Unique (Free.ChooseBasisIndex R M) :=
+    (Fintype.card_eq_one_iff_nonempty_unique.mp (by simpa using this)).some
+  exact ⟨e ≪≫ₗ uniqueLinearEquiv R R default⟩
 
 中文:
 定理 free_iff_linearEquiv
@@ -714,7 +744,11 @@ have := card_eq_of_linearEquiv R
   have e := (Free.chooseBasis R M).repr
 have := card_eq_of_linearEquiv R
     (finsuppTensorFinsupp' .. ≪≫ₗ linearEquivFunOnFinite R R _).symm ≪≫ₗ TensorProduct.congr
-      (linearEquivFunOnFinite R R _ ≪≫ₗ llift R R R _ ≪≫ₗ e.d
+      (linearEquivFunOnFinite R R _ ≪≫ₗ llift R R R _ ≪≫ₗ e.dualMap)
+      e.symm ≪≫ₗ linearEquiv R M ≪≫ₗ (.symm <| .funUnique Unit R R)
+  have : Unique (Free.ChooseBasisIndex R M) :=
+    (Fintype.card_eq_one_iff_nonempty_unique.mp (by simpa using this)).some
+  exact ⟨e ≪≫ₗ uniqueLinearEquiv R R default⟩
 
 Depends on / 依赖: ChooseBasisIndex, Fintype, Fintype.card_eq_one_iff_nonempty_unique.mp, Free.ChooseBasisIndex, Free.chooseBasis, TensorProduct, TensorProduct.congr, Unique, card_eq_of_linearEquiv, card_eq_one_iff_nonempty_unique, chooseBasis, dualMap, e.dualMap, e.symm, finsuppTensorFinsupp, funUnique, linearEquiv, linearEquivFunOnFinite, nontriviality, of_equiv
 -/
@@ -1052,7 +1086,9 @@ definition algEquivOfRing
       (leftCancelEquiv A (linearEquiv R A)).symm
   have right : inv ∘ₗ Algebra.linearMap R A = LinearMap.id :=
     let ⟨s, hs⟩ := exists_finset ((linearEquiv R A).symm 1)
-LinearMap.ext_ring by simp [inv, 
+LinearMap.ext_ring by simp [inv, hs, sum_tmul, map_sum, ← (LinearEquiv.symm_apply_eq _).1 hs]
+  { linearEquivOfRightInverse (f := Algebra.linearMap R A) (g := inv) (LinearMap.ext_iff.1 right),
+    Algebra.ofId R A with }
 
 中文:
 定义 algEquivOfRing
@@ -1063,7 +1099,9 @@ LinearMap.ext_ring by simp [inv,
       (leftCancelEquiv A (linearEquiv R A)).symm
   have right : inv ∘ₗ Algebra.linearMap R A = LinearMap.id :=
     let ⟨s, hs⟩ := exists_finset ((linearEquiv R A).symm 1)
-LinearMap.ext_ring by simp [inv, 
+LinearMap.ext_ring by simp [inv, hs, sum_tmul, map_sum, ← (LinearEquiv.symm_apply_eq _).1 hs]
+  { linearEquivOfRightInverse (f := Algebra.linearMap R A) (g := inv) (LinearMap.ext_iff.1 right),
+    Algebra.ofId R A with }
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Algebra.ofId, LinearEquiv, LinearEquiv.symm_apply_eq, LinearMap, LinearMap.ext_iff, LinearMap.ext_ring, LinearMap.id, LinearMap.mul, exists_finset, ext_iff, ext_ring, lTensor, leftCancelEquiv, linearEquiv, linearEquivOfRightInverse, linearMap, map_sum, sum_tmul
 -/
@@ -1162,7 +1200,18 @@ theorem exists_finset_free_localization
   obtain ⟨S, hS⟩ := ((linearEquiv R M).symm 1).exists_finset
   refine ⟨S.image fun i => i.1 i.2, ?_, fun r hr => ?_⟩
   -- Part 1: The evaluations fᵢ(mᵢ) generate the unit ideal
-  · simpa [Ideal.eq_top_iff_one, (LinearEquiv.sym
+  · simpa [Ideal.eq_top_iff_one, (LinearEquiv.symm_apply_eq _).mp hS, linearEquiv]
+      using Ideal.sum_mem _ fun i hi => Ideal.subset_span (Finset.mem_image_of_mem _ hi)
+  -- Part 2: After localizing at any f(m), the module becomes free
+  obtain ⟨⟨f, m⟩, _, rfl⟩ := Finset.mem_image.mp hr
+  -- Extend f to a R_{f(m)}-linear functional f' on the localized module
+  let f' : Dual (Localization.Away (f m)) (LocalizedModule.Away (f m) M) :=
+.extendScalarsOfIsLocalization (.powers (f m)) _ IsLocalizedModule.map
+      (.powers (f m)) (LocalizedModule.mkLinearMap _ M) (Algebra.linearMap R _) f
+  -- f'(m/1) = f(m)/1 is a unit in R_{f(m)}, so f' is surjective and therefore bijective
+have surj : Function.Surjective f' := LinearMap.range_eq_top.mp Ideal.eq_top_of_isUnit_mem
+    _ ⟨_, IsLocalizedModule.map_apply ..⟩ (IsLocalization.Away.algebraMap_isUnit (f m))
+exact .of_equiv .symm .ofBijective f' (bijective_of_surjective surj)
 
 中文:
 定理 存在_finset_free_localization
@@ -1172,7 +1221,18 @@ theorem exists_finset_free_localization
   obtain ⟨S, hS⟩ := ((linearEquiv R M).symm 1).exists_finset
   refine ⟨S.image fun i => i.1 i.2, ?_, fun r hr => ?_⟩
   -- Part 1: The evaluations fᵢ(mᵢ) generate the unit ideal
-  · simpa [Ideal.eq_top_iff_one, (LinearEquiv.sym
+  · simpa [Ideal.eq_top_iff_one, (LinearEquiv.symm_apply_eq _).mp hS, linearEquiv]
+      using Ideal.sum_mem _ fun i hi => Ideal.subset_span (Finset.mem_image_of_mem _ hi)
+  -- Part 2: After localizing at any f(m), the module becomes free
+  obtain ⟨⟨f, m⟩, _, rfl⟩ := Finset.mem_image.mp hr
+  -- Extend f to a R_{f(m)}-linear functional f' on the localized module
+  let f' : Dual (Localization.Away (f m)) (LocalizedModule.Away (f m) M) :=
+.extendScalarsOfIsLocalization (.powers (f m)) _ IsLocalizedModule.map
+      (.powers (f m)) (LocalizedModule.mkLinearMap _ M) (Algebra.linearMap R _) f
+  -- f'(m/1) = f(m)/1 is a unit in R_{f(m)}, so f' is surjective and therefore bijective
+have surj : Function.Surjective f' := LinearMap.range_eq_top.mp Ideal.eq_top_of_isUnit_mem
+    _ ⟨_, IsLocalizedModule.map_apply ..⟩ (IsLocalization.Away.algebraMap_isUnit (f m))
+exact .of_equiv .symm .ofBijective f' (bijective_of_surjective surj)
 
 Depends on / 依赖: classical
 -/
@@ -1225,7 +1285,7 @@ instance :
   have {c₁ c₂ : sf} : c₁ = c₂ -> c₁.2.Quotient ≃ₗ[R] c₂.2.Quotient := by rintro rfl; exact .refl ..
   let f (M : (Skeleton <| SemimoduleCat.{u} R)ˣ) : sf := ⟨_, Finite.kerReprₛ R M⟩
 small_of_injective (f := f) fun M N eq => Units.ext Quotient.out_equiv_out.mp
-
+    ⟨((Finite.reprEquivₛ R M).symm ≪≫ₗ this eq ≪≫ₗ Finite.reprEquivₛ R N).toModuleIsoₛ⟩
 
 中文:
 实例 :
@@ -1234,7 +1294,7 @@ small_of_injective (f := f) fun M N eq => Units.ext Quotient.out_equiv_out.mp
   have {c₁ c₂ : sf} : c₁ = c₂ -> c₁.2.Quotient ≃ₗ[R] c₂.2.Quotient := by rintro rfl; exact .refl ..
   let f (M : (Skeleton <| SemimoduleCat.{u} R)ˣ) : sf := ⟨_, Finite.kerReprₛ R M⟩
 small_of_injective (f := f) fun M N eq => Units.ext Quotient.out_equiv_out.mp
-
+    ⟨((Finite.reprEquivₛ R M).symm ≪≫ₗ this eq ≪≫ₗ Finite.reprEquivₛ R N).toModuleIsoₛ⟩
 
 Depends on / 依赖: Finite, Finite.kerRepr, Finite.reprEquiv, ModuleCon, Quotient, Quotient.out_equiv_out.mp, SemimoduleCat, Skeleton, Units.ext, out_equiv_out, small_of_injective
 -/
@@ -1609,7 +1669,7 @@ theorem mk_tensor
     simp_rw [Pic.mk, Equiv.toFun_as_coe, Equiv.symm_apply_apply]
     refine (Quotient.sound ?_).trans (Skeleton.toSkeleton_tensorObj ..)
     exact ⟨(Finite.reprEquivₛ R _ ≪≫ₗ TensorProduct.congr
-      (Finite.reprEquivₛ R M).symm (Finite.reprEquivₛ R N).symm).t
+      (Finite.reprEquivₛ R M).symm (Finite.reprEquivₛ R N).symm).toModuleIsoₛ⟩
 
 中文:
 定理 mk_tensor
@@ -1618,7 +1678,7 @@ theorem mk_tensor
     simp_rw [Pic.mk, Equiv.toFun_as_coe, Equiv.symm_apply_apply]
     refine (Quotient.sound ?_).trans (Skeleton.toSkeleton_tensorObj ..)
     exact ⟨(Finite.reprEquivₛ R _ ≪≫ₗ TensorProduct.congr
-      (Finite.reprEquivₛ R M).symm (Finite.reprEquivₛ R N).symm).t
+      (Finite.reprEquivₛ R M).symm (Finite.reprEquivₛ R N).symm).toModuleIsoₛ⟩
 
 Depends on / 依赖: Equiv.symm_apply_apply, Equiv.toFun_as_coe, Finite, Finite.reprEquiv, Pic.mk, Quotient, Quotient.sound, Skeleton, Skeleton.toSkeleton_tensorObj, TensorProduct, TensorProduct.congr, Units.ext, congr_arg, equivShrink, simp_rw, symm_apply_apply, toFun_as_coe, toSkeleton_tensorObj
 -/
@@ -1777,7 +1837,9 @@ instance [IsLocalRing
   obtain ⟨S, hS⟩ := ((Invertible.linearEquiv R M).symm 1).exists_finset
   replace hS : 1 = ∑ i in S, i.1 i.2 := by
     simpa [LinearEquiv.symm_apply_eq, Invertible.linearEquiv] using hS
-  obtain ⟨⟨f, m⟩, mem, hfm⟩ := IsLocalRing.exists_of_isUnit_sum (hS ▸ isUn
+  obtain ⟨⟨f, m⟩, mem, hfm⟩ := IsLocalRing.exists_of_isUnit_sum (hS ▸ isUnit_one)
+exact .of_equiv .symm .ofBijective f (Invertible.bijective_of_surjective <|
+LinearMap.range_eq_top.mp Ideal.eq_top_of_isUnit_mem _ ⟨m, rfl⟩ hfm)
 
 中文:
 实例 [是局部环
@@ -1786,7 +1848,9 @@ instance [IsLocalRing
   obtain ⟨S, hS⟩ := ((Invertible.linearEquiv R M).symm 1).exists_finset
   replace hS : 1 = ∑ i in S, i.1 i.2 := by
     simpa [LinearEquiv.symm_apply_eq, Invertible.linearEquiv] using hS
-  obtain ⟨⟨f, m⟩, mem, hfm⟩ := IsLocalRing.exists_of_isUnit_sum (hS ▸ isUn
+  obtain ⟨⟨f, m⟩, mem, hfm⟩ := IsLocalRing.exists_of_isUnit_sum (hS ▸ isUnit_one)
+exact .of_equiv .symm .ofBijective f (Invertible.bijective_of_surjective <|
+LinearMap.range_eq_top.mp Ideal.eq_top_of_isUnit_mem _ ⟨m, rfl⟩ hfm)
 
 Depends on / 依赖: Ideal.eq_top_of_isUnit_mem, Invertible, Invertible.bijective_of_surjective, Invertible.linearEquiv, IsLocalRing, IsLocalRing.exists_of_isUnit_sum, LinearEquiv, LinearEquiv.symm_apply_eq, LinearMap, LinearMap.range_eq_top.mp, bijective_of_surjective, eq_top_of_isUnit_mem, exists_finset, exists_of_isUnit_sum, isUnit_one, linearEquiv, ofBijective, of_equiv, range_eq_top, replace
 -/
@@ -2126,7 +2190,17 @@ theorem tensorProductComm_eq_refl
   let f (P : Ideal R) [P.IsMaximal] := LocalizedModule.mkLinearMap P.primeCompl M
   let ff (P : Ideal R) [P.IsMaximal] := TensorProduct.map (f P) (f P)
 refine LinearEquiv.toLinearMap_injective LinearMap.eq_of_localization_maximal _ ff _ ff _ _
-    fun P _ => .trans (b := (TensorProduct.comm ..).t
+    fun P _ => .trans (b := (TensorProduct.comm ..).toLinearMap) ?_ ?_
+  · apply IsLocalizedModule.linearMap_ext P.primeCompl (ff P) (ff P)
+    ext; exact IsLocalizedModule.map_apply _ (ff P) ..
+  let Rp := Localization P.primeCompl
+  have ⟨e⟩ := free_iff_linearEquiv.mp (inferInstance : Free Rp (LocalizedModule P.primeCompl M))
+  have e := e.restrictScalars R
+  ext x y
+  refine (congr e e ≪≫ₗ equivOfCompatibleSMul Rp ..).injective ?_
+  suffices e y otimesₜ[Rp] e x = e x otimesₜ e y by simpa [equivOfCompatibleSMul]
+  conv_lhs => rw [← mul_one (e y), ← smul_eq_mul, smul_tmul, smul_eq_mul,
+    mul_comm, ← smul_eq_mul, ← smul_tmul, smul_eq_mul, mul_one]
 
 中文:
 定理 tensorProductComm_eq_refl
@@ -2135,7 +2209,17 @@ refine LinearEquiv.toLinearMap_injective LinearMap.eq_of_localization_maximal _ 
   let f (P : Ideal R) [P.IsMaximal] := LocalizedModule.mkLinearMap P.primeCompl M
   let ff (P : Ideal R) [P.IsMaximal] := TensorProduct.map (f P) (f P)
 refine LinearEquiv.toLinearMap_injective LinearMap.eq_of_localization_maximal _ ff _ ff _ _
-    fun P _ => .trans (b := (TensorProduct.comm ..).t
+    fun P _ => .trans (b := (TensorProduct.comm ..).toLinearMap) ?_ ?_
+  · apply IsLocalizedModule.linearMap_ext P.primeCompl (ff P) (ff P)
+    ext; exact IsLocalizedModule.map_apply _ (ff P) ..
+  let Rp := Localization P.primeCompl
+  have ⟨e⟩ := free_iff_linearEquiv.mp (inferInstance : Free Rp (LocalizedModule P.primeCompl M))
+  have e := e.restrictScalars R
+  ext x y
+  refine (congr e e ≪≫ₗ equivOfCompatibleSMul Rp ..).injective ?_
+  suffices e y otimesₜ[Rp] e x = e x otimesₜ e y by simpa [equivOfCompatibleSMul]
+  conv_lhs => rw [← mul_one (e y), ← smul_eq_mul, smul_tmul, smul_eq_mul,
+    mul_comm, ← smul_eq_mul, ← smul_tmul, smul_eq_mul, mul_one]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.linearMap_ext, IsLocalizedModule.map_apply, IsMaximal, LinearEquiv, LinearEquiv.toLinearMap_injective, LinearMap, LinearMap.eq_of_localization_maximal, Localization, LocalizedModule, LocalizedModule.mkLinearMap, P.IsMaximal, P.primeCompl, TensorProduct, TensorProduct.comm, TensorProduct.map, eq_of_localization_maximal, free_iff_linearEquiv, free_iff_linearEquiv.mp, linearMap_ext
 -/
@@ -2202,7 +2286,28 @@ theorem projective_units_and_mul'_comp_lTensor_bijective
   rw [← Set.image2_mul]; rw [← Finset.coe_image₂]; rw [mem_span_finset] at one_mem
   set S := T.image₂ (· * ·) T'
   obtain ⟨r, hr⟩ := one_mem
-  choose a ha b hb eq using fun i : S => Fi
+  choose a ha b hb eq using fun i : S => Finset.mem_image₂.mp i.2
+  let f : I ->ₗ[R] S -> R := .pi fun i => (LinearEquiv.ofInjective
+      (Algebra.linearMap R A) (FaithfulSMul.algebraMap_injective R A)).symm.comp <|
+    restrict (mulRight R (r i • a i)) fun x hx => by
+      rw [← one_eq_range]; rw [← I.mul_inv]; exact mul_mem_mul hx (I⁻¹.1.smul_mem _ <| hT <| ha i)
+  have hf (x : I.1) (i : S) : algebraMap R A (f x i) = x * r i • a i := by
+    dsimp [f, ← Algebra.linearMap_apply]
+    exact LinearEquiv.ofInjective_symm_apply ..
+let g : (S -> R) ->ₗ[R] I := .lsum _ _ Nat fun i => .toSpanSingleton _ _ ⟨b i, hT' hb i⟩
+have hgf : g ∘ₗ f = .id := LinearMap.ext fun x => Subtype.ext by
+    simp only [g, lsum_apply, comp_apply, LinearMap.sum_apply, toSpanSingleton_apply, proj_apply]
+    simp_rw [coe_sum, coe_smul, Algebra.smul_def, hf, mul_assoc, ← Finset.mul_sum,
+      Algebra.smul_mul_assoc, eq, (Finset.sum_coe_sort ..).trans hr.2, mul_one, id_apply]
+  set m := mul' R A ∘ₗ I.1.subtype.lTensor A
+  have eq : (piScalarRight R R A S).toLinearMap ∘ₗ f.lTensor A =
+      (.pi fun i : S => mulRight R (r i • a i)) ∘ₗ m := by
+    ext; simp [(Algebra.smul_def ..).trans (Algebra.commutes ..), hf, m, mul_assoc]
+have := (piScalarRight R R A S).injective.comp injective_of_comp_eq_id
+(f.lTensor A) (g.lTensor A) by rw [← lTensor_comp, hgf, lTensor_id]
+  rw [← LinearEquiv.coe_toLinearMap]; rw [← coe_comp]; rw [eq]; rw [coe_comp] at this
+  refine ⟨.of_split f g hgf, .of_comp this, range_eq_top.mp ?_⟩
+  rw [show m = mulMap ⊤ I ∘ₗ (topEquiv.symm.rTensor I.1).toLinearMap by ext; rfl]; rw [range_comp]; rw [LinearEquiv.range]; rw [map_top]; rw [mulMap_range]; rw [top_mul_eq_top_of_mul_eq_one I.inv_mul]
 
 中文:
 定理 projective_units_and_mul'_comp_lTensor_bijective
@@ -2213,7 +2318,28 @@ theorem projective_units_and_mul'_comp_lTensor_bijective
   rw [← Set.image2_mul]; rw [← Finset.coe_image₂]; rw [mem_span_finset] at one_mem
   set S := T.image₂ (· * ·) T'
   obtain ⟨r, hr⟩ := one_mem
-  choose a ha b hb eq using fun i : S => Fi
+  choose a ha b hb eq using fun i : S => Finset.mem_image₂.mp i.2
+  let f : I ->ₗ[R] S -> R := .pi fun i => (LinearEquiv.ofInjective
+      (Algebra.linearMap R A) (FaithfulSMul.algebraMap_injective R A)).symm.comp <|
+    restrict (mulRight R (r i • a i)) fun x hx => by
+      rw [← one_eq_range]; rw [← I.mul_inv]; exact mul_mem_mul hx (I⁻¹.1.smul_mem _ <| hT <| ha i)
+  have hf (x : I.1) (i : S) : algebraMap R A (f x i) = x * r i • a i := by
+    dsimp [f, ← Algebra.linearMap_apply]
+    exact LinearEquiv.ofInjective_symm_apply ..
+let g : (S -> R) ->ₗ[R] I := .lsum _ _ Nat fun i => .toSpanSingleton _ _ ⟨b i, hT' hb i⟩
+have hgf : g ∘ₗ f = .id := LinearMap.ext fun x => Subtype.ext by
+    simp only [g, lsum_apply, comp_apply, LinearMap.sum_apply, toSpanSingleton_apply, proj_apply]
+    simp_rw [coe_sum, coe_smul, Algebra.smul_def, hf, mul_assoc, ← Finset.mul_sum,
+      Algebra.smul_mul_assoc, eq, (Finset.sum_coe_sort ..).trans hr.2, mul_one, id_apply]
+  set m := mul' R A ∘ₗ I.1.subtype.lTensor A
+  have eq : (piScalarRight R R A S).toLinearMap ∘ₗ f.lTensor A =
+      (.pi fun i : S => mulRight R (r i • a i)) ∘ₗ m := by
+    ext; simp [(Algebra.smul_def ..).trans (Algebra.commutes ..), hf, m, mul_assoc]
+have := (piScalarRight R R A S).injective.comp injective_of_comp_eq_id
+(f.lTensor A) (g.lTensor A) by rw [← lTensor_comp, hgf, lTensor_id]
+  rw [← LinearEquiv.coe_toLinearMap]; rw [← coe_comp]; rw [eq]; rw [coe_comp] at this
+  refine ⟨.of_split f g hgf, .of_comp this, range_eq_top.mp ?_⟩
+  rw [show m = mulMap ⊤ I ∘ₗ (topEquiv.symm.rTensor I.1).toLinearMap by ext; rfl]; rw [range_comp]; rw [LinearEquiv.range]; rw [map_top]; rw [mulMap_range]; rw [top_mul_eq_top_of_mul_eq_one I.inv_mul]
 -/
 private theorem projective_units_and_mul'_comp_lTensor_bijective (I : (Submodule R A)ˣ) :
     Projective R I ∧ Function.Bijective (mul' R A ∘ₗ I.1.subtype.lTensor A) := by
@@ -2420,7 +2546,17 @@ theorem ker_unitsToPic
     have e' := (mk_eq_one_iff.mp (inv_mem h)).some.symm
     have h := eq_span_singleton_of_surjective e.surjective
     have h' := eq_span_singleton_of_surjective e'.surjective
-    refine ⟨(isUnit_iff_exists_and_exists.m
+    refine ⟨(isUnit_iff_exists_and_exists.mpr ⟨?_, ?_⟩).unit, Units.ext h.symm⟩
+    · have : span R {(e 1).1 * e' 1} = 1 := by simpa [span_mul_span] using congr($h * $h').symm
+      have ⟨r, hr⟩ := span_singleton_eq_one_iff.mp this
+      exact ⟨e' 1 * algebraMap R A r.inv, by simp [← mul_assoc, hr, ← map_mul]⟩
+    · have : span R {(e' 1).1 * e 1} = 1 := by simpa [span_mul_span] using congr($h' * $h).symm
+      have ⟨r, hr⟩ := span_singleton_eq_one_iff.mp this
+      exact ⟨algebraMap R A r.inv * e' 1, by simp [mul_assoc, hr, ← map_mul]⟩
+  · obtain ⟨x, rfl⟩ := h
+exact mk_eq_one_iff.mpr ⟨.symm (.ofInjective (LinearMap.toSpanSingleton R A x) fun _ _ eq =>
+(faithfulSMul_iff_injective_smul_one R A).mp ‹_› by simpa using congr($eq * x.inv)) ≪≫ₗ
+      .ofEq _ _ (by ext; simp [mem_span_singleton])⟩
 
 中文:
 定理 ker_unitsToPic
@@ -2430,7 +2566,17 @@ theorem ker_unitsToPic
     have e' := (mk_eq_one_iff.mp (inv_mem h)).some.symm
     have h := eq_span_singleton_of_surjective e.surjective
     have h' := eq_span_singleton_of_surjective e'.surjective
-    refine ⟨(isUnit_iff_exists_and_exists.m
+    refine ⟨(isUnit_iff_exists_and_exists.mpr ⟨?_, ?_⟩).unit, Units.ext h.symm⟩
+    · have : span R {(e 1).1 * e' 1} = 1 := by simpa [span_mul_span] using congr($h * $h').symm
+      have ⟨r, hr⟩ := span_singleton_eq_one_iff.mp this
+      exact ⟨e' 1 * algebraMap R A r.inv, by simp [← mul_assoc, hr, ← map_mul]⟩
+    · have : span R {(e' 1).1 * e 1} = 1 := by simpa [span_mul_span] using congr($h' * $h).symm
+      have ⟨r, hr⟩ := span_singleton_eq_one_iff.mp this
+      exact ⟨algebraMap R A r.inv * e' 1, by simp [mul_assoc, hr, ← map_mul]⟩
+  · obtain ⟨x, rfl⟩ := h
+exact mk_eq_one_iff.mpr ⟨.symm (.ofInjective (LinearMap.toSpanSingleton R A x) fun _ _ eq =>
+(faithfulSMul_iff_injective_smul_one R A).mp ‹_› by simpa using congr($eq * x.inv)) ≪≫ₗ
+      .ofEq _ _ (by ext; simp [mem_span_singleton])⟩
 
 Depends on / 依赖: Units.ext, algebraMap, e.surjective, eq_span_singleton_of_surjective, h.symm, inv_mem, isUnit_iff_exists_and_exists, isUnit_iff_exists_and_exists.mpr, mk_eq_one_iff, mk_eq_one_iff.mp, r.inv, some.symm, span_mul_span, span_singleton_eq_one_iff, span_singleton_eq_one_iff.mp, surjective
 -/
@@ -2603,7 +2749,10 @@ definition tensorSubmoduleAlgebraEquiv
     ext x
     refine x.induction_on (by simp) ?_ (by simp +contextual)
     intro a x
-    obtain ⟨m, rfl⟩ := (submoduleAl
+    obtain ⟨m, rfl⟩ := (submoduleAlgebraEquiv e).symm.surjective x
+    suffices a * toAlgebra e m = e (a otimesₜ[R] m) by simpa using! this
+    dsimp [toAlgebra]
+    rw [map_one]; rw [← smul_eq_mul]; rw [← map_smul]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
 
 中文:
 定义 tensorSubmoduleAlgebraEquiv
@@ -2613,7 +2762,10 @@ definition tensorSubmoduleAlgebraEquiv
     ext x
     refine x.induction_on (by simp) ?_ (by simp +contextual)
     intro a x
-    obtain ⟨m, rfl⟩ := (submoduleAl
+    obtain ⟨m, rfl⟩ := (submoduleAlgebraEquiv e).symm.surjective x
+    suffices a * toAlgebra e m = e (a otimesₜ[R] m) by simpa using! this
+    dsimp [toAlgebra]
+    rw [map_one]; rw [← smul_eq_mul]; rw [← map_smul]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.congr, AlgebraTensorModule.lTensor, Submodule, Submodule.subtype, bijective, contextual, convert, induction_on, lTensor, map_one, map_smul, mul_one, ofBijective, smul_eq_mul, smul_tmul, submoduleAlgebraEquiv, subtype, surjective, symm.surjective
 -/
@@ -2668,7 +2820,8 @@ definition tensorSubmoduleAlgebraEquivMul
   convert!
     ((tensorSubmoduleAlgebraEquiv e).restrictScalars R).injective.comp
       (Flat.rTensor_preserves_injective_linearMap _ I.subtype_injective)
-  simp_rw [← LinearEquiv.coe_toLinearMap, ←
+  simp_rw [← LinearEquiv.coe_toLinearMap, ← LinearMap.coe_comp]
+  congr 1; ext; rfl
 
 中文:
 定义 tensorSubmoduleAlgebraEquivMul
@@ -2678,7 +2831,8 @@ definition tensorSubmoduleAlgebraEquivMul
   convert!
     ((tensorSubmoduleAlgebraEquiv e).restrictScalars R).injective.comp
       (Flat.rTensor_preserves_injective_linearMap _ I.subtype_injective)
-  simp_rw [← LinearEquiv.coe_toLinearMap, ←
+  simp_rw [← LinearEquiv.coe_toLinearMap, ← LinearMap.coe_comp]
+  congr 1; ext; rfl
 
 Depends on / 依赖: Flat.rTensor_preserves_injective_linearMap, I.subtype_injective, LinearEquiv, LinearEquiv.coe_toLinearMap, LinearMap, LinearMap.coe_comp, Submodule, Submodule.mulMap, Submodule.subtype, _surjective, coe_comp, coe_toLinearMap, convert, injective, injective.comp, mulMap, ofBijective, of_comp, rTensor_preserves_injective_linearMap, restrictScalars
 -/
@@ -2710,7 +2864,20 @@ theorem Submodule.range_unitsToPic
   · obtain ⟨I, rfl⟩ := h
     exact mk_eq_one_iff.mpr ⟨AlgebraTensorModule.congr (.refl ..) (unitsToPicEquiv I) ≪≫ₗ
       .ofBijective ((Algebra.TensorProduct.lmul'' R).toLinearMap ∘ₗ AlgebraTensorModule.lTensor A A
-        I.1.subtype) (projective_units_and_mul'_c
+        I.1.subtype) (projective_units_and_mul'_comp_lTensor_bijective I).2⟩
+  have e := (mk_eq_one_iff.mp h).some
+  have f := (mk_eq_one_iff.mp (inv_mem h)).some
+  refine ⟨(isUnit_of_mul_isUnit_left (x := submoduleAlgebra e) (y := submoduleAlgebra f) ?_).unit,
+    mk_eq_iff.mpr ⟨submoduleAlgebraEquiv e⟩⟩
+have := eq_span_singleton_of_surjective LinearEquiv.surjective
+    (congr (submoduleAlgebraEquiv e) (submoduleAlgebraEquiv f) ≪≫ₗ
+    (mk_eq_one_iff.mp <| by simp_rw [mk_tensor, mk_eq_self, mul_inv_cancel]).some).symm ≪≫ₗ
+    tensorSubmoduleAlgebraEquivMul f (submoduleAlgebra e)
+  rw [this]
+  apply_fun (⊤ * ·) at this
+  simp_rw [← mul_assoc, top_mul_submoduleAlgebra] at this
+  obtain ⟨a, -, eq⟩ := mem_mul_span_singleton.mp (this ▸ mem_top (x := 1))
+  exact .map (spanSingleton R).toMonoidHom (.of_mul_eq_one_right _ eq)
 
 中文:
 定理 子模.range_unitsToPic
@@ -2720,7 +2887,20 @@ theorem Submodule.range_unitsToPic
   · obtain ⟨I, rfl⟩ := h
     exact mk_eq_one_iff.mpr ⟨AlgebraTensorModule.congr (.refl ..) (unitsToPicEquiv I) ≪≫ₗ
       .ofBijective ((Algebra.TensorProduct.lmul'' R).toLinearMap ∘ₗ AlgebraTensorModule.lTensor A A
-        I.1.subtype) (projective_units_and_mul'_c
+        I.1.subtype) (projective_units_and_mul'_comp_lTensor_bijective I).2⟩
+  have e := (mk_eq_one_iff.mp h).some
+  have f := (mk_eq_one_iff.mp (inv_mem h)).some
+  refine ⟨(isUnit_of_mul_isUnit_left (x := submoduleAlgebra e) (y := submoduleAlgebra f) ?_).unit,
+    mk_eq_iff.mpr ⟨submoduleAlgebraEquiv e⟩⟩
+have := eq_span_singleton_of_surjective LinearEquiv.surjective
+    (congr (submoduleAlgebraEquiv e) (submoduleAlgebraEquiv f) ≪≫ₗ
+    (mk_eq_one_iff.mp <| by simp_rw [mk_tensor, mk_eq_self, mul_inv_cancel]).some).symm ≪≫ₗ
+    tensorSubmoduleAlgebraEquivMul f (submoduleAlgebra e)
+  rw [this]
+  apply_fun (⊤ * ·) at this
+  simp_rw [← mul_assoc, top_mul_submoduleAlgebra] at this
+  obtain ⟨a, -, eq⟩ := mem_mul_span_singleton.mp (this ▸ mem_top (x := 1))
+  exact .map (spanSingleton R).toMonoidHom (.of_mul_eq_one_right _ eq)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lmul, AlgebraTensorModule, AlgebraTensorModule.congr, AlgebraTensorModule.lTensor, TensorProduct, _comp_lTensor_bijective, inv_mem, isUnit_of_mul_isUnit_left, lTensor, mk_eq_iff, mk_eq_iff.mpr, mk_eq_one_iff, mk_eq_one_iff.mp, mk_eq_one_iff.mpr, ofBijective, projective_units_and_mul, submoduleAlgebra, subtype, toLinearMap
 -/
@@ -2884,7 +3064,12 @@ theorem Ideal.eq_top_of_mk_tensor_eq_one
   have e := e.symm ≪≫ₗ Submodule.LinearDisjoint.mulMap
     (.of_left_le_one_of_flat I J <| le_top.trans one_eq_top.ge)
 have : IsUnit (e 1 : R) := IsFractionRing.self_iff_nonZeroDivisors_le_isUnit.mp ‹_›
-IsRegular.mem_nonZeroDivisors isRightRegular_iff_isRegular.mp
+IsRegular.mem_nonZeroDivisors isRightRegular_iff_isRegular.mp by
+    rw [IsRightRegular]
+    convert! Subtype.val_injective.comp e.injective using 2
+    rw [← smul_eq_mul]; rw [← Submodule.coe_smul]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [Function.comp_apply]
+  constructor <;> refine eq_top_of_isUnit_mem _ ?_ this
+  exacts [mul_le_left (e 1).2, mul_le_right (e 1).2]
 
 中文:
 定理 理想.eq_top_of_mk_tensor_eq_one
@@ -2894,7 +3079,12 @@ IsRegular.mem_nonZeroDivisors isRightRegular_iff_isRegular.mp
   have e := e.symm ≪≫ₗ Submodule.LinearDisjoint.mulMap
     (.of_left_le_one_of_flat I J <| le_top.trans one_eq_top.ge)
 have : IsUnit (e 1 : R) := IsFractionRing.self_iff_nonZeroDivisors_le_isUnit.mp ‹_›
-IsRegular.mem_nonZeroDivisors isRightRegular_iff_isRegular.mp
+IsRegular.mem_nonZeroDivisors isRightRegular_iff_isRegular.mp by
+    rw [IsRightRegular]
+    convert! Subtype.val_injective.comp e.injective using 2
+    rw [← smul_eq_mul]; rw [← Submodule.coe_smul]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [Function.comp_apply]
+  constructor <;> refine eq_top_of_isUnit_mem _ ?_ this
+  exacts [mul_le_left (e 1).2, mul_le_right (e 1).2]
 
 Depends on / 依赖: Function, Function.comp_apply, IsFractionRing, IsFractionRing.self_iff_nonZeroDivisors_le_isUnit.mp, IsRegular, IsRegular.mem_nonZeroDivisors, IsRightRegular, IsUnit, LinearDisjoint, Submodule, Submodule.LinearDisjoint.mulMap, Submodule.coe_smul, Subtype, Subtype.val_injective.comp, coe_smul, comp_apply, constru, convert, e.injective, e.symm
 -/

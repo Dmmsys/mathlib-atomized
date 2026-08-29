@@ -479,7 +479,13 @@ definition constantsVarsEquiv
       · cases f
         · simp [constantsToVars, varsToConstants, ih]
         · simp [constantsToVars, varsToConstants, Constants.term, eq_iff_true_of_subsingleton]
-      · o
+      · obtain - | f := f
+        · simp [constantsToVars, varsToConstants, ih]
+        · exact isEmptyElim f, by
+    intro t
+    induction t with
+    | var x => cases x <;> rfl
+    | @func n f _ ih => cases n <;> · simp [varsToConstants, constantsToVars, ih]⟩
 
 中文:
 定义 constantsVarsEquiv
@@ -493,7 +499,13 @@ definition constantsVarsEquiv
       · cases f
         · simp [constantsToVars, varsToConstants, ih]
         · simp [constantsToVars, varsToConstants, Constants.term, eq_iff_true_of_subsingleton]
-      · o
+      · obtain - | f := f
+        · simp [constantsToVars, varsToConstants, ih]
+        · exact isEmptyElim f, by
+    intro t
+    induction t with
+    | var x => cases x <;> rfl
+    | @func n f _ ih => cases n <;> · simp [varsToConstants, constantsToVars, ih]⟩
 
 Depends on / 依赖: Constants, Constants.term, constantsToVars, eq_iff_true_of_subsingleton, isEmptyElim, varsToConstants
 -/
@@ -2031,7 +2043,7 @@ theorem id_onBoundedFormula
   | imp _ _ ih1 ih2 => rw [onBoundedFormula, ih1, ih2, id, id, id]
   | all _ ih3 => rw [onBoundedFormula, ih3, id, id]
 
-@
+@[simp]
 
 中文:
 定理 id_onBoundedFormula
@@ -2044,7 +2056,7 @@ theorem id_onBoundedFormula
   | imp _ _ ih1 ih2 => rw [onBoundedFormula, ih1, ih2, id, id, id]
   | all _ ih3 => rw [onBoundedFormula, ih3, id, id]
 
-@
+@[simp]
 
 Depends on / 依赖: LHom.id_onTerm, Term.bdEqual, bdEqual, falsum, id_onTerm, onBoundedFormula
 -/
@@ -2073,7 +2085,7 @@ theorem comp_onBoundedFormula
   | rel => simp only [onBoundedFormula, comp_onRelation, comp_onTerm, Function.comp_apply]; rfl
   | imp _ _ ih1 ih2 =>
     simp only [onBoundedFormula, Function.comp_apply, ih1, ih2]
-  | all _ ih3 => simp only [ih3, onB
+  | all _ ih3 => simp only [ih3, onBoundedFormula, Function.comp_apply]
 
 中文:
 定理 comp_onBoundedFormula
@@ -2086,7 +2098,7 @@ theorem comp_onBoundedFormula
   | rel => simp only [onBoundedFormula, comp_onRelation, comp_onTerm, Function.comp_apply]; rfl
   | imp _ _ ih1 ih2 =>
     simp only [onBoundedFormula, Function.comp_apply, ih1, ih2]
-  | all _ ih3 => simp only [ih3, onB
+  | all _ ih3 => simp only [ih3, onBoundedFormula, Function.comp_apply]
 
 Depends on / 依赖: Function, Function.comp_apply, Term.bdEqual, bdEqual, comp_apply, comp_onRelation, comp_onTerm, falsum, onBoundedFormula
 -/
@@ -2197,7 +2209,7 @@ definition onBoundedFormula
   left_inv := by
     rw [Function.leftInverse_iff_comp]; rw [← LHom.comp_onBoundedFormula]; rw [φ.left_inv]; rw [LHom.id_onBoundedFormula]
   right_inv := by
-    rw [Function.rightInverse_iff_comp]; rw [← LHom.comp_onBoundedFormula]; rw
+    rw [Function.rightInverse_iff_comp]; rw [← LHom.comp_onBoundedFormula]; rw [φ.right_inv]; rw [LHom.id_onBoundedFormula]
 
 中文:
 定义 onBoundedFormula
@@ -2207,7 +2219,7 @@ definition onBoundedFormula
   left_inv := by
     rw [Function.leftInverse_iff_comp]; rw [← LHom.comp_onBoundedFormula]; rw [φ.left_inv]; rw [LHom.id_onBoundedFormula]
   right_inv := by
-    rw [Function.rightInverse_iff_comp]; rw [← LHom.comp_onBoundedFormula]; rw
+    rw [Function.rightInverse_iff_comp]; rw [← LHom.comp_onBoundedFormula]; rw [φ.right_inv]; rw [LHom.id_onBoundedFormula]
 
 Depends on / 依赖: onBoundedFormula, toLHom, toLHom.onBoundedFormula
 -/
@@ -2836,7 +2848,12 @@ theorem distinctConstantsTheory_eq_iUnion
     refine congr(_ '' ($(?_) inter _))
     ext ⟨i, j⟩
     simp only [prodMk_mem_set_prod_eq, Finset.coe_map, Function.Embedding.coe_subtype, mem_iUnion,
-      mem_image, Finset.mem_coe, Subtype.exists
+      mem_image, Finset.mem_coe, Subtype.exists, exists_and_right, exists_eq_right]
+    refine ⟨fun h => ⟨{⟨i, h.1⟩, ⟨j, h.2⟩}, ⟨h.1, ?_⟩, ⟨h.2, ?_⟩⟩, ?_⟩
+    · simp
+    · simp
+    · rintro ⟨t, ⟨is, _⟩, ⟨js, _⟩⟩
+      exact ⟨is, js⟩
 
 中文:
 定理 distinctConstantsTheory_eq_iUnion
@@ -2848,7 +2865,12 @@ theorem distinctConstantsTheory_eq_iUnion
     refine congr(_ '' ($(?_) inter _))
     ext ⟨i, j⟩
     simp only [prodMk_mem_set_prod_eq, Finset.coe_map, Function.Embedding.coe_subtype, mem_iUnion,
-      mem_image, Finset.mem_coe, Subtype.exists
+      mem_image, Finset.mem_coe, Subtype.exists, exists_and_right, exists_eq_right]
+    refine ⟨fun h => ⟨{⟨i, h.1⟩, ⟨j, h.2⟩}, ⟨h.1, ?_⟩, ⟨h.2, ?_⟩⟩, ?_⟩
+    · simp
+    · simp
+    · rintro ⟨t, ⟨is, _⟩, ⟨js, _⟩⟩
+      exact ⟨is, js⟩
 
 Depends on / 依赖: Embedding, Finset, Finset.coe_map, Finset.mem_coe, Function, Function.Embedding.coe_subtype, Subtype, Subtype.exists, classical, coe_map, coe_subtype, distinctConstantsTheory, exists_and_right, exists_eq_right, iUnion_inter, image_iUnion, mem_coe, mem_iUnion, mem_image, prodMk_mem_set_prod_eq
 -/

@@ -392,7 +392,7 @@ instance tendstoIccClassNhds
     ((hasBasis_iInf_principal_finite _).inf (hasBasis_iInf_principal_finite _)).tendstoIxxClass
       fun s _ => ?_
   refine ((ordConnected_biInter ?_).inter (ordConnected_biInter ?_)).out <;> intro _ _
-  exacts [ordConnected_Ioi, ordConnected_I
+  exacts [ordConnected_Ioi, ordConnected_Iio]
 
 中文:
 实例 tendstoIccClassNhds
@@ -403,7 +403,7 @@ instance tendstoIccClassNhds
     ((hasBasis_iInf_principal_finite _).inf (hasBasis_iInf_principal_finite _)).tendstoIxxClass
       fun s _ => ?_
   refine ((ordConnected_biInter ?_).inter (ordConnected_biInter ?_)).out <;> intro _ _
-  exacts [ordConnected_Ioi, ordConnected_I
+  exacts [ordConnected_Ioi, ordConnected_Iio]
 
 Depends on / 依赖: exacts, hasBasis_iInf_principal_finite, iInf_subtype, nhds_eq_order, ordConnected_Iio, ordConnected_Ioi, ordConnected_biInter, tendstoIxxClass
 -/
@@ -480,7 +480,18 @@ lemma exists_countable_generateFrom_Ioi_Iio
   · exact ⟨∅, by simp, Subsingleton.elim _ _⟩
   obtain ⟨t, t_subs, t_count, ht⟩ : exists t subseteq { s | exists a, s = Ioi a ∨ s = Iio a },
       t.Countable ∧ ts = generateFrom t :=
-    exists_countable_of_generateFrom OrderTopology.topology_eq_genera
+    exists_countable_of_generateFrom OrderTopology.topology_eq_generate_intervals
+  have A : forall s in t, exists a, s = Ioi a ∨ s = Iio a := t_subs
+  choose! a ha using A
+  refine ⟨a '' t, t_count.image _, ?_⟩
+  apply le_antisymm
+  · apply le_generateFrom_iff_subset_isOpen.2
+    simp only [mem_image, exists_exists_and_eq_and, ofPred_subset_ofPred, forall_exists_index,
+      and_imp]
+    grind [isOpen_Iio', isOpen_Ioi']
+  · rw [ht]
+    apply generateFrom_anti
+    grind
 
 中文:
 引理 存在_countable_generateFrom_Ioi_Iio
@@ -489,7 +500,18 @@ lemma exists_countable_generateFrom_Ioi_Iio
   · exact ⟨∅, by simp, Subsingleton.elim _ _⟩
   obtain ⟨t, t_subs, t_count, ht⟩ : exists t subseteq { s | exists a, s = Ioi a ∨ s = Iio a },
       t.Countable ∧ ts = generateFrom t :=
-    exists_countable_of_generateFrom OrderTopology.topology_eq_genera
+    exists_countable_of_generateFrom OrderTopology.topology_eq_generate_intervals
+  have A : forall s in t, exists a, s = Ioi a ∨ s = Iio a := t_subs
+  choose! a ha using A
+  refine ⟨a '' t, t_count.image _, ?_⟩
+  apply le_antisymm
+  · apply le_generateFrom_iff_subset_isOpen.2
+    simp only [mem_image, exists_exists_and_eq_and, ofPred_subset_ofPred, forall_exists_index,
+      and_imp]
+    grind [isOpen_Iio', isOpen_Ioi']
+  · rw [ht]
+    apply generateFrom_anti
+    grind
 
 Depends on / 依赖: Countable, OrderTopology, OrderTopology.topology_eq_generate_intervals, Subsingleton, Subsingleton.elim, exists_countable_of_generateFrom, generateFrom, isEmpty_or_nonempty, le_antisymm, le_generateFrom_iff_subset_isOpen, mem_im, subseteq, t.Countable, t_count, t_count.image, t_subs, topology_eq_generate_intervals
 -/
@@ -529,7 +551,28 @@ lemma isTopologicalBasis_biInter_Ioi_Iio_of_generateFrom
     · apply hf_fin.isOpen_biInter (fun i hi => ?_)
       rw [h]
       exact isOpen_generateFrom_of_mem ⟨i, hfc hi, Or.inl rfl⟩
-    · a
+    · apply hg_fin.isOpen_biInter (fun i hi => ?_)
+      rw [h]
+      exact isOpen_generateFrom_of_mem ⟨i, hgc hi, Or.inr rfl⟩
+  simp only [exists_and_left, image_subset_iff, preimage_ofPred_eq, ofPred_subset_ofPred, and_imp]
+  intro k k_fin hk
+  let kl := {s in k | exists a in c, s = Ioi a}
+  let kr := {s in k | exists a in c, s = Iio a}
+  have k_eq : k = kl union kr := by
+    -- this `have` can be removed, but makes `grind` slower
+    have : forall s in k, exists a in c, s = Ioi a ∨ s = Iio a := hk
+    ext
+    grind
+  have : Finite kl := k_fin.subset (by simp [k_eq])
+  have : Finite kr := k_fin.subset (by simp [k_eq])
+  have Al : forall s : kl, exists a in c, s = Ioi a := fun s => s.2.2
+  choose al alc hal using Al
+  have Ar : forall s : kr, exists a in c, s = Iio a := fun s => s.2.2
+  choose ar arc har using Ar
+  refine ⟨range al, by simp [range_subset_iff, alc], range ar,
+    by simp [range_subset_iff, arc], finite_range _, finite_range _, ?_⟩
+  rw [k_eq]; rw [sInter_eq_biInter]; rw [biInter_union]; rw [biInter_range]; rw [biInter_range]; rw [biInter_eq_iInter]; rw [biInter_eq_iInter]
+  simp [hal, har]
 
 中文:
 引理 isTopologicalBasis_bi整数er_Ioi_Iio_of_generateFrom
@@ -541,7 +584,28 @@ lemma isTopologicalBasis_biInter_Ioi_Iio_of_generateFrom
     · apply hf_fin.isOpen_biInter (fun i hi => ?_)
       rw [h]
       exact isOpen_generateFrom_of_mem ⟨i, hfc hi, Or.inl rfl⟩
-    · a
+    · apply hg_fin.isOpen_biInter (fun i hi => ?_)
+      rw [h]
+      exact isOpen_generateFrom_of_mem ⟨i, hgc hi, Or.inr rfl⟩
+  simp only [exists_and_left, image_subset_iff, preimage_ofPred_eq, ofPred_subset_ofPred, and_imp]
+  intro k k_fin hk
+  let kl := {s in k | exists a in c, s = Ioi a}
+  let kr := {s in k | exists a in c, s = Iio a}
+  have k_eq : k = kl union kr := by
+    -- this `have` can be removed, but makes `grind` slower
+    have : forall s in k, exists a in c, s = Ioi a ∨ s = Iio a := hk
+    ext
+    grind
+  have : Finite kl := k_fin.subset (by simp [k_eq])
+  have : Finite kr := k_fin.subset (by simp [k_eq])
+  have Al : forall s : kl, exists a in c, s = Ioi a := fun s => s.2.2
+  choose al alc hal using Al
+  have Ar : forall s : kr, exists a in c, s = Iio a := fun s => s.2.2
+  choose ar arc har using Ar
+  refine ⟨range al, by simp [range_subset_iff, alc], range ar,
+    by simp [range_subset_iff, arc], finite_range _, finite_range _, ?_⟩
+  rw [k_eq]; rw [sInter_eq_biInter]; rw [biInter_union]; rw [biInter_range]; rw [biInter_range]; rw [biInter_eq_iInter]; rw [biInter_eq_iInter]
+  simp [hal, har]
 
 Depends on / 依赖: IsOpen, IsOpen.inter, IsTopologicalBasis, IsTopologicalBasis.of_isOpen_of_subset, Or.inl, Or.inr, and_imp, exists_and_left, hf_fin, hf_fin.isOpen_biInter, hg_fin, hg_fin.isOpen_biInter, image_subset_iff, isOpen_biInter, isOpen_generateFrom_of_mem, isTopologicalBasis_of_subbasis, k_fin, ofPred_subset_ofPred, of_isOpen_of_subset, preimage_ofPred_eq
 -/
@@ -725,7 +789,8 @@ instance tendstoIccClassNhdsPi
   simp only [smallSets_iInf, smallSets_comap_eq_comap_image, tendsto_iInf, tendsto_comap_iff]
   intro i
   have : Tendsto (fun g : forall i, α i => g i) (𝓝 f) (𝓝 (f i)) := (continuous_apply i).tendsto f
-.smallSets_mono ?_ refine (t
+.smallSets_mono ?_ refine (this.comp tendsto_fst).Icc (this.comp tendsto_snd)
+  filter_upwards [] using fun ⟨f, g⟩ => image_subset_iff.mpr fun p hp => ⟨hp.1 i, hp.2 i⟩
 
 中文:
 实例 tendstoIccClassNhdsPi
@@ -736,7 +801,8 @@ instance tendstoIccClassNhdsPi
   simp only [smallSets_iInf, smallSets_comap_eq_comap_image, tendsto_iInf, tendsto_comap_iff]
   intro i
   have : Tendsto (fun g : forall i, α i => g i) (𝓝 f) (𝓝 (f i)) := (continuous_apply i).tendsto f
-.smallSets_mono ?_ refine (t
+.smallSets_mono ?_ refine (this.comp tendsto_fst).Icc (this.comp tendsto_snd)
+  filter_upwards [] using fun ⟨f, g⟩ => image_subset_iff.mpr fun p hp => ⟨hp.1 i, hp.2 i⟩
 
 Depends on / 依赖: Filter, Filter.pi, Tendsto, continuous_apply, filter_upwards, image_subset_iff, image_subset_iff.mpr, nhds_pi, smallSets, smallSets_comap_eq_comap_image, smallSets_iInf, smallSets_mono, tendsto, tendsto_comap_iff, tendsto_fst, tendsto_iInf, tendsto_snd, this.comp
 -/
@@ -762,7 +828,9 @@ theorem induced_topology_le_preorder
   refine le_of_nhds_le_nhds fun x => ?_
   simp only [nhds_eq_order, nhds_induced, comap_inf, comap_iInf, comap_principal, Ioi, Iio, ← hf]
   refine inf_le_inf (le_iInf₂ fun a ha => ?_) (le_iInf₂ fun a ha => ?_)
-  exacts [iInf₂_le (f a
+  exacts [iInf₂_le (f a) ha, iInf₂_le (f a) ha]
+
+@[to_dual self (reorder := hf (x y), H₁ H₂)]
 
 中文:
 定理 induced_topology_le_preorder
@@ -772,7 +840,9 @@ theorem induced_topology_le_preorder
   refine le_of_nhds_le_nhds fun x => ?_
   simp only [nhds_eq_order, nhds_induced, comap_inf, comap_iInf, comap_principal, Ioi, Iio, ← hf]
   refine inf_le_inf (le_iInf₂ fun a ha => ?_) (le_iInf₂ fun a ha => ?_)
-  exacts [iInf₂_le (f a
+  exacts [iInf₂_le (f a) ha, iInf₂_le (f a) ha]
+
+@[to_dual self (reorder := hf (x y), H₁ H₂)]
 
 Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, comap_iInf, comap_inf, comap_principal, exacts, inf_le_inf, le_of_nhds_le_nhds, nhds_eq_order, nhds_induced, topology
 -/
@@ -797,7 +867,19 @@ theorem induced_topology_eq_preorder
   refine le_antisymm (induced_topology_le_preorder hf) ?_
   refine le_of_nhds_le_nhds fun a => ?_
   simp only [nhds_eq_order, nhds_induced, comap_inf, comap_iInf, comap_principal]
-  refine inf_le_inf (le_iInf₂ fun b hb => ?_) (le_iIn
+  refine inf_le_inf (le_iInf₂ fun b hb => ?_) (le_iInf₂ fun b hb => ?_)
+  · by_cases! h : exists x, ¬(b < f x)
+    · rcases h with ⟨x, hx⟩
+      rcases H₁ hb hx with ⟨y, hya, hyb⟩
+      exact iInf₂_le_of_le y hya (principal_mono.2 fun z hz => hyb.trans_lt (hf.2 hz))
+    · exact le_principal_iff.2 (univ_mem' h)
+  · by_cases! h : exists x, ¬(f x < b)
+    · rcases h with ⟨x, hx⟩
+      rcases H₂ hb hx with ⟨y, hya, hyb⟩
+      exact iInf₂_le_of_le y hya (principal_mono.2 fun z hz => (hf.2 hz).trans_le hyb)
+    · exact le_principal_iff.2 (univ_mem' h)
+
+@[to_dual self (reorder := hf (x y), H₁ H₂)]
 
 中文:
 定理 induced_topology_eq_preorder
@@ -807,7 +889,19 @@ theorem induced_topology_eq_preorder
   refine le_antisymm (induced_topology_le_preorder hf) ?_
   refine le_of_nhds_le_nhds fun a => ?_
   simp only [nhds_eq_order, nhds_induced, comap_inf, comap_iInf, comap_principal]
-  refine inf_le_inf (le_iInf₂ fun b hb => ?_) (le_iIn
+  refine inf_le_inf (le_iInf₂ fun b hb => ?_) (le_iInf₂ fun b hb => ?_)
+  · by_cases! h : exists x, ¬(b < f x)
+    · rcases h with ⟨x, hx⟩
+      rcases H₁ hb hx with ⟨y, hya, hyb⟩
+      exact iInf₂_le_of_le y hya (principal_mono.2 fun z hz => hyb.trans_lt (hf.2 hz))
+    · exact le_principal_iff.2 (univ_mem' h)
+  · by_cases! h : exists x, ¬(f x < b)
+    · rcases h with ⟨x, hx⟩
+      rcases H₂ hb hx with ⟨y, hya, hyb⟩
+      exact iInf₂_le_of_le y hya (principal_mono.2 fun z hz => (hf.2 hz).trans_le hyb)
+    · exact le_principal_iff.2 (univ_mem' h)
+
+@[to_dual self (reorder := hf (x y), H₁ H₂)]
 
 Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, comap_iInf, comap_inf, comap_principal, hyb.trans_lt, induced_topology_le_preorder, inf_le_inf, le_antisymm, le_of_nhds_le_nhds, le_pri, nhds_eq_order, nhds_induced, principal_mono, topology, trans_lt
 -/
@@ -1315,7 +1409,9 @@ theorem exists_Icc_mem_subset_of_mem_nhdsGE
     simpa [ha.Ici_eq] using hs
   · rcases (nhdsGE_basis_of_exists_gt ha).mem_iff.mp hs with ⟨b, hab, hbs⟩
     rcases eq_empty_or_nonempty (Ioo a b) with (H | ⟨c, hc⟩)
-    · have : Ico a b = Icc a a := by rw [← Icc_union_I
+    · have : Ico a b = Icc a a := by rw [← Icc_union_Ioo_eq_Ico le_rfl hab, H, union_empty]
+      exact ⟨a, le_rfl, this ▸ ⟨Ico_mem_nhdsGE hab, hbs⟩⟩
+    · exact ⟨c, hc.1.le, Icc_mem_nhdsGE hc.1, (Icc_subset_Ico_right hc.2).trans hbs⟩
 
 中文:
 定理 存在_Icc_mem_subset_of_mem_nhdsGE
@@ -1326,7 +1422,9 @@ theorem exists_Icc_mem_subset_of_mem_nhdsGE
     simpa [ha.Ici_eq] using hs
   · rcases (nhdsGE_basis_of_exists_gt ha).mem_iff.mp hs with ⟨b, hab, hbs⟩
     rcases eq_empty_or_nonempty (Ioo a b) with (H | ⟨c, hc⟩)
-    · have : Ico a b = Icc a a := by rw [← Icc_union_I
+    · have : Ico a b = Icc a a := by rw [← Icc_union_Ioo_eq_Ico le_rfl hab, H, union_empty]
+      exact ⟨a, le_rfl, this ▸ ⟨Ico_mem_nhdsGE hab, hbs⟩⟩
+    · exact ⟨c, hc.1.le, Icc_mem_nhdsGE hc.1, (Icc_subset_Ico_right hc.2).trans hbs⟩
 
 Depends on / 依赖: Icc_mem_nhdsGE, Icc_subset_Ico_right, Icc_union_Ioo_eq_Ico, Ici_eq, Ico_mem_nhdsGE, eq_empty_or_nonempty, ha.Ici_eq, imp_right, le_rfl, mem_iff, mem_iff.mp, nhdsGE_basis_of_exists_gt, not_isMax_iff, not_isMax_iff.mp, union_empty
 -/
@@ -1354,6 +1452,9 @@ theorem exists_Icc_mem_subset_of_mem_nhds
     ⟨c, hac, hc_nhds, hcs⟩
   refine ⟨b, c, ⟨hba, hac⟩, ?_⟩
   rw [← Icc_union_Icc_eq_Icc hba hac]; rw [← nhdsLE_sup_nhdsGE]
+  exact ⟨union_mem_sup hb_nhds hc_nhds, union_subset hbs hcs⟩
+
+@[to_dual none]
 
 中文:
 定理 存在_Icc_mem_subset_of_mem_nhds
@@ -1365,6 +1466,9 @@ theorem exists_Icc_mem_subset_of_mem_nhds
     ⟨c, hac, hc_nhds, hcs⟩
   refine ⟨b, c, ⟨hba, hac⟩, ?_⟩
   rw [← Icc_union_Icc_eq_Icc hba hac]; rw [← nhdsLE_sup_nhdsGE]
+  exact ⟨union_mem_sup hb_nhds hc_nhds, union_subset hbs hcs⟩
+
+@[to_dual none]
 
 Depends on / 依赖: Icc_union_Icc_eq_Icc, exists_Icc_mem_subset_of_mem_nhdsGE, exists_Icc_mem_subset_of_mem_nhdsLE, hb_nhds, hc_nhds, nhdsLE_sup_nhdsGE, nhdsWithin_le_nhds, union_mem_sup, union_subset
 -/
@@ -1391,7 +1495,13 @@ theorem IsOpen.exists_Ioo_subset
   rcases lt_trichotomy x y with (H | rfl | H)
   · obtain ⟨u, xu, hu⟩ : exists u, x < u ∧ Ico x u subseteq s :=
       exists_Ico_subset_of_mem_nhds (hs.mem_nhds hx) ⟨y, H⟩
-    exact ⟨x, u, xu, Ioo_subset_Ic
+    exact ⟨x, u, xu, Ioo_subset_Ico_self.trans hu⟩
+  · exact (hy rfl).elim
+  · obtain ⟨l, lx, hl⟩ : exists l, l < x ∧ Ioc l x subseteq s :=
+      exists_Ioc_subset_of_mem_nhds (hs.mem_nhds hx) ⟨y, H⟩
+    exact ⟨l, x, lx, Ioo_subset_Ioc_self.trans hl⟩
+
+@[to_dual self]
 
 中文:
 定理 是开集.存在_Ioo_subset
@@ -1402,7 +1512,13 @@ theorem IsOpen.exists_Ioo_subset
   rcases lt_trichotomy x y with (H | rfl | H)
   · obtain ⟨u, xu, hu⟩ : exists u, x < u ∧ Ico x u subseteq s :=
       exists_Ico_subset_of_mem_nhds (hs.mem_nhds hx) ⟨y, H⟩
-    exact ⟨x, u, xu, Ioo_subset_Ic
+    exact ⟨x, u, xu, Ioo_subset_Ico_self.trans hu⟩
+  · exact (hy rfl).elim
+  · obtain ⟨l, lx, hl⟩ : exists l, l < x ∧ Ioc l x subseteq s :=
+      exists_Ioc_subset_of_mem_nhds (hs.mem_nhds hx) ⟨y, H⟩
+    exact ⟨l, x, lx, Ioo_subset_Ioc_self.trans hl⟩
+
+@[to_dual self]
 
 Depends on / 依赖: Ioo_subset_Ico_self, Ioo_subset_Ico_self.trans, Ioo_subset_Ioc_self, Ioo_subset_Ioc_self.trans, exists_Ico_subset_of_mem_nhds, exists_Ioc_subset_of_mem_nhds, exists_ne, hs.mem_nhds, lt_trichotomy, mem_nhds, subseteq
 -/
@@ -1546,7 +1662,7 @@ theorem mem_nhds_iff_exists_Ioo_subset'
     rcases exists_Ioc_subset_of_mem_nhds h hl with ⟨l, la, hl⟩
     exact ⟨l, u, ⟨la, au⟩, Ioc_union_Ico_eq_Ioo la au ▸ union_subset hl hu⟩
   · rintro ⟨l, u, ha, h⟩
-    apply mem_of_superset (Ioo_mem_nhds ha.1
+    apply mem_of_superset (Ioo_mem_nhds ha.1 ha.2) h
 
 中文:
 定理 mem_nhds_iff_存在_Ioo_subset'
@@ -1558,7 +1674,7 @@ theorem mem_nhds_iff_exists_Ioo_subset'
     rcases exists_Ioc_subset_of_mem_nhds h hl with ⟨l, la, hl⟩
     exact ⟨l, u, ⟨la, au⟩, Ioc_union_Ico_eq_Ioo la au ▸ union_subset hl hu⟩
   · rintro ⟨l, u, ha, h⟩
-    apply mem_of_superset (Ioo_mem_nhds ha.1
+    apply mem_of_superset (Ioo_mem_nhds ha.1 ha.2) h
 
 Depends on / 依赖: Ioc_union_Ico_eq_Ioo, Ioo_mem_nhds, exists_Ico_subset_of_mem_nhds, exists_Ioc_subset_of_mem_nhds, mem_of_superset, union_subset
 -/
@@ -1660,7 +1776,14 @@ theorem Dense.topology_eq_generateFrom
   · simp only [union_subset_iff, image_subset_iff]
     exact ⟨fun a _ => ⟨a, .inl rfl⟩, fun a _ => ⟨a, .inr rfl⟩⟩
   · rintro _ ⟨a, rfl | rfl⟩
-    · rw [hs.Ioi
+    · rw [hs.Ioi_eq_biUnion]
+      let _ := generateFrom (Ioi '' s union Iio '' s)
+exact isOpen_iUnion fun x => isOpen_iUnion fun h => .basic _ .inl mem_image_of_mem _ h.1
+    · rw [hs.Iio_eq_biUnion]
+      let _ := generateFrom (Ioi '' s union Iio '' s)
+exact isOpen_iUnion fun x => isOpen_iUnion fun h => .basic _ .inr mem_image_of_mem _ h.1
+
+@[to_dual hasBasis_nhds_Ico_of_exists_gt]
 
 中文:
 定理 稠密.topology_eq_generateFrom
@@ -1671,7 +1794,14 @@ theorem Dense.topology_eq_generateFrom
   · simp only [union_subset_iff, image_subset_iff]
     exact ⟨fun a _ => ⟨a, .inl rfl⟩, fun a _ => ⟨a, .inr rfl⟩⟩
   · rintro _ ⟨a, rfl | rfl⟩
-    · rw [hs.Ioi
+    · rw [hs.Ioi_eq_biUnion]
+      let _ := generateFrom (Ioi '' s union Iio '' s)
+exact isOpen_iUnion fun x => isOpen_iUnion fun h => .basic _ .inl mem_image_of_mem _ h.1
+    · rw [hs.Iio_eq_biUnion]
+      let _ := generateFrom (Ioi '' s union Iio '' s)
+exact isOpen_iUnion fun x => isOpen_iUnion fun h => .basic _ .inr mem_image_of_mem _ h.1
+
+@[to_dual hasBasis_nhds_Ico_of_exists_gt]
 
 Depends on / 依赖: Iio_eq_biUnion, Ioi_eq_biUnion, OrderTopology, OrderTopology.topology_eq_generate_intervals, generateFrom, generateFrom_anti, hs.Iio_eq_biUnion, hs.Ioi_eq_biUnion, image_subset_iff, isOpen_iUnion, le_antisymm, le_generateFrom, mem_image_of_mem, topology_eq_generate_intervals, union_subset_iff
 -/
@@ -1796,7 +1926,44 @@ theorem countable_setOfPred_covBy_right
   have : forall x in s, exists y, x ⋖ y := fun x => id
   choose! y hy using this
   have Hy : forall x z, x in s -> z < y x -> z <= x := fun x z hx => (hy x hx).le_of_lt
-  suffices H : forall a : Set α, IsOpen a -> Set.Countable { x | x in s
+  suffices H : forall a : Set α, IsOpen a -> Set.Countable { x | x in s ∧ x in a ∧ y x ∉ a } by
+    have : s subseteq ⋃ a in countableBasis α, { x | x in s ∧ x in a ∧ y x ∉ a } := fun x hx => by
+      rcases (isBasis_countableBasis α).exists_mem_of_ne (hy x hx).ne with ⟨a, ab, xa, ya⟩
+      exact mem_iUnion₂.2 ⟨a, ab, hx, xa, ya⟩
+    refine Set.Countable.mono this ?_
+    refine Countable.biUnion (countable_countableBasis α) fun a ha => H _ ?_
+    exact isOpen_of_mem_countableBasis ha
+  intro a ha
+  suffices H : Set.Countable { x | (x in s ∧ x in a ∧ y x ∉ a) ∧ ¬IsBot x } from
+    H.of_sdiff (subsingleton_isBot α).countable
+  simp only [and_assoc]
+  let t := { x | x in s ∧ x in a ∧ y x ∉ a ∧ ¬IsBot x }
+  have : forall x in t, exists z < x, Ioc z x subseteq a := by
+    intro x hx
+    apply exists_Ioc_subset_of_mem_nhds (ha.mem_nhds hx.2.1)
+    simpa only [IsBot, not_forall, not_le] using hx.right.right.right
+  choose! z hz h'z using this
+  have : PairwiseDisjoint t fun x => Ioc (z x) x := fun x xt x' x't hxx' => by
+    rcases hxx'.lt_or_gt with (h' | h')
+    · refine disjoint_left.2 fun u ux ux' => xt.2.2.1 ?_
+      refine h'z x' x't ⟨ux'.1.trans_le (ux.2.trans (hy x xt.1).le), ?_⟩
+      by_contra! H
+      exact lt_irrefl _ ((Hy _ _ xt.1 H).trans_lt h')
+    · refine disjoint_left.2 fun u ux ux' => x't.2.2.1 ?_
+      refine h'z x xt ⟨ux.1.trans_le (ux'.2.trans (hy x' x't.1).le), ?_⟩
+      by_contra! H
+      exact lt_irrefl _ ((Hy _ _ x't.1 H).trans_lt h')
+  refine this.countable_of_isOpen (fun x hx => ?_) fun x hx => ⟨x, hz x hx, le_rfl⟩
+  suffices H : Ioc (z x) x = Ioo (z x) (y x) by rw [H]; exact isOpen_Ioo
+  apply (Ioc_subset_Ioo_right (hy x hx.1).lt).antisymm
+  simp_rw [subset_def, mem_Ioo, mem_Ioc]
+  exact fun u hu => ⟨hu.1, Hy _ _ hx.1 hu.2⟩
+
+@[deprecated (since := "2026-07-09")] alias countable_setOf_covBy_right :=
+  countable_setOfPred_covBy_right
+
+@[deprecated (since := "2026-07-09")] alias countable_setOf_covBy_left :=
+  countable_setOfPred_covBy_left
 
 中文:
 定理 countable_setOfPred_covBy_right
@@ -1807,7 +1974,44 @@ theorem countable_setOfPred_covBy_right
   have : forall x in s, exists y, x ⋖ y := fun x => id
   choose! y hy using this
   have Hy : forall x z, x in s -> z < y x -> z <= x := fun x z hx => (hy x hx).le_of_lt
-  suffices H : forall a : Set α, IsOpen a -> Set.Countable { x | x in s
+  suffices H : forall a : Set α, IsOpen a -> Set.Countable { x | x in s ∧ x in a ∧ y x ∉ a } by
+    have : s subseteq ⋃ a in countableBasis α, { x | x in s ∧ x in a ∧ y x ∉ a } := fun x hx => by
+      rcases (isBasis_countableBasis α).exists_mem_of_ne (hy x hx).ne with ⟨a, ab, xa, ya⟩
+      exact mem_iUnion₂.2 ⟨a, ab, hx, xa, ya⟩
+    refine Set.Countable.mono this ?_
+    refine Countable.biUnion (countable_countableBasis α) fun a ha => H _ ?_
+    exact isOpen_of_mem_countableBasis ha
+  intro a ha
+  suffices H : Set.Countable { x | (x in s ∧ x in a ∧ y x ∉ a) ∧ ¬IsBot x } from
+    H.of_sdiff (subsingleton_isBot α).countable
+  simp only [and_assoc]
+  let t := { x | x in s ∧ x in a ∧ y x ∉ a ∧ ¬IsBot x }
+  have : forall x in t, exists z < x, Ioc z x subseteq a := by
+    intro x hx
+    apply exists_Ioc_subset_of_mem_nhds (ha.mem_nhds hx.2.1)
+    simpa only [IsBot, not_forall, not_le] using hx.right.right.right
+  choose! z hz h'z using this
+  have : PairwiseDisjoint t fun x => Ioc (z x) x := fun x xt x' x't hxx' => by
+    rcases hxx'.lt_or_gt with (h' | h')
+    · refine disjoint_left.2 fun u ux ux' => xt.2.2.1 ?_
+      refine h'z x' x't ⟨ux'.1.trans_le (ux.2.trans (hy x xt.1).le), ?_⟩
+      by_contra! H
+      exact lt_irrefl _ ((Hy _ _ xt.1 H).trans_lt h')
+    · refine disjoint_left.2 fun u ux ux' => x't.2.2.1 ?_
+      refine h'z x xt ⟨ux.1.trans_le (ux'.2.trans (hy x' x't.1).le), ?_⟩
+      by_contra! H
+      exact lt_irrefl _ ((Hy _ _ x't.1 H).trans_lt h')
+  refine this.countable_of_isOpen (fun x hx => ?_) fun x hx => ⟨x, hz x hx, le_rfl⟩
+  suffices H : Ioc (z x) x = Ioo (z x) (y x) by rw [H]; exact isOpen_Ioo
+  apply (Ioc_subset_Ioo_right (hy x hx.1).lt).antisymm
+  simp_rw [subset_def, mem_Ioo, mem_Ioc]
+  exact fun u hu => ⟨hu.1, Hy _ _ hx.1 hu.2⟩
+
+@[deprecated (since := "2026-07-09")] alias countable_setOf_covBy_right :=
+  countable_setOfPred_covBy_right
+
+@[deprecated (since := "2026-07-09")] alias countable_setOf_covBy_left :=
+  countable_setOfPred_covBy_left
 
 Depends on / 依赖: Countable, IsOpen, Set.Countable, countableBasis, exists_mem_of_ne, isBasis_countableBasis, le_of_lt, nontriviality, subseteq
 -/
@@ -1929,7 +2133,33 @@ theorem countable_image_lt_image_Ioi_within
     which is not reached by `f`. This gives a family of disjoint open intervals in `α`. Such a
     family can only be countable as `α` is second-countable. -/
   nontriviality β
-  have : Nonempty α
+  have : Nonempty α := Nonempty.map f (by infer_instance)
+  let s := {x in t | exists z, f x < z ∧ forall y in t, x < y -> z <= f y}
+  have : forall x, x in s -> exists z, f x < z ∧ forall y in t, x < y -> z <= f y := fun x hx => hx.2
+  -- choose `z x` such that `f` does not take the values in `(f x, z x)`.
+  choose! z hz using this
+  have I : InjOn f s := by
+    apply StrictMonoOn.injOn
+    intro x hx y hy hxy
+    calc
+      f x < z x := (hz x hx).1
+      _ <= f y := (hz x hx).2 y hy.1 hxy
+  -- show that `f s` is countable by arguing that a disjoint family of disjoint open intervals
+  -- (the intervals `(f x, z x)`) is at most countable.
+  have fs_count : (f '' s).Countable := by
+    have A : (f '' s).PairwiseDisjoint fun x => Ioo x (z (invFunOn f s x)) := by
+      rintro _ ⟨u, us, rfl⟩ _ ⟨v, vs, rfl⟩ huv
+      wlog hle : u <= v generalizing u v
+      · exact (this v vs u us huv.symm (le_of_not_ge hle)).symm
+      have hlt : u < v := hle.lt_of_ne (ne_of_apply_ne _ huv)
+      apply disjoint_iff_forall_ne.2
+      rintro a ha b hb rfl
+      simp only [I.leftInvOn_invFunOn us, I.leftInvOn_invFunOn vs] at ha hb
+      exact lt_irrefl _ ((ha.2.trans_le ((hz u us).2 v vs.1 hlt)).trans hb.1)
+    apply Set.PairwiseDisjoint.countable_of_Ioo A
+    rintro _ ⟨y, ys, rfl⟩
+    simpa only [I.leftInvOn_invFunOn ys] using (hz y ys).1
+  exact MapsTo.countable_of_injOn (mapsTo_image f s) I fs_count
 
 中文:
 定理 countable_image_lt_image_Ioi_within
@@ -1938,7 +2168,33 @@ theorem countable_image_lt_image_Ioi_within
     which is not reached by `f`. This gives a family of disjoint open intervals in `α`. Such a
     family can only be countable as `α` is second-countable. -/
   nontriviality β
-  have : Nonempty α
+  have : Nonempty α := Nonempty.map f (by infer_instance)
+  let s := {x in t | exists z, f x < z ∧ forall y in t, x < y -> z <= f y}
+  have : forall x, x in s -> exists z, f x < z ∧ forall y in t, x < y -> z <= f y := fun x hx => hx.2
+  -- choose `z x` such that `f` does not take the values in `(f x, z x)`.
+  choose! z hz using this
+  have I : InjOn f s := by
+    apply StrictMonoOn.injOn
+    intro x hx y hy hxy
+    calc
+      f x < z x := (hz x hx).1
+      _ <= f y := (hz x hx).2 y hy.1 hxy
+  -- show that `f s` is countable by arguing that a disjoint family of disjoint open intervals
+  -- (the intervals `(f x, z x)`) is at most countable.
+  have fs_count : (f '' s).Countable := by
+    have A : (f '' s).PairwiseDisjoint fun x => Ioo x (z (invFunOn f s x)) := by
+      rintro _ ⟨u, us, rfl⟩ _ ⟨v, vs, rfl⟩ huv
+      wlog hle : u <= v generalizing u v
+      · exact (this v vs u us huv.symm (le_of_not_ge hle)).symm
+      have hlt : u < v := hle.lt_of_ne (ne_of_apply_ne _ huv)
+      apply disjoint_iff_forall_ne.2
+      rintro a ha b hb rfl
+      simp only [I.leftInvOn_invFunOn us, I.leftInvOn_invFunOn vs] at ha hb
+      exact lt_irrefl _ ((ha.2.trans_le ((hz u us).2 v vs.1 hlt)).trans hb.1)
+    apply Set.PairwiseDisjoint.countable_of_Ioo A
+    rintro _ ⟨y, ys, rfl⟩
+    simpa only [I.leftInvOn_invFunOn ys] using (hz y ys).1
+  exact MapsTo.countable_of_injOn (mapsTo_image f s) I fs_count
 -/
 theorem countable_image_lt_image_Ioi_within
     [LinearOrder β] [SecondCountableTopology α] (t : Set β) (f : β -> α) :
@@ -2066,7 +2322,13 @@ instance instIsCountablyGenerated_atTop
   · obtain ⟨s, s_count, hs⟩ := exists_countable_dense α
     have : atTop = generate (Ici '' s) := by
       refine atTop_eq_generate_of_not_bddAbove fun ⟨x, hx⟩ => ?_
-      simp only [eq_empty_iff_forall_notMem, IsTop, mem_ofPred
+      simp only [eq_empty_iff_forall_notMem, IsTop, mem_ofPred_eq, not_forall, not_le] at h
+      obtain ⟨y, hy, hxy⟩ := hs.exists_mem_open isOpen_Ioi (h x)
+      exact (hx hy).not_gt hxy
+    rw [this]
+    exact ⟨_, s_count.image _, rfl⟩
+  · rw [atTop_eq_pure_of_isTop hx]
+    exact isCountablyGenerated_pure x
 
 中文:
 实例 instIsCountablyGenerated_atTop
@@ -2076,7 +2338,13 @@ instance instIsCountablyGenerated_atTop
   · obtain ⟨s, s_count, hs⟩ := exists_countable_dense α
     have : atTop = generate (Ici '' s) := by
       refine atTop_eq_generate_of_not_bddAbove fun ⟨x, hx⟩ => ?_
-      simp only [eq_empty_iff_forall_notMem, IsTop, mem_ofPred
+      simp only [eq_empty_iff_forall_notMem, IsTop, mem_ofPred_eq, not_forall, not_le] at h
+      obtain ⟨y, hy, hxy⟩ := hs.exists_mem_open isOpen_Ioi (h x)
+      exact (hx hy).not_gt hxy
+    rw [this]
+    exact ⟨_, s_count.image _, rfl⟩
+  · rw [atTop_eq_pure_of_isTop hx]
+    exact isCountablyGenerated_pure x
 
 Depends on / 依赖: Set.eq_empty_or_nonempty, atTop_eq_generate_of_not_bddAbove, atTop_eq_pure_of_isTop, eq_empty_iff_forall_notMem, eq_empty_or_nonempty, exists_countable_dense, exists_mem_open, generate, hs.exists_mem_open, isCountablyGenerated_pure, isOpen_Ioi, mem_ofPred_eq, not_forall, not_gt, not_le, s_count, s_count.image
 -/
@@ -2386,7 +2654,18 @@ lemma LeftOrdContinuous.continuousWithinAt_Iic
   rintro V ⟨z, rfl | rfl⟩ hxz
   -- The case `V = Ioi z`.
   · obtain hz | ne := em' (f ⁻¹' Iic z).Nonempty
-    · exact ⟨univ, isOpen_univ
+    · exact ⟨univ, isOpen_univ, mem_univ _, fun a ha => not_le.mp fun h => hz ⟨a, h⟩⟩
+    have bdd : BddAbove (f ⁻¹' Iic z) := ⟨x, fun a ha => (hf.mono.reflect_lt (ha.trans_lt hxz)).le⟩
+    have u_eq : Ioi (sSup (f ⁻¹' Iic z)) = f ⁻¹' Ioi z := by
+      refine Set.ext fun a => ⟨fun ha => ?_, fun ha => ?_⟩
+      · exact not_le.mp fun h => ha.not_ge (le_csSup bdd h)
+      · apply lt_of_le_of_ne
+        · exact csSup_le ne fun b hb => (hf.mono.reflect_lt (hb.trans_lt ha)).le
+        · have : sSup (f '' f ⁻¹' Iic z) <= z := csSup_le (.image _ ne) fun _ ⟨b, hb, heq⟩ => heq ▸ hb
+          exact fun h => this.not_gt ((h ▸ ha).trans_eq (hf.map_csSup ne bdd))
+    exact ⟨f ⁻¹' Ioi z, u_eq ▸ isOpen_Ioi, hxz, fun _ h => h.1⟩
+  -- The case `V = Iio z`.
+  · exact ⟨univ, isOpen_univ, trivial, fun a ha => (hf.mono ha.2).trans_lt hxz⟩
 
 中文:
 引理 LeftOrdContinuous.continuousWithinAt_Iic
@@ -2397,7 +2676,18 @@ lemma LeftOrdContinuous.continuousWithinAt_Iic
   rintro V ⟨z, rfl | rfl⟩ hxz
   -- The case `V = Ioi z`.
   · obtain hz | ne := em' (f ⁻¹' Iic z).Nonempty
-    · exact ⟨univ, isOpen_univ
+    · exact ⟨univ, isOpen_univ, mem_univ _, fun a ha => not_le.mp fun h => hz ⟨a, h⟩⟩
+    have bdd : BddAbove (f ⁻¹' Iic z) := ⟨x, fun a ha => (hf.mono.reflect_lt (ha.trans_lt hxz)).le⟩
+    have u_eq : Ioi (sSup (f ⁻¹' Iic z)) = f ⁻¹' Ioi z := by
+      refine Set.ext fun a => ⟨fun ha => ?_, fun ha => ?_⟩
+      · exact not_le.mp fun h => ha.not_ge (le_csSup bdd h)
+      · apply lt_of_le_of_ne
+        · exact csSup_le ne fun b hb => (hf.mono.reflect_lt (hb.trans_lt ha)).le
+        · have : sSup (f '' f ⁻¹' Iic z) <= z := csSup_le (.image _ ne) fun _ ⟨b, hb, heq⟩ => heq ▸ hb
+          exact fun h => this.not_gt ((h ▸ ha).trans_eq (hf.map_csSup ne bdd))
+    exact ⟨f ⁻¹' Ioi z, u_eq ▸ isOpen_Ioi, hxz, fun _ h => h.1⟩
+  -- The case `V = Iio z`.
+  · exact ⟨univ, isOpen_univ, trivial, fun a ha => (hf.mono ha.2).trans_lt hxz⟩
 
 Depends on / 依赖: ContinuousWithinAt, OrderTopology, OrderTopology.topology_eq_generate_intervals, TopologicalSpace, TopologicalSpace.tendsto_nhds_generateFrom_iff, mem_nhdsWithin, simp_rw, tendsto_nhds_generateFrom_iff, topology_eq_generate_intervals
 -/

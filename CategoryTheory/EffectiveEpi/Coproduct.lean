@@ -42,7 +42,7 @@ definition effectiveEpiStructIsColimitDescOfEffectiveEpiFamily
     exact h (g₁ ≫ c.ι.app ⟨a₁⟩) (g₂ ≫ c.ι.app ⟨a₂⟩) (by simpa))
   fac e h := hc.hom_ext (fun ⟨j⟩ => (by simp))
   uniq e _ m hm := EffectiveEpiFamily.uniq X π (fun a => c.ι.app ⟨a⟩ ≫ e)
- 
+      (fun _ _ _ _ hg => (by simp [← hm, reassoc_of% hg])) m (fun _ => (by simp [← hm]))
 
 中文:
 定义 effectiveEpiStructIsColimitDescOfEffectiveEpiFamily
@@ -52,7 +52,7 @@ definition effectiveEpiStructIsColimitDescOfEffectiveEpiFamily
     exact h (g₁ ≫ c.ι.app ⟨a₁⟩) (g₂ ≫ c.ι.app ⟨a₂⟩) (by simpa))
   fac e h := hc.hom_ext (fun ⟨j⟩ => (by simp))
   uniq e _ m hm := EffectiveEpiFamily.uniq X π (fun a => c.ι.app ⟨a⟩ ≫ e)
- 
+      (fun _ _ _ _ hg => (by simp [← hm, reassoc_of% hg])) m (fun _ => (by simp [← hm]))
 
 Depends on / 依赖: Category, Category.assoc, EffectiveEpiFamily, EffectiveEpiFamily.desc, EffectiveEpiFamily.uniq, hc.hom_ext, hom_ext, reassoc_of
 -/
@@ -91,7 +91,25 @@ theorem effectiveEpiFamilyStructOfEffectiveEpiDesc_aux
   ext a
   simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app]
   rw [← Category.assoc]; rw [pullback.condition]
-  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_
+  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_app]
+  apply_fun ((Sigma.desc fun a => pullback.fst (pullback.fst _ _ ≫ g₂) (Sigma.ι X a)) ≫ ·)
+    using (fun a b => (cancel_epi _).mp)
+  ext b
+  simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app]
+  simp only [← Category.assoc]
+  rw [(Category.assoc _ _ g₂)]; rw [pullback.condition]
+  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_app]
+  rw [← Category.assoc]
+  apply h
+  apply_fun (pullback.fst g₁ (Sigma.ι X a) ≫ ·) at hg
+  rw [← Category.assoc]; rw [pullback.condition] at hg
+  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_app] at hg
+  apply_fun ((Sigma.ι (fun a => pullback _ _) b) ≫ (Sigma.desc fun a =>
+    pullback.fst (pullback.fst _ _ ≫ g₂) (Sigma.ι X a)) ≫ ·) at hg
+  simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app] at hg
+  simp only [← Category.assoc] at hg
+  rw [(Category.assoc _ _ g₂)]; rw [pullback.condition] at hg
+  simpa using hg
 
 中文:
 定理 effectiveEpiFamilyStructOfEffectiveEpiDesc_aux
@@ -102,7 +120,25 @@ theorem effectiveEpiFamilyStructOfEffectiveEpiDesc_aux
   ext a
   simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app]
   rw [← Category.assoc]; rw [pullback.condition]
-  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_
+  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_app]
+  apply_fun ((Sigma.desc fun a => pullback.fst (pullback.fst _ _ ≫ g₂) (Sigma.ι X a)) ≫ ·)
+    using (fun a b => (cancel_epi _).mp)
+  ext b
+  simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app]
+  simp only [← Category.assoc]
+  rw [(Category.assoc _ _ g₂)]; rw [pullback.condition]
+  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_app]
+  rw [← Category.assoc]
+  apply h
+  apply_fun (pullback.fst g₁ (Sigma.ι X a) ≫ ·) at hg
+  rw [← Category.assoc]; rw [pullback.condition] at hg
+  simp only [Category.assoc, colimit.ι_desc, Cofan.mk_ι_app] at hg
+  apply_fun ((Sigma.ι (fun a => pullback _ _) b) ≫ (Sigma.desc fun a =>
+    pullback.fst (pullback.fst _ _ ≫ g₂) (Sigma.ι X a)) ≫ ·) at hg
+  simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app] at hg
+  simp only [← Category.assoc] at hg
+  rw [(Category.assoc _ _ g₂)]; rw [pullback.condition] at hg
+  simpa using hg
 
 Depends on / 依赖: Category, Category.assoc, Cofan.mk_, Discrete, Discrete.functor_obj, Sigma.desc, apply_fun, cancel_epi, colimit, condition, functor_obj, pullback, pullback.condition, pullback.fst
 -/
@@ -156,7 +192,12 @@ definition effectiveEpiFamilyStructOfEffectiveEpiDesc
   body: EffectiveEpi.desc (Sigma.desc π) (Sigma.desc e) fun _ _ hg =>
     effectiveEpiFamilyStructOfEffectiveEpiDesc_aux h hg
   fac e h a := by
-    rw [(by simp : π a = Sigma.ι X a ≫ Sigma.desc π)]; rw [(by simp : e a = Sigma.ι X a ≫ Sigma.desc e)]; rw [Category.assoc]; rw [EffectiveEpi.fac (Sigma.desc π) (
+    rw [(by simp : π a = Sigma.ι X a ≫ Sigma.desc π)]; rw [(by simp : e a = Sigma.ι X a ≫ Sigma.desc e)]; rw [Category.assoc]; rw [EffectiveEpi.fac (Sigma.desc π) (Sigma.desc e) (fun g₁ g₂ hg =>
+      effectiveEpiFamilyStructOfEffectiveEpiDesc_aux h hg)]
+  uniq _ _ _ hm := by
+    apply EffectiveEpi.uniq (Sigma.desc π)
+    ext
+    simpa using hm _
 
 中文:
 定义 effectiveEpiFamilyStructOfEffectiveEpiDesc
@@ -164,7 +205,12 @@ definition effectiveEpiFamilyStructOfEffectiveEpiDesc
   定义体: EffectiveEpi.desc (Sigma.desc π) (Sigma.desc e) fun _ _ hg =>
     effectiveEpiFamilyStructOfEffectiveEpiDesc_aux h hg
   fac e h a := by
-    rw [(by simp : π a = Sigma.ι X a ≫ Sigma.desc π)]; rw [(by simp : e a = Sigma.ι X a ≫ Sigma.desc e)]; rw [Category.assoc]; rw [EffectiveEpi.fac (Sigma.desc π) (
+    rw [(by simp : π a = Sigma.ι X a ≫ Sigma.desc π)]; rw [(by simp : e a = Sigma.ι X a ≫ Sigma.desc e)]; rw [Category.assoc]; rw [EffectiveEpi.fac (Sigma.desc π) (Sigma.desc e) (fun g₁ g₂ hg =>
+      effectiveEpiFamilyStructOfEffectiveEpiDesc_aux h hg)]
+  uniq _ _ _ hm := by
+    apply EffectiveEpi.uniq (Sigma.desc π)
+    ext
+    simpa using hm _
 
 Depends on / 依赖: EffectiveEpi, EffectiveEpi.desc, Sigma.desc
 -/

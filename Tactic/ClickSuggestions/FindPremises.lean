@@ -160,7 +160,7 @@ definition isBadMatch
   -- these are almost never useful, and there are very many of them.
   -- We could consider removing this check.
   e.eq?.any fun (α, l, r) =>
-    α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l 
+    α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
 
 中文:
 定义 isBadMatch
@@ -170,7 +170,7 @@ definition isBadMatch
   -- these are almost never useful, and there are very many of them.
   -- We could consider removing this check.
   e.eq?.any fun (α, l, r) =>
-    α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l 
+    α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
 
 Depends on / 依赖: e.getAppFn.isMVar, getAppFn, isMVar
 -/
@@ -253,7 +253,30 @@ definition Entries.addConst
   if choice.app then
     if !isBadMatch e then
       app ← pushEntry app e ⟨.const name⟩
-  -- 
+  -- apply at
+  if choice.appAt then
+    if let some x := xs.back? then
+      let e ← inferType x
+      if !isBadMatch e then
+        appAt ← pushEntry appAt e ⟨.const name⟩
+  if choice.rw || choice.grw then
+    let mkApp2 rel lhs rhs := e | pure ()
+    let .const relName _ := rel.getAppFn | pure ()
+    -- rw
+    if relName matches ``Iff | ``Eq then
+      if choice.rw then
+        if !isBadMatch lhs then
+          rw ← pushEntry rw lhs ⟨.const name, false⟩
+        if !isBadMatch rhs && (isBadMatch lhs || !isMVarSwap lhs rhs) then
+          rw ← pushEntry rw rhs ⟨.const name, true⟩
+    -- grw
+    else
+      if choice.grw then
+        if !isBadMatch lhs then
+          grw ← pushEntry grw lhs ⟨.const name, false, relName⟩
+        if !isBadMatch rhs then
+          grw ← pushEntry grw rhs ⟨.const name, true, relName⟩
+  return { rw, grw, app, appAt }
 
 中文:
 定义 Entries.addConst
@@ -268,7 +291,30 @@ definition Entries.addConst
   if choice.app then
     if !isBadMatch e then
       app ← pushEntry app e ⟨.const name⟩
-  -- 
+  -- apply at
+  if choice.appAt then
+    if let some x := xs.back? then
+      let e ← inferType x
+      if !isBadMatch e then
+        appAt ← pushEntry appAt e ⟨.const name⟩
+  if choice.rw || choice.grw then
+    let mkApp2 rel lhs rhs := e | pure ()
+    let .const relName _ := rel.getAppFn | pure ()
+    -- rw
+    if relName matches ``Iff | ``Eq then
+      if choice.rw then
+        if !isBadMatch lhs then
+          rw ← pushEntry rw lhs ⟨.const name, false⟩
+        if !isBadMatch rhs && (isBadMatch lhs || !isMVarSwap lhs rhs) then
+          rw ← pushEntry rw rhs ⟨.const name, true⟩
+    -- grw
+    else
+      if choice.grw then
+        if !isBadMatch lhs then
+          grw ← pushEntry grw lhs ⟨.const name, false, relName⟩
+        if !isBadMatch rhs then
+          grw ← pushEntry grw rhs ⟨.const name, true, relName⟩
+  return { rw, grw, app, appAt }
 -/
 def Entries.addConst (choice : Choice) (env : Environment) (entries : Entries)
     (name : Name) (cinfo : ConstantInfo) : MetaM Entries := do
@@ -321,7 +367,22 @@ definition Entries.addFVar
   -- apply at
   if choice.appAt then
     if let some x := xs.back? then
-      let e ← inferType 
+      let e ← inferType x
+      appAt ← pushEntry appAt e ⟨.fvar decl.fvarId⟩
+  -- rw
+  if choice.rw then
+    if let mkApp2 rel lhs rhs ← whnf e then
+      if rel.getAppFn matches .const ``Iff _ | .const ``Eq _ then
+        rw ← pushEntry rw lhs ⟨.fvar decl.fvarId, false⟩
+        if !isMVarSwap lhs rhs then
+          rw ← pushEntry rw rhs ⟨.fvar decl.fvarId, true⟩
+  -- grw
+  if choice.grw then
+    if let mkApp2 rel lhs rhs := e.cleanupAnnotations then
+      if let .const relName _ := rel.getAppFn then
+        grw ← pushEntry grw lhs ⟨.fvar decl.fvarId, false, relName⟩
+        grw ← pushEntry grw rhs ⟨.fvar decl.fvarId, true, relName⟩
+  return { rw, grw, app, appAt }
 
 中文:
 定义 Entries.addFVar
@@ -335,7 +396,22 @@ definition Entries.addFVar
   -- apply at
   if choice.appAt then
     if let some x := xs.back? then
-      let e ← inferType 
+      let e ← inferType x
+      appAt ← pushEntry appAt e ⟨.fvar decl.fvarId⟩
+  -- rw
+  if choice.rw then
+    if let mkApp2 rel lhs rhs ← whnf e then
+      if rel.getAppFn matches .const ``Iff _ | .const ``Eq _ then
+        rw ← pushEntry rw lhs ⟨.fvar decl.fvarId, false⟩
+        if !isMVarSwap lhs rhs then
+          rw ← pushEntry rw rhs ⟨.fvar decl.fvarId, true⟩
+  -- grw
+  if choice.grw then
+    if let mkApp2 rel lhs rhs := e.cleanupAnnotations then
+      if let .const relName _ := rel.getAppFn then
+        grw ← pushEntry grw lhs ⟨.fvar decl.fvarId, false, relName⟩
+        grw ← pushEntry grw rhs ⟨.fvar decl.fvarId, true, relName⟩
+  return { rw, grw, app, appAt }
 -/
 def Entries.addFVar (choice : Choice) (entries : Entries) (decl : LocalDecl) : MetaM Entries := do
   let (xs, _, e) ← forallMetaTelescopeReducing (← instantiateMVars decl.type)
@@ -383,7 +459,7 @@ definition PreDiscrTrees.append
   body: maps.rw.foldl (init := pres.rw) fun pre (key, e) => pre.push key e
   grw := maps.grw.foldl (init := pres.grw) fun pre (key, e) => pre.push key e
   app := maps.app.foldl (init := pres.app) fun pre (key, e) => pre.push key e
-  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) => pre.push
+  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) => pre.push key e
 
 中文:
 定义 PreDiscrTrees.append
@@ -391,7 +467,7 @@ definition PreDiscrTrees.append
   定义体: maps.rw.foldl (init := pres.rw) fun pre (key, e) => pre.push key e
   grw := maps.grw.foldl (init := pres.grw) fun pre (key, e) => pre.push key e
   app := maps.app.foldl (init := pres.app) fun pre (key, e) => pre.push key e
-  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) => pre.push
+  appAt := maps.appAt.foldl (init := pres.appAt) fun pre (key, e) => pre.push key e
 
 Depends on / 依赖: maps.rw.foldl, pre.push, pres.rw
 -/

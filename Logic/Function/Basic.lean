@@ -1441,7 +1441,7 @@ theorem injective_comp_right_iff_surjective
   have ⟨b₀, hb⟩ := not_forall.mp not_surj
   classical have := inj (a₁ := fun _ => c) (a₂ := (if · = b₀ then c' else c)) ?_
   · simpa using congr_fun this b₀
-  ext a; simp only [comp_app
+  ext a; simp only [comp_apply, if_neg fun h => hb ⟨a, h⟩]
 
 中文:
 定理 injective_comp_right_iff_surjective
@@ -1452,7 +1452,7 @@ theorem injective_comp_right_iff_surjective
   have ⟨b₀, hb⟩ := not_forall.mp not_surj
   classical have := inj (a₁ := fun _ => c) (a₂ := (if · = b₀ then c' else c)) ?_
   · simpa using congr_fun this b₀
-  ext a; simp only [comp_app
+  ext a; simp only [comp_apply, if_neg fun h => hb ⟨a, h⟩]
 
 Depends on / 依赖: classical, comp_apply, congr_fun, if_neg, injective_comp_right, not_forall, not_forall.mp, not_imp_not, not_imp_not.mp, not_subsingleton, not_surj
 -/
@@ -1719,7 +1719,9 @@ theorem not_surjective_Type
     intro s t h
     suffices cast hU (g s).2 = cast hU (g t).2 by
       simp only [g, cast_cast, cast_eq] at this
-      assumptio
+      assumption
+    · congr
+  exact cantor_injective g hg
 
 中文:
 定理 not_surjective_Type
@@ -1734,7 +1736,9 @@ theorem not_surjective_Type
     intro s t h
     suffices cast hU (g s).2 = cast hU (g t).2 by
       simp only [g, cast_cast, cast_eq] at this
-      assumptio
+      assumption
+    · congr
+  exact cantor_injective g hg
 
 Depends on / 依赖: Injective, cantor_injective, cast_cast, cast_eq, hU.symm
 -/
@@ -2255,7 +2259,9 @@ theorem Injective.isPartialInv
             apply Classical.choose_spec h'
     else by rw [hpi, dif_neg h'] at h; contradiction,
   fun e => e ▸ have h : exists a', f a' = f a := ⟨_, rfl⟩
-              (dif_pos
+              (dif_pos h).trans (congr_arg _ (I <| Classical.choose_spec h))⟩
+
+@[deprecated (since := "2026-03-11")] alias partialInv_of_injective := Injective.isPartialInv
 
 中文:
 定理 单射.isPartialInv
@@ -2269,7 +2275,9 @@ theorem Injective.isPartialInv
             apply Classical.choose_spec h'
     else by rw [hpi, dif_neg h'] at h; contradiction,
   fun e => e ▸ have h : exists a', f a' = f a := ⟨_, rfl⟩
-              (dif_pos
+              (dif_pos h).trans (congr_arg _ (I <| Classical.choose_spec h))⟩
+
+@[deprecated (since := "2026-03-11")] alias partialInv_of_injective := Injective.isPartialInv
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, congr_arg, dif_neg, dif_pos, injection
 -/
@@ -3787,7 +3795,10 @@ theorem Injective.extend_comp
     · obtain ⟨c, rfl⟩ := h₂
       rw [h₁₂.extend_apply]
       exact (h₂₃.comp h₁₂).extend_apply _ _ _
-    · rw [extend_apply' _ _ _ h₂, extend_apply', co
+    · rw [extend_apply' _ _ _ h₂, extend_apply', comp_apply]
+      exact fun h => h₂ (Exists.casesOn h fun c hc => Exists.intro c (h₂₃ hc))
+  · rw [extend_apply' _ _ _ h₃, extend_apply']
+    exact fun h => h₃ (Exists.casesOn h fun c hc => Exists.intro (f₁₂ c) (hc))
 
 中文:
 定理 单射.extend_comp
@@ -3801,7 +3812,10 @@ theorem Injective.extend_comp
     · obtain ⟨c, rfl⟩ := h₂
       rw [h₁₂.extend_apply]
       exact (h₂₃.comp h₁₂).extend_apply _ _ _
-    · rw [extend_apply' _ _ _ h₂, extend_apply', co
+    · rw [extend_apply' _ _ _ h₂, extend_apply', comp_apply]
+      exact fun h => h₂ (Exists.casesOn h fun c hc => Exists.intro c (h₂₃ hc))
+  · rw [extend_apply' _ _ _ h₃, extend_apply']
+    exact fun h => h₃ (Exists.casesOn h fun c hc => Exists.intro (f₁₂ c) (hc))
 
 Depends on / 依赖: Exists, Exists.casesOn, Exists.intro, Injective, Injective.extend_apply, casesOn, comp_apply, extend_apply
 -/
@@ -4021,7 +4035,9 @@ theorem surjective_comp_right_iff_injective
   have ⟨a₁, a₂, eq, ne⟩ := not_inj
   have ⟨f, hf⟩ := surj (if · = a₂ then c else c')
   have h₁ := congr_fun hf a₁
-  have h₂ :
+  have h₂ := congr_fun hf a₂
+  simp only [comp_apply, if_neg ne, reduceIte] at h₁ h₂
+  rw [← h₁]; rw [eq]; rw [h₂]
 
 中文:
 定理 surjective_comp_right_iff_injective
@@ -4034,7 +4050,9 @@ theorem surjective_comp_right_iff_injective
   have ⟨a₁, a₂, eq, ne⟩ := not_inj
   have ⟨f, hf⟩ := surj (if · = a₂ then c else c')
   have h₁ := congr_fun hf a₁
-  have h₂ :
+  have h₂ := congr_fun hf a₂
+  simp only [comp_apply, if_neg ne, reduceIte] at h₁ h₂
+  rw [← h₁]; rw [eq]; rw [h₂]
 
 Depends on / 依赖: Injective, classical, comp_apply, congr_fun, if_neg, not_forall, not_imp_not, not_imp_not.mp, not_inj, not_subsingleton, reduceIte, surjective_comp_right
 -/
@@ -4915,7 +4933,7 @@ lemma Std.Symm.forall_existsUnique_iff'
   exact ⟨f, symm_apply_eq_iff.1 ‹_›, rfl⟩
 
 @[deprecated (since := "2026-06-10")]
-protected alias Symmetric.forall_existsUnique_iff' := Std.Symm.forall_existsUni
+protected alias Symmetric.forall_existsUnique_iff' := Std.Symm.forall_existsUnique_iff'
 
 中文:
 引理 Std.Symm.对任意_存在Unique_iff'
@@ -4926,7 +4944,7 @@ protected alias Symmetric.forall_existsUnique_iff' := Std.Symm.forall_existsUni
   exact ⟨f, symm_apply_eq_iff.1 ‹_›, rfl⟩
 
 @[deprecated (since := "2026-06-10")]
-protected alias Symmetric.forall_existsUnique_iff' := Std.Symm.forall_existsUni
+protected alias Symmetric.forall_existsUnique_iff' := Std.Symm.forall_existsUnique_iff'
 -/
 protected lemma Std.Symm.forall_existsUnique_iff' {r : α -> α -> Prop} [Std.Symm r] :
     (forall a, exists! b, r a b) ↔ exists f : α -> α, Involutive f ∧ r = (f · = ·) := by

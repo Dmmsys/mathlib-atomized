@@ -126,7 +126,13 @@ theorem primeFactorsList_count_eq
     simp [factorization, pp]
   simp only [factorization_def _ pp]
   apply _root_.le_antisymm
-  · rw [le_padicValNat_iff
+  · rw [le_padicValNat_iff_replicate_subperm_primeFactorsList pp hn0.ne']
+.subperm exact List.replicate_sublist_iff.mpr le_rfl
+  · rw [← Nat.lt_add_one_iff, lt_iff_not_ge,
+      le_padicValNat_iff_replicate_subperm_primeFactorsList pp hn0.ne']
+    intro h
+    have := h.count_le p
+    simp at this
 
 中文:
 定理 primeFactorsList_count_eq
@@ -140,7 +146,13 @@ theorem primeFactorsList_count_eq
     simp [factorization, pp]
   simp only [factorization_def _ pp]
   apply _root_.le_antisymm
-  · rw [le_padicValNat_iff
+  · rw [le_padicValNat_iff_replicate_subperm_primeFactorsList pp hn0.ne']
+.subperm exact List.replicate_sublist_iff.mpr le_rfl
+  · rw [← Nat.lt_add_one_iff, lt_iff_not_ge,
+      le_padicValNat_iff_replicate_subperm_primeFactorsList pp hn0.ne']
+    intro h
+    have := h.count_le p
+    simp at this
 
 Depends on / 依赖: List.replicate_sublist_iff.mpr, Nat.lt_add_one_iff, _root_, _root_.le_antisymm, count_eq_zero_of_not_mem, eq_zero_or_pos, factorization, factorization_def, hn0.ne, le_antisymm, le_padicValNat_iff_replicate_subperm_primeFactorsList, le_rfl, lt_add_one_iff, lt_iff_not_ge, n.eq_zero_or_pos, p.Prime, prime_of_mem_primeFactorsList, replicate_sublist_iff, subperm
 -/
@@ -553,7 +565,7 @@ theorem factorization_le_iff_dvd
     exact prod_dvd_prod_of_subset_of_dvd (support_mono hdn) fun a _ => pow_dvd_pow a (hdn a)
   · subst h
     rw [factorization_mul hd <| right_ne_zero_of_mul hn]
-    apply 
+    apply self_le_add_right
 
 中文:
 定理 factorization_le_iff_dvd
@@ -564,7 +576,7 @@ theorem factorization_le_iff_dvd
     exact prod_dvd_prod_of_subset_of_dvd (support_mono hdn) fun a _ => pow_dvd_pow a (hdn a)
   · subst h
     rw [factorization_mul hd <| right_ne_zero_of_mul hn]
-    apply 
+    apply self_le_add_right
 
 Depends on / 依赖: factorization_mul, pow_dvd_pow, prod_dvd_prod_of_subset_of_dvd, prod_factorization_pow_eq_self, right_ne_zero_of_mul, self_le_add_right, support_mono
 -/
@@ -923,7 +935,7 @@ definition factorizationEquiv
   invFun := fun ⟨f, hf⟩ =>
     ⟨f.prod _, prod_pow_pos_of_zero_notMem_support fun H => not_prime_zero (hf 0 H)⟩
 left_inv := fun ⟨_, hx⟩ => Subtype.ext prod_factorization_pow_eq_self hx.ne.symm
-right_inv := fun ⟨_, hf⟩ => Subtype.ext
+right_inv := fun ⟨_, hf⟩ => Subtype.ext prod_pow_factorization_eq_self hf
 
 中文:
 定义 factorizationEquiv
@@ -932,7 +944,7 @@ right_inv := fun ⟨_, hf⟩ => Subtype.ext
   invFun := fun ⟨f, hf⟩ =>
     ⟨f.prod _, prod_pow_pos_of_zero_notMem_support fun H => not_prime_zero (hf 0 H)⟩
 left_inv := fun ⟨_, hx⟩ => Subtype.ext prod_factorization_pow_eq_self hx.ne.symm
-right_inv := fun ⟨_, hf⟩ => Subtype.ext
+right_inv := fun ⟨_, hf⟩ => Subtype.ext prod_pow_factorization_eq_self hf
 
 Depends on / 依赖: factorization, n.factorization, prime_of_mem_primeFactors
 -/

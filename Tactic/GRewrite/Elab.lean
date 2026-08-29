@@ -70,7 +70,10 @@ definition updateInfoTree
     let i := match i with
       | .ofTermInfo i => .ofTermInfo { i with lctx := mergeLCtx lctx i.lctx }
       | .ofFieldInfo i => .ofFieldInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | .ofMacr
+      | .ofMacroExpansionInfo i => .ofMacroExpansionInfo { i with lctx := mergeLCtx lctx i.lctx }
+      | _ => i
+    .node i (children.map (updateInfoTree lctx))
+  | _ => tree
 
 中文:
 定义 updateInfoTree
@@ -81,7 +84,10 @@ definition updateInfoTree
     let i := match i with
       | .ofTermInfo i => .ofTermInfo { i with lctx := mergeLCtx lctx i.lctx }
       | .ofFieldInfo i => .ofFieldInfo { i with lctx := mergeLCtx lctx i.lctx }
-      | .ofMacr
+      | .ofMacroExpansionInfo i => .ofMacroExpansionInfo { i with lctx := mergeLCtx lctx i.lctx }
+      | _ => i
+    .node i (children.map (updateInfoTree lctx))
+  | _ => tree
 -/
 partial def updateInfoTree (lctx : LocalContext) (tree : InfoTree) : InfoTree :=
   match tree with
@@ -140,7 +146,29 @@ definition elabGRewrite
       throwAbortTactic
     unless ← occursCheck mvarId thm do
       throwErrorAt stx
-        "Occurs che
+        "Occurs check failed: Expression{indentExpr thm}\ncontains the goal {Expr.mvar mvarId}"
+    let mvarIds ← getMVarsNoDelayed thm
+    let mctx ← getMCtx
+    let mvarIds := mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
+    let lctx ← getLCtx
+    let mvarIds ← mvarIds.mapM fun mvarId => do
+      let mut fvarIds := #[]
+      for decl in (← mvarId.getDecl).lctx do
+        unless lctx.contains decl.fvarId do
+          fvarIds := fvarIds.push decl
+      return (mvarId, fvarIds)
+    let r ← mvarId.grewrite e thm mvarIds
+      (forwardImp := forwardImp) (symm := symm) (config := config)
+    let mctx ← getMCtx
+    let mvarIds := r.mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
+    return { r with mvarIds }
+  let s ← getInfoState
+  let trees := s.trees.map (·.substitute s.assignment)
+  let trees := match r.lctx? with
+    | some lctx => trees.map (updateInfoTree lctx)
+    | none => trees
+  modifyInfoState fun s => { s with trees := treesSaved ++ trees }
+  finishElabGRewrite r
 
 中文:
 定义 elabGRewrite
@@ -154,7 +182,29 @@ definition elabGRewrite
       throwAbortTactic
     unless ← occursCheck mvarId thm do
       throwErrorAt stx
-        "Occurs che
+        "Occurs check failed: Expression{indentExpr thm}\ncontains the goal {Expr.mvar mvarId}"
+    let mvarIds ← getMVarsNoDelayed thm
+    let mctx ← getMCtx
+    let mvarIds := mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
+    let lctx ← getLCtx
+    let mvarIds ← mvarIds.mapM fun mvarId => do
+      let mut fvarIds := #[]
+      for decl in (← mvarId.getDecl).lctx do
+        unless lctx.contains decl.fvarId do
+          fvarIds := fvarIds.push decl
+      return (mvarId, fvarIds)
+    let r ← mvarId.grewrite e thm mvarIds
+      (forwardImp := forwardImp) (symm := symm) (config := config)
+    let mctx ← getMCtx
+    let mvarIds := r.mvarIds.filter fun mvarId => mvarCounterSaved <= (mctx.getDecl mvarId).index
+    return { r with mvarIds }
+  let s ← getInfoState
+  let trees := s.trees.map (·.substitute s.assignment)
+  let trees := match r.lctx? with
+    | some lctx => trees.map (updateInfoTree lctx)
+    | none => trees
+  modifyInfoState fun s => { s with trees := treesSaved ++ trees }
+  finishElabGRewrite r
 -/
 def elabGRewrite (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : Bool)
     (config : GRewrite.Config) : TacticM GRewriteResult := do
@@ -202,7 +252,7 @@ definition grewriteTarget
     elabGRewrite goal (← goal.getType) stx (forwardImp := false) (symm := symm) (config := config)
   let mvarNew ← mkFreshExprSyntheticOpaqueMVar r.eNew (← goal.getTag)
   goal.assign (r.impProof.app mvarNew)
-  replaceMainGoal (mvarNew.mvarId!
+  replaceMainGoal (mvarNew.mvarId! :: r.mvarIds)
 
 中文:
 定义 grewriteTarget
@@ -213,7 +263,7 @@ definition grewriteTarget
     elabGRewrite goal (← goal.getType) stx (forwardImp := false) (symm := symm) (config := config)
   let mvarNew ← mkFreshExprSyntheticOpaqueMVar r.eNew (← goal.getTag)
   goal.assign (r.impProof.app mvarNew)
-  replaceMainGoal (mvarNew.mvarId!
+  replaceMainGoal (mvarNew.mvarId! :: r.mvarIds)
 -/
 def grewriteTarget (stx : Syntax) (symm : Bool) (config : GRewrite.Config) : TacticM Unit := do
   let goal ← getMainGoal
@@ -234,7 +284,10 @@ definition grewriteLocalDecl
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
   let goal ← getMainGoal
   let r ← withMainContext do
-    elabGRewrit
+    elabGRewrite (← getMainGoal) (← fvarId.getType) stx symm (forwardImp := true) (config := config)
+  let proof := r.impProof.app (.fvar fvarId)
+  let { mvarId, .. } ← goal.replace fvarId proof r.eNew
+  replaceMainGoal (mvarId :: r.mvarIds)
 
 中文:
 定义 grewriteLocalDecl
@@ -244,7 +297,10 @@ definition grewriteLocalDecl
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
   let goal ← getMainGoal
   let r ← withMainContext do
-    elabGRewrit
+    elabGRewrite (← getMainGoal) (← fvarId.getType) stx symm (forwardImp := true) (config := config)
+  let proof := r.impProof.app (.fvar fvarId)
+  let { mvarId, .. } ← goal.replace fvarId proof r.eNew
+  replaceMainGoal (mvarId :: r.mvarIds)
 
 Depends on / 依赖: withMainContext
 -/

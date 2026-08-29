@@ -83,7 +83,18 @@ definition runAndFailIfNoProgress
       -- Check that the local contexts are compatible
       let ctxDecls := (← goal.getDecl).lctx.decls.toList
       let newCtxDecls := (← newGoal.getDecl).lctx.decls.toList
-guard ← withNewMCtxDepth withReducib
+guard ← withNewMCtxDepth withReducible lctxIsDefEq ctxDecls newCtxDecls
+      -- They are compatible, so now we can check that the goals are equivalent
+guard ← withNewMCtxDepth withReducible isDefEq (← newGoal.getType) (← goal.getType)
+  catch _ =>
+    return l
+  throwError "no progress made on\n{goal}"
+
+elab_rules : tactic
+| `(tactic| fail_if_no_progress $tacs) => do
+  let goal ← getMainGoal
+  let l ← runAndFailIfNoProgress goal (evalTactic tacs)
+  replaceMainGoal l
 
 中文:
 定义 runAndFailIfNoProgress
@@ -96,7 +107,18 @@ guard ← withNewMCtxDepth withReducib
       -- Check that the local contexts are compatible
       let ctxDecls := (← goal.getDecl).lctx.decls.toList
       let newCtxDecls := (← newGoal.getDecl).lctx.decls.toList
-guard ← withNewMCtxDepth withReducib
+guard ← withNewMCtxDepth withReducible lctxIsDefEq ctxDecls newCtxDecls
+      -- They are compatible, so now we can check that the goals are equivalent
+guard ← withNewMCtxDepth withReducible isDefEq (← newGoal.getType) (← goal.getType)
+  catch _ =>
+    return l
+  throwError "no progress made on\n{goal}"
+
+elab_rules : tactic
+| `(tactic| fail_if_no_progress $tacs) => do
+  let goal ← getMainGoal
+  let l ← runAndFailIfNoProgress goal (evalTactic tacs)
+  replaceMainGoal l
 -/
 def runAndFailIfNoProgress (goal : MVarId) (tacs : TacticM Unit) : TacticM (List MVarId) := do
   let l ← run goal tacs

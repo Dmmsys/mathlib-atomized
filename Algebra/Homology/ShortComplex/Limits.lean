@@ -44,7 +44,22 @@ definition isLimitOfIsLimitπ
         have eq₁ := h₁.fac (π₁.mapCone s)
         have eq₂ := h₂.fac (π₂.mapCone s)
         have eq₁₂ := fun j => (c.π.app j).comm₁₂
-        have eq₁₂' := fun 
+        have eq₁₂' := fun j => (s.π.app j).comm₁₂
+        dsimp at eq₁ eq₂ eq₁₂ eq₁₂' ⊢
+        rw [assoc]; rw [assoc]; rw [← eq₁₂]; rw [reassoc_of% eq₁]; rw [eq₂]; rw [eq₁₂'])
+      comm₂₃ := h₃.hom_ext (fun j => by
+        have eq₂ := h₂.fac (π₂.mapCone s)
+        have eq₃ := h₃.fac (π₃.mapCone s)
+        have eq₂₃ := fun j => (c.π.app j).comm₂₃
+        have eq₂₃' := fun j => (s.π.app j).comm₂₃
+        dsimp at eq₂ eq₃ eq₂₃ eq₂₃' ⊢
+        rw [assoc]; rw [assoc]; rw [← eq₂₃]; rw [reassoc_of% eq₂]; rw [eq₃]; rw [eq₂₃']) }
+  fac s j := by ext <;> apply IsLimit.fac
+  uniq s m hm := by
+    ext
+    · exact h₁.uniq (π₁.mapCone s) _ (fun j => π₁.congr_map (hm j))
+    · exact h₂.uniq (π₂.mapCone s) _ (fun j => π₂.congr_map (hm j))
+    · exact h₃.uniq (π₃.mapCone s) _ (fun j => π₃.congr_map (hm j))
 
 中文:
 定义 isLimitOfIsLimitπ
@@ -56,7 +71,22 @@ definition isLimitOfIsLimitπ
         have eq₁ := h₁.fac (π₁.mapCone s)
         have eq₂ := h₂.fac (π₂.mapCone s)
         have eq₁₂ := fun j => (c.π.app j).comm₁₂
-        have eq₁₂' := fun 
+        have eq₁₂' := fun j => (s.π.app j).comm₁₂
+        dsimp at eq₁ eq₂ eq₁₂ eq₁₂' ⊢
+        rw [assoc]; rw [assoc]; rw [← eq₁₂]; rw [reassoc_of% eq₁]; rw [eq₂]; rw [eq₁₂'])
+      comm₂₃ := h₃.hom_ext (fun j => by
+        have eq₂ := h₂.fac (π₂.mapCone s)
+        have eq₃ := h₃.fac (π₃.mapCone s)
+        have eq₂₃ := fun j => (c.π.app j).comm₂₃
+        have eq₂₃' := fun j => (s.π.app j).comm₂₃
+        dsimp at eq₂ eq₃ eq₂₃ eq₂₃' ⊢
+        rw [assoc]; rw [assoc]; rw [← eq₂₃]; rw [reassoc_of% eq₂]; rw [eq₃]; rw [eq₂₃']) }
+  fac s j := by ext <;> apply IsLimit.fac
+  uniq s m hm := by
+    ext
+    · exact h₁.uniq (π₁.mapCone s) _ (fun j => π₁.congr_map (hm j))
+    · exact h₂.uniq (π₂.mapCone s) _ (fun j => π₂.congr_map (hm j))
+    · exact h₃.uniq (π₃.mapCone s) _ (fun j => π₃.congr_map (hm j))
 
 Depends on / 依赖: hom_ext, mapCone, reassoc_of
 -/
@@ -486,7 +516,26 @@ definition isColimitOfIsColimitπ
         have eq₁ := h₁.fac (π₁.mapCocone s)
         have eq₂ := h₂.fac (π₂.mapCocone s)
         have eq₁₂ := fun j => (c.ι.app j).comm₁₂
-        have eq₁
+        have eq₁₂' := fun j => (s.ι.app j).comm₁₂
+        dsimp at eq₁ eq₂ eq₁₂ eq₁₂' ⊢
+        rw [reassoc_of% (eq₁ j)]; rw [eq₁₂']; rw [reassoc_of% eq₁₂]; rw [eq₂])
+      comm₂₃ := h₂.hom_ext (fun j => by
+        have eq₂ := h₂.fac (π₂.mapCocone s)
+        have eq₃ := h₃.fac (π₃.mapCocone s)
+        have eq₂₃ := fun j => (c.ι.app j).comm₂₃
+        have eq₂₃' := fun j => (s.ι.app j).comm₂₃
+        dsimp at eq₂ eq₃ eq₂₃ eq₂₃' ⊢
+        rw [reassoc_of% (eq₂ j)]; rw [eq₂₃']; rw [reassoc_of% eq₂₃]; rw [eq₃]) }
+  fac s j := by
+    ext
+    · apply IsColimit.fac h₁
+    · apply IsColimit.fac h₂
+    · apply IsColimit.fac h₃
+  uniq s m hm := by
+    ext
+    · exact h₁.uniq (π₁.mapCocone s) _ (fun j => π₁.congr_map (hm j))
+    · exact h₂.uniq (π₂.mapCocone s) _ (fun j => π₂.congr_map (hm j))
+    · exact h₃.uniq (π₃.mapCocone s) _ (fun j => π₃.congr_map (hm j))
 
 中文:
 定义 isColimitOfIsColimitπ
@@ -498,7 +547,26 @@ definition isColimitOfIsColimitπ
         have eq₁ := h₁.fac (π₁.mapCocone s)
         have eq₂ := h₂.fac (π₂.mapCocone s)
         have eq₁₂ := fun j => (c.ι.app j).comm₁₂
-        have eq₁
+        have eq₁₂' := fun j => (s.ι.app j).comm₁₂
+        dsimp at eq₁ eq₂ eq₁₂ eq₁₂' ⊢
+        rw [reassoc_of% (eq₁ j)]; rw [eq₁₂']; rw [reassoc_of% eq₁₂]; rw [eq₂])
+      comm₂₃ := h₂.hom_ext (fun j => by
+        have eq₂ := h₂.fac (π₂.mapCocone s)
+        have eq₃ := h₃.fac (π₃.mapCocone s)
+        have eq₂₃ := fun j => (c.ι.app j).comm₂₃
+        have eq₂₃' := fun j => (s.ι.app j).comm₂₃
+        dsimp at eq₂ eq₃ eq₂₃ eq₂₃' ⊢
+        rw [reassoc_of% (eq₂ j)]; rw [eq₂₃']; rw [reassoc_of% eq₂₃]; rw [eq₃]) }
+  fac s j := by
+    ext
+    · apply IsColimit.fac h₁
+    · apply IsColimit.fac h₂
+    · apply IsColimit.fac h₃
+  uniq s m hm := by
+    ext
+    · exact h₁.uniq (π₁.mapCocone s) _ (fun j => π₁.congr_map (hm j))
+    · exact h₂.uniq (π₂.mapCocone s) _ (fun j => π₂.congr_map (hm j))
+    · exact h₃.uniq (π₃.mapCocone s) _ (fun j => π₃.congr_map (hm j))
 
 Depends on / 依赖: hom_ext, mapCocone, reassoc_of
 -/
@@ -553,7 +621,9 @@ definition colimitCocone
         (colimit.ι (F ⋙ π₃) _) (by simp) (by simp)
       naturality := fun _ _ f => by
         ext
-        ·
+        · simp [← colimit.w (F ⋙ π₁) f]
+        · simp [← colimit.w (F ⋙ π₂) f]
+        · simp [← colimit.w (F ⋙ π₃) f] }
 
 中文:
 定义 colimitCocone
@@ -564,7 +634,9 @@ definition colimitCocone
         (colimit.ι (F ⋙ π₃) _) (by simp) (by simp)
       naturality := fun _ _ f => by
         ext
-        ·
+        · simp [← colimit.w (F ⋙ π₁) f]
+        · simp [← colimit.w (F ⋙ π₂) f]
+        · simp [← colimit.w (F ⋙ π₃) f] }
 
 Depends on / 依赖: Cocone, Cocone.mk, Hom.mk, ShortComplex, ShortComplex.mk, cat_disch, colimMap, colimit, colimit.w, naturality, whiskerLeft
 -/

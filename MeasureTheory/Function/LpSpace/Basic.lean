@@ -124,7 +124,7 @@ definition Lp
   add_mem' {f g} hf hg := by
     simp [eLpNorm_congr_ae (AEEqFun.coeFn_add f g),
       eLpNorm_add_lt_top ⟨f.aestronglyMeasurable, hf⟩ ⟨g.aestronglyMeasurable, hg⟩]
-  neg_mem' {f} hf := by rwa [Set.m
+  neg_mem' {f} hf := by rwa [Set.mem_ofPred_eq, eLpNorm_congr_ae (AEEqFun.coeFn_neg f), eLpNorm_neg]
 
 中文:
 定义 Lp
@@ -134,7 +134,7 @@ definition Lp
   add_mem' {f g} hf hg := by
     simp [eLpNorm_congr_ae (AEEqFun.coeFn_add f g),
       eLpNorm_add_lt_top ⟨f.aestronglyMeasurable, hf⟩ ⟨g.aestronglyMeasurable, hg⟩]
-  neg_mem' {f} hf := by rwa [Set.m
+  neg_mem' {f} hf := by rwa [Set.mem_ofPred_eq, eLpNorm_congr_ae (AEEqFun.coeFn_neg f), eLpNorm_neg]
 
 Depends on / 依赖: AEEqFun, AEEqFun.coeFn_add, AEEqFun.coeFn_neg, AEEqFun.coeFn_zero, AddSubgroup, Set.mem_ofPred_eq, add_mem, aestronglyMeasurable, carrier, coeFn_add, coeFn_neg, coeFn_zero, eLpNorm, eLpNorm_add_lt_top, eLpNorm_congr_ae, eLpNorm_neg, eLpNorm_zero, f.aestronglyMeasurable, g.aestronglyMeasurable, mem_ofPred_eq
 -/
@@ -1626,7 +1626,7 @@ theorem nnnorm_le_of_ae_bound
   · simp [hμ, nnnorm_def]
   rw [← ENNReal.coe_le_coe]; rw [nnnorm_def]; rw [ENNReal.coe_toNNReal (eLpNorm_ne_top _)]
   refine (eLpNorm_le_of_ae_nnnorm_bound hfC).trans_eq ?_
-  rw [← coe_measureUnivNNReal μ]; rw [← ENNReal.coe_rpow_of_ne_zero (measureUnivNNReal_pos hμ).ne']; 
+  rw [← coe_measureUnivNNReal μ]; rw [← ENNReal.coe_rpow_of_ne_zero (measureUnivNNReal_pos hμ).ne']; rw [ENNReal.coe_mul]; rw [mul_comm]; rw [ENNReal.smul_def]; rw [smul_eq_mul]
 
 中文:
 定理 nnnorm_le_of_ae_bound
@@ -1636,7 +1636,7 @@ theorem nnnorm_le_of_ae_bound
   · simp [hμ, nnnorm_def]
   rw [← ENNReal.coe_le_coe]; rw [nnnorm_def]; rw [ENNReal.coe_toNNReal (eLpNorm_ne_top _)]
   refine (eLpNorm_le_of_ae_nnnorm_bound hfC).trans_eq ?_
-  rw [← coe_measureUnivNNReal μ]; rw [← ENNReal.coe_rpow_of_ne_zero (measureUnivNNReal_pos hμ).ne']; 
+  rw [← coe_measureUnivNNReal μ]; rw [← ENNReal.coe_rpow_of_ne_zero (measureUnivNNReal_pos hμ).ne']; rw [ENNReal.coe_mul]; rw [mul_comm]; rw [ENNReal.smul_def]; rw [smul_eq_mul]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_mul, ENNReal.coe_rpow_of_ne_zero, ENNReal.coe_toNNReal, ENNReal.smul_def, coe_le_coe, coe_measureUnivNNReal, coe_mul, coe_rpow_of_ne_zero, coe_toNNReal, eLpNorm_le_of_ae_nnnorm_bound, eLpNorm_ne_top, measureUnivNNReal_pos, mul_comm, nnnorm_def, smul_def, smul_eq_mul, trans_eq
 -/
@@ -1703,7 +1703,14 @@ instance instNormedAddCommGroup
         neg' := by simp only [norm_neg, implies_true] -- squeezed for performance reasons
         add_le' := fun f g => by
           suffices ‖f + g‖ₑ <= ‖f‖ₑ + ‖g‖ₑ by
-    
+            -- Squeezed for performance reasons
+            simpa only [ge_iff_le, enorm, ← ENNReal.coe_add, ENNReal.coe_le_coe] using! this
+          simp only [Lp.enorm_def]
+          exact (eLpNorm_congr_ae (AEEqFun.coeFn_add _ _)).trans_le
+            (eLpNorm_add_le (Lp.aestronglyMeasurable _) (Lp.aestronglyMeasurable _) hp.out)
+        eq_zero_of_map_eq_zero' _ := (norm_eq_zero_iff <| zero_lt_one.trans_le hp.1).1 } with
+    edist := edist
+    edist_dist := Lp.edist_dist }
 
 中文:
 实例 instNormedAddCommGroup
@@ -1715,7 +1722,14 @@ instance instNormedAddCommGroup
         neg' := by simp only [norm_neg, implies_true] -- squeezed for performance reasons
         add_le' := fun f g => by
           suffices ‖f + g‖ₑ <= ‖f‖ₑ + ‖g‖ₑ by
-    
+            -- Squeezed for performance reasons
+            simpa only [ge_iff_le, enorm, ← ENNReal.coe_add, ENNReal.coe_le_coe] using! this
+          simp only [Lp.enorm_def]
+          exact (eLpNorm_congr_ae (AEEqFun.coeFn_add _ _)).trans_le
+            (eLpNorm_add_le (Lp.aestronglyMeasurable _) (Lp.aestronglyMeasurable _) hp.out)
+        eq_zero_of_map_eq_zero' _ := (norm_eq_zero_iff <| zero_lt_one.trans_le hp.1).1 } with
+    edist := edist
+    edist_dist := Lp.edist_dist }
 
 Depends on / 依赖: AddGroupNorm, AddGroupNorm.toNormedAddCommGroup, add_le, fast_instance, implies_true, map_zero, norm_neg, norm_zero, performance, reasons, squeezed, toNormedAddCommGroup
 -/
@@ -1996,7 +2010,11 @@ theorem MemLp.enorm_rpow_div
     by_cases p_zero : p = 0
     · simp [p_zero]
     rw [ENNReal.div_zero p_zero]
-    simpa only [ENNReal.rpow_zero, e
+    simpa only [ENNReal.rpow_zero, eLpNorm_exponent_top] using (memLp_top_const_enorm (by simp)).2
+  rw [eLpNorm_enorm_rpow _ (ENNReal.toReal_pos q_zero q_top)]
+  apply ENNReal.rpow_lt_top_of_nonneg ENNReal.toReal_nonneg
+  rw [ENNReal.ofReal_toReal q_top]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel q_zero q_top]; rw [mul_one]
+  exact hf.2.ne
 
 中文:
 定理 MemLp.enorm_rpow_div
@@ -2010,7 +2028,11 @@ theorem MemLp.enorm_rpow_div
     by_cases p_zero : p = 0
     · simp [p_zero]
     rw [ENNReal.div_zero p_zero]
-    simpa only [ENNReal.rpow_zero, e
+    simpa only [ENNReal.rpow_zero, eLpNorm_exponent_top] using (memLp_top_const_enorm (by simp)).2
+  rw [eLpNorm_enorm_rpow _ (ENNReal.toReal_pos q_zero q_top)]
+  apply ENNReal.rpow_lt_top_of_nonneg ENNReal.toReal_nonneg
+  rw [ENNReal.ofReal_toReal q_top]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel q_zero q_top]; rw [mul_one]
+  exact hf.2.ne
 
 Depends on / 依赖: ENNReal, ENNReal.div_zero, ENNReal.ofReal_toReal, ENNReal.rpow_lt_top_of_nonneg, ENNReal.rpow_zero, ENNReal.toReal_nonneg, ENNReal.toReal_pos, ENNReal.toReal_zero, aestronglyMeasurable, div_eq_, div_zero, eLpNorm_enorm_rpow, eLpNorm_exponent_top, enorm.pow_const, memLp_top_const_enorm, ofReal_toReal, p_zero, pow_const, q.toReal, q_top
 -/
@@ -2045,7 +2067,11 @@ theorem MemLp.norm_rpow_div
     by_cases p_zero : p = 0
     · simp [p_zero]
     rw [ENNReal.div_zero p_zero]
-    exac
+    exact (memLp_top_const (1 : Real)).2
+  rw [eLpNorm_norm_rpow _ (ENNReal.toReal_pos q_zero q_top)]
+  apply ENNReal.rpow_lt_top_of_nonneg ENNReal.toReal_nonneg
+  rw [ENNReal.ofReal_toReal q_top]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel q_zero q_top]; rw [mul_one]
+  exact hf.2.ne
 
 中文:
 定理 MemLp.norm_rpow_div
@@ -2059,7 +2085,11 @@ theorem MemLp.norm_rpow_div
     by_cases p_zero : p = 0
     · simp [p_zero]
     rw [ENNReal.div_zero p_zero]
-    exac
+    exact (memLp_top_const (1 : Real)).2
+  rw [eLpNorm_norm_rpow _ (ENNReal.toReal_pos q_zero q_top)]
+  apply ENNReal.rpow_lt_top_of_nonneg ENNReal.toReal_nonneg
+  rw [ENNReal.ofReal_toReal q_top]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel q_zero q_top]; rw [mul_one]
+  exact hf.2.ne
 
 Depends on / 依赖: ENNReal, ENNReal.div_zero, ENNReal.ofReal_toReal, ENNReal.rpow_lt_top_of_nonneg, ENNReal.toReal_nonneg, ENNReal.toReal_pos, ENNReal.toReal_zero, Real.rpow_zero, aemeasurable, aestronglyMeasurable, div_eq_mul_inv, div_zero, eLpNorm_norm_rpow, memLp_top_const, mul_assoc, norm.aemeasurable.pow_const, ofReal_toReal, p_zero, pow_const, q.toReal
 -/
@@ -2092,7 +2122,9 @@ theorem memLp_enorm_rpow_iff
   · ext x
     have : q.toReal * q.toReal⁻¹ = 1 :=
 CommGroupWithZero.mul_inv_cancel q.toReal ENNReal.toReal_ne_zero.mpr ⟨q_zero, q_top⟩
-    simp [← ENNReal.rpow_mul, this, ENN
+    simp [← ENNReal.rpow_mul, this, ENNReal.rpow_one]
+  · rw [div_eq_mul_inv, inv_inv, div_eq_mul_inv, mul_assoc, ENNReal.inv_mul_cancel q_zero q_top,
+      mul_one]
 
 中文:
 定理 memLp_enorm_rpow_iff
@@ -2104,7 +2136,9 @@ CommGroupWithZero.mul_inv_cancel q.toReal ENNReal.toReal_ne_zero.mpr ⟨q_zero, 
   · ext x
     have : q.toReal * q.toReal⁻¹ = 1 :=
 CommGroupWithZero.mul_inv_cancel q.toReal ENNReal.toReal_ne_zero.mpr ⟨q_zero, q_top⟩
-    simp [← ENNReal.rpow_mul, this, ENN
+    simp [← ENNReal.rpow_mul, this, ENNReal.rpow_one]
+  · rw [div_eq_mul_inv, inv_inv, div_eq_mul_inv, mul_assoc, ENNReal.inv_mul_cancel q_zero q_top,
+      mul_one]
 
 Depends on / 依赖: CommGroupWithZero, CommGroupWithZero.mul_inv_cancel, ENNReal, ENNReal.inv_mul_cancel, ENNReal.rpow_mul, ENNReal.rpow_one, ENNReal.toReal_ne_zero.mpr, convert, div_eq_mul_inv, enorm_rpow_div, h.enorm_rpow_div, inv_inv, inv_mul_cancel, memLp_enorm_iff, mul_assoc, mul_inv_cancel, mul_one, q.toReal, q_top, q_zero
 -/
@@ -2131,7 +2165,10 @@ theorem memLp_norm_rpow_iff
   apply (memLp_norm_iff hf).1
   convert! h.norm_rpow_div q⁻¹ using 1
   · ext x
-    rw [Real.norm_eq_abs]; rw [Real.abs_rpow_of_nonneg (norm_nonneg _)]; rw [← Real.rpow_mul (abs_nonneg _)]; rw [ENNReal.toReal_inv]; rw [mul_inv_cancel₀]; rw [abs_of
+    rw [Real.norm_eq_abs]; rw [Real.abs_rpow_of_nonneg (norm_nonneg _)]; rw [← Real.rpow_mul (abs_nonneg _)]; rw [ENNReal.toReal_inv]; rw [mul_inv_cancel₀]; rw [abs_of_nonneg (norm_nonneg _)]; rw [Real.rpow_one]
+    simp [ENNReal.toReal_eq_zero_iff, q_zero, q_top]
+  · rw [div_eq_mul_inv, inv_inv, div_eq_mul_inv, mul_assoc, ENNReal.inv_mul_cancel q_zero q_top,
+      mul_one]
 
 中文:
 定理 memLp_norm_rpow_iff
@@ -2141,7 +2178,10 @@ theorem memLp_norm_rpow_iff
   apply (memLp_norm_iff hf).1
   convert! h.norm_rpow_div q⁻¹ using 1
   · ext x
-    rw [Real.norm_eq_abs]; rw [Real.abs_rpow_of_nonneg (norm_nonneg _)]; rw [← Real.rpow_mul (abs_nonneg _)]; rw [ENNReal.toReal_inv]; rw [mul_inv_cancel₀]; rw [abs_of
+    rw [Real.norm_eq_abs]; rw [Real.abs_rpow_of_nonneg (norm_nonneg _)]; rw [← Real.rpow_mul (abs_nonneg _)]; rw [ENNReal.toReal_inv]; rw [mul_inv_cancel₀]; rw [abs_of_nonneg (norm_nonneg _)]; rw [Real.rpow_one]
+    simp [ENNReal.toReal_eq_zero_iff, q_zero, q_top]
+  · rw [div_eq_mul_inv, inv_inv, div_eq_mul_inv, mul_assoc, ENNReal.inv_mul_cancel q_zero q_top,
+      mul_one]
 
 Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, ENNReal.toReal_eq_zero_iff, ENNReal.toReal_inv, Real.abs_rpow_of_nonneg, Real.norm_eq_abs, Real.rpow_mul, Real.rpow_one, abs_nonneg, abs_of_nonneg, abs_rpow_of_nonneg, convert, div_eq_mul_inv, h.norm_rpow_div, inv_inv, inv_mul_cancel, memLp_norm_iff, mul_assoc, mul_one, norm_eq_abs
 -/
@@ -2596,7 +2636,8 @@ theorem MeasureTheory.MemLp.of_comp_antilipschitzWith
     rw [← dist_zero_right]; rw [← dist_zero_right]; rw [← g0]
     apply hg'.le_mul_dist
   have B : AEStronglyMeasurable f μ :=
-    (hg'.isUnifo
+    (hg'.isUniformEmbedding hg).isEmbedding.aestronglyMeasurable_comp_iff.1 hL.1
+  exact hL.of_le_mul B (Filter.Eventually.of_forall A)
 
 中文:
 定理 测度论.MemLp.of_comp_antilipschitzWith
@@ -2608,7 +2649,8 @@ theorem MeasureTheory.MemLp.of_comp_antilipschitzWith
     rw [← dist_zero_right]; rw [← dist_zero_right]; rw [← g0]
     apply hg'.le_mul_dist
   have B : AEStronglyMeasurable f μ :=
-    (hg'.isUnifo
+    (hg'.isUniformEmbedding hg).isEmbedding.aestronglyMeasurable_comp_iff.1 hL.1
+  exact hL.of_le_mul B (Filter.Eventually.of_forall A)
 -/
 theorem MeasureTheory.MemLp.of_comp_antilipschitzWith {α E F} {K'} [MeasurableSpace α]
     {μ : Measure α} [NormedAddCommGroup E] [NormedAddCommGroup F] {f : α -> E} {g : E -> F}
@@ -2756,7 +2798,7 @@ theorem norm_compLp_sub_le
   filter_upwards [hg.coeFn_compLp g0 f, hg.coeFn_compLp g0 f',
     Lp.coeFn_sub (hg.compLp g0 f) (hg.compLp g0 f'), Lp.coeFn_sub f f'] with a ha1 ha2 ha3 ha4
   simp only [ha1, ha2, ha3, ha4, ← dist_eq_norm, Pi.sub_apply, Function.comp_apply]
-  exact hg.dis
+  exact hg.dist_le_mul (f a) (f' a)
 
 中文:
 定理 norm_compLp_sub_le
@@ -2766,7 +2808,7 @@ theorem norm_compLp_sub_le
   filter_upwards [hg.coeFn_compLp g0 f, hg.coeFn_compLp g0 f',
     Lp.coeFn_sub (hg.compLp g0 f) (hg.compLp g0 f'), Lp.coeFn_sub f f'] with a ha1 ha2 ha3 ha4
   simp only [ha1, ha2, ha3, ha4, ← dist_eq_norm, Pi.sub_apply, Function.comp_apply]
-  exact hg.dis
+  exact hg.dist_le_mul (f a) (f' a)
 
 Depends on / 依赖: Function, Function.comp_apply, Lp.coeFn_sub, Lp.norm_le_mul_norm_of_ae_le_mul, Pi.sub_apply, coeFn_compLp, coeFn_sub, compLp, comp_apply, dist_eq_norm, dist_le_mul, filter_upwards, hg.coeFn_compLp, hg.compLp, hg.dist_le_mul, norm_le_mul_norm_of_ae_le_mul, sub_apply
 -/
@@ -3094,7 +3136,11 @@ definition compLpₗ
       coeFn_compLp L g, Lp.coeFn_add (L.compLp f) (L.compLp g)]
     intro a ha1 ha2 ha3 ha4 ha5
     simp only [ha1, ha2, ha3, ha4, ha5, map_add, Pi.add_apply]
-  map_smul' c f := b
+  map_smul' c f := by
+    ext1
+    filter_upwards [Lp.coeFn_smul c f, coeFn_compLp L (c • f), Lp.coeFn_smul (σ c) (L.compLp f),
+      coeFn_compLp L f] with _ ha1 ha2 ha3 ha4
+    simp only [ha1, ha2, ha3, ha4, Pi.smul_apply, map_smulₛₗ]
 
 中文:
 定义 compLpₗ
@@ -3106,7 +3152,11 @@ definition compLpₗ
       coeFn_compLp L g, Lp.coeFn_add (L.compLp f) (L.compLp g)]
     intro a ha1 ha2 ha3 ha4 ha5
     simp only [ha1, ha2, ha3, ha4, ha5, map_add, Pi.add_apply]
-  map_smul' c f := b
+  map_smul' c f := by
+    ext1
+    filter_upwards [Lp.coeFn_smul c f, coeFn_compLp L (c • f), Lp.coeFn_smul (σ c) (L.compLp f),
+      coeFn_compLp L f] with _ ha1 ha2 ha3 ha4
+    simp only [ha1, ha2, ha3, ha4, Pi.smul_apply, map_smulₛₗ]
 -/
 @[simps] def compLpₗ (L : E ->SL[σ] F) : Lp E p μ ->ₛₗ[σ] Lp F p μ where
   toFun f := L.compLp f
@@ -3239,7 +3289,12 @@ definition compLpₗ₂
     filter_upwards [(B (g + h)).coeFn_compLp f, (B g).coeFn_compLp f, (B h).coeFn_compLp f,
       Lp.coeFn_add ((B g).compLp f) ((B h).compLp f)] with x hx hg hh hadd
     simp only [compLpₗ_apply, LinearMap.add_apply, hx, hadd]
-    simp only [map_add,
+    simp only [map_add, add_apply, Pi.add_apply, hg, hh]
+  map_smul' c g := by
+    ext f
+    filter_upwards [(c • B g).coeFn_compLp f, (B g).coeFn_compLp f,
+      Lp.coeFn_smul c ((B g).compLp f)] with x hx hg hsmul
+    simp [hx, hsmul, hg]
 
 中文:
 定义 compLpₗ₂
@@ -3250,7 +3305,12 @@ definition compLpₗ₂
     filter_upwards [(B (g + h)).coeFn_compLp f, (B g).coeFn_compLp f, (B h).coeFn_compLp f,
       Lp.coeFn_add ((B g).compLp f) ((B h).compLp f)] with x hx hg hh hadd
     simp only [compLpₗ_apply, LinearMap.add_apply, hx, hadd]
-    simp only [map_add,
+    simp only [map_add, add_apply, Pi.add_apply, hg, hh]
+  map_smul' c g := by
+    ext f
+    filter_upwards [(c • B g).coeFn_compLp f, (B g).coeFn_compLp f,
+      Lp.coeFn_smul c ((B g).compLp f)] with x hx hg hsmul
+    simp [hx, hsmul, hg]
 -/
 @[simps] def compLpₗ₂ (B : G ->L[𝕜] E ->L[𝕜] F) : G ->ₗ[𝕜] Lp E p μ ->ₗ[𝕜] Lp F p μ where
   toFun g := (B g).compLpₗ p μ
@@ -3352,7 +3412,11 @@ definition noncomputable
     grw [Lp.coeFn_add]
   map_smul' c f := by
     ext
-    grw [Mem
+    grw [MemLp.coeFn_toLp, Lp.coeFn_smul, MemLp.coeFn_toLp]
+    have : μ ≪ ν := Measure.absolutelyContinuous_of_le_smul h
+    apply this.ae_eq
+    grw [Lp.coeFn_smul]
+    rfl
 
 中文:
 定义 noncomputable
@@ -3366,7 +3430,11 @@ definition noncomputable
     grw [Lp.coeFn_add]
   map_smul' c f := by
     ext
-    grw [Mem
+    grw [MemLp.coeFn_toLp, Lp.coeFn_smul, MemLp.coeFn_toLp]
+    have : μ ≪ ν := Measure.absolutelyContinuous_of_le_smul h
+    apply this.ae_eq
+    grw [Lp.coeFn_smul]
+    rfl
 -/
 private noncomputable def LpToLpOfMeasureLeSMulₗ (hc : c != ∞) (h : μ <= c • ν) :
     Lp E p ν ->ₗ[Real] Lp E p μ where

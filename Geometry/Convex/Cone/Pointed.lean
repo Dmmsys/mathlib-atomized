@@ -555,7 +555,10 @@ definition _root_.ConvexCone.toPointedCone
       convert! hC
       simp [← hzero]
     · apply ConvexCone.smul_mem
-      · convert! hpo
+      · convert! hpos
+      · exact hx
+
+@[simp]
 
 中文:
 定义 _root_.余nvexCone.toPointedCone
@@ -570,7 +573,10 @@ definition _root_.ConvexCone.toPointedCone
       convert! hC
       simp [← hzero]
     · apply ConvexCone.smul_mem
-      · convert! hpo
+      · convert! hpos
+      · exact hx
+
+@[simp]
 
 Depends on / 依赖: Matrix, Matrix.toLin, _mul
 -/
@@ -777,7 +783,8 @@ lemma mem_hull_set
   · rintro ⟨c, hc, hc₀, rfl⟩
     exact ⟨⟨c.support, fun y => ⟨c y, hc₀ _⟩, by simp⟩, hc, rfl⟩
 
-@[deprecated "`PointedCone.span` was renamed to
+@[deprecated "`PointedCone.span` was renamed to `PointedCone.hull`" (since := "2026-03-22")]
+alias mem_span_set := mem_hull_set
 
 中文:
 引理 mem_hull_set
@@ -791,7 +798,8 @@ lemma mem_hull_set
   · rintro ⟨c, hc, hc₀, rfl⟩
     exact ⟨⟨c.support, fun y => ⟨c y, hc₀ _⟩, by simp⟩, hc, rfl⟩
 
-@[deprecated "`PointedCone.span` was renamed to
+@[deprecated "`PointedCone.span` was renamed to `PointedCone.hull`" (since := "2026-03-22")]
+alias mem_span_set := mem_hull_set
 
 Depends on / 依赖: Subtype, Subtype.val, Subtype.val_inj, c.support, mem_span_set, support, val_inj
 -/

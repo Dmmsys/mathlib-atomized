@@ -363,7 +363,21 @@ theorem apply_eq_one_iff
 fun a' ha' => ha'.symm ▸ (p.mem_support_iff a).2 fun ha => zero_ne_one ha.symm.trans h,
     fun h => _root_.trans (symm <| tsum_eq_single a
       fun a' ha' => (p.apply_eq_zero_iff a').2 (h.symm ▸ ha')) p.tsum_coe⟩
-  su
+  suffices 1 < ∑' a, p a from ne_of_lt this p.tsum_coe.symm
+  classical
+  have : 0 < ∑' b, ite (b = a) 0 (p b) := by
+    rw [pos_iff_ne_zero]; rw [ENNReal.summable.tsum_ne_zero_iff]
+exact ⟨a', ite_ne_left_iff.2 ⟨ha, Ne.symm (p.mem_support_iff a').2 ha'⟩⟩
+  calc
+    1 = 1 + 0 := (add_zero 1).symm
+    _ < p a + ∑' b, ite (b = a) 0 (p b) :=
+      (ENNReal.add_lt_add_of_le_of_lt ENNReal.one_ne_top (le_of_eq h.symm) this)
+    _ = ite (a = a) (p a) 0 + ∑' b, ite (b = a) 0 (p b) := by rw [eq_self_iff_true, if_true]
+    _ = (∑' b, ite (b = a) (p b) 0) + ∑' b, ite (b = a) 0 (p b) := by
+      congr
+      exact symm (tsum_eq_single a fun b hb => if_neg hb)
+    _ = ∑' b, (ite (b = a) (p b) 0 + ite (b = a) 0 (p b)) := ENNReal.tsum_add.symm
+    _ = ∑' b, p b := tsum_congr fun b => by split_ifs <;> simp only [zero_add, add_zero]
 
 中文:
 定理 apply_eq_one_iff
@@ -374,7 +388,21 @@ fun a' ha' => ha'.symm ▸ (p.mem_support_iff a).2 fun ha => zero_ne_one ha.symm
 fun a' ha' => ha'.symm ▸ (p.mem_support_iff a).2 fun ha => zero_ne_one ha.symm.trans h,
     fun h => _root_.trans (symm <| tsum_eq_single a
       fun a' ha' => (p.apply_eq_zero_iff a').2 (h.symm ▸ ha')) p.tsum_coe⟩
-  su
+  suffices 1 < ∑' a, p a from ne_of_lt this p.tsum_coe.symm
+  classical
+  have : 0 < ∑' b, ite (b = a) 0 (p b) := by
+    rw [pos_iff_ne_zero]; rw [ENNReal.summable.tsum_ne_zero_iff]
+exact ⟨a', ite_ne_left_iff.2 ⟨ha, Ne.symm (p.mem_support_iff a').2 ha'⟩⟩
+  calc
+    1 = 1 + 0 := (add_zero 1).symm
+    _ < p a + ∑' b, ite (b = a) 0 (p b) :=
+      (ENNReal.add_lt_add_of_le_of_lt ENNReal.one_ne_top (le_of_eq h.symm) this)
+    _ = ite (a = a) (p a) 0 + ∑' b, ite (b = a) 0 (p b) := by rw [eq_self_iff_true, if_true]
+    _ = (∑' b, ite (b = a) (p b) 0) + ∑' b, ite (b = a) 0 (p b) := by
+      congr
+      exact symm (tsum_eq_single a fun b hb => if_neg hb)
+    _ = ∑' b, (ite (b = a) (p b) 0 + ite (b = a) 0 (p b)) := ENNReal.tsum_add.symm
+    _ = ∑' b, p b := tsum_congr fun b => by split_ifs <;> simp only [zero_add, add_zero]
 
 Depends on / 依赖: ENNReal, ENNReal.summable.tsum_ne_zero_iff, Ne.symm, Set.Subset.antisymm, Subset, _root_, _root_.trans, antisymm, apply_eq_zero_iff, classical, h.symm, ha.symm.trans, ite_ne_left_iff, mem_support_iff, ne_of_lt, p.apply_eq_zero_iff, p.mem_support_iff, p.tsum_coe, p.tsum_coe.symm, pos_iff_ne_zero
 -/
@@ -683,7 +711,16 @@ theorem toOuterMeasure_apply_eq_one_iff
   refine (p.toOuterMeasure_apply s).symm ▸ ⟨fun h a hap => ?_, fun h => ?_⟩
   · refine by_contra fun hs => ne_of_lt ?_ (h.trans p.tsum_coe.symm)
 have hs' : s.indicator p a = 0 := Set.indicator_apply_eq_zero.2 fun hs' => False.elim hs hs'
-    have hsa : s.indicator p a < p a := hs'.symm ▸ (p.apply
+    have hsa : s.indicator p a < p a := hs'.symm ▸ (p.apply_pos_iff a).2 hap
+    exact ENNReal.tsum_lt_tsum (p.tsum_coe_indicator_ne_top s)
+      (fun x => Set.indicator_apply_le fun _ => le_rfl) hsa
+  · classical suffices forall (x) (_ : x ∉ s), p x = 0 from
+      _root_.trans (tsum_congr
+        fun a => (Set.indicator_apply s p a).trans
+          (ite_eq_left_iff.2 <| symm ∘ this a)) p.tsum_coe
+exact fun a ha => (p.apply_eq_zero_iff a).2 Set.notMem_subset h ha
+
+@[simp]
 
 中文:
 定理 toOuterMeasure_apply_eq_one_iff
@@ -692,7 +729,16 @@ have hs' : s.indicator p a = 0 := Set.indicator_apply_eq_zero.2 fun hs' => False
   refine (p.toOuterMeasure_apply s).symm ▸ ⟨fun h a hap => ?_, fun h => ?_⟩
   · refine by_contra fun hs => ne_of_lt ?_ (h.trans p.tsum_coe.symm)
 have hs' : s.indicator p a = 0 := Set.indicator_apply_eq_zero.2 fun hs' => False.elim hs hs'
-    have hsa : s.indicator p a < p a := hs'.symm ▸ (p.apply
+    have hsa : s.indicator p a < p a := hs'.symm ▸ (p.apply_pos_iff a).2 hap
+    exact ENNReal.tsum_lt_tsum (p.tsum_coe_indicator_ne_top s)
+      (fun x => Set.indicator_apply_le fun _ => le_rfl) hsa
+  · classical suffices forall (x) (_ : x ∉ s), p x = 0 from
+      _root_.trans (tsum_congr
+        fun a => (Set.indicator_apply s p a).trans
+          (ite_eq_left_iff.2 <| symm ∘ this a)) p.tsum_coe
+exact fun a ha => (p.apply_eq_zero_iff a).2 Set.notMem_subset h ha
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_lt_tsum, False.elim, Set.indicator_apply_eq_zero, Set.indicator_apply_le, _root_, _root_.trans, apply_pos_iff, classical, h.trans, indicator, indicator_apply_eq_zero, indicator_apply_le, le_rfl, ne_of_lt, p.apply_pos_iff, p.toOuterMeasure_apply, p.tsum_coe.symm, p.tsum_coe_indicator_ne_top, s.indicator
 -/

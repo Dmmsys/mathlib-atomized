@@ -1797,7 +1797,9 @@ theorem NormedGroup.nhds_one_basis_norm_lt
 alias NormedCommGroup.nhds_one_basis_norm_lt := NormedGroup.nhds_one_basis_norm_lt
 
 @[deprecated (since := "2026-02-17")]
-alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds
+alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds_zero_basis_norm_lt
+
+@[to_additive]
 
 中文:
 定理 赋范群.nhds_one_basis_norm_lt
@@ -1809,7 +1811,9 @@ alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds
 alias NormedCommGroup.nhds_one_basis_norm_lt := NormedGroup.nhds_one_basis_norm_lt
 
 @[deprecated (since := "2026-02-17")]
-alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds
+alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds_zero_basis_norm_lt
+
+@[to_additive]
 
 Depends on / 依赖: NormedGroup, NormedGroup.nhds_basis_norm_lt, convert, nhds_basis_norm_lt
 -/

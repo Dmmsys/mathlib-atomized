@@ -69,7 +69,9 @@ lemma exists_pow_mem_center_of_inseparable
   have pure : IsPurelyInseparable k D := ⟨Algebra.IsAlgebraic.isIntegral, fun x hx => by
     rw [RingHom.mem_range]; rw [Subtype.exists]
     exact ⟨x, ⟨hinsep x hx, rfl⟩⟩⟩
-  obtain ⟨n, ⟨m, hm⟩⟩ := th
+  obtain ⟨n, ⟨m, hm⟩⟩ := this pure a
+  have := Subalgebra.range_subset (R := k) ⟨(k).toSubsemiring, fun r => r.2⟩
+exact ⟨n, Set.mem_of_subset_of_mem this Set.mem_range.2 ⟨m, hm⟩⟩
 
 中文:
 引理 存在_pow_mem_center_of_inseparable
@@ -79,7 +81,9 @@ lemma exists_pow_mem_center_of_inseparable
   have pure : IsPurelyInseparable k D := ⟨Algebra.IsAlgebraic.isIntegral, fun x hx => by
     rw [RingHom.mem_range]; rw [Subtype.exists]
     exact ⟨x, ⟨hinsep x hx, rfl⟩⟩⟩
-  obtain ⟨n, ⟨m, hm⟩⟩ := th
+  obtain ⟨n, ⟨m, hm⟩⟩ := this pure a
+  have := Subalgebra.range_subset (R := k) ⟨(k).toSubsemiring, fun r => r.2⟩
+exact ⟨n, Set.mem_of_subset_of_mem this Set.mem_range.2 ⟨m, hm⟩⟩
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isIntegral, ExpChar, ExpChar.expChar_center_iff, IsAlgebraic, IsPurelyInseparable, RingHom, RingHom.mem_range, Set.mem_of_subset_of_mem, Set.mem_range, Subalgebra, Subalgebra.range_subset, Subtype, Subtype.exists, expChar_center_iff, hinsep, isIntegral, isPurelyInseparable_iff_pow_mem, mem_of_subset_of_mem, mem_range
 -/
@@ -142,7 +146,9 @@ lemma exist_pow_eq_zero_of_le
   refine ⟨m, ⟨hm.1, fun n hn => ?_⟩⟩
   have inter : (ad k D a)^[p ^ m] = 0 := by
     ext x
-    rw [ad_eq_lmul_left_sub_lmul_right]; rw [← Module.End.pow_apply]; rw [Pi.sub_apply]; rw [sub_pow_expChar_pow_of_commute p m (commute
+    rw [ad_eq_lmul_left_sub_lmul_right]; rw [← Module.End.pow_apply]; rw [Pi.sub_apply]; rw [sub_pow_expChar_pow_of_commute p m (commute_mulLeft_right a a)]; rw [LinearMap.sub_apply]; rw [pow_mulLeft]; rw [mulLeft_apply]; rw [pow_mulRight]; rw [mulRight_apply]; rw [Pi.zero_apply]; rw [Subring.mem_center_iff.1 hm.2 x]
+    exact sub_eq_zero_of_eq rfl
+  rw [(Nat.sub_eq_iff_eq_add hn).1 rfl]; rw [Function.iterate_add]; rw [inter]; rw [Pi.comp_zero]; rw [iterate_map_zero]; rw [Function.const_zero]
 
 中文:
 引理 exist_pow_eq_zero_of_le
@@ -152,7 +158,9 @@ lemma exist_pow_eq_zero_of_le
   refine ⟨m, ⟨hm.1, fun n hn => ?_⟩⟩
   have inter : (ad k D a)^[p ^ m] = 0 := by
     ext x
-    rw [ad_eq_lmul_left_sub_lmul_right]; rw [← Module.End.pow_apply]; rw [Pi.sub_apply]; rw [sub_pow_expChar_pow_of_commute p m (commute
+    rw [ad_eq_lmul_left_sub_lmul_right]; rw [← Module.End.pow_apply]; rw [Pi.sub_apply]; rw [sub_pow_expChar_pow_of_commute p m (commute_mulLeft_right a a)]; rw [LinearMap.sub_apply]; rw [pow_mulLeft]; rw [mulLeft_apply]; rw [pow_mulRight]; rw [mulRight_apply]; rw [Pi.zero_apply]; rw [Subring.mem_center_iff.1 hm.2 x]
+    exact sub_eq_zero_of_eq rfl
+  rw [(Nat.sub_eq_iff_eq_add hn).1 rfl]; rw [Function.iterate_add]; rw [inter]; rw [Pi.comp_zero]; rw [iterate_map_zero]; rw [Function.const_zero]
 
 Depends on / 依赖: LinearMap, LinearMap.sub_apply, Module, Module.End.pow_apply, Pi.sub_apply, Pi.zero_apply, Subring, Subring.mem_center_iff, ad_eq_lmul_left_sub_lmul_right, commute_mulLeft_right, exists_pow_mem_center_of_inseparable, hinsep, mem_center_iff, mulLeft_apply, mulRight_apply, pow_apply, pow_mulLeft, pow_mulRight, sub_apply, sub_eq_zero_of_eq
 -/
@@ -180,7 +188,60 @@ theorem exists_separable_and_not_isCentral
   replace insep : forall x : D, IsSeparable k x -> x in k :=
     fun x h => Classical.byContradiction fun hx => insep x hx h
   -- The element `a` below is in `D` but not in `k`.
-obtain ⟨a, ha⟩ := not_forall.mp mt (Subring.eq_top_iff' k).mpr 
+obtain ⟨a, ha⟩ := not_forall.mp mt (Subring.eq_top_iff' k).mpr H
+have ha₀ : a != 0 := fun nh => nh ▸ ha Subring.zero_mem k
+  -- We construct another element `b` that does not commute with `a`.
+  obtain ⟨b, hb1⟩ : exists b : D, ad k D a b != 0 := by
+    rw [Subring.mem_center_iff]; rw [not_forall] at ha
+    use ha.choose
+    change a * ha.choose - ha.choose * a != 0
+    simpa only [ne_eq, sub_eq_zero] using Ne.symm ha.choose_spec
+  -- We find a maximum natural number `n` such that `(a * x - x * a) ^ n b ≠ 0`.
+  obtain ⟨n, hn, hb⟩ : exists n, 0 < n ∧ (ad k D a)^[n] b != 0 ∧ (ad k D a)^[n + 1] b = 0 := by
+    obtain ⟨m, -, hm2⟩ := exist_pow_eq_zero_of_le p ha insep
+    have h_exist : exists n, 0 < n ∧ (ad k D a)^[n + 1] b = 0 := ⟨p ^ m,
+      ⟨expChar_pow_pos D p m, by rw [hm2 (p ^ m + 1) (Nat.le_add_right _ _), Pi.zero_apply]⟩⟩
+    classical
+    refine ⟨Nat.find h_exist, ⟨(Nat.find_spec h_exist).1, ?_, (Nat.find_spec h_exist).2⟩⟩
+    set t := (Nat.find h_exist - 1 : Nat) with ht
+    by_cases! h_pos : 0 < t
+    · convert! (ne_eq _ _) ▸ not_and.mp (Nat.find_min h_exist (m := t) (by lia)) h_pos
+      lia
+    · suffices h_find : Nat.find h_exist = 1 by
+        rwa [h_find]
+      rw [Nat.le_zero]; rw [ht]; rw [Nat.sub_eq_zero_iff_le] at h_pos
+      linarith [(Nat.find_spec h_exist).1]
+  -- We define `c` to be the value that we proved above to be non-zero.
+  set c := (ad k D a)^[n] b with hc_def
+  let _ : Invertible c := ⟨c⁻¹, inv_mul_cancel₀ hb.1, mul_inv_cancel₀ hb.1⟩
+  -- We prove that `c` commutes with `a`.
+  have hc : a * c = c * a := by
+    apply eq_of_sub_eq_zero
+    rw [← mulLeft_apply (R := k)]; rw [← mulRight_apply (R := k)]
+    suffices ad k D a c = 0 from by
+      rw [← this]; simp [LieRing.of_associative_ring_bracket]
+    rw [← Function.iterate_succ_apply' (ad k D a) n b]; rw [hb.2]
+  -- We now make some computation to obtain the final equation.
+  set d := c⁻¹ * a * (ad k D a)^[n - 1] b with hd_def
+  have hc' : c⁻¹ * a = a * c⁻¹ := by
+    apply_fun (c⁻¹ * · * c⁻¹) at hc
+    rw [mul_assoc]; rw [mul_assoc]; rw [mul_inv_cancel₀ hb.1]; rw [mul_one]; rw [← mul_assoc]; rw [inv_mul_cancel₀ hb.1]; rw [one_mul] at hc
+    exact hc
+  have c_eq : a * (ad k D a)^[n - 1] b - (ad k D a)^[n - 1] b * a = c := by
+    rw [hc_def]; rw [← Nat.sub_add_cancel hn]; rw [Function.iterate_succ_apply' (ad k D a) _ b]; rfl
+  have eq1 : c⁻¹ * a * (ad k D a)^[n - 1] b - c⁻¹ * (ad k D a)^[n - 1] b * a = 1 := by
+    simp_rw [mul_assoc, (mul_sub_left_distrib c⁻¹ _ _).symm, c_eq, inv_mul_cancel_of_invertible]
+  -- We show that `a` commutes with `d`.
+  have deq : a * d - d * a = a := by
+    nth_rw 3 [← mul_one a]
+    rw [hd_def]; rw [← eq1]; rw [mul_sub]; rw [mul_assoc _ _ a]; rw [sub_right_inj]; rw [hc']; rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]
+  -- This then yields a contradiction.
+  apply_fun (a⁻¹ * ·) at deq
+  rw [mul_sub]; rw [← mul_assoc]; rw [inv_mul_cancel₀ ha₀]; rw [one_mul]; rw [← mul_assoc]; rw [sub_eq_iff_eq_add] at deq
+  obtain ⟨r, hr⟩ := exists_pow_mem_center_of_inseparable p d insep
+  apply_fun (· ^ (p ^ r)) at deq
+  rw [add_pow_expChar_pow_of_commute p r (Commute.one_left _)]; rw [one_pow]; rw [GroupWithZero.conj_pow₀ ha₀]; rw [← hr.comm]; rw [mul_assoc]; rw [inv_mul_cancel₀ ha₀]; rw [mul_one]; rw [right_eq_add] at deq
+  exact one_ne_zero deq
 
 中文:
 定理 存在_separable_and_not_isCentral
@@ -191,7 +252,60 @@ obtain ⟨a, ha⟩ := not_forall.mp mt (Subring.eq_top_iff' k).mpr
   replace insep : forall x : D, IsSeparable k x -> x in k :=
     fun x h => Classical.byContradiction fun hx => insep x hx h
   -- The element `a` below is in `D` but not in `k`.
-obtain ⟨a, ha⟩ := not_forall.mp mt (Subring.eq_top_iff' k).mpr 
+obtain ⟨a, ha⟩ := not_forall.mp mt (Subring.eq_top_iff' k).mpr H
+have ha₀ : a != 0 := fun nh => nh ▸ ha Subring.zero_mem k
+  -- We construct another element `b` that does not commute with `a`.
+  obtain ⟨b, hb1⟩ : exists b : D, ad k D a b != 0 := by
+    rw [Subring.mem_center_iff]; rw [not_forall] at ha
+    use ha.choose
+    change a * ha.choose - ha.choose * a != 0
+    simpa only [ne_eq, sub_eq_zero] using Ne.symm ha.choose_spec
+  -- We find a maximum natural number `n` such that `(a * x - x * a) ^ n b ≠ 0`.
+  obtain ⟨n, hn, hb⟩ : exists n, 0 < n ∧ (ad k D a)^[n] b != 0 ∧ (ad k D a)^[n + 1] b = 0 := by
+    obtain ⟨m, -, hm2⟩ := exist_pow_eq_zero_of_le p ha insep
+    have h_exist : exists n, 0 < n ∧ (ad k D a)^[n + 1] b = 0 := ⟨p ^ m,
+      ⟨expChar_pow_pos D p m, by rw [hm2 (p ^ m + 1) (Nat.le_add_right _ _), Pi.zero_apply]⟩⟩
+    classical
+    refine ⟨Nat.find h_exist, ⟨(Nat.find_spec h_exist).1, ?_, (Nat.find_spec h_exist).2⟩⟩
+    set t := (Nat.find h_exist - 1 : Nat) with ht
+    by_cases! h_pos : 0 < t
+    · convert! (ne_eq _ _) ▸ not_and.mp (Nat.find_min h_exist (m := t) (by lia)) h_pos
+      lia
+    · suffices h_find : Nat.find h_exist = 1 by
+        rwa [h_find]
+      rw [Nat.le_zero]; rw [ht]; rw [Nat.sub_eq_zero_iff_le] at h_pos
+      linarith [(Nat.find_spec h_exist).1]
+  -- We define `c` to be the value that we proved above to be non-zero.
+  set c := (ad k D a)^[n] b with hc_def
+  let _ : Invertible c := ⟨c⁻¹, inv_mul_cancel₀ hb.1, mul_inv_cancel₀ hb.1⟩
+  -- We prove that `c` commutes with `a`.
+  have hc : a * c = c * a := by
+    apply eq_of_sub_eq_zero
+    rw [← mulLeft_apply (R := k)]; rw [← mulRight_apply (R := k)]
+    suffices ad k D a c = 0 from by
+      rw [← this]; simp [LieRing.of_associative_ring_bracket]
+    rw [← Function.iterate_succ_apply' (ad k D a) n b]; rw [hb.2]
+  -- We now make some computation to obtain the final equation.
+  set d := c⁻¹ * a * (ad k D a)^[n - 1] b with hd_def
+  have hc' : c⁻¹ * a = a * c⁻¹ := by
+    apply_fun (c⁻¹ * · * c⁻¹) at hc
+    rw [mul_assoc]; rw [mul_assoc]; rw [mul_inv_cancel₀ hb.1]; rw [mul_one]; rw [← mul_assoc]; rw [inv_mul_cancel₀ hb.1]; rw [one_mul] at hc
+    exact hc
+  have c_eq : a * (ad k D a)^[n - 1] b - (ad k D a)^[n - 1] b * a = c := by
+    rw [hc_def]; rw [← Nat.sub_add_cancel hn]; rw [Function.iterate_succ_apply' (ad k D a) _ b]; rfl
+  have eq1 : c⁻¹ * a * (ad k D a)^[n - 1] b - c⁻¹ * (ad k D a)^[n - 1] b * a = 1 := by
+    simp_rw [mul_assoc, (mul_sub_left_distrib c⁻¹ _ _).symm, c_eq, inv_mul_cancel_of_invertible]
+  -- We show that `a` commutes with `d`.
+  have deq : a * d - d * a = a := by
+    nth_rw 3 [← mul_one a]
+    rw [hd_def]; rw [← eq1]; rw [mul_sub]; rw [mul_assoc _ _ a]; rw [sub_right_inj]; rw [hc']; rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]
+  -- This then yields a contradiction.
+  apply_fun (a⁻¹ * ·) at deq
+  rw [mul_sub]; rw [← mul_assoc]; rw [inv_mul_cancel₀ ha₀]; rw [one_mul]; rw [← mul_assoc]; rw [sub_eq_iff_eq_add] at deq
+  obtain ⟨r, hr⟩ := exists_pow_mem_center_of_inseparable p d insep
+  apply_fun (· ^ (p ^ r)) at deq
+  rw [add_pow_expChar_pow_of_commute p r (Commute.one_left _)]; rw [one_pow]; rw [GroupWithZero.conj_pow₀ ha₀]; rw [← hr.comm]; rw [mul_assoc]; rw [inv_mul_cancel₀ ha₀]; rw [mul_one]; rw [right_eq_add] at deq
+  exact one_ne_zero deq
 
 Depends on / 依赖: Classical, Classical.byContradiction, ExpChar, ExpChar.exists, IsSeparable, byContradiction, replace
 -/
@@ -269,7 +383,17 @@ theorem exists_separable_and_not_isCentral'
   have ntrivial : Subring.center D != ⊤ :=
     congr(Subalgebra.toSubring $hcenter).trans_ne (Subalgebra.toSubring_injective.ne hneq)
   set φ := Subalgebra.equivOfEq (⊥ : Subalgebra L D) (.center L D) hcenter.symm
-  set equ
+  set equiv : L ≃+* (center D) := ((botEquiv L D).symm.trans φ).toRingEquiv
+  let _ : Algebra L (center D) := equiv.toRingHom.toAlgebra
+  let _ : Algebra (center D) L := equiv.symm.toRingHom.toAlgebra
+  have _ : IsScalarTower L (center D) D := .of_algebraMap_eq fun _ => rfl
+  have _ : IsScalarTower (center D) L D := .of_algebraMap_eq fun x => by
+    rw [IsScalarTower.algebraMap_apply L (center D)]
+    congr
+    exact (equiv.apply_symm_apply x).symm
+  have _ : Algebra.IsAlgebraic (center D) D := .tower_top (K := L) _
+  obtain ⟨x, hxd, hx⟩ := exists_separable_and_not_isCentral D ntrivial
+  exact ⟨x, ⟨by rwa [← Subalgebra.center_toSubring L, hcenter] at hxd, IsSeparable.tower_top _ hx⟩⟩
 
 中文:
 定理 存在_separable_and_not_isCentral'
@@ -279,7 +403,17 @@ theorem exists_separable_and_not_isCentral'
   have ntrivial : Subring.center D != ⊤ :=
     congr(Subalgebra.toSubring $hcenter).trans_ne (Subalgebra.toSubring_injective.ne hneq)
   set φ := Subalgebra.equivOfEq (⊥ : Subalgebra L D) (.center L D) hcenter.symm
-  set equ
+  set equiv : L ≃+* (center D) := ((botEquiv L D).symm.trans φ).toRingEquiv
+  let _ : Algebra L (center D) := equiv.toRingHom.toAlgebra
+  let _ : Algebra (center D) L := equiv.symm.toRingHom.toAlgebra
+  have _ : IsScalarTower L (center D) D := .of_algebraMap_eq fun _ => rfl
+  have _ : IsScalarTower (center D) L D := .of_algebraMap_eq fun x => by
+    rw [IsScalarTower.algebraMap_apply L (center D)]
+    congr
+    exact (equiv.apply_symm_apply x).symm
+  have _ : Algebra.IsAlgebraic (center D) D := .tower_top (K := L) _
+  obtain ⟨x, hxd, hx⟩ := exists_separable_and_not_isCentral D ntrivial
+  exact ⟨x, ⟨by rwa [← Subalgebra.center_toSubring L, hcenter] at hxd, IsSeparable.tower_top _ hx⟩⟩
 
 Depends on / 依赖: Algebra, IsCentral, IsCentral.out, IsScalarTower, Subalgebra, Subalgebra.center, Subalgebra.equivOfEq, Subalgebra.toSubring, Subalgebra.toSubring_injective.ne, Subring, Subring.center, botEquiv, center, equiv.symm.toRingHom.toAlgebra, equiv.toRingHom.toAlgebra, equivOfEq, hcenter, hcenter.symm, le_bot_iff, le_bot_iff.mp
 -/

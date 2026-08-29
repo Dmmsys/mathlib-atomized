@@ -67,7 +67,8 @@ theorem not_isLocalRing_of_nontrivial_pi
   have ha : ¬IsUnit (fun i => if i = i₁ then 0 else 1 : Π i, R i) :=
     fun h => not_isUnit_zero (M₀ := R i₁) (by simpa using h.map (Pi.evalRingHom R i₁))
   have hb : ¬IsUnit (fun i => if i = i₁ then 1 else 0 : Π i, R i) :=
-    fun h => not_isUn
+    fun h => not_isUnit_zero (M₀ := R i₂) (by simpa [hi.symm] using h.map (Pi.evalRingHom R i₂))
+  exact not_isLocalRing_def ha hb (by ext; dsimp; split <;> simp)
 
 中文:
 定理 not_isLocalRing_of_nontrivial_pi
@@ -78,7 +79,8 @@ theorem not_isLocalRing_of_nontrivial_pi
   have ha : ¬IsUnit (fun i => if i = i₁ then 0 else 1 : Π i, R i) :=
     fun h => not_isUnit_zero (M₀ := R i₁) (by simpa using h.map (Pi.evalRingHom R i₁))
   have hb : ¬IsUnit (fun i => if i = i₁ then 1 else 0 : Π i, R i) :=
-    fun h => not_isUn
+    fun h => not_isUnit_zero (M₀ := R i₂) (by simpa [hi.symm] using h.map (Pi.evalRingHom R i₂))
+  exact not_isLocalRing_def ha hb (by ext; dsimp; split <;> simp)
 
 Depends on / 依赖: IsUnit, Pi.evalRingHom, classical, evalRingHom, exists_pair_ne, h.map, hi.symm, not_isLocalRing_def, not_isUnit_zero
 -/
@@ -135,7 +137,8 @@ theorem not_isLocalRing_tfae
   tfae_have 2 -> 3
   | ⟨⟨m₁, hm₁⟩, ⟨m₂, hm₂⟩, h⟩ => ⟨m₁, m₂, ⟨hm₁, hm₂, fun _ => h (by congr)⟩⟩
   tfae_have 3 -> 1
-| ⟨m₁, m₂, ⟨hm₁, hm₂, h⟩⟩ => fun _ => h (eq_maximalIdeal hm₁).trans (eq_maximal
+| ⟨m₁, m₂, ⟨hm₁, hm₂, h⟩⟩ => fun _ => h (eq_maximalIdeal hm₁).trans (eq_maximalIdeal hm₂).symm
+  tfae_finish
 
 中文:
 定理 not_isLocalRing_tfae
@@ -146,7 +149,8 @@ theorem not_isLocalRing_tfae
   tfae_have 2 -> 3
   | ⟨⟨m₁, hm₁⟩, ⟨m₂, hm₂⟩, h⟩ => ⟨m₁, m₂, ⟨hm₁, hm₂, fun _ => h (by congr)⟩⟩
   tfae_have 3 -> 1
-| ⟨m₁, m₂, ⟨hm₁, hm₂, h⟩⟩ => fun _ => h (eq_maximalIdeal hm₁).trans (eq_maximal
+| ⟨m₁, m₂, ⟨hm₁, hm₂, h⟩⟩ => fun _ => h (eq_maximalIdeal hm₁).trans (eq_maximalIdeal hm₂).symm
+  tfae_finish
 
 Depends on / 依赖: eq_maximalIdeal, not_subsingleton_iff_nontrivial, not_subsingleton_iff_nontrivial.mp, of_singleton_maximalSpectrum, tfae_finish, tfae_have
 -/
@@ -174,7 +178,8 @@ theorem exists_surjective_of_not_isLocalRing.{u}
   obtain ⟨m₁, m₂, _, _, hm₁m₂⟩ := (not_isLocalRing_tfae.out 0 2).mp h
 let e := Ideal.quotientInfEquivQuotientProd m₁ m₂ Ideal.isCoprime_of_isMaximal hm₁m₂
 let f := e.toRingHom.comp Ideal.Quotient.mk (m₁ ⊓ m₂)
-  use R
+  use R ⧸ m₁, R ⧸ m₂, Ideal.Quotient.field m₁, Ideal.Quotient.field m₂, f
+  apply Function.Surjective.comp e.surjective Ideal.Quotient.mk_surjective
 
 中文:
 定理 存在_surjective_of_not_isLocalRing.{u}
@@ -184,7 +189,8 @@ let f := e.toRingHom.comp Ideal.Quotient.mk (m₁ ⊓ m₂)
   obtain ⟨m₁, m₂, _, _, hm₁m₂⟩ := (not_isLocalRing_tfae.out 0 2).mp h
 let e := Ideal.quotientInfEquivQuotientProd m₁ m₂ Ideal.isCoprime_of_isMaximal hm₁m₂
 let f := e.toRingHom.comp Ideal.Quotient.mk (m₁ ⊓ m₂)
-  use R
+  use R ⧸ m₁, R ⧸ m₂, Ideal.Quotient.field m₁, Ideal.Quotient.field m₂, f
+  apply Function.Surjective.comp e.surjective Ideal.Quotient.mk_surjective
 -/
 theorem exists_surjective_of_not_isLocalRing.{u} {R : Type u} [CommRing R] [Nontrivial R]
     (h : ¬IsLocalRing R) :

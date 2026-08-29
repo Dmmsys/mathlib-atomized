@@ -33,7 +33,7 @@ theorem pow_minFac
   apply (minFac_le_of_dvd (minFac_prime hn).two_le ((minFac_dvd n).pow hk)).antisymm
   apply
     minFac_le_of_dvd (minFac_prime hnk).two_le
-      ((minFac_prime hnk).dvd_of_dvd
+      ((minFac_prime hnk).dvd_of_dvd_pow (minFac_dvd _))
 
 中文:
 定理 pow_minFac
@@ -46,7 +46,7 @@ theorem pow_minFac
   apply (minFac_le_of_dvd (minFac_prime hn).two_le ((minFac_dvd n).pow hk)).antisymm
   apply
     minFac_le_of_dvd (minFac_prime hnk).two_le
-      ((minFac_prime hnk).dvd_of_dvd
+      ((minFac_prime hnk).dvd_of_dvd_pow (minFac_dvd _))
 
 Depends on / 依赖: antisymm, dvd_of_dvd_pow, eq_or_ne, minFac_dvd, minFac_le_of_dvd, minFac_prime, pow_eq_one_iff_left, two_le
 -/

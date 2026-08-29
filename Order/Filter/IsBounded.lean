@@ -515,7 +515,9 @@ theorem not_isBoundedUnder_of_tendsto_atTop
   have hb' := (tendsto_atTop.mp hf) b'
   have : { x : α | f x <= b } inter { x : α | b' <= f x } = ∅ :=
     eq_empty_of_subset_empty fun x hx => (not_le_of_gt h) (le_trans hx.2 hx.1)
-  exact (nonempty_of_mem (hb.and hb')
+  exact (nonempty_of_mem (hb.and hb')).ne_empty this
+
+@[to_dual]
 
 中文:
 定理 not_isBoundedUnder_of_tendsto_atTop
@@ -527,7 +529,9 @@ theorem not_isBoundedUnder_of_tendsto_atTop
   have hb' := (tendsto_atTop.mp hf) b'
   have : { x : α | f x <= b } inter { x : α | b' <= f x } = ∅ :=
     eq_empty_of_subset_empty fun x hx => (not_le_of_gt h) (le_trans hx.2 hx.1)
-  exact (nonempty_of_mem (hb.and hb')
+  exact (nonempty_of_mem (hb.and hb')).ne_empty this
+
+@[to_dual]
 
 Depends on / 依赖: eq_empty_of_subset_empty, eventually_map, exists_gt, hb.and, le_trans, ne_empty, nonempty_of_mem, not_le_of_gt, tendsto_atTop, tendsto_atTop.mp
 -/
@@ -993,7 +997,7 @@ lemma isBoundedUnder_sum
     exact ⟨0, by simp_all only [eventually_map, Pi.zero_apply, eventually_true]⟩
   case cons k₀ s k₀_notin_s ih =>
     simp only [Finset.forall_mem_cons] at *
-    simpa only [Finset.sum_cons] using hr _ _ h.1 (ih 
+    simpa only [Finset.sum_cons] using hr _ _ h.1 (ih h.2)
 
 中文:
 引理 isBoundedUnder_sum
@@ -1005,7 +1009,7 @@ lemma isBoundedUnder_sum
     exact ⟨0, by simp_all only [eventually_map, Pi.zero_apply, eventually_true]⟩
   case cons k₀ s k₀_notin_s ih =>
     simp only [Finset.forall_mem_cons] at *
-    simpa only [Finset.sum_cons] using hr _ _ h.1 (ih 
+    simpa only [Finset.sum_cons] using hr _ _ h.1 (ih h.2)
 
 Depends on / 依赖: Finset, Finset.cons_induction, Finset.forall_mem_cons, Finset.sum_cons, Finset.sum_empty, Pi.zero_apply, cons_induction, eventually_map, eventually_true, forall_mem_cons, sum_cons, sum_empty, zero_apply
 -/
@@ -1142,7 +1146,7 @@ lemma isBoundedUnder_le_mul_of_nonneg
   have U_0 : 0 <= U := by
     obtain ⟨y, y_0, y_U⟩ := (h₁.and_eventually hU).exists
     exact y_0.trans y_U
-  exact (
+  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V U_0)
 
 中文:
 引理 isBoundedUnder_le_mul_of_nonneg
@@ -1155,7 +1159,7 @@ lemma isBoundedUnder_le_mul_of_nonneg
   have U_0 : 0 <= U := by
     obtain ⟨y, y_0, y_U⟩ := (h₁.and_eventually hU).exists
     exact y_0.trans y_U
-  exact (
+  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V U_0)
 
 Depends on / 依赖: and_eventually, eventually_le, filter_upwards, isBoundedUnder_of_eventually_le, mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right, y_0.trans
 -/
@@ -1185,7 +1189,7 @@ lemma isCoboundedUnder_ge_mul_of_nonneg
   refine IsCoboundedUnder.of_frequently_le (a := U * V) ?_
   apply (hV.and_eventually (hU.and (h₁.and h₃))).mono
   intro x ⟨x_V, x_U, u_0, v_0⟩
-  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x
+  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V (u_0.trans x_U))
 
 中文:
 引理 isCoboundedUnder_ge_mul_of_nonneg
@@ -1196,7 +1200,7 @@ lemma isCoboundedUnder_ge_mul_of_nonneg
   refine IsCoboundedUnder.of_frequently_le (a := U * V) ?_
   apply (hV.and_eventually (hU.and (h₁.and h₃))).mono
   intro x ⟨x_V, x_U, u_0, v_0⟩
-  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x
+  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V (u_0.trans x_U))
 
 Depends on / 依赖: IsCoboundedUnder, IsCoboundedUnder.of_frequently_le, and_eventually, eventually_le, frequently_le, hU.and, hV.and_eventually, mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right, of_frequently_le, u_0.trans
 -/
@@ -1532,7 +1536,7 @@ theorem Monotone.isBoundedUnder_le_comp_iff
   obtain ⟨b, hb⟩ : exists b, forall a >= b, c < g a := eventually_atTop.1 (hg'.eventually_gt_atTop c)
   exact ⟨b, hc.mono fun x hx => not_lt.1 fun h => (hb _ h.le).not_ge hx⟩
 
-@[to_dual isBoundedUnder
+@[to_dual isBoundedUnder_ge_comp_iff]
 
 中文:
 定理 递增.isBoundedUnder_le_comp_iff
@@ -1543,7 +1547,7 @@ theorem Monotone.isBoundedUnder_le_comp_iff
   obtain ⟨b, hb⟩ : exists b, forall a >= b, c < g a := eventually_atTop.1 (hg'.eventually_gt_atTop c)
   exact ⟨b, hc.mono fun x hx => not_lt.1 fun h => (hb _ h.le).not_ge hx⟩
 
-@[to_dual isBoundedUnder
+@[to_dual isBoundedUnder_ge_comp_iff]
 
 Depends on / 依赖: eventually_atTop, eventually_gt_atTop, eventually_map, h.isBoundedUnder, h.le, hc.mono, isBoundedUnder, not_ge, not_lt
 -/

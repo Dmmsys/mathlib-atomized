@@ -284,7 +284,7 @@ theorem Monic.mul
   else by
     have : p.leadingCoeff * q.leadingCoeff != 0 := by
       simp [Monic.def.1 hp, Monic.def.1 hq, Ne.symm h0]
-    rw [Monic.def]; rw [leadingCoeff_mul' this]; rw [Moni
+    rw [Monic.def]; rw [leadingCoeff_mul' this]; rw [Monic.def.1 hp]; rw [Monic.def.1 hq]; rw [one_mul]
 
 中文:
 定理 Monic.mul
@@ -297,7 +297,7 @@ theorem Monic.mul
   else by
     have : p.leadingCoeff * q.leadingCoeff != 0 := by
       simp [Monic.def.1 hp, Monic.def.1 hq, Ne.symm h0]
-    rw [Monic.def]; rw [leadingCoeff_mul' this]; rw [Moni
+    rw [Monic.def]; rw [leadingCoeff_mul' this]; rw [Monic.def.1 hp]; rw [Monic.def.1 hq]; rw [one_mul]
 -/
 theorem Monic.mul (hp : Monic p) (hq : Monic q) : Monic (p * q) :=
   letI := Classical.decEq R
@@ -441,7 +441,7 @@ lemma comp
   nontriviality R
   have : (p.comp q).natDegree = p.natDegree * q.natDegree :=
 natDegree_comp_eq_of_mul_ne_zero by simp [hp.leadingCoeff, hq.leadingCoeff]
-  rw [Monic.def]; rw [Polynomial.leadingCoeff]; rw [this]; rw [coeff_comp_degree_mul_degree h]; rw [hp.leadingCoeff]; rw [hq.leadingCoeff]; rw
+  rw [Monic.def]; rw [Polynomial.leadingCoeff]; rw [this]; rw [coeff_comp_degree_mul_degree h]; rw [hp.leadingCoeff]; rw [hq.leadingCoeff]; rw [one_pow]; rw [mul_one]
 
 中文:
 引理 comp
@@ -451,7 +451,7 @@ natDegree_comp_eq_of_mul_ne_zero by simp [hp.leadingCoeff, hq.leadingCoeff]
   nontriviality R
   have : (p.comp q).natDegree = p.natDegree * q.natDegree :=
 natDegree_comp_eq_of_mul_ne_zero by simp [hp.leadingCoeff, hq.leadingCoeff]
-  rw [Monic.def]; rw [Polynomial.leadingCoeff]; rw [this]; rw [coeff_comp_degree_mul_degree h]; rw [hp.leadingCoeff]; rw [hq.leadingCoeff]; rw
+  rw [Monic.def]; rw [Polynomial.leadingCoeff]; rw [this]; rw [coeff_comp_degree_mul_degree h]; rw [hp.leadingCoeff]; rw [hq.leadingCoeff]; rw [one_pow]; rw [mul_one]
 
 Depends on / 依赖: Monic.def, Polynomial, Polynomial.leadingCoeff, coeff_comp_degree_mul_degree, hp.leadingCoeff, hq.leadingCoeff, leadingCoeff, mul_one, natDegree, natDegree_comp_eq_of_mul_ne_zero, nontriviality, one_pow, p.comp, p.natDegree, q.natDegree
 -/
@@ -563,7 +563,7 @@ theorem degree_mul_comm
 nonrec theorem natDegree_mul' (hp : p.Monic) (hq : q != 0) :
     (p * q).natDegree = p.natDegree + q.natDegree := by
   rw [natDegree_mul']
-  si
+  simpa [hp.leadingCoeff, leadingCoeff_ne_zero]
 
 中文:
 定理 degree_mul_comm
@@ -579,7 +579,7 @@ nonrec theorem natDegree_mul' (hp : p.Monic) (hq : q != 0) :
 nonrec theorem natDegree_mul' (hp : p.Monic) (hq : q != 0) :
     (p * q).natDegree = p.natDegree + q.natDegree := by
   rw [natDegree_mul']
-  si
+  simpa [hp.leadingCoeff, leadingCoeff_ne_zero]
 
 Depends on / 依赖: add_comm, degree_mul, hp.degree_mul, hp.leadingCoeff, leadingCoeff, leadingCoeff_ne_zero, one_mul
 -/
@@ -772,7 +772,9 @@ theorem eq_one_of_map_eq_one
     · rw [hp.leadingCoeff, f.map_one]
       exact one_ne_zero
   have hndeg : p.natDegree = 0 :=
-    WithBot.coe_eq_coe.mp ((degree_eq_natDegree hp.ne_zero).symm.tr
+    WithBot.coe_eq_coe.mp ((degree_eq_natDegree hp.ne_zero).symm.trans hdeg)
+  convert! eq_C_of_degree_eq_zero hdeg
+  rw [← hndeg]; rw [← Polynomial.leadingCoeff]; rw [hp.leadingCoeff]; rw [C.map_one]
 
 中文:
 定理 eq_one_of_map_eq_one
@@ -784,7 +786,9 @@ theorem eq_one_of_map_eq_one
     · rw [hp.leadingCoeff, f.map_one]
       exact one_ne_zero
   have hndeg : p.natDegree = 0 :=
-    WithBot.coe_eq_coe.mp ((degree_eq_natDegree hp.ne_zero).symm.tr
+    WithBot.coe_eq_coe.mp ((degree_eq_natDegree hp.ne_zero).symm.trans hdeg)
+  convert! eq_C_of_degree_eq_zero hdeg
+  rw [← hndeg]; rw [← Polynomial.leadingCoeff]; rw [hp.leadingCoeff]; rw [C.map_one]
 
 Depends on / 依赖: C.map_one, Polynomial, Polynomial.leadingCoeff, WithBot, WithBot.coe_eq_coe.mp, coe_eq_coe, convert, degree, degree_eq_natDegree, degree_map_eq_of_leadingCoeff_ne_zero, degree_one, eq_C_of_degree_eq_zero, f.map_one, hp.leadingCoeff, hp.ne_zero, leadingCoeff, map_eq, map_one, natDegree, ne_zero
 -/
@@ -1196,7 +1200,10 @@ theorem Monic.nextCoeff_multiset_prod
       Multiset.prod_zero, Multiset.sum_zero, not_false_iff, forall_true_iff]
     rw [← C_1]
     rw [nextCoeff_C_eq_zero]
-  · rw [Mu
+  · rw [Multiset.map_cons, Multiset.prod_cons, Multiset.map_cons, Multiset.sum_cons,
+      Monic.nextCoeff_mul, ih]
+    exacts [fun i hi => ht i (Multiset.mem_cons_of_mem hi), ht a (Multiset.mem_cons_self _ _),
+      monic_multiset_prod_of_monic _ _ fun b bs => ht _ (Multiset.mem_cons_of_mem bs)]
 
 中文:
 定理 Monic.nextCoeff_multiset_prod
@@ -1208,7 +1215,10 @@ theorem Monic.nextCoeff_multiset_prod
       Multiset.prod_zero, Multiset.sum_zero, not_false_iff, forall_true_iff]
     rw [← C_1]
     rw [nextCoeff_C_eq_zero]
-  · rw [Mu
+  · rw [Multiset.map_cons, Multiset.prod_cons, Multiset.map_cons, Multiset.sum_cons,
+      Monic.nextCoeff_mul, ih]
+    exacts [fun i hi => ht i (Multiset.mem_cons_of_mem hi), ht a (Multiset.mem_cons_self _ _),
+      monic_multiset_prod_of_monic _ _ fun b bs => ht _ (Multiset.mem_cons_of_mem bs)]
 
 Depends on / 依赖: Monic.nextCoeff_mul, Multiset, Multiset.induction_on, Multiset.map_cons, Multiset.map_zero, Multiset.mem_cons_of_mem, Multiset.mem_cons_self, Multiset.notMem_zero, Multiset.prod_cons, Multiset.prod_zero, Multiset.sum_cons, Multiset.sum_zero, exacts, forall_prop_of_false, forall_prop_of_true, forall_true_iff, induction_on, map_cons, map_zero, mem_cons_of_mem
 -/
@@ -1259,7 +1269,10 @@ lemma irreducible_of_monic
         (h (g * C f.leadingCoeff) (f * C g.leadingCoeff) ?_ ?_ ?_).symm.imp
           (.of_mul_eq_one _)
           (.of_mul_eq_one _)⟩⟩
-  · rwa 
+  · rwa [Monic, leadingCoeff_mul, leadingCoeff_C, ← leadingCoeff_mul, mul_comm, ← hfg, ← Monic]
+  · rwa [Monic, leadingCoeff_mul, leadingCoeff_C, ← leadingCoeff_mul, ← hfg, ← Monic]
+  · rw [mul_mul_mul_comm, ← C_mul, ← leadingCoeff_mul, ← hfg, hp.leadingCoeff, C_1, mul_one,
+      mul_comm, ← hfg]
 
 中文:
 引理 irreducible_of_monic
@@ -1271,7 +1284,10 @@ lemma irreducible_of_monic
         (h (g * C f.leadingCoeff) (f * C g.leadingCoeff) ?_ ?_ ?_).symm.imp
           (.of_mul_eq_one _)
           (.of_mul_eq_one _)⟩⟩
-  · rwa 
+  · rwa [Monic, leadingCoeff_mul, leadingCoeff_C, ← leadingCoeff_mul, mul_comm, ← hfg, ← Monic]
+  · rwa [Monic, leadingCoeff_mul, leadingCoeff_C, ← leadingCoeff_mul, ← hfg, ← Monic]
+  · rw [mul_mul_mul_comm, ← C_mul, ← leadingCoeff_mul, ← hfg, hp.leadingCoeff, C_1, mul_one,
+      mul_comm, ← hfg]
 
 Depends on / 依赖: C_mul, eq_one_of_isUnit, f.leadingCoeff, g.leadingCoeff, hf.eq_one_of_isUnit, hg.eq_one_of_isUnit, hp.eq_one_of_isUnit, hp.leading, hp.symm, leading, leadingCoeff, leadingCoeff_C, leadingCoeff_mul, mul_comm, mul_mul_mul_comm, of_mul_eq_one, symm.imp
 -/
@@ -1332,7 +1348,12 @@ lemma Monic.irreducible_iff_natDegree'
   apply and_congr_right'
   constructor <;> intro h f g hf hg he <;> subst he
   · rw [hf.natDegree_mul hg, add_le_add_iff_right]
-    exact fun ha => (h f g hf hg rfl).elim (ha.1.trans_le ha.2).ne' ha.1.ne
+    exact fun ha => (h f g hf hg rfl).elim (ha.1.trans_le ha.2).ne' ha.1.ne'
+  · simp_rw [hf.natDegree_mul hg, pos_iff_ne_zero] at h
+    contrapose! h
+    obtain hl | hl := le_total f.natDegree g.natDegree
+    · exact ⟨g, f, hg, hf, mul_comm g f, h.1, by gcongr⟩
+    · exact ⟨f, g, hf, hg, rfl, h.2, by gcongr⟩
 
 中文:
 引理 Monic.irreducible_iff_natDegree'
@@ -1343,7 +1364,12 @@ lemma Monic.irreducible_iff_natDegree'
   apply and_congr_right'
   constructor <;> intro h f g hf hg he <;> subst he
   · rw [hf.natDegree_mul hg, add_le_add_iff_right]
-    exact fun ha => (h f g hf hg rfl).elim (ha.1.trans_le ha.2).ne' ha.1.ne
+    exact fun ha => (h f g hf hg rfl).elim (ha.1.trans_le ha.2).ne' ha.1.ne'
+  · simp_rw [hf.natDegree_mul hg, pos_iff_ne_zero] at h
+    contrapose! h
+    obtain hl | hl := le_total f.natDegree g.natDegree
+    · exact ⟨g, f, hg, hf, mul_comm g f, h.1, by gcongr⟩
+    · exact ⟨f, g, hf, hg, rfl, h.2, by gcongr⟩
 
 Depends on / 依赖: Nat.le_div_iff_mul_le, add_le_add_iff_right, and_congr_right, contrapose, f.natDegree, g.natDegree, hf.natDegree_mul, hp.irreducible_iff_natDegree, irreducible_iff_natDegree, le_div_iff_mul_le, le_total, mem_Ioc, mul_comm, mul_two, natDegree, natDegree_mul, pos_iff_ne_zero, simp_rw, trans_le, zero_lt_two
 -/
@@ -1410,7 +1436,19 @@ lemma Monic.not_irreducible_iff_exists_add_mul_eq_coeff
     constructor
     · rintro ⟨a, b, ha, hb, rfl, hdb⟩
       simp only [Nat.Ioc_succ_singleton, zero_add, mem_singleton] at hdb
-      hav
+      have hda := hnd
+      rw [ha.natDegree_mul hb]; rw [hdb] at hda
+      use a.coeff 0, b.coeff 0, mul_coeff_zero a b
+      simpa only [nextCoeff, hnd, add_right_cancel hda, hdb] using! ha.nextCoeff_mul hb
+    · rintro ⟨c₁, c₂, hmul, hadd⟩
+      refine
+        ⟨X + C c₁, X + C c₂, monic_X_add_C _, monic_X_add_C _, ?_, ?_⟩
+      · rw [p.as_sum_range_C_mul_X_pow, hnd, Finset.sum_range_succ, Finset.sum_range_succ,
+          Finset.sum_range_one, ← hnd, hm.coeff_natDegree, hnd, hmul, hadd, C_mul, C_add, C_1]
+        ring
+      · simp
+  · rintro rfl
+    simp [natDegree_one] at hnd
 
 中文:
 引理 Monic.not_irreducible_iff_存在_add_mul_eq_coeff
@@ -1423,7 +1461,19 @@ lemma Monic.not_irreducible_iff_exists_add_mul_eq_coeff
     constructor
     · rintro ⟨a, b, ha, hb, rfl, hdb⟩
       simp only [Nat.Ioc_succ_singleton, zero_add, mem_singleton] at hdb
-      hav
+      have hda := hnd
+      rw [ha.natDegree_mul hb]; rw [hdb] at hda
+      use a.coeff 0, b.coeff 0, mul_coeff_zero a b
+      simpa only [nextCoeff, hnd, add_right_cancel hda, hdb] using! ha.nextCoeff_mul hb
+    · rintro ⟨c₁, c₂, hmul, hadd⟩
+      refine
+        ⟨X + C c₁, X + C c₂, monic_X_add_C _, monic_X_add_C _, ?_, ?_⟩
+      · rw [p.as_sum_range_C_mul_X_pow, hnd, Finset.sum_range_succ, Finset.sum_range_succ,
+          Finset.sum_range_one, ← hnd, hm.coeff_natDegree, hnd, hmul, hadd, C_mul, C_add, C_1]
+        ring
+      · simp
+  · rintro rfl
+    simp [natDegree_one] at hnd
 
 Depends on / 依赖: Ioc_succ_singleton, Nat.Ioc_succ_singleton, a.coeff, add_right_cancel, and_iff_right, b.coeff, ha.natDegree_mul, ha.nextCoeff_mul, hm.irreducible_iff_natDegree, irreducible_iff_natDegree, mem_singleton, mul_coeff_zero, natDegree_mul, natDegree_of_subsingleton, nextCoeff, nextCoeff_mul, subsingleton_or_nontrivial, zero_add
 -/
@@ -2116,7 +2166,10 @@ theorem isUnit_leadingCoeff_mul_right_eq_zero_iff
       simp only [Units.smul_def, coeff_smul, coeff_mul, smul_eq_mul, mul_sum]
       refine sum_congr rfl fun x _ => ?_
       rw [← mul_assoc]
-    rwa [this, Mo
+    rwa [this, Monic.mul_right_eq_zero_iff] at hp
+    exact monic_of_isUnit_leadingCoeff_inv_smul _
+  · rintro rfl
+    simp
 
 中文:
 定理 isUnit_leadingCoeff_mul_right_eq_zero_iff
@@ -2130,7 +2183,10 @@ theorem isUnit_leadingCoeff_mul_right_eq_zero_iff
       simp only [Units.smul_def, coeff_smul, coeff_mul, smul_eq_mul, mul_sum]
       refine sum_congr rfl fun x _ => ?_
       rw [← mul_assoc]
-    rwa [this, Mo
+    rwa [this, Monic.mul_right_eq_zero_iff] at hp
+    exact monic_of_isUnit_leadingCoeff_inv_smul _
+  · rintro rfl
+    simp
 
 Depends on / 依赖: Monic.mul_right_eq_zero_iff, Units.smul_def, coeff_mul, coeff_smul, h.unit, monic_of_isUnit_leadingCoeff_inv_smul, mul_assoc, mul_right_eq_zero_iff, mul_sum, smul_def, smul_eq_mul, smul_eq_zero_iff_eq, sum_congr
 -/

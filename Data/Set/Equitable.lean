@@ -84,7 +84,9 @@ theorem equitableOn_iff_exists_le_le_add_one
   by_cases! h : forall y in s, f x <= f y
   · exact ⟨f x, fun y hy => ⟨h _ hy, hs hy hx⟩⟩
   obtain ⟨w, hw, hwx⟩ := h
-  refine ⟨f w, fun y hy => ⟨Nat.le_of
+  refine ⟨f w, fun y hy => ⟨Nat.le_of_succ_le_succ ?_, hs hy hw⟩⟩
+  rw [(Nat.succ_le_of_lt hwx).antisymm (hs hx hw)]
+  exact hs hx hy
 
 中文:
 定理 equitableOn_iff_存在_le_le_add_one
@@ -97,7 +99,9 @@ theorem equitableOn_iff_exists_le_le_add_one
   by_cases! h : forall y in s, f x <= f y
   · exact ⟨f x, fun y hy => ⟨h _ hy, hs hy hx⟩⟩
   obtain ⟨w, hw, hwx⟩ := h
-  refine ⟨f w, fun y hy => ⟨Nat.le_of
+  refine ⟨f w, fun y hy => ⟨Nat.le_of_succ_le_succ ?_, hs hy hw⟩⟩
+  rw [(Nat.succ_le_of_lt hwx).antisymm (hs hx hw)]
+  exact hs hx hy
 
 Depends on / 依赖: Nat.le_of_succ_le_succ, Nat.succ_le_of_lt, antisymm, eq_empty_or_nonempty, le_of_succ_le_succ, s.eq_empty_or_nonempty, succ_le_of_lt
 -/
@@ -255,7 +259,16 @@ theorem equitableOn_iff_le_le_add_one
   · intro a ha
     rw [h _ ha]; rw [sum_const_nat h]; rw [Nat.mul_div_cancel_left _ (card_pos.2 ⟨a]; rw [ha⟩)]
     exact ⟨le_rfl, Nat.le_succ _⟩
-  obtain ⟨x, 
+  obtain ⟨x, hx₁, hx₂⟩ := h
+  suffices h : b = (∑ i in s, f i) / s.card by
+    simp_rw [← h]
+    apply hb
+  symm
+  refine
+    Nat.div_eq_of_lt_le (le_trans (by simp [mul_comm]) (sum_le_sum fun a ha => (hb a ha).1))
+      ((sum_lt_sum (fun a ha => (hb a ha).2) ⟨_, hx₁, (hb _ hx₁).2.lt_of_ne hx₂⟩).trans_le ?_)
+  rw [mul_comm]; rw [sum_const_nat]
+  exact fun _ _ => rfl
 
 中文:
 定理 equitableOn_iff_le_le_add_one
@@ -267,7 +280,16 @@ theorem equitableOn_iff_le_le_add_one
   · intro a ha
     rw [h _ ha]; rw [sum_const_nat h]; rw [Nat.mul_div_cancel_left _ (card_pos.2 ⟨a]; rw [ha⟩)]
     exact ⟨le_rfl, Nat.le_succ _⟩
-  obtain ⟨x, 
+  obtain ⟨x, hx₁, hx₂⟩ := h
+  suffices h : b = (∑ i in s, f i) / s.card by
+    simp_rw [← h]
+    apply hb
+  symm
+  refine
+    Nat.div_eq_of_lt_le (le_trans (by simp [mul_comm]) (sum_le_sum fun a ha => (hb a ha).1))
+      ((sum_lt_sum (fun a ha => (hb a ha).2) ⟨_, hx₁, (hb _ hx₁).2.lt_of_ne hx₂⟩).trans_le ?_)
+  rw [mul_comm]; rw [sum_const_nat]
+  exact fun _ _ => rfl
 
 Depends on / 依赖: Nat.div_eq_of_lt_le, Nat.le_succ, Nat.mul_div_cancel_left, Set.equitableOn_iff_exists_le_le_add_one, card_pos, div_eq_of_lt_le, equitableOn_iff_exists_le_le_add_one, le_rfl, le_succ, le_trans, mul_comm, mul_div_cancel_left, s.card, simp_rw, sum_const_nat, sum_le_sum, sum_lt_sum
 -/

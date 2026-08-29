@@ -101,7 +101,45 @@ instance colimitSemiring
     mul_zero := fun x => by
       refine Quot.inductionOn x ?_; clear x; intro x
       obtain ⟨j, x⟩ := x
-      erw [colimit_zero_eq _ j, colimit_mul_mk_eq 
+      erw [colimit_zero_eq _ j, colimit_mul_mk_eq _ ⟨j, _⟩ ⟨j, _⟩ j (𝟙 j) (𝟙 j)]
+      rw [CategoryTheory.Functor.map_id]
+      dsimp
+      rw [mul_zero x]
+      rfl
+    zero_mul := fun x => by
+      refine Quot.inductionOn x ?_; clear x; intro x
+      obtain ⟨j, x⟩ := x
+      erw [colimit_zero_eq _ j, colimit_mul_mk_eq _ ⟨j, _⟩ ⟨j, _⟩ j (𝟙 j) (𝟙 j)]
+      rw [CategoryTheory.Functor.map_id]
+      dsimp
+      rw [zero_mul x]
+      rfl
+    left_distrib := fun x y z => by
+      refine Quot.induction_on₃ x y z ?_; clear x y z; intro x y z
+      obtain ⟨j₁, x⟩ := x; obtain ⟨j₂, y⟩ := y; obtain ⟨j₃, z⟩ := z
+      let k := IsFiltered.max₃ j₁ j₂ j₃
+      let f := IsFiltered.firstToMax₃ j₁ j₂ j₃
+      let g := IsFiltered.secondToMax₃ j₁ j₂ j₃
+      let h := IsFiltered.thirdToMax₃ j₁ j₂ j₃
+      erw [colimit_add_mk_eq _ ⟨j₂, _⟩ ⟨j₃, _⟩ k g h, colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨k, _⟩ k f (𝟙 k),
+        colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨j₂, _⟩ k f g, colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨j₃, _⟩ k f h,
+        colimit_add_mk_eq _ ⟨k, _⟩ ⟨k, _⟩ k (𝟙 k) (𝟙 k)]
+      simp only [CategoryTheory.Functor.map_id]
+      erw [left_distrib (F.map f x) (F.map g y) (F.map h z)]
+      rfl
+    right_distrib := fun x y z => by
+      refine Quot.induction_on₃ x y z ?_; clear x y z; intro x y z
+      obtain ⟨j₁, x⟩ := x; obtain ⟨j₂, y⟩ := y; obtain ⟨j₃, z⟩ := z
+      let k := IsFiltered.max₃ j₁ j₂ j₃
+      let f := IsFiltered.firstToMax₃ j₁ j₂ j₃
+      let g := IsFiltered.secondToMax₃ j₁ j₂ j₃
+      let h := IsFiltered.thirdToMax₃ j₁ j₂ j₃
+      erw [colimit_add_mk_eq _ ⟨j₁, _⟩ ⟨j₂, _⟩ k f g, colimit_mul_mk_eq _ ⟨k, _⟩ ⟨j₃, _⟩ k (𝟙 k) h,
+        colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨j₃, _⟩ k f h, colimit_mul_mk_eq _ ⟨j₂, _⟩ ⟨j₃, _⟩ k g h,
+        colimit_add_mk_eq _ ⟨k, _⟩ ⟨k, _⟩ k (𝟙 k) (𝟙 k)]
+      simp only [CategoryTheory.Functor.map_id]
+      erw [right_distrib (F.map f x) (F.map g y) (F.map h z)]
+      rfl }
 
 中文:
 实例 colimitSemiring
@@ -112,7 +150,45 @@ instance colimitSemiring
     mul_zero := fun x => by
       refine Quot.inductionOn x ?_; clear x; intro x
       obtain ⟨j, x⟩ := x
-      erw [colimit_zero_eq _ j, colimit_mul_mk_eq 
+      erw [colimit_zero_eq _ j, colimit_mul_mk_eq _ ⟨j, _⟩ ⟨j, _⟩ j (𝟙 j) (𝟙 j)]
+      rw [CategoryTheory.Functor.map_id]
+      dsimp
+      rw [mul_zero x]
+      rfl
+    zero_mul := fun x => by
+      refine Quot.inductionOn x ?_; clear x; intro x
+      obtain ⟨j, x⟩ := x
+      erw [colimit_zero_eq _ j, colimit_mul_mk_eq _ ⟨j, _⟩ ⟨j, _⟩ j (𝟙 j) (𝟙 j)]
+      rw [CategoryTheory.Functor.map_id]
+      dsimp
+      rw [zero_mul x]
+      rfl
+    left_distrib := fun x y z => by
+      refine Quot.induction_on₃ x y z ?_; clear x y z; intro x y z
+      obtain ⟨j₁, x⟩ := x; obtain ⟨j₂, y⟩ := y; obtain ⟨j₃, z⟩ := z
+      let k := IsFiltered.max₃ j₁ j₂ j₃
+      let f := IsFiltered.firstToMax₃ j₁ j₂ j₃
+      let g := IsFiltered.secondToMax₃ j₁ j₂ j₃
+      let h := IsFiltered.thirdToMax₃ j₁ j₂ j₃
+      erw [colimit_add_mk_eq _ ⟨j₂, _⟩ ⟨j₃, _⟩ k g h, colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨k, _⟩ k f (𝟙 k),
+        colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨j₂, _⟩ k f g, colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨j₃, _⟩ k f h,
+        colimit_add_mk_eq _ ⟨k, _⟩ ⟨k, _⟩ k (𝟙 k) (𝟙 k)]
+      simp only [CategoryTheory.Functor.map_id]
+      erw [left_distrib (F.map f x) (F.map g y) (F.map h z)]
+      rfl
+    right_distrib := fun x y z => by
+      refine Quot.induction_on₃ x y z ?_; clear x y z; intro x y z
+      obtain ⟨j₁, x⟩ := x; obtain ⟨j₂, y⟩ := y; obtain ⟨j₃, z⟩ := z
+      let k := IsFiltered.max₃ j₁ j₂ j₃
+      let f := IsFiltered.firstToMax₃ j₁ j₂ j₃
+      let g := IsFiltered.secondToMax₃ j₁ j₂ j₃
+      let h := IsFiltered.thirdToMax₃ j₁ j₂ j₃
+      erw [colimit_add_mk_eq _ ⟨j₁, _⟩ ⟨j₂, _⟩ k f g, colimit_mul_mk_eq _ ⟨k, _⟩ ⟨j₃, _⟩ k (𝟙 k) h,
+        colimit_mul_mk_eq _ ⟨j₁, _⟩ ⟨j₃, _⟩ k f h, colimit_mul_mk_eq _ ⟨j₂, _⟩ ⟨j₃, _⟩ k g h,
+        colimit_add_mk_eq _ ⟨k, _⟩ ⟨k, _⟩ k (𝟙 k) (𝟙 k)]
+      simp only [CategoryTheory.Functor.map_id]
+      erw [right_distrib (F.map f x) (F.map g y) (F.map h z)]
+      rfl }
 
 Depends on / 依赖: AddCommMonCat, AddCommMonCat.FilteredColimits.colimitAddCommMonoid, CategoryTheory, CategoryTheory.Functor.map_id, FilteredColimits, Functor, Quot.inductionOn, SemiRingCat, colimitAddCommMonoid, colimit_mul_mk_eq, colimit_zero_eq, inductionOn, map_id, mul_zero, zero_mul
 -/
@@ -193,7 +269,10 @@ definition colimitCocone
         { ((MonCat.FilteredColimits.colimitCocone
             (F ⋙ forget₂ SemiRingCat.{max v u} MonCat)).ι.app j).hom,
             ((AddCommMonCat.FilteredColimits.colimitCocone
-              (F ⋙ forget₂ SemiRingCat.{max v u} AddCommMonCat)).ι.ap
+              (F ⋙ forget₂ SemiRingCat.{max v u} AddCommMonCat)).ι.app j).hom with }
+      naturality _ _ f := by
+        ext
+        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget SemiRingCat)).ι.naturality_apply f _ }
 
 中文:
 定义 colimitCocone
@@ -204,7 +283,10 @@ definition colimitCocone
         { ((MonCat.FilteredColimits.colimitCocone
             (F ⋙ forget₂ SemiRingCat.{max v u} MonCat)).ι.app j).hom,
             ((AddCommMonCat.FilteredColimits.colimitCocone
-              (F ⋙ forget₂ SemiRingCat.{max v u} AddCommMonCat)).ι.ap
+              (F ⋙ forget₂ SemiRingCat.{max v u} AddCommMonCat)).ι.app j).hom with }
+      naturality _ _ f := by
+        ext
+        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget SemiRingCat)).ι.naturality_apply f _ }
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, TopModuleCat, colimit
 -/
@@ -362,7 +444,11 @@ definition colimitCoconeIsColimit
         change descAddMonoidHom t (x * y) =
           descAddMonoidHom t x * descAddMonoidHom t y
         simp [← descMonoidHom_apply_eq] }
-  fac t j := by ext x; exact de
+  fac t j := by ext x; exact descAddMonoidHom_quotMk t x
+  uniq t m hm := by
+    ext ⟨j, x⟩
+    exact (ConcreteCategory.congr_hom ((forget SemiRingCat).congr_map (hm j)) x).trans
+      (descAddMonoidHom_quotMk t x).symm
 
 中文:
 定义 colimitCoconeIsColimit
@@ -374,7 +460,11 @@ definition colimitCoconeIsColimit
         change descAddMonoidHom t (x * y) =
           descAddMonoidHom t x * descAddMonoidHom t y
         simp [← descMonoidHom_apply_eq] }
-  fac t j := by ext x; exact de
+  fac t j := by ext x; exact descAddMonoidHom_quotMk t x
+  uniq t m hm := by
+    ext ⟨j, x⟩
+    exact (ConcreteCategory.congr_hom ((forget SemiRingCat).congr_map (hm j)) x).trans
+      (descAddMonoidHom_quotMk t x).symm
 -/
 def colimitCoconeIsColimit : IsColimit colimitCocone.{v, u} F where
   desc t := ofHom
@@ -522,7 +612,7 @@ definition colimitCocone
       naturality _ _ f := by
         ext
         simpa using! (Types.TypeMax.colimitCocone
-          (F ⋙ forget CommSemiRin
+          (F ⋙ forget CommSemiRingCat)).ι.naturality_apply f _ }
 
 中文:
 定义 colimitCocone
@@ -534,7 +624,7 @@ definition colimitCocone
       naturality _ _ f := by
         ext
         simpa using! (Types.TypeMax.colimitCocone
-          (F ⋙ forget CommSemiRin
+          (F ⋙ forget CommSemiRingCat)).ι.naturality_apply f _ }
 
 Depends on / 依赖: colimit
 -/
@@ -710,7 +800,7 @@ definition colimitCocone
           (F ⋙ forget₂ RingCat SemiRingCat.{max v u})).ι.app X).hom
       naturality _ _ f := by
         ext
-        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget RingCat)).ι.naturality_apply 
+        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget RingCat)).ι.naturality_apply f _ }
 
 中文:
 定义 colimitCocone
@@ -721,7 +811,7 @@ definition colimitCocone
           (F ⋙ forget₂ RingCat SemiRingCat.{max v u})).ι.app X).hom
       naturality _ _ f := by
         ext
-        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget RingCat)).ι.naturality_apply 
+        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget RingCat)).ι.naturality_apply f _ }
 
 Depends on / 依赖: colimit
 -/
@@ -923,7 +1013,7 @@ definition colimitCocone
           (F ⋙ forget₂ CommRingCat RingCat.{max v u})).ι.app X).hom
       naturality _ _ f := by
         ext
-        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget CommRingCat)).ι.naturality_apply 
+        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget CommRingCat)).ι.naturality_apply f _ }
 
 中文:
 定义 colimitCocone
@@ -934,7 +1024,7 @@ definition colimitCocone
           (F ⋙ forget₂ CommRingCat RingCat.{max v u})).ι.app X).hom
       naturality _ _ f := by
         ext
-        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget CommRingCat)).ι.naturality_apply 
+        simpa using! (Types.TypeMax.colimitCocone (F ⋙ forget CommRingCat)).ι.naturality_apply f _ }
 
 Depends on / 依赖: colimit
 -/
@@ -1036,7 +1126,8 @@ lemma nontrivial
   refine ⟨c.ι.app i 0, c.ι.app i 1, fun h => ?_⟩
   have : IsFiltered J := ⟨⟩
   obtain ⟨k, f, e⟩ :=
-    (Types.FilteredColimit.isColimit_eq_i
+    (Types.FilteredColimit.isColimit_eq_iff' (isColimitOfPreserves (forget _) hc) _ _).mp h
+  exact zero_ne_one (((F.map f).hom.map_zero.symm.trans e).trans (F.map f).hom.map_one)
 
 中文:
 引理 nontrivial
@@ -1048,7 +1139,8 @@ lemma nontrivial
   refine ⟨c.ι.app i 0, c.ι.app i 1, fun h => ?_⟩
   have : IsFiltered J := ⟨⟩
   obtain ⟨k, f, e⟩ :=
-    (Types.FilteredColimit.isColimit_eq_i
+    (Types.FilteredColimit.isColimit_eq_iff' (isColimitOfPreserves (forget _) hc) _ _).mp h
+  exact zero_ne_one (((F.map f).hom.map_zero.symm.trans e).trans (F.map f).hom.map_one)
 -/
 protected lemma nontrivial {F : J ⥤ CommRingCat.{v}} [IsFilteredOrEmpty J]
     [forall i, Nontrivial (F.obj i)] {c : Cocone F} (hc : IsColimit c) : Nontrivial c.pt := by

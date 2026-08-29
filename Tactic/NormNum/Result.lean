@@ -1002,7 +1002,9 @@ definition Result.isRat
     .isInt q(DivisionRing.toRing) n q.num q(IsRat.to_isInt $proof)
   else if 0 <= q then
     let proof : Q(IsRat $x (.ofNat $lit) $d) := proof
-    .isNNRat q(DivisionRing.toDivisionSemiring) q lit
+    .isNNRat q(DivisionRing.toDivisionSemiring) q lit d q(IsRat.to_isNNRat $proof)
+  else
+    .isNegNNRat inst q lit d proof
 
 中文:
 定义 Result.isRat
@@ -1013,7 +1015,9 @@ definition Result.isRat
     .isInt q(DivisionRing.toRing) n q.num q(IsRat.to_isInt $proof)
   else if 0 <= q then
     let proof : Q(IsRat $x (.ofNat $lit) $d) := proof
-    .isNNRat q(DivisionRing.toDivisionSemiring) q lit
+    .isNNRat q(DivisionRing.toDivisionSemiring) q lit d q(IsRat.to_isNNRat $proof)
+  else
+    .isNegNNRat inst q lit d proof
 
 Depends on / 依赖: DivisionRing, DivisionRing.toDivisionSemiring, DivisionRing.toRing, IsRat.to_isInt, IsRat.to_isNNRat, Result, appArg, isNNRat, isNegNNRat, n.appArg, nat_lit, q.den, q.num, toDivisionSemiring, toRing, to_isInt, to_isNNRat
 -/
@@ -1145,7 +1149,11 @@ definition Result.toRat'
   | .isNegNat _ lit proof =>
     have proof : Q(@IsInt _ DivisionRing.toRing $e (.negOfNat $lit)) := proof
     some ⟨-lit.natLit!, q(.negOfNat $lit), q(nat_lit 1),
-      q(@IsInt.to_isRat _ DivisionRing.toRin
+      q(@IsInt.to_isRat _ DivisionRing.toRing _ _ $proof)⟩
+  | .isNNRat inst q n d proof =>
+letI : inst =Q DivisionRing.toDivisionSemiring := ⟨⟩
+    some ⟨q, q(.ofNat $n), d, q(IsNNRat.to_isRat $proof)⟩
+  | .isNegNNRat _ q n d proof => some ⟨q, q(.negOfNat $n), d, proof⟩
 
 中文:
 定义 Result.toRat'
@@ -1155,7 +1163,11 @@ definition Result.toRat'
   | .isNegNat _ lit proof =>
     have proof : Q(@IsInt _ DivisionRing.toRing $e (.negOfNat $lit)) := proof
     some ⟨-lit.natLit!, q(.negOfNat $lit), q(nat_lit 1),
-      q(@IsInt.to_isRat _ DivisionRing.toRin
+      q(@IsInt.to_isRat _ DivisionRing.toRing _ _ $proof)⟩
+  | .isNNRat inst q n d proof =>
+letI : inst =Q DivisionRing.toDivisionSemiring := ⟨⟩
+    some ⟨q, q(.ofNat $n), d, q(IsNNRat.to_isRat $proof)⟩
+  | .isNegNNRat _ q n d proof => some ⟨q, q(.negOfNat $n), d, proof⟩
 
 Depends on / 依赖: DivisionRing, DivisionRing.toRing, IsInt.to_isRat, Result, instAddMonoidWithOne, isBool, isNegNat, lit.natLit, natLit, nat_lit, negOfNat, toRing, to_isNNRat, to_isNNRat.to_isRat, to_isRat, with_reducible
 -/
@@ -1187,7 +1199,9 @@ definition Result.toRawEq
     have e : Q(Prop) := e; have p : Q($e) := p
     ⟨(q(True) : Expr), (q(eq_true $p) : Expr)⟩
   | .isNat _ lit p => ⟨q(Nat.rawCast $lit), q(IsNat.to_raw_eq $p)⟩
-  | .isNegNat _ lit p => ⟨q(Int.rawCast (.ne
+  | .isNegNat _ lit p => ⟨q(Int.rawCast (.negOfNat $lit)), q(IsInt.to_raw_eq $p)⟩
+  | .isNNRat _ _ n d p => ⟨q(NNRat.rawCast $n $d), q(IsNNRat.to_raw_eq $p)⟩
+  | .isNegNNRat _ _ n d p => ⟨q(Rat.rawCast (.negOfNat $n) $d), q(IsRat.to_raw_eq $p)⟩
 
 中文:
 定义 Result.toRawEq
@@ -1198,7 +1212,9 @@ definition Result.toRawEq
     have e : Q(Prop) := e; have p : Q($e) := p
     ⟨(q(True) : Expr), (q(eq_true $p) : Expr)⟩
   | .isNat _ lit p => ⟨q(Nat.rawCast $lit), q(IsNat.to_raw_eq $p)⟩
-  | .isNegNat _ lit p => ⟨q(Int.rawCast (.ne
+  | .isNegNat _ lit p => ⟨q(Int.rawCast (.negOfNat $lit)), q(IsInt.to_raw_eq $p)⟩
+  | .isNNRat _ _ n d p => ⟨q(NNRat.rawCast $n $d), q(IsNNRat.to_raw_eq $p)⟩
+  | .isNegNNRat _ _ n d p => ⟨q(Rat.rawCast (.negOfNat $n) $d), q(IsRat.to_raw_eq $p)⟩
 -/
 def Result.toRawEq {α : Q(Type u)} {e : Q($α)} : Result e -> (e' : Q($α)) × Q($e = $e')
   | .isBool false p =>
@@ -1331,7 +1347,7 @@ definition Result.ofRawRat
     let .app (.app (.app _ (dα : Q(DivisionRing $α))) (.app _ (n : Q(Nat)))) (d : Q(Nat)) := e
       | panic! "not a raw rat cast"
     let hyp : Q(($d : $α) != 0) := hyp.get!
-    .isNeg
+    .isNegNNRat dα q n d (q(IsRat.of_raw $α (.negOfNat $n) $d $hyp) : Expr)
 
 中文:
 定义 Result.ofRawRat
@@ -1344,7 +1360,7 @@ definition Result.ofRawRat
     let .app (.app (.app _ (dα : Q(DivisionRing $α))) (.app _ (n : Q(Nat)))) (d : Q(Nat)) := e
       | panic! "not a raw rat cast"
     let hyp : Q(($d : $α) != 0) := hyp.get!
-    .isNeg
+    .isNegNNRat dα q n d (q(IsRat.of_raw $α (.negOfNat $n) $d $hyp) : Expr)
 
 Depends on / 依赖: Result
 -/
@@ -1371,7 +1387,15 @@ definition Result.toSimpResult
     return { expr := a', proof? := q(IsNat.to_eq $p $pa') }
   | .isNegNat _rα lit p => do
     let ⟨a', pa'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) lit
-    return { expr := q(-$a'), proof? 
+    return { expr := q(-$a'), proof? := q(IsInt.neg_to_eq $p $pa') }
+  | .isNNRat _ _ n d p => do
+    let ⟨n', pn'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) n
+    let ⟨d', pd'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) d
+    return { expr := q($n' / $d'), proof? := q(IsNNRat.to_eq $p $pn' $pd') }
+  | .isNegNNRat _ _ n d p => do
+    let ⟨n', pn'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) n
+    let ⟨d', pd'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) d
+    return { expr := q(-($n' / $d')), proof? := q(IsRat.neg_to_eq $p $pn' $pd') }
 
 中文:
 定义 Result.toSimpResult
@@ -1382,7 +1406,15 @@ definition Result.toSimpResult
     return { expr := a', proof? := q(IsNat.to_eq $p $pa') }
   | .isNegNat _rα lit p => do
     let ⟨a', pa'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) lit
-    return { expr := q(-$a'), proof? 
+    return { expr := q(-$a'), proof? := q(IsInt.neg_to_eq $p $pa') }
+  | .isNNRat _ _ n d p => do
+    let ⟨n', pn'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) n
+    let ⟨d', pd'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) d
+    return { expr := q($n' / $d'), proof? := q(IsNNRat.to_eq $p $pn' $pd') }
+  | .isNegNNRat _ _ n d p => do
+    let ⟨n', pn'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) n
+    let ⟨d', pd'⟩ ← mkOfNat α q(AddCommMonoidWithOne.toAddMonoidWithOne) d
+    return { expr := q(-($n' / $d')), proof? := q(IsRat.neg_to_eq $p $pn' $pd') }
 
 Depends on / 依赖: r.toRawEq, toRawEq
 -/
@@ -1455,7 +1487,11 @@ definition Result.eqTrans
     have b : Q(Prop) := b
     have eq : Q($a = $b) := eq
     have proof : Q(¬ $b) := proof
-    Result.isFalse (x 
+    Result.isFalse (x := a) q($eq ▸ $proof)
+  | .isNat inst lit proof => Result.isNat inst lit q($eq ▸ $proof)
+  | .isNegNat inst lit proof => Result.isNegNat inst lit q($eq ▸ $proof)
+  | .isNNRat inst q n d proof => Result.isNNRat inst q n d q($eq ▸ $proof)
+  | .isNegNNRat inst q n d proof => Result.isNegNNRat inst q n d q($eq ▸ $proof)
 
 中文:
 定义 Result.eqTrans
@@ -1470,7 +1506,11 @@ definition Result.eqTrans
     have b : Q(Prop) := b
     have eq : Q($a = $b) := eq
     have proof : Q(¬ $b) := proof
-    Result.isFalse (x 
+    Result.isFalse (x := a) q($eq ▸ $proof)
+  | .isNat inst lit proof => Result.isNat inst lit q($eq ▸ $proof)
+  | .isNegNat inst lit proof => Result.isNegNat inst lit q($eq ▸ $proof)
+  | .isNNRat inst q n d proof => Result.isNNRat inst q n d q($eq ▸ $proof)
+  | .isNegNNRat inst q n d proof => Result.isNegNNRat inst q n d q($eq ▸ $proof)
 -/
 def Result.eqTrans {α : Q(Type u)} {a b : Q($α)} (eq : Q($a = $b)) : Result b -> Result a
   | .isBool true proof =>

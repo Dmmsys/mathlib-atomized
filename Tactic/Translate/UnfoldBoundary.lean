@@ -90,7 +90,12 @@ definition unfoldConsts
     trace[translate_detail] "unfoldConsts: added a cast from {eType} to {expr}"
     mkAppOptM ``Eq.mp #[eType, expr, proof, e]
   let eTypeWhnf ← whnf (← inferType e)
-  if let .const c us :
+  if let .const c us := eTypeWhnf.getAppFn then
+    if let some (cast, _) := b.casts.find? c then
+      let e := .app (mkAppN (.const cast us) eTypeWhnf.getAppArgs) e
+      trace[translate_detail] "unfoldConsts: created the cast {e} to unfold {.ofConstName c}"
+      return ← unfoldConsts b e
+  return e
 
 中文:
 定义 unfoldConsts
@@ -102,7 +107,12 @@ definition unfoldConsts
     trace[translate_detail] "unfoldConsts: added a cast from {eType} to {expr}"
     mkAppOptM ``Eq.mp #[eType, expr, proof, e]
   let eTypeWhnf ← whnf (← inferType e)
-  if let .const c us :
+  if let .const c us := eTypeWhnf.getAppFn then
+    if let some (cast, _) := b.casts.find? c then
+      let e := .app (mkAppN (.const cast us) eTypeWhnf.getAppArgs) e
+      trace[translate_detail] "unfoldConsts: created the cast {e} to unfold {.ofConstName c}"
+      return ← unfoldConsts b e
+  return e
 -/
 partial def unfoldConsts (b : UnfoldBoundaries) (e : Expr) : SimpM Expr := do
   let eType ← inferType e

@@ -1466,7 +1466,7 @@ instance instPartialOrderPEquiv
         intro a
         rcases h : g a with _ | b
 · exact eq_none_iff_forall_not_mem.2 fun b hb => Option.not_mem_none b h ▸ fg a b hb
-       
+        · exact gf _ _ h)
 
 中文:
 实例 instPartialOrderPEquiv
@@ -1480,7 +1480,7 @@ instance instPartialOrderPEquiv
         intro a
         rcases h : g a with _ | b
 · exact eq_none_iff_forall_not_mem.2 fun b hb => Option.not_mem_none b h ▸ fg a b hb
-       
+        · exact gf _ _ h)
 -/
 instance instPartialOrderPEquiv : PartialOrder (α ≃. β) where
   le f g := forall (a : α) (b : β), b in f a -> b in g a
@@ -1545,6 +1545,16 @@ instance [DecidableEq
         inv := fun a b => by
           have hf := @mem_iff_mem _ _ f a b
           have hg := @mem_iff_mem _ _ g a b
+          simp only [Option.mem_def] at *
+          grind }
+    inf_le_left := fun _ _ _ _ => by simp only [coe_mk, mem_def]; split_ifs <;> simp [*]
+    inf_le_right := fun _ _ _ _ => by simp only [coe_mk, mem_def]; split_ifs <;> simp [*]
+    le_inf := fun f g h fg gh a b => by
+      intro H
+      have hf := fg a b H
+      have hg := gh a b H
+      simp only [Option.mem_def, PEquiv.coe_mk_apply] at *
+      rw [hf]; rw [hg]; rw [if_pos rfl] }
 
 中文:
 实例 [DecidableEq
@@ -1556,6 +1566,16 @@ instance [DecidableEq
         inv := fun a b => by
           have hf := @mem_iff_mem _ _ f a b
           have hg := @mem_iff_mem _ _ g a b
+          simp only [Option.mem_def] at *
+          grind }
+    inf_le_left := fun _ _ _ _ => by simp only [coe_mk, mem_def]; split_ifs <;> simp [*]
+    inf_le_right := fun _ _ _ _ => by simp only [coe_mk, mem_def]; split_ifs <;> simp [*]
+    le_inf := fun f g h fg gh a b => by
+      intro H
+      have hf := fg a b H
+      have hg := gh a b H
+      simp only [Option.mem_def, PEquiv.coe_mk_apply] at *
+      rw [hf]; rw [hg]; rw [if_pos rfl] }
 
 Depends on / 依赖: Option.mem_def, coe_mk, f.symm, g.symm, inf_le_left, inf_le_right, instPartialOrderPEquiv, invFun, le_inf, mem_def, mem_iff_mem, split_ifs
 -/

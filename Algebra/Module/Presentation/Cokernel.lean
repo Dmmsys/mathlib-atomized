@@ -210,7 +210,17 @@ definition isPresentationCore
       linearCombination_var_relation :=
         fun r => s.linearCombination_var_relation (.inl r) }) (by
           rw [LinearMap.range_eq_map]; rw [← hg₁]; rw [Submodule.map_span]; rw [Submodule.span_le]; rw [Set.image_subset_iff]
-          r
+          rintro _ ⟨i, rfl⟩
+          rw [Set.mem_preimage]; rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [← data.π_lift]; rw [Relations.Solution.IsPresentation.π_desc_apply]
+          exact s.linearCombination_var_relation (.inr i))
+  postcomp_desc s := by aesop
+  postcomp_injective h := by
+    ext : 1
+    apply pres₂.toIsPresentation.postcomp_injective
+    ext g
+    exact Relations.Solution.congr_var h g
+
+include hg₁ in
 
 中文:
 定义 isPresentationCore
@@ -220,7 +230,17 @@ definition isPresentationCore
       linearCombination_var_relation :=
         fun r => s.linearCombination_var_relation (.inl r) }) (by
           rw [LinearMap.range_eq_map]; rw [← hg₁]; rw [Submodule.map_span]; rw [Submodule.span_le]; rw [Set.image_subset_iff]
-          r
+          rintro _ ⟨i, rfl⟩
+          rw [Set.mem_preimage]; rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [← data.π_lift]; rw [Relations.Solution.IsPresentation.π_desc_apply]
+          exact s.linearCombination_var_relation (.inr i))
+  postcomp_desc s := by aesop
+  postcomp_injective h := by
+    ext : 1
+    apply pres₂.toIsPresentation.postcomp_injective
+    ext g
+    exact Relations.Solution.congr_var h g
+
+include hg₁ in
 
 Depends on / 依赖: LinearMap, LinearMap.range
 -/

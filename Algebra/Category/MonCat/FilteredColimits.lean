@@ -255,7 +255,11 @@ theorem colimitMulAux_eq_of_rel_left
   replace hfg : F.map f x = F.map g x' := by simpa
   obtain ⟨s, α, β, γ, h₁, h₂, h₃⟩ :=
     IsFiltered.tulip (IsFiltered.leftToMax j₁ j₂) (IsFiltered.rightToMax j₁ j₂)
-      (IsFiltered.rightToMax j₃
+      (IsFiltered.rightToMax j₃ j₂) (IsFiltered.leftToMax j₃ j₂) f g
+  apply M.mk_eq
+  use s, α, γ
+  simp_rw [map_mul, ← ConcreteCategory.comp_apply, ← F.map_comp, h₁, h₂, h₃, F.map_comp,
+    ConcreteCategory.comp_apply, hfg]
 
 中文:
 定理 colimitMulAux_eq_of_rel_left
@@ -266,7 +270,11 @@ theorem colimitMulAux_eq_of_rel_left
   replace hfg : F.map f x = F.map g x' := by simpa
   obtain ⟨s, α, β, γ, h₁, h₂, h₃⟩ :=
     IsFiltered.tulip (IsFiltered.leftToMax j₁ j₂) (IsFiltered.rightToMax j₁ j₂)
-      (IsFiltered.rightToMax j₃
+      (IsFiltered.rightToMax j₃ j₂) (IsFiltered.leftToMax j₃ j₂) f g
+  apply M.mk_eq
+  use s, α, γ
+  simp_rw [map_mul, ← ConcreteCategory.comp_apply, ← F.map_comp, h₁, h₂, h₃, F.map_comp,
+    ConcreteCategory.comp_apply, hfg]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, F.map, F.map_comp, IsFiltered, IsFiltered.leftToMax, IsFiltered.rightToMax, IsFiltered.tulip, M.mk_eq, comp_apply, leftToMax, map_comp, map_mul, mk_eq, replace, rightToMax, simp_rw
 -/
@@ -299,7 +307,12 @@ theorem colimitMulAux_eq_of_rel_right
   simp only [Functor.comp_obj, Functor.comp_map, ConcreteCategory.hom_ofHom,
     TypeCat.Fun.coe_mk] at hfg
   obtain ⟨s, α, β, γ, h₁, h₂, h₃⟩ :=
-    IsFiltered.tulip (IsFiltered.rightToMax j₂ j₁) (Is
+    IsFiltered.tulip (IsFiltered.rightToMax j₂ j₁) (IsFiltered.leftToMax j₂ j₁)
+      (IsFiltered.leftToMax j₂ j₃) (IsFiltered.rightToMax j₂ j₃) f g
+  apply M.mk_eq
+  use s, α, γ
+  simp_rw [map_mul, ← comp_apply, ← F.map_comp, h₁, h₂, h₃, F.map_comp,
+    comp_apply, hfg]
 
 中文:
 定理 colimitMulAux_eq_of_rel_right
@@ -310,7 +323,12 @@ theorem colimitMulAux_eq_of_rel_right
   simp only [Functor.comp_obj, Functor.comp_map, ConcreteCategory.hom_ofHom,
     TypeCat.Fun.coe_mk] at hfg
   obtain ⟨s, α, β, γ, h₁, h₂, h₃⟩ :=
-    IsFiltered.tulip (IsFiltered.rightToMax j₂ j₁) (Is
+    IsFiltered.tulip (IsFiltered.rightToMax j₂ j₁) (IsFiltered.leftToMax j₂ j₁)
+      (IsFiltered.leftToMax j₂ j₃) (IsFiltered.rightToMax j₂ j₃) f g
+  apply M.mk_eq
+  use s, α, γ
+  simp_rw [map_mul, ← comp_apply, ← F.map_comp, h₁, h₂, h₃, F.map_comp,
+    comp_apply, hfg]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, F.map_comp, Functor, Functor.comp_map, Functor.comp_obj, IsFiltered, IsFiltered.leftToMax, IsFiltered.rightToMax, IsFiltered.tulip, M.mk_eq, TypeCat, TypeCat.Fun.coe_mk, coe_mk, comp_apply, comp_map, comp_obj, hom_ofHom, leftToMax, map_comp
 -/
@@ -345,7 +363,8 @@ instance colimitMul
       exact h
     · intro x x' y h
       apply colimitMulAux_eq_of_rel_left
-      apply Types.FilteredColimi
+      apply Types.FilteredColimit.rel_of_colimitTypeRel
+      exact h }
 
 中文:
 实例 colimitMul
@@ -358,7 +377,8 @@ instance colimitMul
       exact h
     · intro x x' y h
       apply colimitMulAux_eq_of_rel_left
-      apply Types.FilteredColimi
+      apply Types.FilteredColimit.rel_of_colimitTypeRel
+      exact h }
 
 Depends on / 依赖: FilteredColimit, Quot.lift, Types.FilteredColimit.rel_of_colimitTypeRel, colimitMulAux, colimitMulAux_eq_of_rel_left, colimitMulAux_eq_of_rel_right, rel_of_colimitTypeRel
 -/
@@ -465,7 +485,9 @@ instance colimitMulOneClass
       rw [colimit_one_eq F j]; rw [colimit_mul_mk_eq']; rw [one_mul]
     mul_one := fun x => by
       obtain ⟨j, x, rfl⟩ := x.mk_surjective
-      rw [colimit_one_eq F j]; rw [colimit_mul_mk_e
+      rw [colimit_one_eq F j]; rw [colimit_mul_mk_eq']; rw [mul_one] }
+
+@[to_additive]
 
 中文:
 实例 colimitMulOneClass
@@ -477,7 +499,9 @@ instance colimitMulOneClass
       rw [colimit_one_eq F j]; rw [colimit_mul_mk_eq']; rw [one_mul]
     mul_one := fun x => by
       obtain ⟨j, x, rfl⟩ := x.mk_surjective
-      rw [colimit_one_eq F j]; rw [colimit_mul_mk_e
+      rw [colimit_one_eq F j]; rw [colimit_mul_mk_eq']; rw [mul_one] }
+
+@[to_additive]
 
 Depends on / 依赖: colimitMul, colimitOne, colimit_mul_mk_eq, colimit_one_eq, mk_surjective, mul_one, one_mul, x.mk_surjective
 -/
@@ -504,7 +528,13 @@ instance colimitMonoid
       obtain ⟨j₂, y₂, rfl⟩ := y.mk_surjective
       obtain ⟨j₃, z₃, rfl⟩ := z.mk_surjective
       obtain ⟨j, f₁, f₂, f₃, x, y, z, h₁, h₂, h₃⟩ :
-          exists (j : J) (f₁ : j₁ ⟶ j) (f₂ : j₂ ⟶
+          exists (j : J) (f₁ : j₁ ⟶ j) (f₂ : j₂ ⟶ j) (f₃ : j₃ ⟶ j) (x y z : F.obj j),
+          F.map f₁ x₁ = x ∧ F.map f₂ y₂ = y ∧ F.map f₃ z₃ = z :=
+        ⟨IsFiltered.max₃ j₁ j₂ j₃, IsFiltered.firstToMax₃ _ _ _,
+          IsFiltered.secondToMax₃ _ _ _, IsFiltered.thirdToMax₃ _ _ _,
+          _, _, _, rfl, rfl, rfl⟩
+      simp only [← M.map_mk F f₁, ← M.map_mk F f₂, ← M.map_mk F f₃, h₁, h₂, h₃,
+        colimit_mul_mk_eq', mul_assoc] }
 
 中文:
 实例 colimitMonoid
@@ -515,7 +545,13 @@ instance colimitMonoid
       obtain ⟨j₂, y₂, rfl⟩ := y.mk_surjective
       obtain ⟨j₃, z₃, rfl⟩ := z.mk_surjective
       obtain ⟨j, f₁, f₂, f₃, x, y, z, h₁, h₂, h₃⟩ :
-          exists (j : J) (f₁ : j₁ ⟶ j) (f₂ : j₂ ⟶
+          exists (j : J) (f₁ : j₁ ⟶ j) (f₂ : j₂ ⟶ j) (f₃ : j₃ ⟶ j) (x y z : F.obj j),
+          F.map f₁ x₁ = x ∧ F.map f₂ y₂ = y ∧ F.map f₃ z₃ = z :=
+        ⟨IsFiltered.max₃ j₁ j₂ j₃, IsFiltered.firstToMax₃ _ _ _,
+          IsFiltered.secondToMax₃ _ _ _, IsFiltered.thirdToMax₃ _ _ _,
+          _, _, _, rfl, rfl, rfl⟩
+      simp only [← M.map_mk F f₁, ← M.map_mk F f₂, ← M.map_mk F f₃, h₁, h₂, h₃,
+        colimit_mul_mk_eq', mul_assoc] }
 
 Depends on / 依赖: F.map, F.obj, IsFiltered, IsFiltered.firstToMax, IsFiltered.max, IsFiltered.secondToMax, IsFiltered.thirdToMax, colimitMulOneClass, mk_surjective, mul_assoc, x.mk_surjective, y.mk_surjective, z.mk_surjective
 -/
@@ -661,7 +697,12 @@ definition colimitDesc
       simp [colimit_one_eq F IsFiltered.nonempty.some]
     map_mul' x y := by
       obtain ⟨i, x, rfl⟩ := x.mk_surjective
-      obtain ⟨j, y, rf
+      obtain ⟨j, y, rfl⟩ := y.mk_surjective
+      rw [colimit_mul_mk_eq F ⟨i]; rw [x⟩ ⟨j]; rw [y⟩ (max' i j) (IsFiltered.leftToMax i j)
+        (IsFiltered.rightToMax i j)]
+      dsimp
+      set_option backward.isDefEq.respectTransparency true in
+      rw [map_mul]; rw [t.w_apply]; rw [t.w_apply] }
 
 中文:
 定义 colimitDesc
@@ -673,7 +714,12 @@ definition colimitDesc
       simp [colimit_one_eq F IsFiltered.nonempty.some]
     map_mul' x y := by
       obtain ⟨i, x, rfl⟩ := x.mk_surjective
-      obtain ⟨j, y, rf
+      obtain ⟨j, y, rfl⟩ := y.mk_surjective
+      rw [colimit_mul_mk_eq F ⟨i]; rw [x⟩ ⟨j]; rw [y⟩ (max' i j) (IsFiltered.leftToMax i j)
+        (IsFiltered.rightToMax i j)]
+      dsimp
+      set_option backward.isDefEq.respectTransparency true in
+      rw [map_mul]; rw [t.w_apply]; rw [t.w_apply] }
 
 Depends on / 依赖: IsFiltered, IsFiltered.leftToMax, IsFiltered.nonempty.some, IsFiltered.rightToMax, MonCat, backward, backward.isDefEq.respectTransparency, coconeTypesEquiv, coconeTypesEquiv.symm, colimit_mul_mk_eq, colimit_one_eq, descColimitType, forget, isDefEq, leftToMax, mapCocone, map_mul, map_one, mk_surjective, nonempty
 -/
@@ -805,7 +851,9 @@ instance colimitCommMonoid
       let k := max' i j
       let f := IsFiltered.leftToMax i j
       let g := IsFiltered.rightToMax i j
-      rw [colimit_mul_mk_eq.{v]; rw [u} (F ⋙ forget₂ Comm
+      rw [colimit_mul_mk_eq.{v]; rw [u} (F ⋙ forget₂ CommMonCat MonCat) ⟨i]; rw [x⟩ ⟨j]; rw [y⟩ k f g]; rw [colimit_mul_mk_eq.{v]; rw [u} (F ⋙ forget₂ CommMonCat MonCat) ⟨j]; rw [y⟩ ⟨i]; rw [x⟩ k g f]
+      dsimp
+      rw [mul_comm] }
 
 中文:
 实例 colimitCommMonoid
@@ -817,7 +865,9 @@ instance colimitCommMonoid
       let k := max' i j
       let f := IsFiltered.leftToMax i j
       let g := IsFiltered.rightToMax i j
-      rw [colimit_mul_mk_eq.{v]; rw [u} (F ⋙ forget₂ Comm
+      rw [colimit_mul_mk_eq.{v]; rw [u} (F ⋙ forget₂ CommMonCat MonCat) ⟨i]; rw [x⟩ ⟨j]; rw [y⟩ k f g]; rw [colimit_mul_mk_eq.{v]; rw [u} (F ⋙ forget₂ CommMonCat MonCat) ⟨j]; rw [y⟩ ⟨i]; rw [x⟩ k g f]
+      dsimp
+      rw [mul_comm] }
 
 Depends on / 依赖: CommMonCat, IsFiltered, IsFiltered.leftToMax, IsFiltered.rightToMax, MonCat, colimit_mul_mk_eq, leftToMax, mk_surjective, mul_comm, rightToMax, x.mk_surjective, y.mk_surjective
 -/
@@ -867,7 +917,7 @@ definition colimitCocone
     (F ⋙ forget₂ CommMonCat MonCat.{max v u})).ι.app j).hom
 ι.naturality _ _ f := hom_ext congr_arg (MonCat.Hom.hom)
     ((MonCat.FilteredColimits.colimitCocone.{v, u}
-      (F ⋙ forget₂ CommMonCat MonCat.{max v u})).
+      (F ⋙ forget₂ CommMonCat MonCat.{max v u})).ι.naturality f)
 
 中文:
 定义 colimitCocone
@@ -877,7 +927,7 @@ definition colimitCocone
     (F ⋙ forget₂ CommMonCat MonCat.{max v u})).ι.app j).hom
 ι.naturality _ _ f := hom_ext congr_arg (MonCat.Hom.hom)
     ((MonCat.FilteredColimits.colimitCocone.{v, u}
-      (F ⋙ forget₂ CommMonCat MonCat.{max v u})).
+      (F ⋙ forget₂ CommMonCat MonCat.{max v u})).ι.naturality f)
 
 Depends on / 依赖: colimit
 -/

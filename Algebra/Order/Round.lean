@@ -65,7 +65,20 @@ theorem round_eq_div
   statement: round x = (⌊2 * x⌋ + 1) / 2
   proof: by
   rw [← floor_add_fract x]; rw [round]; rw [fract_intCast_add]; rw [fract_fract]; rw [floor_intCast_add]; rw [mul_add]; rw [← Int.cast_ofNat]; rw [← Int.cast_mul]; rw [floor_intCast_add]; rw [ceil_intCast_add]; rw [add_assoc]; rw [Int.mul_add_ediv_left _ _ two_ne_zero]; rw [Int.cast_ofNat]
-  spli
+  split_ifs with h <;> congr 1
+  · rw [Int.floor_eq_zero_iff.mpr, Int.floor_eq_zero_iff.mpr]
+    · simp
+    · simp [h]
+    · suffices fract x < 1 by simpa
+      refine lt_of_le_of_lt ?_ h
+      apply le_mul_of_one_le_left <;> simp
+  · have H : ⌊2 * fract x⌋ = 1 := by simpa [floor_eq_iff, ← two_mul, fract_lt_one] using h
+    suffices 0 < fract x by simp [this, H, ceil_eq_iff, (fract_lt_one _).le]
+    contrapose! h
+    grw [h]
+    simp
+
+@[simp]
 
 中文:
 定理 round_eq_div
@@ -73,7 +86,20 @@ theorem round_eq_div
   结论: round x = (⌊2 * x⌋ + 1) / 2
   证明: by
   rw [← floor_add_fract x]; rw [round]; rw [fract_intCast_add]; rw [fract_fract]; rw [floor_intCast_add]; rw [mul_add]; rw [← Int.cast_ofNat]; rw [← Int.cast_mul]; rw [floor_intCast_add]; rw [ceil_intCast_add]; rw [add_assoc]; rw [Int.mul_add_ediv_left _ _ two_ne_zero]; rw [Int.cast_ofNat]
-  spli
+  split_ifs with h <;> congr 1
+  · rw [Int.floor_eq_zero_iff.mpr, Int.floor_eq_zero_iff.mpr]
+    · simp
+    · simp [h]
+    · suffices fract x < 1 by simpa
+      refine lt_of_le_of_lt ?_ h
+      apply le_mul_of_one_le_left <;> simp
+  · have H : ⌊2 * fract x⌋ = 1 := by simpa [floor_eq_iff, ← two_mul, fract_lt_one] using h
+    suffices 0 < fract x by simp [this, H, ceil_eq_iff, (fract_lt_one _).le]
+    contrapose! h
+    grw [h]
+    simp
+
+@[simp]
 
 Depends on / 依赖: Int.cast_mul, Int.cast_ofNat, Int.floor_eq_zero_iff.mpr, Int.mul_add_ediv_left, add_assoc, cast_mul, cast_ofNat, ceil_intCast_add, floor_add_fract, floor_eq_zero_iff, floor_intCast_add, fract_fract, fract_intCast_add, le_mul_of_one_le_left, lt_of_le_of_lt, mul_add, mul_add_ediv_left, split_ifs, two_ne_zero
 -/
@@ -209,7 +235,12 @@ theorem round_eq_half_ceil_two_mul
   · rw [← hm, ceil_intCast]
     rcases m.even_or_odd with ⟨m, rfl⟩ | ⟨m, rfl⟩
 · obtain rfl : m = x := mul_left_cancel₀ two_ne_zero by simp [← hm, ← two_mul]
-      rw [round_intCast]; rw [← two_mul]; rw [Int.mul_ediv_cancel_left _ two_ne_zer
+      rw [round_intCast]; rw [← two_mul]; rw [Int.mul_ediv_cancel_left _ two_ne_zero]
+    · refine absurd ?_ hx
+      exact (mul_fract_eq_one_iff_exists_int one_lt_two).mpr ⟨m, mod_cast hm.symm⟩
+  · rw [round_eq_div, (ceil_eq_floor_add_one_iff_notMem _).mpr hx']
+
+@[simp]
 
 中文:
 定理 round_eq_half_ceil_two_mul
@@ -220,7 +251,12 @@ theorem round_eq_half_ceil_two_mul
   · rw [← hm, ceil_intCast]
     rcases m.even_or_odd with ⟨m, rfl⟩ | ⟨m, rfl⟩
 · obtain rfl : m = x := mul_left_cancel₀ two_ne_zero by simp [← hm, ← two_mul]
-      rw [round_intCast]; rw [← two_mul]; rw [Int.mul_ediv_cancel_left _ two_ne_zer
+      rw [round_intCast]; rw [← two_mul]; rw [Int.mul_ediv_cancel_left _ two_ne_zero]
+    · refine absurd ?_ hx
+      exact (mul_fract_eq_one_iff_exists_int one_lt_two).mpr ⟨m, mod_cast hm.symm⟩
+  · rw [round_eq_div, (ceil_eq_floor_add_one_iff_notMem _).mpr hx']
+
+@[simp]
 
 Depends on / 依赖: Int.cast, Int.mul_ediv_cancel_left, absurd, ceil_eq_floor_add_one_iff_notMem, ceil_intCast, even_or_odd, hm.symm, m.even_or_odd, mod_cast, mul_ediv_cancel_left, mul_fract_eq_one_iff_exists_int, one_lt_two, round_eq_div, round_intCast, two_mul, two_ne_zero
 -/
@@ -533,7 +569,8 @@ theorem abs_sub_round_eq_min
   · rw [if_pos hx, if_pos hx, self_sub_floor, abs_fract]
   · have : 0 < fract x := by
       replace hx : 0 < fract x + fract x := lt_of_lt_of_le zero_lt_one (tsub_le_iff_left.mp hx)
- 
+      simpa only [← two_mul, mul_pos_iff_of_pos_left, zero_lt_two] using hx
+    rw [if_neg (not_lt.mpr hx)]; rw [if_neg (not_lt.mpr hx)]; rw [abs_sub_comm]; rw [ceil_sub_self_eq this.ne.symm]; rw [abs_one_sub_fract]
 
 中文:
 定理 abs_sub_round_eq_min
@@ -545,7 +582,8 @@ theorem abs_sub_round_eq_min
   · rw [if_pos hx, if_pos hx, self_sub_floor, abs_fract]
   · have : 0 < fract x := by
       replace hx : 0 < fract x + fract x := lt_of_lt_of_le zero_lt_one (tsub_le_iff_left.mp hx)
- 
+      simpa only [← two_mul, mul_pos_iff_of_pos_left, zero_lt_two] using hx
+    rw [if_neg (not_lt.mpr hx)]; rw [if_neg (not_lt.mpr hx)]; rw [abs_sub_comm]; rw [ceil_sub_self_eq this.ne.symm]; rw [abs_one_sub_fract]
 
 Depends on / 依赖: abs_fract, abs_one_sub_fract, abs_sub_comm, ceil_sub_self_eq, if_neg, if_pos, lt_of_lt_of_le, lt_or_ge, lt_tsub_iff_left, min_def_lt, mul_pos_iff_of_pos_left, not_lt, not_lt.mpr, replace, self_sub_floor, simp_rw, this.ne.symm, tsub_le_iff_left, tsub_le_iff_left.mp, two_mul
 -/
@@ -570,7 +608,11 @@ theorem round_le
   rcases le_or_gt (z : α) x with (hx | hx) <;> [left; right]
   · conv_rhs => rw [abs_eq_self.mpr (sub_nonneg.mpr hx), ← fract_add_floor x, add_sub_assoc]
     simpa only [le_add_iff_nonneg_right, sub_nonneg, cast_le] using le_floor.mpr hx
-  · rw [abs_eq
+  · rw [abs_eq_neg_self.mpr (sub_neg.mpr hx).le]
+    conv_rhs => rw [← fract_add_floor x]
+    rw [add_sub_assoc]; rw [add_comm]; rw [neg_add]; rw [neg_sub]; rw [le_add_neg_iff_add_le]; rw [sub_add_cancel]; rw [le_sub_comm]
+    norm_cast
+    rwa [le_sub_one_iff, floor_lt]
 
 中文:
 定理 round_le
@@ -581,7 +623,11 @@ theorem round_le
   rcases le_or_gt (z : α) x with (hx | hx) <;> [left; right]
   · conv_rhs => rw [abs_eq_self.mpr (sub_nonneg.mpr hx), ← fract_add_floor x, add_sub_assoc]
     simpa only [le_add_iff_nonneg_right, sub_nonneg, cast_le] using le_floor.mpr hx
-  · rw [abs_eq
+  · rw [abs_eq_neg_self.mpr (sub_neg.mpr hx).le]
+    conv_rhs => rw [← fract_add_floor x]
+    rw [add_sub_assoc]; rw [add_comm]; rw [neg_add]; rw [neg_sub]; rw [le_add_neg_iff_add_le]; rw [sub_add_cancel]; rw [le_sub_comm]
+    norm_cast
+    rwa [le_sub_one_iff, floor_lt]
 
 Depends on / 依赖: abs_eq_neg_self, abs_eq_neg_self.mpr, abs_eq_self, abs_eq_self.mpr, abs_sub_round_eq_min, add_comm, add_sub_assoc, cast_le, conv_rhs, fract_add_floor, le_add_iff_nonneg_right, le_add_neg_iff_add_le, le_floor, le_floor.mpr, le_or_gt, le_sub_comm, min_le_iff, neg_add, neg_sub, sub_add_cancel
 -/
@@ -764,7 +810,7 @@ theorem abs_sub_round_div_natCast_eq
     norm_cast
   rw [abs_sub_round_eq_min]; rw [Nat.cast_min]; rw [← min_div_div_right hn'.le]; rw [fract_div_natCast_eq_div_natCast_mod]; rw [Nat.cast_sub (m.mod_lt hn).le]; rw [sub_div]; rw [div_self hn'.ne']
 
-@[bo
+@[bound]
 
 中文:
 定理 abs_sub_round_div_natCast_eq
@@ -776,7 +822,7 @@ theorem abs_sub_round_div_natCast_eq
     norm_cast
   rw [abs_sub_round_eq_min]; rw [Nat.cast_min]; rw [← min_div_div_right hn'.le]; rw [fract_div_natCast_eq_div_natCast_mod]; rw [Nat.cast_sub (m.mod_lt hn).le]; rw [sub_div]; rw [div_self hn'.ne']
 
-@[bo
+@[bound]
 
 Depends on / 依赖: Nat.cast_min, Nat.cast_sub, abs_sub_round_eq_min, cast_min, cast_sub, div_self, eq_zero_or_pos, fract_div_natCast_eq_div_natCast_mod, m.mod_lt, min_div_div_right, mod_lt, n.eq_zero_or_pos, sub_div
 -/

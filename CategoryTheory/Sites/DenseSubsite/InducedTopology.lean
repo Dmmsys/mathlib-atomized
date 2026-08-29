@@ -116,7 +116,33 @@ theorem coverPreserving_restrictedTopology
     | top X => simp
     | pullback X S _ Y f ih =>
       apply K.transitive (LocallyCoverDense.functorPushforward_functorPullback_mem
-        ⟨_, K.pullback_stable (
+        ⟨_, K.pullback_stable (G.map f) ih⟩)
+      rintro Z _ ⟨U, iUY, iZU, ⟨W, iWX, iUW, hiWX, e₁⟩, rfl⟩
+      rw [Sieve.pullback_comp]
+      apply K.pullback_stable
+      clear iZU Z
+      apply K.transitive (G.functorPushforward_imageSieve_mem _ iUW)
+      rintro Z _ ⟨U₁, iU₁U, iZU₁, ⟨iU₁W, e₂⟩, rfl⟩
+      rw [Sieve.pullback_comp]
+      apply K.pullback_stable
+      clear iZU₁ Z
+      apply K.superset_covering ?_ (G.functorPushforward_equalizer_mem _
+        (iU₁U ≫ iUY ≫ f) (iU₁W ≫ iWX) (by simp [e₁, e₂]))
+      rintro Z _ ⟨U₂, iU₂U₁, iZU₂, e₃ : _ = _, rfl⟩
+      refine ⟨_, iU₂U₁ ≫ iU₁U ≫ iUY, iZU₂, ?_, by simp⟩
+      simpa [e₃] using S.downward_closed hiWX (iU₂U₁ ≫ iU₁W)
+    | transitive X S R _ _ hS H' =>
+      apply K.transitive hS
+      rintro Y _ ⟨Z, g, i, hg, rfl⟩
+      rw [Sieve.pullback_comp]
+      apply K.pullback_stable i
+      refine K.superset_covering ?_ (H' hg)
+      rintro W _ ⟨Z', g', i', hg, rfl⟩
+      refine ⟨Z', g' ≫ g, i', hg, ?_⟩
+      simp
+
+@[deprecated (since := "2026-05-28")]
+alias inducedTopology_coverPreserving := coverPreserving_restrictedTopology
 
 中文:
 定理 coverPreserving_restrictedTopology
@@ -128,7 +154,33 @@ theorem coverPreserving_restrictedTopology
     | top X => simp
     | pullback X S _ Y f ih =>
       apply K.transitive (LocallyCoverDense.functorPushforward_functorPullback_mem
-        ⟨_, K.pullback_stable (
+        ⟨_, K.pullback_stable (G.map f) ih⟩)
+      rintro Z _ ⟨U, iUY, iZU, ⟨W, iWX, iUW, hiWX, e₁⟩, rfl⟩
+      rw [Sieve.pullback_comp]
+      apply K.pullback_stable
+      clear iZU Z
+      apply K.transitive (G.functorPushforward_imageSieve_mem _ iUW)
+      rintro Z _ ⟨U₁, iU₁U, iZU₁, ⟨iU₁W, e₂⟩, rfl⟩
+      rw [Sieve.pullback_comp]
+      apply K.pullback_stable
+      clear iZU₁ Z
+      apply K.superset_covering ?_ (G.functorPushforward_equalizer_mem _
+        (iU₁U ≫ iUY ≫ f) (iU₁W ≫ iWX) (by simp [e₁, e₂]))
+      rintro Z _ ⟨U₂, iU₂U₁, iZU₂, e₃ : _ = _, rfl⟩
+      refine ⟨_, iU₂U₁ ≫ iU₁U ≫ iUY, iZU₂, ?_, by simp⟩
+      simpa [e₃] using S.downward_closed hiWX (iU₂U₁ ≫ iU₁W)
+    | transitive X S R _ _ hS H' =>
+      apply K.transitive hS
+      rintro Y _ ⟨Z, g, i, hg, rfl⟩
+      rw [Sieve.pullback_comp]
+      apply K.pullback_stable i
+      refine K.superset_covering ?_ (H' hg)
+      rintro W _ ⟨Z', g', i', hg, rfl⟩
+      refine ⟨Z', g' ≫ g, i', hg, ?_⟩
+      simp
+
+@[deprecated (since := "2026-05-28")]
+alias inducedTopology_coverPreserving := coverPreserving_restrictedTopology
 
 Depends on / 依赖: Functor, Functor.restrictedTopology, G.functorPushforward_imageSieve_mem, G.map, K.pullback_stable, K.transitive, LocallyCoverDense, LocallyCoverDense.functorPushforward_functorPullback_mem, Sieve.generate_map_eq_functorPushforward, Sieve.pullback_comp, functorPushforward_functorPullback_mem, functorPushforward_imageSieve_mem, generate_map_eq_functorPushforward, pullback, pullback_comp, pullback_stable, restrictedTopology, transitive
 -/
@@ -340,7 +392,8 @@ lemma locallyCoverDense_of_map_functorPullback_mem
     refine ⟨_, H hR, ?_⟩
     refine le_trans ?_
       (Presieve.functorPushforward_monotone (Presieve.functorPullback_monotone hle))
-    rw [← Sieve.arrows_generate_map_eq_
+    rw [← Sieve.arrows_generate_map_eq_functorPushforward]
+    exact Sieve.le_generate _
 
 中文:
 引理 locallyCoverDense_of_map_functorPullback_mem
@@ -350,7 +403,8 @@ lemma locallyCoverDense_of_map_functorPullback_mem
     refine ⟨_, H hR, ?_⟩
     refine le_trans ?_
       (Presieve.functorPushforward_monotone (Presieve.functorPullback_monotone hle))
-    rw [← Sieve.arrows_generate_map_eq_
+    rw [← Sieve.arrows_generate_map_eq_functorPushforward]
+    exact Sieve.le_generate _
 
 Depends on / 依赖: Precoverage, Precoverage.mem_toGrothendieck_iff_of_isStableUnderComposition, Presieve, Presieve.functorPullback_monotone, Presieve.functorPushforward_monotone, Sieve.arrows_generate_map_eq_functorPushforward, Sieve.le_generate, arrows_generate_map_eq_functorPushforward, functorPullback_monotone, functorPushforward_monotone, le_generate, le_trans, mem_toGrothendieck_iff_of_isStableUnderComposition
 -/
@@ -379,7 +433,20 @@ lemma toGrothendieck_comap_eq_restrictedTopology
   refine le_antisymm ?_ fun X T hT => ?_
   · apply toGrothendieck_comap_le_restrictedTopology
   · rw [Functor.mem_restrictedTopology_iff] at hT
-    rw [Precoverage.mem_toGrothendieck_iff_of_isS
+    rw [Precoverage.mem_toGrothendieck_iff_of_isStableUnderComposition] at hT
+    obtain ⟨R, hR, hle⟩ := hT
+    refine GrothendieckTopology.superset_covering
+        (S := Sieve.generate (Presieve.functorPullback F R)) _ ?_ ?_
+    · refine le_trans (le_trans (Sieve.generate_functorPullback_le F R)
+        (Sieve.functorPullback_monotone _ _ (Sieve.generate_mono hle))) ?_
+      rw [Sieve.generate_sieve]; rw [Sieve.functorPullback_functorPushforward_eq]
+    · exact Precoverage.generate_mem_toGrothendieck (H hR)
+
+@[deprecated (since := "2026-05-28")]
+alias toGrothendieck_comap_eq_inducedTopology := toGrothendieck_comap_eq_restrictedTopology
+
+@[deprecated (since := "2026-05-28")]
+alias toGrothendieck_comap_le_inducedTopology := toGrothendieck_comap_le_restrictedTopology
 
 中文:
 引理 toGrothendieck_comap_eq_restrictedTopology
@@ -390,7 +457,20 @@ lemma toGrothendieck_comap_eq_restrictedTopology
   refine le_antisymm ?_ fun X T hT => ?_
   · apply toGrothendieck_comap_le_restrictedTopology
   · rw [Functor.mem_restrictedTopology_iff] at hT
-    rw [Precoverage.mem_toGrothendieck_iff_of_isS
+    rw [Precoverage.mem_toGrothendieck_iff_of_isStableUnderComposition] at hT
+    obtain ⟨R, hR, hle⟩ := hT
+    refine GrothendieckTopology.superset_covering
+        (S := Sieve.generate (Presieve.functorPullback F R)) _ ?_ ?_
+    · refine le_trans (le_trans (Sieve.generate_functorPullback_le F R)
+        (Sieve.functorPullback_monotone _ _ (Sieve.generate_mono hle))) ?_
+      rw [Sieve.generate_sieve]; rw [Sieve.functorPullback_functorPushforward_eq]
+    · exact Precoverage.generate_mem_toGrothendieck (H hR)
+
+@[deprecated (since := "2026-05-28")]
+alias toGrothendieck_comap_eq_inducedTopology := toGrothendieck_comap_eq_restrictedTopology
+
+@[deprecated (since := "2026-05-28")]
+alias toGrothendieck_comap_le_inducedTopology := toGrothendieck_comap_le_restrictedTopology
 
 Depends on / 依赖: F.LocallyCoverDense, Functor, Functor.mem_restrictedTopology_iff, GrothendieckTopology, GrothendieckTopology.superset_covering, K.locallyCoverDense_of_map_functorPullback_mem, K.toGrothendieck, LocallyCoverDense, Precoverage, Precoverage.mem_toGrothendieck_iff_of_isStableUnderComposition, Presieve, Presieve.functorPullback, Sieve.generate, Sieve.generate_functorPul, functorPullback, generate, generate_functorPul, le_antisymm, le_trans, locallyCoverDense_of_map_functorPullback_mem
 -/

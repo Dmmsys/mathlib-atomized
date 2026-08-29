@@ -534,7 +534,7 @@ theorem StrictConvexOn.comp
     (hg' (mem_image_of_mem f <| hf.1 hx hy ha.le hb.le hab)
 (hg.1 (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab)
           hf.2 hx hy hxy ha hb hab).trans <|
-      hg.2 (mem_image_of_mem f hx) (mem_image_of_mem f hy) (mt (hf' hx hy) hxy) ha
+      hg.2 (mem_image_of_mem f hx) (mem_image_of_mem f hy) (mt (hf' hx hy) hxy) ha hb hab⟩
 
 中文:
 定理 StrictConvexOn.comp
@@ -543,7 +543,7 @@ theorem StrictConvexOn.comp
     (hg' (mem_image_of_mem f <| hf.1 hx hy ha.le hb.le hab)
 (hg.1 (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab)
           hf.2 hx hy hxy ha hb hab).trans <|
-      hg.2 (mem_image_of_mem f hx) (mem_image_of_mem f hy) (mt (hf' hx hy) hxy) ha
+      hg.2 (mem_image_of_mem f hx) (mem_image_of_mem f hy) (mt (hf' hx hy) hxy) ha hb hab⟩
 
 Depends on / 依赖: ha.le, hb.le, mem_image_of_mem
 -/
@@ -624,7 +624,7 @@ theorem ConvexOn.comp_strictConvexOn
   refine ⟨hf.left, fun x hx y hy hxy a b ha hb hab => .trans_le (b := g (a • f x + b • f y)) ?_ ?_⟩
 · refine hg' (mem_image_of_mem f <| hf.1 hx hy ha.le hb.le hab) ?_ hf.2 hx hy hxy ha hb hab
     exact hg.left (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab
-  · exact hg.right (mem
+  · exact hg.right (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab
 
 中文:
 定理 ConvexOn.comp_strictConvexOn
@@ -633,7 +633,7 @@ theorem ConvexOn.comp_strictConvexOn
   refine ⟨hf.left, fun x hx y hy hxy a b ha hb hab => .trans_le (b := g (a • f x + b • f y)) ?_ ?_⟩
 · refine hg' (mem_image_of_mem f <| hf.1 hx hy ha.le hb.le hab) ?_ hf.2 hx hy hxy ha hb hab
     exact hg.left (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab
-  · exact hg.right (mem
+  · exact hg.right (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab
 
 Depends on / 依赖: ha.le, hb.le, hf.left, hg.left, hg.right, mem_image_of_mem, trans_le
 -/
@@ -711,7 +711,8 @@ theorem StrictConvexOn.comp_convexOn
   refine ⟨hf.left, fun x hx y hy hxy a b ha hb hab => .trans_le' (b := g (a • f x + b • f y)) ?_ ?_⟩
   · exact hg.right (mem_image_of_mem f hx) (mem_image_of_mem f hy) (hf'.ne hx hy hxy) ha hb hab
 · refine hg' ?_ ?_ hf.right hx hy ha.le hb.le hab
-· exact mem_image_of_mem f hf.left hx hy ha.le hb.
+· exact mem_image_of_mem f hf.left hx hy ha.le hb.le hab
+    · exact hg.left (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab
 
 中文:
 定理 StrictConvexOn.comp_convexOn
@@ -720,7 +721,8 @@ theorem StrictConvexOn.comp_convexOn
   refine ⟨hf.left, fun x hx y hy hxy a b ha hb hab => .trans_le' (b := g (a • f x + b • f y)) ?_ ?_⟩
   · exact hg.right (mem_image_of_mem f hx) (mem_image_of_mem f hy) (hf'.ne hx hy hxy) ha hb hab
 · refine hg' ?_ ?_ hf.right hx hy ha.le hb.le hab
-· exact mem_image_of_mem f hf.left hx hy ha.le hb.
+· exact mem_image_of_mem f hf.left hx hy ha.le hb.le hab
+    · exact hg.left (mem_image_of_mem f hx) (mem_image_of_mem f hy) ha.le hb.le hab
 
 Depends on / 依赖: ha.le, hb.le, hf.left, hf.right, hg.left, hg.right, mem_image_of_mem, trans_le
 -/
@@ -807,7 +809,7 @@ theorem ConvexOn.add
       f (a • x + b • y) + g (a • x + b • y) <= a • f x + b • f y + (a • g x + b • g y) :=
         add_le_add (hf.2 hx hy ha hb hab) (hg.2 hx hy ha hb hab)
       _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_comm]
-      
+      ⟩
 
 中文:
 定理 ConvexOn.add
@@ -818,7 +820,7 @@ theorem ConvexOn.add
       f (a • x + b • y) + g (a • x + b • y) <= a • f x + b • f y + (a • g x + b • g y) :=
         add_le_add (hf.2 hx hy ha hb hab) (hg.2 hx hy ha hb hab)
       _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_comm]
-      
+      ⟩
 
 Depends on / 依赖: add_add_add_comm, add_le_add, smul_add
 -/
@@ -1149,7 +1151,7 @@ theorem ConvexOn.translate_right
       f (c + (a • x + b • y)) = f (a • (c + x) + b • (c + y)) := by
         rw [smul_add]; rw [smul_add]; rw [add_add_add_comm]; rw [Convex.combo_self hab]
       _ <= a • f (c + x) + b • f (c + y) := hf.2 hx hy ha hb hab
-     
+      ⟩
 
 中文:
 定理 ConvexOn.translate_right
@@ -1159,7 +1161,7 @@ theorem ConvexOn.translate_right
       f (c + (a • x + b • y)) = f (a • (c + x) + b • (c + y)) := by
         rw [smul_add]; rw [smul_add]; rw [add_add_add_comm]; rw [Convex.combo_self hab]
       _ <= a • f (c + x) + b • f (c + y) := hf.2 hx hy ha hb hab
-     
+      ⟩
 
 Depends on / 依赖: Convex, Convex.combo_self, add_add_add_comm, combo_self, smul_add, translate_preimage_right
 -/
@@ -1251,7 +1253,10 @@ theorem convexOn_iff_forall_pos
     subst b
     simp_rw [zero_smul, zero_add, one_smul, le_rfl]
   obtain rfl | hb' := hb.eq_or_lt
-  · rw [add_ze
+  · rw [add_zero] at hab
+    subst a
+    simp_rw [zero_smul, add_zero, one_smul, le_rfl]
+  exact h hx hy ha' hb' hab
 
 中文:
 定理 convexOn_iff_对任意_pos
@@ -1264,7 +1269,10 @@ theorem convexOn_iff_forall_pos
     subst b
     simp_rw [zero_smul, zero_add, one_smul, le_rfl]
   obtain rfl | hb' := hb.eq_or_lt
-  · rw [add_ze
+  · rw [add_zero] at hab
+    subst a
+    simp_rw [zero_smul, add_zero, one_smul, le_rfl]
+  exact h hx hy ha' hb' hab
 
 Depends on / 依赖: add_zero, and_congr_right, eq_or_lt, ha.eq_or_lt, ha.le, hb.eq_or_lt, hb.le, le_rfl, one_smul, simp_rw, zero_add, zero_smul
 -/
@@ -1467,7 +1475,8 @@ theorem StrictConvexOn.convex_lt
           gcongr
           · exact hx.2.le
           · exact hy.2.le
-        _ =
+        _ = r := Convex.combo_self hab r
+        ⟩
 
 中文:
 定理 StrictConvexOn.convex_lt
@@ -1480,7 +1489,8 @@ theorem StrictConvexOn.convex_lt
           gcongr
           · exact hx.2.le
           · exact hy.2.le
-        _ =
+        _ = r := Convex.combo_self hab r
+        ⟩
 
 Depends on / 依赖: Convex, Convex.combo_self, combo_self, convex_iff_pairwise_pos, ha.le, hb.le
 -/
@@ -1717,7 +1727,7 @@ theorem StrictConvexOn.add_convexOn
     calc
       f (a • x + b • y) + g (a • x + b • y) < a • f x + b • f y + (a • g x + b • g y) :=
         add_lt_add_of_lt_of_le (hf.2 hx hy hxy ha hb hab) (hg.2 hx hy ha.le hb.le hab)
-      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add,
+      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_comm]⟩
 
 中文:
 定理 StrictConvexOn.add_convexOn
@@ -1726,7 +1736,7 @@ theorem StrictConvexOn.add_convexOn
     calc
       f (a • x + b • y) + g (a • x + b • y) < a • f x + b • f y + (a • g x + b • g y) :=
         add_lt_add_of_lt_of_le (hf.2 hx hy hxy ha hb hab) (hg.2 hx hy ha.le hb.le hab)
-      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add,
+      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_comm]⟩
 
 Depends on / 依赖: add_add_add_comm, add_lt_add_of_lt_of_le, ha.le, hb.le, smul_add
 -/
@@ -1767,7 +1777,7 @@ theorem StrictConvexOn.add
     calc
       f (a • x + b • y) + g (a • x + b • y) < a • f x + b • f y + (a • g x + b • g y) :=
         add_lt_add (hf.2 hx hy hxy ha hb hab) (hg.2 hx hy hxy ha hb hab)
-      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_c
+      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_comm]⟩
 
 中文:
 定理 StrictConvexOn.add
@@ -1776,7 +1786,7 @@ theorem StrictConvexOn.add
     calc
       f (a • x + b • y) + g (a • x + b • y) < a • f x + b • f y + (a • g x + b • g y) :=
         add_lt_add (hf.2 hx hy hxy ha hb hab) (hg.2 hx hy hxy ha hb hab)
-      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_c
+      _ = a • (f x + g x) + b • (f y + g y) := by rw [smul_add, smul_add, add_add_add_comm]⟩
 
 Depends on / 依赖: add_add_add_comm, add_lt_add, smul_add
 -/
@@ -1904,7 +1914,8 @@ theorem ConvexOn.convex_lt
         f (a • x + b • y) <= a • f x + b • f y := hf.2 hx.1 hy.1 ha.le hb.le hab
         _ < a • r + b • r :=
           (add_lt_add_of_lt_of_le (smul_lt_smul_of_pos_left hx.2 ha)
-            (smul_
+            (smul_le_smul_of_nonneg_left hy.2.le hb.le))
+        _ = r := Convex.combo_self hab _⟩
 
 中文:
 定理 ConvexOn.convex_lt
@@ -1916,7 +1927,8 @@ theorem ConvexOn.convex_lt
         f (a • x + b • y) <= a • f x + b • f y := hf.2 hx.1 hy.1 ha.le hb.le hab
         _ < a • r + b • r :=
           (add_lt_add_of_lt_of_le (smul_lt_smul_of_pos_left hx.2 ha)
-            (smul_
+            (smul_le_smul_of_nonneg_left hy.2.le hb.le))
+        _ = r := Convex.combo_self hab _⟩
 
 Depends on / 依赖: Convex, Convex.combo_self, add_lt_add_of_lt_of_le, combo_self, convex_iff_forall_pos, hT.toLinearMap.re_inner_nonneg_right, ha.le, hb.le, re_inner_nonneg_right, smul_le_smul_of_nonneg_left, smul_lt_smul_of_pos_left, toLinearMap
 -/
@@ -1962,7 +1974,7 @@ theorem ConvexOn.openSegment_subset_strict_epigraph
   calc
     f (a • p.1 + b • q.1) <= a • f p.1 + b • f q.1 := hf.2 hp.1 hq.1 ha.le hb.le hab
     _ < a • p.2 + b • q.2 := add_lt_add_of_lt_of_le
-       (smul_lt_smul_of_pos_left hp.2 ha) (smul_le_smul_of_nonneg_left 
+       (smul_lt_smul_of_pos_left hp.2 ha) (smul_le_smul_of_nonneg_left hq.2 hb.le)
 
 中文:
 定理 ConvexOn.openSegment_subset_strict_epigraph
@@ -1973,7 +1985,7 @@ theorem ConvexOn.openSegment_subset_strict_epigraph
   calc
     f (a • p.1 + b • q.1) <= a • f p.1 + b • f q.1 := hf.2 hp.1 hq.1 ha.le hb.le hab
     _ < a • p.2 + b • q.2 := add_lt_add_of_lt_of_le
-       (smul_lt_smul_of_pos_left hp.2 ha) (smul_le_smul_of_nonneg_left 
+       (smul_lt_smul_of_pos_left hp.2 ha) (smul_le_smul_of_nonneg_left hq.2 hb.le)
 
 Depends on / 依赖: add_lt_add_of_lt_of_le, ha.le, hb.le, smul_le_smul_of_nonneg_left, smul_lt_smul_of_pos_left
 -/
@@ -2071,7 +2083,8 @@ theorem ConvexOn.sup
       f (a • x + b • y) <= a • f x + b • f y := hf.right hx hy ha hb hab
       _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_left
   · calc
-      g (a • x + b • y) <= a • g x + b • g y := hg.right hx hy
+      g (a • x + b • y) <= a • g x + b • g y := hg.right hx hy ha hb hab
+      _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_right
 
 中文:
 定理 ConvexOn.上确界
@@ -2083,7 +2096,8 @@ theorem ConvexOn.sup
       f (a • x + b • y) <= a • f x + b • f y := hf.right hx hy ha hb hab
       _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_left
   · calc
-      g (a • x + b • y) <= a • g x + b • g y := hg.right hx hy
+      g (a • x + b • y) <= a • g x + b • g y := hg.right hx hy ha hb hab
+      _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_right
 
 Depends on / 依赖: hf.left, hf.right, hg.right, le_sup_left, le_sup_right, sup_le
 -/
@@ -2128,7 +2142,8 @@ theorem StrictConvexOn.sup
         f (a • x + b • y) < a • f x + b • f y := hf.2 hx hy hxy ha hb hab
         _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_left)
       (calc
-        g (a • x + b • y) < a • g x + b • g y := hg.2 hx hy hxy
+        g (a • x + b • y) < a • g x + b • g y := hg.2 hx hy hxy ha hb hab
+        _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_right)⟩
 
 中文:
 定理 StrictConvexOn.上确界
@@ -2139,7 +2154,8 @@ theorem StrictConvexOn.sup
         f (a • x + b • y) < a • f x + b • f y := hf.2 hx hy hxy ha hb hab
         _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_left)
       (calc
-        g (a • x + b • y) < a • g x + b • g y := hg.2 hx hy hxy
+        g (a • x + b • y) < a • g x + b • g y := hg.2 hx hy hxy ha hb hab
+        _ <= a • (f x ⊔ g x) + b • (f y ⊔ g y) := by gcongr <;> apply le_sup_right)⟩
 
 Depends on / 依赖: hf.left, le_sup_left, le_sup_right, max_lt
 -/
@@ -2390,7 +2406,7 @@ theorem ConvexOn.le_left_of_right_le'
       f (a • x + b • y) <= a • f x + b • f y := hf.2 hx hy ha.le hb hab
       _ < a • f (a • x + b • y) + b • f (a • x + b • y) := add_lt_add_of_lt_of_le
           (smul_lt_smul_of_pos_left h ha) (smul_le_smul_of_nonneg_left hfy hb)
-      
+      _ = f (a • x + b • y) := Convex.combo_self hab _
 
 中文:
 定理 ConvexOn.le_left_of_right_le'
@@ -2400,7 +2416,7 @@ theorem ConvexOn.le_left_of_right_le'
       f (a • x + b • y) <= a • f x + b • f y := hf.2 hx hy ha.le hb hab
       _ < a • f (a • x + b • y) + b • f (a • x + b • y) := add_lt_add_of_lt_of_le
           (smul_lt_smul_of_pos_left h ha) (smul_le_smul_of_nonneg_left hfy hb)
-      
+      _ = f (a • x + b • y) := Convex.combo_self hab _
 
 Depends on / 依赖: Convex, Convex.combo_self, add_lt_add_of_lt_of_le, combo_self, ha.le, le_of_not_gt, lt_irrefl, smul_le_smul_of_nonneg_left, smul_lt_smul_of_pos_left
 -/
@@ -2583,7 +2599,7 @@ theorem ConvexOn.lt_left_of_right_lt'
       f (a • x + b • y) <= a • f x + b • f y := hf.2 hx hy ha.le hb.le hab
       _ < a • f (a • x + b • y) + b • f (a • x + b • y) := add_lt_add_of_le_of_lt
           (smul_le_smul_of_nonneg_left h ha.le) (smul_lt_smul_of_pos_left hfy hb)
-    
+      _ = f (a • x + b • y) := Convex.combo_self hab _
 
 中文:
 定理 ConvexOn.lt_left_of_right_lt'
@@ -2593,7 +2609,7 @@ theorem ConvexOn.lt_left_of_right_lt'
       f (a • x + b • y) <= a • f x + b • f y := hf.2 hx hy ha.le hb.le hab
       _ < a • f (a • x + b • y) + b • f (a • x + b • y) := add_lt_add_of_le_of_lt
           (smul_le_smul_of_nonneg_left h ha.le) (smul_lt_smul_of_pos_left hfy hb)
-    
+      _ = f (a • x + b • y) := Convex.combo_self hab _
 
 Depends on / 依赖: Convex, Convex.combo_self, add_lt_add_of_le_of_lt, combo_self, ha.le, hb.le, lt_irrefl, not_le, smul_le_smul_of_nonneg_left, smul_lt_smul_of_pos_left
 -/
@@ -2784,7 +2800,7 @@ theorem neg_convexOn_iff
     refine ⟨hconv, fun x hx y hy a b ha hb hab => ?_⟩
     rw [← neg_le_neg_iff]
     simp_rw [neg_add, Pi.neg_apply, smul_neg, neg_neg]
-    e
+    exact h hx hy ha hb hab
 
 中文:
 定理 neg_convexOn_iff
@@ -2798,7 +2814,7 @@ theorem neg_convexOn_iff
     refine ⟨hconv, fun x hx y hy a b ha hb hab => ?_⟩
     rw [← neg_le_neg_iff]
     simp_rw [neg_add, Pi.neg_apply, smul_neg, neg_neg]
-    e
+    exact h hx hy ha hb hab
 
 Depends on / 依赖: Pi.neg_apply, add_comm, neg_add, neg_apply, neg_le_neg_iff, neg_neg, simp_rw, smul_neg
 -/
@@ -2851,7 +2867,10 @@ theorem neg_strictConvexOn_iff
       add_neg_lt_iff_lt_add] at h
     exact h hx hy hxy ha hb hab
   · rintro ⟨hconv, h⟩
-    refine ⟨hconv, fun x hx y hy hxy
+    refine ⟨hconv, fun x hx y hy hxy a b ha hb hab => ?_⟩
+    rw [← neg_lt_neg_iff]
+    simp_rw [neg_add, Pi.neg_apply, smul_neg, neg_neg]
+    exact h hx hy hxy ha hb hab
 
 中文:
 定理 neg_strictConvexOn_iff
@@ -2864,7 +2883,10 @@ theorem neg_strictConvexOn_iff
       add_neg_lt_iff_lt_add] at h
     exact h hx hy hxy ha hb hab
   · rintro ⟨hconv, h⟩
-    refine ⟨hconv, fun x hx y hy hxy
+    refine ⟨hconv, fun x hx y hy hxy a b ha hb hab => ?_⟩
+    rw [← neg_lt_neg_iff]
+    simp_rw [neg_add, Pi.neg_apply, smul_neg, neg_neg]
+    exact h hx hy hxy ha hb hab
 
 Depends on / 依赖: Pi.neg_apply, add_comm, add_neg_lt_iff_lt_add, lt_add_neg_iff_add_lt, ne_eq, neg_add, neg_apply, neg_lt_neg_iff, neg_neg, simp_rw, smul_neg
 -/
@@ -3101,7 +3123,7 @@ theorem StrictConvexOn.translate_right
     calc
       f (c + (a • x + b • y)) = f (a • (c + x) + b • (c + y)) := by
         rw [smul_add]; rw [smul_add]; rw [add_add_add_comm]; rw [Convex.combo_self hab]
-      _ < a • f (c + x) + b • f (c + y) := hf.2 hx hy ((add_right_
+      _ < a • f (c + x) + b • f (c + y) := hf.2 hx hy ((add_right_injective c).ne hxy) ha hb hab⟩
 
 中文:
 定理 StrictConvexOn.translate_right
@@ -3110,7 +3132,7 @@ theorem StrictConvexOn.translate_right
     calc
       f (c + (a • x + b • y)) = f (a • (c + x) + b • (c + y)) := by
         rw [smul_add]; rw [smul_add]; rw [add_add_add_comm]; rw [Convex.combo_self hab]
-      _ < a • f (c + x) + b • f (c + y) := hf.2 hx hy ((add_right_
+      _ < a • f (c + x) + b • f (c + y) := hf.2 hx hy ((add_right_injective c).ne hxy) ha hb hab⟩
 
 Depends on / 依赖: Convex, Convex.combo_self, add_add_add_comm, add_right_injective, combo_self, smul_add, translate_preimage_right
 -/
@@ -3476,7 +3498,9 @@ theorem OrderIso.strictConvexOn_symm
   obtain ⟨x', hx''⟩ := f.surjective.exists.mp ⟨x, rfl⟩
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   have hxy' : x' != y' := by rw [← f.injective.ne_iff, ← hx'', ← hy'']; exact hxy
-  simp only [hx'', hy'', OrderIso.symm_apply_
+  simp only [hx'', hy'', OrderIso.symm_apply_apply, gt_iff_lt]
+  rw [← f.lt_iff_lt]; rw [OrderIso.apply_symm_apply]
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) hxy' ha hb hab
 
 中文:
 定理 OrderIso.strictConvexOn_symm
@@ -3486,7 +3510,9 @@ theorem OrderIso.strictConvexOn_symm
   obtain ⟨x', hx''⟩ := f.surjective.exists.mp ⟨x, rfl⟩
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   have hxy' : x' != y' := by rw [← f.injective.ne_iff, ← hx'', ← hy'']; exact hxy
-  simp only [hx'', hy'', OrderIso.symm_apply_
+  simp only [hx'', hy'', OrderIso.symm_apply_apply, gt_iff_lt]
+  rw [← f.lt_iff_lt]; rw [OrderIso.apply_symm_apply]
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) hxy' ha hb hab
 
 Depends on / 依赖: OrderIso, OrderIso.apply_symm_apply, OrderIso.symm_apply_apply, apply_symm_apply, convex_univ, f.injective.ne_iff, f.lt_iff_lt, f.surjective.exists.mp, gt_iff_lt, injective, lt_iff_lt, ne_iff, surjective, symm_apply_apply
 -/
@@ -3512,7 +3538,7 @@ theorem OrderIso.convexOn_symm
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   simp only [hx'', hy'', OrderIso.symm_apply_apply]
   rw [← f.le_iff_le]; rw [OrderIso.apply_symm_apply]
-  exact hf.2 (by simp : x'
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) ha hb hab
 
 中文:
 定理 OrderIso.convexOn_symm
@@ -3523,7 +3549,7 @@ theorem OrderIso.convexOn_symm
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   simp only [hx'', hy'', OrderIso.symm_apply_apply]
   rw [← f.le_iff_le]; rw [OrderIso.apply_symm_apply]
-  exact hf.2 (by simp : x'
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) ha hb hab
 
 Depends on / 依赖: OrderIso, OrderIso.apply_symm_apply, OrderIso.symm_apply_apply, apply_symm_apply, convex_univ, f.le_iff_le, f.surjective.exists.mp, le_iff_le, surjective, symm_apply_apply
 -/
@@ -3547,7 +3573,9 @@ theorem OrderIso.strictConcaveOn_symm
   obtain ⟨x', hx''⟩ := f.surjective.exists.mp ⟨x, rfl⟩
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   have hxy' : x' != y' := by rw [← f.injective.ne_iff, ← hx'', ← hy'']; exact hxy
-  simp only [hx'', hy'', OrderIso.symm_apply_
+  simp only [hx'', hy'', OrderIso.symm_apply_apply, gt_iff_lt]
+  rw [← f.lt_iff_lt]; rw [OrderIso.apply_symm_apply]
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) hxy' ha hb hab
 
 中文:
 定理 OrderIso.strictConcaveOn_symm
@@ -3557,7 +3585,9 @@ theorem OrderIso.strictConcaveOn_symm
   obtain ⟨x', hx''⟩ := f.surjective.exists.mp ⟨x, rfl⟩
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   have hxy' : x' != y' := by rw [← f.injective.ne_iff, ← hx'', ← hy'']; exact hxy
-  simp only [hx'', hy'', OrderIso.symm_apply_
+  simp only [hx'', hy'', OrderIso.symm_apply_apply, gt_iff_lt]
+  rw [← f.lt_iff_lt]; rw [OrderIso.apply_symm_apply]
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) hxy' ha hb hab
 
 Depends on / 依赖: OrderIso, OrderIso.apply_symm_apply, OrderIso.symm_apply_apply, apply_symm_apply, convex_univ, f.injective.ne_iff, f.lt_iff_lt, f.surjective.exists.mp, gt_iff_lt, injective, lt_iff_lt, ne_iff, surjective, symm_apply_apply
 -/
@@ -3583,7 +3613,7 @@ theorem OrderIso.concaveOn_symm
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   simp only [hx'', hy'', OrderIso.symm_apply_apply]
   rw [← f.le_iff_le]; rw [OrderIso.apply_symm_apply]
-  exact hf.2 (by simp : x'
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) ha hb hab
 
 中文:
 定理 OrderIso.concaveOn_symm
@@ -3594,7 +3624,7 @@ theorem OrderIso.concaveOn_symm
   obtain ⟨y', hy''⟩ := f.surjective.exists.mp ⟨y, rfl⟩
   simp only [hx'', hy'', OrderIso.symm_apply_apply]
   rw [← f.le_iff_le]; rw [OrderIso.apply_symm_apply]
-  exact hf.2 (by simp : x'
+  exact hf.2 (by simp : x' in univ) (by simp : y' in univ) ha hb hab
 
 Depends on / 依赖: OrderIso, OrderIso.apply_symm_apply, OrderIso.symm_apply_apply, apply_symm_apply, convex_univ, f.le_iff_le, f.surjective.exists.mp, le_iff_le, surjective, symm_apply_apply
 -/
@@ -3632,7 +3662,7 @@ have hz : z in s := hf.1 hx hy (by simp) (by simp) by norm_num
   calc
 f z < _ := hf.2 hx hy hxy (by simp) (by simp) by norm_num
     _ <= (2 : 𝕜)⁻¹ • f z + (2 : 𝕜)⁻¹ • f z := by gcongr; exacts [hfx hz, hfy hz]
-   
+    _ = f z := by rw [← _root_.add_smul]; norm_num
 
 中文:
 引理 StrictConvexOn.eq_of_isMinOn
@@ -3645,7 +3675,7 @@ have hz : z in s := hf.1 hx hy (by simp) (by simp) by norm_num
   calc
 f z < _ := hf.2 hx hy hxy (by simp) (by simp) by norm_num
     _ <= (2 : 𝕜)⁻¹ • f z + (2 : 𝕜)⁻¹ • f z := by gcongr; exacts [hfx hz, hfy hz]
-   
+    _ = f z := by rw [← _root_.add_smul]; norm_num
 
 Depends on / 依赖: _root_, _root_.add_smul, add_smul, exacts, lt_irrefl
 -/

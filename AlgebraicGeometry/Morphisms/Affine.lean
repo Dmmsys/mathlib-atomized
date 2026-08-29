@@ -184,7 +184,15 @@ lemma isAffine_of_isAffineOpen_basicOpen_aux
   intro U V
   obtain ⟨s', hs', e⟩ := (Ideal.span_eq_top_iff_finite _).mp hs
   rw [← Set.inter_univ (_ inter _)]; rw [← Opens.coe_top]; rw [← iSup_basicOpen_of_span_eq_top _ _ e]; rw [← iSup_subtype'']; rw [Opens.coe_iSup]; rw [Set.inter_iUnion]
-  
+  apply isCompact_iUnion
+  intro i
+  rw [Set.inter_inter_distrib_right]
+  refine (hs₂ i (hs' i.2)).isQuasiSeparated _ _ Set.inter_subset_right
+    (U.1.2.inter (X.basicOpen _).2) ?_ Set.inter_subset_right (V.1.2.inter (X.basicOpen _).2) ?_
+  · rw [← Opens.coe_inf, ← X.basicOpen_res _ (homOfLE le_top).op]
+    exact (U.2.basicOpen _).isCompact
+  · rw [← Opens.coe_inf, ← X.basicOpen_res _ (homOfLE le_top).op]
+    exact (V.2.basicOpen _).isCompact
 
 中文:
 引理 isAffine_of_isAffineOpen_basicOpen_aux
@@ -194,7 +202,15 @@ lemma isAffine_of_isAffineOpen_basicOpen_aux
   intro U V
   obtain ⟨s', hs', e⟩ := (Ideal.span_eq_top_iff_finite _).mp hs
   rw [← Set.inter_univ (_ inter _)]; rw [← Opens.coe_top]; rw [← iSup_basicOpen_of_span_eq_top _ _ e]; rw [← iSup_subtype'']; rw [Opens.coe_iSup]; rw [Set.inter_iUnion]
-  
+  apply isCompact_iUnion
+  intro i
+  rw [Set.inter_inter_distrib_right]
+  refine (hs₂ i (hs' i.2)).isQuasiSeparated _ _ Set.inter_subset_right
+    (U.1.2.inter (X.basicOpen _).2) ?_ Set.inter_subset_right (V.1.2.inter (X.basicOpen _).2) ?_
+  · rw [← Opens.coe_inf, ← X.basicOpen_res _ (homOfLE le_top).op]
+    exact (U.2.basicOpen _).isCompact
+  · rw [← Opens.coe_inf, ← X.basicOpen_res _ (homOfLE le_top).op]
+    exact (V.2.basicOpen _).isCompact
 -/
 private lemma isAffine_of_isAffineOpen_basicOpen_aux (s : Set Γ(X, ⊤))
     (hs : Ideal.span s = ⊤) (hs₂ : forall i in s, IsAffineOpen (X.basicOpen i)) :
@@ -226,7 +242,22 @@ lemma isAffine_of_isAffineOpen_basicOpen
   have : CompactSpace X := by
     obtain ⟨s', hs', e⟩ := (Ideal.span_eq_top_iff_finite _).mp hs
     rw [← isCompact_univ_iff]; rw [← Opens.coe_top]; rw [← iSup_basicOpen_of_span_eq_top _ _ e]
-    simp only [Finset.m
+    simp only [Finset.mem_coe, Opens.iSup_mk, Opens.carrier_eq_coe, Opens.coe_mk]
+    apply s'.isCompact_biUnion
+    exact fun i hi => (hs₂ _ (hs' hi)).isCompact
+  constructor
+  refine HasAffineProperty.of_iSup_eq_top (P := MorphismProperty.isomorphisms Scheme)
+    (fun i : s => ⟨PrimeSpectrum.basicOpen i.1, ?_⟩) ?_ (fun i => ⟨?_, ?_⟩)
+  · change IsAffineOpen _
+    simp only [← basicOpen_eq_of_affine]
+    exact (isAffineOpen_top (Scheme.Spec.obj (op _))).basicOpen _
+  · rw [PrimeSpectrum.iSup_basicOpen_eq_top_iff, Subtype.range_coe_subtype, Set.ofPred_mem_eq, hs]
+  · rw [Scheme.toSpecΓ_preimage_basicOpen]
+    exact hs₂ _ i.2
+  · simp only [Opens.map_top, morphismRestrict_app]
+    refine IsIso.comp_isIso' ?_ inferInstance
+    convert! isIso_ΓSpec_adjunction_unit_app_basicOpen i.1 using 0
+    exact congr(IsIso ((ΓSpec.adjunction.unit.app X).app $(by simp)))
 
 中文:
 引理 isAffine_of_isAffineOpen_basicOpen
@@ -236,7 +267,22 @@ lemma isAffine_of_isAffineOpen_basicOpen
   have : CompactSpace X := by
     obtain ⟨s', hs', e⟩ := (Ideal.span_eq_top_iff_finite _).mp hs
     rw [← isCompact_univ_iff]; rw [← Opens.coe_top]; rw [← iSup_basicOpen_of_span_eq_top _ _ e]
-    simp only [Finset.m
+    simp only [Finset.mem_coe, Opens.iSup_mk, Opens.carrier_eq_coe, Opens.coe_mk]
+    apply s'.isCompact_biUnion
+    exact fun i hi => (hs₂ _ (hs' hi)).isCompact
+  constructor
+  refine HasAffineProperty.of_iSup_eq_top (P := MorphismProperty.isomorphisms Scheme)
+    (fun i : s => ⟨PrimeSpectrum.basicOpen i.1, ?_⟩) ?_ (fun i => ⟨?_, ?_⟩)
+  · change IsAffineOpen _
+    simp only [← basicOpen_eq_of_affine]
+    exact (isAffineOpen_top (Scheme.Spec.obj (op _))).basicOpen _
+  · rw [PrimeSpectrum.iSup_basicOpen_eq_top_iff, Subtype.range_coe_subtype, Set.ofPred_mem_eq, hs]
+  · rw [Scheme.toSpecΓ_preimage_basicOpen]
+    exact hs₂ _ i.2
+  · simp only [Opens.map_top, morphismRestrict_app]
+    refine IsIso.comp_isIso' ?_ inferInstance
+    convert! isIso_ΓSpec_adjunction_unit_app_basicOpen i.1 using 0
+    exact congr(IsIso ((ΓSpec.adjunction.unit.app X).app $(by simp)))
 
 Depends on / 依赖: CompactSpace, Finset, Finset.mem_coe, HasAffineProperty, HasAffineProperty.of_iSup_eq_top, Ideal.span_eq_top_iff_finite, MorphismProperty, MorphismProperty.isomorphis, Opens.carrier_eq_coe, Opens.coe_mk, Opens.coe_top, Opens.iSup_mk, QuasiSeparatedSpace, carrier_eq_coe, coe_mk, coe_top, iSup_basicOpen_of_span_eq_top, iSup_mk, isAffine_of_isAffineOpen_basicOpen_aux, isCompact
 -/
@@ -276,7 +322,7 @@ lemma isAffineOpen_of_isAffineOpen_basicOpen
   · rw [← Ideal.map_span U.topIso.inv.hom, hs, Ideal.map_top]
   · rintro _ ⟨j, hj, rfl⟩
     rw [← (Scheme.Opens.ι _).isAffineOpen_iff_of_isOpenImmersion]; rw [Scheme.image_basicOpen]
-    simpa [Scheme.Opens.toScheme_presheaf_obj] usin
+    simpa [Scheme.Opens.toScheme_presheaf_obj] using hs₂ j hj
 
 中文:
 引理 isAffineOpen_of_isAffineOpen_basicOpen
@@ -286,7 +332,7 @@ lemma isAffineOpen_of_isAffineOpen_basicOpen
   · rw [← Ideal.map_span U.topIso.inv.hom, hs, Ideal.map_top]
   · rintro _ ⟨j, hj, rfl⟩
     rw [← (Scheme.Opens.ι _).isAffineOpen_iff_of_isOpenImmersion]; rw [Scheme.image_basicOpen]
-    simpa [Scheme.Opens.toScheme_presheaf_obj] usin
+    simpa [Scheme.Opens.toScheme_presheaf_obj] using hs₂ j hj
 
 Depends on / 依赖: Ideal.map_span, Ideal.map_top, Scheme, Scheme.Opens, Scheme.Opens.toScheme_presheaf_obj, Scheme.image_basicOpen, U.topIso.inv, U.topIso.inv.hom, image_basicOpen, isAffineOpen_iff_of_isOpenImmersion, isAffine_of_isAffineOpen_basicOpen, map_span, map_top, toScheme_presheaf_obj, topIso
 -/
@@ -315,7 +361,19 @@ instance :
     · intro X Y _ f r H
       have : IsAffine X := H
       change IsAffineOpen _
-      rw [Scheme.preimag
+      rw [Scheme.preimage_basicOpen]
+      exact (isAffineOpen_top X).basicOpen _
+    · intro X Y _ f S hS hS'
+      apply_fun Ideal.map (f.appTop).hom at hS
+      rw [Ideal.map_span]; rw [Ideal.map_top] at hS
+      apply isAffine_of_isAffineOpen_basicOpen _ hS
+      have : forall i : S, IsAffineOpen (f ⁻¹ᵁ Y.basicOpen i.1) := hS'
+      simpa [Scheme.preimage_basicOpen] using! this
+  eq_targetAffineLocally' := by
+    ext X Y f
+    simp only [targetAffineLocally, Scheme.affineOpens, Set.coe_ofPred, Set.mem_ofPred_eq,
+      Subtype.forall, isAffineHom_iff]
+    rfl
 
 中文:
 实例 :
@@ -330,7 +388,19 @@ instance :
     · intro X Y _ f r H
       have : IsAffine X := H
       change IsAffineOpen _
-      rw [Scheme.preimag
+      rw [Scheme.preimage_basicOpen]
+      exact (isAffineOpen_top X).basicOpen _
+    · intro X Y _ f S hS hS'
+      apply_fun Ideal.map (f.appTop).hom at hS
+      rw [Ideal.map_span]; rw [Ideal.map_top] at hS
+      apply isAffine_of_isAffineOpen_basicOpen _ hS
+      have : forall i : S, IsAffineOpen (f ⁻¹ᵁ Y.basicOpen i.1) := hS'
+      simpa [Scheme.preimage_basicOpen] using! this
+  eq_targetAffineLocally' := by
+    ext X Y f
+    simp only [targetAffineLocally, Scheme.affineOpens, Set.coe_ofPred, Set.mem_ofPred_eq,
+      Subtype.forall, isAffineHom_iff]
+    rfl
 
 Depends on / 依赖: AffineTargetMorphismProperty, AffineTargetMorphismProperty.respectsIso_mk, Ideal.map, Ideal.map_span, Ideal.map_top, IsAffine, IsAffineOpen, Scheme, Scheme.preimage_basicOpen, Y.basic, appTop, apply_fun, basicOpen, e.hom, f.appTop, isAffineOpen_top, isAffine_of_isAffineOpen_basicOpen, map_span, map_top, of_isIso
 -/
@@ -549,7 +619,21 @@ lemma isAffineHom_of_isInducing
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
       Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
     obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ :=
-      X.i
+      X.isBasis_affineOpens.exists_subset_of_mem_open hxU (f ⁻¹ᵁ U).isOpen
+    obtain ⟨U', hU'U, rfl⟩ : exists U' : Y.Opens, U' <= U ∧ f ⁻¹ᵁ U' = V := by
+      obtain ⟨U', hU', e⟩ := hf₁.isOpen_iff.mp V.2
+      exact ⟨⟨U', hU'⟩ ⊓ U, inf_le_right, Opens.ext (by simpa [e] using hVU)⟩
+    obtain ⟨r, hrU', hxr⟩ := hU.exists_basicOpen_le ⟨f x, hxV⟩ hxU
+    refine ⟨_, hxr, hU.basicOpen r, ?_⟩
+    convert hV.basicOpen (f.app _ (Y.presheaf.map (homOfLE hU'U).op r))
+    simp only [Scheme.preimage_basicOpen, ← CommRingCat.comp_apply, f.naturality]
+    simpa using ((Opens.map f.base).map (homOfLE hrU')).le
+  · obtain ⟨_, ⟨U, hU, rfl⟩, hyU, hU'⟩ :=
+      Y.isBasis_affineOpens.exists_subset_of_mem_open hy hf₂.isOpen_compl
+    rw [Set.subset_compl_iff_disjoint_right]; rw [← Set.preimage_eq_empty_iff] at hU'
+    refine ⟨U, hyU, hU, ?_⟩
+    convert isAffineOpen_bot _
+    exact Opens.ext hU'
 
 中文:
 引理 isAffineHom_of_isInducing
@@ -561,7 +645,21 @@ lemma isAffineHom_of_isInducing
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
       Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
     obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ :=
-      X.i
+      X.isBasis_affineOpens.exists_subset_of_mem_open hxU (f ⁻¹ᵁ U).isOpen
+    obtain ⟨U', hU'U, rfl⟩ : exists U' : Y.Opens, U' <= U ∧ f ⁻¹ᵁ U' = V := by
+      obtain ⟨U', hU', e⟩ := hf₁.isOpen_iff.mp V.2
+      exact ⟨⟨U', hU'⟩ ⊓ U, inf_le_right, Opens.ext (by simpa [e] using hVU)⟩
+    obtain ⟨r, hrU', hxr⟩ := hU.exists_basicOpen_le ⟨f x, hxV⟩ hxU
+    refine ⟨_, hxr, hU.basicOpen r, ?_⟩
+    convert hV.basicOpen (f.app _ (Y.presheaf.map (homOfLE hU'U).op r))
+    simp only [Scheme.preimage_basicOpen, ← CommRingCat.comp_apply, f.naturality]
+    simpa using ((Opens.map f.base).map (homOfLE hrU')).le
+  · obtain ⟨_, ⟨U, hU, rfl⟩, hyU, hU'⟩ :=
+      Y.isBasis_affineOpens.exists_subset_of_mem_open hy hf₂.isOpen_compl
+    rw [Set.subset_compl_iff_disjoint_right]; rw [← Set.preimage_eq_empty_iff] at hU'
+    refine ⟨U, hyU, hU, ?_⟩
+    convert isAffineOpen_bot _
+    exact Opens.ext hU'
 
 Depends on / 依赖: Set.mem_univ, Set.range, X.isBasis_affineOpens.exists_subset_of_mem_open, Y.Opens, Y.isBasis_affineOpens.exists_subset_of_mem_open, exists_subset_of_mem_open, inf_le_right, isAffineHom_of_forall_exists_isAffineOpen, isBasis_affineOpens, isOpen, isOpen_iff, isOpen_iff.mp, isOpen_univ, mem_univ
 -/
@@ -605,7 +703,10 @@ lemma IsAffineOpen.isCompact_pullback_inf
   let f' : U.toScheme ⟶ W := f.resLE _ _ hUW
   let q : Scheme.Opens.toScheme V ⟶ W :=
 IsOpenImmersion.lift W.ι (Scheme.Opens.ι _ ≫ g) by simpa [Set.range_comp]
-  let p
+  let p : pullback f' q ⟶ pullback f g :=
+    pullback.map _ _ _ _ U.ι (Scheme.Opens.ι _) W.ι (by simp [f']) (by simp [q])
+  convert! isCompact_range p.continuous
+  simp [p, Scheme.Pullback.range_map]
 
 中文:
 引理 是仿射开集.isCompact_pullback_inf
@@ -617,7 +718,10 @@ IsOpenImmersion.lift W.ι (Scheme.Opens.ι _ ≫ g) by simpa [Set.range_comp]
   let f' : U.toScheme ⟶ W := f.resLE _ _ hUW
   let q : Scheme.Opens.toScheme V ⟶ W :=
 IsOpenImmersion.lift W.ι (Scheme.Opens.ι _ ≫ g) by simpa [Set.range_comp]
-  let p
+  let p : pullback f' q ⟶ pullback f g :=
+    pullback.map _ _ _ _ U.ι (Scheme.Opens.ι _) W.ι (by simp [f']) (by simp [q])
+  convert! isCompact_range p.continuous
+  simp [p, Scheme.Pullback.range_map]
 
 Depends on / 依赖: CompactSpace, IsAffine, IsOpenImmersion, IsOpenImmersion.lift, Pullback, Scheme, Scheme.Opens, Scheme.Opens.toScheme, Scheme.Pullback.range_map, Set.range_comp, U.toScheme, W.toScheme, continuous, convert, f.resLE, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isCompact_range, p.continuous, pullback
 -/
@@ -688,7 +792,15 @@ theorem diagonal_isAffine_iff_forall_isAffineOpen_inf
     have : IsAffine _ := hU
     have : IsAffine _ := hV
     let g : pullback U.ι V.ι ⟶ X := pullback.fst _ _ ≫ U.ι
-    have := IsOpenImmersion.isPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_righ
+    have := IsOpenImmersion.isPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_right)
+      U.ι V.ι (by simp) (by ext; simp)
+    exact .of_isIso this.isoPullback.hom
+  · introv H h₁ h₂
+    have : IsAffineOpen (pullback.fst f₁ f₂ ≫ f₁).opensRange := by
+      convert! H _ _ (isAffineOpen_opensRange f₁) (isAffineOpen_opensRange f₂)
+      exact Opens.ext (IsOpenImmersion.range_pullback_to_base_of_left _ _)
+    change IsAffine _ at this
+    exact .of_isIso (pullback.fst f₁ f₂ ≫ f₁).isoOpensRange.hom
 
 中文:
 定理 diagonal_isAffine_iff_对任意_isAffineOpen_inf
@@ -701,7 +813,15 @@ theorem diagonal_isAffine_iff_forall_isAffineOpen_inf
     have : IsAffine _ := hU
     have : IsAffine _ := hV
     let g : pullback U.ι V.ι ⟶ X := pullback.fst _ _ ≫ U.ι
-    have := IsOpenImmersion.isPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_righ
+    have := IsOpenImmersion.isPullback (X.homOfLE inf_le_left) (X.homOfLE inf_le_right)
+      U.ι V.ι (by simp) (by ext; simp)
+    exact .of_isIso this.isoPullback.hom
+  · introv H h₁ h₂
+    have : IsAffineOpen (pullback.fst f₁ f₂ ≫ f₁).opensRange := by
+      convert! H _ _ (isAffineOpen_opensRange f₁) (isAffineOpen_opensRange f₂)
+      exact Opens.ext (IsOpenImmersion.range_pullback_to_base_of_left _ _)
+    change IsAffine _ at this
+    exact .of_isIso (pullback.fst f₁ f₂ ≫ f₁).isoOpensRange.hom
 
 Depends on / 依赖: AffineTargetMorphismProperty, AffineTargetMorphismProperty.diagonal, IsAffine, IsAffineOpen, IsOpenImmersion, IsOpenImmersion.isPullback, X.homOfLE, convert, diagonal, homOfLE, inf_le_left, inf_le_right, introv, isAffineOpen_opensRange, isPullback, isoPullback, of_isIso, opensRange, pullback, pullback.fst
 -/
@@ -737,7 +857,11 @@ theorem isAffineHom_diagonal_iff
     (.diagonal @IsAffineHom)) f).to_iff.trans ?_
   simp only [targetAffineLocally, diagonal_isAffine_iff_forall_isAffineOpen_inf,
     (IsOpenImmersion.opensEquiv (f ⁻¹ᵁ _).ι).forall_congr_left, Scheme.affineOpens,
-    Subtype.forall, Set.m
+    Subtype.forall, Set.mem_ofPred_eq, Scheme.Opens.opensRange_ι, ← Scheme.Hom.preimage_inf,
+    IsOpenImmersion.opensEquiv_symm_apply, Scheme.Hom.image_preimage_eq_opensRange_inf,
+    ← Scheme.Hom.isAffineOpen_iff_of_isOpenImmersion (Scheme.Opens.ι _)]
+  congr! with U hU V₁ hV₁ V₂ hV₂
+  rw [inf_eq_right.mpr hV₁]; rw [inf_eq_right.mpr hV₂]; rw [inf_eq_right.mpr (inf_le_left.trans hV₁)]
 
 中文:
 定理 isAffineHom_diagonal_iff
@@ -747,7 +871,11 @@ theorem isAffineHom_diagonal_iff
     (.diagonal @IsAffineHom)) f).to_iff.trans ?_
   simp only [targetAffineLocally, diagonal_isAffine_iff_forall_isAffineOpen_inf,
     (IsOpenImmersion.opensEquiv (f ⁻¹ᵁ _).ι).forall_congr_left, Scheme.affineOpens,
-    Subtype.forall, Set.m
+    Subtype.forall, Set.mem_ofPred_eq, Scheme.Opens.opensRange_ι, ← Scheme.Hom.preimage_inf,
+    IsOpenImmersion.opensEquiv_symm_apply, Scheme.Hom.image_preimage_eq_opensRange_inf,
+    ← Scheme.Hom.isAffineOpen_iff_of_isOpenImmersion (Scheme.Opens.ι _)]
+  congr! with U hU V₁ hV₁ V₂ hV₂
+  rw [inf_eq_right.mpr hV₁]; rw [inf_eq_right.mpr hV₂]; rw [inf_eq_right.mpr (inf_le_left.trans hV₁)]
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.eq_targetAffineLocally, IsAffineHom, IsOpenImmersion, IsOpenImmersion.opensEquiv, IsOpenImmersion.opensEquiv_symm_apply, Scheme, Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Hom.isAffineOpen_iff_of_isOpenImmersion, Scheme.Hom.preimage_inf, Scheme.Opens, Scheme.Opens.opensRange_, Scheme.affineOpens, Set.mem_ofPred_eq, Subtype, Subtype.forall, affineOpens, diagonal, diagonal_isAffine_iff_forall_isAffineOpen_inf, eq_targetAffineLocally
 -/

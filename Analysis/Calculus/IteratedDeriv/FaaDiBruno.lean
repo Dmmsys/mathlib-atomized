@@ -110,7 +110,11 @@ theorem iteratedDerivWithin_vcomp_two
   rw [iteratedDerivWithin_vcomp_eq_sum_orderedFinpartition hg hf ht hs hx hst le_rfl]
   simp only [← (OrderedFinpartition.extendEquiv 1).sum_comp, Fintype.sum_sigma, Fintype.sum_unique,
     OrderedFinpartition.default_eq, Fintype.sum_option]
-  have : (Fin.cons 1 (fun _ => 1) : Fin 2 -> Nat) = fun
+  have : (Fin.cons 1 (fun _ => 1) : Fin 2 -> Nat) = fun _ => 1 :=
+funext Fin.forall_fin_two.mpr ⟨rfl, rfl⟩
+  simp [OrderedFinpartition.extendEquiv, OrderedFinpartition.extend,
+    OrderedFinpartition.extendLeft, OrderedFinpartition.extendMiddle, ht _ (hst hx),
+    OrderedFinpartition.atomic, this]
 
 中文:
 定理 iteratedDerivWithin_vcomp_two
@@ -118,7 +122,11 @@ theorem iteratedDerivWithin_vcomp_two
   rw [iteratedDerivWithin_vcomp_eq_sum_orderedFinpartition hg hf ht hs hx hst le_rfl]
   simp only [← (OrderedFinpartition.extendEquiv 1).sum_comp, Fintype.sum_sigma, Fintype.sum_unique,
     OrderedFinpartition.default_eq, Fintype.sum_option]
-  have : (Fin.cons 1 (fun _ => 1) : Fin 2 -> Nat) = fun
+  have : (Fin.cons 1 (fun _ => 1) : Fin 2 -> Nat) = fun _ => 1 :=
+funext Fin.forall_fin_two.mpr ⟨rfl, rfl⟩
+  simp [OrderedFinpartition.extendEquiv, OrderedFinpartition.extend,
+    OrderedFinpartition.extendLeft, OrderedFinpartition.extendMiddle, ht _ (hst hx),
+    OrderedFinpartition.atomic, this]
 
 Depends on / 依赖: Fin.cons, Fin.forall_fin_two.mpr, Fintype, Fintype.sum_option, Fintype.sum_sigma, Fintype.sum_unique, OrderedFin, OrderedFinpartition, OrderedFinpartition.default_eq, OrderedFinpartition.extend, OrderedFinpartition.extendEquiv, OrderedFinpartition.extendLeft, OrderedFinpartition.extendMiddle, default_eq, extend, extendEquiv, extendLeft, extendMiddle, forall_fin_two, iteratedDerivWithin_vcomp_eq_sum_orderedFinpartition
 -/
@@ -180,7 +188,19 @@ theorem iteratedDerivWithin_vcomp_three
   simp only [← (OrderedFinpartition.extendEquiv 1).sum_comp,
     ← (OrderedFinpartition.extendEquiv 2).sum_comp, Fintype.sum_sigma,
     Fintype.sum_option, Nat.reduceAdd, OrderedFinpartition.extendEquiv_apply,
- 
+    OrderedFinpartition.extend_none, OrderedFinpartition.extend_some,
+    OrderedFinpartition.extendMiddle_length, OrderedFinpartition.default_eq, Fintype.sum_unique,
+    OrderedFinpartition.atomic_length, OrderedFinpartition.extendLeft_length, Fin.sum_univ_two]
+  simp? [add_assoc, two_smul, iteratedFDerivWithin_one_apply (ht _ <| hst hx)] says
+    simp only [OrderedFinpartition.extendLeft_partSize, OrderedFinpartition.extendLeft_length,
+      OrderedFinpartition.atomic_length, Nat.reduceAdd, OrderedFinpartition.atomic_partSize,
+      Fin.isValue, OrderedFinpartition.extendMiddle_partSize, Fin.cons_zero, Fin.update_cons_zero,
+      Fin.cons_one, Fin.default_eq_zero, OrderedFinpartition.extendMiddle_length, Fin.cons_update,
+      Fin.succ_zero_eq_one, update_self, update_idem,
+      iteratedFDerivWithin_one_apply (ht _ <| hst hx), add_assoc, two_smul]
+  have (j : _) : (Fin.cons 1 (Fin.cons 1 fun _ => 1) : Fin 3 -> Nat) j = 1 := by
+    fin_cases j <;> rfl
+  congr <;> ext x <;> fin_cases x <;> simp [this]
 
 中文:
 定理 iteratedDerivWithin_vcomp_three
@@ -189,7 +209,19 @@ theorem iteratedDerivWithin_vcomp_three
   simp only [← (OrderedFinpartition.extendEquiv 1).sum_comp,
     ← (OrderedFinpartition.extendEquiv 2).sum_comp, Fintype.sum_sigma,
     Fintype.sum_option, Nat.reduceAdd, OrderedFinpartition.extendEquiv_apply,
- 
+    OrderedFinpartition.extend_none, OrderedFinpartition.extend_some,
+    OrderedFinpartition.extendMiddle_length, OrderedFinpartition.default_eq, Fintype.sum_unique,
+    OrderedFinpartition.atomic_length, OrderedFinpartition.extendLeft_length, Fin.sum_univ_two]
+  simp? [add_assoc, two_smul, iteratedFDerivWithin_one_apply (ht _ <| hst hx)] says
+    simp only [OrderedFinpartition.extendLeft_partSize, OrderedFinpartition.extendLeft_length,
+      OrderedFinpartition.atomic_length, Nat.reduceAdd, OrderedFinpartition.atomic_partSize,
+      Fin.isValue, OrderedFinpartition.extendMiddle_partSize, Fin.cons_zero, Fin.update_cons_zero,
+      Fin.cons_one, Fin.default_eq_zero, OrderedFinpartition.extendMiddle_length, Fin.cons_update,
+      Fin.succ_zero_eq_one, update_self, update_idem,
+      iteratedFDerivWithin_one_apply (ht _ <| hst hx), add_assoc, two_smul]
+  have (j : _) : (Fin.cons 1 (Fin.cons 1 fun _ => 1) : Fin 3 -> Nat) j = 1 := by
+    fin_cases j <;> rfl
+  congr <;> ext x <;> fin_cases x <;> simp [this]
 
 Depends on / 依赖: Fintype, Fintype.sum_option, Fintype.sum_sigma, Fintype.sum_unique, Nat.reduceAdd, OrderedFinpartition, OrderedFinpartition.atomic_length, OrderedFinpartition.default_eq, OrderedFinpartition.extendEquiv, OrderedFinpartition.extendEquiv_apply, OrderedFinpartition.extendMiddle_length, OrderedFinpartition.extend_none, OrderedFinpartition.extend_some, atomic_length, default_eq, extendEquiv, extendEquiv_apply, extendMiddle_length, extend_none, extend_some
 -/

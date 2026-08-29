@@ -427,7 +427,12 @@ have : Module.Finite k l := Module.finite_of_finrank_pos h ▸ NeZero.pos n
   have : Finite l := Module.finite_of_finite k
   have : Fintype l := .ofFinite _
   have : IsSplittingField k l (X ^ Nat.card k ^ n - X) := by
-    rw [← h]; rw [← Module.natCard_eq_pow_finrank]; rw 
+    rw [← h]; rw [← Module.natCard_eq_pow_finrank]; rw [← Fintype.card_eq_nat_card]
+    exact FiniteField.isSplittingField_sub l k
+  refine ⟨(IsSplittingField.algEquiv _ (X ^ (Nat.card k ^ n) - X)).trans ?_⟩
+  exact (IsSplittingField.algEquiv _ (X ^ (Nat.card k ^ n) - X)).symm
+
+include p in
 
 中文:
 定义 algEquivExtension
@@ -438,7 +443,12 @@ have : Module.Finite k l := Module.finite_of_finrank_pos h ▸ NeZero.pos n
   have : Finite l := Module.finite_of_finite k
   have : Fintype l := .ofFinite _
   have : IsSplittingField k l (X ^ Nat.card k ^ n - X) := by
-    rw [← h]; rw [← Module.natCard_eq_pow_finrank]; rw 
+    rw [← h]; rw [← Module.natCard_eq_pow_finrank]; rw [← Fintype.card_eq_nat_card]
+    exact FiniteField.isSplittingField_sub l k
+  refine ⟨(IsSplittingField.algEquiv _ (X ^ (Nat.card k ^ n) - X)).trans ?_⟩
+  exact (IsSplittingField.algEquiv _ (X ^ (Nat.card k ^ n) - X)).symm
+
+include p in
 
 Depends on / 依赖: Finite, FiniteField, FiniteField.isSplittingField_sub, Fintype, Fintype.card_eq_nat_card, IsSplittingField, IsSplittingField.algEquiv, Module, Module.Finite, Module.finite_of_finite, Module.finite_of_finrank_pos, Module.natCard_eq_pow_finrank, Nat.card, NeZero, NeZero.pos, Nonempty, Nonempty.some, algEquiv, card_eq_nat_card, finite_of_finite
 -/
@@ -467,7 +477,8 @@ theorem exists_forall_apply_eq_pow
 obtain ⟨i, _, hi⟩ := Extension.exists_frob_pow_eq k p n
     (algEquivExtension k p n l rfl).symm.trans (g.trans (algEquivExtension k p n l rfl))
   refine ⟨i, fun x => ?_⟩
-  simpa using (AlgEquiv.congr_arg (f := (a
+  simpa using (AlgEquiv.congr_arg (f := (algEquivExtension k p n l rfl).symm) <|
+    AlgEquiv.congr_fun hi (algEquivExtension k p n l rfl x)).symm
 
 中文:
 定理 存在_对任意_apply_eq_pow
@@ -478,7 +489,8 @@ obtain ⟨i, _, hi⟩ := Extension.exists_frob_pow_eq k p n
 obtain ⟨i, _, hi⟩ := Extension.exists_frob_pow_eq k p n
     (algEquivExtension k p n l rfl).symm.trans (g.trans (algEquivExtension k p n l rfl))
   refine ⟨i, fun x => ?_⟩
-  simpa using (AlgEquiv.congr_arg (f := (a
+  simpa using (AlgEquiv.congr_arg (f := (algEquivExtension k p n l rfl).symm) <|
+    AlgEquiv.congr_fun hi (algEquivExtension k p n l rfl x)).symm
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.congr_arg, AlgEquiv.congr_fun, Extension, Extension.exists_frob_pow_eq, Module, Module.finrank, Module.finrank_pos, NeZero, NeZero.of_pos, algEquivExtension, congr_arg, congr_fun, exists_frob_pow_eq, finrank, finrank_pos, g.trans, of_pos, symm.trans
 -/
@@ -516,7 +528,14 @@ theorem natDegree_dvd_of_dvd_X_pow_card_pow_sub_X
   · rw [Nat.card_eq_zero_of_infinite, zero_pow hn, pow_zero, ← dvd_neg, neg_sub] at h
     rw [((Splits.X_sub_C 1).of_dvd (X_sub_C_ne_zero 1) h).natDegree_eq_one_of_irreducible hi]
     exact one_dvd n
-  let ⟨p, hp⟩ := 
+  let ⟨p, hp⟩ := CharP.exists k
+  have : Fact (Nat.Prime p) := ⟨CharP.char_is_prime k p⟩
+  have : NeZero n := ⟨hn⟩
+  rw [← finrank_extension k p n]
+  apply Irreducible.natDegree_dvd_finrank hi
+  refine Splits.of_dvd ?_ ?_ (map_dvd (algebraMap _ (Extension _ p n)) h)
+  · apply IsSplittingField.splits
+  · exact map_ne_zero (X_pow_card_pow_sub_X_ne_zero _ hn Finite.one_lt_card)
 
 中文:
 定理 natDegree_dvd_of_dvd_X_pow_card_pow_sub_X
@@ -528,7 +547,14 @@ theorem natDegree_dvd_of_dvd_X_pow_card_pow_sub_X
   · rw [Nat.card_eq_zero_of_infinite, zero_pow hn, pow_zero, ← dvd_neg, neg_sub] at h
     rw [((Splits.X_sub_C 1).of_dvd (X_sub_C_ne_zero 1) h).natDegree_eq_one_of_irreducible hi]
     exact one_dvd n
-  let ⟨p, hp⟩ := 
+  let ⟨p, hp⟩ := CharP.exists k
+  have : Fact (Nat.Prime p) := ⟨CharP.char_is_prime k p⟩
+  have : NeZero n := ⟨hn⟩
+  rw [← finrank_extension k p n]
+  apply Irreducible.natDegree_dvd_finrank hi
+  refine Splits.of_dvd ?_ ?_ (map_dvd (algebraMap _ (Extension _ p n)) h)
+  · apply IsSplittingField.splits
+  · exact map_ne_zero (X_pow_card_pow_sub_X_ne_zero _ hn Finite.one_lt_card)
 
 Depends on / 依赖: CharP.char_is_prime, CharP.exists, Irreducible, Irreducible.natDegree_dvd_finrank, Nat.Prime, Nat.card_eq_zero_of_infinite, NeZero, Splits, Splits.X_sub_C, Splits.of_dvd, X_sub_C, X_sub_C_ne_zero, algebraMap, card_eq_zero_of_infinite, char_is_prime, dvd_neg, eq_or_ne, finite_or_infinite, finrank_extension, map_dvd
 -/
@@ -561,7 +587,16 @@ theorem natDegree_dvd_iff_dvd_X_pow_card_pow_sub_X
   let a := AdjoinRoot.root f
   have : NeZero f.natDegree := NeZero.of_pos (Irreducible.natDegree_pos hi)
 have : Fact Irreducible f := ⟨hi⟩
-  rw [← hi.dvd_iff_aeval_eq_zero (b :
+  rw [← hi.dvd_iff_aeval_eq_zero (b := a) (by aesop)]
+  let ⟨p, hp⟩ := CharP.exists k
+  have : Fact (Nat.Prime p) := ⟨CharP.char_is_prime k p⟩
+  let e := FiniteField.algEquivExtension k p f.natDegree (AdjoinRoot f)
+    (finrank_quotient_span_eq_natDegree (f := f))
+  have hpeval : (e a) ^ (Nat.card k) ^ f.natDegree - (e a) = 0 := by
+    have := Fintype.ofFinite (Extension k p f.natDegree)
+    rw [← (natCard_extension k p f.natDegree)]; rw [← Fintype.card_eq_nat_card]; rw [pow_card (e a)]; rw [sub_self]
+  apply_fun e.symm at hpeval
+  simpa using hpeval
 
 中文:
 定理 natDegree_dvd_iff_dvd_X_pow_card_pow_sub_X
@@ -572,7 +607,16 @@ have : Fact Irreducible f := ⟨hi⟩
   let a := AdjoinRoot.root f
   have : NeZero f.natDegree := NeZero.of_pos (Irreducible.natDegree_pos hi)
 have : Fact Irreducible f := ⟨hi⟩
-  rw [← hi.dvd_iff_aeval_eq_zero (b :
+  rw [← hi.dvd_iff_aeval_eq_zero (b := a) (by aesop)]
+  let ⟨p, hp⟩ := CharP.exists k
+  have : Fact (Nat.Prime p) := ⟨CharP.char_is_prime k p⟩
+  let e := FiniteField.algEquivExtension k p f.natDegree (AdjoinRoot f)
+    (finrank_quotient_span_eq_natDegree (f := f))
+  have hpeval : (e a) ^ (Nat.card k) ^ f.natDegree - (e a) = 0 := by
+    have := Fintype.ofFinite (Extension k p f.natDegree)
+    rw [← (natCard_extension k p f.natDegree)]; rw [← Fintype.card_eq_nat_card]; rw [pow_card (e a)]; rw [sub_self]
+  apply_fun e.symm at hpeval
+  simpa using hpeval
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.root, CharP.char_is_prime, CharP.exists, FiniteField, FiniteField.algEquivExtension, Irreducible, Irreducible.natDegree_pos, Nat.Prime, NeZero, NeZero.of_pos, algEquivExtension, char_is_prime, dvd_iff_aeval_eq_zero, dvd_pow_pow_sub_self_of_dvd, dvd_trans, f.natDegree, finrank_quotient_span_eq_natDegree, hi.dvd_iff_aeval_eq_zero, hi.natDegree_dvd_of_dvd_X_pow_card_pow_sub_X
 -/

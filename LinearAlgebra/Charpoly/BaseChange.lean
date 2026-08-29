@@ -32,7 +32,8 @@ lemma LinearMap.charpoly_baseChange
   let b : Module.Basis I R M := Module.Free.chooseBasis R M
   rw [← f.charpoly_toMatrix b]; rw [← (f.baseChange A).charpoly_toMatrix (b.baseChange A)]; rw [← Matrix.charpoly_map]
   congr 1
- 
+  ext i j
+  simp [LinearMap.toMatrix_apply, ← Algebra.algebraMap_eq_smul_one]
 
 中文:
 引理 线性映射.charpoly_baseChange
@@ -43,7 +44,8 @@ lemma LinearMap.charpoly_baseChange
   let b : Module.Basis I R M := Module.Free.chooseBasis R M
   rw [← f.charpoly_toMatrix b]; rw [← (f.baseChange A).charpoly_toMatrix (b.baseChange A)]; rw [← Matrix.charpoly_map]
   congr 1
- 
+  ext i j
+  simp [LinearMap.toMatrix_apply, ← Algebra.algebraMap_eq_smul_one]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, ChooseBasisIndex, LinearMap, LinearMap.toMatrix_apply, Matrix, Matrix.charpoly_map, Module, Module.Basis, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, algebraMap, algebraMap_eq_smul_one, b.baseChange, baseChange, charpoly_map, charpoly_toMatrix, chooseBasis, domain_nontrivial, f.baseChange
 -/

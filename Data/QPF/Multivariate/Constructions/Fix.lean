@@ -166,7 +166,10 @@ theorem recF_eq_of_wEquiv
       intro h
       -- Porting note: induction on h doesn't work.
       refine @WEquiv.recOn _ _ _ _ (fun a a' _ => recF u a = recF u a') _ _ h ?_ ?_ ?_
-      · intro a f' f₀ f₁ _h ih; 
+      · intro a f' f₀ f₁ _h ih; simp only [recF_eq]
+        congr 4; funext; apply ih
+      · intro a₀ f'₀ f₀ a₁ f'₁ f₁ h; simp only [recF_eq', abs_map, MvPFunctor.wDest'_wMk, h]
+      · intro x y z _e₁ _e₂ ih₁ ih₂; exact Eq.trans ih₁ ih₂
 
 中文:
 定理 recF_eq_of_wEquiv
@@ -179,7 +182,10 @@ theorem recF_eq_of_wEquiv
       intro h
       -- Porting note: induction on h doesn't work.
       refine @WEquiv.recOn _ _ _ _ (fun a a' _ => recF u a = recF u a') _ _ h ?_ ?_ ?_
-      · intro a f' f₀ f₁ _h ih; 
+      · intro a f' f₀ f₁ _h ih; simp only [recF_eq]
+        congr 4; funext; apply ih
+      · intro a₀ f'₀ f₀ a₁ f'₁ f₁ h; simp only [recF_eq', abs_map, MvPFunctor.wDest'_wMk, h]
+      · intro x y z _e₁ _e₂ ih₁ ih₂; exact Eq.trans ih₁ ih₂
 
 Depends on / 依赖: q.P.wCases, wCases
 -/
@@ -334,7 +340,8 @@ theorem wrepr_equiv
     apply WEquiv.trans _ (q.P.wMk' (appendFun id wrepr <$$> ⟨a, q.P.appendContents f' f⟩))
     · apply wEquiv.abs'
       rw [wrepr_wMk]; rw [q.P.wDest'_wMk']; rw [q.P.wDest'_wMk']; rw [abs_repr]
-    rw [q.P.map_eq]; rw [MvPFunctor.wMk']; rw [app
+    rw [q.P.map_eq]; rw [MvPFunctor.wMk']; rw [appendFun_comp_splitFun]; rw [id_comp]
+    apply WEquiv.ind; exact ih
 
 中文:
 定理 wrepr_equiv
@@ -346,7 +353,8 @@ theorem wrepr_equiv
     apply WEquiv.trans _ (q.P.wMk' (appendFun id wrepr <$$> ⟨a, q.P.appendContents f' f⟩))
     · apply wEquiv.abs'
       rw [wrepr_wMk]; rw [q.P.wDest'_wMk']; rw [q.P.wDest'_wMk']; rw [abs_repr]
-    rw [q.P.map_eq]; rw [MvPFunctor.wMk']; rw [app
+    rw [q.P.map_eq]; rw [MvPFunctor.wMk']; rw [appendFun_comp_splitFun]; rw [id_comp]
+    apply WEquiv.ind; exact ih
 
 Depends on / 依赖: MvPFunctor, MvPFunctor.wMk, WEquiv, WEquiv.ind, WEquiv.trans, _wMk, abs_repr, appendContents, appendFun, appendFun_comp_splitFun, id_comp, map_eq, q.P.appendContents, q.P.map_eq, q.P.wDest, q.P.wInd, q.P.wMk, wEquiv, wEquiv.abs, wrepr_wMk
 -/
@@ -372,7 +380,12 @@ theorem wEquiv_map
     rw [q.P.w_map_wMk]; rw [q.P.w_map_wMk]; apply WEquiv.abs
     change
       abs (q.P.objAppend1 a₀ (g ⊚ f'₀) fun x => q.P.wMap g (f₀ x)) =
-      
+        abs (q.P.objAppend1 a₁ (g ⊚ f'₁) fun x => q.P.wMap g (f₁ x))
+    rw [← q.P.map_objAppend1]; rw [← q.P.map_objAppend1]; rw [abs_map]; rw [abs_map]; rw [h]
+  | trans x y z _ _ ih₁ ih₂ =>
+    apply MvQPF.WEquiv.trans
+    · apply ih₁
+    · apply ih₂
 
 中文:
 定理 wEquiv_map
@@ -384,7 +397,12 @@ theorem wEquiv_map
     rw [q.P.w_map_wMk]; rw [q.P.w_map_wMk]; apply WEquiv.abs
     change
       abs (q.P.objAppend1 a₀ (g ⊚ f'₀) fun x => q.P.wMap g (f₀ x)) =
-      
+        abs (q.P.objAppend1 a₁ (g ⊚ f'₁) fun x => q.P.wMap g (f₁ x))
+    rw [← q.P.map_objAppend1]; rw [← q.P.map_objAppend1]; rw [abs_map]; rw [abs_map]; rw [h]
+  | trans x y z _ _ ih₁ ih₂ =>
+    apply MvQPF.WEquiv.trans
+    · apply ih₁
+    · apply ih₂
 
 Depends on / 依赖: MvQPF.WEquiv.trans, WEquiv, WEquiv.abs, WEquiv.ind, abs_map, map_objAppend1, objAppend1, q.P.map_objAppend1, q.P.objAppend1, q.P.wMap, q.P.w_map_wMk, w_map_wMk
 -/
@@ -572,7 +590,8 @@ theorem Fix.rec_eq
     rw [Fix.rec]; rw [Fix.mk]
     dsimp
   rcases h : repr x with ⟨a, f⟩
-  rw [MvPFunctor.map_eq]; rw [recF_eq']; rw [← MvPFunctor.map_
+  rw [MvPFunctor.map_eq]; rw [recF_eq']; rw [← MvPFunctor.map_eq]; rw [MvPFunctor.wDest'_wMk']
+  rw [← MvPFunctor.comp_map]; rw [abs_map]; rw [← h]; rw [abs_repr]; rw [← appendFun_comp]; rw [id_comp]; rw [this]
 
 中文:
 定理 Fix.rec_eq
@@ -589,7 +608,8 @@ theorem Fix.rec_eq
     rw [Fix.rec]; rw [Fix.mk]
     dsimp
   rcases h : repr x with ⟨a, f⟩
-  rw [MvPFunctor.map_eq]; rw [recF_eq']; rw [← MvPFunctor.map_
+  rw [MvPFunctor.map_eq]; rw [recF_eq']; rw [← MvPFunctor.map_eq]; rw [MvPFunctor.wDest'_wMk']
+  rw [← MvPFunctor.comp_map]; rw [abs_map]; rw [← h]; rw [abs_repr]; rw [← appendFun_comp]; rw [id_comp]; rw [this]
 
 Depends on / 依赖: Fix.mk, Fix.rec, MvPFunctor, MvPFunctor.comp_map, MvPFunctor.map_eq, MvPFunctor.wDest, Quotient, Quotient.ind, _wMk, abs_map, abs_repr, appendFun_comp, comp_map, fixToW, id_comp, map_eq, recF_eq, recF_eq_of_wEquiv, wrepr_equiv
 -/
@@ -622,7 +642,13 @@ theorem Fix.ind_aux
     rw [MvPFunctor.wDest'_wMk']; rw [abs_map]; rw [abs_repr]; rw [← abs_map]; rw [MvPFunctor.map_eq]
     conv =>
       rhs
-      rw [wrepr_wMk]; rw [q.P.wDest'_
+      rw [wrepr_wMk]; rw [q.P.wDest'_wMk']; rw [abs_repr]; rw [MvPFunctor.map_eq]
+    congr 2; rw [MvPFunctor.appendContents, MvPFunctor.appendContents]
+    rw [appendFun]; rw [appendFun]; rw [← splitFun_comp]; rw [← splitFun_comp]
+    rfl
+  rw [this]
+  apply Quot.sound
+  apply wrepr_equiv
 
 中文:
 定理 Fix.ind_aux
@@ -633,7 +659,13 @@ theorem Fix.ind_aux
     rw [MvPFunctor.wDest'_wMk']; rw [abs_map]; rw [abs_repr]; rw [← abs_map]; rw [MvPFunctor.map_eq]
     conv =>
       rhs
-      rw [wrepr_wMk]; rw [q.P.wDest'_
+      rw [wrepr_wMk]; rw [q.P.wDest'_wMk']; rw [abs_repr]; rw [MvPFunctor.map_eq]
+    congr 2; rw [MvPFunctor.appendContents, MvPFunctor.appendContents]
+    rw [appendFun]; rw [appendFun]; rw [← splitFun_comp]; rw [← splitFun_comp]
+    rfl
+  rw [this]
+  apply Quot.sound
+  apply wrepr_equiv
 
 Depends on / 依赖: Fix.mk, MvPFunctor, MvPFunctor.appendContents, MvPFunctor.map_eq, MvPFunctor.wDest, Quot.sound, _wMk, abs_map, abs_repr, appendContents, appendFun, map_eq, q.P.appendContents, q.P.wDest, q.P.wMk, splitFun_comp, wEquiv, wEquiv.abs, wrepr_wMk
 -/
@@ -669,7 +701,11 @@ theorem Fix.ind_rec
     apply h
     rw [← abs_map]; rw [← abs_map]; rw [MvPFunctor.map_eq]; rw [MvPFunctor.map_eq]
     congr 2
-    rw [MvPFunctor.appendCon
+    rw [MvPFunctor.appendContents]; rw [appendFun]; rw [appendFun]; rw [← splitFun_comp]; rw [← splitFun_comp]
+    have : (g₁ ∘ fun x => ⟦f x⟧) = g₂ ∘ fun x => ⟦f x⟧ := by
+      ext x
+      exact ih x
+    rw [this]
 
 中文:
 定理 Fix.ind_rec
@@ -684,7 +720,11 @@ theorem Fix.ind_rec
     apply h
     rw [← abs_map]; rw [← abs_map]; rw [MvPFunctor.map_eq]; rw [MvPFunctor.map_eq]
     congr 2
-    rw [MvPFunctor.appendCon
+    rw [MvPFunctor.appendContents]; rw [appendFun]; rw [appendFun]; rw [← splitFun_comp]; rw [← splitFun_comp]
+    have : (g₁ ∘ fun x => ⟦f x⟧) = g₂ ∘ fun x => ⟦f x⟧ := by
+      ext x
+      exact ih x
+    rw [this]
 
 Depends on / 依赖: Fix.ind_aux, MvPFunctor, MvPFunctor.appendContents, MvPFunctor.map_eq, Quot.ind, abs_map, appendContents, appendFun, ind_aux, map_eq, q.P.wInd, q.P.wMk, splitFun_comp
 -/
@@ -963,7 +1003,9 @@ definition Fix.drec
     conv =>
       rhs
       rw [← ih]
-    rw [MvFunct
+    rw [MvFunctor.map_map]; rw [← appendFun_comp]; rw [id_comp]
+    simp only [Function.comp_def]
+  cast (by rw [this]) y.2
 
 中文:
 定义 Fix.drec
@@ -981,7 +1023,9 @@ definition Fix.drec
     conv =>
       rhs
       rw [← ih]
-    rw [MvFunct
+    rw [MvFunctor.map_map]; rw [← appendFun_comp]; rw [id_comp]
+    simp only [Function.comp_def]
+  cast (by rw [this]) y.2
 
 Depends on / 依赖: Fix.ind_rec, Fix.rec, Fix.rec_eq, Function, Function.comp_def, MvFunctor, MvFunctor.id_map, MvFunctor.map_map, appendFun_comp, appendFun_id_id, comp_def, id_comp, id_map, ind_rec, map_map, rec_eq
 -/

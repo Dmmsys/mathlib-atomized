@@ -475,7 +475,18 @@ lemma mem_closure_iff_exists_finset_subset
     | mul x y _ _ hx hy =>
     obtain ⟨f, t, hts, hf, rfl⟩ := hx
     obtain ⟨g, u, hus, hg, rfl⟩ := hy
-    refine ⟨f + g
+    refine ⟨f + g, t union u, mod_cast Set.union_subset hts hus,
+(Function.support_add _ _).trans mod_cast Set.union_subset_union hf hg, ?_⟩
+    simp only [Pi.add_apply, pow_add, Finset.prod_mul_distrib]
+    congr 1 <;> symm
+    · refine Finset.prod_subset Finset.subset_union_left ?_
+      simp +contextual [Function.support_subset_iff'.1 hf]
+    · refine Finset.prod_subset Finset.subset_union_right ?_
+      simp +contextual [Function.support_subset_iff'.1 hg]
+  mpr := by
+    rintro ⟨n, t, hts, -, rfl⟩; exact prod_mem _ fun x hx => pow_mem (subset_closure <| hts hx) _
+
+@[to_additive]
 
 中文:
 引理 mem_closure_iff_存在_finset_subset
@@ -489,7 +500,18 @@ lemma mem_closure_iff_exists_finset_subset
     | mul x y _ _ hx hy =>
     obtain ⟨f, t, hts, hf, rfl⟩ := hx
     obtain ⟨g, u, hus, hg, rfl⟩ := hy
-    refine ⟨f + g
+    refine ⟨f + g, t union u, mod_cast Set.union_subset hts hus,
+(Function.support_add _ _).trans mod_cast Set.union_subset_union hf hg, ?_⟩
+    simp only [Pi.add_apply, pow_add, Finset.prod_mul_distrib]
+    congr 1 <;> symm
+    · refine Finset.prod_subset Finset.subset_union_left ?_
+      simp +contextual [Function.support_subset_iff'.1 hf]
+    · refine Finset.prod_subset Finset.subset_union_right ?_
+      simp +contextual [Function.support_subset_iff'.1 hg]
+  mpr := by
+    rintro ⟨n, t, hts, -, rfl⟩; exact prod_mem _ fun x hx => pow_mem (subset_closure <| hts hx) _
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.prod_mul_distrib, Finset.prod_subset, Finset.sub, Function, Function.support_add, Pi.add_apply, Pi.single, Pi.single_apply, Set.union_subset, Set.union_subset_union, add_apply, classical, closure_induction, mod_cast, pow_add, prod_mul_distrib, prod_subset, single, single_apply
 -/

@@ -49,7 +49,10 @@ definition reduceModIdeal
     Submodule.mapQ (I • ⊤ : Submodule R M) (I • ⊤ : Submodule R N) f
       (fun x hx => by
         refine Submodule.smul_induction_on hx (fun r hr x _ => ?_) (fun x y hx hy => ?_)
-        · simp [Submodule.smul_mem_smul hr Submodule.me
+        · simp [Submodule.smul_mem_smul hr Submodule.mem_top]
+        · simp [Submodule.add_mem _ hx hy])
+
+@[simp]
 
 中文:
 定义 reduceModIdeal
@@ -58,7 +61,10 @@ definition reduceModIdeal
     Submodule.mapQ (I • ⊤ : Submodule R M) (I • ⊤ : Submodule R N) f
       (fun x hx => by
         refine Submodule.smul_induction_on hx (fun r hr x _ => ?_) (fun x y hx hy => ?_)
-        · simp [Submodule.smul_mem_smul hr Submodule.me
+        · simp [Submodule.smul_mem_smul hr Submodule.mem_top]
+        · simp [Submodule.add_mem _ hx hy])
+
+@[simp]
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, LinearMap, LinearMap.extendScalarsOfSurjective, Quotient, Submodule, Submodule.add_mem, Submodule.mapQ, Submodule.mem_top, Submodule.smul_induction_on, Submodule.smul_mem_smul, add_mem, extendScalarsOfSurjective, mem_top, mk_surjective, smul_induction_on, smul_mem_smul
 -/
@@ -139,7 +145,8 @@ definition map
       exact smul_mono_right _ le_top
     apply SModEq.mono hm
     apply SModEq.map (a.property hmn) f⟩
-  map_add' a b := by ext n; sim
+  map_add' a b := by ext n; simp
+  map_smul' r a := by ext n; simp
 
 中文:
 定义 map
@@ -150,7 +157,8 @@ definition map
       exact smul_mono_right _ le_top
     apply SModEq.mono hm
     apply SModEq.map (a.property hmn) f⟩
-  map_add' a b := by ext n; sim
+  map_add' a b := by ext n; simp
+  map_smul' r a := by ext n; simp
 
 Depends on / 依赖: SModEq, SModEq.map, SModEq.mono, Submodule, Submodule.map, Submodule.map_smul, a.property, le_top, map_add, map_smul, property, smul_mono_right
 -/
@@ -253,7 +261,9 @@ definition map
   map_smul' r x := by
     ext
     dsimp
-    rw [val_smul_eq_evalₐ_smul]; r
+    rw [val_smul_eq_evalₐ_smul]; rw [val_smul_eq_evalₐ_smul]; rw [map_smul]
+
+@[simp]
 
 中文:
 定义 map
@@ -264,7 +274,9 @@ definition map
   map_smul' r x := by
     ext
     dsimp
-    rw [val_smul_eq_evalₐ_smul]; r
+    rw [val_smul_eq_evalₐ_smul]; rw [val_smul_eq_evalₐ_smul]; rw [map_smul]
+
+@[simp]
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.eval, AdicCompletion.lift, reduceModIdeal
 -/
@@ -803,7 +815,10 @@ theorem sumInv_comp_sum
   ext n
   simp only [LinearMap.coe_comp, Function.comp_apply, sum_lof, map_mk, component_sumInv,
     mk_apply_coe, AdicCauchySequence.map_apply_coe, Submodule.mkQ_apply, LinearMap.id_comp]
-  rw [DirectSum.component.o
+  rw [DirectSum.component.of]; rw [DirectSum.component.of]
+  split
+  · next h => subst h; simp
+  · simp
 
 中文:
 定理 sumInv_comp_sum
@@ -814,7 +829,10 @@ theorem sumInv_comp_sum
   ext n
   simp only [LinearMap.coe_comp, Function.comp_apply, sum_lof, map_mk, component_sumInv,
     mk_apply_coe, AdicCauchySequence.map_apply_coe, Submodule.mkQ_apply, LinearMap.id_comp]
-  rw [DirectSum.component.o
+  rw [DirectSum.component.of]; rw [DirectSum.component.of]
+  split
+  · next h => subst h; simp
+  · simp
 
 Depends on / 依赖: AdicCauchySequence, AdicCauchySequence.map_apply_coe, AdicCompletion, DirectSum, DirectSum.component.of, DirectSum.ext_component, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.id_comp, Submodule, Submodule.mkQ_apply, coe_comp, comp_apply, component, component_sumInv, ext_component, id_comp, map_apply_coe
 -/
@@ -840,7 +858,10 @@ theorem sum_comp_sumInv
   simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq, mk_apply_coe,
     Submodule.mkQ_apply]
   rw [← DirectSum.sum_univ_of (((sumInv I M) ((AdicCompletion.mk I (⨁ (j : ι)]; rw [M j)) f)))]
-  simp only [sumInv_apply, map_mk, map_sum, sum_of, val_sum_apply, mk_app
+  simp only [sumInv_apply, map_mk, map_sum, sum_of, val_sum_apply, mk_apply_coe,
+    AdicCauchySequence.map_apply_coe]
+  simp only [← Submodule.mkQ_apply, ← map_sum, ← apply_eq_component, lof_eq_of,
+    DirectSum.sum_univ_of]
 
 中文:
 定理 sum_comp_sumInv
@@ -850,7 +871,10 @@ theorem sum_comp_sumInv
   simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq, mk_apply_coe,
     Submodule.mkQ_apply]
   rw [← DirectSum.sum_univ_of (((sumInv I M) ((AdicCompletion.mk I (⨁ (j : ι)]; rw [M j)) f)))]
-  simp only [sumInv_apply, map_mk, map_sum, sum_of, val_sum_apply, mk_app
+  simp only [sumInv_apply, map_mk, map_sum, sum_of, val_sum_apply, mk_apply_coe,
+    AdicCauchySequence.map_apply_coe]
+  simp only [← Submodule.mkQ_apply, ← map_sum, ← apply_eq_component, lof_eq_of,
+    DirectSum.sum_univ_of]
 
 Depends on / 依赖: AdicCauchySequence, AdicCauchySequence.map_apply_coe, AdicCompletion, AdicCompletion.mk, DirectSum, DirectSum.sum_univ_of, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.id_coe, Submodule, Submodule.mkQ_apply, apply_eq_component, coe_comp, comp_apply, id_coe, id_eq, lof_eq_of, map_apply_coe
 -/
@@ -1067,7 +1091,12 @@ theorem exists_smodEq_pow_add_one_smul
     simp only [coe_comp, Function.comp_apply, mkQ_apply, ← SModEq.def, map_smul] at ⊢ hx
     rw [pow_succ]; rw [← smul_smul]
     exact SModEq.smul' hx hr
-  |
+  | add y1 hy1 y2 hy2 ih1 ih2 =>
+    obtain ⟨x1, hx1, hx1'⟩ := ih1
+    obtain ⟨x2, hx2, hx2'⟩ := ih2
+    use x1 + x2, add_mem hx1 hx2
+    simp only [map_add]
+    exact SModEq.add hx1' hx2'
 
 中文:
 定理 存在_smodEq_pow_add_one_smul
@@ -1080,7 +1109,12 @@ theorem exists_smodEq_pow_add_one_smul
     simp only [coe_comp, Function.comp_apply, mkQ_apply, ← SModEq.def, map_smul] at ⊢ hx
     rw [pow_succ]; rw [← smul_smul]
     exact SModEq.smul' hx hr
-  |
+  | add y1 hy1 y2 hy2 ih1 ih2 =>
+    obtain ⟨x1, hx1, hx1'⟩ := ih1
+    obtain ⟨x2, hx2, hx2'⟩ := ih2
+    use x1 + x2, add_mem hx1 hx2
+    simp only [map_add]
+    exact SModEq.add hx1' hx2'
 
 Depends on / 依赖: Function, Function.comp_apply, SModEq, SModEq.add, SModEq.def, SModEq.smul, add_mem, coe_comp, comp_apply, map_add, map_smul, mem_top, mkQ_apply, pow_succ, smul_induction_on, smul_mem_smul, smul_smul
 -/
@@ -1152,7 +1186,9 @@ theorem exists_smodEq_pow_smul_top_and_mkQ_eq
   have : f x ≡ y0 [SMOD (I ^ n • ⊤ : Submodule R N)] := by
     rw [SModEq]; rw [← mkQ_apply]; rw [← mkQ_apply]; rw [← factor_mk (pow_smul_top_le I N n.le_succ) y0]; rw [hy0]; rw [hyy']; rw [hxy]
   obtain ⟨x', hxx', hx'y0⟩ :=
-    exists_smodEq_pow_smul_top
+    exists_smodEq_pow_smul_top_and_smodEq_pow_add_one_smul_top h this
+  use x', hxx'
+  rwa [mkQ_apply, hx'y0]
 
 中文:
 定理 存在_smodEq_pow_smul_top_and_mkQ_eq
@@ -1162,7 +1198,9 @@ theorem exists_smodEq_pow_smul_top_and_mkQ_eq
   have : f x ≡ y0 [SMOD (I ^ n • ⊤ : Submodule R N)] := by
     rw [SModEq]; rw [← mkQ_apply]; rw [← mkQ_apply]; rw [← factor_mk (pow_smul_top_le I N n.le_succ) y0]; rw [hy0]; rw [hyy']; rw [hxy]
   obtain ⟨x', hxx', hx'y0⟩ :=
-    exists_smodEq_pow_smul_top
+    exists_smodEq_pow_smul_top_and_smodEq_pow_add_one_smul_top h this
+  use x', hxx'
+  rwa [mkQ_apply, hx'y0]
 
 Depends on / 依赖: SModEq, Submodule, exists_smodEq_pow_smul_top_and_smodEq_pow_add_one_smul_top, factor_mk, le_succ, mkQ_apply, mkQ_surjective, n.le_succ, pow_smul_top_le
 -/
@@ -1192,7 +1230,21 @@ theorem map_surjective_of_mkQ_comp_surjective
       Submodule.Quotient.mk (f (x n)) = eval I _ n y by
     obtain ⟨x, hx⟩ := h
     use AdicCompletion.mk I M ⟨x, fun h =>
-        eq_factor_of_eq_factor_succ (fun _ _ => pow_smul_top_le I
+        eq_factor_of_eq_factor_succ (fun _ _ => pow_smul_top_le I M) _ (fun n => (hx n).1) h⟩
+    ext n
+    simp [hx n]
+  let x : (n : Nat) -> {m : M // Submodule.Quotient.mk (f m) = eval I _ n y} := fun n => by
+    induction n with
+    | zero =>
+      use 0
+      apply_fun (Submodule.Quotient.equiv (I ^ 0 • ⊤) ⊤ (.refl R N) (by simp)).toEquiv
+      exact Subsingleton.elim _ _
+    | succ n xn =>
+      choose z hz using exists_smodEq_pow_smul_top_and_mkQ_eq h
+          (y' := eval _ _ (n + 1) y) (by simp) xn.2
+      exact ⟨z, hz.2⟩
+  exact ⟨fun n => (x n).val, fun n => ⟨(Classical.choose_spec (exists_smodEq_pow_smul_top_and_mkQ_eq
+      h (y' := eval I _ (n + 1) y) (by simp) (x n).2)).1, (x n).property⟩⟩
 
 中文:
 定理 map_surjective_of_mkQ_comp_surjective
@@ -1203,7 +1255,21 @@ theorem map_surjective_of_mkQ_comp_surjective
       Submodule.Quotient.mk (f (x n)) = eval I _ n y by
     obtain ⟨x, hx⟩ := h
     use AdicCompletion.mk I M ⟨x, fun h =>
-        eq_factor_of_eq_factor_succ (fun _ _ => pow_smul_top_le I
+        eq_factor_of_eq_factor_succ (fun _ _ => pow_smul_top_le I M) _ (fun n => (hx n).1) h⟩
+    ext n
+    simp [hx n]
+  let x : (n : Nat) -> {m : M // Submodule.Quotient.mk (f m) = eval I _ n y} := fun n => by
+    induction n with
+    | zero =>
+      use 0
+      apply_fun (Submodule.Quotient.equiv (I ^ 0 • ⊤) ⊤ (.refl R N) (by simp)).toEquiv
+      exact Subsingleton.elim _ _
+    | succ n xn =>
+      choose z hz using exists_smodEq_pow_smul_top_and_mkQ_eq h
+          (y' := eval _ _ (n + 1) y) (by simp) xn.2
+      exact ⟨z, hz.2⟩
+  exact ⟨fun n => (x n).val, fun n => ⟨(Classical.choose_spec (exists_smodEq_pow_smul_top_and_mkQ_eq
+      h (y' := eval I _ (n + 1) y) (by simp) (x n).2)).1, (x n).property⟩⟩
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.mk, Quotient, Submodule, Submodule.Quotient.equiv, Submodule.Quotient.mk, apply_fun, eq_factor_of_eq_factor_succ, pow_smul_top_le
 -/
@@ -1284,7 +1350,9 @@ theorem surjective_of_mk_map_comp_surjective
   have : I • ⊤ = restrictScalars R (Ideal.map f I) := by
     simp only [Ideal.smul_top_eq_map, restrictScalars_inj]
     rfl
-  have _ := IsHausdorff.map_alg
+  have _ := IsHausdorff.map_algebraMap_iff.mp haus
+  apply surjective_of_mkQ_comp_surjective (I := I) (f := fₗ)
+  rwa [Ideal.smul_top_eq_map]
 
 中文:
 定理 surjective_of_mk_map_comp_surjective
@@ -1296,7 +1364,9 @@ theorem surjective_of_mk_map_comp_surjective
   have : I • ⊤ = restrictScalars R (Ideal.map f I) := by
     simp only [Ideal.smul_top_eq_map, restrictScalars_inj]
     rfl
-  have _ := IsHausdorff.map_alg
+  have _ := IsHausdorff.map_algebraMap_iff.mp haus
+  apply surjective_of_mkQ_comp_surjective (I := I) (f := fₗ)
+  rwa [Ideal.smul_top_eq_map]
 
 Depends on / 依赖: Algebra, Algebra.ofId, Function, Function.Surjective, I.map, Ideal.map, Ideal.smul_top_eq_map, IsHausdorff, IsHausdorff.map_algebraMap_iff.mp, Surjective, f.toAlgebra, map_algebraMap_iff, restrictScalars, restrictScalars_inj, smul_top_eq_map, surjective_of_mkQ_comp_surjective, toAlgebra, toLinearMap
 -/

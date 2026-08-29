@@ -408,7 +408,8 @@ theorem Prefunctor.symmetrifyStar
   ext ⟨v, f | g⟩ <;>
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): was `simp [Quiver.symmetrifyStar]`
     simp only [Quiver.symmetrifyStar, Function.comp_apply] <;>
-    erw [Equiv.sigmaSumDistr
+    erw [Equiv.sigmaSumDistrib_apply, Equiv.sigmaSumDistrib_apply] <;>
+    simp
 
 中文:
 定理 预函子.symmetrifyStar
@@ -418,7 +419,8 @@ theorem Prefunctor.symmetrifyStar
   ext ⟨v, f | g⟩ <;>
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): was `simp [Quiver.symmetrifyStar]`
     simp only [Quiver.symmetrifyStar, Function.comp_apply] <;>
-    erw [Equiv.sigmaSumDistr
+    erw [Equiv.sigmaSumDistrib_apply, Equiv.sigmaSumDistrib_apply] <;>
+    simp
 
 Depends on / 依赖: Equiv.eq_symm_comp, Quiver, Quiver.symmetrifyStar, eq_symm_comp, symmetrifyStar
 -/
@@ -445,7 +447,8 @@ theorem Prefunctor.symmetrifyCostar
   ext ⟨v, f | g⟩ <;>
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): was `simp [Quiver.symmetrifyCostar]`
     simp only [Quiver.symmetrifyCostar, Function.comp_apply] <;>
-    erw [Equiv.sigmaSu
+    erw [Equiv.sigmaSumDistrib_apply, Equiv.sigmaSumDistrib_apply] <;>
+    simp
 
 中文:
 定理 预函子.symmetrifyCostar
@@ -455,7 +458,8 @@ theorem Prefunctor.symmetrifyCostar
   ext ⟨v, f | g⟩ <;>
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): was `simp [Quiver.symmetrifyCostar]`
     simp only [Quiver.symmetrifyCostar, Function.comp_apply] <;>
-    erw [Equiv.sigmaSu
+    erw [Equiv.sigmaSumDistrib_apply, Equiv.sigmaSumDistrib_apply] <;>
+    simp
 -/
 protected theorem Prefunctor.symmetrifyCostar (u : U) :
     φ.symmetrify.costar u =
@@ -580,6 +584,35 @@ theorem Prefunctor.pathStar_injective
     · intro; rfl -- Porting note: goal not present in lean3.
     · intro h
       simp only [mapPath_cons, Sigma.mk.inj_iff] at h
+      exfalso
+      obtain ⟨h, h'⟩ := h
+      rw [← Path.eq_cast_iff_heq rfl h.symm]; rw [Path.cast_cons] at h'
+      exact (Path.nil_ne_cons _ _) h'
+  | cons p₁ e₁ ih =>
+    rename_i x₁ y₁
+    rintro ⟨y₂, p₂⟩
+    rcases p₂ with - | ⟨p₂, e₂⟩
+    · intro h
+      simp only [mapPath_cons, Sigma.mk.inj_iff] at h
+      exfalso
+      obtain ⟨h, h'⟩ := h
+      rw [← Path.cast_eq_iff_heq rfl h]; rw [Path.cast_cons] at h'
+      exact (Path.cons_ne_nil _ _) h'
+    · rename_i x₂
+      intro h
+      simp only [mapPath_cons, Sigma.mk.inj_iff] at h
+      obtain ⟨hφy, h'⟩ := h
+      rw [← Path.cast_eq_iff_heq rfl hφy]; rw [Path.cast_cons]; rw [Path.cast_rfl_rfl] at h'
+      have hφx := Path.obj_eq_of_cons_eq_cons h'
+      have hφp := Path.heq_of_cons_eq_cons h'
+      have hφe := HEq.trans (Hom.cast_heq rfl hφy _).symm (Path.hom_heq_of_cons_eq_cons h')
+      have h_path_star : φ.pathStar u ⟨x₁, p₁⟩ = φ.pathStar u ⟨x₂, p₂⟩ := by
+        simp only [Prefunctor.pathStar_apply, Sigma.mk.inj_iff]; exact ⟨hφx, hφp⟩
+      cases ih h_path_star
+      have h_star : φ.star x₁ ⟨y₁, e₁⟩ = φ.star x₁ ⟨y₂, e₂⟩ := by
+        simp only [Prefunctor.star_apply, Sigma.mk.inj_iff]; exact ⟨hφy, hφe⟩
+      cases hφ x₁ h_star
+      rfl
 
 中文:
 定理 预函子.pathStar_injective
@@ -594,6 +627,35 @@ theorem Prefunctor.pathStar_injective
     · intro; rfl -- Porting note: goal not present in lean3.
     · intro h
       simp only [mapPath_cons, Sigma.mk.inj_iff] at h
+      exfalso
+      obtain ⟨h, h'⟩ := h
+      rw [← Path.eq_cast_iff_heq rfl h.symm]; rw [Path.cast_cons] at h'
+      exact (Path.nil_ne_cons _ _) h'
+  | cons p₁ e₁ ih =>
+    rename_i x₁ y₁
+    rintro ⟨y₂, p₂⟩
+    rcases p₂ with - | ⟨p₂, e₂⟩
+    · intro h
+      simp only [mapPath_cons, Sigma.mk.inj_iff] at h
+      exfalso
+      obtain ⟨h, h'⟩ := h
+      rw [← Path.cast_eq_iff_heq rfl h]; rw [Path.cast_cons] at h'
+      exact (Path.cons_ne_nil _ _) h'
+    · rename_i x₂
+      intro h
+      simp only [mapPath_cons, Sigma.mk.inj_iff] at h
+      obtain ⟨hφy, h'⟩ := h
+      rw [← Path.cast_eq_iff_heq rfl hφy]; rw [Path.cast_cons]; rw [Path.cast_rfl_rfl] at h'
+      have hφx := Path.obj_eq_of_cons_eq_cons h'
+      have hφp := Path.heq_of_cons_eq_cons h'
+      have hφe := HEq.trans (Hom.cast_heq rfl hφy _).symm (Path.hom_heq_of_cons_eq_cons h')
+      have h_path_star : φ.pathStar u ⟨x₁, p₁⟩ = φ.pathStar u ⟨x₂, p₂⟩ := by
+        simp only [Prefunctor.pathStar_apply, Sigma.mk.inj_iff]; exact ⟨hφx, hφp⟩
+      cases ih h_path_star
+      have h_star : φ.star x₁ ⟨y₁, e₁⟩ = φ.star x₁ ⟨y₂, e₂⟩ := by
+        simp only [Prefunctor.star_apply, Sigma.mk.inj_iff]; exact ⟨hφy, hφe⟩
+      cases hφ x₁ h_star
+      rfl
 
 Depends on / 依赖: Path.cast_cons, Path.eq_cast_iff_heq, Path.nil_ne_cons, PathStar, Porting, Prefunctor, Prefunctor.pathStar, Quiver, Quiver.PathStar.mk, Sigma.mk.inj_iff, cast_cons, eq_cast_iff_heq, h.symm, inj_iff, mapPath_cons, nil_ne_cons, pathStar, present, rename_i, unfoldPartialApp
 -/
@@ -655,7 +717,14 @@ theorem Prefunctor.pathStar_surjective
     obtain ⟨⟨u', q'⟩, h⟩ := ih
     simp only at h
     obtain ⟨rfl, rfl⟩ := h
-    obtain ⟨⟨u'', eu⟩, k
+    obtain ⟨⟨u'', eu⟩, k⟩ := hφ u' ⟨_, ev⟩
+    simp only [star_apply, Sigma.mk.inj_iff] at k
+    -- Porting note: was `obtain ⟨rfl, rfl⟩ := k`
+    obtain ⟨rfl, k⟩ := k
+    simp only [heq_eq_eq] at k
+    subst k
+    use ⟨_, q'.cons eu⟩
+    simp only [Prefunctor.mapPath_cons]
 
 中文:
 定理 预函子.pathStar_surjective
@@ -671,7 +740,14 @@ theorem Prefunctor.pathStar_surjective
     obtain ⟨⟨u', q'⟩, h⟩ := ih
     simp only at h
     obtain ⟨rfl, rfl⟩ := h
-    obtain ⟨⟨u'', eu⟩, k
+    obtain ⟨⟨u'', eu⟩, k⟩ := hφ u' ⟨_, ev⟩
+    simp only [star_apply, Sigma.mk.inj_iff] at k
+    -- Porting note: was `obtain ⟨rfl, rfl⟩ := k`
+    obtain ⟨rfl, k⟩ := k
+    simp only [heq_eq_eq] at k
+    subst k
+    use ⟨_, q'.cons eu⟩
+    simp only [Prefunctor.mapPath_cons]
 
 Depends on / 依赖: Path.nil, PathStar, Prefunctor, Prefunctor.mapPath_nil, Prefunctor.pathStar, Quiver, Quiver.PathStar.mk, Sigma.mk.inj_iff, inj_iff, mapPath_nil, pathStar, star_apply, unfoldPartialApp
 -/

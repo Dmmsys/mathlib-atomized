@@ -30,7 +30,9 @@ theorem modifyLast.go_concat
     simp only [cons_append]
     rw [modifyLast.go]; rw [modifyLast.go]
     case x_3 | x_3 => exact append_ne_nil_of_right_ne_nil tl (cons_ne_nil a [])
-    rw [modifyLast.go_concat _ _ tl _]; rw [modifyLas
+    rw [modifyLast.go_concat _ _ tl _]; rw [modifyLast.go_concat _ _ tl (Array.push #[] hd)]
+    simp only [Array.toListAppend_eq, Array.toList_push, nil_append,
+      append_assoc]
 
 中文:
 定理 modifyLast.go_concat
@@ -43,7 +45,9 @@ theorem modifyLast.go_concat
     simp only [cons_append]
     rw [modifyLast.go]; rw [modifyLast.go]
     case x_3 | x_3 => exact append_ne_nil_of_right_ne_nil tl (cons_ne_nil a [])
-    rw [modifyLast.go_concat _ _ tl _]; rw [modifyLas
+    rw [modifyLast.go_concat _ _ tl _]; rw [modifyLast.go_concat _ _ tl (Array.push #[] hd)]
+    simp only [Array.toListAppend_eq, Array.toList_push, nil_append,
+      append_assoc]
 -/
 private theorem modifyLast.go_concat (f : α -> α) (a : α) (tl : List α) (r : Array α) :
     modifyLast.go f (tl ++ [a]) r = (r.toListAppend <| modifyLast.go f (tl ++ [a]) #[]) := by
@@ -72,7 +76,8 @@ theorem modifyLast_concat
     simp only [cons_append, modifyLast]
     rw [modifyLast.go]
     case x_3 => exact append_ne_nil_of_right_ne_nil tl (cons_ne_nil a [])
-    rw [modifyLast.go_concat]; rw [Array
+    rw [modifyLast.go_concat]; rw [Array.toListAppend_eq]; rw [Array.toList_push]; rw [List.toList_toArray]; rw [nil_append]; rw [cons_append]; rw [nil_append]; rw [cons_inj_right]
+    exact modifyLast_concat _ _ tl
 
 中文:
 定理 modifyLast_concat
@@ -85,7 +90,8 @@ theorem modifyLast_concat
     simp only [cons_append, modifyLast]
     rw [modifyLast.go]
     case x_3 => exact append_ne_nil_of_right_ne_nil tl (cons_ne_nil a [])
-    rw [modifyLast.go_concat]; rw [Array
+    rw [modifyLast.go_concat]; rw [Array.toListAppend_eq]; rw [Array.toList_push]; rw [List.toList_toArray]; rw [nil_append]; rw [cons_append]; rw [nil_append]; rw [cons_inj_right]
+    exact modifyLast_concat _ _ tl
 
 Depends on / 依赖: Array.toListAppend_eq, Array.toList_push, List.toList_toArray, append_ne_nil_of_right_ne_nil, cons_append, cons_inj_right, cons_ne_nil, go_concat, modifyLast, modifyLast.go, modifyLast.go_concat, modifyLast_concat, nil_append, toListAppend_eq, toList_push, toList_toArray
 -/
@@ -116,7 +122,11 @@ theorem modifyLast_append_of_right_ne_nil
       simp only [modifyLast, modifyLast.go, Array.toListAppend_eq, nil_append]
       exact modifyLast_concat _ hd _
     | cons hd' tl' =>
-      rw [append_cons]; rw [← nil_append (hd :: hd' :: tl')]; rw [app
+      rw [append_cons]; rw [← nil_append (hd :: hd' :: tl')]; rw [append_cons [], nil_append,
+        modifyLast_append_of_right_ne_nil _ (l₁ ++ [hd]) (hd' :: tl') _,
+        modifyLast_append_of_right_ne_nil _ [hd] (hd' :: tl') _,
+        append_assoc]
+      all_goals { exact cons_ne_nil _ _ }
 
 中文:
 定理 modifyLast_append_of_right_ne_nil
@@ -130,7 +140,11 @@ theorem modifyLast_append_of_right_ne_nil
       simp only [modifyLast, modifyLast.go, Array.toListAppend_eq, nil_append]
       exact modifyLast_concat _ hd _
     | cons hd' tl' =>
-      rw [append_cons]; rw [← nil_append (hd :: hd' :: tl')]; rw [app
+      rw [append_cons]; rw [← nil_append (hd :: hd' :: tl')]; rw [append_cons [], nil_append,
+        modifyLast_append_of_right_ne_nil _ (l₁ ++ [hd]) (hd' :: tl') _,
+        modifyLast_append_of_right_ne_nil _ [hd] (hd' :: tl') _,
+        append_assoc]
+      all_goals { exact cons_ne_nil _ _ }
 
 Depends on / 依赖: Array.toListAppend_eq, all_goals, append_assoc, append_cons, cons_ne_nil, modifyLast, modifyLast.go, modifyLast_append_of_right_ne_nil, modifyLast_concat, nil_append, toListAppend_eq
 -/

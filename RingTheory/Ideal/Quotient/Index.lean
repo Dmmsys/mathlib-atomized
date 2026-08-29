@@ -46,7 +46,17 @@ lemma Submodule.finite_quotient_smul
   suffices Nat.card (N ⧸ (I • N).comap N.subtype) != 0 by
     constructor
     rw [← AddSubgroup.relIndex_mul_index
-      (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smu
+      (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
+    have inst : Finite (M ⧸ N.toAddSubgroup) := ‹_›
+    exact mul_ne_zero this AddSubgroup.index_ne_zero_of_finite
+  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
+    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
+      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
+        (quotTensorEquivQuotSMul N I).symm
+  rw [Nat.card_congr e.toEquiv]
+  have : Module.Finite R N := .of_fg hN
+  have : Finite ((R ⧸ I) otimes[R] N) := Module.finite_of_finite (R ⧸ I)
+  exact Nat.card_pos.ne'
 
 中文:
 引理 子模.finite_quotient_smul
@@ -57,7 +67,17 @@ lemma Submodule.finite_quotient_smul
   suffices Nat.card (N ⧸ (I • N).comap N.subtype) != 0 by
     constructor
     rw [← AddSubgroup.relIndex_mul_index
-      (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smu
+      (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
+    have inst : Finite (M ⧸ N.toAddSubgroup) := ‹_›
+    exact mul_ne_zero this AddSubgroup.index_ne_zero_of_finite
+  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
+    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
+      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
+        (quotTensorEquivQuotSMul N I).symm
+  rw [Nat.card_congr e.toEquiv]
+  have : Module.Finite R N := .of_fg hN
+  have : Finite ((R ⧸ I) otimes[R] N) := Module.finite_of_finite (R ⧸ I)
+  exact Nat.card_pos.ne'
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.index_ne_zero_of_finite, AddSubgroup.relIndex_mul_index, Finite, FiniteIndex, N.subtype, N.toAddSubgroup, Nat.card, Submodule, Submodule.quotEquivOfEq, Submodule.smul_le_right, finite_quotient_of_finiteIndex, index_ne_zero_of_finite, mul_ne_zero, otimes, quotEquivOfEq, relIndex_mul_index, smul_le_right, subtype, toAddSubgroup
 -/
@@ -97,7 +117,22 @@ lemma Submodule.index_smul_le
     (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
   gcongr
   change (Nat.card (N ⧸ (I • N).comap N.subtype)) <= Nat.card (R ⧸ I) ^ s.card
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R
+  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
+    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
+      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
+      (quotTensorEquivQuotSMul N I).symm
+  rw [Nat.card_congr e.toEquiv]
+  have H : LinearMap.range (Finsupp.linearCombination R (α := s) (↑)) = N := by
+    rw [Finsupp.range_linearCombination]; rw [← hs]; rw [Subtype.range_val]
+  let f : (s ->₀ R) ->ₗ[R] N := (Finsupp.linearCombination R (↑)).codRestrict _
+    (fun c => by rw [← H, LinearMap.mem_range]; exact exists_apply_eq_apply _ _)
+  have hf : Function.Surjective f := fun x => by
+    obtain ⟨y, hy⟩ := H.ge x.2; exact ⟨y, Subtype.ext hy⟩
+  have : Function.Surjective
+      (f.lTensor (R ⧸ I) ∘ₗ (finsuppScalarRight R R (R ⧸ I) s).symm.toLinearMap) :=
+    (LinearMap.lTensor_surjective (R ⧸ I) hf).comp (LinearEquiv.surjective _)
+  refine (Nat.card_le_card_of_surjective _ this).trans ?_
+  simp only [Nat.card_eq_fintype_card, Fintype.card_finsupp, Fintype.card_coe, le_rfl]
 
 中文:
 引理 子模.index_smul_le
@@ -109,7 +144,22 @@ lemma Submodule.index_smul_le
     (H := (I • N).toAddSubgroup) (K := N.toAddSubgroup) Submodule.smul_le_right]
   gcongr
   change (Nat.card (N ⧸ (I • N).comap N.subtype)) <= Nat.card (R ⧸ I) ^ s.card
-  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R
+  let e : (N ⧸ (I • N).comap N.subtype) ≃ₗ[R] (R ⧸ I) otimes[R] N :=
+    Submodule.quotEquivOfEq _ (I • (⊤ : Submodule R N)) (Submodule.map_injective_of_injective
+      N.injective_subtype (by simp [Submodule.smul_le_right])) ≪≫ₗ
+      (quotTensorEquivQuotSMul N I).symm
+  rw [Nat.card_congr e.toEquiv]
+  have H : LinearMap.range (Finsupp.linearCombination R (α := s) (↑)) = N := by
+    rw [Finsupp.range_linearCombination]; rw [← hs]; rw [Subtype.range_val]
+  let f : (s ->₀ R) ->ₗ[R] N := (Finsupp.linearCombination R (↑)).codRestrict _
+    (fun c => by rw [← H, LinearMap.mem_range]; exact exists_apply_eq_apply _ _)
+  have hf : Function.Surjective f := fun x => by
+    obtain ⟨y, hy⟩ := H.ge x.2; exact ⟨y, Subtype.ext hy⟩
+  have : Function.Surjective
+      (f.lTensor (R ⧸ I) ∘ₗ (finsuppScalarRight R R (R ⧸ I) s).symm.toLinearMap) :=
+    (LinearMap.lTensor_surjective (R ⧸ I) hf).comp (LinearEquiv.surjective _)
+  refine (Nat.card_le_card_of_surjective _ this).trans ?_
+  simp only [Nat.card_eq_fintype_card, Fintype.card_finsupp, Fintype.card_coe, le_rfl]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.relIndex_mul_index, N.injective_subtype, N.subtype, N.toAddSubgroup, Nat.card, Submodule, Submodule.map_injective_of_injective, Submodule.quotEquivOfEq, Submodule.smul_le_right, classical, injective_subtype, map_injective_of_injective, nonempty_fintype, otimes, quotEquivOfEq, quotTensorEquivQuotSMul, relIndex_mul_index, s.card, smul_le_right
 -/
@@ -154,7 +204,8 @@ lemma Ideal.finite_quotient_prod
   | insert a s has IH =>
     rw [Finset.prod_insert has]; rw [mul_comm]
     have := hI' a (by simp)
-    have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (
+    have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (by simp [hi]))
+    exact Submodule.finite_quotient_smul _ (hI a (by simp))
 
 中文:
 引理 理想.finite_quotient_prod
@@ -166,7 +217,8 @@ lemma Ideal.finite_quotient_prod
   | insert a s has IH =>
     rw [Finset.prod_insert has]; rw [mul_comm]
     have := hI' a (by simp)
-    have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (
+    have := IH (fun i hi => hI _ (by simp [hi])) (fun i hi => hI' _ (by simp [hi]))
+    exact Submodule.finite_quotient_smul _ (hI a (by simp))
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.prod_empty, Finset.prod_insert, Submodule, Submodule.finite_quotient_smul, classical, finite_quotient_smul, induction_on, infer_instance, insert, isClosed_fiber, isCompact, isCompact_iff_compactSpace, mul_comm, one_eq_top, prod_empty, prod_insert, x.prop
 -/
@@ -231,7 +283,7 @@ lemma Ideal.index_pow_le
   | succ n IH =>
     refine (Submodule.index_smul_le (I ^ n) s hs).trans ?_
     refine (Nat.mul_le_mul (Nat.pow_le_pow_left IH _) le_rfl).trans ?_
-    rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_c
+    rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_comm]
 
 中文:
 引理 理想.index_pow_le
@@ -243,7 +295,7 @@ lemma Ideal.index_pow_le
   | succ n IH =>
     refine (Submodule.index_smul_le (I ^ n) s hs).trans ?_
     refine (Nat.mul_le_mul (Nat.pow_le_pow_left IH _) le_rfl).trans ?_
-    rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_c
+    rw [← pow_mul]; rw [← pow_succ]; rw [geom_sum_succ]; rw [mul_comm]
 
 Depends on / 依赖: Ideal.finite_quotient_pow, Nat.mul_le_mul, Nat.pow_le_pow_left, Submodule, Submodule.index_smul_le, finite_quotient_pow, geom_sum_succ, index_smul_le, le_rfl, mul_comm, mul_le_mul, pow_le_pow_left, pow_mul, pow_succ
 -/

@@ -1275,7 +1275,13 @@ theorem tendsto_iff_forall
   simp_rw [Set.mem_Ioo, eventually_and, ← ofSeq_lt_ofSeq]
   refine ⟨fun H => ⟨fun s hs => ?_, fun s hs => ?_⟩, fun H ⟨s, t⟩ ⟨hs, ht⟩ => ⟨?_, ?_⟩⟩
   · obtain ⟨t, ht⟩ := exists_gt r
-    exact (
+    exact (H ⟨s, t⟩ ⟨hs, ht⟩).1.le
+  · obtain ⟨t, ht⟩ := exists_lt r
+    exact (H ⟨t, s⟩ ⟨ht, hs⟩).2.le
+  · obtain ⟨u, hu, hu'⟩ := exists_between hs
+    exact (coe_lt_coe.2 hu).trans_le (H.1 _ hu')
+  · obtain ⟨u, hu, hu'⟩ := exists_between ht
+    exact (H.2 _ hu).trans_lt (coe_lt_coe.2 hu')
 
 中文:
 定理 tendsto_iff_对任意
@@ -1286,7 +1292,13 @@ theorem tendsto_iff_forall
   simp_rw [Set.mem_Ioo, eventually_and, ← ofSeq_lt_ofSeq]
   refine ⟨fun H => ⟨fun s hs => ?_, fun s hs => ?_⟩, fun H ⟨s, t⟩ ⟨hs, ht⟩ => ⟨?_, ?_⟩⟩
   · obtain ⟨t, ht⟩ := exists_gt r
-    exact (
+    exact (H ⟨s, t⟩ ⟨hs, ht⟩).1.le
+  · obtain ⟨t, ht⟩ := exists_lt r
+    exact (H ⟨t, s⟩ ⟨ht, hs⟩).2.le
+  · obtain ⟨u, hu, hu'⟩ := exists_between hs
+    exact (coe_lt_coe.2 hu).trans_le (H.1 _ hu')
+  · obtain ⟨u, hu, hu'⟩ := exists_between ht
+    exact (H.2 _ hu).trans_lt (coe_lt_coe.2 hu')
 
 Depends on / 依赖: Set.mem_Ioo, coe_lt_coe, eventually_and, exists_between, exists_gt, exists_lt, mem_Ioo, nhds_basis_Ioo, ofSeq_lt_ofSeq, ofSeq_surjective, simp_rw, tendsto_ofSeq, tendsto_right_iff, trans_le
 -/
@@ -1755,7 +1767,10 @@ theorem isSt_iff
     · simpa using (h _ (sub_pos_of_lt hs)).1.le
     · simpa using (h _ (sub_pos_of_lt hs)).2.le
   mpr h := by
-    obta
+    obtain ⟨h, rfl⟩ := h
+    refine fun y hy => ⟨?_, ?_⟩
+    · apply lt_of_lt_stdPart coeRingHom h; simpa
+    · apply lt_of_stdPart_lt coeRingHom h; simpa
 
 中文:
 定理 isSt_iff
@@ -1768,7 +1783,10 @@ theorem isSt_iff
     · simpa using (h _ (sub_pos_of_lt hs)).1.le
     · simpa using (h _ (sub_pos_of_lt hs)).2.le
   mpr h := by
-    obta
+    obtain ⟨h, rfl⟩ := h
+    refine fun y hy => ⟨?_, ?_⟩
+    · apply lt_of_lt_stdPart coeRingHom h; simpa
+    · apply lt_of_stdPart_lt coeRingHom h; simpa
 
 Depends on / 依赖: coeRingHom, lt_of_lt_stdPart, lt_of_stdPart_lt, mk_nonneg_of_le_of_le_of_archimedean, stdPart_eq, sub_pos_of_lt, zero_lt_one
 -/
@@ -4385,7 +4403,11 @@ theorem infinitesimal_real_iff
 nonrec theorem Infinitesimal.add {x y : Real*} (hx : Infinitesimal x) (hy : Infinitesimal y) :
     Infinitesimal (x + y) := by simpa only [add_zero] using! hx.add hy
 
-@[deprecated "`Infinitesimal` is deprecated" 
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
+nonrec theorem Infinitesimal.neg {x : Real*} (hx : Infinitesimal x) : Infinitesimal (-x) := by
+  simpa only [neg_zero] using! hx.neg
+
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 中文:
 定理 infinitesimal_real_iff
@@ -4397,7 +4419,11 @@ nonrec theorem Infinitesimal.add {x y : Real*} (hx : Infinitesimal x) (hy : Infi
 nonrec theorem Infinitesimal.add {x y : Real*} (hx : Infinitesimal x) (hy : Infinitesimal y) :
     Infinitesimal (x + y) := by simpa only [add_zero] using! hx.add hy
 
-@[deprecated "`Infinitesimal` is deprecated" 
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
+nonrec theorem Infinitesimal.neg {x : Real*} (hx : Infinitesimal x) : Infinitesimal (-x) := by
+  simpa only [neg_zero] using! hx.neg
+
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 Depends on / 依赖: isSt_real_iff_eq
 -/
@@ -4426,7 +4452,7 @@ theorem infinitesimal_neg
 nonrec theorem Infinitesimal.mul {x y : Real*} (hx : Infinitesimal x) (hy : Infinitesimal y) :
     Infinitesimal (x * y) := by simpa only [mul_zero] using! hx.mul hy
 
-@[deprecated "
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 中文:
 定理 infinitesimal_neg
@@ -4438,7 +4464,7 @@ nonrec theorem Infinitesimal.mul {x y : Real*} (hx : Infinitesimal x) (hy : Infi
 nonrec theorem Infinitesimal.mul {x y : Real*} (hx : Infinitesimal x) (hy : Infinitesimal y) :
     Infinitesimal (x * y) := by simpa only [mul_zero] using! hx.mul hy
 
-@[deprecated "
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 Depends on / 依赖: Infinitesimal, Infinitesimal.neg, h.neg, neg_neg
 -/
@@ -4900,7 +4926,9 @@ theorem infinitePos_mul_of_infinitePos_not_infinitesimal_pos
   have hyr : 0 < r₁ ∧ ↑r₁ <= y := by
     rwa [Classical.not_imp, ← abs_lt, not_lt, abs_of_pos hy₂] at hy₁''
   rw [← div_mul_cancel₀ r (ne_of_gt hyr.1)]; rw [coe_mul]
-  exact mul_lt_mul (hx (r /
+  exact mul_lt_mul (hx (r / r₁)) hyr.2 (coe_lt_coe.2 hyr.1) (le_of_lt (hx 0))
+
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 中文:
 定理 infinitePos_mul_of_infinitePos_not_infinitesimal_pos
@@ -4911,7 +4939,9 @@ theorem infinitePos_mul_of_infinitePos_not_infinitesimal_pos
   have hyr : 0 < r₁ ∧ ↑r₁ <= y := by
     rwa [Classical.not_imp, ← abs_lt, not_lt, abs_of_pos hy₂] at hy₁''
   rw [← div_mul_cancel₀ r (ne_of_gt hyr.1)]; rw [coe_mul]
-  exact mul_lt_mul (hx (r /
+  exact mul_lt_mul (hx (r / r₁)) hyr.2 (coe_lt_coe.2 hyr.1) (le_of_lt (hx 0))
+
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 Depends on / 依赖: Classical, Classical.not_imp, abs_lt, abs_of_pos, coe_lt_coe, coe_mul, infinitesimal_def, le_of_lt, mul_lt_mul, ne_of_gt, not_forall, not_forall.mp, not_imp, not_lt
 -/
@@ -5217,7 +5247,12 @@ theorem infinite_mul_of_infinite_not_infinitesimal
   hx.elim
     (h0.elim
       (fun H0 Hx => Or.inr (infiniteNeg_mul_of_infinitePos_not_infinitesimal_neg Hx hy H0))
-      fun H0 Hx => Or.inl (infinitePos_mul_of_infinitePos_not_infinitesimal_pos H
+      fun H0 Hx => Or.inl (infinitePos_mul_of_infinitePos_not_infinitesimal_pos Hx hy H0))
+    (h0.elim
+      (fun H0 Hx => Or.inl (infinitePos_mul_of_infiniteNeg_not_infinitesimal_neg Hx hy H0))
+      fun H0 Hx => Or.inr (infiniteNeg_mul_of_infiniteNeg_not_infinitesimal_pos Hx hy H0))
+
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 
 中文:
 定理 infinite_mul_of_infinite_not_infinitesimal
@@ -5227,7 +5262,12 @@ theorem infinite_mul_of_infinite_not_infinitesimal
   hx.elim
     (h0.elim
       (fun H0 Hx => Or.inr (infiniteNeg_mul_of_infinitePos_not_infinitesimal_neg Hx hy H0))
-      fun H0 Hx => Or.inl (infinitePos_mul_of_infinitePos_not_infinitesimal_pos H
+      fun H0 Hx => Or.inl (infinitePos_mul_of_infinitePos_not_infinitesimal_pos Hx hy H0))
+    (h0.elim
+      (fun H0 Hx => Or.inl (infinitePos_mul_of_infiniteNeg_not_infinitesimal_neg Hx hy H0))
+      fun H0 Hx => Or.inr (infiniteNeg_mul_of_infiniteNeg_not_infinitesimal_pos Hx hy H0))
+
+@[deprecated "`Infinitesimal` is deprecated" (since := "2026-01-05")]
 -/
 theorem infinite_mul_of_infinite_not_infinitesimal {x y : Real*} :
     Infinite x -> ¬Infinitesimal y -> Infinite (x * y) := fun hx hy =>

@@ -318,7 +318,10 @@ theorem closure_toSubmonoid
       closure_induction
         (fun x hx => Submonoid.closure_mono subset_union_left (Submonoid.subset_closure hx))
         (Submonoid.one_mem _) (fun x y _ _ hx hy => Submonoid.mul_mem _ hx hy) (fun x _ hx => ?_) hx
-  
+    rwa [← Submonoid.mem_closure_inv, Set.union_inv, inv_inv, Set.union_comm]
+  · simp only [true_and, coe_toSubmonoid, union_subset_iff, subset_closure, inv_subset_closure]
+
+@[to_additive]
 
 中文:
 定理 closure_toSubmonoid
@@ -329,7 +332,10 @@ theorem closure_toSubmonoid
       closure_induction
         (fun x hx => Submonoid.closure_mono subset_union_left (Submonoid.subset_closure hx))
         (Submonoid.one_mem _) (fun x y _ _ hx hy => Submonoid.mul_mem _ hx hy) (fun x _ hx => ?_) hx
-  
+    rwa [← Submonoid.mem_closure_inv, Set.union_inv, inv_inv, Set.union_comm]
+  · simp only [true_and, coe_toSubmonoid, union_subset_iff, subset_closure, inv_subset_closure]
+
+@[to_additive]
 
 Depends on / 依赖: Set.union_comm, Set.union_inv, Submonoid, Submonoid.closure_le, Submonoid.closure_mono, Submonoid.mem_closure_inv, Submonoid.mul_mem, Submonoid.one_mem, Submonoid.subset_closure, closure_induction, closure_le, closure_mono, coe_toSubmonoid, inv_inv, inv_subset_closure, le_antisymm, mem_closure_inv, mul_mem, one_mem, subset_closure
 -/
@@ -413,7 +419,7 @@ theorem closure_induction_left
   | mul_left x hx y hy ih =>
     cases hx with
     | inl hx => exact mul_left _ hx _ hy ih
-    | inr hx => simpa only [inv_inv] using inv_mul
+    | inr hx => simpa only [inv_inv] using inv_mul_cancel _ hx _ hy ih
 
 中文:
 定理 closure_induction_left
@@ -427,7 +433,7 @@ theorem closure_induction_left
   | mul_left x hx y hy ih =>
     cases hx with
     | inl hx => exact mul_left _ hx _ hy ih
-    | inr hx => simpa only [inv_inv] using inv_mul
+    | inr hx => simpa only [inv_inv] using inv_mul_cancel _ hx _ hy ih
 
 Depends on / 依赖: Submonoid, Submonoid.closure_induction_left, closure_induction_left, closure_toSubmonoid, inv_inv, inv_mul_cancel, mem_toSubmonoid, mul_left, revert, simp_rw
 -/
@@ -596,7 +602,7 @@ theorem iSup_induction
   | inv_mem x hx =>
     obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx
     exact mem _ _ (inv_mem hi)
-  | mul x y _ _ ihx ihy => 
+  | mul x y _ _ ihx ihy => exact mul x y ihx ihy
 
 中文:
 定理 iSup_induction
@@ -611,7 +617,7 @@ theorem iSup_induction
   | inv_mem x hx =>
     obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx
     exact mem _ _ (inv_mem hi)
-  | mul x y _ _ ihx ihy => 
+  | mul x y _ _ ihx ihy => exact mul x y ihx ihy
 
 Depends on / 依赖: Set.mem_iUnion.mp, closure_induction, iSup_eq_closure, inv_mem, mem_iUnion
 -/
@@ -938,7 +944,14 @@ theorem coe_mul_of_left_le_normalizer_right
   | mem _ hx => exact hx
   | inv_mem x hx =>
     obtain ⟨x, hx, y, hy, rfl⟩ := hx
-    simpa only [mul_inv_r
+    simpa only [mul_inv_rev, mul_assoc, inv_inv, inv_mul_cancel_left]
+      using mul_mem_mul (inv_mem hx) ((mem_normalizer_iff.mp (hLE hx) y⁻¹).mp (inv_mem hy))
+  | mul x' x' _ _ hx hx' =>
+    obtain ⟨x, hx, y, hy, rfl⟩ := hx
+    obtain ⟨x', hx', y', hy', rfl⟩ := hx'
+    refine ⟨x * x', mul_mem hx hx', x'⁻¹ * y * x' * y', mul_mem ?_ hy', ?_⟩
+    · exact (mem_normalizer_iff''.mp (hLE hx') y).mp hy
+    · simp only [mul_assoc, mul_inv_cancel_left]
 
 中文:
 定理 coe_mul_of_left_le_normalizer_right
@@ -951,7 +964,14 @@ theorem coe_mul_of_left_le_normalizer_right
   | mem _ hx => exact hx
   | inv_mem x hx =>
     obtain ⟨x, hx, y, hy, rfl⟩ := hx
-    simpa only [mul_inv_r
+    simpa only [mul_inv_rev, mul_assoc, inv_inv, inv_mul_cancel_left]
+      using mul_mem_mul (inv_mem hx) ((mem_normalizer_iff.mp (hLE hx) y⁻¹).mp (inv_mem hy))
+  | mul x' x' _ _ hx hx' =>
+    obtain ⟨x, hx, y, hy, rfl⟩ := hx
+    obtain ⟨x', hx', y', hy', rfl⟩ := hx'
+    refine ⟨x * x', mul_mem hx hx', x'⁻¹ * y * x' * y', mul_mem ?_ hy', ?_⟩
+    · exact (mem_normalizer_iff''.mp (hLE hx') y).mp hy
+    · simp only [mul_assoc, mul_inv_cancel_left]
 
 Depends on / 依赖: Set.Subset.antisymm, Subset, antisymm, closure_induction, inv_inv, inv_mem, inv_mul_cancel_left, mem_normalizer_iff, mem_normalizer_iff.mp, mul_assoc, mul_inv_rev, mul_mem_mul, mul_one, one_mem, subset_closure, sup_eq_closure_mul
 -/
@@ -1065,7 +1085,9 @@ theorem mul_inf_assoc
   rintro ⟨⟨y, hy, z, hz, rfl⟩, hyz⟩
   refine ⟨y, hy, z, ⟨hz, ?_⟩, rfl⟩
   suffices y⁻¹ * (y * z) in C by simpa
-  exact
+  exact mul_mem (inv_mem (h hy)) hyz
+
+@[to_additive]
 
 中文:
 定理 mul_inf_assoc
@@ -1080,7 +1102,9 @@ theorem mul_inf_assoc
   rintro ⟨⟨y, hy, z, hz, rfl⟩, hyz⟩
   refine ⟨y, hy, z, ⟨hz, ?_⟩, rfl⟩
   suffices y⁻¹ * (y * z) in C by simpa
-  exact
+  exact mul_mem (inv_mem (h hy)) hyz
+
+@[to_additive]
 
 Depends on / 依赖: Set.mem_inter_iff, Set.mem_mul, coe_inf, inv_mem, mem_inter_iff, mem_mul, mul_mem
 -/
@@ -1114,7 +1138,9 @@ theorem inf_mul_assoc
   rintro ⟨hyz, y, hy, z, hz, rfl⟩
   refine ⟨y, ⟨?_, hy⟩, z, hz, rfl⟩
   suffices y * z * z⁻¹ in A by simpa
-  exact m
+  exact mul_mem hyz (inv_mem (h hz))
+
+@[to_additive]
 
 中文:
 定理 inf_mul_assoc
@@ -1129,7 +1155,9 @@ theorem inf_mul_assoc
   rintro ⟨hyz, y, hy, z, hz, rfl⟩
   refine ⟨y, ⟨?_, hy⟩, z, hz, rfl⟩
   suffices y * z * z⁻¹ in A by simpa
-  exact m
+  exact mul_mem hyz (inv_mem (h hz))
+
+@[to_additive]
 
 Depends on / 依赖: A.mul_mem, Set.mem_inter_iff, Set.mem_mul, coe_inf, inv_mem, mem_inter_iff, mem_mul, mul_mem
 -/
@@ -1385,7 +1413,7 @@ theorem biSup_normal
   rw [sSup_eq_iSup]
   exact biSup_normal Hs id h
 
-@[to_additi
+@[to_additive]
 
 中文:
 定理 biSup_normal
@@ -1400,7 +1428,7 @@ theorem biSup_normal
   rw [sSup_eq_iSup]
   exact biSup_normal Hs id h
 
-@[to_additi
+@[to_additive]
 
 Depends on / 依赖: Normal, i.property, iSup_normal, iSup_subtype, property
 -/
@@ -1522,7 +1550,7 @@ definition pointwiseMulAction
     (congr_arg (fun f : Monoid.End G => S.map f) (map_mul _ _ _)).trans
       (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Subgroup.poi
+scoped[Pointwise] attribute [instance] Subgroup.pointwiseMulAction
 
 中文:
 定义 pointwiseMulAction
@@ -1535,7 +1563,7 @@ scoped[Pointwise] attribute [instance] Subgroup.poi
     (congr_arg (fun f : Monoid.End G => S.map f) (map_mul _ _ _)).trans
       (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Subgroup.poi
+scoped[Pointwise] attribute [instance] Subgroup.pointwiseMulAction
 -/
 protected def pointwiseMulAction : MulAction α (Subgroup G) where
   smul a S := S.map (MulDistribMulAction.toMonoidEnd _ _ a)
@@ -2121,7 +2149,7 @@ theorem Normal.of_conjugate_fixed
   constructor
   intro n hn g
   rw [← h g]; rw [Subgroup.mem_pointwise_smul_iff_inv_smul_mem]; rw [← map_inv]; rw [MulAut.smul_def]; rw [MulAut.conj_apply]; rw [inv_inv]; rw [mul_assoc]; rw [mul_assoc]; rw [inv_mul_cancel]; rw [mul_one]; rw [← mul_assoc]; rw [inv_mul_cancel]; rw [one_mul]
-  exact 
+  exact hn
 
 中文:
 定理 正规.of_conjugate_fixed
@@ -2130,7 +2158,7 @@ theorem Normal.of_conjugate_fixed
   constructor
   intro n hn g
   rw [← h g]; rw [Subgroup.mem_pointwise_smul_iff_inv_smul_mem]; rw [← map_inv]; rw [MulAut.smul_def]; rw [MulAut.conj_apply]; rw [inv_inv]; rw [mul_assoc]; rw [mul_assoc]; rw [inv_mul_cancel]; rw [mul_one]; rw [← mul_assoc]; rw [inv_mul_cancel]; rw [one_mul]
-  exact 
+  exact hn
 
 Depends on / 依赖: MulAut, MulAut.conj_apply, MulAut.smul_def, Subgroup, Subgroup.mem_pointwise_smul_iff_inv_smul_mem, conj_apply, inv_inv, inv_mul_cancel, map_inv, mem_pointwise_smul_iff_inv_smul_mem, mul_assoc, mul_one, one_mul, smul_def
 -/

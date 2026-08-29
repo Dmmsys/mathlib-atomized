@@ -34,7 +34,9 @@ definition liftQ₂
     simp_rw [LinearMap.mem_ker, LinearMap.ext_iff, LinearMap.flip_apply, Submodule.Quotient.forall,
       Submodule.liftQ_apply, ← f.flip_apply, show f.flip n = 0 from hN' hn, LinearMap.zero_apply,
       forall_true_iff]
-  (N'.l
+  (N'.liftQ (M'.liftQ f hM').flip this).flip
+
+@[simp]
 
 中文:
 定义 liftQ₂
@@ -43,7 +45,9 @@ definition liftQ₂
     simp_rw [LinearMap.mem_ker, LinearMap.ext_iff, LinearMap.flip_apply, Submodule.Quotient.forall,
       Submodule.liftQ_apply, ← f.flip_apply, show f.flip n = 0 from hN' hn, LinearMap.zero_apply,
       forall_true_iff]
-  (N'.l
+  (N'.liftQ (M'.liftQ f hM').flip this).flip
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.ext_iff, LinearMap.flip_apply, LinearMap.mem_ker, LinearMap.zero_apply, Quotient, Submodule, Submodule.Quotient.forall, Submodule.liftQ_apply, ext_iff, f.flip, f.flip_apply, flip.ker, flip_apply, forall_true_iff, liftQ_apply, mem_ker, simp_rw, zero_apply
 -/

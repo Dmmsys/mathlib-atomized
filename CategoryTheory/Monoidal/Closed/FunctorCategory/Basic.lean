@@ -54,7 +54,33 @@ definition homEquiv
           dsimp
           simp only [enrichedOrdinaryCategorySelf_eHomWhiskerLeft, Category.assoc,
             enrichedOrdinaryCategorySelf_eHomWhiskerRight]
-          rw [← curry_natural_left_assoc]; rw 
+          rw [← curry_natural_left_assoc]; rw [← curry_natural_left_assoc]; rw [← curry_natural_right]; rw [curry_pre_app]; rw [Category.assoc]; rw [← f.naturality φ.right]; rw [Monoidal.tensorObj_map]; rw [tensorHom_def_assoc]; rw [← Under.w φ]; rw [Functor.map_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange_assoc]) }
+  invFun g :=
+    { app j := uncurry (g.app j ≫ enrichedHomπ C _ _ (Under.mk (𝟙 j)))
+      naturality j j' φ := by
+        dsimp
+        rw [← uncurry_natural_right]; rw [tensorHom_def'_assoc]; rw [← uncurry_pre_app]; rw [← uncurry_natural_left]; rw [Category.assoc]; rw [Category.assoc]; rw [NatTrans.naturality_assoc]; rw [functorEnrichedHom_map]; rw [end_.lift_π_assoc]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]
+        dsimp
+        rw [pre_id]; rw [NatTrans.id_app]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]; rw [Functor.map_id]; rw [Category.comp_id]; rw [Category.comp_id]
+        congr 2
+        rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
+        let α : Under.mk (𝟙 j) ⟶ (Under.map φ).obj (Under.mk (𝟙 j')) := Under.homMk φ
+        exact (enrichedHom_condition C (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₃) α).symm }
+  left_inv f := by cat_disch
+  right_inv g := by
+    ext j
+    dsimp
+    ext k
+    -- this following list was obtained by
+    -- `simp? [enrichedOrdinaryCategorySelf_eHomWhiskerLeft, Under.map, Comma.mapLeft]`
+    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, enrichedCategorySelf_hom,
+      curry_uncurry, NatTrans.naturality_assoc, functorEnrichedHom_obj, functorEnrichedHom_map,
+      Under.map, Comma.mapLeft, Functor.const_obj_obj, Functor.id_obj, Discrete.natTrans_app,
+      StructuredArrow.left_eq_id, end_.lift_π, Under.mk_right, Under.mk_hom, Iso.refl_inv,
+      NatTrans.id_app, enrichedOrdinaryCategorySelf_eHomWhiskerRight, pre_id, Iso.refl_hom,
+      enrichedOrdinaryCategorySelf_eHomWhiskerLeft, Functor.map_id, Category.comp_id]
+    congr
+    simp
 
 中文:
 定义 homEquiv
@@ -64,7 +90,33 @@ definition homEquiv
           dsimp
           simp only [enrichedOrdinaryCategorySelf_eHomWhiskerLeft, Category.assoc,
             enrichedOrdinaryCategorySelf_eHomWhiskerRight]
-          rw [← curry_natural_left_assoc]; rw 
+          rw [← curry_natural_left_assoc]; rw [← curry_natural_left_assoc]; rw [← curry_natural_right]; rw [curry_pre_app]; rw [Category.assoc]; rw [← f.naturality φ.right]; rw [Monoidal.tensorObj_map]; rw [tensorHom_def_assoc]; rw [← Under.w φ]; rw [Functor.map_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange_assoc]) }
+  invFun g :=
+    { app j := uncurry (g.app j ≫ enrichedHomπ C _ _ (Under.mk (𝟙 j)))
+      naturality j j' φ := by
+        dsimp
+        rw [← uncurry_natural_right]; rw [tensorHom_def'_assoc]; rw [← uncurry_pre_app]; rw [← uncurry_natural_left]; rw [Category.assoc]; rw [Category.assoc]; rw [NatTrans.naturality_assoc]; rw [functorEnrichedHom_map]; rw [end_.lift_π_assoc]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]
+        dsimp
+        rw [pre_id]; rw [NatTrans.id_app]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]; rw [Functor.map_id]; rw [Category.comp_id]; rw [Category.comp_id]
+        congr 2
+        rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
+        let α : Under.mk (𝟙 j) ⟶ (Under.map φ).obj (Under.mk (𝟙 j')) := Under.homMk φ
+        exact (enrichedHom_condition C (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₃) α).symm }
+  left_inv f := by cat_disch
+  right_inv g := by
+    ext j
+    dsimp
+    ext k
+    -- this following list was obtained by
+    -- `simp? [enrichedOrdinaryCategorySelf_eHomWhiskerLeft, Under.map, Comma.mapLeft]`
+    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, enrichedCategorySelf_hom,
+      curry_uncurry, NatTrans.naturality_assoc, functorEnrichedHom_obj, functorEnrichedHom_map,
+      Under.map, Comma.mapLeft, Functor.const_obj_obj, Functor.id_obj, Discrete.natTrans_app,
+      StructuredArrow.left_eq_id, end_.lift_π, Under.mk_right, Under.mk_hom, Iso.refl_inv,
+      NatTrans.id_app, enrichedOrdinaryCategorySelf_eHomWhiskerRight, pre_id, Iso.refl_hom,
+      enrichedOrdinaryCategorySelf_eHomWhiskerLeft, Functor.map_id, Category.comp_id]
+    congr
+    simp
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, Monoidal, Monoidal.tensorObj_map, MonoidalCategory, MonoidalCategory.whisk, Under.w, curry_natural_left_assoc, curry_natural_right, curry_pre_app, end_, end_.lift, enrichedOrdinaryCategorySelf_eHomWhiskerLeft, enrichedOrdinaryCategorySelf_eHomWhiskerRight, f.app, f.naturality, k.hom, k.right
 -/
@@ -144,7 +196,12 @@ lemma homEquiv_naturality_three
   ext j
   dsimp
   ext k
-  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [end_.lift_π]; rw [enrichedComp_π]; rw [tensorHom_def]; rw [Category.assoc]; rw [whisker_exchange_assoc]; rw [whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [end_.lift_π_assoc]; r
+  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [end_.lift_π]; rw [enrichedComp_π]; rw [tensorHom_def]; rw [Category.assoc]; rw [whisker_exchange_assoc]; rw [whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [end_.lift_π_assoc]; rw [Category.assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [Category.assoc]; rw [end_.lift_π]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
+  dsimp
+  rw [pre_id]; rw [NatTrans.id_app]; rw [Functor.map_id]; rw [Category.comp_id]; rw [Category.comp_id]; rw [homEquiv_apply_π]; rw [curry_natural_right]
+  congr 2
+  symm
+  apply enrichedOrdinaryCategorySelf_eHomWhiskerLeft
 
 中文:
 引理 homEquiv_naturality_three
@@ -154,7 +211,12 @@ lemma homEquiv_naturality_three
   ext j
   dsimp
   ext k
-  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [end_.lift_π]; rw [enrichedComp_π]; rw [tensorHom_def]; rw [Category.assoc]; rw [whisker_exchange_assoc]; rw [whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [end_.lift_π_assoc]; r
+  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [end_.lift_π]; rw [enrichedComp_π]; rw [tensorHom_def]; rw [Category.assoc]; rw [whisker_exchange_assoc]; rw [whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [end_.lift_π_assoc]; rw [Category.assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [Category.assoc]; rw [end_.lift_π]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
+  dsimp
+  rw [pre_id]; rw [NatTrans.id_app]; rw [Functor.map_id]; rw [Category.comp_id]; rw [Category.comp_id]; rw [homEquiv_apply_π]; rw [curry_natural_right]
+  congr 2
+  symm
+  apply enrichedOrdinaryCategorySelf_eHomWhiskerLeft
 
 Depends on / 依赖: Category, Category.assoc, Iso.inv_hom_id_assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, end_, end_.lift_, enrichedOrdinaryCategorySelf_eHomWhiskerLeft, enrichedOrdinaryCategorySelf_eHomWhiskerRight, homEquiv, inv_hom_id_assoc, tensorHom_def, whiskerLeft_comp_assoc, whiskerRight_id_assoc, whisker_exchange_assoc
 -/

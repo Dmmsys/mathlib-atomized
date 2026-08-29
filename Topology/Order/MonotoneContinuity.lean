@@ -46,7 +46,10 @@ theorem StrictMonoOn.continuousWithinAt_right_of_exists_between
   · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
       ((h_mono.le_iff_le has hxs).2 hxa)
   · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-
+    rw [h_mono.lt_iff_lt has hcs] at hac
+    filter_upwards [hs, Ico_mem_nhdsGE hac]
+    rintro x hx ⟨_, hxc⟩
+    exact ((h_mono.lt_iff_lt hx hcs).2 hxc).trans_le hcb
 
 中文:
 定理 StrictMonoOn.continuousWithinAt_right_of_存在_between
@@ -57,7 +60,10 @@ theorem StrictMonoOn.continuousWithinAt_right_of_exists_between
   · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
       ((h_mono.le_iff_le has hxs).2 hxa)
   · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-
+    rw [h_mono.lt_iff_lt has hcs] at hac
+    filter_upwards [hs, Ico_mem_nhdsGE hac]
+    rintro x hx ⟨_, hxc⟩
+    exact ((h_mono.lt_iff_lt hx hcs).2 hxc).trans_le hcb
 
 Depends on / 依赖: Ico_mem_nhdsGE, filter_upwards, h_mono, h_mono.le_iff_le, h_mono.lt_iff_lt, hb.trans_le, le_iff_le, lt_iff_lt, mem_of_mem_nhdsWithin, self_mem_Ici, self_mem_nhdsWithin, tendsto_order, trans_le
 -/
@@ -86,7 +92,10 @@ theorem continuousWithinAt_right_of_monotoneOn_of_exists_between
   · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
       (h_mono has hxs hxa)
   · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-have : a < c :
+have : a < c := not_le.1 fun h => hac.not_ge h_mono hcs has h
+    filter_upwards [hs, Ico_mem_nhdsGE this]
+    rintro x hx ⟨_, hxc⟩
+    exact (h_mono hx hcs hxc.le).trans_lt hcb
 
 中文:
 定理 continuousWithinAt_right_of_monotoneOn_of_存在_between
@@ -97,7 +106,10 @@ have : a < c :
   · filter_upwards [hs, @self_mem_nhdsWithin _ _ a (Ici a)] with _ hxs hxa using hb.trans_le
       (h_mono has hxs hxa)
   · rcases hfs b hb with ⟨c, hcs, hac, hcb⟩
-have : a < c :
+have : a < c := not_le.1 fun h => hac.not_ge h_mono hcs has h
+    filter_upwards [hs, Ico_mem_nhdsGE this]
+    rintro x hx ⟨_, hxc⟩
+    exact (h_mono hx hcs hxc.le).trans_lt hcb
 
 Depends on / 依赖: Ico_mem_nhdsGE, filter_upwards, h_mono, hac.not_ge, hb.trans_le, hxc.le, mem_of_mem_nhdsWithin, not_ge, not_le, self_mem_Ici, self_mem_nhdsWithin, tendsto_order, trans_le, trans_lt
 -/
@@ -124,7 +136,9 @@ theorem continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
   refine continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono hs fun b hb => ?_
   rcases (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hb).1 hfs with ⟨b', ⟨hab', hbb'⟩, hb'⟩
   rcases exists_between hab' with ⟨c', hc'⟩
-  rcases mem_closure_iff.1 (hb' ⟨hc'.1.le, hc'.2⟩) (Ioo (f a) b') isOpen
+  rcases mem_closure_iff.1 (hb' ⟨hc'.1.le, hc'.2⟩) (Ioo (f a) b') isOpen_Ioo hc' with
+    ⟨_, hc, ⟨c, hcs, rfl⟩⟩
+  exact ⟨c, hcs, hc.1, hc.2.trans_le hbb'⟩
 
 中文:
 定理 continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
@@ -133,7 +147,9 @@ theorem continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
   refine continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono hs fun b hb => ?_
   rcases (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hb).1 hfs with ⟨b', ⟨hab', hbb'⟩, hb'⟩
   rcases exists_between hab' with ⟨c', hc'⟩
-  rcases mem_closure_iff.1 (hb' ⟨hc'.1.le, hc'.2⟩) (Ioo (f a) b') isOpen
+  rcases mem_closure_iff.1 (hb' ⟨hc'.1.le, hc'.2⟩) (Ioo (f a) b') isOpen_Ioo hc' with
+    ⟨_, hc, ⟨c, hcs, rfl⟩⟩
+  exact ⟨c, hcs, hc.1, hc.2.trans_le hbb'⟩
 
 Depends on / 依赖: continuousWithinAt_right_of_monotoneOn_of_exists_between, exists_between, h_mono, isOpen_Ioo, mem_closure_iff, mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset, trans_le
 -/
@@ -439,7 +455,7 @@ theorem StrictMonoOn.continuousAt_of_closure_image_mem_nhds
     ⟨h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin (mem_nhdsWithin_of_mem_nhds hs)
         (mem_nhdsWithin_of_mem_nhds hfs),
       h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nh
+        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
 
 中文:
 定理 StrictMonoOn.continuousAt_of_closure_image_mem_nhds
@@ -448,7 +464,7 @@ theorem StrictMonoOn.continuousAt_of_closure_image_mem_nhds
     ⟨h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin (mem_nhdsWithin_of_mem_nhds hs)
         (mem_nhdsWithin_of_mem_nhds hfs),
       h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
-        (mem_nhdsWithin_of_mem_nhds hs) (mem_nh
+        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
 
 Depends on / 依赖: continuousAt_iff_continuous_left_right, continuousWithinAt_left_of_closure_image_mem_nhdsWithin, continuousWithinAt_right_of_closure_image_mem_nhdsWithin, h_mono, h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin, h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds
 -/
@@ -523,7 +539,7 @@ theorem continuousAt_of_monotoneOn_of_closure_image_mem_nhds
     ⟨continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
         (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs),
       continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
-        (mem_nhdsWi
+        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
 
 中文:
 定理 continuousAt_of_monotoneOn_of_closure_image_mem_nhds
@@ -532,7 +548,7 @@ theorem continuousAt_of_monotoneOn_of_closure_image_mem_nhds
     ⟨continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
         (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs),
       continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
-        (mem_nhdsWi
+        (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs)⟩
 
 Depends on / 依赖: continuousAt_iff_continuous_left_right, continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin, continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin, h_mono, mem_nhdsWithin_of_mem_nhds
 -/

@@ -725,7 +725,8 @@ instance instCompleteLinearOrder
   isGLB_sInf _ := ⟨bot_mem_lowerBounds _, top_mem_upperBounds _⟩
   le_himp_iff := by intros; trivial
   himp_bot := by intros; trivial
-  sdiff_le
+  sdiff_le_iff := by intros; trivial
+  top_sdiff := by intros; trivial
 
 中文:
 实例 instCompleteLinearOrder
@@ -738,7 +739,8 @@ instance instCompleteLinearOrder
   isGLB_sInf _ := ⟨bot_mem_lowerBounds _, top_mem_upperBounds _⟩
   le_himp_iff := by intros; trivial
   himp_bot := by intros; trivial
-  sdiff_le
+  sdiff_le_iff := by intros; trivial
+  top_sdiff := by intros; trivial
 
 Depends on / 依赖: instBooleanAlgebra
 -/

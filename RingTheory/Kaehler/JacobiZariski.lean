@@ -128,7 +128,41 @@ lemma Cotangent.exact
     ext x
     obtain ⟨⟨x, hx⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
     simp only [map_mk, val_mk, LinearMap.zero_apply, val_zero]
-    co
+    convert! Q.ker.toCotangent.map_zero
+    trans ((IsScalarTower.toAlgHom R _ _).comp (IsScalarTower.toAlgHom R P.Ring S)) x
+    · congr
+      refine MvPolynomial.algHom_ext fun i => ?_
+      change (Q.ofComp P).toAlgHom ((Q.toComp P).toAlgHom (X i)) = _
+      simp
+    · simp [aeval_val_eq_zero hx]
+  · intro x hx
+    obtain ⟨⟨x : (Q.comp P).Ring, hx'⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
+    replace hx : (Q.ofComp P).toAlgHom x in Q.ker ^ 2 := by
+      simpa only [map_mk, val_mk, val_zero, Ideal.toCotangent_eq_zero] using! congr(($hx).val)
+    rw [pow_two]; rw [← map_ofComp_ker (P := P)]; rw [← Ideal.map_mul]; rw [Ideal.mem_map_iff_of_surjective
+      _ (toAlgHom_ofComp_surjective Q P)] at hx
+    obtain ⟨y, hy, e⟩ := hx
+    rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]; rw [← map_toComp_ker] at e
+    rw [LinearMap.range_liftBaseChange]
+    let z : (Q.comp P).ker := ⟨x - y, Ideal.sub_mem _ hx' (Ideal.mul_le_right hy)⟩
+    have hz : z.1 in P.ker.map (Q.toComp P).toAlgHom.toRingHom := e
+    have : Extension.Cotangent.mk (P := (Q.comp P).toExtension) ⟨x, hx'⟩ =
+      Extension.Cotangent.mk z := by
+      ext; simpa only [val_mk, Ideal.toCotangent_eq, sub_sub_cancel, pow_two, z]
+    rw [this]; rw [← Submodule.restrictScalars_mem (Q.comp P).Ring]; rw [← Submodule.mem_comap]; rw [← Submodule.span_singleton_le_iff_mem]; rw [← Submodule.map_le_map_iff_of_injective
+      (f := Submodule.subtype _) Subtype.val_injective]; rw [Submodule.map_subtype_span_singleton]; rw [Submodule.span_singleton_le_iff_mem]
+    refine (show Ideal.map (Q.toComp P).toAlgHom.toRingHom P.ker <= _ from ?_) hz
+    rw [Ideal.map_le_iff_le_comap]
+    rintro w hw
+    simp only [AlgHom.toRingHom_eq_coe, Ideal.mem_comap, RingHom.coe_coe,
+      Submodule.mem_map, Submodule.mem_comap, Submodule.restrictScalars_mem, Submodule.coe_subtype,
+      Subtype.exists, exists_and_right, exists_eq_right,
+      toExtension_Ring]
+    refine ⟨?_, Submodule.subset_span ⟨Extension.Cotangent.mk ⟨w, hw⟩, ?_⟩⟩
+    · simp only [ker_eq_ker_aeval_val, RingHom.mem_ker, Hom.algebraMap_toAlgHom]
+      rw [aeval_val_eq_zero hw]; rw [map_zero]
+    · rw [map_mk]
+      rfl
 
 中文:
 引理 余切.exact
@@ -139,7 +173,41 @@ lemma Cotangent.exact
     ext x
     obtain ⟨⟨x, hx⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
     simp only [map_mk, val_mk, LinearMap.zero_apply, val_zero]
-    co
+    convert! Q.ker.toCotangent.map_zero
+    trans ((IsScalarTower.toAlgHom R _ _).comp (IsScalarTower.toAlgHom R P.Ring S)) x
+    · congr
+      refine MvPolynomial.algHom_ext fun i => ?_
+      change (Q.ofComp P).toAlgHom ((Q.toComp P).toAlgHom (X i)) = _
+      simp
+    · simp [aeval_val_eq_zero hx]
+  · intro x hx
+    obtain ⟨⟨x : (Q.comp P).Ring, hx'⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
+    replace hx : (Q.ofComp P).toAlgHom x in Q.ker ^ 2 := by
+      simpa only [map_mk, val_mk, val_zero, Ideal.toCotangent_eq_zero] using! congr(($hx).val)
+    rw [pow_two]; rw [← map_ofComp_ker (P := P)]; rw [← Ideal.map_mul]; rw [Ideal.mem_map_iff_of_surjective
+      _ (toAlgHom_ofComp_surjective Q P)] at hx
+    obtain ⟨y, hy, e⟩ := hx
+    rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]; rw [← map_toComp_ker] at e
+    rw [LinearMap.range_liftBaseChange]
+    let z : (Q.comp P).ker := ⟨x - y, Ideal.sub_mem _ hx' (Ideal.mul_le_right hy)⟩
+    have hz : z.1 in P.ker.map (Q.toComp P).toAlgHom.toRingHom := e
+    have : Extension.Cotangent.mk (P := (Q.comp P).toExtension) ⟨x, hx'⟩ =
+      Extension.Cotangent.mk z := by
+      ext; simpa only [val_mk, Ideal.toCotangent_eq, sub_sub_cancel, pow_two, z]
+    rw [this]; rw [← Submodule.restrictScalars_mem (Q.comp P).Ring]; rw [← Submodule.mem_comap]; rw [← Submodule.span_singleton_le_iff_mem]; rw [← Submodule.map_le_map_iff_of_injective
+      (f := Submodule.subtype _) Subtype.val_injective]; rw [Submodule.map_subtype_span_singleton]; rw [Submodule.span_singleton_le_iff_mem]
+    refine (show Ideal.map (Q.toComp P).toAlgHom.toRingHom P.ker <= _ from ?_) hz
+    rw [Ideal.map_le_iff_le_comap]
+    rintro w hw
+    simp only [AlgHom.toRingHom_eq_coe, Ideal.mem_comap, RingHom.coe_coe,
+      Submodule.mem_map, Submodule.mem_comap, Submodule.restrictScalars_mem, Submodule.coe_subtype,
+      Subtype.exists, exists_and_right, exists_eq_right,
+      toExtension_Ring]
+    refine ⟨?_, Submodule.subset_span ⟨Extension.Cotangent.mk ⟨w, hw⟩, ?_⟩⟩
+    · simp only [ker_eq_ker_aeval_val, RingHom.mem_ker, Hom.algebraMap_toAlgHom]
+      rw [aeval_val_eq_zero hw]; rw [map_zero]
+    · rw [map_mk]
+      rfl
 
 Depends on / 依赖: Cotangent, EmbeddingLike, EmbeddingLike.map_eq_zero_iff, Extension, Extension.Cotangent.map_comp, Extension.Cotangent.mk_surjective, IsScalarTower, IsScalarTower.toAlgHom, LinearMap, LinearMap.exact_of_comp_of_mem_range, LinearMap.liftBaseChange_comp, LinearMap.zero_apply, MvPolynomial, MvPolynomial.algHom_ext, P.Ring, Q.ker.toCotangent.map_zero, Q.ofComp, Q.toComp, algHom_ext, convert
 -/
@@ -228,7 +296,14 @@ lemma CotangentSpace.compEquiv_symm_inr
   ext j
   simp only [compEquiv, LinearEquiv.trans_symm, LinearEquiv.symm_symm,
     Basis.baseChange_apply, LinearMap.coe_comp, LinearEquiv.coe_coe, LinearMap.coe_inr,
-    F
+    Function.comp_apply, LinearEquiv.trans_apply, Basis.repr_symm_apply, pderiv_X, toComp_val,
+    Basis.repr_linearCombination, LinearMap.liftBaseChange_tmul, one_smul, repr_CotangentSpaceMap]
+  obtain (j | j) := j <;>
+    simp only [Basis.prod_repr_inr, Basis.baseChange_repr_tmul,
+      Basis.repr_self, Basis.prod_repr_inl, map_zero, Finsupp.coe_zero,
+      Pi.zero_apply, ne_eq, not_false_eq_true, Pi.single_eq_of_ne, Pi.single_apply,
+      Finsupp.single_apply, ite_smul, one_smul, zero_smul, Sum.inr.injEq,
+      MonoidWithZeroHom.map_ite_one_zero, reduceCtorEq]
 
 中文:
 引理 CotangentSpace.compEquiv_symm_inr
@@ -240,7 +315,14 @@ lemma CotangentSpace.compEquiv_symm_inr
   ext j
   simp only [compEquiv, LinearEquiv.trans_symm, LinearEquiv.symm_symm,
     Basis.baseChange_apply, LinearMap.coe_comp, LinearEquiv.coe_coe, LinearMap.coe_inr,
-    F
+    Function.comp_apply, LinearEquiv.trans_apply, Basis.repr_symm_apply, pderiv_X, toComp_val,
+    Basis.repr_linearCombination, LinearMap.liftBaseChange_tmul, one_smul, repr_CotangentSpaceMap]
+  obtain (j | j) := j <;>
+    simp only [Basis.prod_repr_inr, Basis.baseChange_repr_tmul,
+      Basis.repr_self, Basis.prod_repr_inl, map_zero, Finsupp.coe_zero,
+      Pi.zero_apply, ne_eq, not_false_eq_true, Pi.single_eq_of_ne, Pi.single_apply,
+      Finsupp.single_apply, ite_smul, one_smul, zero_smul, Sum.inr.injEq,
+      MonoidWithZeroHom.map_ite_one_zero, reduceCtorEq]
 
 Depends on / 依赖: Basis.baseChange_apply, Basis.repr_linearCombination, Basis.repr_symm_apply, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.symm_symm, LinearEquiv.trans_apply, LinearEquiv.trans_symm, LinearMap, LinearMap.coe_comp, LinearMap.coe_inr, LinearMap.liftBaseChange_tmul, P.cotangentSpaceBasis.baseChange, Q.comp, baseChange, baseChange_apply, classical, coe_coe
 -/
@@ -296,7 +378,13 @@ lemma CotangentSpace.fst_compEquiv
   apply Q.cotangentSpaceBasis.repr.injective
   ext j
   simp only [compEquiv, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, ofComp_val,
-    LinearEquiv.trans_apply, Basis.repr_self, LinearMap.fst_apply, repr_Cotangent
+    LinearEquiv.trans_apply, Basis.repr_self, LinearMap.fst_apply, repr_CotangentSpaceMap]
+  obtain (i | i) := i <;>
+    simp only [Basis.repr_symm_apply, Finsupp.linearCombination_single, Basis.prod_apply,
+      LinearMap.coe_inl, LinearMap.coe_inr, Sum.elim_inl, Function.comp_apply, one_smul,
+      Basis.repr_self, Finsupp.single_apply, pderiv_X, Pi.single_apply,
+      Sum.elim_inr, Function.comp_apply, Basis.baseChange_apply, one_smul,
+      MonoidWithZeroHom.map_ite_one_zero, map_zero, Finsupp.coe_zero, Pi.zero_apply, derivation_C]
 
 中文:
 引理 CotangentSpace.fst_compEquiv
@@ -307,7 +395,13 @@ lemma CotangentSpace.fst_compEquiv
   apply Q.cotangentSpaceBasis.repr.injective
   ext j
   simp only [compEquiv, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, ofComp_val,
-    LinearEquiv.trans_apply, Basis.repr_self, LinearMap.fst_apply, repr_Cotangent
+    LinearEquiv.trans_apply, Basis.repr_self, LinearMap.fst_apply, repr_CotangentSpaceMap]
+  obtain (i | i) := i <;>
+    simp only [Basis.repr_symm_apply, Finsupp.linearCombination_single, Basis.prod_apply,
+      LinearMap.coe_inl, LinearMap.coe_inr, Sum.elim_inl, Function.comp_apply, one_smul,
+      Basis.repr_self, Finsupp.single_apply, pderiv_X, Pi.single_apply,
+      Sum.elim_inr, Function.comp_apply, Basis.baseChange_apply, one_smul,
+      MonoidWithZeroHom.map_ite_one_zero, map_zero, Finsupp.coe_zero, Pi.zero_apply, derivation_C]
 
 Depends on / 依赖: Basis.prod_apply, Basis.repr_se, Basis.repr_self, Basis.repr_symm_apply, Finsupp, Finsupp.linearCombination_single, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.trans_apply, LinearMap, LinearMap.coe_comp, LinearMap.coe_inl, LinearMap.coe_inr, LinearMap.fst_apply, Q.comp, Q.cotangentSpaceBasis.repr.injective, Sum.elim_inl, classical
 -/
@@ -514,7 +608,11 @@ lemma δAux_mul
     induction y using MvPolynomial.induction_on' with
     | monomial m s =>
       simp only [monomial_mul, δAux_monomial, Derivation.leibniz, tmul_add, tmul_smul,
-        smul_tmul', Algebra.smul_def, algebraMap_apply, aeval_
+        smul_tmul', Algebra.smul_def, algebraMap_apply, aeval_monomial, mul_assoc]
+      rw [mul_comm (m.prod _) (n.prod _)]
+      simp only [pow_zero, implies_true, pow_add, Finsupp.prod_add_index']
+    | add y₁ y₂ hy₁ hy₂ => simp only [map_add, smul_add, hy₁, hy₂, mul_add, add_smul]; abel
+  | add x₁ x₂ hx₁ hx₂ => simp only [add_mul, map_add, hx₁, hx₂, add_smul, smul_add]; abel
 
 中文:
 引理 δAux_mul
@@ -525,7 +623,11 @@ lemma δAux_mul
     induction y using MvPolynomial.induction_on' with
     | monomial m s =>
       simp only [monomial_mul, δAux_monomial, Derivation.leibniz, tmul_add, tmul_smul,
-        smul_tmul', Algebra.smul_def, algebraMap_apply, aeval_
+        smul_tmul', Algebra.smul_def, algebraMap_apply, aeval_monomial, mul_assoc]
+      rw [mul_comm (m.prod _) (n.prod _)]
+      simp only [pow_zero, implies_true, pow_add, Finsupp.prod_add_index']
+    | add y₁ y₂ hy₁ hy₂ => simp only [map_add, smul_add, hy₁, hy₂, mul_add, add_smul]; abel
+  | add x₁ x₂ hx₁ hx₂ => simp only [add_mul, map_add, hx₁, hx₂, add_smul, smul_add]; abel
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Derivation, Derivation.leibniz, Finsupp, Finsupp.prod_add_index, MvPolynomial, MvPolynomial.induction_on, add_smul, aeval_monomial, algebraMap_apply, implies_true, induction_on, leibniz, m.prod, map_add, monomial, monomial_mul, mul_add, mul_assoc
 -/
@@ -578,7 +680,16 @@ lemma δAux_toAlgHom
   | C s => simp [MvPolynomial.algebraMap_eq, δAux_C]
   | add x₁ x₂ hx₁ hx₂ =>
     simp only [map_add, hx₁, hx₂, tmul_add]
-  
+    rw [add_add_add_comm]
+  | mul_X p n IH =>
+    simp only [map_mul, Hom.toAlgHom_X, δAux_mul, algebraMap_apply, Hom.algebraMap_toAlgHom,
+      ← @IsScalarTower.algebraMap_smul Q'.Ring T, algebraMap_self, δAux_X,
+      RingHom.id_apply, coe_eval₂Hom, IH, Hom.aeval_val, smul_add, map_aeval, tmul_add, tmul_smul,
+      ← @IsScalarTower.algebraMap_smul Q.Ring T, smul_zero, aeval_X, zero_add, Derivation.leibniz,
+      Basis.repr_self, map_add, one_smul, map_smul, Finsupp.linearCombination_single,
+      RingHomCompTriple.comp_eq, Function.comp_apply, ← cotangentSpaceBasis_apply]
+    rw [add_left_comm]
+    rfl
 
 中文:
 引理 δAux_toAlgHom
@@ -590,7 +701,16 @@ lemma δAux_toAlgHom
   | C s => simp [MvPolynomial.algebraMap_eq, δAux_C]
   | add x₁ x₂ hx₁ hx₂ =>
     simp only [map_add, hx₁, hx₂, tmul_add]
-  
+    rw [add_add_add_comm]
+  | mul_X p n IH =>
+    simp only [map_mul, Hom.toAlgHom_X, δAux_mul, algebraMap_apply, Hom.algebraMap_toAlgHom,
+      ← @IsScalarTower.algebraMap_smul Q'.Ring T, algebraMap_self, δAux_X,
+      RingHom.id_apply, coe_eval₂Hom, IH, Hom.aeval_val, smul_add, map_aeval, tmul_add, tmul_smul,
+      ← @IsScalarTower.algebraMap_smul Q.Ring T, smul_zero, aeval_X, zero_add, Derivation.leibniz,
+      Basis.repr_self, map_add, one_smul, map_smul, Finsupp.linearCombination_single,
+      RingHomCompTriple.comp_eq, Function.comp_apply, ← cotangentSpaceBasis_apply]
+    rw [add_left_comm]
+    rfl
 
 Depends on / 依赖: AddCommGroup, Hom.algebraMap_toAlgHom, Hom.toAlgHom_X, IsScalarTower, IsScalarTower.algebraMap_smul, IsScalarTower.left, MvPolynomial, MvPolynomial.algebraMap_eq, MvPolynomial.induction_on, Q.Ring, RingHom, RingHom.id_apply, add_add_add_comm, algebraMap_apply, algebraMap_eq, algebraMap_self, algebraMap_smul, algebraMap_toAlgHom, id_apply, induction_on
 -/
@@ -627,7 +747,27 @@ lemma δAux_ofComp
   induction x using MvPolynomial.induction_on with
   | C s =>
     simp only [algHom_C, δAux_C, derivation_C, Derivation.map_algebraMap,
-      tmul_zero, map_
+      tmul_zero, map_zero, MvPolynomial.algebraMap_apply, Prod.snd_zero]
+  | add x₁ x₂ hx₁ hx₂ =>
+    simp only [map_add, hx₁, hx₂, tmul_add, Prod.snd_add]
+  | mul_X p n IH =>
+    simp only [map_mul, Hom.toAlgHom_X, ofComp_val, δAux_mul,
+      ← @IsScalarTower.algebraMap_smul Q.Ring T, algebraMap_apply, Hom.algebraMap_toAlgHom,
+      algebraMap_self, map_aeval, RingHomCompTriple.comp_eq, comp_val, RingHom.id_apply,
+      IH, Derivation.leibniz, tmul_add, tmul_smul, ← cotangentSpaceBasis_apply, coe_eval₂Hom,
+      ← @IsScalarTower.algebraMap_smul (Q.comp P).Ring T, aeval_X, map_smul, Prod.snd_add,
+      Prod.smul_snd, map_add]
+    obtain (n | n) := n
+    · simp only [Sum.elim_inl, δAux_X, smul_zero, aeval_X,
+        CotangentSpace.compEquiv, LinearEquiv.trans_apply, Basis.repr_symm_apply, zero_add,
+        Basis.repr_self, Finsupp.linearCombination_single, Basis.prod_apply, LinearMap.coe_inl,
+        LinearMap.coe_inr, Function.comp_apply, one_smul, map_zero]
+    · simp only [Sum.elim_inr, Function.comp_apply, algHom_C, δAux_C,
+        CotangentSpace.compEquiv, LinearEquiv.trans_apply, Basis.repr_symm_apply,
+        algebraMap_smul, Basis.repr_self, Finsupp.linearCombination_single, Basis.prod_apply,
+        LinearMap.coe_inr, Basis.baseChange_apply, one_smul, LinearMap.baseChange_tmul,
+        toKaehler_cotangentSpaceBasis, add_left_inj, LinearMap.coe_inl]
+      rfl
 
 中文:
 引理 δAux_ofComp
@@ -638,7 +778,27 @@ lemma δAux_ofComp
   induction x using MvPolynomial.induction_on with
   | C s =>
     simp only [algHom_C, δAux_C, derivation_C, Derivation.map_algebraMap,
-      tmul_zero, map_
+      tmul_zero, map_zero, MvPolynomial.algebraMap_apply, Prod.snd_zero]
+  | add x₁ x₂ hx₁ hx₂ =>
+    simp only [map_add, hx₁, hx₂, tmul_add, Prod.snd_add]
+  | mul_X p n IH =>
+    simp only [map_mul, Hom.toAlgHom_X, ofComp_val, δAux_mul,
+      ← @IsScalarTower.algebraMap_smul Q.Ring T, algebraMap_apply, Hom.algebraMap_toAlgHom,
+      algebraMap_self, map_aeval, RingHomCompTriple.comp_eq, comp_val, RingHom.id_apply,
+      IH, Derivation.leibniz, tmul_add, tmul_smul, ← cotangentSpaceBasis_apply, coe_eval₂Hom,
+      ← @IsScalarTower.algebraMap_smul (Q.comp P).Ring T, aeval_X, map_smul, Prod.snd_add,
+      Prod.smul_snd, map_add]
+    obtain (n | n) := n
+    · simp only [Sum.elim_inl, δAux_X, smul_zero, aeval_X,
+        CotangentSpace.compEquiv, LinearEquiv.trans_apply, Basis.repr_symm_apply, zero_add,
+        Basis.repr_self, Finsupp.linearCombination_single, Basis.prod_apply, LinearMap.coe_inl,
+        LinearMap.coe_inr, Function.comp_apply, one_smul, map_zero]
+    · simp only [Sum.elim_inr, Function.comp_apply, algHom_C, δAux_C,
+        CotangentSpace.compEquiv, LinearEquiv.trans_apply, Basis.repr_symm_apply,
+        algebraMap_smul, Basis.repr_self, Finsupp.linearCombination_single, Basis.prod_apply,
+        LinearMap.coe_inr, Basis.baseChange_apply, one_smul, LinearMap.baseChange_tmul,
+        toKaehler_cotangentSpaceBasis, add_left_inj, LinearMap.coe_inl]
+      rfl
 
 Depends on / 依赖: AddCommGroup, Derivation, Derivation.map_algebraMap, Hom.toAlgHom_X, IsScalarTo, IsScalarTower, IsScalarTower.left, MvPolynomial, MvPolynomial.algebraMap_apply, MvPolynomial.induction_on, Prod.snd_add, Prod.snd_zero, Q.comp, algHom_C, algebraMap_apply, derivation_C, induction_on, map_add, map_algebraMap, map_mul
 -/
@@ -726,7 +886,20 @@ definition δ
     Q.toExtension.cotangentComplex
     ((Extension.Cotangent.map (toComp Q P).toExtensionHom).liftBaseChange T)
     (Extension.Cotangent.map (ofComp Q P).toExtensionHom)
-    (Cotangent.exact Q
+    (Cotangent.exact Q P)
+    ((Extension.CotangentSpace.map (toComp Q P).toExtensionHom).liftBaseChange T)
+    (Extension.CotangentSpace.map (ofComp Q P).toExtensionHom)
+    (CotangentSpace.exact Q P)
+    (map_comp_cotangentComplex_baseChange Q P)
+    (by ext; exact Extension.CotangentSpace.map_cotangentComplex (ofComp Q P).toExtensionHom _)
+    Q.toExtension.h1Cotangentι
+    (LinearMap.exact_subtype_ker_map _)
+    (N₁ := T otimes[S] P.toExtension.CotangentSpace)
+    (P.toExtension.toKaehler.baseChange T)
+    (lTensor_exact T P.toExtension.exact_cotangentComplex_toKaehler
+      P.toExtension.toKaehler_surjective)
+    (Cotangent.surjective_map_ofComp Q P)
+    (CotangentSpace.map_toComp_injective Q P)
 
 中文:
 定义 δ
@@ -737,7 +910,20 @@ definition δ
     Q.toExtension.cotangentComplex
     ((Extension.Cotangent.map (toComp Q P).toExtensionHom).liftBaseChange T)
     (Extension.Cotangent.map (ofComp Q P).toExtensionHom)
-    (Cotangent.exact Q
+    (Cotangent.exact Q P)
+    ((Extension.CotangentSpace.map (toComp Q P).toExtensionHom).liftBaseChange T)
+    (Extension.CotangentSpace.map (ofComp Q P).toExtensionHom)
+    (CotangentSpace.exact Q P)
+    (map_comp_cotangentComplex_baseChange Q P)
+    (by ext; exact Extension.CotangentSpace.map_cotangentComplex (ofComp Q P).toExtensionHom _)
+    Q.toExtension.h1Cotangentι
+    (LinearMap.exact_subtype_ker_map _)
+    (N₁ := T otimes[S] P.toExtension.CotangentSpace)
+    (P.toExtension.toKaehler.baseChange T)
+    (lTensor_exact T P.toExtension.exact_cotangentComplex_toKaehler
+      P.toExtension.toKaehler_surjective)
+    (Cotangent.surjective_map_ofComp Q P)
+    (CotangentSpace.map_toComp_injective Q P)
 
 Depends on / 依赖: Cotangent, Cotangent.exact, CotangentSpace, CotangentSpace.exact, Extension, Extension.Cotangent.map, Extension.CotangentSpace.map, P.toExtension.cotangentComplex.baseChange, Q.comp, Q.toExtension.cotangentComplex, SnakeLemma, baseChange, cotangentComplex, liftBaseChange, map_comp_cotangentComplex_baseChange, ofComp, toComp, toExtension, toExtension.cotangentComplex, toExtensionHom
 -/
@@ -777,7 +963,14 @@ lemma exact_δ_map
     (hπ₂ := (Q.comp P).toExtension.exact_cotangentComplex_toKaehler)
   · apply (P.cotangentSpaceBasis.baseChange T).ext
     intro i
-    simp only [Basis.baseChange_apply, LinearMap.coe_comp, Function.comp_app
+    simp only [Basis.baseChange_apply, LinearMap.coe_comp, Function.comp_apply,
+      LinearMap.baseChange_tmul, toKaehler_cotangentSpaceBasis, mapBaseChange_tmul, map_D,
+      one_smul, LinearMap.liftBaseChange_tmul]
+    rw [cotangentSpaceBasis_apply]
+    conv_rhs => enter [2]; tactic => exact Extension.CotangentSpace.map_tmul ..
+    simp only [map_one, mapBaseChange_tmul, map_D, one_smul]
+    simp [Extension.Hom.toAlgHom]
+  · exact LinearMap.lTensor_surjective T P.toExtension.toKaehler_surjective
 
 中文:
 引理 exact_δ_map
@@ -787,7 +980,14 @@ lemma exact_δ_map
     (hπ₂ := (Q.comp P).toExtension.exact_cotangentComplex_toKaehler)
   · apply (P.cotangentSpaceBasis.baseChange T).ext
     intro i
-    simp only [Basis.baseChange_apply, LinearMap.coe_comp, Function.comp_app
+    simp only [Basis.baseChange_apply, LinearMap.coe_comp, Function.comp_apply,
+      LinearMap.baseChange_tmul, toKaehler_cotangentSpaceBasis, mapBaseChange_tmul, map_D,
+      one_smul, LinearMap.liftBaseChange_tmul]
+    rw [cotangentSpaceBasis_apply]
+    conv_rhs => enter [2]; tactic => exact Extension.CotangentSpace.map_tmul ..
+    simp only [map_one, mapBaseChange_tmul, map_D, one_smul]
+    simp [Extension.Hom.toAlgHom]
+  · exact LinearMap.lTensor_surjective T P.toExtension.toKaehler_surjective
 
 Depends on / 依赖: Basis.baseChange_apply, Cotangen, Extension, Extension.Cotangen, Function, Function.comp_apply, LinearMap, LinearMap.baseChange_tmul, LinearMap.coe_comp, LinearMap.liftBaseChange_tmul, P.cotangentSpaceBasis.baseChange, Q.comp, SnakeLemma, SnakeLemma.exact_, baseChange, baseChange_apply, baseChange_tmul, coe_comp, comp_apply, conv_rhs
 -/
@@ -850,7 +1050,21 @@ lemma δ_eq_δAux
     simp only [y, Extension.Cotangent.map_mk]
     congr
     exact ofComp_kerCompPreimage Q P x
-  let z := (C
+  let z := (CotangentSpace.compEquiv Q P ((Q.comp P).toExtension.cotangentComplex y)).2
+  rw [H1Cotangent.δ_eq (y := y) (z := z)]
+  · rw [← ofComp_kerCompPreimage Q P x, δAux_ofComp]
+    rfl
+  · exact hy
+  · rw [← CotangentSpace.compEquiv_symm_inr]
+    apply (CotangentSpace.compEquiv Q P).injective
+    simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, LinearMap.coe_inr, Function.comp_apply,
+      LinearEquiv.apply_symm_apply, z]
+    ext
+    swap; · rfl
+    change 0 = (LinearMap.fst T Q.toExtension.CotangentSpace
+        (T otimes[S] P.toExtension.CotangentSpace) ∘ₗ (CotangentSpace.compEquiv Q P).toLinearMap)
+      ((Q.comp P).toExtension.cotangentComplex y)
+    rw [CotangentSpace.fst_compEquiv]; rw [Extension.CotangentSpace.map_cotangentComplex]; rw [hy]; rw [hx]
 
 中文:
 引理 δ_eq_δAux
@@ -861,7 +1075,21 @@ lemma δ_eq_δAux
     simp only [y, Extension.Cotangent.map_mk]
     congr
     exact ofComp_kerCompPreimage Q P x
-  let z := (C
+  let z := (CotangentSpace.compEquiv Q P ((Q.comp P).toExtension.cotangentComplex y)).2
+  rw [H1Cotangent.δ_eq (y := y) (z := z)]
+  · rw [← ofComp_kerCompPreimage Q P x, δAux_ofComp]
+    rfl
+  · exact hy
+  · rw [← CotangentSpace.compEquiv_symm_inr]
+    apply (CotangentSpace.compEquiv Q P).injective
+    simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, LinearMap.coe_inr, Function.comp_apply,
+      LinearEquiv.apply_symm_apply, z]
+    ext
+    swap; · rfl
+    change 0 = (LinearMap.fst T Q.toExtension.CotangentSpace
+        (T otimes[S] P.toExtension.CotangentSpace) ∘ₗ (CotangentSpace.compEquiv Q P).toLinearMap)
+      ((Q.comp P).toExtension.cotangentComplex y)
+    rw [CotangentSpace.fst_compEquiv]; rw [Extension.CotangentSpace.map_cotangentComplex]; rw [hy]; rw [hx]
 
 Depends on / 依赖: Cotangent, CotangentSpace, CotangentSpace.compEquiv, CotangentSpace.compEquiv_symm, Extension, Extension.Cotangent.map, Extension.Cotangent.map_mk, Extension.Cotangent.mk, H1Cotangent, Q.comp, Q.kerCompPreimage, Q.ofComp, compEquiv, compEquiv_symm, cotangentComplex, kerCompPreimage, map_mk, ofComp, ofComp_kerCompPreimage, toExtension
 -/
@@ -983,7 +1211,10 @@ lemma δ_map
   obtain ⟨⟨y, hy⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
   change δ _ _ ⟨_, _⟩ = δ _ _ _
   replace hx : (1 : T) otimesₜ[Q'.Ring] (D S Q'.Ring) y = 0 := by
-    simpa only [LinearMap.mem_ker, Extension.cotangentC
+    simpa only [LinearMap.mem_ker, Extension.cotangentComplex_mk, ker, RingHom.mem_ker] using! hx
+  simp only [LinearMap.domRestrict_apply, Extension.Cotangent.map_mk, δ_eq_δAux]
+  refine (δAux_toAlgHom f _).trans ?_
+  rw [hx]; rw [map_zero]; rw [map_zero]; rw [add_zero]
 
 中文:
 引理 δ_map
@@ -994,7 +1225,10 @@ lemma δ_map
   obtain ⟨⟨y, hy⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
   change δ _ _ ⟨_, _⟩ = δ _ _ _
   replace hx : (1 : T) otimesₜ[Q'.Ring] (D S Q'.Ring) y = 0 := by
-    simpa only [LinearMap.mem_ker, Extension.cotangentC
+    simpa only [LinearMap.mem_ker, Extension.cotangentComplex_mk, ker, RingHom.mem_ker] using! hx
+  simp only [LinearMap.domRestrict_apply, Extension.Cotangent.map_mk, δ_eq_δAux]
+  refine (δAux_toAlgHom f _).trans ?_
+  rw [hx]; rw [map_zero]; rw [map_zero]; rw [add_zero]
 
 Depends on / 依赖: AddCommGroup, Cotangent, Extension, Extension.Cotangent.map_mk, Extension.Cotangent.mk_surjective, Extension.cotangentComplex_mk, LinearMap, LinearMap.domRestrict_apply, LinearMap.mem_ker, RingHom, RingHom.mem_ker, add_zero, cotangentComplex_mk, domRestrict_apply, map_mk, map_zero, mem_ker, mk_surjective, otimes, replace
 -/
@@ -1040,7 +1274,8 @@ lemma exact_map_δ'
   refine (H1Cotangent.equiv (Q.comp P) W).surjective.comp_exact_iff_exact.mp ?_
   change Function.Exact ((Extension.H1Cotangent.map f.toExtensionHom).restrictScalars T ∘ₗ
     (Extension.H1Cotangent.map _)) (δ Q P)
-  rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq _ (Q.ofCo
+  rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq _ (Q.ofComp P).toExtensionHom]
+  exact exact_map_δ Q P
 
 中文:
 引理 exact_map_δ'
@@ -1049,7 +1284,8 @@ lemma exact_map_δ'
   refine (H1Cotangent.equiv (Q.comp P) W).surjective.comp_exact_iff_exact.mp ?_
   change Function.Exact ((Extension.H1Cotangent.map f.toExtensionHom).restrictScalars T ∘ₗ
     (Extension.H1Cotangent.map _)) (δ Q P)
-  rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq _ (Q.ofCo
+  rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq _ (Q.ofComp P).toExtensionHom]
+  exact exact_map_δ Q P
 
 Depends on / 依赖: Extension, Extension.H1Cotangent.map, Extension.H1Cotangent.map_comp, Extension.H1Cotangent.map_eq, Function, Function.Exact, H1Cotangent, H1Cotangent.equiv, Q.comp, Q.ofComp, comp_exact_iff_exact, f.toExtensionHom, map_comp, map_eq, ofComp, restrictScalars, surjective, surjective.comp_exact_iff_exact.mp, toExtensionHom
 -/
@@ -1073,7 +1309,10 @@ lemma liftBaseChange_range_le
   rintro ⟨x, _⟩
   obtain ⟨⟨(x : P.Ring), x_in⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
   ext; suffices (Q.ofComp P).toAlgHom ((Q.toComp P).toAlgHom x) in Q.toExtension.ker ^ 2 by
-    simpa [Ideal.t
+    simpa [Ideal.toCotangent_eq_zero]
+  rw [← Generators.ker]; rw [Generators.ker_eq_ker_aeval_val] at x_in
+  rw [toComp_toAlgHom]; rw [toAlgHom_ofComp_rename]; rw [Generators.algebraMap_eq]; rw [RingHom.coe_coe]; rw [x_in]; rw [RingHom.map_zero]
+  exact Ideal.zero_mem _
 
 中文:
 引理 liftBaseChange_range_le
@@ -1082,7 +1321,10 @@ lemma liftBaseChange_range_le
   rintro ⟨x, _⟩
   obtain ⟨⟨(x : P.Ring), x_in⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
   ext; suffices (Q.ofComp P).toAlgHom ((Q.toComp P).toAlgHom x) in Q.toExtension.ker ^ 2 by
-    simpa [Ideal.t
+    simpa [Ideal.toCotangent_eq_zero]
+  rw [← Generators.ker]; rw [Generators.ker_eq_ker_aeval_val] at x_in
+  rw [toComp_toAlgHom]; rw [toAlgHom_ofComp_rename]; rw [Generators.algebraMap_eq]; rw [RingHom.coe_coe]; rw [x_in]; rw [RingHom.map_zero]
+  exact Ideal.zero_mem _
 
 Depends on / 依赖: Cotangent, Extension, Extension.Cotangent.mk_surjective, Generators, Generators.algebraMap_eq, Generators.ker, Generators.ker_eq_ker_aeval_val, Ideal.toCotangent_eq_zero, P.Ring, Q.ofComp, Q.toComp, Q.toExtension.ker, RingHom, RingHom.coe_coe, Set.range_subset_iff, Submodule, Submodule.span_le, algebraMap_eq, coe_coe, coe_range
 -/
@@ -1143,7 +1385,15 @@ theorem exact_liftBaseChange_map_of_flat
   rintro ⟨x, x_in⟩ hx
   replace hx : Extension.Cotangent.map (Q.ofComp P).toExtensionHom x = 0 := by
     simpa [← Extension.h1Cotangentι_injective.eq_iff] using hx
-  rw [← mem_ker]; rw [(Cotangent.exact Q P).linearMap_ker_eq] 
+  rw [← mem_ker]; rw [(Cotangent.exact Q P).linearMap_ker_eq] at hx
+  rcases hx with ⟨x, rfl⟩
+  rw [mem_ker]; rw [← comp_apply]; rw [← map_comp_cotangentComplex_baseChange]; rw [comp_apply]; rw [← mem_ker]; rw [ker_eq_bot.mpr (CotangentSpace.map_toComp_injective Q P)]; rw [Submodule.mem_bot]; rw [baseChange_eq_ltensor]; rw [← mem_ker]; rw [(Module.Flat.lTensor_exact T
+      P.toExtension.exact_hCotangentι_cotangentComplex).linearMap_ker_eq] at x_in
+  rcases x_in with ⟨x, rfl⟩
+  use x; induction x with
+  | zero => ext; simp
+  | tmul x y => ext; simp
+  | add x y hx hy => ext; simp [hx (auxMemKer Q P x), hy (auxMemKer Q P y)]
 
 中文:
 定理 exact_liftBaseChange_map_of_flat
@@ -1154,7 +1404,15 @@ theorem exact_liftBaseChange_map_of_flat
   rintro ⟨x, x_in⟩ hx
   replace hx : Extension.Cotangent.map (Q.ofComp P).toExtensionHom x = 0 := by
     simpa [← Extension.h1Cotangentι_injective.eq_iff] using hx
-  rw [← mem_ker]; rw [(Cotangent.exact Q P).linearMap_ker_eq] 
+  rw [← mem_ker]; rw [(Cotangent.exact Q P).linearMap_ker_eq] at hx
+  rcases hx with ⟨x, rfl⟩
+  rw [mem_ker]; rw [← comp_apply]; rw [← map_comp_cotangentComplex_baseChange]; rw [comp_apply]; rw [← mem_ker]; rw [ker_eq_bot.mpr (CotangentSpace.map_toComp_injective Q P)]; rw [Submodule.mem_bot]; rw [baseChange_eq_ltensor]; rw [← mem_ker]; rw [(Module.Flat.lTensor_exact T
+      P.toExtension.exact_hCotangentι_cotangentComplex).linearMap_ker_eq] at x_in
+  rcases x_in with ⟨x, rfl⟩
+  use x; induction x with
+  | zero => ext; simp
+  | tmul x y => ext; simp
+  | add x y hx hy => ext; simp [hx (auxMemKer Q P x), hy (auxMemKer Q P y)]
 
 Depends on / 依赖: Cotangent, Cotangent.exact, CotangentSpace, CotangentSpace.map_toComp_injective, Extension, Extension.Cotangent.map, Extension.h1Cotangent, Q.ofComp, Submod, _injective.eq_iff, comp_apply, eq_iff, exact_iff, ker_eq_bot, ker_eq_bot.mpr, le_antisymm, liftBaseChange_range_le, linearMap_ker_eq, map_comp_cotangentComplex_baseChange, map_toComp_injective
 -/
@@ -1186,7 +1444,10 @@ theorem exact_liftBaseChange_map_of_flat'
   rw [← LinearEquiv.conj_exact_iff_exact _ _ (H1Cotangent.equiv W (Q.comp P))]
   convert! exact_liftBaseChange_map_of_flat Q P
   · change Extension.H1Cotangent.map (W.defaultHom (Q.comp P)).toExtensionHom ∘ₗ _ = _
-    rw [LinearMap.liftBaseChange_comp]; rw [← Extension.H1Cotangent.map_comp]; rw [
+    rw [LinearMap.liftBaseChange_comp]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]
+  · change (Extension.H1Cotangent.map f.toExtensionHom).restrictScalars T ∘ₗ
+      (Extension.H1Cotangent.map _) = _
+    rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]
 
 中文:
 定理 exact_liftBaseChange_map_of_flat'
@@ -1195,7 +1456,10 @@ theorem exact_liftBaseChange_map_of_flat'
   rw [← LinearEquiv.conj_exact_iff_exact _ _ (H1Cotangent.equiv W (Q.comp P))]
   convert! exact_liftBaseChange_map_of_flat Q P
   · change Extension.H1Cotangent.map (W.defaultHom (Q.comp P)).toExtensionHom ∘ₗ _ = _
-    rw [LinearMap.liftBaseChange_comp]; rw [← Extension.H1Cotangent.map_comp]; rw [
+    rw [LinearMap.liftBaseChange_comp]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]
+  · change (Extension.H1Cotangent.map f.toExtensionHom).restrictScalars T ∘ₗ
+      (Extension.H1Cotangent.map _) = _
+    rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]
 
 Depends on / 依赖: Extension, Extension.H1Cotangent.map, Extension.H1Cotangent.map_comp, Extension.H1Cotangent.map_eq, H1Cotangent, H1Cotangent.equiv, LinearEquiv, LinearEquiv.conj_exact_iff_exact, LinearMap, LinearMap.liftBaseChange_comp, Q.comp, W.defaultHom, conj_exact_iff_exact, convert, defaultHom, exact_liftBaseChange_map_of_flat, f.toExtensionHom, liftBaseChange_comp, map_comp, map_eq
 -/

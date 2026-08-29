@@ -229,7 +229,7 @@ lemma disjointedRec
   | empty => simpa only [sup_empty, sdiff_bot] using hpi
   | insert _ _ ht IH =>
     rw [sup_insert]; rw [sup_comm]; rw [← sdiff_sdiff]
- 
+    exact hdiff IH
 
 中文:
 引理 disjointedRec
@@ -244,7 +244,7 @@ lemma disjointedRec
   | empty => simpa only [sup_empty, sdiff_bot] using hpi
   | insert _ _ ht IH =>
     rw [sup_insert]; rw [sup_comm]; rw [← sdiff_sdiff]
- 
+    exact hdiff IH
 
 Depends on / 依赖: Finset, Finset.induction, classical, disjointed, insert, s.sup, sdiff_bot, sdiff_sdiff, sup_comm, sup_empty, sup_insert
 -/
@@ -279,7 +279,38 @@ theorem partialSups_disjointed
   -- in the definition of `disjointed` can involve multiple "paths" through the poset.
   classical
   -- We argue by induction on the size of `Iio i`.
-  suffices forall r i (hi : #(Iio i) <= r), partialSup
+  suffices forall r i (hi : #(Iio i) <= r), partialSups (disjointed f) i = partialSups f i from
+    OrderHom.ext _ _ (funext fun i => this _ i le_rfl)
+  intro r i hi
+  induction r generalizing i with
+  | zero =>
+    -- Base case: `n` is minimal, so `partialSups f i = partialSups (disjointed f) n = f i`.
+    simp only [Nat.le_zero, card_eq_zero] at hi
+    simp only [partialSups_apply, Iic_eq_cons_Iio, hi, disjointed_apply, sup'_eq_sup, sup_cons,
+      sup_empty, sdiff_bot]
+  | succ n ih =>
+    -- Induction step: first WLOG arrange that `#(Iio i) = r + 1`
+    rcases lt_or_eq_of_le hi with hn | hn
+· exact ih _ Nat.le_of_lt_succ hn
+    simp only [partialSups_apply (disjointed f), Iic_eq_cons_Iio, sup'_eq_sup, sup_cons]
+    -- Key claim: we can write `Iio i` as a union of (finitely many) `Iic` intervals.
+    have hun : (Iio i).biUnion Iic = Iio i := by
+      ext r; simpa using ⟨fun ⟨a, ha⟩ => ha.2.trans_lt ha.1, fun hr => ⟨r, hr, le_rfl⟩⟩
+    -- Use claim and `sup_biUnion` to rewrite the supremum in the definition of `disjointed f`
+    -- in terms of suprema over `Iic`'s. Then the RHS is a `sup` over `partialSups`, which we
+    -- can rewrite via the induction hypothesis.
+    rw [← hun]; rw [sup_biUnion]; rw [sup_congr rfl (g := partialSups f)]
+    · simp only [funext (partialSups_apply f), sup'_eq_sup, ← sup_biUnion, hun]
+      simp only [disjointed, sdiff_sup_self, Iic_eq_cons_Iio, sup_cons]
+    · simp only [partialSups, sup'_eq_sup, OrderHom.coe_mk] at ih ⊢
+      refine fun x hx => ih x ?_
+      -- Remains to show `∀ x in Iio i, #(Iio x) ≤ r`.
+      rw [← Nat.lt_add_one_iff]; rw [← hn]
+      apply lt_of_lt_of_le (b := #(Iic x))
+      · simpa only [Iic_eq_cons_Iio, card_cons] using Nat.lt_succ_self _
+      · refine card_le_card (fun r hr => ?_)
+        simp only [mem_Iic, mem_Iio] at hx hr ⊢
+        exact hr.trans_lt hx
 
 中文:
 定理 partialSups_disjointed
@@ -289,7 +320,38 @@ theorem partialSups_disjointed
   -- in the definition of `disjointed` can involve multiple "paths" through the poset.
   classical
   -- We argue by induction on the size of `Iio i`.
-  suffices forall r i (hi : #(Iio i) <= r), partialSup
+  suffices forall r i (hi : #(Iio i) <= r), partialSups (disjointed f) i = partialSups f i from
+    OrderHom.ext _ _ (funext fun i => this _ i le_rfl)
+  intro r i hi
+  induction r generalizing i with
+  | zero =>
+    -- Base case: `n` is minimal, so `partialSups f i = partialSups (disjointed f) n = f i`.
+    simp only [Nat.le_zero, card_eq_zero] at hi
+    simp only [partialSups_apply, Iic_eq_cons_Iio, hi, disjointed_apply, sup'_eq_sup, sup_cons,
+      sup_empty, sdiff_bot]
+  | succ n ih =>
+    -- Induction step: first WLOG arrange that `#(Iio i) = r + 1`
+    rcases lt_or_eq_of_le hi with hn | hn
+· exact ih _ Nat.le_of_lt_succ hn
+    simp only [partialSups_apply (disjointed f), Iic_eq_cons_Iio, sup'_eq_sup, sup_cons]
+    -- Key claim: we can write `Iio i` as a union of (finitely many) `Iic` intervals.
+    have hun : (Iio i).biUnion Iic = Iio i := by
+      ext r; simpa using ⟨fun ⟨a, ha⟩ => ha.2.trans_lt ha.1, fun hr => ⟨r, hr, le_rfl⟩⟩
+    -- Use claim and `sup_biUnion` to rewrite the supremum in the definition of `disjointed f`
+    -- in terms of suprema over `Iic`'s. Then the RHS is a `sup` over `partialSups`, which we
+    -- can rewrite via the induction hypothesis.
+    rw [← hun]; rw [sup_biUnion]; rw [sup_congr rfl (g := partialSups f)]
+    · simp only [funext (partialSups_apply f), sup'_eq_sup, ← sup_biUnion, hun]
+      simp only [disjointed, sdiff_sup_self, Iic_eq_cons_Iio, sup_cons]
+    · simp only [partialSups, sup'_eq_sup, OrderHom.coe_mk] at ih ⊢
+      refine fun x hx => ih x ?_
+      -- Remains to show `∀ x in Iio i, #(Iio x) ≤ r`.
+      rw [← Nat.lt_add_one_iff]; rw [← hn]
+      apply lt_of_lt_of_le (b := #(Iic x))
+      · simpa only [Iic_eq_cons_Iio, card_cons] using Nat.lt_succ_self _
+      · refine card_le_card (fun r hr => ?_)
+        simp only [mem_Iic, mem_Iio] at hx hr ⊢
+        exact hr.trans_lt hx
 -/
 theorem partialSups_disjointed (f : ι -> α) :
     partialSups (disjointed f) = partialSups f := by
@@ -341,7 +403,7 @@ lemma Fintype.sup_disjointed
   have hun : univ.biUnion Iic = (univ : Finset ι) := by
     ext r; simpa only [mem_biUnion, mem_univ, mem_Iic, true_and, iff_true] using ⟨r, le_rfl⟩
   rw [← hun]; rw [sup_biUnion]; rw [sup_biUnion]; rw [sup_congr rfl (fun i _ => ?_)]
-  rw [← sup'_eq_sup nonempty_Iic]; rw [← sup'_eq_su
+  rw [← sup'_eq_sup nonempty_Iic]; rw [← sup'_eq_sup nonempty_Iic]; rw [← partialSups_apply]; rw [← partialSups_apply]; rw [partialSups_disjointed]
 
 中文:
 引理 有限类型.sup_disjointed
@@ -351,7 +413,7 @@ lemma Fintype.sup_disjointed
   have hun : univ.biUnion Iic = (univ : Finset ι) := by
     ext r; simpa only [mem_biUnion, mem_univ, mem_Iic, true_and, iff_true] using ⟨r, le_rfl⟩
   rw [← hun]; rw [sup_biUnion]; rw [sup_biUnion]; rw [sup_congr rfl (fun i _ => ?_)]
-  rw [← sup'_eq_sup nonempty_Iic]; rw [← sup'_eq_su
+  rw [← sup'_eq_sup nonempty_Iic]; rw [← sup'_eq_sup nonempty_Iic]; rw [← partialSups_apply]; rw [← partialSups_apply]; rw [partialSups_disjointed]
 
 Depends on / 依赖: Finset, _eq_sup, biUnion, classical, iff_true, le_rfl, mem_Iic, mem_biUnion, mem_univ, nonempty_Iic, partialSups_apply, partialSups_disjointed, sup_biUnion, sup_congr, true_and, univ.biUnion
 -/
@@ -376,6 +438,11 @@ lemma disjointed_partialSups
     rw [sdiff_eq_symm (sdiff_le.trans (le_partialSups f i))]
     simp only [funext (partialSups_apply f), sup'_eq_sup]
     rw [sdiff_sdiff_eq_sdiff_sup (sup_mono Iio_subset_Iic_self)]; rw [sup_eq_right]
+    simp only [Iic_eq_cons_Iio, sup_cons, sup_sdiff_left_self, sdiff_le_iff, le_sup_right]
+  simp only [disjointed_apply, step1, funext (partialSups_apply f), sup'_eq_sup, ← sup_biUnion]
+  congr 2 with r
+  simpa only [mem_biUnion, mem_Iio, mem_Iic] using
+    ⟨fun ⟨a, ha⟩ => ha.2.trans_lt ha.1, fun hr => ⟨r, hr, le_rfl⟩⟩
 
 中文:
 引理 disjointed_partialSups
@@ -387,6 +454,11 @@ lemma disjointed_partialSups
     rw [sdiff_eq_symm (sdiff_le.trans (le_partialSups f i))]
     simp only [funext (partialSups_apply f), sup'_eq_sup]
     rw [sdiff_sdiff_eq_sdiff_sup (sup_mono Iio_subset_Iic_self)]; rw [sup_eq_right]
+    simp only [Iic_eq_cons_Iio, sup_cons, sup_sdiff_left_self, sdiff_le_iff, le_sup_right]
+  simp only [disjointed_apply, step1, funext (partialSups_apply f), sup'_eq_sup, ← sup_biUnion]
+  congr 2 with r
+  simpa only [mem_biUnion, mem_Iio, mem_Iic] using
+    ⟨fun ⟨a, ha⟩ => ha.2.trans_lt ha.1, fun hr => ⟨r, hr, le_rfl⟩⟩
 
 Depends on / 依赖: Iic_eq_cons_Iio, Iio_subset_Iic_self, _eq_sup, classical, disjointed_apply, le_partialSups, le_sup_right, mem_biUni, partialSups, partialSups_apply, sdiff_eq_symm, sdiff_le, sdiff_le.trans, sdiff_le_iff, sdiff_sdiff_eq_sdiff_sup, sup_biUnion, sup_cons, sup_eq_right, sup_mono, sup_sdiff_left_self
 -/
@@ -610,7 +682,7 @@ lemma Monotone.disjointed_succ_sup
     have : Iio (succ i) = Iic i := by
       ext
       simp only [mem_Iio, lt_succ_iff_eq_or_lt_of_not_isMax h, mem_Iic, le_iff_lt_or_eq, Or.comm]
-    rw [this]; rw [← su
+    rw [this]; rw [← sup'_eq_sup nonempty_Iic]; rw [← partialSups_apply]; rw [hf.partialSups_eq]; rw [sdiff_sup_cancel hf le_succ i]
 
 中文:
 引理 递增.disjointed_succ_sup
@@ -622,7 +694,7 @@ lemma Monotone.disjointed_succ_sup
     have : Iio (succ i) = Iic i := by
       ext
       simp only [mem_Iio, lt_succ_iff_eq_or_lt_of_not_isMax h, mem_Iic, le_iff_lt_or_eq, Or.comm]
-    rw [this]; rw [← su
+    rw [this]; rw [← sup'_eq_sup nonempty_Iic]; rw [← partialSups_apply]; rw [hf.partialSups_eq]; rw [sdiff_sup_cancel hf le_succ i]
 
 Depends on / 依赖: Or.comm, _eq_sup, disjointed_apply, disjointed_le, hf.partialSups_eq, le_iff_lt_or_eq, le_succ, lt_succ_iff_eq_or_lt_of_not_isMax, mem_Iic, mem_Iio, nonempty_Iic, partialSups_apply, partialSups_eq, sdiff_sup_cancel, succ_eq_iff_isMax, succ_eq_iff_isMax.mpr, sup_eq_right
 -/
@@ -651,7 +723,8 @@ lemma sup_Ioc_disjointed_of_monotone
     by_cases h'm : IsMax m
     · simpa [Order.succ_eq_iff_isMax.mpr h'm] using ih
     · rw [← Finset.insert_Ioc_right_eq_Ioc_succ_of_not_isMax hm h'm]
-      simp only
+      simp only [sup_insert, hf.disjointed_succ h'm, ih]
+      exact sdiff_sup_sdiff_cancel (hf (Order.le_succ m)) (hf hm)
 
 中文:
 引理 sup_Ioc_disjointed_of_monotone
@@ -663,7 +736,8 @@ lemma sup_Ioc_disjointed_of_monotone
     by_cases h'm : IsMax m
     · simpa [Order.succ_eq_iff_isMax.mpr h'm] using ih
     · rw [← Finset.insert_Ioc_right_eq_Ioc_succ_of_not_isMax hm h'm]
-      simp only
+      simp only [sup_insert, hf.disjointed_succ h'm, ih]
+      exact sdiff_sup_sdiff_cancel (hf (Order.le_succ m)) (hf hm)
 
 Depends on / 依赖: Finset, Finset.insert_Ioc_right_eq_Ioc_succ_of_not_isMax, LinearLocallyFiniteOrder, LinearLocallyFiniteOrder.succOrder, Order.le_succ, Order.succ_eq_iff_isMax.mpr, Succ.rec, SuccOrder, disjointed_succ, hf.disjointed_succ, insert_Ioc_right_eq_Ioc_succ_of_not_isMax, le_succ, sdiff_sup_sdiff_cancel, succOrder, succ_eq_iff_isMax, sup_insert
 -/
@@ -720,7 +794,12 @@ lemma Fintype.exists_disjointed_le
     exact ⟨f, le_rfl, rfl, Subsingleton.pairwise⟩
   let R : ι ≃ Fin _ := equivFin ι
   let f' : Fin _ -> α := f ∘ R.symm
-  have hf' : f = f' ∘ R := by ext; simp only [Function.comp_
+  have hf' : f = f' ∘ R := by ext; simp only [Function.comp_apply, Equiv.symm_apply_apply, f']
+  refine ⟨disjointed f' ∘ R, ?_, ?_, ?_⟩
+  · intro n
+    simpa only [hf'] using! disjointed_le f' (R n)
+  · simpa only [← sup_image, image_univ_equiv, hf'] using! sup_disjointed f'
+  · exact fun i j hij => disjoint_disjointed f' (R.injective.ne hij)
 
 中文:
 引理 有限类型.存在_disjointed_le
@@ -731,7 +810,12 @@ lemma Fintype.exists_disjointed_le
     exact ⟨f, le_rfl, rfl, Subsingleton.pairwise⟩
   let R : ι ≃ Fin _ := equivFin ι
   let f' : Fin _ -> α := f ∘ R.symm
-  have hf' : f = f' ∘ R := by ext; simp only [Function.comp_
+  have hf' : f = f' ∘ R := by ext; simp only [Function.comp_apply, Equiv.symm_apply_apply, f']
+  refine ⟨disjointed f' ∘ R, ?_, ?_, ?_⟩
+  · intro n
+    simpa only [hf'] using! disjointed_le f' (R n)
+  · simpa only [← sup_image, image_univ_equiv, hf'] using! sup_disjointed f'
+  · exact fun i j hij => disjoint_disjointed f' (R.injective.ne hij)
 
 Depends on / 依赖: Equiv.symm_apply_apply, Function, Function.comp_apply, R.symm, Subsingleton, Subsingleton.pairwise, comp_apply, defined, disjointed, disjointed_le, equivFin, image_univ_equiv, isEmpty_or_nonempty, le_rfl, pairwise, separately, sup_disjointed, sup_image, symm_apply_apply
 -/

@@ -1037,7 +1037,11 @@ theorem map_add_of_distinct_val
   · refine this h.symm ?_ (h.lt_or_gt.resolve_right vyx)
     rwa [add_comm, max_comm]
   rw [max_eq_left_of_lt vyx] at h'
-  apply lt_i
+  apply lt_irrefl (v x)
+  calc
+    v x = v (x + y - y) := by simp
+    _ <= max (v <| x + y) (v y) := map_sub _ _ _
+    _ < v x := max_lt h' vyx
 
 中文:
 定理 map_add_of_distinct_val
@@ -1051,7 +1055,11 @@ theorem map_add_of_distinct_val
   · refine this h.symm ?_ (h.lt_or_gt.resolve_right vyx)
     rwa [add_comm, max_comm]
   rw [max_eq_left_of_lt vyx] at h'
-  apply lt_i
+  apply lt_irrefl (v x)
+  calc
+    v x = v (x + y - y) := by simp
+    _ <= max (v <| x + y) (v y) := map_sub _ _ _
+    _ < v x := max_lt h' vyx
 
 Depends on / 依赖: add_comm, generalizing, h.lt_or_gt.resolve_right, h.symm, le_iff_eq_or_lt, lt_irrefl, lt_or_gt, map_add, map_sub, max_comm, max_eq_left_of_lt, max_lt, or_iff_not_imp_right, resolve_right, v.map_add
 -/
@@ -1898,7 +1906,22 @@ definition restrict
         reduceDIte, le_sup_iff]
       all_goals split_ifs with H
       · simp [H]
-      ·
+      · simp only [H, ↓reduceDIte, WithZero.coe_le_coe, Subtype.mk_le_mk, ← Units.val_le_val,
+          Units.val_mk0]
+        split_ifs with hy
+        · simpa [hy] using map_add_le _ (le_rfl (a := v x)) (hy ▸ zero_le)
+        · simp [hy, ← Units.val_le_val]
+      · simp [H]
+      · simp only [H, ↓reduceDIte, WithZero.coe_le_coe, Subtype.mk_le_mk]
+        split_ifs with hx
+        · simpa [hx, ← Units.val_le_val] using map_add_le _ (hx ▸ zero_le) (le_rfl (a := v y))
+        · simp [hx, ← Units.val_le_val]
+    · simp only [ne_eq, not_or, Decidable.not_not] at H
+      simp only [ZeroHom.toFun_eq_coe, toZeroHom_coe, restrict₀_apply,
+        MonoidWithZeroHom.coe_ofClass, H, ↓reduceDIte, max_self, nonpos_iff_eq_zero]
+      replace H : v (x + y) = 0 :=
+        le_antisymm (map_add_le _ (le_of_eq H.1) (le_of_eq H.2)) zero_le
+      simp [H]
 
 中文:
 定义 restrict
@@ -1911,7 +1934,22 @@ definition restrict
         reduceDIte, le_sup_iff]
       all_goals split_ifs with H
       · simp [H]
-      ·
+      · simp only [H, ↓reduceDIte, WithZero.coe_le_coe, Subtype.mk_le_mk, ← Units.val_le_val,
+          Units.val_mk0]
+        split_ifs with hy
+        · simpa [hy] using map_add_le _ (le_rfl (a := v x)) (hy ▸ zero_le)
+        · simp [hy, ← Units.val_le_val]
+      · simp [H]
+      · simp only [H, ↓reduceDIte, WithZero.coe_le_coe, Subtype.mk_le_mk]
+        split_ifs with hx
+        · simpa [hx, ← Units.val_le_val] using map_add_le _ (hx ▸ zero_le) (le_rfl (a := v y))
+        · simp [hx, ← Units.val_le_val]
+    · simp only [ne_eq, not_or, Decidable.not_not] at H
+      simp only [ZeroHom.toFun_eq_coe, toZeroHom_coe, restrict₀_apply,
+        MonoidWithZeroHom.coe_ofClass, H, ↓reduceDIte, max_self, nonpos_iff_eq_zero]
+      replace H : v (x + y) = 0 :=
+        le_antisymm (map_add_le _ (le_of_eq H.1) (le_of_eq H.2)) zero_le
+      simp [H]
 
 Depends on / 依赖: ofClass
 -/
@@ -2288,7 +2326,13 @@ lemma exists_div_eq_of_unit
   have hx : 0 < v x := by
     rw [← restrict_pos_iff]; rw [restrict_def]; rw [WithZero.pos_iff_ne_zero]; rw [ne_eq]; rw [restrict₀_eq_zero_iff]
     aesop
-  use x, a, hx, ze
+  use x, a, hx, zero_lt_iff.mpr ha
+  have ha0 : v.restrict a != 0 := by simpa using ha
+  rw [div_eq_iff ha0]; rw [mul_comm]; rw [← embedding_strictMono.injective.eq_iff]; rw [map_mul]; rw [embedding_restrict]; rw [embedding_restrict]
+  rw [← MonoidWithZeroHom.coe_ofClass]; rw [← hax]
+  congr
+  rw [← WithZero.coe_unzero (Units.ne_zero γ)]
+  exact Eq.refl ..
 
 中文:
 引理 存在_div_eq_of_unit
@@ -2299,7 +2343,13 @@ lemma exists_div_eq_of_unit
   have hx : 0 < v x := by
     rw [← restrict_pos_iff]; rw [restrict_def]; rw [WithZero.pos_iff_ne_zero]; rw [ne_eq]; rw [restrict₀_eq_zero_iff]
     aesop
-  use x, a, hx, ze
+  use x, a, hx, zero_lt_iff.mpr ha
+  have ha0 : v.restrict a != 0 := by simpa using ha
+  rw [div_eq_iff ha0]; rw [mul_comm]; rw [← embedding_strictMono.injective.eq_iff]; rw [map_mul]; rw [embedding_restrict]; rw [embedding_restrict]
+  rw [← MonoidWithZeroHom.coe_ofClass]; rw [← hax]
+  congr
+  rw [← WithZero.coe_unzero (Units.ne_zero γ)]
+  exact Eq.refl ..
 
 Depends on / 依赖: Units.ne_zero, WithZero, WithZero.pos_iff_ne_zero, WithZero.unzero, div_eq_iff, embedding_restrict, embedding_strictMono, embedding_strictMono.injective.eq_iff, eq_iff, hu_def, injective, map_mul, mem_valueGroup_iff_of_comm, mul_comm, ne_eq, ne_zero, pos_iff_ne_zero, restrict, restrict_def, restrict_pos_iff
 -/
@@ -3379,7 +3429,41 @@ definition orderMonoidIso
     · simp_all [valueGroup₀Fun_zero]
     obtain _ | ⟨r₂, s₂, hr₂, hs₂, rfl⟩ := y.zero_or_exists_mk
     · simp_all [valueGroup₀Fun_zero]
-    simp [← WithZero.coe_mul, 
+    simp [← WithZero.coe_mul, valueGroup.mk_mul, valueGroup₀Fun_spec h]
+  left_inv x := by
+    obtain _ | ⟨r₁, s₁, hr₁, hs₁, rfl⟩ := x.zero_or_exists_mk
+    · simp_all [valueGroup₀Fun_zero]
+    rw [valueGroup₀Fun_spec h]; rw [valueGroup₀Fun_spec h.symm]
+  right_inv x := by
+    obtain _ | ⟨r₁, s₁, hr₁, hs₁, rfl⟩ := x.zero_or_exists_mk
+    · simp_all [valueGroup₀Fun_zero]
+    rw [valueGroup₀Fun_spec h.symm]; rw [valueGroup₀Fun_spec h]
+  map_le_map_iff' {x} {y} := by
+    simp only [valueGroup₀Fun, ne_eq]
+    split_ifs with hx0 hy0 hy0
+    · simp [hx0, hy0]
+    · simp [hx0]
+    · simp [hx0, hy0]
+    · generalize_proofs _ _ _ _ hx _ _ hy
+      conv_rhs => rw [hx.choose_spec, hy.choose_spec]
+      simp only [valueGroup.mk, WithZero.coe_le_coe, Subtype.mk_le_mk]
+      nth_rw 2 [mul_comm]
+      rw [le_mul_inv_iff_mul_le]; rw [mul_assoc]; rw [mul_comm]; rw [← le_mul_inv_iff_mul_le]; rw [inv_inv]
+      nth_rw 4 [mul_comm]
+      conv_rhs =>
+        rw [le_mul_inv_iff_mul_le]; rw [mul_assoc]; rw [mul_comm]; rw [← le_mul_inv_iff_mul_le]; rw [inv_inv]
+      generalize_proofs _ hx' hx20 hy' hy10 hx10 hy20
+      rw [← Units.mk0_mul _ _ (mul_ne_zero hx10 hy20)]; rw [← Units.mk0_mul _ _ (mul_ne_zero hx20 hy10)]; rw [← Units.mk0_mul]; rw [← Units.mk0_mul]
+      · simp only [← Units.val_le_val]
+        repeat rw [Units.val_mk0]
+        simp only [MonoidWithZeroHom.coe_ofClass, ← map_mul w, ← h.le_iff_le]
+        simp
+      · simpa only [MonoidWithZeroHom.coe_ofClass, ← map_mul v, ne_eq, h.eq_zero, map_mul w]
+          using mul_ne_zero hx10 hy20
+      · simpa only [MonoidWithZeroHom.coe_ofClass, ← map_mul v, ne_eq, h.eq_zero, map_mul w]
+          using mul_ne_zero hx20 hy10
+
+@[simp]
 
 中文:
 定义 orderMonoidIso
@@ -3391,7 +3475,41 @@ definition orderMonoidIso
     · simp_all [valueGroup₀Fun_zero]
     obtain _ | ⟨r₂, s₂, hr₂, hs₂, rfl⟩ := y.zero_or_exists_mk
     · simp_all [valueGroup₀Fun_zero]
-    simp [← WithZero.coe_mul, 
+    simp [← WithZero.coe_mul, valueGroup.mk_mul, valueGroup₀Fun_spec h]
+  left_inv x := by
+    obtain _ | ⟨r₁, s₁, hr₁, hs₁, rfl⟩ := x.zero_or_exists_mk
+    · simp_all [valueGroup₀Fun_zero]
+    rw [valueGroup₀Fun_spec h]; rw [valueGroup₀Fun_spec h.symm]
+  right_inv x := by
+    obtain _ | ⟨r₁, s₁, hr₁, hs₁, rfl⟩ := x.zero_or_exists_mk
+    · simp_all [valueGroup₀Fun_zero]
+    rw [valueGroup₀Fun_spec h.symm]; rw [valueGroup₀Fun_spec h]
+  map_le_map_iff' {x} {y} := by
+    simp only [valueGroup₀Fun, ne_eq]
+    split_ifs with hx0 hy0 hy0
+    · simp [hx0, hy0]
+    · simp [hx0]
+    · simp [hx0, hy0]
+    · generalize_proofs _ _ _ _ hx _ _ hy
+      conv_rhs => rw [hx.choose_spec, hy.choose_spec]
+      simp only [valueGroup.mk, WithZero.coe_le_coe, Subtype.mk_le_mk]
+      nth_rw 2 [mul_comm]
+      rw [le_mul_inv_iff_mul_le]; rw [mul_assoc]; rw [mul_comm]; rw [← le_mul_inv_iff_mul_le]; rw [inv_inv]
+      nth_rw 4 [mul_comm]
+      conv_rhs =>
+        rw [le_mul_inv_iff_mul_le]; rw [mul_assoc]; rw [mul_comm]; rw [← le_mul_inv_iff_mul_le]; rw [inv_inv]
+      generalize_proofs _ hx' hx20 hy' hy10 hx10 hy20
+      rw [← Units.mk0_mul _ _ (mul_ne_zero hx10 hy20)]; rw [← Units.mk0_mul _ _ (mul_ne_zero hx20 hy10)]; rw [← Units.mk0_mul]; rw [← Units.mk0_mul]
+      · simp only [← Units.val_le_val]
+        repeat rw [Units.val_mk0]
+        simp only [MonoidWithZeroHom.coe_ofClass, ← map_mul w, ← h.le_iff_le]
+        simp
+      · simpa only [MonoidWithZeroHom.coe_ofClass, ← map_mul v, ne_eq, h.eq_zero, map_mul w]
+          using mul_ne_zero hx10 hy20
+      · simpa only [MonoidWithZeroHom.coe_ofClass, ← map_mul v, ne_eq, h.eq_zero, map_mul w]
+          using mul_ne_zero hx20 hy10
+
+@[simp]
 -/
 noncomputable def orderMonoidIso (h : v.IsEquiv w) :
     ValueGroup₀ (.ofClass v) ≃*o ValueGroup₀ (.ofClass w) where
@@ -3666,7 +3784,25 @@ theorem isEquiv_iff_val_eq_one
       · have : v (1 + x) = 1 := by
           rw [← v.map_one]
           apply map_add_eq_of_lt_left
-       
+          simpa
+        rw [h] at this
+        rw [show x = -1 + (1 + x) by simp]
+        refine le_trans (v'.map_add _ _) ?_
+        simp [this]
+      · rw [h] at hx'
+        exact le_of_eq hx'
+    · intro hx
+      rcases lt_or_eq_of_le hx with hx' | hx'
+      · have : v' (1 + x) = 1 := by
+          rw [← v'.map_one]
+          apply map_add_eq_of_lt_left
+          simpa
+        rw [← h] at this
+        rw [show x = -1 + (1 + x) by simp]
+        refine le_trans (v.map_add _ _) ?_
+        simp [this]
+      · rw [← h] at hx'
+        exact le_of_eq hx'
 
 中文:
 定理 isEquiv_iff_val_eq_one
@@ -3684,7 +3820,25 @@ theorem isEquiv_iff_val_eq_one
       · have : v (1 + x) = 1 := by
           rw [← v.map_one]
           apply map_add_eq_of_lt_left
-       
+          simpa
+        rw [h] at this
+        rw [show x = -1 + (1 + x) by simp]
+        refine le_trans (v'.map_add _ _) ?_
+        simp [this]
+      · rw [h] at hx'
+        exact le_of_eq hx'
+    · intro hx
+      rcases lt_or_eq_of_le hx with hx' | hx'
+      · have : v' (1 + x) = 1 := by
+          rw [← v'.map_one]
+          apply map_add_eq_of_lt_left
+          simpa
+        rw [← h] at this
+        rw [show x = -1 + (1 + x) by simp]
+        refine le_trans (v.map_add _ _) ?_
+        simp [this]
+      · rw [← h] at hx'
+        exact le_of_eq hx'
 
 Depends on / 依赖: eq_one_iff_eq_one, h.eq_one_iff_eq_one, isEquiv_of_val_le_one, le_of_eq, le_trans, lt_or_eq_of_le, map_add, map_add_eq_of_lt_left, map_one, v.map_one
 -/
@@ -3739,7 +3893,17 @@ theorem isEquiv_iff_val_lt_one
     · intro hh
       by_contra h_1
       cases ne_iff_lt_or_gt.1 h_1 with
-      | inl h_2 => simpa [hh, l
+      | inl h_2 => simpa [hh, lt_self_iff_false] using h.2 h_2
+      | inr h_2 =>
+          rw [← inv_one]; rw [← inv_eq_iff_eq_inv]; rw [← map_inv₀] at hh
+          exact hh.not_lt (h.2 ((one_lt_val_iff v' hx).1 h_2))
+    · intro hh
+      by_contra h_1
+      cases ne_iff_lt_or_gt.1 h_1 with
+      | inl h_2 => simpa [hh, lt_self_iff_false] using h.1 h_2
+      | inr h_2 =>
+        rw [← inv_one]; rw [← inv_eq_iff_eq_inv]; rw [← map_inv₀] at hh
+        exact hh.not_lt (h.1 ((one_lt_val_iff v hx).1 h_2))
 
 中文:
 定理 isEquiv_iff_val_lt_one
@@ -3756,7 +3920,17 @@ theorem isEquiv_iff_val_lt_one
     · intro hh
       by_contra h_1
       cases ne_iff_lt_or_gt.1 h_1 with
-      | inl h_2 => simpa [hh, l
+      | inl h_2 => simpa [hh, lt_self_iff_false] using h.2 h_2
+      | inr h_2 =>
+          rw [← inv_one]; rw [← inv_eq_iff_eq_inv]; rw [← map_inv₀] at hh
+          exact hh.not_lt (h.2 ((one_lt_val_iff v' hx).1 h_2))
+    · intro hh
+      by_contra h_1
+      cases ne_iff_lt_or_gt.1 h_1 with
+      | inl h_2 => simpa [hh, lt_self_iff_false] using h.1 h_2
+      | inr h_2 =>
+        rw [← inv_one]; rw [← inv_eq_iff_eq_inv]; rw [← map_inv₀] at hh
+        exact hh.not_lt (h.1 ((one_lt_val_iff v hx).1 h_2))
 
 Depends on / 依赖: h.lt_one_iff_lt_one, hh.not_lt, inv_eq_iff_eq_inv, inv_one, isEquiv_iff_val_eq_one, lt_one_iff_lt_one, lt_s, lt_self_iff_false, ne_iff_lt_or_gt, not_lt, one_lt_val_iff, zero_iff, zero_ne_one
 -/
@@ -3875,7 +4049,10 @@ add_mem' {x y} hx hy := le_zero_iff.mp
   smul_mem' c x hx :=
     calc
       v (c * x) = v c * v x := map_mul v c x
-      _ = v c * 0
+      _ = v c * 0 := congr_arg _ hx
+      _ = 0 := mul_zero _
+
+@[simp]
 
 中文:
 定义 supp
@@ -3889,7 +4066,10 @@ add_mem' {x y} hx hy := le_zero_iff.mp
   smul_mem' c x hx :=
     calc
       v (c * x) = v c * v x := map_mul v c x
-      _ = v c * 0
+      _ = v c * 0 := congr_arg _ hx
+      _ = 0 := mul_zero _
+
+@[simp]
 -/
 def supp : Ideal R where
   carrier := { x | v x = 0 }
@@ -3982,7 +4162,7 @@ theorem map_add_supp
   apply le_antisymm (aux a s h)
   calc
     v a = v (a + s + -s) := by simp
-    _ <= v (a + s) := aux (a + s) (-s) (by rwa [← Ideal.neg_mem_iff] at h
+    _ <= v (a + s) := aux (a + s) (-s) (by rwa [← Ideal.neg_mem_iff] at h)
 
 中文:
 定理 map_add_supp
@@ -3996,7 +4176,7 @@ theorem map_add_supp
   apply le_antisymm (aux a s h)
   calc
     v a = v (a + s + -s) := by simp
-    _ <= v (a + s) := aux (a + s) (-s) (by rwa [← Ideal.neg_mem_iff] at h
+    _ <= v (a + s) := aux (a + s) (-s) (by rwa [← Ideal.neg_mem_iff] at h)
 
 Depends on / 依赖: Ideal.neg_mem_iff, le_antisymm, le_rfl, le_trans, map_add, max_le, neg_mem_iff, v.map_add
 -/

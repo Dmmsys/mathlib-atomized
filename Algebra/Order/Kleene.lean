@@ -164,7 +164,9 @@ abbreviation IdemSemiring.ofSemiring
   sup := (· + ·)
   le_sup_left a b := by rw [← add_assoc, h]
   le_sup_right a b := by rw [add_comm, add_assoc, h]
-  sup_le a b c hab hbc := by rwa [add_assoc, hb
+  sup_le a b c hab hbc := by rwa [add_assoc, hbc]
+  bot := 0
+  bot_le := zero_add
 
 中文:
 缩写 IdemSemiring.ofSemiring
@@ -176,7 +178,9 @@ abbreviation IdemSemiring.ofSemiring
   sup := (· + ·)
   le_sup_left a b := by rw [← add_assoc, h]
   le_sup_right a b := by rw [add_comm, add_assoc, h]
-  sup_le a b c hab hbc := by rwa [add_assoc, hb
+  sup_le a b c hab hbc := by rwa [add_assoc, hbc]
+  bot := 0
+  bot_le := zero_add
 -/
 abbrev IdemSemiring.ofSemiring [Semiring α] (h : forall a : α, a + a = a) : IdemSemiring α where
   le a b := a + b = b
@@ -804,7 +808,7 @@ theorem one_add_mul_kstar
     rw [add_le_iff] at this
     nth_rw 1 [← mul_one a∗]
     exact (mul_right_mono this.1).trans (kstar_mul_le_self this.2)
-  ap
+  apply add_le_add_right (mul_right_mono h)
 
 中文:
 定理 one_add_mul_kstar
@@ -818,7 +822,7 @@ theorem one_add_mul_kstar
     rw [add_le_iff] at this
     nth_rw 1 [← mul_one a∗]
     exact (mul_right_mono this.1).trans (kstar_mul_le_self this.2)
-  ap
+  apply add_le_add_right (mul_right_mono h)
 
 Depends on / 依赖: add_le_add_right, add_le_iff, kstar_mul_le_self, le_antisymm, mul_kstar_le_kstar, mul_one, mul_right_mono, nth_rw, one_le_kstar
 -/
@@ -848,7 +852,7 @@ theorem one_add_kstar_mul
     rw [add_le_iff] at this
     nth_rw 1 [← one_mul a∗]
     exact (mul_left_mono this.1).trans (mul_kstar_le_self this.2)
-  app
+  apply add_le_add_right (mul_left_mono h)
 
 中文:
 定理 one_add_kstar_mul
@@ -862,7 +866,7 @@ theorem one_add_kstar_mul
     rw [add_le_iff] at this
     nth_rw 1 [← one_mul a∗]
     exact (mul_left_mono this.1).trans (mul_kstar_le_self this.2)
-  app
+  apply add_le_add_right (mul_left_mono h)
 
 Depends on / 依赖: add_le_add_right, add_le_iff, kstar_mul_le_kstar, le_antisymm, mul_kstar_le_self, mul_left_mono, nth_rw, one_le_kstar, one_mul
 -/
@@ -933,7 +937,7 @@ instance :
   mul_kstar_le_kstar _ := ⟨mul_kstar_le_kstar, mul_kstar_le_kstar⟩
   kstar_mul_le_kstar _ := ⟨kstar_mul_le_kstar, kstar_mul_le_kstar⟩
   mul_kstar_le_self _ _ := And.imp mul_kstar_le_self mul_kstar_le_self
-  kstar_mul_le_self _ _ := And.im
+  kstar_mul_le_self _ _ := And.imp kstar_mul_le_self kstar_mul_le_self
 
 中文:
 实例 :
@@ -943,7 +947,7 @@ instance :
   mul_kstar_le_kstar _ := ⟨mul_kstar_le_kstar, mul_kstar_le_kstar⟩
   kstar_mul_le_kstar _ := ⟨kstar_mul_le_kstar, kstar_mul_le_kstar⟩
   mul_kstar_le_self _ _ := And.imp mul_kstar_le_self mul_kstar_le_self
-  kstar_mul_le_self _ _ := And.im
+  kstar_mul_le_self _ _ := And.imp kstar_mul_le_self kstar_mul_le_self
 -/
 instance : KleeneAlgebra (α × β) where
   kstar a := (a.1∗, a.2∗)
@@ -1218,7 +1222,16 @@ abbreviation kleeneAlgebra
     rw [← le]; rw [mul]; rw [kstar]
     exact mul_kstar_le_kstar
   kstar_mul_le_kstar a := by
-    rw [← le]; rw [mul]; rw
+    rw [← le]; rw [mul]; rw [kstar]
+    exact kstar_mul_le_kstar
+  mul_kstar_le_self a b h := by
+    rw [← le]; rw [mul]; rw [kstar]
+    rw [← le]; rw [mul] at h
+    exact mul_kstar_le_self h
+  kstar_mul_le_self a b h := by
+    rw [← le]; rw [mul]; rw [kstar]
+    rw [← le]; rw [mul] at h
+    exact kstar_mul_le_self h
 
 中文:
 缩写 kleeneAlgebra
@@ -1231,7 +1244,16 @@ abbreviation kleeneAlgebra
     rw [← le]; rw [mul]; rw [kstar]
     exact mul_kstar_le_kstar
   kstar_mul_le_kstar a := by
-    rw [← le]; rw [mul]; rw
+    rw [← le]; rw [mul]; rw [kstar]
+    exact kstar_mul_le_kstar
+  mul_kstar_le_self a b h := by
+    rw [← le]; rw [mul]; rw [kstar]
+    rw [← le]; rw [mul] at h
+    exact mul_kstar_le_self h
+  kstar_mul_le_self a b h := by
+    rw [← le]; rw [mul]; rw [kstar]
+    rw [← le]; rw [mul] at h
+    exact kstar_mul_le_self h
 -/
 protected abbrev kleeneAlgebra [KleeneAlgebra α] [LE β] [LT β] [Zero β] [One β]
     [Add β] [Mul β] [Pow β Nat] [SMul Nat β] [NatCast β] [Max β] [Bot β] [KStar β] (f : β -> α)

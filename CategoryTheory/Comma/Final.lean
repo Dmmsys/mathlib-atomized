@@ -56,7 +56,24 @@ lemma isCofiltered_of_isCofiltered_costructuredArrow
     exact ⟨⟨X.left, b, X.hom⟩⟩
   toIsCofilteredOrEmpty := by
     refine ⟨fun j₁ j₂ => ?_, fun j₁ j₂ u v => ?_⟩
-    · obtain ⟨Q⟩ : Nonempty (CostructuredArrow L (R.ob
+    · obtain ⟨Q⟩ : Nonempty (CostructuredArrow L (R.obj (IsCofiltered.min j₁.right j₂.right))) :=
+        IsCofiltered.nonempty
+      obtain ⟨ia, va₁, va₂, heqa⟩ := exists_eq_of_isCofiltered_costructuredArrow L
+        (Q.hom ≫ R.map (IsCofiltered.minToLeft j₁.right j₂.right)) j₁.hom
+      obtain ⟨ib, vb₁, vb₂, heqb⟩ := exists_eq_of_isCofiltered_costructuredArrow L
+        (Q.hom ≫ R.map (IsCofiltered.minToRight j₁.right j₂.right)) j₂.hom
+      obtain ⟨i₀, il₀, ir₀, heq⟩ := IsCofiltered.cospan va₁ vb₁
+      exact ⟨⟨i₀, IsCofiltered.min j₁.right j₂.right, L.map (il₀ ≫ va₁) ≫ Q.hom⟩,
+        ⟨il₀ ≫ va₂, IsCofiltered.minToLeft _ _, by simp [← heqa]⟩,
+        ⟨ir₀ ≫ vb₂, IsCofiltered.minToRight _ _, by cat_disch⟩, trivial⟩
+    · obtain ⟨Q⟩ : Nonempty (CostructuredArrow L (R.obj (IsCofiltered.eq u.right v.right))) :=
+        IsCofiltered.nonempty
+      obtain ⟨ia, va₁, va₂, heqa⟩ := exists_eq_of_isCofiltered_costructuredArrow L
+        (Q.hom ≫ R.map (IsCofiltered.eqHom u.right v.right)) j₁.hom
+      obtain ⟨i₀, α, β, hα, hβ⟩ := IsCofiltered.bowtie u.left (va₂ ≫ v.left) (𝟙 _) va₂
+      have := IsCofiltered.eq_condition u.right v.right
+      exact ⟨⟨i₀, IsCofiltered.eq u.right v.right, L.map (β ≫ va₁) ≫ Q.hom⟩,
+        ⟨β ≫ va₂, IsCofiltered.eqHom u.right v.right, by cat_disch⟩, by cat_disch⟩
 
 中文:
 引理 isCofiltered_of_isCofiltered_costructuredArrow
@@ -67,7 +84,24 @@ lemma isCofiltered_of_isCofiltered_costructuredArrow
     exact ⟨⟨X.left, b, X.hom⟩⟩
   toIsCofilteredOrEmpty := by
     refine ⟨fun j₁ j₂ => ?_, fun j₁ j₂ u v => ?_⟩
-    · obtain ⟨Q⟩ : Nonempty (CostructuredArrow L (R.ob
+    · obtain ⟨Q⟩ : Nonempty (CostructuredArrow L (R.obj (IsCofiltered.min j₁.right j₂.right))) :=
+        IsCofiltered.nonempty
+      obtain ⟨ia, va₁, va₂, heqa⟩ := exists_eq_of_isCofiltered_costructuredArrow L
+        (Q.hom ≫ R.map (IsCofiltered.minToLeft j₁.right j₂.right)) j₁.hom
+      obtain ⟨ib, vb₁, vb₂, heqb⟩ := exists_eq_of_isCofiltered_costructuredArrow L
+        (Q.hom ≫ R.map (IsCofiltered.minToRight j₁.right j₂.right)) j₂.hom
+      obtain ⟨i₀, il₀, ir₀, heq⟩ := IsCofiltered.cospan va₁ vb₁
+      exact ⟨⟨i₀, IsCofiltered.min j₁.right j₂.right, L.map (il₀ ≫ va₁) ≫ Q.hom⟩,
+        ⟨il₀ ≫ va₂, IsCofiltered.minToLeft _ _, by simp [← heqa]⟩,
+        ⟨ir₀ ≫ vb₂, IsCofiltered.minToRight _ _, by cat_disch⟩, trivial⟩
+    · obtain ⟨Q⟩ : Nonempty (CostructuredArrow L (R.obj (IsCofiltered.eq u.right v.right))) :=
+        IsCofiltered.nonempty
+      obtain ⟨ia, va₁, va₂, heqa⟩ := exists_eq_of_isCofiltered_costructuredArrow L
+        (Q.hom ≫ R.map (IsCofiltered.eqHom u.right v.right)) j₁.hom
+      obtain ⟨i₀, α, β, hα, hβ⟩ := IsCofiltered.bowtie u.left (va₂ ≫ v.left) (𝟙 _) va₂
+      have := IsCofiltered.eq_condition u.right v.right
+      exact ⟨⟨i₀, IsCofiltered.eq u.right v.right, L.map (β ≫ va₁) ≫ Q.hom⟩,
+        ⟨β ≫ va₂, IsCofiltered.eqHom u.right v.right, by cat_disch⟩, by cat_disch⟩
 
 Depends on / 依赖: CostructuredArrow, IsCofiltered, IsCofiltered.min, IsCofiltered.minToLeft, IsCofiltered.nonempty, Nonempty, Q.hom, R.map, R.obj, X.hom, X.left, exists_eq_of_isCofiltered_costructuredArrow, minToLeft, nonempty, toIsCofilteredOrEmpty
 -/
@@ -111,7 +145,10 @@ lemma initial_fst_of_isCofiltered_costructuredArrow
   refine ⟨fun a => ?_, fun {a} A' s s' => ?_⟩
   · obtain ⟨b⟩ := IsCofiltered.nonempty (C := B)
     obtain ⟨X⟩ : Nonempty (CostructuredArrow L (R.obj b)) := IsCofiltered.nonempty
-    exact ⟨⟨IsC
+    exact ⟨⟨IsCofiltered.min a X.left, b, L.map (IsCofiltered.minToRight a X.left) ≫ X.hom⟩,
+      ⟨IsCofiltered.minToLeft a X.left⟩⟩
+  · exact ⟨⟨_, A'.right, L.map (IsCofiltered.eqHom s s') ≫ A'.hom⟩,
+      ⟨IsCofiltered.eqHom s s', 𝟙 A'.right, by simp⟩, IsCofiltered.eq_condition s s'⟩
 
 中文:
 引理 initial_fst_of_isCofiltered_costructuredArrow
@@ -122,7 +159,10 @@ lemma initial_fst_of_isCofiltered_costructuredArrow
   refine ⟨fun a => ?_, fun {a} A' s s' => ?_⟩
   · obtain ⟨b⟩ := IsCofiltered.nonempty (C := B)
     obtain ⟨X⟩ : Nonempty (CostructuredArrow L (R.obj b)) := IsCofiltered.nonempty
-    exact ⟨⟨IsC
+    exact ⟨⟨IsCofiltered.min a X.left, b, L.map (IsCofiltered.minToRight a X.left) ≫ X.hom⟩,
+      ⟨IsCofiltered.minToLeft a X.left⟩⟩
+  · exact ⟨⟨_, A'.right, L.map (IsCofiltered.eqHom s s') ≫ A'.hom⟩,
+      ⟨IsCofiltered.eqHom s s', 𝟙 A'.right, by simp⟩, IsCofiltered.eq_condition s s'⟩
 
 Depends on / 依赖: CostructuredArrow, Functor, Functor.initial_iff_of_isCofiltered, IsCofiltered, IsCofiltered.eqHom, IsCofiltered.min, IsCofiltered.minToLeft, IsCofiltered.minToRight, IsCofiltered.nonempty, L.map, Nonempty, R.obj, X.hom, X.left, initial_iff_of_isCofiltered, isCofiltered_of_isCofiltered_costructuredArrow, minToLeft, minToRight, nonempty
 -/
@@ -174,7 +214,7 @@ lemma isFiltered_of_isFiltered_structuredArrow
   have (a : Aᵒᵖ) : IsCofiltered (CostructuredArrow R.op (L.op.obj a)) :=
     IsCofiltered.of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))
   have : IsCofiltered (Comma R.op L.op) := isCofiltered_of_isCofiltered_costructuredArrow _ _
-  exact IsFiltered.of_equivalence (opEquiv L R).sy
+  exact IsFiltered.of_equivalence (opEquiv L R).symm
 
 中文:
 引理 isFiltered_of_isFiltered_structuredArrow
@@ -183,7 +223,7 @@ lemma isFiltered_of_isFiltered_structuredArrow
   have (a : Aᵒᵖ) : IsCofiltered (CostructuredArrow R.op (L.op.obj a)) :=
     IsCofiltered.of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))
   have : IsCofiltered (Comma R.op L.op) := isCofiltered_of_isCofiltered_costructuredArrow _ _
-  exact IsFiltered.of_equivalence (opEquiv L R).sy
+  exact IsFiltered.of_equivalence (opEquiv L R).symm
 
 Depends on / 依赖: CostructuredArrow, IsCofiltered, IsCofiltered.of_equivalence, IsFiltered, IsFiltered.of_equivalence, L.obj, L.op, L.op.obj, R.op, a.unop, isCofiltered_of_isCofiltered_costructuredArrow, of_equivalence, opEquiv, structuredArrowOpEquivalence
 -/
@@ -204,7 +244,10 @@ lemma final_fst_of_isConnected_structuredArrow
     (isConnected_iff_of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))).mp
       inferInstance
   have : (snd R.op L.op).Initial := initial_snd_of_isConnected_costructuredArrow _ _
-  have : ((opFunctor L R).leftOp
+  have : ((opFunctor L R).leftOp ⋙ snd R.op L.op).Initial :=
+    initial_equivalence_comp (opEquiv L R).functor.leftOp _
+have : (fst L R).op.Initial := initial_of_natIso opFunctorCompSnd _ _
+  apply final_of_initial_op
 
 中文:
 引理 final_fst_of_isConnected_structuredArrow
@@ -213,7 +256,10 @@ lemma final_fst_of_isConnected_structuredArrow
     (isConnected_iff_of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))).mp
       inferInstance
   have : (snd R.op L.op).Initial := initial_snd_of_isConnected_costructuredArrow _ _
-  have : ((opFunctor L R).leftOp
+  have : ((opFunctor L R).leftOp ⋙ snd R.op L.op).Initial :=
+    initial_equivalence_comp (opEquiv L R).functor.leftOp _
+have : (fst L R).op.Initial := initial_of_natIso opFunctorCompSnd _ _
+  apply final_of_initial_op
 
 Depends on / 依赖: CostructuredArrow, Initial, IsConnected, L.obj, L.op, L.op.obj, R.op, a.unop, final_of_initial_op, functor, functor.leftOp, initial_equivalence_comp, initial_of_natIso, initial_snd_of_isConnected_costructuredArrow, isConnected_iff_of_equivalence, leftOp, op.Initial, opEquiv, opFunctor, opFunctorCompSnd
 -/
@@ -238,7 +284,10 @@ lemma final_snd_of_isFiltered_structuredArrow
   have (a : Aᵒᵖ) : IsCofiltered (CostructuredArrow R.op (L.op.obj a)) :=
     IsCofiltered.of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))
   have : (fst R.op L.op).Initial := initial_fst_of_isCofiltered_costructuredArrow _ _
-  have : ((opFunctor L R).leftOp ⋙ fst R.op L.op).Initial 
+  have : ((opFunctor L R).leftOp ⋙ fst R.op L.op).Initial :=
+    initial_equivalence_comp (opEquiv L R).functor.leftOp _
+have : (snd L R).op.Initial := initial_of_natIso opFunctorCompFst _ _
+  apply final_of_initial_op
 
 中文:
 引理 final_snd_of_isFiltered_structuredArrow
@@ -247,7 +296,10 @@ lemma final_snd_of_isFiltered_structuredArrow
   have (a : Aᵒᵖ) : IsCofiltered (CostructuredArrow R.op (L.op.obj a)) :=
     IsCofiltered.of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))
   have : (fst R.op L.op).Initial := initial_fst_of_isCofiltered_costructuredArrow _ _
-  have : ((opFunctor L R).leftOp ⋙ fst R.op L.op).Initial 
+  have : ((opFunctor L R).leftOp ⋙ fst R.op L.op).Initial :=
+    initial_equivalence_comp (opEquiv L R).functor.leftOp _
+have : (snd L R).op.Initial := initial_of_natIso opFunctorCompFst _ _
+  apply final_of_initial_op
 
 Depends on / 依赖: CostructuredArrow, Initial, IsCofiltered, IsCofiltered.of_equivalence, L.obj, L.op, L.op.obj, R.op, a.unop, final_of_initial_op, functor, functor.leftOp, initial_equivalence_comp, initial_fst_of_isCofiltered_costructuredArrow, initial_of_natIso, leftOp, of_equivalence, op.Initial, opEquiv, opFunctor
 -/
@@ -351,7 +403,18 @@ lemma map_final
   rw [isConnected_iff_of_equivalence (StructuredArrow.commaMapEquivalence iL.hom iR.inv _)]
   have : StructuredArrow.map₂ u₂ iR.hom ≅ StructuredArrow.post j₂ G R' ⋙
       StructuredArrow.map₂ (G := 𝟭 _) (F := 𝟭 _) (R' := R ⋙ H) u₂ iR.hom ⋙
-      S
+      StructuredArrow.pre _ R H :=
+    eqToIso (by
+      congr
+      · simp
+      · ext; simp) ≪≫
+    (StructuredArrow.map₂CompMap₂Iso _ _ _ _).symm ≪≫
+    isoWhiskerLeft _ ((StructuredArrow.map₂CompMap₂Iso _ _ _ _).symm ≪≫
+      isoWhiskerLeft _ (StructuredArrow.preIsoMap₂ _ _ _).symm) ≪≫
+    isoWhiskerRight (StructuredArrow.postIsoMap₂ j₂ G R').symm _
+  have := final_of_natIso this.symm
+  rw [IsIso.Iso.inv_inv]
+  infer_instance⟩
 
 中文:
 引理 map_final
@@ -361,7 +424,18 @@ lemma map_final
   rw [isConnected_iff_of_equivalence (StructuredArrow.commaMapEquivalence iL.hom iR.inv _)]
   have : StructuredArrow.map₂ u₂ iR.hom ≅ StructuredArrow.post j₂ G R' ⋙
       StructuredArrow.map₂ (G := 𝟭 _) (F := 𝟭 _) (R' := R ⋙ H) u₂ iR.hom ⋙
-      S
+      StructuredArrow.pre _ R H :=
+    eqToIso (by
+      congr
+      · simp
+      · ext; simp) ≪≫
+    (StructuredArrow.map₂CompMap₂Iso _ _ _ _).symm ≪≫
+    isoWhiskerLeft _ ((StructuredArrow.map₂CompMap₂Iso _ _ _ _).symm ≪≫
+      isoWhiskerLeft _ (StructuredArrow.preIsoMap₂ _ _ _).symm) ≪≫
+    isoWhiskerRight (StructuredArrow.postIsoMap₂ j₂ G R').symm _
+  have := final_of_natIso this.symm
+  rw [IsIso.Iso.inv_inv]
+  infer_instance⟩
 
 Depends on / 依赖: StructuredArr, StructuredArrow, StructuredArrow.commaMapEquivalence, StructuredArrow.map, StructuredArrow.post, StructuredArrow.pre, commaMapEquivalence, eqToIso, final_of_natIso, iL.hom, iR.hom, iR.inv, isConnected_iff_of_equivalence, isoWhiskerLeft
 -/

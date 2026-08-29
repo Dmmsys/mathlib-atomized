@@ -1513,7 +1513,9 @@ theorem closure_sdiff
     closure s \ closure t = (closure t)ᶜ inter closure s := by simp only [sdiff_eq, inter_comm]
     _ subseteq closure ((closure t)ᶜ inter s) := (isOpen_compl_iff.mpr <| isClosed_closure).inter_closure
     _ = closure (s \ closure t) := by simp only [sdiff_eq, inter_comm]
-_ subseteq closure (s 
+_ subseteq closure (s \ t) := closure_mono sdiff_subset_sdiff (Subset.refl s) subset_closure
+
+@[deprecated (since := "2026-06-03")] alias closure_diff := closure_sdiff
 
 中文:
 定理 closure_sdiff
@@ -1522,7 +1524,9 @@ _ subseteq closure (s
     closure s \ closure t = (closure t)ᶜ inter closure s := by simp only [sdiff_eq, inter_comm]
     _ subseteq closure ((closure t)ᶜ inter s) := (isOpen_compl_iff.mpr <| isClosed_closure).inter_closure
     _ = closure (s \ closure t) := by simp only [sdiff_eq, inter_comm]
-_ subseteq closure (s 
+_ subseteq closure (s \ t) := closure_mono sdiff_subset_sdiff (Subset.refl s) subset_closure
+
+@[deprecated (since := "2026-06-03")] alias closure_diff := closure_sdiff
 
 Depends on / 依赖: Subset, Subset.refl, closure, closure_mono, inter_closure, inter_comm, isClosed_closure, isOpen_compl_iff, isOpen_compl_iff.mpr, sdiff_eq, sdiff_subset_sdiff, subset_closure, subseteq
 -/
@@ -1644,7 +1648,9 @@ theorem tendsto_inf_principal_nhds_iff_of_forall_eq
     exact htU this
   refine ⟨fun h' => ?_, le_trans inf_le_left⟩
   have := sup_le h' h
-  rw [sup_inf_right]; rw [sup_
+  rw [sup_inf_right]; rw [sup_principal]; rw [union_compl_self]; rw [principal_univ]; rw [inf_top_eq]; rw [sup_le_iff]
+    at this
+  exact this.1
 
 中文:
 定理 tendsto_inf_principal_nhds_iff_of_对任意_eq
@@ -1657,7 +1663,9 @@ theorem tendsto_inf_principal_nhds_iff_of_forall_eq
     exact htU this
   refine ⟨fun h' => ?_, le_trans inf_le_left⟩
   have := sup_le h' h
-  rw [sup_inf_right]; rw [sup_
+  rw [sup_inf_right]; rw [sup_principal]; rw [union_compl_self]; rw [principal_univ]; rw [inf_top_eq]; rw [sup_le_iff]
+    at this
+  exact this.1
 
 Depends on / 依赖: inf_le_left, inf_top_eq, le_trans, mem_of_mem_nhds, principal_univ, replace, sup_inf_right, sup_le, sup_le_iff, sup_principal, tendsto_iff_comap, union_compl_self
 -/

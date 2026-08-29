@@ -136,13 +136,13 @@ English:
 theorem card_infinitePlace_eq_card_infinitePlace
   given: [NumberField K]
   proof: by
-  rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← I
+  rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← IsTotallyComplex.finrank]; rw [← Module.finrank_mul_finrank Rat K⁺ K]; rw [mul_comm]; rw [IsQuadraticExtension.finrank_eq_two _ K]
 
 中文:
 定理 card_infinitePlace_eq_card_infinitePlace
   条件: [数域 K]
   证明: by
-  rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← I
+  rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← IsTotallyComplex.finrank]; rw [← Module.finrank_mul_finrank Rat K⁺ K]; rw [mul_comm]; rw [IsQuadraticExtension.finrank_eq_two _ K]
 
 Depends on / 依赖: IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyComplex, IsTotallyComplex.finrank, IsTotallyComplex.nrRealPlaces_eq_zero, IsTotallyReal, IsTotallyReal.finrank, IsTotallyReal.nrComplexPlaces_eq_zero, Module, Module.finrank_mul_finrank, Nat.mul_left_cancel_iff, add_zero, card_eq_nrRealPlaces_add_nrComplexPlaces, finrank, finrank_eq_two, finrank_mul_finrank, mul_comm, mul_left_cancel_iff, nrComplexPlaces_eq_zero, nrRealPlaces_eq_zero
 -/
@@ -278,7 +278,7 @@ theorem isConj_eq_isConj
   rw [Nat.card_eq_two_iff' 1] at this
   exact ExistsUnique.unique this
     ((isConj_ne_one_iff hφ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal φ)
-    ((isConj_ne_one_if
+    ((isConj_ne_one_iff hψ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal ψ)
 
 中文:
 定理 isConj_eq_isConj
@@ -289,7 +289,7 @@ theorem isConj_eq_isConj
   rw [Nat.card_eq_two_iff' 1] at this
   exact ExistsUnique.unique this
     ((isConj_ne_one_iff hφ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal φ)
-    ((isConj_ne_one_if
+    ((isConj_ne_one_iff hψ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal ψ)
 
 Depends on / 依赖: ExistsUnique, ExistsUnique.unique, IsGalois, IsGalois.card_aut_eq_finrank, IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyComplex, IsTotallyComplex.complexEmbedding_not_isReal, Nat.card, Nat.card_eq_two_iff, card_aut_eq_finrank, card_eq_two_iff, complexEmbedding_not_isReal, finrank_eq_two, isConj_ne_one_iff, unique
 -/
@@ -531,7 +531,8 @@ theorem complexConj_eq_self_iff
   convert! (IntermediateField.mem_fixedField_iff (⊤ : Subgroup (K ≃ₐ[K⁺] K)) x).symm using 1
   · rw [← zpowers_complexConj_eq_top, Subgroup.forall_mem_zpowers]
     exact (MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy (g := (complexConj K))).symm
-  · rw [IsGalois.fixedField_top, IntermediateField.
+  · rw [IsGalois.fixedField_top, IntermediateField.mem_bot]
+    aesop
 
 中文:
 定理 complexConj_eq_self_iff
@@ -540,7 +541,8 @@ theorem complexConj_eq_self_iff
   convert! (IntermediateField.mem_fixedField_iff (⊤ : Subgroup (K ≃ₐ[K⁺] K)) x).symm using 1
   · rw [← zpowers_complexConj_eq_top, Subgroup.forall_mem_zpowers]
     exact (MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy (g := (complexConj K))).symm
-  · rw [IsGalois.fixedField_top, IntermediateField.
+  · rw [IsGalois.fixedField_top, IntermediateField.mem_bot]
+    aesop
 
 Depends on / 依赖: IntermediateField, IntermediateField.mem_bot, IntermediateField.mem_fixedField_iff, IsGalois, IsGalois.fixedField_top, MulAction, MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy, Subgroup, Subgroup.forall_mem_zpowers, complexConj, convert, fixedField_top, forall_mem_zpowers, mem_bot, mem_fixedBy_zpowers_iff_mem_fixedBy, mem_fixedField_iff, zpowers_complexConj_eq_top
 -/
@@ -565,7 +567,10 @@ theorem RingOfIntegers.complexConj_eq_self_iff
   · have : IsIntegral Int (⟨x, h⟩ : K⁺) :=
       (isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective K⁺ K)).mp x.isIntegral_coe
     refine ⟨⟨⟨x, h⟩, this⟩, ?_⟩
-    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw 
+    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw [RingOfIntegers.map_mk]
+    rfl
+  · rw [← hy, IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]
+    exact SetLike.coe_mem _
 
 中文:
 定理 RingOf整数egers.complexConj_eq_self_iff
@@ -576,7 +581,10 @@ theorem RingOfIntegers.complexConj_eq_self_iff
   · have : IsIntegral Int (⟨x, h⟩ : K⁺) :=
       (isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective K⁺ K)).mp x.isIntegral_coe
     refine ⟨⟨⟨x, h⟩, this⟩, ?_⟩
-    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw 
+    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw [RingOfIntegers.map_mk]
+    rfl
+  · rw [← hy, IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]
+    exact SetLike.coe_mem _
 -/
 protected theorem RingOfIntegers.complexConj_eq_self_iff (x : 𝓞 K) :
     complexConj K x = x ↔ exists y : 𝓞 K⁺, algebraMap (𝓞 K⁺) K y = x := by
@@ -603,7 +611,7 @@ theorem Units.complexConj_eq_self_iff
     apply IsUnit.of_map (algebraMap (𝓞 K⁺) (𝓞 K))
     rw [show algebraMap (𝓞 K⁺) (𝓞 K) y = u by exact RingOfIntegers.ext hy]
     exact u.isUnit
-  
+  exact ⟨this.unit, by simp [hy]⟩
 
 中文:
 定理 单位群.complexConj_eq_self_iff
@@ -615,7 +623,7 @@ theorem Units.complexConj_eq_self_iff
     apply IsUnit.of_map (algebraMap (𝓞 K⁺) (𝓞 K))
     rw [show algebraMap (𝓞 K⁺) (𝓞 K) y = u by exact RingOfIntegers.ext hy]
     exact u.isUnit
-  
+  exact ⟨this.unit, by simp [hy]⟩
 -/
 protected theorem Units.complexConj_eq_self_iff (u : (𝓞 K)ˣ) :
     complexConj K u = u ↔ exists v : (𝓞 K⁺)ˣ, algebraMap (𝓞 K⁺) K v = u := by
@@ -845,7 +853,8 @@ theorem complexConj_torsion
   proof: by
   let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
   apply φ.injective
-  rw [complexEmbedding_complexConj]; rw [← Units.complexEmbedding_apply]; rw [Complex.conj_rootsOfUnity (n := torsionOrder K)]; rw [Units.val_inv_eq_inv_val]; rw [Units.complexEmbedding_apply]; rw [map_i
+  rw [complexEmbedding_complexConj]; rw [← Units.complexEmbedding_apply]; rw [Complex.conj_rootsOfUnity (n := torsionOrder K)]; rw [Units.val_inv_eq_inv_val]; rw [Units.complexEmbedding_apply]; rw [map_inv₀]
+  exact map_complexEmbedding_torsion K φ ▸ Subgroup.apply_coe_mem_map _ _ _
 
 中文:
 定理 complexConj_torsion
@@ -853,7 +862,8 @@ theorem complexConj_torsion
   证明: by
   let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
   apply φ.injective
-  rw [complexEmbedding_complexConj]; rw [← Units.complexEmbedding_apply]; rw [Complex.conj_rootsOfUnity (n := torsionOrder K)]; rw [Units.val_inv_eq_inv_val]; rw [Units.complexEmbedding_apply]; rw [map_i
+  rw [complexEmbedding_complexConj]; rw [← Units.complexEmbedding_apply]; rw [Complex.conj_rootsOfUnity (n := torsionOrder K)]; rw [Units.val_inv_eq_inv_val]; rw [Units.complexEmbedding_apply]; rw [map_inv₀]
+  exact map_complexEmbedding_torsion K φ ▸ Subgroup.apply_coe_mem_map _ _ _
 
 Depends on / 依赖: Classical, Classical.choice, Complex.conj_rootsOfUnity, Nonempty, Subgroup, Subgroup.apply_coe_mem_map, Units.complexEmbedding_apply, Units.val_inv_eq_inv_val, apply_coe_mem_map, choice, complexEmbedding_apply, complexEmbedding_complexConj, conj_rootsOfUnity, injective, map_complexEmbedding_torsion, torsionOrder, val_inv_eq_inv_val
 -/
@@ -1022,7 +1032,7 @@ theorem index_unitsMulComplexConjInv_range_dvd
     rintro _ ⟨ζ, _, rfl⟩
     exact ⟨ζ, Subtype.ext_iff.mpr (by simp [pow_two])⟩
   rw [IsCyclic.index_powMonoidHom_range]; rw [Nat.gcd_eq_right_iff_dvd]
-exact Even.two_dvd even_torsionOrd
+exact Even.two_dvd even_torsionOrder K
 
 中文:
 定理 index_unitsMulComplexConjInv_range_dvd
@@ -1032,7 +1042,7 @@ exact Even.two_dvd even_torsionOrd
     rintro _ ⟨ζ, _, rfl⟩
     exact ⟨ζ, Subtype.ext_iff.mpr (by simp [pow_two])⟩
   rw [IsCyclic.index_powMonoidHom_range]; rw [Nat.gcd_eq_right_iff_dvd]
-exact Even.two_dvd even_torsionOrd
+exact Even.two_dvd even_torsionOrder K
 
 Depends on / 依赖: Even.two_dvd, IsCyclic, IsCyclic.index_powMonoidHom_range, Nat.gcd_eq_right_iff_dvd, Subgroup, Subgroup.index_dvd_of_le, Subtype, Subtype.ext_iff.mpr, even_torsionOrder, ext_iff, gcd_eq_right_iff_dvd, index_dvd_of_le, index_powMonoidHom_range, powMonoidHom, pow_two, range.index, torsion, two_dvd
 -/
@@ -1133,7 +1143,14 @@ theorem indexRealUnits_eq_two_iff
     have h_eq := indexRealUnits_mul_eq K
     refine ⟨fun h => ?_, fun h => ?_⟩
     · rwa [h, Nat.mul_eq_left two_ne_zero] at h_eq
-    · rwa [h, mul
+    · rwa [h, mul_one] at h_eq
+  refine ⟨fun ⟨u, hu⟩ => Subgroup.index_eq_one.mpr (top_le_iff.mp ?_), fun h => ?_⟩
+  · refine le_of_eq_of_le ?_ ((Subgroup.zpowers u).map_le_range (unitsMulComplexConjInv K))
+    rw [MonoidHom.map_zpowers]; rw [← hu]
+  · obtain ⟨ζ, hζ⟩ := exists_zpow_surjective (torsion K)
+    rw [Subgroup.index_eq_one]; rw [MonoidHom.range_eq_top] at h
+    obtain ⟨u, rfl⟩ := h ζ
+    exact ⟨u, (Subgroup.eq_top_iff' _).mpr hζ⟩
 
 中文:
 定理 index实数Units_eq_two_iff
@@ -1144,7 +1161,14 @@ theorem indexRealUnits_eq_two_iff
     have h_eq := indexRealUnits_mul_eq K
     refine ⟨fun h => ?_, fun h => ?_⟩
     · rwa [h, Nat.mul_eq_left two_ne_zero] at h_eq
-    · rwa [h, mul
+    · rwa [h, mul_one] at h_eq
+  refine ⟨fun ⟨u, hu⟩ => Subgroup.index_eq_one.mpr (top_le_iff.mp ?_), fun h => ?_⟩
+  · refine le_of_eq_of_le ?_ ((Subgroup.zpowers u).map_le_range (unitsMulComplexConjInv K))
+    rw [MonoidHom.map_zpowers]; rw [← hu]
+  · obtain ⟨ζ, hζ⟩ := exists_zpow_surjective (torsion K)
+    rw [Subgroup.index_eq_one]; rw [MonoidHom.range_eq_top] at h
+    obtain ⟨u, rfl⟩ := h ζ
+    exact ⟨u, (Subgroup.eq_top_iff' _).mpr hζ⟩
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_zpowers, Nat.mul_eq_left, Subgroup, Subgroup.index_eq_one.mpr, Subgroup.zpowers, h_eq, indexRealUnits_mul_eq, index_eq_one, le_of_eq_of_le, map_le_range, map_zpowers, mul_eq_left, mul_one, range.index, top_le_iff, top_le_iff.mp, two_ne_zero, unitsMulComplexConjInv, zpowers
 -/
@@ -1196,7 +1220,9 @@ theorem closure_realFundSystem_sup_torsion
   have : Subgroup.map (Units.map (algebraMap (𝓞 K⁺) (𝓞 K))) (torsion K⁺) <= torsion K := by
     rintro _ ⟨x, hx, rfl⟩
     exact MonoidHom.isOfFinOrder _ hx
-  rw [realUnits]; rw [MonoidHom.range_eq_map]; rw [← closure_fundSystem_sup_torsion_eq_top]; rw [Subgroup.map_sup]; rw [sup_assoc]; rw [RingH
+  rw [realUnits]; rw [MonoidHom.range_eq_map]; rw [← closure_fundSystem_sup_torsion_eq_top]; rw [Subgroup.map_sup]; rw [sup_assoc]; rw [RingHom.toMonoidHom_eq_coe]; rw [sup_eq_right.mpr this]; rw [MonoidHom.map_closure]
+  congr; ext
+  simp [realFundSystem, Equiv.exists_congr_left (finCongr (units_rank_eq_units_rank K).symm)]
 
 中文:
 定理 closure_realFundSystem_sup_torsion
@@ -1204,7 +1230,9 @@ theorem closure_realFundSystem_sup_torsion
   have : Subgroup.map (Units.map (algebraMap (𝓞 K⁺) (𝓞 K))) (torsion K⁺) <= torsion K := by
     rintro _ ⟨x, hx, rfl⟩
     exact MonoidHom.isOfFinOrder _ hx
-  rw [realUnits]; rw [MonoidHom.range_eq_map]; rw [← closure_fundSystem_sup_torsion_eq_top]; rw [Subgroup.map_sup]; rw [sup_assoc]; rw [RingH
+  rw [realUnits]; rw [MonoidHom.range_eq_map]; rw [← closure_fundSystem_sup_torsion_eq_top]; rw [Subgroup.map_sup]; rw [sup_assoc]; rw [RingHom.toMonoidHom_eq_coe]; rw [sup_eq_right.mpr this]; rw [MonoidHom.map_closure]
+  congr; ext
+  simp [realFundSystem, Equiv.exists_congr_left (finCongr (units_rank_eq_units_rank K).symm)]
 
 Depends on / 依赖: Equiv.exists_congr_left, MonoidHom, MonoidHom.isOfFinOrder, MonoidHom.map_closure, MonoidHom.range_eq_map, RingHom, RingHom.toMonoidHom_eq_coe, Subgroup, Subgroup.map, Subgroup.map_sup, Units.map, algebraMap, closure_fundSystem_sup_torsion_eq_top, exists_congr_left, finCongr, isOfFinOrder, map_closure, map_sup, range_eq_map, realFundSystem
 -/
@@ -1228,7 +1256,14 @@ theorem regOfFamily_realFunSystem
   let W₀ := (equivInfinitePlace K).symm w₀
   let f : {w : InfinitePlace K // w != W₀} ≃ {w : InfinitePlace K⁺ // w != w₀} :=
     (equivInfinitePlace K).subtypeEquiv fun w => by rw [not_iff_not, Equiv.eq_symm_apply]
-  let g := ((finCongr (units_rank_eq_units_rank K).symm).trans (equivF
+  let g := ((finCongr (units_rank_eq_units_rank K).symm).trans (equivFinRank K⁺)).trans f.symm
+  rw [show (2 : Real) ^ rank K = |∏ w : {w : InfinitePlace K⁺ // w != w₀}]; rw [2| by
+    rw [Finset.prod_const]; rw [abs_pow]; rw [abs_of_pos zero_lt_two]; rw [← units_rank_eq_units_rank K]; rw [rank]
+    simp]
+  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det _ W₀ g.symm]; rw [regOfFamily_eq_det']; rw [← abs_mul]; rw [← Matrix.det_mul_column]; rw [← Matrix.det_reindex_self f]; rw [Matrix.reindex_apply]
+  congr; ext i w
+  rw [Matrix.submatrix_apply]; rw [Matrix.of_apply]; rw [Matrix.of_apply]; rw [show f.symm w = (equivInfinitePlace K).symm w.1 by rfl]; rw [show algebraMap (𝓞 K) K _ = algebraMap K⁺ K _ by rfl]; rw [equivInfinitePlace_symm_apply]
+  simp [f, g]
 
 中文:
 定理 regOfFamily_realFunSystem
@@ -1237,7 +1272,14 @@ theorem regOfFamily_realFunSystem
   let W₀ := (equivInfinitePlace K).symm w₀
   let f : {w : InfinitePlace K // w != W₀} ≃ {w : InfinitePlace K⁺ // w != w₀} :=
     (equivInfinitePlace K).subtypeEquiv fun w => by rw [not_iff_not, Equiv.eq_symm_apply]
-  let g := ((finCongr (units_rank_eq_units_rank K).symm).trans (equivF
+  let g := ((finCongr (units_rank_eq_units_rank K).symm).trans (equivFinRank K⁺)).trans f.symm
+  rw [show (2 : Real) ^ rank K = |∏ w : {w : InfinitePlace K⁺ // w != w₀}]; rw [2| by
+    rw [Finset.prod_const]; rw [abs_pow]; rw [abs_of_pos zero_lt_two]; rw [← units_rank_eq_units_rank K]; rw [rank]
+    simp]
+  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det _ W₀ g.symm]; rw [regOfFamily_eq_det']; rw [← abs_mul]; rw [← Matrix.det_mul_column]; rw [← Matrix.det_reindex_self f]; rw [Matrix.reindex_apply]
+  congr; ext i w
+  rw [Matrix.submatrix_apply]; rw [Matrix.of_apply]; rw [Matrix.of_apply]; rw [show f.symm w = (equivInfinitePlace K).symm w.1 by rfl]; rw [show algebraMap (𝓞 K) K _ = algebraMap K⁺ K _ by rfl]; rw [equivInfinitePlace_symm_apply]
+  simp [f, g]
 
 Depends on / 依赖: Equiv.eq_symm_apply, Finset, Finset.prod_const, InfinitePlace, abs_of_pos, abs_pow, classical, eq_symm_apply, equivFinRank, equivInfinitePlace, f.symm, finCongr, not_iff_not, prod_const, subtypeEquiv, units_rank_eq_units_rank, zero_lt_two
 -/
@@ -1301,7 +1343,18 @@ theorem eq_maximalRealSubfield
   have h' : E ⊔ (maximalRealSubfield K) = ⊤ := by
     let L : IntermediateField E K := (E ⊔ (maximalRealSubfield K)).toIntermediateField
       (fun x => (le_sup_left (a := E)) x.prop)
-    have := ((IntermediateField.i
+    have := ((IntermediateField.isSimpleOrder_of_finrank_prime E K
+      (IsQuadraticExtension.finrank_eq_two E K ▸ Nat.prime_two)).eq_bot_or_eq_top L).resolve_left ?_
+    · simpa [L] using congr_arg IntermediateField.toSubfield this
+    · contrapose h
+      rw [← SetLike.coe_set_eq]; rw [Subfield.coe_toIntermediateField] at h
+      rw [← sup_eq_left]; rw [← SetLike.coe_set_eq]; rw [h]; rw [IntermediateField.coe_bot]
+      aesop
+  have : Algebra.IsAlgebraic (maximalRealSubfield K) K :=
+    Algebra.IsAlgebraic.tower_top (K := Rat) (maximalRealSubfield K)
+  have : IsTotallyReal K := (h' ▸ isTotallyReal_sup).ofRingEquiv Subring.topEquiv
+  obtain w : InfinitePlace K := Classical.choice (inferInstance : Nonempty _)
+  exact (not_isReal_iff_isComplex.mpr (IsTotallyComplex.isComplex w)) (IsTotallyReal.isReal w)
 
 中文:
 定理 eq_maximal实数Subfield
@@ -1312,7 +1365,18 @@ theorem eq_maximalRealSubfield
   have h' : E ⊔ (maximalRealSubfield K) = ⊤ := by
     let L : IntermediateField E K := (E ⊔ (maximalRealSubfield K)).toIntermediateField
       (fun x => (le_sup_left (a := E)) x.prop)
-    have := ((IntermediateField.i
+    have := ((IntermediateField.isSimpleOrder_of_finrank_prime E K
+      (IsQuadraticExtension.finrank_eq_two E K ▸ Nat.prime_two)).eq_bot_or_eq_top L).resolve_left ?_
+    · simpa [L] using congr_arg IntermediateField.toSubfield this
+    · contrapose h
+      rw [← SetLike.coe_set_eq]; rw [Subfield.coe_toIntermediateField] at h
+      rw [← sup_eq_left]; rw [← SetLike.coe_set_eq]; rw [h]; rw [IntermediateField.coe_bot]
+      aesop
+  have : Algebra.IsAlgebraic (maximalRealSubfield K) K :=
+    Algebra.IsAlgebraic.tower_top (K := Rat) (maximalRealSubfield K)
+  have : IsTotallyReal K := (h' ▸ isTotallyReal_sup).ofRingEquiv Subring.topEquiv
+  obtain w : InfinitePlace K := Classical.choice (inferInstance : Nonempty _)
+  exact (not_isReal_iff_isComplex.mpr (IsTotallyComplex.isComplex w)) (IsTotallyReal.isReal w)
 
 Depends on / 依赖: IntermediateField, IntermediateField.isSimpleOrder_of_finrank_prime, IntermediateField.toSubfield, IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyReal, IsTotallyReal.le_maximalRealSubfield, Nat.prime_two, SetLike, congr_arg, contrapose, eq_bot_or_eq_top, finrank_eq_two, isSimpleOrder_of_finrank_prime, le_antisymm, le_maximalRealSubfield, le_sup_left, maximalRealSubfield, prime_two, resolve_left
 -/
@@ -1346,7 +1410,11 @@ definition equivMaximalRealSubfield
     have := IsTotallyReal.ofRingEquiv (algebraMap F K).rangeRestrictFieldEquiv
     have : IsQuadraticExtension (algebraMap F K).fieldRange K :=
     { finrank_eq_two' :=
-        (IsQuadraticExtension.finrank_eq_two F K) ▸ Alg
+        (IsQuadraticExtension.finrank_eq_two F K) ▸ Algebra.finrank_eq_of_equiv_equiv
+          (algebraMap F K).rangeRestrictFieldEquiv.symm (RingEquiv.refl K) (by ext; simp; rfl) }
+    exact eq_maximalRealSubfield K (algebraMap F K).fieldRange))
+
+@[simp]
 
 中文:
 定义 equivMaximal实数Subfield
@@ -1355,7 +1423,11 @@ definition equivMaximalRealSubfield
     have := IsTotallyReal.ofRingEquiv (algebraMap F K).rangeRestrictFieldEquiv
     have : IsQuadraticExtension (algebraMap F K).fieldRange K :=
     { finrank_eq_two' :=
-        (IsQuadraticExtension.finrank_eq_two F K) ▸ Alg
+        (IsQuadraticExtension.finrank_eq_two F K) ▸ Algebra.finrank_eq_of_equiv_equiv
+          (algebraMap F K).rangeRestrictFieldEquiv.symm (RingEquiv.refl K) (by ext; simp; rfl) }
+    exact eq_maximalRealSubfield K (algebraMap F K).fieldRange))
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.finrank_eq_of_equiv_equiv, IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyReal, IsTotallyReal.ofRingEquiv, RingEquiv, RingEquiv.refl, RingEquiv.subfieldCongr, algebraMap, eq_maximalRealSubfield, fieldRange, finrank_eq_of_equiv_equiv, finrank_eq_two, ofRingEquiv, rangeRestrictFieldEquiv, rangeRestrictFieldEquiv.symm, rangeRestrictFieldEquiv.trans, subfieldCongr
 -/
@@ -1453,7 +1525,18 @@ theorem of_forall_isConj
   have hσ' : Nat.card (Subgroup.zpowers σ) = 2 := by
     rw [Nat.card_zpowers]; rw [orderOf_isConj_two_of_ne_one (hσ φ)]
 exact (isConj_ne_one_iff (hσ φ)).mpr IsTotallyComplex.complexEmbedding_not_isReal φ
-  have : Finite (S
+  have : Finite (Subgroup.zpowers σ) := Nat.finite_of_card_ne_zero (by positivity)
+  let L := (FixedPoints.intermediateField (Subgroup.zpowers σ) : IntermediateField Rat K)
+  have : IsTotallyReal L := ⟨fun w => by
+    obtain ⟨W, rfl⟩ := w.comap_surjective (K := K)
+    dsimp only
+    rw [← mk_embedding W]; rw [comap_mk]; rw [isReal_mk_iff]
+    exact ComplexEmbedding.IsConj.isReal_comp
+     (σ := IsGaloisGroup.mulEquivAlgEquiv (Subgroup.zpowers σ) L K ⟨σ, Subgroup.mem_zpowers σ⟩)
+      (hσ W.embedding)⟩
+  have : IsQuadraticExtension L K := ⟨by
+    rw [IsGaloisGroup.finrank_fixedPoints_eq_card_subgroup]; rw [hσ']⟩
+  exact IsCMField.ofCMExtension L K
 
 中文:
 定理 of_对任意_isConj
@@ -1463,7 +1546,18 @@ exact (isConj_ne_one_iff (hσ φ)).mpr IsTotallyComplex.complexEmbedding_not_isR
   have hσ' : Nat.card (Subgroup.zpowers σ) = 2 := by
     rw [Nat.card_zpowers]; rw [orderOf_isConj_two_of_ne_one (hσ φ)]
 exact (isConj_ne_one_iff (hσ φ)).mpr IsTotallyComplex.complexEmbedding_not_isReal φ
-  have : Finite (S
+  have : Finite (Subgroup.zpowers σ) := Nat.finite_of_card_ne_zero (by positivity)
+  let L := (FixedPoints.intermediateField (Subgroup.zpowers σ) : IntermediateField Rat K)
+  have : IsTotallyReal L := ⟨fun w => by
+    obtain ⟨W, rfl⟩ := w.comap_surjective (K := K)
+    dsimp only
+    rw [← mk_embedding W]; rw [comap_mk]; rw [isReal_mk_iff]
+    exact ComplexEmbedding.IsConj.isReal_comp
+     (σ := IsGaloisGroup.mulEquivAlgEquiv (Subgroup.zpowers σ) L K ⟨σ, Subgroup.mem_zpowers σ⟩)
+      (hσ W.embedding)⟩
+  have : IsQuadraticExtension L K := ⟨by
+    rw [IsGaloisGroup.finrank_fixedPoints_eq_card_subgroup]; rw [hσ']⟩
+  exact IsCMField.ofCMExtension L K
 
 Depends on / 依赖: Classical, Classical.choice, Finite, FixedPoints, FixedPoints.intermediateField, IntermediateField, IsTotallyComplex, IsTotallyComplex.complexEmbedding_not_isReal, IsTotallyReal, Nat.card, Nat.card_zpowers, Nat.finite_of_card_ne_zero, Nonempty, Subgroup, Subgroup.zpowers, card_zpowers, choice, complexEmbedding_not_isReal, finite_of_card_ne_zero, intermediateField
 -/
@@ -1498,7 +1592,12 @@ instance of_isAbelianGalois
   obtain ⟨σ, hσ₁⟩ : exists σ : Gal(K/Rat), ComplexEmbedding.IsConj φ σ :=
 exists_isConj_of_isRamified
       isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
-  have hσ₂ : forall (φ : K ->+* Complex),
+  have hσ₂ : forall (φ : K ->+* Complex), ComplexEmbedding.IsConj φ σ := by
+    intro ψ
+    obtain ⟨ν, rfl⟩ := exists_comp_symm_eq_of_comp_eq (k := Rat) φ ψ (by ext; simp)
+    rw [show σ = ν.symm⁻¹ * σ * ν.symm by simp]
+    exact hσ₁.comp _
+  exact IsCMField.of_forall_isConj K hσ₂
 
 中文:
 实例 of_isAbelianGalois
@@ -1508,7 +1607,12 @@ exists_isConj_of_isRamified
   obtain ⟨σ, hσ₁⟩ : exists σ : Gal(K/Rat), ComplexEmbedding.IsConj φ σ :=
 exists_isConj_of_isRamified
       isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
-  have hσ₂ : forall (φ : K ->+* Complex),
+  have hσ₂ : forall (φ : K ->+* Complex), ComplexEmbedding.IsConj φ σ := by
+    intro ψ
+    obtain ⟨ν, rfl⟩ := exists_comp_symm_eq_of_comp_eq (k := Rat) φ ψ (by ext; simp)
+    rw [show σ = ν.symm⁻¹ * σ * ν.symm by simp]
+    exact hσ₁.comp _
+  exact IsCMField.of_forall_isConj K hσ₂
 
 Depends on / 依赖: Classical, Classical.choice, ComplexEmbedding, ComplexEmbedding.IsConj, IsCMField, IsCMField.of_forall_is, IsConj, IsTotallyComplex, IsTotallyComplex.isComplex, IsTotallyReal, IsTotallyReal.isReal, Nonempty, choice, exists_comp_symm_eq_of_comp_eq, exists_isConj_of_isRamified, isComplex, isRamified_iff, isRamified_iff.mpr, isReal, of_forall_is
 -/
@@ -1543,7 +1647,11 @@ theorem isCMField
   have : NeZero n := ⟨by positivity⟩
   obtain ⟨ζ, hζ⟩ := exists_isPrimitiveRoot Rat K hn₁ (by grind)
   have : IsTotallyComplex K := by
-    have : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯ := hζ.intermediateField_adjoin_
+    have : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯ := hζ.intermediateField_adjoin_isCyclotomicExtension Rat
+    have : IsTotallyComplex Rat⟮ζ⟯ := isTotallyComplex Rat⟮ζ⟯ hn₂
+    exact isTotallyComplex_of_algebra Rat⟮ζ⟯ K
+  have := isAbelianGalois S Rat K
+  exact IsCMField.of_isAbelianGalois K
 
 中文:
 定理 isCMField
@@ -1554,7 +1662,11 @@ theorem isCMField
   have : NeZero n := ⟨by positivity⟩
   obtain ⟨ζ, hζ⟩ := exists_isPrimitiveRoot Rat K hn₁ (by grind)
   have : IsTotallyComplex K := by
-    have : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯ := hζ.intermediateField_adjoin_
+    have : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯ := hζ.intermediateField_adjoin_isCyclotomicExtension Rat
+    have : IsTotallyComplex Rat⟮ζ⟯ := isTotallyComplex Rat⟮ζ⟯ hn₂
+    exact isTotallyComplex_of_algebra Rat⟮ζ⟯ K
+  have := isAbelianGalois S Rat K
+  exact IsCMField.of_isAbelianGalois K
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, IsCMField, IsCMField.of_isAbelianGalois, IsCyclotomicExtension, IsIntegral, IsTotallyComplex, NeZero, exists_isPrimitiveRoot, integral, intermediateField_adjoin_isCyclotomicExtension, isAbelianGalois, isTotallyComplex, isTotallyComplex_of_algebra, of_isAbelianGalois
 -/

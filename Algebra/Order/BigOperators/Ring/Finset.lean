@@ -87,7 +87,7 @@ lemma prod_add_prod_le
     gcongr with j hj <;> aesop
   · apply prod_nonneg
     simp only [and_imp, mem_sdiff, mem_singleton]
-    exact fun j hj hji => le_trans (hg j hj) (h
+    exact fun j hj hji => le_trans (hg j hj) (hgf j hj hji)
 
 中文:
 引理 prod_add_prod_le
@@ -100,7 +100,7 @@ lemma prod_add_prod_le
     gcongr with j hj <;> aesop
   · apply prod_nonneg
     simp only [and_imp, mem_sdiff, mem_singleton]
-    exact fun j hj hji => le_trans (hg j hj) (h
+    exact fun j hj hji => le_trans (hg j hj) (hgf j hj hji)
 
 Depends on / 依赖: and_imp, classical, le_trans, mem_sdiff, mem_singleton, mul_le_mul_of_nonneg_right, prod_eq_mul_prod_sdiff_singleton_of_mem, prod_nonneg, right_distrib, simp_rw
 -/
@@ -314,7 +314,22 @@ lemma sum_sq_le_sum_mul_sum_of_sq_le_mul
     rw [h]; rw [ht']
     simp
   · refine le_of_mul_le_mul_of_pos_left
-      (le_of_add_le_add_left (a := (∑ i in s, g i) *
+      (le_of_add_le_add_left (a := (∑ i in s, g i) * (∑ i in s, r i) ^ 2) ?_) h
+    calc
+      _ = ∑ i in s, 2 * r i * (∑ j in s, g j) * (∑ j in s, r j) := by
+          simp_rw [mul_assoc, ← mul_sum, ← sum_mul]; ring
+      _ <= ∑ i in s, (f i * (∑ j in s, g j) ^ 2 + g i * (∑ j in s, r j) ^ 2) := by
+          gcongr with i hi
+          have ht : (r i * (∑ j in s, g j) * (∑ j in s, r j)) ^ 2 <=
+              (f i * (∑ j in s, g j) ^ 2) * (g i * (∑ j in s, r j) ^ 2) := by
+            grw [mul_mul_mul_comm, ← mul_pow, mul_assoc, mul_pow, ht i hi]
+            exact sq_nonneg _
+          refine le_of_eq_of_le ?_ (two_mul_le_add_of_sq_le_mul
+            (mul_nonneg (hf i hi) (sq_nonneg _)) (mul_nonneg (hg i hi) (sq_nonneg _)) ht)
+          repeat rw [mul_assoc]
+      _ = _ := by simp_rw [sum_add_distrib, ← sum_mul]; ring
+
+@[deprecated sum_sq_le_sum_mul_sum_of_sq_le_mul (since := "2026-05-12")]
 
 中文:
 引理 sum_sq_le_sum_mul_sum_of_sq_le_mul
@@ -326,7 +341,22 @@ lemma sum_sq_le_sum_mul_sum_of_sq_le_mul
     rw [h]; rw [ht']
     simp
   · refine le_of_mul_le_mul_of_pos_left
-      (le_of_add_le_add_left (a := (∑ i in s, g i) *
+      (le_of_add_le_add_left (a := (∑ i in s, g i) * (∑ i in s, r i) ^ 2) ?_) h
+    calc
+      _ = ∑ i in s, 2 * r i * (∑ j in s, g j) * (∑ j in s, r j) := by
+          simp_rw [mul_assoc, ← mul_sum, ← sum_mul]; ring
+      _ <= ∑ i in s, (f i * (∑ j in s, g j) ^ 2 + g i * (∑ j in s, r j) ^ 2) := by
+          gcongr with i hi
+          have ht : (r i * (∑ j in s, g j) * (∑ j in s, r j)) ^ 2 <=
+              (f i * (∑ j in s, g j) ^ 2) * (g i * (∑ j in s, r j) ^ 2) := by
+            grw [mul_mul_mul_comm, ← mul_pow, mul_assoc, mul_pow, ht i hi]
+            exact sq_nonneg _
+          refine le_of_eq_of_le ?_ (two_mul_le_add_of_sq_le_mul
+            (mul_nonneg (hf i hi) (sq_nonneg _)) (mul_nonneg (hg i hi) (sq_nonneg _)) ht)
+          repeat rw [mul_assoc]
+      _ = _ := by simp_rw [sum_add_distrib, ← sum_mul]; ring
+
+@[deprecated sum_sq_le_sum_mul_sum_of_sq_le_mul (since := "2026-05-12")]
 
 Depends on / 依赖: eq_or_lt, le_of_add_le_add_left, le_of_mul_le_mul_of_pos_left, mul_assoc, mul_sum, simp_rw, sum_eq_zero, sum_eq_zero_iff_of_nonneg, sum_mul, sum_nonneg
 -/
@@ -411,7 +441,8 @@ theorem sq_sum_div_le_sum_sq_div
   have H : forall i in s, 0 <= f i ^ 2 / g i := fun i hi => div_nonneg (sq_nonneg _) (hg' i hi)
   refine div_le_of_le_mul₀ (sum_nonneg hg') (sum_nonneg H)
     (sum_sq_le_sum_mul_sum_of_sq_le_mul _ H hg' fun i hi => ?_)
-  rw [div_mul
+  rw [div_mul_cancel₀]
+  exact (hg i hi).ne'
 
 中文:
 定理 sq_sum_div_le_sum_sq_div
@@ -421,7 +452,8 @@ theorem sq_sum_div_le_sum_sq_div
   have H : forall i in s, 0 <= f i ^ 2 / g i := fun i hi => div_nonneg (sq_nonneg _) (hg' i hi)
   refine div_le_of_le_mul₀ (sum_nonneg hg') (sum_nonneg H)
     (sum_sq_le_sum_mul_sum_of_sq_le_mul _ H hg' fun i hi => ?_)
-  rw [div_mul
+  rw [div_mul_cancel₀]
+  exact (hg i hi).ne'
 
 Depends on / 依赖: div_nonneg, sq_nonneg, sum_nonneg, sum_sq_le_sum_mul_sum_of_sq_le_mul
 -/
@@ -474,7 +506,7 @@ nonrec lemma AbsoluteValue.map_prod [CommSemiring R] [Nontrivial R]
     [CommRing S] [LinearOrder S] [IsStrictOrderedRing S]
     (abv : AbsoluteValue R S) (f : ι -> R) (s : Finset ι) :
     abv (∏ i in s, f i) = ∏ i in s, abv (f i) :=
-  map_prod abv f
+  map_prod abv f s
 
 中文:
 引理 是绝对值.abv_sum
@@ -485,7 +517,7 @@ nonrec lemma AbsoluteValue.map_prod [CommSemiring R] [Nontrivial R]
     [CommRing S] [LinearOrder S] [IsStrictOrderedRing S]
     (abv : AbsoluteValue R S) (f : ι -> R) (s : Finset ι) :
     abv (∏ i in s, f i) = ∏ i in s, abv (f i) :=
-  map_prod abv f
+  map_prod abv f s
 
 Depends on / 依赖: IsAbsoluteValue, IsAbsoluteValue.toAbsoluteValue, sum_le, toAbsoluteValue
 -/

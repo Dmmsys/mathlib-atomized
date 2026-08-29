@@ -47,7 +47,14 @@ definition ofSimpleGraph
     rcases hs with ⟨v, rfl⟩ | ⟨e, he, rfl⟩
     · simp
     · constructor
-      · exact Finset.nonempty_iff_ne_empty.mp
+      · exact Finset.nonempty_iff_ne_empty.mpr (Sym2.toFinset_ne_empty e)
+      · intro b hb_sub hb_nonempty
+        by_cases h : b.card = 1 <;>
+          grind [Finset.card_eq_one, Finset.eq_of_subset_of_card_le hb_sub, Sym2.card_toFinset]
+  singleton_mem := by
+    simp only [Set.mem_union, Set.mem_ofPred_eq, Set.mem_image]
+    intro v
+    exact Or.inl ⟨v, rfl⟩
 
 中文:
 定义 ofSimpleGraph
@@ -59,7 +66,14 @@ definition ofSimpleGraph
     rcases hs with ⟨v, rfl⟩ | ⟨e, he, rfl⟩
     · simp
     · constructor
-      · exact Finset.nonempty_iff_ne_empty.mp
+      · exact Finset.nonempty_iff_ne_empty.mpr (Sym2.toFinset_ne_empty e)
+      · intro b hb_sub hb_nonempty
+        by_cases h : b.card = 1 <;>
+          grind [Finset.card_eq_one, Finset.eq_of_subset_of_card_le hb_sub, Sym2.card_toFinset]
+  singleton_mem := by
+    simp only [Set.mem_union, Set.mem_ofPred_eq, Set.mem_image]
+    intro v
+    exact Or.inl ⟨v, rfl⟩
 
 Depends on / 依赖: Finset, G.edgeSet, Sym2.toFinset, edgeSet, toFinset
 -/
@@ -98,7 +112,9 @@ definition ofAffineIndependent
     rw [AffineIndependent.convexHull_inter (R := 𝕜) (s := s union t)]
     · apply indep.mono
       simp only [Finset.coe_union]
-      exact Set.union_subset (Set.su
+      exact Set.union_subset (Set.subset_biUnion_of_mem hs) (Set.subset_biUnion_of_mem ht)
+    · exact Finset.subset_union_left
+    · exact Finset.subset_union_right
 
 中文:
 定义 ofAffineIndependent
@@ -110,7 +126,9 @@ definition ofAffineIndependent
     rw [AffineIndependent.convexHull_inter (R := 𝕜) (s := s union t)]
     · apply indep.mono
       simp only [Finset.coe_union]
-      exact Set.union_subset (Set.su
+      exact Set.union_subset (Set.subset_biUnion_of_mem hs) (Set.subset_biUnion_of_mem ht)
+    · exact Finset.subset_union_left
+    · exact Finset.subset_union_right
 
 Depends on / 依赖: abstract
 -/
@@ -141,7 +159,8 @@ definition onFinsupp
     (by
       refine (Finsupp.linearIndependent_single_one 𝕜 ι).affineIndependent.range.mono fun x hx => ?_
       simp only [Set.mem_iUnion, Finset.mem_coe] at hx
-      obtain ⟨_, ⟨_, _, rfl⟩, hx⟩ := h
+      obtain ⟨_, ⟨_, _, rfl⟩, hx⟩ := hx
+      grind)
 
 中文:
 定义 onFinsupp
@@ -151,7 +170,8 @@ definition onFinsupp
     (by
       refine (Finsupp.linearIndependent_single_one 𝕜 ι).affineIndependent.range.mono fun x hx => ?_
       simp only [Set.mem_iUnion, Finset.mem_coe] at hx
-      obtain ⟨_, ⟨_, _, rfl⟩, hx⟩ := h
+      obtain ⟨_, ⟨_, _, rfl⟩, hx⟩ := hx
+      grind)
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finsupp, Finsupp.linearIndependent_single_one, Finsupp.single, Set.mem_iUnion, abstract, abstract.map, affineIndependent, affineIndependent.range.mono, linearIndependent_single_one, mem_coe, mem_iUnion, ofAffineIndependent, single
 -/

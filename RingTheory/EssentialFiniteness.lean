@@ -189,7 +189,7 @@ lemma essFiniteType_cond_iff
       obtain ⟨t, ht, ht', h⟩ := hσ s
       exact ⟨⟨⟨_, h⟩, ⟨t, ht⟩, ht'⟩, rfl⟩
     · intro x y e
-      e
+      exact ⟨1, by simpa using Subtype.ext e⟩
 
 中文:
 引理 essFiniteType_cond_iff
@@ -205,7 +205,7 @@ lemma essFiniteType_cond_iff
       obtain ⟨t, ht, ht', h⟩ := hσ s
       exact ⟨⟨⟨_, h⟩, ⟨t, ht⟩, ht'⟩, rfl⟩
     · intro x y e
-      e
+      exact ⟨1, by simpa using Subtype.ext e⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, y.prop
 -/
@@ -347,7 +347,17 @@ lemma EssFiniteType.aux
   · intro s
     obtain ⟨s', hs₁, hs₂, hs₃⟩ := hσ s
     refine ⟨_, hs₁, hs₂, Algebra.mem_sup_left ?_⟩
-    rw
+    rw [Algebra.smul_def]; rw [← map_mul]; rw [mul_comm]
+    exact ⟨_, hs₃, rfl⟩
+  · rintro x y - - ⟨sx, hsx, hsx', hsx''⟩ ⟨sy, hsy, hsy', hsy''⟩
+    refine ⟨_, σ.mul_mem hsx hsy, hsx'.mul hsy', ?_⟩
+    rw [smul_add]; rw [mul_smul]; rw [mul_smul]; rw [Algebra.smul_def sx (sy • y)]; rw [smul_comm]; rw [Algebra.smul_def sy (sx • x)]
+    apply add_mem (mul_mem _ hsx'') (mul_mem _ hsy'') <;>
+      exact Algebra.mem_sup_left ⟨_, ‹_›, rfl⟩
+  · rintro x y - - ⟨sx, hsx, hsx', hsx''⟩ ⟨sy, hsy, hsy', hsy''⟩
+    refine ⟨_, σ.mul_mem hsx hsy, hsx'.mul hsy', ?_⟩
+    rw [mul_smul]; rw [← smul_eq_mul]; rw [smul_comm sy x]; rw [← smul_assoc]; rw [smul_eq_mul]
+    exact mul_mem hsx'' hsy''
 
 中文:
 引理 EssFiniteType.aux
@@ -360,7 +370,17 @@ lemma EssFiniteType.aux
   · intro s
     obtain ⟨s', hs₁, hs₂, hs₃⟩ := hσ s
     refine ⟨_, hs₁, hs₂, Algebra.mem_sup_left ?_⟩
-    rw
+    rw [Algebra.smul_def]; rw [← map_mul]; rw [mul_comm]
+    exact ⟨_, hs₃, rfl⟩
+  · rintro x y - - ⟨sx, hsx, hsx', hsx''⟩ ⟨sy, hsy, hsy', hsy''⟩
+    refine ⟨_, σ.mul_mem hsx hsy, hsx'.mul hsy', ?_⟩
+    rw [smul_add]; rw [mul_smul]; rw [mul_smul]; rw [Algebra.smul_def sx (sy • y)]; rw [smul_comm]; rw [Algebra.smul_def sy (sx • x)]
+    apply add_mem (mul_mem _ hsx'') (mul_mem _ hsy'') <;>
+      exact Algebra.mem_sup_left ⟨_, ‹_›, rfl⟩
+  · rintro x y - - ⟨sx, hsx, hsx', hsx''⟩ ⟨sy, hsy, hsy', hsy''⟩
+    refine ⟨_, σ.mul_mem hsx hsy, hsx'.mul hsy', ?_⟩
+    rw [mul_smul]; rw [← smul_eq_mul]; rw [smul_comm sy x]; rw [← smul_assoc]; rw [smul_eq_mul]
+    exact mul_mem hsx'' hsy''
 
 Depends on / 依赖: Algebra, Algebra.adjoin_induction, Algebra.mem_sup_left, Algebra.mem_sup_right, Algebra.smul_def, Algebra.subset_adjoin, Subalgebra, Subalgebra.one_mem, adjoin_induction, isUnit_one, map_mul, mem_sup_left, mem_sup_right, mul_comm, mul_mem, mul_smul, one_mem, one_smul, smul_add, smul_def
 -/
@@ -402,7 +422,15 @@ lemma EssFiniteType.comp
   simp only [Finset.coe_union, Finset.coe_image, Algebra.adjoin_union, Algebra.adjoin_image]
   intro x
   obtain ⟨y, hy₁, hy₂, hy₃⟩ := ht x
-  obtain ⟨t
+  obtain ⟨t₁, h₁, h₂, h₃⟩ := EssFiniteType.aux _ _ _ _ hs _ y hy₁
+  obtain ⟨t₂, h₄, h₅, h₆⟩ := EssFiniteType.aux _ _ _ _ hs _ _ hy₃
+  refine ⟨t₂ • t₁ • y, ?_, ?_, ?_⟩
+  · rw [Algebra.smul_def]
+    exact mul_mem (Algebra.mem_sup_left ⟨_, h₄, rfl⟩) h₃
+  · rw [Algebra.smul_def, Algebra.smul_def]
+    exact (h₅.map _).mul ((h₂.map _).mul hy₂)
+  · rw [← mul_smul, mul_comm, smul_mul_assoc, mul_comm, mul_comm y, mul_smul, Algebra.smul_def]
+    exact mul_mem (Algebra.mem_sup_left ⟨_, h₁, rfl⟩) h₆
 
 中文:
 引理 EssFiniteType.comp
@@ -416,7 +444,15 @@ lemma EssFiniteType.comp
   simp only [Finset.coe_union, Finset.coe_image, Algebra.adjoin_union, Algebra.adjoin_image]
   intro x
   obtain ⟨y, hy₁, hy₂, hy₃⟩ := ht x
-  obtain ⟨t
+  obtain ⟨t₁, h₁, h₂, h₃⟩ := EssFiniteType.aux _ _ _ _ hs _ y hy₁
+  obtain ⟨t₂, h₄, h₅, h₆⟩ := EssFiniteType.aux _ _ _ _ hs _ _ hy₃
+  refine ⟨t₂ • t₁ • y, ?_, ?_, ?_⟩
+  · rw [Algebra.smul_def]
+    exact mul_mem (Algebra.mem_sup_left ⟨_, h₄, rfl⟩) h₃
+  · rw [Algebra.smul_def, Algebra.smul_def]
+    exact (h₅.map _).mul ((h₂.map _).mul hy₂)
+  · rw [← mul_smul, mul_comm, smul_mul_assoc, mul_comm, mul_comm y, mul_smul, Algebra.smul_def]
+    exact mul_mem (Algebra.mem_sup_left ⟨_, h₁, rfl⟩) h₆
 
 Depends on / 依赖: Algebra, Algebra.adjoin_image, Algebra.adjoin_union, Algebra.mem_sup_left, Algebra.smul_def, EssFiniteType, EssFiniteType.aux, Finset, Finset.coe_image, Finset.coe_union, IsScalarTower, IsScalarTower.toAlgHom, adjoin_image, adjoin_union, classical, coe_image, coe_union, essFiniteType_iff, mem_sup_left, mul_mem
 -/
@@ -487,7 +523,27 @@ instance EssFiniteType.baseChange
   | zero => exact ⟨1, one_mem _, isUnit_one, by simp⟩
   | tmul x y =>
     obtain ⟨t, h₁, h₂, h₃⟩ := hσ y
-    have H (x :
+    have H (x : S) (hx : x in Algebra.adjoin R (σ : Set S)) :
+        1 otimesₜ[R] x in Algebra.adjoin T
+          ((σ.image Algebra.TensorProduct.includeRight : Finset (T otimes[R] S)) : Set (T otimes[R] S)) := by
+      have : Algebra.TensorProduct.includeRight x in
+          (Algebra.adjoin R (σ : Set S)).map (Algebra.TensorProduct.includeRight (A := T)) :=
+        Subalgebra.mem_map.mpr ⟨_, hx, rfl⟩
+      rw [← Algebra.adjoin_adjoin_of_tower R]
+      apply Algebra.subset_adjoin
+      simpa [← Algebra.adjoin_image] using this
+    refine ⟨Algebra.TensorProduct.includeRight t, H _ h₁, h₂.map _, ?_⟩
+    simp only [Algebra.TensorProduct.includeRight_apply, Algebra.TensorProduct.tmul_mul_tmul,
+      mul_one]
+    rw [← mul_one x]; rw [← smul_eq_mul]; rw [← TensorProduct.smul_tmul']
+    apply Subalgebra.smul_mem
+    exact H _ h₃
+  | add x y hx hy =>
+    obtain ⟨tx, hx₁, hx₂, hx₃⟩ := hx
+    obtain ⟨ty, hy₁, hy₂, hy₃⟩ := hy
+    refine ⟨_, mul_mem hx₁ hy₁, hx₂.mul hy₂, ?_⟩
+    rw [add_mul]; rw [← mul_assoc]; rw [mul_comm tx ty]; rw [← mul_assoc]
+    exact add_mem (mul_mem hx₃ hy₁) (mul_mem hy₃ hx₁)
 
 中文:
 实例 EssFiniteType.baseChange
@@ -502,7 +558,27 @@ instance EssFiniteType.baseChange
   | zero => exact ⟨1, one_mem _, isUnit_one, by simp⟩
   | tmul x y =>
     obtain ⟨t, h₁, h₂, h₃⟩ := hσ y
-    have H (x :
+    have H (x : S) (hx : x in Algebra.adjoin R (σ : Set S)) :
+        1 otimesₜ[R] x in Algebra.adjoin T
+          ((σ.image Algebra.TensorProduct.includeRight : Finset (T otimes[R] S)) : Set (T otimes[R] S)) := by
+      have : Algebra.TensorProduct.includeRight x in
+          (Algebra.adjoin R (σ : Set S)).map (Algebra.TensorProduct.includeRight (A := T)) :=
+        Subalgebra.mem_map.mpr ⟨_, hx, rfl⟩
+      rw [← Algebra.adjoin_adjoin_of_tower R]
+      apply Algebra.subset_adjoin
+      simpa [← Algebra.adjoin_image] using this
+    refine ⟨Algebra.TensorProduct.includeRight t, H _ h₁, h₂.map _, ?_⟩
+    simp only [Algebra.TensorProduct.includeRight_apply, Algebra.TensorProduct.tmul_mul_tmul,
+      mul_one]
+    rw [← mul_one x]; rw [← smul_eq_mul]; rw [← TensorProduct.smul_tmul']
+    apply Subalgebra.smul_mem
+    exact H _ h₃
+  | add x y hx hy =>
+    obtain ⟨tx, hx₁, hx₂, hx₃⟩ := hx
+    obtain ⟨ty, hy₁, hy₂, hy₃⟩ := hy
+    refine ⟨_, mul_mem hx₁ hy₁, hx₂.mul hy₂, ?_⟩
+    rw [add_mul]; rw [← mul_assoc]; rw [mul_comm tx ty]; rw [← mul_assoc]
+    exact add_mem (mul_mem hx₃ hy₁) (mul_mem hy₃ hx₁)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, Algebra.adjoin, Finset, TensorProduct, TensorProduct.induction_on, adjoin, classical, essFiniteType_iff, includeRight, induction_on, isUnit_one, one_mem, otimes
 -/
@@ -702,7 +778,9 @@ lemma EssFiniteType.algHom_ext
   apply IsLocalization.ringHom_ext (EssFiniteType.submonoid R S)
   suffices f.comp (IsScalarTower.toAlgHom R _ S) = g.comp (IsScalarTower.toAlgHom R _ S) by
     ext; exact AlgHom.congr_fun this _
-  apply AlgHom.ext_of_adj
+  apply AlgHom.ext_of_adjoin_eq_top (s := { x | x.1 in finset R S })
+  · exact adjoin_mem_finset R S
+  · rintro ⟨x, hx⟩ hx'; exact H x hx'
 
 中文:
 引理 EssFiniteType.algHom_ext
@@ -712,7 +790,9 @@ lemma EssFiniteType.algHom_ext
   apply IsLocalization.ringHom_ext (EssFiniteType.submonoid R S)
   suffices f.comp (IsScalarTower.toAlgHom R _ S) = g.comp (IsScalarTower.toAlgHom R _ S) by
     ext; exact AlgHom.congr_fun this _
-  apply AlgHom.ext_of_adj
+  apply AlgHom.ext_of_adjoin_eq_top (s := { x | x.1 in finset R S })
+  · exact adjoin_mem_finset R S
+  · rintro ⟨x, hx⟩ hx'; exact H x hx'
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, AlgHom.ext_of_adjoin_eq_top, EssFiniteType, EssFiniteType.submonoid, IsLocalization, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.toAlgHom, RingHom, RingHom.congr_fun, adjoin_mem_finset, congr_fun, ext_of_adjoin_eq_top, f.comp, f.toRingHom, finset, g.comp, g.toRingHom, ringHom_ext
 -/

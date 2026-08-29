@@ -38,7 +38,12 @@ abbreviation algebra
     { toFun r := e.invFun (algebraMap R β r)
       __ := e.ringEquiv.symm.toRingHom.comp (algebraMap R β) }
     commutes' r x :=
-      show e.symm ((e (e.symm (alg
+      show e.symm ((e (e.symm (algebraMap R β r)) * e x)) =
+          e.symm (e x * e (e.symm (algebraMap R β r))) by
+        simp [Algebra.commutes]
+    smul_def' r x :=
+      show e.symm (r • e x) = e.symm (e (e.symm (algebraMap R β r)) * e x) by
+        simp [Algebra.smul_def] }
 
 中文:
 缩写 algebra
@@ -51,7 +56,12 @@ abbreviation algebra
     { toFun r := e.invFun (algebraMap R β r)
       __ := e.ringEquiv.symm.toRingHom.comp (algebraMap R β) }
     commutes' r x :=
-      show e.symm ((e (e.symm (alg
+      show e.symm ((e (e.symm (algebraMap R β r)) * e x)) =
+          e.symm (e x * e (e.symm (algebraMap R β r))) by
+        simp [Algebra.commutes]
+    smul_def' r x :=
+      show e.symm (r • e x) = e.symm (e (e.symm (algebraMap R β r)) * e x) by
+        simp [Algebra.smul_def] }
 -/
 protected abbrev algebra (e : α ≃ β) [Semiring β] :
     let _ := Equiv.semiring e
@@ -109,7 +119,9 @@ definition algEquiv
       commutes' := fun r => by
         apply e.symm.injective
         simp only [RingEquiv.toEquiv_eq_coe, toFun_as_coe, EquivLike.coe_coe, ringEquiv_apply,
-          symm_ap
+          symm_apply_apply, algebraMap_def] }
+
+@[simp]
 
 中文:
 定义 algEquiv
@@ -123,7 +135,9 @@ definition algEquiv
       commutes' := fun r => by
         apply e.symm.injective
         simp only [RingEquiv.toEquiv_eq_coe, toFun_as_coe, EquivLike.coe_coe, ringEquiv_apply,
-          symm_ap
+          symm_apply_apply, algebraMap_def] }
+
+@[simp]
 
 Depends on / 依赖: Equiv.semiring, semiring
 -/

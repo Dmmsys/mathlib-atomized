@@ -497,7 +497,11 @@ definition reorderMVars
     let mvarId := mvars[arg]!.mvarId!
     let decl ← mvarId.getDecl
     let mvarId' ← mkFreshExprMVar (← reorderForall argReorder decl.type) (userName := decl.userName)
-    -- Note: we assign `mvarId` in terms of `mvarId'`
+    -- Note: we assign `mvarId` in terms of `mvarId'`, and to do this we need to reorder `mvarId'`
+    -- with the reverse reorder of `argReorder`.
+    mvarId.assign (← reorderLambda argReorder.reverse mvarId')
+    mvars := mvars.set! arg mvarId'
+  return reorder.permute! mvars
 
 中文:
 定义 reorderMVars
@@ -508,7 +512,11 @@ definition reorderMVars
     let mvarId := mvars[arg]!.mvarId!
     let decl ← mvarId.getDecl
     let mvarId' ← mkFreshExprMVar (← reorderForall argReorder decl.type) (userName := decl.userName)
-    -- Note: we assign `mvarId` in terms of `mvarId'`
+    -- Note: we assign `mvarId` in terms of `mvarId'`, and to do this we need to reorder `mvarId'`
+    -- with the reverse reorder of `argReorder`.
+    mvarId.assign (← reorderLambda argReorder.reverse mvarId')
+    mvars := mvars.set! arg mvarId'
+  return reorder.permute! mvars
 -/
 private partial def reorderMVars (mvars : Array Expr) (reorder : ArgReorder) :
     MetaM (Array Expr) := do
@@ -535,7 +543,8 @@ definition reorderForall
     throwError "the permutation (reorder := {reorder}) is out of bounds, \
       the type{indentExpr e}\nhas only {mvars.size} arguments"
 .toList let bis := reorder.permute! bis
-  -- Note tha
+  -- Note that `mkForallFVars` also works with mvars.
+fixBinderInfos bis < > mkForallFVars (← reorderMVars mvars reorder) e
 
 中文:
 定义 reorderForall
@@ -546,7 +555,8 @@ definition reorderForall
     throwError "the permutation (reorder := {reorder}) is out of bounds, \
       the type{indentExpr e}\nhas only {mvars.size} arguments"
 .toList let bis := reorder.permute! bis
-  -- Note tha
+  -- Note that `mkForallFVars` also works with mvars.
+fixBinderInfos bis < > mkForallFVars (← reorderMVars mvars reorder) e
 -/
 partial def reorderForall (reorder : ArgReorder) (e : Expr) : MetaM Expr := do
   let (mvars, bis, e) ← forallMetaBoundedTelescope e reorder.range
@@ -568,7 +578,9 @@ definition reorderLambda
   unless mvars.size = reorder.range do
     throwError "the permutation (reorder := {reorder}) is out of bounds, \
       the function{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute!
+.toList let bis := reorder.permute! bis
+  -- Note that `mkLambdaFVars` also works with mvars.
+fixBinderInfos bis < > mkLambdaFVars (← reorderMVars mvars reorder) (e.beta mvars)
 
 中文:
 定义 reorderLambda
@@ -578,7 +590,9 @@ definition reorderLambda
   unless mvars.size = reorder.range do
     throwError "the permutation (reorder := {reorder}) is out of bounds, \
       the function{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute!
+.toList let bis := reorder.permute! bis
+  -- Note that `mkLambdaFVars` also works with mvars.
+fixBinderInfos bis < > mkLambdaFVars (← reorderMVars mvars reorder) (e.beta mvars)
 -/
 partial def reorderLambda (reorder : ArgReorder) (e : Expr) : MetaM Expr := do
   let (mvars, bis, _) ← forallMetaBoundedTelescope (← inferType e) reorder.range
@@ -608,7 +622,14 @@ definition decomposePerm
     let mut cycle := ⟨[i, j], by grind⟩
     repeat do
       let some j' := map[j] | return [] -- If the permutation is malformed, return `[]`.
-      -- To av
+      -- To avoid computing the same cycle multiple times, and to avoid infinite loops,
+      -- we erase visited elements from `map`.
+      map := map.set! j none
+      if j' = i then break
+      j := j'
+      cycle := ⟨cycle.1 ++ [j.val], by grind⟩
+    perm := cycle :: perm
+  return perm
 
 中文:
 定义 decomposePerm
@@ -622,7 +643,14 @@ definition decomposePerm
     let mut cycle := ⟨[i, j], by grind⟩
     repeat do
       let some j' := map[j] | return [] -- If the permutation is malformed, return `[]`.
-      -- To av
+      -- To avoid computing the same cycle multiple times, and to avoid infinite loops,
+      -- we erase visited elements from `map`.
+      map := map.set! j none
+      if j' = i then break
+      j := j'
+      cycle := ⟨cycle.1 ++ [j.val], by grind⟩
+    perm := cycle :: perm
+  return perm
 -/
 private def decomposePerm {n} (map : Vector (Option (Fin n)) n) : Permutation := Id.run do
   let mut map := map
@@ -713,7 +741,27 @@ definition guessReorder
   unless depth == depForallDepth tgt do return {}
   forallBoundedTelescope src depth fun srcVars src => do
   forallBoundedTelescope tgt depth fun tgtVars tgt => do
-let srcMap : Std.HashMap FVarId Nat := .ofAr
+let srcMap : Std.HashMap FVarId Nat := .ofArray srcVars.mapIdx fun i x => (x.fvarId!, i)
+let tgtMap : Std.HashMap FVarId Nat := .ofArray tgtVars.mapIdx fun i x => (x.fvarId!, i)
+  let perm := (← visit src tgt (.replicate depth none) |>.run (srcMap, tgtMap) |>.run' {} |>.run)
+.elim [] decomposePerm
+  -- Recursively guess the reorder in the hypotheses
+  let mut argReorders := #[]
+  for i in *...depth do
+    let r ← guessReorder (← inferType srcVars[i]!) (← inferType tgtVars[i]!)
+    unless r.isEmpty do
+      argReorders := argReorders.push (i, r)
+  let mut src := src; let mut tgt := tgt
+  let mut n := depth
+  while src.isForall && tgt.isForall do
+    let r ← guessReorder src.bindingDomain! tgt.bindingDomain!
+    unless r.isEmpty do
+      argReorders := argReorders.push (n, r)
+    -- This won't create loose bound variables, because we already introduced all dependent foralls.
+    src := src.bindingBody!
+    tgt := tgt.bindingBody!
+    n := n + 1
+  return { perm, argReorders }
 
 中文:
 定义 guessReorder
@@ -724,7 +772,27 @@ let srcMap : Std.HashMap FVarId Nat := .ofAr
   unless depth == depForallDepth tgt do return {}
   forallBoundedTelescope src depth fun srcVars src => do
   forallBoundedTelescope tgt depth fun tgtVars tgt => do
-let srcMap : Std.HashMap FVarId Nat := .ofAr
+let srcMap : Std.HashMap FVarId Nat := .ofArray srcVars.mapIdx fun i x => (x.fvarId!, i)
+let tgtMap : Std.HashMap FVarId Nat := .ofArray tgtVars.mapIdx fun i x => (x.fvarId!, i)
+  let perm := (← visit src tgt (.replicate depth none) |>.run (srcMap, tgtMap) |>.run' {} |>.run)
+.elim [] decomposePerm
+  -- Recursively guess the reorder in the hypotheses
+  let mut argReorders := #[]
+  for i in *...depth do
+    let r ← guessReorder (← inferType srcVars[i]!) (← inferType tgtVars[i]!)
+    unless r.isEmpty do
+      argReorders := argReorders.push (i, r)
+  let mut src := src; let mut tgt := tgt
+  let mut n := depth
+  while src.isForall && tgt.isForall do
+    let r ← guessReorder src.bindingDomain! tgt.bindingDomain!
+    unless r.isEmpty do
+      argReorders := argReorders.push (n, r)
+    -- This won't create loose bound variables, because we already introduced all dependent foralls.
+    src := src.bindingBody!
+    tgt := tgt.bindingBody!
+    n := n + 1
+  return { perm, argReorders }
 -/
 partial def guessReorder (src tgt : Expr) : MetaM ArgReorder := withReducible do
   let src ← whnf src; let tgt ← whnf tgt
@@ -825,7 +893,13 @@ definition elabArgStx
         "invalid argument `{stx}`, it is not an argument of `{head}`."
     | `($n:num) =>
       if n.getNat = 0 then
-        throwErrorAt stx "invalid i
+        throwErrorAt stx "invalid index `{stx}`, arguments are counted starting from 1."
+      if n.getNat > fvars.size then
+        throwErrorAt stx "index `{stx}` is out of bounds, there are only `{fvars.size}` arguments"
+      pure (n.getNat - 1)
+    | _ => throwUnsupportedSyntax
+.run' Elab.Term.addTermInfo' stx fvars[n]!
+  return n
 
 中文:
 定义 elabArgStx
@@ -838,7 +912,13 @@ definition elabArgStx
         "invalid argument `{stx}`, it is not an argument of `{head}`."
     | `($n:num) =>
       if n.getNat = 0 then
-        throwErrorAt stx "invalid i
+        throwErrorAt stx "invalid index `{stx}`, arguments are counted starting from 1."
+      if n.getNat > fvars.size then
+        throwErrorAt stx "index `{stx}` is out of bounds, there are only `{fvars.size}` arguments"
+      pure (n.getNat - 1)
+    | _ => throwUnsupportedSyntax
+.run' Elab.Term.addTermInfo' stx fvars[n]!
+  return n
 -/
 def elabArgStx (stx : TSyntax [`ident, `num]) (argNames : Array Name) (fvars : Array Expr)
     (head : MessageData) : MetaM Nat := do
@@ -869,7 +949,38 @@ definition elabReorder
     let mut argReorders := #[]
     for part in parts do
       let `(reorderPart| $[$cycleStx]* $[($argReorder?)]?) := part | throwUnsupportedSyntax
-      let cycle ← cycleStx.toList.mapM (elabArgStx · argNames args h
+      let cycle ← cycleStx.toList.mapM (elabArgStx · argNames args head)
+      if h : 2 <= cycle.length then
+        perm := ⟨cycle, h⟩ :: perm
+      else if argReorder?.isNone then
+        throwErrorAt part "\
+          Invalid cycle `{part}`, a cycle must have at least 2 elements.\n\
+            See the docstring of `reorder` for how to specify reorders."
+      if let some argReorder := argReorder? then
+        for arg in cycle do
+        let reorder ←
+          -- Use a reducing telescope to see through `autoParam`.
+withReducible forallTelescopeReducing (← inferType args[arg]!) fun xs _ => do
+            let argNames ← xs.mapM (·.fvarId!.getUserName)
+            -- Recursively elaborate the nested reorder syntax.
+            elabReorder argReorder argNames xs m!"{args[arg]!}"
+        argReorders := argReorders.push (arg, reorder)
+    -- Check that the cycles are disjoint
+.foldM (init := ({} : Std.HashSet Nat)) fun s n => do _ ← perm.iter.flatMap (·.1.iter)
+      let (contains, s) := s.containsThenInsert n
+      if contains then throwError
+        "Please remove the duplicate entries from the disjoint cycle representation.\n\
+        See the docstring of `reorder` for how to specify reorders."
+      return s
+    argReorders := argReorders.qsort (·.1 < ·.1)
+    -- check that the `argReorders` aren't duplicated.
+    for h : i in *...(argReorders.size - 1) do
+      let arg₀ := argReorders[i]; let arg₁ := argReorders[i + 1]
+      if arg₀.1 == arg₁.1 then
+        throwError "The reorder within argument {arg₀.1 + 1} has been set to both \
+          `{arg₀.2.toString}` and `{arg₁.2.toString}`. Please specify it only once."
+    return { perm, argReorders }
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 elabReorder
@@ -880,7 +991,38 @@ definition elabReorder
     let mut argReorders := #[]
     for part in parts do
       let `(reorderPart| $[$cycleStx]* $[($argReorder?)]?) := part | throwUnsupportedSyntax
-      let cycle ← cycleStx.toList.mapM (elabArgStx · argNames args h
+      let cycle ← cycleStx.toList.mapM (elabArgStx · argNames args head)
+      if h : 2 <= cycle.length then
+        perm := ⟨cycle, h⟩ :: perm
+      else if argReorder?.isNone then
+        throwErrorAt part "\
+          Invalid cycle `{part}`, a cycle must have at least 2 elements.\n\
+            See the docstring of `reorder` for how to specify reorders."
+      if let some argReorder := argReorder? then
+        for arg in cycle do
+        let reorder ←
+          -- Use a reducing telescope to see through `autoParam`.
+withReducible forallTelescopeReducing (← inferType args[arg]!) fun xs _ => do
+            let argNames ← xs.mapM (·.fvarId!.getUserName)
+            -- Recursively elaborate the nested reorder syntax.
+            elabReorder argReorder argNames xs m!"{args[arg]!}"
+        argReorders := argReorders.push (arg, reorder)
+    -- Check that the cycles are disjoint
+.foldM (init := ({} : Std.HashSet Nat)) fun s n => do _ ← perm.iter.flatMap (·.1.iter)
+      let (contains, s) := s.containsThenInsert n
+      if contains then throwError
+        "Please remove the duplicate entries from the disjoint cycle representation.\n\
+        See the docstring of `reorder` for how to specify reorders."
+      return s
+    argReorders := argReorders.qsort (·.1 < ·.1)
+    -- check that the `argReorders` aren't duplicated.
+    for h : i in *...(argReorders.size - 1) do
+      let arg₀ := argReorders[i]; let arg₁ := argReorders[i + 1]
+      if arg₀.1 == arg₁.1 then
+        throwError "The reorder within argument {arg₀.1 + 1} has been set to both \
+          `{arg₀.2.toString}` and `{arg₁.2.toString}`. Please specify it only once."
+    return { perm, argReorders }
+  | _ => throwUnsupportedSyntax
 -/
 partial def elabReorder (stx : TSyntax `translateReorder) (argNames : Array Name)
     (args : Array Expr) (head : MessageData) : MetaM ArgReorder :=

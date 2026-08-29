@@ -263,7 +263,24 @@ lemma norm_sub_mem_Icc_angle
     simp at hy
   subst y
   rw [norm_eq_one_iff'] at hx
-  obtain ⟨θ, hθ, rfl⟩ :
+  obtain ⟨θ, hθ, rfl⟩ := hx
+  rw [angle_exp_one]; rw [exp_mul_I]; rw [add_sub_right_comm]; rw [(toIocMod_eq_self _).2]
+  · norm_cast
+    rw [norm_add_mul_I]
+    refine ⟨Real.le_sqrt_of_sq_le ?_, ?_⟩
+    · rw [mul_pow, ← abs_pow, abs_sq]
+      calc
+        _ = 2 * (1 - (1 - 2 / π ^ 2 * θ ^ 2)) := by ring
+        _ <= 2 * (1 - θ.cos) := by
+gcongr; exact Real.cos_le_one_sub_mul_cos_sq abs_le.2 Ioc_subset_Icc_self hθ
+        _ = _ := by linear_combination -θ.cos_sq_add_sin_sq
+    · rw [Real.sqrt_le_left (by positivity), ← abs_pow, abs_sq]
+      calc
+        _ = 2 * (1 - θ.cos) := by linear_combination θ.cos_sq_add_sin_sq
+        _ <= 2 * (1 - (1 - θ ^ 2 / 2)) := by gcongr; exact Real.one_sub_sq_div_two_le_cos
+        _ = _ := by ring
+  · convert! hθ
+    ring
 
 中文:
 引理 norm_sub_mem_Icc_angle
@@ -277,7 +294,24 @@ lemma norm_sub_mem_Icc_angle
     simp at hy
   subst y
   rw [norm_eq_one_iff'] at hx
-  obtain ⟨θ, hθ, rfl⟩ :
+  obtain ⟨θ, hθ, rfl⟩ := hx
+  rw [angle_exp_one]; rw [exp_mul_I]; rw [add_sub_right_comm]; rw [(toIocMod_eq_self _).2]
+  · norm_cast
+    rw [norm_add_mul_I]
+    refine ⟨Real.le_sqrt_of_sq_le ?_, ?_⟩
+    · rw [mul_pow, ← abs_pow, abs_sq]
+      calc
+        _ = 2 * (1 - (1 - 2 / π ^ 2 * θ ^ 2)) := by ring
+        _ <= 2 * (1 - θ.cos) := by
+gcongr; exact Real.cos_le_one_sub_mul_cos_sq abs_le.2 Ioc_subset_Icc_self hθ
+        _ = _ := by linear_combination -θ.cos_sq_add_sin_sq
+    · rw [Real.sqrt_le_left (by positivity), ← abs_pow, abs_sq]
+      calc
+        _ = 2 * (1 - θ.cos) := by linear_combination θ.cos_sq_add_sin_sq
+        _ <= 2 * (1 - (1 - θ ^ 2 / 2)) := by gcongr; exact Real.one_sub_sq_div_two_le_cos
+        _ = _ := by ring
+  · convert! hθ
+    ring
 
 Depends on / 依赖: Real.le_sqrt_of_sq_le, abs_pow, abs_sq, add_sub_right_comm, angle_div_left_eq_angle_mul_right, angle_exp_one, div_one, div_sub_one, exp_mul_I, le_sqrt_of_sq_le, mul_pow, norm_add_mul_I, norm_div, norm_eq_one_iff, norm_one, one_mul, toIocMod_eq_self
 -/

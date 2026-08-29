@@ -211,7 +211,8 @@ theorem closedBall_eq_Icc
   · rw [closedBall_eq_empty.2 hr, Icc_eq_empty_of_lt]
 calc ⌊(x : Real) + r⌋₊ <= ⌊(x : Real)⌋₊ := floor_mono by linarith
     _ < ⌈↑x - r⌉₊ := by
-      rw [floor_natCast]; rw [Na
+      rw [floor_natCast]; rw [Nat.lt_ceil]
+      linarith
 
 中文:
 定理 closedBall_eq_Icc
@@ -224,7 +225,8 @@ calc ⌊(x : Real) + r⌋₊ <= ⌊(x : Real)⌋₊ := floor_mono by linarith
   · rw [closedBall_eq_empty.2 hr, Icc_eq_empty_of_lt]
 calc ⌊(x : Real) + r⌋₊ <= ⌊(x : Real)⌋₊ := floor_mono by linarith
     _ < ⌈↑x - r⌉₊ := by
-      rw [floor_natCast]; rw [Na
+      rw [floor_natCast]; rw [Nat.lt_ceil]
+      linarith
 
 Depends on / 依赖: Icc_eq_empty_of_lt, Nat.lt_ceil, Real.closedBall_eq_Icc, closedBall_eq_Icc, closedBall_eq_empty, floor_mono, floor_natCast, le_or_gt, lt_ceil, preimage_Icc, preimage_closedBall
 -/

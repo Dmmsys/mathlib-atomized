@@ -864,7 +864,7 @@ lemma integrable_norm_rpow_of_le
   · grind
   rw [← ENNReal.toReal_ofReal hp.le]; rw [integrable_norm_rpow_iff hf (by simp [hp]) (by simp)]
   rw [← ENNReal.toReal_ofReal hq.le]; rw [integrable_norm_rpow_iff hf (by simp [hq]) (by simp)] at hint
-  ex
+  exact MemLp.mono_exponent hint (ENNReal.ofReal_le_ofReal hpq)
 
 中文:
 引理 integrable_norm_rpow_of_le
@@ -876,7 +876,7 @@ lemma integrable_norm_rpow_of_le
   · grind
   rw [← ENNReal.toReal_ofReal hp.le]; rw [integrable_norm_rpow_iff hf (by simp [hp]) (by simp)]
   rw [← ENNReal.toReal_ofReal hq.le]; rw [integrable_norm_rpow_iff hf (by simp [hq]) (by simp)] at hint
-  ex
+  exact MemLp.mono_exponent hint (ENNReal.ofReal_le_ofReal hpq)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_le_ofReal, ENNReal.toReal_ofReal, MemLp.mono_exponent, eq_or_lt, hp.eq_or_lt, hp.le, hq.eq_or_lt, hq.le, integrable_norm_rpow_iff, mono_exponent, ofReal_le_ofReal, toReal_ofReal
 -/
@@ -2251,7 +2251,9 @@ theorem Integrable.essSup_smul
   have hg' : eLpNorm g ∞ μ != ∞ := by rwa [eLpNorm_exponent_top]
   calc
     eLpNorm (fun x : α => g x • f x) 1 μ <= _ := by
-      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm hf.1 g_aestronglyMeasurab
+      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm hf.1 g_aestronglyMeasurable
+        (p := ∞) (q := 1)
+    _ < ∞ := ENNReal.mul_lt_top hg'.lt_top hf.2
 
 中文:
 定理 可积.essSup_smul
@@ -2262,7 +2264,9 @@ theorem Integrable.essSup_smul
   have hg' : eLpNorm g ∞ μ != ∞ := by rwa [eLpNorm_exponent_top]
   calc
     eLpNorm (fun x : α => g x • f x) 1 μ <= _ := by
-      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm hf.1 g_aestronglyMeasurab
+      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm hf.1 g_aestronglyMeasurable
+        (p := ∞) (q := 1)
+    _ < ∞ := ENNReal.mul_lt_top hg'.lt_top hf.2
 
 Depends on / 依赖: ENNReal, ENNReal.mul_lt_top, MeasureTheory, MeasureTheory.eLpNorm_smul_le_mul_eLpNorm, eLpNorm, eLpNorm_exponent_top, eLpNorm_smul_le_mul_eLpNorm, g_aestronglyMeasurable, g_aestronglyMeasurable.smul, lt_top, memLp_one_iff_integrable, mul_lt_top
 -/
@@ -2291,7 +2295,9 @@ theorem Integrable.smul_essSup
   have hg' : eLpNorm g ∞ μ != ∞ := by rwa [eLpNorm_exponent_top]
   calc
     eLpNorm (fun x : α => f x • g x) 1 μ <= _ := by
-      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm g_aestronglyMeasurable hf
+      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm g_aestronglyMeasurable hf.1
+        (p := 1) (q := ∞)
+    _ < ∞ := ENNReal.mul_lt_top hf.2 hg'.lt_top
 
 中文:
 定理 可积.smul_essSup
@@ -2302,7 +2308,9 @@ theorem Integrable.smul_essSup
   have hg' : eLpNorm g ∞ μ != ∞ := by rwa [eLpNorm_exponent_top]
   calc
     eLpNorm (fun x : α => f x • g x) 1 μ <= _ := by
-      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm g_aestronglyMeasurable hf
+      simpa using! MeasureTheory.eLpNorm_smul_le_mul_eLpNorm g_aestronglyMeasurable hf.1
+        (p := 1) (q := ∞)
+    _ < ∞ := ENNReal.mul_lt_top hf.2 hg'.lt_top
 
 Depends on / 依赖: ENNReal, ENNReal.mul_lt_top, MeasureTheory, MeasureTheory.eLpNorm_smul_le_mul_eLpNorm, eLpNorm, eLpNorm_exponent_top, eLpNorm_smul_le_mul_eLpNorm, g_aestronglyMeasurable, lt_top, memLp_one_iff_integrable, mul_lt_top
 -/
@@ -2416,7 +2424,10 @@ lemma integrable_of_le_of_le
     exact abs_le_max_abs_abs hx1 hx2
   have h_le_add : forallᵐ x ∂μ, ‖f x‖ <= ‖‖g₁ x‖ + ‖g₂ x‖‖ := by
     filter_upwards [this] with x hx
-    refine hx.trans ?
+    refine hx.trans ?_
+    conv_rhs => rw [Real.norm_of_nonneg (by positivity)]
+    exact max_le_add_of_nonneg (norm_nonneg _) (norm_nonneg _)
+  exact Integrable.mono (by fun_prop) hf h_le_add
 
 中文:
 引理 integrable_of_le_of_le
@@ -2428,7 +2439,10 @@ lemma integrable_of_le_of_le
     exact abs_le_max_abs_abs hx1 hx2
   have h_le_add : forallᵐ x ∂μ, ‖f x‖ <= ‖‖g₁ x‖ + ‖g₂ x‖‖ := by
     filter_upwards [this] with x hx
-    refine hx.trans ?
+    refine hx.trans ?_
+    conv_rhs => rw [Real.norm_of_nonneg (by positivity)]
+    exact max_le_add_of_nonneg (norm_nonneg _) (norm_nonneg _)
+  exact Integrable.mono (by fun_prop) hf h_le_add
 
 Depends on / 依赖: Integrable, Integrable.mono, Real.norm_eq_abs, Real.norm_of_nonneg, abs_le_max_abs_abs, conv_rhs, filter_upwards, fun_prop, h_le_add, hx.trans, max_le_add_of_nonneg, norm_eq_abs, norm_nonneg, norm_of_nonneg
 -/
@@ -2514,7 +2528,8 @@ theorem Integrable.measure_enorm_ge_lt_top
   apply ENNReal.mul_lt_top
   · simpa only [ENNReal.toReal_one, ENNReal.rpow_one, ENNReal.inv_lt_top, ENNReal.ofReal_pos]
       using hε
-  · simpa only [ENNReal.toReal_one, ENNReal.rpow_one]
+  · simpa only [ENNReal.toReal_one, ENNReal.rpow_one] using
+      (memLp_one_iff_integrable.2 hf).eLpNorm_lt_top
 
 中文:
 定理 可积.measure_enorm_ge_lt_top
@@ -2525,7 +2540,8 @@ theorem Integrable.measure_enorm_ge_lt_top
   apply ENNReal.mul_lt_top
   · simpa only [ENNReal.toReal_one, ENNReal.rpow_one, ENNReal.inv_lt_top, ENNReal.ofReal_pos]
       using hε
-  · simpa only [ENNReal.toReal_one, ENNReal.rpow_one]
+  · simpa only [ENNReal.toReal_one, ENNReal.rpow_one] using
+      (memLp_one_iff_integrable.2 hf).eLpNorm_lt_top
 
 Depends on / 依赖: ENNReal, ENNReal.inv_lt_top, ENNReal.mul_lt_top, ENNReal.ofReal_pos, ENNReal.rpow_one, ENNReal.toReal_one, eLpNorm_lt_top, inv_lt_top, meas_ge_le_mul_pow_eLpNorm_enorm, memLp_one_iff_integrable, mul_lt_top, ofReal_pos, one_ne_top, one_ne_zero, rpow_one, toReal_one, trans_lt
 -/
@@ -2849,7 +2865,20 @@ lemma integrable_count_iff
   -- Note: this proof would be much easier if we assumed `SecondCountableTopology G`. Without
   -- this we have to justify the claim that `f` lands a.e. in a separable subset, which is true
   -- (because summable functions have countable range) but slightly tedious to check.
-  rw [Integrable]; rw
+  rw [Integrable]; rw [hasFiniteIntegral_count_iff]; rw [and_iff_right_iff_imp]
+  intro hs
+  have hs' : (Function.support f).Countable := by
+    simpa only [Ne, Pi.zero_apply, eq_comm, Function.support, norm_eq_zero]
+      using hs.countable_support
+  let : MeasurableSpace β := borel β
+  have : BorelSpace β := ⟨rfl⟩
+  refine aestronglyMeasurable_iff_aemeasurable_separable.mpr ⟨?_, ?_⟩
+  · refine (measurable_zero.measurable_of_countable_ne ?_).aemeasurable
+    simpa only [Ne, Pi.zero_apply, eq_comm, Function.support] using hs'
+  · refine ⟨f '' univ, ?_, ae_of_all _ fun a => ⟨a, ⟨mem_univ _, rfl⟩⟩⟩
+    suffices f '' univ subseteq (f '' f.support) union {0} from
+      (((hs'.image f).union (countable_singleton 0)).mono this).isSeparable
+    grind [Function.mem_support]
 
 中文:
 引理 integrable_count_iff
@@ -2857,7 +2886,20 @@ lemma integrable_count_iff
   -- Note: this proof would be much easier if we assumed `SecondCountableTopology G`. Without
   -- this we have to justify the claim that `f` lands a.e. in a separable subset, which is true
   -- (because summable functions have countable range) but slightly tedious to check.
-  rw [Integrable]; rw
+  rw [Integrable]; rw [hasFiniteIntegral_count_iff]; rw [and_iff_right_iff_imp]
+  intro hs
+  have hs' : (Function.support f).Countable := by
+    simpa only [Ne, Pi.zero_apply, eq_comm, Function.support, norm_eq_zero]
+      using hs.countable_support
+  let : MeasurableSpace β := borel β
+  have : BorelSpace β := ⟨rfl⟩
+  refine aestronglyMeasurable_iff_aemeasurable_separable.mpr ⟨?_, ?_⟩
+  · refine (measurable_zero.measurable_of_countable_ne ?_).aemeasurable
+    simpa only [Ne, Pi.zero_apply, eq_comm, Function.support] using hs'
+  · refine ⟨f '' univ, ?_, ae_of_all _ fun a => ⟨a, ⟨mem_univ _, rfl⟩⟩⟩
+    suffices f '' univ subseteq (f '' f.support) union {0} from
+      (((hs'.image f).union (countable_singleton 0)).mono this).isSeparable
+    grind [Function.mem_support]
 -/
 lemma integrable_count_iff :
     Integrable f Measure.count ↔ Summable (‖f ·‖) := by
@@ -2897,7 +2939,8 @@ theorem integrable_withDensity_iff_integrable_coe_smul
       true_and]
     rw [lintegral_withDensity_eq_lintegral_mul₀' hf.coe_nnreal_ennreal.aemeasurable]
     · simp [enorm_smul]
-
+    · simpa [aemeasurable_withDensity_ennreal_iff hf, enorm_smul] using H.enorm
+  · simp only [Integrable, aestronglyMeasurable_withDensity_iff hf, H, false_and]
 
 中文:
 定理 integrable_withDensity_iff_integrable_coe_smul
@@ -2908,7 +2951,8 @@ theorem integrable_withDensity_iff_integrable_coe_smul
       true_and]
     rw [lintegral_withDensity_eq_lintegral_mul₀' hf.coe_nnreal_ennreal.aemeasurable]
     · simp [enorm_smul]
-
+    · simpa [aemeasurable_withDensity_ennreal_iff hf, enorm_smul] using H.enorm
+  · simp only [Integrable, aestronglyMeasurable_withDensity_iff hf, H, false_and]
 
 Depends on / 依赖: AEStronglyMeasurable, H.enorm, Integrable, aemeasurable, aemeasurable_withDensity_ennreal_iff, aestronglyMeasurable_withDensity_iff, coe_nnreal_ennreal, enorm_smul, false_and, hasFiniteIntegral_iff_enorm, hf.coe_nnreal_ennreal.aemeasurable, true_and
 -/
@@ -2982,7 +3026,13 @@ theorem integrable_withDensity_iff_integrable_coe_smul₀
       suffices (fun x => (f x : Real>=0∞)) =ᵐ[μ] (fun x => (hf.mk f x : Real>=0)) by
         rw [withDensity_congr_ae this]
       filter_upwards [hf.ae_eq_mk] with x hx
-    
+      simp [hx]
+    _ ↔ Integrable (fun x => ((hf.mk f x : Real>=0) : Real) • g x) μ :=
+      integrable_withDensity_iff_integrable_coe_smul hf.measurable_mk
+    _ ↔ Integrable (fun x => (f x : Real) • g x) μ := by
+      apply integrable_congr
+      filter_upwards [hf.ae_eq_mk] with x hx
+      simp [hx]
 
 中文:
 定理 integrable_withDensity_iff_integrable_coe_smul₀
@@ -2993,7 +3043,13 @@ theorem integrable_withDensity_iff_integrable_coe_smul₀
       suffices (fun x => (f x : Real>=0∞)) =ᵐ[μ] (fun x => (hf.mk f x : Real>=0)) by
         rw [withDensity_congr_ae this]
       filter_upwards [hf.ae_eq_mk] with x hx
-    
+      simp [hx]
+    _ ↔ Integrable (fun x => ((hf.mk f x : Real>=0) : Real) • g x) μ :=
+      integrable_withDensity_iff_integrable_coe_smul hf.measurable_mk
+    _ ↔ Integrable (fun x => (f x : Real) • g x) μ := by
+      apply integrable_congr
+      filter_upwards [hf.ae_eq_mk] with x hx
+      simp [hx]
 
 Depends on / 依赖: Integrable, ae_eq_mk, filter_upwards, hf.ae_eq_mk, hf.measurable_mk, hf.mk, integrable_congr, integrable_withDensity_iff_integrable_coe_smul, measurable_mk, withDensity, withDensity_congr_ae
 -/
@@ -3129,7 +3185,42 @@ definition withDensitySMulLI
     filter_upwards [(memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp,
       (memL1_smul_of_L1_withDensity f_meas v).coeFn_toLp,
       (memL1_smul_of_L1_withDensity f_meas (u + v)).coeFn_toLp,
-      Lp.coeFn_add 
+      Lp.coeFn_add ((memL1_smul_of_L1_withDensity f_meas u).toLp _)
+        ((memL1_smul_of_L1_withDensity f_meas v).toLp _),
+      (ae_withDensity_iff f_meas.coe_nnreal_ennreal).1 (Lp.coeFn_add u v)]
+    intro x hu hv huv h' h''
+    rw [huv]; rw [h']; rw [Pi.add_apply]; rw [hu]; rw [hv]
+    rcases eq_or_ne (f x) 0 with (hx | hx)
+    · simp only [hx, zero_smul, add_zero]
+    · rw [h'' _, Pi.add_apply, smul_add]
+      simpa only [Ne, ENNReal.coe_eq_zero] using hx
+  map_smul' := by
+    intro r u
+    ext1
+    filter_upwards [(ae_withDensity_iff f_meas.coe_nnreal_ennreal).1 (Lp.coeFn_smul r u),
+      (memL1_smul_of_L1_withDensity f_meas (r • u)).coeFn_toLp,
+      Lp.coeFn_smul r ((memL1_smul_of_L1_withDensity f_meas u).toLp _),
+      (memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp]
+    intro x h h' h'' h'''
+    rw [RingHom.id_apply]; rw [h']; rw [h'']; rw [Pi.smul_apply]; rw [h''']
+    rcases eq_or_ne (f x) 0 with (hx | hx)
+    · simp only [hx, zero_smul, smul_zero]
+    · rw [h _, smul_comm, Pi.smul_apply]
+      simpa only [Ne, ENNReal.coe_eq_zero] using hx
+  norm_map' := by
+    intro u
+    simp only [eLpNorm, LinearMap.coe_mk, AddHom.coe_mk,
+      one_ne_zero, ENNReal.one_ne_top, ENNReal.toReal_one, if_false, eLpNorm', ENNReal.rpow_one,
+      _root_.div_one, Lp.norm_def]
+    rw [lintegral_withDensity_eq_lintegral_mul_non_measurable _ f_meas.coe_nnreal_ennreal
+        (Filter.Eventually.of_forall fun x => ENNReal.coe_lt_top)]
+    congr 1
+    apply lintegral_congr_ae
+    filter_upwards [(memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp] with x hx
+    rw [hx]
+    simp [NNReal.smul_def, enorm_smul]
+
+@[simp]
 
 中文:
 定义 withDensitySMulLI
@@ -3141,7 +3232,42 @@ definition withDensitySMulLI
     filter_upwards [(memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp,
       (memL1_smul_of_L1_withDensity f_meas v).coeFn_toLp,
       (memL1_smul_of_L1_withDensity f_meas (u + v)).coeFn_toLp,
-      Lp.coeFn_add 
+      Lp.coeFn_add ((memL1_smul_of_L1_withDensity f_meas u).toLp _)
+        ((memL1_smul_of_L1_withDensity f_meas v).toLp _),
+      (ae_withDensity_iff f_meas.coe_nnreal_ennreal).1 (Lp.coeFn_add u v)]
+    intro x hu hv huv h' h''
+    rw [huv]; rw [h']; rw [Pi.add_apply]; rw [hu]; rw [hv]
+    rcases eq_or_ne (f x) 0 with (hx | hx)
+    · simp only [hx, zero_smul, add_zero]
+    · rw [h'' _, Pi.add_apply, smul_add]
+      simpa only [Ne, ENNReal.coe_eq_zero] using hx
+  map_smul' := by
+    intro r u
+    ext1
+    filter_upwards [(ae_withDensity_iff f_meas.coe_nnreal_ennreal).1 (Lp.coeFn_smul r u),
+      (memL1_smul_of_L1_withDensity f_meas (r • u)).coeFn_toLp,
+      Lp.coeFn_smul r ((memL1_smul_of_L1_withDensity f_meas u).toLp _),
+      (memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp]
+    intro x h h' h'' h'''
+    rw [RingHom.id_apply]; rw [h']; rw [h'']; rw [Pi.smul_apply]; rw [h''']
+    rcases eq_or_ne (f x) 0 with (hx | hx)
+    · simp only [hx, zero_smul, smul_zero]
+    · rw [h _, smul_comm, Pi.smul_apply]
+      simpa only [Ne, ENNReal.coe_eq_zero] using hx
+  norm_map' := by
+    intro u
+    simp only [eLpNorm, LinearMap.coe_mk, AddHom.coe_mk,
+      one_ne_zero, ENNReal.one_ne_top, ENNReal.toReal_one, if_false, eLpNorm', ENNReal.rpow_one,
+      _root_.div_one, Lp.norm_def]
+    rw [lintegral_withDensity_eq_lintegral_mul_non_measurable _ f_meas.coe_nnreal_ennreal
+        (Filter.Eventually.of_forall fun x => ENNReal.coe_lt_top)]
+    congr 1
+    apply lintegral_congr_ae
+    filter_upwards [(memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp] with x hx
+    rw [hx]
+    simp [NNReal.smul_def, enorm_smul]
+
+@[simp]
 
 Depends on / 依赖: f_meas, memL1_smul_of_L1_withDensity
 -/
@@ -3607,7 +3733,7 @@ theorem integrable_smul_const
     hasFiniteIntegral_iff_enorm, enorm_smul]
   intro _; rw [lintegral_mul_const' _ _ enorm_ne_top, ENNReal.mul_lt_top_iff]
   have : forall x : Real>=0∞, x = 0 -> x < ∞ := by simp
-  simp [hc, or_iff_left_o
+  simp [hc, or_iff_left_of_imp (this _)]
 
 中文:
 定理 integrable_smul_const
@@ -3617,7 +3743,7 @@ theorem integrable_smul_const
     hasFiniteIntegral_iff_enorm, enorm_smul]
   intro _; rw [lintegral_mul_const' _ _ enorm_ne_top, ENNReal.mul_lt_top_iff]
   have : forall x : Real>=0∞, x = 0 -> x < ∞ := by simp
-  simp [hc, or_iff_left_o
+  simp [hc, or_iff_left_of_imp (this _)]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_lt_top_iff, Integrable, aestronglyMeasurable_smul_const_iff, and_congr_right_iff, enorm_ne_top, enorm_smul, hasFiniteIntegral_iff_enorm, lintegral_mul_const, mul_lt_top_iff, or_iff_left_of_imp, simp_rw
 -/

@@ -173,7 +173,11 @@ definition singleTriangle.map
   comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
   comm₃ := by
     dsimp [singleδ]
-    rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← 
+    rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← NatTrans.naturality]; rw [Functor.map_comp]
+    dsimp [CochainComplex.singleFunctors]
+    rw [reassoc_of% dsimp% ((triangleOfSES.map (h₁.map_of_exact _) (h₂.map_of_exact _))
+      ((HomologicalComplex.single C (.up Int) 0).mapShortComplex.map f)).comm₃]
+    simp
 
 中文:
 定义 singleTriangle.map
@@ -185,7 +189,11 @@ definition singleTriangle.map
   comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
   comm₃ := by
     dsimp [singleδ]
-    rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← 
+    rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← NatTrans.naturality]; rw [Functor.map_comp]
+    dsimp [CochainComplex.singleFunctors]
+    rw [reassoc_of% dsimp% ((triangleOfSES.map (h₁.map_of_exact _) (h₂.map_of_exact _))
+      ((HomologicalComplex.single C (.up Int) 0).mapShortComplex.map f)).comm₃]
+    simp
 
 Depends on / 依赖: singleFunctor
 -/

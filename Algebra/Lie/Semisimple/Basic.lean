@@ -408,7 +408,62 @@ lemma isSimple_of_isAtom
     let J' : LieIdeal R L :=
     { __ := J.toSubmodule.map I.incl.toLinearMap
       lie_mem := by
-  
+        rintro x _ ⟨y, hy, rfl⟩
+        -- We need to show that `⁅x, y⁆ ∈ J` for any `x ∈ L` and `y ∈ J`.
+        -- Since `L` is semisimple, `x` is contained
+        -- in the supremum of `I` and the atoms not equal to `I`.
+        have hx : x in I ⊔ sSup ({I' : LieIdeal R L | IsAtom I'} \ {I}) := by
+          nth_rewrite 1 [← sSup_singleton (a := I)]
+          rw [← sSup_union]; rw [Set.union_sdiff_self]; rw [Set.union_eq_self_of_subset_left]; rw [IsSemisimple.sSup_atoms_eq_top]
+          · apply LieSubmodule.mem_top
+          · simp only [Set.singleton_subset_iff, Set.mem_ofPred_eq, hI]
+        -- Hence we can write `x` as `a + b` with `a ∈ I`
+        -- and `b` in the supremum of the atoms not equal to `I`.
+        rw [LieSubmodule.mem_sup] at hx
+        obtain ⟨a, ha, b, hb, rfl⟩ := hx
+        -- Therefore it suffices to show that `⁅a, y⁆ ∈ J` and `⁅b, y⁆ ∈ J`.
+        simp only [Submodule.carrier_eq_coe, add_lie, SetLike.mem_coe]
+        apply add_mem
+        -- Now `⁅a, y⁆ ∈ J` since `a ∈ I`, `y ∈ J`, and `J` is an ideal of `I`.
+        · simp only [Submodule.mem_map, LieSubmodule.mem_toSubmodule, Subtype.exists]
+          erw [Submodule.coe_subtype]
+          simp only [exists_and_right, exists_eq_right, ha, lie_mem_left, exists_true_left]
+          exact lie_mem_right R I J ⟨a, ha⟩ y hy
+        -- Finally `⁅b, y⁆ = 0`, by the independence of the atoms.
+        · suffices ⁅b, y.val⁆ = 0 by erw [this]; simp only [zero_mem]
+          rw [← LieSubmodule.mem_bot (R := R) (L := L)]; rw [← (IsSemisimple.sSupIndep_isAtom hI).eq_bot]
+          exact ⟨lie_mem_right R L I b y y.2, lie_mem_left _ _ _ _ _ hb⟩ }
+    -- Now that we know that `J` is an ideal of `L`,
+    -- we start with the proof that `I` is a simple Lie algebra.
+    -- Assume that `J ≠ ⊤`.
+    rw [or_iff_not_imp_right]
+    intro hJ
+    suffices J' = ⊥ by
+      rw [eq_bot_iff] at this ⊢
+      intro x hx
+      suffices x in J -> x = 0 from this hx
+      have := @this x.1
+      simp only [LieIdeal.incl_coe, LieIdeal.toLieSubalgebra_toSubmodule,
+        LieSubmodule.mem_mk_iff', Submodule.mem_map, LieSubmodule.mem_toSubmodule, Subtype.exists,
+        LieSubmodule.mem_bot, ZeroMemClass.coe_eq_zero, forall_exists_index, and_imp, J'] at this
+      exact fun _ => this (↑x) x.property hx rfl
+    -- We need to show that `J = ⊥`.
+    -- Since `J` is an ideal of `L`, and `I` is an atom,
+    -- it suffices to show that `J < I`.
+    apply hI.2
+    rw [lt_iff_le_and_ne]
+    constructor
+    -- We know that `J ≤ I` since `J` is an ideal of `I`.
+    · rintro _ ⟨x, -, rfl⟩
+      exact x.2
+    -- So we need to show `J ≠ I` as ideals of `L`.
+    -- This follows from our assumption that `J ≠ ⊤` as ideals of `I`.
+    contrapose hJ
+    rw [eq_top_iff]
+    rintro ⟨x, hx⟩ -
+    rw [← hJ] at hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact hy
 
 中文:
 引理 isSimple_of_isAtom
@@ -422,7 +477,62 @@ lemma isSimple_of_isAtom
     let J' : LieIdeal R L :=
     { __ := J.toSubmodule.map I.incl.toLinearMap
       lie_mem := by
-  
+        rintro x _ ⟨y, hy, rfl⟩
+        -- We need to show that `⁅x, y⁆ ∈ J` for any `x ∈ L` and `y ∈ J`.
+        -- Since `L` is semisimple, `x` is contained
+        -- in the supremum of `I` and the atoms not equal to `I`.
+        have hx : x in I ⊔ sSup ({I' : LieIdeal R L | IsAtom I'} \ {I}) := by
+          nth_rewrite 1 [← sSup_singleton (a := I)]
+          rw [← sSup_union]; rw [Set.union_sdiff_self]; rw [Set.union_eq_self_of_subset_left]; rw [IsSemisimple.sSup_atoms_eq_top]
+          · apply LieSubmodule.mem_top
+          · simp only [Set.singleton_subset_iff, Set.mem_ofPred_eq, hI]
+        -- Hence we can write `x` as `a + b` with `a ∈ I`
+        -- and `b` in the supremum of the atoms not equal to `I`.
+        rw [LieSubmodule.mem_sup] at hx
+        obtain ⟨a, ha, b, hb, rfl⟩ := hx
+        -- Therefore it suffices to show that `⁅a, y⁆ ∈ J` and `⁅b, y⁆ ∈ J`.
+        simp only [Submodule.carrier_eq_coe, add_lie, SetLike.mem_coe]
+        apply add_mem
+        -- Now `⁅a, y⁆ ∈ J` since `a ∈ I`, `y ∈ J`, and `J` is an ideal of `I`.
+        · simp only [Submodule.mem_map, LieSubmodule.mem_toSubmodule, Subtype.exists]
+          erw [Submodule.coe_subtype]
+          simp only [exists_and_right, exists_eq_right, ha, lie_mem_left, exists_true_left]
+          exact lie_mem_right R I J ⟨a, ha⟩ y hy
+        -- Finally `⁅b, y⁆ = 0`, by the independence of the atoms.
+        · suffices ⁅b, y.val⁆ = 0 by erw [this]; simp only [zero_mem]
+          rw [← LieSubmodule.mem_bot (R := R) (L := L)]; rw [← (IsSemisimple.sSupIndep_isAtom hI).eq_bot]
+          exact ⟨lie_mem_right R L I b y y.2, lie_mem_left _ _ _ _ _ hb⟩ }
+    -- Now that we know that `J` is an ideal of `L`,
+    -- we start with the proof that `I` is a simple Lie algebra.
+    -- Assume that `J ≠ ⊤`.
+    rw [or_iff_not_imp_right]
+    intro hJ
+    suffices J' = ⊥ by
+      rw [eq_bot_iff] at this ⊢
+      intro x hx
+      suffices x in J -> x = 0 from this hx
+      have := @this x.1
+      simp only [LieIdeal.incl_coe, LieIdeal.toLieSubalgebra_toSubmodule,
+        LieSubmodule.mem_mk_iff', Submodule.mem_map, LieSubmodule.mem_toSubmodule, Subtype.exists,
+        LieSubmodule.mem_bot, ZeroMemClass.coe_eq_zero, forall_exists_index, and_imp, J'] at this
+      exact fun _ => this (↑x) x.property hx rfl
+    -- We need to show that `J = ⊥`.
+    -- Since `J` is an ideal of `L`, and `I` is an atom,
+    -- it suffices to show that `J < I`.
+    apply hI.2
+    rw [lt_iff_le_and_ne]
+    constructor
+    -- We know that `J ≤ I` since `J` is an ideal of `I`.
+    · rintro _ ⟨x, -, rfl⟩
+      exact x.2
+    -- So we need to show `J ≠ I` as ideals of `L`.
+    -- This follows from our assumption that `J ≠ ⊤` as ideals of `I`.
+    contrapose hJ
+    rw [eq_top_iff]
+    rintro ⟨x, hx⟩ -
+    rw [← hJ] at hx
+    rcases hx with ⟨y, hy, rfl⟩
+    exact hy
 
 Depends on / 依赖: IsSemisimple, IsSemisimple.non_abelian_of_isAtom, non_abelian_of_isAtom
 -/
@@ -517,7 +627,60 @@ lemma finitelyAtomistic
   · exact ⟨s, Finset.Subset.rfl, rfl⟩
   -- We assume that `I` is strictly smaller than the supremum of `s`.
   -- Hence there must exist an atom `J` that is not contained in `I`.
-  obtain ⟨J, hJs, hJI⟩ : ex
+  obtain ⟨J, hJs, hJI⟩ : exists J in s, ¬ J <= I := by
+    by_contra! H
+    exact hI.ne (le_antisymm hI.le (s.sup_le H))
+  classical
+  let s' := s.erase J
+  have hs' : s' ⊂ s := Finset.erase_ssubset hJs
+  have hs'S : ↑s' subseteq S := Set.Subset.trans (Finset.coe_subset.mpr hs'.subset) hs
+  -- If we show that `I` is contained in the supremum `K` of the complement of `J` in `s`,
+  -- then we are done by recursion.
+  set K := s'.sup id
+  suffices I <= K by
+    obtain ⟨t, hts', htI⟩ := finitelyAtomistic s' hs'S I this
+    exact ⟨t, hts'.trans hs'.subset, htI⟩
+  -- Since `I` is contained in the supremum of `J` with the supremum of `s'`,
+  -- any element `x` of `I` can be written as `y + z` for some `y ∈ J` and `z ∈ K`.
+  intro x hx
+  obtain ⟨y, hy, z, hz, rfl⟩ : exists y in id J, exists z in K, y + z = x := by
+    rw [← LieSubmodule.mem_sup]; rw [← Finset.sup_insert]; rw [Finset.insert_erase hJs]
+    exact hI.le hx
+  -- If we show that `y` is contained in the center of `J`,
+  -- then we find `x = z`, and hence `x` is contained in the supremum of `s'`.
+  -- Since `x` was arbitrary, we have shown that `I` is contained in the supremum of `s'`.
+  suffices ⟨y, hy⟩ in LieAlgebra.center R J by
+    have _inst := isSimple_of_isAtom J (hs hJs)
+    simp_all
+  -- To show that `y` is in the center of `J`,
+  -- we show that any `j ∈ J` brackets to `0` with `z` and with `x = y + z`.
+  -- By a simple computation, that implies `⁅j, y⁆ = 0`, for all `j`, as desired.
+  intro j
+  suffices ⁅(j : L), z⁆ = 0 ∧ ⁅(j : L), y + z⁆ = 0 by
+    rw [lie_add]; rw [this.1]; rw [add_zero] at this
+    ext
+    exact this.2
+  rw [← LieSubmodule.mem_bot (R := R) (L := L)]; rw [← LieSubmodule.mem_bot (R := R) (L := L)]
+  constructor
+  -- `j` brackets to `0` with `z`, since `⁅j, z⁆` is contained in `⁅J, K⁆ ≤ J ⊓ K`,
+  -- and `J ⊓ K = ⊥` by the independence of the atoms.
+  · apply (sSupIndep_isAtom.disjoint_sSup (hs hJs) hs'S (Finset.notMem_erase _ _)).le_bot
+    apply LieSubmodule.lie_le_inf
+    apply LieSubmodule.lie_mem_lie j.2
+    simpa only [K, Finset.sup_id_eq_sSup] using hz
+  -- By similar reasoning, `j` brackets to `0` with `x = y + z ∈ I`, if we show `J ⊓ I = ⊥`.
+  suffices J ⊓ I = ⊥ by
+    apply this.le
+    apply LieSubmodule.lie_le_inf
+    exact LieSubmodule.lie_mem_lie j.2 hx
+  -- Indeed `J ⊓ I = ⊥`, since `J` is an atom that is not contained in `I`.
+  apply ((hs hJs).le_iff.mp _).resolve_right
+  · contrapose hJI
+    rw [← hJI]
+    exact inf_le_right
+  exact inf_le_left
+termination_by s => s.card
+decreasing_by exact Finset.card_lt_card hs'
 
 中文:
 引理 finitelyAtomistic
@@ -529,7 +692,60 @@ lemma finitelyAtomistic
   · exact ⟨s, Finset.Subset.rfl, rfl⟩
   -- We assume that `I` is strictly smaller than the supremum of `s`.
   -- Hence there must exist an atom `J` that is not contained in `I`.
-  obtain ⟨J, hJs, hJI⟩ : ex
+  obtain ⟨J, hJs, hJI⟩ : exists J in s, ¬ J <= I := by
+    by_contra! H
+    exact hI.ne (le_antisymm hI.le (s.sup_le H))
+  classical
+  let s' := s.erase J
+  have hs' : s' ⊂ s := Finset.erase_ssubset hJs
+  have hs'S : ↑s' subseteq S := Set.Subset.trans (Finset.coe_subset.mpr hs'.subset) hs
+  -- If we show that `I` is contained in the supremum `K` of the complement of `J` in `s`,
+  -- then we are done by recursion.
+  set K := s'.sup id
+  suffices I <= K by
+    obtain ⟨t, hts', htI⟩ := finitelyAtomistic s' hs'S I this
+    exact ⟨t, hts'.trans hs'.subset, htI⟩
+  -- Since `I` is contained in the supremum of `J` with the supremum of `s'`,
+  -- any element `x` of `I` can be written as `y + z` for some `y ∈ J` and `z ∈ K`.
+  intro x hx
+  obtain ⟨y, hy, z, hz, rfl⟩ : exists y in id J, exists z in K, y + z = x := by
+    rw [← LieSubmodule.mem_sup]; rw [← Finset.sup_insert]; rw [Finset.insert_erase hJs]
+    exact hI.le hx
+  -- If we show that `y` is contained in the center of `J`,
+  -- then we find `x = z`, and hence `x` is contained in the supremum of `s'`.
+  -- Since `x` was arbitrary, we have shown that `I` is contained in the supremum of `s'`.
+  suffices ⟨y, hy⟩ in LieAlgebra.center R J by
+    have _inst := isSimple_of_isAtom J (hs hJs)
+    simp_all
+  -- To show that `y` is in the center of `J`,
+  -- we show that any `j ∈ J` brackets to `0` with `z` and with `x = y + z`.
+  -- By a simple computation, that implies `⁅j, y⁆ = 0`, for all `j`, as desired.
+  intro j
+  suffices ⁅(j : L), z⁆ = 0 ∧ ⁅(j : L), y + z⁆ = 0 by
+    rw [lie_add]; rw [this.1]; rw [add_zero] at this
+    ext
+    exact this.2
+  rw [← LieSubmodule.mem_bot (R := R) (L := L)]; rw [← LieSubmodule.mem_bot (R := R) (L := L)]
+  constructor
+  -- `j` brackets to `0` with `z`, since `⁅j, z⁆` is contained in `⁅J, K⁆ ≤ J ⊓ K`,
+  -- and `J ⊓ K = ⊥` by the independence of the atoms.
+  · apply (sSupIndep_isAtom.disjoint_sSup (hs hJs) hs'S (Finset.notMem_erase _ _)).le_bot
+    apply LieSubmodule.lie_le_inf
+    apply LieSubmodule.lie_mem_lie j.2
+    simpa only [K, Finset.sup_id_eq_sSup] using hz
+  -- By similar reasoning, `j` brackets to `0` with `x = y + z ∈ I`, if we show `J ⊓ I = ⊥`.
+  suffices J ⊓ I = ⊥ by
+    apply this.le
+    apply LieSubmodule.lie_le_inf
+    exact LieSubmodule.lie_mem_lie j.2 hx
+  -- Indeed `J ⊓ I = ⊥`, since `J` is an atom that is not contained in `I`.
+  apply ((hs hJs).le_iff.mp _).resolve_right
+  · contrapose hJI
+    rw [← hJI]
+    exact inf_le_right
+  exact inf_le_left
+termination_by s => s.card
+decreasing_by exact Finset.card_lt_card hs'
 
 Depends on / 依赖: Finset, Finset.Subset.rfl, IsAtom, LieIdeal, Subset, eq_or_lt, hI.eq_or_lt
 -/

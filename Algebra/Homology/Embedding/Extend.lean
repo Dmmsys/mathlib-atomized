@@ -206,7 +206,7 @@ lemma XOpIso_hom_d_op
       simp only [d_eq _ rfl rfl, op_comp, assoc, id_comp, comp_id]
       rfl
   | some _, none => by
-      simp only [d_none_eq_zero, d_none
+      simp only [d_none_eq_zero, d_none_eq_zero', comp_zero, zero_comp, op_zero]
 
 中文:
 引理 XOpIso_hom_d_op
@@ -219,7 +219,7 @@ lemma XOpIso_hom_d_op
       simp only [d_eq _ rfl rfl, op_comp, assoc, id_comp, comp_id]
       rfl
   | some _, none => by
-      simp only [d_none_eq_zero, d_none
+      simp only [d_none_eq_zero, d_none_eq_zero', comp_zero, zero_comp, op_zero]
 
 Depends on / 依赖: XOpIso, comp_id, comp_zero, d_eq, d_none_eq_zero, id_comp, op_comp, op_zero, zero_comp
 -/
@@ -316,7 +316,20 @@ definition extend
     · rw [extend.d_none_eq_zero K _ _ hi']
     · obtain hj' | ⟨j, hj⟩ := (e.r j').eq_none_or_eq_some
       · rw [extend.d_none_eq_zero' K _ _ hj']
-      · rw [e
+      · rw [extend.d_eq K hi hj, K.shape, zero_comp, comp_zero]
+        obtain rfl := e.f_eq_of_r_eq_some hi
+        obtain rfl := e.f_eq_of_r_eq_some hj
+        intro hij
+        exact h (e.rel hij)
+  d_comp_d' i' j' k' _ _ := by
+    obtain hi' | ⟨i, hi⟩ := (e.r i').eq_none_or_eq_some
+    · rw [extend.d_none_eq_zero K _ _ hi', zero_comp]
+    · obtain hj' | ⟨j, hj⟩ := (e.r j').eq_none_or_eq_some
+      · rw [extend.d_none_eq_zero K _ _ hj', comp_zero]
+      · obtain hk' | ⟨k, hk⟩ := (e.r k').eq_none_or_eq_some
+        · rw [extend.d_none_eq_zero' K _ _ hk', comp_zero]
+        · rw [extend.d_eq K hi hj, extend.d_eq K hj hk, assoc, assoc,
+            Iso.inv_hom_id_assoc, K.d_comp_d_assoc, zero_comp, comp_zero]
 
 中文:
 定义 extend
@@ -328,7 +341,20 @@ definition extend
     · rw [extend.d_none_eq_zero K _ _ hi']
     · obtain hj' | ⟨j, hj⟩ := (e.r j').eq_none_or_eq_some
       · rw [extend.d_none_eq_zero' K _ _ hj']
-      · rw [e
+      · rw [extend.d_eq K hi hj, K.shape, zero_comp, comp_zero]
+        obtain rfl := e.f_eq_of_r_eq_some hi
+        obtain rfl := e.f_eq_of_r_eq_some hj
+        intro hij
+        exact h (e.rel hij)
+  d_comp_d' i' j' k' _ _ := by
+    obtain hi' | ⟨i, hi⟩ := (e.r i').eq_none_or_eq_some
+    · rw [extend.d_none_eq_zero K _ _ hi', zero_comp]
+    · obtain hj' | ⟨j, hj⟩ := (e.r j').eq_none_or_eq_some
+      · rw [extend.d_none_eq_zero K _ _ hj', comp_zero]
+      · obtain hk' | ⟨k, hk⟩ := (e.r k').eq_none_or_eq_some
+        · rw [extend.d_none_eq_zero' K _ _ hk', comp_zero]
+        · rw [extend.d_eq K hi hj, extend.d_eq K hj hk, assoc, assoc,
+            Iso.inv_hom_id_assoc, K.d_comp_d_assoc, zero_comp, comp_zero]
 
 Depends on / 依赖: extend, extend.X
 -/
@@ -539,7 +565,14 @@ definition extendMap
     · obtain ⟨i, hi⟩ := hi
       by_cases hj : exists j, e.f j = j'
       · obtain ⟨j, hj⟩ := hj
-        rw [K.extend_d_eq e hi hj]; rw [L.extend_d_eq e hi hj]; rw [extend.mapX_some φ (e.r_eq_some hi)]; rw [extend.mapX_some
+        rw [K.extend_d_eq e hi hj]; rw [L.extend_d_eq e hi hj]; rw [extend.mapX_some φ (e.r_eq_some hi)]; rw [extend.mapX_some φ (e.r_eq_some hj)]
+        simp only [extendXIso, assoc, Iso.inv_hom_id_assoc, Hom.comm_assoc]
+      · have hj' := e.r_eq_none j' (fun j'' hj'' => hj ⟨j'', hj''⟩)
+        dsimp [extend]
+        rw [extend.d_none_eq_zero' _ _ _ hj']; rw [extend.d_none_eq_zero' _ _ _ hj']; rw [comp_zero]; rw [zero_comp]
+    · have hi' := e.r_eq_none i' (fun i'' hi'' => hi ⟨i'', hi''⟩)
+      dsimp [extend]
+      rw [extend.d_none_eq_zero _ _ _ hi']; rw [extend.d_none_eq_zero _ _ _ hi']; rw [comp_zero]; rw [zero_comp]
 
 中文:
 定义 extendMap
@@ -550,7 +583,14 @@ definition extendMap
     · obtain ⟨i, hi⟩ := hi
       by_cases hj : exists j, e.f j = j'
       · obtain ⟨j, hj⟩ := hj
-        rw [K.extend_d_eq e hi hj]; rw [L.extend_d_eq e hi hj]; rw [extend.mapX_some φ (e.r_eq_some hi)]; rw [extend.mapX_some
+        rw [K.extend_d_eq e hi hj]; rw [L.extend_d_eq e hi hj]; rw [extend.mapX_some φ (e.r_eq_some hi)]; rw [extend.mapX_some φ (e.r_eq_some hj)]
+        simp only [extendXIso, assoc, Iso.inv_hom_id_assoc, Hom.comm_assoc]
+      · have hj' := e.r_eq_none j' (fun j'' hj'' => hj ⟨j'', hj''⟩)
+        dsimp [extend]
+        rw [extend.d_none_eq_zero' _ _ _ hj']; rw [extend.d_none_eq_zero' _ _ _ hj']; rw [comp_zero]; rw [zero_comp]
+    · have hi' := e.r_eq_none i' (fun i'' hi'' => hi ⟨i'', hi''⟩)
+      dsimp [extend]
+      rw [extend.d_none_eq_zero _ _ _ hi']; rw [extend.d_none_eq_zero _ _ _ hi']; rw [comp_zero]; rw [zero_comp]
 
 Depends on / 依赖: extend, extend.mapX
 -/
@@ -865,7 +905,7 @@ lemma extend_single_d
     · obtain ⟨k, rfl⟩ := hk
       simp [extend_d_eq _ _ rfl rfl]
     · exact IsZero.eq_of_tgt (isZero_extend_X _ _ _ (by tauto)) _ _
-  · exact IsZero.eq_of_src (isZero_extend_X _ _ _ (by tauto)) 
+  · exact IsZero.eq_of_src (isZero_extend_X _ _ _ (by tauto)) _ _
 
 中文:
 引理 extend_single_d
@@ -877,7 +917,7 @@ lemma extend_single_d
     · obtain ⟨k, rfl⟩ := hk
       simp [extend_d_eq _ _ rfl rfl]
     · exact IsZero.eq_of_tgt (isZero_extend_X _ _ _ (by tauto)) _ _
-  · exact IsZero.eq_of_src (isZero_extend_X _ _ _ (by tauto)) 
+  · exact IsZero.eq_of_src (isZero_extend_X _ _ _ (by tauto)) _ _
 
 Depends on / 依赖: IsZero, IsZero.eq_of_src, IsZero.eq_of_tgt, eq_of_src, eq_of_tgt, extend_d_eq, isZero_extend_X
 -/
@@ -907,7 +947,15 @@ definition extendSingleIso
   hom_inv_id := by
     ext j'
     by_cases hj : exists j, e.f j = j'
-    · 
+    · obtain ⟨j, hj⟩ := hj
+      by_cases hij : j = i
+      · obtain rfl : i' = j' := by rw [← hj, hij, h]
+        simp
+      · exact ((isZero_single_obj_X _ _ _ _ hij).of_iso
+          (((single C c i).obj X).extendXIso e hj)).eq_of_src _ _
+    · exact IsZero.eq_of_src (isZero_extend_X _ _ _ (by tauto)) _ _
+
+@[reassoc]
 
 中文:
 定义 extendSingleIso
@@ -920,7 +968,15 @@ definition extendSingleIso
   hom_inv_id := by
     ext j'
     by_cases hj : exists j, e.f j = j'
-    · 
+    · obtain ⟨j, hj⟩ := hj
+      by_cases hij : j = i
+      · obtain rfl : i' = j' := by rw [← hj, hij, h]
+        simp
+      · exact ((isZero_single_obj_X _ _ _ _ hij).of_iso
+          (((single C c i).obj X).extendXIso e hj)).eq_of_src _ _
+    · exact IsZero.eq_of_src (isZero_extend_X _ _ _ (by tauto)) _ _
+
+@[reassoc]
 
 Depends on / 依赖: IsZero, IsZero.eq_of_src, eq_of_src, extendXIso, hom_inv_id, isZero, isZero_single_obj_X, mkHomFromSingle, mkHomToSingle, of_iso, single, singleObjXSelf
 -/
@@ -1127,7 +1183,16 @@ definition fullyFaithfulExtendFunctor
       comm' i j h := by
         have := φ.comm (e.f i) (e.f j)
         simp only [extendFunctor_obj, K.extend_d_eq e rfl rfl, L.extend_d_eq e rfl rfl] at this
-        simp [← cancel_mono (L.extendXIso e rfl).inv, Category.ass
+        simp [← cancel_mono (L.extendXIso e rfl).inv, Category.assoc, this] }
+  map_preimage {K L} φ := by
+    ext i'
+    by_cases hi' : exists i, e.f i = i'
+    · obtain ⟨i, rfl⟩ := hi'
+      simp [HomologicalComplex.extendMap_f _ _ rfl]
+    · exact (K.isZero_extend_X _ _ (by tauto)).eq_of_src _ _
+  preimage_map {K L} f := by
+    ext i
+    simp [HomologicalComplex.extendMap_f _ _ rfl]
 
 中文:
 定义 fullyFaithfulExtendFunctor
@@ -1136,7 +1201,16 @@ definition fullyFaithfulExtendFunctor
       comm' i j h := by
         have := φ.comm (e.f i) (e.f j)
         simp only [extendFunctor_obj, K.extend_d_eq e rfl rfl, L.extend_d_eq e rfl rfl] at this
-        simp [← cancel_mono (L.extendXIso e rfl).inv, Category.ass
+        simp [← cancel_mono (L.extendXIso e rfl).inv, Category.assoc, this] }
+  map_preimage {K L} φ := by
+    ext i'
+    by_cases hi' : exists i, e.f i = i'
+    · obtain ⟨i, rfl⟩ := hi'
+      simp [HomologicalComplex.extendMap_f _ _ rfl]
+    · exact (K.isZero_extend_X _ _ (by tauto)).eq_of_src _ _
+  preimage_map {K L} f := by
+    ext i
+    simp [HomologicalComplex.extendMap_f _ _ rfl]
 
 Depends on / 依赖: Category, Category.assoc, HomologicalComplex, HomologicalComplex.extendMap_f, K.extendXIso, K.extend_d_eq, K.isZero_extend_X, L.extendXIso, L.extend_d_eq, cancel_mono, eq_of_src, extendFunctor_obj, extendMap_f, extendXIso, extend_d_eq, isZero_extend_X, map_preimage, preimage_map
 -/

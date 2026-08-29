@@ -63,7 +63,44 @@ theorem mem_convexHull_erase
   replace gpos := exists_pos_of_sum_zero_of_exists_nonzero g gsum gpos
   clear h
   let s := {z in t | 0 < g z}
-  
+  obtain ⟨i₀, mem, w⟩ : exists i₀ in s, forall i in s, f i₀ / g i₀ <= f i / g i := by
+    apply s.exists_min_image fun z => f z / g z
+    obtain ⟨x, hx, hgx⟩ : exists x in t, 0 < g x := gpos
+    exact ⟨x, mem_filter.mpr ⟨hx, hgx⟩⟩
+  have hg : 0 < g i₀ := by
+    rw [mem_filter] at mem
+    exact mem.2
+  have hi₀ : i₀ in t := filter_subset _ _ mem
+  let k : E -> 𝕜 := fun z => f z - f i₀ / g i₀ * g z
+  have hk : k i₀ = 0 := by simp [k, ne_of_gt hg]
+  have ksum : ∑ e in t.erase i₀, k e = 1 := by
+    calc
+      ∑ e in t.erase i₀, k e = ∑ e in t, k e := by
+        conv_rhs => rw [← insert_erase hi₀, sum_insert (notMem_erase i₀ t), hk, zero_add]
+      _ = ∑ e in t, (f e - f i₀ / g i₀ * g e) := rfl
+      _ = 1 := by rw [sum_sub_distrib, fsum, ← mul_sum, gsum, mul_zero, sub_zero]
+  refine ⟨⟨i₀, hi₀⟩, k, ?_, by convert! ksum, ?_⟩
+  · simp only [k, and_imp, sub_nonneg, mem_erase, Ne]
+    intro e _ het
+    by_cases hes : e in s
+    · have hge : 0 < g e := by
+        rw [mem_filter] at hes
+        exact hes.2
+      rw [← le_div_iff₀ hge]
+      exact w _ hes
+    · calc
+        _ <= 0 := by
+          apply mul_nonpos_of_nonneg_of_nonpos
+          · apply div_nonneg (fpos i₀ (mem_of_subset (filter_subset _ t) mem)) (le_of_lt hg)
+          · simpa only [s, mem_filter, het, true_and, not_lt] using hes
+        _ <= f e := fpos e het
+  · rw [Subtype.coe_mk, centerMass_eq_of_sum_1 _ id ksum]
+    calc
+      ∑ e in t.erase i₀, k e • e = ∑ e in t, k e • e := sum_erase _ (by rw [hk, zero_smul])
+      _ = ∑ e in t, (f e - f i₀ / g i₀ * g e) • e := rfl
+      _ = t.centerMass f id := by
+        simp only [sub_smul, mul_smul, sum_sub_distrib, ← smul_sum, gcombo, smul_zero, sub_zero,
+          centerMass, fsum, inv_one, one_smul, id]
 
 中文:
 定理 mem_convexHull_erase
@@ -75,7 +112,44 @@ theorem mem_convexHull_erase
   replace gpos := exists_pos_of_sum_zero_of_exists_nonzero g gsum gpos
   clear h
   let s := {z in t | 0 < g z}
-  
+  obtain ⟨i₀, mem, w⟩ : exists i₀ in s, forall i in s, f i₀ / g i₀ <= f i / g i := by
+    apply s.exists_min_image fun z => f z / g z
+    obtain ⟨x, hx, hgx⟩ : exists x in t, 0 < g x := gpos
+    exact ⟨x, mem_filter.mpr ⟨hx, hgx⟩⟩
+  have hg : 0 < g i₀ := by
+    rw [mem_filter] at mem
+    exact mem.2
+  have hi₀ : i₀ in t := filter_subset _ _ mem
+  let k : E -> 𝕜 := fun z => f z - f i₀ / g i₀ * g z
+  have hk : k i₀ = 0 := by simp [k, ne_of_gt hg]
+  have ksum : ∑ e in t.erase i₀, k e = 1 := by
+    calc
+      ∑ e in t.erase i₀, k e = ∑ e in t, k e := by
+        conv_rhs => rw [← insert_erase hi₀, sum_insert (notMem_erase i₀ t), hk, zero_add]
+      _ = ∑ e in t, (f e - f i₀ / g i₀ * g e) := rfl
+      _ = 1 := by rw [sum_sub_distrib, fsum, ← mul_sum, gsum, mul_zero, sub_zero]
+  refine ⟨⟨i₀, hi₀⟩, k, ?_, by convert! ksum, ?_⟩
+  · simp only [k, and_imp, sub_nonneg, mem_erase, Ne]
+    intro e _ het
+    by_cases hes : e in s
+    · have hge : 0 < g e := by
+        rw [mem_filter] at hes
+        exact hes.2
+      rw [← le_div_iff₀ hge]
+      exact w _ hes
+    · calc
+        _ <= 0 := by
+          apply mul_nonpos_of_nonneg_of_nonpos
+          · apply div_nonneg (fpos i₀ (mem_of_subset (filter_subset _ t) mem)) (le_of_lt hg)
+          · simpa only [s, mem_filter, het, true_and, not_lt] using hes
+        _ <= f e := fpos e het
+  · rw [Subtype.coe_mk, centerMass_eq_of_sum_1 _ id ksum]
+    calc
+      ∑ e in t.erase i₀, k e • e = ∑ e in t, k e • e := sum_erase _ (by rw [hk, zero_smul])
+      _ = ∑ e in t, (f e - f i₀ / g i₀ * g e) • e := rfl
+      _ = t.centerMass f id := by
+        simp only [sub_smul, mul_smul, sum_sub_distrib, ← smul_sum, gcombo, smul_zero, sub_zero,
+          centerMass, fsum, inv_one, one_smul, id]
 
 Depends on / 依赖: Finset, Finset.convexHull_eq, convexHull_eq, exists_min_image, exists_nontrivial_relation_sum_zero_of_not_affine_ind, exists_pos_of_sum_zero_of_exists_nonzero, gcombo, mem_filter, mem_filter.mpr, mem_ofPred_eq, replace, s.exists_min_image
 -/
@@ -240,7 +314,14 @@ theorem affineIndependent_minCardFinsetOfMemConvexHull
     (Nat.succ_pred_eq_of_pos (Finset.card_pos.mpr (minCardFinsetOfMemConvexHull_nonempty hx))).symm
   classical
   by_contra h
-  obtain ⟨p, hp⟩ := mem_convexHull_erase h (mem_minCardFinsetOf
+  obtain ⟨p, hp⟩ := mem_convexHull_erase h (mem_minCardFinsetOfMemConvexHull hx)
+  have contra := minCardFinsetOfMemConvexHull_card_le_card hx (Set.Subset.trans
+    (Finset.erase_subset (p : E) (minCardFinsetOfMemConvexHull hx))
+    (minCardFinsetOfMemConvexHull_subseteq hx)) hp
+  rw [← not_lt] at contra
+  apply contra
+  rw [card_erase_of_mem p.2]; rw [hk]
+  exact lt_add_one _
 
 中文:
 定理 affineIndependent_minCardFinsetOfMemConvexHull
@@ -250,7 +331,14 @@ theorem affineIndependent_minCardFinsetOfMemConvexHull
     (Nat.succ_pred_eq_of_pos (Finset.card_pos.mpr (minCardFinsetOfMemConvexHull_nonempty hx))).symm
   classical
   by_contra h
-  obtain ⟨p, hp⟩ := mem_convexHull_erase h (mem_minCardFinsetOf
+  obtain ⟨p, hp⟩ := mem_convexHull_erase h (mem_minCardFinsetOfMemConvexHull hx)
+  have contra := minCardFinsetOfMemConvexHull_card_le_card hx (Set.Subset.trans
+    (Finset.erase_subset (p : E) (minCardFinsetOfMemConvexHull hx))
+    (minCardFinsetOfMemConvexHull_subseteq hx)) hp
+  rw [← not_lt] at contra
+  apply contra
+  rw [card_erase_of_mem p.2]; rw [hk]
+  exact lt_add_one _
 
 Depends on / 依赖: Finset, Finset.card_pos.mpr, Finset.erase_subset, Nat.succ_pred_eq_of_pos, Set.Subset.trans, Subset, card_pos, classical, contra, erase_subset, mem_convexHull_erase, mem_minCardFinsetOfMemConvexHull, minCardFinsetOfMemConvexHull, minCardFinsetOfMemConvexHull_card_le_card, minCardFinsetOfMemConvexHull_nonempty, minCardFinsetOfMemConvexHull_subseteq, succ_pred_eq_of_pos
 -/
@@ -287,7 +375,9 @@ theorem convexHull_eq_union
     exact ⟨Caratheodory.minCardFinsetOfMemConvexHull hx,
       Caratheodory.minCardFinsetOfMemConvexHull_subseteq hx,
       Caratheodory.affineIndependent_minCardFinsetOfMemConvexHull hx,
-      Caratheodory.mem
+      Caratheodory.mem_minCardFinsetOfMemConvexHull hx⟩
+  · iterate 3 convert! Set.iUnion_subset _; intro
+    exact convexHull_mono ‹_›
 
 中文:
 定理 convexHull_eq_union
@@ -299,7 +389,9 @@ theorem convexHull_eq_union
     exact ⟨Caratheodory.minCardFinsetOfMemConvexHull hx,
       Caratheodory.minCardFinsetOfMemConvexHull_subseteq hx,
       Caratheodory.affineIndependent_minCardFinsetOfMemConvexHull hx,
-      Caratheodory.mem
+      Caratheodory.mem_minCardFinsetOfMemConvexHull hx⟩
+  · iterate 3 convert! Set.iUnion_subset _; intro
+    exact convexHull_mono ‹_›
 
 Depends on / 依赖: Caratheodory, Caratheodory.affineIndependent_minCardFinsetOfMemConvexHull, Caratheodory.mem_minCardFinsetOfMemConvexHull, Caratheodory.minCardFinsetOfMemConvexHull, Caratheodory.minCardFinsetOfMemConvexHull_subseteq, Set.Subset.antisymm, Set.iUnion_subset, Set.mem_iUnion, Subset, affineIndependent_minCardFinsetOfMemConvexHull, antisymm, convert, convexHull_mono, exists_prop, iUnion_subset, iterate, mem_iUnion, mem_minCardFinsetOfMemConvexHull, minCardFinsetOfMemConvexHull, minCardFinsetOfMemConvexHull_subseteq
 -/
@@ -328,7 +420,21 @@ theorem eq_pos_convex_span_of_mem_convexHull
   simp only [t.convexHull_eq, Set.mem_ofPred_eq] at ht₃
   obtain ⟨w, hw₁, hw₂, hw₃⟩ := ht₃
   let t' := {i in t | w i != 0}
-  refine ⟨t', t'.fintypeCoeSort, ((↑) : t' -> E), w ∘ ((↑) 
+  refine ⟨t', t'.fintypeCoeSort, ((↑) : t' -> E), w ∘ ((↑) : t' -> E), ?_, ?_, ?_, ?_, ?_⟩
+  · rw [Subtype.range_coe_subtype]
+    exact Subset.trans (Finset.filter_subset _ t) ht₁
+  · exact ht₂.comp_embedding ⟨_, inclusion_injective (Finset.filter_subset (fun i => w i != 0) t)⟩
+  · exact fun i =>
+      (hw₁ _ (Finset.mem_filter.mp i.2).1).lt_of_ne (Finset.mem_filter.mp i.property).2.symm
+  · simp only [univ_eq_attach, Function.comp_apply]
+    rw [Finset.sum_attach]; rw [Finset.sum_filter_ne_zero]; rw [hw₂]
+  · change (∑ i in t'.attach, (fun e => w e • e) ↑i) = x
+    rw [Finset.sum_attach (f := fun e => w e • e)]; rw [Finset.sum_filter_of_ne]
+    · rw [t.centerMass_eq_of_sum_1 id hw₂] at hw₃
+      exact hw₃
+    · intro e _ hwe contra
+      apply hwe
+      rw [contra]; rw [zero_smul]
 
 中文:
 定理 eq_pos_convex_span_of_mem_convexHull
@@ -340,7 +446,21 @@ theorem eq_pos_convex_span_of_mem_convexHull
   simp only [t.convexHull_eq, Set.mem_ofPred_eq] at ht₃
   obtain ⟨w, hw₁, hw₂, hw₃⟩ := ht₃
   let t' := {i in t | w i != 0}
-  refine ⟨t', t'.fintypeCoeSort, ((↑) : t' -> E), w ∘ ((↑) 
+  refine ⟨t', t'.fintypeCoeSort, ((↑) : t' -> E), w ∘ ((↑) : t' -> E), ?_, ?_, ?_, ?_, ?_⟩
+  · rw [Subtype.range_coe_subtype]
+    exact Subset.trans (Finset.filter_subset _ t) ht₁
+  · exact ht₂.comp_embedding ⟨_, inclusion_injective (Finset.filter_subset (fun i => w i != 0) t)⟩
+  · exact fun i =>
+      (hw₁ _ (Finset.mem_filter.mp i.2).1).lt_of_ne (Finset.mem_filter.mp i.property).2.symm
+  · simp only [univ_eq_attach, Function.comp_apply]
+    rw [Finset.sum_attach]; rw [Finset.sum_filter_ne_zero]; rw [hw₂]
+  · change (∑ i in t'.attach, (fun e => w e • e) ↑i) = x
+    rw [Finset.sum_attach (f := fun e => w e • e)]; rw [Finset.sum_filter_of_ne]
+    · rw [t.centerMass_eq_of_sum_1 id hw₂] at hw₃
+      exact hw₃
+    · intro e _ hwe contra
+      apply hwe
+      rw [contra]; rw [zero_smul]
 
 Depends on / 依赖: Finset, Finset.filter_subset, Set.mem_iUnion, Set.mem_ofPred_eq, Subset, Subset.trans, Subtype, Subtype.range_coe_subtype, comp_embedding, convexHull_eq, convexHull_eq_union, exists_prop, filter_subset, fintypeCoeSort, inclusion_injective, mem_iUnion, mem_ofPred_eq, range_coe_subtype, t.convexHull_eq
 -/

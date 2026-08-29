@@ -116,7 +116,13 @@ theorem properSMul_iff_continuousSMul_ultrafilter_tendsto
     rcases h.2 h' with ⟨gx, hgx1, hgx2⟩
     refine ⟨gx.1, ?_, (continuous_fst.tendsto gx).mono_left hgx2⟩
     simp only [Prod.mk.injEq] at hgx1
-    rw [← hgx1.2
+    rw [← hgx1.2]; rw [hgx1.1]
+  · rw [properSMul_iff, isProperMap_iff_ultrafilter]
+    refine ⟨by fun_prop, fun 𝒰 (x₁, x₂) hxx => ?_⟩
+    rcases h 𝒰 x₁ x₂ hxx with ⟨g, hg1, hg2⟩
+    refine ⟨(g, x₂), by simp_rw [hg1], ?_⟩
+    rw [nhds_prod_eq]; rw [𝒰.le_prod]
+    exact ⟨hg2, (continuous_snd.tendsto _).comp hxx⟩
 
 中文:
 定理 properSMul_iff_continuousSMul_ultrafilter_tendsto
@@ -126,7 +132,13 @@ theorem properSMul_iff_continuousSMul_ultrafilter_tendsto
     rcases h.2 h' with ⟨gx, hgx1, hgx2⟩
     refine ⟨gx.1, ?_, (continuous_fst.tendsto gx).mono_left hgx2⟩
     simp only [Prod.mk.injEq] at hgx1
-    rw [← hgx1.2
+    rw [← hgx1.2]; rw [hgx1.1]
+  · rw [properSMul_iff, isProperMap_iff_ultrafilter]
+    refine ⟨by fun_prop, fun 𝒰 (x₁, x₂) hxx => ?_⟩
+    rcases h 𝒰 x₁ x₂ hxx with ⟨g, hg1, hg2⟩
+    refine ⟨(g, x₂), by simp_rw [hg1], ?_⟩
+    rw [nhds_prod_eq]; rw [𝒰.le_prod]
+    exact ⟨hg2, (continuous_snd.tendsto _).comp hxx⟩
 
 Depends on / 依赖: Prod.mk.injEq, continuous_fst, continuous_fst.tendsto, fun_prop, isProperMap_iff_ultrafilter, mono_left, nhds_prod_eq, properSMul_iff, simp_rw, tendsto
 -/
@@ -199,7 +211,12 @@ instance t2Space_quotient_mulAction_of_properSMul
   have : IsOpenQuotientMap (Prod.map π π) :=
     MulAction.isOpenQuotientMap_quotientMk.prodMap MulAction.isOpenQuotientMap_quotientMk
   rw [← this.isQuotientMap.isClosed_preimage]
-  conver
+  convert! ProperSMul.isProperMap_smul_pair.isClosedMap.isClosed_range
+  · ext ⟨x₁, x₂⟩
+    simp only [mem_preimage, map_apply, mem_diagonal_iff, mem_range, Prod.mk.injEq, Prod.exists,
+      exists_eq_right]
+    rw [Quotient.eq']; rw [MulAction.orbitRel_apply]; rw [MulAction.mem_orbit_iff]
+  all_goals infer_instance
 
 中文:
 实例 t2Space_quotient_mulAction_of_properSMul
@@ -211,7 +228,12 @@ instance t2Space_quotient_mulAction_of_properSMul
   have : IsOpenQuotientMap (Prod.map π π) :=
     MulAction.isOpenQuotientMap_quotientMk.prodMap MulAction.isOpenQuotientMap_quotientMk
   rw [← this.isQuotientMap.isClosed_preimage]
-  conver
+  convert! ProperSMul.isProperMap_smul_pair.isClosedMap.isClosed_range
+  · ext ⟨x₁, x₂⟩
+    simp only [mem_preimage, map_apply, mem_diagonal_iff, mem_range, Prod.mk.injEq, Prod.exists,
+      exists_eq_right]
+    rw [Quotient.eq']; rw [MulAction.orbitRel_apply]; rw [MulAction.mem_orbit_iff]
+  all_goals infer_instance
 
 Depends on / 依赖: IsOpenQuotientMap, MulAction, MulAction.isOpenQuotientMap_quotientMk, MulAction.isOpenQuotientMap_quotientMk.prodMap, MulAction.orbitRel, Prod.exists, Prod.map, Prod.mk.injEq, ProperSMul, ProperSMul.isProperMap_smul_pair.isClosedMap.isClosed_range, Quotient, Quotient.eq, Quotient.mk, convert, exists_eq_right, isClosedMap, isClosed_preimage, isClosed_range, isOpenQuotientMap_quotientMk, isProperMap_smul_pair
 -/
@@ -247,7 +269,13 @@ theorem t2Space_of_properSMul_of_t1Group
     have : range f = ({1} ×ˢ univ) := by simp [f, Set.singleton_prod]
     rw [this]
     exact isClosed_singleton.prod isClosed_univ
-  rw [t2_iff_isCl
+  rw [t2_iff_isClosed_diagonal]
+  let g := fun gx : G × X => (gx.1 • gx.2, gx.2)
+  have proper_g : IsProperMap g := (properSMul_iff G X).1 h_proper
+  have : g ∘ f = Function.diag := by ext x <;> simp [f, g]
+  have range_gf : range (g ∘ f) = diagonal X := by simp [this]
+  rw [← range_gf]
+  exact (proper_g.comp proper_f).isClosed_range
 
 中文:
 定理 t2Space_of_properSMul_of_t1Group
@@ -260,7 +288,13 @@ theorem t2Space_of_properSMul_of_t1Group
     have : range f = ({1} ×ˢ univ) := by simp [f, Set.singleton_prod]
     rw [this]
     exact isClosed_singleton.prod isClosed_univ
-  rw [t2_iff_isCl
+  rw [t2_iff_isClosed_diagonal]
+  let g := fun gx : G × X => (gx.1 • gx.2, gx.2)
+  have proper_g : IsProperMap g := (properSMul_iff G X).1 h_proper
+  have : g ∘ f = Function.diag := by ext x <;> simp [f, g]
+  have range_gf : range (g ∘ f) = diagonal X := by simp [this]
+  rw [← range_gf]
+  exact (proper_g.comp proper_f).isClosed_range
 
 Depends on / 依赖: Function, Function.diag, IsClosedEmbedding, IsClosedEmbedding.isProperMap, IsProperMap, Set.singleton_prod, diagon, h_proper, isClosed_singleton, isClosed_singleton.prod, isClosed_univ, isEmbedding_prodMkRight, isProperMap, properSMul_iff, proper_f, proper_g, range_gf, singleton_prod, t2_iff_isClosed_diagonal
 -/
@@ -474,7 +508,11 @@ lemma ProperSMul.isProperMap_smul_pair_set
   let α : G × t ≃ₜ (Φ ⁻¹' snd ⁻¹' t) :=
     have : univ ×ˢ t = Φ ⁻¹' snd ⁻¹' t := by ext; simp [Φ]
 .trans .symm.prodCongr (.refl t) Homeomorph.Set.univ G
-.trans (Homeomorp
+.trans (Homeomorph.setCongr this) ((Homeomorph.Set.prod _ t).symm)
+  let β : X × t ≃ₜ (snd ⁻¹' t) :=
+.trans .symm.prodCongr (.refl t) Homeomorph.Set.univ X
+.trans (Homeomorph.setCongr univ_prod) ((Homeomorph.Set.prod _ t).symm)
+.comp α.isProperMap exact β.symm.isProperMap.comp (Φ_proper.restrictPreimage (snd ⁻¹' t))
 
 中文:
 引理 真标量乘法.isProperMap_smul_pair_set
@@ -485,7 +523,11 @@ lemma ProperSMul.isProperMap_smul_pair_set
   let α : G × t ≃ₜ (Φ ⁻¹' snd ⁻¹' t) :=
     have : univ ×ˢ t = Φ ⁻¹' snd ⁻¹' t := by ext; simp [Φ]
 .trans .symm.prodCongr (.refl t) Homeomorph.Set.univ G
-.trans (Homeomorp
+.trans (Homeomorph.setCongr this) ((Homeomorph.Set.prod _ t).symm)
+  let β : X × t ≃ₜ (snd ⁻¹' t) :=
+.trans .symm.prodCongr (.refl t) Homeomorph.Set.univ X
+.trans (Homeomorph.setCongr univ_prod) ((Homeomorph.Set.prod _ t).symm)
+.comp α.isProperMap exact β.symm.isProperMap.comp (Φ_proper.restrictPreimage (snd ⁻¹' t))
 
 Depends on / 依赖: Homeomorph, Homeomorph.Set.prod, Homeomorph.Set.univ, Homeomorph.setCongr, IsProperMap, ProperSMul, ProperSMul.isProperMap_smul_pair, isProperMap_smul_pair, prodCongr, setCongr, symm.prodCongr, univ_prod
 -/
@@ -527,7 +569,10 @@ theorem IsClosed.smul_right_of_isCompact
   have : s • t = (fst ∘ Ψ) '' fst ⁻¹' s :=
     subset_antisymm
       (smul_subset_iff.mpr fun g hg x hx => mem_image_of_mem (fst ∘ Ψ) (x := ⟨g, ⟨x, hx⟩⟩) hg)
-      (im
+      (image_subset_iff.mpr fun ⟨g, ⟨x, hx⟩⟩ hg => smul_mem_smul hg hx)
+  rw [this]
+  have : CompactSpace t := isCompact_iff_compactSpace.mp ht
+  exact (isProperMap_fst_of_compactSpace.comp Ψ_proper).isClosedMap _ (hs.preimage continuous_fst)
 
 中文:
 定理 是闭集.smul_right_of_isCompact
@@ -538,7 +583,10 @@ theorem IsClosed.smul_right_of_isCompact
   have : s • t = (fst ∘ Ψ) '' fst ⁻¹' s :=
     subset_antisymm
       (smul_subset_iff.mpr fun g hg x hx => mem_image_of_mem (fst ∘ Ψ) (x := ⟨g, ⟨x, hx⟩⟩) hg)
-      (im
+      (image_subset_iff.mpr fun ⟨g, ⟨x, hx⟩⟩ hg => smul_mem_smul hg hx)
+  rw [this]
+  have : CompactSpace t := isCompact_iff_compactSpace.mp ht
+  exact (isProperMap_fst_of_compactSpace.comp Ψ_proper).isClosedMap _ (hs.preimage continuous_fst)
 
 Depends on / 依赖: CompactSpace, IsProperMap, ProperSMul, ProperSMul.isProperMap_smul_pair_set, continuous, hs.preimage, image_subset_iff, image_subset_iff.mpr, isClosedMap, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isProperMap_fst_of_compactSpace, isProperMap_fst_of_compactSpace.comp, isProperMap_smul_pair_set, mem_image_of_mem, preimage, smul_mem_smul, smul_subset_iff, smul_subset_iff.mpr, subset_antisymm
 -/
@@ -585,7 +633,11 @@ lemma ProperSMul.isCompact_setOfPred_inter_nonempty
   rw [← (MulAction.toPerm g).exists_congr_right]
   simp [and_comm]
 
-@[deprecated (sin
+@[deprecated (since := "2026-07-09")]
+alias ProperSMul.isCompact_setOf_inter_nonempty := ProperSMul.isCompact_setOfPred_inter_nonempty
+
+@[deprecated (since := "2026-07-09")]
+alias ProperVAdd.isCompact_setOf_inter_nonempty := ProperVAdd.isCompact_setOfPred_inter_nonempty
 
 中文:
 引理 真标量乘法.isCompact_setOfPred_inter_nonempty
@@ -598,7 +650,11 @@ lemma ProperSMul.isCompact_setOfPred_inter_nonempty
   rw [← (MulAction.toPerm g).exists_congr_right]
   simp [and_comm]
 
-@[deprecated (sin
+@[deprecated (since := "2026-07-09")]
+alias ProperSMul.isCompact_setOf_inter_nonempty := ProperSMul.isCompact_setOfPred_inter_nonempty
+
+@[deprecated (since := "2026-07-09")]
+alias ProperVAdd.isCompact_setOf_inter_nonempty := ProperVAdd.isCompact_setOfPred_inter_nonempty
 
 Depends on / 依赖: MulAction, MulAction.toPerm, ProperSMul, ProperSMul.isProperMap_smul_pair, and_comm, continuous_fst, convert, exists_congr_right, hV.prod, isCompact_preimage, isProperMap_smul_pair, toPerm
 -/
@@ -634,7 +690,7 @@ lemma MulAction.properSMul_of_proper_orbitMap
   have hfsurj : f.Surjective := Function.surjective_id.prodMap (surjective_smul G x)
   refine isProperMap_of_comp_of_surj (by fun_prop) (by fun_prop) ?_ hfsurj
   simpa [Function.comp_def, Prod.map_apply, mul_smul]
-    using! (
+    using! (hx.prodMap hx).comp (ProperSMul.isProperMap_smul_pair (G := G))
 
 中文:
 引理 乘法作用.properSMul_of_proper_orbitMap
@@ -644,7 +700,7 @@ lemma MulAction.properSMul_of_proper_orbitMap
   have hfsurj : f.Surjective := Function.surjective_id.prodMap (surjective_smul G x)
   refine isProperMap_of_comp_of_surj (by fun_prop) (by fun_prop) ?_ hfsurj
   simpa [Function.comp_def, Prod.map_apply, mul_smul]
-    using! (
+    using! (hx.prodMap hx).comp (ProperSMul.isProperMap_smul_pair (G := G))
 
 Depends on / 依赖: Function, Function.comp_def, Function.surjective_id.prodMap, Prod.map, Prod.map_apply, ProperSMul, ProperSMul.isProperMap_smul_pair, Surjective, comp_def, f.Surjective, fun_prop, hfsurj, hx.prodMap, isProperMap_of_comp_of_surj, isProperMap_smul_pair, map_apply, mul_smul, prodMap, surjective_id, surjective_smul
 -/

@@ -468,7 +468,8 @@ lemma jacobian_ofAlgEquiv
   rw [jacobian_eq_jacobiMatrix_det]; rw [jacobian_eq_jacobiMatrix_det]
   simp only [ofAlgEquiv_toPresentation, Presentation.ofAlgEquiv_toGenerators,
     jacobiMatrix_ofAlgEquiv, Generators.algebraMap_apply, Generators.ofAlgEquiv_val,
-    ← AlgHom.coe_coe e, 
+    ← AlgHom.coe_coe e, MvPolynomial.comp_aeval_apply]
+  simp [Function.comp_def]
 
 中文:
 引理 jacobian_ofAlgEquiv
@@ -479,7 +480,8 @@ lemma jacobian_ofAlgEquiv
   rw [jacobian_eq_jacobiMatrix_det]; rw [jacobian_eq_jacobiMatrix_det]
   simp only [ofAlgEquiv_toPresentation, Presentation.ofAlgEquiv_toGenerators,
     jacobiMatrix_ofAlgEquiv, Generators.algebraMap_apply, Generators.ofAlgEquiv_val,
-    ← AlgHom.coe_coe e, 
+    ← AlgHom.coe_coe e, MvPolynomial.comp_aeval_apply]
+  simp [Function.comp_def]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_coe, Function, Function.comp_def, Generators, Generators.algebraMap_apply, Generators.ofAlgEquiv_val, MvPolynomial, MvPolynomial.comp_aeval_apply, Presentation, Presentation.ofAlgEquiv_toGenerators, algebraMap_apply, classical, coe_coe, comp_aeval_apply, comp_def, jacobiMatrix_ofAlgEquiv, jacobian_eq_jacobiMatrix_det, nonempty_fintype, ofAlgEquiv_toGenerators
 -/
@@ -922,7 +924,17 @@ lemma jacobiMatrix_comp_₂₂_det
   congr
   ext i j : 1
   simp only [Matrix.toBlocks₂₂, AlgHom.mapMatrix_apply, Matrix.map_apply, Matrix.of_apply,
-    RingHom.mapMatrix_apply, Generators.algebraMap_apply, m
+    RingHom.mapMatrix_apply, Generators.algebraMap_apply, map_aeval, coe_eval₂Hom]
+  rw [jacobiMatrix_comp_inr_inr]; rw [← IsScalarTower.algebraMap_eq]
+  simp only [aeval]
+  generalize P.jacobiMatrix i j = p
+  induction p using MvPolynomial.induction_on with
+  | C a =>
+    simp only [algHom_C, algebraMap_eq, eval₂_C]
+  | add p q hp hq => simp [hp, hq]
+  | mul_X p i hp =>
+    simp only [map_mul, eval₂_mul, hp]
+    simp [Presentation.toGenerators_comp, toPresentation_comp]
 
 中文:
 引理 jacobiMatrix_comp_₂₂_det
@@ -932,7 +944,17 @@ lemma jacobiMatrix_comp_₂₂_det
   congr
   ext i j : 1
   simp only [Matrix.toBlocks₂₂, AlgHom.mapMatrix_apply, Matrix.map_apply, Matrix.of_apply,
-    RingHom.mapMatrix_apply, Generators.algebraMap_apply, m
+    RingHom.mapMatrix_apply, Generators.algebraMap_apply, map_aeval, coe_eval₂Hom]
+  rw [jacobiMatrix_comp_inr_inr]; rw [← IsScalarTower.algebraMap_eq]
+  simp only [aeval]
+  generalize P.jacobiMatrix i j = p
+  induction p using MvPolynomial.induction_on with
+  | C a =>
+    simp only [algHom_C, algebraMap_eq, eval₂_C]
+  | add p q hp hq => simp [hp, hq]
+  | mul_X p i hp =>
+    simp only [map_mul, eval₂_mul, hp]
+    simp [Presentation.toGenerators_comp, toPresentation_comp]
 -/
 private lemma jacobiMatrix_comp_₂₂_det :
     (aeval (Q.comp P).val) (Q.comp P).jacobiMatrix.toBlocks₂₂.det = algebraMap S T P.jacobian := by
@@ -972,7 +994,13 @@ lemma comp_jacobian_eq_jacobian_smul_jacobian
   rw [jacobian_eq_jacobiMatrix_det]; rw [← Matrix.fromBlocks_toBlocks ((Q.comp P).jacobiMatrix)]; rw [jacobiMatrix_comp_₁₂]
   convert_to
     (aeval (Q.comp P).val) (Q.comp P).jacobiMatrix.toBlocks₁₁.det *
-    (aeval (Q.comp P).val
+    (aeval (Q.comp P).val) (Q.comp P).jacobiMatrix.toBlocks₂₂.det = P.jacobian • Q.jacobian
+  · simp only [Generators.algebraMap_apply, ← map_mul]
+    congr
+    convert!
+      Matrix.det_fromBlocks_zero₁₂ (Q.comp P).jacobiMatrix.toBlocks₁₁
+        (Q.comp P).jacobiMatrix.toBlocks₂₁ (Q.comp P).jacobiMatrix.toBlocks₂₂
+  · rw [jacobiMatrix_comp_₁₁_det, jacobiMatrix_comp_₂₂_det, mul_comm, Algebra.smul_def]
 
 中文:
 引理 comp_jacobian_eq_jacobian_smul_jacobian
@@ -984,7 +1012,13 @@ lemma comp_jacobian_eq_jacobian_smul_jacobian
   rw [jacobian_eq_jacobiMatrix_det]; rw [← Matrix.fromBlocks_toBlocks ((Q.comp P).jacobiMatrix)]; rw [jacobiMatrix_comp_₁₂]
   convert_to
     (aeval (Q.comp P).val) (Q.comp P).jacobiMatrix.toBlocks₁₁.det *
-    (aeval (Q.comp P).val
+    (aeval (Q.comp P).val) (Q.comp P).jacobiMatrix.toBlocks₂₂.det = P.jacobian • Q.jacobian
+  · simp only [Generators.algebraMap_apply, ← map_mul]
+    congr
+    convert!
+      Matrix.det_fromBlocks_zero₁₂ (Q.comp P).jacobiMatrix.toBlocks₁₁
+        (Q.comp P).jacobiMatrix.toBlocks₂₁ (Q.comp P).jacobiMatrix.toBlocks₂₂
+  · rw [jacobiMatrix_comp_₁₁_det, jacobiMatrix_comp_₂₂_det, mul_comm, Algebra.smul_def]
 
 Depends on / 依赖: Generators, Generators.algebraMap_apply, Matrix, Matrix.det_fromBlocks_zero, Matrix.fromBlocks_toBlocks, P.jacobian, Q.comp, Q.jacobian, algebraMap_apply, classical, convert, convert_to, fromBlocks_toBlocks, jacobiMa, jacobiMatrix, jacobiMatrix.toBlocks, jacobian, jacobian_eq_jacobiMatrix_det, map_mul, nonempty_fintype
 -/
@@ -1084,7 +1118,10 @@ lemma baseChange_jacobian
       (MvPolynomial.map (algebraMap R T)).mapMatrix P.jacobiMatrix := by
     ext i j : 1
     simp only [baseChange, jacobiMatrix_apply, Presentation.baseChange_relation,
-    
+      RingHom.mapMatrix_apply, Matrix.map_apply,
+      Presentation.baseChange_toGenerators, MvPolynomial.pderiv_map]
+  rw [h]; rw [← RingHom.map_det]; rw [Generators.algebraMap_apply]; rw [aeval_map_algebraMap]; rw [P.algebraMap_apply]
+  apply aeval_one_tmul
 
 中文:
 引理 baseChange_jacobian
@@ -1098,7 +1135,10 @@ lemma baseChange_jacobian
       (MvPolynomial.map (algebraMap R T)).mapMatrix P.jacobiMatrix := by
     ext i j : 1
     simp only [baseChange, jacobiMatrix_apply, Presentation.baseChange_relation,
-    
+      RingHom.mapMatrix_apply, Matrix.map_apply,
+      Presentation.baseChange_toGenerators, MvPolynomial.pderiv_map]
+  rw [h]; rw [← RingHom.map_det]; rw [Generators.algebraMap_apply]; rw [aeval_map_algebraMap]; rw [P.algebraMap_apply]
+  apply aeval_one_tmul
 
 Depends on / 依赖: Generators, Generators.algebraMap_apply, Matrix, Matrix.map_apply, MvPolynomial, MvPolynomial.map, MvPolynomial.pderiv_map, P.algebraMap_apply, P.jacobiMatrix, Presentation, Presentation.baseChange_relation, Presentation.baseChange_toGenerators, RingHom, RingHom.mapMatrix_apply, RingHom.map_det, aeval_map_algebraMap, algebraMap, algebraMap_apply, baseChange, baseChange_relation
 -/
@@ -1199,7 +1239,11 @@ lemma jacobian_reindex
   cases nonempty_fintype σ'
   simp_rw [PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det]
   simp only [reindex_toPresentation, Presentation.reindex_toGenerators, jacobiMatrix_reindex,
-    Matrix.reindex_apply, Equiv.symm_symm, Generators.algebraMap_appl
+    Matrix.reindex_apply, Equiv.symm_symm, Generators.algebraMap_apply, Generators.reindex_val]
+  simp_rw [← MvPolynomial.aeval_rename,
+    ← AlgHom.mapMatrix_apply, ← Matrix.det_submatrix_equiv_self f, AlgHom.map_det,
+    AlgHom.mapMatrix_apply, Matrix.map_map]
+  simp [← AlgHom.coe_comp, rename_comp_rename, rename_id]
 
 中文:
 引理 jacobian_reindex
@@ -1210,7 +1254,11 @@ lemma jacobian_reindex
   cases nonempty_fintype σ'
   simp_rw [PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det]
   simp only [reindex_toPresentation, Presentation.reindex_toGenerators, jacobiMatrix_reindex,
-    Matrix.reindex_apply, Equiv.symm_symm, Generators.algebraMap_appl
+    Matrix.reindex_apply, Equiv.symm_symm, Generators.algebraMap_apply, Generators.reindex_val]
+  simp_rw [← MvPolynomial.aeval_rename,
+    ← AlgHom.mapMatrix_apply, ← Matrix.det_submatrix_equiv_self f, AlgHom.map_det,
+    AlgHom.mapMatrix_apply, Matrix.map_map]
+  simp [← AlgHom.coe_comp, rename_comp_rename, rename_id]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_comp, AlgHom.mapMatrix_apply, AlgHom.map_det, Equiv.symm_symm, Generators, Generators.algebraMap_apply, Generators.reindex_val, Matrix, Matrix.det_submatrix_equiv_self, Matrix.map_map, Matrix.reindex_apply, MvPolynomial, MvPolynomial.aeval_rename, PreSubmersivePresentation, PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det, Presentation, Presentation.reindex_toGenerators, aeval_rename, algebraMap_apply
 -/
@@ -1576,7 +1624,9 @@ definition aevalDifferentialEquiv
   have :
       IsUnit (LinearMap.toMatrix (Pi.basisFun S σ) (Pi.basisFun S σ) P.aevalDifferential).det := by
     convert! P.jacobian_isUnit
-    rw [LinearMap.toMatrix_eq_toMatrix']; rw [jacobian_eq_jacobiMatrix_det]; rw [aevalDifferential_toMatrix'_eq_mapMatri
+    rw [LinearMap.toMatrix_eq_toMatrix']; rw [jacobian_eq_jacobiMatrix_det]; rw [aevalDifferential_toMatrix'_eq_mapMatrix_jacobiMatrix]; rw [P.algebraMap_eq]
+    simp [RingHom.map_det]
+  LinearEquiv.ofIsUnitDet this
 
 中文:
 定义 aevalDifferentialEquiv
@@ -1585,7 +1635,9 @@ definition aevalDifferentialEquiv
   have :
       IsUnit (LinearMap.toMatrix (Pi.basisFun S σ) (Pi.basisFun S σ) P.aevalDifferential).det := by
     convert! P.jacobian_isUnit
-    rw [LinearMap.toMatrix_eq_toMatrix']; rw [jacobian_eq_jacobiMatrix_det]; rw [aevalDifferential_toMatrix'_eq_mapMatri
+    rw [LinearMap.toMatrix_eq_toMatrix']; rw [jacobian_eq_jacobiMatrix_det]; rw [aevalDifferential_toMatrix'_eq_mapMatrix_jacobiMatrix]; rw [P.algebraMap_eq]
+    simp [RingHom.map_det]
+  LinearEquiv.ofIsUnitDet this
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, IsUnit, LinearEquiv, LinearEquiv.ofIsUnitDet, LinearMap, LinearMap.toMatrix, LinearMap.toMatrix_eq_toMatrix, P.aevalDifferential, P.algebraMap_eq, P.jacobian_isUnit, Pi.basisFun, RingHom, RingHom.map_det, _eq_mapMatrix_jacobiMatrix, aevalDifferential, aevalDifferential_toMatrix, algebraMap_eq, basisFun, convert
 -/

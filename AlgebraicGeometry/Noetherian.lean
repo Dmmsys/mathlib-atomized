@@ -93,7 +93,22 @@ theorem isNoetherianRing_of_away
   let suitableN s :=
     { n : Nat | forall m : Nat, n <= m -> (Ideal.map (floc s) (I n)) = (Ideal.map (floc s) (I m)) }
   let minN s := sInf (suitableN s)
-  have hSuit : forall s : S, minN s in
+  have hSuit : forall s : S, minN s in suitableN s := by
+    intro s
+    apply Nat.sInf_mem
+    let f : Nat ->o Ideal (Away (M := R) s) :=
+      ⟨fun n => Ideal.map (floc s) (I n), fun _ _ h => Ideal.map_mono (I.monotone h)⟩
+    exact monotone_stabilizes_iff_noetherian.mpr (hN s) f
+  let N := Finset.sup S minN
+  use N
+  have hN : forall s : S, minN s <= N := fun s => Finset.le_sup s.prop
+  intro n hn
+  rw [IsLocalization.ideal_eq_iInf_under_map_away hS (I N)]; rw [IsLocalization.ideal_eq_iInf_under_map_away hS (I n)]; rw [iInf_subtype']; rw [iInf_subtype']
+  apply iInf_congr
+  intro s
+  congr 1
+  rw [← hSuit s N (hN s)]
+exact hSuit s n Nat.le_trans (hN s) hn
 
 中文:
 定理 isNoetherianRing_of_away
@@ -105,7 +120,22 @@ theorem isNoetherianRing_of_away
   let suitableN s :=
     { n : Nat | forall m : Nat, n <= m -> (Ideal.map (floc s) (I n)) = (Ideal.map (floc s) (I m)) }
   let minN s := sInf (suitableN s)
-  have hSuit : forall s : S, minN s in
+  have hSuit : forall s : S, minN s in suitableN s := by
+    intro s
+    apply Nat.sInf_mem
+    let f : Nat ->o Ideal (Away (M := R) s) :=
+      ⟨fun n => Ideal.map (floc s) (I n), fun _ _ h => Ideal.map_mono (I.monotone h)⟩
+    exact monotone_stabilizes_iff_noetherian.mpr (hN s) f
+  let N := Finset.sup S minN
+  use N
+  have hN : forall s : S, minN s <= N := fun s => Finset.le_sup s.prop
+  intro n hn
+  rw [IsLocalization.ideal_eq_iInf_under_map_away hS (I N)]; rw [IsLocalization.ideal_eq_iInf_under_map_away hS (I n)]; rw [iInf_subtype']; rw [iInf_subtype']
+  apply iInf_congr
+  intro s
+  congr 1
+  rw [← hSuit s N (hN s)]
+exact hSuit s n Nat.le_trans (hN s) hn
 
 Depends on / 依赖: I.monotone, Ideal.map, Ideal.map_mono, Nat.sInf_mem, algebraMap, map_mono, monotone, monotone_stabilizes_iff_noetherian, monotone_stabilizes_iff_noetherian.mp, monotone_stabilizes_iff_noetherian.mpr, sInf_mem, suitableN
 -/
@@ -151,7 +181,12 @@ theorem isLocallyNoetherian_of_affine_cover
     exact IsLocalization.isNoetherianRing (.powers f) Γ(X, X.basicOpen f) hN
   | openCover U s _ hN =>
     apply isNoetherianRing_of_away s ‹_›
-    intro
+    intro ⟨f, hf⟩
+    have : IsNoetherianRing Γ(X, X.basicOpen f) := hN ⟨f, hf⟩
+    have := U.prop.isLocalization_basicOpen f
+    have hEq := IsLocalization.algEquiv (.powers f) (Localization.Away f) Γ(X, X.basicOpen f)
+    exact isNoetherianRing_of_ringEquiv Γ(X, X.basicOpen f) hEq.symm.toRingEquiv
+  | hU => exact hS' _
 
 中文:
 定理 isLocallyNoetherian_of_affine_cover
@@ -164,7 +199,12 @@ theorem isLocallyNoetherian_of_affine_cover
     exact IsLocalization.isNoetherianRing (.powers f) Γ(X, X.basicOpen f) hN
   | openCover U s _ hN =>
     apply isNoetherianRing_of_away s ‹_›
-    intro
+    intro ⟨f, hf⟩
+    have : IsNoetherianRing Γ(X, X.basicOpen f) := hN ⟨f, hf⟩
+    have := U.prop.isLocalization_basicOpen f
+    have hEq := IsLocalization.algEquiv (.powers f) (Localization.Away f) Γ(X, X.basicOpen f)
+    exact isNoetherianRing_of_ringEquiv Γ(X, X.basicOpen f) hEq.symm.toRingEquiv
+  | hU => exact hS' _
 
 Depends on / 依赖: IsLocalization, IsLocalization.algEquiv, IsLocalization.isNoetherianRing, IsNoetherianRing, Localization, Localization.Away, U.prop.isLocalization_basicOpen, X.basicOpen, algEquiv, basicOpen, isLocalization_basicOpen, isNoetherianRing, isNoetherianRing_of, isNoetherianRing_of_away, of_affine_open_cover, openCover, powers
 -/
@@ -222,7 +262,14 @@ theorem isLocallyNoetherian_iff_of_affine_openCover
     apply isNoetherianRing_of_ringEquiv (R := Γ(X, U))
     apply CategoryTheory.Iso.commRingCatIsoToRingEquiv
     exact (IsOpenImmersion.ΓIsoTop (𝒰.f i)).symm
- 
+  · intro hCNoeth
+    let fS i : X.affineOpens := ⟨Scheme.Hom.opensRange (𝒰.f i), isAffineOpen_opensRange _⟩
+    apply isLocallyNoetherian_of_affine_cover (S := fS)
+    · rw [← Scheme.OpenCover.iSup_opensRange 𝒰]
+    intro i
+    apply isNoetherianRing_of_ringEquiv (R := Γ(𝒰.X i, ⊤))
+    apply CategoryTheory.Iso.commRingCatIsoToRingEquiv
+    exact IsOpenImmersion.ΓIsoTop (𝒰.f i)
 
 中文:
 定理 isLocallyNoetherian_iff_of_affine_openCover
@@ -235,7 +282,14 @@ theorem isLocallyNoetherian_iff_of_affine_openCover
     apply isNoetherianRing_of_ringEquiv (R := Γ(X, U))
     apply CategoryTheory.Iso.commRingCatIsoToRingEquiv
     exact (IsOpenImmersion.ΓIsoTop (𝒰.f i)).symm
- 
+  · intro hCNoeth
+    let fS i : X.affineOpens := ⟨Scheme.Hom.opensRange (𝒰.f i), isAffineOpen_opensRange _⟩
+    apply isLocallyNoetherian_of_affine_cover (S := fS)
+    · rw [← Scheme.OpenCover.iSup_opensRange 𝒰]
+    intro i
+    apply isNoetherianRing_of_ringEquiv (R := Γ(𝒰.X i, ⊤))
+    apply CategoryTheory.Iso.commRingCatIsoToRingEquiv
+    exact IsOpenImmersion.ΓIsoTop (𝒰.f i)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Iso.commRingCatIsoToRingEquiv, IsOpenImmersion, OpenCover, Scheme, Scheme.Hom.opensRange, Scheme.OpenCover.iSup_opensRange, X.affineOpens, affineOpens, commRingCatIsoToRingEquiv, component_noetherian, h.component_noetherian, hCNoeth, iSup_opensRange, isAffineOpen_opensRange, isLocallyNoetherian_of_affine_cover, isNoetherian, isNoetherianRing_of_ringEquiv, objEquiv, opensRange
 -/
@@ -304,7 +358,7 @@ theorem isLocallyNoetherian_iff_openCover
     intro h i
     exact @isNoetherianRing_of_ringEquiv _ _ _ _
       (IsOpenImmersion.ΓIsoTop (PreZeroHypercover.f _ i.2)).symm.commRingCatIsoToRingEquiv
-      (IsLocally
+      (IsLocallyNoetherian.component_noetherian ⟨_, isAffineOpen_opensRange _⟩)
 
 中文:
 定理 isLocallyNoetherian_iff_openCover
@@ -315,7 +369,7 @@ theorem isLocallyNoetherian_iff_openCover
     intro h i
     exact @isNoetherianRing_of_ringEquiv _ _ _ _
       (IsOpenImmersion.ΓIsoTop (PreZeroHypercover.f _ i.2)).symm.commRingCatIsoToRingEquiv
-      (IsLocally
+      (IsLocallyNoetherian.component_noetherian ⟨_, isAffineOpen_opensRange _⟩)
 
 Depends on / 依赖: IsLocallyNoetherian, IsLocallyNoetherian.component_noetherian, IsOpenImmersion, PreZeroHypercover, PreZeroHypercover.f, affineRefinement, affineRefinement.openCover, commRingCatIsoToRingEquiv, component_noetherian, isAffineOpen_opensRange, isLocallyNoetherian_iff_of_affine_openCover, isNoetherianRing_of_ringEquiv, openCover, symm.commRingCatIsoToRingEquiv
 -/
@@ -456,7 +510,15 @@ theorem LocallyOfFiniteType.isLocallyNoetherian
   wlog hY : exists R, Y = Spec R
   · exact (isLocallyNoetherian_iff_openCover (Y.affineCover.pullback₁ f)).mpr fun i =>
       this (Limits.pullback.snd f (Y.affineCover.f i)) ⟨_, rfl⟩
-  wlog hX : exist
+  wlog hX : exists S, X = Spec S
+  · exact (isLocallyNoetherian_iff_openCover X.affineCover).mpr
+      fun i => this (X.affineCover.f i ≫ f) hY ⟨_, rfl⟩
+  obtain ⟨R, rfl⟩ := hY
+  obtain ⟨S, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  have : φ.hom.FiniteType := HasRingHomProperty.Spec_iff.mp ‹_›
+  algebraize [φ.hom]
+  simp_all [Algebra.FiniteType.isNoetherianRing R]
 
 中文:
 定理 局部有限型.isLocallyNoetherian
@@ -465,7 +527,15 @@ theorem LocallyOfFiniteType.isLocallyNoetherian
   wlog hY : exists R, Y = Spec R
   · exact (isLocallyNoetherian_iff_openCover (Y.affineCover.pullback₁ f)).mpr fun i =>
       this (Limits.pullback.snd f (Y.affineCover.f i)) ⟨_, rfl⟩
-  wlog hX : exist
+  wlog hX : exists S, X = Spec S
+  · exact (isLocallyNoetherian_iff_openCover X.affineCover).mpr
+      fun i => this (X.affineCover.f i ≫ f) hY ⟨_, rfl⟩
+  obtain ⟨R, rfl⟩ := hY
+  obtain ⟨S, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  have : φ.hom.FiniteType := HasRingHomProperty.Spec_iff.mp ‹_›
+  algebraize [φ.hom]
+  simp_all [Algebra.FiniteType.isNoetherianRing R]
 
 Depends on / 依赖: IsLocallyNoetherian, Limits, Limits.pullback.snd, Spec.map_surjective, X.affineCover, X.affineCover.f, Y.affineCover.f, Y.affineCover.pullback, affineCover, confusing, hypotheses, instance, isLocallyNoetherian_iff_openCover, map_surjective, pullback, synthesizer
 -/
@@ -556,7 +626,13 @@ theorem isNoetherian_iff_of_finite_iSup_eq_top
     · exact isLocallyNoetherian_of_affine_cover hS h
     · constructor
       rw [← Opens.coe_top]; rw [← hS]; rw [Opens.iSup_mk]
-      ap
+      apply isCompact_iUnion
+      intro i
+      apply isCompact_iff_isCompact_univ.mpr
+      convert! CompactSpace.isCompact_univ
+      have : NoetherianSpace (S i) := by
+        apply noetherianSpace_of_isAffineOpen (S i).1 (S i).2
+      apply NoetherianSpace.compactSpace (S i)
 
 中文:
 定理 isNoetherian_iff_of_finite_iSup_eq_top
@@ -571,7 +647,13 @@ theorem isNoetherian_iff_of_finite_iSup_eq_top
     · exact isLocallyNoetherian_of_affine_cover hS h
     · constructor
       rw [← Opens.coe_top]; rw [← hS]; rw [Opens.iSup_mk]
-      ap
+      apply isCompact_iUnion
+      intro i
+      apply isCompact_iff_isCompact_univ.mpr
+      convert! CompactSpace.isCompact_univ
+      have : NoetherianSpace (S i) := by
+        apply noetherianSpace_of_isAffineOpen (S i).1 (S i).2
+      apply NoetherianSpace.compactSpace (S i)
 
 Depends on / 依赖: CompactSpace, CompactSpace.isCompact_univ, IsNoetherian, IsNoetherian.mk, NoetherianSpace, NoetherianSpace.compactSpace, Opens.coe_top, Opens.iSup_mk, coe_top, compactSpace, convert, h.toIsLocallyNoetherian, iSup_mk, isCompact_iUnion, isCompact_iff_isCompact_univ, isCompact_iff_isCompact_univ.mpr, isCompact_univ, isLocallyNoetherian_iff_of_iSup_eq_top, isLocallyNoetherian_of_affine_cover, noetherianSpace_of_isAffineOpen
 -/
@@ -680,7 +762,8 @@ instance [IsLocallyNoetherian
   obtain ⟨U, hU, hU2, hU3⟩ := exists_isAffineOpen_mem_and_subset (U := ⊤) (x := x) (by simp)
   have := AlgebraicGeometry.IsAffineOpen.isLocalization_stalk hU ⟨x, hU2⟩
   exact @IsLocalization.isNoetherianRing _ _ (hU.primeIdealOf ⟨x, hU2⟩).asIdeal.primeCompl
-        (X.presheaf.stalk x) _ (X.presh
+        (X.presheaf.stalk x) _ (X.presheaf.algebra_section_stalk ⟨x, hU2⟩)
+        this (IsLocallyNoetherian.component_noetherian ⟨U, hU⟩)
 
 中文:
 实例 [是LocallyNoetherian
@@ -689,7 +772,8 @@ instance [IsLocallyNoetherian
   obtain ⟨U, hU, hU2, hU3⟩ := exists_isAffineOpen_mem_and_subset (U := ⊤) (x := x) (by simp)
   have := AlgebraicGeometry.IsAffineOpen.isLocalization_stalk hU ⟨x, hU2⟩
   exact @IsLocalization.isNoetherianRing _ _ (hU.primeIdealOf ⟨x, hU2⟩).asIdeal.primeCompl
-        (X.presheaf.stalk x) _ (X.presh
+        (X.presheaf.stalk x) _ (X.presheaf.algebra_section_stalk ⟨x, hU2⟩)
+        this (IsLocallyNoetherian.component_noetherian ⟨U, hU⟩)
 
 Depends on / 依赖: AlgebraicGeometry, AlgebraicGeometry.IsAffineOpen.isLocalization_stalk, IsAffineOpen, IsLocalization, IsLocalization.isNoetherianRing, IsLocallyNoetherian, IsLocallyNoetherian.component_noetherian, X.presheaf.algebra_section_stalk, X.presheaf.stalk, algebra_section_stalk, asIdeal, asIdeal.primeCompl, component_noetherian, exists_isAffineOpen_mem_and_subset, hU.primeIdealOf, isLocalization_stalk, isNoetherianRing, presheaf, primeCompl, primeIdealOf
 -/

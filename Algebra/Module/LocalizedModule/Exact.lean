@@ -44,7 +44,14 @@ lemma LocalizedModule.map_exact
         rw [map_LocalizedModules]; rw [← zero_mk 1]; rw [mk_eq]; rw [one_smul]; rw [smul_zero] at hy
         obtain ⟨a, aS, ha⟩ := Subtype.exists.1 hy
         rw [smul_zero]; rw [mk_smul]; rw [← map_smul]; rw [ex (a • m)] at ha
-        rca
+        rcases ha with ⟨x, hx⟩
+        use mk x (⟨a, aS⟩ * s)
+        rw [map_LocalizedModules]; rw [hx]; rw [← mk_cancel_common_left ⟨a]; rw [aS⟩ s m]; rw [mk_smul])
+      y)
+    fun ⟨x, hx⟩ => by
+      revert hx
+      refine induction_on (fun m s hx => ?_) x
+      rw [← hx]; rw [map_LocalizedModules]; rw [map_LocalizedModules]; rw [(ex (g m)).2 ⟨m]; rw [rfl⟩]; rw [zero_mk]
 
 中文:
 引理 LocalizedModule.map_exact
@@ -55,7 +62,14 @@ lemma LocalizedModule.map_exact
         rw [map_LocalizedModules]; rw [← zero_mk 1]; rw [mk_eq]; rw [one_smul]; rw [smul_zero] at hy
         obtain ⟨a, aS, ha⟩ := Subtype.exists.1 hy
         rw [smul_zero]; rw [mk_smul]; rw [← map_smul]; rw [ex (a • m)] at ha
-        rca
+        rcases ha with ⟨x, hx⟩
+        use mk x (⟨a, aS⟩ * s)
+        rw [map_LocalizedModules]; rw [hx]; rw [← mk_cancel_common_left ⟨a]; rw [aS⟩ s m]; rw [mk_smul])
+      y)
+    fun ⟨x, hx⟩ => by
+      revert hx
+      refine induction_on (fun m s hx => ?_) x
+      rw [← hx]; rw [map_LocalizedModules]; rw [map_LocalizedModules]; rw [(ex (g m)).2 ⟨m]; rw [rfl⟩]; rw [zero_mk]
 
 Depends on / 依赖: Iff.intro, Subtype, Subtype.exists, induction_on, map_LocalizedMo, map_LocalizedModules, map_smul, mk_cancel_common_left, mk_eq, mk_smul, one_smul, revert, smul_zero, zero_mk
 -/

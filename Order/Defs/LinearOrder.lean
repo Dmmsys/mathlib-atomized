@@ -1132,7 +1132,8 @@ instance :
     simp only [← Ordering.ne_gt_iff_isLE, compare_le_iff_le] at *
     exact le_trans h₁ h₂
   compare_eq_iff_beq := by simp [compare_eq_iff_eq]
-  eq_lt_iff
+  eq_lt_iff_lt := by simp [compare_lt_iff_lt]
+  isLE_iff_le := by simp [← Ordering.ne_gt_iff_isLE, compare_le_iff_le]
 
 中文:
 实例 :
@@ -1144,7 +1145,8 @@ instance :
     simp only [← Ordering.ne_gt_iff_isLE, compare_le_iff_le] at *
     exact le_trans h₁ h₂
   compare_eq_iff_beq := by simp [compare_eq_iff_eq]
-  eq_lt_iff
+  eq_lt_iff_lt := by simp [compare_lt_iff_lt]
+  isLE_iff_le := by simp [← Ordering.ne_gt_iff_isLE, compare_le_iff_le]
 
 Depends on / 依赖: Finset, Finset.coe_image, Finset.coe_univ, Finset.univ.image, FreeAlgebra, FreeAlgebra.adjoin_range_, Set.image_univ, classical, coe_image, coe_univ, image_univ, nonempty_fintype
 -/

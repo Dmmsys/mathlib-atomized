@@ -307,7 +307,12 @@ theorem ContinuousMul.induced
 
 @[deprecated (since := "2026-02-20")] alias continuous_add_left := continuous_const_add
 @[deprecated (since := "2026-02-20")] alias continuous_add_right := continuous_add_const
-@[t
+@[to_additive existing, deprecated (since := "2026-02-20")]
+alias continuous_mul_left := continuous_const_mul
+@[to_additive existing, deprecated (since := "2026-02-20")]
+alias continuous_mul_right := continuous_mul_const
+
+@[to_additive]
 
 中文:
 定理 连续乘法.induced
@@ -320,7 +325,12 @@ theorem ContinuousMul.induced
 
 @[deprecated (since := "2026-02-20")] alias continuous_add_left := continuous_const_add
 @[deprecated (since := "2026-02-20")] alias continuous_add_right := continuous_add_const
-@[t
+@[to_additive existing, deprecated (since := "2026-02-20")]
+alias continuous_mul_left := continuous_const_mul
+@[to_additive existing, deprecated (since := "2026-02-20")]
+alias continuous_mul_right := continuous_mul_const
+
+@[to_additive]
 
 Depends on / 依赖: Function, Function.comp_def, comp_def, continuous_induced_rng, fun_prop, induced, map_mul
 -/
@@ -865,7 +875,22 @@ theorem ContinuousMul.of_nhds_one
         ((fun x => x₀ * x) ∘ fun x => x * y₀) ∘ uncurry (· * ·) := by
       ext p
       simp [uncurry, mul_assoc]
-    have key₂ : ((fun x => x₀ * x) ∘ fun x => y₀ * x) = fun x => x₀
+    have key₂ : ((fun x => x₀ * x) ∘ fun x => y₀ * x) = fun x => x₀ * y₀ * x := by
+      ext x
+      simp [mul_assoc]
+    calc
+      map (uncurry (· * ·)) (𝓝 (x₀, y₀)) = map (uncurry (· * ·)) (𝓝 x₀ ×ˢ 𝓝 y₀) := by
+        rw [nhds_prod_eq]
+      _ = map (fun p : M × M => x₀ * p.1 * (p.2 * y₀)) (𝓝 1 ×ˢ 𝓝 1) := by
+        unfold uncurry
+        rw [hleft x₀]; rw [hright y₀]; rw [prod_map_map_eq]; rw [Filter.map_map]; rw [Function.comp_def]
+      _ = map ((fun x => x₀ * x) ∘ fun x => x * y₀) (map (uncurry (· * ·)) (𝓝 1 ×ˢ 𝓝 1)) := by
+        rw [key]; rw [← Filter.map_map]
+      _ <= map ((fun x : M => x₀ * x) ∘ fun x => x * y₀) (𝓝 1) := map_mono hmul
+      _ = 𝓝 (x₀ * y₀) := by
+        rw [← Filter.map_map]; rw [← hright]; rw [hleft y₀]; rw [Filter.map_map]; rw [key₂]; rw [← hleft]⟩
+
+@[to_additive]
 
 中文:
 定理 连续乘法.of_nhds_one
@@ -877,7 +902,22 @@ theorem ContinuousMul.of_nhds_one
         ((fun x => x₀ * x) ∘ fun x => x * y₀) ∘ uncurry (· * ·) := by
       ext p
       simp [uncurry, mul_assoc]
-    have key₂ : ((fun x => x₀ * x) ∘ fun x => y₀ * x) = fun x => x₀
+    have key₂ : ((fun x => x₀ * x) ∘ fun x => y₀ * x) = fun x => x₀ * y₀ * x := by
+      ext x
+      simp [mul_assoc]
+    calc
+      map (uncurry (· * ·)) (𝓝 (x₀, y₀)) = map (uncurry (· * ·)) (𝓝 x₀ ×ˢ 𝓝 y₀) := by
+        rw [nhds_prod_eq]
+      _ = map (fun p : M × M => x₀ * p.1 * (p.2 * y₀)) (𝓝 1 ×ˢ 𝓝 1) := by
+        unfold uncurry
+        rw [hleft x₀]; rw [hright y₀]; rw [prod_map_map_eq]; rw [Filter.map_map]; rw [Function.comp_def]
+      _ = map ((fun x => x₀ * x) ∘ fun x => x * y₀) (map (uncurry (· * ·)) (𝓝 1 ×ˢ 𝓝 1)) := by
+        rw [key]; rw [← Filter.map_map]
+      _ <= map ((fun x : M => x₀ * x) ∘ fun x => x * y₀) (𝓝 1) := map_mono hmul
+      _ = 𝓝 (x₀ * y₀) := by
+        rw [← Filter.map_map]; rw [← hright]; rw [hleft y₀]; rw [Filter.map_map]; rw [key₂]; rw [← hleft]⟩
+
+@[to_additive]
 
 Depends on / 依赖: continuous_iff_continuousAt, mul_assoc, nhds_prod_eq, uncurry
 -/
@@ -992,7 +1032,7 @@ theorem isClosed_setOfPred_map_mul
     isClosed_eq (continuous_apply _) (by fun_prop)
 
 @[deprecated (since := "2026-07-09")] alias isClosed_setOf_map_mul := isClosed_setOfPred_map_mul
-@[deprecated (since := "2026-07-09")] alias isClosed_setOf_map
+@[deprecated (since := "2026-07-09")] alias isClosed_setOf_map_add := isClosed_setOfPred_map_add
 
 中文:
 定理 isClosed_setOfPred_map_mul
@@ -1003,7 +1043,7 @@ theorem isClosed_setOfPred_map_mul
     isClosed_eq (continuous_apply _) (by fun_prop)
 
 @[deprecated (since := "2026-07-09")] alias isClosed_setOf_map_mul := isClosed_setOfPred_map_mul
-@[deprecated (since := "2026-07-09")] alias isClosed_setOf_map
+@[deprecated (since := "2026-07-09")] alias isClosed_setOf_map_add := isClosed_setOfPred_map_add
 
 Depends on / 依赖: continuous_apply, fun_prop, isClosed_eq, isClosed_iInter, ofPred_forall
 -/
@@ -1421,7 +1461,14 @@ theorem exists_mem_nhds_zero_mul_subset
     use V inter W, inter_mem V_in W_in
     rw [union_mul]
     exact
-      union_subset ((mul_subset_m
+      union_subset ((mul_subset_mul_left V.inter_subset_left).trans hV')
+        ((mul_subset_mul_left V.inter_subset_right).trans hW')
+  · intro x hx
+    have := tendsto_mul (show U in 𝓝 (x * 0) by simpa using hU)
+    rw [nhds_prod_eq]; rw [mem_map]; rw [mem_prod_iff] at this
+    rcases this with ⟨t, ht, s, hs, h⟩
+    rw [← image_subset_iff]; rw [image_mul_prod] at h
+    exact ⟨t, mem_nhdsWithin_of_mem_nhds ht, s, hs, h⟩
 
 中文:
 定理 存在_mem_nhds_zero_mul_subset
@@ -1434,7 +1481,14 @@ theorem exists_mem_nhds_zero_mul_subset
     use V inter W, inter_mem V_in W_in
     rw [union_mul]
     exact
-      union_subset ((mul_subset_m
+      union_subset ((mul_subset_mul_left V.inter_subset_left).trans hV')
+        ((mul_subset_mul_left V.inter_subset_right).trans hW')
+  · intro x hx
+    have := tendsto_mul (show U in 𝓝 (x * 0) by simpa using hU)
+    rw [nhds_prod_eq]; rw [mem_map]; rw [mem_prod_iff] at this
+    rcases this with ⟨t, ht, s, hs, h⟩
+    rw [← image_subset_iff]; rw [image_mul_prod] at h
+    exact ⟨t, mem_nhdsWithin_of_mem_nhds ht, s, hs, h⟩
 
 Depends on / 依赖: V.inter_subset_left, V.inter_subset_right, V_in, W_in, hK.induction_on, induction_on, inter_mem, inter_subset_left, inter_subset_right, mem_map, mem_prod_iff, mul_subset_mul_left, mul_subset_mul_right, nhds_prod_eq, tendsto_mul, union_mul, union_subset
 -/
@@ -1529,7 +1583,10 @@ theorem tendsto_mul_coprod_nhds_zero_inf_of_disjoint_cocompact
     _ <= 𝓝 0 ×ˢ map Prod.snd l ⊔ map Prod.fst l ×ˢ 𝓝 0 :=
       coprod_inf_prod_le _ _ _ _
   apply (Tendsto.sup _ _).mono_left this
-  · apply ten
+  · apply tendsto_mul_nhds_zero_prod_of_disjoint_cocompact
+    exact disjoint_map_cocompact continuous_snd hl
+  · apply tendsto_mul_prod_nhds_zero_of_disjoint_cocompact
+    exact disjoint_map_cocompact continuous_fst hl
 
 中文:
 定理 tendsto_mul_coprod_nhds_zero_inf_of_disjoint_cocompact
@@ -1542,7 +1599,10 @@ theorem tendsto_mul_coprod_nhds_zero_inf_of_disjoint_cocompact
     _ <= 𝓝 0 ×ˢ map Prod.snd l ⊔ map Prod.fst l ×ˢ 𝓝 0 :=
       coprod_inf_prod_le _ _ _ _
   apply (Tendsto.sup _ _).mono_left this
-  · apply ten
+  · apply tendsto_mul_nhds_zero_prod_of_disjoint_cocompact
+    exact disjoint_map_cocompact continuous_snd hl
+  · apply tendsto_mul_prod_nhds_zero_of_disjoint_cocompact
+    exact disjoint_map_cocompact continuous_fst hl
 
 Depends on / 依赖: Prod.fst, Prod.snd, Tendsto, Tendsto.sup, continuous_fst, continuous_snd, coprod, coprod_inf_prod_le, disjoint_map_cocompact, inf_le_inf_left, le_prod_map_fst_snd, mono_left, tendsto_mul_nhds_zero_prod_of_disjoint_cocompact, tendsto_mul_prod_nhds_zero_of_disjoint_cocompact
 -/
@@ -1634,7 +1694,15 @@ theorem tendsto_mul_cocompact_nhds_zero
   set K : Set (M × M) := (insert 0 (range f)) ×ˢ (insert 0 (range g))
   have K_compact : IsCompact K := .prod (hf.isCompact_insert_range_of_cocompact f_cont)
     (hg.isCompact_insert_range_of_cocompact g_cont)
-have K_me
+have K_mem_l : K in l := eventually_map.mpr .of_forall fun ⟨x, y⟩ =>
+    ⟨mem_insert_of_mem _ (mem_range_self _), mem_insert_of_mem _ (mem_range_self _)⟩
+  have l_compact : Disjoint l (cocompact (M × M)) := by
+    rw [disjoint_cocompact_right]
+    exact ⟨K, K_mem_l, K_compact⟩
+  have l_le_coprod : l <= (𝓝 0).coprod (𝓝 0) := by
+    rw [l_def]; rw [← coprod_cocompact]
+    exact hf.prodMap_coprod hg
+.comp tendsto_map exact tendsto_mul_nhds_zero_of_disjoint_cocompact l_compact l_le_coprod
 
 中文:
 定理 tendsto_mul_cocompact_nhds_zero
@@ -1644,7 +1712,15 @@ have K_me
   set K : Set (M × M) := (insert 0 (range f)) ×ˢ (insert 0 (range g))
   have K_compact : IsCompact K := .prod (hf.isCompact_insert_range_of_cocompact f_cont)
     (hg.isCompact_insert_range_of_cocompact g_cont)
-have K_me
+have K_mem_l : K in l := eventually_map.mpr .of_forall fun ⟨x, y⟩ =>
+    ⟨mem_insert_of_mem _ (mem_range_self _), mem_insert_of_mem _ (mem_range_self _)⟩
+  have l_compact : Disjoint l (cocompact (M × M)) := by
+    rw [disjoint_cocompact_right]
+    exact ⟨K, K_mem_l, K_compact⟩
+  have l_le_coprod : l <= (𝓝 0).coprod (𝓝 0) := by
+    rw [l_def]; rw [← coprod_cocompact]
+    exact hf.prodMap_coprod hg
+.comp tendsto_map exact tendsto_mul_nhds_zero_of_disjoint_cocompact l_compact l_le_coprod
 
 Depends on / 依赖: Disjoint, Filter, IsCompact, K_compact, K_mem_l, Prod.map, cocompact, disjoint_co, eventually_map, eventually_map.mpr, f_cont, g_cont, hf.isCompact_insert_range_of_cocompact, hg.isCompact_insert_range_of_cocompact, insert, isCompact_insert_range_of_cocompact, l_compact, l_def, mem_insert_of_mem, mem_range_self
 -/
@@ -1679,7 +1755,7 @@ theorem tendsto_mul_cofinite_nhds_zero
   have : DiscreteTopology β := discreteTopology_bot β
   rw [← cocompact_eq_cofinite] at *
   exact tendsto_mul_cocompact_nhds_zero
-    continuous_of_discreteTopology continuous_of_
+    continuous_of_discreteTopology continuous_of_discreteTopology hf hg
 
 中文:
 定理 tendsto_mul_cofinite_nhds_zero
@@ -1691,7 +1767,7 @@ theorem tendsto_mul_cofinite_nhds_zero
   have : DiscreteTopology β := discreteTopology_bot β
   rw [← cocompact_eq_cofinite] at *
   exact tendsto_mul_cocompact_nhds_zero
-    continuous_of_discreteTopology continuous_of_
+    continuous_of_discreteTopology continuous_of_discreteTopology hf hg
 
 Depends on / 依赖: DiscreteTopology, TopologicalSpace, cocompact_eq_cofinite, continuous_of_discreteTopology, discreteTopology_bot, tendsto_mul_cocompact_nhds_zero
 -/
@@ -1721,7 +1797,10 @@ lemma GroupWithZero.isOpen_singleton_zero
   obtain ⟨W, hW, hW'⟩ := exists_mem_nhds_zero_mul_subset isCompact_univ (hU.mem_nhds h0U)
   by_cases H : exists x != 0, x in W
   · obtain ⟨x, hx, hxW⟩ := H
-    cases h1U (hW' (by simpa [hx] using Set.mul_mem_mul (Set.mem_uni
+    cases h1U (hW' (by simpa [hx] using Set.mul_mem_mul (Set.mem_univ x⁻¹) hxW))
+  · obtain rfl : W = {0} := subset_antisymm
+      (by simpa [not_imp_not] using H) (by simpa using mem_of_mem_nhds hW)
+    simpa [isOpen_iff_mem_nhds]
 
 中文:
 引理 带零群.isOpen_singleton_zero
@@ -1731,7 +1810,10 @@ lemma GroupWithZero.isOpen_singleton_zero
   obtain ⟨W, hW, hW'⟩ := exists_mem_nhds_zero_mul_subset isCompact_univ (hU.mem_nhds h0U)
   by_cases H : exists x != 0, x in W
   · obtain ⟨x, hx, hxW⟩ := H
-    cases h1U (hW' (by simpa [hx] using Set.mul_mem_mul (Set.mem_uni
+    cases h1U (hW' (by simpa [hx] using Set.mul_mem_mul (Set.mem_univ x⁻¹) hxW))
+  · obtain rfl : W = {0} := subset_antisymm
+      (by simpa [not_imp_not] using H) (by simpa using mem_of_mem_nhds hW)
+    simpa [isOpen_iff_mem_nhds]
 
 Depends on / 依赖: Set.mem_univ, Set.mul_mem_mul, exists_mem_nhds_zero_mul_subset, hU.mem_nhds, isCompact_univ, isOpen_iff_mem_nhds, mem_nhds, mem_of_mem_nhds, mem_univ, mul_mem_mul, not_imp_not, subset_antisymm, t1Space_iff_exists_open, t1Space_iff_exists_open.mp, zero_ne_one
 -/
@@ -2058,7 +2140,9 @@ abbreviation Subsemigroup.commSemigroupTopologicalClosure
       fun ⟨x, hx⟩ ⟨y, hy⟩ =>
 Subtype.ext by
         refine eqOn_closure₂' this ?_ ?_ ?_ ?_ x hx y hy
-   
+        all_goals fun_prop }
+
+@[to_additive]
 
 中文:
 缩写 子半群.commSemigroupTopologicalClosure
@@ -2070,7 +2154,9 @@ Subtype.ext by
       fun ⟨x, hx⟩ ⟨y, hy⟩ =>
 Subtype.ext by
         refine eqOn_closure₂' this ?_ ?_ ?_ ?_ x hx y hy
-   
+        all_goals fun_prop }
+
+@[to_additive]
 
 Depends on / 依赖: MulMemClass, MulMemClass.toSemigroup, Subtype, Subtype.ext, Subtype.val, all_goals, congr_arg, fun_prop, mul_comm, s.topologicalClosure, toSemigroup, topologicalClosure
 -/

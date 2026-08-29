@@ -42,7 +42,8 @@ instance commRing
   natCast n := Int.cast n
   natCast_zero := rfl
   natCast_succ n := by
-    simp only [intCast_eq_divInt, divInt_add_divInt _ _ In
+    simp only [intCast_eq_divInt, divInt_add_divInt _ _ Int.one_ne_zero Int.one_ne_zero,
+      ← divInt_one_one, Int.natCast_add, Int.natCast_one, mul_one]
 
 中文:
 实例 commRing
@@ -57,7 +58,8 @@ instance commRing
   natCast n := Int.cast n
   natCast_zero := rfl
   natCast_succ n := by
-    simp only [intCast_eq_divInt, divInt_add_divInt _ _ In
+    simp only [intCast_eq_divInt, divInt_add_divInt _ _ Int.one_ne_zero Int.one_ne_zero,
+      ← divInt_one_one, Int.natCast_add, Int.natCast_one, mul_one]
 
 Depends on / 依赖: addCommGroup
 -/

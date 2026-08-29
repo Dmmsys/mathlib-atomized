@@ -42,7 +42,7 @@ definition invtSubmodule
 le_trans hq Submodule.comap_mono le_sup_right⟩
   infClosed' p hp q hq := by
     simp only [Set.mem_ofPred_eq, Submodule.comap_inf, le_inf_iff]
-    exact ⟨inf_le_of_left_le hp,
+    exact ⟨inf_le_of_left_le hp, inf_le_of_right_le hq⟩
 
 中文:
 定义 invtSubmodule
@@ -53,7 +53,7 @@ le_trans hq Submodule.comap_mono le_sup_right⟩
 le_trans hq Submodule.comap_mono le_sup_right⟩
   infClosed' p hp q hq := by
     simp only [Set.mem_ofPred_eq, Submodule.comap_inf, le_inf_iff]
-    exact ⟨inf_le_of_left_le hp,
+    exact ⟨inf_le_of_left_le hp, inf_le_of_right_le hq⟩
 
 Depends on / 依赖: Submodule, p.comap
 -/
@@ -651,14 +651,14 @@ lemma _root_.LinearEquiv.map_mem_invtSubmodule_conj_iff
   statement: {R M N : Type*} [CommSemiring R]
   proof: by
   have : e.symm.toLinearMap ∘ₗ ((e ∘ₗ f) ∘ₗ e.symm.toLinearMap) ∘ₗ e = f := by ext; simp
-  rw [LinearEquiv.conj_apply]; rw [mem_invtSubmodule]; rw [mem_invtSubmodule]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.map_equiv_eq_comap_symm]; rw [← Submodule.comap_comp]; rw [← Submodule.comap_co
+  rw [LinearEquiv.conj_apply]; rw [mem_invtSubmodule]; rw [mem_invtSubmodule]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.map_equiv_eq_comap_symm]; rw [← Submodule.comap_comp]; rw [← Submodule.comap_comp]; rw [this]
 
 中文:
 引理 _root_.线性等价.map_mem_invtSubmodule_conj_iff
   结论: {R M N : 类型} [交换半环 R]
   证明: by
   have : e.symm.toLinearMap ∘ₗ ((e ∘ₗ f) ∘ₗ e.symm.toLinearMap) ∘ₗ e = f := by ext; simp
-  rw [LinearEquiv.conj_apply]; rw [mem_invtSubmodule]; rw [mem_invtSubmodule]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.map_equiv_eq_comap_symm]; rw [← Submodule.comap_comp]; rw [← Submodule.comap_co
+  rw [LinearEquiv.conj_apply]; rw [mem_invtSubmodule]; rw [mem_invtSubmodule]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.map_equiv_eq_comap_symm]; rw [← Submodule.comap_comp]; rw [← Submodule.comap_comp]; rw [this]
 -/
 @[simp] lemma _root_.LinearEquiv.map_mem_invtSubmodule_conj_iff {R M N : Type*} [CommSemiring R]
     [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N] {f : End R M}

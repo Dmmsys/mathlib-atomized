@@ -139,7 +139,11 @@ lemma mem_inducedTopology_iff
     refine Sieve.W_shrinkFunctor_ι_of_mem (F.inducedTopology K) (Sieve.pullback f S) ?_
     exact GrothendieckTopology.pullback_stable (F.inducedTopology K) f hS
   · intro H
-  
+    apply Sheaf.mem_finestTopology_of_forall_isSheafFor
+    rintro - ⟨P, rfl⟩ Y f
+    dsimp
+    rw [Presieve.isSheafFor_iff_bijective_shrinkFunctor_ι_comp]
+    exact (adj.map_comp_bijective_iff _ _).mp (H f _ P.property)
 
 中文:
 引理 mem_inducedTopology_iff
@@ -151,7 +155,11 @@ lemma mem_inducedTopology_iff
     refine Sieve.W_shrinkFunctor_ι_of_mem (F.inducedTopology K) (Sieve.pullback f S) ?_
     exact GrothendieckTopology.pullback_stable (F.inducedTopology K) f hS
   · intro H
-  
+    apply Sheaf.mem_finestTopology_of_forall_isSheafFor
+    rintro - ⟨P, rfl⟩ Y f
+    dsimp
+    rw [Presieve.isSheafFor_iff_bijective_shrinkFunctor_ι_comp]
+    exact (adj.map_comp_bijective_iff _ _).mp (H f _ P.property)
 
 Depends on / 依赖: F.inducedTopology, Functor, Functor.W_map_of_adjunction_of_isContinuous, GrothendieckTopology, GrothendieckTopology.pullback_stable, P.property, Presieve, Presieve.isSheafFor_iff_bijective_shrinkFunctor_, Sheaf.mem_finestTopology_of_forall_isSheafFor, Sieve.W_shrinkFunctor_, Sieve.pullback, W_map_of_adjunction_of_isContinuous, adj.map_comp_bijective_iff, inducedTopology, map_comp_bijective_iff, mem_finestTopology_of_forall_isSheafFor, property, pullback, pullback_stable
 -/

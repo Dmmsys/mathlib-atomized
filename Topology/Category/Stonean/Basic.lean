@@ -237,7 +237,25 @@ lemma epi_iff_surjective
   have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
   let U := Cᶜ
   have hUy : U in 𝓝 y := by
-    simp only [U, C, Set.mem_range, h
+    simp only [U, C, Set.mem_range, hy, exists_false, not_false_eq_true, hC.compl_mem_nhds]
+  obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
+  classical
+  let g : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom
+    ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
+  let h : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom ⟨fun _ => ⟨1⟩, continuous_const⟩
+  have H : h = g := by
+    rw [← cancel_epi f]
+    ext x
+    apply ULift.ext -- why is `ext` not doing this automatically?
+    change 1 = ite _ _ _ -- why is `dsimp` not getting me here?
+    rw [if_neg]
+    refine mt (hVU ·) ?_ -- what would be an idiomatic tactic for this step?
+    simpa only [U, Set.mem_compl_iff, Set.mem_range, not_exists, not_forall, not_not]
+      using! exists_apply_eq_apply f x
+  apply_fun fun e => (e y).down at H
+  change 1 = ite _ _ _ at H -- why is `dsimp at H` not getting me here?
+  rw [if_pos hyV] at H
+  exact one_ne_zero H
 
 中文:
 引理 epi_iff_surjective
@@ -251,7 +269,25 @@ lemma epi_iff_surjective
   have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
   let U := Cᶜ
   have hUy : U in 𝓝 y := by
-    simp only [U, C, Set.mem_range, h
+    simp only [U, C, Set.mem_range, hy, exists_false, not_false_eq_true, hC.compl_mem_nhds]
+  obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
+  classical
+  let g : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom
+    ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
+  let h : Y ⟶ mkFinite (ULift (Fin 2)) := ConcreteCategory.ofHom ⟨fun _ => ⟨1⟩, continuous_const⟩
+  have H : h = g := by
+    rw [← cancel_epi f]
+    ext x
+    apply ULift.ext -- why is `ext` not doing this automatically?
+    change 1 = ite _ _ _ -- why is `dsimp` not getting me here?
+    rw [if_neg]
+    refine mt (hVU ·) ?_ -- what would be an idiomatic tactic for this step?
+    simpa only [U, Set.mem_compl_iff, Set.mem_range, not_exists, not_forall, not_not]
+      using! exists_apply_eq_apply f x
+  apply_fun fun e => (e y).down at H
+  change 1 = ite _ _ _ at H -- why is `dsimp at H` not getting me here?
+  rw [if_pos hyV] at H
+  exact one_ne_zero H
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.epi_of_surjective, ConcreteCategory.ofHom, Function, Function.Surjective, IsClosed, LocallyConstan, Set.mem_range, Set.range, Surjective, classical, compl_mem_nhds, continuous, epi_of_surjective, exists_false, f.hom.hom.continuous, hC.compl_mem_nhds, isClosed, isCompact_range, isTopologicalBasis_isClopen
 -/
@@ -298,7 +334,9 @@ instance instProjectiveCompHausCompHaus
     obtain ⟨f', h⟩ := CompactT2.ExtremallyDisconnected.projective φ.hom.hom.continuous
       f.hom.hom.continuous
       hf
-    use
+    use ofHom _ ⟨f', h.left⟩
+    ext
+    exact congr_fun h.right _
 
 中文:
 实例 instProjectiveCompHausCompHaus
@@ -310,7 +348,9 @@ instance instProjectiveCompHausCompHaus
     obtain ⟨f', h⟩ := CompactT2.ExtremallyDisconnected.projective φ.hom.hom.continuous
       f.hom.hom.continuous
       hf
-    use
+    use ofHom _ ⟨f', h.left⟩
+    ext
+    exact congr_fun h.right _
 
 Depends on / 依赖: CompHaus, CompHaus.epi_iff_surjective, CompactT2, CompactT2.ExtremallyDisconnected.projective, ExtremallyDisconnected, Function, Function.Surjective, Surjective, X.prop, congr_fun, continuous, epi_iff_surjective, f.hom.hom.continuous, h.left, h.right, hom.hom.continuous, projective, toCompHaus, toCompHaus.obj
 -/

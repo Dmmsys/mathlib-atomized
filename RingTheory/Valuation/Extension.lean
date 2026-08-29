@@ -284,7 +284,9 @@ instance instAlgebraInteger
   algebraMap := (algebraMap R A).restrict vR.integer vA.integer
     (by simp [Valuation.mem_integer_iff, val_map_le_one_iff vR vA])
   commutes' _ _ := Subtype.ext (Algebra.commutes _ _)
-  smul_def' _ _ := Su
+  smul_def' _ _ := Subtype.ext (Algebra.smul_def _ _)
+
+@[simp, norm_cast]
 
 中文:
 实例 instAlgebra整数eger
@@ -294,7 +296,9 @@ instance instAlgebraInteger
   algebraMap := (algebraMap R A).restrict vR.integer vA.integer
     (by simp [Valuation.mem_integer_iff, val_map_le_one_iff vR vA])
   commutes' _ _ := Subtype.ext (Algebra.commutes _ _)
-  smul_def' _ _ := Su
+  smul_def' _ _ := Subtype.ext (Algebra.smul_def _ _)
+
+@[simp, norm_cast]
 -/
 instance instAlgebraInteger : Algebra vR.integer vA.integer where
   smul r a := ⟨r • a,

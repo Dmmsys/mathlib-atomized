@@ -94,6 +94,32 @@ definition mateEquiv
     whiskerLeft R₁ (whiskerRight α.natTrans R₂) ≫
     whiskerLeft _ (associator _ _ _).hom ≫ (associator _ _ _).inv ≫
     whiskerRight adj₁.counit (H ⋙ R₂) ≫
+    (leftUnitor _).hom
+invFun β := .mk _ _ _ _
+    (leftUnitor _).inv ≫
+    whiskerRight adj₁.unit (G ⋙ L₂) ≫
+    (associator _ _ _).inv ≫ whiskerRight (associator _ _ _).hom _ ≫
+    whiskerRight (whiskerLeft L₁ β.natTrans) L₂ ≫
+    whiskerRight (associator _ _ _).inv _ ≫ (associator _ _ _).hom ≫
+    whiskerLeft (L₁ ⋙ H) adj₂.counit ≫
+    (rightUnitor _).hom
+  left_inv α := by
+    ext
+    simp only [comp_obj, whiskerLeft_comp, whiskerLeft_twice, assoc, Iso.hom_inv_id_assoc,
+      whiskerRight_comp, comp_app, id_obj, leftUnitor_inv_app, Functor.whiskerRight_app,
+      Functor.comp_map, associator_inv_app, associator_hom_app, map_id, Functor.whiskerLeft_app,
+      rightUnitor_inv_app, leftUnitor_hom_app, rightUnitor_hom_app, comp_id, id_comp,
+      counit_naturality, counit_naturality_assoc, left_triangle_components_assoc]
+    rw [← assoc]; rw [← Functor.comp_map]; rw [α.natTrans.naturality]; rw [Functor.comp_map]; rw [assoc]; rw [← H.map_comp]; rw [left_triangle_components]; rw [map_id]
+    simp only [comp_obj, comp_id]
+  right_inv β := by
+    ext
+    simp only [comp_obj, whiskerRight_comp, whiskerRight_twice, assoc, Iso.inv_hom_id_assoc,
+      whiskerLeft_comp, comp_app, id_obj, rightUnitor_inv_app, Functor.whiskerLeft_app,
+      associator_hom_app, associator_inv_app, Functor.whiskerRight_app, leftUnitor_inv_app, map_id,
+      Functor.comp_map, rightUnitor_hom_app, leftUnitor_hom_app, comp_id, id_comp,
+      unit_naturality_assoc, right_triangle_components_assoc]
+    rw [← assoc]; rw [← Functor.comp_map]; rw [assoc]; rw [← β.natTrans.naturality]; rw [← assoc]; rw [Functor.comp_map]; rw [← G.map_comp]; rw [right_triangle_components]; rw [map_id]; rw [id_comp]
 
 中文:
 定义 mateEquiv
@@ -105,6 +131,32 @@ definition mateEquiv
     whiskerLeft R₁ (whiskerRight α.natTrans R₂) ≫
     whiskerLeft _ (associator _ _ _).hom ≫ (associator _ _ _).inv ≫
     whiskerRight adj₁.counit (H ⋙ R₂) ≫
+    (leftUnitor _).hom
+invFun β := .mk _ _ _ _
+    (leftUnitor _).inv ≫
+    whiskerRight adj₁.unit (G ⋙ L₂) ≫
+    (associator _ _ _).inv ≫ whiskerRight (associator _ _ _).hom _ ≫
+    whiskerRight (whiskerLeft L₁ β.natTrans) L₂ ≫
+    whiskerRight (associator _ _ _).inv _ ≫ (associator _ _ _).hom ≫
+    whiskerLeft (L₁ ⋙ H) adj₂.counit ≫
+    (rightUnitor _).hom
+  left_inv α := by
+    ext
+    simp only [comp_obj, whiskerLeft_comp, whiskerLeft_twice, assoc, Iso.hom_inv_id_assoc,
+      whiskerRight_comp, comp_app, id_obj, leftUnitor_inv_app, Functor.whiskerRight_app,
+      Functor.comp_map, associator_inv_app, associator_hom_app, map_id, Functor.whiskerLeft_app,
+      rightUnitor_inv_app, leftUnitor_hom_app, rightUnitor_hom_app, comp_id, id_comp,
+      counit_naturality, counit_naturality_assoc, left_triangle_components_assoc]
+    rw [← assoc]; rw [← Functor.comp_map]; rw [α.natTrans.naturality]; rw [Functor.comp_map]; rw [assoc]; rw [← H.map_comp]; rw [left_triangle_components]; rw [map_id]
+    simp only [comp_obj, comp_id]
+  right_inv β := by
+    ext
+    simp only [comp_obj, whiskerRight_comp, whiskerRight_twice, assoc, Iso.inv_hom_id_assoc,
+      whiskerLeft_comp, comp_app, id_obj, rightUnitor_inv_app, Functor.whiskerLeft_app,
+      associator_hom_app, associator_inv_app, Functor.whiskerRight_app, leftUnitor_inv_app, map_id,
+      Functor.comp_map, rightUnitor_hom_app, leftUnitor_hom_app, comp_id, id_comp,
+      unit_naturality_assoc, right_triangle_components_assoc]
+    rw [← assoc]; rw [← Functor.comp_map]; rw [assoc]; rw [← β.natTrans.naturality]; rw [← assoc]; rw [Functor.comp_map]; rw [← G.map_comp]; rw [right_triangle_components]; rw [map_id]; rw [id_comp]
 -/
 def mateEquiv : TwoSquare G L₁ L₂ H ≃ TwoSquare R₁ H G R₂ where
 toFun α := .mk _ _ _ _
@@ -196,7 +248,12 @@ theorem unit_mateEquiv
     Functor.whiskerLeft_app, associator_hom_app, associator_inv_app, Functor.whiskerRight_app,
     Functor.comp_map, leftUnitor_hom_app, comp_id, id_comp]
   rw [← adj₂.unit_naturality_assoc]
-  slice_lhs 2 3 
+  slice_lhs 2 3 =>
+    rw [← R₂.map_comp]; rw [← Functor.comp_map G L₂]; rw [α.naturality]
+  rw [R₂.map_comp]
+  slice_lhs 3 4 =>
+    rw [← R₂.map_comp]; rw [Functor.comp_map L₁ H]; rw [← H.map_comp]; rw [left_triangle_components]
+  simp only [comp_obj, map_id, comp_id]
 
 中文:
 定理 unit_mateEquiv
@@ -206,7 +263,12 @@ theorem unit_mateEquiv
     Functor.whiskerLeft_app, associator_hom_app, associator_inv_app, Functor.whiskerRight_app,
     Functor.comp_map, leftUnitor_hom_app, comp_id, id_comp]
   rw [← adj₂.unit_naturality_assoc]
-  slice_lhs 2 3 
+  slice_lhs 2 3 =>
+    rw [← R₂.map_comp]; rw [← Functor.comp_map G L₂]; rw [α.naturality]
+  rw [R₂.map_comp]
+  slice_lhs 3 4 =>
+    rw [← R₂.map_comp]; rw [Functor.comp_map L₁ H]; rw [← H.map_comp]; rw [left_triangle_components]
+  simp only [comp_obj, map_id, comp_id]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Functor, Functor.comp_map, Functor.whiskerLeft_app, Functor.whiskerRight_app, H.map_comp, associator_hom_app, associator_inv_app, coe_fn_mk, comp_app, comp_id, comp_map, comp_obj, id_comp, id_obj, leftUnitor_hom_app, left_triangle_components, map_comp, mateEquiv, naturality
 -/
@@ -272,7 +334,24 @@ theorem mateEquiv_vcomp
   ext b
   simp only [comp_obj, Equiv.coe_fn_mk, whiskerRight_comp, whiskerRight_twice, assoc,
     whiskerLeft_comp, comp_app, id_obj, rightUnitor_inv_app, Functor.whiskerLeft_app,
-    associator_hom_app, associator_inv_app, Functor.whiskerRight_app, map_id, Functor.
+    associator_hom_app, associator_inv_app, Functor.whiskerRight_app, map_id, Functor.comp_map,
+    leftUnitor_hom_app, comp_id, id_comp, whiskerLeft_twice, Iso.hom_inv_id_assoc]
+  slice_rhs 1 4 => rw [← assoc, ← assoc, ← unit_naturality (adj₃)]
+  rw [L₃.map_comp]; rw [R₃.map_comp]
+  slice_rhs 2 4 =>
+    rw [← R₃.map_comp]; rw [← R₃.map_comp]; rw [← assoc]; rw [← L₃.map_comp]; rw [← G₂.map_comp]; rw [← G₂.map_comp]
+    rw [← Functor.comp_map G₂ L₃]; rw [β.naturality]
+  rw [(L₂ ⋙ H₂).map_comp]; rw [R₃.map_comp]; rw [R₃.map_comp]
+  slice_rhs 4 5 =>
+    rw [← R₃.map_comp]; rw [Functor.comp_map L₂ _]; rw [← Functor.comp_map _ L₂]; rw [← H₂.map_comp]
+    rw [adj₂.counit.naturality]
+  simp only [comp_obj, Functor.comp_map, map_comp, id_obj, Functor.id_map, assoc]
+  slice_rhs 4 5 =>
+    rw [← R₃.map_comp]; rw [← H₂.map_comp]; rw [← Functor.comp_map _ L₂]; rw [adj₂.counit.naturality]
+  simp only [comp_obj, id_obj, Functor.id_map, map_comp, assoc]
+  slice_rhs 3 4 =>
+    rw [← R₃.map_comp]; rw [← H₂.map_comp]; rw [left_triangle_components]
+  simp only [map_id, id_comp]
 
 中文:
 定理 mateEquiv_vcomp
@@ -282,7 +361,24 @@ theorem mateEquiv_vcomp
   ext b
   simp only [comp_obj, Equiv.coe_fn_mk, whiskerRight_comp, whiskerRight_twice, assoc,
     whiskerLeft_comp, comp_app, id_obj, rightUnitor_inv_app, Functor.whiskerLeft_app,
-    associator_hom_app, associator_inv_app, Functor.whiskerRight_app, map_id, Functor.
+    associator_hom_app, associator_inv_app, Functor.whiskerRight_app, map_id, Functor.comp_map,
+    leftUnitor_hom_app, comp_id, id_comp, whiskerLeft_twice, Iso.hom_inv_id_assoc]
+  slice_rhs 1 4 => rw [← assoc, ← assoc, ← unit_naturality (adj₃)]
+  rw [L₃.map_comp]; rw [R₃.map_comp]
+  slice_rhs 2 4 =>
+    rw [← R₃.map_comp]; rw [← R₃.map_comp]; rw [← assoc]; rw [← L₃.map_comp]; rw [← G₂.map_comp]; rw [← G₂.map_comp]
+    rw [← Functor.comp_map G₂ L₃]; rw [β.naturality]
+  rw [(L₂ ⋙ H₂).map_comp]; rw [R₃.map_comp]; rw [R₃.map_comp]
+  slice_rhs 4 5 =>
+    rw [← R₃.map_comp]; rw [Functor.comp_map L₂ _]; rw [← Functor.comp_map _ L₂]; rw [← H₂.map_comp]
+    rw [adj₂.counit.naturality]
+  simp only [comp_obj, Functor.comp_map, map_comp, id_obj, Functor.id_map, assoc]
+  slice_rhs 4 5 =>
+    rw [← R₃.map_comp]; rw [← H₂.map_comp]; rw [← Functor.comp_map _ L₂]; rw [adj₂.counit.naturality]
+  simp only [comp_obj, id_obj, Functor.id_map, map_comp, assoc]
+  slice_rhs 3 4 =>
+    rw [← R₃.map_comp]; rw [← H₂.map_comp]; rw [left_triangle_components]
+  simp only [map_id, id_comp]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Functor, Functor.comp_map, Functor.whiskerLeft_app, Functor.whiskerRight_app, Iso.hom_inv_id_assoc, associator_hom_app, associator_inv_app, coe_fn_mk, comp_app, comp_id, comp_map, comp_obj, hom_inv_id_assoc, id_comp, id_obj, leftUnitor_hom_app, map_comp, map_id, mateEquiv
 -/
@@ -335,7 +431,15 @@ theorem mateEquiv_hcomp
   ext c
   simp only [comp_obj, whiskerRight_comp, assoc, mk'_unit, whiskerLeft_comp, mk'_counit,
     whiskerRight_twice, Iso.inv_hom_id_assoc, Equiv.coe_fn_mk, comp_app, id_obj,
-    rightUnitor_inv_app, Functor.whiskerLeft_app, Functor.whiskerRight_a
+    rightUnitor_inv_app, Functor.whiskerLeft_app, Functor.whiskerRight_app, map_id,
+    associator_inv_app, associator_hom_app, Functor.comp_map, rightUnitor_hom_app,
+    leftUnitor_hom_app, comp_id, id_comp, whiskerLeft_twice, Iso.hom_inv_id_assoc]
+  slice_rhs 2 4 =>
+    rw [← R₂.map_comp]; rw [← R₂.map_comp]; rw [← assoc]; rw [← unit_naturality (adj₄)]
+  rw [R₂.map_comp]; rw [L₄.map_comp]; rw [R₄.map_comp]; rw [R₂.map_comp]
+  slice_rhs 4 5 =>
+    rw [← R₂.map_comp]; rw [← R₄.map_comp]; rw [← Functor.comp_map _ L₄]; rw [β.naturality]
+  simp only [comp_obj, Functor.comp_map, map_comp, assoc]
 
 中文:
 定理 mateEquiv_hcomp
@@ -345,7 +449,15 @@ theorem mateEquiv_hcomp
   ext c
   simp only [comp_obj, whiskerRight_comp, assoc, mk'_unit, whiskerLeft_comp, mk'_counit,
     whiskerRight_twice, Iso.inv_hom_id_assoc, Equiv.coe_fn_mk, comp_app, id_obj,
-    rightUnitor_inv_app, Functor.whiskerLeft_app, Functor.whiskerRight_a
+    rightUnitor_inv_app, Functor.whiskerLeft_app, Functor.whiskerRight_app, map_id,
+    associator_inv_app, associator_hom_app, Functor.comp_map, rightUnitor_hom_app,
+    leftUnitor_hom_app, comp_id, id_comp, whiskerLeft_twice, Iso.hom_inv_id_assoc]
+  slice_rhs 2 4 =>
+    rw [← R₂.map_comp]; rw [← R₂.map_comp]; rw [← assoc]; rw [← unit_naturality (adj₄)]
+  rw [R₂.map_comp]; rw [L₄.map_comp]; rw [R₄.map_comp]; rw [R₂.map_comp]
+  slice_rhs 4 5 =>
+    rw [← R₂.map_comp]; rw [← R₄.map_comp]; rw [← Functor.comp_map _ L₄]; rw [β.naturality]
+  simp only [comp_obj, Functor.comp_map, map_comp, assoc]
 
 Depends on / 依赖: Adjunction, Adjunction.comp, Equiv.coe_fn_mk, Functor, Functor.comp_map, Functor.whiskerLeft_app, Functor.whiskerRight_app, Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc, _counit, _unit, associator_hom_app, associator_inv_app, coe_fn_mk, comp_app, comp_id, comp_map, comp_obj, hom_inv_id_assoc, id_comp
 -/
@@ -446,7 +558,7 @@ definition conjugateEquiv
     _ ≃ TwoSquare _ _ _ _ := (TwoSquare.equivNatTrans _ _ _ _).symm
     _ ≃ _ := mateEquiv adj₁ adj₂
     _ ≃ (R₁ ⋙ 𝟭 C ⟶ 𝟭 D ⋙ R₂) := TwoSquare.equivNatTrans _ _ _ _
-    _ ≃ (R₁ ⟶ R₂) := R₁.rightUnitor.hom
+    _ ≃ (R₁ ⟶ R₂) := R₁.rightUnitor.homCongr R₂.leftUnitor
 
 中文:
 定义 conjugateEquiv
@@ -456,7 +568,7 @@ definition conjugateEquiv
     _ ≃ TwoSquare _ _ _ _ := (TwoSquare.equivNatTrans _ _ _ _).symm
     _ ≃ _ := mateEquiv adj₁ adj₂
     _ ≃ (R₁ ⋙ 𝟭 C ⟶ 𝟭 D ⋙ R₂) := TwoSquare.equivNatTrans _ _ _ _
-    _ ≃ (R₁ ⟶ R₂) := R₁.rightUnitor.hom
+    _ ≃ (R₁ ⟶ R₂) := R₁.rightUnitor.homCongr R₂.leftUnitor
 
 Depends on / 依赖: Iso.homCongr, TwoSquare, TwoSquare.equivNatTrans, equivNatTrans, homCongr, leftUnitor, mateEquiv, rightUnitor, rightUnitor.homCongr
 -/
@@ -698,7 +810,13 @@ theorem conjugateEquiv_comp
     (L₂.leftUnitor.hom ≫ α ≫ L₁.rightUnitor.inv)
     (L₃.leftUnitor.hom ≫ β ≫ L₂.rightUnitor.inv)
   have vcompd := congr_app vcomp d
-  simp only [comp_obj, id_obj, mateEquiv_apply, comp_app, rightUnitor_inv
+  simp only [comp_obj, id_obj, mateEquiv_apply, comp_app, rightUnitor_inv_app,
+    Functor.whiskerLeft_app, associator_hom_app, associator_inv_app, Functor.whiskerRight_app,
+    hComp_app, leftUnitor_hom_app, comp_id, id_comp, Functor.id_map, map_comp, Functor.comp_map,
+    assoc, whiskerRight_comp, whiskerLeft_comp, vComp_app, map_id] at vcompd ⊢
+  rw [vcompd]
+
+@[reassoc (attr := simp)]
 
 中文:
 定理 conjugateEquiv_comp
@@ -710,7 +828,13 @@ theorem conjugateEquiv_comp
     (L₂.leftUnitor.hom ≫ α ≫ L₁.rightUnitor.inv)
     (L₃.leftUnitor.hom ≫ β ≫ L₂.rightUnitor.inv)
   have vcompd := congr_app vcomp d
-  simp only [comp_obj, id_obj, mateEquiv_apply, comp_app, rightUnitor_inv
+  simp only [comp_obj, id_obj, mateEquiv_apply, comp_app, rightUnitor_inv_app,
+    Functor.whiskerLeft_app, associator_hom_app, associator_inv_app, Functor.whiskerRight_app,
+    hComp_app, leftUnitor_hom_app, comp_id, id_comp, Functor.id_map, map_comp, Functor.comp_map,
+    assoc, whiskerRight_comp, whiskerLeft_comp, vComp_app, map_id] at vcompd ⊢
+  rw [vcompd]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.id_map, Functor.whiskerLeft_app, Functor.whiskerRight_app, associator_hom_app, associator_inv_app, comp_app, comp_id, comp_map, comp_obj, congr_app, conjugateEquiv, hComp_app, id_comp, id_map, id_obj, leftUnitor, leftUnitor.hom, leftUnitor_hom_app
 -/
@@ -1026,7 +1150,11 @@ theorem mateEquiv_conjugateEquiv_vcomp
   unfold vComp hComp at vcomp
   have vcompb := congr_app vcomp b
   simp only [comp_obj, id_obj, whiskerLeft_comp, assoc, mateEquiv_apply, whiskerLeft_twice,
-    Iso.hom_inv_id_assoc, whiskerRight
+    Iso.hom_inv_id_assoc, whiskerRight_comp, comp_app, Functor.whiskerLeft_app,
+    Functor.whiskerRight_app, associator_hom_app, map_id, associator_inv_app, leftUnitor_hom_app,
+    rightUnitor_inv_app, Functor.id_map, Functor.comp_map, id_comp, whiskerRight_twice,
+    comp_id] at vcompb
+  simpa [mateEquiv]
 
 中文:
 定理 mateEquiv_conjugateEquiv_vcomp
@@ -1037,7 +1165,11 @@ theorem mateEquiv_conjugateEquiv_vcomp
   unfold vComp hComp at vcomp
   have vcompb := congr_app vcomp b
   simp only [comp_obj, id_obj, whiskerLeft_comp, assoc, mateEquiv_apply, whiskerLeft_twice,
-    Iso.hom_inv_id_assoc, whiskerRight
+    Iso.hom_inv_id_assoc, whiskerRight_comp, comp_app, Functor.whiskerLeft_app,
+    Functor.whiskerRight_app, associator_hom_app, map_id, associator_inv_app, leftUnitor_hom_app,
+    rightUnitor_inv_app, Functor.id_map, Functor.comp_map, id_comp, whiskerRight_twice,
+    comp_id] at vcompb
+  simpa [mateEquiv]
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.id_map, Functor.whiskerLeft_app, Functor.whiskerRight_app, Iso.hom_inv_id_assoc, associator_hom_app, associator_inv_app, comp_app, comp_map, comp_obj, congr_app, hom_inv_id_assoc, id_comp, id_map, id_obj, leftUnitor, leftUnitor.hom, leftUnitor_hom_app, map_id
 -/
@@ -1071,7 +1203,11 @@ theorem conjugateEquiv_mateEquiv_vcomp
   unfold vComp hComp at vcomp
   have vcompb := congr_app vcomp b
   simp only [comp_obj, id_obj, whiskerRight_comp, assoc, mateEquiv_apply, whiskerLeft_comp,
-    whiskerLeft_twice, comp_app, Funct
+    whiskerLeft_twice, comp_app, Functor.whiskerLeft_app, Functor.whiskerRight_app,
+    associator_hom_app, map_id, associator_inv_app, leftUnitor_hom_app, rightUnitor_inv_app,
+    Functor.comp_map, Functor.id_map, id_comp, whiskerRight_twice, Iso.inv_hom_id_assoc,
+    comp_id] at vcompb
+  simpa [mateEquiv]
 
 中文:
 定理 conjugateEquiv_mateEquiv_vcomp
@@ -1082,7 +1218,11 @@ theorem conjugateEquiv_mateEquiv_vcomp
   unfold vComp hComp at vcomp
   have vcompb := congr_app vcomp b
   simp only [comp_obj, id_obj, whiskerRight_comp, assoc, mateEquiv_apply, whiskerLeft_comp,
-    whiskerLeft_twice, comp_app, Funct
+    whiskerLeft_twice, comp_app, Functor.whiskerLeft_app, Functor.whiskerRight_app,
+    associator_hom_app, map_id, associator_inv_app, leftUnitor_hom_app, rightUnitor_inv_app,
+    Functor.comp_map, Functor.id_map, id_comp, whiskerRight_twice, Iso.inv_hom_id_assoc,
+    comp_id] at vcompb
+  simpa [mateEquiv]
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.id_map, Functor.whiskerLeft_app, Functor.whiskerRight_app, Iso.inv_hom_id_a, associator_hom_app, associator_inv_app, comp_app, comp_map, comp_obj, congr_app, id_comp, id_map, id_obj, inv_hom_id_a, leftUnitor, leftUnitor.hom, leftUnitor_hom_app, map_id
 -/

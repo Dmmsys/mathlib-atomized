@@ -260,7 +260,33 @@ definition plusObj
     dsimp
     simp only [diagramPullback_app, colimit.ι_pre, ι_colimMap_assoc, Category.comp_id]
     let e := S.unop.pullbackId
-    dsim
+    dsimp only [Functor.op, pullback_obj]
+    rw [← colimit.w _ e.inv.op]; rw [← Category.assoc]
+    convert! Category.id_comp (colimit.ι (diagram J P (unop X)) S)
+    refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
+    dsimp
+    simp only [Multiequalizer.lift_ι, Category.id_comp, Category.assoc]
+    dsimp [Cover.Arrow.map, Cover.Arrow.base]
+    cases I
+    congr
+    simp
+  map_comp := by
+    intro X Y Z f g
+    refine colimit.hom_ext (fun S => ?_)
+    dsimp
+    simp only [diagramPullback_app, colimit.ι_pre_assoc, colimit.ι_pre, ι_colimMap_assoc,
+      Category.assoc]
+    let e := S.unop.pullbackComp g.unop f.unop
+    dsimp only [Functor.op, pullback_obj]
+    rw [← colimit.w _ e.inv.op]; rw [← Category.assoc]; rw [← Category.assoc]
+    congr 1
+    refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
+    dsimp
+    simp only [Multiequalizer.lift_ι, Category.assoc]
+    cases I
+    dsimp only [Cover.Arrow.base, Cover.Arrow.map]
+    congr 2
+    simp
 
 中文:
 定义 plusObj
@@ -273,7 +299,33 @@ definition plusObj
     dsimp
     simp only [diagramPullback_app, colimit.ι_pre, ι_colimMap_assoc, Category.comp_id]
     let e := S.unop.pullbackId
-    dsim
+    dsimp only [Functor.op, pullback_obj]
+    rw [← colimit.w _ e.inv.op]; rw [← Category.assoc]
+    convert! Category.id_comp (colimit.ι (diagram J P (unop X)) S)
+    refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
+    dsimp
+    simp only [Multiequalizer.lift_ι, Category.id_comp, Category.assoc]
+    dsimp [Cover.Arrow.map, Cover.Arrow.base]
+    cases I
+    congr
+    simp
+  map_comp := by
+    intro X Y Z f g
+    refine colimit.hom_ext (fun S => ?_)
+    dsimp
+    simp only [diagramPullback_app, colimit.ι_pre_assoc, colimit.ι_pre, ι_colimMap_assoc,
+      Category.assoc]
+    let e := S.unop.pullbackComp g.unop f.unop
+    dsimp only [Functor.op, pullback_obj]
+    rw [← colimit.w _ e.inv.op]; rw [← Category.assoc]; rw [← Category.assoc]
+    congr 1
+    refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
+    dsimp
+    simp only [Multiequalizer.lift_ι, Category.assoc]
+    cases I
+    dsimp only [Cover.Arrow.base, Cover.Arrow.map]
+    congr 2
+    simp
 
 Depends on / 依赖: J.diagram, X.unop, colimit, diagram
 -/
@@ -331,7 +383,9 @@ definition plusMap
       ι_colimMap_assoc, Category.assoc]
     simp_rw [← Category.assoc]
     congr 1
-    exact Multiequalizer.hom_ext
+    exact Multiequalizer.hom_ext _ _ _ (fun I => by simp)
+
+@[simp]
 
 中文:
 定义 plusMap
@@ -345,7 +399,9 @@ definition plusMap
       ι_colimMap_assoc, Category.assoc]
     simp_rw [← Category.assoc]
     congr 1
-    exact Multiequalizer.hom_ext
+    exact Multiequalizer.hom_ext _ _ _ (fun I => by simp)
+
+@[simp]
 
 Depends on / 依赖: J.diagramNatTrans, X.unop, colimMap, diagramNatTrans
 -/
@@ -493,7 +549,13 @@ definition toPlus
     delta Cover.toMultiequalizer
     simp only [diagramPullback_app, colimit.ι_pre, ι_colimMap_assoc, Category.assoc]
     dsimp only [Functor.op, unop_op]
-    
+    let e : (J.pullback f.unop).obj ⊤ ⟶ ⊤ := homOfLE (OrderTop.le_top _)
+    rw [← colimit.w _ e.op]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]
+    congr 1
+    refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
+    simp only [Category.assoc]
+    dsimp [Cover.Arrow.base]
+    simp
 
 中文:
 定义 toPlus
@@ -505,7 +567,13 @@ definition toPlus
     delta Cover.toMultiequalizer
     simp only [diagramPullback_app, colimit.ι_pre, ι_colimMap_assoc, Category.assoc]
     dsimp only [Functor.op, unop_op]
-    
+    let e : (J.pullback f.unop).obj ⊤ ⟶ ⊤ := homOfLE (OrderTop.le_top _)
+    rw [← colimit.w _ e.op]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]
+    congr 1
+    refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
+    simp only [Category.assoc]
+    dsimp [Cover.Arrow.base]
+    simp
 
 Depends on / 依赖: Cover.toMultiequalizer, J.Cover, J.diagram, X.unop, colimit, diagram, toMultiequalizer
 -/
@@ -606,7 +674,18 @@ theorem plusMap_toPlus
   rw [ι_colimMap]; rw [← colimit.w _ e.op]; rw [← Category.assoc]; rw [← Category.assoc]
   congr 1
   refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
-  erw [Multi
+  erw [Multiequalizer.lift_ι]
+  simp only [unop_op, op_unop, diagram_map, Category.assoc, limit.lift_π,
+    Multifork.ofι_π_app]
+  let ee : (J.pullback (I.map e).f).obj S.unop ⟶ ⊤ := homOfLE (OrderTop.le_top _)
+  erw [← colimit.w _ ee.op, ι_colimMap_assoc, colimit.ι_pre, diagramPullback_app,
+    ← Category.assoc, ← Category.assoc]
+  congr 1
+  refine Multiequalizer.hom_ext _ _ _ (fun II => ?_)
+  convert!
+    Multiequalizer.condition (S.unop.index P)
+      { fst := I, snd := II.base, r.Z := II.Y, r.g₁ := II.f, r.g₂ := 𝟙 II.Y } using 1
+  all_goals simp
 
 中文:
 定理 plusMap_toPlus
@@ -619,7 +698,18 @@ theorem plusMap_toPlus
   rw [ι_colimMap]; rw [← colimit.w _ e.op]; rw [← Category.assoc]; rw [← Category.assoc]
   congr 1
   refine Multiequalizer.hom_ext _ _ _ (fun I => ?_)
-  erw [Multi
+  erw [Multiequalizer.lift_ι]
+  simp only [unop_op, op_unop, diagram_map, Category.assoc, limit.lift_π,
+    Multifork.ofι_π_app]
+  let ee : (J.pullback (I.map e).f).obj S.unop ⟶ ⊤ := homOfLE (OrderTop.le_top _)
+  erw [← colimit.w _ ee.op, ι_colimMap_assoc, colimit.ι_pre, diagramPullback_app,
+    ← Category.assoc, ← Category.assoc]
+  congr 1
+  refine Multiequalizer.hom_ext _ _ _ (fun II => ?_)
+  convert!
+    Multiequalizer.condition (S.unop.index P)
+      { fst := I, snd := II.base, r.Z := II.Y, r.g₁ := II.f, r.g₂ := 𝟙 II.Y } using 1
+  all_goals simp
 
 Depends on / 依赖: Category, Category.assoc, I.map, J.pullback, Multiequalizer, Multiequalizer.hom_ext, Multiequalizer.lift_, Multifork, Multifork.of, OrderTop, OrderTop.le_top, S.unop, colimit, colimit.hom_ext, colimit.w, diagram_map, e.op, ee.op, homOfLE, hom_ext
 -/
@@ -658,7 +748,11 @@ theorem isIso_toPlus_of_isSheaf
   intro X
   refine IsIso.comp_isIso' inferInstance ?_
   suffices forall (S T : (J.Cover X.unop)ᵒᵖ) (f : S ⟶ T), IsIso ((J.diagram P X.unop).map f) from
-    isIso_ι_of_
+    isIso_ι_of_isInitial (initialOpOfTerminal isTerminalTop) _
+  intro S T e
+  have : S.unop.toMultiequalizer P ≫ (J.diagram P X.unop).map e = T.unop.toMultiequalizer P :=
+    Multiequalizer.hom_ext _ _ _ (fun II => by simp)
+  exact IsIso.of_isIso_fac_left this
 
 中文:
 定理 isIso_toPlus_of_isSheaf
@@ -670,7 +764,11 @@ theorem isIso_toPlus_of_isSheaf
   intro X
   refine IsIso.comp_isIso' inferInstance ?_
   suffices forall (S T : (J.Cover X.unop)ᵒᵖ) (f : S ⟶ T), IsIso ((J.diagram P X.unop).map f) from
-    isIso_ι_of_
+    isIso_ι_of_isInitial (initialOpOfTerminal isTerminalTop) _
+  intro S T e
+  have : S.unop.toMultiequalizer P ≫ (J.diagram P X.unop).map e = T.unop.toMultiequalizer P :=
+    Multiequalizer.hom_ext _ _ _ (fun II => by simp)
+  exact IsIso.of_isIso_fac_left this
 
 Depends on / 依赖: IsIso.comp_isIso, J.Cover, J.diagram, J.toPlus, Multiequalizer, Multiequalizer.hom_ext, NatIso, NatIso.isIso_of_isIso_app, Presheaf, Presheaf.isSheaf_iff_multiequalizer, S.unop.toMultiequalizer, T.unop.toMultiequalizer, X.unop, comp_isIso, diagram, hom_ext, initialOpOfTerminal, isIso_of_isIso_app, isSheaf_iff_multiequalizer, isTerminalTop
 -/

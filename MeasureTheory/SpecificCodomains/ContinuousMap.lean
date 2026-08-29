@@ -70,7 +70,8 @@ lemma hasFiniteIntegral_of_bound
   · have bound_nonneg : 0 <=ᵐ[μ] bound := by
       filter_upwards [bound_ge] with x bound_x using le_trans (norm_nonneg _) (bound_x h.some)
     refine .mono' bound_int ?_
-    filter_upwards [bound_ge, bound_nonneg] with x bound_ge_x bound_nonne
+    filter_upwards [bound_ge, bound_nonneg] with x bound_ge_x bound_nonneg_x
+.mpr bound_ge_x exact ContinuousMap.norm_le _ bound_nonneg_x
 
 中文:
 引理 hasFinite整数egral_of_bound
@@ -81,7 +82,8 @@ lemma hasFiniteIntegral_of_bound
   · have bound_nonneg : 0 <=ᵐ[μ] bound := by
       filter_upwards [bound_ge] with x bound_x using le_trans (norm_nonneg _) (bound_x h.some)
     refine .mono' bound_int ?_
-    filter_upwards [bound_ge, bound_nonneg] with x bound_ge_x bound_nonne
+    filter_upwards [bound_ge, bound_nonneg] with x bound_ge_x bound_nonneg_x
+.mpr bound_ge_x exact ContinuousMap.norm_le _ bound_nonneg_x
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.norm_le, bound_ge, bound_ge_x, bound_int, bound_nonneg, bound_nonneg_x, bound_x, filter_upwards, h.some, isEmpty_or_nonempty, le_trans, norm_le, norm_nonneg
 -/

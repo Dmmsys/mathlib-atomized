@@ -347,7 +347,18 @@ theorem attach_ndinsert
       (fun p : { x // x in s } => ⟨p.val, h p⟩ : { x // x in s } -> { x // x in s }) = id :=
     fun _ => funext fun _ => Subtype.ext rfl
   have : forall (t) (eq : s.ndinsert a = t), t.attach = ndinsert ⟨a, eq ▸ mem_ndinsert_self a s⟩
-  
+      (s.attach.map fun p => ⟨p.1, eq ▸ mem_ndinsert_of_mem p.2⟩) := by
+    intro t ht
+    by_cases h : a in s
+    · rw [ndinsert_of_mem h] at ht
+      subst ht
+      rw [eq]; rw [map_id]; rw [ndinsert_of_mem (mem_attach _ _)]
+    · rw [ndinsert_of_notMem h] at ht
+      subst ht
+      simp [attach_cons, h]
+  this _ rfl
+
+@[simp]
 
 中文:
 定理 attach_ndinsert
@@ -357,7 +368,18 @@ theorem attach_ndinsert
       (fun p : { x // x in s } => ⟨p.val, h p⟩ : { x // x in s } -> { x // x in s }) = id :=
     fun _ => funext fun _ => Subtype.ext rfl
   have : forall (t) (eq : s.ndinsert a = t), t.attach = ndinsert ⟨a, eq ▸ mem_ndinsert_self a s⟩
-  
+      (s.attach.map fun p => ⟨p.1, eq ▸ mem_ndinsert_of_mem p.2⟩) := by
+    intro t ht
+    by_cases h : a in s
+    · rw [ndinsert_of_mem h] at ht
+      subst ht
+      rw [eq]; rw [map_id]; rw [ndinsert_of_mem (mem_attach _ _)]
+    · rw [ndinsert_of_notMem h] at ht
+      subst ht
+      simp [attach_cons, h]
+  this _ rfl
+
+@[simp]
 
 Depends on / 依赖: Subtype, Subtype.ext, attach, map_id, mem_attach, mem_ndinsert_of_mem, mem_ndinsert_self, ndinsert, ndinsert_of_mem, ndinsert_of_not, p.val, s.attach.map, s.ndinsert, t.attach
 -/

@@ -38,7 +38,9 @@ lemma prod_prodMkLeft_comp_prod_deterministic
   rw [prod_apply' _ _ _ hs]; rw [comp_apply' _ _ _ hs]; rw [lintegral_prod_deterministic]; rw [lintegral_comp]; rw [lintegral_prod_deterministic]
   · congr with b
     rw [prod_apply' _ _ _ hs]; rw [prodMkLeft_apply]; rw [comp_deterministic_eq_comap]; rw [comap_apply]
-  · exact (measu
+  · exact (measurable_measure_prodMk_left hs).lintegral_kernel
+  · exact measurable_measure_prodMk_left hs
+  · exact Kernel.measurable_coe _ hs
 
 中文:
 引理 prod_prodMkLeft_comp_prod_deterministic
@@ -48,7 +50,9 @@ lemma prod_prodMkLeft_comp_prod_deterministic
   rw [prod_apply' _ _ _ hs]; rw [comp_apply' _ _ _ hs]; rw [lintegral_prod_deterministic]; rw [lintegral_comp]; rw [lintegral_prod_deterministic]
   · congr with b
     rw [prod_apply' _ _ _ hs]; rw [prodMkLeft_apply]; rw [comp_deterministic_eq_comap]; rw [comap_apply]
-  · exact (measu
+  · exact (measurable_measure_prodMk_left hs).lintegral_kernel
+  · exact measurable_measure_prodMk_left hs
+  · exact Kernel.measurable_coe _ hs
 
 Depends on / 依赖: Kernel, Kernel.measurable_coe, comap_apply, comp_apply, comp_deterministic_eq_comap, lintegral_comp, lintegral_kernel, lintegral_prod_deterministic, measurable_coe, measurable_measure_prodMk_left, prodMkLeft_apply, prod_apply
 -/
@@ -77,7 +81,9 @@ lemma prod_prodMkRight_comp_deterministic_prod
   rw [prod_apply' _ _ _ hs]; rw [comp_apply' _ _ _ hs]; rw [lintegral_deterministic_prod]; rw [lintegral_comp]; rw [lintegral_deterministic_prod]
   · congr with b
     rw [prod_apply' _ _ _ hs]; rw [prodMkRight_apply]; rw [comp_deterministic_eq_comap]; rw [comap_apply]
-  · exact (meas
+  · exact (measurable_measure_prodMk_left hs).lintegral_kernel
+  · exact measurable_measure_prodMk_left hs
+  · exact Kernel.measurable_coe _ hs
 
 中文:
 引理 prod_prodMkRight_comp_deterministic_prod
@@ -87,7 +93,9 @@ lemma prod_prodMkRight_comp_deterministic_prod
   rw [prod_apply' _ _ _ hs]; rw [comp_apply' _ _ _ hs]; rw [lintegral_deterministic_prod]; rw [lintegral_comp]; rw [lintegral_deterministic_prod]
   · congr with b
     rw [prod_apply' _ _ _ hs]; rw [prodMkRight_apply]; rw [comp_deterministic_eq_comap]; rw [comap_apply]
-  · exact (meas
+  · exact (measurable_measure_prodMk_left hs).lintegral_kernel
+  · exact measurable_measure_prodMk_left hs
+  · exact Kernel.measurable_coe _ hs
 
 Depends on / 依赖: Kernel, Kernel.measurable_coe, comap_apply, comp_apply, comp_deterministic_eq_comap, lintegral_comp, lintegral_deterministic_prod, lintegral_kernel, measurable_coe, measurable_measure_prodMk_left, prodMkRight_apply, prod_apply
 -/
@@ -149,7 +157,9 @@ lemma prod_comp_right
   rw [MeasureTheory.lintegral_prod]
   swap; · exact (Kernel.measurable_coe _ hs).aemeasurable
   congr with a
-  congr with 
+  congr with b
+  rw [Kernel.parallelComp_apply]; rw [Kernel.id_apply]; rw [Measure.prod_apply hs]; rw [lintegral_dirac']
+  exact measurable_measure_prodMk_left hs
 
 中文:
 引理 prod_comp_right
@@ -161,7 +171,9 @@ lemma prod_comp_right
   rw [MeasureTheory.lintegral_prod]
   swap; · exact (Kernel.measurable_coe _ hs).aemeasurable
   congr with a
-  congr with 
+  congr with b
+  rw [Kernel.parallelComp_apply]; rw [Kernel.id_apply]; rw [Measure.prod_apply hs]; rw [lintegral_dirac']
+  exact measurable_measure_prodMk_left hs
 
 Depends on / 依赖: Kernel, Kernel.aemeasurable, Kernel.id_apply, Kernel.measurable_coe, Kernel.parallelComp_apply, Measure, Measure.bind_apply, Measure.prod_apply, MeasureTheory, MeasureTheory.lintegral_prod, aemeasurable, bind_apply, id_apply, lintegral_dirac, lintegral_prod, measurable_coe, measurable_measure_prodMk_left, measurable_prodMk_left, parallelComp_apply, prod_apply
 -/
@@ -187,7 +199,15 @@ lemma prod_comp_left
   have h1 : (κ ∘ₘ μ).prod ν = (ν.prod (κ ∘ₘ μ)).map Prod.swap := by rw [Measure.prod_swap]
   have h2 : (κ ∥ₖ Kernel.id) ∘ₘ (μ.prod ν) = ((Kernel.id ∥ₖ κ) ∘ₘ (ν.prod μ)).map Prod.swap := by
     calc (κ ∥ₖ Kernel.id) ∘ₘ (μ.prod ν)
-    _ = (κ ∥ₖ Kernel.id) ∘ₘ ((ν.prod μ).map Prod.swap) := by rw [Mea
+    _ = (κ ∥ₖ Kernel.id) ∘ₘ ((ν.prod μ).map Prod.swap) := by rw [Measure.prod_swap]
+    _ = (κ ∥ₖ Kernel.id) ∘ₘ ((Kernel.swap _ _) ∘ₘ (ν.prod μ)) := by
+      rw [Kernel.swap]; rw [Measure.deterministic_comp_eq_map]
+    _ = (Kernel.swap _ _) ∘ₘ ((Kernel.id ∥ₖ κ) ∘ₘ (ν.prod μ)) := by
+      rw [Measure.comp_assoc]; rw [Measure.comp_assoc]; rw [Kernel.swap_parallelComp]
+    _ = ((Kernel.id ∥ₖ κ) ∘ₘ (ν.prod μ)).map Prod.swap := by
+      rw [Kernel.swap]; rw [Measure.deterministic_comp_eq_map]
+  rw [← Measure.prod_comp_right]; rw [← h1] at h2
+  exact h2.symm
 
 中文:
 引理 prod_comp_left
@@ -196,7 +216,15 @@ lemma prod_comp_left
   have h1 : (κ ∘ₘ μ).prod ν = (ν.prod (κ ∘ₘ μ)).map Prod.swap := by rw [Measure.prod_swap]
   have h2 : (κ ∥ₖ Kernel.id) ∘ₘ (μ.prod ν) = ((Kernel.id ∥ₖ κ) ∘ₘ (ν.prod μ)).map Prod.swap := by
     calc (κ ∥ₖ Kernel.id) ∘ₘ (μ.prod ν)
-    _ = (κ ∥ₖ Kernel.id) ∘ₘ ((ν.prod μ).map Prod.swap) := by rw [Mea
+    _ = (κ ∥ₖ Kernel.id) ∘ₘ ((ν.prod μ).map Prod.swap) := by rw [Measure.prod_swap]
+    _ = (κ ∥ₖ Kernel.id) ∘ₘ ((Kernel.swap _ _) ∘ₘ (ν.prod μ)) := by
+      rw [Kernel.swap]; rw [Measure.deterministic_comp_eq_map]
+    _ = (Kernel.swap _ _) ∘ₘ ((Kernel.id ∥ₖ κ) ∘ₘ (ν.prod μ)) := by
+      rw [Measure.comp_assoc]; rw [Measure.comp_assoc]; rw [Kernel.swap_parallelComp]
+    _ = ((Kernel.id ∥ₖ κ) ∘ₘ (ν.prod μ)).map Prod.swap := by
+      rw [Kernel.swap]; rw [Measure.deterministic_comp_eq_map]
+  rw [← Measure.prod_comp_right]; rw [← h1] at h2
+  exact h2.symm
 
 Depends on / 依赖: Kernel, Kernel.id, Kernel.swap, Measure, Measure.deterministic_comp_eq_map, Measure.prod_swap, Prod.swap, deterministic_comp_eq_map, prod_swap
 -/
@@ -252,7 +280,9 @@ lemma compProd_map
   calc μ otimesₘ (κ.map f)
   _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (Kernel.id ×ₖ κ) ∘ₘ μ := by
     rw [comp_assoc]; rw [Kernel.parallelComp_comp_prod]; rw [compProd_eq_comp_prod]; rw [Kernel.id_comp]; rw [Kernel.deterministic_comp_eq_map]
-  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘
+  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (μ otimesₘ κ) := by rw [compProd_eq_comp_prod]
+  _ = (μ otimesₘ κ).map (Prod.map id f) := by
+    rw [Kernel.id]; rw [Kernel.deterministic_parallelComp_deterministic]; rw [deterministic_comp_eq_map]
 
 中文:
 引理 compProd_map
@@ -261,7 +291,9 @@ lemma compProd_map
   calc μ otimesₘ (κ.map f)
   _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (Kernel.id ×ₖ κ) ∘ₘ μ := by
     rw [comp_assoc]; rw [Kernel.parallelComp_comp_prod]; rw [compProd_eq_comp_prod]; rw [Kernel.id_comp]; rw [Kernel.deterministic_comp_eq_map]
-  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘
+  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (μ otimesₘ κ) := by rw [compProd_eq_comp_prod]
+  _ = (μ otimesₘ κ).map (Prod.map id f) := by
+    rw [Kernel.id]; rw [Kernel.deterministic_parallelComp_deterministic]; rw [deterministic_comp_eq_map]
 
 Depends on / 依赖: Kernel, Kernel.deterministic, Kernel.deterministic_comp_eq_map, Kernel.deterministic_parallelComp_deterministic, Kernel.id, Kernel.id_comp, Kernel.parallelComp_comp_prod, Prod.map, compProd_eq_comp_prod, comp_assoc, deterministic, deterministic_comp_eq_map, deterministic_parallelComp_deterministic, id_comp, parallelComp_comp_prod
 -/

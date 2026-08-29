@@ -75,7 +75,22 @@ definition homEquiv₁
     calc
       _ = 𝟙 _ otimes≫ (adj.unit ▷ g ≫ (l ≫ r) ◁ γ) otimes≫ l ◁ adj.counit ▷ h otimes≫ 𝟙 _ := by
         bicategory
-      _ = γ otimes≫ leftZigzag adj.uni
+      _ = γ otimes≫ leftZigzag adj.unit adj.counit ▷ h otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]
+        bicategory
+      _ = γ := by
+        rw [adj.left_triangle]
+        bicategory
+  right_inv β := by
+    calc
+      _ = 𝟙 _ otimes≫ r ◁ adj.unit ▷ g otimes≫ ((r ≫ l) ◁ β ≫ adj.counit ▷ h) otimes≫ 𝟙 _ := by
+        bicategory
+      _ = 𝟙 _ otimes≫ rightZigzag adj.unit adj.counit ▷ g otimes≫ β := by
+        rw [whisker_exchange]
+        bicategory
+      _ = β := by
+        rw [adj.right_triangle]
+        bicategory
 
 中文:
 定义 homEquiv₁
@@ -86,7 +101,22 @@ definition homEquiv₁
     calc
       _ = 𝟙 _ otimes≫ (adj.unit ▷ g ≫ (l ≫ r) ◁ γ) otimes≫ l ◁ adj.counit ▷ h otimes≫ 𝟙 _ := by
         bicategory
-      _ = γ otimes≫ leftZigzag adj.uni
+      _ = γ otimes≫ leftZigzag adj.unit adj.counit ▷ h otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]
+        bicategory
+      _ = γ := by
+        rw [adj.left_triangle]
+        bicategory
+  right_inv β := by
+    calc
+      _ = 𝟙 _ otimes≫ r ◁ adj.unit ▷ g otimes≫ ((r ≫ l) ◁ β ≫ adj.counit ▷ h) otimes≫ 𝟙 _ := by
+        bicategory
+      _ = 𝟙 _ otimes≫ rightZigzag adj.unit adj.counit ▷ g otimes≫ β := by
+        rw [whisker_exchange]
+        bicategory
+      _ = β := by
+        rw [adj.right_triangle]
+        bicategory
 
 Depends on / 依赖: adj.counit, counit, fun_
 -/
@@ -129,7 +159,22 @@ definition homEquiv₂
     calc
       _ = 𝟙 _ otimes≫ g ◁ adj.unit ▷ l otimes≫ (α ▷ (r ≫ l) ≫ h ◁ adj.counit) otimes≫ 𝟙 _ := by
         bicategory
-      _ = 𝟙 _ otimes≫ g ◁ leftZigzag adj.u
+      _ = 𝟙 _ otimes≫ g ◁ leftZigzag adj.unit adj.counit otimes≫ α := by
+        rw [← whisker_exchange]
+        bicategory
+      _ = α := by
+        rw [adj.left_triangle]
+        bicategory
+  right_inv γ :=
+    calc
+      _ = 𝟙 _ otimes≫ (g ◁ adj.unit ≫ γ ▷ (l ≫ r)) otimes≫ h ◁ adj.counit ▷ r otimes≫ 𝟙 _ := by
+        bicategory
+      _ = 𝟙 _ otimes≫ γ otimes≫ h ◁ rightZigzag adj.unit adj.counit otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]
+        bicategory
+      _ = γ := by
+        rw [adj.right_triangle]
+        bicategory
 
 中文:
 定义 homEquiv₂
@@ -140,7 +185,22 @@ definition homEquiv₂
     calc
       _ = 𝟙 _ otimes≫ g ◁ adj.unit ▷ l otimes≫ (α ▷ (r ≫ l) ≫ h ◁ adj.counit) otimes≫ 𝟙 _ := by
         bicategory
-      _ = 𝟙 _ otimes≫ g ◁ leftZigzag adj.u
+      _ = 𝟙 _ otimes≫ g ◁ leftZigzag adj.unit adj.counit otimes≫ α := by
+        rw [← whisker_exchange]
+        bicategory
+      _ = α := by
+        rw [adj.left_triangle]
+        bicategory
+  right_inv γ :=
+    calc
+      _ = 𝟙 _ otimes≫ (g ◁ adj.unit ≫ γ ▷ (l ≫ r)) otimes≫ h ◁ adj.counit ▷ r otimes≫ 𝟙 _ := by
+        bicategory
+      _ = 𝟙 _ otimes≫ γ otimes≫ h ◁ rightZigzag adj.unit adj.counit otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]
+        bicategory
+      _ = γ := by
+        rw [adj.right_triangle]
+        bicategory
 
 Depends on / 依赖: adj.unit
 -/
@@ -420,7 +480,33 @@ theorem mateEquiv_vcomp
   calc
     _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ adj₂.unit ▷ g₂ otimes≫ r₁ ◁ α ▷ r₂ ▷ g₂ otimes≫
           ((adj₁.counit ▷ (h₁ ≫ r₂ ≫ g₂ ≫ 𝟙 e)) ≫ 𝟙 b ◁ (h₁ ◁ r₂ ◁ g₂ ◁ adj₃.unit)) otimes≫
-            h₁ ◁ r₂ ◁ β ▷ r₃ ot
+            h₁ ◁ r₂ ◁ β ▷ r₃ otimes≫ h₁ ◁ adj₂.counit ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ adj₂.unit ▷ g₂ otimes≫
+          (r₁ ◁ (α ▷ (r₂ ≫ g₂ ≫ 𝟙 e) ≫ (l₁ ≫ h₁) ◁ r₂ ◁ g₂ ◁ adj₃.unit)) otimes≫
+            ((adj₁.counit ▷ (h₁ ≫ r₂) ▷ (g₂ ≫ l₃) ≫ (𝟙 b ≫ h₁ ≫ r₂) ◁ β) ▷ r₃) otimes≫
+              h₁ ◁ adj₂.counit ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ (adj₂.unit ▷ (g₂ ≫ 𝟙 e) ≫ (l₂ ≫ r₂) ◁ g₂ ◁ adj₃.unit) otimes≫
+          (r₁ ◁ (α ▷ (r₂ ≫ g₂ ≫ l₃) ≫ (l₁ ≫ h₁) ◁ r₂ ◁ β) ▷ r₃) otimes≫
+            (adj₁.counit ▷ h₁ ▷ (r₂ ≫ l₂) ≫ (𝟙 b ≫ h₁) ◁ adj₂.counit) ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ g₂ ◁ adj₃.unit otimes≫
+          r₁ ◁ g₁ ◁ (adj₂.unit ▷ (g₂ ≫ l₃) ≫ (l₂ ≫ r₂) ◁ β) ▷ r₃ otimes≫
+            r₁ ◁ (α ▷ (r₂ ≫ l₂) ≫ (l₁ ≫ h₁) ◁ adj₂.counit) ▷ h₂ ▷ r₃ otimes≫
+              adj₁.counit ▷ h₁ ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]; rw [← whisker_exchange]
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ g₂ ◁ adj₃.unit otimes≫ r₁ ◁ g₁ ◁ β ▷ r₃ otimes≫
+          ((r₁ ≫ g₁) ◁ leftZigzag adj₂.unit adj₂.counit ▷ (h₂ ≫ r₃)) otimes≫
+            r₁ ◁ α ▷ h₂ ▷ r₃ otimes≫ adj₁.counit ▷ h₁ ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]
+      bicategory
+    _ = _ := by
+      rw [adj₂.left_triangle]
+      bicategory
 
 中文:
 定理 mateEquiv_vcomp
@@ -431,7 +517,33 @@ theorem mateEquiv_vcomp
   calc
     _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ adj₂.unit ▷ g₂ otimes≫ r₁ ◁ α ▷ r₂ ▷ g₂ otimes≫
           ((adj₁.counit ▷ (h₁ ≫ r₂ ≫ g₂ ≫ 𝟙 e)) ≫ 𝟙 b ◁ (h₁ ◁ r₂ ◁ g₂ ◁ adj₃.unit)) otimes≫
-            h₁ ◁ r₂ ◁ β ▷ r₃ ot
+            h₁ ◁ r₂ ◁ β ▷ r₃ otimes≫ h₁ ◁ adj₂.counit ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ adj₂.unit ▷ g₂ otimes≫
+          (r₁ ◁ (α ▷ (r₂ ≫ g₂ ≫ 𝟙 e) ≫ (l₁ ≫ h₁) ◁ r₂ ◁ g₂ ◁ adj₃.unit)) otimes≫
+            ((adj₁.counit ▷ (h₁ ≫ r₂) ▷ (g₂ ≫ l₃) ≫ (𝟙 b ≫ h₁ ≫ r₂) ◁ β) ▷ r₃) otimes≫
+              h₁ ◁ adj₂.counit ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ (adj₂.unit ▷ (g₂ ≫ 𝟙 e) ≫ (l₂ ≫ r₂) ◁ g₂ ◁ adj₃.unit) otimes≫
+          (r₁ ◁ (α ▷ (r₂ ≫ g₂ ≫ l₃) ≫ (l₁ ≫ h₁) ◁ r₂ ◁ β) ▷ r₃) otimes≫
+            (adj₁.counit ▷ h₁ ▷ (r₂ ≫ l₂) ≫ (𝟙 b ≫ h₁) ◁ adj₂.counit) ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ g₂ ◁ adj₃.unit otimes≫
+          r₁ ◁ g₁ ◁ (adj₂.unit ▷ (g₂ ≫ l₃) ≫ (l₂ ≫ r₂) ◁ β) ▷ r₃ otimes≫
+            r₁ ◁ (α ▷ (r₂ ≫ l₂) ≫ (l₁ ≫ h₁) ◁ adj₂.counit) ▷ h₂ ▷ r₃ otimes≫
+              adj₁.counit ▷ h₁ ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]; rw [← whisker_exchange]
+      bicategory
+    _ = 𝟙 _ otimes≫ r₁ ◁ g₁ ◁ g₂ ◁ adj₃.unit otimes≫ r₁ ◁ g₁ ◁ β ▷ r₃ otimes≫
+          ((r₁ ≫ g₁) ◁ leftZigzag adj₂.unit adj₂.counit ▷ (h₂ ≫ r₃)) otimes≫
+            r₁ ◁ α ▷ h₂ ▷ r₃ otimes≫ adj₁.counit ▷ h₁ ▷ h₂ ▷ r₃ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]
+      bicategory
+    _ = _ := by
+      rw [adj₂.left_triangle]
+      bicategory
 
 Depends on / 依赖: bicategory, counit, leftAdjointSquare, leftAdjointSquare.vcomp, mateEquiv_apply, otimes, rightAdjointSquare, rightAdjointSquare.vcomp
 -/
@@ -529,6 +641,16 @@ theorem mateEquiv_hcomp
     _ = 𝟙 _ otimes≫ r₃ ◁ r₁ ◁ g ◁ adj₂.unit otimes≫
           r₃ ◁ r₁ ◁ ((g ≫ l₂) ◁ adj₄.unit ≫ α ▷ (l₄ ≫ r₄)) ▷ r₂ otimes≫
             r₃ ◁ ((r₁ ≫ l₁) ◁ β ≫ adj₁.counit ▷ (l₃ ≫ k)) ▷ r₄ ▷ r₂ otimes≫
+              adj₃.counit ▷ k ▷ r₄ ▷ r₂ otimes≫ 𝟙 _ := by
+      bicategory
+    _ = 𝟙 _ otimes≫ r₃ ◁ r₁ ◁ g ◁ adj₂.unit otimes≫ r₃ ◁ r₁ ◁ α ▷ r₂ otimes≫
+          r₃ ◁ ((r₁ ≫ l₁) ◁ h ◁ adj₄.unit ≫ adj₁.counit ▷ (h ≫ l₄ ≫ r₄)) ▷ r₂ otimes≫
+            r₃ ◁ β ▷ r₄ ▷ r₂ otimes≫ adj₃.counit ▷ k ▷ r₄ ▷ r₂ otimes≫ 𝟙 _ := by
+      rw [whisker_exchange]; rw [whisker_exchange]
+      bicategory
+    _ = _ := by
+      rw [whisker_exchange]
+      bicategory
 
 中文:
 定理 mateEquiv_hcomp
@@ -540,6 +662,16 @@ theorem mateEquiv_hcomp
     _ = 𝟙 _ otimes≫ r₃ ◁ r₁ ◁ g ◁ adj₂.unit otimes≫
           r₃ ◁ r₁ ◁ ((g ≫ l₂) ◁ adj₄.unit ≫ α ▷ (l₄ ≫ r₄)) ▷ r₂ otimes≫
             r₃ ◁ ((r₁ ≫ l₁) ◁ β ≫ adj₁.counit ▷ (l₃ ≫ k)) ▷ r₄ ▷ r₂ otimes≫
+              adj₃.counit ▷ k ▷ r₄ ▷ r₂ otimes≫ 𝟙 _ := by
+      bicategory
+    _ = 𝟙 _ otimes≫ r₃ ◁ r₁ ◁ g ◁ adj₂.unit otimes≫ r₃ ◁ r₁ ◁ α ▷ r₂ otimes≫
+          r₃ ◁ ((r₁ ≫ l₁) ◁ h ◁ adj₄.unit ≫ adj₁.counit ▷ (h ≫ l₄ ≫ r₄)) ▷ r₂ otimes≫
+            r₃ ◁ β ▷ r₄ ▷ r₂ otimes≫ adj₃.counit ▷ k ▷ r₄ ▷ r₂ otimes≫ 𝟙 _ := by
+      rw [whisker_exchange]; rw [whisker_exchange]
+      bicategory
+    _ = _ := by
+      rw [whisker_exchange]
+      bicategory
 
 Depends on / 依赖: bicategory, counit, leftAdjointSquare, leftAdjointSquare.hcomp, mateEquiv_apply, otimes, rightAdjointSquare, rightAdjointSquare.hcomp
 -/
@@ -737,7 +869,8 @@ theorem mateEquiv_square
       (leftAdjointSquare.hcomp α β) (leftAdjointSquare.hcomp γ δ)
   have hcomp1 := mateEquiv_hcomp adj₁ adj₃ adj₂ adj₄ α β
   have hcomp2 := mateEquiv_hcomp adj₃ adj₅ adj₄ adj₆ γ δ
-  rw [hcomp1]; rw [hcomp2] at 
+  rw [hcomp1]; rw [hcomp2] at vcomp
+  exact vcomp
 
 中文:
 定理 mateEquiv_square
@@ -747,7 +880,8 @@ theorem mateEquiv_square
       (leftAdjointSquare.hcomp α β) (leftAdjointSquare.hcomp γ δ)
   have hcomp1 := mateEquiv_hcomp adj₁ adj₃ adj₂ adj₄ α β
   have hcomp2 := mateEquiv_hcomp adj₃ adj₅ adj₄ adj₆ γ δ
-  rw [hcomp1]; rw [hcomp2] at 
+  rw [hcomp1]; rw [hcomp2] at vcomp
+  exact vcomp
 
 Depends on / 依赖: hcomp1, hcomp2, leftAdjointSquare, leftAdjointSquare.hcomp, mateEquiv_hcomp, mateEquiv_vcomp
 -/
@@ -1112,7 +1246,10 @@ lemma conjugateEquiv_whiskerLeft
     ((fun_ _).hom ≫ φ ≫ (ρ_ _).inv)
   dsimp [leftAdjointSquare.hcomp, rightAdjointSquare.hcomp] at this
   simp only [comp_whiskerRight, leftUnitor_whiskerRight, Category.assoc, whiskerLeft_comp,
-    whiskerLeft_rightUnitor
+    whiskerLeft_rightUnitor_inv, Iso.hom_inv_id, Category.comp_id, triangle_assoc,
+    inv_hom_whiskerRight_assoc, Iso.inv_hom_id_assoc, mateEquiv_leftUnitor_hom_rightUnitor_inv,
+    whiskerLeft_rightUnitor, triangle_assoc_comp_left_inv_assoc, Iso.hom_inv_id_assoc] at this
+  simp [conjugateEquiv_apply, this]
 
 中文:
 引理 conjugateEquiv_whiskerLeft
@@ -1121,7 +1258,10 @@ lemma conjugateEquiv_whiskerLeft
     ((fun_ _).hom ≫ φ ≫ (ρ_ _).inv)
   dsimp [leftAdjointSquare.hcomp, rightAdjointSquare.hcomp] at this
   simp only [comp_whiskerRight, leftUnitor_whiskerRight, Category.assoc, whiskerLeft_comp,
-    whiskerLeft_rightUnitor
+    whiskerLeft_rightUnitor_inv, Iso.hom_inv_id, Category.comp_id, triangle_assoc,
+    inv_hom_whiskerRight_assoc, Iso.inv_hom_id_assoc, mateEquiv_leftUnitor_hom_rightUnitor_inv,
+    whiskerLeft_rightUnitor, triangle_assoc_comp_left_inv_assoc, Iso.hom_inv_id_assoc] at this
+  simp [conjugateEquiv_apply, this]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Iso.h, Iso.hom_inv_id, Iso.inv_hom_id_assoc, comp_id, comp_whiskerRight, fun_, hom_inv_id, inv_hom_id_assoc, inv_hom_whiskerRight_assoc, leftAdjointSquare, leftAdjointSquare.hcomp, leftUnitor_whiskerRight, mateEquiv_hcomp, mateEquiv_leftUnitor_hom_rightUnitor_inv, rightAdjointSquare, rightAdjointSquare.hcomp, triangle_assoc
 -/
@@ -1150,7 +1290,10 @@ lemma conjugateEquiv_whiskerRight
     ((fun_ _).hom ≫ φ ≫ (ρ_ _).inv) ((fun_ _).hom ≫ (ρ_ _).inv)
   dsimp [leftAdjointSquare.hcomp, rightAdjointSquare.hcomp] at this
   simp only [comp_whiskerRight, leftUnitor_whiskerRight, Category.assoc, whiskerLeft_comp,
-    whiskerLeft_rightUnitor
+    whiskerLeft_rightUnitor_inv, Iso.hom_inv_id, Category.comp_id, triangle_assoc,
+    inv_hom_whiskerRight_assoc, Iso.inv_hom_id_assoc, mateEquiv_leftUnitor_hom_rightUnitor_inv,
+    leftUnitor_inv_whiskerRight, Iso.inv_hom_id, triangle_assoc_comp_right_assoc] at this
+  simp [conjugateEquiv_apply, this]
 
 中文:
 引理 conjugateEquiv_whiskerRight
@@ -1159,7 +1302,10 @@ lemma conjugateEquiv_whiskerRight
     ((fun_ _).hom ≫ φ ≫ (ρ_ _).inv) ((fun_ _).hom ≫ (ρ_ _).inv)
   dsimp [leftAdjointSquare.hcomp, rightAdjointSquare.hcomp] at this
   simp only [comp_whiskerRight, leftUnitor_whiskerRight, Category.assoc, whiskerLeft_comp,
-    whiskerLeft_rightUnitor
+    whiskerLeft_rightUnitor_inv, Iso.hom_inv_id, Category.comp_id, triangle_assoc,
+    inv_hom_whiskerRight_assoc, Iso.inv_hom_id_assoc, mateEquiv_leftUnitor_hom_rightUnitor_inv,
+    leftUnitor_inv_whiskerRight, Iso.inv_hom_id, triangle_assoc_comp_right_assoc] at this
+  simp [conjugateEquiv_apply, this]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Iso.hom_inv_id, Iso.inv_hom_id, Iso.inv_hom_id_assoc, comp_id, comp_whiskerRight, fun_, hom_inv_id, inv_hom_id, inv_hom_id_assoc, inv_hom_whiskerRight_assoc, leftAdjointSquare, leftAdjointSquare.hcomp, leftUnitor_inv_whiskerRight, leftUnitor_whiskerRight, mateEquiv_hcomp, mateEquiv_leftUnitor_hom_rightUnitor_inv, rightAdjointSquare
 -/
@@ -1233,7 +1379,13 @@ theorem conjugateEquiv_comp
             (mateEquiv adj₁ adj₂ ((fun_ _).hom ≫ α ≫ (ρ_ _).inv))
             (mateEquiv adj₂ adj₃ ((fun_ _).hom ≫ β ≫ (ρ_ _).inv)) otimes≫ 𝟙 r₃ := by
       dsimp only [rightAdjointSquare.vcomp]
-    
+      bicategory
+    _ = _ := by
+      rw [← mateEquiv_vcomp]
+      simp only [leftAdjointSquare.vcomp, mateEquiv_apply']
+      bicategory
+
+@[simp]
 
 中文:
 定理 conjugateEquiv_comp
@@ -1246,7 +1398,13 @@ theorem conjugateEquiv_comp
             (mateEquiv adj₁ adj₂ ((fun_ _).hom ≫ α ≫ (ρ_ _).inv))
             (mateEquiv adj₂ adj₃ ((fun_ _).hom ≫ β ≫ (ρ_ _).inv)) otimes≫ 𝟙 r₃ := by
       dsimp only [rightAdjointSquare.vcomp]
-    
+      bicategory
+    _ = _ := by
+      rw [← mateEquiv_vcomp]
+      simp only [leftAdjointSquare.vcomp, mateEquiv_apply']
+      bicategory
+
+@[simp]
 
 Depends on / 依赖: bicategory, conjugateEquiv_apply, fun_, leftAdjointSquare, leftAdjointSquare.vcomp, mateEquiv, mateEquiv_apply, mateEquiv_vcomp, otimes, rightAdjointSquare, rightAdjointSquare.vcomp
 -/
@@ -1454,7 +1612,19 @@ definition conjugateIsoEquiv
         rw [conjugateEquiv_comp]; rw [Iso.inv_hom_id]; rw [conjugateEquiv_id]
       inv_hom_id := by
         rw [conjugateEquiv_comp]; rw [Iso.hom_inv_id]; rw [conjugateEquiv_id] }
-  invFun β :
+  invFun β :=
+    { hom := (conjugateEquiv adj₁ adj₂).symm β.hom
+      inv := (conjugateEquiv adj₂ adj₁).symm β.inv
+      hom_inv_id := by
+        rw [conjugateEquiv_symm_comp]; rw [Iso.inv_hom_id]; rw [conjugateEquiv_symm_id]
+      inv_hom_id := by
+        rw [conjugateEquiv_symm_comp]; rw [Iso.hom_inv_id]; rw [conjugateEquiv_symm_id] }
+  left_inv := by
+    intro α
+    simp only [Equiv.symm_apply_apply]
+  right_inv := by
+    intro α
+    simp only [Equiv.apply_symm_apply]
 
 中文:
 定义 conjugateIsoEquiv
@@ -1465,7 +1635,19 @@ definition conjugateIsoEquiv
         rw [conjugateEquiv_comp]; rw [Iso.inv_hom_id]; rw [conjugateEquiv_id]
       inv_hom_id := by
         rw [conjugateEquiv_comp]; rw [Iso.hom_inv_id]; rw [conjugateEquiv_id] }
-  invFun β :
+  invFun β :=
+    { hom := (conjugateEquiv adj₁ adj₂).symm β.hom
+      inv := (conjugateEquiv adj₂ adj₁).symm β.inv
+      hom_inv_id := by
+        rw [conjugateEquiv_symm_comp]; rw [Iso.inv_hom_id]; rw [conjugateEquiv_symm_id]
+      inv_hom_id := by
+        rw [conjugateEquiv_symm_comp]; rw [Iso.hom_inv_id]; rw [conjugateEquiv_symm_id] }
+  left_inv := by
+    intro α
+    simp only [Equiv.symm_apply_apply]
+  right_inv := by
+    intro α
+    simp only [Equiv.apply_symm_apply]
 
 Depends on / 依赖: Iso.hom_inv_id, Iso.inv_hom_id, conjugateEquiv, conjugateEquiv_comp, conjugateEquiv_id, conjugateEquiv_symm_comp, conjugateEquiv_symm_id, hom_inv_id, invFun, inv_hom_id
 -/
@@ -1608,7 +1790,12 @@ theorem mateEquiv_conjugateEquiv_vcomp
             (mateEquiv adj₁ adj₂ α)
             (mateEquiv adj₂ adj₃ ((fun_ l₃).hom ≫ β ≫ (ρ_ l₂).inv)) otimes≫ 𝟙 _ := by
       dsimp only [conjugateEquiv_apply, rightAdjointSquareConjugate.vcomp,
-        rightAdjointSquare.vcom
+        rightAdjointSquare.vcomp]
+      bicategory
+    _ = _ := by
+      rw [← mateEquiv_vcomp]
+      simp only [leftAdjointSquare.vcomp, mateEquiv_apply', leftAdjointSquareConjugate.vcomp]
+      bicategory
 
 中文:
 定理 mateEquiv_conjugateEquiv_vcomp
@@ -1620,7 +1807,12 @@ theorem mateEquiv_conjugateEquiv_vcomp
             (mateEquiv adj₁ adj₂ α)
             (mateEquiv adj₂ adj₃ ((fun_ l₃).hom ≫ β ≫ (ρ_ l₂).inv)) otimes≫ 𝟙 _ := by
       dsimp only [conjugateEquiv_apply, rightAdjointSquareConjugate.vcomp,
-        rightAdjointSquare.vcom
+        rightAdjointSquare.vcomp]
+      bicategory
+    _ = _ := by
+      rw [← mateEquiv_vcomp]
+      simp only [leftAdjointSquare.vcomp, mateEquiv_apply', leftAdjointSquareConjugate.vcomp]
+      bicategory
 
 Depends on / 依赖: bicategory, conjugateEquiv_apply, fun_, leftAdjointSquare, leftAdjointSquare.vcomp, leftAdjointSquareConjugate, leftAdjointSquareConjugate.vcomp, mateEquiv, mateEquiv_apply, mateEquiv_vcomp, otimes, rightAdjointSquare, rightAdjointSquare.vcomp, rightAdjointSquareConjugate, rightAdjointSquareConjugate.vcomp
 -/
@@ -1698,7 +1890,11 @@ theorem conjugateEquiv_mateEquiv_vcomp
             (mateEquiv adj₁ adj₂ ((fun_ l₂).hom ≫ α ≫ (ρ_ l₁).inv))
             (mateEquiv adj₂ adj₃ β) otimes≫ 𝟙 _ := by
       dsimp only [conjugateEquiv_apply, rightAdjointConjugateSquare.vcomp, rightAdjointSquare.vcomp]
-     
+      bicategory
+    _ = _ := by
+      rw [← mateEquiv_vcomp]
+      simp only [leftAdjointSquare.vcomp, mateEquiv_apply', leftAdjointConjugateSquare.vcomp]
+      bicategory
 
 中文:
 定理 conjugateEquiv_mateEquiv_vcomp
@@ -1710,7 +1906,11 @@ theorem conjugateEquiv_mateEquiv_vcomp
             (mateEquiv adj₁ adj₂ ((fun_ l₂).hom ≫ α ≫ (ρ_ l₁).inv))
             (mateEquiv adj₂ adj₃ β) otimes≫ 𝟙 _ := by
       dsimp only [conjugateEquiv_apply, rightAdjointConjugateSquare.vcomp, rightAdjointSquare.vcomp]
-     
+      bicategory
+    _ = _ := by
+      rw [← mateEquiv_vcomp]
+      simp only [leftAdjointSquare.vcomp, mateEquiv_apply', leftAdjointConjugateSquare.vcomp]
+      bicategory
 
 Depends on / 依赖: bicategory, conjugateEquiv_apply, fun_, leftAdjointConjugateSquare, leftAdjointConjugateSquare.vcomp, leftAdjointSquare, leftAdjointSquare.vcomp, mateEquiv, mateEquiv_apply, mateEquiv_vcomp, otimes, rightAdjointConjugateSquare, rightAdjointConjugateSquare.vcomp, rightAdjointSquare, rightAdjointSquare.vcomp
 -/

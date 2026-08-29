@@ -70,7 +70,7 @@ theorem Fintype.nonempty_field_iff
   have := Fact.mk hp.nat_prime
   have : Fintype (GaloisField p n) := Fintype.ofFinite (GaloisField p n)
   exact ⟨(Fintype.equivOfCardEq
-    (((Fintype.card_eq_nat_card).trans (GaloisField.card p n hn.ne')).tran
+    (((Fintype.card_eq_nat_card).trans (GaloisField.card p n hn.ne')).trans hα)).symm.field⟩
 
 中文:
 定理 有限类型.nonempty_field_iff
@@ -82,7 +82,7 @@ theorem Fintype.nonempty_field_iff
   have := Fact.mk hp.nat_prime
   have : Fintype (GaloisField p n) := Fintype.ofFinite (GaloisField p n)
   exact ⟨(Fintype.equivOfCardEq
-    (((Fintype.card_eq_nat_card).trans (GaloisField.card p n hn.ne')).tran
+    (((Fintype.card_eq_nat_card).trans (GaloisField.card p n hn.ne')).trans hα)).symm.field⟩
 
 Depends on / 依赖: Fact.mk, Fintype, Fintype.card_eq_nat_card, Fintype.equivOfCardEq, Fintype.isPrimePow_card_of_field, Fintype.ofFinite, GaloisField, GaloisField.card, card_eq_nat_card, equivOfCardEq, hn.ne, hp.nat_prime, isPrimePow_card_of_field, nat_prime, ofFinite, symm.field
 -/
@@ -153,7 +153,7 @@ theorem Field.nonempty_iff
   obtain h | h := fintypeOrInfinite α
   · simpa only [Cardinal.mk_fintype, Nat.cast_inj, exists_eq_left',
       Cardinal.natCast_lt_aleph0.not_ge, false_or] using Fintype.nonempty_field_iff
-  · simpa only [← Cardinal.infinite_iff, h, true_or, iff_true] using Infinit
+  · simpa only [← Cardinal.infinite_iff, h, true_or, iff_true] using Infinite.nonempty_field
 
 中文:
 定理 域.nonempty_iff
@@ -164,7 +164,7 @@ theorem Field.nonempty_iff
   obtain h | h := fintypeOrInfinite α
   · simpa only [Cardinal.mk_fintype, Nat.cast_inj, exists_eq_left',
       Cardinal.natCast_lt_aleph0.not_ge, false_or] using Fintype.nonempty_field_iff
-  · simpa only [← Cardinal.infinite_iff, h, true_or, iff_true] using Infinit
+  · simpa only [← Cardinal.infinite_iff, h, true_or, iff_true] using Infinite.nonempty_field
 
 Depends on / 依赖: Cardinal, Cardinal.infinite_iff, Cardinal.isPrimePow_iff, Cardinal.mk_fintype, Cardinal.natCast_lt_aleph0.not_ge, Fintype, Fintype.nonempty_field_iff, Infinite, Infinite.nonempty_field, Nat.cast_inj, cast_inj, exists_eq_left, false_or, fintypeOrInfinite, iff_true, infinite_iff, isPrimePow_iff, mk_fintype, natCast_lt_aleph0, nonempty_field
 -/

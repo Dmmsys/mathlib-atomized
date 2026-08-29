@@ -195,7 +195,10 @@ lemma LocallyIntegrableOn.mono_measure'
   refine ⟨u inter s, inter_mem (mem_nhdsWithin.mpr ⟨u, hu, hxu, inter_subset_left⟩) self_mem_nhdsWithin,
     ?_⟩
 .mono_measure' ?_ refine hf.mono_set hut
-  simp_rw [← restrict_restrict hu.measurableSet
+  simp_rw [← restrict_restrict hu.measurableSet]
+  gcongr
+
+@[gcongr]
 
 中文:
 引理 Locally整数egrableOn.mono_measure'
@@ -207,7 +210,10 @@ lemma LocallyIntegrableOn.mono_measure'
   refine ⟨u inter s, inter_mem (mem_nhdsWithin.mpr ⟨u, hu, hxu, inter_subset_left⟩) self_mem_nhdsWithin,
     ?_⟩
 .mono_measure' ?_ refine hf.mono_set hut
-  simp_rw [← restrict_restrict hu.measurableSet
+  simp_rw [← restrict_restrict hu.measurableSet]
+  gcongr
+
+@[gcongr]
 
 Depends on / 依赖: hf.mono_set, hu.measurableSet, inter_mem, inter_subset_left, measurableSet, mem_nhdsWithin, mem_nhdsWithin.mp, mem_nhdsWithin.mpr, mono_measure, mono_set, restrict_restrict, self_mem_nhdsWithin, simp_rw
 -/
@@ -380,7 +386,15 @@ theorem LocallyIntegrableOn.exists_countable_integrableOn
     rcases mem_nhdsWithin.1 ht with ⟨u, u_open, x_mem, u_sub⟩
     exact ⟨u, u_open, x_mem, h't.mono_set u_sub⟩
   choose u u_open xu hu using this
-  obt
+  obtain ⟨T, T_count, hT⟩ : exists T : Set s, T.Countable ∧ s subseteq ⋃ i in T, u i := by
+    have : s subseteq ⋃ x : s, u x := fun y hy => mem_iUnion_of_mem ⟨y, hy⟩ (xu ⟨y, hy⟩)
+    obtain ⟨T, hT_count, hT_un⟩ := isOpen_iUnion_countable u u_open
+    exact ⟨T, hT_count, by rwa [hT_un]⟩
+  refine ⟨u '' T, T_count.image _, ?_, by rwa [biUnion_image], ?_⟩
+  · rintro v ⟨w, -, rfl⟩
+    exact u_open _
+  · rintro v ⟨w, -, rfl⟩
+    exact hu _
 
 中文:
 定理 Locally整数egrableOn.存在_countable_integrableOn
@@ -392,7 +406,15 @@ theorem LocallyIntegrableOn.exists_countable_integrableOn
     rcases mem_nhdsWithin.1 ht with ⟨u, u_open, x_mem, u_sub⟩
     exact ⟨u, u_open, x_mem, h't.mono_set u_sub⟩
   choose u u_open xu hu using this
-  obt
+  obtain ⟨T, T_count, hT⟩ : exists T : Set s, T.Countable ∧ s subseteq ⋃ i in T, u i := by
+    have : s subseteq ⋃ x : s, u x := fun y hy => mem_iUnion_of_mem ⟨y, hy⟩ (xu ⟨y, hy⟩)
+    obtain ⟨T, hT_count, hT_un⟩ := isOpen_iUnion_countable u u_open
+    exact ⟨T, hT_count, by rwa [hT_un]⟩
+  refine ⟨u '' T, T_count.image _, ?_, by rwa [biUnion_image], ?_⟩
+  · rintro v ⟨w, -, rfl⟩
+    exact u_open _
+  · rintro v ⟨w, -, rfl⟩
+    exact hu _
 
 Depends on / 依赖: Countable, IntegrableOn, IsOpen, T.Countable, T_count, hT_count, hT_un, isOpen_iUnion_counta, mem_iUnion_of_mem, mem_nhdsWithin, mono_set, subseteq, t.mono_set, u_open, u_sub, x_mem
 -/
@@ -427,7 +449,23 @@ theorem LocallyIntegrableOn.exists_nat_integrableOn
   have T'_count : T'.Countable := Countable.insert ∅ T_count
   have T'_ne : T'.Nonempty := by simp only [T', insert_nonempty]
   rcases T'_count.exists_eq_range T'_ne with ⟨u, hu⟩
-  ref
+  refine ⟨u, ?_, ?_, ?_⟩
+  · intro n
+    have : u n in T' := by rw [hu]; exact mem_range_self n
+    rcases mem_insert_iff.1 this with h | h
+    · rw [h]
+      exact isOpen_empty
+    · exact T_open _ h
+  · intro x hx
+    obtain ⟨v, hv, h'v⟩ : exists v, v in T ∧ x in v := by simpa only [mem_iUnion, exists_prop] using sT hx
+    have : v in range u := by rw [← hu]; exact subset_insert ∅ T hv
+    obtain ⟨n, rfl⟩ : exists n, u n = v := by simpa only [mem_range] using this
+    exact mem_iUnion_of_mem _ h'v
+  · intro n
+    have : u n in T' := by rw [hu]; exact mem_range_self n
+    rcases mem_insert_iff.1 this with h | h
+    · simp only [h, empty_inter, integrableOn_empty]
+    · exact hT _ h
 
 中文:
 定理 Locally整数egrableOn.存在_nat_integrableOn
@@ -438,7 +476,23 @@ theorem LocallyIntegrableOn.exists_nat_integrableOn
   have T'_count : T'.Countable := Countable.insert ∅ T_count
   have T'_ne : T'.Nonempty := by simp only [T', insert_nonempty]
   rcases T'_count.exists_eq_range T'_ne with ⟨u, hu⟩
-  ref
+  refine ⟨u, ?_, ?_, ?_⟩
+  · intro n
+    have : u n in T' := by rw [hu]; exact mem_range_self n
+    rcases mem_insert_iff.1 this with h | h
+    · rw [h]
+      exact isOpen_empty
+    · exact T_open _ h
+  · intro x hx
+    obtain ⟨v, hv, h'v⟩ : exists v, v in T ∧ x in v := by simpa only [mem_iUnion, exists_prop] using sT hx
+    have : v in range u := by rw [← hu]; exact subset_insert ∅ T hv
+    obtain ⟨n, rfl⟩ : exists n, u n = v := by simpa only [mem_range] using this
+    exact mem_iUnion_of_mem _ h'v
+  · intro n
+    have : u n in T' := by rw [hu]; exact mem_range_self n
+    rcases mem_insert_iff.1 this with h | h
+    · simp only [h, empty_inter, integrableOn_empty]
+    · exact hT _ h
 
 Depends on / 依赖: Countable, Countable.insert, Nonempty, T_count, T_open, _count, _count.exists_eq_range, exists_countable_integrableOn, exists_eq_range, hf.exists_countable_integrableOn, insert, insert_nonempty, isOpen_empty, mem_insert_iff, mem_range_self
 -/
@@ -510,7 +564,8 @@ theorem locallyIntegrableOn_iff
   rcases hs with ⟨U, Z, hU, hZ, rfl⟩
   rcases exists_compact_subset hU hx.1 with ⟨K, hK, hxK, hKU⟩
   rw [nhdsWithin_inter_of_mem (nhdsWithin_le_nhds <| hU.mem_nhds hx.1)]
-  refine ⟨Z inter K, inter_mem_nhdsWithin _ (me
+  refine ⟨Z inter K, inter_mem_nhdsWithin _ (mem_interior_iff_mem_nhds.1 hxK), ?_⟩
+  exact hf (Z inter K) (fun y hy => ⟨hKU hy.2, hy.1⟩) (.inter_left hK hZ)
 
 中文:
 定理 locally整数egrableOn_iff
@@ -520,7 +575,8 @@ theorem locallyIntegrableOn_iff
   rcases hs with ⟨U, Z, hU, hZ, rfl⟩
   rcases exists_compact_subset hU hx.1 with ⟨K, hK, hxK, hKU⟩
   rw [nhdsWithin_inter_of_mem (nhdsWithin_le_nhds <| hU.mem_nhds hx.1)]
-  refine ⟨Z inter K, inter_mem_nhdsWithin _ (me
+  refine ⟨Z inter K, inter_mem_nhdsWithin _ (mem_interior_iff_mem_nhds.1 hxK), ?_⟩
+  exact hf (Z inter K) (fun y hy => ⟨hKU hy.2, hy.1⟩) (.inter_left hK hZ)
 
 Depends on / 依赖: exists_compact_subset, hU.mem_nhds, hf.integrableOn_compact_subset, integrableOn_compact_subset, inter_left, inter_mem_nhdsWithin, mem_interior_iff_mem_nhds, mem_nhds, nhdsWithin_inter_of_mem, nhdsWithin_le_nhds
 -/
@@ -936,7 +992,12 @@ theorem locallyIntegrableOn_iff_locallyIntegrable_restrict
   · obtain ⟨t, ht_nhds, ht_int⟩ := hf x h
     obtain ⟨u, hu_o, hu_x, hu_sub⟩ := mem_nhdsWithin.mp ht_nhds
     refine ⟨u, hu_o.mem_nhds hu_x, ?_⟩
-    rw [IntegrableOn]; rw [restrict_restrict hu_o.mea
+    rw [IntegrableOn]; rw [restrict_restrict hu_o.measurableSet]
+    exact ht_int.mono_set hu_sub
+  · rw [← isOpen_compl_iff] at hs
+    refine ⟨sᶜ, hs.mem_nhds h, ?_⟩
+    rw [IntegrableOn]; rw [restrict_restrict]; rw [inter_comm]; rw [inter_compl_self]; rw [← IntegrableOn]
+    exacts [integrableOn_empty, hs.measurableSet]
 
 中文:
 定理 locally整数egrableOn_iff_locally整数egrable_restrict
@@ -947,7 +1008,12 @@ theorem locallyIntegrableOn_iff_locallyIntegrable_restrict
   · obtain ⟨t, ht_nhds, ht_int⟩ := hf x h
     obtain ⟨u, hu_o, hu_x, hu_sub⟩ := mem_nhdsWithin.mp ht_nhds
     refine ⟨u, hu_o.mem_nhds hu_x, ?_⟩
-    rw [IntegrableOn]; rw [restrict_restrict hu_o.mea
+    rw [IntegrableOn]; rw [restrict_restrict hu_o.measurableSet]
+    exact ht_int.mono_set hu_sub
+  · rw [← isOpen_compl_iff] at hs
+    refine ⟨sᶜ, hs.mem_nhds h, ?_⟩
+    rw [IntegrableOn]; rw [restrict_restrict]; rw [inter_comm]; rw [inter_compl_self]; rw [← IntegrableOn]
+    exacts [integrableOn_empty, hs.measurableSet]
 
 Depends on / 依赖: IntegrableOn, exacts, hs.mem_nhds, ht_int, ht_int.mono_set, ht_nhds, hu_o, hu_o.measurableSet, hu_o.mem_nhds, hu_sub, hu_x, inter_comm, inter_compl_self, isOpen_compl_iff, locallyIntegrableOn_of_locallyIntegrable_restrict, measurableSet, mem_nhds, mem_nhdsWithin, mem_nhdsWithin.mp, mono_set
 -/
@@ -996,7 +1062,11 @@ theorem LocallyIntegrable.integrableOn_nhds_isCompact
   · rintro s t hst ⟨u, u_open, tu, hu⟩
     exact ⟨u, u_open, hst.trans tu, hu⟩
   · rintro s t ⟨u, u_open, su, hu⟩ ⟨v, v_open, tv, hv⟩
-    exact ⟨u union v, u_open.union v_open, union_subset
+    exact ⟨u union v, u_open.union v_open, union_subset_union su tv, hu.union hv⟩
+  · intro x _
+    rcases hf x with ⟨u, ux, hu⟩
+    rcases mem_nhds_iff.1 ux with ⟨v, vu, v_open, xv⟩
+    exact ⟨v, nhdsWithin_le_nhds (v_open.mem_nhds xv), v, v_open, Subset.rfl, hu.mono_set vu⟩
 
 中文:
 定理 Locally整数egrable.integrableOn_nhds_isCompact
@@ -1007,7 +1077,11 @@ theorem LocallyIntegrable.integrableOn_nhds_isCompact
   · rintro s t hst ⟨u, u_open, tu, hu⟩
     exact ⟨u, u_open, hst.trans tu, hu⟩
   · rintro s t ⟨u, u_open, su, hu⟩ ⟨v, v_open, tv, hv⟩
-    exact ⟨u union v, u_open.union v_open, union_subset
+    exact ⟨u union v, u_open.union v_open, union_subset_union su tv, hu.union hv⟩
+  · intro x _
+    rcases hf x with ⟨u, ux, hu⟩
+    rcases mem_nhds_iff.1 ux with ⟨v, vu, v_open, xv⟩
+    exact ⟨v, nhdsWithin_le_nhds (v_open.mem_nhds xv), v, v_open, Subset.rfl, hu.mono_set vu⟩
 
 Depends on / 依赖: IsCompact, IsCompact.induction_on, Subset, Subset.rfl, hst.trans, hu.mono_set, hu.union, induction_on, integrableOn_empty, isOpen_empty, mem_nhds, mem_nhds_iff, mono_set, nhdsWithin_le_nhds, u_open, u_open.union, union_subset_union, v_open, v_open.mem_nhds
 -/
@@ -1286,7 +1360,12 @@ theorem locallyIntegrable_map_homeomorph
     refine ⟨e ⁻¹' U, e.continuous.continuousAt.preimage_mem_nhds hU, ?_⟩
     exact (integrableOn_map_equiv e.toMeasurableEquiv).1 h'U
   · rcases h (e.symm x) with ⟨U, hU, h'U⟩
-    refine ⟨e.symm ⁻¹' U, e.symm.continuous.
+    refine ⟨e.symm ⁻¹' U, e.symm.continuous.continuousAt.preimage_mem_nhds hU, ?_⟩
+    apply (integrableOn_map_equiv e.toMeasurableEquiv).2
+    simp only [Homeomorph.toMeasurableEquiv_coe]
+    convert! h'U
+    ext x
+    simp only [mem_preimage, Homeomorph.symm_apply_apply]
 
 中文:
 定理 locally整数egrable_map_homeomorph
@@ -1297,7 +1376,12 @@ theorem locallyIntegrable_map_homeomorph
     refine ⟨e ⁻¹' U, e.continuous.continuousAt.preimage_mem_nhds hU, ?_⟩
     exact (integrableOn_map_equiv e.toMeasurableEquiv).1 h'U
   · rcases h (e.symm x) with ⟨U, hU, h'U⟩
-    refine ⟨e.symm ⁻¹' U, e.symm.continuous.
+    refine ⟨e.symm ⁻¹' U, e.symm.continuous.continuousAt.preimage_mem_nhds hU, ?_⟩
+    apply (integrableOn_map_equiv e.toMeasurableEquiv).2
+    simp only [Homeomorph.toMeasurableEquiv_coe]
+    convert! h'U
+    ext x
+    simp only [mem_preimage, Homeomorph.symm_apply_apply]
 
 Depends on / 依赖: Homeomorph, Homeomorph.symm_apply_apply, Homeomorph.toMeasurableEquiv_coe, continuous, continuousAt, convert, e.continuous.continuousAt.preimage_mem_nhds, e.symm, e.symm.continuous.continuousAt.preimage_mem_nhds, e.toMeasurableEquiv, integrableOn_map_equiv, mem_preimage, preimage_mem_nhds, symm_apply_apply, toMeasurableEquiv, toMeasurableEquiv_coe
 -/
@@ -1501,7 +1585,10 @@ theorem LocallyIntegrable.integrable_smul_left_of_hasCompactSupport
     intro x hx
     simp [image_eq_zero_of_notMem_tsupport hx]
   rw [← this]; rw [indicator_smul]
-  apply Integr
+  apply Integrable.smul_of_top_right
+  · rw [integrable_indicator_iff hK.measurableSet]
+    exact hf.integrableOn_isCompact hK
+  · exact hg.memLp_top_of_hasCompactSupport h'g μ
 
 中文:
 定理 Locally整数egrable.integrable_smul_left_of_hasCompactSupport
@@ -1514,7 +1601,10 @@ theorem LocallyIntegrable.integrable_smul_left_of_hasCompactSupport
     intro x hx
     simp [image_eq_zero_of_notMem_tsupport hx]
   rw [← this]; rw [indicator_smul]
-  apply Integr
+  apply Integrable.smul_of_top_right
+  · rw [integrable_indicator_iff hK.measurableSet]
+    exact hf.integrableOn_isCompact hK
+  · exact hg.memLp_top_of_hasCompactSupport h'g μ
 
 Depends on / 依赖: Integrable, Integrable.smul_of_top_right, IsCompact, K.indicator, hK.measurableSet, hf.integrableOn_isCompact, hg.memLp_top_of_hasCompactSupport, image_eq_zero_of_notMem_tsupport, indicator, indicator_eq_self, indicator_smul, integrableOn_isCompact, integrable_indicator_iff, measurableSet, memLp_top_of_hasCompactSupport, smul_of_top_right, support_subset_iff, tsupport
 -/
@@ -1550,7 +1640,10 @@ theorem LocallyIntegrable.integrable_smul_right_of_hasCompactSupport
     intro x hx
     simp [image_eq_zero_of_notMem_tsupport hx]
   rw [← this]; rw [indicator_smul_left]
-  apply I
+  apply Integrable.smul_of_top_left
+  · rw [integrable_indicator_iff hK.measurableSet]
+    exact hf.integrableOn_isCompact hK
+  · exact hg.memLp_top_of_hasCompactSupport h'g μ
 
 中文:
 定理 Locally整数egrable.integrable_smul_right_of_hasCompactSupport
@@ -1563,7 +1656,10 @@ theorem LocallyIntegrable.integrable_smul_right_of_hasCompactSupport
     intro x hx
     simp [image_eq_zero_of_notMem_tsupport hx]
   rw [← this]; rw [indicator_smul_left]
-  apply I
+  apply Integrable.smul_of_top_left
+  · rw [integrable_indicator_iff hK.measurableSet]
+    exact hf.integrableOn_isCompact hK
+  · exact hg.memLp_top_of_hasCompactSupport h'g μ
 
 Depends on / 依赖: Integrable, Integrable.smul_of_top_left, IsCompact, K.indicator, hK.measurableSet, hf.integrableOn_isCompact, hg.memLp_top_of_hasCompactSupport, image_eq_zero_of_notMem_tsupport, indicator, indicator_eq_self, indicator_smul_left, integrableOn_isCompact, integrable_indicator_iff, measurableSet, memLp_top_of_hasCompactSupport, smul_of_top_left, support_subset_iff, tsupport
 -/
@@ -1709,7 +1805,7 @@ theorem integrableOn_Iic_iff_integrableAtFilter_atBot
   have : Nonempty X := Nonempty.intro a
   obtain ⟨a', ha'⟩ := mem_atBot_sets.mp hsl
   refine (integrableOn_union.mpr ⟨hs.mono ha' le_rfl, ?_⟩).mono Iic_subset_Iic_union_Icc le_rfl
-  exact h.integ
+  exact h.integrableOn_compact_subset Icc_subset_Iic_self isCompact_Icc
 
 中文:
 定理 integrableOn_Iic_iff_integrableAtFilter_atBot
@@ -1719,7 +1815,7 @@ theorem integrableOn_Iic_iff_integrableAtFilter_atBot
   have : Nonempty X := Nonempty.intro a
   obtain ⟨a', ha'⟩ := mem_atBot_sets.mp hsl
   refine (integrableOn_union.mpr ⟨hs.mono ha' le_rfl, ?_⟩).mono Iic_subset_Iic_union_Icc le_rfl
-  exact h.integ
+  exact h.integrableOn_compact_subset Icc_subset_Iic_self isCompact_Icc
 
 Depends on / 依赖: Icc_subset_Iic_self, Iic_mem_atBot, Iic_subset_Iic_union_Icc, Nonempty, Nonempty.intro, h.integrableOn_compact_subset, h.locallyIntegrableOn, hs.mono, integrableOn_compact_subset, integrableOn_union, integrableOn_union.mpr, isCompact_Icc, le_rfl, locallyIntegrableOn, mem_atBot_sets, mem_atBot_sets.mp
 -/
@@ -1761,7 +1857,9 @@ theorem integrableOn_Iio_iff_integrableAtFilter_atBot_nhdsWithin
     exact ⟨⟨Iio a, Iio_mem_atBot a, h⟩, ⟨Iio a, self_mem_nhdsWithin, h⟩, h.locallyIntegrableOn⟩
   · intro ⟨hbot, ⟨s, hsl, hs⟩, hlocal⟩
     obtain ⟨s', ⟨hs'_mono, hs'⟩⟩ := mem_nhdsLT_iff_exists_Ioo_subset.mp hsl
-    refine (integrableOn_union.mpr ⟨?_, hs.mono hs' le_rfl⟩)
+    refine (integrableOn_union.mpr ⟨?_, hs.mono hs' le_rfl⟩).mono Iio_subset_Iic_union_Ioo le_rfl
+    exact integrableOn_Iic_iff_integrableAtFilter_atBot.mpr
+      ⟨hbot, hlocal.mono_set (Iic_subset_Iio.mpr hs'_mono)⟩
 
 中文:
 定理 integrableOn_Iio_iff_integrableAtFilter_atBot_nhdsWithin
@@ -1771,7 +1869,9 @@ theorem integrableOn_Iio_iff_integrableAtFilter_atBot_nhdsWithin
     exact ⟨⟨Iio a, Iio_mem_atBot a, h⟩, ⟨Iio a, self_mem_nhdsWithin, h⟩, h.locallyIntegrableOn⟩
   · intro ⟨hbot, ⟨s, hsl, hs⟩, hlocal⟩
     obtain ⟨s', ⟨hs'_mono, hs'⟩⟩ := mem_nhdsLT_iff_exists_Ioo_subset.mp hsl
-    refine (integrableOn_union.mpr ⟨?_, hs.mono hs' le_rfl⟩)
+    refine (integrableOn_union.mpr ⟨?_, hs.mono hs' le_rfl⟩).mono Iio_subset_Iic_union_Ioo le_rfl
+    exact integrableOn_Iic_iff_integrableAtFilter_atBot.mpr
+      ⟨hbot, hlocal.mono_set (Iic_subset_Iio.mpr hs'_mono)⟩
 
 Depends on / 依赖: Iic_subset_Iio, Iic_subset_Iio.mpr, Iio_mem_atBot, Iio_subset_Iic_union_Ioo, _mono, h.locallyIntegrableOn, hlocal, hlocal.mono_set, hs.mono, integrableOn_Iic_iff_integrableAtFilter_atBot, integrableOn_Iic_iff_integrableAtFilter_atBot.mpr, integrableOn_union, integrableOn_union.mpr, le_rfl, locallyIntegrableOn, mem_nhdsLT_iff_exists_Ioo_subset, mem_nhdsLT_iff_exists_Ioo_subset.mp, mono_set, self_mem_nhdsWithin
 -/
@@ -1867,7 +1967,7 @@ theorem ContinuousOn.integrableOn_of_subset_isCompact
   obtain ⟨C, hC⟩ : exists C, forall x in f '' K, ‖x‖ <= C :=
     IsBounded.exists_norm_le (hK.image_of_continuousOn hf).isBounded
   apply HasFiniteIntegral.of_bounded (C := C)
-  filter_upw
+  filter_upwards [ae_restrict_mem hs] with a ha using hC _ (mem_image_of_mem f (h's ha))
 
 中文:
 定理 ContinuousOn.integrableOn_of_subset_isCompact
@@ -1878,7 +1978,7 @@ theorem ContinuousOn.integrableOn_of_subset_isCompact
   obtain ⟨C, hC⟩ : exists C, forall x in f '' K, ‖x‖ <= C :=
     IsBounded.exists_norm_le (hK.image_of_continuousOn hf).isBounded
   apply HasFiniteIntegral.of_bounded (C := C)
-  filter_upw
+  filter_upwards [ae_restrict_mem hs] with a ha using hC _ (mem_image_of_mem f (h's ha))
 
 Depends on / 依赖: HasFiniteIntegral, HasFiniteIntegral.of_bounded, IsBounded, IsBounded.exists_norm_le, ae_restrict_mem, aestronglyMeasurable_of_subset_isCompact, exists_norm_le, filter_upwards, hK.image_of_continuousOn, hf.aestronglyMeasurable_of_subset_isCompact, image_of_continuousOn, isBounded, lt_top, mem_image_of_mem, mus.lt_top, of_bounded
 -/
@@ -2089,7 +2189,12 @@ theorem MonotoneOn.memLp_top
   have hbelow : BddBelow (f '' s) := ⟨f a, fun x ⟨y, hy, hyx⟩ => hyx ▸ hmono ha.1 hy (ha.2 hy)⟩
   have habove : BddAbove (f '' s) := ⟨f b, fun x ⟨y, hy, hyx⟩ => hyx ▸ hmono hy hb.1 (hb.2 hy)⟩
   have : IsBounded (f '' s) := Metric.isBounded_of_bddAbove_of_bddBelow habove hbelow
-  rcas
+  rcases isBounded_iff_forall_norm_le.mp this with ⟨C, hC⟩
+  have A : MemLp (fun _ => C) ⊤ (μ.restrict s) := memLp_top_const _
+  apply MemLp.mono A (aemeasurable_restrict_of_monotoneOn h's hmono).aestronglyMeasurable
+  apply (ae_restrict_iff' h's).mpr
+  apply ae_of_all _ fun y hy => ?_
+  exact (hC _ (mem_image_of_mem f hy)).trans (le_abs_self _)
 
 中文:
 定理 MonotoneOn.memLp_top
@@ -2099,7 +2204,12 @@ theorem MonotoneOn.memLp_top
   have hbelow : BddBelow (f '' s) := ⟨f a, fun x ⟨y, hy, hyx⟩ => hyx ▸ hmono ha.1 hy (ha.2 hy)⟩
   have habove : BddAbove (f '' s) := ⟨f b, fun x ⟨y, hy, hyx⟩ => hyx ▸ hmono hy hb.1 (hb.2 hy)⟩
   have : IsBounded (f '' s) := Metric.isBounded_of_bddAbove_of_bddBelow habove hbelow
-  rcas
+  rcases isBounded_iff_forall_norm_le.mp this with ⟨C, hC⟩
+  have A : MemLp (fun _ => C) ⊤ (μ.restrict s) := memLp_top_const _
+  apply MemLp.mono A (aemeasurable_restrict_of_monotoneOn h's hmono).aestronglyMeasurable
+  apply (ae_restrict_iff' h's).mpr
+  apply ae_of_all _ fun y hy => ?_
+  exact (hC _ (mem_image_of_mem f hy)).trans (le_abs_self _)
 
 Depends on / 依赖: BddAbove, BddBelow, IsBounded, MemLp.mono, Metric, Metric.isBounded_of_bddAbove_of_bddBelow, aemeasurable_restrict_of_monotoneOn, aestronglyMeasurable, borelize, habove, hbelow, isBounded_iff_forall_norm_le, isBounded_iff_forall_norm_le.mp, isBounded_of_bddAbove_of_bddBelow, memLp_top_const, restrict
 -/
@@ -2324,7 +2434,8 @@ theorem Monotone.locallyIntegrable
   have ab : a <= b := xab.1.trans xab.2
   refine ⟨Icc a b, hab, ?_⟩
   exact
-    (hmono.monotoneOn 
+    (hmono.monotoneOn _).integrableOn_of_measure_ne_top (isLeast_Icc ab) (isGreatest_Icc ab)
+      ((measure_mono abU).trans_lt h'U).ne measurableSet_Icc
 
 中文:
 定理 递增.locally整数egrable
@@ -2337,7 +2448,8 @@ theorem Monotone.locallyIntegrable
   have ab : a <= b := xab.1.trans xab.2
   refine ⟨Icc a b, hab, ?_⟩
   exact
-    (hmono.monotoneOn 
+    (hmono.monotoneOn _).integrableOn_of_measure_ne_top (isLeast_Icc ab) (isGreatest_Icc ab)
+      ((measure_mono abU).trans_lt h'U).ne measurableSet_Icc
 
 Depends on / 依赖: exists_Icc_mem_subset_of_mem_nhds, finiteAt_nhds, hmono.monotoneOn, integrableOn_of_measure_ne_top, isGreatest_Icc, isLeast_Icc, measurableSet_Icc, measure_mono, monotoneOn, subseteq, trans_lt
 -/

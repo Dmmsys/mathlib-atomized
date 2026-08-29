@@ -158,7 +158,9 @@ definition lift
         fst := { hf := le _ (Sieve.ofArrows_mk _ _ i₁), .. }
         snd := { hf := le _ (Sieve.ofArrows_mk _ _ i₂), .. }
         r := { w := E.w j, .. }
+      })
 
+@[reassoc]
 
 中文:
 定义 lift
@@ -170,7 +172,9 @@ definition lift
         fst := { hf := le _ (Sieve.ofArrows_mk _ _ i₁), .. }
         snd := { hf := le _ (Sieve.ofArrows_mk _ _ i₂), .. }
         r := { w := E.w j, .. }
+      })
 
+@[reassoc]
 
 Depends on / 依赖: F.condition, IsLimit, Multifork, Multifork.IsLimit.lift, Sieve.ofArrows_mk, condition, ofArrows_mk
 -/
@@ -218,7 +222,9 @@ lemma fac
   rw [assoc]; rw [← P.map_comp]; rw [← op_comp]; rw [← fac]; rw [op_comp]; rw [P.map_comp]; rw [fac'_assoc]
   exact F.condition {
     fst := { hf := le _ (Sieve.ofArrows_mk _ _ _), .. }
-    snd := { hf 
+    snd := { hf := hf, .. }
+    r := { w := fac, .. }
+  }
 
 中文:
 引理 fac
@@ -230,7 +236,9 @@ lemma fac
   rw [assoc]; rw [← P.map_comp]; rw [← op_comp]; rw [← fac]; rw [op_comp]; rw [P.map_comp]; rw [fac'_assoc]
   exact F.condition {
     fst := { hf := le _ (Sieve.ofArrows_mk _ _ _), .. }
-    snd := { hf 
+    snd := { hf := hf, .. }
+    r := { w := fac, .. }
+  }
 
 Depends on / 依赖: E.mem, F.condition, J.pullback_stable, P.map_comp, Sieve.ofArrows_mk, _assoc, condition, hom_ext, map_comp, ofArrows_mk, op_comp, pullback_stable
 -/

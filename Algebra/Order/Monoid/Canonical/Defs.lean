@@ -429,7 +429,8 @@ theorem lt_iff_exists_mul
     apply mt
     rintro rfl
     rw [mul_one]
-  · rw [← (self_le_mul_right a c).lt_
+  · rw [← (self_le_mul_right a c).lt_iff_ne]
+    apply lt_mul_of_one_lt_right'
 
 中文:
 定理 lt_iff_存在_mul
@@ -446,7 +447,8 @@ theorem lt_iff_exists_mul
     apply mt
     rintro rfl
     rw [mul_one]
-  · rw [← (self_le_mul_right a c).lt_
+  · rw [← (self_le_mul_right a c).lt_iff_ne]
+    apply lt_mul_of_one_lt_right'
 
 Depends on / 依赖: and_comm, and_congr_left_iff, exists_and_right, exists_congr, gt_iff_lt, le_iff_exists_mul, lt_iff_le_and_ne, lt_iff_ne, lt_mul_of_one_lt_right, mul_one, one_lt_iff_ne_one, self_le_mul_right
 -/

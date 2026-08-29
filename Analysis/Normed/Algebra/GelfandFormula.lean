@@ -61,7 +61,10 @@ theorem hasDerivAt_resolvent_const_left
     hasFDerivAt_ringInverse (𝕜 := 𝕜) hk.unit
   have H₂ : HasDerivAt (fun k => algebraMap 𝕜 A k - a) 1 k := by
     simpa using! (Algebra.linearMap 𝕜 A).hasDerivAt.sub_const a
-  simpa [resolvent, sq, hk.unit_spec, ← Ring.inverse_unit 
+  simpa [resolvent, sq, hk.unit_spec, ← Ring.inverse_unit hk.unit] using! H₁.comp_hasDerivAt k H₂
+
+@[deprecated (since := "2026-03-26")]
+alias hasDerivAt_resolvent := hasDerivAt_resolvent_const_left
 
 中文:
 定理 hasDerivAt_resolvent_const_left
@@ -71,7 +74,10 @@ theorem hasDerivAt_resolvent_const_left
     hasFDerivAt_ringInverse (𝕜 := 𝕜) hk.unit
   have H₂ : HasDerivAt (fun k => algebraMap 𝕜 A k - a) 1 k := by
     simpa using! (Algebra.linearMap 𝕜 A).hasDerivAt.sub_const a
-  simpa [resolvent, sq, hk.unit_spec, ← Ring.inverse_unit 
+  simpa [resolvent, sq, hk.unit_spec, ← Ring.inverse_unit hk.unit] using! H₁.comp_hasDerivAt k H₂
+
+@[deprecated (since := "2026-03-26")]
+alias hasDerivAt_resolvent := hasDerivAt_resolvent_const_left
 
 Depends on / 依赖: Algebra, Algebra.linearMap, HasDerivAt, HasFDerivAt, Ring.inverse, Ring.inverse_unit, algebraMap, comp_hasDerivAt, hasDerivAt, hasDerivAt.sub_const, hasFDerivAt_ringInverse, hk.unit, hk.unit_spec, inverse, inverse_unit, linearMap, resolvent, sub_const, unit_spec
 -/
@@ -160,7 +166,9 @@ theorem differentiableOn_inverse_one_sub_smul
   have hu : IsUnit (1 - z • a) := by
     refine isUnit_one_sub_smul_of_lt_inv_radius (lt_of_le_of_lt (coe_mono ?_) hr)
     simpa only [norm_toNNReal, Real.toNNReal_coe] using
-      Real.toNNReal_mono (mem_closedBall_zero_iff.mp z_mem
+      Real.toNNReal_mono (mem_closedBall_zero_iff.mp z_mem)
+  have H₁ : Differentiable 𝕜 fun w : 𝕜 => 1 - w • a := (differentiable_id.smul_const a).const_sub 1
+  exact DifferentiableAt.comp z (differentiableAt_inverse hu) H₁.differentiableAt
 
 中文:
 定理 differentiableOn_inverse_one_sub_smul
@@ -171,7 +179,9 @@ theorem differentiableOn_inverse_one_sub_smul
   have hu : IsUnit (1 - z • a) := by
     refine isUnit_one_sub_smul_of_lt_inv_radius (lt_of_le_of_lt (coe_mono ?_) hr)
     simpa only [norm_toNNReal, Real.toNNReal_coe] using
-      Real.toNNReal_mono (mem_closedBall_zero_iff.mp z_mem
+      Real.toNNReal_mono (mem_closedBall_zero_iff.mp z_mem)
+  have H₁ : Differentiable 𝕜 fun w : 𝕜 => 1 - w • a := (differentiable_id.smul_const a).const_sub 1
+  exact DifferentiableAt.comp z (differentiableAt_inverse hu) H₁.differentiableAt
 
 Depends on / 依赖: Differentiable, DifferentiableAt, DifferentiableAt.comp, DifferentiableAt.differentiableWithinAt, IsUnit, Real.toNNReal_coe, Real.toNNReal_mono, coe_mono, const_sub, differentiableAt, differentiableAt_inverse, differentiableWithinAt, differentiable_id, differentiable_id.smul_const, isUnit_one_sub_smul_of_lt_inv_radius, lt_of_le_of_lt, mem_closedBall_zero_iff, mem_closedBall_zero_iff.mp, norm_toNNReal, smul_const
 -/
@@ -205,7 +215,15 @@ theorem limsup_pow_nnnorm_pow_one_div_le_spectralRadius
   let p : FormalMultilinearSeries Complex Complex A := fun n =>
     ContinuousMultilinearMap.mkPiRing Complex (Fin n) (a ^ n)
   suffices h : (r : Real>=0∞) <= p.radius by
-    conve
+    convert! h
+    simp only [p, p.radius_eq_liminf, ← norm_toNNReal, norm_mkPiRing]
+    congr
+    ext n
+    rw [norm_toNNReal]; rw [ENNReal.coe_rpow_def ‖a ^ n‖₊ (1 / n : Real)]; rw [if_neg]
+    exact fun ha => (lt_self_iff_false _).mp
+      (ha.2.trans_le (one_div_nonneg.mpr n.cast_nonneg : 0 <= (1 / n : Real)))
+  have H₁ := (differentiableOn_inverse_one_sub_smul r_lt).hasFPowerSeriesOnBall r_pos
+  exact ((hasFPowerSeriesOnBall_inverse_one_sub_smul Complex a).exchange_radius H₁).r_le
 
 中文:
 定理 limsup_pow_nnnorm_pow_one_div_le_spectralRadius
@@ -216,7 +234,15 @@ theorem limsup_pow_nnnorm_pow_one_div_le_spectralRadius
   let p : FormalMultilinearSeries Complex Complex A := fun n =>
     ContinuousMultilinearMap.mkPiRing Complex (Fin n) (a ^ n)
   suffices h : (r : Real>=0∞) <= p.radius by
-    conve
+    convert! h
+    simp only [p, p.radius_eq_liminf, ← norm_toNNReal, norm_mkPiRing]
+    congr
+    ext n
+    rw [norm_toNNReal]; rw [ENNReal.coe_rpow_def ‖a ^ n‖₊ (1 / n : Real)]; rw [if_neg]
+    exact fun ha => (lt_self_iff_false _).mp
+      (ha.2.trans_le (one_div_nonneg.mpr n.cast_nonneg : 0 <= (1 / n : Real)))
+  have H₁ := (differentiableOn_inverse_one_sub_smul r_lt).hasFPowerSeriesOnBall r_pos
+  exact ((hasFPowerSeriesOnBall_inverse_one_sub_smul Complex a).exchange_radius H₁).r_le
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.mkPiRing, ENNReal, ENNReal.coe_rpow_def, ENNReal.inv_le_inv.mp, FormalMultilinearSeries, coe_rpow_def, convert, if_neg, inv_le_inv, inv_limsup, le_of_forall_pos_nnreal_lt, lt_self_iff_false, mkPiRing, norm_mkPiRing, norm_toNNReal, one_div, p.radius, p.radius_eq_liminf, r_lt
 -/
@@ -314,7 +340,14 @@ theorem nonempty
     is differentiable on `ℂ`. -/
   by_contra! h
   have H₀ : resolventSet Complex a = Set.univ := by rwa [spectrum, Set.compl_empty_iff] at h
-  have H₁ : Differentiable Complex fun z : Complex => reso
+  have H₁ : Differentiable Complex fun z : Complex => resolvent a z := fun z =>
+    hasDerivAt_resolvent_const_left (H₀.symm ▸ Set.mem_univ z : z in resolventSet Complex a)
+.differentiableAt
+  /- Since `resolvent a` tends to zero at infinity, by Liouville's theorem `resolvent a = 0`,
+  which contradicts that `resolvent a z` is invertible. -/
+have H₃ := H₁.apply_eq_of_tendsto_cocompact 0 by
+    simpa [Metric.cobounded_eq_cocompact] using resolvent_tendsto_cobounded a (𝕜 := Complex)
+exact not_isUnit_zero H₃ ▸ (isUnit_resolvent.mp <| H₀.symm ▸ Set.mem_univ 0)
 
 中文:
 定理 nonempty
@@ -325,7 +358,14 @@ theorem nonempty
     is differentiable on `ℂ`. -/
   by_contra! h
   have H₀ : resolventSet Complex a = Set.univ := by rwa [spectrum, Set.compl_empty_iff] at h
-  have H₁ : Differentiable Complex fun z : Complex => reso
+  have H₁ : Differentiable Complex fun z : Complex => resolvent a z := fun z =>
+    hasDerivAt_resolvent_const_left (H₀.symm ▸ Set.mem_univ z : z in resolventSet Complex a)
+.differentiableAt
+  /- Since `resolvent a` tends to zero at infinity, by Liouville's theorem `resolvent a = 0`,
+  which contradicts that `resolvent a z` is invertible. -/
+have H₃ := H₁.apply_eq_of_tendsto_cocompact 0 by
+    simpa [Metric.cobounded_eq_cocompact] using resolvent_tendsto_cobounded a (𝕜 := Complex)
+exact not_isUnit_zero H₃ ▸ (isUnit_resolvent.mp <| H₀.symm ▸ Set.mem_univ 0)
 -/
 protected theorem nonempty (a : A) : (spectrum Complex a).Nonempty := by
   /- Suppose `σ a = ∅`, then resolvent set is `ℂ`, any `(z • 1 - a)` is a unit, and `resolvent a`
@@ -466,7 +506,8 @@ definition _root_.NormedRing.algEquivComplexOfComplete
     invFun := fun a => (@spectrum.nonempty _ _ _ _ nt a).some
     left_inv := fun z => by
       simpa only [@scalar_eq _ _ _ _ _ nt _] using!
-        (@spect
+        (@spectrum.nonempty _ _ _ _ nt <| algebraMap Complex A z).some_mem
+    right_inv := fun a => algebraMap_eq_of_mem (@hA) (@spectrum.nonempty _ _ _ _ nt a).some_mem }
 
 中文:
 定义 _root_.赋范环.algEquivComplexOfComplete
@@ -477,7 +518,8 @@ definition _root_.NormedRing.algEquivComplexOfComplete
     invFun := fun a => (@spectrum.nonempty _ _ _ _ nt a).some
     left_inv := fun z => by
       simpa only [@scalar_eq _ _ _ _ _ nt _] using!
-        (@spect
+        (@spectrum.nonempty _ _ _ _ nt <| algebraMap Complex A z).some_mem
+    right_inv := fun a => algebraMap_eq_of_mem (@hA) (@spectrum.nonempty _ _ _ _ nt a).some_mem }
 
 Depends on / 依赖: Algebra, Algebra.ofId, Nontrivial, algebraMap, algebraMap_eq_of_mem, hA.mp, invFun, left_inv, mul_one, nonempty, right_inv, scalar_eq, some_mem, spectrum, spectrum.nonempty
 -/

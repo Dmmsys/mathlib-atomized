@@ -47,7 +47,8 @@ definition localPolynomial
   letI a : Int := q + 1 - (Nat.card (W'.reduction R).toAffine.Point)
   if W'.HasGoodReduction R then 1 - C a * X + C q * X ^ 2
   else if W'.HasSplitMultiplicativeReduction R then 1 - X
-  else if W'.HasMultiplicativeReduct
+  else if W'.HasMultiplicativeReduction R then 1 + X
+  else 1
 
 中文:
 定义 localPolynomial
@@ -57,7 +58,8 @@ definition localPolynomial
   letI a : Int := q + 1 - (Nat.card (W'.reduction R).toAffine.Point)
   if W'.HasGoodReduction R then 1 - C a * X + C q * X ^ 2
   else if W'.HasSplitMultiplicativeReduction R then 1 - X
-  else if W'.HasMultiplicativeReduct
+  else if W'.HasMultiplicativeReduction R then 1 + X
+  else 1
 
 Depends on / 依赖: HasGoodReduction, HasMultiplicativeReduction, HasSplitMultiplicativeReduction, IsLocalRing, IsLocalRing.ResidueField, Nat.card, ResidueField, W.minimal, minimal, reduction, toAffine, toAffine.Point
 -/

@@ -39,7 +39,22 @@ theorem pi_mem_of_mulSingle_mem_aux
   | insert i I hnotMem ih =>
     have : x = Function.update x i 1 * Pi.mulSingle i (x i) := by
       ext j
-      by_cases heq : j = 
+      by_cases heq : j = i
+      · subst heq
+        simp
+      · simp [heq]
+    rw [this]
+    clear this
+    apply mul_mem (ih _ _ _) (by simp [h2]) <;> clear ih <;> intro j hj
+    · by_cases heq : j = i
+      · subst heq
+        simp
+      · simpa [heq] using h1 j (by simpa [heq] using hj)
+· have : j != i := fun h => h ▸ hnotMem hj
+      simp only [ne_eq, this, not_false_eq_true, Function.update_of_ne]
+      exact h2 _ (Finset.mem_insert_of_mem hj)
+
+@[to_additive]
 
 中文:
 定理 pi_mem_of_mulSingle_mem_aux
@@ -52,7 +67,22 @@ theorem pi_mem_of_mulSingle_mem_aux
   | insert i I hnotMem ih =>
     have : x = Function.update x i 1 * Pi.mulSingle i (x i) := by
       ext j
-      by_cases heq : j = 
+      by_cases heq : j = i
+      · subst heq
+        simp
+      · simp [heq]
+    rw [this]
+    clear this
+    apply mul_mem (ih _ _ _) (by simp [h2]) <;> clear ih <;> intro j hj
+    · by_cases heq : j = i
+      · subst heq
+        simp
+      · simpa [heq] using h1 j (by simpa [heq] using hj)
+· have : j != i := fun h => h ▸ hnotMem hj
+      simp only [ne_eq, this, not_false_eq_true, Function.update_of_ne]
+      exact h2 _ (Finset.mem_insert_of_mem hj)
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.notMem_empty, Function, Function.update, Pi.mulSingle, generalizing, hnotMem, induction_on, insert, mulSingle, mul_mem, notMem_empty, one_mem, update
 -/
@@ -150,7 +180,7 @@ subset_closure mem_univ_pi.mpr fun j => by
         by_cases H : j = i
         · subst H
           simpa
-        ·
+        · simpa [H] using hs _)
 
 中文:
 定理 closure_pi
@@ -164,7 +194,7 @@ subset_closure mem_univ_pi.mpr fun j => by
         by_cases H : j = i
         · subst H
           simpa
-        ·
+        · simpa [H] using hs _)
 
 Depends on / 依赖: classical, closure_le, le_antisymm, map_le_of_le_comap, mem_univ_pi, mem_univ_pi.mpr, pi_le_iff, pi_le_iff.mpr, pi_subset_pi_iff, subset_closure
 -/

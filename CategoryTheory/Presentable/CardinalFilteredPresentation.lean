@@ -224,7 +224,14 @@ lemma presentable
   obtain ⟨κ', _, le, hκ'⟩ : exists (κ' : Cardinal.{w}) (_ : Fact κ'.IsRegular) (_ : κ <= κ'),
       HasCardinalLT (Arrow J) κ' := by
     obtain ⟨κ', h₁, h₂⟩ := HasCardinalLT.exists_regular_cardinal_forall.{w}
-      (Sum.elim (fun (_ : Unit) =
+      (Sum.elim (fun (_ : Unit) => Arrow J) (fun (_ : Unit) => κ.ord.ToType))
+    exact ⟨κ', ⟨h₁⟩,
+      le_of_lt (by simpa [hasCardinalLT_iff_cardinal_mk_lt] using h₂ (Sum.inr ⟨⟩)),
+      h₂ (Sum.inl ⟨⟩)⟩
+  have := hX.isCardinalPresentable h.le_isCardinalPresentable _ le hκ'
+  exact isPresentable_of_isCardinalPresentable _ κ'
+
+include h in
 
 中文:
 引理 presentable
@@ -234,7 +241,14 @@ lemma presentable
   obtain ⟨κ', _, le, hκ'⟩ : exists (κ' : Cardinal.{w}) (_ : Fact κ'.IsRegular) (_ : κ <= κ'),
       HasCardinalLT (Arrow J) κ' := by
     obtain ⟨κ', h₁, h₂⟩ := HasCardinalLT.exists_regular_cardinal_forall.{w}
-      (Sum.elim (fun (_ : Unit) =
+      (Sum.elim (fun (_ : Unit) => Arrow J) (fun (_ : Unit) => κ.ord.ToType))
+    exact ⟨κ', ⟨h₁⟩,
+      le_of_lt (by simpa [hasCardinalLT_iff_cardinal_mk_lt] using h₂ (Sum.inr ⟨⟩)),
+      h₂ (Sum.inl ⟨⟩)⟩
+  have := hX.isCardinalPresentable h.le_isCardinalPresentable _ le hκ'
+  exact isPresentable_of_isCardinalPresentable _ κ'
+
+include h in
 
 Depends on / 依赖: Cardinal, HasCardinalLT, HasCardinalLT.exists_regular_cardinal_forall, IsRegular, Sum.elim, Sum.inl, Sum.inr, ToType, exists_colimitsOfShape, exists_regular_cardinal_forall, h.exists_colimitsOfShape, h.le_isCardinalPresentable, hX.isCardinalPresentable, hasCardinalLT_iff_cardinal_mk_lt, isCardinalPresentable, le_isCardinalPresentable, le_of_lt, ord.ToType
 -/
@@ -292,7 +306,10 @@ lemma isPresentable_eq_retractClosure
     obtain ⟨J, _, _, ⟨p⟩⟩ := h.exists_colimitsOfShape X
     have := essentiallySmall_of_small_of_locallySmall.{w} J
     obtain ⟨j, f, hf⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit (𝟙 X)
-    exac
+    exact ⟨_, p.prop_diag_obj j, ⟨{ i := _, r := _, retract := hf}⟩⟩
+  · simpa only [ObjectProperty.retractClosure_le_iff] using h.le_isCardinalPresentable
+
+include h in
 
 中文:
 引理 isPresentable_eq_retractClosure
@@ -302,7 +319,10 @@ lemma isPresentable_eq_retractClosure
     obtain ⟨J, _, _, ⟨p⟩⟩ := h.exists_colimitsOfShape X
     have := essentiallySmall_of_small_of_locallySmall.{w} J
     obtain ⟨j, f, hf⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit (𝟙 X)
-    exac
+    exact ⟨_, p.prop_diag_obj j, ⟨{ i := _, r := _, retract := hf}⟩⟩
+  · simpa only [ObjectProperty.retractClosure_le_iff] using h.le_isCardinalPresentable
+
+include h in
 
 Depends on / 依赖: IsCardinalPresentable, IsCardinalPresentable.exists_hom_of_isColimit, ObjectProperty, ObjectProperty.retractClosure_le_iff, essentiallySmall_of_small_of_locallySmall, exists_colimitsOfShape, exists_hom_of_isColimit, h.exists_colimitsOfShape, h.le_isCardinalPresentable, isCardinalPresentable_iff, isColimit, le_antisymm, le_isCardinalPresentable, p.isColimit, p.prop_diag_obj, prop_diag_obj, retract, retractClosure_le_iff
 -/

@@ -1186,7 +1186,8 @@ instance :
     let e := ValuativeRel.ValueGroupWithZero.orderMonoidIso (valuation v)
     apply e.unitsCongr.symm.exists_congr fun a => ?_
     simp [-OrderMonoidIso.val_unitsCongr_symm_apply, OrderMonoidIso.unitsCongr_symm_apply,
-   
+      e.lt_symm_apply, e, ← Valuation.restrict_def, sub_eq_neg_add]
+    rfl
 
 中文:
 实例 :
@@ -1196,7 +1197,8 @@ instance :
     let e := ValuativeRel.ValueGroupWithZero.orderMonoidIso (valuation v)
     apply e.unitsCongr.symm.exists_congr fun a => ?_
     simp [-OrderMonoidIso.val_unitsCongr_symm_apply, OrderMonoidIso.unitsCongr_symm_apply,
-   
+      e.lt_symm_apply, e, ← Valuation.restrict_def, sub_eq_neg_add]
+    rfl
 
 Depends on / 依赖: OrderMonoidIso, OrderMonoidIso.unitsCongr_symm_apply, OrderMonoidIso.val_unitsCongr_symm_apply, Set.image_add_left, Set.preimage_ofPred_eq, Valuation, Valuation.restrict_def, ValuativeRel, ValuativeRel.ValueGroupWithZero.orderMonoidIso, ValueGroupWithZero, Valued, Valued.mem_nhds, e.lt_symm_apply, e.unitsCongr.symm.exists_congr, exists_congr, image_add_left, lt_symm_apply, mem_nhds, orderMonoidIso, preimage_ofPred_eq
 -/
@@ -2156,7 +2158,11 @@ definition valueGroupOrderIso₀
     | .coe b => simp
   map_mul' := by simp
   map_le_map_iff' {a b} := by
-    match a, b w
+    match a, b with
+    | 0, 0 => simp
+    | 0, .coe _ => simp
+    | .coe _, 0 => simp
+    | .coe a, .coe b => simp
 
 中文:
 定义 valueGroupOrderIso₀
@@ -2173,7 +2179,11 @@ definition valueGroupOrderIso₀
     | .coe b => simp
   map_mul' := by simp
   map_le_map_iff' {a b} := by
-    match a, b w
+    match a, b with
+    | 0, 0 => simp
+    | 0, .coe _ => simp
+    | .coe _, 0 => simp
+    | .coe a, .coe b => simp
 
 Depends on / 依赖: WithVal
 -/
@@ -2399,7 +2409,20 @@ theorem IsEquiv.uniformContinuous_equiv
     (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
   intro γ
   obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  use .mk0 ((instValued v).v
+  use .mk0 ((instValued v).v.restrict ((WithVal.equiv v).symm r) /
+    (instValued v).v.restrict ((WithVal.equiv v).symm s)) (by
+    simp [Valuation.restrict_def, restrict₀_eq_zero_iff, (eq_zero h (r := r)).ne, ← hv,
+      (eq_zero h (r := s)).ne, hr₀.ne', hs₀.ne'])
+  intro x hx
+  let y := (WithVal.equiv v) x
+  have hy : toVal v y = x := rfl
+  have hs0' : 0 < Valued.v.restrict (toVal v s) := by
+    simp [restrict_pos_iff, h.pos_iff, ← hv, hs₀]
+  have h' : v.restrict.IsEquiv w.restrict := h.restrict
+  rw [← hr]; rw [equiv_apply]; rw [Set.mem_ofPred_eq]; rw [lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀)]; rw [hv]; rw [← map_mul]; rw [← lt_def]; rw [← ofVal_mul]; rw [← hy]; rw [← toVal_mul]; rw [← h'.orderRingIso_apply]; rw [← h'.orderRingIso.lt_symm_apply]
+  simp only [toVal_mul, orderRingIso_symm_apply, lt_def, ofVal_mul, restrict_lt_iff]
+  simp only [equiv_symm_apply, Units.val_mk0, Set.mem_ofPred_eq, lt_div_iff₀ hs0'] at hx
+  rwa [← map_mul, restrict_lt_iff] at hx
 
 中文:
 定理 Is等价.uniformContinuous_equiv
@@ -2410,7 +2433,20 @@ theorem IsEquiv.uniformContinuous_equiv
     (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
   intro γ
   obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  use .mk0 ((instValued v).v
+  use .mk0 ((instValued v).v.restrict ((WithVal.equiv v).symm r) /
+    (instValued v).v.restrict ((WithVal.equiv v).symm s)) (by
+    simp [Valuation.restrict_def, restrict₀_eq_zero_iff, (eq_zero h (r := r)).ne, ← hv,
+      (eq_zero h (r := s)).ne, hr₀.ne', hs₀.ne'])
+  intro x hx
+  let y := (WithVal.equiv v) x
+  have hy : toVal v y = x := rfl
+  have hs0' : 0 < Valued.v.restrict (toVal v s) := by
+    simp [restrict_pos_iff, h.pos_iff, ← hv, hs₀]
+  have h' : v.restrict.IsEquiv w.restrict := h.restrict
+  rw [← hr]; rw [equiv_apply]; rw [Set.mem_ofPred_eq]; rw [lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀)]; rw [hv]; rw [← map_mul]; rw [← lt_def]; rw [← ofVal_mul]; rw [← hy]; rw [← toVal_mul]; rw [← h'.orderRingIso_apply]; rw [← h'.orderRingIso.lt_symm_apply]
+  simp only [toVal_mul, orderRingIso_symm_apply, lt_def, ofVal_mul, restrict_lt_iff]
+  simp only [equiv_symm_apply, Units.val_mk0, Set.mem_ofPred_eq, lt_div_iff₀ hs0'] at hx
+  rwa [← map_mul, restrict_lt_iff] at hx
 
 Depends on / 依赖: ContinuousAt, Valuation, Valuation.restrict_def, Valued, Valued.hasBasis_nhds_zero, Valued.v, WithVal, WithVal.equiv, eq_zero, exists_div_eq_of_unit, forall_const, hasBasis_nhds_zero, instValued, map_zero, restrict, restrict_def, simp_rw, tendsto_iff, true_and, uniformContinuous_of_continuousAt_zero
 -/
@@ -2448,7 +2484,24 @@ theorem IsEquiv.uniformContinuous_equiv_symm
     (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
   intro γ
   obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  have h' : w.restrict.IsEqu
+  have h' : w.restrict.IsEquiv v.restrict := h.restrict
+  use .mk0 ((Valued.v.restrict ((WithVal.equiv v) r)) /
+    (Valued.v.restrict ((WithVal.equiv v) s))) (by
+    simp only [equiv_apply, restrict_def, ne_eq, div_eq_zero_iff, restrict₀_eq_zero_iff, hv,
+      MonoidWithZeroHom.coe_ofClass, not_or, (eq_zero h (r := r.ofVal)).ne,
+      (eq_zero h (r := s.ofVal)).ne]
+    exact ⟨hr₀.ne', hs₀.ne'⟩)
+  intro x hx
+  simp only [equiv_symm_apply, Set.mem_ofPred_eq]
+  simp only [equiv_apply, Units.val_mk0, Set.mem_ofPred_eq] at hx
+  rw [lt_div_iff₀]; rw [← map_mul]; rw [restrict_lt_iff]; rw [hv]; rw [h.lt_iff_lt]; rw [map_mul] at hx
+  · rw [← hr, lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀), ← map_mul, ← lt_def,
+      ← h.orderRingIso_apply]
+    simp only [orderRingIso_apply, toVal_mul, lt_def, ofVal_mul, restrict_lt_iff]
+    rw [map_mul]
+    exact hx
+  · rw [restrict_pos_iff, hv, h.pos_iff]
+    exact hs₀
 
 中文:
 定理 Is等价.uniformContinuous_equiv_symm
@@ -2459,7 +2512,24 @@ theorem IsEquiv.uniformContinuous_equiv_symm
     (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
   intro γ
   obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  have h' : w.restrict.IsEqu
+  have h' : w.restrict.IsEquiv v.restrict := h.restrict
+  use .mk0 ((Valued.v.restrict ((WithVal.equiv v) r)) /
+    (Valued.v.restrict ((WithVal.equiv v) s))) (by
+    simp only [equiv_apply, restrict_def, ne_eq, div_eq_zero_iff, restrict₀_eq_zero_iff, hv,
+      MonoidWithZeroHom.coe_ofClass, not_or, (eq_zero h (r := r.ofVal)).ne,
+      (eq_zero h (r := s.ofVal)).ne]
+    exact ⟨hr₀.ne', hs₀.ne'⟩)
+  intro x hx
+  simp only [equiv_symm_apply, Set.mem_ofPred_eq]
+  simp only [equiv_apply, Units.val_mk0, Set.mem_ofPred_eq] at hx
+  rw [lt_div_iff₀]; rw [← map_mul]; rw [restrict_lt_iff]; rw [hv]; rw [h.lt_iff_lt]; rw [map_mul] at hx
+  · rw [← hr, lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀), ← map_mul, ← lt_def,
+      ← h.orderRingIso_apply]
+    simp only [orderRingIso_apply, toVal_mul, lt_def, ofVal_mul, restrict_lt_iff]
+    rw [map_mul]
+    exact hx
+  · rw [restrict_pos_iff, hv, h.pos_iff]
+    exact hs₀
 
 Depends on / 依赖: ContinuousAt, IsEquiv, Valued, Valued.hasBasis_nhds_zero, Valued.v, Valued.v.restrict, WithVal, WithVal.equiv, div_eq_zero_iff, equiv_apply, exists_div_eq_of_unit, forall_const, h.restrict, hasBasis_nhds_zero, map_zero, ne_eq, restrict, restrict_def, simp_rw, tendsto_iff
 -/
@@ -2500,7 +2570,19 @@ lemma IsEquiv.uniformContinuous
   have h_res : v.restrict.IsEquiv w.restrict := h_val.restrict
   refine @uniformContinuous_of_continuousAt_zero _ _ (Valued.mk' w).toUniformSpace _ _
     _ (Valued.mk' v).toUniformSpace _ _ _ _ (RingHom.id R) ?_
-  simp_rw [Continuous
+  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
+    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
+  intro x
+  let u := WithZero.unzero (Units.ne_zero x)
+  obtain ⟨a, ha, y, hu⟩ := (mem_valueGroup_iff_of_comm _).mp u.2
+  simp only [Set.mem_ofPred_eq, RingHom.id_apply]
+  set y₀ := h_val.orderMonoidIso x with hy₀_def
+  have hy₀_ne_zero : y₀ != 0 := by simp [hy₀_def]
+  set y := (Units.mk0 y₀ hy₀_ne_zero) with hy_def
+  use y
+  intro b hb
+  rwa [← h_val.orderMonoidIso_spec, hy_def, Units.val_mk0, hy₀_def,
+    h_val.orderMonoidIso.strictMono.lt_iff_lt] at hb
 
 中文:
 引理 Is等价.uniformContinuous
@@ -2510,7 +2592,19 @@ lemma IsEquiv.uniformContinuous
   have h_res : v.restrict.IsEquiv w.restrict := h_val.restrict
   refine @uniformContinuous_of_continuousAt_zero _ _ (Valued.mk' w).toUniformSpace _ _
     _ (Valued.mk' v).toUniformSpace _ _ _ _ (RingHom.id R) ?_
-  simp_rw [Continuous
+  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
+    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
+  intro x
+  let u := WithZero.unzero (Units.ne_zero x)
+  obtain ⟨a, ha, y, hu⟩ := (mem_valueGroup_iff_of_comm _).mp u.2
+  simp only [Set.mem_ofPred_eq, RingHom.id_apply]
+  set y₀ := h_val.orderMonoidIso x with hy₀_def
+  have hy₀_ne_zero : y₀ != 0 := by simp [hy₀_def]
+  set y := (Units.mk0 y₀ hy₀_ne_zero) with hy_def
+  use y
+  intro b hb
+  rwa [← h_val.orderMonoidIso_spec, hy_def, Units.val_mk0, hy₀_def,
+    h_val.orderMonoidIso.strictMono.lt_iff_lt] at hb
 
 Depends on / 依赖: ContinuousAt, IsEquiv, RingHom, RingHom.id, Units.ne_zero, Valued, Valued.hasBasis_nhds_zero, Valued.mk, WithZero, WithZero.unzero, forall_const, h_res, h_val, h_val.restrict, hasBasis_nhds_zero, map_zero, mem_valueGroup_iff_o, ne_zero, restrict, simp_rw
 -/
@@ -2545,7 +2639,15 @@ theorem IsEquiv.uniformContinuous_congr
   have hcomp : WithVal.congr v w (.refl R) = _ := RingEquiv.ext_iff.mpr (congrFun rfl)
   have h1 := IsEquiv.uniformContinuous_equiv (hval := Valued.mk' w) rfl h
   have h2 := IsEquiv.uniformContinuous_equiv_symm (hval := Valued.mk' v) rfl h
-  have hR : @UniformContinuous R R (Valued.mk' w).toUnifo
+  have hR : @UniformContinuous R R (Valued.mk' w).toUniformSpace (Valued.mk' v).toUniformSpace
+      (RingHom.id R) := h.uniformContinuous
+  apply @UniformContinuous.comp (WithVal v) R (WithVal w) _ (Valued.mk' w).toUniformSpace _
+    ((RingEquiv.refl R).trans (WithVal.equiv w).symm) (WithVal.equiv v) ?_ h1
+  exact @UniformContinuous.comp R R (WithVal w) (Valued.mk' w).toUniformSpace
+       (Valued.mk' v).toUniformSpace _ (WithVal.equiv w).symm (RingEquiv.refl R) h2 hR
+
+@[deprecated (since := "2026-01-27")]
+  alias IsEquiv.uniformContinuous_equivWithVal := IsEquiv.uniformContinuous_congr
 
 中文:
 定理 Is等价.uniformContinuous_congr
@@ -2554,7 +2656,15 @@ theorem IsEquiv.uniformContinuous_congr
   have hcomp : WithVal.congr v w (.refl R) = _ := RingEquiv.ext_iff.mpr (congrFun rfl)
   have h1 := IsEquiv.uniformContinuous_equiv (hval := Valued.mk' w) rfl h
   have h2 := IsEquiv.uniformContinuous_equiv_symm (hval := Valued.mk' v) rfl h
-  have hR : @UniformContinuous R R (Valued.mk' w).toUnifo
+  have hR : @UniformContinuous R R (Valued.mk' w).toUniformSpace (Valued.mk' v).toUniformSpace
+      (RingHom.id R) := h.uniformContinuous
+  apply @UniformContinuous.comp (WithVal v) R (WithVal w) _ (Valued.mk' w).toUniformSpace _
+    ((RingEquiv.refl R).trans (WithVal.equiv w).symm) (WithVal.equiv v) ?_ h1
+  exact @UniformContinuous.comp R R (WithVal w) (Valued.mk' w).toUniformSpace
+       (Valued.mk' v).toUniformSpace _ (WithVal.equiv w).symm (RingEquiv.refl R) h2 hR
+
+@[deprecated (since := "2026-01-27")]
+  alias IsEquiv.uniformContinuous_equivWithVal := IsEquiv.uniformContinuous_congr
 
 Depends on / 依赖: IsEquiv, IsEquiv.uniformContinuous_equiv, IsEquiv.uniformContinuous_equiv_symm, RingEquiv, RingEquiv.ext_iff.mpr, RingEquiv.refl, RingHom, RingHom.id, UniformContinuous, UniformContinuous.comp, Valued, Valued.mk, WithVal, WithVal.congr, WithVal.equiv, ext_iff, h.uniformContinuous, toUniformSpace, uniformContinuous, uniformContinuous_equiv
 -/
@@ -2696,7 +2806,11 @@ theorem IsEquiv.valuedCompletion_le_one_iff
     simp_rw [h1]
     convert!
       (mapEquiv h.uniformEquiv).toHomeomorph.isClosed_setOfPred_iff
-        (Valued
+        (Valued.isClopen_closedBall _ one_ne_zero) (Valued.isClopen_closedBall _ one_ne_zero)
+    rw [restrict_le_one_iff]
+    rfl
+  | ih a =>
+    simpa [Valued.valuedCompletion_apply] using! h.le_one_iff_le_one
 
 中文:
 定理 Is等价.valuedCompletion_le_one_iff
@@ -2709,7 +2823,11 @@ theorem IsEquiv.valuedCompletion_le_one_iff
     simp_rw [h1]
     convert!
       (mapEquiv h.uniformEquiv).toHomeomorph.isClosed_setOfPred_iff
-        (Valued
+        (Valued.isClopen_closedBall _ one_ne_zero) (Valued.isClopen_closedBall _ one_ne_zero)
+    rw [restrict_le_one_iff]
+    rfl
+  | ih a =>
+    simpa [Valued.valuedCompletion_apply] using! h.le_one_iff_le_one
 
 Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion, Valued, Valued.isClopen_closedBall, Valued.v, Valued.v.restrict, Valued.valuedCompletion_apply, WithVal, convert, h.le_one_iff_le_one, h.uniformEquiv, induction_on, isClopen_closedBall, isClosed_setOfPred_iff, le_one_iff_le_one, mapEquiv, one_ne_zero, restrict, restrict_le_one_iff
 -/

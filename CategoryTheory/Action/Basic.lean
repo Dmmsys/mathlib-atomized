@@ -905,7 +905,11 @@ definition actionPUnitEquivalence
   unitIso :=
     NatIso.ofComponents fun X => mkIso (Iso.refl _) fun ⟨⟩ => by
       simp only [Functor.id_obj, MonoidHom.one_apply, End.one_def, Functor.comp_obj,
-        forget_obj, Iso.refl_hom, Cat
+        forget_obj, Iso.refl_hom, Category.comp_id]
+      exact ρ_one X
+  counitIso := NatIso.ofComponents fun _ => Iso.refl _
+
+@[deprecated (since := "2026-02-08")] alias actionPunitEquivalence := actionPUnitEquivalence
 
 中文:
 定义 actionPUnitEquivalence
@@ -917,7 +921,11 @@ definition actionPUnitEquivalence
   unitIso :=
     NatIso.ofComponents fun X => mkIso (Iso.refl _) fun ⟨⟩ => by
       simp only [Functor.id_obj, MonoidHom.one_apply, End.one_def, Functor.comp_obj,
-        forget_obj, Iso.refl_hom, Cat
+        forget_obj, Iso.refl_hom, Category.comp_id]
+      exact ρ_one X
+  counitIso := NatIso.ofComponents fun _ => Iso.refl _
+
+@[deprecated (since := "2026-02-08")] alias actionPunitEquivalence := actionPUnitEquivalence
 
 Depends on / 依赖: forget
 -/
@@ -1178,7 +1186,9 @@ definition mapAction
             rw [map_mul]; rw [End.mul_def]; rw [F.map_comp] } }
   map f :=
     { hom := F.map f.hom
-      comm := fun g => by dsimp; rw [← F.map_c
+      comm := fun g => by dsimp; rw [← F.map_comp, f.comm, F.map_comp] }
+  map_id M := by ext; simp only [Action.id_hom, F.map_id]
+  map_comp f g := by ext; simp only [Action.comp_hom, F.map_comp]
 
 中文:
 定义 mapAction
@@ -1192,7 +1202,9 @@ definition mapAction
             rw [map_mul]; rw [End.mul_def]; rw [F.map_comp] } }
   map f :=
     { hom := F.map f.hom
-      comm := fun g => by dsimp; rw [← F.map_c
+      comm := fun g => by dsimp; rw [← F.map_comp, f.comm, F.map_comp] }
+  map_id M := by ext; simp only [Action.id_hom, F.map_id]
+  map_comp f g := by ext; simp only [Action.comp_hom, F.map_comp]
 
 Depends on / 依赖: Action, Action.comp_hom, Action.id_hom, End.mul_def, F.map, F.map_comp, F.map_id, F.obj, comp_hom, f.comm, f.hom, id_hom, map_comp, map_id, map_mul, map_one, mul_def
 -/

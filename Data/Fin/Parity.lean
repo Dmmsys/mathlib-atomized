@@ -41,7 +41,7 @@ theorem even_succAbove_add_predAbove
     simp [succAbove_of_castSucc_lt _ _ hji, predAbove_of_castSucc_lt _ _ hji, this, iff_comm,
       parity_simps]
   · simp [succAbove_of_le_castSucc _ _ hij, predAbove_of_le_castSucc _ _ hij,
- 
+      ← Nat.not_even_iff_odd, not_iff, not_iff_comm, parity_simps]
 
 中文:
 定理 even_succAbove_add_predAbove
@@ -52,7 +52,7 @@ theorem even_succAbove_add_predAbove
     simp [succAbove_of_castSucc_lt _ _ hji, predAbove_of_castSucc_lt _ _ hji, this, iff_comm,
       parity_simps]
   · simp [succAbove_of_le_castSucc _ _ hij, predAbove_of_le_castSucc _ _ hij,
- 
+      ← Nat.not_even_iff_odd, not_iff, not_iff_comm, parity_simps]
 
 Depends on / 依赖: Nat.not_even_iff_odd, Nat.zero_le, castSucc, iff_comm, j.castSucc, lt_or_ge, not_even_iff_odd, not_iff, not_iff_comm, parity_simps, predAbove_of_castSucc_lt, predAbove_of_le_castSucc, succAbove_of_castSucc_lt, succAbove_of_le_castSucc, trans_lt, zero_le
 -/
@@ -249,7 +249,8 @@ lemma odd_iff_of_even
   rintro ⟨l, rfl⟩
   rw [val_add]; rw [val_mul]; rw [coe_ofNat_eq_mod]; rw [coe_ofNat_eq_mod]
   simp only [Nat.mod_mul_mod, Nat.add_mod_mod, Nat.mod_add_mod, Nat.odd_iff]
-  rw [Nat.mod_mod_of_dvd _ ⟨n]; rw [(two_mul n).symm⟩]; rw [← Nat.odd_iff];
+  rw [Nat.mod_mod_of_dvd _ ⟨n]; rw [(two_mul n).symm⟩]; rw [← Nat.odd_iff]; rw [Nat.odd_add_one]; rw [Nat.not_odd_iff_even]
+  simp
 
 中文:
 引理 odd_iff_of_even
@@ -261,7 +262,8 @@ lemma odd_iff_of_even
   rintro ⟨l, rfl⟩
   rw [val_add]; rw [val_mul]; rw [coe_ofNat_eq_mod]; rw [coe_ofNat_eq_mod]
   simp only [Nat.mod_mul_mod, Nat.add_mod_mod, Nat.mod_add_mod, Nat.odd_iff]
-  rw [Nat.mod_mod_of_dvd _ ⟨n]; rw [(two_mul n).symm⟩]; rw [← Nat.odd_iff];
+  rw [Nat.mod_mod_of_dvd _ ⟨n]; rw [(two_mul n).symm⟩]; rw [← Nat.odd_iff]; rw [Nat.odd_add_one]; rw [Nat.not_odd_iff_even]
+  simp
 
 Depends on / 依赖: Nat.add_mod_mod, Nat.mod_add_mod, Nat.mod_mod_of_dvd, Nat.mod_mul_mod, Nat.not_odd_iff_even, Nat.odd_add_one, Nat.odd_iff, add_mod_mod, coe_ofNat_eq_mod, mod_add_mod, mod_mod_of_dvd, mod_mul_mod, not_odd_iff_even, odd_add_one, odd_iff, odd_of_val, two_mul, val_add, val_mul
 -/

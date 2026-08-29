@@ -41,7 +41,14 @@ theorem mapsTo_tangentConeAt_pi
   apply mem_tangentConeAt_of_seq l c (fun n => Pi.single i (d n))
   · rw [tendsto_pi_nhds]
     intro j
-    rcases eq_or_ne j i with rfl | hj <;> simp [*, ten
+    rcases eq_or_ne j i with rfl | hj <;> simp [*, tendsto_const_nhds]
+  · refine hds.mono fun n hn => ?_
+    rw [closure_pi_set]; rw [mem_univ_pi]
+    intro j
+    rcases eq_or_ne j i with rfl | hj <;> simp [*, subset_closure hn]
+  · rw [tendsto_pi_nhds]
+    intro j
+    rcases eq_or_ne j i with rfl | hj <;> simp [*, tendsto_const_nhds]
 
 中文:
 定理 mapsTo_tangentConeAt_pi
@@ -53,7 +60,14 @@ theorem mapsTo_tangentConeAt_pi
   apply mem_tangentConeAt_of_seq l c (fun n => Pi.single i (d n))
   · rw [tendsto_pi_nhds]
     intro j
-    rcases eq_or_ne j i with rfl | hj <;> simp [*, ten
+    rcases eq_or_ne j i with rfl | hj <;> simp [*, tendsto_const_nhds]
+  · refine hds.mono fun n hn => ?_
+    rw [closure_pi_set]; rw [mem_univ_pi]
+    intro j
+    rcases eq_or_ne j i with rfl | hj <;> simp [*, subset_closure hn]
+  · rw [tendsto_pi_nhds]
+    intro j
+    rcases eq_or_ne j i with rfl | hj <;> simp [*, tendsto_const_nhds]
 
 Depends on / 依赖: Pi.single, closure_pi_set, eq_or_ne, exists_fun_of_mem_tangentConeAt, hds.mono, mem_tangentConeAt_of_seq, mem_univ_pi, single, subset_closure, tangentConeAt_closure, tendsto_const_nhds, tendsto_pi_nhds
 -/
@@ -87,7 +101,8 @@ refine ⟨.of_closure (dense_pi univ fun i _ => (h i).1).closure.mono ?_, fun i 
   simp only [closure_pi_set, ← Submodule.closure_coe_iSup_map_single, Submodule.map_span]
   gcongr
   refine iSup_le fun i => ?_
-  gco
+  gcongr
+.image_subset exact mapsTo_tangentConeAt_pi (fun j _ => (h j).2)
 
 中文:
 定理 UniqueDiffWithinAt.univ_pi
@@ -99,7 +114,8 @@ refine ⟨.of_closure (dense_pi univ fun i _ => (h i).1).closure.mono ?_, fun i 
   simp only [closure_pi_set, ← Submodule.closure_coe_iSup_map_single, Submodule.map_span]
   gcongr
   refine iSup_le fun i => ?_
-  gco
+  gcongr
+.image_subset exact mapsTo_tangentConeAt_pi (fun j _ => (h j).2)
 
 Depends on / 依赖: Submodule, Submodule.closure_coe_iSup_map_single, Submodule.map_span, classical, closure, closure.mono, closure_coe_iSup_map_single, closure_pi_set, dense_pi, iSup_le, image_subset, map_span, mapsTo_tangentConeAt_pi, of_closure, uniqueDiffWithinAt_iff
 -/

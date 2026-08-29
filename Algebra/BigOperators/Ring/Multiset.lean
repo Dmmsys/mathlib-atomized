@@ -210,7 +210,9 @@ lemma prod_map_add
   refine s.induction_on ?_ fun a s ih => ?_
   · simp only [map_zero, prod_zero, antidiagonal_zero, map_singleton, mul_one, sum_singleton]
   · simp only [map_cons, prod_cons, ih, sum_map_mul_left.symm, add_mul, mul_left_comm (f a),
-      mul_left_comm (g a), sum_map_add, antidiagonal_cons, Prod.ma
+      mul_left_comm (g a), sum_map_add, antidiagonal_cons, Prod.map_fst, Prod.map_snd,
+      id_eq, map_add, map_map, Function.comp_apply, mul_assoc, sum_add]
+    exact add_comm _ _
 
 中文:
 引理 prod_map_add
@@ -219,7 +221,9 @@ lemma prod_map_add
   refine s.induction_on ?_ fun a s ih => ?_
   · simp only [map_zero, prod_zero, antidiagonal_zero, map_singleton, mul_one, sum_singleton]
   · simp only [map_cons, prod_cons, ih, sum_map_mul_left.symm, add_mul, mul_left_comm (f a),
-      mul_left_comm (g a), sum_map_add, antidiagonal_cons, Prod.ma
+      mul_left_comm (g a), sum_map_add, antidiagonal_cons, Prod.map_fst, Prod.map_snd,
+      id_eq, map_add, map_map, Function.comp_apply, mul_assoc, sum_add]
+    exact add_comm _ _
 
 Depends on / 依赖: Function, Function.comp_apply, Prod.map_fst, Prod.map_snd, add_comm, add_mul, antidiagonal_cons, antidiagonal_zero, comp_apply, id_eq, induction_on, map_add, map_cons, map_fst, map_map, map_singleton, map_snd, map_zero, mul_assoc, mul_left_comm
 -/

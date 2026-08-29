@@ -46,7 +46,13 @@ lemma LinearIndependent.linearIndependent_of_exact_of_retraction
     generalize f y = x
     intro hy
     induction hy using Submodule.span_induction with
-    | mem m hm => obtain ⟨i, rfl⟩ :
+    | mem m hm => obtain ⟨i, rfl⟩ := hm; apply hsa
+    | zero => simp_all
+    | add => simp_all
+    | smul => simp_all
+  replace hs := DFunLike.congr_fun hs y
+  simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq] at hs
+  rw [← hs]; rw [hz]; rw [map_zero]
 
 中文:
 引理 LinearIndependent.linearIndependent_of_exact_of_retraction
@@ -59,7 +65,13 @@ lemma LinearIndependent.linearIndependent_of_exact_of_retraction
     generalize f y = x
     intro hy
     induction hy using Submodule.span_induction with
-    | mem m hm => obtain ⟨i, rfl⟩ :
+    | mem m hm => obtain ⟨i, rfl⟩ := hm; apply hsa
+    | zero => simp_all
+    | add => simp_all
+    | smul => simp_all
+  replace hs := DFunLike.congr_fun hs y
+  simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq] at hs
+  rw [← hs]; rw [hz]; rw [map_zero]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Function, Function.comp_apply, LinearIndependent, LinearIndependent.comp, LinearMap, LinearMap.coe_comp, LinearMap.id_coe, Submodule, Submodule.disjoint_def, Submodule.span_induction, coe_comp, comp_apply, congr_fun, disjoint_def, generalize, hfg.linearMap_ker_eq, id_coe, id_eq
 -/
@@ -98,7 +110,18 @@ lemma top_le_span_of_aux
     rw [show g m = g (m - f (s m)) by simp [hfg.apply_apply_eq_zero]]
     apply this hs hfg v hg hslzero hli hsp
     replace hs := DFunLike.congr_fun hs (s m)
-    simp only [LinearMap.coe_comp, Functio
+    simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq] at hs
+    simp [hs]
+  have : m in Submodule.span R (Set.range v) := hsp Submodule.mem_top
+  obtain ⟨c, rfl⟩ := Finsupp.mem_span_range_iff_exists_finsupp.mp this
+  simp only [LinearMap.mem_ker, Finsupp.sum, map_sum, map_smul,
+    Finset.sum_sum_eq_sum_toLeft_add_sum_toRight, map_add, hslzero, smul_zero,
+    Finset.sum_const_zero, zero_add] at h
+  replace hli := (linearIndependent_iff'.mp hli) c.support.toRight (c ∘ .inr) h
+  simp only [Finset.mem_toRight, Finsupp.mem_support_iff, Function.comp_apply, not_imp_self] at hli
+  simp only [Finsupp.sum, Finset.sum_sum_eq_sum_toLeft_add_sum_toRight, hli, zero_smul,
+    Finset.sum_const_zero, add_zero, map_sum, map_smul]
+  exact Submodule.sum_mem _ (fun i hi => Submodule.smul_mem _ _ <| Submodule.subset_span ⟨i, rfl⟩)
 
 中文:
 引理 top_le_span_of_aux
@@ -111,7 +134,18 @@ lemma top_le_span_of_aux
     rw [show g m = g (m - f (s m)) by simp [hfg.apply_apply_eq_zero]]
     apply this hs hfg v hg hslzero hli hsp
     replace hs := DFunLike.congr_fun hs (s m)
-    simp only [LinearMap.coe_comp, Functio
+    simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq] at hs
+    simp [hs]
+  have : m in Submodule.span R (Set.range v) := hsp Submodule.mem_top
+  obtain ⟨c, rfl⟩ := Finsupp.mem_span_range_iff_exists_finsupp.mp this
+  simp only [LinearMap.mem_ker, Finsupp.sum, map_sum, map_smul,
+    Finset.sum_sum_eq_sum_toLeft_add_sum_toRight, map_add, hslzero, smul_zero,
+    Finset.sum_const_zero, zero_add] at h
+  replace hli := (linearIndependent_iff'.mp hli) c.support.toRight (c ∘ .inr) h
+  simp only [Finset.mem_toRight, Finsupp.mem_support_iff, Function.comp_apply, not_imp_self] at hli
+  simp only [Finsupp.sum, Finset.sum_sum_eq_sum_toLeft_add_sum_toRight, hli, zero_smul,
+    Finset.sum_const_zero, add_zero, map_sum, map_smul]
+  exact Submodule.sum_mem _ (fun i hi => Submodule.smul_mem _ _ <| Submodule.subset_span ⟨i, rfl⟩)
 -/
 private lemma top_le_span_of_aux (v : κ oplus σ -> M)
     (hg : Function.Surjective g) (hslzero : forall i, s (v (.inl i)) = 0)
@@ -236,7 +270,11 @@ lemma Submodule.projectionOnto_comp_surjective_of_exact
   rw [← LinearMap.coe_range]; rw [← Submodule.top_coe (R := R)]; rw [surjOn_iff_le_map]; rw [← hfg.linearMap_ker_eq]
   intro x triv
   obtain ⟨a, haq, ha⟩ : g x.val in q.map g := by rwa [hmap]
-  exact 
+  exact ⟨x - a, by simp [← ha], by simpa⟩
+
+@[deprecated (since := "2026-05-05")] alias
+  Submodule.linearProjOfIsCompl_comp_surjective_of_exact :=
+  Submodule.projectionOnto_comp_surjective_of_exact
 
 中文:
 引理 子模.projectionOnto_comp_surjective_of_exact
@@ -245,7 +283,11 @@ lemma Submodule.projectionOnto_comp_surjective_of_exact
   rw [← LinearMap.coe_range]; rw [← Submodule.top_coe (R := R)]; rw [surjOn_iff_le_map]; rw [← hfg.linearMap_ker_eq]
   intro x triv
   obtain ⟨a, haq, ha⟩ : g x.val in q.map g := by rwa [hmap]
-  exact 
+  exact ⟨x - a, by simp [← ha], by simpa⟩
+
+@[deprecated (since := "2026-05-05")] alias
+  Submodule.linearProjOfIsCompl_comp_surjective_of_exact :=
+  Submodule.projectionOnto_comp_surjective_of_exact
 
 Depends on / 依赖: LinearMap, LinearMap.coe_comp, LinearMap.coe_range, Set.image_univ, Set.surjOn_comp_iff, Set.surjOn_univ, Submodule, Submodule.top_coe, coe_comp, coe_range, hfg.linearMap_ker_eq, image_univ, linearMap_ker_eq, q.map, surjOn_comp_iff, surjOn_iff_le_map, surjOn_univ, top_coe, x.val
 -/
@@ -274,7 +316,8 @@ lemma Submodule.projectionOnto_comp_bijective_of_exact
   simpa [← LinearMap.disjoint_ker_iff_injOn, ← hfg.linearMap_ker_eq]
 
 @[deprecated (since := "2026-05-05")] alias
-  Submodule.linearPro
+  Submodule.linearProjOfIsCompl_comp_bijective_of_exact :=
+  Submodule.projectionOnto_comp_bijective_of_exact
 
 中文:
 引理 子模.projectionOnto_comp_bijective_of_exact
@@ -284,7 +327,8 @@ lemma Submodule.projectionOnto_comp_bijective_of_exact
   simpa [← LinearMap.disjoint_ker_iff_injOn, ← hfg.linearMap_ker_eq]
 
 @[deprecated (since := "2026-05-05")] alias
-  Submodule.linearPro
+  Submodule.linearProjOfIsCompl_comp_bijective_of_exact :=
+  Submodule.projectionOnto_comp_bijective_of_exact
 
 Depends on / 依赖: LinearMap, LinearMap.coe_comp, LinearMap.disjoint_ker_iff_injOn, LinearMap.range, Set.InjOn.injective_iff, Submodule, Submodule.projectionOnto_comp_surjective_of_exact, coe_comp, disjoint_ker_iff_injOn, hfg.linearMap_ker_eq, injective_iff, linearMap_ker_eq, projectionOnto_comp_surjective_of_exact, subset_rfl
 -/

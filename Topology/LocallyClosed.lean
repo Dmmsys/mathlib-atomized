@@ -497,7 +497,31 @@ lemma isLocallyClosed_tfae
       nth_rw 1 [← hZ.closure_eq]
       rw [← compl_subset_iff_union]; rw [compl_subset_compl]
       refine frontier_subset_closure.trans (closure_mono inter_subset_right)
-    rw [cobord
+    rw [coborder_eq_union_frontier_compl]; rw [inter_union_distrib_right]; rw [this]; rw [inter_univ]
+    exact hU.union isClosed_frontier.isOpen_compl
+  tfae_have 2 -> 3
+  | h, x => (⟨coborder s, h.mem_nhds <| subset_coborder ·, isClosed_preimage_val_coborder⟩)
+  tfae_have 3 -> 4
+  | h, x, hx => by
+    obtain ⟨t, ht, ht'⟩ := h x hx
+    obtain ⟨U, hUt, hU, hxU⟩ := mem_nhds_iff.mp ht
+    rw [isClosed_preimage_val] at ht'
+    exact ⟨U, hxU, hU, (subset_inter (inter_subset_left.trans hUt) (hU.inter_closure.trans
+      (closure_mono <| inter_subset_inter hUt subset_rfl))).trans ht'⟩
+  tfae_have 4 -> 5
+  | H => by
+    choose U hxU hU e using H
+    refine ⟨⋃ x in s, U x ‹_›, isOpen_iUnion (isOpen_iUnion <| hU ·), ext fun x => ⟨?_, ?_⟩⟩
+    · rintro ⟨_, ⟨⟨y, rfl⟩, ⟨_, ⟨hy, rfl⟩, hxU⟩⟩⟩
+      exact e y hy ⟨hxU, x.2⟩
+    · exact (subset_iUnion₂ _ _ <| hxU x ·)
+  tfae_have 5 -> 1
+  | H => by
+    convert!
+      H.isLocallyClosed.image IsInducing.subtypeVal
+        (by simpa using isClosed_closure.isLocallyClosed)
+    simpa using subset_closure
+  tfae_finish
 
 中文:
 引理 isLocallyClosed_tfae
@@ -509,7 +533,31 @@ lemma isLocallyClosed_tfae
       nth_rw 1 [← hZ.closure_eq]
       rw [← compl_subset_iff_union]; rw [compl_subset_compl]
       refine frontier_subset_closure.trans (closure_mono inter_subset_right)
-    rw [cobord
+    rw [coborder_eq_union_frontier_compl]; rw [inter_union_distrib_right]; rw [this]; rw [inter_univ]
+    exact hU.union isClosed_frontier.isOpen_compl
+  tfae_have 2 -> 3
+  | h, x => (⟨coborder s, h.mem_nhds <| subset_coborder ·, isClosed_preimage_val_coborder⟩)
+  tfae_have 3 -> 4
+  | h, x, hx => by
+    obtain ⟨t, ht, ht'⟩ := h x hx
+    obtain ⟨U, hUt, hU, hxU⟩ := mem_nhds_iff.mp ht
+    rw [isClosed_preimage_val] at ht'
+    exact ⟨U, hxU, hU, (subset_inter (inter_subset_left.trans hUt) (hU.inter_closure.trans
+      (closure_mono <| inter_subset_inter hUt subset_rfl))).trans ht'⟩
+  tfae_have 4 -> 5
+  | H => by
+    choose U hxU hU e using H
+    refine ⟨⋃ x in s, U x ‹_›, isOpen_iUnion (isOpen_iUnion <| hU ·), ext fun x => ⟨?_, ?_⟩⟩
+    · rintro ⟨_, ⟨⟨y, rfl⟩, ⟨_, ⟨hy, rfl⟩, hxU⟩⟩⟩
+      exact e y hy ⟨hxU, x.2⟩
+    · exact (subset_iUnion₂ _ _ <| hxU x ·)
+  tfae_have 5 -> 1
+  | H => by
+    convert!
+      H.isLocallyClosed.image IsInducing.subtypeVal
+        (by simpa using isClosed_closure.isLocallyClosed)
+    simpa using subset_closure
+  tfae_finish
 
 Depends on / 依赖: closure_eq, closure_mono, coborder, coborder_eq_union_frontier_compl, compl_subset_compl, compl_subset_iff_union, frontier, frontier_subset_closure, frontier_subset_closure.trans, h.mem_nhds, hU.union, hZ.closure_eq, inter_subset_right, inter_union_distrib_right, inter_univ, isClosed_frontier, isClosed_frontier.isOpen_compl, isClosed_preimage_val_co, isOpen_compl, mem_nhds
 -/

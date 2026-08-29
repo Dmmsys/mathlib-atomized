@@ -122,7 +122,10 @@ lemma hasSmallInductiveDimensionLT_one_iff
     rw [← closure_subset_iff_isClosed]
     cases h U hU
     rwa [isEmpty_coe_sort, (hs.isOpen hU).frontier_eq, sdiff_eq_empty] at ‹_›
-  · exact fun h => .succ 0 _ h 
+  · exact fun h => .succ 0 _ h fun _ hU => hU.frontier_eq ▸ .zero
+
+@[deprecated (since := "2026-06-21")]
+alias HasSmallInductiveDimensionLT_one_iff := hasSmallInductiveDimensionLT_one_iff
 
 中文:
 引理 hasSmallInductiveDimensionLT_one_iff
@@ -133,7 +136,10 @@ lemma hasSmallInductiveDimensionLT_one_iff
     rw [← closure_subset_iff_isClosed]
     cases h U hU
     rwa [isEmpty_coe_sort, (hs.isOpen hU).frontier_eq, sdiff_eq_empty] at ‹_›
-  · exact fun h => .succ 0 _ h 
+  · exact fun h => .succ 0 _ h fun _ hU => hU.frontier_eq ▸ .zero
+
+@[deprecated (since := "2026-06-21")]
+alias HasSmallInductiveDimensionLT_one_iff := hasSmallInductiveDimensionLT_one_iff
 
 Depends on / 依赖: closure_subset_iff_isClosed, frontier_eq, hU.frontier_eq, hU.isOpen, hs.isOpen, hs.of_isOpen_of_subset, isEmpty_coe_sort, isOpen, of_isOpen_of_subset, sdiff_eq_empty
 -/
@@ -349,7 +355,7 @@ theorem smallInductiveDimension_lt_iff
       · exact fun _ _ => h.mono zero_le
     | succ n =>
       apply (smallInductiveDimension_le_iff.2 h).trans_lt
-    
+      exact_mod_cast n.lt_add_one
 
 中文:
 定理 smallInductiveDimension_lt_iff
@@ -363,7 +369,7 @@ theorem smallInductiveDimension_lt_iff
       · exact fun _ _ => h.mono zero_le
     | succ n =>
       apply (smallInductiveDimension_le_iff.2 h).trans_lt
-    
+      exact_mod_cast n.lt_add_one
 
 Depends on / 依赖: hasSmallInductiveDimensionLT_of_smallInductiveDimension_lt
 -/

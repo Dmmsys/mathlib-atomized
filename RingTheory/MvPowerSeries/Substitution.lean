@@ -517,7 +517,7 @@ lemma HasSubst.truncTotal
     rw [← coeff_zero_eq_constantCoeff_apply]; rw [MvPolynomial.coeff_coe]; rw [← MvPolynomial.constantCoeff_eq]; rw [constantCoeff_truncTotal_eq_ite]
     split_ifs <;> simp [ha.const_coeff i]
   coeff_zero d :=
-    (ha.coeff_zero d).subset fun i => by contrapose; simp +contextual [coeff_truncTotal
+    (ha.coeff_zero d).subset fun i => by contrapose; simp +contextual [coeff_truncTotal_eq_ite]
 
 中文:
 引理 有Subst.truncTotal
@@ -526,7 +526,7 @@ lemma HasSubst.truncTotal
     rw [← coeff_zero_eq_constantCoeff_apply]; rw [MvPolynomial.coeff_coe]; rw [← MvPolynomial.constantCoeff_eq]; rw [constantCoeff_truncTotal_eq_ite]
     split_ifs <;> simp [ha.const_coeff i]
   coeff_zero d :=
-    (ha.coeff_zero d).subset fun i => by contrapose; simp +contextual [coeff_truncTotal
+    (ha.coeff_zero d).subset fun i => by contrapose; simp +contextual [coeff_truncTotal_eq_ite]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.coeff_coe, MvPolynomial.constantCoeff_eq, coeff_coe, coeff_truncTotal_eq_ite, coeff_zero, coeff_zero_eq_constantCoeff_apply, const_coeff, constantCoeff_eq, constantCoeff_truncTotal_eq_ite, contextual, contrapose, ha.coeff_zero, ha.const_coeff, split_ifs, subset
 -/
@@ -1127,7 +1127,9 @@ theorem constantCoeff_subst_eq_zero
       obtain ⟨i, hi⟩ : exists i : σ, d i != 0 := by
         by_contra! hc
 exact hd Finsupp.ext hc
-      simpa [map_
+      simpa [map_finsuppProd, ha'] using!
+        Finset.prod_eq_zero (i := i) (by simp [hi]) (by simp [zero_pow hi])
+    rw [this]; rw [smul_zero]
 
 中文:
 定理 constantCoeff_subst_eq_zero
@@ -1141,7 +1143,9 @@ exact hd Finsupp.ext hc
       obtain ⟨i, hi⟩ : exists i : σ, d i != 0 := by
         by_contra! hc
 exact hd Finsupp.ext hc
-      simpa [map_
+      simpa [map_finsuppProd, ha'] using!
+        Finset.prod_eq_zero (i := i) (by simp [hi]) (by simp [zero_pow hi])
+    rw [this]; rw [smul_zero]
 
 Depends on / 依赖: Finset, Finset.prod_eq_zero, Finsupp, Finsupp.ext, constantCoeff, constantCoeff_subst, d.prod, finsum_eq_zero_of_forall_eq_zero, map_finsuppProd, prod_eq_zero, smul_zero, zero_pow
 -/
@@ -1172,7 +1176,9 @@ theorem map_algebraMap_eq_subst_X
   · rw [← MvPowerSeries.monomial_one_eq, coeff_monomial_same,
       algebra_compatible_smul S, smul_eq_mul, mul_one]
   · intro d hd
-    rw [← MvPowerSeries.monomial_one_eq]; rw [coeff_monomial_ne hd.symm]; rw [sm
+    rw [← MvPowerSeries.monomial_one_eq]; rw [coeff_monomial_ne hd.symm]; rw [smul_zero]
+
+omit [Algebra R S] in
 
 中文:
 定理 map_algebraMap_eq_subst_X
@@ -1183,7 +1189,9 @@ theorem map_algebraMap_eq_subst_X
   · rw [← MvPowerSeries.monomial_one_eq, coeff_monomial_same,
       algebra_compatible_smul S, smul_eq_mul, mul_one]
   · intro d hd
-    rw [← MvPowerSeries.monomial_one_eq]; rw [coeff_monomial_ne hd.symm]; rw [sm
+    rw [← MvPowerSeries.monomial_one_eq]; rw [coeff_monomial_ne hd.symm]; rw [smul_zero]
+
+omit [Algebra R S] in
 
 Depends on / 依赖: HasSubst, HasSubst.X, MvPowerSeries, MvPowerSeries.monomial_one_eq, algebra_compatible_smul, coeff_map, coeff_monomial_ne, coeff_monomial_same, coeff_subst, finsum_eq_single, hd.symm, monomial_one_eq, mul_one, smul_eq_mul, smul_zero
 -/
@@ -1209,7 +1217,8 @@ theorem map_subst
   rw [coeff_subst (ha.map h)]; rw [coeff_map]; rw [coeff_subst ha]; rw [this]; rw [AddMonoidHom.map_finsum _
     (coeff_subst_finite ha _ _)]; rw [finsum_congr]
   intro d
-  simp [smul_eq_mul, RingHom.toAddMonoidHom_eq_coe, AddMonoidHom.coe_
+  simp [smul_eq_mul, RingHom.toAddMonoidHom_eq_coe, AddMonoidHom.coe_coe, map_mul,
+    ← coeff_map, Finsupp.prod]
 
 中文:
 定理 map_subst
@@ -1220,7 +1229,8 @@ theorem map_subst
   rw [coeff_subst (ha.map h)]; rw [coeff_map]; rw [coeff_subst ha]; rw [this]; rw [AddMonoidHom.map_finsum _
     (coeff_subst_finite ha _ _)]; rw [finsum_congr]
   intro d
-  simp [smul_eq_mul, RingHom.toAddMonoidHom_eq_coe, AddMonoidHom.coe_
+  simp [smul_eq_mul, RingHom.toAddMonoidHom_eq_coe, AddMonoidHom.coe_coe, map_mul,
+    ← coeff_map, Finsupp.prod]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, AddMonoidHom.map_finsum, Finsupp, Finsupp.prod, RingHom, RingHom.toAddMonoidHom_eq_coe, coe_coe, coeff_map, coeff_subst, coeff_subst_finite, finsum_congr, h.toAddMonoidHom, ha.map, map_finsum, map_mul, smul_eq_mul, toAddMonoidHom, toAddMonoidHom_eq_coe
 -/
@@ -1249,7 +1259,10 @@ lemma subst_zero_eq_C_constantCoeff
     · simp [hn, Algebra.algebraMap_eq_smul_one]
     simp [coeff_C_of_ne_zero hn, coeff_one, hn]
   intro d hd
-  obtain ⟨i, hi⟩ : d.support.Nonempty := d.support_nonempty_iff.mpr
+  obtain ⟨i, hi⟩ : d.support.Nonempty := d.support_nonempty_iff.mpr hd
+  simp [Finsupp.prod, Finset.prod_eq_zero hi, coeff_zero, zero_pow <| d.mem_support_iff.mp hi]
+
+@[simp]
 
 中文:
 引理 subst_zero_eq_C_constantCoeff
@@ -1262,7 +1275,10 @@ lemma subst_zero_eq_C_constantCoeff
     · simp [hn, Algebra.algebraMap_eq_smul_one]
     simp [coeff_C_of_ne_zero hn, coeff_one, hn]
   intro d hd
-  obtain ⟨i, hi⟩ : d.support.Nonempty := d.support_nonempty_iff.mpr
+  obtain ⟨i, hi⟩ : d.support.Nonempty := d.support_nonempty_iff.mpr hd
+  simp [Finsupp.prod, Finset.prod_eq_zero hi, coeff_zero, zero_pow <| d.mem_support_iff.mp hi]
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Finset, Finset.prod_eq_zero, Finsupp, Finsupp.prod, Nonempty, algebraMap_eq_smul_one, classical, coeff_C_of_ne_zero, coeff_map, coeff_one, coeff_subst, coeff_zero, d.mem_support_iff.mp, d.support.Nonempty, d.support_nonempty_iff.mpr, finsum_eq_single, hasSubst_def, mem_support_iff
 -/
@@ -1468,7 +1484,10 @@ lemma IsNilpotent_subst
   · rw [← algebraMap_smul S, smul_eq_mul, mul_comm, ← smul_eq_mul, hd]
     apply IsNilpotent.smul
     simpa using IsNilpotent.map hf (algebraMap R S)
-  obtain ⟨i, hi⟩ : d.support.Nonempty := d.
+  obtain ⟨i, hi⟩ : d.support.Nonempty := d.support_nonempty_iff.mpr hd
+  rw [Finsupp.prod]; rw [map_prod]; rw [← Finset.prod_erase_mul _ _ hi]; rw [← algebraMap_smul S]; rw [smul_eq_mul]; rw [← mul_assoc]; rw [map_pow]
+  exact Commute.isNilpotent_mul_left (Commute.all _ _)
+ (IsNilpotent.pow_iff_pos (d.mem_support_iff.mp hi)).mpr (ha.const_coeff i)
 
 中文:
 引理 IsNilpotent_subst
@@ -1481,7 +1500,10 @@ lemma IsNilpotent_subst
   · rw [← algebraMap_smul S, smul_eq_mul, mul_comm, ← smul_eq_mul, hd]
     apply IsNilpotent.smul
     simpa using IsNilpotent.map hf (algebraMap R S)
-  obtain ⟨i, hi⟩ : d.support.Nonempty := d.
+  obtain ⟨i, hi⟩ : d.support.Nonempty := d.support_nonempty_iff.mpr hd
+  rw [Finsupp.prod]; rw [map_prod]; rw [← Finset.prod_erase_mul _ _ hi]; rw [← algebraMap_smul S]; rw [smul_eq_mul]; rw [← mul_assoc]; rw [map_pow]
+  exact Commute.isNilpotent_mul_left (Commute.all _ _)
+ (IsNilpotent.pow_iff_pos (d.mem_support_iff.mp hi)).mpr (ha.const_coeff i)
 
 Depends on / 依赖: Commute, Commute.al, Commute.isNilpotent_mul_left, Finset, Finset.prod_erase_mul, Finsupp, Finsupp.prod, IsNilpotent, IsNilpotent.map, IsNilpotent.smul, Nonempty, algebraMap, algebraMap_smul, classical, constantCoeff_subst, d.support.Nonempty, d.support_nonempty_iff.mpr, isNilpotent_finsum, isNilpotent_mul_left, map_pow
 -/
@@ -1670,7 +1692,9 @@ theorem le_weightedOrder_subst
   by_cases hfx : f.coeff x = 0
   · simp [hfx]
   rw [coeff_eq_zero_of_lt_weightedOrder w]; rw [smul_zero]
-  refine hd.trans_le (((biInf_le _ hfx).trans ?_).trans (le_weightedO
+  refine hd.trans_le (((biInf_le _ hfx).trans ?_).trans (le_weightedOrder_prod ..))
+  simp only [Finsupp.weight_apply, Finsupp.sum, Function.comp_apply]
+  exact Finset.sum_le_sum fun i hi => .trans (by simp) (le_weightedOrder_pow ..)
 
 中文:
 定理 le_weightedOrder_subst
@@ -1683,7 +1707,9 @@ theorem le_weightedOrder_subst
   by_cases hfx : f.coeff x = 0
   · simp [hfx]
   rw [coeff_eq_zero_of_lt_weightedOrder w]; rw [smul_zero]
-  refine hd.trans_le (((biInf_le _ hfx).trans ?_).trans (le_weightedO
+  refine hd.trans_le (((biInf_le _ hfx).trans ?_).trans (le_weightedOrder_prod ..))
+  simp only [Finsupp.weight_apply, Finsupp.sum, Function.comp_apply]
+  exact Finset.sum_le_sum fun i hi => .trans (by simp) (le_weightedOrder_pow ..)
 
 Depends on / 依赖: Finset, Finset.sum_le_sum, Finsupp, Finsupp.sum, Finsupp.weight_apply, Function, Function.comp_apply, MvPowerSeries, MvPowerSeries.le_weightedOrder, biInf_le, coeff_eq_zero_of_lt_weightedOrder, coeff_subst, comp_apply, f.coeff, finsum_eq_zero_of_forall_eq_zero, hd.trans_le, le_weightedOrder, le_weightedOrder_pow, le_weightedOrder_prod, smul_zero
 -/
@@ -1744,6 +1770,9 @@ theorem le_order_subst
   trans (⨅ (i : σ), (order ∘ a) i) * ↑i.degree
   · refine mul_le_mul_right (order_le hi) _
   · simp only [Function.comp_apply, order, Finsupp.degree, AddMonoidHom.coe_mk, ZeroHom.coe_mk,
+      Nat.cast_sum, Finset.mul_sum, Finsupp.weight_apply, nsmul_eq_mul]
+    exact Finset.sum_le_sum fun j hj => by
+      simp [mul_comm, mul_le_mul_right (iInf_le_iff.mpr fun _ a => a j)]
 
 中文:
 定理 le_order_subst
@@ -1755,6 +1784,9 @@ theorem le_order_subst
   trans (⨅ (i : σ), (order ∘ a) i) * ↑i.degree
   · refine mul_le_mul_right (order_le hi) _
   · simp only [Function.comp_apply, order, Finsupp.degree, AddMonoidHom.coe_mk, ZeroHom.coe_mk,
+      Nat.cast_sum, Finset.mul_sum, Finsupp.weight_apply, nsmul_eq_mul]
+    exact Finset.sum_le_sum fun j hj => by
+      simp [mul_comm, mul_le_mul_right (iInf_le_iff.mpr fun _ a => a j)]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_mk, Finset, Finset.mul_sum, Finset.sum_le_sum, Finsupp, Finsupp.degree, Finsupp.weight_apply, Function, Function.comp_apply, MvPowerSeries, MvPowerSeries.le_weightedOrder_subst, Nat.cast_sum, ZeroHom, ZeroHom.coe_mk, cast_sum, coe_mk, comp_apply, degree, i.degree
 -/
@@ -1793,7 +1825,11 @@ theorem truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le
       simp_rw [Finsupp.prod, coeff_prod]
       congr! 3 with l hl i hi
       obtain ⟨hl₁, -⟩ := mem_finsuppAntidiag.mp hl
-      have : (l
+      have : (l i).degree <= d.degree :=
+        hl₁ ▸ Finsupp.degree_mono (single_le_sum_of_canonicallyOrdered hi)
+      exact_mod_cast (coeff_truncTotal_pow _ (by nlinarith [hx i])).symm
+    · exact ha.truncTotal
+  simp_rw [coeff_truncTotal_eq_zero _ (not_lt.mp hd)]
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le
@@ -1807,7 +1843,11 @@ theorem truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le
       simp_rw [Finsupp.prod, coeff_prod]
       congr! 3 with l hl i hi
       obtain ⟨hl₁, -⟩ := mem_finsuppAntidiag.mp hl
-      have : (l
+      have : (l i).degree <= d.degree :=
+        hl₁ ▸ Finsupp.degree_mono (single_le_sum_of_canonicallyOrdered hi)
+      exact_mod_cast (coeff_truncTotal_pow _ (by nlinarith [hx i])).symm
+    · exact ha.truncTotal
+  simp_rw [coeff_truncTotal_eq_zero _ (not_lt.mp hd)]
 
 Depends on / 依赖: Finsupp, Finsupp.degree_mono, Finsupp.prod, classical, coeff_prod, coeff_subst, coeff_truncTotal, coeff_truncTotal_eq_zero, coeff_truncTotal_pow, d.degree, degree, degree_mono, finsum_congr, ha.truncTotal, mem_finsuppAntidiag, mem_finsuppAntidiag.mp, not_lt, not_lt.mp, simp_rw, single_le_sum_of_canonicallyOrdered
 -/
@@ -1843,7 +1883,27 @@ theorem truncTotal_subst_eq_truncTotal_subst_sum
     have h1 := coeff_subst_finite ha f d
     have h2 := coeff_subst_finite ha (∑ i in range k, (homogeneousComponent i) f) d
     rw [finsum_eq_sum _ h1]; rw [finsum_eq_sum _ h2]
-    have : h2.toFinset subsete
+    have : h2.toFinset subseteq h1.toFinset := by simp +contextual [coeff_homogeneousComponent]
+    have aux {n : σ ->₀ Nat} : coeff d (n.prod fun s e => a s ^ e) != 0 -> n.degree <= d.degree := by
+      contrapose!
+      intro hc
+      rw [Finsupp.prod]
+      refine coeff_of_lt_order (lt_of_lt_of_le (Nat.cast_lt.mpr hc)
+        (.trans ?_ (le_order_prod _ n.support)))
+      exact_mod_cast sum_le_sum fun i hi => le_order_pow_of_constantCoeff_eq_zero _ (ha₁ i)
+    rw [← Finset.sum_subset this]
+    · congr! 2 with n hn
+      simp only [map_sum, coeff_homogeneousComponent, sum_ite_eq, mem_range, left_eq_ite_iff,
+        not_lt]
+      have : n.degree <= d.degree := by
+        simp only [map_sum, Set.Finite.mem_toFinset, Function.mem_support, ne_eq] at hn
+        exact aux (right_ne_zero_of_smul hn)
+      grind
+    · simp +contextual only [Set.Finite.mem_toFinset, Function.mem_support, ne_eq, map_sum,
+        coeff_homogeneousComponent, sum_ite_eq, mem_range, ite_smul, zero_smul, ite_eq_right_iff,
+        imp_false, not_lt, not_le]
+      grind [right_ne_zero_of_smul]
+  simp_rw [coeff_truncTotal_eq_zero _ (not_lt.mp hd)]
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_subst_sum
@@ -1855,7 +1915,27 @@ theorem truncTotal_subst_eq_truncTotal_subst_sum
     have h1 := coeff_subst_finite ha f d
     have h2 := coeff_subst_finite ha (∑ i in range k, (homogeneousComponent i) f) d
     rw [finsum_eq_sum _ h1]; rw [finsum_eq_sum _ h2]
-    have : h2.toFinset subsete
+    have : h2.toFinset subseteq h1.toFinset := by simp +contextual [coeff_homogeneousComponent]
+    have aux {n : σ ->₀ Nat} : coeff d (n.prod fun s e => a s ^ e) != 0 -> n.degree <= d.degree := by
+      contrapose!
+      intro hc
+      rw [Finsupp.prod]
+      refine coeff_of_lt_order (lt_of_lt_of_le (Nat.cast_lt.mpr hc)
+        (.trans ?_ (le_order_prod _ n.support)))
+      exact_mod_cast sum_le_sum fun i hi => le_order_pow_of_constantCoeff_eq_zero _ (ha₁ i)
+    rw [← Finset.sum_subset this]
+    · congr! 2 with n hn
+      simp only [map_sum, coeff_homogeneousComponent, sum_ite_eq, mem_range, left_eq_ite_iff,
+        not_lt]
+      have : n.degree <= d.degree := by
+        simp only [map_sum, Set.Finite.mem_toFinset, Function.mem_support, ne_eq] at hn
+        exact aux (right_ne_zero_of_smul hn)
+      grind
+    · simp +contextual only [Set.Finite.mem_toFinset, Function.mem_support, ne_eq, map_sum,
+        coeff_homogeneousComponent, sum_ite_eq, mem_range, ite_smul, zero_smul, ite_eq_right_iff,
+        imp_false, not_lt, not_le]
+      grind [right_ne_zero_of_smul]
+  simp_rw [coeff_truncTotal_eq_zero _ (not_lt.mp hd)]
 
 Depends on / 依赖: Finsupp, Finsupp.prod, coeff_homogeneousComponent, coeff_of_lt_, coeff_subst, coeff_subst_finite, coeff_truncTotal, contextual, contrapose, d.degree, degree, finsum_eq_sum, h1.toFinset, h2.toFinset, homogeneousComponent, n.degree, n.prod, simp_rw, subseteq, toFinset
 -/
@@ -1948,7 +2028,7 @@ theorem truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le
   proof: by
   rw [truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le ha hx]
   exact truncTotal_subst_eq_truncTotal_sum_subst ha.truncTotal fun i => by
-    rw [← coeff_zero_eq_constantCoeff_apply]; rw [MvPolynomial.coeff_coe]; rw [← MvPolynomial.constantCoeff_eq]; rw [constantCoeff_truncTotal_eq_ite]; rw [
+    rw [← coeff_zero_eq_constantCoeff_apply]; rw [MvPolynomial.coeff_coe]; rw [← MvPolynomial.constantCoeff_eq]; rw [constantCoeff_truncTotal_eq_ite]; rw [h i]; rw [ite_self]
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le
@@ -1956,7 +2036,7 @@ theorem truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le
   证明: by
   rw [truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le ha hx]
   exact truncTotal_subst_eq_truncTotal_sum_subst ha.truncTotal fun i => by
-    rw [← coeff_zero_eq_constantCoeff_apply]; rw [MvPolynomial.coeff_coe]; rw [← MvPolynomial.constantCoeff_eq]; rw [constantCoeff_truncTotal_eq_ite]; rw [
+    rw [← coeff_zero_eq_constantCoeff_apply]; rw [MvPolynomial.coeff_coe]; rw [← MvPolynomial.constantCoeff_eq]; rw [constantCoeff_truncTotal_eq_ite]; rw [h i]; rw [ite_self]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.coeff_coe, MvPolynomial.constantCoeff_eq, coeff_coe, coeff_zero_eq_constantCoeff_apply, constantCoeff_eq, constantCoeff_truncTotal_eq_ite, ha.truncTotal, ite_self, truncTotal, truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le, truncTotal_subst_eq_truncTotal_sum_subst
 -/
@@ -2069,6 +2149,29 @@ definition rescale
     split_ifs with h
     · simp [h, coeff_apply]
     · simp only [coeff_apply, ite_eq_right_iff]
+      exact fun a_1 => False.elim (h a_1)
+  map_add' := by
+    intros
+    ext
+    exact mul_add _ _ _
+  map_mul' f g := by
+    ext n
+    classical
+    rw [coeff_apply]; rw [coeff_mul]; rw [coeff_mul]; rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro x hx
+    simp only [Finset.mem_antidiagonal] at hx
+    rw [← hx]
+    simp only [coeff_apply]
+    rw [Finsupp.prod_of_support_subset _ Finsupp.support_add]; rw [Finsupp.prod_of_support_subset x.1 Finset.subset_union_left]; rw [Finsupp.prod_of_support_subset x.2 Finset.subset_union_right]
+    · simp only [← mul_assoc]
+      congr 1
+      rw [mul_assoc]; rw [mul_comm (f x.1)]; rw [← mul_assoc]
+      congr 1
+      rw [← Finset.prod_mul_distrib]
+      apply Finset.prod_congr rfl
+      simp [pow_add]
+    all_goals {simp}
 
 中文:
 定义 rescale
@@ -2084,6 +2187,29 @@ definition rescale
     split_ifs with h
     · simp [h, coeff_apply]
     · simp only [coeff_apply, ite_eq_right_iff]
+      exact fun a_1 => False.elim (h a_1)
+  map_add' := by
+    intros
+    ext
+    exact mul_add _ _ _
+  map_mul' f g := by
+    ext n
+    classical
+    rw [coeff_apply]; rw [coeff_mul]; rw [coeff_mul]; rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro x hx
+    simp only [Finset.mem_antidiagonal] at hx
+    rw [← hx]
+    simp only [coeff_apply]
+    rw [Finsupp.prod_of_support_subset _ Finsupp.support_add]; rw [Finsupp.prod_of_support_subset x.1 Finset.subset_union_left]; rw [Finsupp.prod_of_support_subset x.2 Finset.subset_union_right]
+    · simp only [← mul_assoc]
+      congr 1
+      rw [mul_assoc]; rw [mul_comm (f x.1)]; rw [← mul_assoc]
+      congr 1
+      rw [← Finset.prod_mul_distrib]
+      apply Finset.prod_congr rfl
+      simp [pow_add]
+    all_goals {simp}
 
 Depends on / 依赖: f.coeff, n.prod
 -/
@@ -2161,7 +2287,12 @@ theorem rescale_zero
   split_ifs with h
   · simp [h, coeff_apply, ← @coeff_zero_eq_constantCoeff_apply, coeff_apply]
   · simp only [coeff_apply]
-    convert! 
+    convert! zero_mul _
+    simp only [DFunLike.ext_iff, not_forall, Finsupp.coe_zero, Pi.zero_apply] at h
+    obtain ⟨s, h⟩ := h
+    simp only [Finsupp.prod]
+    apply Finset.prod_eq_zero (i := s) _ (zero_pow h)
+    simpa using h
 
 中文:
 定理 rescale_zero
@@ -2173,7 +2304,12 @@ theorem rescale_zero
   split_ifs with h
   · simp [h, coeff_apply, ← @coeff_zero_eq_constantCoeff_apply, coeff_apply]
   · simp only [coeff_apply]
-    convert! 
+    convert! zero_mul _
+    simp only [DFunLike.ext_iff, not_forall, Finsupp.coe_zero, Pi.zero_apply] at h
+    obtain ⟨s, h⟩ := h
+    simp only [Finsupp.prod]
+    apply Finset.prod_eq_zero (i := s) _ (zero_pow h)
+    simpa using h
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, Finset, Finset.prod_eq_zero, Finsupp, Finsupp.coe_zero, Finsupp.prod, Function, Function.comp_apply, MonoidHom, MonoidHom.coe_mk, OneHom, OneHom.coe_mk, Pi.zero_apply, RingHom, RingHom.coe_comp, RingHom.coe_mk, classical, coe_comp, coe_mk
 -/
@@ -2300,7 +2436,7 @@ lemma rescale_homogeneous_eq_smul
   by_cases he : e in f.support
   · rw [← hf e he, Finsupp.degree_apply]
   · simp only [Function.mem_support, ne_eq, not_not] at he
-    simp [he, mul_zero, c
+    simp [he, mul_zero, coeff_apply]
 
 中文:
 引理 rescale_homogeneous_eq_smul
@@ -2312,7 +2448,7 @@ lemma rescale_homogeneous_eq_smul
   by_cases he : e in f.support
   · rw [← hf e he, Finsupp.degree_apply]
   · simp only [Function.mem_support, ne_eq, not_not] at he
-    simp [he, mul_zero, c
+    simp [he, mul_zero, coeff_apply]
 
 Depends on / 依赖: Finset, Finset.prod_pow_eq_pow_sum, Finsupp, Finsupp.degree_apply, Finsupp.prod, Function, Function.const_apply, Function.mem_support, MvPowerSeries, MvPowerSeries.coeff_rescale, coeff_apply, coeff_rescale, const_apply, degree_apply, f.support, map_smul, mem_support, mul_zero, ne_eq, not_not
 -/
@@ -2371,7 +2507,9 @@ theorem rescale_eq_subst
   rw [Finset.sum_eq_single n _ _]
   · simp [mul_comm, ← monomial_eq]
   · intro b hb hbn
-    rw [← monomial_e
+    rw [← monomial_eq]; rw [coeff_monomial]; rw [if_neg (Ne.symm hbn)]; rw [mul_zero]
+  · intro hn
+    simpa using hn
 
 中文:
 定理 rescale_eq_subst
@@ -2385,7 +2523,9 @@ theorem rescale_eq_subst
   rw [Finset.sum_eq_single n _ _]
   · simp [mul_comm, ← monomial_eq]
   · intro b hb hbn
-    rw [← monomial_e
+    rw [← monomial_eq]; rw [coeff_monomial]; rw [if_neg (Ne.symm hbn)]; rw [mul_zero]
+  · intro hn
+    simpa using hn
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, HasSubst, HasSubst.smul_X, Ne.symm, Pi.smul_apply, classical, coeff_monomial, coeff_rescale, coeff_subst, coeff_subst_finite, finsum_eq_sum, if_neg, monomial_eq, mul_comm, mul_zero, smul_X, smul_apply, smul_eq_mul, sum_eq_single
 -/

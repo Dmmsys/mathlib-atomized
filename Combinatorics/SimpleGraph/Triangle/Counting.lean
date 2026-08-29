@@ -119,7 +119,9 @@ lemma card_badVertices_le
     (dst.trans <| mod_cast edgeDensity_le_one _ _ _)
   by_contra! h
   have : |(G.edgeDensity (badVertices G ε s t) t - G.edgeDensity s t : Real)| < ε :=
-    hst (filter_subset _ _) Subset.rfl h.le (mul_le_of_le_one_right (Na
+    hst (filter_subset _ _) Subset.rfl h.le (mul_le_of_le_one_right (Nat.cast_nonneg _) hε)
+  rw [abs_sub_lt_iff] at this
+  linarith [G.edgeDensity_badVertices_le hst.pos.le dst]
 
 中文:
 引理 card_badVertices_le
@@ -129,7 +131,9 @@ lemma card_badVertices_le
     (dst.trans <| mod_cast edgeDensity_le_one _ _ _)
   by_contra! h
   have : |(G.edgeDensity (badVertices G ε s t) t - G.edgeDensity s t : Real)| < ε :=
-    hst (filter_subset _ _) Subset.rfl h.le (mul_le_of_le_one_right (Na
+    hst (filter_subset _ _) Subset.rfl h.le (mul_le_of_le_one_right (Nat.cast_nonneg _) hε)
+  rw [abs_sub_lt_iff] at this
+  linarith [G.edgeDensity_badVertices_le hst.pos.le dst]
 -/
 private lemma card_badVertices_le (dst : 2 * ε <= G.edgeDensity s t) (hst : G.IsUniform ε s t) :
     #(badVertices G ε s t) <= #s * ε := by
@@ -186,7 +190,20 @@ lemma good_vertices_triangle_card
   simp only [false_or, and_not_self, mul_comm (_ - _)] at hx
   obtain ⟨-, hxY, hsu⟩ := hx
   have hY : #t * ε <= #{y in t | G.Adj x y} := by
-    refine le_tran
+    refine le_trans ?_ hxY; gcongr; linarith
+  have hZ : #u * ε <= #{y in u | G.Adj x y} := by
+    refine le_trans ?_ hsu; gcongr; linarith
+  rw [card_image_of_injective _ (Prod.mk_right_injective _)]
+  have := utu (filter_subset (G.Adj x) _) (filter_subset (G.Adj x) _) hY hZ
+  have : ε <= G.edgeDensity {y in t | G.Adj x y} {y in u | G.Adj x y} := by
+    rw [abs_sub_lt_iff] at this; linarith
+  rw [edgeDensity_def] at this
+  push_cast at this
+  have hε := utu.pos.le
+  refine le_trans ?_ (mul_le_of_le_div₀ (Nat.cast_nonneg _) (by positivity) this)
+  refine Eq.trans_le ?_
+    (mul_le_mul_of_nonneg_left (mul_le_mul hY hZ (by positivity) (by positivity)) hε)
+  ring
 
 中文:
 引理 good_vertices_triangle_card
@@ -197,7 +214,20 @@ lemma good_vertices_triangle_card
   simp only [false_or, and_not_self, mul_comm (_ - _)] at hx
   obtain ⟨-, hxY, hsu⟩ := hx
   have hY : #t * ε <= #{y in t | G.Adj x y} := by
-    refine le_tran
+    refine le_trans ?_ hxY; gcongr; linarith
+  have hZ : #u * ε <= #{y in u | G.Adj x y} := by
+    refine le_trans ?_ hsu; gcongr; linarith
+  rw [card_image_of_injective _ (Prod.mk_right_injective _)]
+  have := utu (filter_subset (G.Adj x) _) (filter_subset (G.Adj x) _) hY hZ
+  have : ε <= G.edgeDensity {y in t | G.Adj x y} {y in u | G.Adj x y} := by
+    rw [abs_sub_lt_iff] at this; linarith
+  rw [edgeDensity_def] at this
+  push_cast at this
+  have hε := utu.pos.le
+  refine le_trans ?_ (mul_le_of_le_div₀ (Nat.cast_nonneg _) (by positivity) this)
+  refine Eq.trans_le ?_
+    (mul_le_mul_of_nonneg_left (mul_le_mul hY hZ (by positivity) (by positivity)) hε)
+  ring
 -/
 private lemma good_vertices_triangle_card [DecidableEq α] (dst : 2 * ε <= G.edgeDensity s t)
     (dsu : 2 * ε <= G.edgeDensity s u) (dtu : 2 * ε <= G.edgeDensity t u) (utu : G.IsUniform ε t u)
@@ -234,7 +264,26 @@ lemma triangle_counting'
   have h₁ : #(badVertices G ε s t) <= #s * ε := G.card_badVertices_le dst hst
   have h₂ : #(badVertices G ε s u) <= #s * ε := G.card_badVertices_le dsu usu
   let X' := s \ (badVertices G ε s t union badVertices G ε s u)
-  have : X'.biUnion _ subseteq (s ×ˢ t ×ˢ u).filter fun (a, b, c)
+  have : X'.biUnion _ subseteq (s ×ˢ t ×ˢ u).filter fun (a, b, c) => G.Adj a b ∧ G.Adj a c ∧ G.Adj b c :=
+    triangle_split_helper _
+  refine le_trans ?_ (Nat.cast_le.2 <| card_le_card this)
+  rw [card_biUnion]; rw [Nat.cast_sum]
+  · apply le_trans _ (card_nsmul_le_sum X' _ _ <| G.good_vertices_triangle_card dst dsu dtu utu)
+    rw [nsmul_eq_mul]
+    have := hst.pos.le
+    suffices hX' : (1 - 2 * ε) * #s <= #X' by
+      exact Eq.trans_le (by ring) (mul_le_mul_of_nonneg_right hX' <| by positivity)
+    have i : badVertices G ε s t union badVertices G ε s u subseteq s :=
+      union_subset (filter_subset _ _) (filter_subset _ _)
+    rw [sub_mul]; rw [one_mul]; rw [card_sdiff_of_subset i]; rw [Nat.cast_sub (card_le_card i)]; rw [sub_le_sub_iff_left]; rw [mul_assoc]; rw [mul_comm ε]; rw [two_mul]
+    refine (Nat.cast_le.2 <| card_union_le _ _).trans ?_
+    rw [Nat.cast_add]
+    gcongr
+  rintro a _ b _ t
+  rw [Function.onFun]; rw [Finset.disjoint_left]
+  simp only [Prod.forall, mem_image, not_exists, Prod.mk_inj,
+    exists_imp, and_imp, not_and]
+  aesop
 
 中文:
 引理 triangle_counting'
@@ -243,7 +292,26 @@ lemma triangle_counting'
   have h₁ : #(badVertices G ε s t) <= #s * ε := G.card_badVertices_le dst hst
   have h₂ : #(badVertices G ε s u) <= #s * ε := G.card_badVertices_le dsu usu
   let X' := s \ (badVertices G ε s t union badVertices G ε s u)
-  have : X'.biUnion _ subseteq (s ×ˢ t ×ˢ u).filter fun (a, b, c)
+  have : X'.biUnion _ subseteq (s ×ˢ t ×ˢ u).filter fun (a, b, c) => G.Adj a b ∧ G.Adj a c ∧ G.Adj b c :=
+    triangle_split_helper _
+  refine le_trans ?_ (Nat.cast_le.2 <| card_le_card this)
+  rw [card_biUnion]; rw [Nat.cast_sum]
+  · apply le_trans _ (card_nsmul_le_sum X' _ _ <| G.good_vertices_triangle_card dst dsu dtu utu)
+    rw [nsmul_eq_mul]
+    have := hst.pos.le
+    suffices hX' : (1 - 2 * ε) * #s <= #X' by
+      exact Eq.trans_le (by ring) (mul_le_mul_of_nonneg_right hX' <| by positivity)
+    have i : badVertices G ε s t union badVertices G ε s u subseteq s :=
+      union_subset (filter_subset _ _) (filter_subset _ _)
+    rw [sub_mul]; rw [one_mul]; rw [card_sdiff_of_subset i]; rw [Nat.cast_sub (card_le_card i)]; rw [sub_le_sub_iff_left]; rw [mul_assoc]; rw [mul_comm ε]; rw [two_mul]
+    refine (Nat.cast_le.2 <| card_union_le _ _).trans ?_
+    rw [Nat.cast_add]
+    gcongr
+  rintro a _ b _ t
+  rw [Function.onFun]; rw [Finset.disjoint_left]
+  simp only [Prod.forall, mem_image, not_exists, Prod.mk_inj,
+    exists_imp, and_imp, not_and]
+  aesop
 
 Depends on / 依赖: G.Adj, G.card_badVertices_le, G.go, Nat.cast_le, Nat.cast_sum, badVertices, biUnion, card_badVertices_le, card_biUnion, card_le_card, card_nsmul_le_sum, cast_le, cast_sum, classical, filter, le_trans, subseteq, triangle_split_helper
 -/
@@ -321,7 +389,8 @@ lemma triangle_counting
   · rintro ⟨x, y, z⟩
     simp +contextual [is3Clique_triple_iff]
   rintro ⟨x₁, y₁, z₁⟩ h₁ ⟨x₂, y₂, z₂⟩ h₂ t
-  simp only [mem_coe, mem_filter, mem_pro
+  simp only [mem_coe, mem_filter, mem_product] at h₁ h₂
+  apply triple_eq_triple_of_mem hst hsu htu t <;> tauto
 
 中文:
 引理 triangle_counting
@@ -332,7 +401,8 @@ lemma triangle_counting
   · rintro ⟨x, y, z⟩
     simp +contextual [is3Clique_triple_iff]
   rintro ⟨x₁, y₁, z₁⟩ h₁ ⟨x₂, y₂, z₂⟩ h₂ t
-  simp only [mem_coe, mem_filter, mem_pro
+  simp only [mem_coe, mem_filter, mem_product] at h₁ h₂
+  apply triple_eq_triple_of_mem hst hsu htu t <;> tauto
 
 Depends on / 依赖: G.triangle_counting, Nat.cast_le, card_le_card_of_injOn, cast_le, contextual, is3Clique_triple_iff, mem_coe, mem_filter, mem_product, triangle_counting, triple_eq_triple_of_mem
 -/

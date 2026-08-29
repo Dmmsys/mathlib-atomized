@@ -149,7 +149,10 @@ theorem disjoint_lsingle_lsingle
   refine le_trans (le_iInf fun i => ?_) iInf_ker_lapply_le_bot
   classical
     by_cases his : i in s
-    · b
+    · by_cases hit : i in t
+      · exact (hs.le_bot ⟨his, hit⟩).elim
+      exact inf_le_of_right_le (iInf_le_of_le i <| iInf_le _ hit)
+    exact inf_le_of_left_le (iInf_le_of_le i <| iInf_le _ his)
 
 中文:
 定理 disjoint_lsingle_lsingle
@@ -164,7 +167,10 @@ theorem disjoint_lsingle_lsingle
   refine le_trans (le_iInf fun i => ?_) iInf_ker_lapply_le_bot
   classical
     by_cases his : i in s
-    · b
+    · by_cases hit : i in t
+      · exact (hs.le_bot ⟨his, hit⟩).elim
+      exact inf_le_of_right_le (iInf_le_of_le i <| iInf_le _ hit)
+    exact inf_le_of_left_le (iInf_le_of_le i <| iInf_le _ his)
 
 Depends on / 依赖: Disjoint, Disjoint.mono, classical, disjoint_compl_right, disjoint_iff_inf_le, hs.le_bot, iInf_ker_lapply_le_bot, iInf_le, iInf_le_of_le, inf_le_of_left_le, inf_le_of_right_le, le_bot, le_iInf, le_trans, lsingle_range_le_ker_lapply
 -/
@@ -220,7 +226,12 @@ lemma range_lmapDomain
         rw [lmapDomain_apply]; rw [mapDomain_single]; rw [← Finsupp.smul_single_one]
         exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, rfl⟩)
     | zero => simp
-    | add 
+    | add f g hf hg =>
+        rw [map_add]
+        exact Submodule.add_mem _ hf hg
+  · rw [Submodule.span_le, Set.range_subset_iff]
+    intro i
+    exact ⟨Finsupp.single i 1, by simp⟩
 
 中文:
 引理 range_lmapDomain
@@ -233,7 +244,12 @@ lemma range_lmapDomain
         rw [lmapDomain_apply]; rw [mapDomain_single]; rw [← Finsupp.smul_single_one]
         exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, rfl⟩)
     | zero => simp
-    | add 
+    | add f g hf hg =>
+        rw [map_add]
+        exact Submodule.add_mem _ hf hg
+  · rw [Submodule.span_le, Set.range_subset_iff]
+    intro i
+    exact ⟨Finsupp.single i 1, by simp⟩
 
 Depends on / 依赖: Finsupp, Finsupp.single, Finsupp.smul_single_one, Set.range_subset_iff, Submodule, Submodule.add_mem, Submodule.smul_mem, Submodule.span_le, Submodule.subset_span, add_mem, induction_linear, le_antisymm, lmapDomain_apply, mapDomain_single, map_add, range_subset_iff, single, smul_mem, smul_single_one, span_le
 -/
@@ -362,7 +378,10 @@ theorem mem_sSup_iff_exists_finset
   refine ⟨fun ⟨s, hs⟩ => ⟨s.map (Function.Embedding.subtype (· in S)), ?_, ?_⟩,
           fun ⟨s, hsS, hs⟩ => ⟨s.preimage (↑) Subtype.coe_injective.injOn, ?_⟩⟩
   · simp
-  · suffices m in ⨆ (i) (hi : i in S) (_ : ⟨i
+  · suffices m in ⨆ (i) (hi : i in S) (_ : ⟨i, hi⟩ in s), i by simpa
+    rwa [iSup_subtype']
+  · have : ⨆ (i) (_ : i in S ∧ i in s), i = ⨆ (i) (_ : i in s), i := by convert! rfl; grind
+    simpa only [Finset.mem_preimage, iSup_subtype, iSup_and', this]
 
 中文:
 定理 mem_sSup_iff_存在_finset
@@ -372,7 +391,10 @@ theorem mem_sSup_iff_exists_finset
   refine ⟨fun ⟨s, hs⟩ => ⟨s.map (Function.Embedding.subtype (· in S)), ?_, ?_⟩,
           fun ⟨s, hsS, hs⟩ => ⟨s.preimage (↑) Subtype.coe_injective.injOn, ?_⟩⟩
   · simp
-  · suffices m in ⨆ (i) (hi : i in S) (_ : ⟨i
+  · suffices m in ⨆ (i) (hi : i in S) (_ : ⟨i, hi⟩ in s), i by simpa
+    rwa [iSup_subtype']
+  · have : ⨆ (i) (_ : i in S ∧ i in s), i = ⨆ (i) (_ : i in s), i := by convert! rfl; grind
+    simpa only [Finset.mem_preimage, iSup_subtype, iSup_and', this]
 
 Depends on / 依赖: Embedding, Finset, Finset.mem_preimage, Function, Function.Embedding.subtype, Submodule, Submodule.mem_iSup_iff_exists_finset, Subtype, Subtype.coe_injective.injOn, coe_injective, convert, iSup_and, iSup_subtype, mem_iSup_iff_exists_finset, mem_preimage, preimage, s.map, s.preimage, sSup_eq_iSup, subtype
 -/

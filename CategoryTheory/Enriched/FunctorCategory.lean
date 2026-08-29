@@ -187,7 +187,18 @@ definition homEquiv
       simp only [eHomEquiv_comp, tensorHom_def_assoc, MonoidalCategory.whiskerRight_id,
         ← unitors_equal, assoc, Iso.inv_hom_id_assoc, eHomWhiskerLeft]
     · dsimp
-      simp onl
+      simp only [← NatTrans.naturality, eHomEquiv_comp, tensorHom_def', id_whiskerLeft,
+        assoc, Iso.inv_hom_id_assoc, eHomWhiskerRight])
+  invFun g :=
+    { app := fun j => (eHomEquiv V).symm (g ≫ end_.π _ j)
+      naturality := fun i j f => (eHomEquiv V).injective (by
+        simp only [eHomEquiv_comp, Equiv.apply_symm_apply, Iso.cancel_iso_inv_left]
+        conv_rhs =>
+          rw [tensorHom_def_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [enrichedHom_condition' V F₁ F₂ f]
+        conv_lhs =>
+          rw [tensorHom_def'_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [id_whiskerLeft_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]; rw [unitors_equal]) }
+  left_inv τ := by aesop
+  right_inv g := by aesop
 
 中文:
 定义 homEquiv
@@ -198,7 +209,18 @@ definition homEquiv
       simp only [eHomEquiv_comp, tensorHom_def_assoc, MonoidalCategory.whiskerRight_id,
         ← unitors_equal, assoc, Iso.inv_hom_id_assoc, eHomWhiskerLeft]
     · dsimp
-      simp onl
+      simp only [← NatTrans.naturality, eHomEquiv_comp, tensorHom_def', id_whiskerLeft,
+        assoc, Iso.inv_hom_id_assoc, eHomWhiskerRight])
+  invFun g :=
+    { app := fun j => (eHomEquiv V).symm (g ≫ end_.π _ j)
+      naturality := fun i j f => (eHomEquiv V).injective (by
+        simp only [eHomEquiv_comp, Equiv.apply_symm_apply, Iso.cancel_iso_inv_left]
+        conv_rhs =>
+          rw [tensorHom_def_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [enrichedHom_condition' V F₁ F₂ f]
+        conv_lhs =>
+          rw [tensorHom_def'_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [id_whiskerLeft_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]; rw [unitors_equal]) }
+  left_inv τ := by aesop
+  right_inv g := by aesop
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, MonoidalCategory, MonoidalCategory.whiskerRight_id, NatTrans, NatTrans.naturality, eHomEquiv, eHomEquiv_comp, eHomWhiskerLeft, eHomWhiskerRight, end_, end_.lift, id_whiskerLeft, invFun, inv_hom_id_assoc, naturality, tensorHom_def, tensorHom_def_assoc, unitors_equal, whiskerRight_id
 -/
@@ -333,7 +355,16 @@ definition enrichedComp
     trans (end_.π (diagram V F₁ F₂) i otimesₘ end_.π (diagram V F₂ F₃) j) ≫
       (ρ_ _).inv ▷ _ ≫ (_ ◁ (eHomEquiv V (F₂.map f))) ▷ _ ≫ eComp V _ (F₂.obj i) _ ▷ _ ≫
         eComp V _ (F₂.obj j) _
-    · ha
+    · have := end_.condition (diagram V F₂ F₃) f
+      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
+      conv_lhs => rw [assoc, tensorHom_def_assoc]
+      conv_rhs =>
+        rw [tensorHom_def_assoc]; rw [whisker_assoc_assoc]; rw [e_assoc]; rw [triangle_assoc_comp_right_inv_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [assoc]; rw [assoc]; rw [← this]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
+    · have := end_.condition (diagram V F₁ F₂) f
+      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
+      conv_lhs =>
+        rw [tensorHom_def'_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [assoc]; rw [assoc]; rw [this]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [← e_assoc']; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
+      conv_rhs => rw [assoc, tensorHom_def'_assoc])
 
 中文:
 定义 enrichedComp
@@ -343,7 +374,16 @@ definition enrichedComp
     trans (end_.π (diagram V F₁ F₂) i otimesₘ end_.π (diagram V F₂ F₃) j) ≫
       (ρ_ _).inv ▷ _ ≫ (_ ◁ (eHomEquiv V (F₂.map f))) ▷ _ ≫ eComp V _ (F₂.obj i) _ ▷ _ ≫
         eComp V _ (F₂.obj j) _
-    · ha
+    · have := end_.condition (diagram V F₂ F₃) f
+      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
+      conv_lhs => rw [assoc, tensorHom_def_assoc]
+      conv_rhs =>
+        rw [tensorHom_def_assoc]; rw [whisker_assoc_assoc]; rw [e_assoc]; rw [triangle_assoc_comp_right_inv_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [assoc]; rw [assoc]; rw [← this]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
+    · have := end_.condition (diagram V F₁ F₂) f
+      dsimp [eHomWhiskerLeft, eHomWhiskerRight] at this ⊢
+      conv_lhs =>
+        rw [tensorHom_def'_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [assoc]; rw [assoc]; rw [this]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [← e_assoc']; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
+      conv_rhs => rw [assoc, tensorHom_def'_assoc])
 
 Depends on / 依赖: condition, conv_lhs, conv_rhs, diagram, eHomEquiv, eHomWhiskerLeft, eHomWhiskerRight, e_assoc, end_, end_.condition, end_.lift, tensorHom_def_assoc, triangl, whisker_assoc_assoc
 -/
@@ -467,7 +507,7 @@ lemma enriched_comp_id
   ext j
   rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def']; rw [assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedId_π]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
   dsimp
-  
+  rw [e_comp_id]; rw [comp_id]
 
 中文:
 引理 enriched_comp_id
@@ -476,7 +516,7 @@ lemma enriched_comp_id
   ext j
   rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [id_comp]; rw [tensorHom_def']; rw [assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedId_π]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]
   dsimp
-  
+  rw [e_comp_id]; rw [comp_id]
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerRight_id, comp_id, e_comp_id, id_comp, inv_hom_id_assoc, tensorHom_def, whiskerLeft_comp_assoc, whiskerRight_id, whisker_exchange_assoc
 -/
@@ -499,7 +539,11 @@ lemma enriched_assoc
   proof: by
   ext j
   conv_lhs =>
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def_assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedComp_π]; rw [comp_whiskerRight_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [← associator_inv_natur
+    rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def_assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedComp_π]; rw [comp_whiskerRight_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [← associator_inv_naturality_assoc]
+  conv_rhs =>
+    rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def'_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedComp_π]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange_assoc]; rw [whisker_exchange_assoc]; rw [← tensorHom_def_assoc]
+  dsimp
+  rw [e_assoc]
 
 中文:
 引理 enriched_assoc
@@ -507,7 +551,11 @@ lemma enriched_assoc
   证明: by
   ext j
   conv_lhs =>
-    rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def_assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedComp_π]; rw [comp_whiskerRight_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [← associator_inv_natur
+    rw [assoc]; rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def_assoc]; rw [← comp_whiskerRight_assoc]; rw [enrichedComp_π]; rw [comp_whiskerRight_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [← associator_inv_naturality_assoc]
+  conv_rhs =>
+    rw [assoc]; rw [enrichedComp_π]; rw [tensorHom_def'_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [enrichedComp_π]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange_assoc]; rw [whisker_exchange_assoc]; rw [← tensorHom_def_assoc]
+  dsimp
+  rw [e_assoc]
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, _assoc, associator_inv_naturality_assoc, comp_whiskerRight_assoc, conv_lhs, conv_rhs, tensorHom_def, tensorHom_def_assoc, whiskerLeft_comp_assoc, whisker_exchange_assoc
 -/
@@ -583,7 +631,10 @@ abbreviation precompEnrichedHom'
     (eHomWhiskerRight _ (e₁.inv.app x) _ ≫ eHomWhiskerLeft _ _ (e₂.hom.app x)))
     (fun i j f => by
       dsimp
-      rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← eHomWhiskerLeft_comp]; rw [← eHom_whisker_exchange]; rw [← e₂.hom.naturali
+      rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← eHomWhiskerLeft_comp]; rw [← eHom_whisker_exchange]; rw [← e₂.hom.naturality f]; rw [eHomWhiskerLeft_comp_assoc]
+      dsimp
+      rw [enrichedHom_condition_assoc]; rw [eHom_whisker_exchange]; rw [eHom_whisker_exchange]; rw [← eHomWhiskerRight_comp_assoc]; rw [← eHomWhiskerRight_comp_assoc]; rw [NatTrans.naturality]
+      dsimp)
 
 中文:
 缩写 precompEnrichedHom'
@@ -592,7 +643,10 @@ abbreviation precompEnrichedHom'
     (eHomWhiskerRight _ (e₁.inv.app x) _ ≫ eHomWhiskerLeft _ _ (e₂.hom.app x)))
     (fun i j f => by
       dsimp
-      rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← eHomWhiskerLeft_comp]; rw [← eHom_whisker_exchange]; rw [← e₂.hom.naturali
+      rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← eHomWhiskerLeft_comp]; rw [← eHom_whisker_exchange]; rw [← e₂.hom.naturality f]; rw [eHomWhiskerLeft_comp_assoc]
+      dsimp
+      rw [enrichedHom_condition_assoc]; rw [eHom_whisker_exchange]; rw [eHom_whisker_exchange]; rw [← eHomWhiskerRight_comp_assoc]; rw [← eHomWhiskerRight_comp_assoc]; rw [NatTrans.naturality]
+      dsimp)
 
 Depends on / 依赖: G.obj, NatTrans, eHomWhiskerLeft, eHomWhiskerLeft_comp, eHomWhiskerLeft_comp_assoc, eHomWhiskerRight, eHomWhiskerRight_comp_assoc, eHom_whisker_exchange, end_, end_.lift, enrichedHom_condition_assoc, hom.app, hom.naturality, inv.app, naturality
 -/
@@ -670,7 +724,19 @@ definition functorEnrichedHom
     ext j
     -- this was produced by `simp?`
     simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
-      Under.map_obj_right
+      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
+      eHomWhiskerLeft_id, comp_id, id_comp]
+    congr 1
+    simp [Under.map, Comma.mapLeft]
+    rfl
+  map_comp f g := by
+    ext j
+    -- this was produced by `simp?`
+    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
+      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
+      eHomWhiskerLeft_id, comp_id, assoc]
+    congr 1
+    simp [Under.map, Comma.mapLeft]
 
 中文:
 定义 functorEnrichedHom
@@ -681,7 +747,19 @@ definition functorEnrichedHom
     ext j
     -- this was produced by `simp?`
     simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
-      Under.map_obj_right
+      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
+      eHomWhiskerLeft_id, comp_id, id_comp]
+    congr 1
+    simp [Under.map, Comma.mapLeft]
+    rfl
+  map_comp f g := by
+    ext j
+    -- this was produced by `simp?`
+    simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, end_.lift_π,
+      Under.map_obj_right, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
+      eHomWhiskerLeft_id, comp_id, assoc]
+    congr 1
+    simp [Under.map, Comma.mapLeft]
 
 Depends on / 依赖: F.isColimitOfIsWellOrderContinuous, Under.forget, enrichedHom, forget, isColimitOfIsWellOrderContinuous, isColimitOfPreserves, preservesColimitsOfShape_of_preservesWellOrderContinuousOfShape
 -/
@@ -749,7 +827,15 @@ definition lift
     rw [← s.w f]; rw [assoc]; rw [assoc]; rw [assoc]
     -- this was produced by `simp?`
     simp only [functorEnrichedHom_obj, functorEnrichedHom_map, end_.lift_π_assoc, diagram_obj_obj,
-      Functor.c
+      Functor.comp_obj, Under.forget_obj, Under.mk_right, Under.map_obj_right, Iso.refl_inv,
+      NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom, eHomWhiskerLeft_id, comp_id]
+    have := enrichedHom_condition V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
+      (Under.homMk f : Under.mk (𝟙 j) ⟶ Under.mk f)
+    dsimp at this
+    rw [this]
+    congr 3
+    simp [Under.map, Comma.mapLeft]
+    rfl)
 
 中文:
 定义 lift
@@ -759,7 +845,15 @@ definition lift
     rw [← s.w f]; rw [assoc]; rw [assoc]; rw [assoc]
     -- this was produced by `simp?`
     simp only [functorEnrichedHom_obj, functorEnrichedHom_map, end_.lift_π_assoc, diagram_obj_obj,
-      Functor.c
+      Functor.comp_obj, Under.forget_obj, Under.mk_right, Under.map_obj_right, Iso.refl_inv,
+      NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom, eHomWhiskerLeft_id, comp_id]
+    have := enrichedHom_condition V (Under.forget j ⋙ F₁) (Under.forget j ⋙ F₂)
+      (Under.homMk f : Under.mk (𝟙 j) ⟶ Under.mk f)
+    dsimp at this
+    rw [this]
+    congr 3
+    simp [Under.map, Comma.mapLeft]
+    rfl)
 
 Depends on / 依赖: Under.mk, end_, end_.lift
 -/
@@ -794,7 +888,11 @@ lemma fac
   dsimp at this
   -- this was produced by `simp? [lift, ← this]`
   simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, lift, functorEnrichedHom_obj,
-    assoc, end_.lift_π, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id,
+    assoc, end_.lift_π, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
+    eHomWhiskerLeft_id, comp_id, ← this, Under.map_obj_right, Under.mk_right]
+  congr
+  simp [Under.map, Comma.mapLeft]
+  rfl
 
 中文:
 引理 fac
@@ -807,7 +905,11 @@ lemma fac
   dsimp at this
   -- this was produced by `simp? [lift, ← this]`
   simp only [diagram_obj_obj, Functor.comp_obj, Under.forget_obj, lift, functorEnrichedHom_obj,
-    assoc, end_.lift_π, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id,
+    assoc, end_.lift_π, Iso.refl_inv, NatTrans.id_app, eHomWhiskerRight_id, Iso.refl_hom,
+    eHomWhiskerLeft_id, comp_id, ← this, Under.map_obj_right, Under.mk_right]
+  congr
+  simp [Under.map, Comma.mapLeft]
+  rfl
 
 Depends on / 依赖: coneFunctorEnrichedHom, k.hom
 -/

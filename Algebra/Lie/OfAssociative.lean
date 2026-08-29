@@ -57,7 +57,7 @@ definition ofAssociativeRing
   lie_add _ _ _ := by simp only [Ring.lie_def, right_distrib, left_distrib]; abel
   lie_self := by simp only [Ring.lie_def, forall_const, sub_self]
   leibniz_lie _ _ _ := by
-    simp only [Ring.lie_def, mul_sub_left_distrib, mul_sub_righ
+    simp only [Ring.lie_def, mul_sub_left_distrib, mul_sub_right_distrib, mul_assoc]; abel
 
 中文:
 定义 ofAssociativeRing
@@ -66,7 +66,7 @@ definition ofAssociativeRing
   lie_add _ _ _ := by simp only [Ring.lie_def, right_distrib, left_distrib]; abel
   lie_self := by simp only [Ring.lie_def, forall_const, sub_self]
   leibniz_lie _ _ _ := by
-    simp only [Ring.lie_def, mul_sub_left_distrib, mul_sub_righ
+    simp only [Ring.lie_def, mul_sub_left_distrib, mul_sub_right_distrib, mul_assoc]; abel
 
 Depends on / 依赖: Ring.lie_def, forall_const, left_distrib, leibniz_lie, lie_add, lie_def, lie_self, mul_assoc, mul_sub_left_distrib, mul_sub_right_distrib, right_distrib, sub_self
 -/
@@ -901,7 +901,10 @@ lemma LieModule.toEnd_pow_lie
       (fun i j => ⁅((ad R L x) ^ i) y]; rw [((φ x) ^ j) z⁆) n]
     simp only [pow_succ', Module.End.mul_apply, ih, map_sum, map_nsmul,
       toEnd_lie, nsmul_add, sum_add_distrib]
-    rw [add_co
+    rw [add_comm]; rw [add_left_cancel_iff]; rw [sum_congr rfl]
+    rintro ⟨i, j⟩ hij
+    rw [mem_antidiagonal] at hij
+    rw [Nat.choose_symm_of_eq_add hij.symm]
 
 中文:
 引理 Lie模.toEnd_pow_lie
@@ -914,7 +917,10 @@ lemma LieModule.toEnd_pow_lie
       (fun i j => ⁅((ad R L x) ^ i) y]; rw [((φ x) ^ j) z⁆) n]
     simp only [pow_succ', Module.End.mul_apply, ih, map_sum, map_nsmul,
       toEnd_lie, nsmul_add, sum_add_distrib]
-    rw [add_co
+    rw [add_comm]; rw [add_left_cancel_iff]; rw [sum_congr rfl]
+    rintro ⟨i, j⟩ hij
+    rw [mem_antidiagonal] at hij
+    rw [Nat.choose_symm_of_eq_add hij.symm]
 
 Depends on / 依赖: Finset, Finset.sum_antidiagonal_choose_succ_nsmul, Module, Module.End.mul_apply, Nat.choose_symm_of_eq_add, add_comm, add_left_cancel_iff, choose_symm_of_eq_add, hij.symm, map_nsmul, map_sum, mem_antidiagonal, mul_apply, nsmul_add, pow_succ, sum_add_distrib, sum_antidiagonal_choose_succ_nsmul, sum_congr, toEnd_lie
 -/
@@ -1178,7 +1184,7 @@ definition lieSubalgebraOfSubalgebra
       rw [LieRing.of_associative_ring_bracket]
       have hxy := A'.mul_mem hx hy
       have hyx := A'.mul_mem hy hx
-      exact Submodule.sub_mem (Subalgebra.
+      exact Submodule.sub_mem (Subalgebra.toSubmodule A') hxy hyx }
 
 中文:
 定义 lieSubalgebraOfSubalgebra
@@ -1189,7 +1195,7 @@ definition lieSubalgebraOfSubalgebra
       rw [LieRing.of_associative_ring_bracket]
       have hxy := A'.mul_mem hx hy
       have hyx := A'.mul_mem hy hx
-      exact Submodule.sub_mem (Subalgebra.
+      exact Submodule.sub_mem (Subalgebra.toSubmodule A') hxy hyx }
 
 Depends on / 依赖: LieRing, LieRing.of_associative_ring_bracket, Subalgebra, Subalgebra.toSubmodule, Submodule, Submodule.sub_mem, lie_mem, mul_mem, of_associative_ring_bracket, sub_mem, toSubmodule
 -/

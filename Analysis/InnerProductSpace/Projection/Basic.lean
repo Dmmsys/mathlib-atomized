@@ -512,7 +512,10 @@ theorem eq_starProjection_of_mem_of_inner_eq_zero
   have hvs : K.starProjection u - v in K := K.sub_mem (coe_mem _) hvm
   have houv : ⟪u - v - (u - K.starProjection u), K.starProjection u - v⟫ = 0 := by
     rw [inner_sub_left]; rw [starProjection_inner_eq_zero u _ hvs]; rw [hvo _ hvs]; rw [sub_zero]
-  rwa [sub_sub_sub_cancel_left, inner_self_eq_
+  rwa [sub_sub_sub_cancel_left, inner_self_eq_zero, sub_eq_zero] at houv
+
+@[deprecated (since := "2026-06-10")] alias eq_orthogonalProjectionFn_of_mem_of_inner_eq_zero :=
+  eq_starProjection_of_mem_of_inner_eq_zero
 
 中文:
 定理 eq_starProjection_of_mem_of_inner_eq_zero
@@ -521,7 +524,10 @@ theorem eq_starProjection_of_mem_of_inner_eq_zero
   have hvs : K.starProjection u - v in K := K.sub_mem (coe_mem _) hvm
   have houv : ⟪u - v - (u - K.starProjection u), K.starProjection u - v⟫ = 0 := by
     rw [inner_sub_left]; rw [starProjection_inner_eq_zero u _ hvs]; rw [hvo _ hvs]; rw [sub_zero]
-  rwa [sub_sub_sub_cancel_left, inner_self_eq_
+  rwa [sub_sub_sub_cancel_left, inner_self_eq_zero, sub_eq_zero] at houv
+
+@[deprecated (since := "2026-06-10")] alias eq_orthogonalProjectionFn_of_mem_of_inner_eq_zero :=
+  eq_starProjection_of_mem_of_inner_eq_zero
 
 Depends on / 依赖: K.starProjection, K.sub_mem, coe_mem, inner_self_eq_zero, inner_sub_left, starProjection, starProjection_inner_eq_zero, sub_eq_zero, sub_mem, sub_sub_sub_cancel_left, sub_zero
 -/
@@ -902,7 +908,9 @@ refine ⟨fun h => ?_, fun h => Subtype.ext eq_starProjection_of_mem_orthogonal
   · simpa
 
 @[deprecated (since := "2026-05-05")]
-alias orthogonalProjection_eq_zero_iff := orth
+alias orthogonalProjection_eq_zero_iff := orthogonalProjectionOnto_eq_zero_iff
+
+@[simp]
 
 中文:
 定理 orthogonalProjectionOnto_eq_zero_iff
@@ -915,7 +923,9 @@ refine ⟨fun h => ?_, fun h => Subtype.ext eq_starProjection_of_mem_orthogonal
   · simpa
 
 @[deprecated (since := "2026-05-05")]
-alias orthogonalProjection_eq_zero_iff := orth
+alias orthogonalProjection_eq_zero_iff := orthogonalProjectionOnto_eq_zero_iff
+
+@[simp]
 
 Depends on / 依赖: Subtype, Subtype.ext, coe_zero, eq_starProjection_of_mem_orthogonal, sub_starProjection_mem_orthogonal, sub_zero, zero_mem
 -/
@@ -1224,7 +1234,7 @@ theorem norm_orthogonalProjectionOnto_apply_le
   _ = _ := by simp
 
 @[deprecated (since := "2026-05-05")]
-alias norm_orthogonalProjection_apply_le := nor
+alias norm_orthogonalProjection_apply_le := norm_orthogonalProjectionOnto_apply_le
 
 中文:
 定理 norm_orthogonalProjectionOnto_apply_le
@@ -1236,7 +1246,7 @@ alias norm_orthogonalProjection_apply_le := nor
   _ = _ := by simp
 
 @[deprecated (since := "2026-05-05")]
-alias norm_orthogonalProjection_apply_le := nor
+alias norm_orthogonalProjection_apply_le := norm_orthogonalProjectionOnto_apply_le
 
 Depends on / 依赖: K.orthogonalProjectionOnto.le_opNorm, le_opNorm, orthogonalProjectionOnto, orthogonalProjectionOnto_norm_le
 -/
@@ -1323,7 +1333,8 @@ theorem norm_orthogonalProjectionOnto
   simpa [K.norm_orthogonalProjectionOnto_apply hxK, norm_eq_zero, hx_ne_zero]
     using K.orthogonalProjectionOnto.ratio_le_opNorm x
 
-@[deprecated (since := "2026-
+@[deprecated (since := "2026-05-05")]
+alias norm_orthogonalProjection := norm_orthogonalProjectionOnto
 
 中文:
 定理 norm_orthogonalProjectionOnto
@@ -1334,7 +1345,8 @@ theorem norm_orthogonalProjectionOnto
   simpa [K.norm_orthogonalProjectionOnto_apply hxK, norm_eq_zero, hx_ne_zero]
     using K.orthogonalProjectionOnto.ratio_le_opNorm x
 
-@[deprecated (since := "2026-
+@[deprecated (since := "2026-05-05")]
+alias norm_orthogonalProjection := norm_orthogonalProjectionOnto
 
 Depends on / 依赖: K.norm_orthogonalProjectionOnto_apply, K.orthogonalProjectionOnto.ratio_le_opNorm, K.orthogonalProjectionOnto_norm_le, Submodule, Submodule.exists_mem_ne_zero_of_ne_bot, exists_mem_ne_zero_of_ne_bot, hx_ne_zero, le_antisymm, norm_eq_zero, norm_orthogonalProjectionOnto_apply, orthogonalProjectionOnto, orthogonalProjectionOnto_norm_le, ratio_le_opNorm
 -/
@@ -1382,7 +1394,7 @@ theorem smul_starProjection_singleton
   · rw [Submodule.mem_span_singleton]
     use ⟪v, w⟫
   · rw [← Submodule.mem_orthogonal', Submodule.mem_orthogonal_singleton_iff_inner_left]
-    simp [i
+    simp [inner_sub_left, inner_smul_left, inner_self_eq_norm_sq_to_K, mul_comm]
 
 中文:
 定理 smul_starProjection_singleton
@@ -1394,7 +1406,7 @@ theorem smul_starProjection_singleton
   · rw [Submodule.mem_span_singleton]
     use ⟪v, w⟫
   · rw [← Submodule.mem_orthogonal', Submodule.mem_orthogonal_singleton_iff_inner_left]
-    simp [i
+    simp [inner_sub_left, inner_smul_left, inner_self_eq_norm_sq_to_K, mul_comm]
 
 Depends on / 依赖: Submodule, Submodule.mem_orthogonal, Submodule.mem_orthogonal_singleton_iff_inner_left, Submodule.mem_span_singleton, eq_starProjection_of_mem_of_inner_eq_zero, inner_self_eq_norm_sq_to_K, inner_smul_left, inner_sub_left, mem_orthogonal, mem_orthogonal_singleton_iff_inner_left, mem_span_singleton, mul_comm, starProjection
 -/
@@ -1422,7 +1434,8 @@ theorem starProjection_singleton
   have key :
     (((‖v‖ ^ 2 : Real) : 𝕜)⁻¹ * ((‖v‖ ^ 2 : Real) : 𝕜)) • (𝕜 ∙ v).starProjection w =
       (((‖v‖ ^ 2 : Real) : 𝕜)⁻¹ * ⟪v, w⟫) • v := by
-    simp [mul_
+    simp [mul_smul, smul_starProjection_singleton 𝕜 w, -map_pow]
+  convert! key using 1 <;> match_scalars <;> field_simp [hv']
 
 中文:
 定理 starProjection_singleton
@@ -1435,7 +1448,8 @@ theorem starProjection_singleton
   have key :
     (((‖v‖ ^ 2 : Real) : 𝕜)⁻¹ * ((‖v‖ ^ 2 : Real) : 𝕜)) • (𝕜 ∙ v).starProjection w =
       (((‖v‖ ^ 2 : Real) : 𝕜)⁻¹ * ⟪v, w⟫) • v := by
-    simp [mul_
+    simp [mul_smul, smul_starProjection_singleton 𝕜 w, -map_pow]
+  convert! key using 1 <;> match_scalars <;> field_simp [hv']
 
 Depends on / 依赖: Submodule, Submodule.span_zero_singleton, convert, map_pow, match_scalars, mul_smul, ne_of_gt, norm_pos_iff, norm_pos_iff.mpr, smul_starProjection_singleton, span_zero_singleton, starProjection
 -/
@@ -1598,7 +1612,9 @@ theorem orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff
   have : U.orthogonalProjectionOnto v = 0 := DFunLike.congr_fun h (⟨_, hv⟩ : V)
   rw [starProjection_apply]; rw [this]; rw [Submodule.coe_zero]; rw [sub_zero]
 
-
+@[deprecated (since := "2026-05-05")]
+alias orthogonalProjection_comp_subtypeL_eq_zero_iff :=
+  orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff
 
 中文:
 定理 orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff
@@ -1609,7 +1625,9 @@ theorem orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff
   have : U.orthogonalProjectionOnto v = 0 := DFunLike.congr_fun h (⟨_, hv⟩ : V)
   rw [starProjection_apply]; rw [this]; rw [Submodule.coe_zero]; rw [sub_zero]
 
-
+@[deprecated (since := "2026-05-05")]
+alias orthogonalProjection_comp_subtypeL_eq_zero_iff :=
+  orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, IsOrtho, Submodule, Submodule.IsOrtho.orthogonalProjectionOnto_comp_subtypeL, Submodule.coe_zero, U.orthogonalProjectionOnto, coe_zero, congr_fun, convert, orthogonalProjectionOnto, orthogonalProjectionOnto_comp_subtypeL, starProjection_apply, starProjection_inner_eq_zero, sub_zero
 -/
@@ -1636,7 +1654,7 @@ theorem starProjection_comp_starProjection_eq_zero_iff
   simp only [ContinuousLinearMap.ext_iff, ContinuousLinearMap.comp_apply, subtypeL_apply,
     starProjection_apply, zero_apply, coe_eq_zero] at h ⊢
   intro x
-  simpa u
+  simpa using h (x : E)
 
 中文:
 定理 starProjection_comp_starProjection_eq_zero_iff
@@ -1647,7 +1665,7 @@ theorem starProjection_comp_starProjection_eq_zero_iff
   simp only [ContinuousLinearMap.ext_iff, ContinuousLinearMap.comp_apply, subtypeL_apply,
     starProjection_apply, zero_apply, coe_eq_zero] at h ⊢
   intro x
-  simpa u
+  simpa using h (x : E)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_apply, ContinuousLinearMap.ext_iff, coe_eq_zero, comp_apply, ext_iff, h.starProjection_comp_starProjection, orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff, starProjection_apply, starProjection_comp_starProjection, subtypeL_apply, zero_apply
 -/
@@ -1722,7 +1740,7 @@ theorem orthogonalProjectionOnto_starProjection_of_le
         (Submodule.orthogonal_le h (sub_starProjection_mem_orthogonal x))
 
 @[deprecated (since := "2026-05-05")]
-alias orthogonalProjection_starProjection_of_le := orthogonalProjectionOnto_s
+alias orthogonalProjection_starProjection_of_le := orthogonalProjectionOnto_starProjection_of_le
 
 中文:
 定理 orthogonalProjectionOnto_starProjection_of_le
@@ -1733,7 +1751,7 @@ alias orthogonalProjection_starProjection_of_le := orthogonalProjectionOnto_s
         (Submodule.orthogonal_le h (sub_starProjection_mem_orthogonal x))
 
 @[deprecated (since := "2026-05-05")]
-alias orthogonalProjection_starProjection_of_le := orthogonalProjectionOnto_s
+alias orthogonalProjection_starProjection_of_le := orthogonalProjectionOnto_starProjection_of_le
 
 Depends on / 依赖: Eq.symm, Submodule, Submodule.orthogonal_le, map_sub, orthogonalProjectionOnto_apply_of_mem_orthogonal, orthogonal_le, sub_eq_zero, sub_starProjection_mem_orthogonal
 -/
@@ -1910,7 +1928,7 @@ theorem norm_sq_eq_add_norm_sq_projection
     _ = ‖S.orthogonalProjectionOnto x‖ ^ 2 + ‖Sᗮ.orthogonalProjectionOnto x‖ ^ 2 := by
       simp only [sq]
 exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _
-  
+        (S.mem_orthogonal _).1 (Sᗮ.orthogonalProjectionOnto x).2 _ (S.orthogonalProjectionOnto x).2
 
 中文:
 定理 norm_sq_eq_add_norm_sq_projection
@@ -1921,7 +1939,7 @@ exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _
     _ = ‖S.orthogonalProjectionOnto x‖ ^ 2 + ‖Sᗮ.orthogonalProjectionOnto x‖ ^ 2 := by
       simp only [sq]
 exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _
-  
+        (S.mem_orthogonal _).1 (Sᗮ.orthogonalProjectionOnto x).2 _ (S.orthogonalProjectionOnto x).2
 
 Depends on / 依赖: S.mem_orthogonal, S.orthogonalProjectionOnto, S.starProjection, mem_orthogonal, norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero, orthogonalProjectionOnto, starProjection, starProjection_add_starProjection_orthogonal
 -/
@@ -2022,7 +2040,8 @@ theorem inner_orthogonalProjectionOnto_eq_of_mem_right
       rw [starProjection_inner_eq_zero _ _ (Submodule.coe_mem _)]; rw [add_zero]
     _ = ⟪v, u⟫ := by rw [← inner_add_left, add_sub_cancel]
 
-@[d
+@[deprecated (since := "2026-05-05")]
+alias inner_orthogonalProjection_eq_of_mem_right := inner_orthogonalProjectionOnto_eq_of_mem_right
 
 中文:
 定理 inner_orthogonalProjectionOnto_eq_of_mem_right
@@ -2033,7 +2052,8 @@ theorem inner_orthogonalProjectionOnto_eq_of_mem_right
       rw [starProjection_inner_eq_zero _ _ (Submodule.coe_mem _)]; rw [add_zero]
     _ = ⟪v, u⟫ := by rw [← inner_add_left, add_sub_cancel]
 
-@[d
+@[deprecated (since := "2026-05-05")]
+alias inner_orthogonalProjection_eq_of_mem_right := inner_orthogonalProjectionOnto_eq_of_mem_right
 
 Depends on / 依赖: K.coe_inner, K.orthogonalProjectionOnto, K.starProjection, Submodule, Submodule.coe_mem, add_sub_cancel, add_zero, coe_inner, coe_mem, inner_add_left, orthogonalProjectionOnto, starProjection, starProjection_inner_eq_zero
 -/
@@ -2159,7 +2179,8 @@ theorem _root_.LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range
   refine ⟨this, Eq.symm ?_⟩
   ext x
   refine Submodule.eq_starProjection_of_mem_orthogonal (by simp) ?_
-  rw [hp.isIdempoten
+  rw [hp.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp hp.isSymmetric]
+  simpa using congr($hp.isIdempotentElem.mul_one_sub_self x)
 
 中文:
 定理 _root_.线性映射.isSymmetricProjection_iff_eq_coe_starProjection_range
@@ -2170,7 +2191,8 @@ theorem _root_.LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range
   refine ⟨this, Eq.symm ?_⟩
   ext x
   refine Submodule.eq_starProjection_of_mem_orthogonal (by simp) ?_
-  rw [hp.isIdempoten
+  rw [hp.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp hp.isSymmetric]
+  simpa using congr($hp.isIdempotentElem.mul_one_sub_self x)
 
 Depends on / 依赖: Eq.symm, HasOrthogonalProjection, LinearMap, LinearMap.range, Submodule, Submodule.eq_starProjection_of_mem_orthogonal, eq_starProjection_of_mem_orthogonal, hasOrthogonalProjection_range, hp.hasOrthogonalProjection_range, hp.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp, hp.isIdempotentElem.mul_one_sub_self, hp.isSymmetric, isIdempotentElem, isSymmetric, isSymmetricProjection_starProjection, isSymmetric_iff_orthogonal_range, mul_one_sub_self
 -/
@@ -2247,13 +2269,19 @@ English:
 lemma re_inner_starProjection_eq_normSq
   given: [K.HasOrthogonalProjection] (v : E)
   proof: by
-  rw [starProjection_apply]; rw [re_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]; rw [div_eq_iff (NeZero.ne' 2).symm]; rw [pow_two]; rw [add_sub_assoc]; rw [← eq_sub_iff_add_eq']; rw [coe_norm]; rw [← mul_sub_one]; rw [show (2 : Real) - 1 = 1 by norm_num]; rw [mul_one];
+  rw [starProjection_apply]; rw [re_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]; rw [div_eq_iff (NeZero.ne' 2).symm]; rw [pow_two]; rw [add_sub_assoc]; rw [← eq_sub_iff_add_eq']; rw [coe_norm]; rw [← mul_sub_one]; rw [show (2 : Real) - 1 = 1 by norm_num]; rw [mul_one]; rw [sub_eq_iff_eq_add']; rw [norm_sub_rev]
+  simpa [sq, add_comm] using K.norm_sq_eq_add_norm_sq_starProjection v
+
+@[deprecated norm_sq_eq_add_norm_sq_starProjection (since := "2026-06-10")]
 
 中文:
 引理 re_inner_starProjection_eq_normSq
   条件: [K.有OrthogonalProjection] (v : E)
   证明: by
-  rw [starProjection_apply]; rw [re_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]; rw [div_eq_iff (NeZero.ne' 2).symm]; rw [pow_two]; rw [add_sub_assoc]; rw [← eq_sub_iff_add_eq']; rw [coe_norm]; rw [← mul_sub_one]; rw [show (2 : Real) - 1 = 1 by norm_num]; rw [mul_one];
+  rw [starProjection_apply]; rw [re_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]; rw [div_eq_iff (NeZero.ne' 2).symm]; rw [pow_two]; rw [add_sub_assoc]; rw [← eq_sub_iff_add_eq']; rw [coe_norm]; rw [← mul_sub_one]; rw [show (2 : Real) - 1 = 1 by norm_num]; rw [mul_one]; rw [sub_eq_iff_eq_add']; rw [norm_sub_rev]
+  simpa [sq, add_comm] using K.norm_sq_eq_add_norm_sq_starProjection v
+
+@[deprecated norm_sq_eq_add_norm_sq_starProjection (since := "2026-06-10")]
 
 Depends on / 依赖: K.norm_sq_eq_add_norm_sq_starProjection, NeZero, NeZero.ne, add_comm, add_sub_assoc, coe_norm, div_eq_iff, eq_sub_iff_add_eq, mul_one, mul_sub_one, norm_sq_eq_add_norm_sq_starProjection, norm_sub_rev, pow_two, re_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two, starProjection_apply, sub_eq_iff_eq_add
 -/

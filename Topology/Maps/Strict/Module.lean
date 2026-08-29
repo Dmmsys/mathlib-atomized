@@ -55,7 +55,9 @@ lemma isStrictMap_iff_isHomeomorph_quotKerEquivRange
   -- `fₗ.quotKerEquivRange.toAddEquiv` is not def-eq to
   -- `QuotientAddGroup.quotientKerEquivRange fₗ.toAddMonoidHom`. This would require
   -- fixing the definition of `LinearMap.quotKerEquivRange`.
- 
+  simp_rw [isHomeomorph_iff_isStrictMap_bijective, EquivLike.bijective, and_true,
+    fₗ.ker.isQuotientMap_mkQ.isStrictMap_iff, IsEmbedding.subtypeVal.isStrictMap_iff]
+  rfl
 
 中文:
 引理 isStrictMap_iff_isHomeomorph_quotKerEquivRange
@@ -64,7 +66,9 @@ lemma isStrictMap_iff_isHomeomorph_quotKerEquivRange
   -- `fₗ.quotKerEquivRange.toAddEquiv` is not def-eq to
   -- `QuotientAddGroup.quotientKerEquivRange fₗ.toAddMonoidHom`. This would require
   -- fixing the definition of `LinearMap.quotKerEquivRange`.
- 
+  simp_rw [isHomeomorph_iff_isStrictMap_bijective, EquivLike.bijective, and_true,
+    fₗ.ker.isQuotientMap_mkQ.isStrictMap_iff, IsEmbedding.subtypeVal.isStrictMap_iff]
+  rfl
 -/
 protected lemma isStrictMap_iff_isHomeomorph_quotKerEquivRange :
     IsStrictMap fₗ ↔ IsHomeomorph fₗ.quotKerEquivRange := by

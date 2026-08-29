@@ -129,7 +129,18 @@ theorem TFAE
   | ⟨h⟩ => by
     rw [isNoetherianRing_iff]; rw [isNoetherian_iff_fg_wellFounded]
     refine ⟨RelEmbedding.wellFounded ?_ h⟩
-    have : forall I : { J :
+    have : forall I : { J : Ideal R // J.FG }, exists x : R, (I : Ideal R) = Ideal.span {x} :=
+      fun ⟨I, hI⟩ => (IsBezout.isPrincipal_of_FG I hI).1
+    choose f hf using this
+    exact
+      { toFun := f
+        inj' := fun x y e => by ext1; rw [hf, hf, e]
+        map_rel_iff' := by
+          dsimp
+          intro a b
+          rw [← Ideal.span_singleton_lt_span_singleton]; rw [← hf]; rw [← hf]
+          rfl }
+  tfae_finish
 
 中文:
 定理 TFAE
@@ -145,7 +156,18 @@ theorem TFAE
   | ⟨h⟩ => by
     rw [isNoetherianRing_iff]; rw [isNoetherian_iff_fg_wellFounded]
     refine ⟨RelEmbedding.wellFounded ?_ h⟩
-    have : forall I : { J :
+    have : forall I : { J : Ideal R // J.FG }, exists x : R, (I : Ideal R) = Ideal.span {x} :=
+      fun ⟨I, hI⟩ => (IsBezout.isPrincipal_of_FG I hI).1
+    choose f hf using this
+    exact
+      { toFun := f
+        inj' := fun x y e => by ext1; rw [hf, hf, e]
+        map_rel_iff' := by
+          dsimp
+          intro a b
+          rw [← Ideal.span_singleton_lt_span_singleton]; rw [← hf]; rw [← hf]
+          rfl }
+  tfae_finish
 
 Depends on / 依赖: Ideal.span, IsBezout, IsBezout.isPrincipal_of_FG, J.FG, RelEmbedding, RelEmbedding.wellFounded, isNoetherianRing_iff, isNoetherian_iff_fg_wellFounded, isPrincipal_of_FG, map_rel_iff, tfae_have, wellFounded
 -/

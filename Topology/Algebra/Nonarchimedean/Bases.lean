@@ -123,7 +123,47 @@ definition toRingFilterBasis
   zero' := by
     rintro _ ⟨i, rfl⟩
     exact (B i).zero_mem
-  ad
+  add' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · rintro x ⟨y, y_in, z, z_in, rfl⟩
+      exact (B i).add_mem y_in z_in
+  neg' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · intro x x_in
+      exact (B i).neg_mem x_in
+  conj' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · simp
+  mul' := by
+    rintro _ ⟨i, rfl⟩
+    obtain ⟨k, hk⟩ := hB.mul i
+    use B k
+    constructor
+    · use k
+    · exact hk
+  mul_left' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    obtain ⟨k, hk⟩ := hB.leftMul x₀ i
+    use B k
+    constructor
+    · use k
+    · exact hk
+  mul_right' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    obtain ⟨k, hk⟩ := hB.rightMul x₀ i
+    use B k
+    constructor
+    · use k
+    · exact hk
 
 中文:
 定义 toRingFilterBasis
@@ -142,7 +182,47 @@ definition toRingFilterBasis
   zero' := by
     rintro _ ⟨i, rfl⟩
     exact (B i).zero_mem
-  ad
+  add' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · rintro x ⟨y, y_in, z, z_in, rfl⟩
+      exact (B i).add_mem y_in z_in
+  neg' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · intro x x_in
+      exact (B i).neg_mem x_in
+  conj' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · simp
+  mul' := by
+    rintro _ ⟨i, rfl⟩
+    obtain ⟨k, hk⟩ := hB.mul i
+    use B k
+    constructor
+    · use k
+    · exact hk
+  mul_left' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    obtain ⟨k, hk⟩ := hB.leftMul x₀ i
+    use B k
+    constructor
+    · use k
+    · exact hk
+  mul_right' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    obtain ⟨k, hk⟩ := hB.rightMul x₀ i
+    use B k
+    constructor
+    · use k
+    · exact hk
 -/
 def toRingFilterBasis [Nonempty ι] {B : ι -> AddSubgroup A} (hB : RingSubgroupsBasis B) :
     RingFilterBasis A where
@@ -317,7 +397,17 @@ theorem hasBasis_nhds
       suffices h : { b : A | b - a in B i } = (fun y => a + y) '' ↑(B i) by
         rw [h]
         assumption
-      simp o
+      simp only [image_add_left, neg_add_eq_sub]
+      ext b
+      simp
+    · rintro ⟨i, hi⟩
+      use B i
+      constructor
+      · use i
+      · rw [image_subset_iff]
+        rintro b b_in
+        apply hi
+        simpa using b_in⟩
 
 中文:
 定理 hasBasis_nhds
@@ -332,7 +422,17 @@ theorem hasBasis_nhds
       suffices h : { b : A | b - a in B i } = (fun y => a + y) '' ↑(B i) by
         rw [h]
         assumption
-      simp o
+      simp only [image_add_left, neg_add_eq_sub]
+      ext b
+      simp
+    · rintro ⟨i, hi⟩
+      use B i
+      constructor
+      · use i
+      · rw [image_subset_iff]
+        rintro b b_in
+        apply hi
+        simpa using b_in⟩
 
 Depends on / 依赖: b_in, hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_hasBasis, image_add_left, image_subset_iff, mem_iff, neg_add_eq_sub, nhds_hasBasis, toAddGroupFilterBasis, toRingFilterBasis, true_and
 -/
@@ -580,7 +680,46 @@ definition toModuleFilterBasis
   zero' := by
     rintro _ ⟨i, rfl⟩
     exact (B i).zero_mem
-  ad
+  add' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · rintro x ⟨y, y_in, z, z_in, rfl⟩
+      exact (B i).add_mem y_in z_in
+  neg' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · intro x x_in
+      exact (B i).neg_mem x_in
+  conj' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · simp
+  smul' := by
+    rintro _ ⟨i, rfl⟩
+    use univ
+    constructor
+    · exact univ_mem
+    · use B i
+      constructor
+      · use i
+      · rintro _ ⟨a, -, m, hm, rfl⟩
+        exact (B i).smul_mem _ hm
+  smul_left' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · intro m
+      exact (B i).smul_mem _
+  smul_right' := by
+    rintro m₀ _ ⟨i, rfl⟩
+    exact hB.smul m₀ i
 
 中文:
 定义 toModuleFilterBasis
@@ -599,7 +738,46 @@ definition toModuleFilterBasis
   zero' := by
     rintro _ ⟨i, rfl⟩
     exact (B i).zero_mem
-  ad
+  add' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · rintro x ⟨y, y_in, z, z_in, rfl⟩
+      exact (B i).add_mem y_in z_in
+  neg' := by
+    rintro _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · intro x x_in
+      exact (B i).neg_mem x_in
+  conj' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · simp
+  smul' := by
+    rintro _ ⟨i, rfl⟩
+    use univ
+    constructor
+    · exact univ_mem
+    · use B i
+      constructor
+      · use i
+      · rintro _ ⟨a, -, m, hm, rfl⟩
+        exact (B i).smul_mem _ hm
+  smul_left' := by
+    rintro x₀ _ ⟨i, rfl⟩
+    use B i
+    constructor
+    · use i
+    · intro m
+      exact (B i).smul_mem _
+  smul_right' := by
+    rintro m₀ _ ⟨i, rfl⟩
+    exact hB.smul m₀ i
 -/
 def toModuleFilterBasis : ModuleFilterBasis R M where
   sets := { U | exists i, U = B i }
@@ -693,7 +871,8 @@ definition openAddSubgroup
       use B i
       constructor
       · use i
-      · rintro - ⟨b, b_in, rf
+      · rintro - ⟨b, b_in, rfl⟩
+        exact (B i).add_mem a_in b_in }
 
 中文:
 定义 openAddSubgroup
@@ -708,7 +887,8 @@ definition openAddSubgroup
       use B i
       constructor
       · use i
-      · rintro - ⟨b, b_in, rf
+      · rintro - ⟨b, b_in, rfl⟩
+        exact (B i).add_mem a_in b_in }
 
 Depends on / 依赖: a_in, add_mem, b_in, hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_hasBasis, hB.topology, isOpen, isOpen_iff_mem_nhds, mem_iff, nhds_hasBasis, toAddGroupFilterBasis, toAddSubgroup, toModuleFilterBasis, topology
 -/
@@ -743,7 +923,10 @@ theorem nonarchimedean
   exact ⟨hB.openAddSubgroup i, hi⟩
 
 library_note «non-Archimedean non-instances» /--
-The non-Archimedean subgr
+The non-Archimedean subgroup basis lemmas cannot be instances because some instances
+(such as `MeasureTheory.AEEqFun.instAddMonoid` or `IsTopologicalAddGroup.toContinuousAdd`)
+cause the search for `@IsTopologicalAddGroup β ?m1 ?m2`, i.e. a search for a topological group where
+the topology/group structure are unknown. -/
 
 中文:
 定理 nonarchimedean
@@ -758,7 +941,10 @@ The non-Archimedean subgr
   exact ⟨hB.openAddSubgroup i, hi⟩
 
 library_note «non-Archimedean non-instances» /--
-The non-Archimedean subgr
+The non-Archimedean subgroup basis lemmas cannot be instances because some instances
+(such as `MeasureTheory.AEEqFun.instAddMonoid` or `IsTopologicalAddGroup.toContinuousAdd`)
+cause the search for `@IsTopologicalAddGroup β ?m1 ?m2`, i.e. a search for a topological group where
+the topology/group structure are unknown. -/
 
 Depends on / 依赖: hB.openAddSubgroup, hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff.mp, hB.topology, mem_iff, nhds_zero_hasBasis, openAddSubgroup, subseteq, toAddGroupFilterBasis, toModuleFilterBasis, topology
 -/

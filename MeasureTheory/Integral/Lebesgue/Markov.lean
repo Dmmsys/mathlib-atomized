@@ -41,7 +41,12 @@ theorem lintegral_add_mul_meas_add_le_le_lintegral
     _ <= ∫⁻ x, φ x ∂μ + ε * μ { x | φ x + ε <= g x } := by
       gcongr
       exact hφ_le _
-    _ 
+    _ = ∫⁻ x, φ x + indicator { x | φ x + ε <= g x } (fun _ => ε) x ∂μ := by
+      rw [lintegral_add_left hφm]; rw [lintegral_indicator₀]; rw [setLIntegral_const]
+      exact measurableSet_le (hφm.nullMeasurable.measurable'.add_const _) hg.nullMeasurable
+    _ <= ∫⁻ x, g x ∂μ := lintegral_mono_ae (hle.mono fun x hx₁ => ?_)
+  simp only [indicator_apply]; split_ifs with hx₂
+  exacts [hx₂, (add_zero _).trans_le <| (hφ_le x).trans hx₁]
 
 中文:
 定理 lintegral_add_mul_meas_add_le_le_lintegral
@@ -54,7 +59,12 @@ theorem lintegral_add_mul_meas_add_le_le_lintegral
     _ <= ∫⁻ x, φ x ∂μ + ε * μ { x | φ x + ε <= g x } := by
       gcongr
       exact hφ_le _
-    _ 
+    _ = ∫⁻ x, φ x + indicator { x | φ x + ε <= g x } (fun _ => ε) x ∂μ := by
+      rw [lintegral_add_left hφm]; rw [lintegral_indicator₀]; rw [setLIntegral_const]
+      exact measurableSet_le (hφm.nullMeasurable.measurable'.add_const _) hg.nullMeasurable
+    _ <= ∫⁻ x, g x ∂μ := lintegral_mono_ae (hle.mono fun x hx₁ => ?_)
+  simp only [indicator_apply]; split_ifs with hx₂
+  exacts [hx₂, (add_zero _).trans_le <| (hφ_le x).trans hx₁]
 
 Depends on / 依赖: add_const, exists_measurable_le_lintegral_eq, hg.nullMeasurab, indicator, lintegral_add_left, m.nullMeasurable.measurable, measurable, measurableSet_le, nullMeasurab, nullMeasurable, setLIntegral_const
 -/
@@ -330,7 +340,13 @@ theorem ae_eq_of_ae_le_of_lintegral_le
     simp only [ae_iff, not_lt]
     have : ∫⁻ x, f x ∂μ + (↑n)⁻¹ * μ { x : α | f x + (n : Real>=0∞)⁻¹ <= g x } <= ∫⁻ x, f x ∂μ :=
       (lintegral_add_mul_meas_add_le_le_lintegral hfg hg n⁻¹).trans hgf
-    rw [(E
+    rw [(ENNReal.cancel_of_ne hf).add_le_iff_nonpos_right]; rw [nonpos_iff_eq_zero]; rw [mul_eq_zero] at this
+    exact this.resolve_left (ENNReal.inv_ne_zero.2 (ENNReal.natCast_ne_top _))
+  refine hfg.mp ((ae_all_iff.2 this).mono fun x hlt hle => hle.antisymm ?_)
+  suffices Tendsto (fun n : Nat => f x + (n : Real>=0∞)⁻¹) atTop (𝓝 (f x)) from
+    ge_of_tendsto' this fun i => (hlt i).le
+  simpa only [inv_top, add_zero] using
+    tendsto_const_nhds.add (tendsto_inv_iff.2 ENNReal.tendsto_nat_nhds_top)
 
 中文:
 定理 ae_eq_of_ae_le_of_lintegral_le
@@ -341,7 +357,13 @@ theorem ae_eq_of_ae_le_of_lintegral_le
     simp only [ae_iff, not_lt]
     have : ∫⁻ x, f x ∂μ + (↑n)⁻¹ * μ { x : α | f x + (n : Real>=0∞)⁻¹ <= g x } <= ∫⁻ x, f x ∂μ :=
       (lintegral_add_mul_meas_add_le_le_lintegral hfg hg n⁻¹).trans hgf
-    rw [(E
+    rw [(ENNReal.cancel_of_ne hf).add_le_iff_nonpos_right]; rw [nonpos_iff_eq_zero]; rw [mul_eq_zero] at this
+    exact this.resolve_left (ENNReal.inv_ne_zero.2 (ENNReal.natCast_ne_top _))
+  refine hfg.mp ((ae_all_iff.2 this).mono fun x hlt hle => hle.antisymm ?_)
+  suffices Tendsto (fun n : Nat => f x + (n : Real>=0∞)⁻¹) atTop (𝓝 (f x)) from
+    ge_of_tendsto' this fun i => (hlt i).le
+  simpa only [inv_top, add_zero] using
+    tendsto_const_nhds.add (tendsto_inv_iff.2 ENNReal.tendsto_nat_nhds_top)
 
 Depends on / 依赖: ENNReal, ENNReal.cancel_of_ne, ENNReal.inv_ne_zero, ENNReal.natCast_ne_top, add_le_iff_nonpos_right, ae_all_iff, ae_iff, cancel_of_ne, hfg.mp, inv_ne_zero, lintegral_add_mul_meas_add_le_le_lintegral, mul_eq_zero, natCast_ne_top, nonpos_iff_eq_zero, not_lt, resolve_left, this.resolve_left
 -/

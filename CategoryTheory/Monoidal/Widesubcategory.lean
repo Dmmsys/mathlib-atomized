@@ -148,7 +148,10 @@ instance [P.IsMonoidalStable]
   associator _ _ _ :=
     isoMk (α_ _ _ _) (P.associator_hom_mem _ _ _) (P.associator_inv_mem _ _ _)
   leftUnitor _ :=
-    
+    isoMk (fun_ _) (P.leftUnitor_hom_mem _) (P.leftUnitor_inv_mem _)
+  rightUnitor _ :=
+    isoMk (ρ_ _) (P.rightUnitor_hom_mem _) (P.rightUnitor_inv_mem _)
+  tensorHom f g := ⟨f.1 otimesₘ g.1, P.tensorHom_mem _ _ f.2 g.2⟩
 
 中文:
 实例 [P.是MonoidalStable]
@@ -160,7 +163,10 @@ instance [P.IsMonoidalStable]
   associator _ _ _ :=
     isoMk (α_ _ _ _) (P.associator_hom_mem _ _ _) (P.associator_inv_mem _ _ _)
   leftUnitor _ :=
-    
+    isoMk (fun_ _) (P.leftUnitor_hom_mem _) (P.leftUnitor_inv_mem _)
+  rightUnitor _ :=
+    isoMk (ρ_ _) (P.rightUnitor_hom_mem _) (P.rightUnitor_inv_mem _)
+  tensorHom f g := ⟨f.1 otimesₘ g.1, P.tensorHom_mem _ _ f.2 g.2⟩
 
 Depends on / 依赖: c.obj, otimes
 -/

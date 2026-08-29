@@ -206,7 +206,18 @@ theorem exists_finite_submodule_of_setFinite
   | @insert a s _ _ ih =>
   obtain ⟨M', N', hM', hN', h⟩ := ih
   refine TensorProduct.induction_on a ?_ (fun x y => ?_) fun x y hx hy => ?_
-  · exact
+  · exact ⟨M', N', hM', hN', Set.insert_subset (zero_mem _) h⟩
+  · refine ⟨_, _, hM'.sup (fg_span_singleton x),
+      hN'.sup (fg_span_singleton y), Set.insert_subset ?_ fun z hz => ?_⟩
+    · exact ⟨⟨x, mem_sup_right (mem_span_singleton_self x)⟩ otimesₜ
+        ⟨y, mem_sup_right (mem_span_singleton_self y)⟩, rfl⟩
+    · exact range_mapIncl_mono le_sup_left le_sup_left (h hz)
+  · obtain ⟨M₁', N₁', hM₁', hN₁', h₁⟩ := hx
+    obtain ⟨M₂', N₂', hM₂', hN₂', h₂⟩ := hy
+    refine ⟨_, _, hM₁'.sup hM₂', hN₁'.sup hN₂', Set.insert_subset (add_mem ?_ ?_) fun z hz => ?_⟩
+    · exact range_mapIncl_mono le_sup_left le_sup_left (h₁ (Set.mem_insert x s))
+    · exact range_mapIncl_mono le_sup_right le_sup_right (h₂ (Set.mem_insert y s))
+    · exact range_mapIncl_mono le_sup_left le_sup_left (h₁ (Set.subset_insert x s hz))
 
 中文:
 定理 存在_finite_submodule_of_setFinite
@@ -218,7 +229,18 @@ theorem exists_finite_submodule_of_setFinite
   | @insert a s _ _ ih =>
   obtain ⟨M', N', hM', hN', h⟩ := ih
   refine TensorProduct.induction_on a ?_ (fun x y => ?_) fun x y hx hy => ?_
-  · exact
+  · exact ⟨M', N', hM', hN', Set.insert_subset (zero_mem _) h⟩
+  · refine ⟨_, _, hM'.sup (fg_span_singleton x),
+      hN'.sup (fg_span_singleton y), Set.insert_subset ?_ fun z hz => ?_⟩
+    · exact ⟨⟨x, mem_sup_right (mem_span_singleton_self x)⟩ otimesₜ
+        ⟨y, mem_sup_right (mem_span_singleton_self y)⟩, rfl⟩
+    · exact range_mapIncl_mono le_sup_left le_sup_left (h hz)
+  · obtain ⟨M₁', N₁', hM₁', hN₁', h₁⟩ := hx
+    obtain ⟨M₂', N₂', hM₂', hN₂', h₂⟩ := hy
+    refine ⟨_, _, hM₁'.sup hM₂', hN₁'.sup hN₂', Set.insert_subset (add_mem ?_ ?_) fun z hz => ?_⟩
+    · exact range_mapIncl_mono le_sup_left le_sup_left (h₁ (Set.mem_insert x s))
+    · exact range_mapIncl_mono le_sup_right le_sup_right (h₂ (Set.mem_insert y s))
+    · exact range_mapIncl_mono le_sup_left le_sup_left (h₁ (Set.subset_insert x s hz))
 
 Depends on / 依赖: Finite, Module, Module.Finite.iff_fg, Set.Finite.induction_on, Set.empty_subset, Set.insert_subset, TensorProduct, TensorProduct.induction_on, empty_subset, fg_bot, fg_span_singleton, iff_fg, induction_on, insert, insert_subset, mem_span_singleto, mem_sup_right, simp_rw, zero_mem
 -/
@@ -315,7 +337,8 @@ theorem exists_finite_submodule_of_setFinite'
   have hM := map_subtype_le M₁ M'
   have hN := map_subtype_le N₁ N'
   refine ⟨_, _, hM, hN, .map _ _, .map _ _, ?_⟩
-  rw [mapIncl]; rw [show M'.subtype = inclusion hM ∘ₗ M₁.subtype.submoduleMap M' by ext; simp]; rw [show N'.s
+  rw [mapIncl]; rw [show M'.subtype = inclusion hM ∘ₗ M₁.subtype.submoduleMap M' by ext; simp]; rw [show N'.subtype = inclusion hN ∘ₗ N₁.subtype.submoduleMap N' by ext; simp]; rw [map_comp] at h
+  exact h.trans (LinearMap.range_comp_le_range _ _)
 
 中文:
 定理 存在_finite_submodule_of_setFinite'
@@ -325,7 +348,8 @@ theorem exists_finite_submodule_of_setFinite'
   have hM := map_subtype_le M₁ M'
   have hN := map_subtype_le N₁ N'
   refine ⟨_, _, hM, hN, .map _ _, .map _ _, ?_⟩
-  rw [mapIncl]; rw [show M'.subtype = inclusion hM ∘ₗ M₁.subtype.submoduleMap M' by ext; simp]; rw [show N'.s
+  rw [mapIncl]; rw [show M'.subtype = inclusion hM ∘ₗ M₁.subtype.submoduleMap M' by ext; simp]; rw [show N'.subtype = inclusion hN ∘ₗ N₁.subtype.submoduleMap N' by ext; simp]; rw [map_comp] at h
+  exact h.trans (LinearMap.range_comp_le_range _ _)
 
 Depends on / 依赖: LinearMap, LinearMap.range_comp_le_range, exists_finite_submodule_of_setFinite, h.trans, inclusion, mapIncl, map_comp, map_subtype_le, range_comp_le_range, submoduleMap, subtype, subtype.submoduleMap
 -/
@@ -415,7 +439,8 @@ lemma exists_sum_tmul_eq
   | add x y hx hy =>
     obtain ⟨kx, mx, nx, rfl⟩ := hx
     obtain ⟨ky, my, ny, rfl⟩ := hy
-    use kx + ky, Fin.addCases mx my, Fin.
+    use kx + ky, Fin.addCases mx my, Fin.addCases nx ny
+    simp [Fin.sum_univ_add]
 
 中文:
 引理 存在_sum_tmul_eq
@@ -427,7 +452,8 @@ lemma exists_sum_tmul_eq
   | add x y hx hy =>
     obtain ⟨kx, mx, nx, rfl⟩ := hx
     obtain ⟨ky, my, ny, rfl⟩ := hy
-    use kx + ky, Fin.addCases mx my, Fin.
+    use kx + ky, Fin.addCases mx my, Fin.addCases nx ny
+    simp [Fin.sum_univ_add]
 
 Depends on / 依赖: Fin.addCases, Fin.sum_univ_add, IsEmpty, IsEmpty.elim, addCases, sum_univ_add
 -/

@@ -1007,7 +1007,7 @@ theorem support_sum
   have : forall c, (f.sum fun a b => g a b c) != 0 -> exists a, f a != 0 ∧ ¬(g a (f a)) c = 0 := fun a₁ h =>
     let ⟨a, ha, ne⟩ := Finset.exists_ne_zero_of_sum_ne_zero h
     ⟨a, mem_support_iff.mp ha, ne⟩
-  simpa only [Finset.subset_iff, mem_support_iff, Finset.mem_biUnion, sum_apply, exists_pro
+  simpa only [Finset.subset_iff, mem_support_iff, Finset.mem_biUnion, sum_apply, exists_prop]
 
 中文:
 定理 support_sum
@@ -1016,7 +1016,7 @@ theorem support_sum
   have : forall c, (f.sum fun a b => g a b c) != 0 -> exists a, f a != 0 ∧ ¬(g a (f a)) c = 0 := fun a₁ h =>
     let ⟨a, ha, ne⟩ := Finset.exists_ne_zero_of_sum_ne_zero h
     ⟨a, mem_support_iff.mp ha, ne⟩
-  simpa only [Finset.subset_iff, mem_support_iff, Finset.mem_biUnion, sum_apply, exists_pro
+  simpa only [Finset.subset_iff, mem_support_iff, Finset.mem_biUnion, sum_apply, exists_prop]
 
 Depends on / 依赖: Finset, Finset.exists_ne_zero_of_sum_ne_zero, Finset.mem_biUnion, Finset.subset_iff, exists_ne_zero_of_sum_ne_zero, exists_prop, f.sum, mem_biUnion, mem_support_iff, mem_support_iff.mp, subset_iff, sum_apply
 -/
@@ -1041,7 +1041,7 @@ theorem support_finsetSum
     rw [Finset.sum_cons]; rw [Finset.sup_cons]
     exact support_add.trans (Finset.union_subset_union (Finset.Subset.refl _) ih)
 
-@[deprecated (since := "2026-04-08")] alias supp
+@[deprecated (since := "2026-04-08")] alias support_finset_sum := support_finsetSum
 
 中文:
 定理 support_finsetSum
@@ -1054,7 +1054,7 @@ theorem support_finsetSum
     rw [Finset.sum_cons]; rw [Finset.sup_cons]
     exact support_add.trans (Finset.union_subset_union (Finset.Subset.refl _) ih)
 
-@[deprecated (since := "2026-04-08")] alias supp
+@[deprecated (since := "2026-04-08")] alias support_finset_sum := support_finsetSum
 
 Depends on / 依赖: Finset, Finset.Subset.refl, Finset.cons_induction_on, Finset.sum_cons, Finset.sup_cons, Finset.sup_eq_biUnion, Finset.union_subset_union, Subset, cons_induction_on, sum_cons, sup_cons, sup_eq_biUnion, support_add, support_add.trans, union_subset_union
 -/
@@ -1083,7 +1083,17 @@ theorem sum_eq_one_iff
     obtain ⟨a, ha⟩ := ne_iff.mp hd0
     obtain ⟨hda, hda'⟩ : d a = 1 ∧ forall i != a, d i = 0 := by
       rw [← add_sum_erase' _ a _ (fun _ => rfl)]; rw [Nat.add_eq_one_iff]; rw [or_iff_not_imp_left] at h1
-      
+      simp_all +contextual [sum, support_erase, sum_eq_zero_iff, mem_erase, erase_ne]
+    use a
+    ext b
+    by_cases hb : b = a
+    · rw [hb, single_eq_same, hda]
+    · simpa only [single_eq_of_ne hb] using hda' b hb
+  · rintro ⟨a, rfl⟩
+    rw [sum_eq_single a ?_ (fun _ => rfl)]; rw [single_eq_same]
+    exact fun _ _ hba => single_eq_of_ne hba
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 sum_eq_one_iff
@@ -1096,7 +1106,17 @@ theorem sum_eq_one_iff
     obtain ⟨a, ha⟩ := ne_iff.mp hd0
     obtain ⟨hda, hda'⟩ : d a = 1 ∧ forall i != a, d i = 0 := by
       rw [← add_sum_erase' _ a _ (fun _ => rfl)]; rw [Nat.add_eq_one_iff]; rw [or_iff_not_imp_left] at h1
-      
+      simp_all +contextual [sum, support_erase, sum_eq_zero_iff, mem_erase, erase_ne]
+    use a
+    ext b
+    by_cases hb : b = a
+    · rw [hb, single_eq_same, hda]
+    · simpa only [single_eq_of_ne hb] using hda' b hb
+  · rintro ⟨a, rfl⟩
+    rw [sum_eq_single a ?_ (fun _ => rfl)]; rw [single_eq_same]
+    exact fun _ _ hba => single_eq_of_ne hba
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Nat.add_eq_one_iff, add_eq_one_iff, add_sum_erase, classical, contextual, erase_ne, mem_erase, ne_iff, ne_iff.mp, or_iff_not_imp_left, single_eq_of_ne, single_eq_same, sum_eq_sing, sum_eq_zero_iff, support_erase
 -/
@@ -1201,7 +1221,7 @@ theorem prod_add_index
   proof: by
   rw [Finsupp.prod_of_support_subset f subset_union_left h h_zero]; rw [Finsupp.prod_of_support_subset g subset_union_right h h_zero]; rw [←
     Finset.prod_mul_distrib]; rw [Finsupp.prod_of_support_subset (f + g) Finsupp.support_add h h_zero]
-  exact Finset.prod_congr rfl fun x hx => by apply h_
+  exact Finset.prod_congr rfl fun x hx => by apply h_add x hx
 
 中文:
 定理 prod_add_index
@@ -1209,7 +1229,7 @@ theorem prod_add_index
   证明: by
   rw [Finsupp.prod_of_support_subset f subset_union_left h h_zero]; rw [Finsupp.prod_of_support_subset g subset_union_right h h_zero]; rw [←
     Finset.prod_mul_distrib]; rw [Finsupp.prod_of_support_subset (f + g) Finsupp.support_add h h_zero]
-  exact Finset.prod_congr rfl fun x hx => by apply h_
+  exact Finset.prod_congr rfl fun x hx => by apply h_add x hx
 
 Depends on / 依赖: Finset, Finset.prod_congr, Finset.prod_mul_distrib, Finsupp, Finsupp.prod_of_support_subset, Finsupp.support_add, h_add, h_zero, prod_congr, prod_mul_distrib, prod_of_support_subset, subset_union_left, subset_union_right, support_add
 -/
@@ -1765,7 +1785,9 @@ theorem prod_finsetSum_index
 @[deprecated (since := "2026-04-08")] alias sum_finset_sum_index := sum_finsetSum_index
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias prod_finset_su
+alias prod_finset_sum_index := prod_finsetSum_index
+
+@[to_additive]
 
 中文:
 定理 prod_finsetSum_index
@@ -1776,7 +1798,9 @@ alias prod_finset_su
 @[deprecated (since := "2026-04-08")] alias sum_finset_sum_index := sum_finsetSum_index
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias prod_finset_su
+alias prod_finset_sum_index := prod_finsetSum_index
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, cons_induction_on, h_add, h_zero, prod_add_index, prod_cons, sum_cons
 -/
@@ -1853,7 +1877,7 @@ theorem support_sum_eq_biUnion
     rw [Finsupp.support_add_eq]; rw [hs]
     rw [hs]; rw [Finset.disjoint_biUnion_right]
     intro j hj
-    exact h _ _ (ne_of_mem_of_not_mem hj hi
+    exact h _ _ (ne_of_mem_of_not_mem hj hi).symm
 
 中文:
 定理 support_sum_eq_biUnion
@@ -1868,7 +1892,7 @@ theorem support_sum_eq_biUnion
     rw [Finsupp.support_add_eq]; rw [hs]
     rw [hs]; rw [Finset.disjoint_biUnion_right]
     intro j hj
-    exact h _ _ (ne_of_mem_of_not_mem hj hi
+    exact h _ _ (ne_of_mem_of_not_mem hj hi).symm
 
 Depends on / 依赖: Finset, Finset.disjoint_biUnion_right, Finset.induction_on, Finsupp, Finsupp.support_add_eq, biUnion_insert, classical, disjoint_biUnion_right, induction_on, ne_of_mem_of_not_mem, not_false_iff, sum_insert, support_add_eq
 -/
@@ -1943,7 +1967,8 @@ theorem prod_add_index_of_disjoint
     fun hd =>
     Finset.prod_congr rfl fun x hx => by
       simp only [notMem_support_iff.mp (disjoint_left.mp hd hx), add_zero]
-  classical simp_rw [← this hd, ← 
+  classical simp_rw [← this hd, ← this hd.symm, add_comm (f2 _), Finsupp.prod, support_add_eq hd,
+      prod_union hd, add_apply]
 
 中文:
 定理 prod_add_index_of_disjoint
@@ -1955,7 +1980,8 @@ theorem prod_add_index_of_disjoint
     fun hd =>
     Finset.prod_congr rfl fun x hx => by
       simp only [notMem_support_iff.mp (disjoint_left.mp hd hx), add_zero]
-  classical simp_rw [← this hd, ← 
+  classical simp_rw [← this hd, ← this hd.symm, add_comm (f2 _), Finsupp.prod, support_add_eq hd,
+      prod_union hd, add_apply]
 
 Depends on / 依赖: Disjoint, Finset, Finset.prod_congr, Finsupp, Finsupp.prod, add_apply, add_comm, add_zero, classical, disjoint_left, disjoint_left.mp, f1.prod, f1.support, f2.support, hd.symm, notMem_support_iff, notMem_support_iff.mp, prod_congr, prod_union, simp_rw
 -/

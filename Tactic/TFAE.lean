@@ -444,7 +444,8 @@ definition proveChain
     -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
     let i' :: is' := id is | unreachable!
     have cl' : Q(IsChain (· -> ·) ($P' :: $l')) := ← proveChain i' is' q($P') q($l')
-    let
+    let p ← proveImpl hyps atoms i i' P P'
+    return q(.cons_cons $p $cl')
 
 中文:
 定义 proveChain
@@ -456,7 +457,8 @@ definition proveChain
     -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
     let i' :: is' := id is | unreachable!
     have cl' : Q(IsChain (· -> ·) ($P' :: $l')) := ← proveChain i' is' q($P') q($l')
-    let
+    let p ← proveImpl hyps atoms i i' P P'
+    return q(.cons_cons $p $cl')
 -/
 partial def proveChain (i : Nat) (is : List Nat) (P : Q(Prop)) (l : Q(List Prop)) :
     MetaM Q(IsChain (· -> ·) ($P :: $l)) := do
@@ -516,7 +518,9 @@ definition proveTFAE
   | ~q($P :: $P' :: $l') =>
     -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
     let i :: i' :: is' := id is | unreachable!
-    let c ← proveChain hyps atoms i (i'::
+    let c ← proveChain hyps atoms i (i'::is') P q($P' :: $l')
+    let il ← proveGetLastDImpl hyps atoms i i' is' P P' l'
+    return q(tfae_of_cycle $c $il)
 
 中文:
 定义 proveTFAE
@@ -528,7 +532,9 @@ definition proveTFAE
   | ~q($P :: $P' :: $l') =>
     -- `id` is a workaround for https://github.com/leanprover-community/quote4/issues/30
     let i :: i' :: is' := id is | unreachable!
-    let c ← proveChain hyps atoms i (i'::
+    let c ← proveChain hyps atoms i (i'::is') P q($P' :: $l')
+    let il ← proveGetLastDImpl hyps atoms i i' is' P P' l'
+    return q(tfae_of_cycle $c $il)
 -/
 def proveTFAE (is : List Nat) (l : Q(List Prop)) : MetaM Q(TFAE $l) := do
   match l with
@@ -604,7 +610,17 @@ definition elabTFAEType
     let j' ← elabIndex j l
     let Pi := tfaeList[i'-1]!
     let Pj := tfaeList[j'-1]!
-    /- TODO: this is a hack to show the types `Pi`, `Pj` on hover. See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Pre-RFC.3A.20Forcing.20t
+    /- TODO: this is a hack to show the types `Pi`, `Pj` on hover. See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Pre-RFC.3A.20Forcing.20terms.20to.20be.20shown.20in.20hover.3F). -/
+    Term.addTermInfo' i q(sorry : $Pi) Pi
+    Term.addTermInfo' j q(sorry : $Pj) Pj
+    let (ty : Q(Prop)) ← match arr with
+      | `(impArrow| ← ) => pure q($Pj -> $Pi)
+      | `(impArrow| -> ) => pure q($Pi -> $Pj)
+      | `(impArrow| ↔ ) => pure q($Pi ↔ $Pj)
+      | _ => throwUnsupportedSyntax
+    Term.addTermInfo' stx q(sorry : $ty) ty
+    return ty
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 elabTFAEType
@@ -614,7 +630,17 @@ definition elabTFAEType
     let j' ← elabIndex j l
     let Pi := tfaeList[i'-1]!
     let Pj := tfaeList[j'-1]!
-    /- TODO: this is a hack to show the types `Pi`, `Pj` on hover. See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Pre-RFC.3A.20Forcing.20t
+    /- TODO: this is a hack to show the types `Pi`, `Pj` on hover. See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Pre-RFC.3A.20Forcing.20terms.20to.20be.20shown.20in.20hover.3F). -/
+    Term.addTermInfo' i q(sorry : $Pi) Pi
+    Term.addTermInfo' j q(sorry : $Pj) Pj
+    let (ty : Q(Prop)) ← match arr with
+      | `(impArrow| ← ) => pure q($Pj -> $Pi)
+      | `(impArrow| -> ) => pure q($Pi -> $Pj)
+      | `(impArrow| ↔ ) => pure q($Pi ↔ $Pj)
+      | _ => throwUnsupportedSyntax
+    Term.addTermInfo' stx q(sorry : $ty) ty
+    return ty
+  | _ => throwUnsupportedSyntax
 
 Depends on / 依赖: length, tfaeList, tfaeList.length
 -/

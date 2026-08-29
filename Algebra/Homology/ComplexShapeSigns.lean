@@ -277,7 +277,7 @@ lemma ε₁_ε₂
     conv_lhs =>
       arg 2
       rw [← mul_assoc]; rw [ε₂_ε₁ c₁₂ h₁ h₂]
-    rw [neg_mul]; rw [neg_mul]; rw [neg_mul]; rw [mul_neg]; rw [neg_inj]; rw [← mul_assoc]; rw [← mul_assoc]
+    rw [neg_mul]; rw [neg_mul]; rw [neg_mul]; rw [mul_neg]; rw [neg_inj]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul])
 
 中文:
 引理 ε₁_ε₂
@@ -287,7 +287,7 @@ lemma ε₁_ε₂
     conv_lhs =>
       arg 2
       rw [← mul_assoc]; rw [ε₂_ε₁ c₁₂ h₁ h₂]
-    rw [neg_mul]; rw [neg_mul]; rw [neg_mul]; rw [mul_neg]; rw [neg_inj]; rw [← mul_assoc]; rw [← mul_assoc]
+    rw [neg_mul]; rw [neg_mul]; rw [neg_mul]; rw [mul_neg]; rw [neg_inj]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul])
 
 Depends on / 依赖: ComplexShape, Eq.trans, Int.units_mul_self, conv_lhs, mul_assoc, mul_neg, mul_one, neg_inj, neg_mul, one_mul, units_mul_self
 -/
@@ -890,7 +890,7 @@ definition TotalComplexShape.symm
   rel₁ h i₁ := ComplexShape.rel_π₂ c₁ c₁₂ i₁ h
   rel₂ i₂ _ _ h := ComplexShape.rel_π₁ c₂ c₁₂ h i₂
   ε₂_ε₁ h₂ h₁ := by
-    rw [neg_mu
+    rw [neg_mul]; rw [ComplexShape.ε₂_ε₁ c₁₂ h₁ h₂]; rw [neg_mul]; rw [neg_neg]
 
 中文:
 定义 TotalComplexShape.symm
@@ -901,7 +901,7 @@ definition TotalComplexShape.symm
   rel₁ h i₁ := ComplexShape.rel_π₂ c₁ c₁₂ i₁ h
   rel₂ i₂ _ _ h := ComplexShape.rel_π₁ c₂ c₁₂ h i₂
   ε₂_ε₁ h₂ h₁ := by
-    rw [neg_mu
+    rw [neg_mul]; rw [ComplexShape.ε₂_ε₁ c₁₂ h₁ h₂]; rw [neg_mul]; rw [neg_neg]
 
 Depends on / 依赖: ComplexShape
 -/
@@ -1106,7 +1106,9 @@ instance :
     dsimp
     rw [mul_one]; rw [← Int.negOnePow_add]; rw [add_comm q]; rw [add_mul]; rw [one_mul]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [mul_assoc]; rw [Int.units_mul_self]; rw [mul_one]
   σ_ε₂ := by
-    rintro
+    rintro p q _ rfl
+    dsimp
+    rw [one_mul]; rw [← Int.negOnePow_add]; rw [mul_add]; rw [mul_one]
 
 中文:
 实例 :
@@ -1118,7 +1120,9 @@ instance :
     dsimp
     rw [mul_one]; rw [← Int.negOnePow_add]; rw [add_comm q]; rw [add_mul]; rw [one_mul]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [mul_assoc]; rw [Int.units_mul_self]; rw [mul_one]
   σ_ε₂ := by
-    rintro
+    rintro p q _ rfl
+    dsimp
+    rw [one_mul]; rw [← Int.negOnePow_add]; rw [mul_add]; rw [mul_one]
 
 Depends on / 依赖: add_comm
 -/
@@ -1151,7 +1155,12 @@ definition TotalComplexShapeSymmetry.symmetry
     apply mul_right_cancel (b := ComplexShape.ε₂ c₁ c₂ c₁₂ (i₁, i₂))
     rw [mul_assoc]
     nth_rw 2 [mul_comm]
-    rw [← mul_assoc]; rw [ComplexShape.σ_ε₂ c₁ c₁₂ i₁ h₂]; rw [mul_comm];
+    rw [← mul_assoc]; rw [ComplexShape.σ_ε₂ c₁ c₁₂ i₁ h₂]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
+  σ_ε₂ i₂ i₁ i₁' h₁ := by
+    apply mul_right_cancel (b := ComplexShape.ε₁ c₁ c₂ c₁₂ (i₁, i₂))
+    rw [mul_assoc]
+    nth_rw 2 [mul_comm]
+    rw [← mul_assoc]; rw [ComplexShape.σ_ε₁ c₂ c₁₂ h₁ i₂]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
 
 中文:
 定义 TotalComplexShapeSymmetry.symmetry
@@ -1162,7 +1171,12 @@ definition TotalComplexShapeSymmetry.symmetry
     apply mul_right_cancel (b := ComplexShape.ε₂ c₁ c₂ c₁₂ (i₁, i₂))
     rw [mul_assoc]
     nth_rw 2 [mul_comm]
-    rw [← mul_assoc]; rw [ComplexShape.σ_ε₂ c₁ c₁₂ i₁ h₂]; rw [mul_comm];
+    rw [← mul_assoc]; rw [ComplexShape.σ_ε₂ c₁ c₁₂ i₁ h₂]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
+  σ_ε₂ i₂ i₁ i₁' h₁ := by
+    apply mul_right_cancel (b := ComplexShape.ε₁ c₁ c₂ c₁₂ (i₁, i₂))
+    rw [mul_assoc]
+    nth_rw 2 [mul_comm]
+    rw [← mul_assoc]; rw [ComplexShape.σ_ε₁ c₂ c₁₂ h₁ i₂]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]; rw [mul_comm]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
 
 Depends on / 依赖: ComplexShape
 -/

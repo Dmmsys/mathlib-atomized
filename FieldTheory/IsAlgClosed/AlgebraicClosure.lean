@@ -195,7 +195,11 @@ theorem toSplittingField_coeff
   simp_rw [← AlgHom.coe_toRingHom, ← coeff_map, subProdXSubC, Polynomial.map_sub,
     Polynomial.map_prod, Polynomial.map_sub, map_X, map_C, toSplittingField,
     AlgHom.coe_toRingHom, MvPolynomial.aeval_X, dif_pos h,
-    ← (finEquivRoots (Monics.splits_finsetProd h)).symm.prod_comp, 
+    ← (finEquivRoots (Monics.splits_finsetProd h)).symm.prod_comp, Equiv.apply_symm_apply]
+  rw [Finset.prod_coe_sort (f := fun x : _ × Nat => X - C x.1)]; rw [(Multiset.toEnumFinset _)
+.prod_eq_multiset_prod]; rw [← Function.comp_def (X - C ·) Prod.fst]; rw [← Multiset.map_map]; rw [Multiset.map_toEnumFinset_fst]; rw [map_map]; rw [AlgHom.comp_algebraMap]
+  conv in map _ _ => rw [Splits.eq_prod_roots (Monics.splits_finsetProd h)]
+  rw [leadingCoeff_map]; rw [f.2]; rw [map_one]; rw [C_1]; rw [one_mul]; rw [sub_self]; rw [coeff_zero]
 
 中文:
 定理 toSplittingField_coeff
@@ -205,7 +209,11 @@ theorem toSplittingField_coeff
   simp_rw [← AlgHom.coe_toRingHom, ← coeff_map, subProdXSubC, Polynomial.map_sub,
     Polynomial.map_prod, Polynomial.map_sub, map_X, map_C, toSplittingField,
     AlgHom.coe_toRingHom, MvPolynomial.aeval_X, dif_pos h,
-    ← (finEquivRoots (Monics.splits_finsetProd h)).symm.prod_comp, 
+    ← (finEquivRoots (Monics.splits_finsetProd h)).symm.prod_comp, Equiv.apply_symm_apply]
+  rw [Finset.prod_coe_sort (f := fun x : _ × Nat => X - C x.1)]; rw [(Multiset.toEnumFinset _)
+.prod_eq_multiset_prod]; rw [← Function.comp_def (X - C ·) Prod.fst]; rw [← Multiset.map_map]; rw [Multiset.map_toEnumFinset_fst]; rw [map_map]; rw [AlgHom.comp_algebraMap]
+  conv in map _ _ => rw [Splits.eq_prod_roots (Monics.splits_finsetProd h)]
+  rw [leadingCoeff_map]; rw [f.2]; rw [map_one]; rw [C_1]; rw [one_mul]; rw [sub_self]; rw [coeff_zero]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, Equiv.apply_symm_apply, Finset, Finset.prod_coe_sort, Function, Function.comp_def, Monics, Monics.splits_finsetProd, Multiset, Multiset.map_map, Multiset.toEnumFinset, MvPolynomial, MvPolynomial.aeval_X, Polynomial, Polynomial.map_prod, Polynomial.map_sub, Prod.fst, aeval_X, apply_symm_apply
 -/
@@ -234,7 +242,10 @@ theorem spanCoeffs_ne_top
   rintro ⟨v, _, hv⟩
   classical
   replace hv := congr_arg (toSplittingField <| v.support.image Prod.fst) hv
-  rw [map_one]; rw [Finsupp.linearCombination_apply];
+  rw [map_one]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [Finset.sum_eq_zero] at hv
+  · exact zero_ne_one hv
+  intro j hj
+  rw [smul_eq_mul]; rw [map_mul]; rw [toSplittingField_coeff (Finset.mem_image_of_mem _ hj)]; rw [mul_zero]
 
 中文:
 定理 spanCoeffs_ne_top
@@ -244,7 +255,10 @@ theorem spanCoeffs_ne_top
   rintro ⟨v, _, hv⟩
   classical
   replace hv := congr_arg (toSplittingField <| v.support.image Prod.fst) hv
-  rw [map_one]; rw [Finsupp.linearCombination_apply];
+  rw [map_one]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [Finset.sum_eq_zero] at hv
+  · exact zero_ne_one hv
+  intro j hj
+  rw [smul_eq_mul]; rw [map_mul]; rw [toSplittingField_coeff (Finset.mem_image_of_mem _ hj)]; rw [mul_zero]
 
 Depends on / 依赖: Finset, Finset.mem_image_of_mem, Finset.sum_eq_zero, Finsupp, Finsupp.linearCombination_apply, Finsupp.mem_span_image_iff_linearCombination, Finsupp.sum, Ideal.ne_top_iff_one, Ideal.span, Prod.fst, Set.image_univ, classical, congr_arg, image_univ, linearCombination_apply, map_mul, map_one, map_sum, mem_image_of_mem, mem_span_image_iff_linearCombination
 -/
@@ -422,7 +436,11 @@ instance instField
   ratCast q := algebraMap k _ q
   nnratCast_def q := by change algebraMap k _ _ = _; simp_rw [NNRat.cast_def, map_div₀, map_natCast]
   ratCast_def q := by
-    change algebraMap k _ _ 
+    change algebraMap k _ _ = _; rw [Rat.cast_def, map_div₀, map_intCast, map_natCast]
+nnqsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, NNRat.smul_def]
+qsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, Rat.smul_def]
 
 中文:
 实例 instField
@@ -435,7 +453,11 @@ instance instField
   ratCast q := algebraMap k _ q
   nnratCast_def q := by change algebraMap k _ _ = _; simp_rw [NNRat.cast_def, map_div₀, map_natCast]
   ratCast_def q := by
-    change algebraMap k _ _ 
+    change algebraMap k _ _ = _; rw [Rat.cast_def, map_div₀, map_intCast, map_natCast]
+nnqsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, NNRat.smul_def]
+qsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, Rat.smul_def]
 
 Depends on / 依赖: instCommRing
 -/
@@ -465,7 +487,7 @@ theorem Monics.map_eq_prod
   ext
   dsimp [AlgebraicClosure]
   rw [← Ideal.Quotient.mk_comp_algebraMap]; rw [← map_map]; rw [← Polynomial.map_prod]; rw [← sub_eq_zero]; rw [← coeff_sub]; rw [← Polynomial.map_sub]; rw [← subProdXSubC]; rw [coeff_map]; rw [Ideal.Quotient.eq_zero_iff_mem]
-  refine le_maxIdeal _ (Ideal.subset_s
+  refine le_maxIdeal _ (Ideal.subset_span ⟨⟨f, _⟩, rfl⟩)
 
 中文:
 定理 Monics.map_eq_prod
@@ -474,7 +496,7 @@ theorem Monics.map_eq_prod
   ext
   dsimp [AlgebraicClosure]
   rw [← Ideal.Quotient.mk_comp_algebraMap]; rw [← map_map]; rw [← Polynomial.map_prod]; rw [← sub_eq_zero]; rw [← coeff_sub]; rw [← Polynomial.map_sub]; rw [← subProdXSubC]; rw [coeff_map]; rw [Ideal.Quotient.eq_zero_iff_mem]
-  refine le_maxIdeal _ (Ideal.subset_s
+  refine le_maxIdeal _ (Ideal.subset_span ⟨⟨f, _⟩, rfl⟩)
 
 Depends on / 依赖: AlgebraicClosure, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk_comp_algebraMap, Ideal.subset_span, Polynomial, Polynomial.map_prod, Polynomial.map_sub, Quotient, coeff_map, coeff_sub, eq_zero_iff_mem, le_maxIdeal, map_map, map_prod, map_sub, mk_comp_algebraMap, subProdXSubC, sub_eq_zero, subset_span
 -/
@@ -500,7 +522,16 @@ IsIntegral.isAlgebraic by
       induction p using MvPolynomial.induction_on generalizing z with
         | C => exact isIntegral_algebraMap
         | add _ _ ha hb => exact (ha _ rfl).add (hb _ rfl)
-        | mul_X p fi ih 
+        | mul_X p fi ih =>
+          rw [map_mul]
+          refine (ih _ rfl).mul ⟨_, fi.1.2, ?_⟩
+          simp_rw [← eval_map, Monics.map_eq_prod, eval_prod, Polynomial.map_sub, eval_sub]
+          apply Finset.prod_eq_zero (Finset.mem_univ fi.2)
+          rw [map_C]
+          -- The `erw` is needed here because the `R` in `eval` is `AlgebraicClosure k`,
+          -- but this has been unfolded in the arguments of `eval`.
+          erw [eval_C]
+          simp⟩
 
 中文:
 实例 isAlgebraic
@@ -512,7 +543,16 @@ IsIntegral.isAlgebraic by
       induction p using MvPolynomial.induction_on generalizing z with
         | C => exact isIntegral_algebraMap
         | add _ _ ha hb => exact (ha _ rfl).add (hb _ rfl)
-        | mul_X p fi ih 
+        | mul_X p fi ih =>
+          rw [map_mul]
+          refine (ih _ rfl).mul ⟨_, fi.1.2, ?_⟩
+          simp_rw [← eval_map, Monics.map_eq_prod, eval_prod, Polynomial.map_sub, eval_sub]
+          apply Finset.prod_eq_zero (Finset.mem_univ fi.2)
+          rw [map_C]
+          -- The `erw` is needed here because the `R` in `eval` is `AlgebraicClosure k`,
+          -- but this has been unfolded in the arguments of `eval`.
+          erw [eval_C]
+          simp⟩
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.prod_eq_zero, Ideal.Quotient.mk_surjective, IsIntegral, IsIntegral.isAlgebraic, Monics, Monics.map_eq_prod, MvPolynomial, MvPolynomial.induction_on, Polynomial, Polynomial.map_sub, Quotient, eval_map, eval_prod, eval_sub, generalizing, induction_on, isAlgebraic, isIntegral_algebraMap
 -/

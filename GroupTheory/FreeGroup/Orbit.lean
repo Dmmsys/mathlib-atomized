@@ -74,7 +74,9 @@ lemma startsWith.disjoint_iff_ne
     Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_and, Option.some.injEq]
   exact Iff.intro (fun h => h (mk [w]) (by simp)) (by grind)
 
-.Injective := fun a b h => by lemma startsWith.
+.Injective := fun a b h => by lemma startsWith.Injective : @startsWith α _
+  simp only [startsWith, Set.ext_iff, Set.mem_ofPred_eq] at h
+  simpa using h (mk [a])
 
 中文:
 引理 startsWith.disjoint_iff_ne
@@ -84,7 +86,9 @@ lemma startsWith.disjoint_iff_ne
     Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_and, Option.some.injEq]
   exact Iff.intro (fun h => h (mk [w]) (by simp)) (by grind)
 
-.Injective := fun a b h => by lemma startsWith.
+.Injective := fun a b h => by lemma startsWith.Injective : @startsWith α _
+  simp only [startsWith, Set.ext_iff, Set.mem_ofPred_eq] at h
+  simpa using h (mk [a])
 
 Depends on / 依赖: Iff.intro, Option.some.injEq, Set.disjoint_iff_inter_eq_empty, Set.ext_iff, Set.mem_empty_iff_false, Set.mem_inter_iff, Set.mem_ofPred_eq, disjoint_iff_inter_eq_empty, ext_iff, iff_false, mem_empty_iff_false, mem_inter_iff, mem_ofPred_eq, ne_eq, not_and, startsWith
 -/
@@ -109,7 +113,9 @@ theorem startsWith_mk_mul
   · simp only [startsWith, Set.mem_ofPred_eq, getElem?_pos, Option.some.injEq,
       Prod.eq_iff_fst_eq_snd_eq, not_and, Bool.not_eq_not, toWord_mul, toWord_mk, reduce.cons,
       reduce_nil, List.cons_append, List.nil_append, reduce_toWord, hC] at *
-    rw [sh
+    rw [show g.toWord = g.toWord.head (by grind) :: g.toWord.tail by grind]
+    grind
+  · simp_all [startsWith]
 
 中文:
 定理 startsWith_mk_mul
@@ -119,7 +125,9 @@ theorem startsWith_mk_mul
   · simp only [startsWith, Set.mem_ofPred_eq, getElem?_pos, Option.some.injEq,
       Prod.eq_iff_fst_eq_snd_eq, not_and, Bool.not_eq_not, toWord_mul, toWord_mk, reduce.cons,
       reduce_nil, List.cons_append, List.nil_append, reduce_toWord, hC] at *
-    rw [sh
+    rw [show g.toWord = g.toWord.head (by grind) :: g.toWord.tail by grind]
+    grind
+  · simp_all [startsWith]
 
 Depends on / 依赖: Bool.not_eq_not, List.cons_append, List.nil_append, Option.some.injEq, Prod.eq_iff_fst_eq_snd_eq, Set.mem_ofPred_eq, _pos, cons_append, eq_iff_fst_eq_snd_eq, g.toWord, g.toWord.head, g.toWord.length, g.toWord.tail, getElem, length, mem_ofPred_eq, nil_append, not_and, not_eq_not, reduce.cons
 -/
@@ -175,7 +183,21 @@ theorem Orbit.duplicate
     match l with
     | [] => simp [← hl, startsWith] at hg
     | [a] =>
-      simp_rw [h, ← hl, s
+      simp_rw [h, ← hl, show a = w by simpa [← hl, startsWith] using hg, startsWith.smul_def,
+        inv_smul_smul]
+      exact Or.inr rfl
+    | a :: b :: l =>
+      have ha : a = w := by simpa [← hl, startsWith] using hg
+      have h1 := isReduced_cons_cons.mp (hl ▸ isReduced_toWord)
+      refine Or.inl (Set.mem_biUnion (x := b) (by grind) ?_)
+      simp_rw [h, ← hl, ha, ← List.singleton_append (l := b :: l), ← mul_mk, startsWith.smul_def,
+        mul_smul, inv_smul_smul]
+      exact ⟨⟨mk (b :: l), by simp [startsWith, h1.2.reduce_eq]⟩, rfl⟩
+  · rintro (⟨-, ⟨w', rfl⟩, -, ⟨hw, rfl⟩, ⟨g, hg⟩, rfl⟩ | rfl)
+    · exact ⟨mk [w] • g • x, ⟨⟨mk [w] * g, startsWith_mk_mul g
+        ((startsWith.disjoint_iff_ne.mpr hw).notMem_of_mem_left hg)⟩,
+        mul_smul (mk [w]) g x⟩, inv_smul_smul (mk [w]) (g • x)⟩
+    · exact ⟨mk [w] • i, ⟨⟨mk [w], rfl⟩, rfl⟩, inv_smul_smul (mk [w]) i⟩
 
 中文:
 定理 Orbit.duplicate
@@ -190,7 +212,21 @@ theorem Orbit.duplicate
     match l with
     | [] => simp [← hl, startsWith] at hg
     | [a] =>
-      simp_rw [h, ← hl, s
+      simp_rw [h, ← hl, show a = w by simpa [← hl, startsWith] using hg, startsWith.smul_def,
+        inv_smul_smul]
+      exact Or.inr rfl
+    | a :: b :: l =>
+      have ha : a = w := by simpa [← hl, startsWith] using hg
+      have h1 := isReduced_cons_cons.mp (hl ▸ isReduced_toWord)
+      refine Or.inl (Set.mem_biUnion (x := b) (by grind) ?_)
+      simp_rw [h, ← hl, ha, ← List.singleton_append (l := b :: l), ← mul_mk, startsWith.smul_def,
+        mul_smul, inv_smul_smul]
+      exact ⟨⟨mk (b :: l), by simp [startsWith, h1.2.reduce_eq]⟩, rfl⟩
+  · rintro (⟨-, ⟨w', rfl⟩, -, ⟨hw, rfl⟩, ⟨g, hg⟩, rfl⟩ | rfl)
+    · exact ⟨mk [w] • g • x, ⟨⟨mk [w] * g, startsWith_mk_mul g
+        ((startsWith.disjoint_iff_ne.mpr hw).notMem_of_mem_left hg)⟩,
+        mul_smul (mk [w]) g x⟩, inv_smul_smul (mk [w]) (g • x)⟩
+    · exact ⟨mk [w] • i, ⟨⟨mk [w], rfl⟩, rfl⟩, inv_smul_smul (mk [w]) i⟩
 
 Depends on / 依赖: Or.inr, g.mk_toWord, g.toWord, inv_smul_smul, isReduced_cons_cons, isReduced_cons_cons.mp, isReduced_toWord, mk_toWord, simp_rw, smul_def, startsWith, startsWith.smul_def, toWord
 -/

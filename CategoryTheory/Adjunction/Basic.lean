@@ -251,7 +251,9 @@ definition homEquiv
     rw [F.map_comp]; rw [assoc]; rw [← Functor.comp_map]; rw [adj.counit.naturality]; rw [← assoc]
     simp
   right_inv := fun g => by
-    simp only [Functor.comp_obj, Functor.map_co
+    simp only [Functor.comp_obj, Functor.map_comp]
+    rw [← assoc]; rw [← Functor.comp_map]; rw [← adj.unit.naturality]
+    simp
 
 中文:
 定义 homEquiv
@@ -263,7 +265,9 @@ definition homEquiv
     rw [F.map_comp]; rw [assoc]; rw [← Functor.comp_map]; rw [adj.counit.naturality]; rw [← assoc]
     simp
   right_inv := fun g => by
-    simp only [Functor.comp_obj, Functor.map_co
+    simp only [Functor.comp_obj, Functor.map_comp]
+    rw [← assoc]; rw [← Functor.comp_map]; rw [← adj.unit.naturality]
+    simp
 
 Depends on / 依赖: G.map, adj.unit.app
 -/
@@ -1067,7 +1071,8 @@ definition mk'
     rw [← adj.homEquiv_counit]; rw [(adj.homEquiv _ _).symm_apply_eq]; rw [adj.homEquiv_unit]
     simp
   right_triangle_components Y := by
-    rw [← adj.homEquiv_unit]; rw [← (adj.homEquiv _ _).eq_symm_apply]; rw [adj.homEquiv_counit
+    rw [← adj.homEquiv_unit]; rw [← (adj.homEquiv _ _).eq_symm_apply]; rw [adj.homEquiv_counit]
+    simp
 
 中文:
 定义 mk'
@@ -1078,7 +1083,8 @@ definition mk'
     rw [← adj.homEquiv_counit]; rw [(adj.homEquiv _ _).symm_apply_eq]; rw [adj.homEquiv_unit]
     simp
   right_triangle_components Y := by
-    rw [← adj.homEquiv_unit]; rw [← (adj.homEquiv _ _).eq_symm_apply]; rw [adj.homEquiv_counit
+    rw [← adj.homEquiv_unit]; rw [← (adj.homEquiv _ _).eq_symm_apply]; rw [adj.homEquiv_counit]
+    simp
 
 Depends on / 依赖: adj.unit
 -/
@@ -1132,7 +1138,14 @@ definition mkOfHomEquiv
           simp [← adj.homEquiv_naturality_left, ← adj.homEquiv_naturality_right] }
     counit :=
       { app := fun Y => (adj.homEquiv _ _).invFun (𝟙 (G.obj Y))
-        natura
+        naturality := by
+          intros
+          simp [← adj.homEquiv_naturality_left_symm, ← adj.homEquiv_naturality_right_symm] }
+    homEquiv := adj.homEquiv
+    homEquiv_unit := fun {X Y f} => by simp [← adj.homEquiv_naturality_right]
+    homEquiv_counit := fun {X Y f} => by simp [← adj.homEquiv_naturality_left_symm] }
+
+@[simp]
 
 中文:
 定义 mkOfHomEquiv
@@ -1145,7 +1158,14 @@ definition mkOfHomEquiv
           simp [← adj.homEquiv_naturality_left, ← adj.homEquiv_naturality_right] }
     counit :=
       { app := fun Y => (adj.homEquiv _ _).invFun (𝟙 (G.obj Y))
-        natura
+        naturality := by
+          intros
+          simp [← adj.homEquiv_naturality_left_symm, ← adj.homEquiv_naturality_right_symm] }
+    homEquiv := adj.homEquiv
+    homEquiv_unit := fun {X Y f} => by simp [← adj.homEquiv_naturality_right]
+    homEquiv_counit := fun {X Y f} => by simp [← adj.homEquiv_naturality_left_symm] }
+
+@[simp]
 
 Depends on / 依赖: F.obj, G.obj, adj.homEqui, adj.homEquiv, adj.homEquiv_naturality_left, adj.homEquiv_naturality_left_symm, adj.homEquiv_naturality_right, adj.homEquiv_naturality_right_symm, counit, homEqui, homEquiv, homEquiv_counit, homEquiv_naturality_left, homEquiv_naturality_left_symm, homEquiv_naturality_right, homEquiv_naturality_right_symm, homEquiv_unit, intros, invFun, naturality
 -/
@@ -1207,7 +1227,8 @@ definition mkOfUnitCounit
     simpa [-CoreUnitCounit.left_triangle] using this X
   right_triangle_components Y := by
     have := adj.right_triangle
-    rw [NatTrans.ext_iff]; rw 
+    rw [NatTrans.ext_iff]; rw [funext_iff] at this
+    simpa [-CoreUnitCounit.right_triangle] using this Y
 
 中文:
 定义 mkOfUnitCounit
@@ -1220,7 +1241,8 @@ definition mkOfUnitCounit
     simpa [-CoreUnitCounit.left_triangle] using this X
   right_triangle_components Y := by
     have := adj.right_triangle
-    rw [NatTrans.ext_iff]; rw 
+    rw [NatTrans.ext_iff]; rw [funext_iff] at this
+    simpa [-CoreUnitCounit.right_triangle] using this Y
 
 Depends on / 依赖: adj.unit
 -/
@@ -1319,7 +1341,9 @@ definition ofNatIsoLeft
   counit := Functor.whiskerLeft _ iso.inv ≫ adj.counit
   left_triangle_components X := by
     simp only [Functor.id_obj, Functor.comp_obj, NatTrans.comp_app, Functor.whiskerRight_app,
-      Functor.map_comp, Functor.whiskerLeft_app, Category.assoc, NatTrans.
+      Functor.map_comp, Functor.whiskerLeft_app, Category.assoc, NatTrans.naturality_assoc]
+    simp [← Functor.comp_map]
+  right_triangle_components := by simp [← Functor.map_comp]
 
 中文:
 定义 of自然数IsoLeft
@@ -1328,7 +1352,9 @@ definition ofNatIsoLeft
   counit := Functor.whiskerLeft _ iso.inv ≫ adj.counit
   left_triangle_components X := by
     simp only [Functor.id_obj, Functor.comp_obj, NatTrans.comp_app, Functor.whiskerRight_app,
-      Functor.map_comp, Functor.whiskerLeft_app, Category.assoc, NatTrans.
+      Functor.map_comp, Functor.whiskerLeft_app, Category.assoc, NatTrans.naturality_assoc]
+    simp [← Functor.comp_map]
+  right_triangle_components := by simp [← Functor.map_comp]
 
 Depends on / 依赖: Functor, Functor.whiskerRight, adj.unit, iso.hom, whiskerRight
 -/
@@ -1533,7 +1559,8 @@ definition comp
     homEquiv := fun _ _ => Equiv.trans (adj₂.homEquiv _ _) (adj₁.homEquiv _ _)
     unit := adj₁.unit ≫ whiskerRight (F.rightUnitor.inv ≫ whiskerLeft F adj₂.unit ≫
       (associator _ _ _).inv) G ≫ (associator _ _ _).hom
-    counit := (associator _ _ _).inv ≫ whiskerRight ((associator _ _ _).ho
+    counit := (associator _ _ _).inv ≫ whiskerRight ((associator _ _ _).hom ≫
+      whiskerLeft _ adj₁.counit ≫ I.rightUnitor.hom) _ ≫ adj₂.counit }
 
 中文:
 定义 comp
@@ -1542,7 +1569,8 @@ definition comp
     homEquiv := fun _ _ => Equiv.trans (adj₂.homEquiv _ _) (adj₁.homEquiv _ _)
     unit := adj₁.unit ≫ whiskerRight (F.rightUnitor.inv ≫ whiskerLeft F adj₂.unit ≫
       (associator _ _ _).inv) G ≫ (associator _ _ _).hom
-    counit := (associator _ _ _).inv ≫ whiskerRight ((associator _ _ _).ho
+    counit := (associator _ _ _).inv ≫ whiskerRight ((associator _ _ _).hom ≫
+      whiskerLeft _ adj₁.counit ≫ I.rightUnitor.hom) _ ≫ adj₂.counit }
 
 Depends on / 依赖: Equiv.trans, F.rightUnitor.inv, I.rightUnitor.hom, associator, counit, homEquiv, rightUnitor, whiskerLeft, whiskerRight
 -/
@@ -1697,7 +1725,7 @@ definition adjunctionOfEquivLeft
         have {X : C} {Y Y' : D} (f : X ⟶ G.obj Y) (g : Y ⟶ Y') :
             (e X Y').symm (f ≫ G.map g) = (e X Y).symm f ≫ g := by
           rw [Equiv.symm_apply_eq]; rw [he]; simp
-        simp [← thi
+        simp [← this, ← he] }
 
 中文:
 定义 adjunctionOfEquivLeft
@@ -1708,7 +1736,7 @@ definition adjunctionOfEquivLeft
         have {X : C} {Y Y' : D} (f : X ⟶ G.obj Y) (g : Y ⟶ Y') :
             (e X Y').symm (f ≫ G.map g) = (e X Y).symm f ≫ g := by
           rw [Equiv.symm_apply_eq]; rw [he]; simp
-        simp [← thi
+        simp [← this, ← he] }
 
 Depends on / 依赖: Equiv.symm_apply_eq, G.map, G.obj, homEquiv, homEquiv_naturality_left_symm, mkOfHomEquiv, symm_apply_eq
 -/
@@ -1766,7 +1794,7 @@ definition rightAdjointOfEquiv
     conv =>
       rhs
       rw [← assoc]; rw [he'' e he]; rw [comp_id]; rw [Equiv.symm_apply_apply]
-  
+    simp
 
 中文:
 定义 rightAdjointOfEquiv
@@ -1778,7 +1806,7 @@ definition rightAdjointOfEquiv
     conv =>
       rhs
       rw [← assoc]; rw [he'' e he]; rw [comp_id]; rw [Equiv.symm_apply_apply]
-  
+    simp
 
 Depends on / 依赖: G_obj
 -/

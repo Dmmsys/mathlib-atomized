@@ -96,7 +96,7 @@ lemma iff_lTensor_preserves_shortComplex_exact
 .1 moduleCat_exact_iff_function_exact _
       H (.mk (ModuleCat.ofHom f) (ModuleCat.ofHom g)
         (ModuleCat.hom_ext (DFunLike.ext _ _ h.apply_apply_eq_zero)))
-          (moduleCat_exact_if
+          (moduleCat_exact_iff_function_exact _ |>.2 h)⟩
 
 中文:
 引理 iff_lTensor_preserves_shortComplex_exact
@@ -105,7 +105,7 @@ lemma iff_lTensor_preserves_shortComplex_exact
 .1 moduleCat_exact_iff_function_exact _
       H (.mk (ModuleCat.ofHom f) (ModuleCat.ofHom g)
         (ModuleCat.hom_ext (DFunLike.ext _ _ h.apply_apply_eq_zero)))
-          (moduleCat_exact_if
+          (moduleCat_exact_iff_function_exact _ |>.2 h)⟩
 
 Depends on / 依赖: DFunLike, DFunLike.ext, ModuleCat, ModuleCat.hom_ext, ModuleCat.ofHom, apply_apply_eq_zero, h.apply_apply_eq_zero, hom_ext, iff_lTensor_exact, lTensor_shortComplex_exact, moduleCat_exact_iff_function_exact
 -/
@@ -129,7 +129,7 @@ lemma iff_rTensor_preserves_shortComplex_exact
 .1 moduleCat_exact_iff_function_exact _
       H (.mk (ModuleCat.ofHom f) (ModuleCat.ofHom g)
         (ModuleCat.hom_ext (DFunLike.ext _ _ h.apply_apply_eq_zero)))
-          (moduleCat_exact_if
+          (moduleCat_exact_iff_function_exact _ |>.2 h)⟩
 
 中文:
 引理 iff_rTensor_preserves_shortComplex_exact
@@ -138,7 +138,7 @@ lemma iff_rTensor_preserves_shortComplex_exact
 .1 moduleCat_exact_iff_function_exact _
       H (.mk (ModuleCat.ofHom f) (ModuleCat.ofHom g)
         (ModuleCat.hom_ext (DFunLike.ext _ _ h.apply_apply_eq_zero)))
-          (moduleCat_exact_if
+          (moduleCat_exact_iff_function_exact _ |>.2 h)⟩
 
 Depends on / 依赖: DFunLike, DFunLike.ext, ModuleCat, ModuleCat.hom_ext, ModuleCat.ofHom, apply_apply_eq_zero, h.apply_apply_eq_zero, hom_ext, iff_rTensor_exact, moduleCat_exact_iff_function_exact, rTensor_shortComplex_exact
 -/

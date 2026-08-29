@@ -1177,7 +1177,8 @@ instance Monoid.gMonoid
   mul_one := fun _ => Sigma.ext (add_zero _) (heq_of_eq (mul_one _))
   mul_assoc := fun _ _ _ => Sigma.ext (add_assoc _ _ _) (heq_of_eq (mul_assoc _ _ _))
   gnpow := fun n _ a => a ^ n
-  gnpow_zero' := fun _ => Sigma.ext (zero_nsmul _) (heq_of_
+  gnpow_zero' := fun _ => Sigma.ext (zero_nsmul _) (heq_of_eq (Monoid.npow_zero _))
+  gnpow_succ' := fun _ ⟨_, _⟩ => Sigma.ext (succ_nsmul _ _) (heq_of_eq (Monoid.npow_succ _ _))
 
 中文:
 实例 幺半群.gMonoid
@@ -1186,7 +1187,8 @@ instance Monoid.gMonoid
   mul_one := fun _ => Sigma.ext (add_zero _) (heq_of_eq (mul_one _))
   mul_assoc := fun _ _ _ => Sigma.ext (add_assoc _ _ _) (heq_of_eq (mul_assoc _ _ _))
   gnpow := fun n _ a => a ^ n
-  gnpow_zero' := fun _ => Sigma.ext (zero_nsmul _) (heq_of_
+  gnpow_zero' := fun _ => Sigma.ext (zero_nsmul _) (heq_of_eq (Monoid.npow_zero _))
+  gnpow_succ' := fun _ ⟨_, _⟩ => Sigma.ext (succ_nsmul _ _) (heq_of_eq (Monoid.npow_succ _ _))
 
 Depends on / 依赖: Sigma.ext, heq_of_eq, one_mul, zero_add
 -/
@@ -1620,7 +1622,7 @@ theorem list_prod_map_mem_graded
     rw [List.map_cons]; rw [List.map_cons]; rw [List.prod_cons]; rw [List.sum_cons]
     exact
       mul_mem_graded (h _ List.mem_cons_self)
-       
+        (list_prod_map_mem_graded tail _ _ fun j hj => h _ <| List.mem_cons_of_mem _ hj)
 
 中文:
 定理 list_prod_map_mem_graded
@@ -1634,7 +1636,7 @@ theorem list_prod_map_mem_graded
     rw [List.map_cons]; rw [List.map_cons]; rw [List.prod_cons]; rw [List.sum_cons]
     exact
       mul_mem_graded (h _ List.mem_cons_self)
-       
+        (list_prod_map_mem_graded tail _ _ fun j hj => h _ <| List.mem_cons_of_mem _ hj)
 
 Depends on / 依赖: List.map_cons, List.map_nil, List.mem_cons_of_mem, List.mem_cons_self, List.prod_cons, List.prod_nil, List.sum_cons, List.sum_nil, list_prod_map_mem_graded, map_cons, map_nil, mem_cons_of_mem, mem_cons_self, mul_mem_graded, one_mem_graded, prod_cons, prod_nil, sum_cons, sum_nil
 -/
@@ -1686,7 +1688,11 @@ instance SetLike.gMonoid
   mul_one := fun ⟨_, _, _⟩ => Sigma.subtype_ext (add_zero _) (mul_one _)
   mul_assoc := fun ⟨_, _, _⟩ ⟨_, _, _⟩ ⟨_, _, _⟩ =>
     Sigma.subtype_ext (add_assoc _ _ _) (mul_assoc _ _ _)
-  gnpow := fun n _ a => ⟨(a:R)^n, SetLike.pow_mem_graded 
+  gnpow := fun n _ a => ⟨(a:R)^n, SetLike.pow_mem_graded n a.prop⟩
+  gnpow_zero' := fun _ => Sigma.subtype_ext (zero_nsmul _) (pow_zero _)
+  gnpow_succ' := fun _ _ => Sigma.subtype_ext (succ_nsmul _ _) (pow_succ _ _)
+
+@[simp]
 
 中文:
 实例 集合状.gMonoid
@@ -1695,7 +1701,11 @@ instance SetLike.gMonoid
   mul_one := fun ⟨_, _, _⟩ => Sigma.subtype_ext (add_zero _) (mul_one _)
   mul_assoc := fun ⟨_, _, _⟩ ⟨_, _, _⟩ ⟨_, _, _⟩ =>
     Sigma.subtype_ext (add_assoc _ _ _) (mul_assoc _ _ _)
-  gnpow := fun n _ a => ⟨(a:R)^n, SetLike.pow_mem_graded 
+  gnpow := fun n _ a => ⟨(a:R)^n, SetLike.pow_mem_graded n a.prop⟩
+  gnpow_zero' := fun _ => Sigma.subtype_ext (zero_nsmul _) (pow_zero _)
+  gnpow_succ' := fun _ _ => Sigma.subtype_ext (succ_nsmul _ _) (pow_succ _ _)
+
+@[simp]
 
 Depends on / 依赖: Sigma.subtype_ext, one_mul, subtype_ext, zero_add
 -/

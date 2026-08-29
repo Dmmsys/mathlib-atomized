@@ -211,7 +211,12 @@ lemma ι_singularChainComplexFunctorAdjunction_counit_app_app
       sSetTopAdj.counit.app X)
   · dsimp [singularChainComplexFunctorAdjunction, Adjunction.ofNatIsoRight,
       Adjunction.equivHomsetRightOfNatIso, Adjunction.homEquiv,
-      Adjunction.comp, singularChain
+      Adjunction.comp, singularChainComplexFunctor, SSet.chainComplexFunctor,
+      SSet.chainComplexFunctorAdjunction]
+    simp
+  · congr 1
+    rw [← reassoc_of% sSetTopAdj_unit_app_app_down]
+    exact congr(($(sSetTopAdj.right_triangle_components X).app (.op ⦋n⦌) i).down)
 
 中文:
 引理 ι_singularChainComplexFunctorAdjunction_counit_app_app
@@ -221,7 +226,12 @@ lemma ι_singularChainComplexFunctorAdjunction_counit_app_app
       sSetTopAdj.counit.app X)
   · dsimp [singularChainComplexFunctorAdjunction, Adjunction.ofNatIsoRight,
       Adjunction.equivHomsetRightOfNatIso, Adjunction.homEquiv,
-      Adjunction.comp, singularChain
+      Adjunction.comp, singularChainComplexFunctor, SSet.chainComplexFunctor,
+      SSet.chainComplexFunctorAdjunction]
+    simp
+  · congr 1
+    rw [← reassoc_of% sSetTopAdj_unit_app_app_down]
+    exact congr(($(sSetTopAdj.right_triangle_components X).app (.op ⦋n⦌) i).down)
 
 Depends on / 依赖: Adjunction, Adjunction.comp, Adjunction.equivHomsetRightOfNatIso, Adjunction.homEquiv, Adjunction.ofNatIsoRight, F.map, SSet.chainComplexFunctor, SSet.chainComplexFunctorAdjunction, SSet.toTop.map, SSet.toTopSimplex.inv.app, SSet.yonedaEquiv.symm, chainComplexFunctor, chainComplexFunctorAdjunction, counit, equivHomsetRightOfNatIso, homEquiv, ofNatIsoRight, reassoc_of, right_triangle_components, sSetTopAdj
 -/

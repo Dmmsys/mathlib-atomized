@@ -91,7 +91,15 @@ theorem isSheaf_yoneda_obj
   rw [← Sieve.generateFamily_eq] at h_colim
   intro x hx
   let x_ext := Presieve.FamilyOfElements.sieveExtend x
-  have hx_ext := Presieve.FamilyOfElements.Compatible.sie
+  have hx_ext := Presieve.FamilyOfElements.Compatible.sieveExtend hx
+  let S := Sieve.generate (Presieve.ofArrows Y π)
+  obtain ⟨t, t_amalg, t_uniq⟩ : exists! t, x_ext.IsAmalgamation t :=
+    (Sieve.forallYonedaIsSheaf_iff_colimit S).mpr ⟨h_colim⟩ W x_ext hx_ext
+  refine ⟨t, ?_, ?_⟩
+  · convert!
+    Presieve.isAmalgamation_restrict (Sieve.le_generate (Presieve.ofArrows Y π)) _ _ t_amalg
+    exact (Presieve.restrict_extend hx).symm
+· exact fun y hy => t_uniq y Presieve.isAmalgamation_sieveExtend x y hy
 
 中文:
 定理 isSheaf_yoneda_obj
@@ -104,7 +112,15 @@ theorem isSheaf_yoneda_obj
   rw [← Sieve.generateFamily_eq] at h_colim
   intro x hx
   let x_ext := Presieve.FamilyOfElements.sieveExtend x
-  have hx_ext := Presieve.FamilyOfElements.Compatible.sie
+  have hx_ext := Presieve.FamilyOfElements.Compatible.sieveExtend hx
+  let S := Sieve.generate (Presieve.ofArrows Y π)
+  obtain ⟨t, t_amalg, t_uniq⟩ : exists! t, x_ext.IsAmalgamation t :=
+    (Sieve.forallYonedaIsSheaf_iff_colimit S).mpr ⟨h_colim⟩ W x_ext hx_ext
+  refine ⟨t, ?_, ?_⟩
+  · convert!
+    Presieve.isAmalgamation_restrict (Sieve.le_generate (Presieve.ofArrows Y π)) _ _ t_amalg
+    exact (Presieve.restrict_extend hx).symm
+· exact fun y hy => t_uniq y Presieve.isAmalgamation_sieveExtend x y hy
 
 Depends on / 依赖: Compatible, FamilyOfElements, H.effectiveEpiFamily.some, IsAmalgamation, Presieve, Presieve.FamilyOfElements.Compatible.sieveExtend, Presieve.FamilyOfElements.sieveExtend, Presieve.ofArrows, Sieve.forallYonedaIsSheaf_iff_colimit, Sieve.generate, Sieve.generateFamily_eq, effectiveEpiFamily, forallYonedaIsSheaf_iff_colimit, generate, generateFamily_eq, h_colim, hx_ext, isColimitOfEffectiveEpiFamilyStruct, isSheaf_coherent, ofArrows
 -/

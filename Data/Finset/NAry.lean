@@ -1783,7 +1783,14 @@ theorem card_dvd_card_image₂_right
     (hs.subset <| Set.image_mono <| coe_subset.2 <| subset_insert _ _)
   rw [image₂_insert_left]
   by_cases h : Disjoint (image (f a) t) (image₂ f s t)
-  
+  · rw [card_union_of_disjoint h]
+    exact Nat.dvd_add (card_image_of_injective _ <| hf _ <| mem_insert_self _ _).symm.dvd ih
+  simp_rw [← biUnion_image_left, disjoint_biUnion_right, not_forall] at h
+  obtain ⟨b, hb, h⟩ := h
+  rwa [union_eq_right.2]
+  exact (hs.eq (Set.mem_image_of_mem _ <| mem_insert_self _ _)
+      (Set.mem_image_of_mem _ <| mem_insert_of_mem hb) h).trans_subset
+    (image_subset_image₂_right hb)
 
 中文:
 定理 card_dvd_card_image₂_right
@@ -1797,7 +1804,14 @@ theorem card_dvd_card_image₂_right
     (hs.subset <| Set.image_mono <| coe_subset.2 <| subset_insert _ _)
   rw [image₂_insert_left]
   by_cases h : Disjoint (image (f a) t) (image₂ f s t)
-  
+  · rw [card_union_of_disjoint h]
+    exact Nat.dvd_add (card_image_of_injective _ <| hf _ <| mem_insert_self _ _).symm.dvd ih
+  simp_rw [← biUnion_image_left, disjoint_biUnion_right, not_forall] at h
+  obtain ⟨b, hb, h⟩ := h
+  rwa [union_eq_right.2]
+  exact (hs.eq (Set.mem_image_of_mem _ <| mem_insert_self _ _)
+      (Set.mem_image_of_mem _ <| mem_insert_of_mem hb) h).trans_subset
+    (image_subset_image₂_right hb)
 
 Depends on / 依赖: Disjoint, Finset, Finset.induction, Nat.dvd_add, Set.image_mono, biUnion_image_left, card_image_of_injective, card_union_of_disjoint, classical, coe_subset, disjoint_biUnion_right, dvd_add, forall_of_forall_insert, hs.subset, image_mono, insert, mem_insert_self, not_forall, simp_rw, specialize
 -/
@@ -1850,7 +1864,7 @@ theorem subset_set_image₂
   use u.image Prod.fst, u.image Prod.snd
   simp only [coe_image, Set.image_subset_iff, image₂_image_left, image₂_image_right,
     image_subset_iff]
-  exact ⟨fun _ h => (hu h).1, fun _ h => (hu h).2,
+  exact ⟨fun _ h => (hu h).1, fun _ h => (hu h).2, fun x hx => mem_image₂_of_mem hx hx⟩
 
 中文:
 定理 subset_set_image₂
@@ -1862,7 +1876,7 @@ theorem subset_set_image₂
   use u.image Prod.fst, u.image Prod.snd
   simp only [coe_image, Set.image_subset_iff, image₂_image_left, image₂_image_right,
     image_subset_iff]
-  exact ⟨fun _ h => (hu h).1, fun _ h => (hu h).2,
+  exact ⟨fun _ h => (hu h).1, fun _ h => (hu h).2, fun x hx => mem_image₂_of_mem hx hx⟩
 
 Depends on / 依赖: Prod.fst, Prod.snd, Set.image_prod, Set.image_subset_iff, classical, coe_image, image_prod, image_subset_iff, subset_set_image_iff, u.image
 -/

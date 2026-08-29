@@ -111,7 +111,8 @@ theorem glueDist_glued_points
     refine le_antisymm ?_ (le_ciInf A)
     have : 0 = dist (Φ p) (Φ p) + dist (Ψ p) (Ψ p) := by simp
     rw [this]
-    exact ciInf_le ⟨0, forall_me
+    exact ciInf_le ⟨0, forall_mem_range.2 A⟩ p
+  simp only [glueDist, this, zero_add]
 
 中文:
 定理 glueDist_glued_points
@@ -122,7 +123,8 @@ theorem glueDist_glued_points
     refine le_antisymm ?_ (le_ciInf A)
     have : 0 = dist (Φ p) (Φ p) + dist (Ψ p) (Ψ p) := by simp
     rw [this]
-    exact ciInf_le ⟨0, forall_me
+    exact ciInf_le ⟨0, forall_mem_range.2 A⟩ p
+  simp only [glueDist, this, zero_add]
 
 Depends on / 依赖: ciInf_le, forall_mem_range, glueDist, le_antisymm, le_ciInf, zero_add
 -/
@@ -350,7 +352,11 @@ theorem Sum.mem_uniformity_iff_glueDist
     refine ⟨min (min δX δY) ε, lt_min (lt_min δX0 δY0) hε, ?_⟩
     rintro (a | a) (b | b) h <;> simp only [lt_min_iff] at h
     · exact hX h.1.1
-  
+    · exact absurd h.2 (le_glueDist_inl_inr _ _ _ _ _).not_gt
+    · exact absurd h.2 (le_glueDist_inr_inl _ _ _ _ _).not_gt
+    · exact hY h.1.2
+  · rintro ⟨ε, ε0, H⟩
+    constructor <;> exact ⟨ε, ε0, fun _ _ h => H _ _ h⟩
 
 中文:
 定理 和.mem_uniformity_iff_glueDist
@@ -362,7 +368,11 @@ theorem Sum.mem_uniformity_iff_glueDist
     refine ⟨min (min δX δY) ε, lt_min (lt_min δX0 δY0) hε, ?_⟩
     rintro (a | a) (b | b) h <;> simp only [lt_min_iff] at h
     · exact hX h.1.1
-  
+    · exact absurd h.2 (le_glueDist_inl_inr _ _ _ _ _).not_gt
+    · exact absurd h.2 (le_glueDist_inr_inl _ _ _ _ _).not_gt
+    · exact hY h.1.2
+  · rintro ⟨ε, ε0, H⟩
+    constructor <;> exact ⟨ε, ε0, fun _ _ h => H _ _ h⟩
 
 Depends on / 依赖: Filter, Filter.mem_map, Filter.mem_sup, Sum.uniformity, absurd, le_glueDist_inl_inr, le_glueDist_inr_inl, lt_min, lt_min_iff, mem_map, mem_preimage, mem_sup, mem_uniformity_dist, not_gt, uniformity
 -/
@@ -399,7 +409,7 @@ definition glueMetricApprox
   dist_triangle := glueDist_triangle Φ Ψ ε H
   eq_of_dist_eq_zero := eq_of_glueDist_eq_zero Φ Ψ ε ε0 _ _
   toUniformSpace := Sum.instUniformSpace
-uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_unif
+uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_uniformity_iff_glueDist ε0
 
 中文:
 定义 glueMetricApprox
@@ -410,7 +420,7 @@ uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_unif
   dist_triangle := glueDist_triangle Φ Ψ ε H
   eq_of_dist_eq_zero := eq_of_glueDist_eq_zero Φ Ψ ε ε0 _ _
   toUniformSpace := Sum.instUniformSpace
-uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_unif
+uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_uniformity_iff_glueDist ε0
 
 Depends on / 依赖: glueDist
 -/
@@ -560,7 +570,12 @@ theorem Sum.mem_uniformity
     rcases mem_uniformity_dist.1 hsY with ⟨εY, εY0, hY⟩
     refine ⟨min (min εX εY) 1, lt_min (lt_min εX0 εY0) zero_lt_one, ?_⟩
     rintro (a | a) (b | b) h
-    · exact hX (lt_of_lt_of_le h (le_trans (min_
+    · exact hX (lt_of_lt_of_le h (le_trans (min_le_left _ _) (min_le_left _ _)))
+    · cases not_le_of_gt (lt_of_lt_of_le h (min_le_right _ _)) Sum.one_le_dist_inl_inr
+    · cases not_le_of_gt (lt_of_lt_of_le h (min_le_right _ _)) Sum.one_le_dist_inr_inl
+    · exact hY (lt_of_lt_of_le h (le_trans (min_le_left _ _) (min_le_right _ _)))
+  · rintro ⟨ε, ε0, H⟩
+    constructor <;> rw [Filter.mem_map, mem_uniformity_dist] <;> exact ⟨ε, ε0, fun _ _ h => H _ _ h⟩
 
 中文:
 定理 和.mem_uniformity
@@ -572,7 +587,12 @@ theorem Sum.mem_uniformity
     rcases mem_uniformity_dist.1 hsY with ⟨εY, εY0, hY⟩
     refine ⟨min (min εX εY) 1, lt_min (lt_min εX0 εY0) zero_lt_one, ?_⟩
     rintro (a | a) (b | b) h
-    · exact hX (lt_of_lt_of_le h (le_trans (min_
+    · exact hX (lt_of_lt_of_le h (le_trans (min_le_left _ _) (min_le_left _ _)))
+    · cases not_le_of_gt (lt_of_lt_of_le h (min_le_right _ _)) Sum.one_le_dist_inl_inr
+    · cases not_le_of_gt (lt_of_lt_of_le h (min_le_right _ _)) Sum.one_le_dist_inr_inl
+    · exact hY (lt_of_lt_of_le h (le_trans (min_le_left _ _) (min_le_right _ _)))
+  · rintro ⟨ε, ε0, H⟩
+    constructor <;> rw [Filter.mem_map, mem_uniformity_dist] <;> exact ⟨ε, ε0, fun _ _ h => H _ _ h⟩
 -/
 private theorem Sum.mem_uniformity (s : Set ((X oplus Y) × (X oplus Y))) :
     s in 𝓤 (X oplus Y) ↔ exists ε > 0, forall a b, Sum.dist a b < ε -> (a, b) in s := by
@@ -609,7 +629,21 @@ definition metricSpaceSum
     | .inl p, .inr q, _ => by
       simp only [Sum.dist_eq_glueDist p q]
       exact glueDist_triangle _ _ _ (by simp) _ _ _
-    |
+    | _, .inl q, .inr r => by
+      simp only [Sum.dist_eq_glueDist q r]
+      exact glueDist_triangle _ _ _ (by simp) _ _ _
+    | .inr p, _, .inl r => by
+      simp only [Sum.dist_eq_glueDist r p]
+      exact glueDist_triangle _ _ _ (by simp) _ _ _
+    | .inr p, .inr q, .inr r => dist_triangle p q r
+  eq_of_dist_eq_zero {p q} h := by
+    rcases p with p | p <;> rcases q with q | q
+    · rw [eq_of_dist_eq_zero h]
+    · exact eq_of_glueDist_eq_zero _ _ _ one_pos _ _ ((Sum.dist_eq_glueDist p q).symm.trans h)
+    · exact eq_of_glueDist_eq_zero _ _ _ one_pos _ _ ((Sum.dist_eq_glueDist q p).symm.trans h)
+    · rw [eq_of_dist_eq_zero h]
+  toUniformSpace := Sum.instUniformSpace
+  uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_uniformity
 
 中文:
 定义 metricSpaceSum
@@ -622,7 +656,21 @@ definition metricSpaceSum
     | .inl p, .inr q, _ => by
       simp only [Sum.dist_eq_glueDist p q]
       exact glueDist_triangle _ _ _ (by simp) _ _ _
-    |
+    | _, .inl q, .inr r => by
+      simp only [Sum.dist_eq_glueDist q r]
+      exact glueDist_triangle _ _ _ (by simp) _ _ _
+    | .inr p, _, .inl r => by
+      simp only [Sum.dist_eq_glueDist r p]
+      exact glueDist_triangle _ _ _ (by simp) _ _ _
+    | .inr p, .inr q, .inr r => dist_triangle p q r
+  eq_of_dist_eq_zero {p q} h := by
+    rcases p with p | p <;> rcases q with q | q
+    · rw [eq_of_dist_eq_zero h]
+    · exact eq_of_glueDist_eq_zero _ _ _ one_pos _ _ ((Sum.dist_eq_glueDist p q).symm.trans h)
+    · exact eq_of_glueDist_eq_zero _ _ _ one_pos _ _ ((Sum.dist_eq_glueDist q p).symm.trans h)
+    · rw [eq_of_dist_eq_zero h]
+  toUniformSpace := Sum.instUniformSpace
+  uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_uniformity
 
 Depends on / 依赖: Sum.dist
 -/
@@ -878,7 +926,29 @@ theorem dist_triangle
     · simpa using dist_triangle x y z
     · simp only [Sigma.dist_same, Sigma.dist_ne hij, Sigma.dist_ne hij.symm]
       calc
-        dist x z <= dist
+        dist x z <= dist x (Nonempty.some ⟨x⟩) + 0 + 0 + (0 + 0 + dist (Nonempty.some ⟨z⟩) z) := by
+          simpa only [zero_add, add_zero] using dist_triangle _ _ _
+        _ <= _ := by apply_rules [add_le_add, le_rfl, dist_nonneg, zero_le_one]
+  · rcases eq_or_ne i j with (rfl | hij)
+    · simp only [Sigma.dist_ne hik, Sigma.dist_same]
+      calc
+        dist x (Nonempty.some ⟨x⟩) + 1 + dist (Nonempty.some ⟨z⟩) z <=
+            dist x y + dist y (Nonempty.some ⟨y⟩) + 1 + dist (Nonempty.some ⟨z⟩) z := by
+          apply_rules [add_le_add, le_rfl, dist_triangle]
+        _ = _ := by abel
+    · rcases eq_or_ne j k with (rfl | hjk)
+      · simp only [Sigma.dist_ne hij, Sigma.dist_same]
+        calc
+          dist x (Nonempty.some ⟨x⟩) + 1 + dist (Nonempty.some ⟨z⟩) z <=
+              dist x (Nonempty.some ⟨x⟩) + 1 + (dist (Nonempty.some ⟨z⟩) y + dist y z) := by
+            apply_rules [add_le_add, le_rfl, dist_triangle]
+          _ = _ := by abel
+      · simp only [hik, hij, hjk, Sigma.dist_ne, Ne, not_false_iff]
+        calc
+          dist x (Nonempty.some ⟨x⟩) + 1 + dist (Nonempty.some ⟨z⟩) z =
+              dist x (Nonempty.some ⟨x⟩) + 1 + 0 + (0 + 0 + dist (Nonempty.some ⟨z⟩) z) := by
+            simp only [add_zero, zero_add]
+          _ <= _ := by apply_rules [add_le_add, zero_le_one, dist_nonneg, le_rfl]
 
 中文:
 定理 dist_triangle
@@ -891,7 +961,29 @@ theorem dist_triangle
     · simpa using dist_triangle x y z
     · simp only [Sigma.dist_same, Sigma.dist_ne hij, Sigma.dist_ne hij.symm]
       calc
-        dist x z <= dist
+        dist x z <= dist x (Nonempty.some ⟨x⟩) + 0 + 0 + (0 + 0 + dist (Nonempty.some ⟨z⟩) z) := by
+          simpa only [zero_add, add_zero] using dist_triangle _ _ _
+        _ <= _ := by apply_rules [add_le_add, le_rfl, dist_nonneg, zero_le_one]
+  · rcases eq_or_ne i j with (rfl | hij)
+    · simp only [Sigma.dist_ne hik, Sigma.dist_same]
+      calc
+        dist x (Nonempty.some ⟨x⟩) + 1 + dist (Nonempty.some ⟨z⟩) z <=
+            dist x y + dist y (Nonempty.some ⟨y⟩) + 1 + dist (Nonempty.some ⟨z⟩) z := by
+          apply_rules [add_le_add, le_rfl, dist_triangle]
+        _ = _ := by abel
+    · rcases eq_or_ne j k with (rfl | hjk)
+      · simp only [Sigma.dist_ne hij, Sigma.dist_same]
+        calc
+          dist x (Nonempty.some ⟨x⟩) + 1 + dist (Nonempty.some ⟨z⟩) z <=
+              dist x (Nonempty.some ⟨x⟩) + 1 + (dist (Nonempty.some ⟨z⟩) y + dist y z) := by
+            apply_rules [add_le_add, le_rfl, dist_triangle]
+          _ = _ := by abel
+      · simp only [hik, hij, hjk, Sigma.dist_ne, Ne, not_false_iff]
+        calc
+          dist x (Nonempty.some ⟨x⟩) + 1 + dist (Nonempty.some ⟨z⟩) z =
+              dist x (Nonempty.some ⟨x⟩) + 1 + 0 + (0 + 0 + dist (Nonempty.some ⟨z⟩) z) := by
+            simp only [add_zero, zero_add]
+          _ <= _ := by apply_rules [add_le_add, zero_le_one, dist_nonneg, le_rfl]
 -/
 protected theorem dist_triangle (x y z : Σ i, E i) : dist x z <= dist x y + dist y z := by
   rcases x with ⟨i, x⟩; rcases y with ⟨j, y⟩; rcases z with ⟨k, z⟩
@@ -938,7 +1030,19 @@ theorem isOpen_iff
     refine ⟨min ε 1, lt_min εpos zero_lt_one, ?_⟩
     rintro ⟨j, y⟩ hy
     rcases eq_or_ne i j with (rfl | hij)
-    · simp 
+    · simp only [Sigma.dist_same, lt_min_iff] at hy
+      exact hε (mem_ball'.2 hy.1)
+    · apply (lt_irrefl (1 : Real) _).elim
+      calc
+        1 <= Sigma.dist ⟨i, x⟩ ⟨j, y⟩ := Sigma.one_le_dist_of_ne hij _ _
+        _ < 1 := hy.trans_le (min_le_right _ _)
+  · refine fun H => isOpen_sigma_iff.2 fun i => Metric.isOpen_iff.2 fun x hx => ?_
+    obtain ⟨ε, εpos, hε⟩ : exists ε > 0, forall y, dist (⟨i, x⟩ : Σ j, E j) y < ε -> y in s :=
+      H ⟨i, x⟩ hx
+    refine ⟨ε, εpos, fun y hy => ?_⟩
+    apply hε ⟨i, y⟩
+    rw [Sigma.dist_same]
+    exact mem_ball'.1 hy
 
 中文:
 定理 isOpen_iff
@@ -951,7 +1055,19 @@ theorem isOpen_iff
     refine ⟨min ε 1, lt_min εpos zero_lt_one, ?_⟩
     rintro ⟨j, y⟩ hy
     rcases eq_or_ne i j with (rfl | hij)
-    · simp 
+    · simp only [Sigma.dist_same, lt_min_iff] at hy
+      exact hε (mem_ball'.2 hy.1)
+    · apply (lt_irrefl (1 : Real) _).elim
+      calc
+        1 <= Sigma.dist ⟨i, x⟩ ⟨j, y⟩ := Sigma.one_le_dist_of_ne hij _ _
+        _ < 1 := hy.trans_le (min_le_right _ _)
+  · refine fun H => isOpen_sigma_iff.2 fun i => Metric.isOpen_iff.2 fun x hx => ?_
+    obtain ⟨ε, εpos, hε⟩ : exists ε > 0, forall y, dist (⟨i, x⟩ : Σ j, E j) y < ε -> y in s :=
+      H ⟨i, x⟩ hx
+    refine ⟨ε, εpos, fun y hy => ?_⟩
+    apply hε ⟨i, y⟩
+    rw [Sigma.dist_same]
+    exact mem_ball'.1 hy
 -/
 protected theorem isOpen_iff (s : Set (Σ i, E i)) :
     IsOpen s ↔ forall x in s, exists ε > 0, forall y, dist x y < ε -> y in s := by
@@ -995,7 +1111,16 @@ definition metricSpace
   · rintro ⟨i, x⟩ ⟨j, y⟩
     rcases eq_or_ne i j with (rfl | h)
     · simp [Sigma.dist, dist_comm]
-    · simp only [Sigma.dist, dist_comm, h, h.symm, not_false_iff,
+    · simp only [Sigma.dist, dist_comm, h, h.symm, not_false_iff, dif_neg]
+      abel
+  · rintro ⟨i, x⟩ ⟨j, y⟩
+    rcases eq_or_ne i j with (rfl | hij)
+    · simp [Sigma.dist]
+    · intro h
+      apply (lt_irrefl (1 : Real) _).elim
+      calc
+        1 <= Sigma.dist (⟨i, x⟩ : Σ k, E k) ⟨j, y⟩ := Sigma.one_le_dist_of_ne hij _ _
+        _ < 1 := by rw [h]; exact zero_lt_one
 
 中文:
 定义 metricSpace
@@ -1007,7 +1132,16 @@ definition metricSpace
   · rintro ⟨i, x⟩ ⟨j, y⟩
     rcases eq_or_ne i j with (rfl | h)
     · simp [Sigma.dist, dist_comm]
-    · simp only [Sigma.dist, dist_comm, h, h.symm, not_false_iff,
+    · simp only [Sigma.dist, dist_comm, h, h.symm, not_false_iff, dif_neg]
+      abel
+  · rintro ⟨i, x⟩ ⟨j, y⟩
+    rcases eq_or_ne i j with (rfl | hij)
+    · simp [Sigma.dist]
+    · intro h
+      apply (lt_irrefl (1 : Real) _).elim
+      calc
+        1 <= Sigma.dist (⟨i, x⟩ : Σ k, E k) ⟨j, y⟩ := Sigma.one_le_dist_of_ne hij _ _
+        _ < 1 := by rw [h]; exact zero_lt_one
 -/
 protected def metricSpace : MetricSpace (Σ i, E i) := by
   refine MetricSpace.ofDistTopology Sigma.dist ?_ ?_ Sigma.dist_triangle Sigma.isOpen_iff ?_
@@ -1066,7 +1200,11 @@ theorem completeSpace
   have hc : forall i, IsComplete (s i) := fun i => by
     simp only [s, ← range_sigmaMk]
     exact (isometry_mk i).isUniformInducing.isComplete_range
-  have hd : forall (i j), f
+  have hd : forall (i j), forall x in s i, forall y in s j, (x, y) in U -> i = j := fun i j x hx y hy hxy =>
+    (Eq.symm hx).trans ((fst_eq_of_dist_lt_one _ _ hxy).trans hy)
+  refine completeSpace_of_isComplete_univ ?_
+  convert! isComplete_iUnion_separated hc (dist_mem_uniformity zero_lt_one) hd
+  simp only [s, ← preimage_iUnion, iUnion_of_singleton, preimage_univ]
 
 中文:
 定理 completeSpace
@@ -1078,7 +1216,11 @@ theorem completeSpace
   have hc : forall i, IsComplete (s i) := fun i => by
     simp only [s, ← range_sigmaMk]
     exact (isometry_mk i).isUniformInducing.isComplete_range
-  have hd : forall (i j), f
+  have hd : forall (i j), forall x in s i, forall y in s j, (x, y) in U -> i = j := fun i j x hx y hy hxy =>
+    (Eq.symm hx).trans ((fst_eq_of_dist_lt_one _ _ hxy).trans hy)
+  refine completeSpace_of_isComplete_univ ?_
+  convert! isComplete_iUnion_separated hc (dist_mem_uniformity zero_lt_one) hd
+  simp only [s, ← preimage_iUnion, iUnion_of_singleton, preimage_univ]
 -/
 protected theorem completeSpace [forall i, CompleteSpace (E i)] : CompleteSpace (Σ i, E i) := by
   set s : ι -> Set (Σ i, E i) := fun i => Sigma.fst ⁻¹' {i}
@@ -1366,7 +1508,12 @@ theorem inductiveLimitDist_eq_dist
     · generalize m + 1 = m' at *
       subst m'
       rfl
-    · have : max x.1 y.1 <= succ m := by simp [
+    · have : max x.1 y.1 <= succ m := by simp [hx, hy]
+      have : max x.1 y.1 <= m := by simpa [h] using of_le_succ this
+      have xm : x.1 <= m := le_trans (le_max_left _ _) this
+      have ym : y.1 <= m := le_trans (le_max_right _ _) this
+      rw [leRecOn_succ xm]; rw [leRecOn_succ ym]; rw [(I m).dist_eq]
+      exact inductiveLimitDist_eq_dist I x y m xm ym
 
 中文:
 定理 inductiveLimitDist_eq_dist
@@ -1380,7 +1527,12 @@ theorem inductiveLimitDist_eq_dist
     · generalize m + 1 = m' at *
       subst m'
       rfl
-    · have : max x.1 y.1 <= succ m := by simp [
+    · have : max x.1 y.1 <= succ m := by simp [hx, hy]
+      have : max x.1 y.1 <= m := by simpa [h] using of_le_succ this
+      have xm : x.1 <= m := le_trans (le_max_left _ _) this
+      have ym : y.1 <= m := le_trans (le_max_right _ _) this
+      rw [leRecOn_succ xm]; rw [leRecOn_succ ym]; rw [(I m).dist_eq]
+      exact inductiveLimitDist_eq_dist I x y m xm ym
 -/
 theorem inductiveLimitDist_eq_dist (I : forall n, Isometry (f n)) (x y : Σ n, X n) :
     forall m (hx : x.1 <= m) (hy : y.1 <= m), inductiveLimitDist f x y =
@@ -1416,7 +1568,20 @@ definition inductivePremetric
     let m := max x.1 y.1
     have hx : x.1 <= m := le_max_left _ _
     have hy : y.1 <= m := le_max_right _ _
-    rw [inductiveLimitDist_eq_dist I x y m hx hy]; rw [inductiveLimitDist_eq_dist I y x m hy hx]; rw 
+    rw [inductiveLimitDist_eq_dist I x y m hx hy]; rw [inductiveLimitDist_eq_dist I y x m hy hx]; rw [dist_comm]
+  dist_triangle x y z := by
+    let m := max (max x.1 y.1) z.1
+    have hx : x.1 <= m := le_trans (le_max_left _ _) (le_max_left _ _)
+    have hy : y.1 <= m := le_trans (le_max_right _ _) (le_max_left _ _)
+    have hz : z.1 <= m := le_max_right _ _
+    calc
+      inductiveLimitDist f x z = dist (leRecOn hx (f _) x.2 : X m) (leRecOn hz (f _) z.2 : X m) :=
+        inductiveLimitDist_eq_dist I x z m hx hz
+      _ <= dist (leRecOn hx (f _) x.2 : X m) (leRecOn hy (f _) y.2 : X m) +
+            dist (leRecOn hy (f _) y.2 : X m) (leRecOn hz (f _) z.2 : X m) :=
+        (dist_triangle _ _ _)
+      _ = inductiveLimitDist f x y + inductiveLimitDist f y z := by
+        rw [inductiveLimitDist_eq_dist I x y m hx hy]; rw [inductiveLimitDist_eq_dist I y z m hy hz]
 
 中文:
 定义 inductivePremetric
@@ -1427,7 +1592,20 @@ definition inductivePremetric
     let m := max x.1 y.1
     have hx : x.1 <= m := le_max_left _ _
     have hy : y.1 <= m := le_max_right _ _
-    rw [inductiveLimitDist_eq_dist I x y m hx hy]; rw [inductiveLimitDist_eq_dist I y x m hy hx]; rw 
+    rw [inductiveLimitDist_eq_dist I x y m hx hy]; rw [inductiveLimitDist_eq_dist I y x m hy hx]; rw [dist_comm]
+  dist_triangle x y z := by
+    let m := max (max x.1 y.1) z.1
+    have hx : x.1 <= m := le_trans (le_max_left _ _) (le_max_left _ _)
+    have hy : y.1 <= m := le_trans (le_max_right _ _) (le_max_left _ _)
+    have hz : z.1 <= m := le_max_right _ _
+    calc
+      inductiveLimitDist f x z = dist (leRecOn hx (f _) x.2 : X m) (leRecOn hz (f _) z.2 : X m) :=
+        inductiveLimitDist_eq_dist I x z m hx hz
+      _ <= dist (leRecOn hx (f _) x.2 : X m) (leRecOn hy (f _) y.2 : X m) +
+            dist (leRecOn hy (f _) y.2 : X m) (leRecOn hz (f _) z.2 : X m) :=
+        (dist_triangle _ _ _)
+      _ = inductiveLimitDist f x y + inductiveLimitDist f y z := by
+        rw [inductiveLimitDist_eq_dist I x y m hx hy]; rw [inductiveLimitDist_eq_dist I y z m hy hz]
 
 Depends on / 依赖: inductiveLimitDist
 -/
@@ -1534,7 +1712,10 @@ theorem toInductiveLimit_commute
   simp only [comp, toInductiveLimit]
   refine SeparationQuotient.mk_eq_mk.2 (Metric.inseparable_iff.2 ?_)
   change inductiveLimitDist f ⟨n.succ, f n x⟩ ⟨n, x⟩ = 0
-  rw [inductiveLimitDist_eq_dist I ⟨n.succ];
+  rw [inductiveLimitDist_eq_dist I ⟨n.succ]; rw [f n x⟩ ⟨n]; rw [x⟩ n.succ]; rw [leRecOn_self]; rw [leRecOn_succ]; rw [leRecOn_self]; rw [dist_self]
+  · rfl
+  · rfl
+  · exact le_succ _
 
 中文:
 定理 toInductiveLimit_commute
@@ -1546,7 +1727,10 @@ theorem toInductiveLimit_commute
   simp only [comp, toInductiveLimit]
   refine SeparationQuotient.mk_eq_mk.2 (Metric.inseparable_iff.2 ?_)
   change inductiveLimitDist f ⟨n.succ, f n x⟩ ⟨n, x⟩ = 0
-  rw [inductiveLimitDist_eq_dist I ⟨n.succ];
+  rw [inductiveLimitDist_eq_dist I ⟨n.succ]; rw [f n x⟩ ⟨n]; rw [x⟩ n.succ]; rw [leRecOn_self]; rw [leRecOn_succ]; rw [leRecOn_self]; rw [dist_self]
+  · rfl
+  · rfl
+  · exact le_succ _
 
 Depends on / 依赖: Metric, Metric.inseparable_iff, SeparationQuotient, SeparationQuotient.mk_eq_mk, dist_self, h.toUniformSpace.toTopologicalSpace, inductiveLimitDist, inductiveLimitDist_eq_dist, inductivePremetric, inseparable_iff, leRecOn_self, leRecOn_succ, le_succ, mk_eq_mk, n.succ, toInductiveLimit, toTopologicalSpace, toUniformSpace
 -/
@@ -1601,7 +1785,10 @@ theorem separableSpaceInductiveLimit_of_separableSpace
   let s := ⋃ (i : Nat), (toInductiveLimit I i '' (hsX i))
   refine ⟨s, countable_iUnion (fun n => (hcX n).image _), ?_⟩
 refine .of_closure (dense_iUnion_range_toInductiveLimit I).mono iUnion_subset fun i => ?_
-  c
+  calc
+    range (toInductiveLimit I i) subseteq closure (toInductiveLimit I i '' (hsX i)) :=
+      (toInductiveLimit_isometry I i |>.continuous).range_subset_closure_image_dense (hdX i)
+_ subseteq closure s := closure_mono subset_iUnion (fun j => toInductiveLimit I j '' hsX j) i
 
 中文:
 定理 separableSpaceInductiveLimit_of_separableSpace
@@ -1610,7 +1797,10 @@ refine .of_closure (dense_iUnion_range_toInductiveLimit I).mono iUnion_subset fu
   let s := ⋃ (i : Nat), (toInductiveLimit I i '' (hsX i))
   refine ⟨s, countable_iUnion (fun n => (hcX n).image _), ?_⟩
 refine .of_closure (dense_iUnion_range_toInductiveLimit I).mono iUnion_subset fun i => ?_
-  c
+  calc
+    range (toInductiveLimit I i) subseteq closure (toInductiveLimit I i '' (hsX i)) :=
+      (toInductiveLimit_isometry I i |>.continuous).range_subset_closure_image_dense (hdX i)
+_ subseteq closure s := closure_mono subset_iUnion (fun j => toInductiveLimit I j '' hsX j) i
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.exists_countable_dense, closure, closure_mo, continuous, countable_iUnion, dense_iUnion_range_toInductiveLimit, exists_countable_dense, iUnion_subset, of_closure, range_subset_closure_image_dense, subseteq, toInductiveLimit, toInductiveLimit_isometry
 -/

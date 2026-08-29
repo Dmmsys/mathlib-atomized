@@ -54,7 +54,10 @@ definition distribHaarChar
     map_mul' g g' := by
       simp_rw [DomMulAct.mk_mul]
       rw [addHaarScalarFactor_eq_mul _ (DomMulAct.mk g' • addHaar (G := A))]
-      con
+      congr 1
+      simp_rw [mul_smul]
+      rw [addHaarScalarFactor_domSMul]
+  }
 
 中文:
 定义 distribHaarChar
@@ -67,7 +70,10 @@ definition distribHaarChar
     map_mul' g g' := by
       simp_rw [DomMulAct.mk_mul]
       rw [addHaarScalarFactor_eq_mul _ (DomMulAct.mk g' • addHaar (G := A))]
-      con
+      congr 1
+      simp_rw [mul_smul]
+      rw [addHaarScalarFactor_domSMul]
+  }
 
 Depends on / 依赖: BorelSpace, DomMulAct, DomMulAct.mk, DomMulAct.mk_mul, addHaar, addHaarScalarFactor, addHaarScalarFactor_domSMul, addHaarScalarFactor_eq_mul, map_mul, map_one, mk_mul, mul_smul, simp_rw
 -/

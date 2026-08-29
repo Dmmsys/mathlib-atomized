@@ -191,7 +191,35 @@ lemma exists_one_add_mul_pow_prime_eq
   simp_rw [one_pow, pow_zero, Nat.choose_zero_right, Nat.cast_one, mul_one]
   rw [← Finset.add_sum_erase (a := 1) _ _ (by simp [hp.pos])]
   rw [← Finset.sum_erase_add (a := p) _ _ (by -- aesop works but is slow
-   
+      simp only [Finset.mem_erase]
+      rw [← and_assoc]; rw [and_comm (a := ¬ _)]; rw [← Nat.two_le_iff]
+      simp [hp.two_le])]
+  obtain ⟨a, ha⟩ := hvu
+  obtain ⟨b, hb⟩ := hpuv
+  use a * x ^ 2 * ∑ i in (((Finset.range (p + 1)).erase 0).erase 1).erase p,
+    (u * x) ^ (i - 2) * (p.choose i / p : Nat) + b * x ^ p
+  rw [mul_add]
+  congr 2
+  · rw [Nat.choose_one_right]; ring
+  simp only [mul_add, Finset.mul_sum]
+  congr 1
+  · congr! 1 with i hi
+    simp only [Finset.mem_erase, ne_eq, Finset.mem_range] at hi
+    have hi' : 2 <= i := by lia
+    calc
+      (u * x) ^ i * p.choose i =
+        (u * x) ^ (2 + (i - 2)) * p.choose i := by rw [Nat.add_sub_of_le hi']
+      _ = u ^ 2 * x ^ 2 * (u * x) ^ (i - 2) * p.choose i := by ring_nf
+      _ = u ^ 2 * x ^ 2 * (u * x) ^ (i - 2) * (p * (p.choose i / p) : Nat) := by
+        rw [Nat.mul_div_cancel' (hp.dvd_choose_self hi.2.2.1 <| by lia)]
+      _ = u ^ 2 * x ^ 2 * (u * x) ^ (i - 2) * p * (p.choose i / p : Nat) := by
+        simp only [Nat.cast_mul]; ring_nf
+      _ = p * u * (v * (a * x ^ 2 * ((u * x) ^ (i - 2) * (p.choose i / p : Nat)))) := by
+        rw [ha]; ring
+  · calc
+      (u * x) ^ p * (p.choose p) = u ^ p * x ^ p := by simp [Nat.choose_self, mul_pow]
+    _ = p * u * v * b * x ^ p := by rw [hb]
+    _ = p * u * (v * (b * x ^ p)) := by ring_nf
 
 中文:
 引理 存在_one_add_mul_pow_prime_eq
@@ -201,7 +229,35 @@ lemma exists_one_add_mul_pow_prime_eq
   simp_rw [one_pow, pow_zero, Nat.choose_zero_right, Nat.cast_one, mul_one]
   rw [← Finset.add_sum_erase (a := 1) _ _ (by simp [hp.pos])]
   rw [← Finset.sum_erase_add (a := p) _ _ (by -- aesop works but is slow
-   
+      simp only [Finset.mem_erase]
+      rw [← and_assoc]; rw [and_comm (a := ¬ _)]; rw [← Nat.two_le_iff]
+      simp [hp.two_le])]
+  obtain ⟨a, ha⟩ := hvu
+  obtain ⟨b, hb⟩ := hpuv
+  use a * x ^ 2 * ∑ i in (((Finset.range (p + 1)).erase 0).erase 1).erase p,
+    (u * x) ^ (i - 2) * (p.choose i / p : Nat) + b * x ^ p
+  rw [mul_add]
+  congr 2
+  · rw [Nat.choose_one_right]; ring
+  simp only [mul_add, Finset.mul_sum]
+  congr 1
+  · congr! 1 with i hi
+    simp only [Finset.mem_erase, ne_eq, Finset.mem_range] at hi
+    have hi' : 2 <= i := by lia
+    calc
+      (u * x) ^ i * p.choose i =
+        (u * x) ^ (2 + (i - 2)) * p.choose i := by rw [Nat.add_sub_of_le hi']
+      _ = u ^ 2 * x ^ 2 * (u * x) ^ (i - 2) * p.choose i := by ring_nf
+      _ = u ^ 2 * x ^ 2 * (u * x) ^ (i - 2) * (p * (p.choose i / p) : Nat) := by
+        rw [Nat.mul_div_cancel' (hp.dvd_choose_self hi.2.2.1 <| by lia)]
+      _ = u ^ 2 * x ^ 2 * (u * x) ^ (i - 2) * p * (p.choose i / p : Nat) := by
+        simp only [Nat.cast_mul]; ring_nf
+      _ = p * u * (v * (a * x ^ 2 * ((u * x) ^ (i - 2) * (p.choose i / p : Nat)))) := by
+        rw [ha]; ring
+  · calc
+      (u * x) ^ p * (p.choose p) = u ^ p * x ^ p := by simp [Nat.choose_self, mul_pow]
+    _ = p * u * v * b * x ^ p := by rw [hb]
+    _ = p * u * (v * (b * x ^ p)) := by ring_nf
 
 Depends on / 依赖: Finset, Finset.add_sum_erase, Finset.mem_erase, Finset.range, Finset.sum_erase_add, Nat.cast_one, Nat.choose_zero_right, Nat.two_le_iff, add_comm, add_pow, add_sum_erase, and_assoc, and_comm, cast_one, choose_zero_right, hp.pos, hp.two_le, mem_erase, mul_one, one_pow
 -/
@@ -259,7 +315,16 @@ lemma exists_one_add_mul_pow_prime_pow_eq
       exists_one_add_mul_pow_prime_pow_eq (u := p * u) (v := p * v) hp
       (mul_dvd_mul_left _ hvu)
       (by
-  
+        rw [mul_pow]
+        simp only [← mul_assoc]
+        rw [mul_assoc]; rw [mul_assoc]; rw [← mul_assoc u]; rw [mul_comm u]
+        apply mul_dvd_mul _ hpuv
+        rw [← pow_two]
+        exact pow_dvd_pow _ hp.two_le)
+      (x + v * y) m
+    use y + p * z
+    rw [hz]
+    ring
 
 中文:
 引理 存在_one_add_mul_pow_prime_pow_eq
@@ -274,7 +339,16 @@ lemma exists_one_add_mul_pow_prime_pow_eq
       exists_one_add_mul_pow_prime_pow_eq (u := p * u) (v := p * v) hp
       (mul_dvd_mul_left _ hvu)
       (by
-  
+        rw [mul_pow]
+        simp only [← mul_assoc]
+        rw [mul_assoc]; rw [mul_assoc]; rw [← mul_assoc u]; rw [mul_comm u]
+        apply mul_dvd_mul _ hpuv
+        rw [← pow_two]
+        exact pow_dvd_pow _ hp.two_le)
+      (x + v * y) m
+    use y + p * z
+    rw [hz]
+    ring
 
 Depends on / 依赖: exists_one_add_mul_pow_prime_eq, exists_one_add_mul_pow_prime_pow_eq, hp.two_le, mul_assoc, mul_comm, mul_dvd_mul, mul_dvd_mul_left, mul_pow, pow_dvd_pow, pow_mul, pow_succ, pow_two, two_le
 -/
@@ -320,7 +394,16 @@ theorem orderOf_one_add_mul_prime_pow
     have := exists_one_add_mul_pow_prime_pow_eq
       (R := ZMod (p ^ (n + 1 + m))) (u := p ^ m) (v := p) hp (dvd_pow_self _ hm0) ?_ a
     · apply orderOf_eq_prime_pow
-      · obta
+      · obtain ⟨y, hy⟩ := this n
+        rw [hy]; rw [← pow_add]; rw [add_eq_left]; rw [mul_add]; rw [← mul_assoc]; rw [← pow_succ]
+        simp_rw [add_right_comm n _ 1, ← Nat.cast_pow, ZMod.natCast_self, zero_mul, add_zero]
+        rwa [← Int.cast_natCast, ← Int.cast_mul, ZMod.intCast_zmod_eq_zero_iff_dvd, add_right_comm,
+          pow_succ, Nat.cast_mul, Int.mul_dvd_mul_iff_left (by simp [hp.ne_zero])]
+      · obtain ⟨y, hy⟩ := this (n + 1)
+        rw [hy]; rw [← pow_add]; rw [← Nat.cast_pow]
+        simp
+    · rw [← pow_succ', ← pow_succ, ← pow_mul, mul_comm]
+      exact pow_dvd_pow _ hpm
 
 中文:
 定理 orderOf_one_add_mul_prime_pow
@@ -333,7 +416,16 @@ theorem orderOf_one_add_mul_prime_pow
     have := exists_one_add_mul_pow_prime_pow_eq
       (R := ZMod (p ^ (n + 1 + m))) (u := p ^ m) (v := p) hp (dvd_pow_self _ hm0) ?_ a
     · apply orderOf_eq_prime_pow
-      · obta
+      · obtain ⟨y, hy⟩ := this n
+        rw [hy]; rw [← pow_add]; rw [add_eq_left]; rw [mul_add]; rw [← mul_assoc]; rw [← pow_succ]
+        simp_rw [add_right_comm n _ 1, ← Nat.cast_pow, ZMod.natCast_self, zero_mul, add_zero]
+        rwa [← Int.cast_natCast, ← Int.cast_mul, ZMod.intCast_zmod_eq_zero_iff_dvd, add_right_comm,
+          pow_succ, Nat.cast_mul, Int.mul_dvd_mul_iff_left (by simp [hp.ne_zero])]
+      · obtain ⟨y, hy⟩ := this (n + 1)
+        rw [hy]; rw [← pow_add]; rw [← Nat.cast_pow]
+        simp
+    · rw [← pow_succ', ← pow_succ, ← pow_mul, mul_comm]
+      exact pow_dvd_pow _ hpm
 
 Depends on / 依赖: Fact.mk, Int.c, Int.cast_natCast, Nat.cast_pow, ZMod.natCast_self, add_eq_left, add_right_comm, add_zero, cast_natCast, cast_pow, dvd_pow_self, exists_one_add_mul_pow_prime_pow_eq, mul_add, mul_assoc, natCast_self, orderOf_eq_prime_pow, pow_add, pow_succ, simp_rw, zero_add
 -/
@@ -432,7 +524,28 @@ theorem isCyclic_units_of_prime_pow
   -- We first consider the element `1 + p` of order `p ^ n`
   set a := (1 + p : ZMod (p ^ (n + 1))) with ha_def
   have ha : IsUnit a := by
-    rw [ha_def]; rw [← Nat.cast_one (R := ZMod _)]; rw [← Nat.cast_add]; rw [ZMod
+    rw [ha_def]; rw [← Nat.cast_one (R := ZMod _)]; rw [← Nat.cast_add]; rw [ZMod.isUnit_iff_coprime]
+    apply Nat.Coprime.pow_right
+    simp only [Nat.coprime_add_self_left, Nat.coprime_one_left_eq_true]
+  have ha' : orderOf ha.unit = p ^ n := by
+    rw [← orderOf_injective _ Units.coeHom_injective ha.unit]; rw [Units.coeHom_apply]; rw [IsUnit.unit_spec]
+    exact orderOf_one_add_prime hp hp2 n
+  -- We lift a primitive root of unity mod `p`, an adequate power of which has order `p - 1`.
+  obtain ⟨c, hc⟩ := isCyclic_iff_exists_orderOf_eq_natCard.mp (isCyclic_units_prime hp)
+  rw [Nat.card_eq_fintype_card]; rw [ZMod.card_units] at hc
+  obtain ⟨(b : (ZMod (p ^ (n + 1)))ˣ), rfl⟩ :=
+    ZMod.unitsMap_surjective (Dvd.intro_left (p ^ n) rfl) c
+  have : p - 1 ∣ orderOf b := hc ▸ orderOf_map_dvd _ b
+  let k := orderOf b / (p - 1)
+  have : orderOf (b ^ k) = p - 1 := orderOf_pow_orderOf_div (orderOf_pos b).ne' this
+  rw [isCyclic_iff_exists_orderOf_eq_natCard]
+  -- The product of `ha.unit` and `b ^ k` has the required order
+  use ha.unit * b ^ k
+  rw [(Commute.all _ _).orderOf_mul_eq_mul_orderOf_of_coprime]; rw [this]; rw [Nat.card_eq_fintype_card]; rw [ZMod.card_units_eq_totient]; rw [Nat.totient_prime_pow_succ hp]; rw [← ha']
+  rw [ha']; rw [this]
+  apply Nat.Coprime.pow_left
+  rw [Nat.coprime_self_sub_right hp.pos]
+  simp
 
 中文:
 定理 isCyclic_units_of_prime_pow
@@ -444,7 +557,28 @@ theorem isCyclic_units_of_prime_pow
   -- We first consider the element `1 + p` of order `p ^ n`
   set a := (1 + p : ZMod (p ^ (n + 1))) with ha_def
   have ha : IsUnit a := by
-    rw [ha_def]; rw [← Nat.cast_one (R := ZMod _)]; rw [← Nat.cast_add]; rw [ZMod
+    rw [ha_def]; rw [← Nat.cast_one (R := ZMod _)]; rw [← Nat.cast_add]; rw [ZMod.isUnit_iff_coprime]
+    apply Nat.Coprime.pow_right
+    simp only [Nat.coprime_add_self_left, Nat.coprime_one_left_eq_true]
+  have ha' : orderOf ha.unit = p ^ n := by
+    rw [← orderOf_injective _ Units.coeHom_injective ha.unit]; rw [Units.coeHom_apply]; rw [IsUnit.unit_spec]
+    exact orderOf_one_add_prime hp hp2 n
+  -- We lift a primitive root of unity mod `p`, an adequate power of which has order `p - 1`.
+  obtain ⟨c, hc⟩ := isCyclic_iff_exists_orderOf_eq_natCard.mp (isCyclic_units_prime hp)
+  rw [Nat.card_eq_fintype_card]; rw [ZMod.card_units] at hc
+  obtain ⟨(b : (ZMod (p ^ (n + 1)))ˣ), rfl⟩ :=
+    ZMod.unitsMap_surjective (Dvd.intro_left (p ^ n) rfl) c
+  have : p - 1 ∣ orderOf b := hc ▸ orderOf_map_dvd _ b
+  let k := orderOf b / (p - 1)
+  have : orderOf (b ^ k) = p - 1 := orderOf_pow_orderOf_div (orderOf_pos b).ne' this
+  rw [isCyclic_iff_exists_orderOf_eq_natCard]
+  -- The product of `ha.unit` and `b ^ k` has the required order
+  use ha.unit * b ^ k
+  rw [(Commute.all _ _).orderOf_mul_eq_mul_orderOf_of_coprime]; rw [this]; rw [Nat.card_eq_fintype_card]; rw [ZMod.card_units_eq_totient]; rw [Nat.totient_prime_pow_succ hp]; rw [← ha']
+  rw [ha']; rw [this]
+  apply Nat.Coprime.pow_left
+  rw [Nat.coprime_self_sub_right hp.pos]
+  simp
 
 Depends on / 依赖: Fact.mk, infer_instance, pow_zero
 -/
@@ -494,7 +628,8 @@ theorem isCyclic_units_two_pow_iff
     simp only [Nat.reduceLeDiff, iff_false]
     intro H
     apply not_isCyclic_units_eight
-    have h : 2 ^ 3 ∣ 2 ^ (n + 3) := pow_dvd_pow _ (by li
+    have h : 2 ^ 3 ∣ 2 ^ (n + 3) := pow_dvd_pow _ (by lia)
+    exact isCyclic_of_surjective _ (unitsMap_surjective h)
 
 中文:
 定理 isCyclic_units_two_pow_iff
@@ -508,7 +643,8 @@ theorem isCyclic_units_two_pow_iff
     simp only [Nat.reduceLeDiff, iff_false]
     intro H
     apply not_isCyclic_units_eight
-    have h : 2 ^ 3 ∣ 2 ^ (n + 3) := pow_dvd_pow _ (by li
+    have h : 2 ^ 3 ∣ 2 ^ (n + 3) := pow_dvd_pow _ (by lia)
+    exact isCyclic_of_surjective _ (unitsMap_surjective h)
 
 Depends on / 依赖: Nat.prime_two, Nat.reduceLeDiff, iff_false, isCyclic_of_surjective, isCyclic_units_four, isCyclic_units_one, isCyclic_units_prime, not_isCyclic_units_eight, pow_dvd_pow, prime_two, reduceLeDiff, unitsMap_surjective
 -/
@@ -595,7 +731,15 @@ theorem isCyclic_units_four_mul_iff
   obtain ⟨n, rfl⟩ | h2n := em (2 ∣ n)
   · rw [← mul_assoc]
     have : NeZero n := ⟨by simpa using hn0⟩
-    refine mt (f
+    refine mt (fun _ => ?_) not_isCyclic_units_eight
+    exact isCyclic_of_surjective _ (ZMod.unitsMap_surjective (m := 4 * 2 * n) (dvd_mul_right 8 _))
+  have : Nat.Coprime 4 n := (Nat.prime_two.coprime_iff_not_dvd.mpr h2n).pow_left 2
+  rw [((Units.mapEquiv (chineseRemainder this).toMulEquiv).trans .prodUnits).isCyclic]; rw [Group.isCyclic_prod_iff]
+  rintro ⟨-, -, h⟩
+  have : NeZero n := ⟨hn0⟩
+  have : Odd (φ n) := by simpa [show φ 4 = 2 from rfl] using h
+  rw [Nat.odd_totient_iff] at this
+  lia
 
 中文:
 定理 isCyclic_units_four_mul_iff
@@ -609,7 +753,15 @@ theorem isCyclic_units_four_mul_iff
   obtain ⟨n, rfl⟩ | h2n := em (2 ∣ n)
   · rw [← mul_assoc]
     have : NeZero n := ⟨by simpa using hn0⟩
-    refine mt (f
+    refine mt (fun _ => ?_) not_isCyclic_units_eight
+    exact isCyclic_of_surjective _ (ZMod.unitsMap_surjective (m := 4 * 2 * n) (dvd_mul_right 8 _))
+  have : Nat.Coprime 4 n := (Nat.prime_two.coprime_iff_not_dvd.mpr h2n).pow_left 2
+  rw [((Units.mapEquiv (chineseRemainder this).toMulEquiv).trans .prodUnits).isCyclic]; rw [Group.isCyclic_prod_iff]
+  rintro ⟨-, -, h⟩
+  have : NeZero n := ⟨hn0⟩
+  have : Odd (φ n) := by simpa [show φ 4 = 2 from rfl] using h
+  rw [Nat.odd_totient_iff] at this
+  lia
 
 Depends on / 依赖: Coprime, Nat.Coprime, Nat.prime_two.coprime_iff_not_dvd.mpr, NeZero, ZMod.unitsMap_surjective, coprime_iff_not_dvd, dvd_mul_right, eq_or_ne, iff_of_false, isCyclic_of_surjective, isCyclic_units_four, isCyclic_units_zero, mul_assoc, not_isCyclic_units_eight, pow_left, prime_two, unitsMap_surjective
 -/
@@ -670,6 +822,10 @@ theorem not_isCyclic_units_of_mul_coprime
   rw [e.isCyclic]; rw [Group.isCyclic_prod_iff]
   rintro ⟨-, -, h⟩
   simp_rw [Nat.card_eq_fintype_card, card_units_eq_totient,
+    Nat.totient_coprime_totient_iff, hm1, hn1, false_or] at h
+  rcases h with (rfl | rfl)
+  · simp [← Nat.not_even_iff_odd] at hm
+  · simp [← Nat.not_even_iff_odd] at hn
 
 中文:
 定理 not_isCyclic_units_of_mul_coprime
@@ -681,6 +837,10 @@ theorem not_isCyclic_units_of_mul_coprime
   rw [e.isCyclic]; rw [Group.isCyclic_prod_iff]
   rintro ⟨-, -, h⟩
   simp_rw [Nat.card_eq_fintype_card, card_units_eq_totient,
+    Nat.totient_coprime_totient_iff, hm1, hn1, false_or] at h
+  rcases h with (rfl | rfl)
+  · simp [← Nat.not_even_iff_odd] at hm
+  · simp [← Nat.not_even_iff_odd] at hn
 
 Depends on / 依赖: Group.isCyclic_prod_iff, Nat.card_eq_fintype_card, Nat.ne_of_odd_add, Nat.not_even_iff_odd, Nat.totient_coprime_totient_iff, NeZero, Units.mapEquiv, card_eq_fintype_card, card_units_eq_totient, chineseRemainder, e.isCyclic, false_or, isCyclic, isCyclic_prod_iff, mapEquiv, ne_of_odd_add, not_even_iff_odd, prodUnits, simp_rw, toMulEquiv
 -/
@@ -711,7 +871,20 @@ theorem isCyclic_units_iff_of_odd
     exact ⟨3, 0, Nat.prime_three, by simp [Nat.odd_iff], by rw [pow_zero]⟩
   have ⟨p, hp, dvd⟩ := n.exists_prime_and_dvd h1
   have odd := hn.of_dvd_nat dvd
-
+  by_cases hnp : n = p ^ n.factorization p
+  · exact hnp ▸ iff_of_true (isCyclic_units_of_prime_pow p hp (odd.ne_two_of_dvd_nat dvd_rfl) _)
+      ⟨p, _, hp, odd, rfl⟩
+  refine iff_of_false ?_ (mt ?_ hnp)
+  · have := n.ordProj_dvd p
+    rw [← Nat.mul_div_cancel' this]
+    refine not_isCyclic_units_of_mul_coprime _ _ (hn.of_dvd_nat this) ?_
+      (hn.of_dvd_nat (Nat.div_dvd_of_dvd this)) ?_ ((Nat.coprime_ordCompl hp hn0).pow_left ..)
+    · simpa [(hp.factorization_pos_of_dvd hn0 dvd).ne'] using hp.ne_one
+    · contrapose hnp
+      conv_lhs => rw [← Nat.div_mul_cancel this, hnp, one_mul]
+  rintro ⟨q, m, hq, -, rfl⟩
+  cases (Nat.prime_dvd_prime_iff_eq hp hq).mp (hp.dvd_of_dvd_pow dvd)
+  simp [hp.factorization_self] at hnp
 
 中文:
 定理 isCyclic_units_iff_of_odd
@@ -723,7 +896,20 @@ theorem isCyclic_units_iff_of_odd
     exact ⟨3, 0, Nat.prime_three, by simp [Nat.odd_iff], by rw [pow_zero]⟩
   have ⟨p, hp, dvd⟩ := n.exists_prime_and_dvd h1
   have odd := hn.of_dvd_nat dvd
-
+  by_cases hnp : n = p ^ n.factorization p
+  · exact hnp ▸ iff_of_true (isCyclic_units_of_prime_pow p hp (odd.ne_two_of_dvd_nat dvd_rfl) _)
+      ⟨p, _, hp, odd, rfl⟩
+  refine iff_of_false ?_ (mt ?_ hnp)
+  · have := n.ordProj_dvd p
+    rw [← Nat.mul_div_cancel' this]
+    refine not_isCyclic_units_of_mul_coprime _ _ (hn.of_dvd_nat this) ?_
+      (hn.of_dvd_nat (Nat.div_dvd_of_dvd this)) ?_ ((Nat.coprime_ordCompl hp hn0).pow_left ..)
+    · simpa [(hp.factorization_pos_of_dvd hn0 dvd).ne'] using hp.ne_one
+    · contrapose hnp
+      conv_lhs => rw [← Nat.div_mul_cancel this, hnp, one_mul]
+  rintro ⟨q, m, hq, -, rfl⟩
+  cases (Nat.prime_dvd_prime_iff_eq hp hq).mp (hp.dvd_of_dvd_pow dvd)
+  simp [hp.factorization_self] at hnp
 
 Depends on / 依赖: Nat.not_odd_zero, Nat.odd_iff, Nat.prime_three, dvd_rfl, eq_or_ne, exists_prime_and_dvd, factorization, hn.of_dvd_nat, iff_of_false, iff_of_true, isCyclic_units_of_prime_pow, isCyclic_units_one, n.exists_prime_and_dvd, n.factorization, n.ordProj_dv, ne_two_of_dvd_nat, not_odd_zero, odd.ne_two_of_dvd_nat, odd_iff, of_dvd_nat
 -/
@@ -767,7 +953,34 @@ theorem isCyclic_units_iff
   · rw [h2]; simp [isCyclic_units_two]
   by_cases h4 : n = 4
   · rw [h4]; simp [isCyclic_units_four]
-  simp only [h0, h1, h2, h4, false_or, and_or_left,
+  simp only [h0, h1, h2, h4, false_or, and_or_left, exists_or]
+  rcases (n.even_or_odd).symm with hn | hn
+  · rw [isCyclic_units_iff_of_odd hn, or_iff_left]
+    · congr! with p m
+      rw [and_iff_right_of_imp]
+      rintro rfl
+      contrapose! h1
+      cases Nat.lt_one_iff.mp h1
+      apply pow_zero
+    · rintro ⟨p, m, -, -, -, rfl⟩
+      simp [← Nat.not_even_iff_odd] at hn
+  obtain ⟨n, rfl⟩ := hn.two_dvd
+  rcases (n.even_or_odd).symm with hn | hn
+  · rw [isCyclic_units_two_mul_iff_of_odd _ hn, isCyclic_units_iff_of_odd hn, or_iff_right]
+    · congr! with p m
+      rw [Nat.mul_left_cancel_iff zero_lt_two]; rw [and_iff_right_of_imp]
+      rintro rfl
+      contrapose! h2
+      cases Nat.lt_one_iff.mp h2
+      rw [pow_zero]; rw [mul_one]
+    · rintro ⟨p, m, -, odd, -, eq⟩
+      have := eq ▸ odd.pow
+      simp [← Nat.not_even_iff_odd] at this
+  obtain ⟨n, rfl⟩ := hn.two_dvd
+  apply iff_of_false
+  · rw [← mul_assoc, show 2 * 2 = 4 from rfl, isCyclic_units_four_mul_iff]
+    lia
+  grind
 
 中文:
 定理 isCyclic_units_iff
@@ -781,7 +994,34 @@ theorem isCyclic_units_iff
   · rw [h2]; simp [isCyclic_units_two]
   by_cases h4 : n = 4
   · rw [h4]; simp [isCyclic_units_four]
-  simp only [h0, h1, h2, h4, false_or, and_or_left,
+  simp only [h0, h1, h2, h4, false_or, and_or_left, exists_or]
+  rcases (n.even_or_odd).symm with hn | hn
+  · rw [isCyclic_units_iff_of_odd hn, or_iff_left]
+    · congr! with p m
+      rw [and_iff_right_of_imp]
+      rintro rfl
+      contrapose! h1
+      cases Nat.lt_one_iff.mp h1
+      apply pow_zero
+    · rintro ⟨p, m, -, -, -, rfl⟩
+      simp [← Nat.not_even_iff_odd] at hn
+  obtain ⟨n, rfl⟩ := hn.two_dvd
+  rcases (n.even_or_odd).symm with hn | hn
+  · rw [isCyclic_units_two_mul_iff_of_odd _ hn, isCyclic_units_iff_of_odd hn, or_iff_right]
+    · congr! with p m
+      rw [Nat.mul_left_cancel_iff zero_lt_two]; rw [and_iff_right_of_imp]
+      rintro rfl
+      contrapose! h2
+      cases Nat.lt_one_iff.mp h2
+      rw [pow_zero]; rw [mul_one]
+    · rintro ⟨p, m, -, odd, -, eq⟩
+      have := eq ▸ odd.pow
+      simp [← Nat.not_even_iff_odd] at this
+  obtain ⟨n, rfl⟩ := hn.two_dvd
+  apply iff_of_false
+  · rw [← mul_assoc, show 2 * 2 = 4 from rfl, isCyclic_units_four_mul_iff]
+    lia
+  grind
 
 Depends on / 依赖: Nat.lt_one_iff.mp, and_iff_right_of_imp, and_or_left, contrapose, even_or_odd, exists_or, false_or, isCyclic_units_four, isCyclic_units_iff_of_odd, isCyclic_units_one, isCyclic_units_two, isCyclic_units_zero, lt_one_iff, n.even_or_odd, or_iff_left, pow_zero
 -/

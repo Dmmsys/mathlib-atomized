@@ -70,6 +70,11 @@ theorem mem_traverse_iff
     | cons b fs ih =>
       intro ht
       rcases mem_seq_iff.1 ht with ⟨u, hu, v, hv, ht⟩
+      rcases mem_map_iff_exists_image.1 hu with ⟨w, hw, hwu⟩
+      rcases ih v hv with ⟨us, hus, hu⟩
+      exact ⟨w::us, Forall₂.cons hw hus, (Set.seq_mono hwu hu).trans ht⟩
+  · rintro ⟨us, hus, hs⟩
+    exact mem_of_superset (mem_traverse _ _ hus) hs
 
 中文:
 定理 mem_traverse_iff
@@ -83,6 +88,11 @@ theorem mem_traverse_iff
     | cons b fs ih =>
       intro ht
       rcases mem_seq_iff.1 ht with ⟨u, hu, v, hv, ht⟩
+      rcases mem_map_iff_exists_image.1 hu with ⟨w, hw, hwu⟩
+      rcases ih v hv with ⟨us, hus, hu⟩
+      exact ⟨w::us, Forall₂.cons hw hus, (Set.seq_mono hwu hu).trans ht⟩
+  · rintro ⟨us, hus, hs⟩
+    exact mem_of_superset (mem_traverse _ _ hus) hs
 
 Depends on / 依赖: Set.pure_def, Set.seq_mono, exists_eq_left, generalizing, imp_self, mem_map_iff_exists_image, mem_of_superset, mem_pure, mem_seq_iff, mem_traverse, pure_def, seq_mono, sequence, singleton_subset_iff, traverse_nil
 -/

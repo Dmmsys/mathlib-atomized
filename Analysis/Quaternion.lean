@@ -104,7 +104,8 @@ instance :
       conj_inner_symm := fun x y => by simp [inner_def, mul_comm]
       re_inner_nonneg := fun _ => normSq_nonneg
       definite := fun _ => normSq_eq_zero.1
-      add_left := fun x y z => by simp only [inner_de
+      add_left := fun x y z => by simp only [inner_def, add_mul, re_add]
+      smul_left := fun x y r => by simp [inner_def] }
 
 中文:
 实例 :
@@ -114,7 +115,8 @@ instance :
       conj_inner_symm := fun x y => by simp [inner_def, mul_comm]
       re_inner_nonneg := fun _ => normSq_nonneg
       definite := fun _ => normSq_eq_zero.1
-      add_left := fun x y z => by simp only [inner_de
+      add_left := fun x y z => by simp only [inner_def, add_mul, re_add]
+      smul_left := fun x y r => by simp [inner_def] }
 
 Depends on / 依赖: Category, InnerProductSpace, InnerProductSpace.Core.toNormedAddCommGroup, IsThin, Quiver, Quiver.IsThin, add_left, add_mul, conj_inner_symm, definite, inner_def, locallySmall_of_thin, mul_comm, normSq_eq_zero, normSq_nonneg, re_add, re_inner_nonneg, smul_left, toInner, toNormedAddCommGroup
 -/

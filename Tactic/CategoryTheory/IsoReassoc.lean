@@ -57,7 +57,7 @@ definition categoryIsoSimp
   body: simpOnlyNames [``Iso.trans_symm, ``Iso.trans_refl, ``Iso.refl_trans, ``Iso.trans_assoc,
     ``Iso.symm_self_id, ``Iso.self_symm_id, ``Iso.symm_self_id_assoc, ``Iso.self_symm_id_assoc,
     ``Functor.mapIso_trans, ``Functor.mapIso_symm, ``Functor.mapIso_refl, ``Functor.id_obj] e
-    (config := { decid
+    (config := { decide := false })
 
 中文:
 定义 categoryIsoSimp
@@ -65,7 +65,7 @@ definition categoryIsoSimp
   定义体: simpOnlyNames [``Iso.trans_symm, ``Iso.trans_refl, ``Iso.refl_trans, ``Iso.trans_assoc,
     ``Iso.symm_self_id, ``Iso.self_symm_id, ``Iso.symm_self_id_assoc, ``Iso.self_symm_id_assoc,
     ``Functor.mapIso_trans, ``Functor.mapIso_symm, ``Functor.mapIso_refl, ``Functor.id_obj] e
-    (config := { decid
+    (config := { decide := false })
 
 Depends on / 依赖: Functor, Functor.id_obj, Functor.mapIso_refl, Functor.mapIso_symm, Functor.mapIso_trans, Iso.refl_trans, Iso.self_symm_id, Iso.self_symm_id_assoc, Iso.symm_self_id, Iso.symm_self_id_assoc, Iso.trans_assoc, Iso.trans_refl, Iso.trans_symm, config, id_obj, mapIso_refl, mapIso_symm, mapIso_trans, refl_trans, self_symm_id
 -/
@@ -89,7 +89,7 @@ definition reassocExprIso
   let w := args[6]!
   w.mvarId!.assignIfDefEq e
   withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType
+    return (← simpType categoryIsoSimp (mkAppN lem₀ args), #[inst.mvarId!])
 
 中文:
 定义 reassocExprIso
@@ -102,7 +102,7 @@ definition reassocExprIso
   let w := args[6]!
   w.mvarId!.assignIfDefEq e
   withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType
+    return (← simpType categoryIsoSimp (mkAppN lem₀ args), #[inst.mvarId!])
 
 Depends on / 依赖: CompleteLinearOrder, compactSpace_of_completeLinearOrder
 -/

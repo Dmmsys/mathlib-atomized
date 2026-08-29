@@ -382,7 +382,7 @@ theorem pow_inj
   rw [← tsub_eq_zero_iff_le]
   apply Nat.eq_zero_of_dvd_of_lt _ (lt_of_le_of_lt tsub_le_self hj)
   apply h.dvd_of_pow_eq_one
-  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_lef
+  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_left_inj]; rw [← pow_add]; rw [tsub_add_cancel_of_le hij]; rw [H]; rw [one_mul]
 
 中文:
 定理 pow_inj
@@ -395,7 +395,7 @@ theorem pow_inj
   rw [← tsub_eq_zero_iff_le]
   apply Nat.eq_zero_of_dvd_of_lt _ (lt_of_le_of_lt tsub_le_self hj)
   apply h.dvd_of_pow_eq_one
-  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_lef
+  rw [← ((h.isUnit (Nat.ne_zero_of_lt hi)).pow i).mul_left_inj]; rw [← pow_add]; rw [tsub_add_cancel_of_le hij]; rw [H]; rw [one_mul]
 
 Depends on / 依赖: H.symm, Nat.eq_zero_of_dvd_of_lt, Nat.ne_zero_of_lt, dvd_of_pow_eq_one, eq_zero_of_dvd_of_lt, generalizing, h.dvd_of_pow_eq_one, h.isUnit, isUnit, le_antisymm, le_of_not_ge, lt_of_le_of_lt, mul_left_inj, ne_zero_of_lt, one_mul, pow_add, tsub_add_cancel_of_le, tsub_eq_zero_iff_le, tsub_le_self
 -/
@@ -590,7 +590,9 @@ theorem pow_of_coprime
   rw [coe_units_iff] at h ⊢
   refine
     { pow_eq_one := by rw [← pow_mul', pow_mul, h.pow_eq_one, one_pow]
-      dvd_of_pow_eq_one := fun l hl =
+      dvd_of_pow_eq_one := fun l hl => h.dvd_of_pow_eq_one l ?_ }
+  rw [← pow_one ζ]; rw [← zpow_natCast ζ]; rw [← hi.gcd_eq_one]; rw [Nat.gcd_eq_gcd_ab]; rw [zpow_add]; rw [mul_pow]; rw [← zpow_natCast]; rw [← zpow_mul]; rw [mul_right_comm]
+  simp only [zpow_mul, hl, h.pow_eq_one, one_zpow, one_pow, one_mul, zpow_natCast]
 
 中文:
 定理 pow_of_coprime
@@ -603,7 +605,9 @@ theorem pow_of_coprime
   rw [coe_units_iff] at h ⊢
   refine
     { pow_eq_one := by rw [← pow_mul', pow_mul, h.pow_eq_one, one_pow]
-      dvd_of_pow_eq_one := fun l hl =
+      dvd_of_pow_eq_one := fun l hl => h.dvd_of_pow_eq_one l ?_ }
+  rw [← pow_one ζ]; rw [← zpow_natCast ζ]; rw [← hi.gcd_eq_one]; rw [Nat.gcd_eq_gcd_ab]; rw [zpow_add]; rw [mul_pow]; rw [← zpow_natCast]; rw [← zpow_mul]; rw [mul_right_comm]
+  simp only [zpow_mul, hl, h.pow_eq_one, one_zpow, one_pow, one_mul, zpow_natCast]
 
 Depends on / 依赖: Nat.coprime_zero_right, Nat.gcd_eq_gcd_ab, Units.val_pow_eq_pow_val, coe_units_iff, coprime_zero_right, dvd_of_pow_eq_one, gcd_eq_gcd_ab, gcd_eq_one, h.dvd_of_pow_eq_one, h.isUnit, h.pow_eq_one, hi.gcd_eq_one, isUnit, mul_pow, mul_right_comm, one_pow, pow_eq_one, pow_mul, pow_one, val_pow_eq_pow_val
 -/
@@ -653,7 +657,8 @@ theorem pow_iff_coprime
     rwa [this, eq_comm, Nat.mul_eq_right h0.ne', ← Nat.coprime_iff_gcd_eq_one] at hb
   rw [ha] at hi
   rw [mul_comm] at hb
-  apply Nat.dvd_antisymm ⟨i.gcd k, 
+  apply Nat.dvd_antisymm ⟨i.gcd k, hb⟩ (hi.dvd_of_pow_eq_one b _)
+  rw [← pow_mul']; rw [← mul_assoc]; rw [← hb]; rw [pow_mul]; rw [h.pow_eq_one]; rw [one_pow]
 
 中文:
 定理 pow_iff_coprime
@@ -666,7 +671,8 @@ theorem pow_iff_coprime
     rwa [this, eq_comm, Nat.mul_eq_right h0.ne', ← Nat.coprime_iff_gcd_eq_one] at hb
   rw [ha] at hi
   rw [mul_comm] at hb
-  apply Nat.dvd_antisymm ⟨i.gcd k, 
+  apply Nat.dvd_antisymm ⟨i.gcd k, hb⟩ (hi.dvd_of_pow_eq_one b _)
+  rw [← pow_mul']; rw [← mul_assoc]; rw [← hb]; rw [pow_mul]; rw [h.pow_eq_one]; rw [one_pow]
 
 Depends on / 依赖: Nat.coprime_iff_gcd_eq_one, Nat.dvd_antisymm, Nat.mul_eq_right, coprime_iff_gcd_eq_one, dvd_antisymm, dvd_of_pow_eq_one, eq_comm, gcd_dvd_left, gcd_dvd_right, h.pow_eq_one, h.pow_of_coprime, h0.ne, hi.dvd_of_pow_eq_one, i.gcd, i.gcd_dvd_left, i.gcd_dvd_right, mul_assoc, mul_comm, mul_eq_right, one_pow
 -/
@@ -1240,7 +1246,7 @@ theorem zpow_eq_one_iff_dvd
     lift -l to Nat using this with l' hl'
     rw [← dvd_neg]; rw [← hl']
     norm_cast
-    rw [← h.pow_eq_one_iff_dvd]; rw [← inv_inj]; rw 
+    rw [← h.pow_eq_one_iff_dvd]; rw [← inv_inj]; rw [← zpow_neg]; rw [← hl']; rw [zpow_natCast]; rw [inv_one]
 
 中文:
 定理 zpow_eq_one_iff_dvd
@@ -1253,7 +1259,7 @@ theorem zpow_eq_one_iff_dvd
     lift -l to Nat using this with l' hl'
     rw [← dvd_neg]; rw [← hl']
     norm_cast
-    rw [← h.pow_eq_one_iff_dvd]; rw [← inv_inj]; rw 
+    rw [← h.pow_eq_one_iff_dvd]; rw [← inv_inj]; rw [← zpow_neg]; rw [← hl']; rw [zpow_natCast]; rw [inv_one]
 
 Depends on / 依赖: Int.lt_of_not_ge, Int.neg_pos_of_neg, dvd_neg, h.pow_eq_one_iff_dvd, inv_inj, inv_one, lt_of_not_ge, neg_pos_of_neg, pow_eq_one_iff_dvd, zpow_natCast, zpow_neg
 -/
@@ -1335,7 +1341,7 @@ theorem zpow_of_gcd_eq_one
   lift -i to Nat using this with i' hi'
   rw [← inv_iff]; rw [← zpow_neg]; rw [← hi']; rw [zpow_natCast]
   apply h.pow_of_coprime
-  rwa [In
+  rwa [Int.gcd, ← Int.natAbs_neg, ← hi'] at hi
 
 中文:
 定理 zpow_of_gcd_eq_one
@@ -1348,7 +1354,7 @@ theorem zpow_of_gcd_eq_one
   lift -i to Nat using this with i' hi'
   rw [← inv_iff]; rw [← zpow_neg]; rw [← hi']; rw [zpow_natCast]
   apply h.pow_of_coprime
-  rwa [In
+  rwa [Int.gcd, ← Int.natAbs_neg, ← hi'] at hi
 
 Depends on / 依赖: CompactSpace, Finite, Finite.compactSpace, Int.gcd, Int.lt_of_not_ge, Int.natAbs_neg, Int.neg_pos_of_neg, compactSpace, h.pow_of_coprime, inv_iff, lt_of_not_ge, natAbs_neg, neg_pos_of_neg, pow_of_coprime, zpow_natCast, zpow_neg
 -/
@@ -1483,7 +1489,13 @@ theorem neZero'
   have h : p != 0 ∧ n != 0 := by aesop
   have : NeZero p := .mk h.1
   have hp : Fact p.Prime := CharP.char_is_prime_of_pos R p
-  refine (hζ.pow_ne_one_of_pos_of_lt h.2 (lt_mul_of_one_lt_left (by grind) hp
+  refine (hζ.pow_ne_one_of_pos_of_lt h.2 (lt_mul_of_one_lt_left (by grind) hp.1.one_lt) <|
+    frobenius_inj R p ?_).elim
+  rw [frobenius_def]; rw [← pow_mul']; rw [hζ.1]; rw [map_one]
+
+nonrec theorem mem_nthRootsFinset (hζ : IsPrimitiveRoot ζ k) (hk : 0 < k) :
+    ζ in nthRootsFinset k (1 : R) :=
+  (mem_nthRootsFinset hk (1 : R)).2 hζ.pow_eq_one
 
 中文:
 定理 neZero'
@@ -1496,7 +1508,13 @@ theorem neZero'
   have h : p != 0 ∧ n != 0 := by aesop
   have : NeZero p := .mk h.1
   have hp : Fact p.Prime := CharP.char_is_prime_of_pos R p
-  refine (hζ.pow_ne_one_of_pos_of_lt h.2 (lt_mul_of_one_lt_left (by grind) hp
+  refine (hζ.pow_ne_one_of_pos_of_lt h.2 (lt_mul_of_one_lt_left (by grind) hp.1.one_lt) <|
+    frobenius_inj R p ?_).elim
+  rw [frobenius_def]; rw [← pow_mul']; rw [hζ.1]; rw [map_one]
+
+nonrec theorem mem_nthRootsFinset (hζ : IsPrimitiveRoot ζ k) (hk : 0 < k) :
+    ζ in nthRootsFinset k (1 : R) :=
+  (mem_nthRootsFinset hk (1 : R)).2 hζ.pow_eq_one
 
 Depends on / 依赖: CharP.char_is_prime_of_pos, NeZero, Sigma.univ, char_is_prime_of_pos, continuous_sigmaMk, frobenius_def, frobenius_inj, isCompact_iUnion, isCompact_range, lt_mul_of_one_lt_left, map_one, of_not_dvd, one_lt, p.Prime, pow_mul, pow_ne_one_of_pos_of_lt, ringChar
 -/
@@ -1642,7 +1660,25 @@ definition zmodEquivZPowers
     (AddMonoidHom.liftOfRightInverse (Int.castAddHom <| ZMod k) _ ZMod.intCast_rightInverse
       ⟨{ toFun := fun i => Additive.ofMul (⟨_, i, rfl⟩ : Subgroup.zpowers ζ)
           map_zero' := by simp only [zpow_zero]; rfl
-          map_add' := by intro i j; simp only [zpow_add];
+          map_add' := by intro i j; simp only [zpow_add]; rfl }, fun i hi => by
+        simp only [AddMonoidHom.mem_ker, CharP.intCast_eq_zero_iff (ZMod k) k, AddMonoidHom.coe_mk,
+          Int.coe_castAddHom] at hi ⊢
+        obtain ⟨i, rfl⟩ := hi
+        simp [zpow_mul, h.pow_eq_one, one_zpow, zpow_natCast]⟩)
+    (by
+      constructor
+      · rw [injective_iff_map_eq_zero]
+        intro i hi
+        rw [Subtype.ext_iff] at hi
+        have := (h.zpow_eq_one_iff_dvd _).mp hi
+        rw [← (CharP.intCast_eq_zero_iff (ZMod k) k _).mpr this]; rw [eq_comm]
+        exact ZMod.intCast_rightInverse i
+      · rintro ⟨ξ, i, rfl⟩
+        refine ⟨Int.castAddHom (ZMod k) i, ?_⟩
+        rw [AddMonoidHom.liftOfRightInverse_comp_apply]
+        rfl)
+
+@[simp]
 
 中文:
 定义 zmodEquivZPowers
@@ -1651,7 +1687,25 @@ definition zmodEquivZPowers
     (AddMonoidHom.liftOfRightInverse (Int.castAddHom <| ZMod k) _ ZMod.intCast_rightInverse
       ⟨{ toFun := fun i => Additive.ofMul (⟨_, i, rfl⟩ : Subgroup.zpowers ζ)
           map_zero' := by simp only [zpow_zero]; rfl
-          map_add' := by intro i j; simp only [zpow_add];
+          map_add' := by intro i j; simp only [zpow_add]; rfl }, fun i hi => by
+        simp only [AddMonoidHom.mem_ker, CharP.intCast_eq_zero_iff (ZMod k) k, AddMonoidHom.coe_mk,
+          Int.coe_castAddHom] at hi ⊢
+        obtain ⟨i, rfl⟩ := hi
+        simp [zpow_mul, h.pow_eq_one, one_zpow, zpow_natCast]⟩)
+    (by
+      constructor
+      · rw [injective_iff_map_eq_zero]
+        intro i hi
+        rw [Subtype.ext_iff] at hi
+        have := (h.zpow_eq_one_iff_dvd _).mp hi
+        rw [← (CharP.intCast_eq_zero_iff (ZMod k) k _).mpr this]; rw [eq_comm]
+        exact ZMod.intCast_rightInverse i
+      · rintro ⟨ξ, i, rfl⟩
+        refine ⟨Int.castAddHom (ZMod k) i, ?_⟩
+        rw [AddMonoidHom.liftOfRightInverse_comp_apply]
+        rfl)
+
+@[simp]
 
 Depends on / 依赖: AddEquiv, AddEquiv.ofBijective, AddMonoidHom, AddMonoidHom.coe_mk, AddMonoidHom.liftOfRightInverse, AddMonoidHom.mem_ker, Additive, Additive.ofMul, CharP.intCast_eq_zero_iff, Int.castAddHom, Int.coe_castAddHom, NoncompactSpace, Nonempty, Prod.noncompactSpace_right, Subgroup, Subgroup.zpowers, ZMod.intCast_rightInverse, castAddHom, coe_castAddHom, coe_mk
 -/
@@ -1966,7 +2020,9 @@ theorem eq_pow_of_mem_rootsOfUnity
   have hi0 : 0 <= i := Int.emod_nonneg _ (ne_of_gt hk0)
   lift i to Nat using hi0 with i₀ hi₀
   refine ⟨i₀, ?_, ?_⟩
-  · zify; rw [hi₀]; exact Int.emo
+  · zify; rw [hi₀]; exact Int.emod_lt_of_pos _ hk0
+  · rw [← zpow_natCast, hi₀, ← Int.emod_add_mul_ediv n k, zpow_add, zpow_mul, h.zpow_eq_one,
+      one_zpow, mul_one]
 
 中文:
 定理 eq_pow_of_mem_rootsOfUnity
@@ -1978,7 +2034,9 @@ theorem eq_pow_of_mem_rootsOfUnity
   have hi0 : 0 <= i := Int.emod_nonneg _ (ne_of_gt hk0)
   lift i to Nat using hi0 with i₀ hi₀
   refine ⟨i₀, ?_, ?_⟩
-  · zify; rw [hi₀]; exact Int.emo
+  · zify; rw [hi₀]; exact Int.emod_lt_of_pos _ hk0
+  · rw [← zpow_natCast, hi₀, ← Int.emod_add_mul_ediv n k, zpow_add, zpow_mul, h.zpow_eq_one,
+      one_zpow, mul_one]
 
 Depends on / 依赖: Int.emod_add_mul_ediv, Int.emod_lt_of_pos, Int.emod_nonneg, NeZero, NeZero.pos, emod_add_mul_ediv, emod_lt_of_pos, emod_nonneg, h.zpow_eq_one, h.zpowers_eq, mod_cast, mul_one, ne_of_gt, one_zpow, zpow_add, zpow_eq_one, zpow_mul, zpow_natCast, zpowers_eq
 -/
@@ -2115,7 +2173,13 @@ theorem nthRoots_eq
   classical
   symm; apply Multiset.eq_of_le_of_card_le
   · rw [← Finset.range_val,
-    
+      ← Finset.image_val_of_injOn (hζ.injOn_pow_mul hα), Finset.val_le_iff_val_subset]
+    intro x hx
+    simp only [Finset.image_val, Finset.range_val, Multiset.mem_dedup, Multiset.mem_map,
+      Multiset.mem_range] at hx
+    obtain ⟨m, _, rfl⟩ := hx
+    rw [mem_nthRoots hn]; rw [mul_pow]; rw [e]; rw [← pow_mul]; rw [mul_comm m]; rw [pow_mul]; rw [hζ.pow_eq_one]; rw [one_pow]; rw [one_mul]
+  · simpa only [Multiset.card_map, Multiset.card_range] using card_nthRoots n a
 
 中文:
 定理 nthRoots_eq
@@ -2129,7 +2193,13 @@ theorem nthRoots_eq
   classical
   symm; apply Multiset.eq_of_le_of_card_le
   · rw [← Finset.range_val,
-    
+      ← Finset.image_val_of_injOn (hζ.injOn_pow_mul hα), Finset.val_le_iff_val_subset]
+    intro x hx
+    simp only [Finset.image_val, Finset.range_val, Multiset.mem_dedup, Multiset.mem_map,
+      Multiset.mem_range] at hx
+    obtain ⟨m, _, rfl⟩ := hx
+    rw [mem_nthRoots hn]; rw [mul_pow]; rw [e]; rw [← pow_mul]; rw [mul_comm m]; rw [pow_mul]; rw [hζ.pow_eq_one]; rw [one_pow]; rw [one_mul]
+  · simpa only [Multiset.card_map, Multiset.card_range] using card_nthRoots n a
 
 Depends on / 依赖: Finset, Finset.image_val, Finset.image_val_of_injOn, Finset.range_val, Finset.val_le_iff_val_subset, Multiset, Multiset.card_range, Multiset.eq_of_le_of_card_le, Multiset.map_const, Multiset.mem_dedup, Multiset.mem_map, Multiset.mem_range, card_range, classical, e.symm, eq_of_le_of_card_le, eq_zero_or_pos, hn.ne, image_val, image_val_of_injOn
 -/
@@ -2163,7 +2233,13 @@ theorem adjoin_pair_eq
   · refine Set.pair_subset_iff.mpr ⟨?_, ?_⟩
 · obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
 (hζ₁.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_left k₂
-      exact Subalgebra.pow_mem 
+      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
+· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
+(hζ₂.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_right k₂
+      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
+  · have hζ' := IsPrimitiveRoot.pow_mul_pow_lcm hζ₁ hζ₂ hk₁ hk₂
+    obtain ⟨_, _, rfl⟩ := hζ'.eq_pow_of_pow_eq_one hζ.pow_eq_one
+    aesop
 
 中文:
 定理 adjoin_pair_eq
@@ -2174,7 +2250,13 @@ theorem adjoin_pair_eq
   · refine Set.pair_subset_iff.mpr ⟨?_, ?_⟩
 · obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
 (hζ₁.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_left k₂
-      exact Subalgebra.pow_mem 
+      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
+· obtain ⟨_, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one
+(hζ₂.pow_eq_one_iff_dvd _).mpr k₁.dvd_lcm_right k₂
+      exact Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton S _) _
+  · have hζ' := IsPrimitiveRoot.pow_mul_pow_lcm hζ₁ hζ₂ hk₁ hk₂
+    obtain ⟨_, _, rfl⟩ := hζ'.eq_pow_of_pow_eq_one hζ.pow_eq_one
+    aesop
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le, Algebra.self_mem_adjoin_singleton, Nat.lcm_ne_zero, NeZero, Set.pair_subset_iff.mpr, Subalgebra, Subalgebra.pow_mem, adjoin_le, dvd_lcm_left, dvd_lcm_right, eq_pow_of_pow_eq_one, lcm_ne_zero, le_antisymm, pair_subset_iff, pow_eq_one_iff_dvd, pow_mem, self_mem_adjoin_singleton
 -/
@@ -2344,7 +2426,9 @@ theorem nthRoots_nodup
     by_cases hα' : α = 0
     · exact (ha (by rwa [hα', zero_pow hn.ne', eq_comm] at hα)).elim
     rw [nthRoots_eq h hα]; rw [Multiset.nodup_map_iff_inj_on (Multiset.nodup_range n)]
-    exac
+    exact h.injOn_pow_mul hα'
+  · suffices nthRoots n a = 0 by simp [this]
+    simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
 
 中文:
 定理 nthRoots_nodup
@@ -2356,7 +2440,9 @@ theorem nthRoots_nodup
     by_cases hα' : α = 0
     · exact (ha (by rwa [hα', zero_pow hn.ne', eq_comm] at hα)).elim
     rw [nthRoots_eq h hα]; rw [Multiset.nodup_map_iff_inj_on (Multiset.nodup_range n)]
-    exac
+    exact h.injOn_pow_mul hα'
+  · suffices nthRoots n a = 0 by simp [this]
+    simpa only [Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, mem_nthRoots hn]
 
 Depends on / 依赖: Multiset, Multiset.card_eq_zero, Multiset.eq_zero_iff_forall_notMem, Multiset.nodup_map_iff_inj_on, Multiset.nodup_range, card_eq_zero, eq_comm, eq_zero_iff_forall_notMem, eq_zero_or_pos, h.injOn_pow_mul, hn.ne, injOn_pow_mul, mem_nthRoots, n.eq_zero_or_pos, nodup_map_iff_inj_on, nodup_range, nthRoots, nthRoots_eq, zero_pow
 -/
@@ -2434,7 +2520,14 @@ theorem card_primitiveRoots
     rintro i - hi
     rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]
     exact h.pow_of_coprime i hi.symm
-  · simp only [and_im
+  · simp only [and_imp, mem_filter, mem_range]
+    rintro i hi - j hj - H
+    exact h.pow_inj hi hj H
+  · simp only [exists_prop, mem_filter, mem_range]
+    intro ξ hξ
+    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]; rw [h.isPrimitiveRoot_iff] at hξ
+    rcases hξ with ⟨i, hin, hi, H⟩
+    exact ⟨i, ⟨hin, hi.symm⟩, H⟩
 
 中文:
 定理 card_primitiveRoots
@@ -2449,7 +2542,14 @@ theorem card_primitiveRoots
     rintro i - hi
     rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]
     exact h.pow_of_coprime i hi.symm
-  · simp only [and_im
+  · simp only [and_imp, mem_filter, mem_range]
+    rintro i hi - j hj - H
+    exact h.pow_inj hi hj H
+  · simp only [exists_prop, mem_filter, mem_range]
+    intro ξ hξ
+    rw [mem_primitiveRoots (Nat.pos_of_ne_zero h0)]; rw [h.isPrimitiveRoot_iff] at hξ
+    rcases hξ with ⟨i, hin, hi, H⟩
+    exact ⟨i, ⟨hin, hi.symm⟩, H⟩
 
 Depends on / 依赖: Finset, Finset.card_bij, Nat.pos_of_ne_zero, NeZero, and_imp, card_bij, exists_prop, h.isPrimitiveRoot_iff, h.pow_inj, h.pow_of_coprime, hi.symm, isPrimitiveRoot_iff, mem_filter, mem_primitiveRoots, mem_range, pos_of_ne_zero, pow_inj, pow_of_coprime
 -/
@@ -2488,7 +2588,14 @@ definition primitiveRootsPowEquiv
       simpa [(a.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right a n)
 (mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
   invFun x := ⟨x.1 ^ b,
-    have hr :
+    have hr : 0 < n := by by_contra! h; cases x; simp_all
+    have hr' : b.Coprime n := by
+      simpa [(b.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right b n)
+(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
+  left_inv x := by ext; simp [← pow_mul,
+    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
+  right_inv x := by ext; simp [← pow_mul, mul_comm b,
+    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
 
 中文:
 定义 primitiveRootsPowEquiv
@@ -2499,7 +2606,14 @@ definition primitiveRootsPowEquiv
       simpa [(a.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right a n)
 (mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
   invFun x := ⟨x.1 ^ b,
-    have hr :
+    have hr : 0 < n := by by_contra! h; cases x; simp_all
+    have hr' : b.Coprime n := by
+      simpa [(b.gcd_dvd_left n).trans] using h.dvd_iff (Nat.gcd_dvd_right b n)
+(mem_primitiveRoots hr).mpr ((mem_primitiveRoots hr).mp x.2).pow_of_coprime _ hr'⟩
+  left_inv x := by ext; simp [← pow_mul,
+    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
+  right_inv x := by ext; simp [← pow_mul, mul_comm b,
+    pow_eq_pow_of_modEq h (isPrimitiveRoot_of_mem_primitiveRoots x.2).pow_eq_one]
 -/
 def primitiveRootsPowEquiv {a b n : Nat} (h : a * b ≡ 1 [MOD n]) :
     primitiveRoots n R ≃ primitiveRoots n R where
@@ -2588,7 +2702,10 @@ theorem nthRoots_one_eq_biUnion_primitiveRoots'
   · intro H
     obtain ⟨k, hk, hx⟩ := exists_pos H (NeZero.ne n)
     exact ⟨k, hx.2 _ H, (mem_primitiveRoots hk).mpr hx⟩
-  · rintro ⟨a,
+  · rintro ⟨a, ⟨d, hd⟩, ha⟩
+    have hazero : 0 < a := Nat.pos_of_ne_zero fun ha₀ => by simp_all
+    rw [mem_primitiveRoots hazero] at ha
+    rw [hd]; rw [pow_mul]; rw [ha.pow_eq_one]; rw [one_pow]
 
 中文:
 定理 nthRoots_one_eq_biUnion_primitiveRoots'
@@ -2601,7 +2718,10 @@ theorem nthRoots_one_eq_biUnion_primitiveRoots'
   · intro H
     obtain ⟨k, hk, hx⟩ := exists_pos H (NeZero.ne n)
     exact ⟨k, hx.2 _ H, (mem_primitiveRoots hk).mpr hx⟩
-  · rintro ⟨a,
+  · rintro ⟨a, ⟨d, hd⟩, ha⟩
+    have hazero : 0 < a := Nat.pos_of_ne_zero fun ha₀ => by simp_all
+    rw [mem_primitiveRoots hazero] at ha
+    rw [hd]; rw [pow_mul]; rw [ha.pow_eq_one]; rw [one_pow]
 
 Depends on / 依赖: Nat.pos_of_ne_zero, NeZero, NeZero.ne, NeZero.pos, Polynomial, Polynomial.mem_nthRootsFinset, exists_pos, ha.pow_eq_one, hazero, mem_nthRootsFinset, mem_primitiveRoots, one_pow, pos_of_ne_zero, pow_eq_one, pow_mul, primitiveRoots
 -/
@@ -2667,7 +2787,29 @@ definition autToPow
     refine Eq.trans ?_ hμ.eq_orderOf.symm -- `rw [hμ.eq_orderOf]` gives "motive not type correct"
     rw [← hμ.val_toRootsOfUnity_coe]; rw [orderOf_units]; rw [Subgroup.orderOf_coe]
   MonoidHom.toHomUnits
-    { toFun := fun σ => (map_roots
+    { toFun := fun σ => (map_rootsOfUnity_eq_pow_self σ.toAlgHom μ').choose
+      map_one' := by
+        generalize_proofs h1
+        have h := h1.choose_spec
+        replace h : μ' = μ' ^ h1.choose :=
+          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! h)
+        nth_rw 1 [← pow_one μ'] at h
+        convert! ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp h).symm
+        exact Nat.cast_one.symm
+      map_mul' := by
+        intro x y
+        generalize_proofs hxy' hx' hy'
+        have hxy := hxy'.choose_spec
+        replace hxy : x (((μ' : Sˣ) : S) ^ hy'.choose) = ((μ' : Sˣ) : S) ^ hxy'.choose :=
+          hy'.choose_spec ▸ hxy
+        rw [map_pow] at hxy
+        replace hxy : (((μ' : Sˣ) : S) ^ hx'.choose) ^ hy'.choose = ((μ' : Sˣ) : S) ^ hxy'.choose :=
+          hx'.choose_spec ▸ hxy
+        rw [← pow_mul] at hxy
+        replace hxy : μ' ^ (hx'.choose * hy'.choose) = μ' ^ hxy'.choose :=
+          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! hxy)
+        convert ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp hxy).symm
+        exact (Nat.cast_mul ..).symm }
 
 中文:
 定义 autToPow
@@ -2677,7 +2819,29 @@ definition autToPow
     refine Eq.trans ?_ hμ.eq_orderOf.symm -- `rw [hμ.eq_orderOf]` gives "motive not type correct"
     rw [← hμ.val_toRootsOfUnity_coe]; rw [orderOf_units]; rw [Subgroup.orderOf_coe]
   MonoidHom.toHomUnits
-    { toFun := fun σ => (map_roots
+    { toFun := fun σ => (map_rootsOfUnity_eq_pow_self σ.toAlgHom μ').choose
+      map_one' := by
+        generalize_proofs h1
+        have h := h1.choose_spec
+        replace h : μ' = μ' ^ h1.choose :=
+          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! h)
+        nth_rw 1 [← pow_one μ'] at h
+        convert! ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp h).symm
+        exact Nat.cast_one.symm
+      map_mul' := by
+        intro x y
+        generalize_proofs hxy' hx' hy'
+        have hxy := hxy'.choose_spec
+        replace hxy : x (((μ' : Sˣ) : S) ^ hy'.choose) = ((μ' : Sˣ) : S) ^ hxy'.choose :=
+          hy'.choose_spec ▸ hxy
+        rw [map_pow] at hxy
+        replace hxy : (((μ' : Sˣ) : S) ^ hx'.choose) ^ hy'.choose = ((μ' : Sˣ) : S) ^ hxy'.choose :=
+          hx'.choose_spec ▸ hxy
+        rw [← pow_mul] at hxy
+        replace hxy : μ' ^ (hx'.choose * hy'.choose) = μ' ^ hxy'.choose :=
+          rootsOfUnity.coe_injective (by simpa only [rootsOfUnity.coe_pow] using! hxy)
+        convert ho ▸ (ZMod.natCast_eq_natCast_iff ..).mpr (pow_eq_pow_iff_modEq.mp hxy).symm
+        exact (Nat.cast_mul ..).symm }
 
 Depends on / 依赖: Eq.trans, MonoidHom, MonoidHom.toHomUnits, Subgroup, Subgroup.orderOf_coe, choose_spec, coe_injective, coe_pow, correct, eq_orderOf, eq_orderOf.symm, generalize_proofs, h1.choose, h1.choose_spec, map_one, map_rootsOfUnity_eq_pow_self, motive, orderOf, orderOf_coe, orderOf_units
 -/
@@ -2749,7 +2913,9 @@ theorem autToPow_spec
   rw [← rootsOfUnity.coe_pow]; rw [← rootsOfUnity.coe_pow]
   congr 2
   rw [pow_eq_pow_iff_modEq]; rw [ZMod.val_natCast]
-  conv => enter [2, 2]; rw [hμ.eq
+  conv => enter [2, 2]; rw [hμ.eq_orderOf]
+  rw [← Subgroup.orderOf_coe]; rw [← orderOf_units]
+  exact Nat.mod_modEq _ _
 
 中文:
 定理 autToPow_spec
@@ -2762,7 +2928,9 @@ theorem autToPow_spec
   rw [← rootsOfUnity.coe_pow]; rw [← rootsOfUnity.coe_pow]
   congr 2
   rw [pow_eq_pow_iff_modEq]; rw [ZMod.val_natCast]
-  conv => enter [2, 2]; rw [hμ.eq
+  conv => enter [2, 2]; rw [hμ.eq_orderOf]
+  rw [← Subgroup.orderOf_coe]; rw [← orderOf_units]
+  exact Nat.mod_modEq _ _
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_autToPow_apply, Nat.mod_modEq, Subgroup, Subgroup.orderOf_coe, ZMod.val_natCast, choose_spec, coe_autToPow_apply, coe_pow, eq_orderOf, generalize_proofs, h.choose_spec.symm, mod_modEq, orderOf_coe, orderOf_units, pow_eq_pow_iff_modEq, rootsOfUnity, rootsOfUnity.coe_pow, toRootsOfUnity, val_natCast
 -/
@@ -2886,7 +3054,19 @@ lemma IsCyclic.exists_apply_ne_one
   -- pick a generator `g` of `G`
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
   have hζg : orderOf ζ ∣ orderOf g := by
-    rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_ca
+    rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_card]
+  -- use the homomorphism `φ` given by `g ↦ ζ`
+  let φ := monoidHomOfForallMemZpowers hg hζg
+  have hφg : IsPrimitiveRoot (φ g) (Nat.card G) := by
+    rwa [monoidHomOfForallMemZpowers_apply_gen hg hζg]
+  use φ
+  contrapose ha
+  specialize hg a
+  rw [← mem_powers_iff_mem_zpowers]; rw [Submonoid.mem_powers_iff] at hg
+  obtain ⟨k, hk⟩ := hg
+  rw [← hk]; rw [map_pow] at ha
+  obtain ⟨l, rfl⟩ := (hφg.pow_eq_one_iff_dvd k).mp ha
+  rw [← hk]; rw [pow_mul]; rw [Nat.card_eq_fintype_card]; rw [pow_card_eq_one]; rw [one_pow]
 
 中文:
 引理 是循环.存在_apply_ne_one
@@ -2897,7 +3077,19 @@ lemma IsCyclic.exists_apply_ne_one
   -- pick a generator `g` of `G`
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
   have hζg : orderOf ζ ∣ orderOf g := by
-    rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_ca
+    rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_card]
+  -- use the homomorphism `φ` given by `g ↦ ζ`
+  let φ := monoidHomOfForallMemZpowers hg hζg
+  have hφg : IsPrimitiveRoot (φ g) (Nat.card G) := by
+    rwa [monoidHomOfForallMemZpowers_apply_gen hg hζg]
+  use φ
+  contrapose ha
+  specialize hg a
+  rw [← mem_powers_iff_mem_zpowers]; rw [Submonoid.mem_powers_iff] at hg
+  obtain ⟨k, hk⟩ := hg
+  rw [← hk]; rw [map_pow] at ha
+  obtain ⟨l, rfl⟩ := (hφg.pow_eq_one_iff_dvd k).mp ha
+  rw [← hk]; rw [pow_mul]; rw [Nat.card_eq_fintype_card]; rw [pow_card_eq_one]; rw [one_pow]
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, ofFinite
 -/
@@ -2935,7 +3127,7 @@ lemma ZMod.exists_monoidHom_apply_ne_one
     simp only [Nat.card_eq_fintype_card, Fintype.card_multiplicative, card]
   exact IsCyclic.exists_apply_ne_one
 (hc ▸ ⟨hζ.toRootsOfUnity.val, IsPrimitiveRoot.coe_units_iff.mp hζ⟩)
-    by simp only [ne_eq, ofAdd_eq_on
+    by simp only [ne_eq, ofAdd_eq_one, ha, not_false_eq_true]
 
 中文:
 引理 ZMod.存在_monoidHom_apply_ne_one
@@ -2946,7 +3138,7 @@ lemma ZMod.exists_monoidHom_apply_ne_one
     simp only [Nat.card_eq_fintype_card, Fintype.card_multiplicative, card]
   exact IsCyclic.exists_apply_ne_one
 (hc ▸ ⟨hζ.toRootsOfUnity.val, IsPrimitiveRoot.coe_units_iff.mp hζ⟩)
-    by simp only [ne_eq, ofAdd_eq_on
+    by simp only [ne_eq, ofAdd_eq_one, ha, not_false_eq_true]
 
 Depends on / 依赖: Fintype, Fintype.card_multiplicative, IsCyclic, IsCyclic.exists_apply_ne_one, IsPrimitiveRoot, IsPrimitiveRoot.coe_units_iff.mp, Multiplicative, Nat.card, Nat.card_eq_fintype_card, card_eq_fintype_card, card_multiplicative, coe_units_iff, exists_apply_ne_one, ne_eq, not_false_eq_true, ofAdd_eq_one, toRootsOfUnity, toRootsOfUnity.val
 -/

@@ -136,7 +136,12 @@ lemma isSaddlePointOn_iff
       intro x hx
       exact h x hx b hb
   · trans f a b
-    · -
+    · -- f a y ≤ f a b
+      rw [← h]
+      apply le_iSup₂ y hy
+    · -- f a b ≤ f x b
+      rw [← h']
+      apply iInf₂_le x hx
 
 中文:
 引理 isSaddlePointOn_iff
@@ -153,7 +158,12 @@ lemma isSaddlePointOn_iff
       intro x hx
       exact h x hx b hb
   · trans f a b
-    · -
+    · -- f a y ≤ f a b
+      rw [← h]
+      apply le_iSup₂ y hy
+    · -- f a b ≤ f x b
+      rw [← h']
+      apply iInf₂_le x hx
 
 Depends on / 依赖: iSup_le_iff, le_antisymm, le_iInf_iff
 -/
@@ -195,7 +205,7 @@ lemma isSaddlePointOn_iff'
     · apply le_iSup₂ b hb
   · apply le_antisymm
     · apply iInf₂_le a ha
-    · apply le_trans (le_iSup₂
+    · apply le_trans (le_iSup₂ b hb) h
 
 中文:
 引理 isSaddlePointOn_iff'
@@ -209,7 +219,7 @@ lemma isSaddlePointOn_iff'
     · apply le_iSup₂ b hb
   · apply le_antisymm
     · apply iInf₂_le a ha
-    · apply le_trans (le_iSup₂
+    · apply le_trans (le_iSup₂ b hb) h
 
 Depends on / 依赖: isSaddlePointOn_iff, le_antisymm, le_of_eq, le_trans
 -/
@@ -249,7 +259,9 @@ lemma isSaddlePointOn_value
     · rw [← h.1]
       apply iSup₂_mono
       intro y _
-
+      apply iInf₂_le a ha
+    · rw [← h.2]
+      apply le_trans (le_rfl) (le_iSup₂ b hb)
 
 中文:
 引理 isSaddlePointOn_value
@@ -268,7 +280,9 @@ lemma isSaddlePointOn_value
     · rw [← h.1]
       apply iSup₂_mono
       intro y _
-
+      apply iInf₂_le a ha
+    · rw [← h.2]
+      apply le_trans (le_rfl) (le_iSup₂ b hb)
 
 Depends on / 依赖: isSaddlePointOn_iff, le_antisymm, le_rfl, le_trans
 -/

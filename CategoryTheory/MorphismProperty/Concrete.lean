@@ -347,7 +347,15 @@ definition functorialSurjectiveInjectiveFactorizationData
         ext x
         exact congr_hom φ.w x }
   p :=
-    { app := fun _ => ↾fun y => 
+    { app := fun _ => ↾fun y => y.1
+      naturality := by intros; rfl; }
+  fac := rfl
+  hi := by
+    rintro f ⟨_, x, rfl⟩
+    exact ⟨x, rfl⟩
+  hp f x₁ x₂ h := by
+    rw [Subtype.ext_iff]
+    exact h
 
 中文:
 定义 functorialSurjectiveInjectiveFactorizationData
@@ -360,7 +368,15 @@ definition functorialSurjectiveInjectiveFactorizationData
         ext x
         exact congr_hom φ.w x }
   p :=
-    { app := fun _ => ↾fun y => 
+    { app := fun _ => ↾fun y => y.1
+      naturality := by intros; rfl; }
+  fac := rfl
+  hi := by
+    rintro f ⟨_, x, rfl⟩
+    exact ⟨x, rfl⟩
+  hp f x₁ x₂ h := by
+    rw [Subtype.ext_iff]
+    exact h
 
 Depends on / 依赖: Set.range, f.hom.hom
 -/

@@ -36,7 +36,19 @@ definition adjoin.powerBasisAux
     IsIntegral K (⟨x, subset_adjoin (Set.mem_singleton x)⟩ : K[(x : S)]) := by
     apply (isIntegral_algebraMap_iff hST).mp
     convert! hx
-  apply Basis.mk (v := fun i : Fin _ => ⟨x, subset_adjoin (
+  apply Basis.mk (v := fun i : Fin _ => ⟨x, subset_adjoin (Set.mem_singleton x)⟩ ^ (i : Nat))
+  · have : LinearIndependent K _ := linearIndependent_pow
+      (⟨x, self_mem_adjoin_singleton _ _⟩ : K[x])
+    rwa [← minpoly.algebraMap_eq hST] at this
+  · rintro ⟨y, hy⟩ _
+    have := hx'.mem_span_pow (y := ⟨y, hy⟩)
+    rw [← minpoly.algebraMap_eq hST] at this
+    apply this
+    rw [adjoin_singleton_eq_range_aeval] at hy
+    obtain ⟨f, rfl⟩ := (aeval x).mem_range.mp hy
+    use f
+    ext
+    exact aeval_algebraMap_apply S (⟨x, _⟩ : K[x]) _
 
 中文:
 定义 adjoin.powerBasisAux
@@ -47,7 +59,19 @@ definition adjoin.powerBasisAux
     IsIntegral K (⟨x, subset_adjoin (Set.mem_singleton x)⟩ : K[(x : S)]) := by
     apply (isIntegral_algebraMap_iff hST).mp
     convert! hx
-  apply Basis.mk (v := fun i : Fin _ => ⟨x, subset_adjoin (
+  apply Basis.mk (v := fun i : Fin _ => ⟨x, subset_adjoin (Set.mem_singleton x)⟩ ^ (i : Nat))
+  · have : LinearIndependent K _ := linearIndependent_pow
+      (⟨x, self_mem_adjoin_singleton _ _⟩ : K[x])
+    rwa [← minpoly.algebraMap_eq hST] at this
+  · rintro ⟨y, hy⟩ _
+    have := hx'.mem_span_pow (y := ⟨y, hy⟩)
+    rw [← minpoly.algebraMap_eq hST] at this
+    apply this
+    rw [adjoin_singleton_eq_range_aeval] at hy
+    obtain ⟨f, rfl⟩ := (aeval x).mem_range.mp hy
+    use f
+    ext
+    exact aeval_algebraMap_apply S (⟨x, _⟩ : K[x]) _
 
 Depends on / 依赖: Basis.mk, Function, Function.Injective, Injective, IsIntegral, LinearIndependent, Set.mem_singleton, Subtype, Subtype.coe_injective, algebraMap, algebraMap_eq, coe_injective, convert, isIntegral_algebraMap_iff, linearIndependent_pow, mem_singleton, mem_span_p, minpoly, minpoly.algebraMap_eq, self_mem_adjoin_singleton
 -/
@@ -188,7 +212,22 @@ theorem repr_gen_pow_isIntegral
     simp [Q]
   by_cases hQ : Q = 0
   · simp [this, hQ, isIntegral_zero]
-  have hlt : Q.natDegree < 
+  have hlt : Q.natDegree < B.dim := by
+    rw [← B.natDegree_minpoly]; rw [hmin]; rw [(minpoly.monic hB).natDegree_map]; rw [natDegree_lt_natDegree_iff hQ]
+    let : Nontrivial R := Nontrivial.of_polynomial_ne hQ
+    exact degree_modByMonic_lt _ (minpoly.monic hB)
+  rw [this]; rw [aeval_eq_sum_range' hlt]
+  simp only [map_sum, Finset.sum_apply']
+  refine IsIntegral.sum _ fun j hj => ?_
+  replace hj := Finset.mem_range.1 hj
+  rw [← Fin.val_mk hj]; rw [← B.basis_eq_pow]; rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R S A]; rw [←
+    Algebra.smul_def]; rw [map_smul]
+  simp only [algebraMap_smul, Finsupp.coe_smul, Pi.smul_apply, B.basis.repr_self_apply]
+  by_cases hij : (⟨j, hj⟩ : Fin _) = i
+  · simp only [hij, if_true]
+    rw [Algebra.smul_def]; rw [mul_one]
+    exact isIntegral_algebraMap
+  · simp [hij, isIntegral_zero]
 
 中文:
 定理 repr_gen_pow_is整数egral
@@ -202,7 +241,22 @@ theorem repr_gen_pow_isIntegral
     simp [Q]
   by_cases hQ : Q = 0
   · simp [this, hQ, isIntegral_zero]
-  have hlt : Q.natDegree < 
+  have hlt : Q.natDegree < B.dim := by
+    rw [← B.natDegree_minpoly]; rw [hmin]; rw [(minpoly.monic hB).natDegree_map]; rw [natDegree_lt_natDegree_iff hQ]
+    let : Nontrivial R := Nontrivial.of_polynomial_ne hQ
+    exact degree_modByMonic_lt _ (minpoly.monic hB)
+  rw [this]; rw [aeval_eq_sum_range' hlt]
+  simp only [map_sum, Finset.sum_apply']
+  refine IsIntegral.sum _ fun j hj => ?_
+  replace hj := Finset.mem_range.1 hj
+  rw [← Fin.val_mk hj]; rw [← B.basis_eq_pow]; rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R S A]; rw [←
+    Algebra.smul_def]; rw [map_smul]
+  simp only [algebraMap_smul, Finsupp.coe_smul, Pi.smul_apply, B.basis.repr_self_apply]
+  by_cases hij : (⟨j, hj⟩ : Fin _) = i
+  · simp only [hij, if_true]
+    rw [Algebra.smul_def]; rw [mul_one]
+    exact isIntegral_algebraMap
+  · simp [hij, isIntegral_zero]
 
 Depends on / 依赖: B.dim, B.gen, B.natDegree_minpoly, Nontrivial, Nontrivial.of_polynomial_ne, Q.natDegree, aeval_X_pow, degree_modByMonic_lt, isIntegral_zero, minpoly, minpoly.monic, modByMonic_add_div, natDegree, natDegree_lt_natDegree_iff, natDegree_map, natDegree_minpoly, nontriviality, of_polynomial_ne
 -/
@@ -245,7 +299,10 @@ theorem repr_mul_isIntegral
   rw [← B.basis.sum_repr x]; rw [← B.basis.sum_repr y]; rw [Finset.sum_mul_sum]; rw [← Finset.sum_product']; rw [map_sum]; rw [Finset.sum_apply']
   refine IsIntegral.sum _ fun I _ => ?_
   simp only [Algebra.smul_mul_assoc, Algebra.mul_smul_comm, map_smulₛₗ, RingHom.id_apply,
-    Finsupp
+    Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul]
+  refine (hy _).mul ((hx _).mul ?_)
+  simp only [coe_basis, ← pow_add]
+  exact repr_gen_pow_isIntegral hB hmin _ _
 
 中文:
 定理 repr_mul_is整数egral
@@ -255,7 +312,10 @@ theorem repr_mul_isIntegral
   rw [← B.basis.sum_repr x]; rw [← B.basis.sum_repr y]; rw [Finset.sum_mul_sum]; rw [← Finset.sum_product']; rw [map_sum]; rw [Finset.sum_apply']
   refine IsIntegral.sum _ fun I _ => ?_
   simp only [Algebra.smul_mul_assoc, Algebra.mul_smul_comm, map_smulₛₗ, RingHom.id_apply,
-    Finsupp
+    Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul]
+  refine (hy _).mul ((hx _).mul ?_)
+  simp only [coe_basis, ← pow_add]
+  exact repr_gen_pow_isIntegral hB hmin _ _
 
 Depends on / 依赖: Algebra, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, B.basis.sum_repr, Finset, Finset.sum_apply, Finset.sum_mul_sum, Finset.sum_product, Finsupp, Finsupp.coe_smul, IsIntegral, IsIntegral.sum, Pi.smul_apply, RingHom, RingHom.id_apply, coe_basis, coe_smul, id_apply, map_sum, mul_smul_comm
 -/
@@ -286,7 +346,13 @@ theorem repr_pow_isIntegral
     (p := fun n => _ -> forall (i : Fin B.dim), IsIntegral R (B.basis.repr (x ^ n) i))
     n ?_ fun n hn => ?_
   · intro _ i
-  
+    rw [pow_zero]; rw [← pow_zero B.gen]; rw [← Fin.val_mk B.dim_pos]; rw [← B.basis_eq_pow]; rw [B.basis.repr_self_apply]
+    split_ifs
+    · exact isIntegral_one
+    · exact isIntegral_zero
+  · intro hx
+    rw [pow_succ]
+    exact repr_mul_isIntegral hB (fun _ => hn _ le_rfl (fun _ => hx _) _) hx hmin
 
 中文:
 定理 repr_pow_is整数egral
@@ -299,7 +365,13 @@ theorem repr_pow_isIntegral
     (p := fun n => _ -> forall (i : Fin B.dim), IsIntegral R (B.basis.repr (x ^ n) i))
     n ?_ fun n hn => ?_
   · intro _ i
-  
+    rw [pow_zero]; rw [← pow_zero B.gen]; rw [← Fin.val_mk B.dim_pos]; rw [← B.basis_eq_pow]; rw [B.basis.repr_self_apply]
+    split_ifs
+    · exact isIntegral_one
+    · exact isIntegral_zero
+  · intro hx
+    rw [pow_succ]
+    exact repr_mul_isIntegral hB (fun _ => hn _ le_rfl (fun _ => hx _) _) hx hmin
 
 Depends on / 依赖: Nat.case_strong_induction_on, Subsingleton, Subsingleton.elim, case_strong_induction_on, isIntegral_zero, nontriviality, revert
 -/
@@ -334,7 +406,8 @@ theorem toMatrix_isIntegral
   refine repr_pow_isIntegral hB (fun i => ?_) hmin _ _
   rw [← h]; rw [aeval_eq_sum_range]; rw [map_sum]; rw [Finset.sum_apply']
   refine IsIntegral.sum _ fun n _ => ?_
-  rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R K S];
+  rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R K S]; rw [← Algebra.smul_def]; rw [map_smul]; rw [algebraMap_smul]
+  exact (repr_gen_pow_isIntegral hB hmin _ _).smul _
 
 中文:
 定理 toMatrix_is整数egral
@@ -345,7 +418,8 @@ theorem toMatrix_isIntegral
   refine repr_pow_isIntegral hB (fun i => ?_) hmin _ _
   rw [← h]; rw [aeval_eq_sum_range]; rw [map_sum]; rw [Finset.sum_apply']
   refine IsIntegral.sum _ fun n _ => ?_
-  rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R K S];
+  rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R K S]; rw [← Algebra.smul_def]; rw [map_smul]; rw [algebraMap_smul]
+  exact (repr_gen_pow_isIntegral hB hmin _ _).smul _
 
 Depends on / 依赖: Algebra, Algebra.smul_def, B.basis.toMatrix_apply, Finset, Finset.sum_apply, IsIntegral, IsIntegral.sum, IsScalarTower, IsScalarTower.algebraMap_apply, aeval_eq_sum_range, algebraMap_apply, algebraMap_smul, coe_basis, map_smul, map_sum, repr_gen_pow_isIntegral, repr_pow_isIntegral, smul_def, sum_apply, toMatrix_apply
 -/

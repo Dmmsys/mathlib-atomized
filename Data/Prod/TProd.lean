@@ -368,7 +368,9 @@ theorem mk_preimage_tprod
       rw [mk_preimage_tprod l t]
     -- `simp [Set.TProd, TProd.mk, this]` can close this goal but is slow.
     rw [Set.tprod]; rw [TProd.mk]; rw [mem_preimage]; rw [mem_pi]; rw [prodMk_mem_set_prod_eq]
-    simp_rw [mem_ofP
+    simp_rw [mem_ofPred_eq, mem_cons]
+    rw [forall_eq_or_imp]; rw [and_congr_right_iff]
+    exact fun _ => h
 
 中文:
 定理 mk_preimage_tprod
@@ -377,7 +379,9 @@ theorem mk_preimage_tprod
       rw [mk_preimage_tprod l t]
     -- `simp [Set.TProd, TProd.mk, this]` can close this goal but is slow.
     rw [Set.tprod]; rw [TProd.mk]; rw [mem_preimage]; rw [mem_pi]; rw [prodMk_mem_set_prod_eq]
-    simp_rw [mem_ofP
+    simp_rw [mem_ofPred_eq, mem_cons]
+    rw [forall_eq_or_imp]; rw [and_congr_right_iff]
+    exact fun _ => h
 
 Depends on / 依赖: Set.tprod, TProd.mk, mk_preimage_tprod
 -/

@@ -1339,7 +1339,7 @@ theorem OpenPartialHomeomorph.contDiff_univUnitBall
   suffices ContDiff Real n fun x : E => (√(1 + ‖x‖ ^ 2 : Real))⁻¹ from this.smul contDiff_id
   have h : forall x : E, (0 : Real) < (1 : Real) + ‖x‖ ^ 2 := fun x => by positivity
   refine ContDiff.inv ?_ fun x => Real.sqrt_ne_zero'.mpr (h x)
-  exact (contDiff_const.add <| contDiff_norm_sq Real).sq
+  exact (contDiff_const.add <| contDiff_norm_sq Real).sqrt fun x => (h x).ne'
 
 中文:
 定理 OpenPartialHomeomorph.contDiff_univUnitBall
@@ -1348,7 +1348,7 @@ theorem OpenPartialHomeomorph.contDiff_univUnitBall
   suffices ContDiff Real n fun x : E => (√(1 + ‖x‖ ^ 2 : Real))⁻¹ from this.smul contDiff_id
   have h : forall x : E, (0 : Real) < (1 : Real) + ‖x‖ ^ 2 := fun x => by positivity
   refine ContDiff.inv ?_ fun x => Real.sqrt_ne_zero'.mpr (h x)
-  exact (contDiff_const.add <| contDiff_norm_sq Real).sq
+  exact (contDiff_const.add <| contDiff_norm_sq Real).sqrt fun x => (h x).ne'
 
 Depends on / 依赖: ContDiff, ContDiff.inv, Real.sqrt_ne_zero, contDiff_const, contDiff_const.add, contDiff_id, contDiff_norm_sq, sqrt_ne_zero, this.smul
 -/
@@ -1367,7 +1367,11 @@ theorem OpenPartialHomeomorph.contDiffOn_univUnitBall_symm
   apply ContDiffAt.contDiffWithinAt
   suffices ContDiffAt Real n (fun y : E => (√(1 - ‖y‖ ^ 2 : Real))⁻¹) y from this.smul contDiffAt_id
   have h : (0 : Real) < (1 : Real) - ‖(y : E)‖ ^ 2 := by
-    rwa [mem_ball_zero_iff, ← _root_.abs_one, ← abs_norm, ← sq_lt_sq, one_pow, ← sub_pos] a
+    rwa [mem_ball_zero_iff, ← _root_.abs_one, ← abs_norm, ← sq_lt_sq, one_pow, ← sub_pos] at hy
+  refine ContDiffAt.inv ?_ (Real.sqrt_ne_zero'.mpr h)
+  change ContDiffAt Real n ((fun y => √(y)) ∘ fun y => (1 - ‖y‖ ^ 2)) y
+  refine (contDiffAt_sqrt h.ne').comp y ?_
+  exact contDiffAt_const.sub (contDiff_norm_sq Real).contDiffAt
 
 中文:
 定理 OpenPartialHomeomorph.contDiffOn_univUnitBall_symm
@@ -1375,7 +1379,11 @@ theorem OpenPartialHomeomorph.contDiffOn_univUnitBall_symm
   apply ContDiffAt.contDiffWithinAt
   suffices ContDiffAt Real n (fun y : E => (√(1 - ‖y‖ ^ 2 : Real))⁻¹) y from this.smul contDiffAt_id
   have h : (0 : Real) < (1 : Real) - ‖(y : E)‖ ^ 2 := by
-    rwa [mem_ball_zero_iff, ← _root_.abs_one, ← abs_norm, ← sq_lt_sq, one_pow, ← sub_pos] a
+    rwa [mem_ball_zero_iff, ← _root_.abs_one, ← abs_norm, ← sq_lt_sq, one_pow, ← sub_pos] at hy
+  refine ContDiffAt.inv ?_ (Real.sqrt_ne_zero'.mpr h)
+  change ContDiffAt Real n ((fun y => √(y)) ∘ fun y => (1 - ‖y‖ ^ 2)) y
+  refine (contDiffAt_sqrt h.ne').comp y ?_
+  exact contDiffAt_const.sub (contDiff_norm_sq Real).contDiffAt
 
 Depends on / 依赖: ContDiffAt, ContDiffAt.contDiffWithinAt, ContDiffAt.inv, Real.sqrt_ne_zero, _root_, _root_.abs_one, abs_norm, abs_one, contDiffAt_const, contDiffAt_const.sub, contDiffAt_id, contDiffAt_sqrt, contDiffWithinAt, contDiff_norm_, h.ne, mem_ball_zero_iff, one_pow, sq_lt_sq, sqrt_ne_zero, sub_pos
 -/

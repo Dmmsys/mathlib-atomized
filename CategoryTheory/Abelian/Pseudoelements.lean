@@ -199,7 +199,7 @@ instance pseudoEqual_trans
   refine ⟨fun f g h ⟨R, p, q, ep, Eq, comm⟩ ⟨R', p', q', ep', eq', comm'⟩ => ?_⟩
   refine ⟨pullback q p', pullback.fst _ _ ≫ p, pullback.snd _ _ ≫ q',
     epi_comp _ _, epi_comp _ _, ?_⟩
-  rw [Category.assoc]; rw [comm]; rw [← Category.assoc]; rw [pullback.condition]; rw [Category.assoc]; rw [com
+  rw [Category.assoc]; rw [comm]; rw [← Category.assoc]; rw [pullback.condition]; rw [Category.assoc]; rw [comm']; rw [Category.assoc]
 
 中文:
 实例 pseudoEqual_trans
@@ -208,7 +208,7 @@ instance pseudoEqual_trans
   refine ⟨fun f g h ⟨R, p, q, ep, Eq, comm⟩ ⟨R', p', q', ep', eq', comm'⟩ => ?_⟩
   refine ⟨pullback q p', pullback.fst _ _ ≫ p, pullback.snd _ _ ≫ q',
     epi_comp _ _, epi_comp _ _, ?_⟩
-  rw [Category.assoc]; rw [comm]; rw [← Category.assoc]; rw [pullback.condition]; rw [Category.assoc]; rw [com
+  rw [Category.assoc]; rw [comm]; rw [← Category.assoc]; rw [pullback.condition]; rw [Category.assoc]; rw [comm']; rw [Category.assoc]
 
 Depends on / 依赖: Category, Category.assoc, condition, epi_comp, pullback, pullback.condition, pullback.fst, pullback.snd
 -/
@@ -761,7 +761,9 @@ theorem pseudo_injective_of_mono
   have : (⟦(a.hom ≫ f : Over Q)⟧ : Quotient (setoid Q)) = ⟦↑(a'.hom ≫ f)⟧ := by convert!
     ha
   have ⟨R, p, q, ep, Eq, comm⟩ := Quotient.exact this
-exact ⟨R, p, q, ep, Eq, (
+exact ⟨R, p, q, ep, Eq, (cancel_mono f).1 by
+    simp only [Category.assoc]
+    exact comm⟩
 
 中文:
 定理 pseudo_injective_of_mono
@@ -774,7 +776,9 @@ exact ⟨R, p, q, ep, Eq, (
   have : (⟦(a.hom ≫ f : Over Q)⟧ : Quotient (setoid Q)) = ⟦↑(a'.hom ≫ f)⟧ := by convert!
     ha
   have ⟨R, p, q, ep, Eq, comm⟩ := Quotient.exact this
-exact ⟨R, p, q, ep, Eq, (
+exact ⟨R, p, q, ep, Eq, (cancel_mono f).1 by
+    simp only [Category.assoc]
+    exact comm⟩
 
 Depends on / 依赖: Category, Category.assoc, IsColimit, Quotient, Quotient.exact, Quotient.inductionOn, Quotient.sound, Subsingleton, a.hom, cancel_mono, convert, setoid
 -/
@@ -897,7 +901,10 @@ theorem epi_of_pseudo_surjective
     rw [← hp] at hpbar
     exact hpbar
   have ⟨R, x, y, _, ey, comm⟩ := Quotient.exact this
-  apply @epi_of_epi_fac _ _ _ _ _ (x ≫ p.hom) f
+  apply @epi_of_epi_fac _ _ _ _ _ (x ≫ p.hom) f y ey
+  dsimp at comm
+  rw [Category.assoc]; rw [comm]
+  apply Category.comp_id
 
 中文:
 定理 epi_of_pseudo_surjective
@@ -911,7 +918,10 @@ theorem epi_of_pseudo_surjective
     rw [← hp] at hpbar
     exact hpbar
   have ⟨R, x, y, _, ey, comm⟩ := Quotient.exact this
-  apply @epi_of_epi_fac _ _ _ _ _ (x ≫ p.hom) f
+  apply @epi_of_epi_fac _ _ _ _ _ (x ≫ p.hom) f y ey
+  dsimp at comm
+  rw [Category.assoc]; rw [comm]
+  apply Category.comp_id
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Quotient, Quotient.exact, Quotient.exists_rep, comp_id, epi_of_epi_fac, exists_rep, p.hom, setoid
 -/
@@ -942,7 +952,25 @@ theorem pseudo_exact_of_exact
       have hb' : b.hom ≫ S.g = 0 := (pseudoZero_iff _).1 hb
       -- By exactness, `b` factors through `im f = ker g` via some `c`.
       obtain ⟨c, hc⟩ := KernelFork.IsLimit.lift' hS.isLimitImage _ hb'
-      -- We compute the pullback of the map 
+      -- We compute the pullback of the map into the image and `c`.
+      -- The pseudoelement induced by the first pullback map will be our preimage.
+      use pullback.fst (Abelian.factorThruImage S.f) c
+      -- It remains to show that the image of this element under `f` is pseudo-equal to `b`.
+      apply Quotient.sound
+      refine ⟨pullback (Abelian.factorThruImage S.f) c, 𝟙 _,
+              pullback.snd _ _, inferInstance, inferInstance, ?_⟩
+      -- Now we can verify that the diagram commutes.
+      calc
+        𝟙 (pullback (Abelian.factorThruImage S.f) c) ≫ pullback.fst _ _ ≫ S.f =
+          pullback.fst _ _ ≫ S.f :=
+          Category.id_comp _
+        _ = pullback.fst _ _ ≫ Abelian.factorThruImage S.f ≫ kernel.ι (cokernel.π S.f) := by
+          rw [Abelian.image.fac]
+        _ = (pullback.snd _ _ ≫ c) ≫ kernel.ι (cokernel.π S.f) := by
+          rw [← Category.assoc]; rw [pullback.condition]
+        _ = pullback.snd _ _ ≫ b.hom := by
+          rw [Category.assoc]
+          congr
 
 中文:
 定理 pseudo_exact_of_exact
@@ -952,7 +980,25 @@ theorem pseudo_exact_of_exact
       have hb' : b.hom ≫ S.g = 0 := (pseudoZero_iff _).1 hb
       -- By exactness, `b` factors through `im f = ker g` via some `c`.
       obtain ⟨c, hc⟩ := KernelFork.IsLimit.lift' hS.isLimitImage _ hb'
-      -- We compute the pullback of the map 
+      -- We compute the pullback of the map into the image and `c`.
+      -- The pseudoelement induced by the first pullback map will be our preimage.
+      use pullback.fst (Abelian.factorThruImage S.f) c
+      -- It remains to show that the image of this element under `f` is pseudo-equal to `b`.
+      apply Quotient.sound
+      refine ⟨pullback (Abelian.factorThruImage S.f) c, 𝟙 _,
+              pullback.snd _ _, inferInstance, inferInstance, ?_⟩
+      -- Now we can verify that the diagram commutes.
+      calc
+        𝟙 (pullback (Abelian.factorThruImage S.f) c) ≫ pullback.fst _ _ ≫ S.f =
+          pullback.fst _ _ ≫ S.f :=
+          Category.id_comp _
+        _ = pullback.fst _ _ ≫ Abelian.factorThruImage S.f ≫ kernel.ι (cokernel.π S.f) := by
+          rw [Abelian.image.fac]
+        _ = (pullback.snd _ _ ≫ c) ≫ kernel.ι (cokernel.π S.f) := by
+          rw [← Category.assoc]; rw [pullback.condition]
+        _ = pullback.snd _ _ ≫ b.hom := by
+          rw [Category.assoc]
+          congr
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, b.hom, inductionOn, pseudoZero_iff
 -/
@@ -1019,7 +1065,29 @@ theorem exact_of_pseudo_exact
       -- If we apply `g` to the pseudoelement induced by its kernel, we get 0 (of course!).
       have : S.g (kernel.ι S.g) = 0 := apply_eq_zero_of_comp_eq_zero _ _ (kernel.condition _)
       -- By pseudo-exactness, we get a preimage.
-      obtain ⟨a
+      obtain ⟨a', ha⟩ := hS _ this
+      obtain ⟨a, ha'⟩ := Quotient.exists_rep a'
+      rw [← ha'] at ha
+      obtain ⟨Z, r, q, _, eq, comm⟩ := Quotient.exact ha
+      -- Consider the pullback of `kernel.ι (cokernel.π f)` and `kernel.ι g`.
+      -- The commutative diagram given by the pseudo-equality `f a = b` induces
+      -- a cone over this pullback, so we get a factorization `z`.
+      obtain ⟨z, _, hz₂⟩ := @pullback.lift' _ _ _ _ _ _ (kernel.ι (cokernel.π S.f))
+        (kernel.ι S.g) _ (r ≫ a.hom ≫ Abelian.factorThruImage S.f) q (by
+          simp only [Category.assoc, Abelian.image.fac]
+          exact comm)
+      -- Let's give a name to the second pullback morphism.
+      let j : pullback (kernel.ι (cokernel.π S.f)) (kernel.ι S.g) ⟶ kernel S.g := pullback.snd _ _
+      -- Since `q` is an epimorphism, in particular this means that `j` is an epimorphism.
+      have pe : Epi j := epi_of_epi_fac hz₂
+      -- But it is also a monomorphism, because `kernel.ι (cokernel.π f)` is: A kernel is
+      -- always a monomorphism and the pullback of a monomorphism is a monomorphism.
+      -- But mono + epi = iso, so `j` is an isomorphism.
+      have : IsIso j := isIso_of_mono_of_epi _
+      -- But then `kernel.ι g` can be expressed using all of the maps of the pullback square, and we
+      -- are done.
+      rw [(Iso.eq_inv_comp (asIso j)).2 pullback.condition.symm]
+      simp only [Category.assoc, kernel.condition, HasZeroMorphisms.comp_zero])
 
 中文:
 定理 exact_of_pseudo_exact
@@ -1028,7 +1096,29 @@ theorem exact_of_pseudo_exact
       -- If we apply `g` to the pseudoelement induced by its kernel, we get 0 (of course!).
       have : S.g (kernel.ι S.g) = 0 := apply_eq_zero_of_comp_eq_zero _ _ (kernel.condition _)
       -- By pseudo-exactness, we get a preimage.
-      obtain ⟨a
+      obtain ⟨a', ha⟩ := hS _ this
+      obtain ⟨a, ha'⟩ := Quotient.exists_rep a'
+      rw [← ha'] at ha
+      obtain ⟨Z, r, q, _, eq, comm⟩ := Quotient.exact ha
+      -- Consider the pullback of `kernel.ι (cokernel.π f)` and `kernel.ι g`.
+      -- The commutative diagram given by the pseudo-equality `f a = b` induces
+      -- a cone over this pullback, so we get a factorization `z`.
+      obtain ⟨z, _, hz₂⟩ := @pullback.lift' _ _ _ _ _ _ (kernel.ι (cokernel.π S.f))
+        (kernel.ι S.g) _ (r ≫ a.hom ≫ Abelian.factorThruImage S.f) q (by
+          simp only [Category.assoc, Abelian.image.fac]
+          exact comm)
+      -- Let's give a name to the second pullback morphism.
+      let j : pullback (kernel.ι (cokernel.π S.f)) (kernel.ι S.g) ⟶ kernel S.g := pullback.snd _ _
+      -- Since `q` is an epimorphism, in particular this means that `j` is an epimorphism.
+      have pe : Epi j := epi_of_epi_fac hz₂
+      -- But it is also a monomorphism, because `kernel.ι (cokernel.π f)` is: A kernel is
+      -- always a monomorphism and the pullback of a monomorphism is a monomorphism.
+      -- But mono + epi = iso, so `j` is an isomorphism.
+      have : IsIso j := isIso_of_mono_of_epi _
+      -- But then `kernel.ι g` can be expressed using all of the maps of the pullback square, and we
+      -- are done.
+      rw [(Iso.eq_inv_comp (asIso j)).2 pullback.condition.symm]
+      simp only [Category.assoc, kernel.condition, HasZeroMorphisms.comp_zero])
 
 Depends on / 依赖: S.exact_iff_kernel_
 -/
@@ -1078,7 +1168,16 @@ theorem sub_of_eq_image
       ⟨a'',
         ⟨show ⟦(a'' ≫ f : Over Q)⟧ = ⟦↑(0 : Q ⟶ Q)⟧ by
             dsimp at comm
-            simp [a'', sub_eq_zero.
+            simp [a'', sub_eq_zero.2 comm],
+          fun Z g hh => by
+          obtain ⟨X, p', q', ep', _, comm'⟩ := Quotient.exact hh
+          have : a'.hom ≫ g = 0 := by
+            apply (epi_iff_cancel_zero _).1 ep' _ (a'.hom ≫ g)
+            simpa using comm'
+          apply Quotient.sound
+          -- Can we prevent quotient.sound from giving us this weird `coe_b` thingy?
+          change app g (a'' : Over P) ≈ app g a
+          exact ⟨R, 𝟙 R, p, inferInstance, ep, by simp [a'', sub_eq_add_neg, this]⟩⟩⟩
 
 中文:
 定理 sub_of_eq_image
@@ -1090,7 +1189,16 @@ theorem sub_of_eq_image
       ⟨a'',
         ⟨show ⟦(a'' ≫ f : Over Q)⟧ = ⟦↑(0 : Q ⟶ Q)⟧ by
             dsimp at comm
-            simp [a'', sub_eq_zero.
+            simp [a'', sub_eq_zero.2 comm],
+          fun Z g hh => by
+          obtain ⟨X, p', q', ep', _, comm'⟩ := Quotient.exact hh
+          have : a'.hom ≫ g = 0 := by
+            apply (epi_iff_cancel_zero _).1 ep' _ (a'.hom ≫ g)
+            simpa using comm'
+          apply Quotient.sound
+          -- Can we prevent quotient.sound from giving us this weird `coe_b` thingy?
+          change app g (a'' : Over P) ≈ app g a
+          exact ⟨R, 𝟙 R, p, inferInstance, ep, by simp [a'', sub_eq_add_neg, this]⟩⟩⟩
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.inductionOn, Quotient.sound, a.hom, epi_iff_cancel_zero, sub_eq_zero
 -/
@@ -1128,7 +1236,8 @@ theorem pseudo_pullback
     obtain ⟨l, hl₁, hl₂⟩ := @pullback.lift' _ _ _ _ _ _ f g _ (a ≫ x.hom) (b ≫ y.hom) (by
       simp only [Category.assoc]
       exact comm)
-    exact ⟨l, ⟨Quotient.sound ⟨Z, 𝟙 Z, a, inferInstance, ea, b
+    exact ⟨l, ⟨Quotient.sound ⟨Z, 𝟙 Z, a, inferInstance, ea, by rwa [Category.id_comp]⟩,
+      Quotient.sound ⟨Z, 𝟙 Z, b, inferInstance, eb, by rwa [Category.id_comp]⟩⟩⟩
 
 中文:
 定理 pseudo_pullback
@@ -1138,7 +1247,8 @@ theorem pseudo_pullback
     obtain ⟨l, hl₁, hl₂⟩ := @pullback.lift' _ _ _ _ _ _ f g _ (a ≫ x.hom) (b ≫ y.hom) (by
       simp only [Category.assoc]
       exact comm)
-    exact ⟨l, ⟨Quotient.sound ⟨Z, 𝟙 Z, a, inferInstance, ea, b
+    exact ⟨l, ⟨Quotient.sound ⟨Z, 𝟙 Z, a, inferInstance, ea, by rwa [Category.id_comp]⟩,
+      Quotient.sound ⟨Z, 𝟙 Z, b, inferInstance, eb, by rwa [Category.id_comp]⟩⟩⟩
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, Quotient, Quotient.exact, Quotient.inductionOn, Quotient.sound, id_comp, pullback, pullback.lift, x.hom, y.hom
 -/
@@ -1168,7 +1278,12 @@ theorem ModuleCat.eq_range_of_pseudoequal
     obtain ⟨a'', ha''⟩ := (ModuleCat.epi_iff_surjective p).1 hp a'
     refine ⟨q a'', ?_⟩
     dsimp at ha' ⊢
-    rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [←
+    rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [← H]; rw [ModuleCat.hom_comp]; rw [LinearMap.comp_apply]; rw [ha'']; rw [ha']
+  · obtain ⟨a', ha'⟩ := ha
+    obtain ⟨a'', ha''⟩ := (ModuleCat.epi_iff_surjective q).1 hq a'
+    refine ⟨p a'', ?_⟩
+    dsimp at ha' ⊢
+    rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [H]; rw [ModuleCat.hom_comp]; rw [LinearMap.comp_apply]; rw [ha'']; rw [ha']
 
 中文:
 定理 模范畴.eq_range_of_pseudoequal
@@ -1180,7 +1295,12 @@ theorem ModuleCat.eq_range_of_pseudoequal
     obtain ⟨a'', ha''⟩ := (ModuleCat.epi_iff_surjective p).1 hp a'
     refine ⟨q a'', ?_⟩
     dsimp at ha' ⊢
-    rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [←
+    rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [← H]; rw [ModuleCat.hom_comp]; rw [LinearMap.comp_apply]; rw [ha'']; rw [ha']
+  · obtain ⟨a', ha'⟩ := ha
+    obtain ⟨a'', ha''⟩ := (ModuleCat.epi_iff_surjective q).1 hq a'
+    refine ⟨p a'', ?_⟩
+    dsimp at ha' ⊢
+    rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [H]; rw [ModuleCat.hom_comp]; rw [LinearMap.comp_apply]; rw [ha'']; rw [ha']
 
 Depends on / 依赖: LinearMap, LinearMap.comp_ap, LinearMap.comp_apply, ModuleCat, ModuleCat.epi_iff_surjective, ModuleCat.hom_comp, Submodule, Submodule.ext, comp_ap, comp_apply, epi_iff_surjective, hom_comp
 -/

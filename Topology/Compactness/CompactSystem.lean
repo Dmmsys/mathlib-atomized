@@ -226,7 +226,16 @@ lemma insert_univ
   let n := Nat.find h₀
   let s' := fun i => if s i in S then s i else s n
   have h₁ : forall i, s' i in S := by grind
- 
+  have h₂ : ⋂ i, s i = ⋂ i, s' i := by ext; simp; grind
+  apply h₂ ▸ h s' h₁
+  by_contra! ⟨j, hj⟩
+  have h₃ (v : Nat) (hv : n <= v) : dissipate s v = dissipate s' v := by ext; simp; grind
+  have h₇ : dissipate s' (max j n) = ∅ := by
+    rw [← subset_empty_iff] at hj ⊢
+    exact (antitone_dissipate (Nat.le_max_left j n)).trans hj
+  specialize h₃ (max j n) (Nat.le_max_right j n)
+  specialize hd (max j n)
+  simp [h₃, h₇] at hd
 
 中文:
 引理 insert_univ
@@ -243,7 +252,16 @@ lemma insert_univ
   let n := Nat.find h₀
   let s' := fun i => if s i in S then s i else s n
   have h₁ : forall i, s' i in S := by grind
- 
+  have h₂ : ⋂ i, s i = ⋂ i, s' i := by ext; simp; grind
+  apply h₂ ▸ h s' h₁
+  by_contra! ⟨j, hj⟩
+  have h₃ (v : Nat) (hv : n <= v) : dissipate s v = dissipate s' v := by ext; simp; grind
+  have h₇ : dissipate s' (max j n) = ∅ := by
+    rw [← subset_empty_iff] at hj ⊢
+    exact (antitone_dissipate (Nat.le_max_left j n)).trans hj
+  specialize h₃ (max j n) (Nat.le_max_right j n)
+  specialize hd (max j n)
+  simp [h₃, h₇] at hd
 
 Depends on / 依赖: IsCompactSystem, IsCompactSystem.iff_nonempty_iInter, Nat.find, classical, dissipate, iff_nonempty_iInter, isEmpty_or_nonempty
 -/
@@ -284,7 +302,7 @@ lemma isCompactSystem_iff_nonempty_iInter_of_lt
   simp_rw [Set.nonempty_iff_ne_empty] at h' ⊢
   refine fun n g => h' n ?_
   simp_rw [← subset_empty_iff, dissipate] at g ⊢
-  exact le
+  exact le_trans (fun x => by simp; grind) g
 
 中文:
 引理 isCompactSystem_iff_nonempty_i整数er_of_lt
@@ -296,7 +314,7 @@ lemma isCompactSystem_iff_nonempty_iInter_of_lt
   simp_rw [Set.nonempty_iff_ne_empty] at h' ⊢
   refine fun n g => h' n ?_
   simp_rw [← subset_empty_iff, dissipate] at g ⊢
-  exact le
+  exact le_trans (fun x => by simp; grind) g
 
 Depends on / 依赖: IsCompactSystem, IsCompactSystem.iff_nonempty_iInter, Set.nonempty_iff_ne_empty, dissipate, dissipate_eq_biInter_lt, iff_nonempty_iInter, le_trans, nonempty_iff_ne_empty, simp_rw, subset_empty_iff
 -/
@@ -358,7 +376,15 @@ theorem isCompactSystem_iff_of_directed
   · rw [← exists_dissipate_eq_empty_iff_of_directed hdi]
     exact h C (by simp [hi])
   rw [← biInter_le_eq_iInter] at h2
-  suffices (forall n, dissipate C n in S ∨ dissipate C n = ∅) ∧ (⋂ n, dis
+  suffices (forall n, dissipate C n in S ∨ dissipate C n = ∅) ∧ (⋂ n, dissipate C n = ∅) by
+    by_cases! f : forall n, dissipate C n in S
+    · exact h (dissipate C) directed_dissipate f this.2
+    · obtain ⟨n, hn⟩ := f
+      exact ⟨n, by simpa [hn] using this.1 n⟩
+  refine ⟨fun n => ?_, h2⟩
+  by_cases g : (dissipate C n).Nonempty
+  · simpa [or_comm] using hpi.insert_empty.dissipate_mem h1 n g
+  · exact .inr (Set.not_nonempty_iff_eq_empty.mp g)
 
 中文:
 定理 isCompactSystem_iff_of_directed
@@ -369,7 +395,15 @@ theorem isCompactSystem_iff_of_directed
   · rw [← exists_dissipate_eq_empty_iff_of_directed hdi]
     exact h C (by simp [hi])
   rw [← biInter_le_eq_iInter] at h2
-  suffices (forall n, dissipate C n in S ∨ dissipate C n = ∅) ∧ (⋂ n, dis
+  suffices (forall n, dissipate C n in S ∨ dissipate C n = ∅) ∧ (⋂ n, dissipate C n = ∅) by
+    by_cases! f : forall n, dissipate C n in S
+    · exact h (dissipate C) directed_dissipate f this.2
+    · obtain ⟨n, hn⟩ := f
+      exact ⟨n, by simpa [hn] using this.1 n⟩
+  refine ⟨fun n => ?_, h2⟩
+  by_cases g : (dissipate C n).Nonempty
+  · simpa [or_comm] using hpi.insert_empty.dissipate_mem h1 n g
+  · exact .inr (Set.not_nonempty_iff_eq_empty.mp g)
 
 Depends on / 依赖: biInter_le_eq_iInter, directed_dissipate, dissipate, exists_dissipate_eq_empty_iff_of_directed, isCompactSystem_insert_empty_iff
 -/
@@ -436,7 +470,8 @@ theorem isCompactSystem_isCompact_isClosed
   rw [← iInter_dissipate]
   refine IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed (Set.dissipate C)
     (fun n => ?_) h_nonempty ?_ (fun n => isClosed_biInter (fun i _ => (hC_cc i).2))
-  · exact Set.antito
+  · exact Set.antitone_dissipate (by lia)
+  · simpa using (hC_cc 0).1
 
 中文:
 定理 isCompactSystem_isCompact_isClosed
@@ -446,7 +481,8 @@ theorem isCompactSystem_isCompact_isClosed
   rw [← iInter_dissipate]
   refine IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed (Set.dissipate C)
     (fun n => ?_) h_nonempty ?_ (fun n => isClosed_biInter (fun i _ => (hC_cc i).2))
-  · exact Set.antito
+  · exact Set.antitone_dissipate (by lia)
+  · simpa using (hC_cc 0).1
 
 Depends on / 依赖: IsCompact, IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, IsCompactSystem, IsCompactSystem.of_nonempty_iInter, Set.antitone_dissipate, Set.dissipate, antitone_dissipate, dissipate, hC_cc, h_nonempty, iInter_dissipate, isClosed_biInter, nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, of_nonempty_iInter
 -/

@@ -44,7 +44,11 @@ definition toSmallShiftedHom
     intro y₁ y₂ h
     refine (SmallShiftedHom.equiv _ DerivedCategory.Q).injective ?_
     simp only [SmallShiftedHom.equiv_mk, ShiftedHom.map]
-    rw [cancel_mono]; rw [DerivedCa
+    rw [cancel_mono]; rw [DerivedCategory.Q_map_eq_of_homotopy]
+    apply HomotopyCategory.homotopyOfEq
+    rw [← toHom_mk]; rw [← toHom_mk]
+    congr 1
+    exact Quotient.sound h) x
 
 中文:
 定义 toSmallShiftedHom
@@ -54,7 +58,11 @@ definition toSmallShiftedHom
     intro y₁ y₂ h
     refine (SmallShiftedHom.equiv _ DerivedCategory.Q).injective ?_
     simp only [SmallShiftedHom.equiv_mk, ShiftedHom.map]
-    rw [cancel_mono]; rw [DerivedCa
+    rw [cancel_mono]; rw [DerivedCategory.Q_map_eq_of_homotopy]
+    apply HomotopyCategory.homotopyOfEq
+    rw [← toHom_mk]; rw [← toHom_mk]
+    congr 1
+    exact Quotient.sound h) x
 
 Depends on / 依赖: Cocycle, Cocycle.equivHomShift.symm, DerivedCategory, DerivedCategory.Q, DerivedCategory.Q_map_eq_of_homotopy, HasDerivedCategory, HasDerivedCategory.standard, HomotopyCategory, HomotopyCategory.homotopyOfEq, Q_map_eq_of_homotopy, Quotient, Quotient.lift, Quotient.sound, ShiftedHom, ShiftedHom.map, SmallShiftedHom, SmallShiftedHom.equiv, SmallShiftedHom.equiv_mk, SmallShiftedHom.mk, cancel_mono
 -/

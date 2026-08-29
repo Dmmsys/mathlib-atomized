@@ -85,7 +85,7 @@ definition alternatingMapToDual
     ext v
     suffices Matrix.det (n := Fin n) (.of (fun i j => f j (v i))) = 0 by
       simpa [Matrix.det_apply] using this
-    exact Matrix.det_zero_of_column_eq hi
+    exact Matrix.det_zero_of_column_eq hij (by simp [hf])
 
 中文:
 定义 alternatingMapToDual
@@ -96,7 +96,7 @@ definition alternatingMapToDual
     ext v
     suffices Matrix.det (n := Fin n) (.of (fun i j => f j (v i))) = 0 by
       simpa [Matrix.det_apply] using this
-    exact Matrix.det_zero_of_column_eq hi
+    exact Matrix.det_zero_of_column_eq hij (by simp [hf])
 
 Depends on / 依赖: compMultilinearMap, dualMap, dualMap.compMultilinearMap, toTensorPower
 -/
@@ -261,7 +261,24 @@ lemma pairingDual_apply_apply_eq_one_zero
   have : a = b ∘ σ := by
     ext i
     by_contra hi
-    exact h' (Finset.prod_eq_ze
+    exact h' (Finset.prod_eq_zero (i := i) (by simp) (h₀ hi))
+  have hσ : Monotone σ := fun i j hij => by
+    have h'' := congr_fun this
+    dsimp at h''
+    rw [← a.map_rel_iff] at hij
+    simpa only [← b.map_rel_iff, ← h'']
+  have hσ' : Monotone σ.symm := fun i j hij => by
+    obtain ⟨i, rfl⟩ := σ.surjective i
+    obtain ⟨j, rfl⟩ := σ.surjective j
+    simp only [Equiv.symm_apply_apply]
+    by_contra! h
+    obtain rfl : i = j := σ.injective (le_antisymm hij (hσ h.le))
+    simp only [lt_self_iff_false] at h
+  obtain rfl : σ = 1 := by
+    ext i : 1
+    exact DFunLike.congr_fun (Subsingleton.elim (σ.toOrderIso hσ hσ') (OrderIso.refl _)) i
+  ext
+  apply congr_fun this
 
 中文:
 引理 pairingDual_apply_apply_eq_one_zero
@@ -275,7 +292,24 @@ lemma pairingDual_apply_apply_eq_one_zero
   have : a = b ∘ σ := by
     ext i
     by_contra hi
-    exact h' (Finset.prod_eq_ze
+    exact h' (Finset.prod_eq_zero (i := i) (by simp) (h₀ hi))
+  have hσ : Monotone σ := fun i j hij => by
+    have h'' := congr_fun this
+    dsimp at h''
+    rw [← a.map_rel_iff] at hij
+    simpa only [← b.map_rel_iff, ← h'']
+  have hσ' : Monotone σ.symm := fun i j hij => by
+    obtain ⟨i, rfl⟩ := σ.surjective i
+    obtain ⟨j, rfl⟩ := σ.surjective j
+    simp only [Equiv.symm_apply_apply]
+    by_contra! h
+    obtain rfl : i = j := σ.injective (le_antisymm hij (hσ h.le))
+    simp only [lt_self_iff_false] at h
+  obtain rfl : σ = 1 := by
+    ext i : 1
+    exact DFunLike.congr_fun (Subsingleton.elim (σ.toOrderIso hσ hσ') (OrderIso.refl _)) i
+  ext
+  apply congr_fun this
 
 Depends on / 依赖: Finset, Finset.prod_eq_zero, Finset.sum_eq_zero, Function, Function.comp_apply, Matrix, Matrix.det_apply, Matrix.of_apply, Monotone, a.map_rel_iff, b.map_rel_iff, comp_apply, congr_fun, det_apply, map_rel_iff, of_apply, prod_eq_zero, smul_eq_iff_eq_inv_smul, smul_zero, sum_eq_zero
 -/

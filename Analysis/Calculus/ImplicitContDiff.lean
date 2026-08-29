@@ -189,7 +189,8 @@ theorem contDiffAt_implicitFunction
   set φ := (cdf.hasStrictFDerivAt pn).implicitFunctionDataOfProdDomain if₂
   have : ContDiffAt 𝕜 n φ.implicitFunction.uncurry (f u, u.1) := by
     simpa [φ] using φ.contDiffAt_implicitFunction
-      (b
+      (by simpa [φ] using cdf) (by simpa [φ] using contDiffAt_fst) pn
+  fun_prop
 
 中文:
 定理 contDiffAt_implicitFunction
@@ -198,7 +199,8 @@ theorem contDiffAt_implicitFunction
   set φ := (cdf.hasStrictFDerivAt pn).implicitFunctionDataOfProdDomain if₂
   have : ContDiffAt 𝕜 n φ.implicitFunction.uncurry (f u, u.1) := by
     simpa [φ] using φ.contDiffAt_implicitFunction
-      (b
+      (by simpa [φ] using cdf) (by simpa [φ] using contDiffAt_fst) pn
+  fun_prop
 
 Depends on / 依赖: ContDiffAt, ContDiffAt.implicitFunction_def, HasStrictFDerivAt, HasStrictFDerivAt.implicitFunctionOfProdDomain_def, cdf.hasStrictFDerivAt, contDiffAt_fst, contDiffAt_implicitFunction, fun_prop, hasStrictFDerivAt, implicitFunction, implicitFunction.uncurry, implicitFunctionDataOfProdDomain, implicitFunctionOfProdDomain_def, implicitFunction_def, uncurry
 -/

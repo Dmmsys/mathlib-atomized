@@ -40,7 +40,14 @@ theorem fin_nat_prod
       integrable_const_iff, pi_empty_univ, ENNReal.one_lt_top, or_true]
   | succ n n_ih =>
       have := ((measurePreserving_piFinSuccAbove μ 0).symm)
-      rw [← this.integrable_comp_emb (Meas
+      rw [← this.integrable_comp_emb (MeasurableEquiv.measurableEmbedding _)]
+      simp_rw [MeasurableEquiv.piFinSuccAbove_symm_apply, Fin.insertNthEquiv,
+        Fin.prod_univ_succ, Fin.insertNth_zero]
+      simp only [Fin.zero_succAbove, Function.comp_def]
+      have : Integrable (fun (x : (j : Fin n) -> E (Fin.succ j)) => ∏ j, f (Fin.succ j) (x j))
+          (Measure.pi (fun i => μ i.succ)) :=
+        n_ih (fun i => hf _)
+      exact Integrable.mul_prod (hf 0) this
 
 中文:
 定理 fin_nat_prod
@@ -51,7 +58,14 @@ theorem fin_nat_prod
       integrable_const_iff, pi_empty_univ, ENNReal.one_lt_top, or_true]
   | succ n n_ih =>
       have := ((measurePreserving_piFinSuccAbove μ 0).symm)
-      rw [← this.integrable_comp_emb (Meas
+      rw [← this.integrable_comp_emb (MeasurableEquiv.measurableEmbedding _)]
+      simp_rw [MeasurableEquiv.piFinSuccAbove_symm_apply, Fin.insertNthEquiv,
+        Fin.prod_univ_succ, Fin.insertNth_zero]
+      simp only [Fin.zero_succAbove, Function.comp_def]
+      have : Integrable (fun (x : (j : Fin n) -> E (Fin.succ j)) => ∏ j, f (Fin.succ j) (x j))
+          (Measure.pi (fun i => μ i.succ)) :=
+        n_ih (fun i => hf _)
+      exact Integrable.mul_prod (hf 0) this
 
 Depends on / 依赖: ENNReal, ENNReal.one_lt_top, Fin.insertNthEquiv, Fin.insertNth_zero, Fin.prod_univ_succ, Fin.zero_succAbove, Finset, Finset.prod_empty, Finset.univ_eq_empty, Function, Function.comp_def, Integrable, MeasurableEquiv, MeasurableEquiv.measurableEmbedding, MeasurableEquiv.piFinSuccAbove_symm_apply, comp_def, insertNthEquiv, insertNth_zero, integrable_comp_emb, integrable_const_iff
 -/
@@ -152,7 +166,14 @@ theorem integral_fin_nat_prod_eq_prod
         _ = ∫ x : E 0 × ((i : Fin n) -> E (Fin.succ i)),
             f 0 x.1 * ∏ i : Fin n, f (Fin.succ i) (x.2 i)
             ∂((μ 0).prod (Measure.pi (fun i => μ i.succ))) := by
-          rw [← ((measurePreservi
+          rw [← ((measurePreserving_piFinSuccAbove μ 0).symm).integral_comp']
+          simp_rw [MeasurableEquiv.piFinSuccAbove_symm_apply, Fin.insertNthEquiv,
+            Fin.prod_univ_succ, Fin.insertNth_zero, Equiv.coe_fn_mk, Fin.cons_succ,
+            Fin.zero_succAbove, cast_eq, Fin.cons_zero]
+        _ = (∫ x, f 0 x ∂μ 0)
+            * ∏ i : Fin n, ∫ (x : E (Fin.succ i)), f (Fin.succ i) x ∂(μ i.succ) := by
+          rw [← n_ih]; rw [← integral_prod_mul]
+        _ = ∏ i, ∫ x, f i x ∂(μ i) := by rw [Fin.prod_univ_succ]
 
 中文:
 定理 integral_fin_nat_prod_eq_prod
@@ -165,7 +186,14 @@ theorem integral_fin_nat_prod_eq_prod
         _ = ∫ x : E 0 × ((i : Fin n) -> E (Fin.succ i)),
             f 0 x.1 * ∏ i : Fin n, f (Fin.succ i) (x.2 i)
             ∂((μ 0).prod (Measure.pi (fun i => μ i.succ))) := by
-          rw [← ((measurePreservi
+          rw [← ((measurePreserving_piFinSuccAbove μ 0).symm).integral_comp']
+          simp_rw [MeasurableEquiv.piFinSuccAbove_symm_apply, Fin.insertNthEquiv,
+            Fin.prod_univ_succ, Fin.insertNth_zero, Equiv.coe_fn_mk, Fin.cons_succ,
+            Fin.zero_succAbove, cast_eq, Fin.cons_zero]
+        _ = (∫ x, f 0 x ∂μ 0)
+            * ∏ i : Fin n, ∫ (x : E (Fin.succ i)), f (Fin.succ i) x ∂(μ i.succ) := by
+          rw [← n_ih]; rw [← integral_prod_mul]
+        _ = ∏ i, ∫ x, f i x ∂(μ i) := by rw [Fin.prod_univ_succ]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Fin.cons_succ, Fin.cons_zero, Fin.insertNthEquiv, Fin.insertNth_zero, Fin.prod_univ_succ, Fin.succ, Fin.zero_succAbove, MeasurableEquiv, MeasurableEquiv.piFinSuccAbove_symm_apply, Measure, Measure.pi, cast_eq, coe_fn_mk, cons_succ, cons_zero, i.succ, insertNthEquiv, insertNth_zero, integral_comp
 -/

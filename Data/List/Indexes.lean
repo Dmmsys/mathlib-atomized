@@ -99,7 +99,10 @@ theorem mapIdxMAux'_eq_mapIdxMGo
   | cons head tail ih =>
     simp only [mapIdxMAux', seqRight_eq, map_eq_pure_bind, seq_eq_bind_map, bind_pure_unit,
       LawfulMonad.bind_assoc, pure_bind, mapIdxM.go]
-    genera
+    generalize (f (Array.size arr) head) = head
+    have : (arr.push ⟨⟩).size = arr.size + 1 := Array.size_push _
+    rw [← this]; rw [ih]
+    simp only [seqRight_eq, map_eq_pure_bind, seq_pure, LawfulMonad.bind_assoc, pure_bind]
 
 中文:
 定理 mapIdxMAux'_eq_mapIdxMGo
@@ -110,7 +113,10 @@ theorem mapIdxMAux'_eq_mapIdxMGo
   | cons head tail ih =>
     simp only [mapIdxMAux', seqRight_eq, map_eq_pure_bind, seq_eq_bind_map, bind_pure_unit,
       LawfulMonad.bind_assoc, pure_bind, mapIdxM.go]
-    genera
+    generalize (f (Array.size arr) head) = head
+    have : (arr.push ⟨⟩).size = arr.size + 1 := Array.size_push _
+    rw [← this]; rw [ih]
+    simp only [seqRight_eq, map_eq_pure_bind, seq_pure, LawfulMonad.bind_assoc, pure_bind]
 
 Depends on / 依赖: Array.size, Array.size_push, LawfulMonad, LawfulMonad.bind_assoc, arr.push, arr.size, bind_assoc, bind_pure_unit, generalize, generalizing, mapIdxM, mapIdxM.go, mapIdxMAux, map_eq_pure_bind, map_pure, pure_bind, seqRight_eq, seq_eq_bind_map, seq_pure, size_push
 -/

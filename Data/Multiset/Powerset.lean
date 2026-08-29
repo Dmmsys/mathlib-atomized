@@ -187,7 +187,9 @@ theorem powerset_aux'_perm
   | swap a b =>
     simp only [powersetAux'_cons, map_append, List.map_map, append_assoc]
     apply Perm.append_left
-    rw [← append_assoc]; rw [← append_assoc]; rw [(by funext 
+    rw [← append_assoc]; rw [← append_assoc]; rw [(by funext s; simp [cons_swap] : cons b ∘ cons a = cons a ∘ cons b)]
+    exact perm_append_comm.append_right _
+  | trans _ _ IH₁ IH₂ => exact IH₁.trans IH₂
 
 中文:
 定理 powerset_aux'_perm
@@ -202,7 +204,9 @@ theorem powerset_aux'_perm
   | swap a b =>
     simp only [powersetAux'_cons, map_append, List.map_map, append_assoc]
     apply Perm.append_left
-    rw [← append_assoc]; rw [← append_assoc]; rw [(by funext 
+    rw [← append_assoc]; rw [← append_assoc]; rw [(by funext s; simp [cons_swap] : cons b ∘ cons a = cons a ∘ cons b)]
+    exact perm_append_comm.append_right _
+  | trans _ _ IH₁ IH₂ => exact IH₁.trans IH₂
 
 Depends on / 依赖: IH.append, IH.map, List.map_map, Perm.append_left, _cons, append, append_assoc, append_left, append_right, cons_swap, map_append, map_map, perm_append_comm, perm_append_comm.append_right, powersetAux
 -/
@@ -591,7 +595,8 @@ theorem revzip_powersetAux_lemma
     rintro ⟨s, t⟩ h
     dsimp
     rw [← H h]; rw [add_tsub_cancel_left]
-  rw [← forall₂_eq_eq_eq]; rw [
+  rw [← forall₂_eq_eq_eq]; rw [forall₂_map_right_iff]
+  simpa using this
 
 中文:
 定理 revzip_powersetAux_lemma
@@ -604,7 +609,8 @@ theorem revzip_powersetAux_lemma
     rintro ⟨s, t⟩ h
     dsimp
     rw [← H h]; rw [add_tsub_cancel_left]
-  rw [← forall₂_eq_eq_eq]; rw [
+  rw [← forall₂_eq_eq_eq]; rw [forall₂_map_right_iff]
+  simpa using this
 
 Depends on / 依赖: Multiset, Prod.fst, add_tsub_cancel_left, revzip
 -/
@@ -841,7 +847,9 @@ theorem mem_powersetCardAux
       coe_eq_coe, coe_le, Subperm, coe_card]
     exact fun l₁ =>
       ⟨fun ⟨l₂, ⟨s, e⟩, p⟩ => ⟨⟨_, p, s⟩, p.symm.length_eq.trans e⟩,
-       fun ⟨⟨l₂, p, s⟩, e⟩ => ⟨_, ⟨s, p.length_eq.
+       fun ⟨⟨l₂, p, s⟩, e⟩ => ⟨_, ⟨s, p.length_eq.trans e⟩, p⟩⟩
+
+@[simp]
 
 中文:
 定理 mem_powersetCardAux
@@ -852,7 +860,9 @@ theorem mem_powersetCardAux
       coe_eq_coe, coe_le, Subperm, coe_card]
     exact fun l₁ =>
       ⟨fun ⟨l₂, ⟨s, e⟩, p⟩ => ⟨⟨_, p, s⟩, p.symm.length_eq.trans e⟩,
-       fun ⟨⟨l₂, p, s⟩, e⟩ => ⟨_, ⟨s, p.length_eq.
+       fun ⟨⟨l₂, p, s⟩, e⟩ => ⟨_, ⟨s, p.length_eq.trans e⟩, p⟩⟩
+
+@[simp]
 
 Depends on / 依赖: List.mem_map, Quotient, Quotient.inductionOn, Subperm, coe_card, coe_eq_coe, coe_le, inductionOn, length_eq, mem_map, mem_sublistsLen, p.length_eq.trans, p.symm.length_eq.trans, powersetCardAux_eq_map_coe, quot_mk_to_coe
 -/
@@ -953,7 +963,12 @@ theorem powersetCardAux_perm
   | swap a b =>
     simp only [powersetCardAux_cons, append_assoc]
     apply Perm.append_left
-    c
+    cases n
+    · simp [Perm.swap]
+    simp only [powersetCardAux_cons, map_append, List.map_map]
+    rw [← append_assoc]; rw [← append_assoc]; rw [(by funext s; simp [cons_swap] : cons b ∘ cons a = cons a ∘ cons b)]
+    exact perm_append_comm.append_right _
+  | trans _ _ IH₁ IH₂ => exact IH₁.trans IH₂
 
 中文:
 定理 powersetCardAux_perm
@@ -968,7 +983,12 @@ theorem powersetCardAux_perm
   | swap a b =>
     simp only [powersetCardAux_cons, append_assoc]
     apply Perm.append_left
-    c
+    cases n
+    · simp [Perm.swap]
+    simp only [powersetCardAux_cons, map_append, List.map_map]
+    rw [← append_assoc]; rw [← append_assoc]; rw [(by funext s; simp [cons_swap] : cons b ∘ cons a = cons a ∘ cons b)]
+    exact perm_append_comm.append_right _
+  | trans _ _ IH₁ IH₂ => exact IH₁.trans IH₂
 
 Depends on / 依赖: IH.append, List.map_map, Perm.append_left, Perm.swap, append, append_, append_assoc, append_left, cons_swap, generalizing, map_append, map_map, perm_append_comm, perm_append_comm.append_, powersetCardAux_cons
 -/
@@ -1411,7 +1431,9 @@ theorem nodup_powerset
       simp only [quot_mk_to_coe, powerset_coe', coe_nodup]
       refine (nodup_sublists'.2 h).map_on ?_
       exact fun x sx y sy e =>
-        (h.perm_iff_eq_of_sublist (mem_sublists'.1 sx) (mem_s
+        (h.perm_iff_eq_of_sublist (mem_sublists'.1 sx) (mem_sublists'.1 sy)).1 (Quotient.exact e)⟩
+
+alias ⟨Nodup.ofPowerset, Nodup.powerset⟩ := nodup_powerset
 
 中文:
 定理 nodup_powerset
@@ -1422,7 +1444,9 @@ theorem nodup_powerset
       simp only [quot_mk_to_coe, powerset_coe', coe_nodup]
       refine (nodup_sublists'.2 h).map_on ?_
       exact fun x sx y sy e =>
-        (h.perm_iff_eq_of_sublist (mem_sublists'.1 sx) (mem_s
+        (h.perm_iff_eq_of_sublist (mem_sublists'.1 sx) (mem_sublists'.1 sy)).1 (Quotient.exact e)⟩
+
+alias ⟨Nodup.ofPowerset, Nodup.powerset⟩ := nodup_powerset
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.inductionOn, coe_nodup, h.perm_iff_eq_of_sublist, inductionOn, map_on, map_single_le_powerset, mem_sublists, nodup_of_le, nodup_sublists, of_map, perm_iff_eq_of_sublist, powerset_coe, quot_mk_to_coe
 -/

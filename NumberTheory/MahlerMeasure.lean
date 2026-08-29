@@ -101,7 +101,17 @@ theorem ncard_boxPoly
   · refine Set.ncard_congr' ⟨fun p => ⟨toFn (n + 1) p, ?_⟩, fun p => ⟨ofFn (n + 1) p, ?_⟩, ?_, ?_⟩
     · have prop := p.property.2
       simpa using ⟨fun i => ceil_le.mpr (prop i).1, fun i => le_floor.mpr (prop i).2⟩
-· ref
+· refine ⟨Nat.le_of_lt_succ ofFn_natDegree_lt (Nat.le_add_left 1 n) p.val, fun i => ?_⟩
+      have prop := Finset.mem_Icc.mp p.property
+      rw [ofFn_coeff_eq_val_of_lt _ i.2]
+      exact ⟨ceil_le.mp (prop.1 i), le_floor.mp (prop.2 i)⟩
+    · grind [boxPoly, ofFn_comp_toFn_eq_id_of_natDegree_lt]
+    · grind [toFn_comp_ofFn_eq_id]
+  · norm_cast
+    grind [Pi.card_Icc, card_Icc]
+
+@[deprecated (since := "2026-02-02")]
+alias card_eq_of_natDegree_le_of_coeff_le := ncard_boxPoly
 
 中文:
 定理 ncard_boxPoly
@@ -111,7 +121,17 @@ theorem ncard_boxPoly
   · refine Set.ncard_congr' ⟨fun p => ⟨toFn (n + 1) p, ?_⟩, fun p => ⟨ofFn (n + 1) p, ?_⟩, ?_, ?_⟩
     · have prop := p.property.2
       simpa using ⟨fun i => ceil_le.mpr (prop i).1, fun i => le_floor.mpr (prop i).2⟩
-· ref
+· refine ⟨Nat.le_of_lt_succ ofFn_natDegree_lt (Nat.le_add_left 1 n) p.val, fun i => ?_⟩
+      have prop := Finset.mem_Icc.mp p.property
+      rw [ofFn_coeff_eq_val_of_lt _ i.2]
+      exact ⟨ceil_le.mp (prop.1 i), le_floor.mp (prop.2 i)⟩
+    · grind [boxPoly, ofFn_comp_toFn_eq_id_of_natDegree_lt]
+    · grind [toFn_comp_ofFn_eq_id]
+  · norm_cast
+    grind [Pi.card_Icc, card_Icc]
+
+@[deprecated (since := "2026-02-02")]
+alias card_eq_of_natDegree_le_of_coeff_le := ncard_boxPoly
 
 Depends on / 依赖: Finset, Finset.Icc, Finset.mem_Icc.mp, Nat.le_add_left, Nat.le_of_lt_succ, Set.ncard, Set.ncard_congr, ceil_le, ceil_le.mp, ceil_le.mpr, le_add_left, le_floor, le_floor.mp, le_floor.mpr, le_of_lt_succ, mem_Icc, ncard_congr, ofFn_coeff_eq_val_of_lt, ofFn_natDegree_lt, p.property
 -/
@@ -146,7 +166,28 @@ lemma card_mahlerMeasure
       ∏ i : Fin (n + 1), (2 * ⌊n.choose i * B⌋₊ + 1) := by
     simp_rw [norm_eq_abs, abs_le]
     rw [← boxPoly]; rw [ncard_boxPoly]
-    simp only [ceil_neg, sub_neg_eq_add, ← 
+    simp only [ceil_neg, sub_neg_eq_add, ← two_mul]
+    apply Finset.prod_congr rfl fun i _ => ?_
+    zify
+    rw [toNat_of_nonneg (by positivity)]; rw [← natCast_floor_eq_floor (by positivity)]
+    norm_cast
+  rw [← h_card]
+  have h_subset :
+      {p : Int[X] | p.natDegree <= n ∧ (p.map (Int.castRingHom Complex)).mahlerMeasure <= B} subseteq
+      {p : Int[X] | p.natDegree <= n ∧ forall i : Fin (n + 1), ‖p.coeff i‖ <= n.choose i * B} := by
+    gcongr with p hp
+    intro hB d
+    rw [show ‖p.coeff d‖ = ‖(p.map (castRingHom Complex)).coeff d‖ by aesop]
+apply le_trans (p.map (castRingHom Complex)).norm_coeff_le_choose_mul_mahlerMeasure d
+    gcongr
+    · exact mahlerMeasure_nonneg _
+    · grind [Polynomial.natDegree_map_le]
+  have h_finite : {p : Int[X]| p.natDegree <= n ∧
+      forall (i : Fin (n + 1)), ‖p.coeff ↑i‖ <= ↑(n.choose ↑i) * ↑B}.Finite := by
+    apply Set.finite_of_ncard_ne_zero
+    rw [h_card]; rw [Finset.prod_ne_zero_iff]
+    grind
+  exact ⟨h_finite.subset h_subset, Set.ncard_le_ncard h_subset h_finite⟩
 
 中文:
 引理 card_mahlerMeasure
@@ -157,7 +198,28 @@ lemma card_mahlerMeasure
       ∏ i : Fin (n + 1), (2 * ⌊n.choose i * B⌋₊ + 1) := by
     simp_rw [norm_eq_abs, abs_le]
     rw [← boxPoly]; rw [ncard_boxPoly]
-    simp only [ceil_neg, sub_neg_eq_add, ← 
+    simp only [ceil_neg, sub_neg_eq_add, ← two_mul]
+    apply Finset.prod_congr rfl fun i _ => ?_
+    zify
+    rw [toNat_of_nonneg (by positivity)]; rw [← natCast_floor_eq_floor (by positivity)]
+    norm_cast
+  rw [← h_card]
+  have h_subset :
+      {p : Int[X] | p.natDegree <= n ∧ (p.map (Int.castRingHom Complex)).mahlerMeasure <= B} subseteq
+      {p : Int[X] | p.natDegree <= n ∧ forall i : Fin (n + 1), ‖p.coeff i‖ <= n.choose i * B} := by
+    gcongr with p hp
+    intro hB d
+    rw [show ‖p.coeff d‖ = ‖(p.map (castRingHom Complex)).coeff d‖ by aesop]
+apply le_trans (p.map (castRingHom Complex)).norm_coeff_le_choose_mul_mahlerMeasure d
+    gcongr
+    · exact mahlerMeasure_nonneg _
+    · grind [Polynomial.natDegree_map_le]
+  have h_finite : {p : Int[X]| p.natDegree <= n ∧
+      forall (i : Fin (n + 1)), ‖p.coeff ↑i‖ <= ↑(n.choose ↑i) * ↑B}.Finite := by
+    apply Set.finite_of_ncard_ne_zero
+    rw [h_card]; rw [Finset.prod_ne_zero_iff]
+    grind
+  exact ⟨h_finite.subset h_subset, Set.ncard_le_ncard h_subset h_finite⟩
 -/
 private lemma card_mahlerMeasure (n : Nat) (B : Real>=0) :
     Set.Finite {p : Int[X] | p.natDegree <= n ∧ (p.map (castRingHom Complex)).mahlerMeasure <= B} ∧
@@ -246,7 +308,9 @@ theorem cyclotomic_mahlerMeasure_eq_one
   suffices ∏ x in primitiveRoots n Complex, max 1 ‖x‖ = 1 by
     simpa [mahlerMeasure_eq_leadingCoeff_mul_prod_roots, cyclotomic.monic n Complex,
       Polynomial.cyclotomic.roots_eq_primitiveRoots_val]
-  suffices forall x
+  suffices forall x in primitiveRoots n Complex, ‖x‖ <= 1 from Multiset.prod_eq_one (by simpa)
+  intro _ hz
+  exact (IsPrimitiveRoot.norm'_eq_one (isPrimitiveRoot_of_mem_primitiveRoots hz) hn).le
 
 中文:
 定理 cyclotomic_mahlerMeasure_eq_one
@@ -258,7 +322,9 @@ theorem cyclotomic_mahlerMeasure_eq_one
   suffices ∏ x in primitiveRoots n Complex, max 1 ‖x‖ = 1 by
     simpa [mahlerMeasure_eq_leadingCoeff_mul_prod_roots, cyclotomic.monic n Complex,
       Polynomial.cyclotomic.roots_eq_primitiveRoots_val]
-  suffices forall x
+  suffices forall x in primitiveRoots n Complex, ‖x‖ <= 1 from Multiset.prod_eq_one (by simpa)
+  intro _ hz
+  exact (IsPrimitiveRoot.norm'_eq_one (isPrimitiveRoot_of_mem_primitiveRoots hz) hn).le
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.norm, Multiset, Multiset.prod_eq_one, NeZero, Polynomial, Polynomial.cyclotomic.roots_eq_primitiveRoots_val, _eq_one, cyclotomic, cyclotomic.monic, eq_or_ne, isPrimitiveRoot_of_mem_primitiveRoots, mahlerMeasure_eq_leadingCoeff_mul_prod_roots, primitiveRoots, prod_eq_one, roots_eq_primitiveRoots_val
 -/
@@ -290,7 +356,7 @@ lemma norm_leadingCoeff_eq_one_of_mahlerMeasure_eq_one
   norm_cast at ⊢ h_ineq
   grind [leadingCoeff_eq_zero]
 
-include 
+include h in
 
 中文:
 引理 norm_leadingCoeff_eq_one_of_mahlerMeasure_eq_one
@@ -302,7 +368,7 @@ include
   norm_cast at ⊢ h_ineq
   grind [leadingCoeff_eq_zero]
 
-include 
+include h in
 
 Depends on / 依赖: castRingHom, eq_intCast, eq_or_ne, h_ineq, injective_int, leadingCoeff_eq_zero, leadingCoeff_le_mahlerMeasure, leadingCoeff_map_of_injective, p.map
 -/
@@ -389,7 +455,7 @@ lemma norm_root_le_one_of_mahlerMeasure_eq_one
   _ <= ((p.map (castRingHom Complex)).roots.map (fun a => max 1 ‖a‖)).prod :=
         mem_le_prod_of_one_le (fun a => le_max_left 1 ‖a‖) hz
   _ <= 1 := by grind [prod_max_one_norm_roots_le_mahlerMeasure_of_one_le_leadingCoeff,
-        norm_leadingCo
+        norm_leadingCoeff_eq_one_of_mahlerMeasure_eq_one]
 
 中文:
 引理 norm_root_le_one_of_mahlerMeasure_eq_one
@@ -400,7 +466,7 @@ lemma norm_root_le_one_of_mahlerMeasure_eq_one
   _ <= ((p.map (castRingHom Complex)).roots.map (fun a => max 1 ‖a‖)).prod :=
         mem_le_prod_of_one_le (fun a => le_max_left 1 ‖a‖) hz
   _ <= 1 := by grind [prod_max_one_norm_roots_le_mahlerMeasure_of_one_le_leadingCoeff,
-        norm_leadingCo
+        norm_leadingCoeff_eq_one_of_mahlerMeasure_eq_one]
 
 Depends on / 依赖: castRingHom, le_max_left, le_max_right, mem_le_prod_of_one_le, norm_leadingCoeff_eq_one_of_mahlerMeasure_eq_one, p.map, prod_max_one_norm_roots_le_mahlerMeasure_of_one_le_leadingCoeff, roots.map
 -/
@@ -495,7 +561,13 @@ theorem cyclotomic_dvd_of_mahlerMeasure_eq_one
     hpdegC
   have hz₀ : z != 0 := by
     contrapose hX
-    s
+    simp_all [X_dvd_iff, coeff_zero_eq_aeval_zero]
+  have h_z_root : z in p.aroots Complex := by aesop
+  obtain ⟨m, h_m_pos, h_prim⟩ := isPrimitiveRoot_of_mahlerMeasure_eq_one h hz₀ h_z_root
+  use m, h_m_pos
+  rw [cyclotomic_eq_minpoly h_prim h_m_pos]
+apply minpoly.isIntegrallyClosed_dvd isIntegral_of_mahlerMeasure_eq_one h h_z_root
+  exact (mem_aroots.mp h_z_root).2
 
 中文:
 定理 cyclotomic_dvd_of_mahlerMeasure_eq_one
@@ -507,7 +579,13 @@ theorem cyclotomic_dvd_of_mahlerMeasure_eq_one
     hpdegC
   have hz₀ : z != 0 := by
     contrapose hX
-    s
+    simp_all [X_dvd_iff, coeff_zero_eq_aeval_zero]
+  have h_z_root : z in p.aroots Complex := by aesop
+  obtain ⟨m, h_m_pos, h_prim⟩ := isPrimitiveRoot_of_mahlerMeasure_eq_one h hz₀ h_z_root
+  use m, h_m_pos
+  rw [cyclotomic_eq_minpoly h_prim h_m_pos]
+apply minpoly.isIntegrallyClosed_dvd isIntegral_of_mahlerMeasure_eq_one h h_z_root
+  exact (mem_aroots.mp h_z_root).2
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, Splits, Splits.exists_eval_eq_zero, X_dvd_iff, aroots, castRingHom, coeff_zero_eq_aeval_zero, contrapose, cyclotomic_eq_minpoly, degree, degree_map_eq_of_injective, exists_eval_eq_zero, h_m_pos, h_prim, h_z_root, hpdegC, injective_int, isPrimitiveRoot_of_mahlerMeasure_eq_one, p.aroots
 -/

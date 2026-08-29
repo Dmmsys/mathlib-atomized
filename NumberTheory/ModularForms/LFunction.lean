@@ -81,7 +81,7 @@ lemma isBigO_comp_ofComplex_I_mul_sub_valueAtInfty
   refine (hCO.comp_tendsto tendsto_ofComplex_I_mul_atTop_atImInfty).trans ?_
   refine (EventuallyEq.isBigO ?_).trans (isLittleO_exp_neg_mul_rpow_atTop hCpos r).isBigO
   filter_upwards [eventually_gt_atTop 0] with t ht
-  simp 
+  simp [ht, ofComplex_apply_of_im_pos, ← coe_im]
 
 中文:
 引理 isBigO_comp_ofComplex_I_mul_sub_valueAtInfty
@@ -91,7 +91,7 @@ lemma isBigO_comp_ofComplex_I_mul_sub_valueAtInfty
   refine (hCO.comp_tendsto tendsto_ofComplex_I_mul_atTop_atImInfty).trans ?_
   refine (EventuallyEq.isBigO ?_).trans (isLittleO_exp_neg_mul_rpow_atTop hCpos r).isBigO
   filter_upwards [eventually_gt_atTop 0] with t ht
-  simp 
+  simp [ht, ofComplex_apply_of_im_pos, ← coe_im]
 -/
 private lemma isBigO_comp_ofComplex_I_mul_sub_valueAtInfty (r : Real) :
     (fun t : Real => f (ofComplex (I * t)) - valueAtInfty f) =O[atTop] (fun t => t ^ r) := by
@@ -117,7 +117,23 @@ definition weakFEPair
   hε := zpow_ne_zero _ I_ne_zero
   f₀ := valueAtInfty f
   g₀ := valueAtInfty (translate f ModularGroup.S)
-  hf_int := ContinuousOn.locallyIntegrableOn (by fun_prop) measurableSet_I
+  hf_int := ContinuousOn.locallyIntegrableOn (by fun_prop) measurableSet_Ioi
+  hg_int := ContinuousOn.locallyIntegrableOn (by fun_prop) measurableSet_Ioi
+  h_feq t (ht : 0 < t) := by
+    rw [coe_translate]; rw [slash_def]
+    suffices f (ofComplex (I * t⁻¹)) = I ^ k * t ^ k *
+        (f ((ModularGroup.S : GL (Fin 2) Real) • ofComplex (I * t)) * ofComplex (I * t) ^ (-k)) by
+      simpa [σ, denom]
+    rw [ofComplex_apply_of_im_pos (by simpa)]; rw [ofComplex_apply_of_im_pos (by simpa)]; rw [mul_comm (f _)]; rw [← mul_assoc]; rw [← mul_zpow]; rw [zpow_neg]; rw [mul_inv_cancel₀ (zpow_ne_zero _ (by aesop))]
+    simp only [one_mul]
+    congr 1
+    ext
+    rw [coe_smul_of_det_pos (by simp)]
+    simp [num, denom, div_eq_mul_inv, mul_comm]
+  hf_top r := by -- `by exact` to hide use of private lemma in @[expose]'d declaration
+    exact isBigO_comp_ofComplex_I_mul_sub_valueAtInfty f r
+  hg_top r := by -- `by exact` to hide use of private lemma in @[expose]'d declaration
+    exact isBigO_comp_ofComplex_I_mul_sub_valueAtInfty (translate f ModularGroup.S) r
 
 中文:
 定义 weakFEPair
@@ -130,7 +146,23 @@ definition weakFEPair
   hε := zpow_ne_zero _ I_ne_zero
   f₀ := valueAtInfty f
   g₀ := valueAtInfty (translate f ModularGroup.S)
-  hf_int := ContinuousOn.locallyIntegrableOn (by fun_prop) measurableSet_I
+  hf_int := ContinuousOn.locallyIntegrableOn (by fun_prop) measurableSet_Ioi
+  hg_int := ContinuousOn.locallyIntegrableOn (by fun_prop) measurableSet_Ioi
+  h_feq t (ht : 0 < t) := by
+    rw [coe_translate]; rw [slash_def]
+    suffices f (ofComplex (I * t⁻¹)) = I ^ k * t ^ k *
+        (f ((ModularGroup.S : GL (Fin 2) Real) • ofComplex (I * t)) * ofComplex (I * t) ^ (-k)) by
+      simpa [σ, denom]
+    rw [ofComplex_apply_of_im_pos (by simpa)]; rw [ofComplex_apply_of_im_pos (by simpa)]; rw [mul_comm (f _)]; rw [← mul_assoc]; rw [← mul_zpow]; rw [zpow_neg]; rw [mul_inv_cancel₀ (zpow_ne_zero _ (by aesop))]
+    simp only [one_mul]
+    congr 1
+    ext
+    rw [coe_smul_of_det_pos (by simp)]
+    simp [num, denom, div_eq_mul_inv, mul_comm]
+  hf_top r := by -- `by exact` to hide use of private lemma in @[expose]'d declaration
+    exact isBigO_comp_ofComplex_I_mul_sub_valueAtInfty f r
+  hg_top r := by -- `by exact` to hide use of private lemma in @[expose]'d declaration
+    exact isBigO_comp_ofComplex_I_mul_sub_valueAtInfty (translate f ModularGroup.S) r
 -/
 @[simps] noncomputable def weakFEPair : WeakFEPair Complex where
   f t := f (ofComplex (I * t))
@@ -189,7 +221,24 @@ lemma hasSum_Λ_of_qExpansion_isBigO
   refine hasSum_mellin_pi_mul₀ (fun _ => by positivity) hpos ?_ ?_
   · -- show `q`-expansion converges to `f` on positive imaginary axis
     intro t (ht : 0 < t)
-    have := hasSum_qExpansion f hh hΓ (
+    have := hasSum_qExpansion f hh hΓ (ofComplex (I * t))
+    convert! hasSum_ite_sub_hasSum this 0 using 2 with n
+    · rcases Nat.eq_zero_or_pos n with rfl | hn
+      · simp
+      · simp [hn.ne', Function.Periodic.qParam, ofComplex_apply_eq_ite, ht, ← exp_nat_mul]
+        grind [I_sq]
+    · simp only [weakFEPair]
+      rw [qExpansion_coeff_zero hh]; rw [pow_zero]; rw [mul_one]
+      · exact ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ
+      · exact SlashInvariantFormClass.periodic_comp_ofComplex f hΓ
+  · -- show summability of Dirichlet series
+    simp_rw [mul_comm (2 : Real), mul_div_assoc,
+      Real.mul_rpow (Nat.cast_nonneg _) (show 0 <= 2 / h Γ by positivity), ← div_div]
+    apply Summable.div_const
+    apply summable_of_isBigO_nat (Real.summable_nat_rpow.mpr <| show r - s.re < -1 by linarith)
+    simp only [Real.rpow_sub' (Nat.cast_nonneg _) (show r - s.re != 0 by linarith)]
+    apply IsBigO.mul _ (isBigO_refl _ _)
+    simpa using hcoeff.norm_left
 
 中文:
 引理 hasSum_Λ_of_qExpansion_isBigO
@@ -201,7 +250,24 @@ lemma hasSum_Λ_of_qExpansion_isBigO
   refine hasSum_mellin_pi_mul₀ (fun _ => by positivity) hpos ?_ ?_
   · -- show `q`-expansion converges to `f` on positive imaginary axis
     intro t (ht : 0 < t)
-    have := hasSum_qExpansion f hh hΓ (
+    have := hasSum_qExpansion f hh hΓ (ofComplex (I * t))
+    convert! hasSum_ite_sub_hasSum this 0 using 2 with n
+    · rcases Nat.eq_zero_or_pos n with rfl | hn
+      · simp
+      · simp [hn.ne', Function.Periodic.qParam, ofComplex_apply_eq_ite, ht, ← exp_nat_mul]
+        grind [I_sq]
+    · simp only [weakFEPair]
+      rw [qExpansion_coeff_zero hh]; rw [pow_zero]; rw [mul_one]
+      · exact ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ
+      · exact SlashInvariantFormClass.periodic_comp_ofComplex f hΓ
+  · -- show summability of Dirichlet series
+    simp_rw [mul_comm (2 : Real), mul_div_assoc,
+      Real.mul_rpow (Nat.cast_nonneg _) (show 0 <= 2 / h Γ by positivity), ← div_div]
+    apply Summable.div_const
+    apply summable_of_isBigO_nat (Real.summable_nat_rpow.mpr <| show r - s.re < -1 by linarith)
+    simp only [Real.rpow_sub' (Nat.cast_nonneg _) (show r - s.re != 0 by linarith)]
+    apply IsBigO.mul _ (isBigO_refl _ _)
+    simpa using hcoeff.norm_left
 -/
 private lemma hasSum_Λ_of_qExpansion_isBigO {r : Real}
     (hpos : 0 < s.re) (hs : r + 1 < s.re)
@@ -292,7 +358,15 @@ lemma hasSum_L_of_hasSum_Λ
   convert! hΛ.mul_right (2 / GammaComplex s * h Γ ^ (-s)) using 1
   · ext n
     generalize (PowerSeries.coeff n) (qExpansion (h Γ) f) = p
-    rw [GammaComplex]; rw [← div_div]; rw [← div_div]; rw [div_self two_ne_zero]; rw [one_div]; rw [cpow_neg (2 * _)]; rw [inv_inv]; rw [← ofReal_ofNat]; rw [m
+    rw [GammaComplex]; rw [← div_div]; rw [← div_div]; rw [div_self two_ne_zero]; rw [one_div]; rw [cpow_neg (2 * _)]; rw [inv_inv]; rw [← ofReal_ofNat]; rw [mul_cpow_ofReal_nonneg two_pos.le Real.pi_pos.le]
+    simp only [ofReal_div, ofReal_mul, ofReal_ofNat, ofReal_natCast]
+    have : (2 * n / h Γ : Complex) ^ s = 2 ^ s * n ^ s / h Γ ^ s := by
+      rw [← ofReal_ofNat]; rw [← ofReal_natCast]; rw [← ofReal_mul]; rw [div_cpow_ofReal_nonneg (by grind) Γ.strictWidthInfty_nonneg]; rw [ofReal_mul]; rw [mul_cpow_ofReal_nonneg zero_le_two n.cast_nonneg]
+    rw [this]; rw [cpow_neg]; rw [cpow_neg]
+    have := Gamma_ne_zero_of_re_pos hs
+    have := cpow_ne_zero_iff (y := s).mpr (.inl <| ofReal_ne_zero.mpr Γ.strictWidthInfty_pos.ne')
+    field_simp
+  · grind [L]
 
 中文:
 引理 hasSum_L_of_hasSum_Λ
@@ -301,7 +375,15 @@ lemma hasSum_L_of_hasSum_Λ
   convert! hΛ.mul_right (2 / GammaComplex s * h Γ ^ (-s)) using 1
   · ext n
     generalize (PowerSeries.coeff n) (qExpansion (h Γ) f) = p
-    rw [GammaComplex]; rw [← div_div]; rw [← div_div]; rw [div_self two_ne_zero]; rw [one_div]; rw [cpow_neg (2 * _)]; rw [inv_inv]; rw [← ofReal_ofNat]; rw [m
+    rw [GammaComplex]; rw [← div_div]; rw [← div_div]; rw [div_self two_ne_zero]; rw [one_div]; rw [cpow_neg (2 * _)]; rw [inv_inv]; rw [← ofReal_ofNat]; rw [mul_cpow_ofReal_nonneg two_pos.le Real.pi_pos.le]
+    simp only [ofReal_div, ofReal_mul, ofReal_ofNat, ofReal_natCast]
+    have : (2 * n / h Γ : Complex) ^ s = 2 ^ s * n ^ s / h Γ ^ s := by
+      rw [← ofReal_ofNat]; rw [← ofReal_natCast]; rw [← ofReal_mul]; rw [div_cpow_ofReal_nonneg (by grind) Γ.strictWidthInfty_nonneg]; rw [ofReal_mul]; rw [mul_cpow_ofReal_nonneg zero_le_two n.cast_nonneg]
+    rw [this]; rw [cpow_neg]; rw [cpow_neg]
+    have := Gamma_ne_zero_of_re_pos hs
+    have := cpow_ne_zero_iff (y := s).mpr (.inl <| ofReal_ne_zero.mpr Γ.strictWidthInfty_pos.ne')
+    field_simp
+  · grind [L]
 -/
 private lemma hasSum_L_of_hasSum_Λ (hs : 0 < s.re)
     (hΛ : HasSum (fun n => π ^ (-s) * Gamma s *

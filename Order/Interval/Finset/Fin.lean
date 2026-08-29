@@ -36,7 +36,11 @@ instance instLocallyFiniteOrder
   body: attachFin (Icc a b) fun x hx => (mem_Icc.mp hx).2.trans_lt b.2
   finsetIco a b := attachFin (Ico a b) fun x hx => (mem_Ico.mp hx).2.trans b.2
   finsetIoc a b := attachFin (Ioc a b) fun x hx => (mem_Ioc.mp hx).2.trans_lt b.2
-  finsetIoo a b := attachFin (Ioo a b) fun x hx => (mem_Ioo.mp hx).2.trans b
+  finsetIoo a b := attachFin (Ioo a b) fun x hx => (mem_Ioo.mp hx).2.trans b.2
+  finset_mem_Icc a b := by simp
+  finset_mem_Ico a b := by simp
+  finset_mem_Ioc a b := by simp
+  finset_mem_Ioo a b := by simp
 
 中文:
 实例 instLocallyFiniteOrder
@@ -44,7 +48,11 @@ instance instLocallyFiniteOrder
   定义体: attachFin (Icc a b) fun x hx => (mem_Icc.mp hx).2.trans_lt b.2
   finsetIco a b := attachFin (Ico a b) fun x hx => (mem_Ico.mp hx).2.trans b.2
   finsetIoc a b := attachFin (Ioc a b) fun x hx => (mem_Ioc.mp hx).2.trans_lt b.2
-  finsetIoo a b := attachFin (Ioo a b) fun x hx => (mem_Ioo.mp hx).2.trans b
+  finsetIoo a b := attachFin (Ioo a b) fun x hx => (mem_Ioo.mp hx).2.trans b.2
+  finset_mem_Icc a b := by simp
+  finset_mem_Ico a b := by simp
+  finset_mem_Ioc a b := by simp
+  finset_mem_Ioo a b := by simp
 
 Depends on / 依赖: attachFin, mem_Icc, mem_Icc.mp, trans_lt
 -/

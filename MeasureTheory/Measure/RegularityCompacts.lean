@@ -44,7 +44,8 @@ theorem innerRegularWRT_isCompact_closure_iff
     exact ⟨closure K, closure_minimal hK1 hA, hK2, hK3.trans_le (measure_mono subset_closure)⟩
   · rcases h hA r hr with ⟨K, ⟨hK1, hK2, hK3⟩⟩
     refine ⟨closure K, closure_minimal hK1 hA, ?_, ?_⟩
-    · simpa only 
+    · simpa only [closure_closure, Function.comp_apply] using hK2.closure
+    · exact hK3.trans_le (measure_mono subset_closure)
 
 中文:
 定理 innerRegularWRT_isCompact_closure_iff
@@ -55,7 +56,8 @@ theorem innerRegularWRT_isCompact_closure_iff
     exact ⟨closure K, closure_minimal hK1 hA, hK2, hK3.trans_le (measure_mono subset_closure)⟩
   · rcases h hA r hr with ⟨K, ⟨hK1, hK2, hK3⟩⟩
     refine ⟨closure K, closure_minimal hK1 hA, ?_, ?_⟩
-    · simpa only 
+    · simpa only [closure_closure, Function.comp_apply] using hK2.closure
+    · exact hK3.trans_le (measure_mono subset_closure)
 
 Depends on / 依赖: Function, Function.comp_apply, closure, closure_closure, closure_minimal, comp_apply, hK2.closure, hK3.trans_le, measure_mono, subset_closure, trans_le
 -/
@@ -82,7 +84,8 @@ lemma innerRegularWRT_isCompact_isClosed_iff_innerRegularWRT_isCompact_closure
     exact hK2.closure
   · obtain ⟨K, hK1, hK2, hK3⟩ := h hA r hr
     refine ⟨closure K, closure_minimal hK1 hA, ?_, ?_⟩
-    · simpa only [isClosed_c
+    · simpa only [isClosed_closure, and_true]
+    · exact hK3.trans_le (measure_mono subset_closure)
 
 中文:
 引理 innerRegularWRT_isCompact_isClosed_iff_innerRegularWRT_isCompact_closure
@@ -94,7 +97,8 @@ lemma innerRegularWRT_isCompact_isClosed_iff_innerRegularWRT_isCompact_closure
     exact hK2.closure
   · obtain ⟨K, hK1, hK2, hK3⟩ := h hA r hr
     refine ⟨closure K, closure_minimal hK1 hA, ?_, ?_⟩
-    · simpa only [isClosed_c
+    · simpa only [isClosed_closure, and_true]
+    · exact hK3.trans_le (measure_mono subset_closure)
 
 Depends on / 依赖: BddLat, ConcreteCategory, ConcreteCategory.hom, Function, Function.comp_apply, and_true, closure, closure_minimal, comp_apply, hK2.closure, hK3.trans_le, isClosed_closure, measure_mono, subset_closure, trans_le
 -/
@@ -146,7 +150,12 @@ theorem innerRegularWRT_of_exists_compl_lt
   obtain ⟨K, hK, hK_subset, h_lt⟩ : exists K, p K ∧ K subseteq A ∧ μ (A \ K) < μ A - r := by
     obtain ⟨K', hpK', hK'_lt⟩ := hμ (μ A - r) (tsub_pos_of_lt hr)
     refine ⟨K' inter A, hpq K' A hpK' hA, inter_subset_right, ?_⟩
-    · refine (measure_mono fun x => ?_).trans_lt hK'_l
+    · refine (measure_mono fun x => ?_).trans_lt hK'_lt
+      simp only [sdiff_inter_self_eq_sdiff, mem_sdiff, mem_compl_iff, and_imp, imp_self,
+        imp_true_iff]
+  refine ⟨K, hK_subset, hK, ?_⟩
+  have h_lt' : μ A - μ K < μ A - r := le_measure_sdiff.trans_lt h_lt
+  exact lt_of_tsub_lt_tsub_left h_lt'
 
 中文:
 定理 innerRegularWRT_of_存在_compl_lt
@@ -156,7 +165,12 @@ theorem innerRegularWRT_of_exists_compl_lt
   obtain ⟨K, hK, hK_subset, h_lt⟩ : exists K, p K ∧ K subseteq A ∧ μ (A \ K) < μ A - r := by
     obtain ⟨K', hpK', hK'_lt⟩ := hμ (μ A - r) (tsub_pos_of_lt hr)
     refine ⟨K' inter A, hpq K' A hpK' hA, inter_subset_right, ?_⟩
-    · refine (measure_mono fun x => ?_).trans_lt hK'_l
+    · refine (measure_mono fun x => ?_).trans_lt hK'_lt
+      simp only [sdiff_inter_self_eq_sdiff, mem_sdiff, mem_compl_iff, and_imp, imp_self,
+        imp_true_iff]
+  refine ⟨K, hK_subset, hK, ?_⟩
+  have h_lt' : μ A - μ K < μ A - r := le_measure_sdiff.trans_lt h_lt
+  exact lt_of_tsub_lt_tsub_left h_lt'
 
 Depends on / 依赖: and_imp, f.hom, hK_subset, h_lt, imp_self, imp_true_iff, inter_subset_right, le_measure_sdiff, le_measure_sdiff.trans_lt, lt_of_tsub_lt_, measure_mono, mem_compl_iff, mem_sdiff, sdiff_inter_self_eq_sdiff, subseteq, trans_lt, tsub_pos_of_lt
 -/
@@ -220,7 +234,37 @@ theorem exists_isCompact_closure_measure_compl_lt
 
   Otherwise, fix a dense sequence `seq` and an antitone basis `t` of entourages. We find a sequence
   of natural numbers `u n`, such that `interUnionBalls seq u t`, which is the intersection over
-  `n` of the `t n`-neighborhood of `seq 1, ..., seq (u 
+  `n` of the `t n`-neighborhood of `seq 1, ..., seq (u n)`, covers the space arbitrarily well.
+  -/
+  let := upgradeIsCompletelyPseudoMetrizable α
+  cases isEmpty_or_nonempty α
+  case inl =>
+    refine ⟨∅, by simp, ?_⟩
+    rwa [Set.eq_empty_of_isEmpty ∅ᶜ, measure_empty]
+  case inr =>
+    let seq := TopologicalSpace.denseSeq α
+    have hseq_dense : DenseRange seq := TopologicalSpace.denseRange_denseSeq α
+    obtain ⟨t : Nat -> SetRel α α,
+        ht : forall i, t i in 𝓤 α ∧ IsOpen (t i) ∧ (t i).IsSymm,
+        h_basis : (uniformity α).HasAntitoneBasis t⟩ :=
+      (@uniformity_hasBasis_open_symmetric α _).exists_antitone_subbasis
+    choose htu hto _ using ht
+    let f : Nat -> Nat -> Set α := fun n m => UniformSpace.ball (seq m) (t n)
+    have h_univ n : (⋃ m, f n m) = univ := hseq_dense.iUnion_uniformity_ball (htu n)
+    have h3 n (ε : Real>=0∞) (hε : 0 < ε) : exists m, P (⋂ m' <= m, (f n m')ᶜ) < ε := by
+      refine exists_measure_iInter_lt (fun m => ?_) hε ⟨0, measure_ne_top P _⟩ ?_
+      · exact (measurable_prodMk_left (hto n).measurableSet).compl.nullMeasurableSet
+      · rw [← compl_iUnion, h_univ, compl_univ]
+    choose! s' s'bound using h3
+    rcases ENNReal.exists_pos_sum_of_countable' (ne_of_gt hε) Nat with ⟨δ, hδ1, hδ2⟩
+    let u : Nat -> Nat := fun n => s' n (δ n)
+    refine ⟨interUnionBalls seq u t, isCompact_closure_interUnionBalls h_basis.toHasBasis seq u, ?_⟩
+    rw [interUnionBalls]; rw [Set.compl_iInter]
+    refine ((measure_iUnion_le _).trans ?_).trans_lt hδ2
+    refine ENNReal.tsum_le_tsum (fun n => ?_)
+    have h'' n : Prod.swap ⁻¹' t n = t n := by ext; exact (t n).comm
+    simp only [h'', compl_iUnion, ge_iff_le]
+    exact (s'bound n (δ n) (hδ1 n)).le
 
 中文:
 定理 存在_isCompact_closure_measure_compl_lt
@@ -231,7 +275,37 @@ theorem exists_isCompact_closure_measure_compl_lt
 
   Otherwise, fix a dense sequence `seq` and an antitone basis `t` of entourages. We find a sequence
   of natural numbers `u n`, such that `interUnionBalls seq u t`, which is the intersection over
-  `n` of the `t n`-neighborhood of `seq 1, ..., seq (u 
+  `n` of the `t n`-neighborhood of `seq 1, ..., seq (u n)`, covers the space arbitrarily well.
+  -/
+  let := upgradeIsCompletelyPseudoMetrizable α
+  cases isEmpty_or_nonempty α
+  case inl =>
+    refine ⟨∅, by simp, ?_⟩
+    rwa [Set.eq_empty_of_isEmpty ∅ᶜ, measure_empty]
+  case inr =>
+    let seq := TopologicalSpace.denseSeq α
+    have hseq_dense : DenseRange seq := TopologicalSpace.denseRange_denseSeq α
+    obtain ⟨t : Nat -> SetRel α α,
+        ht : forall i, t i in 𝓤 α ∧ IsOpen (t i) ∧ (t i).IsSymm,
+        h_basis : (uniformity α).HasAntitoneBasis t⟩ :=
+      (@uniformity_hasBasis_open_symmetric α _).exists_antitone_subbasis
+    choose htu hto _ using ht
+    let f : Nat -> Nat -> Set α := fun n m => UniformSpace.ball (seq m) (t n)
+    have h_univ n : (⋃ m, f n m) = univ := hseq_dense.iUnion_uniformity_ball (htu n)
+    have h3 n (ε : Real>=0∞) (hε : 0 < ε) : exists m, P (⋂ m' <= m, (f n m')ᶜ) < ε := by
+      refine exists_measure_iInter_lt (fun m => ?_) hε ⟨0, measure_ne_top P _⟩ ?_
+      · exact (measurable_prodMk_left (hto n).measurableSet).compl.nullMeasurableSet
+      · rw [← compl_iUnion, h_univ, compl_univ]
+    choose! s' s'bound using h3
+    rcases ENNReal.exists_pos_sum_of_countable' (ne_of_gt hε) Nat with ⟨δ, hδ1, hδ2⟩
+    let u : Nat -> Nat := fun n => s' n (δ n)
+    refine ⟨interUnionBalls seq u t, isCompact_closure_interUnionBalls h_basis.toHasBasis seq u, ?_⟩
+    rw [interUnionBalls]; rw [Set.compl_iInter]
+    refine ((measure_iUnion_le _).trans ?_).trans_lt hδ2
+    refine ENNReal.tsum_le_tsum (fun n => ?_)
+    have h'' n : Prod.swap ⁻¹' t n = t n := by ext; exact (t n).comm
+    simp only [h'', compl_iUnion, ge_iff_le]
+    exact (s'bound n (δ n) (hδ1 n)).le
 -/
 theorem exists_isCompact_closure_measure_compl_lt [TopologicalSpace α]
     [SecondCountableTopology α] [IsCompletelyPseudoMetrizableSpace α]
@@ -443,7 +517,9 @@ instance instInnerRegularCompactLTTopOfIsCompletelyPseudoMetrizableSpace
     rwa [Measure.restrict_apply_self]
   have hr' : r < μ.restrict A A := by
     rwa [Measure.restrict_apply_self]
-  obtain ⟨K, ⟨hK1, hK2, hK3⟩⟩ := MeasurableSet.exists_lt_isCompact_of_ne
+  obtain ⟨K, ⟨hK1, hK2, hK3⟩⟩ := MeasurableSet.exists_lt_isCompact_of_ne_top hA1 hA2' hr'
+  use K, hK1, hK2
+  rwa [Measure.restrict_eq_self μ hK1] at hK3
 
 中文:
 实例 instInnerRegularCompactLTTopOfIsCompletelyPseudoMetrizableSpace
@@ -455,7 +531,9 @@ instance instInnerRegularCompactLTTopOfIsCompletelyPseudoMetrizableSpace
     rwa [Measure.restrict_apply_self]
   have hr' : r < μ.restrict A A := by
     rwa [Measure.restrict_apply_self]
-  obtain ⟨K, ⟨hK1, hK2, hK3⟩⟩ := MeasurableSet.exists_lt_isCompact_of_ne
+  obtain ⟨K, ⟨hK1, hK2, hK3⟩⟩ := MeasurableSet.exists_lt_isCompact_of_ne_top hA1 hA2' hr'
+  use K, hK1, hK2
+  rwa [Measure.restrict_eq_self μ hK1] at hK3
 
 Depends on / 依赖: Fact.mk, MeasurableSet, MeasurableSet.exists_lt_isCompact_of_ne_top, Measure, Measure.restrict_apply_self, Measure.restrict_eq_self, exists_lt_isCompact_of_ne_top, hA2.lt_top, lt_top, restrict, restrict_apply_self, restrict_eq_self
 -/
@@ -487,7 +565,11 @@ theorem innerRegular_isCompact_isClosed_measurableSet_of_finite
     simp only [iff_self_and]
     exact fun _ => measure_ne_top P _
   refine Measure.InnerRegularWRT.measurableSet_of_isOpen ?_ ?_
-  · exact innerRegularWRT_isCompact_isC
+  · exact innerRegularWRT_isCompact_isClosed_isOpen P
+  · rintro s t ⟨hs_compact, hs_closed⟩ ht_open
+    rw [sdiff_eq]
+    exact ⟨hs_compact.inter_right ht_open.isClosed_compl,
+      hs_closed.inter (isClosed_compl_iff.mpr ht_open)⟩
 
 中文:
 定理 innerRegular_isCompact_isClosed_measurableSet_of_finite
@@ -499,7 +581,11 @@ theorem innerRegular_isCompact_isClosed_measurableSet_of_finite
     simp only [iff_self_and]
     exact fun _ => measure_ne_top P _
   refine Measure.InnerRegularWRT.measurableSet_of_isOpen ?_ ?_
-  · exact innerRegularWRT_isCompact_isC
+  · exact innerRegularWRT_isCompact_isClosed_isOpen P
+  · rintro s t ⟨hs_compact, hs_closed⟩ ht_open
+    rw [sdiff_eq]
+    exact ⟨hs_compact.inter_right ht_open.isClosed_compl,
+      hs_closed.inter (isClosed_compl_iff.mpr ht_open)⟩
 
 Depends on / 依赖: InnerRegularWRT, IsClosed, IsCompact, MeasurableSet, Measure, Measure.InnerRegularWRT.measurableSet_of_isOpen, P.InnerRegularWRT, convert, hs_closed, hs_closed.inter, hs_compact, hs_compact.inter_right, ht_open, ht_open.isClosed_compl, iff_self_and, innerRegularWRT_isCompact_isClosed_isOpen, inter_right, isClosed_compl, isClosed_compl_iff, isClosed_compl_iff.mpr
 -/

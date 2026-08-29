@@ -462,7 +462,8 @@ instance isStrictOrder
       · left; exact lt_trans hab hbc
       · left; exact lt_of_lt_of_eq hab hbc.1
     · rcases hbc with (hbc | hbc)
-      · left; exac
+      · left; exact lt_of_eq_of_lt hab.1 hbc
+      · right; exact ⟨Eq.trans hab.1 hbc.1, lt_trans hab.2 hbc.2⟩
 
 中文:
 实例 isStrictOrder
@@ -476,7 +477,8 @@ instance isStrictOrder
       · left; exact lt_trans hab hbc
       · left; exact lt_of_lt_of_eq hab hbc.1
     · rcases hbc with (hbc | hbc)
-      · left; exac
+      · left; exact lt_of_eq_of_lt hab.1 hbc
+      · right; exact ⟨Eq.trans hab.1 hbc.1, lt_trans hab.2 hbc.2⟩
 
 Depends on / 依赖: lt_def
 -/
@@ -780,7 +782,8 @@ definition degLex
     by_cases! ha : a.degree < b.degree
     · exact Or.inl ha
     · refine Or.inr ⟨le_antisymm ?_ ha, toLex_monotone h⟩
-      
+      rw [← add_tsub_cancel_of_le h]; rw [map_add]
+      exact Nat.le_add_right a.degree (b - a).degree
 
 中文:
 定义 degLex
@@ -792,7 +795,8 @@ definition degLex
     by_cases! ha : a.degree < b.degree
     · exact Or.inl ha
     · refine Or.inr ⟨le_antisymm ?_ ha, toLex_monotone h⟩
-      
+      rw [← add_tsub_cancel_of_le h]; rw [map_add]
+      exact Nat.le_add_right a.degree (b - a).degree
 
 Depends on / 依赖: DegLex
 -/

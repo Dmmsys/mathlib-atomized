@@ -275,7 +275,7 @@ theorem isIso_prod_iff
     exact ⟨⟨⟨g.1, hfg₁, hgf₁⟩⟩, ⟨⟨g.2, hfg₂, hgf₂⟩⟩⟩
   · rintro ⟨⟨g₁, hfg₁, hgf₁⟩, ⟨g₂, hfg₂, hgf₂⟩⟩
     dsimp at hfg₁ hgf₁ hfg₂ hgf₂
-    refine ⟨⟨(g₁, g₂
+    refine ⟨⟨(g₁, g₂), by aesop_cat, by aesop_cat⟩⟩
 
 中文:
 定理 isIso_prod_iff
@@ -288,7 +288,7 @@ theorem isIso_prod_iff
     exact ⟨⟨⟨g.1, hfg₁, hgf₁⟩⟩, ⟨⟨g.2, hfg₂, hgf₂⟩⟩⟩
   · rintro ⟨⟨g₁, hfg₁, hgf₁⟩, ⟨g₂, hfg₂, hgf₂⟩⟩
     dsimp at hfg₁ hgf₁ hfg₂ hgf₂
-    refine ⟨⟨(g₁, g₂
+    refine ⟨⟨(g₁, g₂), by aesop_cat, by aesop_cat⟩⟩
 
 Depends on / 依赖: Prod.hom_ext_iff, aesop_cat, hom_ext_iff
 -/

@@ -635,7 +635,10 @@ theorem normalizeObj_congr
   | comp _ _ _ _ => apply Eq.trans <;> assumption
   | whiskerLeft _ _ ih => funext; apply congr_fun ih
   | whiskerRight _ _ ih => funext; apply congr_arg₂ _ rfl (congr_fun ih _)
-  | @tensor W X Y
+  | @tensor W X Y Z _ _ ih₁ ih₂ =>
+      funext n
+      simp [congr_fun ih₁ n, congr_fun ih₂ (normalizeObj Y n)]
+  | _ => funext; rfl
 
 中文:
 定理 normalizeObj_congr
@@ -648,7 +651,10 @@ theorem normalizeObj_congr
   | comp _ _ _ _ => apply Eq.trans <;> assumption
   | whiskerLeft _ _ ih => funext; apply congr_fun ih
   | whiskerRight _ _ ih => funext; apply congr_arg₂ _ rfl (congr_fun ih _)
-  | @tensor W X Y
+  | @tensor W X Y Z _ _ ih₁ ih₂ =>
+      funext n
+      simp [congr_fun ih₁ n, congr_fun ih₂ (normalizeObj Y n)]
+  | _ => funext; rfl
 
 Depends on / 依赖: Eq.trans, congr_fun, normalizeObj, tensor, whiskerLeft, whiskerRight
 -/
@@ -681,7 +687,17 @@ theorem normalize_naturality
   case whiskerLeft X' X Y f ih =>
     intro n
     dsimp only [normalizeObj_tensor, normalizeIsoApp'_tensor, Iso.trans_hom,
-      Iso.symm_hom, whiskerRightIso_hom, Function.comp_apply, inclus
+      Iso.symm_hom, whiskerRightIso_hom, Function.comp_apply, inclusion_obj]
+    rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [ih]
+    simp
+  case whiskerRight X Y h η' ih =>
+    intro n
+    dsimp only [normalizeObj_tensor, normalizeIsoApp'_tensor, Iso.trans_hom,
+      Iso.symm_hom, whiskerRightIso_hom, Function.comp_apply, inclusion_obj]
+    rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [ih]
+    have := dcongr_arg (fun x => (normalizeIsoApp' C η' x).hom) (normalizeObj_congr n h)
+    simp [this]
+  all_goals simp
 
 中文:
 定理 normalize_naturality
@@ -693,7 +709,17 @@ theorem normalize_naturality
   case whiskerLeft X' X Y f ih =>
     intro n
     dsimp only [normalizeObj_tensor, normalizeIsoApp'_tensor, Iso.trans_hom,
-      Iso.symm_hom, whiskerRightIso_hom, Function.comp_apply, inclus
+      Iso.symm_hom, whiskerRightIso_hom, Function.comp_apply, inclusion_obj]
+    rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [ih]
+    simp
+  case whiskerRight X Y h η' ih =>
+    intro n
+    dsimp only [normalizeObj_tensor, normalizeIsoApp'_tensor, Iso.trans_hom,
+      Iso.symm_hom, whiskerRightIso_hom, Function.comp_apply, inclusion_obj]
+    rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [ih]
+    have := dcongr_arg (fun x => (normalizeIsoApp' C η' x).hom) (normalizeObj_congr n h)
+    simp [this]
+  all_goals simp
 
 Depends on / 依赖: Function, Function.comp_apply, Hom.inductionOn, Iso.symm_hom, Iso.trans_hom, _tensor, associator_inv_naturality_right_assoc, comp_apply, inclusion_obj, inductionOn, normalizeIsoApp, normalizeObj_tensor, reassoc_of, revert, symm_hom, trans_hom, whiskerLeft, whiskerRight, whiskerRightIso_hom, whisker_exchange_assoc
 -/
@@ -768,7 +794,8 @@ definition fullNormalizeIso
       dsimp
       rw [leftUnitor_inv_naturality_assoc]; rw [Category.assoc]; rw [Iso.cancel_iso_inv_left]
       exact
-        congr_arg (fun f => NatTrans.app f (Discr
+        congr_arg (fun f => NatTrans.app f (Discrete.mk NormalMonoidalObject.unit))
+          ((normalizeIso.{u} C).hom.naturality f))
 
 中文:
 定义 fullNormalizeIso
@@ -780,7 +807,8 @@ definition fullNormalizeIso
       dsimp
       rw [leftUnitor_inv_naturality_assoc]; rw [Category.assoc]; rw [Iso.cancel_iso_inv_left]
       exact
-        congr_arg (fun f => NatTrans.app f (Discr
+        congr_arg (fun f => NatTrans.app f (Discrete.mk NormalMonoidalObject.unit))
+          ((normalizeIso.{u} C).hom.naturality f))
 
 Depends on / 依赖: Category, Category.assoc, Discrete, Discrete.mk, Iso.cancel_iso_inv_left, NatIso, NatIso.ofComponents, NatTrans, NatTrans.app, NormalMonoidalObject, NormalMonoidalObject.unit, PreOneHypercover, PreOneHypercover.inv_hom_h, cancel_iso_inv_left, congr_arg, fun_, hom.naturality, leftUnitor_inv_naturality_assoc, naturality, normalizeIso
 -/
@@ -808,7 +836,7 @@ instance subsingleton_hom
     have hfg : (fullNormalize C).map f = (fullNormalize C).map g := Subsingleton.elim _ _
     have hf := NatIso.naturality_2 (fullNormalizeIso.{u} C) f
     have hg := NatIso.naturality_2 (fullNormalizeIso.{u} C) g
-    exact hf.symm.trans (Eq.trans (by simp only [Functor.c
+    exact hf.symm.trans (Eq.trans (by simp only [Functor.comp_map, hfg]) hg)⟩
 
 中文:
 实例 subsingleton_hom
@@ -818,7 +846,7 @@ instance subsingleton_hom
     have hfg : (fullNormalize C).map f = (fullNormalize C).map g := Subsingleton.elim _ _
     have hf := NatIso.naturality_2 (fullNormalizeIso.{u} C) f
     have hg := NatIso.naturality_2 (fullNormalizeIso.{u} C) g
-    exact hf.symm.trans (Eq.trans (by simp only [Functor.c
+    exact hf.symm.trans (Eq.trans (by simp only [Functor.comp_map, hfg]) hg)⟩
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, E.congrIndexOneOfEqIso, Iso.inv_hom_id, PreOneHypercover, PreOneHypercover.congrIndexOneOfEqIso_hom_naturality, PreOneHypercover.hom_inv_h, congrIndexOneOfEqIso, congrIndexOneOfEqIso_hom_naturality, e.inv.h, eqToHom, eqToHom_naturality_assoc, eqToHom_refl, eqToHom_trans_assoc, id_comp, inv_hom_id, true_and
 -/

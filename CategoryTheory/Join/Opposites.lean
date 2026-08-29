@@ -39,7 +39,18 @@ definition opEquiv
   unitIso := NatIso.ofComponents
     (fun
       | op (left _) => Iso.refl _
-      | op (right _) => 
+      | op (right _) => Iso.refl _)
+    (@fun
+      | op (left _), op (left _), _ => by cat_disch
+      | op (right _), op (left _), _ => by cat_disch
+      | op (right _), op (right _), _ => by cat_disch)
+  counitIso := NatIso.ofComponents
+    (fun
+      | left _ => Iso.refl _
+      | right _ => Iso.refl _)
+  functor_unitIso_comp
+    | op (left _) => by cat_disch
+    | op (right _) => by cat_disch
 
 中文:
 定义 opEquiv
@@ -50,7 +61,18 @@ definition opEquiv
   unitIso := NatIso.ofComponents
     (fun
       | op (left _) => Iso.refl _
-      | op (right _) => 
+      | op (right _) => Iso.refl _)
+    (@fun
+      | op (left _), op (left _), _ => by cat_disch
+      | op (right _), op (left _), _ => by cat_disch
+      | op (right _), op (right _), _ => by cat_disch)
+  counitIso := NatIso.ofComponents
+    (fun
+      | left _ => Iso.refl _
+      | right _ => Iso.refl _)
+  functor_unitIso_comp
+    | op (left _) => by cat_disch
+    | op (right _) => by cat_disch
 
 Depends on / 依赖: Functor, Functor.leftOp, leftOp
 -/

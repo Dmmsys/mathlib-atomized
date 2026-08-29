@@ -37,7 +37,16 @@ definition reportAdaptationNote
     trace[adaptationNote] (Lean.TSyntax.getDocString ⟨doc⟩)
   else
     logError "Adaptation notes must be followed by a /-- comment -/"
-    let trailing := if let .original (trailing := s) .. := stx[0].getTailInfo then s else defaul
+    let trailing := if let .original (trailing := s) .. := stx[0].getTailInfo then s else default
+    let doc : Syntax :=
+      Syntax.node2 .none ``Parser.Command.docComment (mkAtom "/--") (mkAtom "comment -/")
+    -- Optional: copy the original whitespace after the `#adaptation_note` token
+    -- to after the docstring comment
+    let doc := doc.updateTrailing trailing
+    let stx' := (← getRef)
+    let stx' := stx'.setArg 0 stx'[0].unsetTrailing
+    let stx' := stx'.setArg 1 (mkNullNode #[doc])
+    Meta.Tactic.TryThis.addSuggestion (← getRef) (f stx') (origSpan? := ← getRef)
 
 中文:
 定义 reportAdaptationNote
@@ -48,7 +57,16 @@ definition reportAdaptationNote
     trace[adaptationNote] (Lean.TSyntax.getDocString ⟨doc⟩)
   else
     logError "Adaptation notes must be followed by a /-- comment -/"
-    let trailing := if let .original (trailing := s) .. := stx[0].getTailInfo then s else defaul
+    let trailing := if let .original (trailing := s) .. := stx[0].getTailInfo then s else default
+    let doc : Syntax :=
+      Syntax.node2 .none ``Parser.Command.docComment (mkAtom "/--") (mkAtom "comment -/")
+    -- Optional: copy the original whitespace after the `#adaptation_note` token
+    -- to after the docstring comment
+    let doc := doc.updateTrailing trailing
+    let stx' := (← getRef)
+    let stx' := stx'.setArg 0 stx'[0].unsetTrailing
+    let stx' := stx'.setArg 1 (mkNullNode #[doc])
+    Meta.Tactic.TryThis.addSuggestion (← getRef) (f stx') (origSpan? := ← getRef)
 -/
 def reportAdaptationNote (f : Syntax -> Meta.Tactic.TryThis.Suggestion) : MetaM Unit := do
   let stx ← getRef

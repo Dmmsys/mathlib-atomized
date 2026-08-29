@@ -1495,7 +1495,7 @@ theorem Set.minimal_iff_forall_sdiff_singleton
       h.2 x hxs (hP ht <| subset_sdiff_singleton hts hxt)⟩⟩
 
 @[deprecated (since := "2026-06-03")]
-alias Set.minimal_iff_forall_diff_singleton := Set.minimal_iff_fora
+alias Set.minimal_iff_forall_diff_singleton := Set.minimal_iff_forall_sdiff_singleton
 
 中文:
 定理 集合.minimal_iff_对任意_sdiff_singleton
@@ -1505,7 +1505,7 @@ alias Set.minimal_iff_forall_diff_singleton := Set.minimal_iff_fora
       h.2 x hxs (hP ht <| subset_sdiff_singleton hts hxt)⟩⟩
 
 @[deprecated (since := "2026-06-03")]
-alias Set.minimal_iff_forall_diff_singleton := Set.minimal_iff_fora
+alias Set.minimal_iff_forall_diff_singleton := Set.minimal_iff_forall_sdiff_singleton
 
 Depends on / 依赖: h.notMem_of_prop_sdiff_singleton, notMem_of_prop_sdiff_singleton, subset_sdiff_singleton
 -/
@@ -1916,7 +1916,13 @@ theorem image_monotone_setOfPred_minimal
   obtain ⟨y, hy, rfl⟩ := (mem_ofPred_eq ▸ h).prop
 exact mem_image_of_mem _ (minimal_mem_image_monotone_iff (s := Set.ofPred P) hy hf).1 h
 
-@[deprecated (s
+@[deprecated (since := "2026-07-09")]
+alias image_monotone_setOf_minimal := image_monotone_setOfPred_minimal
+
+@[deprecated (since := "2026-07-09")]
+alias image_monotone_setOf_maximal := image_monotone_setOfPred_maximal
+
+@[to_dual (reorder := hf (x y, 3 4))]
 
 中文:
 定理 image_monotone_setOfPred_minimal
@@ -1928,7 +1934,13 @@ exact mem_image_of_mem _ (minimal_mem_image_monotone_iff (s := Set.ofPred P) hy 
   obtain ⟨y, hy, rfl⟩ := (mem_ofPred_eq ▸ h).prop
 exact mem_image_of_mem _ (minimal_mem_image_monotone_iff (s := Set.ofPred P) hy hf).1 h
 
-@[deprecated (s
+@[deprecated (since := "2026-07-09")]
+alias image_monotone_setOf_minimal := image_monotone_setOfPred_minimal
+
+@[deprecated (since := "2026-07-09")]
+alias image_monotone_setOf_maximal := image_monotone_setOfPred_maximal
+
+@[to_dual (reorder := hf (x y, 3 4))]
 
 Depends on / 依赖: Minimal, Set.ext, Set.ofPred, hx.prop, mem_image_of_mem, mem_ofPred_eq, minimal_mem_image_monotone_iff, ofPred
 -/
@@ -1961,7 +1973,7 @@ alias image_antitone_setOf_minimal := image_antitone_setOfPred_minimal
 @[deprecated (since := "2026-07-09")]
 alias image_antitone_setOf_maximal := image_antitone_setOfPred_maximal
 
-@[to_du
+@[to_dual (reorder := hf (x y, 3 4))]
 
 中文:
 定理 image_antitone_setOfPred_minimal
@@ -1974,7 +1986,7 @@ alias image_antitone_setOf_minimal := image_antitone_setOfPred_minimal
 @[deprecated (since := "2026-07-09")]
 alias image_antitone_setOf_maximal := image_antitone_setOfPred_maximal
 
-@[to_du
+@[to_dual (reorder := hf (x y, 3 4))]
 
 Depends on / 依赖: image_monotone_setOfPred_minimal
 -/
@@ -2003,7 +2015,7 @@ alias image_monotone_setOf_minimal_mem := image_monotone_setOfPred_minimal_mem
 @[deprecated (since := "2026-07-09")]
 alias image_monotone_setOf_maximal_mem := image_monotone_setOfPred_maximal_mem
 
-@[to_dual (reorder := hf (x
+@[to_dual (reorder := hf (x y, 3 4))]
 
 中文:
 定理 image_monotone_setOfPred_minimal_mem
@@ -2016,7 +2028,7 @@ alias image_monotone_setOf_minimal_mem := image_monotone_setOfPred_minimal_mem
 @[deprecated (since := "2026-07-09")]
 alias image_monotone_setOf_maximal_mem := image_monotone_setOfPred_maximal_mem
 
-@[to_dual (reorder := hf (x
+@[to_dual (reorder := hf (x y, 3 4))]
 
 Depends on / 依赖: image_monotone_setOfPred_minimal
 -/
@@ -2235,7 +2247,10 @@ theorem inter_preimage_setOfPred_minimal_eq_of_subset
     minimal_and_iff_left_of_imp (fun _ hx => f.injective.mem_set_image.1 <| hts hx)]
 
 @[deprecated (since := "2026-07-09")]
-alias inter_preimage_setOf_minim
+alias inter_preimage_setOf_minimal_eq_of_subset := inter_preimage_setOfPred_minimal_eq_of_subset
+
+@[deprecated (since := "2026-07-09")]
+alias inter_preimage_setOf_maximal_eq_of_subset := inter_preimage_setOfPred_maximal_eq_of_subset
 
 中文:
 定理 inter_preimage_setOfPred_minimal_eq_of_subset
@@ -2246,7 +2261,10 @@ alias inter_preimage_setOf_minim
     minimal_and_iff_left_of_imp (fun _ hx => f.injective.mem_set_image.1 <| hts hx)]
 
 @[deprecated (since := "2026-07-09")]
-alias inter_preimage_setOf_minim
+alias inter_preimage_setOf_minimal_eq_of_subset := inter_preimage_setOfPred_minimal_eq_of_subset
+
+@[deprecated (since := "2026-07-09")]
+alias inter_preimage_setOf_maximal_eq_of_subset := inter_preimage_setOfPred_maximal_eq_of_subset
 
 Depends on / 依赖: f.injective.mem_set_image, f.minimal_apply_mem_iff, hts.trans, image_subset_range, injective, mem_inter_iff, mem_ofPred_eq, mem_preimage, mem_set_image, minimal_and_iff_left_of_imp, minimal_apply_mem_iff, preimage_ofPred_eq, simp_rw
 -/
@@ -2350,7 +2368,7 @@ definition mapSetOfPredMinimal
   right_inv x := Subtype.ext (congr_arg Subtype.val <| f.right_inv ⟨x, x.2.1⟩ :)
   map_rel_iff' := f.map_rel_iff
 
-@[depre
+@[deprecated (since := "2026-07-28")] alias mapSetOfMinimal := mapSetOfPredMinimal
 
 中文:
 定义 mapSetOfPredMinimal
@@ -2361,7 +2379,7 @@ definition mapSetOfPredMinimal
   right_inv x := Subtype.ext (congr_arg Subtype.val <| f.right_inv ⟨x, x.2.1⟩ :)
   map_rel_iff' := f.map_rel_iff
 
-@[depre
+@[deprecated (since := "2026-07-28")] alias mapSetOfMinimal := mapSetOfPredMinimal
 
 Depends on / 依赖: f.map_minimal_mem, map_minimal_mem
 -/
@@ -2388,7 +2406,7 @@ definition mapSetOfPredMaximal
   right_inv x := Subtype.ext (congr_arg Subtype.val <| f.right_inv ⟨x, x.2.1⟩ :)
   map_rel_iff' := f.map_rel_iff
 
-@[depre
+@[deprecated (since := "2026-07-28")] alias mapSetOfMaximal := mapSetOfPredMaximal
 
 中文:
 定义 mapSetOfPredMaximal
@@ -2399,7 +2417,7 @@ definition mapSetOfPredMaximal
   right_inv x := Subtype.ext (congr_arg Subtype.val <| f.right_inv ⟨x, x.2.1⟩ :)
   map_rel_iff' := f.map_rel_iff
 
-@[depre
+@[deprecated (since := "2026-07-28")] alias mapSetOfMaximal := mapSetOfPredMaximal
 
 Depends on / 依赖: f.map_maximal_mem, map_maximal_mem
 -/
@@ -2426,7 +2444,9 @@ definition setOfPredMinimalIsoSetOfPredMaximal
       __ := (show s ≃o ofDual ⁻¹' t from f).mapSetOfPredMinimal
 
 @[deprecated (since := "2026-07-09")]
-a
+alias setOfMinimalIsoSetOfMaximal := setOfPredMinimalIsoSetOfPredMaximal
+@[deprecated (since := "2026-07-09")]
+alias setOfMaximalIsoSetOfMinimal := setOfPredMaximalIsoSetOfPredMinimal
 
 中文:
 定义 setOfPredMinimalIsoSetOfPredMaximal
@@ -2437,7 +2457,9 @@ a
       __ := (show s ≃o ofDual ⁻¹' t from f).mapSetOfPredMinimal
 
 @[deprecated (since := "2026-07-09")]
-a
+alias setOfMinimalIsoSetOfMaximal := setOfPredMinimalIsoSetOfPredMaximal
+@[deprecated (since := "2026-07-09")]
+alias setOfMaximalIsoSetOfMinimal := setOfPredMaximalIsoSetOfPredMinimal
 
 Depends on / 依赖: mapSetOfPredMinimal, ofDual
 -/

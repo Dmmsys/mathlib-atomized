@@ -53,7 +53,17 @@ theorem Submartingale.expected_stoppedValue_mono
       convert! (hπ i).compl using 1
       ext x
       simp; rfl
-
+    rw [integral_finsetSum]
+    · refine Finset.sum_nonneg fun i _ => ?_
+      rw [integral_indicator (𝒢.le _ _ (this _))]; rw [integral_sub']; rw [sub_nonneg]
+      · exact hf.setIntegral_le (Nat.le_succ i) (this _)
+      · exact (hf.integrable _).integrableOn
+      · exact (hf.integrable _).integrableOn
+    intro i _
+    exact Integrable.indicator (Integrable.sub (hf.integrable _) (hf.integrable _))
+      (𝒢.le _ _ (this _))
+  · exact hf.integrable_stoppedValue hπ hbdd
+  · exact hf.integrable_stoppedValue hτ fun ω => le_trans (hle ω) (hbdd ω)
 
 中文:
 定理 Submartingale.expected_stoppedValue_mono
@@ -67,7 +77,17 @@ theorem Submartingale.expected_stoppedValue_mono
       convert! (hπ i).compl using 1
       ext x
       simp; rfl
-
+    rw [integral_finsetSum]
+    · refine Finset.sum_nonneg fun i _ => ?_
+      rw [integral_indicator (𝒢.le _ _ (this _))]; rw [integral_sub']; rw [sub_nonneg]
+      · exact hf.setIntegral_le (Nat.le_succ i) (this _)
+      · exact (hf.integrable _).integrableOn
+      · exact (hf.integrable _).integrableOn
+    intro i _
+    exact Integrable.indicator (Integrable.sub (hf.integrable _) (hf.integrable _))
+      (𝒢.le _ _ (this _))
+  · exact hf.integrable_stoppedValue hπ hbdd
+  · exact hf.integrable_stoppedValue hτ fun ω => le_trans (hle ω) (hbdd ω)
 
 Depends on / 依赖: Finset, Finset.sum_apply, Finset.sum_nonneg, MeasurableSet, Nat.le_succ, convert, hf.integrable, hf.setIntegral_le, integrable, integrableOn, integral_finsetSum, integral_indicator, integral_sub, le_succ, setIntegral_le, stoppedValue_sub_eq_sum, sub_nonneg, sum_apply, sum_nonneg
 -/
@@ -110,7 +130,13 @@ theorem submartingale_of_expected_stoppedValue_mono
     (isStoppingTime_const 𝒢 j) ?_
     ⟨j, fun _ => le_rfl⟩
   · intro ω
-    simp only [Set.piecewise, ENat.some_eq_n
+    simp only [Set.piecewise, ENat.some_eq_natCast]
+    split_ifs with hω
+    · exact mod_cast hij
+    · norm_cast
+  · rwa [stoppedValue_const, ← ENat.some_eq_natCast, stoppedValue_piecewise_const,
+      integral_piecewise (𝒢.le _ _ hs) (hint _).integrableOn (hint _).integrableOn, ←
+      integral_add_compl (𝒢.le _ _ hs) (hint j), add_le_add_iff_right] at hf
 
 中文:
 定理 submartingale_of_expected_stoppedValue_mono
@@ -122,7 +148,13 @@ theorem submartingale_of_expected_stoppedValue_mono
     (isStoppingTime_const 𝒢 j) ?_
     ⟨j, fun _ => le_rfl⟩
   · intro ω
-    simp only [Set.piecewise, ENat.some_eq_n
+    simp only [Set.piecewise, ENat.some_eq_natCast]
+    split_ifs with hω
+    · exact mod_cast hij
+    · norm_cast
+  · rwa [stoppedValue_const, ← ENat.some_eq_natCast, stoppedValue_piecewise_const,
+      integral_piecewise (𝒢.le _ _ hs) (hint _).integrableOn (hint _).integrableOn, ←
+      integral_add_compl (𝒢.le _ _ hs) (hint j), add_le_add_iff_right] at hf
 
 Depends on / 依赖: ENat.some_eq_natCast, Set.piecewise, classical, integrableOn, integral_piecewise, isStoppingTime_const, isStoppingTime_piecewise_const, le_rfl, mod_cast, piecewise, s.piecewise, some_eq_natCast, specialize, split_ifs, stoppedValue_const, stoppedValue_piecewise_const, submartingale_of_setIntegral_le
 -/
@@ -182,7 +214,13 @@ theorem Submartingale.stoppedProcess
     simp_rw [stoppedValue_stoppedProcess]
     obtain ⟨n, hπ_le_n⟩ := hπ_bdd
     have hπ_top ω : π ω != ⊤ := ne_top_of_le_ne_top (by simp) (hπ_le_n ω)
-    have hσ_top ω : σ ω != ⊤ := ne_top_of_le_ne_top (hπ_top 
+    have hσ_top ω : σ ω != ⊤ := ne_top_of_le_ne_top (hπ_top ω) (hσ_le_π ω)
+    simp only [ne_eq, hσ_top, not_false_eq_true, ↓reduceIte, hπ_top, ge_iff_le]
+    exact h.expected_stoppedValue_mono (hσ.min hτ) (hπ.min hτ)
+      (fun ω => min_le_min (hσ_le_π ω) le_rfl) fun ω => (min_le_left _ _).trans (hπ_le_n ω)
+  · exact StronglyAdapted.stoppedProcess_of_discrete h.stronglyAdapted hτ
+  · exact fun i =>
+      h.integrable_stoppedValue ((isStoppingTime_const _ i).min hτ) fun ω => min_le_left _ _
 
 中文:
 定理 Submartingale.stoppedProcess
@@ -193,7 +231,13 @@ theorem Submartingale.stoppedProcess
     simp_rw [stoppedValue_stoppedProcess]
     obtain ⟨n, hπ_le_n⟩ := hπ_bdd
     have hπ_top ω : π ω != ⊤ := ne_top_of_le_ne_top (by simp) (hπ_le_n ω)
-    have hσ_top ω : σ ω != ⊤ := ne_top_of_le_ne_top (hπ_top 
+    have hσ_top ω : σ ω != ⊤ := ne_top_of_le_ne_top (hπ_top ω) (hσ_le_π ω)
+    simp only [ne_eq, hσ_top, not_false_eq_true, ↓reduceIte, hπ_top, ge_iff_le]
+    exact h.expected_stoppedValue_mono (hσ.min hτ) (hπ.min hτ)
+      (fun ω => min_le_min (hσ_le_π ω) le_rfl) fun ω => (min_le_left _ _).trans (hπ_le_n ω)
+  · exact StronglyAdapted.stoppedProcess_of_discrete h.stronglyAdapted hτ
+  · exact fun i =>
+      h.integrable_stoppedValue ((isStoppingTime_const _ i).min hτ) fun ω => min_le_left _ _
 -/
 protected theorem Submartingale.stoppedProcess [SigmaFiniteFiltration μ 𝒢]
     (h : Submartingale f 𝒢 μ) (hτ : IsStoppingTime 𝒢 τ) :
@@ -227,7 +271,20 @@ theorem smul_le_stoppedValue_hittingBtwn
       (ε : Real) <= stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω := by
     intro x hx
     simp_rw [le_sup'_iff, mem_range, Nat.lt_succ_iff] at hx
-    refine stoppedValue
+    refine stoppedValue_hittingBtwn_mem ?_
+    simp only [Set.mem_Icc, zero_le, true_and, Set.mem_ofPred_eq]
+    exact
+      let ⟨j, hj₁, hj₂⟩ := hx
+      ⟨j, hj₁, hj₂⟩
+  have h := setIntegral_ge_of_const_le_real (measurableSet_le measurable_const
+    (measurable_range_sup'' fun n _ => (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)))
+      (measure_ne_top _ _) this (Integrable.integrableOn (hsub.integrable_stoppedValue
+        (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+        (mod_cast hittingBtwn_le)))
+  rw [ENNReal.le_ofReal_iff_toReal_le]; rw [ENNReal.toReal_smul]
+  · exact h
+  · exact ENNReal.mul_ne_top (by simp) (measure_ne_top _ _)
+  · exact le_trans (mul_nonneg ε.coe_nonneg ENNReal.toReal_nonneg) h
 
 中文:
 定理 smul_le_stoppedValue_hittingBtwn
@@ -237,7 +294,20 @@ theorem smul_le_stoppedValue_hittingBtwn
       (ε : Real) <= stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω := by
     intro x hx
     simp_rw [le_sup'_iff, mem_range, Nat.lt_succ_iff] at hx
-    refine stoppedValue
+    refine stoppedValue_hittingBtwn_mem ?_
+    simp only [Set.mem_Icc, zero_le, true_and, Set.mem_ofPred_eq]
+    exact
+      let ⟨j, hj₁, hj₂⟩ := hx
+      ⟨j, hj₁, hj₂⟩
+  have h := setIntegral_ge_of_const_le_real (measurableSet_le measurable_const
+    (measurable_range_sup'' fun n _ => (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)))
+      (measure_ne_top _ _) this (Integrable.integrableOn (hsub.integrable_stoppedValue
+        (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+        (mod_cast hittingBtwn_le)))
+  rw [ENNReal.le_ofReal_iff_toReal_le]; rw [ENNReal.toReal_smul]
+  · exact h
+  · exact ENNReal.mul_ne_top (by simp) (measure_ne_top _ _)
+  · exact le_trans (mul_nonneg ε.coe_nonneg ENNReal.toReal_nonneg) h
 
 Depends on / 依赖: Nat.lt_succ_iff, Set.mem_Icc, Set.mem_ofPred_eq, _iff, hittingBtwn, le_sup, lt_succ_iff, measurableSet_le, measurable_const, measurable_range, mem_Icc, mem_ofPred_eq, mem_range, nonempty_range_add_one, setIntegral_ge_of_const_le_real, simp_rw, stoppedValue, stoppedValue_hittingBtwn_mem, true_and, zero_le
 -/
@@ -278,7 +348,73 @@ theorem maximal_ineq
         (∫ ω in {ω | ((range (n + 1)).sup' nonempty_range_add_one fun k => f k ω) < ε},
           f n ω ∂μ) <=
       ENNReal.ofReal (μ[f n]) by
-    have hadd : ENNReal.ofReal (∫ 
+    have hadd : ENNReal.ofReal (∫ ω, f n ω ∂μ) =
+      ENNReal.ofReal
+        (∫ ω in {ω | ε <= (range (n + 1)).sup' nonempty_range_add_one fun k => f k ω}, f n ω ∂μ) +
+      ENNReal.ofReal
+        (∫ ω in {ω | ((range (n + 1)).sup' nonempty_range_add_one fun k => f k ω) < ε},
+          f n ω ∂μ) := by
+      rw [← ENNReal.ofReal_add]; rw [← setIntegral_union]
+      · rw [← setIntegral_univ]
+        convert! rfl
+        ext ω
+        change (ε : Real) <= _ ∨ _ < (ε : Real) ↔ _
+        simp only [le_or_gt, Set.mem_univ]
+      · grind
+      · exact measurableSet_lt (measurable_range_sup'' fun n _ =>
+          (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)) measurable_const
+      exacts [(hsub.integrable _).integrableOn, (hsub.integrable _).integrableOn,
+        integral_nonneg (hnonneg _), integral_nonneg (hnonneg _)]
+    rwa [hadd, ENNReal.add_le_add_iff_right ENNReal.ofReal_ne_top] at this
+  calc
+    _ <= ENNReal.ofReal
+          (∫ ω in {ω | (ε : Real) <= (range (n + 1)).sup' nonempty_range_add_one fun k => f k ω},
+            stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω ∂μ) +
+        ENNReal.ofReal
+          (∫ ω in {ω | ((range (n + 1)).sup' nonempty_range_add_one fun k => f k ω) < ε},
+            stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω ∂μ) := by
+      gcongr with ω hω
+      · exact smul_le_stoppedValue_hittingBtwn hsub n
+      · exact (hsub.integrable n).integrableOn
+      · refine Integrable.integrableOn ?_
+        refine hsub.integrable_stoppedValue ?_ (fun ω => mod_cast hittingBtwn_le ω)
+        exact hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici
+      · exact nullMeasurableSet_lt (measurable_range_sup'' fun n _ =>
+          (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)).aemeasurable aemeasurable_const
+      rw [Set.mem_ofPred_eq] at hω
+      have : hittingBtwn f {y : Real | ε <= y} 0 n ω = n := by
+        simp only [hittingBtwn, Set.mem_ofPred_eq, ite_eq_right_iff, forall_exists_index, and_imp]
+        intro m hm hεm
+        exact False.elim
+          ((not_le.2 hω) ((le_sup'_iff _).2 ⟨m, mem_range.2 (Nat.lt_succ_of_le hm.2), hεm⟩))
+      simp only [stoppedValue, this, ge_iff_le]
+      refine le_of_eq ?_
+      congr
+    _ = ENNReal.ofReal
+        (∫ ω, stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω ∂μ) := by
+      rw [← ENNReal.ofReal_add]; rw [← setIntegral_union]
+      · rw [← setIntegral_univ (μ := μ)]
+        convert! rfl
+        ext ω
+        change _ ↔ (ε : Real) <= _ ∨ _ < (ε : Real)
+        simp only [le_or_gt, Set.mem_univ]
+      · grind
+      · exact measurableSet_lt (measurable_range_sup'' fun n _ =>
+          (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)) measurable_const
+      · exact Integrable.integrableOn (hsub.integrable_stoppedValue
+          (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+          (fun ω => mod_cast hittingBtwn_le ω))
+      · exact Integrable.integrableOn (hsub.integrable_stoppedValue
+          (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+          (fun ω => mod_cast hittingBtwn_le ω))
+      exacts [integral_nonneg fun x => hnonneg _ _, integral_nonneg fun x => hnonneg _ _]
+    _ <= ENNReal.ofReal (μ[f n]) := by
+      refine ENNReal.ofReal_le_ofReal ?_
+      rw [← stoppedValue_const f n]
+      refine hsub.expected_stoppedValue_mono
+        (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+        (isStoppingTime_const _ _) (fun ω => ?_) (fun _ => mod_cast le_rfl)
+      simp [hittingBtwn_le]
 
 中文:
 定理 maximal_ineq
@@ -289,7 +425,73 @@ theorem maximal_ineq
         (∫ ω in {ω | ((range (n + 1)).sup' nonempty_range_add_one fun k => f k ω) < ε},
           f n ω ∂μ) <=
       ENNReal.ofReal (μ[f n]) by
-    have hadd : ENNReal.ofReal (∫ 
+    have hadd : ENNReal.ofReal (∫ ω, f n ω ∂μ) =
+      ENNReal.ofReal
+        (∫ ω in {ω | ε <= (range (n + 1)).sup' nonempty_range_add_one fun k => f k ω}, f n ω ∂μ) +
+      ENNReal.ofReal
+        (∫ ω in {ω | ((range (n + 1)).sup' nonempty_range_add_one fun k => f k ω) < ε},
+          f n ω ∂μ) := by
+      rw [← ENNReal.ofReal_add]; rw [← setIntegral_union]
+      · rw [← setIntegral_univ]
+        convert! rfl
+        ext ω
+        change (ε : Real) <= _ ∨ _ < (ε : Real) ↔ _
+        simp only [le_or_gt, Set.mem_univ]
+      · grind
+      · exact measurableSet_lt (measurable_range_sup'' fun n _ =>
+          (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)) measurable_const
+      exacts [(hsub.integrable _).integrableOn, (hsub.integrable _).integrableOn,
+        integral_nonneg (hnonneg _), integral_nonneg (hnonneg _)]
+    rwa [hadd, ENNReal.add_le_add_iff_right ENNReal.ofReal_ne_top] at this
+  calc
+    _ <= ENNReal.ofReal
+          (∫ ω in {ω | (ε : Real) <= (range (n + 1)).sup' nonempty_range_add_one fun k => f k ω},
+            stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω ∂μ) +
+        ENNReal.ofReal
+          (∫ ω in {ω | ((range (n + 1)).sup' nonempty_range_add_one fun k => f k ω) < ε},
+            stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω ∂μ) := by
+      gcongr with ω hω
+      · exact smul_le_stoppedValue_hittingBtwn hsub n
+      · exact (hsub.integrable n).integrableOn
+      · refine Integrable.integrableOn ?_
+        refine hsub.integrable_stoppedValue ?_ (fun ω => mod_cast hittingBtwn_le ω)
+        exact hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici
+      · exact nullMeasurableSet_lt (measurable_range_sup'' fun n _ =>
+          (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)).aemeasurable aemeasurable_const
+      rw [Set.mem_ofPred_eq] at hω
+      have : hittingBtwn f {y : Real | ε <= y} 0 n ω = n := by
+        simp only [hittingBtwn, Set.mem_ofPred_eq, ite_eq_right_iff, forall_exists_index, and_imp]
+        intro m hm hεm
+        exact False.elim
+          ((not_le.2 hω) ((le_sup'_iff _).2 ⟨m, mem_range.2 (Nat.lt_succ_of_le hm.2), hεm⟩))
+      simp only [stoppedValue, this, ge_iff_le]
+      refine le_of_eq ?_
+      congr
+    _ = ENNReal.ofReal
+        (∫ ω, stoppedValue f (fun ω => (hittingBtwn f {y : Real | ε <= y} 0 n ω : Nat)) ω ∂μ) := by
+      rw [← ENNReal.ofReal_add]; rw [← setIntegral_union]
+      · rw [← setIntegral_univ (μ := μ)]
+        convert! rfl
+        ext ω
+        change _ ↔ (ε : Real) <= _ ∨ _ < (ε : Real)
+        simp only [le_or_gt, Set.mem_univ]
+      · grind
+      · exact measurableSet_lt (measurable_range_sup'' fun n _ =>
+          (hsub.stronglyMeasurable n).measurable.le (𝒢.le n)) measurable_const
+      · exact Integrable.integrableOn (hsub.integrable_stoppedValue
+          (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+          (fun ω => mod_cast hittingBtwn_le ω))
+      · exact Integrable.integrableOn (hsub.integrable_stoppedValue
+          (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+          (fun ω => mod_cast hittingBtwn_le ω))
+      exacts [integral_nonneg fun x => hnonneg _ _, integral_nonneg fun x => hnonneg _ _]
+    _ <= ENNReal.ofReal (μ[f n]) := by
+      refine ENNReal.ofReal_le_ofReal ?_
+      rw [← stoppedValue_const f n]
+      refine hsub.expected_stoppedValue_mono
+        (hsub.stronglyAdapted.adapted.isStoppingTime_hittingBtwn measurableSet_Ici)
+        (isStoppingTime_const _ _) (fun ω => ?_) (fun _ => mod_cast le_rfl)
+      simp [hittingBtwn_le]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, nonempty_range_add_one, ofReal
 -/

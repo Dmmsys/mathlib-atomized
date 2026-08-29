@@ -690,7 +690,12 @@ theorem mem_εClosure_iff_exists_path
   mpr := by
     intro ⟨n, h⟩
     induction n generalizing s₂
-    · rw [List.replic
+    · rw [List.replicate_zero] at h
+      apply IsPath.eq_of_nil at h
+      solve_by_elim
+    · simp_rw [List.replicate_add, isPath_append, List.replicate_one, isPath_singleton] at h
+      obtain ⟨t, _, _⟩ := h
+      solve_by_elim [εClosure.step]
 
 中文:
 定理 mem_εClosure_iff_存在_path
@@ -709,7 +714,12 @@ theorem mem_εClosure_iff_exists_path
   mpr := by
     intro ⟨n, h⟩
     induction n generalizing s₂
-    · rw [List.replic
+    · rw [List.replicate_zero] at h
+      apply IsPath.eq_of_nil at h
+      solve_by_elim
+    · simp_rw [List.replicate_add, isPath_append, List.replicate_one, isPath_singleton] at h
+      obtain ⟨t, _, _⟩ := h
+      solve_by_elim [εClosure.step]
 
 Depends on / 依赖: Closure.step, IsPath, IsPath.eq_of_nil, IsPath.nil, List.replicate_add, List.replicate_one, List.replicate_zero, eq_of_nil, generalizing, isPath_append, isPath_singleton, replicate_add, replicate_one, replicate_zero, simp_rw, solve_by_elim
 -/
@@ -752,7 +762,28 @@ theorem mem_evalFrom_iff_exists_path
       rw [List.reduceOption_replicate_none]
       trivial
     · simp_rw [List.reduceOption_eq_nil_iff]
-
+      intro ⟨_, ⟨n, rfl⟩, h⟩
+      exact ⟨n, h⟩
+  | append_singleton x a ih =>
+    rw [evalFrom_append_singleton]; rw [mem_stepSet_iff]
+    constructor
+    · intro ⟨t, ht, h⟩
+      obtain ⟨x', _, _⟩ := ih.mp ht
+      rw [mem_εClosure_iff_exists] at h
+      simp_rw [mem_εClosure_iff_exists_path] at h
+      obtain ⟨u, _, n, _⟩ := h
+      use x' ++ some a :: List.replicate n none
+      rw [List.reduceOption_append]; rw [List.reduceOption_cons_of_some]; rw [List.reduceOption_replicate_none]; rw [isPath_append]
+      tauto
+    · simp_rw [← List.concat_eq_append, List.reduceOption_eq_concat_iff,
+        List.reduceOption_eq_nil_iff]
+      intro ⟨_, ⟨x', _, rfl, _, n, rfl⟩, h⟩
+      rw [isPath_append] at h
+      obtain ⟨t, _, _ | u⟩ := h
+      use t
+      rw [mem_εClosure_iff_exists]; rw [ih]
+      simp_rw [mem_εClosure_iff_exists_path]
+      tauto
 
 中文:
 定理 mem_evalFrom_iff_存在_path
@@ -767,7 +798,28 @@ theorem mem_evalFrom_iff_exists_path
       rw [List.reduceOption_replicate_none]
       trivial
     · simp_rw [List.reduceOption_eq_nil_iff]
-
+      intro ⟨_, ⟨n, rfl⟩, h⟩
+      exact ⟨n, h⟩
+  | append_singleton x a ih =>
+    rw [evalFrom_append_singleton]; rw [mem_stepSet_iff]
+    constructor
+    · intro ⟨t, ht, h⟩
+      obtain ⟨x', _, _⟩ := ih.mp ht
+      rw [mem_εClosure_iff_exists] at h
+      simp_rw [mem_εClosure_iff_exists_path] at h
+      obtain ⟨u, _, n, _⟩ := h
+      use x' ++ some a :: List.replicate n none
+      rw [List.reduceOption_append]; rw [List.reduceOption_cons_of_some]; rw [List.reduceOption_replicate_none]; rw [isPath_append]
+      tauto
+    · simp_rw [← List.concat_eq_append, List.reduceOption_eq_concat_iff,
+        List.reduceOption_eq_nil_iff]
+      intro ⟨_, ⟨x', _, rfl, _, n, rfl⟩, h⟩
+      rw [isPath_append] at h
+      obtain ⟨t, _, _ | u⟩ := h
+      use t
+      rw [mem_εClosure_iff_exists]; rw [ih]
+      simp_rw [mem_εClosure_iff_exists_path]
+      tauto
 
 Depends on / 依赖: List.reduceOption_eq_nil_iff, List.reduceOption_replicate_none, List.replicate, List.reverseRecOn, append_singleton, evalFrom_append_singleton, evalFrom_nil, generalizing, ih.mp, mem_stepSet_iff, reduceOption_eq_nil_iff, reduceOption_replicate_none, replicate, reverseRecOn, simp_rw
 -/
@@ -820,7 +872,7 @@ theorem mem_accepts_iff_exists_path
   mpr := by
     intro ⟨s₁, s₂, x', hs₁, hs₂, h⟩
     have := M.mem_evalFrom_iff_exists.mpr ⟨_, hs₁, M.mem_evalFrom_iff_exists_path.mpr ⟨_, h⟩⟩
-    e
+    exact ⟨s₂, hs₂, this⟩
 
 中文:
 定理 mem_accepts_iff_存在_path
@@ -834,7 +886,7 @@ theorem mem_accepts_iff_exists_path
   mpr := by
     intro ⟨s₁, s₂, x', hs₁, hs₂, h⟩
     have := M.mem_evalFrom_iff_exists.mpr ⟨_, hs₁, M.mem_evalFrom_iff_exists_path.mpr ⟨_, h⟩⟩
-    e
+    exact ⟨s₂, hs₂, this⟩
 
 Depends on / 依赖: M.mem_evalFrom_iff_exists.mpr, M.mem_evalFrom_iff_exists_path.mpr, mem_evalFrom_iff_exists, mem_evalFrom_iff_exists_path
 -/
@@ -1032,7 +1084,7 @@ theorem toεNFA_evalFrom_match
   rw [M.toεNFA_εClosure]
   rfl
 
-@[sim
+@[simp]
 
 中文:
 定理 toεNFA_evalFrom_match
@@ -1048,7 +1100,7 @@ theorem toεNFA_evalFrom_match
   rw [M.toεNFA_εClosure]
   rfl
 
-@[sim
+@[simp]
 
 Depends on / 依赖: M.to, NFA.evalFrom, NFA.stepSet, Set.mem_iUnion, and_congr_right_iff, evalFrom, exists_congr, exists_prop, mem_iUnion, stepSet
 -/

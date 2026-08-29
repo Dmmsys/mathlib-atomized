@@ -273,7 +273,18 @@ theorem laplacian_eq_fourierMultiplierCLM
   have : forall i (hi : i in Finset.univ), (inner Real · (b i) ^ 2).HasTemperateGrowth := by
     fun_prop
   simp_rw [laplacian_eq_sum b, ← b.sum_sq_inner_left, fourierMultiplierCLM_sum F this,
-    _root_.sum_apply, Finse
+    _root_.sum_apply, Finset.smul_sum]
+  congr 1
+  ext i x
+  simp_rw [smul_apply, lineDeriv_eq_fourierMultiplierCLM]
+  rw [← fourierMultiplierCLM_ofReal Complex (by fun_prop)]
+  simp_rw [map_smul, smul_apply, smul_smul]
+  congr 1
+  · ring_nf
+    simp
+  · rw [fourierMultiplierCLM_ofReal Complex (by fun_prop),
+      fourierMultiplierCLM_fourierMultiplierCLM_apply (by fun_prop) (by fun_prop)]
+    simp [sq, Pi.mul_def]
 
 中文:
 定理 laplacian_eq_fourierMultiplierCLM
@@ -284,7 +295,18 @@ theorem laplacian_eq_fourierMultiplierCLM
   have : forall i (hi : i in Finset.univ), (inner Real · (b i) ^ 2).HasTemperateGrowth := by
     fun_prop
   simp_rw [laplacian_eq_sum b, ← b.sum_sq_inner_left, fourierMultiplierCLM_sum F this,
-    _root_.sum_apply, Finse
+    _root_.sum_apply, Finset.smul_sum]
+  congr 1
+  ext i x
+  simp_rw [smul_apply, lineDeriv_eq_fourierMultiplierCLM]
+  rw [← fourierMultiplierCLM_ofReal Complex (by fun_prop)]
+  simp_rw [map_smul, smul_apply, smul_smul]
+  congr 1
+  · ring_nf
+    simp
+  · rw [fourierMultiplierCLM_ofReal Complex (by fun_prop),
+      fourierMultiplierCLM_fourierMultiplierCLM_apply (by fun_prop) (by fun_prop)]
+    simp [sq, Pi.mul_def]
 
 Depends on / 依赖: Finset, Finset.smul_sum, Finset.univ, HasTemperateGrowth, Module, Module.finrank, _root_, _root_.sum_apply, b.sum_sq_inner_left, finrank, fourierMultiplierCLM_ofReal, fourierMultiplierCLM_sum, fun_prop, laplacian_eq_sum, lineDeriv_eq_fourierMultiplierCLM, map_smul, ring_nf, simp_rw, smul_apply, smul_smul
 -/
@@ -581,7 +603,16 @@ theorem laplacian_eq_fourierMultiplierCLM
   have : forall i (hi : i in Finset.univ),
       (fun x => Complex.ofReal (inner Real x (b i)) ^ 2).HasTemperateGrowth := by
     fun_prop
-  simp_rw [laplacian_eq_sum b, ← b.sum_sq_inner_left, Complex.ofReal_sum, Complex.
+  simp_rw [laplacian_eq_sum b, ← b.sum_sq_inner_left, Complex.ofReal_sum, Complex.ofReal_pow,
+    fourierMultiplierCLM_sum F this, sum_apply, Finset.smul_sum]
+  congr 1
+  ext i x
+  simp_rw [lineDeriv_eq_fourierMultiplierCLM, map_smul, smul_smul]
+  rw [fourierMultiplierCLM_fourierMultiplierCLM_apply (by fun_prop) (by fun_prop)]; rw [← Complex.coe_smul (-(2 * π) ^ 2)]
+  congr 4
+  · ring_nf
+    simp
+  · simp [sq, Pi.mul_def]
 
 中文:
 定理 laplacian_eq_fourierMultiplierCLM
@@ -592,7 +623,16 @@ theorem laplacian_eq_fourierMultiplierCLM
   have : forall i (hi : i in Finset.univ),
       (fun x => Complex.ofReal (inner Real x (b i)) ^ 2).HasTemperateGrowth := by
     fun_prop
-  simp_rw [laplacian_eq_sum b, ← b.sum_sq_inner_left, Complex.ofReal_sum, Complex.
+  simp_rw [laplacian_eq_sum b, ← b.sum_sq_inner_left, Complex.ofReal_sum, Complex.ofReal_pow,
+    fourierMultiplierCLM_sum F this, sum_apply, Finset.smul_sum]
+  congr 1
+  ext i x
+  simp_rw [lineDeriv_eq_fourierMultiplierCLM, map_smul, smul_smul]
+  rw [fourierMultiplierCLM_fourierMultiplierCLM_apply (by fun_prop) (by fun_prop)]; rw [← Complex.coe_smul (-(2 * π) ^ 2)]
+  congr 4
+  · ring_nf
+    simp
+  · simp [sq, Pi.mul_def]
 
 Depends on / 依赖: Complex.ofReal, Complex.ofReal_pow, Complex.ofReal_sum, Finset, Finset.smul_sum, Finset.univ, HasTemperateGrowth, Module, Module.finrank, b.sum_sq_inner_left, finrank, fourierMultiplierCLM_fourierMultiplierCLM_apply, fourierMultiplierCLM_sum, fun_prop, laplacian_eq_sum, lineDeriv_eq_fourierMultiplierCLM, map_smul, ofReal, ofReal_pow, ofReal_sum
 -/

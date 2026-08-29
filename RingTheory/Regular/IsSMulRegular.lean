@@ -232,7 +232,7 @@ lemma isSMulRegular_of_range_eq_ker
 obtain ⟨y, ⟨⟩⟩ := (congrArg (x in ·) hfg).mpr h2.right_eq_zero_of_smul
 (g.map_smul r x).symm.trans (congrArg _ hx).trans g.map_zero
   refine (congrArg f (h1.right_eq_zero_of_smul ?_)).trans f.map_zero
-exact hf (f.map_smul r y).trans 
+exact hf (f.map_smul r y).trans hx.trans f.map_zero.symm
 
 中文:
 引理 isSMulRegular_of_range_eq_ker
@@ -243,7 +243,7 @@ exact hf (f.map_smul r y).trans
 obtain ⟨y, ⟨⟩⟩ := (congrArg (x in ·) hfg).mpr h2.right_eq_zero_of_smul
 (g.map_smul r x).symm.trans (congrArg _ hx).trans g.map_zero
   refine (congrArg f (h1.right_eq_zero_of_smul ?_)).trans f.map_zero
-exact hf (f.map_smul r y).trans 
+exact hf (f.map_smul r y).trans hx.trans f.map_zero.symm
 
 Depends on / 依赖: IsSMulRegular, IsSMulRegular.of_right_eq_zero_of_smul, f.map_smul, f.map_zero, f.map_zero.symm, g.map_smul, g.map_zero, h1.right_eq_zero_of_smul, h2.right_eq_zero_of_smul, hx.trans, map_smul, map_zero, of_right_eq_zero_of_smul, right_eq_zero_of_smul, symm.trans
 -/
@@ -468,7 +468,7 @@ lemma QuotSMulTop.map_first_exact_on_four_term_exact_of_isSMulRegular_last
     rw [Exact.exact_mapQ_iff h₁₂]; rw [map_pointwise_smul]; rw [Submodule.map_top]; rw [inf_comm]
     exact smul_top_inf_eq_smul_of_isSMulRegular_on_quot this
 h.of_injective _ LinearMap.ker_eq_bot.mp
-    ker_liftQ_eq_
+    ker_liftQ_eq_bot' _ _ h₂₃.linearMap_ker_eq.symm
 
 中文:
 引理 QuotSMulTop.map_first_exact_on_four_term_exact_of_isSMulRegular_last
@@ -477,7 +477,7 @@ h.of_injective _ LinearMap.ker_eq_bot.mp
     rw [Exact.exact_mapQ_iff h₁₂]; rw [map_pointwise_smul]; rw [Submodule.map_top]; rw [inf_comm]
     exact smul_top_inf_eq_smul_of_isSMulRegular_on_quot this
 h.of_injective _ LinearMap.ker_eq_bot.mp
-    ker_liftQ_eq_
+    ker_liftQ_eq_bot' _ _ h₂₃.linearMap_ker_eq.symm
 
 Depends on / 依赖: Exact.exact_mapQ_iff, IsSMulRegular, LinearMap, LinearMap.ker_eq_bot.mp, LinearMap.range, Submodule, Submodule.map_top, exact_mapQ_iff, h.of_injective, inf_comm, ker_eq_bot, ker_liftQ_eq_bot, linearMap_ker_eq, linearMap_ker_eq.symm, mapQLinear, map_pointwise_smul, map_top, of_injective, smul_top_inf_eq_smul_of_isSMulRegular_on_quot
 -/

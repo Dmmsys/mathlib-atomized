@@ -122,7 +122,7 @@ lemma map_lift_mapCone
   have h₁ := congr_hom (preservesLimitIso_hom_π A (F ⋙ π A) i)
     (A.map (limit.lift (F ⋙ π A) ((π A).mapCone c)) c.pt.snd)
   have h₂ := (c.π.app i).property
-  simpa [-Functor.comp_obj, ← comp_apply, ← Functor.map_comp, liftedCone
+  simpa [-Functor.comp_obj, ← comp_apply, ← Functor.map_comp, liftedConeElement, liftedConeElement']
 
 中文:
 引理 map_lift_mapCone
@@ -133,7 +133,7 @@ lemma map_lift_mapCone
   have h₁ := congr_hom (preservesLimitIso_hom_π A (F ⋙ π A) i)
     (A.map (limit.lift (F ⋙ π A) ((π A).mapCone c)) c.pt.snd)
   have h₂ := (c.π.app i).property
-  simpa [-Functor.comp_obj, ← comp_apply, ← Functor.map_comp, liftedCone
+  simpa [-Functor.comp_obj, ← comp_apply, ← Functor.map_comp, liftedConeElement, liftedConeElement']
 
 Depends on / 依赖: A.map, Functor, Functor.comp_obj, Functor.map_comp, c.pt.snd, comp_apply, comp_obj, congr_hom, injective, liftedConeElement, limit.lift, mapCone, map_comp, preservesLimitIso, property, toEquiv, toEquiv.injective
 -/

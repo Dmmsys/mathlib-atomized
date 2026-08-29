@@ -603,7 +603,45 @@ theorem Valid'.node4L
     BalancedSz (size l) (size ml) ∧
       BalancedSz (size mr) (size r) ∧ BalancedSz (size l + size ml + 1) (size mr + size r + 1) from
     Valid'.node' (hl.node' hm.left this.1) (hm.right.node' hr this.2.1) this.2.2
-  rcases H with (⟨l0, m1
+  rcases H with (⟨l0, m1, r0⟩ | ⟨l0, mr₁, lr₁, lr₂, mr₂⟩)
+  · rw [hm.2.size_eq, Nat.succ_inj, add_eq_zero] at m1
+    rw [l0]; rw [m1.1]; rw [m1.2]; revert r0; rcases size r with (_ | _ | _) <;>
+      [decide; decide; (intro r0; unfold BalancedSz delta; lia)]
+  · rcases Nat.eq_zero_or_pos (size r) with r0 | r0
+    · rw [r0] at mr₂; cases not_le_of_gt Hm mr₂
+    rw [hm.2.size_eq] at lr₁ lr₂ mr₁ mr₂
+    by_cases mm : size ml + size mr <= 1
+    · dsimp [delta, ratio] at lr₁ mr₁
+      have r1 : r.size = 1 := by lia
+      have l1 : l.size = 1 := by lia
+      rw [r1]; rw [add_assoc] at lr₁
+      rw [l1]; rw [r1]
+      revert mm; cases size ml <;> cases size mr <;> intro mm
+      · decide
+      · rw [zero_add] at mm; rcases mm with (_ | ⟨⟨⟩⟩)
+        decide
+      · rcases mm with (_ | ⟨⟨⟩⟩); decide
+      · rw [Nat.succ_add] at mm; rcases mm with (_ | ⟨⟨⟩⟩)
+    rcases hm.3.1.resolve_left mm with ⟨mm₁, mm₂⟩
+    rcases Nat.eq_zero_or_pos (size ml) with ml0 | ml0
+    · rw [ml0, mul_zero, Nat.le_zero] at mm₂
+      rw [ml0]; rw [mm₂] at mm; cases mm (by decide)
+    have : 2 * size l <= size ml + size mr + 1 := by
+      have := Nat.mul_le_mul_left ratio lr₁
+      rw [mul_left_comm]; rw [mul_add] at this
+      have := le_trans this (add_le_add_right mr₁ _)
+      rw [← Nat.succ_mul] at this
+      exact (mul_le_mul_iff_right₀ (by decide)).1 this
+    refine ⟨Or.inr ⟨?_, ?_⟩, Or.inr ⟨?_, ?_⟩, Or.inr ⟨?_, ?_⟩⟩
+    · refine (mul_le_mul_iff_right₀ (by decide)).1 (le_trans this ?_)
+      rw [two_mul]; rw [Nat.succ_le_iff]
+      refine add_lt_add_of_lt_of_le ?_ mm₂
+      simpa using! mul_lt_mul_of_pos_right (by decide : 1 < 3) ml0
+    · exact Nat.le_of_lt_succ (Valid'.node4L_lemma₁ lr₂ mr₂ mm₁)
+    · exact Valid'.node4L_lemma₂ mr₂
+    · exact Valid'.node4L_lemma₃ mr₁ mm₁
+    · exact Valid'.node4L_lemma₄ lr₁ mr₂ mm₁
+    · exact Valid'.node4L_lemma₅ lr₂ mr₁ mm₂
 
 中文:
 定理 Valid'.node4L
@@ -614,7 +652,45 @@ theorem Valid'.node4L
     BalancedSz (size l) (size ml) ∧
       BalancedSz (size mr) (size r) ∧ BalancedSz (size l + size ml + 1) (size mr + size r + 1) from
     Valid'.node' (hl.node' hm.left this.1) (hm.right.node' hr this.2.1) this.2.2
-  rcases H with (⟨l0, m1
+  rcases H with (⟨l0, m1, r0⟩ | ⟨l0, mr₁, lr₁, lr₂, mr₂⟩)
+  · rw [hm.2.size_eq, Nat.succ_inj, add_eq_zero] at m1
+    rw [l0]; rw [m1.1]; rw [m1.2]; revert r0; rcases size r with (_ | _ | _) <;>
+      [decide; decide; (intro r0; unfold BalancedSz delta; lia)]
+  · rcases Nat.eq_zero_or_pos (size r) with r0 | r0
+    · rw [r0] at mr₂; cases not_le_of_gt Hm mr₂
+    rw [hm.2.size_eq] at lr₁ lr₂ mr₁ mr₂
+    by_cases mm : size ml + size mr <= 1
+    · dsimp [delta, ratio] at lr₁ mr₁
+      have r1 : r.size = 1 := by lia
+      have l1 : l.size = 1 := by lia
+      rw [r1]; rw [add_assoc] at lr₁
+      rw [l1]; rw [r1]
+      revert mm; cases size ml <;> cases size mr <;> intro mm
+      · decide
+      · rw [zero_add] at mm; rcases mm with (_ | ⟨⟨⟩⟩)
+        decide
+      · rcases mm with (_ | ⟨⟨⟩⟩); decide
+      · rw [Nat.succ_add] at mm; rcases mm with (_ | ⟨⟨⟩⟩)
+    rcases hm.3.1.resolve_left mm with ⟨mm₁, mm₂⟩
+    rcases Nat.eq_zero_or_pos (size ml) with ml0 | ml0
+    · rw [ml0, mul_zero, Nat.le_zero] at mm₂
+      rw [ml0]; rw [mm₂] at mm; cases mm (by decide)
+    have : 2 * size l <= size ml + size mr + 1 := by
+      have := Nat.mul_le_mul_left ratio lr₁
+      rw [mul_left_comm]; rw [mul_add] at this
+      have := le_trans this (add_le_add_right mr₁ _)
+      rw [← Nat.succ_mul] at this
+      exact (mul_le_mul_iff_right₀ (by decide)).1 this
+    refine ⟨Or.inr ⟨?_, ?_⟩, Or.inr ⟨?_, ?_⟩, Or.inr ⟨?_, ?_⟩⟩
+    · refine (mul_le_mul_iff_right₀ (by decide)).1 (le_trans this ?_)
+      rw [two_mul]; rw [Nat.succ_le_iff]
+      refine add_lt_add_of_lt_of_le ?_ mm₂
+      simpa using! mul_lt_mul_of_pos_right (by decide : 1 < 3) ml0
+    · exact Nat.le_of_lt_succ (Valid'.node4L_lemma₁ lr₂ mr₂ mm₁)
+    · exact Valid'.node4L_lemma₂ mr₂
+    · exact Valid'.node4L_lemma₃ mr₁ mm₁
+    · exact Valid'.node4L_lemma₄ lr₁ mr₂ mm₁
+    · exact Valid'.node4L_lemma₅ lr₂ mr₁ mm₂
 -/
 theorem Valid'.node4L {l} {x : α} {m} {y : α} {r o₁ o₂} (hl : Valid' o₁ l x) (hm : Valid' x m y)
     (hr : Valid' (↑y) r o₂) (Hm : 0 < size m)
@@ -757,7 +833,53 @@ theorem Valid'.rotateL
   rw [hr.2.size_eq] at H3
   replace H3 : 2 * (size rl + size rr) <= 9 * size l + 3 ∨ size rl + size rr <= 2 :=
     H3.imp (@Nat.le_of_add_le_add_right _ 2 _) Nat.le_of_succ_le_succ
-  have H3_0 (l0 : siz
+  have H3_0 (l0 : size l = 0) : size rl + size rr <= 2 := by lia
+  have H3p : size l > 0 -> 2 * (size rl + size rr) <= 9 * size l + 3 := fun l0 : 1 <= size l =>
+    (or_iff_left_of_imp <| by lia).1 H3
+  have ablem : forall {a b : Nat}, 1 <= a -> a + b <= 2 -> b <= 1 := by lia
+  have hlp : size l > 0 -> ¬size rl + size rr <= 1 := fun l0 hb =>
+    absurd (le_trans (le_trans (Nat.mul_le_mul_left _ l0) H2) hb) (by decide)
+  rw [Ordnode.rotateL_node]; split_ifs with h
+  · have rr0 : size rr > 0 :=
+      (mul_lt_mul_iff_right₀ (by decide)).1 (lt_of_le_of_lt (Nat.zero_le _) h : ratio * 0 < _)
+    suffices BalancedSz (size l) (size rl) ∧ BalancedSz (size l + size rl + 1) (size rr) by
+      exact hl.node3L hr.left hr.right this.1 this.2
+    rcases Nat.eq_zero_or_pos (size l) with l0 | l0
+    · rw [l0]; replace H3 := H3_0 l0
+      have := hr.3.1
+      rcases Nat.eq_zero_or_pos (size rl) with rl0 | rl0
+      · rw [rl0] at this ⊢
+        rw [le_antisymm (balancedSz_zero.1 this.symm) rr0]
+        decide
+      have rr1 : size rr = 1 := le_antisymm (ablem rl0 H3) rr0
+      rw [add_comm] at H3
+      rw [rr1]; rw [show size rl = 1 from le_antisymm (ablem rr0 H3) rl0]
+      decide
+    replace H3 := H3p l0
+    rcases hr.3.1.resolve_left (hlp l0) with ⟨_, hb₂⟩
+    refine ⟨Or.inr ⟨?_, ?_⟩, Or.inr ⟨?_, ?_⟩⟩
+    · exact Valid'.rotateL_lemma₁ H2 hb₂
+    · exact Nat.le_of_lt_succ (Valid'.rotateL_lemma₂ H3 h)
+    · exact Valid'.rotateL_lemma₃ H2 h
+    · exact
+        le_trans hb₂
+          (Nat.mul_le_mul_left _ <| le_trans (Nat.le_add_left _ _) (Nat.le_add_right _ _))
+  · rcases Nat.eq_zero_or_pos (size rl) with rl0 | rl0
+    · rw [rl0, not_lt, Nat.le_zero, Nat.mul_eq_zero] at h
+      replace h := h.resolve_left (by decide)
+      rw [rl0]; rw [h]; rw [Nat.le_zero]; rw [Nat.mul_eq_zero] at H2
+      rw [hr.2.size_eq]; rw [rl0]; rw [h]; rw [H2.resolve_left (by decide)] at H1
+      cases H1 (by decide)
+    refine hl.node4L hr.left hr.right rl0 ?_
+    rcases Nat.eq_zero_or_pos (size l) with l0 | l0
+    · replace H3 := H3_0 l0
+      rcases Nat.eq_zero_or_pos (size rr) with rr0 | rr0
+      · have := hr.3.1
+        rw [rr0] at this
+        exact Or.inl ⟨l0, le_antisymm (balancedSz_zero.1 this) rl0, rr0.symm ▸ zero_le_one⟩
+      exact Or.inl ⟨l0, le_antisymm (ablem rr0 <| by rwa [add_comm]) rl0, ablem rl0 H3⟩
+    exact
+      Or.inr ⟨l0, not_lt.1 h, H2, Valid'.rotateL_lemma₄ (H3p l0), (hr.3.1.resolve_left (hlp l0)).1⟩
 
 中文:
 定理 Valid'.rotateL
@@ -768,7 +890,53 @@ theorem Valid'.rotateL
   rw [hr.2.size_eq] at H3
   replace H3 : 2 * (size rl + size rr) <= 9 * size l + 3 ∨ size rl + size rr <= 2 :=
     H3.imp (@Nat.le_of_add_le_add_right _ 2 _) Nat.le_of_succ_le_succ
-  have H3_0 (l0 : siz
+  have H3_0 (l0 : size l = 0) : size rl + size rr <= 2 := by lia
+  have H3p : size l > 0 -> 2 * (size rl + size rr) <= 9 * size l + 3 := fun l0 : 1 <= size l =>
+    (or_iff_left_of_imp <| by lia).1 H3
+  have ablem : forall {a b : Nat}, 1 <= a -> a + b <= 2 -> b <= 1 := by lia
+  have hlp : size l > 0 -> ¬size rl + size rr <= 1 := fun l0 hb =>
+    absurd (le_trans (le_trans (Nat.mul_le_mul_left _ l0) H2) hb) (by decide)
+  rw [Ordnode.rotateL_node]; split_ifs with h
+  · have rr0 : size rr > 0 :=
+      (mul_lt_mul_iff_right₀ (by decide)).1 (lt_of_le_of_lt (Nat.zero_le _) h : ratio * 0 < _)
+    suffices BalancedSz (size l) (size rl) ∧ BalancedSz (size l + size rl + 1) (size rr) by
+      exact hl.node3L hr.left hr.right this.1 this.2
+    rcases Nat.eq_zero_or_pos (size l) with l0 | l0
+    · rw [l0]; replace H3 := H3_0 l0
+      have := hr.3.1
+      rcases Nat.eq_zero_or_pos (size rl) with rl0 | rl0
+      · rw [rl0] at this ⊢
+        rw [le_antisymm (balancedSz_zero.1 this.symm) rr0]
+        decide
+      have rr1 : size rr = 1 := le_antisymm (ablem rl0 H3) rr0
+      rw [add_comm] at H3
+      rw [rr1]; rw [show size rl = 1 from le_antisymm (ablem rr0 H3) rl0]
+      decide
+    replace H3 := H3p l0
+    rcases hr.3.1.resolve_left (hlp l0) with ⟨_, hb₂⟩
+    refine ⟨Or.inr ⟨?_, ?_⟩, Or.inr ⟨?_, ?_⟩⟩
+    · exact Valid'.rotateL_lemma₁ H2 hb₂
+    · exact Nat.le_of_lt_succ (Valid'.rotateL_lemma₂ H3 h)
+    · exact Valid'.rotateL_lemma₃ H2 h
+    · exact
+        le_trans hb₂
+          (Nat.mul_le_mul_left _ <| le_trans (Nat.le_add_left _ _) (Nat.le_add_right _ _))
+  · rcases Nat.eq_zero_or_pos (size rl) with rl0 | rl0
+    · rw [rl0, not_lt, Nat.le_zero, Nat.mul_eq_zero] at h
+      replace h := h.resolve_left (by decide)
+      rw [rl0]; rw [h]; rw [Nat.le_zero]; rw [Nat.mul_eq_zero] at H2
+      rw [hr.2.size_eq]; rw [rl0]; rw [h]; rw [H2.resolve_left (by decide)] at H1
+      cases H1 (by decide)
+    refine hl.node4L hr.left hr.right rl0 ?_
+    rcases Nat.eq_zero_or_pos (size l) with l0 | l0
+    · replace H3 := H3_0 l0
+      rcases Nat.eq_zero_or_pos (size rr) with rr0 | rr0
+      · have := hr.3.1
+        rw [rr0] at this
+        exact Or.inl ⟨l0, le_antisymm (balancedSz_zero.1 this) rl0, rr0.symm ▸ zero_le_one⟩
+      exact Or.inl ⟨l0, le_antisymm (ablem rr0 <| by rwa [add_comm]) rl0, ablem rl0 H3⟩
+    exact
+      Or.inr ⟨l0, not_lt.1 h, H2, Valid'.rotateL_lemma₄ (H3p l0), (hr.3.1.resolve_left (hlp l0)).1⟩
 -/
 theorem Valid'.rotateL {l} {x : α} {r o₁ o₂} (hl : Valid' o₁ l x) (hr : Valid' x r o₂)
     (H1 : ¬size l + size r <= 1) (H2 : delta * size l < size r)
@@ -906,7 +1074,12 @@ theorem Valid'.balance'_lemma
   · exact le_trans (Nat.le_add_left _ _) (le_trans h (Nat.le_add_left _ _))
   · exact
       le_trans h₂
-        (Nat.mul_le_mul_left _ <| le_trans (Nat.dist_tri_right _ _) (Na
+        (Nat.mul_le_mul_left _ <| le_trans (Nat.dist_tri_right _ _) (Nat.add_le_add_left hl _))
+  · exact
+      le_trans (Nat.dist_tri_left' _ _)
+        (le_trans (add_le_add hr (le_trans (Nat.le_add_left _ _) h)) (by lia))
+  · rw [Nat.mul_succ]
+    exact le_trans (Nat.dist_tri_right' _ _) (add_le_add h₂ (le_trans hr (by decide)))
 
 中文:
 定理 Valid'.balance'_lemma
@@ -917,7 +1090,12 @@ theorem Valid'.balance'_lemma
   · exact le_trans (Nat.le_add_left _ _) (le_trans h (Nat.le_add_left _ _))
   · exact
       le_trans h₂
-        (Nat.mul_le_mul_left _ <| le_trans (Nat.dist_tri_right _ _) (Na
+        (Nat.mul_le_mul_left _ <| le_trans (Nat.dist_tri_right _ _) (Nat.add_le_add_left hl _))
+  · exact
+      le_trans (Nat.dist_tri_left' _ _)
+        (le_trans (add_le_add hr (le_trans (Nat.le_add_left _ _) h)) (by lia))
+  · rw [Nat.mul_succ]
+    exact le_trans (Nat.dist_tri_right' _ _) (add_le_add h₂ (le_trans hr (by decide)))
 -/
 theorem Valid'.balance'_lemma {α l l' r r'} (H1 : BalancedSz l' r')
     (H2 : Nat.dist (@size α l) l' <= 1 ∧ size r = r' ∨ Nat.dist (size r) r' <= 1 ∧ size l = l') :
@@ -989,7 +1167,8 @@ theorem Valid'.balanceL_aux
   rcases Nat.eq_zero_or_pos (size r) with r0 | r0
   · rw [r0]; exact Nat.zero_le _
   rcases Nat.eq_zero_or_pos (size l) with l0 | l0
-  · rw [l0]; exact le_trans (Nat
+  · rw [l0]; exact le_trans (Nat.mul_le_mul_left _ (H₁ l0)) (by decide)
+  replace H₂ : _ <= 3 * _ := H₂ l0 r0; lia
 
 中文:
 定理 Valid'.balanceL_aux
@@ -1000,7 +1179,8 @@ theorem Valid'.balanceL_aux
   rcases Nat.eq_zero_or_pos (size r) with r0 | r0
   · rw [r0]; exact Nat.zero_le _
   rcases Nat.eq_zero_or_pos (size l) with l0 | l0
-  · rw [l0]; exact le_trans (Nat
+  · rw [l0]; exact le_trans (Nat.mul_le_mul_left _ (H₁ l0)) (by decide)
+  replace H₂ : _ <= 3 * _ := H₂ l0 r0; lia
 -/
 theorem Valid'.balanceL_aux {l} {x : α} {r o₁ o₂} (hl : Valid' o₁ l x) (hr : Valid' x r o₂)
     (H₁ : size l = 0 -> size r <= 1) (H₂ : 1 <= size l -> 1 <= size r -> size r <= delta * size l)
@@ -1111,7 +1291,9 @@ theorem Valid'.eraseMax_aux
   | node rs rl rx rr _ IHrr =>
     have := H.2.2.2.eq_node'; rw [this] at H ⊢
     rcases IHrr H.right with ⟨h, e⟩
-    refine ⟨Valid'.balanceL H.left h (Or.inr ⟨_, Or.inr e, H.3
+    refine ⟨Valid'.balanceL H.left h (Or.inr ⟨_, Or.inr e, H.3.1⟩), ?_⟩
+    rw [eraseMax]; rw [size_balanceL H.3.2.1 h.3 H.2.2.1 h.2 (Or.inr ⟨_]; rw [Or.inr e]; rw [H.3.1⟩)]
+    rw [size_node]; rw [e]; rfl
 
 中文:
 定理 Valid'.eraseMax_aux
@@ -1123,7 +1305,9 @@ theorem Valid'.eraseMax_aux
   | node rs rl rx rr _ IHrr =>
     have := H.2.2.2.eq_node'; rw [this] at H ⊢
     rcases IHrr H.right with ⟨h, e⟩
-    refine ⟨Valid'.balanceL H.left h (Or.inr ⟨_, Or.inr e, H.3
+    refine ⟨Valid'.balanceL H.left h (Or.inr ⟨_, Or.inr e, H.3.1⟩), ?_⟩
+    rw [eraseMax]; rw [size_balanceL H.3.2.1 h.3 H.2.2.1 h.2 (Or.inr ⟨_]; rw [Or.inr e]; rw [H.3.1⟩)]
+    rw [size_node]; rw [e]; rfl
 -/
 theorem Valid'.eraseMax_aux {s l x r o₁ o₂} (H : Valid' o₁ (.node s l x r) o₂) :
     Valid' o₁ (@eraseMax α (.node' l x r)) ↑(findMax' x r) ∧
@@ -1217,7 +1401,27 @@ theorem Valid'.glue_aux
     · obtain ⟨v, e⟩ := Valid'.eraseMax_aux hl
       suffices H : _ by
         refine ⟨Valid'.balanceR v (hr.of_gt ?_ ?_) H, ?_⟩
-
+        · refine findMax'_all (P := fun a : α => Bounded nil (a : WithTop α) o₂)
+            lx lr hl.1.2.to_nil (sep.2.2.imp ?_)
+          exact fun x h => hr.1.2.to_nil.mono_left (le_of_lt h.2.1)
+        · exact @findMax'_all _ (fun a => All (· > a) (.node rs rl rx rr)) lx lr sep.2.1 sep.2.2
+        · rw [size_balanceR v.3 hr.3 v.2 hr.2 H, add_right_comm, ← e, hl.2.1]; rfl
+      refine Or.inl ⟨_, Or.inr e, ?_⟩
+      rwa [hl.2.eq_node'] at bal
+  · rw [splitMin_eq]
+    · obtain ⟨v, e⟩ := Valid'.eraseMin_aux hr
+      suffices H : _ by
+        refine ⟨Valid'.balanceL (hl.of_lt ?_ ?_) v H, ?_⟩
+        · refine @findMin'_all (P := fun a : α => Bounded nil o₁ (a : WithBot α))
+            _ rl rx (sep.2.1.1.imp ?_) hr.1.1.to_nil
+          exact fun y h => hl.1.1.to_nil.mono_right (le_of_lt h)
+        · exact
+            @findMin'_all _ (fun a => All (· < a) (.node ls ll lx lr)) rl rx
+              (all_iff_forall.2 fun x hx => sep.imp fun y hy => all_iff_forall.1 hy.1 _ hx)
+              (sep.imp fun y hy => hy.2.1)
+        · rw [size_balanceL hl.3 v.3 hl.2 v.2 H, add_assoc, ← e, hr.2.1]; rfl
+      refine Or.inr ⟨_, Or.inr e, ?_⟩
+      rwa [hr.2.eq_node'] at bal
 
 中文:
 定理 Valid'.glue_aux
@@ -1230,7 +1434,27 @@ theorem Valid'.glue_aux
     · obtain ⟨v, e⟩ := Valid'.eraseMax_aux hl
       suffices H : _ by
         refine ⟨Valid'.balanceR v (hr.of_gt ?_ ?_) H, ?_⟩
-
+        · refine findMax'_all (P := fun a : α => Bounded nil (a : WithTop α) o₂)
+            lx lr hl.1.2.to_nil (sep.2.2.imp ?_)
+          exact fun x h => hr.1.2.to_nil.mono_left (le_of_lt h.2.1)
+        · exact @findMax'_all _ (fun a => All (· > a) (.node rs rl rx rr)) lx lr sep.2.1 sep.2.2
+        · rw [size_balanceR v.3 hr.3 v.2 hr.2 H, add_right_comm, ← e, hl.2.1]; rfl
+      refine Or.inl ⟨_, Or.inr e, ?_⟩
+      rwa [hl.2.eq_node'] at bal
+  · rw [splitMin_eq]
+    · obtain ⟨v, e⟩ := Valid'.eraseMin_aux hr
+      suffices H : _ by
+        refine ⟨Valid'.balanceL (hl.of_lt ?_ ?_) v H, ?_⟩
+        · refine @findMin'_all (P := fun a : α => Bounded nil o₁ (a : WithBot α))
+            _ rl rx (sep.2.1.1.imp ?_) hr.1.1.to_nil
+          exact fun y h => hl.1.1.to_nil.mono_right (le_of_lt h)
+        · exact
+            @findMin'_all _ (fun a => All (· < a) (.node ls ll lx lr)) rl rx
+              (all_iff_forall.2 fun x hx => sep.imp fun y hy => all_iff_forall.1 hy.1 _ hx)
+              (sep.imp fun y hy => hy.2.1)
+        · rw [size_balanceL hl.3 v.3 hl.2 v.2 H, add_assoc, ← e, hr.2.1]; rfl
+      refine Or.inr ⟨_, Or.inr e, ?_⟩
+      rwa [hr.2.eq_node'] at bal
 -/
 theorem Valid'.glue_aux {l r o₁ o₂} (hl : Valid' o₁ l o₂) (hr : Valid' o₁ r o₂)
     (sep : l.All fun x => r.All fun y => x < y) (bal : BalancedSz (size l) (size r)) :
@@ -1312,7 +1536,11 @@ theorem Valid'.merge_aux₁
     suffices H₁ : _ by
       refine ⟨Valid'.balanceL_aux v hr.right H₁ H₂ ?_, ?_⟩
       · rw [e]; exact Or.inl (Valid'.merge_lemma h hr₁)
-      · rw [balanceL_eq_balanc
+      · rw [balanceL_eq_balance v.2 hr.2.2.2 H₁ H₂, balance_eq_balance' v.3 hr.3.2.2 v.2 hr.2.2.2,
+          size_balance' v.2 hr.2.2.2, e, hl.2.1, hr.2.1]
+        abel
+    · rw [e, add_right_comm]; rintro ⟨⟩
+  intro _ _; rw [e]; unfold delta at hr₂ ⊢; lia
 
 中文:
 定理 Valid'.merge_aux₁
@@ -1325,7 +1553,11 @@ theorem Valid'.merge_aux₁
     suffices H₁ : _ by
       refine ⟨Valid'.balanceL_aux v hr.right H₁ H₂ ?_, ?_⟩
       · rw [e]; exact Or.inl (Valid'.merge_lemma h hr₁)
-      · rw [balanceL_eq_balanc
+      · rw [balanceL_eq_balance v.2 hr.2.2.2 H₁ H₂, balance_eq_balance' v.3 hr.3.2.2 v.2 hr.2.2.2,
+          size_balance' v.2 hr.2.2.2, e, hl.2.1, hr.2.1]
+        abel
+    · rw [e, add_right_comm]; rintro ⟨⟩
+  intro _ _; rw [e]; unfold delta at hr₂ ⊢; lia
 -/
 theorem Valid'.merge_aux₁ {o₁ o₂ ls ll lx lr rs rl rx rr t}
     (hl : Valid' o₁ (@Ordnode.node α ls ll lx lr) o₂) (hr : Valid' o₁ (.node rs rl rx rr) o₂)
@@ -1359,7 +1591,14 @@ theorem Valid'.merge_aux
   | nil => exact ⟨hl, rfl⟩
   | node rs rl rx rr IHrl _ => ?_
   rw [merge_node]; split_ifs with h h_1
-  · obtain ⟨v, e⟩ := IHrl (hl.of_lt hr.1.1.
+  · obtain ⟨v, e⟩ := IHrl (hl.of_lt hr.1.1.to_nil <| sep.imp fun x h => h.2.1) hr.left
+      (sep.imp fun x h => h.1)
+    exact Valid'.merge_aux₁ hl hr h v e
+  · obtain ⟨v, e⟩ := IHlr hl.right (hr.of_gt hl.1.2.to_nil sep.2.1) sep.2.2
+    have := Valid'.merge_aux₁ hr.dual hl.dual h_1 v.dual
+    rw [size_dual]; rw [add_comm]; rw [size_dual]; rw [← dual_balanceR]; rw [← Valid'.dual_iff]; rw [size_dual]; rw [add_comm rs] at this
+    exact this e
+  · refine Valid'.glue_aux hl hr sep (Or.inr ⟨not_lt.1 h_1, not_lt.1 h⟩)
 
 中文:
 定理 Valid'.merge_aux
@@ -1372,7 +1611,14 @@ theorem Valid'.merge_aux
   | nil => exact ⟨hl, rfl⟩
   | node rs rl rx rr IHrl _ => ?_
   rw [merge_node]; split_ifs with h h_1
-  · obtain ⟨v, e⟩ := IHrl (hl.of_lt hr.1.1.
+  · obtain ⟨v, e⟩ := IHrl (hl.of_lt hr.1.1.to_nil <| sep.imp fun x h => h.2.1) hr.left
+      (sep.imp fun x h => h.1)
+    exact Valid'.merge_aux₁ hl hr h v e
+  · obtain ⟨v, e⟩ := IHlr hl.right (hr.of_gt hl.1.2.to_nil sep.2.1) sep.2.2
+    have := Valid'.merge_aux₁ hr.dual hl.dual h_1 v.dual
+    rw [size_dual]; rw [add_comm]; rw [size_dual]; rw [← dual_balanceR]; rw [← Valid'.dual_iff]; rw [size_dual]; rw [add_comm rs] at this
+    exact this e
+  · refine Valid'.glue_aux hl hr sep (Or.inr ⟨not_lt.1 h_1, not_lt.1 h⟩)
 -/
 theorem Valid'.merge_aux {l r o₁ o₂} (hl : Valid' o₁ l o₂) (hr : Valid' o₁ r o₂)
     (sep : l.All fun x => r.All fun y => x < y) :
@@ -1423,7 +1669,8 @@ theorem insertWith.valid_aux
       suffices H : _ by
         refine ⟨h.left.balanceR vr H, ?_⟩
         rw [size_balanceR h.3.2.1 vr.3 h.2.2.1 vr.2 H]; rw [h.2.size_eq]
-        exact (e.add_left _)
+        exact (e.add_left _).add_right _
+      exact Or.inr ⟨_, e, h.3.1⟩
 
 中文:
 定理 insertWith.valid_aux
@@ -1433,7 +1680,8 @@ theorem insertWith.valid_aux
       suffices H : _ by
         refine ⟨h.left.balanceR vr H, ?_⟩
         rw [size_balanceR h.3.2.1 vr.3 h.2.2.1 vr.2 H]; rw [h.2.size_eq]
-        exact (e.add_left _)
+        exact (e.add_left _).add_right _
+      exact Or.inr ⟨_, e, h.3.1⟩
 
 Depends on / 依赖: lt_of_le_not_ge, resolve_left, total_of
 -/
@@ -1577,7 +1825,23 @@ theorem Valid'.map_aux
     exact f_strict_mono h.ord
   | node _ _ _ _ t_ih_l t_ih_r =>
     have t_ih_l' := t_ih_l h.left
-    have
+    have t_ih_r' := t_ih_r h.right
+    clear t_ih_l t_ih_r
+    obtain ⟨t_l_valid, t_l_size⟩ := t_ih_l'
+    obtain ⟨t_r_valid, t_r_size⟩ := t_ih_r'
+    simp only [map, size_node, and_true]
+    constructor
+    · exact And.intro t_l_valid.ord t_r_valid.ord
+    · constructor
+      · rw [t_l_size, t_r_size]; exact h.sz.1
+      · constructor
+        · exact t_l_valid.sz
+        · exact t_r_valid.sz
+    · constructor
+      · rw [t_l_size, t_r_size]; exact h.bal.1
+      · constructor
+        · exact t_l_valid.bal
+        · exact t_r_valid.bal
 
 中文:
 定理 Valid'.map_aux
@@ -1592,7 +1856,23 @@ theorem Valid'.map_aux
     exact f_strict_mono h.ord
   | node _ _ _ _ t_ih_l t_ih_r =>
     have t_ih_l' := t_ih_l h.left
-    have
+    have t_ih_r' := t_ih_r h.right
+    clear t_ih_l t_ih_r
+    obtain ⟨t_l_valid, t_l_size⟩ := t_ih_l'
+    obtain ⟨t_r_valid, t_r_size⟩ := t_ih_r'
+    simp only [map, size_node, and_true]
+    constructor
+    · exact And.intro t_l_valid.ord t_r_valid.ord
+    · constructor
+      · rw [t_l_size, t_r_size]; exact h.sz.1
+      · constructor
+        · exact t_l_valid.sz
+        · exact t_r_valid.sz
+    · constructor
+      · rw [t_l_size, t_r_size]; exact h.bal.1
+      · constructor
+        · exact t_l_valid.bal
+        · exact t_r_valid.bal
 -/
 theorem Valid'.map_aux {β} [Preorder β] {f : α -> β} (f_strict_mono : StrictMono f) {t a₁ a₂}
     (h : Valid' a₁ t a₂) :
@@ -1659,7 +1939,28 @@ theorem Valid'.erase_aux
     have t_ih_r' := t_ih_r h.right
     clear t_ih_l t_ih_r
     obtain ⟨t_l_valid, t_l_size⟩ := t_ih_l'
-    obtain ⟨
+    obtain ⟨t_r_valid, t_r_size⟩ := t_ih_r'
+    cases cmpLE x t_x <;> rw [h.sz.1]
+    · suffices h_balanceable : _ by
+        constructor
+        · exact Valid'.balanceR t_l_valid h.right h_balanceable
+        · rw [size_balanceR t_l_valid.bal h.right.bal t_l_valid.sz h.right.sz h_balanceable]
+          repeat apply Raised.add_right
+          exact t_l_size
+      left; exists t_l.size; exact And.intro t_l_size h.bal.1
+    · have h_glue := Valid'.glue h.left h.right h.bal.1
+      obtain ⟨h_glue_valid, h_glue_sized⟩ := h_glue
+      constructor
+      · exact h_glue_valid
+      · right; rw [h_glue_sized]
+    · suffices h_balanceable : _ by
+        constructor
+        · exact Valid'.balanceL h.left t_r_valid h_balanceable
+        · rw [size_balanceL h.left.bal t_r_valid.bal h.left.sz t_r_valid.sz h_balanceable]
+          apply Raised.add_right
+          apply Raised.add_left
+          exact t_r_size
+      right; exists t_r.size; exact And.intro t_r_size h.bal.1
 
 中文:
 定理 Valid'.erase_aux
@@ -1674,7 +1975,28 @@ theorem Valid'.erase_aux
     have t_ih_r' := t_ih_r h.right
     clear t_ih_l t_ih_r
     obtain ⟨t_l_valid, t_l_size⟩ := t_ih_l'
-    obtain ⟨
+    obtain ⟨t_r_valid, t_r_size⟩ := t_ih_r'
+    cases cmpLE x t_x <;> rw [h.sz.1]
+    · suffices h_balanceable : _ by
+        constructor
+        · exact Valid'.balanceR t_l_valid h.right h_balanceable
+        · rw [size_balanceR t_l_valid.bal h.right.bal t_l_valid.sz h.right.sz h_balanceable]
+          repeat apply Raised.add_right
+          exact t_l_size
+      left; exists t_l.size; exact And.intro t_l_size h.bal.1
+    · have h_glue := Valid'.glue h.left h.right h.bal.1
+      obtain ⟨h_glue_valid, h_glue_sized⟩ := h_glue
+      constructor
+      · exact h_glue_valid
+      · right; rw [h_glue_sized]
+    · suffices h_balanceable : _ by
+        constructor
+        · exact Valid'.balanceL h.left t_r_valid h_balanceable
+        · rw [size_balanceL h.left.bal t_r_valid.bal h.left.sz t_r_valid.sz h_balanceable]
+          apply Raised.add_right
+          apply Raised.add_left
+          exact t_r_size
+      right; exists t_r.size; exact And.intro t_r_size h.bal.1
 -/
 theorem Valid'.erase_aux [DecidableLE α] (x : α) {t a₁ a₂} (h : Valid' a₁ t a₂) :
     Valid' a₁ (erase x t) a₂ ∧ Raised (erase x t).size t.size := by
@@ -1746,7 +2068,30 @@ theorem size_erase_of_mem
     clear t_ih_l t_ih_r
     dsimp only [Membership.mem, mem] at h_mem
     unfold erase
-    revert h_mem; cases cmpLE x t_
+    revert h_mem; cases cmpLE x t_x <;> intro h_mem <;> dsimp only at h_mem ⊢
+    · have t_ih_l := t_ih_l' h_mem
+      clear t_ih_l' t_ih_r'
+      have t_l_h := Valid'.erase_aux x h.left
+      obtain ⟨t_l_valid, t_l_size⟩ := t_l_h
+      rw [size_balanceR t_l_valid.bal h.right.bal t_l_valid.sz h.right.sz
+          (Or.inl (Exists.intro t_l.size (And.intro t_l_size h.bal.1)))]
+      rw [t_ih_l]; rw [h.sz.1]
+      have h_pos_t_l_size := pos_size_of_mem h.left.sz h_mem
+      revert h_pos_t_l_size; rcases t_l.size with - | t_l_size <;> intro h_pos_t_l_size
+      · cases h_pos_t_l_size
+      · simp [Nat.add_right_comm]
+    · rw [(Valid'.glue h.left h.right h.bal.1).2, h.sz.1]; rfl
+    · have t_ih_r := t_ih_r' h_mem
+      clear t_ih_l' t_ih_r'
+      have t_r_h := Valid'.erase_aux x h.right
+      obtain ⟨t_r_valid, t_r_size⟩ := t_r_h
+      rw [size_balanceL h.left.bal t_r_valid.bal h.left.sz t_r_valid.sz
+          (Or.inr (Exists.intro t_r.size (And.intro t_r_size h.bal.1)))]
+      rw [t_ih_r]; rw [h.sz.1]
+      have h_pos_t_r_size := pos_size_of_mem h.right.sz h_mem
+      revert h_pos_t_r_size; rcases t_r.size with - | t_r_size <;> intro h_pos_t_r_size
+      · cases h_pos_t_r_size
+      · simp [Nat.add_assoc]
 
 中文:
 定理 size_erase_of_mem
@@ -1761,7 +2106,30 @@ theorem size_erase_of_mem
     clear t_ih_l t_ih_r
     dsimp only [Membership.mem, mem] at h_mem
     unfold erase
-    revert h_mem; cases cmpLE x t_
+    revert h_mem; cases cmpLE x t_x <;> intro h_mem <;> dsimp only at h_mem ⊢
+    · have t_ih_l := t_ih_l' h_mem
+      clear t_ih_l' t_ih_r'
+      have t_l_h := Valid'.erase_aux x h.left
+      obtain ⟨t_l_valid, t_l_size⟩ := t_l_h
+      rw [size_balanceR t_l_valid.bal h.right.bal t_l_valid.sz h.right.sz
+          (Or.inl (Exists.intro t_l.size (And.intro t_l_size h.bal.1)))]
+      rw [t_ih_l]; rw [h.sz.1]
+      have h_pos_t_l_size := pos_size_of_mem h.left.sz h_mem
+      revert h_pos_t_l_size; rcases t_l.size with - | t_l_size <;> intro h_pos_t_l_size
+      · cases h_pos_t_l_size
+      · simp [Nat.add_right_comm]
+    · rw [(Valid'.glue h.left h.right h.bal.1).2, h.sz.1]; rfl
+    · have t_ih_r := t_ih_r' h_mem
+      clear t_ih_l' t_ih_r'
+      have t_r_h := Valid'.erase_aux x h.right
+      obtain ⟨t_r_valid, t_r_size⟩ := t_r_h
+      rw [size_balanceL h.left.bal t_r_valid.bal h.left.sz t_r_valid.sz
+          (Or.inr (Exists.intro t_r.size (And.intro t_r_size h.bal.1)))]
+      rw [t_ih_r]; rw [h.sz.1]
+      have h_pos_t_r_size := pos_size_of_mem h.right.sz h_mem
+      revert h_pos_t_r_size; rcases t_r.size with - | t_r_size <;> intro h_pos_t_r_size
+      · cases h_pos_t_r_size
+      · simp [Nat.add_assoc]
 
 Depends on / 依赖: Membership, Membership.mem, erase_aux, generalizing, h.left, h.right, h.right.bal, h_mem, revert, size_balanceR, t_ih_l, t_ih_r, t_l_h, t_l_size, t_l_valid, t_l_valid.bal, t_l_valid.sz
 -/

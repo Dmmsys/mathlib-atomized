@@ -35,7 +35,11 @@ lemma Retract.isCardinalPresentable
     have := isFiltered_of_isCardinalFiltered J κ
     refine Types.FilteredColimit.isColimitOf' _ _ (fun f => ?_) (fun j f₁ f₂ hf => ?_)
     · obtain ⟨i, g, hg⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ hc (h.r ≫ f)
-      exac
+      exact ⟨i, h.i ≫ g, by simp [hg]⟩
+    · dsimp at f₁ f₂ hf ⊢
+      obtain ⟨k, u, hj⟩ := IsCardinalPresentable.exists_eq_of_isColimit'
+        κ hc (h.r ≫ f₁) (h.r ≫ f₂) (by simp [hf])
+      exact ⟨k, u, by simpa [← cancel_epi h.r] using hj⟩⟩⟩⟩
 
 中文:
 引理 收缩.isCardinalPresentable
@@ -44,7 +48,11 @@ lemma Retract.isCardinalPresentable
     have := isFiltered_of_isCardinalFiltered J κ
     refine Types.FilteredColimit.isColimitOf' _ _ (fun f => ?_) (fun j f₁ f₂ hf => ?_)
     · obtain ⟨i, g, hg⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ hc (h.r ≫ f)
-      exac
+      exact ⟨i, h.i ≫ g, by simp [hg]⟩
+    · dsimp at f₁ f₂ hf ⊢
+      obtain ⟨k, u, hj⟩ := IsCardinalPresentable.exists_eq_of_isColimit'
+        κ hc (h.r ≫ f₁) (h.r ≫ f₂) (by simp [hf])
+      exact ⟨k, u, by simpa [← cancel_epi h.r] using hj⟩⟩⟩⟩
 
 Depends on / 依赖: FilteredColimit, IsCardinalPresentable, IsCardinalPresentable.exists_eq_of_isColimit, IsCardinalPresentable.exists_hom_of_isColimit, Types.FilteredColimit.isColimitOf, cancel_epi, essentiallySmallSelf, exists_eq_of_isColimit, exists_hom_of_isColimit, isColimitOf, isFiltered_of_isCardinalFiltered
 -/

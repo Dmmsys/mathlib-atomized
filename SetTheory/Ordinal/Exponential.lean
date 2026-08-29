@@ -827,7 +827,9 @@ theorem opow_le_opow_left
     | add_one c IH => simpa using mul_le_mul' IH ab
     | limit c l IH =>
       exact (opow_le_of_isSuccLimit ha l).2 fun b' h =>
-        (IH _ h).trans (opow_le_opow_right ((pos_iff_ne_
+        (IH _ h).trans (opow_le_opow_right ((pos_iff_ne_zero.2 ha).trans_le ab) h.le)
+
+@[gcongr]
 
 中文:
 定理 opow_le_opow_left
@@ -841,7 +843,9 @@ theorem opow_le_opow_left
     | add_one c IH => simpa using mul_le_mul' IH ab
     | limit c l IH =>
       exact (opow_le_of_isSuccLimit ha l).2 fun b' h =>
-        (IH _ h).trans (opow_le_opow_right ((pos_iff_ne_
+        (IH _ h).trans (opow_le_opow_right ((pos_iff_ne_zero.2 ha).trans_le ab) h.le)
+
+@[gcongr]
 
 Depends on / 依赖: add_one, h.le, limitRecOn, mul_le_mul, opow_le_of_isSuccLimit, opow_le_opow_right, pos_iff_ne_zero, trans_le
 -/
@@ -1002,7 +1006,16 @@ theorem opow_add
     have : b + c != 0 := (hc.trans_le le_add_self).ne'
     rw [zero_opow hc.ne']; rw [zero_opow]; rw [mul_zero]
     exact (hc.trans_le le_add_self).ne'
-  obtain rfl | ha' := (one_le_iff_ne_zero.2 ha.ne').eq_or_l
+  obtain rfl | ha' := (one_le_iff_ne_zero.2 ha.ne').eq_or_lt; · simp
+  induction c using limitRecOn with
+  | zero => simp
+  | add_one c IH => rw [← add_assoc, opow_add_one, IH, opow_add_one, mul_assoc]
+  | limit c l IH =>
+    refine eq_of_forall_ge_iff fun d =>
+      (((isNormal_opow ha').comp (isNormal_add_right b)).le_iff_forall_le l).trans ?_
+    simpa +contextual [IH] using
+      (((isNormal_mul_right <| opow_pos b (pos_iff_ne_zero.2 ha.ne')).comp
+        (isNormal_opow ha')).le_iff_forall_le l).symm
 
 中文:
 定理 opow_add
@@ -1014,7 +1027,16 @@ theorem opow_add
     have : b + c != 0 := (hc.trans_le le_add_self).ne'
     rw [zero_opow hc.ne']; rw [zero_opow]; rw [mul_zero]
     exact (hc.trans_le le_add_self).ne'
-  obtain rfl | ha' := (one_le_iff_ne_zero.2 ha.ne').eq_or_l
+  obtain rfl | ha' := (one_le_iff_ne_zero.2 ha.ne').eq_or_lt; · simp
+  induction c using limitRecOn with
+  | zero => simp
+  | add_one c IH => rw [← add_assoc, opow_add_one, IH, opow_add_one, mul_assoc]
+  | limit c l IH =>
+    refine eq_of_forall_ge_iff fun d =>
+      (((isNormal_opow ha').comp (isNormal_add_right b)).le_iff_forall_le l).trans ?_
+    simpa +contextual [IH] using
+      (((isNormal_mul_right <| opow_pos b (pos_iff_ne_zero.2 ha.ne')).comp
+        (isNormal_opow ha')).le_iff_forall_le l).symm
 
 Depends on / 依赖: add_assoc, add_one, eq_of_forall_ge_iff, eq_or_lt, eq_zero_or_pos, ha.ne, hc.ne, hc.trans_le, isNormal_opow, le_add_self, limitRecOn, mul_assoc, mul_zero, one_le_iff_ne_zero, opow_add_one, trans_le, zero_opow
 -/
@@ -1121,7 +1143,11 @@ theorem opow_mul
   obtain rfl | ha' := (one_le_iff_ne_zero.2 ha).eq_or_lt; · simp
   induction c using limitRecOn with
   | zero => simp
-  | add_one c IH => rw [mul_add_one, opow_add, I
+  | add_one c IH => rw [mul_add_one, opow_add, IH, opow_add_one]
+  | limit c l IH =>
+    refine eq_of_forall_ge_iff fun d =>
+      (((isNormal_opow ha').comp (isNormal_mul_right hb)).le_iff_forall_le l).trans ?_
+    simpa +contextual [IH] using (opow_le_of_isSuccLimit (opow_ne_zero _ ha) l).symm
 
 中文:
 定理 opow_mul
@@ -1135,7 +1161,11 @@ theorem opow_mul
   obtain rfl | ha' := (one_le_iff_ne_zero.2 ha).eq_or_lt; · simp
   induction c using limitRecOn with
   | zero => simp
-  | add_one c IH => rw [mul_add_one, opow_add, I
+  | add_one c IH => rw [mul_add_one, opow_add, IH, opow_add_one]
+  | limit c l IH =>
+    refine eq_of_forall_ge_iff fun d =>
+      (((isNormal_opow ha').comp (isNormal_mul_right hb)).le_iff_forall_le l).trans ?_
+    simpa +contextual [IH] using (opow_le_of_isSuccLimit (opow_ne_zero _ ha) l).symm
 
 Depends on / 依赖: add_one, contextual, eq_of_forall_ge_iff, eq_or_lt, eq_or_ne, eq_zero_or_pos, hb.ne, isNormal_mul_right, isNormal_opow, le_iff_forall_le, limitRecOn, mul_add_one, one_le_iff_ne_zero, opow_add, opow_add_one, opow_le_of_isSuccLimit, opow_ne_zero
 -/
@@ -1675,7 +1705,7 @@ theorem log_eq_zero
     · exact log_one_left o
   · rwa [← nonpos_iff_eq_zero, ← lt_add_one_iff, zero_add, ← lt_opow_iff_log_lt hb ho, opow_one]
 
-
+@[gcongr, mono]
 
 中文:
 定理 log_eq_zero
@@ -1690,7 +1720,7 @@ theorem log_eq_zero
     · exact log_one_left o
   · rwa [← nonpos_iff_eq_zero, ← lt_add_one_iff, zero_add, ← lt_opow_iff_log_lt hb ho, opow_one]
 
-
+@[gcongr, mono]
 
 Depends on / 依赖: eq_or_ne, le_one_iff, le_or_gt, log_one_left, log_zero_left, log_zero_right, lt_add_one_iff, lt_opow_iff_log_lt, nonpos_iff_eq_zero, opow_one, zero_add
 -/
@@ -1923,7 +1953,7 @@ theorem log_opow_mul_add
       rw [add_one_le_iff]
       exact lt_opow_succ_log_self hb _
 · exact fun h => mul_ne_zero (opow_ne_zero u (bot_lt_of_lt hb).ne') hv
- 
+      left_eq_zero_of_add_eq_zero h
 
 中文:
 定理 log_opow_mul_add
@@ -1937,7 +1967,7 @@ theorem log_opow_mul_add
       rw [add_one_le_iff]
       exact lt_opow_succ_log_self hb _
 · exact fun h => mul_ne_zero (opow_ne_zero u (bot_lt_of_lt hb).ne') hv
- 
+      left_eq_zero_of_add_eq_zero h
 
 Depends on / 依赖: add_assoc, add_one_le_iff, bot_lt_of_lt, le_self_add, left_eq_zero_of_add_eq_zero, log_eq_iff, lt_opow_succ_log_self, mul_add_one, mul_ne_zero, opow_add, opow_log_le_self, opow_ne_zero
 -/
@@ -2180,7 +2210,10 @@ obtain ⟨n, hn⟩ := lt_omega0.1 div_opow_log_lt a one_lt_omega0
   | zero =>
     simpa using ((div_pos (opow_ne_zero _ omega0_ne_zero)).2 (opow_log_le_self _ ha)).trans_eq hn
   | succ n =>
-    rw [add_comm]; rw [Nat.cast_add];
+    rw [add_comm]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [mul_one_add]; rw [add_assoc]; rw [Ordinal.add_sub_cancel]
+    apply (opow_mul_add_lt_opow_mul _ (lt_add_one _)).trans_le
+    · rw [Ordinal.mul_le_iff_le_div, hn] <;> simp
+    · exact mod_lt _ (opow_ne_zero _ omega0_ne_zero)
 
 中文:
 定理 sub_omega0_opow_log_lt
@@ -2193,7 +2226,10 @@ obtain ⟨n, hn⟩ := lt_omega0.1 div_opow_log_lt a one_lt_omega0
   | zero =>
     simpa using ((div_pos (opow_ne_zero _ omega0_ne_zero)).2 (opow_log_le_self _ ha)).trans_eq hn
   | succ n =>
-    rw [add_comm]; rw [Nat.cast_add];
+    rw [add_comm]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [mul_one_add]; rw [add_assoc]; rw [Ordinal.add_sub_cancel]
+    apply (opow_mul_add_lt_opow_mul _ (lt_add_one _)).trans_le
+    · rw [Ordinal.mul_le_iff_le_div, hn] <;> simp
+    · exact mod_lt _ (opow_ne_zero _ omega0_ne_zero)
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, Ordinal, Ordinal.add_sub_cancel, Ordinal.mul_le_iff_le_div, add_assoc, add_comm, add_sub_cancel, cast_add, cast_one, conv_lhs, div_add_mod, div_opow_log_lt, div_pos, lt_add_one, lt_omega0, mod_lt, mul_le_iff_le_div, mul_one_add, omega0_ne_zero
 -/
@@ -2221,7 +2257,7 @@ theorem lt_omega0_opow
   obtain ⟨n, hn⟩ := lt_omega0.1 (div_opow_log_lt a one_lt_omega0)
   use n + 1
   rw [Nat.cast_add_one]; rw [← hn]
-  exact lt_mul_succ_div a (opow_ne_zero _ omega0_n
+  exact lt_mul_succ_div a (opow_ne_zero _ omega0_ne_zero)
 
 中文:
 定理 lt_omega0_opow
@@ -2232,7 +2268,7 @@ theorem lt_omega0_opow
   obtain ⟨n, hn⟩ := lt_omega0.1 (div_opow_log_lt a one_lt_omega0)
   use n + 1
   rw [Nat.cast_add_one]; rw [← hn]
-  exact lt_mul_succ_div a (opow_ne_zero _ omega0_n
+  exact lt_mul_succ_div a (opow_ne_zero _ omega0_ne_zero)
 
 Depends on / 依赖: Nat.cast_add_one, cast_add_one, div_opow_log_lt, hn.trans, lt_log_of_lt_opow, lt_mul_succ_div, lt_omega0, natCast_lt_omega0, omega0_ne_zero, one_lt_omega0, opow_mul_lt_opow, opow_ne_zero
 -/
@@ -2292,7 +2328,9 @@ theorem lt_omega0_omega0_opow
 exact ⟨_, hb, _, hn.trans opow_mul_lt_opow (natCast_lt_omega0 _)
       hm.trans_le (mul_le_mul_right (Nat.cast_le.2 m.le_succ) _)⟩
   · intro ⟨a, ha, ⟨n, hn⟩⟩
-    re
+    refine ⟨ω ^ a * n, ⟨a, ha, n + 1, ?_⟩, 1, ?_⟩
+    · simp [mul_lt_mul_iff_right₀, opow_pos]
+    · simpa
 
 中文:
 定理 lt_omega0_omega0_opow
@@ -2304,7 +2342,9 @@ exact ⟨_, hb, _, hn.trans opow_mul_lt_opow (natCast_lt_omega0 _)
 exact ⟨_, hb, _, hn.trans opow_mul_lt_opow (natCast_lt_omega0 _)
       hm.trans_le (mul_le_mul_right (Nat.cast_le.2 m.le_succ) _)⟩
   · intro ⟨a, ha, ⟨n, hn⟩⟩
-    re
+    refine ⟨ω ^ a * n, ⟨a, ha, n + 1, ?_⟩, 1, ?_⟩
+    · simp [mul_lt_mul_iff_right₀, opow_pos]
+    · simpa
 
 Depends on / 依赖: Nat.cast_le, cast_le, hm.trans_le, hn.trans, le_succ, lt_omega0_opow, m.le_succ, mul_le_mul_right, natCast_lt_omega0, omega0_ne_zero, opow_mul_lt_opow, opow_ne_zero, opow_pos, simp_rw, trans_le
 -/

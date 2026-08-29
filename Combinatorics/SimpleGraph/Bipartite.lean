@@ -642,7 +642,9 @@ theorem isBipartiteWith_sum_degrees_eq
   conv_rhs =>
     rhs; intro w
     rw [isBipartiteWith_bipartiteBelow h w.prop]
-  simp_rw [sum_attach s fun w => #(bipartiteAbove
+  simp_rw [sum_attach s fun w => #(bipartiteAbove G.Adj t w),
+    sum_attach t fun v => #(bipartiteBelow G.Adj s v)]
+  exact sum_card_bipartiteAbove_eq_sum_card_bipartiteBelow G.Adj
 
 中文:
 定理 isBipartiteWith_sum_degrees_eq
@@ -656,7 +658,9 @@ theorem isBipartiteWith_sum_degrees_eq
   conv_rhs =>
     rhs; intro w
     rw [isBipartiteWith_bipartiteBelow h w.prop]
-  simp_rw [sum_attach s fun w => #(bipartiteAbove
+  simp_rw [sum_attach s fun w => #(bipartiteAbove G.Adj t w),
+    sum_attach t fun v => #(bipartiteBelow G.Adj s v)]
+  exact sum_card_bipartiteAbove_eq_sum_card_bipartiteBelow G.Adj
 
 Depends on / 依赖: G.Adj, bipartiteAbove, bipartiteBelow, card_neighborFinset_eq_degree, classical, conv_lhs, conv_rhs, isBipartiteWith_bipartiteAbove, isBipartiteWith_bipartiteBelow, simp_rw, sum_attach, sum_card_bipartiteAbove_eq_sum_card_bipartiteBelow, v.prop, w.prop
 -/
@@ -687,7 +691,7 @@ lemma isBipartiteWith_sum_degrees_eq_twice_card_edges
   rw [← coe_union]; rw [← Set.toFinset_subset] at hsub
   rw [← Finset.sum_subset hsub]; rw [← sum_degrees_support_eq_twice_card_edges]
   intro v _ hv
-  rwa [Set.mem_toFinset, ← degree_eq_zero_iff_notMem_support] at h
+  rwa [Set.mem_toFinset, ← degree_eq_zero_iff_notMem_support] at hv
 
 中文:
 引理 isBipartiteWith_sum_degrees_eq_twice_card_edges
@@ -697,7 +701,7 @@ lemma isBipartiteWith_sum_degrees_eq_twice_card_edges
   rw [← coe_union]; rw [← Set.toFinset_subset] at hsub
   rw [← Finset.sum_subset hsub]; rw [← sum_degrees_support_eq_twice_card_edges]
   intro v _ hv
-  rwa [Set.mem_toFinset, ← degree_eq_zero_iff_notMem_support] at h
+  rwa [Set.mem_toFinset, ← degree_eq_zero_iff_notMem_support] at hv
 
 Depends on / 依赖: Finset, Finset.sum_subset, G.support, Set.mem_toFinset, Set.toFinset_subset, coe_union, degree_eq_zero_iff_notMem_support, isBipartiteWith_support_subset, mem_toFinset, subseteq, sum_degrees_support_eq_twice_card_edges, sum_subset, support, toFinset_subset
 -/
@@ -885,7 +889,7 @@ theorem chromaticNumber_eq_two_iff
             two_le_chromaticNumber_iff_ne_bot.mp (by simp [h])⟩,
    fun ⟨h₁, h₂⟩ => ENat.eq_of_forall_natCast_le_iff fun _ =>
 ⟨fun h => h.trans chromaticNumber_le_two_iff_isBipartite.mpr h₁,
-fun h => h.trans two_le_chromaticNumber_i
+fun h => h.trans two_le_chromaticNumber_iff_ne_bot.mpr h₂⟩⟩
 
 中文:
 定理 chromaticNumber_eq_two_iff
@@ -894,7 +898,7 @@ fun h => h.trans two_le_chromaticNumber_i
             two_le_chromaticNumber_iff_ne_bot.mp (by simp [h])⟩,
    fun ⟨h₁, h₂⟩ => ENat.eq_of_forall_natCast_le_iff fun _ =>
 ⟨fun h => h.trans chromaticNumber_le_two_iff_isBipartite.mpr h₁,
-fun h => h.trans two_le_chromaticNumber_i
+fun h => h.trans two_le_chromaticNumber_iff_ne_bot.mpr h₂⟩⟩
 
 Depends on / 依赖: ENat.eq_of_forall_natCast_le_iff, chromaticNumber_le_two_iff_isBipartite, chromaticNumber_le_two_iff_isBipartite.mp, chromaticNumber_le_two_iff_isBipartite.mpr, eq_of_forall_natCast_le_iff, h.trans, two_le_chromaticNumber_iff_ne_bot, two_le_chromaticNumber_iff_ne_bot.mp, two_le_chromaticNumber_iff_ne_bot.mpr
 -/
@@ -924,7 +928,26 @@ definition Copy.completeBipartiteGraph
   let fα : α ↪ left := Classical.arbitrary (α ↪ left)
   have : Nonempty (β ↪ right) := by
     rw [← card_coe] at card_right
-    exact Function.Embedding.nonempty_
+    exact Function.Embedding.nonempty_of_card_le card_right.symm.le
+  let fβ : β ↪ right := Classical.arbitrary (β ↪ right)
+  let f : α oplus β ↪ V := by
+    refine ⟨Sum.elim (Subtype.val ∘ fα) (Subtype.val ∘ fβ), fun s₁ s₂ => ?_⟩
+    match s₁, s₂ with
+    | .inl p₁, .inl p₂ => simp
+    | .inr p₁, .inl p₂ =>
+      simpa using (h (fα p₂).prop (fβ p₁).prop).ne'
+    | .inl p₁, .inr p₂ =>
+      simpa using (h (fα p₁).prop (fβ p₂).prop).symm.ne'
+    | .inr p₁, .inr p₂ => simp
+  refine ⟨⟨f.toFun, fun {s₁ s₂} hadj => ?_⟩, f.injective⟩
+  rcases hadj with ⟨hs₁, hs₂⟩ | ⟨hs₁, hs₂⟩
+  all_goals dsimp [f]
+  · rw [← Sum.inl_getLeft s₁ hs₁, ← Sum.inr_getRight s₂ hs₂,
+      Sum.elim_inl, Sum.elim_inr]
+    exact h (by simp) (by simp)
+  · rw [← Sum.inr_getRight s₁ hs₁, ← Sum.inl_getLeft s₂ hs₂,
+      Sum.elim_inl, Sum.elim_inr, adj_comm]
+    exact h (by simp) (by simp)
 
 中文:
 定义 余py.completeBipartiteGraph
@@ -935,7 +958,26 @@ definition Copy.completeBipartiteGraph
   let fα : α ↪ left := Classical.arbitrary (α ↪ left)
   have : Nonempty (β ↪ right) := by
     rw [← card_coe] at card_right
-    exact Function.Embedding.nonempty_
+    exact Function.Embedding.nonempty_of_card_le card_right.symm.le
+  let fβ : β ↪ right := Classical.arbitrary (β ↪ right)
+  let f : α oplus β ↪ V := by
+    refine ⟨Sum.elim (Subtype.val ∘ fα) (Subtype.val ∘ fβ), fun s₁ s₂ => ?_⟩
+    match s₁, s₂ with
+    | .inl p₁, .inl p₂ => simp
+    | .inr p₁, .inl p₂ =>
+      simpa using (h (fα p₂).prop (fβ p₁).prop).ne'
+    | .inl p₁, .inr p₂ =>
+      simpa using (h (fα p₁).prop (fβ p₂).prop).symm.ne'
+    | .inr p₁, .inr p₂ => simp
+  refine ⟨⟨f.toFun, fun {s₁ s₂} hadj => ?_⟩, f.injective⟩
+  rcases hadj with ⟨hs₁, hs₂⟩ | ⟨hs₁, hs₂⟩
+  all_goals dsimp [f]
+  · rw [← Sum.inl_getLeft s₁ hs₁, ← Sum.inr_getRight s₂ hs₂,
+      Sum.elim_inl, Sum.elim_inr]
+    exact h (by simp) (by simp)
+  · rw [← Sum.inr_getRight s₁ hs₁, ← Sum.inl_getLeft s₂ hs₂,
+      Sum.elim_inl, Sum.elim_inr, adj_comm]
+    exact h (by simp) (by simp)
 
 Depends on / 依赖: Classical, Classical.arbitrary, Embedding, Function, Function.Embedding.nonempty_of_card_le, Nonempty, Subtype, Subtype.val, Sum.elim, arbitrary, card_coe, card_left, card_left.symm.le, card_right, card_right.symm.le, nonempty_of_card_le
 -/
@@ -981,7 +1023,10 @@ theorem completeBipartiteGraph_isContained_iff
     rw [mem_coe]; rw [mem_map] at hl hr
     replace ⟨_, _, hl⟩ := hl
     replace ⟨_, _, hr⟩ := hr
-    r
+    rw [← hl]; rw [← hr]
+    exact f.toHom.map_adj (by simp)
+  mpr := fun ⟨left, right, card_left, card_right, h⟩ =>
+    ⟨.completeBipartiteGraph left right card_left card_right h⟩
 
 中文:
 定理 completeBipartiteGraph_isContained_iff
@@ -992,7 +1037,10 @@ theorem completeBipartiteGraph_isContained_iff
     rw [mem_coe]; rw [mem_map] at hl hr
     replace ⟨_, _, hl⟩ := hl
     replace ⟨_, _, hr⟩ := hr
-    r
+    rw [← hl]; rw [← hr]
+    exact f.toHom.map_adj (by simp)
+  mpr := fun ⟨left, right, card_left, card_right, h⟩ =>
+    ⟨.completeBipartiteGraph left right card_left card_right h⟩
 
 Depends on / 依赖: Sum.inl, Sum.inl_injective, Sum.inr, Sum.inr_injective, card_left, card_right, completeBipartiteGraph, f.injective.comp, f.toHom.map_adj, injective, inl_injective, inr_injective, map_adj, mem_coe, mem_map, replace, univ.map
 -/
@@ -1286,7 +1334,7 @@ theorem degree_le_between_add
     simpa using between_isBipartiteWith disjoint_compl_right
   simp_rw [← card_neighborFinset_eq_degree,
     ← card_union_of_disjoint (isBipartiteWith_neighborFinset_disjoint h_bipartite hv)]
-  exact card_le_card (neighborFinset_
+  exact card_le_card (neighborFinset_subset_between_union hv)
 
 中文:
 定理 degree_le_between_add
@@ -1296,7 +1344,7 @@ theorem degree_le_between_add
     simpa using between_isBipartiteWith disjoint_compl_right
   simp_rw [← card_neighborFinset_eq_degree,
     ← card_union_of_disjoint (isBipartiteWith_neighborFinset_disjoint h_bipartite hv)]
-  exact card_le_card (neighborFinset_
+  exact card_le_card (neighborFinset_subset_between_union hv)
 
 Depends on / 依赖: G.between, IsBipartiteWith, between, between_isBipartiteWith, card_le_card, card_neighborFinset_eq_degree, card_union_of_disjoint, disjoint_compl_right, h_bipartite, isBipartiteWith_neighborFinset_disjoint, neighborFinset_subset_between_union, simp_rw
 -/
@@ -1340,7 +1388,7 @@ theorem degree_le_between_add_compl
     simpa using between_isBipartiteWith disjoint_compl_right
   simp_rw [← card_neighborFinset_eq_degree,
     ← card_union_of_disjoint (isBipartiteWith_neighborFinset_disjoint' h_bipartite hw)]
-  exact card_le_card (neighborFinset
+  exact card_le_card (neighborFinset_subset_between_union_compl hw)
 
 中文:
 定理 degree_le_between_add_compl
@@ -1350,7 +1398,7 @@ theorem degree_le_between_add_compl
     simpa using between_isBipartiteWith disjoint_compl_right
   simp_rw [← card_neighborFinset_eq_degree,
     ← card_union_of_disjoint (isBipartiteWith_neighborFinset_disjoint' h_bipartite hw)]
-  exact card_le_card (neighborFinset
+  exact card_le_card (neighborFinset_subset_between_union_compl hw)
 
 Depends on / 依赖: G.between, IsBipartiteWith, between, between_isBipartiteWith, card_le_card, card_neighborFinset_eq_degree, card_union_of_disjoint, disjoint_compl_right, h_bipartite, isBipartiteWith_neighborFinset_disjoint, neighborFinset_subset_between_union_compl, simp_rw
 -/
@@ -1427,7 +1475,10 @@ definition IsBipartiteWith.edgeSetEmbeddingCompleteBipartiteGraph
       (fun h => ⟨s(.inl ⟨u, h.left⟩, .inr ⟨v, h.right⟩), .inl ⟨rfl, rfl⟩⟩)
       (fun h => ⟨s(.inl ⟨v, h.right⟩, .inr ⟨u, h.left⟩), .inl ⟨rfl, rfl⟩⟩)
     ) <| by grind [Or.by_cases, hG.disjoint]
-  inj' := 
+  inj' := by
+    rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩
+    change (dite ..) = (dite ..) -> _
+    grind
 
 中文:
 定义 是BipartiteWith.edgeSetEmbeddingCompleteBipartiteGraph
@@ -1437,7 +1488,10 @@ definition IsBipartiteWith.edgeSetEmbeddingCompleteBipartiteGraph
       (fun h => ⟨s(.inl ⟨u, h.left⟩, .inr ⟨v, h.right⟩), .inl ⟨rfl, rfl⟩⟩)
       (fun h => ⟨s(.inl ⟨v, h.right⟩, .inr ⟨u, h.left⟩), .inl ⟨rfl, rfl⟩⟩)
     ) <| by grind [Or.by_cases, hG.disjoint]
-  inj' := 
+  inj' := by
+    rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩
+    change (dite ..) = (dite ..) -> _
+    grind
 -/
 def IsBipartiteWith.edgeSetEmbeddingCompleteBipartiteGraph [DecidableRel (· in · : V -> Set V -> _)]
     (hG : G.IsBipartiteWith s t) : G.edgeSet ↪ (completeBipartiteGraph s t).edgeSet where
@@ -1493,7 +1547,9 @@ theorem IsBipartite.four_mul_encard_edgeSet_le
   have ⟨s, t, h⟩ := h.exists_isBipartiteWith
   grw [h.encard_edgeSet_le]
   have := Set.encard_union_eq h.disjoint ▸ Set.encard_le_card
-  rw [ENat.card_eq_coe_natCard]; rw [← s.toFinite.cast_ncard_eq]; rw [← t.toFinite.cast_ncard_
+  rw [ENat.card_eq_coe_natCard]; rw [← s.toFinite.cast_ncard_eq]; rw [← t.toFinite.cast_ncard_eq] at this ⊢
+  norm_cast at this ⊢
+  grind [Nat.pow_le_pow_left this 2, four_mul_le_sq_add s.ncard t.ncard]
 
 中文:
 定理 IsBipartite.four_mul_encard_edgeSet_le
@@ -1503,7 +1559,9 @@ theorem IsBipartite.four_mul_encard_edgeSet_le
   have ⟨s, t, h⟩ := h.exists_isBipartiteWith
   grw [h.encard_edgeSet_le]
   have := Set.encard_union_eq h.disjoint ▸ Set.encard_le_card
-  rw [ENat.card_eq_coe_natCard]; rw [← s.toFinite.cast_ncard_eq]; rw [← t.toFinite.cast_ncard_
+  rw [ENat.card_eq_coe_natCard]; rw [← s.toFinite.cast_ncard_eq]; rw [← t.toFinite.cast_ncard_eq] at this ⊢
+  norm_cast at this ⊢
+  grind [Nat.pow_le_pow_left this 2, four_mul_le_sq_add s.ncard t.ncard]
 
 Depends on / 依赖: ENat.card_eq_coe_natCard, Nat.pow_le_pow_left, Set.encard_le_card, Set.encard_union_eq, card_eq_coe_natCard, cast_ncard_eq, disjoint, encard_edgeSet_le, encard_le_card, encard_union_eq, exists_isBipartiteWith, finite_or_infinite, four_mul_le_sq_add, h.disjoint, h.encard_edgeSet_le, h.exists_isBipartiteWith, pow_le_pow_left, s.ncard, s.toFinite.cast_ncard_eq, t.ncard
 -/
@@ -1592,7 +1650,8 @@ theorem card_edgeFinset_bipartiteDoubleCover
   rw [mem_edgeFinset]; rw [mem_edgeSet] at he
   match v, w with
   | .inl _, .inr _ => simpa using he
-  | .inr 
+  | .inr _, .inl _ => simpa using he.symm
+  | .inl _, .inl _ | .inr _, .inr _ => simp at he
 
 中文:
 定理 card_edgeFinset_bipartiteDoubleCover
@@ -1605,7 +1664,8 @@ theorem card_edgeFinset_bipartiteDoubleCover
   rw [mem_edgeFinset]; rw [mem_edgeSet] at he
   match v, w with
   | .inl _, .inr _ => simpa using he
-  | .inr 
+  | .inr _, .inl _ => simpa using he.symm
+  | .inl _, .inl _ | .inr _, .inr _ => simp at he
 
 Depends on / 依赖: card_bij, eq_comm, he.symm, mem_edgeFinset, mem_edgeSet, two_mul_card_edgeFinset
 -/
@@ -1633,7 +1693,42 @@ theorem completeBipartiteGraph_isContained_bipartiteDoubleCover
   refine ⟨fun ⟨left, right, card_left, card_right, h⟩ => ?_,
     fun ⟨left, right, card_left, card_right, h⟩ => ?_⟩
   · simp_rw [← card_left, ← card_right]
-obtain ⟨l, hl⟩ : left.
+obtain ⟨l, hl⟩ : left.Nonempty := card_pos.mp card_pos.trans_le card_left.ge
+obtain ⟨r, hr⟩ : right.Nonempty := card_pos.mp card_pos.trans_le card_right.ge
+    have hmem_left {l'} (hl' : l' in left) :
+        (l.isLeft -> l'.isLeft) ∧ (l.isRight -> l'.isRight) := by
+      rcases l with l | l <;> rcases r with r | r <;> rcases l' with l' | l'
+      all_goals solve | simp | simpa using h hl hr | simpa using h hl' hr
+    have hmem_right {r'} (hr' : r' in right) :
+        (r.isLeft -> r'.isLeft) ∧ (r.isRight -> r'.isRight) := by
+      rcases l with l | l <;> rcases r with r | r <;> rcases r' with r' | r'
+      all_goals solve | simp | simpa using h hl hr | simpa using h hl hr'
+    rcases l with l | l <;> rcases r with r | r
+    · simpa using h hl hr
+    · refine ⟨left.toLeft, right.toRight, ?_, ?_, fun i hi j hj => ?_⟩
+      · exact card_bij (fun i _ => .inl i) (fun i hi => by simpa using hi) (fun i hi j hj => by simp)
+          (fun i hi => ⟨i.getLeft <| (hmem_left hi).left Sum.isLeft_inl, by simp [hi]⟩)
+      · exact card_bij (fun j hj => .inr j) (fun j hj => by simpa using hj) (fun i hi j hj => by simp)
+          (fun j hj => ⟨j.getRight <| (hmem_right hj).right Sum.isRight_inr, by simp [hj]⟩)
+      · rw [mem_coe, mem_toLeft] at hi
+        rw [mem_coe]; rw [mem_toRight] at hj
+        simpa using h hi hj
+    · refine ⟨left.toRight, right.toLeft, ?_, ?_, fun i hi j hj => ?_⟩
+      · exact card_bij (fun i _ => .inr i) (fun i hi => by simpa using hi) (fun i hi j hj => by simp)
+          (fun i hi => ⟨i.getRight <| (hmem_left hi).right Sum.isRight_inr, by simp [hi]⟩)
+      · exact card_bij (fun j hj => .inl j) (fun j hj => by simpa using hj) (fun i hi j hj => by simp)
+          (fun j hj => ⟨j.getLeft <| (hmem_right hj).left Sum.isLeft_inl, by simp [hj]⟩)
+      · rw [mem_coe, mem_toRight] at hi
+        rw [mem_coe]; rw [mem_toLeft] at hj
+        simpa using h hi hj
+    · simpa using h hl hr
+  · simp_rw [← card_left, ← card_right]
+    refine ⟨left.map .inl, right.map .inr, card_map _, card_map _, fun i hi j hj => ?_⟩
+    simp_rw [mem_coe, mem_map, Function.Embedding.inl_apply,
+      Function.Embedding.inr_apply] at hi hj
+    obtain ⟨i', hi', hi⟩ := hi
+    obtain ⟨j', hj', hj⟩ := hj
+    simpa [← hi, ← hj] using h hi' hj'
 
 中文:
 定理 completeBipartiteGraph_isContained_bipartiteDoubleCover
@@ -1644,7 +1739,42 @@ obtain ⟨l, hl⟩ : left.
   refine ⟨fun ⟨left, right, card_left, card_right, h⟩ => ?_,
     fun ⟨left, right, card_left, card_right, h⟩ => ?_⟩
   · simp_rw [← card_left, ← card_right]
-obtain ⟨l, hl⟩ : left.
+obtain ⟨l, hl⟩ : left.Nonempty := card_pos.mp card_pos.trans_le card_left.ge
+obtain ⟨r, hr⟩ : right.Nonempty := card_pos.mp card_pos.trans_le card_right.ge
+    have hmem_left {l'} (hl' : l' in left) :
+        (l.isLeft -> l'.isLeft) ∧ (l.isRight -> l'.isRight) := by
+      rcases l with l | l <;> rcases r with r | r <;> rcases l' with l' | l'
+      all_goals solve | simp | simpa using h hl hr | simpa using h hl' hr
+    have hmem_right {r'} (hr' : r' in right) :
+        (r.isLeft -> r'.isLeft) ∧ (r.isRight -> r'.isRight) := by
+      rcases l with l | l <;> rcases r with r | r <;> rcases r' with r' | r'
+      all_goals solve | simp | simpa using h hl hr | simpa using h hl hr'
+    rcases l with l | l <;> rcases r with r | r
+    · simpa using h hl hr
+    · refine ⟨left.toLeft, right.toRight, ?_, ?_, fun i hi j hj => ?_⟩
+      · exact card_bij (fun i _ => .inl i) (fun i hi => by simpa using hi) (fun i hi j hj => by simp)
+          (fun i hi => ⟨i.getLeft <| (hmem_left hi).left Sum.isLeft_inl, by simp [hi]⟩)
+      · exact card_bij (fun j hj => .inr j) (fun j hj => by simpa using hj) (fun i hi j hj => by simp)
+          (fun j hj => ⟨j.getRight <| (hmem_right hj).right Sum.isRight_inr, by simp [hj]⟩)
+      · rw [mem_coe, mem_toLeft] at hi
+        rw [mem_coe]; rw [mem_toRight] at hj
+        simpa using h hi hj
+    · refine ⟨left.toRight, right.toLeft, ?_, ?_, fun i hi j hj => ?_⟩
+      · exact card_bij (fun i _ => .inr i) (fun i hi => by simpa using hi) (fun i hi j hj => by simp)
+          (fun i hi => ⟨i.getRight <| (hmem_left hi).right Sum.isRight_inr, by simp [hi]⟩)
+      · exact card_bij (fun j hj => .inl j) (fun j hj => by simpa using hj) (fun i hi j hj => by simp)
+          (fun j hj => ⟨j.getLeft <| (hmem_right hj).left Sum.isLeft_inl, by simp [hj]⟩)
+      · rw [mem_coe, mem_toRight] at hi
+        rw [mem_coe]; rw [mem_toLeft] at hj
+        simpa using h hi hj
+    · simpa using h hl hr
+  · simp_rw [← card_left, ← card_right]
+    refine ⟨left.map .inl, right.map .inr, card_map _, card_map _, fun i hi j hj => ?_⟩
+    simp_rw [mem_coe, mem_map, Function.Embedding.inl_apply,
+      Function.Embedding.inr_apply] at hi hj
+    obtain ⟨i', hi', hi⟩ := hi
+    obtain ⟨j', hj', hj⟩ := hj
+    simpa [← hi, ← hj] using h hi' hj'
 
 Depends on / 依赖: Fintype, Nonempty, card_left, card_left.ge, card_pos, card_pos.mp, card_pos.trans_le, card_right, card_right.ge, completeBipartiteGraph_isContained_iff, hmem_left, isLeft, isRight, l.isLeft, l.isRight, left.Nonempty, ofFinite, right.Nonempty, simp_rw, trans_le
 -/

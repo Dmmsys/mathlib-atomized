@@ -341,7 +341,11 @@ theorem eval₂_mul_monomial
   · intro p n ih s a
     exact
       calc (p * X n * monomial s a).eval₂ f g
-        _ = (p * monomial (Finsupp.s
+        _ = (p * monomial (Finsupp.single n 1 + s) a).eval₂ f g := by
+          rw [monomial_single_add]; rw [pow_one]; rw [mul_assoc]
+        _ = (p * monomial (Finsupp.single n 1) 1).eval₂ f g * f a * s.prod fun n e => g n ^ e := by
+          simp [ih, prod_single_index, prod_add_index, pow_one, pow_add, mul_assoc, mul_left_comm,
+            f.map_one]
 
 中文:
 定理 eval₂_mul_monomial
@@ -355,7 +359,11 @@ theorem eval₂_mul_monomial
   · intro p n ih s a
     exact
       calc (p * X n * monomial s a).eval₂ f g
-        _ = (p * monomial (Finsupp.s
+        _ = (p * monomial (Finsupp.single n 1 + s) a).eval₂ f g := by
+          rw [monomial_single_add]; rw [pow_one]; rw [mul_assoc]
+        _ = (p * monomial (Finsupp.single n 1) 1).eval₂ f g * f a * s.prod fun n e => g n ^ e := by
+          simp [ih, prod_single_index, prod_add_index, pow_one, pow_add, mul_assoc, mul_left_comm,
+            f.map_one]
 
 Depends on / 依赖: C_mul_monomial, Finsupp, Finsupp.single, MvPolynomial, MvPolynomial.induction_on, add_mul, classical, f.map_mul, ih_p, ih_q, induction_on, map_mul, monomial, monomial_single_add, mul_assoc, pow_one, prod_add_index, prod_single_index, s.prod, single
 -/
@@ -1398,7 +1406,7 @@ theorem eval₂_comp_right
   · intro p q hp hq
     rw [eval₂_add]; rw [k.map_add]; rw [(map f).map_add]; rw [eval₂_add]; rw [hp]; rw [hq]
   · intro p s hp
-    rw [eval₂_mul]; rw [k.map_mul]; rw [(map f).map_mul]; rw [eval₂_mul]; rw [
+    rw [eval₂_mul]; rw [k.map_mul]; rw [(map f).map_mul]; rw [eval₂_mul]; rw [map_X]; rw [hp]; rw [eval₂_X]; rw [eval₂_X]; rw [comp_apply]
 
 中文:
 定理 eval₂_comp_right
@@ -1410,7 +1418,7 @@ theorem eval₂_comp_right
   · intro p q hp hq
     rw [eval₂_add]; rw [k.map_add]; rw [(map f).map_add]; rw [eval₂_add]; rw [hp]; rw [hq]
   · intro p s hp
-    rw [eval₂_mul]; rw [k.map_mul]; rw [(map f).map_mul]; rw [eval₂_mul]; rw [
+    rw [eval₂_mul]; rw [k.map_mul]; rw [(map f).map_mul]; rw [eval₂_mul]; rw [map_X]; rw [hp]; rw [eval₂_X]; rw [eval₂_X]; rw [comp_apply]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, comp_apply, induction_on, k.map_add, k.map_mul, map_C, map_X, map_add, map_mul
 -/
@@ -1437,7 +1445,7 @@ theorem map_eval₂
   · intro p q hp hq
     rw [eval₂_add]; rw [(map f).map_add]; rw [hp]; rw [hq]; rw [(map f).map_add]; rw [eval₂_add]
   · intro p s hp
-    rw [eval₂_mul]; rw [(map f).map_mul]; rw [hp]; rw [(map 
+    rw [eval₂_mul]; rw [(map f).map_mul]; rw [hp]; rw [(map f).map_mul]; rw [map_X]; rw [eval₂_mul]; rw [eval₂_X]; rw [eval₂_X]; rw [comp_apply]
 
 中文:
 定理 map_eval₂
@@ -1449,7 +1457,7 @@ theorem map_eval₂
   · intro p q hp hq
     rw [eval₂_add]; rw [(map f).map_add]; rw [hp]; rw [hq]; rw [(map f).map_add]; rw [eval₂_add]
   · intro p s hp
-    rw [eval₂_mul]; rw [(map f).map_mul]; rw [hp]; rw [(map 
+    rw [eval₂_mul]; rw [(map f).map_mul]; rw [hp]; rw [(map f).map_mul]; rw [map_X]; rw [eval₂_mul]; rw [eval₂_X]; rw [eval₂_X]; rw [comp_apply]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, comp_apply, induction_on, map_C, map_X, map_add, map_mul
 -/
@@ -1520,7 +1528,7 @@ theorem coeff_map
   · intro p q hp hq m
     simp only [hp, hq, (map f).map_add, coeff_add, f.map_add]
   · intro p i hp m
-    simp only [(map f).map_mul, map_X, hp, coeff_mul_X', f.map_zer
+    simp only [(map f).map_mul, map_X, hp, coeff_mul_X', f.map_zero, apply_ite f]
 
 中文:
 定理 coeff_map
@@ -1534,7 +1542,7 @@ theorem coeff_map
   · intro p q hp hq m
     simp only [hp, hq, (map f).map_add, coeff_add, f.map_add]
   · intro p i hp m
-    simp only [(map f).map_mul, map_X, hp, coeff_mul_X', f.map_zer
+    simp only [(map f).map_mul, map_X, hp, coeff_mul_X', f.map_zero, apply_ite f]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, apply_ite, classical, coeff_C, coeff_add, coeff_mul_X, f.map_add, f.map_zero, induction_on, map_C, map_X, map_add, map_mul, map_zero, simp_rw
 -/
@@ -1986,7 +1994,12 @@ lemma coeffs_map
   | monomial_add a s p ha hs hp ih =>
     rw [coeffs_add (disjoint_support_monomial ha hs)]; rw [map_add]; rw [coeffs_add]
     · rw [Finset.image_union, Finset.union_subset_iff]
-    
+      exact ⟨ih.trans (by simp), hp.trans (by simp)⟩
+· exact Finset.disjoint_of_subset_left (support_map_subset _ _)
+Finset.disjoint_of_subset_right (support_map_subset _ _)
+          disjoint_support_monomial ha hs
+
+@[simp]
 
 中文:
 引理 coeffs_map
@@ -1999,7 +2012,12 @@ lemma coeffs_map
   | monomial_add a s p ha hs hp ih =>
     rw [coeffs_add (disjoint_support_monomial ha hs)]; rw [map_add]; rw [coeffs_add]
     · rw [Finset.image_union, Finset.union_subset_iff]
-    
+      exact ⟨ih.trans (by simp), hp.trans (by simp)⟩
+· exact Finset.disjoint_of_subset_left (support_map_subset _ _)
+Finset.disjoint_of_subset_right (support_map_subset _ _)
+          disjoint_support_monomial ha hs
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.disjoint_of_subset_left, Finset.disjoint_of_subset_right, Finset.image_union, Finset.union_subset_iff, classical, coeffs_C, coeffs_add, disjoint_of_subset_left, disjoint_of_subset_right, disjoint_support_monomial, hp.trans, ih.trans, image_union, induction_on, map_add, monomial_add, mul_X, support_map_subset, union_subset_iff
 -/
@@ -2058,7 +2076,19 @@ lemma mem_range_map_iff_coeffs_subset
       by_cases h : a = 0
       · subst h
         exact ⟨0, by simp⟩
-      · simp only [coeffs_C, h, reduceIte, F
+      · simp only [coeffs_C, h, reduceIte, Finset.coe_singleton, Set.singleton_subset_iff] at hx
+        obtain ⟨b, rfl⟩ := hx
+        exact ⟨C b, by simp⟩
+    | mul_X p n ih =>
+      rw [coeffs_mul_X] at hx
+      obtain ⟨q, rfl⟩ := ih hx
+      exact ⟨q * X n, by simp⟩
+    | monomial_add a s p ha hs hp ih =>
+      rw [coeffs_add (disjoint_support_monomial ha hs)] at hx
+      simp only [Finset.coe_union, Set.union_subset_iff] at hx
+      obtain ⟨q, hq⟩ := ih hx.1
+      obtain ⟨u, hu⟩ := hp hx.2
+      exact ⟨q + u, by simp [hq, hu]⟩
 
 中文:
 引理 mem_range_map_iff_coeffs_subset
@@ -2073,7 +2103,19 @@ lemma mem_range_map_iff_coeffs_subset
       by_cases h : a = 0
       · subst h
         exact ⟨0, by simp⟩
-      · simp only [coeffs_C, h, reduceIte, F
+      · simp only [coeffs_C, h, reduceIte, Finset.coe_singleton, Set.singleton_subset_iff] at hx
+        obtain ⟨b, rfl⟩ := hx
+        exact ⟨C b, by simp⟩
+    | mul_X p n ih =>
+      rw [coeffs_mul_X] at hx
+      obtain ⟨q, rfl⟩ := ih hx
+      exact ⟨q * X n, by simp⟩
+    | monomial_add a s p ha hs hp ih =>
+      rw [coeffs_add (disjoint_support_monomial ha hs)] at hx
+      simp only [Finset.coe_union, Set.union_subset_iff] at hx
+      obtain ⟨q, hq⟩ := ih hx.1
+      obtain ⟨u, hu⟩ := hp hx.2
+      exact ⟨q + u, by simp [hq, hu]⟩
 
 Depends on / 依赖: Finset, Finset.coe_singleton, Set.singleton_subset_iff, classical, coe_coeffs_map, coe_singleton, coeffs_C, coeffs_add, coeffs_mul_X, induction_on, monomial_add, mul_X, reduceIte, singleton_subset_iff, subset_trans
 -/
@@ -2613,7 +2655,15 @@ theorem aeval_range
     simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe]
     induction p using induction_on with
     | C a => exact aeval_C f a ▸ Subsemiring.subset_closure (Or.inl (Set.mem_range_self a))
-    | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp
+    | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp hq
+    | mul_X p n h =>
+      simp only [map_mul, aeval_X]
+      exact Subalgebra.mul_mem _ h (Algebra.subset_adjoin (Set.mem_range_self n))
+  · rw [Algebra.adjoin_le_iff]
+    rintro x ⟨i, rfl⟩
+    use X i, by aesop
+
+@[simp]
 
 中文:
 定理 aeval_range
@@ -2624,7 +2674,15 @@ theorem aeval_range
     simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe]
     induction p using induction_on with
     | C a => exact aeval_C f a ▸ Subsemiring.subset_closure (Or.inl (Set.mem_range_self a))
-    | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp
+    | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp hq
+    | mul_X p n h =>
+      simp only [map_mul, aeval_X]
+      exact Subalgebra.mul_mem _ h (Algebra.subset_adjoin (Set.mem_range_self n))
+  · rw [Algebra.adjoin_le_iff]
+    rintro x ⟨i, rfl⟩
+    use X i, by aesop
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Algebra, Algebra.adjoin_le_iff, Algebra.subset_adjoin, Or.inl, RingHom, RingHom.coe_coe, Set.mem_range_self, Subalgebra, Subalgebra.add_mem, Subalgebra.mul_mem, Subsemiring, Subsemiring.subset_closure, add_mem, adjoin_le_iff, aeval_C, aeval_X, coe_coe, induction_on
 -/
@@ -2885,7 +2943,7 @@ theorem eval₂Hom_eq_zero
   obtain ⟨i, hi, hgi⟩ : exists i in d.support, g i = 0 := h d (Finsupp.mem_support_iff.mp hd)
   rw [eval₂Hom_monomial]; rw [Finsupp.prod]; rw [Finset.prod_eq_zero hi]; rw [mul_zero]
   rw [hgi]; rw [zero_pow]
-  rwa [← Finsupp
+  rwa [← Finsupp.mem_support_iff]
 
 中文:
 定理 eval₂Hom_eq_zero
@@ -2896,7 +2954,7 @@ theorem eval₂Hom_eq_zero
   obtain ⟨i, hi, hgi⟩ : exists i in d.support, g i = 0 := h d (Finsupp.mem_support_iff.mp hd)
   rw [eval₂Hom_monomial]; rw [Finsupp.prod]; rw [Finset.prod_eq_zero hi]; rw [mul_zero]
   rw [hgi]; rw [zero_pow]
-  rwa [← Finsupp
+  rwa [← Finsupp.mem_support_iff]
 
 Depends on / 依赖: Finset, Finset.prod_eq_zero, Finset.sum_eq_zero, Finsupp, Finsupp.mem_support_iff, Finsupp.mem_support_iff.mp, Finsupp.prod, as_sum, d.support, map_sum, mem_support_iff, mul_zero, prod_eq_zero, sum_eq_zero, support, zero_pow
 -/
@@ -3285,7 +3343,18 @@ theorem eval₂_mem
       exact zero_mem s
   induction p using MvPolynomial.monomial_add_induction_on with
   | C a =>
-    simpa us
+    simpa using hs 0
+  | monomial_add a b f ha _ ih =>
+    rw [eval₂_add]; rw [eval₂_monomial]
+    refine add_mem (mul_mem ?_ <| prod_mem fun i _ => pow_mem (hv _) _) (ih fun i => ?_)
+    · simpa [MvPolynomial.notMem_support_iff.1 ha] using hs a
+    have := hs i
+    rw [coeff_add]; rw [coeff_monomial] at this
+    split_ifs at this with h
+    · subst h
+      rw [MvPolynomial.notMem_support_iff.1 ha]; rw [map_zero]
+      exact zero_mem _
+    · rwa [zero_add] at this
 
 中文:
 定理 eval₂_mem
@@ -3300,7 +3369,18 @@ theorem eval₂_mem
       exact zero_mem s
   induction p using MvPolynomial.monomial_add_induction_on with
   | C a =>
-    simpa us
+    simpa using hs 0
+  | monomial_add a b f ha _ ih =>
+    rw [eval₂_add]; rw [eval₂_monomial]
+    refine add_mem (mul_mem ?_ <| prod_mem fun i _ => pow_mem (hv _) _) (ih fun i => ?_)
+    · simpa [MvPolynomial.notMem_support_iff.1 ha] using hs a
+    have := hs i
+    rw [coeff_add]; rw [coeff_monomial] at this
+    split_ifs at this with h
+    · subst h
+      rw [MvPolynomial.notMem_support_iff.1 ha]; rw [map_zero]
+      exact zero_mem _
+    · rwa [zero_add] at this
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.monomial_add_induction_on, MvPolynomial.notMem_support_iff, add_mem, classical, f.map_zero, map_zero, monomial_add, monomial_add_induction_on, mul_mem, notMem_support_iff, p.coeff, p.support, pow_mem, prod_mem, replace, support, zero_mem
 -/

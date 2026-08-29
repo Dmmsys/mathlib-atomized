@@ -224,7 +224,11 @@ lemma iff_eq_top_or_exists
       right
       obtain rfl | hH := eq_or_ne H K
       · use K'
-      · exa
+      · exact ⟨K, by simpa [*] using HK.lt_of_ne hH⟩
+  mpr h := by
+    obtain rfl | ⟨K, HK, Ksn, h⟩ := h
+    · exact top
+    · exact step _ _ HK.le Ksn h
 
 中文:
 引理 iff_eq_top_or_存在
@@ -239,7 +243,11 @@ lemma iff_eq_top_or_exists
       right
       obtain rfl | hH := eq_or_ne H K
       · use K'
-      · exa
+      · exact ⟨K, by simpa [*] using HK.lt_of_ne hH⟩
+  mpr h := by
+    obtain rfl | ⟨K, HK, Ksn, h⟩ := h
+    · exact top
+    · exact step _ _ HK.le Ksn h
 
 Depends on / 依赖: HK.le, HK.lt_of_ne, Or.inr, eq_or_ne, hH.lt_top, lt_of_ne, lt_top
 -/
@@ -362,7 +370,21 @@ lemma isSubnormal_iff
       obtain ⟨n, f, hf, f0, fn⟩ := ih
       use n + 1, fun | 0 => H | n + 1 => f n, ?_, ?_
       · grind
-      · refine monotone_nat_of_l
+      · refine monotone_nat_of_le_succ ?_
+        grind only [monotone_iff_forall_lt]
+      · grind
+  mpr := by
+    rintro ⟨n, hyps⟩
+    revert H
+    induction n with
+    | zero => simp_all
+    | succ n ih =>
+      rintro J ⟨F, hF, H_le, rfl, ih1⟩
+      refine step _ _ (hF <| Nat.le_add_right 0 1) ?_ (H_le _)
+      refine ih ⟨fun n => F (n + 1), ?_⟩
+      grind only [Monotone, monotone_iff_forall_lt]
+
+alias ⟨exists_chain, _⟩ := isSubnormal_iff
 
 中文:
 引理 isSubnormal_iff
@@ -376,7 +398,21 @@ lemma isSubnormal_iff
       obtain ⟨n, f, hf, f0, fn⟩ := ih
       use n + 1, fun | 0 => H | n + 1 => f n, ?_, ?_
       · grind
-      · refine monotone_nat_of_l
+      · refine monotone_nat_of_le_succ ?_
+        grind only [monotone_iff_forall_lt]
+      · grind
+  mpr := by
+    rintro ⟨n, hyps⟩
+    revert H
+    induction n with
+    | zero => simp_all
+    | succ n ih =>
+      rintro J ⟨F, hF, H_le, rfl, ih1⟩
+      refine step _ _ (hF <| Nat.le_add_right 0 1) ?_ (H_le _)
+      refine ih ⟨fun n => F (n + 1), ?_⟩
+      grind only [Monotone, monotone_iff_forall_lt]
+
+alias ⟨exists_chain, _⟩ := isSubnormal_iff
 
 Depends on / 依赖: H_le, Nat.le_add_right, h_le, le_add_right, le_top, monotone_iff_forall_lt, monotone_nat_of_le_succ, revert
 -/
@@ -431,7 +467,8 @@ lemma trans'
   | step A B h_le hSubn hN ih =>
     refine step (A.map K.subtype) (B.map K.subtype) (map_mono h_le) ih ?_
     rw [normal_subgroupOf_iff_le_normalizer h_le] at hN
-    rw [normal_subgroupOf_iff_le_normalizer (map_mon
+    rw [normal_subgroupOf_iff_le_normalizer (map_mono h_le)]
+    exact le_trans (map_mono hN) (le_normalizer_map _)
 
 中文:
 引理 trans'
@@ -443,7 +480,8 @@ lemma trans'
   | step A B h_le hSubn hN ih =>
     refine step (A.map K.subtype) (B.map K.subtype) (map_mono h_le) ih ?_
     rw [normal_subgroupOf_iff_le_normalizer h_le] at hN
-    rw [normal_subgroupOf_iff_le_normalizer (map_mon
+    rw [normal_subgroupOf_iff_le_normalizer (map_mono h_le)]
+    exact le_trans (map_mono hN) (le_normalizer_map _)
 
 Depends on / 依赖: A.map, B.map, K.subtype, MonoidHom, MonoidHom.range_eq_map, h_le, le_normalizer_map, le_trans, map_mono, normal_subgroupOf_iff_le_normalizer, range_eq_map, range_subtype, subtype
 -/
@@ -507,7 +545,7 @@ lemma map
   | step H K h_le hSubn hN ih =>
     apply step _ (map f K) (map_mono h_le) ih
     rw [normal_subgroupOf_iff_le_normalizer h_le] at hN
-    exact normal_subgroupOf_of_le_normalizer ((map_mono hN).trans (H.le_normalize
+    exact normal_subgroupOf_of_le_normalizer ((map_mono hN).trans (H.le_normalizer_map f))
 
 中文:
 引理 map
@@ -520,7 +558,7 @@ lemma map
   | step H K h_le hSubn hN ih =>
     apply step _ (map f K) (map_mono h_le) ih
     rw [normal_subgroupOf_iff_le_normalizer h_le] at hN
-    exact normal_subgroupOf_of_le_normalizer ((map_mono hN).trans (H.le_normalize
+    exact normal_subgroupOf_of_le_normalizer ((map_mono hN).trans (H.le_normalizer_map f))
 
 Depends on / 依赖: H.le_normalizer_map, h_le, le_normalizer_map, map_mono, map_top_of_surjective, normal_subgroupOf_iff_le_normalizer, normal_subgroupOf_of_le_normalizer
 -/
@@ -574,7 +612,7 @@ lemma comap
     rw [normal_subgroupOf_iff_le_normalizer (comap_mono h_le)]
     exact (comap_mono hN).trans (le_normalizer_comap f)
 
-@[t
+@[to_additive (attr := simp)]
 
 中文:
 引理 comap
@@ -588,7 +626,7 @@ lemma comap
     rw [normal_subgroupOf_iff_le_normalizer (comap_mono h_le)]
     exact (comap_mono hN).trans (le_normalizer_comap f)
 
-@[t
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: comap_mono, h_le, le_normalizer_comap, normal_subgroupOf_iff_le_normalizer
 -/

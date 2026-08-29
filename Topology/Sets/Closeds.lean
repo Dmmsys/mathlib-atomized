@@ -369,7 +369,14 @@ instance instCompleteLattice
     ⟨∅, isClosed_empty⟩ (SetLike.coe_injective closure_empty.symm)
     -- sup
     (fun s t => ⟨s union t, s.2.union t.2⟩)
-    (funext fun s => fune
+    (funext fun s => funext fun t => SetLike.coe_injective (s.2.union t.2).closure_eq.symm)
+    -- inf
+    (fun s t => ⟨s inter t, s.2.inter t.2⟩) rfl
+    -- sSup
+    _ rfl
+    -- sInf
+    (fun S => ⟨⋂ s in S, ↑s, isClosed_biInter fun s _ => s.2⟩)
+    (funext fun _ => SetLike.coe_injective sInf_image.symm)
 
 中文:
 实例 instCompleteLattice
@@ -384,7 +391,14 @@ instance instCompleteLattice
     ⟨∅, isClosed_empty⟩ (SetLike.coe_injective closure_empty.symm)
     -- sup
     (fun s t => ⟨s union t, s.2.union t.2⟩)
-    (funext fun s => fune
+    (funext fun s => funext fun t => SetLike.coe_injective (s.2.union t.2).closure_eq.symm)
+    -- inf
+    (fun s t => ⟨s inter t, s.2.inter t.2⟩) rfl
+    -- sSup
+    _ rfl
+    -- sInf
+    (fun S => ⟨⋂ s in S, ↑s, isClosed_biInter fun s _ => s.2⟩)
+    (funext fun _ => SetLike.coe_injective sInf_image.symm)
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.copy, GaloisInsertion, GaloisInsertion.liftCompleteLattice, fast_instance, liftCompleteLattice
 -/
@@ -2349,7 +2363,7 @@ lemma map_injective_of_isInducing
   intro A B h_images_eq
   apply SetLike.coe_injective
   replace h_images_eq : closure (f '' A) = closure (f '' B) := congr($h_images_eq)
-  rw [← A.isClosed.closure_eq]; rw [hf.closure_eq_preimage_closure_image]; rw [h_images_eq]; rw [← hf.closure_eq_preimage_closure_image]; rw [B.isClosed.closure
+  rw [← A.isClosed.closure_eq]; rw [hf.closure_eq_preimage_closure_image]; rw [h_images_eq]; rw [← hf.closure_eq_preimage_closure_image]; rw [B.isClosed.closure_eq]
 
 中文:
 引理 map_injective_of_isInducing
@@ -2358,7 +2372,7 @@ lemma map_injective_of_isInducing
   intro A B h_images_eq
   apply SetLike.coe_injective
   replace h_images_eq : closure (f '' A) = closure (f '' B) := congr($h_images_eq)
-  rw [← A.isClosed.closure_eq]; rw [hf.closure_eq_preimage_closure_image]; rw [h_images_eq]; rw [← hf.closure_eq_preimage_closure_image]; rw [B.isClosed.closure
+  rw [← A.isClosed.closure_eq]; rw [hf.closure_eq_preimage_closure_image]; rw [h_images_eq]; rw [← hf.closure_eq_preimage_closure_image]; rw [B.isClosed.closure_eq]
 
 Depends on / 依赖: A.isClosed.closure_eq, B.isClosed.closure_eq, SetLike, SetLike.coe_injective, closure, closure_eq, closure_eq_preimage_closure_image, coe_injective, h_images_eq, hf.closure_eq_preimage_closure_image, isClosed, replace
 -/
@@ -2407,7 +2421,14 @@ definition orderIsoOfIsOpenEmbedding
       isClosed' := V.1.3.preimage h.continuous }
   left_inv V := by
     ext
-    simp [h.isOpenMap.preimage_closu
+    simp [h.isOpenMap.preimage_closure_image h.injective h.continuous _ V.isClosed]
+  right_inv V := by
+    ext
+    simp [closure_image_preimage_of_isPreirreducible f h.isOpenMap V V.2 V.1.2.2 V.1.3]
+  map_rel_iff' {a b} := by
+    refine ⟨fun hle => ?_, fun hle => map_mono h.continuous hle⟩
+    simpa [← h.isEmbedding.closure_eq_preimage_closure_image, a.isClosed.closure_eq,
+      b.isClosed.closure_eq] using Set.preimage_mono (f := f) hle
 
 中文:
 定义 orderIsoOfIsOpenEmbedding
@@ -2419,7 +2440,14 @@ definition orderIsoOfIsOpenEmbedding
       isClosed' := V.1.3.preimage h.continuous }
   left_inv V := by
     ext
-    simp [h.isOpenMap.preimage_closu
+    simp [h.isOpenMap.preimage_closure_image h.injective h.continuous _ V.isClosed]
+  right_inv V := by
+    ext
+    simp [closure_image_preimage_of_isPreirreducible f h.isOpenMap V V.2 V.1.2.2 V.1.3]
+  map_rel_iff' {a b} := by
+    refine ⟨fun hle => ?_, fun hle => map_mono h.continuous hle⟩
+    simpa [← h.isEmbedding.closure_eq_preimage_closure_image, a.isClosed.closure_eq,
+      b.isClosed.closure_eq] using Set.preimage_mono (f := f) hle
 
 Depends on / 依赖: continuous, h.continuous, nonempty, nonempty_preimage_closure_image
 -/

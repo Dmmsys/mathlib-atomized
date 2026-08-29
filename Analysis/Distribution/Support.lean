@@ -502,7 +502,7 @@ theorem smulLeftCLM
   exact (tsupport_smul_subset_right g u).trans hu
 
 @[deprecated (since := "2026-07-01")] alias _root_.Distribution.IsVanishingOn.smulLeftCLM :=
-  Distribution.TemperedDistribution.IsVanishingOn
+  Distribution.TemperedDistribution.IsVanishingOn.smulLeftCLM
 
 中文:
 定理 smulLeftCLM
@@ -514,7 +514,7 @@ theorem smulLeftCLM
   exact (tsupport_smul_subset_right g u).trans hu
 
 @[deprecated (since := "2026-07-01")] alias _root_.Distribution.IsVanishingOn.smulLeftCLM :=
-  Distribution.TemperedDistribution.IsVanishingOn
+  Distribution.TemperedDistribution.IsVanishingOn.smulLeftCLM
 
 Depends on / 依赖: SchwartzMap, SchwartzMap.smulLeftCLM, SchwartzMap.smulLeftCLM_apply, smulLeftCLM, smulLeftCLM_apply, tsupport_smul_subset_right
 -/
@@ -722,7 +722,11 @@ theorem dsupport_delta
   rw [mem_dsupport_iff_forall_exists_ne]
   intro s hx hs
   obtain ⟨u, h₁, h₂, h₃, -, h₄⟩ :=
-    exists_contDiff_tsupport_subset (n := ⊤) ((IsOpen.mem_n
+    exists_contDiff_tsupport_subset (n := ⊤) ((IsOpen.mem_nhds_iff hs).mpr hx)
+  have h₁' : tsupport (Complex.ofRealCLM ∘ u) subseteq s := (tsupport_comp_subset rfl _).trans h₁
+  have h₂' : HasCompactSupport (Complex.ofRealCLM ∘ u) := h₂.comp_left rfl
+  use h₂'.toSchwartzMap (Complex.ofRealCLM.contDiff.comp h₃)
+  exact ⟨h₁', by simp [h₄]⟩
 
 中文:
 定理 dsupport_delta
@@ -736,7 +740,11 @@ theorem dsupport_delta
   rw [mem_dsupport_iff_forall_exists_ne]
   intro s hx hs
   obtain ⟨u, h₁, h₂, h₃, -, h₄⟩ :=
-    exists_contDiff_tsupport_subset (n := ⊤) ((IsOpen.mem_n
+    exists_contDiff_tsupport_subset (n := ⊤) ((IsOpen.mem_nhds_iff hs).mpr hx)
+  have h₁' : tsupport (Complex.ofRealCLM ∘ u) subseteq s := (tsupport_comp_subset rfl _).trans h₁
+  have h₂' : HasCompactSupport (Complex.ofRealCLM ∘ u) := h₂.comp_left rfl
+  use h₂'.toSchwartzMap (Complex.ofRealCLM.contDiff.comp h₃)
+  exact ⟨h₁', by simp [h₄]⟩
 
 Depends on / 依赖: Complex.ofRe, Complex.ofRealCLM, HasCompactSupport, IsOpen, IsOpen.mem_nhds_iff, T1Space, T1Space.t1, comp_left, exists_contDiff_tsupport_subset, isVanishingOn_delta, mem_dsupport_iff, mem_dsupport_iff_forall_exists_ne, mem_nhds_iff, ofRealCLM, subset_antisymm, subseteq, toSchwartzMap, tsupport, tsupport_comp_subset
 -/
@@ -941,7 +949,10 @@ theorem dsupport_delta
   intro s hxs hs
   set t := s inter Ω
   have ht : IsOpen t := hs.inter Ω.isOpen
-  have htx : x in t := Set.mem
+  have htx : x in t := Set.mem_inter hxs hx
+  obtain ⟨u, h₁, h₂, h₃, -, h₄⟩ :=
+    exists_contDiff_tsupport_subset (n := n) ((IsOpen.mem_nhds_iff ht).mpr htx)
+  exact ⟨⟨u, h₃, h₂, by aesop⟩, ⟨by aesop, by simp [h₄]⟩⟩
 
 中文:
 定理 dsupport_delta
@@ -956,7 +967,10 @@ theorem dsupport_delta
   intro s hxs hs
   set t := s inter Ω
   have ht : IsOpen t := hs.inter Ω.isOpen
-  have htx : x in t := Set.mem
+  have htx : x in t := Set.mem_inter hxs hx
+  obtain ⟨u, h₁, h₂, h₃, -, h₄⟩ :=
+    exists_contDiff_tsupport_subset (n := n) ((IsOpen.mem_nhds_iff ht).mpr htx)
+  exact ⟨⟨u, h₃, h₂, by aesop⟩, ⟨by aesop, by simp [h₄]⟩⟩
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds_iff, Set.mem_inter, T1Space, T1Space.t1, exists_contDiff_tsupport_subset, hs.inter, isOpen, isVanishingOn_delta, mem_dsupport_iff, mem_dsupport_iff_forall_exists_ne, mem_inter, mem_nhds_iff, subset_antisymm
 -/

@@ -103,7 +103,8 @@ theorem Module.FinitePresentation.exists_fin
   refine ⟨_, LinearMap.ker (linearCombination R Subtype.val ∘ₗ
     (lcongr ι.equivFin (.refl ..) ≪≫ₗ linearEquivFunOnFinite R R _).symm.toLinearMap),
     (LinearMap.quotKerEquivOfSurjective _ <| LinearMap.range_eq_top.mp ?_).symm, ?_⟩
-  · simpa [range_linearCombinatio
+  · simpa [range_linearCombination] using hι₁
+  · simpa [LinearMap.ker_comp, Submodule.comap_equiv_eq_map_symm] using hι₂.map _
 
 中文:
 定理 模.有限呈现.存在_fin
@@ -113,7 +114,8 @@ theorem Module.FinitePresentation.exists_fin
   refine ⟨_, LinearMap.ker (linearCombination R Subtype.val ∘ₗ
     (lcongr ι.equivFin (.refl ..) ≪≫ₗ linearEquivFunOnFinite R R _).symm.toLinearMap),
     (LinearMap.quotKerEquivOfSurjective _ <| LinearMap.range_eq_top.mp ?_).symm, ?_⟩
-  · simpa [range_linearCombinatio
+  · simpa [range_linearCombination] using hι₁
+  · simpa [LinearMap.ker_comp, Submodule.comap_equiv_eq_map_symm] using hι₂.map _
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_comp, LinearMap.quotKerEquivOfSurjective, LinearMap.range_eq_top.mp, Submodule, Submodule.comap_equiv_eq_map_symm, Subtype, Subtype.val, comap_equiv_eq_map_symm, equivFin, ker_comp, lcongr, linearCombination, linearEquivFunOnFinite, quotKerEquivOfSurjective, range_eq_top, range_linearCombination, symm.toLinearMap, toLinearMap
 -/
@@ -249,7 +251,25 @@ lemma Module.finitePresentation_of_free_of_surjective
   have : π.Surjective := fun ⟨x, hx⟩ => by
     obtain ⟨y, rfl⟩ : exists a, l (b a) = x := by simpa using hx
     exact ⟨y, rfl⟩
-  choose σ hσ using t
+  choose σ hσ using this
+  have hπ : Subtype.val ∘ π = l ∘ b := rfl
+  have hσ₁ : π ∘ σ = id := by ext i; exact congr_arg Subtype.val (hσ i)
+  have hσ₂ : l ∘ b ∘ σ = Subtype.val := by ext i; exact congr_arg Subtype.val (hσ i)
+  refine ⟨(Set.finite_range (l ∘ b)).toFinset,
+    by simpa [Set.range_comp, LinearMap.range_eq_top], ?_⟩
+  let f : M ->ₗ[R] (Set.finite_range (l ∘ b)).toFinset ->₀ R :=
+    Finsupp.lmapDomain _ _ π ∘ₗ b.repr.toLinearMap
+  convert! hl'.map f
+  ext x; simp only [LinearMap.mem_ker, Submodule.mem_map]
+  constructor
+  · intro hx
+    refine ⟨b.repr.symm (x.mapDomain σ), ?_, ?_⟩
+    · simp [Finsupp.apply_linearCombination, hσ₂, hx]
+    · simp only [f, LinearMap.comp_apply, b.repr.apply_symm_apply,
+        LinearEquiv.coe_toLinearMap, Finsupp.lmapDomain_apply]
+      rw [← Finsupp.mapDomain_comp]; rw [hσ₁]; rw [Finsupp.mapDomain_id]
+  · rintro ⟨y, hy, rfl⟩
+    simp [f, hπ, ← Finsupp.apply_linearCombination, hy]
 
 中文:
 引理 模.finitePresentation_of_free_of_surjective
@@ -261,7 +281,25 @@ lemma Module.finitePresentation_of_free_of_surjective
   have : π.Surjective := fun ⟨x, hx⟩ => by
     obtain ⟨y, rfl⟩ : exists a, l (b a) = x := by simpa using hx
     exact ⟨y, rfl⟩
-  choose σ hσ using t
+  choose σ hσ using this
+  have hπ : Subtype.val ∘ π = l ∘ b := rfl
+  have hσ₁ : π ∘ σ = id := by ext i; exact congr_arg Subtype.val (hσ i)
+  have hσ₂ : l ∘ b ∘ σ = Subtype.val := by ext i; exact congr_arg Subtype.val (hσ i)
+  refine ⟨(Set.finite_range (l ∘ b)).toFinset,
+    by simpa [Set.range_comp, LinearMap.range_eq_top], ?_⟩
+  let f : M ->ₗ[R] (Set.finite_range (l ∘ b)).toFinset ->₀ R :=
+    Finsupp.lmapDomain _ _ π ∘ₗ b.repr.toLinearMap
+  convert! hl'.map f
+  ext x; simp only [LinearMap.mem_ker, Submodule.mem_map]
+  constructor
+  · intro hx
+    refine ⟨b.repr.symm (x.mapDomain σ), ?_, ?_⟩
+    · simp [Finsupp.apply_linearCombination, hσ₂, hx]
+    · simp only [f, LinearMap.comp_apply, b.repr.apply_symm_apply,
+        LinearEquiv.coe_toLinearMap, Finsupp.lmapDomain_apply]
+      rw [← Finsupp.mapDomain_comp]; rw [hσ₁]; rw [Finsupp.mapDomain_id]
+  · rintro ⟨y, hy, rfl⟩
+    simp [f, hπ, ← Finsupp.apply_linearCombination, hy]
 
 Depends on / 依赖: ChooseBasisIndex, Free.ChooseBasisIndex, Module, Module.Free.chooseBasis, Set.finite_ra, Set.finite_range, Subtype, Subtype.val, Surjective, chooseBasis, congr_arg, finite_ra, finite_range, toFinset
 -/
@@ -386,7 +424,13 @@ lemma Module.finitePresentation_of_surjective
   have H : Function.Surjective (Finsupp.linearCombination R ((↑) : s -> M)) :=
     LinearMap.range_eq_top.mp
       (by rw [range_linearCombination, Subtype.range_val, ← hs])
-  apply Module.finitePresentation_of_free_of_surjective (l ∘
+  apply Module.finitePresentation_of_free_of_surjective (l ∘ₗ linearCombination R Subtype.val)
+    (hl.comp H)
+  choose σ hσ using (show _ from H)
+  have : Finsupp.linearCombination R Subtype.val '' σ '' t = t := by
+    simp only [Set.image_image, hσ, Set.image_id']
+  rw [LinearMap.ker_comp]; rw [← ht]; rw [← this]; rw [← Submodule.map_span]; rw [Submodule.comap_map_eq]; rw [← Finset.coe_image]
+  exact Submodule.FG.sup ⟨_, rfl⟩ hs'
 
 中文:
 引理 模.finitePresentation_of_surjective
@@ -398,7 +442,13 @@ lemma Module.finitePresentation_of_surjective
   have H : Function.Surjective (Finsupp.linearCombination R ((↑) : s -> M)) :=
     LinearMap.range_eq_top.mp
       (by rw [range_linearCombination, Subtype.range_val, ← hs])
-  apply Module.finitePresentation_of_free_of_surjective (l ∘
+  apply Module.finitePresentation_of_free_of_surjective (l ∘ₗ linearCombination R Subtype.val)
+    (hl.comp H)
+  choose σ hσ using (show _ from H)
+  have : Finsupp.linearCombination R Subtype.val '' σ '' t = t := by
+    simp only [Set.image_image, hσ, Set.image_id']
+  rw [LinearMap.ker_comp]; rw [← ht]; rw [← this]; rw [← Submodule.map_span]; rw [Submodule.comap_map_eq]; rw [← Finset.coe_image]
+  exact Submodule.FG.sup ⟨_, rfl⟩ hs'
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Function, Function.Surjective, LinearMap, LinearMap.ker_comp, LinearMap.range_eq_top.mp, Module, Module.finitePresentation_of_free_of_surjective, Set.image_id, Set.image_image, Subtype, Subtype.range_val, Subtype.val, Surjective, classical, finitePresentation_of_free_of_surjective, hl.comp, image_id, image_image
 -/
@@ -430,7 +480,21 @@ lemma Module.FinitePresentation.fg_ker
   have H : Function.Surjective (Finsupp.linearCombination R ((↑) : s -> N)) :=
     LinearMap.range_eq_top.mp
       (by rw [range_linearCombination, Subtype.range_val, ← hs])
-  obtain ⟨f, hf⟩ : exists f : (s ->₀ R) ->ₗ[R] M, l ∘ₗ f = (Finsupp.linearCombination R Subtype.
+  obtain ⟨f, hf⟩ : exists f : (s ->₀ R) ->ₗ[R] M, l ∘ₗ f = (Finsupp.linearCombination R Subtype.val) := by
+    choose f hf using show _ from hl
+    exact ⟨Finsupp.linearCombination R (fun i => f i), by ext; simp [hf]⟩
+  have : (LinearMap.ker l).map (LinearMap.range f).mkQ = ⊤ := by
+    rw [← top_le_iff]
+    rintro x -
+    obtain ⟨x, rfl⟩ := Submodule.mkQ_surjective _ x
+    obtain ⟨y, hy⟩ := H (l x)
+    rw [← hf]; rw [LinearMap.comp_apply]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub] at hy
+    exact ⟨_, hy, by simp⟩
+  apply Submodule.fg_of_fg_map_of_fg_inf_ker (LinearMap.range f).mkQ
+  · rw [this]
+    exact Module.Finite.fg_top
+  · rw [Submodule.ker_mkQ, inf_comm, ← Submodule.map_comap_eq, ← LinearMap.ker_comp, hf]
+    exact hs'.map f
 
 中文:
 引理 模.有限呈现.fg_ker
@@ -440,7 +504,21 @@ lemma Module.FinitePresentation.fg_ker
   have H : Function.Surjective (Finsupp.linearCombination R ((↑) : s -> N)) :=
     LinearMap.range_eq_top.mp
       (by rw [range_linearCombination, Subtype.range_val, ← hs])
-  obtain ⟨f, hf⟩ : exists f : (s ->₀ R) ->ₗ[R] M, l ∘ₗ f = (Finsupp.linearCombination R Subtype.
+  obtain ⟨f, hf⟩ : exists f : (s ->₀ R) ->ₗ[R] M, l ∘ₗ f = (Finsupp.linearCombination R Subtype.val) := by
+    choose f hf using show _ from hl
+    exact ⟨Finsupp.linearCombination R (fun i => f i), by ext; simp [hf]⟩
+  have : (LinearMap.ker l).map (LinearMap.range f).mkQ = ⊤ := by
+    rw [← top_le_iff]
+    rintro x -
+    obtain ⟨x, rfl⟩ := Submodule.mkQ_surjective _ x
+    obtain ⟨y, hy⟩ := H (l x)
+    rw [← hf]; rw [LinearMap.comp_apply]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← map_sub] at hy
+    exact ⟨_, hy, by simp⟩
+  apply Submodule.fg_of_fg_map_of_fg_inf_ker (LinearMap.range f).mkQ
+  · rw [this]
+    exact Module.Finite.fg_top
+  · rw [Submodule.ker_mkQ, inf_comm, ← Submodule.map_comap_eq, ← LinearMap.ker_comp, hf]
+    exact hs'.map f
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Function, Function.Surjective, LinearMap, LinearMap.ker, LinearMap.range, LinearMap.range_eq_top.mp, Subtype, Subtype.range_val, Subtype.val, Surjective, linearCombination, range_eq_top, range_linearCombination, range_val, top_le_iff
 -/
@@ -499,7 +577,23 @@ lemma Module.finitePresentation_of_ker
     · rw [Submodule.map_top, LinearMap.range_eq_top.mpr hl]; exact Module.Finite.fg_top
     · rw [top_inf_eq, ← Module.Finite.iff_fg]; infer_instance
   refine ⟨s, hs, ?_⟩
-  let π := Finsupp.linearComb
+  let π := Finsupp.linearCombination R ((↑) : s -> M)
+  have H : Function.Surjective π :=
+    LinearMap.range_eq_top.mp
+      (by rw [range_linearCombination, Subtype.range_val, ← hs])
+  have inst : Module.Finite R (LinearMap.ker (l ∘ₗ π)) :=
+.of_fg Module.FinitePresentation.fg_ker _ (hl.comp H)
+  let f : LinearMap.ker (l ∘ₗ π) ->ₗ[R] LinearMap.ker l := LinearMap.restrict π (fun x => id)
+  have e : π ∘ₗ Submodule.subtype _ = Submodule.subtype _ ∘ₗ f := by ext; rfl
+  have hf : Function.Surjective f := by
+    rw [← LinearMap.range_eq_top]
+    apply Submodule.map_injective_of_injective (Submodule.injective_subtype _)
+    rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [← LinearMap.range_comp]; rw [← e]; rw [LinearMap.range_comp]; rw [Submodule.range_subtype]; rw [LinearMap.ker_comp]; rw [Submodule.map_comap_eq_of_surjective H]
+  change (LinearMap.ker π).FG
+  have : LinearMap.ker π <= LinearMap.ker (l ∘ₗ π) :=
+    Submodule.comap_mono (f := π) (bot_le (a := LinearMap.ker l))
+  rw [← inf_eq_right.mpr this]; rw [← Submodule.range_subtype (LinearMap.ker _)]; rw [← Submodule.map_comap_eq]; rw [← LinearMap.ker_comp]; rw [e]; rw [LinearMap.ker_comp f]; rw [LinearMap.ker_eq_bot.mpr (Submodule.injective_subtype (LinearMap.ker l))]; rw [Submodule.comap_bot]
+  exact (Module.FinitePresentation.fg_ker f hf).map (Submodule.subtype _)
 
 中文:
 引理 模.finitePresentation_of_ker
@@ -510,7 +604,23 @@ lemma Module.finitePresentation_of_ker
     · rw [Submodule.map_top, LinearMap.range_eq_top.mpr hl]; exact Module.Finite.fg_top
     · rw [top_inf_eq, ← Module.Finite.iff_fg]; infer_instance
   refine ⟨s, hs, ?_⟩
-  let π := Finsupp.linearComb
+  let π := Finsupp.linearCombination R ((↑) : s -> M)
+  have H : Function.Surjective π :=
+    LinearMap.range_eq_top.mp
+      (by rw [range_linearCombination, Subtype.range_val, ← hs])
+  have inst : Module.Finite R (LinearMap.ker (l ∘ₗ π)) :=
+.of_fg Module.FinitePresentation.fg_ker _ (hl.comp H)
+  let f : LinearMap.ker (l ∘ₗ π) ->ₗ[R] LinearMap.ker l := LinearMap.restrict π (fun x => id)
+  have e : π ∘ₗ Submodule.subtype _ = Submodule.subtype _ ∘ₗ f := by ext; rfl
+  have hf : Function.Surjective f := by
+    rw [← LinearMap.range_eq_top]
+    apply Submodule.map_injective_of_injective (Submodule.injective_subtype _)
+    rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [← LinearMap.range_comp]; rw [← e]; rw [LinearMap.range_comp]; rw [Submodule.range_subtype]; rw [LinearMap.ker_comp]; rw [Submodule.map_comap_eq_of_surjective H]
+  change (LinearMap.ker π).FG
+  have : LinearMap.ker π <= LinearMap.ker (l ∘ₗ π) :=
+    Submodule.comap_mono (f := π) (bot_le (a := LinearMap.ker l))
+  rw [← inf_eq_right.mpr this]; rw [← Submodule.range_subtype (LinearMap.ker _)]; rw [← Submodule.map_comap_eq]; rw [← LinearMap.ker_comp]; rw [e]; rw [LinearMap.ker_comp f]; rw [LinearMap.ker_eq_bot.mpr (Submodule.injective_subtype (LinearMap.ker l))]; rw [Submodule.comap_bot]
+  exact (Module.FinitePresentation.fg_ker f hf).map (Submodule.subtype _)
 
 Depends on / 依赖: Finite, Finsupp, Finsupp.linearCombination, Function, Function.Surjective, LinearMap, LinearMap.ker, LinearMap.range_eq_top.mp, LinearMap.range_eq_top.mpr, Module, Module.Fini, Module.Finite, Module.Finite.fg_top, Module.Finite.iff_fg, Submodule, Submodule.fg_of_fg_map_of_fg_inf_ker, Submodule.map_top, Subtype, Subtype.range_val, Surjective
 -/
@@ -550,7 +660,10 @@ lemma Module.finitePresentation_of_split_exact
   have := Module.Finite.of_surjective g hg
   obtain ⟨e, rfl, rfl⟩ := ((Function.Exact.split_tfae' H).out 0 2 rfl rfl).mp
     ⟨hf, l, hl⟩
-  refine Module.finitePresentation_of_surjective (LinearMap.fst _ _
+  refine Module.finitePresentation_of_surjective (LinearMap.fst _ _ _ ∘ₗ e.toLinearMap)
+    (Prod.fst_surjective.comp e.surjective) ?_
+  rw [LinearMap.ker_comp]; rw [Submodule.comap_equiv_eq_map_symm]; rw [LinearMap.exact_iff.mp Function.Exact.inr_fst]; rw [← LinearMap.range_comp]
+  exact Submodule.fg_range _
 
 中文:
 引理 模.finitePresentation_of_split_exact
@@ -559,7 +672,10 @@ lemma Module.finitePresentation_of_split_exact
   have := Module.Finite.of_surjective g hg
   obtain ⟨e, rfl, rfl⟩ := ((Function.Exact.split_tfae' H).out 0 2 rfl rfl).mp
     ⟨hf, l, hl⟩
-  refine Module.finitePresentation_of_surjective (LinearMap.fst _ _
+  refine Module.finitePresentation_of_surjective (LinearMap.fst _ _ _ ∘ₗ e.toLinearMap)
+    (Prod.fst_surjective.comp e.surjective) ?_
+  rw [LinearMap.ker_comp]; rw [Submodule.comap_equiv_eq_map_symm]; rw [LinearMap.exact_iff.mp Function.Exact.inr_fst]; rw [← LinearMap.range_comp]
+  exact Submodule.fg_range _
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Finite, Function, Function.Exact.inr_fst, Function.Exact.split_tfae, Function.LeftInverse.surjective, Function.Surjective, LeftInverse, LinearMap, LinearMap.exact_iff.mp, LinearMap.fst, LinearMap.ker_comp, LinearMap.range_comp, Module, Module.Finite.of_surjective, Module.finitePresentation_of_surjective, Prod.fst_surjective.comp, Submodule, Submodule.comap_equiv_eq_map_symm
 -/
@@ -661,7 +777,7 @@ instance prod
   have : FinitePresentation R ↥(LinearMap.ker (LinearMap.fst R M N)) := by
     rw [LinearMap.ker_fst]
     exact .of_equiv (LinearEquiv.ofInjective (LinearMap.inr R M N) LinearMap.inr_injective)
-  apply Module.finite
+  apply Module.finitePresentation_of_ker (.fst R M N) hf
 
 中文:
 实例 乘积
@@ -671,7 +787,7 @@ instance prod
   have : FinitePresentation R ↥(LinearMap.ker (LinearMap.fst R M N)) := by
     rw [LinearMap.ker_fst]
     exact .of_equiv (LinearEquiv.ofInjective (LinearMap.inr R M N) LinearMap.inr_injective)
-  apply Module.finite
+  apply Module.finitePresentation_of_ker (.fst R M N) hf
 
 Depends on / 依赖: FinitePresentation, Function, Function.Surjective, LinearEquiv, LinearEquiv.ofInjective, LinearMap, LinearMap.fst, LinearMap.fst_surjective, LinearMap.inr, LinearMap.inr_injective, LinearMap.ker, LinearMap.ker_fst, Module, Module.finitePresentation_of_ker, Surjective, finitePresentation_of_ker, fst_surjective, inr_injective, ker_fst, ofInjective
 -/
@@ -693,7 +809,10 @@ instance pi
   refine Module.pi_induction' (motive := fun N _ _ => Module.FinitePresentation R N)
       (motive' := fun N _ _ => Module.FinitePresentation R N) R ?_ ?_ ?_ ?_ M inferInstance
   · exact fun e (hN : Module.FinitePresentation _ _) => .of_equiv e
-  · exact fun e (hN : Module.FinitePresentation _ _)
+  · exact fun e (hN : Module.FinitePresentation _ _) => .of_equiv e
+  · infer_instance
+  · introv hN hN'
+    infer_instance
 
 中文:
 实例 pi
@@ -702,7 +821,10 @@ instance pi
   refine Module.pi_induction' (motive := fun N _ _ => Module.FinitePresentation R N)
       (motive' := fun N _ _ => Module.FinitePresentation R N) R ?_ ?_ ?_ ?_ M inferInstance
   · exact fun e (hN : Module.FinitePresentation _ _) => .of_equiv e
-  · exact fun e (hN : Module.FinitePresentation _ _)
+  · exact fun e (hN : Module.FinitePresentation _ _) => .of_equiv e
+  · infer_instance
+  · introv hN hN'
+    infer_instance
 
 Depends on / 依赖: FinitePresentation, Module, Module.FinitePresentation, Module.pi_induction, infer_instance, introv, motive, of_equiv, pi_induction
 -/
@@ -739,7 +861,11 @@ lemma Module.FinitePresentation.trans
   refine Module.finitePresentation_of_surjective f (fun m => ?_) ?_
   · obtain ⟨a, ha⟩ := K.mkQ_surjective (e m)
     exact ⟨a, by simp [f, ha]⟩
-  · have : Modu
+  · have : Module.Finite S
+        (Submodule.restrictScalars R (LinearMap.ker (e.symm.toLinearMap ∘ₗ K.mkQ))) :=
+.of_fg show (LinearMap.ker (e.symm.toLinearMap ∘ₗ K.mkQ)).FG by simpa
+    simp only [f, LinearMap.ker_restrictScalars, ← Module.Finite.iff_fg]
+    exact Module.Finite.trans S _
 
 中文:
 引理 模.有限呈现.trans
@@ -750,7 +876,11 @@ lemma Module.FinitePresentation.trans
   refine Module.finitePresentation_of_surjective f (fun m => ?_) ?_
   · obtain ⟨a, ha⟩ := K.mkQ_surjective (e m)
     exact ⟨a, by simp [f, ha]⟩
-  · have : Modu
+  · have : Module.Finite S
+        (Submodule.restrictScalars R (LinearMap.ker (e.symm.toLinearMap ∘ₗ K.mkQ))) :=
+.of_fg show (LinearMap.ker (e.symm.toLinearMap ∘ₗ K.mkQ)).FG by simpa
+    simp only [f, LinearMap.ker_restrictScalars, ← Module.Finite.iff_fg]
+    exact Module.Finite.trans S _
 
 Depends on / 依赖: Finite, FinitePresentation, K.mkQ, K.mkQ_surjective, LinearMap, LinearMap.ker, LinearMap.ker_restrictScalars, Module, Module.Finite, Module.FinitePresentation.exists_fin, Module.finitePresentation_of_surjective, Submodule, Submodule.restrictScalars, e.symm, e.symm.toLinearMap, exists_fin, finitePresentation_of_surjective, ker_restrictScalars, mkQ_surjective, of_fg
 -/
@@ -826,7 +956,39 @@ lemma Module.FinitePresentation.exists_lift_of_isLocalizedModule
   classical
   choose s hs using IsLocalizedModule.surj S f
   let i : σ -> N :=
-   
+    fun x => (∏ j in σ.erase x.1, (s (g j)).2) • (s (g x)).1
+  let s₀ := ∏ j in σ, (s (g j)).2
+  have hi : f ∘ₗ Finsupp.linearCombination R i = (s₀ • g) ∘ₗ π := by
+    ext j
+    simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply,
+      linearCombination_single, one_smul, LinearMap.map_smul_of_tower, ← hs, LinearMap.smul_apply,
+      i, s₀, π]
+    rw [← mul_smul]; rw [Finset.prod_erase_mul]
+    exact j.prop
+  have : forall x : τ, exists s : S, s • (Finsupp.linearCombination R i x) = 0 := by
+    intro x
+    convert_to exists s : S, s • (Finsupp.linearCombination R i x) = s • 0
+    · simp only [smul_zero]
+    apply IsLocalizedModule.exists_of_eq (S := S) (f := f)
+    rw [← LinearMap.comp_apply]; rw [map_zero]; rw [hi]; rw [LinearMap.comp_apply]
+    convert! map_zero (s₀ • g)
+    rw [← LinearMap.mem_ker]; rw [← hτ]
+    exact Submodule.subset_span x.prop
+  choose s' hs' using this
+  let s₁ := ∏ i : τ, s' i
+  have : LinearMap.ker π <= LinearMap.ker (s₁ • Finsupp.linearCombination R i) := by
+    rw [← hτ]; rw [Submodule.span_le]
+    intro x hxσ
+    simp only [s₁]
+    rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [LinearMap.smul_apply]; rw [← Finset.prod_erase_mul _ _ (Finset.mem_univ ⟨x]; rw [hxσ⟩)]; rw [mul_smul]
+    convert! smul_zero _
+    exact hs' ⟨x, hxσ⟩
+  refine ⟨Submodule.liftQ _ _ this ∘ₗ
+    (LinearMap.quotKerEquivOfSurjective _ hπ).symm.toLinearMap, s₁ * s₀, ?_⟩
+  ext x
+  obtain ⟨x, rfl⟩ := hπ x
+  rw [← LinearMap.comp_apply]; rw [← LinearMap.comp_apply]; rw [mul_smul]; rw [LinearMap.smul_comp]; rw [← hi]; rw [← LinearMap.comp_smul]; rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]
+  simp
 
 中文:
 引理 模.有限呈现.存在_lift_of_isLocalizedModule
@@ -839,7 +1001,39 @@ lemma Module.FinitePresentation.exists_lift_of_isLocalizedModule
   classical
   choose s hs using IsLocalizedModule.surj S f
   let i : σ -> N :=
-   
+    fun x => (∏ j in σ.erase x.1, (s (g j)).2) • (s (g x)).1
+  let s₀ := ∏ j in σ, (s (g j)).2
+  have hi : f ∘ₗ Finsupp.linearCombination R i = (s₀ • g) ∘ₗ π := by
+    ext j
+    simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply,
+      linearCombination_single, one_smul, LinearMap.map_smul_of_tower, ← hs, LinearMap.smul_apply,
+      i, s₀, π]
+    rw [← mul_smul]; rw [Finset.prod_erase_mul]
+    exact j.prop
+  have : forall x : τ, exists s : S, s • (Finsupp.linearCombination R i x) = 0 := by
+    intro x
+    convert_to exists s : S, s • (Finsupp.linearCombination R i x) = s • 0
+    · simp only [smul_zero]
+    apply IsLocalizedModule.exists_of_eq (S := S) (f := f)
+    rw [← LinearMap.comp_apply]; rw [map_zero]; rw [hi]; rw [LinearMap.comp_apply]
+    convert! map_zero (s₀ • g)
+    rw [← LinearMap.mem_ker]; rw [← hτ]
+    exact Submodule.subset_span x.prop
+  choose s' hs' using this
+  let s₁ := ∏ i : τ, s' i
+  have : LinearMap.ker π <= LinearMap.ker (s₁ • Finsupp.linearCombination R i) := by
+    rw [← hτ]; rw [Submodule.span_le]
+    intro x hxσ
+    simp only [s₁]
+    rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [LinearMap.smul_apply]; rw [← Finset.prod_erase_mul _ _ (Finset.mem_univ ⟨x]; rw [hxσ⟩)]; rw [mul_smul]
+    convert! smul_zero _
+    exact hs' ⟨x, hxσ⟩
+  refine ⟨Submodule.liftQ _ _ this ∘ₗ
+    (LinearMap.quotKerEquivOfSurjective _ hπ).symm.toLinearMap, s₁ * s₀, ?_⟩
+  ext x
+  obtain ⟨x, rfl⟩ := hπ x
+  rw [← LinearMap.comp_apply]; rw [← LinearMap.comp_apply]; rw [mul_smul]; rw [LinearMap.smul_comp]; rw [← hi]; rw [← LinearMap.comp_smul]; rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]
+  simp
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.lsi, Function, Function.Surjective, Function.comp_apply, IsLocalizedModule, IsLocalizedModule.surj, LinearMap, LinearMap.coe_comp, LinearMap.range_eq_top.mp, Subtype, Subtype.range_val, Surjective, classical, coe_comp, comp_apply, linearCombination, range_eq_top, range_linearCombination
 -/
@@ -900,7 +1094,7 @@ lemma Module.exists_localizedMap_surjective_of_surjective
     apply IsLocalizedModule.linearMap_ext S f g
     simp [IsLocalizedModule.map_comp, hφ, LinearMap.smul_comp]
   refine ⟨φ, s, hmap, ?_⟩
-  simpa only [
+  simpa only [hmap] using! ((End.isUnit_iff _).mp (IsLocalizedModule.map_units g s)).2.comp hϕ
 
 中文:
 引理 模.存在_localizedMap_surjective_of_surjective
@@ -911,7 +1105,7 @@ lemma Module.exists_localizedMap_surjective_of_surjective
     apply IsLocalizedModule.linearMap_ext S f g
     simp [IsLocalizedModule.map_comp, hφ, LinearMap.smul_comp]
   refine ⟨φ, s, hmap, ?_⟩
-  simpa only [
+  simpa only [hmap] using! ((End.isUnit_iff _).mp (IsLocalizedModule.map_units g s)).2.comp hϕ
 
 Depends on / 依赖: End.isUnit_iff, FinitePresentation, FinitePresentation.exists_lift_of_isLocalizedModule, IsLocalizedModule, IsLocalizedModule.linearMap_ext, IsLocalizedModule.map, IsLocalizedModule.map_comp, IsLocalizedModule.map_units, LinearMap, LinearMap.smul_comp, exists_lift_of_isLocalizedModule, isUnit_iff, linearMap_ext, map_comp, map_units, smul_comp
 -/
@@ -940,7 +1134,10 @@ lemma Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule
   choose s hs using this
   obtain ⟨σ, hσ⟩ := hM
   use σ.prod s
-  rw [← sub_eq_zero]; rw [← LinearMap.ker_eq_top]; rw [← top_le_iff]; rw [← hσ
+  rw [← sub_eq_zero]; rw [← LinearMap.ker_eq_top]; rw [← top_le_iff]; rw [← hσ]; rw [Submodule.span_le]
+  intro x hx
+  simp only [SetLike.mem_coe, LinearMap.mem_ker, LinearMap.sub_apply, LinearMap.smul_apply,
+    sub_eq_zero, ← Finset.prod_erase_mul σ s hx, mul_smul, hs]
 
 中文:
 引理 模.有限.存在_smul_of_comp_eq_of_isLocalizedModule
@@ -951,7 +1148,10 @@ lemma Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule
   choose s hs using this
   obtain ⟨σ, hσ⟩ := hM
   use σ.prod s
-  rw [← sub_eq_zero]; rw [← LinearMap.ker_eq_top]; rw [← top_le_iff]; rw [← hσ
+  rw [← sub_eq_zero]; rw [← LinearMap.ker_eq_top]; rw [← top_le_iff]; rw [← hσ]; rw [Submodule.span_le]
+  intro x hx
+  simp only [SetLike.mem_coe, LinearMap.mem_ker, LinearMap.sub_apply, LinearMap.smul_apply,
+    sub_eq_zero, ← Finset.prod_erase_mul σ s hx, mul_smul, hs]
 
 Depends on / 依赖: Finset, Finset.prod_erase_mul, IsLocalizedModule, IsLocalizedModule.exists_of_eq, LinearMap, LinearMap.congr_fun, LinearMap.ker_eq_top, LinearMap.mem_ker, LinearMap.smul_apply, LinearMap.sub_apply, SetLike, SetLike.mem_coe, Submodule, Submodule.span_le, classical, congr_fun, exists_of_eq, ker_eq_top, mem_coe, mem_ker
 -/
@@ -983,7 +1183,52 @@ lemma exists_bijective_map_powers
   obtain ⟨l', s₀, H⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S f
     (e.symm.toLinearMap.comp g)
   have H₁ : g ∘ₗ l ∘ₗ l' = g ∘ₗ (s₀ • LinearMap.id) := by
-    ext a; simpa [-EmbeddingLike.apply_eq_iff_eq, e] using congr(e
+    ext a; simpa [-EmbeddingLike.apply_eq_iff_eq, e] using congr(e ($H a))
+  obtain ⟨s₁, hs₁⟩ := Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule S g _ _ H₁
+  have H₂ : f ∘ₗ l' ∘ₗ l = f ∘ₗ (s₀ • LinearMap.id) := by
+    rw [← LinearMap.comp_assoc]; rw [H]; rw [LinearMap.smul_comp]; rw [LinearMap.comp_assoc]; rw [← IsLocalizedModule.map_comp S f g l]; rw [← LinearMap.comp_assoc]
+    change s₀ • (e.symm.toLinearMap ∘ₗ e.toLinearMap) ∘ₗ _ = _
+    simp [LinearMap.comp_smul]
+  obtain ⟨s₂, hs₂⟩ := Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule S f _ _ H₂
+  refine ⟨s₀ * s₁ * s₂, (s₀ * s₁ * s₂).2, fun t ht => ?_⟩
+  let Rₛ := Localization (.powers t)
+  let lₛ := LocalizedModule.map (.powers t) l
+  have hu := IsLocalization.map_units (M := .powers t) Rₛ ⟨t, Submonoid.mem_powers t⟩
+  have hu₀ : IsUnit (algebraMap R Rₛ s₀) := isUnit_of_dvd_unit
+      (map_dvd (algebraMap R Rₛ) (dvd_trans ⟨s₁ * s₂, by simp [mul_assoc]⟩ ht)) hu
+  have hu₁ : IsUnit (algebraMap R Rₛ s₁) := isUnit_of_dvd_unit
+      (map_dvd (algebraMap R Rₛ) (dvd_trans ⟨s₀ * s₂, by ring⟩ ht)) hu
+  have hu₂ : IsUnit (algebraMap R Rₛ s₂) := isUnit_of_dvd_unit
+      (map_dvd (algebraMap R Rₛ) (dvd_trans ⟨s₀ * s₁, by ring⟩ ht)) hu
+  let lₛ' := LocalizedModule.map (.powers t) l'
+  have H_left : ((hu₀.unit⁻¹).1 • lₛ') ∘ₗ lₛ = LinearMap.id := by
+    apply ((Module.End.isUnit_iff _).mp (hu₂.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    apply ((Module.End.isUnit_iff _).mp (hu₀.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    simp only [Module.algebraMap_end_apply, algebraMap_smul, LinearMap.map_smul_of_tower]
+    rw [LinearMap.smul_comp]; rw [← smul_assoc s₀.1]; rw [Algebra.smul_def s₀.1]; rw [IsUnit.mul_val_inv]; rw [one_smul]
+    apply LinearMap.restrictScalars_injective R
+    apply IsLocalizedModule.ext (.powers t) (LocalizedModule.mkLinearMap (.powers t) M)
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap (.powers t) M))
+    ext x
+    have : s₂.1 • l' (l x) = s₂.1 • s₀.1 • x := congr($hs₂ x)
+    simp [lₛ, lₛ', LocalizedModule.smul'_mk, this]
+  have H_right : lₛ ∘ₗ ((hu₀.unit⁻¹).1 • lₛ') = LinearMap.id := by
+    apply ((Module.End.isUnit_iff _).mp (hu₁.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    apply ((Module.End.isUnit_iff _).mp (hu₀.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    simp only [Module.algebraMap_end_apply, algebraMap_smul, LinearMap.map_smul_of_tower]
+    rw [LinearMap.comp_smul]; rw [← smul_assoc s₀.1]; rw [Algebra.smul_def s₀.1]; rw [IsUnit.mul_val_inv]; rw [one_smul]
+    apply LinearMap.restrictScalars_injective R
+    apply IsLocalizedModule.ext (.powers t) (LocalizedModule.mkLinearMap (.powers t) N)
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap (.powers t) N))
+    ext x
+    have : s₁.1 • l (l' x) = s₁.1 • s₀.1 • x := congr($hs₁ x)
+    simp [lₛ, lₛ', LocalizedModule.smul'_mk, this]
+  let eₛ : LocalizedModule.Away t M ≃ₗ[Rₛ] LocalizedModule.Away t N :=
+    { __ := lₛ,
+      invFun := ((hu₀.unit⁻¹).1 • lₛ'),
+      left_inv := fun x => congr($H_left x),
+      right_inv := fun x => congr($H_right x) }
+  exact eₛ.bijective
 
 中文:
 引理 存在_bijective_map_powers
@@ -993,7 +1238,52 @@ lemma exists_bijective_map_powers
   obtain ⟨l', s₀, H⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S f
     (e.symm.toLinearMap.comp g)
   have H₁ : g ∘ₗ l ∘ₗ l' = g ∘ₗ (s₀ • LinearMap.id) := by
-    ext a; simpa [-EmbeddingLike.apply_eq_iff_eq, e] using congr(e
+    ext a; simpa [-EmbeddingLike.apply_eq_iff_eq, e] using congr(e ($H a))
+  obtain ⟨s₁, hs₁⟩ := Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule S g _ _ H₁
+  have H₂ : f ∘ₗ l' ∘ₗ l = f ∘ₗ (s₀ • LinearMap.id) := by
+    rw [← LinearMap.comp_assoc]; rw [H]; rw [LinearMap.smul_comp]; rw [LinearMap.comp_assoc]; rw [← IsLocalizedModule.map_comp S f g l]; rw [← LinearMap.comp_assoc]
+    change s₀ • (e.symm.toLinearMap ∘ₗ e.toLinearMap) ∘ₗ _ = _
+    simp [LinearMap.comp_smul]
+  obtain ⟨s₂, hs₂⟩ := Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule S f _ _ H₂
+  refine ⟨s₀ * s₁ * s₂, (s₀ * s₁ * s₂).2, fun t ht => ?_⟩
+  let Rₛ := Localization (.powers t)
+  let lₛ := LocalizedModule.map (.powers t) l
+  have hu := IsLocalization.map_units (M := .powers t) Rₛ ⟨t, Submonoid.mem_powers t⟩
+  have hu₀ : IsUnit (algebraMap R Rₛ s₀) := isUnit_of_dvd_unit
+      (map_dvd (algebraMap R Rₛ) (dvd_trans ⟨s₁ * s₂, by simp [mul_assoc]⟩ ht)) hu
+  have hu₁ : IsUnit (algebraMap R Rₛ s₁) := isUnit_of_dvd_unit
+      (map_dvd (algebraMap R Rₛ) (dvd_trans ⟨s₀ * s₂, by ring⟩ ht)) hu
+  have hu₂ : IsUnit (algebraMap R Rₛ s₂) := isUnit_of_dvd_unit
+      (map_dvd (algebraMap R Rₛ) (dvd_trans ⟨s₀ * s₁, by ring⟩ ht)) hu
+  let lₛ' := LocalizedModule.map (.powers t) l'
+  have H_left : ((hu₀.unit⁻¹).1 • lₛ') ∘ₗ lₛ = LinearMap.id := by
+    apply ((Module.End.isUnit_iff _).mp (hu₂.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    apply ((Module.End.isUnit_iff _).mp (hu₀.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    simp only [Module.algebraMap_end_apply, algebraMap_smul, LinearMap.map_smul_of_tower]
+    rw [LinearMap.smul_comp]; rw [← smul_assoc s₀.1]; rw [Algebra.smul_def s₀.1]; rw [IsUnit.mul_val_inv]; rw [one_smul]
+    apply LinearMap.restrictScalars_injective R
+    apply IsLocalizedModule.ext (.powers t) (LocalizedModule.mkLinearMap (.powers t) M)
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap (.powers t) M))
+    ext x
+    have : s₂.1 • l' (l x) = s₂.1 • s₀.1 • x := congr($hs₂ x)
+    simp [lₛ, lₛ', LocalizedModule.smul'_mk, this]
+  have H_right : lₛ ∘ₗ ((hu₀.unit⁻¹).1 • lₛ') = LinearMap.id := by
+    apply ((Module.End.isUnit_iff _).mp (hu₁.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    apply ((Module.End.isUnit_iff _).mp (hu₀.map (algebraMap Rₛ (Module.End Rₛ _)))).1
+    simp only [Module.algebraMap_end_apply, algebraMap_smul, LinearMap.map_smul_of_tower]
+    rw [LinearMap.comp_smul]; rw [← smul_assoc s₀.1]; rw [Algebra.smul_def s₀.1]; rw [IsUnit.mul_val_inv]; rw [one_smul]
+    apply LinearMap.restrictScalars_injective R
+    apply IsLocalizedModule.ext (.powers t) (LocalizedModule.mkLinearMap (.powers t) N)
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap (.powers t) N))
+    ext x
+    have : s₁.1 • l (l' x) = s₁.1 • s₀.1 • x := congr($hs₁ x)
+    simp [lₛ, lₛ', LocalizedModule.smul'_mk, this]
+  let eₛ : LocalizedModule.Away t M ≃ₗ[Rₛ] LocalizedModule.Away t N :=
+    { __ := lₛ,
+      invFun := ((hu₀.unit⁻¹).1 • lₛ'),
+      left_inv := fun x => congr($H_left x),
+      right_inv := fun x => congr($H_right x) }
+  exact eₛ.bijective
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Finite, FinitePresentation, LinearEquiv, LinearEquiv.ofBijective, LinearMap, LinearMap.comp_assoc, LinearMap.id, LinearMap.smul_comp, Module, Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule, Module.FinitePresentation.exists_lift_of_isLocalizedModule, apply_eq_iff_eq, comp_assoc, e.symm.toLinearMap.comp, exists_lift_of_isLocalizedModule, exists_smul_of_comp_eq_of_isLocalizedModule, ofBijective, smul_comp
 -/
@@ -1090,7 +1380,34 @@ lemma Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule
   obtain ⟨l', s, H⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S g (l ∘ₗ f)
   have : Function.Bijective (IsLocalizedModule.map S f g l') := by
     have : IsLocalizedModule.map S f g l' = (s • LinearMap.id) ∘ₗ l := by
-      apply IsLocalizedModule.ext S f (IsLocalizedModule.map_
+      apply IsLocalizedModule.ext S f (IsLocalizedModule.map_units g)
+      apply LinearMap.ext fun x => ?_
+      simp only [LinearMap.coe_comp, Function.comp_apply, IsLocalizedModule.map_apply]
+      rw [← LinearMap.comp_apply]; rw [H]
+      simp
+    rw [this]
+    exact ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units g s)).comp l.bijective
+  obtain ⟨r, hr, hr'⟩ := exists_bijective_map_powers S f g _ this
+  let rs : Submonoid R := (.powers <| r * s)
+  let Rᵣₛ := Localization rs
+  have hsu : IsUnit (algebraMap R Rᵣₛ s) := isUnit_of_dvd_unit
+      (hu := IsLocalization.map_units (M := rs) Rᵣₛ ⟨_, Submonoid.mem_powers _⟩)
+      (map_dvd (algebraMap R Rᵣₛ) ⟨r, mul_comm _ _⟩)
+  have : Function.Bijective ((hsu.unit⁻¹).1 • LocalizedModule.map rs l') :=
+    ((Module.End.isUnit_iff _).mp ((hsu.unit⁻¹).isUnit.map (algebraMap _ (End Rᵣₛ
+      (LocalizedModule rs N))))).comp (hr' (r * s) (dvd_mul_right _ _))
+  refine ⟨r * s, mul_mem hr s.2, LinearEquiv.ofBijective _ this, ?_⟩
+  apply IsLocalizedModule.ext rs (LocalizedModule.mkLinearMap rs M) fun x => map_units g
+    ⟨x.1, SetLike.le_def.mp (Submonoid.powers_le.mpr (mul_mem hr s.2)) x.2⟩
+  ext x
+  apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units g s)).1
+  have : forall x, g (l' x) = s.1 • (l (f x)) := LinearMap.congr_fun H
+  simp only [rs, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearEquiv.coe_coe,
+    Function.comp_apply, LocalizedModule.mkLinearMap_apply, LinearEquiv.ofBijective_apply,
+    LinearMap.smul_apply, LocalizedModule.map_mk, algebraMap_end_apply]
+  rw [← map_smul]; rw [← smul_assoc]; rw [Algebra.smul_def s.1]; rw [hsu.mul_val_inv]; rw [one_smul]
+  simp only [LocalizedModule.lift_mk, OneMemClass.coe_one, map_one, IsUnit.unit_one,
+    inv_one, Units.val_one, Module.End.one_apply, this]
 
 中文:
 引理 模.有限呈现.存在_lift_equiv_of_isLocalizedModule
@@ -1098,7 +1415,34 @@ lemma Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule
   obtain ⟨l', s, H⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S g (l ∘ₗ f)
   have : Function.Bijective (IsLocalizedModule.map S f g l') := by
     have : IsLocalizedModule.map S f g l' = (s • LinearMap.id) ∘ₗ l := by
-      apply IsLocalizedModule.ext S f (IsLocalizedModule.map_
+      apply IsLocalizedModule.ext S f (IsLocalizedModule.map_units g)
+      apply LinearMap.ext fun x => ?_
+      simp only [LinearMap.coe_comp, Function.comp_apply, IsLocalizedModule.map_apply]
+      rw [← LinearMap.comp_apply]; rw [H]
+      simp
+    rw [this]
+    exact ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units g s)).comp l.bijective
+  obtain ⟨r, hr, hr'⟩ := exists_bijective_map_powers S f g _ this
+  let rs : Submonoid R := (.powers <| r * s)
+  let Rᵣₛ := Localization rs
+  have hsu : IsUnit (algebraMap R Rᵣₛ s) := isUnit_of_dvd_unit
+      (hu := IsLocalization.map_units (M := rs) Rᵣₛ ⟨_, Submonoid.mem_powers _⟩)
+      (map_dvd (algebraMap R Rᵣₛ) ⟨r, mul_comm _ _⟩)
+  have : Function.Bijective ((hsu.unit⁻¹).1 • LocalizedModule.map rs l') :=
+    ((Module.End.isUnit_iff _).mp ((hsu.unit⁻¹).isUnit.map (algebraMap _ (End Rᵣₛ
+      (LocalizedModule rs N))))).comp (hr' (r * s) (dvd_mul_right _ _))
+  refine ⟨r * s, mul_mem hr s.2, LinearEquiv.ofBijective _ this, ?_⟩
+  apply IsLocalizedModule.ext rs (LocalizedModule.mkLinearMap rs M) fun x => map_units g
+    ⟨x.1, SetLike.le_def.mp (Submonoid.powers_le.mpr (mul_mem hr s.2)) x.2⟩
+  ext x
+  apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units g s)).1
+  have : forall x, g (l' x) = s.1 • (l (f x)) := LinearMap.congr_fun H
+  simp only [rs, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearEquiv.coe_coe,
+    Function.comp_apply, LocalizedModule.mkLinearMap_apply, LinearEquiv.ofBijective_apply,
+    LinearMap.smul_apply, LocalizedModule.map_mk, algebraMap_end_apply]
+  rw [← map_smul]; rw [← smul_assoc]; rw [Algebra.smul_def s.1]; rw [hsu.mul_val_inv]; rw [one_smul]
+  simp only [LocalizedModule.lift_mk, OneMemClass.coe_one, map_one, IsUnit.unit_one,
+    inv_one, Units.val_one, Module.End.one_apply, this]
 
 Depends on / 依赖: Bijective, FinitePresentation, Function, Function.Bijective, Function.comp_apply, IsLocalizedModule, IsLocalizedModule.ext, IsLocalizedModule.map, IsLocalizedModule.map_apply, IsLocalizedModule.map_units, LinearMap, LinearMap.coe_comp, LinearMap.comp_apply, LinearMap.ext, LinearMap.id, Module, Module.End.isUnit_iff, Module.FinitePresentation.exists_lift_of_isLocalizedModule, coe_comp, comp_apply
 -/
@@ -1158,7 +1502,19 @@ instance Module.FinitePresentation.isLocalizedModule_map
     constructor
     · exact fun _ _ e => LinearMap.ext fun m => this.left (LinearMap.congr_fun e m)
     · intro h
-      use ((IsLocalizedModule.map_u
+      use ((IsLocalizedModule.map_units (S := S) (f := g) s).unit⁻¹).1 ∘ₗ h
+      ext x
+      exact Module.End.isUnit_apply_inv_apply_of_isUnit
+        (IsLocalizedModule.map_units (S := S) (f := g) s) (h x)
+  · intro h
+    obtain ⟨h', s, e⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S g (h ∘ₗ f)
+    refine ⟨⟨h', s⟩, ?_⟩
+    apply IsLocalizedModule.ext S f (IsLocalizedModule.map_units g)
+    refine e.symm.trans (by ext; simp)
+  · intro h₁ h₂ e
+    apply Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule S g
+    ext x
+    simpa using LinearMap.congr_fun e (f x)
 
 中文:
 实例 模.有限呈现.isLocalizedModule_map
@@ -1171,7 +1527,19 @@ instance Module.FinitePresentation.isLocalizedModule_map
     constructor
     · exact fun _ _ e => LinearMap.ext fun m => this.left (LinearMap.congr_fun e m)
     · intro h
-      use ((IsLocalizedModule.map_u
+      use ((IsLocalizedModule.map_units (S := S) (f := g) s).unit⁻¹).1 ∘ₗ h
+      ext x
+      exact Module.End.isUnit_apply_inv_apply_of_isUnit
+        (IsLocalizedModule.map_units (S := S) (f := g) s) (h x)
+  · intro h
+    obtain ⟨h', s, e⟩ := Module.FinitePresentation.exists_lift_of_isLocalizedModule S g (h ∘ₗ f)
+    refine ⟨⟨h', s⟩, ?_⟩
+    apply IsLocalizedModule.ext S f (IsLocalizedModule.map_units g)
+    refine e.symm.trans (by ext; simp)
+  · intro h₁ h₂ e
+    apply Module.Finite.exists_smul_of_comp_eq_of_isLocalizedModule S g
+    ext x
+    simpa using LinearMap.congr_fun e (f x)
 
 Depends on / 依赖: FinitePresentation, IsLocalizedModule, IsLocalizedModule.map_units, LinearMap, LinearMap.congr_fun, LinearMap.ext, Module, Module.End.isUnit_apply_inv_apply_of_isUnit, Module.End.isUnit_iff, Module.FinitePresentation.exists_lift_of_isLoc, congr_fun, exists_lift_of_isLoc, isUnit_apply_inv_apply_of_isUnit, isUnit_iff, map_units, this.left
 -/
@@ -1245,7 +1613,23 @@ lemma IsLocalizedModule.exists_isLocalizedModule_powers_of_finitePresentation
     ⟨IsLocalizedModule.map_units f, fun y => ⟨⟨y, 1⟩, by simp⟩, by simpa using ⟨1, S.one_mem⟩⟩
   obtain ⟨r, hrp, H⟩ := exists_bijective_map_powers S
 f (.id (R := R) (M := M')) f by
-    convert! show Function.Bijective LinearMap.id from Func
+    convert! show Function.Bijective LinearMap.id from Function.bijective_id
+    apply IsLocalizedModule.ext S f
+    · exact IsLocalizedModule.map_units f
+    · simp [IsLocalizedModule.map_comp]
+  have hrp' : .powers r <= S := by simpa [Submonoid.powers_le]
+  refine ⟨r, hrp, ⟨fun x => IsLocalizedModule.map_units f ⟨x, hrp' x.2⟩, ?_, ?_⟩⟩
+  · intro y
+    obtain ⟨x, hx⟩ := (H _ dvd_rfl).2 (LocalizedModule.mkLinearMap _ _ y)
+    obtain ⟨⟨x, ⟨_, n, rfl⟩⟩, rfl⟩ := IsLocalizedModule.mk'_surjective
+      (.powers r) (LocalizedModule.mkLinearMap _ _) x
+    obtain ⟨m, hm⟩ : exists m, r ^ (m + n) • y = f (r ^ m • x) := by
+      simpa [LocalizedModule.map, IsLocalizedModule.mk_eq_mk', -IsLocalizedModule.mk'_one,
+        pow_add, mul_smul, IsLocalizedModule.mk'_eq_mk'_iff, Submonoid.mem_powers_iff,
+        Submonoid.smul_def] using hx
+    exact ⟨⟨_, ⟨_, _, rfl⟩⟩, hm⟩
+  · exact fun {x₁ x₂} hx => IsLocalizedModule.exists_of_eq (f := LocalizedModule.mkLinearMap
+      (.powers r) _) ((H _ dvd_rfl).1 (by simp [hx]))
 
 中文:
 引理 是Localized模.存在_isLocalizedModule_powers_of_finitePresentation
@@ -1254,7 +1638,23 @@ f (.id (R := R) (M := M')) f by
     ⟨IsLocalizedModule.map_units f, fun y => ⟨⟨y, 1⟩, by simp⟩, by simpa using ⟨1, S.one_mem⟩⟩
   obtain ⟨r, hrp, H⟩ := exists_bijective_map_powers S
 f (.id (R := R) (M := M')) f by
-    convert! show Function.Bijective LinearMap.id from Func
+    convert! show Function.Bijective LinearMap.id from Function.bijective_id
+    apply IsLocalizedModule.ext S f
+    · exact IsLocalizedModule.map_units f
+    · simp [IsLocalizedModule.map_comp]
+  have hrp' : .powers r <= S := by simpa [Submonoid.powers_le]
+  refine ⟨r, hrp, ⟨fun x => IsLocalizedModule.map_units f ⟨x, hrp' x.2⟩, ?_, ?_⟩⟩
+  · intro y
+    obtain ⟨x, hx⟩ := (H _ dvd_rfl).2 (LocalizedModule.mkLinearMap _ _ y)
+    obtain ⟨⟨x, ⟨_, n, rfl⟩⟩, rfl⟩ := IsLocalizedModule.mk'_surjective
+      (.powers r) (LocalizedModule.mkLinearMap _ _) x
+    obtain ⟨m, hm⟩ : exists m, r ^ (m + n) • y = f (r ^ m • x) := by
+      simpa [LocalizedModule.map, IsLocalizedModule.mk_eq_mk', -IsLocalizedModule.mk'_one,
+        pow_add, mul_smul, IsLocalizedModule.mk'_eq_mk'_iff, Submonoid.mem_powers_iff,
+        Submonoid.smul_def] using hx
+    exact ⟨⟨_, ⟨_, _, rfl⟩⟩, hm⟩
+  · exact fun {x₁ x₂} hx => IsLocalizedModule.exists_of_eq (f := LocalizedModule.mkLinearMap
+      (.powers r) _) ((H _ dvd_rfl).1 (by simp [hx]))
 
 Depends on / 依赖: Bijective, Function, Function.Bijective, Function.bijective_id, IsLocalizedModule, IsLocalizedModule.ext, IsLocalizedModule.map_comp, IsLocalizedModule.map_units, LinearMap, LinearMap.id, S.one_mem, Submonoid, Submonoid.powers_le, bijective_id, convert, exists_bijective_map_powers, map_comp, map_units, one_mem, powers
 -/
@@ -1436,7 +1836,13 @@ lemma Module.isBaseChange_map_of_finite_free
   let e₁ := TensorProduct.piRight R S S (fun _ : ι => R)
   let e₂ := (LinearEquiv.piCongrRight (fun _ => (LinearMap.ringLmapEquivSelf S S _).symm ≪≫ₗ
     (LinearEquiv.congrLeft (S otimes[R] N) S (AlgebraTensorModule.rid R S S).symm))) ≪≫ₗ
-    (
+    (LinearMap.lsum S (fun _ : ι => _) S) ≪≫ₗ (e₁.symm.congrLeft (S otimes[R] N) S)
+  let e₃ := (LinearMap.lsum R (fun _ : ι => R) R).symm ≪≫ₗ
+    LinearEquiv.piCongrRight (fun _ => LinearMap.ringLmapEquivSelf R R N)
+  refine IsBaseChange.of_equiv ((e₃.baseChange R S) ≪≫ₗ (TensorProduct.piRight R S S _) ≪≫ₗ e₂)
+    (fun f => TensorProduct.AlgebraTensorModule.curry_injective (LinearMap.ext fun s => ?_))
+  ext i
+  simpa [e₃, e₂, e₁] using (tmul_eq_smul_one_tmul s (f (Pi.single i 1))).symm
 
 中文:
 引理 模.isBaseChange_map_of_finite_free
@@ -1447,7 +1853,13 @@ lemma Module.isBaseChange_map_of_finite_free
   let e₁ := TensorProduct.piRight R S S (fun _ : ι => R)
   let e₂ := (LinearEquiv.piCongrRight (fun _ => (LinearMap.ringLmapEquivSelf S S _).symm ≪≫ₗ
     (LinearEquiv.congrLeft (S otimes[R] N) S (AlgebraTensorModule.rid R S S).symm))) ≪≫ₗ
-    (
+    (LinearMap.lsum S (fun _ : ι => _) S) ≪≫ₗ (e₁.symm.congrLeft (S otimes[R] N) S)
+  let e₃ := (LinearMap.lsum R (fun _ : ι => R) R).symm ≪≫ₗ
+    LinearEquiv.piCongrRight (fun _ => LinearMap.ringLmapEquivSelf R R N)
+  refine IsBaseChange.of_equiv ((e₃.baseChange R S) ≪≫ₗ (TensorProduct.piRight R S S _) ≪≫ₗ e₂)
+    (fun f => TensorProduct.AlgebraTensorModule.curry_injective (LinearMap.ext fun s => ?_))
+  ext i
+  simpa [e₃, e₂, e₁] using (tmul_eq_smul_one_tmul s (f (Pi.single i 1))).symm
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.rid, Fintype, Fintype.ofFinite, LinearEquiv, LinearEquiv.congrLeft, LinearEquiv.piCongrRight, LinearMap, LinearMap.lsum, LinearMap.ringLmapEquivSelf, TensorProduct, TensorProduct.piRight, classical, congrLeft, ofFinite, otimes, piCongrRight, piRight, ringLmapEquivSelf, symm.congrLeft
 -/
@@ -1477,7 +1889,17 @@ theorem Module.FinitePresentation.isBaseChange_map
   obtain ⟨n, m, f, g, hf, hfg⟩ := Module.FinitePresentation.exists_fin' R M
   refine IsBaseChange.of_left_exact S (f' := (f.baseChange S).lcomp S (S otimes[R] N))
     (g' := (g.baseChange S).lcomp S (S otimes[R] N)) _ _ _ ?_ ?_
-    (Module.isBaseChange_map_of_finite_free N S _) (Module.isBaseChan
+    (Module.isBaseChange_map_of_finite_free N S _) (Module.isBaseChange_map_of_finite_free N S _)
+    (exact_lcomp_of_exact_of_surjective _ hfg hf) (lcomp_injective_of_surjective f hf) ?_ ?_
+  · exact LinearMap.ext fun φ => TensorProduct.AlgebraTensorModule.curry_injective
+      (LinearMap.ext fun s => (LinearMap.ext fun m => (by simp)))
+  · exact LinearMap.ext fun φ => TensorProduct.AlgebraTensorModule.curry_injective
+      (LinearMap.ext fun s => (LinearMap.ext fun m => (by simp)))
+  · apply exact_lcomp_of_exact_of_surjective
+    · exact lTensor_exact S hfg hf
+    · exact LinearMap.lTensor_surjective S hf
+  · apply lcomp_injective_of_surjective
+    exact LinearMap.lTensor_surjective S hf
 
 中文:
 定理 模.有限呈现.isBaseChange_map
@@ -1486,7 +1908,17 @@ theorem Module.FinitePresentation.isBaseChange_map
   obtain ⟨n, m, f, g, hf, hfg⟩ := Module.FinitePresentation.exists_fin' R M
   refine IsBaseChange.of_left_exact S (f' := (f.baseChange S).lcomp S (S otimes[R] N))
     (g' := (g.baseChange S).lcomp S (S otimes[R] N)) _ _ _ ?_ ?_
-    (Module.isBaseChange_map_of_finite_free N S _) (Module.isBaseChan
+    (Module.isBaseChange_map_of_finite_free N S _) (Module.isBaseChange_map_of_finite_free N S _)
+    (exact_lcomp_of_exact_of_surjective _ hfg hf) (lcomp_injective_of_surjective f hf) ?_ ?_
+  · exact LinearMap.ext fun φ => TensorProduct.AlgebraTensorModule.curry_injective
+      (LinearMap.ext fun s => (LinearMap.ext fun m => (by simp)))
+  · exact LinearMap.ext fun φ => TensorProduct.AlgebraTensorModule.curry_injective
+      (LinearMap.ext fun s => (LinearMap.ext fun m => (by simp)))
+  · apply exact_lcomp_of_exact_of_surjective
+    · exact lTensor_exact S hfg hf
+    · exact LinearMap.lTensor_surjective S hf
+  · apply lcomp_injective_of_surjective
+    exact LinearMap.lTensor_surjective S hf
 
 Depends on / 依赖: AlgebraTensorModule, FinitePresentation, IsBaseChange, IsBaseChange.of_left_exact, LinearMap, LinearMap.ex, LinearMap.ext, Module, Module.FinitePresentation.exists_fin, Module.isBaseChange_map_of_finite_free, TensorProduct, TensorProduct.AlgebraTensorModule.curry_injective, baseChange, curry_injective, exact_lcomp_of_exact_of_surjective, exists_fin, f.baseChange, g.baseChange, isBaseChange_map_of_finite_free, lcomp_injective_of_surjective
 -/

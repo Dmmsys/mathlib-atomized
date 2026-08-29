@@ -352,7 +352,52 @@ let l' ← detailTrace "addNegEqProofs" addNegEqProofsIdx lidx
 detailTrace "mkNegOneLtZeroProof"
           return ((← mkNegOneLtZeroProof (← typeOfIneqProof h)), none) ::
             (l'.reverse.map fun ⟨e, i⟩ => (e, some i))
-      let input
+      let inputs := inputsTagged.map Prod.fst
+      trace[linarith.detail] "inputs:{indentD <| toMessageData (← inputs.mapM inferType)}"
+let (comps, max_var) ← detailTrace "linearFormsAndMaxVar"
+        linearFormsAndMaxVar transparency inputs
+      trace[linarith.detail] "comps:{indentD <| toMessageData comps}"
+      -- perform the elimination and fail if no contradiction is found.
+      let certificate : Std.HashMap Nat Nat ←
+        withTraceNode `linarith (fun _ => return m!" Invoking oracle") do
+          let certificate ←
+            try
+              oracle.produceCertificate comps max_var
+            catch e =>
+              trace[linarith] e.toMessageData
+              throwError "linarith failed to find a contradiction"
+          trace[linarith] "found a contradiction: {certificate.toList}"
+          return certificate
+      let (sm, zip, idxs) ←
+        withTraceNode `linarith (fun _ => return m!" Building final expression") do
+          let enum_inputs := inputsTagged.zipIdx
+          -- construct a list pairing nonzero coeffs with the proof of their corresponding
+          -- comparison and track the original index
+          let used := enum_inputs.filterMap fun ⟨⟨e, orig?⟩, n⟩ =>
+            (certificate[n]?).map fun c => (e, c, orig?)
+          let zip := used.map fun ⟨e, c, _⟩ => (e, c)
+          let mls ← used.mapM fun ⟨e, c, _⟩ => do mulExpr c (← leftOfIneqProof e)
+          -- `sm` is the sum of input terms, scaled to cancel out all variables.
+          let sm ← addExprs mls
+          -- let sm ← instantiateMVars sm
+          trace[linarith] "{indentD sm}\nshould be both 0 and negative"
+          let idxs :=
+            (used.foldl (fun acc (_, _, orig?) =>
+                match orig? with
+                | some i => i :: acc
+                | none => acc) []).eraseDups
+          return (sm, zip, idxs)
+      -- we prove that `sm = 0`, typically with `ring`.
+let sm_eq_zero ← detailTrace "proveEqZeroUsing" proveEqZeroUsing discharger sm
+      -- we also prove that `sm < 0`
+let sm_lt_zero ← detailTrace "mkLTZeroProof" mkLTZeroProof zip
+      let pf ← detailTrace "Linarith.lt_irrefl" do
+        -- this is a contradiction.
+        let pftp ← inferType sm_lt_zero
+        let ⟨_, nep, _⟩ ← g.rewrite pftp sm_eq_zero
+        let pf' ← mkAppM ``Eq.mp #[nep, sm_lt_zero]
+        mkAppM ``Linarith.lt_irrefl #[pf']
+      return (pf, idxs)
 
 中文:
 定义 proveFalseByLinarith
@@ -363,7 +408,52 @@ let l' ← detailTrace "addNegEqProofs" addNegEqProofsIdx lidx
 detailTrace "mkNegOneLtZeroProof"
           return ((← mkNegOneLtZeroProof (← typeOfIneqProof h)), none) ::
             (l'.reverse.map fun ⟨e, i⟩ => (e, some i))
-      let input
+      let inputs := inputsTagged.map Prod.fst
+      trace[linarith.detail] "inputs:{indentD <| toMessageData (← inputs.mapM inferType)}"
+let (comps, max_var) ← detailTrace "linearFormsAndMaxVar"
+        linearFormsAndMaxVar transparency inputs
+      trace[linarith.detail] "comps:{indentD <| toMessageData comps}"
+      -- perform the elimination and fail if no contradiction is found.
+      let certificate : Std.HashMap Nat Nat ←
+        withTraceNode `linarith (fun _ => return m!" Invoking oracle") do
+          let certificate ←
+            try
+              oracle.produceCertificate comps max_var
+            catch e =>
+              trace[linarith] e.toMessageData
+              throwError "linarith failed to find a contradiction"
+          trace[linarith] "found a contradiction: {certificate.toList}"
+          return certificate
+      let (sm, zip, idxs) ←
+        withTraceNode `linarith (fun _ => return m!" Building final expression") do
+          let enum_inputs := inputsTagged.zipIdx
+          -- construct a list pairing nonzero coeffs with the proof of their corresponding
+          -- comparison and track the original index
+          let used := enum_inputs.filterMap fun ⟨⟨e, orig?⟩, n⟩ =>
+            (certificate[n]?).map fun c => (e, c, orig?)
+          let zip := used.map fun ⟨e, c, _⟩ => (e, c)
+          let mls ← used.mapM fun ⟨e, c, _⟩ => do mulExpr c (← leftOfIneqProof e)
+          -- `sm` is the sum of input terms, scaled to cancel out all variables.
+          let sm ← addExprs mls
+          -- let sm ← instantiateMVars sm
+          trace[linarith] "{indentD sm}\nshould be both 0 and negative"
+          let idxs :=
+            (used.foldl (fun acc (_, _, orig?) =>
+                match orig? with
+                | some i => i :: acc
+                | none => acc) []).eraseDups
+          return (sm, zip, idxs)
+      -- we prove that `sm = 0`, typically with `ring`.
+let sm_eq_zero ← detailTrace "proveEqZeroUsing" proveEqZeroUsing discharger sm
+      -- we also prove that `sm < 0`
+let sm_lt_zero ← detailTrace "mkLTZeroProof" mkLTZeroProof zip
+      let pf ← detailTrace "Linarith.lt_irrefl" do
+        -- this is a contradiction.
+        let pftp ← inferType sm_lt_zero
+        let ⟨_, nep, _⟩ ← g.rewrite pftp sm_eq_zero
+        let pf' ← mkAppM ``Eq.mp #[nep, sm_lt_zero]
+        mkAppM ``Linarith.lt_irrefl #[pf']
+      return (pf, idxs)
 
 Depends on / 依赖: l.zipIdx, zipIdx
 -/

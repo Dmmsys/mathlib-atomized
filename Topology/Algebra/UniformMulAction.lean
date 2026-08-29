@@ -636,7 +636,10 @@ instance [SMul
     have hmn : m • n • x = (Completion.map (SMul.smul m) ∘ Completion.map (SMul.smul n)) x := rfl
     have hnm : n • m • x = (Completion.map (SMul.smul n) ∘ Completion.map (SMul.smul m)) x := rfl
     rw [hmn]; rw [hnm]; rw [map_comp]; rw [map_comp]
-    · exact congr_arg (fun f => Co
+    · exact congr_arg (fun f => Completion.map f x) (funext (smul_comm _ _))
+    repeat' exact uniformContinuous_const_smul _⟩
+
+@[to_additive]
 
 中文:
 实例 [标量乘法
@@ -645,7 +648,10 @@ instance [SMul
     have hmn : m • n • x = (Completion.map (SMul.smul m) ∘ Completion.map (SMul.smul n)) x := rfl
     have hnm : n • m • x = (Completion.map (SMul.smul n) ∘ Completion.map (SMul.smul m)) x := rfl
     rw [hmn]; rw [hnm]; rw [map_comp]; rw [map_comp]
-    · exact congr_arg (fun f => Co
+    · exact congr_arg (fun f => Completion.map f x) (funext (smul_comm _ _))
+    repeat' exact uniformContinuous_const_smul _⟩
+
+@[to_additive]
 
 Depends on / 依赖: Completion, Completion.map, SMul.smul, congr_arg, map_comp, repeat, smul_comm, uniformContinuous_const_smul
 -/

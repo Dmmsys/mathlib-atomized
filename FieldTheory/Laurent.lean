@@ -50,7 +50,7 @@ theorem taylor_mem_nonZeroDivisors
   have : x = taylor (r - r) x := by simp
   rwa [this, sub_eq_add_neg, ← taylor_taylor, ← taylor_mul,
     LinearMap.map_eq_zero_iff _ (taylor_injective _), mul_right_mem_nonZeroDivisors_eq_zero_iff hp,
-    LinearMap.map_eq_zero_iff _ (taylor_inject
+    LinearMap.map_eq_zero_iff _ (taylor_injective _)] at hx
 
 中文:
 定理 taylor_mem_nonZeroDivisors
@@ -62,7 +62,7 @@ theorem taylor_mem_nonZeroDivisors
   have : x = taylor (r - r) x := by simp
   rwa [this, sub_eq_add_neg, ← taylor_taylor, ← taylor_mul,
     LinearMap.map_eq_zero_iff _ (taylor_injective _), mul_right_mem_nonZeroDivisors_eq_zero_iff hp,
-    LinearMap.map_eq_zero_iff _ (taylor_inject
+    LinearMap.map_eq_zero_iff _ (taylor_injective _)] at hx
 
 Depends on / 依赖: LinearMap, LinearMap.map_eq_zero_iff, map_eq_zero_iff, mem_nonZeroDivisors_iff_right, mul_right_mem_nonZeroDivisors_eq_zero_iff, sub_eq_add_neg, taylor, taylor_injective, taylor_mul, taylor_taylor
 -/

@@ -643,7 +643,9 @@ theorem edgeDensity_sub_edgeDensity_le_one_sub_mul
   refine le_trans ?_ (mul_le_of_le_one_right ?_ (edgeDensity_le_one r s₂ t₂))
   · rw [sub_mul, one_mul]
   refine sub_nonneg_of_le (mul_le_one₀ ?_ ?_ ?_)
-  · exact div_le_one_of_le₀ ((@Nat.cast_le Rat).2 (card_l
+  · exact div_le_one_of_le₀ ((@Nat.cast_le Rat).2 (card_le_card hs)) (Nat.cast_nonneg _)
+  · apply div_nonneg <;> exact mod_cast Nat.zero_le _
+  · exact div_le_one_of_le₀ ((@Nat.cast_le Rat).2 (card_le_card ht)) (Nat.cast_nonneg _)
 
 中文:
 定理 edgeDensity_sub_edgeDensity_le_one_sub_mul
@@ -653,7 +655,9 @@ theorem edgeDensity_sub_edgeDensity_le_one_sub_mul
   refine le_trans ?_ (mul_le_of_le_one_right ?_ (edgeDensity_le_one r s₂ t₂))
   · rw [sub_mul, one_mul]
   refine sub_nonneg_of_le (mul_le_one₀ ?_ ?_ ?_)
-  · exact div_le_one_of_le₀ ((@Nat.cast_le Rat).2 (card_l
+  · exact div_le_one_of_le₀ ((@Nat.cast_le Rat).2 (card_le_card hs)) (Nat.cast_nonneg _)
+  · apply div_nonneg <;> exact mod_cast Nat.zero_le _
+  · exact div_le_one_of_le₀ ((@Nat.cast_le Rat).2 (card_le_card ht)) (Nat.cast_nonneg _)
 
 Depends on / 依赖: Nat.cast_le, Nat.cast_nonneg, Nat.zero_le, card_le_card, cast_le, cast_nonneg, div_nonneg, edgeDensity_le_one, le_trans, mod_cast, mul_edgeDensity_le_edgeDensity, mul_le_of_le_one_right, one_mul, sub_le_sub_left, sub_mul, sub_nonneg_of_le, zero_le
 -/
@@ -676,14 +680,16 @@ theorem abs_edgeDensity_sub_edgeDensity_le_one_sub_mul
   statement: (hs : s₂ subseteq s₁) (ht : t₂ subseteq t₁)
   proof: by
   refine abs_sub_le_iff.2 ⟨edgeDensity_sub_edgeDensity_le_one_sub_mul r hs ht hs₂ ht₂, ?_⟩
-  rw [← add_sub_cancel_right (edgeDensity r s₁ t₁) (edgeDensity (fun x y => ¬r x y) s₁ t₁)]; rw [← add_sub_cancel_right (edgeDensity r s₂ t₂) (edgeDensity (fun x y => ¬r x y) s₂ t₂)]; rw [edgeDensity_add_ed
+  rw [← add_sub_cancel_right (edgeDensity r s₁ t₁) (edgeDensity (fun x y => ¬r x y) s₁ t₁)]; rw [← add_sub_cancel_right (edgeDensity r s₂ t₂) (edgeDensity (fun x y => ¬r x y) s₂ t₂)]; rw [edgeDensity_add_edgeDensity_compl _ (hs₂.mono hs) (ht₂.mono ht)]; rw [edgeDensity_add_edgeDensity_compl _ hs₂ ht₂]; rw [sub_sub_sub_cancel_left]
+  exact edgeDensity_sub_edgeDensity_le_one_sub_mul _ hs ht hs₂ ht₂
 
 中文:
 定理 abs_edgeDensity_sub_edgeDensity_le_one_sub_mul
   结论: (hs : s₂ subseteq s₁) (ht : t₂ subseteq t₁)
   证明: by
   refine abs_sub_le_iff.2 ⟨edgeDensity_sub_edgeDensity_le_one_sub_mul r hs ht hs₂ ht₂, ?_⟩
-  rw [← add_sub_cancel_right (edgeDensity r s₁ t₁) (edgeDensity (fun x y => ¬r x y) s₁ t₁)]; rw [← add_sub_cancel_right (edgeDensity r s₂ t₂) (edgeDensity (fun x y => ¬r x y) s₂ t₂)]; rw [edgeDensity_add_ed
+  rw [← add_sub_cancel_right (edgeDensity r s₁ t₁) (edgeDensity (fun x y => ¬r x y) s₁ t₁)]; rw [← add_sub_cancel_right (edgeDensity r s₂ t₂) (edgeDensity (fun x y => ¬r x y) s₂ t₂)]; rw [edgeDensity_add_edgeDensity_compl _ (hs₂.mono hs) (ht₂.mono ht)]; rw [edgeDensity_add_edgeDensity_compl _ hs₂ ht₂]; rw [sub_sub_sub_cancel_left]
+  exact edgeDensity_sub_edgeDensity_le_one_sub_mul _ hs ht hs₂ ht₂
 
 Depends on / 依赖: abs_sub_le_iff, add_sub_cancel_right, edgeDensity, edgeDensity_add_edgeDensity_compl, edgeDensity_sub_edgeDensity_le_one_sub_mul, sub_sub_sub_cancel_left
 -/
@@ -708,7 +714,23 @@ theorem abs_edgeDensity_sub_edgeDensity_le_two_mul_sub_sq
   rw [← sub_pos] at hδ₁
   obtain rfl | hs₂' := s₂.eq_empty_or_nonempty
   · rw [Finset.card_empty, Nat.cast_zero] at hs₂
-    simpa [edgeDensity, (nonpos_of_mul_nonpos_right hs₂ hδ₁).antis
+    simpa [edgeDensity, (nonpos_of_mul_nonpos_right hs₂ hδ₁).antisymm (Nat.cast_nonneg _)] using hδ'
+  obtain rfl | ht₂' := t₂.eq_empty_or_nonempty
+  · rw [Finset.card_empty, Nat.cast_zero] at ht₂
+    simpa [edgeDensity, (nonpos_of_mul_nonpos_right ht₂ hδ₁).antisymm (Nat.cast_nonneg _)] using hδ'
+  have hr : 2 * δ - δ ^ 2 = 1 - (1 - δ) * (1 - δ) := by ring
+  rw [hr]
+  norm_cast
+  refine
+    (Rat.cast_le.2 <| abs_edgeDensity_sub_edgeDensity_le_one_sub_mul r hs ht hs₂' ht₂').trans ?_
+  push_cast
+  have h₁ := hs₂'.mono hs
+  have h₂ := ht₂'.mono ht
+  gcongr
+  · refine (le_div_iff₀ ?_).2 hs₂
+    exact mod_cast h₁.card_pos
+  · refine (le_div_iff₀ ?_).2 ht₂
+    exact mod_cast h₂.card_pos
 
 中文:
 定理 abs_edgeDensity_sub_edgeDensity_le_two_mul_sub_sq
@@ -721,7 +743,23 @@ theorem abs_edgeDensity_sub_edgeDensity_le_two_mul_sub_sq
   rw [← sub_pos] at hδ₁
   obtain rfl | hs₂' := s₂.eq_empty_or_nonempty
   · rw [Finset.card_empty, Nat.cast_zero] at hs₂
-    simpa [edgeDensity, (nonpos_of_mul_nonpos_right hs₂ hδ₁).antis
+    simpa [edgeDensity, (nonpos_of_mul_nonpos_right hs₂ hδ₁).antisymm (Nat.cast_nonneg _)] using hδ'
+  obtain rfl | ht₂' := t₂.eq_empty_or_nonempty
+  · rw [Finset.card_empty, Nat.cast_zero] at ht₂
+    simpa [edgeDensity, (nonpos_of_mul_nonpos_right ht₂ hδ₁).antisymm (Nat.cast_nonneg _)] using hδ'
+  have hr : 2 * δ - δ ^ 2 = 1 - (1 - δ) * (1 - δ) := by ring
+  rw [hr]
+  norm_cast
+  refine
+    (Rat.cast_le.2 <| abs_edgeDensity_sub_edgeDensity_le_one_sub_mul r hs ht hs₂' ht₂').trans ?_
+  push_cast
+  have h₁ := hs₂'.mono hs
+  have h₂ := ht₂'.mono ht
+  gcongr
+  · refine (le_div_iff₀ ?_).2 hs₂
+    exact mod_cast h₁.card_pos
+  · refine (le_div_iff₀ ?_).2 ht₂
+    exact mod_cast h₂.card_pos
 
 Depends on / 依赖: Finset, Finset.card_empty, Nat.cast_nonneg, Nat.cast_zero, antisymm, card_empty, cast_nonneg, cast_zero, edgeDensity, eq_empty_or_nonempty, le.trans, nonpos_of_mul_nonpos_right, sub_nonneg, sub_pos
 -/
@@ -767,7 +805,8 @@ theorem abs_edgeDensity_sub_edgeDensity_le_two_mul
   rw [two_mul]
   refine (abs_sub _ _).trans (add_le_add (le_trans ?_ h) (le_trans ?_ h)) <;>
     · rw [abs_of_nonneg]
-      
+      · exact mod_cast edgeDensity_le_one r _ _
+      · exact mod_cast edgeDensity_nonneg r _ _
 
 中文:
 定理 abs_edgeDensity_sub_edgeDensity_le_two_mul
@@ -779,7 +818,8 @@ theorem abs_edgeDensity_sub_edgeDensity_le_two_mul
   rw [two_mul]
   refine (abs_sub _ _).trans (add_le_add (le_trans ?_ h) (le_trans ?_ h)) <;>
     · rw [abs_of_nonneg]
-      
+      · exact mod_cast edgeDensity_le_one r _ _
+      · exact mod_cast edgeDensity_nonneg r _ _
 
 Depends on / 依赖: abs_edgeDensity_sub_edgeDensity_le_two_mul_sub_sq, abs_of_nonneg, abs_sub, add_le_add, edgeDensity_le_one, edgeDensity_nonneg, hscard, htcard, le_trans, lt_or_ge, mod_cast, sq_nonneg, sub_le_self_iff, two_mul
 -/
@@ -1184,7 +1224,8 @@ theorem card_interedges_add_card_interedges_compl
     refine filter_congr fun x hx => ?_
     rw [mem_product] at hx
     rw [compl_adj]; rw [and_iff_right (h.forall_ne_finset hx.1 hx.2)]
-  rw [this]; rw [←
+  rw [this]; rw [← card_union_of_disjoint]; rw [filter_union_filter_not_eq]
+  exact disjoint_filter.2 fun _ _ => Classical.not_not.2
 
 中文:
 定理 card_interedges_add_card_interedges_compl
@@ -1195,7 +1236,8 @@ theorem card_interedges_add_card_interedges_compl
     refine filter_congr fun x hx => ?_
     rw [mem_product] at hx
     rw [compl_adj]; rw [and_iff_right (h.forall_ne_finset hx.1 hx.2)]
-  rw [this]; rw [←
+  rw [this]; rw [← card_union_of_disjoint]; rw [filter_union_filter_not_eq]
+  exact disjoint_filter.2 fun _ _ => Classical.not_not.2
 
 Depends on / 依赖: Classical, Classical.not_not, G.Adj, and_iff_right, card_product, card_union_of_disjoint, compl_adj, disjoint_filter, filter_congr, filter_union_filter_not_eq, forall_ne_finset, h.forall_ne_finset, interedges_def, mem_product, not_not
 -/

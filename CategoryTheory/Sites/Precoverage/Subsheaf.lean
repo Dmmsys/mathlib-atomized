@@ -111,7 +111,7 @@ lemma isSheafFor_subsheafify
   rw [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor]
   refine ⟨.of_mono G.ι h'.isSeparatedFor, fun x hx => ?_⟩
   obtain ⟨t, ht, uniq⟩ := h' (x.map G.ι) (hx.map G.ι)
-  exact ⟨⟨t, .amalgamate h (hx.map G.ι) (fun _ _ hr => (x _ hr).property) ht⟩, .of_m
+  exact ⟨⟨t, .amalgamate h (hx.map G.ι) (fun _ _ hr => (x _ hr).property) ht⟩, .of_mono _ ht⟩
 
 中文:
 引理 isSheafFor_subsheafify
@@ -121,7 +121,7 @@ lemma isSheafFor_subsheafify
   rw [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor]
   refine ⟨.of_mono G.ι h'.isSeparatedFor, fun x hx => ?_⟩
   obtain ⟨t, ht, uniq⟩ := h' (x.map G.ι) (hx.map G.ι)
-  exact ⟨⟨t, .amalgamate h (hx.map G.ι) (fun _ _ hr => (x _ hr).property) ht⟩, .of_m
+  exact ⟨⟨t, .amalgamate h (hx.map G.ι) (fun _ _ hr => (x _ hr).property) ht⟩, .of_mono _ ht⟩
 
 Depends on / 依赖: K.subsheafify, Presieve, Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, amalgamate, hx.map, isSeparatedFor, isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, of_mono, property, subsheafify, x.map
 -/
@@ -178,7 +178,9 @@ definition Witness.eval
     /- If all elements of the family are evaluatable and the resulting family is compatible, take
     the glued section. Otherwise, return `none`. -/
     if hall : forall (W : C) (r : W ⟶ _) (hr : R r), (vals W r hr).isSome then
-      let y : R.Fa
+      let y : R.FamilyOfElements F := fun _ _ hr => (vals _ _ _).get (hall _ _ hr)
+      if hy : y.Compatible then some (hF _ hR _ hy).choose else none
+    else none
 
 中文:
 定义 Witness.eval
@@ -187,7 +189,9 @@ definition Witness.eval
     /- If all elements of the family are evaluatable and the resulting family is compatible, take
     the glued section. Otherwise, return `none`. -/
     if hall : forall (W : C) (r : W ⟶ _) (hr : R r), (vals W r hr).isSome then
-      let y : R.Fa
+      let y : R.FamilyOfElements F := fun _ _ hr => (vals _ _ _).get (hall _ _ hr)
+      if hy : y.Compatible then some (hF _ hR _ hy).choose else none
+    else none
 -/
 def Witness.eval (hF : forall ⦃X : C⦄ (R : Presieve X), R in K X -> Presieve.IsSheafFor F R)
     (ι : C -> Type max u v) (t : forall X, ι X -> F.obj (.op X)) :
@@ -219,7 +223,21 @@ lemma small_subsheafify_of_small
   have (x : F.obj (.op X)) (hx : K.SubsheafClosure 𝒮 X x) :
       exists (i : Witness K ι X), Witness.eval hF _ t i = x := by
     induction hx with
-    | base h
+    | base ha => exact ⟨.base _ (equivShrink _ ⟨_, ha⟩), by grind [Witness.eval]⟩
+    | restrict f ha ih =>
+      obtain ⟨i, hi⟩ := ih
+      use .restrict f i
+      grind [Witness.eval]
+    | amalgamate hR hy hmem ht ih =>
+      choose x hx using ih
+      exact ⟨.amalgamate hR x, by simp [Witness.eval, hx]; grind⟩
+  choose i hi using this
+  have : Function.Injective (fun x : { x // K.SubsheafClosure 𝒮 X x } => i x x.prop) := by
+    intro x y hxy
+    ext
+    apply Option.some_injective
+    simp [← hi _ x.prop, ← hi _ y.prop, hxy]
+  exact small_of_injective this
 
 中文:
 引理 small_subsheafify_of_small
@@ -230,7 +248,21 @@ lemma small_subsheafify_of_small
   have (x : F.obj (.op X)) (hx : K.SubsheafClosure 𝒮 X x) :
       exists (i : Witness K ι X), Witness.eval hF _ t i = x := by
     induction hx with
-    | base h
+    | base ha => exact ⟨.base _ (equivShrink _ ⟨_, ha⟩), by grind [Witness.eval]⟩
+    | restrict f ha ih =>
+      obtain ⟨i, hi⟩ := ih
+      use .restrict f i
+      grind [Witness.eval]
+    | amalgamate hR hy hmem ht ih =>
+      choose x hx using ih
+      exact ⟨.amalgamate hR x, by simp [Witness.eval, hx]; grind⟩
+  choose i hi using this
+  have : Function.Injective (fun x : { x // K.SubsheafClosure 𝒮 X x } => i x x.prop) := by
+    intro x y hxy
+    ext
+    apply Option.some_injective
+    simp [← hi _ x.prop, ← hi _ y.prop, hxy]
+  exact small_of_injective this
 
 Depends on / 依赖: F.obj, K.SubsheafClosure, Opposite, Opposite.op, Shrink, SubsheafClosure, Witness, Witness.eval, amalgama, amalgamate, equivShrink, restrict
 -/

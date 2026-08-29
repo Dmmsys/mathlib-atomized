@@ -38,7 +38,7 @@ theorem isIndObject_pi
   suffices (∏ᶜ f ≅ colimit (pointwiseProduct F)) from
     (isIndObject_colimit _ _ (fun i => h _)).map this.inv
   refine Pi.mapIso (fun s => ?_) ≪≫ (asIso (colimitPointwiseProductToProductColimit F)).symm
-  exact IsColimit.coconePointUniqueUpToIs
+  exact IsColimit.coconePointUniqueUpToIso (hf s).presentation.isColimit (colimit.isColimit _)
 
 中文:
 定理 isIndObject_pi
@@ -48,7 +48,7 @@ theorem isIndObject_pi
   suffices (∏ᶜ f ≅ colimit (pointwiseProduct F)) from
     (isIndObject_colimit _ _ (fun i => h _)).map this.inv
   refine Pi.mapIso (fun s => ?_) ≪≫ (asIso (colimitPointwiseProductToProductColimit F)).symm
-  exact IsColimit.coconePointUniqueUpToIs
+  exact IsColimit.coconePointUniqueUpToIso (hf s).presentation.isColimit (colimit.isColimit _)
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, Pi.mapIso, coconePointUniqueUpToIso, colimit, colimit.isColimit, colimitPointwiseProductToProductColimit, isColimit, isIndObject_colimit, mapIso, pointwiseProduct, presentation, presentation.F, presentation.isColimit, this.inv, yoneda
 -/

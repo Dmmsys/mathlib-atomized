@@ -158,7 +158,16 @@ definition extractS
     let .const n _ := f | return none
     let mut args := e.getAppArgs
     let mut info := (← getFunInfoNArgs f args.size).paramInfo
-    for _ in [0 : ar
+    for _ in [0 : args.size - 1] do
+      if info.back!.isInstImplicit then
+        args := args.pop
+        info := info.pop
+      else
+        break
+    let x := args.back!
+    unless ← Meta.isType x do return none
+    return some ({name := n, args := args.pop}, x)
+  | _ => return none
 
 中文:
 定义 extractS
@@ -171,7 +180,16 @@ definition extractS
     let .const n _ := f | return none
     let mut args := e.getAppArgs
     let mut info := (← getFunInfoNArgs f args.size).paramInfo
-    for _ in [0 : ar
+    for _ in [0 : args.size - 1] do
+      if info.back!.isInstImplicit then
+        args := args.pop
+        info := info.pop
+      else
+        break
+    let x := args.back!
+    unless ← Meta.isType x do return none
+    return some ({name := n, args := args.pop}, x)
+  | _ => return none
 -/
 private partial def extractS (e : Expr) : TermElabM (Option (SRec × Expr)) :=
   match e with
@@ -204,7 +222,9 @@ definition applyS
     let v ← elabAppArgs f #[] ((S.args.push x).map .expr)
       (expectedType? := none) (explicit := true) (ellipsis := false)
     -- Now elaborate any remaining instance arguments
-    elabAppArgs v #[] #[] (expectedType? := none) (explicit := false)
+    elabAppArgs v #[] #[] (expectedType? := none) (explicit := false) (ellipsis := false)
+  catch _ =>
+    return none
 
 中文:
 定义 applyS
@@ -214,7 +234,9 @@ definition applyS
     let v ← elabAppArgs f #[] ((S.args.push x).map .expr)
       (expectedType? := none) (explicit := true) (ellipsis := false)
     -- Now elaborate any remaining instance arguments
-    elabAppArgs v #[] #[] (expectedType? := none) (explicit := false)
+    elabAppArgs v #[] #[] (expectedType? := none) (explicit := false) (ellipsis := false)
+  catch _ =>
+    return none
 -/
 private def applyS (S : SRec) (x : Expr) : TermElabM (Option Expr) :=
   try
@@ -239,7 +261,8 @@ definition hasCoeS
   withLocalDeclD `v fromType fun v => do
     match ← coerceSimple? v toType with
     | .some _ => return true
-    | .none => return
+    | .none => return false
+    | .undef => return false -- TODO: should we do something smarter here?
 
 中文:
 定义 hasCoeS
@@ -251,7 +274,8 @@ definition hasCoeS
   withLocalDeclD `v fromType fun v => do
     match ← coerceSimple? v toType with
     | .some _ => return true
-    | .none => return
+    | .none => return false
+    | .undef => return false -- TODO: should we do something smarter here?
 -/
 private def hasCoeS (fromS toS : SRec) (x : Expr) : TermElabM Bool := do
   let some fromType ← applyS fromS x | return false
@@ -392,7 +416,10 @@ withRef ref withTermInfoContext' .anonymous ref do
       let lhs ← toExprCore lhs
       let mut rhs ← toExprCore rhs
       mkBinOp f lhs rhs
-  | .macroEx
+  | .macroExpansion macroName stx stx' nested =>
+withRef stx withTermInfoContext' macroName stx do
+      withMacroExpansion stx stx' do
+        toExprCore nested
 
 中文:
 定义 toExprCore
@@ -406,7 +433,10 @@ withRef ref withTermInfoContext' .anonymous ref do
       let lhs ← toExprCore lhs
       let mut rhs ← toExprCore rhs
       mkBinOp f lhs rhs
-  | .macroEx
+  | .macroExpansion macroName stx stx' nested =>
+withRef stx withTermInfoContext' macroName stx do
+      withMacroExpansion stx stx' do
+        toExprCore nested
 -/
 private def toExprCore (t : Tree) : TermElabM Expr := do
   match t with
@@ -482,7 +512,11 @@ definition toExpr
     let result ← toExprCore tree
     ensureHasType expectedType? result
   else
-    let result ← toExprCore (← applyCoe tre
+    let result ← toExprCore (← applyCoe tree r.maxS?.get!)
+    trace[Elab.fbinop] "result: {result}"
+    ensureHasType expectedType? result
+
+@[term_elab prodSyntax]
 
 中文:
 定义 toExpr
@@ -494,7 +528,11 @@ definition toExpr
     let result ← toExprCore tree
     ensureHasType expectedType? result
   else
-    let result ← toExprCore (← applyCoe tre
+    let result ← toExprCore (← applyCoe tree r.maxS?.get!)
+    trace[Elab.fbinop] "result: {result}"
+    ensureHasType expectedType? result
+
+@[term_elab prodSyntax]
 -/
 private def toExpr (tree : Tree) (expectedType? : Option Expr) : TermElabM Expr := do
   let r ← analyze tree expectedType?

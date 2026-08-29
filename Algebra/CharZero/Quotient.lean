@@ -33,7 +33,19 @@ theorem zsmul_mem_zmultiples_iff_exists_sub_div
   simp_rw [AddSubgroup.mem_zmultiples_iff, div_eq_mul_inv, ← smul_mul_assoc, eq_sub_iff_add_eq]
   have hz' : (z : R) != 0 := Int.cast_ne_zero.mpr hz
   conv_rhs => simp +singlePass only [← (mul_right_injective₀ hz').eq_iff]
-  simp_rw [← zsmul_eq_mul, smul_add,
+  simp_rw [← zsmul_eq_mul, smul_add, ← mul_smul_comm, zsmul_eq_mul (z : R)⁻¹, mul_inv_cancel₀ hz',
+    mul_one, ← natCast_zsmul, smul_smul, ← add_smul]
+  constructor
+  · rintro ⟨k, h⟩
+    simp_rw [← h]
+    refine ⟨⟨(k % z).toNat, ?_⟩, k / z, ?_⟩
+    · rw [← Int.ofNat_lt, Int.toNat_of_nonneg (Int.emod_nonneg _ hz)]
+      exact (Int.emod_lt_abs _ hz).trans_eq (Int.abs_eq_natAbs _)
+    rw [Fin.val_mk]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ hz)]
+    nth_rewrite 3 [← Int.mul_ediv_add_emod k z]
+    rfl
+  · rintro ⟨k, n, h⟩
+    exact ⟨_, h⟩
 
 中文:
 定理 zsmul_mem_zmultiples_iff_存在_sub_div
@@ -43,7 +55,19 @@ theorem zsmul_mem_zmultiples_iff_exists_sub_div
   simp_rw [AddSubgroup.mem_zmultiples_iff, div_eq_mul_inv, ← smul_mul_assoc, eq_sub_iff_add_eq]
   have hz' : (z : R) != 0 := Int.cast_ne_zero.mpr hz
   conv_rhs => simp +singlePass only [← (mul_right_injective₀ hz').eq_iff]
-  simp_rw [← zsmul_eq_mul, smul_add,
+  simp_rw [← zsmul_eq_mul, smul_add, ← mul_smul_comm, zsmul_eq_mul (z : R)⁻¹, mul_inv_cancel₀ hz',
+    mul_one, ← natCast_zsmul, smul_smul, ← add_smul]
+  constructor
+  · rintro ⟨k, h⟩
+    simp_rw [← h]
+    refine ⟨⟨(k % z).toNat, ?_⟩, k / z, ?_⟩
+    · rw [← Int.ofNat_lt, Int.toNat_of_nonneg (Int.emod_nonneg _ hz)]
+      exact (Int.emod_lt_abs _ hz).trans_eq (Int.abs_eq_natAbs _)
+    rw [Fin.val_mk]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ hz)]
+    nth_rewrite 3 [← Int.mul_ediv_add_emod k z]
+    rfl
+  · rintro ⟨k, n, h⟩
+    exact ⟨_, h⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mem_zmultiples_iff, Int.cast_ne_zero.mpr, Int.ofNa, add_smul, cast_ne_zero, conv_rhs, div_eq_mul_inv, eq_iff, eq_sub_iff_add_eq, mem_zmultiples_iff, mul_one, mul_smul_comm, natCast_zsmul, simp_rw, singlePass, smul_add, smul_mul_assoc, smul_smul, zsmul_eq_mul
 -/

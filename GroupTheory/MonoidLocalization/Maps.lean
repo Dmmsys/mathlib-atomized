@@ -126,7 +126,14 @@ definition lift
   body: g (f.sec z).1 * (IsUnit.liftRight (g.domRestrict S) hg (f.sec z).2)⁻¹
   map_one' := by rw [mul_inv_left, mul_one]; exact f.eq_of_eq hg (by rw [← sec_spec, one_mul])
   map_mul' x y := by
-    rw [mul_inv_left hg]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_right hg]; rw [mul_comm _ (g (f.sec y).1
+    rw [mul_inv_left hg]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_right hg]; rw [mul_comm _ (g (f.sec y).1)]; rw [←
+      mul_assoc]; rw [← mul_assoc]; rw [mul_inv_right hg]
+    repeat rw [← g.map_mul]
+    refine f.eq_of_eq hg ?_
+    simp_rw [map_mul, sec_spec', ← toMonoidHom_apply]
+    ac_rfl
+
+@[to_additive]
 
 中文:
 定义 lift
@@ -134,7 +141,14 @@ definition lift
   定义体: g (f.sec z).1 * (IsUnit.liftRight (g.domRestrict S) hg (f.sec z).2)⁻¹
   map_one' := by rw [mul_inv_left, mul_one]; exact f.eq_of_eq hg (by rw [← sec_spec, one_mul])
   map_mul' x y := by
-    rw [mul_inv_left hg]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_right hg]; rw [mul_comm _ (g (f.sec y).1
+    rw [mul_inv_left hg]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_right hg]; rw [mul_comm _ (g (f.sec y).1)]; rw [←
+      mul_assoc]; rw [← mul_assoc]; rw [mul_inv_right hg]
+    repeat rw [← g.map_mul]
+    refine f.eq_of_eq hg ?_
+    simp_rw [map_mul, sec_spec', ← toMonoidHom_apply]
+    ac_rfl
+
+@[to_additive]
 
 Depends on / 依赖: IsUnit, IsUnit.liftRight, domRestrict, f.sec, g.domRestrict, liftRight
 -/
@@ -630,7 +644,13 @@ theorem lift_surjective_iff
     obtain ⟨z, hz⟩ := H v
     obtain ⟨x, hx⟩ := f.surj z
     use x
-    rw [← hz]; rw [f.eq_mk'_iff_mul_eq.2 hx]; rw [lift_mk']; rw [mul_assoc]; rw [mul_comm _ (g ↑x.2)]; rw [← MonoidHom.domRestrict_apply]; rw [IsUnit.mul_liftRight_inv (g.domRestrict S) hg]; rw [mul_one
+    rw [← hz]; rw [f.eq_mk'_iff_mul_eq.2 hx]; rw [lift_mk']; rw [mul_assoc]; rw [mul_comm _ (g ↑x.2)]; rw [← MonoidHom.domRestrict_apply]; rw [IsUnit.mul_liftRight_inv (g.domRestrict S) hg]; rw [mul_one]
+  · intro H v
+    obtain ⟨x, hx⟩ := H v
+    use f.mk' x.1 x.2
+    rw [lift_mk']; rw [mul_inv_left hg]; rw [mul_comm]; rw [← hx]
+
+@[to_additive]
 
 中文:
 定理 lift_surjective_iff
@@ -640,7 +660,13 @@ theorem lift_surjective_iff
     obtain ⟨z, hz⟩ := H v
     obtain ⟨x, hx⟩ := f.surj z
     use x
-    rw [← hz]; rw [f.eq_mk'_iff_mul_eq.2 hx]; rw [lift_mk']; rw [mul_assoc]; rw [mul_comm _ (g ↑x.2)]; rw [← MonoidHom.domRestrict_apply]; rw [IsUnit.mul_liftRight_inv (g.domRestrict S) hg]; rw [mul_one
+    rw [← hz]; rw [f.eq_mk'_iff_mul_eq.2 hx]; rw [lift_mk']; rw [mul_assoc]; rw [mul_comm _ (g ↑x.2)]; rw [← MonoidHom.domRestrict_apply]; rw [IsUnit.mul_liftRight_inv (g.domRestrict S) hg]; rw [mul_one]
+  · intro H v
+    obtain ⟨x, hx⟩ := H v
+    use f.mk' x.1 x.2
+    rw [lift_mk']; rw [mul_inv_left hg]; rw [mul_comm]; rw [← hx]
+
+@[to_additive]
 
 Depends on / 依赖: IsUnit, IsUnit.mul_liftRight_inv, MonoidHom, MonoidHom.domRestrict_apply, _iff_mul_eq, domRestrict, domRestrict_apply, eq_mk, f.eq_mk, f.mk, f.surj, g.domRestrict, lift_mk, mul_assoc, mul_comm, mul_inv_left, mul_liftRight_inv, mul_one
 -/
@@ -675,7 +701,7 @@ theorem lift_injective_iff
     obtain ⟨_, _⟩ := f.surj z
     obtain ⟨_, _⟩ := f.surj w
     rw [← f.mk'_sec z]; rw [← f.mk'_sec w]
-    exact (mul_inv f.m
+    exact (mul_inv f.map_units).2 ((H _ _).2 <| (mul_inv hg).1 h)
 
 中文:
 定理 lift_injective_iff
@@ -691,7 +717,7 @@ theorem lift_injective_iff
     obtain ⟨_, _⟩ := f.surj z
     obtain ⟨_, _⟩ := f.surj w
     rw [← f.mk'_sec z]; rw [← f.mk'_sec w]
-    exact (mul_inv f.m
+    exact (mul_inv f.map_units).2 ((H _ _).2 <| (mul_inv hg).1 h)
 
 Depends on / 依赖: _sec, eq_of_eq, f.eq_of_eq, f.lift_eq, f.map_units, f.mk, f.surj, lift_eq, map_units, mul_inv
 -/
@@ -954,7 +980,7 @@ theorem map_comp_map
   change j _ * j (l (g _)) = j (l _) * _
   rw [← map_mul j]; rw [← map_mul j]; rw [← l.map_mul]; rw [← l.map_mul]
   refine k.comp_eq_of_eq hl j ?_
-  rw [map_mul k]; rw [map_mul k]; rw [sec_spec']; rw 
+  rw [map_mul k]; rw [map_mul k]; rw [sec_spec']; rw [mul_assoc]; rw [map_mul_right]
 
 中文:
 定理 map_comp_map
@@ -966,7 +992,7 @@ theorem map_comp_map
   change j _ * j (l (g _)) = j (l _) * _
   rw [← map_mul j]; rw [← map_mul j]; rw [← l.map_mul]; rw [← l.map_mul]
   refine k.comp_eq_of_eq hl j ?_
-  rw [map_mul k]; rw [map_mul k]; rw [sec_spec']; rw 
+  rw [map_mul k]; rw [map_mul k]; rw [sec_spec']; rw [mul_assoc]; rw [map_mul_right]
 
 Depends on / 依赖: comp_eq_of_eq, k.comp_eq_of_eq, l.map_mul, map_mul, map_mul_right, mul_assoc, mul_inv_left, mul_inv_right, sec_spec
 -/
@@ -1024,7 +1050,13 @@ theorem map_injective_of_surjOn_or_injective
   have ⟨z', w', x, hxz, hxw⟩ := surj₂ f z w
   have : k (g z') = k (g w') := by rw [← ifkg, ← ifkg, ← hxz, ← hxw, map_mul, map_mul, hizw]
   obtain surj | inj := or
-  · have ⟨⟨c, hc'⟩, eq⟩ := k.exists_of_
+  · have ⟨⟨c, hc'⟩, eq⟩ := k.exists_of_eq this
+    obtain ⟨c, hc, rfl⟩ := surj hc'
+    simp_rw [← map_mul, hg.eq_iff] at eq
+    rw [← (f.map_units x).mul_left_inj]; rw [hxz]; rw [hxw]; rw [f.eq_iff_exists]
+    exact ⟨⟨c, hc⟩, eq⟩
+  · apply (f.map_units x).mul_right_cancel
+    rw [hxz]; rw [hxw]; rw [hg (inj this)]
 
 中文:
 定理 map_injective_of_surjOn_or_injective
@@ -1034,7 +1066,13 @@ theorem map_injective_of_surjOn_or_injective
   have ⟨z', w', x, hxz, hxw⟩ := surj₂ f z w
   have : k (g z') = k (g w') := by rw [← ifkg, ← ifkg, ← hxz, ← hxw, map_mul, map_mul, hizw]
   obtain surj | inj := or
-  · have ⟨⟨c, hc'⟩, eq⟩ := k.exists_of_
+  · have ⟨⟨c, hc'⟩, eq⟩ := k.exists_of_eq this
+    obtain ⟨c, hc, rfl⟩ := surj hc'
+    simp_rw [← map_mul, hg.eq_iff] at eq
+    rw [← (f.map_units x).mul_left_inj]; rw [hxz]; rw [hxw]; rw [f.eq_iff_exists]
+    exact ⟨⟨c, hc⟩, eq⟩
+  · apply (f.map_units x).mul_right_cancel
+    rw [hxz]; rw [hxw]; rw [hg (inj this)]
 -/
 @[to_additive] theorem map_injective_of_surjOn_or_injective
     (or : (S : Set M).SurjOn g T ∨ Injective k) (hg : Injective g) :
@@ -1262,6 +1300,7 @@ definition ofMulEquivOfLocalizations
       ⟨x, show v * k (f _) = k (f _) by rw [← hx, map_mul, ← hz]⟩)
     fun x y => (k.apply_eq_iff_eq.trans f.eq_iff_exists).1
 
+@[to_additive (attr := simp)]
 
 中文:
 定义 ofMulEquivOfLocalizations
@@ -1273,6 +1312,7 @@ definition ofMulEquivOfLocalizations
       ⟨x, show v * k (f _) = k (f _) by rw [← hx, map_mul, ← hz]⟩)
     fun x y => (k.apply_eq_iff_eq.trans f.eq_iff_exists).1
 
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: apply_eq_iff_eq, eq_iff_exists, f.eq_iff_exists, f.surj, f.toMonoidHom, isUnit_comp, k.apply_eq_iff_eq.trans, k.surjective, k.toMonoidHom, k.toMonoidHom.comp, map_mul, surjective, toLocalizationMap, toMonoidHom
 -/
@@ -1550,7 +1590,21 @@ definition ofMulEquivOfDom
       let ⟨z, hz⟩ := f.map_units ⟨k y, H ▸ Set.mem_image_of_mem k y.2⟩
       ⟨z, hz⟩)
     (fun z =>
-      let ⟨x,
+      let ⟨x, hx⟩ := f.surj z
+      let ⟨v, hv⟩ := k.surjective x.1
+      let ⟨w, hw⟩ := k.surjective x.2
+      ⟨(v, ⟨w, H' ▸ show k w in S from hw.symm ▸ x.2.2⟩), by
+        simp_rw [MonoidHom.comp_apply, MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_coe, hv, hw]
+        dsimp
+        rw [hx]⟩)
+    fun x y => by
+      rw [MonoidHom.comp_apply]; rw [MonoidHom.comp_apply]; rw [MulEquiv.toMonoidHom_eq_coe]; rw [MonoidHom.coe_coe]; rw [toMonoidHom_apply]; rw [toMonoidHom_apply]; rw [f.eq_iff_exists]
+      rintro ⟨c, hc⟩
+      let ⟨d, hd⟩ := k.surjective c
+      refine ⟨⟨d, H' ▸ show k d in S from hd.symm ▸ c.2⟩, ?_⟩
+      rw [← hd]; rw [← map_mul k]; rw [← map_mul k] at hc; exact k.injective hc
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 ofMulEquivOfDom
@@ -1562,7 +1616,21 @@ definition ofMulEquivOfDom
       let ⟨z, hz⟩ := f.map_units ⟨k y, H ▸ Set.mem_image_of_mem k y.2⟩
       ⟨z, hz⟩)
     (fun z =>
-      let ⟨x,
+      let ⟨x, hx⟩ := f.surj z
+      let ⟨v, hv⟩ := k.surjective x.1
+      let ⟨w, hw⟩ := k.surjective x.2
+      ⟨(v, ⟨w, H' ▸ show k w in S from hw.symm ▸ x.2.2⟩), by
+        simp_rw [MonoidHom.comp_apply, MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_coe, hv, hw]
+        dsimp
+        rw [hx]⟩)
+    fun x y => by
+      rw [MonoidHom.comp_apply]; rw [MonoidHom.comp_apply]; rw [MulEquiv.toMonoidHom_eq_coe]; rw [MonoidHom.coe_coe]; rw [toMonoidHom_apply]; rw [toMonoidHom_apply]; rw [f.eq_iff_exists]
+      rintro ⟨c, hc⟩
+      let ⟨d, hd⟩ := k.surjective c
+      refine ⟨⟨d, H' ▸ show k d in S from hd.symm ▸ c.2⟩, ?_⟩
+      rw [← hd]; rw [← map_mul k]; rw [← map_mul k] at hc; exact k.injective hc
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_coe, MonoidHom.comp_apply, MulEquiv, MulEquiv.toMonoidHom_eq_coe, S.comap, Set.mem_image_of_mem, SetLike, SetLike.coe_injective, coe_coe, coe_injective, comp_apply, f.map_units, f.surj, f.toMonoidHom.comp, hw.symm, injective, k.surjective, k.toEquiv.injective, k.toMonoidHom
 -/

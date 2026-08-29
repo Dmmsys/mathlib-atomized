@@ -33,6 +33,8 @@ lemma prod_Icc_of_even_eq_range
   | succ N ih =>
     rw [Nat.cast_add]; rw [Nat.cast_one]; rw [Icc_succ_succ]; rw [prod_union (by simp)]; rw [prod_pair (by lia)]; rw [ih]; rw [prod_range_succ _ (N + 1)]; rw [hf]; rw [← pow_two]; rw [div_mul_eq_mul_div]; rw [← mul_pow]; rw [Nat.cast_succ]
 
+@[to_additive]
+
 中文:
 引理 prod_Icc_of_even_eq_range
   条件: {α : 类型} [交换群 α] {f : 整数 -> α} (hf : f.Even) (N : 自然数)
@@ -41,6 +43,8 @@ lemma prod_Icc_of_even_eq_range
   | zero => simp [sq]
   | succ N ih =>
     rw [Nat.cast_add]; rw [Nat.cast_one]; rw [Icc_succ_succ]; rw [prod_union (by simp)]; rw [prod_pair (by lia)]; rw [ih]; rw [prod_range_succ _ (N + 1)]; rw [hf]; rw [← pow_two]; rw [div_mul_eq_mul_div]; rw [← mul_pow]; rw [Nat.cast_succ]
+
+@[to_additive]
 
 Depends on / 依赖: Icc_succ_succ, Nat.cast_add, Nat.cast_one, Nat.cast_succ, cast_add, cast_one, cast_succ, div_mul_eq_mul_div, mul_pow, pow_two, prod_pair, prod_range_succ, prod_union
 -/

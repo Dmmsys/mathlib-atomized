@@ -39,7 +39,9 @@ definition noncomputable
     classical
     simp [coeff_mul, MonoidAlgebra.ext_iff, Finsupp.ext_iff, ← MulOpposite.unop_inj,
       unop_finsuppSum, sum_mapRange_index, apply_ite unop, mapAddEquiv]
-    simpa using fun _ _ _ => 
+    simpa using fun _ _ _ => Finsupp.sum_comm ..
+
+@[to_additive (dont_translate := R)]
 
 中文:
 定义 noncomputable
@@ -49,7 +51,9 @@ definition noncomputable
     classical
     simp [coeff_mul, MonoidAlgebra.ext_iff, Finsupp.ext_iff, ← MulOpposite.unop_inj,
       unop_finsuppSum, sum_mapRange_index, apply_ite unop, mapAddEquiv]
-    simpa using fun _ _ _ => 
+    simpa using fun _ _ _ => Finsupp.sum_comm ..
+
+@[to_additive (dont_translate := R)]
 -/
 protected noncomputable def opRingEquiv : R[M]ᵐᵒᵖ ≃+* Rᵐᵒᵖ[Mᵐᵒᵖ] where
   toAddEquiv :=

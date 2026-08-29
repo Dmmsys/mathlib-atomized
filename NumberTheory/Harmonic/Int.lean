@@ -64,7 +64,11 @@ theorem padicValRat_two_harmonic
     · simp
     rw [harmonic_succ]
     have key : padicValRat 2 (harmonic n) != padicValRat 2 (↑(n + 1))⁻¹ := by
-      rw [ih]; rw [padicValRat.inv]; rw [padicValRat.of_nat]; rw [Ne]; rw [neg_inj]; rw [Nat.c
+      rw [ih]; rw [padicValRat.inv]; rw [padicValRat.of_nat]; rw [Ne]; rw [neg_inj]; rw [Nat.cast_inj]
+      exact Nat.log_ne_padicValNat_succ hn
+    rw [padicValRat.add_eq_min (harmonic_succ n ▸ (harmonic_pos n.succ_ne_zero).ne')
+        (harmonic_pos hn).ne' (inv_ne_zero (Nat.cast_ne_zero.mpr n.succ_ne_zero)) key]; rw [ih]; rw [padicValRat.inv]; rw [padicValRat.of_nat]; rw [min_neg_neg]; rw [neg_inj]; rw [← Nat.cast_max]; rw [Nat.cast_inj]
+    exact Nat.max_log_padicValNat_succ_eq_log_succ n
 
 中文:
 定理 padicValRat_two_harmonic
@@ -78,7 +82,11 @@ theorem padicValRat_two_harmonic
     · simp
     rw [harmonic_succ]
     have key : padicValRat 2 (harmonic n) != padicValRat 2 (↑(n + 1))⁻¹ := by
-      rw [ih]; rw [padicValRat.inv]; rw [padicValRat.of_nat]; rw [Ne]; rw [neg_inj]; rw [Nat.c
+      rw [ih]; rw [padicValRat.inv]; rw [padicValRat.of_nat]; rw [Ne]; rw [neg_inj]; rw [Nat.cast_inj]
+      exact Nat.log_ne_padicValNat_succ hn
+    rw [padicValRat.add_eq_min (harmonic_succ n ▸ (harmonic_pos n.succ_ne_zero).ne')
+        (harmonic_pos hn).ne' (inv_ne_zero (Nat.cast_ne_zero.mpr n.succ_ne_zero)) key]; rw [ih]; rw [padicValRat.inv]; rw [padicValRat.of_nat]; rw [min_neg_neg]; rw [neg_inj]; rw [← Nat.cast_max]; rw [Nat.cast_inj]
+    exact Nat.max_log_padicValNat_succ_eq_log_succ n
 
 Depends on / 依赖: Nat.cast_inj, Nat.cast_ne_zero.mpr, Nat.log_ne_padicValNat_succ, add_eq_min, cast_inj, cast_ne_zero, eq_or_ne, harmonic, harmonic_pos, harmonic_succ, inv_ne_zero, log_ne_padicValNat_succ, n.succ_ne_zero, neg_inj, of_nat, padicVal, padicValRat, padicValRat.add_eq_min, padicValRat.inv, padicValRat.of_nat
 -/

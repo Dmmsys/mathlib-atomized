@@ -609,7 +609,8 @@ theorem comap_mabs_atTop
       (sup_le tendsto_mabs_atBot_atTop.le_comap tendsto_mabs_atTop_atTop.le_comap)
   rintro ⟨a, b⟩ -
   refine ⟨max (a⁻¹) b, trivial, fun x hx => ?_⟩
-  rw [mem_preimage]; rw [mem_Ici]; rw [le_mabs'];
+  rw [mem_preimage]; rw [mem_Ici]; rw [le_mabs']; rw [max_le_iff]; rw [← min_inv_inv']; rw [le_min_iff]; rw [inv_inv] at hx
+  exact hx.imp And.left And.right
 
 中文:
 定理 comap_mabs_atTop
@@ -621,7 +622,8 @@ theorem comap_mabs_atTop
       (sup_le tendsto_mabs_atBot_atTop.le_comap tendsto_mabs_atTop_atTop.le_comap)
   rintro ⟨a, b⟩ -
   refine ⟨max (a⁻¹) b, trivial, fun x hx => ?_⟩
-  rw [mem_preimage]; rw [mem_Ici]; rw [le_mabs'];
+  rw [mem_preimage]; rw [mem_Ici]; rw [le_mabs']; rw [max_le_iff]; rw [← min_inv_inv']; rw [le_min_iff]; rw [inv_inv] at hx
+  exact hx.imp And.left And.right
 
 Depends on / 依赖: And.left, And.right, atBot_basis, atBot_basis.sup, atTop_basis, atTop_basis.comap, hx.imp, inv_inv, le_antisymm, le_basis_iff, le_comap, le_mabs, le_min_iff, max_le_iff, mem_Ici, mem_preimage, min_inv_inv, sup_le, tendsto_mabs_atBot_atTop, tendsto_mabs_atBot_atTop.le_comap
 -/

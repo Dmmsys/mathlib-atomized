@@ -176,6 +176,26 @@ lemma sylvesterDeriv_updateRow
   rcases ne_or_eq i (2 * f.natDegree - 2) with hi' | rfl
   · -- Top part of matrix
     rw [Matrix.updateRow_ne (Fin.ne_of_val_ne hi')]; rw [Matrix.updateRow_ne (Fin.ne_of_val_ne hi')]
+  · -- Bottom row
+    simp only [sylvester, Fin.addCases, mem_Icc, coeff_derivative, eq_rec_constant, leadingCoeff,
+      Matrix.updateRow_self, Matrix.updateRow_apply, ↓reduceIte, Pi.smul_apply, smul_eq_mul,
+      mul_ite, mul_one, mul_zero, Matrix.of_apply, Fin.castLT_mk, tsub_le_iff_right, Fin.cast_mk,
+      Fin.subNat_mk, dite_eq_ite]
+    split_ifs
+    on_goal 2 => rw [show f.natDegree = 1 by lia]
+    on_goal 3 =>
+      rw [← Nat.cast_one (R := R)]; rw [← Nat.cast_add]; rw [show f.natDegree = 1 by lia]
+      norm_num
+    on_goal 6 =>
+      rw [← Nat.cast_one (R := R)]; rw [← Nat.cast_add]
+      #adaptation_note
+      /--
+      Prior to nightly-2025-09-09,
+      these two steps were not needed (i.e. `grind` just finished from here)
+      -/
+      have : 2 * f.natDegree - 2 - (j - (f.natDegree - 1)) + 1 = f.natDegree := by grind
+      simp [this]
+    all_goals grind
 
 中文:
 引理 sylvesterDeriv_updateRow
@@ -188,6 +208,26 @@ lemma sylvesterDeriv_updateRow
   rcases ne_or_eq i (2 * f.natDegree - 2) with hi' | rfl
   · -- Top part of matrix
     rw [Matrix.updateRow_ne (Fin.ne_of_val_ne hi')]; rw [Matrix.updateRow_ne (Fin.ne_of_val_ne hi')]
+  · -- Bottom row
+    simp only [sylvester, Fin.addCases, mem_Icc, coeff_derivative, eq_rec_constant, leadingCoeff,
+      Matrix.updateRow_self, Matrix.updateRow_apply, ↓reduceIte, Pi.smul_apply, smul_eq_mul,
+      mul_ite, mul_one, mul_zero, Matrix.of_apply, Fin.castLT_mk, tsub_le_iff_right, Fin.cast_mk,
+      Fin.subNat_mk, dite_eq_ite]
+    split_ifs
+    on_goal 2 => rw [show f.natDegree = 1 by lia]
+    on_goal 3 =>
+      rw [← Nat.cast_one (R := R)]; rw [← Nat.cast_add]; rw [show f.natDegree = 1 by lia]
+      norm_num
+    on_goal 6 =>
+      rw [← Nat.cast_one (R := R)]; rw [← Nat.cast_add]
+      #adaptation_note
+      /--
+      Prior to nightly-2025-09-09,
+      these two steps were not needed (i.e. `grind` just finished from here)
+      -/
+      have : 2 * f.natDegree - 2 - (j - (f.natDegree - 1)) + 1 = f.natDegree := by grind
+      simp [this]
+    all_goals grind
 
 Depends on / 依赖: Bottom, Fin.addCases, Fin.ne_of_val_ne, Matrix, Matrix.updateRow_apply, Matrix.updateRow_ne, Matrix.updateRow_self, Pi.smul_apply, addCases, coeff_derivative, dif_neg, eq_rec_constant, f.natDegree, leadingCoeff, matrix, mem_Icc, mul_ite, mul_one, natDegree, ne_of_val_ne
 -/
@@ -319,7 +359,13 @@ lemma resultant_comm
   dsimp
   simp only [Fin.cast_lt_cast, Units.coe_prod, apply_ite, Units.val_one, Units.val_neg,
     Int.reduceNeg, Int.cast_prod, Int.cast_one, Int.cast_neg]
-  simp_rw [
+  simp_rw [← finSumFinEquiv.prod_comp, ← Finset.prod_map_equiv finSumFinEquiv.symm]
+  simp only [Equiv.symm_apply_apply, ← Fin.val_fin_lt, Equiv.symm_symm, Function.comp_apply,
+    ← Finset.prod_ite_mem_eq (Finset.map _ _), Finset.mem_map_equiv, Finset.mem_Ioi,
+    Fintype.prod_sum_type, finSumFinEquiv_apply_left, Fin.val_castAdd, Sum.swap_inl,
+    finSumFinEquiv_apply_right, Fin.val_natAdd, Sum.swap_inr, add_lt_add_iff_left,
+    ← ite_not (α := R) (p := _ < _) (y := 1), ← ite_and, and_not_self]
+  simp [(Fin.isLt _).trans_le, (Fin.isLt _).le.trans, pow_mul]
 
 中文:
 引理 resultant_comm
@@ -330,7 +376,13 @@ lemma resultant_comm
   dsimp
   simp only [Fin.cast_lt_cast, Units.coe_prod, apply_ite, Units.val_one, Units.val_neg,
     Int.reduceNeg, Int.cast_prod, Int.cast_one, Int.cast_neg]
-  simp_rw [
+  simp_rw [← finSumFinEquiv.prod_comp, ← Finset.prod_map_equiv finSumFinEquiv.symm]
+  simp only [Equiv.symm_apply_apply, ← Fin.val_fin_lt, Equiv.symm_symm, Function.comp_apply,
+    ← Finset.prod_ite_mem_eq (Finset.map _ _), Finset.mem_map_equiv, Finset.mem_Ioi,
+    Fintype.prod_sum_type, finSumFinEquiv_apply_left, Fin.val_castAdd, Sum.swap_inl,
+    finSumFinEquiv_apply_right, Fin.val_natAdd, Sum.swap_inr, add_lt_add_iff_left,
+    ← ite_not (α := R) (p := _ < _) (y := 1), ← ite_and, and_not_self]
+  simp [(Fin.isLt _).trans_le, (Fin.isLt _).le.trans, pow_mul]
 
 Depends on / 依赖: Equiv.Perm.sign_eq_prod_prod_Ioi, Equiv.symm_apply_apply, Equiv.symm_symm, Fin.cast_lt_cast, Fin.val_fin_lt, Finset, Finset.map, Finset.prod_ite_mem_eq, Finset.prod_map_equiv, Function, Function.comp_apply, Int.cast_neg, Int.cast_one, Int.cast_prod, Int.reduceNeg, Matrix, Matrix.det_reindex, Units.coe_prod, Units.val_neg, Units.val_one
 -/
@@ -474,7 +526,46 @@ lemma resultant_add_mul_monomial_right
   let M₁ := f.sylvester (g + f * monomial k r) m n
   let M₂ := f.sylvester g m n
   let M (i : Nat) : Matrix (Fin (m + n)) (Fin (m + n)) R :=
-    .of fun j₁ j₂ => if j₂.1 < i then M₁ j₁ j₂ else 
+    .of fun j₁ j₂ => if j₂.1 < i then M₁ j₁ j₂ else M₂ j₁ j₂
+  have (i : Nat) (hi : i <= m) : (M i).det = M₂.det := by
+    induction i with
+    | zero => simp [M]; rfl
+    | succ i IH =>
+      rw [← IH (by lia)]; rw [← Matrix.det_updateCol_add_smul_self (i := ⟨i]; rw [by lia⟩)
+        (j := ⟨i + k + m]; rw [by lia⟩) (c := -r) (M (i + 1)) (by simp; lia)]
+      congr 1
+      ext j₁ j₂
+      simp only [Matrix.of_apply, lt_add_iff_pos_right, zero_lt_one, ↓reduceIte, add_assoc,
+        add_lt_add_iff_left, Nat.lt_one_iff, Nat.add_eq_zero_iff, hm, and_false, smul_eq_mul,
+        Matrix.updateCol_apply, Fin.ext_iff, M, M₂, neg_mul, ← sub_eq_add_neg]
+      obtain rfl | h := eq_or_ne ↑j₂ i
+      · simp only [↓reduceIte, sylvester, Set.mem_Icc, coeff_add, Fin.eta, Matrix.of_apply,
+          lt_self_iff_false, M₁]
+        induction j₂ using Fin.addCases with
+        | left j₂ =>
+          dsimp at hi
+          have : Fin.mk (n := m + n) (↑j₂ + (k + m)) (by lia) = .natAdd m ⟨j₂ + k, by lia⟩ :=
+            Fin.ext (by simp; lia)
+          simp only [Fin.addCases_left, Fin.val_castAdd, this, Fin.addCases_right, mul_ite,
+            mul_zero, ← C_mul_X_pow_eq_monomial, ← mul_assoc, coeff_mul_X_pow', ite_add_zero,
+            coeff_mul_C, add_assoc, add_eq_left, ← ite_and, ← mul_comm r, tsub_add_eq_tsub_tsub,
+            add_sub_assoc, sub_eq_zero]
+          split_ifs with h₁ h₂ h₂ <;> try rfl
+          · rw [coeff_eq_zero_of_natDegree_lt, mul_zero]
+            exact hf.trans_lt (by lia)
+          · lia
+        | right i =>
+          simp only [Fin.val_natAdd] at hi
+          have : Fin.mk (n := m + n) (m + ↑i + (k + m)) (by lia) =
+              Fin.natAdd m ⟨↑i + (k + m), by lia⟩ := Fin.ext (by simp; lia)
+          simp only [Fin.addCases_right, Fin.val_natAdd, sub_eq_self, this]
+          rw [if_neg]; rw [mul_zero]
+          lia
+      lia
+  rw [resultant]; rw [resultant]; rw [← this m le_rfl]
+  congr 1
+  ext i j
+  induction j using Fin.addCases <;> simp [M, sylvester, M₁, M₂]
 
 中文:
 引理 resultant_add_mul_monomial_right
@@ -485,7 +576,46 @@ lemma resultant_add_mul_monomial_right
   let M₁ := f.sylvester (g + f * monomial k r) m n
   let M₂ := f.sylvester g m n
   let M (i : Nat) : Matrix (Fin (m + n)) (Fin (m + n)) R :=
-    .of fun j₁ j₂ => if j₂.1 < i then M₁ j₁ j₂ else 
+    .of fun j₁ j₂ => if j₂.1 < i then M₁ j₁ j₂ else M₂ j₁ j₂
+  have (i : Nat) (hi : i <= m) : (M i).det = M₂.det := by
+    induction i with
+    | zero => simp [M]; rfl
+    | succ i IH =>
+      rw [← IH (by lia)]; rw [← Matrix.det_updateCol_add_smul_self (i := ⟨i]; rw [by lia⟩)
+        (j := ⟨i + k + m]; rw [by lia⟩) (c := -r) (M (i + 1)) (by simp; lia)]
+      congr 1
+      ext j₁ j₂
+      simp only [Matrix.of_apply, lt_add_iff_pos_right, zero_lt_one, ↓reduceIte, add_assoc,
+        add_lt_add_iff_left, Nat.lt_one_iff, Nat.add_eq_zero_iff, hm, and_false, smul_eq_mul,
+        Matrix.updateCol_apply, Fin.ext_iff, M, M₂, neg_mul, ← sub_eq_add_neg]
+      obtain rfl | h := eq_or_ne ↑j₂ i
+      · simp only [↓reduceIte, sylvester, Set.mem_Icc, coeff_add, Fin.eta, Matrix.of_apply,
+          lt_self_iff_false, M₁]
+        induction j₂ using Fin.addCases with
+        | left j₂ =>
+          dsimp at hi
+          have : Fin.mk (n := m + n) (↑j₂ + (k + m)) (by lia) = .natAdd m ⟨j₂ + k, by lia⟩ :=
+            Fin.ext (by simp; lia)
+          simp only [Fin.addCases_left, Fin.val_castAdd, this, Fin.addCases_right, mul_ite,
+            mul_zero, ← C_mul_X_pow_eq_monomial, ← mul_assoc, coeff_mul_X_pow', ite_add_zero,
+            coeff_mul_C, add_assoc, add_eq_left, ← ite_and, ← mul_comm r, tsub_add_eq_tsub_tsub,
+            add_sub_assoc, sub_eq_zero]
+          split_ifs with h₁ h₂ h₂ <;> try rfl
+          · rw [coeff_eq_zero_of_natDegree_lt, mul_zero]
+            exact hf.trans_lt (by lia)
+          · lia
+        | right i =>
+          simp only [Fin.val_natAdd] at hi
+          have : Fin.mk (n := m + n) (m + ↑i + (k + m)) (by lia) =
+              Fin.natAdd m ⟨↑i + (k + m), by lia⟩ := Fin.ext (by simp; lia)
+          simp only [Fin.addCases_right, Fin.val_natAdd, sub_eq_self, this]
+          rw [if_neg]; rw [mul_zero]
+          lia
+      lia
+  rw [resultant]; rw [resultant]; rw [← this m le_rfl]
+  congr 1
+  ext i j
+  induction j using Fin.addCases <;> simp [M, sylvester, M₁, M₂]
 -/
 private lemma resultant_add_mul_monomial_right (hk : k + m <= n) (hf : f.natDegree <= m) :
     resultant f (g + f * monomial k r) m n = resultant f g m n := by
@@ -548,7 +678,14 @@ lemma resultant_add_mul_right
     exact fun x hx => (le_natDegree_of_mem_supp _ hx).trans_lt (by lia)
   rw [← p.sum_monomial_eq]; rw [Polynomial.sum_eq_of_subset _ (by simp) H]
   set k := n - m + 1
-  replace H := s
+  replace H := show k <= n - m + 1 from le_rfl
+  clear_value k
+  induction k generalizing g with
+  | zero =>
+    simp only [Finset.range_zero, Finset.sum_empty]
+    rw [mul_zero]; rw [add_zero]
+  | succ k IH =>
+    rw [Finset.sum_range_succ]; rw [mul_add]; rw [← add_assoc]; rw [resultant_add_mul_monomial_right]; rw [IH] <;> lia
 
 中文:
 引理 resultant_add_mul_right
@@ -559,7 +696,14 @@ lemma resultant_add_mul_right
     exact fun x hx => (le_natDegree_of_mem_supp _ hx).trans_lt (by lia)
   rw [← p.sum_monomial_eq]; rw [Polynomial.sum_eq_of_subset _ (by simp) H]
   set k := n - m + 1
-  replace H := s
+  replace H := show k <= n - m + 1 from le_rfl
+  clear_value k
+  induction k generalizing g with
+  | zero =>
+    simp only [Finset.range_zero, Finset.sum_empty]
+    rw [mul_zero]; rw [add_zero]
+  | succ k IH =>
+    rw [Finset.sum_range_succ]; rw [mul_add]; rw [← add_assoc]; rw [resultant_add_mul_monomial_right]; rw [IH] <;> lia
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.range, Finset.range_zero, Finset.subset_iff, Finset.sum_empty, Finset.sum_range_succ, Polynomial, Polynomial.sum_eq_of_subset, add_zero, clear_value, generalizing, le_natDegree_of_mem_supp, le_rfl, mem_range, mul_a, mul_zero, p.sum_monomial_eq, p.support, range_zero
 -/
@@ -616,7 +760,24 @@ lemma resultant_C_mul_right
     .of fun j₁ j₂ => if j₂.1 < i then M₁ j₁ j₂ else M₂ j₁ j₂
   have (i : Nat) (hi : i <= m) : (M i).det = r ^ i * M₂.det := by
     induction i with
-    | zero => simp [M
+    | zero => simp [M]; rfl
+    | succ i IH =>
+      suffices (M i).updateCol ⟨i, by lia⟩ (r • fun j => M i j ⟨i, by lia⟩) = (M (i + 1)) by
+        rw [pow_succ']; rw [mul_assoc]; rw [← IH (by lia)]; rw [← this]; rw [Matrix.det_updateCol_smul]; rw [Matrix.updateCol_eq_self]
+      ext j₁ j₂
+      simp only [Matrix.of_apply, lt_self_iff_false, ↓reduceIte, Matrix.updateCol_apply,
+        Fin.ext_iff, Pi.smul_apply, smul_eq_mul, M, M₂]
+      obtain rfl | h := eq_or_ne ↑j₂ i
+      · simp only [↓reduceIte, sylvester, Set.mem_Icc, Fin.eta, Matrix.of_apply,
+          lt_add_iff_pos_right, zero_lt_one, coeff_C_mul, M₁]
+        induction j₂ using Fin.addCases with
+        | left j₂ => simp
+        | right i => simp at hi
+      lia
+  rw [resultant]; rw [resultant]; rw [← this m le_rfl]
+  congr 1
+  ext i j
+  induction j using Fin.addCases <;> simp [M, sylvester, M₁, M₂]
 
 中文:
 引理 resultant_C_mul_right
@@ -628,7 +789,24 @@ lemma resultant_C_mul_right
     .of fun j₁ j₂ => if j₂.1 < i then M₁ j₁ j₂ else M₂ j₁ j₂
   have (i : Nat) (hi : i <= m) : (M i).det = r ^ i * M₂.det := by
     induction i with
-    | zero => simp [M
+    | zero => simp [M]; rfl
+    | succ i IH =>
+      suffices (M i).updateCol ⟨i, by lia⟩ (r • fun j => M i j ⟨i, by lia⟩) = (M (i + 1)) by
+        rw [pow_succ']; rw [mul_assoc]; rw [← IH (by lia)]; rw [← this]; rw [Matrix.det_updateCol_smul]; rw [Matrix.updateCol_eq_self]
+      ext j₁ j₂
+      simp only [Matrix.of_apply, lt_self_iff_false, ↓reduceIte, Matrix.updateCol_apply,
+        Fin.ext_iff, Pi.smul_apply, smul_eq_mul, M, M₂]
+      obtain rfl | h := eq_or_ne ↑j₂ i
+      · simp only [↓reduceIte, sylvester, Set.mem_Icc, Fin.eta, Matrix.of_apply,
+          lt_add_iff_pos_right, zero_lt_one, coeff_C_mul, M₁]
+        induction j₂ using Fin.addCases with
+        | left j₂ => simp
+        | right i => simp at hi
+      lia
+  rw [resultant]; rw [resultant]; rw [← this m le_rfl]
+  congr 1
+  ext i j
+  induction j using Fin.addCases <;> simp [M, sylvester, M₁, M₂]
 
 Depends on / 依赖: Matrix, Matrix.det_updateCol_smul, Matrix.upd, det_updateCol_smul, f.sylvester, mul_assoc, pow_succ, sylvester, updateCol
 -/
@@ -691,7 +869,40 @@ lemma resultant_succ_left_deg
   · simp [pow_succ']
   rw [resultant]; rw [Matrix.det_succ_row (i := .last _)]; rw [Finset.sum_eq_single (by exact ((Fin.last m).castAdd (n + 1))) _ (by simp)]
   · rw [resultant, ← Matrix.det_reindex_self (finCongr (show (m + 1).add n = m + (n + 1) by grind))]
-    simp only [N
+    simp only [Nat.add_eq, Nat.succ_eq_add_one, Fin.val_last, Fin.val_castAdd, Fin.succAbove_last,
+      Matrix.reindex_apply, finCongr_symm, Matrix.submatrix_submatrix]
+    congr 2
+    · trans (-1) ^ (2 * m + (n + 1))
+      · congr 1; lia
+      · simp [pow_add]
+    · simp only [sylvester, Set.mem_Icc, Matrix.of_apply, Fin.val_last, Fin.addCases_left]
+      rw [if_pos (by lia)]
+      simp [add_assoc, add_comm 1]
+    · ext i j
+      simp only [sylvester, Set.mem_Icc, Matrix.submatrix_apply, Function.comp_apply,
+        finCongr_apply, Matrix.of_apply, Fin.val_castSucc, Fin.val_cast]
+      induction j using Fin.addCases with
+      | left j =>
+        have : ((Fin.last m).castAdd (n + 1)).succAbove ((j.castAdd (n + 1)).cast (by grind)) =
+          j.castSucc.castAdd (n + 1) := by ext; simp [Fin.succAbove, Fin.lt_def]
+        simp [this]
+      | right j =>
+        have : ((Fin.last m).castAdd (n + 1)).succAbove ((j.natAdd m).cast (by grind)) =
+          j.natAdd _ := by ext; simp [Fin.succAbove, Fin.lt_def, add_right_comm]
+        simp only [ite_and, this, Fin.addCases_right]
+        split_ifs with h₁ h₂ h₃ h₃ <;> try lia
+        exact coeff_eq_zero_of_natDegree_lt (by lia)
+  · rintro (b : Fin ((m + 1) + (n + 1))) - hb
+    suffices f.sylvester g (m + 1) (n + 1) (.last (m + 1 + n)) b = 0 by simp [this]
+    induction b using Fin.addCases with
+    | left b =>
+      simp only [Nat.add_eq, Nat.succ_eq_add_one, ne_eq, Fin.ext_iff, Fin.val_castAdd,
+        Fin.val_last] at hb
+      simp only [sylvester, Set.mem_Icc, Matrix.of_apply, Fin.val_last, Fin.addCases_left,
+        ite_eq_right_iff, and_imp]
+      intros
+      lia
+    | right i => simpa [sylvester] using fun _ _ => coeff_eq_zero_of_natDegree_lt (by lia)
 
 中文:
 引理 resultant_succ_left_deg
@@ -701,7 +912,40 @@ lemma resultant_succ_left_deg
   · simp [pow_succ']
   rw [resultant]; rw [Matrix.det_succ_row (i := .last _)]; rw [Finset.sum_eq_single (by exact ((Fin.last m).castAdd (n + 1))) _ (by simp)]
   · rw [resultant, ← Matrix.det_reindex_self (finCongr (show (m + 1).add n = m + (n + 1) by grind))]
-    simp only [N
+    simp only [Nat.add_eq, Nat.succ_eq_add_one, Fin.val_last, Fin.val_castAdd, Fin.succAbove_last,
+      Matrix.reindex_apply, finCongr_symm, Matrix.submatrix_submatrix]
+    congr 2
+    · trans (-1) ^ (2 * m + (n + 1))
+      · congr 1; lia
+      · simp [pow_add]
+    · simp only [sylvester, Set.mem_Icc, Matrix.of_apply, Fin.val_last, Fin.addCases_left]
+      rw [if_pos (by lia)]
+      simp [add_assoc, add_comm 1]
+    · ext i j
+      simp only [sylvester, Set.mem_Icc, Matrix.submatrix_apply, Function.comp_apply,
+        finCongr_apply, Matrix.of_apply, Fin.val_castSucc, Fin.val_cast]
+      induction j using Fin.addCases with
+      | left j =>
+        have : ((Fin.last m).castAdd (n + 1)).succAbove ((j.castAdd (n + 1)).cast (by grind)) =
+          j.castSucc.castAdd (n + 1) := by ext; simp [Fin.succAbove, Fin.lt_def]
+        simp [this]
+      | right j =>
+        have : ((Fin.last m).castAdd (n + 1)).succAbove ((j.natAdd m).cast (by grind)) =
+          j.natAdd _ := by ext; simp [Fin.succAbove, Fin.lt_def, add_right_comm]
+        simp only [ite_and, this, Fin.addCases_right]
+        split_ifs with h₁ h₂ h₃ h₃ <;> try lia
+        exact coeff_eq_zero_of_natDegree_lt (by lia)
+  · rintro (b : Fin ((m + 1) + (n + 1))) - hb
+    suffices f.sylvester g (m + 1) (n + 1) (.last (m + 1 + n)) b = 0 by simp [this]
+    induction b using Fin.addCases with
+    | left b =>
+      simp only [Nat.add_eq, Nat.succ_eq_add_one, ne_eq, Fin.ext_iff, Fin.val_castAdd,
+        Fin.val_last] at hb
+      simp only [sylvester, Set.mem_Icc, Matrix.of_apply, Fin.val_last, Fin.addCases_left,
+        ite_eq_right_iff, and_imp]
+      intros
+      lia
+    | right i => simpa [sylvester] using fun _ _ => coeff_eq_zero_of_natDegree_lt (by lia)
 
 Depends on / 依赖: Fin.last, Fin.succAbove_last, Fin.val_castAdd, Fin.val_last, Finset, Finset.sum_eq_single, Matrix, Matrix.det_reindex_self, Matrix.det_succ_row, Matrix.reindex_apply, Matrix.submatrix_submatrix, Nat.add_eq, Nat.succ_eq_add_one, add_eq, castAdd, det_reindex_self, det_succ_row, finCongr, finCongr_symm, pow_succ
 -/
@@ -935,7 +1179,8 @@ lemma resultant_X_sub_C_left
   conv_lhs => rw [← g.modByMonic_add_div (X - C r)]
   rw [resultant_add_mul_right _ _ _ _ _ _ (natDegree_X_sub_C_le _)]; rw [modByMonic_X_sub_C_eq_C_eval]
   · simp
-  · rw [natD
+  · rw [natDegree_divByMonic g (monic_X_sub_C r), natDegree_sub_C, natDegree_X]
+    lia
 
 中文:
 引理 resultant_X_sub_C_left
@@ -948,7 +1193,8 @@ lemma resultant_X_sub_C_left
   conv_lhs => rw [← g.modByMonic_add_div (X - C r)]
   rw [resultant_add_mul_right _ _ _ _ _ _ (natDegree_X_sub_C_le _)]; rw [modByMonic_X_sub_C_eq_C_eval]
   · simp
-  · rw [natD
+  · rw [natDegree_divByMonic g (monic_X_sub_C r), natDegree_sub_C, natDegree_X]
+    lia
 -/
 @[simp] lemma resultant_X_sub_C_left (r : R) (hg : g.natDegree <= n) :
     (X - C r).resultant g 1 n = eval r g := by
@@ -1033,7 +1279,61 @@ lemma resultant_eq_prod_roots_sub
   · trans ((f.roots ×ˢ g.roots).map fun ij => (-1) * (ij.2 - ij.1)).prod
     · rw [resultant_comm, this g f hg hf hg' hf' (le_of_not_ge hfg), ← Multiset.map_swap_product,
         Multiset.map_map, Multiset.prod_map_mul]
-      simp [hf'.natDegree_eq_card_roo
+      simp [hf'.natDegree_eq_card_roots, hg'.natDegree_eq_card_roots]
+    · simp
+  generalize hN : f.natDegree + g.natDegree = N
+  induction N using Nat.strong_induction_on generalizing K with | h n IH =>
+  by_cases hr : g ∣ f
+  · obtain ⟨r, rfl⟩ := hr
+    have hr' : r != 0 := by simpa [hg.ne_zero] using hf.ne_zero
+    rw [← resultant_add_mul_left _ _ (-r) _ _ _ le_rfl]
+    · rw [mul_neg, add_neg_cancel, resultant_zero_left]
+      by_cases H : g.natDegree = 0
+      · obtain rfl := hg.natDegree_eq_zero.mp H
+        simp
+      · simp only [zero_pow H]
+        rw [hg'.natDegree_eq_card_roots]; rw [Multiset.card_eq_zero]; rw [Multiset.eq_zero_iff_forall_notMem]; rw [not_forall_not] at H
+        obtain ⟨x, hx⟩ := H
+        rw [Multiset.prod_eq_zero]; rw [zero_mul]
+        simp only [Multiset.mem_map, Prod.exists]
+        exact ⟨x, x, Multiset.mem_product.mpr (by simp_all [hg.ne_zero]), by simp⟩
+    · rw [natDegree_mul hg.ne_zero (by simpa [hg.ne_zero] using hf.ne_zero),
+        natDegree_neg, add_comm]
+  let r := C (f %ₘ g).leadingCoeff⁻¹ * (f %ₘ g)
+  have hr₀ : f %ₘ g != 0 := by simpa [modByMonic_eq_zero_iff_dvd, hg]
+  have hrd : r.natDegree < g.natDegree := by
+    simp [r, natDegree_C_mul, hr₀, natDegree_modByMonic_lt _ hg (show g != 1 by aesop)]
+  have hr : r.Monic := by
+    dsimp only [r]
+    rw [Monic]; rw [leadingCoeff]; rw [natDegree_C_mul (by simpa)]; rw [coeff_C_mul]; rw [leadingCoeff]; rw [inv_mul_cancel₀ (by simpa)]
+  let L := r.SplittingField
+  have := IH _ (by simp; lia)
+    (g.map (algebraMap K L)) (r.map (algebraMap K L)) (hg.map _) (hr.map _)
+    (hg'.map _) (SplittingField.splits _) (by simpa [r, natDegree_C_mul, hr₀] using hrd.le) rfl
+  rw [resultant_map_map]; rw [natDegree_map]; rw [natDegree_map]; rw [resultant_C_mul_right]; rw [map_mul]; rw [inv_pow]; rw [map_inv₀]; rw [inv_mul_eq_iff_eq_mul₀ (by simp [hr₀])] at this
+  rw [← f.modByMonic_add_div]; rw [resultant_add_mul_left]; rw [f.modByMonic_add_div]; rw [← Nat.sub_add_cancel (hrd.le.trans hfg)]; rw [add_comm]; rw [resultant_add_left_deg]; rw [resultant_comm]
+  · apply (algebraMap K L).injective
+    rw [map_mul]; rw [map_mul]; rw [map_mul]; rw [this]; rw [map_sub_roots_sprod_eq_prod_map_eval _ _ hf hf']; rw [map_sub_sprod_roots_eq_prod_map_eval _ _ (hr.map _) (SplittingField.splits _)]; rw [map_mul]; rw [hg'.roots_map]
+    have : (g.roots.map (eval · f)).prod =
+        (f %ₘ g).leadingCoeff ^ g.natDegree * (g.roots.map (eval · r)).prod := by
+      trans (g.roots.map ((f %ₘ g).leadingCoeff * eval · r)).prod
+      · congr 1
+        refine Multiset.map_congr rfl ?_
+        simp only [mem_roots', ne_eq, IsRoot.def, eval_mul, eval_C, leadingCoeff_eq_zero, hr₀,
+          not_false_eq_true, mul_inv_cancel_left₀, and_imp, r]
+        intro x hx hxg
+        conv_lhs => rw [← f.modByMonic_add_div, eval_add, eval_mul, hxg, zero_mul, add_zero]
+      · simp [hg'.natDegree_eq_card_roots]
+    simp only [coeff_natDegree, hg.leadingCoeff, one_pow, map_one, map_multiset_prod,
+      ← hf'.natDegree_eq_card_roots, ← hg'.natDegree_eq_card_roots, this, map_mul, Multiset.map_map,
+      map_pow, map_neg, mul_one, eval_map_algebraMap, Function.comp_apply]
+    simp only [← mul_assoc, ← pow_add, ← add_mul, Nat.sub_add_cancel (hrd.le.trans hfg),
+      mul_comm g.natDegree]
+    congr 3 with x
+    exact aeval_algebraMap_apply _ _ _
+  · simp [r, hr₀, natDegree_C_mul]
+  · rw [f.modByMonic_add_div, natDegree_divByMonic _ hg, Nat.sub_add_cancel hfg]
+  · simp
 
 中文:
 引理 resultant_eq_prod_roots_sub
@@ -1042,7 +1342,61 @@ lemma resultant_eq_prod_roots_sub
   · trans ((f.roots ×ˢ g.roots).map fun ij => (-1) * (ij.2 - ij.1)).prod
     · rw [resultant_comm, this g f hg hf hg' hf' (le_of_not_ge hfg), ← Multiset.map_swap_product,
         Multiset.map_map, Multiset.prod_map_mul]
-      simp [hf'.natDegree_eq_card_roo
+      simp [hf'.natDegree_eq_card_roots, hg'.natDegree_eq_card_roots]
+    · simp
+  generalize hN : f.natDegree + g.natDegree = N
+  induction N using Nat.strong_induction_on generalizing K with | h n IH =>
+  by_cases hr : g ∣ f
+  · obtain ⟨r, rfl⟩ := hr
+    have hr' : r != 0 := by simpa [hg.ne_zero] using hf.ne_zero
+    rw [← resultant_add_mul_left _ _ (-r) _ _ _ le_rfl]
+    · rw [mul_neg, add_neg_cancel, resultant_zero_left]
+      by_cases H : g.natDegree = 0
+      · obtain rfl := hg.natDegree_eq_zero.mp H
+        simp
+      · simp only [zero_pow H]
+        rw [hg'.natDegree_eq_card_roots]; rw [Multiset.card_eq_zero]; rw [Multiset.eq_zero_iff_forall_notMem]; rw [not_forall_not] at H
+        obtain ⟨x, hx⟩ := H
+        rw [Multiset.prod_eq_zero]; rw [zero_mul]
+        simp only [Multiset.mem_map, Prod.exists]
+        exact ⟨x, x, Multiset.mem_product.mpr (by simp_all [hg.ne_zero]), by simp⟩
+    · rw [natDegree_mul hg.ne_zero (by simpa [hg.ne_zero] using hf.ne_zero),
+        natDegree_neg, add_comm]
+  let r := C (f %ₘ g).leadingCoeff⁻¹ * (f %ₘ g)
+  have hr₀ : f %ₘ g != 0 := by simpa [modByMonic_eq_zero_iff_dvd, hg]
+  have hrd : r.natDegree < g.natDegree := by
+    simp [r, natDegree_C_mul, hr₀, natDegree_modByMonic_lt _ hg (show g != 1 by aesop)]
+  have hr : r.Monic := by
+    dsimp only [r]
+    rw [Monic]; rw [leadingCoeff]; rw [natDegree_C_mul (by simpa)]; rw [coeff_C_mul]; rw [leadingCoeff]; rw [inv_mul_cancel₀ (by simpa)]
+  let L := r.SplittingField
+  have := IH _ (by simp; lia)
+    (g.map (algebraMap K L)) (r.map (algebraMap K L)) (hg.map _) (hr.map _)
+    (hg'.map _) (SplittingField.splits _) (by simpa [r, natDegree_C_mul, hr₀] using hrd.le) rfl
+  rw [resultant_map_map]; rw [natDegree_map]; rw [natDegree_map]; rw [resultant_C_mul_right]; rw [map_mul]; rw [inv_pow]; rw [map_inv₀]; rw [inv_mul_eq_iff_eq_mul₀ (by simp [hr₀])] at this
+  rw [← f.modByMonic_add_div]; rw [resultant_add_mul_left]; rw [f.modByMonic_add_div]; rw [← Nat.sub_add_cancel (hrd.le.trans hfg)]; rw [add_comm]; rw [resultant_add_left_deg]; rw [resultant_comm]
+  · apply (algebraMap K L).injective
+    rw [map_mul]; rw [map_mul]; rw [map_mul]; rw [this]; rw [map_sub_roots_sprod_eq_prod_map_eval _ _ hf hf']; rw [map_sub_sprod_roots_eq_prod_map_eval _ _ (hr.map _) (SplittingField.splits _)]; rw [map_mul]; rw [hg'.roots_map]
+    have : (g.roots.map (eval · f)).prod =
+        (f %ₘ g).leadingCoeff ^ g.natDegree * (g.roots.map (eval · r)).prod := by
+      trans (g.roots.map ((f %ₘ g).leadingCoeff * eval · r)).prod
+      · congr 1
+        refine Multiset.map_congr rfl ?_
+        simp only [mem_roots', ne_eq, IsRoot.def, eval_mul, eval_C, leadingCoeff_eq_zero, hr₀,
+          not_false_eq_true, mul_inv_cancel_left₀, and_imp, r]
+        intro x hx hxg
+        conv_lhs => rw [← f.modByMonic_add_div, eval_add, eval_mul, hxg, zero_mul, add_zero]
+      · simp [hg'.natDegree_eq_card_roots]
+    simp only [coeff_natDegree, hg.leadingCoeff, one_pow, map_one, map_multiset_prod,
+      ← hf'.natDegree_eq_card_roots, ← hg'.natDegree_eq_card_roots, this, map_mul, Multiset.map_map,
+      map_pow, map_neg, mul_one, eval_map_algebraMap, Function.comp_apply]
+    simp only [← mul_assoc, ← pow_add, ← add_mul, Nat.sub_add_cancel (hrd.le.trans hfg),
+      mul_comm g.natDegree]
+    congr 3 with x
+    exact aeval_algebraMap_apply _ _ _
+  · simp [r, hr₀, natDegree_C_mul]
+  · rw [f.modByMonic_add_div, natDegree_divByMonic _ hg, Nat.sub_add_cancel hfg]
+  · simp
 
 Depends on / 依赖: Multiset, Multiset.map_map, Multiset.map_swap_product, Multiset.prod_map_mul, Nat.strong_induction_on, f.natDegree, f.roots, g.natDegree, g.roots, generalize, generalizing, le_of_not_ge, map_map, map_swap_product, natDegree, natDegree_eq_card_roots, prod_map_mul, resultant_comm, strong_induction_on
 -/
@@ -1291,7 +1645,19 @@ lemma resultant_dvd_leadingCoeff_pow
     aesop
   have ⟨a, b, e⟩ := H
   obtain rfl | ha := eq_or_ne a 0
-  · obtain ⟨r, hr, rfl⟩ := isUnit_iff.mp (.of_
+  · obtain ⟨r, hr, rfl⟩ := isUnit_iff.mp (.of_mul_eq_one_right b (by simpa using e))
+    simp [hr.pow]
+  obtain rfl | hb := eq_or_ne b 0
+  · obtain ⟨r, hr, rfl⟩ := isUnit_iff.mp (.of_mul_eq_one_right a (by simpa using e))
+    simp [hr.pow]
+  have := resultant_mul_right f b g _ le_rfl
+  rw [← resultant_add_mul_right _ _ a _ _ _ le_rfl]; rw [add_comm]; rw [mul_comm f]; rw [e]; rw [resultant_one_right] at this
+  · exact ⟨_, _, this.trans (mul_comm _ _)⟩
+  · by_contra! H
+    rw [← natDegree_mul ha hf]; rw [← natDegree_mul hb hg] at H
+    have := natDegree_add_eq_left_of_natDegree_lt H
+    simp only [e, natDegree_one] at this
+    lia
 
 中文:
 引理 resultant_dvd_leadingCoeff_pow
@@ -1305,7 +1671,19 @@ lemma resultant_dvd_leadingCoeff_pow
     aesop
   have ⟨a, b, e⟩ := H
   obtain rfl | ha := eq_or_ne a 0
-  · obtain ⟨r, hr, rfl⟩ := isUnit_iff.mp (.of_
+  · obtain ⟨r, hr, rfl⟩ := isUnit_iff.mp (.of_mul_eq_one_right b (by simpa using e))
+    simp [hr.pow]
+  obtain rfl | hb := eq_or_ne b 0
+  · obtain ⟨r, hr, rfl⟩ := isUnit_iff.mp (.of_mul_eq_one_right a (by simpa using e))
+    simp [hr.pow]
+  have := resultant_mul_right f b g _ le_rfl
+  rw [← resultant_add_mul_right _ _ a _ _ _ le_rfl]; rw [add_comm]; rw [mul_comm f]; rw [e]; rw [resultant_one_right] at this
+  · exact ⟨_, _, this.trans (mul_comm _ _)⟩
+  · by_contra! H
+    rw [← natDegree_mul ha hf]; rw [← natDegree_mul hb hg] at H
+    have := natDegree_add_eq_left_of_natDegree_lt H
+    simp only [e, natDegree_one] at this
+    lia
 
 Depends on / 依赖: eq_or_ne, hr.pow, isCoprime_zero_left, isCoprime_zero_right, isUnit_iff, isUnit_iff.mp, le_r, of_mul_eq_one_right, resultant_mul_right
 -/
@@ -1384,7 +1762,9 @@ lemma resultant_prod_left
   | insert a s has IH =>
     have hf' : ∏ i in s, (f i).leadingCoeff != 0 := by aesop
     rw [Finset.prod_insert has]; rw [natDegree_mul' (by simpa [*]; rw [leadingCoeff_prod'] using hf),
-      resultant_mul_left _ _ _ _ hn, 
+      resultant_mul_left _ _ _ _ hn, IH hf', Finset.prod_insert has]
+
+@[simp]
 
 中文:
 引理 resultant_prod_left
@@ -1396,7 +1776,9 @@ lemma resultant_prod_left
   | insert a s has IH =>
     have hf' : ∏ i in s, (f i).leadingCoeff != 0 := by aesop
     rw [Finset.prod_insert has]; rw [natDegree_mul' (by simpa [*]; rw [leadingCoeff_prod'] using hf),
-      resultant_mul_left _ _ _ _ hn, 
+      resultant_mul_left _ _ _ _ hn, IH hf', Finset.prod_insert has]
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.induction, Finset.prod_insert, classical, insert, leadingCoeff, leadingCoeff_prod, natDegree_mul, prod_insert, resultant_mul_left
 -/
@@ -1568,7 +1950,45 @@ lemma resultant_X_pow_right
 nonrec lemma resultant_scaleRoots (f g : R[X]) (r : R) :
     resultant (f.scaleRoots r) (g.scaleRoots r) =
       r ^ (f.natDegree * g.natDegree) * resultant f g := by
-  rw [natDegree_scaleRoots]; rw [natDegree_s
+  rw [natDegree_scaleRoots]; rw [natDegree_scaleRoots]
+  obtain rfl | hf := eq_or_ne f 0; · simp
+  obtain rfl | hg := eq_or_ne g 0; · simp
+  induction f using induction_of_Splits_of_injective_of_surjective with
+  | Splits R f hf' =>
+    by_cases hf0 : f.natDegree = 0
+    · obtain ⟨a, rfl⟩ := natDegree_eq_zero.mp hf0; simp
+    by_cases hg0 : g.natDegree = 0
+    · obtain ⟨a, rfl⟩ := natDegree_eq_zero.mp hg0; simp
+    obtain rfl | hr := eq_or_ne r 0
+    · rw [scaleRoots_zero, scaleRoots_zero, Algebra.smul_def, Algebra.smul_def]
+      simp [resultant_C_mul_right, resultant_X_pow_right, *, (Ne.symm hf0)]
+    conv_lhs => rw [← natDegree_scaleRoots f r, ← natDegree_scaleRoots g r]
+    rw [resultant_eq_prod_eval _ _ _ le_rfl hf']; rw [resultant_eq_prod_eval _ _ _ le_rfl (hf'.scaleRoots _)]; rw [roots_scaleRoots _ (isUnit_iff_ne_zero.mpr hr)]
+    simp only [Multiset.map_map, Function.comp_def, scaleRoots_eval_mul]
+    simp only [leadingCoeff_scaleRoots, natDegree_scaleRoots, Multiset.prod_map_mul,
+      Multiset.map_const', Multiset.prod_replicate, ← hf'.natDegree_eq_card_roots]
+    ring
+  | injective R S φ hφ f IH =>
+    have := IH (g.map φ) (φ r) (by simpa using (map_injective _ hφ).ne hf)
+      (by simpa using (map_injective _ hφ).ne hg)
+    apply hφ
+    rw [← map_scaleRoots]; rw [← map_scaleRoots] at this
+    · simpa [natDegree_map_eq_of_injective hφ] using this
+    all_goals simpa [map_eq_zero_iff _ hφ]
+  | surjective R S φ hφ f IH =>
+    obtain ⟨f', hf', ef⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ f)
+    obtain ⟨g', hg', eg⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ g)
+    obtain ⟨r, rfl⟩ := hφ r
+    have hfl : f.leadingCoeff = φ f'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree ef, ← hf', coeff_map]
+    have hgl : g.leadingCoeff = φ g'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree eg, ← hg', coeff_map]
+    rw [← hf']; rw [← map_scaleRoots _ _ _ (by simpa [← hfl]), ← hg',
+      ← map_scaleRoots _ _ _ (by simpa [← hgl]), hf', hg',
+      ← natDegree_eq_natDegree ef, ← natDegree_eq_natDegree eg,
+      resultant_map_map, IH f' g' r (by aesop) (by aesop)]
+    rw [← hf']; rw [← hg']; rw [resultant_map_map]
+    simp
 
 中文:
 引理 resultant_X_pow_right
@@ -1579,7 +1999,45 @@ nonrec lemma resultant_scaleRoots (f g : R[X]) (r : R) :
 nonrec lemma resultant_scaleRoots (f g : R[X]) (r : R) :
     resultant (f.scaleRoots r) (g.scaleRoots r) =
       r ^ (f.natDegree * g.natDegree) * resultant f g := by
-  rw [natDegree_scaleRoots]; rw [natDegree_s
+  rw [natDegree_scaleRoots]; rw [natDegree_scaleRoots]
+  obtain rfl | hf := eq_or_ne f 0; · simp
+  obtain rfl | hg := eq_or_ne g 0; · simp
+  induction f using induction_of_Splits_of_injective_of_surjective with
+  | Splits R f hf' =>
+    by_cases hf0 : f.natDegree = 0
+    · obtain ⟨a, rfl⟩ := natDegree_eq_zero.mp hf0; simp
+    by_cases hg0 : g.natDegree = 0
+    · obtain ⟨a, rfl⟩ := natDegree_eq_zero.mp hg0; simp
+    obtain rfl | hr := eq_or_ne r 0
+    · rw [scaleRoots_zero, scaleRoots_zero, Algebra.smul_def, Algebra.smul_def]
+      simp [resultant_C_mul_right, resultant_X_pow_right, *, (Ne.symm hf0)]
+    conv_lhs => rw [← natDegree_scaleRoots f r, ← natDegree_scaleRoots g r]
+    rw [resultant_eq_prod_eval _ _ _ le_rfl hf']; rw [resultant_eq_prod_eval _ _ _ le_rfl (hf'.scaleRoots _)]; rw [roots_scaleRoots _ (isUnit_iff_ne_zero.mpr hr)]
+    simp only [Multiset.map_map, Function.comp_def, scaleRoots_eval_mul]
+    simp only [leadingCoeff_scaleRoots, natDegree_scaleRoots, Multiset.prod_map_mul,
+      Multiset.map_const', Multiset.prod_replicate, ← hf'.natDegree_eq_card_roots]
+    ring
+  | injective R S φ hφ f IH =>
+    have := IH (g.map φ) (φ r) (by simpa using (map_injective _ hφ).ne hf)
+      (by simpa using (map_injective _ hφ).ne hg)
+    apply hφ
+    rw [← map_scaleRoots]; rw [← map_scaleRoots] at this
+    · simpa [natDegree_map_eq_of_injective hφ] using this
+    all_goals simpa [map_eq_zero_iff _ hφ]
+  | surjective R S φ hφ f IH =>
+    obtain ⟨f', hf', ef⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ f)
+    obtain ⟨g', hg', eg⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ g)
+    obtain ⟨r, rfl⟩ := hφ r
+    have hfl : f.leadingCoeff = φ f'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree ef, ← hf', coeff_map]
+    have hgl : g.leadingCoeff = φ g'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree eg, ← hg', coeff_map]
+    rw [← hf']; rw [← map_scaleRoots _ _ _ (by simpa [← hfl]), ← hg',
+      ← map_scaleRoots _ _ _ (by simpa [← hgl]), hf', hg',
+      ← natDegree_eq_natDegree ef, ← natDegree_eq_natDegree eg,
+      resultant_map_map, IH f' g' r (by aesop) (by aesop)]
+    rw [← hf']; rw [← hg']; rw [resultant_map_map]
+    simp
 
 Depends on / 依赖: coeff_zero_eq_eval_zero, convert, resultant_X_sub_C_pow_right
 -/
@@ -1643,7 +2101,23 @@ lemma resultant_integralNormalization
     by_cases hg0 : g = 0; · simp [hg0]
     let S := MvPolynomial R Int
     let φ : S ->+* R := MvPolynomial.eval₂Hom (algebraMap _ _) id
-    have hφ : Function.Surjectiv
+    have hφ : Function.Surjective φ := fun x => ⟨.X x, by simp [φ, MvPolynomial.eval₂Hom]⟩
+    obtain ⟨f', hf', ef⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ f)
+    obtain ⟨g', hg', eg⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ g)
+    have hfl : f.leadingCoeff = φ f'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree ef, ← hf', coeff_map]
+    have hgl : g.leadingCoeff = φ g'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree eg, ← hg', coeff_map]
+    rw [← natDegree_eq_natDegree ef]; rw [← natDegree_eq_natDegree eg]; rw [← hf']; rw [hgl]; rw [← map_scaleRoots _ _ _ (by simpa [← hfl]), ← hg', integralNormalization_map _ _
+      (by simpa [← hgl]), resultant_map_map,
+      this f' g' (by simpa [natDegree_eq_natDegree eg]) inferInstance]
+    simp [resultant_map_map]
+  by_cases hg0 : g = 0; · simp [hg0]
+  apply mul_right_injective₀ (a := g.leadingCoeff ^ f.natDegree) (by simp [hg0])
+  dsimp
+  have := resultant_scaleRoots f g g.leadingCoeff
+  rw [natDegree_scaleRoots]; rw [natDegree_scaleRoots]; rw [← integralNormalization_mul_C_leadingCoeff]; rw [mul_comm]; rw [resultant_C_mul_right] at this
+  rw [this]; rw [← mul_assoc]; rw [← pow_add]; rw [add_comm]; rw [← Nat.mul_add_one]; rw [Nat.sub_add_cancel (by lia)]
 
 中文:
 引理 resultant_integralNormalization
@@ -1655,7 +2129,23 @@ lemma resultant_integralNormalization
     by_cases hg0 : g = 0; · simp [hg0]
     let S := MvPolynomial R Int
     let φ : S ->+* R := MvPolynomial.eval₂Hom (algebraMap _ _) id
-    have hφ : Function.Surjectiv
+    have hφ : Function.Surjective φ := fun x => ⟨.X x, by simp [φ, MvPolynomial.eval₂Hom]⟩
+    obtain ⟨f', hf', ef⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ f)
+    obtain ⟨g', hg', eg⟩ := exists_degree_eq_of_mem_lifts (Polynomial.map_surjective φ hφ g)
+    have hfl : f.leadingCoeff = φ f'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree ef, ← hf', coeff_map]
+    have hgl : g.leadingCoeff = φ g'.leadingCoeff := by
+      simp_rw [← coeff_natDegree, ← natDegree_eq_natDegree eg, ← hg', coeff_map]
+    rw [← natDegree_eq_natDegree ef]; rw [← natDegree_eq_natDegree eg]; rw [← hf']; rw [hgl]; rw [← map_scaleRoots _ _ _ (by simpa [← hfl]), ← hg', integralNormalization_map _ _
+      (by simpa [← hgl]), resultant_map_map,
+      this f' g' (by simpa [natDegree_eq_natDegree eg]) inferInstance]
+    simp [resultant_map_map]
+  by_cases hg0 : g = 0; · simp [hg0]
+  apply mul_right_injective₀ (a := g.leadingCoeff ^ f.natDegree) (by simp [hg0])
+  dsimp
+  have := resultant_scaleRoots f g g.leadingCoeff
+  rw [natDegree_scaleRoots]; rw [natDegree_scaleRoots]; rw [← integralNormalization_mul_C_leadingCoeff]; rw [mul_comm]; rw [resultant_C_mul_right] at this
+  rw [this]; rw [← mul_assoc]; rw [← pow_add]; rw [add_comm]; rw [← Nat.mul_add_one]; rw [Nat.sub_add_cancel (by lia)]
 
 Depends on / 依赖: Function, Function.Surjective, IsDomain, MvPolynomial, MvPolynomial.eval, Polynomial, Polynomial.map_surj, Polynomial.map_surjective, Surjective, algebraMap, exists_degree_eq_of_mem_lifts, map_surj, map_surjective, natDegree_integralNormalization, natDegree_scaleRoots
 -/
@@ -1742,7 +2232,12 @@ definition sylvesterMap
     refine (degree_add_le _ _).trans_lt (max_lt ?_ ?_)
     · by_cases hf' : f = 0; · simp_all
       exact (degree_mul_le _ _).trans_lt (WithBot.add_lt_add_of_le_of_lt (by simpa)
-        (degree_le_of_natDeg
+        (degree_le_of_natDegree_le hf) (by simpa using hq))
+    · by_cases hg' : g = 0; · simp_all
+      exact (degree_mul_le _ _).trans_lt ((WithBot.add_lt_add_of_le_of_lt (by simpa)
+        (degree_le_of_natDegree_le hg) (by simpa using hp)).trans_eq (add_comm _ _))⟩
+  map_add' _ _ := by ext1; dsimp; ring
+  map_smul' _ _ := by ext1; simp
 
 中文:
 定义 sylvesterMap
@@ -1753,7 +2248,12 @@ definition sylvesterMap
     refine (degree_add_le _ _).trans_lt (max_lt ?_ ?_)
     · by_cases hf' : f = 0; · simp_all
       exact (degree_mul_le _ _).trans_lt (WithBot.add_lt_add_of_le_of_lt (by simpa)
-        (degree_le_of_natDeg
+        (degree_le_of_natDegree_le hf) (by simpa using hq))
+    · by_cases hg' : g = 0; · simp_all
+      exact (degree_mul_le _ _).trans_lt ((WithBot.add_lt_add_of_le_of_lt (by simpa)
+        (degree_le_of_natDegree_le hg) (by simpa using hp)).trans_eq (add_comm _ _))⟩
+  map_add' _ _ := by ext1; dsimp; ring
+  map_smul' _ _ := by ext1; simp
 
 Depends on / 依赖: Polynomial, Polynomial.mem_degreeLT, WithBot, WithBot.add_lt_add_of_le_of_lt, add_comm, add_lt_add_of_le_of_lt, degree_add_le, degree_le_of_natDegree_le, degree_mul_le, map_ad, max_lt, mem_degreeLT, trans_eq, trans_lt
 -/
@@ -1785,7 +2285,13 @@ lemma toMatrix_sylvesterMap
         simpa [LinearMap.toMatrix_apply, sylvester, coeff_mul_X_pow']
     rw [ite_and]
     split_ifs with h₁ h₂ <;> try rfl
-    exact coeff_eq_zero_of_natDegree_
+    exact coeff_eq_zero_of_natDegree_lt (by lia)
+  · suffices (if j.1 <= i then f.coeff (i - j) else 0) =
+      if j <= i.1 ∧ ↑i <= j + m then f.coeff (i - j) else 0 by
+        simpa [LinearMap.toMatrix_apply, sylvester, coeff_mul_X_pow']
+    rw [ite_and]
+    split_ifs with h₁ h₂ <;> try rfl
+    exact coeff_eq_zero_of_natDegree_lt (by lia)
 
 中文:
 引理 toMatrix_sylvesterMap
@@ -1797,7 +2303,13 @@ lemma toMatrix_sylvesterMap
         simpa [LinearMap.toMatrix_apply, sylvester, coeff_mul_X_pow']
     rw [ite_and]
     split_ifs with h₁ h₂ <;> try rfl
-    exact coeff_eq_zero_of_natDegree_
+    exact coeff_eq_zero_of_natDegree_lt (by lia)
+  · suffices (if j.1 <= i then f.coeff (i - j) else 0) =
+      if j <= i.1 ∧ ↑i <= j + m then f.coeff (i - j) else 0 by
+        simpa [LinearMap.toMatrix_apply, sylvester, coeff_mul_X_pow']
+    rw [ite_and]
+    split_ifs with h₁ h₂ <;> try rfl
+    exact coeff_eq_zero_of_natDegree_lt (by lia)
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix_apply, coeff_eq_zero_of_natDegree_lt, coeff_mul_X_pow, f.coeff, g.coeff, ite_and, split_ifs, sylvester, toMatrix_apply
 -/
@@ -1884,7 +2396,7 @@ lemma sylveserMap_comp_adjSylvester
   let b₂ := degreeLT.basis R (m + n)
   have := congr(Matrix.toLin b₂ b₂ $(((sylvesterMap f g hf hg).toMatrix b₁ b₂).mul_adjugate))
   rwa [Matrix.toLin_mul b₂ b₁ b₂, Matrix.toLin_toMatrix, map_smul,
-    toMatrix_sy
+    toMatrix_sylvesterMap', Matrix.toLin_one, ← resultant] at this
 
 中文:
 引理 sylveserMap_comp_adjSylvester
@@ -1894,7 +2406,7 @@ lemma sylveserMap_comp_adjSylvester
   let b₂ := degreeLT.basis R (m + n)
   have := congr(Matrix.toLin b₂ b₂ $(((sylvesterMap f g hf hg).toMatrix b₁ b₂).mul_adjugate))
   rwa [Matrix.toLin_mul b₂ b₁ b₂, Matrix.toLin_toMatrix, map_smul,
-    toMatrix_sy
+    toMatrix_sylvesterMap', Matrix.toLin_one, ← resultant] at this
 
 Depends on / 依赖: Matrix, Matrix.toLin, Matrix.toLin_mul, Matrix.toLin_one, Matrix.toLin_toMatrix, degreeLT, degreeLT.basis, finSumFinEquiv, map_smul, mul_adjugate, reindex, resultant, sylvesterMap, toLin_mul, toLin_one, toLin_toMatrix, toMatrix, toMatrix_sylvesterMap
 -/
@@ -1917,7 +2429,7 @@ lemma adjSylvester_comp_sylveserMap
   let b₂ := degreeLT.basis R (m + n)
   have := congr(Matrix.toLin b₁ b₁ $(((sylvesterMap f g hf hg).toMatrix b₁ b₂).adjugate_mul))
   rwa [Matrix.toLin_mul b₁ b₂ b₁, Matrix.toLin_toMatrix, map_smul,
-    toMatrix_sy
+    toMatrix_sylvesterMap', Matrix.toLin_one, ← resultant] at this
 
 中文:
 引理 adjSylvester_comp_sylveserMap
@@ -1927,7 +2439,7 @@ lemma adjSylvester_comp_sylveserMap
   let b₂ := degreeLT.basis R (m + n)
   have := congr(Matrix.toLin b₁ b₁ $(((sylvesterMap f g hf hg).toMatrix b₁ b₂).adjugate_mul))
   rwa [Matrix.toLin_mul b₁ b₂ b₁, Matrix.toLin_toMatrix, map_smul,
-    toMatrix_sy
+    toMatrix_sylvesterMap', Matrix.toLin_one, ← resultant] at this
 
 Depends on / 依赖: Matrix, Matrix.toLin, Matrix.toLin_mul, Matrix.toLin_one, Matrix.toLin_toMatrix, adjugate_mul, degreeLT, degreeLT.basis, finSumFinEquiv, map_smul, reindex, resultant, sylvesterMap, toLin_mul, toLin_one, toLin_toMatrix, toMatrix, toMatrix_sylvesterMap
 -/
@@ -1950,7 +2462,8 @@ lemma exists_mul_add_mul_eq_C_resultant
     ← Nat.cast_add, Nat.pos_iff_ne_zero, not_and_or, -not_and] using H⟩
   have : ((sylvesterMap f g hf hg X)).1 = _ :=
     congr(($(sylveserMap_comp_adjSylvester f g hf hg) _).1)
-  refine ⟨X.2, X.1, by simpa [-Se
+  refine ⟨X.2, X.1, by simpa [-SetLike.coe_mem] using X.2.2,
+    by simpa [-SetLike.coe_mem] using X.1.2, by simpa [Algebra.smul_def] using this⟩
 
 中文:
 引理 存在_mul_add_mul_eq_C_resultant
@@ -1960,7 +2473,8 @@ lemma exists_mul_add_mul_eq_C_resultant
     ← Nat.cast_add, Nat.pos_iff_ne_zero, not_and_or, -not_and] using H⟩
   have : ((sylvesterMap f g hf hg X)).1 = _ :=
     congr(($(sylveserMap_comp_adjSylvester f g hf hg) _).1)
-  refine ⟨X.2, X.1, by simpa [-Se
+  refine ⟨X.2, X.1, by simpa [-SetLike.coe_mem] using X.2.2,
+    by simpa [-SetLike.coe_mem] using X.1.2, by simpa [Algebra.smul_def] using this⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Nat.cast_add, Nat.pos_iff_ne_zero, Polynomial, Polynomial.mem_degreeLT, SetLike, SetLike.coe_mem, adjSylvester, cast_add, coe_mem, mem_degreeLT, nontriviality, not_and, not_and_or, pos_iff_ne_zero, smul_def, sylveserMap_comp_adjSylvester, sylvesterMap
 -/
@@ -1986,7 +2500,22 @@ lemma isUnit_resultant_iff_isCoprime
   · obtain rfl := eq_one_of_monic_natDegree_zero hf hf0; simp [isCoprime_one_left]
   refine ⟨fun H => ?_, ?_⟩
   · obtain ⟨p, q, hp, hq, e⟩ := exists_mul_add_mul_eq_C_resultant f g le_rfl le_rfl (by simp [hf0])
-    exact ⟨C (H.unit⁻¹).1 * p, C (H.unit⁻¹).1 * q, by 
+    exact ⟨C (H.unit⁻¹).1 * p, C (H.unit⁻¹).1 * q, by simp only [mul_assoc, ← mul_add, mul_comm p,
+      mul_comm q, e, ← map_mul, IsUnit.val_inv_mul, map_one]⟩
+  · intro ⟨a, b, e⟩
+    suffices 1 = f.resultant b * f.resultant g from isUnit_iff_exists_inv'.mpr ⟨_, this.symm⟩
+    have := resultant_mul_right f b g _ le_rfl
+    obtain rfl | hb0 := eq_or_ne a 0
+    · rw [show b * g = 1 by simpa using e, resultant_one_right] at this
+      simpa [hf.leadingCoeff] using this
+    · rw [← resultant_add_mul_right _ _ a _ _ _ le_rfl, add_comm, mul_comm, e, ← C.map_one] at this
+      · simpa [hf.leadingCoeff] using this
+      · by_contra! H
+        replace H := natDegree_mul_le.trans_lt H
+        rw [add_comm]; rw [← hf.natDegree_mul' hb0]; rw [mul_comm f] at H
+        have := natDegree_add_eq_left_of_natDegree_lt H
+        simp only [e, natDegree_one] at this
+        lia
 
 中文:
 引理 isUnit_resultant_iff_isCoprime
@@ -1996,7 +2525,22 @@ lemma isUnit_resultant_iff_isCoprime
   · obtain rfl := eq_one_of_monic_natDegree_zero hf hf0; simp [isCoprime_one_left]
   refine ⟨fun H => ?_, ?_⟩
   · obtain ⟨p, q, hp, hq, e⟩ := exists_mul_add_mul_eq_C_resultant f g le_rfl le_rfl (by simp [hf0])
-    exact ⟨C (H.unit⁻¹).1 * p, C (H.unit⁻¹).1 * q, by 
+    exact ⟨C (H.unit⁻¹).1 * p, C (H.unit⁻¹).1 * q, by simp only [mul_assoc, ← mul_add, mul_comm p,
+      mul_comm q, e, ← map_mul, IsUnit.val_inv_mul, map_one]⟩
+  · intro ⟨a, b, e⟩
+    suffices 1 = f.resultant b * f.resultant g from isUnit_iff_exists_inv'.mpr ⟨_, this.symm⟩
+    have := resultant_mul_right f b g _ le_rfl
+    obtain rfl | hb0 := eq_or_ne a 0
+    · rw [show b * g = 1 by simpa using e, resultant_one_right] at this
+      simpa [hf.leadingCoeff] using this
+    · rw [← resultant_add_mul_right _ _ a _ _ _ le_rfl, add_comm, mul_comm, e, ← C.map_one] at this
+      · simpa [hf.leadingCoeff] using this
+      · by_contra! H
+        replace H := natDegree_mul_le.trans_lt H
+        rw [add_comm]; rw [← hf.natDegree_mul' hb0]; rw [mul_comm f] at H
+        have := natDegree_add_eq_left_of_natDegree_lt H
+        simp only [e, natDegree_one] at this
+        lia
 
 Depends on / 依赖: H.unit, IsUnit, IsUnit.val_inv_mul, eq_one_of_monic_natDegree_zero, exists_mul_add_mul_eq_C_resultant, f.natDegree, f.resultant, isCoprime_one_left, isUnit_iff_exists_inv, le_rfl, map_mul, map_one, mul_add, mul_assoc, mul_comm, natDegree, resultant, this.symm, val_inv_mul
 -/
@@ -2035,7 +2579,11 @@ lemma resultant_eq_zero_iff
     simpa [isCoprime_zero_left, isUnit_iff, hg, natDegree_eq_zero] using
       show (forall x, C x != g) ↔ forall x != 0, C x != g by aesop
   have H : (C f.leadingCoeff⁻¹ * f).Monic := by
-    rw [Monic]; rw [← coeff_nat
+    rw [Monic]; rw [← coeff_natDegree]; rw [natDegree_C_mul (by simpa)]; rw [coeff_C_mul]; simp [hf]
+  have := isUnit_resultant_iff_isCoprime (f := C f.leadingCoeff⁻¹ * f) (g := g) H
+  rw [resultant_C_mul_left]; rw [IsUnit.mul_iff]; rw [natDegree_C_mul (by simp [hf]),
+    isCoprime_mul_unit_left_left (isUnit_C.mpr (by simp [hf]))] at this
+  simp [← this, hf]
 
 中文:
 引理 resultant_eq_zero_iff
@@ -2046,7 +2594,11 @@ lemma resultant_eq_zero_iff
     simpa [isCoprime_zero_left, isUnit_iff, hg, natDegree_eq_zero] using
       show (forall x, C x != g) ↔ forall x != 0, C x != g by aesop
   have H : (C f.leadingCoeff⁻¹ * f).Monic := by
-    rw [Monic]; rw [← coeff_nat
+    rw [Monic]; rw [← coeff_natDegree]; rw [natDegree_C_mul (by simpa)]; rw [coeff_C_mul]; simp [hf]
+  have := isUnit_resultant_iff_isCoprime (f := C f.leadingCoeff⁻¹ * f) (g := g) H
+  rw [resultant_C_mul_left]; rw [IsUnit.mul_iff]; rw [natDegree_C_mul (by simp [hf]),
+    isCoprime_mul_unit_left_left (isUnit_C.mpr (by simp [hf]))] at this
+  simp [← this, hf]
 
 Depends on / 依赖: IsUnit, IsUnit.mul_iff, coeff_C_mul, coeff_natDegree, eq_or_ne, f.leadingCoeff, isCoprime_zero_left, isUnit_iff, isUnit_resultant_iff_isCoprime, leadingCoeff, mul_iff, natDegree_C_mul, natDegree_eq_zero, resultant_C_mul_left
 -/
@@ -2124,7 +2676,10 @@ lemma discr_of_degree_eq_one
   have : f.sylvesterDeriv.reindex e e = !![1] := by
     have : NeZero (f.natDegree - 1 + f.natDegree) := ⟨by lia⟩
     ext ⟨i, hi⟩ ⟨j, hj⟩
-    obta
+    obtain ⟨rfl⟩ : i = 0 := by lia
+    obtain ⟨rfl⟩ : j = 0 := by lia
+    simp [e, sylvesterDeriv, mul_comm, hf]
+  simp [discr, ← Matrix.det_reindex_self e, this, hf]
 
 中文:
 引理 discr_of_degree_eq_one
@@ -2136,7 +2691,10 @@ lemma discr_of_degree_eq_one
   have : f.sylvesterDeriv.reindex e e = !![1] := by
     have : NeZero (f.natDegree - 1 + f.natDegree) := ⟨by lia⟩
     ext ⟨i, hi⟩ ⟨j, hj⟩
-    obta
+    obtain ⟨rfl⟩ : i = 0 := by lia
+    obtain ⟨rfl⟩ : j = 0 := by lia
+    simp [e, sylvesterDeriv, mul_comm, hf]
+  simp [discr, ← Matrix.det_reindex_self e, this, hf]
 
 Depends on / 依赖: Matrix, Matrix.det_reindex_self, Nat.cast_one, NeZero, cast_one, degree_eq_iff_natDegree_eq_of_pos, det_reindex_self, f.natDegree, f.sylvesterDeriv.reindex, finCongr, mul_comm, natDegree, one_pos, reindex, sylvesterDeriv
 -/
@@ -2164,7 +2722,15 @@ lemma discr_of_degree_eq_two
   rw [discr]; rw [← Matrix.det_reindex_self e]
   have : f.sylvesterDeriv.reindex e e =
     !![f.coeff 0, f.coeff 1, 0;
-        f.coeff 1, 2 * f.co
+        f.coeff 1, 2 * f.coeff 2, f.coeff 1;
+        1, 0, 2] := by
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      simp [e, sylvesterDeriv, sylvester, coeff_derivative, mul_comm, Fin.addCases,
+        one_add_one_eq_two, hf, Fin.cast]
+  simp only [this, Matrix.det_fin_three, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
+    Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val, hf]
+  ring_nf
 
 中文:
 引理 discr_of_degree_eq_two
@@ -2175,7 +2741,15 @@ lemma discr_of_degree_eq_two
   rw [discr]; rw [← Matrix.det_reindex_self e]
   have : f.sylvesterDeriv.reindex e e =
     !![f.coeff 0, f.coeff 1, 0;
-        f.coeff 1, 2 * f.co
+        f.coeff 1, 2 * f.coeff 2, f.coeff 1;
+        1, 0, 2] := by
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      simp [e, sylvesterDeriv, sylvester, coeff_derivative, mul_comm, Fin.addCases,
+        one_add_one_eq_two, hf, Fin.cast]
+  simp only [this, Matrix.det_fin_three, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
+    Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val, hf]
+  ring_nf
 
 Depends on / 依赖: Fin.addCases, Fin.cast, Matrix, Matrix.det_fin_thr, Matrix.det_reindex_self, Nat.cast_two, addCases, cast_two, coeff_derivative, degree_eq_iff_natDegree_eq_of_pos, det_fin_thr, det_reindex_self, f.coeff, f.natDegree, f.sylvesterDeriv.reindex, finCongr, fin_cases, mul_comm, natDegree, one_add_one_eq_two
 -/
@@ -2206,7 +2780,7 @@ lemma resultant_deriv
   rw [← natDegree_pos_iff_degree_pos] at hf
   rw [resultant_comm]; rw [resultant]; rw [← sylvesterDeriv_updateRow f hf]; rw [Matrix.det_updateRow_smul]; rw [Matrix.updateRow_eq_self]; rw [discr]; rw [mul_comm f.natDegree]
   ring_nf
-  rw [Nat.div_mul_cancel (by convert! Nat.two_dvd_mul_add_one (f.
+  rw [Nat.div_mul_cancel (by convert! Nat.two_dvd_mul_add_one (f.natDegree - 1) using 2; lia)]
 
 中文:
 引理 resultant_deriv
@@ -2215,7 +2789,7 @@ lemma resultant_deriv
   rw [← natDegree_pos_iff_degree_pos] at hf
   rw [resultant_comm]; rw [resultant]; rw [← sylvesterDeriv_updateRow f hf]; rw [Matrix.det_updateRow_smul]; rw [Matrix.updateRow_eq_self]; rw [discr]; rw [mul_comm f.natDegree]
   ring_nf
-  rw [Nat.div_mul_cancel (by convert! Nat.two_dvd_mul_add_one (f.
+  rw [Nat.div_mul_cancel (by convert! Nat.two_dvd_mul_add_one (f.natDegree - 1) using 2; lia)]
 
 Depends on / 依赖: Matrix, Matrix.det_updateRow_smul, Matrix.updateRow_eq_self, Nat.div_mul_cancel, Nat.two_dvd_mul_add_one, convert, det_updateRow_smul, div_mul_cancel, f.natDegree, mul_comm, natDegree, natDegree_pos_iff_degree_pos, resultant, resultant_comm, ring_nf, sylvesterDeriv_updateRow, two_dvd_mul_add_one, updateRow_eq_self
 -/
@@ -2239,7 +2813,20 @@ lemma sylvesterDeriv_of_natDegree_eq_three
   -- In this proof we do as much as possible of the `simp` work before drilling down into the
   -- `fin_cases` constructs. This means the simps are not terminal, so they are not squeezed;
   -- but the proof runs much faster this way.
-  simp only [sylvesterDeriv, hf, OfNat.of
+  simp only [sylvesterDeriv, hf, OfNat.ofNat_ne_zero, ↓reduceDIte, sylvester, Fin.addCases,
+    Nat.add_one_sub_one, Fin.val_castLT, mem_Icc, Fin.val_fin_le, Fin.val_subNat, Fin.val_cast,
+    tsub_le_iff_right, coeff_derivative, eq_rec_constant, dite_eq_ite, Nat.reduceMul, Nat.reduceSub,
+    Nat.cast_ofNat, Matrix.reindex_apply, finCongr_symm, Matrix.submatrix_apply, finCongr_apply,
+    Fin.cast_mk, Matrix.updateRow_apply, Fin.mk.injEq, Matrix.of_apply, Fin.mk_le_mk, one_mul,
+    Matrix.cons_val', Matrix.cons_val_fin_one]
+  have hi' : i in Finset.range 5 := Finset.mem_range.mpr hi
+  have hj' : j in Finset.range 5 := Finset.mem_range.mpr hj
+  fin_cases hi' <;>
+  · simp only [and_true, Fin.isValue, Fin.mk_one, Fin.reduceFinMk, Fin.zero_eta,
+      le_add_iff_nonneg_left, Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val,
+      Nat.reduceAdd, Nat.reduceEqDiff, Nat.reduceLeDiff, nonpos_iff_eq_zero,
+      OfNat.one_ne_ofNat, ↓reduceIte, zero_add, zero_le]
+    fin_cases hj' <;> simp [mul_comm, one_add_one_eq_two, (by norm_num : (2 : R) + 1 = 3)]
 
 中文:
 引理 sylvesterDeriv_of_natDegree_eq_three
@@ -2249,7 +2836,20 @@ lemma sylvesterDeriv_of_natDegree_eq_three
   -- In this proof we do as much as possible of the `simp` work before drilling down into the
   -- `fin_cases` constructs. This means the simps are not terminal, so they are not squeezed;
   -- but the proof runs much faster this way.
-  simp only [sylvesterDeriv, hf, OfNat.of
+  simp only [sylvesterDeriv, hf, OfNat.ofNat_ne_zero, ↓reduceDIte, sylvester, Fin.addCases,
+    Nat.add_one_sub_one, Fin.val_castLT, mem_Icc, Fin.val_fin_le, Fin.val_subNat, Fin.val_cast,
+    tsub_le_iff_right, coeff_derivative, eq_rec_constant, dite_eq_ite, Nat.reduceMul, Nat.reduceSub,
+    Nat.cast_ofNat, Matrix.reindex_apply, finCongr_symm, Matrix.submatrix_apply, finCongr_apply,
+    Fin.cast_mk, Matrix.updateRow_apply, Fin.mk.injEq, Matrix.of_apply, Fin.mk_le_mk, one_mul,
+    Matrix.cons_val', Matrix.cons_val_fin_one]
+  have hi' : i in Finset.range 5 := Finset.mem_range.mpr hi
+  have hj' : j in Finset.range 5 := Finset.mem_range.mpr hj
+  fin_cases hi' <;>
+  · simp only [and_true, Fin.isValue, Fin.mk_one, Fin.reduceFinMk, Fin.zero_eta,
+      le_add_iff_nonneg_left, Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val,
+      Nat.reduceAdd, Nat.reduceEqDiff, Nat.reduceLeDiff, nonpos_iff_eq_zero,
+      OfNat.one_ne_ofNat, ↓reduceIte, zero_add, zero_le]
+    fin_cases hj' <;> simp [mul_comm, one_add_one_eq_two, (by norm_num : (2 : R) + 1 = 3)]
 -/
 private lemma sylvesterDeriv_of_natDegree_eq_three {f : R[X]} (hf : f.natDegree = 3) :
     f.sylvesterDeriv.reindex (finCongr <| by rw [hf]) (finCongr <| by rw [hf]) =
@@ -2287,7 +2887,9 @@ lemma discr_of_degree_eq_three
   apply natDegree_eq_of_degree_eq_some at hf
   let e : Fin ((f.natDegree - 1) + f.natDegree) ≃ Fin 5 := finCongr (by rw [hf])
   rw [discr]; rw [← Matrix.det_reindex_self e]; rw [sylvesterDeriv_of_natDegree_eq_three hf]
-  simp [Matrix.det_succ_row_zero (n := 4), Matrix.det_succ_row_zero (n := 3), 
+  simp [Matrix.det_succ_row_zero (n := 4), Matrix.det_succ_row_zero (n := 3), Fin.succAbove,
+    Matrix.det_fin_three, Finset.sum_fin_eq_sum_range, Finset.sum_range_succ, hf]
+  ring_nf
 
 中文:
 引理 discr_of_degree_eq_three
@@ -2296,7 +2898,9 @@ lemma discr_of_degree_eq_three
   apply natDegree_eq_of_degree_eq_some at hf
   let e : Fin ((f.natDegree - 1) + f.natDegree) ≃ Fin 5 := finCongr (by rw [hf])
   rw [discr]; rw [← Matrix.det_reindex_self e]; rw [sylvesterDeriv_of_natDegree_eq_three hf]
-  simp [Matrix.det_succ_row_zero (n := 4), Matrix.det_succ_row_zero (n := 3), 
+  simp [Matrix.det_succ_row_zero (n := 4), Matrix.det_succ_row_zero (n := 3), Fin.succAbove,
+    Matrix.det_fin_three, Finset.sum_fin_eq_sum_range, Finset.sum_range_succ, hf]
+  ring_nf
 
 Depends on / 依赖: Fin.succAbove, Finset, Finset.sum_fin_eq_sum_range, Finset.sum_range_succ, Matrix, Matrix.det_fin_three, Matrix.det_reindex_self, Matrix.det_succ_row_zero, det_fin_three, det_reindex_self, det_succ_row_zero, f.natDegree, finCongr, natDegree, natDegree_eq_of_degree_eq_some, ring_nf, succAbove, sum_fin_eq_sum_range, sum_range_succ, sylvesterDeriv_of_natDegree_eq_three
 -/

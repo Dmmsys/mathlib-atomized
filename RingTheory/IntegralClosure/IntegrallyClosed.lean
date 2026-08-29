@@ -741,7 +741,9 @@ theorem of_equiv
   let f : S ≃ₐ[S] R := AlgEquiv.ofRingEquiv fun _ => rfl
   let g : FractionRing S ≃ₐ[S] FractionRing R := IsFractionRing.algEquivOfAlgEquiv f
   refine (isIntegrallyClosed_iff (FractionRing S)).mpr (fun hx => ?_)
-  rcases (isIntegrallyClosed_iff 
+  rcases (isIntegrallyClosed_iff _).mp h ((isIntegral_algEquiv g).mpr hx).tower_top with ⟨z, hz⟩
+exact ⟨f.symm z, (IsFractionRing.algEquivOfAlgEquiv_algebraMap f.symm z).symm.trans
+    (AlgEquiv.symm_apply_eq g).mpr hz⟩
 
 中文:
 定理 of_equiv
@@ -752,7 +754,9 @@ theorem of_equiv
   let f : S ≃ₐ[S] R := AlgEquiv.ofRingEquiv fun _ => rfl
   let g : FractionRing S ≃ₐ[S] FractionRing R := IsFractionRing.algEquivOfAlgEquiv f
   refine (isIntegrallyClosed_iff (FractionRing S)).mpr (fun hx => ?_)
-  rcases (isIntegrallyClosed_iff 
+  rcases (isIntegrallyClosed_iff _).mp h ((isIntegral_algEquiv g).mpr hx).tower_top with ⟨z, hz⟩
+exact ⟨f.symm z, (IsFractionRing.algEquivOfAlgEquiv_algebraMap f.symm z).symm.trans
+    (AlgEquiv.symm_apply_eq g).mpr hz⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofRingEquiv, AlgEquiv.symm_apply_eq, Algebra, FractionRing, IsFractionRing, IsFractionRing.algEquivOfAlgEquiv, IsFractionRing.algEquivOfAlgEquiv_algebraMap, algEquivOfAlgEquiv, algEquivOfAlgEquiv_algebraMap, f.symm, f.symm.toRingHom.toAlgebra, isIntegral_algEquiv, isIntegrallyClosed_iff, ofRingEquiv, symm.trans, symm_apply_eq, toAlgebra, toRingHom, tower_top
 -/
@@ -798,7 +802,8 @@ lemma of_isIntegrallyClosedIn
     (FaithfulSMul.algebraMap_injective R K)
   rw [isIntegrallyClosed_iff (K := FractionRing R)]
   intro x hx
-  convert! (IsIntegralClosu
+  convert! (IsIntegralClosure.isIntegral_iff (A := R)).mp (hx.map f)
+  simp [← f.toRingHom.injective.eq_iff]
 
 中文:
 引理 of_is整数egrallyClosedIn
@@ -808,7 +813,8 @@ lemma of_isIntegrallyClosedIn
     (FaithfulSMul.algebraMap_injective R K)
   rw [isIntegrallyClosed_iff (K := FractionRing R)]
   intro x hx
-  convert! (IsIntegralClosu
+  convert! (IsIntegralClosure.isIntegral_iff (A := R)).mp (hx.map f)
+  simp [← f.toRingHom.injective.eq_iff]
 
 Depends on / 依赖: Algebra, Algebra.ofId, FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, IsDomain, IsFractionRing, IsFractionRing.liftAlgHom, IsIntegralClosure, IsIntegralClosure.isIntegral_iff, algebraMap_injective, convert, eq_iff, f.toRingHom.injective.eq_iff, hx.map, injective, isDomain, isIntegral_iff, isIntegrallyClosed_iff, liftAlgHom
 -/
@@ -835,7 +841,14 @@ lemma _root_.IsIntegralClosure.of_isIntegralClosure_of_isIntegrallyClosedIn
       (IsIntegralClosure.algebraMap_injective S R T)
   · intro x
     refine ⟨fun h => ?_, ?_⟩
-    · obtain ⟨x, rfl⟩ := (IsIntegralClosure.isIntegral_iff (R := T) (A := T)).mp
+    · obtain ⟨x, rfl⟩ := (IsIntegralClosure.isIntegral_iff (R := T) (A := T)).mp h.tower_top
+      rw [isIntegral_algebraMap_iff (IsIntegralClosure.algebraMap_injective T T U)] at h
+      obtain ⟨x, rfl⟩ := (IsIntegralClosure.isIntegral_iff (R := R) (A := S)).mp h
+      exact ⟨x, IsScalarTower.algebraMap_apply ..⟩
+    · rintro ⟨x, rfl⟩
+      rw [IsScalarTower.algebraMap_apply S T U]
+      exact ((IsIntegralClosure.isIntegral_iff (A := S) (R := R) (B := T)).mpr ⟨x, rfl⟩).map
+        (IsScalarTower.toAlgHom R T U)
 
 中文:
 引理 _root_.是整闭包.of_is整数egralClosure_of_is整数egrallyClosedIn
@@ -846,7 +859,14 @@ lemma _root_.IsIntegralClosure.of_isIntegralClosure_of_isIntegrallyClosedIn
       (IsIntegralClosure.algebraMap_injective S R T)
   · intro x
     refine ⟨fun h => ?_, ?_⟩
-    · obtain ⟨x, rfl⟩ := (IsIntegralClosure.isIntegral_iff (R := T) (A := T)).mp
+    · obtain ⟨x, rfl⟩ := (IsIntegralClosure.isIntegral_iff (R := T) (A := T)).mp h.tower_top
+      rw [isIntegral_algebraMap_iff (IsIntegralClosure.algebraMap_injective T T U)] at h
+      obtain ⟨x, rfl⟩ := (IsIntegralClosure.isIntegral_iff (R := R) (A := S)).mp h
+      exact ⟨x, IsScalarTower.algebraMap_apply ..⟩
+    · rintro ⟨x, rfl⟩
+      rw [IsScalarTower.algebraMap_apply S T U]
+      exact ((IsIntegralClosure.isIntegral_iff (A := S) (R := R) (B := T)).mpr ⟨x, rfl⟩).map
+        (IsScalarTower.toAlgHom R T U)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.algebraMap_injective, IsIntegralClosure.isIntegral_iff, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.algebraMap_eq, algebraMap_apply, algebraMap_eq, algebraMap_injective, h.tower_top, isIntegral_algebraMap_iff, isIntegral_iff, tower_top
 -/
@@ -935,7 +955,18 @@ theorem pow_dvd_pow_iff
   let K := FractionRing R
   replace ha : algebraMap R K a != 0 := fun h =>
 ha (injective_iff_map_eq_zero _).1 (IsFractionRing.injective R K) _ h
-  let y := (algebraMap R K b) / (algebra
+  let y := (algebraMap R K b) / (algebraMap R K a)
+  have hy : IsIntegral R y := by
+    refine ⟨X ^ n - C x, monic_X_pow_sub_C _ hn, ?_⟩
+    simp only [y, eval₂_sub, eval₂_X_pow, div_pow, eval₂_C]
+    replace hx := congr_arg (algebraMap R K) hx
+    rw [map_pow] at hx
+    simp [hx, ha]
+  obtain ⟨k, hk⟩ := algebraMap_eq_of_integral hy
+  refine ⟨k, IsFractionRing.injective R K ?_⟩
+  rw [map_mul]; rw [hk]; rw [mul_div_cancel₀ _ ha]
+
+@[simp]
 
 中文:
 定理 pow_dvd_pow_iff
@@ -947,7 +978,18 @@ ha (injective_iff_map_eq_zero _).1 (IsFractionRing.injective R K) _ h
   let K := FractionRing R
   replace ha : algebraMap R K a != 0 := fun h =>
 ha (injective_iff_map_eq_zero _).1 (IsFractionRing.injective R K) _ h
-  let y := (algebraMap R K b) / (algebra
+  let y := (algebraMap R K b) / (algebraMap R K a)
+  have hy : IsIntegral R y := by
+    refine ⟨X ^ n - C x, monic_X_pow_sub_C _ hn, ?_⟩
+    simp only [y, eval₂_sub, eval₂_X_pow, div_pow, eval₂_C]
+    replace hx := congr_arg (algebraMap R K) hx
+    rw [map_pow] at hx
+    simp [hx, ha]
+  obtain ⟨k, hk⟩ := algebraMap_eq_of_integral hy
+  refine ⟨k, IsFractionRing.injective R K ?_⟩
+  rw [map_mul]; rw [hk]; rw [mul_div_cancel₀ _ ha]
+
+@[simp]
 
 Depends on / 依赖: FractionRing, IsFractionRing, IsFractionRing.injective, IsIntegral, algebraMap, congr_arg, div_pow, injective, injective_iff_map_eq_zero, map_pow, monic_X_pow_sub_C, pow_dvd_pow_of_dvd, replace
 -/
@@ -1071,7 +1113,14 @@ lemma isIntegrallyClosed_of_isLocalization
   let := g.toAlgebra
   have : IsScalarTower R S K := IsScalarTower.of_algebraMap_eq'
     (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
-  have := IsFraction
+  have := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M S K
+  refine (isIntegrallyClosed_iff_isIntegralClosure (K := K)).mpr
+    ⟨IsFractionRing.injective _ _, fun {x} => ⟨?_, fun e => e.choose_spec ▸ isIntegral_algebraMap⟩⟩
+  intro hx
+  obtain ⟨⟨y, y_mem⟩, hy⟩ := hx.exists_multiple_integral_of_isLocalization M _
+  obtain ⟨z, hz⟩ := (isIntegrallyClosed_iff _).mp ‹_› hy
+  refine ⟨IsLocalization.mk' S z ⟨y, y_mem⟩, (IsLocalization.lift_mk'_spec _ _ _ _).mpr ?_⟩
+  rw [RingHom.comp_id]; rw [hz]; rw [← Algebra.smul_def]; rw [Submonoid.mk_smul]
 
 中文:
 引理 is整数egrallyClosed_of_isLocalization
@@ -1082,7 +1131,14 @@ lemma isIntegrallyClosed_of_isLocalization
   let := g.toAlgebra
   have : IsScalarTower R S K := IsScalarTower.of_algebraMap_eq'
     (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
-  have := IsFraction
+  have := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M S K
+  refine (isIntegrallyClosed_iff_isIntegralClosure (K := K)).mpr
+    ⟨IsFractionRing.injective _ _, fun {x} => ⟨?_, fun e => e.choose_spec ▸ isIntegral_algebraMap⟩⟩
+  intro hx
+  obtain ⟨⟨y, y_mem⟩, hy⟩ := hx.exists_multiple_integral_of_isLocalization M _
+  obtain ⟨z, hz⟩ := (isIntegrallyClosed_iff _).mp ‹_› hy
+  refine ⟨IsLocalization.mk' S z ⟨y, y_mem⟩, (IsLocalization.lift_mk'_spec _ _ _ _).mpr ?_⟩
+  rw [RingHom.comp_id]; rw [hz]; rw [← Algebra.smul_def]; rw [Submonoid.mk_smul]
 
 Depends on / 依赖: FractionRing, IsFractionRing, IsFractionRing.injective, IsFractionRing.isFractionRing_of_isDomain_of_isLocalization, IsLocalization, IsLocalization.map, IsLocalization.map_comp, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraMap_toAlgebra, RingHom.id, RingHomCompTriple, RingHomCompTriple.comp_eq, algebraMap_toAlgebra, choose_spec, comp_eq, e.choose_spec, g.toAlgebra, injective
 -/

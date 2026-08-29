@@ -1316,7 +1316,7 @@ theorem leftUnitor_whiskerRight
       cancel_epi ((α_ _ _ _).hom ▷ _)]; rw [pentagon_assoc]; rw [triangle]; rw [← associator_naturality_middle]; rw [←
       comp_whiskerRight_assoc]; rw [triangle]; rw [associator_naturality_left]
 
-@[reassoc
+@[reassoc, simp]
 
 中文:
 定理 leftUnitor_whiskerRight
@@ -1326,7 +1326,7 @@ theorem leftUnitor_whiskerRight
       cancel_epi ((α_ _ _ _).hom ▷ _)]; rw [pentagon_assoc]; rw [triangle]; rw [← associator_naturality_middle]; rw [←
       comp_whiskerRight_assoc]; rw [triangle]; rw [associator_naturality_left]
 
-@[reassoc
+@[reassoc, simp]
 
 Depends on / 依赖: associator_naturality_left, associator_naturality_middle, cancel_epi, comp_whiskerRight_assoc, pentagon_assoc, triangle, whiskerLeft_comp, whiskerLeft_iff
 -/
@@ -1370,7 +1370,9 @@ theorem whiskerLeft_rightUnitor
   proof: by
   rw [← whiskerRight_iff]; rw [comp_whiskerRight]; rw [← cancel_epi (α_ _ _ _).inv]; rw [←
       cancel_epi (f ◁ (α_ _ _ _).inv)]; rw [pentagon_inv_assoc]; rw [triangle_assoc_comp_right]; rw [←
-      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right];
+      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right]; rw [associator_inv_naturality_right]
+
+@[reassoc, simp]
 
 中文:
 定理 whiskerLeft_rightUnitor
@@ -1378,7 +1380,9 @@ theorem whiskerLeft_rightUnitor
   证明: by
   rw [← whiskerRight_iff]; rw [comp_whiskerRight]; rw [← cancel_epi (α_ _ _ _).inv]; rw [←
       cancel_epi (f ◁ (α_ _ _ _).inv)]; rw [pentagon_inv_assoc]; rw [triangle_assoc_comp_right]; rw [←
-      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right];
+      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right]; rw [associator_inv_naturality_right]
+
+@[reassoc, simp]
 
 Depends on / 依赖: associator_inv_naturality_middle, associator_inv_naturality_right, cancel_epi, comp_whiskerRight, pentagon_inv_assoc, triangle_assoc_comp_right, whiskerLeft_comp_assoc, whiskerRight_iff
 -/

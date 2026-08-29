@@ -69,7 +69,10 @@ theorem measurable_resolvent
     HasDerivAt.continuousOn (fun _ hx => hasDerivAt_resolvent_const_left hx)
   have h2 : ContinuousOn (resolvent (R := 𝕜) a) (resolventSet 𝕜 a)ᶜ := by
     rw [continuousOn_iff_continuous_domRestrict]
-    convert con
+    convert continuous_const (y := (0 : A)) with x
+    simp
+  have h3 : MeasurableSet (resolventSet 𝕜 a) := (isOpen_resolventSet a).measurableSet
+  simpa using h1.measurable_piecewise h2 h3
 
 中文:
 定理 measurable_resolvent
@@ -80,7 +83,10 @@ theorem measurable_resolvent
     HasDerivAt.continuousOn (fun _ hx => hasDerivAt_resolvent_const_left hx)
   have h2 : ContinuousOn (resolvent (R := 𝕜) a) (resolventSet 𝕜 a)ᶜ := by
     rw [continuousOn_iff_continuous_domRestrict]
-    convert con
+    convert continuous_const (y := (0 : A)) with x
+    simp
+  have h3 : MeasurableSet (resolventSet 𝕜 a) := (isOpen_resolventSet a).measurableSet
+  simpa using h1.measurable_piecewise h2 h3
 
 Depends on / 依赖: ContinuousOn, HasDerivAt, HasDerivAt.continuousOn, MeasurableSet, classical, continuousOn, continuousOn_iff_continuous_domRestrict, continuous_const, convert, h1.measurable_piecewise, hasDerivAt_resolvent_const_left, isOpen_resolventSet, measurableSet, measurable_piecewise, resolvent, resolventSet
 -/
@@ -110,7 +116,10 @@ theorem norm_resolvent_le_inv_infDist_support
     refine (IsClosed.notMem_iff_infDist_pos ?_ ((Set.nonempty_of_mem hx).image _)).mp hz
     refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed ?_).mp isClosed_support
     exact (algebraMap_isometry 𝕜 A).isClosedEmbedding
-  ha
+  have : infDist a (algebraMap 𝕜 A '' μ.support) <= ‖(algebraMap 𝕜 A) x - a‖ := by
+    grw [infDist_le_dist_of_mem (y := (algebraMap 𝕜 A) x), ← dist_eq_norm, dist_comm]
+    simp [hx]
+  grw [resolvent, Ring.inverse_eq_inv', norm_inv, inv_le_inv₀ (by linarith) (by positivity), this]
 
 中文:
 定理 norm_resolvent_le_inv_infDist_support
@@ -120,7 +129,10 @@ theorem norm_resolvent_le_inv_infDist_support
     refine (IsClosed.notMem_iff_infDist_pos ?_ ((Set.nonempty_of_mem hx).image _)).mp hz
     refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed ?_).mp isClosed_support
     exact (algebraMap_isometry 𝕜 A).isClosedEmbedding
-  ha
+  have : infDist a (algebraMap 𝕜 A '' μ.support) <= ‖(algebraMap 𝕜 A) x - a‖ := by
+    grw [infDist_le_dist_of_mem (y := (algebraMap 𝕜 A) x), ← dist_eq_norm, dist_comm]
+    simp [hx]
+  grw [resolvent, Ring.inverse_eq_inv', norm_inv, inv_le_inv₀ (by linarith) (by positivity), this]
 
 Depends on / 依赖: IsClosed, IsClosed.notMem_iff_infDist_pos, IsClosedEmbedding, Ring.inverse_eq_inv, Set.nonempty_of_mem, Topology, Topology.IsClosedEmbedding.isClosed_iff_image_isClosed, algebraMap, algebraMap_isometry, dist_comm, dist_eq_norm, infDist, infDist_le_dist_of_mem, inverse_eq_inv, isClosedEmbedding, isClosed_iff_image_isClosed, isClosed_support, nonempty_of_mem, norm_in, notMem_iff_infDist_pos
 -/
@@ -297,7 +309,41 @@ theorem hasDerivAt_resolventTransform
   rw [resolventTransform_def]
   have : 0 < infDist a (algebraMap 𝕜 A '' μ.support) := by
     refine (IsClosed.notMem_iff_infDist_pos ?_ (h.image _)).mp ha
-    refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClos
+    refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed ?_).mp isClosed_support
+    exact (algebraMap_isometry 𝕜 A).isClosedEmbedding
+  let s : Set A := ball a ((infDist a (algebraMap 𝕜 A '' μ.support)) / 2)
+  have hs_z : s in 𝓝 a := ball_mem_nhds _ (by positivity)
+  have hs_μ : s subseteq (algebraMap 𝕜 A '' μ.support)ᶜ := by
+    unfold s
+    grw [ball_subset_ball, ball_infDist_subset_compl]
+    grind
+  have resolvent_meas : forallᶠ w in nhds a, AEStronglyMeasurable (resolvent w) μ := by
+    filter_upwards with _ using by fun_prop
+  have resolvent'_bound : forallᵐ x ∂μ, forall w in s,
+      ‖(resolvent w x) ^ 2‖ <= ((infDist a (algebraMap 𝕜 A '' μ.support)) / 2)⁻¹ ^ 2 := by
+    filter_upwards [support_mem_ae] with x hx w hw
+    grw [resolvent, Ring.inverse_eq_inv, norm_pow, norm_inv]
+    gcongr
+    calc infDist a (algebraMap 𝕜 A '' μ.support) / 2
+      _ <= infDist a (algebraMap 𝕜 A '' μ.support)
+        - infDist a (algebraMap 𝕜 A '' μ.support) / 2 := by grind
+      _ <= ‖(algebraMap 𝕜 A) x - a‖ - ‖a - w‖ := by
+        gcongr
+        · grw [infDist_le_dist_of_mem (y := (algebraMap 𝕜 A) x) (by simp [hx]), dist_comm,
+            dist_eq_norm]
+        · apply le_of_lt
+          simpa [s, ← dist_eq_norm, dist_comm w a] using hw
+      _ <= ‖(algebraMap 𝕜 A) x - w‖ := by grw [norm_sub_le_norm_add]; grind
+  have h_deriv : forallᵐ x ∂μ, forall w in s, HasDerivAt (fun w => resolvent w x) (resolvent w x ^ 2) w := by
+    filter_upwards [support_mem_ae] with x hx w hw
+    apply hasDerivAt_resolvent_const_right
+    replace hw := hs_μ hw
+    contrapose! hw
+    rw [Set.notMem_compl_iff]
+    use x, hx
+    simpa [resolventSet, sub_eq_zero] using hw
+  exact hasDerivAt_integral_of_dominated_loc_of_deriv_le hs_z resolvent_meas
+.2 (integrable_resolvent (by simp [ha])) (by fun_prop) resolvent'_bound (by fun_prop) h_deriv
 
 中文:
 定理 hasDerivAt_resolventTransform
@@ -308,7 +354,41 @@ theorem hasDerivAt_resolventTransform
   rw [resolventTransform_def]
   have : 0 < infDist a (algebraMap 𝕜 A '' μ.support) := by
     refine (IsClosed.notMem_iff_infDist_pos ?_ (h.image _)).mp ha
-    refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClos
+    refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed ?_).mp isClosed_support
+    exact (algebraMap_isometry 𝕜 A).isClosedEmbedding
+  let s : Set A := ball a ((infDist a (algebraMap 𝕜 A '' μ.support)) / 2)
+  have hs_z : s in 𝓝 a := ball_mem_nhds _ (by positivity)
+  have hs_μ : s subseteq (algebraMap 𝕜 A '' μ.support)ᶜ := by
+    unfold s
+    grw [ball_subset_ball, ball_infDist_subset_compl]
+    grind
+  have resolvent_meas : forallᶠ w in nhds a, AEStronglyMeasurable (resolvent w) μ := by
+    filter_upwards with _ using by fun_prop
+  have resolvent'_bound : forallᵐ x ∂μ, forall w in s,
+      ‖(resolvent w x) ^ 2‖ <= ((infDist a (algebraMap 𝕜 A '' μ.support)) / 2)⁻¹ ^ 2 := by
+    filter_upwards [support_mem_ae] with x hx w hw
+    grw [resolvent, Ring.inverse_eq_inv, norm_pow, norm_inv]
+    gcongr
+    calc infDist a (algebraMap 𝕜 A '' μ.support) / 2
+      _ <= infDist a (algebraMap 𝕜 A '' μ.support)
+        - infDist a (algebraMap 𝕜 A '' μ.support) / 2 := by grind
+      _ <= ‖(algebraMap 𝕜 A) x - a‖ - ‖a - w‖ := by
+        gcongr
+        · grw [infDist_le_dist_of_mem (y := (algebraMap 𝕜 A) x) (by simp [hx]), dist_comm,
+            dist_eq_norm]
+        · apply le_of_lt
+          simpa [s, ← dist_eq_norm, dist_comm w a] using hw
+      _ <= ‖(algebraMap 𝕜 A) x - w‖ := by grw [norm_sub_le_norm_add]; grind
+  have h_deriv : forallᵐ x ∂μ, forall w in s, HasDerivAt (fun w => resolvent w x) (resolvent w x ^ 2) w := by
+    filter_upwards [support_mem_ae] with x hx w hw
+    apply hasDerivAt_resolvent_const_right
+    replace hw := hs_μ hw
+    contrapose! hw
+    rw [Set.notMem_compl_iff]
+    use x, hx
+    simpa [resolventSet, sub_eq_zero] using hw
+  exact hasDerivAt_integral_of_dominated_loc_of_deriv_le hs_z resolvent_meas
+.2 (integrable_resolvent (by simp [ha])) (by fun_prop) resolvent'_bound (by fun_prop) h_deriv
 
 Depends on / 依赖: IsClosed, IsClosed.notMem_iff_infDist_pos, IsClosedEmbedding, Nonempty, Topology, Topology.IsClosedEmbedding.isClosed_iff_image_isClosed, algebraMap, algebraMap_isometry, ball_mem_nhds, h.image, hs_z, infDist, isClosedEmbedding, isClosed_iff_image_isClosed, isClosed_support, notMem_iff_infDist_pos, resolventTransform_def, support, support.Nonempty, support_eq_empty_iff
 -/
@@ -368,7 +448,7 @@ theorem analyticOn_resolventTransform
     exact (hasDerivAt_resolventTransform z hz).differentiableAt.differentiableWithinAt
   apply isOpen_compl_iff.mpr
   refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed ?_).mp isClosed_support
-  exact (algebraMap_isometry 𝕜 Complex
+  exact (algebraMap_isometry 𝕜 Complex).isClosedEmbedding
 
 中文:
 定理 analyticOn_resolventTransform
@@ -379,7 +459,7 @@ theorem analyticOn_resolventTransform
     exact (hasDerivAt_resolventTransform z hz).differentiableAt.differentiableWithinAt
   apply isOpen_compl_iff.mpr
   refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed ?_).mp isClosed_support
-  exact (algebraMap_isometry 𝕜 Complex
+  exact (algebraMap_isometry 𝕜 Complex).isClosedEmbedding
 
 Depends on / 依赖: IsClosedEmbedding, Topology, Topology.IsClosedEmbedding.isClosed_iff_image_isClosed, algebraMap_isometry, analyticOn_iff_differentiableOn, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt, hasDerivAt_resolventTransform, isClosedEmbedding, isClosed_iff_image_isClosed, isClosed_support, isOpen_compl_iff, isOpen_compl_iff.mpr
 -/

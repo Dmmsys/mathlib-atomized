@@ -464,7 +464,7 @@ theorem map_insertionSort
     simp_rw [List.map, insertionSort_cons]
     rw [List.map_orderedInsert _ s]; rw [ih hl.2.2]
     · simpa only [mem_insertionSort] using hl.2.1
-    · simpa only [mem_insertionSort] using h
+    · simpa only [mem_insertionSort] using hl.1.2
 
 中文:
 定理 map_insertionSort
@@ -477,7 +477,7 @@ theorem map_insertionSort
     simp_rw [List.map, insertionSort_cons]
     rw [List.map_orderedInsert _ s]; rw [ih hl.2.2]
     · simpa only [mem_insertionSort] using hl.2.1
-    · simpa only [mem_insertionSort] using h
+    · simpa only [mem_insertionSort] using hl.1.2
 
 Depends on / 依赖: List.forall_mem_cons, List.map, List.map_orderedInsert, forall_and, forall_mem_cons, insertionSort_cons, map_orderedInsert, mem_insertionSort, simp_rw
 -/
@@ -633,7 +633,15 @@ theorem Sublist.orderedInsert_sublist
       cases hs <;> split_ifs with hr
 · exact .cons_cons _ .cons _ ‹a :: as <+ bs›
       · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
-     
+        simp only [hr, orderedInsert_cons, ite_true] at ih
+exact .trans ih .cons _ (.refl _)
+.left _ (mem_of_cons_sublist ‹a :: as <+ bs›) · have hba := pairwise_cons.mp hb
+        exact absurd (trans_of _ ‹r x b› hba) hr
+      · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
+        rw [orderedInsert_cons]; rw [if_neg hr] at ih
+        exact .cons _ ih
+      · simp_all
+· exact .cons_cons _ orderedInsert_sublist x ‹as <+ bs› hb.of_cons
 
 中文:
 定理 子表.orderedInsert_sublist
@@ -649,7 +657,15 @@ theorem Sublist.orderedInsert_sublist
       cases hs <;> split_ifs with hr
 · exact .cons_cons _ .cons _ ‹a :: as <+ bs›
       · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
-     
+        simp only [hr, orderedInsert_cons, ite_true] at ih
+exact .trans ih .cons _ (.refl _)
+.left _ (mem_of_cons_sublist ‹a :: as <+ bs›) · have hba := pairwise_cons.mp hb
+        exact absurd (trans_of _ ‹r x b› hba) hr
+      · have ih := orderedInsert_sublist x ‹a :: as <+ bs› hb.of_cons
+        rw [orderedInsert_cons]; rw [if_neg hr] at ih
+        exact .cons _ ih
+      · simp_all
+· exact .cons_cons _ orderedInsert_sublist x ‹as <+ bs› hb.of_cons
 
 Depends on / 依赖: absurd, cons_cons, hb.of_cons, ite_true, mem_of_cons_sublist, of_cons, orderedInsert, orderedInsert_cons, orderedInsert_sublist, pairwise_cons, pairwise_cons.mp, split_ifs, trans_of
 -/
@@ -803,7 +819,10 @@ theorem sublist_insertionSort'
     cases hd with
 .trans (sublist_orderedInsert ..) | cons _ h => exact ih hs _ hc h
     | cons_cons _ h =>
-      specialize ih (hs.erase _) _ (erase_cons_head a ‹List _› ▸ hc
+      specialize ih (hs.erase _) _ (erase_cons_head a ‹List _› ▸ hc.erase a) h
+have hm := hc.mem_iff.mp mem_cons_self ..
+      have he := orderedInsert_erase _ _ hm hs
+      exact he ▸ Sublist.orderedInsert_sublist _ ih (pairwise_insertionSort ..)
 
 中文:
 定理 sublist_insertionSort'
@@ -817,7 +836,10 @@ theorem sublist_insertionSort'
     cases hd with
 .trans (sublist_orderedInsert ..) | cons _ h => exact ih hs _ hc h
     | cons_cons _ h =>
-      specialize ih (hs.erase _) _ (erase_cons_head a ‹List _› ▸ hc
+      specialize ih (hs.erase _) _ (erase_cons_head a ‹List _› ▸ hc.erase a) h
+have hm := hc.mem_iff.mp mem_cons_self ..
+      have he := orderedInsert_erase _ _ hm hs
+      exact he ▸ Sublist.orderedInsert_sublist _ ih (pairwise_insertionSort ..)
 
 Depends on / 依赖: Sublist, Sublist.orderedInsert_sublist, classical, cons_cons, erase_cons_head, generalizing, hc.erase, hc.mem_iff.mp, hs.erase, mem_cons_self, mem_iff, nil_perm, orderedInsert_erase, orderedInsert_sublist, pairwise_insertionSort, specialize, sublist_orderedInsert
 -/
@@ -1220,7 +1242,7 @@ theorem sortedGT_iff_strictAnti_get
 protected alias ⟨SortedLE.monotone_get, _root_.Monotone.sortedLE⟩ := sortedLE_iff_monotone_get
 protected alias ⟨SortedGE.antitone_get, _root_.Antitone.sortedGE⟩ := sortedGE_iff_antitone_get
 protected alias ⟨SortedLT.strictMono_get, _root_.StrictMono.sortedLT⟩ := sortedLT_iff_strictMono_get
-pro
+protected alias ⟨SortedGT.strictAnti_get, _root_.StrictAnti.sortedGT⟩ := sortedGT_iff_strictAnti_get
 
 中文:
 定理 sortedGT_iff_strictAnti_get
@@ -1230,7 +1252,7 @@ pro
 protected alias ⟨SortedLE.monotone_get, _root_.Monotone.sortedLE⟩ := sortedLE_iff_monotone_get
 protected alias ⟨SortedGE.antitone_get, _root_.Antitone.sortedGE⟩ := sortedGE_iff_antitone_get
 protected alias ⟨SortedLT.strictMono_get, _root_.StrictMono.sortedLT⟩ := sortedLT_iff_strictMono_get
-pro
+protected alias ⟨SortedGT.strictAnti_get, _root_.StrictAnti.sortedGT⟩ := sortedGT_iff_strictAnti_get
 -/
 theorem sortedGT_iff_strictAnti_get : l.SortedGT ↔ StrictAnti l.get := .rfl
 
@@ -1315,7 +1337,8 @@ theorem sortedGT_iff_pairwise
 
 protected alias ⟨SortedLE.pairwise, Pairwise.sortedLE⟩ := sortedLE_iff_pairwise
 protected alias ⟨SortedGE.pairwise, Pairwise.sortedGE⟩ := sortedGE_iff_pairwise
-protected alias ⟨SortedLT.pairwise,
+protected alias ⟨SortedLT.pairwise, Pairwise.sortedLT⟩ := sortedLT_iff_pairwise
+protected alias ⟨SortedGT.pairwise, Pairwise.sortedGT⟩ := sortedGT_iff_pairwise
 
 中文:
 定理 sortedGT_iff_pairwise
@@ -1326,7 +1349,8 @@ protected alias ⟨SortedLT.pairwise,
 
 protected alias ⟨SortedLE.pairwise, Pairwise.sortedLE⟩ := sortedLE_iff_pairwise
 protected alias ⟨SortedGE.pairwise, Pairwise.sortedGE⟩ := sortedGE_iff_pairwise
-protected alias ⟨SortedLT.pairwise,
+protected alias ⟨SortedLT.pairwise, Pairwise.sortedLT⟩ := sortedLT_iff_pairwise
+protected alias ⟨SortedGT.pairwise, Pairwise.sortedGT⟩ := sortedGT_iff_pairwise
 -/
 @[grind =] theorem sortedGT_iff_pairwise : l.SortedGT ↔ l.Pairwise (· > ·) := by
   simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff]
@@ -1403,7 +1427,7 @@ theorem sortedGT_iff_isChain
 protected alias ⟨SortedLE.isChain, IsChain.sortedLE⟩ := sortedLE_iff_isChain
 protected alias ⟨SortedGE.isChain, IsChain.sortedGE⟩ := sortedGE_iff_isChain
 protected alias ⟨SortedLT.isChain, IsChain.sortedLT⟩ := sortedLT_iff_isChain
-protected alia
+protected alias ⟨SortedGT.isChain, IsChain.sortedGT⟩ := sortedGT_iff_isChain
 
 中文:
 定理 sortedGT_iff_isChain
@@ -1413,7 +1437,7 @@ protected alia
 protected alias ⟨SortedLE.isChain, IsChain.sortedLE⟩ := sortedLE_iff_isChain
 protected alias ⟨SortedGE.isChain, IsChain.sortedGE⟩ := sortedGE_iff_isChain
 protected alias ⟨SortedLT.isChain, IsChain.sortedLT⟩ := sortedLT_iff_isChain
-protected alia
+protected alias ⟨SortedGT.isChain, IsChain.sortedGT⟩ := sortedGT_iff_isChain
 
 Depends on / 依赖: isChain_iff_pairwise, isChain_iff_pairwise.symm, sortedGT_iff_pairwise, sortedGT_iff_pairwise.trans
 -/
@@ -1552,7 +1576,11 @@ theorem sortedGT_iff_getElem_gt_getElem_of_lt
 alias ⟨SortedLE.getElem_le_getElem_of_le, sortedLE_of_getElem_le_getElem_of_le⟩ :=
   sortedLE_iff_getElem_le_getElem_of_le
 alias ⟨SortedGE.getElem_ge_getElem_of_le, sortedGE_of_getElem_ge_getElem_of_le⟩ :=
-  
+  sortedGE_iff_getElem_ge_getElem_of_le
+alias ⟨SortedLT.getElem_lt_getElem_of_lt, sortedLT_of_getElem_lt_getElem_of_lt⟩ :=
+  sortedLT_iff_getElem_lt_getElem_of_lt
+alias ⟨SortedGT.getElem_gt_getElem_of_lt, sortedGT_of_getElem_gt_getElem_of_lt⟩ :=
+  sortedGT_iff_getElem_gt_getElem_of_lt
 
 中文:
 定理 sortedGT_iff_getElem_gt_getElem_of_lt
@@ -1561,7 +1589,11 @@ alias ⟨SortedGE.getElem_ge_getElem_of_le, sortedGE_of_getElem_ge_getElem_of_le
 alias ⟨SortedLE.getElem_le_getElem_of_le, sortedLE_of_getElem_le_getElem_of_le⟩ :=
   sortedLE_iff_getElem_le_getElem_of_le
 alias ⟨SortedGE.getElem_ge_getElem_of_le, sortedGE_of_getElem_ge_getElem_of_le⟩ :=
-  
+  sortedGE_iff_getElem_ge_getElem_of_le
+alias ⟨SortedLT.getElem_lt_getElem_of_lt, sortedLT_of_getElem_lt_getElem_of_lt⟩ :=
+  sortedLT_iff_getElem_lt_getElem_of_lt
+alias ⟨SortedGT.getElem_gt_getElem_of_lt, sortedGT_of_getElem_gt_getElem_of_lt⟩ :=
+  sortedGT_iff_getElem_gt_getElem_of_lt
 
 Depends on / 依赖: StrictAnti, StrictAnti.sortedGT, h.strictAnti_get, sortedGT, strictAnti_get
 -/
@@ -1901,7 +1933,7 @@ theorem sortedGT_reverse
 protected alias ⟨SortedLE.of_reverse, SortedGE.reverse⟩ := sortedLE_reverse
 protected alias ⟨SortedGE.of_reverse, SortedLE.reverse⟩ := sortedGE_reverse
 protected alias ⟨SortedLT.of_reverse, SortedGT.reverse⟩ := sortedLT_reverse
-protected alias ⟨SortedGT.of_reverse, SortedLT.reverse⟩ := sor
+protected alias ⟨SortedGT.of_reverse, SortedLT.reverse⟩ := sortedGT_reverse
 
 中文:
 定理 sortedGT_reverse
@@ -1911,7 +1943,7 @@ protected alias ⟨SortedGT.of_reverse, SortedLT.reverse⟩ := sor
 protected alias ⟨SortedLE.of_reverse, SortedGE.reverse⟩ := sortedLE_reverse
 protected alias ⟨SortedGE.of_reverse, SortedLE.reverse⟩ := sortedGE_reverse
 protected alias ⟨SortedLT.of_reverse, SortedGT.reverse⟩ := sortedLT_reverse
-protected alias ⟨SortedGT.of_reverse, SortedLT.reverse⟩ := sor
+protected alias ⟨SortedGT.of_reverse, SortedLT.reverse⟩ := sortedGT_reverse
 -/
 @[simp] theorem sortedGT_reverse : l.reverse.SortedGT ↔ l.SortedLT := by grind
 
@@ -1992,7 +2024,7 @@ theorem sortedGT_map_ofDual
 protected alias ⟨SortedLE.map_ofDual, SortedGE.of_map_ofDual⟩ := sortedLE_map_ofDual
 protected alias ⟨SortedGE.map_ofDual, SortedLE.of_map_ofDual⟩ := sortedGE_map_ofDual
 protected alias ⟨SortedLT.map_ofDual, SortedGT.of_map_ofDual⟩ := sortedLT_map_ofDual
-prot
+protected alias ⟨SortedGT.map_ofDual, SortedLT.of_map_ofDual⟩ := sortedGT_map_ofDual
 
 中文:
 定理 sortedGT_map_ofDual
@@ -2003,7 +2035,7 @@ prot
 protected alias ⟨SortedLE.map_ofDual, SortedGE.of_map_ofDual⟩ := sortedLE_map_ofDual
 protected alias ⟨SortedGE.map_ofDual, SortedLE.of_map_ofDual⟩ := sortedGE_map_ofDual
 protected alias ⟨SortedLT.map_ofDual, SortedGT.of_map_ofDual⟩ := sortedLT_map_ofDual
-prot
+protected alias ⟨SortedGT.map_ofDual, SortedLT.of_map_ofDual⟩ := sortedGT_map_ofDual
 -/
 @[simp] theorem sortedGT_map_ofDual {l : List αᵒᵈ} :
     (l.map OrderDual.ofDual).SortedGT ↔ l.SortedLT := by
@@ -2092,7 +2124,7 @@ theorem sortedGT_map_toDual
 protected alias ⟨SortedLE.map_toDual, SortedGE.of_map_toDual⟩ := sortedLE_map_toDual
 protected alias ⟨SortedGE.map_toDual, SortedLE.of_map_toDual⟩ := sortedGE_map_toDual
 protected alias ⟨SortedLT.map_toDual, SortedGT.of_map_toDual⟩ := sortedLT_map_toDual
-prot
+protected alias ⟨SortedGT.map_toDual, SortedLT.of_map_toDual⟩ := sortedGT_map_toDual
 
 中文:
 定理 sortedGT_map_toDual
@@ -2103,7 +2135,7 @@ prot
 protected alias ⟨SortedLE.map_toDual, SortedGE.of_map_toDual⟩ := sortedLE_map_toDual
 protected alias ⟨SortedGE.map_toDual, SortedLE.of_map_toDual⟩ := sortedGE_map_toDual
 protected alias ⟨SortedLT.map_toDual, SortedGT.of_map_toDual⟩ := sortedLT_map_toDual
-prot
+protected alias ⟨SortedGT.map_toDual, SortedLT.of_map_toDual⟩ := sortedGT_map_toDual
 
 Depends on / 依赖: OrderDual, OrderDual.toDual_lt_toDual, toDual_lt_toDual
 -/

@@ -271,7 +271,10 @@ example (X Y : Type u) (f : X ⟶ Y) (x : X) : f x = (f : X -> Y) x := by
   with_reducible rfl
 
 example (X Y : Type*) (f : Fun X Y) : (f : X -> Y) = f := by
-  w
+  with_reducible rfl
+
+example (X Y : Type*) (f : Fun X Y) (x : X) : f x = (f : X -> Y) x := by
+  with_reducible rfl
 
 中文:
 实例 :
@@ -286,7 +289,10 @@ example (X Y : Type u) (f : X ⟶ Y) (x : X) : f x = (f : X -> Y) x := by
   with_reducible rfl
 
 example (X Y : Type*) (f : Fun X Y) : (f : X -> Y) = f := by
-  w
+  with_reducible rfl
+
+example (X Y : Type*) (f : Fun X Y) (x : X) : f x = (f : X -> Y) x := by
+  with_reducible rfl
 
 Depends on / 依赖: Hom.hom
 -/
@@ -1229,7 +1235,10 @@ theorem ofHom_epi_iff_surjective
     apply ConcreteCategory.hom_ext
     intro x
     simp [dsimp% congrFun hg x]
-
+  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
+      congrFun (H.injective_comp_right ?_) x⟩
+    ext y
+    exact ConcreteCategory.congr_hom h y
 
 中文:
 定理 ofHom_epi_iff_surjective
@@ -1244,7 +1253,10 @@ theorem ofHom_epi_iff_surjective
     apply ConcreteCategory.hom_ext
     intro x
     simp [dsimp% congrFun hg x]
-
+  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
+      congrFun (H.injective_comp_right ?_) x⟩
+    ext y
+    exact ConcreteCategory.congr_hom h y
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom_ext, Equiv.ulift, Function, Function.surjective_of_right_cancellable_Prop, H.injective_comp_right, TypeCat, TypeCat.homEquiv.symm.injective, comp_left, congr_hom, eq_iff, homEquiv, hom_ext, injective, injective_comp_right, surjective_of_right_cancellable_Prop, symm.injective.comp_left.eq_iff
 -/

@@ -334,7 +334,18 @@ theorem IsPreirreducible.of_subset_iUnion
 choose i hi using mem_iUnion.mp hsU hx
     rcases exists_mem_irreducibleComponents_subset_of_isIrreducible (U i).carrier ⟨⟨x, hi⟩, h i⟩
       with ⟨u, hu, hUu⟩
-    by_cases huniv : s 
+    by_cases huniv : s subseteq u
+    · exact hu.1.2.open_subset hs huniv
+    · have huo : IsOpen uᶜ :=
+        IsClosed.isOpen_compl (self := isClosed_of_mem_irreducibleComponents u hu)
+      rcases not_subset.mp huniv with ⟨a, ⟨ha₁, ha₂⟩⟩
+choose j haj using mem_iUnion.mp hsU ha₁
+have hji : j != i := fun hji' => ha₂ hUu hji' ▸ haj
+      rcases inter_nonempty_iff_exists_left.mp
+        ((h j) (U i) uᶜ (U i).isOpen huo
+        (not_disjoint_iff_nonempty_inter.mp (by simpa using hn hji)) ⟨a, ⟨haj, ha₂⟩⟩).right
+        with ⟨x, hx₁, hx₂⟩
+exfalso; exact hx₂ hUu hx₁
 
 中文:
 定理 IsPreirreducible.of_subset_iUnion
@@ -346,7 +357,18 @@ choose i hi using mem_iUnion.mp hsU hx
 choose i hi using mem_iUnion.mp hsU hx
     rcases exists_mem_irreducibleComponents_subset_of_isIrreducible (U i).carrier ⟨⟨x, hi⟩, h i⟩
       with ⟨u, hu, hUu⟩
-    by_cases huniv : s 
+    by_cases huniv : s subseteq u
+    · exact hu.1.2.open_subset hs huniv
+    · have huo : IsOpen uᶜ :=
+        IsClosed.isOpen_compl (self := isClosed_of_mem_irreducibleComponents u hu)
+      rcases not_subset.mp huniv with ⟨a, ⟨ha₁, ha₂⟩⟩
+choose j haj using mem_iUnion.mp hsU ha₁
+have hji : j != i := fun hji' => ha₂ hUu hji' ▸ haj
+      rcases inter_nonempty_iff_exists_left.mp
+        ((h j) (U i) uᶜ (U i).isOpen huo
+        (not_disjoint_iff_nonempty_inter.mp (by simpa using hn hji)) ⟨a, ⟨haj, ha₂⟩⟩).right
+        with ⟨x, hx₁, hx₂⟩
+exfalso; exact hx₂ hUu hx₁
 
 Depends on / 依赖: IsClosed, IsClosed.isOpen_compl, IsOpen, carrier, eq_empty_or_nonempty, exists_mem_irreducibleComponents_subset_of_isIrreducible, isClosed_of_mem_irreducibleComponents, isOpen_compl, isPreirreducible_empty, mem_i, mem_iUnion, mem_iUnion.mp, not_subset, not_subset.mp, open_subset, s.eq_empty_or_nonempty, subseteq
 -/

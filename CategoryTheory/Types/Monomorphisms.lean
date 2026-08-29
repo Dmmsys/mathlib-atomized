@@ -70,7 +70,16 @@ instance :
     replace hφ (j : J) := congr_hom (hφ j)
     simp only [Functor.const_obj_obj, comp_apply] at hφ
     intro x₁ y₁ h
-    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : exists (j : J) (x₁' y₁' : F₁
+    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : exists (j : J) (x₁' y₁' : F₁.obj j),
+        x₁ = c₁.ι.app j x₁' ∧ y₁ = c₁.ι.app j y₁' := by
+      obtain ⟨j, x₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ x₁
+      obtain ⟨l, y₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ y₁
+      exact ⟨_, _, _, congr_hom (c₁.w (IsFiltered.leftToMax j l)).symm _,
+        congr_hom (c₁.w (IsFiltered.rightToMax j l)).symm _⟩
+    simp only [Functor.const_obj_obj, hφ] at h
+    obtain ⟨k, α, hk⟩ := (Types.FilteredColimit.isColimit_eq_iff' hc₂ _ _).1 h
+    simp only [← NatTrans.naturality_apply] at hk
+    rw [← c₁.w α]; rw [comp_apply]; rw [comp_apply]; rw [hf _ hk]⟩
 
 中文:
 实例 :
@@ -80,7 +89,16 @@ instance :
     replace hφ (j : J) := congr_hom (hφ j)
     simp only [Functor.const_obj_obj, comp_apply] at hφ
     intro x₁ y₁ h
-    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : exists (j : J) (x₁' y₁' : F₁
+    obtain ⟨j, x₁, y₁, rfl, rfl⟩ : exists (j : J) (x₁' y₁' : F₁.obj j),
+        x₁ = c₁.ι.app j x₁' ∧ y₁ = c₁.ι.app j y₁' := by
+      obtain ⟨j, x₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ x₁
+      obtain ⟨l, y₁, rfl⟩ := Types.jointly_surjective_of_isColimit hc₁ y₁
+      exact ⟨_, _, _, congr_hom (c₁.w (IsFiltered.leftToMax j l)).symm _,
+        congr_hom (c₁.w (IsFiltered.rightToMax j l)).symm _⟩
+    simp only [Functor.const_obj_obj, hφ] at h
+    obtain ⟨k, α, hk⟩ := (Types.FilteredColimit.isColimit_eq_iff' hc₂ _ _).1 h
+    simp only [← NatTrans.naturality_apply] at hk
+    rw [← c₁.w α]; rw [comp_apply]; rw [comp_apply]; rw [hf _ hk]⟩
 
 Depends on / 依赖: Functor, Functor.const_obj_obj, Types.jointly_surjective_of_isColimit, comp_apply, congr_hom, const_obj_obj, functorCategory, jointly_surjective_of_isColimit, mono_iff_injective, monomorphisms, monomorphisms.iff, replace
 -/

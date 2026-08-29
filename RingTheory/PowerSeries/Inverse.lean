@@ -83,7 +83,14 @@ theorem coeff_inv_aux
   · aesop
   · aesop
   · rintro ⟨i, j⟩ _hij
- 
+    obtain H | H := le_or_gt n j
+    · aesop
+    rw [if_pos H]; rw [if_pos]
+    · rfl
+    refine ⟨?_, fun hh => H.not_ge ?_⟩
+    · rintro ⟨⟩
+      simpa [Finsupp.single_eq_same] using le_of_lt H
+    · simpa [Finsupp.single_eq_same] using hh ()
 
 中文:
 定理 coeff_inv_aux
@@ -101,7 +108,14 @@ theorem coeff_inv_aux
   · aesop
   · aesop
   · rintro ⟨i, j⟩ _hij
- 
+    obtain H | H := le_or_gt n j
+    · aesop
+    rw [if_pos H]; rw [if_pos]
+    · rfl
+    refine ⟨?_, fun hh => H.not_ge ?_⟩
+    · rintro ⟨⟩
+      simpa [Finsupp.single_eq_same] using le_of_lt H
+    · simpa [Finsupp.single_eq_same] using hh ()
 
 Depends on / 依赖: Finset, Finset.sum_nbij, Finsupp, Finsupp.single_eq_same, Finsupp.single_eq_zero, H.not_ge, MvPowerSeries, MvPowerSeries.coeff_inv_aux, _hij, coeff_inv_aux, if_pos, inv.aux, le_of_lt, le_or_gt, not_ge, single, single_eq_same, single_eq_zero, split_ifs, sum_nbij
 -/
@@ -1024,7 +1038,16 @@ theorem maximalIdeal_eq_span_X
     · intro I f hI hfX hfI
       rw [Ideal.mem_span_singleton]; rw [X_dvd_iff] at hfX
       have hfI0 : C (f 0) in I := by
- 
+        have : C (f 0) = f - (f - C (f 0)) := by rw [sub_sub_cancel]
+        rw [this]
+        apply Ideal.sub_mem I hfI
+        apply hI
+        rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]; rw [map_sub]; rw [constantCoeff_C]; rw [←
+          coeff_zero_eq_constantCoeff_apply]; rw [sub_eq_zero]; rw [coeff_zero_eq_constantCoeff]
+        rfl
+      rw [← Ideal.eq_top_iff_one]
+      apply Ideal.eq_top_of_isUnit_mem I hfI0 (IsUnit.map C (Ne.isUnit hfX))
+  rw [IsLocalRing.eq_maximalIdeal hX]
 
 中文:
 定理 maximalIdeal_eq_span_X
@@ -1038,7 +1061,16 @@ theorem maximalIdeal_eq_span_X
     · intro I f hI hfX hfI
       rw [Ideal.mem_span_singleton]; rw [X_dvd_iff] at hfX
       have hfI0 : C (f 0) in I := by
- 
+        have : C (f 0) = f - (f - C (f 0)) := by rw [sub_sub_cancel]
+        rw [this]
+        apply Ideal.sub_mem I hfI
+        apply hI
+        rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]; rw [map_sub]; rw [constantCoeff_C]; rw [←
+          coeff_zero_eq_constantCoeff_apply]; rw [sub_eq_zero]; rw [coeff_zero_eq_constantCoeff]
+        rfl
+      rw [← Ideal.eq_top_iff_one]
+      apply Ideal.eq_top_of_isUnit_mem I hfI0 (IsUnit.map C (Ne.isUnit hfX))
+  rw [IsLocalRing.eq_maximalIdeal hX]
 
 Depends on / 依赖: Ideal.isMaximal_iff, Ideal.mem_span_singleton, Ideal.span, Ideal.sub_mem, IsMaximal, Prime.not_dvd_one, X_dvd_iff, X_prime, coeff_zero_eq_constantCoeff_apply, constantCoeff_C, isMaximal_iff, map_sub, mem_span_singleton, not_dvd_one, sub_mem, sub_sub_cancel
 -/
@@ -1073,7 +1105,13 @@ instance :
   normUnit_mul hf hg := by
     simp only [← mul_inv, inv_inj]
     simp only [Unit_of_divided_by_X_pow_order_nonzero (mul_ne_zero hf hg),
-      Unit_of_divided_by_X_pow_order_nonzero hf
+      Unit_of_divided_by_X_pow_order_nonzero hf, Unit_of_divided_by_X_pow_order_nonzero hg,
+      Units.ext_iff, Units.val_mul, ← divXPowOrder_mul]
+  normUnit_coe_units u := by
+    set u₀ := u.1 with hu
+    have h₀ : IsUnit u₀ := ⟨u, hu.symm⟩
+    rw [inv_inj]; rw [Units.ext_iff]; rw [← hu]; rw [Unit_of_divided_by_X_pow_order_nonzero h₀.ne_zero]
+    exact ((eq_divided_by_X_pow_order_Iff_Unit h₀.ne_zero).mpr h₀).symm
 
 中文:
 实例 :
@@ -1083,7 +1121,13 @@ instance :
   normUnit_mul hf hg := by
     simp only [← mul_inv, inv_inj]
     simp only [Unit_of_divided_by_X_pow_order_nonzero (mul_ne_zero hf hg),
-      Unit_of_divided_by_X_pow_order_nonzero hf
+      Unit_of_divided_by_X_pow_order_nonzero hf, Unit_of_divided_by_X_pow_order_nonzero hg,
+      Units.ext_iff, Units.val_mul, ← divXPowOrder_mul]
+  normUnit_coe_units u := by
+    set u₀ := u.1 with hu
+    have h₀ : IsUnit u₀ := ⟨u, hu.symm⟩
+    rw [inv_inj]; rw [Units.ext_iff]; rw [← hu]; rw [Unit_of_divided_by_X_pow_order_nonzero h₀.ne_zero]
+    exact ((eq_divided_by_X_pow_order_Iff_Unit h₀.ne_zero).mpr h₀).symm
 
 Depends on / 依赖: Unit_of_divided_by_X_pow_order
 -/
@@ -1155,7 +1199,9 @@ theorem normalized_count_X_eq_of_coe
   simp only [← Nat.cast_le (α := Nat∞)]
   rw [X_eq_normalize]; rw [PowerSeries.X_eq_normalizeX]; rw [← emultiplicity_eq_count_normalizedFactors
     irreducible_X hP]; rw [← emultiplicity_eq_count_normalizedFactors X_irreducible] <;>
-  simp only [← pow_dvd_iff_le_emulti
+  simp only [← pow_dvd_iff_le_emultiplicity, Polynomial.X_pow_dvd_iff,
+    PowerSeries.X_pow_dvd_iff, Polynomial.coeff_coe P, implies_true, ne_eq, coe_eq_zero_iff, hP,
+    not_false_eq_true]
 
 中文:
 定理 normalized_count_X_eq_of_coe
@@ -1165,7 +1211,9 @@ theorem normalized_count_X_eq_of_coe
   simp only [← Nat.cast_le (α := Nat∞)]
   rw [X_eq_normalize]; rw [PowerSeries.X_eq_normalizeX]; rw [← emultiplicity_eq_count_normalizedFactors
     irreducible_X hP]; rw [← emultiplicity_eq_count_normalizedFactors X_irreducible] <;>
-  simp only [← pow_dvd_iff_le_emulti
+  simp only [← pow_dvd_iff_le_emultiplicity, Polynomial.X_pow_dvd_iff,
+    PowerSeries.X_pow_dvd_iff, Polynomial.coeff_coe P, implies_true, ne_eq, coe_eq_zero_iff, hP,
+    not_false_eq_true]
 
 Depends on / 依赖: Nat.cast_le, Polynomial, Polynomial.X_pow_dvd_iff, Polynomial.coeff_coe, PowerSeries, PowerSeries.X_eq_normalizeX, PowerSeries.X_pow_dvd_iff, X_eq_normalize, X_eq_normalizeX, X_irreducible, X_pow_dvd_iff, cast_le, coe_eq_zero_iff, coeff_coe, emultiplicity_eq_count_normalizedFactors, eq_of_forall_le_iff, implies_true, irreducible_X, ne_eq, not_false_eq_true
 -/

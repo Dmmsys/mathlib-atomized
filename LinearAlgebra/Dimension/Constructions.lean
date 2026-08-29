@@ -59,7 +59,8 @@ theorem LinearIndependent.sumElim_of_quotient
   refine disjoint_def.mpr fun x h₁ h₂ => ?_
   have : x in M' := span_le.mpr (Set.range_subset_iff.mpr fun i => (f i).prop) h₁
   obtain ⟨c, rfl⟩ := Finsupp.mem_span_range_iff_exists_finsupp.mp h₂
-  simp_rw [← Quotient.m
+  simp_rw [← Quotient.mk_eq_zero, ← mkQ_apply, map_finsuppSum, map_smul, mkQ_apply] at this
+  rw [linearIndependent_iff.mp hg _ this]; rw [Finsupp.sum_zero_index]
 
 中文:
 定理 LinearIndependent.sumElim_of_quotient
@@ -68,7 +69,8 @@ theorem LinearIndependent.sumElim_of_quotient
   refine disjoint_def.mpr fun x h₁ h₂ => ?_
   have : x in M' := span_le.mpr (Set.range_subset_iff.mpr fun i => (f i).prop) h₁
   obtain ⟨c, rfl⟩ := Finsupp.mem_span_range_iff_exists_finsupp.mp h₂
-  simp_rw [← Quotient.m
+  simp_rw [← Quotient.mk_eq_zero, ← mkQ_apply, map_finsuppSum, map_smul, mkQ_apply] at this
+  rw [linearIndependent_iff.mp hg _ this]; rw [Finsupp.sum_zero_index]
 -/
 theorem LinearIndependent.sumElim_of_quotient
     {M' : Submodule R M} {ι₁ ι₂} {f : ι₁ -> M'} (hf : LinearIndependent R f) (g : ι₂ -> M)
@@ -201,7 +203,8 @@ theorem rank_quotient_add_rank_le
   rw [Cardinal.ciSup_add_ciSup _ bddAbove_of_small _ bddAbove_of_small]
   refine ciSup_le fun ⟨s, hs⟩ => ciSup_le fun ⟨t, ht⟩ => ?_
   choose f hf using Submodule.Quotient.mk_surjective M'
-  simpa [add_comm] using! (LinearIndependent.sumElim_of_quotient ht
+  simpa [add_comm] using! (LinearIndependent.sumElim_of_quotient ht (fun (i : s) => f i)
+    (by simpa [Function.comp_def, hf] using! hs)).cardinal_le_rank
 
 中文:
 定理 rank_quotient_add_rank_le
@@ -211,7 +214,8 @@ theorem rank_quotient_add_rank_le
   rw [Cardinal.ciSup_add_ciSup _ bddAbove_of_small _ bddAbove_of_small]
   refine ciSup_le fun ⟨s, hs⟩ => ciSup_le fun ⟨t, ht⟩ => ?_
   choose f hf using Submodule.Quotient.mk_surjective M'
-  simpa [add_comm] using! (LinearIndependent.sumElim_of_quotient ht
+  simpa [add_comm] using! (LinearIndependent.sumElim_of_quotient ht (fun (i : s) => f i)
+    (by simpa [Function.comp_def, hf] using! hs)).cardinal_le_rank
 
 Depends on / 依赖: Cardinal, Cardinal.ciSup_add_ciSup, Function, Function.comp_def, LinearIndependent, LinearIndependent.sumElim_of_quotient, Module, Module.rank_def, Quotient, Submodule, Submodule.Quotient.mk_surjective, add_comm, bddAbove_of_small, cardinal_le_rank, ciSup_add_ciSup, ciSup_le, comp_def, conv_lhs, mk_surjective, rank_def
 -/
@@ -1024,7 +1028,8 @@ definition finDimVectorspaceEquiv
   have hn := Cardinal.lift_inj.{v, u}.2 hn
   rw [this] at hn
   rw [← @rank_fin_fun R _ _ n] at hn
-  haveI : Module.Free R (Fin n -> R) := Module.Free.pi 
+  haveI : Module.Free R (Fin n -> R) := Module.Free.pi _ _
+  exact Classical.choice (nonempty_linearEquiv_of_lift_rank_eq hn)
 
 中文:
 定义 finDimVectorspaceEquiv
@@ -1035,7 +1040,8 @@ definition finDimVectorspaceEquiv
   have hn := Cardinal.lift_inj.{v, u}.2 hn
   rw [this] at hn
   rw [← @rank_fin_fun R _ _ n] at hn
-  haveI : Module.Free R (Fin n -> R) := Module.Free.pi 
+  haveI : Module.Free R (Fin n -> R) := Module.Free.pi _ _
+  exact Classical.choice (nonempty_linearEquiv_of_lift_rank_eq hn)
 
 Depends on / 依赖: Cardinal, Cardinal.lift, Cardinal.lift_inj, Classical, Classical.choice, Module, Module.Free, Module.Free.pi, choice, lift_inj, nonempty_linearEquiv_of_lift_rank_eq, nontrivial_of_invariantBasisNumber, rank_fin_fun
 -/
@@ -1831,7 +1837,13 @@ definition sumQuot
     apply Function.rightInverse_surjInv W.mkQ_surjective
   apply Basis.mk (v := b)
   · apply LinearIndependent.sumElim_of_quotient
-    · exact bW.li
+    · exact bW.linearIndependent
+    · convert! bQ.linearIndependent
+  · unfold b
+    rw [Set.Sum.elim_range]; rw [Submodule.span_union]; rw [show Set.range (fun i => (bW i : V)) = W.subtype '' (Set.range (fun i => bW i)) by aesop]; rw [← Submodule.map_span]; rw [bW.span_eq]; rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [top_le_iff]; rw [← Submodule.map_mkQ_eq_top]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← bQ.span_eq]
+    congr 2
+
+@[simp]
 
 中文:
 定义 sumQuot
@@ -1843,7 +1855,13 @@ definition sumQuot
     apply Function.rightInverse_surjInv W.mkQ_surjective
   apply Basis.mk (v := b)
   · apply LinearIndependent.sumElim_of_quotient
-    · exact bW.li
+    · exact bW.linearIndependent
+    · convert! bQ.linearIndependent
+  · unfold b
+    rw [Set.Sum.elim_range]; rw [Submodule.span_union]; rw [show Set.range (fun i => (bW i : V)) = W.subtype '' (Set.range (fun i => bW i)) by aesop]; rw [← Submodule.map_span]; rw [bW.span_eq]; rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [top_le_iff]; rw [← Submodule.map_mkQ_eq_top]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← bQ.span_eq]
+    congr 2
+
+@[simp]
 
 Depends on / 依赖: Basis.mk, Function, Function.rightInverse_surjInv, Function.surjInv, LinearIndependent, LinearIndependent.sumElim_of_quotient, Set.Sum.elim_range, Set.range, Submodul, Submodule, Submodule.span_union, Sum.elim, Sum.inr, W.mkQ, W.mkQ_surjective, W.subtype, bQ.linearIndependent, bW.linearIndependent, convert, elim_range
 -/
@@ -2015,7 +2033,9 @@ theorem sumQuot_repr_inr
   | inl i =>
     simp [sumQuot_inl, LinearMap.comp_apply,
       (Quotient.mk_eq_zero W).mpr (Submodule.coe_mem (bW i))]
-  | inr i =
+  | inr i =>
+    classical
+    simp [LinearMap.comp_apply, sumQuot_inr, Finsupp.single_apply]
 
 中文:
 定理 sumQuot_repr_inr
@@ -2031,7 +2051,9 @@ theorem sumQuot_repr_inr
   | inl i =>
     simp [sumQuot_inl, LinearMap.comp_apply,
       (Quotient.mk_eq_zero W).mpr (Submodule.coe_mem (bW i))]
-  | inr i =
+  | inr i =>
+    classical
+    simp [LinearMap.comp_apply, sumQuot_inr, Finsupp.single_apply]
 
 Depends on / 依赖: Finsupp, Finsupp.single_apply, LinearMap, LinearMap.comp_apply, LinearMap.ext_iff, Module, Module.Basis.coord_apply, Quotient, Quotient.mk_eq_zero, Submodule, Submodule.coe_mem, classical, coe_mem, comp_apply, coord_apply, ext_iff, mk_eq_zero, revert, single_apply, sumQuot
 -/

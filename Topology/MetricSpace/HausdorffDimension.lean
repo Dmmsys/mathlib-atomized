@@ -342,7 +342,8 @@ theorem dimH_eq_iInf
     simpa [hi, hj] using hausdorffMeasure_mono hij.le s
   · by_contra! h
     rcases ENNReal.lt_iff_exists_nnreal_btwn.1 h with ⟨d', hdim_lt, hlt⟩
-    have h0 :
+    have h0 : μH[d'] s = 0 := hausdorffMeasure_of_dimH_lt hdim_lt
+    exact hlt.not_ge (iInf₂_le d' h0)
 
 中文:
 定理 dimH_eq_iInf
@@ -357,7 +358,8 @@ theorem dimH_eq_iInf
     simpa [hi, hj] using hausdorffMeasure_mono hij.le s
   · by_contra! h
     rcases ENNReal.lt_iff_exists_nnreal_btwn.1 h with ⟨d', hdim_lt, hlt⟩
-    have h0 :
+    have h0 : μH[d'] s = 0 := hausdorffMeasure_of_dimH_lt hdim_lt
+    exact hlt.not_ge (iInf₂_le d' h0)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.lt_iff_exists_nnreal_btwn, coe_le_coe, dimH_def, hausdorffMeasure_mono, hausdorffMeasure_of_dimH_lt, hdim_lt, hij.le, hlt.not_ge, iSup_le_iff, le_antisymm, le_iInf_iff, lt_iff_exists_nnreal_btwn, not_ge
 -/
@@ -504,7 +506,9 @@ theorem dimH_iUnion
   have : forall i, μH[d] (s i) = 0 := fun i =>
     hausdorffMeasure_of_dimH_lt ((le_iSup (fun i => dimH (s i)) i).trans_lt hd)
   rw [measure_iUnion_null this]
-  exact ENNR
+  exact ENNReal.zero_ne_top
+
+@[simp]
 
 中文:
 定理 dimH_iUnion
@@ -516,7 +520,9 @@ theorem dimH_iUnion
   have : forall i, μH[d] (s i) = 0 := fun i =>
     hausdorffMeasure_of_dimH_lt ((le_iSup (fun i => dimH (s i)) i).trans_lt hd)
   rw [measure_iUnion_null this]
-  exact ENNR
+  exact ENNReal.zero_ne_top
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.zero_ne_top, borelize, contrapose, dimH_le, dimH_mono, hausdorffMeasure_of_dimH_lt, iSup_le, le_antisymm, le_iSup, measure_iUnion_null, subset_iUnion, trans_lt, zero_ne_top
 -/
@@ -749,7 +755,10 @@ theorem bsupr_limsup_dimH
   · refine limsup_le_of_le isCobounded_le_of_bot ?_
     exact eventually_smallSets.2 ⟨s, self_mem_nhdsWithin, fun t => dimH_mono⟩
   · refine le_of_forall_lt_imp_le_of_dense fun r hr => ?_
-    rcases exists_mem_nhdsWithin_lt_dimH_of_lt_dimH hr with 
+    rcases exists_mem_nhdsWithin_lt_dimH_of_lt_dimH hr with ⟨x, hxs, hxr⟩
+    refine le_iSup₂_of_le x hxs ?_; rw [limsup_eq]; refine le_sInf fun b hb => ?_
+    rcases eventually_smallSets.1 hb with ⟨t, htx, ht⟩
+    exact (hxr t htx).le.trans (ht t Subset.rfl)
 
 中文:
 定理 bsupr_limsup_dimH
@@ -760,7 +769,10 @@ theorem bsupr_limsup_dimH
   · refine limsup_le_of_le isCobounded_le_of_bot ?_
     exact eventually_smallSets.2 ⟨s, self_mem_nhdsWithin, fun t => dimH_mono⟩
   · refine le_of_forall_lt_imp_le_of_dense fun r hr => ?_
-    rcases exists_mem_nhdsWithin_lt_dimH_of_lt_dimH hr with 
+    rcases exists_mem_nhdsWithin_lt_dimH_of_lt_dimH hr with ⟨x, hxs, hxr⟩
+    refine le_iSup₂_of_le x hxs ?_; rw [limsup_eq]; refine le_sInf fun b hb => ?_
+    rcases eventually_smallSets.1 hb with ⟨t, htx, ht⟩
+    exact (hxr t htx).le.trans (ht t Subset.rfl)
 
 Depends on / 依赖: Subset, Subset.rfl, dimH_mono, eventually_smallSets, exists_mem_nhdsWithin_lt_dimH_of_lt_dimH, isCobounded_le_of_bot, le.trans, le_antisymm, le_of_forall_lt_imp_le_of_dense, le_sInf, limsup_eq, limsup_le_of_le, self_mem_nhdsWithin
 -/
@@ -828,7 +840,9 @@ theorem HolderOnWith.dimH_image_le
   have Hrd : μH[(r * d : Real>=0)] s = ⊤ := by
     contrapose this
     finiteness
-  rw [ENNReal.le_div_iff_mul_
+  rw [ENNReal.le_div_iff_mul_le]; rw [mul_comm]; rw [← ENNReal.coe_mul]
+  exacts [le_dimH_of_hausdorffMeasure_eq_top Hrd, Or.inl (mt ENNReal.coe_eq_zero.1 hr.ne'),
+    Or.inl ENNReal.coe_ne_top]
 
 中文:
 定理 HolderOnWith.dimH_image_le
@@ -841,7 +855,9 @@ theorem HolderOnWith.dimH_image_le
   have Hrd : μH[(r * d : Real>=0)] s = ⊤ := by
     contrapose this
     finiteness
-  rw [ENNReal.le_div_iff_mul_
+  rw [ENNReal.le_div_iff_mul_le]; rw [mul_comm]; rw [← ENNReal.coe_mul]
+  exacts [le_dimH_of_hausdorffMeasure_eq_top Hrd, Or.inl (mt ENNReal.coe_eq_zero.1 hr.ne'),
+    Or.inl ENNReal.coe_ne_top]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_eq_zero, ENNReal.coe_mul, ENNReal.coe_ne_top, ENNReal.coe_rpow_of_nonneg, ENNReal.le_div_iff_mul_le, Or.inl, borelize, coe_eq_zero, coe_mul, coe_ne_top, coe_nonneg, coe_rpow_of_nonneg, contrapose, d.coe_nonneg, dimH_le, exacts, finiteness, h.hausdorffMeasure_image_le, hausdorffMeasure_image_le
 -/
@@ -911,7 +927,7 @@ theorem dimH_image_le_of_locally_holder_on
   rcases countable_cover_nhdsWithin htn with ⟨u, hus, huc, huU⟩
   replace huU := inter_eq_self_of_subset_left huU; rw [inter_iUnion₂] at huU
   rw [← huU]; rw [image_iUnion₂]; rw [dimH_bUnion huc]; rw [dimH_bUnion huc]; simp only [ENNReal.iSup_div]
-  exact iSup₂_mono 
+  exact iSup₂_mono fun x hx => ((hC x (hus hx)).mono inter_subset_right).dimH_image_le hr
 
 中文:
 定理 dimH_image_le_of_locally_holder_on
@@ -921,7 +937,7 @@ theorem dimH_image_le_of_locally_holder_on
   rcases countable_cover_nhdsWithin htn with ⟨u, hus, huc, huU⟩
   replace huU := inter_eq_self_of_subset_left huU; rw [inter_iUnion₂] at huU
   rw [← huU]; rw [image_iUnion₂]; rw [dimH_bUnion huc]; rw [dimH_bUnion huc]; simp only [ENNReal.iSup_div]
-  exact iSup₂_mono 
+  exact iSup₂_mono fun x hx => ((hC x (hus hx)).mono inter_subset_right).dimH_image_le hr
 
 Depends on / 依赖: ENNReal, ENNReal.iSup_div, countable_cover_nhdsWithin, dimH_bUnion, dimH_image_le, iSup_div, inter_eq_self_of_subset_left, inter_subset_right, replace
 -/
@@ -1352,7 +1368,10 @@ theorem dimH_ball_pi
     exact fun x _ y _ => Subsingleton.elim x y
   · rw [← ENNReal.coe_natCast]
     have : μH[Fintype.card ι] (Metric.ball x r) = ENNReal.ofReal ((2 * r) ^ Fintype.card ι) := by
-      rw [
+      rw [hausdorffMeasure_pi_real]; rw [Real.volume_pi_ball _ hr]
+    refine dimH_of_hausdorffMeasure_ne_zero_ne_top ?_ ?_ <;> rw [NNReal.coe_natCast, this]
+    · simp [pow_pos (mul_pos (zero_lt_two' Real) hr)]
+    · exact ENNReal.ofReal_ne_top
 
 中文:
 定理 dimH_ball_pi
@@ -1363,7 +1382,10 @@ theorem dimH_ball_pi
     exact fun x _ y _ => Subsingleton.elim x y
   · rw [← ENNReal.coe_natCast]
     have : μH[Fintype.card ι] (Metric.ball x r) = ENNReal.ofReal ((2 * r) ^ Fintype.card ι) := by
-      rw [
+      rw [hausdorffMeasure_pi_real]; rw [Real.volume_pi_ball _ hr]
+    refine dimH_of_hausdorffMeasure_ne_zero_ne_top ?_ ?_ <;> rw [NNReal.coe_natCast, this]
+    · simp [pow_pos (mul_pos (zero_lt_two' Real) hr)]
+    · exact ENNReal.ofReal_ne_top
 
 Depends on / 依赖: ENNReal, ENNReal.coe_natCast, ENNReal.ofReal, ENNReal.ofReal_ne_, Fintype, Fintype.card, Fintype.card_eq_zero_iff, Metric, Metric.ball, NNReal, NNReal.coe_natCast, Nat.cast_eq_zero, Real.volume_pi_ball, Subsingleton, Subsingleton.elim, card_eq_zero_iff, cast_eq_zero, coe_natCast, dimH_of_hausdorffMeasure_ne_zero_ne_top, dimH_subsingleton
 -/
@@ -1457,7 +1479,9 @@ theorem dimH_of_mem_nhds
   rw [← e.dimH_image]
   refine le_antisymm ?_ ?_
   · exact (dimH_mono (subset_univ _)).trans_eq (dimH_univ_pi_fin _)
-  · have : e '' s in 𝓝 (e x) := by rw [← e.map_nhds_e
+  · have : e '' s in 𝓝 (e x) := by rw [← e.map_nhds_eq]; exact image_mem_map h
+    rcases Metric.nhds_basis_ball.mem_iff.1 this with ⟨r, hr0, hr⟩
+    simpa only [dimH_ball_pi_fin (e x) hr0] using dimH_mono hr
 
 中文:
 定理 dimH_of_mem_nhds
@@ -1469,7 +1493,9 @@ theorem dimH_of_mem_nhds
   rw [← e.dimH_image]
   refine le_antisymm ?_ ?_
   · exact (dimH_mono (subset_univ _)).trans_eq (dimH_univ_pi_fin _)
-  · have : e '' s in 𝓝 (e x) := by rw [← e.map_nhds_e
+  · have : e '' s in 𝓝 (e x) := by rw [← e.map_nhds_eq]; exact image_mem_map h
+    rcases Metric.nhds_basis_ball.mem_iff.1 this with ⟨r, hr0, hr⟩
+    simpa only [dimH_ball_pi_fin (e x) hr0] using dimH_mono hr
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ofFinrankEq, Metric, Metric.nhds_basis_ball.mem_iff, Module, Module.finrank_fin_fun, dimH_ball_pi_fin, dimH_image, dimH_mono, dimH_univ_pi_fin, e.dimH_image, e.map_nhds_eq, finrank, finrank_fin_fun, image_mem_map, le_antisymm, map_nhds_eq, mem_iff, nhds_basis_ball, ofFinrankEq
 -/
@@ -1517,7 +1543,10 @@ theorem Convex.dimH_eq_finrank_vectorSpan
   let φ := AffineIsometryEquiv.constVSub Real
     (⟨hne.some, subset_affineSpan Real s hne.some_mem⟩ : affineSpan Real s)
   have hs_eq : s = (↑) '' ((↑) ⁻¹' s : Set (affineSpan Real s)) :=
-    (image_preimage_eq_of_subset <| (subset_affineSpan Real s).trans Subtype.range_
+    (image_preimage_eq_of_subset <| (subset_affineSpan Real s).trans Subtype.range_coe.superset).symm
+  rw [hs_eq]; rw [isometry_subtype_coe.dimH_image]; rw [← φ.isometry.dimH_image]; rw [Real.dimH_of_nonempty_interior]; rw [direction_affineSpan Real s]; rw [← hs_eq]
+  simp_rw [← AffineIsometryEquiv.coe_toHomeomorph, ← φ.toHomeomorph.image_interior, image_nonempty]
+  simpa [intrinsicInterior] using (intrinsicInterior_nonempty hcvx).mpr hne
 
 中文:
 定理 凸.dimH_eq_finrank_vectorSpan
@@ -1527,7 +1556,10 @@ theorem Convex.dimH_eq_finrank_vectorSpan
   let φ := AffineIsometryEquiv.constVSub Real
     (⟨hne.some, subset_affineSpan Real s hne.some_mem⟩ : affineSpan Real s)
   have hs_eq : s = (↑) '' ((↑) ⁻¹' s : Set (affineSpan Real s)) :=
-    (image_preimage_eq_of_subset <| (subset_affineSpan Real s).trans Subtype.range_
+    (image_preimage_eq_of_subset <| (subset_affineSpan Real s).trans Subtype.range_coe.superset).symm
+  rw [hs_eq]; rw [isometry_subtype_coe.dimH_image]; rw [← φ.isometry.dimH_image]; rw [Real.dimH_of_nonempty_interior]; rw [direction_affineSpan Real s]; rw [← hs_eq]
+  simp_rw [← AffineIsometryEquiv.coe_toHomeomorph, ← φ.toHomeomorph.image_interior, image_nonempty]
+  simpa [intrinsicInterior] using (intrinsicInterior_nonempty hcvx).mpr hne
 
 Depends on / 依赖: AffineIsometryEquiv, AffineIsometryEquiv.constVSub, Real.dimH_of_nonempty_interior, Subtype, Subtype.range_coe.superset, affineSpan, constVSub, dimH_image, dimH_of_nonempty_interior, direction_affineSpan, hne.some, hne.some_mem, hne.to_subtype, hs_eq, image_preimage_eq_of_subset, isometry, isometry.dimH_image, isometry_subtype_coe, isometry_subtype_coe.dimH_image, range_coe
 -/

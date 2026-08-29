@@ -55,7 +55,18 @@ definition leftActionOfMonoidalOppositeRightAction
   actionAssocIso _ _ _ := αᵣ _ _ _
   actionUnitIso _ := ρᵣ _
   actionHom_def _ _ := MonoidalRightAction.actionHom_def' _ _
-  actionAssocIso_hom_naturality _ _ _ :
+  actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalRightAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalRightAction.actionUnitIso_hom_naturality _
+  rightUnitor_actionHom c d :=
+    MonoidalRightAction.actionHom_leftUnitor _ _
+  associator_actionHom c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalRightAction.actionHomRight_inv_hom_assoc] using
+      (d ⊴ᵣ (α_ (mop c₃) (mop c₂) (mop c₁)).inv) ≫=
+        MonoidalRightAction.actionHom_associator
+.symm (mop c₃) (mop c₂) (mop c₁) d
 
 中文:
 定义 leftActionOfMonoidalOppositeRightAction
@@ -67,7 +78,18 @@ definition leftActionOfMonoidalOppositeRightAction
   actionAssocIso _ _ _ := αᵣ _ _ _
   actionUnitIso _ := ρᵣ _
   actionHom_def _ _ := MonoidalRightAction.actionHom_def' _ _
-  actionAssocIso_hom_naturality _ _ _ :
+  actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalRightAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalRightAction.actionUnitIso_hom_naturality _
+  rightUnitor_actionHom c d :=
+    MonoidalRightAction.actionHom_leftUnitor _ _
+  associator_actionHom c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalRightAction.actionHomRight_inv_hom_assoc] using
+      (d ⊴ᵣ (α_ (mop c₃) (mop c₂) (mop c₁)).inv) ≫=
+        MonoidalRightAction.actionHom_associator
+.symm (mop c₃) (mop c₂) (mop c₁) d
 -/
 def leftActionOfMonoidalOppositeRightAction [MonoidalRightAction Cᴹᵒᵖ D] :
     MonoidalLeftAction C D where
@@ -107,7 +129,18 @@ definition monoidalOppositeLeftAction
   actionAssocIso _ _ _ := αᵣ _ _ _
   actionUnitIso _ := ρᵣ _
   actionHom_def _ _ := MonoidalRightAction.actionHom_def' _ _
-  actionAssocIso_hom_naturality
+  actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalRightAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalRightAction.actionUnitIso_hom_naturality _
+  rightUnitor_actionHom c d :=
+    MonoidalRightAction.actionHom_leftUnitor _ _
+  associator_actionHom c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalRightAction.actionHomRight_inv_hom_assoc] using!
+      (d ⊴ᵣ (α_ (unmop c₃) (unmop c₂) (unmop c₁)).inv) ≫=
+        MonoidalRightAction.actionHom_associator
+.symm (unmop c₃) (unmop c₂) (unmop c₁) d
 
 中文:
 定义 monoidalOppositeLeftAction
@@ -119,7 +152,18 @@ definition monoidalOppositeLeftAction
   actionAssocIso _ _ _ := αᵣ _ _ _
   actionUnitIso _ := ρᵣ _
   actionHom_def _ _ := MonoidalRightAction.actionHom_def' _ _
-  actionAssocIso_hom_naturality
+  actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalRightAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalRightAction.actionUnitIso_hom_naturality _
+  rightUnitor_actionHom c d :=
+    MonoidalRightAction.actionHom_leftUnitor _ _
+  associator_actionHom c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalRightAction.actionHomRight_inv_hom_assoc] using!
+      (d ⊴ᵣ (α_ (unmop c₃) (unmop c₂) (unmop c₁)).inv) ≫=
+        MonoidalRightAction.actionHom_associator
+.symm (unmop c₃) (unmop c₂) (unmop c₁) d
 -/
 def monoidalOppositeLeftAction [MonoidalRightAction C D] :
     MonoidalLeftAction Cᴹᵒᵖ D where
@@ -246,7 +290,34 @@ actionAssocIso _ _ _ := Iso.op (αₗ _ _ _).symm
 actionUnitIso _ := Iso.op (funₗ _).symm
   actionHom_def
     | op f, op g => by
-        apply Qui
+        apply Quiver.Hom.unop_inj
+        simpa [MonoidalLeftAction.action_exchange] using
+          MonoidalLeftAction.actionHom_def f g
+  actionAssocIso_hom_naturality
+    | op f, op g, op h => by
+        apply Quiver.Hom.unop_inj
+        have := (αₗ (unop _) (unop _) (unop _)).inv ≫=
+          MonoidalLeftAction.actionAssocIso_hom_naturality f g h
+        simp only [Iso.inv_hom_id_assoc] at this
+        simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  associator_actionHom _ _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  leftUnitor_actionHom _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  rightUnitor_actionHom _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 
 中文:
 定义 oppositeLeftAction
@@ -259,7 +330,34 @@ actionAssocIso _ _ _ := Iso.op (αₗ _ _ _).symm
 actionUnitIso _ := Iso.op (funₗ _).symm
   actionHom_def
     | op f, op g => by
-        apply Qui
+        apply Quiver.Hom.unop_inj
+        simpa [MonoidalLeftAction.action_exchange] using
+          MonoidalLeftAction.actionHom_def f g
+  actionAssocIso_hom_naturality
+    | op f, op g, op h => by
+        apply Quiver.Hom.unop_inj
+        have := (αₗ (unop _) (unop _) (unop _)).inv ≫=
+          MonoidalLeftAction.actionAssocIso_hom_naturality f g h
+        simp only [Iso.inv_hom_id_assoc] at this
+        simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  associator_actionHom _ _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  leftUnitor_actionHom _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  rightUnitor_actionHom _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 
 Depends on / 依赖: c.unop, d.unop
 -/
@@ -318,7 +416,33 @@ definition leftActionOfOppositeLeftAction
 actionAssocIso _ _ _ := Iso.unop (αₗ _ _ _).symm
 actionUnitIso _ := Iso.unop (funₗ _).symm
   actionHom_def f g := by
-    apply Q
+    apply Quiver.Hom.op_inj
+    simpa [MonoidalLeftAction.action_exchange] using
+      MonoidalLeftAction.actionHom_def f.op g.op
+  actionAssocIso_hom_naturality f g h := by
+    apply Quiver.Hom.op_inj
+    have := (αₗ (op _) (op _) (op _)).inv ≫=
+      MonoidalLeftAction.actionAssocIso_hom_naturality f.op g.op h.op
+    simp only [Iso.inv_hom_id_assoc] at this
+    simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  associator_actionHom _ _ _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  leftUnitor_actionHom _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  rightUnitor_actionHom _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 
 中文:
 定义 leftActionOfOppositeLeftAction
@@ -330,7 +454,33 @@ actionUnitIso _ := Iso.unop (funₗ _).symm
 actionAssocIso _ _ _ := Iso.unop (αₗ _ _ _).symm
 actionUnitIso _ := Iso.unop (funₗ _).symm
   actionHom_def f g := by
-    apply Q
+    apply Quiver.Hom.op_inj
+    simpa [MonoidalLeftAction.action_exchange] using
+      MonoidalLeftAction.actionHom_def f.op g.op
+  actionAssocIso_hom_naturality f g h := by
+    apply Quiver.Hom.op_inj
+    have := (αₗ (op _) (op _) (op _)).inv ≫=
+      MonoidalLeftAction.actionAssocIso_hom_naturality f.op g.op h.op
+    simp only [Iso.inv_hom_id_assoc] at this
+    simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  associator_actionHom _ _ _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  leftUnitor_actionHom _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  rightUnitor_actionHom _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 -/
 def leftActionOfOppositeLeftAction [MonoidalLeftAction Cᵒᵖ Dᵒᵖ] :
     MonoidalLeftAction C D where
@@ -559,6 +709,15 @@ definition rightActionOfMonoidalOppositeLeftAction
   actionUnitIso _ := funₗ _
   actionHom_def _ _ := MonoidalLeftAction.actionHom_def' _ _
   actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalLeftAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalLeftAction.actionUnitIso_hom_naturality _
+  actionHom_associator c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalLeftAction.inv_hom_actionHomLeft_assoc] using
+      (α_ (mop c₃) (mop c₂) (mop c₁)).inv ⊵ₗ d ≫=
+        MonoidalLeftAction.associator_actionHom
+.symm (mop c₃) (mop c₂) (mop c₁) d
 
 中文:
 定义 rightActionOfMonoidalOppositeLeftAction
@@ -571,6 +730,15 @@ definition rightActionOfMonoidalOppositeLeftAction
   actionUnitIso _ := funₗ _
   actionHom_def _ _ := MonoidalLeftAction.actionHom_def' _ _
   actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalLeftAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalLeftAction.actionUnitIso_hom_naturality _
+  actionHom_associator c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalLeftAction.inv_hom_actionHomLeft_assoc] using
+      (α_ (mop c₃) (mop c₂) (mop c₁)).inv ⊵ₗ d ≫=
+        MonoidalLeftAction.associator_actionHom
+.symm (mop c₃) (mop c₂) (mop c₁) d
 -/
 def rightActionOfMonoidalOppositeLeftAction [MonoidalLeftAction Cᴹᵒᵖ D] :
     MonoidalRightAction C D where
@@ -608,7 +776,16 @@ definition monoidalOppositeRightAction
   actionAssocIso _ _ _ := αₗ _ _ _
   actionUnitIso _ := funₗ _
   actionHom_def _ _ := MonoidalLeftAction.actionHom_def' _ _
-  actionAssocIso_hom_naturality 
+  actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalLeftAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalLeftAction.actionUnitIso_hom_naturality _
+  actionHom_associator c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalLeftAction.inv_hom_actionHomLeft_assoc] using!
+      (α_ (unmop c₃) (unmop c₂) (unmop c₁)).inv ⊵ₗ d ≫=
+        MonoidalLeftAction.associator_actionHom
+.symm (unmop c₃) (unmop c₂) (unmop c₁) d
 
 中文:
 定义 monoidalOppositeRightAction
@@ -620,7 +797,16 @@ definition monoidalOppositeRightAction
   actionAssocIso _ _ _ := αₗ _ _ _
   actionUnitIso _ := funₗ _
   actionHom_def _ _ := MonoidalLeftAction.actionHom_def' _ _
-  actionAssocIso_hom_naturality 
+  actionAssocIso_hom_naturality _ _ _ :=
+    MonoidalLeftAction.actionAssocIso_hom_naturality _ _ _
+  actionUnitIso_hom_naturality _ :=
+    MonoidalLeftAction.actionUnitIso_hom_naturality _
+  actionHom_associator c₁ c₂ c₃ d := by
+    simpa only [mop_tensorObj, mop_hom_associator,
+      MonoidalLeftAction.inv_hom_actionHomLeft_assoc] using!
+      (α_ (unmop c₃) (unmop c₂) (unmop c₁)).inv ⊵ₗ d ≫=
+        MonoidalLeftAction.associator_actionHom
+.symm (unmop c₃) (unmop c₂) (unmop c₁) d
 -/
 def monoidalOppositeRightAction [MonoidalLeftAction C D] :
     MonoidalRightAction Cᴹᵒᵖ D where
@@ -744,7 +930,35 @@ definition oppositeRightAction
 actionAssocIso _ _ _ := Iso.op (αᵣ _ _ _).symm
 actionUnitIso _ := Iso.op (ρᵣ _).symm
   actionHom_def
-    | op f, op g =
+    | op f, op g => by
+        apply Quiver.Hom.unop_inj
+        simpa [MonoidalRightAction.action_exchange] using
+          MonoidalRightAction.actionHom_def f g
+  actionAssocIso_hom_naturality
+    | op f, op g, op h => by
+        apply Quiver.Hom.unop_inj
+        have := (αᵣ (unop _) (unop _) (unop _)).inv ≫=
+          MonoidalRightAction.actionAssocIso_hom_naturality f g h
+        simp only [Iso.inv_hom_id_assoc] at this
+        simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  actionHom_associator _ _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_leftUnitor _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_rightUnitor _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 
 中文:
 定义 oppositeRightAction
@@ -756,7 +970,35 @@ actionUnitIso _ := Iso.op (ρᵣ _).symm
 actionAssocIso _ _ _ := Iso.op (αᵣ _ _ _).symm
 actionUnitIso _ := Iso.op (ρᵣ _).symm
   actionHom_def
-    | op f, op g =
+    | op f, op g => by
+        apply Quiver.Hom.unop_inj
+        simpa [MonoidalRightAction.action_exchange] using
+          MonoidalRightAction.actionHom_def f g
+  actionAssocIso_hom_naturality
+    | op f, op g, op h => by
+        apply Quiver.Hom.unop_inj
+        have := (αᵣ (unop _) (unop _) (unop _)).inv ≫=
+          MonoidalRightAction.actionAssocIso_hom_naturality f g h
+        simp only [Iso.inv_hom_id_assoc] at this
+        simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    simp
+  actionHom_associator _ _ _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_leftUnitor _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_rightUnitor _ _ := by
+    apply Quiver.Hom.unop_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 
 Depends on / 依赖: c.unop, d.unop
 -/
@@ -815,7 +1057,33 @@ definition rightActionOfOppositeRightAction
 actionAssocIso _ _ _ := Iso.unop (αᵣ _ _ _).symm
 actionUnitIso _ := Iso.unop (ρᵣ _).symm
   actionHom_def f g := by
-    apply Qui
+    apply Quiver.Hom.op_inj
+    simpa [MonoidalRightAction.action_exchange] using
+      MonoidalRightAction.actionHom_def f.op g.op
+  actionAssocIso_hom_naturality f g h := by
+    apply Quiver.Hom.op_inj
+    have := (αᵣ (op _) (op _) (op _)).inv ≫=
+      MonoidalRightAction.actionAssocIso_hom_naturality f.op g.op h.op
+    simp only [Iso.inv_hom_id_assoc] at this
+    simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ _ _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  actionHom_associator _ _ _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_leftUnitor _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_rightUnitor _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 
 中文:
 定义 rightActionOfOppositeRightAction
@@ -827,7 +1095,33 @@ actionUnitIso _ := Iso.unop (ρᵣ _).symm
 actionAssocIso _ _ _ := Iso.unop (αᵣ _ _ _).symm
 actionUnitIso _ := Iso.unop (ρᵣ _).symm
   actionHom_def f g := by
-    apply Qui
+    apply Quiver.Hom.op_inj
+    simpa [MonoidalRightAction.action_exchange] using
+      MonoidalRightAction.actionHom_def f.op g.op
+  actionAssocIso_hom_naturality f g h := by
+    apply Quiver.Hom.op_inj
+    have := (αᵣ (op _) (op _) (op _)).inv ≫=
+      MonoidalRightAction.actionAssocIso_hom_naturality f.op g.op h.op
+    simp only [Iso.inv_hom_id_assoc] at this
+    simp [← this]
+  actionUnitIso_hom_naturality _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  whiskerRight_actionHomLeft _ _ _ _ _ := by
+    apply Quiver.Hom.op_inj
+    simp
+  actionHom_associator _ _ _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_leftUnitor _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
+  actionHom_rightUnitor _ _ := by
+    apply Quiver.Hom.op_inj
+    apply IsIso.inv_eq_inv.mp
+    simp
 -/
 def rightActionOfOppositeRightAction [MonoidalRightAction Cᵒᵖ Dᵒᵖ] :
     MonoidalRightAction C D where

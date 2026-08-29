@@ -167,7 +167,7 @@ theorem strongRankCondition_iff_succ
   · by_contra H
     exact
       h m (f.comp (Function.ExtendByZero.linearMap R (Fin.castLE (not_le.1 H))))
-        (hf.comp (Function.extend_injective (Fin.strictMono
+        (hf.comp (Function.extend_injective (Fin.strictMono_castLE _).injective _))
 
 中文:
 定理 strongRankCondition_iff_succ
@@ -177,7 +177,7 @@ theorem strongRankCondition_iff_succ
   · by_contra H
     exact
       h m (f.comp (Function.ExtendByZero.linearMap R (Fin.castLE (not_le.1 H))))
-        (hf.comp (Function.extend_injective (Fin.strictMono
+        (hf.comp (Function.extend_injective (Fin.strictMono_castLE _).injective _))
 
 Depends on / 依赖: ExtendByZero, Fin.castLE, Fin.strictMono_castLE, Function, Function.ExtendByZero.linearMap, Function.extend_injective, Nat.not_succ_le_self, castLE, extend_injective, f.comp, hf.comp, injective, le_of_fin_injective, linearMap, not_le, not_succ_le_self, strictMono_castLE
 -/
@@ -418,7 +418,7 @@ theorem strongRankCondition_iff_forall_not_injective
   constructor <;> refine fun ⟨n, f, inj⟩ => ⟨n, ?_⟩
   · exact f.exists_finsupp_nat_of_fin_fun_injective inj
   · exact ⟨f ∘ₗ Finsupp.lmapDomain R R (↑) ∘ₗ (Finsupp.linearEquivFunOnFinite ..).symm.toLinearMap,
-inj.comp by simpa using
+inj.comp by simpa using! Finsupp.mapDomain_injective Fin.val_injective⟩
 
 中文:
 定理 strongRankCondition_iff_对任意_not_injective
@@ -427,7 +427,7 @@ inj.comp by simpa using
   constructor <;> refine fun ⟨n, f, inj⟩ => ⟨n, ?_⟩
   · exact f.exists_finsupp_nat_of_fin_fun_injective inj
   · exact ⟨f ∘ₗ Finsupp.lmapDomain R R (↑) ∘ₗ (Finsupp.linearEquivFunOnFinite ..).symm.toLinearMap,
-inj.comp by simpa using
+inj.comp by simpa using! Finsupp.mapDomain_injective Fin.val_injective⟩
 
 Depends on / 依赖: Fin.val_injective, Finsupp, Finsupp.linearEquivFunOnFinite, Finsupp.lmapDomain, Finsupp.mapDomain_injective, exists_finsupp_nat_of_fin_fun_injective, f.exists_finsupp_nat_of_fin_fun_injective, inj.comp, linearEquivFunOnFinite, lmapDomain, mapDomain_injective, not_iff_not, strongRankCondition_iff_succ, symm.toLinearMap, toLinearMap, val_injective
 -/
@@ -587,7 +587,7 @@ definition inducedEquiv
   map_add' := by rintro ⟨a⟩ ⟨b⟩; exact congr_arg _ (map_add ..)
   map_smul' := by rintro ⟨a⟩ ⟨b⟩; exact congr_arg _ (map_smul ..)
   left_inv := by rintro ⟨a⟩; exact congr_arg _ (e.left_inv ..)
-  right_inv := by rintro ⟨a⟩; exact congr_arg _ (e.right_i
+  right_inv := by rintro ⟨a⟩; exact congr_arg _ (e.right_inv ..)
 
 中文:
 定义 inducedEquiv
@@ -597,7 +597,7 @@ definition inducedEquiv
   map_add' := by rintro ⟨a⟩ ⟨b⟩; exact congr_arg _ (map_add ..)
   map_smul' := by rintro ⟨a⟩ ⟨b⟩; exact congr_arg _ (map_smul ..)
   left_inv := by rintro ⟨a⟩; exact congr_arg _ (e.left_inv ..)
-  right_inv := by rintro ⟨a⟩; exact congr_arg _ (e.right_i
+  right_inv := by rintro ⟨a⟩; exact congr_arg _ (e.right_inv ..)
 -/
 private def inducedEquiv [Fintype ι'] (I : Ideal R) (e : (ι -> R) ≃ₗ[R] ι' -> R) :
     ((ι -> R) ⧸ Ideal.pi fun _ => I) ≃ₗ[R ⧸ I] (ι' -> R) ⧸ Ideal.pi fun _ => I where

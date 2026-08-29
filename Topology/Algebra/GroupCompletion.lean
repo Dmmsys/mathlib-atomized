@@ -275,7 +275,23 @@ instance :
       show 0 + (a : Completion α) = a by rw [← coe_zero, ← coe_add, zero_add]
   add_zero a :=
     Completion.induction_on a
-      (isClosed_eq (continuous_map₂ continuous_id continuo
+      (isClosed_eq (continuous_map₂ continuous_id continuous_const) continuous_id) fun a =>
+      show (a : Completion α) + 0 = a by rw [← coe_zero, ← coe_add, add_zero]
+  add_assoc := fun a b c =>
+    Completion.induction_on₃ a b c
+      (isClosed_eq
+        (continuous_map₂ (continuous_map₂ continuous_fst (by fun_prop)) (by fun_prop))
+        (continuous_map₂ continuous_fst (continuous_map₂ (by fun_prop) (by fun_prop))))
+      fun a b c =>
+      show (a : Completion α) + b + c = a + (b + c) by repeat' rw_mod_cast [add_assoc]
+  nsmul_zero a :=
+    Completion.induction_on a (isClosed_eq continuous_map continuous_const) fun a =>
+      show 0 • (a : Completion α) = 0 by rw [← coe_smul, ← coe_zero, zero_smul]
+  nsmul_succ n a :=
+    Completion.induction_on a
+      (isClosed_eq continuous_map <| continuous_map₂ continuous_map continuous_id) fun a =>
+      show (n + 1) • (a : Completion α) = n • (a : Completion α) + (a : Completion α) by
+        rw [← coe_smul]; rw [succ_nsmul]; rw [coe_add]; rw [coe_smul]
 
 中文:
 实例 :
@@ -285,7 +301,23 @@ instance :
       show 0 + (a : Completion α) = a by rw [← coe_zero, ← coe_add, zero_add]
   add_zero a :=
     Completion.induction_on a
-      (isClosed_eq (continuous_map₂ continuous_id continuo
+      (isClosed_eq (continuous_map₂ continuous_id continuous_const) continuous_id) fun a =>
+      show (a : Completion α) + 0 = a by rw [← coe_zero, ← coe_add, add_zero]
+  add_assoc := fun a b c =>
+    Completion.induction_on₃ a b c
+      (isClosed_eq
+        (continuous_map₂ (continuous_map₂ continuous_fst (by fun_prop)) (by fun_prop))
+        (continuous_map₂ continuous_fst (continuous_map₂ (by fun_prop) (by fun_prop))))
+      fun a b c =>
+      show (a : Completion α) + b + c = a + (b + c) by repeat' rw_mod_cast [add_assoc]
+  nsmul_zero a :=
+    Completion.induction_on a (isClosed_eq continuous_map continuous_const) fun a =>
+      show 0 • (a : Completion α) = 0 by rw [← coe_smul, ← coe_zero, zero_smul]
+  nsmul_succ n a :=
+    Completion.induction_on a
+      (isClosed_eq continuous_map <| continuous_map₂ continuous_map continuous_id) fun a =>
+      show (n + 1) • (a : Completion α) = n • (a : Completion α) + (a : Completion α) by
+        rw [← coe_smul]; rw [succ_nsmul]; rw [coe_add]; rw [coe_smul]
 
 Depends on / 依赖: Completion, Completion.induction_on, add_assoc, add_zero, coe_add, coe_zero, continuous_const, continuous_fst, continuous_id, induction_on, isClosed_eq, trivialVectorBundleCore, zero_add
 -/
@@ -325,7 +357,20 @@ instance :
         (continuous_map₂ continuous_fst (Completion.continuous_map.comp continuous_snd)))
       fun a b => mod_cast congr_arg ((↑) : α -> Completion α) (sub_eq_add_neg a b)
   zsmul_zero' a :=
-    Completi
+    Completion.induction_on a (isClosed_eq continuous_map continuous_const) fun a =>
+      show (0 : Int) • (a : Completion α) = 0 by rw [← coe_smul, ← coe_zero, zero_smul]
+  zsmul_succ' n a :=
+    Completion.induction_on a
+      (isClosed_eq continuous_map <| continuous_map₂ continuous_map continuous_id) fun a =>
+        show (n.succ : Int) • (a : Completion α) = _ by
+          rw [← coe_smul]; rw [show (n.succ : Int) • a = (n : Int) • a + a from
+            SubNegMonoid.zsmul_succ' n a]; rw [coe_add]; rw [coe_smul]
+  zsmul_neg' n a :=
+    Completion.induction_on a
+      (isClosed_eq continuous_map <| Completion.continuous_map.comp continuous_map) fun a =>
+        show (Int.negSucc n) • (a : Completion α) = _ by
+          rw [← coe_smul]; rw [show (Int.negSucc n) • a = -((n.succ : Int) • a) from
+            SubNegMonoid.zsmul_neg' n a]; rw [coe_neg]; rw [coe_smul]
 
 中文:
 实例 :
@@ -335,7 +380,20 @@ instance :
         (continuous_map₂ continuous_fst (Completion.continuous_map.comp continuous_snd)))
       fun a b => mod_cast congr_arg ((↑) : α -> Completion α) (sub_eq_add_neg a b)
   zsmul_zero' a :=
-    Completi
+    Completion.induction_on a (isClosed_eq continuous_map continuous_const) fun a =>
+      show (0 : Int) • (a : Completion α) = 0 by rw [← coe_smul, ← coe_zero, zero_smul]
+  zsmul_succ' n a :=
+    Completion.induction_on a
+      (isClosed_eq continuous_map <| continuous_map₂ continuous_map continuous_id) fun a =>
+        show (n.succ : Int) • (a : Completion α) = _ by
+          rw [← coe_smul]; rw [show (n.succ : Int) • a = (n : Int) • a + a from
+            SubNegMonoid.zsmul_succ' n a]; rw [coe_add]; rw [coe_smul]
+  zsmul_neg' n a :=
+    Completion.induction_on a
+      (isClosed_eq continuous_map <| Completion.continuous_map.comp continuous_map) fun a =>
+        show (Int.negSucc n) • (a : Completion α) = _ by
+          rw [← coe_smul]; rw [show (Int.negSucc n) • a = -((n.succ : Int) • a) from
+            SubNegMonoid.zsmul_neg' n a]; rw [coe_neg]; rw [coe_smul]
 
 Depends on / 依赖: Completion, Completion.continuous_map.comp, Completion.induction_on, coe_smul, coe_zero, congr_arg, continuous_const, continuous_fst, continuous_ma, continuous_map, continuous_snd, induction_on, isClosed_eq, mod_cast, sub_eq_add_neg, zero_smul, zsmul_succ, zsmul_zero
 -/
@@ -536,7 +594,7 @@ instance instModule
     add_smul := fun a b =>
       ext' (continuous_const_smul _) ((continuous_const_smul _).add (continuous_const_smul _))
         fun x => by
-          rw [← coe_smul]; rw [add_smul
+          rw [← coe_smul]; rw [add_smul]; rw [coe_add]; rw [coe_smul]; rw [coe_smul] }
 
 中文:
 实例 instModule
@@ -546,7 +604,7 @@ instance instModule
     add_smul := fun a b =>
       ext' (continuous_const_smul _) ((continuous_const_smul _).add (continuous_const_smul _))
         fun x => by
-          rw [← coe_smul]; rw [add_smul
+          rw [← coe_smul]; rw [add_smul]; rw [coe_add]; rw [coe_smul]; rw [coe_smul] }
 
 Depends on / 依赖: Completion, DistribMulAction, MulActionWithZero, add_smul, coe_add, coe_smul, continuous_const_smul
 -/
@@ -582,7 +640,9 @@ definition AddMonoidHom.extension
     map_add' a b :=
       Completion.induction_on₂ a b
         (isClosed_eq (by fun_prop) (by fun_prop))
-        fun 
+        fun a b =>
+        show Completion.extension f _ = Completion.extension f _ + Completion.extension f _ by
+        rw_mod_cast [extension_coe hf, extension_coe hf, extension_coe hf, f.map_add] }
 
 中文:
 定义 加法幺半群态射.extension
@@ -593,7 +653,9 @@ definition AddMonoidHom.extension
     map_add' a b :=
       Completion.induction_on₂ a b
         (isClosed_eq (by fun_prop) (by fun_prop))
-        fun 
+        fun a b =>
+        show Completion.extension f _ = Completion.extension f _ + Completion.extension f _ by
+        rw_mod_cast [extension_coe hf, extension_coe hf, extension_coe hf, f.map_add] }
 
 Depends on / 依赖: Completion, Completion.extension, Completion.induction_on, UniformContinuous, coe_zero, extension, extension_coe, f.map_add, f.map_zero, fun_prop, isClosed_eq, map_add, map_zero, rw_mod_cast, uniformContinuous_addMonoidHom_of_continuous
 -/

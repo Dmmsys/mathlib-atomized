@@ -40,7 +40,11 @@ lemma CompletelyRegularSpace.exists_BCNN
     CompletelyRegularSpace.completely_regular x K K_closed x_notin_K
   have g_bdd : forall x y, dist (Real.toNNReal (g x)) (Real.toNNReal (g y)) <= 1 := by
     refine fun x y => ((Real.lipschitzWith_toNNReal).dist_le_mul (g x) (g y)).trans ?_
-    simpa
+    simpa using Real.dist_le_of_mem_Icc_01 (g x).prop (g y).prop
+  set g' := BoundedContinuousFunction.mkOfBound
+      ⟨fun x => Real.toNNReal (g x), continuous_real_toNNReal.comp g_cont.subtype_val⟩ 1 g_bdd
+  set f := 1 - g'
+  refine ⟨f, by simp [f, g', gx_zero], fun y y_in_K => by simp [f, g', g_one_on_K y_in_K, tsub_self]⟩
 
 中文:
 引理 余mpletelyRegular空间.存在_BCNN
@@ -50,7 +54,11 @@ lemma CompletelyRegularSpace.exists_BCNN
     CompletelyRegularSpace.completely_regular x K K_closed x_notin_K
   have g_bdd : forall x y, dist (Real.toNNReal (g x)) (Real.toNNReal (g y)) <= 1 := by
     refine fun x y => ((Real.lipschitzWith_toNNReal).dist_le_mul (g x) (g y)).trans ?_
-    simpa
+    simpa using Real.dist_le_of_mem_Icc_01 (g x).prop (g y).prop
+  set g' := BoundedContinuousFunction.mkOfBound
+      ⟨fun x => Real.toNNReal (g x), continuous_real_toNNReal.comp g_cont.subtype_val⟩ 1 g_bdd
+  set f := 1 - g'
+  refine ⟨f, by simp [f, g', gx_zero], fun y y_in_K => by simp [f, g', g_one_on_K y_in_K, tsub_self]⟩
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.mkOfBound, CompletelyRegularSpace, CompletelyRegularSpace.completely_regular, K_closed, Real.dist_le_of_mem_Icc_01, Real.lipschitzWith_toNNReal, Real.toNNReal, completely_regular, continuous_real_toNNReal, continuous_real_toNNReal.comp, dist_le_mul, dist_le_of_mem_Icc_01, g_bdd, g_cont, g_cont.subtype_val, g_one_on_K, gx_zero, lipschitzWith_toNNReal, mkOfBound
 -/
@@ -176,7 +184,8 @@ lemma continuous_diracProba
   apply fun x => ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto.mpr fun f => ?_
   have f_mble : Measurable (fun X => (f X : Real>=0∞)) :=
     measurable_coe_nnreal_ennreal_iff.mpr f.continuous.measurable
-  simp only [diracProba, ProbabilityMeasure.coe_m
+  simp only [diracProba, ProbabilityMeasure.coe_mk, lintegral_dirac' _ f_mble]
+  exact (ENNReal.continuous_coe.comp f.continuous).continuousAt
 
 中文:
 引理 continuous_diracProba
@@ -186,7 +195,8 @@ lemma continuous_diracProba
   apply fun x => ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto.mpr fun f => ?_
   have f_mble : Measurable (fun X => (f X : Real>=0∞)) :=
     measurable_coe_nnreal_ennreal_iff.mpr f.continuous.measurable
-  simp only [diracProba, ProbabilityMeasure.coe_m
+  simp only [diracProba, ProbabilityMeasure.coe_mk, lintegral_dirac' _ f_mble]
+  exact (ENNReal.continuous_coe.comp f.continuous).continuousAt
 
 Depends on / 依赖: ENNReal, ENNReal.continuous_coe.comp, Measurable, ProbabilityMeasure, ProbabilityMeasure.coe_mk, ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto.mpr, coe_mk, continuous, continuousAt, continuous_coe, continuous_iff_continuousAt, diracProba, f.continuous, f.continuous.measurable, f_mble, lintegral_dirac, measurable, measurable_coe_nnreal_ennreal_iff, measurable_coe_nnreal_ennreal_iff.mpr, tendsto_iff_forall_lintegral_tendsto
 -/
@@ -210,7 +220,18 @@ lemma not_tendsto_diracProba_of_not_tendsto
     exact h
   have Uint_nhds : interior U in 𝓝 x := by simpa only [interior_mem_nhds] using U_nhds
   obtain ⟨f, fx_eq_one, f_vanishes_outside⟩ :=
-    CompletelyRegularSpace.exists_BCNN isOpen_interior.is
+    CompletelyRegularSpace.exists_BCNN isOpen_interior.isClosed_compl
+      (by simpa only [mem_compl_iff, not_not] using mem_of_mem_nhds Uint_nhds)
+  rw [ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto]; rw [not_forall]
+  use f
+  simp only [diracProba, ProbabilityMeasure.coe_mk, fx_eq_one,
+             lintegral_dirac' _ (measurable_coe_nnreal_ennreal_iff.mpr f.continuous.measurable)]
+  apply not_tendsto_iff_exists_frequently_notMem.mpr
+  refine ⟨Ioi 0, Ioi_mem_nhds (by simp only [ENNReal.coe_one, zero_lt_one]),
+          hU.mp (Eventually.of_forall ?_)⟩
+  intro x x_notin_U
+  rw [f_vanishes_outside x (compl_subset_compl.mpr interior_subset x_notin_U)]
+  simp only [ENNReal.coe_zero, mem_Ioi, lt_self_iff_false, not_false_eq_true]
 
 中文:
 引理 not_tendsto_diracProba_of_not_tendsto
@@ -221,7 +242,18 @@ lemma not_tendsto_diracProba_of_not_tendsto
     exact h
   have Uint_nhds : interior U in 𝓝 x := by simpa only [interior_mem_nhds] using U_nhds
   obtain ⟨f, fx_eq_one, f_vanishes_outside⟩ :=
-    CompletelyRegularSpace.exists_BCNN isOpen_interior.is
+    CompletelyRegularSpace.exists_BCNN isOpen_interior.isClosed_compl
+      (by simpa only [mem_compl_iff, not_not] using mem_of_mem_nhds Uint_nhds)
+  rw [ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto]; rw [not_forall]
+  use f
+  simp only [diracProba, ProbabilityMeasure.coe_mk, fx_eq_one,
+             lintegral_dirac' _ (measurable_coe_nnreal_ennreal_iff.mpr f.continuous.measurable)]
+  apply not_tendsto_iff_exists_frequently_notMem.mpr
+  refine ⟨Ioi 0, Ioi_mem_nhds (by simp only [ENNReal.coe_one, zero_lt_one]),
+          hU.mp (Eventually.of_forall ?_)⟩
+  intro x x_notin_U
+  rw [f_vanishes_outside x (compl_subset_compl.mpr interior_subset x_notin_U)]
+  simp only [ENNReal.coe_zero, mem_Ioi, lt_self_iff_false, not_false_eq_true]
 
 Depends on / 依赖: CompletelyRegularSpace, CompletelyRegularSpace.exists_BCNN, ProbabilityMeasure, ProbabilityMeasure.coe_mk, ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto, U_nhds, Uint_nhds, coe_mk, contrapose, diracProba, exists_BCNN, f_vanishes_outside, fx_eq_one, interior, interior_mem_nhds, isClosed_compl, isOpen_interior, isOpen_interior.isClosed_compl, mem_compl_iff, mem_of_mem_nhds
 -/
@@ -403,7 +435,9 @@ lemma tendsto_diracProbaEquivSymm_iff_tendsto
     tendsto_diracProba_iff_tendsto (F.map diracProbaEquiv.symm) (x := diracProbaEquiv.symm μ)
   rw [← (diracProbaEquiv (X := X)).symm_comp_self]; rw [← tendsto_map'_iff] at key
   simp only [tendsto_map'_iff, map_map, Equiv.self_comp_symm, map_id] at key
-  simp only [← key, diracProb
+  simp only [← key, diracProba_comp_diracProbaEquiv_symm_eq_val]
+  convert! tendsto_subtype_rng.symm
+  exact apply_rangeSplitting (fun x => diracProba x) μ
 
 中文:
 引理 tendsto_diracProbaEquivSymm_iff_tendsto
@@ -413,7 +447,9 @@ lemma tendsto_diracProbaEquivSymm_iff_tendsto
     tendsto_diracProba_iff_tendsto (F.map diracProbaEquiv.symm) (x := diracProbaEquiv.symm μ)
   rw [← (diracProbaEquiv (X := X)).symm_comp_self]; rw [← tendsto_map'_iff] at key
   simp only [tendsto_map'_iff, map_map, Equiv.self_comp_symm, map_id] at key
-  simp only [← key, diracProb
+  simp only [← key, diracProba_comp_diracProbaEquiv_symm_eq_val]
+  convert! tendsto_subtype_rng.symm
+  exact apply_rangeSplitting (fun x => diracProba x) μ
 
 Depends on / 依赖: Filter, diracProba
 -/

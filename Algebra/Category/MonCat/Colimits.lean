@@ -219,7 +219,10 @@ instance monoidColimitType
     Setoid.trans (Relation.mul_1 _ _ y rx) (Relation.mul_2 x' _ _ ry)
 one_mul := Quotient.ind fun _ => Quotient.sound Relation.one_mul _
 mul_one := Quotient.ind fun _ => Quotient.sound Relation.mul_one _
-  mul_assoc := Quotient.ind f
+  mul_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
+Quotient.sound Relation.mul_assoc _ _ _
+
+@[simp]
 
 中文:
 实例 monoidColimitType
@@ -229,7 +232,10 @@ mul_one := Quotient.ind fun _ => Quotient.sound Relation.mul_one _
     Setoid.trans (Relation.mul_1 _ _ y rx) (Relation.mul_2 x' _ _ ry)
 one_mul := Quotient.ind fun _ => Quotient.sound Relation.one_mul _
 mul_one := Quotient.ind fun _ => Quotient.sound Relation.mul_one _
-  mul_assoc := Quotient.ind f
+  mul_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
+Quotient.sound Relation.mul_assoc _ _ _
+
+@[simp]
 
 Depends on / 依赖: Quotient, Quotient.mk
 -/
@@ -466,7 +472,12 @@ definition descFun
     | trans x y z _ _ h₁ h₂ => exact h₁.trans h₂
     | map j j' f x => exact s.w_apply f x
     | mul j x y => exact map_mul (s.ι.app j).hom x y
-    | one j => e
+    | one j => exact map_one (s.ι.app j).hom
+    | mul_1 x x' y _ h => exact congr_arg (· * _) h
+    | mul_2 x y y' _ h => exact congr_arg (_ * ·) h
+    | mul_assoc x y z => exact mul_assoc _ _ _
+    | one_mul x => exact one_mul _
+    | mul_one x => exact mul_one _
 
 中文:
 定义 descFun
@@ -481,7 +492,12 @@ definition descFun
     | trans x y z _ _ h₁ h₂ => exact h₁.trans h₂
     | map j j' f x => exact s.w_apply f x
     | mul j x y => exact map_mul (s.ι.app j).hom x y
-    | one j => e
+    | one j => exact map_one (s.ι.app j).hom
+    | mul_1 x x' y _ h => exact congr_arg (· * _) h
+    | mul_2 x y y' _ h => exact congr_arg (_ * ·) h
+    | mul_assoc x y z => exact mul_assoc _ _ _
+    | one_mul x => exact one_mul _
+    | mul_one x => exact mul_one _
 
 Depends on / 依赖: Quot.lift, congr_arg, descFunLift, fapply, h.symm, map_mul, map_one, mul_1, mul_2, mul_assoc, mul_one, one_mul, s.w_apply, w_apply
 -/
@@ -558,7 +574,8 @@ definition colimitIsColimit
       rw [quot_one]; rw [map_one]
       rfl
     | mul x y hx hy =>
-      rw [quot_mul]; rw [ma
+      rw [quot_mul]; rw [map_mul]; rw [hx]; rw [hy]
+      solve_by_elim
 
 中文:
 定义 colimitIsColimit
@@ -576,7 +593,8 @@ definition colimitIsColimit
       rw [quot_one]; rw [map_one]
       rfl
     | mul x y hx hy =>
-      rw [quot_mul]; rw [ma
+      rw [quot_mul]; rw [map_mul]; rw [hx]; rw [hy]
+      solve_by_elim
 
 Depends on / 依赖: descMorphism
 -/

@@ -298,7 +298,7 @@ CommRingCat.ofHom
       (R := Γ.obj (op X))
       (S := (structureSheaf ↑(Γ.obj (op X))).obj.obj (op (basicOpen r)))
       r
-      (isUnit_res_t
+      (isUnit_res_toΓSpecMapBasicOpen _ r)
 
 中文:
 定义 toΓSpecCApp
@@ -310,7 +310,7 @@ CommRingCat.ofHom
       (R := Γ.obj (op X))
       (S := (structureSheaf ↑(Γ.obj (op X))).obj.obj (op (basicOpen r)))
       r
-      (isUnit_res_t
+      (isUnit_res_toΓSpecMapBasicOpen _ r)
 -/
 def toΓSpecCApp :
     (structureSheaf <| Γ.obj <| op X).obj.obj (op <| basicOpen r) ⟶
@@ -338,7 +338,8 @@ theorem toΓSpecCApp_iff
   constructor
   · intro h
     ext : 1
-    exact IsLocalization.ringHom_ext (Subm
+    exact IsLocalization.ringHom_ext (Submonoid.powers r) h
+  apply congr_arg
 
 中文:
 定理 toΓSpecCApp_iff
@@ -350,7 +351,8 @@ theorem toΓSpecCApp_iff
   constructor
   · intro h
     ext : 1
-    exact IsLocalization.ringHom_ext (Subm
+    exact IsLocalization.ringHom_ext (Submonoid.powers r) h
+  apply congr_arg
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ext_iff.trans, IsLocalization, IsLocalization.Away.lift_comp, IsLocalization.ringHom_ext, IsLocalization.to_basicOpen, Submonoid, Submonoid.powers, X.isUnit_res_to, congr_arg, ext_iff, lift_comp, loc_inst, powers, ringHom_ext, to_basicOpen
 -/
@@ -401,7 +403,10 @@ definition toΓSpecCBasicOpens
     apply (StructureSheaf.to_basicOpen_epi (Γ.obj (op X)) r.unop).1
     simp only [← Category.assoc]
     rw [show algebraMap (Γ.obj (op X)) ((structureSheaf (Γ.obj (op X))).obj.obj _) = algebraMap _
-      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op 
+      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op X))).obj.obj _) from rfl]; rw [X.toΓSpecCApp_spec r.unop]
+    convert! X.toΓSpecCApp_spec s.unop
+    symm
+    apply X.presheaf.map_comp
 
 中文:
 定义 toΓSpecCBasicOpens
@@ -411,7 +416,10 @@ definition toΓSpecCBasicOpens
     apply (StructureSheaf.to_basicOpen_epi (Γ.obj (op X)) r.unop).1
     simp only [← Category.assoc]
     rw [show algebraMap (Γ.obj (op X)) ((structureSheaf (Γ.obj (op X))).obj.obj _) = algebraMap _
-      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op 
+      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op X))).obj.obj _) from rfl]; rw [X.toΓSpecCApp_spec r.unop]
+    convert! X.toΓSpecCApp_spec s.unop
+    symm
+    apply X.presheaf.map_comp
 
 Depends on / 依赖: Fin.succAbove_right_injective, X.to, mono_iff_injective, r.unop, succAbove_right_injective
 -/
@@ -510,7 +518,9 @@ theorem toStalk_stalkMap_toΓSpec
   rw [PresheafedSpace.Hom.stalkMap]; rw [← algebraMap_germ (basicOpen (1 : Γ.obj (op X))) _ (by rw [basicOpen_one]; trivial),
     ← Category.assoc, Category.assoc (CommRingCat.ofHom _), stalkFunctor_map_germ, ← Category.assoc,
     X.toΓSpecSheafedSpace_app_eq, X.toΓSpecCApp_spec, Γgerm,
-    ← dsi
+    ← dsimp% stalkPushforward_germ _ _ X.presheaf ⊤]
+  congr 1
+  exact (X.toΓSpecBase _* X.presheaf).germ_res le_top.hom _ _
 
 中文:
 定理 toStalk_stalkMap_toΓSpec
@@ -519,7 +529,9 @@ theorem toStalk_stalkMap_toΓSpec
   rw [PresheafedSpace.Hom.stalkMap]; rw [← algebraMap_germ (basicOpen (1 : Γ.obj (op X))) _ (by rw [basicOpen_one]; trivial),
     ← Category.assoc, Category.assoc (CommRingCat.ofHom _), stalkFunctor_map_germ, ← Category.assoc,
     X.toΓSpecSheafedSpace_app_eq, X.toΓSpecCApp_spec, Γgerm,
-    ← dsi
+    ← dsimp% stalkPushforward_germ _ _ X.presheaf ⊤]
+  congr 1
+  exact (X.toΓSpecBase _* X.presheaf).germ_res le_top.hom _ _
 
 Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.ofHom, PresheafedSpace, PresheafedSpace.Hom.stalkMap, X.presheaf, X.to, algebraMap_germ, basicOpen, basicOpen_one, germ_res, le_top, le_top.hom, presheaf, stalkFunctor_map_germ, stalkMap, stalkPushforward_germ
 -/
@@ -547,7 +559,18 @@ definition toΓSpec
     -- show stalk map is local hom ↓
     let S := (structureSheaf _).presheaf.stalk p
     rintro (t : S) ht
-    obtain ⟨⟨r, s⟩, he⟩ := IsLocalization.surj p.asIdea
+    obtain ⟨⟨r, s⟩, he⟩ := IsLocalization.surj p.asIdeal.primeCompl t
+    dsimp at he
+    set t' := _
+    change t * t' = _ at he
+    apply isUnit_of_mul_isUnit_left (y := t')
+    rw [he]
+    refine IsLocalization.map_units S (⟨r, ?_⟩ : p.asIdeal.primeCompl)
+    apply (notMem_prime_iff_unit_in_stalk _ _ _).mpr
+    rw [← toStalk_stalkMap_toΓSpec]; rw [CommRingCat.comp_apply]
+    erw [← he]
+    rw [map_mul]
+exact ht.mul (IsLocalization.map_units (R := Γ.obj (op X)) S s).map _)
 
 中文:
 定义 toΓSpec
@@ -558,7 +581,18 @@ definition toΓSpec
     -- show stalk map is local hom ↓
     let S := (structureSheaf _).presheaf.stalk p
     rintro (t : S) ht
-    obtain ⟨⟨r, s⟩, he⟩ := IsLocalization.surj p.asIdea
+    obtain ⟨⟨r, s⟩, he⟩ := IsLocalization.surj p.asIdeal.primeCompl t
+    dsimp at he
+    set t' := _
+    change t * t' = _ at he
+    apply isUnit_of_mul_isUnit_left (y := t')
+    rw [he]
+    refine IsLocalization.map_units S (⟨r, ?_⟩ : p.asIdeal.primeCompl)
+    apply (notMem_prime_iff_unit_in_stalk _ _ _).mpr
+    rw [← toStalk_stalkMap_toΓSpec]; rw [CommRingCat.comp_apply]
+    erw [← he]
+    rw [map_mul]
+exact ht.mul (IsLocalization.map_units (R := Γ.obj (op X)) S s).map _)
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.homMk, PrimeSpectrum, X.to
 -/
@@ -596,7 +630,12 @@ lemma toΓSpec_preimage_zeroLocus_eq
         X.toΓSpec.base ⁻¹' ((PrimeSpectrum.basicOpen i).carrier)ᶜ := by
     symm
     rw [Set.preimage_compl]; rw [Opens.carrier_eq_coe]
-    erw [X.t
+    erw [X.toΓSpec_preimage_basicOpen_eq i]
+  erw [Set.iInter₂_congr this]
+  simp_rw [← Set.preimage_iInter₂, Opens.carrier_eq_coe, PrimeSpectrum.basicOpen_eq_zeroLocus_compl,
+    compl_compl]
+  rw [← PrimeSpectrum.zeroLocus_iUnion₂]
+  simp
 
 中文:
 引理 toΓSpec_preimage_zeroLocus_eq
@@ -608,7 +647,12 @@ lemma toΓSpec_preimage_zeroLocus_eq
         X.toΓSpec.base ⁻¹' ((PrimeSpectrum.basicOpen i).carrier)ᶜ := by
     symm
     rw [Set.preimage_compl]; rw [Opens.carrier_eq_coe]
-    erw [X.t
+    erw [X.toΓSpec_preimage_basicOpen_eq i]
+  erw [Set.iInter₂_congr this]
+  simp_rw [← Set.preimage_iInter₂, Opens.carrier_eq_coe, PrimeSpectrum.basicOpen_eq_zeroLocus_compl,
+    compl_compl]
+  rw [← PrimeSpectrum.zeroLocus_iUnion₂]
+  simp
 
 Depends on / 依赖: LocallyRingedSpace, Opens.carrier_eq_coe, PrimeSpectrum, PrimeSpectrum.basicOpen, PrimeSpectrum.basicOpen_eq_zeroLocus_compl, PrimeSpectrum.zeroLocus_iUnion, RingedSpace, RingedSpace.zeroLocus, Set.iInter, Set.preimage_compl, Set.preimage_iInter, SetLike, SetLike.coe, Spec.base, X.to, X.toRingedSpace.basicOpen, basicOpen, basicOpen_eq_zeroLocus_compl, carrier, carrier_eq_coe
 -/
@@ -730,7 +774,14 @@ definition identityToΓSpec
       dsimp
       change PrimeSpectrum.comap (f.c.app (op ⊤)).hom (X.toΓSpecFun x) = Y.toΓSpecFun (f.base x)
       dsimp [toΓSpecFun]
-      rw [← IsLocalRing.comap_closedPoint (f.
+      rw [← IsLocalRing.comap_closedPoint (f.stalkMap x).hom]; rw [←
+        PrimeSpectrum.comap_comp_apply]; rw [← PrimeSpectrum.comap_comp_apply]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]
+      congr 2
+      exact (PresheafedSpace.stalkMap_germ f.1 ⊤ x trivial).symm
+    · intro r
+      rw [LocallyRingedSpace.comp_c_app]; rw [← Category.assoc]
+      erw [Y.toΓSpecSheafedSpace_app_spec, f.c.naturality]
+      rfl
 
 中文:
 定义 identityToΓSpec
@@ -743,7 +794,14 @@ definition identityToΓSpec
       dsimp
       change PrimeSpectrum.comap (f.c.app (op ⊤)).hom (X.toΓSpecFun x) = Y.toΓSpecFun (f.base x)
       dsimp [toΓSpecFun]
-      rw [← IsLocalRing.comap_closedPoint (f.
+      rw [← IsLocalRing.comap_closedPoint (f.stalkMap x).hom]; rw [←
+        PrimeSpectrum.comap_comp_apply]; rw [← PrimeSpectrum.comap_comp_apply]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]
+      congr 2
+      exact (PresheafedSpace.stalkMap_germ f.1 ⊤ x trivial).symm
+    · intro r
+      rw [LocallyRingedSpace.comp_c_app]; rw [← Category.assoc]
+      erw [Y.toΓSpecSheafedSpace_app_spec, f.c.naturality]
+      rfl
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.to
 -/
@@ -845,7 +903,9 @@ definition locallyRingedSpaceAdjunction
     simp only [Functor.id_obj, Γ_obj, Functor.rightOp_map, Γ_map,
       Quiver.Hom.unop_op, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
     exact congr_arg Quiver.Hom.op (left_triangle X)
-  right_
+  right_triangle_components R := by
+    simp only [Functor.id_obj, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
+    exact right_triangle R.unop
 
 中文:
 定义 locallyRingedSpaceAdjunction
@@ -856,7 +916,9 @@ definition locallyRingedSpaceAdjunction
     simp only [Functor.id_obj, Γ_obj, Functor.rightOp_map, Γ_map,
       Quiver.Hom.unop_op, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
     exact congr_arg Quiver.Hom.op (left_triangle X)
-  right_
+  right_triangle_components R := by
+    simp only [Functor.id_obj, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
+    exact right_triangle R.unop
 -/
 def locallyRingedSpaceAdjunction : Γ.rightOp ⊣ Spec.toLocallyRingedSpace.{u} where
   unit := identityToΓSpec
@@ -1006,7 +1068,9 @@ lemma toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app
   dsimp
   rw [← StructureSheaf.algebraMap_self_map _ U _ (homOfLE le_top).op]; rw [Category.assoc]; rw [NatTrans.naturality _ (homOfLE (le_top (a := U.unop))).op]; rw [← unop_locallyRingedSpaceAdjunction_counit_app']
   simp_rw [← Γ_map_op]
-  rw [← Γ.rightOp_map_unop]; rw [← Category.assoc]; rw [←
+  rw [← Γ.rightOp_map_unop]; rw [← Category.assoc]; rw [← unop_comp]
+  erw [← Adjunction.homEquiv_counit, Equiv.symm_apply_apply]
+  rfl
 
 中文:
 引理 toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app
@@ -1014,7 +1078,9 @@ lemma toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app
   dsimp
   rw [← StructureSheaf.algebraMap_self_map _ U _ (homOfLE le_top).op]; rw [Category.assoc]; rw [NatTrans.naturality _ (homOfLE (le_top (a := U.unop))).op]; rw [← unop_locallyRingedSpaceAdjunction_counit_app']
   simp_rw [← Γ_map_op]
-  rw [← Γ.rightOp_map_unop]; rw [← Category.assoc]; rw [←
+  rw [← Γ.rightOp_map_unop]; rw [← Category.assoc]; rw [← unop_comp]
+  erw [← Adjunction.homEquiv_counit, Equiv.symm_apply_apply]
+  rfl
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_counit, Category, Category.assoc, Equiv.symm_apply_apply, NatTrans, NatTrans.naturality, StructureSheaf, StructureSheaf.algebraMap_self_map, U.unop, algebraMap_self_map, homEquiv_counit, homOfLE, le_top, naturality, rightOp_map_unop, simp_rw, symm_apply_apply, unop_comp, unop_locallyRingedSpaceAdjunction_counit_app
 -/
@@ -1042,7 +1108,9 @@ definition adjunction
       Scheme.Hom.ext' (locallyRingedSpaceAdjunction.{u}.unit.naturality f.toLRSHom) }
   counit := (NatIso.op Scheme.SpecΓIdentity.{u}).inv
   left_triangle_components Y :=
-    locallyRi
+    locallyRingedSpaceAdjunction.left_triangle_components Y.toLocallyRingedSpace
+  right_triangle_components R :=
+Scheme.Hom.ext' locallyRingedSpaceAdjunction.right_triangle_components R
 
 中文:
 定义 adjunction
@@ -1052,7 +1120,9 @@ definition adjunction
       Scheme.Hom.ext' (locallyRingedSpaceAdjunction.{u}.unit.naturality f.toLRSHom) }
   counit := (NatIso.op Scheme.SpecΓIdentity.{u}).inv
   left_triangle_components Y :=
-    locallyRi
+    locallyRingedSpaceAdjunction.left_triangle_components Y.toLocallyRingedSpace
+  right_triangle_components R :=
+Scheme.Hom.ext' locallyRingedSpaceAdjunction.right_triangle_components R
 
 Depends on / 依赖: NatIso, NatIso.op, Scheme, Scheme.Hom.ext, Scheme.Spec, X.toLocallyRingedSpace, Y.toLocallyRingedSpace, counit, f.toLRSHom, left_triangle_components, locallyRingedSpaceAdjunction, locallyRingedSpaceAdjunction.left_triangle_components, locallyRingedSpaceAdjunction.right_triangle_components, naturality, right_triangle_components, toLRSHom, toLocallyRingedSpace, unit.app, unit.naturality
 -/

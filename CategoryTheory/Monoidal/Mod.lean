@@ -241,7 +241,15 @@ definition ofIso
     simp [reassoc_of% this]
   mul_smul := by
     have : μ[N] ⊵ₗ Y ≫ (e₁.inv ⊙ₗₘ e₂.inv) =
- 
+        ((e₁.inv otimesₘ e₁.inv) ⊙ₗₘ e₂.inv) ≫ μ[M] ⊵ₗ X := by
+      rw [actionHom_def']; rw [action_exchange]; rw [← comp_actionHomLeft_assoc]; rw [IsMonHom.mul_hom]; rw [comp_actionHomLeft]; rw [Category.assoc]; rw [← action_exchange]; rw [actionHom_def']
+      nth_rw 2 [action_exchange]
+      rw [Category.assoc]
+    rw [reassoc_of% this]
+    have : (αₗ N M X).inv ≫ (e₁.inv ▷ M) ⊵ₗ X ≫ (αₗ M M X).hom ≫ M ⊴ₗ smul =
+        N ⊴ₗ γ ≫ e₁.inv ⊵ₗ X := by
+      rw [← actionHomLeft_action_assoc]; rw [action_exchange]
+    simp [tensorHom_def', actionHom_def', mul_smul_assoc, reassoc_of% this]
 
 中文:
 定义 ofIso
@@ -253,7 +261,15 @@ definition ofIso
     simp [reassoc_of% this]
   mul_smul := by
     have : μ[N] ⊵ₗ Y ≫ (e₁.inv ⊙ₗₘ e₂.inv) =
- 
+        ((e₁.inv otimesₘ e₁.inv) ⊙ₗₘ e₂.inv) ≫ μ[M] ⊵ₗ X := by
+      rw [actionHom_def']; rw [action_exchange]; rw [← comp_actionHomLeft_assoc]; rw [IsMonHom.mul_hom]; rw [comp_actionHomLeft]; rw [Category.assoc]; rw [← action_exchange]; rw [actionHom_def']
+      nth_rw 2 [action_exchange]
+      rw [Category.assoc]
+    rw [reassoc_of% this]
+    have : (αₗ N M X).inv ≫ (e₁.inv ▷ M) ⊵ₗ X ≫ (αₗ M M X).hom ≫ M ⊴ₗ smul =
+        N ⊴ₗ γ ≫ e₁.inv ⊵ₗ X := by
+      rw [← actionHomLeft_action_assoc]; rw [action_exchange]
+    simp [tensorHom_def', actionHom_def', mul_smul_assoc, reassoc_of% this]
 -/
 def ofIso {X : D} {N : C} [MonObj N] (e₁ : M ≅ N) [IsMonHom e₁.hom]
       {Y : D} (e₂ : X ≅ Y) [ModObj M X] :
@@ -884,7 +900,11 @@ definition scalarRestriction
     -- oh, for homotopy.io in a widget!
     slice_rhs 2 3 => rw [action_exchange]
     simp only [actionHomLeft_action_assoc, Category.assoc, Iso.hom_inv_id_assoc,
-   
+      actionHomRight_comp]
+    slice_rhs 4 6 => rw [ModObj.assoc_flip]
+    slice_rhs 2 4 => rw [← whiskerLeft_actionHomLeft]
+    slice_rhs 1 2 => rw [← comp_actionHomLeft]
+    rw [← comp_actionHomLeft]; rw [Category.assoc]; rw [← comp_actionHomLeft_assoc]; rw [IsMonHom.mul_hom]; rw [tensorHom_def]; rw [Category.assoc]
 
 中文:
 定义 scalarRestriction
@@ -897,7 +917,11 @@ definition scalarRestriction
     -- oh, for homotopy.io in a widget!
     slice_rhs 2 3 => rw [action_exchange]
     simp only [actionHomLeft_action_assoc, Category.assoc, Iso.hom_inv_id_assoc,
-   
+      actionHomRight_comp]
+    slice_rhs 4 6 => rw [ModObj.assoc_flip]
+    slice_rhs 2 4 => rw [← whiskerLeft_actionHomLeft]
+    slice_rhs 1 2 => rw [← comp_actionHomLeft]
+    rw [← comp_actionHomLeft]; rw [Category.assoc]; rw [← comp_actionHomLeft_assoc]; rw [IsMonHom.mul_hom]; rw [tensorHom_def]; rw [Category.assoc]
 -/
 def scalarRestriction (M : D) [ModObj B M] : ModObj A M where
   smul := f ⊵ₗ M ≫ γ[B,M]

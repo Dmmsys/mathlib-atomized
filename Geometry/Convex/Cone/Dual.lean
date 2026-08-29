@@ -383,7 +383,10 @@ lemma dual_hull
   | mem _y h => exact hx h
   | zero => simp
   | add y z _hy _hz hy hz => rw [map_add, add_apply]; exact add_nonneg hy hz
-  | smul t y _hy hy => rw [map_smul_of_tower, No
+  | smul t y _hy hy => rw [map_smul_of_tower, Nonneg.mk_smul, smul_apply]; exact mul_nonneg t.2 hy
+
+@[deprecated "`PointedCone.span` was renamed to `PointedCone.hull`" (since := "2026-03-22")]
+alias dual_span := dual_hull
 
 中文:
 引理 dual_hull
@@ -395,7 +398,10 @@ lemma dual_hull
   | mem _y h => exact hx h
   | zero => simp
   | add y z _hy _hz hy hz => rw [map_add, add_apply]; exact add_nonneg hy hz
-  | smul t y _hy hy => rw [map_smul_of_tower, No
+  | smul t y _hy hy => rw [map_smul_of_tower, Nonneg.mk_smul, smul_apply]; exact mul_nonneg t.2 hy
+
+@[deprecated "`PointedCone.span` was renamed to `PointedCone.hull`" (since := "2026-03-22")]
+alias dual_span := dual_hull
 
 Depends on / 依赖: Nonneg, Nonneg.mk_smul, Submodule, Submodule.span_induction, Submodule.subset_span, add_apply, add_nonneg, dual_anti, le_antisymm, map_add, map_smul_of_tower, mk_smul, mul_nonneg, smul_apply, span_induction, subset_span
 -/

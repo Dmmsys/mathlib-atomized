@@ -195,7 +195,11 @@ lemma isGδ_iff_eq_iInter_nat
     rcases Set.eq_empty_or_nonempty T with rfl | hT
     · exact ⟨fun _n => univ, fun _n => isOpen_univ, by simp⟩
     · obtain ⟨f, hf⟩ : exists (f : Nat -> Set X), T = range f := Countable.exists_eq_range T_count hT
-      exact ⟨f, by simp_all, by
+      exact ⟨f, by simp_all, by simp [hf]⟩
+  · rintro ⟨f, hf, rfl⟩
+    exact .iInter_of_isOpen hf
+
+alias ⟨IsGδ.eq_iInter_nat, _⟩ := isGδ_iff_eq_iInter_nat
 
 中文:
 引理 isGδ_iff_eq_i整数er_nat
@@ -206,7 +210,11 @@ lemma isGδ_iff_eq_iInter_nat
     rcases Set.eq_empty_or_nonempty T with rfl | hT
     · exact ⟨fun _n => univ, fun _n => isOpen_univ, by simp⟩
     · obtain ⟨f, hf⟩ : exists (f : Nat -> Set X), T = range f := Countable.exists_eq_range T_count hT
-      exact ⟨f, by simp_all, by
+      exact ⟨f, by simp_all, by simp [hf]⟩
+  · rintro ⟨f, hf, rfl⟩
+    exact .iInter_of_isOpen hf
+
+alias ⟨IsGδ.eq_iInter_nat, _⟩ := isGδ_iff_eq_iInter_nat
 
 Depends on / 依赖: Countable, Countable.exists_eq_range, Set.eq_empty_or_nonempty, T_count, eq_empty_or_nonempty, exists_eq_range, iInter_of_isOpen, isOpen_univ
 -/
@@ -1003,7 +1011,13 @@ lemma isMeagre_iff_countable_union_isNowhereDense
   rw [IsMeagre]; rw [mem_residual_iff]; rw [compl_bijective.surjective.image_surjective.exists]
   simp_rw [← and_assoc, ← forall_and, forall_mem_image, ← isClosed_isNowhereDense_iff_compl,
     sInter_image, ← compl_iUnion₂, compl_subset_compl, ← sUnion_eq_biUnion, and_assoc]
-  refine ⟨fun ⟨S, hS,
+  refine ⟨fun ⟨S, hS, hc, hsub⟩ => ⟨S, fun s hs => (hS hs).2, ?_, hsub⟩, ?_⟩
+  · rw [← compl_compl_image S]; exact hc.image _
+  · intro ⟨S, hS, hc, hsub⟩
+    use closure '' S
+    rw [forall_mem_image]
+    exact ⟨fun s hs => ⟨isClosed_closure, (hS s hs).closure⟩,
+      (hc.image _).image _, hsub.trans (sUnion_mono_subsets fun s => subset_closure)⟩
 
 中文:
 引理 isMeagre_iff_countable_union_isNowhereDense
@@ -1012,7 +1026,13 @@ lemma isMeagre_iff_countable_union_isNowhereDense
   rw [IsMeagre]; rw [mem_residual_iff]; rw [compl_bijective.surjective.image_surjective.exists]
   simp_rw [← and_assoc, ← forall_and, forall_mem_image, ← isClosed_isNowhereDense_iff_compl,
     sInter_image, ← compl_iUnion₂, compl_subset_compl, ← sUnion_eq_biUnion, and_assoc]
-  refine ⟨fun ⟨S, hS,
+  refine ⟨fun ⟨S, hS, hc, hsub⟩ => ⟨S, fun s hs => (hS hs).2, ?_, hsub⟩, ?_⟩
+  · rw [← compl_compl_image S]; exact hc.image _
+  · intro ⟨S, hS, hc, hsub⟩
+    use closure '' S
+    rw [forall_mem_image]
+    exact ⟨fun s hs => ⟨isClosed_closure, (hS s hs).closure⟩,
+      (hc.image _).image _, hsub.trans (sUnion_mono_subsets fun s => subset_closure)⟩
 
 Depends on / 依赖: IsMeagre, and_assoc, closure, compl_bijective, compl_bijective.surjective.image_surjective.exists, compl_compl_image, compl_subset_compl, forall_and, forall_mem_image, hc.image, image_surjective, isClosed_closure, isClosed_isNowhereDense_iff_compl, mem_residual_iff, sInter_image, sUnion_eq_biUnion, simp_rw, surjective
 -/
@@ -1117,7 +1137,10 @@ lemma Topology.IsInducing.isMeagre_image
   case isNowhereDense =>
     intro u ⟨t, tT, tu⟩
     rw [← tu]
-    apply hf.isNowhereDense_image (isNowhereDense t 
+    apply hf.isNowhereDense_image (isNowhereDense t tT)
+  case cover =>
+    rw [← Set.image_sUnion]
+    grw [cover]
 
 中文:
 引理 拓扑.是Inducing.isMeagre_image
@@ -1129,7 +1152,10 @@ lemma Topology.IsInducing.isMeagre_image
   case isNowhereDense =>
     intro u ⟨t, tT, tu⟩
     rw [← tu]
-    apply hf.isNowhereDense_image (isNowhereDense t 
+    apply hf.isNowhereDense_image (isNowhereDense t tT)
+  case cover =>
+    rw [← Set.image_sUnion]
+    grw [cover]
 
 Depends on / 依赖: Set.image, Set.image_sUnion, countable, countable.image, hf.isNowhereDense_image, image_sUnion, isMeagre_iff_countable_union_isNowhereDense, isNowhereDense, isNowhereDense_image
 -/

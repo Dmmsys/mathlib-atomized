@@ -39,7 +39,23 @@ instance :
     convert! congr($(mul_antipode_rTensor_comul_apply (R := S) x) otimesₜ[R]
  (mul_antipode_rTensor_comul_apply (R := R) y)) using 1
     · dsimp
-      hopf_tensor_induction comul 
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      simp
+    · dsimp [Algebra.TensorProduct.one_def]
+      simp [Algebra.algebraMap_eq_smul_one, smul_tmul']
+  mul_antipode_lTensor_comul := by
+    ext x y
+    convert! congr($(mul_antipode_lTensor_comul_apply (R := S) x) otimesₜ[R]
+ (mul_antipode_lTensor_comul_apply (R := R) y)) using 1
+    · dsimp [Algebra.TensorProduct.one_def]
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      simp
+    · dsimp [Algebra.TensorProduct.one_def]
+      simp [Algebra.algebraMap_eq_smul_one, smul_tmul']
+
+@[simp]
 
 中文:
 实例 :
@@ -50,7 +66,23 @@ instance :
     convert! congr($(mul_antipode_rTensor_comul_apply (R := S) x) otimesₜ[R]
  (mul_antipode_rTensor_comul_apply (R := R) y)) using 1
     · dsimp
-      hopf_tensor_induction comul 
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      simp
+    · dsimp [Algebra.TensorProduct.one_def]
+      simp [Algebra.algebraMap_eq_smul_one, smul_tmul']
+  mul_antipode_lTensor_comul := by
+    ext x y
+    convert! congr($(mul_antipode_lTensor_comul_apply (R := S) x) otimesₜ[R]
+ (mul_antipode_lTensor_comul_apply (R := R) y)) using 1
+    · dsimp [Algebra.TensorProduct.one_def]
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      simp
+    · dsimp [Algebra.TensorProduct.one_def]
+      simp [Algebra.algebraMap_eq_smul_one, smul_tmul']
+
+@[simp]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, HopfAlgebra, HopfAlgebra.antipode, antipode
 -/

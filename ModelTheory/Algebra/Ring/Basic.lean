@@ -304,7 +304,9 @@ instance :
     dsimp [Language.Symbols]
     rcases x with ⟨_, f⟩ | ⟨_, f⟩
     · cases f <;> decide
-    ·
+    · cases f ⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -320,7 +322,9 @@ instance :
     dsimp [Language.Symbols]
     rcases x with ⟨_, f⟩ | ⟨_, f⟩
     · cases f <;> decide
-    ·
+    · cases f ⟩
+
+@[simp]
 
 Depends on / 依赖: Language, Language.Symbols, Multiset, Multiset.ofList, Sum.inl, Symbols, ofList
 -/
@@ -582,7 +586,9 @@ definition compatibleRingOfRing
       | _, .one => fun _ => 1
     funMap_add := fun _ => rfl,
     funMap_mul := fun _ => rfl,
-    funMap_neg := f
+    funMap_neg := fun _ => rfl,
+    funMap_zero := fun _ => rfl,
+    funMap_one := fun _ => rfl }
 
 中文:
 定义 compatibleRingOfRing
@@ -596,7 +602,9 @@ definition compatibleRingOfRing
       | _, .one => fun _ => 1
     funMap_add := fun _ => rfl,
     funMap_mul := fun _ => rfl,
-    funMap_neg := f
+    funMap_neg := fun _ => rfl,
+    funMap_zero := fun _ => rfl,
+    funMap_one := fun _ => rfl }
 
 Depends on / 依赖: funMap, funMap_add, funMap_mul, funMap_neg, funMap_one, funMap_zero
 -/
@@ -633,7 +641,7 @@ definition languageEquivEquivRingEquiv
     { f with
       map_fun' := fun {n} f => by
         cases f <;> simp
-      map_re
+      map_rel' := fun {n} f => by cases f } }
 
 中文:
 定义 languageEquivEquivRingEquiv
@@ -650,7 +658,7 @@ definition languageEquivEquivRingEquiv
     { f with
       map_fun' := fun {n} f => by
         cases f <;> simp
-      map_re
+      map_rel' := fun {n} f => by cases f } }
 
 Depends on / 依赖: addFunc, f.map_fun, invFun, map_add, map_fun, map_mul, map_rel, mulFunc
 -/
@@ -780,7 +788,14 @@ abbreviation compatibleRingOfRingStructure
       simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
       intros; rfl
     funMap_neg := by
-      simp only [Fin.forall_fin_succ_pi, Fi
+      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
+      intros; rfl
+    funMap_zero := by
+      simp only [Fin.forall_fin_zero_pi]
+      rfl
+    funMap_one := by
+      simp only [Fin.forall_fin_zero_pi]
+      rfl }
 
 中文:
 缩写 compatibleRingOfRingStructure
@@ -792,7 +807,14 @@ abbreviation compatibleRingOfRingStructure
       simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
       intros; rfl
     funMap_neg := by
-      simp only [Fin.forall_fin_succ_pi, Fi
+      simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
+      intros; rfl
+    funMap_zero := by
+      simp only [Fin.forall_fin_zero_pi]
+      rfl
+    funMap_one := by
+      simp only [Fin.forall_fin_zero_pi]
+      rfl }
 
 Depends on / 依赖: Fin.cons_zero, Fin.forall_fin_succ_pi, Fin.forall_fin_zero_pi, cons_zero, forall_fin_succ_pi, forall_fin_zero_pi, funMap_add, funMap_mul, funMap_neg, funMap_one, funMap_zero, intros
 -/

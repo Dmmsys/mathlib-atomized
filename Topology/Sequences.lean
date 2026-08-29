@@ -250,6 +250,7 @@ theorem tendsto_nhds_iff_seq_tendsto
   refine ⟨closure (f ⁻¹' s), ⟨mt ?_ hbs, isClosed_closure⟩, fun x => mt fun hx => subset_closure hx⟩
   rw [← seqClosure_eq_closure]
   rintro ⟨u, hus, hu⟩
+  exact hsc.mem_of_tendsto (h u hu) (Eventually.of_forall hus)
 
 中文:
 定理 tendsto_nhds_iff_seq_tendsto
@@ -262,6 +263,7 @@ theorem tendsto_nhds_iff_seq_tendsto
   refine ⟨closure (f ⁻¹' s), ⟨mt ?_ hbs, isClosed_closure⟩, fun x => mt fun hx => subset_closure hx⟩
   rw [← seqClosure_eq_closure]
   rintro ⟨u, hus, hu⟩
+  exact hsc.mem_of_tendsto (h u hu) (Eventually.of_forall hus)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, closure, hf.comp, hsc.mem_of_tendsto, isClosed_closure, mem_of_tendsto, nhds_basis_closeds, of_forall, seqClosure_eq_closure, subset_closure, tendsto_iff
 -/
@@ -287,7 +289,10 @@ theorem FrechetUrysohnSpace.of_seq_tendsto_imp_tendsto
   · exact subset_seqClosure hx
   · obtain ⟨u, hux, hus⟩ : exists u : Nat -> X, Tendsto u atTop (𝓝 x) ∧ existsᶠ x in atTop, u x in s := by
       simpa only [ContinuousAt, hx, tendsto_nhds_true, (· ∘ ·), ← not_frequently, exists_prop,
-        ← me
+        ← mem_closure_iff_frequently, hcx, imp_false, not_forall, not_not, not_false_eq_true,
+        not_true_eq_false] using h (· ∉ s) x
+    rcases extraction_of_frequently_atTop hus with ⟨φ, φ_mono, hφ⟩
+    exact ⟨u ∘ φ, hφ, hux.comp φ_mono.tendsto_atTop⟩
 
 中文:
 定理 FrechetUrysohn空间.of_seq_tendsto_imp_tendsto
@@ -297,7 +302,10 @@ theorem FrechetUrysohnSpace.of_seq_tendsto_imp_tendsto
   · exact subset_seqClosure hx
   · obtain ⟨u, hux, hus⟩ : exists u : Nat -> X, Tendsto u atTop (𝓝 x) ∧ existsᶠ x in atTop, u x in s := by
       simpa only [ContinuousAt, hx, tendsto_nhds_true, (· ∘ ·), ← not_frequently, exists_prop,
-        ← me
+        ← mem_closure_iff_frequently, hcx, imp_false, not_forall, not_not, not_false_eq_true,
+        not_true_eq_false] using h (· ∉ s) x
+    rcases extraction_of_frequently_atTop hus with ⟨φ, φ_mono, hφ⟩
+    exact ⟨u ∘ φ, hφ, hux.comp φ_mono.tendsto_atTop⟩
 
 Depends on / 依赖: ContinuousAt, Tendsto, _mono.tendst, exists_prop, extraction_of_frequently_atTop, hux.comp, imp_false, mem_closure_iff_frequently, not_false_eq_true, not_forall, not_frequently, not_not, not_true_eq_false, subset_seqClosure, tendst, tendsto_nhds_true
 -/
@@ -413,7 +421,20 @@ lemma isClosed_iUnion_closure_singleton_of_not_tendsto
   by_cases! hm : exists m, existsᶠ n in atTop, y n in closure {x m}
   · obtain ⟨m, pm⟩ := hm
     exact subset_iUnion _ m (isClosed_closure.mem_of_frequently_of_tendsto pm hy')
-  · have (j : Nat) : existsᶠ k in atTop, exists n >= j, y n in closure
+  · have (j : Nat) : existsᶠ k in atTop, exists n >= j, y n in closure {x k} := by
+      refine frequently_atTop.2 fun a => ?_
+      have := (Filter.eventually_all_finite (by simp : (Iic a).Finite)).2 fun i hi => hm i
+      simp only [mem_Iic, eventually_atTop] at this
+      obtain ⟨c, hc⟩ := this
+      obtain ⟨b, hb⟩ := mem_iUnion.1 (hy (c + j))
+      refine ⟨b, ?_, c + j, j.le_add_left c, hb⟩
+      by_contra! hab
+      simp_all [hc (c + j) (c.le_add_right j) b hab.le]
+    obtain ⟨φ, hφ⟩ := extraction_forall_of_frequently this
+    choose ψ hψ1 hψ2 using hφ.2
+    have : Tendsto ψ atTop atTop := tendsto_atTop_mono hψ1 tendsto_id
+    refine (hx l φ hφ.1 (Tendsto.specializes (hy'.comp this) (fun n => ?_))).elim
+    exact specializes_iff_mem_closure.2 (hψ2 n)
 
 中文:
 引理 isClosed_iUnion_closure_singleton_of_not_tendsto
@@ -423,7 +444,20 @@ lemma isClosed_iUnion_closure_singleton_of_not_tendsto
   by_cases! hm : exists m, existsᶠ n in atTop, y n in closure {x m}
   · obtain ⟨m, pm⟩ := hm
     exact subset_iUnion _ m (isClosed_closure.mem_of_frequently_of_tendsto pm hy')
-  · have (j : Nat) : existsᶠ k in atTop, exists n >= j, y n in closure
+  · have (j : Nat) : existsᶠ k in atTop, exists n >= j, y n in closure {x k} := by
+      refine frequently_atTop.2 fun a => ?_
+      have := (Filter.eventually_all_finite (by simp : (Iic a).Finite)).2 fun i hi => hm i
+      simp only [mem_Iic, eventually_atTop] at this
+      obtain ⟨c, hc⟩ := this
+      obtain ⟨b, hb⟩ := mem_iUnion.1 (hy (c + j))
+      refine ⟨b, ?_, c + j, j.le_add_left c, hb⟩
+      by_contra! hab
+      simp_all [hc (c + j) (c.le_add_right j) b hab.le]
+    obtain ⟨φ, hφ⟩ := extraction_forall_of_frequently this
+    choose ψ hψ1 hψ2 using hφ.2
+    have : Tendsto ψ atTop atTop := tendsto_atTop_mono hψ1 tendsto_id
+    refine (hx l φ hφ.1 (Tendsto.specializes (hy'.comp this) (fun n => ?_))).elim
+    exact specializes_iff_mem_closure.2 (hψ2 n)
 
 Depends on / 依赖: Filter, Filter.eventually_all_finite, Finite, IsSeqClosed, IsSeqClosed.isClosed, closure, eventually_all_finite, eventually_atTop, frequently_atTop, isClosed, isClosed_closure, isClosed_closure.mem_of_frequently_of_tendsto, mem_Iic, mem_of_frequently_of_tendsto, subset_iUnion
 -/
@@ -965,7 +999,11 @@ theorem IsSeqCompact.totallyBounded
   contrapose! h
   obtain ⟨u, u_in, hu⟩ : exists u : Nat -> X, (forall n, u n in s) ∧ forall n m, m < n -> u m ∉ ball (u n) V := by
     simp only [not_subset, mem_iUnion₂, not_exists, exists_prop] at h
-    simpa only [forall_and, forall_mem_image, not_and]
+    simpa only [forall_and, forall_mem_image, not_and] using! seq_of_forall_finite_exists h
+  refine ⟨u, u_in, fun x _ φ hφ huφ => ?_⟩
+  obtain ⟨N, hN⟩ : exists N, forall p q, p >= N -> q >= N -> (u (φ p), u (φ q)) in V :=
+    huφ.cauchySeq.mem_entourage V_in
+  exact hu (φ <| N + 1) (φ N) (hφ <| Nat.lt_add_one N) (hN (N + 1) N N.le_succ le_rfl)
 
 中文:
 定理 IsSeqCompact.totallyBounded
@@ -977,7 +1015,11 @@ theorem IsSeqCompact.totallyBounded
   contrapose! h
   obtain ⟨u, u_in, hu⟩ : exists u : Nat -> X, (forall n, u n in s) ∧ forall n m, m < n -> u m ∉ ball (u n) V := by
     simp only [not_subset, mem_iUnion₂, not_exists, exists_prop] at h
-    simpa only [forall_and, forall_mem_image, not_and]
+    simpa only [forall_and, forall_mem_image, not_and] using! seq_of_forall_finite_exists h
+  refine ⟨u, u_in, fun x _ φ hφ huφ => ?_⟩
+  obtain ⟨N, hN⟩ : exists N, forall p q, p >= N -> q >= N -> (u (φ p), u (φ q)) in V :=
+    huφ.cauchySeq.mem_entourage V_in
+  exact hu (φ <| N + 1) (φ N) (hφ <| Nat.lt_add_one N) (hN (N + 1) N N.le_succ le_rfl)
 -/
 protected theorem IsSeqCompact.totallyBounded (h : IsSeqCompact s) : TotallyBounded s := by
   intro V V_in
@@ -1006,7 +1048,28 @@ theorem IsSeqCompact.isComplete
   choose W hW hWV using fun n => comp_mem_uniformity_sets (hV.mem n)
   have hWV' : forall n, W n subseteq V n := fun n ⟨x, y⟩ hx =>
 @hWV n (x, y) ⟨x, refl_mem_uniformity hW _, hx⟩
-  obtain ⟨t, ht_anti, htl, htW, hts⟩
+  obtain ⟨t, ht_anti, htl, htW, hts⟩ :
+      exists t : Nat -> Set X, Antitone t ∧ (forall n, t n in l) ∧ (forall n, t n ×ˢ t n subseteq W n) ∧ forall n, t n subseteq s := by
+    have : forall n, exists t in l, t ×ˢ t subseteq W n ∧ t subseteq s := by
+      rw [le_principal_iff] at hls
+      have : forall n, W n inter s ×ˢ s in l ×ˢ l := fun n => inter_mem (hl.2 (hW n)) (prod_mem_prod hls hls)
+      simpa only [l.basis_sets.prod_self.mem_iff, true_imp_iff, subset_inter_iff,
+        prod_self_subset_prod_self, and_assoc] using! this
+    choose t htl htW hts using this
+    have : forall n : Nat, ⋂ k <= n, t k subseteq t n := fun n => by apply iInter₂_subset; rfl
+    exact ⟨fun n => ⋂ k <= n, t k, fun m n h =>
+      biInter_subset_biInter_left fun k (hk : k <= m) => hk.trans h, fun n =>
+      (biInter_mem (finite_le_nat n)).2 fun k _ => htl k, fun n =>
+      (prod_mono (this n) (this n)).trans (htW n), fun n => (this n).trans (hts n)⟩
+  choose u hu using fun n => Filter.nonempty_of_mem (htl n)
+  have huc : CauchySeq u := hV.toHasBasis.cauchySeq_iff.2 fun N _ =>
+⟨N, fun m hm n hn => hWV' _ @htW N (_, _) ⟨ht_anti hm (hu _), ht_anti hn (hu _)⟩⟩
+  rcases hs.exists_tendsto (fun n => hts n (hu n)) huc with ⟨x, hxs, hx⟩
+  refine ⟨x, hxs, (nhds_basis_uniformity' hV.toHasBasis).ge_iff.2 fun N _ => ?_⟩
+  obtain ⟨n, hNn, hn⟩ : exists n, N <= n ∧ u n in ball x (W N) :=
+    ((eventually_ge_atTop N).and (hx <| ball_mem_nhds x (hW N))).exists
+  refine mem_of_superset (htl n) fun y hy => hWV N ⟨u n, hn, htW N ?_⟩
+  exact ⟨ht_anti hNn (hu n), ht_anti hNn hy⟩
 
 中文:
 定理 IsSeqCompact.isComplete
@@ -1018,7 +1081,28 @@ theorem IsSeqCompact.isComplete
   choose W hW hWV using fun n => comp_mem_uniformity_sets (hV.mem n)
   have hWV' : forall n, W n subseteq V n := fun n ⟨x, y⟩ hx =>
 @hWV n (x, y) ⟨x, refl_mem_uniformity hW _, hx⟩
-  obtain ⟨t, ht_anti, htl, htW, hts⟩
+  obtain ⟨t, ht_anti, htl, htW, hts⟩ :
+      exists t : Nat -> Set X, Antitone t ∧ (forall n, t n in l) ∧ (forall n, t n ×ˢ t n subseteq W n) ∧ forall n, t n subseteq s := by
+    have : forall n, exists t in l, t ×ˢ t subseteq W n ∧ t subseteq s := by
+      rw [le_principal_iff] at hls
+      have : forall n, W n inter s ×ˢ s in l ×ˢ l := fun n => inter_mem (hl.2 (hW n)) (prod_mem_prod hls hls)
+      simpa only [l.basis_sets.prod_self.mem_iff, true_imp_iff, subset_inter_iff,
+        prod_self_subset_prod_self, and_assoc] using! this
+    choose t htl htW hts using this
+    have : forall n : Nat, ⋂ k <= n, t k subseteq t n := fun n => by apply iInter₂_subset; rfl
+    exact ⟨fun n => ⋂ k <= n, t k, fun m n h =>
+      biInter_subset_biInter_left fun k (hk : k <= m) => hk.trans h, fun n =>
+      (biInter_mem (finite_le_nat n)).2 fun k _ => htl k, fun n =>
+      (prod_mono (this n) (this n)).trans (htW n), fun n => (this n).trans (hts n)⟩
+  choose u hu using fun n => Filter.nonempty_of_mem (htl n)
+  have huc : CauchySeq u := hV.toHasBasis.cauchySeq_iff.2 fun N _ =>
+⟨N, fun m hm n hn => hWV' _ @htW N (_, _) ⟨ht_anti hm (hu _), ht_anti hn (hu _)⟩⟩
+  rcases hs.exists_tendsto (fun n => hts n (hu n)) huc with ⟨x, hxs, hx⟩
+  refine ⟨x, hxs, (nhds_basis_uniformity' hV.toHasBasis).ge_iff.2 fun N _ => ?_⟩
+  obtain ⟨n, hNn, hn⟩ : exists n, N <= n ∧ u n in ball x (W N) :=
+    ((eventually_ge_atTop N).and (hx <| ball_mem_nhds x (hW N))).exists
+  refine mem_of_superset (htl n) fun y hy => hWV N ⟨u n, hn, htW N ?_⟩
+  exact ⟨ht_anti hNn (hu n), ht_anti hNn hy⟩
 -/
 protected theorem IsSeqCompact.isComplete (hs : IsSeqCompact s) : IsComplete s := fun l hl hls => by
   have := hl.1

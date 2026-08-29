@@ -637,7 +637,11 @@ definition mapIso
     rw [LinearEquiv.toLinearMap_symm_comp_eq]; rw [← LinearMap.comp_assoc]
     simp [he, LinearMap.comp_assoc]⟩) n
   hom_inv_id := by
-    rw [← groupHomology.map_comp]; r
+    rw [← groupHomology.map_comp]; rw [← groupHomology.map_id]
+    exact groupHomology.map_congr e.coe_monoidHom_symm_comp_coe_monoidHom e'.symm_comp n
+  inv_hom_id := by
+    rw [← groupHomology.map_comp]; rw [← groupHomology.map_id]
+    exact groupHomology.map_congr e.coe_monoidHom_comp_coe_monoidHom_symm e'.comp_symm n
 
 中文:
 定义 mapIso
@@ -647,7 +651,11 @@ definition mapIso
     rw [LinearEquiv.toLinearMap_symm_comp_eq]; rw [← LinearMap.comp_assoc]
     simp [he, LinearMap.comp_assoc]⟩) n
   hom_inv_id := by
-    rw [← groupHomology.map_comp]; r
+    rw [← groupHomology.map_comp]; rw [← groupHomology.map_id]
+    exact groupHomology.map_congr e.coe_monoidHom_symm_comp_coe_monoidHom e'.symm_comp n
+  inv_hom_id := by
+    rw [← groupHomology.map_comp]; rw [← groupHomology.map_id]
+    exact groupHomology.map_congr e.coe_monoidHom_comp_coe_monoidHom_symm e'.comp_symm n
 
 Depends on / 依赖: groupHomology, groupHomology.map
 -/
@@ -977,7 +985,7 @@ definition mapShortComplexH1
   comm₂₃ := by
     simp only [shortComplexH1]
     ext : 3
-    simpa [← map_inv, d
+    simpa [← map_inv, d₁₀] using (hom_comm_apply φ _ _).symm
 
 中文:
 定义 mapShortComplexH1
@@ -992,7 +1000,7 @@ definition mapShortComplexH1
   comm₂₃ := by
     simp only [shortComplexH1]
     ext : 3
-    simpa [← map_inv, d
+    simpa [← map_inv, d₁₀] using (hom_comm_apply φ _ _).symm
 -/
 noncomputable def mapShortComplexH1 :
     shortComplexH1 A ⟶ shortComplexH1 B where
@@ -1381,7 +1389,10 @@ instance mapCycles₁_quotientGroupMk'_epi
   have hs₁ : QuotientGroup.mk ∘ s = id := funext hs
 refine ⟨⟨mapDomain s x, ?_⟩, Subtype.ext by
     simp [mapCycles₁_hom, ← mapDomain_comp, hs₁, res, Rep.hom_id (of _)]⟩
-  simpa [mem_cyc
+  simpa [mem_cycles₁_iff, ← (mem_cycles₁_iff _).1 hx, sum_mapDomain_index_inj (f := s)
+      (fun x y h => by rw [← hs x, ← hs y, h])]
+    using Finsupp.sum_congr fun a b => QuotientGroup.induction_on a fun a => by
+      simp [← QuotientGroup.mk_inv, apply_eq_of_coe_eq A.ρ S (s a)⁻¹ a⁻¹ (by simp [hs])]
 
 中文:
 实例 mapCycles₁_quotientGroupMk'_epi
@@ -1393,7 +1404,10 @@ refine ⟨⟨mapDomain s x, ?_⟩, Subtype.ext by
   have hs₁ : QuotientGroup.mk ∘ s = id := funext hs
 refine ⟨⟨mapDomain s x, ?_⟩, Subtype.ext by
     simp [mapCycles₁_hom, ← mapDomain_comp, hs₁, res, Rep.hom_id (of _)]⟩
-  simpa [mem_cyc
+  simpa [mem_cycles₁_iff, ← (mem_cycles₁_iff _).1 hx, sum_mapDomain_index_inj (f := s)
+      (fun x y h => by rw [← hs x, ← hs y, h])]
+    using Finsupp.sum_congr fun a b => QuotientGroup.induction_on a fun a => by
+      simp [← QuotientGroup.mk_inv, apply_eq_of_coe_eq A.ρ S (s a)⁻¹ a⁻¹ (by simp [hs])]
 
 Depends on / 依赖: Finsupp, Finsupp.sum_congr, ModuleCat, ModuleCat.epi_iff_surjective, QuotientGroup, QuotientGroup.induction_on, QuotientGroup.mk, QuotientGroup.mk_, QuotientGroup.mk_surjective, Rep.hom_id, Subtype, Subtype.ext, epi_iff_surjective, hom_id, induction_on, mapDomain, mapDomain_comp, mk_surjective, sum_congr, sum_mapDomain_index_inj
 -/
@@ -1638,7 +1652,16 @@ theorem comap_coinvariantsKer_pOpcycles_range_subtype_pOpcycles_eq_top
     (res S.subtype A)) x with ⟨(X : G ->₀ S ->₀ A), hX⟩
   let Y : S ->₀ A := X.sum fun g f =>
     mapRange.linearMap (A.ρ g⁻¹) (lmapDomain _ k (fun s => MulAut.conjNormal g⁻¹ s) f) - f
- 
+  let Z : G × G ->₀ A := X.sum fun g f =>
+    lmapDomain _ k (fun s => (g, g⁻¹ * s.1 * g)) f - lmapDomain _ k (fun s => (s.1, g)) f
+  use Y
+  apply (moduleCat_pOpcycles_eq_iff _ _ _).2 ⟨Z, ?_⟩
+  change d₂₁ A Z = mapRange id rfl (lmapDomain _ k Subtype.val Y) -
+    mapRange.linearMap (Submodule.subtype _) (mapDomain id x)
+  simpa [map_finsuppSum, mapDomain, map_sub, ← hX, sum_single_index, curryLinearEquiv,
+    curryEquiv, Finsupp.uncurry, d₂₁, Y, Z, sum_mapRange_index,
+    chains₁ToCoinvariantsKer, d₁₀, single_sum, mul_assoc, sub_add_eq_add_sub,
+    sum_sum_index, add_smul, sub_sub_sub_eq, lsingle, singleAddHom] using add_comm _ _
 
 中文:
 定理 comap_coinvariantsKer_pOpcycles_range_subtype_pOpcycles_eq_top
@@ -1649,7 +1672,16 @@ theorem comap_coinvariantsKer_pOpcycles_range_subtype_pOpcycles_eq_top
     (res S.subtype A)) x with ⟨(X : G ->₀ S ->₀ A), hX⟩
   let Y : S ->₀ A := X.sum fun g f =>
     mapRange.linearMap (A.ρ g⁻¹) (lmapDomain _ k (fun s => MulAut.conjNormal g⁻¹ s) f) - f
- 
+  let Z : G × G ->₀ A := X.sum fun g f =>
+    lmapDomain _ k (fun s => (g, g⁻¹ * s.1 * g)) f - lmapDomain _ k (fun s => (s.1, g)) f
+  use Y
+  apply (moduleCat_pOpcycles_eq_iff _ _ _).2 ⟨Z, ?_⟩
+  change d₂₁ A Z = mapRange id rfl (lmapDomain _ k Subtype.val Y) -
+    mapRange.linearMap (Submodule.subtype _) (mapDomain id x)
+  simpa [map_finsuppSum, mapDomain, map_sub, ← hX, sum_single_index, curryLinearEquiv,
+    curryEquiv, Finsupp.uncurry, d₂₁, Y, Z, sum_mapRange_index,
+    chains₁ToCoinvariantsKer, d₁₀, single_sum, mul_assoc, sub_add_eq_add_sub,
+    sum_sum_index, add_smul, sub_sub_sub_eq, lsingle, singleAddHom] using add_comm _ _
 
 Depends on / 依赖: MulAut, MulAut.conjNormal, S.subtype, X.sum, conjNormal, eq_top_iff, linearMap, lmapDomain, mapRange, mapRange.linearMap, mapRange_surjective, map_zero, moduleCat_pOpcycles_eq_iff, subtype
 -/
@@ -1860,7 +1892,8 @@ definition mapShortComplexH2
   comm₂₃ := by
     simp only [shortComplexH2]
     ext : 3
-    simpa [
+    simpa [d₂₁, map_add, map_sub, ← map_inv]
+      using congr(Finsupp.single _ $((hom_comm_apply φ _ _).symm))
 
 中文:
 定义 mapShortComplexH2
@@ -1876,7 +1909,8 @@ definition mapShortComplexH2
   comm₂₃ := by
     simp only [shortComplexH2]
     ext : 3
-    simpa [
+    simpa [d₂₁, map_add, map_sub, ← map_inv]
+      using congr(Finsupp.single _ $((hom_comm_apply φ _ _).symm))
 -/
 noncomputable def mapShortComplexH2 :
     shortComplexH2 A ⟶ shortComplexH2 B where
@@ -2309,7 +2343,8 @@ definition coresNatTrans
     simp only [← cancel_epi (groupHomology.π _ n), Functor.comp_map,
       functor_map, HomologicalComplex.homologyπ_naturality_assoc,
       HomologicalComplex.homologyπ_naturality, ← HomologicalComplex.cyclesMap_comp_assoc,
-      ← chainsMap_comp, Category.i
+      ← chainsMap_comp, Category.id_comp]
+    rfl
 
 中文:
 定义 cores自然数Trans
@@ -2319,7 +2354,8 @@ definition coresNatTrans
     simp only [← cancel_epi (groupHomology.π _ n), Functor.comp_map,
       functor_map, HomologicalComplex.homologyπ_naturality_assoc,
       HomologicalComplex.homologyπ_naturality, ← HomologicalComplex.cyclesMap_comp_assoc,
-      ← chainsMap_comp, Category.i
+      ← chainsMap_comp, Category.id_comp]
+    rfl
 -/
 noncomputable def coresNatTrans (n : Nat) :
     resFunctor f ⋙ functor k G n ⟶ functor k H n where
@@ -2345,7 +2381,8 @@ definition coinfNatTrans
   naturality {X Y} φ := by
     simp only [Functor.comp_map, functor_map, ← cancel_epi (groupHomology.π _ n),
       HomologicalComplex.homologyπ_naturality_assoc, HomologicalComplex.homologyπ_naturality,
-      ← HomologicalComplex.cyclesMap_comp
+      ← HomologicalComplex.cyclesMap_comp_assoc, ← chainsMap_comp]
+    congr 1
 
 中文:
 定义 coinf自然数Trans
@@ -2354,7 +2391,8 @@ definition coinfNatTrans
   naturality {X Y} φ := by
     simp only [Functor.comp_map, functor_map, ← cancel_epi (groupHomology.π _ n),
       HomologicalComplex.homologyπ_naturality_assoc, HomologicalComplex.homologyπ_naturality,
-      ← HomologicalComplex.cyclesMap_comp
+      ← HomologicalComplex.cyclesMap_comp_assoc, ← chainsMap_comp]
+    congr 1
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk, Rep.toCoinvariantsMkQ, toCoinvariantsMkQ
 -/

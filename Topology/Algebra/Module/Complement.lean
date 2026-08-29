@@ -326,7 +326,7 @@ have range_p : p.range = f₁.range := range_comp_of_range_eq_top _
     range_eq_top_of_surjective _ h.surjective
 have ker_p : p.ker = f₂.ker := ker_comp_of_ker_eq_bot _
     ker_eq_bot_of_injective h.injective
-  range
+  range_p ▸ ker_p ▸ p_idem.isTopCompl
 
 中文:
 定理 _root_.连续线性映射.isTopCompl_range_ker_of_leftInverse
@@ -336,7 +336,7 @@ have range_p : p.range = f₁.range := range_comp_of_range_eq_top _
     range_eq_top_of_surjective _ h.surjective
 have ker_p : p.ker = f₂.ker := ker_comp_of_ker_eq_bot _
     ker_eq_bot_of_injective h.injective
-  range
+  range_p ▸ ker_p ▸ p_idem.isTopCompl
 
 Depends on / 依赖: IsIdempotentElem, h.injective, h.surjective, injective, isTopCompl, ker_comp_of_ker_eq_bot, ker_eq_bot_of_injective, ker_p, p.ker, p.range, p_idem, p_idem.isTopCompl, range_comp_of_range_eq_top, range_eq_top_of_surjective, range_p, surjective
 -/

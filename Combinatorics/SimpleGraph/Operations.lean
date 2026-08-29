@@ -337,14 +337,22 @@ theorem card_edgeFinset_replaceVertex_of_not_adj
   given: (hn : ¬G.Adj s t)
   proof: by
   have inc : G.incidenceFinset t subseteq G.edgeFinset := by simp [incidenceFinset, incidenceSet_subset]
-  rw [G.edgeFinset_replaceVertex_of_not_adj hn]; rw [card_union_of_disjoint G.disjoint_sdiff_neighborFinset_image]; rw [card_sdiff_of_subset inc]; rw [← Nat.sub_add_comm card_le_card inc]; rw 
+  rw [G.edgeFinset_replaceVertex_of_not_adj hn]; rw [card_union_of_disjoint G.disjoint_sdiff_neighborFinset_image]; rw [card_sdiff_of_subset inc]; rw [← Nat.sub_add_comm card_le_card inc]; rw [card_incidenceFinset_eq_degree]
+  congr 2
+  rw [card_image_of_injective]; rw [card_neighborFinset_eq_degree]
+  unfold Function.Injective
+  aesop
 
 中文:
 定理 card_edgeFinset_replaceVertex_of_not_adj
   条件: (hn : ¬G.伴随 s t)
   证明: by
   have inc : G.incidenceFinset t subseteq G.edgeFinset := by simp [incidenceFinset, incidenceSet_subset]
-  rw [G.edgeFinset_replaceVertex_of_not_adj hn]; rw [card_union_of_disjoint G.disjoint_sdiff_neighborFinset_image]; rw [card_sdiff_of_subset inc]; rw [← Nat.sub_add_comm card_le_card inc]; rw 
+  rw [G.edgeFinset_replaceVertex_of_not_adj hn]; rw [card_union_of_disjoint G.disjoint_sdiff_neighborFinset_image]; rw [card_sdiff_of_subset inc]; rw [← Nat.sub_add_comm card_le_card inc]; rw [card_incidenceFinset_eq_degree]
+  congr 2
+  rw [card_image_of_injective]; rw [card_neighborFinset_eq_degree]
+  unfold Function.Injective
+  aesop
 
 Depends on / 依赖: Function, Function.Injective, G.disjoint_sdiff_neighborFinset_image, G.edgeFinset, G.edgeFinset_replaceVertex_of_not_adj, G.incidenceFinset, Injective, Nat.sub_add_comm, card_image_of_injective, card_incidenceFinset_eq_degree, card_le_card, card_neighborFinset_eq_degree, card_sdiff_of_subset, card_union_of_disjoint, disjoint_sdiff_neighborFinset_image, edgeFinset, edgeFinset_replaceVertex_of_not_adj, incidenceFinset, incidenceSet_subset, sub_add_comm
 -/
@@ -367,7 +375,11 @@ theorem card_edgeFinset_replaceVertex_of_adj
   have inc : G.incidenceFinset t subseteq G.edgeFinset := by simp [incidenceFinset, incidenceSet_subset]
   rw [G.edgeFinset_replaceVertex_of_adj ha]; rw [card_sdiff_of_subset (by simp [ha]),
     card_union_of_disjoint G.disjoint_sdiff_neighborFinset_image, card_sdiff_of_subset inc,
-← Nat.sub_add_
+← Nat.sub_add_comm card_le_card inc, card_incidenceFinset_eq_degree]
+  congr 2
+  rw [card_image_of_injective]; rw [card_neighborFinset_eq_degree]
+  unfold Function.Injective
+  aesop
 
 中文:
 定理 card_edgeFinset_replaceVertex_of_adj
@@ -376,7 +388,11 @@ theorem card_edgeFinset_replaceVertex_of_adj
   have inc : G.incidenceFinset t subseteq G.edgeFinset := by simp [incidenceFinset, incidenceSet_subset]
   rw [G.edgeFinset_replaceVertex_of_adj ha]; rw [card_sdiff_of_subset (by simp [ha]),
     card_union_of_disjoint G.disjoint_sdiff_neighborFinset_image, card_sdiff_of_subset inc,
-← Nat.sub_add_
+← Nat.sub_add_comm card_le_card inc, card_incidenceFinset_eq_degree]
+  congr 2
+  rw [card_image_of_injective]; rw [card_neighborFinset_eq_degree]
+  unfold Function.Injective
+  aesop
 
 Depends on / 依赖: Function, Function.Injective, G.disjoint_sdiff_neighborFinset_image, G.edgeFinset, G.edgeFinset_replaceVertex_of_adj, G.incidenceFinset, Injective, Nat.sub_add_comm, card_image_of_injective, card_incidenceFinset_eq_degree, card_le_card, card_neighborFinset_eq_degree, card_sdiff_of_subset, card_union_of_disjoint, disjoint_sdiff_neighborFinset_image, edgeFinset, edgeFinset_replaceVertex_of_adj, incidenceFinset, incidenceSet_subset, sub_add_comm
 -/

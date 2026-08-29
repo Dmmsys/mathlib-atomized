@@ -138,7 +138,10 @@ lemma isSemisimple_restrict_iff
     (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
       (Submodule.mapIic _)
   simp_rw [IsSemisimple, isSemisimpleModule_iff, e.complementedLattice_iff, disjoint_iff,
-  
+    ← (OrderIso.Iic _ _).complementedLattice_iff, Iic.complementedLattice_iff, Subtype.forall,
+    Subtype.exists, Subtype.mk_le_mk, Sublattice.mk_inf_mk, Sublattice.mk_sup_mk, Subtype.mk.injEq,
+    exists_and_left, exists_and_right, invtSubmodule.mk_eq_bot_iff, exists_prop, and_assoc]
+  rfl
 
 中文:
 引理 isSemisimple_restrict_iff
@@ -148,7 +151,10 @@ lemma isSemisimple_restrict_iff
     (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
       (Submodule.mapIic _)
   simp_rw [IsSemisimple, isSemisimpleModule_iff, e.complementedLattice_iff, disjoint_iff,
-  
+    ← (OrderIso.Iic _ _).complementedLattice_iff, Iic.complementedLattice_iff, Subtype.forall,
+    Subtype.exists, Subtype.mk_le_mk, Sublattice.mk_inf_mk, Sublattice.mk_sup_mk, Subtype.mk.injEq,
+    exists_and_left, exists_and_right, invtSubmodule.mk_eq_bot_iff, exists_prop, and_assoc]
+  rfl
 
 Depends on / 依赖: AEval.mapSubmodule, AEval.restrict_equiv_mapSubmodule, Iic.complementedLattice_iff, IsSemisimple, OrderIso, OrderIso.Iic, Sublattice, Sublattice.mk_inf_mk, Sublattice.mk_sup_mk, Submodule, Submodule.mapIic, Submodule.orderIsoMapComap, Subtype, Subtype.exists, Subtype.forall, Subtype.mk.injEq, Subtype.mk_le_mk, complementedLattice_iff, disjoint_iff, e.complementedLattice_iff
 -/
@@ -347,7 +353,23 @@ lemma eq_zero_of_isNilpotent_of_isFinitelySemisimple
     replace hn : IsNilpotent (f.restrict hp₁) := isNilpotent.restrict hp₁ hn
     exact eq_zero_of_isNilpotent_isSemisimple hn hs
   ext x
-  obtain ⟨k : Nat, hk : f ^ k = 0⟩ := h
+  obtain ⟨k : Nat, hk : f ^ k = 0⟩ := hn
+  let p := Submodule.span R {(f ^ i) x | (i : Nat) (_ : i <= k)}
+  have hp₁ : p in f.invtSubmodule := by
+    simp only [mem_invtSubmodule, p, Submodule.span_le]
+    rintro - ⟨i, hi, rfl⟩
+    apply Submodule.subset_span
+    rcases lt_or_eq_of_le hi with hik | rfl
+    · exact ⟨i + 1, hik, by simpa [Module.End.pow_apply] using iterate_succ_apply' f i x⟩
+    · exact ⟨i, by simp [hk]⟩
+  have hp₂ : Module.Finite R p := by
+    let g : Nat -> M := fun i => (f ^ i) x
+    have hg : {(f ^ i) x | (i : Nat) (_ : i <= k)} = g '' Iic k := by ext; simp [g]
+exact Module.Finite.span_of_finite _ hg ▸ toFinite (g '' Iic k)
+  simpa [LinearMap.restrict_apply, Subtype.ext_iff] using
+    LinearMap.congr_fun (this p hp₁ hp₂) ⟨x, Submodule.subset_span ⟨0, k.zero_le, rfl⟩⟩
+
+@[simp]
 
 中文:
 引理 eq_zero_of_isNilpotent_of_isFinitelySemisimple
@@ -357,7 +379,23 @@ lemma eq_zero_of_isNilpotent_of_isFinitelySemisimple
     replace hn : IsNilpotent (f.restrict hp₁) := isNilpotent.restrict hp₁ hn
     exact eq_zero_of_isNilpotent_isSemisimple hn hs
   ext x
-  obtain ⟨k : Nat, hk : f ^ k = 0⟩ := h
+  obtain ⟨k : Nat, hk : f ^ k = 0⟩ := hn
+  let p := Submodule.span R {(f ^ i) x | (i : Nat) (_ : i <= k)}
+  have hp₁ : p in f.invtSubmodule := by
+    simp only [mem_invtSubmodule, p, Submodule.span_le]
+    rintro - ⟨i, hi, rfl⟩
+    apply Submodule.subset_span
+    rcases lt_or_eq_of_le hi with hik | rfl
+    · exact ⟨i + 1, hik, by simpa [Module.End.pow_apply] using iterate_succ_apply' f i x⟩
+    · exact ⟨i, by simp [hk]⟩
+  have hp₂ : Module.Finite R p := by
+    let g : Nat -> M := fun i => (f ^ i) x
+    have hg : {(f ^ i) x | (i : Nat) (_ : i <= k)} = g '' Iic k := by ext; simp [g]
+exact Module.Finite.span_of_finite _ hg ▸ toFinite (g '' Iic k)
+  simpa [LinearMap.restrict_apply, Subtype.ext_iff] using
+    LinearMap.congr_fun (this p hp₁ hp₂) ⟨x, Submodule.subset_span ⟨0, k.zero_le, rfl⟩⟩
+
+@[simp]
 
 Depends on / 依赖: Finite, IsNilpotent, Module, Module.Finite, Submodule, Submodule.span, Submodule.span_le, Submodule.subset_span, eq_zero_of_isNilpotent_isSemisimple, f.invtSubmodule, f.restrict, invtSubmodule, isNilpotent, isNilpotent.restrict, lt_or_, mem_invtSubmodule, replace, restrict, span_le, specialize
 -/
@@ -427,7 +465,7 @@ lemma IsSemisimple.restrict
       Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
 (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
       Submodule.mapIic _
-  exact (isSemisimpleModule_iff ..).mpr (e.complemente
+  exact (isSemisimpleModule_iff ..).mpr (e.complementedLattice_iff.mpr inferInstance)
 
 中文:
 引理 是半单.restrict
@@ -438,7 +476,7 @@ lemma IsSemisimple.restrict
       Iic (AEval.mapSubmodule R M f ⟨p, hp⟩) :=
 (Submodule.orderIsoMapComap <| AEval.restrict_equiv_mapSubmodule f p hp).trans
       Submodule.mapIic _
-  exact (isSemisimpleModule_iff ..).mpr (e.complemente
+  exact (isSemisimpleModule_iff ..).mpr (e.complementedLattice_iff.mpr inferInstance)
 
 Depends on / 依赖: AEval.mapSubmodule, AEval.restrict_equiv_mapSubmodule, IsSemisimple, LinearMap, LinearMap.restrict, Submodule, Submodule.mapIic, Submodule.orderIsoMapComap, complementedLattice_iff, e.complementedLattice_iff.mpr, isSemisimpleModule_iff, mapIic, mapSubmodule, orderIsoMapComap, restrict, restrict_equiv_mapSubmodule
 -/
@@ -520,7 +558,7 @@ lemma isFinitelySemisimple_sub_algebraMap_iff
   suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
     simp_rw [isFinitelySemisimple_iff, mem_invtSubmodule, this]
   refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
-  simpa using p.add_mem (h hx) (p.smul
+  simpa using p.add_mem (h hx) (p.smul_mem μ hx)
 
 中文:
 引理 isFinitelySemisimple_sub_algebraMap_iff
@@ -529,7 +567,7 @@ lemma isFinitelySemisimple_sub_algebraMap_iff
   suffices forall p : Submodule R M, p <= p.comap (f - algebraMap R (Module.End R M) μ) ↔ p <= p.comap f by
     simp_rw [isFinitelySemisimple_iff, mem_invtSubmodule, this]
   refine fun p => ⟨fun h x hx => ?_, fun h x hx => p.sub_mem (h hx) (p.smul_mem μ hx)⟩
-  simpa using p.add_mem (h hx) (p.smul
+  simpa using p.add_mem (h hx) (p.smul_mem μ hx)
 
 Depends on / 依赖: Module, Module.End, Submodule, add_mem, algebraMap, isFinitelySemisimple_iff, mem_invtSubmodule, p.add_mem, p.comap, p.smul_mem, p.sub_mem, simp_rw, smul_mem, sub_mem
 -/
@@ -635,7 +673,14 @@ theorem isSemisimple_of_squarefree_aeval_eq_zero
   rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)]; rw [mem_annihilator]; rw [← IsTorsionBy]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_is_torsion_by_span] at hpf
   let R := K[X] ⧸ Ideal.span {p}
   have : IsReduced R :=
-    (Ideal.isRadical_iff_quotient_red
+    (Ideal.isRadical_iff_quotient_reduced _).mp (isRadical_iff_span_singleton.mp hp.isRadical)
+  have : FiniteDimensional K R := (AdjoinRoot.powerBasis hp.ne_zero).finite
+  have : IsArtinianRing R := .of_finite K R
+  have : IsSemisimpleRing R := IsArtinianRing.isSemisimpleRing_of_isReduced R
+  let : Module R (AEval' f) := Module.IsTorsionBySet.module hpf
+  let e : AEval' f ->ₛₗ[Ideal.Quotient.mk (Ideal.span {p})] AEval' f :=
+    { AddMonoidHom.id _ with map_smul' := fun _ _ => rfl }
+  exact (e.isSemisimpleModule_iff_of_bijective bijective_id).mpr inferInstance
 
 中文:
 定理 isSemisimple_of_squarefree_aeval_eq_zero
@@ -644,7 +689,14 @@ theorem isSemisimple_of_squarefree_aeval_eq_zero
   rw [← RingHom.mem_ker]; rw [← AEval.annihilator_eq_ker_aeval (M := M)]; rw [mem_annihilator]; rw [← IsTorsionBy]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_is_torsion_by_span] at hpf
   let R := K[X] ⧸ Ideal.span {p}
   have : IsReduced R :=
-    (Ideal.isRadical_iff_quotient_red
+    (Ideal.isRadical_iff_quotient_reduced _).mp (isRadical_iff_span_singleton.mp hp.isRadical)
+  have : FiniteDimensional K R := (AdjoinRoot.powerBasis hp.ne_zero).finite
+  have : IsArtinianRing R := .of_finite K R
+  have : IsSemisimpleRing R := IsArtinianRing.isSemisimpleRing_of_isReduced R
+  let : Module R (AEval' f) := Module.IsTorsionBySet.module hpf
+  let e : AEval' f ->ₛₗ[Ideal.Quotient.mk (Ideal.span {p})] AEval' f :=
+    { AddMonoidHom.id _ with map_smul' := fun _ _ => rfl }
+  exact (e.isSemisimpleModule_iff_of_bijective bijective_id).mpr inferInstance
 
 Depends on / 依赖: AEval.annihilator_eq_ker_aeval, AdjoinRoot, AdjoinRoot.powerBasis, FiniteDimensional, Ideal.isRadical_iff_quotient_reduced, Ideal.span, IsArtin, IsArtinianRing, IsReduced, IsSemisimpleRing, IsTorsionBy, RingHom, RingHom.mem_ker, annihilator_eq_ker_aeval, finite, hp.isRadical, hp.ne_zero, isRadical, isRadical_iff_quotient_reduced, isRadical_iff_span_singleton
 -/
@@ -704,7 +756,11 @@ theorem IsSemisimple.aeval
     (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
 have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
     span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
-  isSemisimple_of_sq
+  isSemisimple_of_squarefree_aeval_eq_zero ((minpoly.isRadical K _).squarefree <|
+minpoly.ne_zero .of_finite K Ideal.Quotient.mkₐ K (.span {minpoly K f}) p) <| by
+      rw [← Ideal.Quotient.liftₐ_comp (.span {minpoly K f}) (aeval f)
+        fun a h => by rwa [Ideal.span]; rw [← minpoly.ker_aeval_eq_span_minpoly] at h, aeval_algHom,
+        AlgHom.comp_apply, AlgHom.comp_apply, ← aeval_algHom_apply, minpoly.aeval, map_zero]
 
 中文:
 定理 是半单.aeval
@@ -715,7 +771,11 @@ have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
     (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
 have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
     span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
-  isSemisimple_of_sq
+  isSemisimple_of_squarefree_aeval_eq_zero ((minpoly.isRadical K _).squarefree <|
+minpoly.ne_zero .of_finite K Ideal.Quotient.mkₐ K (.span {minpoly K f}) p) <| by
+      rw [← Ideal.Quotient.liftₐ_comp (.span {minpoly K f}) (aeval f)
+        fun a h => by rwa [Ideal.span]; rw [← minpoly.ker_aeval_eq_span_minpoly] at h, aeval_algHom,
+        AlgHom.comp_apply, AlgHom.comp_apply, ← aeval_algHom_apply, minpoly.aeval, map_zero]
 -/
 protected theorem IsSemisimple.aeval (p : K[X]) : (aeval f p).IsSemisimple :=
   let R := K[X] ⧸ Ideal.span {minpoly K f}
@@ -791,7 +851,31 @@ theorem IsSemisimple.of_mem_adjoin_pair
   have : Module.Finite K R :=
     (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
   have : Module.Finite R S :=
-    (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsInt
+    (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsIntegral.isIntegral g).map _).finite
+  have : Module.Finite K S := .trans R S
+  have : IsArtinianRing R := .of_finite K R
+have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
+    span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
+  have : IsReduced S := by
+    simp_rw [S, AdjoinRoot, ← Ideal.isRadical_iff_quotient_reduced, ← isRadical_iff_span_singleton]
+    exact (PerfectField.separable_iff_squarefree.mpr hg.minpoly_squarefree).map.squarefree.isRadical
+  let φ : S ->ₐ[K] End K M := Ideal.Quotient.liftₐ _ (eval₂AlgHom (Ideal.Quotient.liftₐ _ (aeval f)
+    fun a => ?_) g ?_) ((Ideal.span_singleton_le_iff_mem _).mpr ?_ : _ <= RingHom.ker _)
+  rotate_left 1
+  · rw [Ideal.span, ← minpoly.ker_aeval_eq_span_minpoly]; exact id
+  · rintro ⟨p⟩; exact p.induction_on (fun k => by simp [R, commute_algebraMap_left])
+      (fun p q hp hq => by simpa [R] using! hp.add_left hq)
+      fun n k => by simpa [R, pow_succ, ← mul_assoc _ _ X] using! (·.mul_left comm)
+  · simpa only [RingHom.mem_ker, eval₂AlgHom_apply, eval₂_map, AlgHom.comp_algebraMap_of_tower]
+      using! minpoly.aeval K g
+  have : K[f, g] <= φ.range := adjoin_le fun x => by
+    rintro (hx | hx) <;> rw [hx]
+    · exact ⟨AdjoinRoot.of _ (AdjoinRoot.root _), (eval₂_C _ _).trans (aeval_X f)⟩
+    · exact ⟨AdjoinRoot.root _, eval₂_X _ _⟩
+  obtain ⟨p, rfl⟩ := (AlgHom.mem_range _).mp (this ha)
+  refine isSemisimple_of_squarefree_aeval_eq_zero
+    ((minpoly.isRadical K p).squarefree <| minpoly.ne_zero <| .of_finite K p) ?_
+  rw [aeval_algHom]; rw [φ.comp_apply]; rw [minpoly.aeval]; rw [map_zero]
 
 中文:
 定理 是半单.of_mem_adjoin_pair
@@ -802,7 +886,31 @@ theorem IsSemisimple.of_mem_adjoin_pair
   have : Module.Finite K R :=
     (AdjoinRoot.powerBasis' <| minpoly.monic <| IsIntegral.isIntegral f).finite
   have : Module.Finite R S :=
-    (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsInt
+    (AdjoinRoot.powerBasis' <| (minpoly.monic <| IsIntegral.isIntegral g).map _).finite
+  have : Module.Finite K S := .trans R S
+  have : IsArtinianRing R := .of_finite K R
+have : IsReduced R := (Ideal.isRadical_iff_quotient_reduced _).mp
+    span_minpoly_eq_annihilator K f ▸ hf.annihilator_isRadical
+  have : IsReduced S := by
+    simp_rw [S, AdjoinRoot, ← Ideal.isRadical_iff_quotient_reduced, ← isRadical_iff_span_singleton]
+    exact (PerfectField.separable_iff_squarefree.mpr hg.minpoly_squarefree).map.squarefree.isRadical
+  let φ : S ->ₐ[K] End K M := Ideal.Quotient.liftₐ _ (eval₂AlgHom (Ideal.Quotient.liftₐ _ (aeval f)
+    fun a => ?_) g ?_) ((Ideal.span_singleton_le_iff_mem _).mpr ?_ : _ <= RingHom.ker _)
+  rotate_left 1
+  · rw [Ideal.span, ← minpoly.ker_aeval_eq_span_minpoly]; exact id
+  · rintro ⟨p⟩; exact p.induction_on (fun k => by simp [R, commute_algebraMap_left])
+      (fun p q hp hq => by simpa [R] using! hp.add_left hq)
+      fun n k => by simpa [R, pow_succ, ← mul_assoc _ _ X] using! (·.mul_left comm)
+  · simpa only [RingHom.mem_ker, eval₂AlgHom_apply, eval₂_map, AlgHom.comp_algebraMap_of_tower]
+      using! minpoly.aeval K g
+  have : K[f, g] <= φ.range := adjoin_le fun x => by
+    rintro (hx | hx) <;> rw [hx]
+    · exact ⟨AdjoinRoot.of _ (AdjoinRoot.root _), (eval₂_C _ _).trans (aeval_X f)⟩
+    · exact ⟨AdjoinRoot.root _, eval₂_X _ _⟩
+  obtain ⟨p, rfl⟩ := (AlgHom.mem_range _).mp (this ha)
+  refine isSemisimple_of_squarefree_aeval_eq_zero
+    ((minpoly.isRadical K p).squarefree <| minpoly.ne_zero <| .of_finite K p) ?_
+  rw [aeval_algHom]; rw [φ.comp_apply]; rw [minpoly.aeval]; rw [map_zero]
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.powerBasis, Finite, Ideal.isRadical_iff_quotient_reduced, Ideal.span, IsArtinianRing, IsIntegral, IsIntegral.isIntegral, IsReduced, Module, Module.Finite, algebraMap, finite, isIntegral, isRadical_iff_quotient_reduced, minpoly, minpoly.monic, of_finite, powerBasis, span_minpoly_eq_annihilator
 -/

@@ -173,7 +173,8 @@ definition ConnectedComponents.typeToCatHomEquiv
     rfl
   right_inv fctr :=
     Functor.hext (fun _ => rfl) (fun c d f =>
-      have : Subsingleton (fctr.obj c ⟶ fctr.obj 
+      have : Subsingleton (fctr.obj c ⟶ fctr.obj d) := Discrete.instSubsingletonDiscreteHom _ _
+      (Subsingleton.elim (fctr.map f) _).symm.heq)
 
 中文:
 定义 ConnectedComponents.typeToCatHomEquiv
@@ -186,7 +187,8 @@ definition ConnectedComponents.typeToCatHomEquiv
     rfl
   right_inv fctr :=
     Functor.hext (fun _ => rfl) (fun c d f =>
-      have : Subsingleton (fctr.obj c ⟶ fctr.obj 
+      have : Subsingleton (fctr.obj c ⟶ fctr.obj d) := Discrete.instSubsingletonDiscreteHom _ _
+      (Subsingleton.elim (fctr.map f) _).symm.heq)
 
 Depends on / 依赖: ConnectedComponents, ConnectedComponents.functorToDiscrete, functorToDiscrete
 -/

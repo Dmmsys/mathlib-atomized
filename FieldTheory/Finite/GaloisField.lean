@@ -50,7 +50,12 @@ instance FiniteField.isSplittingField_sub
   body: by
     have h : (X ^ Fintype.card K - X : K[X]).natDegree = Fintype.card K :=
       FiniteField.X_pow_card_sub_X_natDegree_eq K Fintype.one_lt_card
-    rw [splits_iff_card_roots]; rw [Polynomial.map_sub]; rw [Polynomial.map_pow]; rw [map_X]; rw [h]; rw [FiniteField.roots_X_pow_card_sub_X K]; rw [← F
+    rw [splits_iff_card_roots]; rw [Polynomial.map_sub]; rw [Polynomial.map_pow]; rw [map_X]; rw [h]; rw [FiniteField.roots_X_pow_card_sub_X K]; rw [← Finset.card_def]; rw [Finset.card_univ]
+  adjoin_rootSet' := by
+    classical
+    trans Algebra.adjoin F ((roots (X ^ Fintype.card K - X : K[X])).toFinset : Set K)
+    · simp only [rootSet, aroots, Polynomial.map_pow, map_X, Polynomial.map_sub]
+    · rw [FiniteField.roots_X_pow_card_sub_X, val_toFinset, coe_univ, Algebra.adjoin_univ]
 
 中文:
 实例 FiniteField.isSplittingField_sub
@@ -58,7 +63,12 @@ instance FiniteField.isSplittingField_sub
   定义体: by
     have h : (X ^ Fintype.card K - X : K[X]).natDegree = Fintype.card K :=
       FiniteField.X_pow_card_sub_X_natDegree_eq K Fintype.one_lt_card
-    rw [splits_iff_card_roots]; rw [Polynomial.map_sub]; rw [Polynomial.map_pow]; rw [map_X]; rw [h]; rw [FiniteField.roots_X_pow_card_sub_X K]; rw [← F
+    rw [splits_iff_card_roots]; rw [Polynomial.map_sub]; rw [Polynomial.map_pow]; rw [map_X]; rw [h]; rw [FiniteField.roots_X_pow_card_sub_X K]; rw [← Finset.card_def]; rw [Finset.card_univ]
+  adjoin_rootSet' := by
+    classical
+    trans Algebra.adjoin F ((roots (X ^ Fintype.card K - X : K[X])).toFinset : Set K)
+    · simp only [rootSet, aroots, Polynomial.map_pow, map_X, Polynomial.map_sub]
+    · rw [FiniteField.roots_X_pow_card_sub_X, val_toFinset, coe_univ, Algebra.adjoin_univ]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, FiniteField, FiniteField.X_pow_card_sub_X_natDegree_eq, FiniteField.roots_X_pow_card_sub_X, Finset, Finset.card_def, Finset.card_univ, Fintype, Fintype.card, Fintype.one_lt_card, Polynomial, Polynomial.map_pow, Polynomial.map_sub, X_pow_card_sub_X_natDegree_eq, adjoin, adjoin_rootSet, aroots, card_def, card_univ
 -/
@@ -150,7 +160,50 @@ theorem finrank
   set g_poly := (X ^ p ^ n - X : (ZMod p)[X])
   have hp : 1 < p := h_prime.out.one_lt
   have aux : g_poly != 0 := FiniteField.X_pow_card_pow_sub_X_ne_zero _ h hp
-  have key : Fintype.card (g_poly.rootSet (GaloisField p n)) =
+  have key : Fintype.card (g_poly.rootSet (GaloisField p n)) = g_poly.natDegree :=
+    card_rootSet_eq_natDegree (galois_poly_separable p _ (dvd_pow (dvd_refl p) h))
+      (SplittingField.splits (g_poly : (ZMod p)[X]))
+  have nat_degree_eq : g_poly.natDegree = p ^ n :=
+    FiniteField.X_pow_card_pow_sub_X_natDegree_eq _ h hp
+  rw [nat_degree_eq] at key
+  suffices g_poly.rootSet (GaloisField p n) = Set.univ by
+    simp_rw [this, ← Fintype.ofEquiv_card (Equiv.Set.univ _)] at key
+    -- Porting note: prevents `card_eq_pow_finrank` from using a wrong instance for `Fintype`
+    rw [@Module.card_eq_pow_finrank (K := ZMod p)]; rw [ZMod.card] at key
+    exact Nat.pow_right_injective (Nat.Prime.one_lt' p).out key
+  rw [Set.eq_univ_iff_forall]
+  suffices forall (x) (hx : x in (⊤ : Subalgebra (ZMod p) (GaloisField p n))),
+      x in (X ^ p ^ n - X : (ZMod p)[X]).rootSet (GaloisField p n)
+    by simpa
+  rw [← SplittingField.adjoin_rootSet]
+  simp_rw [Algebra.mem_adjoin_iff]
+  intro x hx
+  -- We discharge the `p = 0` separately, to avoid typeclass issues on `ZMod p`.
+  cases p; cases hp
+  simp only [g_poly] at aux
+  refine Subring.closure_induction ?_ ?_ ?_ ?_ ?_ ?_ hx
+    <;> simp_rw [mem_rootSet_of_ne aux]
+  · rintro x (⟨r, rfl⟩ | hx)
+    · simp only [map_sub, map_pow, aeval_X]
+      rw [← map_pow]; rw [ZMod.pow_card_pow]; rw [sub_self]
+    · dsimp only [GaloisField] at hx
+      rwa [mem_rootSet_of_ne aux] at hx
+  · rw [← coeff_zero_eq_aeval_zero']
+    simp only [coeff_X_pow, coeff_X_zero, sub_zero, _root_.map_eq_zero, ite_eq_right_iff,
+      one_ne_zero, coeff_sub]
+    intro hn
+    exact Nat.not_lt_zero 1 (eq_zero_of_pow_eq_zero hn.symm ▸ hp)
+  · simp
+  · simp only [aeval_X_pow, aeval_X, map_sub, add_pow_char_pow, sub_eq_zero]
+    intro x y _ _ hx hy
+    rw [hx]; rw [hy]
+  · intro x _ hx
+    simp only [g_poly, sub_eq_zero, aeval_X_pow, aeval_X, map_sub, sub_neg_eq_add] at *
+    rw [neg_pow]; rw [hx]; rw [neg_one_pow_char_pow]
+    simp
+  · simp only [aeval_X_pow, aeval_X, map_sub, mul_pow, sub_eq_zero]
+    intro x y _ _ hx hy
+    rw [hx]; rw [hy]
 
 中文:
 定理 finrank
@@ -161,7 +214,50 @@ theorem finrank
   set g_poly := (X ^ p ^ n - X : (ZMod p)[X])
   have hp : 1 < p := h_prime.out.one_lt
   have aux : g_poly != 0 := FiniteField.X_pow_card_pow_sub_X_ne_zero _ h hp
-  have key : Fintype.card (g_poly.rootSet (GaloisField p n)) =
+  have key : Fintype.card (g_poly.rootSet (GaloisField p n)) = g_poly.natDegree :=
+    card_rootSet_eq_natDegree (galois_poly_separable p _ (dvd_pow (dvd_refl p) h))
+      (SplittingField.splits (g_poly : (ZMod p)[X]))
+  have nat_degree_eq : g_poly.natDegree = p ^ n :=
+    FiniteField.X_pow_card_pow_sub_X_natDegree_eq _ h hp
+  rw [nat_degree_eq] at key
+  suffices g_poly.rootSet (GaloisField p n) = Set.univ by
+    simp_rw [this, ← Fintype.ofEquiv_card (Equiv.Set.univ _)] at key
+    -- Porting note: prevents `card_eq_pow_finrank` from using a wrong instance for `Fintype`
+    rw [@Module.card_eq_pow_finrank (K := ZMod p)]; rw [ZMod.card] at key
+    exact Nat.pow_right_injective (Nat.Prime.one_lt' p).out key
+  rw [Set.eq_univ_iff_forall]
+  suffices forall (x) (hx : x in (⊤ : Subalgebra (ZMod p) (GaloisField p n))),
+      x in (X ^ p ^ n - X : (ZMod p)[X]).rootSet (GaloisField p n)
+    by simpa
+  rw [← SplittingField.adjoin_rootSet]
+  simp_rw [Algebra.mem_adjoin_iff]
+  intro x hx
+  -- We discharge the `p = 0` separately, to avoid typeclass issues on `ZMod p`.
+  cases p; cases hp
+  simp only [g_poly] at aux
+  refine Subring.closure_induction ?_ ?_ ?_ ?_ ?_ ?_ hx
+    <;> simp_rw [mem_rootSet_of_ne aux]
+  · rintro x (⟨r, rfl⟩ | hx)
+    · simp only [map_sub, map_pow, aeval_X]
+      rw [← map_pow]; rw [ZMod.pow_card_pow]; rw [sub_self]
+    · dsimp only [GaloisField] at hx
+      rwa [mem_rootSet_of_ne aux] at hx
+  · rw [← coeff_zero_eq_aeval_zero']
+    simp only [coeff_X_pow, coeff_X_zero, sub_zero, _root_.map_eq_zero, ite_eq_right_iff,
+      one_ne_zero, coeff_sub]
+    intro hn
+    exact Nat.not_lt_zero 1 (eq_zero_of_pow_eq_zero hn.symm ▸ hp)
+  · simp
+  · simp only [aeval_X_pow, aeval_X, map_sub, add_pow_char_pow, sub_eq_zero]
+    intro x y _ _ hx hy
+    rw [hx]; rw [hy]
+  · intro x _ hx
+    simp only [g_poly, sub_eq_zero, aeval_X_pow, aeval_X, map_sub, sub_neg_eq_add] at *
+    rw [neg_pow]; rw [hx]; rw [neg_one_pow_char_pow]
+    simp
+  · simp only [aeval_X_pow, aeval_X, map_sub, mul_pow, sub_eq_zero]
+    intro x y _ _ hx hy
+    rw [hx]; rw [hy]
 
 Depends on / 依赖: FiniteField, FiniteField.X_, FiniteField.X_pow_card_pow_sub_X_ne_zero, Fintype, Fintype.card, Fintype.ofFinite, GaloisField, SplittingField, SplittingField.splits, X_pow_card_pow_sub_X_ne_zero, card_rootSet_eq_natDegree, dvd_pow, dvd_refl, g_poly, g_poly.natDegree, g_poly.rootSet, galois_poly_separable, h_prime, h_prime.out.one_lt, natDegree
 -/
@@ -255,7 +351,9 @@ theorem splits_zmod_X_pow_sub_X
     convert! FiniteField.roots_X_pow_card_sub_X (ZMod p)
     exact (ZMod.card p).symm
   have h2 := FiniteField.X_pow_card_sub_X_natDegree_eq (ZMod p) hp
-  -- We discharge the `p = 0` separa
+  -- We discharge the `p = 0` separately, to avoid typeclass issues on `ZMod p`.
+  cases p; cases hp
+  rw [splits_iff_card_roots]; rw [h1]; rw [← Finset.card_def]; rw [Finset.card_univ]; rw [h2]; rw [ZMod.card]
 
 中文:
 定理 splits_zmod_X_pow_sub_X
@@ -266,7 +364,9 @@ theorem splits_zmod_X_pow_sub_X
     convert! FiniteField.roots_X_pow_card_sub_X (ZMod p)
     exact (ZMod.card p).symm
   have h2 := FiniteField.X_pow_card_sub_X_natDegree_eq (ZMod p) hp
-  -- We discharge the `p = 0` separa
+  -- We discharge the `p = 0` separately, to avoid typeclass issues on `ZMod p`.
+  cases p; cases hp
+  rw [splits_iff_card_roots]; rw [h1]; rw [← Finset.card_def]; rw [Finset.card_univ]; rw [h2]; rw [ZMod.card]
 
 Depends on / 依赖: FiniteField, FiniteField.X_pow_card_sub_X_natDegree_eq, FiniteField.roots_X_pow_card_sub_X, Finset, Finset.univ.val, X_pow_card_sub_X_natDegree_eq, ZMod.card, convert, h_prime, h_prime.out.one_lt, one_lt, roots_X_pow_card_sub_X
 -/
@@ -438,7 +538,7 @@ theorem _root_.Polynomial.splits_X_pow_nat_card_sub_X
   · have := (IsSplittingField.splits (L := K) (X ^ (Fintype.card K) - X : K[X]))
     simpa [Algebra.algebraMap_self, map_sub, map_pow, map_X] using this
   · rw [← Polynomial.splits_neg_iff]
-    simpa [Nat.card_eq_zero_of_infinite, pow_zero, neg_sub] using Splits.X_sub_
+    simpa [Nat.card_eq_zero_of_infinite, pow_zero, neg_sub] using Splits.X_sub_C (1 : K)
 
 中文:
 定理 _root_.多项式.splits_X_pow_nat_card_sub_X
@@ -447,7 +547,7 @@ theorem _root_.Polynomial.splits_X_pow_nat_card_sub_X
   · have := (IsSplittingField.splits (L := K) (X ^ (Fintype.card K) - X : K[X]))
     simpa [Algebra.algebraMap_self, map_sub, map_pow, map_X] using this
   · rw [← Polynomial.splits_neg_iff]
-    simpa [Nat.card_eq_zero_of_infinite, pow_zero, neg_sub] using Splits.X_sub_
+    simpa [Nat.card_eq_zero_of_infinite, pow_zero, neg_sub] using Splits.X_sub_C (1 : K)
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self, Fintype, Fintype.card, IsSplittingField, IsSplittingField.splits, Nat.card_eq_zero_of_infinite, Polynomial, Polynomial.splits_neg_iff, Splits, Splits.X_sub_C, X_sub_C, algebraMap_self, card_eq_zero_of_infinite, fintypeOrInfinite, map_X, map_pow, map_sub, neg_sub, pow_zero
 -/
@@ -515,7 +615,8 @@ theorem algebraMap_norm_eq_pow
   have := Fintype.ofFinite K'
   simp_rw [← Fintype.card_eq_nat_card, Algebra.norm_eq_prod_automorphisms,
     ← (bijective_frobeniusAlgEquivOfAlgebraic_pow K K').prod_comp, AlgEquiv.coe_pow,
-    coe_frobeniusA
+    coe_frobeniusAlgEquivOfAlgebraic, pow_iterate, Finset.prod_pow_eq_pow_sum,
+    Fin.sum_univ_eq_sum_range, Nat.geomSum_eq Fintype.one_lt_card, ← Module.card_eq_pow_finrank]
 
 中文:
 定理 algebraMap_norm_eq_pow
@@ -526,7 +627,8 @@ theorem algebraMap_norm_eq_pow
   have := Fintype.ofFinite K'
   simp_rw [← Fintype.card_eq_nat_card, Algebra.norm_eq_prod_automorphisms,
     ← (bijective_frobeniusAlgEquivOfAlgebraic_pow K K').prod_comp, AlgEquiv.coe_pow,
-    coe_frobeniusA
+    coe_frobeniusAlgEquivOfAlgebraic, pow_iterate, Finset.prod_pow_eq_pow_sum,
+    Fin.sum_univ_eq_sum_range, Nat.geomSum_eq Fintype.one_lt_card, ← Module.card_eq_pow_finrank]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_pow, Algebra, Algebra.norm_eq_prod_automorphisms, Fin.sum_univ_eq_sum_range, Finite, Finite.of_injective, Finset, Finset.prod_pow_eq_pow_sum, Fintype, Fintype.card_eq_nat_card, Fintype.ofFinite, Fintype.one_lt_card, Module, Module.card_eq_pow_finrank, Nat.geomSum_eq, algebraMap, bijective_frobeniusAlgEquivOfAlgebraic_pow, card_eq_nat_card, card_eq_pow_finrank
 -/
@@ -556,7 +658,11 @@ MonoidHom.surjective_of_card_ker_le_div _ by
     convert!
 IsCyclic.card_pow_eq_one_le (α := K'ˣ)
         Nat.div_pos
-            (Nat.sub_le_sub_right (Nat
+            (Nat.sub_le_sub_right (Nat.card_le_card_of_injective _ (algebraMap K K').injective)
+              _) <|
+          Nat.sub_pos_of_lt Finite.one_lt_card
+    rw [← Set.ncard_coe_finset]; rw [← SetLike.coe_sort_coe]; rw [Nat.card_coe_set_eq]; congr 1; ext
+    simp [Units.ext_iff, ← (algebraMap K K').injective.eq_iff, algebraMap_norm_eq_pow]
 
 中文:
 定理 unitsMap_norm_surjective
@@ -569,7 +675,11 @@ MonoidHom.surjective_of_card_ker_le_div _ by
     convert!
 IsCyclic.card_pow_eq_one_le (α := K'ˣ)
         Nat.div_pos
-            (Nat.sub_le_sub_right (Nat
+            (Nat.sub_le_sub_right (Nat.card_le_card_of_injective _ (algebraMap K K').injective)
+              _) <|
+          Nat.sub_pos_of_lt Finite.one_lt_card
+    rw [← Set.ncard_coe_finset]; rw [← SetLike.coe_sort_coe]; rw [Nat.card_coe_set_eq]; congr 1; ext
+    simp [Units.ext_iff, ← (algebraMap K K').injective.eq_iff, algebraMap_norm_eq_pow]
 -/
 theorem unitsMap_norm_surjective : Function.Surjective (Units.map <| Algebra.norm K (S := K')) :=
   have := Finite.of_injective_finite_range (algebraMap K K').injective
@@ -631,7 +741,10 @@ definition algEquivOfCardEq
   choose n a hK using FiniteField.card K p
   choose n' a' hK' using FiniteField.card K' p
   rw [hK]; rw [hK'] at hKK'
-  have hGal
+  have hGalK := GaloisField.algEquivGaloisFieldOfFintype p n hK
+  have hK'Gal := (GaloisField.algEquivGaloisFieldOfFintype p n' hK').symm
+  rw [Nat.pow_right_injective h_prime.out.one_lt hKK'] at *
+  exact AlgEquiv.trans hGalK hK'Gal
 
 中文:
 定义 algEquivOfCardEq
@@ -642,7 +755,10 @@ definition algEquivOfCardEq
   choose n a hK using FiniteField.card K p
   choose n' a' hK' using FiniteField.card K' p
   rw [hK]; rw [hK'] at hKK'
-  have hGal
+  have hGalK := GaloisField.algEquivGaloisFieldOfFintype p n hK
+  have hK'Gal := (GaloisField.algEquivGaloisFieldOfFintype p n' hK').symm
+  rw [Nat.pow_right_injective h_prime.out.one_lt hKK'] at *
+  exact AlgEquiv.trans hGalK hK'Gal
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.trans, Algebra, Algebra.charP_iff, FiniteField, FiniteField.card, GaloisField, GaloisField.algEquivGaloisFieldOfFintype, Nat.pow_right_injective, ZMod.charP, algEquivGaloisFieldOfFintype, charP_iff, h_prime, h_prime.out.one_lt, one_lt, pow_right_injective
 -/
@@ -671,7 +787,12 @@ definition ringEquivOfCardEq
   choose n' hp' hK' using FiniteField.card K' p'
   have hpp' : p = p' := by
     by_contra hne
-    simpa [← hK, hK', hKK', hp'.ne_one] using Nat.coprime_pow_primes n 
+    simpa [← hK, hK', hKK', hp'.ne_one] using Nat.coprime_pow_primes n n' hp hp' hne
+  rw [← hpp'] at _char_p'_K'
+  haveI := fact_iff.2 hp
+  letI : Algebra (ZMod p) K := ZMod.algebra _ _
+  letI : Algebra (ZMod p) K' := ZMod.algebra _ _
+  exact ↑(algEquivOfCardEq p hKK')
 
 中文:
 定义 ringEquivOfCardEq
@@ -683,7 +804,12 @@ definition ringEquivOfCardEq
   choose n' hp' hK' using FiniteField.card K' p'
   have hpp' : p = p' := by
     by_contra hne
-    simpa [← hK, hK', hKK', hp'.ne_one] using Nat.coprime_pow_primes n 
+    simpa [← hK, hK', hKK', hp'.ne_one] using Nat.coprime_pow_primes n n' hp hp' hne
+  rw [← hpp'] at _char_p'_K'
+  haveI := fact_iff.2 hp
+  letI : Algebra (ZMod p) K := ZMod.algebra _ _
+  letI : Algebra (ZMod p) K' := ZMod.algebra _ _
+  exact ↑(algEquivOfCardEq p hKK')
 
 Depends on / 依赖: Algebra, CharP.exists, FiniteField, FiniteField.card, Nat.coprime_pow_primes, ZMod.algebra, _char_p, _char_p_K, algEquivOfCardEq, algebra, coprime_pow_primes, fact_iff, ne_one
 -/
@@ -761,7 +887,11 @@ theorem nonempty_algHom_of_finrank_dvd
   have := Module.finite_of_finite F (M := K)
   have := Fintype.ofFinite K
   have := Fintype.ofFinite L
-  refine ⟨Polynomial.I
+  refine ⟨Polynomial.IsSplittingField.lift _ (X ^ Fintype.card K - X) ?_⟩
+  refine (FiniteField.isSplittingField_sub L F).splits.of_dvd ?_ ?_
+  · exact map_ne_zero (FiniteField.X_pow_card_sub_X_ne_zero _ Fintype.one_lt_card)
+  · rw [Module.card_eq_pow_finrank (K := F), Module.card_eq_pow_finrank (K := F) (V := L)]
+    exact (map_dvd_map' _).mpr (dvd_pow_pow_sub_self_of_dvd h)
 
 中文:
 定理 nonempty_algHom_of_finrank_dvd
@@ -773,7 +903,11 @@ theorem nonempty_algHom_of_finrank_dvd
   have := Module.finite_of_finite F (M := K)
   have := Fintype.ofFinite K
   have := Fintype.ofFinite L
-  refine ⟨Polynomial.I
+  refine ⟨Polynomial.IsSplittingField.lift _ (X ^ Fintype.card K - X) ?_⟩
+  refine (FiniteField.isSplittingField_sub L F).splits.of_dvd ?_ ?_
+  · exact map_ne_zero (FiniteField.X_pow_card_sub_X_ne_zero _ Fintype.one_lt_card)
+  · rw [Module.card_eq_pow_finrank (K := F), Module.card_eq_pow_finrank (K := F) (V := L)]
+    exact (map_dvd_map' _).mpr (dvd_pow_pow_sub_self_of_dvd h)
 
 Depends on / 依赖: Finite, Finite.of_injective, FiniteField, FiniteField.X_pow_card_sub_X_ne_zero, FiniteField.isSplittingField_sub, Fintype, Fintype.card, Fintype.ofFinite, Fintype.one_lt_card, IsSplittingField, Module, Module.ca, Module.finite_of_finite, Module.finite_of_finrank_pos, Module.finrank_pos, Nat.pos_of_dvd_of_pos, Polynomial, Polynomial.IsSplittingField.lift, X_pow_card_sub_X_ne_zero, algebraMap
 -/

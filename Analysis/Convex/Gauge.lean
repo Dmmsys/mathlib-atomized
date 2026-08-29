@@ -245,7 +245,9 @@ theorem gauge_zero'
   · simp only [csInf_Ioi, mem_zero, Pi.zero_apply, sep_true, smul_zero]
   · simp only [mem_zero, Pi.zero_apply, inv_eq_zero, smul_eq_zero]
     convert! Real.sInf_empty
-    exact eq_empty_iff_forall_notMem.2 fun r hr => hr.2.elim (ne_of_g
+    exact eq_empty_iff_forall_notMem.2 fun r hr => hr.2.elim (ne_of_gt hr.1) hx
+
+@[simp]
 
 中文:
 定理 gauge_zero'
@@ -257,7 +259,9 @@ theorem gauge_zero'
   · simp only [csInf_Ioi, mem_zero, Pi.zero_apply, sep_true, smul_zero]
   · simp only [mem_zero, Pi.zero_apply, inv_eq_zero, smul_eq_zero]
     convert! Real.sInf_empty
-    exact eq_empty_iff_forall_notMem.2 fun r hr => hr.2.elim (ne_of_g
+    exact eq_empty_iff_forall_notMem.2 fun r hr => hr.2.elim (ne_of_gt hr.1) hx
+
+@[simp]
 
 Depends on / 依赖: Pi.zero_apply, Real.sInf_empty, convert, csInf_Ioi, eq_empty_iff_forall_notMem, eq_or_ne, gauge_def, inv_eq_zero, mem_zero, ne_of_gt, sInf_empty, sep_true, smul_eq_zero, smul_zero, zero_apply
 -/
@@ -449,7 +453,17 @@ theorem setOfPred_gauge_le_eq
   · have hr' := ha.trans_lt hr
     rw [mem_smul_set_iff_inv_smul_mem₀ hr'.ne']
     obtain ⟨δ, δ_pos, hδr, hδ⟩ := exists_lt_of_gauge_lt hs₂ (h.trans_lt hr)
-    suffice
+    suffices (r⁻¹ * δ) • δ⁻¹ • x in s by rwa [smul_smul, mul_inv_cancel_right₀ δ_pos.ne'] at this
+    rw [mem_smul_set_iff_inv_smul_mem₀ δ_pos.ne'] at hδ
+    refine hs₁.smul_mem_of_zero_mem hs₀ hδ ⟨by positivity, ?_⟩
+    rw [inv_mul_le_iff₀ hr']; rw [mul_one]
+    exact hδr.le
+  · linarith [gauge_le_of_mem (by linarith) <| h (a + ε / 2) (by linarith)]
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_gauge_le_eq := setOfPred_gauge_le_eq
+
+@[deprecated (since := "2026-06-17")] alias gauge_le_eq := setOfPred_gauge_le_eq
 
 中文:
 定理 setOfPred_gauge_le_eq
@@ -461,7 +475,17 @@ theorem setOfPred_gauge_le_eq
   · have hr' := ha.trans_lt hr
     rw [mem_smul_set_iff_inv_smul_mem₀ hr'.ne']
     obtain ⟨δ, δ_pos, hδr, hδ⟩ := exists_lt_of_gauge_lt hs₂ (h.trans_lt hr)
-    suffice
+    suffices (r⁻¹ * δ) • δ⁻¹ • x in s by rwa [smul_smul, mul_inv_cancel_right₀ δ_pos.ne'] at this
+    rw [mem_smul_set_iff_inv_smul_mem₀ δ_pos.ne'] at hδ
+    refine hs₁.smul_mem_of_zero_mem hs₀ hδ ⟨by positivity, ?_⟩
+    rw [inv_mul_le_iff₀ hr']; rw [mul_one]
+    exact hδr.le
+  · linarith [gauge_le_of_mem (by linarith) <| h (a + ε / 2) (by linarith)]
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_gauge_le_eq := setOfPred_gauge_le_eq
+
+@[deprecated (since := "2026-06-17")] alias gauge_le_eq := setOfPred_gauge_le_eq
 
 Depends on / 依赖: Set.mem_iInter, Set.mem_ofPred_eq, _pos.ne, exists_lt_of_gauge_lt, h.trans_lt, ha.trans_lt, le_of_forall_pos_lt_add, mem_iInter, mem_ofPred_eq, simp_rw, smul_mem_of_zero_mem, smul_smul, trans_lt
 -/
@@ -501,7 +525,7 @@ theorem setOfPred_gauge_lt_eq'
 @[deprecated (since := "2026-07-09")]
 alias setOf_gauge_lt_eq' := setOfPred_gauge_lt_eq'
 
-@[deprecated (since := "2026-06-17"
+@[deprecated (since := "2026-06-17")] alias gauge_lt_eq' := setOfPred_gauge_lt_eq'
 
 中文:
 定理 setOfPred_gauge_lt_eq'
@@ -516,7 +540,7 @@ alias setOf_gauge_lt_eq' := setOfPred_gauge_lt_eq'
 @[deprecated (since := "2026-07-09")]
 alias setOf_gauge_lt_eq' := setOfPred_gauge_lt_eq'
 
-@[deprecated (since := "2026-06-17"
+@[deprecated (since := "2026-06-17")] alias gauge_lt_eq' := setOfPred_gauge_lt_eq'
 
 Depends on / 依赖: absorbs, exists_lt_of_gauge_lt, exists_prop, gauge_le_of_mem, mem_iUnion, mem_ofPred, simp_rw, trans_lt
 -/
@@ -549,7 +573,7 @@ theorem setOfPred_gauge_lt_eq
 @[deprecated (since := "2026-07-09")]
 alias setOf_gauge_lt_eq := setOfPred_gauge_lt_eq
 
-@[deprecated (sin
+@[deprecated (since := "2026-06-17")] alias gauge_lt_eq := setOfPred_gauge_lt_eq
 
 中文:
 定理 setOfPred_gauge_lt_eq
@@ -564,7 +588,7 @@ alias setOf_gauge_lt_eq := setOfPred_gauge_lt_eq
 @[deprecated (since := "2026-07-09")]
 alias setOf_gauge_lt_eq := setOfPred_gauge_lt_eq
 
-@[deprecated (sin
+@[deprecated (since := "2026-06-17")] alias gauge_lt_eq := setOfPred_gauge_lt_eq
 
 Depends on / 依赖: absorbs, and_assoc, exists_lt_of_gauge_lt, exists_prop, gauge_le_of_mem, mem_Ioo, mem_iUnion, mem_ofPred, simp_rw, trans_lt
 -/
@@ -622,7 +646,7 @@ theorem setOfPred_gauge_lt_one_subset_self
 alias setOf_gauge_lt_one_subset_self := setOfPred_gauge_lt_one_subset_self
 
 @[deprecated (since := "2026-06-17")]
-alias gauge_lt_one_subset_self := 
+alias gauge_lt_one_subset_self := setOfPred_gauge_lt_one_subset_self
 
 中文:
 定理 setOfPred_gauge_lt_one_subset_self
@@ -635,7 +659,7 @@ alias gauge_lt_one_subset_self :=
 alias setOf_gauge_lt_one_subset_self := setOfPred_gauge_lt_one_subset_self
 
 @[deprecated (since := "2026-06-17")]
-alias gauge_lt_one_subset_self := 
+alias gauge_lt_one_subset_self := setOfPred_gauge_lt_one_subset_self
 -/
 theorem setOfPred_gauge_lt_one_subset_self (hs : Convex Real s) (h₀ : (0 : E) in s)
     (absorbs : Absorbent Real s) : { x | gauge s x < 1 } subseteq s := fun _x hx =>
@@ -681,7 +705,10 @@ theorem gauge_add_le
   obtain ⟨b, hb, hb', y, hy, rfl⟩ :=
     exists_lt_of_gauge_lt absorbs (lt_add_of_pos_right (gauge s y) (half_pos hε))
   calc
-gaug
+gauge s (a • x + b • y) <= a + b := gauge_le_of_mem (by positivity) by
+      rw [hs.add_smul ha.le hb.le]
+      exact add_mem_add (smul_mem_smul_set hx) (smul_mem_smul_set hy)
+    _ < gauge s (a • x) + gauge s (b • y) + ε := by linarith
 
 中文:
 定理 gauge_add_le
@@ -693,7 +720,10 @@ gaug
   obtain ⟨b, hb, hb', y, hy, rfl⟩ :=
     exists_lt_of_gauge_lt absorbs (lt_add_of_pos_right (gauge s y) (half_pos hε))
   calc
-gaug
+gauge s (a • x + b • y) <= a + b := gauge_le_of_mem (by positivity) by
+      rw [hs.add_smul ha.le hb.le]
+      exact add_mem_add (smul_mem_smul_set hx) (smul_mem_smul_set hy)
+    _ < gauge s (a • x) + gauge s (b • y) + ε := by linarith
 
 Depends on / 依赖: absorbs, add_mem_add, add_smul, exists_lt_of_gauge_lt, gauge_le_of_mem, ha.le, half_pos, hb.le, hs.add_smul, le_of_forall_pos_lt_add, lt_add_of_pos_right, smul_mem_smul_set
 -/
@@ -779,7 +809,9 @@ theorem Convex.setOfPred_gauge_le
 exact eq_empty_iff_forall_notMem.2 fun x hx => ha (gauge_nonneg _).trans hx
 
 @[deprecated (since := "2026-07-09")]
-alias C
+alias Convex.setOf_gauge_le := Convex.setOfPred_gauge_le
+
+@[deprecated (since := "2026-06-17")] alias Convex.gauge_le := Convex.setOfPred_gauge_le
 
 中文:
 定理 凸.setOfPred_gauge_le
@@ -792,7 +824,9 @@ alias C
 exact eq_empty_iff_forall_notMem.2 fun x hx => ha (gauge_nonneg _).trans hx
 
 @[deprecated (since := "2026-07-09")]
-alias C
+alias Convex.setOf_gauge_le := Convex.setOfPred_gauge_le
+
+@[deprecated (since := "2026-06-17")] alias Convex.gauge_le := Convex.setOfPred_gauge_le
 
 Depends on / 依赖: absorbs, convert, convex_empty, convex_iInter, eq_empty_iff_forall_notMem, gauge_nonneg, hs.smul, setOfPred_gauge_le_eq
 -/
@@ -822,7 +856,11 @@ refine le_csInf ⟨r, hr, singleton_subset_iff.1 h _ (Real.norm_of_nonneg hr.le)
   rintro b ⟨hb, x, hx', rfl⟩
   refine not_lt.1 fun hba => hx ?_
   have ha := hb.trans hba
-  refine ⟨(a⁻¹ * b) • x, hs₀ hx' (by positivity) 
+  refine ⟨(a⁻¹ * b) • x, hs₀ hx' (by positivity) ?_, ?_⟩
+  · rw [← div_eq_inv_mul]
+    exact div_le_one_of_le₀ hba.le ha.le
+  · dsimp only
+    rw [← mul_smul]; rw [mul_inv_cancel_left₀ ha.ne']
 
 中文:
 定理 le_gauge_of_notMem
@@ -834,7 +872,11 @@ refine le_csInf ⟨r, hr, singleton_subset_iff.1 h _ (Real.norm_of_nonneg hr.le)
   rintro b ⟨hb, x, hx', rfl⟩
   refine not_lt.1 fun hba => hx ?_
   have ha := hb.trans hba
-  refine ⟨(a⁻¹ * b) • x, hs₀ hx' (by positivity) 
+  refine ⟨(a⁻¹ * b) • x, hs₀ hx' (by positivity) ?_, ?_⟩
+  · rw [← div_eq_inv_mul]
+    exact div_le_one_of_le₀ hba.le ha.le
+  · dsimp only
+    rw [← mul_smul]; rw [mul_inv_cancel_left₀ ha.ne']
 
 Depends on / 依赖: Real.norm_of_nonneg, div_eq_inv_mul, exists_pos, ha.le, ha.ne, hb.trans, hba.le, hr.le, le_csInf, mul_smul, norm_of_nonneg, not_lt, singleton_subset_iff, starConvex_zero_iff
 -/
@@ -892,7 +934,18 @@ theorem gauge_smul_of_nonneg
   constructor
   · rintro ⟨hr, hx⟩
     simp_rw [mem_Ioi] at hr ⊢
-    rw [← mem_smul_set
+    rw [← mem_smul_set_iff_inv_smul_mem₀ hr.ne'] at hx
+    have := smul_pos (inv_pos.2 ha') hr
+    refine ⟨a⁻¹ • r, ⟨this, ?_⟩, smul_inv_smul₀ ha'.ne' _⟩
+    rwa [← mem_smul_set_iff_inv_smul_mem₀ this.ne', smul_assoc,
+      mem_smul_set_iff_inv_smul_mem₀ (inv_ne_zero ha'.ne'), inv_inv]
+  · rintro ⟨r, ⟨hr, hx⟩, rfl⟩
+    rw [mem_Ioi] at hr ⊢
+    rw [← mem_smul_set_iff_inv_smul_mem₀ hr.ne'] at hx
+    have := smul_pos ha' hr
+    refine ⟨this, ?_⟩
+    rw [← mem_smul_set_iff_inv_smul_mem₀ this.ne']; rw [smul_assoc]
+    exact smul_mem_smul_set hx
 
 中文:
 定理 gauge_smul_of_nonneg
@@ -907,7 +960,18 @@ theorem gauge_smul_of_nonneg
   constructor
   · rintro ⟨hr, hx⟩
     simp_rw [mem_Ioi] at hr ⊢
-    rw [← mem_smul_set
+    rw [← mem_smul_set_iff_inv_smul_mem₀ hr.ne'] at hx
+    have := smul_pos (inv_pos.2 ha') hr
+    refine ⟨a⁻¹ • r, ⟨this, ?_⟩, smul_inv_smul₀ ha'.ne' _⟩
+    rwa [← mem_smul_set_iff_inv_smul_mem₀ this.ne', smul_assoc,
+      mem_smul_set_iff_inv_smul_mem₀ (inv_ne_zero ha'.ne'), inv_inv]
+  · rintro ⟨r, ⟨hr, hx⟩, rfl⟩
+    rw [mem_Ioi] at hr ⊢
+    rw [← mem_smul_set_iff_inv_smul_mem₀ hr.ne'] at hx
+    have := smul_pos ha' hr
+    refine ⟨this, ?_⟩
+    rw [← mem_smul_set_iff_inv_smul_mem₀ this.ne']; rw [smul_assoc]
+    exact smul_mem_smul_set hx
 
 Depends on / 依赖: Real.sInf_smul_of_nonneg, Set.mem_sep_iff, Set.mem_smul_set, eq_or_lt, gauge_def, gauge_zero, ha.eq_or_lt, hr.ne, inv_ne_z, inv_pos, mem_Ioi, mem_sep_iff, mem_smul_set, sInf_smul_of_nonneg, simp_rw, smul_assoc, smul_pos, this.ne, zero_smul
 -/
@@ -949,7 +1013,15 @@ theorem gauge_smul_left_of_nonneg
   congr 1
   ext r
   simp_rw [Set.mem_smul_set, Set.mem_sep_iff]
-  constru
+  constructor
+  · rintro ⟨hr, y, hy, h⟩
+    simp_rw [mem_Ioi] at hr ⊢
+    refine ⟨a • r, ⟨smul_pos ha' hr, ?_⟩, inv_smul_smul₀ ha'.ne' _⟩
+    rwa [smul_inv₀, smul_assoc, ← h, inv_smul_smul₀ ha'.ne']
+  · rintro ⟨r, ⟨hr, hx⟩, rfl⟩
+    rw [mem_Ioi] at hr ⊢
+    refine ⟨smul_pos (inv_pos.2 ha') hr, r⁻¹ • x, hx, ?_⟩
+    rw [smul_inv₀]; rw [smul_assoc]; rw [inv_inv]
 
 中文:
 定理 gauge_smul_left_of_nonneg
@@ -962,7 +1034,15 @@ theorem gauge_smul_left_of_nonneg
   congr 1
   ext r
   simp_rw [Set.mem_smul_set, Set.mem_sep_iff]
-  constru
+  constructor
+  · rintro ⟨hr, y, hy, h⟩
+    simp_rw [mem_Ioi] at hr ⊢
+    refine ⟨a • r, ⟨smul_pos ha' hr, ?_⟩, inv_smul_smul₀ ha'.ne' _⟩
+    rwa [smul_inv₀, smul_assoc, ← h, inv_smul_smul₀ ha'.ne']
+  · rintro ⟨r, ⟨hr, hx⟩, rfl⟩
+    rw [mem_Ioi] at hr ⊢
+    refine ⟨smul_pos (inv_pos.2 ha') hr, r⁻¹ • x, hx, ?_⟩
+    rw [smul_inv₀]; rw [smul_assoc]; rw [inv_inv]
 
 Depends on / 依赖: Pi.smul_apply, Real.sInf_smul_of_nonneg, Set.mem_sep_iff, Set.mem_smul_set, eq_or_lt, gauge_def, gauge_of_subset_zero, ha.eq_or_lt, inv_nonneg, inv_zero, mem_Ioi, mem_sep_iff, mem_smul_set, sInf_smul_of_nonneg, simp_rw, smul_apply, smul_assoc, smul_pos, zero_smul, zero_smul_set_subset
 -/
@@ -1112,7 +1192,8 @@ theorem comap_gauge_nhds_zero_le
   filter_upwards [preimage_mem_comap (gt_mem_nhds (inv_pos.2 hr₀))] with x (hx : gauge s x < r⁻¹)
   rcases exists_lt_of_gauge_lt ha hx with ⟨c, hc₀, hcr, y, hy, rfl⟩
   have hrc := (lt_inv_comm₀ hr₀ hc₀).2 hcr
-  rcases hr c⁻¹ (hrc.le.trans 
+  rcases hr c⁻¹ (hrc.le.trans (le_abs_self _)) hy with ⟨z, hz, rfl⟩
+  simpa only [smul_inv_smul₀ hc₀.ne']
 
 中文:
 定理 comap_gauge_nhds_zero_le
@@ -1122,7 +1203,8 @@ theorem comap_gauge_nhds_zero_le
   filter_upwards [preimage_mem_comap (gt_mem_nhds (inv_pos.2 hr₀))] with x (hx : gauge s x < r⁻¹)
   rcases exists_lt_of_gauge_lt ha hx with ⟨c, hc₀, hcr, y, hy, rfl⟩
   have hrc := (lt_inv_comm₀ hr₀ hc₀).2 hcr
-  rcases hr c⁻¹ (hrc.le.trans 
+  rcases hr c⁻¹ (hrc.le.trans (le_abs_self _)) hy with ⟨z, hz, rfl⟩
+  simpa only [smul_inv_smul₀ hc₀.ne']
 
 Depends on / 依赖: exists_lt_of_gauge_lt, exists_pos, filter_upwards, gt_mem_nhds, hrc.le.trans, inv_pos, le_abs_self, preimage_mem_comap
 -/
@@ -1148,7 +1230,7 @@ theorem gauge_eq_zero
   have : {x}ᶜ in comap (gauge s) (𝓝 0) :=
     comap_gauge_nhds_zero_le hs hb (isOpen_compl_singleton.mem_nhds hne.symm)
   rcases ((nhds_basis_zero_abs_lt _).comap _).mem_iff.1 this with ⟨r, hr₀, hr⟩
-  exact hr (
+  exact hr (by simpa [h₀]) rfl
 
 中文:
 定理 gauge_eq_zero
@@ -1158,7 +1240,7 @@ theorem gauge_eq_zero
   have : {x}ᶜ in comap (gauge s) (𝓝 0) :=
     comap_gauge_nhds_zero_le hs hb (isOpen_compl_singleton.mem_nhds hne.symm)
   rcases ((nhds_basis_zero_abs_lt _).comap _).mem_iff.1 this with ⟨r, hr₀, hr⟩
-  exact hr (
+  exact hr (by simpa [h₀]) rfl
 
 Depends on / 依赖: comap_gauge_nhds_zero_le, gauge_zero, h.symm, hne.symm, isOpen_compl_singleton, isOpen_compl_singleton.mem_nhds, mem_iff, mem_nhds, nhds_basis_zero_abs_lt
 -/
@@ -1211,7 +1293,10 @@ theorem interior_subset_gauge_lt_one
     ((tendsto_id.inv₀ one_ne_zero).smul tendsto_const_nhds).mono_left inf_le_left
   rw [inv_one]; rw [one_smul] at H₁
   have H₂ : forallᶠ r in 𝓝[<] (1 : Real), x in r • s ∧ 0 < r ∧ r < 1 := by
-    filter
+    filter_upwards [H₁ (mem_interior_iff_mem_nhds.1 hx), Ioo_mem_nhdsLT one_pos] with r h₁ h₂
+    exact ⟨(mem_smul_set_iff_inv_smul_mem₀ h₂.1.ne' _ _).2 h₁, h₂⟩
+  rcases H₂.exists with ⟨r, hxr, hr₀, hr₁⟩
+  exact (gauge_le_of_mem hr₀.le hxr).trans_lt hr₁
 
 中文:
 定理 interior_subset_gauge_lt_one
@@ -1223,7 +1308,10 @@ theorem interior_subset_gauge_lt_one
     ((tendsto_id.inv₀ one_ne_zero).smul tendsto_const_nhds).mono_left inf_le_left
   rw [inv_one]; rw [one_smul] at H₁
   have H₂ : forallᶠ r in 𝓝[<] (1 : Real), x in r • s ∧ 0 < r ∧ r < 1 := by
-    filter
+    filter_upwards [H₁ (mem_interior_iff_mem_nhds.1 hx), Ioo_mem_nhdsLT one_pos] with r h₁ h₂
+    exact ⟨(mem_smul_set_iff_inv_smul_mem₀ h₂.1.ne' _ _).2 h₁, h₂⟩
+  rcases H₂.exists with ⟨r, hxr, hr₀, hr₁⟩
+  exact (gauge_le_of_mem hr₀.le hxr).trans_lt hr₁
 
 Depends on / 依赖: Ioo_mem_nhdsLT, Tendsto, filter_upwards, gauge_le_of_mem, inf_le_left, inv_one, mem_interior_iff_mem_nhds, mono_left, one_ne_zero, one_pos, one_smul, tendsto_const_nhds, tendsto_id, tendsto_id.inv
 -/
@@ -1251,7 +1339,10 @@ theorem setOfPred_gauge_lt_one_eq_self_of_isOpen
   exact hs₂.interior_eq.symm
 
 @[deprecated (since := "2026-07-09")]
-alias setOf_gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_se
+alias setOf_gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_self_of_isOpen
+
+@[deprecated (since := "2026-06-17")]
+alias gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_self_of_isOpen
 
 中文:
 定理 setOfPred_gauge_lt_one_eq_self_of_isOpen
@@ -1263,7 +1354,10 @@ alias setOf_gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_se
   exact hs₂.interior_eq.symm
 
 @[deprecated (since := "2026-07-09")]
-alias setOf_gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_se
+alias setOf_gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_self_of_isOpen
+
+@[deprecated (since := "2026-06-17")]
+alias gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_self_of_isOpen
 
 Depends on / 依赖: absorbent_nhds_zero, antisymm, convert, interior_eq, interior_eq.symm, interior_subset_gauge_lt_one, mem_nhds, setOfPred_gauge_lt_one_subset_self
 -/
@@ -1341,7 +1435,9 @@ theorem mem_closure_of_gauge_le_one
     apply setOfPred_gauge_lt_one_subset_self hc hs₀ ha
     rw [mem_ofPred_eq]; rw [gauge_smul_of_nonneg hr₀]
     exact mul_lt_one_of_nonneg_of_lt_one_left hr₀ hr₁ h
-  refine mem_clo
+  refine mem_closure_of_tendsto ?_ this
+  exact Filter.Tendsto.mono_left (Continuous.tendsto' (by fun_prop) _ _ (one_smul _ _))
+    inf_le_left
 
 中文:
 定理 mem_closure_of_gauge_le_one
@@ -1352,7 +1448,9 @@ theorem mem_closure_of_gauge_le_one
     apply setOfPred_gauge_lt_one_subset_self hc hs₀ ha
     rw [mem_ofPred_eq]; rw [gauge_smul_of_nonneg hr₀]
     exact mul_lt_one_of_nonneg_of_lt_one_left hr₀ hr₁ h
-  refine mem_clo
+  refine mem_closure_of_tendsto ?_ this
+  exact Filter.Tendsto.mono_left (Continuous.tendsto' (by fun_prop) _ _ (one_smul _ _))
+    inf_le_left
 
 Depends on / 依赖: Continuous, Continuous.tendsto, Filter, Filter.Tendsto.mono_left, Ico_mem_nhdsLT, Tendsto, filter_upwards, fun_prop, gauge_smul_of_nonneg, inf_le_left, mem_closure_of_tendsto, mem_ofPred_eq, mono_left, mul_lt_one_of_nonneg_of_lt_one_left, one_pos, one_smul, setOfPred_gauge_lt_one_subset_self, tendsto
 -/
@@ -1508,7 +1606,17 @@ theorem continuousAt_gauge
   rw [← map_add_left_nhds_zero]; rw [eventually_map]
   have : ε • s inter -(ε • s) in 𝓝 0 :=
     inter_mem ((set_smul_mem_nhds_zero_iff hε₀.ne').2 hs₀)
-      (neg_mem_nhds_z
+      (neg_mem_nhds_zero _ ((set_smul_mem_nhds_zero_iff hε₀.ne').2 hs₀))
+  filter_upwards [this] with y hy
+  constructor
+  · rw [sub_le_iff_le_add]
+    calc
+      gauge s x = gauge s (x + y + (-y)) := by simp
+      _ <= gauge s (x + y) + gauge s (-y) := gauge_add_le hc ha _ _
+      _ <= gauge s (x + y) + ε := by grw [gauge_le_of_mem hε₀.le (mem_neg.1 hy.2)]
+  · calc
+      gauge s (x + y) <= gauge s x + gauge s y := gauge_add_le hc ha _ _
+      _ <= gauge s x + ε := by grw [gauge_le_of_mem hε₀.le hy.1]
 
 中文:
 定理 continuousAt_gauge
@@ -1520,7 +1628,17 @@ theorem continuousAt_gauge
   rw [← map_add_left_nhds_zero]; rw [eventually_map]
   have : ε • s inter -(ε • s) in 𝓝 0 :=
     inter_mem ((set_smul_mem_nhds_zero_iff hε₀.ne').2 hs₀)
-      (neg_mem_nhds_z
+      (neg_mem_nhds_zero _ ((set_smul_mem_nhds_zero_iff hε₀.ne').2 hs₀))
+  filter_upwards [this] with y hy
+  constructor
+  · rw [sub_le_iff_le_add]
+    calc
+      gauge s x = gauge s (x + y + (-y)) := by simp
+      _ <= gauge s (x + y) + gauge s (-y) := gauge_add_le hc ha _ _
+      _ <= gauge s (x + y) + ε := by grw [gauge_le_of_mem hε₀.le (mem_neg.1 hy.2)]
+  · calc
+      gauge s (x + y) <= gauge s x + gauge s y := gauge_add_le hc ha _ _
+      _ <= gauge s x + ε := by grw [gauge_le_of_mem hε₀.le hy.1]
 
 Depends on / 依赖: Absorbent, absorbent_nhds_zero, eventually_map, filter_upwards, gauge_a, inter_mem, map_add_left_nhds_zero, neg_mem_nhds_zero, nhds_basis_Icc_pos, set_smul_mem_nhds_zero_iff, sub_le_iff_le_add, tendsto_right_iff
 -/
@@ -1578,6 +1696,10 @@ theorem setOfPred_gauge_lt_one_eq_interior
   exact hc.openSegment_interior_self_subset_interior (mem_interior_iff_mem_nhds.2 hs₀) hys hxy
 
 @[deprecated (since := "2026-07-09")]
+alias setOf_gauge_lt_one_eq_interior := setOfPred_gauge_lt_one_eq_interior
+
+@[deprecated (since := "2026-06-17")]
+alias gauge_lt_one_eq_interior := setOfPred_gauge_lt_one_eq_interior
 
 中文:
 定理 setOfPred_gauge_lt_one_eq_interior
@@ -1588,6 +1710,10 @@ theorem setOfPred_gauge_lt_one_eq_interior
   exact hc.openSegment_interior_self_subset_interior (mem_interior_iff_mem_nhds.2 hs₀) hys hxy
 
 @[deprecated (since := "2026-07-09")]
+alias setOf_gauge_lt_one_eq_interior := setOfPred_gauge_lt_one_eq_interior
+
+@[deprecated (since := "2026-06-17")]
+alias gauge_lt_one_eq_interior := setOfPred_gauge_lt_one_eq_interior
 
 Depends on / 依赖: Subset, Subset.antisymm, absorbent_nhds_zero, antisymm, hc.openSegment_interior_self_subset_interior, interior_subset_gauge_lt_one, mem_interior_iff_mem_nhds, mem_openSegment_of_gauge_lt_one, openSegment_interior_self_subset_interior
 -/
@@ -1762,7 +1888,18 @@ theorem Seminorm.gauge_ball
     by_contra h
     have hpx : 0 < p x := (apply_nonneg _ _).lt_of_ne h
     have hpx₂ : 0 < 2 * p x := mul_pos zero_lt_two hpx
-    refine hp.subset ⟨hpx₂, (2 * p x)⁻¹ • 
+    refine hp.subset ⟨hpx₂, (2 * p x)⁻¹ • x, ?_, smul_inv_smul₀ hpx₂.ne' _⟩
+    rw [p.mem_ball_zero]; rw [map_smul_eq_mul]; rw [Real.norm_eq_abs]; rw [abs_of_pos (inv_pos.2 hpx₂)]; rw [inv_mul_lt_iff₀ hpx₂]; rw [mul_one]
+    exact lt_mul_of_one_lt_left hpx one_lt_two
+  refine IsGLB.csInf_eq ⟨fun r => ?_, fun r hr => le_of_forall_pos_le_add fun ε hε => ?_⟩ hp
+  · rintro ⟨hr, y, hy, rfl⟩
+    rw [p.mem_ball_zero] at hy
+    rw [map_smul_eq_mul]; rw [Real.norm_eq_abs]; rw [abs_of_pos hr]
+    exact mul_le_of_le_one_right hr.le hy.le
+  · have hpε : 0 < p x + ε := by positivity
+    refine hr ⟨hpε, (p x + ε)⁻¹ • x, ?_, smul_inv_smul₀ hpε.ne' _⟩
+    rw [p.mem_ball_zero]; rw [map_smul_eq_mul]; rw [Real.norm_eq_abs]; rw [abs_of_pos (inv_pos.2 hpε)]; rw [inv_mul_lt_iff₀ hpε]; rw [mul_one]
+    exact lt_add_of_pos_right _ hε
 
 中文:
 定理 半范数.gauge_ball
@@ -1775,7 +1912,18 @@ theorem Seminorm.gauge_ball
     by_contra h
     have hpx : 0 < p x := (apply_nonneg _ _).lt_of_ne h
     have hpx₂ : 0 < 2 * p x := mul_pos zero_lt_two hpx
-    refine hp.subset ⟨hpx₂, (2 * p x)⁻¹ • 
+    refine hp.subset ⟨hpx₂, (2 * p x)⁻¹ • x, ?_, smul_inv_smul₀ hpx₂.ne' _⟩
+    rw [p.mem_ball_zero]; rw [map_smul_eq_mul]; rw [Real.norm_eq_abs]; rw [abs_of_pos (inv_pos.2 hpx₂)]; rw [inv_mul_lt_iff₀ hpx₂]; rw [mul_one]
+    exact lt_mul_of_one_lt_left hpx one_lt_two
+  refine IsGLB.csInf_eq ⟨fun r => ?_, fun r hr => le_of_forall_pos_le_add fun ε hε => ?_⟩ hp
+  · rintro ⟨hr, y, hy, rfl⟩
+    rw [p.mem_ball_zero] at hy
+    rw [map_smul_eq_mul]; rw [Real.norm_eq_abs]; rw [abs_of_pos hr]
+    exact mul_le_of_le_one_right hr.le hy.le
+  · have hpε : 0 < p x + ε := by positivity
+    refine hr ⟨hpε, (p x + ε)⁻¹ • x, ?_, smul_inv_smul₀ hpε.ne' _⟩
+    rw [p.mem_ball_zero]; rw [map_smul_eq_mul]; rw [Real.norm_eq_abs]; rw [abs_of_pos (inv_pos.2 hpε)]; rw [inv_mul_lt_iff₀ hpε]; rw [mul_one]
+    exact lt_add_of_pos_right _ hε
 -/
 protected theorem Seminorm.gauge_ball (p : Seminorm Real E) : gauge (p.ball 0 1) = p := by
   ext x
@@ -1900,7 +2048,10 @@ theorem gauge_closure_zero
   rcases (norm_nonneg x).eq_or_lt' with hx | hx
   · convert! csInf_Ioi (a := (0 : Real))
     exact Set.ext fun r => and_iff_left (.inr hx)
-  · convert! Real
+  · convert! Real.sInf_empty
+exact eq_empty_of_forall_notMem fun r ⟨hr₀, hr⟩ => hx.ne' hr.resolve_left hr₀.out.ne'
+
+@[simp]
 
 中文:
 定理 gauge_closure_zero
@@ -1911,7 +2062,10 @@ theorem gauge_closure_zero
   rcases (norm_nonneg x).eq_or_lt' with hx | hx
   · convert! csInf_Ioi (a := (0 : Real))
     exact Set.ext fun r => and_iff_left (.inr hx)
-  · convert! Real
+  · convert! Real.sInf_empty
+exact eq_empty_of_forall_notMem fun r ⟨hr₀, hr⟩ => hx.ne' hr.resolve_left hr₀.out.ne'
+
+@[simp]
 
 Depends on / 依赖: Real.sInf_empty, Set.ext, and_iff_left, convert, csInf_Ioi, eq_empty_of_forall_notMem, eq_or_lt, gauge_def, hr.resolve_left, hx.ne, inv_eq_zero, mem_closure_zero_iff_norm, mul_eq_zero, norm_eq_zero, norm_nonneg, norm_smul, out.ne, resolve_left, sInf_empty, singleton_zero
 -/
@@ -1938,7 +2092,13 @@ theorem gauge_closedBall
   · apply le_antisymm
     · rw [← gauge_ball hr]
       exact gauge_mono (absorbent_ball_zero hr') ball_subset_closedBall x
-    · suffices forallᶠ R in 𝓝[>] r, ‖x‖ / R <= gauge (closedB
+    · suffices forallᶠ R in 𝓝[>] r, ‖x‖ / R <= gauge (closedBall 0 r) x by
+        refine le_of_tendsto ?_ this
+        exact tendsto_const_nhds.div inf_le_left hr'.ne'
+      filter_upwards [self_mem_nhdsWithin] with R hR
+      rw [← gauge_ball (hr.trans hR.out.le)]
+      refine gauge_mono ?_ (closedBall_subset_ball hR) _
+      exact (absorbent_ball_zero hr').mono ball_subset_closedBall
 
 中文:
 定理 gauge_closedBall
@@ -1950,7 +2110,13 @@ theorem gauge_closedBall
   · apply le_antisymm
     · rw [← gauge_ball hr]
       exact gauge_mono (absorbent_ball_zero hr') ball_subset_closedBall x
-    · suffices forallᶠ R in 𝓝[>] r, ‖x‖ / R <= gauge (closedB
+    · suffices forallᶠ R in 𝓝[>] r, ‖x‖ / R <= gauge (closedBall 0 r) x by
+        refine le_of_tendsto ?_ this
+        exact tendsto_const_nhds.div inf_le_left hr'.ne'
+      filter_upwards [self_mem_nhdsWithin] with R hR
+      rw [← gauge_ball (hr.trans hR.out.le)]
+      refine gauge_mono ?_ (closedBall_subset_ball hR) _
+      exact (absorbent_ball_zero hr').mono ball_subset_closedBall
 
 Depends on / 依赖: absorbent_ball_zero, ball_subset_closedBall, closedBall, closedBall_subset_ba, closedBall_zero, div_zero, eq_or_lt, filter_upwards, gauge_ball, gauge_closure_zero, gauge_mono, hR.out.le, hr.eq_or_lt, hr.trans, inf_le_left, le_antisymm, le_of_tendsto, self_mem_nhdsWithin, singleton_zero, tendsto_const_nhds
 -/
@@ -2010,7 +2176,8 @@ theorem Convex.lipschitzWith_gauge
     calc
       gauge s x = gauge s (y + (x - y)) := by simp
       _ <= gauge s y + gauge s (x - y) := gauge_add_le hc (this.mono hs) _ _
-      _ <= gauge s y + ‖x - y‖ / r := by grw [ga
+      _ <= gauge s y + ‖x - y‖ / r := by grw [gauge_mono this hs (x - y), gauge_ball]; positivity
+      _ = gauge s y + r⁻¹ * dist x y := by rw [dist_eq_norm, div_eq_inv_mul, NNReal.coe_inv]
 
 中文:
 定理 凸.lipschitzWith_gauge
@@ -2020,7 +2187,8 @@ theorem Convex.lipschitzWith_gauge
     calc
       gauge s x = gauge s (y + (x - y)) := by simp
       _ <= gauge s y + gauge s (x - y) := gauge_add_le hc (this.mono hs) _ _
-      _ <= gauge s y + ‖x - y‖ / r := by grw [ga
+      _ <= gauge s y + ‖x - y‖ / r := by grw [gauge_mono this hs (x - y), gauge_ball]; positivity
+      _ = gauge s y + r⁻¹ * dist x y := by rw [dist_eq_norm, div_eq_inv_mul, NNReal.coe_inv]
 
 Depends on / 依赖: Absorbent, LipschitzWith, LipschitzWith.of_le_add_mul, Metric, Metric.ball, NNReal, NNReal.coe_inv, absorbent_ball_zero, coe_inv, dist_eq_norm, div_eq_inv_mul, gauge_add_le, gauge_ball, gauge_mono, of_le_add_mul, this.mono
 -/

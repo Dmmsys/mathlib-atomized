@@ -243,7 +243,16 @@ definition map
     have := P.supIndep hu hb (by simp [hbu]) (map_rel e.symm hx) ?_
     · rw [← e.symm.map_bot] at this
       exact e.symm.map_rel_iff.mp this
-    · convert! e.symm.map_rel_iff.
+    · convert! e.symm.map_rel_iff.mpr hxu
+      rw [map_finset_sup]; rw [sup_map]
+      rfl
+  sup_parts := by simp [← P.sup_parts]
+  bot_notMem := by
+    rw [mem_map_equiv]
+    convert! P.bot_notMem
+    exact e.symm.map_bot
+
+@[simp]
 
 中文:
 定义 map
@@ -255,7 +264,16 @@ definition map
     have := P.supIndep hu hb (by simp [hbu]) (map_rel e.symm hx) ?_
     · rw [← e.symm.map_bot] at this
       exact e.symm.map_rel_iff.mp this
-    · convert! e.symm.map_rel_iff.
+    · convert! e.symm.map_rel_iff.mpr hxu
+      rw [map_finset_sup]; rw [sup_map]
+      rfl
+  sup_parts := by simp [← P.sup_parts]
+  bot_notMem := by
+    rw [mem_map_equiv]
+    convert! P.bot_notMem
+    exact e.symm.map_bot
+
+@[simp]
 
 Depends on / 依赖: P.parts.map
 -/
@@ -750,7 +768,15 @@ instance :
       exact ⟨d, hd, hbc.trans hcd⟩
     le_antisymm := fun P Q hPQ hQP => by
       ext b
-     
+      refine ⟨fun hb => ?_, fun hb => ?_⟩
+      · obtain ⟨c, hc, hbc⟩ := hPQ hb
+        obtain ⟨d, hd, hcd⟩ := hQP hc
+        rwa [hbc.antisymm]
+        rwa [P.disjoint.eq_of_le hb hd (P.ne_bot hb) (hbc.trans hcd)]
+      · obtain ⟨c, hc, hbc⟩ := hQP hb
+        obtain ⟨d, hd, hcd⟩ := hPQ hc
+        rwa [hbc.antisymm]
+        rwa [Q.disjoint.eq_of_le hb hd (Q.ne_bot hb) (hbc.trans hcd)] }
 
 中文:
 实例 :
@@ -763,7 +789,15 @@ instance :
       exact ⟨d, hd, hbc.trans hcd⟩
     le_antisymm := fun P Q hPQ hQP => by
       ext b
-     
+      refine ⟨fun hb => ?_, fun hb => ?_⟩
+      · obtain ⟨c, hc, hbc⟩ := hPQ hb
+        obtain ⟨d, hd, hcd⟩ := hQP hc
+        rwa [hbc.antisymm]
+        rwa [P.disjoint.eq_of_le hb hd (P.ne_bot hb) (hbc.trans hcd)]
+      · obtain ⟨c, hc, hbc⟩ := hQP hb
+        obtain ⟨d, hd, hcd⟩ := hPQ hc
+        rwa [hbc.antisymm]
+        rwa [Q.disjoint.eq_of_le hb hd (Q.ne_bot hb) (hbc.trans hcd)] }
 
 Depends on / 依赖: Finpartition, P.disjoint.eq_of_le, P.ne_bot, antisymm, disjoint, eq_of_le, hbc.antisymm, hbc.trans, le_antisymm, le_refl, le_rfl, le_trans, ne_bot
 -/
@@ -884,7 +918,7 @@ instance [DecidableEq
   complete P := by
     refine mem_image.mpr ⟨P.parts, ?_, ?_⟩
     · rw [mem_powerset]; intro p hp; rw [mem_powerset]; exact P.le hp
-    · simp [P.supIndep, P.sup_parts, P.bot_no
+    · simp [P.supIndep, P.sup_parts, P.bot_notMem, -bot_eq_empty]
 
 中文:
 实例 [DecidableEq
@@ -894,7 +928,7 @@ instance [DecidableEq
   complete P := by
     refine mem_image.mpr ⟨P.parts, ?_, ?_⟩
     · rw [mem_powerset]; intro p hp; rw [mem_powerset]; exact P.le hp
-    · simp [P.supIndep, P.sup_parts, P.bot_no
+    · simp [P.supIndep, P.sup_parts, P.bot_notMem, -bot_eq_empty]
 
 Depends on / 依赖: powerset, s.powerset.powerset.image
 -/
@@ -918,7 +952,8 @@ theorem exists_le_of_le
   refine Q.ne_bot hb (disjoint_self.1 <| Disjoint.mono_right (Q.le hb) ?_)
   have : forall p in P.parts, exists q in Q.parts.erase b, p <= q := by grind [h _]
   have : P.parts.sup id <= (Q.parts.erase b).sup id := by grind [Finset.le_sup, Finset.sup_le_iff]
-  grw [← P.su
+  grw [← P.sup_parts, this]
+  exact Q.supIndep (erase_subset _ _) hb (notMem_erase _ _)
 
 中文:
 定理 存在_le_of_le
@@ -929,7 +964,8 @@ theorem exists_le_of_le
   refine Q.ne_bot hb (disjoint_self.1 <| Disjoint.mono_right (Q.le hb) ?_)
   have : forall p in P.parts, exists q in Q.parts.erase b, p <= q := by grind [h _]
   have : P.parts.sup id <= (Q.parts.erase b).sup id := by grind [Finset.le_sup, Finset.sup_le_iff]
-  grw [← P.su
+  grw [← P.sup_parts, this]
+  exact Q.supIndep (erase_subset _ _) hb (notMem_erase _ _)
 
 Depends on / 依赖: Disjoint, Disjoint.mono_right, Finset, Finset.le_sup, Finset.sup_le_iff, P.parts, P.parts.sup, P.sup_parts, Q.le, Q.ne_bot, Q.parts.erase, Q.supIndep, classical, disjoint_self, erase_subset, le_sup, mono_right, ne_bot, notMem_erase, supIndep
 -/
@@ -957,7 +993,8 @@ theorem card_mono
   refine card_le_card_of_injOn (fun b => f _ b.2) (fun b _ => hP _ b.2) fun b _ c _ h => ?_
   exact
     Subtype.coe_injective
-      (Q.disjoint.elim b.2 c.2 fun
+      (Q.disjoint.elim b.2 c.2 fun H =>
+P.ne_bot (hP _ b.2) disjoint_self.1 H.mono (hf _ b.2) h.le.trans hf _ c.2)
 
 中文:
 定理 card_mono
@@ -970,7 +1007,8 @@ theorem card_mono
   refine card_le_card_of_injOn (fun b => f _ b.2) (fun b _ => hP _ b.2) fun b _ c _ h => ?_
   exact
     Subtype.coe_injective
-      (Q.disjoint.elim b.2 c.2 fun
+      (Q.disjoint.elim b.2 c.2 fun H =>
+P.ne_bot (hP _ b.2) disjoint_self.1 H.mono (hf _ b.2) h.le.trans hf _ c.2)
 
 Depends on / 依赖: H.mono, P.ne_bot, P.parts, Q.disjoint.elim, Q.parts, Subtype, Subtype.coe_injective, card_attach, card_le_card_of_injOn, coe_injective, disjoint, disjoint_self, exists_le_of_le, h.le.trans, ne_bot
 -/
@@ -1003,7 +1041,21 @@ definition toSubtype
     Finpartition (⟨s, hs⟩ : Subtype Pr) :=
   letI : Lattice (Subtype Pr) := Subtype.lattice Prsup Prinf
   letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-  { parts := preimage P.parts Subtype.val Subtype.va
+  { parts := preimage P.parts Subtype.val Subtype.val_injective.injOn
+    supIndep t ht i hi hi' := by
+      classical
+      have : (fun (i : Subtype Pr) => (id i).val) = id ∘ Subtype.val := rfl
+      rw [disjoint_subtype_iff Prinf Prbot]; rw [sup_coe]; rw [this]; rw [← sup_image t Subtype.val id]
+      · apply P.supIndep
+        · simpa [image_subset_iff_subset_preimage] using ht
+        · simpa using hi
+        · simpa [i.property] using hi'
+      exact Prsup
+    sup_parts := by
+      simpa [Finset.sup_preimage_val_id Prsup Prbot hP] using P.sup_parts
+    bot_notMem := by simpa [mem_preimage, Subtype.coe_bot Prbot] using P.bot_notMem }
+
+@[simp]
 
 中文:
 定义 toSubtype
@@ -1013,7 +1065,21 @@ definition toSubtype
     Finpartition (⟨s, hs⟩ : Subtype Pr) :=
   letI : Lattice (Subtype Pr) := Subtype.lattice Prsup Prinf
   letI : OrderBot (Subtype Pr) := Subtype.orderBot Prbot
-  { parts := preimage P.parts Subtype.val Subtype.va
+  { parts := preimage P.parts Subtype.val Subtype.val_injective.injOn
+    supIndep t ht i hi hi' := by
+      classical
+      have : (fun (i : Subtype Pr) => (id i).val) = id ∘ Subtype.val := rfl
+      rw [disjoint_subtype_iff Prinf Prbot]; rw [sup_coe]; rw [this]; rw [← sup_image t Subtype.val id]
+      · apply P.supIndep
+        · simpa [image_subset_iff_subset_preimage] using ht
+        · simpa using hi
+        · simpa [i.property] using hi'
+      exact Prsup
+    sup_parts := by
+      simpa [Finset.sup_preimage_val_id Prsup Prbot hP] using P.sup_parts
+    bot_notMem := by simpa [mem_preimage, Subtype.coe_bot Prbot] using P.bot_notMem }
+
+@[simp]
 
 Depends on / 依赖: Subtype, Subtype.lattice, lattice
 -/
@@ -1109,7 +1175,20 @@ instance :
         rw [supIndep_iff_disjoint_erase]
         simp only [mem_image, and_imp, forall_exists_index, id, Prod.exists,
           mem_product, Finset.disjoint_sup_right, mem_erase, Ne]
-        rintro _ x₁ y₁ hx₁ hy₁ r
+        rintro _ x₁ y₁ hx₁ hy₁ rfl _ h x₂ y₂ hx₂ hy₂ rfl
+        rcases eq_or_ne x₁ x₂ with (rfl | xdiff)
+        · refine Disjoint.mono inf_le_right inf_le_right (Q.disjoint hy₁ hy₂ ?_)
+          intro t
+          simp [t] at h
+        exact Disjoint.mono inf_le_left inf_le_left (P.disjoint hx₁ hx₂ xdiff))
+      (by
+        rw [sup_image]; rw [id_comp]; rw [sup_product_left]
+        trans P.parts.sup id ⊓ Q.parts.sup id
+        · simp_rw [Finset.sup_inf_distrib_right, Finset.sup_inf_distrib_left]
+          rfl
+        · rw [P.sup_parts, Q.sup_parts, inf_idem])⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -1120,7 +1199,20 @@ instance :
         rw [supIndep_iff_disjoint_erase]
         simp only [mem_image, and_imp, forall_exists_index, id, Prod.exists,
           mem_product, Finset.disjoint_sup_right, mem_erase, Ne]
-        rintro _ x₁ y₁ hx₁ hy₁ r
+        rintro _ x₁ y₁ hx₁ hy₁ rfl _ h x₂ y₂ hx₂ hy₂ rfl
+        rcases eq_or_ne x₁ x₂ with (rfl | xdiff)
+        · refine Disjoint.mono inf_le_right inf_le_right (Q.disjoint hy₁ hy₂ ?_)
+          intro t
+          simp [t] at h
+        exact Disjoint.mono inf_le_left inf_le_left (P.disjoint hx₁ hx₂ xdiff))
+      (by
+        rw [sup_image]; rw [id_comp]; rw [sup_product_left]
+        trans P.parts.sup id ⊓ Q.parts.sup id
+        · simp_rw [Finset.sup_inf_distrib_right, Finset.sup_inf_distrib_left]
+          rfl
+        · rw [P.sup_parts, Q.sup_parts, inf_idem])⟩
+
+@[simp]
 
 Depends on / 依赖: Disjoint, Disjoint.mono, Finset, Finset.disjoint_sup_right, P.disjoint, P.parts, Prod.exists, Q.disjoint, Q.parts, and_imp, disjoint, disjoint_sup_right, eq_or_ne, forall_exists_index, inf_le_left, inf_le_right, mem_erase, mem_image, mem_product, ofErase
 -/
@@ -1175,7 +1267,17 @@ instance :
       exact ⟨c.1, hc.1, inf_le_left⟩
     inf_le_right := fun P Q b hb => by
       obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
-      rw [mem_
+      rw [mem_product] at hc
+      exact ⟨c.2, hc.2, inf_le_right⟩
+    le_inf := fun P Q R hPQ hPR b hb => by
+      obtain ⟨c, hc, hbc⟩ := hPQ hb
+      obtain ⟨d, hd, hbd⟩ := hPR hb
+      have h := _root_.le_inf hbc hbd
+      refine
+        ⟨c ⊓ d,
+          mem_erase_of_ne_of_mem (ne_bot_of_le_ne_bot (P.ne_bot hb) h)
+            (mem_image.2 ⟨(c, d), mem_product.2 ⟨hc, hd⟩, rfl⟩),
+          h⟩ }
 
 中文:
 实例 :
@@ -1187,7 +1289,17 @@ instance :
       exact ⟨c.1, hc.1, inf_le_left⟩
     inf_le_right := fun P Q b hb => by
       obtain ⟨c, hc, rfl⟩ := mem_image.1 (mem_of_mem_erase hb)
-      rw [mem_
+      rw [mem_product] at hc
+      exact ⟨c.2, hc.2, inf_le_right⟩
+    le_inf := fun P Q R hPQ hPR b hb => by
+      obtain ⟨c, hc, hbc⟩ := hPQ hb
+      obtain ⟨d, hd, hbd⟩ := hPR hb
+      have h := _root_.le_inf hbc hbd
+      refine
+        ⟨c ⊓ d,
+          mem_erase_of_ne_of_mem (ne_bot_of_le_ne_bot (P.ne_bot hb) h)
+            (mem_image.2 ⟨(c, d), mem_product.2 ⟨hc, hd⟩, rfl⟩),
+          h⟩ }
 
 Depends on / 依赖: Min.min, _root_, _root_.le_inf, inf_le_left, inf_le_right, le_inf, mem_erase_of_ne_of_mem, mem_image, mem_of_mem_erase, mem_product, ne_bot_of_le_ne_bot
 -/
@@ -1222,7 +1334,13 @@ definition restrict
     simp only [coe_erase, coe_image, Set.mem_sdiff, Set.mem_image, Set.mem_singleton_iff] at hx hy
     obtain ⟨⟨px, hpx, rfl⟩, _⟩ := hx
     obtain ⟨⟨py, hpy, rfl⟩, _⟩ := hy
-    simpa [Function.onF
+    simpa [Function.onFun, id_eq]
+      using (P.disjoint hpx hpy fun h => hxy (h ▸ rfl)).mono inf_le_left inf_le_left
+  sup_parts := by
+    simp only [sup_erase_bot, sup_image, Function.id_comp, (sup_inf_distrib_right ..).symm]
+    have : P.parts.sup (fun x => x) = a := P.sup_parts
+    rw [this]; rw [inf_eq_right.mpr hb]
+  bot_notMem := notMem_erase _ _
 
 中文:
 定义 restrict
@@ -1232,7 +1350,13 @@ definition restrict
     simp only [coe_erase, coe_image, Set.mem_sdiff, Set.mem_image, Set.mem_singleton_iff] at hx hy
     obtain ⟨⟨px, hpx, rfl⟩, _⟩ := hx
     obtain ⟨⟨py, hpy, rfl⟩, _⟩ := hy
-    simpa [Function.onF
+    simpa [Function.onFun, id_eq]
+      using (P.disjoint hpx hpy fun h => hxy (h ▸ rfl)).mono inf_le_left inf_le_left
+  sup_parts := by
+    simp only [sup_erase_bot, sup_image, Function.id_comp, (sup_inf_distrib_right ..).symm]
+    have : P.parts.sup (fun x => x) = a := P.sup_parts
+    rw [this]; rw [inf_eq_right.mpr hb]
+  bot_notMem := notMem_erase _ _
 
 Depends on / 依赖: P.parts.image
 -/
@@ -1261,7 +1385,15 @@ lemma sum_restrict
       x ⊓ b = y ⊓ b -> x = y := fun x hx y hy hxy => by
     by_contra hne
     simp only [Finset.mem_filter] at hx hy
-    have : Disjoint (x ⊓ b) (y ⊓ b) := (P.disjoint hx.1 hy.1 hne).mono inf_le_left i
+    have : Disjoint (x ⊓ b) (y ⊓ b) := (P.disjoint hx.1 hy.1 hne).mono inf_le_left inf_le_left
+    grind
+  have heq : (P.parts.image (· ⊓ b)).erase ⊥ = (P.parts.filter (· ⊓ b != ⊥)).image (· ⊓ b) := by
+    grind
+  have hz : ∑ x in P.parts.filter (¬ · ⊓ b != ⊥), f (x ⊓ b) = 0 := Finset.sum_eq_zero fun x hx => by
+    simp only [ne_eq, Decidable.not_not, Finset.mem_filter] at hx
+    rw [hx.2]; rw [hf]
+  simp only [restrict, heq, ← Finset.sum_filter_add_sum_filter_not P.parts (· ⊓ b != ⊥), hz,
+    Finset.sum_image hinj, add_zero]
 
 中文:
 引理 sum_restrict
@@ -1271,7 +1403,15 @@ lemma sum_restrict
       x ⊓ b = y ⊓ b -> x = y := fun x hx y hy hxy => by
     by_contra hne
     simp only [Finset.mem_filter] at hx hy
-    have : Disjoint (x ⊓ b) (y ⊓ b) := (P.disjoint hx.1 hy.1 hne).mono inf_le_left i
+    have : Disjoint (x ⊓ b) (y ⊓ b) := (P.disjoint hx.1 hy.1 hne).mono inf_le_left inf_le_left
+    grind
+  have heq : (P.parts.image (· ⊓ b)).erase ⊥ = (P.parts.filter (· ⊓ b != ⊥)).image (· ⊓ b) := by
+    grind
+  have hz : ∑ x in P.parts.filter (¬ · ⊓ b != ⊥), f (x ⊓ b) = 0 := Finset.sum_eq_zero fun x hx => by
+    simp only [ne_eq, Decidable.not_not, Finset.mem_filter] at hx
+    rw [hx.2]; rw [hf]
+  simp only [restrict, heq, ← Finset.sum_filter_add_sum_filter_not P.parts (· ⊓ b != ⊥), hz,
+    Finset.sum_image hinj, add_zero]
 
 Depends on / 依赖: Disjoint, Finset, Finset.mem_filter, Finset.sum_eq_zero, P.disjoint, P.parts.filter, P.parts.image, disjoint, filter, inf_le_left, mem_filter, sum_eq_zero
 -/
@@ -1527,7 +1667,7 @@ theorem card_bind
   exact
     (Q b hb).ne_bot hdb
       (eq_bot_iff.2 <|
-(le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans (P.disjoint hb hc hbc).le_bo
+(le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans (P.disjoint hb hc hbc).le_bot)
 
 中文:
 定理 card_bind
@@ -1541,7 +1681,7 @@ theorem card_bind
   exact
     (Q b hb).ne_bot hdb
       (eq_bot_iff.2 <|
-(le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans (P.disjoint hb hc hbc).le_bo
+(le_inf ((Q b hb).le hdb) <| (Q c hc).le hdc).trans (P.disjoint hb hc hbc).le_bot)
 
 Depends on / 依赖: Finset, Finset.disjoint_left, Function, Function.onFun, P.disjoint, Subtype, Subtype.mk_eq_mk, card_biUnion, disjoint, disjoint_left, eq_bot_iff, le_bot, le_inf, mk_eq_mk, ne_bot
 -/
@@ -2019,7 +2159,11 @@ definition ofExistsUnique
     ext i
     simp only [mem_sup, id_eq]
     constructor
- 
+    · rintro ⟨j, hj, hj'⟩
+      exact h j hj hj'
+    · rintro hi
+      exact (h' i hi).exists
+  bot_notMem := h''
 
 中文:
 定义 ofExistsUnique
@@ -2035,7 +2179,11 @@ definition ofExistsUnique
     ext i
     simp only [mem_sup, id_eq]
     constructor
- 
+    · rintro ⟨j, hj, hj'⟩
+      exact h j hj hj'
+    · rintro hi
+      exact (h' i hi).exists
+  bot_notMem := h''
 -/
 def ofExistsUnique (parts : Finset (Finset α)) (h : forall p in parts, p subseteq s)
     (h' : forall a in s, exists! t in parts, a in t) (h'' : ∅ ∉ parts) :
@@ -2617,7 +2765,20 @@ definition ofSetSetoid
   supIndep := by
     suffices forall (a b c d : α), s a d -> s b d -> (s a c ↔ s b c) by
       simp only [supIndep_iff_pairwiseDisjoint, Set.PairwiseDisjoint, Set.Pairwise, coe_image,
-        Set.mem_image, mem_coe, ne_eq, onFun, id_eq, disjoint_iff_ne, forall_mem
+        Set.mem_image, mem_coe, ne_eq, onFun, id_eq, disjoint_iff_ne, forall_mem_not_eq,
+        forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_filter, not_and, filter_inj',
+        not_forall, @not_imp_comm (_ ↔ _), Decidable.not_not]
+      intro _ _ _ _ _ _ _ _ ha _ hb
+      exact ⟨(s.trans' hb <| s.trans' (s.symm' ha) ·), (s.trans' ha <| s.trans' (s.symm' hb) ·)⟩
+    simp +contextual [← Quotient.eq]
+  sup_parts := by
+    ext a
+    simp_rw [sup_image, id_comp, mem_sup, mem_filter]
+    refine ⟨(·.choose_spec.2.1), fun _ => by use a⟩
+  bot_notMem := by
+    suffices forall x₁ in x, exists x₂ in x, s x₁ x₂ by simpa [filter_eq_empty_iff]
+    intro x _
+    use x
 
 中文:
 定义 ofSetSetoid
@@ -2626,7 +2787,20 @@ definition ofSetSetoid
   supIndep := by
     suffices forall (a b c d : α), s a d -> s b d -> (s a c ↔ s b c) by
       simp only [supIndep_iff_pairwiseDisjoint, Set.PairwiseDisjoint, Set.Pairwise, coe_image,
-        Set.mem_image, mem_coe, ne_eq, onFun, id_eq, disjoint_iff_ne, forall_mem
+        Set.mem_image, mem_coe, ne_eq, onFun, id_eq, disjoint_iff_ne, forall_mem_not_eq,
+        forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_filter, not_and, filter_inj',
+        not_forall, @not_imp_comm (_ ↔ _), Decidable.not_not]
+      intro _ _ _ _ _ _ _ _ ha _ hb
+      exact ⟨(s.trans' hb <| s.trans' (s.symm' ha) ·), (s.trans' ha <| s.trans' (s.symm' hb) ·)⟩
+    simp +contextual [← Quotient.eq]
+  sup_parts := by
+    ext a
+    simp_rw [sup_image, id_comp, mem_sup, mem_filter]
+    refine ⟨(·.choose_spec.2.1), fun _ => by use a⟩
+  bot_notMem := by
+    suffices forall x₁ in x, exists x₂ in x, s x₁ x₂ by simpa [filter_eq_empty_iff]
+    intro x _
+    use x
 
 Depends on / 依赖: x.image
 -/
@@ -2753,7 +2927,28 @@ definition atomise
         h (by
             rw [mem_coe]; rw [mem_image] at hx hy
             obtain ⟨Q, hQ, rfl⟩ := hx
-            obtain ⟨R, hR
+            obtain ⟨R, hR, rfl⟩ := hy
+            suffices h' : Q = R by
+              subst h'
+              exact of_eq_true (eq_self {i in s | forall t in F, t in Q ↔ i in t})
+            rw [id]; rw [mem_filter] at hz1 hz2
+            rw [mem_powerset] at hQ hR
+            ext i
+            refine ⟨fun hi => ?_, fun hi => ?_⟩
+            · rwa [hz2.2 _ (hQ hi), ← hz1.2 _ (hQ hi)]
+            · rwa [hz1.2 _ (hR hi), ← hz2.2 _ (hR hi)]))
+    (by
+      refine (Finset.sup_le fun t ht => ?_).antisymm fun a ha => ?_
+      · rw [mem_image] at ht
+        obtain ⟨A, _, rfl⟩ := ht
+        exact s.filter_subset _
+      · rw [mem_sup]
+        refine
+          ⟨{i in s | forall t in F, t in {u in F | a in u} ↔ i in t},
+            mem_image_of_mem _ (mem_powerset.2 <| filter_subset _ _),
+            mem_filter.2 ⟨ha, fun t ht => ?_⟩⟩
+        rw [mem_filter]
+        exact and_iff_right ht)
 
 中文:
 定义 atomise
@@ -2764,7 +2959,28 @@ definition atomise
         h (by
             rw [mem_coe]; rw [mem_image] at hx hy
             obtain ⟨Q, hQ, rfl⟩ := hx
-            obtain ⟨R, hR
+            obtain ⟨R, hR, rfl⟩ := hy
+            suffices h' : Q = R by
+              subst h'
+              exact of_eq_true (eq_self {i in s | forall t in F, t in Q ↔ i in t})
+            rw [id]; rw [mem_filter] at hz1 hz2
+            rw [mem_powerset] at hQ hR
+            ext i
+            refine ⟨fun hi => ?_, fun hi => ?_⟩
+            · rwa [hz2.2 _ (hQ hi), ← hz1.2 _ (hQ hi)]
+            · rwa [hz1.2 _ (hR hi), ← hz2.2 _ (hR hi)]))
+    (by
+      refine (Finset.sup_le fun t ht => ?_).antisymm fun a ha => ?_
+      · rw [mem_image] at ht
+        obtain ⟨A, _, rfl⟩ := ht
+        exact s.filter_subset _
+      · rw [mem_sup]
+        refine
+          ⟨{i in s | forall t in F, t in {u in F | a in u} ↔ i in t},
+            mem_image_of_mem _ (mem_powerset.2 <| filter_subset _ _),
+            mem_filter.2 ⟨ha, fun t ht => ?_⟩⟩
+        rw [mem_filter]
+        exact and_iff_right ht)
 
 Depends on / 依赖: F.powerset.image, PairwiseDisjoint, Set.PairwiseDisjoint.supIndep, disjoint_left, disjoint_left.mpr, eq_self, mem_coe, mem_filter, mem_image, mem_powerset, ofErase, of_eq_true, powerset, supIndep
 -/
@@ -2882,7 +3098,7 @@ theorem biUnion_filter_atomise
   refine ⟨u, mem_filter.2 ⟨hu, fun b hb => ?_, _, hau⟩, hau⟩
   obtain ⟨Q, _hQ, rfl⟩ := (mem_atomise.1 hu).2
   rw [mem_filter] at hau hb
-  rwa [
+  rwa [← hb.2 _ ht, hau.2 _ ht]
 
 中文:
 定理 biUnion_filter_atomise
@@ -2894,7 +3110,7 @@ theorem biUnion_filter_atomise
   refine ⟨u, mem_filter.2 ⟨hu, fun b hb => ?_, _, hau⟩, hau⟩
   obtain ⟨Q, _hQ, rfl⟩ := (mem_atomise.1 hu).2
   rw [mem_filter] at hau hb
-  rwa [
+  rwa [← hb.2 _ ht, hau.2 _ ht]
 
 Depends on / 依赖: atomise, exists_mem, mem_atomise, mem_biUnion, mem_biUnion.trans, mem_filter
 -/
@@ -2920,7 +3136,12 @@ theorem card_filter_atomise_le_two_pow
       (F.erase t).powerset.image fun P => {i in s | forall x in F, x in insert t P ↔ i in x} by
     refine (card_le_card h).trans (card_image_le.trans ?_)
     rw [card_powerset]; rw [card_erase_of_mem ht]
-  rw [sub
+  rw [subset_iff]
+  simp_rw [mem_image, mem_powerset, mem_filter, and_imp, Finset.Nonempty, exists_imp, mem_atomise,
+    and_imp, Finset.Nonempty, exists_imp, and_imp]
+  rintro P' i hi P PQ rfl hy₂ j _hj
+  refine ⟨P.erase t, erase_subset_erase _ PQ, ?_⟩
+  simp only [insert_erase (((mem_filter.1 hi).2 _ ht).2 <| hy₂ hi)]
 
 中文:
 定理 card_filter_atomise_le_two_pow
@@ -2931,7 +3152,12 @@ theorem card_filter_atomise_le_two_pow
       (F.erase t).powerset.image fun P => {i in s | forall x in F, x in insert t P ↔ i in x} by
     refine (card_le_card h).trans (card_image_le.trans ?_)
     rw [card_powerset]; rw [card_erase_of_mem ht]
-  rw [sub
+  rw [subset_iff]
+  simp_rw [mem_image, mem_powerset, mem_filter, and_imp, Finset.Nonempty, exists_imp, mem_atomise,
+    and_imp, Finset.Nonempty, exists_imp, and_imp]
+  rintro P' i hi P PQ rfl hy₂ j _hj
+  refine ⟨P.erase t, erase_subset_erase _ PQ, ?_⟩
+  simp only [insert_erase (((mem_filter.1 hi).2 _ ht).2 <| hy₂ hi)]
 
 Depends on / 依赖: F.erase, Finset, Finset.Nonempty, Nonempty, P.erase, and_imp, atomise, card_erase_of_mem, card_image_le, card_image_le.trans, card_le_card, card_powerset, erase_subset_era, exists_imp, insert, mem_atomise, mem_filter, mem_image, mem_powerset, powerset
 -/

@@ -392,7 +392,11 @@ instance isLocallySurjective_comp
         imageSieve (f₁ ≫ f₂) s := by
       rintro V i ⟨W, i, j, H, ⟨t', ht'⟩, rfl⟩
       refine ⟨t', ?_⟩
-      rw [op_comp]; rw [F₃.map_comp]; rw [NatTrans.comp_app]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCat
+      rw [op_comp]; rw [F₃.map_comp]; rw [NatTrans.comp_app]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]; rw [ht']; rw [NatTrans.naturality_apply]; rw [H.choose_spec]
+    apply J.superset_covering this
+    apply J.bind_covering
+    · apply imageSieve_mem
+    · intros; apply imageSieve_mem
 
 中文:
 实例 isLocallySurjective_comp
@@ -402,7 +406,11 @@ instance isLocallySurjective_comp
         imageSieve (f₁ ≫ f₂) s := by
       rintro V i ⟨W, i, j, H, ⟨t', ht'⟩, rfl⟩
       refine ⟨t', ?_⟩
-      rw [op_comp]; rw [F₃.map_comp]; rw [NatTrans.comp_app]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCat
+      rw [op_comp]; rw [F₃.map_comp]; rw [NatTrans.comp_app]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]; rw [ht']; rw [NatTrans.naturality_apply]; rw [H.choose_spec]
+    apply J.superset_covering this
+    apply J.bind_covering
+    · apply imageSieve_mem
+    · intros; apply imageSieve_mem
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, H.choose_spec, J.bind_covering, J.superset_covering, NatTrans, NatTrans.comp_app, NatTrans.naturality_apply, Sieve.bind, bind_covering, choose_spec, comp_app, comp_apply, h.choose, imageSieve, imageSieve_mem, intros, map_comp, naturality_apply, op_comp
 -/
@@ -558,7 +566,15 @@ lemma isLocallyInjective_of_isLocallyInjective_of_isLocallySurjective
       apply J.intersection_covering
       all_goals apply imageSieve_mem
     let T : forall ⦃Y : C⦄ (f : Y ⟶ X.unop) (_ : S f), Sieve Y := fun Y f hf =>
-      equalizerSieve (localPreimage f₁ x₁ f hf.1) (localPreim
+      equalizerSieve (localPreimage f₁ x₁ f hf.1) (localPreimage f₁ x₂ f hf.2)
+    refine J.superset_covering ?_ (J.transitive hS (Sieve.bind S.1 T) ?_)
+    · rintro Y f ⟨Z, a, g, hg, ha, rfl⟩
+      simpa using congr_arg (f₁.app _) ha
+    · intro Y f hf
+      apply J.superset_covering (Sieve.le_pullback_bind _ _ _ hf)
+      apply equalizerSieve_mem J (f₁ ≫ f₂)
+      dsimp
+      rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]; rw [app_localPreimage]; rw [app_localPreimage]; rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]; rw [h]
 
 中文:
 引理 isLocallyInjective_of_isLocallyInjective_of_isLocallySurjective
@@ -568,7 +584,15 @@ lemma isLocallyInjective_of_isLocallyInjective_of_isLocallySurjective
       apply J.intersection_covering
       all_goals apply imageSieve_mem
     let T : forall ⦃Y : C⦄ (f : Y ⟶ X.unop) (_ : S f), Sieve Y := fun Y f hf =>
-      equalizerSieve (localPreimage f₁ x₁ f hf.1) (localPreim
+      equalizerSieve (localPreimage f₁ x₁ f hf.1) (localPreimage f₁ x₂ f hf.2)
+    refine J.superset_covering ?_ (J.transitive hS (Sieve.bind S.1 T) ?_)
+    · rintro Y f ⟨Z, a, g, hg, ha, rfl⟩
+      simpa using congr_arg (f₁.app _) ha
+    · intro Y f hf
+      apply J.superset_covering (Sieve.le_pullback_bind _ _ _ hf)
+      apply equalizerSieve_mem J (f₁ ≫ f₂)
+      dsimp
+      rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]; rw [app_localPreimage]; rw [app_localPreimage]; rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]; rw [h]
 
 Depends on / 依赖: J.intersection_covering, J.superset_covering, J.transitive, Sieve.bind, Sieve.le_pullback_bind, X.unop, all_goals, congr_arg, equalizerSieve, imageSieve, imageSieve_mem, intersection_covering, le_pullback_bind, localPreimage, superset_covering, transitive
 -/
@@ -625,7 +649,14 @@ lemma isLocallySurjective_of_isLocallySurjective_of_isLocallyInjective
     let S := imageSieve (f₁ ≫ f₂) (f₂.app _ x)
     let T : forall ⦃Y : C⦄ (f : Y ⟶ X) (_ : S f), Sieve Y := fun Y f hf =>
       equalizerSieve (f₁.app _ (localPreimage (f₁ ≫ f₂) (f₂.app _ x) f hf)) (F₂.map f.op x)
-    refine J.superset_covering ?_ (J.transitive (imageSieve_mem J (f₁ ≫ f₂) (f₂.app
+    refine J.superset_covering ?_ (J.transitive (imageSieve_mem J (f₁ ≫ f₂) (f₂.app _ x))
+      (Sieve.bind S.1 T) ?_)
+    · rintro Y _ ⟨Z, a, g, hg, ha, rfl⟩
+      exact ⟨F₁.map a.op (localPreimage (f₁ ≫ f₂) _ _ hg), by simpa using! ha⟩
+    · intro Y f hf
+      apply J.superset_covering (Sieve.le_pullback_bind _ _ _ hf)
+      apply equalizerSieve_mem J f₂
+      rw [NatTrans.naturality_apply]; rw [← app_localPreimage (f₁ ≫ f₂) _ _ hf]; rw [NatTrans.comp_app]; rw [ConcreteCategory.comp_apply]
 
 中文:
 引理 isLocallySurjective_of_isLocallySurjective_of_isLocallyInjective
@@ -633,7 +664,14 @@ lemma isLocallySurjective_of_isLocallySurjective_of_isLocallyInjective
     let S := imageSieve (f₁ ≫ f₂) (f₂.app _ x)
     let T : forall ⦃Y : C⦄ (f : Y ⟶ X) (_ : S f), Sieve Y := fun Y f hf =>
       equalizerSieve (f₁.app _ (localPreimage (f₁ ≫ f₂) (f₂.app _ x) f hf)) (F₂.map f.op x)
-    refine J.superset_covering ?_ (J.transitive (imageSieve_mem J (f₁ ≫ f₂) (f₂.app
+    refine J.superset_covering ?_ (J.transitive (imageSieve_mem J (f₁ ≫ f₂) (f₂.app _ x))
+      (Sieve.bind S.1 T) ?_)
+    · rintro Y _ ⟨Z, a, g, hg, ha, rfl⟩
+      exact ⟨F₁.map a.op (localPreimage (f₁ ≫ f₂) _ _ hg), by simpa using! ha⟩
+    · intro Y f hf
+      apply J.superset_covering (Sieve.le_pullback_bind _ _ _ hf)
+      apply equalizerSieve_mem J f₂
+      rw [NatTrans.naturality_apply]; rw [← app_localPreimage (f₁ ≫ f₂) _ _ hf]; rw [NatTrans.comp_app]; rw [ConcreteCategory.comp_apply]
 
 Depends on / 依赖: J.superset_covering, J.transitive, Sieve.bind, Sieve.le_pullback_bind, a.op, equalizerSieve, f.op, imageSieve, imageSieve_mem, le_pullback_bind, localPreimage, superset_covering, transitive
 -/
@@ -764,7 +802,12 @@ Subfunctor.sheafify_isSheaf _
 (isSheaf_iff_isSheaf_of_type J _).mp GrothendieckTopology.sheafify_isSheaf J _)
   inv := Subfunctor.ι _
   hom_inv_id :=
-    J.sheafify_hom_ext _ _ (J.sheafify_isSheaf _) (by 
+    J.sheafify_hom_ext _ _ (J.sheafify_isSheaf _) (by simp [Subfunctor.toRangeSheafify])
+  inv_hom_id := by
+    rw [← cancel_mono (Subfunctor.ι _)]; rw [Category.id_comp]; rw [Category.assoc]
+    refine Eq.trans ?_ (Category.comp_id _)
+    congr 1
+    exact J.sheafify_hom_ext _ _ (J.sheafify_isSheaf _) (by simp [Subfunctor.toRangeSheafify])
 
 中文:
 定义 sheafificationIsoImagePresheaf
@@ -775,7 +818,12 @@ Subfunctor.sheafify_isSheaf _
 (isSheaf_iff_isSheaf_of_type J _).mp GrothendieckTopology.sheafify_isSheaf J _)
   inv := Subfunctor.ι _
   hom_inv_id :=
-    J.sheafify_hom_ext _ _ (J.sheafify_isSheaf _) (by 
+    J.sheafify_hom_ext _ _ (J.sheafify_isSheaf _) (by simp [Subfunctor.toRangeSheafify])
+  inv_hom_id := by
+    rw [← cancel_mono (Subfunctor.ι _)]; rw [Category.id_comp]; rw [Category.assoc]
+    refine Eq.trans ?_ (Category.comp_id _)
+    congr 1
+    exact J.sheafify_hom_ext _ _ (J.sheafify_isSheaf _) (by simp [Subfunctor.toRangeSheafify])
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Eq.trans, GrothendieckTopology, GrothendieckTopology.sheafify_isSheaf, J.sh, J.sheafifyLift, J.sheafify_hom_ext, J.sheafify_isSheaf, Subfunctor, Subfunctor.sheafify_isSheaf, Subfunctor.toRangeSheafify, cancel_mono, comp_id, hom_inv_id, id_comp, inv_hom_id, isSheaf_iff_isSheaf_of_type
 -/
@@ -812,7 +860,7 @@ instance isLocallySurjective_toPlus
     refine ⟨S.pullback f, homOfLE le_top, 𝟙 _, ?_⟩
     ext ⟨Z, g, hg⟩
     simpa using!
-      x.2 { fst.hf := hf, 
+      x.2 { fst.hf := hf, snd.hf := S.1.downward_closed hf g, r.g₁ := g, r.g₂ := 𝟙 Z, .. }
 
 中文:
 实例 isLocallySurjective_toPlus
@@ -824,7 +872,7 @@ instance isLocallySurjective_toPlus
     refine ⟨S.pullback f, homOfLE le_top, 𝟙 _, ?_⟩
     ext ⟨Z, g, hg⟩
     simpa using!
-      x.2 { fst.hf := hf, 
+      x.2 { fst.hf := hf, snd.hf := S.1.downward_closed hf g, r.g₁ := g, r.g₂ := 𝟙 Z, .. }
 
 Depends on / 依赖: J.superset_covering, S.pullback, downward_closed, eq_mk_iff_exists, exists_rep, fst.hf, homOfLE, le_top, pullback, res_mk_eq_mk_pullback, snd.hf, superset_covering, toPlus_eq_mk
 -/
@@ -1042,7 +1090,10 @@ instance epi_of_isLocallySurjective'
     rintro Y f ⟨s : F₁.obj.obj (op Y), hs : φ.hom.app _ s = F₂.obj.map f.op x⟩
     dsimp
     have h₁ := ConcreteCategory.congr_hom (f₁.hom.naturality f.op) x
-    have h₂ :
+    have h₂ := ConcreteCategory.congr_hom (f₂.hom.naturality f.op) x
+    dsimp at h₁ h₂
+    rw [← h₁]; rw [← h₂]; rw [← hs]
+    exact ConcreteCategory.congr_hom (congr_app ((sheafToPresheaf J _).congr_map h) (op Y)) s
 
 中文:
 实例 epi_of_isLocallySurjective'
@@ -1054,7 +1105,10 @@ instance epi_of_isLocallySurjective'
     rintro Y f ⟨s : F₁.obj.obj (op Y), hs : φ.hom.app _ s = F₂.obj.map f.op x⟩
     dsimp
     have h₁ := ConcreteCategory.congr_hom (f₁.hom.naturality f.op) x
-    have h₂ :
+    have h₂ := ConcreteCategory.congr_hom (f₂.hom.naturality f.op) x
+    dsimp at h₁ h₂
+    rw [← h₁]; rw [← h₂]; rw [← hs]
+    exact ConcreteCategory.congr_hom (congr_app ((sheafToPresheaf J _).congr_map h) (op Y)) s
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Presheaf, Presheaf.imageSieve_mem, congr_app, congr_hom, congr_map, f.op, hom.app, hom.naturality, imageSieve_mem, isSeparated, isSheaf_iff_isSheaf_of_type, naturality, obj.map, obj.obj, sheafToPresheaf
 -/
@@ -1192,7 +1246,21 @@ lemma imageSieve_cofanIsColimitDesc_shrinkYoneda_map
   · obtain ⟨w, hw⟩ := hv
     obtain ⟨⟨i⟩, a, rfl⟩ := Types.jointly_surjective_of_isColimit
       (isColimitOfPreserves ((evaluation _ _).obj (op V)) hc) w
-    obtain ⟨a : V ⟶ X i, rfl⟩ := shrinkYonedaOb
+    obtain ⟨a : V ⟶ X i, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective a
+    refine ⟨_, a, _, ⟨i⟩, shrinkYonedaObjObjEquiv.symm.injective ?_⟩
+    rw [← shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm]
+    convert! hw using 1
+    · exact (ConcreteCategory.congr_hom (NatTrans.congr_app
+        ((Cofan.IsColimit.fac hc (fun i => shrinkYoneda.{w}.map (f i))) i) (op V))
+          (shrinkYonedaObjObjEquiv.symm a)).symm
+    · exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm v.op g).symm
+  · rintro ⟨_, a, _, ⟨i⟩, fac⟩
+    refine ⟨(c.inj i).app (op V) (shrinkYonedaObjObjEquiv.symm a),
+      (ConcreteCategory.congr_hom (NatTrans.congr_app
+      ((Cofan.IsColimit.fac hc (fun i => shrinkYoneda.{w}.map (f i))) i) (op V))
+        (shrinkYonedaObjObjEquiv.symm a)).trans ?_⟩
+    rw [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm a (f i)]; rw [fac]
+    exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm v.op g).symm
 
 中文:
 引理 imageSieve_cofanIsColimitDesc_shrinkYoneda_map
@@ -1203,7 +1271,21 @@ lemma imageSieve_cofanIsColimitDesc_shrinkYoneda_map
   · obtain ⟨w, hw⟩ := hv
     obtain ⟨⟨i⟩, a, rfl⟩ := Types.jointly_surjective_of_isColimit
       (isColimitOfPreserves ((evaluation _ _).obj (op V)) hc) w
-    obtain ⟨a : V ⟶ X i, rfl⟩ := shrinkYonedaOb
+    obtain ⟨a : V ⟶ X i, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective a
+    refine ⟨_, a, _, ⟨i⟩, shrinkYonedaObjObjEquiv.symm.injective ?_⟩
+    rw [← shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm]
+    convert! hw using 1
+    · exact (ConcreteCategory.congr_hom (NatTrans.congr_app
+        ((Cofan.IsColimit.fac hc (fun i => shrinkYoneda.{w}.map (f i))) i) (op V))
+          (shrinkYonedaObjObjEquiv.symm a)).symm
+    · exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm v.op g).symm
+  · rintro ⟨_, a, _, ⟨i⟩, fac⟩
+    refine ⟨(c.inj i).app (op V) (shrinkYonedaObjObjEquiv.symm a),
+      (ConcreteCategory.congr_hom (NatTrans.congr_app
+      ((Cofan.IsColimit.fac hc (fun i => shrinkYoneda.{w}.map (f i))) i) (op V))
+        (shrinkYonedaObjObjEquiv.symm a)).trans ?_⟩
+    rw [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm a (f i)]; rw [fac]
+    exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm v.op g).symm
 -/
 lemma imageSieve_cofanIsColimitDesc_shrinkYoneda_map
     {c : Cofan (fun i => shrinkYoneda.{w}.obj (X i))} (hc : IsColimit c)
@@ -1248,7 +1330,9 @@ lemma ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_shrinkYoneda_map
     replace hf := J.pullback_stable u hf
     rwa [← Presheaf.imageSieve_cofanIsColimitDesc_shrinkYoneda_map f hc u] at hf
   · rw [← Sieve.pullback_id (S := Sieve.ofArrows X f),
-  
+      ← Presheaf.imageSieve_cofanIsColimitDesc_shrinkYoneda_map f hc (𝟙 S)]
+    exact Presheaf.imageSieve_mem J (Cofan.IsColimit.desc hc (fun i => shrinkYoneda.{w}.map (f i)))
+      (shrinkYonedaObjObjEquiv.symm (𝟙 S))
 
 中文:
 引理 ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_shrinkYoneda_map
@@ -1258,7 +1342,9 @@ lemma ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_shrinkYoneda_map
     replace hf := J.pullback_stable u hf
     rwa [← Presheaf.imageSieve_cofanIsColimitDesc_shrinkYoneda_map f hc u] at hf
   · rw [← Sieve.pullback_id (S := Sieve.ofArrows X f),
-  
+      ← Presheaf.imageSieve_cofanIsColimitDesc_shrinkYoneda_map f hc (𝟙 S)]
+    exact Presheaf.imageSieve_mem J (Cofan.IsColimit.desc hc (fun i => shrinkYoneda.{w}.map (f i)))
+      (shrinkYonedaObjObjEquiv.symm (𝟙 S))
 
 Depends on / 依赖: Cofan.IsColimit.desc, IsColimit, J.pullback_stable, Presheaf, Presheaf.imageSieve_cofanIsColimitDesc_shrinkYoneda_map, Presheaf.imageSieve_mem, Sieve.ofArrows, Sieve.pullback_id, imageSieve_cofanIsColimitDesc_shrinkYoneda_map, imageSieve_mem, ofArrows, pullback_id, pullback_stable, replace, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, shrinkYonedaObjObjEquiv.symm.surjective, surjective
 -/
@@ -1289,7 +1375,15 @@ lemma ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_uliftYoneda_map
       Discrete.functor (fun i => shrinkYoneda.{max w v}.obj (X i)) :=
     Discrete.natIso (fun i => uliftYonedaIsoShrinkYoneda.{w}.app (X i.as))
   let hc' := (IsColimit.precomposeInvEquiv e _).2 hc
-  rw [ofArrows_mem_iff_isLocallyS
+  rw [ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_shrinkYoneda_map.{max w v} J f hc']
+  have :
+      Cofan.IsColimit.desc hc (fun i => uliftYoneda.map (f i)) ≫
+        uliftYonedaIsoShrinkYoneda.hom.app _ =
+      Cofan.IsColimit.desc hc' (fun i => shrinkYoneda.map (f i)) :=
+    Cofan.IsColimit.hom_ext hc _ _ (fun i => by
+      rw [Cofan.IsColimit.fac_assoc]; rw [NatTrans.naturality]; rw [← Cofan.IsColimit.fac hc' (fun i => shrinkYoneda.map (f i)) i]
+      simp [Cofan.inj, e])
+  rw [← this]; rw [Presheaf.isLocallySurjective_comp_iff J]
 
 中文:
 引理 ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_uliftYoneda_map
@@ -1298,7 +1392,15 @@ lemma ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_uliftYoneda_map
       Discrete.functor (fun i => shrinkYoneda.{max w v}.obj (X i)) :=
     Discrete.natIso (fun i => uliftYonedaIsoShrinkYoneda.{w}.app (X i.as))
   let hc' := (IsColimit.precomposeInvEquiv e _).2 hc
-  rw [ofArrows_mem_iff_isLocallyS
+  rw [ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_shrinkYoneda_map.{max w v} J f hc']
+  have :
+      Cofan.IsColimit.desc hc (fun i => uliftYoneda.map (f i)) ≫
+        uliftYonedaIsoShrinkYoneda.hom.app _ =
+      Cofan.IsColimit.desc hc' (fun i => shrinkYoneda.map (f i)) :=
+    Cofan.IsColimit.hom_ext hc _ _ (fun i => by
+      rw [Cofan.IsColimit.fac_assoc]; rw [NatTrans.naturality]; rw [← Cofan.IsColimit.fac hc' (fun i => shrinkYoneda.map (f i)) i]
+      simp [Cofan.inj, e])
+  rw [← this]; rw [Presheaf.isLocallySurjective_comp_iff J]
 
 Depends on / 依赖: Cofan.IsColimit.desc, Discrete, Discrete.functor, Discrete.natIso, IsColimit, IsColimit.precomposeInvEquiv, functor, i.as, natIso, ofArrows_mem_iff_isLocallySurjective_cofanIsColimitDesc_shrinkYoneda_map, precomposeInvEquiv, shrinkYoned, shrinkYoneda, uliftYoneda, uliftYoneda.map, uliftYonedaIsoShrinkYoneda, uliftYonedaIsoShrinkYoneda.hom.app
 -/

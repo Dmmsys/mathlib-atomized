@@ -344,7 +344,9 @@ definition forgetToSheafModuleCatOfIso
   · refine NatIso.ofComponents (fun U => ?_) ?_
     · dsimp [PresheafOfModules.forgetToPresheafModuleCatObjObj]
       refine ModuleCat.restrictScalarsComp'App _ _ _ ?_ _
-      simpa using congr((R.obj.map $(hX.hom_ext (hX.to U) 
+      simpa using congr((R.obj.map $(hX.hom_ext (hX.to U) (φ.hom ≫ hY.to U))).hom)
+    cat_disch
+  cat_disch
 
 中文:
 定义 forgetToSheafModuleCatOfIso
@@ -354,7 +356,9 @@ definition forgetToSheafModuleCatOfIso
   · refine NatIso.ofComponents (fun U => ?_) ?_
     · dsimp [PresheafOfModules.forgetToPresheafModuleCatObjObj]
       refine ModuleCat.restrictScalarsComp'App _ _ _ ?_ _
-      simpa using congr((R.obj.map $(hX.hom_ext (hX.to U) 
+      simpa using congr((R.obj.map $(hX.hom_ext (hX.to U) (φ.hom ≫ hY.to U))).hom)
+    cat_disch
+  cat_disch
 
 Depends on / 依赖: ModuleCat, ModuleCat.restrictScalarsComp, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.isoMk, PresheafOfModules, PresheafOfModules.forgetToPresheafModuleCatObjObj, R.obj.map, cat_disch, forgetToPresheafModuleCatObjObj, hX.hom_ext, hX.to, hY.to, hom_ext, ofComponents, restrictScalarsComp
 -/
@@ -741,7 +745,27 @@ definition homEquivOfIsLocallyBijective
       ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).symm
       ((PresheafOfModules.toPresheaf R).map ψ)) (by
         obtain ⟨φ, hφ⟩ := ((J.W_of_isLocallyBijective
-          ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).surj
+          ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).surjective
+          ((PresheafOfModules.toPresheaf R).map ψ)
+        simp only [← hφ, Equiv.symm_apply_apply]
+        replace hφ : forall (Z : Cᵒᵖ) (x : M₁.obj Z), φ.app Z (f.app Z x) = ψ.app Z x :=
+          fun Z x => CategoryTheory.congr_fun (congr_app hφ Z) x
+        intro X r y
+        apply hN.isSeparated _ _
+          (Presheaf.imageSieve_mem J ((toPresheaf R).map f) y)
+        rintro Y p ⟨x : M₁.obj _, hx : f.app _ x = M₂.map p.op y⟩
+        have hφ' : forall (z : M₂.obj X), φ.app _ (M₂.map p.op z) =
+            N.map p.op (φ.app _ z) := CategoryTheory.congr_fun (φ.naturality p.op)
+        change N.map p.op (φ.app X (r • y)) = N.map p.op (r • φ.app X y)
+        rw [← hφ']; rw [M₂.map_smul]; rw [← hx]; rw [← (f.app _).hom.map_smul]; rw [hφ]; rw [(ψ.app _).hom.map_smul]; rw [← hφ]; rw [hx]; rw [N.map_smul]; rw [hφ'])
+  left_inv φ := (toPresheaf _).map_injective
+    (((J.W_of_isLocallyBijective
+      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).left_inv
+      ((PresheafOfModules.toPresheaf R).map φ))
+  right_inv ψ := (toPresheaf _).map_injective
+    (((J.W_of_isLocallyBijective
+      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).right_inv
+      ((PresheafOfModules.toPresheaf R).map ψ))
 
 中文:
 定义 homEquivOfIsLocallyBijective
@@ -751,7 +775,27 @@ definition homEquivOfIsLocallyBijective
       ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).symm
       ((PresheafOfModules.toPresheaf R).map ψ)) (by
         obtain ⟨φ, hφ⟩ := ((J.W_of_isLocallyBijective
-          ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).surj
+          ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).surjective
+          ((PresheafOfModules.toPresheaf R).map ψ)
+        simp only [← hφ, Equiv.symm_apply_apply]
+        replace hφ : forall (Z : Cᵒᵖ) (x : M₁.obj Z), φ.app Z (f.app Z x) = ψ.app Z x :=
+          fun Z x => CategoryTheory.congr_fun (congr_app hφ Z) x
+        intro X r y
+        apply hN.isSeparated _ _
+          (Presheaf.imageSieve_mem J ((toPresheaf R).map f) y)
+        rintro Y p ⟨x : M₁.obj _, hx : f.app _ x = M₂.map p.op y⟩
+        have hφ' : forall (z : M₂.obj X), φ.app _ (M₂.map p.op z) =
+            N.map p.op (φ.app _ z) := CategoryTheory.congr_fun (φ.naturality p.op)
+        change N.map p.op (φ.app X (r • y)) = N.map p.op (r • φ.app X y)
+        rw [← hφ']; rw [M₂.map_smul]; rw [← hx]; rw [← (f.app _).hom.map_smul]; rw [hφ]; rw [(ψ.app _).hom.map_smul]; rw [← hφ]; rw [hx]; rw [N.map_smul]; rw [hφ'])
+  left_inv φ := (toPresheaf _).map_injective
+    (((J.W_of_isLocallyBijective
+      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).left_inv
+      ((PresheafOfModules.toPresheaf R).map φ))
+  right_inv ψ := (toPresheaf _).map_injective
+    (((J.W_of_isLocallyBijective
+      ((PresheafOfModules.toPresheaf R).map f)).homEquiv _ hN).right_inv
+      ((PresheafOfModules.toPresheaf R).map ψ))
 -/
 noncomputable def homEquivOfIsLocallyBijective : (M₂ ⟶ N) ≃ (M₁ ⟶ N) where
   toFun φ := f ≫ φ

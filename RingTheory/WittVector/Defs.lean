@@ -701,7 +701,18 @@ theorem wittOne_pos_eq_zero
   simp only [wittOne, wittStructureRat, map_zero, map_one, map_wittStructureInt]
   induction n using Nat.strong_induction_on with | h n IH => ?_
   rw [xInTermsOfW_eq]
-  simp only [map_mul, map_sub, map_sum, map_pow, bind₁
+  simp only [map_mul, map_sub, map_sum, map_pow, bind₁_X_right,
+    bind₁_C_right]
+  rw [sub_mul]; rw [one_mul]
+  rw [Finset.sum_eq_single 0]
+  · simp only [one_mul, pow_zero]
+    simp only [one_pow, one_mul, xInTermsOfW_zero, sub_self, bind₁_X_right]
+  · intro i hin hi0
+    rw [Finset.mem_range] at hin
+    rw [IH _ hin (Nat.pos_of_ne_zero hi0)]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]
+  · grind
+
+@[simp]
 
 中文:
 定理 wittOne_pos_eq_zero
@@ -712,7 +723,18 @@ theorem wittOne_pos_eq_zero
   simp only [wittOne, wittStructureRat, map_zero, map_one, map_wittStructureInt]
   induction n using Nat.strong_induction_on with | h n IH => ?_
   rw [xInTermsOfW_eq]
-  simp only [map_mul, map_sub, map_sum, map_pow, bind₁
+  simp only [map_mul, map_sub, map_sum, map_pow, bind₁_X_right,
+    bind₁_C_right]
+  rw [sub_mul]; rw [one_mul]
+  rw [Finset.sum_eq_single 0]
+  · simp only [one_mul, pow_zero]
+    simp only [one_pow, one_mul, xInTermsOfW_zero, sub_self, bind₁_X_right]
+  · intro i hin hi0
+    rw [Finset.mem_range] at hin
+    rw [IH _ hin (Nat.pos_of_ne_zero hi0)]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]
+  · grind
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map_injective, Nat.strong_induction_on, castRingHom, cast_injective, map_injective, map_mul, map_one, map_pow, map_sub, map_sum, map_wittStructureInt, map_zero, one_mul, one_pow, pow_zero
 -/

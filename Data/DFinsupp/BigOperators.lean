@@ -276,6 +276,12 @@ theorem prod_mapRange_index
     simp only [Finset.coe_sort_coe, mem_support_toFun, mk_apply, ne_eq, h1, not_false_iff,
       dite_eq_ite, ite_true, not_not] at h2
     simp [h2, h0]
+  · refine Finset.prod_congr rfl ?_
+    intro i h1
+    simp only [mem_support_toFun, ne_eq] at h1
+    simp [h1]
+
+@[to_additive]
 
 中文:
 定理 prod_mapRange_index
@@ -288,6 +294,12 @@ theorem prod_mapRange_index
     simp only [Finset.coe_sort_coe, mem_support_toFun, mk_apply, ne_eq, h1, not_false_iff,
       dite_eq_ite, ite_true, not_not] at h2
     simp [h2, h0]
+  · refine Finset.prod_congr rfl ?_
+    intro i h1
+    simp only [mem_support_toFun, ne_eq] at h1
+    simp [h1]
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.coe_sort_coe, Finset.prod_congr, Finset.prod_subset, coe_sort_coe, dite_eq_ite, ite_true, mapRange_def, mem_support_toFun, mk_apply, ne_eq, not_false_iff, not_not, prod_congr, prod_subset, support_mk_subset
 -/
@@ -455,7 +467,9 @@ theorem support_sum
     fun i₁ h =>
     let ⟨i, hi, Ne⟩ := Finset.exists_ne_zero_of_sum_ne_zero h
     ⟨i, mem_support_iff.1 hi, Ne⟩
-  simpa [Finset.subset_iff, mem_support_iff, Fin
+  simpa [Finset.subset_iff, mem_support_iff, Finset.mem_biUnion, sum_apply] using this
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 support_sum
@@ -467,7 +481,9 @@ theorem support_sum
     fun i₁ h =>
     let ⟨i, hi, Ne⟩ := Finset.exists_ne_zero_of_sum_ne_zero h
     ⟨i, mem_support_iff.1 hi, Ne⟩
-  simpa [Finset.subset_iff, mem_support_iff, Fin
+  simpa [Finset.subset_iff, mem_support_iff, Finset.mem_biUnion, sum_apply] using this
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Finset, Finset.exists_ne_zero_of_sum_ne_zero, Finset.mem_biUnion, Finset.subset_iff, exists_ne_zero_of_sum_ne_zero, f.sum, mem_biUnion, mem_support_iff, subset_iff, sum_apply
 -/
@@ -613,7 +629,16 @@ theorem prod_add_index
         simp +contextual [h_zero]).symm
   have g_eq : (∏ i in f.support union g.support, h i (g i)) = g.prod h :=
     (Finset.prod_subset Finset.subset_union_right <| by
-   
+        simp +contextual [h_zero]).symm
+  calc
+    (∏ i in (f + g).support, h i ((f + g) i)) = ∏ i in f.support union g.support, h i ((f + g) i) :=
+Finset.prod_subset support_add by
+        simp +contextual [h_zero]
+    _ = (∏ i in f.support union g.support, h i (f i)) * ∏ i in f.support union g.support, h i (g i) := by
+      { simp [h_add, Finset.prod_mul_distrib] }
+    _ = _ := by rw [f_eq, g_eq]
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 prod_add_index
@@ -623,7 +648,16 @@ theorem prod_add_index
         simp +contextual [h_zero]).symm
   have g_eq : (∏ i in f.support union g.support, h i (g i)) = g.prod h :=
     (Finset.prod_subset Finset.subset_union_right <| by
-   
+        simp +contextual [h_zero]).symm
+  calc
+    (∏ i in (f + g).support, h i ((f + g) i)) = ∏ i in f.support union g.support, h i ((f + g) i) :=
+Finset.prod_subset support_add by
+        simp +contextual [h_zero]
+    _ = (∏ i in f.support union g.support, h i (f i)) * ∏ i in f.support union g.support, h i (g i) := by
+      { simp [h_add, Finset.prod_mul_distrib] }
+    _ = _ := by rw [f_eq, g_eq]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Finset, Finset.prod_subset, Finset.subset_union_left, Finset.subset_union_right, contextual, f.prod, f.support, f_eq, g.prod, g.support, g_eq, h_zero, prod_subset, subset_union_left, subset_union_right, support, support_add
 -/
@@ -729,7 +763,26 @@ definition sumZeroHom
       rintro ⟨sx, hx⟩ ⟨sy, hy⟩
       dsimp only [Subtype.coe_mk, toFun_eq_coe] at *
       have H1 : sx.toFinset inter sy.toFinset subseteq sx.toFinset := Finset.inter_subset_left
-      have H2 : sx.toFinset inter sy.toFinset subse
+      have H2 : sx.toFinset inter sy.toFinset subseteq sy.toFinset := Finset.inter_subset_right
+      refine
+        (Finset.sum_subset H1 ?_).symm.trans
+          ((Finset.sum_congr rfl ?_).trans (Finset.sum_subset H2 ?_))
+      · intro i H1 H2
+        rw [Finset.mem_inter] at H2
+        simp only [Multiset.mem_toFinset] at H1 H2
+        convert! map_zero (φ i)
+        exact (hy i).resolve_left (mt (And.intro H1) H2)
+      · intro i _
+        rfl
+      · intro i H1 H2
+        rw [Finset.mem_inter] at H2
+        simp only [Multiset.mem_toFinset] at H1 H2
+        convert! map_zero (φ i)
+        exact (hx i).resolve_left (mt (fun H3 => And.intro H3 H1) H2)
+  map_zero' := by
+    simp only [toFun_eq_coe, coe_zero, Pi.zero_apply, map_zero, Finset.sum_const_zero]; rfl
+
+@[simp]
 
 中文:
 定义 sumZeroHom
@@ -738,7 +791,26 @@ definition sumZeroHom
       rintro ⟨sx, hx⟩ ⟨sy, hy⟩
       dsimp only [Subtype.coe_mk, toFun_eq_coe] at *
       have H1 : sx.toFinset inter sy.toFinset subseteq sx.toFinset := Finset.inter_subset_left
-      have H2 : sx.toFinset inter sy.toFinset subse
+      have H2 : sx.toFinset inter sy.toFinset subseteq sy.toFinset := Finset.inter_subset_right
+      refine
+        (Finset.sum_subset H1 ?_).symm.trans
+          ((Finset.sum_congr rfl ?_).trans (Finset.sum_subset H2 ?_))
+      · intro i H1 H2
+        rw [Finset.mem_inter] at H2
+        simp only [Multiset.mem_toFinset] at H1 H2
+        convert! map_zero (φ i)
+        exact (hy i).resolve_left (mt (And.intro H1) H2)
+      · intro i _
+        rfl
+      · intro i H1 H2
+        rw [Finset.mem_inter] at H2
+        simp only [Multiset.mem_toFinset] at H1 H2
+        convert! map_zero (φ i)
+        exact (hx i).resolve_left (mt (fun H3 => And.intro H3 H1) H2)
+  map_zero' := by
+    simp only [toFun_eq_coe, coe_zero, Pi.zero_apply, map_zero, Finset.sum_const_zero]; rfl
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.inter_subset_left, Finset.inter_subset_right, Finset.mem_inter, Finset.sum_congr, Finset.sum_subset, Multiset, Multiset.mem_toFinse, Multiset.toFinset, Subtype, Subtype.coe_mk, coe_mk, f.support, inter_subset_left, inter_subset_right, mem_inter, mem_toFinse, subseteq, sum_congr, sum_subset
 -/
@@ -894,6 +966,21 @@ definition sumAddHom
       Finset.sum_add_distrib]
     congr 1
     · refine (Finset.sum_subset ?_ ?_).symm
+      · intro i
+        simp only [Multiset.mem_toFinset, Multiset.mem_add]
+        exact Or.inl
+      · intro i _ H2
+        simp only [Multiset.mem_toFinset] at H2
+        rw [(hf i).resolve_left H2]; rw [map_zero]
+    · refine (Finset.sum_subset ?_ ?_).symm
+      · intro i
+        simp only [Multiset.mem_toFinset, Multiset.mem_add]
+        exact Or.inr
+      · intro i _ H2
+        simp only [Multiset.mem_toFinset] at H2
+        rw [(hg i).resolve_left H2]; rw [map_zero]
+
+@[simp]
 
 中文:
 定义 sumAddHom
@@ -906,6 +993,21 @@ definition sumAddHom
       Finset.sum_add_distrib]
     congr 1
     · refine (Finset.sum_subset ?_ ?_).symm
+      · intro i
+        simp only [Multiset.mem_toFinset, Multiset.mem_add]
+        exact Or.inl
+      · intro i _ H2
+        simp only [Multiset.mem_toFinset] at H2
+        rw [(hf i).resolve_left H2]; rw [map_zero]
+    · refine (Finset.sum_subset ?_ ?_).symm
+      · intro i
+        simp only [Multiset.mem_toFinset, Multiset.mem_add]
+        exact Or.inr
+      · intro i _ H2
+        simp only [Multiset.mem_toFinset] at H2
+        rw [(hg i).resolve_left H2]; rw [map_zero]
+
+@[simp]
 
 Depends on / 依赖: sumZeroHom
 -/
@@ -1315,7 +1417,9 @@ theorem prod_finsetSum_index
 @[deprecated (since := "2026-04-08")] alias sum_finset_sum_index := sum_finsetSum_index
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias prod_fins
+alias prod_finset_sum_index := prod_finsetSum_index
+
+@[to_additive]
 
 中文:
 定理 prod_finsetSum_index
@@ -1328,7 +1432,9 @@ alias prod_fins
 @[deprecated (since := "2026-04-08")] alias sum_finset_sum_index := sum_finsetSum_index
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias prod_fins
+alias prod_finset_sum_index := prod_finsetSum_index
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.induction_on, classical, contextual, h_add, h_zero, induction_on, prod_add_index, prod_zero_index
 -/

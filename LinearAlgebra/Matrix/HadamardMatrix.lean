@@ -203,7 +203,22 @@ theorem IsHadamard.kronecker
   · calc
       _ = ∑ x₁, ∑ x₂, A i x₁ * (B i' x₂ * Bᴴ x₂ j') * Aᴴ x₁ j := by
         simp [conjTranspose_kronecker', mul_apply, mul_assoc, ← Finset.sum_product']
-      _ = if i' = j' then ∑ x, A i 
+      _ = if i' = j' then ∑ x, A i x * (Fintype.card n • Aᴴ) x j else 0 := by
+        simp [← Finset.sum_mul, ← Finset.mul_sum, ← mul_apply, hB.mul_conjTranspose,
+          one_apply, mul_assoc _ (Fintype.card n : R), -conjTranspose_apply]
+      _ = _ := by
+        simp only [← mul_apply, mul_smul_comm, hA.mul_conjTranspose]
+        simp [one_apply, ← Nat.cast_mul, mul_comm, ← ite_and, and_comm]
+  · calc
+      _ = ∑ x₁, ∑ x₂, Bᴴ i' x₂ * (Aᴴ i x₁ * A x₁ j) * B x₂ j' := by
+        simp [conjTranspose_kronecker', mul_apply, mul_assoc, ← Finset.sum_product']
+      _ = if i = j then ∑ x, Bᴴ i' x * (Fintype.card m • B) x j' else 0 := by
+        rw [Finset.sum_comm]
+        simp [← Finset.sum_mul, ← Finset.mul_sum, ← mul_apply, hA.conjTranspose_mul,
+          one_apply, mul_assoc _ (Fintype.card m : R), -conjTranspose_apply]
+      _ = _ := by
+        simp only [← mul_apply, mul_smul_comm, hB.conjTranspose_mul]
+        simp [one_apply, ← Nat.cast_mul, ← ite_and]
 
 中文:
 定理 是Hadamard.kronecker
@@ -213,7 +228,22 @@ theorem IsHadamard.kronecker
   · calc
       _ = ∑ x₁, ∑ x₂, A i x₁ * (B i' x₂ * Bᴴ x₂ j') * Aᴴ x₁ j := by
         simp [conjTranspose_kronecker', mul_apply, mul_assoc, ← Finset.sum_product']
-      _ = if i' = j' then ∑ x, A i 
+      _ = if i' = j' then ∑ x, A i x * (Fintype.card n • Aᴴ) x j else 0 := by
+        simp [← Finset.sum_mul, ← Finset.mul_sum, ← mul_apply, hB.mul_conjTranspose,
+          one_apply, mul_assoc _ (Fintype.card n : R), -conjTranspose_apply]
+      _ = _ := by
+        simp only [← mul_apply, mul_smul_comm, hA.mul_conjTranspose]
+        simp [one_apply, ← Nat.cast_mul, mul_comm, ← ite_and, and_comm]
+  · calc
+      _ = ∑ x₁, ∑ x₂, Bᴴ i' x₂ * (Aᴴ i x₁ * A x₁ j) * B x₂ j' := by
+        simp [conjTranspose_kronecker', mul_apply, mul_assoc, ← Finset.sum_product']
+      _ = if i = j then ∑ x, Bᴴ i' x * (Fintype.card m • B) x j' else 0 := by
+        rw [Finset.sum_comm]
+        simp [← Finset.sum_mul, ← Finset.mul_sum, ← mul_apply, hA.conjTranspose_mul,
+          one_apply, mul_assoc _ (Fintype.card m : R), -conjTranspose_apply]
+      _ = _ := by
+        simp only [← mul_apply, mul_smul_comm, hB.conjTranspose_mul]
+        simp [one_apply, ← Nat.cast_mul, ← ite_and]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_mul, Finset.sum_product, Fintype, Fintype.card, apply_mem, conjTranspose_apply, conjTranspose_kronecker, hA.apply_mem, hB.apply_mem, hB.mul_conjTranspose, mul_apply, mul_assoc, mul_conjTranspose, mul_mem, mul_sum, one_apply, sum_mul, sum_product
 -/
@@ -253,7 +283,15 @@ theorem IsHadamard.card_eq_mul_star_of_const_col_sum
   have hconjcol : Aᴴ *ᵥ (1 : n -> R) = star s • 1 := by
     ext i
     simp [Matrix.mulVec, dotProduct, ← star_sum, hcol i]
-  have hleft : (1 : n -> R) ᵥ* (A * Aᴴ) ⬝ᵥ 1 = (Fintype.card n : R
+  have hleft : (1 : n -> R) ᵥ* (A * Aᴴ) ⬝ᵥ 1 = (Fintype.card n : R) ^ 2 := by
+    rw [hA.mul_conjTranspose]; rw [Nat.cast_smul_eq_nsmul]; rw [vecMul_smul]; rw [smul_dotProduct]
+    simp [dotProduct, pow_two]
+  have hright : (1 : n -> R) ᵥ* (A * Aᴴ) ⬝ᵥ 1 = (Fintype.card n : R) * (s * star s) := by
+    rw [← vecMul_vecMul]; rw [← dotProduct_mulVec]; rw [hvcol]; rw [hconjcol]
+    simp [dotProduct]
+exact hcard.left show (Fintype.card n : R) * (Fintype.card n : R) =
+      (Fintype.card n : R) * (s * star s) by
+    simpa [pow_two] using hleft.symm.trans hright
 
 中文:
 定理 是Hadamard.card_eq_mul_star_of_const_col_sum
@@ -265,7 +303,15 @@ theorem IsHadamard.card_eq_mul_star_of_const_col_sum
   have hconjcol : Aᴴ *ᵥ (1 : n -> R) = star s • 1 := by
     ext i
     simp [Matrix.mulVec, dotProduct, ← star_sum, hcol i]
-  have hleft : (1 : n -> R) ᵥ* (A * Aᴴ) ⬝ᵥ 1 = (Fintype.card n : R
+  have hleft : (1 : n -> R) ᵥ* (A * Aᴴ) ⬝ᵥ 1 = (Fintype.card n : R) ^ 2 := by
+    rw [hA.mul_conjTranspose]; rw [Nat.cast_smul_eq_nsmul]; rw [vecMul_smul]; rw [smul_dotProduct]
+    simp [dotProduct, pow_two]
+  have hright : (1 : n -> R) ᵥ* (A * Aᴴ) ⬝ᵥ 1 = (Fintype.card n : R) * (s * star s) := by
+    rw [← vecMul_vecMul]; rw [← dotProduct_mulVec]; rw [hvcol]; rw [hconjcol]
+    simp [dotProduct]
+exact hcard.left show (Fintype.card n : R) * (Fintype.card n : R) =
+      (Fintype.card n : R) * (s * star s) by
+    simpa [pow_two] using hleft.symm.trans hright
 
 Depends on / 依赖: Fintype, Fintype.card, Matrix, Matrix.mulVec, Matrix.vecMul, Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, dotProduct, hA.mul_conjTranspose, hconjcol, hright, mulVec, mul_conjTranspose, pow_two, smul_dotProduct, star_sum, vecMul, vecMul_smul
 -/
@@ -332,7 +378,9 @@ theorem IsHadamard.transpose
   mul_conjTranspose := by
     rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]; rw [hA.conjTranspose_mul]; rw [transpose_smul]; rw [transpose_one]
   conjTranspose_mul := by
-    rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]
+    rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]; rw [hA.mul_conjTranspose]; rw [transpose_smul]; rw [transpose_one]
+
+@[simp]
 
 中文:
 定理 是Hadamard.transpose
@@ -342,7 +390,9 @@ theorem IsHadamard.transpose
   mul_conjTranspose := by
     rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]; rw [hA.conjTranspose_mul]; rw [transpose_smul]; rw [transpose_one]
   conjTranspose_mul := by
-    rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]
+    rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]; rw [hA.mul_conjTranspose]; rw [transpose_smul]; rw [transpose_one]
+
+@[simp]
 
 Depends on / 依赖: apply_mem, hA.apply_mem
 -/
@@ -531,7 +581,9 @@ theorem IsHadamard.of_mul_conjTranspose
     rw [this]
     exact hcard.pow _
   have hreg : IsLeftRegular A :=
-    (isRegular_of_isLeftRe
+    (isRegular_of_isLeftRegular_det hdet.of_mul_left.left).left
+exact hreg show A * (Aᴴ * A) = A * ((Fintype.card n : R) • 1) by
+    rw [← mul_assoc]; rw [hmul]; rw [smul_mul_assoc]; rw [one_mul]; rw [mul_smul_comm]; rw [mul_one]
 
 中文:
 定理 是Hadamard.of_mul_conjTranspose
@@ -543,7 +595,9 @@ theorem IsHadamard.of_mul_conjTranspose
     rw [this]
     exact hcard.pow _
   have hreg : IsLeftRegular A :=
-    (isRegular_of_isLeftRe
+    (isRegular_of_isLeftRegular_det hdet.of_mul_left.left).left
+exact hreg show A * (Aᴴ * A) = A * ((Fintype.card n : R) • 1) by
+    rw [← mul_assoc]; rw [hmul]; rw [smul_mul_assoc]; rw [one_mul]; rw [mul_smul_comm]; rw [mul_one]
 
 Depends on / 依赖: A.det, Fintype, Fintype.card, IsLeftRegular, IsRegular, congr_arg, det_conjTranspose, det_mul, det_one, det_smul, hcard.pow, hdet.of_mul_left.left, hentry, isRegular_of_isLeftRegular_det, mul_assoc, mul_one, mul_smul_comm, of_mul_left, one_mul, smul_mul_assoc
 -/
@@ -598,7 +652,18 @@ theorem IsHadamard.four_dvd_card
     Unitary.mem_iff_eq_one_or_eq_neg_one.mp (hA.apply_mem i j)
   obtain ⟨r, s, t, hrs, hrt, hst⟩ := Fintype.two_lt_card_iff.mp hcard
   have horth ⦃i k : n⦄ (hik : i != k) : ∑ j, A i j * A k j = 0 := by
-    simpa [Matrix.mul_apply, hik]
+    simpa [Matrix.mul_apply, hik] using congr_fun (congr_fun hA.mul_conjTranspose i) k
+  have hexpand : forall j, (1 + A s j * A r j) * (1 + A t j * A r j) =
+      1 + A s j * A r j + A t j * A r j + A s j * A t j := fun j => by
+    obtain hr | hr := hpm r j <;> simp [hr] <;> ring
+  have hdvd : forall j, (4 : Int) ∣ (1 + A s j * A r j) * (1 + A t j * A r j) := fun j => by
+    obtain hs | hs := hpm s j <;> obtain hr | hr := hpm r j <;>
+      obtain ht | ht := hpm t j <;> simp [hs, hr, ht]
+  have hsum : ∑ j, (1 + A s j * A r j) * (1 + A t j * A r j) = (Fintype.card n : Int) := by
+    simp_rw [hexpand]
+    simp [Finset.sum_add_distrib, horth hrs.symm, horth hrt.symm, horth hst]
+  rw [← Int.ofNat_dvd]; rw [← hsum]
+  exact Finset.dvd_sum fun j _ => hdvd j
 
 中文:
 定理 是Hadamard.four_dvd_card
@@ -608,7 +673,18 @@ theorem IsHadamard.four_dvd_card
     Unitary.mem_iff_eq_one_or_eq_neg_one.mp (hA.apply_mem i j)
   obtain ⟨r, s, t, hrs, hrt, hst⟩ := Fintype.two_lt_card_iff.mp hcard
   have horth ⦃i k : n⦄ (hik : i != k) : ∑ j, A i j * A k j = 0 := by
-    simpa [Matrix.mul_apply, hik]
+    simpa [Matrix.mul_apply, hik] using congr_fun (congr_fun hA.mul_conjTranspose i) k
+  have hexpand : forall j, (1 + A s j * A r j) * (1 + A t j * A r j) =
+      1 + A s j * A r j + A t j * A r j + A s j * A t j := fun j => by
+    obtain hr | hr := hpm r j <;> simp [hr] <;> ring
+  have hdvd : forall j, (4 : Int) ∣ (1 + A s j * A r j) * (1 + A t j * A r j) := fun j => by
+    obtain hs | hs := hpm s j <;> obtain hr | hr := hpm r j <;>
+      obtain ht | ht := hpm t j <;> simp [hs, hr, ht]
+  have hsum : ∑ j, (1 + A s j * A r j) * (1 + A t j * A r j) = (Fintype.card n : Int) := by
+    simp_rw [hexpand]
+    simp [Finset.sum_add_distrib, horth hrs.symm, horth hrt.symm, horth hst]
+  rw [← Int.ofNat_dvd]; rw [← hsum]
+  exact Finset.dvd_sum fun j _ => hdvd j
 
 Depends on / 依赖: Fintype, Fintype.two_lt_card_iff.mp, Matrix, Matrix.mul_apply, Unitary, Unitary.mem_iff_eq_one_or_eq_neg_one.mp, apply_mem, congr_fun, hA.apply_mem, hA.mul_conjTranspose, hexpand, mem_iff_eq_one_or_eq_neg_one, mul_apply, mul_conjTranspose, two_lt_card_iff
 -/

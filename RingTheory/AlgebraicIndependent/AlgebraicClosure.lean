@@ -49,7 +49,22 @@ theorem extendScalars
   let Rt := adjoin R (x '' t)
   let St := adjoin S (x '' t)
   let _ : Algebra Rt St :=
-    (Rt.inclusion (T := St.restrictScalars R) <| adjoin_le <| by ex
+    (Rt.inclusion (T := St.restrictScalars R) <| adjoin_le <| by exact subset_adjoin).toAlgebra
+  have : IsScalarTower Rt St A := .of_algebraMap_eq fun ⟨y, _⟩ => show y = y from rfl
+  have : NoZeroDivisors St := (Set.image_eq_range _ _ ▸ ind.aevalEquiv)
+.symm.injective.noZeroDivisors _ (map_zero _) (map_mul _)
+  have : NoZeroDivisors Rt := (Subalgebra.inclusion_injective _).noZeroDivisors
+    (algebraMap Rt St) (map_zero _) (map_mul _)
+  have : Algebra.IsAlgebraic Rt St := ⟨fun ⟨y, hy⟩ => by
+    rw [← isAlgebraic_algHom_iff (IsScalarTower.toAlgHom Rt St A) Subtype.val_injective]
+    change IsAlgebraic Rt y
+    have := Algebra.IsAlgebraic.nontrivial R S
+    have := hx.algebraMap_injective.nontrivial
+    exact adjoin_induction (fun _ h => isAlgebraic_algebraMap (⟨_, subset_adjoin h⟩ : Rt))
+      (fun z => ((alg.1 z).algHom (IsScalarTower.toAlgHom R S A)).extendScalars fun _ _ eq => by
+        exact hx.algebraMap_injective congr($eq.1)) (fun _ _ _ _ => .add) (fun _ _ _ _ => .mul) hy⟩
+  change Transcendental St (x i)
+  exact (hx.transcendental_adjoin hi).extendScalars _
 
 中文:
 定理 extendScalars
@@ -61,7 +76,22 @@ theorem extendScalars
   let Rt := adjoin R (x '' t)
   let St := adjoin S (x '' t)
   let _ : Algebra Rt St :=
-    (Rt.inclusion (T := St.restrictScalars R) <| adjoin_le <| by ex
+    (Rt.inclusion (T := St.restrictScalars R) <| adjoin_le <| by exact subset_adjoin).toAlgebra
+  have : IsScalarTower Rt St A := .of_algebraMap_eq fun ⟨y, _⟩ => show y = y from rfl
+  have : NoZeroDivisors St := (Set.image_eq_range _ _ ▸ ind.aevalEquiv)
+.symm.injective.noZeroDivisors _ (map_zero _) (map_mul _)
+  have : NoZeroDivisors Rt := (Subalgebra.inclusion_injective _).noZeroDivisors
+    (algebraMap Rt St) (map_zero _) (map_mul _)
+  have : Algebra.IsAlgebraic Rt St := ⟨fun ⟨y, hy⟩ => by
+    rw [← isAlgebraic_algHom_iff (IsScalarTower.toAlgHom Rt St A) Subtype.val_injective]
+    change IsAlgebraic Rt y
+    have := Algebra.IsAlgebraic.nontrivial R S
+    have := hx.algebraMap_injective.nontrivial
+    exact adjoin_induction (fun _ h => isAlgebraic_algebraMap (⟨_, subset_adjoin h⟩ : Rt))
+      (fun z => ((alg.1 z).algHom (IsScalarTower.toAlgHom R S A)).extendScalars fun _ _ eq => by
+        exact hx.algebraMap_injective congr($eq.1)) (fun _ _ _ _ => .add) (fun _ _ _ _ => .mul) hy⟩
+  change Transcendental St (x i)
+  exact (hx.transcendental_adjoin hi).extendScalars _
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.injective_tower_top, IsAlgebraic, IsScalarTower, NoZeroDivisors, Rt.inclusion, Set.image_eq_range, St.restrictScalars, adjoin, adjoin_le, aevalEquiv, algebraMap_injective, algebraicIndependent_of_finite_type, hx.algebraMap_injective, image_eq_range, inclusion, ind.aevalEquiv, injective, injective_tower_top, noZeroDivisors
 -/

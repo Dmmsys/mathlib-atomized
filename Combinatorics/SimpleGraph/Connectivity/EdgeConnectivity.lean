@@ -475,7 +475,10 @@ lemma isEdgeReachable_add_one
     grw [Set.encard_union_le, Set.encard_singleton]
 .mpr hk exact ENat.add_lt_add_iff_right ENat.one_ne_top
   obtain rfl | ⟨e, he⟩ := s.eq_empty_or_nonempty
-  · simpa using (h s(u, u)).rea
+  · simpa using (h s(u, u)).reachable hk
+  · rw [← Set.insert_sdiff_self_of_mem he, Set.insert_eq, ← deleteEdges_deleteEdges]
+refine h e .mp ?_ ENat.add_lt_add_iff_right ENat.one_ne_top
+    rwa [Set.encard_sdiff_singleton_add_one he]
 
 中文:
 引理 isEdgeReachable_add_one
@@ -487,7 +490,10 @@ lemma isEdgeReachable_add_one
     grw [Set.encard_union_le, Set.encard_singleton]
 .mpr hk exact ENat.add_lt_add_iff_right ENat.one_ne_top
   obtain rfl | ⟨e, he⟩ := s.eq_empty_or_nonempty
-  · simpa using (h s(u, u)).rea
+  · simpa using (h s(u, u)).reachable hk
+  · rw [← Set.insert_sdiff_self_of_mem he, Set.insert_eq, ← deleteEdges_deleteEdges]
+refine h e .mp ?_ ENat.add_lt_add_iff_right ENat.one_ne_top
+    rwa [Set.encard_sdiff_singleton_add_one he]
 
 Depends on / 依赖: ENat.add_lt_add_iff_right, ENat.one_ne_top, Set.encard_sdiff_singleton_add_one, Set.encard_singleton, Set.encard_union_le, Set.insert_eq, Set.insert_sdiff_self_of_mem, Set.union_comm, add_lt_add_iff_right, deleteEdges_deleteEdges, encard_sdiff_singleton_add_one, encard_singleton, encard_union_le, eq_empty_or_nonempty, insert_eq, insert_sdiff_self_of_mem, one_ne_top, reachable, s.eq_empty_or_nonempty, union_comm
 -/
@@ -557,7 +563,12 @@ lemma isBridge_iff_not_isEdgeReachable_two
   · apply G.isEdgeReachable_one.mpr huv.reachable
     exact lt_of_le_of_ne (ENat.lt_natCast_add_one_iff.mp hs₂) hs₁
   obtain ⟨x, rfl⟩ := s.encard_eq_one.mp hs₁
-  obtain rfl | hx 
+  obtain rfl | hx := eq_or_ne s(u, v) x
+  · exact hr
+.reachable · exact deleteEdges_adj.mpr ⟨huv, hx⟩
+
+@[deprecated (since := "2026-05-16")]
+alias isBridge_iff_adj_and_not_isEdgeConnected_two := isBridge_iff_not_isEdgeReachable_two
 
 中文:
 引理 isBridge_iff_not_isEdgeReachable_two
@@ -568,7 +579,12 @@ lemma isBridge_iff_not_isEdgeReachable_two
   · apply G.isEdgeReachable_one.mpr huv.reachable
     exact lt_of_le_of_ne (ENat.lt_natCast_add_one_iff.mp hs₂) hs₁
   obtain ⟨x, rfl⟩ := s.encard_eq_one.mp hs₁
-  obtain rfl | hx 
+  obtain rfl | hx := eq_or_ne s(u, v) x
+  · exact hr
+.reachable · exact deleteEdges_adj.mpr ⟨huv, hx⟩
+
+@[deprecated (since := "2026-05-16")]
+alias isBridge_iff_adj_and_not_isEdgeConnected_two := isBridge_iff_not_isEdgeReachable_two
 
 Depends on / 依赖: ENat.lt_natCast_add_one_iff.mp, G.isEdgeReachable_one.mpr, deleteEdges_adj, deleteEdges_adj.mpr, encard, encard_eq_one, eq_or_ne, h.not_isEdgeReachable_two, huv.reachable, isEdgeReachable_one, lt_natCast_add_one_iff, lt_of_le_of_ne, not_isEdgeReachable_two, reachable, s.encard, s.encard_eq_one.mp
 -/
@@ -641,7 +657,13 @@ lemma exists_adj_isEdgeReachable_two
   by_cases! h' : s = {s(u, w.snd)}
   · subst h'
 refine Reachable.trans (h hs) .reachable.symm w.tail.toDeleteEdge _ (fun hh => ?_)
- 
+    have := hw.tail.eq_snd_of_mem_edges (Sym2.eq_swap ▸ hh)
+    simp only [Walk.getVert_tail, Nat.reduceAdd] at this
+.mp this.symm simpa using hw.getVert_eq_start_iff_of_not_nil (Walk.not_nil_of_ne hne)
+· refine Walk.reachable Walk.cons (deleteEdges_adj.mpr ⟨this, ?_⟩) Walk.nil
+    contrapose h'
+    refine (Set.subsingleton_iff_singleton h').mp ?_
+    exact Set.encard_le_one_iff_subsingleton.mp (Order.le_of_lt_succ hs)
 
 中文:
 引理 存在_adj_isEdgeReachable_two
@@ -653,7 +675,13 @@ refine Reachable.trans (h hs) .reachable.symm w.tail.toDeleteEdge _ (fun hh => ?
   by_cases! h' : s = {s(u, w.snd)}
   · subst h'
 refine Reachable.trans (h hs) .reachable.symm w.tail.toDeleteEdge _ (fun hh => ?_)
- 
+    have := hw.tail.eq_snd_of_mem_edges (Sym2.eq_swap ▸ hh)
+    simp only [Walk.getVert_tail, Nat.reduceAdd] at this
+.mp this.symm simpa using hw.getVert_eq_start_iff_of_not_nil (Walk.not_nil_of_ne hne)
+· refine Walk.reachable Walk.cons (deleteEdges_adj.mpr ⟨this, ?_⟩) Walk.nil
+    contrapose h'
+    refine (Set.subsingleton_iff_singleton h').mp ?_
+    exact Set.encard_le_one_iff_subsingleton.mp (Order.le_of_lt_succ hs)
 
 Depends on / 依赖: G.Adj, Nat.reduceAdd, Reachable, Reachable.trans, Sym2.eq_swap, Walk.adj_snd, Walk.getVert_tail, Walk.not_nil_of_ne, adj_snd, eq_snd_of_mem_edges, eq_swap, exists_isPath, getVert_eq_start_iff_of_not_nil, getVert_tail, h.reachable, hw.getVert_eq_start_iff_of_not_nil, hw.tail.eq_snd_of_mem_edges, not_nil_of_ne, reachable, reachable.symm
 -/
@@ -695,7 +723,8 @@ lemma IsTrail.isEdgeReachable_two_of_isEdgeReachable_two_aux
   have he' : ¬ (G.deleteEdges {e}).Reachable v x := fun hvy =>
 he (isEdgeReachable_two.1 huv _).trans hvy
   exact fun hy => hw.disjoint_edges_takeUntil_dropUntil hy
-    ((w.takeUntil x _).mem_edges_of_not_re
+    ((w.takeUntil x _).mem_edges_of_not_reachable_deleteEdges he)
+    (by simpa using (w.dropUntil x _).reverse.mem_edges_of_not_reachable_deleteEdges he')
 
 中文:
 引理 是Trail.isEdgeReachable_two_of_isEdgeReachable_two_aux
@@ -707,7 +736,8 @@ he (isEdgeReachable_two.1 huv _).trans hvy
   have he' : ¬ (G.deleteEdges {e}).Reachable v x := fun hvy =>
 he (isEdgeReachable_two.1 huv _).trans hvy
   exact fun hy => hw.disjoint_edges_takeUntil_dropUntil hy
-    ((w.takeUntil x _).mem_edges_of_not_re
+    ((w.takeUntil x _).mem_edges_of_not_reachable_deleteEdges he)
+    (by simpa using (w.dropUntil x _).reverse.mem_edges_of_not_reachable_deleteEdges he')
 -/
 private lemma IsTrail.isEdgeReachable_two_of_isEdgeReachable_two_aux (hw : w.IsTrail)
     (huv : G.IsEdgeReachable 2 u v) (huy : x in w.support) : G.IsEdgeReachable 2 u x := by

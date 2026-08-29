@@ -242,7 +242,9 @@ lemma fg_subalgebra
   · exact Presentation.finite_coeffs
   · refine Set.finite_iUnion fun i => Finset.finite_toSet _
   · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Fin
+    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
+  · refine Set.finite_iUnion fun i => ?_
+    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
 
 中文:
 引理 fg_subalgebra
@@ -254,7 +256,9 @@ lemma fg_subalgebra
   · exact Presentation.finite_coeffs
   · refine Set.finite_iUnion fun i => Finset.finite_toSet _
   · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Fin
+    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
+  · refine Set.finite_iUnion fun i => ?_
+    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
 
 Depends on / 依赖: Finite, Finset, Finset.finite_toSet, Presentation, Presentation.finite_coeffs, Set.Finite.biUnion, Set.finite_iUnion, Subalgebra, Subalgebra.fg_def.mpr, biUnion, fg_def, finite_coeffs, finite_iUnion, finite_toSet
 -/
@@ -279,7 +283,10 @@ instance hasCoeffs
     #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
     without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-    problem in the new canoni
+    problem in the new canonicalizer; a minimization would help. The original proof was:
+    `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+    rw [Subalgebra.setRange_algebraMap]
+    grind [subalgebra, Algebra.subset_adjoin]
 
 中文:
 实例 hasCoeffs
@@ -288,7 +295,10 @@ instance hasCoeffs
     #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
     without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-    problem in the new canoni
+    problem in the new canonicalizer; a minimization would help. The original proof was:
+    `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+    rw [Subalgebra.setRange_algebraMap]
+    grind [subalgebra, Algebra.subset_adjoin]
 
 Depends on / 依赖: Algebra, Algebra.subset_adjoin, Before, Mathlib, Subalgebra, Subalgebra.setRange_algebraMap, adaptation_note, canonicalizer, closed, directed, github, github.com, leanprover, minimization, normalizer, original, problem, replacing, setRange_algebraMap, subalgebra
 -/
@@ -320,7 +330,11 @@ lemma coeffs_h_subset
     Set.subset_iUnion_of_subset i subset_rfl
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  wit
+  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
+  problem in the new canonicalizer; a minimization would help. The original proof was:
+  `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+  rw [Subalgebra.setRange_algebraMap]
+  grind [subalgebra, Algebra.subset_adjoin]
 
 中文:
 引理 coeffs_h_subset
@@ -331,7 +345,11 @@ lemma coeffs_h_subset
     Set.subset_iUnion_of_subset i subset_rfl
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  wit
+  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
+  problem in the new canonicalizer; a minimization would help. The original proof was:
+  `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+  rw [Subalgebra.setRange_algebraMap]
+  grind [subalgebra, Algebra.subset_adjoin]
 
 Depends on / 依赖: Before, Mathlib, Set.subset_iUnion_of_subset, Subalgebra, Subalgebra.setRange_a, adaptation_note, canonicalizer, closed, coeffs, directed, github, github.com, leanprover, minimization, normalizer, original, problem, replacing, setRange_a, subalgebra
 -/
@@ -358,7 +376,13 @@ lemma coeffs_p_subset
   have : (p.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.p i).coeffs, ↑x.coeffs :=
     Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset p hp subset_rfl)
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-d
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
+  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
+  problem in the new canonicalizer; a minimization would help. The original proof was:
+  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
+    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
+  grind [subalgebra, Algebra.subset_adjoin]
 
 中文:
 引理 coeffs_p_subset
@@ -368,7 +392,13 @@ lemma coeffs_p_subset
   have : (p.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.p i).coeffs, ↑x.coeffs :=
     Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset p hp subset_rfl)
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-d
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
+  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
+  problem in the new canonicalizer; a minimization would help. The original proof was:
+  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
+    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
+  grind [subalgebra, Algebra.subset_adjoin]
 
 Depends on / 依赖: Before, D.subalgebra, D.vars, Mathlib, Set.subset_iUnion, Set.subset_iUnion_of_subset, adaptation_note, algebraMap, canonicalizer, closed, coeffs, directed, github, github.com, leanprover, normalizer, p.coeffs, problem, replacing, subalgebra
 -/
@@ -399,7 +429,13 @@ lemma coeffs_q_subset
   have : (q.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.q i).coeffs, ↑(coeffs x) :=
     Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset q hq subset_rfl)
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
+  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
+  problem in the new canonicalizer; a minimization would help. The original proof was:
+  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
+    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
+  grind [subalgebra, Algebra.subset_adjoin]
 
 中文:
 引理 coeffs_q_subset
@@ -409,7 +445,13 @@ lemma coeffs_q_subset
   have : (q.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.q i).coeffs, ↑(coeffs x) :=
     Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset q hq subset_rfl)
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
+  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
+  problem in the new canonicalizer; a minimization would help. The original proof was:
+  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
+    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
+  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
+  grind [subalgebra, Algebra.subset_adjoin]
 
 Depends on / 依赖: Before, D.subalgebra, D.vars, Mathlib, Set.subset_iUnion, Set.subset_iUnion_of_subset, adaptation_note, algebraMap, canonicalize, canonicalizer, closed, coeffs, directed, github, github.com, leanprover, normalizer, problem, q.coeffs, replacing
 -/
@@ -440,7 +482,37 @@ lemma exists_kerSquareLift_comp_eq_id
   · refine Ideal.Quotient.liftₐ _ ((Ideal.Quotient.mkₐ _ _).comp <| aeval p) ?_
     simp_rw [← RingHom.mem_ker, ← SetLike.le_def, Ideal.span_le, Set.range_subset_iff]
     intro i
-   
+    simp only [← AlgHom.comap_ker, Ideal.coe_comap, Set.mem_preimage, SetLike.mem_coe]
+    rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]
+    have hinj : Function.Injective
+        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
+      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
+    rw [Ideal.mem_span_pow_iff_exists_isHomogeneous]
+    obtain ⟨q, hq⟩ := (D.p i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_p_subset R i)
+    refine ⟨q, .of_map hinj ?_, hinj ?_⟩
+    · rw [hq]
+      exact D.hphom i
+    · simp_rw [map_eval, Function.comp_def, Presentation.map_relationOfHasCoeffs,
+        hq, D.hp, MvPolynomial.map_aeval, hp]
+      simp [MvPolynomial.eval₂_map_comp_C, Presentation.map_relationOfHasCoeffs, aeval_def]
+  · have hf₀ : Function.Surjective f₀ := Ideal.Quotient.mk_surjective
+    rw [← AlgHom.cancel_right hf₀]
+    refine MvPolynomial.algHom_ext fun i => ?_
+    suffices h : exists p', p'.IsHomogeneous 1 ∧ (eval (D.P.relationOfHasCoeffs (D.subalgebra R))) p' =
+        p i - X i by
+      -- Reducible def-eq issues caused by `RingHom.ker f.toRingHom` discrepancies
+      -- Can be fixed after #25138.
+      apply (Ideal.Quotient.mk_eq_mk_iff_sub_mem _ _).mpr
+      simpa [Ideal.mem_span_iff_exists_isHomogeneous, hp]
+    have hinj : Function.Injective
+        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
+      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
+    obtain ⟨t, ht⟩ := (D.q i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_q_subset R i)
+    refine ⟨t, .of_map hinj ?_, hinj ?_⟩
+    · rw [ht]
+      exact D.hqhom i
+    · simp [MvPolynomial.map_eval, Function.comp_def,
+        Presentation.map_relationOfHasCoeffs, ht, hq, hp]
 
 中文:
 引理 存在_kerSquareLift_comp_eq_id
@@ -450,7 +522,37 @@ lemma exists_kerSquareLift_comp_eq_id
   · refine Ideal.Quotient.liftₐ _ ((Ideal.Quotient.mkₐ _ _).comp <| aeval p) ?_
     simp_rw [← RingHom.mem_ker, ← SetLike.le_def, Ideal.span_le, Set.range_subset_iff]
     intro i
-   
+    simp only [← AlgHom.comap_ker, Ideal.coe_comap, Set.mem_preimage, SetLike.mem_coe]
+    rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]
+    have hinj : Function.Injective
+        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
+      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
+    rw [Ideal.mem_span_pow_iff_exists_isHomogeneous]
+    obtain ⟨q, hq⟩ := (D.p i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_p_subset R i)
+    refine ⟨q, .of_map hinj ?_, hinj ?_⟩
+    · rw [hq]
+      exact D.hphom i
+    · simp_rw [map_eval, Function.comp_def, Presentation.map_relationOfHasCoeffs,
+        hq, D.hp, MvPolynomial.map_aeval, hp]
+      simp [MvPolynomial.eval₂_map_comp_C, Presentation.map_relationOfHasCoeffs, aeval_def]
+  · have hf₀ : Function.Surjective f₀ := Ideal.Quotient.mk_surjective
+    rw [← AlgHom.cancel_right hf₀]
+    refine MvPolynomial.algHom_ext fun i => ?_
+    suffices h : exists p', p'.IsHomogeneous 1 ∧ (eval (D.P.relationOfHasCoeffs (D.subalgebra R))) p' =
+        p i - X i by
+      -- Reducible def-eq issues caused by `RingHom.ker f.toRingHom` discrepancies
+      -- Can be fixed after #25138.
+      apply (Ideal.Quotient.mk_eq_mk_iff_sub_mem _ _).mpr
+      simpa [Ideal.mem_span_iff_exists_isHomogeneous, hp]
+    have hinj : Function.Injective
+        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
+      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
+    obtain ⟨t, ht⟩ := (D.q i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_q_subset R i)
+    refine ⟨t, .of_map hinj ?_, hinj ?_⟩
+    · rw [ht]
+      exact D.hqhom i
+    · simp [MvPolynomial.map_eval, Function.comp_def,
+        Presentation.map_relationOfHasCoeffs, ht, hq, hp]
 
 Depends on / 依赖: AlgHom, AlgHom.comap_ker, D.coeffs_h_subset, Ideal.Quotient.lift, Ideal.Quotient.mk, Ideal.coe_comap, Ideal.span_le, Quotient, RingHom, RingHom.ker_coe_toRingHom, RingHom.mem_ker, Set.mem_preimage, Set.range_subset_iff, SetLike, SetLike.le_def, SetLike.mem_coe, coe_comap, coeffs_h_subset, comap_ker, ker_coe_toRingHom
 -/

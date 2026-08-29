@@ -413,7 +413,14 @@ theorem not_isCyclic_of_denselyOrdered
     suffices 0 < k ∧ k < 1 by lia
     rw [← one_lt_inv'] at hlt
     simp_rw [← zpow_lt_zpow_iff_right hlt]
-    sim
+    simp_all
+  · rcases exists_ne (1 : α) with ⟨b, hb⟩
+    simpa [hb.symm] using ha b
+  · rcases exists_between hlt with ⟨b, hb, hba⟩
+    rcases ha b with ⟨k, rfl⟩
+    suffices 0 < k ∧ k < 1 by lia
+    simp_rw [← zpow_lt_zpow_iff_right hlt]
+    simp_all
 
 中文:
 定理 not_isCyclic_of_denselyOrdered
@@ -428,7 +435,14 @@ theorem not_isCyclic_of_denselyOrdered
     suffices 0 < k ∧ k < 1 by lia
     rw [← one_lt_inv'] at hlt
     simp_rw [← zpow_lt_zpow_iff_right hlt]
-    sim
+    simp_all
+  · rcases exists_ne (1 : α) with ⟨b, hb⟩
+    simpa [hb.symm] using ha b
+  · rcases exists_between hlt with ⟨b, hb, hba⟩
+    rcases ha b with ⟨k, rfl⟩
+    suffices 0 < k ∧ k < 1 by lia
+    simp_rw [← zpow_lt_zpow_iff_right hlt]
+    simp_all
 
 Depends on / 依赖: exists_between, exists_ne, exists_zpow_surjective, hb.symm, lt_trichotomy, one_lt_inv, simp_rw, zpow_lt_zpow_iff_right
 -/

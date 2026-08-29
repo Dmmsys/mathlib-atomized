@@ -486,7 +486,10 @@ definition equivMapOfInjective
     map_smul' := by
       intros
       -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
-   
+      simp only [coe_smul_of_tower, map_smulₛₗ _, Equiv.toFun_as_coe, Equiv.Set.image_apply]
+      rfl }
+
+@[simp]
 
 中文:
 定义 equivMapOfInjective
@@ -499,7 +502,10 @@ definition equivMapOfInjective
     map_smul' := by
       intros
       -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
-   
+      simp only [coe_smul_of_tower, map_smulₛₗ _, Equiv.toFun_as_coe, Equiv.Set.image_apply]
+      rfl }
+
+@[simp]
 
 Depends on / 依赖: Equiv.Set.image, Equiv.Set.image_apply, Equiv.toFun_as_coe, coe_add, image_apply, intros, map_add, map_smul, toFun_as_coe
 -/
@@ -1626,7 +1632,7 @@ lemma map_covBy_of_injective
   refine h.2 ?_ (Submodule.comap_lt_of_lt_map_of_injective hf h₂)
   rw [← Submodule.map_lt_map_iff_of_injective hf]
   refine h₁.trans_le ?_
-  exact (Set.image_preimage_eq_of_subset (.trans 
+  exact (Set.image_preimage_eq_of_subset (.trans h₂.le (Set.image_subset_range _ _))).superset
 
 中文:
 引理 map_covBy_of_injective
@@ -1637,7 +1643,7 @@ lemma map_covBy_of_injective
   refine h.2 ?_ (Submodule.comap_lt_of_lt_map_of_injective hf h₂)
   rw [← Submodule.map_lt_map_iff_of_injective hf]
   refine h₁.trans_le ?_
-  exact (Set.image_preimage_eq_of_subset (.trans 
+  exact (Set.image_preimage_eq_of_subset (.trans h₂.le (Set.image_subset_range _ _))).superset
 
 Depends on / 依赖: Set.image_preimage_eq_of_subset, Set.image_subset_range, Submodule, Submodule.comap_lt_of_lt_map_of_injective, Submodule.map_lt_map_iff_of_injective, comap_lt_of_lt_map_of_injective, image_preimage_eq_of_subset, image_subset_range, lt_of_le_of_ne, map_injective_of_injective, map_lt_map_iff_of_injective, map_mono, superset, trans_le
 -/
@@ -2725,7 +2731,20 @@ definition submoduleMap
           SetLike.mem_coe]⟩ with
     invFun := fun y =>
       ⟨(e.symm : M₂ ->ₛₗ[σ₂₁] M) y, by
-        rcases y with ⟨y', h
+        rcases y with ⟨y', hy⟩
+        rw [Submodule.mem_map] at hy
+        rcases hy with ⟨x, hx, hxy⟩
+        subst hxy
+        simp only [symm_apply_apply, coe_coe, hx]⟩
+    left_inv := fun x => by
+      simp only [LinearMap.domRestrict_apply, LinearMap.codRestrict_apply, LinearMap.toFun_eq_coe,
+        LinearEquiv.coe_coe, LinearEquiv.symm_apply_apply, SetLike.eta]
+    right_inv := fun y => by
+      apply SetCoe.ext
+      simp only [LinearMap.domRestrict_apply, LinearMap.codRestrict_apply, LinearMap.toFun_eq_coe,
+        LinearEquiv.coe_coe, LinearEquiv.apply_symm_apply] }
+
+@[simp]
 
 中文:
 定义 submoduleMap
@@ -2736,7 +2755,20 @@ definition submoduleMap
           SetLike.mem_coe]⟩ with
     invFun := fun y =>
       ⟨(e.symm : M₂ ->ₛₗ[σ₂₁] M) y, by
-        rcases y with ⟨y', h
+        rcases y with ⟨y', hy⟩
+        rw [Submodule.mem_map] at hy
+        rcases hy with ⟨x, hx, hxy⟩
+        subst hxy
+        simp only [symm_apply_apply, coe_coe, hx]⟩
+    left_inv := fun x => by
+      simp only [LinearMap.domRestrict_apply, LinearMap.codRestrict_apply, LinearMap.toFun_eq_coe,
+        LinearEquiv.coe_coe, LinearEquiv.symm_apply_apply, SetLike.eta]
+    right_inv := fun y => by
+      apply SetCoe.ext
+      simp only [LinearMap.domRestrict_apply, LinearMap.codRestrict_apply, LinearMap.toFun_eq_coe,
+        LinearEquiv.coe_coe, LinearEquiv.apply_symm_apply] }
+
+@[simp]
 
 Depends on / 依赖: LinearEquiv, LinearMap, LinearMap.codRestrict_apply, LinearMap.domRestrict_apply, LinearMap.toFun_eq_coe, SetLike, SetLike.coe_mem, SetLike.mem_coe, Submodule, Submodule.mem_map, and_true, codRestrict, codRestrict_apply, coe_coe, coe_mem, domRestrict, domRestrict_apply, e.symm, invFun, left_inv
 -/

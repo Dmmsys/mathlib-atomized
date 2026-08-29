@@ -24,7 +24,7 @@ lemma Ideal.ncard_primesOver_lt_of_not_le
   refine Set.ncard_lt_ncard (Set.ssubset_iff_exists.mpr ⟨?_, P', ⟨‹_›, ‹_›⟩, ?_⟩) H
   · rintro _ ⟨q, ⟨_, _⟩, rfl⟩
     exact ⟨inferInstance, inferInstanceAs ((q.comap f).LiesOver _)⟩
-  · rintro ⟨q, ⟨_, _⟩, rfl⟩; exa
+  · rintro ⟨q, ⟨_, _⟩, rfl⟩; exact hkP' (Ideal.ker_le_comap _)
 
 中文:
 引理 理想.ncard_primesOver_lt_of_not_le
@@ -33,7 +33,7 @@ lemma Ideal.ncard_primesOver_lt_of_not_le
   refine Set.ncard_lt_ncard (Set.ssubset_iff_exists.mpr ⟨?_, P', ⟨‹_›, ‹_›⟩, ?_⟩) H
   · rintro _ ⟨q, ⟨_, _⟩, rfl⟩
     exact ⟨inferInstance, inferInstanceAs ((q.comap f).LiesOver _)⟩
-  · rintro ⟨q, ⟨_, _⟩, rfl⟩; exa
+  · rintro ⟨q, ⟨_, _⟩, rfl⟩; exact hkP' (Ideal.ker_le_comap _)
 
 Depends on / 依赖: Ideal.comap_injective_of_surjective, Ideal.ker_le_comap, LiesOver, Set.ncard_image_of_injective, Set.ncard_lt_ncard, Set.ssubset_iff_exists.mpr, comap_injective_of_surjective, ker_le_comap, ncard_image_of_injective, ncard_lt_ncard, q.comap, ssubset_iff_exists
 -/

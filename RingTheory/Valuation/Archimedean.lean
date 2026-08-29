@@ -31,7 +31,9 @@ instance MonoidWithZeroHom.instLinearOrderedCommGroupWithZeroMrange
   isBot_zero a := by simp [← Subtype.coe_le_coe]
   mul_lt_mul_of_pos_left := by
     simp only [← Subtype.coe_lt_coe, val_mrange_zero, Submonoid.coe_mul, Subtype.forall,
-      MonoidHom.mem_mrange, forall_exists_inde
+      MonoidHom.mem_mrange, forall_exists_index, forall_apply_eq_imp_iff]
+    rintro a ha b c hbc
+    gcongr
 
 中文:
 实例 带零幺半群态射.instLinearOrderedCommGroupWithZeroMrange
@@ -41,7 +43,9 @@ instance MonoidWithZeroHom.instLinearOrderedCommGroupWithZeroMrange
   isBot_zero a := by simp [← Subtype.coe_le_coe]
   mul_lt_mul_of_pos_left := by
     simp only [← Subtype.coe_lt_coe, val_mrange_zero, Submonoid.coe_mul, Subtype.forall,
-      MonoidHom.mem_mrange, forall_exists_inde
+      MonoidHom.mem_mrange, forall_exists_index, forall_apply_eq_imp_iff]
+    rintro a ha b c hbc
+    gcongr
 
 Depends on / 依赖: bot_eq_zero
 -/
@@ -116,7 +120,18 @@ lemma wellFounded_gt_on_v_iff_discrete_mrange
   classical
   refine ⟨fun h => (h.mapsTo Subtype.val ?_).mono' (by simp), fun h => (h.mapsTo ?_ ?_).mono' ?_⟩
   · rintro ⟨_, x, rfl⟩
-    simp 
+    simp only [← Subtype.coe_le_coe, OneMemClass.coe_one, Set.mem_ofPred_eq, Set.mem_range,
+      Function.comp_apply]
+    intro hx
+    obtain ⟨y, rfl⟩ := hv.exists_of_le_one hx
+    exact ⟨y, by simp⟩
+  · exact fun x => if hx : x in MonoidHom.mrange v then ⟨x, hx⟩ else 1
+  · intro
+    simp only [Set.mem_range, Function.comp_apply, MonoidHom.mem_mrange, Set.mem_ofPred_eq,
+      forall_exists_index]
+    rintro x rfl
+    simp [← Subtype.coe_le_coe, hv.map_le_one]
+  · simp [Function.onFun]
 
 中文:
 引理 wellFounded_gt_on_v_iff_discrete_mrange
@@ -128,7 +143,18 @@ lemma wellFounded_gt_on_v_iff_discrete_mrange
   classical
   refine ⟨fun h => (h.mapsTo Subtype.val ?_).mono' (by simp), fun h => (h.mapsTo ?_ ?_).mono' ?_⟩
   · rintro ⟨_, x, rfl⟩
-    simp 
+    simp only [← Subtype.coe_le_coe, OneMemClass.coe_one, Set.mem_ofPred_eq, Set.mem_range,
+      Function.comp_apply]
+    intro hx
+    obtain ⟨y, rfl⟩ := hv.exists_of_le_one hx
+    exact ⟨y, by simp⟩
+  · exact fun x => if hx : x in MonoidHom.mrange v then ⟨x, hx⟩ else 1
+  · intro
+    simp only [Set.mem_range, Function.comp_apply, MonoidHom.mem_mrange, Set.mem_ofPred_eq,
+      forall_exists_index]
+    rintro x rfl
+    simp [← Subtype.coe_le_coe, hv.map_le_one]
+  · simp [Function.onFun]
 
 Depends on / 依赖: Function, Function.comp_apply, LinearOrderedCommGroupWithZero, LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero, MonoidHom, MonoidHom.mrange, OneMemClass, OneMemClass.coe_one, Set.mem_ofPred_eq, Set.mem_range, Set.wellFoundedOn_range, Subtype, Subtype.coe_le_coe, Subtype.val, classical, coe_le_coe, coe_one, comp_apply, exists_of_le_one, h.mapsTo
 -/
@@ -166,7 +192,11 @@ lemma isPrincipalIdealRing_iff_not_denselyOrdered
   rcases subsingleton_or_nontrivial (MonoidHom.mrange v)ˣ with hs | _
   · have := bijective_algebraMap_of_subsingleton_units_mrange hv
     exact .of_surjective _ (RingEquiv.ofBijective _ this).symm.surjective
-  have : 
+  have : IsDomain O := hv.hom_inj.isDomain
+  have : ValuationRing O := ValuationRing.of_integers v hv
+  have := ((IsBezout.TFAE (R := O)).out 1 3)
+  rw [this]; rw [hv.wfDvdMonoid_iff_wellFounded_gt_on_v]; rw [hv.wellFounded_gt_on_v_iff_discrete_mrange]; rw [LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered]
+  exact H
 
 中文:
 引理 isPrincipalIdealRing_iff_not_denselyOrdered
@@ -176,7 +206,11 @@ lemma isPrincipalIdealRing_iff_not_denselyOrdered
   rcases subsingleton_or_nontrivial (MonoidHom.mrange v)ˣ with hs | _
   · have := bijective_algebraMap_of_subsingleton_units_mrange hv
     exact .of_surjective _ (RingEquiv.ofBijective _ this).symm.surjective
-  have : 
+  have : IsDomain O := hv.hom_inj.isDomain
+  have : ValuationRing O := ValuationRing.of_integers v hv
+  have := ((IsBezout.TFAE (R := O)).out 1 3)
+  rw [this]; rw [hv.wfDvdMonoid_iff_wellFounded_gt_on_v]; rw [hv.wellFounded_gt_on_v_iff_discrete_mrange]; rw [LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered]
+  exact H
 
 Depends on / 依赖: IsBezout, IsBezout.TFAE, IsDomain, MonoidHom, MonoidHom.mrange, RingEquiv, RingEquiv.ofBijective, ValuationRing, ValuationRing.of_integers, bijective_algebraMap_of_subsingleton_units_mrange, hom_inj, hv.hom_inj.isDomain, hv.wellFounded_gt_, hv.wfDvdMonoid_iff_wellFounded_gt_on_v, isDomain, mrange, not_denselyOrdered_of_isPrincipalIdealRing, ofBijective, of_integers, of_surjective
 -/

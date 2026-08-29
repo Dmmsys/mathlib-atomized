@@ -248,7 +248,8 @@ lemma sin_div_le_inv_abs
       exact neg_one_le_sin x
     · simpa using hx
   · simp
-  · rw [abs_of_nonneg hx.le, div_
+  · rw [abs_of_nonneg hx.le, div_eq_mul_inv, mul_inv_le_iff₀ hx, inv_mul_cancel₀ hx.ne']
+    exact sin_le_one x
 
 中文:
 引理 sin_div_le_inv_abs
@@ -262,7 +263,8 @@ lemma sin_div_le_inv_abs
       exact neg_one_le_sin x
     · simpa using hx
   · simp
-  · rw [abs_of_nonneg hx.le, div_
+  · rw [abs_of_nonneg hx.le, div_eq_mul_inv, mul_inv_le_iff₀ hx, inv_mul_cancel₀ hx.ne']
+    exact sin_le_one x
 
 Depends on / 依赖: abs_of_nonneg, abs_of_nonpos, div_eq_mul_inv, hx.le, hx.ne, lt_trichotomy, mul_assoc, mul_one, neg_le, neg_one_le_sin, one_div, ring_nf, sin_le_one
 -/

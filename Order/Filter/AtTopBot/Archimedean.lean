@@ -592,7 +592,9 @@ theorem Tendsto.const_mul_atTop'
     b <= 1 * max b 0 := by
     { rw [one_mul]
       exact le_max_left _ _ }
-    _ <= r * n * max b 0 :=
+    _ <= r * n * max b 0 := by gcongr
+    _ = r * (n * max b 0) := by rw [mul_assoc]
+    _ <= r * f x := by gcongr
 
 中文:
 定理 收敛.const_mul_atTop'
@@ -606,7 +608,9 @@ theorem Tendsto.const_mul_atTop'
     b <= 1 * max b 0 := by
     { rw [one_mul]
       exact le_max_left _ _ }
-    _ <= r * n * max b 0 :=
+    _ <= r * n * max b 0 := by gcongr
+    _ = r * (n * max b 0) := by rw [mul_assoc]
+    _ <= r * f x := by gcongr
 
 Depends on / 依赖: Archimedean, Archimedean.arch, filter_upwards, le_max_left, mul_assoc, nsmul_eq_mul, one_mul, tendsto_atTop
 -/
@@ -638,7 +642,10 @@ theorem Tendsto.atTop_mul_const'
   calc
     b <= max b 0 * 1 := by
     { rw [mul_one]
-      exact le_max_left
+      exact le_max_left _ _ }
+    _ <= max b 0 * (n * r) := by gcongr
+    _ = max b 0 * n * r := by rw [mul_assoc]
+    _ <= f x * r := by gcongr
 
 中文:
 定理 收敛.atTop_mul_const'
@@ -651,7 +658,10 @@ theorem Tendsto.atTop_mul_const'
   calc
     b <= max b 0 * 1 := by
     { rw [mul_one]
-      exact le_max_left
+      exact le_max_left _ _ }
+    _ <= max b 0 * (n * r) := by gcongr
+    _ = max b 0 * n * r := by rw [mul_assoc]
+    _ <= f x * r := by gcongr
 
 Depends on / 依赖: Archimedean, Archimedean.arch, filter_upwards, le_max_left, mul_assoc, mul_one, nsmul_eq_mul, tendsto_atTop
 -/

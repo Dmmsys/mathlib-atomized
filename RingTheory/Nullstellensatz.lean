@@ -431,7 +431,7 @@ theorem vanishingIdeal_pointToPoint
     fun _ hp =>
     (PrimeSpectrum.mem_vanishingIdeal _ _).2 fun _ hI =>
       let ⟨x, hx⟩ := hI
-      hx.2 ▸ fun _ hx' => (Set.
+      hx.2 ▸ fun _ hx' => (Set.mem_singleton_iff.1 hx').symm ▸ hp x hx.1
 
 中文:
 定理 vanishingIdeal_pointToPoint
@@ -444,7 +444,7 @@ theorem vanishingIdeal_pointToPoint
     fun _ hp =>
     (PrimeSpectrum.mem_vanishingIdeal _ _).2 fun _ hI =>
       let ⟨x, hx⟩ := hI
-      hx.2 ▸ fun _ hx' => (Set.
+      hx.2 ▸ fun _ hx' => (Set.mem_singleton_iff.1 hx').symm ▸ hp x hx.1
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.mem_vanishingIdeal, Set.mem_singleton_iff, infer_instance, le_antisymm, mem_singleton_iff, mem_vanishingIdeal, vanishingIdeal
 -/
@@ -504,7 +504,12 @@ theorem eq_vanishingIdeal_singleton_of_isMaximal
   have : Algebra.IsAlgebraic k (MvPolynomial σ k ⧸ I) := by
     rw [Algebra.isAlgebraic_iff_isIntegral]; rw [← algebraMap_isIntegral_iff]
     exact MvPolynomial.comp_C_integral_of_surjective_of_isJacobsonRing
-      (Ideal.Quotient.mk I) Ide
+      (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
+  let φ : (MvPolynomial σ k ⧸ I) ->ₐ[k] K := IsAlgClosed.lift
+  let x : σ -> K := fun s => φ (Ideal.Quotient.mk I (X s))
+  have : aeval x = φ.comp (Quotient.mkₐ k I) := by ext; simp [x]
+  use x
+  simp [Ideal.ext_iff, this, Ideal.Quotient.eq_zero_iff_mem]
 
 中文:
 定理 eq_vanishingIdeal_singleton_of_isMaximal
@@ -514,7 +519,12 @@ theorem eq_vanishingIdeal_singleton_of_isMaximal
   have : Algebra.IsAlgebraic k (MvPolynomial σ k ⧸ I) := by
     rw [Algebra.isAlgebraic_iff_isIntegral]; rw [← algebraMap_isIntegral_iff]
     exact MvPolynomial.comp_C_integral_of_surjective_of_isJacobsonRing
-      (Ideal.Quotient.mk I) Ide
+      (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
+  let φ : (MvPolynomial σ k ⧸ I) ->ₐ[k] K := IsAlgClosed.lift
+  let x : σ -> K := fun s => φ (Ideal.Quotient.mk I (X s))
+  have : aeval x = φ.comp (Quotient.mkₐ k I) := by ext; simp [x]
+  use x
+  simp [Ideal.ext_iff, this, Ideal.Quotient.eq_zero_iff_mem]
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.isAlgebraic_iff_isIntegral, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsAlgClosed, IsAlgClosed.lift, IsAlgebraic, MvPolynomial, MvPolynomial.comp_C_integral_of_surjective_of_isJacobsonRing, Quotient, Quotient.field, Quotient.mk, algebraMap_isIntegral_iff, comp_C_integral_of_surjective_of_isJacobsonRing, isAlgebraic_iff_isIntegral, mk_surjective
 -/
@@ -568,7 +578,10 @@ theorem vanishingIdeal_zeroLocus_eq_radical
   rintro J ⟨hJI, hJ⟩
   obtain ⟨x, hx⟩ := eq_vanishingIdeal_singleton_of_isMaximal K hJ
   refine hx.symm ▸ vanishingIdeal_anti_mono fun y hy p hp => ?_
-  rw [← mem_vanishingIdeal_singleton_
+  rw [← mem_vanishingIdeal_singleton_iff]; rw [Set.mem_singleton_iff.1 hy]; rw [← hx]
+  exact hJI hp
+
+@[simp high] -- This needs to fire before `vanishingIdeal_zeroLocus_eq_radical`
 
 中文:
 定理 vanishingIdeal_zeroLocus_eq_radical
@@ -580,7 +593,10 @@ theorem vanishingIdeal_zeroLocus_eq_radical
   rintro J ⟨hJI, hJ⟩
   obtain ⟨x, hx⟩ := eq_vanishingIdeal_singleton_of_isMaximal K hJ
   refine hx.symm ▸ vanishingIdeal_anti_mono fun y hy p hp => ?_
-  rw [← mem_vanishingIdeal_singleton_
+  rw [← mem_vanishingIdeal_singleton_iff]; rw [Set.mem_singleton_iff.1 hy]; rw [← hx]
+  exact hJI hp
+
+@[simp high] -- This needs to fire before `vanishingIdeal_zeroLocus_eq_radical`
 
 Depends on / 依赖: I.radical_eq_jacobson, Set.mem_singleton_iff, eq_vanishingIdeal_singleton_of_isMaximal, hx.symm, le_antisymm, le_sInf, mem_singleton_iff, mem_vanishingIdeal_singleton_iff, radical_eq_jacobson, radical_le_vanishingIdeal_zeroLocus, vanishingIdeal_anti_mono
 -/

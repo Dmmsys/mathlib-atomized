@@ -186,7 +186,7 @@ theorem fourierIntegral_comp_add_right
   conv in L _ => rw [← add_sub_cancel_right v v₀]
   rw [integral_add_right_eq_self fun v : V => (e (-L (v - v₀) w) : Complex) • f v]; rw [← integral_smul]
   congr 1 with v
-  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← Ci
+  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← Circle.coe_mul]; rw [← e.map_add_eq_mul]; rw [← LinearMap.neg_apply]; rw [← sub_eq_add_neg]; rw [← LinearMap.sub_apply]; rw [map_sub]; rw [neg_sub]
 
 中文:
 定理 fourier整数egral_comp_add_right
@@ -197,7 +197,7 @@ theorem fourierIntegral_comp_add_right
   conv in L _ => rw [← add_sub_cancel_right v v₀]
   rw [integral_add_right_eq_self fun v : V => (e (-L (v - v₀) w) : Complex) • f v]; rw [← integral_smul]
   congr 1 with v
-  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← Ci
+  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← Circle.coe_mul]; rw [← e.map_add_eq_mul]; rw [← LinearMap.neg_apply]; rw [← sub_eq_add_neg]; rw [← LinearMap.sub_apply]; rw [map_sub]; rw [neg_sub]
 
 Depends on / 依赖: Circle, Circle.coe_mul, Circle.smul_def, Function, Function.comp_apply, LinearMap, LinearMap.neg_apply, LinearMap.sub_apply, add_sub_cancel_right, coe_mul, comp_apply, e.map_add_eq_mul, fourierIntegral, integral_add_right_eq_self, integral_smul, map_add_eq_mul, map_sub, neg_apply, neg_sub, smul_assoc
 -/
@@ -239,7 +239,14 @@ theorem fourierIntegral_convergent_iff
   have aux {g : V -> E} (hg : Integrable g μ) (x : W) :
       Integrable (fun v : V => e (-L v x) • g v) μ := by
     have c : Continuous fun v => e (-L v x) := he.comp (hL.comp (.prodMk_left _)).neg
-    simp_rw [← integrable_norm_iff (c.aestronglyMeasurable.fu
+    simp_rw [← integrable_norm_iff (c.aestronglyMeasurable.fun_smul hg.1), Circle.norm_smul]
+    exact hg.norm
+  -- then use it for both directions
+  refine ⟨fun hf => ?_, fun hf => aux hf w⟩
+  have := aux hf (-w)
+  simp_rw [← mul_smul (e _) (e _) (f _), ← e.map_add_eq_mul, map_neg, neg_add_cancel,
+    e.map_zero_eq_one, one_smul] at this -- the `(e _)` speeds up elaboration considerably
+  exact this
 
 中文:
 定理 fourier整数egral_convergent_iff
@@ -249,7 +256,14 @@ theorem fourierIntegral_convergent_iff
   have aux {g : V -> E} (hg : Integrable g μ) (x : W) :
       Integrable (fun v : V => e (-L v x) • g v) μ := by
     have c : Continuous fun v => e (-L v x) := he.comp (hL.comp (.prodMk_left _)).neg
-    simp_rw [← integrable_norm_iff (c.aestronglyMeasurable.fu
+    simp_rw [← integrable_norm_iff (c.aestronglyMeasurable.fun_smul hg.1), Circle.norm_smul]
+    exact hg.norm
+  -- then use it for both directions
+  refine ⟨fun hf => ?_, fun hf => aux hf w⟩
+  have := aux hf (-w)
+  simp_rw [← mul_smul (e _) (e _) (f _), ← e.map_add_eq_mul, map_neg, neg_add_cancel,
+    e.map_zero_eq_one, one_smul] at this -- the `(e _)` speeds up elaboration considerably
+  exact this
 -/
 theorem fourierIntegral_convergent_iff (he : Continuous e)
     (hL : Continuous fun p : V × W => L p.1 p.2) {f : V -> E} (w : W) :
@@ -363,7 +377,19 @@ theorem integral_fourierIntegral_swap
     (hg.norm.mul_prod hf.norm).const_mul _
   apply this.mono
   · change AEStronglyMeasurable (fun p : W × V => (M (g p.1) (e (-(L p.2) p.1) • f p.2))) _
-    have A : AEStronglyMeasurable
+    have A : AEStronglyMeasurable (fun (p : W × V) => e (-L p.2 p.1) • f p.2) (ν.prod μ) := by
+      refine (Continuous.aestronglyMeasurable ?_).fun_smul hf.1.comp_snd
+      exact he.comp (hL.comp continuous_swap).neg
+    have A' : AEStronglyMeasurable (fun p => (g p.1, e (-(L p.2) p.1) • f p.2) : W × V -> F × E)
+      (Measure.prod ν μ) := hg.1.comp_fst.prodMk A
+    have hM : Continuous (fun q => M q.1 q.2 : F × E -> G) :=
+      -- There is no `Continuous.clm_apply` for semilinear continuous maps
+      (M.flip.cont.comp continuous_snd).clm_apply continuous_fst
+    apply hM.comp_aestronglyMeasurable A' -- `exact` works, but `apply` is 10x faster!
+  · filter_upwards with ⟨ξ, x⟩
+    simp only [Function.uncurry_apply_pair, norm_mul, norm_norm, ge_iff_le, ← mul_assoc]
+    convert! M.le_opNorm₂ (g ξ) (e (-L x ξ) • f x) using 2
+    simp
 
 中文:
 定理 integral_fourier整数egral_swap
@@ -373,7 +399,19 @@ theorem integral_fourierIntegral_swap
     (hg.norm.mul_prod hf.norm).const_mul _
   apply this.mono
   · change AEStronglyMeasurable (fun p : W × V => (M (g p.1) (e (-(L p.2) p.1) • f p.2))) _
-    have A : AEStronglyMeasurable
+    have A : AEStronglyMeasurable (fun (p : W × V) => e (-L p.2 p.1) • f p.2) (ν.prod μ) := by
+      refine (Continuous.aestronglyMeasurable ?_).fun_smul hf.1.comp_snd
+      exact he.comp (hL.comp continuous_swap).neg
+    have A' : AEStronglyMeasurable (fun p => (g p.1, e (-(L p.2) p.1) • f p.2) : W × V -> F × E)
+      (Measure.prod ν μ) := hg.1.comp_fst.prodMk A
+    have hM : Continuous (fun q => M q.1 q.2 : F × E -> G) :=
+      -- There is no `Continuous.clm_apply` for semilinear continuous maps
+      (M.flip.cont.comp continuous_snd).clm_apply continuous_fst
+    apply hM.comp_aestronglyMeasurable A' -- `exact` works, but `apply` is 10x faster!
+  · filter_upwards with ⟨ξ, x⟩
+    simp only [Function.uncurry_apply_pair, norm_mul, norm_norm, ge_iff_le, ← mul_assoc]
+    convert! M.le_opNorm₂ (g ξ) (e (-L x ξ) • f x) using 2
+    simp
 
 Depends on / 依赖: AEStronglyMeasurable, Continuous, Continuous.aestronglyMeasurable, Integrable, aestronglyMeasurable, comp_snd, const_mul, continuous_swap, fun_smul, hL.comp, he.comp, hf.norm, hg.norm.mul_prod, integral_integral_swap, mul_prod, this.mono
 -/
@@ -416,7 +454,17 @@ theorem integral_bilin_fourierIntegral_eq_flip
     = ∫ ξ, (∫ x, M.flip (g ξ) (e (-L x ξ) • f x) ∂μ) ∂ν := by
     congr with ξ
     apply (ContinuousLinearMap.integral_comp_comm _ _).symm
-    exact (fourierIntegral_convergent_if
+    exact (fourierIntegral_convergent_iff he hL _).2 hf
+  _ = ∫ x, (∫ ξ, M.flip (g ξ) (e (-L x ξ) • f x) ∂ν) ∂μ :=
+    integral_fourierIntegral_swap M.flip he hL hf hg
+  _ = ∫ x, (∫ ξ, M (f x) (e (-L.flip ξ x) • g ξ) ∂ν) ∂μ := by
+    simp only [ContinuousLinearMap.flip_apply, ContinuousLinearMap.map_smul_of_tower,
+      smul_apply, LinearMap.flip_apply]
+  _ = ∫ x, M (f x) (∫ ξ, e (-L.flip ξ x) • g ξ ∂ν) ∂μ := by
+    congr with x
+    apply ContinuousLinearMap.integral_comp_comm
+    apply (fourierIntegral_convergent_iff he _ _).2 hg
+    exact hL.comp continuous_swap
 
 中文:
 定理 integral_bilin_fourier整数egral_eq_flip
@@ -427,7 +475,17 @@ theorem integral_bilin_fourierIntegral_eq_flip
     = ∫ ξ, (∫ x, M.flip (g ξ) (e (-L x ξ) • f x) ∂μ) ∂ν := by
     congr with ξ
     apply (ContinuousLinearMap.integral_comp_comm _ _).symm
-    exact (fourierIntegral_convergent_if
+    exact (fourierIntegral_convergent_iff he hL _).2 hf
+  _ = ∫ x, (∫ ξ, M.flip (g ξ) (e (-L x ξ) • f x) ∂ν) ∂μ :=
+    integral_fourierIntegral_swap M.flip he hL hf hg
+  _ = ∫ x, (∫ ξ, M (f x) (e (-L.flip ξ x) • g ξ) ∂ν) ∂μ := by
+    simp only [ContinuousLinearMap.flip_apply, ContinuousLinearMap.map_smul_of_tower,
+      smul_apply, LinearMap.flip_apply]
+  _ = ∫ x, M (f x) (∫ ξ, e (-L.flip ξ x) • g ξ ∂ν) ∂μ := by
+    congr with x
+    apply ContinuousLinearMap.integral_comp_comm
+    apply (fourierIntegral_convergent_iff he _ _).2 hg
+    exact hL.comp continuous_swap
 
 Depends on / 依赖: CompleteSpace, ContinuousLinearMap, ContinuousLinearMap.flip_appl, ContinuousLinearMap.integral_comp_comm, L.flip, M.flip, flip_appl, fourierIntegral_convergent_iff, integral, integral_comp_comm, integral_fourierIntegral_swap
 -/
@@ -486,7 +544,25 @@ theorem integral_sesq_fourierIntegral_eq_neg_flip
     = ∫ ξ, (∫ x, M.flip (g ξ) (e (-L x ξ) • f x) ∂μ) ∂ν := by
     congr with ξ
     apply (ContinuousLinearMap.integral_comp_commSL RCLike.conj_smul _ _).symm
-    exact (fourierInt
+    exact (fourierIntegral_convergent_iff he hL _).2 hf
+  _ = ∫ x, (∫ ξ, M.flip (g ξ) (e (-L x ξ) • f x) ∂ν) ∂μ :=
+    integral_fourierIntegral_swap M.flip he hL hf hg
+  _ = ∫ x, (∫ ξ, M (f x) (e (L.flip ξ x) • g ξ) ∂ν) ∂μ := by
+    congr with x
+    congr with ξ
+    rw [← smul_one_smul Complex _ (f x)]; rw [← smul_one_smul Complex _ (g ξ)]
+    simp only [map_smulₛₗ, ContinuousLinearMap.flip_apply, LinearMap.flip_apply, RingHom.id_apply,
+      Circle.smul_def, smul_eq_mul, mul_one, ← Circle.coe_inv_eq_conj, AddChar.map_neg_eq_inv,
+      inv_inv]
+  _ = ∫ x, (∫ ξ, M (f x) (e (-(-L.flip ξ) x) • g ξ) ∂ν) ∂μ := by
+    simp only [LinearMap.flip_apply, ContinuousLinearMap.map_smul_of_tower, LinearMap.neg_apply,
+      neg_neg]
+  _ = ∫ x, M (f x) (∫ ξ, e (-(-L.flip ξ) x) • g ξ ∂ν) ∂μ := by
+    congr with x
+    apply ContinuousLinearMap.integral_comp_comm
+    have hLflip : Continuous fun (p : W × V) => (-L.flip p.1) p.2 :=
+      (continuous_neg.comp hL).comp continuous_swap
+    exact (fourierIntegral_convergent_iff (L := -L.flip) he hLflip x).2 hg
 
 中文:
 定理 integral_sesq_fourier整数egral_eq_neg_flip
@@ -497,7 +573,25 @@ theorem integral_sesq_fourierIntegral_eq_neg_flip
     = ∫ ξ, (∫ x, M.flip (g ξ) (e (-L x ξ) • f x) ∂μ) ∂ν := by
     congr with ξ
     apply (ContinuousLinearMap.integral_comp_commSL RCLike.conj_smul _ _).symm
-    exact (fourierInt
+    exact (fourierIntegral_convergent_iff he hL _).2 hf
+  _ = ∫ x, (∫ ξ, M.flip (g ξ) (e (-L x ξ) • f x) ∂ν) ∂μ :=
+    integral_fourierIntegral_swap M.flip he hL hf hg
+  _ = ∫ x, (∫ ξ, M (f x) (e (L.flip ξ x) • g ξ) ∂ν) ∂μ := by
+    congr with x
+    congr with ξ
+    rw [← smul_one_smul Complex _ (f x)]; rw [← smul_one_smul Complex _ (g ξ)]
+    simp only [map_smulₛₗ, ContinuousLinearMap.flip_apply, LinearMap.flip_apply, RingHom.id_apply,
+      Circle.smul_def, smul_eq_mul, mul_one, ← Circle.coe_inv_eq_conj, AddChar.map_neg_eq_inv,
+      inv_inv]
+  _ = ∫ x, (∫ ξ, M (f x) (e (-(-L.flip ξ) x) • g ξ) ∂ν) ∂μ := by
+    simp only [LinearMap.flip_apply, ContinuousLinearMap.map_smul_of_tower, LinearMap.neg_apply,
+      neg_neg]
+  _ = ∫ x, M (f x) (∫ ξ, e (-(-L.flip ξ) x) • g ξ ∂ν) ∂μ := by
+    congr with x
+    apply ContinuousLinearMap.integral_comp_comm
+    have hLflip : Continuous fun (p : W × V) => (-L.flip p.1) p.2 :=
+      (continuous_neg.comp hL).comp continuous_swap
+    exact (fourierIntegral_convergent_iff (L := -L.flip) he hLflip x).2 hg
 
 Depends on / 依赖: CompleteSpace, ContinuousLinearMap, ContinuousLinearMap.integral_comp_commSL, L.flip, M.flip, RCLike, RCLike.conj_smul, conj_smul, fourierIntegral_convergent_iff, integral, integral_comp_commSL, integral_fourierIntegral_swap
 -/
@@ -1243,7 +1337,10 @@ definition Lp.fourierTransform
   ‖f‖ fun x => by
     rw [Real.fourier_eq]
     apply (norm_integral_le_integral_norm _).trans
-    simp_rw [C
+    simp_rw [Circle.norm_smul]
+    exact (L1.norm_eq_integral_norm f).symm.le
+
+@[norm_cast]
 
 中文:
 定义 Lp.fourierTransform
@@ -1254,7 +1351,10 @@ definition Lp.fourierTransform
   ‖f‖ fun x => by
     rw [Real.fourier_eq]
     apply (norm_integral_le_integral_norm _).trans
-    simp_rw [C
+    simp_rw [Circle.norm_smul]
+    exact (L1.norm_eq_integral_norm f).symm.le
+
+@[norm_cast]
 -/
 def Lp.fourierTransform (f : Lp (α := V) E 1) : V ->ᵇ E :=
   BoundedContinuousFunction.ofNormedAddCommGroup (𝓕 (f : V -> E))
@@ -1351,7 +1451,30 @@ definition Lp.fourierTransformCLM
           Real.fourier_eq]
         rw [← integral_add]
         · apply integral_congr_ae
-          filter_up
+          filter_upwards [Lp.coeFn_add f g] with x h₁
+          rw [h₁]
+          simp
+        · rw [Real.fourierIntegral_convergent_iff]
+          exact L1.integrable_coeFn f
+        · rw [Real.fourierIntegral_convergent_iff]
+          exact L1.integrable_coeFn g
+      map_smul' c f := by
+        ext x
+        simp only [Lp.fourierTransform_apply, BoundedContinuousFunction.coe_smul, Real.fourier_eq]
+        rw [← integral_smul]
+        apply integral_congr_ae
+        filter_upwards [Lp.coeFn_smul c f] with x h
+        rw [h]; rw [smul_comm]
+        simp }
+    1 fun f => by
+      rw [one_mul]; rw [BoundedContinuousFunction.norm_le (by positivity)]
+      intro x
+      rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]; rw [Lp.fourierTransform_apply]; rw [Real.fourier_eq]
+      apply (norm_integral_le_integral_norm _).trans
+      simp_rw [Circle.norm_smul]
+      exact (L1.norm_eq_integral_norm f).symm.le
+
+@[simp]
 
 中文:
 定义 Lp.fourierTransformCLM
@@ -1364,7 +1487,30 @@ definition Lp.fourierTransformCLM
           Real.fourier_eq]
         rw [← integral_add]
         · apply integral_congr_ae
-          filter_up
+          filter_upwards [Lp.coeFn_add f g] with x h₁
+          rw [h₁]
+          simp
+        · rw [Real.fourierIntegral_convergent_iff]
+          exact L1.integrable_coeFn f
+        · rw [Real.fourierIntegral_convergent_iff]
+          exact L1.integrable_coeFn g
+      map_smul' c f := by
+        ext x
+        simp only [Lp.fourierTransform_apply, BoundedContinuousFunction.coe_smul, Real.fourier_eq]
+        rw [← integral_smul]
+        apply integral_congr_ae
+        filter_upwards [Lp.coeFn_smul c f] with x h
+        rw [h]; rw [smul_comm]
+        simp }
+    1 fun f => by
+      rw [one_mul]; rw [BoundedContinuousFunction.norm_le (by positivity)]
+      intro x
+      rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]; rw [Lp.fourierTransform_apply]; rw [Real.fourier_eq]
+      apply (norm_integral_le_integral_norm _).trans
+      simp_rw [Circle.norm_smul]
+      exact (L1.norm_eq_integral_norm f).symm.le
+
+@[simp]
 -/
 def Lp.fourierTransformCLM : Lp (α := V) E 1 ->L[Complex] V ->ᵇ E :=
   LinearMap.mkContinuous

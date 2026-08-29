@@ -89,7 +89,14 @@ theorem IsClosed.smul_left_of_isCompact
     right_inv := fun _ => by simp }
   have : s • t = (snd ∘ Φ) '' snd ⁻¹' t :=
     subset_antisymm
-      (smul_subset_iff.mpr fun g hg 
+      (smul_subset_iff.mpr fun g hg x hx => mem_image_of_mem (snd ∘ Φ) (x := ⟨⟨g, hg⟩, x⟩) hx)
+      (image_subset_iff.mpr fun ⟨⟨g, hg⟩, x⟩ hx => smul_mem_smul hg hx)
+  rw [this]
+  have : CompactSpace s := isCompact_iff_compactSpace.mp hs
+  exact (isProperMap_snd_of_compactSpace.comp Φ.isProperMap).isClosedMap _
+    (ht.preimage continuous_snd)
+
+@[to_additive]
 
 中文:
 定理 是闭集.smul_left_of_isCompact
@@ -102,7 +109,14 @@ theorem IsClosed.smul_left_of_isCompact
     right_inv := fun _ => by simp }
   have : s • t = (snd ∘ Φ) '' snd ⁻¹' t :=
     subset_antisymm
-      (smul_subset_iff.mpr fun g hg 
+      (smul_subset_iff.mpr fun g hg x hx => mem_image_of_mem (snd ∘ Φ) (x := ⟨⟨g, hg⟩, x⟩) hx)
+      (image_subset_iff.mpr fun ⟨⟨g, hg⟩, x⟩ hx => smul_mem_smul hg hx)
+  rw [this]
+  have : CompactSpace s := isCompact_iff_compactSpace.mp hs
+  exact (isProperMap_snd_of_compactSpace.comp Φ.isProperMap).isClosedMap _
+    (ht.preimage continuous_snd)
+
+@[to_additive]
 
 Depends on / 依赖: CompactSpace, image_subset_iff, image_subset_iff.mpr, invFun, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isProperMap_snd_of_compactSp, left_inv, mem_image_of_mem, right_inv, smul_mem_smul, smul_subset_iff, smul_subset_iff.mpr, subset_antisymm
 -/
@@ -134,7 +148,8 @@ theorem MulAction.isClosedMap_quotient
   intro t ht
   rw [← isQuotientMap_quotient_mk'.isClosed_preimage]; rw [MulAction.quotient_preimage_image_eq_union_mul]
   convert! ht.smul_left_of_isCompact (isCompact_univ (X := α))
-  rw [← biUnion_univ]; rw [← iUnion_
+  rw [← biUnion_univ]; rw [← iUnion_smul_left_image]
+  simp only [image_smul]
 
 中文:
 定理 乘法作用.isClosedMap_quotient
@@ -144,7 +159,8 @@ theorem MulAction.isClosedMap_quotient
   intro t ht
   rw [← isQuotientMap_quotient_mk'.isClosed_preimage]; rw [MulAction.quotient_preimage_image_eq_union_mul]
   convert! ht.smul_left_of_isCompact (isCompact_univ (X := α))
-  rw [← biUnion_univ]; rw [← iUnion_
+  rw [← biUnion_univ]; rw [← iUnion_smul_left_image]
+  simp only [image_smul]
 
 Depends on / 依赖: orbitRel
 -/
@@ -694,7 +710,10 @@ theorem IsOpen.mul_closure
   refine (mul_subset_iff.2 fun a ha b hb => ?_).antisymm (mul_subset_mul_left subset_closure)
   rw [mem_closure_iff] at hb
   have hbU : b in s⁻¹ * {a * b} := ⟨a⁻¹, Set.inv_mem_inv.2 ha, a * b, rfl, inv_mul_cancel_left _ _⟩
-  obtain ⟨_, ⟨c, hc, d, rfl : d = _, rfl⟩, hcs⟩ := hb _ hs.inv.mul_right h
+  obtain ⟨_, ⟨c, hc, d, rfl : d = _, rfl⟩, hcs⟩ := hb _ hs.inv.mul_right hbU
+  exact ⟨c⁻¹, hc, _, hcs, inv_mul_cancel_left _ _⟩
+
+@[to_additive]
 
 中文:
 定理 是开集.mul_closure
@@ -704,7 +723,10 @@ theorem IsOpen.mul_closure
   refine (mul_subset_iff.2 fun a ha b hb => ?_).antisymm (mul_subset_mul_left subset_closure)
   rw [mem_closure_iff] at hb
   have hbU : b in s⁻¹ * {a * b} := ⟨a⁻¹, Set.inv_mem_inv.2 ha, a * b, rfl, inv_mul_cancel_left _ _⟩
-  obtain ⟨_, ⟨c, hc, d, rfl : d = _, rfl⟩, hcs⟩ := hb _ hs.inv.mul_right h
+  obtain ⟨_, ⟨c, hc, d, rfl : d = _, rfl⟩, hcs⟩ := hb _ hs.inv.mul_right hbU
+  exact ⟨c⁻¹, hc, _, hcs, inv_mul_cancel_left _ _⟩
+
+@[to_additive]
 
 Depends on / 依赖: Set.inv_mem_inv, antisymm, hs.inv.mul_right, inv_mem_inv, inv_mul_cancel_left, mem_closure_iff, mul_right, mul_subset_iff, mul_subset_mul_left, subset_closure
 -/
@@ -893,7 +915,12 @@ lemma IsCompact.mul_closure_one_eq_closure
       smul_subset_smul_right subset_closure
     _ subseteq closure (K * ({1} : Set G)) := smul_set_closure_subset _ _
     _ = closure K := by simp
-  · have : IsClosed (K * (closure {
+  · have : IsClosed (K * (closure {1} : Set G)) :=
+      IsClosed.smul_left_of_isCompact isClosed_closure hK
+    rw [IsClosed.closure_subset_iff this]
+    exact subset_mul_closure_one K
+
+@[to_additive]
 
 中文:
 引理 是紧集.mul_closure_one_eq_closure
@@ -905,7 +932,12 @@ lemma IsCompact.mul_closure_one_eq_closure
       smul_subset_smul_right subset_closure
     _ subseteq closure (K * ({1} : Set G)) := smul_set_closure_subset _ _
     _ = closure K := by simp
-  · have : IsClosed (K * (closure {
+  · have : IsClosed (K * (closure {1} : Set G)) :=
+      IsClosed.smul_left_of_isCompact isClosed_closure hK
+    rw [IsClosed.closure_subset_iff this]
+    exact subset_mul_closure_one K
+
+@[to_additive]
 
 Depends on / 依赖: IsClosed, IsClosed.closure_subset_iff, IsClosed.smul_left_of_isCompact, Subset, Subset.antisymm, antisymm, closure, closure_subset_iff, isClosed_closure, smul_left_of_isCompact, smul_set_closure_subset, smul_subset_smul_right, subset_closure, subset_mul_closure_one, subseteq
 -/
@@ -974,7 +1006,11 @@ lemma compl_mul_closure_one_eq
   have : x in t * (closure {1} : Set G) := by
     rw [← Subgroup.coe_topologicalClosure_bot G] at hg ⊢
     simp only [mem_compl_iff, not_not] at H
-    exact ⟨x * g, H, g⁻¹, Subgroup.inv_mem _ hg, 
+    exact ⟨x * g, H, g⁻¹, Subgroup.inv_mem _ hg, by simp⟩
+  rw [ht] at this
+  exact hx this
+
+@[to_additive]
 
 中文:
 引理 compl_mul_closure_one_eq
@@ -986,7 +1022,11 @@ lemma compl_mul_closure_one_eq
   have : x in t * (closure {1} : Set G) := by
     rw [← Subgroup.coe_topologicalClosure_bot G] at hg ⊢
     simp only [mem_compl_iff, not_not] at H
-    exact ⟨x * g, H, g⁻¹, Subgroup.inv_mem _ hg, 
+    exact ⟨x * g, H, g⁻¹, Subgroup.inv_mem _ hg, by simp⟩
+  rw [ht] at this
+  exact hx this
+
+@[to_additive]
 
 Depends on / 依赖: Subgroup, Subgroup.coe_topologicalClosure_bot, Subgroup.inv_mem, Subset, Subset.antisymm, antisymm, closure, coe_topologicalClosure_bot, inv_mem, mem_compl_iff, not_not, subset_mul_closure_one
 -/
@@ -1212,7 +1252,12 @@ theorem exists_closed_nhds_one_inv_eq_mul_subset
   rcases exists_open_nhds_one_mul_subset hU with ⟨V, V_open, V_mem, hV⟩
   rcases exists_mem_nhds_isClosed_subset (V_open.mem_nhds V_mem) with ⟨W, W_mem, W_closed, hW⟩
   refine ⟨W inter W⁻¹, Filter.inter_mem W_mem (inv_mem_nhds_one G W_mem), W_closed.inter W_closed.inv,
-    by simp [inter_comm], ?
+    by simp [inter_comm], ?_⟩
+  calc
+  W inter W⁻¹ * (W inter W⁻¹)
+    subseteq W * W := mul_subset_mul inter_subset_left inter_subset_left
+  _ subseteq V * V := mul_subset_mul hW hW
+  _ subseteq U := hV
 
 中文:
 定理 存在_closed_nhds_one_inv_eq_mul_subset
@@ -1221,7 +1266,12 @@ theorem exists_closed_nhds_one_inv_eq_mul_subset
   rcases exists_open_nhds_one_mul_subset hU with ⟨V, V_open, V_mem, hV⟩
   rcases exists_mem_nhds_isClosed_subset (V_open.mem_nhds V_mem) with ⟨W, W_mem, W_closed, hW⟩
   refine ⟨W inter W⁻¹, Filter.inter_mem W_mem (inv_mem_nhds_one G W_mem), W_closed.inter W_closed.inv,
-    by simp [inter_comm], ?
+    by simp [inter_comm], ?_⟩
+  calc
+  W inter W⁻¹ * (W inter W⁻¹)
+    subseteq W * W := mul_subset_mul inter_subset_left inter_subset_left
+  _ subseteq V * V := mul_subset_mul hW hW
+  _ subseteq U := hV
 
 Depends on / 依赖: Filter, Filter.inter_mem, V_mem, V_open, V_open.mem_nhds, W_closed, W_closed.inter, W_closed.inv, W_mem, exists_mem_nhds_isClosed_subset, exists_open_nhds_one_mul_subset, inter_comm, inter_mem, inter_subset_left, inv_mem_nhds_one, mem_nhds, mul_subset_mul, subseteq
 -/
@@ -1249,7 +1299,7 @@ lemma IsDiscrete.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
   rintro ⟨_, ⟨x, hx, rfl⟩, hgx⟩
   refine hV.2.subset ⟨hUV ?_, hgS⟩
   rw [← hUinv] at hx
-  exact ⟨_, hg
+  exact ⟨_, hgx, _, hx, by simp⟩
 
 中文:
 引理 是离散.存在_nhds_eq_one_of_image_mulLeft_inter_nonempty
@@ -1260,7 +1310,7 @@ lemma IsDiscrete.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
   rintro ⟨_, ⟨x, hx, rfl⟩, hgx⟩
   refine hV.2.subset ⟨hUV ?_, hgS⟩
   rw [← hUinv] at hx
-  exact ⟨_, hg
+  exact ⟨_, hgx, _, hx, by simp⟩
 -/
 @[to_additive] lemma IsDiscrete.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
     (S : Subgroup G) (hS : IsDiscrete (S : Set G)) :

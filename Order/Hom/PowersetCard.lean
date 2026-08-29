@@ -167,7 +167,8 @@ definition permOfDisjoint
   body: letI e₁ : Fin (m + n) ≃ Fin m oplus Fin n := finSumFinEquiv.symm
   letI e₂ : Fin m oplus Fin n ≃ s.val oplus t.val := (orderIsoOfFin s).sumCongr (orderIsoOfFin t)
   letI e₃ : s.val oplus t.val ≃ disjUnion h := Equiv.Finset.disjUnionEquiv _ _ h
-  letI e₄ : disjUnion h ≃o Fin (m + n) := (orderIsoOfFin
+  letI e₄ : disjUnion h ≃o Fin (m + n) := (orderIsoOfFin (disjUnion h)).symm
+e₁.trans e₂.trans e₃.trans e₄
 
 中文:
 定义 permOfDisjoint
@@ -175,7 +176,8 @@ definition permOfDisjoint
   定义体: letI e₁ : Fin (m + n) ≃ Fin m oplus Fin n := finSumFinEquiv.symm
   letI e₂ : Fin m oplus Fin n ≃ s.val oplus t.val := (orderIsoOfFin s).sumCongr (orderIsoOfFin t)
   letI e₃ : s.val oplus t.val ≃ disjUnion h := Equiv.Finset.disjUnionEquiv _ _ h
-  letI e₄ : disjUnion h ≃o Fin (m + n) := (orderIsoOfFin
+  letI e₄ : disjUnion h ≃o Fin (m + n) := (orderIsoOfFin (disjUnion h)).symm
+e₁.trans e₂.trans e₃.trans e₄
 
 Depends on / 依赖: Equiv.Finset.disjUnionEquiv, Finset, disjUnion, disjUnionEquiv, finSumFinEquiv, finSumFinEquiv.symm, orderIsoOfFin, s.val, sumCongr, t.val
 -/

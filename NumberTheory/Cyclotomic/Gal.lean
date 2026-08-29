@@ -109,7 +109,31 @@ definition autEquivPow
       (hζ.powerBasis K).equivOfMinpoly ((hμ t).powerBasis K)
         (by
           have := IsCyclotomicExtension.neZero' n K L
-          simp only [I
+          simp only [IsPrimitiveRoot.powerBasis_gen]
+          have hr :=
+            IsPrimitiveRoot.minpoly_eq_cyclotomic_of_irreducible
+              ((zeta_spec n K L).pow_of_coprime _ (ZMod.val_coe_unit_coprime t)) h
+          exact ((zeta_spec n K L).minpoly_eq_cyclotomic_of_irreducible h).symm.trans hr)
+    left_inv := fun f => by
+      simp only [MonoidHom.toFun_eq_coe]
+      apply AlgEquiv.coe_toAlgHom_injective
+      apply (hζ.powerBasis K).algHom_ext
+      simp only [AlgEquiv.coe_toAlgHom]
+      rw [PowerBasis.equivOfMinpoly_gen]
+      simp only [IsPrimitiveRoot.powerBasis_gen, IsPrimitiveRoot.autToPow_spec]
+    right_inv := fun x => by
+      simp only [MonoidHom.toFun_eq_coe]
+      generalize_proofs _ h
+      have key := hζ.autToPow_spec K ((hζ.powerBasis K).equivOfMinpoly ((hμ x).powerBasis K) h)
+      have := (hζ.powerBasis K).equivOfMinpoly_gen ((hμ x).powerBasis K) h
+      rw [hζ.powerBasis_gen K] at this
+      rw [this]; rw [IsPrimitiveRoot.powerBasis_gen] at key
+      nth_rw 1 5 [← hζ.val_toRootsOfUnity_coe] at key
+      simp only [← rootsOfUnity.coe_pow] at key
+      replace key := rootsOfUnity.coe_injective key
+      rw [pow_eq_pow_iff_modEq]; rw [← Subgroup.orderOf_coe]; rw [← orderOf_units]; rw [hζ.val_toRootsOfUnity_coe]; rw [← (zeta_spec n K L).eq_orderOf]; rw [← ZMod.natCast_eq_natCast_iff] at key
+      simp only [ZMod.natCast_val, ZMod.cast_id', id] at key
+      exact Units.ext key }
 
 中文:
 定义 autEquivPow
@@ -121,7 +145,31 @@ definition autEquivPow
       (hζ.powerBasis K).equivOfMinpoly ((hμ t).powerBasis K)
         (by
           have := IsCyclotomicExtension.neZero' n K L
-          simp only [I
+          simp only [IsPrimitiveRoot.powerBasis_gen]
+          have hr :=
+            IsPrimitiveRoot.minpoly_eq_cyclotomic_of_irreducible
+              ((zeta_spec n K L).pow_of_coprime _ (ZMod.val_coe_unit_coprime t)) h
+          exact ((zeta_spec n K L).minpoly_eq_cyclotomic_of_irreducible h).symm.trans hr)
+    left_inv := fun f => by
+      simp only [MonoidHom.toFun_eq_coe]
+      apply AlgEquiv.coe_toAlgHom_injective
+      apply (hζ.powerBasis K).algHom_ext
+      simp only [AlgEquiv.coe_toAlgHom]
+      rw [PowerBasis.equivOfMinpoly_gen]
+      simp only [IsPrimitiveRoot.powerBasis_gen, IsPrimitiveRoot.autToPow_spec]
+    right_inv := fun x => by
+      simp only [MonoidHom.toFun_eq_coe]
+      generalize_proofs _ h
+      have key := hζ.autToPow_spec K ((hζ.powerBasis K).equivOfMinpoly ((hμ x).powerBasis K) h)
+      have := (hζ.powerBasis K).equivOfMinpoly_gen ((hμ x).powerBasis K) h
+      rw [hζ.powerBasis_gen K] at this
+      rw [this]; rw [IsPrimitiveRoot.powerBasis_gen] at key
+      nth_rw 1 5 [← hζ.val_toRootsOfUnity_coe] at key
+      simp only [← rootsOfUnity.coe_pow] at key
+      replace key := rootsOfUnity.coe_injective key
+      rw [pow_eq_pow_iff_modEq]; rw [← Subgroup.orderOf_coe]; rw [← orderOf_units]; rw [hζ.val_toRootsOfUnity_coe]; rw [← (zeta_spec n K L).eq_orderOf]; rw [← ZMod.natCast_eq_natCast_iff] at key
+      simp only [ZMod.natCast_val, ZMod.cast_id', id] at key
+      exact Units.ext key }
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.neZero, IsPrimitiveRoot, IsPrimitiveRoot.minpoly_eq_cyclotomic_of_irreducible, IsPrimitiveRoot.powerBasis_gen, ZMod.val_coe_unit_coprime, autToPow, equivOfMinpoly, invFun, minpoly_eq_cyclotomic_of_irreducible, neZero, pow_of_coprime, powerBasis, powerBasis_gen, symm.trans, val_coe_unit_coprime, zeta_spec
 -/

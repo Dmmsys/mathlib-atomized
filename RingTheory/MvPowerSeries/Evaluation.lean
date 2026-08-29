@@ -392,7 +392,34 @@ theorem _root_.MvPolynomial.toMvPowerSeries_uniformContinuous
   rw [ContinuousAt]; rw [map_zero]; rw [IsLinearTopology.hasBasis_ideal.tendsto_right_iff]
   intro I hI
   let n : σ -> Nat := fun s => sInf {n : Nat | (a s) ^ n.succ in I}
-  have hn_ne : forall s, Set.Nonempty {n : Nat | (a s) ^ n.succ in
+  have hn_ne : forall s, Set.Nonempty {n : Nat | (a s) ^ n.succ in I} := fun s => by
+.exists_forall_of_atTop with ⟨n, hn⟩ .eventually_mem hI rcases ha.hpow s
+    use n
+    simpa using hn n.succ n.le_succ
+  have hn : Set.Finite (n.support) := by
+    change n =ᶠ[cofinite] 0
+    filter_upwards [ha.tendsto_zero.eventually_mem hI] with s has
+    simpa [n, Pi.zero_apply, Nat.sInf_eq_zero, or_iff_left (hn_ne s).ne_empty] using has
+  let n₀ : σ ->₀ Nat := .ofSupportFinite n hn
+  let D := Iic n₀
+  have hD : Set.Finite D := finite_Iic _
+  have : forall d in D, forallᶠ (p : MvPolynomial σ R) in 𝓝 0, φ (p.coeff d) in I := fun d hd => by
+    have : Tendsto (φ ∘ coeff d ∘ toMvPowerSeries) (𝓝 0) (𝓝 0) :=
+.tendsto' 0 0 (map_zero _) .comp continuous_induced_dom hφ.comp (continuous_coeff R d)
+    filter_upwards [this.eventually_mem hI] with f hf
+    simpa using hf
+  rw [← hD.eventually_all] at this
+  filter_upwards [this] with p hp
+  rw [coe_eval₂Hom]; rw [SetLike.mem_coe]; rw [eval₂_eq]
+  apply Ideal.sum_mem
+  intro d _
+  by_cases hd : d in D
+  · exact Ideal.mul_mem_right _ _ (hp d hd)
+  · apply Ideal.mul_mem_left
+    simp only [mem_Iic, D, Finsupp.le_iff] at hd
+    push Not at hd
+    rcases hd with ⟨s, hs', hs⟩
+    exact I.prod_mem hs' (I.pow_mem_of_pow_mem (Nat.sInf_mem (hn_ne s)) hs)
 
 中文:
 定理 _root_.多元多项式.toMvPowerSeries_uniformContinuous
@@ -402,7 +429,34 @@ theorem _root_.MvPolynomial.toMvPowerSeries_uniformContinuous
   rw [ContinuousAt]; rw [map_zero]; rw [IsLinearTopology.hasBasis_ideal.tendsto_right_iff]
   intro I hI
   let n : σ -> Nat := fun s => sInf {n : Nat | (a s) ^ n.succ in I}
-  have hn_ne : forall s, Set.Nonempty {n : Nat | (a s) ^ n.succ in
+  have hn_ne : forall s, Set.Nonempty {n : Nat | (a s) ^ n.succ in I} := fun s => by
+.exists_forall_of_atTop with ⟨n, hn⟩ .eventually_mem hI rcases ha.hpow s
+    use n
+    simpa using hn n.succ n.le_succ
+  have hn : Set.Finite (n.support) := by
+    change n =ᶠ[cofinite] 0
+    filter_upwards [ha.tendsto_zero.eventually_mem hI] with s has
+    simpa [n, Pi.zero_apply, Nat.sInf_eq_zero, or_iff_left (hn_ne s).ne_empty] using has
+  let n₀ : σ ->₀ Nat := .ofSupportFinite n hn
+  let D := Iic n₀
+  have hD : Set.Finite D := finite_Iic _
+  have : forall d in D, forallᶠ (p : MvPolynomial σ R) in 𝓝 0, φ (p.coeff d) in I := fun d hd => by
+    have : Tendsto (φ ∘ coeff d ∘ toMvPowerSeries) (𝓝 0) (𝓝 0) :=
+.tendsto' 0 0 (map_zero _) .comp continuous_induced_dom hφ.comp (continuous_coeff R d)
+    filter_upwards [this.eventually_mem hI] with f hf
+    simpa using hf
+  rw [← hD.eventually_all] at this
+  filter_upwards [this] with p hp
+  rw [coe_eval₂Hom]; rw [SetLike.mem_coe]; rw [eval₂_eq]
+  apply Ideal.sum_mem
+  intro d _
+  by_cases hd : d in D
+  · exact Ideal.mul_mem_right _ _ (hp d hd)
+  · apply Ideal.mul_mem_left
+    simp only [mem_Iic, D, Finsupp.le_iff] at hd
+    push Not at hd
+    rcases hd with ⟨s, hs', hs⟩
+    exact I.prod_mem hs' (I.pow_mem_of_pow_mem (Nat.sInf_mem (hn_ne s)) hs)
 
 Depends on / 依赖: ContinuousAt, Finite, IsLinearTopology, IsLinearTopology.hasBasis_ideal.tendsto_right_iff, Nonempty, Set.Finite, Set.Nonempty, classical, cofinite, eventually_mem, exists_forall_of_atTop, filter_upwards, ha.hpow, hasBasis_ideal, hn_ne, le_succ, map_zero, n.le_succ, n.succ, n.support
 -/
@@ -798,7 +852,7 @@ theorem comp_eval₂
   · intro p
     simp only [Function.comp_apply, eval₂_coe]
     rw [← MvPolynomial.coe_eval₂Hom]; rw [← comp_apply]; rw [MvPolynomial.comp_eval₂Hom]; rw [MvPolynomial.coe_eval₂Hom]
-  · simp only [coe_comp, Con
+  · simp only [coe_comp, Continuous.comp hε hφ]
 
 中文:
 定理 comp_eval₂
@@ -809,7 +863,7 @@ theorem comp_eval₂
   · intro p
     simp only [Function.comp_apply, eval₂_coe]
     rw [← MvPolynomial.coe_eval₂Hom]; rw [← comp_apply]; rw [MvPolynomial.comp_eval₂Hom]; rw [MvPolynomial.coe_eval₂Hom]
-  · simp only [coe_comp, Con
+  · simp only [coe_comp, Continuous.comp hε hφ]
 
 Depends on / 依赖: Continuous, Continuous.comp, Function, Function.comp_apply, MvPolynomial, MvPolynomial.coe_eval, MvPolynomial.comp_eval, coe_comp, comp_apply, ha.map
 -/

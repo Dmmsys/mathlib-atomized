@@ -38,7 +38,21 @@ theorem generateFrom_prod_eq
       rw [← prod_univ]; rw [← h2t]; rw [prod_iUnion]
       apply MeasurableSet.iUnion
       intro n
-      apply measurableSet_genera
+      apply measurableSet_generateFrom
+      exact ⟨s, hs, t n, h1t n, rfl⟩
+    · rcases hC with ⟨t, h1t, h2t⟩
+      rw [← univ_prod]; rw [← h2t]; rw [iUnion_prod_const]
+      apply MeasurableSet.iUnion
+      rintro n
+      apply measurableSet_generateFrom
+      exact mem_image2_of_mem (h1t n) hs
+  · apply generateFrom_le
+    rintro _ ⟨s, hs, t, ht, rfl⟩
+    dsimp only
+    rw [prod_eq]
+    apply (measurable_fst _).inter (measurable_snd _)
+    · exact measurableSet_generateFrom hs
+    · exact measurableSet_generateFrom ht
 
 中文:
 定理 generateFrom_prod_eq
@@ -51,7 +65,21 @@ theorem generateFrom_prod_eq
       rw [← prod_univ]; rw [← h2t]; rw [prod_iUnion]
       apply MeasurableSet.iUnion
       intro n
-      apply measurableSet_genera
+      apply measurableSet_generateFrom
+      exact ⟨s, hs, t n, h1t n, rfl⟩
+    · rcases hC with ⟨t, h1t, h2t⟩
+      rw [← univ_prod]; rw [← h2t]; rw [iUnion_prod_const]
+      apply MeasurableSet.iUnion
+      rintro n
+      apply measurableSet_generateFrom
+      exact mem_image2_of_mem (h1t n) hs
+  · apply generateFrom_le
+    rintro _ ⟨s, hs, t, ht, rfl⟩
+    dsimp only
+    rw [prod_eq]
+    apply (measurable_fst _).inter (measurable_snd _)
+    · exact measurableSet_generateFrom hs
+    · exact measurableSet_generateFrom ht
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, comap_generateFrom, generateFrom_le, iUnion, iUnion_prod_const, le_antisymm, measurableSet_generateFrom, mem_image2_of_mem, prod_iUnion, prod_univ, sup_le, univ_prod
 -/
@@ -204,7 +232,7 @@ lemma MeasurableEmbedding.prodMap
   · rw [Prod.instMeasurableSpace, Prod.instMeasurableSpace, MeasurableSpace.comap_prodMap,
       hg.comap_eq, hf.comap_eq]
   · rw [range_prodMap]
-    exact hg.measurableSet_range.prod hf.measurableSet_ran
+    exact hg.measurableSet_range.prod hf.measurableSet_range
 
 中文:
 引理 可测嵌入.prodMap
@@ -215,7 +243,7 @@ lemma MeasurableEmbedding.prodMap
   · rw [Prod.instMeasurableSpace, Prod.instMeasurableSpace, MeasurableSpace.comap_prodMap,
       hg.comap_eq, hf.comap_eq]
   · rw [range_prodMap]
-    exact hg.measurableSet_range.prod hf.measurableSet_ran
+    exact hg.measurableSet_range.prod hf.measurableSet_range
 
 Depends on / 依赖: MeasurableEmbedding, MeasurableEmbedding.iff_comap_eq, MeasurableSpace, MeasurableSpace.comap_prodMap, Prod.instMeasurableSpace, comap_eq, comap_prodMap, hf.comap_eq, hf.injective, hf.measurableSet_range, hg.comap_eq, hg.injective.prodMap, hg.measurableSet_range.prod, iff_comap_eq, injective, instMeasurableSpace, measurableSet_range, prodMap, range_prodMap
 -/
@@ -245,7 +273,7 @@ lemma MeasurableEmbedding.prodMk_left
     intro s hs
     convert! (MeasurableSet.singleton x).prod (hf.measurableSet_image.mpr hs)
     ext x
-    simp [P
+    simp [Prod.ext_iff, eq_comm, ← exists_and_left, and_left_comm]
 
 中文:
 引理 可测嵌入.prodMk_left
@@ -259,7 +287,7 @@ lemma MeasurableEmbedding.prodMk_left
     intro s hs
     convert! (MeasurableSet.singleton x).prod (hf.measurableSet_image.mpr hs)
     ext x
-    simp [P
+    simp [Prod.ext_iff, eq_comm, ← exists_and_left, and_left_comm]
 
 Depends on / 依赖: Measurable, Measurable.prodMk, MeasurableSet, MeasurableSet.singleton, Prod.ext_iff, Prod.mk.injEq, and_left_comm, convert, eq_comm, exists_and_left, ext_iff, hf.injective, hf.measurable, hf.measurableSet_image.mpr, injective, measurable, measurableSet_image, measurable_const, prodMk, singleton
 -/

@@ -380,7 +380,18 @@ definition ofMonoidHom
   left_inv e := by
     simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, ← map_inv, ← map_mul]
     obtain ⟨n, hn⟩ :
-        (Function.surjInv S.rightHom_s
+        (Function.surjInv S.rightHom_surjective (S'.rightHom (f e)))⁻¹ * e in S.inl.range := by
+      rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
+      simpa only [Function.surjInv_eq] using inv_mul_cancel (S.rightHom e)
+    rw [← eq_inv_mul_iff_mul_eq]; rw [← hn]; rw [← MonoidHom.comp_apply]; rw [comp_inl]; rw [Function.leftInverse_invFun S'.inl_injective]
+  right_inv e' := by
+    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, map_mul]
+    rw [← eq_inv_mul_iff_mul_eq]; rw [← MonoidHom.comp_apply]; rw [comp_inl]
+    apply Function.invFun_eq
+    rw [← MonoidHom.mem_range]; rw [S'.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
+    simpa only [Function.surjInv_eq] using inv_mul_cancel (S'.rightHom e')
+  inl_comm := congrArg DFunLike.coe comp_inl
+  rightHom_comm := congrArg DFunLike.coe rightHom_comp
 
 中文:
 定义 ofMonoidHom
@@ -392,7 +403,18 @@ definition ofMonoidHom
   left_inv e := by
     simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, ← map_inv, ← map_mul]
     obtain ⟨n, hn⟩ :
-        (Function.surjInv S.rightHom_s
+        (Function.surjInv S.rightHom_surjective (S'.rightHom (f e)))⁻¹ * e in S.inl.range := by
+      rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
+      simpa only [Function.surjInv_eq] using inv_mul_cancel (S.rightHom e)
+    rw [← eq_inv_mul_iff_mul_eq]; rw [← hn]; rw [← MonoidHom.comp_apply]; rw [comp_inl]; rw [Function.leftInverse_invFun S'.inl_injective]
+  right_inv e' := by
+    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, map_mul]
+    rw [← eq_inv_mul_iff_mul_eq]; rw [← MonoidHom.comp_apply]; rw [comp_inl]
+    apply Function.invFun_eq
+    rw [← MonoidHom.mem_range]; rw [S'.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
+    simpa only [Function.surjInv_eq] using inv_mul_cancel (S'.rightHom e')
+  inl_comm := congrArg DFunLike.coe comp_inl
+  rightHom_comm := congrArg DFunLike.coe rightHom_comp
 -/
 noncomputable def ofMonoidHom (f : E ->* E') (comp_inl : f.comp S.inl = S'.inl)
     (rightHom_comp : S'.rightHom.comp f = S.rightHom) : S.Equiv S' where
@@ -452,7 +474,22 @@ definition semidirectProductToGroupExtensionEquiv
   left_inv := fun ⟨n, g⟩ => by
     simp only [map_mul, rightHom_inl, rightHom_splitting, one_mul, mul_inv_cancel_right,
       Function.leftInverse_invFun S.inl_injective n]
-  right_inv :
+  right_inv := fun e => by
+    simp only [← eq_mul_inv_iff_mul_eq]
+    apply Function.invFun_eq
+    rw [← MonoidHom.mem_range]; rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [rightHom_splitting]; rw [mul_inv_cancel]
+  map_mul' := fun ⟨n₁, g₁⟩ ⟨n₂, g₂⟩ => by
+    simp only [conjAct, MonoidHom.comp_apply, map_mul, inl_conjAct_comm, MonoidHom.coe_coe]
+    group
+  inl_comm := by
+    ext n
+    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
+      Equiv.coe_fn_mk, SemidirectProduct.left_inl, SemidirectProduct.right_inl, map_one, mul_one]
+  rightHom_comm := by
+    ext ⟨n, g⟩
+    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
+      Equiv.coe_fn_mk, map_mul, rightHom_inl, one_mul, rightHom_splitting,
+      SemidirectProduct.rightHom_eq_right]
 
 中文:
 定义 semidirectProductToGroupExtensionEquiv
@@ -462,7 +499,22 @@ definition semidirectProductToGroupExtensionEquiv
   left_inv := fun ⟨n, g⟩ => by
     simp only [map_mul, rightHom_inl, rightHom_splitting, one_mul, mul_inv_cancel_right,
       Function.leftInverse_invFun S.inl_injective n]
-  right_inv :
+  right_inv := fun e => by
+    simp only [← eq_mul_inv_iff_mul_eq]
+    apply Function.invFun_eq
+    rw [← MonoidHom.mem_range]; rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [rightHom_splitting]; rw [mul_inv_cancel]
+  map_mul' := fun ⟨n₁, g₁⟩ ⟨n₂, g₂⟩ => by
+    simp only [conjAct, MonoidHom.comp_apply, map_mul, inl_conjAct_comm, MonoidHom.coe_coe]
+    group
+  inl_comm := by
+    ext n
+    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
+      Equiv.coe_fn_mk, SemidirectProduct.left_inl, SemidirectProduct.right_inl, map_one, mul_one]
+  rightHom_comm := by
+    ext ⟨n, g⟩
+    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
+      Equiv.coe_fn_mk, map_mul, rightHom_inl, one_mul, rightHom_splitting,
+      SemidirectProduct.rightHom_eq_right]
 
 Depends on / 依赖: S.inl
 -/

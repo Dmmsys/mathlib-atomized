@@ -182,7 +182,9 @@ theorem integrable_measure_prodMk_left
   convert! h2s.lt_top using 1
   rw [prod_apply hs]
   apply lintegral_congr_ae
-  filter_upwards [ae_measure_lt
+  filter_upwards [ae_measure_lt_top hs h2s] with x hx
+  rw [lt_top_iff_ne_top] at hx
+  simp [ofReal_toReal, hx]
 
 中文:
 定理 integrable_measure_prodMk_left
@@ -193,7 +195,9 @@ theorem integrable_measure_prodMk_left
   convert! h2s.lt_top using 1
   rw [prod_apply hs]
   apply lintegral_congr_ae
-  filter_upwards [ae_measure_lt
+  filter_upwards [ae_measure_lt_top hs h2s] with x hx
+  rw [lt_top_iff_ne_top] at hx
+  simp [ofReal_toReal, hx]
 
 Depends on / 依赖: ae_measure_lt_top, aemeasurable, aestronglyMeasurable, convert, ennreal_toReal, ennreal_toReal.aemeasurable.aestronglyMeasurable, enorm_eq_ofReal, filter_upwards, h2s.lt_top, hasFiniteIntegral_iff_enorm, lintegral_congr_ae, lt_top, lt_top_iff_ne_top, measurable_measure_prodMk_left, measureReal_def, ofReal_toReal, prod_apply, simp_rw, toReal_nonneg
 -/
@@ -491,7 +495,16 @@ theorem hasFiniteIntegral_prod_iff
   simp only [hasFiniteIntegral_iff_enorm, lintegral_prod _ h1f.enorm.aemeasurable]
   have (x : _) : forallᵐ y ∂ν, 0 <= ‖f (x, y)‖ := by filter_upwards with y using norm_nonneg _
   simp_rw [integral_eq_lintegral_of_nonneg_ae (this _)
-      (h1f.norm.comp_measurable measurable_prodMk_left).aestrong
+      (h1f.norm.comp_measurable measurable_prodMk_left).aestronglyMeasurable,
+    enorm_eq_ofReal toReal_nonneg, ofReal_norm]
+  -- this fact is probably too specialized to be its own lemma
+  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p -> (r ↔ q) := fun {p q r} h1 => by
+    rw [← and_congr_right_iff]; rw [and_iff_right_of_imp h1]
+  rw [this]
+  · intro h2f; rw [lintegral_congr_ae]
+    filter_upwards [h2f] with x hx
+    rw [ofReal_toReal]; rw [← lt_top_iff_ne_top]; exact hx
+  · intro h2f; refine ae_lt_top ?_ h2f.ne; exact h1f.enorm.lintegral_prod_right'
 
 中文:
 定理 hasFinite整数egral_prod_iff
@@ -501,7 +514,16 @@ theorem hasFiniteIntegral_prod_iff
   simp only [hasFiniteIntegral_iff_enorm, lintegral_prod _ h1f.enorm.aemeasurable]
   have (x : _) : forallᵐ y ∂ν, 0 <= ‖f (x, y)‖ := by filter_upwards with y using norm_nonneg _
   simp_rw [integral_eq_lintegral_of_nonneg_ae (this _)
-      (h1f.norm.comp_measurable measurable_prodMk_left).aestrong
+      (h1f.norm.comp_measurable measurable_prodMk_left).aestronglyMeasurable,
+    enorm_eq_ofReal toReal_nonneg, ofReal_norm]
+  -- this fact is probably too specialized to be its own lemma
+  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p -> (r ↔ q) := fun {p q r} h1 => by
+    rw [← and_congr_right_iff]; rw [and_iff_right_of_imp h1]
+  rw [this]
+  · intro h2f; rw [lintegral_congr_ae]
+    filter_upwards [h2f] with x hx
+    rw [ofReal_toReal]; rw [← lt_top_iff_ne_top]; exact hx
+  · intro h2f; refine ae_lt_top ?_ h2f.ne; exact h1f.enorm.lintegral_prod_right'
 
 Depends on / 依赖: aemeasurable, aestronglyMeasurable, comp_measurable, enorm_eq_ofReal, filter_upwards, h1f.enorm.aemeasurable, h1f.norm.comp_measurable, hasFiniteIntegral_iff_enorm, integral_eq_lintegral_of_nonneg_ae, lintegral_prod, measurable_prodMk_left, norm_nonneg, ofReal_norm, simp_rw, toReal_nonneg
 -/
@@ -538,7 +560,8 @@ theorem hasFiniteIntegral_prod_iff'
     intro x hx
     exact hasFiniteIntegral_congr hx
   · apply hasFiniteIntegral_congr
-    fil
+    filter_upwards [ae_ae_of_ae_prod h1f.ae_eq_mk.symm] with _ hx using
+      integral_congr_ae (EventuallyEq.fun_comp hx _)
 
 中文:
 定理 hasFinite整数egral_prod_iff'
@@ -552,7 +575,8 @@ theorem hasFiniteIntegral_prod_iff'
     intro x hx
     exact hasFiniteIntegral_congr hx
   · apply hasFiniteIntegral_congr
-    fil
+    filter_upwards [ae_ae_of_ae_prod h1f.ae_eq_mk.symm] with _ hx using
+      integral_congr_ae (EventuallyEq.fun_comp hx _)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.fun_comp, ae_ae_of_ae_prod, ae_eq_mk, and_congr, eventually_congr, filter_upwards, fun_comp, h1f.ae_eq_mk, h1f.ae_eq_mk.symm, h1f.stronglyMeasurable_mk, hasFiniteIntegral_congr, hasFiniteIntegral_prod_iff, integral_congr_ae, stronglyMeasurable_mk
 -/
@@ -726,7 +750,15 @@ theorem Integrable.op_fst_snd
   calc
     ∫⁻ z, ‖op (f z.1) (g z.2)‖ₑ ∂μ.prod ν <= ∫⁻ z, .ofReal C * ‖f z.1‖ₑ * ‖g z.2‖ₑ ∂μ.prod ν := by
       gcongr with z
-      simp only [enorm_eq_nnnorm, ENNReal.ofReal, ← ENNReal.coe_mul, ENNRea
+      simp only [enorm_eq_nnnorm, ENNReal.ofReal, ← ENNReal.coe_mul, ENNReal.coe_le_coe,
+        ← NNReal.coe_le_coe, NNReal.coe_mul, coe_nnnorm]
+      refine (hC _ _).trans ?_
+      gcongr
+      apply le_coe_toNNReal
+    _ <= ∫⁻ x, ∫⁻ y, .ofReal C * ‖f x‖ₑ * ‖g y‖ₑ ∂ν ∂μ := lintegral_prod_le _
+    _ <= .ofReal C * (∫⁻ x, ‖f x‖ₑ ∂μ) * ∫⁻ y, ‖g y‖ₑ ∂ν := by
+      simp [lintegral_const_mul', lintegral_mul_const', hg.2.ne, mul_assoc]
+    _ < ∞ := by apply_rules [ENNReal.mul_lt_top, hf.2, hg.2, ENNReal.ofReal_lt_top]
 
 中文:
 定理 可积.op_fst_snd
@@ -737,7 +769,15 @@ theorem Integrable.op_fst_snd
   calc
     ∫⁻ z, ‖op (f z.1) (g z.2)‖ₑ ∂μ.prod ν <= ∫⁻ z, .ofReal C * ‖f z.1‖ₑ * ‖g z.2‖ₑ ∂μ.prod ν := by
       gcongr with z
-      simp only [enorm_eq_nnnorm, ENNReal.ofReal, ← ENNReal.coe_mul, ENNRea
+      simp only [enorm_eq_nnnorm, ENNReal.ofReal, ← ENNReal.coe_mul, ENNReal.coe_le_coe,
+        ← NNReal.coe_le_coe, NNReal.coe_mul, coe_nnnorm]
+      refine (hC _ _).trans ?_
+      gcongr
+      apply le_coe_toNNReal
+    _ <= ∫⁻ x, ∫⁻ y, .ofReal C * ‖f x‖ₑ * ‖g y‖ₑ ∂ν ∂μ := lintegral_prod_le _
+    _ <= .ofReal C * (∫⁻ x, ‖f x‖ₑ ∂μ) * ∫⁻ y, ‖g y‖ₑ ∂ν := by
+      simp [lintegral_const_mul', lintegral_mul_const', hg.2.ne, mul_assoc]
+    _ < ∞ := by apply_rules [ENNReal.mul_lt_top, hf.2, hg.2, ENNReal.ofReal_lt_top]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_mul, ENNReal.ofReal, NNReal, NNReal.coe_le_coe, NNReal.coe_mul, coe_le_coe, coe_mul, coe_nnnorm, comp_fst, comp_snd, disjoint_comm, enorm_eq_nnnorm, hop.comp_aestronglyMeasurable, hop_norm, le_coe_toNNReal, lintegral_prod_le, ofReal
 -/
@@ -1284,7 +1324,16 @@ theorem continuous_integral_integral
   refine
     tendsto_integral_of_L1 _ (L1.integrable_coeFn g).integral_prod_left.aestronglyMeasurable
       (Eventually.of_forall fun h => (L1.integrable_coeFn h).integral_prod_left) ?_
-  simp_rw [← lintegral_fn_integral_sub _ (L1.integrable_coeFn _) (L
+  simp_rw [← lintegral_fn_integral_sub _ (L1.integrable_coeFn _) (L1.integrable_coeFn g)]
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds _ (fun i => zero_le) _
+  · exact fun i => ∫⁻ x, ∫⁻ y, ‖i (x, y) - g (x, y)‖ₑ ∂ν ∂μ
+  swap; · exact fun i => lintegral_mono fun x => enorm_integral_le_lintegral_enorm _
+  have (i : α × β ->₁[μ.prod ν] E) : Measurable fun z => ‖i z - g z‖ₑ :=
+    ((Lp.stronglyMeasurable i).sub (Lp.stronglyMeasurable g)).enorm
+  simp_rw [← lintegral_prod _ (this _).aemeasurable, ← L1.ofReal_norm_sub_eq_lintegral,
+    ← ofReal_zero]
+  refine (continuous_ofReal.tendsto 0).comp ?_
+  rw [← tendsto_iff_norm_sub_tendsto_zero]; exact tendsto_id
 
 中文:
 定理 continuous_integral_integral
@@ -1293,7 +1342,16 @@ theorem continuous_integral_integral
   refine
     tendsto_integral_of_L1 _ (L1.integrable_coeFn g).integral_prod_left.aestronglyMeasurable
       (Eventually.of_forall fun h => (L1.integrable_coeFn h).integral_prod_left) ?_
-  simp_rw [← lintegral_fn_integral_sub _ (L1.integrable_coeFn _) (L
+  simp_rw [← lintegral_fn_integral_sub _ (L1.integrable_coeFn _) (L1.integrable_coeFn g)]
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds _ (fun i => zero_le) _
+  · exact fun i => ∫⁻ x, ∫⁻ y, ‖i (x, y) - g (x, y)‖ₑ ∂ν ∂μ
+  swap; · exact fun i => lintegral_mono fun x => enorm_integral_le_lintegral_enorm _
+  have (i : α × β ->₁[μ.prod ν] E) : Measurable fun z => ‖i z - g z‖ₑ :=
+    ((Lp.stronglyMeasurable i).sub (Lp.stronglyMeasurable g)).enorm
+  simp_rw [← lintegral_prod _ (this _).aemeasurable, ← L1.ofReal_norm_sub_eq_lintegral,
+    ← ofReal_zero]
+  refine (continuous_ofReal.tendsto 0).comp ?_
+  rw [← tendsto_iff_norm_sub_tendsto_zero]; exact tendsto_id
 
 Depends on / 依赖: Eventually, Eventually.of_forall, L1.integrable_coeFn, aestronglyMeasurable, continuous_iff_continuousAt, integrable_coeFn, integral_prod_left, integral_prod_left.aestronglyMeasurable, lintegral_fn_integral_sub, lintegral_mono, of_forall, simp_rw, tendsto_const_nhds, tendsto_integral_of_L1, tendsto_of_tendsto_of_tendsto_of_le_of_le, zero_le
 -/
@@ -1326,7 +1384,18 @@ theorem integral_prod
   apply Integrable.induction
   · intro c s hs h2s
     simp_rw [integral_indicator hs, ← indicator_comp_right, Function.comp_def,
-      integral_indicator (measurable_prodMk_left hs), setIntegral_const, integral_s
+      integral_indicator (measurable_prodMk_left hs), setIntegral_const, integral_smul_const,
+      measureReal_def,
+      integral_toReal (measurable_measure_prodMk_left hs).aemeasurable
+        (ae_measure_lt_top hs h2s.ne)]
+    rw [Measure.prod_apply hs]
+  · rintro f g - i_f i_g hf hg
+    simp_rw [integral_add' i_f i_g, integral_integral_add' i_f i_g, hf, hg]
+  · exact isClosed_eq continuous_integral continuous_integral_integral
+  · rintro f g hfg - hf; convert! hf using 1
+    · exact integral_congr_ae hfg.symm
+    · apply integral_congr_ae
+      filter_upwards [ae_ae_of_ae_prod hfg] with x hfgx using integral_congr_ae (ae_eq_symm hfgx)
 
 中文:
 定理 integral_prod
@@ -1337,7 +1406,18 @@ theorem integral_prod
   apply Integrable.induction
   · intro c s hs h2s
     simp_rw [integral_indicator hs, ← indicator_comp_right, Function.comp_def,
-      integral_indicator (measurable_prodMk_left hs), setIntegral_const, integral_s
+      integral_indicator (measurable_prodMk_left hs), setIntegral_const, integral_smul_const,
+      measureReal_def,
+      integral_toReal (measurable_measure_prodMk_left hs).aemeasurable
+        (ae_measure_lt_top hs h2s.ne)]
+    rw [Measure.prod_apply hs]
+  · rintro f g - i_f i_g hf hg
+    simp_rw [integral_add' i_f i_g, integral_integral_add' i_f i_g, hf, hg]
+  · exact isClosed_eq continuous_integral continuous_integral_integral
+  · rintro f g hfg - hf; convert! hf using 1
+    · exact integral_congr_ae hfg.symm
+    · apply integral_congr_ae
+      filter_upwards [ae_ae_of_ae_prod hfg] with x hfgx using integral_congr_ae (ae_eq_symm hfgx)
 
 Depends on / 依赖: CompleteSpace, Function, Function.comp_def, Integrable, Integrable.induction, Measure, Measure.prod_apply, ae_measure_lt_top, aemeasurable, comp_def, dif_neg, h2s.ne, indicator_comp_right, integr, integral, integral_add, integral_indicator, integral_smul_const, integral_toReal, measurable_measure_prodMk_left
 -/
@@ -1454,7 +1534,7 @@ lemma intervalIntegral_integral_swap
     exact integral_integral_swap h_int
   · simp_rw [intervalIntegral.integral_of_ge hab]
     simp only [hab, Set.uIoc_of_ge] at h_int
-    rw [integral_integral_swa
+    rw [integral_integral_swap h_int]; rw [integral_neg]
 
 中文:
 引理 interval整数egral_integral_swap
@@ -1466,7 +1546,7 @@ lemma intervalIntegral_integral_swap
     exact integral_integral_swap h_int
   · simp_rw [intervalIntegral.integral_of_ge hab]
     simp only [hab, Set.uIoc_of_ge] at h_int
-    rw [integral_integral_swa
+    rw [integral_integral_swap h_int]; rw [integral_neg]
 
 Depends on / 依赖: Set.uIoc_of_ge, Set.uIoc_of_le, h_int, integral_integral_swap, integral_neg, integral_of_ge, integral_of_le, intervalIntegral, intervalIntegral.integral_of_ge, intervalIntegral.integral_of_le, le_total, simp_rw, uIoc_of_ge, uIoc_of_le
 -/
@@ -1546,7 +1626,7 @@ theorem integral_prod_bilin
   simp_rw [integral_prod _ this, ContinuousLinearMap.integral_comp_comm _ hg]
   change ∫ x, B.flip (∫ y, g y ∂ν) (f x) ∂μ = _
   rw [ContinuousLinearMap.integral_comp_comm _ hf]
-  
+  simp
 
 中文:
 定理 integral_prod_bilin
@@ -1557,7 +1637,7 @@ theorem integral_prod_bilin
   simp_rw [integral_prod _ this, ContinuousLinearMap.integral_comp_comm _ hg]
   change ∫ x, B.flip (∫ y, g y ∂ν) (f x) ∂μ = _
   rw [ContinuousLinearMap.integral_comp_comm _ hf]
-  
+  simp
 
 Depends on / 依赖: B.flip, B.le_opNorm, ContinuousLinearMap, ContinuousLinearMap.integral_comp_comm, Integrable, fun_prop, hf.op_fst_snd, integral_comp_comm, integral_prod, op_fst_snd, simp_rw
 -/
@@ -1588,7 +1668,8 @@ theorem integral_prod_smul
     simp_rw [integral_smul, integral_smul_const]
   have H : ¬Integrable f μ ∨ ¬Integrable g ν := by
     contrapose! h
-    exact h.1.smul_pr
+    exact h.1.smul_prod h.2
+  rcases H with H | H <;> simp [integral_undef h, integral_undef H]
 
 中文:
 定理 integral_prod_smul
@@ -1600,7 +1681,8 @@ theorem integral_prod_smul
     simp_rw [integral_smul, integral_smul_const]
   have H : ¬Integrable f μ ∨ ¬Integrable g ν := by
     contrapose! h
-    exact h.1.smul_pr
+    exact h.1.smul_prod h.2
+  rcases H with H | H <;> simp [integral_undef h, integral_undef H]
 
 Depends on / 依赖: CompleteSpace, Integrable, contrapose, integral, integral_prod, integral_smul, integral_smul_const, integral_undef, simp_rw, smul_prod
 -/
@@ -1837,7 +1919,40 @@ lemma integral_integral_swap_of_hasCompactSupport
   let V := Prod.snd '' (tsupport f.uncurry)
   have : Fact (ν V < ∞) := ⟨(IsCompact.image h'f continuous_snd).measure_lt_top⟩
   calc
-  ∫ x, (∫ y, f x y ∂ν) ∂μ = ∫ x, (∫ y in
+  ∫ x, (∫ y, f x y ∂ν) ∂μ = ∫ x, (∫ y in V, f x y ∂ν) ∂μ := by
+    congr 1 with x
+    apply (setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)).symm
+    contrapose! hy
+    have : (x, y) in Function.support f.uncurry := hy
+    exact mem_image_of_mem _ (subset_tsupport _ this)
+  _ = ∫ x in U, (∫ y in V, f x y ∂ν) ∂μ := by
+    apply (setIntegral_eq_integral_of_forall_compl_eq_zero (fun x hx => ?_)).symm
+    have : forall y, f x y = 0 := by
+      intro y
+      contrapose! hx
+      have : (x, y) in Function.support f.uncurry := hx
+      exact mem_image_of_mem _ (subset_tsupport _ this)
+    simp [this]
+  _ = ∫ y in V, (∫ x in U, f x y ∂μ) ∂ν := by
+    apply integral_integral_swap
+    apply (integrableOn_iff_integrable_of_support_subset (subset_tsupport f.uncurry)).mp
+    refine ⟨(h'f.stronglyMeasurable_of_prod hf).aestronglyMeasurable, ?_⟩
+    obtain ⟨C, hC⟩ : exists C, forall p, ‖f.uncurry p‖ <= C := hf.bounded_above_of_compact_support h'f
+    exact .of_bounded (C := C) (.of_forall hC)
+  _ = ∫ y, (∫ x in U, f x y ∂μ) ∂ν := by
+    apply setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)
+    have : forall x, f x y = 0 := by
+      intro x
+      contrapose! hy
+      have : (x, y) in Function.support f.uncurry := hy
+      exact mem_image_of_mem _ (subset_tsupport _ this)
+    simp [this]
+  _ = ∫ y, (∫ x, f x y ∂μ) ∂ν := by
+    congr 1 with y
+    apply setIntegral_eq_integral_of_forall_compl_eq_zero (fun x hx => ?_)
+    contrapose! hx
+    have : (x, y) in Function.support f.uncurry := hx
+    exact mem_image_of_mem _ (subset_tsupport _ this)
 
 中文:
 引理 integral_integral_swap_of_hasCompactSupport
@@ -1847,7 +1962,40 @@ lemma integral_integral_swap_of_hasCompactSupport
   let V := Prod.snd '' (tsupport f.uncurry)
   have : Fact (ν V < ∞) := ⟨(IsCompact.image h'f continuous_snd).measure_lt_top⟩
   calc
-  ∫ x, (∫ y, f x y ∂ν) ∂μ = ∫ x, (∫ y in
+  ∫ x, (∫ y, f x y ∂ν) ∂μ = ∫ x, (∫ y in V, f x y ∂ν) ∂μ := by
+    congr 1 with x
+    apply (setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)).symm
+    contrapose! hy
+    have : (x, y) in Function.support f.uncurry := hy
+    exact mem_image_of_mem _ (subset_tsupport _ this)
+  _ = ∫ x in U, (∫ y in V, f x y ∂ν) ∂μ := by
+    apply (setIntegral_eq_integral_of_forall_compl_eq_zero (fun x hx => ?_)).symm
+    have : forall y, f x y = 0 := by
+      intro y
+      contrapose! hx
+      have : (x, y) in Function.support f.uncurry := hx
+      exact mem_image_of_mem _ (subset_tsupport _ this)
+    simp [this]
+  _ = ∫ y in V, (∫ x in U, f x y ∂μ) ∂ν := by
+    apply integral_integral_swap
+    apply (integrableOn_iff_integrable_of_support_subset (subset_tsupport f.uncurry)).mp
+    refine ⟨(h'f.stronglyMeasurable_of_prod hf).aestronglyMeasurable, ?_⟩
+    obtain ⟨C, hC⟩ : exists C, forall p, ‖f.uncurry p‖ <= C := hf.bounded_above_of_compact_support h'f
+    exact .of_bounded (C := C) (.of_forall hC)
+  _ = ∫ y, (∫ x in U, f x y ∂μ) ∂ν := by
+    apply setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)
+    have : forall x, f x y = 0 := by
+      intro x
+      contrapose! hy
+      have : (x, y) in Function.support f.uncurry := hy
+      exact mem_image_of_mem _ (subset_tsupport _ this)
+    simp [this]
+  _ = ∫ y, (∫ x, f x y ∂μ) ∂ν := by
+    congr 1 with y
+    apply setIntegral_eq_integral_of_forall_compl_eq_zero (fun x hx => ?_)
+    contrapose! hx
+    have : (x, y) in Function.support f.uncurry := hx
+    exact mem_image_of_mem _ (subset_tsupport _ this)
 
 Depends on / 依赖: Function, Function.support, IsCompact, IsCompact.image, Prod.fst, Prod.snd, continuous_fst, continuous_snd, contrapose, f.uncurry, measure_lt_top, mem_image_of_mem, setIntegral_eq_integral_of_forall_compl_eq_zero, support, tsupport, uncurry
 -/

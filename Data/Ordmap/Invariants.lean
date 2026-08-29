@@ -467,7 +467,7 @@ theorem balancedSz_up
     · cases h (le_trans (Nat.add_le_add_left (Nat.zero_le _) _) H)
     · exact le_trans (le_trans (Nat.le_add_right _ _) H) (Nat.le_add_left 1 _)
   | inr H =>
-    exact le_trans H.
+    exact le_trans H.1 (Nat.mul_le_mul_left _ h₁)
 
 中文:
 定理 balancedSz_up
@@ -481,7 +481,7 @@ theorem balancedSz_up
     · cases h (le_trans (Nat.add_le_add_left (Nat.zero_le _) _) H)
     · exact le_trans (le_trans (Nat.le_add_right _ _) H) (Nat.le_add_left 1 _)
   | inr H =>
-    exact le_trans H.
+    exact le_trans H.1 (Nat.mul_le_mul_left _ h₁)
 
 Depends on / 依赖: Nat.add_le_add_left, Nat.le_add_left, Nat.le_add_right, Nat.mul_le_mul_left, Nat.zero_le, add_le_add_left, le_add_left, le_add_right, le_trans, mul_le_mul_left, or_iff_not_imp_left, resolve_left, zero_le
 -/
@@ -961,7 +961,12 @@ theorem dual_balanceL
     obtain - | ⟨lls, lll, llx, llr⟩ := ll <;> obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr <;>
       dsimp only [dual, id] <;> try rfl
     split_ifs with h <;> repeat simp [add_comm]
-  · obtain - | 
+  · obtain - | ⟨ls, ll, lx, lr⟩ := l; · rfl
+    dsimp only [dual, id]
+    split_ifs; swap; · simp [add_comm]
+    obtain - | ⟨lls, lll, llx, llr⟩ := ll <;> obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr <;> try rfl
+    dsimp only [dual, id]
+    split_ifs with h <;> simp [add_comm]
 
 中文:
 定理 dual_balanceL
@@ -973,7 +978,12 @@ theorem dual_balanceL
     obtain - | ⟨lls, lll, llx, llr⟩ := ll <;> obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr <;>
       dsimp only [dual, id] <;> try rfl
     split_ifs with h <;> repeat simp [add_comm]
-  · obtain - | 
+  · obtain - | ⟨ls, ll, lx, lr⟩ := l; · rfl
+    dsimp only [dual, id]
+    split_ifs; swap; · simp [add_comm]
+    obtain - | ⟨lls, lll, llx, llr⟩ := ll <;> obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr <;> try rfl
+    dsimp only [dual, id]
+    split_ifs with h <;> simp [add_comm]
 
 Depends on / 依赖: add_comm, balanceL, balanceR, repeat, split_ifs
 -/
@@ -2123,7 +2133,80 @@ theorem balance_eq_balance'
       obtain - | ⟨rls, rll, rlx, rlr⟩ := rl <;> obtain - | ⟨rrs, rrl, rrx, rrr⟩ := rr <;>
         dsimp +instances [balance, balance']
       · rfl
-      · have : size rrl = 0 ∧ size rr
+      · have : size rrl = 0 ∧ size rrr = 0 := by
+          have := balancedSz_zero.1 hr.1.symm
+          rwa [size, sr.2.2.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sr.2.2.2.1.size_eq_zero.1 this.1
+        cases sr.2.2.2.2.size_eq_zero.1 this.2
+        obtain rfl : rrs = 1 := sr.2.2.1
+        rw [if_neg]; rw [rotateL_node]; rw [if_pos]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · have : size rll = 0 ∧ size rlr = 0 := by
+          have := balancedSz_zero.1 hr.1
+          rwa [size, sr.2.1.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sr.2.1.2.1.size_eq_zero.1 this.1
+        cases sr.2.1.2.2.size_eq_zero.1 this.2
+        obtain rfl : rls = 1 := sr.2.1.1
+        rw [if_neg]; rw [rotateL_node]; rw [if_neg]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · symm; rw [zero_add, if_neg, rotateL]
+        · dsimp only [size_node]; split_ifs
+          · simp [node3L, node']; abel
+          · simp [node4L, node', sr.2.1.1]; abel
+        · exact not_le_of_gt (Nat.succ_lt_succ (add_pos sr.2.1.pos sr.2.2.pos))
+  · obtain - | ⟨rs, rl, rx, rr⟩ := r
+    · rw [sl.eq_node'] at hl ⊢
+      obtain - | ⟨lls, lll, llx, llr⟩ := ll <;> obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr <;>
+        dsimp [balance, balance']
+      · rfl
+      · have : size lrl = 0 ∧ size lrr = 0 := by
+          have := balancedSz_zero.1 hl.1.symm
+          rwa [size, sl.2.2.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sl.2.2.2.1.size_eq_zero.1 this.1
+        cases sl.2.2.2.2.size_eq_zero.1 this.2
+        obtain rfl : lrs = 1 := sl.2.2.1
+        rw [if_neg]; rw [rotateR_node]; rw [if_neg]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · have : size lll = 0 ∧ size llr = 0 := by
+          have := balancedSz_zero.1 hl.1
+          rwa [size, sl.2.1.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sl.2.1.2.1.size_eq_zero.1 this.1
+        cases sl.2.1.2.2.size_eq_zero.1 this.2
+        obtain rfl : lls = 1 := sl.2.1.1
+        rw [if_neg]; rw [rotateR_node]; rw [if_pos]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · symm; rw [if_neg, rotateR]
+        · dsimp only [size_node]; split_ifs
+          · simp [node3R, node']; abel
+          · simp [node4R, node', sl.2.2.1]; abel
+        · exact not_le_of_gt (Nat.succ_lt_succ (add_pos sl.2.1.pos sl.2.2.pos))
+    · simp only [balance, id_eq, balance', size_node, gt_iff_lt]
+      symm; rw [if_neg]
+      · split_ifs with h h_1
+        · have rd : delta <= size rl + size rr := by
+            have := lt_of_le_of_lt (Nat.mul_le_mul_left _ sl.pos) h
+            rwa [sr.1, Nat.lt_succ_iff] at this
+          obtain - | ⟨rls, rll, rlx, rlr⟩ := rl
+          · rw [size, zero_add] at rd
+            exact absurd (le_trans rd (balancedSz_zero.1 hr.1.symm)) (by decide)
+          obtain - | ⟨rrs, rrl, rrx, rrr⟩ := rr
+          · exact absurd (le_trans rd (balancedSz_zero.1 hr.1)) (by decide)
+          dsimp [rotateL]; split_ifs
+          · simp [node3L, node', sr.1]; abel
+          · simp [node4L, node', sr.1, sr.2.1.1]; abel
+        · have ld : delta <= size ll + size lr := by
+            have := lt_of_le_of_lt (Nat.mul_le_mul_left _ sr.pos) h_1
+            rwa [sl.1, Nat.lt_succ_iff] at this
+          obtain - | ⟨lls, lll, llx, llr⟩ := ll
+          · rw [size, zero_add] at ld
+            exact absurd (le_trans ld (balancedSz_zero.1 hl.1.symm)) (by decide)
+          obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr
+          · exact absurd (le_trans ld (balancedSz_zero.1 hl.1)) (by decide)
+          dsimp [rotateR]; split_ifs
+          · simp [node3R, node', sl.1]; abel
+          · simp [node4R, node', sl.1, sl.2.2.1]; abel
+        · simp [node']
+      · exact not_le_of_gt (add_le_add (Nat.succ_le_of_lt sl.pos) (Nat.succ_le_of_lt sr.pos))
 
 中文:
 定理 balance_eq_balance'
@@ -2136,7 +2219,80 @@ theorem balance_eq_balance'
       obtain - | ⟨rls, rll, rlx, rlr⟩ := rl <;> obtain - | ⟨rrs, rrl, rrx, rrr⟩ := rr <;>
         dsimp +instances [balance, balance']
       · rfl
-      · have : size rrl = 0 ∧ size rr
+      · have : size rrl = 0 ∧ size rrr = 0 := by
+          have := balancedSz_zero.1 hr.1.symm
+          rwa [size, sr.2.2.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sr.2.2.2.1.size_eq_zero.1 this.1
+        cases sr.2.2.2.2.size_eq_zero.1 this.2
+        obtain rfl : rrs = 1 := sr.2.2.1
+        rw [if_neg]; rw [rotateL_node]; rw [if_pos]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · have : size rll = 0 ∧ size rlr = 0 := by
+          have := balancedSz_zero.1 hr.1
+          rwa [size, sr.2.1.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sr.2.1.2.1.size_eq_zero.1 this.1
+        cases sr.2.1.2.2.size_eq_zero.1 this.2
+        obtain rfl : rls = 1 := sr.2.1.1
+        rw [if_neg]; rw [rotateL_node]; rw [if_neg]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · symm; rw [zero_add, if_neg, rotateL]
+        · dsimp only [size_node]; split_ifs
+          · simp [node3L, node']; abel
+          · simp [node4L, node', sr.2.1.1]; abel
+        · exact not_le_of_gt (Nat.succ_lt_succ (add_pos sr.2.1.pos sr.2.2.pos))
+  · obtain - | ⟨rs, rl, rx, rr⟩ := r
+    · rw [sl.eq_node'] at hl ⊢
+      obtain - | ⟨lls, lll, llx, llr⟩ := ll <;> obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr <;>
+        dsimp [balance, balance']
+      · rfl
+      · have : size lrl = 0 ∧ size lrr = 0 := by
+          have := balancedSz_zero.1 hl.1.symm
+          rwa [size, sl.2.2.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sl.2.2.2.1.size_eq_zero.1 this.1
+        cases sl.2.2.2.2.size_eq_zero.1 this.2
+        obtain rfl : lrs = 1 := sl.2.2.1
+        rw [if_neg]; rw [rotateR_node]; rw [if_neg]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · have : size lll = 0 ∧ size llr = 0 := by
+          have := balancedSz_zero.1 hl.1
+          rwa [size, sl.2.1.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
+        cases sl.2.1.2.1.size_eq_zero.1 this.1
+        cases sl.2.1.2.2.size_eq_zero.1 this.2
+        obtain rfl : lls = 1 := sl.2.1.1
+        rw [if_neg]; rw [rotateR_node]; rw [if_pos]; · rfl
+        all_goals (try dsimp only [size]); decide
+      · symm; rw [if_neg, rotateR]
+        · dsimp only [size_node]; split_ifs
+          · simp [node3R, node']; abel
+          · simp [node4R, node', sl.2.2.1]; abel
+        · exact not_le_of_gt (Nat.succ_lt_succ (add_pos sl.2.1.pos sl.2.2.pos))
+    · simp only [balance, id_eq, balance', size_node, gt_iff_lt]
+      symm; rw [if_neg]
+      · split_ifs with h h_1
+        · have rd : delta <= size rl + size rr := by
+            have := lt_of_le_of_lt (Nat.mul_le_mul_left _ sl.pos) h
+            rwa [sr.1, Nat.lt_succ_iff] at this
+          obtain - | ⟨rls, rll, rlx, rlr⟩ := rl
+          · rw [size, zero_add] at rd
+            exact absurd (le_trans rd (balancedSz_zero.1 hr.1.symm)) (by decide)
+          obtain - | ⟨rrs, rrl, rrx, rrr⟩ := rr
+          · exact absurd (le_trans rd (balancedSz_zero.1 hr.1)) (by decide)
+          dsimp [rotateL]; split_ifs
+          · simp [node3L, node', sr.1]; abel
+          · simp [node4L, node', sr.1, sr.2.1.1]; abel
+        · have ld : delta <= size ll + size lr := by
+            have := lt_of_le_of_lt (Nat.mul_le_mul_left _ sr.pos) h_1
+            rwa [sl.1, Nat.lt_succ_iff] at this
+          obtain - | ⟨lls, lll, llx, llr⟩ := ll
+          · rw [size, zero_add] at ld
+            exact absurd (le_trans ld (balancedSz_zero.1 hl.1.symm)) (by decide)
+          obtain - | ⟨lrs, lrl, lrx, lrr⟩ := lr
+          · exact absurd (le_trans ld (balancedSz_zero.1 hl.1)) (by decide)
+          dsimp [rotateR]; split_ifs
+          · simp [node3R, node', sl.1]; abel
+          · simp [node4R, node', sl.1, sl.2.2.1]; abel
+        · simp [node']
+      · exact not_le_of_gt (add_le_add (Nat.succ_le_of_lt sl.pos) (Nat.succ_le_of_lt sr.pos))
 
 Depends on / 依赖: Nat.le_zero, Nat.succ_le_succ_iff, add_eq_zero, balance, balancedSz_zero, eq_node, instances, le_zero, size_eq_zero, sr.eq_node, succ_le_succ_iff
 -/
@@ -2238,7 +2394,10 @@ theorem balanceL_eq_balance
         have := H1 rfl
         rwa [size, sr.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
       cases sr.2.1.size_eq_zero.1 this.1
-      cases sr.2.2.size_eq_
+      cases sr.2.2.size_eq_zero.1 this.2
+      rw [sr.eq_node']; rfl
+    · replace H2 : ¬rs > delta * ls := not_lt_of_ge (H2 sl.pos sr.pos)
+      simp [balanceL, balance, H2]; split_ifs <;> simp [add_comm]
 
 中文:
 定理 balanceL_eq_balance
@@ -2251,7 +2410,10 @@ theorem balanceL_eq_balance
         have := H1 rfl
         rwa [size, sr.1, Nat.succ_le_succ_iff, Nat.le_zero, add_eq_zero] at this
       cases sr.2.1.size_eq_zero.1 this.1
-      cases sr.2.2.size_eq_
+      cases sr.2.2.size_eq_zero.1 this.2
+      rw [sr.eq_node']; rfl
+    · replace H2 : ¬rs > delta * ls := not_lt_of_ge (H2 sl.pos sr.pos)
+      simp [balanceL, balance, H2]; split_ifs <;> simp [add_comm]
 
 Depends on / 依赖: Nat.le_zero, Nat.succ_le_succ_iff, add_comm, add_eq_zero, balance, balanceL, eq_node, le_zero, not_lt_of_ge, replace, size_eq_zero, sl.pos, split_ifs, sr.eq_node, sr.pos, succ_le_succ_iff
 -/
@@ -2466,7 +2628,11 @@ theorem balanceL_eq_balance'
     · exact balancedSz_zero.1 H.symm
     exact le_trans (raised_iff.1 e).1 (balancedSz_zero.1 H.symm)
   · intro l1 _
-    rcases H with (⟨l', e, 
+    rcases H with (⟨l', e, H | ⟨_, H₂⟩⟩ | ⟨r', e, H | ⟨_, H₂⟩⟩)
+    · exact le_trans (le_trans (Nat.le_add_left _ _) H) (mul_pos (by decide) l1 : (0 : Nat) < _)
+    · exact le_trans H₂ (Nat.mul_le_mul_left _ (raised_iff.1 e).1)
+    · cases raised_iff.1 e; unfold delta; lia
+    · exact le_trans (raised_iff.1 e).1 H₂
 
 中文:
 定理 balanceL_eq_balance'
@@ -2478,7 +2644,11 @@ theorem balanceL_eq_balance'
     · exact balancedSz_zero.1 H.symm
     exact le_trans (raised_iff.1 e).1 (balancedSz_zero.1 H.symm)
   · intro l1 _
-    rcases H with (⟨l', e, 
+    rcases H with (⟨l', e, H | ⟨_, H₂⟩⟩ | ⟨r', e, H | ⟨_, H₂⟩⟩)
+    · exact le_trans (le_trans (Nat.le_add_left _ _) H) (mul_pos (by decide) l1 : (0 : Nat) < _)
+    · exact le_trans H₂ (Nat.mul_le_mul_left _ (raised_iff.1 e).1)
+    · cases raised_iff.1 e; unfold delta; lia
+    · exact le_trans (raised_iff.1 e).1 H₂
 
 Depends on / 依赖: H.symm, Nat.le_add_left, Nat.mul_le_mul_left, balanceL_eq_balance, balance_eq_balance, balancedSz_zero, le_add_left, le_trans, mul_le_mul_left, mul_pos, raised_iff
 -/

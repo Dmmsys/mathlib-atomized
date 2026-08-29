@@ -53,7 +53,8 @@ theorem tendsto_mul_pow_div_factorial_sub_atTop
     rw [mul_right_comm]; rw [← div_eq_mul_inv] at h
   · rw [div_lt_iff_of_neg hε] at h
     rwa [lt_div_iff₀' (Nat.cast_pos.mpr (Nat.factorial_pos _))]
-  · 
+  · rw [div_lt_iff₀ hε] at h
+    rwa [div_lt_iff₀' (Nat.cast_pos.mpr (Nat.factorial_pos _))]
 
 中文:
 定理 tendsto_mul_pow_div_factorial_sub_atTop
@@ -67,7 +68,8 @@ theorem tendsto_mul_pow_div_factorial_sub_atTop
     rw [mul_right_comm]; rw [← div_eq_mul_inv] at h
   · rw [div_lt_iff_of_neg hε] at h
     rwa [lt_div_iff₀' (Nat.cast_pos.mpr (Nat.factorial_pos _))]
-  · 
+  · rw [div_lt_iff₀ hε] at h
+    rwa [div_lt_iff₀' (Nat.cast_pos.mpr (Nat.factorial_pos _))]
 
 Depends on / 依赖: Nat.cast_pos.mpr, Nat.factorial_pos, all_goals, cast_pos, div_eq_mul_inv, div_lt_iff_of_neg, eventually_mul_pow_lt_factorial_sub, factorial_pos, filter_upwards, mul_right_comm, tendsto_order
 -/
@@ -343,7 +345,7 @@ theorem tendsto_floor_left_pure_ceil_sub_one
   proof: have h₁ : ↑(⌈x⌉ - 1) < x := by rw [cast_sub, cast_one, sub_lt_iff_lt_add]; exact ceil_lt_add_one _
   have h₂ : x <= ↑(⌈x⌉ - 1) + 1 := by rw [cast_sub, cast_one, sub_add_cancel]; exact le_ceil _
 tendsto_pure.2 mem_of_superset (Ico_mem_nhdsLT h₁) fun _y hy =>
-    floor_eq_on_Ico _ _ ⟨hy.1, hy.2.trans_
+    floor_eq_on_Ico _ _ ⟨hy.1, hy.2.trans_le h₂⟩
 
 中文:
 定理 tendsto_floor_left_pure_ceil_sub_one
@@ -351,7 +353,7 @@ tendsto_pure.2 mem_of_superset (Ico_mem_nhdsLT h₁) fun _y hy =>
   证明: have h₁ : ↑(⌈x⌉ - 1) < x := by rw [cast_sub, cast_one, sub_lt_iff_lt_add]; exact ceil_lt_add_one _
   have h₂ : x <= ↑(⌈x⌉ - 1) + 1 := by rw [cast_sub, cast_one, sub_add_cancel]; exact le_ceil _
 tendsto_pure.2 mem_of_superset (Ico_mem_nhdsLT h₁) fun _y hy =>
-    floor_eq_on_Ico _ _ ⟨hy.1, hy.2.trans_
+    floor_eq_on_Ico _ _ ⟨hy.1, hy.2.trans_le h₂⟩
 
 Depends on / 依赖: Ico_mem_nhdsLT, cast_one, cast_sub, ceil_lt_add_one, floor_eq_on_Ico, le_ceil, mem_of_superset, sub_add_cancel, sub_lt_iff_lt_add, tendsto_pure, trans_le
 -/
@@ -757,7 +759,17 @@ theorem ContinuousOn.comp_fract'
   rcases em (exists n : Int, t = n) with (⟨n, rfl⟩ | ht)
   · rw [ContinuousAt, nhds_prod_eq, ← nhdsLT_sup_nhdsGE (n : α), prod_sup, tendsto_sup]
     constructor
-    · refine (((h (s, 1) ⟨trivial
+    · refine (((h (s, 1) ⟨trivial, zero_le_one, le_rfl⟩).tendsto.mono_left ?_).comp
+        (tendsto_id.prodMap (tendsto_fract_left _))).mono_right (le_of_eq ?_)
+      · rw [nhdsWithin_prod_eq, nhdsWithin_univ, ← nhdsWithin_Ico_eq_nhdsLT one_pos]
+        exact Filter.prod_mono le_rfl (nhdsWithin_mono _ Ico_subset_Icc_self)
+      · simp [hf]
+    · refine (((h (s, 0) ⟨trivial, le_rfl, zero_le_one⟩).tendsto.mono_left <| le_of_eq ?_).comp
+        (tendsto_id.prodMap (tendsto_fract_right _))).mono_right (le_of_eq ?_) <;>
+        simp [nhdsWithin_prod_eq, nhdsWithin_univ]
+  · replace ht : t != ⌊t⌋ := fun ht' => ht ⟨_, ht'⟩
+    refine (h.continuousAt ?_).comp (continuousAt_id.prodMap (continuousAt_fract ht))
+    exact prod_mem_nhds univ_mem (Icc_mem_nhds (fract_pos.2 ht) (fract_lt_one _))
 
 中文:
 定理 ContinuousOn.comp_fract'
@@ -769,7 +781,17 @@ theorem ContinuousOn.comp_fract'
   rcases em (exists n : Int, t = n) with (⟨n, rfl⟩ | ht)
   · rw [ContinuousAt, nhds_prod_eq, ← nhdsLT_sup_nhdsGE (n : α), prod_sup, tendsto_sup]
     constructor
-    · refine (((h (s, 1) ⟨trivial
+    · refine (((h (s, 1) ⟨trivial, zero_le_one, le_rfl⟩).tendsto.mono_left ?_).comp
+        (tendsto_id.prodMap (tendsto_fract_left _))).mono_right (le_of_eq ?_)
+      · rw [nhdsWithin_prod_eq, nhdsWithin_univ, ← nhdsWithin_Ico_eq_nhdsLT one_pos]
+        exact Filter.prod_mono le_rfl (nhdsWithin_mono _ Ico_subset_Icc_self)
+      · simp [hf]
+    · refine (((h (s, 0) ⟨trivial, le_rfl, zero_le_one⟩).tendsto.mono_left <| le_of_eq ?_).comp
+        (tendsto_id.prodMap (tendsto_fract_right _))).mono_right (le_of_eq ?_) <;>
+        simp [nhdsWithin_prod_eq, nhdsWithin_univ]
+  · replace ht : t != ⌊t⌋ := fun ht' => ht ⟨_, ht'⟩
+    refine (h.continuousAt ?_).comp (continuousAt_id.prodMap (continuousAt_fract ht))
+    exact prod_mem_nhds univ_mem (Icc_mem_nhds (fract_pos.2 ht) (fract_lt_one _))
 
 Depends on / 依赖: Continuous, ContinuousAt, Filter, Filter.prod_, Prod.map, continuous_iff_continuousAt, le_of_eq, le_rfl, mono_left, mono_right, nhdsLT_sup_nhdsGE, nhdsWithin_Ico_eq_nhdsLT, nhdsWithin_prod_eq, nhdsWithin_univ, nhds_prod_eq, one_pos, prodMap, prod_, prod_sup, tendsto
 -/

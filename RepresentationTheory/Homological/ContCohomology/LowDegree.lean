@@ -39,7 +39,11 @@ lemma cocycles₀IsoAux
     Subtype.ext_iff, homogeneousCochains.d_apply _] at hσ
   simp only [mem_invariants]
   intro g
-  rw [d_succ]; rw [hom_sub]; rw [hom_ofHom]; rw [ContIntertwiningMap.sub_apply]; rw [d_zero]; rw [ZeroMemClass.coe_zero]; rw
+  rw [d_succ]; rw [hom_sub]; rw [hom_ofHom]; rw [ContIntertwiningMap.sub_apply]; rw [d_zero]; rw [ZeroMemClass.coe_zero]; rw [sub_eq_zero] at hσ
+  replace hσ := DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hσ 1) g⁻¹
+  simp only [Nat.reduceAdd, coind₁ι_toFun, ContinuousMap.const_apply, ConcreteCategory.hom_ofHom,
+    coind₁Map_toFun, ContinuousMap.comp_apply, ContinuousMap.coe_mk] at hσ
+  simpa [hσ] using DFunLike.ext_iff.1 (σ.2 g) 1
 
 中文:
 引理 cocycles₀IsoAux
@@ -49,7 +53,11 @@ lemma cocycles₀IsoAux
     Subtype.ext_iff, homogeneousCochains.d_apply _] at hσ
   simp only [mem_invariants]
   intro g
-  rw [d_succ]; rw [hom_sub]; rw [hom_ofHom]; rw [ContIntertwiningMap.sub_apply]; rw [d_zero]; rw [ZeroMemClass.coe_zero]; rw
+  rw [d_succ]; rw [hom_sub]; rw [hom_ofHom]; rw [ContIntertwiningMap.sub_apply]; rw [d_zero]; rw [ZeroMemClass.coe_zero]; rw [sub_eq_zero] at hσ
+  replace hσ := DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hσ 1) g⁻¹
+  simp only [Nat.reduceAdd, coind₁ι_toFun, ContinuousMap.const_apply, ConcreteCategory.hom_ofHom,
+    coind₁Map_toFun, ContinuousMap.comp_apply, ContinuousMap.coe_mk] at hσ
+  simpa [hσ] using DFunLike.ext_iff.1 (σ.2 g) 1
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, ContIntertwiningMap, ContIntertwiningMap.sub_apply, ContinuousLinearMap, ContinuousLinearMap.coe_coe, ContinuousMap, ContinuousMap.c, ContinuousMap.const_apply, DFunLike, DFunLike.ext_iff, LinearMap, LinearMap.mem_ker, Nat.reduceAdd, Subtype, Subtype.ext_iff, ZeroMemClass, ZeroMemClass.coe_zero, coe_coe, coe_zero
 -/
@@ -143,7 +151,16 @@ definition d₀kerIso
     cocycles₀IsoAux' X x (mem_const_resol₀ X x hx)⟩
   left_inv := fun ⟨⟨(x : C(G, X)), hx'⟩, hx⟩ => by
     ext g
-    rw [Linea
+    rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply] at hx
+    simp only [Nat.reduceAdd, d_succ, d_zero, ConcreteCategory.hom_ofHom, hom_sub,
+      ContIntertwiningMap.sub_apply, coind₁ι_toFun, coind₁Map_toFun, ZeroMemClass.coe_zero,
+      sub_eq_zero, ContinuousMap.const_apply] at hx ⊢
+    simpa using DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hx g) 1
+  right_inv _ := rfl
+continuous_toFun := continuous_induced_rng.2 (continuous_eval_const 1).comp
+    (continuous_subtype_val.comp continuous_subtype_val)
+continuous_invFun := continuous_induced_rng.2 continuous_induced_rng.2
+    ContinuousMap.continuous_const'.comp continuous_subtype_val
 
 中文:
 定义 d₀kerIso
@@ -155,7 +172,16 @@ definition d₀kerIso
     cocycles₀IsoAux' X x (mem_const_resol₀ X x hx)⟩
   left_inv := fun ⟨⟨(x : C(G, X)), hx'⟩, hx⟩ => by
     ext g
-    rw [Linea
+    rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply] at hx
+    simp only [Nat.reduceAdd, d_succ, d_zero, ConcreteCategory.hom_ofHom, hom_sub,
+      ContIntertwiningMap.sub_apply, coind₁ι_toFun, coind₁Map_toFun, ZeroMemClass.coe_zero,
+      sub_eq_zero, ContinuousMap.const_apply] at hx ⊢
+    simpa using DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hx g) 1
+  right_inv _ := rfl
+continuous_toFun := continuous_induced_rng.2 (continuous_eval_const 1).comp
+    (continuous_subtype_val.comp continuous_subtype_val)
+continuous_invFun := continuous_induced_rng.2 continuous_induced_rng.2
+    ContinuousMap.continuous_const'.comp continuous_subtype_val
 -/
 def d₀kerIso : ((homogeneousCochains X).d 0 1).hom.ker ≃L[k] X.ρ.invariants where
   toFun := fun ⟨σ, hσ⟩ => ⟨σ.val 1, cocycles₀IsoAux X σ hσ⟩

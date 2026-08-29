@@ -218,7 +218,15 @@ letI : IsScalarTower R A B := IsScalarTower.of_algebraMap_eq' IsScalarTower.alge
   haveI equiv := baseChangeMkQEquiv N.toSubmodule
   { toSubmodule := (baseChangeMkQ B N.toSubmodule).ker
     finite_quotient := Module.Finite.equiv equiv.symm
-    project
+    projective_quotient := Module.Projective.of_equiv equiv.symm
+    rankAtStalk_eq p := by
+      calc
+        _ = rankAtStalk (R := B) (B otimes[A] ((A otimes[R] M) ⧸ N.toSubmodule)) p := by
+simpa using congrArg (fun g => g p) Module.rankAtStalk_eq_of_equiv equiv
+        _ = rankAtStalk (R := A) (A otimes[R] M ⧸ N.toSubmodule)
+            (PrimeSpectrum.comap (algebraMap A B) p) := by
+          simpa using Module.rankAtStalk_baseChange ..
+        _ = k := N.rankAtStalk_eq _ }
 
 中文:
 定义 map
@@ -228,7 +236,15 @@ letI : IsScalarTower R A B := IsScalarTower.of_algebraMap_eq' IsScalarTower.alge
   haveI equiv := baseChangeMkQEquiv N.toSubmodule
   { toSubmodule := (baseChangeMkQ B N.toSubmodule).ker
     finite_quotient := Module.Finite.equiv equiv.symm
-    project
+    projective_quotient := Module.Projective.of_equiv equiv.symm
+    rankAtStalk_eq p := by
+      calc
+        _ = rankAtStalk (R := B) (B otimes[A] ((A otimes[R] M) ⧸ N.toSubmodule)) p := by
+simpa using congrArg (fun g => g p) Module.rankAtStalk_eq_of_equiv equiv
+        _ = rankAtStalk (R := A) (A otimes[R] M ⧸ N.toSubmodule)
+            (PrimeSpectrum.comap (algebraMap A B) p) := by
+          simpa using Module.rankAtStalk_baseChange ..
+        _ = k := N.rankAtStalk_eq _ }
 
 Depends on / 依赖: Algebra, Finite, IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, Module, Module.Finite.equiv, Module.Projective.of_equiv, Module.rankAt, N.toSubmodule, Projective, algebraMap_eq, baseChangeMkQ, baseChangeMkQEquiv, equiv.symm, f.toAlgebra, finite_quotient, of_algebraMap_eq, of_equiv, otimes
 -/
@@ -310,7 +326,31 @@ theorem map_comp
   -- FIXME: `algebraize` doesn't generate this instance, even though it seems like it should
   let : IsScalarTower A B C := by apply IsScalarTower.of_algebraMap_eq'; rfl
   let fAB := baseChangeMkQ B N.toSubmodule
-  let fAC := baseChang
+  let fAC := baseChangeMkQ C N.toSubmodule
+  let fBC := baseChangeMkQ C fAB.ker
+  have hfAB : Function.Surjective fAB :=
+    (LinearMap.baseChange_surjective B (Submodule.mkQ_surjective _)).comp
+      (cancelBaseChange R A B B M).symm.surjective
+  let e := (fAB.quotKerEquivOfSurjective hfAB).baseChange B C ≪≫ₗ
+    cancelBaseChange A B C C (A otimes[R] M ⧸ N.toSubmodule)
+  ext x
+  have hfAC_ker_eq : (map (g.comp f) N).toSubmodule = fAC.ker := map_toSubmodule (g.comp f) N
+  have hfBC_ker_eq : (map g (map f N)).toSubmodule = fBC.ker := by
+    rw [map_toSubmodule g (map f N)]; rw [map_toSubmodule f N]
+  have hcomp : fAC = e.toLinearMap.comp fBC := by
+    apply LinearMap.ext
+    intro z
+    induction z using TensorProduct.induction_on with
+    | zero => simp [fAC, fBC, e]
+    | tmul c m =>
+      simp only [fAC, fBC, e, baseChangeMkQ, LinearMap.comp_apply, cancelBaseChange_symm_tmul,
+         LinearMap.baseChange_tmul, Submodule.mkQ_apply, LinearEquiv.coe_trans, LinearEquiv.coe_coe,
+         LinearEquiv.coe_baseChange, LinearMap.quotKerEquivOfSurjective_apply_mk]
+      simp [fAB, baseChangeMkQ]
+    | add x y hx hy =>
+      simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, map_add] at *
+      rw [hx]; rw [hy]
+  rw [hfAC_ker_eq]; rw [hfBC_ker_eq]; rw [hcomp]; rw [LinearEquiv.ker_comp]
 
 中文:
 定理 map_comp
@@ -320,7 +360,31 @@ theorem map_comp
   -- FIXME: `algebraize` doesn't generate this instance, even though it seems like it should
   let : IsScalarTower A B C := by apply IsScalarTower.of_algebraMap_eq'; rfl
   let fAB := baseChangeMkQ B N.toSubmodule
-  let fAC := baseChang
+  let fAC := baseChangeMkQ C N.toSubmodule
+  let fBC := baseChangeMkQ C fAB.ker
+  have hfAB : Function.Surjective fAB :=
+    (LinearMap.baseChange_surjective B (Submodule.mkQ_surjective _)).comp
+      (cancelBaseChange R A B B M).symm.surjective
+  let e := (fAB.quotKerEquivOfSurjective hfAB).baseChange B C ≪≫ₗ
+    cancelBaseChange A B C C (A otimes[R] M ⧸ N.toSubmodule)
+  ext x
+  have hfAC_ker_eq : (map (g.comp f) N).toSubmodule = fAC.ker := map_toSubmodule (g.comp f) N
+  have hfBC_ker_eq : (map g (map f N)).toSubmodule = fBC.ker := by
+    rw [map_toSubmodule g (map f N)]; rw [map_toSubmodule f N]
+  have hcomp : fAC = e.toLinearMap.comp fBC := by
+    apply LinearMap.ext
+    intro z
+    induction z using TensorProduct.induction_on with
+    | zero => simp [fAC, fBC, e]
+    | tmul c m =>
+      simp only [fAC, fBC, e, baseChangeMkQ, LinearMap.comp_apply, cancelBaseChange_symm_tmul,
+         LinearMap.baseChange_tmul, Submodule.mkQ_apply, LinearEquiv.coe_trans, LinearEquiv.coe_coe,
+         LinearEquiv.coe_baseChange, LinearMap.quotKerEquivOfSurjective_apply_mk]
+      simp [fAB, baseChangeMkQ]
+    | add x y hx hy =>
+      simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, map_add] at *
+      rw [hx]; rw [hy]
+  rw [hfAC_ker_eq]; rw [hfBC_ker_eq]; rw [hcomp]; rw [LinearEquiv.ker_comp]
 
 Depends on / 依赖: algebraize, f.toRingHom, g.comp, g.toRingHom, toRingHom
 -/

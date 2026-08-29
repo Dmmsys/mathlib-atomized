@@ -183,7 +183,54 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero
   set G : (ι ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R m with hG
   have G_basis_eq (i : ι) : G (Finsupp.single i 1) = m i := by simp [hG]
   have G_surjective : Surjective G := by
-    apply Linear
+    apply LinearMap.range_eq_top.mp
+    apply top_le_iff.mp
+    rw [← hm]
+    apply Submodule.span_le.mpr
+    rintro _ ⟨i, rfl⟩
+    use Finsupp.single i 1, G_basis_eq i
+  /- Consider the element $\sum_i e_i \otimes n_i$ of $R^\iota \otimes N$. It is in the kernel of
+  $R^\iota \otimes N \to M \otimes N$. -/
+  set en : (ι ->₀ R) otimes[R] N := ∑ i, Finsupp.single i 1 otimesₜ n i with hen
+  have en_mem_ker : en in ker (rTensor N G) := by simp [hen, G_basis_eq, hmn]
+  -- We have an exact sequence $\ker G \to R^\iota \to M \to 0$.
+  have exact_ker_subtype : Exact (ker G).subtype G := G.exact_subtype_ker_map
+  -- Tensor the exact sequence with $N$.
+  have exact_rTensor_ker_subtype : Exact (rTensor N (ker G).subtype) (rTensor N G) :=
+    rTensor_exact (M := ↥(ker G)) N exact_ker_subtype G_surjective
+  /- We conclude that $\sum_i e_i \otimes n_i$ is in the range of
+    $\ker G \otimes N \to R^\iota \otimes N$. -/
+  have en_mem_range : en in range (rTensor N (ker G).subtype) :=
+    exact_rTensor_ker_subtype.linearMap_ker_eq ▸ en_mem_ker
+  /- There is an element of in $\ker G \otimes N$ that maps to $\sum_i e_i \otimes n_i$.
+  Write it as a finite sum of pure tensors. -/
+  obtain ⟨kn, hkn⟩ := en_mem_range
+  obtain ⟨ma, rfl : kn = ∑ kj in ma, kj.1 otimesₜ[R] kj.2⟩ := exists_finset kn
+  /- Let $\sum_j k_j \otimes y_j$ be the sum obtained in the previous step.
+  In order to show that $\sum_i m_i \otimes n_i$ vanishes trivially, it suffices to prove that there
+  exist $(a_{ij})_{i, j}$ such that for all $i$,
+  $$n_i = \sum_j a_{ij} y_j$$
+  and for all $j$,
+  $$\sum_i a_{ij} m_i = 0.$$
+  For this, take $a_{ij}$ to be the coefficient of $e_i$ in $k_j$. -/
+  refine .of_fintype (κ := ma) (fun i ⟨⟨kj, _⟩, _⟩ => (kj : ι ->₀ R) i) (fun ⟨⟨_, yj⟩, _⟩ => yj) ?_ ?_
+  · intro i
+    classical
+    apply_fun finsuppScalarLeft R N ι at hkn
+    apply_fun (· i) at hkn
+    symm at hkn
+    simp only [map_sum, finsuppScalarLeft_apply_tmul, zero_smul, Finsupp.single_zero,
+      Finsupp.sum_single_index, one_smul, Finsupp.finsetSum_apply, Finsupp.single_apply,
+      Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, rTensor_tmul, coe_subtype, Finsupp.sum_apply,
+      Finsupp.sum_ite_eq', Finsupp.mem_support_iff, ne_eq, ite_not, en] at hkn
+    simp only [Finset.univ_eq_attach, Finset.sum_attach ma (fun x => (x.1 : ι ->₀ R) i • x.2)]
+    convert! hkn using 2 with x _
+    split
+    · next h'x => rw [h'x, zero_smul]
+    · rfl
+  · rintro ⟨⟨⟨k, hk⟩, _⟩, _⟩
+    simpa only [hG, linearCombination_apply, zero_smul, implies_true, Finsupp.sum_fintype] using
+      mem_ker.mp hk
 
 中文:
 定理 vanishesTrivially_of_sum_tmul_eq_zero
@@ -193,7 +240,54 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero
   set G : (ι ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R m with hG
   have G_basis_eq (i : ι) : G (Finsupp.single i 1) = m i := by simp [hG]
   have G_surjective : Surjective G := by
-    apply Linear
+    apply LinearMap.range_eq_top.mp
+    apply top_le_iff.mp
+    rw [← hm]
+    apply Submodule.span_le.mpr
+    rintro _ ⟨i, rfl⟩
+    use Finsupp.single i 1, G_basis_eq i
+  /- Consider the element $\sum_i e_i \otimes n_i$ of $R^\iota \otimes N$. It is in the kernel of
+  $R^\iota \otimes N \to M \otimes N$. -/
+  set en : (ι ->₀ R) otimes[R] N := ∑ i, Finsupp.single i 1 otimesₜ n i with hen
+  have en_mem_ker : en in ker (rTensor N G) := by simp [hen, G_basis_eq, hmn]
+  -- We have an exact sequence $\ker G \to R^\iota \to M \to 0$.
+  have exact_ker_subtype : Exact (ker G).subtype G := G.exact_subtype_ker_map
+  -- Tensor the exact sequence with $N$.
+  have exact_rTensor_ker_subtype : Exact (rTensor N (ker G).subtype) (rTensor N G) :=
+    rTensor_exact (M := ↥(ker G)) N exact_ker_subtype G_surjective
+  /- We conclude that $\sum_i e_i \otimes n_i$ is in the range of
+    $\ker G \otimes N \to R^\iota \otimes N$. -/
+  have en_mem_range : en in range (rTensor N (ker G).subtype) :=
+    exact_rTensor_ker_subtype.linearMap_ker_eq ▸ en_mem_ker
+  /- There is an element of in $\ker G \otimes N$ that maps to $\sum_i e_i \otimes n_i$.
+  Write it as a finite sum of pure tensors. -/
+  obtain ⟨kn, hkn⟩ := en_mem_range
+  obtain ⟨ma, rfl : kn = ∑ kj in ma, kj.1 otimesₜ[R] kj.2⟩ := exists_finset kn
+  /- Let $\sum_j k_j \otimes y_j$ be the sum obtained in the previous step.
+  In order to show that $\sum_i m_i \otimes n_i$ vanishes trivially, it suffices to prove that there
+  exist $(a_{ij})_{i, j}$ such that for all $i$,
+  $$n_i = \sum_j a_{ij} y_j$$
+  and for all $j$,
+  $$\sum_i a_{ij} m_i = 0.$$
+  For this, take $a_{ij}$ to be the coefficient of $e_i$ in $k_j$. -/
+  refine .of_fintype (κ := ma) (fun i ⟨⟨kj, _⟩, _⟩ => (kj : ι ->₀ R) i) (fun ⟨⟨_, yj⟩, _⟩ => yj) ?_ ?_
+  · intro i
+    classical
+    apply_fun finsuppScalarLeft R N ι at hkn
+    apply_fun (· i) at hkn
+    symm at hkn
+    simp only [map_sum, finsuppScalarLeft_apply_tmul, zero_smul, Finsupp.single_zero,
+      Finsupp.sum_single_index, one_smul, Finsupp.finsetSum_apply, Finsupp.single_apply,
+      Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, rTensor_tmul, coe_subtype, Finsupp.sum_apply,
+      Finsupp.sum_ite_eq', Finsupp.mem_support_iff, ne_eq, ite_not, en] at hkn
+    simp only [Finset.univ_eq_attach, Finset.sum_attach ma (fun x => (x.1 : ι ->₀ R) i • x.2)]
+    convert! hkn using 2 with x _
+    split
+    · next h'x => rw [h'x, zero_smul]
+    · rfl
+  · rintro ⟨⟨⟨k, hk⟩, _⟩, _⟩
+    simpa only [hG, linearCombination_apply, zero_smul, implies_true, Finsupp.sum_fintype] using
+      mem_ker.mp hk
 -/
 theorem vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range m) = ⊤)
     (hmn : ∑ i, m i otimesₜ n i = (0 : M otimes[R] N)) : VanishesTrivially R m n := by
@@ -279,7 +373,17 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
   have mem_M' i : m i in span R (Set.range m) := subset_span ⟨i, rfl⟩
   set m' : ι -> span R (Set.range m) := Subtype.coind m mem_M' with m'_eq
   have hm' : span R (Set.range m') = ⊤ := by
-    apply map
+    apply map_injective_of_injective (injective_subtype (span R (Set.range m)))
+    rw [Submodule.map_span]; rw [Submodule.map_top]; rw [range_subtype]; rw [coe_subtype]; rw [← Set.range_comp]
+    rfl
+  have hm'n : ∑ i, m' i otimesₜ n i = (0 : span R (Set.range m) otimes[R] N) := by
+    apply hm
+    simp only [m'_eq, map_sum, rTensor_tmul, coe_subtype, Subtype.coind_coe, map_zero, hmn]
+  have : VanishesTrivially R m' n := vanishesTrivially_of_sum_tmul_eq_zero R hm' hm'n
+  unfold VanishesTrivially at this ⊢
+  convert! this with κ _ a y j
+  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype (span R (Set.range m))) _
+  simp [m'_eq]
 
 中文:
 定理 vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
@@ -288,7 +392,17 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
   have mem_M' i : m i in span R (Set.range m) := subset_span ⟨i, rfl⟩
   set m' : ι -> span R (Set.range m) := Subtype.coind m mem_M' with m'_eq
   have hm' : span R (Set.range m') = ⊤ := by
-    apply map
+    apply map_injective_of_injective (injective_subtype (span R (Set.range m)))
+    rw [Submodule.map_span]; rw [Submodule.map_top]; rw [range_subtype]; rw [coe_subtype]; rw [← Set.range_comp]
+    rfl
+  have hm'n : ∑ i, m' i otimesₜ n i = (0 : span R (Set.range m) otimes[R] N) := by
+    apply hm
+    simp only [m'_eq, map_sum, rTensor_tmul, coe_subtype, Subtype.coind_coe, map_zero, hmn]
+  have : VanishesTrivially R m' n := vanishesTrivially_of_sum_tmul_eq_zero R hm' hm'n
+  unfold VanishesTrivially at this ⊢
+  convert! this with κ _ a y j
+  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype (span R (Set.range m))) _
+  simp [m'_eq]
 -/
 theorem vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
     (hm : Injective (rTensor N (span R (Set.range m)).subtype))
@@ -343,7 +457,14 @@ theorem rTensor_injective_of_forall_vanishesTrivially
   apply sum_tmul_eq_zero_of_vanishesTrivially
   simp only [map_sum, rTensor_tmul, coe_subtype] at hx
   have e := (Fintype.equivFin s).symm
-  rw [← Finset.sum_coe_sort]; rw [← e.
+  rw [← Finset.sum_coe_sort]; rw [← e.sum_comp] at hx
+  have := hMN hx
+  rw [← e.vanishesTrivially_comp]
+  unfold VanishesTrivially at this ⊢
+  convert! this
+  symm
+  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype M') _
+  simp
 
 中文:
 定理 rTensor_injective_of_对任意_vanishesTrivially
@@ -355,7 +476,14 @@ theorem rTensor_injective_of_forall_vanishesTrivially
   apply sum_tmul_eq_zero_of_vanishesTrivially
   simp only [map_sum, rTensor_tmul, coe_subtype] at hx
   have e := (Fintype.equivFin s).symm
-  rw [← Finset.sum_coe_sort]; rw [← e.
+  rw [← Finset.sum_coe_sort]; rw [← e.sum_comp] at hx
+  have := hMN hx
+  rw [← e.vanishesTrivially_comp]
+  unfold VanishesTrivially at this ⊢
+  convert! this
+  symm
+  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype M') _
+  simp
 
 Depends on / 依赖: Finset, Finset.sum_attach, Finset.sum_coe_sort, Fintype, Fintype.equivFin, VanishesTrivially, coe_subtype, convert, e.sum_comp, e.vanishesTrivially_comp, equivFin, exists_finset, injective_iff_map_eq_zero, injective_subtype, map_sum, rTensor_tmul, sum_attach, sum_coe_sort, sum_comp, sum_tmul_eq_zero_of_vanishesTrivially
 -/

@@ -125,7 +125,7 @@ theorem Walk.setOfPred_length_eq_add_one
 alias Walk.setOf_length_eq_add_one := Walk.setOfPred_length_eq_add_one
 
 @[deprecated (since := "2026-05-12")]
-alias set_walk_length_succ_eq := Walk.setOf
+alias set_walk_length_succ_eq := Walk.setOfPred_length_eq_add_one
 
 中文:
 定理 途径.setOfPred_length_eq_add_one
@@ -140,7 +140,7 @@ alias set_walk_length_succ_eq := Walk.setOf
 alias Walk.setOf_length_eq_add_one := Walk.setOfPred_length_eq_add_one
 
 @[deprecated (since := "2026-05-12")]
-alias set_walk_length_succ_eq := Walk.setOf
+alias set_walk_length_succ_eq := Walk.setOfPred_length_eq_add_one
 
 Depends on / 依赖: Set.mem_iUnion, eq_comm, length_cons, mem_iUnion
 -/
@@ -248,7 +248,8 @@ theorem coe_finsetWalkLength_eq
   | succ n ih =>
     simp only [finsetWalkLength, Walk.setOfPred_length_eq_add_one, Finset.coe_biUnion,
       Finset.mem_coe, Finset.mem_univ, Set.iUnion_true, Finset.coe_map, Set.iUnion_coe_set]
-    con
+    congr!
+    grind
 
 中文:
 定理 coe_finsetWalkLength_eq
@@ -259,7 +260,8 @@ theorem coe_finsetWalkLength_eq
   | succ n ih =>
     simp only [finsetWalkLength, Walk.setOfPred_length_eq_add_one, Finset.coe_biUnion,
       Finset.mem_coe, Finset.mem_univ, Set.iUnion_true, Finset.coe_map, Set.iUnion_coe_set]
-    con
+    congr!
+    grind
 
 Depends on / 依赖: Finset, Finset.coe_biUnion, Finset.coe_map, Finset.mem_coe, Finset.mem_univ, Set.iUnion_coe_set, Set.iUnion_true, Walk.eq_nil_iff_nil, Walk.setOfPred_length_eq_add_one, coe_biUnion, coe_map, eq_nil_iff_nil, finsetWalkLength, generalizing, iUnion_coe_set, iUnion_true, mem_coe, mem_univ, setOfPred_length_eq_add_one
 -/

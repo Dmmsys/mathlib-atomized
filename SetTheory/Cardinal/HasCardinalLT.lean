@@ -125,7 +125,8 @@ lemma of_injective
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
   rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
   exact lt_of_le_of_lt (Cardinal.mk_le_of_injective
-    (Function.Injective.comp ULi
+    (Function.Injective.comp ULift.up_injective
+      (Function.Injective.comp hf ULift.down_injective))) h
 
 中文:
 引理 of_injective
@@ -135,7 +136,8 @@ lemma of_injective
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
   rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
   exact lt_of_le_of_lt (Cardinal.mk_le_of_injective
-    (Function.Injective.comp ULi
+    (Function.Injective.comp ULift.up_injective
+      (Function.Injective.comp hf ULift.down_injective))) h
 
 Depends on / 依赖: Cardinal, Cardinal.lift_lift, Cardinal.lift_lt, Cardinal.mk_le_of_injective, Function, Function.Injective.comp, HasCardinalLT, Injective, ULift.down_injective, ULift.up_injective, down_injective, lift_lift, lift_lt, lt_of_le_of_lt, mk_le_of_injective, up_injective
 -/
@@ -159,7 +161,8 @@ lemma of_surjective
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
   rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
   exact lt_of_le_of_lt (Cardinal.mk_le_of_surjective
-    (Function.Surjective.comp U
+    (Function.Surjective.comp ULift.up_surjective (Function.Surjective.comp hf
+      ULift.down_surjective))) h
 
 中文:
 引理 of_surjective
@@ -169,7 +172,8 @@ lemma of_surjective
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift]
   rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at h
   exact lt_of_le_of_lt (Cardinal.mk_le_of_surjective
-    (Function.Surjective.comp U
+    (Function.Surjective.comp ULift.up_surjective (Function.Surjective.comp hf
+      ULift.down_surjective))) h
 
 Depends on / 依赖: Cardinal, Cardinal.lift_lift, Cardinal.lift_lt, Cardinal.mk_le_of_surjective, Function, Function.Surjective.comp, HasCardinalLT, Surjective, ULift.down_surjective, ULift.up_surjective, down_surjective, lift_lift, lift_lt, lt_of_le_of_lt, mk_le_of_surjective, up_surjective
 -/
@@ -316,7 +320,9 @@ lemma hasCardinalLT_sum_iff
   · rintro ⟨hX, hY⟩
     dsimp [HasCardinalLT] at hX hY ⊢
     rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hX
-    rw [← Cardinal.lift_lt.{
+    rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hY
+    simp only [Cardinal.mk_sum, Cardinal.lift_add, Cardinal.lift_lift]
+    exact Cardinal.add_lt_of_lt (by simpa using hκ) hX hY
 
 中文:
 引理 hasCardinalLT_sum_iff
@@ -329,7 +335,9 @@ lemma hasCardinalLT_sum_iff
   · rintro ⟨hX, hY⟩
     dsimp [HasCardinalLT] at hX hY ⊢
     rw [← Cardinal.lift_lt.{_]; rw [u'}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hX
-    rw [← Cardinal.lift_lt.{
+    rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lift] at hY
+    simp only [Cardinal.mk_sum, Cardinal.lift_add, Cardinal.lift_lift]
+    exact Cardinal.add_lt_of_lt (by simpa using hκ) hX hY
 
 Depends on / 依赖: Cardinal, Cardinal.add_lt_of_lt, Cardinal.lift_add, Cardinal.lift_lift, Cardinal.lift_lt, Cardinal.mk_sum, HasCardinalLT, Sum.inl_injective, Sum.inr_injective, add_lt_of_lt, h.of_injective, inl_injective, inr_injective, lift_add, lift_lift, lift_lt, mk_sum, of_injective
 -/
@@ -391,7 +399,7 @@ lemma hasCardinalLT_subtype_max
     (fun x => ⟨x.1, Or.inr x.2⟩)) ?_
   rintro ⟨x, hx | hx⟩
   · exact ⟨Sum.inl ⟨x, hx⟩, rfl⟩
-  · exact ⟨Sum.inr
+  · exact ⟨Sum.inr ⟨x, hx⟩, rfl⟩
 
 中文:
 引理 hasCardinalLT_subtype_max
@@ -403,7 +411,7 @@ lemma hasCardinalLT_subtype_max
     (fun x => ⟨x.1, Or.inr x.2⟩)) ?_
   rintro ⟨x, hx | hx⟩
   · exact ⟨Sum.inl ⟨x, hx⟩, rfl⟩
-  · exact ⟨Sum.inr
+  · exact ⟨Sum.inr ⟨x, hx⟩, rfl⟩
 
 Depends on / 依赖: HasCardinalLT, Or.inl, Or.inr, Subtype, Sum.elim, Sum.inl, Sum.inr, hasCardinalLT_sum_iff, of_surjective, this.of_surjective
 -/
@@ -479,7 +487,9 @@ lemma hasCardinalLT_sigma
     (fun (i : ULift.{max v w} ι) => ULift.{max u w} (α (ULift.down i)))
     (Cardinal.lift.{max u v} κ) (by simpa)
     (fun i => by simpa using hα (ULift.down i))
-  rw [hasCard
+  rw [hasCardinalLT_lift_iff] at this
+  exact this.of_surjective (fun ⟨i, a⟩ => ⟨ULift.down i, ULift.down a⟩)
+    (fun ⟨i, a⟩ => ⟨⟨ULift.up i, ULift.up a⟩, rfl⟩)
 
 中文:
 引理 hasCardinalLT_sigma
@@ -490,7 +500,9 @@ lemma hasCardinalLT_sigma
     (fun (i : ULift.{max v w} ι) => ULift.{max u w} (α (ULift.down i)))
     (Cardinal.lift.{max u v} κ) (by simpa)
     (fun i => by simpa using hα (ULift.down i))
-  rw [hasCard
+  rw [hasCardinalLT_lift_iff] at this
+  exact this.of_surjective (fun ⟨i, a⟩ => ⟨ULift.down i, ULift.down a⟩)
+    (fun ⟨i, a⟩ => ⟨⟨ULift.up i, ULift.up a⟩, rfl⟩)
 
 Depends on / 依赖: Cardinal, Cardinal.IsRegular.lift, Cardinal.lift, Fact.out, IsRegular, ULift.down, ULift.up, hasCardinalLT_lift_iff, hasCardinalLT_sigma, of_surjective, this.of_surjective
 -/
@@ -601,7 +613,7 @@ lemma hasCardinalLT_prod
     (κ := Cardinal.lift.{max u u'} κ) (by simpa) (by simpa) (by simpa)
   simp only [hasCardinalLT_lift_iff] at this
   exact this.of_surjective (fun ⟨x₁, x₂⟩ => ⟨ULift.down x₁, ULift.down x₂⟩) (fun ⟨x₁, x₂⟩ =>
-   
+    ⟨⟨ULift.up x₁, ULift.up x₂⟩, rfl⟩)
 
 中文:
 引理 hasCardinalLT_prod
@@ -611,7 +623,7 @@ lemma hasCardinalLT_prod
     (κ := Cardinal.lift.{max u u'} κ) (by simpa) (by simpa) (by simpa)
   simp only [hasCardinalLT_lift_iff] at this
   exact this.of_surjective (fun ⟨x₁, x₂⟩ => ⟨ULift.down x₁, ULift.down x₂⟩) (fun ⟨x₁, x₂⟩ =>
-   
+    ⟨⟨ULift.up x₁, ULift.up x₂⟩, rfl⟩)
 
 Depends on / 依赖: Cardinal, Cardinal.lift, ULift.down, ULift.up, hasCardinalLT_lift_iff, hasCardinalLT_prod, of_surjective, this.of_surjective
 -/

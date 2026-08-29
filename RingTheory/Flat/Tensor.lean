@@ -151,7 +151,7 @@ lemma iff_rTensor_injective
     fun h I => (injective_iff_map_eq_zero _).mpr fun x hx => ?_⟩
   obtain ⟨J, hfg, hle, y, rfl⟩ := Submodule.exists_fg_le_eq_rTensor_inclusion x
   rw [← rTensor_comp_apply] at hx
-  rw [(injective_iff_map_eq_zero _).mp (h hfg) y hx]; rw [map
+  rw [(injective_iff_map_eq_zero _).mp (h hfg) y hx]; rw [map_zero]
 
 中文:
 引理 iff_rTensor_injective
@@ -160,7 +160,7 @@ lemma iff_rTensor_injective
     fun h I => (injective_iff_map_eq_zero _).mpr fun x hx => ?_⟩
   obtain ⟨J, hfg, hle, y, rfl⟩ := Submodule.exists_fg_le_eq_rTensor_inclusion x
   rw [← rTensor_comp_apply] at hx
-  rw [(injective_iff_map_eq_zero _).mp (h hfg) y hx]; rw [map
+  rw [(injective_iff_map_eq_zero _).mp (h hfg) y hx]; rw [map_zero]
 
 Depends on / 依赖: Submodule, Submodule.exists_fg_le_eq_rTensor_inclusion, exists_fg_le_eq_rTensor_inclusion, iff_rTensor_injective, injective_iff_map_eq_zero, map_zero, rTensor_comp_apply
 -/

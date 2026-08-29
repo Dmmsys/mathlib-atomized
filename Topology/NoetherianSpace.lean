@@ -176,7 +176,7 @@ theorem noetherianSpace_TFAE
   tfae_have 1 ↔ 4 := noetherianSpace_iff_opens α
   tfae_have 1 -> 3 := @NoetherianSpace.isCompact α _
   tfae_have 3 -> 4 := fun h s => h s
-  tfae_fini
+  tfae_finish
 
 中文:
 定理 noetherianSpace_TFAE
@@ -187,7 +187,7 @@ theorem noetherianSpace_TFAE
   tfae_have 1 ↔ 4 := noetherianSpace_iff_opens α
   tfae_have 1 -> 3 := @NoetherianSpace.isCompact α _
   tfae_have 3 -> 4 := fun h s => h s
-  tfae_fini
+  tfae_finish
 
 Depends on / 依赖: NoetherianSpace, NoetherianSpace.isCompact, Opens.compl_bijective, OrderIso, OrderIso.compl, compl_bijective, isCompact, isWellFounded_iff, lt_iff_lt, lt_iff_lt.symm, noetherianSpace_iff_opens, simp_rw, tfae_finish, tfae_have, wellFounded_iff
 -/
@@ -457,7 +457,14 @@ theorem NoetherianSpace.exists_finite_set_closeds_irreducible
   · by_cases h₁ : IsPreirreducible (s : Set α)
     · replace h₁ : IsIrreducible (s : Set α) := ⟨Closeds.coe_nonempty.2 h₀, h₁⟩
       use {s}; simp [h₁]
-    · simp only [isPreirreducible_iff
+    · simp only [isPreirreducible_iff_isClosed_union_isClosed, not_forall, not_or] at h₁
+      obtain ⟨z₁, z₂, hz₁, hz₂, h, hz₁', hz₂'⟩ := h₁
+      lift z₁ to Closeds α using hz₁
+      lift z₂ to Closeds α using hz₂
+      rcases H (s ⊓ z₁) (inf_lt_left.2 hz₁') with ⟨S₁, hSf₁, hS₁, h₁⟩
+      rcases H (s ⊓ z₂) (inf_lt_left.2 hz₂') with ⟨S₂, hSf₂, hS₂, h₂⟩
+      refine ⟨S₁ union S₂, hSf₁.union hSf₂, Set.union_subset_iff.2 ⟨hS₁, hS₂⟩, ?_⟩
+      rwa [sSup_union, ← h₁, ← h₂, ← inf_sup_left, left_eq_inf]
 
 中文:
 定理 NoetherianSpace.存在_finite_set_closeds_irreducible
@@ -470,7 +477,14 @@ theorem NoetherianSpace.exists_finite_set_closeds_irreducible
   · by_cases h₁ : IsPreirreducible (s : Set α)
     · replace h₁ : IsIrreducible (s : Set α) := ⟨Closeds.coe_nonempty.2 h₀, h₁⟩
       use {s}; simp [h₁]
-    · simp only [isPreirreducible_iff
+    · simp only [isPreirreducible_iff_isClosed_union_isClosed, not_forall, not_or] at h₁
+      obtain ⟨z₁, z₂, hz₁, hz₂, h, hz₁', hz₂'⟩ := h₁
+      lift z₁ to Closeds α using hz₁
+      lift z₂ to Closeds α using hz₂
+      rcases H (s ⊓ z₁) (inf_lt_left.2 hz₁') with ⟨S₁, hSf₁, hS₁, h₁⟩
+      rcases H (s ⊓ z₂) (inf_lt_left.2 hz₂') with ⟨S₂, hSf₂, hS₂, h₂⟩
+      refine ⟨S₁ union S₂, hSf₁.union hSf₂, Set.union_subset_iff.2 ⟨hS₁, hS₂⟩, ?_⟩
+      rwa [sSup_union, ← h₁, ← h₂, ← inf_sup_left, left_eq_inf]
 
 Depends on / 依赖: Closeds, Closeds.coe_nonempty, IsIrreducible, IsPreirreducible, coe_nonempty, eq_or_ne, inf_lt_left, isPreirreducible_iff_isClosed_union_isClosed, not_forall, not_or, replace, wellFounded_lt, wellFounded_lt.induction
 -/
@@ -504,7 +518,7 @@ theorem NoetherianSpace.exists_finite_set_isClosed_irreducible
   refine ⟨(↑) '' S, hSf.image _, Set.forall_mem_image.2 fun S _ => S.2, Set.forall_mem_image.2 hS,
     ?_⟩
   lift S to Finset (Closeds α) using hSf
-  simp [← Finset.sup_id_eq_sSu
+  simp [← Finset.sup_id_eq_sSup, Closeds.coe_finset_sup]
 
 中文:
 定理 NoetherianSpace.存在_finite_set_isClosed_irreducible
@@ -515,7 +529,7 @@ theorem NoetherianSpace.exists_finite_set_isClosed_irreducible
   refine ⟨(↑) '' S, hSf.image _, Set.forall_mem_image.2 fun S _ => S.2, Set.forall_mem_image.2 hS,
     ?_⟩
   lift S to Finset (Closeds α) using hSf
-  simp [← Finset.sup_id_eq_sSu
+  simp [← Finset.sup_id_eq_sSup, Closeds.coe_finset_sup]
 
 Depends on / 依赖: Closeds, Closeds.coe_finset_sup, Finset, Finset.sup_id_eq_sSup, NoetherianSpace, NoetherianSpace.exists_finite_set_closeds_irreducible, Set.forall_mem_image, coe_finset_sup, exists_finite_set_closeds_irreducible, forall_mem_image, hSf.image, sup_id_eq_sSup
 -/
@@ -569,7 +583,10 @@ theorem NoetherianSpace.finite_irreducibleComponents
     NoetherianSpace.exists_finite_set_isClosed_irreducible isClosed_univ (α := α)
   refine hSf.subset fun s hs => ?_
   lift S to Finset (Set α) using hSf
-  rcases isIrreducible_iff_sUnion_isClosed.1 hs.1 S hSc (hSU ▸ Set.subset_univ _) with ⟨t, ht
+  rcases isIrreducible_iff_sUnion_isClosed.1 hs.1 S hSc (hSU ▸ Set.subset_univ _) with ⟨t, htS, ht⟩
+  rwa [ht.antisymm (hs.2 (hSi _ htS) ht)]
+
+@[stacks 0052 "(3)"]
 
 中文:
 定理 NoetherianSpace.finite_irreducibleComponents
@@ -579,7 +596,10 @@ theorem NoetherianSpace.finite_irreducibleComponents
     NoetherianSpace.exists_finite_set_isClosed_irreducible isClosed_univ (α := α)
   refine hSf.subset fun s hs => ?_
   lift S to Finset (Set α) using hSf
-  rcases isIrreducible_iff_sUnion_isClosed.1 hs.1 S hSc (hSU ▸ Set.subset_univ _) with ⟨t, ht
+  rcases isIrreducible_iff_sUnion_isClosed.1 hs.1 S hSc (hSU ▸ Set.subset_univ _) with ⟨t, htS, ht⟩
+  rwa [ht.antisymm (hs.2 (hSi _ htS) ht)]
+
+@[stacks 0052 "(3)"]
 
 Depends on / 依赖: Finset, NoetherianSpace, NoetherianSpace.exists_finite_set_isClosed_irreducible, Set.subset_univ, antisymm, exists_finite_set_isClosed_irreducible, hSf.subset, ht.antisymm, isClosed_univ, isIrreducible_iff_sUnion_isClosed, subset, subset_univ
 -/
@@ -604,7 +624,10 @@ theorem NoetherianSpace.exists_isOpen_nonempty_subset_irreducibleComponent
   have hZ := closure_sUnion_irreducibleComponents_sdiff_singleton hα Z H
   refine ⟨(⋃₀ (irreducibleComponents α \ {Z}))ᶜ, ?_, ?_, subset_closure.trans hZ.le⟩
   · rw [Set.sUnion_eq_biUnion, isOpen_compl_iff]
-    exact hα.
+    exact hα.sdiff.isClosed_biUnion fun W hW => isClosed_of_mem_irreducibleComponents W hW.1
+  · contrapose! hZ
+    rw [hZ]; rw [closure_empty]; rw [← Set.nonempty_iff_empty_ne]
+    exact H.1.nonempty
 
 中文:
 定理 NoetherianSpace.存在_isOpen_nonempty_subset_irreducibleComponent
@@ -614,7 +637,10 @@ theorem NoetherianSpace.exists_isOpen_nonempty_subset_irreducibleComponent
   have hZ := closure_sUnion_irreducibleComponents_sdiff_singleton hα Z H
   refine ⟨(⋃₀ (irreducibleComponents α \ {Z}))ᶜ, ?_, ?_, subset_closure.trans hZ.le⟩
   · rw [Set.sUnion_eq_biUnion, isOpen_compl_iff]
-    exact hα.
+    exact hα.sdiff.isClosed_biUnion fun W hW => isClosed_of_mem_irreducibleComponents W hW.1
+  · contrapose! hZ
+    rw [hZ]; rw [closure_empty]; rw [← Set.nonempty_iff_empty_ne]
+    exact H.1.nonempty
 
 Depends on / 依赖: Finite, Set.nonempty_iff_empty_ne, Set.sUnion_eq_biUnion, closure_empty, closure_sUnion_irreducibleComponents_sdiff_singleton, contrapose, finite_irreducibleComponents, hZ.le, irreducibleComponents, isClosed_biUnion, isClosed_of_mem_irreducibleComponents, isOpen_compl_iff, nonempty, nonempty_iff_empty_ne, sUnion_eq_biUnion, sdiff.isClosed_biUnion, subset_closure, subset_closure.trans
 -/

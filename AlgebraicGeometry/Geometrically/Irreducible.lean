@@ -158,7 +158,8 @@ lemma Scheme.Hom.isIrreducible_preimage
     rw [Set.range_eq_univ.mpr f.surjective]; rw [Set.inter_univ]
     exact hs.nonempty
   obtain ⟨s, rfl⟩ := H
-  rw [← f.ra
+  rw [← f.range_fiberι]; rw [← Set.image_univ]
+  exact (IrreducibleSpace.isIrreducible_univ _).image _ (f.fiberι _).continuous.continuousOn
 
 中文:
 引理 概形.态射.isIrreducible_preimage
@@ -169,7 +170,8 @@ lemma Scheme.Hom.isIrreducible_preimage
     rw [Set.range_eq_univ.mpr f.surjective]; rw [Set.inter_univ]
     exact hs.nonempty
   obtain ⟨s, rfl⟩ := H
-  rw [← f.ra
+  rw [← f.range_fiberι]; rw [← Set.image_univ]
+  exact (IrreducibleSpace.isIrreducible_univ _).image _ (f.fiberι _).continuous.continuousOn
 
 Depends on / 依赖: IrreducibleSpace, IrreducibleSpace.isIrreducible_univ, Set.image_univ, Set.inter_univ, Set.range_eq_univ.mpr, continuous, continuous.continuousOn, continuousOn, f.fiber, f.range_fiber, f.surjective, generalizing, hs.nonempty, hs.preimage_of_isPreirreducible_fiber, image_univ, inter_univ, isIrreducible_singleton, isIrreducible_univ, isPreirreducible, nonempty
 -/

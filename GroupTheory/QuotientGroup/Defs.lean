@@ -141,7 +141,7 @@ definition con
       _ = (a * c)⁻¹ * (b * d) := by
         simp only [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
 
-@[to_add
+@[to_additive]
 
 中文:
 定义 con
@@ -155,7 +155,7 @@ definition con
       _ = (a * c)⁻¹ * (b * d) := by
         simp only [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
 
-@[to_add
+@[to_additive]
 -/
 protected def con : Con G where
   toSetoid := leftRel N
@@ -823,7 +823,12 @@ definition _root_.Subgroup.orderIsoCon
   left_inv := fun ⟨N, _⟩ => Subtype.mk_eq_mk.mpr (Con.subgroup_quotientGroupCon N)
   right_inv c := QuotientGroup.con_subgroup c
   map_rel_iff' := by
-    simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le
+    simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le_def, Con.rel_mk, leftRel_apply]
+    refine ⟨fun h x _ => ?_, fun hle _ _ h => hle h⟩
+    specialize @h 1 x
+    simp_all
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 _root_.子群.orderIsoCon
@@ -833,7 +838,12 @@ definition _root_.Subgroup.orderIsoCon
   left_inv := fun ⟨N, _⟩ => Subtype.mk_eq_mk.mpr (Con.subgroup_quotientGroupCon N)
   right_inv c := QuotientGroup.con_subgroup c
   map_rel_iff' := by
-    simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le
+    simp only [QuotientGroup.con, Equiv.coe_fn_mk, Con.le_def, Con.rel_mk, leftRel_apply]
+    refine ⟨fun h x _ => ?_, fun hle _ _ h => hle h⟩
+    specialize @h 1 x
+    simp_all
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: N.prop, N.val.Normal, Normal, QuotientGroup, QuotientGroup.con
 -/
@@ -1431,7 +1441,9 @@ lemma preimage_image_coe
     simp only [h, QuotientGroup.mk_div, div_self']
   · rintro ⟨a, ha, b, hb, rfl⟩
     refine ⟨b, hb, ?_⟩
-    simpa only [QuotientGroup.mk_mul, right_eq_mul, QuotientGroup.e
+    simpa only [QuotientGroup.mk_mul, right_eq_mul, QuotientGroup.eq_one_iff]
+
+@[to_additive]
 
 中文:
 引理 preimage_image_coe
@@ -1445,7 +1457,9 @@ lemma preimage_image_coe
     simp only [h, QuotientGroup.mk_div, div_self']
   · rintro ⟨a, ha, b, hb, rfl⟩
     refine ⟨b, hb, ?_⟩
-    simpa only [QuotientGroup.mk_mul, right_eq_mul, QuotientGroup.e
+    simpa only [QuotientGroup.mk_mul, right_eq_mul, QuotientGroup.eq_one_iff]
+
+@[to_additive]
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk_div, QuotientGroup.mk_mul, div_mul_cancel, div_self, eq_one_iff, mk_div, mk_mul, right_eq_mul
 -/
@@ -1506,7 +1520,16 @@ definition congr
     invFun := map H' G' e.symm (he ▸ (G'.map_equiv_eq_comap_symm e).le)
     left_inv := fun x => by
       rw [map_map G' H' G' e e.symm (he ▸ G'.le_comap_map (e : G ->* H))
-        (
+        (he ▸ (G'.map_equiv_eq_comap_symm e).le)]
+      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.self_trans_symm,
+        MulEquiv.coe_monoidHom_refl, map_id_apply]
+    right_inv := fun x => by
+      rw [map_map H' G' H' e.symm e (he ▸ (G'.map_equiv_eq_comap_symm e).le)
+        (he ▸ G'.le_comap_map (e : G ->* H))]
+      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.symm_trans_self,
+        MulEquiv.coe_monoidHom_refl, map_id_apply] }
+
+@[simp]
 
 中文:
 定义 congr
@@ -1516,7 +1539,16 @@ definition congr
     invFun := map H' G' e.symm (he ▸ (G'.map_equiv_eq_comap_symm e).le)
     left_inv := fun x => by
       rw [map_map G' H' G' e e.symm (he ▸ G'.le_comap_map (e : G ->* H))
-        (
+        (he ▸ (G'.map_equiv_eq_comap_symm e).le)]
+      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.self_trans_symm,
+        MulEquiv.coe_monoidHom_refl, map_id_apply]
+    right_inv := fun x => by
+      rw [map_map H' G' H' e.symm e (he ▸ (G'.map_equiv_eq_comap_symm e).le)
+        (he ▸ G'.le_comap_map (e : G ->* H))]
+      simp only [← MulEquiv.coe_monoidHom_trans, MulEquiv.symm_trans_self,
+        MulEquiv.coe_monoidHom_refl, map_id_apply] }
+
+@[simp]
 
 Depends on / 依赖: MulEquiv, MulEquiv.coe_monoidHom_refl, MulEquiv.coe_monoidHom_trans, MulEquiv.self_trans_symm, coe_monoidHom_refl, coe_monoidHom_trans, e.symm, invFun, le_comap_map, left_inv, map_equi, map_equiv_eq_comap_symm, map_id_apply, map_map, right_inv, self_trans_symm
 -/

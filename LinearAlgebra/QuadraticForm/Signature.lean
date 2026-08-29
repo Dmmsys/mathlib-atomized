@@ -100,7 +100,7 @@ definition sigPos
     simp only [mem_filter, mem_Iic]
     refine ⟨?_, ⟨⊥, rfl, fun x hx' => (hx' <| Subsingleton.elim x 0).elim⟩⟩
     nontriviality R
-    simp
+    simp [finrank_bot]⟩
 
 中文:
 定义 sigPos
@@ -111,7 +111,7 @@ definition sigPos
     simp only [mem_filter, mem_Iic]
     refine ⟨?_, ⟨⊥, rfl, fun x hx' => (hx' <| Subsingleton.elim x 0).elim⟩⟩
     nontriviality R
-    simp
+    simp [finrank_bot]⟩
 
 Depends on / 依赖: Module, Module.finrank, finrank
 -/
@@ -350,7 +350,7 @@ lemma QuadraticMap.Equivalent.sigPos_eq
     revert j
     rw [eq_iff_eq_cancel_right]
     exact (e.finrank_map_eq _).symm
-  · exact e.toLinearEquiv.fin
+  · exact e.toLinearEquiv.finrank_eq
 
 中文:
 引理 二次映射.Equivalent.sigPos_eq
@@ -366,7 +366,7 @@ lemma QuadraticMap.Equivalent.sigPos_eq
     revert j
     rw [eq_iff_eq_cancel_right]
     exact (e.finrank_map_eq _).symm
-  · exact e.toLinearEquiv.fin
+  · exact e.toLinearEquiv.finrank_eq
 
 Depends on / 依赖: IsometryEquiv, IsometryEquiv.map_posDef_iff, Submodule, Submodule.orderIsoMapComap, e.finrank_map_eq, e.toLinearEquiv, e.toLinearEquiv.finrank_eq, eq_iff_eq_cancel_right, exists_congr, finrank_eq, finrank_map_eq, map_posDef_iff, orderIsoMapComap, revert, sigPos, toLinearEquiv
 -/
@@ -426,7 +426,7 @@ lemma sigPos_add_finrank_le_of_nonpos
   by_contra hx'
   have := hVp ⟨x, hWp hx⟩ (by simpa using hx')
   have := hV x (hWm hx)
-  gri
+  grind [restrict_apply]
 
 中文:
 引理 sigPos_add_finrank_le_of_nonpos
@@ -441,7 +441,7 @@ lemma sigPos_add_finrank_le_of_nonpos
   by_contra hx'
   have := hVp ⟨x, hWp hx⟩ (by simpa using hx')
   have := hV x (hWm hx)
-  gri
+  grind [restrict_apply]
 
 Depends on / 依赖: Submodule, Submodule.eq_bot_iff, Submodule.finrank_add_finrank_le_of_disjoint, eq_bot_iff, exists_finrank_eq_sigPos_and_posDef, finrank_add_finrank_le_of_disjoint, le_bot_iff, restrict_apply
 -/
@@ -475,7 +475,13 @@ lemma posDef_spanSubset
     by_cases hi : i in s
     · exact smul_nonneg (hs i hi).le (mul_self_nonneg _)
     · simp [Pi.mem_spanSubset_iff.mp hv i hi]
-  · simp on
+  · simp only [ne_eq, Submodule.mk_eq_zero, funext_iff, not_forall, Pi.zero_apply] at hv'
+    obtain ⟨i, hi⟩ := hv'
+    refine ⟨i, mem_univ _, ?_⟩
+    have : i in s := by
+      contrapose hi
+      exact Pi.mem_spanSubset_iff.mp hv i hi
+    exact smul_pos (hs i this) (mul_self_pos.mpr hi)
 
 中文:
 引理 posDef_spanSubset
@@ -488,7 +494,13 @@ lemma posDef_spanSubset
     by_cases hi : i in s
     · exact smul_nonneg (hs i hi).le (mul_self_nonneg _)
     · simp [Pi.mem_spanSubset_iff.mp hv i hi]
-  · simp on
+  · simp only [ne_eq, Submodule.mk_eq_zero, funext_iff, not_forall, Pi.zero_apply] at hv'
+    obtain ⟨i, hi⟩ := hv'
+    refine ⟨i, mem_univ _, ?_⟩
+    have : i in s := by
+      contrapose hi
+      exact Pi.mem_spanSubset_iff.mp hv i hi
+    exact smul_pos (hs i this) (mul_self_pos.mpr hi)
 -/
 private lemma posDef_spanSubset (s : Set ι) (hs : forall i in s, 0 < w i) :
 .PosDef := by (weightedSumSquares 𝕜 w).restrict (Pi.spanSubset 𝕜 s)
@@ -558,7 +570,10 @@ lemma sigPos_weightedSumSquares
     ext
     grind
   have : p.ncard <= sigPos (weightedSumSquares 𝕜 w) :=
-    (sigPos_isGreatest _).2 ⟨Pi.spanSu
+    (sigPos_isGreatest _).2 ⟨Pi.spanSubset 𝕜 p, Pi.dim_spanSubset,
+      posDef_spanSubset p (by grind)⟩
+  suffices sigPos (weightedSumSquares 𝕜 w) + m.ncard <= Nat.card ι by lia
+simpa using sigPos_add_finrank_le_of_nonpos negSemidef_spanSubset m (fun _ hi => hi)
 
 中文:
 引理 sigPos_weightedSumSquares
@@ -571,7 +586,10 @@ lemma sigPos_weightedSumSquares
     ext
     grind
   have : p.ncard <= sigPos (weightedSumSquares 𝕜 w) :=
-    (sigPos_isGreatest _).2 ⟨Pi.spanSu
+    (sigPos_isGreatest _).2 ⟨Pi.spanSubset 𝕜 p, Pi.dim_spanSubset,
+      posDef_spanSubset p (by grind)⟩
+  suffices sigPos (weightedSumSquares 𝕜 w) + m.ncard <= Nat.card ι by lia
+simpa using sigPos_add_finrank_le_of_nonpos negSemidef_spanSubset m (fun _ hi => hi)
 
 Depends on / 依赖: Nat.card, Pi.dim_spanSubset, Pi.spanSubset, Set.ncard_add_ncard_compl, convert, convert_to, dim_spanSubset, m.ncard, ncard_add_ncard_compl, negSemidef_spanSubset, p.ncard, posDef_spanSubset, sigPos, sigPos_add_finrank_le_of_nonpos, sigPos_isGreatest, spanSubset, weightedSumSquares
 -/
@@ -627,7 +645,18 @@ lemma sigPos_add_sigNeg_add_radical₁
   rw [radical_weightedSumSquares]; rw [sigPos_weightedSumSquares]; rw [sigNeg_weightedSumSquares]; rw [Pi.dim_spanSubset]
   calc {i | 0 < w i}.ncard + {i | w i < 0}.ncard + {i | w i = 0}.ncard
   _ = {i | 0 < w i}.ncard + {i | w i <= 0}.ncard := by
-    rw [add_assoc]; rw [add_left_cancel_iff]; rw 
+    rw [add_assoc]; rw [add_left_cancel_iff]; rw [← Set.ncard_union_eq]
+    · congr! 1
+      ext
+      grind
+    · grind [disjoint_iff_ne]
+  _ = Set.univ.ncard := by
+    rw [← Set.ncard_union_eq]
+    · congr! 1
+      ext
+      grind [le_iff_lt_or_eq]
+    · grind [disjoint_iff_ne]
+  _ = Nat.card ι := Set.ncard_univ _
 
 中文:
 引理 sigPos_add_sigNeg_add_radical₁
@@ -635,7 +664,18 @@ lemma sigPos_add_sigNeg_add_radical₁
   rw [radical_weightedSumSquares]; rw [sigPos_weightedSumSquares]; rw [sigNeg_weightedSumSquares]; rw [Pi.dim_spanSubset]
   calc {i | 0 < w i}.ncard + {i | w i < 0}.ncard + {i | w i = 0}.ncard
   _ = {i | 0 < w i}.ncard + {i | w i <= 0}.ncard := by
-    rw [add_assoc]; rw [add_left_cancel_iff]; rw 
+    rw [add_assoc]; rw [add_left_cancel_iff]; rw [← Set.ncard_union_eq]
+    · congr! 1
+      ext
+      grind
+    · grind [disjoint_iff_ne]
+  _ = Set.univ.ncard := by
+    rw [← Set.ncard_union_eq]
+    · congr! 1
+      ext
+      grind [le_iff_lt_or_eq]
+    · grind [disjoint_iff_ne]
+  _ = Nat.card ι := Set.ncard_univ _
 -/
 private lemma sigPos_add_sigNeg_add_radical₁ :
     sigPos (weightedSumSquares 𝕜 w) + sigNeg (weightedSumSquares 𝕜 w) +

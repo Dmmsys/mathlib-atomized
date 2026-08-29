@@ -67,7 +67,47 @@ definition sigma
 
   indep_iff' I := by
     refine ⟨fun h => ?_, fun ⟨B, hB, hIB⟩ i => (hB i).indep.subset (preimage_mono hIB)⟩
-    choose Bs hBs using fun i => (h i).exists_isBa
+    choose Bs hBs using fun i => (h i).exists_isBase_superset
+    refine ⟨univ.sigma Bs, fun i => by simpa using (hBs i).1, ?_⟩
+    rw [← univ_sigma_preimage_mk I]
+    refine sigma_mono rfl.subset fun i => (hBs i).2
+
+  exists_isBase := by
+    choose B hB using fun i => (M i).exists_isBase
+    exact ⟨univ.sigma B, by simpa⟩
+
+  isBase_exchange B₁ B₂ h₁ h₂ := by
+    simp only [mem_sdiff, Sigma.exists, and_imp, Sigma.forall]
+    intro i e he₁ he₂
+    have hf_ex := (h₁ i).exchange (h₂ i) ⟨he₁, by simpa⟩
+    obtain ⟨f, ⟨hf₁, hf₂⟩, hfB⟩ := hf_ex
+    refine ⟨i, f, ⟨hf₁, hf₂⟩, fun j => ?_⟩
+    rw [← union_singleton]; rw [preimage_union]; rw [preimage_sdiff]
+    obtain (rfl | hne) := eq_or_ne i j
+    · simpa only [show forall x, {⟨i,x⟩} = Sigma.mk i '' {x} by simp,
+        preimage_image_eq _ sigma_mk_injective, union_singleton]
+    rw [preimage_singleton_eq_empty.2 (by simpa)]; rw [preimage_singleton_eq_empty.2 (by simpa)]; rw [sdiff_empty]; rw [union_empty]
+    exact h₁ j
+
+  maximality X _ I hI hIX := by
+    choose Js hJs using
+      fun i => (hI i).subset_isBasis'_of_subset (preimage_mono (f := Sigma.mk i) hIX)
+    use univ.sigma Js
+    simp only [maximal_subset_iff', mem_univ, mk_preimage_sigma, and_imp]
+    refine ⟨?_, ⟨fun i => (hJs i).1.indep, ?_⟩, fun S hS hSX hJS => ?_⟩
+    · rw [← univ_sigma_preimage_mk I]
+      exact sigma_mono rfl.subset fun i => (hJs i).2
+    · rw [← univ_sigma_preimage_mk X]
+      exact sigma_mono rfl.subset fun i => (hJs i).1.subset
+    rw [← univ_sigma_preimage_mk S]
+    refine sigma_mono rfl.subset fun i => ?_
+    rw [sigma_subset_iff] at hJS
+    rw [(hJs i).1.eq_of_subset_indep (hS i) (hJS <| mem_univ i)]
+    exact preimage_mono hSX
+
+  subset_ground B hB := by
+    rw [← univ_sigma_preimage_mk B]
+    apply sigma_mono Subset.rfl fun i => (hB i).subset_ground
 
 中文:
 定义 sigma
@@ -78,7 +118,47 @@ definition sigma
 
   indep_iff' I := by
     refine ⟨fun h => ?_, fun ⟨B, hB, hIB⟩ i => (hB i).indep.subset (preimage_mono hIB)⟩
-    choose Bs hBs using fun i => (h i).exists_isBa
+    choose Bs hBs using fun i => (h i).exists_isBase_superset
+    refine ⟨univ.sigma Bs, fun i => by simpa using (hBs i).1, ?_⟩
+    rw [← univ_sigma_preimage_mk I]
+    refine sigma_mono rfl.subset fun i => (hBs i).2
+
+  exists_isBase := by
+    choose B hB using fun i => (M i).exists_isBase
+    exact ⟨univ.sigma B, by simpa⟩
+
+  isBase_exchange B₁ B₂ h₁ h₂ := by
+    simp only [mem_sdiff, Sigma.exists, and_imp, Sigma.forall]
+    intro i e he₁ he₂
+    have hf_ex := (h₁ i).exchange (h₂ i) ⟨he₁, by simpa⟩
+    obtain ⟨f, ⟨hf₁, hf₂⟩, hfB⟩ := hf_ex
+    refine ⟨i, f, ⟨hf₁, hf₂⟩, fun j => ?_⟩
+    rw [← union_singleton]; rw [preimage_union]; rw [preimage_sdiff]
+    obtain (rfl | hne) := eq_or_ne i j
+    · simpa only [show forall x, {⟨i,x⟩} = Sigma.mk i '' {x} by simp,
+        preimage_image_eq _ sigma_mk_injective, union_singleton]
+    rw [preimage_singleton_eq_empty.2 (by simpa)]; rw [preimage_singleton_eq_empty.2 (by simpa)]; rw [sdiff_empty]; rw [union_empty]
+    exact h₁ j
+
+  maximality X _ I hI hIX := by
+    choose Js hJs using
+      fun i => (hI i).subset_isBasis'_of_subset (preimage_mono (f := Sigma.mk i) hIX)
+    use univ.sigma Js
+    simp only [maximal_subset_iff', mem_univ, mk_preimage_sigma, and_imp]
+    refine ⟨?_, ⟨fun i => (hJs i).1.indep, ?_⟩, fun S hS hSX hJS => ?_⟩
+    · rw [← univ_sigma_preimage_mk I]
+      exact sigma_mono rfl.subset fun i => (hJs i).2
+    · rw [← univ_sigma_preimage_mk X]
+      exact sigma_mono rfl.subset fun i => (hJs i).1.subset
+    rw [← univ_sigma_preimage_mk S]
+    refine sigma_mono rfl.subset fun i => ?_
+    rw [sigma_subset_iff] at hJS
+    rw [(hJs i).1.eq_of_subset_indep (hS i) (hJS <| mem_univ i)]
+    exact preimage_mono hSX
+
+  subset_ground B hB := by
+    rw [← univ_sigma_preimage_mk B]
+    apply sigma_mono Subset.rfl fun i => (hB i).subset_ground
 -/
 protected def sigma (M : (i : ι) -> Matroid (α i)) : Matroid ((i : ι) × α i) where
   E := univ.sigma (fun i => (M i).E)
@@ -187,7 +267,22 @@ lemma sigma_isBasis_iff
     forall_and, and_congr_right_iff]
   refine fun hI => ⟨fun ⟨hIX, h, h'⟩ => ⟨fun i => preimage_mono hIX, fun i I₀ hI₀ hI₀X hII₀ => ?_, ?_⟩,
     fun ⟨hIX, h', h''⟩ => ⟨?_, ?_, ?_⟩⟩
-  · refine hII₀.anti
+  · refine hII₀.antisymm ?_
+    specialize h (t := I union Sigma.mk i '' I₀)
+    simp only [preimage_union, union_subset_iff, hIX, image_subset_iff, hI₀X, and_self,
+      subset_union_left, true_implies] at h
+    rw [h]; rw [preimage_union]; rw [sigma_mk_preimage_image_eq_self]
+    · exact subset_union_right
+    intro j
+    obtain (rfl | hij) := eq_or_ne i j
+    · rwa [sigma_mk_preimage_image_eq_self, union_eq_self_of_subset_left hII₀]
+    rw [sigma_mk_preimage_image' hij]; rw [union_empty]
+    apply hI
+  · exact fun i => by simpa using preimage_mono (f := Sigma.mk i) h'
+  · exact fun ⟨i, x⟩ hx => by simpa using hIX i hx
+  · refine fun J hJ hJX hIJ => hIJ.antisymm fun ⟨i,x⟩ hx => ?_
+    simpa using (h' i (hJ i) (preimage_mono hJX) (preimage_mono hIJ)).symm.subset hx
+  exact fun ⟨i,x⟩ hx => by simpa using h'' i hx
 
 中文:
 引理 sigma_isBasis_iff
@@ -197,7 +292,22 @@ lemma sigma_isBasis_iff
     forall_and, and_congr_right_iff]
   refine fun hI => ⟨fun ⟨hIX, h, h'⟩ => ⟨fun i => preimage_mono hIX, fun i I₀ hI₀ hI₀X hII₀ => ?_, ?_⟩,
     fun ⟨hIX, h', h''⟩ => ⟨?_, ?_, ?_⟩⟩
-  · refine hII₀.anti
+  · refine hII₀.antisymm ?_
+    specialize h (t := I union Sigma.mk i '' I₀)
+    simp only [preimage_union, union_subset_iff, hIX, image_subset_iff, hI₀X, and_self,
+      subset_union_left, true_implies] at h
+    rw [h]; rw [preimage_union]; rw [sigma_mk_preimage_image_eq_self]
+    · exact subset_union_right
+    intro j
+    obtain (rfl | hij) := eq_or_ne i j
+    · rwa [sigma_mk_preimage_image_eq_self, union_eq_self_of_subset_left hII₀]
+    rw [sigma_mk_preimage_image' hij]; rw [union_empty]
+    apply hI
+  · exact fun i => by simpa using preimage_mono (f := Sigma.mk i) h'
+  · exact fun ⟨i, x⟩ hx => by simpa using hIX i hx
+  · refine fun J hJ hJX hIJ => hIJ.antisymm fun ⟨i,x⟩ hx => ?_
+    simpa using (h' i (hJ i) (preimage_mono hJX) (preimage_mono hIJ)).symm.subset hx
+  exact fun ⟨i,x⟩ hx => by simpa using h'' i hx
 -/
 @[simp] lemma sigma_isBasis_iff {I X} :
     (Matroid.sigma M).IsBasis I X ↔ forall i, (M i).IsBasis (Sigma.mk i ⁻¹' I) (Sigma.mk i ⁻¹' X) := by

@@ -271,7 +271,31 @@ lemma QuasiFinite.ofLocalizationSpanTarget
   refine ⟨fun P _ => ?_⟩
   have (r : s) : Module.Finite P.ResidueField (P.Fiber (Localization.Away r.1)) := by
     have : Algebra.QuasiFinite R (Localization.Away r.1) := quasiFinite_algebraMap.mp (H r)
-    infer_
+    infer_instance
+  let φ (r : s) : P.Fiber S ->ₐ[P.ResidueField] P.Fiber (Localization.Away r.1) :=
+    Algebra.TensorProduct.map (.id _ _) (IsScalarTower.toAlgHom _ _ _)
+  let f : P.Fiber S ->ₐ[P.ResidueField] Π r : s, (P.Fiber (Localization.Away r.1)) :=
+    AlgHom.pi φ
+  have : IsNoetherian P.ResidueField (Π r : s, (P.Fiber (Localization.Away r.1))) :=
+    isNoetherian_of_isNoetherianRing_of_finite ..
+  suffices Function.Injective f from .of_injective f.toLinearMap this
+  rw [injective_iff_map_eq_zero]
+  intro a ha
+  apply eq_zero_of_localization _ fun J hJ => ?_
+  let I := (PrimeSpectrum.primesOverOrderIsoFiber R S P).symm ⟨J, inferInstance⟩
+  have : ¬ (s : Set S) subseteq I.1 := fun h =>
+    Ideal.IsPrime.ne_top' (top_le_iff.mp (hs.symm.trans_le (Ideal.span_le.mpr h)))
+  obtain ⟨r, hrs, hrI⟩ := Set.not_subset.mp this
+  let ψ : P.Fiber (Localization.Away r) ->ₐ[P.ResidueField] Localization.AtPrime J :=
+    Algebra.TensorProduct.lift (Algebra.ofId _ _) ⟨IsLocalization.map (M := .powers r)
+      (T := J.primeCompl) _ Algebra.TensorProduct.includeRight.toRingHom (by
+      simpa [Submonoid.powers_le] using! hrI), by
+      simp [IsScalarTower.algebraMap_apply R S (Localization.Away r),
+        -Algebra.TensorProduct.algebraMap_apply,
+        ← IsScalarTower.algebraMap_apply R _ (Localization.AtPrime J)]⟩ (fun _ _ => .all _ _)
+  have hψ : ψ.comp (φ ⟨r, hrs⟩) = IsScalarTower.toAlgHom _ _ _ := by ext; simp [φ, ψ]
+  refine congr($hψ a).symm.trans
+    (show ψ (f a ⟨r, hrs⟩) = 0 by simp only [ha, Pi.zero_apply, map_zero])
 
 中文:
 引理 拟有限.ofLocalizationSpanTarget
@@ -283,7 +307,31 @@ lemma QuasiFinite.ofLocalizationSpanTarget
   refine ⟨fun P _ => ?_⟩
   have (r : s) : Module.Finite P.ResidueField (P.Fiber (Localization.Away r.1)) := by
     have : Algebra.QuasiFinite R (Localization.Away r.1) := quasiFinite_algebraMap.mp (H r)
-    infer_
+    infer_instance
+  let φ (r : s) : P.Fiber S ->ₐ[P.ResidueField] P.Fiber (Localization.Away r.1) :=
+    Algebra.TensorProduct.map (.id _ _) (IsScalarTower.toAlgHom _ _ _)
+  let f : P.Fiber S ->ₐ[P.ResidueField] Π r : s, (P.Fiber (Localization.Away r.1)) :=
+    AlgHom.pi φ
+  have : IsNoetherian P.ResidueField (Π r : s, (P.Fiber (Localization.Away r.1))) :=
+    isNoetherian_of_isNoetherianRing_of_finite ..
+  suffices Function.Injective f from .of_injective f.toLinearMap this
+  rw [injective_iff_map_eq_zero]
+  intro a ha
+  apply eq_zero_of_localization _ fun J hJ => ?_
+  let I := (PrimeSpectrum.primesOverOrderIsoFiber R S P).symm ⟨J, inferInstance⟩
+  have : ¬ (s : Set S) subseteq I.1 := fun h =>
+    Ideal.IsPrime.ne_top' (top_le_iff.mp (hs.symm.trans_le (Ideal.span_le.mpr h)))
+  obtain ⟨r, hrs, hrI⟩ := Set.not_subset.mp this
+  let ψ : P.Fiber (Localization.Away r) ->ₐ[P.ResidueField] Localization.AtPrime J :=
+    Algebra.TensorProduct.lift (Algebra.ofId _ _) ⟨IsLocalization.map (M := .powers r)
+      (T := J.primeCompl) _ Algebra.TensorProduct.includeRight.toRingHom (by
+      simpa [Submonoid.powers_le] using! hrI), by
+      simp [IsScalarTower.algebraMap_apply R S (Localization.Away r),
+        -Algebra.TensorProduct.algebraMap_apply,
+        ← IsScalarTower.algebraMap_apply R _ (Localization.AtPrime J)]⟩ (fun _ _ => .all _ _)
+  have hψ : ψ.comp (φ ⟨r, hrs⟩) = IsScalarTower.toAlgHom _ _ _ := by ext; simp [φ, ψ]
+  refine congr($hψ a).symm.trans
+    (show ψ (f a ⟨r, hrs⟩) = 0 by simp only [ha, Pi.zero_apply, map_zero])
 
 Depends on / 依赖: Algebra, Algebra.QuasiFinite, Algebra.TensorProduct.map, Finite, IsScalarTower, IsScalarTower.toAlgHom, Localization, Localization.Away, Module, Module.Finite, P.Fiber, P.ResidueField, QuasiFinite, ResidueField, RingHom, RingHom.ofLocalizationSpanTarget_iff_finite, TensorProduct, algebraize, infer_instance, introv
 -/
@@ -331,7 +379,9 @@ lemma QuasiFinite.propertyIsLocal
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
     (stableUnderComposition.stableUnderCompositionWithLocalizationAway
       holdsForLocalizationAway).left
-  StableUnderCompo
+  StableUnderCompositionWithLocalizationAwayTarget :=
+    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      holdsForLocalizationAway).right
 
 中文:
 引理 拟有限.propertyIsLocal
@@ -341,7 +391,9 @@ lemma QuasiFinite.propertyIsLocal
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
     (stableUnderComposition.stableUnderCompositionWithLocalizationAway
       holdsForLocalizationAway).left
-  StableUnderCompo
+  StableUnderCompositionWithLocalizationAwayTarget :=
+    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      holdsForLocalizationAway).right
 
 Depends on / 依赖: isStableUnderBaseChange, isStableUnderBaseChange.localizationPreserves.away, localizationPreserves
 -/

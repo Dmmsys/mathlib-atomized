@@ -52,7 +52,13 @@ definition ofMemClosureImageCoeBounded
   refine (linearMapOfMemClosureRangeCoe f ?_).mkContinuousOfExistsBound ?_
   · refine closure_mono (image_subset_iff.2 fun g _ => ?_) hf
     exact ⟨g, rfl⟩
-  · -- We need to show that `f` has bounded norm. Choose `C` such that `‖g‖ ≤
+  · -- We need to show that `f` has bounded norm. Choose `C` such that `‖g‖ ≤ C` for all `g ∈ s`.
+    rcases isBounded_iff_forall_norm_le.1 hs with ⟨C, hC⟩
+    -- Then `‖g x‖ ≤ C * ‖x‖` for all `g ∈ s`, `x : E`, hence `‖f x‖ ≤ C * ‖x‖` for all `x`.
+    have : forall x, IsClosed { g : E' -> F | ‖g x‖ <= C * ‖x‖ } := fun x =>
+      isClosed_Iic.preimage (@continuous_apply E' (fun _ => F) _ x).norm
+    refine ⟨C, fun x => (this x).closure_subset_iff.2 (image_subset_iff.2 fun g hg => ?_) hf⟩
+    exact g.le_of_opNorm_le (hC _ hg) _
 
 中文:
 定义 ofMemClosureImageCoeBounded
@@ -62,7 +68,13 @@ definition ofMemClosureImageCoeBounded
   refine (linearMapOfMemClosureRangeCoe f ?_).mkContinuousOfExistsBound ?_
   · refine closure_mono (image_subset_iff.2 fun g _ => ?_) hf
     exact ⟨g, rfl⟩
-  · -- We need to show that `f` has bounded norm. Choose `C` such that `‖g‖ ≤
+  · -- We need to show that `f` has bounded norm. Choose `C` such that `‖g‖ ≤ C` for all `g ∈ s`.
+    rcases isBounded_iff_forall_norm_le.1 hs with ⟨C, hC⟩
+    -- Then `‖g x‖ ≤ C * ‖x‖` for all `g ∈ s`, `x : E`, hence `‖f x‖ ≤ C * ‖x‖` for all `x`.
+    have : forall x, IsClosed { g : E' -> F | ‖g x‖ <= C * ‖x‖ } := fun x =>
+      isClosed_Iic.preimage (@continuous_apply E' (fun _ => F) _ x).norm
+    refine ⟨C, fun x => (this x).closure_subset_iff.2 (image_subset_iff.2 fun g hg => ?_) hf⟩
+    exact g.le_of_opNorm_le (hC _ hg) _
 -/
 def ofMemClosureImageCoeBounded (f : E' -> F) {s : Set (E' ->SL[σ₁₂] F)} (hs : IsBounded s)
     (hf : f in closure (((↑) : (E' ->SL[σ₁₂] F) -> E' -> F) '' s)) : E' ->SL[σ₁₂] F := by
@@ -116,7 +128,18 @@ theorem tendsto_of_tendsto_pointwise_of_cauchySeq
     `m, n ≥ N`. -/
   rcases cauchySeq_iff_le_tendsto_0.1 hf with ⟨b, hb₀, hfb, hb_lim⟩
   simp_rw [dist_eq_norm] at hfb
-  -- Since `b → 0`, it suffices to show that `‖f n x - g x‖ ≤ b n * ‖x‖` for all `
+  -- Since `b → 0`, it suffices to show that `‖f n x - g x‖ ≤ b n * ‖x‖` for all `n` and `x`.
+  suffices forall n x, ‖f n x - g x‖ <= b n * ‖x‖ from
+    tendsto_iff_norm_sub_tendsto_zero.2
+    (squeeze_zero (fun n => norm_nonneg _) (fun n => opNorm_le_bound _ (hb₀ n) (this n)) hb_lim)
+  intro n x
+  -- Note that `f m x → g x`, hence `‖f n x - f m x‖ → ‖f n x - g x‖` as `m → ∞`
+  have : Tendsto (fun m => ‖f n x - f m x‖) atTop (𝓝 ‖f n x - g x‖) :=
+    (tendsto_const_nhds.sub <| tendsto_pi_nhds.1 hg _).norm
+  -- Thus it suffices to verify `‖f n x - f m x‖ ≤ b n * ‖x‖` for `m ≥ n`.
+  refine le_of_tendsto this (eventually_atTop.2 ⟨n, fun m hm => ?_⟩)
+  -- This inequality follows from `‖f n - f m‖ ≤ b n`.
+  exact (f n - f m).le_of_opNorm_le (hfb _ _ _ le_rfl hm) _
 
 中文:
 定理 tendsto_of_tendsto_pointwise_of_cauchySeq
@@ -126,7 +149,18 @@ theorem tendsto_of_tendsto_pointwise_of_cauchySeq
     `m, n ≥ N`. -/
   rcases cauchySeq_iff_le_tendsto_0.1 hf with ⟨b, hb₀, hfb, hb_lim⟩
   simp_rw [dist_eq_norm] at hfb
-  -- Since `b → 0`, it suffices to show that `‖f n x - g x‖ ≤ b n * ‖x‖` for all `
+  -- Since `b → 0`, it suffices to show that `‖f n x - g x‖ ≤ b n * ‖x‖` for all `n` and `x`.
+  suffices forall n x, ‖f n x - g x‖ <= b n * ‖x‖ from
+    tendsto_iff_norm_sub_tendsto_zero.2
+    (squeeze_zero (fun n => norm_nonneg _) (fun n => opNorm_le_bound _ (hb₀ n) (this n)) hb_lim)
+  intro n x
+  -- Note that `f m x → g x`, hence `‖f n x - f m x‖ → ‖f n x - g x‖` as `m → ∞`
+  have : Tendsto (fun m => ‖f n x - f m x‖) atTop (𝓝 ‖f n x - g x‖) :=
+    (tendsto_const_nhds.sub <| tendsto_pi_nhds.1 hg _).norm
+  -- Thus it suffices to verify `‖f n x - f m x‖ ≤ b n * ‖x‖` for `m ≥ n`.
+  refine le_of_tendsto this (eventually_atTop.2 ⟨n, fun m hm => ?_⟩)
+  -- This inequality follows from `‖f n - f m‖ ≤ b n`.
+  exact (f n - f m).le_of_opNorm_le (hfb _ _ _ le_rfl hm) _
 -/
 theorem tendsto_of_tendsto_pointwise_of_cauchySeq {f : Nat -> E' ->SL[σ₁₂] F} {g : E' ->SL[σ₁₂] F}
     (hg : Tendsto (fun n x => f n x) atTop (𝓝 g)) (hf : CauchySeq f) : Tendsto f atTop (𝓝 g) := by
@@ -254,7 +288,9 @@ theorem is_weak_closed_closedBall
   have hr : 0 <= r := nonempty_closedBall.1 (closure_nonempty_iff.1 ⟨_, hf⟩).of_image
   refine mem_closedBall_iff_norm.2 (opNorm_le_bound _ hr fun x => ?_)
   have : IsClosed { g : E' -> F | ‖g x - f₀ x‖ <= r * ‖x‖ } :=
-    isClosed_Iic.preimage ((@continuous_apply E' (fun _ => F) _ x).sub continu
+    isClosed_Iic.preimage ((@continuous_apply E' (fun _ => F) _ x).sub continuous_const).norm
+  refine this.closure_subset_iff.2 (image_subset_iff.2 fun g hg => ?_) hf
+  exact (g - f₀).le_of_opNorm_le (mem_closedBall_iff_norm.1 hg) _
 
 中文:
 定理 is_weak_closed_closedBall
@@ -264,7 +300,9 @@ theorem is_weak_closed_closedBall
   have hr : 0 <= r := nonempty_closedBall.1 (closure_nonempty_iff.1 ⟨_, hf⟩).of_image
   refine mem_closedBall_iff_norm.2 (opNorm_le_bound _ hr fun x => ?_)
   have : IsClosed { g : E' -> F | ‖g x - f₀ x‖ <= r * ‖x‖ } :=
-    isClosed_Iic.preimage ((@continuous_apply E' (fun _ => F) _ x).sub continu
+    isClosed_Iic.preimage ((@continuous_apply E' (fun _ => F) _ x).sub continuous_const).norm
+  refine this.closure_subset_iff.2 (image_subset_iff.2 fun g hg => ?_) hf
+  exact (g - f₀).le_of_opNorm_le (mem_closedBall_iff_norm.1 hg) _
 
 Depends on / 依赖: IsClosed, closure_nonempty_iff, closure_subset_iff, continuous_apply, continuous_const, image_subset_iff, isClosed_Iic, isClosed_Iic.preimage, le_of_opNorm_le, mem_closedBall_iff_norm, nonempty_closedBall, of_image, opNorm_le_bound, preimage, this.closure_subset_iff
 -/

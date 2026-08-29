@@ -340,7 +340,7 @@ theorem analyticSet_range_of_polishSpace
     obtain ⟨g, g_cont, hg⟩ : exists g : (Nat -> Nat) -> β, Continuous g ∧ Surjective g :=
       exists_nat_nat_continuous_surjective β
     refine Or.inr ⟨f ∘ g, f_cont.comp g_cont, ?_⟩
-    rw [h
+    rw [hg.range_comp]
 
 中文:
 定理 analyticSet_range_of_polishSpace
@@ -353,7 +353,7 @@ theorem analyticSet_range_of_polishSpace
     obtain ⟨g, g_cont, hg⟩ : exists g : (Nat -> Nat) -> β, Continuous g ∧ Surjective g :=
       exists_nat_nat_continuous_surjective β
     refine Or.inr ⟨f ∘ g, f_cont.comp g_cont, ?_⟩
-    rw [h
+    rw [hg.range_comp]
 
 Depends on / 依赖: AnalyticSet, Continuous, Or.inr, Surjective, analyticSet_empty, exists_nat_nat_continuous_surjective, f_cont, f_cont.comp, g_cont, hg.range_comp, isEmpty_or_nonempty, range_comp, range_eq_empty
 -/
@@ -410,7 +410,9 @@ theorem analyticSet_iff_exists_polishSpace_range
       rw [h]
       exact range_eq_empty _
     · exact ⟨Nat -> Nat, inferInstance, inferInstance, h⟩
-  · rintro ⟨β, h, h', f, f_cont, f_ran
+  · rintro ⟨β, h, h', f, f_cont, f_range⟩
+    rw [← f_range]
+    exact analyticSet_range_of_polishSpace f_cont
 
 中文:
 定理 analyticSet_iff_存在_polishSpace_range
@@ -424,7 +426,9 @@ theorem analyticSet_iff_exists_polishSpace_range
       rw [h]
       exact range_eq_empty _
     · exact ⟨Nat -> Nat, inferInstance, inferInstance, h⟩
-  · rintro ⟨β, h, h', f, f_cont, f_ran
+  · rintro ⟨β, h, h', f, f_cont, f_range⟩
+    rw [← f_range]
+    exact analyticSet_range_of_polishSpace f_cont
 
 Depends on / 依赖: AnalyticSet, Empty.elim, analyticSet_range_of_polishSpace, continuous_bot, f_cont, f_range, range_eq_empty
 -/
@@ -512,7 +516,40 @@ theorem AnalyticSet.iInter
   rcases hι with ⟨i₀⟩
   /- For the proof, write each `s n` as the continuous image under a map `f n` of a
     Polish space `β n`. The product space `γ = Π n, β n` is also Polish, and so is the subset
-    `t` of sequences `x n` for which `f n (x n)` is independent of `n`. The set `t` is Polish, an
+    `t` of sequences `x n` for which `f n (x n)` is independent of `n`. The set `t` is Polish, and
+    the range of `x ↦ f 0 (x 0)` on `t` is exactly `⋂ n, s n`, so this set is analytic. -/
+  choose β hβ h'β f f_cont f_range using fun n =>
+    analyticSet_iff_exists_polishSpace_range.1 (hs n)
+  let γ := forall n, β n
+  let t : Set γ := ⋂ n, { x | f n (x n) = f i₀ (x i₀) }
+  have t_closed : IsClosed t := by
+    apply isClosed_iInter
+    intro n
+    exact
+      isClosed_eq ((f_cont n).comp (continuous_apply n)) ((f_cont i₀).comp (continuous_apply i₀))
+  have : PolishSpace t := t_closed.polishSpace
+  let F : t -> α := fun x => f i₀ ((x : γ) i₀)
+  have F_cont : Continuous F := (f_cont i₀).comp ((continuous_apply i₀).comp continuous_subtype_val)
+  have F_range : range F = ⋂ n : ι, s n := by
+    apply Subset.antisymm
+    · rintro y ⟨x, rfl⟩
+      refine mem_iInter.2 fun n => ?_
+      have : f n ((x : γ) n) = F x := (mem_iInter.1 x.2 n :)
+      rw [← this]; rw [← f_range n]
+      exact mem_range_self _
+    · intro y hy
+      have A : forall n, exists x : β n, f n x = y := by
+        intro n
+        rw [← mem_range]; rw [f_range n]
+        exact mem_iInter.1 hy n
+      choose x hx using A
+      have xt : x in t := by
+        refine mem_iInter.2 fun n => ?_
+        simp [γ, hx]
+      refine ⟨⟨x, xt⟩, ?_⟩
+      exact hx i₀
+  rw [← F_range]
+  exact analyticSet_range_of_polishSpace F_cont
 
 中文:
 定理 AnalyticSet.i整数er
@@ -521,7 +558,40 @@ theorem AnalyticSet.iInter
   rcases hι with ⟨i₀⟩
   /- For the proof, write each `s n` as the continuous image under a map `f n` of a
     Polish space `β n`. The product space `γ = Π n, β n` is also Polish, and so is the subset
-    `t` of sequences `x n` for which `f n (x n)` is independent of `n`. The set `t` is Polish, an
+    `t` of sequences `x n` for which `f n (x n)` is independent of `n`. The set `t` is Polish, and
+    the range of `x ↦ f 0 (x 0)` on `t` is exactly `⋂ n, s n`, so this set is analytic. -/
+  choose β hβ h'β f f_cont f_range using fun n =>
+    analyticSet_iff_exists_polishSpace_range.1 (hs n)
+  let γ := forall n, β n
+  let t : Set γ := ⋂ n, { x | f n (x n) = f i₀ (x i₀) }
+  have t_closed : IsClosed t := by
+    apply isClosed_iInter
+    intro n
+    exact
+      isClosed_eq ((f_cont n).comp (continuous_apply n)) ((f_cont i₀).comp (continuous_apply i₀))
+  have : PolishSpace t := t_closed.polishSpace
+  let F : t -> α := fun x => f i₀ ((x : γ) i₀)
+  have F_cont : Continuous F := (f_cont i₀).comp ((continuous_apply i₀).comp continuous_subtype_val)
+  have F_range : range F = ⋂ n : ι, s n := by
+    apply Subset.antisymm
+    · rintro y ⟨x, rfl⟩
+      refine mem_iInter.2 fun n => ?_
+      have : f n ((x : γ) n) = F x := (mem_iInter.1 x.2 n :)
+      rw [← this]; rw [← f_range n]
+      exact mem_range_self _
+    · intro y hy
+      have A : forall n, exists x : β n, f n x = y := by
+        intro n
+        rw [← mem_range]; rw [f_range n]
+        exact mem_iInter.1 hy n
+      choose x hx using A
+      have xt : x in t := by
+        refine mem_iInter.2 fun n => ?_
+        simp [γ, hx]
+      refine ⟨⟨x, xt⟩, ?_⟩
+      exact hx i₀
+  rw [← F_range]
+  exact analyticSet_range_of_polishSpace F_cont
 -/
 theorem AnalyticSet.iInter [hι : Nonempty ι] [Countable ι] [T2Space α] {s : ι -> Set α}
     (hs : forall n, AnalyticSet (s n)) : AnalyticSet (⋂ n, s n) := by
@@ -574,7 +644,14 @@ theorem AnalyticSet.iUnion
     Polish space `β n`. The union space `γ = Σ n, β n` is also Polish, and the map `F : γ → α` which
     coincides with `f n` on `β n` sends it to `⋃ n, s n`. -/
   choose β hβ h'β f f_cont f_range using fun n =>
- 
+    analyticSet_iff_exists_polishSpace_range.1 (hs n)
+  let γ := Σ n, β n
+  let F : γ -> α := fun ⟨n, x⟩ => f n x
+  have F_cont : Continuous F := continuous_sigma f_cont
+  have F_range : range F = ⋃ n, s n := by
+    simp only [γ, F, range_sigma_eq_iUnion_range, f_range]
+  rw [← F_range]
+  exact analyticSet_range_of_polishSpace F_cont
 
 中文:
 定理 AnalyticSet.iUnion
@@ -584,7 +661,14 @@ theorem AnalyticSet.iUnion
     Polish space `β n`. The union space `γ = Σ n, β n` is also Polish, and the map `F : γ → α` which
     coincides with `f n` on `β n` sends it to `⋃ n, s n`. -/
   choose β hβ h'β f f_cont f_range using fun n =>
- 
+    analyticSet_iff_exists_polishSpace_range.1 (hs n)
+  let γ := Σ n, β n
+  let F : γ -> α := fun ⟨n, x⟩ => f n x
+  have F_cont : Continuous F := continuous_sigma f_cont
+  have F_range : range F = ⋃ n, s n := by
+    simp only [γ, F, range_sigma_eq_iUnion_range, f_range]
+  rw [← F_range]
+  exact analyticSet_range_of_polishSpace F_cont
 -/
 theorem AnalyticSet.iUnion [Countable ι] {s : ι -> Set α} (hs : forall n, AnalyticSet (s n)) :
     AnalyticSet (⋃ n, s n) := by
@@ -671,7 +755,12 @@ theorem _root_.MeasurableSet.analyticSet
   /- For a short proof (avoiding measurable induction), one sees `s` as a closed set for a finer
     topology `t'`. It is analytic for this topology. As the identity from `t'` to `t` is continuous
     and the image of an analytic set is analytic, it follows that `s` is also analytic for `t`. -/
- 
+  obtain ⟨t', t't, t'_polish, s_closed, _⟩ :
+      exists t' : TopologicalSpace α, t' <= t ∧ @PolishSpace α t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s :=
+    hs.isClopenable
+  have A := @IsClosed.analyticSet α t' t'_polish s s_closed
+  convert! @AnalyticSet.image_of_continuous α t' α t s A id (continuous_id_of_le t't)
+  simp only [id, image_id']
 
 中文:
 定理 _root_.可测集.analyticSet
@@ -680,7 +769,12 @@ theorem _root_.MeasurableSet.analyticSet
   /- For a short proof (avoiding measurable induction), one sees `s` as a closed set for a finer
     topology `t'`. It is analytic for this topology. As the identity from `t'` to `t` is continuous
     and the image of an analytic set is analytic, it follows that `s` is also analytic for `t`. -/
- 
+  obtain ⟨t', t't, t'_polish, s_closed, _⟩ :
+      exists t' : TopologicalSpace α, t' <= t ∧ @PolishSpace α t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s :=
+    hs.isClopenable
+  have A := @IsClosed.analyticSet α t' t'_polish s s_closed
+  convert! @AnalyticSet.image_of_continuous α t' α t s A id (continuous_id_of_le t't)
+  simp only [id, image_id']
 -/
 theorem _root_.MeasurableSet.analyticSet {α : Type*} [t : TopologicalSpace α] [PolishSpace α]
     [MeasurableSpace α] [BorelSpace α] {s : Set α} (hs : MeasurableSet s) : AnalyticSet s := by
@@ -706,7 +800,16 @@ theorem _root_.Measurable.exists_continuous
     exists_countable_basis (range f)
   have : Countable b := b_count.to_subtype
   have : forall s : b, IsClopenable (rangeFactorization f ⁻¹' s) := fun s => by
-    apply MeasurableSe
+    apply MeasurableSet.isClopenable
+    exact hf.subtype_mk (hb.isOpen s.2).measurableSet
+  choose T Tt Tpolish _ Topen using this
+  obtain ⟨t', t'T, t't, t'_polish⟩ :
+      exists t' : TopologicalSpace α, (forall i, t' <= T i) ∧ t' <= t ∧ @PolishSpace α t' :=
+    exists_polishSpace_forall_le (t := t) T Tt Tpolish
+  refine ⟨t', t't, ?_, t'_polish⟩
+  have : Continuous[t', _] (rangeFactorization f) :=
+    hb.continuous_iff.2 fun s hs => t'T ⟨s, hs⟩ _ (Topen ⟨s, hs⟩)
+  exact continuous_subtype_val.comp this
 
 中文:
 定理 _root_.可测.存在_continuous
@@ -717,7 +820,16 @@ theorem _root_.Measurable.exists_continuous
     exists_countable_basis (range f)
   have : Countable b := b_count.to_subtype
   have : forall s : b, IsClopenable (rangeFactorization f ⁻¹' s) := fun s => by
-    apply MeasurableSe
+    apply MeasurableSet.isClopenable
+    exact hf.subtype_mk (hb.isOpen s.2).measurableSet
+  choose T Tt Tpolish _ Topen using this
+  obtain ⟨t', t'T, t't, t'_polish⟩ :
+      exists t' : TopologicalSpace α, (forall i, t' <= T i) ∧ t' <= t ∧ @PolishSpace α t' :=
+    exists_polishSpace_forall_le (t := t) T Tt Tpolish
+  refine ⟨t', t't, ?_, t'_polish⟩
+  have : Continuous[t', _] (rangeFactorization f) :=
+    hb.continuous_iff.2 fun s hs => t'T ⟨s, hs⟩ _ (Topen ⟨s, hs⟩)
+  exact continuous_subtype_val.comp this
 
 Depends on / 依赖: Countable, IsClopenable, IsTopologicalBasis, MeasurableSet, MeasurableSet.isClopenable, PolishSpace, TopologicalSpace, Tpolish, _polish, b.Countable, b_count, b_count.to_subtype, exists_countable_basis, hb.isOpen, hf.subtype_mk, isClopenable, isOpen, measurableSet, rangeFactorization, subtype_mk
 -/
@@ -848,7 +960,9 @@ theorem MeasurablySeparable.iUnion
   · simp_rw [disjoint_iUnion_left, disjoint_iUnion_right]
     intro n m
     apply Disjoint.mono_right _ (htu m n)
-    apply 
+    apply iInter_subset
+  · refine MeasurableSet.iUnion fun m => ?_
+    exact MeasurableSet.iInter fun n => hu m n
 
 中文:
 定理 MeasurablySeparable.iUnion
@@ -861,7 +975,9 @@ theorem MeasurablySeparable.iUnion
   · simp_rw [disjoint_iUnion_left, disjoint_iUnion_right]
     intro n m
     apply Disjoint.mono_right _ (htu m n)
-    apply 
+    apply iInter_subset
+  · refine MeasurableSet.iUnion fun m => ?_
+    exact MeasurableSet.iInter fun n => hu m n
 
 Depends on / 依赖: Disjoint, Disjoint.mono_right, MeasurableSet, MeasurableSet.iInter, MeasurableSet.iUnion, disjoint_iUnion_left, disjoint_iUnion_right, iInter, iInter_subset, iUnion, iUnion_subset, mono_right, simp_rw, subset_iInter, subset_iUnion_of_subset
 -/
@@ -888,7 +1004,109 @@ theorem measurablySeparable_range_of_disjoint
   /- We follow [Kechris, *Classical Descriptive Set Theory* (Theorem 14.7)][kechris1995].
     If the ranges are not Borel-separated, then one can find two cylinders of length one whose
     images are not Borel-separated, and then two smaller cylinders of length two whose images are
-    not Borel-
+    not Borel-separated, and so on. One thus gets two sequences of cylinders, that decrease to two
+    points `x` and `y`. Their images are different by the disjointness assumption, hence contained
+    in two disjoint open sets by the T2 property. By continuity, long enough cylinders around `x`
+    and `y` have images which are separated by these two disjoint open sets, a contradiction.
+    -/
+  by_contra hfg
+  have I : forall n x y, ¬MeasurablySeparable (f '' cylinder x n) (g '' cylinder y n) ->
+      exists x' y', x' in cylinder x n ∧ y' in cylinder y n ∧
+      ¬MeasurablySeparable (f '' cylinder x' (n + 1)) (g '' cylinder y' (n + 1)) := by
+    intro n x y
+    contrapose!
+    intro H
+    rw [← iUnion_cylinder_update x n]; rw [← iUnion_cylinder_update y n]; rw [image_iUnion]; rw [image_iUnion]
+    refine MeasurablySeparable.iUnion fun i j => ?_
+    exact H _ _ (update_mem_cylinder _ _ _) (update_mem_cylinder _ _ _)
+  -- consider the set of pairs of cylinders of some length whose images are not Borel-separated
+  let A :=
+    { p : Nat × (Nat -> Nat) × (Nat -> Nat) //
+      ¬MeasurablySeparable (f '' cylinder p.2.1 p.1) (g '' cylinder p.2.2 p.1) }
+  -- for each such pair, one can find longer cylinders whose images are not Borel-separated either
+  have : forall p : A, exists q : A,
+      q.1.1 = p.1.1 + 1 ∧ q.1.2.1 in cylinder p.1.2.1 p.1.1 ∧ q.1.2.2 in cylinder p.1.2.2 p.1.1 := by
+    rintro ⟨⟨n, x, y⟩, hp⟩
+    rcases I n x y hp with ⟨x', y', hx', hy', h'⟩
+    exact ⟨⟨⟨n + 1, x', y'⟩, h'⟩, rfl, hx', hy'⟩
+  choose F hFn hFx hFy using this
+  let p0 : A := ⟨⟨0, fun _ => 0, fun _ => 0⟩, by simp [hfg]⟩
+  -- construct inductively decreasing sequences of cylinders whose images are not separated
+  let p : Nat -> A := fun n => F^[n] p0
+  have prec : forall n, p (n + 1) = F (p n) := fun n => by simp only [p, iterate_succ', Function.comp]
+  -- check that at the `n`-th step we deal with cylinders of length `n`
+  have pn_fst : forall n, (p n).1.1 = n := fun n => by
+    induction n with
+    | zero => rfl
+    | succ n IH => simp only [prec, hFn, IH]
+  -- check that the cylinders we construct are indeed decreasing, by checking that the coordinates
+  -- are stationary.
+  have Ix : forall m n, m + 1 <= n -> (p n).1.2.1 m = (p (m + 1)).1.2.1 m := by
+    intro m
+    apply Nat.le_induction
+    · rfl
+    intro n hmn IH
+    have I : (F (p n)).val.snd.fst m = (p n).val.snd.fst m := by
+      apply hFx (p n) m
+      rw [pn_fst]
+      exact hmn
+    rw [prec]; rw [I]; rw [IH]
+  have Iy : forall m n, m + 1 <= n -> (p n).1.2.2 m = (p (m + 1)).1.2.2 m := by
+    intro m
+    apply Nat.le_induction
+    · rfl
+    intro n hmn IH
+    have I : (F (p n)).val.snd.snd m = (p n).val.snd.snd m := by
+      apply hFy (p n) m
+      rw [pn_fst]
+      exact hmn
+    rw [prec]; rw [I]; rw [IH]
+  -- denote by `x` and `y` the limit points of these two sequences of cylinders.
+  set x : Nat -> Nat := fun n => (p (n + 1)).1.2.1 n with hx
+  set y : Nat -> Nat := fun n => (p (n + 1)).1.2.2 n with hy
+  -- by design, the cylinders around these points have images which are not Borel-separable.
+  have M : forall n, ¬MeasurablySeparable (f '' cylinder x n) (g '' cylinder y n) := by
+    intro n
+    convert! (p n).2 using 3
+    · rw [pn_fst, ← mem_cylinder_iff_eq, mem_cylinder_iff]
+      intro i hi
+      rw [hx]
+      exact (Ix i n hi).symm
+    · rw [pn_fst, ← mem_cylinder_iff_eq, mem_cylinder_iff]
+      intro i hi
+      rw [hy]
+      exact (Iy i n hi).symm
+  -- consider two open sets separating `f x` and `g y`.
+  obtain ⟨u, v, u_open, v_open, xu, yv, huv⟩ :
+      exists u v : Set α, IsOpen u ∧ IsOpen v ∧ f x in u ∧ g y in v ∧ Disjoint u v := by
+    apply t2_separation
+    exact disjoint_iff_forall_ne.1 h (mem_range_self _) (mem_range_self _)
+  let : MetricSpace (Nat -> Nat) := metricSpaceNatNat
+  obtain ⟨εx, εxpos, hεx⟩ : exists (εx : Real), εx > 0 ∧ Metric.ball x εx subseteq f ⁻¹' u := by
+    apply Metric.mem_nhds_iff.1
+    exact hf.continuousAt.preimage_mem_nhds (u_open.mem_nhds xu)
+  obtain ⟨εy, εypos, hεy⟩ : exists (εy : Real), εy > 0 ∧ Metric.ball y εy subseteq g ⁻¹' v := by
+    apply Metric.mem_nhds_iff.1
+    exact hg.continuousAt.preimage_mem_nhds (v_open.mem_nhds yv)
+  obtain ⟨n, hn⟩ : exists n : Nat, (1 / 2 : Real) ^ n < min εx εy :=
+    exists_pow_lt_of_lt_one (lt_min εxpos εypos) (by norm_num)
+  -- for large enough `n`, these open sets separate the images of long cylinders around `x` and `y`
+  have B : MeasurablySeparable (f '' cylinder x n) (g '' cylinder y n) := by
+    refine ⟨u, ?_, ?_, u_open.measurableSet⟩
+    · rw [image_subset_iff]
+      apply Subset.trans _ hεx
+      intro z hz
+      rw [mem_cylinder_iff_dist_le] at hz
+      exact hz.trans_lt (hn.trans_le (min_le_left _ _))
+    · refine Disjoint.mono_left ?_ huv.symm
+      change g '' cylinder y n subseteq v
+      rw [image_subset_iff]
+      apply Subset.trans _ hεy
+      intro z hz
+      rw [mem_cylinder_iff_dist_le] at hz
+      exact hz.trans_lt (hn.trans_le (min_le_right _ _))
+  -- this is a contradiction.
+  exact M n B
 
 中文:
 定理 measurablySeparable_range_of_disjoint
@@ -897,7 +1115,109 @@ theorem measurablySeparable_range_of_disjoint
   /- We follow [Kechris, *Classical Descriptive Set Theory* (Theorem 14.7)][kechris1995].
     If the ranges are not Borel-separated, then one can find two cylinders of length one whose
     images are not Borel-separated, and then two smaller cylinders of length two whose images are
-    not Borel-
+    not Borel-separated, and so on. One thus gets two sequences of cylinders, that decrease to two
+    points `x` and `y`. Their images are different by the disjointness assumption, hence contained
+    in two disjoint open sets by the T2 property. By continuity, long enough cylinders around `x`
+    and `y` have images which are separated by these two disjoint open sets, a contradiction.
+    -/
+  by_contra hfg
+  have I : forall n x y, ¬MeasurablySeparable (f '' cylinder x n) (g '' cylinder y n) ->
+      exists x' y', x' in cylinder x n ∧ y' in cylinder y n ∧
+      ¬MeasurablySeparable (f '' cylinder x' (n + 1)) (g '' cylinder y' (n + 1)) := by
+    intro n x y
+    contrapose!
+    intro H
+    rw [← iUnion_cylinder_update x n]; rw [← iUnion_cylinder_update y n]; rw [image_iUnion]; rw [image_iUnion]
+    refine MeasurablySeparable.iUnion fun i j => ?_
+    exact H _ _ (update_mem_cylinder _ _ _) (update_mem_cylinder _ _ _)
+  -- consider the set of pairs of cylinders of some length whose images are not Borel-separated
+  let A :=
+    { p : Nat × (Nat -> Nat) × (Nat -> Nat) //
+      ¬MeasurablySeparable (f '' cylinder p.2.1 p.1) (g '' cylinder p.2.2 p.1) }
+  -- for each such pair, one can find longer cylinders whose images are not Borel-separated either
+  have : forall p : A, exists q : A,
+      q.1.1 = p.1.1 + 1 ∧ q.1.2.1 in cylinder p.1.2.1 p.1.1 ∧ q.1.2.2 in cylinder p.1.2.2 p.1.1 := by
+    rintro ⟨⟨n, x, y⟩, hp⟩
+    rcases I n x y hp with ⟨x', y', hx', hy', h'⟩
+    exact ⟨⟨⟨n + 1, x', y'⟩, h'⟩, rfl, hx', hy'⟩
+  choose F hFn hFx hFy using this
+  let p0 : A := ⟨⟨0, fun _ => 0, fun _ => 0⟩, by simp [hfg]⟩
+  -- construct inductively decreasing sequences of cylinders whose images are not separated
+  let p : Nat -> A := fun n => F^[n] p0
+  have prec : forall n, p (n + 1) = F (p n) := fun n => by simp only [p, iterate_succ', Function.comp]
+  -- check that at the `n`-th step we deal with cylinders of length `n`
+  have pn_fst : forall n, (p n).1.1 = n := fun n => by
+    induction n with
+    | zero => rfl
+    | succ n IH => simp only [prec, hFn, IH]
+  -- check that the cylinders we construct are indeed decreasing, by checking that the coordinates
+  -- are stationary.
+  have Ix : forall m n, m + 1 <= n -> (p n).1.2.1 m = (p (m + 1)).1.2.1 m := by
+    intro m
+    apply Nat.le_induction
+    · rfl
+    intro n hmn IH
+    have I : (F (p n)).val.snd.fst m = (p n).val.snd.fst m := by
+      apply hFx (p n) m
+      rw [pn_fst]
+      exact hmn
+    rw [prec]; rw [I]; rw [IH]
+  have Iy : forall m n, m + 1 <= n -> (p n).1.2.2 m = (p (m + 1)).1.2.2 m := by
+    intro m
+    apply Nat.le_induction
+    · rfl
+    intro n hmn IH
+    have I : (F (p n)).val.snd.snd m = (p n).val.snd.snd m := by
+      apply hFy (p n) m
+      rw [pn_fst]
+      exact hmn
+    rw [prec]; rw [I]; rw [IH]
+  -- denote by `x` and `y` the limit points of these two sequences of cylinders.
+  set x : Nat -> Nat := fun n => (p (n + 1)).1.2.1 n with hx
+  set y : Nat -> Nat := fun n => (p (n + 1)).1.2.2 n with hy
+  -- by design, the cylinders around these points have images which are not Borel-separable.
+  have M : forall n, ¬MeasurablySeparable (f '' cylinder x n) (g '' cylinder y n) := by
+    intro n
+    convert! (p n).2 using 3
+    · rw [pn_fst, ← mem_cylinder_iff_eq, mem_cylinder_iff]
+      intro i hi
+      rw [hx]
+      exact (Ix i n hi).symm
+    · rw [pn_fst, ← mem_cylinder_iff_eq, mem_cylinder_iff]
+      intro i hi
+      rw [hy]
+      exact (Iy i n hi).symm
+  -- consider two open sets separating `f x` and `g y`.
+  obtain ⟨u, v, u_open, v_open, xu, yv, huv⟩ :
+      exists u v : Set α, IsOpen u ∧ IsOpen v ∧ f x in u ∧ g y in v ∧ Disjoint u v := by
+    apply t2_separation
+    exact disjoint_iff_forall_ne.1 h (mem_range_self _) (mem_range_self _)
+  let : MetricSpace (Nat -> Nat) := metricSpaceNatNat
+  obtain ⟨εx, εxpos, hεx⟩ : exists (εx : Real), εx > 0 ∧ Metric.ball x εx subseteq f ⁻¹' u := by
+    apply Metric.mem_nhds_iff.1
+    exact hf.continuousAt.preimage_mem_nhds (u_open.mem_nhds xu)
+  obtain ⟨εy, εypos, hεy⟩ : exists (εy : Real), εy > 0 ∧ Metric.ball y εy subseteq g ⁻¹' v := by
+    apply Metric.mem_nhds_iff.1
+    exact hg.continuousAt.preimage_mem_nhds (v_open.mem_nhds yv)
+  obtain ⟨n, hn⟩ : exists n : Nat, (1 / 2 : Real) ^ n < min εx εy :=
+    exists_pow_lt_of_lt_one (lt_min εxpos εypos) (by norm_num)
+  -- for large enough `n`, these open sets separate the images of long cylinders around `x` and `y`
+  have B : MeasurablySeparable (f '' cylinder x n) (g '' cylinder y n) := by
+    refine ⟨u, ?_, ?_, u_open.measurableSet⟩
+    · rw [image_subset_iff]
+      apply Subset.trans _ hεx
+      intro z hz
+      rw [mem_cylinder_iff_dist_le] at hz
+      exact hz.trans_lt (hn.trans_le (min_le_left _ _))
+    · refine Disjoint.mono_left ?_ huv.symm
+      change g '' cylinder y n subseteq v
+      rw [image_subset_iff]
+      apply Subset.trans _ hεy
+      intro z hz
+      rw [mem_cylinder_iff_dist_le] at hz
+      exact hz.trans_lt (hn.trans_le (min_le_right _ _))
+  -- this is a contradiction.
+  exact M n B
 -/
 theorem measurablySeparable_range_of_disjoint [T2Space α] [MeasurableSpace α]
     [OpensMeasurableSpace α] {f g : (Nat -> Nat) -> α} (hf : Continuous f) (hg : Continuous g)
@@ -1100,7 +1420,7 @@ theorem measurableSet_preimage_iff_of_surjective
   · rw [← image_preimage_eq s hsurj]
     exact h.analyticSet_image hf
   · rw [← image_preimage_eq sᶜ hsurj]
-    exact h.compl.analyticSet
+    exact h.compl.analyticSet_image hf
 
 中文:
 定理 measurableSet_preimage_iff_of_surjective
@@ -1112,7 +1432,7 @@ theorem measurableSet_preimage_iff_of_surjective
   · rw [← image_preimage_eq s hsurj]
     exact h.analyticSet_image hf
   · rw [← image_preimage_eq sᶜ hsurj]
-    exact h.compl.analyticSet
+    exact h.compl.analyticSet_image hf
 
 Depends on / 依赖: AnalyticSet, AnalyticSet.measurableSet_of_compl, analyticSet_image, exists_opensMeasurableSpace_of_countablySeparated, h.analyticSet_image, h.compl.analyticSet_image, image_preimage_eq, measurableSet_of_compl
 -/
@@ -1423,7 +1743,144 @@ theorem MeasureTheory.measurableSet_range_of_continuous_injective
   /- We follow [Fremlin, *Measure Theory* (volume 4, 423I)][fremlin_vol4].
     Let `b = {s i}` be a countable basis for `α`. When `s i` and `s j` are disjoint, their images
     are disjoint analytic sets, hence by the separation theorem one can find a Borel-measurable set
-    `q i j` separating t
+    `q i j` separating them.
+    Let `E i = closure (f '' s i) ∩ ⋂ j, q i j \ q j i`. It contains `f '' (s i)` and it is
+    measurable. Let `F n = ⋃ E i`, where the union is taken over those `i` for which `diam (s i)`
+    is bounded by some number `u n` tending to `0` with `n`.
+    We claim that `range f = ⋂ F n`, from which the measurability is obvious. The inclusion `⊆` is
+    straightforward. To show `⊇`, consider a point `x` in the intersection. For each `n`, it belongs
+    to some `E i` with `diam (s i) ≤ u n`. Pick a point `y i ∈ s i`. We claim that for such `i`
+    and `j`, the intersection `s i ∩ s j` is nonempty: if it were empty, then thanks to the
+    separating set `q i j` in the definition of `E i` one could not have `x ∈ E i ∩ E j`.
+    Since these two sets have small diameter, it follows that `y i` and `y j` are close.
+    Thus, `y` is a Cauchy sequence, converging to a limit `z`. We claim that `f z = x`, completing
+    the proof.
+    Otherwise, one could find open sets `v` and `w` separating `f z` from `x`. Then, for large `n`,
+    the image `f '' (s i)` would be included in `v` by continuity of `f`, so its closure would be
+    contained in the closure of `v`, and therefore it would be disjoint from `w`. This is a
+    contradiction since `x` belongs both to this closure and to `w`. -/
+  let := TopologicalSpace.upgradeIsCompletelyMetrizable γ
+  obtain ⟨b, b_count, b_nonempty, hb⟩ :
+    exists b : Set (Set γ), b.Countable ∧ ∅ ∉ b ∧ IsTopologicalBasis b := exists_countable_basis γ
+  have : Encodable b := b_count.toEncodable
+  let A := { p : b × b // Disjoint (p.1 : Set γ) p.2 }
+  -- for each pair of disjoint sets in the topological basis `b`, consider Borel sets separating
+  -- their images, by injectivity of `f` and the Lusin separation theorem.
+  have : forall p : A, exists q : Set β,
+      f '' (p.1.1 : Set γ) subseteq q ∧ Disjoint (f '' (p.1.2 : Set γ)) q ∧ MeasurableSet q := by
+    intro p
+    apply
+      AnalyticSet.measurablySeparable ((hb.isOpen p.1.1.2).analyticSet_image f_cont)
+        ((hb.isOpen p.1.2.2).analyticSet_image f_cont)
+    exact Disjoint.image p.2 f_inj.injOn (subset_univ _) (subset_univ _)
+  choose q hq1 hq2 q_meas using this
+  -- define sets `E i` and `F n` as in the proof sketch above
+  let E : b -> Set β := fun s =>
+    closure (f '' s) inter ⋂ (t : b) (ht : Disjoint s.1 t.1), q ⟨(s, t), ht⟩ \ q ⟨(t, s), ht.symm⟩
+  obtain ⟨u, u_anti, u_pos, u_lim⟩ :
+      exists u : Nat -> Real, StrictAnti u ∧ (forall n : Nat, 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
+    exists_seq_strictAnti_tendsto (0 : Real)
+  let F : Nat -> Set β := fun n => ⋃ (s : b) (_ : IsBounded s.1 ∧ diam s.1 <= u n), E s
+  -- it is enough to show that `range f = ⋂ F n`, as the latter set is obviously measurable.
+  suffices range f = ⋂ n, F n by
+    have E_meas : forall s : b, MeasurableSet (E s) := by
+      intro b
+      refine isClosed_closure.measurableSet.inter ?_
+      refine MeasurableSet.iInter fun s => ?_
+      exact MeasurableSet.iInter fun hs => (q_meas _).diff (q_meas _)
+    have F_meas : forall n, MeasurableSet (F n) := by
+      intro n
+      refine MeasurableSet.iUnion fun s => ?_
+      exact MeasurableSet.iUnion fun _ => E_meas _
+    rw [this]
+    exact MeasurableSet.iInter fun n => F_meas n
+  -- we check both inclusions.
+  apply Subset.antisymm
+  -- we start with the easy inclusion `range f ⊆ ⋂ F n`. One just needs to unfold the definitions.
+  · rintro x ⟨y, rfl⟩
+    refine mem_iInter.2 fun n => ?_
+    obtain ⟨s, sb, ys, hs⟩ : exists (s : Set γ), s in b ∧ y in s ∧ s subseteq ball y (u n / 2) := by
+      apply hb.mem_nhds_iff.1
+      exact ball_mem_nhds _ (half_pos (u_pos n))
+    have diam_s : diam s <= u n := by
+      apply (diam_mono hs isBounded_ball).trans
+      convert! diam_ball (x := y) (half_pos (u_pos n)).le
+      ring
+    refine mem_iUnion.2 ⟨⟨s, sb⟩, ?_⟩
+    refine mem_iUnion.2 ⟨⟨isBounded_ball.subset hs, diam_s⟩, ?_⟩
+    apply mem_inter (subset_closure (mem_image_of_mem _ ys))
+    refine mem_iInter.2 fun t => mem_iInter.2 fun ht => ⟨?_, ?_⟩
+    · apply hq1
+      exact mem_image_of_mem _ ys
+    · apply disjoint_left.1 (hq2 ⟨(t, ⟨s, sb⟩), ht.symm⟩)
+      exact mem_image_of_mem _ ys
+  -- Now, let us prove the harder inclusion `⋂ F n ⊆ range f`.
+  · intro x hx
+    -- pick for each `n` a good set `s n` of small diameter for which `x ∈ E (s n)`.
+    have C1 : forall n, exists (s : b) (_ : IsBounded s.1 ∧ diam s.1 <= u n), x in E s := fun n => by
+      simpa only [F, mem_iUnion] using mem_iInter.1 hx n
+    choose s hs hxs using C1
+    have C2 : forall n, (s n).1.Nonempty := by
+      intro n
+      rw [nonempty_iff_ne_empty]
+      grind
+    -- choose a point `y n ∈ s n`.
+    choose y hy using C2
+    have I : forall m n, ((s m).1 inter (s n).1).Nonempty := by
+      intro m n
+      rw [← not_disjoint_iff_nonempty_inter]
+      by_contra! h
+      have A : x in q ⟨(s m, s n), h⟩ \ q ⟨(s n, s m), h.symm⟩ :=
+        haveI := mem_iInter.1 (hxs m).2 (s n)
+        (mem_iInter.1 this h :)
+      have B : x in q ⟨(s n, s m), h.symm⟩ \ q ⟨(s m, s n), h⟩ :=
+        haveI := mem_iInter.1 (hxs n).2 (s m)
+        (mem_iInter.1 this h.symm :)
+      exact A.2 B.1
+    -- the points `y n` are nearby, and therefore they form a Cauchy sequence.
+    have cauchy_y : CauchySeq y := by
+      have : Tendsto (fun n => 2 * u n) atTop (𝓝 0) := by
+        simpa only [mul_zero] using u_lim.const_mul 2
+      refine cauchySeq_of_le_tendsto_0' (fun n => 2 * u n) (fun m n hmn => ?_) this
+      rcases I m n with ⟨z, zsm, zsn⟩
+      calc
+        dist (y m) (y n) <= dist (y m) z + dist z (y n) := dist_triangle _ _ _
+        _ <= u m + u n :=
+          (add_le_add ((dist_le_diam_of_mem (hs m).1 (hy m) zsm).trans (hs m).2)
+            ((dist_le_diam_of_mem (hs n).1 zsn (hy n)).trans (hs n).2))
+        _ <= 2 * u m := by linarith [u_anti.antitone hmn]
+    have : Nonempty γ := ⟨y 0⟩
+    -- let `z` be its limit.
+    let z := limUnder atTop y
+    have y_lim : Tendsto y atTop (𝓝 z) := cauchy_y.tendsto_limUnder
+    suffices f z = x by
+      rw [← this]
+      exact mem_range_self _
+    -- assume for a contradiction that `f z ≠ x`.
+    by_contra! hne
+    -- introduce disjoint open sets `v` and `w` separating `f z` from `x`.
+    obtain ⟨v, w, v_open, w_open, fzv, xw, hvw⟩ := t2_separation hne
+    obtain ⟨δ, δpos, hδ⟩ : exists δ > (0 : Real), ball z δ subseteq f ⁻¹' v := by
+      apply Metric.mem_nhds_iff.1
+      exact f_cont.continuousAt.preimage_mem_nhds (v_open.mem_nhds fzv)
+    obtain ⟨n, hn⟩ : exists n, u n + dist (y n) z < δ :=
+      haveI : Tendsto (fun n => u n + dist (y n) z) atTop (𝓝 0) := by
+        simpa only [add_zero] using u_lim.add (tendsto_iff_dist_tendsto_zero.1 y_lim)
+      ((tendsto_order.1 this).2 _ δpos).exists
+    -- for large enough `n`, the image of `s n` is contained in `v`, by continuity of `f`.
+    have fsnv : f '' s n subseteq v := by
+      rw [image_subset_iff]
+      apply Subset.trans _ hδ
+      intro a ha
+      calc
+        dist a z <= dist a (y n) + dist (y n) z := dist_triangle _ _ _
+        _ <= u n + dist (y n) z := by grw [dist_le_diam_of_mem (hs n).1 ha (hy n), (hs n).2]
+        _ < δ := hn
+    -- as `x` belongs to the closure of `f '' (s n)`, it belongs to the closure of `v`.
+    have : x in closure v := closure_mono fsnv (hxs n).1
+    -- this is a contradiction, as `x` is supposed to belong to `w`, which is disjoint from
+    -- the closure of `v`.
+    exact disjoint_left.1 (hvw.closure_left w_open) this xw
 
 中文:
 定理 测度论.measurableSet_range_of_continuous_injective
@@ -1432,7 +1889,144 @@ theorem MeasureTheory.measurableSet_range_of_continuous_injective
   /- We follow [Fremlin, *Measure Theory* (volume 4, 423I)][fremlin_vol4].
     Let `b = {s i}` be a countable basis for `α`. When `s i` and `s j` are disjoint, their images
     are disjoint analytic sets, hence by the separation theorem one can find a Borel-measurable set
-    `q i j` separating t
+    `q i j` separating them.
+    Let `E i = closure (f '' s i) ∩ ⋂ j, q i j \ q j i`. It contains `f '' (s i)` and it is
+    measurable. Let `F n = ⋃ E i`, where the union is taken over those `i` for which `diam (s i)`
+    is bounded by some number `u n` tending to `0` with `n`.
+    We claim that `range f = ⋂ F n`, from which the measurability is obvious. The inclusion `⊆` is
+    straightforward. To show `⊇`, consider a point `x` in the intersection. For each `n`, it belongs
+    to some `E i` with `diam (s i) ≤ u n`. Pick a point `y i ∈ s i`. We claim that for such `i`
+    and `j`, the intersection `s i ∩ s j` is nonempty: if it were empty, then thanks to the
+    separating set `q i j` in the definition of `E i` one could not have `x ∈ E i ∩ E j`.
+    Since these two sets have small diameter, it follows that `y i` and `y j` are close.
+    Thus, `y` is a Cauchy sequence, converging to a limit `z`. We claim that `f z = x`, completing
+    the proof.
+    Otherwise, one could find open sets `v` and `w` separating `f z` from `x`. Then, for large `n`,
+    the image `f '' (s i)` would be included in `v` by continuity of `f`, so its closure would be
+    contained in the closure of `v`, and therefore it would be disjoint from `w`. This is a
+    contradiction since `x` belongs both to this closure and to `w`. -/
+  let := TopologicalSpace.upgradeIsCompletelyMetrizable γ
+  obtain ⟨b, b_count, b_nonempty, hb⟩ :
+    exists b : Set (Set γ), b.Countable ∧ ∅ ∉ b ∧ IsTopologicalBasis b := exists_countable_basis γ
+  have : Encodable b := b_count.toEncodable
+  let A := { p : b × b // Disjoint (p.1 : Set γ) p.2 }
+  -- for each pair of disjoint sets in the topological basis `b`, consider Borel sets separating
+  -- their images, by injectivity of `f` and the Lusin separation theorem.
+  have : forall p : A, exists q : Set β,
+      f '' (p.1.1 : Set γ) subseteq q ∧ Disjoint (f '' (p.1.2 : Set γ)) q ∧ MeasurableSet q := by
+    intro p
+    apply
+      AnalyticSet.measurablySeparable ((hb.isOpen p.1.1.2).analyticSet_image f_cont)
+        ((hb.isOpen p.1.2.2).analyticSet_image f_cont)
+    exact Disjoint.image p.2 f_inj.injOn (subset_univ _) (subset_univ _)
+  choose q hq1 hq2 q_meas using this
+  -- define sets `E i` and `F n` as in the proof sketch above
+  let E : b -> Set β := fun s =>
+    closure (f '' s) inter ⋂ (t : b) (ht : Disjoint s.1 t.1), q ⟨(s, t), ht⟩ \ q ⟨(t, s), ht.symm⟩
+  obtain ⟨u, u_anti, u_pos, u_lim⟩ :
+      exists u : Nat -> Real, StrictAnti u ∧ (forall n : Nat, 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
+    exists_seq_strictAnti_tendsto (0 : Real)
+  let F : Nat -> Set β := fun n => ⋃ (s : b) (_ : IsBounded s.1 ∧ diam s.1 <= u n), E s
+  -- it is enough to show that `range f = ⋂ F n`, as the latter set is obviously measurable.
+  suffices range f = ⋂ n, F n by
+    have E_meas : forall s : b, MeasurableSet (E s) := by
+      intro b
+      refine isClosed_closure.measurableSet.inter ?_
+      refine MeasurableSet.iInter fun s => ?_
+      exact MeasurableSet.iInter fun hs => (q_meas _).diff (q_meas _)
+    have F_meas : forall n, MeasurableSet (F n) := by
+      intro n
+      refine MeasurableSet.iUnion fun s => ?_
+      exact MeasurableSet.iUnion fun _ => E_meas _
+    rw [this]
+    exact MeasurableSet.iInter fun n => F_meas n
+  -- we check both inclusions.
+  apply Subset.antisymm
+  -- we start with the easy inclusion `range f ⊆ ⋂ F n`. One just needs to unfold the definitions.
+  · rintro x ⟨y, rfl⟩
+    refine mem_iInter.2 fun n => ?_
+    obtain ⟨s, sb, ys, hs⟩ : exists (s : Set γ), s in b ∧ y in s ∧ s subseteq ball y (u n / 2) := by
+      apply hb.mem_nhds_iff.1
+      exact ball_mem_nhds _ (half_pos (u_pos n))
+    have diam_s : diam s <= u n := by
+      apply (diam_mono hs isBounded_ball).trans
+      convert! diam_ball (x := y) (half_pos (u_pos n)).le
+      ring
+    refine mem_iUnion.2 ⟨⟨s, sb⟩, ?_⟩
+    refine mem_iUnion.2 ⟨⟨isBounded_ball.subset hs, diam_s⟩, ?_⟩
+    apply mem_inter (subset_closure (mem_image_of_mem _ ys))
+    refine mem_iInter.2 fun t => mem_iInter.2 fun ht => ⟨?_, ?_⟩
+    · apply hq1
+      exact mem_image_of_mem _ ys
+    · apply disjoint_left.1 (hq2 ⟨(t, ⟨s, sb⟩), ht.symm⟩)
+      exact mem_image_of_mem _ ys
+  -- Now, let us prove the harder inclusion `⋂ F n ⊆ range f`.
+  · intro x hx
+    -- pick for each `n` a good set `s n` of small diameter for which `x ∈ E (s n)`.
+    have C1 : forall n, exists (s : b) (_ : IsBounded s.1 ∧ diam s.1 <= u n), x in E s := fun n => by
+      simpa only [F, mem_iUnion] using mem_iInter.1 hx n
+    choose s hs hxs using C1
+    have C2 : forall n, (s n).1.Nonempty := by
+      intro n
+      rw [nonempty_iff_ne_empty]
+      grind
+    -- choose a point `y n ∈ s n`.
+    choose y hy using C2
+    have I : forall m n, ((s m).1 inter (s n).1).Nonempty := by
+      intro m n
+      rw [← not_disjoint_iff_nonempty_inter]
+      by_contra! h
+      have A : x in q ⟨(s m, s n), h⟩ \ q ⟨(s n, s m), h.symm⟩ :=
+        haveI := mem_iInter.1 (hxs m).2 (s n)
+        (mem_iInter.1 this h :)
+      have B : x in q ⟨(s n, s m), h.symm⟩ \ q ⟨(s m, s n), h⟩ :=
+        haveI := mem_iInter.1 (hxs n).2 (s m)
+        (mem_iInter.1 this h.symm :)
+      exact A.2 B.1
+    -- the points `y n` are nearby, and therefore they form a Cauchy sequence.
+    have cauchy_y : CauchySeq y := by
+      have : Tendsto (fun n => 2 * u n) atTop (𝓝 0) := by
+        simpa only [mul_zero] using u_lim.const_mul 2
+      refine cauchySeq_of_le_tendsto_0' (fun n => 2 * u n) (fun m n hmn => ?_) this
+      rcases I m n with ⟨z, zsm, zsn⟩
+      calc
+        dist (y m) (y n) <= dist (y m) z + dist z (y n) := dist_triangle _ _ _
+        _ <= u m + u n :=
+          (add_le_add ((dist_le_diam_of_mem (hs m).1 (hy m) zsm).trans (hs m).2)
+            ((dist_le_diam_of_mem (hs n).1 zsn (hy n)).trans (hs n).2))
+        _ <= 2 * u m := by linarith [u_anti.antitone hmn]
+    have : Nonempty γ := ⟨y 0⟩
+    -- let `z` be its limit.
+    let z := limUnder atTop y
+    have y_lim : Tendsto y atTop (𝓝 z) := cauchy_y.tendsto_limUnder
+    suffices f z = x by
+      rw [← this]
+      exact mem_range_self _
+    -- assume for a contradiction that `f z ≠ x`.
+    by_contra! hne
+    -- introduce disjoint open sets `v` and `w` separating `f z` from `x`.
+    obtain ⟨v, w, v_open, w_open, fzv, xw, hvw⟩ := t2_separation hne
+    obtain ⟨δ, δpos, hδ⟩ : exists δ > (0 : Real), ball z δ subseteq f ⁻¹' v := by
+      apply Metric.mem_nhds_iff.1
+      exact f_cont.continuousAt.preimage_mem_nhds (v_open.mem_nhds fzv)
+    obtain ⟨n, hn⟩ : exists n, u n + dist (y n) z < δ :=
+      haveI : Tendsto (fun n => u n + dist (y n) z) atTop (𝓝 0) := by
+        simpa only [add_zero] using u_lim.add (tendsto_iff_dist_tendsto_zero.1 y_lim)
+      ((tendsto_order.1 this).2 _ δpos).exists
+    -- for large enough `n`, the image of `s n` is contained in `v`, by continuity of `f`.
+    have fsnv : f '' s n subseteq v := by
+      rw [image_subset_iff]
+      apply Subset.trans _ hδ
+      intro a ha
+      calc
+        dist a z <= dist a (y n) + dist (y n) z := dist_triangle _ _ _
+        _ <= u n + dist (y n) z := by grw [dist_le_diam_of_mem (hs n).1 ha (hy n), (hs n).2]
+        _ < δ := hn
+    -- as `x` belongs to the closure of `f '' (s n)`, it belongs to the closure of `v`.
+    have : x in closure v := closure_mono fsnv (hxs n).1
+    -- this is a contradiction, as `x` is supposed to belong to `w`, which is disjoint from
+    -- the closure of `v`.
+    exact disjoint_left.1 (hvw.closure_left w_open) this xw
 -/
 theorem MeasureTheory.measurableSet_range_of_continuous_injective {β : Type*} [TopologicalSpace γ]
     [PolishSpace γ] [TopologicalSpace β] [T2Space β] [MeasurableSpace β] [OpensMeasurableSpace β]
@@ -1629,7 +2223,7 @@ theorem MeasurableSet.image_of_continuousOn_injOn
     hs.isClopenable
   exact
     @IsClosed.measurableSet_image_of_continuousOn_injOn γ t' t'_polish β _ _ _ _ s s_closed f
-      (f_cont.mono_dom t't) 
+      (f_cont.mono_dom t't) f_inj
 
 中文:
 定理 可测集.image_of_continuousOn_injOn
@@ -1640,7 +2234,7 @@ theorem MeasurableSet.image_of_continuousOn_injOn
     hs.isClopenable
   exact
     @IsClosed.measurableSet_image_of_continuousOn_injOn γ t' t'_polish β _ _ _ _ s s_closed f
-      (f_cont.mono_dom t't) 
+      (f_cont.mono_dom t't) f_inj
 
 Depends on / 依赖: IsClosed, IsClosed.measurableSet_image_of_continuousOn_injOn, IsOpen, PolishSpace, TopologicalSpace, _polish, f_cont, f_cont.mono_dom, f_inj, hs.isClopenable, isClopenable, measurableSet_image_of_continuousOn_injOn, mono_dom, s_closed
 -/
@@ -1667,7 +2261,13 @@ theorem MeasurableSet.image_of_measurable_injOn
   rcases exists_opensMeasurableSpace_of_countablySeparated α with ⟨τ, _, _, _⟩
   -- for a finer Polish topology, `f` is continuous. Therefore, one may apply the corresponding
   -- result for continuous maps.
-  obtain ⟨
+  obtain ⟨t', t't, f_cont, t'_polish⟩ :
+      exists t' : TopologicalSpace γ, t' <= tγ ∧ @Continuous γ _ t' _ f ∧ @PolishSpace γ t' :=
+    f_meas.exists_continuous
+have hs' := (borel_anti t't s) by rwa [← eq_borel_upgradeStandardBorel γ]
+  let : MeasurableSpace γ := @borel γ t'
+  let : BorelSpace γ := ⟨rfl⟩
+  exact hs'.image_of_continuousOn_injOn f_cont.continuousOn f_inj
 
 中文:
 定理 可测集.image_of_measurable_injOn
@@ -1678,7 +2278,13 @@ theorem MeasurableSet.image_of_measurable_injOn
   rcases exists_opensMeasurableSpace_of_countablySeparated α with ⟨τ, _, _, _⟩
   -- for a finer Polish topology, `f` is continuous. Therefore, one may apply the corresponding
   -- result for continuous maps.
-  obtain ⟨
+  obtain ⟨t', t't, f_cont, t'_polish⟩ :
+      exists t' : TopologicalSpace γ, t' <= tγ ∧ @Continuous γ _ t' _ f ∧ @PolishSpace γ t' :=
+    f_meas.exists_continuous
+have hs' := (borel_anti t't s) by rwa [← eq_borel_upgradeStandardBorel γ]
+  let : MeasurableSpace γ := @borel γ t'
+  let : BorelSpace γ := ⟨rfl⟩
+  exact hs'.image_of_continuousOn_injOn f_cont.continuousOn f_inj
 
 Depends on / 依赖: TopologicalSpace, exists_opensMeasurableSpace_of_countablySeparated, upgradeStandardBorel
 -/
@@ -1742,7 +2348,10 @@ theorem ContinuousOn.measurableEmbedding
       intro u hu
       have A : MeasurableSet (((↑) : s -> γ) '' u) :=
         (MeasurableEmbedding.subtype_coe hs).measurableSet_image.2 hu
-     
+      have B : MeasurableSet (f '' ((↑) : s -> γ) '' u) :=
+        A.image_of_continuousOn_injOn (f_cont.mono (Subtype.coe_image_subset s u))
+          (f_inj.mono (Subtype.coe_image_subset s u))
+      rwa [← image_comp] at B }
 
 中文:
 定理 ContinuousOn.measurableEmbedding
@@ -1753,7 +2362,10 @@ theorem ContinuousOn.measurableEmbedding
       intro u hu
       have A : MeasurableSet (((↑) : s -> γ) '' u) :=
         (MeasurableEmbedding.subtype_coe hs).measurableSet_image.2 hu
-     
+      have B : MeasurableSet (f '' ((↑) : s -> γ) '' u) :=
+        A.image_of_continuousOn_injOn (f_cont.mono (Subtype.coe_image_subset s u))
+          (f_inj.mono (Subtype.coe_image_subset s u))
+      rwa [← image_comp] at B }
 
 Depends on / 依赖: A.image_of_continuousOn_injOn, MeasurableEmbedding, MeasurableEmbedding.subtype_coe, MeasurableSet, Subtype, Subtype.coe_image_subset, coe_image_subset, continuousOn_iff_continuous_domRestrict, f_cont, f_cont.mono, f_inj, f_inj.mono, image_comp, image_of_continuousOn_injOn, injOn_iff_injective, injective, measurable, measurableSet_image, subtype_coe
 -/
@@ -1812,6 +2424,7 @@ theorem MeasureTheory.borel_eq_borel_of_le
     _ _ (@borel _ t') t' _ _ (@BorelSpace.mk _ _ (borel γ) rfl)
     t _ (@borel _ t) (@BorelSpace.mk _ t (@borel _ t) rfl) (continuous_id_of_le hle) injective_id
   convert! e.measurableSet_image.2 hs
+  simp only [id_eq, image_id']
 
 中文:
 定理 测度论.borel_eq_borel_of_le
@@ -1823,6 +2436,7 @@ theorem MeasureTheory.borel_eq_borel_of_le
     _ _ (@borel _ t') t' _ _ (@BorelSpace.mk _ _ (borel γ) rfl)
     t _ (@borel _ t) (@BorelSpace.mk _ t (@borel _ t) rfl) (continuous_id_of_le hle) injective_id
   convert! e.measurableSet_image.2 hs
+  simp only [id_eq, image_id']
 
 Depends on / 依赖: PolishSpace
 -/
@@ -1848,7 +2462,10 @@ theorem MeasureTheory.isClopenable_iff_measurableSet
   borelize γ
   -- consider a finer topology `t'` in which `s` is open and closed.
   obtain ⟨t', t't, t'_polish, _, s_open⟩ :
-    exists t' : Topo
+    exists t' : TopologicalSpace γ, t' <= tγ ∧ @PolishSpace γ t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s := hs
+  rw [← borel_eq_borel_of_le t'_polish _ t't]
+  · exact MeasurableSpace.measurableSet_generateFrom s_open
+  infer_instance
 
 中文:
 定理 测度论.isClopenable_iff_measurableSet
@@ -1858,7 +2475,10 @@ theorem MeasureTheory.isClopenable_iff_measurableSet
   borelize γ
   -- consider a finer topology `t'` in which `s` is open and closed.
   obtain ⟨t', t't, t'_polish, _, s_open⟩ :
-    exists t' : Topo
+    exists t' : TopologicalSpace γ, t' <= tγ ∧ @PolishSpace γ t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s := hs
+  rw [← borel_eq_borel_of_le t'_polish _ t't]
+  · exact MeasurableSpace.measurableSet_generateFrom s_open
+  infer_instance
 -/
 theorem MeasureTheory.isClopenable_iff_measurableSet
     [tγ : TopologicalSpace γ] [PolishSpace γ] [MeasurableSpace γ] [BorelSpace γ] :
@@ -1891,7 +2511,28 @@ theorem MeasurableSet.image_of_monotoneOn_of_continuousOn
   /- We use that the image of a measurable set by a continuous injective map is measurable.
   Therefore, we need to remove the points where the map is not injective. There are only countably
   many points that have several preimages, so this set is also measurable. -/
-  let u : Set β := {c | exis
+  let u : Set β := {c | exists x, exists y, x in t ∧ y in t ∧ x < y ∧ g x = c ∧ g y = c}
+  have hu : Set.Countable u := MonotoneOn.countable_setOfPred_two_preimages hg
+  let t' := t inter g ⁻¹' u
+  have ht' : MeasurableSet t' := by
+    have : t' = ⋃ c in u, t inter g ⁻¹' {c} := by ext; simp [t']
+    rw [this]
+    apply MeasurableSet.biUnion hu (fun c hc => ?_)
+    obtain ⟨v, hv, tv⟩ : exists v, OrdConnected v ∧ t inter g ⁻¹' {c} = t inter v :=
+      ordConnected_singleton.preimage_monotoneOn hg
+    exact tv ▸ ht.inter hv.measurableSet
+  have : g '' t = g '' (t \ t') union g '' t' := by simp [← image_union, t']
+  rw [this]
+  apply MeasurableSet.union
+  · apply (ht.diff ht').image_of_continuousOn_injOn (h'g.mono sdiff_subset)
+    intro x hx y hy hxy
+    contrapose! hxy
+    wlog! H : x < y generalizing x y with h
+    · have : y < x := lt_of_le_of_ne H hxy.symm
+      exact (h hy hx hxy.symm this).symm
+    intro h
+    exact hx.2 ⟨hx.1, x, y, hx.1, hy.1, H, rfl, h.symm⟩
+.measurableSet · exact hu.mono (by simp [t'])
 
 中文:
 定理 可测集.image_of_monotoneOn_of_continuousOn
@@ -1899,7 +2540,28 @@ theorem MeasurableSet.image_of_monotoneOn_of_continuousOn
   /- We use that the image of a measurable set by a continuous injective map is measurable.
   Therefore, we need to remove the points where the map is not injective. There are only countably
   many points that have several preimages, so this set is also measurable. -/
-  let u : Set β := {c | exis
+  let u : Set β := {c | exists x, exists y, x in t ∧ y in t ∧ x < y ∧ g x = c ∧ g y = c}
+  have hu : Set.Countable u := MonotoneOn.countable_setOfPred_two_preimages hg
+  let t' := t inter g ⁻¹' u
+  have ht' : MeasurableSet t' := by
+    have : t' = ⋃ c in u, t inter g ⁻¹' {c} := by ext; simp [t']
+    rw [this]
+    apply MeasurableSet.biUnion hu (fun c hc => ?_)
+    obtain ⟨v, hv, tv⟩ : exists v, OrdConnected v ∧ t inter g ⁻¹' {c} = t inter v :=
+      ordConnected_singleton.preimage_monotoneOn hg
+    exact tv ▸ ht.inter hv.measurableSet
+  have : g '' t = g '' (t \ t') union g '' t' := by simp [← image_union, t']
+  rw [this]
+  apply MeasurableSet.union
+  · apply (ht.diff ht').image_of_continuousOn_injOn (h'g.mono sdiff_subset)
+    intro x hx y hy hxy
+    contrapose! hxy
+    wlog! H : x < y generalizing x y with h
+    · have : y < x := lt_of_le_of_ne H hxy.symm
+      exact (h hy hx hxy.symm this).symm
+    intro h
+    exact hx.2 ⟨hx.1, x, y, hx.1, hy.1, H, rfl, h.symm⟩
+.measurableSet · exact hu.mono (by simp [t'])
 -/
 theorem MeasurableSet.image_of_monotoneOn_of_continuousOn
     (ht : MeasurableSet t) (hg : MonotoneOn g t) (h'g : ContinuousOn g t) :
@@ -1941,7 +2603,19 @@ theorem MeasurableSet.image_of_monotoneOn
   the continuous case, which we have already proved. -/
   let t' := {x in t | ¬ ContinuousWithinAt g t x}
   have ht' : Set.Countable t' := hg.countable_not_continuousWithinAt
-  have : g '' t = g '' (
+  have : g '' t = g '' (t \ t') union g '' t' := by
+    rw [← image_union]
+    congr!
+    ext
+    simp only [sdiff_sep_self, not_not, mem_union, mem_ofPred_eq, t']
+    tauto
+  rw [this]
+  apply MeasurableSet.union _ (ht'.image g).measurableSet
+  apply MeasurableSet.image_of_monotoneOn_of_continuousOn (ht.diff ht'.measurableSet)
+    (hg.mono sdiff_subset)
+  intro x hx
+  simp only [sdiff_sep_self, not_not, mem_ofPred_eq, t'] at hx
+  exact hx.2.mono sdiff_subset
 
 中文:
 定理 可测集.image_of_monotoneOn
@@ -1951,7 +2625,19 @@ theorem MeasurableSet.image_of_monotoneOn
   the continuous case, which we have already proved. -/
   let t' := {x in t | ¬ ContinuousWithinAt g t x}
   have ht' : Set.Countable t' := hg.countable_not_continuousWithinAt
-  have : g '' t = g '' (
+  have : g '' t = g '' (t \ t') union g '' t' := by
+    rw [← image_union]
+    congr!
+    ext
+    simp only [sdiff_sep_self, not_not, mem_union, mem_ofPred_eq, t']
+    tauto
+  rw [this]
+  apply MeasurableSet.union _ (ht'.image g).measurableSet
+  apply MeasurableSet.image_of_monotoneOn_of_continuousOn (ht.diff ht'.measurableSet)
+    (hg.mono sdiff_subset)
+  intro x hx
+  simp only [sdiff_sep_self, not_not, mem_ofPred_eq, t'] at hx
+  exact hx.2.mono sdiff_subset
 -/
 theorem MeasurableSet.image_of_monotoneOn [SecondCountableTopology β]
     (ht : MeasurableSet t) (hg : MonotoneOn g t) : MeasurableSet (g '' t) := by
@@ -2043,7 +2729,19 @@ theorem MeasureTheory.measurableSet_exists_tendsto
   rcases l.exists_antitone_basis with ⟨u, hu⟩
   simp_rw [← cauchy_map_iff_exists_tendsto]
   change MeasurableSet { x | _ ∧ _ }
-  have : forall x, (map (f · x) l ×ˢ map (f · x) l).HasAntit
+  have : forall x, (map (f · x) l ×ˢ map (f · x) l).HasAntitoneBasis fun n =>
+      ((f · x) '' u n) ×ˢ ((f · x) '' u n) := fun x => (hu.map _).prod (hu.map _)
+  simp_rw [and_iff_right (hl.map _),
+    Filter.HasBasis.le_basis_iff (this _).toHasBasis Metric.uniformity_basis_dist_inv_nat_succ,
+    Set.ofPred_forall]
+  refine MeasurableSet.biInter Set.countable_univ fun K _ => ?_
+  simp_rw [Set.ofPred_exists, true_and]
+  refine MeasurableSet.iUnion fun N => ?_
+  simp_rw [prod_image_image_eq, image_subset_iff, prod_subset_iff, Set.ofPred_forall]
+  exact
+    MeasurableSet.biInter (to_countable (u N)) fun i _ =>
+      MeasurableSet.biInter (to_countable (u N)) fun j _ =>
+        measurableSet_lt (Measurable.dist (hf i) (hf j)) measurable_const
 
 中文:
 定理 测度论.measurableSet_存在_tendsto
@@ -2055,7 +2753,19 @@ theorem MeasureTheory.measurableSet_exists_tendsto
   rcases l.exists_antitone_basis with ⟨u, hu⟩
   simp_rw [← cauchy_map_iff_exists_tendsto]
   change MeasurableSet { x | _ ∧ _ }
-  have : forall x, (map (f · x) l ×ˢ map (f · x) l).HasAntit
+  have : forall x, (map (f · x) l ×ˢ map (f · x) l).HasAntitoneBasis fun n =>
+      ((f · x) '' u n) ×ˢ ((f · x) '' u n) := fun x => (hu.map _).prod (hu.map _)
+  simp_rw [and_iff_right (hl.map _),
+    Filter.HasBasis.le_basis_iff (this _).toHasBasis Metric.uniformity_basis_dist_inv_nat_succ,
+    Set.ofPred_forall]
+  refine MeasurableSet.biInter Set.countable_univ fun K _ => ?_
+  simp_rw [Set.ofPred_exists, true_and]
+  refine MeasurableSet.iUnion fun N => ?_
+  simp_rw [prod_image_image_eq, image_subset_iff, prod_subset_iff, Set.ofPred_forall]
+  exact
+    MeasurableSet.biInter (to_countable (u N)) fun i _ =>
+      MeasurableSet.biInter (to_countable (u N)) fun j _ =>
+        measurableSet_lt (Measurable.dist (hf i) (hf j)) measurable_const
 
 Depends on / 依赖: Filter, Filter.HasBasis.le_basis_iff, HasAntitoneBasis, HasBasis, MeasurableSet, Metric, Metric.uniformity_basis_dist_inv_nat, TopologicalSpace, TopologicalSpace.upgradeIsCompletelyPseudoMetrizable, and_iff_right, cauchy_map_iff_exists_tendsto, eq_or_neBot, exists_antitone_basis, hl.map, hu.map, l.eq_or_neBot, l.exists_antitone_basis, le_basis_iff, simp_rw, toHasBasis
 -/
@@ -2108,7 +2818,9 @@ theorem Measurable.tprod
   have hE : MeasurableSet E := measurableSet_exists_tendsto (by fun_prop)
   have h0 : (Eᶜ.domRestrict fun x => ∏'[L] i, f i x) = fun _ => 1 :=
     funext fun ⟨x, hx⟩ => tprod_eq_one_of_not_multipliable hx
-  refine measurable_of_restrict_of_restrict_compl 
+  refine measurable_of_restrict_of_restrict_compl hE ?_ (h0 ▸ measurable_const)
+  refine measurable_of_tendsto_metrizable' L.filter ?_ (tendsto_pi_nhds.mpr fun e => e.2.hasProd)
+  fun_prop
 
 中文:
 定理 可测.tprod
@@ -2118,7 +2830,9 @@ theorem Measurable.tprod
   have hE : MeasurableSet E := measurableSet_exists_tendsto (by fun_prop)
   have h0 : (Eᶜ.domRestrict fun x => ∏'[L] i, f i x) = fun _ => 1 :=
     funext fun ⟨x, hx⟩ => tprod_eq_one_of_not_multipliable hx
-  refine measurable_of_restrict_of_restrict_compl 
+  refine measurable_of_restrict_of_restrict_compl hE ?_ (h0 ▸ measurable_const)
+  refine measurable_of_tendsto_metrizable' L.filter ?_ (tendsto_pi_nhds.mpr fun e => e.2.hasProd)
+  fun_prop
 
 Depends on / 依赖: L.filter, MeasurableSet, Multipliable, domRestrict, filter, fun_prop, hasProd, measurableSet_exists_tendsto, measurable_const, measurable_of_restrict_of_restrict_compl, measurable_of_tendsto_metrizable, tendsto_pi_nhds, tendsto_pi_nhds.mpr, tprod_eq_one_of_not_multipliable
 -/
@@ -2228,7 +2942,8 @@ theorem AEMeasurable.tprod'
     rw [Set.mulIndicator]
     split_ifs <;> fun_prop
   · apply aemeasurable_of_tendsto_metrizable_ae L.filter (f := fun s => ∏ i in s, f i)
-    · fun_pr
+    · fun_prop
+    · exact .of_forall fun x => hm.choose_spec.apply_nhds x
 
 中文:
 定理 几乎处处可测.tprod'
@@ -2241,7 +2956,8 @@ theorem AEMeasurable.tprod'
     rw [Set.mulIndicator]
     split_ifs <;> fun_prop
   · apply aemeasurable_of_tendsto_metrizable_ae L.filter (f := fun s => ∏ i in s, f i)
-    · fun_pr
+    · fun_prop
+    · exact .of_forall fun x => hm.choose_spec.apply_nhds x
 
 Depends on / 依赖: Finset, Finset.aemeasurable_prod, L.filter, Set.mulIndicator, aemeasurable_of_tendsto_metrizable_ae, aemeasurable_one, aemeasurable_prod, any_goals, apply_nhds, choose_spec, filter, finprod_def, fun_prop, hm.choose_spec.apply_nhds, mulIndicator, of_forall, split_ifs, tprod_def
 -/
@@ -2375,7 +3091,8 @@ definition measurableEquivNatBoolOfNotCountable
     isClosed_univ.exists_nat_bool_injection_of_not_countable (α := α)
       (by rwa [← countable_coe_iff, (Equiv.Set.univ _).countable_iff])
   obtain ⟨g, gmeas, ginj⟩ :=
-    MeasurableSpace.measurable_injection_n
+    MeasurableSpace.measurable_injection_nat_bool_of_countablySeparated α
+  exact ⟨borelSchroederBernstein gmeas ginj fcts.measurable finj⟩
 
 中文:
 定义 measurableEquiv自然数布尔OfNotCountable
@@ -2387,7 +3104,8 @@ definition measurableEquivNatBoolOfNotCountable
     isClosed_univ.exists_nat_bool_injection_of_not_countable (α := α)
       (by rwa [← countable_coe_iff, (Equiv.Set.univ _).countable_iff])
   obtain ⟨g, gmeas, ginj⟩ :=
-    MeasurableSpace.measurable_injection_n
+    MeasurableSpace.measurable_injection_nat_bool_of_countablySeparated α
+  exact ⟨borelSchroederBernstein gmeas ginj fcts.measurable finj⟩
 
 Depends on / 依赖: Equiv.Set.univ, MeasurableSpace, MeasurableSpace.measurable_injection_nat_bool_of_countablySeparated, Nonempty, Nonempty.some, borelSchroederBernstein, countable_coe_iff, countable_iff, exists_nat_bool_injection_of_not_countable, fcts.measurable, isClosed_univ, isClosed_univ.exists_nat_bool_injection_of_not_countable, measurable, measurable_injection_nat_bool_of_countablySeparated, upgradeStandardBorel
 -/

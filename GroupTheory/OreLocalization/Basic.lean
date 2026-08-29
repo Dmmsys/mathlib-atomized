@@ -73,7 +73,20 @@ definition oreEqv
     · rintro ⟨r, s⟩ ⟨r', s'⟩ ⟨u, v, hru, hsu⟩; dsimp only at *
       rcases oreCondition (s : R) s' with ⟨r₂, s₂, h₁⟩
       rcases oreCondition r₂ u with ⟨r₃, s₃, h₂⟩
-     
+      have : r₃ * v * s = s₃ * s₂ * s := by
+        -- Porting note: the proof used `assoc_rw`
+        rw [mul_assoc _ (s₂ : R)]; rw [h₁]; rw [← mul_assoc]; rw [h₂]; rw [mul_assoc]; rw [← hsu]; rw [← mul_assoc]
+      rcases ore_right_cancel (r₃ * v) (s₃ * s₂) s this with ⟨w, hw⟩
+      refine ⟨w * (s₃ * s₂), w * (r₃ * u), ?_, ?_⟩ <;>
+        simp only [Submonoid.coe_mul, Submonoid.smul_def, ← hw]
+      · simp only [mul_smul, hru, ← Submonoid.smul_def]
+      · simp only [mul_assoc, hsu]
+    · rintro ⟨r₁, s₁⟩ ⟨r₂, s₂⟩ ⟨r₃, s₃⟩ ⟨u, v, hur₁, hs₁u⟩ ⟨u', v', hur₂, hs₂u⟩
+      rcases oreCondition v' u with ⟨r', s', h⟩; dsimp only at *
+      refine ⟨s' * u', r' * v, ?_, ?_⟩ <;>
+        simp only [Submonoid.smul_def, Submonoid.coe_mul, mul_smul, mul_assoc] at *
+      · rw [hur₂, smul_smul, h, mul_smul, hur₁]
+      · rw [hs₂u, ← mul_assoc, h, mul_assoc, hs₁u]
 
 中文:
 定义 oreEqv
@@ -84,7 +97,20 @@ definition oreEqv
     · rintro ⟨r, s⟩ ⟨r', s'⟩ ⟨u, v, hru, hsu⟩; dsimp only at *
       rcases oreCondition (s : R) s' with ⟨r₂, s₂, h₁⟩
       rcases oreCondition r₂ u with ⟨r₃, s₃, h₂⟩
-     
+      have : r₃ * v * s = s₃ * s₂ * s := by
+        -- Porting note: the proof used `assoc_rw`
+        rw [mul_assoc _ (s₂ : R)]; rw [h₁]; rw [← mul_assoc]; rw [h₂]; rw [mul_assoc]; rw [← hsu]; rw [← mul_assoc]
+      rcases ore_right_cancel (r₃ * v) (s₃ * s₂) s this with ⟨w, hw⟩
+      refine ⟨w * (s₃ * s₂), w * (r₃ * u), ?_, ?_⟩ <;>
+        simp only [Submonoid.coe_mul, Submonoid.smul_def, ← hw]
+      · simp only [mul_smul, hru, ← Submonoid.smul_def]
+      · simp only [mul_assoc, hsu]
+    · rintro ⟨r₁, s₁⟩ ⟨r₂, s₂⟩ ⟨r₃, s₃⟩ ⟨u, v, hur₁, hs₁u⟩ ⟨u', v', hur₂, hs₂u⟩
+      rcases oreCondition v' u with ⟨r', s', h⟩; dsimp only at *
+      refine ⟨s' * u', r' * v, ?_, ?_⟩ <;>
+        simp only [Submonoid.smul_def, Submonoid.coe_mul, mul_smul, mul_assoc] at *
+      · rw [hur₂, smul_smul, h, mul_smul, hur₁]
+      · rw [hs₂u, ← mul_assoc, h, mul_assoc, hs₁u]
 -/
 def oreEqv : Setoid (X × S) where
   r rs rs' := exists (u : S) (v : R), u • rs'.1 = v • rs.1 ∧ u * rs'.2 = v * rs.2
@@ -301,7 +327,13 @@ theorem eq_of_num_factor_eq
   congr 1
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11215): TODO: use `assoc_rw`?
   calc (t' : R) * (r₁ * r * r₂)
-      = t' * r₁ * r * r₂ := 
+      = t' * r₁ * r * r₂ := by simp [← mul_assoc]
+    _ = r₁' * t * r * r₂ := by rw [hr₁]
+    _ = r₁' * (t * r) * r₂ := by simp [← mul_assoc]
+    _ = r₁' * (t * r') * r₂ := by rw [h]
+    _ = r₁' * t * r' * r₂ := by simp [← mul_assoc]
+    _ = t' * r₁ * r' * r₂ := by rw [hr₁]
+    _ = t' * (r₁ * r' * r₂) := by simp [← mul_assoc]
 
 中文:
 定理 eq_of_num_factor_eq
@@ -312,7 +344,13 @@ theorem eq_of_num_factor_eq
   congr 1
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11215): TODO: use `assoc_rw`?
   calc (t' : R) * (r₁ * r * r₂)
-      = t' * r₁ * r * r₂ := 
+      = t' * r₁ * r * r₂ := by simp [← mul_assoc]
+    _ = r₁' * t * r * r₂ := by rw [hr₁]
+    _ = r₁' * (t * r) * r₂ := by simp [← mul_assoc]
+    _ = r₁' * (t * r') * r₂ := by rw [h]
+    _ = r₁' * t * r' * r₂ := by simp [← mul_assoc]
+    _ = t' * r₁ * r' * r₂ := by rw [hr₁]
+    _ = t' * (r₁ * r' * r₂) := by simp [← mul_assoc]
 -/
 protected theorem eq_of_num_factor_eq {r r' r₁ r₂ : R} {s t : S} (h : t * r = t * r') :
     r₁ * r * r₂ /ₒ s = r₁ * r' * r₂ /ₒ s := by
@@ -345,7 +383,10 @@ definition liftExpand
       rw [← hs₂]; rw [← S.coe_mul]
       exact SetLike.coe_mem (u * s₂)
     replace hs₂ : u * s₂ = ⟨_, s₁vS⟩ := by ext; simp [hs₂]
-    rw [hP r₁ v s₁ s₁vS]; rw [hP
+    rw [hP r₁ v s₁ s₁vS]; rw [hP r₂ u s₂ (by norm_cast; rwa [hs₂]), ← hr₂]
+    simp only [← hs₂]; rfl
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 liftExpand
@@ -356,7 +397,10 @@ definition liftExpand
       rw [← hs₂]; rw [← S.coe_mul]
       exact SetLike.coe_mem (u * s₂)
     replace hs₂ : u * s₂ = ⟨_, s₁vS⟩ := by ext; simp [hs₂]
-    rw [hP r₁ v s₁ s₁vS]; rw [hP
+    rw [hP r₁ v s₁ s₁vS]; rw [hP r₂ u s₂ (by norm_cast; rwa [hs₂]), ← hr₂]
+    simp only [← hs₂]; rfl
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Quotient, Quotient.lift, S.coe_mul, SetLike, SetLike.coe_mem, coe_mem, coe_mul, replace
 -/
@@ -409,7 +453,7 @@ definition lift₂Expand
     ext x; cases x with | _ r₂ s₂
     rw [liftExpand_of]; rw [liftExpand_of]; rw [hP r₁ t₁ s₁ ht₁ r₂ 1 s₂ (by simp)]; simp
 
-@[to_addi
+@[to_additive (attr := simp)]
 
 中文:
 定义 lift₂Expand
@@ -422,7 +466,7 @@ definition lift₂Expand
     ext x; cases x with | _ r₂ s₂
     rw [liftExpand_of]; rw [liftExpand_of]; rw [hP r₁ t₁ s₁ ht₁ r₂ 1 s₂ (by simp)]; simp
 
-@[to_addi
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: liftExpand, liftExpand_of
 -/
@@ -499,7 +543,18 @@ theorem smul'_char
   have :=
     calc
       r₃ * v * s₂ = r₃ * (u * r₁) := by rw [mul_assoc, ← huv]
-      _ = s₃ * (u₀ *
+      _ = s₃ * (u₀ * r₁) := by rw [← mul_assoc, ← mul_assoc, h₃]
+      _ = s₃ * v₀ * s₂ := by rw [mul_assoc, h₀]
+  rcases ore_right_cancel _ _ _ this with ⟨s₄, hs₄⟩
+  symm; rw [oreDiv_eq_iff]
+  use s₄ * s₃
+  use s₄ * r₃
+  simp only [Submonoid.coe_mul, Submonoid.smul_def]
+  constructor
+  · rw [smul_smul, mul_assoc (c := v₀), ← hs₄]
+    simp only [smul_smul, mul_assoc]
+  · rw [← mul_assoc (b := (u₀ : R)), mul_assoc (c := (u₀ : R)), h₃]
+    simp only [mul_assoc]
 
 中文:
 定理 smul'_char
@@ -512,7 +567,18 @@ theorem smul'_char
   have :=
     calc
       r₃ * v * s₂ = r₃ * (u * r₁) := by rw [mul_assoc, ← huv]
-      _ = s₃ * (u₀ *
+      _ = s₃ * (u₀ * r₁) := by rw [← mul_assoc, ← mul_assoc, h₃]
+      _ = s₃ * v₀ * s₂ := by rw [mul_assoc, h₀]
+  rcases ore_right_cancel _ _ _ this with ⟨s₄, hs₄⟩
+  symm; rw [oreDiv_eq_iff]
+  use s₄ * s₃
+  use s₄ * r₃
+  simp only [Submonoid.coe_mul, Submonoid.smul_def]
+  constructor
+  · rw [smul_smul, mul_assoc (c := v₀), ← hs₄]
+    simp only [smul_smul, mul_assoc]
+  · rw [← mul_assoc (b := (u₀ : R)), mul_assoc (c := (u₀ : R)), h₃]
+    simp only [mul_assoc]
 -/
 private theorem smul'_char (r₁ : R) (r₂ : X) (s₁ s₂ : S) (u : S) (v : R) (huv : u * r₁ = v * s₂) :
     OreLocalization.smul' r₁ s₁ r₂ s₂ = v • r₂ /ₒ (u * s₁) := by
@@ -551,7 +617,18 @@ abbreviation smul''
     rcases oreCondition r ⟨_, hs⟩ with ⟨r₂', s₂', h₂⟩
     rw [smul'_char _ _ _ _ _ _ h₂]
     rcases oreCondition (s₁' : R) (s₂') with ⟨r₃', s₃', h₃⟩
-    have : s₃' * r₁' *
+    have : s₃' * r₁' * s' = (r₃' * r₂' * r₂) * s' := by
+      rw [mul_assoc]; rw [← h₁]; rw [← mul_assoc]; rw [h₃]; rw [mul_assoc]; rw [h₂]
+      simp [mul_assoc]
+    rcases ore_right_cancel _ _ _ this with ⟨s₄', h₄⟩
+    have : (s₄' * r₃') * (s₂' * s) in S := by
+      rw [mul_assoc]; rw [← mul_assoc r₃']; rw [← h₃]
+      exact (s₄' * (s₃' * s₁' * s)).2
+    rw [OreLocalization.expand' _ _ (s₄' * s₃')]; rw [OreLocalization.expand _ (s₂' * s) _ this]
+    simp only [Submonoid.smul_def, Submonoid.coe_mul, smul_smul, mul_assoc, h₄]
+    congr 1
+    ext; simp only [Submonoid.coe_mul, ← mul_assoc]
+    rw [mul_assoc (s₄' : R)]; rw [h₃]; rw [← mul_assoc]
 
 中文:
 缩写 smul''
@@ -562,7 +639,18 @@ abbreviation smul''
     rcases oreCondition r ⟨_, hs⟩ with ⟨r₂', s₂', h₂⟩
     rw [smul'_char _ _ _ _ _ _ h₂]
     rcases oreCondition (s₁' : R) (s₂') with ⟨r₃', s₃', h₃⟩
-    have : s₃' * r₁' *
+    have : s₃' * r₁' * s' = (r₃' * r₂' * r₂) * s' := by
+      rw [mul_assoc]; rw [← h₁]; rw [← mul_assoc]; rw [h₃]; rw [mul_assoc]; rw [h₂]
+      simp [mul_assoc]
+    rcases ore_right_cancel _ _ _ this with ⟨s₄', h₄⟩
+    have : (s₄' * r₃') * (s₂' * s) in S := by
+      rw [mul_assoc]; rw [← mul_assoc r₃']; rw [← h₃]
+      exact (s₄' * (s₃' * s₁' * s)).2
+    rw [OreLocalization.expand' _ _ (s₄' * s₃')]; rw [OreLocalization.expand _ (s₂' * s) _ this]
+    simp only [Submonoid.smul_def, Submonoid.coe_mul, smul_smul, mul_assoc, h₄]
+    congr 1
+    ext; simp only [Submonoid.coe_mul, ← mul_assoc]
+    rw [mul_assoc (s₄' : R)]; rw [h₃]; rw [← mul_assoc]
 -/
 private abbrev smul'' (r : R) (s : S) : X[S⁻¹] -> X[S⁻¹] :=
   liftExpand (smul' r s) fun r₁ r₂ s' hs => by
@@ -600,7 +688,22 @@ abbreviation smul
     change OreLocalization.smul' r₁ s x s₂ = OreLocalization.smul' (r₂ * r₁) ⟨_, hs⟩ x s₂
     rcases oreCondition r₁ s₂ with ⟨r₁', s₁', h₁⟩
     rw [smul'_char _ _ _ _ _ _ h₁]
-    rcases oreCondition (r₂ * r₁) s₂ with ⟨r₂', s₂'
+    rcases oreCondition (r₂ * r₁) s₂ with ⟨r₂', s₂', h₂⟩
+    rw [smul'_char _ _ _ _ _ _ h₂]
+    rcases oreCondition (s₂' * r₂) (s₁') with ⟨r₃', s₃', h₃⟩
+    have : s₃' * r₂' * s₂ = r₃' * r₁' * s₂ := by
+      rw [mul_assoc]; rw [← h₂]; rw [← mul_assoc _ r₂]; rw [← mul_assoc]; rw [h₃]; rw [mul_assoc]; rw [h₁]; rw [mul_assoc]
+    rcases ore_right_cancel _ _ _ this with ⟨s₄', h₄⟩
+    have : (s₄' * r₃') * (s₁' * s) in S := by
+      rw [← mul_assoc]; rw [mul_assoc _ r₃']; rw [← h₃]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_assoc]
+      exact mul_mem (s₄' * s₃' * s₂').2 hs
+    rw [OreLocalization.expand' (r₂' • x) _ (s₄' * s₃')]; rw [OreLocalization.expand _ _ _ this]
+    simp only [Submonoid.smul_def, Submonoid.coe_mul, smul_smul, mul_assoc, h₄]
+    congr 1
+    ext; simp only [Submonoid.coe_mul, ← mul_assoc]
+    rw [mul_assoc _ r₃']; rw [← h₃]; rw [← mul_assoc]; rw [← mul_assoc]) y
+
+@[to_additive]
 
 中文:
 缩写 smul
@@ -610,7 +713,22 @@ abbreviation smul
     change OreLocalization.smul' r₁ s x s₂ = OreLocalization.smul' (r₂ * r₁) ⟨_, hs⟩ x s₂
     rcases oreCondition r₁ s₂ with ⟨r₁', s₁', h₁⟩
     rw [smul'_char _ _ _ _ _ _ h₁]
-    rcases oreCondition (r₂ * r₁) s₂ with ⟨r₂', s₂'
+    rcases oreCondition (r₂ * r₁) s₂ with ⟨r₂', s₂', h₂⟩
+    rw [smul'_char _ _ _ _ _ _ h₂]
+    rcases oreCondition (s₂' * r₂) (s₁') with ⟨r₃', s₃', h₃⟩
+    have : s₃' * r₂' * s₂ = r₃' * r₁' * s₂ := by
+      rw [mul_assoc]; rw [← h₂]; rw [← mul_assoc _ r₂]; rw [← mul_assoc]; rw [h₃]; rw [mul_assoc]; rw [h₁]; rw [mul_assoc]
+    rcases ore_right_cancel _ _ _ this with ⟨s₄', h₄⟩
+    have : (s₄' * r₃') * (s₁' * s) in S := by
+      rw [← mul_assoc]; rw [mul_assoc _ r₃']; rw [← h₃]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_assoc]
+      exact mul_mem (s₄' * s₃' * s₂').2 hs
+    rw [OreLocalization.expand' (r₂' • x) _ (s₄' * s₃')]; rw [OreLocalization.expand _ _ _ this]
+    simp only [Submonoid.smul_def, Submonoid.coe_mul, smul_smul, mul_assoc, h₄]
+    congr 1
+    ext; simp only [Submonoid.coe_mul, ← mul_assoc]
+    rw [mul_assoc _ r₃']; rw [← h₃]; rw [← mul_assoc]; rw [← mul_assoc]) y
+
+@[to_additive]
 -/
 protected abbrev smul (y : R[S⁻¹]) (x : X[S⁻¹]) : X[S⁻¹] :=
   liftExpand (smul'' · · x) (fun r₁ r₂ s hs => by
@@ -1058,7 +1176,14 @@ theorem mul_smul
   cases z with | _ r₃ s₃
   rcases oreDivMulChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'
   rcases oreDivSMulChar' r₂ r₃ s₂ s₃ with ⟨rb, sb, hb, hb'⟩; rw [hb']; clear hb'
-  rcases ore
+  rcases oreCondition ra sb with ⟨rc, sc, hc⟩
+  rw [oreDiv_smul_char (ra * r₂) r₃ (sa * s₁) s₃ (rc * rb) sc]; swap
+  · rw [← mul_assoc _ ra, hc, mul_assoc, hb, ← mul_assoc]
+  rw [← mul_assoc]; rw [mul_smul]
+  symm; apply oreDiv_smul_char
+  rw [Submonoid.coe_mul]; rw [Submonoid.coe_mul]; rw [← mul_assoc]; rw [← hc]; rw [mul_assoc _ ra]; rw [← ha]; rw [mul_assoc]
+
+@[to_additive]
 
 中文:
 定理 mul_smul
@@ -1071,7 +1196,14 @@ theorem mul_smul
   cases z with | _ r₃ s₃
   rcases oreDivMulChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'
   rcases oreDivSMulChar' r₂ r₃ s₂ s₃ with ⟨rb, sb, hb, hb'⟩; rw [hb']; clear hb'
-  rcases ore
+  rcases oreCondition ra sb with ⟨rc, sc, hc⟩
+  rw [oreDiv_smul_char (ra * r₂) r₃ (sa * s₁) s₃ (rc * rb) sc]; swap
+  · rw [← mul_assoc _ ra, hc, mul_assoc, hb, ← mul_assoc]
+  rw [← mul_assoc]; rw [mul_smul]
+  symm; apply oreDiv_smul_char
+  rw [Submonoid.coe_mul]; rw [Submonoid.coe_mul]; rw [← mul_assoc]; rw [← hc]; rw [mul_assoc _ ra]; rw [← ha]; rw [mul_assoc]
+
+@[to_additive]
 -/
 protected theorem mul_smul (x y : R[S⁻¹]) (z : X[S⁻¹]) : (x * y) • z = x • y • z := by
   -- Porting note: `assoc_rw` was not ported yet
@@ -1571,7 +1703,15 @@ definition universalMulHom
       have : (fS ⟨t * s, ht⟩ : T) = f t * fS s := by
         simp only [← hf, map_mul]
       conv_rhs =>
-        rw [map_mul]; rw [← one_mul (f r)]; rw [← Units.val_one]; rw [← mul_inv_cancel (fS s)
+        rw [map_mul]; rw [← one_mul (f r)]; rw [← Units.val_one]; rw [← mul_inv_cancel (fS s)]
+        rw [Units.val_mul]; rw [mul_assoc]; rw [← mul_assoc _ (fS s : T)]; rw [← this]; rw [← mul_assoc]
+      simp only [one_mul, Units.inv_mul]
+  map_one' := by rw [OreLocalization.one_def, liftExpand_of]; simp
+  map_mul' x y := by
+    cases x with | _ r₁ s₁
+    cases y with | _ r₂ s₂
+    rcases oreDivMulChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'
+    rw [liftExpand_of]; rw [liftExpand_of]; rw [liftExpand_of]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [map_mul]; rw [map_mul]; rw [Units.val_mul]; rw [mul_assoc]; rw [← mul_assoc (fS s₁ : T)]; rw [← mul_assoc (fS s₁ : T)]; rw [Units.mul_inv]; rw [one_mul]; rw [← hf]; rw [← mul_assoc]; rw [← map_mul _ _ r₁]; rw [ha]; rw [map_mul]; rw [hf s₂]; rw [mul_assoc]; rw [← mul_assoc (fS s₂ : T)]; rw [(fS s₂).mul_inv]; rw [one_mul]
 
 中文:
 定义 universalMulHom
@@ -1581,7 +1721,15 @@ definition universalMulHom
       have : (fS ⟨t * s, ht⟩ : T) = f t * fS s := by
         simp only [← hf, map_mul]
       conv_rhs =>
-        rw [map_mul]; rw [← one_mul (f r)]; rw [← Units.val_one]; rw [← mul_inv_cancel (fS s)
+        rw [map_mul]; rw [← one_mul (f r)]; rw [← Units.val_one]; rw [← mul_inv_cancel (fS s)]
+        rw [Units.val_mul]; rw [mul_assoc]; rw [← mul_assoc _ (fS s : T)]; rw [← this]; rw [← mul_assoc]
+      simp only [one_mul, Units.inv_mul]
+  map_one' := by rw [OreLocalization.one_def, liftExpand_of]; simp
+  map_mul' x y := by
+    cases x with | _ r₁ s₁
+    cases y with | _ r₂ s₂
+    rcases oreDivMulChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'
+    rw [liftExpand_of]; rw [liftExpand_of]; rw [liftExpand_of]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [map_mul]; rw [map_mul]; rw [Units.val_mul]; rw [mul_assoc]; rw [← mul_assoc (fS s₁ : T)]; rw [← mul_assoc (fS s₁ : T)]; rw [Units.mul_inv]; rw [one_mul]; rw [← hf]; rw [← mul_assoc]; rw [← map_mul _ _ r₁]; rw [ha]; rw [map_mul]; rw [hf s₂]; rw [mul_assoc]; rw [← mul_assoc (fS s₂ : T)]; rw [(fS s₂).mul_inv]; rw [one_mul]
 
 Depends on / 依赖: OreLocalization, OreLocalization.one_def, Units.inv_mul, Units.val_mul, Units.val_one, conv_rhs, inv_mul, liftExpand, liftExpand_of, map_mul, map_one, mul_assoc, mul_inv_cancel, one_def, one_mul, smul_eq_mul, val_mul, val_one, x.liftExpand
 -/
@@ -1660,7 +1808,7 @@ theorem universalMulHom_unique
   proof: by
   ext x; cases x with | _ r s
   rw [universalMulHom_apply]; rw [← huniv r]; rw [numeratorHom_apply]; rw [← one_mul (φ (r /ₒ s))]; rw [←
-    Units.val_one]; rw [← inv_mul_cancel (fS s)]; rw [Units.val_mul]; rw [mul_assoc]; rw [← hf]; rw [← huniv]; rw [← φ.map_mul]; rw [numeratorHom_apply]; rw [Ore
+    Units.val_one]; rw [← inv_mul_cancel (fS s)]; rw [Units.val_mul]; rw [mul_assoc]; rw [← hf]; rw [← huniv]; rw [← φ.map_mul]; rw [numeratorHom_apply]; rw [OreLocalization.mul_cancel]
 
 中文:
 定理 universalMulHom_unique
@@ -1668,7 +1816,7 @@ theorem universalMulHom_unique
   证明: by
   ext x; cases x with | _ r s
   rw [universalMulHom_apply]; rw [← huniv r]; rw [numeratorHom_apply]; rw [← one_mul (φ (r /ₒ s))]; rw [←
-    Units.val_one]; rw [← inv_mul_cancel (fS s)]; rw [Units.val_mul]; rw [mul_assoc]; rw [← hf]; rw [← huniv]; rw [← φ.map_mul]; rw [numeratorHom_apply]; rw [Ore
+    Units.val_one]; rw [← inv_mul_cancel (fS s)]; rw [Units.val_mul]; rw [mul_assoc]; rw [← hf]; rw [← huniv]; rw [← φ.map_mul]; rw [numeratorHom_apply]; rw [OreLocalization.mul_cancel]
 
 Depends on / 依赖: OreLocalization, OreLocalization.mul_cancel, Units.val_mul, Units.val_one, inv_mul_cancel, map_mul, mul_assoc, mul_cancel, numeratorHom_apply, one_mul, universalMulHom_apply, val_mul, val_one
 -/

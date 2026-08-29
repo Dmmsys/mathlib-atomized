@@ -234,7 +234,9 @@ definition _root_.Homeomorph.preimageImageRestrict
   right_inv p := by ext <;> simp
   continuous_toFun := by
     refine (Continuous.subtype_mk (by fun_prop) _).prodMk ?_
-    rw
+    rw [continuous_pi_iff]
+    exact fun _ => (continuous_apply _).comp continuous_subtype_val
+  continuous_invFun := continuous_reorderRestrictProd.subtype_mk _
 
 中文:
 定义 _root_.同胚.preimageImageRestrict
@@ -245,7 +247,9 @@ definition _root_.Homeomorph.preimageImageRestrict
   right_inv p := by ext <;> simp
   continuous_toFun := by
     refine (Continuous.subtype_mk (by fun_prop) _).prodMk ?_
-    rw
+    rw [continuous_pi_iff]
+    exact fun _ => (continuous_apply _).comp continuous_subtype_val
+  continuous_invFun := continuous_reorderRestrictProd.subtype_mk _
 
 Depends on / 依赖: domRestrict
 -/
@@ -275,7 +279,11 @@ lemma image_snd_preimageImageRestrict
     mem_image, mem_preimage, Subtype.exists, exists_and_left, Prod.exists, Prod.mk.injEq,
     exists_and_right, exists_eq_right, Subtype.mk.injEq, exists_prop]
   constructor
-  · rintro ⟨y, _, z, 
+  · rintro ⟨y, _, z, hz_mem, _, hzx⟩
+    exact ⟨z, hz_mem, hzx⟩
+  · rintro ⟨z, hz_mem, hzx⟩
+    exact ⟨Sᶜ.domRestrict z, mem_image_of_mem Sᶜ.domRestrict hz_mem, z, hz_mem,
+      ⟨⟨⟨z, hz_mem, rfl⟩, rfl⟩, hzx⟩⟩
 
 中文:
 引理 image_snd_preimageImageRestrict
@@ -286,7 +294,11 @@ lemma image_snd_preimageImageRestrict
     mem_image, mem_preimage, Subtype.exists, exists_and_left, Prod.exists, Prod.mk.injEq,
     exists_and_right, exists_eq_right, Subtype.mk.injEq, exists_prop]
   constructor
-  · rintro ⟨y, _, z, 
+  · rintro ⟨y, _, z, hz_mem, _, hzx⟩
+    exact ⟨z, hz_mem, hzx⟩
+  · rintro ⟨z, hz_mem, hzx⟩
+    exact ⟨Sᶜ.domRestrict z, mem_image_of_mem Sᶜ.domRestrict hz_mem, z, hz_mem,
+      ⟨⟨⟨z, hz_mem, rfl⟩, rfl⟩, hzx⟩⟩
 
 Depends on / 依赖: Equiv.coe_fn_mk, Homeomorph, Homeomorph.homeomorph_mk_coe, Homeomorph.preimageImageRestrict, Prod.exists, Prod.mk.injEq, Subtype, Subtype.exists, Subtype.mk.injEq, coe_fn_mk, domRestrict, exists_and_left, exists_and_right, exists_eq_right, exists_prop, homeomorph_mk_coe, hz_mem, mem_image, mem_image_of_mem, mem_preimage
 -/
@@ -323,7 +335,7 @@ theorem IsCompact.isClosed_image_restrict
     isCompact_iff_compactSpace.mp (hs_compact.image (Pi.continuous_domRestrict _))
   refine isClosedMap_snd_of_compactSpace _ ?_
   rw [Homeomorph.isClosed_image]
-  exact hs_closed.preimage continuous_
+  exact hs_closed.preimage continuous_subtype_val
 
 中文:
 定理 是紧集.isClosed_image_restrict
@@ -334,7 +346,7 @@ theorem IsCompact.isClosed_image_restrict
     isCompact_iff_compactSpace.mp (hs_compact.image (Pi.continuous_domRestrict _))
   refine isClosedMap_snd_of_compactSpace _ ?_
   rw [Homeomorph.isClosed_image]
-  exact hs_closed.preimage continuous_
+  exact hs_closed.preimage continuous_subtype_val
 
 Depends on / 依赖: CompactSpace, Homeomorph, Homeomorph.isClosed_image, Pi.continuous_domRestrict, Topology, Topology.image_snd_preimageImageRestrict, continuous_domRestrict, continuous_subtype_val, domRestrict, hs_closed, hs_closed.preimage, hs_compact, hs_compact.image, image_snd_preimageImageRestrict, isClosedMap_snd_of_compactSpace, isClosed_image, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, preimage
 -/

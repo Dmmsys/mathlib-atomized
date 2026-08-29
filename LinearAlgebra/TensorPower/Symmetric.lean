@@ -115,7 +115,14 @@ lemma smul
         classical
         convert!
 AddConGen.Rel.of _ _
-SymmetricPower.Rel.perm (R := R) (ι := ι) e Function.up
+SymmetricPower.Rel.perm (R := R) (ι := ι) e Function.update f i (r • f i)
+        · rw [MultilinearMap.map_update_smul, Function.update_eq_self]
+        · simp_rw [Function.update_apply_equiv_apply, MultilinearMap.map_update_smul,
+              ← Function.update_comp_equiv, Function.update_eq_self]; rfl
+  | refl => exact AddCon.refl _ _
+  | symm => apply AddCon.symm; assumption
+  | trans => apply AddCon.trans <;> assumption
+  | add => rw [smul_add, smul_add]; apply AddCon.add <;> assumption
 
 中文:
 引理 smul
@@ -130,7 +137,14 @@ SymmetricPower.Rel.perm (R := R) (ι := ι) e Function.up
         classical
         convert!
 AddConGen.Rel.of _ _
-SymmetricPower.Rel.perm (R := R) (ι := ι) e Function.up
+SymmetricPower.Rel.perm (R := R) (ι := ι) e Function.update f i (r • f i)
+        · rw [MultilinearMap.map_update_smul, Function.update_eq_self]
+        · simp_rw [Function.update_apply_equiv_apply, MultilinearMap.map_update_smul,
+              ← Function.update_comp_equiv, Function.update_eq_self]; rfl
+  | refl => exact AddCon.refl _ _
+  | symm => apply AddCon.symm; assumption
+  | trans => apply AddCon.trans <;> assumption
+  | add => rw [smul_add, smul_add]; apply AddCon.add <;> assumption
 
 Depends on / 依赖: AddConGen, AddConGen.Rel.of, Function, Function.update, Function.update_apply_equiv_apply, Function.update_comp_equiv, Function.update_eq_self, MultilinearMap, MultilinearMap.map_update_smul, Nonempty, Nonempty.some, SymmetricPower, SymmetricPower.Rel.perm, addConGen, classical, convert, isEmpty_or_nonempty, map_update_smul, simp_rw, update
 -/
@@ -196,7 +210,8 @@ one_smul x := AddCon.induction_on x fun x => congr_arg _ one_smul R x
 mul_smul r s x := AddCon.induction_on x fun x => congr_arg _ mul_smul r s x
 smul_zero r := congr_arg _ smul_zero r
 smul_add r x y := AddCon.induction_on₂ x y fun x y => congr_arg _ smul_add r x y
-add_smul r s x := Ad
+add_smul r s x := AddCon.induction_on x fun x => congr_arg _ add_smul r s x
+zero_smul x := AddCon.induction_on x fun x => congr_arg _ zero_smul R x
 
 中文:
 实例 module
@@ -206,7 +221,8 @@ one_smul x := AddCon.induction_on x fun x => congr_arg _ one_smul R x
 mul_smul r s x := AddCon.induction_on x fun x => congr_arg _ mul_smul r s x
 smul_zero r := congr_arg _ smul_zero r
 smul_add r x y := AddCon.induction_on₂ x y fun x y => congr_arg _ smul_add r x y
-add_smul r s x := Ad
+add_smul r s x := AddCon.induction_on x fun x => congr_arg _ add_smul r s x
+zero_smul x := AddCon.induction_on x fun x => congr_arg _ zero_smul R x
 -/
 instance module : Module R (Sym[R] ι M) where
   smul r x := smul' ι M r x

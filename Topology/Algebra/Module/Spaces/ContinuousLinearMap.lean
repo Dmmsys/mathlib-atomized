@@ -496,7 +496,7 @@ theorem isInducing_postcomp
   haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
   letI : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
   haveI : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
-  (isUniformInducing_postcomp 
+  (isUniformInducing_postcomp f <| AddMonoidHom.isUniformInducing_of_isInducing hf).isInducing
 
 中文:
 定理 isInducing_postcomp
@@ -505,7 +505,7 @@ theorem isInducing_postcomp
   haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
   letI : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
   haveI : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
-  (isUniformInducing_postcomp 
+  (isUniformInducing_postcomp f <| AddMonoidHom.isUniformInducing_of_isInducing hf).isInducing
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.isUniformInducing_of_isInducing, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, UniformSpace, isInducing, isUniformAddGroup_of_addCommGroup, isUniformInducing_of_isInducing, isUniformInducing_postcomp, rightUniformSpace
 -/
@@ -1321,7 +1321,10 @@ definition arrowCongrSL
     toFun := fun L => (e₄₃ : H ->SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F ->SL[σ₂₁] E))
     -- given explicitly to help `simps`
     invFun := fun L => (e₄₃.symm : G ->SL[σ₃₄] H).comp (L.comp (e₁₂ : E ->SL[σ₁₂] F))
-    continuous_t
+    continuous_toFun := ((postcomp F e₄₃.toContinuousLinearMap).comp
+      (precomp H e₁₂.symm.toContinuousLinearMap)).continuous
+    continuous_invFun := ((precomp H e₁₂.toContinuousLinearMap).comp
+      (postcomp F e₄₃.symm.toContinuousLinearMap)).continuous }
 
 中文:
 定义 arrowCongrSL
@@ -1331,7 +1334,10 @@ definition arrowCongrSL
     toFun := fun L => (e₄₃ : H ->SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F ->SL[σ₂₁] E))
     -- given explicitly to help `simps`
     invFun := fun L => (e₄₃.symm : G ->SL[σ₃₄] H).comp (L.comp (e₁₂ : E ->SL[σ₁₂] F))
-    continuous_t
+    continuous_toFun := ((postcomp F e₄₃.toContinuousLinearMap).comp
+      (precomp H e₁₂.symm.toContinuousLinearMap)).continuous
+    continuous_invFun := ((precomp H e₁₂.toContinuousLinearMap).comp
+      (postcomp F e₄₃.symm.toContinuousLinearMap)).continuous }
 -/
 def arrowCongrSL (e₁₂ : E ≃SL[σ₁₂] F) (e₄₃ : H ≃SL[σ₄₃] G) :
     (E ->SL[σ₁₄] H) ≃SL[σ₄₃] F ->SL[σ₂₃] G :=

@@ -405,7 +405,7 @@ definition findLinarithContradiction
           proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (L.map Prod.fst)
         let idxs := idxs.map fun i => L[i]!.2
         return (pf, idxs))
-
+  catch e => throwError "linarith failed to find a contradiction\n{g}\n{e.toMessageData}"
 
 中文:
 定义 findLinarithContradiction
@@ -417,7 +417,7 @@ definition findLinarithContradiction
           proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (L.map Prod.fst)
         let idxs := idxs.map fun i => L[i]!.2
         return (pf, idxs))
-
+  catch e => throwError "linarith failed to find a contradiction\n{g}\n{e.toMessageData}"
 
 Depends on / 依赖: L.map, Prod.fst, cfg.discharger, cfg.oracle, cfg.transparency, discharger, e.toMessageData, failed, firstM, idxs.map, ls.firstM, oracle, proveFalseByLinarith, return, running, throwError, toMessageData, transparency, withTraceNode
 -/
@@ -445,7 +445,37 @@ definition runLinarith
       linarithTraceProofs
         s!"after preprocessing, linarith has {hyps.length} facts:" (hyps.map Prod.fst)
       let mut hyp_set ← partitionByTypeIdx hyps
-      trace[linarith] "hyp
+      trace[linarith] "hypotheses appear in {hyp_set.size} different types"
+      -- If we have a preferred type, strip it from `hyp_set` and prepare a handler with a custom
+      -- trace message
+      let pref : MetaM _ ← do
+        if let some t := prefType then
+          let (i, vs) ← hyp_set.find t
+          hyp_set := hyp_set.eraseIdxIfInBounds i
+pure
+            withTraceNode `linarith (fun _ => return m!" running on preferred type {t}") do
+              let (pf, idxs) ←
+                proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (vs.map Prod.fst)
+              let idxs := idxs.map fun j => vs[j]!.2
+              return (pf, idxs)
+        else
+          pure failure
+pref > findLinarithContradiction cfg g hyp_set.toList
+  let mut preprocessors := cfg.preprocessors
+  if cfg.splitNe then
+    preprocessors := Linarith.removeNe :: preprocessors
+  if cfg.splitHypotheses then
+    preprocessors := Linarith.splitConjunctions.globalize.branching :: preprocessors
+  let branches ← preprocess preprocessors g hyps
+  let mut used : List Nat := []
+  for (g, es) in branches do
+    let esIdx := es.zipIdx
+    let (r, idxs) ← singleProcess g esIdx
+    g.assign r
+    used := idxs ++ used
+  -- Verify that we closed the goal. Failure here should only result from a bad `Preprocessor`.
+  (Expr.mvar g).ensureHasNoMVars
+  return used.eraseDups
 
 中文:
 定义 runLinarith
@@ -456,7 +486,37 @@ definition runLinarith
       linarithTraceProofs
         s!"after preprocessing, linarith has {hyps.length} facts:" (hyps.map Prod.fst)
       let mut hyp_set ← partitionByTypeIdx hyps
-      trace[linarith] "hyp
+      trace[linarith] "hypotheses appear in {hyp_set.size} different types"
+      -- If we have a preferred type, strip it from `hyp_set` and prepare a handler with a custom
+      -- trace message
+      let pref : MetaM _ ← do
+        if let some t := prefType then
+          let (i, vs) ← hyp_set.find t
+          hyp_set := hyp_set.eraseIdxIfInBounds i
+pure
+            withTraceNode `linarith (fun _ => return m!" running on preferred type {t}") do
+              let (pf, idxs) ←
+                proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (vs.map Prod.fst)
+              let idxs := idxs.map fun j => vs[j]!.2
+              return (pf, idxs)
+        else
+          pure failure
+pref > findLinarithContradiction cfg g hyp_set.toList
+  let mut preprocessors := cfg.preprocessors
+  if cfg.splitNe then
+    preprocessors := Linarith.removeNe :: preprocessors
+  if cfg.splitHypotheses then
+    preprocessors := Linarith.splitConjunctions.globalize.branching :: preprocessors
+  let branches ← preprocess preprocessors g hyps
+  let mut used : List Nat := []
+  for (g, es) in branches do
+    let esIdx := es.zipIdx
+    let (r, idxs) ← singleProcess g esIdx
+    g.assign r
+    used := idxs ++ used
+  -- Verify that we closed the goal. Failure here should only result from a bad `Preprocessor`.
+  (Expr.mvar g).ensureHasNoMVars
+  return used.eraseDups
 -/
 def runLinarith (cfg : LinarithConfig) (prefType : Option Expr) (g : MVarId)
     (hyps : List Expr) : MetaM (List Nat) := do
@@ -519,7 +579,46 @@ definition linarithUsedHyps
   if (← whnfR (← instantiateMVars (← g.getType))).isEq then
     trace[linarith] "target is an equality: splitting"
     if let some [g₁, g₂] ← try? (g.apply (← mkConst' ``eq_of_not_lt_of_not_gt)) then
-let h
+let h₁ ← withTraceNode `linarith (fun _ => return m!" proving >=")
+        linarithUsedHyps only_on hyps cfg g₁
+let h₂ ← withTraceNode `linarith (fun _ => return m!" proving <=")
+        linarithUsedHyps only_on hyps cfg g₂
+      return h₁ ++ h₂
+
+  /- If we are proving a comparison goal (and not just `False`), we consider the type of the
+    elements in the comparison to be the "preferred" type. That is, if we find comparison
+    hypotheses in multiple types, we will run `linarith` on the goal type first.
+    In this case we also receive a new variable from moving the goal to a hypothesis.
+    Otherwise, there is no preferred type and no new variable; we simply change the goal to `False`.
+  -/
+
+  let (g, target_type, new_var) ← match ← applyContrLemma g with
+  | (none, g) =>
+    if cfg.exfalso then
+      trace[linarith] "using exfalso"
+      pure (← g.exfalso, none, none)
+    else
+      pure (g, none, none)
+  | (some (t, v), g) => pure (g, some t, some v)
+
+  g.withContext do
+    -- set up the list of hypotheses, considering the `only_on` and `restrict_type` options
+    let hyps ←
+      (if only_on then return new_var.toList ++ hyps
+        else return (← getLocalHyps).toList ++ hyps)
+
+    -- TODO in mathlib3 we could specify a restriction to a single type.
+    -- I haven't done that here because I don't know how to store a `Type` in `LinarithConfig`.
+    -- There's only one use of the `restrict_type` configuration option in mathlib3,
+    -- and it can be avoided just by using `linarith only`.
+
+    linarithTraceProofs "linarith is running on the following hypotheses:" hyps
+    let usedIdxs ← runLinarith cfg target_type g hyps
+    let used := usedIdxs.filterMap (hyps[·]?)
+    let used := match new_var with
+      | some nv => used.filter (fun h => !(h == nv))
+      | none => used
+    return used
 
 中文:
 定义 linarithUsedHyps
@@ -529,7 +628,46 @@ let h
   if (← whnfR (← instantiateMVars (← g.getType))).isEq then
     trace[linarith] "target is an equality: splitting"
     if let some [g₁, g₂] ← try? (g.apply (← mkConst' ``eq_of_not_lt_of_not_gt)) then
-let h
+let h₁ ← withTraceNode `linarith (fun _ => return m!" proving >=")
+        linarithUsedHyps only_on hyps cfg g₁
+let h₂ ← withTraceNode `linarith (fun _ => return m!" proving <=")
+        linarithUsedHyps only_on hyps cfg g₂
+      return h₁ ++ h₂
+
+  /- If we are proving a comparison goal (and not just `False`), we consider the type of the
+    elements in the comparison to be the "preferred" type. That is, if we find comparison
+    hypotheses in multiple types, we will run `linarith` on the goal type first.
+    In this case we also receive a new variable from moving the goal to a hypothesis.
+    Otherwise, there is no preferred type and no new variable; we simply change the goal to `False`.
+  -/
+
+  let (g, target_type, new_var) ← match ← applyContrLemma g with
+  | (none, g) =>
+    if cfg.exfalso then
+      trace[linarith] "using exfalso"
+      pure (← g.exfalso, none, none)
+    else
+      pure (g, none, none)
+  | (some (t, v), g) => pure (g, some t, some v)
+
+  g.withContext do
+    -- set up the list of hypotheses, considering the `only_on` and `restrict_type` options
+    let hyps ←
+      (if only_on then return new_var.toList ++ hyps
+        else return (← getLocalHyps).toList ++ hyps)
+
+    -- TODO in mathlib3 we could specify a restriction to a single type.
+    -- I haven't done that here because I don't know how to store a `Type` in `LinarithConfig`.
+    -- There's only one use of the `restrict_type` configuration option in mathlib3,
+    -- and it can be avoided just by using `linarith only`.
+
+    linarithTraceProofs "linarith is running on the following hypotheses:" hyps
+    let usedIdxs ← runLinarith cfg target_type g hyps
+    let used := usedIdxs.filterMap (hyps[·]?)
+    let used := match new_var with
+      | some nv => used.filter (fun h => !(h == nv))
+      | none => used
+    return used
 -/
 partial def linarithUsedHyps (only_on : Bool) (hyps : List Expr)
     (cfg : LinarithConfig := {}) (g : MVarId) : MetaM (List Expr) := g.withContext do

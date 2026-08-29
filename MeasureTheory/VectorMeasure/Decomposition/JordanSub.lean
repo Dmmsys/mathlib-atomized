@@ -104,7 +104,7 @@ lemma toSignedMeasure_restrict_sub
   have hmeas := hs.measurableSet
   rw [eq_sub_iff_add_eq]; rw [toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hmeas]; rw [← toSignedMeasure_add]
   simp only [restrict_sub_eq_restrict_sub_restrict, hmeas, sub_add_cancel_of_le hs.le_on]
-  exact (toSignedMeasure_restrict_eq_restrict_toSign
+  exact (toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hmeas).symm
 
 中文:
 引理 toSignedMeasure_restrict_sub
@@ -113,7 +113,7 @@ lemma toSignedMeasure_restrict_sub
   have hmeas := hs.measurableSet
   rw [eq_sub_iff_add_eq]; rw [toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hmeas]; rw [← toSignedMeasure_add]
   simp only [restrict_sub_eq_restrict_sub_restrict, hmeas, sub_add_cancel_of_le hs.le_on]
-  exact (toSignedMeasure_restrict_eq_restrict_toSign
+  exact (toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hmeas).symm
 
 Depends on / 依赖: eq_sub_iff_add_eq, hs.le_on, hs.measurableSet, le_on, measurableSet, restrict_sub_eq_restrict_sub_restrict, sub_add_cancel_of_le, toSignedMeasure_add, toSignedMeasure_restrict_eq_restrict_toSignedMeasure
 -/
@@ -137,7 +137,19 @@ theorem sub_toSignedMeasure_eq_toSignedMeasure_sub
   have h₂ := toSignedMeasure_restrict_sub hsc
 have h₁' := toSignedMeasure_congr restrict_eq_zero.mpr
     sub_apply_eq_zero_of_isHahnDecomposition hs
-have h₂' := toSignedMeasure_c
+have h₂' := toSignedMeasure_congr restrict_eq_zero.mpr
+  sub_apply_eq_zero_of_isHahnDecomposition hsc
+  have partition₁ := VectorMeasure.restrict_add_restrict_compl (v := (μ - ν).toSignedMeasure)
+    hs.measurableSet
+  have partition₂ := VectorMeasure.restrict_add_restrict_compl (v := (ν - μ).toSignedMeasure)
+    hs.measurableSet
+  rw [toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hs.measurableSet]; rw [toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hs.measurableSet.compl]
+    at partition₁ partition₂
+  rw [h₁']; rw [h₂] at partition₁
+  rw [h₁]; rw [h₂'] at partition₂
+  simp only [toSignedMeasure_zero, zero_add] at partition₁ partition₂
+  rw [← VectorMeasure.restrict_add_restrict_compl (v := μ.toSignedMeasure) hs.measurableSet]; rw [← VectorMeasure.restrict_add_restrict_compl (v := ν.toSignedMeasure) hs.measurableSet]; rw [← partition₁]; rw [← partition₂]
+  abel
 
 中文:
 定理 sub_toSignedMeasure_eq_toSignedMeasure_sub
@@ -148,7 +160,19 @@ have h₂' := toSignedMeasure_c
   have h₂ := toSignedMeasure_restrict_sub hsc
 have h₁' := toSignedMeasure_congr restrict_eq_zero.mpr
     sub_apply_eq_zero_of_isHahnDecomposition hs
-have h₂' := toSignedMeasure_c
+have h₂' := toSignedMeasure_congr restrict_eq_zero.mpr
+  sub_apply_eq_zero_of_isHahnDecomposition hsc
+  have partition₁ := VectorMeasure.restrict_add_restrict_compl (v := (μ - ν).toSignedMeasure)
+    hs.measurableSet
+  have partition₂ := VectorMeasure.restrict_add_restrict_compl (v := (ν - μ).toSignedMeasure)
+    hs.measurableSet
+  rw [toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hs.measurableSet]; rw [toSignedMeasure_restrict_eq_restrict_toSignedMeasure _ _ hs.measurableSet.compl]
+    at partition₁ partition₂
+  rw [h₁']; rw [h₂] at partition₁
+  rw [h₁]; rw [h₂'] at partition₂
+  simp only [toSignedMeasure_zero, zero_add] at partition₁ partition₂
+  rw [← VectorMeasure.restrict_add_restrict_compl (v := μ.toSignedMeasure) hs.measurableSet]; rw [← VectorMeasure.restrict_add_restrict_compl (v := ν.toSignedMeasure) hs.measurableSet]; rw [← partition₁]; rw [← partition₂]
+  abel
 
 Depends on / 依赖: VectorMeasure, VectorMeasure.restrict_add_restrict_compl, exists_isHahnDecomposition, hs.compl, hs.measurableSet, measurableSet, restrict_add_restrict_compl, restrict_eq_zero, restrict_eq_zero.mpr, sub_apply_eq_zero_of_isHahnDecomposition, toSignedMeasure, toSignedMeasure_congr, toSignedMeasure_restrict_sub
 -/

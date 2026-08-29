@@ -467,7 +467,8 @@ theorem subset_union
   refine ⟨fun h => ?_, fun h x xH => h.imp (mem_of_le_of_mem · xH) (mem_of_le_of_mem · xH)⟩
   rw [or_iff_not_imp_left]; rw [SetLike.not_le_iff_exists]; rw [← SetLike.coe_subset_coe]
   exact fun ⟨x, xH, xK⟩ y yH => (h <| mul_mem xH yH).elim
-    ((h yH).resolve_left fun yK => xK <| (mul_mem_cancel_
+    ((h yH).resolve_left fun yK => xK <| (mul_mem_cancel_right yK).mp ·)
+    (mul_mem_cancel_left <| (h xH).resolve_left xK).mp
 
 中文:
 定理 subset_union
@@ -476,7 +477,8 @@ theorem subset_union
   refine ⟨fun h => ?_, fun h x xH => h.imp (mem_of_le_of_mem · xH) (mem_of_le_of_mem · xH)⟩
   rw [or_iff_not_imp_left]; rw [SetLike.not_le_iff_exists]; rw [← SetLike.coe_subset_coe]
   exact fun ⟨x, xH, xK⟩ y yH => (h <| mul_mem xH yH).elim
-    ((h yH).resolve_left fun yK => xK <| (mul_mem_cancel_
+    ((h yH).resolve_left fun yK => xK <| (mul_mem_cancel_right yK).mp ·)
+    (mul_mem_cancel_left <| (h xH).resolve_left xK).mp
 
 Depends on / 依赖: SetLike, SetLike.coe_subset_coe, SetLike.not_le_iff_exists, coe_subset_coe, h.imp, mem_of_le_of_mem, mul_mem, mul_mem_cancel_left, mul_mem_cancel_right, not_le_iff_exists, or_iff_not_imp_left, resolve_left
 -/
@@ -1648,7 +1650,7 @@ definition ofDiv
   { carrier := s
     one_mem' := one_mem
     inv_mem' := inv_mem _
-    mul_mem' := fun hx hy => by simpa using hs _ hx _
+    mul_mem' := fun hx hy => by simpa using hs _ hx _ (inv_mem _ hy) }
 
 中文:
 定义 ofDiv
@@ -1660,7 +1662,7 @@ definition ofDiv
   { carrier := s
     one_mem' := one_mem
     inv_mem' := inv_mem _
-    mul_mem' := fun hx hy => by simpa using hs _ hx _
+    mul_mem' := fun hx hy => by simpa using hs _ hx _ (inv_mem _ hy) }
 
 Depends on / 依赖: IsCancelSMul, carrier, inv_mem, mul_mem, one_mem
 -/
@@ -2391,7 +2393,14 @@ definition normalizer
   mul_mem' {a b} (ha : forall n, n in S ↔ a * n * a⁻¹ in S) (hb : forall n, n in S ↔ b * n * b⁻¹ in S) n := by
     rw [hb]; rw [ha]
     simp only [mul_assoc, mul_inv_rev]
-  inv_mem' {a} (ha : forall n, n in S ↔ a * n * a⁻¹ in S) n
+  inv_mem' {a} (ha : forall n, n in S ↔ a * n * a⁻¹ in S) n := by
+    rw [ha (a⁻¹ * n * a⁻¹⁻¹)]
+    simp only [inv_inv, mul_assoc, mul_inv_cancel_left, mul_inv_cancel, mul_one]
+
+@[deprecated (since := "2026-03-19")]
+alias setNormalizer := normalizer
+@[deprecated (since := "2026-03-19")]
+alias _root_.AddSubgroup.setNormalizer := AddSubgroup.normalizer
 
 中文:
 定义 normalizer
@@ -2401,7 +2410,14 @@ definition normalizer
   mul_mem' {a b} (ha : forall n, n in S ↔ a * n * a⁻¹ in S) (hb : forall n, n in S ↔ b * n * b⁻¹ in S) n := by
     rw [hb]; rw [ha]
     simp only [mul_assoc, mul_inv_rev]
-  inv_mem' {a} (ha : forall n, n in S ↔ a * n * a⁻¹ in S) n
+  inv_mem' {a} (ha : forall n, n in S ↔ a * n * a⁻¹ in S) n := by
+    rw [ha (a⁻¹ * n * a⁻¹⁻¹)]
+    simp only [inv_inv, mul_assoc, mul_inv_cancel_left, mul_inv_cancel, mul_one]
+
+@[deprecated (since := "2026-03-19")]
+alias setNormalizer := normalizer
+@[deprecated (since := "2026-03-19")]
+alias _root_.AddSubgroup.setNormalizer := AddSubgroup.normalizer
 -/
 def normalizer (S : Set G) : Subgroup G where
   carrier := { g : G | forall n, n in S ↔ g * n * g⁻¹ in S }

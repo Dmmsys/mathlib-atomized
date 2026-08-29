@@ -422,7 +422,7 @@ definition homEquiv
     invFun := fun f => lift f.1.1 f.1.2 f.2,
     left_inv := fun _ => hom_ext (by simp [DFunLike.ext_iff])
       (by simp [DFunLike.ext_iff])
-    right_inv := fun ⟨⟨_, _⟩, _⟩
+    right_inv := fun ⟨⟨_, _⟩, _⟩ => by simp [DFunLike.ext_iff, funext_iff] }
 
 中文:
 定义 homEquiv
@@ -432,7 +432,7 @@ definition homEquiv
     invFun := fun f => lift f.1.1 f.1.2 f.2,
     left_inv := fun _ => hom_ext (by simp [DFunLike.ext_iff])
       (by simp [DFunLike.ext_iff])
-    right_inv := fun ⟨⟨_, _⟩, _⟩
+    right_inv := fun ⟨⟨_, _⟩, _⟩ => by simp [DFunLike.ext_iff, funext_iff] }
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, MonoidHom, MonoidHom.comp_assoc, comp_assoc, ext_iff, f.comp, funext_iff, hom_ext, invFun, left_inv, of_comp_eq_base, right_inv
 -/
@@ -505,7 +505,10 @@ theorem induction_on
       | of i g => exact of i g
       | mul x y ihx ihy =>
         rw [map_mul]
-     
+        exact mul _ _ ihx ihy
+      | one => simpa using base 1
+    | inr h => exact base h
+    | mul x y ihx ihy => exact mul _ _ ihx ihy
 
 中文:
 定理 induction_on
@@ -520,7 +523,10 @@ theorem induction_on
       | of i g => exact of i g
       | mul x y ihx ihy =>
         rw [map_mul]
-     
+        exact mul _ _ ihx ihy
+      | one => simpa using base 1
+    | inr h => exact base h
+    | mul x y ihx ihy => exact mul _ _ ihx ihy
 
 Depends on / 依赖: Con.induction_on, Coprod, Coprod.induction_on, CoprodI, CoprodI.induction_on, PushoutI, PushoutI.base, PushoutI.of, induction_on, map_mul
 -/
@@ -909,7 +915,11 @@ definition cons
       (mt (mul_mem_cancel_right (by simp)).1 hgr))
   { toWord := w'
     head := (MonoidHom.ofInjective (d.injective i)).symm n.1
-    normalized := f
+    normalized := fun i g hg => by
+      simp only [w', Word.cons, mem_cons, Sigma.mk.inj_iff] at hg
+      rcases hg with ⟨rfl, hg | hg⟩
+      · simp
+      · exact w.normalized _ _ (by assumption) }
 
 中文:
 定义 cons
@@ -920,7 +930,11 @@ definition cons
       (mt (mul_mem_cancel_right (by simp)).1 hgr))
   { toWord := w'
     head := (MonoidHom.ofInjective (d.injective i)).symm n.1
-    normalized := f
+    normalized := fun i g hg => by
+      simp only [w', Word.cons, mem_cons, Sigma.mk.inj_iff] at hg
+      rcases hg with ⟨rfl, hg | hg⟩
+      · simp
+      · exact w.normalized _ _ (by assumption) }
 
 Depends on / 依赖: MonoidHom, MonoidHom.ofInjective, Sigma.mk.inj_iff, Word.cons, coe_equiv_snd_eq_one_iff_mem, d.compl, d.injective, d.one_mem, inj_iff, injective, mem_cons, mul_mem_cancel_right, normalized, ofInjective, one_mem, toWord, w.head, w.normalized, w.toWord
 -/
@@ -978,7 +992,33 @@ theorem eq_one_of_smul_normalized
     split_ifs with h
     · rcases h with ⟨_, rfl⟩
       exact hw _ _ (List.head_mem _)
-  
+    · rw [equiv_one (d.compl i) (one_mem _) (d.one_mem _)]
+  by_contra hh1
+  have := hφw i (φ i h * (Word.equivPair i w).head) ?_
+  · apply hh1
+    rw [equiv_mul_left_of_mem (d.compl i) ⟨_]; rw [rfl⟩]; rw [hhead] at this
+    simpa [((injective_iff_map_eq_one' _).1 (d.injective i))] using this
+  · simp only [Word.mem_smul_iff, not_true, false_and, ne_eq, Option.mem_def, mul_right_inj,
+      exists_eq_right', mul_eq_left, exists_prop, true_and, false_or]
+    constructor
+    · intro h
+      apply_fun (d.compl i).equiv at h
+      simp only [Prod.ext_iff, equiv_one (d.compl i) (one_mem _) (d.one_mem _),
+        equiv_mul_left_of_mem (d.compl i) ⟨_, rfl⟩, hhead, Subtype.ext_iff,
+        Prod.ext_iff] at h
+      rcases h with ⟨h₁, h₂⟩
+      rw [h₂]; rw [coe_mul]; rw [((d.compl i).coe_equiv_fst_eq_one_iff_mem (one_mem _)).mpr (d.one_mem _)]; rw [mul_one]; rw [Subtype.coe_mk]; rw [map_eq_one_iff (φ i) (d.injective i)] at h₁
+      contradiction
+    · rw [Word.equivPair_head]
+      dsimp
+      split_ifs with hep
+      · rcases hep with ⟨hnil, rfl⟩
+        rw [head?_eq_some_head hnil]
+        simp_all
+      · push Not at hep
+        by_cases hw : w.toList = []
+        · simp [hw, Word.fstIdx]
+        · simp [head?_eq_some_head hw, Word.fstIdx, hep hw]
 
 中文:
 定理 eq_one_of_smul_normalized
@@ -991,7 +1031,33 @@ theorem eq_one_of_smul_normalized
     split_ifs with h
     · rcases h with ⟨_, rfl⟩
       exact hw _ _ (List.head_mem _)
-  
+    · rw [equiv_one (d.compl i) (one_mem _) (d.one_mem _)]
+  by_contra hh1
+  have := hφw i (φ i h * (Word.equivPair i w).head) ?_
+  · apply hh1
+    rw [equiv_mul_left_of_mem (d.compl i) ⟨_]; rw [rfl⟩]; rw [hhead] at this
+    simpa [((injective_iff_map_eq_one' _).1 (d.injective i))] using this
+  · simp only [Word.mem_smul_iff, not_true, false_and, ne_eq, Option.mem_def, mul_right_inj,
+      exists_eq_right', mul_eq_left, exists_prop, true_and, false_or]
+    constructor
+    · intro h
+      apply_fun (d.compl i).equiv at h
+      simp only [Prod.ext_iff, equiv_one (d.compl i) (one_mem _) (d.one_mem _),
+        equiv_mul_left_of_mem (d.compl i) ⟨_, rfl⟩, hhead, Subtype.ext_iff,
+        Prod.ext_iff] at h
+      rcases h with ⟨h₁, h₂⟩
+      rw [h₂]; rw [coe_mul]; rw [((d.compl i).coe_equiv_fst_eq_one_iff_mem (one_mem _)).mpr (d.one_mem _)]; rw [mul_one]; rw [Subtype.coe_mk]; rw [map_eq_one_iff (φ i) (d.injective i)] at h₁
+      contradiction
+    · rw [Word.equivPair_head]
+      dsimp
+      split_ifs with hep
+      · rcases hep with ⟨hnil, rfl⟩
+        rw [head?_eq_some_head hnil]
+        simp_all
+      · push Not at hep
+        by_cases hw : w.toList = []
+        · simp [hw, Word.fstIdx]
+        · simp [head?_eq_some_head hw, Word.fstIdx, hep hw]
 
 Depends on / 依赖: List.head_mem, Word.equivPair, Word.equivPair_head, d.compl, d.one_mem, equivPair, equivPair_head, equiv_mul_left_of_mem, equiv_one, equiv_snd_eq_self_iff_mem, head_mem, injective_iff_, one_mem, split_ifs
 -/
@@ -1049,7 +1115,7 @@ theorem ext_smul
   simp only [← map_inv, ← map_mul] at hw₁
   have : h₁⁻¹ * h₂ = 1 := eq_one_of_smul_normalized w₂ (h₁⁻¹ * h₂) hw₂ hw₁
   rw [inv_mul_eq_one] at this; subst this
-
+  simp
 
 中文:
 定理 ext_smul
@@ -1063,7 +1129,7 @@ theorem ext_smul
   simp only [← map_inv, ← map_mul] at hw₁
   have : h₁⁻¹ * h₂ = 1 := eq_one_of_smul_normalized w₂ (h₁⁻¹ * h₂) hw₂ hw₁
   rw [inv_mul_eq_one] at this; subst this
-
+  simp
 
 Depends on / 依赖: eq_one_of_smul_normalized, inv_mul_eq_one, map_inv, map_mul, mul_smul, smul_eq_iff_eq_inv_smul
 -/
@@ -1094,7 +1160,9 @@ definition rcons
     normalized := fun i g hg => by
         dsimp [w] at hg
         rw [Word.equivPair_symm]; rw [Word.mem_rcons_iff] at hg
-
+        rcases hg with hg | ⟨_, rfl, rfl⟩
+        · exact p.normalized _ _ hg
+        · simp }
 
 中文:
 定义 rcons
@@ -1106,7 +1174,9 @@ definition rcons
     normalized := fun i g hg => by
         dsimp [w] at hg
         rw [Word.equivPair_symm]; rw [Word.mem_rcons_iff] at hg
-
+        rcases hg with hg | ⟨_, rfl, rfl⟩
+        · exact p.normalized _ _ hg
+        · simp }
 
 Depends on / 依赖: MonoidHom, MonoidHom.ofInjective, Word.equivPair, Word.equivPair_symm, Word.mem_rcons_iff, d.compl, d.injective, equivPair, equivPair_symm, injective, mem_rcons_iff, normalized, ofInjective, p.head, p.normalized, p.toPair, toPair, toWord
 -/
@@ -1134,7 +1204,8 @@ theorem rcons_injective
   simp only [rcons, NormalWord.mk.injEq, EmbeddingLike.apply_eq_iff_eq,
     Word.Pair.mk.injEq, Pair.mk.injEq, and_imp]
   rintro h₁ rfl h₃
-  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁]; rw [← equiv_fst_mul_equiv_snd (d.compl i) head₂]; rw [h₁]
+  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁]; rw [← equiv_fst_mul_equiv_snd (d.compl i) head₂]; rw [h₁]; rw [h₃]
+  simp
 
 中文:
 定理 rcons_injective
@@ -1145,7 +1216,8 @@ theorem rcons_injective
   simp only [rcons, NormalWord.mk.injEq, EmbeddingLike.apply_eq_iff_eq,
     Word.Pair.mk.injEq, Pair.mk.injEq, and_imp]
   rintro h₁ rfl h₃
-  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁]; rw [← equiv_fst_mul_equiv_snd (d.compl i) head₂]; rw [h₁]
+  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁]; rw [← equiv_fst_mul_equiv_snd (d.compl i) head₂]; rw [h₁]; rw [h₃]
+  simp
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, NormalWord, NormalWord.mk.injEq, Pair.mk.injEq, Word.Pair.mk.injEq, and_imp, apply_eq_iff_eq, d.compl, equiv_fst_mul_equiv_snd
 -/
@@ -1169,7 +1241,19 @@ definition equivPair
       { toPair := p
         normalized := fun j g hg => by
           dsimp only [p] at hg
-          rw [Word.of_smul_def]; rw [← Word.equivPair_symm]; rw [Equiv.apply_symm_appl
+          rw [Word.of_smul_def]; rw [← Word.equivPair_symm]; rw [Equiv.apply_symm_apply] at hg
+          dsimp at hg
+          exact w.normalized _ _ (Word.mem_of_mem_equivPair_tail _ hg) }
+  haveI leftInv : Function.LeftInverse (rcons i) toFun :=
+fun w => ext_smul i by
+      simp only [toFun, rcons, Word.equivPair_symm,
+        Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul,
+        MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
+        mul_smul, inv_smul_smul, smul_inv_smul]
+  { toFun := toFun
+    invFun := rcons i
+    left_inv := leftInv
+    right_inv := fun _ => rcons_injective (leftInv _) }
 
 中文:
 定义 equivPair
@@ -1180,7 +1264,19 @@ definition equivPair
       { toPair := p
         normalized := fun j g hg => by
           dsimp only [p] at hg
-          rw [Word.of_smul_def]; rw [← Word.equivPair_symm]; rw [Equiv.apply_symm_appl
+          rw [Word.of_smul_def]; rw [← Word.equivPair_symm]; rw [Equiv.apply_symm_apply] at hg
+          dsimp at hg
+          exact w.normalized _ _ (Word.mem_of_mem_equivPair_tail _ hg) }
+  haveI leftInv : Function.LeftInverse (rcons i) toFun :=
+fun w => ext_smul i by
+      simp only [toFun, rcons, Word.equivPair_symm,
+        Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul,
+        MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
+        mul_smul, inv_smul_smul, smul_inv_smul]
+  { toFun := toFun
+    invFun := rcons i
+    left_inv := leftInv
+    right_inv := fun _ => rcons_injective (leftInv _) }
 
 Depends on / 依赖: CoprodI, CoprodI.of, Equiv.apply_symm_apply, Function, Function.LeftInverse, LeftInverse, NormalWord, Word.equi, Word.equivPair, Word.equivPair_smul_same, Word.equivPair_symm, Word.mem_of_mem_equivPair_tail, Word.of_smul_def, apply_symm_apply, equivPair, equivPair_smul_same, equivPair_symm, ext_smul, leftInv, mem_of_mem_equivPair_tail
 -/
@@ -1219,7 +1315,8 @@ instance summandAction
       rw [one_mul]
       exact (equivPair i).symm_apply_apply _
     mul_smul := fun _ _ _ => by
-      dsimp +instances [instHSM
+      dsimp +instances [instHSMul]
+      simp [mul_assoc, Equiv.apply_symm_apply] }
 
 中文:
 实例 summandAction
@@ -1232,7 +1329,8 @@ instance summandAction
       rw [one_mul]
       exact (equivPair i).symm_apply_apply _
     mul_smul := fun _ _ _ => by
-      dsimp +instances [instHSM
+      dsimp +instances [instHSMul]
+      simp [mul_assoc, Equiv.apply_symm_apply] }
 
 Depends on / 依赖: Equiv.apply_symm_apply, apply_symm_apply, equivPair, instHSMul, instances, mul_assoc, mul_smul, one_mul, one_smul, symm_apply_apply
 -/
@@ -1285,7 +1383,10 @@ MulAction.toEndHom by
     intro h
     funext w
     apply NormalWord.ext_smul i
-    simp only [summan
+    simp only [summand_smul_def', equivPair, rcons, Word.equivPair_symm, Equiv.coe_fn_mk,
+      Equiv.coe_fn_symm_mk, Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul,
+      Word.rcons_eq_smul, equiv_fst_eq_mul_inv, map_mul, map_inv, mul_smul, inv_smul_smul,
+      smul_inv_smul, base_smul_def', MonoidHom.apply_ofInjective_symm]
 
 中文:
 实例 mulAction
@@ -1300,7 +1401,10 @@ MulAction.toEndHom by
     intro h
     funext w
     apply NormalWord.ext_smul i
-    simp only [summan
+    simp only [summand_smul_def', equivPair, rcons, Word.equivPair_symm, Equiv.coe_fn_mk,
+      Equiv.coe_fn_symm_mk, Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul,
+      Word.rcons_eq_smul, equiv_fst_eq_mul_inv, map_mul, map_inv, mul_smul, inv_smul_smul,
+      smul_inv_smul, base_smul_def', MonoidHom.apply_ofInjective_symm]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, MonoidHom, MonoidHom.coe_comp, MonoidHom.coe_mk, MulAction, MulAction.ofEndHom, MulAction.toEndHom, NormalWord, NormalWord.ext_smul, OneHom, OneHom.coe_mk, Word.equivPair_smul_same, Word.equivPair_symm, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, coe_comp, coe_fn_mk
 -/
@@ -1418,7 +1522,18 @@ definition consRecOn
     | cons i g w h1 hg1 ih =>
       convert!
         cons i g ⟨w, 1, fun _ _ h => h3 _ _ (List.mem_cons_of_mem _ h)⟩ h1
-          (h3 
+          (h3 _ _ List.mem_cons_self) ?_ rfl (ih ?_)
+      · simp only [Word.cons, NormalWord.cons, map_one, mul_one,
+          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
+          (h3 _ _ List.mem_cons_self)]
+      · apply d.injective i
+        simp only [NormalWord.cons, equiv_fst_eq_mul_inv, MonoidHom.apply_ofInjective_symm,
+          map_one, mul_one, mul_inv_cancel, (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
+          (h3 _ _ List.mem_cons_self)]
+      · rwa [← SetLike.mem_coe,
+          ← coe_equiv_snd_eq_one_iff_mem (d.compl i) (d.one_mem _),
+          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
+          (h3 _ _ List.mem_cons_self)]
 
 中文:
 定义 consRecOn
@@ -1432,7 +1547,18 @@ definition consRecOn
     | cons i g w h1 hg1 ih =>
       convert!
         cons i g ⟨w, 1, fun _ _ h => h3 _ _ (List.mem_cons_of_mem _ h)⟩ h1
-          (h3 
+          (h3 _ _ List.mem_cons_self) ?_ rfl (ih ?_)
+      · simp only [Word.cons, NormalWord.cons, map_one, mul_one,
+          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
+          (h3 _ _ List.mem_cons_self)]
+      · apply d.injective i
+        simp only [NormalWord.cons, equiv_fst_eq_mul_inv, MonoidHom.apply_ofInjective_symm,
+          map_one, mul_one, mul_inv_cancel, (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
+          (h3 _ _ List.mem_cons_self)]
+      · rwa [← SetLike.mem_coe,
+          ← coe_equiv_snd_eq_one_iff_mem (d.compl i) (d.one_mem _),
+          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
+          (h3 _ _ List.mem_cons_self)]
 
 Depends on / 依赖: List.mem_cons_of_mem, List.mem_cons_self, NormalWord, NormalWord.cons, Word.cons, Word.consRecOn, base_smul_def, consRecOn, convert, d.compl, d.injective, equiv_fst, equiv_snd_eq_self_iff_mem, injective, map_one, mem_cons_of_mem, mem_cons_self, mul_one, one_mem
 -/
@@ -1477,7 +1603,9 @@ theorem cons_eq_smul
   simp only [cons, Word.cons_eq_smul, MonoidHom.apply_ofInjective_symm,
     equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv, mul_smul, inv_smul_smul, summand_smul_def,
     equivPair, rcons, Word.equivPair_symm, Word.rcons_eq_smul, Equiv.coe_fn_mk,
-    Word.equivPair_tail_eq_i
+    Word.equivPair_tail_eq_inv_smul, Equiv.coe_fn_symm_mk, smul_inv_smul]
+
+@[simp]
 
 中文:
 定理 cons_eq_smul
@@ -1487,7 +1615,9 @@ theorem cons_eq_smul
   simp only [cons, Word.cons_eq_smul, MonoidHom.apply_ofInjective_symm,
     equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv, mul_smul, inv_smul_smul, summand_smul_def,
     equivPair, rcons, Word.equivPair_symm, Word.rcons_eq_smul, Equiv.coe_fn_mk,
-    Word.equivPair_tail_eq_i
+    Word.equivPair_tail_eq_inv_smul, Equiv.coe_fn_symm_mk, smul_inv_smul]
+
+@[simp]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, MonoidHom, MonoidHom.apply_ofInjective_symm, Word.cons_eq_smul, Word.equivPair_symm, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, apply_ofInjective_symm, coe_fn_mk, coe_fn_symm_mk, cons_eq_smul, equivPair, equivPair_symm, equivPair_tail_eq_inv_smul, equiv_fst_eq_mul_inv, ext_smul, inv_smul_smul, map_inv, map_mul
 -/
@@ -1511,7 +1641,10 @@ theorem prod_summand_smul
   simp only [prod, summand_smul_def', equivPair, rcons, Word.equivPair_symm,
     Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Word.equivPair_smul_same,
     Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, ← of_apply_eq_base φ i,
-    MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc,
+    MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
+    Word.prod_smul, ofCoprodI_of, inv_mul_cancel_left, mul_inv_cancel_left]
+
+@[simp]
 
 中文:
 定理 prod_summand_smul
@@ -1520,7 +1653,10 @@ theorem prod_summand_smul
   simp only [prod, summand_smul_def', equivPair, rcons, Word.equivPair_symm,
     Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Word.equivPair_smul_same,
     Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, ← of_apply_eq_base φ i,
-    MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc,
+    MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
+    Word.prod_smul, ofCoprodI_of, inv_mul_cancel_left, mul_inv_cancel_left]
+
+@[simp]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, MonoidHom, MonoidHom.apply_ofInjective_symm, Word.equivPair_smul_same, Word.equivPair_symm, Word.equivPair_tail_eq_inv_smul, Word.prod_smul, Word.rcons_eq_smul, apply_ofInjective_symm, coe_fn_mk, coe_fn_symm_mk, equivPair, equivPair_smul_same, equivPair_symm, equivPair_tail_eq_inv_smul, equiv_fst_eq_mul_inv, inv_mul_cancel_left, map_inv, map_mul
 -/
@@ -1714,7 +1850,7 @@ theorem of_injective
     (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
   intro _ _ h
   exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp
+    by simp_all [funext_iff, of_smul_eq_smul])
 
 中文:
 定理 of_injective
@@ -1727,7 +1863,7 @@ theorem of_injective
     (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
   intro _ _ h
   exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp
+    by simp_all [funext_iff, of_smul_eq_smul])
 
 Depends on / 依赖: Classical, Classical.decEq, Function, Function.Injective.of_comp, Injective, NormalWord, PushoutI, eq_of_smul_eq_smul, funext_iff, of_comp, of_smul_eq_smul, transversal_nonempty
 -/
@@ -1756,7 +1892,7 @@ theorem base_injective
     (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
   intro _ _ h
   exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp
+    by simp_all [funext_iff, base_smul_eq_smul])
 
 中文:
 定理 base_injective
@@ -1769,7 +1905,7 @@ theorem base_injective
     (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
   intro _ _ h
   exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp
+    by simp_all [funext_iff, base_smul_eq_smul])
 
 Depends on / 依赖: Classical, Classical.decEq, Function, Function.Injective.of_comp, Injective, NormalWord, PushoutI, base_smul_eq_smul, eq_of_smul_eq_smul, funext_iff, of_comp, transversal_nonempty
 -/
@@ -1818,7 +1954,9 @@ theorem Reduced.exists_normalWord_prod_eq
     rcases ih (fun _ hg => hw _ (List.mem_cons_of_mem _ hg)) with
       ⟨w', hw'prod, hw'map⟩
     refine ⟨cons g w' ?_ ?_, ?_⟩
-    · rwa [Word.fstIdx, ← List.head?_map, hw'map, List.head
+    · rwa [Word.fstIdx, ← List.head?_map, hw'map, List.head?_map]
+    · exact hw _ List.mem_cons_self
+    · simp [hw'prod, hw'map]
 
 中文:
 定理 既约.存在_normalWord_prod_eq
@@ -1830,7 +1968,9 @@ theorem Reduced.exists_normalWord_prod_eq
     rcases ih (fun _ hg => hw _ (List.mem_cons_of_mem _ hg)) with
       ⟨w', hw'prod, hw'map⟩
     refine ⟨cons g w' ?_ ?_, ?_⟩
-    · rwa [Word.fstIdx, ← List.head?_map, hw'map, List.head
+    · rwa [Word.fstIdx, ← List.head?_map, hw'map, List.head?_map]
+    · exact hw _ List.mem_cons_self
+    · simp [hw'prod, hw'map]
 
 Depends on / 依赖: List.head, List.mem_cons_of_mem, List.mem_cons_self, Word.consRecOn, Word.fstIdx, _map, consRecOn, fstIdx, mem_cons_of_mem, mem_cons_self
 -/
@@ -1859,7 +1999,11 @@ theorem Reduced.eq_empty_of_mem_range
   have : (NormalWord.prod (d := d) ⟨.empty, h, by simp⟩) = base φ h := by
     simp [NormalWord.prod]
   rw [← hw'prod]; rw [← this] at heq
-  suffices w'.toWord = 
+  suffices w'.toWord = .empty by
+    simp [this, @eq_comm _ []] at hw'map
+    ext
+    simp [hw'map]
+  rw [← prod_injective heq]
 
 中文:
 定理 既约.eq_empty_of_mem_range
@@ -1870,7 +2014,11 @@ theorem Reduced.eq_empty_of_mem_range
   have : (NormalWord.prod (d := d) ⟨.empty, h, by simp⟩) = base φ h := by
     simp [NormalWord.prod]
   rw [← hw'prod]; rw [← this] at heq
-  suffices w'.toWord = 
+  suffices w'.toWord = .empty by
+    simp [this, @eq_comm _ []] at hw'map
+    ext
+    simp [hw'map]
+  rw [← prod_injective heq]
 
 Depends on / 依赖: NormalWord, NormalWord.prod, eq_comm, exists_normalWord_prod_eq, hw.exists_normalWord_prod_eq, prod_injective, toWord, transversal_nonempty
 -/
@@ -1904,7 +2052,33 @@ theorem inf_of_range_eq_base_range
       have hg₁1 : g₁ != 1 :=
         ne_of_apply_ne (of (φ := φ) i) (by simp_all)
       have hg₂1 : g₂ != 1 :=
-        ne_of_apply_n
+        ne_of_apply_ne (of (φ := φ) j) (by simp_all)
+      have hg₁r : g₁ ∉ (φ i).range := by
+        rintro ⟨y, rfl⟩
+        subst hg₁
+        exact hx (of_apply_eq_base φ i y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
+      have hg₂r : g₂ ∉ (φ j).range := by
+        rintro ⟨y, rfl⟩
+        subst hg₂
+        exact hx (of_apply_eq_base φ j y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
+      let w : Word G := ⟨[⟨_, g₁⟩, ⟨_, g₂⁻¹⟩], by simp_all, by simp_all⟩
+      have hw : Reduced φ w := by
+        simp only [w, Reduced, List.mem_cons,
+          forall_eq_or_imp, not_false_eq_true,
+          hg₁r, hg₂r, List.mem_nil_iff, false_imp_iff, imp_true_iff, and_true,
+          inv_mem_iff]
+      have := hw.eq_empty_of_mem_range hφ (by
+        simp only [w, Word.prod, List.map_cons, List.prod_cons, List.prod_nil,
+          List.map_nil, map_mul, ofCoprodI_of, hg₁, hg₂, map_inv, mul_one,
+          mul_inv_cancel, one_mem])
+      simp [w, Word.empty] at this)
+    (le_inf
+      (by rw [← of_comp_eq_base i]
+          rintro _ ⟨h, rfl⟩
+          exact MonoidHom.mem_range.2 ⟨φ i h, rfl⟩)
+      (by rw [← of_comp_eq_base j]
+          rintro _ ⟨h, rfl⟩
+          exact MonoidHom.mem_range.2 ⟨φ j h, rfl⟩))
 
 中文:
 定理 inf_of_range_eq_base_range
@@ -1916,7 +2090,33 @@ theorem inf_of_range_eq_base_range
       have hg₁1 : g₁ != 1 :=
         ne_of_apply_ne (of (φ := φ) i) (by simp_all)
       have hg₂1 : g₂ != 1 :=
-        ne_of_apply_n
+        ne_of_apply_ne (of (φ := φ) j) (by simp_all)
+      have hg₁r : g₁ ∉ (φ i).range := by
+        rintro ⟨y, rfl⟩
+        subst hg₁
+        exact hx (of_apply_eq_base φ i y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
+      have hg₂r : g₂ ∉ (φ j).range := by
+        rintro ⟨y, rfl⟩
+        subst hg₂
+        exact hx (of_apply_eq_base φ j y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
+      let w : Word G := ⟨[⟨_, g₁⟩, ⟨_, g₂⁻¹⟩], by simp_all, by simp_all⟩
+      have hw : Reduced φ w := by
+        simp only [w, Reduced, List.mem_cons,
+          forall_eq_or_imp, not_false_eq_true,
+          hg₁r, hg₂r, List.mem_nil_iff, false_imp_iff, imp_true_iff, and_true,
+          inv_mem_iff]
+      have := hw.eq_empty_of_mem_range hφ (by
+        simp only [w, Word.prod, List.map_cons, List.prod_cons, List.prod_nil,
+          List.map_nil, map_mul, ofCoprodI_of, hg₁, hg₂, map_inv, mul_one,
+          mul_inv_cancel, one_mem])
+      simp [w, Word.empty] at this)
+    (le_inf
+      (by rw [← of_comp_eq_base i]
+          rintro _ ⟨h, rfl⟩
+          exact MonoidHom.mem_range.2 ⟨φ i h, rfl⟩)
+      (by rw [← of_comp_eq_base j]
+          rintro _ ⟨h, rfl⟩
+          exact MonoidHom.mem_range.2 ⟨φ j h, rfl⟩))
 
 Depends on / 依赖: MonoidHom, MonoidHom.mem_range, le_antisymm, mem_range, ne_eq, ne_of_apply_ne, not_true_eq_false, of_apply_eq_base, one_mem
 -/

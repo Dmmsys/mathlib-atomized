@@ -431,7 +431,8 @@ instance :
     { preserves := fun {c} hc => by
         classical
         rw [isColimit_iff_bijective_desc]; rw [← Function.Bijective.of_comp_iff _
-          (quotQuotUliftAddEquiv F).bijective]; rw [← AddEquiv.coe_toAddMonoidHom]; rw [← AddMonoidHom.coe_comp]; rw [Quot.desc_quo
+          (quotQuotUliftAddEquiv F).bijective]; rw [← AddEquiv.coe_toAddMonoidHom]; rw [← AddMonoidHom.coe_comp]; rw [Quot.desc_quotQuotUliftAddEquiv]
+        exact ULift.up_bijective.comp ((isColimit_iff_bijective_desc c).mp (Nonempty.intro hc)) } }
 
 中文:
 实例 :
@@ -440,7 +441,8 @@ instance :
     { preserves := fun {c} hc => by
         classical
         rw [isColimit_iff_bijective_desc]; rw [← Function.Bijective.of_comp_iff _
-          (quotQuotUliftAddEquiv F).bijective]; rw [← AddEquiv.coe_toAddMonoidHom]; rw [← AddMonoidHom.coe_comp]; rw [Quot.desc_quo
+          (quotQuotUliftAddEquiv F).bijective]; rw [← AddEquiv.coe_toAddMonoidHom]; rw [← AddMonoidHom.coe_comp]; rw [Quot.desc_quotQuotUliftAddEquiv]
+        exact ULift.up_bijective.comp ((isColimit_iff_bijective_desc c).mp (Nonempty.intro hc)) } }
 
 Depends on / 依赖: AddEquiv, AddEquiv.coe_toAddMonoidHom, AddMonoidHom, AddMonoidHom.coe_comp, Bijective, Function, Function.Bijective.of_comp_iff, Nonempty, Nonempty.intro, Quot.desc_quotQuotUliftAddEquiv, ULift.up_bijective.comp, bijective, classical, coe_comp, coe_toAddMonoidHom, desc_quotQuotUliftAddEquiv, f.hom, isColimit_iff_bijective_desc, of_comp_iff, preserves
 -/

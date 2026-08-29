@@ -105,7 +105,9 @@ theorem tendstoLocallyUniformlyOn_iff_forall_tendsto
 
 nonrec theorem IsOpen.tendstoLocallyUniformlyOn_iff_forall_tendsto (hs : IsOpen s) :
     TendstoLocallyUniformlyOn F f p s ↔
-      forall x in s, Tendsto (fun y : ι × α => (f y.2, F y.1 y.2)) 
+      forall x in s, Tendsto (fun y : ι × α => (f y.2, F y.1 y.2)) (p ×ˢ 𝓝 x) (𝓤 β) :=
+tendstoLocallyUniformlyOn_iff_forall_tendsto.trans forall₂_congr fun x hx => by
+    rw [hs.nhdsWithin_eq hx]
 
 中文:
 定理 tendstoLocallyUniformlyOn_iff_对任意_tendsto
@@ -114,7 +116,9 @@ nonrec theorem IsOpen.tendstoLocallyUniformlyOn_iff_forall_tendsto (hs : IsOpen 
 
 nonrec theorem IsOpen.tendstoLocallyUniformlyOn_iff_forall_tendsto (hs : IsOpen s) :
     TendstoLocallyUniformlyOn F f p s ↔
-      forall x in s, Tendsto (fun y : ι × α => (f y.2, F y.1 y.2)) 
+      forall x in s, Tendsto (fun y : ι × α => (f y.2, F y.1 y.2)) (p ×ˢ 𝓝 x) (𝓤 β) :=
+tendstoLocallyUniformlyOn_iff_forall_tendsto.trans forall₂_congr fun x hx => by
+    rw [hs.nhdsWithin_eq hx]
 
 Depends on / 依赖: _comm.trans, mem_map, mem_preimage, mem_prod_iff_right, simp_rw
 -/
@@ -361,7 +365,10 @@ theorem tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace
   replace hU := fun x : t => (hU x).2
   rw [← eventually_all] at hU
   refine hU.mono fun i hi x => ?_
-  spec
+  specialize ht (mem_univ x)
+  simp only [exists_prop, mem_iUnion, SetCoe.exists, exists_and_right] at ht
+  obtain ⟨y, ⟨hy₁, hy₂⟩, hy₃⟩ := ht
+  exact hi ⟨⟨y, hy₁⟩, hy₂⟩ x hy₃
 
 中文:
 定理 tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace
@@ -373,7 +380,10 @@ theorem tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace
   replace hU := fun x : t => (hU x).2
   rw [← eventually_all] at hU
   refine hU.mono fun i hi x => ?_
-  spec
+  specialize ht (mem_univ x)
+  simp only [exists_prop, mem_iUnion, SetCoe.exists, exists_and_right] at ht
+  obtain ⟨y, ⟨hy₁, hy₂⟩, hy₃⟩ := ht
+  exact hi ⟨⟨y, hy₁⟩, hy₂⟩ x hy₃
 
 Depends on / 依赖: SetCoe, SetCoe.exists, TendstoUniformly, TendstoUniformly.tendstoLocallyUniformly, elim_nhds_subcover, eventually_all, exists_and_right, exists_prop, hU.mono, isCompact_univ, isCompact_univ.elim_nhds_subcover, mem_iUnion, mem_univ, replace, specialize, tendstoLocallyUniformly
 -/
@@ -401,7 +411,7 @@ theorem tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact
   refine ⟨fun h => ?_, TendstoUniformlyOn.tendstoLocallyUniformlyOn⟩
   rwa [tendstoLocallyUniformlyOn_iff_tendstoLocallyUniformly_comp_coe,
     tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace, ←
-    tendstoUniformlyOn_iff_te
+    tendstoUniformlyOn_iff_tendstoUniformly_comp_coe] at h
 
 中文:
 定理 tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact
@@ -411,7 +421,7 @@ theorem tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact
   refine ⟨fun h => ?_, TendstoUniformlyOn.tendstoLocallyUniformlyOn⟩
   rwa [tendstoLocallyUniformlyOn_iff_tendstoLocallyUniformly_comp_coe,
     tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace, ←
-    tendstoUniformlyOn_iff_te
+    tendstoUniformlyOn_iff_tendstoUniformly_comp_coe] at h
 
 Depends on / 依赖: CompactSpace, TendstoUniformlyOn, TendstoUniformlyOn.tendstoLocallyUniformlyOn, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, tendstoLocallyUniformlyOn, tendstoLocallyUniformlyOn_iff_tendstoLocallyUniformly_comp_coe, tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace, tendstoUniformlyOn_iff_tendstoUniformly_comp_coe
 -/
@@ -751,7 +761,12 @@ theorem tendstoLocallyUniformlyOn_TFAE
   tfae_have 2 -> 3
   | h, x, hx => by
     obtain ⟨K, ⟨hK1, hK2⟩, hK3⟩ := (compact_basis_nhds x).mem_iff.mp (hs.mem_nhds hx)
-    exact ⟨K, nhdsWithin_le_nhds hK1, h K hK3 
+    exact ⟨K, nhdsWithin_le_nhds hK1, h K hK3 hK2⟩
+  tfae_have 3 -> 1
+  | h, u, hu, x, hx => by
+    obtain ⟨v, hv1, hv2⟩ := h x hx
+    exact ⟨v, hv1, hv2 u hu⟩
+  tfae_finish
 
 中文:
 定理 tendstoLocallyUniformlyOn_TFAE
@@ -763,7 +778,12 @@ theorem tendstoLocallyUniformlyOn_TFAE
   tfae_have 2 -> 3
   | h, x, hx => by
     obtain ⟨K, ⟨hK1, hK2⟩, hK3⟩ := (compact_basis_nhds x).mem_iff.mp (hs.mem_nhds hx)
-    exact ⟨K, nhdsWithin_le_nhds hK1, h K hK3 
+    exact ⟨K, nhdsWithin_le_nhds hK1, h K hK3 hK2⟩
+  tfae_have 3 -> 1
+  | h, u, hu, x, hx => by
+    obtain ⟨v, hv1, hv2⟩ := h x hx
+    exact ⟨v, hv1, hv2 u hu⟩
+  tfae_finish
 
 Depends on / 依赖: compact_basis_nhds, h.mono, hs.mem_nhds, mem_iff, mem_iff.mp, mem_nhds, nhdsWithin_le_nhds, tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact, tfae_finish, tfae_have
 -/
@@ -842,7 +862,7 @@ theorem tendstoLocallyUniformlyOn_iff_filter
     exact ⟨_, hs2, _, eventually_of_mem hs1 fun x => id, fun hi y hy => hi y hy⟩
   · rintro h u hu x hx
     obtain ⟨pa, hpa, pb, hpb, h⟩ := h x hx u hu
-    exac
+    exact ⟨{a | pb a}, hpb, eventually_of_mem hpa fun i hi y hy => h hi hy⟩
 
 中文:
 定理 tendstoLocallyUniformlyOn_iff_filter
@@ -854,7 +874,7 @@ theorem tendstoLocallyUniformlyOn_iff_filter
     exact ⟨_, hs2, _, eventually_of_mem hs1 fun x => id, fun hi y hy => hi y hy⟩
   · rintro h u hu x hx
     obtain ⟨pa, hpa, pb, hpb, h⟩ := h x hx u hu
-    exac
+    exact ⟨{a | pb a}, hpb, eventually_of_mem hpa fun i hi y hy => h hi hy⟩
 
 Depends on / 依赖: TendstoUniformlyOnFilter, eventually_of_mem, eventually_prod_iff
 -/
@@ -946,7 +966,8 @@ theorem TendstoLocallyUniformlyOn.congr_inseparable
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at hf ⊢
   refine forall₂_imp (fun x hx hf => ?_) hf
   rw [uniformity_hasBasis_open.tendsto_right_iff] at hf ⊢
-  exact
+  exact fun i hi => (hf i hi).mp ((hg.filter_mono (prod_mono_right p inf_le_right)).mono
+    fun x hg hf => ((Inseparable.rfl.prod hg).mem_open_iff hi.2).1 hf)
 
 中文:
 定理 TendstoLocallyUniformlyOn.congr_inseparable
@@ -957,7 +978,8 @@ theorem TendstoLocallyUniformlyOn.congr_inseparable
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at hf ⊢
   refine forall₂_imp (fun x hx hf => ?_) hf
   rw [uniformity_hasBasis_open.tendsto_right_iff] at hf ⊢
-  exact
+  exact fun i hi => (hf i hi).mp ((hg.filter_mono (prod_mono_right p inf_le_right)).mono
+    fun x hg hf => ((Inseparable.rfl.prod hg).mem_open_iff hi.2).1 hf)
 
 Depends on / 依赖: Inseparable, Inseparable.rfl.prod, eventually_prod_principal_iff, filter_mono, hg.filter_mono, inf_le_right, mem_open_iff, prod_mono_right, tendstoLocallyUniformlyOn_iff_forall_tendsto, tendsto_right_iff, uniformity_hasBasis_open, uniformity_hasBasis_open.tendsto_right_iff
 -/
@@ -1003,7 +1025,9 @@ theorem TendstoLocallyUniformlyOn.congr_inseparable_right
     exact .of_forall fun _ => hg
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at hf ⊢
   refine forall₂_imp (fun x hx hf => ?_) hf
-  rw [uniformity_hasBasis_open.tendsto_right_iff] at
+  rw [uniformity_hasBasis_open.tendsto_right_iff] at hf ⊢
+  exact fun i hi => (hf i hi).mp ((hg.filter_mono (prod_mono_right p inf_le_right)).mono
+    fun x hg hf => ((hg.prod .rfl).mem_open_iff hi.2).1 hf)
 
 中文:
 定理 TendstoLocallyUniformlyOn.congr_inseparable_right
@@ -1014,7 +1038,9 @@ theorem TendstoLocallyUniformlyOn.congr_inseparable_right
     exact .of_forall fun _ => hg
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at hf ⊢
   refine forall₂_imp (fun x hx hf => ?_) hf
-  rw [uniformity_hasBasis_open.tendsto_right_iff] at
+  rw [uniformity_hasBasis_open.tendsto_right_iff] at hf ⊢
+  exact fun i hi => (hf i hi).mp ((hg.filter_mono (prod_mono_right p inf_le_right)).mono
+    fun x hg hf => ((hg.prod .rfl).mem_open_iff hi.2).1 hf)
 
 Depends on / 依赖: Inseparable, eventually_prod_principal_iff, filter_mono, hg.filter_mono, hg.prod, inf_le_right, mem_open_iff, of_forall, prod_mono_right, tendstoLocallyUniformlyOn_iff_forall_tendsto, tendsto_right_iff, uniformity_hasBasis_open, uniformity_hasBasis_open.tendsto_right_iff
 -/

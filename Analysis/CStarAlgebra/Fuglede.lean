@@ -87,7 +87,8 @@ lemma expMulMulExp_eq_expUnitary_mul_mul_expUnitary
   simp_rw [← mul_assoc, mul_assoc (_ * _ * x)]
   congr!
   all_goals
-    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_smul I I, sub_eq_add
+    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_smul I I, sub_eq_add_neg]
+    grind [exp_add_of_commute, Commute.smul_right, Commute.neg_right]
 
 中文:
 引理 expMulMulExp_eq_expUnitary_mul_mul_expUnitary
@@ -98,7 +99,8 @@ lemma expMulMulExp_eq_expUnitary_mul_mul_expUnitary
   simp_rw [← mul_assoc, mul_assoc (_ * _ * x)]
   congr!
   all_goals
-    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_smul I I, sub_eq_add
+    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_smul I I, sub_eq_add_neg]
+    grind [exp_add_of_commute, Commute.smul_right, Commute.neg_right]
 
 Depends on / 依赖: Commute, Commute.neg_right, Commute.smul_right, NormedAlgebra, all_goals, expMulMulExp, exp_add_of_commute, exp_neg_mul_mul_exp_eq_self, h.smul_right, imaginaryPart_apply_coe, mul_assoc, neg_right, nth_rw, restrictScalars, simp_rw, smul_comm, smul_right, smul_smul, sub_eq_add_neg
 -/
@@ -125,7 +127,8 @@ lemma expMulMulExp_const
   have : IsBounded (Set.range (expMulMulExp a b x)) := by
 .subset apply Metric.isBounded_sphere (x := (0 : A)) (r := ‖x‖)
     rintro - ⟨z, hz, rfl⟩
-    rw [mem_sphere_iff_norm]; rw [sub_zero
+    rw [mem_sphere_iff_norm]; rw [sub_zero]; rw [expMulMulExp_eq_expUnitary_mul_mul_expUnitary h z]; rw [CStarRing.norm_mul_coe_unitary]; rw [CStarRing.norm_coe_unitary_mul]
+  simpa [expMulMulExp] using hf.apply_eq_apply_of_bounded this z 0
 
 中文:
 引理 expMulMulExp_const
@@ -136,7 +139,8 @@ lemma expMulMulExp_const
   have : IsBounded (Set.range (expMulMulExp a b x)) := by
 .subset apply Metric.isBounded_sphere (x := (0 : A)) (r := ‖x‖)
     rintro - ⟨z, hz, rfl⟩
-    rw [mem_sphere_iff_norm]; rw [sub_zero
+    rw [mem_sphere_iff_norm]; rw [sub_zero]; rw [expMulMulExp_eq_expUnitary_mul_mul_expUnitary h z]; rw [CStarRing.norm_mul_coe_unitary]; rw [CStarRing.norm_coe_unitary_mul]
+  simpa [expMulMulExp] using hf.apply_eq_apply_of_bounded this z 0
 
 Depends on / 依赖: CStarRing, CStarRing.norm_coe_unitary_mul, CStarRing.norm_mul_coe_unitary, Differentiable, IsBounded, Metric, Metric.isBounded_sphere, Set.range, apply_eq_apply_of_bounded, expMulMulExp, expMulMulExp_eq_expUnitary_mul_mul_expUnitary, fun_prop, hf.apply_eq_apply_of_bounded, isBounded_sphere, mem_sphere_iff_norm, norm_coe_unitary_mul, norm_mul_coe_unitary, sub_zero, subset
 -/
@@ -159,7 +163,12 @@ lemma SemiconjBy.star_right_of_unital
     have (a : A) : HasDerivAt (fun z : Complex => exp (z • a)) a 0 := by
       simpa using hasDerivAt_exp_smul_const a (0 : Complex)
 .unique apply (this (star a)).const_mul x
-    simpa [key] using (this (star b)).
+    simpa [key] using (this (star b)).mul_const x
+  intro z
+  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
+  let _ := invertibleExp (z • star a)
+  simpa [← mul_assoc, ← invOf_exp, expMulMulExp] using
+    congr($(expMulMulExp_const h z) * exp (z • star a)).symm
 
 中文:
 引理 SemiconjBy.star_right_of_unital
@@ -169,7 +178,12 @@ lemma SemiconjBy.star_right_of_unital
     have (a : A) : HasDerivAt (fun z : Complex => exp (z • a)) a 0 := by
       simpa using hasDerivAt_exp_smul_const a (0 : Complex)
 .unique apply (this (star a)).const_mul x
-    simpa [key] using (this (star b)).
+    simpa [key] using (this (star b)).mul_const x
+  intro z
+  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
+  let _ := invertibleExp (z • star a)
+  simpa [← mul_assoc, ← invOf_exp, expMulMulExp] using
+    congr($(expMulMulExp_const h z) * exp (z • star a)).symm
 
 Depends on / 依赖: HasDerivAt, NormedAlgebra, const_mul, expMulMulExp, expMulMulExp_const, hasDerivAt_exp_smul_const, invOf_exp, invertibleExp, mul_assoc, mul_const, restrictScalars, unique
 -/

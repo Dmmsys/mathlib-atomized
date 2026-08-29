@@ -198,7 +198,12 @@ theorem HasFTaylorSeriesUpToOn.exists_lipschitzOnWith_of_nnnorm_lt
   have hder : forall y in s, HasFDerivWithinAt f (f' y) s y := fun y hy =>
     (hf.hasFDerivWithinAt one_ne_zero (subset_insert x s hy)).mono (subset_insert x s)
   have hcont : ContinuousWithinAt f' s x :=
-    (continuousMultili
+    (continuousMultilinearCurryFin1 Real E F).continuousAt.comp_continuousWithinAt
+      ((hf.cont _ le_rfl _ (mem_insert _ _)).mono (subset_insert x s))
+  replace hK : ‖f' x‖₊ < K := by simpa only [f', LinearIsometryEquiv.nnnorm_map]
+  exact
+    hs.exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
+      (eventually_nhdsWithin_iff.2 <| Eventually.of_forall hder) hcont K hK
 
 中文:
 定理 有FTaylorSeriesUpToOn.存在_lipschitzOnWith_of_nnnorm_lt
@@ -207,7 +212,12 @@ theorem HasFTaylorSeriesUpToOn.exists_lipschitzOnWith_of_nnnorm_lt
   have hder : forall y in s, HasFDerivWithinAt f (f' y) s y := fun y hy =>
     (hf.hasFDerivWithinAt one_ne_zero (subset_insert x s hy)).mono (subset_insert x s)
   have hcont : ContinuousWithinAt f' s x :=
-    (continuousMultili
+    (continuousMultilinearCurryFin1 Real E F).continuousAt.comp_continuousWithinAt
+      ((hf.cont _ le_rfl _ (mem_insert _ _)).mono (subset_insert x s))
+  replace hK : ‖f' x‖₊ < K := by simpa only [f', LinearIsometryEquiv.nnnorm_map]
+  exact
+    hs.exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
+      (eventually_nhdsWithin_iff.2 <| Eventually.of_forall hder) hcont K hK
 
 Depends on / 依赖: ContinuousWithinAt, HasFDerivWithinAt, LinearIsometryEquiv, LinearIsometryEquiv.nnnorm_map, comp_continuousWithinAt, continuousAt, continuousAt.comp_continuousWithinAt, continuousMultilinearCurryFin1, hasFDerivWithinAt, hf.cont, hf.hasFDerivWithinAt, le_rfl, mem_insert, nnnorm_map, one_ne_zero, replace, subset_insert
 -/
@@ -254,6 +264,9 @@ theorem ContDiffWithinAt.exists_lipschitzOnWith
   replace hp : HasFTaylorSeriesUpToOn 1 f p (Metric.ball x ε inter insert x s) := hp.mono hε
   clear hst hε t
   rw [← insert_eq_of_mem (Metric.mem_ball_self ε0)]; rw [← insert_inter_distrib] at hp
+  rcases hp.exists_lipschitzOnWith ((convex_ball _ _).inter hs) with ⟨K, t, hst, hft⟩
+  rw [inter_comm]; rw [← nhdsWithin_restrict' _ (Metric.ball_mem_nhds _ ε0)] at hst
+  exact ⟨K, t, hst, hft⟩
 
 中文:
 定理 ContDiffWithinAt.存在_lipschitzOnWith
@@ -263,6 +276,9 @@ theorem ContDiffWithinAt.exists_lipschitzOnWith
   replace hp : HasFTaylorSeriesUpToOn 1 f p (Metric.ball x ε inter insert x s) := hp.mono hε
   clear hst hε t
   rw [← insert_eq_of_mem (Metric.mem_ball_self ε0)]; rw [← insert_inter_distrib] at hp
+  rcases hp.exists_lipschitzOnWith ((convex_ball _ _).inter hs) with ⟨K, t, hst, hft⟩
+  rw [inter_comm]; rw [← nhdsWithin_restrict' _ (Metric.ball_mem_nhds _ ε0)] at hst
+  exact ⟨K, t, hst, hft⟩
 
 Depends on / 依赖: HasFTaylorSeriesUpToOn, Metric, Metric.ball, Metric.ball_mem_nhds, Metric.mem_ball_self, Metric.mem_nhdsWithin_iff.mp, ball_mem_nhds, convex_ball, exists_lipschitzOnWith, hp.exists_lipschitzOnWith, hp.mono, insert, insert_eq_of_mem, insert_inter_distrib, inter_comm, le_rfl, mem_ball_self, mem_nhdsWithin_iff, nhdsWithin_restrict, replace
 -/

@@ -176,7 +176,8 @@ lemma factorial_coe_dvd_prod
 have hn : 0 <= n % k ! := Int.emod_nonneg n Int.natCast_ne_zero.mpr k.factorial_ne_zero
   obtain ⟨x, hx⟩ := Int.eq_ofNat_of_zero_le hn
   have hdivk := x.factorial_dvd_ascFactorial k
-  zify [x.ascFactorial_
+  zify [x.ascFactorial_eq_prod_range k] at hdivk
+  rwa [← Finset.prod_int_mod, ← Int.dvd_iff_emod_eq_zero, hx]
 
 中文:
 引理 factorial_coe_dvd_prod
@@ -188,7 +189,8 @@ have hn : 0 <= n % k ! := Int.emod_nonneg n Int.natCast_ne_zero.mpr k.factorial_
 have hn : 0 <= n % k ! := Int.emod_nonneg n Int.natCast_ne_zero.mpr k.factorial_ne_zero
   obtain ⟨x, hx⟩ := Int.eq_ofNat_of_zero_le hn
   have hdivk := x.factorial_dvd_ascFactorial k
-  zify [x.ascFactorial_
+  zify [x.ascFactorial_eq_prod_range k] at hdivk
+  rwa [← Finset.prod_int_mod, ← Int.dvd_iff_emod_eq_zero, hx]
 
 Depends on / 依赖: Finset, Finset.prod_int_mod, Int.dvd_iff_emod_eq_zero, Int.emod_add_emod, Int.emod_nonneg, Int.eq_ofNat_of_zero_le, Int.natCast_ne_zero.mpr, ascFactorial_eq_prod_range, dvd_iff_emod_eq_zero, emod_add_emod, emod_nonneg, eq_ofNat_of_zero_le, factorial_dvd_ascFactorial, factorial_ne_zero, k.factorial_ne_zero, natCast_ne_zero, prod_int_mod, simp_rw, x.ascFactorial_eq_prod_range, x.factorial_dvd_ascFactorial
 -/

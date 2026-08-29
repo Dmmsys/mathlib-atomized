@@ -114,7 +114,17 @@ definition haveLetCore
     let elabBinders k := if bis.isEmpty then k #[] else elabBinders bis k
     let (goal1, t, p) ← elabBinders fun es => do
       let t ← match t with
-      | none => mkFreshTyp
+      | none => mkFreshTypeMVar
+      | some stx => withRef stx do
+        let e ← Term.elabType stx
+        Term.synthesizeSyntheticMVars (postpone := .no)
+        instantiateMVars e
+      let p ← mkFreshExprMVar t MetavarKind.syntheticOpaque n
+      pure (p.mvarId!, ← mkForallFVars es t, ← mkLambdaFVars es p)
+    let (fvar, goal2) ← (← declFn goal n t p).intro1P
+    goal2.withContext do
+      Term.addTermInfo' (isBinder := true) name.raw[0] (mkFVar fvar)
+    pure (goal1, goal2)
 
 中文:
 定义 haveLetCore
@@ -125,7 +135,17 @@ definition haveLetCore
     let elabBinders k := if bis.isEmpty then k #[] else elabBinders bis k
     let (goal1, t, p) ← elabBinders fun es => do
       let t ← match t with
-      | none => mkFreshTyp
+      | none => mkFreshTypeMVar
+      | some stx => withRef stx do
+        let e ← Term.elabType stx
+        Term.synthesizeSyntheticMVars (postpone := .no)
+        instantiateMVars e
+      let p ← mkFreshExprMVar t MetavarKind.syntheticOpaque n
+      pure (p.mvarId!, ← mkForallFVars es t, ← mkLambdaFVars es p)
+    let (fvar, goal2) ← (← declFn goal n t p).intro1P
+    goal2.withContext do
+      Term.addTermInfo' (isBinder := true) name.raw[0] (mkFVar fvar)
+    pure (goal1, goal2)
 
 Depends on / 依赖: MVarId, MVarId.assert, MVarId.define, MetavarKind, MetavarKind.syntheticOpaque, Term.elabType, Term.synthesizeSyntheticMVars, assert, bis.isEmpty, declFn, define, elabBinders, elabType, goal.withContext, instantiateMVars, isEmpty, keepTerm, mkForallFVars, mkFreshExprMVar, mkFreshTypeMVar
 -/

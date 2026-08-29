@@ -47,7 +47,7 @@ definition IsColimit.pullbackOfHasExactColimitsOfShape
   have hpull := colim.map_isPullback (IsPullback.of_hasPullback c.ι ((Functor.const J).map f))
   dsimp only [colim_obj, colim_map] at hpull
   have := hc.isIso_colimMap_ι
-  apply hp
+  apply hpull.isIso_snd_of_isIso
 
 中文:
 定义 是余极限.pullbackOfHasExactColimitsOfShape
@@ -58,7 +58,7 @@ definition IsColimit.pullbackOfHasExactColimitsOfShape
   have hpull := colim.map_isPullback (IsPullback.of_hasPullback c.ι ((Functor.const J).map f))
   dsimp only [colim_obj, colim_map] at hpull
   have := hc.isIso_colimMap_ι
-  apply hp
+  apply hpull.isIso_snd_of_isIso
 
 Depends on / 依赖: Cocone, Cocone.isColimitOfIsIsoColimMap, Functor, Functor.const, IsPullback, IsPullback.of_hasPullback, colim.map_isPullback, colimMap, colim_map, colim_obj, hc.isIso_colimMap_, hpull.isIso_snd_of_isIso, isIso_snd_of_isIso, map_isPullback, of_hasPullback, pullback, pullback.snd
 -/
@@ -143,7 +143,7 @@ definition IsLimit.pushoutOfHasExactLimitsOfShape
   have hpush := lim.map_isPushout (IsPushout.of_hasPushout c.π ((Functor.const J).map f))
   dsimp only [lim_obj, lim_map] at hpush
   have := hc.isIso_limMap_π
-  apply hpush.isIso_inr_of_isI
+  apply hpush.isIso_inr_of_isIso
 
 中文:
 定义 是极限.pushoutOfHasExactLimitsOfShape
@@ -154,7 +154,7 @@ definition IsLimit.pushoutOfHasExactLimitsOfShape
   have hpush := lim.map_isPushout (IsPushout.of_hasPushout c.π ((Functor.const J).map f))
   dsimp only [lim_obj, lim_map] at hpush
   have := hc.isIso_limMap_π
-  apply hpush.isIso_inr_of_isI
+  apply hpush.isIso_inr_of_isIso
 
 Depends on / 依赖: Cone.isLimitOfIsIsoLimMap, Functor, Functor.const, IsPushout, IsPushout.of_hasPushout, hc.isIso_limMap_, hpush.isIso_inr_of_isIso, isIso_inr_of_isIso, lim.map_isPushout, limMap, lim_map, lim_obj, map_isPushout, of_hasPushout, pushout, pushout.inr
 -/

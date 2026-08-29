@@ -76,7 +76,22 @@ definition uniqueAlgEquiv
   left_inv := by
     let f : R[X] ->+* MvPolynomial σ R := Polynomial.eval₂RingHom MvPolynomial.C (X default)
     let g : MvPolynomial σ R ->+* R[X] := eval₂Hom Polynomial.C fun _ => Polynomial.X
-    cha
+    change forall p, f.comp g p = p
+    apply is_id
+    · ext a
+      dsimp [f, g]
+      rw [eval₂_C]; rw [Polynomial.eval₂_C]
+    · intro i
+      dsimp [f, g]
+      rw [eval₂_X]; rw [Polynomial.eval₂_X]
+      rw [← Unique.eq_default i]
+  right_inv p :=
+    Polynomial.induction_on p (fun a => by rw [Polynomial.eval₂_C, MvPolynomial.eval₂_C])
+    (fun p q hp hq => by rw [Polynomial.eval₂_add, MvPolynomial.eval₂_add, hp, hq]) fun p n _ => by
+      rw [Polynomial.eval₂_mul]; rw [Polynomial.eval₂_pow]; rw [Polynomial.eval₂_X]; rw [Polynomial.eval₂_C]; rw [eval₂_mul]; rw [eval₂_C]; rw [eval₂_pow]; rw [eval₂_X]
+  map_mul' _ _ := eval₂_mul _ _
+  map_add' _ _ := eval₂_add _ _
+  commutes' _ := eval₂_C _ _ _
 
 中文:
 定义 uniqueAlgEquiv
@@ -86,7 +101,22 @@ definition uniqueAlgEquiv
   left_inv := by
     let f : R[X] ->+* MvPolynomial σ R := Polynomial.eval₂RingHom MvPolynomial.C (X default)
     let g : MvPolynomial σ R ->+* R[X] := eval₂Hom Polynomial.C fun _ => Polynomial.X
-    cha
+    change forall p, f.comp g p = p
+    apply is_id
+    · ext a
+      dsimp [f, g]
+      rw [eval₂_C]; rw [Polynomial.eval₂_C]
+    · intro i
+      dsimp [f, g]
+      rw [eval₂_X]; rw [Polynomial.eval₂_X]
+      rw [← Unique.eq_default i]
+  right_inv p :=
+    Polynomial.induction_on p (fun a => by rw [Polynomial.eval₂_C, MvPolynomial.eval₂_C])
+    (fun p q hp hq => by rw [Polynomial.eval₂_add, MvPolynomial.eval₂_add, hp, hq]) fun p n _ => by
+      rw [Polynomial.eval₂_mul]; rw [Polynomial.eval₂_pow]; rw [Polynomial.eval₂_X]; rw [Polynomial.eval₂_C]; rw [eval₂_mul]; rw [eval₂_C]; rw [eval₂_pow]; rw [eval₂_X]
+  map_mul' _ _ := eval₂_mul _ _
+  map_add' _ _ := eval₂_add _ _
+  commutes' _ := eval₂_C _ _ _
 
 Depends on / 依赖: Polynomial, Polynomial.C, Polynomial.X
 -/
@@ -528,7 +558,10 @@ theorem eval₂_uniqueAlgEquiv
   | monomial d r =>
     rw [← MvPolynomial.uniqueAlgEquiv_apply (R := R) (σ := σ)]; rw [uniqueAlgEquiv_monomial]
     simp only [Polynomial.eval₂_monomial, eval₂_monomial]
-    rw [Finsupp.unique_sin
+    rw [Finsupp.unique_single d]; rw [Finsupp.prod_single_index]
+    · simp
+    · simp only [pow_zero]
+  | add f g hf hg => simp only [eval₂_add, Polynomial.eval₂_add, hf, hg]
 
 中文:
 定理 eval₂_uniqueAlgEquiv
@@ -539,7 +572,10 @@ theorem eval₂_uniqueAlgEquiv
   | monomial d r =>
     rw [← MvPolynomial.uniqueAlgEquiv_apply (R := R) (σ := σ)]; rw [uniqueAlgEquiv_monomial]
     simp only [Polynomial.eval₂_monomial, eval₂_monomial]
-    rw [Finsupp.unique_sin
+    rw [Finsupp.unique_single d]; rw [Finsupp.prod_single_index]
+    · simp
+    · simp only [pow_zero]
+  | add f g hf hg => simp only [eval₂_add, Polynomial.eval₂_add, hf, hg]
 
 Depends on / 依赖: Finsupp, Finsupp.prod_single_index, Finsupp.unique_single, MvPolynomial, MvPolynomial.induction_on, MvPolynomial.uniqueAlgEquiv_apply, Polynomial, Polynomial.eval, induction_on, monomial, pow_zero, prod_single_index, uniqueAlgEquiv_apply, uniqueAlgEquiv_monomial, unique_single
 -/
@@ -1757,7 +1793,11 @@ theorem optionEquivLeft_monomial
   · rw [MvPolynomial.monomial_eq, ← Polynomial.C_mul_X_pow_eq_monomial]
     simp only [Polynomial.algebraMap_apply, algebraMap_eq, Option.elim_none, Option.elim_some,
       map_mul, mul_assoc]
-    simp only [mul_comm, map_f
+    simp only [mul_comm, map_finsuppProd, map_pow]
+  · simp
+  · intros; rw [pow_add]
+
+@[simp]
 
 中文:
 定理 optionEquivLeft_monomial
@@ -1767,7 +1807,11 @@ theorem optionEquivLeft_monomial
   · rw [MvPolynomial.monomial_eq, ← Polynomial.C_mul_X_pow_eq_monomial]
     simp only [Polynomial.algebraMap_apply, algebraMap_eq, Option.elim_none, Option.elim_some,
       map_mul, mul_assoc]
-    simp only [mul_comm, map_f
+    simp only [mul_comm, map_finsuppProd, map_pow]
+  · simp
+  · intros; rw [pow_add]
+
+@[simp]
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, MvPolynomial, MvPolynomial.monomial_eq, Option.elim_none, Option.elim_some, Polynomial, Polynomial.C_mul_X_pow_eq_monomial, Polynomial.algebraMap_apply, aeval_monomial, algebraMap_apply, algebraMap_eq, elim_none, elim_some, intros, map_finsuppProd, map_mul, map_pow, monomial_eq, mul_assoc, mul_comm
 -/
@@ -1861,7 +1905,13 @@ theorem optionEquivLeft_coeff_some_coeff_none
     simp only [coeff_zero]
     by_cases hj : j = n
     · simp [hj]
-    · rw [if_
+    · rw [if_neg hj]
+      simp only [ite_eq_right_iff]
+      intro hj_none hj_some
+      apply False.elim (hj _)
+      simp only [Finsupp.ext_iff, Option.forall, hj_none, true_and]
+      simpa only [Finsupp.ext_iff] using! hj_some
+  | add p q hp hq => simp only [map_add, Polynomial.coeff_add, coeff_add, hp, hq]
 
 中文:
 定理 optionEquivLeft_coeff_some_coeff_none
@@ -1874,7 +1924,13 @@ theorem optionEquivLeft_coeff_some_coeff_none
     simp only [coeff_zero]
     by_cases hj : j = n
     · simp [hj]
-    · rw [if_
+    · rw [if_neg hj]
+      simp only [ite_eq_right_iff]
+      intro hj_none hj_some
+      apply False.elim (hj _)
+      simp only [Finsupp.ext_iff, Option.forall, hj_none, true_and]
+      simpa only [Finsupp.ext_iff] using! hj_some
+  | add p q hp hq => simp only [map_add, Polynomial.coeff_add, coeff_add, hp, hq]
 
 Depends on / 依赖: False.elim, Finsupp, Finsupp.ext_iff, MvPolynomial, MvPolynomial.coeff_monomial, MvPolynomial.induction_on, Option.forall, Polynomial, Polynomial.coeff_monomial, apply_ite, classical, coeff_monomial, coeff_zero, ext_iff, generalizing, hj_none, hj_some, if_neg, induction_on, ite_eq_right_iff
 -/
@@ -1912,7 +1968,14 @@ theorem optionEquivLeft_elim_eval
         exact (eval_C _).symm }
   change
     aeval (fun x => Option.elim x y s) f =
-
+      (Polynomial.aeval y).comp (φ.comp (optionEquivLeft _ _).toAlgHom) f
+  congr 2
+  apply MvPolynomial.algHom_ext
+  rw [Option.forall]
+  simp only [aeval_X, Option.elim_none, AlgHom.coe_comp, Polynomial.coe_aeval_eq_eval,
+    AlgHom.coe_mk, Polynomial.coe_mapRingHom, AlgEquiv.coe_toAlgHom, comp_apply,
+    optionEquivLeft_apply, Polynomial.map_X, Polynomial.eval_X, Option.elim_some,
+    Polynomial.map_C, eval_X, Polynomial.eval_C, implies_true, and_self, φ]
 
 中文:
 定理 optionEquivLeft_elim_eval
@@ -1926,7 +1989,14 @@ theorem optionEquivLeft_elim_eval
         exact (eval_C _).symm }
   change
     aeval (fun x => Option.elim x y s) f =
-
+      (Polynomial.aeval y).comp (φ.comp (optionEquivLeft _ _).toAlgHom) f
+  congr 2
+  apply MvPolynomial.algHom_ext
+  rw [Option.forall]
+  simp only [aeval_X, Option.elim_none, AlgHom.coe_comp, Polynomial.coe_aeval_eq_eval,
+    AlgHom.coe_mk, Polynomial.coe_mapRingHom, AlgEquiv.coe_toAlgHom, comp_apply,
+    optionEquivLeft_apply, Polynomial.map_X, Polynomial.eval_X, Option.elim_some,
+    Polynomial.map_C, eval_X, Polynomial.eval_C, implies_true, and_self, φ]
 -/
 theorem optionEquivLeft_elim_eval (s : S₁ -> R) (y : R) (f : MvPolynomial (Option S₁) R) :
     eval (fun x => Option.elim x y s) f =
@@ -1983,7 +2053,8 @@ lemma support_optionEquivLeft
   constructor
   · rintro ⟨m, hm⟩
     exact ⟨optionElim i m, by simpa using! hm, optionElim_apply_none _ _⟩
-  · rint
+  · rintro ⟨m, h, rfl⟩
+    exact ⟨some m, h⟩
 
 中文:
 引理 support_optionEquivLeft
@@ -1995,7 +2066,8 @@ lemma support_optionEquivLeft
   constructor
   · rintro ⟨m, hm⟩
     exact ⟨optionElim i m, by simpa using! hm, optionElim_apply_none _ _⟩
-  · rint
+  · rintro ⟨m, h, rfl⟩
+    exact ⟨some m, h⟩
 
 Depends on / 依赖: Finset, Finset.mem_image, MvPolynomial, MvPolynomial.ext_iff, Polynomial, Polynomial.mem_support_iff, coeff_zero, ext_iff, mem_image, mem_support_iff, ne_eq, not_forall, optionElim, optionElim_apply_none, optionEquivLeft_coeff_some_coeff_none
 -/
@@ -2040,7 +2112,9 @@ theorem degree_optionEquivLeft
   proof: by
   have h' : ((optionEquivLeft R σ f).support.sup fun x => x) = degreeOf none f := by
     rw [degreeOf_eq_sup]; rw [support_optionEquivLeft]; rw [Finset.sup_image]; rw [Function.comp_def]
-  rw [Polynomial.degree]; rw [← h']; rw [Nat.cast_withBot]; rw [Finset.coe_sup_of_nonempty (nonempty_support_o
+  rw [Polynomial.degree]; rw [← h']; rw [Nat.cast_withBot]; rw [Finset.coe_sup_of_nonempty (nonempty_support_optionEquivLeft R h)]; rw [Finset.max_eq_sup_coe]; rw [Function.comp_def]
+
+@[simp]
 
 中文:
 定理 degree_optionEquivLeft
@@ -2048,7 +2122,9 @@ theorem degree_optionEquivLeft
   证明: by
   have h' : ((optionEquivLeft R σ f).support.sup fun x => x) = degreeOf none f := by
     rw [degreeOf_eq_sup]; rw [support_optionEquivLeft]; rw [Finset.sup_image]; rw [Function.comp_def]
-  rw [Polynomial.degree]; rw [← h']; rw [Nat.cast_withBot]; rw [Finset.coe_sup_of_nonempty (nonempty_support_o
+  rw [Polynomial.degree]; rw [← h']; rw [Nat.cast_withBot]; rw [Finset.coe_sup_of_nonempty (nonempty_support_optionEquivLeft R h)]; rw [Finset.max_eq_sup_coe]; rw [Function.comp_def]
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.coe_sup_of_nonempty, Finset.max_eq_sup_coe, Finset.sup_image, Function, Function.comp_def, Nat.cast_withBot, Polynomial, Polynomial.degree, cast_withBot, coe_sup_of_nonempty, comp_def, degree, degreeOf, degreeOf_eq_sup, max_eq_sup_coe, nonempty_support_optionEquivLeft, optionEquivLeft, sup_image, support
 -/
@@ -2099,7 +2175,8 @@ lemma totalDegree_coeff_optionEquivLeft_add_le
   rw [totalDegree]; rw [add_comm]; rw [Finset.add_sup (by simpa only [support_nonempty]), Finset.sup_le_iff]
   intro σ hσ
   refine le_trans ?_ (Finset.le_sup (b := σ.embDomain .some + .single .none i) ?_)
-  · si
+  · simp [Finsupp.sum_add_index, Finsupp.sum_embDomain, add_comm i]
+  · simpa [mem_support_iff, ← optionEquivLeft_coeff_some_coeff_none R S₁] using hσ
 
 中文:
 引理 totalDegree_coeff_optionEquivLeft_add_le
@@ -2110,7 +2187,8 @@ lemma totalDegree_coeff_optionEquivLeft_add_le
   rw [totalDegree]; rw [add_comm]; rw [Finset.add_sup (by simpa only [support_nonempty]), Finset.sup_le_iff]
   intro σ hσ
   refine le_trans ?_ (Finset.le_sup (b := σ.embDomain .some + .single .none i) ?_)
-  · si
+  · simp [Finsupp.sum_add_index, Finsupp.sum_embDomain, add_comm i]
+  · simpa [mem_support_iff, ← optionEquivLeft_coeff_some_coeff_none R S₁] using hσ
 
 Depends on / 依赖: Finset, Finset.add_sup, Finset.le_sup, Finset.sup_le_iff, Finsupp, Finsupp.sum_add_index, Finsupp.sum_embDomain, add_comm, add_sup, classical, embDomain, le_sup, le_trans, mem_support_iff, optionEquivLeft, optionEquivLeft_coeff_some_coeff_none, single, sum_add_index, sum_embDomain, sup_le_iff
 -/
@@ -2140,7 +2218,7 @@ lemma totalDegree_coeff_optionEquivLeft_le
   intro σ hσ
   refine le_trans ?_ (Finset.le_sup (b := σ.embDomain .some + .single .none i) ?_)
   · simp [Finsupp.sum_add_index, Finsupp.sum_embDomain]
-  · simpa [mem_su
+  · simpa [mem_support_iff, ← optionEquivLeft_coeff_some_coeff_none R S₁] using hσ
 
 中文:
 引理 totalDegree_coeff_optionEquivLeft_le
@@ -2152,7 +2230,7 @@ lemma totalDegree_coeff_optionEquivLeft_le
   intro σ hσ
   refine le_trans ?_ (Finset.le_sup (b := σ.embDomain .some + .single .none i) ?_)
   · simp [Finsupp.sum_add_index, Finsupp.sum_embDomain]
-  · simpa [mem_su
+  · simpa [mem_support_iff, ← optionEquivLeft_coeff_some_coeff_none R S₁] using hσ
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup_le_iff, Finsupp, Finsupp.sum_add_index, Finsupp.sum_embDomain, classical, embDomain, le_sup, le_trans, mem_support_iff, optionEquivLeft, optionEquivLeft_coeff_some_coeff_none, single, sum_add_index, sum_embDomain, sup_le_iff, totalDegree
 -/
@@ -2208,7 +2286,12 @@ definition optionEquivRight
     (by
       ext : 2 <;>
         simp only [MvPolynomial.algebraMap_eq, Option.elim, AlgHom.coe_comp, AlgHom.id_comp,
-          IsScalarTowe
+          IsScalarTower.coe_toAlgHom', comp_apply, aevalTower_C, Polynomial.aeval_X, aeval_X,
+          aevalTower_X, AlgHom.coe_id, id])
+    (by
+      ext ⟨i⟩ : 2 <;>
+        simp only [Option.elim, AlgHom.coe_comp, comp_apply, aeval_X, aevalTower_C,
+          Polynomial.aeval_X, AlgHom.coe_id, id, aevalTower_X])
 
 中文:
 定义 optionEquivRight
@@ -2218,7 +2301,12 @@ definition optionEquivRight
     (by
       ext : 2 <;>
         simp only [MvPolynomial.algebraMap_eq, Option.elim, AlgHom.coe_comp, AlgHom.id_comp,
-          IsScalarTowe
+          IsScalarTower.coe_toAlgHom', comp_apply, aevalTower_C, Polynomial.aeval_X, aeval_X,
+          aevalTower_X, AlgHom.coe_id, id])
+    (by
+      ext ⟨i⟩ : 2 <;>
+        simp only [Option.elim, AlgHom.coe_comp, comp_apply, aeval_X, aevalTower_C,
+          Polynomial.aeval_X, AlgHom.coe_id, id, aevalTower_X])
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgHom, AlgHom.coe, AlgHom.coe_comp, AlgHom.coe_id, AlgHom.id_comp, IsScalarTower, IsScalarTower.coe_toAlgHom, MvPolynomial, MvPolynomial.aeval, MvPolynomial.aevalTower, MvPolynomial.algebraMap_eq, Option.elim, Option.some, Polynomial, Polynomial.X, Polynomial.aeval, Polynomial.aeval_X, aevalTower
 -/
@@ -2465,7 +2553,22 @@ theorem finSuccEquiv_coeff_coeff
   | add p q hp hq => simp only [map_add, Polynomial.coeff_add, coeff_add, hp, hq]
   | monomial j r =>
     simp only [finSuccEquiv_apply, coe_eval₂Hom, eval₂_monomial, RingHom.coe_comp, Finsupp.prod_pow,
-      Polynomial.coeff_C_
+      Polynomial.coeff_C_mul, coeff_C_mul, coeff_monomial, Fin.prod_univ_succ, Fin.cases_zero,
+      Fin.cases_succ, ← _root_.map_prod, ← map_pow, Function.comp_apply]
+    rw [← mul_boole]; rw [mul_comm (Polynomial.X ^ j 0)]; rw [Polynomial.coeff_C_mul_X_pow]; congr 1
+    obtain rfl | hjmi := eq_or_ne j (m.cons i)
+    · simpa only [cons_zero, cons_succ, if_pos rfl, monomial_eq, C_1, one_mul,
+        Finsupp.prod_pow] using! coeff_monomial m m (1 : R)
+    · simp only [hjmi, if_false]
+      obtain hij | rfl := ne_or_eq i (j 0)
+      · simp only [hij, if_false, coeff_zero]
+      simp only [if_true]
+      have hmj : m != j.tail := by
+        rintro rfl
+        rw [cons_tail] at hjmi
+        contradiction
+      simpa only [monomial_eq, C_1, one_mul, Finsupp.prod_pow, tail_apply, if_neg hmj.symm] using!
+        coeff_monomial m j.tail (1 : R)
 
 中文:
 定理 finSuccEquiv_coeff_coeff
@@ -2475,7 +2578,22 @@ theorem finSuccEquiv_coeff_coeff
   | add p q hp hq => simp only [map_add, Polynomial.coeff_add, coeff_add, hp, hq]
   | monomial j r =>
     simp only [finSuccEquiv_apply, coe_eval₂Hom, eval₂_monomial, RingHom.coe_comp, Finsupp.prod_pow,
-      Polynomial.coeff_C_
+      Polynomial.coeff_C_mul, coeff_C_mul, coeff_monomial, Fin.prod_univ_succ, Fin.cases_zero,
+      Fin.cases_succ, ← _root_.map_prod, ← map_pow, Function.comp_apply]
+    rw [← mul_boole]; rw [mul_comm (Polynomial.X ^ j 0)]; rw [Polynomial.coeff_C_mul_X_pow]; congr 1
+    obtain rfl | hjmi := eq_or_ne j (m.cons i)
+    · simpa only [cons_zero, cons_succ, if_pos rfl, monomial_eq, C_1, one_mul,
+        Finsupp.prod_pow] using! coeff_monomial m m (1 : R)
+    · simp only [hjmi, if_false]
+      obtain hij | rfl := ne_or_eq i (j 0)
+      · simp only [hij, if_false, coeff_zero]
+      simp only [if_true]
+      have hmj : m != j.tail := by
+        rintro rfl
+        rw [cons_tail] at hjmi
+        contradiction
+      simpa only [monomial_eq, C_1, one_mul, Finsupp.prod_pow, tail_apply, if_neg hmj.symm] using!
+        coeff_monomial m j.tail (1 : R)
 
 Depends on / 依赖: Fin.cases_succ, Fin.cases_zero, Fin.prod_univ_succ, Finsupp, Finsupp.prod_pow, Function, Function.comp_apply, MvPolynomial, MvPolynomial.induction_on, Polynomial, Polynomial.X, Polynomial.coeff_C_mu, Polynomial.coeff_C_mul, Polynomial.coeff_add, RingHom, RingHom.coe_comp, _root_, _root_.map_prod, cases_succ, cases_zero
 -/
@@ -2516,7 +2634,16 @@ theorem eval_eq_eval_mv_eval'
         convert! Polynomial.map_C (eval s)
         exact (eval_C _).symm }
   change
-    aeval (Fin.cons y s : Fin (n + 1) 
+    aeval (Fin.cons y s : Fin (n + 1) -> R) f =
+      (Polynomial.aeval y).comp (φ.comp (finSuccEquiv R n).toAlgHom) f
+  congr 2
+  apply MvPolynomial.algHom_ext
+  rw [Fin.forall_iff_succ]
+  simp only [aeval_X, Fin.cons_zero, AlgHom.coe_comp, Polynomial.coe_aeval_eq_eval,
+    AlgHom.coe_mk, Polynomial.coe_mapRingHom, AlgEquiv.coe_toAlgHom,
+    comp_apply, finSuccEquiv_apply, eval₂Hom_X', Fin.cases_zero, Polynomial.map_X,
+    Polynomial.eval_X, Fin.cons_succ, Fin.cases_succ, Polynomial.map_C, eval_X, Polynomial.eval_C,
+    implies_true, and_self, φ]
 
 中文:
 定理 eval_eq_eval_mv_eval'
@@ -2529,7 +2656,16 @@ theorem eval_eq_eval_mv_eval'
         convert! Polynomial.map_C (eval s)
         exact (eval_C _).symm }
   change
-    aeval (Fin.cons y s : Fin (n + 1) 
+    aeval (Fin.cons y s : Fin (n + 1) -> R) f =
+      (Polynomial.aeval y).comp (φ.comp (finSuccEquiv R n).toAlgHom) f
+  congr 2
+  apply MvPolynomial.algHom_ext
+  rw [Fin.forall_iff_succ]
+  simp only [aeval_X, Fin.cons_zero, AlgHom.coe_comp, Polynomial.coe_aeval_eq_eval,
+    AlgHom.coe_mk, Polynomial.coe_mapRingHom, AlgEquiv.coe_toAlgHom,
+    comp_apply, finSuccEquiv_apply, eval₂Hom_X', Fin.cases_zero, Polynomial.map_X,
+    Polynomial.eval_X, Fin.cons_succ, Fin.cases_succ, Polynomial.map_C, eval_X, Polynomial.eval_C,
+    implies_true, and_self, φ]
 -/
 theorem eval_eq_eval_mv_eval' (s : Fin n -> R) (y : R) (f : MvPolynomial (Fin (n + 1)) R) :
     eval (Fin.cons y s : Fin (n + 1) -> R) f =
@@ -2617,7 +2753,14 @@ lemma totalDegree_coeff_finSuccEquiv_add_le
     rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty]
     exact hi
   -- Let σ be a monomial index of ((finSuccEquiv R n p).coeff i) of maximal total degree
-  have ⟨σ, hσ1, hσ2⟩ := Finset.exists_mem_eq_sup (s
+  have ⟨σ, hσ1, hσ2⟩ := Finset.exists_mem_eq_sup (support _) hf'_sup
+                          (fun s => Finsupp.sum s fun _ e => e)
+  -- Then cons i σ is a monomial index of p with total degree equal to the desired bound
+  let σ' : Fin (n + 1) ->₀ Nat := cons i σ
+  convert! le_totalDegree (s := σ') _
+  · rw [totalDegree, hσ2, sum_cons, add_comm]
+  · rw [← mem_support_coeff_finSuccEquiv]
+    exact hσ1
 
 中文:
 引理 totalDegree_coeff_finSuccEquiv_add_le
@@ -2627,7 +2770,14 @@ lemma totalDegree_coeff_finSuccEquiv_add_le
     rw [Finset.nonempty_iff_ne_empty]; rw [ne_eq]; rw [support_eq_empty]
     exact hi
   -- Let σ be a monomial index of ((finSuccEquiv R n p).coeff i) of maximal total degree
-  have ⟨σ, hσ1, hσ2⟩ := Finset.exists_mem_eq_sup (s
+  have ⟨σ, hσ1, hσ2⟩ := Finset.exists_mem_eq_sup (support _) hf'_sup
+                          (fun s => Finsupp.sum s fun _ e => e)
+  -- Then cons i σ is a monomial index of p with total degree equal to the desired bound
+  let σ' : Fin (n + 1) ->₀ Nat := cons i σ
+  convert! le_totalDegree (s := σ') _
+  · rw [totalDegree, hσ2, sum_cons, add_comm]
+  · rw [← mem_support_coeff_finSuccEquiv]
+    exact hσ1
 
 Depends on / 依赖: Finset, Finset.nonempty_iff_ne_empty, Nonempty, _sup, finSuccEquiv, ne_eq, nonempty_iff_ne_empty, support, support.Nonempty, support_eq_empty
 -/
@@ -2662,7 +2812,7 @@ theorem support_finSuccEquiv
   · rintro ⟨m, hm⟩
     exact ⟨cons i m, hm, cons_zero _ _⟩
   · rintro ⟨m, h, rfl⟩
-    exact ⟨tail m, by simpa using 
+    exact ⟨tail m, by simpa using h⟩
 
 中文:
 定理 support_finSuccEquiv
@@ -2675,7 +2825,7 @@ theorem support_finSuccEquiv
   · rintro ⟨m, hm⟩
     exact ⟨cons i m, hm, cons_zero _ _⟩
   · rintro ⟨m, h, rfl⟩
-    exact ⟨tail m, by simpa using 
+    exact ⟨tail m, by simpa using h⟩
 
 Depends on / 依赖: Finset, Finset.mem_image, MvPolynomial, MvPolynomial.ext_iff, Polynomial, Polynomial.mem_support_iff, coeff_zero, cons_zero, ext_iff, finSuccEquiv_coeff_coeff, mem_image, mem_support_iff, ne_eq, not_forall
 -/
@@ -2820,7 +2970,8 @@ theorem degree_finSuccEquiv
   have h₀ : forall {α β : Type _} (f : α -> β), (fun x => x) ∘ f = f := fun f => rfl
   have h₁ : forall {α β : Type _} (f : α -> β), f ∘ (fun x => x) = f := fun f => rfl
   have h' : ((finSuccEquiv R n f).support.sup fun x => x) = degreeOf 0 f := by
-    rw [degree
+    rw [degreeOf_eq_sup]; rw [support_finSuccEquiv]; rw [Finset.sup_image]; rw [h₀]
+  rw [Polynomial.degree]; rw [← h']; rw [Nat.cast_withBot]; rw [Finset.coe_sup_of_nonempty (nonempty_support_finSuccEquiv h)]; rw [Finset.max_eq_sup_coe]; rw [h₁]
 
 中文:
 定理 degree_finSuccEquiv
@@ -2830,7 +2981,8 @@ theorem degree_finSuccEquiv
   have h₀ : forall {α β : Type _} (f : α -> β), (fun x => x) ∘ f = f := fun f => rfl
   have h₁ : forall {α β : Type _} (f : α -> β), f ∘ (fun x => x) = f := fun f => rfl
   have h' : ((finSuccEquiv R n f).support.sup fun x => x) = degreeOf 0 f := by
-    rw [degree
+    rw [degreeOf_eq_sup]; rw [support_finSuccEquiv]; rw [Finset.sup_image]; rw [h₀]
+  rw [Polynomial.degree]; rw [← h']; rw [Nat.cast_withBot]; rw [Finset.coe_sup_of_nonempty (nonempty_support_finSuccEquiv h)]; rw [Finset.max_eq_sup_coe]; rw [h₁]
 -/
 theorem degree_finSuccEquiv {f : MvPolynomial (Fin (n + 1)) R} (h : f != 0) :
     (finSuccEquiv R n f).degree = degreeOf 0 f := by
@@ -2944,7 +3096,8 @@ lemma finSuccEquiv_rename_finSuccEquiv
       (Polynomial.mapRingHom (rename e).toRingHom).comp (optionEquivLeft R σ) by
     exact DFunLike.congr_fun this φ
   apply ringHom_ext
-  · simp [Polyn
+  · simp [Polynomial.algebraMap_apply, algebraMap_eq, finSuccEquiv_apply, optionEquivLeft_apply]
+  · rintro (i | i) <;> simp [finSuccEquiv_apply, optionEquivLeft_apply]
 
 中文:
 引理 finSuccEquiv_rename_finSuccEquiv
@@ -2955,7 +3108,8 @@ lemma finSuccEquiv_rename_finSuccEquiv
       (Polynomial.mapRingHom (rename e).toRingHom).comp (optionEquivLeft R σ) by
     exact DFunLike.congr_fun this φ
   apply ringHom_ext
-  · simp [Polyn
+  · simp [Polynomial.algebraMap_apply, algebraMap_eq, finSuccEquiv_apply, optionEquivLeft_apply]
+  · rintro (i | i) <;> simp [finSuccEquiv_apply, optionEquivLeft_apply]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Equiv.optionCongr, Polynomial, Polynomial.algebraMap_apply, Polynomial.mapRingHom, _root_, _root_.finSuccEquiv, algebraMap_apply, algebraMap_eq, congr_fun, finSuccEquiv, finSuccEquiv_apply, mapRingHom, optionCongr, optionEquivLeft, optionEquivLeft_apply, ringHom_ext, toRingEquiv, toRingEquiv.toRingHom.comp
 -/

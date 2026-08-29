@@ -186,7 +186,7 @@ lemma altitude_map
   · exact (s.map f.toAffineMap f.injective).mem_altitude i
   · exact mem_map_of_mem f.toAffineMap (s.mem_altitude i)
   have hf : Function.Injective f.linear := f.linearIsometry.injective
-  rw [map_direction]; rw [direction_a
+  rw [map_direction]; rw [direction_altitude]; rw [direction_altitude]; rw [Submodule.map_inf _ hf]; rw [AffineIsometry.linear_eq_linearIsometry]; rw [Submodule.map_orthogonal]; rw [← AffineIsometry.linear_eq_linearIsometry]; rw [map_points]; rw [Set.range_comp]; rw [Set.image_comp]; rw [← AffineMap.map_vectorSpan]; rw [inf_assoc]; rw [← Submodule.map_top]; rw [← Submodule.map_inf _ hf]; rw [top_inf_eq]; rw [← AffineMap.map_vectorSpan]
 
 中文:
 引理 altitude_map
@@ -196,7 +196,7 @@ lemma altitude_map
   · exact (s.map f.toAffineMap f.injective).mem_altitude i
   · exact mem_map_of_mem f.toAffineMap (s.mem_altitude i)
   have hf : Function.Injective f.linear := f.linearIsometry.injective
-  rw [map_direction]; rw [direction_a
+  rw [map_direction]; rw [direction_altitude]; rw [direction_altitude]; rw [Submodule.map_inf _ hf]; rw [AffineIsometry.linear_eq_linearIsometry]; rw [Submodule.map_orthogonal]; rw [← AffineIsometry.linear_eq_linearIsometry]; rw [map_points]; rw [Set.range_comp]; rw [Set.image_comp]; rw [← AffineMap.map_vectorSpan]; rw [inf_assoc]; rw [← Submodule.map_top]; rw [← Submodule.map_inf _ hf]; rw [top_inf_eq]; rw [← AffineMap.map_vectorSpan]
 
 Depends on / 依赖: AffineIsometry, AffineIsometry.linear_eq_linearIsometry, Function, Function.Injective, Injective, Submodule, Submodule.map_inf, Submodule.map_orthogonal, direction_altitude, eq_iff_direction_eq_of_mem, f.injective, f.linear, f.linearIsometry.injective, f.toAffineMap, injective, linear, linearIsometry, linear_eq_linearIsometry, map_direction, map_inf
 -/
@@ -304,7 +304,10 @@ theorem finrank_direction_altitude
     have := NeZero.ne n
     cases n <;> lia
   have hc : #({i}ᶜ) = (n - 1) + 1 := by
-    rw [card_compl]; rw [card_
+    rw [card_compl]; rw [card_singleton]; rw [Fintype.card_fin]; rw [hn]; rw [add_tsub_cancel_right]
+  refine add_left_cancel (_root_.trans h ?_)
+  classical
+  rw [s.independent.finrank_vectorSpan (Fintype.card_fin _)]; rw [← Finset.coe_singleton]; rw [← Finset.coe_compl]; rw [← Finset.coe_image]; rw [s.independent.finrank_vectorSpan_image_finset hc]; rw [hn]
 
 中文:
 定理 finrank_direction_altitude
@@ -317,7 +320,10 @@ theorem finrank_direction_altitude
     have := NeZero.ne n
     cases n <;> lia
   have hc : #({i}ᶜ) = (n - 1) + 1 := by
-    rw [card_compl]; rw [card_
+    rw [card_compl]; rw [card_singleton]; rw [Fintype.card_fin]; rw [hn]; rw [add_tsub_cancel_right]
+  refine add_left_cancel (_root_.trans h ?_)
+  classical
+  rw [s.independent.finrank_vectorSpan (Fintype.card_fin _)]; rw [← Finset.coe_singleton]; rw [← Finset.coe_compl]; rw [← Finset.coe_image]; rw [s.independent.finrank_vectorSpan_image_finset hc]; rw [hn]
 
 Depends on / 依赖: Finset, Finset.coe_singleton, Fintype, Fintype.card_fin, NeZero, NeZero.ne, Set.image_subset_range, Submodule, Submodule.finrank_add_inf_finrank_orthogonal, _root_, _root_.trans, add_left_cancel, add_tsub_cancel_right, card_compl, card_fin, card_singleton, classical, coe_singleton, direction_altitude, finrank_add_inf_finrank_orthogonal
 -/
@@ -344,6 +350,25 @@ theorem affineSpan_pair_eq_altitude_iff
   proof: by
   rw [eq_iff_direction_eq_of_mem (mem_affineSpan Real (Set.mem_insert_of_mem _ (Set.mem_singleton _)))
       (s.mem_altitude _)]; rw [← vsub_right_mem_direction_iff_mem (mem_affineSpan Real (Set.mem_range_self i)) p]; rw [direction_affineSpan]; rw [direction_affineSpan]; rw [direction_affineSpan]
+  constructor
+  · intro h
+    constructor
+    · intro heq
+      rw [heq]; rw [Set.pair_eq_singleton]; rw [vectorSpan_singleton] at h
+      have hd : finrank Real (s.altitude i).direction = 0 := by rw [← h, finrank_bot]
+      simp at hd
+    · rw [← Submodule.mem_inf, _root_.inf_comm, ← direction_altitude, ← h]
+      exact
+        vsub_mem_vectorSpan Real (Set.mem_insert _ _) (Set.mem_insert_of_mem _ (Set.mem_singleton _))
+  · rintro ⟨hne, h⟩
+    rw [← Submodule.mem_inf]; rw [_root_.inf_comm]; rw [← direction_altitude] at h
+    rw [vectorSpan_eq_span_vsub_set_left_ne Real (Set.mem_insert _ _)]; rw [Set.insert_sdiff_of_mem _ (Set.mem_singleton _)]; rw [Set.sdiff_singleton_eq_self fun h => hne (Set.mem_singleton_iff.1 h)]; rw [Set.image_singleton]
+    refine Submodule.eq_of_le_of_finrank_eq ?_ ?_
+    · rw [Submodule.span_le]
+      simpa using h
+    · rw [finrank_direction_altitude, finrank_span_set_eq_card]
+      · simp
+· exact .singleton by simpa using hne
 
 中文:
 定理 affineSpan_pair_eq_altitude_iff
@@ -351,6 +376,25 @@ theorem affineSpan_pair_eq_altitude_iff
   证明: by
   rw [eq_iff_direction_eq_of_mem (mem_affineSpan Real (Set.mem_insert_of_mem _ (Set.mem_singleton _)))
       (s.mem_altitude _)]; rw [← vsub_right_mem_direction_iff_mem (mem_affineSpan Real (Set.mem_range_self i)) p]; rw [direction_affineSpan]; rw [direction_affineSpan]; rw [direction_affineSpan]
+  constructor
+  · intro h
+    constructor
+    · intro heq
+      rw [heq]; rw [Set.pair_eq_singleton]; rw [vectorSpan_singleton] at h
+      have hd : finrank Real (s.altitude i).direction = 0 := by rw [← h, finrank_bot]
+      simp at hd
+    · rw [← Submodule.mem_inf, _root_.inf_comm, ← direction_altitude, ← h]
+      exact
+        vsub_mem_vectorSpan Real (Set.mem_insert _ _) (Set.mem_insert_of_mem _ (Set.mem_singleton _))
+  · rintro ⟨hne, h⟩
+    rw [← Submodule.mem_inf]; rw [_root_.inf_comm]; rw [← direction_altitude] at h
+    rw [vectorSpan_eq_span_vsub_set_left_ne Real (Set.mem_insert _ _)]; rw [Set.insert_sdiff_of_mem _ (Set.mem_singleton _)]; rw [Set.sdiff_singleton_eq_self fun h => hne (Set.mem_singleton_iff.1 h)]; rw [Set.image_singleton]
+    refine Submodule.eq_of_le_of_finrank_eq ?_ ?_
+    · rw [Submodule.span_le]
+      simpa using h
+    · rw [finrank_direction_altitude, finrank_span_set_eq_card]
+      · simp
+· exact .singleton by simpa using hne
 
 Depends on / 依赖: Set.mem_insert_of_mem, Set.mem_range_self, Set.mem_singleton, Set.pair_eq_singleton, altitude, direction, direction_affineSpan, eq_iff_direction_eq_of_mem, finrank, finrank_bot, mem_affineSpan, mem_altitude, mem_insert_of_mem, mem_range_self, mem_singleton, pair_eq_singleton, s.altitude, s.mem_altitude, vectorSpan_singleton, vsub_right_mem_direction_iff_mem
 -/
@@ -808,7 +852,11 @@ lemma inner_vsub_altitudeFoot_vsub_altitudeFoot_eq_zero
   refine Submodule.inner_right_of_mem_orthogonal
     (K := vectorSpan Real (s.points '' {i}ᶜ))
     (vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
-
+      (s.mem_affineSpan_image_iff.2 h.symm)
+      (Affine.Simplex.altitudeFoot_mem_affineSpan_image_compl _ _))
+    ?_
+  rw [← direction_affineSpan]; rw [← Affine.Simplex.range_faceOpposite_points]
+  exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
 
 中文:
 引理 inner_vsub_altitudeFoot_vsub_altitudeFoot_eq_zero
@@ -819,7 +867,11 @@ lemma inner_vsub_altitudeFoot_vsub_altitudeFoot_eq_zero
   refine Submodule.inner_right_of_mem_orthogonal
     (K := vectorSpan Real (s.points '' {i}ᶜ))
     (vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
-
+      (s.mem_affineSpan_image_iff.2 h.symm)
+      (Affine.Simplex.altitudeFoot_mem_affineSpan_image_compl _ _))
+    ?_
+  rw [← direction_affineSpan]; rw [← Affine.Simplex.range_faceOpposite_points]
+  exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
 
 Depends on / 依赖: Affine, Affine.Simplex.altitudeFoot_mem_affineSpan_image_compl, Affine.Simplex.range_faceOpposite_points, NeZero, Simplex, Submodule, Submodule.inner_right_of_mem_orthogonal, altitudeFoot, altitudeFoot_mem_affineSpan_image_compl, direction_affineSpan, h.symm, inner_right_of_mem_orthogonal, mem_affineSpan_image_iff, neZero_iff, points, range_faceOpposite_points, s.altitudeFoot, s.mem_affineSpan_image_iff, s.points, vectorSpan
 -/
@@ -878,7 +930,40 @@ lemma abs_inner_vsub_altitudeFoot_lt_mul
   · simp_rw [height, dist_eq_norm_vsub]
     rw [← Real.norm_eq_abs]; rw [ne_eq]; rw [norm_inner_eq_norm_iff (by simp) (by simp)]
     rintro ⟨r, hr, h⟩
-    suffices s.points j -ᵥ s.alti
+    suffices s.points j -ᵥ s.altitudeFoot j = 0 by
+      simp at this
+    rw [← Submodule.mem_bot Real]; rw [← Submodule.inf_orthogonal_eq_bot (vectorSpan Real (Set.range s.points))]
+    refine ⟨vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
+      (mem_affineSpan _ (Set.mem_range_self _)) ?_, ?_⟩
+    · refine SetLike.le_def.1 (affineSpan_mono _ ?_) (Subtype.property _)
+      simp
+    · rw [SetLike.mem_coe]
+      have hk : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j
+        (by linarith only [Nat.AtLeastTwo.one_lt (n := n)])
+      have hs : vectorSpan Real (Set.range s.points) =
+          vectorSpan Real (Set.range (s.faceOpposite i).points) ⊔
+            vectorSpan Real (Set.range (s.faceOpposite j).points) := by
+        rcases hk with ⟨k, hki, hkj⟩
+        have hki' : s.points k in Set.range (s.faceOpposite i).points := by
+          rw [range_faceOpposite_points]
+          exact Set.mem_image_of_mem _ hki
+        have hkj' : s.points k in Set.range (s.faceOpposite j).points := by
+          rw [range_faceOpposite_points]
+          exact Set.mem_image_of_mem _ hkj
+        have hs :
+            Set.range s.points =
+              Set.range (s.faceOpposite i).points union Set.range (s.faceOpposite j).points := by
+          simp only [range_faceOpposite_points, ← Set.image_union]
+          simp_rw [← Set.image_univ, ← Set.compl_inter]
+          rw [Set.inter_singleton_eq_empty.mpr ?_]; rw [Set.compl_empty]
+          simpa using hij.symm
+        convert! AffineSubspace.vectorSpan_union_of_mem_of_mem Real hki' hkj'
+      rw [hs]; rw [← Submodule.inf_orthogonal]; rw [Submodule.mem_inf]
+      refine ⟨?_, ?_⟩
+      · rw [h, ← direction_affineSpan]
+        exact Submodule.smul_mem _ _ (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
+      · rw [← direction_affineSpan]
+        exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
 
 中文:
 引理 abs_inner_vsub_altitudeFoot_lt_mul
@@ -890,7 +975,40 @@ lemma abs_inner_vsub_altitudeFoot_lt_mul
   · simp_rw [height, dist_eq_norm_vsub]
     rw [← Real.norm_eq_abs]; rw [ne_eq]; rw [norm_inner_eq_norm_iff (by simp) (by simp)]
     rintro ⟨r, hr, h⟩
-    suffices s.points j -ᵥ s.alti
+    suffices s.points j -ᵥ s.altitudeFoot j = 0 by
+      simp at this
+    rw [← Submodule.mem_bot Real]; rw [← Submodule.inf_orthogonal_eq_bot (vectorSpan Real (Set.range s.points))]
+    refine ⟨vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
+      (mem_affineSpan _ (Set.mem_range_self _)) ?_, ?_⟩
+    · refine SetLike.le_def.1 (affineSpan_mono _ ?_) (Subtype.property _)
+      simp
+    · rw [SetLike.mem_coe]
+      have hk : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j
+        (by linarith only [Nat.AtLeastTwo.one_lt (n := n)])
+      have hs : vectorSpan Real (Set.range s.points) =
+          vectorSpan Real (Set.range (s.faceOpposite i).points) ⊔
+            vectorSpan Real (Set.range (s.faceOpposite j).points) := by
+        rcases hk with ⟨k, hki, hkj⟩
+        have hki' : s.points k in Set.range (s.faceOpposite i).points := by
+          rw [range_faceOpposite_points]
+          exact Set.mem_image_of_mem _ hki
+        have hkj' : s.points k in Set.range (s.faceOpposite j).points := by
+          rw [range_faceOpposite_points]
+          exact Set.mem_image_of_mem _ hkj
+        have hs :
+            Set.range s.points =
+              Set.range (s.faceOpposite i).points union Set.range (s.faceOpposite j).points := by
+          simp only [range_faceOpposite_points, ← Set.image_union]
+          simp_rw [← Set.image_univ, ← Set.compl_inter]
+          rw [Set.inter_singleton_eq_empty.mpr ?_]; rw [Set.compl_empty]
+          simpa using hij.symm
+        convert! AffineSubspace.vectorSpan_union_of_mem_of_mem Real hki' hkj'
+      rw [hs]; rw [← Submodule.inf_orthogonal]; rw [Submodule.mem_inf]
+      refine ⟨?_, ?_⟩
+      · rw [h, ← direction_affineSpan]
+        exact Submodule.smul_mem _ _ (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
+      · rw [← direction_affineSpan]
+        exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
 
 Depends on / 依赖: Real.norm_eq_abs, Set.range, Submodule, Submodule.inf_orthogonal_eq_bot, Submodule.mem_bot, abs_real_inner_le_norm, altitudeFoot, convert, dist_eq_norm_vsub, height, inf_orthogonal_eq_bot, lt_of_le_of_ne, mem_affineSpan, mem_bot, ne_eq, norm_eq_abs, norm_inner_eq_norm_iff, points, s.altitudeFoot, s.points
 -/

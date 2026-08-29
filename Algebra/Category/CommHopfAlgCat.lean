@@ -690,7 +690,19 @@ instance CommAlgCat.grpObjOpOf
     -- TODO: Add more simp lemmas to make this `simpa ... using ...` again.
     simp only [unop_comp, unop_tensorObj, hom_comp, coe_tensorObj, lift_unop_hom,
       Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, unop_id, hom_id,
-
+      ← Algebra.TensorProduct.lmul'_comp_map, mul_op_of_unop_hom, AlgHom.coe_comp,
+      Function.comp_apply, Bialgebra.comulAlgHom_apply, unop_tensorUnit, coe_tensorUnit,
+      toUnit_unop_hom, one_op_of_unop_hom, Bialgebra.counitAlgHom_apply, Algebra.ofId_apply]
+    exact mul_antipode_rTensor_comul_apply (R := R) x
+  right_inv := by
+    ext x
+    -- TODO: Add more simp lemmas to make this `simpa ... using ...` again.
+    simp only [unop_comp, unop_tensorObj, hom_comp, coe_tensorObj, lift_unop_hom, unop_id, hom_id,
+      Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, ← Algebra.TensorProduct.lmul'_comp_map,
+      mul_op_of_unop_hom, AlgHom.coe_comp, Function.comp_apply, Bialgebra.comulAlgHom_apply,
+      unop_tensorUnit, coe_tensorUnit, toUnit_unop_hom, one_op_of_unop_hom,
+      Bialgebra.counitAlgHom_apply, Algebra.ofId_apply]
+    exact mul_antipode_lTensor_comul_apply (R := R) x
 
 中文:
 实例 交换Alg范畴.grpObjOpOf
@@ -701,7 +713,19 @@ instance CommAlgCat.grpObjOpOf
     -- TODO: Add more simp lemmas to make this `simpa ... using ...` again.
     simp only [unop_comp, unop_tensorObj, hom_comp, coe_tensorObj, lift_unop_hom,
       Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, unop_id, hom_id,
-
+      ← Algebra.TensorProduct.lmul'_comp_map, mul_op_of_unop_hom, AlgHom.coe_comp,
+      Function.comp_apply, Bialgebra.comulAlgHom_apply, unop_tensorUnit, coe_tensorUnit,
+      toUnit_unop_hom, one_op_of_unop_hom, Bialgebra.counitAlgHom_apply, Algebra.ofId_apply]
+    exact mul_antipode_rTensor_comul_apply (R := R) x
+  right_inv := by
+    ext x
+    -- TODO: Add more simp lemmas to make this `simpa ... using ...` again.
+    simp only [unop_comp, unop_tensorObj, hom_comp, coe_tensorObj, lift_unop_hom, unop_id, hom_id,
+      Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, ← Algebra.TensorProduct.lmul'_comp_map,
+      mul_op_of_unop_hom, AlgHom.coe_comp, Function.comp_apply, Bialgebra.comulAlgHom_apply,
+      unop_tensorUnit, coe_tensorUnit, toUnit_unop_hom, one_op_of_unop_hom,
+      Bialgebra.counitAlgHom_apply, Algebra.ofId_apply]
+    exact mul_antipode_lTensor_comul_apply (R := R) x
 
 Depends on / 依赖: CommAlgCat, CommAlgCat.ofHom, antipodeAlgHom
 -/
@@ -767,7 +791,11 @@ functor.map {A B} f := op .mk .mk' op CommAlgCat.ofHom f.hom
   inverse.obj A := .of R A.unop.X.unop
 inverse.map {A B} f := CommHopfAlgCat.ofHom .ofAlgHom f.unop.hom.hom.unop.hom
     congr(($(IsMonHom.one_hom (f := f.unop.hom.hom))).unop.hom)
-    congr(($((IsMonHom.mul_hom (f := f.u
+    congr(($((IsMonHom.mul_hom (f := f.unop.hom.hom)).symm)).unop.hom)
+  unitIso.hom := 𝟙 _
+  unitIso.inv := 𝟙 _
+  counitIso.hom := 𝟙 _
+  counitIso.inv := 𝟙 _
 
 中文:
 定义 commHopfAlgCatEquivCogrpCommAlgCat
@@ -777,7 +805,11 @@ functor.map {A B} f := op .mk .mk' op CommAlgCat.ofHom f.hom
   inverse.obj A := .of R A.unop.X.unop
 inverse.map {A B} f := CommHopfAlgCat.ofHom .ofAlgHom f.unop.hom.hom.unop.hom
     congr(($(IsMonHom.one_hom (f := f.unop.hom.hom))).unop.hom)
-    congr(($((IsMonHom.mul_hom (f := f.u
+    congr(($((IsMonHom.mul_hom (f := f.unop.hom.hom)).symm)).unop.hom)
+  unitIso.hom := 𝟙 _
+  unitIso.inv := 𝟙 _
+  counitIso.hom := 𝟙 _
+  counitIso.inv := 𝟙 _
 -/
 def commHopfAlgCatEquivCogrpCommAlgCat : CommHopfAlgCat R ≌ (Grp (CommAlgCat R)ᵒᵖ)ᵒᵖ where
 functor.obj A := op .mk op .of R A

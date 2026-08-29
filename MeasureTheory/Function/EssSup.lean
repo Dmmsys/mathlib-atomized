@@ -571,7 +571,13 @@ theorem essSup_map_measure
     simpa [IsCoboundedUnder, ← map_congr hg.ae_eq_mk]
   have hg_mk_bdd : IsBoundedUnder (· <= ·) (ae (Measure.map f μ)) (hg.mk g) := by
     simpa [IsBoundedUnder, ← map_congr hg.ae_eq_mk]
-  have h_eq := ae_eq_comp 
+  have h_eq := ae_eq_comp hf hg.ae_eq_mk
+  have hg_mk_f : IsBoundedUnder (· <= ·) (ae μ) ((hg.mk g) ∘ f) := by
+    simpa [IsBoundedUnder, ← map_congr h_eq]
+  have hg_mk_f_co : IsCoboundedUnder (· <= ·) (ae μ) ((hg.mk g) ∘ f) := by
+    simpa [IsCoboundedUnder, ← map_congr h_eq]
+  rw [essSup_congr_ae hg.ae_eq_mk]; rw [essSup_map_measure_of_measurable hg.measurable_mk hf hg_mk_co hg_mk_f hg_mk_f_co hg_mk_bdd]
+  exact essSup_congr_ae h_eq.symm
 
 中文:
 定理 essSup_map_measure
@@ -581,7 +587,13 @@ theorem essSup_map_measure
     simpa [IsCoboundedUnder, ← map_congr hg.ae_eq_mk]
   have hg_mk_bdd : IsBoundedUnder (· <= ·) (ae (Measure.map f μ)) (hg.mk g) := by
     simpa [IsBoundedUnder, ← map_congr hg.ae_eq_mk]
-  have h_eq := ae_eq_comp 
+  have h_eq := ae_eq_comp hf hg.ae_eq_mk
+  have hg_mk_f : IsBoundedUnder (· <= ·) (ae μ) ((hg.mk g) ∘ f) := by
+    simpa [IsBoundedUnder, ← map_congr h_eq]
+  have hg_mk_f_co : IsCoboundedUnder (· <= ·) (ae μ) ((hg.mk g) ∘ f) := by
+    simpa [IsCoboundedUnder, ← map_congr h_eq]
+  rw [essSup_congr_ae hg.ae_eq_mk]; rw [essSup_map_measure_of_measurable hg.measurable_mk hf hg_mk_co hg_mk_f hg_mk_f_co hg_mk_bdd]
+  exact essSup_congr_ae h_eq.symm
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, Measure, Measure.map, ae_eq_mk, essSup, hg.ae_eq_mk, hg.mk, hg_bdd, hg_mk_bdd, hg_mk_co, hgf_co, isBoundedDefault, map_congr
 -/
@@ -1388,7 +1400,21 @@ lemma essSup_restrict_eq_of_support_subset
   let t := {x | d < f x}
   have A : 0 < (μ.restrict t) t := by
     simp only [Measure.restrict_apply_self]
-    
+    rw [essSup_eq_sInf] at hd
+    have : d ∉ {a | μ {x | a < f x} = 0} := notMem_of_lt_csInf hd (OrderBot.bddBelow _)
+    exact bot_lt_iff_ne_bot.2 this
+  have B : 0 < (μ.restrict s) t := by
+    have : μ.restrict t <= μ.restrict s := by
+      apply Measure.restrict_mono _ le_rfl
+      apply subset_trans _ hsf
+      intro x (hx : d < f x)
+      exact (lt_of_le_of_lt bot_le hx).ne'
+    exact lt_of_lt_of_le A (this _)
+  apply cd.trans_le
+  rw [essSup_eq_sInf]
+  apply le_sInf (fun b hb => ?_)
+  contrapose! hb
+  exact ne_of_gt (B.trans_le (measure_mono (fun x hx => hb.trans hx)))
 
 中文:
 引理 essSup_restrict_eq_of_support_subset
@@ -1400,7 +1426,21 @@ lemma essSup_restrict_eq_of_support_subset
   let t := {x | d < f x}
   have A : 0 < (μ.restrict t) t := by
     simp only [Measure.restrict_apply_self]
-    
+    rw [essSup_eq_sInf] at hd
+    have : d ∉ {a | μ {x | a < f x} = 0} := notMem_of_lt_csInf hd (OrderBot.bddBelow _)
+    exact bot_lt_iff_ne_bot.2 this
+  have B : 0 < (μ.restrict s) t := by
+    have : μ.restrict t <= μ.restrict s := by
+      apply Measure.restrict_mono _ le_rfl
+      apply subset_trans _ hsf
+      intro x (hx : d < f x)
+      exact (lt_of_le_of_lt bot_le hx).ne'
+    exact lt_of_lt_of_le A (this _)
+  apply cd.trans_le
+  rw [essSup_eq_sInf]
+  apply le_sInf (fun b hb => ?_)
+  contrapose! hb
+  exact ne_of_gt (B.trans_le (measure_mono (fun x hx => hb.trans hx)))
 
 Depends on / 依赖: Measure, Measure.restrict_apply_self, Measure.restrict_le_self, OrderBot, OrderBot.bddBelow, bddBelow, bot_lt_iff_ne_bot, essSup, essSup_eq_sInf, essSup_mono_measure, exists_between, le_antisymm, le_of_forall_lt, notMem_of_lt_csInf, restrict, restrict_apply_self, restrict_le_self
 -/

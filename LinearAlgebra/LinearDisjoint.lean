@@ -442,7 +442,9 @@ theorem of_basis_mul'
   let i := mulMap M N ∘ₗ (i0.trans i1.symm).toLinearMap
   have : i = Finsupp.linearCombination R fun i : κ × ι => (m i.1 * n i.2 : S) := by
     ext x
-    simp [i, i0, i1, finsuppTensorFinsupp'_symm_single
+    simp [i, i0, i1, finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
+  simp_rw [← this, i, LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.injective_comp] at H
+  exact ⟨H⟩
 
 中文:
 定理 of_basis_mul'
@@ -453,7 +455,9 @@ theorem of_basis_mul'
   let i := mulMap M N ∘ₗ (i0.trans i1.symm).toLinearMap
   have : i = Finsupp.linearCombination R fun i : κ × ι => (m i.1 * n i.2 : S) := by
     ext x
-    simp [i, i0, i1, finsuppTensorFinsupp'_symm_single
+    simp [i, i0, i1, finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
+  simp_rw [← this, i, LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.injective_comp] at H
+  exact ⟨H⟩
 
 Depends on / 依赖: EquivLike, EquivLike.injective_comp, Finsupp, Finsupp.linearCombination, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, TensorProduct, TensorProduct.congr, _symm_single_eq_single_one_tmul, coe_coe, coe_comp, finsuppTensorFinsupp, i0.trans, i1.symm, injective_comp, linearCombination, m.repr, mulMap
 -/
@@ -562,7 +566,8 @@ theorem of_linearDisjoint_fg_left
   rw [Module.Finite.iff_fg] at hFG
   obtain ⟨x', hx'⟩ := h (show x in {x, y} by simp)
   obtain ⟨y', hy'⟩ := h (show y in {x, y} by simp)
-  rw
+  rw [← hx']; rw [← hy']; congr
+  exact (H M' hM hFG).injective (by simp [← mulMap_comp_rTensor _ hM, hx', hy', hxy])
 
 中文:
 定理 of_linearDisjoint_fg_left
@@ -572,7 +577,8 @@ theorem of_linearDisjoint_fg_left
   rw [Module.Finite.iff_fg] at hFG
   obtain ⟨x', hx'⟩ := h (show x in {x, y} by simp)
   obtain ⟨y', hy'⟩ := h (show y in {x, y} by simp)
-  rw
+  rw [← hx']; rw [← hy']; congr
+  exact (H M' hM hFG).injective (by simp [← mulMap_comp_rTensor _ hM, hx', hy', hxy])
 
 Depends on / 依赖: Finite, Module, Module.Finite.iff_fg, Set.toFinite, TensorProduct, TensorProduct.exists_finite_submodule_left_of_setFinite, exists_finite_submodule_left_of_setFinite, iff_fg, injective, linearDisjoint_iff, mulMap_comp_rTensor, toFinite
 -/
@@ -598,7 +604,8 @@ theorem of_linearDisjoint_fg_right
   rw [Module.Finite.iff_fg] at hFG
   obtain ⟨x', hx'⟩ := h (show x in {x, y} by simp)
   obtain ⟨y', hy'⟩ := h (show y in {x, y} by simp)
-  r
+  rw [← hx']; rw [← hy']; congr
+  exact (H N' hN hFG).injective (by simp [← mulMap_comp_lTensor _ hN, hx', hy', hxy])
 
 中文:
 定理 of_linearDisjoint_fg_right
@@ -608,7 +615,8 @@ theorem of_linearDisjoint_fg_right
   rw [Module.Finite.iff_fg] at hFG
   obtain ⟨x', hx'⟩ := h (show x in {x, y} by simp)
   obtain ⟨y', hy'⟩ := h (show y in {x, y} by simp)
-  r
+  rw [← hx']; rw [← hy']; congr
+  exact (H N' hN hFG).injective (by simp [← mulMap_comp_lTensor _ hN, hx', hy', hxy])
 
 Depends on / 依赖: Finite, Module, Module.Finite.iff_fg, Set.toFinite, TensorProduct, TensorProduct.exists_finite_submodule_right_of_setFinite, exists_finite_submodule_right_of_setFinite, iff_fg, injective, linearDisjoint_iff, mulMap_comp_lTensor, toFinite
 -/
@@ -712,7 +720,7 @@ theorem linearIndependent_left_of_flat
   classical simp_rw [mulLeftMap_eq_mulMap_comp, LinearMap.coe_comp, LinearEquiv.coe_coe,
     ← Function.comp_assoc, EquivLike.injective_comp]
   rw [LinearIndependent] at hm
-  exact H.injective.comp (Module.Flat.rTensor_preserves_injective_linearMap (M
+  exact H.injective.comp (Module.Flat.rTensor_preserves_injective_linearMap (M := N) _ hm)
 
 中文:
 定理 linearIndependent_left_of_flat
@@ -722,7 +730,7 @@ theorem linearIndependent_left_of_flat
   classical simp_rw [mulLeftMap_eq_mulMap_comp, LinearMap.coe_comp, LinearEquiv.coe_coe,
     ← Function.comp_assoc, EquivLike.injective_comp]
   rw [LinearIndependent] at hm
-  exact H.injective.comp (Module.Flat.rTensor_preserves_injective_linearMap (M
+  exact H.injective.comp (Module.Flat.rTensor_preserves_injective_linearMap (M := N) _ hm)
 
 Depends on / 依赖: EquivLike, EquivLike.injective_comp, Function, Function.comp_assoc, H.injective.comp, LinearEquiv, LinearEquiv.coe_coe, LinearIndependent, LinearMap, LinearMap.coe_comp, LinearMap.ker_eq_bot_of_injective, Module, Module.Flat.rTensor_preserves_injective_linearMap, classical, coe_coe, coe_comp, comp_assoc, injective, injective_comp, ker_eq_bot_of_injective
 -/
@@ -765,7 +773,7 @@ theorem linearIndependent_right_of_flat
   classical simp_rw [mulRightMap_eq_mulMap_comp, LinearMap.coe_comp, LinearEquiv.coe_coe,
     ← Function.comp_assoc, EquivLike.injective_comp]
   rw [LinearIndependent] at hn
-  exact H.injective.comp (Module.Flat.lTensor_preserves_injective_linearMap (
+  exact H.injective.comp (Module.Flat.lTensor_preserves_injective_linearMap (M := M) _ hn)
 
 中文:
 定理 linearIndependent_right_of_flat
@@ -775,7 +783,7 @@ theorem linearIndependent_right_of_flat
   classical simp_rw [mulRightMap_eq_mulMap_comp, LinearMap.coe_comp, LinearEquiv.coe_coe,
     ← Function.comp_assoc, EquivLike.injective_comp]
   rw [LinearIndependent] at hn
-  exact H.injective.comp (Module.Flat.lTensor_preserves_injective_linearMap (
+  exact H.injective.comp (Module.Flat.lTensor_preserves_injective_linearMap (M := M) _ hn)
 
 Depends on / 依赖: EquivLike, EquivLike.injective_comp, Function, Function.comp_assoc, H.injective.comp, LinearEquiv, LinearEquiv.coe_coe, LinearIndependent, LinearMap, LinearMap.coe_comp, LinearMap.ker_eq_bot_of_injective, Module, Module.Flat.lTensor_preserves_injective_linearMap, classical, coe_coe, coe_comp, comp_assoc, injective, injective_comp, ker_eq_bot_of_injective
 -/
@@ -819,7 +827,13 @@ theorem linearIndependent_mul_of_flat_left
   let i1 := LinearMap.rTensor (ι ->₀ R) (Finsupp.linearCombination R m)
   let i2 := LinearMap.lTensor M (Finsupp.linearCombination R n)
   let i := mulMap M N ∘ₗ i2 ∘ₗ i1 ∘ₗ i0.toLinearMap
-  have h1 : Function.Injec
+  have h1 : Function.Injective i1 := Module.Flat.rTensor_preserves_injective_linearMap _ hm
+  have h2 : Function.Injective i2 := Module.Flat.lTensor_preserves_injective_linearMap _ hn
+.comp i0.injective .comp h1 have h : Function.Injective i := H.injective.comp h2
+  have : i = Finsupp.linearCombination R fun i => (m i.1).1 * (n i.2).1 := by
+    ext x
+    simp [i, i0, i1, i2, finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
+  rwa [this] at h
 
 中文:
 定理 linearIndependent_mul_of_flat_left
@@ -830,7 +844,13 @@ theorem linearIndependent_mul_of_flat_left
   let i1 := LinearMap.rTensor (ι ->₀ R) (Finsupp.linearCombination R m)
   let i2 := LinearMap.lTensor M (Finsupp.linearCombination R n)
   let i := mulMap M N ∘ₗ i2 ∘ₗ i1 ∘ₗ i0.toLinearMap
-  have h1 : Function.Injec
+  have h1 : Function.Injective i1 := Module.Flat.rTensor_preserves_injective_linearMap _ hm
+  have h2 : Function.Injective i2 := Module.Flat.lTensor_preserves_injective_linearMap _ hn
+.comp i0.injective .comp h1 have h : Function.Injective i := H.injective.comp h2
+  have : i = Finsupp.linearCombination R fun i => (m i.1).1 * (n i.2).1 := by
+    ext x
+    simp [i, i0, i1, i2, finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
+  rwa [this] at h
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Function, Function.Injective, Injective, LinearIndependent, LinearMap, LinearMap.lTensor, LinearMap.rTensor, Module, Module.Flat.lTensor_preserves_injective_linearMap, Module.Flat.rTensor_preserves_injective_linearMap, finsuppTensorFinsupp, i0.injective, i0.toLinearMap, injective, lTensor, lTensor_preserves_injective_linearMap, linearCombination, mulMap
 -/
@@ -863,7 +883,13 @@ theorem linearIndependent_mul_of_flat_right
   let i1 := LinearMap.lTensor (κ ->₀ R) (Finsupp.linearCombination R n)
   let i2 := LinearMap.rTensor N (Finsupp.linearCombination R m)
   let i := mulMap M N ∘ₗ i2 ∘ₗ i1 ∘ₗ i0.toLinearMap
-  have h1 : Function.Injec
+  have h1 : Function.Injective i1 := Module.Flat.lTensor_preserves_injective_linearMap _ hn
+  have h2 : Function.Injective i2 := Module.Flat.rTensor_preserves_injective_linearMap _ hm
+.comp i0.injective .comp h1 have h : Function.Injective i := H.injective.comp h2
+  have : i = Finsupp.linearCombination R fun i => (m i.1).1 * (n i.2).1 := by
+    ext x
+    simp [i, i0, i1, i2, finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
+  rwa [this] at h
 
 中文:
 定理 linearIndependent_mul_of_flat_right
@@ -874,7 +900,13 @@ theorem linearIndependent_mul_of_flat_right
   let i1 := LinearMap.lTensor (κ ->₀ R) (Finsupp.linearCombination R n)
   let i2 := LinearMap.rTensor N (Finsupp.linearCombination R m)
   let i := mulMap M N ∘ₗ i2 ∘ₗ i1 ∘ₗ i0.toLinearMap
-  have h1 : Function.Injec
+  have h1 : Function.Injective i1 := Module.Flat.lTensor_preserves_injective_linearMap _ hn
+  have h2 : Function.Injective i2 := Module.Flat.rTensor_preserves_injective_linearMap _ hm
+.comp i0.injective .comp h1 have h : Function.Injective i := H.injective.comp h2
+  have : i = Finsupp.linearCombination R fun i => (m i.1).1 * (n i.2).1 := by
+    ext x
+    simp [i, i0, i1, i2, finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
+  rwa [this] at h
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Function, Function.Injective, Injective, LinearIndependent, LinearMap, LinearMap.lTensor, LinearMap.rTensor, Module, Module.Flat.lTensor_preserves_injective_linearMap, Module.Flat.rTensor_preserves_injective_linearMap, finsuppTensorFinsupp, i0.injective, i0.toLinearMap, injective, lTensor, lTensor_preserves_injective_linearMap, linearCombination, mulMap
 -/
@@ -1115,7 +1147,13 @@ theorem not_linearIndependent_pair_of_commute_of_flat_left
   have hn : LinearIndependent R n := h.map' _ (ker_inclusion _ _ _)
   -- need this instance otherwise it only has semigroup structure
   let : AddCommGroup (Fin 2 ->₀ M) := Finsupp.instAddCommGroup
-  let m : Fin 2 ->₀ M := .single
+  let m : Fin 2 ->₀ M := .single 0 ⟨b.1, b.2.1⟩ - .single 1 ⟨a.1, a.2.1⟩
+  have hm : mulRightMap M n m = 0 := by simp [m, n, show _ * _ = _ * _ from hc]
+  rw [← LinearMap.mem_ker]; rw [H.linearIndependent_right_of_flat hn]; rw [mem_bot] at hm
+  simp only [Fin.isValue, sub_eq_zero, Finsupp.single_eq_single_iff, zero_ne_one, Subtype.mk.injEq,
+    SetLike.coe_eq_coe, false_and, false_or, m] at hm
+  repeat rw [AddSubmonoid.mk_eq_zero, ZeroMemClass.coe_eq_zero] at hm
+  exact h.ne_zero 0 hm.2
 
 中文:
 定理 not_linearIndependent_pair_of_commute_of_flat_left
@@ -1125,7 +1163,13 @@ theorem not_linearIndependent_pair_of_commute_of_flat_left
   have hn : LinearIndependent R n := h.map' _ (ker_inclusion _ _ _)
   -- need this instance otherwise it only has semigroup structure
   let : AddCommGroup (Fin 2 ->₀ M) := Finsupp.instAddCommGroup
-  let m : Fin 2 ->₀ M := .single
+  let m : Fin 2 ->₀ M := .single 0 ⟨b.1, b.2.1⟩ - .single 1 ⟨a.1, a.2.1⟩
+  have hm : mulRightMap M n m = 0 := by simp [m, n, show _ * _ = _ * _ from hc]
+  rw [← LinearMap.mem_ker]; rw [H.linearIndependent_right_of_flat hn]; rw [mem_bot] at hm
+  simp only [Fin.isValue, sub_eq_zero, Finsupp.single_eq_single_iff, zero_ne_one, Subtype.mk.injEq,
+    SetLike.coe_eq_coe, false_and, false_or, m] at hm
+  repeat rw [AddSubmonoid.mk_eq_zero, ZeroMemClass.coe_eq_zero] at hm
+  exact h.ne_zero 0 hm.2
 
 Depends on / 依赖: LinearIndependent, h.map, inclusion, inf_le_right, ker_inclusion
 -/
@@ -1154,7 +1198,13 @@ theorem not_linearIndependent_pair_of_commute_of_flat_right
   have hm : LinearIndependent R m := h.map' _ (ker_inclusion _ _ _)
   -- need this instance otherwise it only has semigroup structure
   let : AddCommGroup (Fin 2 ->₀ N) := Finsupp.instAddCommGroup
-  let n : Fin 2 ->₀ N := .single 
+  let n : Fin 2 ->₀ N := .single 0 ⟨b.1, b.2.2⟩ - .single 1 ⟨a.1, a.2.2⟩
+  have hn : mulLeftMap N m n = 0 := by simp [m, n, show _ * _ = _ * _ from hc]
+  rw [← LinearMap.mem_ker]; rw [H.linearIndependent_left_of_flat hm]; rw [mem_bot] at hn
+  simp only [Fin.isValue, sub_eq_zero, Finsupp.single_eq_single_iff, zero_ne_one, Subtype.mk.injEq,
+    SetLike.coe_eq_coe, false_and, false_or, n] at hn
+  repeat rw [AddSubmonoid.mk_eq_zero, ZeroMemClass.coe_eq_zero] at hn
+  exact h.ne_zero 0 hn.2
 
 中文:
 定理 not_linearIndependent_pair_of_commute_of_flat_right
@@ -1164,7 +1214,13 @@ theorem not_linearIndependent_pair_of_commute_of_flat_right
   have hm : LinearIndependent R m := h.map' _ (ker_inclusion _ _ _)
   -- need this instance otherwise it only has semigroup structure
   let : AddCommGroup (Fin 2 ->₀ N) := Finsupp.instAddCommGroup
-  let n : Fin 2 ->₀ N := .single 
+  let n : Fin 2 ->₀ N := .single 0 ⟨b.1, b.2.2⟩ - .single 1 ⟨a.1, a.2.2⟩
+  have hn : mulLeftMap N m n = 0 := by simp [m, n, show _ * _ = _ * _ from hc]
+  rw [← LinearMap.mem_ker]; rw [H.linearIndependent_left_of_flat hm]; rw [mem_bot] at hn
+  simp only [Fin.isValue, sub_eq_zero, Finsupp.single_eq_single_iff, zero_ne_one, Subtype.mk.injEq,
+    SetLike.coe_eq_coe, false_and, false_or, n] at hn
+  repeat rw [AddSubmonoid.mk_eq_zero, ZeroMemClass.coe_eq_zero] at hn
+  exact h.ne_zero 0 hn.2
 
 Depends on / 依赖: LinearIndependent, h.map, inclusion, inf_le_left, ker_inclusion
 -/
@@ -1224,7 +1280,15 @@ theorem rank_inf_le_one_of_commute_of_flat
   rw [not_le]; rw [← Fintype.card_coe]; rw [Fintype.one_lt_card_iff_nontrivial] at hs
   obtain ⟨a, b, hab⟩ := hs.exists_pair_ne
   refine H.not_linearIndependent_pair_of_commute_of_flat hf a.1 b.1 (hc a.1 b.1) ?_
-  have := h.co
+  have := h.comp ![a, b] fun i j hij => by
+    fin_cases i <;> fin_cases j
+    · rfl
+    · simp [hab] at hij
+    · simp [hab.symm] at hij
+    · rfl
+  convert! this
+  ext i
+  fin_cases i <;> simp
 
 中文:
 定理 rank_inf_le_one_of_commute_of_flat
@@ -1236,7 +1300,15 @@ theorem rank_inf_le_one_of_commute_of_flat
   rw [not_le]; rw [← Fintype.card_coe]; rw [Fintype.one_lt_card_iff_nontrivial] at hs
   obtain ⟨a, b, hab⟩ := hs.exists_pair_ne
   refine H.not_linearIndependent_pair_of_commute_of_flat hf a.1 b.1 (hc a.1 b.1) ?_
-  have := h.co
+  have := h.comp ![a, b] fun i j hij => by
+    fin_cases i <;> fin_cases j
+    · rfl
+    · simp [hab] at hij
+    · simp [hab.symm] at hij
+    · rfl
+  convert! this
+  ext i
+  fin_cases i <;> simp
 
 Depends on / 依赖: Fintype, Fintype.card_coe, Fintype.one_lt_card_iff_nontrivial, H.not_linearIndependent_pair_of_commute_of_flat, _root_, _root_.rank_le, card_coe, convert, exists_pair_ne, fin_cases, h.comp, hab.symm, hs.exists_pair_ne, nontriviality, not_le, not_linearIndependent_pair_of_commute_of_flat, one_lt_card_iff_nontrivial, rank_le
 -/

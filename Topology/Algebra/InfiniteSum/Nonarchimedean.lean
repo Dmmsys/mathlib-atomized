@@ -52,7 +52,18 @@ theorem cauchySeq_prod_of_tendsto_cofinite_one
   that for any `t : Finset α` disjoint from `s`, we have `∏ i ∈ t, f i ∈ U`. -/
   apply cauchySeq_finset_iff_prod_vanishing.mpr
   intro U hU
-  -- Since `G` is nonarchimedean, `U` contains an open subg
+  -- Since `G` is nonarchimedean, `U` contains an open subgroup `V`.
+  rcases is_nonarchimedean U hU with ⟨V, hV⟩
+  /- Let `s` be the set of all indices `i : α` such that `f i ∉ V`. By our assumption `hf`, this is
+  finite. -/
+  use (tendsto_def.mp hf V V.mem_nhds_one).toFinset
+  /- For any `t : Finset α` disjoint from `s`, the product `∏ i ∈ t, f i` is a product of elements
+  of `V`, so it is an element of `V` too. Thus, `∏ i ∈ t, f i ∈ U`, as desired. -/
+  intro t ht
+  apply hV
+  apply Subgroup.prod_mem
+  intro i hi
+  simpa using Finset.disjoint_left.mp ht hi
 
 中文:
 定理 cauchySeq_prod_of_tendsto_cofinite_one
@@ -62,7 +73,18 @@ theorem cauchySeq_prod_of_tendsto_cofinite_one
   that for any `t : Finset α` disjoint from `s`, we have `∏ i ∈ t, f i ∈ U`. -/
   apply cauchySeq_finset_iff_prod_vanishing.mpr
   intro U hU
-  -- Since `G` is nonarchimedean, `U` contains an open subg
+  -- Since `G` is nonarchimedean, `U` contains an open subgroup `V`.
+  rcases is_nonarchimedean U hU with ⟨V, hV⟩
+  /- Let `s` be the set of all indices `i : α` such that `f i ∉ V`. By our assumption `hf`, this is
+  finite. -/
+  use (tendsto_def.mp hf V V.mem_nhds_one).toFinset
+  /- For any `t : Finset α` disjoint from `s`, the product `∏ i ∈ t, f i` is a product of elements
+  of `V`, so it is an element of `V` too. Thus, `∏ i ∈ t, f i ∈ U`, as desired. -/
+  intro t ht
+  apply hV
+  apply Subgroup.prod_mem
+  intro i hi
+  simpa using Finset.disjoint_left.mp ht hi
 -/
 theorem cauchySeq_prod_of_tendsto_cofinite_one {f : α -> G} (hf : Tendsto f cofinite (𝓝 1)) :
     CauchySeq (fun s => ∏ i in s, f i) := by
@@ -100,7 +122,18 @@ lemma cauchySeq_of_tendsto_div_nhds_one
   rw [tendsto_atTop']
   intro s hs
   obtain ⟨t, ht⟩ := is_nonarchimedean s hs
-  obtain ⟨N, hN⟩ : exists N : Nat, forall 
+  obtain ⟨N, hN⟩ : exists N : Nat, forall b, N <= b -> f (b + 1) / f b in t := by
+    simpa using! tendsto_def.mp hf t t.mem_nhds_one
+  refine ⟨(N, N), ?_⟩
+  rintro ⟨M, M'⟩ ⟨(hMN : N <= M), (hMN' : N <= M')⟩
+  apply ht
+  wlog h : M <= M' generalizing M M'
+· simpa [inv_div] using! t.inv_mem this _ _ hMN' hMN (le_of_not_ge h)
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h
+  clear h hMN'
+  induction k with
+  | zero => simp
+  | succ k ih => simpa using! t.mul_mem (hN _ (by lia : N <= M + k)) ih
 
 中文:
 引理 cauchySeq_of_tendsto_div_nhds_one
@@ -111,7 +144,18 @@ lemma cauchySeq_of_tendsto_div_nhds_one
   rw [tendsto_atTop']
   intro s hs
   obtain ⟨t, ht⟩ := is_nonarchimedean s hs
-  obtain ⟨N, hN⟩ : exists N : Nat, forall 
+  obtain ⟨N, hN⟩ : exists N : Nat, forall b, N <= b -> f (b + 1) / f b in t := by
+    simpa using! tendsto_def.mp hf t t.mem_nhds_one
+  refine ⟨(N, N), ?_⟩
+  rintro ⟨M, M'⟩ ⟨(hMN : N <= M), (hMN' : N <= M')⟩
+  apply ht
+  wlog h : M <= M' generalizing M M'
+· simpa [inv_div] using! t.inv_mem this _ _ hMN' hMN (le_of_not_ge h)
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h
+  clear h hMN'
+  induction k with
+  | zero => simp
+  | succ k ih => simpa using! t.mul_mem (hN _ (by lia : N <= M + k)) ih
 
 Depends on / 依赖: CauchySeq, Tendsto, atTop_neBot, cauchy_map_iff, generalizing, inv_d, is_nonarchimedean, mem_nhds_one, prod_atTop_atTop_eq, t.mem_nhds_one, tendsto_atTop, tendsto_def, tendsto_def.mp, uniformity_eq_comap_nhds_one
 -/

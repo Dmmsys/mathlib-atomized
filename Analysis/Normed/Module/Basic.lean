@@ -270,7 +270,10 @@ instance NormedSpace.discreteTopology_zmultiples
   · rw [AddSubgroup.zmultiples_zero_eq_bot]
     exact Subsingleton.discreteTopology (α := ↑(⊥ : Subspace Rat E))
   · rw [discreteTopology_iff_isOpen_singleton_zero, isOpen_induced_iff]
-    refine ⟨Metric.ball 0 
+    refine ⟨Metric.ball 0 ‖e‖, Metric.isOpen_ball, ?_⟩
+    ext ⟨x, hx⟩
+    obtain ⟨k, rfl⟩ := AddSubgroup.mem_zmultiples_iff.mp hx
+    rw [mem_preimage]; rw [mem_ball_zero_iff]; rw [AddSubgroup.coe_mk]; rw [mem_singleton_iff]; rw [Subtype.ext_iff]; rw [AddSubgroup.coe_mk]; rw [AddSubgroup.coe_zero]; rw [norm_zsmul Rat k e]; rw [Int.norm_cast_rat]; rw [Int.norm_eq_abs]; rw [mul_lt_iff_lt_one_left (norm_pos_iff.mpr he)]; rw [← @Int.cast_one Real _]; rw [← Int.cast_abs]; rw [Int.cast_lt]; rw [Int.abs_lt_one_iff]; rw [smul_eq_zero]; rw [or_iff_left he]
 
 中文:
 实例 赋范空间.discreteTopology_zmultiples
@@ -280,7 +283,10 @@ instance NormedSpace.discreteTopology_zmultiples
   · rw [AddSubgroup.zmultiples_zero_eq_bot]
     exact Subsingleton.discreteTopology (α := ↑(⊥ : Subspace Rat E))
   · rw [discreteTopology_iff_isOpen_singleton_zero, isOpen_induced_iff]
-    refine ⟨Metric.ball 0 
+    refine ⟨Metric.ball 0 ‖e‖, Metric.isOpen_ball, ?_⟩
+    ext ⟨x, hx⟩
+    obtain ⟨k, rfl⟩ := AddSubgroup.mem_zmultiples_iff.mp hx
+    rw [mem_preimage]; rw [mem_ball_zero_iff]; rw [AddSubgroup.coe_mk]; rw [mem_singleton_iff]; rw [Subtype.ext_iff]; rw [AddSubgroup.coe_mk]; rw [AddSubgroup.coe_zero]; rw [norm_zsmul Rat k e]; rw [Int.norm_cast_rat]; rw [Int.norm_eq_abs]; rw [mul_lt_iff_lt_one_left (norm_pos_iff.mpr he)]; rw [← @Int.cast_one Real _]; rw [← Int.cast_abs]; rw [Int.cast_lt]; rw [Int.abs_lt_one_iff]; rw [smul_eq_zero]; rw [or_iff_left he]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.coe_mk, AddSubgroup.mem_zmultiples_iff.mp, AddSubgroup.zmultiples_zero_eq_bot, IsAddTorsionFree, Metric, Metric.ball, Metric.isOpen_ball, Subsingleton, Subsingleton.discreteTopology, Subspace, Subtype, Subtype.ext_iff, coe_mk, discreteTopology, discreteTopology_iff_isOpen_singleton_zero, eq_or_ne, ext_iff, isOpen_ball, isOpen_induced_iff
 -/
@@ -313,7 +319,9 @@ lemma Metric.diam_sphere_eq
   obtain ⟨y, hy⟩ := exists_ne (0 : E)
   calc
     2 * r = dist (x + r • ‖y‖⁻¹ • y) (x - r • ‖y‖⁻¹ • y) := by
-      simp [dist_eq_norm, ← two_nsmul, ← smul_assoc, norm_smul, abs_of_nonne
+      simp [dist_eq_norm, ← two_nsmul, ← smul_assoc, norm_smul, abs_of_nonneg hr, hy, mul_assoc]
+    _ <= diam (sphere x r) := by
+      apply dist_le_diam_of_mem isBounded_sphere <;> simp [norm_smul, hy, abs_of_nonneg hr]
 
 中文:
 引理 Metric.diam_sphere_eq
@@ -325,7 +333,9 @@ lemma Metric.diam_sphere_eq
   obtain ⟨y, hy⟩ := exists_ne (0 : E)
   calc
     2 * r = dist (x + r • ‖y‖⁻¹ • y) (x - r • ‖y‖⁻¹ • y) := by
-      simp [dist_eq_norm, ← two_nsmul, ← smul_assoc, norm_smul, abs_of_nonne
+      simp [dist_eq_norm, ← two_nsmul, ← smul_assoc, norm_smul, abs_of_nonneg hr, hy, mul_assoc]
+    _ <= diam (sphere x r) := by
+      apply dist_le_diam_of_mem isBounded_sphere <;> simp [norm_smul, hy, abs_of_nonneg hr]
 
 Depends on / 依赖: abs_of_nonneg, diam_closedBall, diam_mono, dist_eq_norm, dist_le_diam_of_mem, exists_ne, isBounded_closedBall, isBounded_sphere, le_antisymm, mul_assoc, norm_smul, smul_assoc, sphere, sphere_subset_closedBall, two_nsmul
 -/
@@ -374,7 +384,9 @@ lemma Metric.diam_ball_eq
   but we opt for this proof to minimize dependencies. -/
 refine le_antisymm (diam_ball hr)
     mul_le_of_forall_lt_of_nonneg (by positivity) diam_nonneg fun a ha ha' r' hr' hr'' => ?_
-  calc a * r' <= 2 * r' := by 
+  calc a * r' <= 2 * r' := by gcongr
+    _ <= _ := by simpa only [← Metric.diam_sphere_eq x hr'.le]
+      using diam_mono (sphere_subset_ball hr'') isBounded_ball
 
 中文:
 引理 Metric.diam_ball_eq
@@ -385,7 +397,9 @@ refine le_antisymm (diam_ball hr)
   but we opt for this proof to minimize dependencies. -/
 refine le_antisymm (diam_ball hr)
     mul_le_of_forall_lt_of_nonneg (by positivity) diam_nonneg fun a ha ha' r' hr' hr'' => ?_
-  calc a * r' <= 2 * r' := by 
+  calc a * r' <= 2 * r' := by gcongr
+    _ <= _ := by simpa only [← Metric.diam_sphere_eq x hr'.le]
+      using diam_mono (sphere_subset_ball hr'') isBounded_ball
 -/
 lemma Metric.diam_ball_eq (x : E) {r : Real} (hr : 0 <= r) : diam (ball x r) = 2 * r := by
   /- This proof could be simplified with `Metric.diam_closure` and `closure_ball`,
@@ -678,7 +692,10 @@ theorem NormedSpace.noncompactSpace
     exact ⟨fun h => NormedSpace.unbounded_univ 𝕜 E h.isBounded⟩
   · rcases exists_ne (0 : E) with ⟨x, hx⟩
     suffices IsClosedEmbedding (Infinite.natEmbedding 𝕜 · • x) from this.noncompactSpace
-    r
+    refine isClosedEmbedding_of_pairwise_le_dist (norm_pos_iff.2 hx) fun k n hne => ?_
+    simp only [dist_eq_norm, ← sub_smul, norm_smul]
+    rw [H]; rw [one_mul]
+    rwa [sub_ne_zero, (Embedding.injective _).ne_iff]
 
 中文:
 定理 赋范空间.noncompactSpace
@@ -689,7 +706,10 @@ theorem NormedSpace.noncompactSpace
     exact ⟨fun h => NormedSpace.unbounded_univ 𝕜 E h.isBounded⟩
   · rcases exists_ne (0 : E) with ⟨x, hx⟩
     suffices IsClosedEmbedding (Infinite.natEmbedding 𝕜 · • x) from this.noncompactSpace
-    r
+    refine isClosedEmbedding_of_pairwise_le_dist (norm_pos_iff.2 hx) fun k n hne => ?_
+    simp only [dist_eq_norm, ← sub_smul, norm_smul]
+    rw [H]; rw [one_mul]
+    rwa [sub_ne_zero, (Embedding.injective _).ne_iff]
 -/
 protected theorem NormedSpace.noncompactSpace : NoncompactSpace E := by
   by_cases! H : exists c : 𝕜, c != 0 ∧ ‖c‖ != 1
@@ -1645,7 +1665,15 @@ abbreviation PseudoMetricSpace.ofSeminormedSpaceCore
     simp
   dist_comm x y := by
     show ‖-x + y‖ = ‖-y + x‖
-    have : -y + x = (-1 : 𝕜) • (-x + y) := by simp;
+    have : -y + x = (-1 : 𝕜) • (-x + y) := by simp; abel
+    rw [this]; rw [core.norm_smul]
+    simp
+  dist_triangle x y z := by
+    show ‖-x + z‖ <= ‖-x + y‖ + ‖-y + z‖
+    have : -x + z = (-x + y) + (-y + z) := by abel
+    rw [this]
+    exact core.norm_triangle _ _
+  edist_dist x y := by exact (ENNReal.ofReal_eq_coe_nnreal _).symm
 
 中文:
 缩写 伪度量空间.ofSeminormedSpaceCore
@@ -1659,7 +1687,15 @@ abbreviation PseudoMetricSpace.ofSeminormedSpaceCore
     simp
   dist_comm x y := by
     show ‖-x + y‖ = ‖-y + x‖
-    have : -y + x = (-1 : 𝕜) • (-x + y) := by simp;
+    have : -y + x = (-1 : 𝕜) • (-x + y) := by simp; abel
+    rw [this]; rw [core.norm_smul]
+    simp
+  dist_triangle x y z := by
+    show ‖-x + z‖ <= ‖-x + y‖ + ‖-y + z‖
+    have : -x + z = (-x + y) + (-y + z) := by abel
+    rw [this]
+    exact core.norm_triangle _ _
+  edist_dist x y := by exact (ENNReal.ofReal_eq_coe_nnreal _).symm
 -/
 abbrev PseudoMetricSpace.ofSeminormedSpaceCore {𝕜 E : Type*} [NormedField 𝕜] [AddCommGroup E]
     [Norm E] [Module 𝕜 E] (core : SeminormedSpace.Core 𝕜 E) :
@@ -2071,7 +2107,25 @@ lemma AddMonoidHom.continuous_of_isBounded_nhds_zero
   obtain ⟨C, hC⟩ := (isBounded_iff_subset_ball 0).1 (hbounded.subset <| image_mono hUε)
   refine continuous_of_continuousAt_zero _ (continuousAt_iff.2 fun ε (hε : _ < _) => ?_)
   simp only [dist_zero_right, map_zero]
-  simp only [subset_def, mem_
+  simp only [subset_def, mem_image, mem_ball, dist_zero_right, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂] at hC
+have hC₀ : 0 < C := (norm_nonneg _).trans_lt hC 0 (by simpa)
+  obtain ⟨n, hn⟩ := exists_nat_gt (C / ε)
+  have hnpos : 0 < (n : Real) := (div_pos hC₀ hε).trans hn
+  have hn₀ : n != 0 := by rintro rfl; simp at hnpos
+  refine ⟨δ / n, div_pos hδ hnpos, fun {x} hxδ => ?_⟩
+  calc
+    ‖f x‖
+    _ = ‖(n : Real)⁻¹ • f (n • x)‖ := by simp [← Nat.cast_smul_eq_nsmul Real, hn₀]
+    _ <= ‖(n : Real)⁻¹‖ * ‖f (n • x)‖ := norm_smul_le ..
+    _ < ‖(n : Real)⁻¹‖ * C := by
+      gcongr
+      · simpa [pos_iff_ne_zero]
+· refine hC _ norm_nsmul_le.trans_lt ?_
+        simpa only [norm_mul, Real.norm_natCast, lt_div_iff₀ hnpos, mul_comm] using hxδ
+    _ = (n : Real)⁻¹ * C := by simp
+    _ < (C / ε : Real)⁻¹ * C := by gcongr
+    _ = ε := by simp [hC₀.ne']
 
 中文:
 引理 加法幺半群态射.continuous_of_isBounded_nhds_zero
@@ -2081,7 +2135,25 @@ lemma AddMonoidHom.continuous_of_isBounded_nhds_zero
   obtain ⟨C, hC⟩ := (isBounded_iff_subset_ball 0).1 (hbounded.subset <| image_mono hUε)
   refine continuous_of_continuousAt_zero _ (continuousAt_iff.2 fun ε (hε : _ < _) => ?_)
   simp only [dist_zero_right, map_zero]
-  simp only [subset_def, mem_
+  simp only [subset_def, mem_image, mem_ball, dist_zero_right, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂] at hC
+have hC₀ : 0 < C := (norm_nonneg _).trans_lt hC 0 (by simpa)
+  obtain ⟨n, hn⟩ := exists_nat_gt (C / ε)
+  have hnpos : 0 < (n : Real) := (div_pos hC₀ hε).trans hn
+  have hn₀ : n != 0 := by rintro rfl; simp at hnpos
+  refine ⟨δ / n, div_pos hδ hnpos, fun {x} hxδ => ?_⟩
+  calc
+    ‖f x‖
+    _ = ‖(n : Real)⁻¹ • f (n • x)‖ := by simp [← Nat.cast_smul_eq_nsmul Real, hn₀]
+    _ <= ‖(n : Real)⁻¹‖ * ‖f (n • x)‖ := norm_smul_le ..
+    _ < ‖(n : Real)⁻¹‖ * C := by
+      gcongr
+      · simpa [pos_iff_ne_zero]
+· refine hC _ norm_nsmul_le.trans_lt ?_
+        simpa only [norm_mul, Real.norm_natCast, lt_div_iff₀ hnpos, mul_comm] using hxδ
+    _ = (n : Real)⁻¹ * C := by simp
+    _ < (C / ε : Real)⁻¹ * C := by gcongr
+    _ = ε := by simp [hC₀.ne']
 
 Depends on / 依赖: Metric, Metric.mem_nhds_iff.mp, and_imp, continuousAt_iff, continuous_of_continuousAt_zero, dist_zero_right, exists_nat_gt, forall_exists_index, hbounded, hbounded.subset, image_mono, isBounded_iff_subset_ball, map_zero, mem_ball, mem_image, mem_nhds_iff, norm_nonneg, subset, subset_def, trans_lt
 -/

@@ -96,6 +96,11 @@ lemma adjRetraction_is_retraction
   simp only [id_obj, adjRetractionAux, Functor.map_inv, Functor.comp_map,
     braiding_naturality_right_assoc]
   slice_lhs 2 3 =>
+    simp only [← id_tensorHom, ← tensorHom_id, tensorHom_comp_tensorHom, Category.id_comp,
+      Category.comp_id]
+  slice_lhs 2 4 =>
+    rw [← adj.unit_naturality_assoc]
+  simp
 
 中文:
 引理 adjRetraction_is_retraction
@@ -107,6 +112,11 @@ lemma adjRetraction_is_retraction
   simp only [id_obj, adjRetractionAux, Functor.map_inv, Functor.comp_map,
     braiding_naturality_right_assoc]
   slice_lhs 2 3 =>
+    simp only [← id_tensorHom, ← tensorHom_id, tensorHom_comp_tensorHom, Category.id_comp,
+      Category.comp_id]
+  slice_lhs 2 4 =>
+    rw [← adj.unit_naturality_assoc]
+  simp
 -/
 private lemma adjRetraction_is_retraction (c : C) (d : D)
     [IsIso (L.map (adj.unit.app ((ihom d).obj (R.obj c)) otimesₘ adj.unit.app d))] :
@@ -141,6 +151,99 @@ theorem isIso_tfae
     have h' : forall d d', IsIso (L.map (d ◁ (adj.unit.app d'))) := by
       intro d d'
       have := braiding_naturality (𝟙 d) (adj.unit.app d')
+      rw [← Iso.eq_comp_inv]; rw [id_tensorHom] at this
+      rw [this]
+      simp only [map_comp, id_obj, comp_obj, tensorHom_id, Category.assoc]
+      infer_instance
+    intro d d'
+    -- We then write the tensor product of the two units as the composition of the whiskered units,
+    -- and conclude.
+    have : (adj.unit.app d) otimesₘ (adj.unit.app d') =
+        (adj.unit.app d ▷ d') ≫ (((L ⋙ R).obj _) ◁ adj.unit.app d') := by
+      simp [← tensorHom_id, ← id_tensorHom, tensorHom_comp_tensorHom]
+    rw [this]; rw [map_comp]
+    infer_instance
+  tfae_have 4 -> 1
+  | _, _, _ => by
+    -- It is enough to show that the unit is a split monomorphism, and the retraction is given
+    -- by `adjRetraction` above.
+    let _ : Reflective R := { L := L, adj := adj }
+    have : IsIso adj.toMonad.μ := μ_iso_of_reflective (R := R)
+    dsimp
+    rw [← dsimp% [Adjunction.toMonad] adj.toMonad.isSplitMono_iff_isIso_unit]
+    exact ⟨⟨adjRetraction adj _ _, adjRetraction_is_retraction adj _ _⟩⟩
+  tfae_have 1 -> 3
+  | h, d, d' => by
+    rw [isIso_iff_isIso_coyoneda_map]
+    intro c
+    -- `w₁, w₃, w₄` are the three stacked commutative squares in the proof on nLab:
+    have w₁ : (coyoneda.map (L.map (adj.unit.app d ▷ d')).op).app c = (adj.homEquiv _ _).symm ∘
+        (coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c) ∘ adj.homEquiv _ _ := by ext; simp
+    rw [isIso_iff_bijective]; rw [w₁]
+    simp only [comp_obj, flip_obj_obj, yoneda_obj_obj, id_obj, op_tensorObj, unop_tensorObj,
+      EquivLike.comp_bijective, EquivLike.bijective_comp]
+    -- We commute the tensor product using the auxiliary commutative square `w₂`.
+    have w₂ : ((coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c)) =
+        ((yoneda.obj (R.obj c)).mapIso (β_ _ _)).hom ≫
+          ((coyoneda.map (d' ◁ adj.unit.app d).op).app (R.obj c)) ≫
+            ((yoneda.obj (R.obj c)).mapIso (β_ _ _)).hom := by ext; simp
+    rw [w₂]; rw [← isIso_iff_bijective]
+suffices IsIso (coyoneda.map (d' ◁ adj.unit.app d).op).app (R.obj c) by infer_instance
+    have w₃ : ((coyoneda.map (d' ◁ adj.unit.app d).op).app (R.obj c) : _ -> _) =
+        ((ihom.adjunction d').homEquiv _ _).symm ∘
+          ((coyoneda.map (adj.unit.app _).op).app _) ∘ (ihom.adjunction d').homEquiv _ _ := by
+      ext
+      simp only [id_obj, op_tensorObj, flip_obj_obj, yoneda_obj_obj, unop_tensorObj, comp_obj,
+        flip_map_app, Function.comp_apply, Adjunction.homEquiv_unit, Adjunction.homEquiv_counit]
+      simp
+    rw [isIso_iff_bijective]; rw [w₃]
+    simp only [comp_obj, op_tensorObj, flip_obj_obj, yoneda_obj_obj, unop_tensorObj, id_obj,
+      yoneda_obj_obj, curriedTensor_obj_obj, EquivLike.comp_bijective, EquivLike.bijective_comp]
+    have w₄ : (coyoneda.map (adj.unit.app d).op).app ((ihom d').obj (R.obj c)) ≫
+        (coyoneda.obj ⟨d⟩).map (adj.unit.app ((ihom d').obj (R.obj c))) =
+          (coyoneda.obj ⟨(L ⋙ R).obj d⟩).map (adj.unit.app ((ihom d').obj (R.obj c))) ≫
+            (coyoneda.map (adj.unit.app d).op).app _ := by cat_disch
+    rw [← isIso_iff_bijective]
+    suffices IsIso ((coyoneda.map (adj.unit.app d).op).app ((ihom d').obj (R.obj c)) ≫
+        (coyoneda.obj ⟨d⟩).map (adj.unit.app ((ihom d').obj (R.obj c)))) from
+      IsIso.of_isIso_comp_right _ ((coyoneda.obj ⟨d⟩).map (adj.unit.app ((ihom d').obj (R.obj c))))
+    rw [w₄]
+    refine IsIso.comp_isIso' inferInstance ?_
+    constructor
+    -- We give the inverse of the bottom map in the stack of commutative squares:
+    refine ⟨↾fun f => R.map ((adj.homEquiv _ _).symm f), ?_, by ext; simp⟩
+    ext f
+    simp only [comp_obj, flip_obj_obj, yoneda_obj_obj, id_obj, flip_map_app, yoneda_obj_map,
+      Quiver.Hom.unop_op, Adjunction.homEquiv_counit, map_comp, TypeCat.Fun.toFun_apply, comp_apply,
+      ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, Category.assoc, id_apply]
+    have : f = R.map (R.preimage f) := by simp
+    rw [this]
+    simp [← map_comp, -map_preimage]
+  tfae_have 2 ↔ 3 := by
+    conv => lhs; intro c d; rw [isIso_iff_isIso_yoneda_map]
+    conv => rhs; intro d d'; rw [isIso_iff_isIso_coyoneda_map]
+    -- bring the quantifiers out of the `↔`:
+    rw [forall_comm]; apply forall_congr'; intro d
+    rw [forall_comm]; apply forall₂_congr; intro d' c
+    -- `w₁, w₂,` are the two stacked commutative squares in the proof on nLab:
+    have w₁ : ((coyoneda.map (L.map (adj.unit.app d ▷ d')).op).app c) =
+        (adj.homEquiv _ _).symm ∘
+          (coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c) ∘
+            (adj.homEquiv _ _) := by ext; simp
+    have w₂ : ((yoneda.map ((pre (adj.unit.app d)).app (R.obj c))).app ⟨d'⟩ : _ -> _) =
+          ((ihom.adjunction d).homEquiv _ _) ∘
+            ((coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c)) ∘
+              ((ihom.adjunction ((L ⋙ R).obj d)).homEquiv _ _).symm := by
+      rw [← Function.comp_assoc]; rw [((ihom.adjunction ((L ⋙ R).obj d)).homEquiv _ _).eq_comp_symm]
+      ext
+      simp only [id_obj, yoneda_obj_obj, comp_obj, Function.comp_apply,
+        yoneda_map_app, op_tensorObj, flip_obj_obj, yoneda_obj_obj, unop_tensorObj, op_whiskerRight,
+        flip_map_app]
+      rw [Adjunction.homEquiv_unit]; rw [Adjunction.homEquiv_unit]
+      simp
+    rw [isIso_iff_bijective]; rw [isIso_iff_bijective]; rw [w₂]; rw [w₁]
+    simp
+  tfae_finish
 
 中文:
 定理 isIso_tfae
@@ -153,6 +256,99 @@ theorem isIso_tfae
     have h' : forall d d', IsIso (L.map (d ◁ (adj.unit.app d'))) := by
       intro d d'
       have := braiding_naturality (𝟙 d) (adj.unit.app d')
+      rw [← Iso.eq_comp_inv]; rw [id_tensorHom] at this
+      rw [this]
+      simp only [map_comp, id_obj, comp_obj, tensorHom_id, Category.assoc]
+      infer_instance
+    intro d d'
+    -- We then write the tensor product of the two units as the composition of the whiskered units,
+    -- and conclude.
+    have : (adj.unit.app d) otimesₘ (adj.unit.app d') =
+        (adj.unit.app d ▷ d') ≫ (((L ⋙ R).obj _) ◁ adj.unit.app d') := by
+      simp [← tensorHom_id, ← id_tensorHom, tensorHom_comp_tensorHom]
+    rw [this]; rw [map_comp]
+    infer_instance
+  tfae_have 4 -> 1
+  | _, _, _ => by
+    -- It is enough to show that the unit is a split monomorphism, and the retraction is given
+    -- by `adjRetraction` above.
+    let _ : Reflective R := { L := L, adj := adj }
+    have : IsIso adj.toMonad.μ := μ_iso_of_reflective (R := R)
+    dsimp
+    rw [← dsimp% [Adjunction.toMonad] adj.toMonad.isSplitMono_iff_isIso_unit]
+    exact ⟨⟨adjRetraction adj _ _, adjRetraction_is_retraction adj _ _⟩⟩
+  tfae_have 1 -> 3
+  | h, d, d' => by
+    rw [isIso_iff_isIso_coyoneda_map]
+    intro c
+    -- `w₁, w₃, w₄` are the three stacked commutative squares in the proof on nLab:
+    have w₁ : (coyoneda.map (L.map (adj.unit.app d ▷ d')).op).app c = (adj.homEquiv _ _).symm ∘
+        (coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c) ∘ adj.homEquiv _ _ := by ext; simp
+    rw [isIso_iff_bijective]; rw [w₁]
+    simp only [comp_obj, flip_obj_obj, yoneda_obj_obj, id_obj, op_tensorObj, unop_tensorObj,
+      EquivLike.comp_bijective, EquivLike.bijective_comp]
+    -- We commute the tensor product using the auxiliary commutative square `w₂`.
+    have w₂ : ((coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c)) =
+        ((yoneda.obj (R.obj c)).mapIso (β_ _ _)).hom ≫
+          ((coyoneda.map (d' ◁ adj.unit.app d).op).app (R.obj c)) ≫
+            ((yoneda.obj (R.obj c)).mapIso (β_ _ _)).hom := by ext; simp
+    rw [w₂]; rw [← isIso_iff_bijective]
+suffices IsIso (coyoneda.map (d' ◁ adj.unit.app d).op).app (R.obj c) by infer_instance
+    have w₃ : ((coyoneda.map (d' ◁ adj.unit.app d).op).app (R.obj c) : _ -> _) =
+        ((ihom.adjunction d').homEquiv _ _).symm ∘
+          ((coyoneda.map (adj.unit.app _).op).app _) ∘ (ihom.adjunction d').homEquiv _ _ := by
+      ext
+      simp only [id_obj, op_tensorObj, flip_obj_obj, yoneda_obj_obj, unop_tensorObj, comp_obj,
+        flip_map_app, Function.comp_apply, Adjunction.homEquiv_unit, Adjunction.homEquiv_counit]
+      simp
+    rw [isIso_iff_bijective]; rw [w₃]
+    simp only [comp_obj, op_tensorObj, flip_obj_obj, yoneda_obj_obj, unop_tensorObj, id_obj,
+      yoneda_obj_obj, curriedTensor_obj_obj, EquivLike.comp_bijective, EquivLike.bijective_comp]
+    have w₄ : (coyoneda.map (adj.unit.app d).op).app ((ihom d').obj (R.obj c)) ≫
+        (coyoneda.obj ⟨d⟩).map (adj.unit.app ((ihom d').obj (R.obj c))) =
+          (coyoneda.obj ⟨(L ⋙ R).obj d⟩).map (adj.unit.app ((ihom d').obj (R.obj c))) ≫
+            (coyoneda.map (adj.unit.app d).op).app _ := by cat_disch
+    rw [← isIso_iff_bijective]
+    suffices IsIso ((coyoneda.map (adj.unit.app d).op).app ((ihom d').obj (R.obj c)) ≫
+        (coyoneda.obj ⟨d⟩).map (adj.unit.app ((ihom d').obj (R.obj c)))) from
+      IsIso.of_isIso_comp_right _ ((coyoneda.obj ⟨d⟩).map (adj.unit.app ((ihom d').obj (R.obj c))))
+    rw [w₄]
+    refine IsIso.comp_isIso' inferInstance ?_
+    constructor
+    -- We give the inverse of the bottom map in the stack of commutative squares:
+    refine ⟨↾fun f => R.map ((adj.homEquiv _ _).symm f), ?_, by ext; simp⟩
+    ext f
+    simp only [comp_obj, flip_obj_obj, yoneda_obj_obj, id_obj, flip_map_app, yoneda_obj_map,
+      Quiver.Hom.unop_op, Adjunction.homEquiv_counit, map_comp, TypeCat.Fun.toFun_apply, comp_apply,
+      ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, Category.assoc, id_apply]
+    have : f = R.map (R.preimage f) := by simp
+    rw [this]
+    simp [← map_comp, -map_preimage]
+  tfae_have 2 ↔ 3 := by
+    conv => lhs; intro c d; rw [isIso_iff_isIso_yoneda_map]
+    conv => rhs; intro d d'; rw [isIso_iff_isIso_coyoneda_map]
+    -- bring the quantifiers out of the `↔`:
+    rw [forall_comm]; apply forall_congr'; intro d
+    rw [forall_comm]; apply forall₂_congr; intro d' c
+    -- `w₁, w₂,` are the two stacked commutative squares in the proof on nLab:
+    have w₁ : ((coyoneda.map (L.map (adj.unit.app d ▷ d')).op).app c) =
+        (adj.homEquiv _ _).symm ∘
+          (coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c) ∘
+            (adj.homEquiv _ _) := by ext; simp
+    have w₂ : ((yoneda.map ((pre (adj.unit.app d)).app (R.obj c))).app ⟨d'⟩ : _ -> _) =
+          ((ihom.adjunction d).homEquiv _ _) ∘
+            ((coyoneda.map (adj.unit.app d ▷ d').op).app (R.obj c)) ∘
+              ((ihom.adjunction ((L ⋙ R).obj d)).homEquiv _ _).symm := by
+      rw [← Function.comp_assoc]; rw [((ihom.adjunction ((L ⋙ R).obj d)).homEquiv _ _).eq_comp_symm]
+      ext
+      simp only [id_obj, yoneda_obj_obj, comp_obj, Function.comp_apply,
+        yoneda_map_app, op_tensorObj, flip_obj_obj, yoneda_obj_obj, unop_tensorObj, op_whiskerRight,
+        flip_map_app]
+      rw [Adjunction.homEquiv_unit]; rw [Adjunction.homEquiv_unit]
+      simp
+    rw [isIso_iff_bijective]; rw [isIso_iff_bijective]; rw [w₂]; rw [w₁]
+    simp
+  tfae_finish
 
 Depends on / 依赖: tfae_have
 -/
@@ -299,7 +495,10 @@ definition closed
       (FullyFaithful.ofFullyFaithful R)
       (FullyFaithful.id _) ?_ ?_
     · refine NatIso.ofComponents (fun _ => (μIso L _ _).symm ≪≫
-        asIso ((adj.counit.app _) otimesₘ (adj.counit.
+        asIso ((adj.counit.app _) otimesₘ (adj.counit.app _))) (fun _ => ?_)
+      dsimp
+      rw [Category.assoc]; rw [← δ_natural_right_assoc]; rw [tensorHom_def']; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [Adjunction.counit_naturality]; rw [whisker_exchange]; rw [tensorHom_def_assoc]; rw [MonoidalCategory.whiskerLeft_comp]
+    · exact NatIso.ofComponents (fun _ => asIso (adj.unit.app ((ihom _).obj _)))
 
 中文:
 定义 closed
@@ -310,7 +509,10 @@ definition closed
       (FullyFaithful.ofFullyFaithful R)
       (FullyFaithful.id _) ?_ ?_
     · refine NatIso.ofComponents (fun _ => (μIso L _ _).symm ≪≫
-        asIso ((adj.counit.app _) otimesₘ (adj.counit.
+        asIso ((adj.counit.app _) otimesₘ (adj.counit.app _))) (fun _ => ?_)
+      dsimp
+      rw [Category.assoc]; rw [← δ_natural_right_assoc]; rw [tensorHom_def']; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [Adjunction.counit_naturality]; rw [whisker_exchange]; rw [tensorHom_def_assoc]; rw [MonoidalCategory.whiskerLeft_comp]
+    · exact NatIso.ofComponents (fun _ => asIso (adj.unit.app ((ihom _).obj _)))
 
 Depends on / 依赖: R.obj
 -/

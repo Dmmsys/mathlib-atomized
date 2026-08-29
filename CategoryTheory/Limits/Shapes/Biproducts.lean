@@ -276,7 +276,7 @@ definition functoriality
   map f :=
     { hom := G.map f.hom
       wπ := fun j => by simp [-BiconeMorphism.wπ, ← f.wπ j]
-      wι := fun j => 
+      wι := fun j => by simp [-BiconeMorphism.wι, ← f.wι j] }
 
 中文:
 定义 functoriality
@@ -290,7 +290,7 @@ definition functoriality
   map f :=
     { hom := G.map f.hom
       wπ := fun j => by simp [-BiconeMorphism.wπ, ← f.wπ j]
-      wι := fun j => 
+      wι := fun j => by simp [-BiconeMorphism.wι, ← f.wι j] }
 
 Depends on / 依赖: A.pt, BiconeMorphism, BiconeMorphism.w, Functor, Functor.map_comp, G.map, G.obj, cat_disch, f.hom, map_comp, symm.trans
 -/
@@ -868,7 +868,16 @@ definition whiskerIsBilimitIff
   refine equivOfSubsingletonOfSubsingleton (fun hc => ⟨?_, ?_⟩) fun hc => ⟨?_, ?_⟩
   · let := IsLimit.ofIsoLimit hc.isLimit (Bicone.whiskerToCone c g)
     let := (IsLimit.postcomposeHomEquiv (Discrete.functorComp f g).symm _) this
-    exact IsLimit.ofWhiskerEquivalence (Discrete.equivalence g) th
+    exact IsLimit.ofWhiskerEquivalence (Discrete.equivalence g) this
+  · let := IsColimit.ofIsoColimit hc.isColimit (Bicone.whiskerToCocone c g)
+    let := (IsColimit.precomposeHomEquiv (Discrete.functorComp f g) _) this
+    exact IsColimit.ofWhiskerEquivalence (Discrete.equivalence g) this
+  · apply IsLimit.ofIsoLimit _ (Bicone.whiskerToCone c g).symm
+    apply (IsLimit.postcomposeHomEquiv (Discrete.functorComp f g).symm _).symm _
+    exact IsLimit.whiskerEquivalence hc.isLimit (Discrete.equivalence g)
+  · apply IsColimit.ofIsoColimit _ (Bicone.whiskerToCocone c g).symm
+    apply (IsColimit.precomposeHomEquiv (Discrete.functorComp f g) _).symm _
+    exact IsColimit.whiskerEquivalence hc.isColimit (Discrete.equivalence g)
 
 中文:
 定义 whiskerIsBilimitIff
@@ -877,7 +886,16 @@ definition whiskerIsBilimitIff
   refine equivOfSubsingletonOfSubsingleton (fun hc => ⟨?_, ?_⟩) fun hc => ⟨?_, ?_⟩
   · let := IsLimit.ofIsoLimit hc.isLimit (Bicone.whiskerToCone c g)
     let := (IsLimit.postcomposeHomEquiv (Discrete.functorComp f g).symm _) this
-    exact IsLimit.ofWhiskerEquivalence (Discrete.equivalence g) th
+    exact IsLimit.ofWhiskerEquivalence (Discrete.equivalence g) this
+  · let := IsColimit.ofIsoColimit hc.isColimit (Bicone.whiskerToCocone c g)
+    let := (IsColimit.precomposeHomEquiv (Discrete.functorComp f g) _) this
+    exact IsColimit.ofWhiskerEquivalence (Discrete.equivalence g) this
+  · apply IsLimit.ofIsoLimit _ (Bicone.whiskerToCone c g).symm
+    apply (IsLimit.postcomposeHomEquiv (Discrete.functorComp f g).symm _).symm _
+    exact IsLimit.whiskerEquivalence hc.isLimit (Discrete.equivalence g)
+  · apply IsColimit.ofIsoColimit _ (Bicone.whiskerToCocone c g).symm
+    apply (IsColimit.precomposeHomEquiv (Discrete.functorComp f g) _).symm _
+    exact IsColimit.whiskerEquivalence hc.isColimit (Discrete.equivalence g)
 
 Depends on / 依赖: Bicone, Bicone.whiskerToCocone, Bicone.whiskerToCone, Discrete, Discrete.equivalence, Discrete.functorComp, IsColimit, IsColimit.ofIsoColimit, IsColimit.ofWhiskerEquivalence, IsColimit.precomposeHomEquiv, IsLimit, IsLimit.ofIsoLimit, IsLimit.ofWhiskerEquivalence, IsLimit.postcomposeHomEquiv, equivOfSubsingletonOfSubsingleton, equivalence, functorComp, hc.isColimit, hc.isLimit, isColimit
 -/
@@ -1719,7 +1737,7 @@ definition HasBiproductsOfShape.colimIsoLim
     fun η => colimit.hom_ext fun ⟨i⟩ => limit.hom_ext fun ⟨j⟩ => by
       classical
       by_cases h : i = j <;>
-       simp_all [Sigma.isoColimit, Pi.isoLimit
+       simp_all [Sigma.isoColimit, Pi.isoLimit, biproduct.ι_π, biproduct.ι_π_assoc]
 
 中文:
 定义 有BiproductsOfShape.colimIsoLim
@@ -1729,7 +1747,7 @@ definition HasBiproductsOfShape.colimIsoLim
     fun η => colimit.hom_ext fun ⟨i⟩ => limit.hom_ext fun ⟨j⟩ => by
       classical
       by_cases h : i = j <;>
-       simp_all [Sigma.isoColimit, Pi.isoLimit
+       simp_all [Sigma.isoColimit, Pi.isoLimit, biproduct.ι_π, biproduct.ι_π_assoc]
 
 Depends on / 依赖: Discrete
 -/
@@ -1940,7 +1958,8 @@ instance biproduct.map_epi
     · subst_vars
       simp
     · simp_all
-  rw [th
+  rw [this]
+  infer_instance
 
 中文:
 实例 biproduct.map_epi
@@ -1955,7 +1974,8 @@ instance biproduct.map_epi
     · subst_vars
       simp
     · simp_all
-  rw [th
+  rw [this]
+  infer_instance
 
 Depends on / 依赖: Category, Category.assoc, Sigma.map, biproduct, biproduct.isoCoproduct, biproduct.map, classical, infer_instance, isoCoproduct, isoCoproduct_hom, isoCoproduct_inv
 -/
@@ -2152,7 +2172,13 @@ lemma biproduct.whiskerEquiv_inv_eq_lift
   · subst h
     simp only [ι_desc_assoc, ← eqToHom_iso_hom_naturality_assoc w (e.symm_apply_apply j).symm,
       Equiv.symm_apply_apply, eqToHom_comp_ι, Category.assoc, bicone_ι_π_self, Category.comp_id,
-      lift_π, bicone_ι_π_self
+      lift_π, bicone_ι_π_self_assoc]
+  · simp only [ι_desc_assoc, Category.assoc, lift_π]
+    rw [biproduct.ι_π_ne]; rw [biproduct.ι_π_ne_assoc]
+    · simp
+    · exact h
+    · rintro rfl
+      simp at h
 
 中文:
 引理 biproduct.whiskerEquiv_inv_eq_lift
@@ -2164,7 +2190,13 @@ lemma biproduct.whiskerEquiv_inv_eq_lift
   · subst h
     simp only [ι_desc_assoc, ← eqToHom_iso_hom_naturality_assoc w (e.symm_apply_apply j).symm,
       Equiv.symm_apply_apply, eqToHom_comp_ι, Category.assoc, bicone_ι_π_self, Category.comp_id,
-      lift_π, bicone_ι_π_self
+      lift_π, bicone_ι_π_self_assoc]
+  · simp only [ι_desc_assoc, Category.assoc, lift_π]
+    rw [biproduct.ι_π_ne]; rw [biproduct.ι_π_ne_assoc]
+    · simp
+    · exact h
+    · rintro rfl
+      simp at h
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Equiv.symm_apply_apply, biproduct, comp_id, e.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, symm_apply_apply, whiskerEquiv_inv
 -/
@@ -2296,7 +2328,7 @@ theorem biproduct.fromSubtype_π
   · rw [dif_pos h, biproduct.ι_π]
     split_ifs with h₁ h₂ h₂
     exacts [rfl, False.elim (h₂ (Subtype.ext h₁)), False.elim (h₁ (congr_arg Subtype.val h₂)), rfl]
-  · rw [dif_neg h,
+  · rw [dif_neg h, dif_neg (show (i : J) != j from fun h₂ => h (h₂ ▸ i.2)), comp_zero]
 
 中文:
 定理 biproduct.fromSubtype_π
@@ -2309,7 +2341,7 @@ theorem biproduct.fromSubtype_π
   · rw [dif_pos h, biproduct.ι_π]
     split_ifs with h₁ h₂ h₂
     exacts [rfl, False.elim (h₂ (Subtype.ext h₁)), False.elim (h₁ (congr_arg Subtype.val h₂)), rfl]
-  · rw [dif_neg h,
+  · rw [dif_neg h, dif_neg (show (i : J) != j from fun h₂ => h (h₂ ▸ i.2)), comp_zero]
 
 Depends on / 依赖: False.elim, Subtype, Subtype.ext, Subtype.val, biproduct, biproduct.fromSubtype, classical, comp_zero, congr_arg, dif_neg, dif_pos, exacts, fromSubtype, split_ifs
 -/
@@ -2420,7 +2452,7 @@ theorem biproduct.ι_toSubtype
   · rw [dif_pos h, biproduct.ι_π]
     split_ifs with h₁ h₂ h₂
     exacts [rfl, False.elim (h₂ (Subtype.ext h₁)), False.elim (h₁ (congr_arg Subtype.val h₂)), rfl]
-  · r
+  · rw [dif_neg h, dif_neg (show j != i from fun h₂ => h (h₂.symm ▸ i.2)), zero_comp]
 
 中文:
 定理 biproduct.ι_toSubtype
@@ -2433,7 +2465,7 @@ theorem biproduct.ι_toSubtype
   · rw [dif_pos h, biproduct.ι_π]
     split_ifs with h₁ h₂ h₂
     exacts [rfl, False.elim (h₂ (Subtype.ext h₁)), False.elim (h₁ (congr_arg Subtype.val h₂)), rfl]
-  · r
+  · rw [dif_neg h, dif_neg (show j != i from fun h₂ => h (h₂.symm ▸ i.2)), zero_comp]
 
 Depends on / 依赖: Category, Category.assoc, False.elim, Subtype, Subtype.ext, Subtype.val, biproduct, biproduct.lift_, biproduct.toSubtype, classical, congr_arg, dif_neg, dif_pos, exacts, split_ifs, toSubtype, zero_comp
 -/
@@ -2602,7 +2634,11 @@ definition biproduct.isLimitFromSubtype
       apply biproduct.hom_ext; intro j
       rw [KernelFork.ι_ofι]; rw [Category.assoc]; rw [Category.assoc]; rw [biproduct.toSubtype_fromSubtype_assoc]; rw [biproduct.map_π]
       rcases Classical.em (i = j) with (rfl | h)
-      · r
+      · rw [if_neg (Classical.not_not.2 rfl), comp_zero, comp_zero, KernelFork.condition]
+      · rw [if_pos (Ne.symm h), Category.comp_id], by
+      intro m hm
+      rw [← hm]; rw [KernelFork.ι_ofι]; rw [Category.assoc]; rw [biproduct.fromSubtype_toSubtype]
+      exact (Category.comp_id _).symm⟩
 
 中文:
 定义 biproduct.isLimitFromSubtype
@@ -2612,7 +2648,11 @@ definition biproduct.isLimitFromSubtype
       apply biproduct.hom_ext; intro j
       rw [KernelFork.ι_ofι]; rw [Category.assoc]; rw [Category.assoc]; rw [biproduct.toSubtype_fromSubtype_assoc]; rw [biproduct.map_π]
       rcases Classical.em (i = j) with (rfl | h)
-      · r
+      · rw [if_neg (Classical.not_not.2 rfl), comp_zero, comp_zero, KernelFork.condition]
+      · rw [if_pos (Ne.symm h), Category.comp_id], by
+      intro m hm
+      rw [← hm]; rw [KernelFork.ι_ofι]; rw [Category.assoc]; rw [biproduct.fromSubtype_toSubtype]
+      exact (Category.comp_id _).symm⟩
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Classical, Classical.em, Classical.not_not, Fork.IsLimit.mk, IsLimit, KernelFork, KernelFork.condition, Ne.symm, biproduct, biproduct.fromSubtype_toSubty, biproduct.hom_ext, biproduct.map_, biproduct.toSubtype, biproduct.toSubtype_fromSubtype_assoc, comp_id, comp_zero, condition
 -/
@@ -2681,7 +2721,11 @@ definition biproduct.isColimitToSubtype
       apply biproduct.hom_ext'; intro j
       rw [CokernelCofork.π_ofπ]; rw [biproduct.toSubtype_fromSubtype_assoc]; rw [biproduct.ι_map_assoc]
       rcases Classical.em (i = j) with (rfl | h)
-      · rw [if_neg (Classical.not_
+      · rw [if_neg (Classical.not_not.2 rfl), zero_comp, CokernelCofork.condition]
+      · rw [if_pos (Ne.symm h), Category.id_comp], by
+      intro m hm
+      rw [← hm]; rw [CokernelCofork.π_ofπ]; rw [← Category.assoc]; rw [biproduct.fromSubtype_toSubtype]
+      exact (Category.id_comp _).symm⟩
 
 中文:
 定义 biproduct.isColimitToSubtype
@@ -2691,7 +2735,11 @@ definition biproduct.isColimitToSubtype
       apply biproduct.hom_ext'; intro j
       rw [CokernelCofork.π_ofπ]; rw [biproduct.toSubtype_fromSubtype_assoc]; rw [biproduct.ι_map_assoc]
       rcases Classical.em (i = j) with (rfl | h)
-      · rw [if_neg (Classical.not_
+      · rw [if_neg (Classical.not_not.2 rfl), zero_comp, CokernelCofork.condition]
+      · rw [if_pos (Ne.symm h), Category.id_comp], by
+      intro m hm
+      rw [← hm]; rw [CokernelCofork.π_ofπ]; rw [← Category.assoc]; rw [biproduct.fromSubtype_toSubtype]
+      exact (Category.id_comp _).symm⟩
 
 Depends on / 依赖: Category, Category.assoc, Category.id_com, Category.id_comp, Classical, Classical.em, Classical.not_not, Cofork, Cofork.IsColimit.mk, CokernelCofork, CokernelCofork.condition, IsColimit, Ne.symm, biproduct, biproduct.fromSubtype, biproduct.fromSubtype_toSubtype, biproduct.hom_ext, biproduct.toSubtype_fromSubtype_assoc, condition, fromSubtype
 -/
@@ -2773,7 +2821,18 @@ definition kernelForkBiproductToSubtype
         rw [dif_neg k.2]
         simp only [zero_comp])
   isLimit :=
-    KernelFork.I
+    KernelFork.IsLimit.ofι _ _ (fun {_} g _ => g ≫ biproduct.toSubtype f pᶜ)
+      (by
+        classical
+        intro W' g' w
+        ext j
+        simp only [Category.assoc, biproduct.toSubtype_fromSubtype, Pi.compl_apply,
+          biproduct.map_π]
+        split_ifs with h
+        · simp
+        · replace w := w =≫ biproduct.π _ ⟨j, not_not.mp h⟩
+          simpa using w.symm)
+      (by cat_disch)
 
 中文:
 定义 kernelForkBiproductToSubtype
@@ -2787,7 +2846,18 @@ definition kernelForkBiproductToSubtype
         rw [dif_neg k.2]
         simp only [zero_comp])
   isLimit :=
-    KernelFork.I
+    KernelFork.IsLimit.ofι _ _ (fun {_} g _ => g ≫ biproduct.toSubtype f pᶜ)
+      (by
+        classical
+        intro W' g' w
+        ext j
+        simp only [Category.assoc, biproduct.toSubtype_fromSubtype, Pi.compl_apply,
+          biproduct.map_π]
+        split_ifs with h
+        · simp
+        · replace w := w =≫ biproduct.π _ ⟨j, not_not.mp h⟩
+          simpa using w.symm)
+      (by cat_disch)
 
 Depends on / 依赖: Category, Category.assoc, IsLimit, KernelFork, KernelFork.IsLimit.of, KernelFork.of, Pi.compl_apply, biproduct, biproduct.fromSubtype, biproduct.map_, biproduct.toSubtype, biproduct.toSubtype_fromSubtype, classical, comp_zero, compl_apply, dif_neg, fromSubtype, isLimit, not_not, not_not.mp
 -/
@@ -2858,7 +2928,19 @@ definition cokernelCoforkBiproductFromSubtype
           biproduct.ι_toSubtype_assoc, comp_zero, zero_comp]
         rw [dif_neg]
         · simp only [zero_comp]
-        · exac
+        · exact not_not.mpr k.2)
+  isColimit :=
+    CokernelCofork.IsColimit.ofπ _ _ (fun {_} g _ => biproduct.fromSubtype f pᶜ ≫ g)
+      (by
+        classical
+        intro W g' w
+        ext j
+        simp only [biproduct.toSubtype_fromSubtype_assoc, Pi.compl_apply, biproduct.ι_map_assoc]
+        split_ifs with h
+        · simp
+        · replace w := biproduct.ι _ (⟨j, not_not.mp h⟩ : Subtype p) ≫= w
+          simpa using w.symm)
+      (by cat_disch)
 
 中文:
 定义 cokernelCoforkBiproductFromSubtype
@@ -2871,7 +2953,19 @@ definition cokernelCoforkBiproductFromSubtype
           biproduct.ι_toSubtype_assoc, comp_zero, zero_comp]
         rw [dif_neg]
         · simp only [zero_comp]
-        · exac
+        · exact not_not.mpr k.2)
+  isColimit :=
+    CokernelCofork.IsColimit.ofπ _ _ (fun {_} g _ => biproduct.fromSubtype f pᶜ ≫ g)
+      (by
+        classical
+        intro W g' w
+        ext j
+        simp only [biproduct.toSubtype_fromSubtype_assoc, Pi.compl_apply, biproduct.ι_map_assoc]
+        split_ifs with h
+        · simp
+        · replace w := biproduct.ι _ (⟨j, not_not.mp h⟩ : Subtype p) ≫= w
+          simpa using w.symm)
+      (by cat_disch)
 
 Depends on / 依赖: Category, Category.assoc, CokernelCofork, CokernelCofork.IsColimit.of, CokernelCofork.of, IsColimit, Pi.compl_apply, biproduct, biproduct.fromSubtype, biproduct.toSubtype, biproduct.toSubtype_fromSubtype_assoc, classical, comp_zero, compl_apply, dif_neg, fromSubtype, isColimit, not_not, not_not.mpr, split_ifs
 -/
@@ -3219,7 +3313,7 @@ definition biproduct.uniqueUpToIso
       biproduct.conePointUniqueUpToIso_inv f hb]; rw [Iso.hom_inv_id]
   inv_hom_id := by
     rw [← biproduct.conePointUniqueUpToIso_hom f hb]; rw [←
-      biproduct.conePoint
+      biproduct.conePointUniqueUpToIso_inv f hb]; rw [Iso.inv_hom_id]
 
 中文:
 定义 biproduct.uniqueUpToIso
@@ -3231,7 +3325,7 @@ definition biproduct.uniqueUpToIso
       biproduct.conePointUniqueUpToIso_inv f hb]; rw [Iso.hom_inv_id]
   inv_hom_id := by
     rw [← biproduct.conePointUniqueUpToIso_hom f hb]; rw [←
-      biproduct.conePoint
+      biproduct.conePointUniqueUpToIso_inv f hb]; rw [Iso.inv_hom_id]
 
 Depends on / 依赖: biproduct, biproduct.lift
 -/

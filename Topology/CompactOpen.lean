@@ -305,7 +305,20 @@ lemma _root_.Filter.HasBasis.nhds_continuousMapConst
     choose hScompact hSopen hSmaps using hS
     have : ⋂ KU in S, ⋂ (_ : KU.1.Nonempty), KU.2 in 𝓝 c := by
       simp only [biInter_mem hSf, Prod.forall, iInter_mem]
-      rintro 
+      rintro K U hKU ⟨x, hx⟩
+exact (hSopen K U hKU).mem_nhds hSmaps K U hKU hx
+    rcases h.mem_iff.mp this with ⟨i, hpi, hi⟩
+refine ⟨(⋃ KU in S, KU.1, i), ⟨hSf.isCompact_biUnion Prod.forall.2 hScompact, hpi⟩,
+      Subset.trans ?_ hSsub⟩
+    intro f hf K V hKV
+    rcases K.eq_empty_or_nonempty with rfl | hKne
+    · exact mapsTo_empty _ _
+    · refine hf.out.mono (subset_biUnion_of_mem (u := Prod.fst) hKV) (hi.trans ?_)
+exact (biInter_subset_of_mem hKV).trans iInter_subset _ hKne
+  · rcases hs with ⟨⟨K, i⟩, ⟨hK, hpi⟩, hi⟩
+    filter_upwards [eventually_mapsTo hK isOpen_interior fun x _ =>
+mem_interior_iff_mem_nhds.mpr h.mem_of_mem hpi] with f hf
+exact hi hf.mono_right interior_subset
 
 中文:
 引理 _root_.滤子.有基.nhds_continuousMapConst
@@ -316,7 +329,20 @@ lemma _root_.Filter.HasBasis.nhds_continuousMapConst
     choose hScompact hSopen hSmaps using hS
     have : ⋂ KU in S, ⋂ (_ : KU.1.Nonempty), KU.2 in 𝓝 c := by
       simp only [biInter_mem hSf, Prod.forall, iInter_mem]
-      rintro 
+      rintro K U hKU ⟨x, hx⟩
+exact (hSopen K U hKU).mem_nhds hSmaps K U hKU hx
+    rcases h.mem_iff.mp this with ⟨i, hpi, hi⟩
+refine ⟨(⋃ KU in S, KU.1, i), ⟨hSf.isCompact_biUnion Prod.forall.2 hScompact, hpi⟩,
+      Subset.trans ?_ hSsub⟩
+    intro f hf K V hKV
+    rcases K.eq_empty_or_nonempty with rfl | hKne
+    · exact mapsTo_empty _ _
+    · refine hf.out.mono (subset_biUnion_of_mem (u := Prod.fst) hKV) (hi.trans ?_)
+exact (biInter_subset_of_mem hKV).trans iInter_subset _ hKne
+  · rcases hs with ⟨⟨K, i⟩, ⟨hK, hpi⟩, hi⟩
+    filter_upwards [eventually_mapsTo hK isOpen_interior fun x _ =>
+mem_interior_iff_mem_nhds.mpr h.mem_of_mem hpi] with f hf
+exact hi hf.mono_right interior_subset
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.mem_nhds_iff.mp, Nonempty, Prod.forall, Subset, Subset.trans, biInter_mem, h.mem_iff.mp, hScompact, hSf.isCompact_biUnion, hSmaps, hSopen, iInter_mem, isCompact_biUnion, mem_iff, mem_nhds, mem_nhds_iff
 -/
@@ -490,7 +516,7 @@ invFun f := .comp ψ.symm f.comp φ
 .trans congrArg f φ.left_inv _ left_inv f := ext fun _ => ψ.left_inv (f _)
 .trans congrArg f φ.right_inv _ right_inv f := ext fun _ => ψ.right_inv (f _)
 .comp continuous_precomp _ continuous_toFun := continuous_postcomp _
-.comp continuous_preco
+.comp continuous_precomp _ continuous_invFun := continuous_postcomp _
 
 中文:
 定义 _root_.同胚.arrowCongr
@@ -500,7 +526,7 @@ invFun f := .comp ψ.symm f.comp φ
 .trans congrArg f φ.left_inv _ left_inv f := ext fun _ => ψ.left_inv (f _)
 .trans congrArg f φ.right_inv _ right_inv f := ext fun _ => ψ.right_inv (f _)
 .comp continuous_precomp _ continuous_toFun := continuous_postcomp _
-.comp continuous_preco
+.comp continuous_precomp _ continuous_invFun := continuous_postcomp _
 -/
 protected def _root_.Homeomorph.arrowCongr (φ : X ≃ₜ Z) (ψ : Y ≃ₜ T) :
     C(X, Y) ≃ₜ C(Z, T) where
@@ -521,7 +547,11 @@ lemma continuous_prodMk_const
   simp_rw [continuous_iff_continuousAt, ContinuousAt, ContinuousMap.tendsto_nhds_compactOpen]
   rintro ⟨r, f⟩ K hK U hU H
   obtain ⟨V, W, hV, hW, hrV, hKW, hVW⟩ := generalized_tube_lemma (isCompact_singleton (x := r))
-    (hK.image f.continuous) hU (by simpa [Set.subset_def, forall_comm (α := X)]
+    (hK.image f.continuous) hU (by simpa [Set.subset_def, forall_comm (α := X)])
+  refine Filter.eventually_of_mem (prod_mem_nhds (hV.mem_nhds (by simpa using hrV))
+    (ContinuousMap.eventually_mapsTo hK hW (Set.mapsTo_iff_image_subset.mpr hKW))) ?_
+  rintro ⟨r', f'⟩ ⟨hr'V, hf'⟩ x hxK
+  exact hVW (Set.mk_mem_prod hr'V (hf' hxK))
 
 中文:
 引理 continuous_prodMk_const
@@ -530,7 +560,11 @@ lemma continuous_prodMk_const
   simp_rw [continuous_iff_continuousAt, ContinuousAt, ContinuousMap.tendsto_nhds_compactOpen]
   rintro ⟨r, f⟩ K hK U hU H
   obtain ⟨V, W, hV, hW, hrV, hKW, hVW⟩ := generalized_tube_lemma (isCompact_singleton (x := r))
-    (hK.image f.continuous) hU (by simpa [Set.subset_def, forall_comm (α := X)]
+    (hK.image f.continuous) hU (by simpa [Set.subset_def, forall_comm (α := X)])
+  refine Filter.eventually_of_mem (prod_mem_nhds (hV.mem_nhds (by simpa using hrV))
+    (ContinuousMap.eventually_mapsTo hK hW (Set.mapsTo_iff_image_subset.mpr hKW))) ?_
+  rintro ⟨r', f'⟩ ⟨hr'V, hf'⟩ x hxK
+  exact hVW (Set.mk_mem_prod hr'V (hf' hxK))
 
 Depends on / 依赖: ContinuousAt, ContinuousMap, ContinuousMap.eventually_mapsTo, ContinuousMap.tendsto_nhds_compactOpen, Filter, Filter.eventually_of_mem, Set.mapsTo_iff_image_subset.mpr, Set.subset_def, continuous, continuous_iff_continuousAt, eventually_mapsTo, eventually_of_mem, f.continuous, forall_comm, generalized_tube_lemma, hK.image, hV.mem_nhds, isCompact_singleton, mapsTo_iff_image_subset, mem_nhds
 -/
@@ -557,7 +591,11 @@ theorem continuous_comp'
   intro ⟨f, g⟩ K hK U hU (hKU : MapsTo (g ∘ f) K U)
   obtain ⟨L, hKL, hLc, hLU⟩ : exists L in 𝓝ˢ (f '' K), IsCompact L ∧ MapsTo g L U :=
     exists_mem_nhdsSet_isCompact_mapsTo g.continuous (hK.image f.continuous) hU
-
+      (mapsTo_image_iff.2 hKU)
+  rw [← subset_interior_iff_mem_nhdsSet]; rw [← mapsTo_iff_image_subset] at hKL
+  exact ((eventually_mapsTo hK isOpen_interior hKL).prod_nhds
+    (eventually_mapsTo hLc hU hLU)).mono fun ⟨f', g'⟩ ⟨hf', hg'⟩ =>
+hg'.comp hf'.mono_right interior_subset
 
 中文:
 定理 continuous_comp'
@@ -567,7 +605,11 @@ theorem continuous_comp'
   intro ⟨f, g⟩ K hK U hU (hKU : MapsTo (g ∘ f) K U)
   obtain ⟨L, hKL, hLc, hLU⟩ : exists L in 𝓝ˢ (f '' K), IsCompact L ∧ MapsTo g L U :=
     exists_mem_nhdsSet_isCompact_mapsTo g.continuous (hK.image f.continuous) hU
-
+      (mapsTo_image_iff.2 hKU)
+  rw [← subset_interior_iff_mem_nhdsSet]; rw [← mapsTo_iff_image_subset] at hKL
+  exact ((eventually_mapsTo hK isOpen_interior hKL).prod_nhds
+    (eventually_mapsTo hLc hU hLU)).mono fun ⟨f', g'⟩ ⟨hf', hg'⟩ =>
+hg'.comp hf'.mono_right interior_subset
 
 Depends on / 依赖: ContinuousAt, IsCompact, MapsTo, continuous, continuous_iff_continuousAt, eventually_mapsTo, exists_mem_nhdsSet_isCompact_mapsTo, f.continuous, g.continuous, hK.image, isOpen_interior, mapsTo_iff_image_subset, mapsTo_image_iff, prod_nhds, simp_rw, subset_interior_iff_mem_nhdsSet, tendsto_nhds_compactOpen
 -/
@@ -665,7 +707,7 @@ instance [LocallyCompactPair
     simp_rw [continuous_iff_continuousAt, ContinuousAt, (nhds_basis_opens _).tendsto_right_iff]
     rintro ⟨f, x⟩ U ⟨hx : f x in U, hU : IsOpen U⟩
     rcases exists_mem_nhds_isCompact_mapsTo f.continuous (hU.mem_nhds hx) with ⟨K, hxK, hK, hKU⟩
-    filter_upwards [prod_mem_nhds (eventually_mapsTo 
+    filter_upwards [prod_mem_nhds (eventually_mapsTo hK hU hKU) hxK] using fun _ h => h.1 h.2
 
 中文:
 实例 [LocallyCompactPair
@@ -674,7 +716,7 @@ instance [LocallyCompactPair
     simp_rw [continuous_iff_continuousAt, ContinuousAt, (nhds_basis_opens _).tendsto_right_iff]
     rintro ⟨f, x⟩ U ⟨hx : f x in U, hU : IsOpen U⟩
     rcases exists_mem_nhds_isCompact_mapsTo f.continuous (hU.mem_nhds hx) with ⟨K, hxK, hK, hKU⟩
-    filter_upwards [prod_mem_nhds (eventually_mapsTo 
+    filter_upwards [prod_mem_nhds (eventually_mapsTo hK hU hKU) hxK] using fun _ h => h.1 h.2
 
 Depends on / 依赖: ContinuousAt, IsOpen, continuous, continuous_iff_continuousAt, eventually_mapsTo, exists_mem_nhds_isCompact_mapsTo, f.continuous, filter_upwards, hU.mem_nhds, mem_nhds, nhds_basis_opens, prod_mem_nhds, simp_rw, tendsto_right_iff
 -/
@@ -924,7 +966,9 @@ instance [RegularSpace
     intro K hK U hU hf
     rcases (hK.image f.continuous).exists_isOpen_closure_subset (hU.mem_nhdsSet.2 hf.image_subset)
       with ⟨V, hVo, hKV, hVU⟩
-    filter_upwards [mem_lift' (eventually_mapsTo hK hVo (maps
+    filter_upwards [mem_lift' (eventually_mapsTo hK hVo (mapsTo_iff_image_subset.2 hKV))] with g hg
+    refine ((isClosed_setOfPred_mapsTo isClosed_closure K).closure_subset ?_).mono_right hVU
+    exact closure_mono (fun _ h => h.mono_right subset_closure) hg
 
 中文:
 实例 [正则空间
@@ -934,7 +978,9 @@ instance [RegularSpace
     intro K hK U hU hf
     rcases (hK.image f.continuous).exists_isOpen_closure_subset (hU.mem_nhdsSet.2 hf.image_subset)
       with ⟨V, hVo, hKV, hVU⟩
-    filter_upwards [mem_lift' (eventually_mapsTo hK hVo (maps
+    filter_upwards [mem_lift' (eventually_mapsTo hK hVo (mapsTo_iff_image_subset.2 hKV))] with g hg
+    refine ((isClosed_setOfPred_mapsTo isClosed_closure K).closure_subset ?_).mono_right hVU
+    exact closure_mono (fun _ h => h.mono_right subset_closure) hg
 
 Depends on / 依赖: _closure_le, closure_mono, closure_subset, continuous, eventually_mapsTo, exists_isOpen_closure_subset, f.continuous, filter_upwards, h.mono_right, hK.image, hU.mem_nhdsSet, hf.image_subset, image_subset, isClosed_closure, isClosed_setOfPred_mapsTo, mapsTo_iff_image_subset, mem_lift, mem_nhdsSet, mono_right, of_lift
 -/
@@ -1100,7 +1146,7 @@ theorem compactOpen_eq_iInf_induced
 refine le_generateFrom forall_mem_image2.2 fun K (hK : IsCompact K) U hU => ?_
   refine TopologicalSpace.le_def.1 (iInf₂_le K hK) _ ?_
   convert! isOpen_induced (isOpen_setOfPred_mapsTo (isCompact_iff_isCompact_univ.1 hK) hU)
-
+  simp [Subtype.forall, MapsTo]
 
 中文:
 定理 compactOpen_eq_iInf_induced
@@ -1109,7 +1155,7 @@ refine le_generateFrom forall_mem_image2.2 fun K (hK : IsCompact K) U hU => ?_
 refine le_generateFrom forall_mem_image2.2 fun K (hK : IsCompact K) U hU => ?_
   refine TopologicalSpace.le_def.1 (iInf₂_le K hK) _ ?_
   convert! isOpen_induced (isOpen_setOfPred_mapsTo (isCompact_iff_isCompact_univ.1 hK) hU)
-
+  simp [Subtype.forall, MapsTo]
 
 Depends on / 依赖: IsCompact, MapsTo, Subtype, Subtype.forall, TopologicalSpace, TopologicalSpace.le_def, compactOpen_le_induced, convert, forall_mem_image2, isCompact_iff_isCompact_univ, isOpen_induced, isOpen_setOfPred_mapsTo, le_antisymm, le_def, le_generateFrom
 -/
@@ -1206,7 +1252,22 @@ theorem exists_tendsto_compactOpen_iff_forall
     choose f hf using h
     -- By uniqueness of limits in a `T2Space`, since `fun i ↦ F i x` tends to both `f s₁ hs₁ x` and
     -- `f s₂ hs₂ x`, we have `f s₁ hs₁ x = f s₂ hs₂ x`
-    have 
+    have h :
+      forall (s₁) (hs₁ : IsCompact s₁) (s₂) (hs₂ : IsCompact s₂) (x : X) (hxs₁ : x in s₁) (hxs₂ : x in s₂),
+        f s₁ hs₁ ⟨x, hxs₁⟩ = f s₂ hs₂ ⟨x, hxs₂⟩ := by
+      rintro s₁ hs₁ s₂ hs₂ x hxs₁ hxs₂
+      have := isCompact_iff_compactSpace.mp hs₁
+      have := isCompact_iff_compactSpace.mp hs₂
+      have h₁ := (continuous_eval_const (⟨x, hxs₁⟩ : s₁)).continuousAt.tendsto.comp (hf s₁ hs₁)
+      have h₂ := (continuous_eval_const (⟨x, hxs₂⟩ : s₂)).continuousAt.tendsto.comp (hf s₂ hs₂)
+      exact tendsto_nhds_unique h₁ h₂
+    -- So glue the `f s hs` together and prove that this glued function `f₀` is a limit on each
+    -- compact set `s`
+    refine ⟨liftCover' _ _ h exists_compact_mem_nhds, ?_⟩
+    rw [tendsto_compactOpen_iff_forall]
+    intro s hs
+    rw [liftCover_restrict']
+    exact hf s hs
 
 中文:
 定理 存在_tendsto_compactOpen_iff_对任意
@@ -1219,7 +1280,22 @@ theorem exists_tendsto_compactOpen_iff_forall
     choose f hf using h
     -- By uniqueness of limits in a `T2Space`, since `fun i ↦ F i x` tends to both `f s₁ hs₁ x` and
     -- `f s₂ hs₂ x`, we have `f s₁ hs₁ x = f s₂ hs₂ x`
-    have 
+    have h :
+      forall (s₁) (hs₁ : IsCompact s₁) (s₂) (hs₂ : IsCompact s₂) (x : X) (hxs₁ : x in s₁) (hxs₂ : x in s₂),
+        f s₁ hs₁ ⟨x, hxs₁⟩ = f s₂ hs₂ ⟨x, hxs₂⟩ := by
+      rintro s₁ hs₁ s₂ hs₂ x hxs₁ hxs₂
+      have := isCompact_iff_compactSpace.mp hs₁
+      have := isCompact_iff_compactSpace.mp hs₂
+      have h₁ := (continuous_eval_const (⟨x, hxs₁⟩ : s₁)).continuousAt.tendsto.comp (hf s₁ hs₁)
+      have h₂ := (continuous_eval_const (⟨x, hxs₂⟩ : s₂)).continuousAt.tendsto.comp (hf s₂ hs₂)
+      exact tendsto_nhds_unique h₁ h₂
+    -- So glue the `f s hs` together and prove that this glued function `f₀` is a limit on each
+    -- compact set `s`
+    refine ⟨liftCover' _ _ h exists_compact_mem_nhds, ?_⟩
+    rw [tendsto_compactOpen_iff_forall]
+    intro s hs
+    rw [liftCover_restrict']
+    exact hf s hs
 
 Depends on / 依赖: f.restrict, restrict, tendsto_compactOpen_restrict
 -/
@@ -1614,7 +1690,9 @@ lemma continuousOn_mkD_of_uncurry
     (Continuous.prodMk_right x) fun _ => ⟨hx, trivial⟩
   simp_rw [continuousOn_iff_continuous_domRestrict, s.domRestrict_def]
   refine continuous_of_continuous_uncurry _ ?_
-  conv in mkD _ _ => rw [mkD_of_continuous (this x x.2
+  conv in mkD _ _ => rw [mkD_of_continuous (this x x.2)]
+  exact f_cont.comp_continuous (.prodMap continuous_subtype_val continuous_id)
+    fun xz => ⟨xz.1.2, trivial⟩
 
 中文:
 引理 continuousOn_mkD_of_uncurry
@@ -1624,7 +1702,9 @@ lemma continuousOn_mkD_of_uncurry
     (Continuous.prodMk_right x) fun _ => ⟨hx, trivial⟩
   simp_rw [continuousOn_iff_continuous_domRestrict, s.domRestrict_def]
   refine continuous_of_continuous_uncurry _ ?_
-  conv in mkD _ _ => rw [mkD_of_continuous (this x x.2
+  conv in mkD _ _ => rw [mkD_of_continuous (this x x.2)]
+  exact f_cont.comp_continuous (.prodMap continuous_subtype_val continuous_id)
+    fun xz => ⟨xz.1.2, trivial⟩
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, comp_continuous, continuousOn_iff_continuous_domRestrict, continuous_id, continuous_of_continuous_uncurry, continuous_subtype_val, domRestrict_def, f_cont, f_cont.comp_continuous, mkD_of_continuous, prodMap, prodMk_right, s.domRestrict_def, simp_rw
 -/
@@ -1651,7 +1731,8 @@ lemma continuous_mkD_restrict_of_uncurry
     f_cont.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨trivial, hz⟩
   refine continuous_of_continuous_uncurry _ ?_
   conv in mkD _ _ => rw [mkD_of_continuousOn (this x)]
-  exact f_cont.comp_continuous (.prodMap continuous_id continuous_subty
+  exact f_cont.comp_continuous (.prodMap continuous_id continuous_subtype_val)
+    fun xz => ⟨trivial, xz.2.2⟩
 
 中文:
 引理 continuous_mkD_restrict_of_uncurry
@@ -1661,7 +1742,8 @@ lemma continuous_mkD_restrict_of_uncurry
     f_cont.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨trivial, hz⟩
   refine continuous_of_continuous_uncurry _ ?_
   conv in mkD _ _ => rw [mkD_of_continuousOn (this x)]
-  exact f_cont.comp_continuous (.prodMap continuous_id continuous_subty
+  exact f_cont.comp_continuous (.prodMap continuous_id continuous_subtype_val)
+    fun xz => ⟨trivial, xz.2.2⟩
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, ContinuousOn, comp_continuous, continuousOn, continuous_id, continuous_of_continuous_uncurry, continuous_subtype_val, f_cont, f_cont.comp, f_cont.comp_continuous, mkD_of_continuousOn, prodMap, prodMk_right
 -/
@@ -1687,7 +1769,9 @@ lemma continuousOn_mkD_restrict_of_uncurry
     f_cont.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
   simp_rw [continuousOn_iff_continuous_domRestrict, s.domRestrict_def]
   refine continuous_of_continuous_uncurry _ ?_
-  conv in mkD _ _ => rw [mkD_of_continuousOn (this
+  conv in mkD _ _ => rw [mkD_of_continuousOn (this x x.2)]
+  exact f_cont.comp_continuous (.prodMap continuous_subtype_val continuous_subtype_val)
+    fun xz => ⟨xz.1.2, xz.2.2⟩
 
 中文:
 引理 continuousOn_mkD_restrict_of_uncurry
@@ -1697,7 +1781,9 @@ lemma continuousOn_mkD_restrict_of_uncurry
     f_cont.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
   simp_rw [continuousOn_iff_continuous_domRestrict, s.domRestrict_def]
   refine continuous_of_continuous_uncurry _ ?_
-  conv in mkD _ _ => rw [mkD_of_continuousOn (this
+  conv in mkD _ _ => rw [mkD_of_continuousOn (this x x.2)]
+  exact f_cont.comp_continuous (.prodMap continuous_subtype_val continuous_subtype_val)
+    fun xz => ⟨xz.1.2, xz.2.2⟩
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, ContinuousOn, comp_continuous, continuousOn, continuousOn_iff_continuous_domRestrict, continuous_of_continuous_uncurry, continuous_subtype_val, domRestrict_def, f_cont, f_cont.comp, f_cont.comp_continuous, mkD_of_continuousOn, prodMap, prodMk_right, s.domRestrict_def, simp_rw
 -/
@@ -1853,7 +1939,8 @@ theorem Topology.IsQuotientMap.continuous_lift_prod_left
   let G : X -> C(Y, Z) := fun x => ⟨_, h x⟩
   have : Continuous G := by
     rw [hf.continuous_iff]
-
+    exact Gf.continuous
+  exact ContinuousMap.continuous_uncurry_of_continuous ⟨G, this⟩
 
 中文:
 定理 拓扑.是商映射.continuous_lift_prod_left
@@ -1867,7 +1954,8 @@ theorem Topology.IsQuotientMap.continuous_lift_prod_left
   let G : X -> C(Y, Z) := fun x => ⟨_, h x⟩
   have : Continuous G := by
     rw [hf.continuous_iff]
-
+    exact Gf.continuous
+  exact ContinuousMap.continuous_uncurry_of_continuous ⟨G, this⟩
 
 Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.continuous_uncurry_of_continuous, ContinuousMap.curry, Gf.continuous, continuous, continuous_iff, continuous_uncurry_of_continuous, hf.continuous_iff, hf.surjective, surjective
 -/

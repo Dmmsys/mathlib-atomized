@@ -521,7 +521,9 @@ definition Ind.colimitPresentationCompYoneda
     (Ind.inclusion C).obj (colimit (X.presentation.F ⋙ Ind.yoneda))
       ≅ colimit (X.presentation.F ⋙ Ind.yoneda ⋙ Ind.inclusion C) := preservesColimitIso _ _
     _ ≅ colimit (X.presentation.F ⋙ yoneda) :=
-          HasColimit.isoOfNatIso (isoWhiskerL
+          HasColimit.isoOfNatIso (isoWhiskerLeft X.presentation.F Ind.yonedaCompInclusion)
+    _ ≅ (Ind.inclusion C).obj X :=
+          IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) X.presentation.isColimit
 
 中文:
 定义 Ind.colimitPresentationCompYoneda
@@ -530,7 +532,9 @@ definition Ind.colimitPresentationCompYoneda
     (Ind.inclusion C).obj (colimit (X.presentation.F ⋙ Ind.yoneda))
       ≅ colimit (X.presentation.F ⋙ Ind.yoneda ⋙ Ind.inclusion C) := preservesColimitIso _ _
     _ ≅ colimit (X.presentation.F ⋙ yoneda) :=
-          HasColimit.isoOfNatIso (isoWhiskerL
+          HasColimit.isoOfNatIso (isoWhiskerLeft X.presentation.F Ind.yonedaCompInclusion)
+    _ ≅ (Ind.inclusion C).obj X :=
+          IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) X.presentation.isColimit
 
 Depends on / 依赖: HasColimit, HasColimit.isoOfNatIso, Ind.inclusion, Ind.inclusion.fullyFaithful.isoEquiv.symm, Ind.yoneda, Ind.yonedaCompInclusion, IsColimit, IsColimit.coconePointUniqueUpToIso, X.presentation.F, X.presentation.isColimit, coconePointUniqueUpToIso, colimit, colimit.isColimit, fullyFaithful, inclusion, isColimit, isoEquiv, isoOfNatIso, isoWhiskerLeft, presentation
 -/
@@ -556,7 +560,7 @@ instance :
     IsFiltered.of_equivalence
       ((CostructuredArrow.post Ind.yoneda (Ind.inclusion C) X).asEquivalence.trans
       (CostructuredArrow.mapNatIso Ind.yonedaCompInclusion)).symm
-  exact ((isInd
+  exact ((isIndObject_iff _).1 (Ind.isIndObject_inclusion_obj X)).1
 
 中文:
 实例 :
@@ -567,7 +571,7 @@ instance :
     IsFiltered.of_equivalence
       ((CostructuredArrow.post Ind.yoneda (Ind.inclusion C) X).asEquivalence.trans
       (CostructuredArrow.mapNatIso Ind.yonedaCompInclusion)).symm
-  exact ((isInd
+  exact ((isIndObject_iff _).1 (Ind.isIndObject_inclusion_obj X)).1
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mapNatIso, CostructuredArrow.post, Ind.inclusion, Ind.isIndObject_inclusion_obj, Ind.yoneda, Ind.yonedaCompInclusion, IsFiltered, IsFiltered.of_equivalence, asEquivalence, asEquivalence.trans, inclusion, isIndObject_iff, isIndObject_inclusion_obj, mapNatIso, of_equivalence, yoneda, yonedaCompInclusion
 -/
@@ -624,7 +628,12 @@ definition Ind.limCompInclusion
   _ ≅ (whiskeringRight _ _ _).obj Ind.yoneda ⋙
       (whiskeringRight _ _ _).obj (Ind.inclusion C) ⋙ colim :=
     isoWhiskerLeft _ (preservesColimitNatIso _)
-  _ ≅ ((
+  _ ≅ ((whiskeringRight _ _ _).obj Ind.yoneda ⋙
+      (whiskeringRight _ _ _).obj (Ind.inclusion C)) ⋙ colim := (Functor.associator _ _ _).symm
+  _ ≅ (whiskeringRight _ _ _).obj (Ind.yoneda ⋙ Ind.inclusion C) ⋙ colim :=
+    isoWhiskerRight (whiskeringRightObjCompIso _ _) colim
+  _ ≅ (whiskeringRight _ _ _).obj yoneda ⋙ colim :=
+    isoWhiskerRight ((whiskeringRight _ _ _).mapIso (Ind.yonedaCompInclusion)) colim
 
 中文:
 定义 Ind.limCompInclusion
@@ -635,7 +644,12 @@ definition Ind.limCompInclusion
   _ ≅ (whiskeringRight _ _ _).obj Ind.yoneda ⋙
       (whiskeringRight _ _ _).obj (Ind.inclusion C) ⋙ colim :=
     isoWhiskerLeft _ (preservesColimitNatIso _)
-  _ ≅ ((
+  _ ≅ ((whiskeringRight _ _ _).obj Ind.yoneda ⋙
+      (whiskeringRight _ _ _).obj (Ind.inclusion C)) ⋙ colim := (Functor.associator _ _ _).symm
+  _ ≅ (whiskeringRight _ _ _).obj (Ind.yoneda ⋙ Ind.inclusion C) ⋙ colim :=
+    isoWhiskerRight (whiskeringRightObjCompIso _ _) colim
+  _ ≅ (whiskeringRight _ _ _).obj yoneda ⋙ colim :=
+    isoWhiskerRight ((whiskeringRight _ _ _).mapIso (Ind.yonedaCompInclusion)) colim
 -/
 noncomputable def Ind.limCompInclusion {I : Type v} [SmallCategory I] [IsFiltered I] :
     Ind.lim I ⋙ Ind.inclusion C ≅ (whiskeringRight _ _ _).obj yoneda ⋙ colim := calc
@@ -745,7 +759,7 @@ instance [HasColimitsOfShape
   obtain ⟨P⟩ := nonempty_indParallelPairPresentation (F.obj WalkingParallelPair.zero).2
     (F.obj WalkingParallelPair.one).2 (Ind.inclusion _ |>.map <| F.map WalkingParallelPairHom.left)
     (Ind.inclusion _ |>.map <| F.map WalkingParallelPairHom.right)
-  exact hasColimit_
+  exact hasColimit_of_iso (diagramIsoParallelPair _ ≪≫ P.parallelPairIsoParallelPairCompIndYoneda)
 
 中文:
 实例 [有形状余极限
@@ -755,7 +769,7 @@ instance [HasColimitsOfShape
   obtain ⟨P⟩ := nonempty_indParallelPairPresentation (F.obj WalkingParallelPair.zero).2
     (F.obj WalkingParallelPair.one).2 (Ind.inclusion _ |>.map <| F.map WalkingParallelPairHom.left)
     (Ind.inclusion _ |>.map <| F.map WalkingParallelPairHom.right)
-  exact hasColimit_
+  exact hasColimit_of_iso (diagramIsoParallelPair _ ≪≫ P.parallelPairIsoParallelPairCompIndYoneda)
 
 Depends on / 依赖: F.map, F.obj, Ind.inclusion, P.parallelPairIsoParallelPairCompIndYoneda, WalkingParallelPair, WalkingParallelPair.one, WalkingParallelPair.zero, WalkingParallelPairHom, WalkingParallelPairHom.left, WalkingParallelPairHom.right, diagramIsoParallelPair, hasColimit_of_iso, inclusion, nonempty_indParallelPairPresentation, parallelPairIsoParallelPairCompIndYoneda
 -/
@@ -797,7 +811,9 @@ theorem Ind.exists_nonempty_arrow_mk_iso_ind_lim
     (Ind.inclusion _ |>.map f) (Ind.inclusion _ |>.map f)
   refine ⟨P.I, inferInstance, inferInstance, P.F₁, P.F₂, P.φ, ⟨Arrow.isoMk ?_ ?_ ?_⟩⟩
   · exact P.parallelPairIsoParallelPairCompIndYoneda.app WalkingParallelPair.zero
-  · exact 
+  · exact P.parallelPairIsoParallelPairCompIndYoneda.app WalkingParallelPair.one
+  · simpa using!
+      (P.parallelPairIsoParallelPairCompIndYoneda.hom.naturality WalkingParallelPairHom.left).symm
 
 中文:
 定理 Ind.存在_nonempty_arrow_mk_iso_ind_lim
@@ -807,7 +823,9 @@ theorem Ind.exists_nonempty_arrow_mk_iso_ind_lim
     (Ind.inclusion _ |>.map f) (Ind.inclusion _ |>.map f)
   refine ⟨P.I, inferInstance, inferInstance, P.F₁, P.F₂, P.φ, ⟨Arrow.isoMk ?_ ?_ ?_⟩⟩
   · exact P.parallelPairIsoParallelPairCompIndYoneda.app WalkingParallelPair.zero
-  · exact 
+  · exact P.parallelPairIsoParallelPairCompIndYoneda.app WalkingParallelPair.one
+  · simpa using!
+      (P.parallelPairIsoParallelPairCompIndYoneda.hom.naturality WalkingParallelPairHom.left).symm
 
 Depends on / 依赖: Arrow.isoMk, Ind.inclusion, P.parallelPairIsoParallelPairCompIndYoneda.app, P.parallelPairIsoParallelPairCompIndYoneda.hom.naturality, WalkingParallelPair, WalkingParallelPair.one, WalkingParallelPair.zero, WalkingParallelPairHom, WalkingParallelPairHom.left, inclusion, naturality, nonempty_indParallelPairPresentation, parallelPairIsoParallelPairCompIndYoneda
 -/

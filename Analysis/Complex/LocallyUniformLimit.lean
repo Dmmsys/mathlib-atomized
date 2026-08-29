@@ -85,7 +85,12 @@ theorem norm_cderiv_le
   have h1 : forall w in sphere z r, ‖((w - z) ^ 2)⁻¹ • f w‖ <= M / r ^ 2 := by
     intro w hw
     simp only [mem_sphere_iff_norm] at hw hf
-    sim
+    simp only [norm_smul, inv_mul_eq_div, hw, norm_inv, norm_pow]
+    exact div_le_div₀ hM (hf w hw) (sq_pos_of_pos hr) le_rfl
+  have h2 := circleIntegral.norm_integral_le_of_norm_le_const hr.le h1
+  simp only [cderiv, norm_smul]
+  refine (mul_le_mul le_rfl h2 (norm_nonneg _) (norm_nonneg _)).trans (le_of_eq ?_)
+  simp [field, abs_of_nonneg Real.pi_pos.le]
 
 中文:
 定理 norm_cderiv_le
@@ -97,7 +102,12 @@ theorem norm_cderiv_le
   have h1 : forall w in sphere z r, ‖((w - z) ^ 2)⁻¹ • f w‖ <= M / r ^ 2 := by
     intro w hw
     simp only [mem_sphere_iff_norm] at hw hf
-    sim
+    simp only [norm_smul, inv_mul_eq_div, hw, norm_inv, norm_pow]
+    exact div_le_div₀ hM (hf w hw) (sq_pos_of_pos hr) le_rfl
+  have h2 := circleIntegral.norm_integral_le_of_norm_le_const hr.le h1
+  simp only [cderiv, norm_smul]
+  refine (mul_le_mul le_rfl h2 (norm_nonneg _) (norm_nonneg _)).trans (le_of_eq ?_)
+  simp [field, abs_of_nonneg Real.pi_pos.le]
 
 Depends on / 依赖: Nonempty, NormedSpace, NormedSpace.sphere_nonempty.mpr, cderiv, circleIntegral, circleIntegral.norm_integral_le_of_norm_le_const, hr.le, inv_mul_eq_div, le_rfl, mem_sphere_iff_norm, norm_integral_le_of_norm_le_const, norm_inv, norm_nonneg, norm_pow, norm_smul, sphere, sphere_nonempty, sq_pos_of_pos
 -/
@@ -128,7 +138,10 @@ theorem cderiv_sub
       fun w hw h => hr.ne ?_
     rwa [mem_sphere_iff_norm, sq_eq_zero_iff.mp h, norm_zero] at hw
   simp_rw [cderiv, ← smul_sub]
-  con
+  congr 1
+  simpa only [Pi.sub_apply, smul_sub] using
+    circleIntegral.integral_sub ((h1.fun_smul hf).circleIntegrable hr.le)
+      ((h1.fun_smul hg).circleIntegrable hr.le)
 
 中文:
 定理 cderiv_sub
@@ -139,7 +152,10 @@ theorem cderiv_sub
       fun w hw h => hr.ne ?_
     rwa [mem_sphere_iff_norm, sq_eq_zero_iff.mp h, norm_zero] at hw
   simp_rw [cderiv, ← smul_sub]
-  con
+  congr 1
+  simpa only [Pi.sub_apply, smul_sub] using
+    circleIntegral.integral_sub ((h1.fun_smul hf).circleIntegrable hr.le)
+      ((h1.fun_smul hg).circleIntegrable hr.le)
 
 Depends on / 依赖: ContinuousOn, Pi.sub_apply, cderiv, circleIntegrable, circleIntegral, circleIntegral.integral_sub, continuousOn, continuousOn.inv, continuous_const, continuous_id, fun_pow, fun_smul, fun_sub, h1.fun_smul, hr.le, hr.ne, integral_sub, mem_sphere_iff_norm, norm_zero, simp_rw
 -/
@@ -165,7 +181,9 @@ theorem norm_cderiv_lt
   obtain ⟨L, hL1, hL2⟩ : exists L < M, forall w in sphere z r, ‖f w‖ <= L := by
     have e1 : (sphere z r).Nonempty := NormedSpace.sphere_nonempty.mpr hr.le
     have e2 : ContinuousOn (fun w => ‖f w‖) (sphere z r) := continuous_norm.comp_continuousOn hf
-    obtain ⟨x, hx, hx'⟩ := (isCompact_spher
+    obtain ⟨x, hx, hx'⟩ := (isCompact_sphere z r).exists_isMaxOn e1 e2
+    exact ⟨‖f x‖, hfM x hx, hx'⟩
+  exact (norm_cderiv_le hr hL2).trans_lt ((div_lt_div_iff_of_pos_right hr).mpr hL1)
 
 中文:
 定理 norm_cderiv_lt
@@ -174,7 +192,9 @@ theorem norm_cderiv_lt
   obtain ⟨L, hL1, hL2⟩ : exists L < M, forall w in sphere z r, ‖f w‖ <= L := by
     have e1 : (sphere z r).Nonempty := NormedSpace.sphere_nonempty.mpr hr.le
     have e2 : ContinuousOn (fun w => ‖f w‖) (sphere z r) := continuous_norm.comp_continuousOn hf
-    obtain ⟨x, hx, hx'⟩ := (isCompact_spher
+    obtain ⟨x, hx, hx'⟩ := (isCompact_sphere z r).exists_isMaxOn e1 e2
+    exact ⟨‖f x‖, hfM x hx, hx'⟩
+  exact (norm_cderiv_le hr hL2).trans_lt ((div_lt_div_iff_of_pos_right hr).mpr hL1)
 
 Depends on / 依赖: ContinuousOn, Nonempty, NormedSpace, NormedSpace.sphere_nonempty.mpr, comp_continuousOn, continuous_norm, continuous_norm.comp_continuousOn, div_lt_div_iff_of_pos_right, exists_isMaxOn, hr.le, isCompact_sphere, norm_cderiv_le, sphere, sphere_nonempty, trans_lt
 -/
@@ -219,7 +239,14 @@ theorem _root_.TendstoUniformlyOn.cderiv
   have e1 : ContinuousOn f (cthickening δ K) := TendstoUniformlyOn.continuousOn hF hFn.frequently
   rw [tendstoUniformlyOn_iff] at hF ⊢
   rintro ε hε
-  filter_upwards [hF (ε * δ) (mul_pos hε hδ)
+  filter_upwards [hF (ε * δ) (mul_pos hε hδ), hFn] with n h h' z hz
+  simp_rw [dist_eq_norm] at h ⊢
+  have e2 : forall w in sphere z δ, ‖f w - F n w‖ < ε * δ := fun w hw1 =>
+    h w (closedBall_subset_cthickening hz δ (sphere_subset_closedBall hw1))
+  have e3 := sphere_subset_closedBall.trans (closedBall_subset_cthickening hz δ)
+  have hf : ContinuousOn f (sphere z δ) :=
+    e1.mono (sphere_subset_closedBall.trans (closedBall_subset_cthickening hz δ))
+  simpa only [mul_div_cancel_right₀ _ hδ.ne.symm] using! norm_cderiv_sub_lt hδ e2 hf (h'.mono e3)
 
 中文:
 定理 _root_.TendstoUniformlyOn.cderiv
@@ -230,7 +257,14 @@ theorem _root_.TendstoUniformlyOn.cderiv
   have e1 : ContinuousOn f (cthickening δ K) := TendstoUniformlyOn.continuousOn hF hFn.frequently
   rw [tendstoUniformlyOn_iff] at hF ⊢
   rintro ε hε
-  filter_upwards [hF (ε * δ) (mul_pos hε hδ)
+  filter_upwards [hF (ε * δ) (mul_pos hε hδ), hFn] with n h h' z hz
+  simp_rw [dist_eq_norm] at h ⊢
+  have e2 : forall w in sphere z δ, ‖f w - F n w‖ < ε * δ := fun w hw1 =>
+    h w (closedBall_subset_cthickening hz δ (sphere_subset_closedBall hw1))
+  have e3 := sphere_subset_closedBall.trans (closedBall_subset_cthickening hz δ)
+  have hf : ContinuousOn f (sphere z δ) :=
+    e1.mono (sphere_subset_closedBall.trans (closedBall_subset_cthickening hz δ))
+  simpa only [mul_div_cancel_right₀ _ hδ.ne.symm] using! norm_cderiv_sub_lt hδ e2 hf (h'.mono e3)
 
 Depends on / 依赖: ContinuousOn, TendstoUniformlyOn, TendstoUniformlyOn.continuousOn, closedBall_subset_cthickening, continuousOn, cthickening, dist_eq_norm, eq_or_neBot, eventually_bot, filter_upwards, frequently, hFn.frequently, imp_true_iff, mul_pos, simp_rw, sphere, sphere_subset_closedBall, tendstoUniformlyOn_iff
 -/
@@ -268,7 +302,10 @@ theorem tendstoUniformlyOn_deriv_of_cthickening_subset
     filter_upwards [hF] with n h using h.continuousOn.mono hKU
   have h2 : IsCompact (cthickening δ K) := hK.cthickening
   have h3 : TendstoUniformlyOn F f φ (cthickening δ K) :=
-    (tendstoLocallyUniformlyOn_iff_forall_isCom
+    (tendstoLocallyUniformlyOn_iff_forall_isCompact hU).mp hf (cthickening δ K) hKU h2
+  apply (h3.cderiv hδ h1).congr
+  filter_upwards [hF] with n h z hz
+  exact cderiv_eq_deriv hU h hδ ((closedBall_subset_cthickening hz δ).trans hKU)
 
 中文:
 定理 tendstoUniformlyOn_deriv_of_cthickening_subset
@@ -278,7 +315,10 @@ theorem tendstoUniformlyOn_deriv_of_cthickening_subset
     filter_upwards [hF] with n h using h.continuousOn.mono hKU
   have h2 : IsCompact (cthickening δ K) := hK.cthickening
   have h3 : TendstoUniformlyOn F f φ (cthickening δ K) :=
-    (tendstoLocallyUniformlyOn_iff_forall_isCom
+    (tendstoLocallyUniformlyOn_iff_forall_isCompact hU).mp hf (cthickening δ K) hKU h2
+  apply (h3.cderiv hδ h1).congr
+  filter_upwards [hF] with n h z hz
+  exact cderiv_eq_deriv hU h hδ ((closedBall_subset_cthickening hz δ).trans hKU)
 
 Depends on / 依赖: ContinuousOn, IsCompact, TendstoUniformlyOn, cderiv, cderiv_eq_deriv, closedBall_subset_cthickening, continuousOn, cthickening, filter_upwards, h.continuousOn.mono, h3.cderiv, hK.cthickening, tendstoLocallyUniformlyOn_iff_forall_isCompact
 -/
@@ -331,7 +371,16 @@ theorem _root_.TendstoLocallyUniformlyOn.differentiableOn
   obtain ⟨K, ⟨hKx, hK⟩, hKU⟩ := (compact_basis_nhds x).mem_iff.mp (hU.mem_nhds hx)
   obtain ⟨δ, _, _, h1⟩ := exists_cthickening_tendstoUniformlyOn hf hF hK hU hKU
   have h2 : interior K subseteq U := interior_subset.trans hKU
-  have h3 : forallᶠ n in φ, DifferentiableOn Complex (F n
+  have h3 : forallᶠ n in φ, DifferentiableOn Complex (F n) (interior K) := by
+    filter_upwards [hF] with n h using h.mono h2
+  have h4 : TendstoLocallyUniformlyOn F f φ (interior K) := hf.mono h2
+  have h5 : TendstoLocallyUniformlyOn (deriv ∘ F) (cderiv δ f) φ (interior K) :=
+    h1.tendstoLocallyUniformlyOn.mono interior_subset
+  have h6 : forall x in interior K, HasDerivAt f (cderiv δ f x) x := fun x h =>
+    hasDerivAt_of_tendsto_locally_uniformly_on' isOpen_interior h5 h3 (fun _ => h4.tendsto_at) h
+  have h7 : DifferentiableOn Complex f (interior K) := fun x hx =>
+    (h6 x hx).differentiableAt.differentiableWithinAt
+  exact (h7.differentiableAt (interior_mem_nhds.mpr hKx)).differentiableWithinAt
 
 中文:
 定理 _root_.TendstoLocallyUniformlyOn.differentiableOn
@@ -341,7 +390,16 @@ theorem _root_.TendstoLocallyUniformlyOn.differentiableOn
   obtain ⟨K, ⟨hKx, hK⟩, hKU⟩ := (compact_basis_nhds x).mem_iff.mp (hU.mem_nhds hx)
   obtain ⟨δ, _, _, h1⟩ := exists_cthickening_tendstoUniformlyOn hf hF hK hU hKU
   have h2 : interior K subseteq U := interior_subset.trans hKU
-  have h3 : forallᶠ n in φ, DifferentiableOn Complex (F n
+  have h3 : forallᶠ n in φ, DifferentiableOn Complex (F n) (interior K) := by
+    filter_upwards [hF] with n h using h.mono h2
+  have h4 : TendstoLocallyUniformlyOn F f φ (interior K) := hf.mono h2
+  have h5 : TendstoLocallyUniformlyOn (deriv ∘ F) (cderiv δ f) φ (interior K) :=
+    h1.tendstoLocallyUniformlyOn.mono interior_subset
+  have h6 : forall x in interior K, HasDerivAt f (cderiv δ f x) x := fun x h =>
+    hasDerivAt_of_tendsto_locally_uniformly_on' isOpen_interior h5 h3 (fun _ => h4.tendsto_at) h
+  have h7 : DifferentiableOn Complex f (interior K) := fun x hx =>
+    (h6 x hx).differentiableAt.differentiableWithinAt
+  exact (h7.differentiableAt (interior_mem_nhds.mpr hKx)).differentiableWithinAt
 
 Depends on / 依赖: DifferentiableOn, TendstoLocallyUniformlyOn, cderiv, compact_basis_nhds, exists_cthickening_tendstoUniformlyOn, filter_upwards, h.mono, hU.mem_nhds, hf.mono, interior, interior_subset, interior_subset.trans, mem_iff, mem_iff.mp, mem_nhds, subseteq
 -/
@@ -375,7 +433,8 @@ theorem _root_.TendstoLocallyUniformlyOn.deriv
   · simp only [TendstoUniformlyOn, eventually_bot, imp_true_iff]
   rintro K hKU hK
   obtain ⟨δ, hδ, hK4, h⟩ := exists_cthickening_tendstoUniformlyOn hf hF hK hU hKU
-  refine h.congr_right fun z hz => cd
+  refine h.congr_right fun z hz => cderiv_eq_deriv hU (hf.differentiableOn hF hU) hδ ?_
+  exact (closedBall_subset_cthickening hz δ).trans hK4
 
 中文:
 定理 _root_.TendstoLocallyUniformlyOn.deriv
@@ -386,7 +445,8 @@ theorem _root_.TendstoLocallyUniformlyOn.deriv
   · simp only [TendstoUniformlyOn, eventually_bot, imp_true_iff]
   rintro K hKU hK
   obtain ⟨δ, hδ, hK4, h⟩ := exists_cthickening_tendstoUniformlyOn hf hF hK hU hKU
-  refine h.congr_right fun z hz => cd
+  refine h.congr_right fun z hz => cderiv_eq_deriv hU (hf.differentiableOn hF hU) hδ ?_
+  exact (closedBall_subset_cthickening hz δ).trans hK4
 
 Depends on / 依赖: TendstoUniformlyOn, cderiv_eq_deriv, closedBall_subset_cthickening, congr_right, differentiableOn, eq_or_neBot, eventually_bot, exists_cthickening_tendstoUniformlyOn, h.congr_right, hf.differentiableOn, imp_true_iff, tendstoLocallyUniformlyOn_iff_forall_isCompact
 -/
@@ -448,7 +508,7 @@ theorem hasSum_deriv_of_summable_norm
           hU).tendsto_at
       hz using 1
   ext1 s
-  exact (deriv_fun_sum fun i _ => (hf i).differentiableAt (h
+  exact (deriv_fun_sum fun i _ => (hf i).differentiableAt (hU.mem_nhds hz)).symm
 
 中文:
 定理 hasSum_deriv_of_summable_norm
@@ -461,7 +521,7 @@ theorem hasSum_deriv_of_summable_norm
           hU).tendsto_at
       hz using 1
   ext1 s
-  exact (deriv_fun_sum fun i _ => (hf i).differentiableAt (h
+  exact (deriv_fun_sum fun i _ => (hf i).differentiableAt (hU.mem_nhds hz)).symm
 
 Depends on / 依赖: DifferentiableOn, DifferentiableOn.fun_sum, Eventually, Eventually.of_forall, HasSum, convert, deriv_fun_sum, differentiableAt, fun_sum, hF_le, hU.mem_nhds, hc.deriv, mem_nhds, of_forall, tendstoLocallyUniformlyOn, tendstoUniformlyOn_tsum, tendsto_at
 -/

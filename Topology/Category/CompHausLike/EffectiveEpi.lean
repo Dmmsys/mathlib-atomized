@@ -46,7 +46,23 @@ definition effectiveEpiStruct
           (ofHom _ ⟨fun _ => b, continuous_const⟩)
         (by ext; exact hab)) a)
   fac e h :=
-    Ind
+    InducedCategory.hom_ext (TopCat.hom_ext
+      ((IsQuotientMap.of_surjective_continuous hπ π.hom.hom.continuous).lift_comp _ _))
+  uniq e h g hm := by
+    suffices g = ofHom _
+        ((IsQuotientMap.of_surjective_continuous hπ π.hom.hom.continuous).liftEquiv ⟨e.hom.hom,
+      fun a b hab => CategoryTheory.congr_fun
+        (h
+          (ofHom _ ⟨fun _ => a, continuous_const⟩)
+          (ofHom _ ⟨fun _ => b, continuous_const⟩)
+          (by ext; exact hab))
+        a⟩) by assumption
+    apply ConcreteCategory.ext
+    rw [hom_ofHom]; rw [← Equiv.symm_apply_eq
+      (IsQuotientMap.of_surjective_continuous hπ π.hom.hom.continuous).liftEquiv]
+    ext
+    simp only [IsQuotientMap.liftEquiv_symm_apply_coe, ContinuousMap.comp_apply, ← hm]
+    rfl
 
 中文:
 定义 effectiveEpiStruct
@@ -58,7 +74,23 @@ definition effectiveEpiStruct
           (ofHom _ ⟨fun _ => b, continuous_const⟩)
         (by ext; exact hab)) a)
   fac e h :=
-    Ind
+    InducedCategory.hom_ext (TopCat.hom_ext
+      ((IsQuotientMap.of_surjective_continuous hπ π.hom.hom.continuous).lift_comp _ _))
+  uniq e h g hm := by
+    suffices g = ofHom _
+        ((IsQuotientMap.of_surjective_continuous hπ π.hom.hom.continuous).liftEquiv ⟨e.hom.hom,
+      fun a b hab => CategoryTheory.congr_fun
+        (h
+          (ofHom _ ⟨fun _ => a, continuous_const⟩)
+          (ofHom _ ⟨fun _ => b, continuous_const⟩)
+          (by ext; exact hab))
+        a⟩) by assumption
+    apply ConcreteCategory.ext
+    rw [hom_ofHom]; rw [← Equiv.symm_apply_eq
+      (IsQuotientMap.of_surjective_continuous hπ π.hom.hom.continuous).liftEquiv]
+    ext
+    simp only [IsQuotientMap.liftEquiv_symm_apply_coe, ContinuousMap.comp_apply, ← hm]
+    rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, InducedCategory, InducedCategory.hom_ext, IsQuotientMap, IsQuotientMap.of_surjective_continuous, TopCat, TopCat.hom_ext, congr_fun, continuous, continuous_const, e.hom.hom, hom.hom.continuous, hom_ext, liftEquiv, lift_comp, of_surjective_continuous
 -/

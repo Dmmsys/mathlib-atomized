@@ -41,7 +41,17 @@ theorem isPrincipal_of_isPrincipal_isLocalizationAway_of_prime
   by_cases hpbot : p = ⊥
   · simp [hpbot, bot_isPrincipal]
   · have hi := IsLocalization.injective S (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
-    have hpb : map (algebraMap R S) p != ⊥ := by simp [Ideal.map_eq_bot_iff_of_
+    have hpb : map (algebraMap R S) p != ⊥ := by simp [Ideal.map_eq_bot_iff_of_injective hi, hpbot]
+    obtain ⟨g, hg⟩ := hp
+have hg0 : g != 0 := fun hg0 => hpb by simp [hg0, hg]
+    obtain ⟨a, n, hxa, hag⟩ := exists_reduced_fraction' x S hg0 hx.irreducible
+    have hu : IsUnit (selfZPow x S n) :=
+      IsUnit.of_mul_eq_one (selfZPow x S (- n)) (selfZPow_mul_neg x S n)
+    refine ⟨a, Ideal.eq_of_map_algebraMap_le S x ?_ (by simp [IsPrime.mul_mem_left_iff hxp]) ?_⟩
+    · simp [hg, map_span, ← span_singleton_mul_left_unit hu (algebraMap R S a), hag]
+    · intro y hy
+      rw [mem_span_singleton] at hy ⊢
+      exact (hx.left_dvd_or_dvd_right_of_dvd_mul hy).resolve_left hxa
 
 中文:
 定理 isPrincipal_of_isPrincipal_isLocalizationAway_of_prime
@@ -50,7 +60,17 @@ theorem isPrincipal_of_isPrincipal_isLocalizationAway_of_prime
   by_cases hpbot : p = ⊥
   · simp [hpbot, bot_isPrincipal]
   · have hi := IsLocalization.injective S (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
-    have hpb : map (algebraMap R S) p != ⊥ := by simp [Ideal.map_eq_bot_iff_of_
+    have hpb : map (algebraMap R S) p != ⊥ := by simp [Ideal.map_eq_bot_iff_of_injective hi, hpbot]
+    obtain ⟨g, hg⟩ := hp
+have hg0 : g != 0 := fun hg0 => hpb by simp [hg0, hg]
+    obtain ⟨a, n, hxa, hag⟩ := exists_reduced_fraction' x S hg0 hx.irreducible
+    have hu : IsUnit (selfZPow x S n) :=
+      IsUnit.of_mul_eq_one (selfZPow x S (- n)) (selfZPow_mul_neg x S n)
+    refine ⟨a, Ideal.eq_of_map_algebraMap_le S x ?_ (by simp [IsPrime.mul_mem_left_iff hxp]) ?_⟩
+    · simp [hg, map_span, ← span_singleton_mul_left_unit hu (algebraMap R S a), hag]
+    · intro y hy
+      rw [mem_span_singleton] at hy ⊢
+      exact (hx.left_dvd_or_dvd_right_of_dvd_mul hy).resolve_left hxa
 
 Depends on / 依赖: Ideal.map_eq_bot_iff_of_injective, IsLocalization, IsLocalization.injective, IsUnit, algebraMap, bot_isPrincipal, disjoint_powers_iff_notMem_of_isPrime, exists_reduced_fraction, hx.irreducible, hx.ne_zero, injective, irreducible, map_eq_bot_iff_of_injective, ne_zero, powers_le_nonZeroDivisors_of_noZeroDivisors, selfZPow
 -/
@@ -135,7 +155,11 @@ theorem of_forall_isPrincipal_of_height_eq_one
   rcases Ideal.exists_minimalPrimes_le (I.span_singleton_le_iff_mem.mpr hxI) with ⟨p, hpmin, hpl⟩
   have : p.IsPrime := hpmin.isPrime
 have hpn : p != ⊥ := fun hpb => hx0
-Ideal.span_singleton_eq_
+Ideal.span_singleton_eq_bot.mp bot_unique (hpmin.le.trans_eq hpb)
+have hpp : p.IsPrincipal := h p le_antisymm
+    (Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes _ p hpmin)
+      (by simpa [Order.one_le_iff_ne_zero])
+  exact ⟨hpp.generator p, hpl (hpp.generator_mem p), hpp.prime_generator_of_isPrime p hpn⟩
 
 中文:
 定理 of_对任意_isPrincipal_of_height_eq_one
@@ -146,7 +170,11 @@ Ideal.span_singleton_eq_
   rcases Ideal.exists_minimalPrimes_le (I.span_singleton_le_iff_mem.mpr hxI) with ⟨p, hpmin, hpl⟩
   have : p.IsPrime := hpmin.isPrime
 have hpn : p != ⊥ := fun hpb => hx0
-Ideal.span_singleton_eq_
+Ideal.span_singleton_eq_bot.mp bot_unique (hpmin.le.trans_eq hpb)
+have hpp : p.IsPrincipal := h p le_antisymm
+    (Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes _ p hpmin)
+      (by simpa [Order.one_le_iff_ne_zero])
+  exact ⟨hpp.generator p, hpl (hpp.generator_mem p), hpp.prime_generator_of_isPrime p hpn⟩
 
 Depends on / 依赖: CofiniteTopology, I.ne_bot_iff.mp, I.span_singleton_le_iff_mem.mpr, Ideal.exists_minimalPrimes_le, Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes, Ideal.span_singleton_eq_bot.mp, Infinite, IrreducibleSpace, IsPrime, IsPrincipal, Order.one_le_iff_ne_zero, bot_unique, exists_minimalPrimes_le, generat, height_le_one_of_isPrincipal_of_mem_minimalPrimes, hpmin.isPrime, hpmin.le.trans_eq, hpp.generat, iff_exists_prime_mem_of_isPrime, isPrime
 -/
@@ -198,7 +226,11 @@ theorem iff_of_isLocalizationAway_of_prime
   intro p hp h1
   by_cases hxp : x in p
   · exact ⟨x, p.eq_span_singleton_of_height_eq_one h1 hxp hx⟩
-  · have 
+  · have hd := by rwa [← Ideal.disjoint_powers_iff_notMem_of_isPrime x] at hxp
+    have := IsLocalization.isPrime_of_isPrime_disjoint (Submonoid.powers x) S p hp hd
+    refine p.isPrincipal_of_isPrincipal_isLocalizationAway_of_prime hx hxp S
+      (isPrincipal_of_height_eq_one ?_)
+    rw [← IsLocalization.height_under (Submonoid.powers x)]; rw [IsLocalization.under_map_of_isPrime_disjoint (Submonoid.powers x) S hp hd]; rw [h1]
 
 中文:
 定理 iff_of_isLocalizationAway_of_prime
@@ -210,7 +242,11 @@ theorem iff_of_isLocalizationAway_of_prime
   intro p hp h1
   by_cases hxp : x in p
   · exact ⟨x, p.eq_span_singleton_of_height_eq_one h1 hxp hx⟩
-  · have 
+  · have hd := by rwa [← Ideal.disjoint_powers_iff_notMem_of_isPrime x] at hxp
+    have := IsLocalization.isPrime_of_isPrime_disjoint (Submonoid.powers x) S p hp hd
+    refine p.isPrincipal_of_isPrincipal_isLocalizationAway_of_prime hx hxp S
+      (isPrincipal_of_height_eq_one ?_)
+    rw [← IsLocalization.height_under (Submonoid.powers x)]; rw [IsLocalization.under_map_of_isPrime_disjoint (Submonoid.powers x) S hp hd]; rw [h1]
 
 Depends on / 依赖: Ideal.disjoint_powers_iff_notMem_of_isPrime, IsDomain, IsLocalization, IsLocalization.Away.isDomain, IsLocalization.isPrime_of_isPrime_disjoint, Submonoid, Submonoid.powers, disjoint_powers_iff_notMem_of_isPrime, eq_span_singleton_of_height_eq_one, hx.ne_zero, iff_forall_isPrincipal_of_height_eq_one, isDomain, isPrime_of_isPrime_disjoint, isPrincipal_of_isPrincipal_isLocalizationAway_of_prim, ne_zero, of_isLocalization, p.eq_span_singleton_of_height_eq_one, p.isPrincipal_of_isPrincipal_isLocalizationAway_of_prim, powers
 -/

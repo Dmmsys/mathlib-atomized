@@ -173,7 +173,7 @@ lemma memLp_haarAddCircle_iff
   have := h.smul_measure (c := (ENNReal.ofReal T)⁻¹) (by finiteness)
   rwa [smul_smul, ENNReal.inv_mul_cancel (by positivity) (by finiteness), one_smul] at this
 
-alia
+alias ⟨MemLp.of_haarAddCircle, MemLp.haarAddCircle⟩ := memLp_haarAddCircle_iff
 
 中文:
 引理 memLp_haarAddCircle_iff
@@ -185,7 +185,7 @@ alia
   have := h.smul_measure (c := (ENNReal.ofReal T)⁻¹) (by finiteness)
   rwa [smul_smul, ENNReal.inv_mul_cancel (by positivity) (by finiteness), one_smul] at this
 
-alia
+alias ⟨MemLp.of_haarAddCircle, MemLp.haarAddCircle⟩ := memLp_haarAddCircle_iff
 
 Depends on / 依赖: AddCircle, AddCircle.volume_eq_smul_haarAddCircle, ENNReal, ENNReal.inv_mul_cancel, ENNReal.ofReal, finiteness, h.smul_measure, hT.out, inv_mul_cancel, ofReal, one_smul, smul_measure, smul_smul, volume_eq_smul_haarAddCircle
 -/
@@ -259,7 +259,9 @@ theorem fourier_coe_apply
   proof: by
   rw [fourier_apply]; rw [← QuotientAddGroup.mk_zsmul]; rw [toCircle]; rw [Function.Periodic.lift_coe]; rw [Circle.coe_exp]; rw [Complex.ofReal_mul]; rw [Complex.ofReal_div]; rw [Complex.ofReal_mul]; rw [zsmul_eq_mul]; rw [Complex.ofReal_mul]; rw [Complex.ofReal_intCast]
   norm_num
-  congr 1; rin
+  congr 1; ring
+
+@[simp]
 
 中文:
 定理 fourier_coe_apply
@@ -267,7 +269,9 @@ theorem fourier_coe_apply
   证明: by
   rw [fourier_apply]; rw [← QuotientAddGroup.mk_zsmul]; rw [toCircle]; rw [Function.Periodic.lift_coe]; rw [Circle.coe_exp]; rw [Complex.ofReal_mul]; rw [Complex.ofReal_div]; rw [Complex.ofReal_mul]; rw [zsmul_eq_mul]; rw [Complex.ofReal_mul]; rw [Complex.ofReal_intCast]
   norm_num
-  congr 1; rin
+  congr 1; ring
+
+@[simp]
 
 Depends on / 依赖: Circle, Circle.coe_exp, Complex.ofReal_div, Complex.ofReal_intCast, Complex.ofReal_mul, Function, Function.Periodic.lift_coe, Periodic, QuotientAddGroup, QuotientAddGroup.mk_zsmul, coe_exp, fourier_apply, lift_coe, mk_zsmul, ofReal_div, ofReal_intCast, ofReal_mul, toCircle, zsmul_eq_mul
 -/
@@ -532,7 +536,9 @@ theorem fourier_add_half_inv_index
   rw [fourier_apply]; rw [zsmul_add]; rw [← QuotientAddGroup.mk_zsmul]; rw [toCircle_add]; rw [Metric.unitSphere.coe_mul]
   have : (@toCircle T (n • (T / 2 / n) : Real) : Complex) = -1 := by
     rw [zsmul_eq_mul]; rw [toCircle]; rw [Function.Periodic.lift_coe]; rw [Circle.coe_exp]
-    convert Com
+    convert Complex.exp_pi_mul_I
+    field_simp
+  rw [this]; simp
 
 中文:
 定理 fourier_add_half_inv_index
@@ -541,7 +547,9 @@ theorem fourier_add_half_inv_index
   rw [fourier_apply]; rw [zsmul_add]; rw [← QuotientAddGroup.mk_zsmul]; rw [toCircle_add]; rw [Metric.unitSphere.coe_mul]
   have : (@toCircle T (n • (T / 2 / n) : Real) : Complex) = -1 := by
     rw [zsmul_eq_mul]; rw [toCircle]; rw [Function.Periodic.lift_coe]; rw [Circle.coe_exp]
-    convert Com
+    convert Complex.exp_pi_mul_I
+    field_simp
+  rw [this]; simp
 
 Depends on / 依赖: Circle, Circle.coe_exp, Complex.exp_pi_mul_I, Function, Function.Periodic.lift_coe, Metric, Metric.unitSphere.coe_mul, Periodic, QuotientAddGroup, QuotientAddGroup.mk_zsmul, coe_exp, coe_mul, convert, exp_pi_mul_I, fourier_apply, lift_coe, mk_zsmul, toCircle, toCircle_add, unitSphere
 -/
@@ -813,7 +821,8 @@ theorem orthonormal_fourier
   have hij : j + -i != 0 := by
     exact sub_ne_zero.mpr (Ne.symm h)
   convert!
-    integral_eq_zero_of_add
+    integral_eq_zero_of_add_right_eq_neg (μ := haarAddCircle)
+      (fourier_add_half_inv_index hij hT.elim)
 
 中文:
 定理 orthonormal_fourier
@@ -828,7 +837,8 @@ theorem orthonormal_fourier
   have hij : j + -i != 0 := by
     exact sub_ne_zero.mpr (Ne.symm h)
   convert!
-    integral_eq_zero_of_add
+    integral_eq_zero_of_add_right_eq_neg (μ := haarAddCircle)
+      (fourier_add_half_inv_index hij hT.elim)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.inner_toLp, Ne.symm, convert, fourier, fourier_add, fourier_add_half_inv_index, fourier_neg, hT.elim, haarAddCircle, inner_toLp, integral_eq_zero_of_add_right_eq_neg, orthonormal_iff_ite, simp_rw, split_ifs, sub_ne_zero, sub_ne_zero.mpr
 -/
@@ -884,7 +894,7 @@ theorem fourierCoeff_eq_intervalIntegral
   have : forall x : Real, @fourier T (-n) x • f x = (fun z : AddCircle T => @fourier T (-n) z • f z) x := by
     intro x; rfl
   simp_rw +singlePass [this]
-  rw [fourierCoeff]; rw [AddCircle.intervalIntegral_preimage T a (fun z => _ • _)]; rw [volume_eq_smul_haarAddCircle]; rw [integral_smul_measu
+  rw [fourierCoeff]; rw [AddCircle.intervalIntegral_preimage T a (fun z => _ • _)]; rw [volume_eq_smul_haarAddCircle]; rw [integral_smul_measure]; rw [ENNReal.toReal_ofReal hT.out.le]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [one_div_mul_cancel hT.out.ne']; rw [one_smul]
 
 中文:
 定理 fourierCoeff_eq_interval整数egral
@@ -893,7 +903,7 @@ theorem fourierCoeff_eq_intervalIntegral
   have : forall x : Real, @fourier T (-n) x • f x = (fun z : AddCircle T => @fourier T (-n) z • f z) x := by
     intro x; rfl
   simp_rw +singlePass [this]
-  rw [fourierCoeff]; rw [AddCircle.intervalIntegral_preimage T a (fun z => _ • _)]; rw [volume_eq_smul_haarAddCircle]; rw [integral_smul_measu
+  rw [fourierCoeff]; rw [AddCircle.intervalIntegral_preimage T a (fun z => _ • _)]; rw [volume_eq_smul_haarAddCircle]; rw [integral_smul_measure]; rw [ENNReal.toReal_ofReal hT.out.le]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [one_div_mul_cancel hT.out.ne']; rw [one_smul]
 
 Depends on / 依赖: AddCircle, AddCircle.intervalIntegral_preimage, ENNReal, ENNReal.toReal_ofReal, fourier, fourierCoeff, hT.out.le, hT.out.ne, integral_smul_measure, intervalIntegral_preimage, one_div_mul_cancel, one_smul, simp_rw, singlePass, smul_assoc, smul_eq_mul, toReal_ofReal, volume_eq_smul_haarAddCircle
 -/
@@ -1093,7 +1103,8 @@ theorem fourierCoeffOn_eq_integral
   congr 1
   simp_rw [intervalIntegral.integral_of_le hab.le]
   refine setIntegral_congr_fun measurableSet_Ioc fun x hx => ?_
-  rw [liftIoc_coe_app
+  rw [liftIoc_coe_apply]
+  rwa [add_sub, add_sub_cancel_left]
 
 中文:
 定理 fourierCoeffOn_eq_integral
@@ -1104,7 +1115,8 @@ theorem fourierCoeffOn_eq_integral
   congr 1
   simp_rw [intervalIntegral.integral_of_le hab.le]
   refine setIntegral_congr_fun measurableSet_Ioc fun x hx => ?_
-  rw [liftIoc_coe_app
+  rw [liftIoc_coe_apply]
+  rwa [add_sub, add_sub_cancel_left]
 
 Depends on / 依赖: Fact.mk, add_sub, add_sub_cancel_left, fourierCoeffOn, fourierCoeff_eq_intervalIntegral, hab.le, integral_of_le, intervalIntegral, intervalIntegral.integral_of_le, liftIoc_coe_apply, measurableSet_Ioc, setIntegral_congr_fun, simp_rw
 -/
@@ -1321,7 +1333,8 @@ theorem fourierBasis_repr
   · rw [fourierBasis.repr_apply_apply f i, MeasureTheory.L2.inner_def, coe_fourierBasis]
     simp only [RCLike.inner_apply']
   · apply integral_congr_ae
-    filter_upwards [coeFn_fourierLp 2 
+    filter_upwards [coeFn_fourierLp 2 i] with _ ht
+    rw [ht]; rw [← fourier_neg]; rw [smul_eq_mul]
 
 中文:
 定理 fourierBasis_repr
@@ -1331,7 +1344,8 @@ theorem fourierBasis_repr
   · rw [fourierBasis.repr_apply_apply f i, MeasureTheory.L2.inner_def, coe_fourierBasis]
     simp only [RCLike.inner_apply']
   · apply integral_congr_ae
-    filter_upwards [coeFn_fourierLp 2 
+    filter_upwards [coeFn_fourierLp 2 i] with _ ht
+    rw [ht]; rw [← fourier_neg]; rw [smul_eq_mul]
 
 Depends on / 依赖: AddCircle, MeasureTheory, MeasureTheory.L2.inner_def, RCLike, RCLike.inner_apply, coeFn_fourierLp, coe_fourierBasis, filter_upwards, fourierBasis, fourierBasis.repr_apply_apply, fourierLp, fourier_neg, haarAddCircle, inner_apply, inner_def, integral_congr_ae, repr_apply_apply, smul_eq_mul
 -/
@@ -1380,7 +1394,11 @@ theorem hasSum_sq_fourierCoeff
     apply_mod_cast lp.hasSum_norm ?_ (fourierBasis.repr f)
     simp
   have H₂ : ‖fourierBasis.repr f‖ ^ 2 = ‖f‖ ^ 2 := by simp
-  have H₃ := congr_arg RCLike.re (@L2.inner_de
+  have H₃ := congr_arg RCLike.re (@L2.inner_def (AddCircle T) Complex Complex _ _ _ _ _ f f)
+  rw [← integral_re] at H₃
+  · simp only [← norm_sq_eq_re_inner] at H₃
+    rwa [H₂, H₃] at H₁
+  · exact L2.integrable_inner f f
 
 中文:
 定理 hasSum_sq_fourierCoeff
@@ -1391,7 +1409,11 @@ theorem hasSum_sq_fourierCoeff
     apply_mod_cast lp.hasSum_norm ?_ (fourierBasis.repr f)
     simp
   have H₂ : ‖fourierBasis.repr f‖ ^ 2 = ‖f‖ ^ 2 := by simp
-  have H₃ := congr_arg RCLike.re (@L2.inner_de
+  have H₃ := congr_arg RCLike.re (@L2.inner_def (AddCircle T) Complex Complex _ _ _ _ _ f f)
+  rw [← integral_re] at H₃
+  · simp only [← norm_sq_eq_re_inner] at H₃
+    rwa [H₂, H₃] at H₁
+  · exact L2.integrable_inner f f
 
 Depends on / 依赖: AddCircle, HasSum, L2.inner_def, L2.integrable_inner, RCLike, RCLike.re, congr_arg, fourierBasis, fourierBasis.repr, fourierBasis_repr, hasSum_norm, inner_def, integrable_inner, integral_re, lp.hasSum_norm, norm_sq_eq_re_inner, simp_rw
 -/
@@ -1439,7 +1461,11 @@ theorem hasSum_sq_fourierCoeffOn
   convert hasSum_sq_fourierCoeff h.toLp
   · simp [fourierCoeff_congr_ae h.coeFn_toLp, fourierCoeff_liftIoc_eq]
   · nth_rw 2 [← add_sub_cancel a b]
-    rw [← AddCircle.integra
+    rw [← AddCircle.integral_liftIoc_eq_intervalIntegral]; rw [← Function.comp_def (f := (‖·‖ ^ 2))]
+    simp only [liftIoc_comp_apply, ← AddCircle.integral_haarAddCircle]
+    apply integral_congr_ae
+    filter_upwards [h.coeFn_toLp] with x hx
+    simp [hx]
 
 中文:
 定理 hasSum_sq_fourierCoeffOn
@@ -1450,7 +1476,11 @@ theorem hasSum_sq_fourierCoeffOn
   convert hasSum_sq_fourierCoeff h.toLp
   · simp [fourierCoeff_congr_ae h.coeFn_toLp, fourierCoeff_liftIoc_eq]
   · nth_rw 2 [← add_sub_cancel a b]
-    rw [← AddCircle.integra
+    rw [← AddCircle.integral_liftIoc_eq_intervalIntegral]; rw [← Function.comp_def (f := (‖·‖ ^ 2))]
+    simp only [liftIoc_comp_apply, ← AddCircle.integral_haarAddCircle]
+    apply integral_congr_ae
+    filter_upwards [h.coeFn_toLp] with x hx
+    simp [hx]
 
 Depends on / 依赖: AddCircle, AddCircle.integral_haarAddCircle, AddCircle.integral_liftIoc_eq_intervalIntegral, Fact.mk, Function, Function.comp_def, add_sub_cancel, coeFn_toLp, comp_def, convert, filter_upwards, fourierCoeff_congr_ae, fourierCoeff_liftIoc_eq, h.coeFn_toLp, h.toLp, hL2.memLp_liftIoc.haarAddCircle, haarAddCircle, hasSum_sq_fourierCoeff, integral_congr_ae, integral_haarAddCircle
 -/
@@ -1588,7 +1618,7 @@ theorem fourierCoeff_fourier
   rw [← fourierCoeff_congr_ae (coeFn_fourierLp 2 n)]; rw [← fourierBasis_repr]; rw [HilbertBasis.repr_apply_apply]; rw [coe_fourierBasis]
   obtain (rfl | hmn) := eq_or_ne m n
   · rw [inner_self_eq_norm_sq_to_K, (orthonormal_fourier (hT := hT)).1 m]; simp
-  · rw [(orthonormal_fourier (hT :
+  · rw [(orthonormal_fourier (hT := hT)).2 hmn]; simp [hmn]
 
 中文:
 定理 fourierCoeff_fourier
@@ -1598,7 +1628,7 @@ theorem fourierCoeff_fourier
   rw [← fourierCoeff_congr_ae (coeFn_fourierLp 2 n)]; rw [← fourierBasis_repr]; rw [HilbertBasis.repr_apply_apply]; rw [coe_fourierBasis]
   obtain (rfl | hmn) := eq_or_ne m n
   · rw [inner_self_eq_norm_sq_to_K, (orthonormal_fourier (hT := hT)).1 m]; simp
-  · rw [(orthonormal_fourier (hT :
+  · rw [(orthonormal_fourier (hT := hT)).2 hmn]; simp [hmn]
 
 Depends on / 依赖: HilbertBasis, HilbertBasis.repr_apply_apply, Pi.single, coeFn_fourierLp, coe_fourierBasis, eq_or_ne, fourier, fourierBasis_repr, fourierCoeff_congr_ae, inner_self_eq_norm_sq_to_K, orthonormal_fourier, repr_apply_apply, single
 -/
@@ -1631,7 +1661,8 @@ theorem hasDerivAt_fourier
   refine (?_ : HasDerivAt (fun y => exp (2 * π * I * n * y / T)) _ _).comp_ofReal
   rw [(fun α β => by ring : forall α β : Complex]; rw [α * exp β = exp β * α)]
   refine (hasDerivAt_exp _).comp (x : Complex) ?_
-  convert! hasDerivAt_mul_const (2 * ↑π * I * ↑n / T) us
+  convert! hasDerivAt_mul_const (2 * ↑π * I * ↑n / T) using 1
+  ext1 y; ring
 
 中文:
 定理 hasDerivAt_fourier
@@ -1641,7 +1672,8 @@ theorem hasDerivAt_fourier
   refine (?_ : HasDerivAt (fun y => exp (2 * π * I * n * y / T)) _ _).comp_ofReal
   rw [(fun α β => by ring : forall α β : Complex]; rw [α * exp β = exp β * α)]
   refine (hasDerivAt_exp _).comp (x : Complex) ?_
-  convert! hasDerivAt_mul_const (2 * ↑π * I * ↑n / T) us
+  convert! hasDerivAt_mul_const (2 * ↑π * I * ↑n / T) using 1
+  ext1 y; ring
 
 Depends on / 依赖: HasDerivAt, comp_ofReal, convert, fourier_coe_apply, hasDerivAt_exp, hasDerivAt_mul_const, simp_rw
 -/
@@ -1719,7 +1751,20 @@ theorem fourierCoeffOn_of_hasDeriv_right
   simp_rw [fourierCoeffOn_eq_integral, smul_eq_mul, real_smul, ofReal_div, ofReal_one]
   conv => pattern (occs := 1 2 3) fourier _ _ * _ <;> (rw [mul_comm])
   rw [integral_mul_deriv_eq_deriv_mul_of_hasDeriv_right hf
-    (fun x _ =>
+    (fun x _ => has_antideriv_at_fourier_neg hT hn x |>.continuousAt |>.continuousWithinAt) hff'
+    (fun x _ => has_antideriv_at_fourier_neg hT hn x |>.hasDerivWithinAt) hf'
+    (((map_continuous (fourier (-n))).comp (AddCircle.continuous_mk' _)).intervalIntegrable _ _)]
+  have : forall u v w : Complex, u * ((b - a : Real) / v * w) = (b - a : Real) / v * (u * w) := by intros; ring
+  conv in intervalIntegral _ _ _ _ => congr; ext; rw [this]
+  rw [(by ring : ((b - a : Real) : Complex) / (-2 * π * I * n) = ((b - a : Real) : Complex) * (1 / (-2 * π * I * n)))]
+  have s2 : (b : AddCircle (b - a)) = (a : AddCircle (b - a)) := by
+    simpa using coe_add_period (b - a) a
+  rw [s2]; rw [intervalIntegral.integral_const_mul]; rw [← sub_mul]; rw [mul_sub]; rw [mul_sub]
+  congr 1
+  · conv_lhs => rw [mul_comm, mul_div, mul_one]
+    rw [div_eq_iff (ofReal_ne_zero.mpr hT.out.ne')]
+    ring
+  · ring
 
 中文:
 定理 fourierCoeffOn_of_hasDeriv_right
@@ -1730,7 +1775,20 @@ theorem fourierCoeffOn_of_hasDeriv_right
   simp_rw [fourierCoeffOn_eq_integral, smul_eq_mul, real_smul, ofReal_div, ofReal_one]
   conv => pattern (occs := 1 2 3) fourier _ _ * _ <;> (rw [mul_comm])
   rw [integral_mul_deriv_eq_deriv_mul_of_hasDeriv_right hf
-    (fun x _ =>
+    (fun x _ => has_antideriv_at_fourier_neg hT hn x |>.continuousAt |>.continuousWithinAt) hff'
+    (fun x _ => has_antideriv_at_fourier_neg hT hn x |>.hasDerivWithinAt) hf'
+    (((map_continuous (fourier (-n))).comp (AddCircle.continuous_mk' _)).intervalIntegrable _ _)]
+  have : forall u v w : Complex, u * ((b - a : Real) / v * w) = (b - a : Real) / v * (u * w) := by intros; ring
+  conv in intervalIntegral _ _ _ _ => congr; ext; rw [this]
+  rw [(by ring : ((b - a : Real) : Complex) / (-2 * π * I * n) = ((b - a : Real) : Complex) * (1 / (-2 * π * I * n)))]
+  have s2 : (b : AddCircle (b - a)) = (a : AddCircle (b - a)) := by
+    simpa using coe_add_period (b - a) a
+  rw [s2]; rw [intervalIntegral.integral_const_mul]; rw [← sub_mul]; rw [mul_sub]; rw [mul_sub]
+  congr 1
+  · conv_lhs => rw [mul_comm, mul_div, mul_one]
+    rw [div_eq_iff (ofReal_ne_zero.mpr hT.out.ne')]
+    ring
+  · ring
 
 Depends on / 依赖: AddCircle, AddCircle.continuo, continuo, continuousAt, continuousWithinAt, fourier, fourierCoeffOn_eq_integral, hasDerivWithinAt, has_antideriv_at_fourier_neg, integral_mul_deriv_eq_deriv_mul_of_hasDeriv_right, map_continuous, mul_comm, ofReal_div, ofReal_one, ofReal_sub, pattern, real_smul, simp_rw, smul_eq_mul
 -/

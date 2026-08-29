@@ -88,7 +88,8 @@ QuotientGroup.leftRel_apply.mpr by
           have h : (a * b)⁻¹ * (b * a) = ⁅b⁻¹, a⁻¹⁆ := by group
           rw [h]
           exact Subgroup.le_topologicalClosure _ (Subgroup.commutator_mem_commutator
-            (Subgroup.mem_top 
+            (Subgroup.mem_top b⁻¹) (Subgroup.mem_top a⁻¹))
+  __ : Group (G_ab G) := inferInstance
 
 中文:
 实例 commGroup
@@ -100,7 +101,8 @@ QuotientGroup.leftRel_apply.mpr by
           have h : (a * b)⁻¹ * (b * a) = ⁅b⁻¹, a⁻¹⁆ := by group
           rw [h]
           exact Subgroup.le_topologicalClosure _ (Subgroup.commutator_mem_commutator
-            (Subgroup.mem_top 
+            (Subgroup.mem_top b⁻¹) (Subgroup.mem_top a⁻¹))
+  __ : Group (G_ab G) := inferInstance
 -/
 instance commGroup : CommGroup (G_ab G) where
   mul_comm := fun x y =>

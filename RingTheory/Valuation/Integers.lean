@@ -39,7 +39,7 @@ definition integer
   mul_mem' {x y} hx hy := by simp only [Set.mem_ofPred_eq, map_mul, mul_le_one' hx hy]
   zero_mem' := by simp
   add_mem' {x y} hx hy := le_trans (v.map_add x y) (max_le hx hy)
-  neg_mem' {x} hx := by simp only [Set.mem_ofPred_eq] at hx; simpa only [S
+  neg_mem' {x} hx := by simp only [Set.mem_ofPred_eq] at hx; simpa only [Set.mem_ofPred_eq, map_neg]
 
 中文:
 定义 integer
@@ -49,7 +49,7 @@ definition integer
   mul_mem' {x y} hx hy := by simp only [Set.mem_ofPred_eq, map_mul, mul_le_one' hx hy]
   zero_mem' := by simp
   add_mem' {x y} hx hy := le_trans (v.map_add x y) (max_le hx hy)
-  neg_mem' {x} hx := by simp only [Set.mem_ofPred_eq] at hx; simpa only [S
+  neg_mem' {x} hx := by simp only [Set.mem_ofPred_eq] at hx; simpa only [Set.mem_ofPred_eq, map_neg]
 -/
 def integer : Subring R where
   carrier := { x | v x <= 1 }
@@ -213,7 +213,9 @@ theorem isUnit_of_one
     rw [← one_mul (v _)]; rw [← hvx]; rw [← v.map_mul]; rw [← hu]; rw [u.mul_inv]; rw [hu]; rw [hvx]; rw [v.map_one]
   let ⟨r1, hr1⟩ := hv.3 h1
   let ⟨r2, hr2⟩ := hv.3 h2
-⟨⟨r1, r2, hv.1 by rw [map_mul, map
+⟨⟨r1, r2, hv.1 by rw [map_mul, map_one, hr1, hr2, Units.mul_inv],
+hv.1 by rw [map_mul, map_one, hr1, hr2, Units.inv_mul]⟩,
+hv.1 hr1.trans hu⟩
 
 中文:
 定理 isUnit_of_one
@@ -224,7 +226,9 @@ theorem isUnit_of_one
     rw [← one_mul (v _)]; rw [← hvx]; rw [← v.map_mul]; rw [← hu]; rw [u.mul_inv]; rw [hu]; rw [hvx]; rw [v.map_one]
   let ⟨r1, hr1⟩ := hv.3 h1
   let ⟨r2, hr2⟩ := hv.3 h2
-⟨⟨r1, r2, hv.1 by rw [map_mul, map
+⟨⟨r1, r2, hv.1 by rw [map_mul, map_one, hr1, hr2, Units.mul_inv],
+hv.1 by rw [map_mul, map_one, hr1, hr2, Units.inv_mul]⟩,
+hv.1 hr1.trans hu⟩
 
 Depends on / 依赖: Units.inv_mul, Units.mul_inv, hr1.trans, hu.symm, inv_mul, map_mul, map_one, mul_inv, one_mul, u.mul_inv, v.map_mul, v.map_one
 -/
@@ -366,7 +370,10 @@ hv.1
           (algebraMap O F).map_zero.symm ▸ (v.zero_iff.1 <| le_zero_iff.1 (v.map_zero ▸ hy ▸ h))
       hx.symm ▸ dvd_zero y)
     fun hy : algebraMap O F y != 0 =>
-    have : v ((algebraMap O F y)⁻¹ * algebraMap O F x) <= 1 
+    have : v ((algebraMap O F y)⁻¹ * algebraMap O F x) <= 1 := by
+      grw [← v.map_one, ← inv_mul_cancel₀ hy, v.map_mul, v.map_mul, h]
+    let ⟨z, hz⟩ := hv.3 this
+⟨z, hv.1 ((algebraMap O F).map_mul y z).symm ▸ hz.symm ▸ (mul_inv_cancel_left₀ hy _).symm⟩
 
 中文:
 定理 dvd_of_le
@@ -378,7 +385,10 @@ hv.1
           (algebraMap O F).map_zero.symm ▸ (v.zero_iff.1 <| le_zero_iff.1 (v.map_zero ▸ hy ▸ h))
       hx.symm ▸ dvd_zero y)
     fun hy : algebraMap O F y != 0 =>
-    have : v ((algebraMap O F y)⁻¹ * algebraMap O F x) <= 1 
+    have : v ((algebraMap O F y)⁻¹ * algebraMap O F x) <= 1 := by
+      grw [← v.map_one, ← inv_mul_cancel₀ hy, v.map_mul, v.map_mul, h]
+    let ⟨z, hz⟩ := hv.3 this
+⟨z, hv.1 ((algebraMap O F).map_mul y z).symm ▸ hz.symm ▸ (mul_inv_cancel_left₀ hy _).symm⟩
 
 Depends on / 依赖: algebraMap, dvd_zero, hx.symm, hz.symm, le_zero_iff, map_mul, map_one, map_zero, map_zero.symm, v.map_mul, v.map_one, v.map_zero, v.zero_iff, zero_iff
 -/
@@ -577,7 +587,10 @@ theorem dvdNotUnit_iff_lt
   refine ⟨⟨d, rfl⟩, ?_⟩
   rw [hv.isUnit_iff_valuation_eq_one]; rw [← ne_eq]; rw [ne_iff_lt_iff_le.mpr (hv.map_le_one d)] at hdu
   rw [dvd_iff_le hv]
-  s
+  simp only [map_mul, not_le]
+  contrapose! hdu
+  refine one_le_of_le_mul_left₀ ?_ hdu
+  simp [hv.valuation_pos_iff_ne_zero, hx0]
 
 中文:
 定理 dvdNotUnit_iff_lt
@@ -589,7 +602,10 @@ theorem dvdNotUnit_iff_lt
   refine ⟨⟨d, rfl⟩, ?_⟩
   rw [hv.isUnit_iff_valuation_eq_one]; rw [← ne_eq]; rw [ne_iff_lt_iff_le.mpr (hv.map_le_one d)] at hdu
   rw [dvd_iff_le hv]
-  s
+  simp only [map_mul, not_le]
+  contrapose! hdu
+  refine one_le_of_le_mul_left₀ ?_ hdu
+  simp [hv.valuation_pos_iff_ne_zero, hx0]
 
 Depends on / 依赖: And.elim, contrapose, dvdNotUnit_of_dvd_of_not_dvd, dvd_iff_le, hv.isUnit_iff_valuation_eq_one, hv.le_iff_dvd, hv.map_le_one, hv.valuation_pos_iff_ne_zero, isUnit_iff_valuation_eq_one, le_iff_dvd, lt_iff_le_not_ge, map_le_one, map_mul, ne_eq, ne_iff_lt_iff_le, ne_iff_lt_iff_le.mpr, not_le, valuation_pos_iff_ne_zero
 -/
@@ -646,7 +662,7 @@ lemma coe_span_singleton_eq_setOfPred_le_v_algebraMap
   simp [SetLike.mem_coe, Ideal.mem_span_singleton, hv.dvd_iff_le]
 
 @[deprecated (since := "2026-07-09")]
-alias coe_span_singleton_eq_setOf_le_v_algebraMap := coe_span_singleton_eq_setOfPred_le_v_
+alias coe_span_singleton_eq_setOf_le_v_algebraMap := coe_span_singleton_eq_setOfPred_le_v_algebraMap
 
 中文:
 引理 coe_span_singleton_eq_setOfPred_le_v_algebraMap
@@ -658,7 +674,7 @@ alias coe_span_singleton_eq_setOf_le_v_algebraMap := coe_span_singleton_eq_setOf
   simp [SetLike.mem_coe, Ideal.mem_span_singleton, hv.dvd_iff_le]
 
 @[deprecated (since := "2026-07-09")]
-alias coe_span_singleton_eq_setOf_le_v_algebraMap := coe_span_singleton_eq_setOfPred_le_v_
+alias coe_span_singleton_eq_setOf_le_v_algebraMap := coe_span_singleton_eq_setOfPred_le_v_algebraMap
 
 Depends on / 依赖: Ideal.mem_span_singleton, Set.singleton_zero, SetLike, SetLike.mem_coe, dvd_iff_le, eq_or_ne, hom_inj, hv.dvd_iff_le, hv.hom_inj, map_eq_zero_iff, mem_coe, mem_span_singleton, singleton_zero
 -/
@@ -720,7 +736,13 @@ lemma isPrincipal_iff_exists_isGreatest
     · intro y hy
       simp only [Function.comp_apply, hx, Ideal.submodule_span_eq, Set.mem_image,
         SetLike.mem_coe, Ideal.mem_span_singleton] at hy
-      obt
+      obtain ⟨y, hy, rfl⟩ := hy
+      exact le_of_dvd hv hy
+  · obtain ⟨a, ha, rfl⟩ : exists a in I, (v ∘ algebraMap O F) a = x := by simpa using hx.left
+    refine ⟨a, ?_⟩
+    ext b
+    simp only [Ideal.submodule_span_eq, Ideal.mem_span_singleton]
+    exact ⟨fun hb => dvd_of_le hv (hx.2 <| mem_image_of_mem _ hb), fun hb => I.mem_of_dvd hb ha⟩
 
 中文:
 引理 isPrincipal_iff_存在_isGreatest
@@ -733,7 +755,13 @@ lemma isPrincipal_iff_exists_isGreatest
     · intro y hy
       simp only [Function.comp_apply, hx, Ideal.submodule_span_eq, Set.mem_image,
         SetLike.mem_coe, Ideal.mem_span_singleton] at hy
-      obt
+      obtain ⟨y, hy, rfl⟩ := hy
+      exact le_of_dvd hv hy
+  · obtain ⟨a, ha, rfl⟩ : exists a in I, (v ∘ algebraMap O F) a = x := by simpa using hx.left
+    refine ⟨a, ?_⟩
+    ext b
+    simp only [Ideal.submodule_span_eq, Ideal.mem_span_singleton]
+    exact ⟨fun hb => dvd_of_le hv (hx.2 <| mem_image_of_mem _ hb), fun hb => I.mem_of_dvd hb ha⟩
 
 Depends on / 依赖: Function, Function.comp_apply, Ideal.mem_span_singleton, Ideal.submodule_span_eq, Set.mem_image, Set.mem_image_of_mem, SetLike, SetLike.mem_coe, algebraMap, comp_apply, hx.left, le_of_dvd, mem_coe, mem_image, mem_image_of_mem, mem_span_singleton, submodule_span_eq
 -/
@@ -768,7 +796,16 @@ lemma isPrincipal_iff_exists_eq_setOfPred_valuation_le
     ext b
     simp only [SetLike.mem_coe, mem_ofPred_eq]
     constructor <;> intro h
-    · exact hx.right (
+    · exact hx.right (Set.mem_image_of_mem _ h)
+    · rw [le_iff_dvd hv] at h
+      exact Ideal.mem_of_dvd I h ha
+  · refine ⟨v (algebraMap O F x), Set.mem_image_of_mem _ ?_, ?_⟩
+    · simp [hx]
+    · simp [hx, mem_upperBounds]
+
+@[deprecated (since := "2026-07-09")]
+alias isPrincipal_iff_exists_eq_setOf_valuation_le :=
+  isPrincipal_iff_exists_eq_setOfPred_valuation_le
 
 中文:
 引理 isPrincipal_iff_存在_eq_setOfPred_valuation_le
@@ -781,7 +818,16 @@ lemma isPrincipal_iff_exists_eq_setOfPred_valuation_le
     ext b
     simp only [SetLike.mem_coe, mem_ofPred_eq]
     constructor <;> intro h
-    · exact hx.right (
+    · exact hx.right (Set.mem_image_of_mem _ h)
+    · rw [le_iff_dvd hv] at h
+      exact Ideal.mem_of_dvd I h ha
+  · refine ⟨v (algebraMap O F x), Set.mem_image_of_mem _ ?_, ?_⟩
+    · simp [hx]
+    · simp [hx, mem_upperBounds]
+
+@[deprecated (since := "2026-07-09")]
+alias isPrincipal_iff_exists_eq_setOf_valuation_le :=
+  isPrincipal_iff_exists_eq_setOfPred_valuation_le
 
 Depends on / 依赖: Ideal.mem_of_dvd, Set.mem_image_of_mem, SetLike, SetLike.mem_coe, algebraMap, hx.left, hx.right, isPrincipal_iff_exists_isGreatest, le_iff_dvd, mem_coe, mem_image_of_mem, mem_ofPred_eq, mem_of_dvd, mem_upperBounds
 -/
@@ -820,7 +866,21 @@ lemma not_denselyOrdered_of_isPrincipalIdealRing
     add_mem' := fun {a b} ha hb => by simpa using map_add_lt v ha hb
     zero_mem' := by simp
     smul_mem' := by
-      intro c
+      intro c x
+      simp only [mem_preimage, Function.comp_apply, mem_Iio, smul_eq_mul, map_mul]
+      intro hx
+      exact Right.mul_lt_one_of_le_of_lt (hv.map_le_one c) hx
+  }
+  obtain ⟨x, hx₁, hx⟩ :
+    exists x, v (algebraMap O F x) < 1 ∧
+      v (algebraMap O F x) in upperBounds (Iio 1 inter range (v ∘ algebraMap O F)) := by
+    simpa [I, IsGreatest, hv.isPrincipal_iff_exists_isGreatest, ← image_preimage_eq_inter_range]
+      using IsPrincipalIdealRing.principal I
+  obtain ⟨y, hy, hy₁⟩ : exists y, v (algebraMap O F x) < v y ∧ v y < 1 := by
+    simpa only [Subtype.exists, Subtype.mk_lt_mk, exists_range_iff, exists_prop]
+      using H.dense ⟨v (algebraMap O F x), mem_range_self _⟩ ⟨1, 1, v.map_one⟩ hx₁
+  obtain ⟨z, rfl⟩ := hv.exists_of_le_one hy₁.le
+exact hy.not_ge hx ⟨hy₁, mem_range_self _⟩
 
 中文:
 引理 not_denselyOrdered_of_isPrincipalIdealRing
@@ -833,7 +893,21 @@ lemma not_denselyOrdered_of_isPrincipalIdealRing
     add_mem' := fun {a b} ha hb => by simpa using map_add_lt v ha hb
     zero_mem' := by simp
     smul_mem' := by
-      intro c
+      intro c x
+      simp only [mem_preimage, Function.comp_apply, mem_Iio, smul_eq_mul, map_mul]
+      intro hx
+      exact Right.mul_lt_one_of_le_of_lt (hv.map_le_one c) hx
+  }
+  obtain ⟨x, hx₁, hx⟩ :
+    exists x, v (algebraMap O F x) < 1 ∧
+      v (algebraMap O F x) in upperBounds (Iio 1 inter range (v ∘ algebraMap O F)) := by
+    simpa [I, IsGreatest, hv.isPrincipal_iff_exists_isGreatest, ← image_preimage_eq_inter_range]
+      using IsPrincipalIdealRing.principal I
+  obtain ⟨y, hy, hy₁⟩ : exists y, v (algebraMap O F x) < v y ∧ v y < 1 := by
+    simpa only [Subtype.exists, Subtype.mk_lt_mk, exists_range_iff, exists_prop]
+      using H.dense ⟨v (algebraMap O F x), mem_range_self _⟩ ⟨1, 1, v.map_one⟩ hx₁
+  obtain ⟨z, rfl⟩ := hv.exists_of_le_one hy₁.le
+exact hy.not_ge hx ⟨hy₁, mem_range_self _⟩
 -/
 lemma not_denselyOrdered_of_isPrincipalIdealRing [IsPrincipalIdealRing O] (hv : Integers v O) :
     ¬ DenselyOrdered (range v) := by
@@ -1408,7 +1482,9 @@ lemma leIdeal_map_algebraMap_eq_leSubmodule_min
     · rw [h]
       exact hy
   · intro hx
-    rcases min_cases 1 γ with ⟨h, h'⟩
+    rcases min_cases 1 γ with ⟨h, h'⟩ | ⟨h, h'⟩ <;> rw [h] at hx
+    · exact ⟨⟨x, hx⟩, hx.trans h', rfl⟩
+    · exact ⟨⟨x, hx.trans h'.le⟩, hx, rfl⟩
 
 中文:
 引理 leIdeal_map_algebraMap_eq_leSubmodule_min
@@ -1424,7 +1500,9 @@ lemma leIdeal_map_algebraMap_eq_leSubmodule_min
     · rw [h]
       exact hy
   · intro hx
-    rcases min_cases 1 γ with ⟨h, h'⟩
+    rcases min_cases 1 γ with ⟨h, h'⟩ | ⟨h, h'⟩ <;> rw [h] at hx
+    · exact ⟨⟨x, hx⟩, hx.trans h', rfl⟩
+    · exact ⟨⟨x, hx.trans h'.le⟩, hx, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.linearMap_apply, Submodule, Submodule.mem_map, hx.trans, linearMap_apply, mem_leIdeal_iff, mem_leSubmodule_iff, mem_map, min_cases, y.prop
 -/

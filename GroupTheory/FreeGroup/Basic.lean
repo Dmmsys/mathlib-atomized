@@ -618,7 +618,16 @@ theorem cons_cons_iff
         subst_vars
         cases eq₂
         constructor
-      | hea
+      | head h₁₂ h ih =>
+        subst_vars
+        obtain ⟨a, b⟩ := p
+        rw [Step.cons_left_iff] at h₁₂
+        rcases h₁₂ with (⟨L, h₁₂, rfl⟩ | rfl)
+        · exact (ih rfl rfl).head h₁₂
+        · exact (cons_cons h).tail Step.cons_not_rev)
+    cons_cons
+
+@[to_additive]
 
 中文:
 定理 cons_cons_iff
@@ -634,7 +643,16 @@ theorem cons_cons_iff
         subst_vars
         cases eq₂
         constructor
-      | hea
+      | head h₁₂ h ih =>
+        subst_vars
+        obtain ⟨a, b⟩ := p
+        rw [Step.cons_left_iff] at h₁₂
+        rcases h₁₂ with (⟨L, h₁₂, rfl⟩ | rfl)
+        · exact (ih rfl rfl).head h₁₂
+        · exact (cons_cons h).tail Step.cons_not_rev)
+    cons_cons
+
+@[to_additive]
 
 Depends on / 依赖: Iff.intro, ReflTransGen, Relation, Relation.ReflTransGen.head_induction_on, Step.cons_left_iff, Step.cons_not_rev, cons_cons, cons_left_iff, cons_not_rev, generalize, generalizing, head_induction_on
 -/
@@ -714,7 +732,16 @@ theorem to_append_iff
       | refl => exact ⟨_, _, eq.symm, by rfl, by rfl⟩
       | tail hLL' h ih =>
         obtain @⟨s, e, a, b⟩ := h
-        rcases List.append_eq_append_iff.1 eq with (⟨s', rfl, rfl⟩ | ⟨e', r
+        rcases List.append_eq_append_iff.1 eq with (⟨s', rfl, rfl⟩ | ⟨e', rfl, rfl⟩)
+        · have : L₁ ++ (s' ++ (a, b) :: (a, not b) :: e) =
+            L₁ ++ s' ++ (a, b) :: (a, not b) :: e := by simp
+          rcases ih this with ⟨w₁, w₂, rfl, h₁, h₂⟩
+          exact ⟨w₁, w₂, rfl, h₁, h₂.tail Step.not⟩
+        · have : s ++ (a, b) :: (a, not b) :: e' ++ L₂ =
+            s ++ (a, b) :: (a, not b) :: (e' ++ L₂) := by simp
+          rcases ih this with ⟨w₁, w₂, rfl, h₁, h₂⟩
+          exact ⟨w₁, w₂, rfl, h₁.tail Step.not, h₂⟩)
+    fun ⟨_, _, Eq, h₃, h₄⟩ => Eq.symm ▸ append_append h₃ h₄
 
 中文:
 定理 to_append_iff
@@ -727,7 +754,16 @@ theorem to_append_iff
       | refl => exact ⟨_, _, eq.symm, by rfl, by rfl⟩
       | tail hLL' h ih =>
         obtain @⟨s, e, a, b⟩ := h
-        rcases List.append_eq_append_iff.1 eq with (⟨s', rfl, rfl⟩ | ⟨e', r
+        rcases List.append_eq_append_iff.1 eq with (⟨s', rfl, rfl⟩ | ⟨e', rfl, rfl⟩)
+        · have : L₁ ++ (s' ++ (a, b) :: (a, not b) :: e) =
+            L₁ ++ s' ++ (a, b) :: (a, not b) :: e := by simp
+          rcases ih this with ⟨w₁, w₂, rfl, h₁, h₂⟩
+          exact ⟨w₁, w₂, rfl, h₁, h₂.tail Step.not⟩
+        · have : s ++ (a, b) :: (a, not b) :: e' ++ L₂ =
+            s ++ (a, b) :: (a, not b) :: (e' ++ L₂) := by simp
+          rcases ih this with ⟨w₁, w₂, rfl, h₁, h₂⟩
+          exact ⟨w₁, w₂, rfl, h₁.tail Step.not, h₂⟩)
+    fun ⟨_, _, Eq, h₃, h₄⟩ => Eq.symm ▸ append_append h₃ h₄
 
 Depends on / 依赖: Iff.intro, List.append_eq_append_iff, Step.not, append_eq_append_iff, eq.symm, generalize, generalizing
 -/
@@ -812,7 +848,10 @@ theorem cons_nil_iff_singleton
       let ⟨L', h₁, h₂⟩ := church_rosser h₁ h₂
       rw [singleton_iff] at h₁
       subst L'
-      assumpti
+      assumption)
+    fun h => (cons_cons h).tail Step.cons_not
+
+@[to_additive]
 
 中文:
 定理 cons_nil_iff_singleton
@@ -825,7 +864,10 @@ theorem cons_nil_iff_singleton
       let ⟨L', h₁, h₂⟩ := church_rosser h₁ h₂
       rw [singleton_iff] at h₁
       subst L'
-      assumpti
+      assumption)
+    fun h => (cons_cons h).tail Step.cons_not
+
+@[to_additive]
 
 Depends on / 依赖: Iff.intro, ReflTransGen, ReflTransGen.single, Step.cons_not, Step.cons_not_rev, church_rosser, cons_cons, cons_not, cons_not_rev, single, singleton_iff
 -/
@@ -854,7 +896,8 @@ theorem red_iff_irreducible
   cases h'
   simp only [List.cons_eq_append_iff, List.cons.injEq, Prod.mk.injEq, and_false,
     List.nil_eq_append_iff, exists_const, or_self, or_false, List.cons_ne_nil] at eq
-  rcases eq with ⟨rfl, ⟨rfl, rf
+  rcases eq with ⟨rfl, ⟨rfl, rfl⟩, ⟨rfl, rfl⟩, rfl⟩
+  simp at h
 
 中文:
 定理 red_iff_irreducible
@@ -866,7 +909,8 @@ theorem red_iff_irreducible
   cases h'
   simp only [List.cons_eq_append_iff, List.cons.injEq, Prod.mk.injEq, and_false,
     List.nil_eq_append_iff, exists_const, or_self, or_false, List.cons_ne_nil] at eq
-  rcases eq with ⟨rfl, ⟨rfl, rf
+  rcases eq with ⟨rfl, ⟨rfl, rfl⟩, ⟨rfl, rfl⟩, rfl⟩
+  simp at h
 
 Depends on / 依赖: List.cons.injEq, List.cons_eq_append_iff, List.cons_ne_nil, List.nil_eq_append_iff, Prod.mk.injEq, and_false, cons_eq_append_iff, cons_ne_nil, exists_const, generalize, nil_eq_append_iff, or_false, or_self, reflTransGen_iff_eq
 -/
@@ -898,7 +942,11 @@ theorem inv_of_red_of_ne
   · cases eq
     change Red (L₃ ++ L₄) ([(x1, not b1), (x2, b2)] ++ L₂)
     apply append_append _ h₂
-    have h₁ : Red ((x1, not b1) :: (x1, b1) :: L₃) 
+    have h₁ : Red ((x1, not b1) :: (x1, b1) :: L₃) [(x1, not b1), (x2, b2)] := cons_cons h₁
+    have h₂ : Red ((x1, not b1) :: (x1, b1) :: L₃) L₃ := Step.cons_not_rev.to_red
+    rcases church_rosser h₁ h₂ with ⟨L', h₁, h₂⟩
+    rw [red_iff_irreducible H1] at h₁
+    rwa [h₁] at h₂
 
 中文:
 定理 inv_of_red_of_ne
@@ -910,7 +958,11 @@ theorem inv_of_red_of_ne
   · cases eq
     change Red (L₃ ++ L₄) ([(x1, not b1), (x2, b2)] ++ L₂)
     apply append_append _ h₂
-    have h₁ : Red ((x1, not b1) :: (x1, b1) :: L₃) 
+    have h₁ : Red ((x1, not b1) :: (x1, b1) :: L₃) [(x1, not b1), (x2, b2)] := cons_cons h₁
+    have h₂ : Red ((x1, not b1) :: (x1, b1) :: L₃) L₃ := Step.cons_not_rev.to_red
+    rcases church_rosser h₁ h₂ with ⟨L', h₁, h₂⟩
+    rw [red_iff_irreducible H1] at h₁
+    rwa [h₁] at h₂
 
 Depends on / 依赖: Step.cons_not_rev.to_red, append_append, church_rosser, cons_cons, cons_not_rev, nil_iff, red_iff_irreducible, to_append_iff, to_red
 -/
@@ -1164,7 +1216,7 @@ theorem eqvGen_step_iff_join_red
       have : EqvGen (Join Red) L₁ L₂ := h.mono fun _ _ => join_red_of_step
       equivalence_join_red.eqvGen_iff.1 this)
     (join_le_of_equivalence_of_le (Relation.EqvGen.is_equivalence _)
-      (reflTransGen_le_of_equivalence_of_le (Relation.EqvGen.is_equivalence _) EqvGen.
+      (reflTransGen_le_of_equivalence_of_le (Relation.EqvGen.is_equivalence _) EqvGen.rel) L₁ L₂)
 
 中文:
 定理 eqvGen_step_iff_join_red
@@ -1174,7 +1226,7 @@ theorem eqvGen_step_iff_join_red
       have : EqvGen (Join Red) L₁ L₂ := h.mono fun _ _ => join_red_of_step
       equivalence_join_red.eqvGen_iff.1 this)
     (join_le_of_equivalence_of_le (Relation.EqvGen.is_equivalence _)
-      (reflTransGen_le_of_equivalence_of_le (Relation.EqvGen.is_equivalence _) EqvGen.
+      (reflTransGen_le_of_equivalence_of_le (Relation.EqvGen.is_equivalence _) EqvGen.rel) L₁ L₂)
 
 Depends on / 依赖: EqvGen, EqvGen.rel, Iff.intro, Relation, Relation.EqvGen.is_equivalence, equivalence_join_red, equivalence_join_red.eqvGen_iff, eqvGen_iff, h.mono, is_equivalence, join_le_of_equivalence_of_le, join_red_of_step, reflTransGen_le_of_equivalence_of_le
 -/
@@ -2257,7 +2309,7 @@ lemma ext_hom
     · simp_rw [← _root_.map_mul, inv_mul_cancel, _root_.map_one, one_mul]
   induction x <;> simp [*]
 
-@[to_a
+@[to_additive]
 
 中文:
 引理 ext_hom
@@ -2270,7 +2322,7 @@ lemma ext_hom
     · simp_rw [← _root_.map_mul, inv_mul_cancel, _root_.map_one, one_mul]
   induction x <;> simp [*]
 
-@[to_a
+@[to_additive]
 
 Depends on / 依赖: _root_, _root_.map_mul, _root_.map_one, inv_mul_cancel, map_mul, map_one, mul_assoc, mul_inv_cancel, mul_one, one_mul, simp_rw
 -/
@@ -2881,7 +2933,10 @@ theorem map.unique
       (show g ((FreeGroup.of x)⁻¹ * FreeGroup.mk t) =
           FreeGroup.map f ((FreeGroup.of x)⁻¹ * FreeGroup.mk t) by
         simp [g.map_mul, g.map_inv, hg, ih])
-   
+      (show g (FreeGroup.of x * FreeGroup.mk t) =
+          FreeGroup.map f (FreeGroup.of x * FreeGroup.mk t) by simp [g.map_mul, hg, ih])
+
+@[to_additive]
 
 中文:
 定理 map.unique
@@ -2893,7 +2948,10 @@ theorem map.unique
       (show g ((FreeGroup.of x)⁻¹ * FreeGroup.mk t) =
           FreeGroup.map f ((FreeGroup.of x)⁻¹ * FreeGroup.mk t) by
         simp [g.map_mul, g.map_inv, hg, ih])
-   
+      (show g (FreeGroup.of x * FreeGroup.mk t) =
+          FreeGroup.map f (FreeGroup.of x * FreeGroup.mk t) by simp [g.map_mul, hg, ih])
+
+@[to_additive]
 
 Depends on / 依赖: Bool.recOn, FreeGroup, FreeGroup.map, FreeGroup.mk, FreeGroup.of, List.recOn, g.map_inv, g.map_mul, g.map_one, map_inv, map_mul, map_one
 -/
@@ -3467,7 +3525,14 @@ definition freeGroupUnitEquivInt
      rfl
      (fun ⟨⟨⟩, b⟩ tl ih => by
         cases b <;> simp [zpow_add, ih] <;> rfl)
-  right_inv x :
+  right_inv x :=
+    Int.induction_on x (by simp)
+      (fun i ih => by
+        simp only [zpow_natCast, map_pow, map.of] at ih
+        simp [zpow_add, ih])
+      (fun i ih => by
+        simp only [zpow_neg, zpow_natCast, map_inv, map_pow, map.of, sum.map_inv, neg_inj] at ih
+        simp [zpow_add, ih, sub_eq_add_neg])
 
 中文:
 定义 freeGroupUnitEquiv整数
@@ -3483,7 +3548,14 @@ definition freeGroupUnitEquivInt
      rfl
      (fun ⟨⟨⟩, b⟩ tl ih => by
         cases b <;> simp [zpow_add, ih] <;> rfl)
-  right_inv x :
+  right_inv x :=
+    Int.induction_on x (by simp)
+      (fun i ih => by
+        simp only [zpow_natCast, map_pow, map.of] at ih
+        simp [zpow_add, ih])
+      (fun i ih => by
+        simp only [zpow_neg, zpow_natCast, map_inv, map_pow, map.of, sum.map_inv, neg_inj] at ih
+        simp [zpow_add, ih, sub_eq_add_neg])
 
 Depends on / 依赖: Int.induction_on, List.map_map, List.recOn, induction_on, invFun, left_inv, map.mk, map.of, map_inv, map_map, map_pow, neg_inj, quot_mk_eq_mk, revert, right_inv, sum.map_inv, sum_mk, zpow_add, zpow_natCast, zpow_neg
 -/
@@ -3525,7 +3597,8 @@ definition equivIntOfUnique
   right_inv x := by
     induction x with
     | zero => simp
-    
+    | succ x hx => simpa [zpow_add_one] using hx
+    | pred x hx => simpa [zpow_sub_one, ← sub_eq_add_neg] using hx
 
 中文:
 定义 equiv整数OfUnique
@@ -3541,7 +3614,8 @@ definition equivIntOfUnique
   right_inv x := by
     induction x with
     | zero => simp
-    
+    | succ x hx => simpa [zpow_add_one] using hx
+    | pred x hx => simpa [zpow_sub_one, ← sub_eq_add_neg] using hx
 -/
 def equivIntOfUnique [Unique α] : FreeGroup α ≃ Int where
   toFun x := sum (map 1 x)
@@ -3621,7 +3695,8 @@ definition _root_.FreeAddGroup.addEquivIntOfUnique
     | of x => simp [Unique.default_eq x]
     | neg_of x hx => simp [Unique.default_eq x]
     | add x y hx hy => simp [add_zsmul, hx, hy]
-  right_inv x := by indu
+  right_inv x := by induction x <;> simp
+  map_add' x y := by simp
 
 中文:
 定义 _root_.自由加法群.addEquiv整数OfUnique
@@ -3634,7 +3709,8 @@ definition _root_.FreeAddGroup.addEquivIntOfUnique
     | of x => simp [Unique.default_eq x]
     | neg_of x hx => simp [Unique.default_eq x]
     | add x y hx hy => simp [add_zsmul, hx, hy]
-  right_inv x := by indu
+  right_inv x := by induction x <;> simp
+  map_add' x y := by simp
 
 Depends on / 依赖: FreeAddGroup, FreeAddGroup.map, FreeAddGroup.sum
 -/
@@ -3915,7 +3991,9 @@ instance :
       fun x y ihx ihy => by rw [map_mul, ihx, ihy])
   (pure_bind := fun x f => pure_bind f x)
   (bind_assoc := fun x => by
-    refine FreeGroup.induction_on x ?_
+    refine FreeGroup.induction_on x ?_ ?_ ?_ ?_ <;> simp +instances +contextual [instMonad])
+  (bind_pure_comp := fun f x => by
+    refine FreeGroup.induction_on x ?_ ?_ ?_ ?_ <;> simp +instances +contextual [instMonad])
 
 中文:
 实例 :
@@ -3926,7 +4004,9 @@ instance :
       fun x y ihx ihy => by rw [map_mul, ihx, ihy])
   (pure_bind := fun x f => pure_bind f x)
   (bind_assoc := fun x => by
-    refine FreeGroup.induction_on x ?_
+    refine FreeGroup.induction_on x ?_ ?_ ?_ ?_ <;> simp +instances +contextual [instMonad])
+  (bind_pure_comp := fun f x => by
+    refine FreeGroup.induction_on x ?_ ?_ ?_ ?_ <;> simp +instances +contextual [instMonad])
 
 Depends on / 依赖: LawfulMonad, LawfulMonad.mk
 -/

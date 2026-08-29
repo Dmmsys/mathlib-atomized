@@ -400,7 +400,11 @@ definition curriedInverse
   body: lift (fun x => lift (fun y => mk (x, y)) (fun {y₀ y₁} e => homMk (Edge.tensor (.id _) e)) (by simp)
     (fun {y₀ y₁ y₁ e₀₁ e₁₂ e₀₂ h} => homMk_comp_homMk ((Edge.CompStruct.idCompId x).tensor h)))
     (fun {x₀ x₁} e => mkNatTrans (fun y => homMk (V := X otimes Y) (x₀ := (x₀, y))
-      (x₁ := (x₁, y))
+      (x₁ := (x₁, y)) (e.tensor (.id y))) (fun y₀ y₁ e' => by simp [square]))
+    (by cat_disch) (fun {x₀ x₁ x₂ e₀₁ e₁₂ e₀₂} h => by
+      ext y
+      obtain ⟨y, rfl⟩ := mk_surjective y
+      simpa using homMk_comp_homMk (h.tensor (.idCompId y)))
 
 中文:
 定义 curriedInverse
@@ -408,7 +412,11 @@ definition curriedInverse
   定义体: lift (fun x => lift (fun y => mk (x, y)) (fun {y₀ y₁} e => homMk (Edge.tensor (.id _) e)) (by simp)
     (fun {y₀ y₁ y₁ e₀₁ e₁₂ e₀₂ h} => homMk_comp_homMk ((Edge.CompStruct.idCompId x).tensor h)))
     (fun {x₀ x₁} e => mkNatTrans (fun y => homMk (V := X otimes Y) (x₀ := (x₀, y))
-      (x₁ := (x₁, y))
+      (x₁ := (x₁, y)) (e.tensor (.id y))) (fun y₀ y₁ e' => by simp [square]))
+    (by cat_disch) (fun {x₀ x₁ x₂ e₀₁ e₁₂ e₀₂} h => by
+      ext y
+      obtain ⟨y, rfl⟩ := mk_surjective y
+      simpa using homMk_comp_homMk (h.tensor (.idCompId y)))
 
 Depends on / 依赖: CompStruct, Edge.CompStruct.idCompId, Edge.tensor, cat_disch, e.tensor, h.tensor, homMk_comp_homMk, idCompId, mkNatTrans, mk_surjective, otimes, square, tensor
 -/
@@ -1060,7 +1068,20 @@ definition associativity'Iso
     (mkNatIso (fun x => mkNatIso (fun y => mkNatIso (fun z => Iso.refl _)
       (fun z₀ z₁ e => by
         dsimp
-        rw [Category.comp_id]; rw [Category.id_comp]; rw [← prod_id]; rw [inverse_map_mkHom_id_homMk]; rw [inverse_map_mkHom_id_homMk]; rw [Categor
+        rw [Category.comp_id]; rw [Category.id_comp]; rw [← prod_id]; rw [inverse_map_mkHom_id_homMk]; rw [inverse_map_mkHom_id_homMk]; rw [CategoryTheory.Functor.map_id]
+        dsimp [← Edge.id_tensor_id]))
+      (fun y₀ y₁ e => by
+        ext z
+        obtain ⟨z, rfl⟩ := z.mk_surjective
+        dsimp
+        rw [Category.comp_id]; rw [Category.id_comp]; rw [inverse_map_mkHom_homMk_id]; rw [inverse_map_mkHom_id_homMk]))
+      (fun x₀ x₁ e => by
+        ext y z
+        obtain ⟨y, rfl⟩ := y.mk_surjective
+        obtain ⟨z, rfl⟩ := z.mk_surjective
+        dsimp
+        simp only [Category.comp_id, Category.id_comp, ← prod_id',
+          CategoryTheory.Functor.map_id, inverse_obj, inverse_map_mkHom_homMk_id]))
 
 中文:
 定义 associativity'同构
@@ -1069,7 +1090,20 @@ definition associativity'Iso
     (mkNatIso (fun x => mkNatIso (fun y => mkNatIso (fun z => Iso.refl _)
       (fun z₀ z₁ e => by
         dsimp
-        rw [Category.comp_id]; rw [Category.id_comp]; rw [← prod_id]; rw [inverse_map_mkHom_id_homMk]; rw [inverse_map_mkHom_id_homMk]; rw [Categor
+        rw [Category.comp_id]; rw [Category.id_comp]; rw [← prod_id]; rw [inverse_map_mkHom_id_homMk]; rw [inverse_map_mkHom_id_homMk]; rw [CategoryTheory.Functor.map_id]
+        dsimp [← Edge.id_tensor_id]))
+      (fun y₀ y₁ e => by
+        ext z
+        obtain ⟨z, rfl⟩ := z.mk_surjective
+        dsimp
+        rw [Category.comp_id]; rw [Category.id_comp]; rw [inverse_map_mkHom_homMk_id]; rw [inverse_map_mkHom_id_homMk]))
+      (fun x₀ x₁ e => by
+        ext y z
+        obtain ⟨y, rfl⟩ := y.mk_surjective
+        obtain ⟨z, rfl⟩ := z.mk_surjective
+        dsimp
+        simp only [Category.comp_id, Category.id_comp, ← prod_id',
+          CategoryTheory.Functor.map_id, inverse_obj, inverse_map_mkHom_homMk_id]))
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, CategoryTheory, CategoryTheory.Functor.map_id, Edge.id_tensor_id, Functor, Functor.fullyFaithfulCurry, Iso.refl, comp_id, id_comp, id_tensor_id, inverse_map_mkHom_homMk_id, inverse_map_mkHom_id_ho, inverse_map_mkHom_id_homMk, map_id, mkNatIso, mk_surjective, preimageIso, prod_id
 -/
@@ -1222,7 +1256,9 @@ instance :
       μIso X Y := (iso X Y).symm
       μIso_hom_natural_left _ _ := by ext; apply mapHomotopyCategory_prod_id_comp_inverse
       μIso_hom_natural_right _ _ := by ext; apply id_prod_mapHomotopyCategory_comp_inverse
-  
+      left_unitality Y := by ext; apply left_unitality
+      right_unitality X := by ext; apply right_unitality
+      associativity _ _ _ := by ext; apply associativity }
 
 中文:
 实例 :
@@ -1232,7 +1268,9 @@ instance :
       μIso X Y := (iso X Y).symm
       μIso_hom_natural_left _ _ := by ext; apply mapHomotopyCategory_prod_id_comp_inverse
       μIso_hom_natural_right _ _ := by ext; apply id_prod_mapHomotopyCategory_comp_inverse
-  
+      left_unitality Y := by ext; apply left_unitality
+      right_unitality X := by ext; apply right_unitality
+      associativity _ _ _ := by ext; apply associativity }
 
 Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal, HomotopyCategory, HomotopyCategory.isoTerminal, associativity, id_prod_mapHomotopyCategory_comp_inverse, isoTerminal, left_unitality, mapHomotopyCategory_prod_id_comp_inverse, right_unitality, toMonoidal
 -/

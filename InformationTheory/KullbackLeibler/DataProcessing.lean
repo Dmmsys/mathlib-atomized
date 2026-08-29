@@ -80,7 +80,7 @@ lemma comp_rnDeriv_map_le
 ae_of_ae_trim _ hf_cvx.map_condExp_rnDeriv_le hg.comap_le hf hf_cont_at h_int] with a ha1 ha2
   calc f ((μ.map g).rnDeriv (ν.map g) (g a)).toReal
       = f ((ν[fun x => (μ.rnDeriv ν x).toReal | m𝓨.comap g]) a) := by rw [ha1]
-    _ <= (ν[fun x => f (μ.r
+    _ <= (ν[fun x => f (μ.rnDeriv ν x).toReal | m𝓨.comap g]) a := ha2
 
 中文:
 引理 comp_rnDeriv_map_le
@@ -90,7 +90,7 @@ ae_of_ae_trim _ hf_cvx.map_condExp_rnDeriv_le hg.comap_le hf hf_cont_at h_int] w
 ae_of_ae_trim _ hf_cvx.map_condExp_rnDeriv_le hg.comap_le hf hf_cont_at h_int] with a ha1 ha2
   calc f ((μ.map g).rnDeriv (ν.map g) (g a)).toReal
       = f ((ν[fun x => (μ.rnDeriv ν x).toReal | m𝓨.comap g]) a) := by rw [ha1]
-    _ <= (ν[fun x => f (μ.r
+    _ <= (ν[fun x => f (μ.rnDeriv ν x).toReal | m𝓨.comap g]) a := ha2
 
 Depends on / 依赖: ae_of_ae_trim, comap_le, filter_upwards, h_int, hf_cont_at, hf_cvx, hf_cvx.map_condExp_rnDeriv_le, hg.comap_le, map_condExp_rnDeriv_le, rnDeriv, toReal, toReal_rnDeriv_map
 -/
@@ -115,7 +115,18 @@ lemma integrable_comp_rnDeriv_map
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   obtain ⟨c, c', h⟩ : exists c c', forall x, 0 <= x -> c * x + c' <= f x :=
     hf_cvx.exists_affine_le_real isClosed_Ici hf_cont.lowerSemicontinuousOn
-  rw [integrable_map_measure (StronglyMeasurable.aestronglyMeasurab
+  rw [integrable_map_measure (StronglyMeasurable.aestronglyMeasurable (by fun_prop))
+      hg.aemeasurable]
+  refine integrable_of_le_of_le (f := fun x => f ((∂μ.map g/∂ν.map g) (g x)).toReal)
+    (g₁ := fun x => c * ((∂μ.map g/∂ν.map g) (g x)).toReal + c')
+    (g₂ := fun x => (ν[fun x => f (μ.rnDeriv ν x).toReal | m𝓨.comap g]) x)
+    ?_ ?_ ?_ ?_ integrable_condExp
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact ae_of_all _ (fun x => h _ ENNReal.toReal_nonneg)
+  · exact hf_cvx.comp_rnDeriv_map_le hμν hg hf hf_cont_at h_int
+  · refine (Integrable.const_mul ?_ _).add (integrable_const _)
+    rw [integrable_congr (toReal_rnDeriv_map hμν hg)]
+    fun_prop
 
 中文:
 引理 integrable_comp_rnDeriv_map
@@ -124,7 +135,18 @@ lemma integrable_comp_rnDeriv_map
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   obtain ⟨c, c', h⟩ : exists c c', forall x, 0 <= x -> c * x + c' <= f x :=
     hf_cvx.exists_affine_le_real isClosed_Ici hf_cont.lowerSemicontinuousOn
-  rw [integrable_map_measure (StronglyMeasurable.aestronglyMeasurab
+  rw [integrable_map_measure (StronglyMeasurable.aestronglyMeasurable (by fun_prop))
+      hg.aemeasurable]
+  refine integrable_of_le_of_le (f := fun x => f ((∂μ.map g/∂ν.map g) (g x)).toReal)
+    (g₁ := fun x => c * ((∂μ.map g/∂ν.map g) (g x)).toReal + c')
+    (g₂ := fun x => (ν[fun x => f (μ.rnDeriv ν x).toReal | m𝓨.comap g]) x)
+    ?_ ?_ ?_ ?_ integrable_condExp
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact ae_of_all _ (fun x => h _ ENNReal.toReal_nonneg)
+  · exact hf_cvx.comp_rnDeriv_map_le hμν hg hf hf_cont_at h_int
+  · refine (Integrable.const_mul ?_ _).add (integrable_const _)
+    rw [integrable_congr (toReal_rnDeriv_map hμν hg)]
+    fun_prop
 
 Depends on / 依赖: ContinuousOn, StronglyMeasurable, StronglyMeasurable.aestronglyMeasurable, aemeasurable, aestronglyMeasurable, continuousOn_Ici, exists_affine_le_real, fun_prop, hf_cont, hf_cont.lowerSemicontinuousOn, hf_cont_at, hf_cvx, hf_cvx.continuousOn_Ici, hf_cvx.exists_affine_le_real, hg.aemeasurable, integrable_map_measure, integrable_of_le_of_le, isClosed_Ici, lowerSemicontinuousOn, toReal
 -/
@@ -194,7 +216,15 @@ lemma integrable_comp_rnDeriv_trim
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   obtain ⟨c, c', h⟩ : exists c c', forall x, 0 <= x -> c * x + c' <= f x :=
     hf_cvx.exists_affine_le_real isClosed_Ici hf_cont.lowerSemicontinuousOn
-  refine integrable_of_le_of_le (f := fun x => f ((∂μ.trim hm/∂ν.tr
+  refine integrable_of_le_of_le (f := fun x => f ((∂μ.trim hm/∂ν.trim hm) x).toReal)
+    (g₁ := fun x => c * ((∂μ.trim hm/∂ν.trim hm) x).toReal + c')
+    (g₂ := fun x => (ν[fun x => f (μ.rnDeriv ν x).toReal | m]) x)
+    ?_ ?_ ?_ ?_ ?_
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact ae_of_all _ (fun x => h _ ENNReal.toReal_nonneg)
+  · exact hf_cvx.comp_rnDeriv_trim_le hm hμν hf hf_cont_at h_int
+  · exact (Integrable.const_mul (by fun_prop) _).add (integrable_const _)
+  · exact integrable_condExp.trim hm stronglyMeasurable_condExp
 
 中文:
 引理 integrable_comp_rnDeriv_trim
@@ -203,7 +233,15 @@ lemma integrable_comp_rnDeriv_trim
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   obtain ⟨c, c', h⟩ : exists c c', forall x, 0 <= x -> c * x + c' <= f x :=
     hf_cvx.exists_affine_le_real isClosed_Ici hf_cont.lowerSemicontinuousOn
-  refine integrable_of_le_of_le (f := fun x => f ((∂μ.trim hm/∂ν.tr
+  refine integrable_of_le_of_le (f := fun x => f ((∂μ.trim hm/∂ν.trim hm) x).toReal)
+    (g₁ := fun x => c * ((∂μ.trim hm/∂ν.trim hm) x).toReal + c')
+    (g₂ := fun x => (ν[fun x => f (μ.rnDeriv ν x).toReal | m]) x)
+    ?_ ?_ ?_ ?_ ?_
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact ae_of_all _ (fun x => h _ ENNReal.toReal_nonneg)
+  · exact hf_cvx.comp_rnDeriv_trim_le hm hμν hf hf_cont_at h_int
+  · exact (Integrable.const_mul (by fun_prop) _).add (integrable_const _)
+  · exact integrable_condExp.trim hm stronglyMeasurable_condExp
 
 Depends on / 依赖: ContinuousOn, StronglyMeasurable, StronglyMeasurable.aestronglyMeasurable, aestronglyMeasurable, continuousOn_Ici, exists_affine_le_real, hf_cont, hf_cont.lowerSemicontinuousOn, hf_cont_at, hf_cvx, hf_cvx.continuousOn_Ici, hf_cvx.exists_affine_le_real, integrable_of_le_of_le, isClosed_Ici, lowerSemicontinuousOn, rnDeriv, toReal
 -/
@@ -388,7 +426,15 @@ theorem klDiv_map_le
   rw [klDiv_map_of_ac hμν hg h_int]; rw [klDiv_eq_integral_klFun]
   simp only [hμν, h_int, and_self, ↓reduceIte]
   conv_rhs => rw [← integral_condExp hg.comap_le]
- 
+  gcongr 1
+  have hf : StronglyMeasurable klFun := by fun_prop
+  have hf_cont : ContinuousWithinAt klFun (Ici 0) 0 := by fun_prop
+  have h_int' : Integrable (fun x => klFun (μ.rnDeriv ν x).toReal) ν := by
+    rwa [integrable_klFun_rnDeriv_iff hμν]
+  refine integral_mono_ae ?_ integrable_condExp ?_
+  · exact convexOn_klFun.integrable_comp_condExp_rnDeriv hg.comap_le hμν hf hf_cont h_int'
+  · refine ae_of_ae_trim hg.comap_le ?_
+    exact convexOn_klFun.map_condExp_rnDeriv_le hg.comap_le hf hf_cont h_int'
 
 中文:
 定理 klDiv_map_le
@@ -402,7 +448,15 @@ theorem klDiv_map_le
   rw [klDiv_map_of_ac hμν hg h_int]; rw [klDiv_eq_integral_klFun]
   simp only [hμν, h_int, and_self, ↓reduceIte]
   conv_rhs => rw [← integral_condExp hg.comap_le]
- 
+  gcongr 1
+  have hf : StronglyMeasurable klFun := by fun_prop
+  have hf_cont : ContinuousWithinAt klFun (Ici 0) 0 := by fun_prop
+  have h_int' : Integrable (fun x => klFun (μ.rnDeriv ν x).toReal) ν := by
+    rwa [integrable_klFun_rnDeriv_iff hμν]
+  refine integral_mono_ae ?_ integrable_condExp ?_
+  · exact convexOn_klFun.integrable_comp_condExp_rnDeriv hg.comap_le hμν hf hf_cont h_int'
+  · refine ae_of_ae_trim hg.comap_le ?_
+    exact convexOn_klFun.map_condExp_rnDeriv_le hg.comap_le hf hf_cont h_int'
 
 Depends on / 依赖: ContinuousWithinAt, Integrable, StronglyMeasurable, and_self, comap_le, conv_rhs, fun_prop, h_int, hf_cont, hg.comap_le, integrable_kl, integral_condExp, klDiv_eq_integral_klFun, klDiv_map_of_ac, klDiv_of_not_integrable, reduceIte, rnDeriv, toReal
 -/

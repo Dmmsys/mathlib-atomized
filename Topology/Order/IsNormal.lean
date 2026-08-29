@@ -39,7 +39,13 @@ theorem IsNormal.continuous
   refine fun b => ⟨?_, ((isLowerSet_Iio b).preimage hf.strictMono.monotone).isOpen⟩
   rw [← isClosed_compl_iff]; rw [← Set.preimage_compl]; rw [Set.compl_Ioi]
   obtain ha | ⟨a, ha⟩ := ((isLowerSet_Iic b).preimage hf.strictMono.monotone).eq_univ_or_Iio
-  · exact
+  · exact ha ▸ isClosed_univ
+  · obtain h | h := (f ⁻¹' Iic b).eq_empty_or_nonempty
+    · exact h ▸ isClosed_empty
+    · have : Nonempty α := ⟨a⟩
+      have : Nonempty β := ⟨b⟩
+      rw [hf.preimage_Iic h (ha ▸ bddAbove_Iio)]
+      exact isClosed_Iic
 
 中文:
 定理 是正规.continuous
@@ -50,7 +56,13 @@ theorem IsNormal.continuous
   refine fun b => ⟨?_, ((isLowerSet_Iio b).preimage hf.strictMono.monotone).isOpen⟩
   rw [← isClosed_compl_iff]; rw [← Set.preimage_compl]; rw [Set.compl_Ioi]
   obtain ha | ⟨a, ha⟩ := ((isLowerSet_Iic b).preimage hf.strictMono.monotone).eq_univ_or_Iio
-  · exact
+  · exact ha ▸ isClosed_univ
+  · obtain h | h := (f ⁻¹' Iic b).eq_empty_or_nonempty
+    · exact h ▸ isClosed_empty
+    · have : Nonempty α := ⟨a⟩
+      have : Nonempty β := ⟨b⟩
+      rw [hf.preimage_Iic h (ha ▸ bddAbove_Iio)]
+      exact isClosed_Iic
 
 Depends on / 依赖: Nonempty, OrderTopology, OrderTopology.continuous_iff, Set.compl_Ioi, Set.preimage_compl, bddAbove_Iio, compl_Ioi, continuous_iff, eq_empty_or_nonempty, eq_univ_or_Iio, hf.preimage_Iic, hf.strictMono.monotone, isClosed_, isClosed_compl_iff, isClosed_empty, isClosed_univ, isLowerSet_Iic, isLowerSet_Iio, isOpen, monotone
 -/
@@ -80,7 +92,7 @@ theorem isNormal_iff_strictMono_and_continuous
     · rintro _ ⟨b, hb, rfl⟩
       exact (hs hb).le
     · apply image_closure_subset_closure_image hc (mem_image_of_mem ..)
-      exact ha.isLUB_Iio.mem_closure (Iio_nonempty.2
+      exact ha.isLUB_Iio.mem_closure (Iio_nonempty.2 ha.1)
 
 中文:
 定理 isNormal_iff_strictMono_and_continuous
@@ -92,7 +104,7 @@ theorem isNormal_iff_strictMono_and_continuous
     · rintro _ ⟨b, hb, rfl⟩
       exact (hs hb).le
     · apply image_closure_subset_closure_image hc (mem_image_of_mem ..)
-      exact ha.isLUB_Iio.mem_closure (Iio_nonempty.2
+      exact ha.isLUB_Iio.mem_closure (Iio_nonempty.2 ha.1)
 
 Depends on / 依赖: continuous, hf.continuous, hf.strictMono, strictMono
 -/

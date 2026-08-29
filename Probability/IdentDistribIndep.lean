@@ -44,7 +44,8 @@ lemma IdentDistrib.prodMk
   map_eq := by
     have : IsFiniteMeasure ν := by
       have : IsFiniteMeasure (ν.map Z) := by rw [← hXZ.map_eq]; infer_instance
-      exact Measure.isFiniteMeasure_of_map hXZ.aeme
+      exact Measure.isFiniteMeasure_of_map hXZ.aemeasurable_snd
+    rw [hXY.map_prod_eq_prod_map_map hXZ.aemeasurable_fst hYW.aemeasurable_fst]; rw [hZW.map_prod_eq_prod_map_map hXZ.aemeasurable_snd hYW.aemeasurable_snd]; rw [hXZ.map_eq]; rw [hYW.map_eq]
 
 中文:
 引理 同分布.prodMk
@@ -54,7 +55,8 @@ lemma IdentDistrib.prodMk
   map_eq := by
     have : IsFiniteMeasure ν := by
       have : IsFiniteMeasure (ν.map Z) := by rw [← hXZ.map_eq]; infer_instance
-      exact Measure.isFiniteMeasure_of_map hXZ.aeme
+      exact Measure.isFiniteMeasure_of_map hXZ.aemeasurable_snd
+    rw [hXY.map_prod_eq_prod_map_map hXZ.aemeasurable_fst hYW.aemeasurable_fst]; rw [hZW.map_prod_eq_prod_map_map hXZ.aemeasurable_snd hYW.aemeasurable_snd]; rw [hXZ.map_eq]; rw [hYW.map_eq]
 
 Depends on / 依赖: aemeasurable_fst, hXZ.aemeasurable_fst.prodMk, hYW.aemeasurable_fst, prodMk
 -/
@@ -82,7 +84,9 @@ lemma IdentDistrib.pi
   map_eq := by
     have : IsProbabilityMeasure μ := hX_ind.isProbabilityMeasure
     have : IsProbabilityMeasure ν := hY_ind.isProbabilityMeasure
-    rw [(iIndepFun_
+    rw [(iIndepFun_iff_map_fun_eq_infinitePi_map₀' (fun i => (h i).aemeasurable_fst)).mp hX_ind]; rw [(iIndepFun_iff_map_fun_eq_infinitePi_map₀' (fun i => (h i).aemeasurable_snd)).mp hY_ind]
+    congr with i
+    rw [(h i).map_eq]
 
 中文:
 引理 同分布.pi
@@ -92,7 +96,9 @@ lemma IdentDistrib.pi
   map_eq := by
     have : IsProbabilityMeasure μ := hX_ind.isProbabilityMeasure
     have : IsProbabilityMeasure ν := hY_ind.isProbabilityMeasure
-    rw [(iIndepFun_
+    rw [(iIndepFun_iff_map_fun_eq_infinitePi_map₀' (fun i => (h i).aemeasurable_fst)).mp hX_ind]; rw [(iIndepFun_iff_map_fun_eq_infinitePi_map₀' (fun i => (h i).aemeasurable_snd)).mp hY_ind]
+    congr with i
+    rw [(h i).map_eq]
 
 Depends on / 依赖: aemeasurable_fst, aemeasurable_pi_lambda
 -/

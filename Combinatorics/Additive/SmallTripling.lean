@@ -50,7 +50,27 @@ lemma inductive_claim_mul
     have hm₀ : m != 0 := by simp at hm; positivity
     have hε₀ i : ε i != 0 := fun h => by simpa [h] using hε i
     obtain rfl | hA := A.eq_empty_or_nonempty
-  
+    · simp [hε₀]
+    have hk : 0 <= k :=
+      nonneg_of_mul_nonneg_left ((h 1 (by simp)).trans' (by positivity)) (by positivity)
+    let π {n} (δ : Fin n -> Int) : Finset G := ((finRange _).map fun i => A ^ δ i).prod
+    let V : Finset G := π ![-ε 1, -ε 0]
+let W : Finset G := π tail tail ε
+    refine le_of_mul_le_mul_left ?_ (by positivity : (0 : Real) < #A)
+    calc
+      (#A * #(π ε) : Real)
+        = #A * #(V⁻¹ * W) := by
+        simp [π, V, W, List.finRange_succ, Fin.tail, Function.comp_def, mul_assoc]
+      _ <= #(A * V) * #(A * W) := by norm_cast; exact ruzsa_triangle_inequality_invMul_mul_mul ..
+      _ = #(π ![1, -ε 1, -ε 0]) * #(π <| Fin.cons 1 <| tail <| tail ε) := by
+        simp [π, V, W, List.finRange_succ, Fin.tail, Function.comp_def]
+      _ <= (k * #A) * (k ^ (m - 1) * #A) := by
+        gcongr
+        · exact h ![1, -ε 1, -ε 0] fun i => by fin_cases i <;> simp [hε]
+· exact ih (Fin.cons 1 <| tail <| tail ε) Fin.cons (by simp) (by simp [hε, Fin.tail])
+      _ = #A * (k ^ m * #A) := by rw [← pow_sub_one_mul hm₀]; ring
+
+@[to_additive]
 
 中文:
 引理 inductive_claim_mul
@@ -64,7 +84,27 @@ lemma inductive_claim_mul
     have hm₀ : m != 0 := by simp at hm; positivity
     have hε₀ i : ε i != 0 := fun h => by simpa [h] using hε i
     obtain rfl | hA := A.eq_empty_or_nonempty
-  
+    · simp [hε₀]
+    have hk : 0 <= k :=
+      nonneg_of_mul_nonneg_left ((h 1 (by simp)).trans' (by positivity)) (by positivity)
+    let π {n} (δ : Fin n -> Int) : Finset G := ((finRange _).map fun i => A ^ δ i).prod
+    let V : Finset G := π ![-ε 1, -ε 0]
+let W : Finset G := π tail tail ε
+    refine le_of_mul_le_mul_left ?_ (by positivity : (0 : Real) < #A)
+    calc
+      (#A * #(π ε) : Real)
+        = #A * #(V⁻¹ * W) := by
+        simp [π, V, W, List.finRange_succ, Fin.tail, Function.comp_def, mul_assoc]
+      _ <= #(A * V) * #(A * W) := by norm_cast; exact ruzsa_triangle_inequality_invMul_mul_mul ..
+      _ = #(π ![1, -ε 1, -ε 0]) * #(π <| Fin.cons 1 <| tail <| tail ε) := by
+        simp [π, V, W, List.finRange_succ, Fin.tail, Function.comp_def]
+      _ <= (k * #A) * (k ^ (m - 1) * #A) := by
+        gcongr
+        · exact h ![1, -ε 1, -ε 0] fun i => by fin_cases i <;> simp [hε]
+· exact ih (Fin.cons 1 <| tail <| tail ε) Fin.cons (by simp) (by simp [hε, Fin.tail])
+      _ = #A * (k ^ m * #A) := by rw [← pow_sub_one_mul hm₀]; ring
+
+@[to_additive]
 -/
 private lemma inductive_claim_mul (hm : 3 <= m)
     (h : forall ε : Fin 3 -> Int, (forall i, |ε i| = 1) -> #((finRange 3).map fun i => A ^ ε i).prod <= k * #A)
@@ -113,7 +153,17 @@ lemma small_neg_pos_pos_mul
   refine le_of_mul_le_mul_left ?_ (by positivity : (0 : Real) < #A)
   calc
     (#A * #(A⁻¹ * A * A) : Real) = #A * #(A⁻¹ * (A * A)) := by rw [mul_assoc]
+    _ <= #(A * A) * #(A * (A * A)) := by
+      norm_cast; exact ruzsa_triangle_inequality_invMul_mul_mul A A (A * A)
+    _ = #(A ^ 2) * #(A ^ 3) := by simp [pow_succ']
+    _ <= (K * #A) * (K * #A) := by
+      gcongr
+      calc
+        (#(A ^ 2) : Real) <= #(A ^ 3) := mod_cast hA₀.card_pow_mono (by simp)
+        _ <= K * #A := hA
+    _ = #A * (K ^ 2 * #A) := by ring
 
+@[to_additive]
 
 中文:
 引理 small_neg_pos_pos_mul
@@ -126,7 +176,17 @@ lemma small_neg_pos_pos_mul
   refine le_of_mul_le_mul_left ?_ (by positivity : (0 : Real) < #A)
   calc
     (#A * #(A⁻¹ * A * A) : Real) = #A * #(A⁻¹ * (A * A)) := by rw [mul_assoc]
+    _ <= #(A * A) * #(A * (A * A)) := by
+      norm_cast; exact ruzsa_triangle_inequality_invMul_mul_mul A A (A * A)
+    _ = #(A ^ 2) * #(A ^ 3) := by simp [pow_succ']
+    _ <= (K * #A) * (K * #A) := by
+      gcongr
+      calc
+        (#(A ^ 2) : Real) <= #(A ^ 3) := mod_cast hA₀.card_pow_mono (by simp)
+        _ <= K * #A := hA
+    _ = #A * (K ^ 2 * #A) := by ring
 
+@[to_additive]
 -/
 private lemma small_neg_pos_pos_mul (hA : #(A ^ 3) <= K * #A) : #(A⁻¹ * A * A) <= K ^ 2 * #A := by
   obtain rfl | hA₀ := A.eq_empty_or_nonempty
@@ -241,7 +301,16 @@ lemma small_pos_neg_pos_mul
   calc
     (#A * #(A * A⁻¹ * A) : Real) <= #(A * (A * A⁻¹)) * #(A * A) := by
       norm_cast; simpa using ruzsa_triangle_inequality_invMul_mul_mul (A * A⁻¹) A A
-    _ = #(A * 
+    _ = #(A * A * A⁻¹) * #(A ^ 2) := by simp [pow_succ, mul_assoc]
+    _ <= (K ^ 2 * #A) * (K * #A) := by
+      gcongr
+      · exact small_pos_pos_neg_mul hA
+      calc
+        (#(A ^ 2) : Real) <= #(A ^ 3) := mod_cast hA₀.card_pow_mono (by simp)
+        _ <= K * #A := hA
+    _ = #A * (K ^ 3 * #A) := by ring
+
+@[to_additive]
 
 中文:
 引理 small_pos_neg_pos_mul
@@ -254,7 +323,16 @@ lemma small_pos_neg_pos_mul
   calc
     (#A * #(A * A⁻¹ * A) : Real) <= #(A * (A * A⁻¹)) * #(A * A) := by
       norm_cast; simpa using ruzsa_triangle_inequality_invMul_mul_mul (A * A⁻¹) A A
-    _ = #(A * 
+    _ = #(A * A * A⁻¹) * #(A ^ 2) := by simp [pow_succ, mul_assoc]
+    _ <= (K ^ 2 * #A) * (K * #A) := by
+      gcongr
+      · exact small_pos_pos_neg_mul hA
+      calc
+        (#(A ^ 2) : Real) <= #(A ^ 3) := mod_cast hA₀.card_pow_mono (by simp)
+        _ <= K * #A := hA
+    _ = #A * (K ^ 3 * #A) := by ring
+
+@[to_additive]
 -/
 private lemma small_pos_neg_pos_mul (hA : #(A ^ 3) <= K * #A) : #(A * A⁻¹ * A) <= K ^ 3 * #A := by
   obtain rfl | hA₀ := A.eq_empty_or_nonempty
@@ -323,7 +401,24 @@ lemma small_alternating_pow_of_small_tripling
   have hK₁ : 1 <= K :=
     one_le_of_le_mul_right₀ (by positivity)
       (hA.trans' <| by norm_cast; exact card_le_card_pow (by simp))
-
+  rw [pow_mul]
+  refine inductive_claim_mul hm (fun δ hδ => ?_) ε hε
+  simp only [finRange_succ, Nat.reduceAdd, isValue, finRange_zero, map_nil, List.map_cons,
+    succ_zero_eq_one, succ_one_eq_two, List.prod_cons, prod_nil, mul_one, ← mul_assoc]
+  simp only [zero_le_one, abs_eq, Int.reduceNeg, forall_iff_succ, isValue, succ_zero_eq_one,
+    succ_one_eq_two, IsEmpty.forall_iff, and_true] at hδ
+  have : K ^ 2 <= K ^ 3 := by gcongr; simp
+  obtain ⟨hδ₀ | hδ₀, hδ₁ | hδ₁, hδ₂ | hδ₂⟩ := hδ <;> simp [hδ₀, hδ₁, hδ₂]
+  · simp [pow_succ] at hA
+    nlinarith
+  · nlinarith [small_pos_pos_neg_mul hA]
+  · nlinarith [small_pos_neg_pos_mul hA]
+  · nlinarith [small_pos_neg_neg_mul hA]
+  · nlinarith [small_neg_pos_pos_mul hA]
+  · nlinarith [small_neg_pos_neg_mul hA]
+  · nlinarith [small_neg_neg_pos_mul hA]
+  · simp [*, pow_succ', ← mul_inv_rev] at hA ⊢
+    nlinarith
 
 中文:
 引理 small_alternating_pow_of_small_tripling
@@ -336,7 +431,24 @@ lemma small_alternating_pow_of_small_tripling
   have hK₁ : 1 <= K :=
     one_le_of_le_mul_right₀ (by positivity)
       (hA.trans' <| by norm_cast; exact card_le_card_pow (by simp))
-
+  rw [pow_mul]
+  refine inductive_claim_mul hm (fun δ hδ => ?_) ε hε
+  simp only [finRange_succ, Nat.reduceAdd, isValue, finRange_zero, map_nil, List.map_cons,
+    succ_zero_eq_one, succ_one_eq_two, List.prod_cons, prod_nil, mul_one, ← mul_assoc]
+  simp only [zero_le_one, abs_eq, Int.reduceNeg, forall_iff_succ, isValue, succ_zero_eq_one,
+    succ_one_eq_two, IsEmpty.forall_iff, and_true] at hδ
+  have : K ^ 2 <= K ^ 3 := by gcongr; simp
+  obtain ⟨hδ₀ | hδ₀, hδ₁ | hδ₁, hδ₂ | hδ₂⟩ := hδ <;> simp [hδ₀, hδ₁, hδ₂]
+  · simp [pow_succ] at hA
+    nlinarith
+  · nlinarith [small_pos_pos_neg_mul hA]
+  · nlinarith [small_pos_neg_pos_mul hA]
+  · nlinarith [small_pos_neg_neg_mul hA]
+  · nlinarith [small_neg_pos_pos_mul hA]
+  · nlinarith [small_neg_pos_neg_mul hA]
+  · nlinarith [small_neg_neg_pos_mul hA]
+  · simp [*, pow_succ', ← mul_inv_rev] at hA ⊢
+    nlinarith
 
 Depends on / 依赖: A.eq_empty_or_nonempty, List.map_cons, List.prod_cons, Nat.reduceAdd, card_le_card_pow, eq_empty_or_nonempty, finRange_succ, finRange_zero, hA.trans, inductive_claim_mul, isValue, map_cons, map_nil, mul_o, pow_mul, prod_cons, prod_nil, reduceAdd, succ_one_eq_two, succ_zero_eq_one
 -/
@@ -392,7 +504,7 @@ lemma small_pow_of_small_tripling
   calc
     (#(A ^ m) : Real) = #((finRange m).map fun i => A ^ 1).prod := by simp
     _ <= K ^ (m - 2) * #A :=
-      inductive_claim_mul hm (fun δ hδ => by simpa [this _ (hδ _), p
+      inductive_claim_mul hm (fun δ hδ => by simpa [this _ (hδ _), pow_succ'] using hA) _ (by simp)
 
 中文:
 引理 small_pow_of_small_tripling
@@ -403,7 +515,7 @@ lemma small_pow_of_small_tripling
   calc
     (#(A ^ m) : Real) = #((finRange m).map fun i => A ^ 1).prod := by simp
     _ <= K ^ (m - 2) * #A :=
-      inductive_claim_mul hm (fun δ hδ => by simpa [this _ (hδ _), p
+      inductive_claim_mul hm (fun δ hδ => by simpa [this _ (hδ _), pow_succ'] using hA) _ (by simp)
 
 Depends on / 依赖: eq_or_eq_neg_of_abs_eq, finRange, hAsymm, inductive_claim_mul, pow_succ
 -/

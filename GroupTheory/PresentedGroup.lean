@@ -227,7 +227,9 @@ theorem closure_range_of
   proof: by
   have : (PresentedGroup.of : α -> PresentedGroup rels) = QuotientGroup.mk' _ ∘ FreeGroup.of := rfl
   rw [this]; rw [Set.range_comp]; rw [← MonoidHom.map_closure (QuotientGroup.mk' _)]; rw [FreeGroup.closure_range_of]; rw [← MonoidHom.range_eq_map]
-  exact MonoidHom.range_eq_top.2 (QuotientGroup.
+  exact MonoidHom.range_eq_top.2 (QuotientGroup.mk'_surjective _)
+
+@[induction_eliminator]
 
 中文:
 定理 closure_range_of
@@ -235,7 +237,9 @@ theorem closure_range_of
   证明: by
   have : (PresentedGroup.of : α -> PresentedGroup rels) = QuotientGroup.mk' _ ∘ FreeGroup.of := rfl
   rw [this]; rw [Set.range_comp]; rw [← MonoidHom.map_closure (QuotientGroup.mk' _)]; rw [FreeGroup.closure_range_of]; rw [← MonoidHom.range_eq_map]
-  exact MonoidHom.range_eq_top.2 (QuotientGroup.
+  exact MonoidHom.range_eq_top.2 (QuotientGroup.mk'_surjective _)
+
+@[induction_eliminator]
 
 Depends on / 依赖: FreeGroup, FreeGroup.closure_range_of, FreeGroup.of, MonoidHom, MonoidHom.map_closure, MonoidHom.range_eq_map, MonoidHom.range_eq_top, PresentedGroup, PresentedGroup.of, QuotientGroup, QuotientGroup.mk, Set.range_comp, _surjective, closure_range_of, map_closure, range_comp, range_eq_map, range_eq_top
 -/
@@ -636,7 +640,8 @@ definition coprodPresentations
     (Monoid.Coprod.lift
       (PresentedGroup.map (FreeGroup.map Sum.inl) fun r hr => .inl ⟨r, hr, rfl⟩)
       (PresentedGroup.map (FreeGroup.map Sum.inr) fun r hr => .inr ⟨r, hr, rfl⟩))
-    (ext <| Sum.rec (fun _ => rfl) (fun _ =
+    (ext <| Sum.rec (fun _ => rfl) (fun _ => rfl))
+    (Monoid.Coprod.hom_ext (ext fun _ => rfl) (ext fun _ => rfl))
 
 中文:
 定义 coprodPresentations
@@ -646,7 +651,8 @@ definition coprodPresentations
     (Monoid.Coprod.lift
       (PresentedGroup.map (FreeGroup.map Sum.inl) fun r hr => .inl ⟨r, hr, rfl⟩)
       (PresentedGroup.map (FreeGroup.map Sum.inr) fun r hr => .inr ⟨r, hr, rfl⟩))
-    (ext <| Sum.rec (fun _ => rfl) (fun _ =
+    (ext <| Sum.rec (fun _ => rfl) (fun _ => rfl))
+    (Monoid.Coprod.hom_ext (ext fun _ => rfl) (ext fun _ => rfl))
 
 Depends on / 依赖: Coprod, FreeGroup, FreeGroup.map, Monoid, Monoid.Coprod.hom_ext, Monoid.Coprod.lift, MonoidHom, MonoidHom.toMulEquiv, PresentedGroup, PresentedGroup.map, Sum.inl, Sum.inr, Sum.rec, hom_ext, lift_toCoprod_eq_one, toGroup, toMulEquiv
 -/

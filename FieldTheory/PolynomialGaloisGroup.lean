@@ -391,7 +391,12 @@ theorem mapRoots_bijective
   · intro y
     -- this is just an equality of two different ways to write the roots of `p` as an `E`-polynomial
     have key := (IsSplittingField.splits p.SplittingField p).roots_map
-      (IsScalarTowe
+      (IsScalarTower.toAlgHom F p.SplittingField E : p.SplittingField ->+* E)
+    rw [map_map]; rw [AlgHom.comp_algebraMap] at key
+    have hy := Subtype.mem y
+    simp only [rootSet, Finset.mem_coe, Multiset.mem_toFinset, key, Multiset.mem_map] at hy
+    rcases hy with ⟨x, hx1, hx2⟩
+    exact ⟨⟨x, (@Multiset.mem_toFinset _ (Classical.decEq _) _ _).mpr hx1⟩, Subtype.ext hx2⟩
 
 中文:
 定理 mapRoots_bijective
@@ -402,7 +407,12 @@ theorem mapRoots_bijective
   · intro y
     -- this is just an equality of two different ways to write the roots of `p` as an `E`-polynomial
     have key := (IsSplittingField.splits p.SplittingField p).roots_map
-      (IsScalarTowe
+      (IsScalarTower.toAlgHom F p.SplittingField E : p.SplittingField ->+* E)
+    rw [map_map]; rw [AlgHom.comp_algebraMap] at key
+    have hy := Subtype.mem y
+    simp only [rootSet, Finset.mem_coe, Multiset.mem_toFinset, key, Multiset.mem_map] at hy
+    rcases hy with ⟨x, hx1, hx2⟩
+    exact ⟨⟨x, (@Multiset.mem_toFinset _ (Classical.decEq _) _ _).mpr hx1⟩, Subtype.ext hx2⟩
 
 Depends on / 依赖: RingHom, RingHom.injective, Subtype, Subtype.ext, Subtype.ext_iff.mp, ext_iff, injective
 -/
@@ -532,7 +542,8 @@ lemma galAction_isPretransitive
   refine ⟨fun x y => ?_⟩
   have hx := minpoly.eq_of_irreducible hp (mem_rootSet.mp ((rootsEquivRoots p E).symm x).2).2
   have hy := minpoly.eq_of_irreducible hp (mem_rootSet.mp ((rootsEquivRoots p E).symm y).2).2
-  obtain ⟨g, hg⟩ := (Normal.minpoly_eq_iff_mem_orbit p.SplittingField).mp (hy.symm.t
+  obtain ⟨g, hg⟩ := (Normal.minpoly_eq_iff_mem_orbit p.SplittingField).mp (hy.symm.trans hx)
+  exact ⟨g, (rootsEquivRoots p E).eq_symm_apply.mp (Subtype.ext hg)⟩
 
 中文:
 引理 galAction_isPretransitive
@@ -541,7 +552,8 @@ lemma galAction_isPretransitive
   refine ⟨fun x y => ?_⟩
   have hx := minpoly.eq_of_irreducible hp (mem_rootSet.mp ((rootsEquivRoots p E).symm x).2).2
   have hy := minpoly.eq_of_irreducible hp (mem_rootSet.mp ((rootsEquivRoots p E).symm y).2).2
-  obtain ⟨g, hg⟩ := (Normal.minpoly_eq_iff_mem_orbit p.SplittingField).mp (hy.symm.t
+  obtain ⟨g, hg⟩ := (Normal.minpoly_eq_iff_mem_orbit p.SplittingField).mp (hy.symm.trans hx)
+  exact ⟨g, (rootsEquivRoots p E).eq_symm_apply.mp (Subtype.ext hg)⟩
 
 Depends on / 依赖: Normal, Normal.minpoly_eq_iff_mem_orbit, SplittingField, Subtype, Subtype.ext, eq_of_irreducible, eq_symm_apply, eq_symm_apply.mp, hy.symm.trans, mem_rootSet, mem_rootSet.mp, minpoly, minpoly.eq_of_irreducible, minpoly_eq_iff_mem_orbit, p.SplittingField, rootsEquivRoots
 -/
@@ -644,7 +656,8 @@ theorem galActionHom_injective
     rootsEquivRoots p E (ϕ • (rootsEquivRoots p E).symm (rootsEquivRoots p E ⟨x, hx⟩)) =
       rootsEquivRoots p E ⟨x, hx⟩
     at key
-  rw [Equiv.symm_apply_appl
+  rw [Equiv.symm_apply_apply] at key
+  exact Subtype.ext_iff.mp (Equiv.injective (rootsEquivRoots p E) key)
 
 中文:
 定理 galActionHom_injective
@@ -658,7 +671,8 @@ theorem galActionHom_injective
     rootsEquivRoots p E (ϕ • (rootsEquivRoots p E).symm (rootsEquivRoots p E ⟨x, hx⟩)) =
       rootsEquivRoots p E ⟨x, hx⟩
     at key
-  rw [Equiv.symm_apply_appl
+  rw [Equiv.symm_apply_apply] at key
+  exact Subtype.ext_iff.mp (Equiv.injective (rootsEquivRoots p E) key)
 
 Depends on / 依赖: Equiv.Perm.ext_iff.mp, Equiv.injective, Equiv.symm_apply_apply, Subtype, Subtype.ext_iff.mp, ext_iff, injective, injective_iff_map_eq_one, rootsEquivRoots, symm_apply_apply
 -/
@@ -800,7 +814,32 @@ theorem restrictProd_injective
   intro f g hfg
   classical
   simp only [restrictProd, restrictDvd_def] at hfg
-  simp only [dif_neg hpq, MonoidHom.prod_apply, P
+  simp only [dif_neg hpq, MonoidHom.prod_apply, Prod.mk_inj] at hfg
+  ext (x hx)
+  rw [rootSet_def]; rw [aroots_mul hpq] at hx
+  rcases Multiset.mem_add.mp (Multiset.mem_toFinset.mp hx) with h | h
+  · have : Fact ((p.map (algebraMap F (p * q).SplittingField)).Splits) :=
+      ⟨(SplittingField.splits (p * q)).of_dvd (map_ne_zero hpq)
+        ((map_dvd_map' _).mpr (dvd_mul_right p q))⟩
+    have key :
+      x =
+        algebraMap p.SplittingField (p * q).SplittingField
+          ((rootsEquivRoots p _).invFun
+            ⟨x, (@Multiset.mem_toFinset _ (Classical.decEq _) _ _).mpr h⟩) :=
+      Subtype.ext_iff.mp (Equiv.apply_symm_apply (rootsEquivRoots p _) ⟨x, _⟩).symm
+    rw [key]; rw [← AlgEquiv.restrictNormal_commutes]; rw [← AlgEquiv.restrictNormal_commutes]
+    exact congr_arg _ (AlgEquiv.ext_iff.mp hfg.1 _)
+  · have : Fact ((q.map (algebraMap F (p * q).SplittingField)).Splits) :=
+      ⟨(SplittingField.splits (p * q)).of_dvd (map_ne_zero hpq)
+        ((map_dvd_map' _).mpr (dvd_mul_left q p))⟩
+    have key :
+      x =
+        algebraMap q.SplittingField (p * q).SplittingField
+          ((rootsEquivRoots q _).invFun
+            ⟨x, (@Multiset.mem_toFinset _ (Classical.decEq _) _ _).mpr h⟩) :=
+      Subtype.ext_iff.mp (Equiv.apply_symm_apply (rootsEquivRoots q _) ⟨x, _⟩).symm
+    rw [key]; rw [← AlgEquiv.restrictNormal_commutes]; rw [← AlgEquiv.restrictNormal_commutes]
+    exact congr_arg _ (AlgEquiv.ext_iff.mp hfg.2 _)
 
 中文:
 定理 restrictProd_injective
@@ -812,7 +851,32 @@ theorem restrictProd_injective
   intro f g hfg
   classical
   simp only [restrictProd, restrictDvd_def] at hfg
-  simp only [dif_neg hpq, MonoidHom.prod_apply, P
+  simp only [dif_neg hpq, MonoidHom.prod_apply, Prod.mk_inj] at hfg
+  ext (x hx)
+  rw [rootSet_def]; rw [aroots_mul hpq] at hx
+  rcases Multiset.mem_add.mp (Multiset.mem_toFinset.mp hx) with h | h
+  · have : Fact ((p.map (algebraMap F (p * q).SplittingField)).Splits) :=
+      ⟨(SplittingField.splits (p * q)).of_dvd (map_ne_zero hpq)
+        ((map_dvd_map' _).mpr (dvd_mul_right p q))⟩
+    have key :
+      x =
+        algebraMap p.SplittingField (p * q).SplittingField
+          ((rootsEquivRoots p _).invFun
+            ⟨x, (@Multiset.mem_toFinset _ (Classical.decEq _) _ _).mpr h⟩) :=
+      Subtype.ext_iff.mp (Equiv.apply_symm_apply (rootsEquivRoots p _) ⟨x, _⟩).symm
+    rw [key]; rw [← AlgEquiv.restrictNormal_commutes]; rw [← AlgEquiv.restrictNormal_commutes]
+    exact congr_arg _ (AlgEquiv.ext_iff.mp hfg.1 _)
+  · have : Fact ((q.map (algebraMap F (p * q).SplittingField)).Splits) :=
+      ⟨(SplittingField.splits (p * q)).of_dvd (map_ne_zero hpq)
+        ((map_dvd_map' _).mpr (dvd_mul_left q p))⟩
+    have key :
+      x =
+        algebraMap q.SplittingField (p * q).SplittingField
+          ((rootsEquivRoots q _).invFun
+            ⟨x, (@Multiset.mem_toFinset _ (Classical.decEq _) _ _).mpr h⟩) :=
+      Subtype.ext_iff.mp (Equiv.apply_symm_apply (rootsEquivRoots q _) ⟨x, _⟩).symm
+    rw [key]; rw [← AlgEquiv.restrictNormal_commutes]; rw [← AlgEquiv.restrictNormal_commutes]
+    exact congr_arg _ (AlgEquiv.ext_iff.mp hfg.2 _)
 
 Depends on / 依赖: Eq.trans, MonoidHom, MonoidHom.prod_apply, Multiset, Multiset.mem_add.mp, Multiset.mem_toFinset.mp, Prod.mk_inj, Splits, SplittingField, Unique, Unique.eq_default, algebraMap, aroots_mul, classical, dif_neg, eq_default, infer_instance, mem_add, mem_toFinset, mk_inj
 -/
@@ -865,7 +929,10 @@ theorem mul_splits_in_splittingField_of_mul
              ((map_dvd_map' _).mpr (dvd_mul_right q₁ q₂)))).comp_algebraMap, ← map_map]
     exact h₁.map _
   · rw [←
-      (Splittin
+      (SplittingField.lift q₂
+          ((SplittingField.splits _).of_dvd (map_ne_zero (mul_ne_zero hq₁ hq₂))
+             ((map_dvd_map' _).mpr (dvd_mul_left q₂ q₁)))).comp_algebraMap, ← map_map]
+    exact h₂.map _
 
 中文:
 定理 mul_splits_in_splittingField_of_mul
@@ -879,7 +946,10 @@ theorem mul_splits_in_splittingField_of_mul
              ((map_dvd_map' _).mpr (dvd_mul_right q₁ q₂)))).comp_algebraMap, ← map_map]
     exact h₁.map _
   · rw [←
-      (Splittin
+      (SplittingField.lift q₂
+          ((SplittingField.splits _).of_dvd (map_ne_zero (mul_ne_zero hq₁ hq₂))
+             ((map_dvd_map' _).mpr (dvd_mul_left q₂ q₁)))).comp_algebraMap, ← map_map]
+    exact h₂.map _
 
 Depends on / 依赖: Polynomial, Polynomial.map_mul, Splits, Splits.mul, SplittingField, SplittingField.lift, SplittingField.splits, comp_algebraMap, dvd_mul_left, dvd_mul_right, map_dvd_map, map_map, map_mul, map_ne_zero, mul_ne_zero, of_dvd, splits
 -/
@@ -912,7 +982,31 @@ theorem splits_in_splittingField_of_comp
     intro r hr
     by_cases hr' : natDegree r = 0
 · exact Splits.of_natDegree_le_one natDegree_map_le.trans (hr'.trans_le zero_le_one)
-    obtain 
+    obtain ⟨x, hx⟩ :=
+      Splits.exists_eval_eq_zero (SplittingField.splits (r.comp q)) fun h =>
+        hr' ((mul_eq_zero.mp (natDegree_comp.symm.trans (natDegree_eq_of_degree_eq_some
+          (by rwa [degree_map] at h)))).resolve_right hq)
+    rw [eval_map_algebraMap]; rw [aeval_comp] at hx
+    have h_normal : Normal F (r.comp q).SplittingField := SplittingField.instNormal (r.comp q)
+    have qx_int := Normal.isIntegral h_normal (aeval x q)
+    exact (h_normal.splits _).of_dvd (map_ne_zero (minpoly.ne_zero (h_normal.isIntegral _)))
+      ((map_dvd_map' _).mpr ((minpoly.irreducible qx_int).dvd_symm hr (minpoly.dvd F _ hx)))
+  have key2 : forall {p₁ p₂ : F[X]}, P p₁ -> P p₂ -> P (p₁ * p₂) := by
+    intro p₁ p₂ hp₁ hp₂
+    by_cases h₁ : p₁.comp q = 0
+    · rcases comp_eq_zero_iff.mp h₁ with h | h
+      · rw [h, zero_mul]
+        simp [P]
+      · exact False.elim (hq (by rw [h.2, natDegree_C]))
+    by_cases h₂ : p₂.comp q = 0
+    · rcases comp_eq_zero_iff.mp h₂ with h | h
+      · simp [h, P]
+      · exact False.elim (hq (by rw [h.2, natDegree_C]))
+    have key := mul_splits_in_splittingField_of_mul h₁ h₂ hp₁ hp₂
+    rwa [← mul_comp] at key
+  exact
+    WfDvdMonoid.induction_on_irreducible p (by simp) (fun _ hu => hu.splits.map _)
+      fun _ _ _ h => key2 (key1 h)
 
 中文:
 定理 splits_in_splittingField_of_comp
@@ -923,7 +1017,31 @@ theorem splits_in_splittingField_of_comp
     intro r hr
     by_cases hr' : natDegree r = 0
 · exact Splits.of_natDegree_le_one natDegree_map_le.trans (hr'.trans_le zero_le_one)
-    obtain 
+    obtain ⟨x, hx⟩ :=
+      Splits.exists_eval_eq_zero (SplittingField.splits (r.comp q)) fun h =>
+        hr' ((mul_eq_zero.mp (natDegree_comp.symm.trans (natDegree_eq_of_degree_eq_some
+          (by rwa [degree_map] at h)))).resolve_right hq)
+    rw [eval_map_algebraMap]; rw [aeval_comp] at hx
+    have h_normal : Normal F (r.comp q).SplittingField := SplittingField.instNormal (r.comp q)
+    have qx_int := Normal.isIntegral h_normal (aeval x q)
+    exact (h_normal.splits _).of_dvd (map_ne_zero (minpoly.ne_zero (h_normal.isIntegral _)))
+      ((map_dvd_map' _).mpr ((minpoly.irreducible qx_int).dvd_symm hr (minpoly.dvd F _ hx)))
+  have key2 : forall {p₁ p₂ : F[X]}, P p₁ -> P p₂ -> P (p₁ * p₂) := by
+    intro p₁ p₂ hp₁ hp₂
+    by_cases h₁ : p₁.comp q = 0
+    · rcases comp_eq_zero_iff.mp h₁ with h | h
+      · rw [h, zero_mul]
+        simp [P]
+      · exact False.elim (hq (by rw [h.2, natDegree_C]))
+    by_cases h₂ : p₂.comp q = 0
+    · rcases comp_eq_zero_iff.mp h₂ with h | h
+      · simp [h, P]
+      · exact False.elim (hq (by rw [h.2, natDegree_C]))
+    have key := mul_splits_in_splittingField_of_mul h₁ h₂ hp₁ hp₂
+    rwa [← mul_comp] at key
+  exact
+    WfDvdMonoid.induction_on_irreducible p (by simp) (fun _ hu => hu.splits.map _)
+      fun _ _ _ h => key2 (key1 h)
 
 Depends on / 依赖: Irreducible, Splits, Splits.exists_eval_eq_zero, Splits.of_natDegree_le_one, SplittingField, SplittingField.splits, algebraMap, degree_map, exists_eval_eq_zero, mul_eq_zero, mul_eq_zero.mp, natDegree, natDegree_comp, natDegree_comp.symm.trans, natDegree_eq_of_degree_eq_some, natDegree_map_le, natDegree_map_le.trans, of_natDegree_le_one, r.comp, r.map
 -/
@@ -1050,7 +1168,18 @@ theorem prime_degree_dvd_card
     Nat.Prime.ne_zero p_deg (natDegree_eq_zero_iff_degree_le_zero.mpr (le_of_eq h))
   let α : p.SplittingField :=
     rootOfSplits (SplittingField.splits p) (by rwa [degree_map])
-  have hα : IsIntegral F α := .of_f
+  have hα : IsIntegral F α := .of_finite F α
+  use Module.finrank F⟮α⟯ p.SplittingField
+  suffices (minpoly F α).natDegree = p.natDegree by
+    let _ : AddCommGroup F⟮α⟯ := Ring.toAddCommGroup
+    rw [← Module.finrank_mul_finrank F F⟮α⟯ p.SplittingField]; rw [IntermediateField.adjoin.finrank hα]; rw [this]
+  suffices minpoly F α ∣ p by
+    have key := (minpoly.irreducible hα).dvd_symm p_irr this
+    apply le_antisymm
+    · exact natDegree_le_of_dvd this p_irr.ne_zero
+    · exact natDegree_le_of_dvd key (minpoly.ne_zero hα)
+  apply minpoly.dvd F α
+  rw [← eval_map_algebraMap]; rw [eval_rootOfSplits]
 
 中文:
 定理 prime_degree_dvd_card
@@ -1061,7 +1190,18 @@ theorem prime_degree_dvd_card
     Nat.Prime.ne_zero p_deg (natDegree_eq_zero_iff_degree_le_zero.mpr (le_of_eq h))
   let α : p.SplittingField :=
     rootOfSplits (SplittingField.splits p) (by rwa [degree_map])
-  have hα : IsIntegral F α := .of_f
+  have hα : IsIntegral F α := .of_finite F α
+  use Module.finrank F⟮α⟯ p.SplittingField
+  suffices (minpoly F α).natDegree = p.natDegree by
+    let _ : AddCommGroup F⟮α⟯ := Ring.toAddCommGroup
+    rw [← Module.finrank_mul_finrank F F⟮α⟯ p.SplittingField]; rw [IntermediateField.adjoin.finrank hα]; rw [this]
+  suffices minpoly F α ∣ p by
+    have key := (minpoly.irreducible hα).dvd_symm p_irr this
+    apply le_antisymm
+    · exact natDegree_le_of_dvd this p_irr.ne_zero
+    · exact natDegree_le_of_dvd key (minpoly.ne_zero hα)
+  apply minpoly.dvd F α
+  rw [← eval_map_algebraMap]; rw [eval_rootOfSplits]
 
 Depends on / 依赖: AddCommGroup, Gal.card_of_separable, IsIntegral, Module, Module.finrank, Module.finrank_mul_finrank, Nat.Prime.ne_zero, Ring.toAddCommGroup, SplittingField, SplittingField.splits, card_of_separable, degree, degree_map, finrank, finrank_mul_finrank, le_of_eq, minpoly, natDegree, natDegree_eq_zero_iff_degree_le_zero, natDegree_eq_zero_iff_degree_le_zero.mpr
 -/

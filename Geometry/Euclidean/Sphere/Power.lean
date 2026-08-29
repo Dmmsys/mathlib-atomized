@@ -54,7 +54,14 @@ theorem mul_norm_eq_abs_sub_sq_norm
       eq_comm]
   have hzx : ⟪z, x⟫ = 0 := by rw [hr, inner_smul_right, hzy, mul_zero]
   calc
-    ‖x - y‖ * ‖x + y‖ = ‖(r - 1) • y‖ * ‖(r + 1) • y‖ :
+    ‖x - y‖ * ‖x + y‖ = ‖(r - 1) • y‖ * ‖(r + 1) • y‖ := by simp [sub_smul, add_smul, hr]
+    _ = ‖r - 1‖ * ‖y‖ * (‖r + 1‖ * ‖y‖) := by simp_rw [norm_smul]
+    _ = ‖r - 1‖ * ‖r + 1‖ * ‖y‖ ^ 2 := by ring
+    _ = |(r - 1) * (r + 1) * ‖y‖ ^ 2| := by simp [abs_mul]
+    _ = |r ^ 2 * ‖y‖ ^ 2 - ‖y‖ ^ 2| := by ring_nf
+    _ = |‖x‖ ^ 2 - ‖y‖ ^ 2| := by simp [hr, norm_smul, mul_pow, sq_abs]
+    _ = |‖z + y‖ ^ 2 - ‖z - x‖ ^ 2| := by
+      simp [norm_add_sq_real, norm_sub_sq_real, hzy, hzx, abs_sub_comm]
 
 中文:
 定理 mul_norm_eq_abs_sub_sq_norm
@@ -66,7 +73,14 @@ theorem mul_norm_eq_abs_sub_sq_norm
       eq_comm]
   have hzx : ⟪z, x⟫ = 0 := by rw [hr, inner_smul_right, hzy, mul_zero]
   calc
-    ‖x - y‖ * ‖x + y‖ = ‖(r - 1) • y‖ * ‖(r + 1) • y‖ :
+    ‖x - y‖ * ‖x + y‖ = ‖(r - 1) • y‖ * ‖(r + 1) • y‖ := by simp [sub_smul, add_smul, hr]
+    _ = ‖r - 1‖ * ‖y‖ * (‖r + 1‖ * ‖y‖) := by simp_rw [norm_smul]
+    _ = ‖r - 1‖ * ‖r + 1‖ * ‖y‖ ^ 2 := by ring
+    _ = |(r - 1) * (r + 1) * ‖y‖ ^ 2| := by simp [abs_mul]
+    _ = |r ^ 2 * ‖y‖ ^ 2 - ‖y‖ ^ 2| := by ring_nf
+    _ = |‖x‖ ^ 2 - ‖y‖ ^ 2| := by simp [hr, norm_smul, mul_pow, sq_abs]
+    _ = |‖z + y‖ ^ 2 - ‖z - x‖ ^ 2| := by
+      simp [norm_add_sq_real, norm_sub_sq_real, hzy, hzx, abs_sub_comm]
 
 Depends on / 依赖: abs_mul, add_smul, eq_comm, inner_eq_zero_iff_angle_eq_pi_div_two, inner_smul_right, mul_zero, norm_add_eq_norm_sub_iff_angle_eq_pi_div_two, norm_smul, simp_rw, sub_smul
 -/
@@ -115,7 +129,19 @@ theorem mul_dist_eq_abs_sub_sq_dist
   have h2 := vsub_sub_vsub_cancel_left p q m
   have h3 := vsub_sub_vsub_cancel_left a q m
   have h : forall r, b -ᵥ r = m -ᵥ r + (m -ᵥ a) := fun r => by
-    rw [midpoint_vsu
+    rw [midpoint_vsub_left]; rw [← right_vsub_midpoint]; rw [add_comm]; rw [vsub_add_vsub_cancel]
+  iterate 4 rw [dist_eq_norm_vsub V]
+  rw [← h1]; rw [← h2]; rw [h]; rw [h]
+  rw [dist_eq_norm_vsub V a q]; rw [dist_eq_norm_vsub V b q]; rw [← h3]; rw [h] at hq
+  refine mul_norm_eq_abs_sub_sq_norm ?_ hq
+  -- TODO: factor this out as a separate lemma?
+  · rw [← vsub_vadd p a, vadd_left_mem_affineSpan_pair] at hp
+    rcases hp with ⟨r, hr⟩
+    rw [h]; rw [← h1']; rw [eq_sub_iff_add_eq]; rw [← eq_sub_iff_add_eq'] at hr
+    rw [hr]
+    use 1 - r * 2
+    match_scalars
+    ring
 
 中文:
 定理 mul_dist_eq_abs_sub_sq_dist
@@ -127,7 +153,19 @@ theorem mul_dist_eq_abs_sub_sq_dist
   have h2 := vsub_sub_vsub_cancel_left p q m
   have h3 := vsub_sub_vsub_cancel_left a q m
   have h : forall r, b -ᵥ r = m -ᵥ r + (m -ᵥ a) := fun r => by
-    rw [midpoint_vsu
+    rw [midpoint_vsub_left]; rw [← right_vsub_midpoint]; rw [add_comm]; rw [vsub_add_vsub_cancel]
+  iterate 4 rw [dist_eq_norm_vsub V]
+  rw [← h1]; rw [← h2]; rw [h]; rw [h]
+  rw [dist_eq_norm_vsub V a q]; rw [dist_eq_norm_vsub V b q]; rw [← h3]; rw [h] at hq
+  refine mul_norm_eq_abs_sub_sq_norm ?_ hq
+  -- TODO: factor this out as a separate lemma?
+  · rw [← vsub_vadd p a, vadd_left_mem_affineSpan_pair] at hp
+    rcases hp with ⟨r, hr⟩
+    rw [h]; rw [← h1']; rw [eq_sub_iff_add_eq]; rw [← eq_sub_iff_add_eq'] at hr
+    rw [hr]
+    use 1 - r * 2
+    match_scalars
+    ring
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, iterate, midpoint, midpoint_vsub_left, right_vsub_midpoint, vsub_add_vsub_cancel, vsub_sub_vsub_cancel_left
 -/
@@ -222,7 +260,34 @@ lemma cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi_aux
   have h_angle_eq : ∠ p₁ p p₄ = ∠ p₃ p p₂ := by
     grind [angle_comm, angle_eq_angle_of_angle_eq_pi_of_angle_eq_pi hp₃p₄]
   rw [angle_eq_pi_iff_sbtw] at hp₁p₂ hp₃p₄
-  have hcol_p₁pp₂ := hp₁p₂.wbtw.collinea
+  have hcol_p₁pp₂ := hp₁p₂.wbtw.collinear
+  have hcol_p₃pp₄ := hp₃p₄.wbtw.collinear
+  have h_notcol_p₁p₂p₃ : ¬ Collinear Real ({p₁, p₂, p₃} : Set P) := by
+    have : AffineIndependent Real ![p₁, p, p₃] := affineIndependent_iff_not_collinear_set.mpr hn
+    rw [← affineIndependent_iff_not_collinear_set]
+    grind [hp₁p₂.left_ne_right, affineIndependent_of_affineIndependent_collinear_ne,
+      AffineIndependent.comm_left, AffineIndependent.comm_right]
+  apply cospherical_of_two_zsmul_oangle_eq_of_not_collinear ?_ h_notcol_p₁p₂p₃
+  suffices ∡ p₁ p₂ p₃ = ∡ p₁ p₄ p₃ by grind
+  suffices ∠ p₁ p₂ p₃ = ∠ p₁ p₄ p₃ by
+    grind [oangle_eq_of_angle_eq_of_sign_eq, Sbtw.oangle_sign_eq_of_sbtw]
+  rw [angle_comm]; rw [← angle_eq_angle_of_angle_eq_pi p₃ hp₁p₂.angle₃₂₁_eq_pi]; rw [← angle_eq_angle_of_angle_eq_pi p₁ hp₃p₄.angle₃₂₁_eq_pi]
+  suffices h_sim : Similar ![p₁, p, p₄] ![p₃, p, p₂] by
+    grind [angle_comm, h_sim.angle_eq_all.right.left]
+  have h_notcol_p₁pp₄ : ¬ Collinear Real ({p₁, p, p₄} : Set P) := by
+    intro hcol
+    suffices hcol : Collinear Real ({p₁, p, p₃} : Set P) by grind
+    suffices hcol : Collinear Real ({p₁, p₃, p, p₄} : Set P) by grind [Collinear.subset _ hcol]
+    have hne_pp₄ := hp₃p₄.ne_right
+    grind [collinear_insert_insert_of_mem_affineSpan_pair, Collinear.mem_affineSpan_of_mem_of_ne]
+  have h_notcol_p₃pp₂ : ¬ Collinear Real ({p₃, p, p₂} : Set P) := by
+    intro hcol
+    suffices hcol : Collinear Real ({p₁, p, p₃} : Set P) by grind
+    suffices hcol : Collinear Real ({p₃, p₁, p, p₂} : Set P) by grind [Collinear.subset _ hcol]
+    have hne_pp₂ := hp₁p₂.ne_right
+    grind [collinear_insert_insert_of_mem_affineSpan_pair, Collinear.mem_affineSpan_of_mem_of_ne]
+  apply similar_of_side_angle_side h_notcol_p₁pp₄ h_notcol_p₃pp₂ h_angle_eq ?_
+  grind [dist_comm]
 
 中文:
 引理 cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi_aux
@@ -231,7 +296,34 @@ lemma cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi_aux
   have h_angle_eq : ∠ p₁ p p₄ = ∠ p₃ p p₂ := by
     grind [angle_comm, angle_eq_angle_of_angle_eq_pi_of_angle_eq_pi hp₃p₄]
   rw [angle_eq_pi_iff_sbtw] at hp₁p₂ hp₃p₄
-  have hcol_p₁pp₂ := hp₁p₂.wbtw.collinea
+  have hcol_p₁pp₂ := hp₁p₂.wbtw.collinear
+  have hcol_p₃pp₄ := hp₃p₄.wbtw.collinear
+  have h_notcol_p₁p₂p₃ : ¬ Collinear Real ({p₁, p₂, p₃} : Set P) := by
+    have : AffineIndependent Real ![p₁, p, p₃] := affineIndependent_iff_not_collinear_set.mpr hn
+    rw [← affineIndependent_iff_not_collinear_set]
+    grind [hp₁p₂.left_ne_right, affineIndependent_of_affineIndependent_collinear_ne,
+      AffineIndependent.comm_left, AffineIndependent.comm_right]
+  apply cospherical_of_two_zsmul_oangle_eq_of_not_collinear ?_ h_notcol_p₁p₂p₃
+  suffices ∡ p₁ p₂ p₃ = ∡ p₁ p₄ p₃ by grind
+  suffices ∠ p₁ p₂ p₃ = ∠ p₁ p₄ p₃ by
+    grind [oangle_eq_of_angle_eq_of_sign_eq, Sbtw.oangle_sign_eq_of_sbtw]
+  rw [angle_comm]; rw [← angle_eq_angle_of_angle_eq_pi p₃ hp₁p₂.angle₃₂₁_eq_pi]; rw [← angle_eq_angle_of_angle_eq_pi p₁ hp₃p₄.angle₃₂₁_eq_pi]
+  suffices h_sim : Similar ![p₁, p, p₄] ![p₃, p, p₂] by
+    grind [angle_comm, h_sim.angle_eq_all.right.left]
+  have h_notcol_p₁pp₄ : ¬ Collinear Real ({p₁, p, p₄} : Set P) := by
+    intro hcol
+    suffices hcol : Collinear Real ({p₁, p, p₃} : Set P) by grind
+    suffices hcol : Collinear Real ({p₁, p₃, p, p₄} : Set P) by grind [Collinear.subset _ hcol]
+    have hne_pp₄ := hp₃p₄.ne_right
+    grind [collinear_insert_insert_of_mem_affineSpan_pair, Collinear.mem_affineSpan_of_mem_of_ne]
+  have h_notcol_p₃pp₂ : ¬ Collinear Real ({p₃, p, p₂} : Set P) := by
+    intro hcol
+    suffices hcol : Collinear Real ({p₁, p, p₃} : Set P) by grind
+    suffices hcol : Collinear Real ({p₃, p₁, p, p₂} : Set P) by grind [Collinear.subset _ hcol]
+    have hne_pp₂ := hp₁p₂.ne_right
+    grind [collinear_insert_insert_of_mem_affineSpan_pair, Collinear.mem_affineSpan_of_mem_of_ne]
+  apply similar_of_side_angle_side h_notcol_p₁pp₄ h_notcol_p₃pp₂ h_angle_eq ?_
+  grind [dist_comm]
 -/
 private lemma cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi_aux
     [Fact (finrank Real V = 2)] [Oriented Real V (Fin 2)] {p₁ p₂ p₃ p₄ p : P}
@@ -281,7 +373,41 @@ theorem cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi
   have hp₁p₂_sbtw : Sbtw Real p₁ p p₂ := angle_eq_pi_iff_sbtw.mp hp₁p₂
   have hp₃p₄_sbtw : Sbtw Real p₃ p p₄ := angle_eq_pi_iff_sbtw.mp hp₃p₄
   have hindep : AffineIndependent Real ![p₁, p, p₃] := affineIndependent_iff_not_collinear_set.mpr hn
-  set t : Affine.Triangle Real P := ⟨_, hindep⟩ with 
+  set t : Affine.Triangle Real P := ⟨_, hindep⟩ with ht
+  set S : AffineSubspace Real P := affineSpan Real (Set.range t.points) with hS
+  have hp₂ : p₂ in S := by
+    suffices hmem : p₂ in affineSpan Real {p₁, p} by exact affineSpan_mono Real (by simp [ht]; grind) hmem
+    simp [hp₁p₂_sbtw.wbtw.collinear.mem_affineSpan_of_mem_of_ne _ _ _ hp₁p₂_sbtw.left_ne]
+  have hp₄ : p₄ in S := by
+    suffices hmem : p₄ in affineSpan Real {p₃, p} by exact affineSpan_mono Real (by simp [ht]; grind) hmem
+    simp [hp₃p₄_sbtw.wbtw.collinear.mem_affineSpan_of_mem_of_ne _ _ _ hp₃p₄_sbtw.left_ne]
+  let s_isom : AffineIsometry Real S P := S.subtypeₐᵢ
+  let p₁' : S := ⟨p₁, mem_affineSpan Real (s := Set.range t.points) (by aesop)⟩
+  let p' : S := ⟨p, mem_affineSpan Real (s := Set.range t.points) (by aesop)⟩
+  let p₃' : S := ⟨p₃, mem_affineSpan Real (s := Set.range t.points) (by aesop)⟩
+  let p₂' : S := ⟨p₂, hp₂⟩
+  let p₄' : S := ⟨p₄, hp₄⟩
+  have h_dist' : dist p₁' p' * dist p₂' p' = dist p₃' p' * dist p₄' p' := by
+    simpa [dist_eq_norm_vsub, ← s_isom.dist_map] using h
+  have hp₁'p₂' : ∠ p₁' p' p₂' = π := by simpa [AffineIsometry.angle_map s_isom]
+  have hp₃'p₄' : ∠ p₃' p' p₄' = π := by simpa [AffineIsometry.angle_map s_isom]
+  suffices h_cospherical' : Cospherical {p₁', p₂', p₃', p₄'} by
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was:
+    `grind [Set.image_insert_eq, Set.image_singleton]` -/
+    simpa [Set.image_insert_eq, Set.image_singleton] using Cospherical.subtype_val h_cospherical'
+  have hf2 : Fact (finrank Real S.direction = 2) := ⟨by
+    rw [hS]; rw [direction_affineSpan]; rw [t.independent.finrank_vectorSpan]
+    simp⟩
+  let : Module.Oriented Real S.direction (Fin 2) :=
+    ⟨Basis.orientation (finBasisOfFinrankEq _ _ hf2.out)⟩
+  have hncol : ¬ Collinear Real {p₁', p', p₃'} := by
+    rw [← affineIndependent_iff_not_collinear_set]; rw [← s_isom.toAffineMap.affineIndependent_iff s_isom.injective]
+    convert! hindep
+    ext i; fin_cases i <;> rfl
+  exact cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi_aux h_dist' hp₁'p₂' hp₃'p₄' hncol
 
 中文:
 定理 cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi
@@ -290,7 +416,41 @@ theorem cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi
   have hp₁p₂_sbtw : Sbtw Real p₁ p p₂ := angle_eq_pi_iff_sbtw.mp hp₁p₂
   have hp₃p₄_sbtw : Sbtw Real p₃ p p₄ := angle_eq_pi_iff_sbtw.mp hp₃p₄
   have hindep : AffineIndependent Real ![p₁, p, p₃] := affineIndependent_iff_not_collinear_set.mpr hn
-  set t : Affine.Triangle Real P := ⟨_, hindep⟩ with 
+  set t : Affine.Triangle Real P := ⟨_, hindep⟩ with ht
+  set S : AffineSubspace Real P := affineSpan Real (Set.range t.points) with hS
+  have hp₂ : p₂ in S := by
+    suffices hmem : p₂ in affineSpan Real {p₁, p} by exact affineSpan_mono Real (by simp [ht]; grind) hmem
+    simp [hp₁p₂_sbtw.wbtw.collinear.mem_affineSpan_of_mem_of_ne _ _ _ hp₁p₂_sbtw.left_ne]
+  have hp₄ : p₄ in S := by
+    suffices hmem : p₄ in affineSpan Real {p₃, p} by exact affineSpan_mono Real (by simp [ht]; grind) hmem
+    simp [hp₃p₄_sbtw.wbtw.collinear.mem_affineSpan_of_mem_of_ne _ _ _ hp₃p₄_sbtw.left_ne]
+  let s_isom : AffineIsometry Real S P := S.subtypeₐᵢ
+  let p₁' : S := ⟨p₁, mem_affineSpan Real (s := Set.range t.points) (by aesop)⟩
+  let p' : S := ⟨p, mem_affineSpan Real (s := Set.range t.points) (by aesop)⟩
+  let p₃' : S := ⟨p₃, mem_affineSpan Real (s := Set.range t.points) (by aesop)⟩
+  let p₂' : S := ⟨p₂, hp₂⟩
+  let p₄' : S := ⟨p₄, hp₄⟩
+  have h_dist' : dist p₁' p' * dist p₂' p' = dist p₃' p' * dist p₄' p' := by
+    simpa [dist_eq_norm_vsub, ← s_isom.dist_map] using h
+  have hp₁'p₂' : ∠ p₁' p' p₂' = π := by simpa [AffineIsometry.angle_map s_isom]
+  have hp₃'p₄' : ∠ p₃' p' p₄' = π := by simpa [AffineIsometry.angle_map s_isom]
+  suffices h_cospherical' : Cospherical {p₁', p₂', p₃', p₄'} by
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was:
+    `grind [Set.image_insert_eq, Set.image_singleton]` -/
+    simpa [Set.image_insert_eq, Set.image_singleton] using Cospherical.subtype_val h_cospherical'
+  have hf2 : Fact (finrank Real S.direction = 2) := ⟨by
+    rw [hS]; rw [direction_affineSpan]; rw [t.independent.finrank_vectorSpan]
+    simp⟩
+  let : Module.Oriented Real S.direction (Fin 2) :=
+    ⟨Basis.orientation (finBasisOfFinrankEq _ _ hf2.out)⟩
+  have hncol : ¬ Collinear Real {p₁', p', p₃'} := by
+    rw [← affineIndependent_iff_not_collinear_set]; rw [← s_isom.toAffineMap.affineIndependent_iff s_isom.injective]
+    convert! hindep
+    ext i; fin_cases i <;> rfl
+  exact cospherical_of_mul_dist_eq_mul_dist_of_angle_eq_pi_aux h_dist' hp₁'p₂' hp₃'p₄' hncol
 
 Depends on / 依赖: Affine, Affine.Triangle, AffineIndependent, AffineSubspace, Set.range, Triangle, affineIndependent_iff_not_collinear_set, affineIndependent_iff_not_collinear_set.mpr, affineSpan, affineSpan_mono, angle_eq_pi_iff_sbtw, angle_eq_pi_iff_sbtw.mp, hindep, points, t.points
 -/
@@ -614,7 +774,8 @@ theorem dist_sq_eq_mul_dist_of_tangent_and_secant
   proof: by
   have hr := radius_nonneg_of_mem ha
   have radius_le_dist := h_tangent.isTangent.radius_le_dist_center (left_mem_affineSpan_pair Real p t)
-  rw [mul_dist_eq_power_of_radius_le_dist_center hr hp ha hb radius_le_dist]; rw [Sphere.power]; rw [h_tangent.dist_sq_eq_of_mem (left_mem_affineSpan_pair Re
+  rw [mul_dist_eq_power_of_radius_le_dist_center hr hp ha hb radius_le_dist]; rw [Sphere.power]; rw [h_tangent.dist_sq_eq_of_mem (left_mem_affineSpan_pair Real p t)]
+  ring
 
 中文:
 定理 dist_sq_eq_mul_dist_of_tangent_and_secant
@@ -622,7 +783,8 @@ theorem dist_sq_eq_mul_dist_of_tangent_and_secant
   证明: by
   have hr := radius_nonneg_of_mem ha
   have radius_le_dist := h_tangent.isTangent.radius_le_dist_center (left_mem_affineSpan_pair Real p t)
-  rw [mul_dist_eq_power_of_radius_le_dist_center hr hp ha hb radius_le_dist]; rw [Sphere.power]; rw [h_tangent.dist_sq_eq_of_mem (left_mem_affineSpan_pair Re
+  rw [mul_dist_eq_power_of_radius_le_dist_center hr hp ha hb radius_le_dist]; rw [Sphere.power]; rw [h_tangent.dist_sq_eq_of_mem (left_mem_affineSpan_pair Real p t)]
+  ring
 
 Depends on / 依赖: Sphere, Sphere.power, dist_sq_eq_of_mem, h_tangent, h_tangent.dist_sq_eq_of_mem, h_tangent.isTangent.radius_le_dist_center, isTangent, left_mem_affineSpan_pair, mul_dist_eq_power_of_radius_le_dist_center, radius_le_dist, radius_le_dist_center, radius_nonneg_of_mem
 -/
@@ -671,7 +833,13 @@ theorem isTangentAt_iff_dist_sq_eq_power
     have h_orth : ⟪p -ᵥ t, t -ᵥ s.center⟫ = 0 := by
       simp only [Sphere.power, ← mem_sphere.mp ht, dist_eq_norm_vsub V, sq,
                  ← vsub_add_vsub_cancel p t s.center] at h_dist_eq
-      exact (norm_add_sq_eq_norm_sq_add_norm_sq_if
+      exact (norm_add_sq_eq_norm_sq_add_norm_sq_iff_real_inner_eq_zero _ _).mp (by linarith)
+    refine ⟨ht, right_mem_affineSpan_pair Real p t, fun x hx => ?_⟩
+    rw [mem_orthRadius_iff_inner_left]
+    obtain ⟨r, hr⟩ := (vadd_right_mem_affineSpan_pair (k := Real)).mp (vsub_vadd x t ▸ hx)
+    rw [← hr]; rw [inner_smul_left]; rw [h_orth]; rw [mul_zero]⟩
+
+alias ⟨_, isTangentAt_of_dist_sq_eq_power⟩ := isTangentAt_iff_dist_sq_eq_power
 
 中文:
 定理 isTangentAt_iff_dist_sq_eq_power
@@ -680,7 +848,13 @@ theorem isTangentAt_iff_dist_sq_eq_power
     have h_orth : ⟪p -ᵥ t, t -ᵥ s.center⟫ = 0 := by
       simp only [Sphere.power, ← mem_sphere.mp ht, dist_eq_norm_vsub V, sq,
                  ← vsub_add_vsub_cancel p t s.center] at h_dist_eq
-      exact (norm_add_sq_eq_norm_sq_add_norm_sq_if
+      exact (norm_add_sq_eq_norm_sq_add_norm_sq_iff_real_inner_eq_zero _ _).mp (by linarith)
+    refine ⟨ht, right_mem_affineSpan_pair Real p t, fun x hx => ?_⟩
+    rw [mem_orthRadius_iff_inner_left]
+    obtain ⟨r, hr⟩ := (vadd_right_mem_affineSpan_pair (k := Real)).mp (vsub_vadd x t ▸ hx)
+    rw [← hr]; rw [inner_smul_left]; rw [h_orth]; rw [mul_zero]⟩
+
+alias ⟨_, isTangentAt_of_dist_sq_eq_power⟩ := isTangentAt_iff_dist_sq_eq_power
 
 Depends on / 依赖: Sphere, Sphere.power, center, dist_eq_norm_vsub, h.power_eq_dist_sq.symm, h_dist_eq, h_orth, mem_orthRadius_iff_inner_left, mem_sphere, mem_sphere.mp, norm_add_sq_eq_norm_sq_add_norm_sq_iff_real_inner_eq_zero, power_eq_dist_sq, right_mem_affineSpan_pair, s.center, vadd_right_mem_affineSpan_pair, vsub_add_vsub_cancel, vsub_vadd
 -/

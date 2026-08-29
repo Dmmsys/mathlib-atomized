@@ -260,7 +260,10 @@ theorem trace_trace_of_basis
   have := Classical.decEq κ
   cases nonempty_fintype ι
   cases nonempty_fintype κ
-  rw [trace_eq_matrix_trace (b.smulTower c)]; rw [trace_eq_matrix_trace b]; rw [trace_eq_matrix_trace c]; rw [Matrix.trace]; rw [Matrix.trace]; rw [Matrix.trace]; rw [← Finset.univ_produc
+  rw [trace_eq_matrix_trace (b.smulTower c)]; rw [trace_eq_matrix_trace b]; rw [trace_eq_matrix_trace c]; rw [Matrix.trace]; rw [Matrix.trace]; rw [Matrix.trace]; rw [← Finset.univ_product_univ]; rw [Finset.sum_product]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  simp only [map_sum, smulTower_leftMulMatrix, Finset.sum_apply, Matrix.diag,
+    Finset.sum_apply i (Finset.univ : Finset κ) fun y => leftMulMatrix b (leftMulMatrix c x y y)]
 
 中文:
 定理 trace_trace_of_basis
@@ -270,7 +273,10 @@ theorem trace_trace_of_basis
   have := Classical.decEq κ
   cases nonempty_fintype ι
   cases nonempty_fintype κ
-  rw [trace_eq_matrix_trace (b.smulTower c)]; rw [trace_eq_matrix_trace b]; rw [trace_eq_matrix_trace c]; rw [Matrix.trace]; rw [Matrix.trace]; rw [Matrix.trace]; rw [← Finset.univ_produc
+  rw [trace_eq_matrix_trace (b.smulTower c)]; rw [trace_eq_matrix_trace b]; rw [trace_eq_matrix_trace c]; rw [Matrix.trace]; rw [Matrix.trace]; rw [Matrix.trace]; rw [← Finset.univ_product_univ]; rw [Finset.sum_product]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  simp only [map_sum, smulTower_leftMulMatrix, Finset.sum_apply, Matrix.diag,
+    Finset.sum_apply i (Finset.univ : Finset κ) fun y => leftMulMatrix b (leftMulMatrix c x y y)]
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.sum_apply, Finset.sum_congr, Finset.sum_product, Finset.univ, Finset.univ_product_univ, Matrix, Matrix.diag, Matrix.trace, b.smulTower, leftMu, map_sum, nonempty_fintype, smulTower, smulTower_leftMulMatrix, sum_apply, sum_congr, sum_product
 -/

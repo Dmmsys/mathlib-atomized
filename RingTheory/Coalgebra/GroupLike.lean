@@ -274,7 +274,49 @@ lemma linearIndepOn_isGroupLikeElem
   induction s using Finset.cons_induction with
   -- The case `s = ∅` is trivial.
   | empty => simp
-  -- L
+  -- Let's deal with the `s ∪ {a}` case.
+  | cons a s has ih =>
+  simp only [Finset.cons_eq_insert, Finset.coe_insert, Set.subset_def, Set.mem_insert_iff,
+    Finset.mem_coe, Set.mem_ofPred_eq, forall_eq_or_imp] at hs
+  obtain ⟨ha, hs⟩ := hs
+  specialize ih hs
+  -- Assume that there is some `c : A → R` and `d : R` such that `∑ x ∈ s, c x • x = d • a`.
+  -- We want to prove `d = 0` and `∀ x ∈ s, c x = 0`.
+  rw [Finset.coe_cons]
+  refine ih.id_insert' ?_
+  simp only [mem_span_finset, forall_exists_index, and_imp]
+  rintro d c - hc
+  -- `x ⊗ y` over `x, y ∈ s` are linearly independent since `s` is linearly independent and
+  -- `R` is a domain.
+  replace ih := ih.tmul_of_isDomain ih
+  simp_rw [← Finset.coe_product, linearIndepOn_finset_iffₛ, id] at ih
+  -- Tensoring the equality `∑ x ∈ s, c x • x = d • a` with itself, we get by linear independence
+  -- that `c x ^ 2 = d * c x` and `c x * c y = 0` for `x ≠ y`.
+  have key := calc
+        ∑ x in s, ∑ y in s, (if x = y then d * c x else 0) • x otimesₜ[R] y
+    _ = d • ∑ x in s, c x • x otimesₜ[R] x := by simp [Finset.smul_sum, mul_smul]
+    _ = d • comul (d • a) := by rw [← hc]; simp +contextual [(hs _ _).comul_eq_tmul_self]
+    _ = (d • a) otimesₜ (d • a) := by simp [ha.comul_eq_tmul_self, smul_tmul, tmul_smul, -neg_smul]
+    _ = ∑ x in s, ∑ y in s, (c x * c y) • x otimesₜ[R] y := by
+      simp_rw [← hc, sum_tmul, smul_tmul, Finset.smul_sum, tmul_sum, tmul_smul, mul_smul]
+  simp_rw [← Finset.sum_product'] at key
+  apply ih at key
+  -- Therefore, `c x = 0` for all `x ∈ s`.
+  replace key x (hx : x in s) : c x = 0 := by
+    -- Otherwise, we deduce from `key` that `c y = 0` for any `y ≠ x` with `y ∈ s`.
+    by_contra! hcx
+    have hcy (y) (hys : y in s) (hyx : y != x) : c y = 0 := by
+      simpa [*] using (key (y, x) (by simp [*])).symm
+    -- Then substitute this into `hc` to get `c x • x = d • a`.
+    rw [Finset.sum_eq_single x (by simp +contextual [hcy]) (by simp [hx])] at hc
+    -- But `key` also says that `c x = d`.
+    have hcxa : d = c x := mul_left_injective₀ hcx (by simpa using (key (x, x) (by simp [*])))
+    -- So `x = a`...
+    obtain rfl : x = a := by rwa [hcxa, smul_right_inj hcx] at hc
+    -- ... which contradicts `x ∈ s` and `a ∉ s`.
+    contradiction
+  -- We are now done, since `d • a = ∑ x ∈ s, c x • x = 0`
+  simp_all [ha.ne_zero, eq_comm]
 
 中文:
 引理 linearIndepOn_isGroupLikeElem
@@ -288,7 +330,49 @@ lemma linearIndepOn_isGroupLikeElem
   induction s using Finset.cons_induction with
   -- The case `s = ∅` is trivial.
   | empty => simp
-  -- L
+  -- Let's deal with the `s ∪ {a}` case.
+  | cons a s has ih =>
+  simp only [Finset.cons_eq_insert, Finset.coe_insert, Set.subset_def, Set.mem_insert_iff,
+    Finset.mem_coe, Set.mem_ofPred_eq, forall_eq_or_imp] at hs
+  obtain ⟨ha, hs⟩ := hs
+  specialize ih hs
+  -- Assume that there is some `c : A → R` and `d : R` such that `∑ x ∈ s, c x • x = d • a`.
+  -- We want to prove `d = 0` and `∀ x ∈ s, c x = 0`.
+  rw [Finset.coe_cons]
+  refine ih.id_insert' ?_
+  simp only [mem_span_finset, forall_exists_index, and_imp]
+  rintro d c - hc
+  -- `x ⊗ y` over `x, y ∈ s` are linearly independent since `s` is linearly independent and
+  -- `R` is a domain.
+  replace ih := ih.tmul_of_isDomain ih
+  simp_rw [← Finset.coe_product, linearIndepOn_finset_iffₛ, id] at ih
+  -- Tensoring the equality `∑ x ∈ s, c x • x = d • a` with itself, we get by linear independence
+  -- that `c x ^ 2 = d * c x` and `c x * c y = 0` for `x ≠ y`.
+  have key := calc
+        ∑ x in s, ∑ y in s, (if x = y then d * c x else 0) • x otimesₜ[R] y
+    _ = d • ∑ x in s, c x • x otimesₜ[R] x := by simp [Finset.smul_sum, mul_smul]
+    _ = d • comul (d • a) := by rw [← hc]; simp +contextual [(hs _ _).comul_eq_tmul_self]
+    _ = (d • a) otimesₜ (d • a) := by simp [ha.comul_eq_tmul_self, smul_tmul, tmul_smul, -neg_smul]
+    _ = ∑ x in s, ∑ y in s, (c x * c y) • x otimesₜ[R] y := by
+      simp_rw [← hc, sum_tmul, smul_tmul, Finset.smul_sum, tmul_sum, tmul_smul, mul_smul]
+  simp_rw [← Finset.sum_product'] at key
+  apply ih at key
+  -- Therefore, `c x = 0` for all `x ∈ s`.
+  replace key x (hx : x in s) : c x = 0 := by
+    -- Otherwise, we deduce from `key` that `c y = 0` for any `y ≠ x` with `y ∈ s`.
+    by_contra! hcx
+    have hcy (y) (hys : y in s) (hyx : y != x) : c y = 0 := by
+      simpa [*] using (key (y, x) (by simp [*])).symm
+    -- Then substitute this into `hc` to get `c x • x = d • a`.
+    rw [Finset.sum_eq_single x (by simp +contextual [hcy]) (by simp [hx])] at hc
+    -- But `key` also says that `c x = d`.
+    have hcxa : d = c x := mul_left_injective₀ hcx (by simpa using (key (x, x) (by simp [*])))
+    -- So `x = a`...
+    obtain rfl : x = a := by rwa [hcxa, smul_right_inj hcx] at hc
+    -- ... which contradicts `x ∈ s` and `a ∉ s`.
+    contradiction
+  -- We are now done, since `d • a = ∑ x ∈ s, c x • x = 0`
+  simp_all [ha.ne_zero, eq_comm]
 
 Depends on / 依赖: classical
 -/

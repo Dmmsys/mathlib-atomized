@@ -107,7 +107,7 @@ theorem Basis.eq_bot_of_rank_eq_zero
   rintro g sum_eq i
   simp only [Fin.default_eq_zero, Finset.univ_unique,
     Finset.sum_singleton] at sum_eq
-  convert! (b.smul_eq_zero.mp
+  convert! (b.smul_eq_zero.mp sum_eq).resolve_right x_ne
 
 中文:
 定理 基.eq_bot_of_rank_eq_zero
@@ -121,7 +121,7 @@ theorem Basis.eq_bot_of_rank_eq_zero
   rintro g sum_eq i
   simp only [Fin.default_eq_zero, Finset.univ_unique,
     Finset.sum_singleton] at sum_eq
-  convert! (b.smul_eq_zero.mp
+  convert! (b.smul_eq_zero.mp sum_eq).resolve_right x_ne
 
 Depends on / 依赖: Fin.default_eq_zero, Finset, Finset.sum_singleton, Finset.univ_unique, Fintype, Fintype.linearIndependent_iff, Submodule, Submodule.eq_bot_iff, b.smul_eq_zero.mp, contrapose, convert, default_eq_zero, eq_bot_iff, linearIndependent_iff, one_ne_zero, rank_eq, resolve_right, smul_eq_zero, sum_eq, sum_singleton
 -/
@@ -162,7 +162,20 @@ definition Submodule.inductionOnRankAux
   induction n generalizing N with
   | zero =>
     suffices N = ⊥ by rwa [this]
-    apply Basis.eq_bo
+    apply Basis.eq_bot_of_rank_eq_zero b _ fun m hv => Nat.le_zero.mp (rank_le _ hv)
+  | succ n rank_ih =>
+    apply ih
+    intro N' N'_le x x_mem x_ortho
+    apply rank_ih
+    intro m v hli
+    refine Nat.succ_le_succ_iff.mp (rank_le (Fin.cons ⟨x, x_mem⟩ fun i => ⟨v i, N'_le (v i).2⟩) ?_)
+    convert! hli.finCons' x _ ?_
+    · ext i
+      refine Fin.cases ?_ ?_ i <;> simp
+    · intro c y hy hc
+      refine x_ortho c y (Submodule.span_le.mpr ?_ hy) hc
+      rintro _ ⟨z, rfl⟩
+      exact (v z).2
 
 中文:
 定义 子模.inductionOnRankAux
@@ -178,7 +191,20 @@ definition Submodule.inductionOnRankAux
   induction n generalizing N with
   | zero =>
     suffices N = ⊥ by rwa [this]
-    apply Basis.eq_bo
+    apply Basis.eq_bot_of_rank_eq_zero b _ fun m hv => Nat.le_zero.mp (rank_le _ hv)
+  | succ n rank_ih =>
+    apply ih
+    intro N' N'_le x x_mem x_ortho
+    apply rank_ih
+    intro m v hli
+    refine Nat.succ_le_succ_iff.mp (rank_le (Fin.cons ⟨x, x_mem⟩ fun i => ⟨v i, N'_le (v i).2⟩) ?_)
+    convert! hli.finCons' x _ ?_
+    · ext i
+      refine Fin.cases ?_ ?_ i <;> simp
+    · intro c y hy hc
+      refine x_ortho c y (Submodule.span_le.mpr ?_ hy) hc
+      rintro _ ⟨z, rfl⟩
+      exact (v z).2
 
 Depends on / 依赖: Basis.eq_bot_of_rank_eq_zero, Classical, Classical.decEq, DecidableEq, Fin.cons, N.zero_mem, Nat.le_zero.mp, Nat.succ_le_succ_iff.mp, eq_bot_of_rank_eq_zero, generalizing, le_zero, mem_bot, rank_ih, rank_le, succ_le_succ_iff, x_mem, x_ortho, zero_mem
 -/
@@ -236,7 +262,21 @@ lemma mem_center_iff
     constructor
     case comm =>
       intro y
-      rw [← b.linearCombination_repr y]; rw [linearCombination_apply]; rw
+      rw [← b.linearCombination_repr y]; rw [linearCombination_apply]; rw [sum]; rw [commute_iff_eq]; rw [Finset.sum_mul]; rw [Finset.mul_sum]
+      simp_rw [mul_smul_comm, smul_mul_assoc, (h.1 _).eq]
+    case left_assoc =>
+      intro c d
+      rw [← b.linearCombination_repr c]; rw [← b.linearCombination_repr d]; rw [linearCombination_apply]; rw [linearCombination_apply]; rw [sum]; rw [sum]; rw [Finset.sum_mul]; rw [Finset.mul_sum]; rw [Finset.mul_sum]; rw [Finset.mul_sum]
+      simp_rw [smul_mul_assoc, Finset.mul_sum, Finset.sum_mul, mul_smul_comm, Finset.mul_sum,
+        Finset.smul_sum, smul_mul_assoc, mul_smul_comm, (h.2 _ _).1,
+        (@SMulCommClass.smul_comm R R A)]
+      rw [Finset.sum_comm]
+    case right_assoc =>
+      intro c d
+      rw [← b.linearCombination_repr c]; rw [← b.linearCombination_repr d]; rw [linearCombination_apply]; rw [linearCombination_apply]; rw [sum]; rw [Finsupp.sum]; rw [Finset.sum_mul]
+      simp_rw [smul_mul_assoc, Finset.mul_sum, Finset.sum_mul, mul_smul_comm, Finset.mul_sum,
+               Finset.smul_sum, smul_mul_assoc, mul_smul_comm, Finset.sum_mul, smul_mul_assoc,
+               (h.2 _ _).2]
 
 中文:
 引理 mem_center_iff
@@ -254,7 +294,21 @@ lemma mem_center_iff
     constructor
     case comm =>
       intro y
-      rw [← b.linearCombination_repr y]; rw [linearCombination_apply]; rw
+      rw [← b.linearCombination_repr y]; rw [linearCombination_apply]; rw [sum]; rw [commute_iff_eq]; rw [Finset.sum_mul]; rw [Finset.mul_sum]
+      simp_rw [mul_smul_comm, smul_mul_assoc, (h.1 _).eq]
+    case left_assoc =>
+      intro c d
+      rw [← b.linearCombination_repr c]; rw [← b.linearCombination_repr d]; rw [linearCombination_apply]; rw [linearCombination_apply]; rw [sum]; rw [sum]; rw [Finset.sum_mul]; rw [Finset.mul_sum]; rw [Finset.mul_sum]; rw [Finset.mul_sum]
+      simp_rw [smul_mul_assoc, Finset.mul_sum, Finset.sum_mul, mul_smul_comm, Finset.mul_sum,
+        Finset.smul_sum, smul_mul_assoc, mul_smul_comm, (h.2 _ _).1,
+        (@SMulCommClass.smul_comm R R A)]
+      rw [Finset.sum_comm]
+    case right_assoc =>
+      intro c d
+      rw [← b.linearCombination_repr c]; rw [← b.linearCombination_repr d]; rw [linearCombination_apply]; rw [linearCombination_apply]; rw [sum]; rw [Finsupp.sum]; rw [Finset.sum_mul]
+      simp_rw [smul_mul_assoc, Finset.mul_sum, Finset.sum_mul, mul_smul_comm, Finset.mul_sum,
+               Finset.smul_sum, smul_mul_assoc, mul_smul_comm, Finset.sum_mul, smul_mul_assoc,
+               (h.2 _ _).2]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_mul, b.linearCombination_repr, center, commute_iff_eq, intros, left_assoc, linearCombination_apply, linearCombination_repr, mem_ofPred_eq, mul_smul_comm, mul_sum, simp_rw, smul_mul_assoc, sum_mul
 -/
@@ -365,7 +419,10 @@ theorem restrictScalars_repr_apply
       ((b.repr : M ->ₗ[S] ι ->₀ S).restrictScalars R).domRestrict _
     DFunLike.congr_fun (LinearMap.congr_fun this m) i
   refine Basis.ext (b.restrictScalars R) fun _ => ?_
-  simp only 
+  simp only [LinearMap.coe_comp, LinearEquiv.coe_toLinearMap, Function.comp_apply, map_one,
+    Basis.repr_self, Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single,
+    Algebra.linearMap_apply, LinearMap.domRestrict_apply,
+    Basis.restrictScalars_apply, LinearMap.coe_restrictScalars]
 
 中文:
 定理 restrictScalars_repr_apply
@@ -376,7 +433,10 @@ theorem restrictScalars_repr_apply
       ((b.repr : M ->ₗ[S] ι ->₀ S).restrictScalars R).domRestrict _
     DFunLike.congr_fun (LinearMap.congr_fun this m) i
   refine Basis.ext (b.restrictScalars R) fun _ => ?_
-  simp only 
+  simp only [LinearMap.coe_comp, LinearEquiv.coe_toLinearMap, Function.comp_apply, map_one,
+    Basis.repr_self, Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single,
+    Algebra.linearMap_apply, LinearMap.domRestrict_apply,
+    Basis.restrictScalars_apply, LinearMap.coe_restrictScalars]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Algebra.linearMap_apply, Basis.ext, Basis.repr_self, Basis.rest, DFunLike, DFunLike.congr_fun, Finsupp, Finsupp.mapRange.linearMap, Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_toLinearMap, LinearMap, LinearMap.coe_comp, LinearMap.congr_fun, LinearMap.domRestrict_apply
 -/
@@ -406,7 +466,7 @@ theorem mem_span_iff_repr_mem
   refine sum_mem fun i _ => ?_
   obtain ⟨_, h⟩ := h i
   simp_rw [← h, algebraMap_smul]
-  exa
+  exact smul_mem _ _ (subset_span (Set.mem_range_self i))
 
 中文:
 定理 mem_span_iff_repr_mem
@@ -419,7 +479,7 @@ theorem mem_span_iff_repr_mem
   refine sum_mem fun i _ => ?_
   obtain ⟨_, h⟩ := h i
   simp_rw [← h, algebraMap_smul]
-  exa
+  exact smul_mem _ _ (subset_span (Set.mem_range_self i))
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination_apply, Set.mem_range_self, algebraMap_smul, b.linearCombination_repr, b.restrictScalars, b.restrictScalars_repr_apply, linearCombination_apply, linearCombination_repr, mem_range_self, restrictScalars, restrictScalars_repr_apply, simp_rw, smul_mem, subset_span, sum_mem
 -/
@@ -508,7 +568,7 @@ theorem addSubgroupOfClosure_repr_apply
       (b.addSubgroupOfClosure A h).repr.toLinearMap =
         ((b.repr : M ->ₗ[R] ι ->₀ R).restrictScalars Int).domRestrict A.toIntSubmodule by
     exact DFunLike.congr_fun (LinearMap.congr_fun this x) i
-  exact (b.addSubgroupOfCl
+  exact (b.addSubgroupOfClosure A h).ext fun _ => by simp
 
 中文:
 定理 addSubgroupOfClosure_repr_apply
@@ -518,7 +578,7 @@ theorem addSubgroupOfClosure_repr_apply
       (b.addSubgroupOfClosure A h).repr.toLinearMap =
         ((b.repr : M ->ₗ[R] ι ->₀ R).restrictScalars Int).domRestrict A.toIntSubmodule by
     exact DFunLike.congr_fun (LinearMap.congr_fun this x) i
-  exact (b.addSubgroupOfCl
+  exact (b.addSubgroupOfClosure A h).ext fun _ => by simp
 
 Depends on / 依赖: A.toIntSubmodule, Algebra, Algebra.linearMap, DFunLike, DFunLike.congr_fun, Finsupp, Finsupp.mapRange.linearMap, LinearMap, LinearMap.congr_fun, addSubgroupOfClosure, b.addSubgroupOfClosure, b.repr, congr_fun, domRestrict, linearMap, mapRange, repr.toLinearMap, restrictScalars, toIntSubmodule, toLinearMap
 -/

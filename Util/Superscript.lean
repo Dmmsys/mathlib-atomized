@@ -90,7 +90,7 @@ definition mkMapping
     assert! !toSpecial.contains nm
     toNormal := toNormal.insert sp nm
     toSpecial := toSpecial.insert nm sp
-  pure { toNorma
+  pure { toNormal, toSpecial }
 
 中文:
 定义 mkMapping
@@ -104,7 +104,7 @@ definition mkMapping
     assert! !toSpecial.contains nm
     toNormal := toNormal.insert sp nm
     toSpecial := toSpecial.insert nm sp
-  pure { toNorma
+  pure { toNormal, toSpecial }
 
 Depends on / 依赖: Id.run
 -/
@@ -177,7 +177,15 @@ definition satisfyTokensFn
   if many then
     let rec /-- Loop body of `satisfyTokensFn` -/
     loop (toks) (s : ParserState) : ParserState :=
- 
+      let start := s.pos
+      let s := takeWhileFn p c s
+      if s.pos == start then k toks s else
+        let stop := s.pos
+        let s := whitespace c s
+        let toks := toks.push (start, stop, s.pos)
+        loop toks s
+    loop toks s
+  else k toks s
 
 中文:
 定义 satisfyTokensFn
@@ -192,7 +200,15 @@ definition satisfyTokensFn
   if many then
     let rec /-- Loop body of `satisfyTokensFn` -/
     loop (toks) (s : ParserState) : ParserState :=
- 
+      let start := s.pos
+      let s := takeWhileFn p c s
+      if s.pos == start then k toks s else
+        let stop := s.pos
+        let s := whitespace c s
+        let toks := toks.push (start, stop, s.pos)
+        loop toks s
+    loop toks s
+  else k toks s
 -/
 partial def satisfyTokensFn (p : Char -> Bool) (errorMsg : String) (many := true)
     (k : Array (String.Pos.Raw × String.Pos.Raw × String.Pos.Raw) -> ParserState -> ParserState) :
@@ -270,7 +286,54 @@ definition scriptFnNoAntiquot
   satisfyTokensFn m.toNormal.contains errorMsg many c s (k := fun toks s => Id.run do
     let mut newStr := ""
     -- This consists of a sorted array of `(from, to)` pairs, where indexes `from+i` in `newStr`
-    -- such that `from+i < from'` for the next element of th
+    -- such that `from+i < from'` for the next element of the array, are mapped to `to+i`.
+    let mut aligns := #[((0 : String.Pos.Raw), start)]
+    for (start, stopTk, stopWs) in toks do
+      let mut pos := start
+      while pos < stopTk do
+        let ch := c.get pos
+        let ch' := m.toNormal[ch]!
+        newStr := newStr.push ch'
+        pos := pos + ch
+        if ch.utf8Size != ch'.utf8Size then
+          aligns := aligns.push (newStr.rawEndPos, pos)
+      newStr := newStr.push ' '
+      if stopWs.1 - stopTk.1 != 1 then
+        aligns := aligns.push (newStr.rawEndPos, stopWs)
+    let ictx := mkInputContext newStr "<superscript>"
+    let s' := p.run ictx c.toParserModuleContext c.tokens (mkParserState newStr)
+    let rec /-- Applies the alignment mapping to a position. -/
+    align (pos : String.Pos.Raw) :=
+      let i := partitionPoint aligns (·.1 <= pos)
+      let (a, b) := aligns[i - 1]!
+.offsetBy b pos.unoffsetBy a
+    let s := { s with pos := align s'.pos, errorMsg := s'.errorMsg }
+    if s.hasError then return s
+    let rec
+    /-- Applies the alignment mapping to a `Substring`. -/
+    alignSubstr : Substring.Raw -> Substring.Raw
+      | ⟨_newStr, start, stop⟩ => c.substring (align start) (align stop),
+    /-- Applies the alignment mapping to a `SourceInfo`. -/
+    alignInfo : SourceInfo -> SourceInfo
+      | .original leading pos trailing endPos =>
+        -- Marking these as original breaks semantic highlighting,
+        -- marking them as canonical breaks the unused variables linter. :(
+        .original (alignSubstr leading) (align pos) (alignSubstr trailing) (align endPos)
+      | .synthetic pos endPos canonical =>
+        .synthetic (align pos) (align endPos) canonical
+      | .none => .none,
+     /-- Applies the alignment mapping to a `Syntax`. -/
+     alignSyntax : Syntax -> Syntax
+      | .missing => .missing
+      | .node info kind args => .node (alignInfo info) kind (args.map alignSyntax)
+      | .atom info val =>
+        -- We have to preserve the unsubscripted `val` even though it breaks `Syntax.reprint`
+        -- because basic parsers like `num` read the `val` directly
+        .atom (alignInfo info) val
+      | .ident info rawVal val preresolved =>
+        .ident (alignInfo info) (alignSubstr rawVal) val preresolved
+    s.pushSyntax (alignSyntax s'.stxStack.back)
+  )
 
 中文:
 定义 scriptFnNoAntiquot
@@ -280,7 +343,54 @@ definition scriptFnNoAntiquot
   satisfyTokensFn m.toNormal.contains errorMsg many c s (k := fun toks s => Id.run do
     let mut newStr := ""
     -- This consists of a sorted array of `(from, to)` pairs, where indexes `from+i` in `newStr`
-    -- such that `from+i < from'` for the next element of th
+    -- such that `from+i < from'` for the next element of the array, are mapped to `to+i`.
+    let mut aligns := #[((0 : String.Pos.Raw), start)]
+    for (start, stopTk, stopWs) in toks do
+      let mut pos := start
+      while pos < stopTk do
+        let ch := c.get pos
+        let ch' := m.toNormal[ch]!
+        newStr := newStr.push ch'
+        pos := pos + ch
+        if ch.utf8Size != ch'.utf8Size then
+          aligns := aligns.push (newStr.rawEndPos, pos)
+      newStr := newStr.push ' '
+      if stopWs.1 - stopTk.1 != 1 then
+        aligns := aligns.push (newStr.rawEndPos, stopWs)
+    let ictx := mkInputContext newStr "<superscript>"
+    let s' := p.run ictx c.toParserModuleContext c.tokens (mkParserState newStr)
+    let rec /-- Applies the alignment mapping to a position. -/
+    align (pos : String.Pos.Raw) :=
+      let i := partitionPoint aligns (·.1 <= pos)
+      let (a, b) := aligns[i - 1]!
+.offsetBy b pos.unoffsetBy a
+    let s := { s with pos := align s'.pos, errorMsg := s'.errorMsg }
+    if s.hasError then return s
+    let rec
+    /-- Applies the alignment mapping to a `Substring`. -/
+    alignSubstr : Substring.Raw -> Substring.Raw
+      | ⟨_newStr, start, stop⟩ => c.substring (align start) (align stop),
+    /-- Applies the alignment mapping to a `SourceInfo`. -/
+    alignInfo : SourceInfo -> SourceInfo
+      | .original leading pos trailing endPos =>
+        -- Marking these as original breaks semantic highlighting,
+        -- marking them as canonical breaks the unused variables linter. :(
+        .original (alignSubstr leading) (align pos) (alignSubstr trailing) (align endPos)
+      | .synthetic pos endPos canonical =>
+        .synthetic (align pos) (align endPos) canonical
+      | .none => .none,
+     /-- Applies the alignment mapping to a `Syntax`. -/
+     alignSyntax : Syntax -> Syntax
+      | .missing => .missing
+      | .node info kind args => .node (alignInfo info) kind (args.map alignSyntax)
+      | .atom info val =>
+        -- We have to preserve the unsubscripted `val` even though it breaks `Syntax.reprint`
+        -- because basic parsers like `num` read the `val` directly
+        .atom (alignInfo info) val
+      | .ident info rawVal val preresolved =>
+        .ident (alignInfo info) (alignSubstr rawVal) val preresolved
+    s.pushSyntax (alignSyntax s'.stxStack.back)
+  )
 -/
 partial def scriptFnNoAntiquot (m : Mapping) (errorMsg : String) (p : ParserFn)
     (many := true) : ParserFn := fun c s =>
@@ -348,7 +458,9 @@ definition scriptParser
   let p := Superscript.scriptFnNoAntiquot m errorMsg p.fn many
   node kind {
     info.firstTokens := .tokens tokens
-    info.collectTokens := (to
+    info.collectTokens := (tokens ++ ·)
+    fn := withAntiquotFn antiquotP.fn p (isCatAntiquot := true)
+  }
 
 中文:
 定义 scriptParser
@@ -358,7 +470,9 @@ definition scriptParser
   let p := Superscript.scriptFnNoAntiquot m errorMsg p.fn many
   node kind {
     info.firstTokens := .tokens tokens
-    info.collectTokens := (to
+    info.collectTokens := (tokens ++ ·)
+    fn := withAntiquotFn antiquotP.fn p (isCatAntiquot := true)
+  }
 
 Depends on / 依赖: Parser, SyntaxNodeKind, decl_name
 -/
@@ -403,7 +517,7 @@ definition _root_.Std.Format.mapStringsM
 | .append f g => .append < > Std.Format.mapStringsM f f' <*> Std.Format.mapStringsM g f'
 | .nest n f => .nest n < > Std.Format.mapStringsM f f'
 | .text s => .text < > f' s
- 
+  | .align _ | .line | .nil => pure f
 
 中文:
 定义 _root_.Std.Format.mapStringsM
@@ -414,7 +528,7 @@ definition _root_.Std.Format.mapStringsM
 | .append f g => .append < > Std.Format.mapStringsM f f' <*> Std.Format.mapStringsM g f'
 | .nest n f => .nest n < > Std.Format.mapStringsM f f'
 | .text s => .text < > f' s
- 
+  | .align _ | .line | .nil => pure f
 
 Depends on / 依赖: Format, Std.Format.mapStringsM, append, mapStringsM
 -/
@@ -440,7 +554,13 @@ definition scriptParser.formatter
   let transformed : Except String _ := st.stack.mapM (·.mapStringsM fun s => do
     let some s := s.toList.mapM (m.toSpecial.insert ' ' ' ').get? | .error s
     .ok (String.ofList s))
- 
+  match transformed with
+  | .error err =>
+    -- TODO: this only appears if the caller explicitly calls the pretty-printer
+    Lean.logErrorAt (← get).stxTrav.cur s!"Not a {name}: '{err}'"
+    set { st with stack := stack ++ st.stack }
+  | .ok newStack =>
+    set { st with stack := stack ++ newStack }
 
 中文:
 定义 scriptParser.formatter
@@ -452,7 +572,13 @@ definition scriptParser.formatter
   let transformed : Except String _ := st.stack.mapM (·.mapStringsM fun s => do
     let some s := s.toList.mapM (m.toSpecial.insert ' ' ' ').get? | .error s
     .ok (String.ofList s))
- 
+  match transformed with
+  | .error err =>
+    -- TODO: this only appears if the caller explicitly calls the pretty-printer
+    Lean.logErrorAt (← get).stxTrav.cur s!"Not a {name}: '{err}'"
+    set { st with stack := stack ++ st.stack }
+  | .ok newStack =>
+    set { st with stack := stack ++ newStack }
 -/
 def scriptParser.formatter (name : String) (m : Mapping) (k : SyntaxNodeKind) (p : Formatter) :
     Formatter := do

@@ -33,7 +33,12 @@ theorem jacobson_bot_polynomial_le_sInf_map_maximal
   refine Trans.trans (jacobson_mono bot_le) (le_of_eq ?_ : J.jacobson <= J)
   suffices t : (⊥ : Ideal (Polynomial (R ⧸ j))).jacobson = ⊥ by
     rw [← hj.2]; rw [jacobson_eq_iff_jacobson_quotient_eq_bot]
-    replace
+    replace t := congr_arg (map (polynomialQuotientEquivQuotientPolynomial j).toRingHom) t
+    rwa [map_jacobson_of_bijective _, map_bot] at t
+    exact RingEquiv.bijective (polynomialQuotientEquivQuotientPolynomial j)
+  refine eq_bot_iff.2 fun f hf => ?_
+have r1 : (X : (R ⧸ j)[X]) != 0 := ne_of_apply_ne (coeff · 1) by simp
+  simpa [r1] using eq_C_of_degree_eq_zero (degree_eq_zero_of_isUnit ((mem_jacobson_bot.1 hf) X))
 
 中文:
 定理 jacobson_bot_polynomial_le_sInf_map_maximal
@@ -43,7 +48,12 @@ theorem jacobson_bot_polynomial_le_sInf_map_maximal
   refine Trans.trans (jacobson_mono bot_le) (le_of_eq ?_ : J.jacobson <= J)
   suffices t : (⊥ : Ideal (Polynomial (R ⧸ j))).jacobson = ⊥ by
     rw [← hj.2]; rw [jacobson_eq_iff_jacobson_quotient_eq_bot]
-    replace
+    replace t := congr_arg (map (polynomialQuotientEquivQuotientPolynomial j).toRingHom) t
+    rwa [map_jacobson_of_bijective _, map_bot] at t
+    exact RingEquiv.bijective (polynomialQuotientEquivQuotientPolynomial j)
+  refine eq_bot_iff.2 fun f hf => ?_
+have r1 : (X : (R ⧸ j)[X]) != 0 := ne_of_apply_ne (coeff · 1) by simp
+  simpa [r1] using eq_C_of_degree_eq_zero (degree_eq_zero_of_isUnit ((mem_jacobson_bot.1 hf) X))
 
 Depends on / 依赖: IsMaximal, J.jacobson, Polynomial, RingEquiv, RingEquiv.bijective, Trans.trans, bijective, bot_le, congr_arg, eq_bot_if, exists_imp, j.IsMaximal, jacobson, jacobson_eq_iff_jacobson_quotient_eq_bot, jacobson_mono, le_of_eq, le_sInf, map_bot, map_jacobson_of_bijective, polynomialQuotientEquivQuotientPolynomial
 -/
@@ -72,7 +82,7 @@ theorem jacobson_bot_polynomial_of_jacobson_bot
 refine fun f hf => (Submodule.mem_bot R[X]).2 Polynomial.ext fun n =>
     Trans.trans (?_ : coeff f n = 0) (coeff_zero n).symm
   suffices f.coeff n in Ideal.jacobson ⊥ by rwa [h, Submodule.mem_bot] at this
-  exact mem
+  exact mem_sInf.2 fun j hj => (mem_map_C_iff.1 ((mem_sInf.1 hf) ⟨j, ⟨hj.2, rfl⟩⟩)) n
 
 中文:
 定理 jacobson_bot_polynomial_of_jacobson_bot
@@ -82,7 +92,7 @@ refine fun f hf => (Submodule.mem_bot R[X]).2 Polynomial.ext fun n =>
 refine fun f hf => (Submodule.mem_bot R[X]).2 Polynomial.ext fun n =>
     Trans.trans (?_ : coeff f n = 0) (coeff_zero n).symm
   suffices f.coeff n in Ideal.jacobson ⊥ by rwa [h, Submodule.mem_bot] at this
-  exact mem
+  exact mem_sInf.2 fun j hj => (mem_map_C_iff.1 ((mem_sInf.1 hf) ⟨j, ⟨hj.2, rfl⟩⟩)) n
 
 Depends on / 依赖: Ideal.jacobson, Polynomial, Polynomial.ext, Submodule, Submodule.mem_bot, Trans.trans, coeff_zero, eq_bot_iff, f.coeff, jacobson, jacobson_bot_polynomial_le_sInf_map_maximal, le_trans, mem_bot, mem_map_C_iff, mem_sInf
 -/

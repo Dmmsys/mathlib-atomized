@@ -152,7 +152,11 @@ theorem RingHom.finite_localizationPreserves
   let := f'.toAlgebra
   have : IsScalarTower R R' S' := IsScalarTower.of_algebraMap_eq'
     (IsLocalization.map_comp M.le_comap_map).symm
-  
+  have : IsScalarTower R S S' := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsLocalization (Algebra.algebraMapSubmonoid S M) S' := by
+    rwa [Algebra.algebraMapSubmonoid, RingHom.algebraMap_toAlgebra]
+  have : Module.Finite R S := hf
+  exact .of_isLocalization R S M
 
 中文:
 定理 环态射.finite_localizationPreserves
@@ -165,7 +169,11 @@ theorem RingHom.finite_localizationPreserves
   let := f'.toAlgebra
   have : IsScalarTower R R' S' := IsScalarTower.of_algebraMap_eq'
     (IsLocalization.map_comp M.le_comap_map).symm
-  
+  have : IsScalarTower R S S' := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsLocalization (Algebra.algebraMapSubmonoid S M) S' := by
+    rwa [Algebra.algebraMapSubmonoid, RingHom.algebraMap_toAlgebra]
+  have : Module.Finite R S := hf
+  exact .of_isLocalization R S M
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, Finite, IsLocalization, IsLocalization.map, IsLocalization.map_comp, IsScalarTower, IsScalarTower.of_algebraMap_eq, M.le_comap_map, Module, Module.Finite, RingHom, RingHom.algebraMap_toAlgebra, Submonoid, Submonoid.le_comap_map, algebraMap, algebraMapSubmonoid, algebraMap_toAlgebra, f.toAlgebra, introv
 -/
@@ -218,7 +226,40 @@ theorem RingHom.finite_ofLocalizationSpan
   let := f.toAlgebra
   let := fun r : s => (Localization.awayMap f r).toAlgebra
   have (r : s) : IsLocalization ((Submonoid.powers (r : R)).map (algebraMap R S))
-      (Localization.Away (f 
+      (Localization.Away (f r)) := by
+    rw [Submonoid.map_powers]; exact Localization.isLocalization
+  have : forall r : s, IsScalarTower R (Localization.Away (r : R)) (Localization.Away (f r)) :=
+    fun r => IsScalarTower.of_algebraMap_eq'
+      (IsLocalization.map_comp (Submonoid.powers (r : R)).le_comap_map).symm
+  -- By the hypothesis, we may find a finite generating set for each `Sᵣ`. This set can then be
+  -- lifted into `R` by multiplying a sufficiently large power of `r`. I claim that the union of
+  -- these generates `S`.
+  constructor
+  replace H := fun r => (H r).1
+  choose s₁ s₂ using H
+  let sf := fun x : s => IsLocalization.finsetIntegerMultiple (Submonoid.powers (f x)) (s₁ x)
+  use s.attach.biUnion sf
+  rw [Submodule.span_attach_biUnion]; rw [eq_top_iff]
+  -- It suffices to show that `r ^ n • x ∈ span T` for each `r : s`, since `{ r ^ n }` spans `R`.
+  -- This then follows from the fact that each `x : R` is a linear combination of the generating set
+  -- of `Sᵣ`. By multiplying a sufficiently large power of `r`, we can cancel out the `r`s in the
+  -- denominators of both the generating set and the coefficients.
+  rintro x -
+  apply Submodule.mem_of_span_eq_top_of_smul_pow_mem _ (s : Set R) hs _ _
+  intro r
+  obtain ⟨⟨_, n₁, rfl⟩, hn₁⟩ :=
+    multiple_mem_span_of_mem_localization_span (Submonoid.powers (r : R))
+      (Localization.Away (r : R)) (s₁ r : Set (Localization.Away (f r))) (algebraMap S _ x)
+      (by rw [s₂ r]; trivial)
+  dsimp only at hn₁
+  rw [Submonoid.smul_def]; rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R S]; rw [← map_mul] at hn₁
+  obtain ⟨⟨_, n₂, rfl⟩, hn₂⟩ :=
+    IsLocalization.smul_mem_finsetIntegerMultiple_span (Submonoid.powers (r : R))
+      (Localization.Away (f r)) _ (s₁ r) hn₁
+  rw [Submonoid.smul_def]; rw [← Algebra.smul_def]; rw [smul_smul]; rw [← pow_add] at hn₂
+  simp_rw [Submonoid.map_powers] at hn₂
+  use n₂ + n₁
+  exact le_iSup (fun x : s => Submodule.span R (sf x : Set S)) r hn₂
 
 中文:
 定理 环态射.finite_ofLocalizationSpan
@@ -231,7 +272,40 @@ theorem RingHom.finite_ofLocalizationSpan
   let := f.toAlgebra
   let := fun r : s => (Localization.awayMap f r).toAlgebra
   have (r : s) : IsLocalization ((Submonoid.powers (r : R)).map (algebraMap R S))
-      (Localization.Away (f 
+      (Localization.Away (f r)) := by
+    rw [Submonoid.map_powers]; exact Localization.isLocalization
+  have : forall r : s, IsScalarTower R (Localization.Away (r : R)) (Localization.Away (f r)) :=
+    fun r => IsScalarTower.of_algebraMap_eq'
+      (IsLocalization.map_comp (Submonoid.powers (r : R)).le_comap_map).symm
+  -- By the hypothesis, we may find a finite generating set for each `Sᵣ`. This set can then be
+  -- lifted into `R` by multiplying a sufficiently large power of `r`. I claim that the union of
+  -- these generates `S`.
+  constructor
+  replace H := fun r => (H r).1
+  choose s₁ s₂ using H
+  let sf := fun x : s => IsLocalization.finsetIntegerMultiple (Submonoid.powers (f x)) (s₁ x)
+  use s.attach.biUnion sf
+  rw [Submodule.span_attach_biUnion]; rw [eq_top_iff]
+  -- It suffices to show that `r ^ n • x ∈ span T` for each `r : s`, since `{ r ^ n }` spans `R`.
+  -- This then follows from the fact that each `x : R` is a linear combination of the generating set
+  -- of `Sᵣ`. By multiplying a sufficiently large power of `r`, we can cancel out the `r`s in the
+  -- denominators of both the generating set and the coefficients.
+  rintro x -
+  apply Submodule.mem_of_span_eq_top_of_smul_pow_mem _ (s : Set R) hs _ _
+  intro r
+  obtain ⟨⟨_, n₁, rfl⟩, hn₁⟩ :=
+    multiple_mem_span_of_mem_localization_span (Submonoid.powers (r : R))
+      (Localization.Away (r : R)) (s₁ r : Set (Localization.Away (f r))) (algebraMap S _ x)
+      (by rw [s₂ r]; trivial)
+  dsimp only at hn₁
+  rw [Submonoid.smul_def]; rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R S]; rw [← map_mul] at hn₁
+  obtain ⟨⟨_, n₂, rfl⟩, hn₂⟩ :=
+    IsLocalization.smul_mem_finsetIntegerMultiple_span (Submonoid.powers (r : R))
+      (Localization.Away (f r)) _ (s₁ r) hn₁
+  rw [Submonoid.smul_def]; rw [← Algebra.smul_def]; rw [smul_smul]; rw [← pow_add] at hn₂
+  simp_rw [Submonoid.map_powers] at hn₂
+  use n₂ + n₁
+  exact le_iSup (fun x : s => Submodule.span R (sf x : Set S)) r hn₂
 
 Depends on / 依赖: RingHom, RingHom.ofLocalizationSpan_iff_finite, classical, introv, ofLocalizationSpan_iff_finite
 -/

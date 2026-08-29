@@ -356,7 +356,15 @@ definition liftAddHom
       | Eqv.of_zero r' f i hf =>
 (AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, C0 r' f i hf]
       | Eqv.of_zero_scalar f =>
-(AddCon.ker_rel _).2 by simp [FreeA
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, C0']
+      | Eqv.of_add inst z f i m₁ m₂ =>
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, @C_add inst]
+      | Eqv.of_add_scalar z₁ z₂ f =>
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, C_add_scalar]
+      | Eqv.of_smul inst z f i r' =>
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, @C_smul inst]
+      | Eqv.add_comm x y =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, add_comm]
 
 中文:
 定义 liftAddHom
@@ -367,7 +375,15 @@ definition liftAddHom
       | Eqv.of_zero r' f i hf =>
 (AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, C0 r' f i hf]
       | Eqv.of_zero_scalar f =>
-(AddCon.ker_rel _).2 by simp [FreeA
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, C0']
+      | Eqv.of_add inst z f i m₁ m₂ =>
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, @C_add inst]
+      | Eqv.of_add_scalar z₁ z₂ f =>
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, C_add_scalar]
+      | Eqv.of_smul inst z f i r' =>
+(AddCon.ker_rel _).2 by simp [FreeAddMonoid.lift_eval_of, @C_smul inst]
+      | Eqv.add_comm x y =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, add_comm]
 
 Depends on / 依赖: AddCon, AddCon.addConGen_le, AddCon.ker_rel, C_add, Eqv.of_add, Eqv.of_add_scalar, Eqv.of_zero, Eqv.of_zero_scalar, FreeAddMonoid, FreeAddMonoid.lift, FreeAddMonoid.lift_eval_of, PiTensorProduct, PiTensorProduct.Eqv, addConGen, addConGen_le, ker_rel, lift_eval_of, of_add, of_add_scalar, of_zero
 -/
@@ -455,6 +471,7 @@ instance hasSMul'
       (fun r' f i hf => by simp_rw [zero_tprodCoeff' _ f i hf])
       (fun f => by simp [zero_tprodCoeff]) (fun r' f i m₁ m₂ => by simp [add_tprodCoeff])
       (fun r' r'' f => by simp [add_tprodCoeff']) fun z f i r' => by
+      simp [smul_tprodCoeff, mul_smul_comm]⟩
 
 中文:
 实例 hasSMul'
@@ -464,6 +481,7 @@ instance hasSMul'
       (fun r' f i hf => by simp_rw [zero_tprodCoeff' _ f i hf])
       (fun f => by simp [zero_tprodCoeff]) (fun r' f i m₁ m₂ => by simp [add_tprodCoeff])
       (fun r' r'' f => by simp [add_tprodCoeff']) fun z f i r' => by
+      simp [smul_tprodCoeff, mul_smul_comm]⟩
 
 Depends on / 依赖: add_tprodCoeff, liftAddHom, mul_smul_comm, simp_rw, smul_tprodCoeff, tprodCoeff, zero_tprodCoeff
 -/
@@ -538,7 +556,9 @@ instance distribMulAction'
     PiTensorProduct.induction_on' x (fun {r'' f} => by simp [smul_tprodCoeff', smul_smul])
       fun {x y} ihx ihy => by simp_rw [PiTensorProduct.smul_add, ihx, ihy]
   one_smul x :=
-    PiTensorProduct.induction_on' x (fun {r f} => by rw [smul_tprodCoeff', one_smul
+    PiTensorProduct.induction_on' x (fun {r f} => by rw [smul_tprodCoeff', one_smul])
+      fun {z y} ihz ihy => by simp_rw [PiTensorProduct.smul_add, ihz, ihy]
+  smul_zero _ := map_zero _
 
 中文:
 实例 distribMulAction'
@@ -548,7 +568,9 @@ instance distribMulAction'
     PiTensorProduct.induction_on' x (fun {r'' f} => by simp [smul_tprodCoeff', smul_smul])
       fun {x y} ihx ihy => by simp_rw [PiTensorProduct.smul_add, ihx, ihy]
   one_smul x :=
-    PiTensorProduct.induction_on' x (fun {r f} => by rw [smul_tprodCoeff', one_smul
+    PiTensorProduct.induction_on' x (fun {r f} => by rw [smul_tprodCoeff', one_smul])
+      fun {z y} ihz ihy => by simp_rw [PiTensorProduct.smul_add, ihz, ihy]
+  smul_zero _ := map_zero _
 
 Depends on / 依赖: map_add
 -/
@@ -626,7 +648,10 @@ instance module'
       PiTensorProduct.induction_on' x
         (fun {r f} => by simp_rw [smul_tprodCoeff', add_smul, add_tprodCoeff'])
         fun {x y} ihx ihy => by simp_rw [PiTensorProduct.smul_add, ihx, ihy, add_add_add_comm]
-    zero_smul :=
+    zero_smul := fun x =>
+      PiTensorProduct.induction_on' x
+        (fun {r f} => by simp_rw [smul_tprodCoeff', zero_smul, zero_tprodCoeff])
+        fun {x y} ihx ihy => by simp_rw [PiTensorProduct.smul_add, ihx, ihy, add_zero] }
 
 中文:
 实例 module'
@@ -636,7 +661,10 @@ instance module'
       PiTensorProduct.induction_on' x
         (fun {r f} => by simp_rw [smul_tprodCoeff', add_smul, add_tprodCoeff'])
         fun {x y} ihx ihy => by simp_rw [PiTensorProduct.smul_add, ihx, ihy, add_add_add_comm]
-    zero_smul :=
+    zero_smul := fun x =>
+      PiTensorProduct.induction_on' x
+        (fun {r f} => by simp_rw [smul_tprodCoeff', zero_smul, zero_tprodCoeff])
+        fun {x y} ihx ihy => by simp_rw [PiTensorProduct.smul_add, ihx, ihy, add_zero] }
 
 Depends on / 依赖: PiTensorProduct, PiTensorProduct.distribMulAction, PiTensorProduct.induction_on, PiTensorProduct.smul_add, add_add_add_comm, add_smul, add_tprodCoeff, add_zero, distribMulAction, induction_on, simp_rw, smul_add, smul_tprodCoeff, zero_smul, zero_tprodCoeff
 -/
@@ -719,7 +747,7 @@ definition tprod
     rw [smul_tprodCoeff']; rw [← smul_tprodCoeff (1 : R) _ i]; rw [update_idem]; rw [update_self]
 
 @[inherit_doc tprod]
-notation3:100 "⨂ₜ["R"] "(...)", "r:(scoped f => tprod R f
+notation3:100 "⨂ₜ["R"] "(...)", "r:(scoped f => tprod R f) => r
 
 中文:
 定义 tprod
@@ -730,7 +758,7 @@ notation3:100 "⨂ₜ["R"] "(...)", "r:(scoped f => tprod R f
     rw [smul_tprodCoeff']; rw [← smul_tprodCoeff (1 : R) _ i]; rw [update_idem]; rw [update_self]
 
 @[inherit_doc tprod]
-notation3:100 "⨂ₜ["R"] "(...)", "r:(scoped f => tprod R f
+notation3:100 "⨂ₜ["R"] "(...)", "r:(scoped f => tprod R f) => r
 
 Depends on / 依赖: tprodCoeff
 -/
@@ -1081,7 +1109,7 @@ definition liftAux
     (fun f => by simp_rw [zero_smul])
     (fun z f i m₁ m₂ => by simp_rw [← smul_add, φ.map_update_add])
     (fun z₁ z₂ f => by rw [← add_smul])
-    fun z f i r => by simp [φ.map_upda
+    fun z f i r => by simp [φ.map_update_smul, smul_smul, mul_comm]
 
 中文:
 定义 liftAux
@@ -1091,7 +1119,7 @@ definition liftAux
     (fun f => by simp_rw [zero_smul])
     (fun z f i m₁ m₂ => by simp_rw [← smul_add, φ.map_update_add])
     (fun z₁ z₂ f => by rw [← add_smul])
-    fun z f i r => by simp [φ.map_upda
+    fun z f i r => by simp [φ.map_update_smul, smul_smul, mul_comm]
 
 Depends on / 依赖: add_smul, liftAddHom, map_coord_zero, map_update_add, map_update_smul, mul_comm, simp_rw, smul_add, smul_smul, smul_zero, zero_smul
 -/
@@ -1114,7 +1142,11 @@ theorem liftAux_tprod
   simp only [liftAux, liftAddHom, tprod_eq_tprodCoeff_one, tprodCoeff, AddCon.coe_mk']
   -- The end of this proof was very different before https://github.com/leanprover/lean4/pull/2644:
   -- rw [FreeAddMonoid.of, FreeAddMonoid.ofList, Equiv.refl_apply, AddCon.lift_coe]
-  -- dsimp [FreeAddMonoid.
+  -- dsimp [FreeAddMonoid.lift, FreeAddMonoid.sumAux]
+  -- show _ • _ = _
+  -- rw [one_smul]
+  conv_lhs => apply AddCon.lift_coe
+  simp
 
 中文:
 定理 liftAux_tprod
@@ -1124,7 +1156,11 @@ theorem liftAux_tprod
   simp only [liftAux, liftAddHom, tprod_eq_tprodCoeff_one, tprodCoeff, AddCon.coe_mk']
   -- The end of this proof was very different before https://github.com/leanprover/lean4/pull/2644:
   -- rw [FreeAddMonoid.of, FreeAddMonoid.ofList, Equiv.refl_apply, AddCon.lift_coe]
-  -- dsimp [FreeAddMonoid.
+  -- dsimp [FreeAddMonoid.lift, FreeAddMonoid.sumAux]
+  -- show _ • _ = _
+  -- rw [one_smul]
+  conv_lhs => apply AddCon.lift_coe
+  simp
 
 Depends on / 依赖: AddCon, AddCon.coe_mk, coe_mk, liftAddHom, liftAux, tprodCoeff, tprod_eq_tprodCoeff_one
 -/
@@ -1204,7 +1240,9 @@ definition lift
   map_add' φ₁ φ₂ := by
     ext
     simp [liftAux_tprod]
-  map_smul' r φ₂ 
+  map_smul' r φ₂ := by
+    ext
+    simp [liftAux_tprod]
 
 中文:
 定义 lift
@@ -1220,7 +1258,9 @@ definition lift
   map_add' φ₁ φ₂ := by
     ext
     simp [liftAux_tprod]
-  map_smul' r φ₂ 
+  map_smul' r φ₂ := by
+    ext
+    simp [liftAux_tprod]
 
 Depends on / 依赖: liftAux, liftAux.smul, map_smul
 -/
@@ -2396,7 +2436,14 @@ definition isEmptyEquiv
         smul_eq_mul, mul_one]
       congr
       aesop
-    · simp
+    · simp only
+      intro x y hx hy
+      rw [map_add]; rw [add_smul]; rw [hx]; rw [hy]
+  right_inv t := by simp
+  map_add' := map_add _
+  map_smul' := map_smul _
+
+@[simp]
 
 中文:
 定义 isEmptyEquiv
@@ -2410,7 +2457,14 @@ definition isEmptyEquiv
         smul_eq_mul, mul_one]
       congr
       aesop
-    · simp
+    · simp only
+      intro x y hx hy
+      rw [map_add]; rw [add_smul]; rw [hx]; rw [hy]
+  right_inv t := by simp
+  map_add' := map_add _
+  map_smul' := map_smul _
+
+@[simp]
 
 Depends on / 依赖: constOfIsEmpty
 -/
@@ -2470,7 +2524,14 @@ definition subsingletonEquiv
         map_update_smul' m i := by rw [Subsingleton.elim i i₀]; simp })
     ({ toFun x := tprod R (update (0 : (i : ι) -> s i) i₀ x)
        map_add' := by simp
-       map_smu
+       map_smul' := by simp })
+    (by ext _; simp)
+    (by
+      ext f
+      have h : update (0 : (i : ι) -> s i) i₀ (f i₀) = f := update_eq_self i₀ f
+      simp [h])
+
+@[simp]
 
 中文:
 定义 subsingletonEquiv
@@ -2482,7 +2543,14 @@ definition subsingletonEquiv
         map_update_smul' m i := by rw [Subsingleton.elim i i₀]; simp })
     ({ toFun x := tprod R (update (0 : (i : ι) -> s i) i₀ x)
        map_add' := by simp
-       map_smu
+       map_smul' := by simp })
+    (by ext _; simp)
+    (by
+      ext f
+      have h : update (0 : (i : ι) -> s i) i₀ (f i₀) = f := update_eq_self i₀ f
+      simp [h])
+
+@[simp]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, Subsingleton, Subsingleton.elim, map_add, map_smul, map_update_add, map_update_smul, ofLinearMap, update, update_eq_self
 -/
@@ -2583,7 +2651,16 @@ definition tmulEquivDep
           (MultilinearMap.currySumEquiv (tprod R)) a)
         map_add' := by simp
         map_smul' := by simp })
-    (PiTensorProduct.lift (MultilinearMap.domCoprodDep (tprod R) (tprod R)))
+    (PiTensorProduct.lift (MultilinearMap.domCoprodDep (tprod R) (tprod R))) (by
+      ext
+      dsimp
+      simp only [lift.tprod, domCoprodDep_apply, lift.tmul, LinearMap.coe_mk, AddHom.coe_mk,
+        currySum_apply]
+      congr
+      ext (_ | _) <;> simp)
+    (TensorProduct.ext (by aesop))
+
+@[simp]
 
 中文:
 定义 tmulEquivDep
@@ -2594,7 +2671,16 @@ definition tmulEquivDep
           (MultilinearMap.currySumEquiv (tprod R)) a)
         map_add' := by simp
         map_smul' := by simp })
-    (PiTensorProduct.lift (MultilinearMap.domCoprodDep (tprod R) (tprod R)))
+    (PiTensorProduct.lift (MultilinearMap.domCoprodDep (tprod R) (tprod R))) (by
+      ext
+      dsimp
+      simp only [lift.tprod, domCoprodDep_apply, lift.tmul, LinearMap.coe_mk, AddHom.coe_mk,
+        currySum_apply]
+      congr
+      ext (_ | _) <;> simp)
+    (TensorProduct.ext (by aesop))
+
+@[simp]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.coe_mk, MultilinearMap, MultilinearMap.currySumEquiv, MultilinearMap.domCoprodDep, PiTensorProduct, PiTensorProduct.lift, TensorProduct, TensorProduct.ext, TensorProduct.lift, coe_mk, currySumEquiv, currySum_apply, domCoprodDep, domCoprodDep_apply, lift.tmul
 -/

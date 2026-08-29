@@ -56,7 +56,31 @@ definition functorEnrichedHomCoyonedaObjEquiv
   body: { app j := MonoidalClosed.uncurry (f ≫ enrichedHomπ A _ _ (Under.mk j.unop.hom.op))
       naturality j j' φ := by
         dsimp
-        rw [tensorHom_id]; rw [← uncurry_natural_right]; rw [← uncurry_pre_app]; rw [Category.assoc]; rw [Category.assoc]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRig
+        rw [tensorHom_id]; rw [← uncurry_natural_right]; rw [← uncurry_pre_app]; rw [Category.assoc]; rw [Category.assoc]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
+        congr 2
+        exact (enrichedHom_condition A (Under.forget (op X) ⋙ F) (Under.forget (op X) ⋙ G)
+          (i := Under.mk j.unop.hom.op) (j := Under.mk j'.unop.hom.op)
+            (Under.homMk φ.unop.left.op (Quiver.Hom.unop_inj (by simp)))).symm }
+  invFun g :=
+    end_.lift (fun j => MonoidalClosed.curry (g.app (op (Over.mk j.hom.unop)))) (fun j j' φ => by
+      dsimp
+      rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]; rw [curry_pre_app]; rw [← curry_natural_right]
+      congr 1
+      let α : Over.mk j'.hom.unop ⟶ Over.mk j.hom.unop := Over.homMk φ.right.unop
+        (Quiver.Hom.op_inj (by simp))
+      simpa using! (g.naturality α.op).symm)
+  left_inv f := by
+    dsimp
+    ext j
+    dsimp
+    simp only [curry_uncurry, end_.lift_π]
+    rfl
+  right_inv g := by
+    dsimp
+    ext j
+    dsimp
+    simp only [uncurry_curry, end_.lift_π]
+    rfl
 
 中文:
 定义 functorEnrichedHomCoyonedaObjEquiv
@@ -64,7 +88,31 @@ definition functorEnrichedHomCoyonedaObjEquiv
   定义体: { app j := MonoidalClosed.uncurry (f ≫ enrichedHomπ A _ _ (Under.mk j.unop.hom.op))
       naturality j j' φ := by
         dsimp
-        rw [tensorHom_id]; rw [← uncurry_natural_right]; rw [← uncurry_pre_app]; rw [Category.assoc]; rw [Category.assoc]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRig
+        rw [tensorHom_id]; rw [← uncurry_natural_right]; rw [← uncurry_pre_app]; rw [Category.assoc]; rw [Category.assoc]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [← enrichedOrdinaryCategorySelf_eHomWhiskerLeft]
+        congr 2
+        exact (enrichedHom_condition A (Under.forget (op X) ⋙ F) (Under.forget (op X) ⋙ G)
+          (i := Under.mk j.unop.hom.op) (j := Under.mk j'.unop.hom.op)
+            (Under.homMk φ.unop.left.op (Quiver.Hom.unop_inj (by simp)))).symm }
+  invFun g :=
+    end_.lift (fun j => MonoidalClosed.curry (g.app (op (Over.mk j.hom.unop)))) (fun j j' φ => by
+      dsimp
+      rw [enrichedOrdinaryCategorySelf_eHomWhiskerRight]; rw [enrichedOrdinaryCategorySelf_eHomWhiskerLeft]; rw [curry_pre_app]; rw [← curry_natural_right]
+      congr 1
+      let α : Over.mk j'.hom.unop ⟶ Over.mk j.hom.unop := Over.homMk φ.right.unop
+        (Quiver.Hom.op_inj (by simp))
+      simpa using! (g.naturality α.op).symm)
+  left_inv f := by
+    dsimp
+    ext j
+    dsimp
+    simp only [curry_uncurry, end_.lift_π]
+    rfl
+  right_inv g := by
+    dsimp
+    ext j
+    dsimp
+    simp only [uncurry_curry, end_.lift_π]
+    rfl
 
 Depends on / 依赖: Category, Category.assoc, MonoidalClosed, MonoidalClosed.uncurry, Under.forget, Under.homMk, Under.mk, enrichedHom_condition, enrichedOrdinaryCategorySelf_eHomWhiskerLeft, enrichedOrdinaryCategorySelf_eHomWhiskerRight, forget, j.unop.hom.op, naturality, tensorHom_id, uncurry, uncurry_natural_right, uncurry_pre_app, unop.hom.op
 -/
@@ -223,7 +271,11 @@ lemma whiskerLeft
   rw [← Function.Bijective.of_comp_iff' (f := MonoidalClosed.curry)
     ((ihom.adjunction _).homEquiv _ _).bijective]
   rw [← Function.Bijective.of_comp_iff (g := MonoidalClosed.curry) _
-    ((ihom.adjunction _).homEquiv _ _).b
+    ((ihom.adjunction _).homEquiv _ _).bijective] at this
+  convert! this using 1
+  ext α : 1
+  dsimp
+  rw [curry_natural_left]
 
 中文:
 引理 whiskerLeft
@@ -233,7 +285,11 @@ lemma whiskerLeft
   rw [← Function.Bijective.of_comp_iff' (f := MonoidalClosed.curry)
     ((ihom.adjunction _).homEquiv _ _).bijective]
   rw [← Function.Bijective.of_comp_iff (g := MonoidalClosed.curry) _
-    ((ihom.adjunction _).homEquiv _ _).b
+    ((ihom.adjunction _).homEquiv _ _).bijective] at this
+  convert! this using 1
+  ext α : 1
+  dsimp
+  rw [curry_natural_left]
 
 Depends on / 依赖: Bijective, Function, Function.Bijective.of_comp_iff, MonoidalClosed, MonoidalClosed.curry, Presheaf, Presheaf.isSheaf_functorEnrichedHom, adjunction, bijective, convert, curry_natural_left, homEquiv, ihom.adjunction, isSheaf_functorEnrichedHom, of_comp_iff
 -/
@@ -413,7 +469,24 @@ instance [(J.W
 
 noncomputable example
     [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), 
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    MonoidalCategory (Sheaf J A) :=
+  monoidalCategory J A
+
+noncomputable example
+    [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    BraidedCategory (Sheaf J A) :=
+  braidedCategory J A
+
+noncomputable example
+    [HasWeakSheafify J A] [MonoidalClosed A] [SymmetricCategory A]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    SymmetricCategory (Sheaf J A) :=
+  symmetricCategory J A
 
 中文:
 实例 [(J.W
@@ -425,7 +498,24 @@ noncomputable example
 
 noncomputable example
     [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
-    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), 
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    MonoidalCategory (Sheaf J A) :=
+  monoidalCategory J A
+
+noncomputable example
+    [HasWeakSheafify J A] [MonoidalClosed A] [BraidedCategory A]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    BraidedCategory (Sheaf J A) :=
+  braidedCategory J A
+
+noncomputable example
+    [HasWeakSheafify J A] [MonoidalClosed A] [SymmetricCategory A]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasFunctorEnrichedHom A F₁ F₂]
+    [forall (F₁ F₂ : Cᵒᵖ ⥤ A), HasEnrichedHom A F₁ F₂] :
+    SymmetricCategory (Sheaf J A) :=
+  symmetricCategory J A
 
 Depends on / 依赖: BraidedCategory, HasWeakSheafify, IsMonoidal
 -/

@@ -75,7 +75,8 @@ theorem isPrime_of_maximal_not
     by_contra! ⟨a, b, hab, ha, hb⟩
 have h₁ : P (I ⊔ span {a}) := of_not_not hI.not_prop_of_gt (Submodule.lt_sup_iff_notMem.2 ha)
 have h₂ : P (I.colon (span {a})) := of_not_not hI.not_prop_of_gt lt_of_le_of_ne le_colon
-      (fun H => hb <| H ▸ mem_colon_spa
+      (fun H => hb <| H ▸ mem_colon_span_singleton.2 (mul_comm a b ▸ hab))
+    exact hI.prop (hP.oka h₁ h₂)
 
 中文:
 定理 isPrime_of_maximal_not
@@ -86,7 +87,8 @@ have h₂ : P (I.colon (span {a})) := of_not_not hI.not_prop_of_gt lt_of_le_of_n
     by_contra! ⟨a, b, hab, ha, hb⟩
 have h₁ : P (I ⊔ span {a}) := of_not_not hI.not_prop_of_gt (Submodule.lt_sup_iff_notMem.2 ha)
 have h₂ : P (I.colon (span {a})) := of_not_not hI.not_prop_of_gt lt_of_le_of_ne le_colon
-      (fun H => hb <| H ▸ mem_colon_spa
+      (fun H => hb <| H ▸ mem_colon_span_singleton.2 (mul_comm a b ▸ hab))
+    exact hI.prop (hP.oka h₁ h₂)
 
 Depends on / 依赖: hI.prop, hP.top
 -/
@@ -137,7 +139,8 @@ theorem forall_of_forall_prime'
     refine zorn_le_nonempty₀ {I | ¬P I} (fun C hC₁ hC₂ J hJ => ⟨sSup C, ?_, fun _ => le_sSup⟩) I hI
     intro H
     obtain ⟨_, h₁, h₂⟩ := hchain C hC₁ hC₂ J hJ H
-    exact hC
+    exact hC₁ h₁ h₂
+  exact ⟨M, hM⟩
 
 中文:
 定理 对任意_of_对任意_prime'
@@ -147,7 +150,8 @@ theorem forall_of_forall_prime'
     refine zorn_le_nonempty₀ {I | ¬P I} (fun C hC₁ hC₂ J hJ => ⟨sSup C, ?_, fun _ => le_sSup⟩) I hI
     intro H
     obtain ⟨_, h₁, h₂⟩ := hchain C hC₁ hC₂ J hJ H
-    exact hC
+    exact hC₁ h₁ h₂
+  exact ⟨M, hM⟩
 
 Depends on / 依赖: Maximal, forall_of_forall_prime, hchain, hprime, le_sSup
 -/

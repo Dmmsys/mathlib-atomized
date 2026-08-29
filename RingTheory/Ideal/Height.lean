@@ -540,7 +540,7 @@ lemma Ideal.height_strict_mono_of_isPrime
     refine le_iInf₂ (fun K hK => ?_)
     have := hK.isPrime
     have : I < K := lt_of_lt_of_le h hK.le
-    exact
+    exact Ideal.height_add_one_le_of_lt_of_isPrime this
 
 中文:
 引理 理想.height_strict_mono_of_isPrime
@@ -553,7 +553,7 @@ lemma Ideal.height_strict_mono_of_isPrime
     refine le_iInf₂ (fun K hK => ?_)
     have := hK.isPrime
     have : I < K := lt_of_lt_of_le h hK.le
-    exact
+    exact Ideal.height_add_one_le_of_lt_of_isPrime this
 
 Depends on / 依赖: ENat.add_one_le_iff, I.height_lt_top, I.height_ne_top, Ideal.height_add_one_le_of_lt_of_isPrime, IsPrime, IsPrime.ne_top, J.height_eq_inf_minimalPrimes, add_one_le_iff, hK.isPrime, hK.le, height_add_one_le_of_lt_of_isPrime, height_eq_inf_minimalPrimes, height_lt_top, height_ne_top, height_top, isPrime, lt_of_lt_of_le, ne_top
 -/
@@ -581,7 +581,10 @@ lemma Ideal.height_strict_mono_of_isPrime_of_isPrime
 
 @[deprecated (since := "2026-04-02")]
 alias Ideal.height_strict_mono_of_isPrime_of_is_prime :=
-  Ideal.heigh
+  Ideal.height_strict_mono_of_isPrime_of_isPrime
+
+@[deprecated "Use `Ideal.height_strict_mono_of_isPrime_of_isPrime` instead."
+  (since := "2026-04-02")]
 
 中文:
 引理 理想.height_strict_mono_of_isPrime_of_isPrime
@@ -593,7 +596,10 @@ alias Ideal.height_strict_mono_of_isPrime_of_is_prime :=
 
 @[deprecated (since := "2026-04-02")]
 alias Ideal.height_strict_mono_of_isPrime_of_is_prime :=
-  Ideal.heigh
+  Ideal.height_strict_mono_of_isPrime_of_isPrime
+
+@[deprecated "Use `Ideal.height_strict_mono_of_isPrime_of_isPrime` instead."
+  (since := "2026-04-02")]
 
 Depends on / 依赖: FiniteHeight, I.FiniteHeight, I.finiteHeight_iff.mpr, Ideal.height_mono, Ideal.height_strict_mono_of_isPrime, IsPrime, IsPrime.ne_top, J.height_lt_top, Or.inr, finiteHeight_iff, h.le, height_lt_top, height_mono, height_strict_mono_of_isPrime, lt_of_le_of_lt, ne_top
 -/
@@ -736,7 +742,9 @@ lemma Ideal.exists_isMaximal_height
   refine ⟨m, hm, le_antisymm (height_le_ringKrullDim_of_ne_top IsPrime.ne_top') ?_⟩
   trans (l.last.asIdeal.height : WithBot Nat∞)
   · rw [Ideal.height_eq_primeHeight]
-    exa
+    exact LTSeries.height_last_longestOf.symm.le
+  · norm_cast
+    exact height_mono hle
 
 中文:
 引理 理想.存在_isMaximal_height
@@ -747,7 +755,9 @@ lemma Ideal.exists_isMaximal_height
   refine ⟨m, hm, le_antisymm (height_le_ringKrullDim_of_ne_top IsPrime.ne_top') ?_⟩
   trans (l.last.asIdeal.height : WithBot Nat∞)
   · rw [Ideal.height_eq_primeHeight]
-    exa
+    exact LTSeries.height_last_longestOf.symm.le
+  · norm_cast
+    exact height_mono hle
 
 Depends on / 依赖: Ideal.height_eq_primeHeight, IsPrime, IsPrime.ne_top, LTSeries, LTSeries.height_last_longestOf.symm.le, LTSeries.longestOf, PrimeSpectrum, WithBot, _closure, asIdeal, closure_eq, exists_le_maximal, ge_iff, h.ge_iff, h.mem_of_mem, height, height_eq_primeHeight, height_last_longestOf, height_le_ringKrullDim_of_ne_top, height_mono
 -/
@@ -804,7 +814,8 @@ lemma Ideal.mem_minimalPrimes_of_height_le
   exact lt_irrefl _ ((height_strict_mono_of_isPrime h₃).trans_le
     (e'.trans <| height_mono h₁.le))
 
-@[de
+@[deprecated (since := "2026-07-28")]
+alias Ideal.mem_minimalPrimes_of_height_eq := Ideal.mem_minimalPrimes_of_height_le
 
 中文:
 引理 理想.mem_minimalPrimes_of_height_le
@@ -818,7 +829,8 @@ lemma Ideal.mem_minimalPrimes_of_height_le
   exact lt_irrefl _ ((height_strict_mono_of_isPrime h₃).trans_le
     (e'.trans <| height_mono h₁.le))
 
-@[de
+@[deprecated (since := "2026-07-28")]
+alias Ideal.mem_minimalPrimes_of_height_eq := Ideal.mem_minimalPrimes_of_height_le
 
 Depends on / 依赖: Ideal.exists_minimalPrimes_le, IsPrime, IsPrime.ne_top, convert, eq_of_le_of_not_lt, exists_minimalPrimes_le, finiteHeight_of_le, height_mono, height_strict_mono_of_isPrime, isPrime, lt_irrefl, ne_top, trans_le
 -/
@@ -848,7 +860,7 @@ lemma Ideal.height_eq_zero_iff
   by_contra! ⟨P, ⟨hP₁, ⟨hP₂, hP₃⟩⟩⟩
   exact hP₃ (h (b := ⟨P, hP₁⟩) hP₂)
 
-@[deprecated "Use `Ideal.height_eq_z
+@[deprecated "Use `Ideal.height_eq_zero_iff` instead." (since := "2026-04-02")]
 
 中文:
 引理 理想.height_eq_zero_iff
@@ -860,7 +872,7 @@ lemma Ideal.height_eq_zero_iff
   by_contra! ⟨P, ⟨hP₁, ⟨hP₂, hP₃⟩⟩⟩
   exact hP₃ (h (b := ⟨P, hP₁⟩) hP₂)
 
-@[deprecated "Use `Ideal.height_eq_z
+@[deprecated "Use `Ideal.height_eq_zero_iff` instead." (since := "2026-04-02")]
 
 Depends on / 依赖: Ideal.height_eq_primeHeight, Ideal.primeHeight, Order.height_eq_zero, b.isPrime, height_eq_primeHeight, height_eq_zero, isPrime, minimalPrimes_eq_minimals, primeHeight
 -/
@@ -902,7 +914,9 @@ lemma Ideal.one_le_height_span_singleton_of_mem_nonZeroDivisors
   rw [Order.one_le_iff_ne_zero]; rw [Ne]; rw [height_eq_zero_iff]
   intro hmin
 exact absurd hx notMem_nonZeroDivisors_of_mem_mem_minimalPrimes
-    (hq.1.2 <| Ideal.mem_span_singleton.mpr <| 
+    (hq.1.2 <| Ideal.mem_span_singleton.mpr <| dvd_refl x) hmin
+
+@[simp]
 
 中文:
 引理 理想.one_le_height_span_singleton_of_mem_nonZeroDivisors
@@ -913,7 +927,9 @@ exact absurd hx notMem_nonZeroDivisors_of_mem_mem_minimalPrimes
   rw [Order.one_le_iff_ne_zero]; rw [Ne]; rw [height_eq_zero_iff]
   intro hmin
 exact absurd hx notMem_nonZeroDivisors_of_mem_mem_minimalPrimes
-    (hq.1.2 <| Ideal.mem_span_singleton.mpr <| 
+    (hq.1.2 <| Ideal.mem_span_singleton.mpr <| dvd_refl x) hmin
+
+@[simp]
 
 Depends on / 依赖: Ideal.height_eq_inf_minimalPrimes, Ideal.mem_span_singleton.mpr, IsPrime, Order.one_le_iff_ne_zero, absurd, dvd_refl, height_eq_inf_minimalPrimes, height_eq_zero_iff, hq.isPrime, isPrime, mem_span_singleton, notMem_nonZeroDivisors_of_mem_mem_minimalPrimes, one_le_iff_ne_zero, q.IsPrime
 -/
@@ -1052,7 +1068,9 @@ theorem Ideal.isMaximal_of_height_eq_ringKrullDim
   · have h1 := Ideal.height_strict_mono_of_isPrime hM'
     have h2 := e ▸ M.height_le_ringKrullDim_of_ne_top hM.ne_top
     simp [← not_lt, h1] at h2
-  · exa
+  · exact hM' ▸ hM
+
+@[deprecated "Use `Ideal.isMaximal_of_height_eq_ringKrullDim` instead." (since := "2026-04-02")]
 
 中文:
 定理 理想.isMaximal_of_height_eq_ringKrullDim
@@ -1064,7 +1082,9 @@ theorem Ideal.isMaximal_of_height_eq_ringKrullDim
   · have h1 := Ideal.height_strict_mono_of_isPrime hM'
     have h2 := e ▸ M.height_le_ringKrullDim_of_ne_top hM.ne_top
     simp [← not_lt, h1] at h2
-  · exa
+  · exact hM' ▸ hM
+
+@[deprecated "Use `Ideal.isMaximal_of_height_eq_ringKrullDim` instead." (since := "2026-04-02")]
 
 Depends on / 依赖: Ideal.IsPrime.ne_top, Ideal.exists_le_maximal, Ideal.height_strict_mono_of_isPrime, IsPrime, M.height_le_ringKrullDim_of_ne_top, exists_le_maximal, hM.ne_top, height_le_ringKrullDim_of_ne_top, height_strict_mono_of_isPrime, lt_or_eq_of_le, ne_top, not_lt
 -/
@@ -1252,7 +1272,7 @@ lemma Ideal.height_le_iff_covBy
     obtain ⟨⟨x, hx⟩, hqx, hxp⟩ :=
       @exists_le_covBy_of_lt { I : Ideal R // I.IsPrime } ⟨q, hq⟩ ⟨p, ‹_›⟩ _ _ e
     exact (Ideal.height_mono hqx).trans_lt
-      (H _ hx hxp.1 (fun I hI e => hxp.
+      (H _ hx hxp.1 (fun I hI e => hxp.2 (show Subtype.mk x hx < ⟨I, hI⟩ from e)))
 
 中文:
 引理 理想.height_le_iff_covBy
@@ -1266,7 +1286,7 @@ lemma Ideal.height_le_iff_covBy
     obtain ⟨⟨x, hx⟩, hqx, hxp⟩ :=
       @exists_le_covBy_of_lt { I : Ideal R // I.IsPrime } ⟨q, hq⟩ ⟨p, ‹_›⟩ _ _ e
     exact (Ideal.height_mono hqx).trans_lt
-      (H _ hx hxp.1 (fun I hI e => hxp.
+      (H _ hx hxp.1 (fun I hI e => hxp.2 (show Subtype.mk x hx < ⟨I, hI⟩ from e)))
 
 Depends on / 依赖: I.IsPrime, Ideal.height_le_iff, Ideal.height_mono, IsPrime, Subtype, Subtype.mk, exists_le_covBy_of_lt, height_le_iff, height_mono, trans_lt
 -/
@@ -1324,7 +1344,11 @@ lemma RingEquiv.height_comap
   · refine .ofIff ?_
     rw [← Ideal.comap_coe]; rw [Ideal.comap_minimalPrimes_eq_of_surjective (f := (↑e : R ->+* S)) e.surjective]
     exact e.idealComapOrderIso.injective.mem_set_image.symm
-  
+  · have : J.IsPrime := h.isPrime
+    simp only [EquivLike.coe_coe, RingEquiv.idealComapOrderIso_apply,
+      ← Ideal.height_eq_primeHeight, RingEquiv.height_comap_of_isPrime]
+
+@[simp]
 
 中文:
 引理 环等价.height_comap
@@ -1334,7 +1358,11 @@ lemma RingEquiv.height_comap
   · refine .ofIff ?_
     rw [← Ideal.comap_coe]; rw [Ideal.comap_minimalPrimes_eq_of_surjective (f := (↑e : R ->+* S)) e.surjective]
     exact e.idealComapOrderIso.injective.mem_set_image.symm
-  
+  · have : J.IsPrime := h.isPrime
+    simp only [EquivLike.coe_coe, RingEquiv.idealComapOrderIso_apply,
+      ← Ideal.height_eq_primeHeight, RingEquiv.height_comap_of_isPrime]
+
+@[simp]
 
 Depends on / 依赖: Equiv.iInf_congr, EquivLike, EquivLike.coe_coe, Ideal.comap_coe, Ideal.comap_minimalPrimes_eq_of_surjective, Ideal.height_eq_primeHeight, IsPrime, J.IsPrime, RingEquiv, RingEquiv.height_comap_of_isPrime, RingEquiv.idealComapOrderIso_apply, coe_coe, comap_coe, comap_minimalPrimes_eq_of_surjective, e.idealComapOrderIso, e.idealComapOrderIso.injective.mem_set_image.symm, e.surjective, h.isPrime, height_comap_of_isPrime, height_eq_primeHeight
 -/
@@ -1451,7 +1479,18 @@ theorem IsLocalization.height_under_eq_of_isPrime
   proof: by
   rw [eq_comm]; rw [Ideal.height_eq_primeHeight]; rw [Ideal.height_eq_primeHeight]; rw [Ideal.primeHeight]; rw [Ideal.primeHeight]; rw [← WithBot.coe_inj]; rw [Order.height_eq_krullDim_Iic]; rw [Order.height_eq_krullDim_Iic]
   let e := IsLocalization.orderIsoOfPrime S A
-  have H (p : Ideal R) (hp
+  have H (p : Ideal R) (hp : p <= J.comap (algebraMap R A)) : Disjoint (S : Set R) p :=
+    Set.disjoint_of_subset_right hp (e ⟨_, ‹J.IsPrime›⟩).2.2
+  exact Order.krullDim_eq_of_orderIso
+    { toFun I := ⟨⟨I.1.1.comap (algebraMap R A), (e ⟨_, I.1.2⟩).2.1⟩, Ideal.comap_mono I.2⟩
+      invFun I := ⟨⟨_, (e.symm ⟨_, I.1.2, H _ I.2⟩).2⟩, Ideal.map_le_iff_le_comap.mpr I.2⟩
+left_inv I := Subtype.ext PrimeSpectrum.ext_iff.mpr
+        congrArg (fun I => I.1) (e.left_inv ⟨_, I.1.2⟩)
+right_inv I := Subtype.ext PrimeSpectrum.ext_iff.mpr
+        congrArg (fun I => I.1) (e.right_inv ⟨_, I.1.2, H _ I.2⟩)
+      map_rel_iff' {I₁ I₂} := @RelIso.map_rel_iff _ _ _ _ e ⟨_, I₁.1.2⟩ ⟨_, I₂.1.2⟩ }
+
+@[deprecated "Use `Ideal.height_ne_top_of_isPrime` instead." (since := "2026-04-04")]
 
 中文:
 定理 是Localization.height_under_eq_of_isPrime
@@ -1459,7 +1498,18 @@ theorem IsLocalization.height_under_eq_of_isPrime
   证明: by
   rw [eq_comm]; rw [Ideal.height_eq_primeHeight]; rw [Ideal.height_eq_primeHeight]; rw [Ideal.primeHeight]; rw [Ideal.primeHeight]; rw [← WithBot.coe_inj]; rw [Order.height_eq_krullDim_Iic]; rw [Order.height_eq_krullDim_Iic]
   let e := IsLocalization.orderIsoOfPrime S A
-  have H (p : Ideal R) (hp
+  have H (p : Ideal R) (hp : p <= J.comap (algebraMap R A)) : Disjoint (S : Set R) p :=
+    Set.disjoint_of_subset_right hp (e ⟨_, ‹J.IsPrime›⟩).2.2
+  exact Order.krullDim_eq_of_orderIso
+    { toFun I := ⟨⟨I.1.1.comap (algebraMap R A), (e ⟨_, I.1.2⟩).2.1⟩, Ideal.comap_mono I.2⟩
+      invFun I := ⟨⟨_, (e.symm ⟨_, I.1.2, H _ I.2⟩).2⟩, Ideal.map_le_iff_le_comap.mpr I.2⟩
+left_inv I := Subtype.ext PrimeSpectrum.ext_iff.mpr
+        congrArg (fun I => I.1) (e.left_inv ⟨_, I.1.2⟩)
+right_inv I := Subtype.ext PrimeSpectrum.ext_iff.mpr
+        congrArg (fun I => I.1) (e.right_inv ⟨_, I.1.2, H _ I.2⟩)
+      map_rel_iff' {I₁ I₂} := @RelIso.map_rel_iff _ _ _ _ e ⟨_, I₁.1.2⟩ ⟨_, I₂.1.2⟩ }
+
+@[deprecated "Use `Ideal.height_ne_top_of_isPrime` instead." (since := "2026-04-04")]
 -/
 private theorem IsLocalization.height_under_eq_of_isPrime (S : Submonoid R) {A : Type*} [CommRing A]
     [Algebra R A] [IsLocalization S A] (J : Ideal A) [J.IsPrime] :
@@ -1511,7 +1561,8 @@ theorem IsLocalization.height_under
   have := hp.isPrime
   exact IsLocalization.height_under_eq_of_isPrime S _
 
-@[deprecated (since
+@[deprecated (since := "2026-04-09")] alias IsLocalization.height_comap :=
+  IsLocalization.height_under
 
 中文:
 定理 是Localization.height_under
@@ -1523,7 +1574,8 @@ theorem IsLocalization.height_under
   have := hp.isPrime
   exact IsLocalization.height_under_eq_of_isPrime S _
 
-@[deprecated (since
+@[deprecated (since := "2026-04-09")] alias IsLocalization.height_comap :=
+  IsLocalization.height_under
 
 Depends on / 依赖: IsLocalization, IsLocalization.height_under_eq_of_isPrime, IsLocalization.minimalPrimes_comap, J.comap, J.height_eq_inf_minimalPrimes, height_eq_inf_minimalPrimes, height_under_eq_of_isPrime, hp.isPrime, iInf_congr, iInf_image, isPrime, minimalPrimes_comap
 -/
@@ -1574,7 +1626,12 @@ lemma IsLocalization.height_map_of_disjoint
   have : P.IsPrime := isPrime_of_isPrime_disjoint M S p ‹_› h
   have := isLocalization_isLocalization_atPrime_isLocalization (M := M) (Localization.AtPrime P) P
   simp_rw [P, under_map_of_isPrime_disjoint M S _ h] at this
-  have := ringKrullDim_eq_of_ringEquiv (I
+  have := ringKrullDim_eq_of_ringEquiv (IsLocalization.algEquiv p.primeCompl
+    (Localization.AtPrime P) (Localization.AtPrime p)).toRingEquiv
+  rw [AtPrime.ringKrullDim_eq_height P]; rw [AtPrime.ringKrullDim_eq_height p] at this
+  exact WithBot.coe_eq_coe.mp this
+
+@[deprecated "Use `mem_minimalPrimes_of_height_le` instead." (since := "2026-04-02")]
 
 中文:
 引理 是Localization.height_map_of_disjoint
@@ -1584,7 +1641,12 @@ lemma IsLocalization.height_map_of_disjoint
   have : P.IsPrime := isPrime_of_isPrime_disjoint M S p ‹_› h
   have := isLocalization_isLocalization_atPrime_isLocalization (M := M) (Localization.AtPrime P) P
   simp_rw [P, under_map_of_isPrime_disjoint M S _ h] at this
-  have := ringKrullDim_eq_of_ringEquiv (I
+  have := ringKrullDim_eq_of_ringEquiv (IsLocalization.algEquiv p.primeCompl
+    (Localization.AtPrime P) (Localization.AtPrime p)).toRingEquiv
+  rw [AtPrime.ringKrullDim_eq_height P]; rw [AtPrime.ringKrullDim_eq_height p] at this
+  exact WithBot.coe_eq_coe.mp this
+
+@[deprecated "Use `mem_minimalPrimes_of_height_le` instead." (since := "2026-04-02")]
 
 Depends on / 依赖: AtPrime, AtPrime.ringKrullDim_eq_height, IsLocalization, IsLocalization.algEquiv, IsPrime, Localization, Localization.AtPrime, P.IsPrime, WithBot, WithBot.coe_eq_coe.m, algEquiv, algebraMap, coe_eq_coe, isLocalization_isLocalization_atPrime_isLocalization, isPrime_of_isPrime_disjoint, p.map, p.primeCompl, primeCompl, ringKrullDim_eq_height, ringKrullDim_eq_of_ringEquiv
 -/
@@ -1636,7 +1698,40 @@ lemma exists_spanRank_le_and_le_height_of_le_height
     obtain ⟨J, h₁, h₂, h₃⟩ := ih ((WithTop.coe_le_coe.mpr r.le_succ).trans hr)
     let S := { K | K in J.minimalPrimes ∧ Ideal.height K = r }
     have hS : Set.Finite S := Set.Finite.subset J.finite_minimalPrimes_of_isNoetherianRing
-      (fun 
+      (fun _ h => h.1)
+    have : ¬(I : Set R) subseteq ⋃ K in hS.toFinset, (K : Set R) := by
+      refine (Ideal.subset_union_prime ⊥ ⊥ ?_).not.mpr ?_
+      · rintro K hK - -
+        rw [Set.Finite.mem_toFinset] at hK
+        exact hK.1.isPrime
+      · push Not
+        intro K hK e
+        have := hr.trans (Ideal.height_mono e)
+        rw [Set.Finite.mem_toFinset] at hK
+        rw [hK.2]; rw [← not_lt] at this
+        norm_cast at this
+        exact this r.lt_succ_self
+    simp_rw [Set.not_subset, Set.mem_iUnion, not_exists, Set.Finite.mem_toFinset] at this
+    obtain ⟨x, hx₁, hx₂⟩ := this
+    refine ⟨J ⊔ Ideal.span {x}, sup_le h₁ ?_, ?_, ?_⟩
+    · rwa [Ideal.span_le, Set.singleton_subset_iff]
+    · apply Submodule.spanRank_sup_le_sum_spanRank.trans
+      push_cast
+      exact add_le_add h₂ ((Submodule.spanRank_span_le_card _).trans (by simp))
+    · refine le_iInf₂ (fun p hp => ?_)
+      have := hp.isPrime
+      rw [← p.height_eq_primeHeight]
+      by_cases h : p.height = ⊤
+      · exact le_of_le_of_eq le_top h.symm
+      have : p.FiniteHeight := ⟨Or.inr h⟩
+      have := Ideal.height_mono (le_sup_left.trans hp.le)
+      suffices h : (r : Nat∞) != p.height by
+        exact Order.add_one_le_of_lt (lt_of_le_of_ne (h₃.trans this) h)
+      intro e
+      apply hx₂ p
+      · refine ⟨mem_minimalPrimes_of_height_le (le_sup_left.trans hp.le) (e.symm.trans_le h₃),
+          e.symm⟩
+· apply hp.le Ideal.mem_sup_right mem_span_singleton_self x
 
 中文:
 引理 存在_spanRank_le_and_le_height_of_le_height
@@ -1648,7 +1743,40 @@ lemma exists_spanRank_le_and_le_height_of_le_height
     obtain ⟨J, h₁, h₂, h₃⟩ := ih ((WithTop.coe_le_coe.mpr r.le_succ).trans hr)
     let S := { K | K in J.minimalPrimes ∧ Ideal.height K = r }
     have hS : Set.Finite S := Set.Finite.subset J.finite_minimalPrimes_of_isNoetherianRing
-      (fun 
+      (fun _ h => h.1)
+    have : ¬(I : Set R) subseteq ⋃ K in hS.toFinset, (K : Set R) := by
+      refine (Ideal.subset_union_prime ⊥ ⊥ ?_).not.mpr ?_
+      · rintro K hK - -
+        rw [Set.Finite.mem_toFinset] at hK
+        exact hK.1.isPrime
+      · push Not
+        intro K hK e
+        have := hr.trans (Ideal.height_mono e)
+        rw [Set.Finite.mem_toFinset] at hK
+        rw [hK.2]; rw [← not_lt] at this
+        norm_cast at this
+        exact this r.lt_succ_self
+    simp_rw [Set.not_subset, Set.mem_iUnion, not_exists, Set.Finite.mem_toFinset] at this
+    obtain ⟨x, hx₁, hx₂⟩ := this
+    refine ⟨J ⊔ Ideal.span {x}, sup_le h₁ ?_, ?_, ?_⟩
+    · rwa [Ideal.span_le, Set.singleton_subset_iff]
+    · apply Submodule.spanRank_sup_le_sum_spanRank.trans
+      push_cast
+      exact add_le_add h₂ ((Submodule.spanRank_span_le_card _).trans (by simp))
+    · refine le_iInf₂ (fun p hp => ?_)
+      have := hp.isPrime
+      rw [← p.height_eq_primeHeight]
+      by_cases h : p.height = ⊤
+      · exact le_of_le_of_eq le_top h.symm
+      have : p.FiniteHeight := ⟨Or.inr h⟩
+      have := Ideal.height_mono (le_sup_left.trans hp.le)
+      suffices h : (r : Nat∞) != p.height by
+        exact Order.add_one_le_of_lt (lt_of_le_of_ne (h₃.trans this) h)
+      intro e
+      apply hx₂ p
+      · refine ⟨mem_minimalPrimes_of_height_le (le_sup_left.trans hp.le) (e.symm.trans_le h₃),
+          e.symm⟩
+· apply hp.le Ideal.mem_sup_right mem_span_singleton_self x
 
 Depends on / 依赖: Finite, Ideal.height, Ideal.subset_union_prime, J.finite_minimalPrimes_of_isNoetherianRing, J.minimalPrimes, Set.Finite, Set.Finite.mem_toFinset, Set.Finite.subset, WithTop, WithTop.coe_le_coe.mpr, coe_le_coe, finite_minimalPrimes_of_isNoetherianRing, hS.toFinset, height, isPrime, le_succ, mem_toFinset, minimalPrimes, not.mpr, r.le_succ
 -/
@@ -1708,7 +1836,14 @@ lemma Ideal.sup_height_eq_ringKrullDim
     by_cases h : I = ⊤
     · simp [h, ringKrullDim_nonneg_of_nontrivial]
     · simp [h, height_le_ringKrullDim_of_ne_top]
-  · refine iSup_le fun p => WithBot.coe_le_coe.mpr (le_trans (b := p.last.a
+  · refine iSup_le fun p => WithBot.coe_le_coe.mpr (le_trans (b := p.last.asIdeal.height) ?_ ?_)
+    · rw [height_eq_primeHeight]
+      apply le_trans (b := ⨆ (_ : p.last <= p.last), ↑p.length)
+      · exact le_iSup (fun _ => (↑p.length : Nat∞)) le_rfl
+      · exact le_iSup (fun p' => (⨆ _, p'.length : Nat∞)) p
+    · apply le_trans (b := ⨆ (_ : (p.last).asIdeal != ⊤), p.last.asIdeal.height)
+      · exact le_iSup_of_le p.last.isPrime.ne_top' le_rfl
+      · exact le_iSup (fun I => ⨆ _, I.height) p.last.asIdeal
 
 中文:
 引理 理想.sup_height_eq_ringKrullDim
@@ -1720,7 +1855,14 @@ lemma Ideal.sup_height_eq_ringKrullDim
     by_cases h : I = ⊤
     · simp [h, ringKrullDim_nonneg_of_nontrivial]
     · simp [h, height_le_ringKrullDim_of_ne_top]
-  · refine iSup_le fun p => WithBot.coe_le_coe.mpr (le_trans (b := p.last.a
+  · refine iSup_le fun p => WithBot.coe_le_coe.mpr (le_trans (b := p.last.asIdeal.height) ?_ ?_)
+    · rw [height_eq_primeHeight]
+      apply le_trans (b := ⨆ (_ : p.last <= p.last), ↑p.length)
+      · exact le_iSup (fun _ => (↑p.length : Nat∞)) le_rfl
+      · exact le_iSup (fun p' => (⨆ _, p'.length : Nat∞)) p
+    · apply le_trans (b := ⨆ (_ : (p.last).asIdeal != ⊤), p.last.asIdeal.height)
+      · exact le_iSup_of_le p.last.isPrime.ne_top' le_rfl
+      · exact le_iSup (fun I => ⨆ _, I.height) p.last.asIdeal
 
 Depends on / 依赖: WithBot, WithBot.coe_iSup, WithBot.coe_le_coe.mpr, asIdeal, coe_iSup, coe_le_coe, height, height_eq_primeHeight, height_le_ringKrullDim_of_ne_top, iSup_le, le_antisymm, le_iSup, le_rfl, le_top, le_trans, length, p.last, p.last.asIdeal.height, p.length, ringKrullDim_nonneg_of_nontrivial
 -/
@@ -1754,7 +1896,12 @@ lemma Ideal.sup_isPrime_height_eq_ringKrullDim
   · refine iSup_mono' fun I => ?_
     by_cases I_top : I = ⊤
     · exact ⟨⊥, by simp [I_top]⟩
-    · obtain ⟨P, hP⟩ := Set.nonempty_coe_sort.mp (no
+    · obtain ⟨P, hP⟩ := Set.nonempty_coe_sort.mp (nonempty_minimalPrimes I_top)
+      refine ⟨P, iSup_pos (α := Nat∞) I_top ▸ le_iSup_of_le (hP.left.left) ?_⟩
+      have := hP.isPrime
+      exact iInf_le_of_le P (iInf_le_of_le hP (ge_of_eq (Ideal.height_eq_primeHeight P)))
+
+@[deprecated "Use `Ideal.sup_height_isPrime_eq_ringKrullDim` instead." (since := "2026-04-02")]
 
 中文:
 引理 理想.sup_isPrime_height_eq_ringKrullDim
@@ -1766,7 +1913,12 @@ lemma Ideal.sup_isPrime_height_eq_ringKrullDim
   · refine iSup_mono' fun I => ?_
     by_cases I_top : I = ⊤
     · exact ⟨⊥, by simp [I_top]⟩
-    · obtain ⟨P, hP⟩ := Set.nonempty_coe_sort.mp (no
+    · obtain ⟨P, hP⟩ := Set.nonempty_coe_sort.mp (nonempty_minimalPrimes I_top)
+      refine ⟨P, iSup_pos (α := Nat∞) I_top ▸ le_iSup_of_le (hP.left.left) ?_⟩
+      have := hP.isPrime
+      exact iInf_le_of_le P (iInf_le_of_le hP (ge_of_eq (Ideal.height_eq_primeHeight P)))
+
+@[deprecated "Use `Ideal.sup_height_isPrime_eq_ringKrullDim` instead." (since := "2026-04-02")]
 
 Depends on / 依赖: I_top, Ideal.height_eq_primeHeight, Set.nonempty_coe_sort.mp, WithBot, WithBot.coe_inj, coe_inj, ge_of_eq, hI.ne_top, hP.isPrime, hP.left.left, height_eq_primeHeight, iInf_le_of_le, iSup_mono, iSup_pos, isPrime, le_antisymm, le_iSup_of_le, le_refl, ne_top, nonempty_coe_sort
 -/
@@ -1816,6 +1968,10 @@ lemma Ideal.sup_isMaximal_height_eq_ringKrullDim
   · refine iSup_mono' fun I => ?_
     obtain rfl | I_top := eq_or_ne I ⊤
     · exact ⟨⊥, by grind [iSup_le_iff, Ideal.IsPrime.ne_top]⟩
+    · obtain ⟨M, hM, hIM⟩ := exists_le_maximal I I_top
+      exact ⟨M, iSup_mono' (fun hI => ⟨hM, height_mono hIM⟩)⟩
+
+@[deprecated "Use `Ideal.sup_height_of_maximal_eq_ringKrullDim` instead." (since := "2026-04-02")]
 
 中文:
 引理 理想.sup_isMaximal_height_eq_ringKrullDim
@@ -1827,6 +1983,10 @@ lemma Ideal.sup_isMaximal_height_eq_ringKrullDim
   · refine iSup_mono' fun I => ?_
     obtain rfl | I_top := eq_or_ne I ⊤
     · exact ⟨⊥, by grind [iSup_le_iff, Ideal.IsPrime.ne_top]⟩
+    · obtain ⟨M, hM, hIM⟩ := exists_le_maximal I I_top
+      exact ⟨M, iSup_mono' (fun hI => ⟨hM, height_mono hIM⟩)⟩
+
+@[deprecated "Use `Ideal.sup_height_of_maximal_eq_ringKrullDim` instead." (since := "2026-04-02")]
 
 Depends on / 依赖: I_top, Ideal.IsPrime.ne_top, Ideal.sup_height_eq_ringKrullDim, IsPrime, WithBot, WithBot.coe_inj, coe_inj, eq_or_ne, exists_le_maximal, hI.isPrime.ne_top, height_mono, iSup_le_iff, iSup_mono, isPrime, le_antisymm, le_rfl, ne_top, sup_height_eq_ringKrullDim
 -/
@@ -1920,7 +2080,8 @@ lemma Ideal.eq_span_singleton_of_height_eq_one
   by_contra! hne
   apply hxp.ne_zero
   rw [← span_singleton_eq_bot]; rw [← height_eq_zero_iff_eq_bot]; rw [← Order.lt_one_iff]; rw [← h1]
-  refine height_stri
+  refine height_strict_mono_of_isPrime_of_isPrime (lt_of_le_of_ne ?_ hne.symm)
+  simp only [p.span_singleton_le_iff_mem, hx]
 
 中文:
 引理 理想.eq_span_singleton_of_height_eq_one
@@ -1931,7 +2092,8 @@ lemma Ideal.eq_span_singleton_of_height_eq_one
   by_contra! hne
   apply hxp.ne_zero
   rw [← span_singleton_eq_bot]; rw [← height_eq_zero_iff_eq_bot]; rw [← Order.lt_one_iff]; rw [← h1]
-  refine height_stri
+  refine height_strict_mono_of_isPrime_of_isPrime (lt_of_le_of_ne ?_ hne.symm)
+  simp only [p.span_singleton_le_iff_mem, hx]
 
 Depends on / 依赖: FiniteHeight, IsPrime, Order.lt_one_iff, finiteHeight_iff, height_eq_zero_iff_eq_bot, height_strict_mono_of_isPrime_of_isPrime, hne.symm, hxp.ne_zero, lt_of_le_of_ne, lt_one_iff, ne_zero, p.FiniteHeight, p.finiteHeight_iff, p.span_singleton_le_iff_mem, span_singleton_eq_bot, span_singleton_le_iff_mem, span_singleton_prime
 -/

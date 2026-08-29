@@ -384,7 +384,8 @@ lemma eccent_le_one_iff
   · intro hall
     rw [eccent_le_iff]
     intro v
-    rw [edi
+    rw [edist_le_one_iff_adj_or_eq]
+    exact or_iff_not_imp_right.mpr (hall v)
 
 中文:
 引理 eccent_le_one_iff
@@ -399,7 +400,8 @@ lemma eccent_le_one_iff
   · intro hall
     rw [eccent_le_iff]
     intro v
-    rw [edi
+    rw [edist_le_one_iff_adj_or_eq]
+    exact or_iff_not_imp_right.mpr (hall v)
 
 Depends on / 依赖: G.edist, G.edist_pos_of_ne, Order.one_le_iff_pos.mpr, eccent_le_iff, edist_eq_one_iff_adj, edist_eq_one_iff_adj.mp, edist_le_eccent, edist_le_eccent.trans, edist_le_one_iff_adj_or_eq, edist_pos_of_ne, le_antisymm, one_le_iff_pos, or_iff_not_imp_right, or_iff_not_imp_right.mpr
 -/
@@ -1084,7 +1086,7 @@ lemma ediam_le_two_mul_eccent
       <= G.edist v u + G.edist u w := G.edist_triangle
     _ = G.edist u v + G.edist u w := by rw [edist_comm]
     _ <= G.eccent u + G.eccent u := add_le_add edist_le_eccent edist_le_eccent
-    _ = 2 * G.eccent u := (two_mul _).sy
+    _ = 2 * G.eccent u := (two_mul _).symm
 
 中文:
 引理 ediam_le_two_mul_eccent
@@ -1097,7 +1099,7 @@ lemma ediam_le_two_mul_eccent
       <= G.edist v u + G.edist u w := G.edist_triangle
     _ = G.edist u v + G.edist u w := by rw [edist_comm]
     _ <= G.eccent u + G.eccent u := add_le_add edist_le_eccent edist_le_eccent
-    _ = 2 * G.eccent u := (two_mul _).sy
+    _ = 2 * G.eccent u := (two_mul _).symm
 
 Depends on / 依赖: G.eccent, G.edist, G.edist_triangle, add_le_add, eccent, ediam_le_of_edist_le, edist_comm, edist_le_eccent, edist_triangle, two_mul
 -/
@@ -1795,7 +1797,7 @@ lemma ediam_eq_top_iff_radius_eq_top
   obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
   have hdiam : G.ediam <= 2 * G.eccent w := ediam_le_two_mul_eccent w
 exact ne_top_of_lt lt_of_le_of_lt hdiam WithTop.mul_lt_top (ENat.natCast_lt_top 2)
-    lt_top_
+    lt_top_iff_ne_top.mpr (hw ▸ hr)
 
 中文:
 引理 ediam_eq_top_iff_radius_eq_top
@@ -1808,7 +1810,7 @@ exact ne_top_of_lt lt_of_le_of_lt hdiam WithTop.mul_lt_top (ENat.natCast_lt_top 
   obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
   have hdiam : G.ediam <= 2 * G.eccent w := ediam_le_two_mul_eccent w
 exact ne_top_of_lt lt_of_le_of_lt hdiam WithTop.mul_lt_top (ENat.natCast_lt_top 2)
-    lt_top_
+    lt_top_iff_ne_top.mpr (hw ▸ hr)
 
 Depends on / 依赖: ENat.natCast_lt_top, G.eccent, G.ediam, G.exists_eccent_eq_radius, WithTop, WithTop.mul_lt_top, contrapose, eccent, ediam_le_two_mul_eccent, eq_top_iff, eq_top_iff.mpr, exists_eccent_eq_radius, lt_of_le_of_lt, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, mul_lt_top, natCast_lt_top, ne_top_of_lt, radius_le_ediam
 -/
@@ -1835,7 +1837,9 @@ lemma ediam_le_two_mul_radius
     · simp [hdiam, ediam_eq_top_iff_radius_eq_top.mp hdiam]
     · obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
       obtain ⟨_, _, h⟩ := G.exists_edist_eq_ediam_of_ne_top hdiam
-      a
+      apply le_trans (h ▸ G.edist_triangle (v := w))
+      rw [two_mul]
+      exact hw ▸ add_le_add (G.edist_comm ▸ G.edist_le_eccent) G.edist_le_eccent
 
 中文:
 引理 ediam_le_two_mul_radius
@@ -1848,7 +1852,9 @@ lemma ediam_le_two_mul_radius
     · simp [hdiam, ediam_eq_top_iff_radius_eq_top.mp hdiam]
     · obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
       obtain ⟨_, _, h⟩ := G.exists_edist_eq_ediam_of_ne_top hdiam
-      a
+      apply le_trans (h ▸ G.edist_triangle (v := w))
+      rw [two_mul]
+      exact hw ▸ add_le_add (G.edist_comm ▸ G.edist_le_eccent) G.edist_le_eccent
 
 Depends on / 依赖: G.ediam, G.edist_comm, G.edist_le_eccent, G.edist_triangle, G.exists_eccent_eq_radius, G.exists_edist_eq_ediam_of_ne_top, add_le_add, ediam_eq_top_iff_radius_eq_top, ediam_eq_top_iff_radius_eq_top.mp, edist_comm, edist_le_eccent, edist_triangle, exists_eccent_eq_radius, exists_edist_eq_ediam_of_ne_top, isEmpty_or_nonempty, le_top, le_trans, radius_eq_top_of_isEmpty, two_mul
 -/
@@ -1879,7 +1885,9 @@ lemma radius_eq_ediam_iff
     have ediam_eq : G.ediam = e :=
       le_antisymm (iSup_le fun u => (h u).le) ((h Classical.ofNonempty) ▸ eccent_le_ediam)
     rw [ediam_eq]
-    
+    exact le_antisymm ((h Classical.ofNonempty) ▸ radius_le_eccent) (le_iInf fun u => (h u).ge)
+
+@[simp]
 
 中文:
 引理 radius_eq_ediam_iff
@@ -1893,7 +1901,9 @@ lemma radius_eq_ediam_iff
     have ediam_eq : G.ediam = e :=
       le_antisymm (iSup_le fun u => (h u).le) ((h Classical.ofNonempty) ▸ eccent_le_ediam)
     rw [ediam_eq]
-    
+    exact le_antisymm ((h Classical.ofNonempty) ▸ radius_le_eccent) (le_iInf fun u => (h u).ge)
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.ofNonempty, G.ediam, G.radius, eccent_le_ediam, ediam_eq, iSup_le, le_antisymm, le_iInf, ofNonempty, radius, radius_le_eccent
 -/
@@ -2030,7 +2040,7 @@ lemma center_eq_univ_iff_radius_eq_ediam
   · obtain ⟨e, h⟩ := h
     intro u hu
     rw [mem_center_iff]; rw [h u]
-    exact le_antisymm (le_iInf fun u => (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_
+    exact le_antisymm (le_iInf fun u => (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_eccent)
 
 中文:
 引理 center_eq_univ_iff_radius_eq_ediam
@@ -2043,7 +2053,7 @@ lemma center_eq_univ_iff_radius_eq_ediam
   · obtain ⟨e, h⟩ := h
     intro u hu
     rw [mem_center_iff]; rw [h u]
-    exact le_antisymm (le_iInf fun u => (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_
+    exact le_antisymm (le_iInf fun u => (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_eccent)
 
 Depends on / 依赖: Classical, Classical.ofNonempty, G.radius, Set.univ_subset_iff, le_antisymm, le_iInf, mem_center_iff, ofNonempty, radius, radius_eq_ediam_iff, radius_le_eccent, univ_subset_iff
 -/

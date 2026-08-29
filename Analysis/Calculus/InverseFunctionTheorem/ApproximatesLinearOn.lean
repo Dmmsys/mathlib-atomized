@@ -161,7 +161,7 @@ theorem approximatesLinearOn_iff_lipschitzOnWith
   simp only [this, lipschitzOnWith_iff_norm_sub_le, ApproximatesLinearOn]
 
 alias ⟨lipschitzOnWith, _root_.LipschitzOnWith.approximatesLinearOn⟩ :=
-  approximatesLinea
+  approximatesLinearOn_iff_lipschitzOnWith
 
 中文:
 定理 approximatesLinearOn_iff_lipschitzOnWith
@@ -172,7 +172,7 @@ alias ⟨lipschitzOnWith, _root_.LipschitzOnWith.approximatesLinearOn⟩ :=
   simp only [this, lipschitzOnWith_iff_norm_sub_le, ApproximatesLinearOn]
 
 alias ⟨lipschitzOnWith, _root_.LipschitzOnWith.approximatesLinearOn⟩ :=
-  approximatesLinea
+  approximatesLinearOn_iff_lipschitzOnWith
 
 Depends on / 依赖: ApproximatesLinearOn, Pi.sub_apply, lipschitzOnWith_iff_norm_sub_le, map_sub, sub_apply
 -/
@@ -288,7 +288,131 @@ theorem surjOn_closedBall_of_nonlinearRightInverse
       (mem_closedBall.1 hy).trans (mul_nonpos_of_nonpos_of_nonneg (by linarith) ε0)
     simp only [dist_le_zero] at this
     rw [this]
-  have If' : (0 : Real) < 
+  have If' : (0 : Real) < f'symm.nnnorm := by rw [← inv_pos]; exact (NNReal.coe_nonneg _).trans_lt hc
+  have Icf' : (c : Real) * f'symm.nnnorm < 1 := by rwa [inv_eq_one_div, lt_div_iff₀ If'] at hc
+  have Jcf' : (1 : Real) - c * f'symm.nnnorm != 0 := by apply ne_of_gt; linarith
+  /- We have to show that `y` can be written as `f x` for some `x ∈ closedBall b ε`.
+    The idea of the proof is to apply the Banach contraction principle to the map
+    `g : x ↦ x + f'symm (y - f x)`, as a fixed point of this map satisfies `f x = y`.
+    When `f'symm` is a genuine linear inverse, `g` is a contracting map. In our case, since `f'symm`
+    is nonlinear, this map is not contracting (it is not even continuous), but still the proof of
+    the contraction theorem holds: `uₙ = gⁿ b` is a Cauchy sequence, converging exponentially fast
+    to the desired point `x`. Instead of appealing to general results, we check this by hand.
+
+    The main point is that `f (u n)` becomes exponentially close to `y`, and therefore
+    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
+    bound on `dist (u n) b`, from which one checks that `u n` stays in the ball on which one has a
+    control. Therefore, the bound can be checked at the next step, and so on inductively.
+    -/
+  set g := fun x => x + f'symm (y - f x) with hg
+  set u := fun n : Nat => g^[n] b with hu
+  have usucc : forall n, u (n + 1) = g (u n) := by simp [hu, ← iterate_succ_apply' g _ b]
+  -- First bound: if `f z` is close to `y`, then `g z` is close to `z` (i.e., almost a fixed point).
+  have A : forall z, dist (g z) z <= f'symm.nnnorm * dist (f z) y := by
+    intro z
+    rw [dist_eq_norm]; rw [hg]; rw [add_sub_cancel_left]; rw [dist_eq_norm']
+    exact f'symm.bound _
+  -- Second bound: if `z` and `g z` are in the set with good control, then `f (g z)` becomes closer
+  -- to `y` than `f z` was (this uses the linear approximation property, and is the reason for the
+  -- choice of the formula for `g`).
+  have B :
+    forall z in closedBall b ε,
+      g z in closedBall b ε -> dist (f (g z)) y <= c * f'symm.nnnorm * dist (f z) y := by
+    intro z hz hgz
+    set v := f'symm (y - f z)
+    calc
+      dist (f (g z)) y = ‖f (z + v) - y‖ := by rw [dist_eq_norm]
+      _ = ‖f (z + v) - f z - f' v + f' v - (y - f z)‖ := by congr 1; abel
+      _ = ‖f (z + v) - f z - f' (z + v - z)‖ := by
+        simp only [v, ContinuousLinearMap.NonlinearRightInverse.right_inv, add_sub_cancel_left,
+          sub_add_cancel]
+      _ <= c * ‖z + v - z‖ := hf _ (hε hgz) _ (hε hz)
+      _ <= c * (f'symm.nnnorm * dist (f z) y) := by
+        gcongr
+        simpa [dist_eq_norm'] using f'symm.bound (y - f z)
+      _ = c * f'symm.nnnorm * dist (f z) y := by ring
+  -- Third bound: a complicated bound on `dist w b` (that will show up in the induction) is enough
+  -- to check that `w` is in the ball on which one has controls. Will be used to check that `u n`
+  -- belongs to this ball for all `n`.
+  have C : forall (n : Nat) (w : E), dist w b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
+      (1 - c * f'symm.nnnorm) * dist (f b) y -> w in closedBall b ε := fun n w hw => by
+    apply hw.trans
+    rw [div_mul_eq_mul_div]; rw [div_le_iff₀]; swap; · linarith
+    calc
+      (f'symm.nnnorm : Real) * (1 - ((c : Real) * f'symm.nnnorm) ^ n) * dist (f b) y =
+          f'symm.nnnorm * dist (f b) y * (1 - ((c : Real) * f'symm.nnnorm) ^ n) := by
+        ring
+      _ <= f'symm.nnnorm * dist (f b) y * 1 := by
+        gcongr
+        rw [sub_le_self_iff]
+        positivity
+      _ <= f'symm.nnnorm * (((f'symm.nnnorm : Real)⁻¹ - c) * ε) := by
+        rw [mul_one]
+        gcongr
+        exact mem_closedBall'.1 hy
+      _ = ε * (1 - c * f'symm.nnnorm) := by field
+  /- Main inductive control: `f (u n)` becomes exponentially close to `y`, and therefore
+    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
+    bound on `dist (u n) b`, from which one checks that `u n` remains in the ball on which we
+    have estimates. -/
+  have D : forall n : Nat, dist (f (u n)) y <= ((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y ∧
+      dist (u n) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
+        (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := fun n => by
+    induction n with
+    | zero => simp [hu]
+    | succ n IH => ?_
+    rw [usucc]
+    have Ign : dist (g (u n)) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
+        (1 - c * f'symm.nnnorm) * dist (f b) y :=
+      calc
+        dist (g (u n)) b <= dist (g (u n)) (u n) + dist (u n) b := dist_triangle _ _ _
+        _ <= f'symm.nnnorm * dist (f (u n)) y + dist (u n) b := add_le_add (A _) le_rfl
+        _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) +
+              f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) / (1 - c * f'symm.nnnorm) *
+                dist (f b) y := by
+                  gcongr
+                  · exact IH.1
+                  · exact IH.2
+        _ = f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
+              (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := by
+          replace Jcf' : (1 : Real) - f'symm.nnnorm * c != 0 := by convert! Jcf' using 1; ring
+          simp [field, pow_succ, -mul_eq_mul_left_iff]
+          ring
+    refine ⟨?_, Ign⟩
+    calc
+      dist (f (g (u n))) y <= c * f'symm.nnnorm * dist (f (u n)) y :=
+        B _ (C n _ IH.2) (C n.succ _ Ign)
+      _ <= (c : Real) * f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
+        gcongr
+        apply IH.1
+      _ = ((c : Real) * f'symm.nnnorm) ^ n.succ * dist (f b) y := by simp only [pow_succ']; ring
+  -- Deduce from the inductive bound that `uₙ` is a Cauchy sequence, therefore converging.
+  have : CauchySeq u := by
+    refine cauchySeq_of_le_geometric _ (↑f'symm.nnnorm * dist (f b) y) Icf' fun n => ?_
+    calc
+      dist (u n) (u (n + 1)) = dist (g (u n)) (u n) := by rw [usucc, dist_comm]
+      _ <= f'symm.nnnorm * dist (f (u n)) y := A _
+      _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
+        gcongr
+        exact (D n).1
+      _ = f'symm.nnnorm * dist (f b) y * ((c : Real) * f'symm.nnnorm) ^ n := by ring
+  obtain ⟨x, hx⟩ : exists x, Tendsto u atTop (𝓝 x) := cauchySeq_tendsto_of_complete this
+  -- As all the `uₙ` belong to the ball `closedBall b ε`, so does their limit `x`.
+  have xmem : x in closedBall b ε :=
+    isClosed_closedBall.mem_of_tendsto hx (Eventually.of_forall fun n => C n _ (D n).2)
+  refine ⟨x, xmem, ?_⟩
+  -- It remains to check that `f x = y`. This follows from continuity of `f` on `closedBall b ε`
+  -- and from the fact that `f uₙ` is converging to `y` by construction.
+  have hx' : Tendsto u atTop (𝓝[closedBall b ε] x) := by
+    simp only [nhdsWithin, tendsto_inf, hx, true_and, tendsto_principal]
+    exact Eventually.of_forall fun n => C n _ (D n).2
+  have T1 : Tendsto (f ∘ u) atTop (𝓝 (f x)) :=
+    (hf.continuousOn.mono hε x xmem).tendsto.comp hx'
+  have T2 : Tendsto (f ∘ u) atTop (𝓝 y) := by
+    rw [tendsto_iff_dist_tendsto_zero]
+    refine squeeze_zero (fun _ => dist_nonneg) (fun n => (D n).1) ?_
+    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) Icf').mul tendsto_const_nhds
+  exact tendsto_nhds_unique T1 T2
 
 中文:
 定理 surjOn_closedBall_of_nonlinearRightInverse
@@ -300,7 +424,131 @@ theorem surjOn_closedBall_of_nonlinearRightInverse
       (mem_closedBall.1 hy).trans (mul_nonpos_of_nonpos_of_nonneg (by linarith) ε0)
     simp only [dist_le_zero] at this
     rw [this]
-  have If' : (0 : Real) < 
+  have If' : (0 : Real) < f'symm.nnnorm := by rw [← inv_pos]; exact (NNReal.coe_nonneg _).trans_lt hc
+  have Icf' : (c : Real) * f'symm.nnnorm < 1 := by rwa [inv_eq_one_div, lt_div_iff₀ If'] at hc
+  have Jcf' : (1 : Real) - c * f'symm.nnnorm != 0 := by apply ne_of_gt; linarith
+  /- We have to show that `y` can be written as `f x` for some `x ∈ closedBall b ε`.
+    The idea of the proof is to apply the Banach contraction principle to the map
+    `g : x ↦ x + f'symm (y - f x)`, as a fixed point of this map satisfies `f x = y`.
+    When `f'symm` is a genuine linear inverse, `g` is a contracting map. In our case, since `f'symm`
+    is nonlinear, this map is not contracting (it is not even continuous), but still the proof of
+    the contraction theorem holds: `uₙ = gⁿ b` is a Cauchy sequence, converging exponentially fast
+    to the desired point `x`. Instead of appealing to general results, we check this by hand.
+
+    The main point is that `f (u n)` becomes exponentially close to `y`, and therefore
+    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
+    bound on `dist (u n) b`, from which one checks that `u n` stays in the ball on which one has a
+    control. Therefore, the bound can be checked at the next step, and so on inductively.
+    -/
+  set g := fun x => x + f'symm (y - f x) with hg
+  set u := fun n : Nat => g^[n] b with hu
+  have usucc : forall n, u (n + 1) = g (u n) := by simp [hu, ← iterate_succ_apply' g _ b]
+  -- First bound: if `f z` is close to `y`, then `g z` is close to `z` (i.e., almost a fixed point).
+  have A : forall z, dist (g z) z <= f'symm.nnnorm * dist (f z) y := by
+    intro z
+    rw [dist_eq_norm]; rw [hg]; rw [add_sub_cancel_left]; rw [dist_eq_norm']
+    exact f'symm.bound _
+  -- Second bound: if `z` and `g z` are in the set with good control, then `f (g z)` becomes closer
+  -- to `y` than `f z` was (this uses the linear approximation property, and is the reason for the
+  -- choice of the formula for `g`).
+  have B :
+    forall z in closedBall b ε,
+      g z in closedBall b ε -> dist (f (g z)) y <= c * f'symm.nnnorm * dist (f z) y := by
+    intro z hz hgz
+    set v := f'symm (y - f z)
+    calc
+      dist (f (g z)) y = ‖f (z + v) - y‖ := by rw [dist_eq_norm]
+      _ = ‖f (z + v) - f z - f' v + f' v - (y - f z)‖ := by congr 1; abel
+      _ = ‖f (z + v) - f z - f' (z + v - z)‖ := by
+        simp only [v, ContinuousLinearMap.NonlinearRightInverse.right_inv, add_sub_cancel_left,
+          sub_add_cancel]
+      _ <= c * ‖z + v - z‖ := hf _ (hε hgz) _ (hε hz)
+      _ <= c * (f'symm.nnnorm * dist (f z) y) := by
+        gcongr
+        simpa [dist_eq_norm'] using f'symm.bound (y - f z)
+      _ = c * f'symm.nnnorm * dist (f z) y := by ring
+  -- Third bound: a complicated bound on `dist w b` (that will show up in the induction) is enough
+  -- to check that `w` is in the ball on which one has controls. Will be used to check that `u n`
+  -- belongs to this ball for all `n`.
+  have C : forall (n : Nat) (w : E), dist w b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
+      (1 - c * f'symm.nnnorm) * dist (f b) y -> w in closedBall b ε := fun n w hw => by
+    apply hw.trans
+    rw [div_mul_eq_mul_div]; rw [div_le_iff₀]; swap; · linarith
+    calc
+      (f'symm.nnnorm : Real) * (1 - ((c : Real) * f'symm.nnnorm) ^ n) * dist (f b) y =
+          f'symm.nnnorm * dist (f b) y * (1 - ((c : Real) * f'symm.nnnorm) ^ n) := by
+        ring
+      _ <= f'symm.nnnorm * dist (f b) y * 1 := by
+        gcongr
+        rw [sub_le_self_iff]
+        positivity
+      _ <= f'symm.nnnorm * (((f'symm.nnnorm : Real)⁻¹ - c) * ε) := by
+        rw [mul_one]
+        gcongr
+        exact mem_closedBall'.1 hy
+      _ = ε * (1 - c * f'symm.nnnorm) := by field
+  /- Main inductive control: `f (u n)` becomes exponentially close to `y`, and therefore
+    `dist (u (n+1)) (u n)` becomes exponentially small, making it possible to get an inductive
+    bound on `dist (u n) b`, from which one checks that `u n` remains in the ball on which we
+    have estimates. -/
+  have D : forall n : Nat, dist (f (u n)) y <= ((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y ∧
+      dist (u n) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) /
+        (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := fun n => by
+    induction n with
+    | zero => simp [hu]
+    | succ n IH => ?_
+    rw [usucc]
+    have Ign : dist (g (u n)) b <= f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
+        (1 - c * f'symm.nnnorm) * dist (f b) y :=
+      calc
+        dist (g (u n)) b <= dist (g (u n)) (u n) + dist (u n) b := dist_triangle _ _ _
+        _ <= f'symm.nnnorm * dist (f (u n)) y + dist (u n) b := add_le_add (A _) le_rfl
+        _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) +
+              f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n) / (1 - c * f'symm.nnnorm) *
+                dist (f b) y := by
+                  gcongr
+                  · exact IH.1
+                  · exact IH.2
+        _ = f'symm.nnnorm * (1 - ((c : Real) * f'symm.nnnorm) ^ n.succ) /
+              (1 - (c : Real) * f'symm.nnnorm) * dist (f b) y := by
+          replace Jcf' : (1 : Real) - f'symm.nnnorm * c != 0 := by convert! Jcf' using 1; ring
+          simp [field, pow_succ, -mul_eq_mul_left_iff]
+          ring
+    refine ⟨?_, Ign⟩
+    calc
+      dist (f (g (u n))) y <= c * f'symm.nnnorm * dist (f (u n)) y :=
+        B _ (C n _ IH.2) (C n.succ _ Ign)
+      _ <= (c : Real) * f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
+        gcongr
+        apply IH.1
+      _ = ((c : Real) * f'symm.nnnorm) ^ n.succ * dist (f b) y := by simp only [pow_succ']; ring
+  -- Deduce from the inductive bound that `uₙ` is a Cauchy sequence, therefore converging.
+  have : CauchySeq u := by
+    refine cauchySeq_of_le_geometric _ (↑f'symm.nnnorm * dist (f b) y) Icf' fun n => ?_
+    calc
+      dist (u n) (u (n + 1)) = dist (g (u n)) (u n) := by rw [usucc, dist_comm]
+      _ <= f'symm.nnnorm * dist (f (u n)) y := A _
+      _ <= f'symm.nnnorm * (((c : Real) * f'symm.nnnorm) ^ n * dist (f b) y) := by
+        gcongr
+        exact (D n).1
+      _ = f'symm.nnnorm * dist (f b) y * ((c : Real) * f'symm.nnnorm) ^ n := by ring
+  obtain ⟨x, hx⟩ : exists x, Tendsto u atTop (𝓝 x) := cauchySeq_tendsto_of_complete this
+  -- As all the `uₙ` belong to the ball `closedBall b ε`, so does their limit `x`.
+  have xmem : x in closedBall b ε :=
+    isClosed_closedBall.mem_of_tendsto hx (Eventually.of_forall fun n => C n _ (D n).2)
+  refine ⟨x, xmem, ?_⟩
+  -- It remains to check that `f x = y`. This follows from continuity of `f` on `closedBall b ε`
+  -- and from the fact that `f uₙ` is converging to `y` by construction.
+  have hx' : Tendsto u atTop (𝓝[closedBall b ε] x) := by
+    simp only [nhdsWithin, tendsto_inf, hx, true_and, tendsto_principal]
+    exact Eventually.of_forall fun n => C n _ (D n).2
+  have T1 : Tendsto (f ∘ u) atTop (𝓝 (f x)) :=
+    (hf.continuousOn.mono hε x xmem).tendsto.comp hx'
+  have T2 : Tendsto (f ∘ u) atTop (𝓝 y) := by
+    rw [tendsto_iff_dist_tendsto_zero]
+    refine squeeze_zero (fun _ => dist_nonneg) (fun n => (D n).1) ?_
+    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) Icf').mul tendsto_const_nhds
+  exact tendsto_nhds_unique T1 T2
 
 Depends on / 依赖: NNReal, NNReal.coe_nonneg, coe_nonneg, dist_le_zero, inv_eq_one_div, inv_pos, le_or_gt, mem_closedBall, mul_nonpos_of_nonpos_of_nonneg, nnnorm, symm.nnnorm, trans_lt
 -/
@@ -454,7 +702,7 @@ theorem open_image
   intro x hx
   rcases hs x hx with ⟨ε, ε0, hε⟩
   refine ⟨(f'symm.nnnorm⁻¹ - c) * ε, mul_pos (sub_pos.2 hc) ε0, ?_⟩
-  exact (hf.surjOn_closedBall_of_nonli
+  exact (hf.surjOn_closedBall_of_nonlinearRightInverse f'symm (le_of_lt ε0) hε).mono hε Subset.rfl
 
 中文:
 定理 open_image
@@ -466,7 +714,7 @@ theorem open_image
   intro x hx
   rcases hs x hx with ⟨ε, ε0, hε⟩
   refine ⟨(f'symm.nnnorm⁻¹ - c) * ε, mul_pos (sub_pos.2 hc) ε0, ?_⟩
-  exact (hf.surjOn_closedBall_of_nonli
+  exact (hf.surjOn_closedBall_of_nonlinearRightInverse f'symm (le_of_lt ε0) hε).mono hε Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, forall_mem_image, hf.surjOn_closedBall_of_nonlinearRightInverse, isOpen_discrete, isOpen_iff_mem_nhds, le_of_lt, mem_iff, mul_pos, nhds_basis_closedBall, nhds_basis_closedBall.mem_iff, nnnorm, sub_pos, surjOn_closedBall_of_nonlinearRightInverse, symm.nnnorm
 -/
@@ -627,7 +875,14 @@ theorem surjective
     exact surjective_to_subsingleton _
   · apply forall_of_forall_mem_closedBall (fun y : F => exists a, f a = y) (f 0) _
     have hc' : (0 : Real) < N⁻¹ - c := by rw [sub_pos]; exact hc
-    let p : R
+    let p : Real -> Prop := fun R => closedBall (f 0) R subseteq Set.range f
+    have hp : forallᶠ r : Real in atTop, p ((N⁻¹ - c) * r) := by
+      have hr : forallᶠ r : Real in atTop, 0 <= r := eventually_ge_atTop 0
+      refine hr.mono fun r hr => Subset.trans ?_ (image_subset_range f (closedBall 0 r))
+      refine hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse hr ?_
+      exact subset_univ _
+    refine ((tendsto_id.const_mul_atTop hc').frequently hp.frequently).mono ?_
+    exact fun R h y hy => h hy
 
 中文:
 定理 surjective
@@ -638,7 +893,14 @@ theorem surjective
     exact surjective_to_subsingleton _
   · apply forall_of_forall_mem_closedBall (fun y : F => exists a, f a = y) (f 0) _
     have hc' : (0 : Real) < N⁻¹ - c := by rw [sub_pos]; exact hc
-    let p : R
+    let p : Real -> Prop := fun R => closedBall (f 0) R subseteq Set.range f
+    have hp : forallᶠ r : Real in atTop, p ((N⁻¹ - c) * r) := by
+      have hr : forallᶠ r : Real in atTop, 0 <= r := eventually_ge_atTop 0
+      refine hr.mono fun r hr => Subset.trans ?_ (image_subset_range f (closedBall 0 r))
+      refine hf.surjOn_closedBall_of_nonlinearRightInverse f'.toNonlinearRightInverse hr ?_
+      exact subset_univ _
+    refine ((tendsto_id.const_mul_atTop hc').frequently hp.frequently).mono ?_
+    exact fun R h y hy => h hy
 -/
 protected theorem surjective [CompleteSpace E] (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
     (hc : Subsingleton E ∨ c < N⁻¹) : Surjective f := by
@@ -715,7 +977,19 @@ theorem to_inv
   rcases (mem_image _ _ _).1 hy with ⟨y', y's, rfl⟩
   rw [← Af x']; rw [← Af y']; rw [A.left_inv x's]; rw [A.left_inv y's]
   calc
-    ‖x' - y' - f'.
+    ‖x' - y' - f'.symm (A x' - A y')‖ <= N * ‖f' (x' - y' - f'.symm (A x' - A y'))‖ :=
+      (f' : E ->L[𝕜] F).bound_of_antilipschitz f'.antilipschitz _
+    _ = N * ‖A y' - A x' - f' (y' - x')‖ := by
+      congr 2
+      simp only [ContinuousLinearEquiv.apply_symm_apply, map_sub]
+      abel
+    _ <= N * (c * ‖y' - x'‖) := by gcongr; exact hf _ y's _ x's
+    _ <= N * (c * (((N⁻¹ - c)⁻¹ : Real>=0) * ‖A y' - A x'‖)) := by
+      gcongr
+      rw [← dist_eq_norm]; rw [← dist_eq_norm]
+      exact (hf.antilipschitz hc).le_mul_dist ⟨y', y's⟩ ⟨x', x's⟩
+    _ = (N * (N⁻¹ - c)⁻¹ * c : Real>=0) * ‖A x' - A y'‖ := by
+      simp only [norm_sub_rev, NNReal.coe_mul]; ring
 
 中文:
 定理 to_inv
@@ -727,7 +1001,19 @@ theorem to_inv
   rcases (mem_image _ _ _).1 hy with ⟨y', y's, rfl⟩
   rw [← Af x']; rw [← Af y']; rw [A.left_inv x's]; rw [A.left_inv y's]
   calc
-    ‖x' - y' - f'.
+    ‖x' - y' - f'.symm (A x' - A y')‖ <= N * ‖f' (x' - y' - f'.symm (A x' - A y'))‖ :=
+      (f' : E ->L[𝕜] F).bound_of_antilipschitz f'.antilipschitz _
+    _ = N * ‖A y' - A x' - f' (y' - x')‖ := by
+      congr 2
+      simp only [ContinuousLinearEquiv.apply_symm_apply, map_sub]
+      abel
+    _ <= N * (c * ‖y' - x'‖) := by gcongr; exact hf _ y's _ x's
+    _ <= N * (c * (((N⁻¹ - c)⁻¹ : Real>=0) * ‖A y' - A x'‖)) := by
+      gcongr
+      rw [← dist_eq_norm]; rw [← dist_eq_norm]
+      exact (hf.antilipschitz hc).le_mul_dist ⟨y', y's⟩ ⟨x', x's⟩
+    _ = (N * (N⁻¹ - c)⁻¹ * c : Real>=0) * ‖A x' - A y'‖ := by
+      simp only [norm_sub_rev, NNReal.coe_mul]; ring
 
 Depends on / 依赖: A.left_inv, ContinuousLinearEquiv, ContinuousLinearEquiv.app, antilipschitz, bound_of_antilipschitz, hf.toPartialEquiv, left_inv, mem_image, toPartialEquiv
 -/

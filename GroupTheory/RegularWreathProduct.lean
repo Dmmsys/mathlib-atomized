@@ -642,7 +642,7 @@ instance [Nonempty
       rw [← (h a b).2] at hh
       group at hh
       exact FaithfulSMul.eq_of_smul_eq_smul hh
- 
+    · exact (h a b).2
 
 中文:
 实例 [非空
@@ -657,7 +657,7 @@ instance [Nonempty
       rw [← (h a b).2] at hh
       group at hh
       exact FaithfulSMul.eq_of_smul_eq_smul hh
- 
+    · exact (h a b).2
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.eq_of_smul_eq_smul, Nonempty, Prod.forall, Prod.mk.injEq, eq_of_smul_eq_smul, mul_left_inj, smul_def
 -/
@@ -894,7 +894,7 @@ lemma iteratedWreathToPermHomInj
       have : FaithfulSMul (IteratedWreathProduct G n) (Fin n -> G) :=
         ⟨fun h => iteratedWreathToPermHomInj G n (Equiv.ext h)⟩
       exact ((Fin.succFunEquiv G n).symm.permCongrHom.toEquiv.comp_injective _).mpr
-        (RegularWreat
+        (RegularWreathProduct.toPermInj (IteratedWreathProduct G n) G (Fin n -> G))
 
 中文:
 引理 iteratedWreathToPermHomInj
@@ -903,7 +903,7 @@ lemma iteratedWreathToPermHomInj
       have : FaithfulSMul (IteratedWreathProduct G n) (Fin n -> G) :=
         ⟨fun h => iteratedWreathToPermHomInj G n (Equiv.ext h)⟩
       exact ((Fin.succFunEquiv G n).symm.permCongrHom.toEquiv.comp_injective _).mpr
-        (RegularWreat
+        (RegularWreathProduct.toPermInj (IteratedWreathProduct G n) G (Fin n -> G))
 
 Depends on / 依赖: MulAction, MulAction.compHom, compHom, iteratedWreathToPermHom
 -/
@@ -930,7 +930,11 @@ definition Sylow.mulEquivIteratedWreathProduct
     (Finite.equivFinOfCardEq (by rw [Nat.card_fun, Nat.card_fin, hG])).symm
   let f := e1.symm.permCongrHom.toMonoidHom.comp (iteratedWreathToPermHom G n)
   have hf : Function.Injective f :=
-    (e1.symm.permCongrHom.comp_injective
+    (e1.symm.permCongrHom.comp_injective _).mpr (iteratedWreathToPermHomInj G n)
+  let g := (MonoidHom.ofInjective hf).symm
+  let P' : Sylow p (Equiv.Perm α) := Sylow.ofCard (MonoidHom.range f) (by
+    rw [Nat.card_congr g.toEquiv]; rw [IteratedWreathProduct.card]; rw [hG]; rw [Nat.card_perm]; rw [hα]; rw [← Nat.multiplicity_eq_factorization hp.out (p ^ n).factorial_ne_zero]; rw [Nat.Prime.multiplicity_factorial_pow hp.out])
+  exact (P.equiv P').trans g
 
 中文:
 定义 Sylow.mulEquivIteratedWreathProduct
@@ -940,7 +944,11 @@ definition Sylow.mulEquivIteratedWreathProduct
     (Finite.equivFinOfCardEq (by rw [Nat.card_fun, Nat.card_fin, hG])).symm
   let f := e1.symm.permCongrHom.toMonoidHom.comp (iteratedWreathToPermHom G n)
   have hf : Function.Injective f :=
-    (e1.symm.permCongrHom.comp_injective
+    (e1.symm.permCongrHom.comp_injective _).mpr (iteratedWreathToPermHomInj G n)
+  let g := (MonoidHom.ofInjective hf).symm
+  let P' : Sylow p (Equiv.Perm α) := Sylow.ofCard (MonoidHom.range f) (by
+    rw [Nat.card_congr g.toEquiv]; rw [IteratedWreathProduct.card]; rw [hG]; rw [Nat.card_perm]; rw [hα]; rw [← Nat.multiplicity_eq_factorization hp.out (p ^ n).factorial_ne_zero]; rw [Nat.Prime.multiplicity_factorial_pow hp.out])
+  exact (P.equiv P').trans g
 
 Depends on / 依赖: Equiv.Perm, Finite, Finite.equivFinOfCardEq, Function, Function.Injective, Injective, IteratedWreathProduct, IteratedWreathProduct.car, MonoidHom, MonoidHom.ofInjective, MonoidHom.range, Nat.card_congr, Nat.card_fin, Nat.card_fun, Sylow.ofCard, card_congr, card_fin, card_fun, comp_injective, e1.symm.permCongrHom.comp_injective
 -/

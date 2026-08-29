@@ -146,7 +146,7 @@ definition IsCompatible.sectionPairwise
   · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.single i) _
   · rfl
   · exact (h i' i).symm
-  · exact ConcreteCategory.congr_hom (G.map_id <| op <| P
+  · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.pair i j) _
 
 中文:
 定义 IsCompatible.sectionPairwise
@@ -158,7 +158,7 @@ definition IsCompatible.sectionPairwise
   · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.single i) _
   · rfl
   · exact (h i' i).symm
-  · exact ConcreteCategory.congr_hom (G.map_id <| op <| P
+  · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.pair i j) _
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, G.map_id, Pairwise, Pairwise.diagram, Pairwise.pair, Pairwise.single, congr_hom, diagram, map_id, objPairwiseOfFamily, single
 -/
@@ -245,7 +245,11 @@ theorem isSheaf_iff_isSheafUniqueGluing_types
     Types.isLimit_iff, IsSheafUniqueGluing, isGluing_iff_pairwise]
   refine forall₂_congr fun ι U => ⟨fun h sf cpt => ?_, fun h s hs => ?_⟩
   · exact h _ cpt.sectionPairwise.prop
-  · specialize h (fun i => s <| op 
+  · specialize h (fun i => s <| op <| Pairwise.single i) fun i j =>
+      (hs <| op <| Pairwise.Hom.left i j).trans (hs <| op <| Pairwise.Hom.right i j).symm
+    convert! h; ext (i | ⟨i, j⟩)
+    · rfl
+    · exact (hs <| op <| Pairwise.Hom.left i j).symm
 
 中文:
 定理 isSheaf_iff_isSheafUniqueGluing_types
@@ -255,7 +259,11 @@ theorem isSheaf_iff_isSheafUniqueGluing_types
     Types.isLimit_iff, IsSheafUniqueGluing, isGluing_iff_pairwise]
   refine forall₂_congr fun ι U => ⟨fun h sf cpt => ?_, fun h s hs => ?_⟩
   · exact h _ cpt.sectionPairwise.prop
-  · specialize h (fun i => s <| op 
+  · specialize h (fun i => s <| op <| Pairwise.single i) fun i j =>
+      (hs <| op <| Pairwise.Hom.left i j).trans (hs <| op <| Pairwise.Hom.right i j).symm
+    convert! h; ext (i | ⟨i, j⟩)
+    · rfl
+    · exact (hs <| op <| Pairwise.Hom.left i j).symm
 
 Depends on / 依赖: IsSheafPairwiseIntersections, IsSheafUniqueGluing, Pairwise, Pairwise.Hom.left, Pairwise.Hom.right, Pairwise.single, Types.isLimit_iff, convert, cpt.sectionPairwise.prop, isGluing_iff_pairwise, isLimit_iff, isSheaf_iff_isSheafPairwiseIntersections, sectionPairwise, simp_rw, single, specialize
 -/
@@ -388,7 +396,13 @@ theorem existsUnique_gluing'
   · intro i
     rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
     exact gl_spec i
-  
+  · intro gl' gl'_spec
+    convert! congr_arg _ (gl_uniq (F.1.map (eqToHom V_eq_supr_U.symm).op gl') fun i => _) <;>
+      rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
+    · simp
+    · exact gl'_spec i
+
+@[ext]
 
 中文:
 定理 存在Unique_gluing'
@@ -400,7 +414,13 @@ theorem existsUnique_gluing'
   · intro i
     rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
     exact gl_spec i
-  
+  · intro gl' gl'_spec
+    convert! congr_arg _ (gl_uniq (F.1.map (eqToHom V_eq_supr_U.symm).op gl') fun i => _) <;>
+      rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
+    · simp
+    · exact gl'_spec i
+
+@[ext]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, F.existsUnique_gluing, V_eq_supr_U, V_eq_supr_U.symm, _spec, comp_apply, congr_arg, convert, eqToHom, existsUnique_gluing, gl_spec, gl_uniq, hcover, iSup_le, le_antisymm, map_comp
 -/
@@ -432,7 +452,15 @@ theorem eq_of_locally_eq
     intro i j
     simp_rw [sf, ← ConcreteCategory.comp_apply, ← F.1.map_comp]
     rfl
-  obtain ⟨gl, -, gl_uniq⟩ := F.existsUnique_gluing U sf sf_compat
+  obtain ⟨gl, -, gl_uniq⟩ := F.existsUnique_gluing U sf sf_compatible
+  trans gl
+  · apply gl_uniq
+    intro i
+    rfl
+  · symm
+    apply gl_uniq
+    intro i
+    rw [← h]
 
 中文:
 定理 eq_of_locally_eq
@@ -443,7 +471,15 @@ theorem eq_of_locally_eq
     intro i j
     simp_rw [sf, ← ConcreteCategory.comp_apply, ← F.1.map_comp]
     rfl
-  obtain ⟨gl, -, gl_uniq⟩ := F.existsUnique_gluing U sf sf_compat
+  obtain ⟨gl, -, gl_uniq⟩ := F.existsUnique_gluing U sf sf_compatible
+  trans gl
+  · apply gl_uniq
+    intro i
+    rfl
+  · symm
+    apply gl_uniq
+    intro i
+    rw [← h]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, F.existsUnique_gluing, IsCompatible, Opens.leSupr, ToType, comp_apply, existsUnique_gluing, gl_uniq, leSupr, map_comp, sf_compatible, simp_rw
 -/
@@ -474,7 +510,11 @@ theorem eq_of_locally_eq'
   have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
   suffices F.1.map (eqToHom V_eq_supr_U.symm).op s = F.1.map (eqToHom V_eq_supr_U.symm).op t by
     convert! congr_arg (F.1.map (eqToHom V_eq_supr_U).op) this <;>
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.
+    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]; rw [eqToHom_op]; rw [eqToHom_op]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [F.1.map_id]; rw [ConcreteCategory.id_apply]
+  apply eq_of_locally_eq
+  intro i
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
+  exact h i
 
 中文:
 定理 eq_of_locally_eq'
@@ -483,7 +523,11 @@ theorem eq_of_locally_eq'
   have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
   suffices F.1.map (eqToHom V_eq_supr_U.symm).op s = F.1.map (eqToHom V_eq_supr_U.symm).op t by
     convert! congr_arg (F.1.map (eqToHom V_eq_supr_U).op) this <;>
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.
+    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]; rw [eqToHom_op]; rw [eqToHom_op]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [F.1.map_id]; rw [ConcreteCategory.id_apply]
+  apply eq_of_locally_eq
+  intro i
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
+  exact h i
 
 Depends on / 依赖: Concret, ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.id_apply, V_eq_supr_U, V_eq_supr_U.symm, comp_apply, congr_arg, convert, eqToHom, eqToHom_op, eqToHom_refl, eqToHom_trans, eq_of_locally_eq, hcover, iSup_le, id_apply, le_antisymm, map_comp, map_id
 -/
@@ -512,7 +556,10 @@ theorem eq_of_locally_eq₂
     rw [sup_le_iff]
     constructor
     · exact le_iSup (fun t : Bool => if t then U₁ else U₂) true
-    · exact le_
+    · exact le_iSup (fun t : Bool => if t then U₁ else U₂) false
+  · rintro ⟨_ | _⟩
+    any_goals exact h₁
+    any_goals exact h₂
 
 中文:
 定理 eq_of_locally_eq₂
@@ -524,7 +571,10 @@ theorem eq_of_locally_eq₂
     rw [sup_le_iff]
     constructor
     · exact le_iSup (fun t : Bool => if t then U₁ else U₂) true
-    · exact le_
+    · exact le_iSup (fun t : Bool => if t then U₁ else U₂) false
+  · rintro ⟨_ | _⟩
+    any_goals exact h₁
+    any_goals exact h₂
 
 Depends on / 依赖: F.eq_of_locally_eq, any_goals, eqToHom, eq_of_locally_eq, fapply, hcover, if_neg, if_pos, le_iSup, le_trans, sup_le_iff
 -/

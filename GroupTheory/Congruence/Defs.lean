@@ -1000,7 +1000,12 @@ instance :
           h⟩
   inf c d := ⟨c.toSetoid ⊓ d.toSetoid, fun h1 h2 => ⟨c.mul h1.1 h2.1, d.mul h1.2 h2.2⟩⟩
   inf_le_left _ _ := fun _ _ h => h.1
-  inf_le_right 
+  inf_le_right _ _ := fun _ _ h => h.2
+  le_inf _ _ _ hb hc := fun _ _ h => ⟨hb h, hc h⟩
+  top := { Setoid.completeLattice.top with mul' := by tauto }
+  le_top _ := fun _ _ _ => trivial
+  bot := { Setoid.completeLattice.bot with mul' := fun h1 h2 => h1 ▸ h2 ▸ rfl }
+  bot_le c := fun x _ h => h ▸ c.refl x
 
 中文:
 实例 :
@@ -1011,7 +1016,12 @@ instance :
           h⟩
   inf c d := ⟨c.toSetoid ⊓ d.toSetoid, fun h1 h2 => ⟨c.mul h1.1 h2.1, d.mul h1.2 h2.2⟩⟩
   inf_le_left _ _ := fun _ _ h => h.1
-  inf_le_right 
+  inf_le_right _ _ := fun _ _ h => h.2
+  le_inf _ _ _ hb hc := fun _ _ h => ⟨hb h, hc h⟩
+  top := { Setoid.completeLattice.top with mul' := by tauto }
+  le_top _ := fun _ _ _ => trivial
+  bot := { Setoid.completeLattice.bot with mul' := fun h1 h2 => h1 ▸ h2 ▸ rfl }
+  bot_le c := fun x _ h => h ▸ c.refl x
 
 Depends on / 依赖: completeLatticeOfInf
 -/
@@ -1191,7 +1201,8 @@ theorem conGen_eq
         · exact s.refl'
         · exact fun _ => s.symm'
         · exact fun _ _ => s.trans'
-        · exact fu
+        · exact fun _ _ => s.mul))
+    (sInf_le ConGen.Rel.of)
 
 中文:
 定理 conGen_eq
@@ -1205,7 +1216,8 @@ theorem conGen_eq
         · exact s.refl'
         · exact fun _ => s.symm'
         · exact fun _ _ => s.trans'
-        · exact fu
+        · exact fun _ _ => s.mul))
+    (sInf_le ConGen.Rel.of)
 
 Depends on / 依赖: ConGen, ConGen.Rel.of, ConGen.Rel.recOn, conGen, le_antisymm, le_sInf, motive, s.mul, s.refl, s.symm, s.trans, sInf_le
 -/
@@ -1950,7 +1962,8 @@ theorem map_of_mul_left_rel_one
       (x : c.Quotient) * f x = f (f x) * f x * (x * f x) := by simp [hf]
       _ = f (f x) * (f x * x) * f x := by simp_rw [mul_assoc]
       _ = 1 := by simp [hf]
-  have : (⟨_,
+  have : (⟨_, _, hf' x, hf x⟩ : c.Quotientˣ) = ⟨_, _, hf' y, hf y⟩ := Units.ext h
+  exact congr_arg Units.inv this
 
 中文:
 定理 map_of_mul_left_rel_one
@@ -1962,7 +1975,8 @@ theorem map_of_mul_left_rel_one
       (x : c.Quotient) * f x = f (f x) * f x * (x * f x) := by simp [hf]
       _ = f (f x) * (f x * x) * f x := by simp_rw [mul_assoc]
       _ = 1 := by simp [hf]
-  have : (⟨_,
+  have : (⟨_, _, hf' x, hf x⟩ : c.Quotientˣ) = ⟨_, _, hf' y, hf y⟩ := Units.ext h
+  exact congr_arg Units.inv this
 
 Depends on / 依赖: Con.eq, Quotient, Units.ext, Units.inv, c.Quotient, coe_mul, coe_one, congr_arg, mul_assoc, simp_rw
 -/
@@ -2182,7 +2196,13 @@ definition liftOnUnits
       (fun (x y : M) (hxy : (x * y : c.Quotient) = 1) (hyx : (y * x : c.Quotient) = 1) =>
         f x y (c.eq.1 hxy) (c.eq.1 hyx))
       (fun x y x' y' hx hy => ?_) u.3 u.4
-
+  refine Function.hfunext ?_ ?_
+  · rw [c.eq.2 hx, c.eq.2 hy]
+  · rintro Hxy Hxy' -
+    refine Function.hfunext ?_ ?_
+    · rw [c.eq.2 hx, c.eq.2 hy]
+    · rintro Hyx Hyx' -
+      exact heq_of_eq (Hf _ _ _ _ _ _ _ _ hx hy)
 
 中文:
 定义 liftOnUnits
@@ -2194,7 +2214,13 @@ definition liftOnUnits
       (fun (x y : M) (hxy : (x * y : c.Quotient) = 1) (hyx : (y * x : c.Quotient) = 1) =>
         f x y (c.eq.1 hxy) (c.eq.1 hyx))
       (fun x y x' y' hx hy => ?_) u.3 u.4
-
+  refine Function.hfunext ?_ ?_
+  · rw [c.eq.2 hx, c.eq.2 hy]
+  · rintro Hxy Hxy' -
+    refine Function.hfunext ?_ ?_
+    · rw [c.eq.2 hx, c.eq.2 hy]
+    · rintro Hyx Hyx' -
+      exact heq_of_eq (Hf _ _ _ _ _ _ _ _ hx hy)
 
 Depends on / 依赖: Con.hrecOn, Function, Function.hfunext, Quotient, c.Quotient, c.eq, heq_of_eq, hfunext
 -/

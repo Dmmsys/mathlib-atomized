@@ -66,7 +66,8 @@ definition homResolutionIso
     ext (x : leftRegular _ _ ⟶ _)
     by_cases hi : Even i
     · have : ¬(Even (i + 1)) := Nat.even_add_one.not_left.mpr hi
-      simp [sub_hom, hi, this, homEquiv, ← hom_comm_apply x, Rep.a
+      simp [sub_hom, hi, this, homEquiv, ← hom_comm_apply x, Rep.applyAsHom]
+    · simp [hi, Nat.even_add_one.2 hi, Representation.norm, homEquiv, Rep.norm, ← hom_comm_apply x]
 
 中文:
 定义 homResolutionIso
@@ -76,7 +77,8 @@ definition homResolutionIso
     ext (x : leftRegular _ _ ⟶ _)
     by_cases hi : Even i
     · have : ¬(Even (i + 1)) := Nat.even_add_one.not_left.mpr hi
-      simp [sub_hom, hi, this, homEquiv, ← hom_comm_apply x, Rep.a
+      simp [sub_hom, hi, this, homEquiv, ← hom_comm_apply x, Rep.applyAsHom]
+    · simp [hi, Nat.even_add_one.2 hi, Representation.norm, homEquiv, Rep.norm, ← hom_comm_apply x]
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, Nat.even_add_one, Nat.even_add_one.not_left.mpr, Rep.applyAsHom, Rep.norm, Representation, Representation.norm, applyAsHom, even_add_one, homEquiv, hom_comm_apply, isoOfComponents, leftRegular, leftRegularHomEquiv, not_left, sub_hom, toModuleIso
 -/
@@ -124,7 +126,8 @@ definition groupCohomologyIsoEven
   (HomologicalComplex.homologyMapIso (homResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoEven (ModuleCat.of k A.V) (by ext; simp [sub_hom])
     (by ext; simp [sub_hom]) (by simp)
-    (by induction i generalizing h₀ with | zero
+    (by induction i generalizing h₀ with | zero => exact (NeZero.ne 0 rfl).elim | succ n _ => simp)
+    (by simp) hi
 
 中文:
 定义 groupCohomologyIsoEven
@@ -133,7 +136,8 @@ definition groupCohomologyIsoEven
   (HomologicalComplex.homologyMapIso (homResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoEven (ModuleCat.of k A.V) (by ext; simp [sub_hom])
     (by ext; simp [sub_hom]) (by simp)
-    (by induction i generalizing h₀ with | zero
+    (by induction i generalizing h₀ with | zero => exact (NeZero.ne 0 rfl).elim | succ n _ => simp)
+    (by simp) hi
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.alternatingConstHomologyIsoEven, HomologicalComplex.homologyMapIso, ModuleCat, ModuleCat.of, NeZero, NeZero.ne, alternatingConstHomologyIsoEven, generalizing, groupCohomologyIso, homResolutionIso, homologyMapIso, resolution, sub_hom
 -/
@@ -228,7 +232,7 @@ definition groupCohomologyIsoOdd
   (HomologicalComplex.homologyMapIso (homResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoOdd (ModuleCat.of k A.V) (by ext; simp [sub_hom])
     (by ext; simp [sub_hom])
-    (by simp) (by rcases hi with ⟨j, rfl⟩; simp) (by simp)
+    (by simp) (by rcases hi with ⟨j, rfl⟩; simp) (by simp) hi
 
 中文:
 定义 groupCohomologyIsoOdd
@@ -237,7 +241,7 @@ definition groupCohomologyIsoOdd
   (HomologicalComplex.homologyMapIso (homResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoOdd (ModuleCat.of k A.V) (by ext; simp [sub_hom])
     (by ext; simp [sub_hom])
-    (by simp) (by rcases hi with ⟨j, rfl⟩; simp) (by simp)
+    (by simp) (by rcases hi with ⟨j, rfl⟩; simp) (by simp) hi
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.alternatingConstHomologyIsoOdd, HomologicalComplex.homologyMapIso, ModuleCat, ModuleCat.of, alternatingConstHomologyIsoOdd, groupCohomologyIso, homResolutionIso, homologyMapIso, resolution, sub_hom
 -/

@@ -1032,7 +1032,11 @@ definition coprodEquiv
   right_inv f := by simp only [← comp_coprod, comp_id, coprod_inl_inr]
   map_add' a b := by
     ext
-    simp only [Prod.snd_add, add_apply, coprod_apply, Prod.fst_add, add_add_
+    simp only [Prod.snd_add, add_apply, coprod_apply, Prod.fst_add, add_add_add_comm]
+  map_smul' r a := by
+    dsimp
+    ext
+    simp only [smul_add, smul_apply, coprod_apply]
 
 中文:
 定义 coprodEquiv
@@ -1043,7 +1047,11 @@ definition coprodEquiv
   right_inv f := by simp only [← comp_coprod, comp_id, coprod_inl_inr]
   map_add' a b := by
     ext
-    simp only [Prod.snd_add, add_apply, coprod_apply, Prod.fst_add, add_add_
+    simp only [Prod.snd_add, add_apply, coprod_apply, Prod.fst_add, add_add_add_comm]
+  map_smul' r a := by
+    dsimp
+    ext
+    simp only [smul_add, smul_apply, coprod_apply]
 
 Depends on / 依赖: coprod
 -/
@@ -1578,7 +1586,8 @@ theorem isCompl_range_inl_inr
   · rw [codisjoint_iff_le_sup]
     rintro ⟨x, y⟩ -
     simp only [mem_sup, mem_range]
-    refine ⟨(x, 0), ⟨x, rfl⟩, (0, y), ⟨y, rfl⟩
+    refine ⟨(x, 0), ⟨x, rfl⟩, (0, y), ⟨y, rfl⟩, ?_⟩
+    simp
 
 中文:
 定理 isCompl_range_inl_inr
@@ -1592,7 +1601,8 @@ theorem isCompl_range_inl_inr
   · rw [codisjoint_iff_le_sup]
     rintro ⟨x, y⟩ -
     simp only [mem_sup, mem_range]
-    refine ⟨(x, 0), ⟨x, rfl⟩, (0, y), ⟨y, rfl⟩
+    refine ⟨(x, 0), ⟨x, rfl⟩, (0, y), ⟨y, rfl⟩, ?_⟩
+    simp
 
 Depends on / 依赖: Prod.ext_iff, codisjoint_iff_le_sup, disjoint_def, ext_iff, inl_apply, inr_apply, mem_range, mem_sup
 -/
@@ -1837,7 +1847,10 @@ theorem ker_coprod_of_disjoint_range
   have : f y in (range f) ⊓ (range g) := by
     simp only [true_and, mem_range, mem_inf, exists_apply_eq_apply]
     use -z
-    rwa [eq_comm, map_neg, ← sub_eq_zero, sub_ne
+    rwa [eq_comm, map_neg, ← sub_eq_zero, sub_neg_eq_add]
+  rw [hd.eq_bot]; rw [mem_bot] at this
+  rw [this] at h
+  simpa [this] using h
 
 中文:
 定理 ker_coprod_of_disjoint_range
@@ -1849,7 +1862,10 @@ theorem ker_coprod_of_disjoint_range
   have : f y in (range f) ⊓ (range g) := by
     simp only [true_and, mem_range, mem_inf, exists_apply_eq_apply]
     use -z
-    rwa [eq_comm, map_neg, ← sub_eq_zero, sub_ne
+    rwa [eq_comm, map_neg, ← sub_eq_zero, sub_neg_eq_add]
+  rw [hd.eq_bot]; rw [mem_bot] at this
+  rw [this] at h
+  simpa [this] using h
 
 Depends on / 依赖: coprod_apply, eq_bot, eq_comm, exists_apply_eq_apply, hd.eq_bot, ker_prod_ker_le_ker_coprod, le_antisymm, map_neg, mem_bot, mem_inf, mem_ker, mem_prod, mem_range, sub_eq_zero, sub_neg_eq_add, true_and
 -/
@@ -1883,7 +1899,7 @@ definition kerComplementEquivRange
     rintro ⟨-, x, rfl⟩
     obtain ⟨y, z, hy, hz, rfl⟩ := codisjoint_iff_exists_add_eq.mp h.codisjoint x
     use ⟨y, hy⟩
-  
+    simpa [Subtype.ext_iff]⟩
 
 中文:
 定义 kerComplementEquivRange
@@ -1894,7 +1910,7 @@ definition kerComplementEquivRange
     rintro ⟨-, x, rfl⟩
     obtain ⟨y, z, hy, hz, rfl⟩ := codisjoint_iff_exists_add_eq.mp h.codisjoint x
     use ⟨y, hy⟩
-  
+    simpa [Subtype.ext_iff]⟩
 
 Depends on / 依赖: C.subtype, Subtype, Subtype.ext_iff, codRestrict, codisjoint, codisjoint_iff_exists_add_eq, codisjoint_iff_exists_add_eq.mp, disjoint, disjoint_iff_comap_eq_bot, ext_iff, h.codisjoint, h.disjoint, ker_codRestrict, ker_comp, ker_eq_bot, mem_range_self, ofBijective, subtype
 -/
@@ -2396,7 +2412,7 @@ theorem fst_sup_snd
   rw [show (m]; rw [n) = (m]; rw [0) + (0]; rw [n) by simp]
   apply Submodule.add_mem (Submodule.fst R M M₂ ⊔ Submodule.snd R M M₂)
   · exact Submodule.mem_sup_left (Submodule.mem_comap.mpr (by simp))
-  · exact Submodule.mem_sup_right (Submodule.mem_comap.mpr (
+  · exact Submodule.mem_sup_right (Submodule.mem_comap.mpr (by simp))
 
 中文:
 定理 fst_sup_snd
@@ -2407,7 +2423,7 @@ theorem fst_sup_snd
   rw [show (m]; rw [n) = (m]; rw [0) + (0]; rw [n) by simp]
   apply Submodule.add_mem (Submodule.fst R M M₂ ⊔ Submodule.snd R M M₂)
   · exact Submodule.mem_sup_left (Submodule.mem_comap.mpr (by simp))
-  · exact Submodule.mem_sup_right (Submodule.mem_comap.mpr (
+  · exact Submodule.mem_sup_right (Submodule.mem_comap.mpr (by simp))
 
 Depends on / 依赖: Submodule, Submodule.add_mem, Submodule.fst, Submodule.mem_comap.mpr, Submodule.mem_sup_left, Submodule.mem_sup_right, Submodule.snd, add_mem, eq_top_iff, mem_comap, mem_sup_left, mem_sup_right
 -/
@@ -2499,7 +2515,11 @@ theorem prod_le_iff
   · rintro ⟨hH, hK⟩ ⟨x1, x2⟩ ⟨h1, h2⟩
     have h1' : (LinearMap.inl R _ _) x1 in q := by
       apply hH
-      s
+      simpa using h1
+    have h2' : (LinearMap.inr R _ _) x2 in q := by
+      apply hK
+      simpa using h2
+    simpa using add_mem h1' h2'
 
 中文:
 定理 prod_le_iff
@@ -2517,7 +2537,11 @@ theorem prod_le_iff
   · rintro ⟨hH, hK⟩ ⟨x1, x2⟩ ⟨h1, h2⟩
     have h1' : (LinearMap.inl R _ _) x1 in q := by
       apply hH
-      s
+      simpa using h1
+    have h2' : (LinearMap.inr R _ _) x2 in q := by
+      apply hK
+      simpa using h2
+    simpa using add_mem h1' h2'
 
 Depends on / 依赖: LinearMap, LinearMap.inl, LinearMap.inr, add_mem, zero_mem
 -/
@@ -3055,7 +3079,9 @@ definition skewProd
         f.comp (LinearMap.fst R M M₃)) with
     invFun := fun p : M₂ × M₄ => (e₁.symm p.1, e₂.symm (p.2 - f (e₁.symm p.1)))
     left_inv := fun p => by simp
-    right_inv := fun p => by s
+    right_inv := fun p => by simp }
+
+@[simp]
 
 中文:
 定义 skewProd
@@ -3065,7 +3091,9 @@ definition skewProd
         f.comp (LinearMap.fst R M M₃)) with
     invFun := fun p : M₂ × M₄ => (e₁.symm p.1, e₂.symm (p.2 - f (e₁.symm p.1)))
     left_inv := fun p => by simp
-    right_inv := fun p => by s
+    right_inv := fun p => by simp }
+
+@[simp]
 -/
 protected def skewProd (f : M ->ₗ[R] M₄) : (M × M₃) ≃ₗ[R] M₂ × M₄ :=
   { ((e₁ : M ->ₗ[R] M₂).comp (LinearMap.fst R M M₃)).prod
@@ -3224,7 +3252,12 @@ theorem range_prod_eq
     Prod.forall, Function.prod_apply]
   rintro _ _ x rfl y rfl
   -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify `(f := f)`
-  simp only
+  simp only [Prod.mk_inj, ← sub_mem_ker_iff (f := f)]
+  have : y - x in ker f ⊔ ker g := by simp only [h, mem_top]
+  rcases mem_sup.1 this with ⟨x', hx', y', hy', H⟩
+  refine ⟨x' + x, ?_, ?_⟩
+  · rwa [add_sub_cancel_right]
+  · simp [← eq_sub_iff_add_eq.1 H, map_add, mem_ker.mp hy']
 
 中文:
 定理 range_prod_eq
@@ -3235,7 +3268,12 @@ theorem range_prod_eq
     Prod.forall, Function.prod_apply]
   rintro _ _ x rfl y rfl
   -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify `(f := f)`
-  simp only
+  simp only [Prod.mk_inj, ← sub_mem_ker_iff (f := f)]
+  have : y - x in ker f ⊔ ker g := by simp only [h, mem_top]
+  rcases mem_sup.1 this with ⟨x', hx', y', hy', H⟩
+  refine ⟨x' + x, ?_, ?_⟩
+  · rwa [add_sub_cancel_right]
+  · simp [← eq_sub_iff_add_eq.1 H, map_add, mem_ker.mp hy']
 
 Depends on / 依赖: Function, Function.prod_apply, Prod.forall, SetLike, SetLike.le_def, and_imp, exists_imp, f.range_prod_le, le_antisymm, le_def, mem_prod, mem_range, prod_apply, range_prod_le
 -/
@@ -3402,7 +3440,15 @@ lemma LinearMap.exists_range_eq_graph
   { toFun := f'.toFun
     map_add' := f'.map_add'
     map_smul' := by
-  
+      intro s h
+      simp only [ZeroHom.toFun_eq_coe, AddMonoidHom.toZeroHom_coe, RingHom.id_apply]
+      refine (hf' (s • h, _)).mp ?_
+      rw [← Prod.smul_mk]; rw [← LinearMap.mem_range]
+      apply Submodule.smul_mem
+      rw [LinearMap.mem_range]; rw [hf'] }
+  ext x
+  simpa only [mem_range, Eq.comm, ZeroHom.toFun_eq_coe, AddMonoidHom.toZeroHom_coe, mem_graph_iff,
+    coe_mk, AddHom.coe_mk, AddMonoidHom.coe_coe, Set.mem_range] using hf' x
 
 中文:
 引理 线性映射.存在_range_eq_graph
@@ -3416,7 +3462,15 @@ lemma LinearMap.exists_range_eq_graph
   { toFun := f'.toFun
     map_add' := f'.map_add'
     map_smul' := by
-  
+      intro s h
+      simp only [ZeroHom.toFun_eq_coe, AddMonoidHom.toZeroHom_coe, RingHom.id_apply]
+      refine (hf' (s • h, _)).mp ?_
+      rw [← Prod.smul_mk]; rw [← LinearMap.mem_range]
+      apply Submodule.smul_mem
+      rw [LinearMap.mem_range]; rw [hf'] }
+  ext x
+  simpa only [mem_range, Eq.comm, ZeroHom.toFun_eq_coe, AddMonoidHom.toZeroHom_coe, mem_graph_iff,
+    coe_mk, AddHom.coe_mk, AddMonoidHom.coe_coe, Set.mem_range] using hf' x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, AddMonoidHom.exists_mrange_eq_mgraph, AddMonoidHom.mem_mgraph, AddMonoidHom.mem_mrange, AddMonoidHom.toZeroHom_coe, LinearMap, LinearMap.mem_range, Prod.smul_mk, RingHom, RingHom.id_apply, SetLike, SetLike.ext_iff, Submodule, Submodule.smul_mem, ZeroHom, ZeroHom.toFun_eq_coe, coe_coe, exists_mrange_eq_mgraph, ext_iff
 -/
@@ -3476,7 +3530,17 @@ lemma LinearMap.exists_linearEquiv_eq_graph
   obtain ⟨e₂, he₂⟩ := ((LinearEquiv.prodComm _ _ _).toLinearMap.comp f).exists_range_eq_graph
 (by simpa) by simp [hf]
   have he₁₂ h i : e₁ h = i ↔ e₂ i = h := by
-    simp only [SetLike.ext_iff, LinearMap.mem_graph_iff] at he₁
+    simp only [SetLike.ext_iff, LinearMap.mem_graph_iff] at he₁ he₂
+    rw [Eq.comm]; rw [← he₁ (h]; rw [i)]; rw [Eq.comm]; rw [← he₂ (i]; rw [h)]
+    simp only [mem_range, coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
+      LinearEquiv.prodComm_apply, Prod.swap_eq_iff_eq_swap, Prod.swap_prod_mk]
+  exact ⟨
+  { toFun := e₁
+    map_smul' := e₁.map_smul'
+    map_add' := e₁.map_add'
+    invFun := e₂
+    left_inv := fun h => by rw [← he₁₂]
+    right_inv := fun i => by rw [he₁₂] }, he₁⟩
 
 中文:
 引理 线性映射.存在_linearEquiv_eq_graph
@@ -3486,7 +3550,17 @@ lemma LinearMap.exists_linearEquiv_eq_graph
   obtain ⟨e₂, he₂⟩ := ((LinearEquiv.prodComm _ _ _).toLinearMap.comp f).exists_range_eq_graph
 (by simpa) by simp [hf]
   have he₁₂ h i : e₁ h = i ↔ e₂ i = h := by
-    simp only [SetLike.ext_iff, LinearMap.mem_graph_iff] at he₁
+    simp only [SetLike.ext_iff, LinearMap.mem_graph_iff] at he₁ he₂
+    rw [Eq.comm]; rw [← he₁ (h]; rw [i)]; rw [Eq.comm]; rw [← he₂ (i]; rw [h)]
+    simp only [mem_range, coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
+      LinearEquiv.prodComm_apply, Prod.swap_eq_iff_eq_swap, Prod.swap_prod_mk]
+  exact ⟨
+  { toFun := e₁
+    map_smul' := e₁.map_smul'
+    map_add' := e₁.map_add'
+    invFun := e₂
+    left_inv := fun h => by rw [← he₁₂]
+    right_inv := fun i => by rw [he₁₂] }, he₁⟩
 
 Depends on / 依赖: Eq.comm, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.prodComm, LinearEquiv.prodComm_apply, LinearMap, LinearMap.mem_graph_iff, Prod.swap_eq_iff_eq_swap, SetLike, SetLike.ext_iff, coe_coe, coe_comp, comp_apply, exists_range_eq_graph, ext_iff, f.exists_range_eq_graph, mem_graph_iff, mem_range
 -/

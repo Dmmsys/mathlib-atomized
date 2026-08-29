@@ -147,7 +147,8 @@ instance enoughProjectives
 f := ofHom e.constr Nat _root_.id
       epi := by
         rw [epi_iff_range_eq_top]; rw [LinearMap.range_eq_top]
- 
+        refine fun m => ⟨Finsupp.single m 1, ?_⟩
+        simp [e, Basis.constr_apply] }⟩
 
 中文:
 实例 enoughProjectives
@@ -158,7 +159,8 @@ f := ofHom e.constr Nat _root_.id
 f := ofHom e.constr Nat _root_.id
       epi := by
         rw [epi_iff_range_eq_top]; rw [LinearMap.range_eq_top]
- 
+        refine fun m => ⟨Finsupp.single m 1, ?_⟩
+        simp [e, Basis.constr_apply] }⟩
 
 Depends on / 依赖: Basis.constr_apply, Finsupp, Finsupp.mapRange.linearEquiv, Finsupp.single, LinearMap, LinearMap.range_eq_top, ModuleCat, ModuleCat.of, Shrink, Shrink.linearEquiv, _root_, _root_.id, constr, constr_apply, e.constr, epi_iff_range_eq_top, linearEquiv, mapRange, projective, projective_of_free
 -/

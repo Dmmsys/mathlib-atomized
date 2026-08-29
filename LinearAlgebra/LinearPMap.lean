@@ -427,7 +427,17 @@ definition mkSpanSingleton'
       rw [← RingHom.map_sub]
       exact H _ h
     { toFun z := σ (Classical.choose (mem_span_singleton.1 z.prop)) • y
-      map_add' y' z
+      map_add' y' z' := by
+        rw [← add_smul]; rw [← RingHom.map_add]; rw [H]
+        have (w : R ∙ x) := Classical.choose_spec (mem_span_singleton.1 w.prop)
+        simp only [add_smul, this, ← coe_add]
+      map_smul' c z := by
+        rw [smul_smul]; rw [← RingHom.map_mul]; rw [H]
+        have (w : R ∙ x) := Classical.choose_spec (mem_span_singleton.1 w.prop)
+        simp only [mul_smul, this]
+        apply coe_smul }
+
+@[simp]
 
 中文:
 定义 mkSpanSingleton'
@@ -440,7 +450,17 @@ definition mkSpanSingleton'
       rw [← RingHom.map_sub]
       exact H _ h
     { toFun z := σ (Classical.choose (mem_span_singleton.1 z.prop)) • y
-      map_add' y' z
+      map_add' y' z' := by
+        rw [← add_smul]; rw [← RingHom.map_add]; rw [H]
+        have (w : R ∙ x) := Classical.choose_spec (mem_span_singleton.1 w.prop)
+        simp only [add_smul, this, ← coe_add]
+      map_smul' c z := by
+        rw [smul_smul]; rw [← RingHom.map_mul]; rw [H]
+        have (w : R ∙ x) := Classical.choose_spec (mem_span_singleton.1 w.prop)
+        simp only [mul_smul, this]
+        apply coe_smul }
+
+@[simp]
 -/
 noncomputable def mkSpanSingleton' (x : E) (y : F) (H : forall c : R, c • x = 0 -> σ c • y = 0) :
     E ->ₛₗ.[σ] F where
@@ -761,7 +781,12 @@ definition eqLocus
   zero_mem' := ⟨zero_mem _, zero_mem _, f.map_zero.trans g.map_zero.symm⟩
   add_mem' {x y} := fun ⟨hfx, hgx, hx⟩ ⟨hfy, hgy, hy⟩ =>
     ⟨add_mem hfx hfy, add_mem hgx hgy, by
-      simp_all [← AddMemClass.mk_add_mk, f.map_
+      simp_all [← AddMemClass.mk_add_mk, f.map_add, g.map_add]⟩
+  smul_mem' c x := fun ⟨hfx, hgx, hx⟩ =>
+    ⟨smul_mem _ c hfx, smul_mem _ c hgx, by
+      have {f : E ->ₛₗ.[σ] F} (hfx) : (⟨c • x, smul_mem _ c hfx⟩ : f.domain) = c • ⟨x, hfx⟩ := by
+        simp
+      rw [this hfx]; rw [this hgx]; rw [f.map_smulₛₗ]; rw [g.map_smulₛₗ]; rw [hx]⟩
 
 中文:
 定义 eqLocus
@@ -770,7 +795,12 @@ definition eqLocus
   zero_mem' := ⟨zero_mem _, zero_mem _, f.map_zero.trans g.map_zero.symm⟩
   add_mem' {x y} := fun ⟨hfx, hgx, hx⟩ ⟨hfy, hgy, hy⟩ =>
     ⟨add_mem hfx hfy, add_mem hgx hgy, by
-      simp_all [← AddMemClass.mk_add_mk, f.map_
+      simp_all [← AddMemClass.mk_add_mk, f.map_add, g.map_add]⟩
+  smul_mem' c x := fun ⟨hfx, hgx, hx⟩ =>
+    ⟨smul_mem _ c hfx, smul_mem _ c hgx, by
+      have {f : E ->ₛₗ.[σ] F} (hfx) : (⟨c • x, smul_mem _ c hfx⟩ : f.domain) = c • ⟨x, hfx⟩ := by
+        simp
+      rw [this hfx]; rw [this hgx]; rw [f.map_smulₛₗ]; rw [g.map_smulₛₗ]; rw [hx]⟩
 
 Depends on / 依赖: domain, f.domain, g.domain
 -/
@@ -829,7 +859,17 @@ instance semilatticeInf
     ⟨le_trans fg_le gh_le, fun x _ hxz =>
       have hxy : (x : E) = inclusion fg_le x := rfl
       (fg_eq hxy).trans (gh_eq <| hxy.symm.trans hxz)⟩
-  le_antisymm _ _ fg gf := eq_of_le_of_do
+  le_antisymm _ _ fg gf := eq_of_le_of_domain_eq fg (le_antisymm fg.1 gf.1)
+inf f g := ⟨f.eqLocus g, f.toFun.comp inclusion fun _x hx => hx.fst⟩
+  le_inf := by
+    intro f g h ⟨fg_le, fg_eq⟩ ⟨fh_le, fh_eq⟩
+    exact ⟨fun x hx =>
+      ⟨fg_le hx, fh_le hx,
+      (fg_eq (x := ⟨x, hx⟩) rfl).symm.trans (fh_eq rfl)⟩,
+      fun x ⟨y, yg, hy⟩ h => fg_eq h⟩
+inf_le_left f _ := ⟨fun _ hx => hx.fst, fun _ _ h => congr_arg f Subtype.ext h⟩
+  inf_le_right _ g :=
+⟨fun _ hx => hx.snd.fst, fun ⟨_, _, _, hx⟩ _ h => hx.trans congr_arg g Subtype.ext h⟩
 
 中文:
 实例 semilatticeInf
@@ -839,7 +879,17 @@ instance semilatticeInf
     ⟨le_trans fg_le gh_le, fun x _ hxz =>
       have hxy : (x : E) = inclusion fg_le x := rfl
       (fg_eq hxy).trans (gh_eq <| hxy.symm.trans hxz)⟩
-  le_antisymm _ _ fg gf := eq_of_le_of_do
+  le_antisymm _ _ fg gf := eq_of_le_of_domain_eq fg (le_antisymm fg.1 gf.1)
+inf f g := ⟨f.eqLocus g, f.toFun.comp inclusion fun _x hx => hx.fst⟩
+  le_inf := by
+    intro f g h ⟨fg_le, fg_eq⟩ ⟨fh_le, fh_eq⟩
+    exact ⟨fun x hx =>
+      ⟨fg_le hx, fh_le hx,
+      (fg_eq (x := ⟨x, hx⟩) rfl).symm.trans (fh_eq rfl)⟩,
+      fun x ⟨y, yg, hy⟩ h => fg_eq h⟩
+inf_le_left f _ := ⟨fun _ hx => hx.fst, fun _ _ h => congr_arg f Subtype.ext h⟩
+  inf_le_right _ g :=
+⟨fun _ hx => hx.snd.fst, fun ⟨_, _, _, hx⟩ _ h => hx.trans congr_arg g Subtype.ext h⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, domain, f.domain, le_refl
 -/
@@ -944,7 +994,23 @@ theorem sup_aux
   have fg_eq : forall (x' : f.domain) (y' : g.domain) (z' : ↥(f.domain ⊔ g.domain))
       (_H : (x' : E) + y' = z'), fg z' = f x' + g y' := by
     intro x' y' z' H
-  
+    dsimp [fg]
+    rw [add_comm]; rw [← sub_eq_sub_iff_add_eq_add]; rw [eq_comm]; rw [← map_sub]; rw [← map_sub]
+    apply h
+    simp only [← eq_sub_iff_add_eq] at hxy
+    simp only [AddSubgroupClass.coe_sub, hxy, ← sub_add, ← sub_sub, sub_self,
+      zero_sub, ← H]
+    apply neg_add_eq_sub
+  use { toFun := fg, map_add' := ?_, map_smul' := ?_ }, fg_eq
+  · rintro ⟨z₁, hz₁⟩ ⟨z₂, hz₂⟩
+    rw [← add_assoc]; rw [add_right_comm (f _)]; rw [← map_add]; rw [add_assoc]; rw [← map_add]
+    apply fg_eq
+    simp only [coe_add, ← add_assoc]
+    rw [add_right_comm (x _)]; rw [hxy]; rw [add_assoc]; rw [hxy]; rw [coe_mk]; rw [coe_mk]
+  · intro c z
+    rw [smul_add]; rw [← map_smulₛₗ]; rw [← map_smulₛₗ]
+    apply fg_eq
+    simp only [coe_smul, ← smul_add, hxy]
 
 中文:
 定理 sup_aux
@@ -955,7 +1021,23 @@ theorem sup_aux
   have fg_eq : forall (x' : f.domain) (y' : g.domain) (z' : ↥(f.domain ⊔ g.domain))
       (_H : (x' : E) + y' = z'), fg z' = f x' + g y' := by
     intro x' y' z' H
-  
+    dsimp [fg]
+    rw [add_comm]; rw [← sub_eq_sub_iff_add_eq_add]; rw [eq_comm]; rw [← map_sub]; rw [← map_sub]
+    apply h
+    simp only [← eq_sub_iff_add_eq] at hxy
+    simp only [AddSubgroupClass.coe_sub, hxy, ← sub_add, ← sub_sub, sub_self,
+      zero_sub, ← H]
+    apply neg_add_eq_sub
+  use { toFun := fg, map_add' := ?_, map_smul' := ?_ }, fg_eq
+  · rintro ⟨z₁, hz₁⟩ ⟨z₂, hz₂⟩
+    rw [← add_assoc]; rw [add_right_comm (f _)]; rw [← map_add]; rw [add_assoc]; rw [← map_add]
+    apply fg_eq
+    simp only [coe_add, ← add_assoc]
+    rw [add_right_comm (x _)]; rw [hxy]; rw [add_assoc]; rw [hxy]; rw [coe_mk]; rw [coe_mk]
+  · intro c z
+    rw [smul_add]; rw [← map_smulₛₗ]; rw [← map_smulₛₗ]
+    apply fg_eq
+    simp only [coe_smul, ← smul_add, hxy]
 -/
 private theorem sup_aux (f g : E ->ₛₗ.[σ] F)
     (h : forall (x : f.domain) (y : g.domain), (x : E) = y -> f x = g y) :
@@ -1841,7 +1923,18 @@ instance instSubtractionCommMonoid
     ext x _ h
     · simp [add_domain, neg_domain, And.comm]
     simp [add_apply, neg_apply, ← sub_eq_add_neg]
-  neg_eq_of_add f g h' :
+  neg_eq_of_add f g h' := by
+    ext x hf hg
+    · have : (0 : E ->ₛₗ.[σ] F).domain = ⊤ := zero_domain
+      simp only [← h', add_domain, inf_eq_top_iff] at this
+      rw [neg_domain]; rw [this.1]; rw [this.2]
+    simp only [neg_domain, neg_apply, neg_eq_iff_add_eq_zero]
+    rw [ext_iff] at h'
+    rcases h' with ⟨hdom, h'⟩
+    rw [zero_domain] at hdom
+    simp only [hdom, zero_domain, mem_top, zero_apply, forall_true_left] at h'
+    apply h'
+  zsmul := zsmulRec
 
 中文:
 实例 instSubtractionCommMonoid
@@ -1856,7 +1949,18 @@ instance instSubtractionCommMonoid
     ext x _ h
     · simp [add_domain, neg_domain, And.comm]
     simp [add_apply, neg_apply, ← sub_eq_add_neg]
-  neg_eq_of_add f g h' :
+  neg_eq_of_add f g h' := by
+    ext x hf hg
+    · have : (0 : E ->ₛₗ.[σ] F).domain = ⊤ := zero_domain
+      simp only [← h', add_domain, inf_eq_top_iff] at this
+      rw [neg_domain]; rw [this.1]; rw [this.2]
+    simp only [neg_domain, neg_apply, neg_eq_iff_add_eq_zero]
+    rw [ext_iff] at h'
+    rcases h' with ⟨hdom, h'⟩
+    rw [zero_domain] at hdom
+    simp only [hdom, zero_domain, mem_top, zero_apply, forall_true_left] at h'
+    apply h'
+  zsmul := zsmulRec
 
 Depends on / 依赖: add_comm
 -/
@@ -2082,7 +2186,26 @@ theorem sSup_aux
     directedOn_image.2 (hc.mono @(domain_mono.monotone))
   have P : forall x : ↥(sSup (domain '' c)), { p : c // (x : E) in p.val.domain } := by
     rintro x
-    apply Classical.indefiniteDe
+    apply Classical.indefiniteDescription
+    have := (mem_sSup_of_directed (cne.image _) hdir).1 x.2
+    rwa [Set.exists_mem_image, ← bex_def, SetCoe.exists'] at this
+  set f : ↥(sSup (domain '' c)) -> F := fun x => (P x).val.val ⟨x, (P x).property⟩
+  have f_eq : forall (p : c) (x : ↥(sSup (domain '' c))) (y : p.1.1) (_hxy : (x : E) = y),
+      f x = p.1 y := by
+    intro p x y hxy
+    rcases hc (P x).1.1 (P x).1.2 p.1 p.2 with ⟨q, _hqc, ⟨hxq1, hxq2⟩, ⟨hpq1, hpq2⟩⟩
+    exact (hxq2 (y := ⟨y, hpq1 y.2⟩) hxy).trans (hpq2 rfl).symm
+  use { toFun := f, map_add' := ?_, map_smul' := ?_ }, ?_
+  · intro x y
+    rcases hc (P x).1.1 (P x).1.2 (P y).1.1 (P y).1.2 with ⟨p, hpc, hpx, hpy⟩
+    set x' := inclusion hpx.1 ⟨x, (P x).2⟩
+    set y' := inclusion hpy.1 ⟨y, (P y).2⟩
+    rw [f_eq ⟨p]; rw [hpc⟩ x x' rfl]; rw [f_eq ⟨p]; rw [hpc⟩ y y' rfl]; rw [f_eq ⟨p]; rw [hpc⟩ (x + y) (x' + y') rfl]; rw [map_add]
+  · intro c x
+    rw [f_eq (P x).1 (c • x) (c • ⟨x]; rw [(P x).2⟩) rfl]; rw [← map_smulₛₗ]
+  · intro p hpc
+refine ⟨le_sSup Set.mem_image_of_mem domain hpc, fun x y hxy => Eq.symm ?_⟩
+    exact f_eq ⟨p, hpc⟩ _ _ hxy.symm
 
 中文:
 定理 sSup_aux
@@ -2094,7 +2217,26 @@ theorem sSup_aux
     directedOn_image.2 (hc.mono @(domain_mono.monotone))
   have P : forall x : ↥(sSup (domain '' c)), { p : c // (x : E) in p.val.domain } := by
     rintro x
-    apply Classical.indefiniteDe
+    apply Classical.indefiniteDescription
+    have := (mem_sSup_of_directed (cne.image _) hdir).1 x.2
+    rwa [Set.exists_mem_image, ← bex_def, SetCoe.exists'] at this
+  set f : ↥(sSup (domain '' c)) -> F := fun x => (P x).val.val ⟨x, (P x).property⟩
+  have f_eq : forall (p : c) (x : ↥(sSup (domain '' c))) (y : p.1.1) (_hxy : (x : E) = y),
+      f x = p.1 y := by
+    intro p x y hxy
+    rcases hc (P x).1.1 (P x).1.2 p.1 p.2 with ⟨q, _hqc, ⟨hxq1, hxq2⟩, ⟨hpq1, hpq2⟩⟩
+    exact (hxq2 (y := ⟨y, hpq1 y.2⟩) hxy).trans (hpq2 rfl).symm
+  use { toFun := f, map_add' := ?_, map_smul' := ?_ }, ?_
+  · intro x y
+    rcases hc (P x).1.1 (P x).1.2 (P y).1.1 (P y).1.2 with ⟨p, hpc, hpx, hpy⟩
+    set x' := inclusion hpx.1 ⟨x, (P x).2⟩
+    set y' := inclusion hpy.1 ⟨y, (P y).2⟩
+    rw [f_eq ⟨p]; rw [hpc⟩ x x' rfl]; rw [f_eq ⟨p]; rw [hpc⟩ y y' rfl]; rw [f_eq ⟨p]; rw [hpc⟩ (x + y) (x' + y') rfl]; rw [map_add]
+  · intro c x
+    rw [f_eq (P x).1 (c • x) (c • ⟨x]; rw [(P x).2⟩) rfl]; rw [← map_smulₛₗ]
+  · intro p hpc
+refine ⟨le_sSup Set.mem_image_of_mem domain hpc, fun x y hxy => Eq.symm ?_⟩
+    exact f_eq ⟨p, hpc⟩ _ _ hxy.symm
 -/
 private theorem sSup_aux (c : Set (E ->ₛₗ.[σ] F)) (hc : DirectedOn (· <= ·) c) :
     exists f : ↥(sSup (domain '' c)) ->ₛₗ[σ] F, (⟨_, f⟩ : E ->ₛₗ.[σ] F) in upperBounds c := by
@@ -2437,7 +2579,7 @@ definition coprod
       (g.comp (LinearPMap.snd f.domain g.domain) fun x => x.2.2).toFun)
 
 omit [Module S F] in
-@[
+@[simp]
 
 中文:
 定义 coprod
@@ -2450,7 +2592,7 @@ omit [Module S F] in
       (g.comp (LinearPMap.snd f.domain g.domain) fun x => x.2.2).toFun)
 
 omit [Module S F] in
-@[
+@[simp]
 
 Depends on / 依赖: domain, f.domain.prod, g.domain
 -/
@@ -2735,7 +2877,18 @@ theorem smul_graph
     rw [LinearPMap.smul_apply] at h
     rw [Submodule.mem_map]
     simp only [mem_graph_iff, LinearMap.prodMap_apply, LinearMap.id_coe, id,
-      LinearMap.smul_apply, Prod.mk_inj, Prod.exists,
+      LinearMap.smul_apply, Prod.mk_inj, Prod.exists, exists_exists_and_eq_and]
+    use x_fst, y, hy
+  rw [Submodule.mem_map] at h
+  rcases h with ⟨x', hx', h⟩
+  cases x'
+  simp only [LinearMap.prodMap_apply, LinearMap.id_coe, id, LinearMap.smul_apply,
+    Prod.mk_inj] at h
+  rw [mem_graph_iff] at hx' ⊢
+  rcases hx' with ⟨y, hy, hx'⟩
+  use y
+  rw [← h.1]; rw [← h.2]
+  simp [hy, hx']
 
 中文:
 定理 smul_graph
@@ -2748,7 +2901,18 @@ theorem smul_graph
     rw [LinearPMap.smul_apply] at h
     rw [Submodule.mem_map]
     simp only [mem_graph_iff, LinearMap.prodMap_apply, LinearMap.id_coe, id,
-      LinearMap.smul_apply, Prod.mk_inj, Prod.exists,
+      LinearMap.smul_apply, Prod.mk_inj, Prod.exists, exists_exists_and_eq_and]
+    use x_fst, y, hy
+  rw [Submodule.mem_map] at h
+  rcases h with ⟨x', hx', h⟩
+  cases x'
+  simp only [LinearMap.prodMap_apply, LinearMap.id_coe, id, LinearMap.smul_apply,
+    Prod.mk_inj] at h
+  rw [mem_graph_iff] at hx' ⊢
+  rcases hx' with ⟨y, hy, hx'⟩
+  use y
+  rw [← h.1]; rw [← h.2]
+  simp [hy, hx']
 
 Depends on / 依赖: LinearMap, LinearMap.id_coe, LinearMap.prodMap_apply, LinearMap.smul_apply, LinearPMap, LinearPMap.smul_apply, Prod.exists, Prod.mk_inj, Submodule, Submodule.mem_map, exists_exists_and_eq_and, id_coe, mem_graph_iff, mem_map, mk_inj, prodMap_apply, smul_apply, x_fst, x_snd
 -/
@@ -2789,7 +2953,18 @@ theorem neg_graph
     rw [LinearPMap.neg_apply] at h
     rw [Submodule.mem_map]
     simp only [mem_graph_iff, LinearMap.prodMap_apply, LinearMap.id_coe, id,
-      LinearMap.neg_apply, Prod.mk_inj, Prod.exists, e
+      LinearMap.neg_apply, Prod.mk_inj, Prod.exists, exists_exists_and_eq_and]
+    use x_fst, y, hy
+  rw [Submodule.mem_map] at h
+  rcases h with ⟨x', hx', h⟩
+  cases x'
+  simp only [LinearMap.prodMap_apply, LinearMap.id_coe, id, LinearMap.neg_apply,
+    Prod.mk_inj] at h
+  rw [mem_graph_iff] at hx' ⊢
+  rcases hx' with ⟨y, hy, hx'⟩
+  use y
+  rw [← h.1]; rw [← h.2]
+  simp [hy, hx']
 
 中文:
 定理 neg_graph
@@ -2802,7 +2977,18 @@ theorem neg_graph
     rw [LinearPMap.neg_apply] at h
     rw [Submodule.mem_map]
     simp only [mem_graph_iff, LinearMap.prodMap_apply, LinearMap.id_coe, id,
-      LinearMap.neg_apply, Prod.mk_inj, Prod.exists, e
+      LinearMap.neg_apply, Prod.mk_inj, Prod.exists, exists_exists_and_eq_and]
+    use x_fst, y, hy
+  rw [Submodule.mem_map] at h
+  rcases h with ⟨x', hx', h⟩
+  cases x'
+  simp only [LinearMap.prodMap_apply, LinearMap.id_coe, id, LinearMap.neg_apply,
+    Prod.mk_inj] at h
+  rw [mem_graph_iff] at hx' ⊢
+  rcases hx' with ⟨y, hy, hx'⟩
+  use y
+  rw [← h.1]; rw [← h.2]
+  simp [hy, hx']
 
 Depends on / 依赖: LinearMap, LinearMap.id_coe, LinearMap.neg_apply, LinearMap.prodMap_apply, LinearPMap, LinearPMap.neg_apply, Prod.exists, Prod.mk_inj, Submodule, Submodule.mem_map, exists_exists_and_eq_and, id_coe, mem_graph_iff, mem_map, mk_inj, neg_apply, prodMap_apply, x_fst, x_snd
 -/
@@ -3275,7 +3461,13 @@ definition toLinearPMapAux
     have hvw := valFromGraph_mem hg hadd
     have hvw' := g.add_mem (valFromGraph_mem hg v.2) (valFromGraph_mem hg w.2)
     rw [Prod.mk_add_mk] at hvw'
-    exact (existsUnique_from
+    exact (existsUnique_from_graph @hg hadd).unique hvw hvw'
+  map_smul' := fun a v => by
+    have hsmul := (g.map (LinearMap.fst R E F)).smul_mem a v.2
+    have hav := valFromGraph_mem hg hsmul
+    have hav' := g.smul_mem a (valFromGraph_mem hg v.2)
+    rw [Prod.smul_mk] at hav'
+    exact (existsUnique_from_graph @hg hsmul).unique hav hav'
 
 中文:
 定义 toLinearPMapAux
@@ -3286,7 +3478,13 @@ definition toLinearPMapAux
     have hvw := valFromGraph_mem hg hadd
     have hvw' := g.add_mem (valFromGraph_mem hg v.2) (valFromGraph_mem hg w.2)
     rw [Prod.mk_add_mk] at hvw'
-    exact (existsUnique_from
+    exact (existsUnique_from_graph @hg hadd).unique hvw hvw'
+  map_smul' := fun a v => by
+    have hsmul := (g.map (LinearMap.fst R E F)).smul_mem a v.2
+    have hav := valFromGraph_mem hg hsmul
+    have hav' := g.smul_mem a (valFromGraph_mem hg v.2)
+    rw [Prod.smul_mk] at hav'
+    exact (existsUnique_from_graph @hg hsmul).unique hav hav'
 
 Depends on / 依赖: valFromGraph
 -/
@@ -3424,7 +3622,12 @@ theorem toLinearPMap_graph_eq
     convert! g.mem_graph_toLinearPMap hg y using 1
     exact Prod.ext hx1.symm hx2.symm
   rw [LinearPMap.mem_graph_iff]
-  have hx_fst : x_fst in g.map (LinearMap.fst R E F) := 
+  have hx_fst : x_fst in g.map (LinearMap.fst R E F) := by
+    simp only [mem_map, LinearMap.fst_apply, Prod.exists, exists_and_right, exists_eq_right]
+    exact ⟨x_snd, hx⟩
+  refine ⟨⟨x_fst, hx_fst⟩, Subtype.coe_mk x_fst hx_fst, ?_⟩
+  rw [toLinearPMap_apply_aux hg]
+  exact (existsUnique_from_graph @hg hx_fst).unique (valFromGraph_mem hg hx_fst) hx
 
 中文:
 定理 toLinearPMap_graph_eq
@@ -3437,7 +3640,12 @@ theorem toLinearPMap_graph_eq
     convert! g.mem_graph_toLinearPMap hg y using 1
     exact Prod.ext hx1.symm hx2.symm
   rw [LinearPMap.mem_graph_iff]
-  have hx_fst : x_fst in g.map (LinearMap.fst R E F) := 
+  have hx_fst : x_fst in g.map (LinearMap.fst R E F) := by
+    simp only [mem_map, LinearMap.fst_apply, Prod.exists, exists_and_right, exists_eq_right]
+    exact ⟨x_snd, hx⟩
+  refine ⟨⟨x_fst, hx_fst⟩, Subtype.coe_mk x_fst hx_fst, ?_⟩
+  rw [toLinearPMap_apply_aux hg]
+  exact (existsUnique_from_graph @hg hx_fst).unique (valFromGraph_mem hg hx_fst) hx
 
 Depends on / 依赖: LinearMap, LinearMap.fst, LinearMap.fst_apply, LinearPMap, LinearPMap.mem_graph_iff, Prod.exists, Prod.ext, Subtype, Subtype.coe_mk, coe_mk, convert, existsUnique_fro, exists_and_right, exists_eq_right, fst_apply, g.map, g.mem_graph_toLinearPMap, hx1.symm, hx2.symm, hx_fst
 -/

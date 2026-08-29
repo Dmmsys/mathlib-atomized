@@ -57,7 +57,10 @@ definition add
       have hpos : 0 < ‖(↑x⁻¹ : R)‖ := Units.norm_pos x⁻¹
       calc
         ‖-(↑x⁻¹ * t)‖ = ‖↑x⁻¹ * t‖ := by rw [norm_neg]
-        _ <= ‖(↑x⁻¹ : R)‖
+        _ <= ‖(↑x⁻¹ : R)‖ * ‖t‖ := norm_mul_le (x⁻¹).1 _
+        _ < ‖(↑x⁻¹ : R)‖ * ‖(↑x⁻¹ : R)‖⁻¹ := by nlinarith only [h, hpos]
+        _ = 1 := mul_inv_cancel₀ (ne_of_gt hpos)))
+    (x + t) (by simp [mul_add]) _ rfl
 
 中文:
 定义 add
@@ -68,7 +71,10 @@ definition add
       have hpos : 0 < ‖(↑x⁻¹ : R)‖ := Units.norm_pos x⁻¹
       calc
         ‖-(↑x⁻¹ * t)‖ = ‖↑x⁻¹ * t‖ := by rw [norm_neg]
-        _ <= ‖(↑x⁻¹ : R)‖
+        _ <= ‖(↑x⁻¹ : R)‖ * ‖t‖ := norm_mul_le (x⁻¹).1 _
+        _ < ‖(↑x⁻¹ : R)‖ * ‖(↑x⁻¹ : R)‖⁻¹ := by nlinarith only [h, hpos]
+        _ = 1 := mul_inv_cancel₀ (ne_of_gt hpos)))
+    (x + t) (by simp [mul_add]) _ rfl
 
 Depends on / 依赖: Units.copy, Units.norm_pos, Units.oneSub, add_val, convenience, definitionally, mul_add, ne_of_gt, nontriviality, norm_mul_le, norm_neg, norm_pos, oneSub, zero_lt_one
 -/
@@ -234,7 +240,7 @@ theorem inverse_add
   rw [Metric.eventually_nhds_iff]
   refine ⟨‖(↑x⁻¹ : R)‖⁻¹, by cancel_denoms, fun t ht => ?_⟩
   rw [dist_zero_right] at ht
-  rw [← x.val_add t ht]; rw [inverse_unit]; rw [Units.add]; rw [Units.copy_eq]; rw [mul_inv_rev]; rw [Units.val_mul]; rw [← inverse_unit]; rw [Units.val_one
+  rw [← x.val_add t ht]; rw [inverse_unit]; rw [Units.add]; rw [Units.copy_eq]; rw [mul_inv_rev]; rw [Units.val_mul]; rw [← inverse_unit]; rw [Units.val_oneSub]; rw [sub_neg_eq_add]
 
 中文:
 定理 inverse_add
@@ -244,7 +250,7 @@ theorem inverse_add
   rw [Metric.eventually_nhds_iff]
   refine ⟨‖(↑x⁻¹ : R)‖⁻¹, by cancel_denoms, fun t ht => ?_⟩
   rw [dist_zero_right] at ht
-  rw [← x.val_add t ht]; rw [inverse_unit]; rw [Units.add]; rw [Units.copy_eq]; rw [mul_inv_rev]; rw [Units.val_mul]; rw [← inverse_unit]; rw [Units.val_one
+  rw [← x.val_add t ht]; rw [inverse_unit]; rw [Units.add]; rw [Units.copy_eq]; rw [mul_inv_rev]; rw [Units.val_mul]; rw [← inverse_unit]; rw [Units.val_oneSub]; rw [sub_neg_eq_add]
 
 Depends on / 依赖: Metric, Metric.eventually_nhds_iff, Units.add, Units.copy_eq, Units.val_mul, Units.val_oneSub, cancel_denoms, copy_eq, dist_zero_right, eventually_nhds_iff, inverse_unit, mul_inv_rev, nontriviality, sub_neg_eq_add, val_add, val_mul, val_oneSub, x.val_add
 -/
@@ -266,7 +272,7 @@ theorem inverse_one_sub_nth_order'
   calc inverse (1 - t) = ∑' i : Nat, t ^ i := inverse_one_sub t ht
     _ = ∑ i in range n, t ^ i + ∑' i : Nat, t ^ (i + n) := (this.sum_add_tsum_nat_add _).symm
     _ = (∑ i in range n, t ^ i) + t ^ n * inverse (1 - t) := by
-      simp only [invers
+      simp only [inverse_one_sub t ht, add_comm _ n, pow_add, this.tsum_mul_left]; rfl
 
 中文:
 定理 inverse_one_sub_nth_order'
@@ -275,7 +281,7 @@ theorem inverse_one_sub_nth_order'
   calc inverse (1 - t) = ∑' i : Nat, t ^ i := inverse_one_sub t ht
     _ = ∑ i in range n, t ^ i + ∑' i : Nat, t ^ (i + n) := (this.sum_add_tsum_nat_add _).symm
     _ = (∑ i in range n, t ^ i) + t ^ n * inverse (1 - t) := by
-      simp only [invers
+      simp only [inverse_one_sub t ht, add_comm _ n, pow_add, this.tsum_mul_left]; rfl
 
 Depends on / 依赖: _root_, _root_.summable_geometric_of_norm_lt_one, add_comm, inverse, inverse_one_sub, pow_add, sum_add_tsum_nat_add, summable_geometric_of_norm_lt_one, this.sum_add_tsum_nat_add, this.tsum_mul_left, tsum_mul_left
 -/
@@ -321,7 +327,8 @@ theorem inverse_add_nth_order
 (mulLeft_continuous _).tendsto' _ _ mul_zero _
   filter_upwards [inverse_add x, hzero.eventually (inverse_one_sub_nth_order n)] with t ht ht'
   rw [neg_mul]; rw [sub_neg_eq_add] at ht'
-  conv_lhs => rw [ht, ht', add_mul, ← neg_mul, mul_assoc
+  conv_lhs => rw [ht, ht', add_mul, ← neg_mul, mul_assoc]
+  rw [ht]
 
 中文:
 定理 inverse_add_nth_order
@@ -331,7 +338,8 @@ theorem inverse_add_nth_order
 (mulLeft_continuous _).tendsto' _ _ mul_zero _
   filter_upwards [inverse_add x, hzero.eventually (inverse_one_sub_nth_order n)] with t ht ht'
   rw [neg_mul]; rw [sub_neg_eq_add] at ht'
-  conv_lhs => rw [ht, ht', add_mul, ← neg_mul, mul_assoc
+  conv_lhs => rw [ht, ht', add_mul, ← neg_mul, mul_assoc]
+  rw [ht]
 
 Depends on / 依赖: Tendsto, add_mul, conv_lhs, eventually, filter_upwards, hzero.eventually, inverse_add, inverse_one_sub_nth_order, mulLeft_continuous, mul_assoc, mul_zero, neg_mul, sub_neg_eq_add, tendsto
 -/
@@ -358,7 +366,9 @@ theorem inverse_one_sub_norm
   have ht' : ‖t‖ < 1 := by linarith
   simp only [inverse_one_sub t ht', norm_one, mul_one]
   change ‖∑' n : Nat, t ^ n‖ <= _
-  have := tsum_geo
+  have := tsum_geometric_le_of_norm_lt_one t ht'
+  have : (1 - ‖t‖)⁻¹ <= 2 := inv_le_of_inv_le₀ (by simp) (by linarith)
+  linarith
 
 中文:
 定理 inverse_one_sub_norm
@@ -370,7 +380,9 @@ theorem inverse_one_sub_norm
   have ht' : ‖t‖ < 1 := by linarith
   simp only [inverse_one_sub t ht', norm_one, mul_one]
   change ‖∑' n : Nat, t ^ n‖ <= _
-  have := tsum_geo
+  have := tsum_geometric_le_of_norm_lt_one t ht'
+  have : (1 - ‖t‖)⁻¹ <= 2 := inv_le_of_inv_le₀ (by simp) (by linarith)
+  linarith
 
 Depends on / 依赖: IsBigO, IsBigOWith, Metric, Metric.eventually_nhds_iff, dist_zero_right, eventually_nhds_iff, inverse_one_sub, mul_one, norm_one, tsum_geometric_le_of_norm_lt_one
 -/
@@ -397,7 +409,7 @@ theorem inverse_add_norm
   simp only [← sub_neg_eq_add, ← neg_mul]
   have hzero : Tendsto (-(↑x⁻¹ : R) * ·) (𝓝 0) (𝓝 0) :=
 (mulLeft_continuous _).tendsto' _ _ mul_zero _
-  exact (inverse_one_sub_norm.comp_tendsto hzero).mul (isBigO_const_const _
+  exact (inverse_one_sub_norm.comp_tendsto hzero).mul (isBigO_const_const _ one_ne_zero _)
 
 中文:
 定理 inverse_add_norm
@@ -408,7 +420,7 @@ theorem inverse_add_norm
   simp only [← sub_neg_eq_add, ← neg_mul]
   have hzero : Tendsto (-(↑x⁻¹ : R) * ·) (𝓝 0) (𝓝 0) :=
 (mulLeft_continuous _).tendsto' _ _ mul_zero _
-  exact (inverse_one_sub_norm.comp_tendsto hzero).mul (isBigO_const_const _
+  exact (inverse_one_sub_norm.comp_tendsto hzero).mul (isBigO_const_const _ one_ne_zero _)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.trans_isBigO, Tendsto, comp_tendsto, inverse_add, inverse_one_sub_norm, inverse_one_sub_norm.comp_tendsto, isBigO_const_const, mulLeft_continuous, mul_zero, neg_mul, one_mul, one_ne_zero, sub_neg_eq_add, tendsto, trans_isBigO
 -/
@@ -430,7 +442,7 @@ theorem inverse_add_norm_diff_nth_order
   simp only [add_sub_cancel_left]
   refine ((isBigO_refl _ _).norm_right.mul (inverse_add_norm x)).trans ?_
   simp only [mul_one, isBigO_norm_left]
-  exact ((isBigO_refl _ _).norm_right.const_mul_left _).pow 
+  exact ((isBigO_refl _ _).norm_right.const_mul_left _).pow _
 
 中文:
 定理 inverse_add_norm_diff_nth_order
@@ -440,7 +452,7 @@ theorem inverse_add_norm_diff_nth_order
   simp only [add_sub_cancel_left]
   refine ((isBigO_refl _ _).norm_right.mul (inverse_add_norm x)).trans ?_
   simp only [mul_one, isBigO_norm_left]
-  exact ((isBigO_refl _ _).norm_right.const_mul_left _).pow 
+  exact ((isBigO_refl _ _).norm_right.const_mul_left _).pow _
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.trans_isBigO, add_sub_cancel_left, const_mul_left, fun_sub, inverse_add_norm, inverse_add_nth_order, isBigO_norm_left, isBigO_refl, mul_one, norm_right, norm_right.const_mul_left, norm_right.mul, trans_isBigO
 -/
@@ -512,7 +524,10 @@ theorem inverse_continuousAt
   have h_is_o : (fun t : R => (↑x + t)⁻¹ʳ - ↑x⁻¹) =o[𝓝 0] (fun _ => 1 : R -> Real) :=
     (inverse_add_norm_diff_first_order x).trans_isLittleO (isLittleO_id_const one_ne_zero).norm_left
   have h_lim : Tendsto (fun y : R => y - x) (𝓝 x) (𝓝 0) := by
-    refine tendsto_zero_iff_norm_tendsto_zero.mp
+    refine tendsto_zero_iff_norm_tendsto_zero.mpr ?_
+    exact tendsto_iff_norm_sub_tendsto_zero.mp tendsto_id
+  rw [ContinuousAt]; rw [tendsto_iff_norm_sub_tendsto_zero]; rw [inverse_unit]
+  simpa [Function.comp_def] using h_is_o.norm_left.tendsto_div_nhds_zero.comp h_lim
 
 中文:
 定理 inverse_continuousAt
@@ -522,7 +537,10 @@ theorem inverse_continuousAt
   have h_is_o : (fun t : R => (↑x + t)⁻¹ʳ - ↑x⁻¹) =o[𝓝 0] (fun _ => 1 : R -> Real) :=
     (inverse_add_norm_diff_first_order x).trans_isLittleO (isLittleO_id_const one_ne_zero).norm_left
   have h_lim : Tendsto (fun y : R => y - x) (𝓝 x) (𝓝 0) := by
-    refine tendsto_zero_iff_norm_tendsto_zero.mp
+    refine tendsto_zero_iff_norm_tendsto_zero.mpr ?_
+    exact tendsto_iff_norm_sub_tendsto_zero.mp tendsto_id
+  rw [ContinuousAt]; rw [tendsto_iff_norm_sub_tendsto_zero]; rw [inverse_unit]
+  simpa [Function.comp_def] using h_is_o.norm_left.tendsto_div_nhds_zero.comp h_lim
 
 Depends on / 依赖: ContinuousAt, Function, Function.comp_def, Tendsto, comp_def, h_is_o, h_is_o.norm_left.tendsto_div_nhds_zero.comp, h_lim, inverse_add_norm_diff_first_order, inverse_unit, isLittleO_id_const, norm_left, one_ne_zero, tendsto_div_nhds_zero, tendsto_id, tendsto_iff_norm_sub_tendsto_zero, tendsto_iff_norm_sub_tendsto_zero.mp, tendsto_zero_iff_norm_tendsto_zero, tendsto_zero_iff_norm_tendsto_zero.mpr, trans_isLittleO
 -/

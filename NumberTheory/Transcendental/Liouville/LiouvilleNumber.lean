@@ -205,7 +205,23 @@ theorem remainder_lt'
   -- to show the strict inequality between these series, we prove that:
   calc
     (∑' i, 1 / m ^ (i + (n + 1))!) < ∑' i, 1 / m ^ (i + (n + 1)!) :=
-        -- 1. the second series dom
+        -- 1. the second series dominates the first
+        Summable.tsum_lt_tsum (fun b => one_div_pow_le_one_div_pow_of_le m1.le
+          (b.add_factorial_succ_le_factorial_add_succ n))
+        -- 2. the term with index `i = 2` of the first series is strictly smaller than
+        -- the corresponding term of the second series
+        (one_div_pow_strictAnti m1 (n.add_factorial_succ_lt_factorial_add_succ (i := 2) le_rfl))
+        -- 3. the first series is summable
+        (remainder_summable m1 n)
+        -- 4. the second series is summable, since its terms grow quickly
+        (summable_one_div_pow_of_le m1 fun _ => le_self_add)
+    -- split the sum in the exponent and massage
+    _ = ∑' i : Nat, (1 / m) ^ i * (1 / m ^ (n + 1)!) := by
+      simp only [pow_add, one_div, mul_inv, inv_pow]
+    -- factor the constant `(1 / m ^ (n + 1)!)` out of the series
+    _ = (∑' i, (1 / m) ^ i) * (1 / m ^ (n + 1)!) := tsum_mul_right
+    -- the series is the geometric series
+    _ = (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) := by rw [tsum_geometric_of_lt_one (by positivity) mi]
 
 中文:
 定理 remainder_lt'
@@ -216,7 +232,23 @@ theorem remainder_lt'
   -- to show the strict inequality between these series, we prove that:
   calc
     (∑' i, 1 / m ^ (i + (n + 1))!) < ∑' i, 1 / m ^ (i + (n + 1)!) :=
-        -- 1. the second series dom
+        -- 1. the second series dominates the first
+        Summable.tsum_lt_tsum (fun b => one_div_pow_le_one_div_pow_of_le m1.le
+          (b.add_factorial_succ_le_factorial_add_succ n))
+        -- 2. the term with index `i = 2` of the first series is strictly smaller than
+        -- the corresponding term of the second series
+        (one_div_pow_strictAnti m1 (n.add_factorial_succ_lt_factorial_add_succ (i := 2) le_rfl))
+        -- 3. the first series is summable
+        (remainder_summable m1 n)
+        -- 4. the second series is summable, since its terms grow quickly
+        (summable_one_div_pow_of_le m1 fun _ => le_self_add)
+    -- split the sum in the exponent and massage
+    _ = ∑' i : Nat, (1 / m) ^ i * (1 / m ^ (n + 1)!) := by
+      simp only [pow_add, one_div, mul_inv, inv_pow]
+    -- factor the constant `(1 / m ^ (n + 1)!)` out of the series
+    _ = (∑' i, (1 / m) ^ i) * (1 / m ^ (n + 1)!) := tsum_mul_right
+    -- the series is the geometric series
+    _ = (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) := by rw [tsum_geometric_of_lt_one (by positivity) mi]
 -/
 theorem remainder_lt' (n : Nat) {m : Real} (m1 : 1 < m) :
     remainder m n < (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) :=
@@ -255,7 +287,15 @@ theorem aux_calc
       -- the second factors coincide (and are non-negative),
       -- the first factors satisfy the inequality `sub_one_div_inv_le_two`
       gcongr; exact sub_one_div_inv_le_two hm
-    _ = 2 / m ^ (n + 1)! := mul_one_div 2 
+    _ = 2 / m ^ (n + 1)! := mul_one_div 2 _
+    _ = 2 / m ^ (n ! * (n + 1)) := (congr_arg (2 / ·) (congr_arg (Pow.pow m) (mul_comm _ _)))
+    _ <= 1 / (m ^ n !) ^ n := by
+      -- Clear denominators and massage*
+      rw [← pow_mul]; rw [div_le_div_iff₀]; rw [one_mul]; rw [mul_add_one]; rw [pow_add]; rw [mul_comm 2]
+      · gcongr
+        -- `2 ≤ m ^ n!` is a consequence of monotonicity of exponentiation at `2 ≤ m`.
+exact hm.trans le_self_pow₀ (one_le_two.trans hm) by positivity
+      all_goals positivity
 
 中文:
 定理 aux_calc
@@ -265,7 +305,15 @@ theorem aux_calc
       -- the second factors coincide (and are non-negative),
       -- the first factors satisfy the inequality `sub_one_div_inv_le_two`
       gcongr; exact sub_one_div_inv_le_two hm
-    _ = 2 / m ^ (n + 1)! := mul_one_div 2 
+    _ = 2 / m ^ (n + 1)! := mul_one_div 2 _
+    _ = 2 / m ^ (n ! * (n + 1)) := (congr_arg (2 / ·) (congr_arg (Pow.pow m) (mul_comm _ _)))
+    _ <= 1 / (m ^ n !) ^ n := by
+      -- Clear denominators and massage*
+      rw [← pow_mul]; rw [div_le_div_iff₀]; rw [one_mul]; rw [mul_add_one]; rw [pow_add]; rw [mul_comm 2]
+      · gcongr
+        -- `2 ≤ m ^ n!` is a consequence of monotonicity of exponentiation at `2 ≤ m`.
+exact hm.trans le_self_pow₀ (one_le_two.trans hm) by positivity
+      all_goals positivity
 -/
 theorem aux_calc (n : Nat) {m : Real} (hm : 2 <= m) :
     (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) <= 1 / (m ^ n !) ^ n :=
@@ -320,7 +368,11 @@ theorem partialSum_eq_rat
   | succ k h =>
     rcases h with ⟨p_k, h_k⟩
     use p_k * m ^ ((k + 1)! - k !) + 1
-    rw [partialSum_succ]; rw [h_k]; rw [div_add_div]; rw [div_eq_div_iff]
+    rw [partialSum_succ]; rw [h_k]; rw [div_add_div]; rw [div_eq_div_iff]; rw [add_mul]
+    · norm_cast
+      rw [add_mul]; rw [one_mul]; rw [Nat.factorial_succ]; rw [add_mul]; rw [one_mul]; rw [add_tsub_cancel_right]; rw [pow_add]
+      simp [mul_assoc]
+    all_goals positivity
 
 中文:
 定理 partialSum_eq_rat
@@ -332,7 +384,11 @@ theorem partialSum_eq_rat
   | succ k h =>
     rcases h with ⟨p_k, h_k⟩
     use p_k * m ^ ((k + 1)! - k !) + 1
-    rw [partialSum_succ]; rw [h_k]; rw [div_add_div]; rw [div_eq_div_iff]
+    rw [partialSum_succ]; rw [h_k]; rw [div_add_div]; rw [div_eq_div_iff]; rw [add_mul]
+    · norm_cast
+      rw [add_mul]; rw [one_mul]; rw [Nat.factorial_succ]; rw [add_mul]; rw [one_mul]; rw [add_tsub_cancel_right]; rw [pow_add]
+      simp [mul_assoc]
+    all_goals positivity
 
 Depends on / 依赖: Nat.cast_one, Nat.factorial, Nat.factorial_succ, add_mul, add_tsub_cancel_right, all_goals, cast_one, div_add_div, div_eq_div_iff, factorial, factorial_succ, mul_assoc, one_mul, partialSum, partialSum_succ, pow_add, pow_one, range_one, sum_singleton
 -/
@@ -368,7 +424,13 @@ theorem liouville_liouvilleNumber
   intro n
   -- the first `n` terms sum to `p / m ^ k!`
   rcases partialSum_eq_rat (zero_lt_two.trans_le hm) n with ⟨p, hp⟩
-  refine ⟨p, m ^ n !, one_lt_pow₀ mZ1 n.factorial_ne_zero, 
+  refine ⟨p, m ^ n !, one_lt_pow₀ mZ1 n.factorial_ne_zero, ?_⟩
+  push_cast
+  rw [Nat.cast_pow] at hp
+  -- separate out the sum of the first `n` terms and the rest
+  rw [← partialSum_add_remainder m1 n]; rw [← hp]
+  have hpos := remainder_pos m1 n
+  simpa [abs_of_pos hpos, hpos.ne'] using @remainder_lt n m (by assumption_mod_cast)
 
 中文:
 定理 liouville_liouvilleNumber
@@ -381,7 +443,13 @@ theorem liouville_liouvilleNumber
   intro n
   -- the first `n` terms sum to `p / m ^ k!`
   rcases partialSum_eq_rat (zero_lt_two.trans_le hm) n with ⟨p, hp⟩
-  refine ⟨p, m ^ n !, one_lt_pow₀ mZ1 n.factorial_ne_zero, 
+  refine ⟨p, m ^ n !, one_lt_pow₀ mZ1 n.factorial_ne_zero, ?_⟩
+  push_cast
+  rw [Nat.cast_pow] at hp
+  -- separate out the sum of the first `n` terms and the rest
+  rw [← partialSum_add_remainder m1 n]; rw [← hp]
+  have hpos := remainder_pos m1 n
+  simpa [abs_of_pos hpos, hpos.ne'] using @remainder_lt n m (by assumption_mod_cast)
 
 Depends on / 依赖: Kernel, Kernel.discard, discard, infer_instance
 -/

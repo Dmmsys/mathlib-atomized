@@ -189,7 +189,8 @@ theorem Convex.combo_interior_closure_subset_interior
       interior (a • s) + b • closure s subseteq interior (a • s) + closure (b • s) :=
         add_subset_add Subset.rfl (smul_closure_subset b s)
       _ = interior (a • s) + b • s := by rw [isOpen_interior.add_closure (b • s)]
-      _ subseteq interior (a • s + b 
+      _ subseteq interior (a • s + b • s) := subset_interior_add_left
+_ subseteq interior s := interior_mono hs.set_combo_subset ha.le hb hab
 
 中文:
 定理 凸.combo_interior_closure_subset_interior
@@ -199,7 +200,8 @@ theorem Convex.combo_interior_closure_subset_interior
       interior (a • s) + b • closure s subseteq interior (a • s) + closure (b • s) :=
         add_subset_add Subset.rfl (smul_closure_subset b s)
       _ = interior (a • s) + b • s := by rw [isOpen_interior.add_closure (b • s)]
-      _ subseteq interior (a • s + b 
+      _ subseteq interior (a • s + b • s) := subset_interior_add_left
+_ subseteq interior s := interior_mono hs.set_combo_subset ha.le hb hab
 
 Depends on / 依赖: Subset, Subset.rfl, add_closure, add_subset_add, closure, ha.le, ha.ne, hs.set_combo_subset, interior, interior_mono, isOpen_interior, isOpen_interior.add_closure, set_combo_subset, smul_closure_subset, subset_interior_add_left, subseteq
 -/
@@ -666,7 +668,11 @@ theorem Convex.strictConvex'
   · exact hs.openSegment_interior_self_subset_interior hx' hy
   by_cases hy' : y in interior s
   · exact hs.openSegment_self_interior_subset_interior hx hy'
-  rcases h ⟨hx, hx'⟩ ⟨hy, hy'⟩ hne 
+  rcases h ⟨hx, hx'⟩ ⟨hy, hy'⟩ hne with ⟨c, hc⟩
+  refine (openSegment_subset_union x y ⟨c, rfl⟩).trans
+    (insert_subset_iff.2 ⟨hc, union_subset ?_ ?_⟩)
+  exacts [hs.openSegment_self_interior_subset_interior hx hc,
+    hs.openSegment_interior_self_subset_interior hc hy]
 
 中文:
 定理 凸.strictConvex'
@@ -678,7 +684,11 @@ theorem Convex.strictConvex'
   · exact hs.openSegment_interior_self_subset_interior hx' hy
   by_cases hy' : y in interior s
   · exact hs.openSegment_self_interior_subset_interior hx hy'
-  rcases h ⟨hx, hx'⟩ ⟨hy, hy'⟩ hne 
+  rcases h ⟨hx, hx'⟩ ⟨hy, hy'⟩ hne with ⟨c, hc⟩
+  refine (openSegment_subset_union x y ⟨c, rfl⟩).trans
+    (insert_subset_iff.2 ⟨hc, union_subset ?_ ?_⟩)
+  exacts [hs.openSegment_self_interior_subset_interior hx hc,
+    hs.openSegment_interior_self_subset_interior hc hy]
 -/
 protected theorem Convex.strictConvex' {s : Set E} (hs : Convex 𝕜 s)
     (h : (s \ interior s).Pairwise fun x y => exists c : 𝕜, lineMap x y c in interior s) :
@@ -773,7 +783,9 @@ theorem Convex.interior_closure_eq_interior_of_nonempty_interior
   have h := AffineMap.lineMap_apply_one (k := 𝕜) x y
 .eventually_mem obtain ⟨t, ht1, ht⟩ := AffineMap.lineMap_continuous.tendsto' _ _ h
 .exists_gt (mem_interior_iff_mem_nhds.1 hy)
-  apply hs.openSegm
+  apply hs.openSegment_interior_closure_subset_interior hx ht
+  nth_rw 1 [← AffineMap.lineMap_apply_zero (k := 𝕜) x y, ← image_openSegment]
+  exact ⟨1, Ioo_subset_openSegment ⟨zero_lt_one, ht1⟩, h⟩
 
 中文:
 定理 凸.interior_closure_eq_interior_of_nonempty_interior
@@ -785,7 +797,9 @@ theorem Convex.interior_closure_eq_interior_of_nonempty_interior
   have h := AffineMap.lineMap_apply_one (k := 𝕜) x y
 .eventually_mem obtain ⟨t, ht1, ht⟩ := AffineMap.lineMap_continuous.tendsto' _ _ h
 .exists_gt (mem_interior_iff_mem_nhds.1 hy)
-  apply hs.openSegm
+  apply hs.openSegment_interior_closure_subset_interior hx ht
+  nth_rw 1 [← AffineMap.lineMap_apply_zero (k := 𝕜) x y, ← image_openSegment]
+  exact ⟨1, Ioo_subset_openSegment ⟨zero_lt_one, ht1⟩, h⟩
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply_one, AffineMap.lineMap_apply_zero, AffineMap.lineMap_continuous.tendsto, Ioo_subset_openSegment, eventually_mem, exists_gt, hs.openSegment_interior_closure_subset_interior, image_openSegment, interior_mono, lineMap_apply_one, lineMap_apply_zero, lineMap_continuous, mem_interior_iff_mem_nhds, nth_rw, openSegment_interior_closure_subset_interior, subset_antisymm, subset_closure, tendsto, zero_lt_one
 -/
@@ -1106,7 +1120,8 @@ theorem Convex.closure_subset_image_homothety_interior_of_one_lt
   refine
     ⟨homothety x t⁻¹ y, hs.openSegment_interior_closure_subset_interior hx hy ?_,
       (AffineEquiv.homothetyUnitsMulHom x (Units.mk0 t hne)).apply_symm_apply y⟩
-  rw [openSegment_eq_image_lineMap]; rw [← inv_one]; rw [← inv_Ioi
+  rw [openSegment_eq_image_lineMap]; rw [← inv_one]; rw [← inv_Ioi₀ (zero_lt_one' Real)]; rw [← image_inv_eq_inv]; rw [image_image]; rw [homothety_eq_lineMap]
+  exact mem_image_of_mem _ ht
 
 中文:
 定理 凸.closure_subset_image_homothety_interior_of_one_lt
@@ -1117,7 +1132,8 @@ theorem Convex.closure_subset_image_homothety_interior_of_one_lt
   refine
     ⟨homothety x t⁻¹ y, hs.openSegment_interior_closure_subset_interior hx hy ?_,
       (AffineEquiv.homothetyUnitsMulHom x (Units.mk0 t hne)).apply_symm_apply y⟩
-  rw [openSegment_eq_image_lineMap]; rw [← inv_one]; rw [← inv_Ioi
+  rw [openSegment_eq_image_lineMap]; rw [← inv_one]; rw [← inv_Ioi₀ (zero_lt_one' Real)]; rw [← image_inv_eq_inv]; rw [image_image]; rw [homothety_eq_lineMap]
+  exact mem_image_of_mem _ ht
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.homothetyUnitsMulHom, Units.mk0, apply_symm_apply, homothety, homothetyUnitsMulHom, homothety_eq_lineMap, hs.openSegment_interior_closure_subset_interior, image_image, image_inv_eq_inv, inv_one, mem_image_of_mem, one_pos, one_pos.trans, openSegment_eq_image_lineMap, openSegment_interior_closure_subset_interior, zero_lt_one
 -/
@@ -1197,7 +1213,10 @@ have hs' := Nonempty.mono interior_mono hs.segment_subset hx hy
     rw [segment_eq_Icc']; rw [interior_Icc]; rw [nonempty_Ioo]; rw [inf_lt_sup] at hs'
     exact hs' h
   · rintro ⟨x, hx⟩
-    rcases eq_singleton_or_nontrivial (interior_subset hx) with rfl 
+    rcases eq_singleton_or_nontrivial (interior_subset hx) with rfl | h
+    · rw [interior_singleton] at hx
+      exact hx.elim
+    · exact h
 
 中文:
 定理 凸.nontrivial_iff_nonempty_interior
@@ -1209,7 +1228,10 @@ have hs' := Nonempty.mono interior_mono hs.segment_subset hx hy
     rw [segment_eq_Icc']; rw [interior_Icc]; rw [nonempty_Ioo]; rw [inf_lt_sup] at hs'
     exact hs' h
   · rintro ⟨x, hx⟩
-    rcases eq_singleton_or_nontrivial (interior_subset hx) with rfl 
+    rcases eq_singleton_or_nontrivial (interior_subset hx) with rfl | h
+    · rw [interior_singleton] at hx
+      exact hx.elim
+    · exact h
 
 Depends on / 依赖: Nonempty, Nonempty.mono, eq_singleton_or_nontrivial, hs.segment_subset, hx.elim, inf_lt_sup, interior_Icc, interior_mono, interior_singleton, interior_subset, nonempty_Ioo, segment_eq_Icc, segment_subset
 -/
@@ -1241,7 +1263,11 @@ lemma Convex.Ioo_subset_of_mem_closure
     simp only [nontrivial_coe_sort] at h'
     calc Ioo a b
     _ = interior (Ioo a b) := interior_Ioo.symm
-_ subseteq interior (openSegment 𝕜 a b)
+_ subseteq interior (openSegment 𝕜 a b) := interior_mono Ioo_subset_openSegment
+_ subseteq interior (closure s) := interior_mono hs.closure.openSegment_subset has hbs
+_ = interior s := hs.interior_closure_eq_interior_of_nonempty_interior
+      hs.nontrivial_iff_nonempty_interior.1 h'
+    _ subseteq s := interior_subset
 
 中文:
 引理 凸.Ioo_subset_of_mem_closure
@@ -1255,7 +1281,11 @@ _ subseteq interior (openSegment 𝕜 a b)
     simp only [nontrivial_coe_sort] at h'
     calc Ioo a b
     _ = interior (Ioo a b) := interior_Ioo.symm
-_ subseteq interior (openSegment 𝕜 a b)
+_ subseteq interior (openSegment 𝕜 a b) := interior_mono Ioo_subset_openSegment
+_ subseteq interior (closure s) := interior_mono hs.closure.openSegment_subset has hbs
+_ = interior s := hs.interior_closure_eq_interior_of_nonempty_interior
+      hs.nontrivial_iff_nonempty_interior.1 h'
+    _ subseteq s := interior_subset
 
 Depends on / 依赖: Ioo_subset_openSegment, closure, hs.closure.openSegment_subset, hs.interior_closure_eq_interior_of_nonempty_interior, hs.nontrivial_iff_nonempty_, hs_sub, hs_sub.closure, interior, interior_Ioo, interior_Ioo.symm, interior_closure_eq_interior_of_nonempty_interior, interior_mono, nontrivial_coe_sort, nontrivial_iff_nonempty_, openSegment, openSegment_subset, subseteq, subsingleton_coe, subsingleton_or_nontrivial
 -/
@@ -1343,7 +1373,7 @@ lemma Convex.nhdsWithin_sdiff_eq_nhdsNE
   simp [hs.nhdsWithin_inter_Ioi_eq_nhdsGT has h_Ioi, hs.nhdsWithin_inter_Iio_eq_nhdsLT has h_Iio]
 
 @[deprecated (since := "2026-06-03")]
-alias Convex.nhdsWithin_diff_eq_nhdsNE := Con
+alias Convex.nhdsWithin_diff_eq_nhdsNE := Convex.nhdsWithin_sdiff_eq_nhdsNE
 
 中文:
 引理 凸.nhdsWithin_sdiff_eq_nhdsNE
@@ -1353,7 +1383,7 @@ alias Convex.nhdsWithin_diff_eq_nhdsNE := Con
   simp [hs.nhdsWithin_inter_Ioi_eq_nhdsGT has h_Ioi, hs.nhdsWithin_inter_Iio_eq_nhdsLT has h_Iio]
 
 @[deprecated (since := "2026-06-03")]
-alias Convex.nhdsWithin_diff_eq_nhdsNE := Con
+alias Convex.nhdsWithin_diff_eq_nhdsNE := Convex.nhdsWithin_sdiff_eq_nhdsNE
 
 Depends on / 依赖: Iio_union_Ioi, h_Iio, h_Ioi, hs.nhdsWithin_inter_Iio_eq_nhdsLT, hs.nhdsWithin_inter_Ioi_eq_nhdsGT, inter_union_distrib_left, nhdsWithin_inter_Iio_eq_nhdsLT, nhdsWithin_inter_Ioi_eq_nhdsGT, nhdsWithin_union, sdiff_eq
 -/
@@ -1413,7 +1443,7 @@ lemma Convex.nhdsWithin_sdiff_eq_nhdsGT
 @[deprecated (since := "2026-06-03")]
 alias Convex.nhdsWithin_diff_eq_nhdsGT := Convex.nhdsWithin_sdiff_eq_nhdsGT
 
-omit [Field 𝕜] [IsStrictOrder
+omit [Field 𝕜] [IsStrictOrderedRing 𝕜] in
 
 中文:
 引理 凸.nhdsWithin_sdiff_eq_nhdsGT
@@ -1425,7 +1455,7 @@ omit [Field 𝕜] [IsStrictOrder
 @[deprecated (since := "2026-06-03")]
 alias Convex.nhdsWithin_diff_eq_nhdsGT := Convex.nhdsWithin_sdiff_eq_nhdsGT
 
-omit [Field 𝕜] [IsStrictOrder
+omit [Field 𝕜] [IsStrictOrderedRing 𝕜] in
 
 Depends on / 依赖: Iio_union_Ioi, h_Iio, h_Ioi, hs.nhdsWithin_inter_Ioi_eq_nhdsGT, inter_union_distrib_left, nhdsWithin_inter_Ioi_eq_nhdsGT, nhdsWithin_union, sdiff_eq
 -/
@@ -1451,7 +1481,7 @@ lemma sdiff_singleton_eventually_mem_nhds_left
   have : Ioo b a subseteq s := h b (subset_closure hbs)
   apply eventually_of_mem (U := Ioo b a) ?_ fun x hx => ?_
   · exact mem_nhdsWithin.2 ⟨Ioi b, isOpen_Ioi, hba, fun _ ⟨h₁, _, h₂⟩ => ⟨h₁, h₂⟩⟩
-  · exact mem
+  · exact mem_nhds_iff.2 ⟨Ioo b a, subset_sdiff_singleton this right_notMem_Ioo, isOpen_Ioo, hx⟩
 
 中文:
 引理 sdiff_singleton_eventually_mem_nhds_left
@@ -1462,7 +1492,7 @@ lemma sdiff_singleton_eventually_mem_nhds_left
   have : Ioo b a subseteq s := h b (subset_closure hbs)
   apply eventually_of_mem (U := Ioo b a) ?_ fun x hx => ?_
   · exact mem_nhdsWithin.2 ⟨Ioi b, isOpen_Ioi, hba, fun _ ⟨h₁, _, h₂⟩ => ⟨h₁, h₂⟩⟩
-  · exact mem
+  · exact mem_nhds_iff.2 ⟨Ioo b a, subset_sdiff_singleton this right_notMem_Ioo, isOpen_Ioo, hx⟩
 -/
 private lemma sdiff_singleton_eventually_mem_nhds_left {s : Set 𝕜} {a : 𝕜}
     (h : forall x in closure s, Ioo x a subseteq s) : forallᶠ (x : 𝕜) in 𝓝[s inter Iio a] a, s \ {a} in 𝓝 x := by
@@ -1486,7 +1516,12 @@ theorem Convex.sdiff_singleton_eventually_mem_nhds
   replace has := closure_mono sdiff_subset (mem_closure_iff_nhdsWithin_neBot.2 has)
   conv in 𝓝[s \ {a}] a => rw [sdiff_eq, ← Iio_union_Ioi, inter_union_distrib_left]
   rw [nhdsWithin_union]; rw [eventually_sup]
+  exact ⟨sdiff_singleton_eventually_mem_nhds_left fun x hx => hs.Ioo_subset_of_mem_closure hx has,
+    sdiff_singleton_eventually_mem_nhds_left (𝕜 := 𝕜ᵒᵈ) fun x hx z hz =>
+      hs.Ioo_subset_of_mem_closure has hx hz.symm⟩
 
+@[deprecated (since := "2026-06-03")]
+alias Convex.diff_singleton_eventually_mem_nhds := Convex.sdiff_singleton_eventually_mem_nhds
 
 中文:
 定理 凸.sdiff_singleton_eventually_mem_nhds
@@ -1498,7 +1533,12 @@ theorem Convex.sdiff_singleton_eventually_mem_nhds
   replace has := closure_mono sdiff_subset (mem_closure_iff_nhdsWithin_neBot.2 has)
   conv in 𝓝[s \ {a}] a => rw [sdiff_eq, ← Iio_union_Ioi, inter_union_distrib_left]
   rw [nhdsWithin_union]; rw [eventually_sup]
+  exact ⟨sdiff_singleton_eventually_mem_nhds_left fun x hx => hs.Ioo_subset_of_mem_closure hx has,
+    sdiff_singleton_eventually_mem_nhds_left (𝕜 := 𝕜ᵒᵈ) fun x hx z hz =>
+      hs.Ioo_subset_of_mem_closure has hx hz.symm⟩
 
+@[deprecated (since := "2026-06-03")]
+alias Convex.diff_singleton_eventually_mem_nhds := Convex.sdiff_singleton_eventually_mem_nhds
 
 Depends on / 依赖: Iio_union_Ioi, Ioo_subset_of_mem_closure, closure_mono, eq_or_neBot, eventually_bot, eventually_sup, hs.Ioo_subset_of_mem_closure, hz.symm, inter_union_distrib_left, mem_closure_iff_nhdsWithin_neBot, nhdsWithin_union, replace, sdiff_eq, sdiff_singleton_eventually_mem_nhds_left, sdiff_subset
 -/
@@ -1542,7 +1582,7 @@ theorem isCompact_closedInterior
     apply (Homeomorph.vaddConst (s.points 0)).symm.isCompact_image.mp
     simpa
   rw [← s.closedInterior_map (AffineEquiv.injective _)]; rw [← convexHull_eq_closedInterior]
-  exact (Set.fin
+  exact (Set.finite_range _).isCompact_convexHull 𝕜
 
 中文:
 定理 isCompact_closed整数erior
@@ -1554,7 +1594,7 @@ theorem isCompact_closedInterior
     apply (Homeomorph.vaddConst (s.points 0)).symm.isCompact_image.mp
     simpa
   rw [← s.closedInterior_map (AffineEquiv.injective _)]; rw [← convexHull_eq_closedInterior]
-  exact (Set.fin
+  exact (Set.finite_range _).isCompact_convexHull 𝕜
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.injective, AffineEquiv.vaddConst, Homeomorph, Homeomorph.vaddConst, IsCompact, Set.finite_range, closedInterior, closedInterior_map, convexHull_eq_closedInterior, finite_range, injective, isCompact_convexHull, isCompact_image, points, s.closedInterior, s.closedInterior_map, s.points, symm.isCompact_image.mp, symm.toAffineMap
 -/

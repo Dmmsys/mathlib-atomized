@@ -94,7 +94,18 @@ lemma smoothLocus_eq_compl_support_inter
   refine (Algebra.formallySmooth_iff _ _).trans (and_comm.trans ?_)
   congr! 1
   · have := IsLocalizedModule.iso p.asIdeal.primeCompl
-      (H1Cotangent.map R R A (Localization.AtPrime 
+      (H1Cotangent.map R R A (Localization.AtPrime p.asIdeal))
+    exact this.subsingleton_congr.symm
+  · trans Module.Free (Localization.AtPrime p.asIdeal) Ω[Localization.AtPrime p.asIdeal⁄R]
+    · have : EssFiniteType A (Localization.AtPrime p.asIdeal) :=
+        .of_isLocalization _ p.asIdeal.primeCompl
+      have : EssFiniteType R (Localization.AtPrime p.asIdeal) := .comp _ A _
+      exact ⟨fun _ => Module.free_of_flat_of_isLocalRing, fun _ => inferInstance⟩
+    · have := IsLocalizedModule.iso p.asIdeal.primeCompl
+        (KaehlerDifferential.map R R A (Localization.AtPrime p.asIdeal))
+      have := this.extendScalarsOfIsLocalization
+        p.asIdeal.primeCompl (Localization.AtPrime p.asIdeal)
+      exact ⟨fun H => H.of_equiv' this.symm, fun H => H.of_equiv' this⟩
 
 中文:
 引理 smoothLocus_eq_compl_support_inter
@@ -106,7 +117,18 @@ lemma smoothLocus_eq_compl_support_inter
   refine (Algebra.formallySmooth_iff _ _).trans (and_comm.trans ?_)
   congr! 1
   · have := IsLocalizedModule.iso p.asIdeal.primeCompl
-      (H1Cotangent.map R R A (Localization.AtPrime 
+      (H1Cotangent.map R R A (Localization.AtPrime p.asIdeal))
+    exact this.subsingleton_congr.symm
+  · trans Module.Free (Localization.AtPrime p.asIdeal) Ω[Localization.AtPrime p.asIdeal⁄R]
+    · have : EssFiniteType A (Localization.AtPrime p.asIdeal) :=
+        .of_isLocalization _ p.asIdeal.primeCompl
+      have : EssFiniteType R (Localization.AtPrime p.asIdeal) := .comp _ A _
+      exact ⟨fun _ => Module.free_of_flat_of_isLocalRing, fun _ => inferInstance⟩
+    · have := IsLocalizedModule.iso p.asIdeal.primeCompl
+        (KaehlerDifferential.map R R A (Localization.AtPrime p.asIdeal))
+      have := this.extendScalarsOfIsLocalization
+        p.asIdeal.primeCompl (Localization.AtPrime p.asIdeal)
+      exact ⟨fun H => H.of_equiv' this.symm, fun H => H.of_equiv' this⟩
 
 Depends on / 依赖: Algebra, Algebra.formallySmooth_iff, AtPrime, EssFiniteType, H1Cotangent, H1Cotangent.map, IsLocalizedModule, IsLocalizedModule.iso, Localization, Localization.AtPrime, Module, Module.Free, Module.mem_freeLocus, Module.notMem_support_iff, Set.mem_compl_iff, Set.mem_inter_iff, and_comm, and_comm.trans, asIdeal, formallySmooth_iff
 -/
@@ -140,7 +162,13 @@ lemma basicOpen_subset_smoothLocus_iff
   proof: by
   rw [smoothLocus_eq_compl_support_inter]; rw [Set.subset_inter_iff]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [Algebra.formallySmooth_iff]; rw [iff_comm]; rw [and_comm]
   congr! 1
-  ·
+  · have := IsLocalizedModule.iso (.powers f) (H1Cotangent.map R R A (Localization.Away f))
+    rw [this.subsingleton_congr]
+  · rw [← PrimeSpectrum.basicOpen_eq_zeroLocus_compl, Module.basicOpen_subset_freeLocus_iff]
+    have := IsLocalizedModule.iso (.powers f)
+        (KaehlerDifferential.map R R A (Localization.Away f))
+    have := this.extendScalarsOfIsLocalization (.powers f) (Localization.Away f)
+    exact ⟨fun _ => .of_equiv this.symm, fun _ => .of_equiv this⟩
 
 中文:
 引理 basicOpen_subset_smoothLocus_iff
@@ -148,7 +176,13 @@ lemma basicOpen_subset_smoothLocus_iff
   证明: by
   rw [smoothLocus_eq_compl_support_inter]; rw [Set.subset_inter_iff]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [Algebra.formallySmooth_iff]; rw [iff_comm]; rw [and_comm]
   congr! 1
-  ·
+  · have := IsLocalizedModule.iso (.powers f) (H1Cotangent.map R R A (Localization.Away f))
+    rw [this.subsingleton_congr]
+  · rw [← PrimeSpectrum.basicOpen_eq_zeroLocus_compl, Module.basicOpen_subset_freeLocus_iff]
+    have := IsLocalizedModule.iso (.powers f)
+        (KaehlerDifferential.map R R A (Localization.Away f))
+    have := this.extendScalarsOfIsLocalization (.powers f) (Localization.Away f)
+    exact ⟨fun _ => .of_equiv this.symm, fun _ => .of_equiv this⟩
 
 Depends on / 依赖: Algebra, Algebra.formallySmooth_iff, H1Cotangent, H1Cotangent.map, IsLocalizedModule, IsLocalizedModule.iso, Localization, Localization.Away, LocalizedModule, LocalizedModule.subsingleton_iff_support_subset, Module, Module.basicOpen_subset_freeLocus_if, PrimeSpectrum, PrimeSpectrum.basicOpen_eq_zeroLocus_compl, Set.subset_compl_comm, Set.subset_inter_iff, and_comm, basicOpen_eq_zeroLocus_compl, basicOpen_subset_freeLocus_if, compl_compl
 -/
@@ -257,7 +291,7 @@ lemma smoothLocus_comap_of_isLocalization
   have : IsLocalization.AtPrime (Localization.AtPrime p.asIdeal) q.asIdeal :=
     IsLocalization.isLocalization_isLocalization_atPrime_isLocalization (.powers f) _ p.asIdeal
   refine Algebra.FormallySmooth.iff_of_equiv ?_
-  exact (IsLocal
+  exact (IsLocalization.algEquiv q.asIdeal.primeCompl _ _).restrictScalars R
 
 中文:
 引理 smoothLocus_comap_of_isLocalization
@@ -268,7 +302,7 @@ lemma smoothLocus_comap_of_isLocalization
   have : IsLocalization.AtPrime (Localization.AtPrime p.asIdeal) q.asIdeal :=
     IsLocalization.isLocalization_isLocalization_atPrime_isLocalization (.powers f) _ p.asIdeal
   refine Algebra.FormallySmooth.iff_of_equiv ?_
-  exact (IsLocal
+  exact (IsLocalization.algEquiv q.asIdeal.primeCompl _ _).restrictScalars R
 
 Depends on / 依赖: Algebra, Algebra.FormallySmooth.iff_of_equiv, AtPrime, FormallySmooth, IsLocalization, IsLocalization.AtPrime, IsLocalization.algEquiv, IsLocalization.isLocalization_isLocalization_atPrime_isLocalization, Localization, Localization.AtPrime, PrimeSpectrum, PrimeSpectrum.comap, algEquiv, algebraMap, asIdeal, iff_of_equiv, isLocalization_isLocalization_atPrime_isLocalization, p.asIdeal, powers, primeCompl
 -/
@@ -300,6 +334,21 @@ lemma isOpen_smoothLocus
     (smoothLocus_eq_compl_support_inter.le hx).2 Module.isOpen_freeLocus
   rw [Module.basicOpen_subset_freeLocus_iff] at hf
   let Af := Localization.Away f
+  have : Algebra.FinitePresentation A (Localization.Away f) :=
+    IsLocalization.Away.finitePresentation f
+  have : Algebra.FinitePresentation R (Localization.Away f) :=
+    .trans _ A _
+  have : IsOpen (smoothLocus R Af) := by
+    have := IsLocalizedModule.iso (.powers f)
+      (KaehlerDifferential.map R R A (Localization.Away f))
+    have := this.extendScalarsOfIsLocalization (.powers f) (Localization.Away f)
+    have := Module.Projective.of_equiv this
+    rw [smoothLocus_eq_compl_support_inter]; rw [Module.support_eq_zeroLocus]
+    exact (isClosed_zeroLocus _).isOpen_compl.inter Module.isOpen_freeLocus
+  rw [← smoothLocus_comap_of_isLocalization f] at this
+  replace this := (PrimeSpectrum.localization_away_isOpenEmbedding Af f).isOpenMap _ this
+  rw [Set.image_preimage_eq_inter_range]; rw [localization_away_comap_range Af f] at this
+  exact ⟨_, Set.inter_subset_left, this, hx, hxf⟩
 
 中文:
 引理 isOpen_smoothLocus
@@ -313,6 +362,21 @@ lemma isOpen_smoothLocus
     (smoothLocus_eq_compl_support_inter.le hx).2 Module.isOpen_freeLocus
   rw [Module.basicOpen_subset_freeLocus_iff] at hf
   let Af := Localization.Away f
+  have : Algebra.FinitePresentation A (Localization.Away f) :=
+    IsLocalization.Away.finitePresentation f
+  have : Algebra.FinitePresentation R (Localization.Away f) :=
+    .trans _ A _
+  have : IsOpen (smoothLocus R Af) := by
+    have := IsLocalizedModule.iso (.powers f)
+      (KaehlerDifferential.map R R A (Localization.Away f))
+    have := this.extendScalarsOfIsLocalization (.powers f) (Localization.Away f)
+    have := Module.Projective.of_equiv this
+    rw [smoothLocus_eq_compl_support_inter]; rw [Module.support_eq_zeroLocus]
+    exact (isClosed_zeroLocus _).isOpen_compl.inter Module.isOpen_freeLocus
+  rw [← smoothLocus_comap_of_isLocalization f] at this
+  replace this := (PrimeSpectrum.localization_away_isOpenEmbedding Af f).isOpenMap _ this
+  rw [Set.image_preimage_eq_inter_range]; rw [localization_away_comap_range Af f] at this
+  exact ⟨_, Set.inter_subset_left, this, hx, hxf⟩
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation, FinitePresentation, IsLocalization, IsLocalization.Away.finitePresentation, IsOpen, Localization, Localization.Away, Module, Module.basicOpen_subset_freeLocus_iff, Module.isOpen_freeLocus, basicOpen_subset_freeLocus_iff, exists_subset_of_mem_open, finitePresentation, isBasis_basic_opens, isBasis_basic_opens.exists_subset_of_mem_open, isOpen_freeLocus, isOpen_iff_forall_mem_open, smoothLocus, smoothLocus_eq_compl_support_inter
 -/

@@ -179,7 +179,7 @@ theorem unique
     | top =>
       rw [hl.eq_top_iff] at hc
       exact absurd (congrFun hc c') (hl'.isLeadingEntry hc').2
-    | coe c => exact_mod_cast (hl.isLeadingEnt
+    | coe c => exact_mod_cast (hl.isLeadingEntry hc).unique (hl'.isLeadingEntry hc')
 
 中文:
 定理 unique
@@ -195,7 +195,7 @@ theorem unique
     | top =>
       rw [hl.eq_top_iff] at hc
       exact absurd (congrFun hc c') (hl'.isLeadingEntry hc').2
-    | coe c => exact_mod_cast (hl.isLeadingEnt
+    | coe c => exact_mod_cast (hl.isLeadingEntry hc).unique (hl'.isLeadingEntry hc')
 
 Depends on / 依赖: absurd, eq_top_iff, hl.eq_top_iff, hl.isLeadingEntry, isLeadingEntry, unique
 -/
@@ -281,7 +281,11 @@ theorem isPivotedBy_iff
   rcases eq_or_ne (l i₂) ⊤ with h₂ | h₂
   · rw [h₂]
     exact WithTop.coe_lt_top j₂
-  · have h₁ : l i₁ != ⊤ := fun ht => h₂ (top_le_i
+  · have h₁ : l i₁ != ⊤ := fun ht => h₂ (top_le_iff.mp (ht.symm.le.trans (hmono hlt.le)))
+    obtain ⟨c₁, hc₁⟩ := WithTop.ne_top_iff_exists.mp h₁
+    have hj : (j₂ : WithTop n) <= c₁ :=
+WithTop.coe_le_coe.mpr le_of_not_gt fun hgt => (hlead i₁).2 c₁ hc₁.symm (hz c₁ hgt)
+    exact lt_of_le_of_lt (hj.trans hc₁.le) (hstrict h₁ h₂ hlt)
 
 中文:
 定理 isPivotedBy_iff
@@ -292,7 +296,11 @@ theorem isPivotedBy_iff
   rcases eq_or_ne (l i₂) ⊤ with h₂ | h₂
   · rw [h₂]
     exact WithTop.coe_lt_top j₂
-  · have h₁ : l i₁ != ⊤ := fun ht => h₂ (top_le_i
+  · have h₁ : l i₁ != ⊤ := fun ht => h₂ (top_le_iff.mp (ht.symm.le.trans (hmono hlt.le)))
+    obtain ⟨c₁, hc₁⟩ := WithTop.ne_top_iff_exists.mp h₁
+    have hj : (j₂ : WithTop n) <= c₁ :=
+WithTop.coe_le_coe.mpr le_of_not_gt fun hgt => (hlead i₁).2 c₁ hc₁.symm (hz c₁ hgt)
+    exact lt_of_le_of_lt (hj.trans hc₁.le) (hstrict h₁ h₂ hlt)
 
 Depends on / 依赖: WithTop, WithTop.coe_le_coe.mpr, WithTop.coe_lt_top, WithTop.ne_top_iff_exists.mp, coe_le_coe, coe_lt_top, eq_or_ne, hA.isPivotEntry, hA.monotone, hA.strictMonoOn, hlt.le, hstrict, ht.symm.le.trans, isPivotEntry, le_of_not_gt, monotone, ne_top_iff_exists, strictMonoOn, top_le_iff, top_le_iff.mp
 -/
@@ -361,7 +369,17 @@ theorem rank_eq
     (Function.support_subset_iff'.mpr fun i hi => hA.eq_top_iff.mp (by aesop))) ?_
   let g : {i // l i != ⊤} -> n := fun i => (l i.1).untop i.2
   have hlead : forall i : {i // l i != ⊤}, A.IsLeadingEntry i.1 (g i) := fun i =>
-    hA.isLeadi
+    hA.isLeadingEntry (WithTop.coe_untop (l i.1) i.2).symm
+  have htri : (A.submatrix Subtype.val g).IsUpperTriangular := by
+    intro i j hij
+    exact (hlead i).1 _ ((WithTop.untop_lt_untop_iff _ _).mpr (hA.strictMonoOn j.2 i.2 hij))
+  have hdet : (A.submatrix Subtype.val g).det != 0 := by
+    rw [det_of_isUpperTriangular htri]
+    exact prod_ne_zero_iff.mpr fun i _ => (hlead i).2
+  calc #{i | l i != ⊤}
+      = (A.submatrix Subtype.val g).rank := by
+        rw [rank_of_det_ne_zero hdet]; rw [Fintype.card_subtype]
+    _ <= A.rank := rank_submatrix_le A Subtype.val g
 
 中文:
 定理 rank_eq
@@ -372,7 +390,17 @@ theorem rank_eq
     (Function.support_subset_iff'.mpr fun i hi => hA.eq_top_iff.mp (by aesop))) ?_
   let g : {i // l i != ⊤} -> n := fun i => (l i.1).untop i.2
   have hlead : forall i : {i // l i != ⊤}, A.IsLeadingEntry i.1 (g i) := fun i =>
-    hA.isLeadi
+    hA.isLeadingEntry (WithTop.coe_untop (l i.1) i.2).symm
+  have htri : (A.submatrix Subtype.val g).IsUpperTriangular := by
+    intro i j hij
+    exact (hlead i).1 _ ((WithTop.untop_lt_untop_iff _ _).mpr (hA.strictMonoOn j.2 i.2 hij))
+  have hdet : (A.submatrix Subtype.val g).det != 0 := by
+    rw [det_of_isUpperTriangular htri]
+    exact prod_ne_zero_iff.mpr fun i _ => (hlead i).2
+  calc #{i | l i != ⊤}
+      = (A.submatrix Subtype.val g).rank := by
+        rw [rank_of_det_ne_zero hdet]; rw [Fintype.card_subtype]
+    _ <= A.rank := rank_submatrix_le A Subtype.val g
 
 Depends on / 依赖: A.IsLeadingEntry, A.rank_le_card_of_support_subset, A.submatrix, Function, Function.support_subset_iff, IsLeadingEntry, IsUpperTriangular, Subtype, Subtype.val, WithTop, WithTop.coe_untop, WithTop.untop_lt_untop_iff, coe_untop, eq_top_iff, hA.eq_top_iff.mp, hA.isLeadingEntry, hA.strictMonoOn, isLeadingEntry, le_antisymm, rank_le_card_of_support_subset
 -/

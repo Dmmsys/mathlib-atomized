@@ -79,7 +79,9 @@ theorem exists_mem_kaplanskySet_le
   · refine ⟨sSup C, ?_, fun _ hz => le_sSup hz⟩
     rw [mem_kaplanskySet_iff]; rw [eq_empty_iff_forall_notMem]
     intro x hx
-    rcases (Submodule.mem_sSup_of_directed ⟨_
+    rcases (Submodule.mem_sSup_of_directed ⟨_, hI⟩ hC₂.directedOn).1 hx.1 with ⟨J, hJ₁, hJ₂⟩
+    have hx₂ : (J : Set R) inter S != ∅ := nonempty_iff_ne_empty.1 ⟨x, hJ₂, hx.2⟩
+    exact hx₂ (mem_kaplanskySet_iff.mp (hC hJ₁))
 
 中文:
 定理 存在_mem_kaplanskySet_le
@@ -90,7 +92,9 @@ theorem exists_mem_kaplanskySet_le
   · refine ⟨sSup C, ?_, fun _ hz => le_sSup hz⟩
     rw [mem_kaplanskySet_iff]; rw [eq_empty_iff_forall_notMem]
     intro x hx
-    rcases (Submodule.mem_sSup_of_directed ⟨_
+    rcases (Submodule.mem_sSup_of_directed ⟨_, hI⟩ hC₂.directedOn).1 hx.1 with ⟨J, hJ₁, hJ₂⟩
+    have hx₂ : (J : Set R) inter S != ∅ := nonempty_iff_ne_empty.1 ⟨x, hJ₂, hx.2⟩
+    exact hx₂ (mem_kaplanskySet_iff.mp (hC hJ₁))
 
 Depends on / 依赖: C.eq_empty_or_nonempty, Submodule, Submodule.mem_sSup_of_directed, directedOn, eq_empty_iff_forall_notMem, eq_empty_or_nonempty, le_sSup, mem_kaplanskySet_iff, mem_kaplanskySet_iff.mp, mem_sSup_of_directed, nonempty_iff_ne_empty
 -/
@@ -147,7 +151,11 @@ theorem span_notMem_kaplanskySet
     exact not_prime_zero (hl 0 (Multiset.prod_eq_zero_iff.1 hprod))
   intro h
   rcases exists_mem_kaplanskySet_eq_of_le hzero with ⟨T, hT, hT₂⟩
-  have hT₃ : T != ⊥ := fun h₂
+  have hT₃ : T != ⊥ := fun h₂ => ha (span_singleton_eq_bot.1 ((h₂ ▸ hT₂) _ h zero_le))
+  have Tpri := isPrime_of_maximally_disjoint T _ hT (fun J hJ H => hJ.ne (hT₂ J H hJ.le).symm)
+  rcases (H T) hT₃ Tpri with ⟨x, H₃, H₄⟩
+  rw [mem_kaplanskySet_iff]; rw [eq_empty_iff_forall_notMem] at hT
+  exact hT x ⟨H₃, subset_closure H₄⟩
 
 中文:
 定理 span_notMem_kaplanskySet
@@ -158,7 +166,11 @@ theorem span_notMem_kaplanskySet
     exact not_prime_zero (hl 0 (Multiset.prod_eq_zero_iff.1 hprod))
   intro h
   rcases exists_mem_kaplanskySet_eq_of_le hzero with ⟨T, hT, hT₂⟩
-  have hT₃ : T != ⊥ := fun h₂
+  have hT₃ : T != ⊥ := fun h₂ => ha (span_singleton_eq_bot.1 ((h₂ ▸ hT₂) _ h zero_le))
+  have Tpri := isPrime_of_maximally_disjoint T _ hT (fun J hJ H => hJ.ne (hT₂ J H hJ.le).symm)
+  rcases (H T) hT₃ Tpri with ⟨x, H₃, H₄⟩
+  rw [mem_kaplanskySet_iff]; rw [eq_empty_iff_forall_notMem] at hT
+  exact hT x ⟨H₃, subset_closure H₄⟩
 
 Depends on / 依赖: Multiset, Multiset.prod_eq_zero_iff, closure, exists_mem_kaplanskySet_eq_of_le, exists_multiset_of_mem_closure, hJ.le, hJ.ne, isPrime_of_maximally_disjoint, mem_kaplanskySet_iff, not_prime_zero, prod_eq_zero_iff, span_singleton_eq_bot, zero_le
 -/
@@ -188,7 +200,22 @@ theorem of_exists_prime_mem_of_isPrime
   rcases nonempty_iff_ne_empty.2 ha₂ with ⟨x, hx, hx₂⟩
   obtain ⟨b, hb⟩ := mem_span_singleton'.1 hx
   rw [← hb]; rw [mul_comm] at hx₂
-  have hsu
+  have hsubset : closure {r : R | Prime r} <= closure {r : R | IsUnit r ∨ Prime r} :=
+    closure_mono (by grind)
+  have := divisor_closure_eq_closure _ _ (hsubset hx₂)
+  clear ha ha₂ hx hb hx₂
+  induction this using closure_induction with
+  | mem z hz =>
+      rcases hz with h | h
+      · exact ⟨∅, by simpa using (associated_one_iff_isUnit.2 h).symm⟩
+      · exact ⟨{z}, by simpa⟩
+  | one => exact ⟨∅, by simp⟩
+  | mul z₁ z₂ hz₁ hz₂ h₁ h₂ =>
+      obtain ⟨S₁, hS₁pri, hS₁⟩ := h₁
+      obtain ⟨S₂, hS₂pri, hS₂⟩ := h₂
+      refine ⟨S₁ + S₂, by grind, ?_⟩
+      rw [Multiset.prod_add]
+      exact hS₁.mul_mul hS₂
 
 中文:
 定理 of_存在_prime_mem_of_isPrime
@@ -199,7 +226,22 @@ theorem of_exists_prime_mem_of_isPrime
   rcases nonempty_iff_ne_empty.2 ha₂ with ⟨x, hx, hx₂⟩
   obtain ⟨b, hb⟩ := mem_span_singleton'.1 hx
   rw [← hb]; rw [mul_comm] at hx₂
-  have hsu
+  have hsubset : closure {r : R | Prime r} <= closure {r : R | IsUnit r ∨ Prime r} :=
+    closure_mono (by grind)
+  have := divisor_closure_eq_closure _ _ (hsubset hx₂)
+  clear ha ha₂ hx hb hx₂
+  induction this using closure_induction with
+  | mem z hz =>
+      rcases hz with h | h
+      · exact ⟨∅, by simpa using (associated_one_iff_isUnit.2 h).symm⟩
+      · exact ⟨{z}, by simpa⟩
+  | one => exact ⟨∅, by simp⟩
+  | mul z₁ z₂ hz₁ hz₂ h₁ h₂ =>
+      obtain ⟨S₁, hS₁pri, hS₁⟩ := h₁
+      obtain ⟨S₂, hS₂pri, hS₂⟩ := h₂
+      refine ⟨S₁ + S₂, by grind, ?_⟩
+      rw [Multiset.prod_add]
+      exact hS₁.mul_mul hS₂
 
 Depends on / 依赖: IsUnit, UniqueFactorizationMonoid, UniqueFactorizationMonoid.of_exists_prime_factors, closure, closure_induction, closure_mono, divisor_closure_eq_closure, hsubset, mem_kaplanskySet_iff, mem_span_singleton, mul_comm, nonempty_iff_ne_empty, of_exists_prime_factors, span_notMem_kaplanskySet
 -/

@@ -561,7 +561,15 @@ theorem encard_sdiff_le_aux
   · rw [exch.antichain hB₂ hB₁ (sdiff_eq_empty.mp he)]
   · exact le_top.trans_eq hinf.symm
   obtain ⟨f, hf, hB'⟩ := exch B₂ B₁ hB₂ hB₁ e he
-  have : encard (insert f (B₂ \ {e}) \ B₁) < en
+  have : encard (insert f (B₂ \ {e}) \ B₁) < encard (B₂ \ B₁) := by
+    rw [insert_sdiff_of_mem _ hf.1]; rw [sdiff_sdiff_comm]; exact hcard
+  have hencard := encard_sdiff_le_aux exch hB₁ hB'
+  rw [insert_sdiff_of_mem _ hf.1]; rw [sdiff_sdiff_comm]; rw [← union_singleton]; rw [← sdiff_sdiff]; rw [sdiff_sdiff_right]; rw [inter_singleton_eq_empty.mpr he.2]; rw [union_empty] at hencard
+  rw [← encard_sdiff_singleton_add_one he]; rw [← encard_sdiff_singleton_add_one hf]
+  gcongr
+termination_by (B₂ \ B₁).encard
+
+@[deprecated (since := "2026-06-03")] alias encard_diff_le_aux := encard_sdiff_le_aux
 
 中文:
 定理 encard_sdiff_le_aux
@@ -572,7 +580,15 @@ theorem encard_sdiff_le_aux
   · rw [exch.antichain hB₂ hB₁ (sdiff_eq_empty.mp he)]
   · exact le_top.trans_eq hinf.symm
   obtain ⟨f, hf, hB'⟩ := exch B₂ B₁ hB₂ hB₁ e he
-  have : encard (insert f (B₂ \ {e}) \ B₁) < en
+  have : encard (insert f (B₂ \ {e}) \ B₁) < encard (B₂ \ B₁) := by
+    rw [insert_sdiff_of_mem _ hf.1]; rw [sdiff_sdiff_comm]; exact hcard
+  have hencard := encard_sdiff_le_aux exch hB₁ hB'
+  rw [insert_sdiff_of_mem _ hf.1]; rw [sdiff_sdiff_comm]; rw [← union_singleton]; rw [← sdiff_sdiff]; rw [sdiff_sdiff_right]; rw [inter_singleton_eq_empty.mpr he.2]; rw [union_empty] at hencard
+  rw [← encard_sdiff_singleton_add_one he]; rw [← encard_sdiff_singleton_add_one hf]
+  gcongr
+termination_by (B₂ \ B₁).encard
+
+@[deprecated (since := "2026-06-03")] alias encard_diff_le_aux := encard_sdiff_le_aux
 
 Depends on / 依赖: antichain, encard, encard_sdiff_le_aux, eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt, exch.antichain, hencard, hinf.symm, insert, insert_sdiff_of_mem, le_top, le_top.trans_eq, sdiff_eq_empty, sdiff_eq_empty.mp, sdiff_sdiff_comm, trans_eq, union_singleto
 -/
@@ -1520,7 +1536,14 @@ theorem isBase_compl_iff_maximal_disjoint_isBase
   simp_rw [maximal_iff, and_iff_right hB, and_imp, forall_exists_index]
   refine ⟨fun h => ⟨⟨_, h, disjoint_sdiff_right⟩,
     fun I hI B' ⟨hB', hIB'⟩ hBI => hBI.antisymm ?_⟩, fun ⟨⟨B', hB', hBB'⟩,h⟩ => ?_⟩
-  · rw [hB'.eq_of_subset_isBase h, ← subset_compl_iff_disjoint_right, sdiff_eq, compl_inter
+  · rw [hB'.eq_of_subset_isBase h, ← subset_compl_iff_disjoint_right, sdiff_eq, compl_inter,
+      compl_compl] at hIB'
+    · exact fun e he => (hIB' he).elim (fun h' => (h' (hI he)).elim) id
+    rw [subset_sdiff]; rw [and_iff_right hB'.subset_ground]; rw [disjoint_comm]
+    exact disjoint_of_subset_left hBI hIB'
+  rw [h sdiff_subset B' ⟨hB']; rw [disjoint_sdiff_left⟩]
+  · simpa [hB'.subset_ground]
+  simp [subset_sdiff, hB, hBB']
 
 中文:
 定理 isBase_compl_iff_maximal_disjoint_isBase
@@ -1529,7 +1552,14 @@ theorem isBase_compl_iff_maximal_disjoint_isBase
   simp_rw [maximal_iff, and_iff_right hB, and_imp, forall_exists_index]
   refine ⟨fun h => ⟨⟨_, h, disjoint_sdiff_right⟩,
     fun I hI B' ⟨hB', hIB'⟩ hBI => hBI.antisymm ?_⟩, fun ⟨⟨B', hB', hBB'⟩,h⟩ => ?_⟩
-  · rw [hB'.eq_of_subset_isBase h, ← subset_compl_iff_disjoint_right, sdiff_eq, compl_inter
+  · rw [hB'.eq_of_subset_isBase h, ← subset_compl_iff_disjoint_right, sdiff_eq, compl_inter,
+      compl_compl] at hIB'
+    · exact fun e he => (hIB' he).elim (fun h' => (h' (hI he)).elim) id
+    rw [subset_sdiff]; rw [and_iff_right hB'.subset_ground]; rw [disjoint_comm]
+    exact disjoint_of_subset_left hBI hIB'
+  rw [h sdiff_subset B' ⟨hB']; rw [disjoint_sdiff_left⟩]
+  · simpa [hB'.subset_ground]
+  simp [subset_sdiff, hB, hBB']
 
 Depends on / 依赖: Disjoint, IsBase, M.IsBase, Maximal, aesop_mat, and_iff_right, and_imp, antisymm, compl_compl, compl_inter, disjoint_sdiff_right, eq_of_subset_isBase, forall_exists_index, hBI.antisymm, maximal_iff, sdiff_eq, simp_rw, subset_compl_iff_disjoint_right, subseteq
 -/
@@ -2259,7 +2289,11 @@ theorem IsBase.eq_exchange_of_sdiff_eq_singleton
   have hne : f != e := by rintro rfl; exact hf.2 (h.symm.subset (mem_singleton f)).1
   rw [insert_sdiff_singleton_comm hne] at hb
   refine ⟨f, hf, (hb.eq_of_subset_isBase hB' ?_).symm⟩
-  rw [sdiff_subset_iff]; rw [insert_su
+  rw [sdiff_subset_iff]; rw [insert_subset_iff]; rw [union_comm]; rw [← sdiff_subset_iff]; rw [h]; rw [and_iff_left rfl.subset]
+  exact Or.inl hf.1
+
+@[deprecated (since := "2026-06-03")]
+alias IsBase.eq_exchange_of_diff_eq_singleton := IsBase.eq_exchange_of_sdiff_eq_singleton
 
 中文:
 定理 IsBase.eq_exchange_of_sdiff_eq_singleton
@@ -2269,7 +2303,11 @@ theorem IsBase.eq_exchange_of_sdiff_eq_singleton
   have hne : f != e := by rintro rfl; exact hf.2 (h.symm.subset (mem_singleton f)).1
   rw [insert_sdiff_singleton_comm hne] at hb
   refine ⟨f, hf, (hb.eq_of_subset_isBase hB' ?_).symm⟩
-  rw [sdiff_subset_iff]; rw [insert_su
+  rw [sdiff_subset_iff]; rw [insert_subset_iff]; rw [union_comm]; rw [← sdiff_subset_iff]; rw [h]; rw [and_iff_left rfl.subset]
+  exact Or.inl hf.1
+
+@[deprecated (since := "2026-06-03")]
+alias IsBase.eq_exchange_of_diff_eq_singleton := IsBase.eq_exchange_of_sdiff_eq_singleton
 
 Depends on / 依赖: Or.inl, and_iff_left, eq_of_subset_isBase, exchange, h.symm.subset, hB.exchange, hb.eq_of_subset_isBase, insert_sdiff_singleton_comm, insert_subset_iff, mem_singleton, rfl.subset, sdiff_subset_iff, subset, union_comm
 -/
@@ -2296,7 +2334,14 @@ theorem IsBase.exchange_isBase_of_indep
   have hcard := hB'.encard_sdiff_comm hB
   rw [insert_subset_iff]; rw [← sdiff_eq_empty]; rw [sdiff_sdiff_comm]; rw [sdiff_eq_empty]; rw [subset_singleton_iff_eq] at hIB'
   obtain ⟨hfB, (h | h)⟩ := hIB'
-  · rw [h, encard_empty, encard_eq_zero,
+  · rw [h, encard_empty, encard_eq_zero, eq_empty_iff_forall_notMem] at hcard
+    exact (hcard f ⟨hfB, hf⟩).elim
+  rw [h]; rw [encard_singleton]; rw [encard_eq_one] at hcard
+  obtain ⟨x, hx⟩ := hcard
+  obtain (rfl : f = x) := hx.subset ⟨hfB, hf⟩
+  simp_rw [← h, ← singleton_union, ← hx, _root_.sdiff_sdiff_right_self, inf_eq_inter, inter_comm B,
+    sdiff_union_inter]
+  exact hB'
 
 中文:
 定理 IsBase.exchange_isBase_of_indep
@@ -2306,7 +2351,14 @@ theorem IsBase.exchange_isBase_of_indep
   have hcard := hB'.encard_sdiff_comm hB
   rw [insert_subset_iff]; rw [← sdiff_eq_empty]; rw [sdiff_sdiff_comm]; rw [sdiff_eq_empty]; rw [subset_singleton_iff_eq] at hIB'
   obtain ⟨hfB, (h | h)⟩ := hIB'
-  · rw [h, encard_empty, encard_eq_zero,
+  · rw [h, encard_empty, encard_eq_zero, eq_empty_iff_forall_notMem] at hcard
+    exact (hcard f ⟨hfB, hf⟩).elim
+  rw [h]; rw [encard_singleton]; rw [encard_eq_one] at hcard
+  obtain ⟨x, hx⟩ := hcard
+  obtain (rfl : f = x) := hx.subset ⟨hfB, hf⟩
+  simp_rw [← h, ← singleton_union, ← hx, _root_.sdiff_sdiff_right_self, inf_eq_inter, inter_comm B,
+    sdiff_union_inter]
+  exact hB'
 
 Depends on / 依赖: encard_empty, encard_eq_one, encard_eq_zero, encard_sdiff_comm, encard_singleton, eq_empty_iff_forall_notMem, exists_isBase_superset, hI.exists_isBase_superset, hx.subset, insert_subset_iff, sdiff_eq_empty, sdiff_sdiff_comm, simp_rw, subset, subset_singleton_iff_eq
 -/
@@ -2419,7 +2471,9 @@ theorem Indep.exists_insert_of_not_isBase
   obtain ⟨x, hxB', hx⟩ := exists_of_ssubset (hIB'.ssubset_of_ne (by (rintro rfl; exact hI' hB')))
   by_cases hxB : x in B
   · exact ⟨x, ⟨hxB, hx⟩, hB'.indep.subset (insert_subset hxB' hIB')⟩
-  obtain ⟨e, he, hBase⟩ := hB'.exchange hB ⟨hxB', hx
+  obtain ⟨e, he, hBase⟩ := hB'.exchange hB ⟨hxB', hxB⟩
+  exact ⟨e, ⟨he.1, notMem_subset hIB' he.2⟩,
+    indep_iff.2 ⟨_, hBase, insert_subset_insert (subset_sdiff_singleton hIB' hx)⟩⟩
 
 中文:
 定理 Indep.存在_insert_of_not_isBase
@@ -2429,7 +2483,9 @@ theorem Indep.exists_insert_of_not_isBase
   obtain ⟨x, hxB', hx⟩ := exists_of_ssubset (hIB'.ssubset_of_ne (by (rintro rfl; exact hI' hB')))
   by_cases hxB : x in B
   · exact ⟨x, ⟨hxB, hx⟩, hB'.indep.subset (insert_subset hxB' hIB')⟩
-  obtain ⟨e, he, hBase⟩ := hB'.exchange hB ⟨hxB', hx
+  obtain ⟨e, he, hBase⟩ := hB'.exchange hB ⟨hxB', hxB⟩
+  exact ⟨e, ⟨he.1, notMem_subset hIB' he.2⟩,
+    indep_iff.2 ⟨_, hBase, insert_subset_insert (subset_sdiff_singleton hIB' hx)⟩⟩
 
 Depends on / 依赖: exchange, exists_isBase_superset, exists_of_ssubset, hI.exists_isBase_superset, indep.subset, indep_iff, insert_subset, insert_subset_insert, notMem_subset, ssubset_of_ne, subset, subset_sdiff_singleton
 -/
@@ -2455,7 +2511,7 @@ theorem Indep.exists_insert_of_not_maximal
   refine hI.exists_insert_of_not_isBase (fun hIb => ?_) ?_
   · obtain ⟨I', hII', hI', hne⟩ := hInotmax
 exact hne hIb.eq_of_subset_indep hII' hI'
-  exact hB.1.isBase_of_maximal fun J hJ hBJ => hB.2 
+  exact hB.1.isBase_of_maximal fun J hJ hBJ => hB.2 hJ hBJ
 
 中文:
 定理 Indep.存在_insert_of_not_maximal
@@ -2466,7 +2522,7 @@ exact hne hIb.eq_of_subset_indep hII' hI'
   refine hI.exists_insert_of_not_isBase (fun hIb => ?_) ?_
   · obtain ⟨I', hII', hI', hne⟩ := hInotmax
 exact hne hIb.eq_of_subset_indep hII' hI'
-  exact hB.1.isBase_of_maximal fun J hJ hBJ => hB.2 
+  exact hB.1.isBase_of_maximal fun J hJ hBJ => hB.2 hJ hBJ
 
 Depends on / 依赖: eq_of_subset_indep, exists_insert_of_not_isBase, exists_prop, hI.exists_insert_of_not_isBase, hIb.eq_of_subset_indep, hInotmax, isBase_of_maximal, maximal_subset_iff, not_and, not_forall, true_imp_iff
 -/
@@ -2704,7 +2760,9 @@ instance finitary_of_rankFinite
     obtain ⟨B, hB⟩ := M.exists_isBase
     obtain ⟨I₀, hI₀I, hI₀fin, hI₀card⟩ := h.exists_subset_ncard_eq (B.ncard + 1)
     obtain ⟨B', hB', hI₀B'⟩ := (hI _ hI₀I hI₀fin).exists_isBase_superset
-    have hle := ncard_le_
+    have hle := ncard_le_ncard hI₀B' hB'.finite
+    rw [hI₀card]; rw [hB'.ncard_eq_ncard_of_isBase hB]; rw [Nat.add_one_le_iff] at hle
+    exact hle.ne rfl
 
 中文:
 实例 finitary_of_rankFinite
@@ -2714,7 +2772,9 @@ instance finitary_of_rankFinite
     obtain ⟨B, hB⟩ := M.exists_isBase
     obtain ⟨I₀, hI₀I, hI₀fin, hI₀card⟩ := h.exists_subset_ncard_eq (B.ncard + 1)
     obtain ⟨B', hB', hI₀B'⟩ := (hI _ hI₀I hI₀fin).exists_isBase_superset
-    have hle := ncard_le_
+    have hle := ncard_le_ncard hI₀B' hB'.finite
+    rw [hI₀card]; rw [hB'.ncard_eq_ncard_of_isBase hB]; rw [Nat.add_one_le_iff] at hle
+    exact hle.ne rfl
 
 Depends on / 依赖: B.ncard, False.elim, I.finite_or_infinite.elim, M.exists_isBase, Nat.add_one_le_iff, Subset, Subset.rfl, add_one_le_iff, exists_isBase, exists_isBase_superset, exists_subset_ncard_eq, finite, finite_or_infinite, h.exists_subset_ncard_eq, hle.ne, ncard_eq_ncard_of_isBase, ncard_le_ncard
 -/
@@ -2768,7 +2828,11 @@ definition copy
     simp_rw [show IsBase = M.IsBase from funext (by simp [hB])]
     exact M.isBase_exchange
   maximality := by
-    simp_rw
+    simp_rw [hE, show Indep = M.Indep from funext (by simp [hI])]
+    exact M.maximality
+  subset_ground := by
+    simp_rw [hE, hB]
+    exact M.subset_ground
 
 中文:
 定义 copy
@@ -2784,7 +2848,11 @@ definition copy
     simp_rw [show IsBase = M.IsBase from funext (by simp [hB])]
     exact M.isBase_exchange
   maximality := by
-    simp_rw
+    simp_rw [hE, show Indep = M.Indep from funext (by simp [hI])]
+    exact M.maximality
+  subset_ground := by
+    simp_rw [hE, hB]
+    exact M.subset_ground
 -/
 @[simps] def copy (M : Matroid α) (E : Set α) (IsBase Indep : Set α -> Prop) (hE : E = M.E)
     (hB : forall B, IsBase B ↔ M.IsBase B) (hI : forall I, Indep I ↔ M.Indep I) : Matroid α where
@@ -3769,7 +3837,9 @@ theorem Indep.isBasis_iff_forall_insert_dep
   rw [IsBasis]; rw [maximal_iff_forall_insert (fun I J hI hIJ => ⟨hI.1.subset hIJ]; rw [hIJ.trans hI.2⟩)]
   simp only [hI, hIX, and_self, insert_subset_iff, and_true, not_and, true_and, mem_sdiff, and_imp,
     Dep, hI.subset_ground]
-  exact ⟨fun h e heX heI => ⟨fun hi => h.1 e heI hi heX, h.2 heX
+  exact ⟨fun h e heX heI => ⟨fun hi => h.1 e heI hi heX, h.2 heX⟩,
+    fun h => ⟨fun e heI hi heX => (h e heX heI).1 hi,
+      fun e heX => (em (e in I)).elim (fun h => hI.subset_ground h) fun heI => (h _ heX heI).2 ⟩⟩
 
 中文:
 定理 Indep.isBasis_iff_对任意_insert_dep
@@ -3778,7 +3848,9 @@ theorem Indep.isBasis_iff_forall_insert_dep
   rw [IsBasis]; rw [maximal_iff_forall_insert (fun I J hI hIJ => ⟨hI.1.subset hIJ]; rw [hIJ.trans hI.2⟩)]
   simp only [hI, hIX, and_self, insert_subset_iff, and_true, not_and, true_and, mem_sdiff, and_imp,
     Dep, hI.subset_ground]
-  exact ⟨fun h e heX heI => ⟨fun hi => h.1 e heI hi heX, h.2 heX
+  exact ⟨fun h e heX heI => ⟨fun hi => h.1 e heI hi heX, h.2 heX⟩,
+    fun h => ⟨fun e heI hi heX => (h e heX heI).1 hi,
+      fun e heX => (em (e in I)).elim (fun h => hI.subset_ground h) fun heI => (h _ heX heI).2 ⟩⟩
 
 Depends on / 依赖: IsBasis, and_imp, and_self, and_true, hI.subset_ground, hIJ.trans, insert_subset_iff, maximal_iff_forall_insert, mem_sdiff, not_and, subset, subset_ground, true_and
 -/
@@ -3851,7 +3923,9 @@ theorem IsBasis.iUnion_isBasis_iUnion
     (iUnion_subset (fun i => (hI i).subset.trans (subset_iUnion _ _))) ?_
   rintro e ⟨⟨_, ⟨⟨i, hi, rfl⟩, (hes : e in X i)⟩⟩, he'⟩
   rw [mem_iUnion]; rw [not_exists] at he'
-  refine ((hI i).insert_dep ⟨hes, he' _⟩).superset (insert_subset_insert (subset_iUni
+  refine ((hI i).insert_dep ⟨hes, he' _⟩).superset (insert_subset_insert (subset_iUnion _ _)) ?_
+  rw [insert_subset_iff]; rw [iUnion_subset_iff]; rw [and_iff_left (fun i => (hI i).indep.subset_ground)]
+  exact (hI i).subset_ground hes
 
 中文:
 定理 是基.iUnion_isBasis_iUnion
@@ -3861,7 +3935,9 @@ theorem IsBasis.iUnion_isBasis_iUnion
     (iUnion_subset (fun i => (hI i).subset.trans (subset_iUnion _ _))) ?_
   rintro e ⟨⟨_, ⟨⟨i, hi, rfl⟩, (hes : e in X i)⟩⟩, he'⟩
   rw [mem_iUnion]; rw [not_exists] at he'
-  refine ((hI i).insert_dep ⟨hes, he' _⟩).superset (insert_subset_insert (subset_iUni
+  refine ((hI i).insert_dep ⟨hes, he' _⟩).superset (insert_subset_insert (subset_iUnion _ _)) ?_
+  rw [insert_subset_iff]; rw [iUnion_subset_iff]; rw [and_iff_left (fun i => (hI i).indep.subset_ground)]
+  exact (hI i).subset_ground hes
 
 Depends on / 依赖: and_iff_left, h_ind, h_ind.isBasis_of_forall_insert, iUnion_subset, iUnion_subset_iff, indep.subset_ground, insert_dep, insert_subset_iff, insert_subset_insert, isBasis_of_forall_insert, mem_iUnion, not_exists, subset, subset.trans, subset_ground, subset_iUnion, superset
 -/
@@ -3940,7 +4016,7 @@ theorem Indep.isBasis_setOfPred_insert_isBasis
   simpa using (hu.eq_of_isBasis he.1).symm
 
 @[deprecated (since := "2026-07-09")]
-alias Indep.isBasis_setOf_insert_
+alias Indep.isBasis_setOf_insert_isBasis := Indep.isBasis_setOfPred_insert_isBasis
 
 中文:
 定理 Indep.isBasis_setOfPred_insert_isBasis
@@ -3952,7 +4028,7 @@ alias Indep.isBasis_setOf_insert_
   simpa using (hu.eq_of_isBasis he.1).symm
 
 @[deprecated (since := "2026-07-09")]
-alias Indep.isBasis_setOf_insert_
+alias Indep.isBasis_setOf_insert_isBasis := Indep.isBasis_setOfPred_insert_isBasis
 
 Depends on / 依赖: IsBasis, M.IsBasis, eq_of_isBasis, hI.isBasis_of_forall_insert, hI.isBasis_self, hu.eq_of_isBasis, insert_eq_of_mem, isBasis_of_forall_insert, isBasis_self, subset_ground
 -/
@@ -4195,7 +4271,7 @@ theorem exists_isBasis_disjoint_isBasis_of_subset
   refine ⟨I, I' \ I, hI, by rwa [union_sdiff_self, union_eq_self_of_subset_left hII'], ?_⟩
   rw [disjoint_iff_forall_ne]
   rintro e heX _ ⟨heI', heI⟩ rfl
-exact heI hI.mem_of_insert_indep heX (hI'.indep.subset (insert_subset he
+exact heI hI.mem_of_insert_indep heX (hI'.indep.subset (insert_subset heI' hII'))
 
 中文:
 定理 存在_isBasis_disjoint_isBasis_of_subset
@@ -4205,7 +4281,7 @@ exact heI hI.mem_of_insert_indep heX (hI'.indep.subset (insert_subset he
   refine ⟨I, I' \ I, hI, by rwa [union_sdiff_self, union_eq_self_of_subset_left hII'], ?_⟩
   rw [disjoint_iff_forall_ne]
   rintro e heX _ ⟨heI', heI⟩ rfl
-exact heI hI.mem_of_insert_indep heX (hI'.indep.subset (insert_subset he
+exact heI hI.mem_of_insert_indep heX (hI'.indep.subset (insert_subset heI' hII'))
 
 Depends on / 依赖: Disjoint, IsBasis, M.IsBasis, M.exists_isBasis_subset_isBasis, aesop_mat, disjoint_iff_forall_ne, exists_isBasis_subset_isBasis, hI.mem_of_insert_indep, indep.subset, insert_subset, mem_of_insert_indep, subset, union_eq_self_of_subset_left, union_sdiff_self
 -/
@@ -4233,7 +4309,14 @@ theorem finite_setOfPred_matroid
     refine fun M M' hMM' => ?_
     rw [Prod.mk.injEq]; rw [and_comm]; rw [Set.ext_iff]; rw [and_comm] at hMM'
     exact ext_isBase hMM'.1 (fun B _ => hMM'.2 B)
-  rw [← Set.finite_image_i
+  rw [← Set.finite_image_iff hf.injOn]
+  refine (hE.finite_subsets.prod hE.finite_subsets.finite_subsets).subset ?_
+  rintro _ ⟨M, hE : M.E subseteq E, rfl⟩
+  simp only [Set.mem_prod, Set.mem_ofPred_eq]
+  exact ⟨hE, fun B hB => hB.subset_ground.trans hE⟩
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_matroid := finite_setOfPred_matroid
 
 中文:
 定理 finite_setOfPred_matroid
@@ -4244,7 +4327,14 @@ theorem finite_setOfPred_matroid
     refine fun M M' hMM' => ?_
     rw [Prod.mk.injEq]; rw [and_comm]; rw [Set.ext_iff]; rw [and_comm] at hMM'
     exact ext_isBase hMM'.1 (fun B _ => hMM'.2 B)
-  rw [← Set.finite_image_i
+  rw [← Set.finite_image_iff hf.injOn]
+  refine (hE.finite_subsets.prod hE.finite_subsets.finite_subsets).subset ?_
+  rintro _ ⟨M, hE : M.E subseteq E, rfl⟩
+  simp only [Set.mem_prod, Set.mem_ofPred_eq]
+  exact ⟨hE, fun B hB => hB.subset_ground.trans hE⟩
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_matroid := finite_setOfPred_matroid
 
 Depends on / 依赖: Injective, IsBase, M.IsBase, Matroid, Prod.mk.injEq, Set.ext_iff, Set.finite_image_iff, Set.mem_ofPred_eq, Set.mem_prod, and_comm, ext_iff, ext_isBase, f.Injective, finite_image_iff, finite_subsets, hB.subset_ground.trans, hE.finite_subsets.finite_subsets, hE.finite_subsets.prod, hf.injOn, mem_ofPred_eq
 -/

@@ -993,7 +993,22 @@ theorem exists_seq_of_forall_finset_exists
     choose! F hF using h
     have h' : forall s : Finset α, exists y, (forall x in s, P x) -> P y ∧ forall x in s, r x y := fun s => ⟨F s, hF s⟩
     set f := seqOfForallFinsetExistsAux P r h' with hf
-  
+    have A : forall n : Nat, P (f n) := by
+      intro n
+      induction n using Nat.strong_induction_on with | _ n IH
+      have IH' : forall x : Fin n, P (f x) := fun n => IH n.1 n.2
+      rw [hf]; rw [seqOfForallFinsetExistsAux]
+      exact
+        (Classical.choose_spec
+            (h' (Finset.image (fun i : Fin n => f i) (Finset.univ : Finset (Fin n))))
+            (by simp [IH'])).1
+    refine ⟨f, A, fun m n hmn => ?_⟩
+    conv_rhs => rw [hf]
+    rw [seqOfForallFinsetExistsAux]
+    apply
+      (Classical.choose_spec
+          (h' (Finset.image (fun i : Fin n => f i) (Finset.univ : Finset (Fin n)))) (by simp [A])).2
+    exact Finset.mem_image.2 ⟨⟨m, hmn⟩, Finset.mem_univ _, rfl⟩
 
 中文:
 定理 存在_seq_of_对任意_finset_存在
@@ -1006,7 +1021,22 @@ theorem exists_seq_of_forall_finset_exists
     choose! F hF using h
     have h' : forall s : Finset α, exists y, (forall x in s, P x) -> P y ∧ forall x in s, r x y := fun s => ⟨F s, hF s⟩
     set f := seqOfForallFinsetExistsAux P r h' with hf
-  
+    have A : forall n : Nat, P (f n) := by
+      intro n
+      induction n using Nat.strong_induction_on with | _ n IH
+      have IH' : forall x : Fin n, P (f x) := fun n => IH n.1 n.2
+      rw [hf]; rw [seqOfForallFinsetExistsAux]
+      exact
+        (Classical.choose_spec
+            (h' (Finset.image (fun i : Fin n => f i) (Finset.univ : Finset (Fin n))))
+            (by simp [IH'])).1
+    refine ⟨f, A, fun m n hmn => ?_⟩
+    conv_rhs => rw [hf]
+    rw [seqOfForallFinsetExistsAux]
+    apply
+      (Classical.choose_spec
+          (h' (Finset.image (fun i : Fin n => f i) (Finset.univ : Finset (Fin n)))) (by simp [A])).2
+    exact Finset.mem_image.2 ⟨⟨m, hmn⟩, Finset.mem_univ _, rfl⟩
 
 Depends on / 依赖: Classical, Classical.choose_spec, Finset, Nat.strong_induction_on, Nonempty, choose_spec, classical, seqOfForallFinsetExistsAux, strong_induction_on
 -/

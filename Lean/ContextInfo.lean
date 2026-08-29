@@ -36,7 +36,21 @@ definition runCoreMWithMessages
   let env := info.env.setExporting false
   let ctx ← read
   /-
-    We must execute `x` using the `ngen`
+    We must execute `x` using the `ngen` stored in `info`. Otherwise, we may create `MVarId`s and
+    `FVarId`s that have been used in `lctx` and `info.mctx`.
+    Similarly, we need to pass in a `namePrefix` because otherwise we can't create auxiliary
+    definitions.
+  -/
+  let (x, newState) ←
+    (withOptions (fun _ => info.options) x).toIO
+      { currNamespace := info.currNamespace, openDecls := info.openDecls
+        fileName := ctx.fileName, fileMap := ctx.fileMap }
+      { env, ngen := info.ngen, auxDeclNGen := { namePrefix := info.parentDecl?.getD .anonymous } }
+  -- Migrate logs back to the main context.
+  modify fun state => { state with
+    messages := state.messages ++ newState.messages,
+    traceState.traces := state.traceState.traces ++ newState.traceState.traces }
+  return x
 
 中文:
 定义 runCoreMWithMessages
@@ -47,7 +61,21 @@ definition runCoreMWithMessages
   let env := info.env.setExporting false
   let ctx ← read
   /-
-    We must execute `x` using the `ngen`
+    We must execute `x` using the `ngen` stored in `info`. Otherwise, we may create `MVarId`s and
+    `FVarId`s that have been used in `lctx` and `info.mctx`.
+    Similarly, we need to pass in a `namePrefix` because otherwise we can't create auxiliary
+    definitions.
+  -/
+  let (x, newState) ←
+    (withOptions (fun _ => info.options) x).toIO
+      { currNamespace := info.currNamespace, openDecls := info.openDecls
+        fileName := ctx.fileName, fileMap := ctx.fileMap }
+      { env, ngen := info.ngen, auxDeclNGen := { namePrefix := info.parentDecl?.getD .anonymous } }
+  -- Migrate logs back to the main context.
+  modify fun state => { state with
+    messages := state.messages ++ newState.messages,
+    traceState.traces := state.traceState.traces ++ newState.traceState.traces }
+  return x
 -/
 def runCoreMWithMessages (info : ContextInfo) (x : CoreM α) : CommandElabM α := do
   -- We assume that this function is used only outside elaboration, mostly in the language server,
@@ -113,7 +141,10 @@ definition runTactic
   let mctx := i.mctxBefore
   let lctx := (mctx.decls.find! goal).2
   ctx.runMetaMWithMessages lctx do
-    -- Make a fresh metavariable because the original goal is already assign
+    -- Make a fresh metavariable because the original goal is already assigned.
+    let type ← goal.getType
+    let goal ← Meta.mkFreshExprSyntheticOpaqueMVar type
+    x goal.mvarId!
 
 中文:
 定义 runTactic
@@ -124,7 +155,10 @@ definition runTactic
   let mctx := i.mctxBefore
   let lctx := (mctx.decls.find! goal).2
   ctx.runMetaMWithMessages lctx do
-    -- Make a fresh metavariable because the original goal is already assign
+    -- Make a fresh metavariable because the original goal is already assigned.
+    let type ← goal.getType
+    let goal ← Meta.mkFreshExprSyntheticOpaqueMVar type
+    x goal.mvarId!
 -/
 def runTactic (ctx : ContextInfo) (i : TacticInfo) (goal : MVarId) (x : MVarId -> MetaM α) :
     CommandElabM α := do
@@ -185,7 +219,12 @@ definition runCoreMCapturingInfoTree
     (withOptions (fun _ => info.options) x).toIO
       { currNamespace := info.currNamespace, openDecls := info.openDecls
         fileName := ctx.fileName, fileMap := ctx.fileMap }
-      { env, ngen := info.ngen,
+      { env, ngen := info.ngen, auxDeclNGen := { namePrefix := info.parentDecl?.getD .anonymous } }
+  -- Migrate logs back to the main context
+  modify fun state => { state with
+    messages := state.messages ++ newState.messages,
+    traceState.traces := state.traceState.traces ++ newState.traceState.traces }
+  return (result, newState.infoState.trees)
 
 中文:
 定义 runCoreMCapturingInfoTree
@@ -197,7 +236,12 @@ definition runCoreMCapturingInfoTree
     (withOptions (fun _ => info.options) x).toIO
       { currNamespace := info.currNamespace, openDecls := info.openDecls
         fileName := ctx.fileName, fileMap := ctx.fileMap }
-      { env, ngen := info.ngen,
+      { env, ngen := info.ngen, auxDeclNGen := { namePrefix := info.parentDecl?.getD .anonymous } }
+  -- Migrate logs back to the main context
+  modify fun state => { state with
+    messages := state.messages ++ newState.messages,
+    traceState.traces := state.traceState.traces ++ newState.traceState.traces }
+  return (result, newState.infoState.trees)
 -/
 def runCoreMCapturingInfoTree (info : ContextInfo) (x : CoreM α) :
     CommandElabM (α × PersistentArray InfoTree) := do
@@ -255,7 +299,8 @@ definition runTacticCapturingInfoTree
   let lctx := (mctx.decls.find! goal).2
   ctx.runMetaMCapturingInfoTree lctx do
     let type ← goal.getType
-    let goal ← Meta.mkFres
+    let goal ← Meta.mkFreshExprSyntheticOpaqueMVar type
+    x goal.mvarId!
 
 中文:
 定义 runTacticCapturingInfoTree
@@ -267,7 +312,8 @@ definition runTacticCapturingInfoTree
   let lctx := (mctx.decls.find! goal).2
   ctx.runMetaMCapturingInfoTree lctx do
     let type ← goal.getType
-    let goal ← Meta.mkFres
+    let goal ← Meta.mkFreshExprSyntheticOpaqueMVar type
+    x goal.mvarId!
 -/
 def runTacticCapturingInfoTree (ctx : ContextInfo) (i : TacticInfo) (goal : MVarId)
     (x : MVarId -> MetaM α) : CommandElabM (α × PersistentArray InfoTree) := do

@@ -464,7 +464,17 @@ theorem nonarchimedean_aux
   else
     if hr : r = 0 then by simp [hr, max_eq_left hnqp]
     else
-      if hqr : q + r = 0 then le_trans (by simpa [hqr] using hnqp) (l
+      if hqr : q + r = 0 then le_trans (by simpa [hqr] using hnqp) (le_max_left _ _)
+      else by
+        unfold padicNorm; split_ifs
+        apply le_max_iff.2
+        left
+        apply zpow_le_zpow_right₀
+        · exact mod_cast le_of_lt hp.1.one_lt
+        · apply neg_le_neg
+          have : padicValRat p q = min (padicValRat p q) (padicValRat p r) := (min_eq_left h).symm
+          rw [this]
+          exact min_le_padicValRat_add hqr
 
 中文:
 定理 nonarchimedean_aux
@@ -475,7 +485,17 @@ theorem nonarchimedean_aux
   else
     if hr : r = 0 then by simp [hr, max_eq_left hnqp]
     else
-      if hqr : q + r = 0 then le_trans (by simpa [hqr] using hnqp) (l
+      if hqr : q + r = 0 then le_trans (by simpa [hqr] using hnqp) (le_max_left _ _)
+      else by
+        unfold padicNorm; split_ifs
+        apply le_max_iff.2
+        left
+        apply zpow_le_zpow_right₀
+        · exact mod_cast le_of_lt hp.1.one_lt
+        · apply neg_le_neg
+          have : padicValRat p q = min (padicValRat p q) (padicValRat p r) := (min_eq_left h).symm
+          rw [this]
+          exact min_le_padicValRat_add hqr
 -/
 private theorem nonarchimedean_aux {q r : Rat} (h : padicValRat p q <= padicValRat p r) :
     padicNorm p (q + r) <= max (padicNorm p q) (padicNorm p r) :=
@@ -642,7 +662,9 @@ theorem dvd_iff_norm_le
     · norm_cast
       rw [← FiniteMultiplicity.pow_dvd_iff_le_multiplicity]
       · norm_cast
-      · app
+      · apply Int.finiteMultiplicity_iff.2 ⟨by simp [hp.out.ne_one], mod_cast hz⟩
+    · exact_mod_cast hz
+    · exact_mod_cast hp.out.one_lt
 
 中文:
 定理 dvd_iff_norm_le
@@ -657,7 +679,9 @@ theorem dvd_iff_norm_le
     · norm_cast
       rw [← FiniteMultiplicity.pow_dvd_iff_le_multiplicity]
       · norm_cast
-      · app
+      · apply Int.finiteMultiplicity_iff.2 ⟨by simp [hp.out.ne_one], mod_cast hz⟩
+    · exact_mod_cast hz
+    · exact_mod_cast hp.out.one_lt
 
 Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.pow_dvd_iff_le_multiplicity, Int.finiteMultiplicity_iff, finiteMultiplicity_iff, hp.out.ne_one, hp.out.one_lt, mod_cast, ne_one, neg_le_neg_iff, of_int, of_ne_one_ne_zero, one_lt, padicNorm, padicValInt, padicValInt.of_ne_one_ne_zero, padicValRat, padicValRat.of_int, pow_dvd_iff_le_multiplicity, split_ifs
 -/
@@ -691,7 +715,14 @@ theorem int_eq_one_iff
     · exact Nat.Prime.pos Fact.out
   · simp only [padicNorm]
     split_ifs
-    · rw [inv_lt_z
+    · rw [inv_lt_zero, ← Nat.cast_zero, Nat.cast_lt]
+      intro h
+      exact (Nat.not_lt_zero p h).elim
+    · have : 1 < (p : Rat) := by norm_cast; exact Nat.Prime.one_lt (Fact.out : Nat.Prime p)
+      rw [← zpow_neg_one]; rw [zpow_lt_zpow_iff_right₀ this]
+      have : 0 <= padicValRat p m := by simp only [of_int, Nat.cast_nonneg]
+      intro h
+      rw [← zpow_zero (p : Rat)]; rw [zpow_right_inj₀] <;> linarith
 
 中文:
 定理 int_eq_one_iff
@@ -707,7 +738,14 @@ theorem int_eq_one_iff
     · exact Nat.Prime.pos Fact.out
   · simp only [padicNorm]
     split_ifs
-    · rw [inv_lt_z
+    · rw [inv_lt_zero, ← Nat.cast_zero, Nat.cast_lt]
+      intro h
+      exact (Nat.not_lt_zero p h).elim
+    · have : 1 < (p : Rat) := by norm_cast; exact Nat.Prime.one_lt (Fact.out : Nat.Prime p)
+      rw [← zpow_neg_one]; rw [zpow_lt_zpow_iff_right₀ this]
+      have : 0 <= padicValRat p m := by simp only [of_int, Nat.cast_nonneg]
+      intro h
+      rw [← zpow_zero (p : Rat)]; rw [zpow_right_inj₀] <;> linarith
 
 Depends on / 依赖: Fact.out, Nat.Prime, Nat.Prime.one_lt, Nat.Prime.pos, Nat.cast_lt, Nat.cast_one, Nat.cast_zero, Nat.not_lt_zero, cast_lt, cast_one, cast_zero, dvd_iff_norm_le, inv_lt_zero, not_le, not_lt_zero, nth_rw, one_lt, padicNorm, pow_one, split_ifs
 -/

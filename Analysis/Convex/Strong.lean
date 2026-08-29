@@ -476,7 +476,7 @@ nonrec lemma StrongConvexOn.strictConvexOn (hf : StrongConvexOn s m f) (hm : 0 <
     StrictConvexOn Real s f := hf.strictConvexOn fun r hr => by positivity
 
 nonrec lemma StrongConcaveOn.strictConcaveOn (hf : StrongConcaveOn s m f) (hm : 0 < m) :
-    S
+    StrictConcaveOn Real s f := hf.strictConcaveOn fun r hr => by positivity
 
 中文:
 引理 strongConcaveOn_zero
@@ -488,7 +488,7 @@ nonrec lemma StrongConvexOn.strictConvexOn (hf : StrongConvexOn s m f) (hm : 0 <
     StrictConvexOn Real s f := hf.strictConvexOn fun r hr => by positivity
 
 nonrec lemma StrongConcaveOn.strictConcaveOn (hf : StrongConcaveOn s m f) (hm : 0 < m) :
-    S
+    StrictConcaveOn Real s f := hf.strictConcaveOn fun r hr => by positivity
 -/
 @[simp] lemma strongConcaveOn_zero : StrongConcaveOn s 0 f ↔ ConcaveOn Real s f := by
   simp [StrongConcaveOn, ← Pi.zero_def]

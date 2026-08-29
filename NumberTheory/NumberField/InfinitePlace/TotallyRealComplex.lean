@@ -536,7 +536,8 @@ theorem isTotallyReal_iff_le_maximalRealSubfield
 let _ : Algebra E (maximalRealSubfield K) := RingHom.toAlgebra Subfield.inclusion h
   have : IsScalarTower E (maximalRealSubfield K) K := IsScalarTower.of_algebraMap_eq' rfl
   have : Algebra.IsAlgebraic E (maximalRealSubfield K) :=
-      A
+      Algebra.IsAlgebraic.tower_bot E (maximalRealSubfield K) K
+  exact IsTotallyReal.of_algebra _ (maximalRealSubfield K)
 
 中文:
 定理 isTotally实数_iff_le_maximal实数Subfield
@@ -546,7 +547,8 @@ let _ : Algebra E (maximalRealSubfield K) := RingHom.toAlgebra Subfield.inclusio
 let _ : Algebra E (maximalRealSubfield K) := RingHom.toAlgebra Subfield.inclusion h
   have : IsScalarTower E (maximalRealSubfield K) K := IsScalarTower.of_algebraMap_eq' rfl
   have : Algebra.IsAlgebraic E (maximalRealSubfield K) :=
-      A
+      Algebra.IsAlgebraic.tower_bot E (maximalRealSubfield K) K
+  exact IsTotallyReal.of_algebra _ (maximalRealSubfield K)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsAlgebraic.tower_bot, IsAlgebraic, IsScalarTower, IsScalarTower.of_algebraMap_eq, IsTotallyReal, IsTotallyReal.of_algebra, RingHom, RingHom.toAlgebra, Subfield, Subfield.inclusion, h.le_maximalRealSubfield, inclusion, le_maximalRealSubfield, maximalRealSubfield, of_algebra, of_algebraMap_eq, toAlgebra, tower_bot
 -/

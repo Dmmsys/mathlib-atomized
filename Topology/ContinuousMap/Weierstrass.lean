@@ -44,7 +44,7 @@ refine mem_closure_of_tendsto (bernsteinApproximation_uniform f) .of_forall fun 
   rw [← SetLike.mem_coe]; rw [polynomialFunctions_coe]
   use bernsteinPolynomial Real n i * .C (f (bernstein.z i))
   ext
-  simp [bernstei
+  simp [bernstein]
 
 中文:
 定理 polynomialFunctions_closure_eq_top'
@@ -58,7 +58,7 @@ refine mem_closure_of_tendsto (bernsteinApproximation_uniform f) .of_forall fun 
   rw [← SetLike.mem_coe]; rw [polynomialFunctions_coe]
   use bernsteinPolynomial Real n i * .C (f (bernstein.z i))
   ext
-  simp [bernstei
+  simp [bernstein]
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, Subalgebra, Subalgebra.sum_mem, bernstein, bernstein.z, bernsteinApproximation_uniform, bernsteinPolynomial, mem_closure_of_tendsto, mem_coe, of_forall, polynomialFunctions_coe, sum_mem, top_unique
 -/
@@ -85,7 +85,24 @@ theorem polynomialFunctions_closure_eq_top
   · -- We can pullback continuous functions on `[a,b]` to continuous functions on `[0,1]`,
     -- by precomposing with an affine map.
     let W : C(Set.Icc a b, Real) ->ₐ[Real] C(I, Real) :=
-      compRightAl
+      compRightAlgHom Real Real (iccHomeoI a b h).symm
+    -- This operation is itself a homeomorphism
+    -- (with respect to the norm topologies on continuous functions).
+    let W' : C(Set.Icc a b, Real) ≃ₜ C(I, Real) := (iccHomeoI a b h).arrowCongr (.refl _)
+    have w : (W : C(Set.Icc a b, Real) -> C(I, Real)) = W' := rfl
+    -- Thus we take the statement of the Weierstrass approximation theorem for `[0,1]`,
+    have p := polynomialFunctions_closure_eq_top'
+    -- and pullback both sides, obtaining an equation between subalgebras of `C([a,b], ℝ)`.
+    apply_fun fun s => s.comap W at p
+    simp only [Algebra.comap_top] at p
+    -- Since the pullback operation is continuous, it commutes with taking `topologicalClosure`,
+    rw [Subalgebra.topologicalClosure_comap_homeomorph _ W W' w] at p
+    -- and precomposing with an affine map takes polynomial functions to polynomial functions.
+    rw [polynomialFunctions.comap_compRightAlgHom_iccHomeoI] at p
+    -- 🎉
+    exact p
+  · -- Otherwise, `b ≤ a`, and the interval is a subsingleton,
+    subsingleton [(Set.subsingleton_Icc_of_ge h).coe_sort]
 
 中文:
 定理 polynomialFunctions_closure_eq_top
@@ -96,7 +113,24 @@ theorem polynomialFunctions_closure_eq_top
   · -- We can pullback continuous functions on `[a,b]` to continuous functions on `[0,1]`,
     -- by precomposing with an affine map.
     let W : C(Set.Icc a b, Real) ->ₐ[Real] C(I, Real) :=
-      compRightAl
+      compRightAlgHom Real Real (iccHomeoI a b h).symm
+    -- This operation is itself a homeomorphism
+    -- (with respect to the norm topologies on continuous functions).
+    let W' : C(Set.Icc a b, Real) ≃ₜ C(I, Real) := (iccHomeoI a b h).arrowCongr (.refl _)
+    have w : (W : C(Set.Icc a b, Real) -> C(I, Real)) = W' := rfl
+    -- Thus we take the statement of the Weierstrass approximation theorem for `[0,1]`,
+    have p := polynomialFunctions_closure_eq_top'
+    -- and pullback both sides, obtaining an equation between subalgebras of `C([a,b], ℝ)`.
+    apply_fun fun s => s.comap W at p
+    simp only [Algebra.comap_top] at p
+    -- Since the pullback operation is continuous, it commutes with taking `topologicalClosure`,
+    rw [Subalgebra.topologicalClosure_comap_homeomorph _ W W' w] at p
+    -- and precomposing with an affine map takes polynomial functions to polynomial functions.
+    rw [polynomialFunctions.comap_compRightAlgHom_iccHomeoI] at p
+    -- 🎉
+    exact p
+  · -- Otherwise, `b ≤ a`, and the interval is a subsingleton,
+    subsingleton [(Set.subsingleton_Icc_of_ge h).coe_sort]
 
 Depends on / 依赖: lt_or_ge
 -/

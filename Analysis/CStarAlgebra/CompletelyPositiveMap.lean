@@ -275,7 +275,9 @@ lemma map_cstarMatrix_nonneg
   let e := Fintype.equivFinOfCardEq (rfl : Fintype.card n = k)
   have hmain : 0 <= (reindexₐ Complex A₁ e M).mapₗ (φ : A₁ ->ₗ[Complex] A₂) := by
     simp only [mapₗ, LinearMap.coe_coe, LinearMap.coe_mk, AddHom.coe_mk]
-    exact CompletelyPositiveMapClass.map_cstarMatrix_
+    exact CompletelyPositiveMapClass.map_cstarMatrix_nonneg' _ k _ (map_nonneg _ hM)
+  rw [← mapₗ_reindexₐ] at hmain
+  simpa [reindexₐ_symm] using map_nonneg (reindexₐ Complex A₂ e).symm hmain
 
 中文:
 引理 map_cstarMatrix_nonneg
@@ -285,7 +287,9 @@ lemma map_cstarMatrix_nonneg
   let e := Fintype.equivFinOfCardEq (rfl : Fintype.card n = k)
   have hmain : 0 <= (reindexₐ Complex A₁ e M).mapₗ (φ : A₁ ->ₗ[Complex] A₂) := by
     simp only [mapₗ, LinearMap.coe_coe, LinearMap.coe_mk, AddHom.coe_mk]
-    exact CompletelyPositiveMapClass.map_cstarMatrix_
+    exact CompletelyPositiveMapClass.map_cstarMatrix_nonneg' _ k _ (map_nonneg _ hM)
+  rw [← mapₗ_reindexₐ] at hmain
+  simpa [reindexₐ_symm] using map_nonneg (reindexₐ Complex A₂ e).symm hmain
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, CompletelyPositiveMapClass, CompletelyPositiveMapClass.map_cstarMatrix_nonneg, Fintype, Fintype.card, Fintype.equivFinOfCardEq, LinearMap, LinearMap.coe_coe, LinearMap.coe_mk, coe_coe, coe_mk, equivFinOfCardEq, map_cstarMatrix_nonneg, map_nonneg
 -/

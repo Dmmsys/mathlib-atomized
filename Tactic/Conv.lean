@@ -88,7 +88,14 @@ definition elabDischargeConv
     let .true ← isProp theLhs | throwError "target is not a proposition"
     theRhs.mvarId!.assign (mkConst ``True)
     let m ← mkFreshExprMVar theLhs
-    
+    g.assign (← mkEqTrue m)
+    if let some tac := tac then
+      setGoals [m.mvarId!]
+      evalTactic tac; done
+      setGoals gs
+    else
+      setGoals (m.mvarId! :: gs)
+  | _ => Elab.throwUnsupportedSyntax
 
 中文:
 定义 elabDischargeConv
@@ -100,7 +107,14 @@ definition elabDischargeConv
     let .true ← isProp theLhs | throwError "target is not a proposition"
     theRhs.mvarId!.assign (mkConst ``True)
     let m ← mkFreshExprMVar theLhs
-    
+    g.assign (← mkEqTrue m)
+    if let some tac := tac then
+      setGoals [m.mvarId!]
+      evalTactic tac; done
+      setGoals gs
+    else
+      setGoals (m.mvarId! :: gs)
+  | _ => Elab.throwUnsupportedSyntax
 -/
 @[tactic dischargeConv] def elabDischargeConv : Tactic := fun
   | `(conv| discharge $[=> $tac]?) => do

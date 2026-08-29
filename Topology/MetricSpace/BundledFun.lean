@@ -328,7 +328,7 @@ instance [AddZeroClass
       apply add_le_add <;> simp
   }
 
-@[simp, 
+@[simp, push_cast]
 
 中文:
 实例 [加法零类
@@ -344,7 +344,7 @@ instance [AddZeroClass
       apply add_le_add <;> simp
   }
 
-@[simp, 
+@[simp, push_cast]
 -/
 instance [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
     Max (PseudoMetric X R) where
@@ -648,7 +648,8 @@ lemma IsUltra.finsetSup
   have h := (h i hi).le_sup' x y z
   simp only [le_sup_iff] at h
   refine h.imp ?_ ?_ <;>
-  intro H <;
+  intro H <;>
+  exact ⟨i, hi, H⟩
 
 中文:
 引理 是Ultra.finsetSup
@@ -665,7 +666,8 @@ lemma IsUltra.finsetSup
   have h := (h i hi).le_sup' x y z
   simp only [le_sup_iff] at h
   refine h.imp ?_ ?_ <;>
-  intro H <;
+  intro H <;>
+  exact ⟨i, hi, H⟩
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup, _iff, eq_empty_or_nonempty, finsetSup_apply, h.imp, le_sup, le_sup_iff, s.eq_empty_or_nonempty, simp_rw
 -/

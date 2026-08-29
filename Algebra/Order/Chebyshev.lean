@@ -214,7 +214,10 @@ lemma pow_sum_le_card_mul_sum_pow
         gcongr
         exacts [sum_nonneg hf, pow_sum_le_card_mul_sum_pow hf _]
       _ = #s ^ n * ((∑ i in s, f i ^ (n + 1)) * ∑ i in s, f i) := by rw [mul_assoc]
-      _ <= #s ^ n * (#s * ∑ i in s, f i ^ (n + 1) *
+      _ <= #s ^ n * (#s * ∑ i in s, f i ^ (n + 1) * f i) := by
+        gcongr _ * ?_
+        exact ((monovaryOn_self ..).pow_left₀ hf _).sum_mul_sum_le_card_mul_sum
+      _ = _ := by simp_rw [← mul_assoc, ← pow_succ]
 
 中文:
 引理 pow_sum_le_card_mul_sum_pow
@@ -224,7 +227,10 @@ lemma pow_sum_le_card_mul_sum_pow
         gcongr
         exacts [sum_nonneg hf, pow_sum_le_card_mul_sum_pow hf _]
       _ = #s ^ n * ((∑ i in s, f i ^ (n + 1)) * ∑ i in s, f i) := by rw [mul_assoc]
-      _ <= #s ^ n * (#s * ∑ i in s, f i ^ (n + 1) *
+      _ <= #s ^ n * (#s * ∑ i in s, f i ^ (n + 1) * f i) := by
+        gcongr _ * ?_
+        exact ((monovaryOn_self ..).pow_left₀ hf _).sum_mul_sum_le_card_mul_sum
+      _ = _ := by simp_rw [← mul_assoc, ← pow_succ]
 
 Depends on / 依赖: exacts, monovaryOn_self, mul_assoc, pow_succ, pow_sum_le_card_mul_sum_pow, simp_rw, sum_mul_sum_le_card_mul_sum, sum_nonneg
 -/

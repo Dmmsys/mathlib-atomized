@@ -569,7 +569,14 @@ theorem of_exists_root
       (irreducible_mul_leadingCoeff_inv.mpr hp)
     exact ⟨x, by simpa [hp.ne_zero] using hx⟩
   refine ⟨fun p => ?_⟩
-  by_cases hp0
+  by_cases hp0 : p = 0
+  · simp [hp0]
+  obtain ⟨u, hu⟩ := UniqueFactorizationMonoid.factors_prod hp0
+  rw [← hu]
+  refine (Splits.multisetProd fun f hf => ?_).mul u.isUnit.splits
+  let h := UniqueFactorizationMonoid.irreducible_of_factor f hf
+  obtain ⟨x, hx⟩ := H f h
+  exact Splits.of_degree_eq_one (degree_eq_one_of_irreducible_of_root h hx)
 
 中文:
 定理 of_存在_root
@@ -580,7 +587,14 @@ theorem of_exists_root
       (irreducible_mul_leadingCoeff_inv.mpr hp)
     exact ⟨x, by simpa [hp.ne_zero] using hx⟩
   refine ⟨fun p => ?_⟩
-  by_cases hp0
+  by_cases hp0 : p = 0
+  · simp [hp0]
+  obtain ⟨u, hu⟩ := UniqueFactorizationMonoid.factors_prod hp0
+  rw [← hu]
+  refine (Splits.multisetProd fun f hf => ?_).mul u.isUnit.splits
+  let h := UniqueFactorizationMonoid.irreducible_of_factor f hf
+  obtain ⟨x, hx⟩ := H f h
+  exact Splits.of_degree_eq_one (degree_eq_one_of_irreducible_of_root h hx)
 
 Depends on / 依赖: Irreducible, Splits, Splits.multisetProd, UniqueFactorizationMonoid, UniqueFactorizationMonoid.factors_prod, UniqueFactorizationMonoid.irreducible_of_factor, factors_prod, hp.ne_zero, irreducible_mul_leadingCoeff_inv, irreducible_mul_leadingCoeff_inv.mpr, irreducible_of_factor, isUnit, leadingCoeff, monic_mul_leadingCoeff_inv, multisetProd, ne_zero, p.eval, replace, splits, u.isUnit.splits
 -/
@@ -615,7 +629,10 @@ theorem of_ringEquiv
   rcases IsAlgClosed.exists_root (k := k) (p.map e.symm.toRingHom) hpe with ⟨x, hx⟩
   use e x
   rw [IsRoot] at hx
-  app
+  apply e.symm.injective
+  rw [map_zero]; rw [← hx]
+  clear hx hpe hp hmp
+  induction p using Polynomial.induction_on <;> simp_all
 
 中文:
 定理 of_ringEquiv
@@ -629,7 +646,10 @@ theorem of_ringEquiv
   rcases IsAlgClosed.exists_root (k := k) (p.map e.symm.toRingHom) hpe with ⟨x, hx⟩
   use e x
   rw [IsRoot] at hx
-  app
+  apply e.symm.injective
+  rw [map_zero]; rw [← hx]
+  clear hx hpe hp hmp
+  induction p using Polynomial.induction_on <;> simp_all
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.exists_root, IsAlgClosed.of_exists_root, IsRoot, Polynomial, Polynomial.induction_on, degree, degree_map, degree_pos_of_irreducible, e.symm.injective, e.symm.toRingHom, exists_root, induction_on, injective, map_zero, ne_of_gt, of_exists_root, p.map, toRingHom
 -/
@@ -682,7 +702,9 @@ theorem algebraMap_bijective_of_isIntegral
   have hq : (minpoly k x).leadingCoeff = 1 := minpoly.monic (Algebra.IsIntegral.isIntegral x)
   have h : (minpoly k x).degree = 1 := degree_eq_one_of_irreducible k (minpoly.irreducible
     (Algebra.IsIntegral.isIntegral x))
-  h
+  have : aeval x (minpoly k x) = 0 := minpoly.aeval k x
+  rw [eq_X_add_C_of_degree_eq_one h]; rw [hq]; rw [C_1]; rw [one_mul]; rw [aeval_add]; rw [aeval_X]; rw [aeval_C]; rw [add_eq_zero_iff_eq_neg] at this
+  exact (map_neg (algebraMap k K) ((minpoly k x).coeff 0)).symm ▸ this.symm
 
 中文:
 定理 algebraMap_bijective_of_is整数egral
@@ -692,7 +714,9 @@ theorem algebraMap_bijective_of_isIntegral
   have hq : (minpoly k x).leadingCoeff = 1 := minpoly.monic (Algebra.IsIntegral.isIntegral x)
   have h : (minpoly k x).degree = 1 := degree_eq_one_of_irreducible k (minpoly.irreducible
     (Algebra.IsIntegral.isIntegral x))
-  h
+  have : aeval x (minpoly k x) = 0 := minpoly.aeval k x
+  rw [eq_X_add_C_of_degree_eq_one h]; rw [hq]; rw [C_1]; rw [one_mul]; rw [aeval_add]; rw [aeval_X]; rw [aeval_C]; rw [add_eq_zero_iff_eq_neg] at this
+  exact (map_neg (algebraMap k K) ((minpoly k x).coeff 0)).symm ▸ this.symm
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, RingHom, RingHom.injective, add_eq_zero_iff_eq_neg, aeval_C, aeval_X, aeval_add, degree, degree_eq_one_of_irreducible, eq_X_add_C_of_degree_eq_one, injective, irreducible, isIntegral, leadingCoeff, minpoly, minpoly.aeval, minpoly.irreducible, minpoly.monic
 -/
@@ -776,7 +800,9 @@ lemma Polynomial.isCoprime_iff_aeval_ne_zero_of_isAlgClosed
     contrapose! h
     rw [h.left]; rw [h.right]; rw [map_zero]; rw [and_self]
   · rintro ⟨_, rfl⟩ ⟨_, rfl⟩
-obtain ⟨a, ha : _ = _⟩ := IsAlgClosed.exists_root (x.map <| algebraM
+obtain ⟨a, ha : _ = _⟩ := IsAlgClosed.exists_root (x.map <| algebraMap k K) by
+      simpa only [degree_map] using (ne_of_lt <| degree_pos_of_ne_zero_of_nonunit h0 hu).symm
+    exact not_and_or.mpr (h a) (by simp_rw [map_mul, ← eval_map_algebraMap, ha, zero_mul, true_and])
 
 中文:
 引理 多项式.isCoprime_iff_aeval_ne_zero_of_isAlgClosed
@@ -787,7 +813,9 @@ obtain ⟨a, ha : _ = _⟩ := IsAlgClosed.exists_root (x.map <| algebraM
     contrapose! h
     rw [h.left]; rw [h.right]; rw [map_zero]; rw [and_self]
   · rintro ⟨_, rfl⟩ ⟨_, rfl⟩
-obtain ⟨a, ha : _ = _⟩ := IsAlgClosed.exists_root (x.map <| algebraM
+obtain ⟨a, ha : _ = _⟩ := IsAlgClosed.exists_root (x.map <| algebraMap k K) by
+      simpa only [degree_map] using (ne_of_lt <| degree_pos_of_ne_zero_of_nonunit h0 hu).symm
+    exact not_and_or.mpr (h a) (by simp_rw [map_mul, ← eval_map_algebraMap, ha, zero_mul, true_and])
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.exists_root, aeval_ne_zero_of_isCoprime, algebraMap, and_self, contrapose, degree_map, degree_pos_of_ne_zero_of_nonunit, eval_map_algebraMap, exists_root, h.left, h.right, isCoprime_of_dvd, map_mul, map_zero, ne_of_lt, not_and_or, not_and_or.mpr, replace, simp_rw
 -/
@@ -1013,7 +1041,11 @@ instance FractionRing.isAlgebraic
     letI : Algebra (FractionRing R) (FractionRing S) := FractionRing.liftAlgebra R _
     Algebra.IsAlgebraic (FractionRing R) (FractionRing S) := by
   let : IsDomain R := (FaithfulSMul.algebraMap_injective R S).isDomain _
-  let : Algebra (FractionRi
+  let : Algebra (FractionRing R) (FractionRing S) := FractionRing.liftAlgebra R _
+  have := FractionRing.isScalarTower_liftAlgebra R (FractionRing S)
+  have := (IsFractionRing.isAlgebraic_iff' R S (FractionRing S)).1 inferInstance
+  exact ⟨fun _ => (IsFractionRing.isAlgebraic_iff R (FractionRing R) (FractionRing S)).1
+    (Algebra.IsAlgebraic.isAlgebraic _)⟩
 
 中文:
 实例 FractionRing.isAlgebraic
@@ -1022,7 +1054,11 @@ instance FractionRing.isAlgebraic
     letI : Algebra (FractionRing R) (FractionRing S) := FractionRing.liftAlgebra R _
     Algebra.IsAlgebraic (FractionRing R) (FractionRing S) := by
   let : IsDomain R := (FaithfulSMul.algebraMap_injective R S).isDomain _
-  let : Algebra (FractionRi
+  let : Algebra (FractionRing R) (FractionRing S) := FractionRing.liftAlgebra R _
+  have := FractionRing.isScalarTower_liftAlgebra R (FractionRing S)
+  have := (IsFractionRing.isAlgebraic_iff' R S (FractionRing S)).1 inferInstance
+  exact ⟨fun _ => (IsFractionRing.isAlgebraic_iff R (FractionRing R) (FractionRing S)).1
+    (Algebra.IsAlgebraic.isAlgebraic _)⟩
 -/
 private instance FractionRing.isAlgebraic :
     letI : IsDomain R := (FaithfulSMul.algebraMap_injective R S).isDomain _
@@ -1050,7 +1086,8 @@ definition lift
   letI := FractionRing.liftAlgebra R (FractionRing S)
   have := FractionRing.isScalarTower_liftAlgebra R M
   have := FractionRing.isScalarTower_liftAlgebra R (FractionRing S)
-  let f :
+  let f : FractionRing S ->ₐ[FractionRing R] M := liftAux (FractionRing R) (FractionRing S) M
+  exact (f.restrictScalars R).comp ((Algebra.ofId S (FractionRing S)).restrictScalars R)
 
 中文:
 定义 lift
@@ -1061,7 +1098,8 @@ definition lift
   letI := FractionRing.liftAlgebra R (FractionRing S)
   have := FractionRing.isScalarTower_liftAlgebra R M
   have := FractionRing.isScalarTower_liftAlgebra R (FractionRing S)
-  let f :
+  let f : FractionRing S ->ₐ[FractionRing R] M := liftAux (FractionRing R) (FractionRing S) M
+  exact (f.restrictScalars R).comp ((Algebra.ofId S (FractionRing S)).restrictScalars R)
 
 Depends on / 依赖: Algebra, Algebra.ofId, FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, FractionRing.isScalarTower_liftAlgebra, FractionRing.liftAlgebra, IsDomain, algebraMap_injective, f.restrictScalars, isDomain, isScalarTower_liftAlgebra, liftAlgebra, liftAux, restrictScalars
 -/
@@ -1272,7 +1310,17 @@ definition equivOfEquivAux
   letI : Algebra S R := RingHom.toAlgebra hSR.toRingHom
   letI : Algebra R L := RingHom.toAlgebra ((algebraMap S L).comp (algebraMap R S))
   haveI : IsScalarTower R S L := .of_algebraMap_eq fun _ => rfl
-  haveI : IsScalarTower S R L := 
+  haveI : IsScalarTower S R L := .of_algebraMap_eq (by simp [RingHom.algebraMap_toAlgebra])
+  have : FaithfulSMul R S := (faithfulSMul_iff_algebraMap_injective R S).mpr hSR.symm.injective
+  have : Algebra.IsAlgebraic R L := (IsAlgClosure.isAlgebraic.extendScalars
+    (show Function.Injective (algebraMap S R) from hSR.injective))
+  refine ⟨equivOfAlgebraic' R S L M, ?_⟩
+  ext x
+  simp only [RingEquiv.toRingHom_eq_coe, Function.comp_apply, RingHom.coe_comp,
+    AlgEquiv.coe_ringEquiv, RingEquiv.coe_toRingHom]
+  conv_lhs => rw [← hSR.symm_apply_apply x]
+  change equivOfAlgebraic' R S L M (algebraMap R L (hSR x)) = _
+  rw [AlgEquiv.commutes]
 
 中文:
 定义 equivOfEquivAux
@@ -1282,7 +1330,17 @@ definition equivOfEquivAux
   letI : Algebra S R := RingHom.toAlgebra hSR.toRingHom
   letI : Algebra R L := RingHom.toAlgebra ((algebraMap S L).comp (algebraMap R S))
   haveI : IsScalarTower R S L := .of_algebraMap_eq fun _ => rfl
-  haveI : IsScalarTower S R L := 
+  haveI : IsScalarTower S R L := .of_algebraMap_eq (by simp [RingHom.algebraMap_toAlgebra])
+  have : FaithfulSMul R S := (faithfulSMul_iff_algebraMap_injective R S).mpr hSR.symm.injective
+  have : Algebra.IsAlgebraic R L := (IsAlgClosure.isAlgebraic.extendScalars
+    (show Function.Injective (algebraMap S R) from hSR.injective))
+  refine ⟨equivOfAlgebraic' R S L M, ?_⟩
+  ext x
+  simp only [RingEquiv.toRingHom_eq_coe, Function.comp_apply, RingHom.coe_comp,
+    AlgEquiv.coe_ringEquiv, RingEquiv.coe_toRingHom]
+  conv_lhs => rw [← hSR.symm_apply_apply x]
+  change equivOfAlgebraic' R S L M (algebraMap R L (hSR x)) = _
+  rw [AlgEquiv.commutes]
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, FaithfulSMul, IsAlgClosure, IsAlgClosure.isAlgebra, IsAlgebraic, IsScalarTower, RingHom, RingHom.algebraMap_toAlgebra, RingHom.toAlgebra, algebraMap, algebraMap_toAlgebra, faithfulSMul_iff_algebraMap_injective, hSR.symm.injective, hSR.symm.toRingHom, hSR.toRingHom, injective, isAlgebra, of_algebraMap_eq, toAlgebra
 -/
@@ -1557,7 +1615,18 @@ theorem Polynomial.isRoot_of_isRoot_iff_dvd_derivative_mul
   · rw [eq_C_of_derivative_eq_zero hdf0]
     simp only [derivative_C, zero_mul, dvd_zero, implies_true]
   have hdg : f.derivative * g != 0 := mul_ne_zero hdf0 hg0
-  c
+  classical rw [IsAlgClosed.dvd_iff_roots_le_roots hf0 hdg, Multiset.le_iff_count]
+  simp only [count_roots, rootMultiplicity_mul hdg]
+  refine forall_imp fun a => ?_
+  by_cases haf : f.eval a = 0
+  · have h0 : 0 < f.rootMultiplicity a := (rootMultiplicity_pos hf0).2 haf
+    rw [derivative_rootMultiplicity_of_root haf]
+    intro h
+    calc rootMultiplicity a f
+        = rootMultiplicity a f - 1 + 1 := (Nat.sub_add_cancel (Nat.succ_le_iff.1 h0)).symm
+      _ <= rootMultiplicity a f - 1 + rootMultiplicity a g := add_le_add le_rfl (Nat.succ_le_iff.1
+        ((rootMultiplicity_pos hg0).2 (h haf)))
+  · simp [haf, rootMultiplicity_eq_zero haf]
 
 中文:
 定理 多项式.isRoot_of_isRoot_iff_dvd_derivative_mul
@@ -1570,7 +1639,18 @@ theorem Polynomial.isRoot_of_isRoot_iff_dvd_derivative_mul
   · rw [eq_C_of_derivative_eq_zero hdf0]
     simp only [derivative_C, zero_mul, dvd_zero, implies_true]
   have hdg : f.derivative * g != 0 := mul_ne_zero hdf0 hg0
-  c
+  classical rw [IsAlgClosed.dvd_iff_roots_le_roots hf0 hdg, Multiset.le_iff_count]
+  simp only [count_roots, rootMultiplicity_mul hdg]
+  refine forall_imp fun a => ?_
+  by_cases haf : f.eval a = 0
+  · have h0 : 0 < f.rootMultiplicity a := (rootMultiplicity_pos hf0).2 haf
+    rw [derivative_rootMultiplicity_of_root haf]
+    intro h
+    calc rootMultiplicity a f
+        = rootMultiplicity a f - 1 + 1 := (Nat.sub_add_cancel (Nat.succ_le_iff.1 h0)).symm
+      _ <= rootMultiplicity a f - 1 + rootMultiplicity a g := add_le_add le_rfl (Nat.succ_le_iff.1
+        ((rootMultiplicity_pos hg0).2 (h haf)))
+  · simp [haf, rootMultiplicity_eq_zero haf]
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.dvd_iff_roots_le_roots, Multiset, Multiset.le_iff_count, classical, count_roots, derivative, derivative_C, dvd_iff_roots_le_roots, dvd_zero, eq_C_of_derivative_eq_zero, f.derivative, f.eval, f.rootMultipli, forall_imp, implies_true, isRoot_of_isRoot_of_dvd_derivative_mul, le_iff_count, mul_ne_zero, rootMultipli
 -/

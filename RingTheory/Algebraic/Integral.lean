@@ -328,7 +328,11 @@ theorem exists_integral_multiple
     exact ⟨r, ne, by simpa [← algebraMap_smul A, eq, zero_smul] using isIntegral_zero⟩
   have ⟨p, p_ne_zero, px⟩ := hz
   set a := p.leadingCoeff
-  have
+  have a_ne_zero : a != 0 := mt Polynomial.leadingCoeff_eq_zero.mp p_ne_zero
+  have x_integral : IsIntegral R (algebraMap R A a * z) :=
+    ⟨p.integralNormalization, monic_integralNormalization p_ne_zero,
+      integralNormalization_aeval_eq_zero px fun _ => (map_eq_zero_iff _ inj).mp⟩
+  exact ⟨_, a_ne_zero, Algebra.smul_def a z ▸ x_integral⟩
 
 中文:
 定理 存在_integral_multiple
@@ -341,7 +345,11 @@ theorem exists_integral_multiple
     exact ⟨r, ne, by simpa [← algebraMap_smul A, eq, zero_smul] using isIntegral_zero⟩
   have ⟨p, p_ne_zero, px⟩ := hz
   set a := p.leadingCoeff
-  have
+  have a_ne_zero : a != 0 := mt Polynomial.leadingCoeff_eq_zero.mp p_ne_zero
+  have x_integral : IsIntegral R (algebraMap R A a * z) :=
+    ⟨p.integralNormalization, monic_integralNormalization p_ne_zero,
+      integralNormalization_aeval_eq_zero px fun _ => (map_eq_zero_iff _ inj).mp⟩
+  exact ⟨_, a_ne_zero, Algebra.smul_def a z ▸ x_integral⟩
 
 Depends on / 依赖: Function, Function.Injective, Injective, IsIntegral, Polynomial, Polynomial.leadingCoeff_eq_zero.mp, a_ne_zero, algebraMap, algebraMap_smul, injective_iff_map_eq_zero, integralNormalization, integralNormalization_aev, isIntegral_zero, leadingCoeff, leadingCoeff_eq_zero, monic_integralNormalization, p.integralNormalization, p.leadingCoeff, p_ne_zero, x_integral
 -/
@@ -404,7 +412,9 @@ theorem of_smul_isIntegral
   refine ⟨p.comp (C y * X), fun h => ?_, by simpa [aeval_comp, Algebra.smul_def] using! eval0⟩
   apply_fun (coeff · p.natDegree) at h
   have hy0 : y != 0 := by rintro rfl; exact hy .zero
-  rw [coeff_zero]; rw [← mul_one p.natDegree]; rw [← natDegree_C_mul_X y hy0]; r
+  rw [coeff_zero]; rw [← mul_one p.natDegree]; rw [← natDegree_C_mul_X y hy0]; rw [coeff_comp_degree_mul_degree]; rw [monic]; rw [one_mul]; rw [leadingCoeff_C_mul_X] at h
+  · exact hy ⟨_, h⟩
+  · rw [natDegree_C_mul_X _ hy0]; rintro ⟨⟩
 
 中文:
 定理 of_smul_is整数egral
@@ -414,7 +424,9 @@ theorem of_smul_isIntegral
   refine ⟨p.comp (C y * X), fun h => ?_, by simpa [aeval_comp, Algebra.smul_def] using! eval0⟩
   apply_fun (coeff · p.natDegree) at h
   have hy0 : y != 0 := by rintro rfl; exact hy .zero
-  rw [coeff_zero]; rw [← mul_one p.natDegree]; rw [← natDegree_C_mul_X y hy0]; r
+  rw [coeff_zero]; rw [← mul_one p.natDegree]; rw [← natDegree_C_mul_X y hy0]; rw [coeff_comp_degree_mul_degree]; rw [monic]; rw [one_mul]; rw [leadingCoeff_C_mul_X] at h
+  · exact hy ⟨_, h⟩
+  · rw [natDegree_C_mul_X _ hy0]; rintro ⟨⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_def, aeval_comp, apply_fun, coeff_comp_degree_mul_degree, coeff_zero, leadingCoeff_C_mul_X, mul_one, natDegree, natDegree_C_mul_X, one_mul, p.comp, p.natDegree, smul_def
 -/
@@ -555,7 +567,13 @@ theorem restrictScalars_of_isIntegral
 fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
   have := hRS.noZeroDivisors _ (map_zero _) (map_mul _)
   have ⟨s, hs, int_s⟩ := h.exists_integral_multiple
-  cases su
+  cases subsingleton_or_nontrivial R
+  · have := Module.subsingleton R S
+    exact (is_transcendental_of_subsingleton _ _ h).elim
+  have ⟨r, hr, _, e⟩ := (int.1 s).isAlgebraic.exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero hs)
+  refine .of_smul_isIntegral (y := r) (by rwa [isNilpotent_iff_eq_zero]) ?_
+  rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R S]; rw [e]; rw [← Algebra.smul_def]; rw [mul_comm]; rw [mul_smul]
+  exact isIntegral_trans _ (int_s.smul _)
 
 中文:
 定理 restrictScalars_of_is整数egral
@@ -566,7 +584,13 @@ fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
 fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
   have := hRS.noZeroDivisors _ (map_zero _) (map_mul _)
   have ⟨s, hs, int_s⟩ := h.exists_integral_multiple
-  cases su
+  cases subsingleton_or_nontrivial R
+  · have := Module.subsingleton R S
+    exact (is_transcendental_of_subsingleton _ _ h).elim
+  have ⟨r, hr, _, e⟩ := (int.1 s).isAlgebraic.exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero hs)
+  refine .of_smul_isIntegral (y := r) (by rwa [isNilpotent_iff_eq_zero]) ?_
+  rw [Algebra.smul_def]; rw [IsScalarTower.algebraMap_apply R S]; rw [e]; rw [← Algebra.smul_def]; rw [mul_comm]; rw [mul_smul]
+  exact isIntegral_trans _ (int_s.smul _)
 
 Depends on / 依赖: Algebra, Algebra.isAlgebraic_of_not_injective, Function, Function.Injective, Injective, IsScalarTower, IsScalarTower.algebraMap_eq, Module, Module.subsingleton, algebraMap, algebraMap_eq, exists_integral_multiple, exists_nonzero_dvd, h.exists_integral_multiple, hRS.noZeroDivisors, int_s, isAlgebraic, isAlgebraic.exists_nonzero_dvd, isAlgebraic_of_not_injective, is_transcendental_of_subsingleton
 -/
@@ -598,7 +622,20 @@ theorem restrictScalars
   on_goal 2 => exact (Algebra.isAlgebraic_of_not_injective
 fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
   rw [← faithfulSMul_iff_algebraMap_injective] at hRS
-  have := NoZeroDivisors.of_faithfulS
+  have := NoZeroDivisors.of_faithfulSMul R S
+  have := Algebra.nontrivial_of_isAlgebraic R S
+  have : IsDomain R := NoZeroDivisors.to_isDomain _
+  classical
+  have ⟨r, hr, int⟩ := Algebra.IsAlgebraic.exists_integral_multiples R (p.support.image (coeff p))
+  let p := (r • p).toSubring (integralClosure R S).toSubring fun s hs => by
+    obtain ⟨n, hn, rfl⟩ := mem_coeffs_iff.mp hs
+    exact int _ (Finset.mem_image_of_mem _ <| support_smul _ _ hn)
+  have : IsAlgebraic (integralClosure R S) a := by
+    refine ⟨p, ?_, ?_⟩
+    · simpa only [← Polynomial.map_ne_zero_iff (f := Subring.subtype _) (p := p)
+        Subtype.val_injective, p, map_toSubring, smul_ne_zero_iff] using And.intro hr hp
+    rw [← eval_map_algebraMap]; rw [Subalgebra.algebraMap_eq]; rw [← map_map]; rw [← Subalgebra.toSubring_subtype]; rw [map_toSubring]; rw [eval_map_algebraMap]; rw [← AlgHom.restrictScalars_apply R]; rw [map_smul]; rw [AlgHom.restrictScalars_apply]; rw [eval0]; rw [smul_zero]
+  exact restrictScalars_of_isIntegral _ this
 
 中文:
 定理 restrictScalars
@@ -609,7 +646,20 @@ fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
   on_goal 2 => exact (Algebra.isAlgebraic_of_not_injective
 fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
   rw [← faithfulSMul_iff_algebraMap_injective] at hRS
-  have := NoZeroDivisors.of_faithfulS
+  have := NoZeroDivisors.of_faithfulSMul R S
+  have := Algebra.nontrivial_of_isAlgebraic R S
+  have : IsDomain R := NoZeroDivisors.to_isDomain _
+  classical
+  have ⟨r, hr, int⟩ := Algebra.IsAlgebraic.exists_integral_multiples R (p.support.image (coeff p))
+  let p := (r • p).toSubring (integralClosure R S).toSubring fun s hs => by
+    obtain ⟨n, hn, rfl⟩ := mem_coeffs_iff.mp hs
+    exact int _ (Finset.mem_image_of_mem _ <| support_smul _ _ hn)
+  have : IsAlgebraic (integralClosure R S) a := by
+    refine ⟨p, ?_, ?_⟩
+    · simpa only [← Polynomial.map_ne_zero_iff (f := Subring.subtype _) (p := p)
+        Subtype.val_injective, p, map_toSubring, smul_ne_zero_iff] using And.intro hr hp
+    rw [← eval_map_algebraMap]; rw [Subalgebra.algebraMap_eq]; rw [← map_map]; rw [← Subalgebra.toSubring_subtype]; rw [map_toSubring]; rw [eval_map_algebraMap]; rw [← AlgHom.restrictScalars_apply R]; rw [map_smul]; rw [AlgHom.restrictScalars_apply]; rw [eval0]; rw [smul_zero]
+  exact restrictScalars_of_isIntegral _ this
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.exists_integral_multiples, Algebra.isAlgebraic_of_not_injective, Algebra.nontrivial_of_isAlgebraic, Function, Function.Injective, Injective, IsAlgebraic, IsDomain, IsScalarTower, IsScalarTower.algebraMap_eq, NoZeroDivisors, NoZeroDivisors.of_faithfulSMul, NoZeroDivisors.to_isDomain, algebraMap, algebraMap_eq, classical, exists_integral_multiples, faithfulSMul_iff_algebraMap_injective, isAlgebraic_of_not_injective
 -/
@@ -768,7 +818,7 @@ lemma tmul
   have ⟨p, h, eval0⟩ := ha
   refine .smul ⟨p.map (algebraMap R S),
     (Polynomial.map_ne_zero_iff <| FaithfulSMul.algebraMap_injective ..).mpr h, ?_⟩ _
-  rw [← Algebra.TensorProduct.includeRight_apply]; rw [← AlgHom.coe_toRi
+  rw [← Algebra.TensorProduct.includeRight_apply]; rw [← AlgHom.coe_toRingHom (A := A)]; rw [← map_aeval_eq_aeval_map (by ext; simp)]; rw [eval0]; rw [map_zero]
 
 中文:
 引理 tmul
@@ -779,7 +829,7 @@ lemma tmul
   have ⟨p, h, eval0⟩ := ha
   refine .smul ⟨p.map (algebraMap R S),
     (Polynomial.map_ne_zero_iff <| FaithfulSMul.algebraMap_injective ..).mpr h, ?_⟩ _
-  rw [← Algebra.TensorProduct.includeRight_apply]; rw [← AlgHom.coe_toRi
+  rw [← Algebra.TensorProduct.includeRight_apply]; rw [← AlgHom.coe_toRingHom (A := A)]; rw [← map_aeval_eq_aeval_map (by ext; simp)]; rw [eval0]; rw [map_zero]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, Algebra, Algebra.TensorProduct.includeRight_apply, FaithfulSMul, FaithfulSMul.algebraMap_injective, Polynomial, Polynomial.map_ne_zero_iff, TensorProduct, TensorProduct.smul_tmul, algebraMap, algebraMap_injective, coe_toRingHom, includeRight_apply, map_aeval_eq_aeval_map, map_ne_zero_iff, map_zero, mul_one, p.map, smul_eq_mul
 -/
@@ -1276,7 +1326,17 @@ theorem IsAlgebraic.adjoin_of_forall_isAlgebraic
   let _ : Algebra Rs Rts := (Subalgebra.inclusion
 (T := Rts.restrictScalars R) adjoin_le by apply subset_adjoin).toAlgebra
   have : IsScalarTower Rs Rts A := .of_algebraMap_eq fun ⟨a, _⟩ => rfl
-  have : Algebra.IsAlgebraic Rt 
+  have : Algebra.IsAlgebraic Rt Rts := by
+    have := ha.nontrivial
+    have := Subtype.val_injective (p := (· in Rs)).nontrivial
+    have := (isDomain_iff_noZeroDivisors_and_nontrivial Rt).mpr ⟨inferInstance, inferInstance⟩
+    rw [← Subalgebra.isAlgebraic_iff]; rw [isAlgebraic_adjoin_iff]
+    intro x hs
+    by_cases ht : x in t
+    · exact isAlgebraic_algebraMap (⟨x, subset_adjoin ht⟩ : Rt)
+    exact alg _ ⟨hs, ht⟩
+  have : IsAlgebraic Rts a := ha.extendScalars (by apply Subalgebra.inclusion_injective)
+  exact this.restrictScalars Rt
 
 中文:
 定理 是代数.adjoin_of_对任意_isAlgebraic
@@ -1288,7 +1348,17 @@ theorem IsAlgebraic.adjoin_of_forall_isAlgebraic
   let _ : Algebra Rs Rts := (Subalgebra.inclusion
 (T := Rts.restrictScalars R) adjoin_le by apply subset_adjoin).toAlgebra
   have : IsScalarTower Rs Rts A := .of_algebraMap_eq fun ⟨a, _⟩ => rfl
-  have : Algebra.IsAlgebraic Rt 
+  have : Algebra.IsAlgebraic Rt Rts := by
+    have := ha.nontrivial
+    have := Subtype.val_injective (p := (· in Rs)).nontrivial
+    have := (isDomain_iff_noZeroDivisors_and_nontrivial Rt).mpr ⟨inferInstance, inferInstance⟩
+    rw [← Subalgebra.isAlgebraic_iff]; rw [isAlgebraic_adjoin_iff]
+    intro x hs
+    by_cases ht : x in t
+    · exact isAlgebraic_algebraMap (⟨x, subset_adjoin ht⟩ : Rt)
+    exact alg _ ⟨hs, ht⟩
+  have : IsAlgebraic Rts a := ha.extendScalars (by apply Subalgebra.inclusion_injective)
+  exact this.restrictScalars Rt
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, IsAlgebraic, IsScalarTower, Rts.restrictScalars, Subalgebra, Subalgebra.inclusion, Subalgebra.isAlgebraic_if, Subtype, Subtype.val_injective, adjoin, adjoin_le, ha.nontrivial, inclusion, isAlgebraic_if, isDomain_iff_noZeroDivisors_and_nontrivial, nontrivial, of_algebraMap_eq, restrictScalars, subset_adjoin
 -/
@@ -1475,7 +1545,7 @@ instance :
   (IsLocalization.iff_of_le_of_exists_dvd _ S⁰
     (map_le_nonZeroDivisors_of_injective _ (FaithfulSMul.algebraMap_injective ..) le_rfl)
     fun s hs => have ⟨r, ne, eq⟩ := (alg.1 s).exists_nonzero_dvd hs
-    ⟨
+    ⟨_, ⟨r, mem_nonZeroDivisors_of_ne_zero ne, rfl⟩, eq⟩).mpr inferInstance
 
 中文:
 实例 :
@@ -1484,7 +1554,7 @@ instance :
   (IsLocalization.iff_of_le_of_exists_dvd _ S⁰
     (map_le_nonZeroDivisors_of_injective _ (FaithfulSMul.algebraMap_injective ..) le_rfl)
     fun s hs => have ⟨r, ne, eq⟩ := (alg.1 s).exists_nonzero_dvd hs
-    ⟨
+    ⟨_, ⟨r, mem_nonZeroDivisors_of_ne_zero ne, rfl⟩, eq⟩).mpr inferInstance
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsLocalization, IsLocalization.iff_of_le_of_exists_dvd, algebraMap_injective, exists_nonzero_dvd, iff_of_le_of_exists_dvd, le_rfl, map_le_nonZeroDivisors_of_injective, map_mul, map_zero, mem_nonZeroDivisors_of_ne_zero, noZeroDivisors
 -/
@@ -1662,7 +1732,10 @@ theorem Module.finrank_mul_finrank'
   · have : FaithfulSMul R T := .trans R S T
     have : IsDomain R := (FaithfulSMul.algebraMap_injective R T).isDomain
     have : IsDomain S := (FaithfulSMul.algebraMap_injective S T).isDomain
-    rw [← IsFractionRing.finrank_eq R (FractionRing R) S (FractionRing S)
+    rw [← IsFractionRing.finrank_eq R (FractionRing R) S (FractionRing S)]; rw [← IsFractionRing.finrank_eq S (FractionRing S) T (FractionRing T)]; rw [← IsFractionRing.finrank_eq R (FractionRing R) T (FractionRing T)]; rw [Module.finrank_mul_finrank (FractionRing R) (FractionRing S) (FractionRing T)]
+  · rw [Module.finrank_eq_zero_of_not_faithfulSMul h, zero_mul,
+      Module.finrank_eq_zero_of_not_faithfulSMul]
+    exact fun _ => h (FaithfulSMul.tower_bot R S T)
 
 中文:
 定理 模.finrank_mul_finrank'
@@ -1672,7 +1745,10 @@ theorem Module.finrank_mul_finrank'
   · have : FaithfulSMul R T := .trans R S T
     have : IsDomain R := (FaithfulSMul.algebraMap_injective R T).isDomain
     have : IsDomain S := (FaithfulSMul.algebraMap_injective S T).isDomain
-    rw [← IsFractionRing.finrank_eq R (FractionRing R) S (FractionRing S)
+    rw [← IsFractionRing.finrank_eq R (FractionRing R) S (FractionRing S)]; rw [← IsFractionRing.finrank_eq S (FractionRing S) T (FractionRing T)]; rw [← IsFractionRing.finrank_eq R (FractionRing R) T (FractionRing T)]; rw [Module.finrank_mul_finrank (FractionRing R) (FractionRing S) (FractionRing T)]
+  · rw [Module.finrank_eq_zero_of_not_faithfulSMul h, zero_mul,
+      Module.finrank_eq_zero_of_not_faithfulSMul]
+    exact fun _ => h (FaithfulSMul.tower_bot R S T)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, IsDomain, IsFractionRing, IsFractionRing.finrank_eq, Module, Module.finrank_mul_finrank, algebraMap_injective, finrank_eq, finrank_mul_finrank, isDomain
 -/

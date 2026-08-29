@@ -43,7 +43,7 @@ theorem Bornology.IsBounded.mul
   rintro z ⟨x, hx, y, hy, rfl⟩
   exact norm_mul_le_of_le' (hRs x hx) (hRt y hy)
 
-@[to_ad
+@[to_additive]
 
 中文:
 定理 有界结构.IsBounded.mul
@@ -56,7 +56,7 @@ theorem Bornology.IsBounded.mul
   rintro z ⟨x, hx, y, hy, rfl⟩
   exact norm_mul_le_of_le' (hRs x hx) (hRt y hy)
 
-@[to_ad
+@[to_additive]
 
 Depends on / 依赖: exists_norm_le, hs.exists_norm_le, ht.exists_norm_le, isBounded_iff_forall_norm_le, norm_mul_le_of_le
 -/

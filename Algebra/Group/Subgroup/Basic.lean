@@ -1288,7 +1288,9 @@ definition _root_.MulAut.characteristic
       invFun := fun h => ⟨φ.symm h, characteristic_iff_le_comap.mp inferInstance φ.symm h.2⟩
       left_inv h := Subtype.ext (φ.symm_apply_apply h)
       right_inv h := Subtype.ext (φ.apply_symm_apply h)
-      map_mul' h k
+      map_mul' h k := Subtype.ext (map_mul φ (h : G) (k : G)) }
+  map_one' := rfl
+  map_mul' _ _ := rfl
 
 中文:
 定义 _root_.MulAut.characteristic
@@ -1297,7 +1299,9 @@ definition _root_.MulAut.characteristic
       invFun := fun h => ⟨φ.symm h, characteristic_iff_le_comap.mp inferInstance φ.symm h.2⟩
       left_inv h := Subtype.ext (φ.symm_apply_apply h)
       right_inv h := Subtype.ext (φ.apply_symm_apply h)
-      map_mul' h k
+      map_mul' h k := Subtype.ext (map_mul φ (h : G) (k : G)) }
+  map_one' := rfl
+  map_mul' _ _ := rfl
 
 Depends on / 依赖: Subtype, Subtype.ext, apply_symm_apply, characteristic_iff_le_comap, characteristic_iff_le_comap.mp, invFun, left_inv, map_mul, map_one, right_inv, symm_apply_apply
 -/
@@ -1663,7 +1667,7 @@ theorem le_normalizer_closure_iff
   rw [mem_normalizer_iff_map_conj_eq]; rw [MonoidHom.map_closure]
 apply le_antisymm by simpa using! hH h hh
   rw [closure_le]; rw [← MonoidHom.map_closure]
-  exact fun g hg => ⟨_, hH _ (inv_mem hh) g hg, by simp [mu
+  exact fun g hg => ⟨_, hH _ (inv_mem hh) g hg, by simp [mul_assoc]⟩
 
 中文:
 定理 le_normalizer_closure_iff
@@ -1673,7 +1677,7 @@ apply le_antisymm by simpa using! hH h hh
   rw [mem_normalizer_iff_map_conj_eq]; rw [MonoidHom.map_closure]
 apply le_antisymm by simpa using! hH h hh
   rw [closure_le]; rw [← MonoidHom.map_closure]
-  exact fun g hg => ⟨_, hH _ (inv_mem hh) g hg, by simp [mu
+  exact fun g hg => ⟨_, hH _ (inv_mem hh) g hg, by simp [mul_assoc]⟩
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_closure, closure_le, inv_mem, le_antisymm, map_closure, mem_closure_of_mem, mem_normalizer_iff_map_conj_eq, mul_assoc
 -/
@@ -2383,7 +2387,7 @@ instance normalClosure_normal
     · rw [← conj_mul]
       exact mul_mem ihx ihy
     · rw [← conj_inv]
-      e
+      exact inv_mem ihx⟩
 
 中文:
 实例 normalClosure_normal
@@ -2396,7 +2400,7 @@ instance normalClosure_normal
     · rw [← conj_mul]
       exact mul_mem ihx ihy
     · rw [← conj_inv]
-      e
+      exact inv_mem ihx⟩
 
 Depends on / 依赖: Subgroup, Subgroup.closure_induction, closure_induction, conj_inv, conj_mem_conjugatesOfSet, conj_mul, conjugatesOfSet_subset_normalClosure, inv_mem, mul_mem
 -/
@@ -2932,7 +2936,13 @@ theorem normalCore_eq_iInf_map_conj
     conv_rhs => rw [← Equiv.iInf_comp (Equiv.mulLeft g)]
     rw [map_iInf _ (MulAut.conj g).injective]
     simp [map_map, MulAut.mul_def]
-  refine le_antisymm (le_iInf fun g => ?_
+  refine le_antisymm (le_iInf fun g => ?_) ?_
+  · grw [← Normal.map_conj_eq H.normalCore g, normalCore_le]
+  · rw [normal_le_normalCore]
+    apply iInf_le_of_le 1
+    simp [MulAut.one_def]
+
+@[to_additive]
 
 中文:
 定理 normalCore_eq_iInf_map_conj
@@ -2943,7 +2953,13 @@ theorem normalCore_eq_iInf_map_conj
     conv_rhs => rw [← Equiv.iInf_comp (Equiv.mulLeft g)]
     rw [map_iInf _ (MulAut.conj g).injective]
     simp [map_map, MulAut.mul_def]
-  refine le_antisymm (le_iInf fun g => ?_
+  refine le_antisymm (le_iInf fun g => ?_) ?_
+  · grw [← Normal.map_conj_eq H.normalCore g, normalCore_le]
+  · rw [normal_le_normalCore]
+    apply iInf_le_of_le 1
+    simp [MulAut.one_def]
+
+@[to_additive]
 
 Depends on / 依赖: Equiv.iInf_comp, Equiv.mulLeft, H.map, H.normalCore, MulAut, MulAut.conj, MulAut.mul_def, MulAut.one_def, Normal, Normal.map_conj_eq, Subgroup, conv_rhs, iInf_comp, iInf_le_of_le, injective, le_antisymm, le_iInf, map_conj_eq, map_iInf, map_map
 -/
@@ -4013,7 +4029,11 @@ theorem commute_of_normal_of_disjoint
   constructor
   · suffices x * (y * x⁻¹ * y⁻¹) in H₁ by simpa [mul_assoc]
     exact H₁.mul_mem hx (hH₁.conj_mem _ (H₁.inv_mem hx) _)
-  · change x * y * 
+  · change x * y * x⁻¹ * y⁻¹ in H₂
+    apply H₂.mul_mem _ (H₂.inv_mem hy)
+    apply hH₂.conj_mem _ hy
+
+@[to_additive]
 
 中文:
 定理 commute_of_normal_of_disjoint
@@ -4027,7 +4047,11 @@ theorem commute_of_normal_of_disjoint
   constructor
   · suffices x * (y * x⁻¹ * y⁻¹) in H₁ by simpa [mul_assoc]
     exact H₁.mul_mem hx (hH₁.conj_mem _ (H₁.inv_mem hx) _)
-  · change x * y * 
+  · change x * y * x⁻¹ * y⁻¹ in H₂
+    apply H₂.mul_mem _ (H₂.inv_mem hy)
+    apply hH₂.conj_mem _ hy
+
+@[to_additive]
 
 Depends on / 依赖: conj_mem, hdis.le_bot, inv_mem, le_bot, mul_assoc, mul_eq_one_iff_eq_inv, mul_mem
 -/
@@ -4142,7 +4166,18 @@ theorem normalClosure_eq_top_of
   have hs : Function.Surjective (((MulAut.conj c).toMonoidHom.domRestrict N).codRestrict _ h) := by
     rintro ⟨x, hx⟩
     refine ⟨⟨c⁻¹ * x * c, ?_⟩, ?_⟩
-    
+    · have h := hn.conj_mem _ hx c⁻¹
+      rwa [inv_inv] at h
+    simp only [MonoidHom.codRestrict_apply, MulEquiv.coe_toMonoidHom, MulAut.conj_apply,
+      MonoidHom.domRestrict_apply, Subtype.mk_eq_mk, ← mul_assoc, mul_inv_cancel, one_mul]
+    rw [mul_assoc]; rw [mul_inv_cancel]; rw [mul_one]
+  rw [eq_top_iff]; rw [← MonoidHom.range_eq_top.2 hs]; rw [MonoidHom.range_eq_map]
+  grw [eq_top_iff.1 ht]
+  refine map_le_iff_le_comap.2 (normalClosure_le_normal ?_)
+  rw [Set.singleton_subset_iff]; rw [SetLike.mem_coe]
+  simp only [MonoidHom.codRestrict_apply, MulEquiv.coe_toMonoidHom, MulAut.conj_apply,
+    MonoidHom.domRestrict_apply, mem_comap]
+  exact subset_normalClosure (Set.mem_singleton _)
 
 中文:
 定理 normalClosure_eq_top_of
@@ -4155,7 +4190,18 @@ theorem normalClosure_eq_top_of
   have hs : Function.Surjective (((MulAut.conj c).toMonoidHom.domRestrict N).codRestrict _ h) := by
     rintro ⟨x, hx⟩
     refine ⟨⟨c⁻¹ * x * c, ?_⟩, ?_⟩
-    
+    · have h := hn.conj_mem _ hx c⁻¹
+      rwa [inv_inv] at h
+    simp only [MonoidHom.codRestrict_apply, MulEquiv.coe_toMonoidHom, MulAut.conj_apply,
+      MonoidHom.domRestrict_apply, Subtype.mk_eq_mk, ← mul_assoc, mul_inv_cancel, one_mul]
+    rw [mul_assoc]; rw [mul_inv_cancel]; rw [mul_one]
+  rw [eq_top_iff]; rw [← MonoidHom.range_eq_top.2 hs]; rw [MonoidHom.range_eq_map]
+  grw [eq_top_iff.1 ht]
+  refine map_le_iff_le_comap.2 (normalClosure_le_normal ?_)
+  rw [Set.singleton_subset_iff]; rw [SetLike.mem_coe]
+  simp only [MonoidHom.codRestrict_apply, MulEquiv.coe_toMonoidHom, MulAut.conj_apply,
+    MonoidHom.domRestrict_apply, mem_comap]
+  exact subset_normalClosure (Set.mem_singleton _)
 
 Depends on / 依赖: Function, Function.Surjective, MonoidHom, MonoidHom.codRestrict_apply, MonoidHom.domRestrict_apply, MulAut, MulAut.conj, MulAut.conj_apply, MulEquiv, MulEquiv.coe_toMonoidHom, Subtype, Subtype.mk_eq_mk, Surjective, codRestrict, codRestrict_apply, coe_toMonoidHom, conj_apply, conj_mem, domRestrict, domRestrict_apply
 -/

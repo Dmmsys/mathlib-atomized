@@ -104,7 +104,41 @@ definition CommSq.isColimitEquivIsColimitCokernelCofork
       (fun s => by
         dsimp
         ext
-   
+        · simp only [biprod.inl_desc_assoc]
+          apply PushoutCocone.IsColimit.inl_desc h
+        · simp only [biprod.inr_desc_assoc]
+          apply PushoutCocone.IsColimit.inr_desc h)
+      (fun s m hm => by
+        apply PushoutCocone.IsColimit.hom_ext h
+        · replace hm := biprod.inl ≫= hm
+          dsimp at hm ⊢
+          simp only [biprod.inl_desc_assoc] at hm
+          rw [hm]
+          symm
+          apply PushoutCocone.IsColimit.inl_desc h
+        · replace hm := biprod.inr ≫= hm
+          dsimp at hm ⊢
+          simp only [biprod.inr_desc_assoc] at hm
+          rw [hm]
+          symm
+          apply PushoutCocone.IsColimit.inr_desc h)
+  invFun h :=
+    PushoutCocone.IsColimit.mk _
+      (fun s => h.desc (CokernelCofork.ofπ (biprod.desc s.inl s.inr)
+          (by simp [s.condition])))
+      (fun s => by simpa using biprod.inl ≫=
+                h.fac (CokernelCofork.ofπ (biprod.desc s.inl s.inr)
+                  (by simp [s.condition])) .one)
+      (fun s => by simpa using biprod.inr ≫=
+                h.fac (CokernelCofork.ofπ (biprod.desc s.inl s.inr)
+                  (by simp [s.condition])) .one)
+      (fun s m hm₁ hm₂ => by
+        apply Cofork.IsColimit.hom_ext h
+        convert!
+          (h.fac (CokernelCofork.ofπ (biprod.desc s.inl s.inr) (by simp [s.condition])) .one).symm
+        cat_disch)
+  left_inv _ := Subsingleton.elim _ _
+  right_inv _ := Subsingleton.elim _ _
 
 中文:
 定义 交换Sq.isColimitEquivIsColimitCokernelCofork
@@ -117,7 +151,41 @@ definition CommSq.isColimitEquivIsColimitCokernelCofork
       (fun s => by
         dsimp
         ext
-   
+        · simp only [biprod.inl_desc_assoc]
+          apply PushoutCocone.IsColimit.inl_desc h
+        · simp only [biprod.inr_desc_assoc]
+          apply PushoutCocone.IsColimit.inr_desc h)
+      (fun s m hm => by
+        apply PushoutCocone.IsColimit.hom_ext h
+        · replace hm := biprod.inl ≫= hm
+          dsimp at hm ⊢
+          simp only [biprod.inl_desc_assoc] at hm
+          rw [hm]
+          symm
+          apply PushoutCocone.IsColimit.inl_desc h
+        · replace hm := biprod.inr ≫= hm
+          dsimp at hm ⊢
+          simp only [biprod.inr_desc_assoc] at hm
+          rw [hm]
+          symm
+          apply PushoutCocone.IsColimit.inr_desc h)
+  invFun h :=
+    PushoutCocone.IsColimit.mk _
+      (fun s => h.desc (CokernelCofork.ofπ (biprod.desc s.inl s.inr)
+          (by simp [s.condition])))
+      (fun s => by simpa using biprod.inl ≫=
+                h.fac (CokernelCofork.ofπ (biprod.desc s.inl s.inr)
+                  (by simp [s.condition])) .one)
+      (fun s => by simpa using biprod.inr ≫=
+                h.fac (CokernelCofork.ofπ (biprod.desc s.inl s.inr)
+                  (by simp [s.condition])) .one)
+      (fun s m hm₁ hm₂ => by
+        apply Cofork.IsColimit.hom_ext h
+        convert!
+          (h.fac (CokernelCofork.ofπ (biprod.desc s.inl s.inr) (by simp [s.condition])) .one).symm
+        cat_disch)
+  left_inv _ := Subsingleton.elim _ _
+  right_inv _ := Subsingleton.elim _ _
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.mk, IsColimit, Preadditive, Preadditive.sub_comp, PushoutCocone, PushoutCocone.IsColimit.desc, PushoutCocone.IsColimit.hom_ext, PushoutCocone.IsColimit.inl_desc, PushoutCocone.IsColimit.inr_desc, biprod, biprod.inl, biprod.inl_desc_assoc, biprod.inr, biprod.inr_desc_assoc, cat_disch, condition, convert, hom_ext, inl_desc
 -/
@@ -283,7 +351,39 @@ definition CommSq.isLimitEquivIsLimitKernelFork
       (fun s => by
         dsimp
         ext
-        · simp
+        · simp only [assoc, biprod.lift_fst]
+          apply PullbackCone.IsLimit.lift_fst h
+        · simp only [assoc, biprod.lift_snd]
+          apply PullbackCone.IsLimit.lift_snd h)
+      (fun s m hm => by
+        apply PullbackCone.IsLimit.hom_ext h
+        · replace hm := hm =≫ biprod.fst
+          dsimp at hm ⊢
+          simp only [assoc, biprod.lift_fst] at hm
+          rw [hm]
+          symm
+          apply PullbackCone.IsLimit.lift_fst h
+        · replace hm := hm =≫ biprod.snd
+          dsimp at hm ⊢
+          simp only [assoc, biprod.lift_snd] at hm
+          rw [hm]
+          symm
+          apply PullbackCone.IsLimit.lift_snd h)
+  invFun h :=
+    PullbackCone.IsLimit.mk _
+      (fun s => h.lift (KernelFork.ofι (biprod.lift s.fst s.snd)
+          (by simp [s.condition])))
+      (fun s => by simpa using h.fac (KernelFork.ofι (biprod.lift s.fst s.snd)
+        (by simp [s.condition])) .zero =≫ biprod.fst)
+      (fun s => by simpa using h.fac (KernelFork.ofι (biprod.lift s.fst s.snd)
+        (by simp [s.condition])) .zero =≫ biprod.snd)
+      (fun s m hm₁ hm₂ => by
+        apply Fork.IsLimit.hom_ext h
+        convert!
+          (h.fac (KernelFork.ofι (biprod.lift s.fst s.snd) (by simp [s.condition])) .zero).symm
+        cat_disch)
+  left_inv _ := Subsingleton.elim _ _
+  right_inv _ := Subsingleton.elim _ _
 
 中文:
 定义 交换Sq.isLimitEquivIsLimitKernelFork
@@ -296,7 +396,39 @@ definition CommSq.isLimitEquivIsLimitKernelFork
       (fun s => by
         dsimp
         ext
-        · simp
+        · simp only [assoc, biprod.lift_fst]
+          apply PullbackCone.IsLimit.lift_fst h
+        · simp only [assoc, biprod.lift_snd]
+          apply PullbackCone.IsLimit.lift_snd h)
+      (fun s m hm => by
+        apply PullbackCone.IsLimit.hom_ext h
+        · replace hm := hm =≫ biprod.fst
+          dsimp at hm ⊢
+          simp only [assoc, biprod.lift_fst] at hm
+          rw [hm]
+          symm
+          apply PullbackCone.IsLimit.lift_fst h
+        · replace hm := hm =≫ biprod.snd
+          dsimp at hm ⊢
+          simp only [assoc, biprod.lift_snd] at hm
+          rw [hm]
+          symm
+          apply PullbackCone.IsLimit.lift_snd h)
+  invFun h :=
+    PullbackCone.IsLimit.mk _
+      (fun s => h.lift (KernelFork.ofι (biprod.lift s.fst s.snd)
+          (by simp [s.condition])))
+      (fun s => by simpa using h.fac (KernelFork.ofι (biprod.lift s.fst s.snd)
+        (by simp [s.condition])) .zero =≫ biprod.fst)
+      (fun s => by simpa using h.fac (KernelFork.ofι (biprod.lift s.fst s.snd)
+        (by simp [s.condition])) .zero =≫ biprod.snd)
+      (fun s m hm₁ hm₂ => by
+        apply Fork.IsLimit.hom_ext h
+        convert!
+          (h.fac (KernelFork.ofι (biprod.lift s.fst s.snd) (by simp [s.condition])) .zero).symm
+        cat_disch)
+  left_inv _ := Subsingleton.elim _ _
+  right_inv _ := Subsingleton.elim _ _
 
 Depends on / 依赖: Fork.IsLimit.mk, IsLimit, Preadditive, Preadditive.comp_sub, PullbackCone, PullbackCone.IsLimit.hom_ext, PullbackCone.IsLimit.lift, PullbackCone.IsLimit.lift_fst, PullbackCone.IsLimit.lift_snd, biprod, biprod.fst, biprod.lift_fst, biprod.lift_snd, biprod.snd, cat_disch, comp_sub, condition, convert, hom_ext, infer_instance
 -/

@@ -298,7 +298,7 @@ definition filter
   sets_of_superset := fun ⟨s, s_in, h⟩ hxy => ⟨s, s_in, Set.Subset.trans h hxy⟩
   inter_sets := fun ⟨_s, s_in, hs⟩ ⟨_t, t_in, ht⟩ =>
     let ⟨u, u_in, u_sub⟩ := B.inter_sets s_in t_in
-    ⟨u, u_in, 
+    ⟨u, u_in, u_sub.trans (inter_subset_inter hs ht)⟩
 
 中文:
 定义 filter
@@ -308,7 +308,7 @@ definition filter
   sets_of_superset := fun ⟨s, s_in, h⟩ hxy => ⟨s, s_in, Set.Subset.trans h hxy⟩
   inter_sets := fun ⟨_s, s_in, hs⟩ ⟨_t, t_in, ht⟩ =>
     let ⟨u, u_in, u_sub⟩ := B.inter_sets s_in t_in
-    ⟨u, u_in, 
+    ⟨u, u_in, u_sub.trans (inter_subset_inter hs ht)⟩
 -/
 protected def filter (B : FilterBasis α) : Filter α where
   sets := { s | exists t in B, t subseteq s }
@@ -375,7 +375,7 @@ theorem eq_iInf_principal
     simp only [le_principal_iff, mem_principal]
     exact subset_inter_iff.mp W_sub
   ext U
-  simp [mem_filter_iff, mem_iInf_of
+  simp [mem_filter_iff, mem_iInf_of_directed this]
 
 中文:
 定理 eq_iInf_principal
@@ -389,7 +389,7 @@ theorem eq_iInf_principal
     simp only [le_principal_iff, mem_principal]
     exact subset_inter_iff.mp W_sub
   ext U
-  simp [mem_filter_iff, mem_iInf_of
+  simp [mem_filter_iff, mem_iInf_of_directed this]
 
 Depends on / 依赖: B.inter_sets, B.sets, Directed, U_in, V_in, W_in, W_sub, inter_sets, le_principal_iff, mem_filter_iff, mem_iInf_of_directed, mem_principal, subset_inter_iff, subset_inter_iff.mp
 -/
@@ -1459,7 +1459,7 @@ theorem HasBasis.inf'
       rintro ⟨t, ⟨i, hi, ht⟩, t', ⟨i', hi', ht'⟩, rfl⟩
       exact ⟨⟨i, i'⟩, ⟨hi, hi'⟩, inter_subset_inter ht ht'⟩
     · rintro ⟨⟨i, i'⟩, ⟨hi, hi'⟩, H⟩
-      exact mem_inf_of_inter (hl.mem_of_mem hi) (hl'.mem_of_m
+      exact mem_inf_of_inter (hl.mem_of_mem hi) (hl'.mem_of_mem hi') H⟩
 
 中文:
 定理 有基.下确界'
@@ -1471,7 +1471,7 @@ theorem HasBasis.inf'
       rintro ⟨t, ⟨i, hi, ht⟩, t', ⟨i', hi', ht'⟩, rfl⟩
       exact ⟨⟨i, i'⟩, ⟨hi, hi'⟩, inter_subset_inter ht ht'⟩
     · rintro ⟨⟨i, i'⟩, ⟨hi, hi'⟩, H⟩
-      exact mem_inf_of_inter (hl.mem_of_mem hi) (hl'.mem_of_m
+      exact mem_inf_of_inter (hl.mem_of_mem hi) (hl'.mem_of_mem hi') H⟩
 
 Depends on / 依赖: hl.mem_iff, hl.mem_of_mem, inter_subset_inter, mem_iff, mem_inf_iff, mem_inf_of_inter, mem_of_mem
 -/

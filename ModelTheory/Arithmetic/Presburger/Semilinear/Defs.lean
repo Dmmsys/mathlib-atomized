@@ -844,7 +844,27 @@ lemma IsLinearSet.closure
   simp only [SetLike.mem_coe, singleton_union, mem_insert_iff, mem_vadd_set, vadd_eq_add]
   constructor
   · intro hx
-    induction hx using closure_induc
+    induction hx using closure_induction with
+    | mem x hx =>
+      rcases hx with ⟨x, hx, rfl⟩
+      exact Or.inr ⟨x, closure_mono (subset_insert _ _) hx, rfl⟩
+    | zero => exact Or.inl rfl
+    | add x y _ _ ih₁ ih₂ =>
+      rcases ih₁ with rfl | ⟨x, hx, rfl⟩
+      · simpa
+      · rcases ih₂ with rfl | ⟨y, hy, rfl⟩
+        · exact Or.inr ⟨x, hx, by simp⟩
+        · refine Or.inr ⟨_, add_mem (mem_closure_of_mem (mem_insert _ _)) (add_mem hx hy), ?_⟩
+          simp_rw [← add_assoc, add_right_comm a a x]
+  · rintro (rfl | ⟨x, hx, rfl⟩)
+    · simp
+    · simp_rw [insert_eq, closure_union, mem_sup, mem_closure_singleton] at hx
+      rcases hx with ⟨_, ⟨n, rfl⟩, ⟨x, hx, rfl⟩⟩
+      rw [add_left_comm]
+      refine add_mem (nsmul_mem (mem_closure_of_mem ?_) _)
+        (mem_closure_of_mem (vadd_mem_vadd_set hx))
+      nth_rw 2 [← add_zero a]
+      exact vadd_mem_vadd_set (zero_mem _)
 
 中文:
 引理 IsLinearSet.closure
@@ -857,7 +877,27 @@ lemma IsLinearSet.closure
   simp only [SetLike.mem_coe, singleton_union, mem_insert_iff, mem_vadd_set, vadd_eq_add]
   constructor
   · intro hx
-    induction hx using closure_induc
+    induction hx using closure_induction with
+    | mem x hx =>
+      rcases hx with ⟨x, hx, rfl⟩
+      exact Or.inr ⟨x, closure_mono (subset_insert _ _) hx, rfl⟩
+    | zero => exact Or.inl rfl
+    | add x y _ _ ih₁ ih₂ =>
+      rcases ih₁ with rfl | ⟨x, hx, rfl⟩
+      · simpa
+      · rcases ih₂ with rfl | ⟨y, hy, rfl⟩
+        · exact Or.inr ⟨x, hx, by simp⟩
+        · refine Or.inr ⟨_, add_mem (mem_closure_of_mem (mem_insert _ _)) (add_mem hx hy), ?_⟩
+          simp_rw [← add_assoc, add_right_comm a a x]
+  · rintro (rfl | ⟨x, hx, rfl⟩)
+    · simp
+    · simp_rw [insert_eq, closure_union, mem_sup, mem_closure_singleton] at hx
+      rcases hx with ⟨_, ⟨n, rfl⟩, ⟨x, hx, rfl⟩⟩
+      rw [add_left_comm]
+      refine add_mem (nsmul_mem (mem_closure_of_mem ?_) _)
+        (mem_closure_of_mem (vadd_mem_vadd_set hx))
+      nth_rw 2 [← add_zero a]
+      exact vadd_mem_vadd_set (zero_mem _)
 -/
 protected lemma IsLinearSet.closure (hs : IsLinearSet s) : IsSemilinearSet (closure s : Set M) := by
   rcases hs with ⟨a, t, ht, rfl⟩
@@ -1233,7 +1273,43 @@ lemma IsLinearSet.isProperSemilinearSet
   subst hn
   by_cases hindep : LinearIndepOn Nat id (t : Set M)
   · exact IsProperLinearSet.isProperSemilinearSet ⟨a, t, by simpa⟩
-  rw [not_l
+  rw [not_linearIndepOn_finset_iffₒₛ] at hindep
+  rcases hindep with ⟨t', ht', f, heq, i, hi, hfi⟩
+  simp only [Function.id_def] at heq
+  convert_to IsProperSemilinearSet (⋃ j in t', ⋃ k in Finset.range (f j),
+    (a + k • j) +ᵥ (closure (t.erase j : Set M) : Set M))
+  · ext x
+    simp only [mem_vadd_set, SetLike.mem_coe]
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      rw [mem_closure_finset] at hy
+      rcases hy with ⟨g, -, rfl⟩
+      induction hn : g i using Nat.strong_induction_on generalizing g with | _ n ih'
+      subst hn
+      by_cases! hfg : forall j in t', f j <= g j
+      · convert!
+        ih' (g i - f i) (Nat.sub_lt_self hfi (hfg i hi))
+          (fun j => if j in t' then g j - f j else g j + f j) (by simp [hi]) using 1
+        conv_lhs => rw [← Finset.union_sdiff_of_subset ht']
+        simp_rw [vadd_eq_add, add_left_cancel_iff, Finset.sum_union Finset.sdiff_disjoint.symm,
+          ite_smul, Finset.sum_ite, Finset.filter_mem_eq_inter, Finset.inter_eq_right.2 ht',
+          Finset.filter_notMem_eq_sdiff, add_smul, Finset.sum_add_distrib, ← heq, ← add_assoc,
+          add_right_comm, ← Finset.sum_add_distrib]
+        congr! 2 with j hj
+        rw [← add_smul]; rw [tsub_add_cancel_of_le (hfg j hj)]
+      · rcases hfg with ⟨j, hj, hgj⟩
+        simp only [mem_iUnion, Finset.mem_range, mem_vadd_set, SetLike.mem_coe, vadd_eq_add]
+        refine ⟨j, hj, g j, hgj, ∑ k in t.erase j, g k • k,
+          sum_mem fun x hx => (nsmul_mem (mem_closure_of_mem hx) _), ?_⟩
+        rw [← Finset.sum_erase_add _ _ (ht' hj)]; rw [← add_assoc]; rw [add_right_comm]
+    · simp only [mem_iUnion, Finset.mem_range, mem_vadd_set, SetLike.mem_coe, vadd_eq_add]
+      rintro ⟨j, hj, k, hk, y, hy, rfl⟩
+      refine ⟨k • j + y,
+        add_mem (nsmul_mem (mem_closure_of_mem (ht' hj)) _)
+          ((closure_mono (t.erase_subset j)) hy), ?_⟩
+      rw [add_assoc]
+  · exact .biUnion_finset fun j hj => .biUnion_finset fun k hk =>
+      ih _ (Finset.card_lt_card (Finset.erase_ssubset (ht' hj))) _ _ rfl
 
 中文:
 引理 IsLinearSet.isProperSemilinearSet
@@ -1246,7 +1322,43 @@ lemma IsLinearSet.isProperSemilinearSet
   subst hn
   by_cases hindep : LinearIndepOn Nat id (t : Set M)
   · exact IsProperLinearSet.isProperSemilinearSet ⟨a, t, by simpa⟩
-  rw [not_l
+  rw [not_linearIndepOn_finset_iffₒₛ] at hindep
+  rcases hindep with ⟨t', ht', f, heq, i, hi, hfi⟩
+  simp only [Function.id_def] at heq
+  convert_to IsProperSemilinearSet (⋃ j in t', ⋃ k in Finset.range (f j),
+    (a + k • j) +ᵥ (closure (t.erase j : Set M) : Set M))
+  · ext x
+    simp only [mem_vadd_set, SetLike.mem_coe]
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      rw [mem_closure_finset] at hy
+      rcases hy with ⟨g, -, rfl⟩
+      induction hn : g i using Nat.strong_induction_on generalizing g with | _ n ih'
+      subst hn
+      by_cases! hfg : forall j in t', f j <= g j
+      · convert!
+        ih' (g i - f i) (Nat.sub_lt_self hfi (hfg i hi))
+          (fun j => if j in t' then g j - f j else g j + f j) (by simp [hi]) using 1
+        conv_lhs => rw [← Finset.union_sdiff_of_subset ht']
+        simp_rw [vadd_eq_add, add_left_cancel_iff, Finset.sum_union Finset.sdiff_disjoint.symm,
+          ite_smul, Finset.sum_ite, Finset.filter_mem_eq_inter, Finset.inter_eq_right.2 ht',
+          Finset.filter_notMem_eq_sdiff, add_smul, Finset.sum_add_distrib, ← heq, ← add_assoc,
+          add_right_comm, ← Finset.sum_add_distrib]
+        congr! 2 with j hj
+        rw [← add_smul]; rw [tsub_add_cancel_of_le (hfg j hj)]
+      · rcases hfg with ⟨j, hj, hgj⟩
+        simp only [mem_iUnion, Finset.mem_range, mem_vadd_set, SetLike.mem_coe, vadd_eq_add]
+        refine ⟨j, hj, g j, hgj, ∑ k in t.erase j, g k • k,
+          sum_mem fun x hx => (nsmul_mem (mem_closure_of_mem hx) _), ?_⟩
+        rw [← Finset.sum_erase_add _ _ (ht' hj)]; rw [← add_assoc]; rw [add_right_comm]
+    · simp only [mem_iUnion, Finset.mem_range, mem_vadd_set, SetLike.mem_coe, vadd_eq_add]
+      rintro ⟨j, hj, k, hk, y, hy, rfl⟩
+      refine ⟨k • j + y,
+        add_mem (nsmul_mem (mem_closure_of_mem (ht' hj)) _)
+          ((closure_mono (t.erase_subset j)) hy), ?_⟩
+      rw [add_assoc]
+  · exact .biUnion_finset fun j hj => .biUnion_finset fun k hk =>
+      ih _ (Finset.card_lt_card (Finset.erase_ssubset (ht' hj))) _ _ rfl
 
 Depends on / 依赖: Finset, Finset.range, Function, Function.id_def, IsProperLinearSet, IsProperLinearSet.isProperSemilinearSet, IsProperSemilinearSet, LinearIndepOn, Nat.strong_induction_on, classical, closure, convert_to, generalizing, hindep, id_def, isLinearSet_iff, isProperSemilinearSet, strong_induction_on, t.card
 -/
@@ -1341,7 +1453,59 @@ theorem Nat.isSemilinearSet_iff_ultimately_periodic
     replace hS : forall t in S, exists k, exists p > 0, forall x >= k, x in t ↔ x + p in t := by
       intro t ht
       apply hS at ht
-      rw
+      rw [isProperLinearSet_iff] at ht
+      rcases ht with ⟨a, t, ht, rfl⟩
+      have hcard : t.card <= 1 := by simpa [CommSemiring.rank_self] using ht.cardinal_le_rank
+      simp_rw [Finset.card_le_one_iff_subset_singleton, Finset.subset_singleton_iff] at hcard
+      rcases hcard with ⟨b, (rfl | rfl)⟩
+      · refine ⟨a + 1, 1, zero_lt_one, fun x hx => ?_⟩
+        simp [(by grind : x != a), (by grind : x + 1 != a)]
+      · have hb : b != 0 := by simpa [ne_comm] using ht.zero_notMem_image
+        rw [Nat.ne_zero_iff_zero_lt] at hb
+        refine ⟨a, b, hb, fun x hx => ?_⟩
+        simp only [Finset.coe_singleton, mem_vadd_set, SetLike.mem_coe,
+          AddSubmonoid.mem_closure_singleton, smul_eq_mul, vadd_eq_add, exists_exists_eq_and]
+        constructor
+        · rintro ⟨x, rfl⟩
+          exact ⟨x + 1, by grind⟩
+        · rintro ⟨y, heq⟩
+          cases y with
+          | zero => exact ⟨0, by grind⟩
+          | succ y => exact ⟨y, by grind⟩
+    choose! k p hS hS' using hS
+    refine ⟨S.sup k, S.lcm p, ?_, fun x hx => ?_⟩
+    · grind [Finset.lcm_eq_zero_iff]
+    · simp only [mem_sUnion, SetLike.mem_coe]
+      refine exists_congr fun t => and_congr_right fun ht => ?_
+      have hpt : p t ∣ S.lcm p := Finset.dvd_lcm ht
+      rw [dvd_iff_exists_eq_mul_left] at hpt
+      rcases hpt with ⟨m, hpt⟩
+      rw [hpt]
+      clear hpt
+      induction m with grind [Finset.sup_le_iff]
+  · intro ⟨k, p, hp, hs⟩
+    have h₁ : {x in s | x < k}.Finite := (Set.finite_lt_nat k).subset (sep_subset_ofPred _ _)
+    have h₂ : {x in s | k <= x ∧ x < k + p}.Finite :=
+      (Set.finite_Ico k (k + p)).subset (sep_subset_ofPred _ _)
+    convert! (IsSemilinearSet.of_finite h₁).union (.add (.of_finite h₂) (.closure_finset { p }))
+    ext x
+    simp only [sep_and, Finset.coe_singleton, mem_union, mem_ofPred_eq, mem_add, mem_inter_iff,
+      SetLike.mem_coe, AddSubmonoid.mem_closure_singleton, smul_eq_mul, exists_exists_eq_and]
+    constructor
+    · intro hx
+      by_cases hx' : x < k
+      · exact Or.inl ⟨hx, hx'⟩
+      · rw [not_lt] at hx'
+        refine Or.inr ⟨k + (x - k) % p, ⟨⟨?_1, ?_2⟩, ?_1, ?_3⟩, (x - k) / p, ?_4⟩
+        · rw [← add_tsub_cancel_of_le hx', ← Nat.mod_add_div' (x - k) p, ← add_assoc] at hx
+          generalize (x - k) / p = m at hx
+          induction m with grind
+        · grind
+        · exact Nat.add_lt_add_left (Nat.mod_lt _ hp) _
+        · rw [add_assoc, Nat.mod_add_div', add_tsub_cancel_of_le hx']
+    · rintro (⟨hx, hx'⟩ | ⟨x, ⟨⟨hx, hx'⟩, _⟩, m, rfl⟩)
+      · exact hx
+      · induction m with grind
 
 中文:
 定理 自然数.isSemilinearSet_iff_ultimately_periodic
@@ -1355,7 +1519,59 @@ theorem Nat.isSemilinearSet_iff_ultimately_periodic
     replace hS : forall t in S, exists k, exists p > 0, forall x >= k, x in t ↔ x + p in t := by
       intro t ht
       apply hS at ht
-      rw
+      rw [isProperLinearSet_iff] at ht
+      rcases ht with ⟨a, t, ht, rfl⟩
+      have hcard : t.card <= 1 := by simpa [CommSemiring.rank_self] using ht.cardinal_le_rank
+      simp_rw [Finset.card_le_one_iff_subset_singleton, Finset.subset_singleton_iff] at hcard
+      rcases hcard with ⟨b, (rfl | rfl)⟩
+      · refine ⟨a + 1, 1, zero_lt_one, fun x hx => ?_⟩
+        simp [(by grind : x != a), (by grind : x + 1 != a)]
+      · have hb : b != 0 := by simpa [ne_comm] using ht.zero_notMem_image
+        rw [Nat.ne_zero_iff_zero_lt] at hb
+        refine ⟨a, b, hb, fun x hx => ?_⟩
+        simp only [Finset.coe_singleton, mem_vadd_set, SetLike.mem_coe,
+          AddSubmonoid.mem_closure_singleton, smul_eq_mul, vadd_eq_add, exists_exists_eq_and]
+        constructor
+        · rintro ⟨x, rfl⟩
+          exact ⟨x + 1, by grind⟩
+        · rintro ⟨y, heq⟩
+          cases y with
+          | zero => exact ⟨0, by grind⟩
+          | succ y => exact ⟨y, by grind⟩
+    choose! k p hS hS' using hS
+    refine ⟨S.sup k, S.lcm p, ?_, fun x hx => ?_⟩
+    · grind [Finset.lcm_eq_zero_iff]
+    · simp only [mem_sUnion, SetLike.mem_coe]
+      refine exists_congr fun t => and_congr_right fun ht => ?_
+      have hpt : p t ∣ S.lcm p := Finset.dvd_lcm ht
+      rw [dvd_iff_exists_eq_mul_left] at hpt
+      rcases hpt with ⟨m, hpt⟩
+      rw [hpt]
+      clear hpt
+      induction m with grind [Finset.sup_le_iff]
+  · intro ⟨k, p, hp, hs⟩
+    have h₁ : {x in s | x < k}.Finite := (Set.finite_lt_nat k).subset (sep_subset_ofPred _ _)
+    have h₂ : {x in s | k <= x ∧ x < k + p}.Finite :=
+      (Set.finite_Ico k (k + p)).subset (sep_subset_ofPred _ _)
+    convert! (IsSemilinearSet.of_finite h₁).union (.add (.of_finite h₂) (.closure_finset { p }))
+    ext x
+    simp only [sep_and, Finset.coe_singleton, mem_union, mem_ofPred_eq, mem_add, mem_inter_iff,
+      SetLike.mem_coe, AddSubmonoid.mem_closure_singleton, smul_eq_mul, exists_exists_eq_and]
+    constructor
+    · intro hx
+      by_cases hx' : x < k
+      · exact Or.inl ⟨hx, hx'⟩
+      · rw [not_lt] at hx'
+        refine Or.inr ⟨k + (x - k) % p, ⟨⟨?_1, ?_2⟩, ?_1, ?_3⟩, (x - k) / p, ?_4⟩
+        · rw [← add_tsub_cancel_of_le hx', ← Nat.mod_add_div' (x - k) p, ← add_assoc] at hx
+          generalize (x - k) / p = m at hx
+          induction m with grind
+        · grind
+        · exact Nat.add_lt_add_left (Nat.mod_lt _ hp) _
+        · rw [add_assoc, Nat.mod_add_div', add_tsub_cancel_of_le hx']
+    · rintro (⟨hx, hx'⟩ | ⟨x, ⟨⟨hx, hx'⟩, _⟩, m, rfl⟩)
+      · exact hx
+      · induction m with grind
 
 Depends on / 依赖: CommSemiring, CommSemiring.rank_self, Finset, Finset.card_le_one_iff_subset_singleton, Finset.subset_singleton_iff, IsSemilinearSet, IsSemilinearSet.isProperSemilinearSet, card_le_one_iff_subset_singleton, cardinal_le_rank, ht.cardinal_le_rank, isProperLinearSet_iff, isProperSemilinearSet, isProperSemilinearSet_iff, rank_self, replace, simp_rw, subset_singleton_iff, t.card
 -/

@@ -50,7 +50,7 @@ lemma Metric.exists_subseq_summable_dist_of_cauchySeq
     (fun n => (1 / (2 : Real)) ^ n) (fun n => by positivity)
   refine ⟨f, hf₁, ?_⟩
   refine Summable.of_nonneg_of_le (fun n => by positivity) ?_ summable_geometric_two
-exact fun n => le_of_lt hf₂ n (f (n + 1)) hf₁.monotone (
+exact fun n => le_of_lt hf₂ n (f (n + 1)) hf₁.monotone (Nat.le_add_right n 1)
 
 中文:
 引理 Metric.存在_subseq_summable_dist_of_cauchySeq
@@ -60,7 +60,7 @@ exact fun n => le_of_lt hf₂ n (f (n + 1)) hf₁.monotone (
     (fun n => (1 / (2 : Real)) ^ n) (fun n => by positivity)
   refine ⟨f, hf₁, ?_⟩
   refine Summable.of_nonneg_of_le (fun n => by positivity) ?_ summable_geometric_two
-exact fun n => le_of_lt hf₂ n (f (n + 1)) hf₁.monotone (
+exact fun n => le_of_lt hf₂ n (f (n + 1)) hf₁.monotone (Nat.le_add_right n 1)
 
 Depends on / 依赖: Metric, Metric.exists_subseq_bounded_of_cauchySeq, Nat.le_add_right, Summable, Summable.of_nonneg_of_le, exists_subseq_bounded_of_cauchySeq, le_add_right, le_of_lt, monotone, of_nonneg_of_le, summable_geometric_two
 -/
@@ -90,7 +90,15 @@ lemma NormedAddCommGroup.completeSpace_of_summable_imp_tendsto
   simp only [dist_eq_norm] at hf₂
   let v n := u (f (n + 1)) - u (f n)
   have hv_sum : (fun n => (∑ i in range n, v i)) = fun n => u (f n) - u (f 0) := by
-    e
+    ext n
+    exact sum_range_sub (u ∘ f) n
+  obtain ⟨a, ha⟩ := h v hf₂
+  refine ⟨a + u (f 0), ?_⟩
+  refine tendsto_nhds_of_cauchySeq_of_subseq hu hf₁.tendsto_atTop ?_
+  rw [hv_sum] at ha
+  have h₁ : Tendsto (fun n => u (f n) - u (f 0) + u (f 0)) atTop (𝓝 (a + u (f 0))) :=
+    Tendsto.add_const _ ha
+  simpa only [sub_add_cancel] using! h₁
 
 中文:
 引理 赋范交换加群.completeSpace_of_summable_imp_tendsto
@@ -101,7 +109,15 @@ lemma NormedAddCommGroup.completeSpace_of_summable_imp_tendsto
   simp only [dist_eq_norm] at hf₂
   let v n := u (f (n + 1)) - u (f n)
   have hv_sum : (fun n => (∑ i in range n, v i)) = fun n => u (f n) - u (f 0) := by
-    e
+    ext n
+    exact sum_range_sub (u ∘ f) n
+  obtain ⟨a, ha⟩ := h v hf₂
+  refine ⟨a + u (f 0), ?_⟩
+  refine tendsto_nhds_of_cauchySeq_of_subseq hu hf₁.tendsto_atTop ?_
+  rw [hv_sum] at ha
+  have h₁ : Tendsto (fun n => u (f n) - u (f 0) + u (f 0)) atTop (𝓝 (a + u (f 0))) :=
+    Tendsto.add_const _ ha
+  simpa only [sub_add_cancel] using! h₁
 
 Depends on / 依赖: Metric, Metric.complete_of_cauchySeq_tendsto, Metric.exists_subseq_summable_dist_of_cauchySeq, Tendsto, complete_of_cauchySeq_tendsto, dist_eq_norm, exists_subseq_summable_dist_of_cauchySeq, hv_sum, sum_range_sub, tendsto_atTop, tendsto_nhds_of_cauchySeq_of_subseq
 -/

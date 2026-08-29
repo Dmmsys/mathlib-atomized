@@ -1412,7 +1412,20 @@ theorem image.ext
       e := e' }
   let v := image.lift F'
   have t₀ : v ≫ q ≫ image.ι f = image.ι f := image.lift_fac F'
-  have t : v ≫ q = 𝟙 
+  have t : v ≫ q = 𝟙 (image f) :=
+    (cancel_mono_id (image.ι f)).1
+      (by
+        convert! t₀ using 1
+        rw [Category.assoc])
+  -- The proof from wikipedia next proves `q ≫ v = 𝟙 _`,
+  -- and concludes that `equalizer g h ≅ image f`,
+  -- but this isn't necessary.
+  calc
+    g = 𝟙 (image f) ≫ g := by rw [Category.id_comp]
+    _ = v ≫ q ≫ g := by rw [← t, Category.assoc]
+    _ = v ≫ q ≫ h := by rw [equalizer.condition g h]
+    _ = 𝟙 (image f) ≫ h := by rw [← Category.assoc, t]
+    _ = h := by rw [Category.id_comp]
 
 中文:
 定理 像.ext
@@ -1427,7 +1440,20 @@ theorem image.ext
       e := e' }
   let v := image.lift F'
   have t₀ : v ≫ q ≫ image.ι f = image.ι f := image.lift_fac F'
-  have t : v ≫ q = 𝟙 
+  have t : v ≫ q = 𝟙 (image f) :=
+    (cancel_mono_id (image.ι f)).1
+      (by
+        convert! t₀ using 1
+        rw [Category.assoc])
+  -- The proof from wikipedia next proves `q ≫ v = 𝟙 _`,
+  -- and concludes that `equalizer g h ≅ image f`,
+  -- but this isn't necessary.
+  calc
+    g = 𝟙 (image f) ≫ g := by rw [Category.id_comp]
+    _ = v ≫ q ≫ g := by rw [← t, Category.assoc]
+    _ = v ≫ q ≫ h := by rw [equalizer.condition g h]
+    _ = 𝟙 (image f) ≫ h := by rw [← Category.assoc, t]
+    _ = h := by rw [Category.id_comp]
 
 Depends on / 依赖: Category, Category.assoc, MonoFactorisation, cancel_mono_id, convert, equalizer, equalizer.lift, image.lift, image.lift_fac, lift_fac, m_mono, mono_comp
 -/
@@ -1793,7 +1819,7 @@ instance hasImage_iso_comp
                    lift_fac := fun F' => by
                     dsimp
                     have : (MonoFactorisation.ofIsoComp f F').m = F'.m := rfl
-                    rw [← 
+                    rw [← this]; rw [image.lift_fac (MonoFactorisation.ofIsoComp f F')] } }
 
 中文:
 实例 hasImage_iso_comp
@@ -1804,7 +1830,7 @@ instance hasImage_iso_comp
                    lift_fac := fun F' => by
                     dsimp
                     have : (MonoFactorisation.ofIsoComp f F').m = F'.m := rfl
-                    rw [← 
+                    rw [← this]; rw [image.lift_fac (MonoFactorisation.ofIsoComp f F')] } }
 
 Depends on / 依赖: HasImage, HasImage.mk, Image.monoFactorisation, MonoFactorisation, MonoFactorisation.ofIsoComp, image.lift, image.lift_fac, isImage, isoComp, lift_fac, monoFactorisation, ofIsoComp
 -/
@@ -1874,7 +1900,13 @@ instance hasImage_comp_iso
       { lift := fun F' => image.lift F'.ofCompIso
         lift_fac := fun F' => by
           rw [← Category.comp_id (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m)]; rw [← IsIso.inv_hom_id g]; rw [← Category.assoc]
- 
+          refine congrArg (· ≫ g) ?_
+          have : (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m) ≫ inv g =
+            image.lift (MonoFactorisation.ofCompIso F') ≫
+            ((MonoFactorisation.ofCompIso F').m) := by
+              simp only [Category.assoc,
+                MonoFactorisation.ofCompIso_m]
+          rw [this]; rw [image.lift_fac (MonoFactorisation.ofCompIso F')]; rw [image.as_ι] } }
 
 中文:
 实例 hasImage_comp_iso
@@ -1885,7 +1917,13 @@ instance hasImage_comp_iso
       { lift := fun F' => image.lift F'.ofCompIso
         lift_fac := fun F' => by
           rw [← Category.comp_id (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m)]; rw [← IsIso.inv_hom_id g]; rw [← Category.assoc]
- 
+          refine congrArg (· ≫ g) ?_
+          have : (image.lift (MonoFactorisation.ofCompIso F') ≫ F'.m) ≫ inv g =
+            image.lift (MonoFactorisation.ofCompIso F') ≫
+            ((MonoFactorisation.ofCompIso F').m) := by
+              simp only [Category.assoc,
+                MonoFactorisation.ofCompIso_m]
+          rw [this]; rw [image.lift_fac (MonoFactorisation.ofCompIso F')]; rw [image.as_ι] } }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, HasImage, HasImage.mk, Image.monoFactorisation, IsIso.inv_hom_id, MonoFactorisation, MonoFactorisation.ofCo, MonoFactorisation.ofCompIso, compMono, comp_id, image.lift, inv_hom_id, isImage, lift_fac, monoFactorisation, ofCompIso
 -/
@@ -2873,7 +2911,16 @@ theorem hasStrongEpiMonoFactorisations_imp_of_isEquivalence
     let em : StrongEpiMonoFactorisation (F.inv.map f) :=
       (HasStrongEpiMonoFactorisations.has_fac (F.inv.map f)).some
     have : Mono (F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y) := mono_comp _ _
-    have : StrongEpi (F.asEquivalence.counitIso.inv.app X ≫ F.map em.e) 
+    have : StrongEpi (F.asEquivalence.counitIso.inv.app X ≫ F.map em.e) := strongEpi_comp _ _
+    exact
+      Nonempty.intro
+        { I := F.obj em.I
+          e := F.asEquivalence.counitIso.inv.app X ≫ F.map em.e
+          m := F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y
+          fac := by
+            simp only [Category.assoc, ← F.map_comp_assoc,
+              MonoFactorisation.fac, fun_inv_map, id_obj, Iso.inv_hom_id_app, Category.comp_id,
+              Iso.inv_hom_id_app_assoc] }⟩
 
 中文:
 定理 hasStrongEpiMonoFactorisations_imp_of_isEquivalence
@@ -2882,7 +2929,16 @@ theorem hasStrongEpiMonoFactorisations_imp_of_isEquivalence
     let em : StrongEpiMonoFactorisation (F.inv.map f) :=
       (HasStrongEpiMonoFactorisations.has_fac (F.inv.map f)).some
     have : Mono (F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y) := mono_comp _ _
-    have : StrongEpi (F.asEquivalence.counitIso.inv.app X ≫ F.map em.e) 
+    have : StrongEpi (F.asEquivalence.counitIso.inv.app X ≫ F.map em.e) := strongEpi_comp _ _
+    exact
+      Nonempty.intro
+        { I := F.obj em.I
+          e := F.asEquivalence.counitIso.inv.app X ≫ F.map em.e
+          m := F.map em.m ≫ F.asEquivalence.counitIso.hom.app Y
+          fac := by
+            simp only [Category.assoc, ← F.map_comp_assoc,
+              MonoFactorisation.fac, fun_inv_map, id_obj, Iso.inv_hom_id_app, Category.comp_id,
+              Iso.inv_hom_id_app_assoc] }⟩
 
 Depends on / 依赖: Category, Category.assoc, F.asEquivalence.counitIso.hom.app, F.asEquivalence.counitIso.inv.app, F.inv.map, F.map, F.map_comp, F.obj, HasStrongEpiMonoFactorisations, HasStrongEpiMonoFactorisations.has_fac, Nonempty, Nonempty.intro, StrongEpi, StrongEpiMonoFactorisation, asEquivalence, counitIso, em.I, em.e, em.m, has_fac
 -/

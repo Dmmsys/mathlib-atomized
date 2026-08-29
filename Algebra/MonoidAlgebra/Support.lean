@@ -45,7 +45,9 @@ theorem support_coeff_mul_subset
   grw [Finsupp.support_sum, biUnion_subset]
 exact fun y hy => support_single_subset.trans singleton_subset_iff.2 mem_image₂_of_mem hx hy
 
-@[deprecated (since := "2026-06-18")] alias sup
+@[deprecated (since := "2026-06-18")] alias support_single_mul_eq_image := support_coeff_mul_subset
+
+@[to_additive (dont_translate := k) support_coeff_single_mul_subset]
 
 中文:
 定理 support_coeff_mul_subset
@@ -57,7 +59,9 @@ exact fun y hy => support_single_subset.trans singleton_subset_iff.2 mem_image�
   grw [Finsupp.support_sum, biUnion_subset]
 exact fun y hy => support_single_subset.trans singleton_subset_iff.2 mem_image₂_of_mem hx hy
 
-@[deprecated (since := "2026-06-18")] alias sup
+@[deprecated (since := "2026-06-18")] alias support_single_mul_eq_image := support_coeff_mul_subset
+
+@[to_additive (dont_translate := k) support_coeff_single_mul_subset]
 
 Depends on / 依赖: Finsupp, Finsupp.support_sum, MonoidAlgebra, MonoidAlgebra.mul_def, biUnion_subset, coeff_finsuppSum, mul_def, singleton_subset_iff, support_single_subset, support_single_subset.trans, support_sum
 -/
@@ -175,7 +179,9 @@ theorem support_coeff_mul_single_eq_image
   simp [coeff_mul, mem_support_iff.mp yf, hr, rx.eq_iff]
 
 @[deprecated (since := "2026-06-18")]
-alias support_mul_single_eq_image := s
+alias support_mul_single_eq_image := support_coeff_mul_single_eq_image
+
+@[to_additive (dont_translate := k) support_coeff_mul_single]
 
 中文:
 定理 support_coeff_mul_single_eq_image
@@ -186,7 +192,9 @@ alias support_mul_single_eq_image := s
   simp [coeff_mul, mem_support_iff.mp yf, hr, rx.eq_iff]
 
 @[deprecated (since := "2026-06-18")]
-alias support_mul_single_eq_image := s
+alias support_mul_single_eq_image := support_coeff_mul_single_eq_image
+
+@[to_additive (dont_translate := k) support_coeff_mul_single]
 
 Depends on / 依赖: coeff_mul, eq_iff, f.coeff.support, mem_support_iff, mem_support_iff.mp, rx.eq_iff, subset_antisymm, support, support_coeff_mul_single_subset
 -/

@@ -321,7 +321,7 @@ lemma posPart_neg
   · have ha' : ¬ IsSelfAdjoint (-a) := fun h => ha (by simpa using h.neg)
     rw [posPart_def]; rw [negPart_def]; rw [cfcₙ_apply_of_not_predicate a ha]; rw [cfcₙ_apply_of_not_predicate _ ha']
 
-@[si
+@[simp]
 
 中文:
 引理 posPart_neg
@@ -334,7 +334,7 @@ lemma posPart_neg
   · have ha' : ¬ IsSelfAdjoint (-a) := fun h => ha (by simpa using h.neg)
     rw [posPart_def]; rw [negPart_def]; rw [cfcₙ_apply_of_not_predicate a ha]; rw [cfcₙ_apply_of_not_predicate _ ha']
 
-@[si
+@[simp]
 
 Depends on / 依赖: IsSelfAdjoint, h.neg, negPart_def, posPart_def
 -/
@@ -388,7 +388,11 @@ lemma posPart_smul
     simp [_root_.posPart_def, mul_max_of_nonneg]
   · obtain (rfl | hr) := eq_or_ne r 0
     · simp
-.mpr ha · have := (not_iff_not.
+.mpr ha · have := (not_iff_not.mpr <| (IsSelfAdjoint.all r).smul_iff hr.isUnit (x := a))
+      simp [CFC.posPart_def, cfcₙ_apply_of_not_predicate a ha,
+        cfcₙ_apply_of_not_predicate _ this]
+
+@[simp]
 
 中文:
 引理 posPart_smul
@@ -402,7 +406,11 @@ lemma posPart_smul
     simp [_root_.posPart_def, mul_max_of_nonneg]
   · obtain (rfl | hr) := eq_or_ne r 0
     · simp
-.mpr ha · have := (not_iff_not.
+.mpr ha · have := (not_iff_not.mpr <| (IsSelfAdjoint.all r).smul_iff hr.isUnit (x := a))
+      simp [CFC.posPart_def, cfcₙ_apply_of_not_predicate a ha,
+        cfcₙ_apply_of_not_predicate _ this]
+
+@[simp]
 
 Depends on / 依赖: CFC.posPart_def, IsSelfAdjoint, IsSelfAdjoint.all, NNReal, NNReal.smul_def, _root_, _root_.posPart_def, eq_or_ne, hr.isUnit, isUnit, mul_max_of_nonneg, not_iff_not, not_iff_not.mpr, posPart_def, smul_def, smul_iff
 -/
@@ -771,7 +779,11 @@ lemma negPart_eq_neg
   rw [← neg_nonneg] at ha
   rw [negPart_def]; rw [← cfcₙ_neg]
   have _ : IsSelfAdjoint a := neg_neg a ▸ (IsSelfAdjoint.neg <| .of_nonneg ha)
-  conv_lhs => rw [← cfcₙ_id R
+  conv_lhs => rw [← cfcₙ_id Real a]
+  refine cfcₙ_congr fun x hx => ?_
+  rw [Unitization.quasispectrum_eq_spectrum_inr Real]; rw [← neg_neg x]; rw [← Set.mem_neg]; rw [spectrum.neg_eq]; rw [← Unitization.inr_neg]; rw [← Unitization.quasispectrum_eq_spectrum_inr Real] at hx
+  rw [← neg_eq_iff_eq_neg]; rw [eq_comm]
+  simpa using quasispectrum_nonneg_of_nonneg _ ha _ hx
 
 中文:
 引理 negPart_eq_neg
@@ -783,7 +795,11 @@ lemma negPart_eq_neg
   rw [← neg_nonneg] at ha
   rw [negPart_def]; rw [← cfcₙ_neg]
   have _ : IsSelfAdjoint a := neg_neg a ▸ (IsSelfAdjoint.neg <| .of_nonneg ha)
-  conv_lhs => rw [← cfcₙ_id R
+  conv_lhs => rw [← cfcₙ_id Real a]
+  refine cfcₙ_congr fun x hx => ?_
+  rw [Unitization.quasispectrum_eq_spectrum_inr Real]; rw [← neg_neg x]; rw [← Set.mem_neg]; rw [spectrum.neg_eq]; rw [← Unitization.inr_neg]; rw [← Unitization.quasispectrum_eq_spectrum_inr Real] at hx
+  rw [← neg_eq_iff_eq_neg]; rw [eq_comm]
+  simpa using quasispectrum_nonneg_of_nonneg _ ha _ hx
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.neg, Set.mem_neg, Unitization, Unitization.inr_neg, Unitization.quasispectrum, Unitization.quasispectrum_eq_spectrum_inr, conv_lhs, eq_comm, inr_neg, mem_neg, negPart_def, negPart_nonneg, neg_eq, neg_inj, neg_neg, neg_nonneg, neg_nonpos, of_nonneg, quasispectrum
 -/
@@ -848,7 +864,86 @@ lemma posPart_negPart_unique
   /- The key idea is to show that `cfcₙ f a = cfcₙ f b + cfcₙ f (-c)` for all real-valued `f`
   continuous on the union of the spectra of `a`, `b`, and `-c`. Then apply this to `f = (·⁺)`.
   The equality holds because both sides constitute star homomorphisms which agree on `f = id` since
-  `a = b
+  `a = b - c`. -/
+  /- `a`, `b`, `-c` are selfadjoint. -/
+  have hb' : IsSelfAdjoint b := .of_nonneg hb
+have hc' : IsSelfAdjoint (-c) := .neg .of_nonneg hc
+have ha : IsSelfAdjoint a := habc ▸ hb'.sub .of_nonneg hc
+  /- It suffices to show `b = a⁺` since `a⁺ - a⁻ = a = b - c` -/
+  rw [and_iff_left_of_imp ?of_b_eq]
+  case of_b_eq =>
+    rintro rfl
+    exact negPart_eq_of_eq_PosPart_sub habc hc
+  /- `s := σₙ ℝ a ∪ σₙ ℝ b ∪ σₙ ℝ (-c)` is compact and each of these sets are subsets of `s`.
+  Moreover, `0 ∈ s`. -/
+  let s := σₙ Real a union σₙ Real b union σₙ Real (-c)
+  have hs : CompactSpace s := by
+refine isCompact_iff_compactSpace.mp (IsCompact.union ?_ ?_).union ?_
+    all_goals exact isCompact_quasispectrum _
+  obtain ⟨has, hbs, hcs⟩ : σₙ Real a subseteq s ∧ σₙ Real b subseteq s ∧ σₙ Real (-c) subseteq s := by grind
+  have : Fact (0 in s) := ⟨by aesop⟩
+  /- The continuous functional calculi for functions `f g : C(s, ℝ)₀` applied to `b` and `(-c)`
+  are orthogonal (i.e., the product is always zero). -/
+  have mul₁ (f g : C(s, Real)₀) :
+      (cfcₙHomSuperset hb' hbs f) * (cfcₙHomSuperset hc' hcs g) = 0 := by
+    refine f.nonUnitalStarAlgHom_apply_mul_eq_zero _ _ ?id ?star_id
+      (cfcₙHomSuperset_continuous hb' hbs)
+    case' star_id => rw [star_trivial]
+    all_goals
+      refine g.mul_nonUnitalStarAlgHom_apply_eq_zero _ _ ?_ ?_
+        (cfcₙHomSuperset_continuous hc' hcs)
+      all_goals simp only [star_trivial, cfcₙHomSuperset_id hb' hbs,
+        cfcₙHomSuperset_id hc' hcs, mul_neg, hbc, neg_zero]
+  have mul₂ (f g : C(s, Real)₀) : (cfcₙHomSuperset hc' hcs f) * (cfcₙHomSuperset hb' hbs g) = 0 := by
+    simpa only [star_mul, star_zero, ← map_star, star_trivial] using congr(star $(mul₁ g f))
+  /- `fun f ↦ cfcₙ f b + cfcₙ f (-c)` defines a star homomorphism `ψ : C(s, ℝ)₀ →⋆ₙₐ[ℝ] A` which
+  agrees with the star homomorphism `cfcₙ · a : C(s, ℝ)₀ →⋆ₙₐ[ℝ] A` since
+  `cfcₙ id a = a = b - c = cfcₙ id b + cfcₙ id (-c)`. -/
+  let ψ : C(s, Real)₀ ->⋆ₙₐ[Real] A :=
+    { (cfcₙHomSuperset hb' hbs : C(s, Real)₀ ->ₗ[Real] A) + (cfcₙHomSuperset hc' hcs : C(s, Real)₀ ->ₗ[Real] A)
+        with
+      toFun := cfcₙHomSuperset hb' hbs + cfcₙHomSuperset hc' hcs
+      map_zero' := by simp [-cfcₙHomSuperset_apply]
+      map_mul' := fun f g => by
+        simp only [Pi.add_apply, map_mul, mul_add, add_mul, mul₂, add_zero, mul₁,
+          zero_add]
+      map_star' := fun f => by simp [← map_star] }
+  have key : (cfcₙHomSuperset ha has) = ψ :=
+    have : ContinuousMapZero.UniqueHom Real A := inferInstance
+    ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id s
+    (cfcₙHomSuperset ha has) ψ (cfcₙHomSuperset_continuous ha has)
+    ((cfcₙHomSuperset_continuous hb' hbs).add (cfcₙHomSuperset_continuous hc' hcs))
+    (by simpa [ψ, -cfcₙHomSuperset_apply, cfcₙHomSuperset_id, sub_eq_add_neg] using habc)
+  /- Applying the equality of star homomorphisms to the function `(·⁺ : ℝ → ℝ)` we find that
+  `b = cfcₙ id b + cfcₙ 0 (-c) = cfcₙ (·⁺) b - cfcₙ (·⁺) (-c) = cfcₙ (·⁺) a = a⁺`, where the
+  second equality follows because these functions are equal on the spectra of `b` and `-c`,
+  respectively, since `0 ≤ b` and `-c ≤ 0`. -/
+  let f : C(s, Real)₀ := ⟨⟨(·⁺), by fun_prop⟩, by simp; norm_cast⟩
+  replace key := congr($key f)
+  simp only [cfcₙHomSuperset_apply, NonUnitalStarAlgHom.coe_mk', NonUnitalAlgHom.coe_mk, ψ,
+    Pi.add_apply, cfcₙHom_eq_cfcₙ_extend (·⁺)] at key
+  symm
+  calc
+    b = cfcₙ (id : Real -> Real) b + cfcₙ (0 : Real -> Real) (-c) := by simp [cfcₙ_id Real b]
+    _ = _ := by
+      congr! 1
+      all_goals
+        refine cfcₙ_congr fun x hx => Eq.symm ?_
+        lift x to σₙ Real _ using hx
+        simp only [Subtype.val_injective.extend_apply, comp_apply, coe_mk,
+          ContinuousMap.coe_mk, Subtype.map_coe, id_eq, _root_.posPart_eq_self, f, Pi.zero_apply,
+          posPart_eq_zero]
+      · exact quasispectrum_nonneg_of_nonneg b hb x.val x.property
+      · obtain ⟨x, hx⟩ := x
+        simp only [← neg_nonneg]
+        rw [Unitization.quasispectrum_eq_spectrum_inr Real (-c)]; rw [Unitization.inr_neg]; rw [← spectrum.neg_eq]; rw [Set.mem_neg]; rw [← Unitization.quasispectrum_eq_spectrum_inr Real c]
+          at hx
+        exact quasispectrum_nonneg_of_nonneg c hc _ hx
+    _ = _ := key.symm
+    _ = a⁺ := by
+      refine cfcₙ_congr fun x hx => ?_
+      lift x to σₙ Real a using hx
+      simp [f]
 
 中文:
 引理 posPart_negPart_unique
@@ -857,7 +952,86 @@ lemma posPart_negPart_unique
   /- The key idea is to show that `cfcₙ f a = cfcₙ f b + cfcₙ f (-c)` for all real-valued `f`
   continuous on the union of the spectra of `a`, `b`, and `-c`. Then apply this to `f = (·⁺)`.
   The equality holds because both sides constitute star homomorphisms which agree on `f = id` since
-  `a = b
+  `a = b - c`. -/
+  /- `a`, `b`, `-c` are selfadjoint. -/
+  have hb' : IsSelfAdjoint b := .of_nonneg hb
+have hc' : IsSelfAdjoint (-c) := .neg .of_nonneg hc
+have ha : IsSelfAdjoint a := habc ▸ hb'.sub .of_nonneg hc
+  /- It suffices to show `b = a⁺` since `a⁺ - a⁻ = a = b - c` -/
+  rw [and_iff_left_of_imp ?of_b_eq]
+  case of_b_eq =>
+    rintro rfl
+    exact negPart_eq_of_eq_PosPart_sub habc hc
+  /- `s := σₙ ℝ a ∪ σₙ ℝ b ∪ σₙ ℝ (-c)` is compact and each of these sets are subsets of `s`.
+  Moreover, `0 ∈ s`. -/
+  let s := σₙ Real a union σₙ Real b union σₙ Real (-c)
+  have hs : CompactSpace s := by
+refine isCompact_iff_compactSpace.mp (IsCompact.union ?_ ?_).union ?_
+    all_goals exact isCompact_quasispectrum _
+  obtain ⟨has, hbs, hcs⟩ : σₙ Real a subseteq s ∧ σₙ Real b subseteq s ∧ σₙ Real (-c) subseteq s := by grind
+  have : Fact (0 in s) := ⟨by aesop⟩
+  /- The continuous functional calculi for functions `f g : C(s, ℝ)₀` applied to `b` and `(-c)`
+  are orthogonal (i.e., the product is always zero). -/
+  have mul₁ (f g : C(s, Real)₀) :
+      (cfcₙHomSuperset hb' hbs f) * (cfcₙHomSuperset hc' hcs g) = 0 := by
+    refine f.nonUnitalStarAlgHom_apply_mul_eq_zero _ _ ?id ?star_id
+      (cfcₙHomSuperset_continuous hb' hbs)
+    case' star_id => rw [star_trivial]
+    all_goals
+      refine g.mul_nonUnitalStarAlgHom_apply_eq_zero _ _ ?_ ?_
+        (cfcₙHomSuperset_continuous hc' hcs)
+      all_goals simp only [star_trivial, cfcₙHomSuperset_id hb' hbs,
+        cfcₙHomSuperset_id hc' hcs, mul_neg, hbc, neg_zero]
+  have mul₂ (f g : C(s, Real)₀) : (cfcₙHomSuperset hc' hcs f) * (cfcₙHomSuperset hb' hbs g) = 0 := by
+    simpa only [star_mul, star_zero, ← map_star, star_trivial] using congr(star $(mul₁ g f))
+  /- `fun f ↦ cfcₙ f b + cfcₙ f (-c)` defines a star homomorphism `ψ : C(s, ℝ)₀ →⋆ₙₐ[ℝ] A` which
+  agrees with the star homomorphism `cfcₙ · a : C(s, ℝ)₀ →⋆ₙₐ[ℝ] A` since
+  `cfcₙ id a = a = b - c = cfcₙ id b + cfcₙ id (-c)`. -/
+  let ψ : C(s, Real)₀ ->⋆ₙₐ[Real] A :=
+    { (cfcₙHomSuperset hb' hbs : C(s, Real)₀ ->ₗ[Real] A) + (cfcₙHomSuperset hc' hcs : C(s, Real)₀ ->ₗ[Real] A)
+        with
+      toFun := cfcₙHomSuperset hb' hbs + cfcₙHomSuperset hc' hcs
+      map_zero' := by simp [-cfcₙHomSuperset_apply]
+      map_mul' := fun f g => by
+        simp only [Pi.add_apply, map_mul, mul_add, add_mul, mul₂, add_zero, mul₁,
+          zero_add]
+      map_star' := fun f => by simp [← map_star] }
+  have key : (cfcₙHomSuperset ha has) = ψ :=
+    have : ContinuousMapZero.UniqueHom Real A := inferInstance
+    ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id s
+    (cfcₙHomSuperset ha has) ψ (cfcₙHomSuperset_continuous ha has)
+    ((cfcₙHomSuperset_continuous hb' hbs).add (cfcₙHomSuperset_continuous hc' hcs))
+    (by simpa [ψ, -cfcₙHomSuperset_apply, cfcₙHomSuperset_id, sub_eq_add_neg] using habc)
+  /- Applying the equality of star homomorphisms to the function `(·⁺ : ℝ → ℝ)` we find that
+  `b = cfcₙ id b + cfcₙ 0 (-c) = cfcₙ (·⁺) b - cfcₙ (·⁺) (-c) = cfcₙ (·⁺) a = a⁺`, where the
+  second equality follows because these functions are equal on the spectra of `b` and `-c`,
+  respectively, since `0 ≤ b` and `-c ≤ 0`. -/
+  let f : C(s, Real)₀ := ⟨⟨(·⁺), by fun_prop⟩, by simp; norm_cast⟩
+  replace key := congr($key f)
+  simp only [cfcₙHomSuperset_apply, NonUnitalStarAlgHom.coe_mk', NonUnitalAlgHom.coe_mk, ψ,
+    Pi.add_apply, cfcₙHom_eq_cfcₙ_extend (·⁺)] at key
+  symm
+  calc
+    b = cfcₙ (id : Real -> Real) b + cfcₙ (0 : Real -> Real) (-c) := by simp [cfcₙ_id Real b]
+    _ = _ := by
+      congr! 1
+      all_goals
+        refine cfcₙ_congr fun x hx => Eq.symm ?_
+        lift x to σₙ Real _ using hx
+        simp only [Subtype.val_injective.extend_apply, comp_apply, coe_mk,
+          ContinuousMap.coe_mk, Subtype.map_coe, id_eq, _root_.posPart_eq_self, f, Pi.zero_apply,
+          posPart_eq_zero]
+      · exact quasispectrum_nonneg_of_nonneg b hb x.val x.property
+      · obtain ⟨x, hx⟩ := x
+        simp only [← neg_nonneg]
+        rw [Unitization.quasispectrum_eq_spectrum_inr Real (-c)]; rw [Unitization.inr_neg]; rw [← spectrum.neg_eq]; rw [Set.mem_neg]; rw [← Unitization.quasispectrum_eq_spectrum_inr Real c]
+          at hx
+        exact quasispectrum_nonneg_of_nonneg c hc _ hx
+    _ = _ := key.symm
+    _ = a⁺ := by
+      refine cfcₙ_congr fun x hx => ?_
+      lift x to σₙ Real a using hx
+      simp [f]
 
 Depends on / 依赖: cfc_tac
 -/

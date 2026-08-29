@@ -1421,7 +1421,15 @@ theorem coinduction
         forall (β : Type u) (fr : Stream' α -> β), fr s₁ = fr s₂ -> fr (tail s₁) = fr (tail s₂))
     (fun s₁ s₂ h =>
       have h₁ : head s₁ = head s₂ := And.left h
-      have h₂ : head (tail s₁) = head (tail s₂) := And.right h α
+      have h₂ : head (tail s₁) = head (tail s₂) := And.right h α (@head α) h₁
+      have h₃ :
+        forall (β : Type u) (fr : Stream' α -> β),
+          fr (tail s₁) = fr (tail s₂) -> fr (tail (tail s₁)) = fr (tail (tail s₂)) :=
+        fun β fr => And.right h β fun s => fr (tail s)
+      And.intro h₁ (And.intro h₂ h₃))
+    (And.intro hh ht)
+
+@[simp]
 
 中文:
 定理 coinduction
@@ -1433,7 +1441,15 @@ theorem coinduction
         forall (β : Type u) (fr : Stream' α -> β), fr s₁ = fr s₂ -> fr (tail s₁) = fr (tail s₂))
     (fun s₁ s₂ h =>
       have h₁ : head s₁ = head s₂ := And.left h
-      have h₂ : head (tail s₁) = head (tail s₂) := And.right h α
+      have h₂ : head (tail s₁) = head (tail s₂) := And.right h α (@head α) h₁
+      have h₃ :
+        forall (β : Type u) (fr : Stream' α -> β),
+          fr (tail s₁) = fr (tail s₂) -> fr (tail (tail s₁)) = fr (tail (tail s₂)) :=
+        fun β fr => And.right h β fun s => fr (tail s)
+      And.intro h₁ (And.intro h₂ h₃))
+    (And.intro hh ht)
+
+@[simp]
 
 Depends on / 依赖: And.intro, And.left, And.right, Stream, eq_of_bisim
 -/
@@ -2800,7 +2816,7 @@ lemma drop_append_of_le_length
   · rw [get_drop, get_append_left, get_append_left, List.getElem_drop]; simpa [hm]
   · obtain ⟨p, rfl⟩ := Nat.exists_eq_add_of_le hk
     have hm' : m = (x.drop n).length := by simp [hm]
-    simp_rw [get_drop, ←
+    simp_rw [get_drop, ← Nat.add_assoc, ← hm, get_append_right, hm', get_append_right]
 
 中文:
 引理 drop_append_of_le_length
@@ -2811,7 +2827,7 @@ lemma drop_append_of_le_length
   · rw [get_drop, get_append_left, get_append_left, List.getElem_drop]; simpa [hm]
   · obtain ⟨p, rfl⟩ := Nat.exists_eq_add_of_le hk
     have hm' : m = (x.drop n).length := by simp [hm]
-    simp_rw [get_drop, ←
+    simp_rw [get_drop, ← Nat.add_assoc, ← hm, get_append_right, hm', get_append_right]
 
 Depends on / 依赖: List.getElem_drop, Nat.add_assoc, Nat.exists_eq_add_of_le, add_assoc, exists_eq_add_of_le, getElem_drop, get_append_left, get_append_right, get_drop, length, lt_or_ge, simp_rw, x.drop
 -/

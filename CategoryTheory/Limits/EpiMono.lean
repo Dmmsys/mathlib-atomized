@@ -98,7 +98,11 @@ lemma mono_iff_isIso_fst
     refine ⟨φ, PullbackCone.IsLimit.hom_ext hc ?_ ?_, hφ₁⟩
     · simp only [assoc, hφ₁, id_comp, comp_id]
     · simp only [assoc, hφ₂, id_comp, comp_id, h]
-  · i
+  · intro
+    obtain ⟨φ, hφ₁, hφ₂⟩ := PullbackCone.IsLimit.lift' hc (𝟙 X) (𝟙 X) (by simp)
+    have : IsSplitEpi φ := IsSplitEpi.mk ⟨SplitEpi.mk c.fst (by
+      rw [← cancel_mono c.fst]; rw [assoc]; rw [id_comp]; rw [hφ₁]; rw [comp_id])⟩
+    rw [← cancel_epi φ]; rw [hφ₁]; rw [hφ₂]
 
 中文:
 引理 mono_iff_isIso_fst
@@ -112,7 +116,11 @@ lemma mono_iff_isIso_fst
     refine ⟨φ, PullbackCone.IsLimit.hom_ext hc ?_ ?_, hφ₁⟩
     · simp only [assoc, hφ₁, id_comp, comp_id]
     · simp only [assoc, hφ₂, id_comp, comp_id, h]
-  · i
+  · intro
+    obtain ⟨φ, hφ₁, hφ₂⟩ := PullbackCone.IsLimit.lift' hc (𝟙 X) (𝟙 X) (by simp)
+    have : IsSplitEpi φ := IsSplitEpi.mk ⟨SplitEpi.mk c.fst (by
+      rw [← cancel_mono c.fst]; rw [assoc]; rw [id_comp]; rw [hφ₁]; rw [comp_id])⟩
+    rw [← cancel_epi φ]; rw [hφ₁]; rw [hφ₂]
 
 Depends on / 依赖: IsLimit, IsSplitEpi, IsSplitEpi.mk, PullbackCone, PullbackCone.IsLimit.hom_ext, PullbackCone.IsLimit.lift, SplitEpi, SplitEpi.mk, c.fst, cancel_mono, comp_id, hom_ext, id_comp, mono_iff_fst_eq_snd
 -/
@@ -248,7 +256,11 @@ lemma epi_iff_isIso_inl
     refine ⟨φ, hφ₁, PushoutCocone.IsColimit.hom_ext hc ?_ ?_⟩
     · simp only [comp_id, reassoc_of% hφ₁]
     · simp only [comp_id, h, reassoc_of% hφ₂]
-  · intr
+  · intro
+    obtain ⟨φ, hφ₁, hφ₂⟩ := PushoutCocone.IsColimit.desc' hc (𝟙 Y) (𝟙 Y) (by simp)
+    have : IsSplitMono φ := IsSplitMono.mk ⟨SplitMono.mk c.inl (by
+      rw [← cancel_epi c.inl]; rw [reassoc_of% hφ₁]; rw [comp_id])⟩
+    rw [← cancel_mono φ]; rw [hφ₁]; rw [hφ₂]
 
 中文:
 引理 epi_iff_isIso_inl
@@ -262,7 +274,11 @@ lemma epi_iff_isIso_inl
     refine ⟨φ, hφ₁, PushoutCocone.IsColimit.hom_ext hc ?_ ?_⟩
     · simp only [comp_id, reassoc_of% hφ₁]
     · simp only [comp_id, h, reassoc_of% hφ₂]
-  · intr
+  · intro
+    obtain ⟨φ, hφ₁, hφ₂⟩ := PushoutCocone.IsColimit.desc' hc (𝟙 Y) (𝟙 Y) (by simp)
+    have : IsSplitMono φ := IsSplitMono.mk ⟨SplitMono.mk c.inl (by
+      rw [← cancel_epi c.inl]; rw [reassoc_of% hφ₁]; rw [comp_id])⟩
+    rw [← cancel_mono φ]; rw [hφ₁]; rw [hφ₂]
 
 Depends on / 依赖: IsColimit, IsSplitMono, IsSplitMono.mk, PushoutCocone, PushoutCocone.IsColimit.desc, PushoutCocone.IsColimit.hom_ext, SplitMono, SplitMono.mk, c.inl, cancel_epi, cancel_mono, comp_id, epi_iff_inl_eq_inr, hom_ext, reassoc_of
 -/

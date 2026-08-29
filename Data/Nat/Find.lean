@@ -60,6 +60,8 @@ definition wf_lbp
           | _, ⟨rfl, a⟩ => absurd pn (a _ kn)⟩)
       fun m IH k kn =>
       ⟨_, fun y r =>
+        match y, r with
+        | _, ⟨rfl, _a⟩ => IH _ (by rw [Nat.add_right_comm]; exact kn)⟩⟩
 
 中文:
 定义 wf_lbp
@@ -74,6 +76,8 @@ definition wf_lbp
           | _, ⟨rfl, a⟩ => absurd pn (a _ kn)⟩)
       fun m IH k kn =>
       ⟨_, fun y r =>
+        match y, r with
+        | _, ⟨rfl, _a⟩ => IH _ (by rw [Nat.add_right_comm]; exact kn)⟩⟩
 -/
 private def wf_lbp : WellFounded (@lbp p) :=
   ⟨let ⟨n, pn⟩ := H
@@ -103,7 +107,8 @@ definition findX
       else
         have : forall n <= m, ¬p n := fun n h =>
           Or.elim (Nat.lt_or_eq_of_le h) (al n) fun e => by rw [e]; exact pm
-IH _ 
+IH _ ⟨rfl, this⟩ fun n h => this n Nat.le_of_succ_le_succ h)
+    0 fun _ h => absurd h (Nat.not_lt_zero _)
 
 中文:
 定义 findX
@@ -114,7 +119,8 @@ IH _
       else
         have : forall n <= m, ¬p n := fun n h =>
           Or.elim (Nat.lt_or_eq_of_le h) (al n) fun e => by rw [e]; exact pm
-IH _ 
+IH _ ⟨rfl, this⟩ fun n h => this n Nat.le_of_succ_le_succ h)
+    0 fun _ h => absurd h (Nat.not_lt_zero _)
 -/
 protected def findX : { n // p n ∧ forall m < n, ¬p m } :=
   @WellFounded.fix _ (fun k => (forall n < k, ¬p n) -> { n // p n ∧ forall m < n, ¬p m }) lbp (wf_lbp H)
@@ -492,7 +498,9 @@ lemma find_add
     refine Nat.add_le_of_le_sub hnm (find_le ?_)
     rwa [Nat.sub_add_cancel hnm]
   · rw [← Nat.sub_le_iff_le_add]
-    refine (le_find_iff _ _).2 fun m hm hpm => Nat
+    refine (le_find_iff _ _).2 fun m hm hpm => Nat.not_le.2 hm ?_
+    rw [Nat.sub_le_iff_le_add]
+    exact find_le hpm
 
 中文:
 引理 find_add
@@ -503,7 +511,9 @@ lemma find_add
     refine Nat.add_le_of_le_sub hnm (find_le ?_)
     rwa [Nat.sub_add_cancel hnm]
   · rw [← Nat.sub_le_iff_le_add]
-    refine (le_find_iff _ _).2 fun m hm hpm => Nat
+    refine (le_find_iff _ _).2 fun m hm hpm => Nat.not_le.2 hm ?_
+    rw [Nat.sub_le_iff_le_add]
+    exact find_le hpm
 
 Depends on / 依赖: Nat.add_le_of_le_sub, Nat.not_le, Nat.sub_add_cancel, Nat.sub_le_iff_le_add, add_le_of_le_sub, find_le, le_antisymm, le_find_iff, le_trans, not_le, sub_add_cancel, sub_le_iff_le_add
 -/
@@ -626,7 +636,15 @@ lemma findGreatest_eq_iff
     exact ⟨fun h => (h rfl).elim, fun n hlt heq => by lia⟩
   | succ k ihk =>
     by_cases hk : P (k + 1)
-    · rw [findGreatest_
+    · rw [findGreatest_eq hk]
+      constructor
+      · rintro rfl
+        exact ⟨le_refl _, fun _ => hk, fun n hlt hle => by lia⟩
+      · rintro ⟨hle, h0, hm⟩
+        rcases Decidable.lt_or_eq_of_le hle with hlt | rfl
+        exacts [(hm hlt (le_refl _) hk).elim, rfl]
+    · rw [findGreatest_of_not hk, ihk]
+      grind
 
 中文:
 引理 findGreatest_eq_iff
@@ -639,7 +657,15 @@ lemma findGreatest_eq_iff
     exact ⟨fun h => (h rfl).elim, fun n hlt heq => by lia⟩
   | succ k ihk =>
     by_cases hk : P (k + 1)
-    · rw [findGreatest_
+    · rw [findGreatest_eq hk]
+      constructor
+      · rintro rfl
+        exact ⟨le_refl _, fun _ => hk, fun n hlt hle => by lia⟩
+      · rintro ⟨hle, h0, hm⟩
+        rcases Decidable.lt_or_eq_of_le hle with hlt | rfl
+        exacts [(hm hlt (le_refl _) hk).elim, rfl]
+    · rw [findGreatest_of_not hk, ihk]
+      grind
 
 Depends on / 依赖: Decidable, Decidable.lt_or_eq_of_le, Iff.comm, Nat.le_zero, and_iff_left_iff_imp, eq_comm, exacts, findGreatest_eq, findGreatest_of_not, findGreatest_zero, generalizing, le_refl, le_zero, lt_or_eq_of_le, ne_eq
 -/

@@ -145,7 +145,10 @@ refine le_antisymm (biInf_mono fun s ⟨as, sg⟩ => ⟨as, .basic _ sg⟩) le_i
   induction hs with
   | basic _ hs => exact iInf₂_le _ ⟨ha, hs⟩
   | univ => exact le_top.trans_eq principal_univ.symm
-  | inter _ _ _ _ hs ht => exact (le_in
+  | inter _ _ _ _ hs ht => exact (le_inf (hs ha.1) (ht ha.2)).trans_eq inf_principal
+  | sUnion _ _ hS =>
+    let ⟨t, htS, hat⟩ := ha
+    exact (hS t htS hat).trans (principal_mono.2 <| subset_sUnion_of_mem htS)
 
 中文:
 定理 nhds_generateFrom
@@ -158,7 +161,10 @@ refine le_antisymm (biInf_mono fun s ⟨as, sg⟩ => ⟨as, .basic _ sg⟩) le_i
   induction hs with
   | basic _ hs => exact iInf₂_le _ ⟨ha, hs⟩
   | univ => exact le_top.trans_eq principal_univ.symm
-  | inter _ _ _ _ hs ht => exact (le_in
+  | inter _ _ _ _ hs ht => exact (le_inf (hs ha.1) (ht ha.2)).trans_eq inf_principal
+  | sUnion _ _ hS =>
+    let ⟨t, htS, hat⟩ := ha
+    exact (hS t htS hat).trans (principal_mono.2 <| subset_sUnion_of_mem htS)
 
 Depends on / 依赖: biInf_mono, generateFrom, inf_principal, le_antisymm, le_inf, le_top, le_top.trans_eq, nhds_def, principal_mono, principal_univ, principal_univ.symm, sUnion, subset_sUnion_of_mem, trans_eq
 -/
@@ -243,7 +249,8 @@ theorem nhds_mkOfNhds_of_hasBasis
     replace hpure : pure <= n := fun x => (hb x).ge_iff.2 (hpure x)
     refine mem_nhds_iff.2 ⟨{x | U in n x}, fun x hx => hpure x hx, fun x hx => ?_, hU⟩
     rcases (hb x).mem_iff.1 hx with ⟨i, hpi, hi⟩
-    exact (hop
+    exact (hopen x i hpi).mono fun y => by gcongr
+  · exact (nhds_basis_opens a).ge_iff.2 fun U ⟨haU, hUo⟩ => hUo a haU
 
 中文:
 定理 nhds_mkOfNhds_of_hasBasis
@@ -255,7 +262,8 @@ theorem nhds_mkOfNhds_of_hasBasis
     replace hpure : pure <= n := fun x => (hb x).ge_iff.2 (hpure x)
     refine mem_nhds_iff.2 ⟨{x | U in n x}, fun x hx => hpure x hx, fun x hx => ?_, hU⟩
     rcases (hb x).mem_iff.1 hx with ⟨i, hpi, hi⟩
-    exact (hop
+    exact (hopen x i hpi).mono fun y => by gcongr
+  · exact (nhds_basis_opens a).ge_iff.2 fun U ⟨haU, hUo⟩ => hUo a haU
 
 Depends on / 依赖: TopologicalSpace, ge_iff, le_antisymm, mem_iff, mem_nhds_iff, mkOfNhds, nhds_basis_opens, replace
 -/
@@ -305,7 +313,7 @@ theorem nhds_mkOfNhds_single
     rcases eq_or_ne b a with (rfl | hb)
     · exact hs
     · rwa [update_of_ne hb]
-  · simpa only [update_of_ne ha, mem_pure, eventually_
+  · simpa only [update_of_ne ha, mem_pure, eventually_pure] using hs
 
 中文:
 定理 nhds_mkOfNhds_single
@@ -317,7 +325,7 @@ theorem nhds_mkOfNhds_single
     rcases eq_or_ne b a with (rfl | hb)
     · exact hs
     · rwa [update_of_ne hb]
-  · simpa only [update_of_ne ha, mem_pure, eventually_
+  · simpa only [update_of_ne ha, mem_pure, eventually_pure] using hs
 
 Depends on / 依赖: eq_or_ne, eventually_pure, filter_upwards, le_rfl, le_update_iff, le_update_iff.mpr, mem_pure, nhds_mkOfNhds, update_of_ne
 -/
@@ -874,7 +882,9 @@ theorem IndiscreteTopology.isOpen_iff
     | univ => exact .inr rfl
     | inter _ _ _ _ h₁ h₂ =>
       rcases h₁ with (rfl | rfl) <;> rcases h₂ with (rfl | rfl) <;> simp
-    | sUnion _ _ ih => exact sUnion_mem_empt
+    | sUnion _ _ ih => exact sUnion_mem_empty_univ ih
+  · rintro (rfl | rfl)
+    exacts [@isOpen_empty _ ⊤, @isOpen_univ _ ⊤]
 
 中文:
 定理 Indiscrete拓扑.isOpen_iff
@@ -887,7 +897,9 @@ theorem IndiscreteTopology.isOpen_iff
     | univ => exact .inr rfl
     | inter _ _ _ _ h₁ h₂ =>
       rcases h₁ with (rfl | rfl) <;> rcases h₂ with (rfl | rfl) <;> simp
-    | sUnion _ _ ih => exact sUnion_mem_empt
+    | sUnion _ _ ih => exact sUnion_mem_empty_univ ih
+  · rintro (rfl | rfl)
+    exacts [@isOpen_empty _ ⊤, @isOpen_univ _ ⊤]
 
 Depends on / 依赖: False.elim, IndiscreteTopology, IndiscreteTopology.eq_top, eq_top, exacts, isOpen_empty, isOpen_univ, sUnion, sUnion_mem_empty_univ
 -/
@@ -3828,7 +3840,7 @@ theorem mem_nhds_induced
   · rintro ⟨u, usub, ⟨v, openv, rfl⟩, au⟩
     exact ⟨v, ⟨v, Subset.rfl, openv, au⟩, usub⟩
   · rintro ⟨u, ⟨v, vsubu, openv, amem⟩, finvsub⟩
-    exact ⟨f ⁻¹' v, (Set.preimage_mono vsubu).trans finvsub, ⟨⟨v, openv, rfl⟩,
+    exact ⟨f ⁻¹' v, (Set.preimage_mono vsubu).trans finvsub, ⟨⟨v, openv, rfl⟩, amem⟩⟩
 
 中文:
 定理 mem_nhds_induced
@@ -3840,7 +3852,7 @@ theorem mem_nhds_induced
   · rintro ⟨u, usub, ⟨v, openv, rfl⟩, au⟩
     exact ⟨v, ⟨v, Subset.rfl, openv, au⟩, usub⟩
   · rintro ⟨u, ⟨v, vsubu, openv, amem⟩, finvsub⟩
-    exact ⟨f ⁻¹' v, (Set.preimage_mono vsubu).trans finvsub, ⟨⟨v, openv, rfl⟩,
+    exact ⟨f ⁻¹' v, (Set.preimage_mono vsubu).trans finvsub, ⟨⟨v, openv, rfl⟩, amem⟩⟩
 
 Depends on / 依赖: Set.preimage_mono, Subset, Subset.rfl, T.induced, finvsub, induced, isOpen_induced_iff, mem_nhds_iff, preimage_mono, simp_rw
 -/

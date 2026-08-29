@@ -33,7 +33,9 @@ lemma IsCommMonObj.ofRepresentableBy
   let : MonObj X := .ofRepresentableBy X (F ⋙ forget₂ CommMonCat MonCat) α
   have : μ = α.homEquiv'.symm (α.homEquiv' (fst X X) * α.homEquiv' (snd X X)) := rfl
   constructor
-  simp_rw [this, ← α.homEquiv'.apply_eq_iff_eq
+  simp_rw [this, ← α.homEquiv'.apply_eq_iff_eq, α.homEquiv'_comp,
+    Equiv.apply_symm_apply, map_mul, ← α.homEquiv'_comp, op_tensorObj,
+    braiding_hom_fst, braiding_hom_snd, _root_.mul_comm]
 
 中文:
 引理 是交换MonObj.ofRepresentableBy
@@ -43,7 +45,9 @@ lemma IsCommMonObj.ofRepresentableBy
   let : MonObj X := .ofRepresentableBy X (F ⋙ forget₂ CommMonCat MonCat) α
   have : μ = α.homEquiv'.symm (α.homEquiv' (fst X X) * α.homEquiv' (snd X X)) := rfl
   constructor
-  simp_rw [this, ← α.homEquiv'.apply_eq_iff_eq
+  simp_rw [this, ← α.homEquiv'.apply_eq_iff_eq, α.homEquiv'_comp,
+    Equiv.apply_symm_apply, map_mul, ← α.homEquiv'_comp, op_tensorObj,
+    braiding_hom_fst, braiding_hom_snd, _root_.mul_comm]
 
 Depends on / 依赖: CommMonCat, MonCat, ofRepresentableBy
 -/

@@ -476,7 +476,19 @@ lemma measurePreserving_eval_sub_eval_projectiveFamily
     · congr
       · simp
       norm_cast
-      rw [sub_add_eq_add_sub]; rw
+      rw [sub_add_eq_add_sub]; rw [← NNReal.coe_add]; rw [← NNReal.coe_sub]; rw [Real.toNNReal_coe]
+      · wlog hst : (s : Real>=0) <= t generalizing s t
+        · convert this t s (le_of_not_ge hst) using 1
+          · rw [add_comm, min_comm]
+          · rw [nndist_comm]
+        grw [min_eq_left hst, NNReal.nndist_eq, max_eq_right (by grw [hst]), two_mul,
+          add_tsub_add_eq_tsub_left]
+      nth_grw 1 [two_mul, min_le_left, min_le_right]
+    · exact (IsGaussian.hasGaussianLaw_id.eval s).integrable
+    · exact (IsGaussian.hasGaussianLaw_id.eval t).integrable
+    · exact (IsGaussian.hasGaussianLaw_id.eval s).memLp_two
+    · exact (IsGaussian.hasGaussianLaw_id.eval t).memLp_two
+    · exact (IsGaussian.hasGaussianLaw_id.prodMk s t).sub
 
 中文:
 引理 measurePreserving_eval_sub_eval_projectiveFamily
@@ -487,7 +499,19 @@ lemma measurePreserving_eval_sub_eval_projectiveFamily
     · congr
       · simp
       norm_cast
-      rw [sub_add_eq_add_sub]; rw
+      rw [sub_add_eq_add_sub]; rw [← NNReal.coe_add]; rw [← NNReal.coe_sub]; rw [Real.toNNReal_coe]
+      · wlog hst : (s : Real>=0) <= t generalizing s t
+        · convert this t s (le_of_not_ge hst) using 1
+          · rw [add_comm, min_comm]
+          · rw [nndist_comm]
+        grw [min_eq_left hst, NNReal.nndist_eq, max_eq_right (by grw [hst]), two_mul,
+          add_tsub_add_eq_tsub_left]
+      nth_grw 1 [two_mul, min_le_left, min_le_right]
+    · exact (IsGaussian.hasGaussianLaw_id.eval s).integrable
+    · exact (IsGaussian.hasGaussianLaw_id.eval t).integrable
+    · exact (IsGaussian.hasGaussianLaw_id.eval s).memLp_two
+    · exact (IsGaussian.hasGaussianLaw_id.eval t).memLp_two
+    · exact (IsGaussian.hasGaussianLaw_id.prodMk s t).sub
 
 Depends on / 依赖: HasGaussianLaw, HasGaussianLaw.map_eq_gaussianReal, NNReal, NNReal.coe_add, NNReal.coe_sub, Real.toNNReal_coe, add_comm, coe_add, coe_sub, convert, covariance_eval_projectiveFamily, fun_prop, generalizing, integral_sub, le_of_not_ge, map_eq, map_eq_gaussianReal, min_comm, min_eq_left, nndist_comm
 -/
@@ -525,7 +549,10 @@ lemma isProjectiveMeasureFamily_projectiveFamily
   rw [Measure.map_map]
   · have : (Finset.restrict₂ (π := fun _ => Real) hJI ∘ (MeasurableEquiv.toLp 2 (I -> Real)).symm) =
         ofLp ∘ (EuclideanSpace.restrict₂ hJI) := by ext; simp
-    rw [this]; rw [((measurePreserving_ofLp_multivariateGaussian 
+    rw [this]; rw [((measurePreserving_ofLp_multivariateGaussian J).comp
+        (measurePreserving_restrict₂_multivariateGaussian (posSemidef_covMatrix I) hJI)).map_eq]
+  · exact Finset.measurable_restrict₂ _ -- fun_prop fails
+  · fun_prop
 
 中文:
 引理 isProjectiveMeasureFamily_projectiveFamily
@@ -535,7 +562,10 @@ lemma isProjectiveMeasureFamily_projectiveFamily
   rw [Measure.map_map]
   · have : (Finset.restrict₂ (π := fun _ => Real) hJI ∘ (MeasurableEquiv.toLp 2 (I -> Real)).symm) =
         ofLp ∘ (EuclideanSpace.restrict₂ hJI) := by ext; simp
-    rw [this]; rw [((measurePreserving_ofLp_multivariateGaussian 
+    rw [this]; rw [((measurePreserving_ofLp_multivariateGaussian J).comp
+        (measurePreserving_restrict₂_multivariateGaussian (posSemidef_covMatrix I) hJI)).map_eq]
+  · exact Finset.measurable_restrict₂ _ -- fun_prop fails
+  · fun_prop
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.restrict, Finset, Finset.measurable_restrict, Finset.restrict, MeasurableEquiv, MeasurableEquiv.toLp, Measure, Measure.map_map, fun_prop, map_eq, map_map, measurePreserving_ofLp_multivariateGaussian, nth_rw, posSemidef_covMatrix, projectiveFamily
 -/

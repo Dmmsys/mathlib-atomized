@@ -159,7 +159,12 @@ theorem irrational_nrt_of_notint_nrt
     rw [Int.cast_ne_zero]; rw [Int.natCast_ne_zero]
     exact P
   have c2 : ((D : Int) : Real) ^ n != 0 := pow_ne_zero _ c1
-  rw [mk_eq_divInt]; rw [cast_pow]; rw [cast_divInt]; rw [div_pow]; rw [div_e
+  rw [mk_eq_divInt]; rw [cast_pow]; rw [cast_divInt]; rw [div_pow]; rw [div_eq_iff_mul_eq c2]; rw [← Int.cast_pow]; rw [← Int.cast_pow]; rw [← Int.cast_mul]; rw [Int.cast_inj] at hxr
+  have hdivn : (D : Int) ^ n ∣ N ^ n := Dvd.intro_left m hxr
+  rw [← Int.dvd_natAbs]; rw [← Int.natCast_pow]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_pow]; rw [Nat.pow_dvd_pow_iff hnpos.ne'] at hdivn
+  obtain rfl : D = 1 := by rw [← Nat.gcd_eq_right hdivn, C.gcd_eq_one]
+  refine hv ⟨N, ?_⟩
+  rw [mk_eq_divInt]; rw [Int.ofNat_one]; rw [divInt_one]; rw [cast_intCast]
 
 中文:
 定理 irrational_nrt_of_notint_nrt
@@ -171,7 +176,12 @@ theorem irrational_nrt_of_notint_nrt
     rw [Int.cast_ne_zero]; rw [Int.natCast_ne_zero]
     exact P
   have c2 : ((D : Int) : Real) ^ n != 0 := pow_ne_zero _ c1
-  rw [mk_eq_divInt]; rw [cast_pow]; rw [cast_divInt]; rw [div_pow]; rw [div_e
+  rw [mk_eq_divInt]; rw [cast_pow]; rw [cast_divInt]; rw [div_pow]; rw [div_eq_iff_mul_eq c2]; rw [← Int.cast_pow]; rw [← Int.cast_pow]; rw [← Int.cast_mul]; rw [Int.cast_inj] at hxr
+  have hdivn : (D : Int) ^ n ∣ N ^ n := Dvd.intro_left m hxr
+  rw [← Int.dvd_natAbs]; rw [← Int.natCast_pow]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_pow]; rw [Nat.pow_dvd_pow_iff hnpos.ne'] at hdivn
+  obtain rfl : D = 1 := by rw [← Nat.gcd_eq_right hdivn, C.gcd_eq_one]
+  refine hv ⟨N, ?_⟩
+  rw [mk_eq_divInt]; rw [Int.ofNat_one]; rw [divInt_one]; rw [cast_intCast]
 
 Depends on / 依赖: Dvd.intro_left, Int.cast_inj, Int.cast_mul, Int.cast_ne_zero, Int.cast_pow, Int.dvd_natAbs, Int.natCast_ne_zero, Int.natCast_pow, cast_divInt, cast_inj, cast_mul, cast_ne_zero, cast_pow, div_eq_iff_mul_eq, div_pow, dvd_natAbs, intro_left, mk_eq_divInt, natCast_ne_zero, natCast_pow
 -/
@@ -202,7 +212,13 @@ theorem irrational_nrt_of_n_not_dvd_multiplicity
     simp [hxr, multiplicity_of_one_right (mt isUnit_iff_dvd_one.1
       (mt Int.natCast_dvd_natCast.1 hp.1.not_dvd_one))] at hv
   refine irrational_nrt_of_notint_nrt _ _ hxr ?_ hnpos
- 
+  rintro ⟨y, rfl⟩
+  rw [← Int.cast_pow]; rw [Int.cast_inj] at hxr
+  subst m
+  have : y != 0 := by rintro rfl; rw [zero_pow hnpos.ne'] at hm; exact hm rfl
+  rw [(Int.finiteMultiplicity_iff.2 ⟨by simp [hp.1.ne_one], this⟩).multiplicity_pow
+    (Nat.prime_iff_prime_int.1 hp.1), Nat.mul_mod_right] at hv
+  exact hv rfl
 
 中文:
 定理 irrational_nrt_of_n_not_dvd_multiplicity
@@ -213,7 +229,13 @@ theorem irrational_nrt_of_n_not_dvd_multiplicity
     simp [hxr, multiplicity_of_one_right (mt isUnit_iff_dvd_one.1
       (mt Int.natCast_dvd_natCast.1 hp.1.not_dvd_one))] at hv
   refine irrational_nrt_of_notint_nrt _ _ hxr ?_ hnpos
- 
+  rintro ⟨y, rfl⟩
+  rw [← Int.cast_pow]; rw [Int.cast_inj] at hxr
+  subst m
+  have : y != 0 := by rintro rfl; rw [zero_pow hnpos.ne'] at hm; exact hm rfl
+  rw [(Int.finiteMultiplicity_iff.2 ⟨by simp [hp.1.ne_one], this⟩).multiplicity_pow
+    (Nat.prime_iff_prime_int.1 hp.1), Nat.mul_mod_right] at hv
+  exact hv rfl
 
 Depends on / 依赖: Int.cast_inj, Int.cast_one, Int.cast_pow, Int.finiteMultiplicity_iff, Int.natCast_dvd_natCast, Nat.eq_zero_or_pos, cast_inj, cast_one, cast_pow, eq_comm, eq_zero_or_pos, finiteMultiplicity_iff, hnpos.ne, irrational_nrt_of_notint_nrt, isUnit_iff_dvd_one, multip, multiplicity_of_one_right, natCast_dvd_natCast, ne_one, not_dvd_one
 -/
@@ -1938,7 +1960,10 @@ theorem one_lt_natDegree_of_irrational_root
   rcases em (a = 0) with (rfl | ha)
   · obtain rfl : b = 0 := by simpa
     simp at p_nonzero
-  · rw [mul_com
+  · rw [mul_comm, ← eq_div_iff_mul_eq, eq_comm] at this
+    · refine hx ⟨-b / a, ?_⟩
+      assumption_mod_cast
+    · assumption_mod_cast
 
 中文:
 定理 one_lt_natDegree_of_irrational_root
@@ -1951,7 +1976,10 @@ theorem one_lt_natDegree_of_irrational_root
   rcases em (a = 0) with (rfl | ha)
   · obtain rfl : b = 0 := by simpa
     simp at p_nonzero
-  · rw [mul_com
+  · rw [mul_comm, ← eq_div_iff_mul_eq, eq_comm] at this
+    · refine hx ⟨-b / a, ?_⟩
+      assumption_mod_cast
+    · assumption_mod_cast
 
 Depends on / 依赖: assumption_mod_cast, eq_comm, eq_div_iff_mul_eq, eq_neg_iff_add_eq_zero, exists_eq_X_add_C_of_natDegree_le_one, mul_comm, not_lt, p_nonzero, x_is_root
 -/

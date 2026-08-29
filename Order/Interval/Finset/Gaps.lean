@@ -62,7 +62,11 @@ definition intervalGapsWithin
   fst := if hi : i = 0 then a else
 .2 F.orderEmbOfFin (α := α ×ₗ α) h (i.pred hi)
   /-- The second coordinate of `F.intervalGapsWithin h a b i` is `b` if `i = k`,
-  `x i` othe
+  `x i` otherwise. -/
+  snd := if hi : i = last k then b else
+.1 F.orderEmbOfFin (α := α ×ₗ α) h (i.castPred hi)
+
+@[simp]
 
 中文:
 定义 intervalGapsWithin
@@ -73,7 +77,11 @@ definition intervalGapsWithin
   fst := if hi : i = 0 then a else
 .2 F.orderEmbOfFin (α := α ×ₗ α) h (i.pred hi)
   /-- The second coordinate of `F.intervalGapsWithin h a b i` is `b` if `i = k`,
-  `x i` othe
+  `x i` otherwise. -/
+  snd := if hi : i = last k then b else
+.1 F.orderEmbOfFin (α := α ×ₗ α) h (i.castPred hi)
+
+@[simp]
 -/
 noncomputable def intervalGapsWithin (i : Fin (k + 1)) : α × α := (fst, snd) where
   /-- The first coordinate of `F.intervalGapsWithin h a b i` is `a` if `i = 0`,
@@ -410,7 +418,24 @@ theorem intervalGapsWithin_fst_le_snd
     by_cases hk : 0 = k
     · simp only [natCast_zero, intervalGapsWithin_zero_fst]
       simp [show 0 = last k by grind, hab]
-.left 
+.left · exact hFab (F.intervalGapsWithin_mapsTo h a b (x := 0) (by grind))
+  have hk : k - 1 + 1 = k := by omega
+  by_cases hj₂ : j = k
+  · simp only [hj₂, natCast_eq_last, intervalGapsWithin_last_snd, ge_iff_le]
+.right.right using 1 convert! hFab (F.intervalGapsWithin_mapsTo h a b (x := j - 1) (by grind))
+    simp [hj₂, hk]
+  rw [intervalGapsWithin_fst_of_lt_lt (hj₁ := by omega) (hj₂ := by omega)]; rw [intervalGapsWithin_snd_of_lt (hj := by omega)]
+  have hj₃ : (⟨j - 1, by omega⟩ : Fin k) != ⟨j, by omega⟩ := by grind
+  set G := F.orderEmbOfFin (α := α ×ₗ α) h
+  have := hF (by simp [G, F.orderEmbOfFin_mem (α := α ×ₗ α)])
+    (by simp [G, F.orderEmbOfFin_mem (α := α ×ₗ α)]) (G.injective.ne (hj₃))
+  contrapose! this
+  simp only [Set.not_disjoint_iff, Set.mem_Icc]
+  use (G ⟨j, by omega⟩).1
+  have hG : (G ⟨j - 1, by omega⟩).1 <= (G ⟨j, by omega⟩).1 :=
+.left Prod.Lex.le_iff'.mp (G.monotone (by simp [le_iff_val_le_val]))
+  have hFabi := hFab (z := G ⟨j, by omega⟩) (by simp [G, F.orderEmbOfFin_mem (α := α ×ₗ α)])
+  simp [hFabi, this.le, hG]
 
 中文:
 定理 intervalGapsWithin_fst_le_snd
@@ -423,7 +448,24 @@ theorem intervalGapsWithin_fst_le_snd
     by_cases hk : 0 = k
     · simp only [natCast_zero, intervalGapsWithin_zero_fst]
       simp [show 0 = last k by grind, hab]
-.left 
+.left · exact hFab (F.intervalGapsWithin_mapsTo h a b (x := 0) (by grind))
+  have hk : k - 1 + 1 = k := by omega
+  by_cases hj₂ : j = k
+  · simp only [hj₂, natCast_eq_last, intervalGapsWithin_last_snd, ge_iff_le]
+.right.right using 1 convert! hFab (F.intervalGapsWithin_mapsTo h a b (x := j - 1) (by grind))
+    simp [hj₂, hk]
+  rw [intervalGapsWithin_fst_of_lt_lt (hj₁ := by omega) (hj₂ := by omega)]; rw [intervalGapsWithin_snd_of_lt (hj := by omega)]
+  have hj₃ : (⟨j - 1, by omega⟩ : Fin k) != ⟨j, by omega⟩ := by grind
+  set G := F.orderEmbOfFin (α := α ×ₗ α) h
+  have := hF (by simp [G, F.orderEmbOfFin_mem (α := α ×ₗ α)])
+    (by simp [G, F.orderEmbOfFin_mem (α := α ×ₗ α)]) (G.injective.ne (hj₃))
+  contrapose! this
+  simp only [Set.not_disjoint_iff, Set.mem_Icc]
+  use (G ⟨j, by omega⟩).1
+  have hG : (G ⟨j - 1, by omega⟩).1 <= (G ⟨j, by omega⟩).1 :=
+.left Prod.Lex.le_iff'.mp (G.monotone (by simp [le_iff_val_le_val]))
+  have hFabi := hFab (z := G ⟨j, by omega⟩) (by simp [G, F.orderEmbOfFin_mem (α := α ×ₗ α)])
+  simp [hFabi, this.le, hG]
 
 Depends on / 依赖: F.intervalGapsWithin_mapsTo, cast_val_eq_self, convert, ge_iff_le, generalizing, intervalGapsWithin_last_snd, intervalGapsWithin_mapsTo, intervalGapsWithin_zero_fst, natCast_eq_last, natCast_zero, right.right
 -/
@@ -470,7 +512,12 @@ theorem intervalGapsWithin_pairwiseDisjoint_Ioc
   · exact (this hj' hj hjj'.symm (by omega)).symm
   rw [Function.onFun]; rw [Set.disjoint_iff_inter_eq_empty]
   suffices (F.intervalGapsWithin h a b j).2 <= (F.intervalGapsWithin h a b j').1 by grind
-  have h
+  have hj'₀ : j' - 1 + 1 = j' := by omega
+.right.left have := hFab (F.intervalGapsWithin_mapsTo h a b (x := j' - 1) (by grind))
+  simp only [Nat.succ_eq_add_one, hj'₀] at this
+  grw [← this]
+  rw [intervalGapsWithin_snd_of_lt (hj := by omega)]; rw [intervalGapsWithin_snd_of_lt (hj := by omega)]
+.left exact Prod.Lex.le_iff'.mp (F.orderEmbOfFin (α := α ×ₗ α) h |>.monotone (by grind))
 
 中文:
 定理 intervalGapsWithin_pairwiseDisjoint_Ioc
@@ -482,7 +529,12 @@ theorem intervalGapsWithin_pairwiseDisjoint_Ioc
   · exact (this hj' hj hjj'.symm (by omega)).symm
   rw [Function.onFun]; rw [Set.disjoint_iff_inter_eq_empty]
   suffices (F.intervalGapsWithin h a b j).2 <= (F.intervalGapsWithin h a b j').1 by grind
-  have h
+  have hj'₀ : j' - 1 + 1 = j' := by omega
+.right.left have := hFab (F.intervalGapsWithin_mapsTo h a b (x := j' - 1) (by grind))
+  simp only [Nat.succ_eq_add_one, hj'₀] at this
+  grw [← this]
+  rw [intervalGapsWithin_snd_of_lt (hj := by omega)]; rw [intervalGapsWithin_snd_of_lt (hj := by omega)]
+.left exact Prod.Lex.le_iff'.mp (F.orderEmbOfFin (α := α ×ₗ α) h |>.monotone (by grind))
 
 Depends on / 依赖: F.intervalGapsWithin, F.intervalGapsWithin_mapsTo, Function, Function.onFun, Nat.succ_eq_add_one, Set.disjoint_iff_inter_eq_empty, disjoint_iff_inter_eq_empty, generalizing, intervalGapsWithin, intervalGapsWithin_mapsTo, intervalGapsWithin_snd_of_lt, mem_Iio, right.left, succ_eq_add_one
 -/

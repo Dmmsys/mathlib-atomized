@@ -246,7 +246,9 @@ instance multiset
       have :=
         raise_lower (List.pairwise_cons.2 ⟨fun n _ => Nat.zero_le n,
         (s.map encode).pairwise_sort _⟩).sortedLE
-      simp [
+      simp [-Multiset.map_coe, this],
+     fun n => by
+      simp [-Multiset.map_coe, List.mergeSort_eq_self _ (raise_sorted _ _).pairwise, lower_raise]⟩
 
 中文:
 实例 multiset
@@ -259,7 +261,9 @@ instance multiset
       have :=
         raise_lower (List.pairwise_cons.2 ⟨fun n _ => Nat.zero_le n,
         (s.map encode).pairwise_sort _⟩).sortedLE
-      simp [
+      simp [-Multiset.map_coe, this],
+     fun n => by
+      simp [-Multiset.map_coe, List.mergeSort_eq_self _ (raise_sorted _ _).pairwise, lower_raise]⟩
 
 Depends on / 依赖: List.mergeSort_eq_self, List.pairwise_cons, Multiset, Multiset.map, Multiset.map_coe, Nat.zero_le, encode, lower_raise, map_coe, mergeSort_eq_self, pairwise, pairwise_cons, pairwise_sort, raise_lower, raise_sorted, s.map, sortedLE, zero_le
 -/

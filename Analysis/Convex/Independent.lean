@@ -185,7 +185,7 @@ theorem ConvexIndependent.range
   let fe : Set.range p ↪ ι := ⟨f, fun x₁ x₂ he => Subtype.ext (hf x₁ ▸ hf x₂ ▸ he ▸ rfl)⟩
   convert! hc.comp_embedding fe
   ext
-  rw [Embedding.coeFn_mk]; rw [comp_apply];
+  rw [Embedding.coeFn_mk]; rw [comp_apply]; rw [hf]
 
 中文:
 定理 ConvexIndependent.range
@@ -196,7 +196,7 @@ theorem ConvexIndependent.range
   let fe : Set.range p ↪ ι := ⟨f, fun x₁ x₂ he => Subtype.ext (hf x₁ ▸ hf x₂ ▸ he ▸ rfl)⟩
   convert! hc.comp_embedding fe
   ext
-  rw [Embedding.coeFn_mk]; rw [comp_apply];
+  rw [Embedding.coeFn_mk]; rw [comp_apply]; rw [hf]
 -/
 protected theorem ConvexIndependent.range {p : ι -> E} (hc : ConvexIndependent 𝕜 p) :
     ConvexIndependent 𝕜 ((↑) : Set.range p -> E) := by
@@ -291,7 +291,7 @@ theorem convexIndependent_iff_notMem_convexHull_sdiff
     exact hi
 
 @[deprecated (since := "2026-06-03")]
-alias convexIndependent_iff_notMem_convexHull_di
+alias convexIndependent_iff_notMem_convexHull_diff := convexIndependent_iff_notMem_convexHull_sdiff
 
 中文:
 定理 convexIndependent_iff_notMem_convexHull_sdiff
@@ -306,7 +306,7 @@ alias convexIndependent_iff_notMem_convexHull_di
     exact hi
 
 @[deprecated (since := "2026-06-03")]
-alias convexIndependent_iff_notMem_convexHull_di
+alias convexIndependent_iff_notMem_convexHull_diff := convexIndependent_iff_notMem_convexHull_sdiff
 
 Depends on / 依赖: Set.mem_singleton, Set.sdiff_singleton_eq_self, hc.mem_convexHull_iff, mem_convexHull_iff, mem_singleton, sdiff_singleton_eq_self
 -/
@@ -380,7 +380,9 @@ theorem convexIndependent_set_iff_notMem_convexHull_sdiff
     by_contra h
     exact hs _ hxs (convexHull_mono (Set.subset_sdiff_singleton ht h) hxt)
 
-@[deprecate
+@[deprecated (since := "2026-06-03")]
+alias convexIndependent_set_iff_notMem_convexHull_diff :=
+  convexIndependent_set_iff_notMem_convexHull_sdiff
 
 中文:
 定理 convexIndependent_set_iff_notMem_convexHull_sdiff
@@ -394,7 +396,9 @@ theorem convexIndependent_set_iff_notMem_convexHull_sdiff
     by_contra h
     exact hs _ hxs (convexHull_mono (Set.subset_sdiff_singleton ht h) hxt)
 
-@[deprecate
+@[deprecated (since := "2026-06-03")]
+alias convexIndependent_set_iff_notMem_convexHull_diff :=
+  convexIndependent_set_iff_notMem_convexHull_sdiff
 
 Depends on / 依赖: Set.mem_singleton, Set.sdiff_subset, Set.subset_sdiff_singleton, convexHull_mono, convexIndependent_set_iff_inter_convexHull_subset, mem_singleton, sdiff_subset, subset_sdiff_singleton
 -/
@@ -433,7 +437,16 @@ theorem convexIndependent_iff_finset
     rw [← mem_singleton]
     refine h {b} a ?_
     rw [hab]; rw [image_singleton]; rw [coe_singleton]; rw [convexHull_singleton]
-    exact Set.mem_singleton 
+    exact Set.mem_singleton _
+  rw [convexHull_eq_union_convexHull_finite_subsets] at hx
+  simp_rw [Set.mem_iUnion] at hx
+  obtain ⟨t, ht, hx⟩ := hx
+  rw [← hp.mem_set_image]
+  refine ht ?_
+  suffices x in t.preimage p hp.injOn by rwa [mem_preimage, ← mem_coe] at this
+  refine h _ x ?_
+  rwa [t.image_preimage p hp.injOn, filter_true_of_mem]
+  exact fun y hy => s.image_subset_range p (ht <| mem_coe.2 hy)
 
 中文:
 定理 convexIndependent_iff_finset
@@ -446,7 +459,16 @@ theorem convexIndependent_iff_finset
     rw [← mem_singleton]
     refine h {b} a ?_
     rw [hab]; rw [image_singleton]; rw [coe_singleton]; rw [convexHull_singleton]
-    exact Set.mem_singleton 
+    exact Set.mem_singleton _
+  rw [convexHull_eq_union_convexHull_finite_subsets] at hx
+  simp_rw [Set.mem_iUnion] at hx
+  obtain ⟨t, ht, hx⟩ := hx
+  rw [← hp.mem_set_image]
+  refine ht ?_
+  suffices x in t.preimage p hp.injOn by rwa [mem_preimage, ← mem_coe] at this
+  refine h _ x ?_
+  rwa [t.image_preimage p hp.injOn, filter_true_of_mem]
+  exact fun y hy => s.image_subset_range p (ht <| mem_coe.2 hy)
 
 Depends on / 依赖: Finset, Finset.coe_image, Injective, Set.mem_iUnion, Set.mem_singleton, coe_image, coe_singleton, convexHull_eq_union_convexHull_finite_subsets, convexHull_singleton, hp.injOn, hp.mem_set_image, image_singleton, mem_coe, mem_iUnion, mem_preimage, mem_set_image, mem_singleton, preimage, simp_rw, t.preimage
 -/

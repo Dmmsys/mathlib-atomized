@@ -313,7 +313,7 @@ lemma epow_right_mono
     · exact (h (Order.lt_one_iff.1 x_0)).rec
     · simp only [one_epow, le_refl]
     · simp only [epow_top x_2, le_top]
-  · exact pow_right_mono₀ (Order.one_le_iff_ne_zero.2 h) 
+  · exact pow_right_mono₀ (Order.one_le_iff_ne_zero.2 h) (Nat.cast_le.1 y_z)
 
 中文:
 引理 epow_right_mono
@@ -328,7 +328,7 @@ lemma epow_right_mono
     · exact (h (Order.lt_one_iff.1 x_0)).rec
     · simp only [one_epow, le_refl]
     · simp only [epow_top x_2, le_top]
-  · exact pow_right_mono₀ (Order.one_le_iff_ne_zero.2 h) 
+  · exact pow_right_mono₀ (Order.one_le_iff_ne_zero.2 h) (Nat.cast_le.1 y_z)
 
 Depends on / 依赖: Nat.cast_le, Order.lt_one_iff, Order.one_le_iff_ne_zero, cast_le, epow_top, le_refl, le_top, lt_one_iff, lt_trichotomy, one_epow, one_le_iff_ne_zero, top_le_iff
 -/
@@ -401,7 +401,7 @@ lemma epow_left_mono
     · rw [Order.lt_one_iff.1 x_0, zero_epow_top]; exact bot_le
     · rw [one_epow]; exact one_le_epow (Order.one_le_iff_ne_zero.1 x_z)
     · rw [epow_top (x_2.trans_le x_z)]; exact le_top
-  · simp only [ep
+  · simp only [epow_natCast, (pow_left_mono _) x_z]
 
 中文:
 引理 epow_left_mono
@@ -414,7 +414,7 @@ lemma epow_left_mono
     · rw [Order.lt_one_iff.1 x_0, zero_epow_top]; exact bot_le
     · rw [one_epow]; exact one_le_epow (Order.one_le_iff_ne_zero.1 x_z)
     · rw [epow_top (x_2.trans_le x_z)]; exact le_top
-  · simp only [ep
+  · simp only [epow_natCast, (pow_left_mono _) x_z]
 
 Depends on / 依赖: Order.lt_one_iff, Order.one_le_iff_ne_zero, bot_le, epow_natCast, epow_top, le_top, lt_one_iff, lt_trichotomy, one_epow, one_le_epow, one_le_iff_ne_zero, pow_left_mono, trans_le, x_2.trans_le, zero_epow_top
 -/
@@ -468,7 +468,9 @@ lemma epow_eq_one_iff
   rcases lt_trichotomy x 1 with x_0 | rfl | x_2
   · rw [Order.lt_one_iff.1 x_0, zero_epow y_0] at h; contradiction
   · rfl
-  · have := epow_right_mono x_2.ne_zero (Order.one_le_iff_ne_zero.2 y_0
+  · have := epow_right_mono x_2.ne_zero (Order.one_le_iff_ne_zero.2 y_0)
+    simp only [epow_one, h] at this
+    exact (not_lt_of_ge this x_2).rec
 
 中文:
 引理 epow_eq_one_iff
@@ -478,7 +480,9 @@ lemma epow_eq_one_iff
   rcases lt_trichotomy x 1 with x_0 | rfl | x_2
   · rw [Order.lt_one_iff.1 x_0, zero_epow y_0] at h; contradiction
   · rfl
-  · have := epow_right_mono x_2.ne_zero (Order.one_le_iff_ne_zero.2 y_0
+  · have := epow_right_mono x_2.ne_zero (Order.one_le_iff_ne_zero.2 y_0)
+    simp only [epow_one, h] at this
+    exact (not_lt_of_ge this x_2).rec
 
 Depends on / 依赖: Order.lt_one_iff, Order.one_le_iff_ne_zero, epow_one, epow_right_mono, lt_one_iff, lt_trichotomy, ne_zero, not_lt_of_ge, one_le_iff_ne_zero, or_iff_not_imp_right, x_2.ne_zero, zero_epow
 -/
@@ -504,7 +508,14 @@ lemma epow_add
     · simp only [zero_add, epow_zero, one_mul]
     · rw [zero_epow y_0.ne.symm, zero_mul]
       exact zero_epow (add_pos_of_pos_of_nonneg y_0 bot_le).ne.symm
-  · simp only [o
+  · simp only [one_epow, mul_one]
+  · induction y
+    · rw [top_add, epow_top x_2, top_mul]
+      exact (epow_pos x_2.ne_zero).ne'
+    induction z
+    · rw [add_top, epow_top x_2, mul_top]
+      exact (epow_pos x_2.ne_zero).ne'
+    simp only [← Nat.cast_add, epow_natCast, pow_add x]
 
 中文:
 引理 epow_add
@@ -516,7 +527,14 @@ lemma epow_add
     · simp only [zero_add, epow_zero, one_mul]
     · rw [zero_epow y_0.ne.symm, zero_mul]
       exact zero_epow (add_pos_of_pos_of_nonneg y_0 bot_le).ne.symm
-  · simp only [o
+  · simp only [one_epow, mul_one]
+  · induction y
+    · rw [top_add, epow_top x_2, top_mul]
+      exact (epow_pos x_2.ne_zero).ne'
+    induction z
+    · rw [add_top, epow_top x_2, mul_top]
+      exact (epow_pos x_2.ne_zero).ne'
+    simp only [← Nat.cast_add, epow_natCast, pow_add x]
 
 Depends on / 依赖: Nat.cast_add, Order.lt_one_iff, add_pos_of_pos_of_nonneg, add_top, bot_le, cast_add, epow_natCas, epow_pos, epow_top, epow_zero, eq_zero_or_pos, lt_one_iff, lt_trichotomy, mul_one, mul_top, ne.symm, ne_zero, one_epow, one_mul, top_add
 -/
@@ -549,7 +567,10 @@ lemma mul_epow
     · simp only [one_mul, one_epow]
     · rcases lt_trichotomy y 1 with y_0 | rfl | y_2
       · simp only [Order.lt_one_iff.1 y_0, mul_zero, zero_epow_top]
-      · sim
+      · simp
+      · rw [epow_top x_2, epow_top y_2, mul_top top_ne_zero]
+        exact epow_top (one_lt_mul x_2.le y_2)
+  · simp only [epow_natCast, mul_pow x y]
 
 中文:
 引理 mul_epow
@@ -561,7 +582,10 @@ lemma mul_epow
     · simp only [one_mul, one_epow]
     · rcases lt_trichotomy y 1 with y_0 | rfl | y_2
       · simp only [Order.lt_one_iff.1 y_0, mul_zero, zero_epow_top]
-      · sim
+      · simp
+      · rw [epow_top x_2, epow_top y_2, mul_top top_ne_zero]
+        exact epow_top (one_lt_mul x_2.le y_2)
+  · simp only [epow_natCast, mul_pow x y]
 
 Depends on / 依赖: Order.lt_one_iff, epow_natCast, epow_top, lt_one_iff, lt_trichotomy, mul_pow, mul_top, mul_zero, one_epow, one_lt_mul, one_mul, top_ne_zero, x_2.le, zero_epow_top, zero_mul
 -/
@@ -592,7 +616,12 @@ lemma epow_mul
   · rw [Order.lt_one_iff.1 x_0, zero_epow y_0, zero_epow z_0, zero_epow (mul_ne_zero y_0 z_0)]
   · simp only [one_epow]
   · induction y
-    · rw 
+    · rw [top_mul z_0, epow_top x_2, top_epow z_0]
+    induction z
+    · rw [mul_top y_0, epow_top x_2, epow_top]
+      apply (epow_right_mono x_2.ne_zero (Order.one_le_iff_ne_zero.2 y_0)).trans_lt'
+      simp [x_2]
+    · simp only [← Nat.cast_mul, epow_natCast, pow_mul x]
 
 中文:
 引理 epow_mul
@@ -606,7 +635,12 @@ lemma epow_mul
   · rw [Order.lt_one_iff.1 x_0, zero_epow y_0, zero_epow z_0, zero_epow (mul_ne_zero y_0 z_0)]
   · simp only [one_epow]
   · induction y
-    · rw 
+    · rw [top_mul z_0, epow_top x_2, top_epow z_0]
+    induction z
+    · rw [mul_top y_0, epow_top x_2, epow_top]
+      apply (epow_right_mono x_2.ne_zero (Order.one_le_iff_ne_zero.2 y_0)).trans_lt'
+      simp [x_2]
+    · simp only [← Nat.cast_mul, epow_natCast, pow_mul x]
 
 Depends on / 依赖: Nat.cast_mul, Order.lt_one_iff, Order.one_le_iff_ne_zero, cast_mul, epow_right_mono, epow_top, eq_or_ne, lt_one_iff, lt_trichotomy, mul_ne_zero, mul_top, ne_zero, one_epow, one_le_iff_ne_zero, top_epow, top_mul, trans_lt, x_2.ne_zero, zero_epow
 -/

@@ -1039,7 +1039,12 @@ definition ringHomEndFinsupp
       (fun _ _ h h' => by rw [smul_add, map_add, h, h', map_add, smul_add]) fun i m => by
         ext j
         change f (Finsupp.lapply j ∘ₗ g ∘ₗ Finsupp.lsingle i • m) = _
-       
+        rw [map_smul]
+        simp }
+  map_one' := by ext; simp
+  map_mul' _ _ := by ext; simp
+  map_zero' := by ext; simp
+  map_add' _ _ := by ext; simp
 
 中文:
 定义 ringHomEndFinsupp
@@ -1050,7 +1055,12 @@ definition ringHomEndFinsupp
       (fun _ _ h h' => by rw [smul_add, map_add, h, h', map_add, smul_add]) fun i m => by
         ext j
         change f (Finsupp.lapply j ∘ₗ g ∘ₗ Finsupp.lsingle i • m) = _
-       
+        rw [map_smul]
+        simp }
+  map_one' := by ext; simp
+  map_mul' _ _ := by ext; simp
+  map_zero' := by ext; simp
+  map_add' _ _ := by ext; simp
 -/
 @[simps] noncomputable def ringHomEndFinsupp :
     End (End R M) M ->+* End (End R (ι ->₀ M)) (ι ->₀ M) where
@@ -1085,7 +1095,9 @@ definition ringEquivEndFinsupp
   left_inv _ := by ext; simp
   right_inv f := by
     ext x j
-    chan
+    change f (Finsupp.lsingle (R := R) (M := M) i ∘ₗ Finsupp.lapply j • x) i = _
+    rw [map_smul]
+    simp
 
 中文:
 定义 ringEquivEndFinsupp
@@ -1099,7 +1111,9 @@ definition ringEquivEndFinsupp
   left_inv _ := by ext; simp
   right_inv f := by
     ext x j
-    chan
+    change f (Finsupp.lsingle (R := R) (M := M) i ∘ₗ Finsupp.lapply j • x) i = _
+    rw [map_smul]
+    simp
 -/
 @[simps!] noncomputable def ringEquivEndFinsupp (i : ι) :
     End (End R M) M ≃+* End (End R (ι ->₀ M)) (ι ->₀ M) where

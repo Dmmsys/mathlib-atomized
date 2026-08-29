@@ -65,7 +65,14 @@ theorem mem_nonZeroDivisorsRight_of_constantCoeff
   intro e he
   rw [map_zero]; rw [← mul_right_mem_nonZeroDivisorsRight_eq_zero_iff hφ]; rw [← map_zero (f := coeff e)]; rw [← hx]
   convert! (coeff_mul e x φ).symm
-  rw [Finset.sum_eq_single (e]; rw [0)]; rw [coeff_zero_eq_constan
+  rw [Finset.sum_eq_single (e]; rw [0)]; rw [coeff_zero_eq_constantCoeff]
+  · rintro ⟨u, _⟩ huv _
+    suffices u < e by simp only [he u this, zero_mul, map_zero]
+    apply lt_of_le_of_ne
+    · simp only [← mem_antidiagonal.mp huv, le_add_iff_nonneg_right, zero_le]
+    · rintro rfl
+      simp_all
+  · simp
 
 中文:
 定理 mem_nonZeroDivisorsRight_of_constantCoeff
@@ -78,7 +85,14 @@ theorem mem_nonZeroDivisorsRight_of_constantCoeff
   intro e he
   rw [map_zero]; rw [← mul_right_mem_nonZeroDivisorsRight_eq_zero_iff hφ]; rw [← map_zero (f := coeff e)]; rw [← hx]
   convert! (coeff_mul e x φ).symm
-  rw [Finset.sum_eq_single (e]; rw [0)]; rw [coeff_zero_eq_constan
+  rw [Finset.sum_eq_single (e]; rw [0)]; rw [coeff_zero_eq_constantCoeff]
+  · rintro ⟨u, _⟩ huv _
+    suffices u < e by simp only [he u this, zero_mul, map_zero]
+    apply lt_of_le_of_ne
+    · simp only [← mem_antidiagonal.mp huv, le_add_iff_nonneg_right, zero_le]
+    · rintro rfl
+      simp_all
+  · simp
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, WellFoundedLT, WellFoundedLT.induction, classical, coeff_mul, coeff_zero_eq_constantCoeff, convert, le_add_iff_nonneg_right, lt_of_le_of_ne, map_zero, mem_antidiagonal, mem_antidiagonal.mp, mul_right_mem_nonZeroDivisorsRight_eq_zero_iff, sum_eq_single, zero_le, zero_mul
 -/
@@ -116,7 +130,15 @@ theorem mem_nonZeroDivisorsLeft_of_constantCoeff
   intro e he
   rw [map_zero]; rw [← mul_left_mem_nonZeroDivisorsLeft_eq_zero_iff hφ]; rw [← map_zero (f := coeff e)]; rw [← hx]
   convert! (coeff_mul e φ x).symm
-  rw [Finset.sum_eq_single (0]; rw [e)]; rw [coeff_zero_eq_constantC
+  rw [Finset.sum_eq_single (0]; rw [e)]; rw [coeff_zero_eq_constantCoeff]
+  · rintro ⟨_, u⟩ huv _
+    suffices u < e by simp only [he u this, mul_zero, map_zero]
+    apply lt_of_le_of_ne
+    · simp only [← mem_antidiagonal.mp huv, le_add_iff_nonneg_left, zero_le]
+    · rintro rfl
+      simp_all
+  · simp only [mem_antidiagonal, zero_add, not_true_eq_false, coeff_zero_eq_constantCoeff,
+      false_implies]
 
 中文:
 定理 mem_nonZeroDivisorsLeft_of_constantCoeff
@@ -129,7 +151,15 @@ theorem mem_nonZeroDivisorsLeft_of_constantCoeff
   intro e he
   rw [map_zero]; rw [← mul_left_mem_nonZeroDivisorsLeft_eq_zero_iff hφ]; rw [← map_zero (f := coeff e)]; rw [← hx]
   convert! (coeff_mul e φ x).symm
-  rw [Finset.sum_eq_single (0]; rw [e)]; rw [coeff_zero_eq_constantC
+  rw [Finset.sum_eq_single (0]; rw [e)]; rw [coeff_zero_eq_constantCoeff]
+  · rintro ⟨_, u⟩ huv _
+    suffices u < e by simp only [he u this, mul_zero, map_zero]
+    apply lt_of_le_of_ne
+    · simp only [← mem_antidiagonal.mp huv, le_add_iff_nonneg_left, zero_le]
+    · rintro rfl
+      simp_all
+  · simp only [mem_antidiagonal, zero_add, not_true_eq_false, coeff_zero_eq_constantCoeff,
+      false_implies]
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, WellFoundedLT, WellFoundedLT.induction, classical, coeff_mul, coeff_zero_eq_constantCoeff, convert, le_add_iff_nonneg_left, lt_of_le_of_ne, map_zero, mem_antidiagonal, mem_antidiagonal.mp, mul_left_mem_nonZeroDivisorsLeft_eq_zero_iff, mul_zero, sum_eq_single, zero_le
 -/
@@ -187,7 +217,8 @@ lemma monomial_mem_nonzeroDivisorsLeft
   · intro H p hrp
     ext i
     have := congr(coeff (i + n) $hrp)
-    rw [coeff_monomial_mul]; rw [if_pos le_add_self]; rw [add_tsub_ca
+    rw [coeff_monomial_mul]; rw [if_pos le_add_self]; rw [add_tsub_cancel_right] at this
+    simpa using H _ this
 
 中文:
 引理 monomial_mem_nonzeroDivisorsLeft
@@ -200,7 +231,8 @@ lemma monomial_mem_nonzeroDivisorsLeft
   · intro H p hrp
     ext i
     have := congr(coeff (i + n) $hrp)
-    rw [coeff_monomial_mul]; rw [if_pos le_add_self]; rw [add_tsub_ca
+    rw [coeff_monomial_mul]; rw [if_pos le_add_self]; rw [add_tsub_cancel_right] at this
+    simpa using H _ this
 
 Depends on / 依赖: add_tsub_cancel_right, coeff_monomial_mul, if_pos, le_add_self, monomial_mul_monomial, monomial_zero_eq_C
 -/
@@ -231,7 +263,8 @@ lemma monomial_mem_nonzeroDivisorsRight
   · intro H p hrp
     ext i
     have := congr(coeff (i + n) $hrp)
-    rw [coeff_mul_monomial]; rw [if_pos le_add_self]; rw [add_tsub_ca
+    rw [coeff_mul_monomial]; rw [if_pos le_add_self]; rw [add_tsub_cancel_right] at this
+    simpa using H _ this
 
 中文:
 引理 monomial_mem_nonzeroDivisorsRight
@@ -244,7 +277,8 @@ lemma monomial_mem_nonzeroDivisorsRight
   · intro H p hrp
     ext i
     have := congr(coeff (i + n) $hrp)
-    rw [coeff_mul_monomial]; rw [if_pos le_add_self]; rw [add_tsub_ca
+    rw [coeff_mul_monomial]; rw [if_pos le_add_self]; rw [add_tsub_cancel_right] at this
+    simpa using H _ this
 
 Depends on / 依赖: add_tsub_cancel_right, coeff_mul_monomial, if_pos, le_add_self, monomial_mul_monomial, monomial_zero_eq_C
 -/
@@ -344,7 +378,27 @@ theorem weightedOrder_mul
     · let p := (f.weightedOrder w).toNat
       have hp : p = f.weightedOrder w := by
         simpa only [p, ENat.natCast_toNat_eq_self, ← lt_top_iff_ne_top]
-      let q := 
+      let q := (g.weightedOrder w).toNat
+      have hq : q = g.weightedOrder w := by
+        simpa only [q, ENat.natCast_toNat_eq_self, ← lt_top_iff_ne_top]
+      have : f.weightedHomogeneousComponent w p * g.weightedHomogeneousComponent w q != 0 := by
+        simp only [ne_eq, mul_eq_zero]
+        intro H
+        rcases H with H | H <;>
+        · refine weightedHomogeneousComponent_of_weightedOrder ?_ H
+          simp only [ENat.natCast_toNat_eq_self, ne_eq, weightedOrder_eq_top_iff, p, q]
+          rw [← ne_eq]; rw [ne_zero_iff_weightedOrder_finite w]
+          exact ENat.natCast_toNat (ne_top_of_lt (by simpa))
+      rw [← weightedHomogeneousComponent_mul_of_le_weightedOrder
+          (le_of_eq hp) (le_of_eq hq)] at this
+      rw [← hp]; rw [← hq]; rw [← Nat.cast_add]; rw [← not_lt]
+      intro H
+      apply this
+      apply weightedHomogeneousComponent_of_lt_weightedOrder_eq_zero H
+    · rw [not_lt_top_iff] at hg
+      simp [hg]
+  · rw [not_lt_top_iff] at hf
+    simp [hf]
 
 中文:
 定理 weightedOrder_mul
@@ -356,7 +410,27 @@ theorem weightedOrder_mul
     · let p := (f.weightedOrder w).toNat
       have hp : p = f.weightedOrder w := by
         simpa only [p, ENat.natCast_toNat_eq_self, ← lt_top_iff_ne_top]
-      let q := 
+      let q := (g.weightedOrder w).toNat
+      have hq : q = g.weightedOrder w := by
+        simpa only [q, ENat.natCast_toNat_eq_self, ← lt_top_iff_ne_top]
+      have : f.weightedHomogeneousComponent w p * g.weightedHomogeneousComponent w q != 0 := by
+        simp only [ne_eq, mul_eq_zero]
+        intro H
+        rcases H with H | H <;>
+        · refine weightedHomogeneousComponent_of_weightedOrder ?_ H
+          simp only [ENat.natCast_toNat_eq_self, ne_eq, weightedOrder_eq_top_iff, p, q]
+          rw [← ne_eq]; rw [ne_zero_iff_weightedOrder_finite w]
+          exact ENat.natCast_toNat (ne_top_of_lt (by simpa))
+      rw [← weightedHomogeneousComponent_mul_of_le_weightedOrder
+          (le_of_eq hp) (le_of_eq hq)] at this
+      rw [← hp]; rw [← hq]; rw [← Nat.cast_add]; rw [← not_lt]
+      intro H
+      apply this
+      apply weightedHomogeneousComponent_of_lt_weightedOrder_eq_zero H
+    · rw [not_lt_top_iff] at hg
+      simp [hg]
+  · rw [not_lt_top_iff] at hf
+    simp [hf]
 
 Depends on / 依赖: ENat.natCast_toNat_eq_self, f.weightedHomogeneousComponent, f.weightedOrder, g.weightedHomogeneousComponent, g.weightedOrder, le_antisymm, le_weightedOrder_mul, lt_top_iff_ne_top, natCast_toNat_eq_self, weightedHomogeneousComponent, weightedOrder
 -/

@@ -123,7 +123,8 @@ definition adjointDomain
     exact continuous_zero
   add_mem' hx hy := by rw [Set.mem_ofPred_eq, LinearMap.map_add] at *; exact hx.add hy
   smul_mem' a x hx := by
-    rw [Set.mem_ofPr
+    rw [Set.mem_ofPred_eq]; rw [LinearMap.map_smulₛₗ] at *
+    exact hx.const_smul (conj a)
 
 中文:
 定义 adjointDomain
@@ -134,7 +135,8 @@ definition adjointDomain
     exact continuous_zero
   add_mem' hx hy := by rw [Set.mem_ofPred_eq, LinearMap.map_add] at *; exact hx.add hy
   smul_mem' a x hx := by
-    rw [Set.mem_ofPr
+    rw [Set.mem_ofPred_eq]; rw [LinearMap.map_smulₛₗ] at *
+    exact hx.const_smul (conj a)
 
 Depends on / 依赖: Continuous, T.toFun
 -/
@@ -242,7 +244,9 @@ definition adjointAux
       simp [InnerProductSpace.toDual_symm_apply, inner_add_left,
         adjointDomainMkCLMExtend_apply hT _ ⟨z, zin⟩, inner_add_left]
   map_smul' _ _ :=
-    hT.eq_of_inner_
+    hT.eq_of_inner_left 𝕜 fun z zin => by
+      simp [inner_smul_left, RingHom.id_apply,
+        InnerProductSpace.toDual_symm_apply, adjointDomainMkCLMExtend_apply hT _ ⟨z, zin⟩]
 
 中文:
 定义 adjointAux
@@ -253,7 +257,9 @@ definition adjointAux
       simp [InnerProductSpace.toDual_symm_apply, inner_add_left,
         adjointDomainMkCLMExtend_apply hT _ ⟨z, zin⟩, inner_add_left]
   map_smul' _ _ :=
-    hT.eq_of_inner_
+    hT.eq_of_inner_left 𝕜 fun z zin => by
+      simp [inner_smul_left, RingHom.id_apply,
+        InnerProductSpace.toDual_symm_apply, adjointDomainMkCLMExtend_apply hT _ ⟨z, zin⟩]
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.toDual, adjointDomainMkCLMExtend, toDual
 -/
@@ -517,7 +523,7 @@ theorem IsFormalAdjoint.le_adjoint
     mem_adjoint_domain_of_exists _
       ⟨S ⟨x, hx⟩, h.symm ⟨x, hx⟩⟩,-- Equality on `S.domain` follows from equality
   -- `⟪v, S x⟫ = ⟪v, T.adjoint y⟫` for all `v : T.domain`:
-  fun _ _ hxy => (adjoint_apply_eq hT _ fun _ => 
+  fun _ _ hxy => (adjoint_apply_eq hT _ fun _ => by rw [h.symm, hxy]).symm⟩
 
 中文:
 定理 IsFormalAdjoint.le_adjoint
@@ -528,7 +534,7 @@ theorem IsFormalAdjoint.le_adjoint
     mem_adjoint_domain_of_exists _
       ⟨S ⟨x, hx⟩, h.symm ⟨x, hx⟩⟩,-- Equality on `S.domain` follows from equality
   -- `⟪v, S x⟫ = ⟪v, T.adjoint y⟫` for all `v : T.domain`:
-  fun _ _ hxy => (adjoint_apply_eq hT _ fun _ => 
+  fun _ _ hxy => (adjoint_apply_eq hT _ fun _ => by rw [h.symm, hxy]).symm⟩
 
 Depends on / 依赖: Equality, S.domain, T.adjoint.domain, Trivially, adjoint, domain, equality, follows, h.symm, mem_adjoint_domain_of_exists
 -/
@@ -560,7 +566,7 @@ theorem toPMap_adjoint_eq_adjoint_toPMap_of_dense
       LinearPMap.mem_adjoint_domain_iff]
     exact ((innerSL 𝕜 x).comp <| A.comp <| Submodule.subtypeL _).cont
   refine LinearPMap.adjoint_apply_eq hp _ fun v => ?_
-  simp only [adjoint_inner_left, LinearMap.toPMap
+  simp only [adjoint_inner_left, LinearMap.toPMap_apply, coe_coe]
 
 中文:
 定理 toPMap_adjoint_eq_adjoint_toPMap_of_dense
@@ -571,7 +577,7 @@ theorem toPMap_adjoint_eq_adjoint_toPMap_of_dense
       LinearPMap.mem_adjoint_domain_iff]
     exact ((innerSL 𝕜 x).comp <| A.comp <| Submodule.subtypeL _).cont
   refine LinearPMap.adjoint_apply_eq hp _ fun v => ?_
-  simp only [adjoint_inner_left, LinearMap.toPMap
+  simp only [adjoint_inner_left, LinearMap.toPMap_apply, coe_coe]
 
 Depends on / 依赖: A.comp, LinearMap, LinearMap.toPMap_apply, LinearMap.toPMap_domain, LinearPMap, LinearPMap.adjoint_apply_eq, LinearPMap.mem_adjoint_domain_iff, Submodule, Submodule.mem_top, Submodule.subtypeL, adjoint_apply_eq, adjoint_inner_left, coe_coe, iff_true, innerSL, mem_adjoint_domain_iff, mem_top, subtypeL, toPMap_apply, toPMap_domain
 -/
@@ -731,7 +737,16 @@ theorem mem_adjoint_iff
     LinearEquiv.trans_apply, LinearEquiv.skewSwap_symm_apply, coe_symm_linearEquiv, Prod.exists,
     prod_inner_apply, ofLp_fst, ofLp_snd, forall_exists_index, and_imp, coe_linearEquiv]
   constructor
-  · rintro ⟨y, h1, 
+  · rintro ⟨y, h1, h2⟩ a b hab
+    rw [← h2]; rw [WithLp.ofLp_fst]; rw [WithLp.ofLp_snd]
+    specialize h1 (toLp 2 (b, -a)) a b hab rfl
+    dsimp at h1
+    simp only [inner_neg_left, ← sub_eq_add_neg] at h1
+    exact h1
+  · intro h
+    refine ⟨toLp 2 x, ?_, rfl⟩
+    intro u a b hab hu
+    simp [← hu, ← sub_eq_add_neg, h a b hab]
 
 中文:
 定理 mem_adjoint_iff
@@ -741,7 +756,16 @@ theorem mem_adjoint_iff
     LinearEquiv.trans_apply, LinearEquiv.skewSwap_symm_apply, coe_symm_linearEquiv, Prod.exists,
     prod_inner_apply, ofLp_fst, ofLp_snd, forall_exists_index, and_imp, coe_linearEquiv]
   constructor
-  · rintro ⟨y, h1, 
+  · rintro ⟨y, h1, h2⟩ a b hab
+    rw [← h2]; rw [WithLp.ofLp_fst]; rw [WithLp.ofLp_snd]
+    specialize h1 (toLp 2 (b, -a)) a b hab rfl
+    dsimp at h1
+    simp only [inner_neg_left, ← sub_eq_add_neg] at h1
+    exact h1
+  · intro h
+    refine ⟨toLp 2 x, ?_, rfl⟩
+    intro u a b hab hu
+    simp [← hu, ← sub_eq_add_neg, h a b hab]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.skewSwap_symm_apply, LinearEquiv.trans_apply, Prod.exists, Submodule, Submodule.adjoint, WithLp, WithLp.ofLp_fst, WithLp.ofLp_snd, adjoint, and_imp, coe_coe, coe_linearEquiv, coe_symm_linearEquiv, forall_exists_index, inner_neg_left, mem_map, mem_orthogonal, ofLp_fst
 -/
@@ -778,7 +802,19 @@ theorem _root_.LinearPMap.adjoint_graph_eq_graph_adjoint
   constructor
   · rintro ⟨hx, h⟩ a ha
     rw [← h]; rw [(adjoint_isFormalAdjoint hT).symm ⟨a]; rw [ha⟩ ⟨x.fst]; rw [hx⟩]; rw [sub_self]
-  · intro
+  · intro h
+    simp_rw [sub_eq_zero] at h
+    have hx : x.fst in T†.domain := by
+      apply mem_adjoint_domain_of_exists
+      use x.snd
+      rintro ⟨a, ha⟩
+      rw [← inner_conj_symm]; rw [← h a ha]; rw [inner_conj_symm]
+    use hx
+    apply hT.eq_of_inner_right 𝕜
+    rintro a ha
+    rw [← h a ha]; rw [(adjoint_isFormalAdjoint hT).symm ⟨a]; rw [ha⟩ ⟨x.fst]; rw [hx⟩]
+
+@[simp]
 
 中文:
 定理 _root_.LinearP映射.adjoint_graph_eq_graph_adjoint
@@ -790,7 +826,19 @@ theorem _root_.LinearPMap.adjoint_graph_eq_graph_adjoint
   constructor
   · rintro ⟨hx, h⟩ a ha
     rw [← h]; rw [(adjoint_isFormalAdjoint hT).symm ⟨a]; rw [ha⟩ ⟨x.fst]; rw [hx⟩]; rw [sub_self]
-  · intro
+  · intro h
+    simp_rw [sub_eq_zero] at h
+    have hx : x.fst in T†.domain := by
+      apply mem_adjoint_domain_of_exists
+      use x.snd
+      rintro ⟨a, ha⟩
+      rw [← inner_conj_symm]; rw [← h a ha]; rw [inner_conj_symm]
+    use hx
+    apply hT.eq_of_inner_right 𝕜
+    rintro a ha
+    rw [← h a ha]; rw [(adjoint_isFormalAdjoint hT).symm ⟨a]; rw [ha⟩ ⟨x.fst]; rw [hx⟩]
+
+@[simp]
 
 Depends on / 依赖: Subtype, Subtype.exists, adjoint_isFormalAdjoint, domain, eq_of_inner_right, exists_and_left, exists_eq_left, forall_apply_eq_imp_iff, forall_exists_index, hT.eq_of_inner_right, inner_conj_symm, mem_adjoint_domain_of_exists, mem_adjoint_iff, mem_graph_iff, simp_rw, sub_eq_zero, sub_self, x.fst, x.snd
 -/
@@ -827,7 +875,9 @@ theorem _root_.LinearPMap.graph_adjoint_toLinearPMap_eq_adjoint
   apply Submodule.toLinearPMap_graph_eq
   intro x hx hx'
   simp only [mem_adjoint_iff, mem_graph_iff, Subtype.exists, exists_and_left, exists_eq_left, hx',
-    inner_zero_right, zero_sub, neg_eq_zero, forall_exists_index, forall_appl
+    inner_zero_right, zero_sub, neg_eq_zero, forall_exists_index, forall_apply_eq_imp_iff] at hx
+  apply hT.eq_zero_of_inner_right 𝕜
+  exact fun a ha => hx a ha
 
 中文:
 定理 _root_.LinearP映射.graph_adjoint_toLinearPMap_eq_adjoint
@@ -838,7 +888,9 @@ theorem _root_.LinearPMap.graph_adjoint_toLinearPMap_eq_adjoint
   apply Submodule.toLinearPMap_graph_eq
   intro x hx hx'
   simp only [mem_adjoint_iff, mem_graph_iff, Subtype.exists, exists_and_left, exists_eq_left, hx',
-    inner_zero_right, zero_sub, neg_eq_zero, forall_exists_index, forall_appl
+    inner_zero_right, zero_sub, neg_eq_zero, forall_exists_index, forall_apply_eq_imp_iff] at hx
+  apply hT.eq_zero_of_inner_right 𝕜
+  exact fun a ha => hx a ha
 
 Depends on / 依赖: Submodule, Submodule.toLinearPMap_graph_eq, Subtype, Subtype.exists, adjoint_graph_eq_graph_adjoint, eq_of_eq_graph, eq_zero_of_inner_right, exists_and_left, exists_eq_left, forall_apply_eq_imp_iff, forall_exists_index, hT.eq_zero_of_inner_right, inner_zero_right, mem_adjoint_iff, mem_graph_iff, neg_eq_zero, toLinearPMap_graph_eq, zero_sub
 -/

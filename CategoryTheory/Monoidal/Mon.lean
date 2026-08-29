@@ -172,7 +172,15 @@ definition ofIso
       hom_inv_whiskerRight_assoc]
     simp [← tensorHom_def_assoc, leftUnitor_inv_comp_tensorHom_assoc]
   mul_one := by
-    r
+    rw [← cancel_epi (ρ_ X).inv]
+    simp only [MonoidalCategory.whiskerLeft_comp, tensorHom_def', Category.assoc,
+      whiskerLeft_hom_inv_assoc, Iso.inv_hom_id]
+    simp [← tensorHom_def'_assoc, rightUnitor_inv_comp_tensorHom_assoc]
+  mul_assoc := by simpa [← id_tensorHom, ← tensorHom_id,
+      -associator_conjugation, associator_naturality_assoc] using
+      congr(((e.inv otimesₘ e.inv) otimesₘ e.inv) ≫ $(MonObj.mul_assoc M) ≫ e.hom)
+
+@[to_additive (attr := simps)]
 
 中文:
 定义 ofIso
@@ -185,7 +193,15 @@ definition ofIso
       hom_inv_whiskerRight_assoc]
     simp [← tensorHom_def_assoc, leftUnitor_inv_comp_tensorHom_assoc]
   mul_one := by
-    r
+    rw [← cancel_epi (ρ_ X).inv]
+    simp only [MonoidalCategory.whiskerLeft_comp, tensorHom_def', Category.assoc,
+      whiskerLeft_hom_inv_assoc, Iso.inv_hom_id]
+    simp [← tensorHom_def'_assoc, rightUnitor_inv_comp_tensorHom_assoc]
+  mul_assoc := by simpa [← id_tensorHom, ← tensorHom_id,
+      -associator_conjugation, associator_naturality_assoc] using
+      congr(((e.inv otimesₘ e.inv) otimesₘ e.inv) ≫ $(MonObj.mul_assoc M) ≫ e.hom)
+
+@[to_additive (attr := simps)]
 
 Depends on / 依赖: e.hom
 -/
@@ -858,7 +874,10 @@ lemma one_associator
   slice_lhs 1 3 => rw [← Category.id_comp (η : 𝟙_ C ⟶ P), ← tensorHom_comp_tensorHom]
   slice_lhs 2 3 => rw [associator_naturality]
   slice_rhs 1 2 => rw [← Category.id_comp η, ← tensorHom_comp_tensorHom]
-  slice_lhs 1 2 => rw [tensorHom_id, ←
+  slice_lhs 1 2 => rw [tensorHom_id, ← leftUnitor_tensor_inv]
+  simp
+
+@[to_additive]
 
 中文:
 引理 one_associator
@@ -868,7 +887,10 @@ lemma one_associator
   slice_lhs 1 3 => rw [← Category.id_comp (η : 𝟙_ C ⟶ P), ← tensorHom_comp_tensorHom]
   slice_lhs 2 3 => rw [associator_naturality]
   slice_rhs 1 2 => rw [← Category.id_comp η, ← tensorHom_comp_tensorHom]
-  slice_lhs 1 2 => rw [tensorHom_id, ←
+  slice_lhs 1 2 => rw [tensorHom_id, ← leftUnitor_tensor_inv]
+  simp
+
+@[to_additive]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, Iso.cancel_iso_inv_left, associator_naturality, cancel_iso_inv_left, id_comp, leftUnitor_tensor_inv, slice_lhs, slice_rhs, tensorHom_comp_tensorHom, tensorHom_id
 -/
@@ -1025,7 +1047,10 @@ lemma Mon_tensor_mul_assoc
   slice_lhs 3 4 => rw [tensorHom_comp_tensorHom, mul_assoc, mul_assoc, ← tensorHom_comp_tensorHom,
     ← tensorHom_comp_tensorHom]
   slice_lhs 1 3 => rw [tensor_associativity]
-  slice_lhs 3 
+  slice_lhs 3 4 => rw [← tensorμ_natural_right]
+  simp
+
+@[to_additive]
 
 中文:
 引理 Mon_tensor_mul_assoc
@@ -1036,7 +1061,10 @@ lemma Mon_tensor_mul_assoc
   slice_lhs 3 4 => rw [tensorHom_comp_tensorHom, mul_assoc, mul_assoc, ← tensorHom_comp_tensorHom,
     ← tensorHom_comp_tensorHom]
   slice_lhs 1 3 => rw [tensor_associativity]
-  slice_lhs 3 
+  slice_lhs 3 4 => rw [← tensorμ_natural_right]
+  simp
+
+@[to_additive]
 
 Depends on / 依赖: comp_whiskerRight_assoc, mul_assoc, slice_lhs, tensorHom_comp_tensorHom, tensor_associativity, whiskerLeft_comp_assoc
 -/
@@ -1067,7 +1095,10 @@ lemma mul_associator
   slice_lhs 3 4 => rw [associator_naturality]
   slice_rhs 3 4 => rw [← Category.id_comp μ, ← tensorHom_comp_tensorHom]
   simp only [tensorHom_id, id_tensorHom]
-  slice_lhs 1 3 => rw [associato
+  slice_lhs 1 3 => rw [associator_monoidal]
+  simp only [Category.assoc]
+
+@[to_additive]
 
 中文:
 引理 mul_associator
@@ -1078,7 +1109,10 @@ lemma mul_associator
   slice_lhs 3 4 => rw [associator_naturality]
   slice_rhs 3 4 => rw [← Category.id_comp μ, ← tensorHom_comp_tensorHom]
   simp only [tensorHom_id, id_tensorHom]
-  slice_lhs 1 3 => rw [associato
+  slice_lhs 1 3 => rw [associator_monoidal]
+  simp only [Category.assoc]
+
+@[to_additive]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, associator_monoidal, associator_naturality, id_comp, id_tensorHom, slice_lhs, slice_rhs, tensorHom_comp_tensorHom, tensorHom_id
 -/
@@ -1818,7 +1852,9 @@ instance monMonoidalStruct
   tensorUnit := ⟨𝟙_ C⟩
 associator M N P := mkIso' associator M.X N.X P.X
 leftUnitor M := mkIso' leftUnitor M.X
-rightUnitor M := mkIso' rightUnitor
+rightUnitor M := mkIso' rightUnitor M.X
+
+@[to_additive (attr := simp)]
 
 中文:
 实例 monMonoidalStruct
@@ -1830,7 +1866,9 @@ rightUnitor M := mkIso' rightUnitor
   tensorUnit := ⟨𝟙_ C⟩
 associator M N P := mkIso' associator M.X N.X P.X
 leftUnitor M := mkIso' leftUnitor M.X
-rightUnitor M := mkIso' rightUnitor
+rightUnitor M := mkIso' rightUnitor M.X
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: otimes
 -/
@@ -2336,7 +2374,24 @@ lemma mul_braiding
   simp only [tensorμ, Category.assoc, BraidedCategory.braiding_naturality,
     BraidedCategory.braiding_tensor_right_hom, BraidedCategory.braiding_tensor_left_hom,
     comp_whiskerRight, whisker_assoc, whiskerLeft_comp, pentagon_assoc,
-    pentagon_inv_hom_hom_hom_inv_
+    pentagon_inv_hom_hom_hom_inv_assoc, Iso.inv_hom_id_assoc, whiskerLeft_hom_inv_assoc]
+  slice_lhs 3 4 =>
+    -- We use symmetry here:
+    rw [← whiskerLeft_comp]; rw [← comp_whiskerRight]; rw [SymmetricCategory.symmetry]
+  simp only [id_whiskerRight, whiskerLeft_id, Category.id_comp, Category.assoc, pentagon_inv_assoc,
+    Iso.hom_inv_id_assoc]
+  slice_lhs 1 2 =>
+    rw [← associator_inv_naturality_left]
+  slice_lhs 2 3 =>
+    rw [Iso.inv_hom_id]
+  rw [Category.id_comp]
+  slice_lhs 2 3 =>
+    rw [← associator_naturality_right]
+  slice_lhs 1 2 =>
+    rw [← tensorHom_def]
+  simp only [Category.assoc]
+
+@[to_additive]
 
 中文:
 引理 mul_braiding
@@ -2346,7 +2401,24 @@ lemma mul_braiding
   simp only [tensorμ, Category.assoc, BraidedCategory.braiding_naturality,
     BraidedCategory.braiding_tensor_right_hom, BraidedCategory.braiding_tensor_left_hom,
     comp_whiskerRight, whisker_assoc, whiskerLeft_comp, pentagon_assoc,
-    pentagon_inv_hom_hom_hom_inv_
+    pentagon_inv_hom_hom_hom_inv_assoc, Iso.inv_hom_id_assoc, whiskerLeft_hom_inv_assoc]
+  slice_lhs 3 4 =>
+    -- We use symmetry here:
+    rw [← whiskerLeft_comp]; rw [← comp_whiskerRight]; rw [SymmetricCategory.symmetry]
+  simp only [id_whiskerRight, whiskerLeft_id, Category.id_comp, Category.assoc, pentagon_inv_assoc,
+    Iso.hom_inv_id_assoc]
+  slice_lhs 1 2 =>
+    rw [← associator_inv_naturality_left]
+  slice_lhs 2 3 =>
+    rw [Iso.inv_hom_id]
+  rw [Category.id_comp]
+  slice_lhs 2 3 =>
+    rw [← associator_naturality_right]
+  slice_lhs 1 2 =>
+    rw [← tensorHom_def]
+  simp only [Category.assoc]
+
+@[to_additive]
 
 Depends on / 依赖: BraidedCategory, BraidedCategory.braiding_naturality, BraidedCategory.braiding_tensor_left_hom, BraidedCategory.braiding_tensor_right_hom, Category, Category.assoc, Iso.inv_hom_id_assoc, braiding_naturality, braiding_tensor_left_hom, braiding_tensor_right_hom, comp_whiskerRight, inv_hom_id_assoc, mul_def, pentagon_assoc, pentagon_inv_hom_hom_hom_inv_assoc, slice_lhs, tensorObj, tensorObj.mul_def, whiskerLeft_comp, whiskerLeft_hom_inv_assoc
 -/
@@ -2473,7 +2545,11 @@ abbreviation monObjObj
   mul_assoc := by
     simp_rw [comp_whiskerRight, Category.assoc, μ_natural_left_assoc,
       MonoidalCategory.whiskerLeft_comp, Category.assoc, μ_natural_right_assoc]
-    sli
+    slice_lhs 3 4 => rw [← F.map_comp, MonObj.mul_assoc]
+    simp
+
+scoped[CategoryTheory.Obj] attribute [instance] CategoryTheory.Functor.monObjObj
+  CategoryTheory.Functor.addMonObjObj
 
 中文:
 缩写 monObjObj
@@ -2485,7 +2561,11 @@ abbreviation monObjObj
   mul_assoc := by
     simp_rw [comp_whiskerRight, Category.assoc, μ_natural_left_assoc,
       MonoidalCategory.whiskerLeft_comp, Category.assoc, μ_natural_right_assoc]
-    sli
+    slice_lhs 3 4 => rw [← F.map_comp, MonObj.mul_assoc]
+    simp
+
+scoped[CategoryTheory.Obj] attribute [instance] CategoryTheory.Functor.monObjObj
+  CategoryTheory.Functor.addMonObjObj
 
 Depends on / 依赖: F.map, SuccOrder, SuccOrder.limitRecOn, isSuccLimit, limitRecOn, some.succ
 -/
@@ -2835,7 +2915,7 @@ abbreviation FullyFaithful.monObj
 mul := hF.preimage OplaxMonoidal.δ F X X ≫ μ[F.obj X]
 one_mul := hF.map_injective by simp [← δ_natural_left_assoc]
 mul_one := hF.map_injective by simp [← δ_natural_right_assoc]
-mul_assoc := hF.map_injective by simp [← δ_natural_left_assoc, ← δ_natural_right
+mul_assoc := hF.map_injective by simp [← δ_natural_left_assoc, ← δ_natural_right_assoc]
 
 中文:
 缩写 满忠实.monObj
@@ -2844,7 +2924,7 @@ mul_assoc := hF.map_injective by simp [← δ_natural_left_assoc, ← δ_natural
 mul := hF.preimage OplaxMonoidal.δ F X X ≫ μ[F.obj X]
 one_mul := hF.map_injective by simp [← δ_natural_left_assoc]
 mul_one := hF.map_injective by simp [← δ_natural_right_assoc]
-mul_assoc := hF.map_injective by simp [← δ_natural_left_assoc, ← δ_natural_right
+mul_assoc := hF.map_injective by simp [← δ_natural_left_assoc, ← δ_natural_right_assoc]
 
 Depends on / 依赖: F.obj, OplaxMonoidal, hF.preimage, preimage
 -/
@@ -3730,7 +3810,7 @@ instance [IsCommMonObj
     simp [← IsIso.inv_comp_eq, tensorμ, ← associator_inv_naturality_left_assoc,
       ← associator_naturality_right_assoc, SymmetricCategory.braiding_swap_eq_inv_braiding M N,
       ← tensorHom_def_assoc, -whiskerRight_tensor, -tensor_whiskerLeft, MonObj.tensorObj.mul_def,
-      ← MonoidalCategor
+      ← MonoidalCategory.whiskerLeft_comp_assoc, -MonoidalCategory.whiskerLeft_comp]
 
 中文:
 实例 [是交换MonObj
@@ -3739,7 +3819,7 @@ instance [IsCommMonObj
     simp [← IsIso.inv_comp_eq, tensorμ, ← associator_inv_naturality_left_assoc,
       ← associator_naturality_right_assoc, SymmetricCategory.braiding_swap_eq_inv_braiding M N,
       ← tensorHom_def_assoc, -whiskerRight_tensor, -tensor_whiskerLeft, MonObj.tensorObj.mul_def,
-      ← MonoidalCategor
+      ← MonoidalCategory.whiskerLeft_comp_assoc, -MonoidalCategory.whiskerLeft_comp]
 
 Depends on / 依赖: IsIso.inv_comp_eq, MonObj, MonObj.tensorObj.mul_def, MonoidalCategory, MonoidalCategory.whiskerLeft_comp, MonoidalCategory.whiskerLeft_comp_assoc, SymmetricCategory, SymmetricCategory.braiding_swap_eq_inv_braiding, associator_inv_naturality_left_assoc, associator_naturality_right_assoc, braiding_swap_eq_inv_braiding, inv_comp_eq, mul_def, tensorHom_def_assoc, tensorObj, tensor_whiskerLeft, whiskerLeft_comp, whiskerLeft_comp_assoc, whiskerRight_tensor
 -/

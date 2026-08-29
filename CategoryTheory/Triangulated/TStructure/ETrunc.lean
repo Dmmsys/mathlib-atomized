@@ -50,7 +50,22 @@ definition eTruncLT
       | top => exact 0
     | coe a =>
       induction y using WithBotTop.rec with
-      | bot => e
+      | bot => exact 0
+      | coe b => exact t.natTransTruncLTOfLE a b (by simpa using leOfHom f)
+      | top => exact t.truncLTι a
+    | top =>
+      induction y using WithBotTop.rec with
+      | bot => exact 0
+      | coe b => exact 0
+      | top => exact 𝟙 _
+  map_id n := by induction n using WithBotTop.rec <;> simp
+  map_comp {x y z} f g := by
+    have f' := leOfHom f
+    have g' := leOfHom g
+    induction x using WithBotTop.rec <;> induction y using WithBotTop.rec <;>
+      induction z using WithBotTop.rec <;> cat_disch
+
+@[simp]
 
 中文:
 定义 eTruncLT
@@ -65,7 +80,22 @@ definition eTruncLT
       | top => exact 0
     | coe a =>
       induction y using WithBotTop.rec with
-      | bot => e
+      | bot => exact 0
+      | coe b => exact t.natTransTruncLTOfLE a b (by simpa using leOfHom f)
+      | top => exact t.truncLTι a
+    | top =>
+      induction y using WithBotTop.rec with
+      | bot => exact 0
+      | coe b => exact 0
+      | top => exact 𝟙 _
+  map_id n := by induction n using WithBotTop.rec <;> simp
+  map_comp {x y z} f g := by
+    have f' := leOfHom f
+    have g' := leOfHom g
+    induction x using WithBotTop.rec <;> induction y using WithBotTop.rec <;>
+      induction z using WithBotTop.rec <;> cat_disch
+
+@[simp]
 
 Depends on / 依赖: WithBotTop, WithBotTop.rec, t.truncLT, truncLT
 -/
@@ -195,7 +225,22 @@ definition eTruncGE
       | top => exact 0
     | coe a =>
       induction y using WithBotTop.rec with
-     
+      | bot => exact 0
+      | coe b => exact t.natTransTruncGEOfLE a b (by simpa using leOfHom f)
+      | top => exact 0
+    | top =>
+      induction y using WithBotTop.rec with
+      | bot => exact 0
+      | coe b => exact 0
+      | top => exact 𝟙 _
+  map_id n := by induction n using WithBotTop.rec <;> simp
+  map_comp {x y z} f g := by
+    have f' := leOfHom f
+    have g' := leOfHom g
+    induction x using WithBotTop.rec <;> induction y using WithBotTop.rec <;>
+      induction z using WithBotTop.rec <;> cat_disch
+
+@[simp]
 
 中文:
 定义 eTruncGE
@@ -210,7 +255,22 @@ definition eTruncGE
       | top => exact 0
     | coe a =>
       induction y using WithBotTop.rec with
-     
+      | bot => exact 0
+      | coe b => exact t.natTransTruncGEOfLE a b (by simpa using leOfHom f)
+      | top => exact 0
+    | top =>
+      induction y using WithBotTop.rec with
+      | bot => exact 0
+      | coe b => exact 0
+      | top => exact 𝟙 _
+  map_id n := by induction n using WithBotTop.rec <;> simp
+  map_comp {x y z} f g := by
+    have f' := leOfHom f
+    have g' := leOfHom g
+    induction x using WithBotTop.rec <;> induction y using WithBotTop.rec <;>
+      induction z using WithBotTop.rec <;> cat_disch
+
+@[simp]
 
 Depends on / 依赖: WithBotTop, WithBotTop.rec, t.truncGE, truncGE
 -/
@@ -315,7 +375,9 @@ definition eTruncGEδLT
     all_goals
       induction b using WithBotTop.rec <;> simp at hab <;>
         dsimp [eTruncGE, eTruncLT] <;>
-       
+        simp [t.truncGEδLT_comp_whiskerRight_natTransTruncLTOfLE]
+
+@[simp]
 
 中文:
 定义 eTruncGEδLT
@@ -328,7 +390,9 @@ definition eTruncGEδLT
     all_goals
       induction b using WithBotTop.rec <;> simp at hab <;>
         dsimp [eTruncGE, eTruncLT] <;>
-       
+        simp [t.truncGEδLT_comp_whiskerRight_natTransTruncLTOfLE]
+
+@[simp]
 
 Depends on / 依赖: WithBotTop, WithBotTop.rec, t.truncGE
 -/
@@ -753,7 +817,7 @@ lemma eTriangleLTGE_distinguished
   | top =>
     rw [Triangle.distinguished_iff_of_isZero₃ _ (Functor.zero_obj X)]
     dsimp
-    
+    infer_instance
 
 中文:
 引理 eTriangleLTGE_distinguished
@@ -768,7 +832,7 @@ lemma eTriangleLTGE_distinguished
   | top =>
     rw [Triangle.distinguished_iff_of_isZero₃ _ (Functor.zero_obj X)]
     dsimp
-    
+    infer_instance
 
 Depends on / 依赖: Functor, Functor.zero_obj, Triangle, Triangle.distinguished_iff_of_isZero, WithBotTop, WithBotTop.rec, infer_instance, t.triangleLTGE_distinguished, triangleLTGE_distinguished, zero_obj
 -/
@@ -969,6 +1033,7 @@ lemma isIso_eTruncGE_obj_map_truncGEπ_app
     | bot => infer_instance
     | coe a => exact t.isIso_truncGE_map_truncGEπ_app b a (by simpa using h) X
     | top => simp at h
+  | top => exact ⟨0, IsZero.eq_of_src (by simp) _ _, IsZero.eq_of_src (by simp) _ _⟩
 
 中文:
 引理 isIso_eTruncGE_obj_map_truncGEπ_app
@@ -983,6 +1048,7 @@ lemma isIso_eTruncGE_obj_map_truncGEπ_app
     | bot => infer_instance
     | coe a => exact t.isIso_truncGE_map_truncGEπ_app b a (by simpa using h) X
     | top => simp at h
+  | top => exact ⟨0, IsZero.eq_of_src (by simp) _ _, IsZero.eq_of_src (by simp) _ _⟩
 
 Depends on / 依赖: IsZero, IsZero.eq_of_src, WithBotTop, WithBotTop.rec, eq_of_src, infer_instance, t.isIso_truncGE_map_truncGE
 -/
@@ -1013,7 +1079,10 @@ lemma isIso_eTruncLT_obj_map_truncLTπ_app
     | bot => simp at h
     | coe b =>
       exact t.isIso_truncLT_map_truncLTι_app a b (by simpa using h) X
-    | top
+    | top => dsimp; infer_instance
+  | top =>
+    obtain rfl : b = ⊤ := by simpa using h
+    infer_instance
 
 中文:
 引理 isIso_eTruncLT_obj_map_truncLTπ_app
@@ -1026,7 +1095,10 @@ lemma isIso_eTruncLT_obj_map_truncLTπ_app
     | bot => simp at h
     | coe b =>
       exact t.isIso_truncLT_map_truncLTι_app a b (by simpa using h) X
-    | top
+    | top => dsimp; infer_instance
+  | top =>
+    obtain rfl : b = ⊤ := by simpa using h
+    infer_instance
 
 Depends on / 依赖: IsZero, IsZero.eq_of_src, WithBotTop, WithBotTop.rec, eq_of_src, infer_instance, t.isIso_truncLT_map_truncLT
 -/
@@ -1432,7 +1504,16 @@ instance :
   | coe b =>
     induction a using WithBotTop.rec with
     | bot => simpa using inferInstanceAs (IsIso ((t.truncLT b).map ((t.truncLTι b).app X)))
-    | coe a
+    | coe a =>
+      simp only [eTruncLT_obj_coe, eTruncGE_obj_coe, eTruncLTGELTSelfToLTGE_app,
+        eTruncLT_map_eq_truncLTι]
+      infer_instance
+    | top =>
+      simp only [eTruncLT_obj_coe, eTruncGE_obj_top, Functor.comp_obj, eTruncLTGELTSelfToLTGE_app,
+        eTruncLT_map_eq_truncLTι, zero_map, Functor.map_zero, isIsoZero_iff_source_target_isZero]
+      constructor
+      all_goals exact Functor.map_isZero _ (Functor.zero_obj _)
+  | top => simpa using inferInstanceAs (IsIso (𝟙 _))
 
 中文:
 实例 :
@@ -1445,7 +1526,16 @@ instance :
   | coe b =>
     induction a using WithBotTop.rec with
     | bot => simpa using inferInstanceAs (IsIso ((t.truncLT b).map ((t.truncLTι b).app X)))
-    | coe a
+    | coe a =>
+      simp only [eTruncLT_obj_coe, eTruncGE_obj_coe, eTruncLTGELTSelfToLTGE_app,
+        eTruncLT_map_eq_truncLTι]
+      infer_instance
+    | top =>
+      simp only [eTruncLT_obj_coe, eTruncGE_obj_top, Functor.comp_obj, eTruncLTGELTSelfToLTGE_app,
+        eTruncLT_map_eq_truncLTι, zero_map, Functor.map_zero, isIsoZero_iff_source_target_isZero]
+      constructor
+      all_goals exact Functor.map_isZero _ (Functor.zero_obj _)
+  | top => simpa using inferInstanceAs (IsIso (𝟙 _))
 
 Depends on / 依赖: Functor, Functor.comp_obj, NatTrans, NatTrans.isIso_iff_isIso_app, WithBotTop, WithBotTop.rec, comp_obj, eTruncGE_obj_coe, eTruncGE_obj_top, eTruncLTGELTSelfToLTGE_app, eTruncLT_obj_coe, infer_instance, isIsoZero_iff_source_target_isZero, isIso_iff_isIso_app, t.truncLT, truncLT
 -/
@@ -1484,7 +1574,16 @@ instance :
   | bot => simpa using inferInstanceAs (IsIso ((t.eTruncLTι b).app ((t.eTruncLT.obj b).obj X)))
   | coe a =>
     induction b using WithBotTop.rec with
-    | bot => simpa [isIsoZero_iff_source_target_isZero] usin
+    | bot => simpa [isIsoZero_iff_source_target_isZero] using
+        (t.eTruncGE.obj a).map_isZero (Functor.zero_obj _)
+    | coe b =>
+      simp only [eTruncLT_obj_coe, eTruncGE_obj_coe, eTruncLTGELTSelfToGELT_app,
+        eTruncLT_map_eq_truncLTι]
+      infer_instance
+    | top => simpa using inferInstanceAs (IsIso (𝟙 _))
+  | top =>
+    exact ⟨0, ((t.eTruncLT.obj b).map_isZero (by simp)).eq_of_src _ _,
+      IsZero.eq_of_src (by simp) _ _⟩
 
 中文:
 实例 :
@@ -1496,7 +1595,16 @@ instance :
   | bot => simpa using inferInstanceAs (IsIso ((t.eTruncLTι b).app ((t.eTruncLT.obj b).obj X)))
   | coe a =>
     induction b using WithBotTop.rec with
-    | bot => simpa [isIsoZero_iff_source_target_isZero] usin
+    | bot => simpa [isIsoZero_iff_source_target_isZero] using
+        (t.eTruncGE.obj a).map_isZero (Functor.zero_obj _)
+    | coe b =>
+      simp only [eTruncLT_obj_coe, eTruncGE_obj_coe, eTruncLTGELTSelfToGELT_app,
+        eTruncLT_map_eq_truncLTι]
+      infer_instance
+    | top => simpa using inferInstanceAs (IsIso (𝟙 _))
+  | top =>
+    exact ⟨0, ((t.eTruncLT.obj b).map_isZero (by simp)).eq_of_src _ _,
+      IsZero.eq_of_src (by simp) _ _⟩
 
 Depends on / 依赖: Functor, Functor.zero_obj, NatTrans, NatTrans.isIso_iff_isIso_app, WithBotTop, WithBotTop.rec, eTruncGE, eTruncGE_obj_coe, eTruncLT, eTruncLTGELTSelfToGELT_app, eTruncLT_obj_coe, infer_instance, isIsoZero_iff_source_target_isZero, isIso_iff_isIso_app, map_isZero, t.eTruncGE.obj, t.eTruncLT, t.eTruncLT.obj, zero_obj
 -/
@@ -1628,14 +1736,16 @@ lemma eTruncLTGEIsoGELT_naturality_app
   statement: (a b : EInt) (hab : a <= b)
   proof: by
   dsimp
-  rw [← cancel_epi ((t.eTruncLTGELTSelfToLTGE a b).app X)]; rw [eTruncLTGELTSelfToLTGE_app]; rw [eTruncLTGEIsoGELT_hom_app_fac_assoc]; rw [NatTrans.naturality_assoc]; rw [← Functor.map_comp_assoc]; rw [NatTrans.naturality]; rw [Functor.map_comp_assoc]; rw [← t.eTruncLT_map_app_eTruncLTι_a
+  rw [← cancel_epi ((t.eTruncLTGELTSelfToLTGE a b).app X)]; rw [eTruncLTGELTSelfToLTGE_app]; rw [eTruncLTGEIsoGELT_hom_app_fac_assoc]; rw [NatTrans.naturality_assoc]; rw [← Functor.map_comp_assoc]; rw [NatTrans.naturality]; rw [Functor.map_comp_assoc]; rw [← t.eTruncLT_map_app_eTruncLTι_app (φ.app 1) X]
+  simp [↓Functor.map_comp, t.eTruncLTGEIsoGELT_hom_app_fac]
 
 中文:
 引理 eTruncLTGEIsoGELT_naturality_app
   结论: (a b : E整数) (hab : a <= b)
   证明: by
   dsimp
-  rw [← cancel_epi ((t.eTruncLTGELTSelfToLTGE a b).app X)]; rw [eTruncLTGELTSelfToLTGE_app]; rw [eTruncLTGEIsoGELT_hom_app_fac_assoc]; rw [NatTrans.naturality_assoc]; rw [← Functor.map_comp_assoc]; rw [NatTrans.naturality]; rw [Functor.map_comp_assoc]; rw [← t.eTruncLT_map_app_eTruncLTι_a
+  rw [← cancel_epi ((t.eTruncLTGELTSelfToLTGE a b).app X)]; rw [eTruncLTGELTSelfToLTGE_app]; rw [eTruncLTGEIsoGELT_hom_app_fac_assoc]; rw [NatTrans.naturality_assoc]; rw [← Functor.map_comp_assoc]; rw [NatTrans.naturality]; rw [Functor.map_comp_assoc]; rw [← t.eTruncLT_map_app_eTruncLTι_app (φ.app 1) X]
+  simp [↓Functor.map_comp, t.eTruncLTGEIsoGELT_hom_app_fac]
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_comp_assoc, NatTrans, NatTrans.naturality, NatTrans.naturality_assoc, cancel_epi, eTruncLTGEIsoGELT_hom_app_fac, eTruncLTGEIsoGELT_hom_app_fac_assoc, eTruncLTGELTSelfToLTGE, eTruncLTGELTSelfToLTGE_app, map_comp, map_comp_assoc, naturality, naturality_assoc, t.eTruncLTGEIsoGELT_hom_app_fac, t.eTruncLTGELTSelfToLTGE, t.eTruncLT_map_app_eTruncLT
 -/

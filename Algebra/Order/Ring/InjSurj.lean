@@ -29,7 +29,8 @@ lemma isOrderedRing
   zero_le_one := by simp only [← le, zero, one, zero_le_one]
   mul_le_mul_of_nonneg_left a ha b c hbc := by
     rw [← le]; rw [mul]; rw [mul]; refine mul_le_mul_of_nonneg_left (le.2 hbc) ?_; rwa [← zero, le]
-  mul_le_mul_of_nonneg_right a ha b c hbc := 
+  mul_le_mul_of_nonneg_right a ha b c hbc := by
+    rw [← le]; rw [mul]; rw [mul]; refine mul_le_mul_of_nonneg_right (le.2 hbc) ?_; rwa [← zero, le]
 
 中文:
 引理 isOrderedRing
@@ -38,7 +39,8 @@ lemma isOrderedRing
   zero_le_one := by simp only [← le, zero, one, zero_le_one]
   mul_le_mul_of_nonneg_left a ha b c hbc := by
     rw [← le]; rw [mul]; rw [mul]; refine mul_le_mul_of_nonneg_left (le.2 hbc) ?_; rwa [← zero, le]
-  mul_le_mul_of_nonneg_right a ha b c hbc := 
+  mul_le_mul_of_nonneg_right a ha b c hbc := by
+    rw [← le]; rw [mul]; rw [mul]; refine mul_le_mul_of_nonneg_right (le.2 hbc) ?_; rwa [← zero, le]
 -/
 protected lemma isOrderedRing [IsOrderedRing R] [Semiring S] [PartialOrder S]
     (f : S -> R) (zero : f 0 = 0) (one : f 1 = 1)
@@ -63,7 +65,8 @@ lemma isStrictOrderedRing
   __ := Function.Injective.isOrderedRing f zero one add mul le
   mul_lt_mul_of_pos_left a ha b c hbc := by
     rw [← lt]; rw [mul]; rw [mul]; refine mul_lt_mul_of_pos_left (lt.2 hbc) ?_; rwa [← zero, lt]
-  mul_
+  mul_lt_mul_of_pos_right a ha b c hbc := by
+    rw [← lt]; rw [mul]; rw [mul]; refine mul_lt_mul_of_pos_right (lt.2 hbc) ?_; rwa [← zero, lt]
 
 中文:
 引理 isStrictOrderedRing
@@ -73,7 +76,8 @@ lemma isStrictOrderedRing
   __ := Function.Injective.isOrderedRing f zero one add mul le
   mul_lt_mul_of_pos_left a ha b c hbc := by
     rw [← lt]; rw [mul]; rw [mul]; refine mul_lt_mul_of_pos_left (lt.2 hbc) ?_; rwa [← zero, lt]
-  mul_
+  mul_lt_mul_of_pos_right a ha b c hbc := by
+    rw [← lt]; rw [mul]; rw [mul]; refine mul_lt_mul_of_pos_right (lt.2 hbc) ?_; rwa [← zero, lt]
 -/
 protected lemma isStrictOrderedRing [IsStrictOrderedRing R] [Semiring S] [PartialOrder S]
     (f : S -> R) (zero : f 0 = 0) (one : f 1 = 1)

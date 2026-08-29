@@ -63,7 +63,8 @@ lemma quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo
   let φ := (shortComplexFunctor' C c q₀ q₁ q₂).map (cF.π.app j)
   have : IsIso φ.τ₁ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₀
   have : IsIso φ.τ₂ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₁
-  have : IsIso φ.τ₃ := is
+  have : IsIso φ.τ₃ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₂
+  apply ShortComplex.quasiIso_of_epi_of_isIso_of_mono
 
 中文:
 引理 quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo
@@ -72,7 +73,8 @@ lemma quasiIsoAt_π_of_isLimit_of_isEventuallyConstantTo
   let φ := (shortComplexFunctor' C c q₀ q₁ q₂).map (cF.π.app j)
   have : IsIso φ.τ₁ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₀
   have : IsIso φ.τ₂ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₁
-  have : IsIso φ.τ₃ := is
+  have : IsIso φ.τ₃ := isIso_π_f_of_isLimit_of_isEventuallyConstantTo F hcF _ _ hq₂
+  apply ShortComplex.quasiIso_of_epi_of_isIso_of_mono
 
 Depends on / 依赖: ShortComplex, ShortComplex.quasiIso_of_epi_of_isIso_of_mono, quasiIsoAt_iff, quasiIso_of_epi_of_isIso_of_mono, shortComplexFunctor
 -/

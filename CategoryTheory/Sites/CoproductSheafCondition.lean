@@ -48,7 +48,23 @@ definition PreZeroHypercover.isLimitSigmaOfIsColimitEquiv
       ((E.sigmaOfIsColimit hc).toPreOneHypercover.Y (i₁ := ⟨⟩) (i₂ := ⟨⟩) ⟨⟩)
       fun b => pullback.map _ _ _ _ (c.inj _) (c.inj _) (𝟙 _) (by simp) (by simp)
   let equiv : E.toPreOneHypercover.I₁' ≃ E.I₀ × E.I₀ :=
-    Equiv.sigmaPUnit (E.
+    Equiv.sigmaPUnit (E.toPreOneHypercover.I₀ × E.toPreOneHypercover.I₀)
+  have hc' : IsColimit c' := by
+    refine (c'.isColimitEquivOfEquiv equiv.symm).symm (Nonempty.some ?_)
+    exact IsUniversalColimit.nonempty_isColimit_prod_of_isPullback
+      huniv huniv E.f E.f ((E.sigmaOfIsColimit hc).f ⟨⟩) ((E.sigmaOfIsColimit hc).f ⟨⟩)
+      (fun i j => .of_hasPullback _ _) (.of_hasPullback _ _) (.refl _) (by simp) (by simp)
+      (by simp [c', equiv, Equiv.sigmaPUnit]) (by simp [c', equiv, Equiv.sigmaPUnit])
+  refine .trans ?_ (E.toPreOneHypercover.isLimitSigmaOfIsColimitEquiv hc hc' F)
+  apply PreOneHypercover.isLimitEquivOfIso
+  refine PreOneHypercover.isoMk (.refl _) (fun _ => .refl _) (fun _ _ => .refl _)
+      (fun _ _ _ => Iso.refl _) (by cat_disch) ?_ ?_
+  · intro ⟨⟩ ⟨⟩ k
+    refine Cofan.IsColimit.hom_ext hc' _ _ fun k => ?_
+    congr 1
+    exact Cofan.IsColimit.hom_ext hc' _ _ fun a => by simp; simp [c']
+  · intro ⟨⟩ ⟨⟩ k
+    exact Cofan.IsColimit.hom_ext hc' _ _ fun a => by simp; simp [c']
 
 中文:
 定义 PreZeroHypercover.isLimitSigmaOfIsColimitEquiv
@@ -59,7 +75,23 @@ definition PreZeroHypercover.isLimitSigmaOfIsColimitEquiv
       ((E.sigmaOfIsColimit hc).toPreOneHypercover.Y (i₁ := ⟨⟩) (i₂ := ⟨⟩) ⟨⟩)
       fun b => pullback.map _ _ _ _ (c.inj _) (c.inj _) (𝟙 _) (by simp) (by simp)
   let equiv : E.toPreOneHypercover.I₁' ≃ E.I₀ × E.I₀ :=
-    Equiv.sigmaPUnit (E.
+    Equiv.sigmaPUnit (E.toPreOneHypercover.I₀ × E.toPreOneHypercover.I₀)
+  have hc' : IsColimit c' := by
+    refine (c'.isColimitEquivOfEquiv equiv.symm).symm (Nonempty.some ?_)
+    exact IsUniversalColimit.nonempty_isColimit_prod_of_isPullback
+      huniv huniv E.f E.f ((E.sigmaOfIsColimit hc).f ⟨⟩) ((E.sigmaOfIsColimit hc).f ⟨⟩)
+      (fun i j => .of_hasPullback _ _) (.of_hasPullback _ _) (.refl _) (by simp) (by simp)
+      (by simp [c', equiv, Equiv.sigmaPUnit]) (by simp [c', equiv, Equiv.sigmaPUnit])
+  refine .trans ?_ (E.toPreOneHypercover.isLimitSigmaOfIsColimitEquiv hc hc' F)
+  apply PreOneHypercover.isLimitEquivOfIso
+  refine PreOneHypercover.isoMk (.refl _) (fun _ => .refl _) (fun _ _ => .refl _)
+      (fun _ _ _ => Iso.refl _) (by cat_disch) ?_ ?_
+  · intro ⟨⟩ ⟨⟩ k
+    refine Cofan.IsColimit.hom_ext hc' _ _ fun k => ?_
+    congr 1
+    exact Cofan.IsColimit.hom_ext hc' _ _ fun a => by simp; simp [c']
+  · intro ⟨⟩ ⟨⟩ k
+    exact Cofan.IsColimit.hom_ext hc' _ _ fun a => by simp; simp [c']
 
 Depends on / 依赖: Cofan.mk, E.sigmaOfIsColimit, E.toPreOneHypercover.I, E.toPreOneHypercover.Y, Equiv.sigmaPUnit, IsColimit, IsUniversalColimit, IsUniversalColimit.nonempty_isColimit_prod_of_isPullback, Nonempty, Nonempty.some, c.inj, equiv.symm, isColimitEquivOfEquiv, nonempty_isColimit_prod_of_isPullback, pullback, pullback.map, sigmaOfIsColimit, sigmaPUnit, toPreOneHypercover, toPreOneHypercover.Y
 -/
@@ -110,7 +142,15 @@ lemma Presieve.isSheafFor_sigmaDesc_iff
     fun i j => by dsimp [sigmaOfIsColimit]; infer_instance
   have (i : E.I₀) : HasPullback (E.f i) ((E.sigmaOfIsColimit hc).f PUnit.unit) := by
     dsimp [sigmaOfIsColimit_f]; infer_instance
-  have : PreservesL
+  have : PreservesLimit (Discrete.functor fun i => op (E.toPreOneHypercover.X i)) F := by
+    dsimp [E]; infer_instance
+  have : PreservesLimit (Discrete.functor fun i => op (E.toPreOneHypercover.Y' i)) F := by
+    convert! Functor.Initial.preservesLimit_of_comp (Discrete.equivalence <| .sigmaPUnit _).inverse
+    · infer_instance
+    · assumption
+  let equiv := (E.isLimitSigmaOfIsColimitEquiv hc hc' F).nonempty_congr
+  rwa [isLimit_toPreOneHypercover_type_iff, isLimit_toPreOneHypercover_type_iff,
+    presieve₀_sigmaOfIsColimit] at equiv
 
 中文:
 引理 Presieve.isSheafFor_sigmaDesc_iff
@@ -121,7 +161,15 @@ lemma Presieve.isSheafFor_sigmaDesc_iff
     fun i j => by dsimp [sigmaOfIsColimit]; infer_instance
   have (i : E.I₀) : HasPullback (E.f i) ((E.sigmaOfIsColimit hc).f PUnit.unit) := by
     dsimp [sigmaOfIsColimit_f]; infer_instance
-  have : PreservesL
+  have : PreservesLimit (Discrete.functor fun i => op (E.toPreOneHypercover.X i)) F := by
+    dsimp [E]; infer_instance
+  have : PreservesLimit (Discrete.functor fun i => op (E.toPreOneHypercover.Y' i)) F := by
+    convert! Functor.Initial.preservesLimit_of_comp (Discrete.equivalence <| .sigmaPUnit _).inverse
+    · infer_instance
+    · assumption
+  let equiv := (E.isLimitSigmaOfIsColimitEquiv hc hc' F).nonempty_congr
+  rwa [isLimit_toPreOneHypercover_type_iff, isLimit_toPreOneHypercover_type_iff,
+    presieve₀_sigmaOfIsColimit] at equiv
 
 Depends on / 依赖: Discrete, Discrete.functor, E.sigmaOfIsColimit, E.toPreOneHypercover.X, E.toPreOneHypercover.Y, Functor, Functor.Initial.prese, HasPullback, HasPullbacks, Initial, PUnit.unit, PreZeroHypercover, PreZeroHypercover.mk, PreservesLimit, convert, functor, infer_instance, sigmaOfIsColimit, sigmaOfIsColimit_f, toPreOneHypercover
 -/

@@ -41,7 +41,7 @@ lemma Functor.reflects_preregular
     · simp only [Functor.map_preimage]
       infer_instance
     · apply F.map_injective
-  
+      simp [w]
 
 中文:
 引理 函子.reflects_preregular
@@ -53,7 +53,7 @@ lemma Functor.reflects_preregular
     · simp only [Functor.map_preimage]
       infer_instance
     · apply F.map_injective
-  
+      simp [w]
 
 Depends on / 依赖: F.effectiveEpiOver, F.effectiveEpi_of_map, F.map, F.map_injective, F.preimage, Functor, Functor.map_preimage, Preregular, Preregular.exists_fac, effectiveEpiOver, effectiveEpi_of_map, exists_fac, infer_instance, map_injective, map_preimage, preimage
 -/

@@ -217,7 +217,32 @@ lemma StrictConvexOn.map_sum_lt
   have hj : j ∉ u := by simp [u]
   have hk : k ∉ u := by simp [u]
   have ht :
-      t = (u.cons k hk).cons j (me
+      t = (u.cons k hk).cons j (mem_cons.not.2 <| not_or_intro (ne_of_apply_ne _ hjk) hj) := by
+    simp [u, insert_erase this, insert_erase ‹j in t›, *]
+  clear_value u
+  subst ht
+  simp only [sum_cons]
+have := h₀ j by simp
+have := h₀ k by simp
+  let c := w j + w k
+  have hc : w j / c + w k / c = 1 := by simp [field, c]
+  calc f (w j • p j + (w k • p k + ∑ x in u, w x • p x))
+    _ = f (c • ((w j / c) • p j + (w k / c) • p k) + ∑ x in u, w x • p x) := by
+      congrm f ?_
+      match_scalars <;> simp [field, c]
+    _ <= c • f ((w j / c) • p j + (w k / c) • p k) + ∑ x in u, w x • f (p x) :=
+      -- apply the usual Jensen's inequality w.r.t. the weighted average of the two distinguished
+      -- points and all the other points
+        hf.convexOn.map_add_sum_le (fun i hi => (h₀ _ <| by simp [hi]).le)
+          (by simpa [-cons_eq_insert, ← add_assoc] using h₁)
+(forall_of_forall_cons <| forall_of_forall_cons hmem) (by positivity) by
+           refine hf.1 (hmem _ <| by simp) (hmem _ <| by simp) ?_ ?_ hc <;> positivity
+    _ < c • ((w j / c) • f (p j) + (w k / c) • f (p k)) + ∑ x in u, w x • f (p x) := by
+      -- then apply the definition of strict convexity for the two distinguished points
+      gcongr; refine hf.2 (hmem _ <| by simp) (hmem _ <| by simp) hjk ?_ ?_ hc <;> positivity
+    _ = (w j • f (p j) + w k • f (p k)) + ∑ x in u, w x • f (p x) := by
+      match_scalars <;> simp [field, c]
+    _ = w j • f (p j) + (w k • f (p k) + ∑ x in u, w x • f (p x)) := by abel_nf
 
 中文:
 引理 StrictConvexOn.map_sum_lt
@@ -231,7 +256,32 @@ lemma StrictConvexOn.map_sum_lt
   have hj : j ∉ u := by simp [u]
   have hk : k ∉ u := by simp [u]
   have ht :
-      t = (u.cons k hk).cons j (me
+      t = (u.cons k hk).cons j (mem_cons.not.2 <| not_or_intro (ne_of_apply_ne _ hjk) hj) := by
+    simp [u, insert_erase this, insert_erase ‹j in t›, *]
+  clear_value u
+  subst ht
+  simp only [sum_cons]
+have := h₀ j by simp
+have := h₀ k by simp
+  let c := w j + w k
+  have hc : w j / c + w k / c = 1 := by simp [field, c]
+  calc f (w j • p j + (w k • p k + ∑ x in u, w x • p x))
+    _ = f (c • ((w j / c) • p j + (w k / c) • p k) + ∑ x in u, w x • p x) := by
+      congrm f ?_
+      match_scalars <;> simp [field, c]
+    _ <= c • f ((w j / c) • p j + (w k / c) • p k) + ∑ x in u, w x • f (p x) :=
+      -- apply the usual Jensen's inequality w.r.t. the weighted average of the two distinguished
+      -- points and all the other points
+        hf.convexOn.map_add_sum_le (fun i hi => (h₀ _ <| by simp [hi]).le)
+          (by simpa [-cons_eq_insert, ← add_assoc] using h₁)
+(forall_of_forall_cons <| forall_of_forall_cons hmem) (by positivity) by
+           refine hf.1 (hmem _ <| by simp) (hmem _ <| by simp) ?_ ?_ hc <;> positivity
+    _ < c • ((w j / c) • f (p j) + (w k / c) • f (p k)) + ∑ x in u, w x • f (p x) := by
+      -- then apply the definition of strict convexity for the two distinguished points
+      gcongr; refine hf.2 (hmem _ <| by simp) (hmem _ <| by simp) hjk ?_ ?_ hc <;> positivity
+    _ = (w j • f (p j) + w k • f (p k)) + ∑ x in u, w x • f (p x) := by
+      match_scalars <;> simp [field, c]
+    _ = w j • f (p j) + (w k • f (p k) + ∑ x in u, w x • f (p x)) := by abel_nf
 
 Depends on / 依赖: classical
 -/
@@ -403,7 +453,8 @@ theorem StrictConvexOn.map_sum_eq_iff_of_nonneg
       f (∑ i in t with w i != 0, w i • p i) = ∑ i in t with w i != 0, w i • f (p i) ↔
         forall ⦃j : ι⦄, j in {x in t | w x != 0} -> forall ⦃k : ι⦄, k in {x in t | w x != 0} -> p j = p k :=
     hf.map_sum_eq_iff_of_pos (by grind)
-      (sum_filter_ne_zero _ |>.trans h₁) (hmem _ <| m
+      (sum_filter_ne_zero _ |>.trans h₁) (hmem _ <| mem_of_mem_filter · ·)
+  grind [sum_filter_of_ne, left_ne_zero_of_smul]
 
 中文:
 定理 StrictConvexOn.map_sum_eq_iff_of_nonneg
@@ -413,7 +464,8 @@ theorem StrictConvexOn.map_sum_eq_iff_of_nonneg
       f (∑ i in t with w i != 0, w i • p i) = ∑ i in t with w i != 0, w i • f (p i) ↔
         forall ⦃j : ι⦄, j in {x in t | w x != 0} -> forall ⦃k : ι⦄, k in {x in t | w x != 0} -> p j = p k :=
     hf.map_sum_eq_iff_of_pos (by grind)
-      (sum_filter_ne_zero _ |>.trans h₁) (hmem _ <| m
+      (sum_filter_ne_zero _ |>.trans h₁) (hmem _ <| mem_of_mem_filter · ·)
+  grind [sum_filter_of_ne, left_ne_zero_of_smul]
 
 Depends on / 依赖: hf.map_sum_eq_iff_of_pos, left_ne_zero_of_smul, map_sum_eq_iff_of_pos, mem_of_mem_filter, sum_filter_ne_zero, sum_filter_of_ne
 -/
@@ -555,7 +607,10 @@ lemma StrictConvexOn.map_sum_eq_iff
     have H (j) (hj : j in t) : p j = p i₀ := hf.eq_of_le_map_sum h₀ h₁ hmem h_eq.ge hj hi₀
     calc p i = p i₀ := by rw [H _ hi]
       _ = (1 : 𝕜) • p i₀ := by simp
-      _ = (∑ j in t, 
+      _ = (∑ j in t, w j) • p i₀ := by rw [h₁]
+      _ = ∑ j in t, (w j • p i₀) := by rw [sum_smul]
+      _ = ∑ j in t, (w j • p j) := by congr! 2 with j hj; rw [← H _ hj]
+  · grind [hf.map_sum_eq_iff_of_pos h₀ h₁ hmem]
 
 中文:
 引理 StrictConvexOn.map_sum_eq_iff
@@ -568,7 +623,10 @@ lemma StrictConvexOn.map_sum_eq_iff
     have H (j) (hj : j in t) : p j = p i₀ := hf.eq_of_le_map_sum h₀ h₁ hmem h_eq.ge hj hi₀
     calc p i = p i₀ := by rw [H _ hi]
       _ = (1 : 𝕜) • p i₀ := by simp
-      _ = (∑ j in t, 
+      _ = (∑ j in t, w j) • p i₀ := by rw [h₁]
+      _ = ∑ j in t, (w j • p i₀) := by rw [sum_smul]
+      _ = ∑ j in t, (w j • p j) := by congr! 2 with j hj; rw [← H _ hj]
+  · grind [hf.map_sum_eq_iff_of_pos h₀ h₁ hmem]
 
 Depends on / 依赖: eq_empty_or_nonempty, eq_of_le_map_sum, h_eq, h_eq.ge, hf.eq_of_le_map_sum, hf.map_sum_eq_iff_of_pos, map_sum_eq_iff_of_pos, sum_smul, t.eq_empty_or_nonempty
 -/
@@ -619,7 +677,8 @@ lemma StrictConvexOn.map_sum_eq_iff'
   rw [← sum_filter_of_ne hw]; rw [← sum_filter_of_ne hw']; rw [hf.map_sum_eq_iff]
   · simp
   · simp +contextual [(h₀ _ _).lt_iff_ne']
-  · rwa [sum_fil
+  · rwa [sum_filter_ne_zero]
+  · simp +contextual [hmem _ _]
 
 中文:
 引理 StrictConvexOn.map_sum_eq_iff'
@@ -630,7 +689,8 @@ lemma StrictConvexOn.map_sum_eq_iff'
   rw [← sum_filter_of_ne hw]; rw [← sum_filter_of_ne hw']; rw [hf.map_sum_eq_iff]
   · simp
   · simp +contextual [(h₀ _ _).lt_iff_ne']
-  · rwa [sum_fil
+  · rwa [sum_filter_ne_zero]
+  · simp +contextual [hmem _ _]
 
 Depends on / 依赖: contextual, hf.map_sum_eq_iff, lt_iff_ne, map_sum_eq_iff, sum_filter_ne_zero, sum_filter_of_ne
 -/
@@ -726,7 +786,7 @@ theorem StrictConvexOn.map_sum_lt_iff_of_nonneg'
         exists j in {x in t | w x != 0}, p j != ∑ i in t with w i != 0, w i • p i :=
     hf.map_sum_lt_iff_of_pos' (by grind)
       (sum_filter_ne_zero _ |>.trans h₁) (hmem _ <| mem_of_mem_filter · ·)
- 
+  grind [sum_filter_of_ne, left_ne_zero_of_smul]
 
 中文:
 定理 StrictConvexOn.map_sum_lt_iff_of_nonneg'
@@ -737,7 +797,7 @@ theorem StrictConvexOn.map_sum_lt_iff_of_nonneg'
         exists j in {x in t | w x != 0}, p j != ∑ i in t with w i != 0, w i • p i :=
     hf.map_sum_lt_iff_of_pos' (by grind)
       (sum_filter_ne_zero _ |>.trans h₁) (hmem _ <| mem_of_mem_filter · ·)
- 
+  grind [sum_filter_of_ne, left_ne_zero_of_smul]
 
 Depends on / 依赖: hf.map_sum_lt_iff_of_pos, left_ne_zero_of_smul, map_sum_lt_iff_of_pos, mem_of_mem_filter, sum_filter_ne_zero, sum_filter_of_ne
 -/
@@ -843,6 +903,12 @@ lemma ConvexOn.exists_ge_of_centerMass
   -- TODO: can `rsuffices` be used to write the `exact` first, then the proof of this obtain?
   obtain ⟨i, hi, hfi⟩ : exists i in {i in t | w i != 0}, w i • f y <= w i • (f ∘ p) i := by
     have hw' : (0 : 𝕜) < ∑ i in t with w i != 0, w i := by rwa [sum_filter_ne_zero]
+    refine exists_le_of_sum_le (nonempty_of_sum_ne_zero hw'.ne') ?_
+    rw [← sum_smul]; rw [← smul_le_smul_iff_of_pos_left (inv_pos.2 hw')]; rw [inv_smul_smul₀ hw'.ne']; rw [←
+      centerMass]; rw [centerMass_filter_ne_zero]
+    exact h.map_centerMass_le hw₀ hw₁ hp
+  rw [mem_filter] at hi
+  exact ⟨i, hi.1, (smul_le_smul_iff_of_pos_left <| (hw₀ i hi.1).lt_of_ne hi.2.symm).1 hfi⟩
 
 中文:
 引理 ConvexOn.存在_ge_of_centerMass
@@ -852,6 +918,12 @@ lemma ConvexOn.exists_ge_of_centerMass
   -- TODO: can `rsuffices` be used to write the `exact` first, then the proof of this obtain?
   obtain ⟨i, hi, hfi⟩ : exists i in {i in t | w i != 0}, w i • f y <= w i • (f ∘ p) i := by
     have hw' : (0 : 𝕜) < ∑ i in t with w i != 0, w i := by rwa [sum_filter_ne_zero]
+    refine exists_le_of_sum_le (nonempty_of_sum_ne_zero hw'.ne') ?_
+    rw [← sum_smul]; rw [← smul_le_smul_iff_of_pos_left (inv_pos.2 hw')]; rw [inv_smul_smul₀ hw'.ne']; rw [←
+      centerMass]; rw [centerMass_filter_ne_zero]
+    exact h.map_centerMass_le hw₀ hw₁ hp
+  rw [mem_filter] at hi
+  exact ⟨i, hi.1, (smul_le_smul_iff_of_pos_left <| (hw₀ i hi.1).lt_of_ne hi.2.symm).1 hfi⟩
 
 Depends on / 依赖: centerMass, t.centerMass
 -/

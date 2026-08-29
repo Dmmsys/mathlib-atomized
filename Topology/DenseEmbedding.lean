@@ -185,7 +185,7 @@ theorem closure_image_mem_nhds
   refine mem_of_superset (hUo.mem_nhds haU) ?_
   calc
     U subseteq closure (i '' i ⁻¹' U) := di.dense.subset_closure_image_preimage_of_isOpen hUo
-    _ subsete
+    _ subseteq closure (i '' s) := closure_mono (image_mono sub)
 
 中文:
 定理 closure_image_mem_nhds
@@ -196,7 +196,7 @@ theorem closure_image_mem_nhds
   refine mem_of_superset (hUo.mem_nhds haU) ?_
   calc
     U subseteq closure (i '' i ⁻¹' U) := di.dense.subset_closure_image_preimage_of_isOpen hUo
-    _ subsete
+    _ subseteq closure (i '' s) := closure_mono (image_mono sub)
 
 Depends on / 依赖: closure, closure_mono, di.dense.subset_closure_image_preimage_of_isOpen, di.nhds_eq_comap, hUo.mem_nhds, image_mono, mem_iff, mem_nhds, mem_of_superset, nhds_basis_opens, nhds_eq_comap, subset_closure_image_preimage_of_isOpen, subseteq
 -/
@@ -326,7 +326,9 @@ theorem tendsto_comap_nhds_nhds
   have lim1 : map g (comap g (𝓝 d)) <= 𝓝 d := map_comap_le
   replace lim1 : map h (map g (comap g (𝓝 d))) <= map h (𝓝 d) := map_mono lim1
   rw [Filter.map_map]; rw [comm]; rw [← Filter.map_map]; rw [map_le_iff_le_comap] at lim1
-  have lim2 : comap i (map h (𝓝 d)) <= comap i (𝓝 (i a)) := comap_mon
+  have lim2 : comap i (map h (𝓝 d)) <= comap i (𝓝 (i a)) := comap_mono H
+  rw [← di.nhds_eq_comap] at lim2
+  exact le_trans lim1 lim2
 
 中文:
 定理 tendsto_comap_nhds_nhds
@@ -335,7 +337,9 @@ theorem tendsto_comap_nhds_nhds
   have lim1 : map g (comap g (𝓝 d)) <= 𝓝 d := map_comap_le
   replace lim1 : map h (map g (comap g (𝓝 d))) <= map h (𝓝 d) := map_mono lim1
   rw [Filter.map_map]; rw [comm]; rw [← Filter.map_map]; rw [map_le_iff_le_comap] at lim1
-  have lim2 : comap i (map h (𝓝 d)) <= comap i (𝓝 (i a)) := comap_mon
+  have lim2 : comap i (map h (𝓝 d)) <= comap i (𝓝 (i a)) := comap_mono H
+  rw [← di.nhds_eq_comap] at lim2
+  exact le_trans lim1 lim2
 
 Depends on / 依赖: Filter, Filter.map_map, comap_mono, di.nhds_eq_comap, le_trans, map_comap_le, map_le_iff_le_comap, map_map, map_mono, nhds_eq_comap, replace
 -/
@@ -651,7 +655,19 @@ theorem continuousAt_extend
     simpa [ContinuousAt, (closed_nhds_basis (φ b)).tendsto_right_iff]
   intro V' V'_in V'_closed
   set V₁ := { x | Tendsto f (comap i <| 𝓝 x) (𝓝 <| φ x) }
-  have V₁_in : V₁ in 𝓝
+  have V₁_in : V₁ in 𝓝 b := by
+    filter_upwards [hf]
+    rintro x ⟨c, hc⟩
+    rwa [← di.extend_eq_of_tendsto hc] at hc
+  obtain ⟨V₂, V₂_in, V₂_op, hV₂⟩ : exists V₂ in 𝓝 b, IsOpen V₂ ∧ forall x in i ⁻¹' V₂, f x in V' := by
+    simpa [and_assoc] using!
+      ((nhds_basis_opens' b).comap i).tendsto_left_iff.mp (mem_of_mem_nhds V₁_in : b in V₁) V' V'_in
+  suffices forall x in V₁ inter V₂, φ x in V' by filter_upwards [inter_mem V₁_in V₂_in] using this
+  rintro x ⟨x_in₁, x_in₂⟩
+  have hV₂x : V₂ in 𝓝 x := IsOpen.mem_nhds V₂_op x_in₂
+  apply V'_closed.mem_of_tendsto x_in₁
+  use V₂
+  tauto
 
 中文:
 定理 continuousAt_extend
@@ -663,7 +679,19 @@ theorem continuousAt_extend
     simpa [ContinuousAt, (closed_nhds_basis (φ b)).tendsto_right_iff]
   intro V' V'_in V'_closed
   set V₁ := { x | Tendsto f (comap i <| 𝓝 x) (𝓝 <| φ x) }
-  have V₁_in : V₁ in 𝓝
+  have V₁_in : V₁ in 𝓝 b := by
+    filter_upwards [hf]
+    rintro x ⟨c, hc⟩
+    rwa [← di.extend_eq_of_tendsto hc] at hc
+  obtain ⟨V₂, V₂_in, V₂_op, hV₂⟩ : exists V₂ in 𝓝 b, IsOpen V₂ ∧ forall x in i ⁻¹' V₂, f x in V' := by
+    simpa [and_assoc] using!
+      ((nhds_basis_opens' b).comap i).tendsto_left_iff.mp (mem_of_mem_nhds V₁_in : b in V₁) V' V'_in
+  suffices forall x in V₁ inter V₂, φ x in V' by filter_upwards [inter_mem V₁_in V₂_in] using this
+  rintro x ⟨x_in₁, x_in₂⟩
+  have hV₂x : V₂ in 𝓝 x := IsOpen.mem_nhds V₂_op x_in₂
+  apply V'_closed.mem_of_tendsto x_in₁
+  use V₂
+  tauto
 
 Depends on / 依赖: ContinuousAt, IsClosed, IsOpen, Tendsto, _closed, and_assoc, closed_nhds_basis, comap_nhds_neBot, di.comap_nhds_neBot, di.extend, di.extend_eq_of_tendsto, extend, extend_eq_of_tendsto, filter_upwards, tendsto_right_iff
 -/
@@ -1073,7 +1101,8 @@ theorem subtype
   injective := (de.injective.comp Subtype.coe_injective).codRestrict _
   eq_induced :=
     (induced_iff_nhds_eq _).2 fun ⟨x, hx⟩ => by
-      simp [subtypeEmb, nhds_subtype
+      simp [subtypeEmb, nhds_subtype_eq_comap, de.isInducing.nhds_eq_comap, comap_comap,
+        Function.comp_def]
 
 中文:
 定理 subtype
@@ -1085,7 +1114,8 @@ theorem subtype
   injective := (de.injective.comp Subtype.coe_injective).codRestrict _
   eq_induced :=
     (induced_iff_nhds_eq _).2 fun ⟨x, hx⟩ => by
-      simp [subtypeEmb, nhds_subtype
+      simp [subtypeEmb, nhds_subtype_eq_comap, de.isInducing.nhds_eq_comap, comap_comap,
+        Function.comp_def]
 -/
 protected theorem subtype (de : IsDenseEmbedding e) (p : α -> Prop) :
     IsDenseEmbedding (subtypeEmb p e) where
@@ -1358,7 +1388,15 @@ theorem Filter.HasBasis.hasBasis_of_isDenseInducing
     have hT₄ : f ⁻¹' T' in 𝓝 x := by
       rw [hf.isInducing.nhds_eq_comap x]
       exact ⟨T', hT₁, Subset.rfl⟩
-    obtain ⟨i, hi, hi'⟩ := (h _).m
+    obtain ⟨i, hi, hi'⟩ := (h _).mp hT₄
+    exact
+      ⟨i, hi,
+        (closure_mono (image_mono hi')).trans
+          (Subset.trans (closure_minimal (image_preimage_subset _ _) hT₂) hT₃)⟩
+  · obtain ⟨i, hi, hi'⟩ := hT
+    suffices closure (f '' s i) in 𝓝 (f x) by filter_upwards [this] using hi'
+    replace h := (h (s i)).mpr ⟨i, hi, Subset.rfl⟩
+    exact hf.closure_image_mem_nhds h
 
 中文:
 定理 滤子.有基.hasBasis_of_isDenseInducing
@@ -1371,7 +1409,15 @@ theorem Filter.HasBasis.hasBasis_of_isDenseInducing
     have hT₄ : f ⁻¹' T' in 𝓝 x := by
       rw [hf.isInducing.nhds_eq_comap x]
       exact ⟨T', hT₁, Subset.rfl⟩
-    obtain ⟨i, hi, hi'⟩ := (h _).m
+    obtain ⟨i, hi, hi'⟩ := (h _).mp hT₄
+    exact
+      ⟨i, hi,
+        (closure_mono (image_mono hi')).trans
+          (Subset.trans (closure_minimal (image_preimage_subset _ _) hT₂) hT₃)⟩
+  · obtain ⟨i, hi, hi'⟩ := hT
+    suffices closure (f '' s i) in 𝓝 (f x) by filter_upwards [this] using hi'
+    replace h := (h (s i)).mpr ⟨i, hi, Subset.rfl⟩
+    exact hf.closure_image_mem_nhds h
 
 Depends on / 依赖: Filter, Filter.hasBasis_iff, Subset, Subset.rfl, Subset.trans, closure, closure_minimal, closure_mono, exists_mem_nhds_isClosed_subset, filter_upwards, hasBasis_iff, hf.isInducing.nhds_eq_comap, image_mono, image_preimage_subset, isInducing, nhds_eq_comap
 -/

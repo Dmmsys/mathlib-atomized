@@ -996,6 +996,12 @@ theorem contLinear_eq_zero_iff_exists_const
     · rw [← coe_contLinear_eq_linear, h]; rfl
     · rw [← coe_linear_eq_coe_contLinear, h]; rfl
   have h₂ : forall q : Q, f = const R P q ↔ (f : P ->ᵃ[R] Q) = AffineMap.const R P q := by
+    intro q
+    refine ⟨fun h => ?_, fun h => ?_⟩ <;> ext
+    · rw [h]; rfl
+    · rw [← coe_toAffineMap, h, AffineMap.const_apply, coe_const, Function.const_apply]
+  simp_rw [h₁, h₂]
+  exact (f : P ->ᵃ[R] Q).linear_eq_zero_iff_exists_const
 
 中文:
 定理 contLinear_eq_zero_iff_存在_const
@@ -1006,6 +1012,12 @@ theorem contLinear_eq_zero_iff_exists_const
     · rw [← coe_contLinear_eq_linear, h]; rfl
     · rw [← coe_linear_eq_coe_contLinear, h]; rfl
   have h₂ : forall q : Q, f = const R P q ↔ (f : P ->ᵃ[R] Q) = AffineMap.const R P q := by
+    intro q
+    refine ⟨fun h => ?_, fun h => ?_⟩ <;> ext
+    · rw [h]; rfl
+    · rw [← coe_toAffineMap, h, AffineMap.const_apply, coe_const, Function.const_apply]
+  simp_rw [h₁, h₂]
+  exact (f : P ->ᵃ[R] Q).linear_eq_zero_iff_exists_const
 
 Depends on / 依赖: AffineMap, AffineMap.const, AffineMap.const_apply, Function, Function.const_apply, coe_const, coe_contLinear_eq_linear, coe_linear_eq_coe_contLinear, coe_toAffineMap, const_apply, contLinear, f.contLinear, linear, linear_eq_zero_iff_exists_c, simp_rw
 -/
@@ -1550,7 +1562,7 @@ instance :
   add_vadd _ _ _ := ext fun _ => add_vadd _ _ _
   vsub f g := { __ := f.toAffineMap -ᵥ g.toAffineMap, cont := f.cont.vsub g.cont }
   vsub_vadd' _ _ := ext fun _ => vsub_vadd _ _
-  vadd_vs
+  vadd_vsub' _ _ := ext fun _ => vadd_vsub _ _
 
 中文:
 实例 :
@@ -1560,7 +1572,7 @@ instance :
   add_vadd _ _ _ := ext fun _ => add_vadd _ _ _
   vsub f g := { __ := f.toAffineMap -ᵥ g.toAffineMap, cont := f.cont.vsub g.cont }
   vsub_vadd' _ _ := ext fun _ => vsub_vadd _ _
-  vadd_vs
+  vadd_vsub' _ _ := ext fun _ => vadd_vsub _ _
 
 Depends on / 依赖: f.cont.vadd, f.toAffineMap, g.cont, g.toAffineMap, toAffineMap
 -/
@@ -2038,7 +2050,12 @@ definition decompEquiv
   left_inv f := by
     ext x
     simp_rw [vadd_apply, f.contLinear.coe_toContinuousAffineMap, coe_const, Function.const_apply,
-      ← f.map_vadd, vadd_eq
+      ← f.map_vadd, vadd_eq_add, add_zero]
+  right_inv := by
+    have := IsTopologicalAddTorsor.to_isTopologicalAddGroup W Q
+    rintro ⟨v, f⟩; ext <;> simp
+
+@[simp]
 
 中文:
 定义 decompEquiv
@@ -2050,7 +2067,12 @@ definition decompEquiv
   left_inv f := by
     ext x
     simp_rw [vadd_apply, f.contLinear.coe_toContinuousAffineMap, coe_const, Function.const_apply,
-      ← f.map_vadd, vadd_eq
+      ← f.map_vadd, vadd_eq_add, add_zero]
+  right_inv := by
+    have := IsTopologicalAddTorsor.to_isTopologicalAddGroup W Q
+    rintro ⟨v, f⟩; ext <;> simp
+
+@[simp]
 
 Depends on / 依赖: contLinear, f.contLinear
 -/

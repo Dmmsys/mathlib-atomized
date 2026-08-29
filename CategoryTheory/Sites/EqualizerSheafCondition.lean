@@ -385,7 +385,17 @@ theorem equalizer_sheaf_condition
   conv => enter [2, a, 1, 1, 2]; rw [(firstObjEqFamily P S.arrows).toEquiv_symm_apply]
   simp only [Iso.inv_hom_id_apply]
   apply forall₂_congr
- 
+  intro x _
+  apply existsUnique_congr
+  intro t
+  rw [Equiv.eq_symm_apply]
+  constructor
+  · intro q
+    ext Y f hf
+    simpa [Iso.toEquiv, forkMap] using q _ _
+  · intro q Y f hf
+    rw [← q]
+    simp [Iso.toEquiv, forkMap]
 
 中文:
 定理 equalizer_sheaf_condition
@@ -395,7 +405,17 @@ theorem equalizer_sheaf_condition
   conv => enter [2, a, 1, 1, 2]; rw [(firstObjEqFamily P S.arrows).toEquiv_symm_apply]
   simp only [Iso.inv_hom_id_apply]
   apply forall₂_congr
- 
+  intro x _
+  apply existsUnique_congr
+  intro t
+  rw [Equiv.eq_symm_apply]
+  constructor
+  · intro q
+    ext Y f hf
+    simpa [Iso.toEquiv, forkMap] using q _ _
+  · intro q Y f hf
+    rw [← q]
+    simp [Iso.toEquiv, forkMap]
 
 Depends on / 依赖: Equiv.eq_symm_apply, Equiv.forall_congr_right, Iso.inv_hom_id_apply, Iso.toEquiv, Presieve, S.arrows, Types.type_equalizer_iff_unique, arrows, compatible_iff, eq_symm_apply, existsUnique_congr, firstObjEqFamily, forall_congr_right, forkMap, inv_hom_id_apply, simp_rw, toEquiv, toEquiv.symm, toEquiv_symm_apply, type_equalizer_iff_unique
 -/
@@ -584,7 +604,7 @@ theorem compatible_iff
     simpa [firstMap, secondMap] using t hf hg
   · intro t Y Z f g hf hg
     rw [Types.limit_ext_iff'] at t
-    simpa [firstMap, secondMap] using t ⟨⟨⟨Y, f, hf⟩, Z, g
+    simpa [firstMap, secondMap] using t ⟨⟨⟨Y, f, hf⟩, Z, g, hg⟩⟩
 
 中文:
 定理 compatible_iff
@@ -598,7 +618,7 @@ theorem compatible_iff
     simpa [firstMap, secondMap] using t hf hg
   · intro t Y Z f g hf hg
     rw [Types.limit_ext_iff'] at t
-    simpa [firstMap, secondMap] using t ⟨⟨⟨Y, f, hf⟩, Z, g
+    simpa [firstMap, secondMap] using t ⟨⟨⟨Y, f, hf⟩, Z, g, hg⟩⟩
 
 Depends on / 依赖: Limits, Limits.Types.limit_ext, Presieve, Presieve.pullbackCompatible_iff, Types.limit_ext_iff, firstMap, limit_ext, limit_ext_iff, pullbackCompatible_iff, secondMap
 -/
@@ -632,6 +652,14 @@ theorem sheaf_condition
   intro x _
   apply existsUnique_congr
   intro t
+  rw [Equiv.eq_symm_apply]
+  constructor
+  · intro q
+    funext Y f hf
+    simpa [Iso.toEquiv, forkMap] using q _ _
+  · intro q Y f hf
+    rw [← q]
+    simp [Iso.toEquiv, forkMap]
 
 中文:
 定理 sheaf_condition
@@ -645,6 +673,14 @@ theorem sheaf_condition
   intro x _
   apply existsUnique_congr
   intro t
+  rw [Equiv.eq_symm_apply]
+  constructor
+  · intro q
+    funext Y f hf
+    simpa [Iso.toEquiv, forkMap] using q _ _
+  · intro q Y f hf
+    rw [← q]
+    simp [Iso.toEquiv, forkMap]
 
 Depends on / 依赖: Equiv.apply_symm_apply, Equiv.eq_symm_apply, Equiv.forall_congr_right, Iso.toEquiv, Iso.toEquiv_apply, Types.type_equalizer_iff_unique, apply_symm_apply, compatible_iff, eq_symm_apply, existsUnique_congr, firstObjEqFamily, forall_congr_right, forkMap, simp_rw, toEquiv, toEquiv.symm, toEquiv_apply, type_equalizer_iff_unique
 -/
@@ -957,7 +993,19 @@ theorem sheaf_condition
   simp only [FirstObj]
   rw [← Equiv.forall_congr_right ((equivShrink _).trans (Types.Small.productIso _).toEquiv.symm)]
   simp_rw [← compatible_iff_of_small, ← Iso.toEquiv_apply, Equiv.trans_apply,
-    Equiv.apply_symm_apply, Equ
+    Equiv.apply_symm_apply, Equiv.symm_apply_apply]
+  apply forall₂_congr
+  intro x _
+  apply existsUnique_congr
+  intro t
+  rw [Equiv.eq_symm_apply]; rw [← Equiv.symm_apply_eq]
+  constructor
+  · intro q
+    funext i
+    simpa [Iso.toEquiv, forkMap] using q i
+  · intro q i
+    rw [← q]
+    simp [Iso.toEquiv, forkMap]
 
 中文:
 定理 sheaf_condition
@@ -967,7 +1015,19 @@ theorem sheaf_condition
   simp only [FirstObj]
   rw [← Equiv.forall_congr_right ((equivShrink _).trans (Types.Small.productIso _).toEquiv.symm)]
   simp_rw [← compatible_iff_of_small, ← Iso.toEquiv_apply, Equiv.trans_apply,
-    Equiv.apply_symm_apply, Equ
+    Equiv.apply_symm_apply, Equiv.symm_apply_apply]
+  apply forall₂_congr
+  intro x _
+  apply existsUnique_congr
+  intro t
+  rw [Equiv.eq_symm_apply]; rw [← Equiv.symm_apply_eq]
+  constructor
+  · intro q
+    funext i
+    simpa [Iso.toEquiv, forkMap] using q i
+  · intro q i
+    rw [← q]
+    simp [Iso.toEquiv, forkMap]
 
 Depends on / 依赖: Equiv.apply_symm_apply, Equiv.eq_symm_apply, Equiv.forall_congr_right, Equiv.symm_apply_apply, Equiv.symm_apply_eq, Equiv.trans_apply, FirstObj, Iso.toEquiv, Iso.toEquiv_apply, Types.Small.productIso, Types.type_equalizer_iff_unique, apply_symm_apply, compatible_iff_of_small, eq_symm_apply, equivShrink, existsUnique_congr, forall_congr_right, forkMap, isSheafFor_arrows_iff, productIso
 -/
@@ -1003,7 +1063,10 @@ lemma isSheafFor_singleton_iff
   have h (x : F.obj (op X)) : (forall {Z : C} (p₁ p₂ : Z ⟶ X),
       p₁ ≫ f = p₂ ≫ f -> F.map p₁.op x = F.map p₂.op x) ↔ F.map c.fst.op x = F.map c.snd.op x := by
     refine ⟨fun H => H _ _ c.condition, fun H Z p₁ p₂ h => ?_⟩
-    rw [← PullbackCone.IsLimit.lift_fst hc _ _ h]; rw [op_comp]; rw [Fu
+    rw [← PullbackCone.IsLimit.lift_fst hc _ _ h]; rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [H]
+    simp [← comp_apply, ← Functor.map_comp, ← op_comp]
+  rw [Types.type_equalizer_iff_unique]; rw [Presieve.isSheafFor_singleton]
+  simp_rw [h]
 
 中文:
 引理 isSheafFor_singleton_iff
@@ -1012,7 +1075,10 @@ lemma isSheafFor_singleton_iff
   have h (x : F.obj (op X)) : (forall {Z : C} (p₁ p₂ : Z ⟶ X),
       p₁ ≫ f = p₂ ≫ f -> F.map p₁.op x = F.map p₂.op x) ↔ F.map c.fst.op x = F.map c.snd.op x := by
     refine ⟨fun H => H _ _ c.condition, fun H Z p₁ p₂ h => ?_⟩
-    rw [← PullbackCone.IsLimit.lift_fst hc _ _ h]; rw [op_comp]; rw [Fu
+    rw [← PullbackCone.IsLimit.lift_fst hc _ _ h]; rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [H]
+    simp [← comp_apply, ← Functor.map_comp, ← op_comp]
+  rw [Types.type_equalizer_iff_unique]; rw [Presieve.isSheafFor_singleton]
+  simp_rw [h]
 
 Depends on / 依赖: F.map, c.fst.op, c.snd.op
 -/

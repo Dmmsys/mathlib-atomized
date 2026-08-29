@@ -254,7 +254,8 @@ theorem rank_add_le
       refine Submodule.rank_mono ?_
 exact LinearMap.range_le_iff_comap.2 eq_top_iff'.2 fun x =>
         show f x + g x in (LinearMap.range f ⊔ LinearMap.range g : Submodule K V') from
-        mem_su
+        mem_sup.2 ⟨_, ⟨x, rfl⟩, _, ⟨x, rfl⟩, rfl⟩
+    _ <= rank f + rank g := Submodule.rank_add_le_rank_add_rank _ _
 
 中文:
 定理 rank_add_le
@@ -265,7 +266,8 @@ exact LinearMap.range_le_iff_comap.2 eq_top_iff'.2 fun x =>
       refine Submodule.rank_mono ?_
 exact LinearMap.range_le_iff_comap.2 eq_top_iff'.2 fun x =>
         show f x + g x in (LinearMap.range f ⊔ LinearMap.range g : Submodule K V') from
-        mem_su
+        mem_sup.2 ⟨_, ⟨x, rfl⟩, _, ⟨x, rfl⟩, rfl⟩
+    _ <= rank f + rank g := Submodule.rank_add_le_rank_add_rank _ _
 
 Depends on / 依赖: LinearMap, LinearMap.range, LinearMap.range_le_iff_comap, Module, Module.rank, Submodule, Submodule.rank_add_le_rank_add_rank, Submodule.rank_mono, eq_top_iff, mem_sup, range_le_iff_comap, rank_add_le_rank_add_rank, rank_mono
 -/
@@ -317,7 +319,19 @@ theorem le_rank_iff_exists_linearIndependent
   have fg : LeftInverse f.rangeRestrict g := LinearMap.congr_fun hg
   refine ⟨fun h => ?_, ?_⟩
   · rcases _root_.le_rank_iff_exists_linearIndependent.1 h with ⟨s, rfl, si⟩
-    refine ⟨g '' s, Cardinal.mk
+    refine ⟨g '' s, Cardinal.mk_image_eq_lift _ _ fg.injective, ?_⟩
+    replace fg : forall x, f (g x) = x := by
+      intro x
+      convert! congr_arg Subtype.val (fg x)
+    replace si : LinearIndepOn K (fun x => f (g x)) s := by
+      simpa only [fg] using! si.map' _ (ker_subtype _)
+    exact si.image_of_comp
+  · rintro ⟨s, hsc, si⟩
+    have : LinearIndepOn K f.rangeRestrict s :=
+      LinearIndependent.of_comp (LinearMap.range f).subtype (by convert! si)
+    convert! this.id_image.cardinal_le_rank
+    rw [← Cardinal.lift_inj]; rw [← hsc]; rw [Cardinal.mk_image_eq_of_injOn_lift]
+    exact injOn_iff_injective.2 this.injective
 
 中文:
 定理 le_rank_iff_存在_linearIndependent
@@ -327,7 +341,19 @@ theorem le_rank_iff_exists_linearIndependent
   have fg : LeftInverse f.rangeRestrict g := LinearMap.congr_fun hg
   refine ⟨fun h => ?_, ?_⟩
   · rcases _root_.le_rank_iff_exists_linearIndependent.1 h with ⟨s, rfl, si⟩
-    refine ⟨g '' s, Cardinal.mk
+    refine ⟨g '' s, Cardinal.mk_image_eq_lift _ _ fg.injective, ?_⟩
+    replace fg : forall x, f (g x) = x := by
+      intro x
+      convert! congr_arg Subtype.val (fg x)
+    replace si : LinearIndepOn K (fun x => f (g x)) s := by
+      simpa only [fg] using! si.map' _ (ker_subtype _)
+    exact si.image_of_comp
+  · rintro ⟨s, hsc, si⟩
+    have : LinearIndepOn K f.rangeRestrict s :=
+      LinearIndependent.of_comp (LinearMap.range f).subtype (by convert! si)
+    convert! this.id_image.cardinal_le_rank
+    rw [← Cardinal.lift_inj]; rw [← hsc]; rw [Cardinal.mk_image_eq_of_injOn_lift]
+    exact injOn_iff_injective.2 this.injective
 
 Depends on / 依赖: Cardinal, Cardinal.mk_image_eq_lift, LeftInverse, LinearIndepOn, LinearMap, LinearMap.congr_fun, Subtype, Subtype.val, _root_, _root_.le_rank_iff_exists_linearIndependent, congr_arg, congr_fun, convert, exists_rightInverse_of_surjective, f.rangeRestrict, f.rangeRestrict.exists_rightInverse_of_surjective, f.range_rangeRestrict, fg.injective, injective, le_rank_iff_exists_linearIndependent
 -/

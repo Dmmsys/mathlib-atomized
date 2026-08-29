@@ -351,7 +351,7 @@ theorem inversion_inversion
   · rw [inversion, dist_inversion_center, inversion_vsub_center, smul_smul, ← mul_pow,
       div_mul_div_comm, div_mul_cancel₀ _ (dist_ne_zero.2 hne), ← sq, div_self, one_pow, one_smul,
       vsub_vadd]
-    exact pow_n
+    exact pow_ne_zero _ hR
 
 中文:
 定理 inversion_inversion
@@ -362,7 +362,7 @@ theorem inversion_inversion
   · rw [inversion, dist_inversion_center, inversion_vsub_center, smul_smul, ← mul_pow,
       div_mul_div_comm, div_mul_cancel₀ _ (dist_ne_zero.2 hne), ← sq, div_self, one_pow, one_smul,
       vsub_vadd]
-    exact pow_n
+    exact pow_ne_zero _ hR
 
 Depends on / 依赖: dist_inversion_center, dist_ne_zero, div_mul_div_comm, div_self, eq_or_ne, inversion, inversion_self, inversion_vsub_center, mul_pow, one_pow, one_smul, pow_ne_zero, smul_smul, vsub_vadd
 -/
@@ -634,7 +634,14 @@ theorem mul_dist_le_mul_dist_add_mul_dist
   · rw [dist_self, zero_mul]
     positivity
   rcases eq_or_ne d a with (rfl | hd)
-  · rw [dis
+  · rw [dist_self, mul_zero, add_zero, dist_comm d, dist_comm d, mul_comm]
+  /- Otherwise, we apply the triangle inequality to `EuclideanGeometry.inversion a 1 b`,
+    `EuclideanGeometry.inversion a 1 c`, and `EuclideanGeometry.inversion a 1 d`. -/
+  have H := dist_triangle (inversion a 1 b) (inversion a 1 c) (inversion a 1 d)
+  rw [dist_inversion_inversion hb hd]; rw [dist_inversion_inversion hb hc]; rw [dist_inversion_inversion hc hd]; rw [one_pow] at H
+  rw [← dist_pos] at hb hc hd
+  rw [← div_le_div_iff_of_pos_right (mul_pos hb (mul_pos hc hd))]
+  convert! H using 1 <;> simp [field, dist_comm a]; ring
 
 中文:
 定理 mul_dist_le_mul_dist_add_mul_dist
@@ -647,7 +654,14 @@ theorem mul_dist_le_mul_dist_add_mul_dist
   · rw [dist_self, zero_mul]
     positivity
   rcases eq_or_ne d a with (rfl | hd)
-  · rw [dis
+  · rw [dist_self, mul_zero, add_zero, dist_comm d, dist_comm d, mul_comm]
+  /- Otherwise, we apply the triangle inequality to `EuclideanGeometry.inversion a 1 b`,
+    `EuclideanGeometry.inversion a 1 c`, and `EuclideanGeometry.inversion a 1 d`. -/
+  have H := dist_triangle (inversion a 1 b) (inversion a 1 c) (inversion a 1 d)
+  rw [dist_inversion_inversion hb hd]; rw [dist_inversion_inversion hb hc]; rw [dist_inversion_inversion hc hd]; rw [one_pow] at H
+  rw [← dist_pos] at hb hc hd
+  rw [← div_le_div_iff_of_pos_right (mul_pos hb (mul_pos hc hd))]
+  convert! H using 1 <;> simp [field, dist_comm a]; ring
 -/
 theorem mul_dist_le_mul_dist_add_mul_dist (a b c d : P) :
     dist a c * dist b d <= dist a b * dist c d + dist b c * dist a d := by
@@ -759,7 +773,11 @@ theorem tendsto_inversion_nhdsNE_center_cobounded
     refine ⟨tendsto_nhdsWithin_of_tendsto_nhds ?_, eventually_nhdsWithin_of_forall ?_⟩
     · rw [← dist_self c]
 exact ContinuousAt.tendsto by fun_prop
-    · aes
+    · aesop
+  have hratio : Tendsto (fun x : P => dist c (inversion c R x)) (𝓝[!=] c) atTop := by
+    simp_rw [dist_center_inversion, div_eq_mul_inv]
+exact hdist.inv_tendsto_nhdsGT_zero.const_mul_atTop by rwa [sq_pos_iff]
+  simpa using hratio
 
 中文:
 定理 tendsto_inversion_nhdsNE_center_cobounded
@@ -771,7 +789,11 @@ exact ContinuousAt.tendsto by fun_prop
     refine ⟨tendsto_nhdsWithin_of_tendsto_nhds ?_, eventually_nhdsWithin_of_forall ?_⟩
     · rw [← dist_self c]
 exact ContinuousAt.tendsto by fun_prop
-    · aes
+    · aesop
+  have hratio : Tendsto (fun x : P => dist c (inversion c R x)) (𝓝[!=] c) atTop := by
+    simp_rw [dist_center_inversion, div_eq_mul_inv]
+exact hdist.inv_tendsto_nhdsGT_zero.const_mul_atTop by rwa [sq_pos_iff]
+  simpa using hratio
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.tendsto, Tendsto, const_mul_atTop, dist_center_inversion, dist_self, div_eq_mul_inv, eventually_nhdsWithin_of_forall, fun_prop, hdist.inv_tendsto_nhdsGT_zero.const_mul_atTop, hratio, inv_tendsto_nhdsGT_zero, inversion, simp_rw, sq_pos_iff, tendsto, tendsto_dist_left_atTop_iff, tendsto_nhdsWithin_iff, tendsto_nhdsWithin_of_tendsto_nhds
 -/

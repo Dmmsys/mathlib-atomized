@@ -320,7 +320,11 @@ instance [Algebra
         Ideal.Quotient.algebraMap_eq, mapQ_eq_factor]
       rfl⟩
 map_one' := Subtype.ext map_one _
-map_mul' 
+map_mul' x y := Subtype.ext map_mul _ x y
+map_zero' := Subtype.ext map_zero _
+map_add' x y := Subtype.ext map_add _ x y }
+commutes' r x := Subtype.ext Algebra.commutes' r x.val
+smul_def' r x := Subtype.ext Algebra.smul_def' r x.val
 
 中文:
 实例 [代数
@@ -331,7 +335,11 @@ map_mul'
         Ideal.Quotient.algebraMap_eq, mapQ_eq_factor]
       rfl⟩
 map_one' := Subtype.ext map_one _
-map_mul' 
+map_mul' x y := Subtype.ext map_mul _ x y
+map_zero' := Subtype.ext map_zero _
+map_add' x y := Subtype.ext map_add _ x y }
+commutes' r x := Subtype.ext Algebra.commutes' r x.val
+smul_def' r x := Subtype.ext Algebra.smul_def' r x.val
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.smul_def, Ideal.Quotient.algebraMap_eq, IsScalarTower, IsScalarTower.algebraMap_apply, Pi.algebraMap_apply, Quotient, Subtype, Subtype.ext, algebraMap, algebraMap_apply, algebraMap_eq, commutes, mapQ_eq_factor, map_add, map_mul, map_one, map_zero, smul_def
 -/
@@ -861,7 +869,9 @@ map_mul' x y := Subtype.ext map_mul _ x y
 map_zero' := Subtype.ext map_zero _
 map_add' x y := Subtype.ext map_add _ x y }
 commutes' r x := Subtype.ext Algebra.commutes' r x.val
-smul_def' r x := Subtype.ext Al
+smul_def' r x := Subtype.ext Algebra.smul_def' r x.val
+
+@[simp]
 
 中文:
 实例 :
@@ -872,7 +882,9 @@ map_mul' x y := Subtype.ext map_mul _ x y
 map_zero' := Subtype.ext map_zero _
 map_add' x y := Subtype.ext map_add _ x y }
 commutes' r x := Subtype.ext Algebra.commutes' r x.val
-smul_def' r x := Subtype.ext Al
+smul_def' r x := Subtype.ext Algebra.smul_def' r x.val
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.smul_def, Subtype, Subtype.ext, algebraMap, commutes, map_add, map_mul, map_one, map_zero, smul_def, x.val
 -/
@@ -1029,7 +1041,10 @@ instance :
       induction x using Quotient.inductionOn'
       have h : b₁ - b₂ in (I : Submodule R R) := by
         rwa [show I = I • ⊤ by simp, ← Submodule.quotientRel_def]
-      rw [← sub_eq_zero]; rw [← sub_smul]; rw [Submodule.Quotient.mk''_eq_mk]; rw [← Submodu
+      rw [← sub_eq_zero]; rw [← sub_smul]; rw [Submodule.Quotient.mk''_eq_mk]; rw [← Submodule.Quotient.mk_smul]; rw [Submodule.Quotient.mk_eq_zero]
+      exact Submodule.smul_mem_smul h mem_top
+
+@[local simp]
 
 中文:
 实例 :
@@ -1038,7 +1053,10 @@ instance :
       induction x using Quotient.inductionOn'
       have h : b₁ - b₂ in (I : Submodule R R) := by
         rwa [show I = I • ⊤ by simp, ← Submodule.quotientRel_def]
-      rw [← sub_eq_zero]; rw [← sub_smul]; rw [Submodule.Quotient.mk''_eq_mk]; rw [← Submodu
+      rw [← sub_eq_zero]; rw [← sub_smul]; rw [Submodule.Quotient.mk''_eq_mk]; rw [← Submodule.Quotient.mk_smul]; rw [Submodule.Quotient.mk_eq_zero]
+      exact Submodule.smul_mem_smul h mem_top
+
+@[local simp]
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.liftOn, Submodule, Submodule.Quotient.mk, Submodule.Quotient.mk_eq_zero, Submodule.Quotient.mk_smul, Submodule.quotientRel_def, Submodule.smul_mem_smul, _eq_mk, inductionOn, liftOn, mem_top, mk_eq_zero, mk_smul, quotientRel_def, smul_mem_smul, sub_eq_zero, sub_smul
 -/
@@ -1157,7 +1175,11 @@ instance smul
       apply induction_on I R r (fun r => ?_)
       apply induction_on I M x (fun x => ?_)
       simp only [coe_eval, mapQ_eq_factor, mk_apply_coe, mkQ_apply, Ideal.Quotient.mk_eq_mk,
-        mk_smul_mk, map_smul, m
+        mk_smul_mk, map_smul, mapQ_apply, LinearMap.id_coe, id_eq]
+      rw [smul_mk I hmn]
+  }
+
+@[simp]
 
 中文:
 实例 smul
@@ -1168,7 +1190,11 @@ instance smul
       apply induction_on I R r (fun r => ?_)
       apply induction_on I M x (fun x => ?_)
       simp only [coe_eval, mapQ_eq_factor, mk_apply_coe, mkQ_apply, Ideal.Quotient.mk_eq_mk,
-        mk_smul_mk, map_smul, m
+        mk_smul_mk, map_smul, mapQ_apply, LinearMap.id_coe, id_eq]
+      rw [smul_mk I hmn]
+  }
+
+@[simp]
 -/
 instance smul : SMul (AdicCompletion I R) (AdicCompletion I M) where
   smul r x := {
@@ -1297,7 +1323,11 @@ definition liftRingHom
     simp only [map_zero]
     ext; simp
   map_mul' x y := by
-    simp only [mapQ_e
+    simp only [mapQ_eq_factor, factor_eq_factor, map_mul]
+    ext; simp
+  map_one' := by
+    simp only [map_one]
+    ext; simp
 
 中文:
 定义 liftRingHom
@@ -1311,7 +1341,11 @@ definition liftRingHom
     simp only [map_zero]
     ext; simp
   map_mul' x y := by
-    simp only [mapQ_e
+    simp only [mapQ_eq_factor, factor_eq_factor, map_mul]
+    ext; simp
+  map_one' := by
+    simp only [map_one]
+    ext; simp
 
 Depends on / 依赖: Equiv.decidable, Ideal.mul_top, SizeOf, SizeOf.sizeOf, decidable, decidable_of_iff, decreasing_tactic, factor, le_of_eq, mem.decidable, mem_cons, mul_top, sizeOf, sizeof_pos, termination_by
 -/

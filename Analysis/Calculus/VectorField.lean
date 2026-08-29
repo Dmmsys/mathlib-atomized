@@ -669,7 +669,7 @@ lemma fderivWithin_apply_lieBracket_of_isSymmSndFDerivWithinAt
     (hf.fderivWithin_right hs (by decide) hxs).differentiableWithinAt one_ne_zero
   have H₁ : UniqueDiffWithinAt 𝕜 s x := hs x hxs
   rw [fderivWithin_clm_apply]; rw [fderivWithin_clm_apply] <;> try assumption
-  simp [lieBracketWithi
+  simp [lieBracketWithin, hsymm (V _) (W _)]
 
 中文:
 引理 fderivWithin_apply_lieBracket_of_isSymmSndFDerivWithinAt
@@ -679,7 +679,7 @@ lemma fderivWithin_apply_lieBracket_of_isSymmSndFDerivWithinAt
     (hf.fderivWithin_right hs (by decide) hxs).differentiableWithinAt one_ne_zero
   have H₁ : UniqueDiffWithinAt 𝕜 s x := hs x hxs
   rw [fderivWithin_clm_apply]; rw [fderivWithin_clm_apply] <;> try assumption
-  simp [lieBracketWithi
+  simp [lieBracketWithin, hsymm (V _) (W _)]
 
 Depends on / 依赖: DifferentiableWithinAt, UniqueDiffWithinAt, differentiableWithinAt, fderivWithin, fderivWithin_clm_apply, fderivWithin_right, hf.fderivWithin_right, lieBracketWithin, one_ne_zero
 -/
@@ -1334,7 +1334,20 @@ lemma leibniz_identity_lieBracketWithin_of_isSymmSndFDerivWithinAt
   have aux₁ {U V : E -> E} (hU : ContDiffWithinAt 𝕜 2 U s x) (hV : ContDiffWithinAt 𝕜 2 V s x) :
       DifferentiableWithinAt 𝕜 (fun x => (fderivWithin 𝕜 V s x) (U x)) s x :=
     have := hV.fderivWithin_right_apply (hU.of_le one_le_two) hs le_rfl hx
-    
+    this.differentiableWithinAt one_ne_zero
+  have aux₂ {U V : E -> E} (hU : ContDiffWithinAt 𝕜 2 U s x) (hV : ContDiffWithinAt 𝕜 2 V s x) :
+      fderivWithin 𝕜 (fun y => (fderivWithin 𝕜 U s y) (V y)) s x =
+        (fderivWithin 𝕜 U s x).comp (fderivWithin 𝕜 V s x) +
+        (fderivWithin 𝕜 (fderivWithin 𝕜 U s) s x).flip (V x) := by
+    refine fderivWithin_clm_apply (hs x hx) ?_ (hV.differentiableWithinAt two_ne_zero)
+    exact (hU.fderivWithin_right hs le_rfl hx).differentiableWithinAt one_ne_zero
+  rw [fderivWithin_fun_sub (hs x hx) (aux₁ hV hW) (aux₁ hW hV)]
+  rw [fderivWithin_fun_sub (hs x hx) (aux₁ hU hV) (aux₁ hV hU)]
+  rw [fderivWithin_fun_sub (hs x hx) (aux₁ hU hW) (aux₁ hW hU)]
+  rw [aux₂ hW hV]; rw [aux₂ hV hW]; rw [aux₂ hV hU]; rw [aux₂ hU hV]; rw [aux₂ hW hU]; rw [aux₂ hU hW]
+  simp only [FunLike.coe_sub, Pi.sub_apply, add_apply, ContinuousLinearMap.comp_apply,
+    ContinuousLinearMap.flip_apply, h'V.eq, h'U.eq, h'W.eq]
+  abel
 
 中文:
 引理 leibniz_identity_lieBracketWithin_of_isSymmSndFDerivWithinAt
@@ -1343,7 +1356,20 @@ lemma leibniz_identity_lieBracketWithin_of_isSymmSndFDerivWithinAt
   have aux₁ {U V : E -> E} (hU : ContDiffWithinAt 𝕜 2 U s x) (hV : ContDiffWithinAt 𝕜 2 V s x) :
       DifferentiableWithinAt 𝕜 (fun x => (fderivWithin 𝕜 V s x) (U x)) s x :=
     have := hV.fderivWithin_right_apply (hU.of_le one_le_two) hs le_rfl hx
-    
+    this.differentiableWithinAt one_ne_zero
+  have aux₂ {U V : E -> E} (hU : ContDiffWithinAt 𝕜 2 U s x) (hV : ContDiffWithinAt 𝕜 2 V s x) :
+      fderivWithin 𝕜 (fun y => (fderivWithin 𝕜 U s y) (V y)) s x =
+        (fderivWithin 𝕜 U s x).comp (fderivWithin 𝕜 V s x) +
+        (fderivWithin 𝕜 (fderivWithin 𝕜 U s) s x).flip (V x) := by
+    refine fderivWithin_clm_apply (hs x hx) ?_ (hV.differentiableWithinAt two_ne_zero)
+    exact (hU.fderivWithin_right hs le_rfl hx).differentiableWithinAt one_ne_zero
+  rw [fderivWithin_fun_sub (hs x hx) (aux₁ hV hW) (aux₁ hW hV)]
+  rw [fderivWithin_fun_sub (hs x hx) (aux₁ hU hV) (aux₁ hV hU)]
+  rw [fderivWithin_fun_sub (hs x hx) (aux₁ hU hW) (aux₁ hW hU)]
+  rw [aux₂ hW hV]; rw [aux₂ hV hW]; rw [aux₂ hV hU]; rw [aux₂ hU hV]; rw [aux₂ hW hU]; rw [aux₂ hU hW]
+  simp only [FunLike.coe_sub, Pi.sub_apply, add_apply, ContinuousLinearMap.comp_apply,
+    ContinuousLinearMap.flip_apply, h'V.eq, h'U.eq, h'W.eq]
+  abel
 
 Depends on / 依赖: ContDiffWithinAt, DifferentiableWithinAt, differentiableWithinAt, fderivWithin, fderivWithin_right_apply, hU.of_le, hV.fderivWithin_right_apply, le_rfl, lieBracketWithin_eq, map_sub, of_le, one_le_two, one_ne_zero, this.differentiableWithinAt
 -/
@@ -1386,7 +1412,8 @@ lemma leibniz_identity_lieBracketWithin
     (hU.of_le (le_minSmoothness.trans hn)) (hV.of_le (le_minSmoothness.trans hn))
     (hW.of_le (le_minSmoothness.trans hn))
   · exact hU.isSymmSndFDerivWithinAt hn hs h'x hx
-  · exact hV.isSymmSndFDerivWithinAt hn hs h'x 
+  · exact hV.isSymmSndFDerivWithinAt hn hs h'x hx
+  · exact hW.isSymmSndFDerivWithinAt hn hs h'x hx
 
 中文:
 引理 leibniz_identity_lieBracketWithin
@@ -1396,7 +1423,8 @@ lemma leibniz_identity_lieBracketWithin
     (hU.of_le (le_minSmoothness.trans hn)) (hV.of_le (le_minSmoothness.trans hn))
     (hW.of_le (le_minSmoothness.trans hn))
   · exact hU.isSymmSndFDerivWithinAt hn hs h'x hx
-  · exact hV.isSymmSndFDerivWithinAt hn hs h'x 
+  · exact hV.isSymmSndFDerivWithinAt hn hs h'x hx
+  · exact hW.isSymmSndFDerivWithinAt hn hs h'x hx
 
 Depends on / 依赖: hU.isSymmSndFDerivWithinAt, hU.of_le, hV.isSymmSndFDerivWithinAt, hV.of_le, hW.isSymmSndFDerivWithinAt, hW.of_le, isSymmSndFDerivWithinAt, le_minSmoothness, le_minSmoothness.trans, leibniz_identity_lieBracketWithin_of_isSymmSndFDerivWithinAt, of_le
 -/
@@ -1673,7 +1701,38 @@ lemma _root_.exists_continuousLinearEquiv_fderivWithin_symm_eq
     have I : range ((↑) : (E ≃L[𝕜] F) -> E ->L[𝕜] F) in 𝓝 (fderivWithin 𝕜 f s x) := by
       rw [← hM]
       exact M.nhds
-    have : ContinuousWithinAt (fderivWithi
+    have : ContinuousWithinAt (fderivWithin 𝕜 f s) s x :=
+      (h'f.fderivWithin_right (m := 1) hs le_rfl hx).continuousWithinAt
+    exact this I
+  let N : E -> (E ≃L[𝕜] F) := fun x => if h : x in U then h.choose else M
+  have eN : (fun y => (N y : E ->L[𝕜] F)) =ᶠ[𝓝[s] x] fun y => fderivWithin 𝕜 f s y := by
+    filter_upwards [hU] with y hy
+    simpa only [hy, ↓reduceDIte, N] using Exists.choose_spec hy
+  have e'N : N x = fderivWithin 𝕜 f s x := by apply mem_of_mem_nhdsWithin hx eN
+  have hN : ContDiffWithinAt 𝕜 1 (fun y => (N y : E ->L[𝕜] F)) s x := by
+    have : ContDiffWithinAt 𝕜 1 (fun y => fderivWithin 𝕜 f s y) s x :=
+      h'f.fderivWithin_right (m := 1) hs le_rfl hx
+    apply this.congr_of_eventuallyEq eN e'N
+  have hN' : ContDiffWithinAt 𝕜 1 (fun y => ((N y).symm : F ->L[𝕜] E)) s x := by
+    have : ContDiffWithinAt 𝕜 1 (ContinuousLinearMap.inverse ∘ (fun y => (N y : E ->L[𝕜] F))) s x :=
+      (contDiffAt_map_inverse (N x)).comp_contDiffWithinAt x hN
+    convert! this with y
+    simp only [Function.comp_apply, ContinuousLinearMap.inverse_equiv]
+  refine ⟨N, hN, hN', eN, fun v => ?_⟩
+  have A' y : ContinuousLinearMap.compL 𝕜 F E F (N y : E ->L[𝕜] F) ((N y).symm : F ->L[𝕜] E)
+      = ContinuousLinearMap.id 𝕜 F := by ext; simp
+  have : fderivWithin 𝕜 (fun y => ContinuousLinearMap.compL 𝕜 F E F (N y : E ->L[𝕜] F)
+      ((N y).symm : F ->L[𝕜] E)) s x v = 0 := by
+    simp [A', fderivWithin_const_apply]
+  have I : (N x : E ->L[𝕜] F) ∘L (fderivWithin 𝕜 (fun y => ((N y).symm : F ->L[𝕜] E)) s x v) =
+      - (fderivWithin 𝕜 (fun y => (N y : E ->L[𝕜] F)) s x v) ∘L ((N x).symm : F ->L[𝕜] E) := by
+    rw [ContinuousLinearMap.fderivWithin_of_bilinear _ (hN.differentiableWithinAt one_ne_zero)
+      (hN'.differentiableWithinAt one_ne_zero) (hs x hx)] at this
+    simpa [eq_neg_iff_add_eq_zero] using this
+  have B (M : F ->L[𝕜] E) : M = ((N x).symm : F ->L[𝕜] E) ∘L ((N x) ∘L M) := by
+    ext; simp
+  rw [B (fderivWithin 𝕜 (fun y => ((N y).symm : F ->L[𝕜] E)) s x v), I]
+  simp only [ContinuousLinearMap.comp_neg, eN.fderivWithin_eq e'N]
 
 中文:
 引理 _root_.存在_continuousLinearEquiv_fderivWithin_symm_eq
@@ -1685,7 +1744,38 @@ lemma _root_.exists_continuousLinearEquiv_fderivWithin_symm_eq
     have I : range ((↑) : (E ≃L[𝕜] F) -> E ->L[𝕜] F) in 𝓝 (fderivWithin 𝕜 f s x) := by
       rw [← hM]
       exact M.nhds
-    have : ContinuousWithinAt (fderivWithi
+    have : ContinuousWithinAt (fderivWithin 𝕜 f s) s x :=
+      (h'f.fderivWithin_right (m := 1) hs le_rfl hx).continuousWithinAt
+    exact this I
+  let N : E -> (E ≃L[𝕜] F) := fun x => if h : x in U then h.choose else M
+  have eN : (fun y => (N y : E ->L[𝕜] F)) =ᶠ[𝓝[s] x] fun y => fderivWithin 𝕜 f s y := by
+    filter_upwards [hU] with y hy
+    simpa only [hy, ↓reduceDIte, N] using Exists.choose_spec hy
+  have e'N : N x = fderivWithin 𝕜 f s x := by apply mem_of_mem_nhdsWithin hx eN
+  have hN : ContDiffWithinAt 𝕜 1 (fun y => (N y : E ->L[𝕜] F)) s x := by
+    have : ContDiffWithinAt 𝕜 1 (fun y => fderivWithin 𝕜 f s y) s x :=
+      h'f.fderivWithin_right (m := 1) hs le_rfl hx
+    apply this.congr_of_eventuallyEq eN e'N
+  have hN' : ContDiffWithinAt 𝕜 1 (fun y => ((N y).symm : F ->L[𝕜] E)) s x := by
+    have : ContDiffWithinAt 𝕜 1 (ContinuousLinearMap.inverse ∘ (fun y => (N y : E ->L[𝕜] F))) s x :=
+      (contDiffAt_map_inverse (N x)).comp_contDiffWithinAt x hN
+    convert! this with y
+    simp only [Function.comp_apply, ContinuousLinearMap.inverse_equiv]
+  refine ⟨N, hN, hN', eN, fun v => ?_⟩
+  have A' y : ContinuousLinearMap.compL 𝕜 F E F (N y : E ->L[𝕜] F) ((N y).symm : F ->L[𝕜] E)
+      = ContinuousLinearMap.id 𝕜 F := by ext; simp
+  have : fderivWithin 𝕜 (fun y => ContinuousLinearMap.compL 𝕜 F E F (N y : E ->L[𝕜] F)
+      ((N y).symm : F ->L[𝕜] E)) s x v = 0 := by
+    simp [A', fderivWithin_const_apply]
+  have I : (N x : E ->L[𝕜] F) ∘L (fderivWithin 𝕜 (fun y => ((N y).symm : F ->L[𝕜] E)) s x v) =
+      - (fderivWithin 𝕜 (fun y => (N y : E ->L[𝕜] F)) s x v) ∘L ((N x).symm : F ->L[𝕜] E) := by
+    rw [ContinuousLinearMap.fderivWithin_of_bilinear _ (hN.differentiableWithinAt one_ne_zero)
+      (hN'.differentiableWithinAt one_ne_zero) (hs x hx)] at this
+    simpa [eq_neg_iff_add_eq_zero] using this
+  have B (M : F ->L[𝕜] E) : M = ((N x).symm : F ->L[𝕜] E) ∘L ((N x) ∘L M) := by
+    ext; simp
+  rw [B (fderivWithin 𝕜 (fun y => ((N y).symm : F ->L[𝕜] E)) s x v), I]
+  simp only [ContinuousLinearMap.comp_neg, eN.fderivWithin_eq e'N]
 
 Depends on / 依赖: ContinuousWithinAt, M.nhds, classical, continuousWithinAt, f.fderivWithin_right, fderivWithin, fderivWithin_right, h.choose, le_rfl
 -/
@@ -1749,7 +1839,12 @@ lemma DifferentiableWithinAt.pullbackWithin
   simp only [pullbackWithin_eq]
   have : DifferentiableWithinAt 𝕜 (fun y => ((M y).symm : F ->L[𝕜] E) (V (f y))) s x := by
     apply DifferentiableWithinAt.clm_apply
-    · exact M_symm_sm
+    · exact M_symm_smooth.differentiableWithinAt one_ne_zero
+    · exact hV.comp _ (hf.differentiableWithinAt two_ne_zero) hst
+  apply this.congr_of_eventuallyEq
+  · filter_upwards [hM] with y hy using by simp [← hy]
+  · have hMx : M x = fderivWithin 𝕜 f s x := by apply mem_of_mem_nhdsWithin hx hM
+    simp [← hMx]
 
 中文:
 引理 DifferentiableWithinAt.pullbackWithin
@@ -1760,7 +1855,12 @@ lemma DifferentiableWithinAt.pullbackWithin
   simp only [pullbackWithin_eq]
   have : DifferentiableWithinAt 𝕜 (fun y => ((M y).symm : F ->L[𝕜] E) (V (f y))) s x := by
     apply DifferentiableWithinAt.clm_apply
-    · exact M_symm_sm
+    · exact M_symm_smooth.differentiableWithinAt one_ne_zero
+    · exact hV.comp _ (hf.differentiableWithinAt two_ne_zero) hst
+  apply this.congr_of_eventuallyEq
+  · filter_upwards [hM] with y hy using by simp [← hy]
+  · have hMx : M x = fderivWithin 𝕜 f s x := by apply mem_of_mem_nhdsWithin hx hM
+    simp [← hMx]
 
 Depends on / 依赖: DifferentiableWithinAt, DifferentiableWithinAt.clm_apply, M_symm_smooth, M_symm_smooth.differentiableWithinAt, clm_apply, congr_of_eventuallyEq, differentiableWithinAt, exists_continuousLinearEquiv_fderivWithin_symm_eq, fderivWithi, filter_upwards, hV.comp, hf.differentiableWithinAt, one_ne_zero, pullbackWithin_eq, this.congr_of_eventuallyEq, two_ne_zero
 -/
@@ -1818,7 +1918,26 @@ lemma pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt
   · simp [pullbackWithin_eq_of_not_isInvertible h, lieBracketWithin_eq]
   rcases exists_continuousLinearEquiv_fderivWithin_symm_eq h'f h hu hx
     with ⟨M, -, M_symm_smooth, hM, M_diff⟩
-  have hMx : M x = fderivWithin 𝕜 f s x := (mem_of_mem
+  have hMx : M x = fderivWithin 𝕜 f s x := (mem_of_mem_nhdsWithin hx hM :)
+  have AV : fderivWithin 𝕜 (pullbackWithin 𝕜 f V s) s x =
+      fderivWithin 𝕜 (fun y => ((M y).symm : F ->L[𝕜] E) (V (f y))) s x := by
+    apply Filter.EventuallyEq.fderivWithin_eq_of_mem _ hx
+    filter_upwards [hM] with y hy using pullbackWithin_eq_of_fderivWithin_eq hy _
+  have AW : fderivWithin 𝕜 (pullbackWithin 𝕜 f W s) s x =
+      fderivWithin 𝕜 (fun y => ((M y).symm : F ->L[𝕜] E) (W (f y))) s x := by
+    apply Filter.EventuallyEq.fderivWithin_eq_of_mem _ hx
+    filter_upwards [hM] with y hy using pullbackWithin_eq_of_fderivWithin_eq hy _
+  have Af : DifferentiableWithinAt 𝕜 f s x := h'f.differentiableWithinAt two_ne_zero
+  simp only [lieBracketWithin_eq, pullbackWithin_eq_of_fderivWithin_eq hMx, map_sub, AV, AW]
+  rw [fderivWithin_clm_apply]; rw [fderivWithin_clm_apply]
+  · simp [fderivWithin_fun_comp x hW Af hst (hu x hx), ← hMx,
+      fderivWithin_fun_comp x hV Af hst (hu x hx), M_diff, hf.eq]
+  · exact hu x hx
+  · exact M_symm_smooth.differentiableWithinAt one_ne_zero
+  · exact hV.comp x Af hst
+  · exact hu x hx
+  · exact M_symm_smooth.differentiableWithinAt one_ne_zero
+  · exact hW.comp x Af hst
 
 中文:
 引理 pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt
@@ -1827,7 +1946,26 @@ lemma pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt
   · simp [pullbackWithin_eq_of_not_isInvertible h, lieBracketWithin_eq]
   rcases exists_continuousLinearEquiv_fderivWithin_symm_eq h'f h hu hx
     with ⟨M, -, M_symm_smooth, hM, M_diff⟩
-  have hMx : M x = fderivWithin 𝕜 f s x := (mem_of_mem
+  have hMx : M x = fderivWithin 𝕜 f s x := (mem_of_mem_nhdsWithin hx hM :)
+  have AV : fderivWithin 𝕜 (pullbackWithin 𝕜 f V s) s x =
+      fderivWithin 𝕜 (fun y => ((M y).symm : F ->L[𝕜] E) (V (f y))) s x := by
+    apply Filter.EventuallyEq.fderivWithin_eq_of_mem _ hx
+    filter_upwards [hM] with y hy using pullbackWithin_eq_of_fderivWithin_eq hy _
+  have AW : fderivWithin 𝕜 (pullbackWithin 𝕜 f W s) s x =
+      fderivWithin 𝕜 (fun y => ((M y).symm : F ->L[𝕜] E) (W (f y))) s x := by
+    apply Filter.EventuallyEq.fderivWithin_eq_of_mem _ hx
+    filter_upwards [hM] with y hy using pullbackWithin_eq_of_fderivWithin_eq hy _
+  have Af : DifferentiableWithinAt 𝕜 f s x := h'f.differentiableWithinAt two_ne_zero
+  simp only [lieBracketWithin_eq, pullbackWithin_eq_of_fderivWithin_eq hMx, map_sub, AV, AW]
+  rw [fderivWithin_clm_apply]; rw [fderivWithin_clm_apply]
+  · simp [fderivWithin_fun_comp x hW Af hst (hu x hx), ← hMx,
+      fderivWithin_fun_comp x hV Af hst (hu x hx), M_diff, hf.eq]
+  · exact hu x hx
+  · exact M_symm_smooth.differentiableWithinAt one_ne_zero
+  · exact hV.comp x Af hst
+  · exact hu x hx
+  · exact M_symm_smooth.differentiableWithinAt one_ne_zero
+  · exact hW.comp x Af hst
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.fderivWithin_eq_of_mem, IsInvertible, M_diff, M_symm_smooth, exists_continuousLinearEquiv_fderivWithin_symm_eq, fderivWithin, fderivWithin_eq_of_mem, filter_up, lieBracketWithin_eq, mem_of_mem_nhdsWithin, pullbackWithin, pullbackWithin_eq_of_not_isInvertible
 -/
@@ -1875,7 +2013,18 @@ lemma pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt_of_eventuallyEq
     congr 2
     exact fderivWithin_congr_set hus.symm
   _ = lieBracketWithin 𝕜 (pullbackWithin 𝕜 f V u) (pullbackWithin 𝕜 f W u) u x :=
-    pullbackWi
+    pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt
+      (hf.congr_set hus.symm) (h'f.congr_set hus.symm) hV hW hu hx hst
+  _ = lieBracketWithin 𝕜 (pullbackWithin 𝕜 f V s) (pullbackWithin 𝕜 f W s) u x := by
+    apply Filter.EventuallyEq.lieBracketWithin_vectorField_eq_of_mem _ _ hx
+    · apply nhdsWithin_le_nhds
+      filter_upwards [fderivWithin_eventually_congr_set (𝕜 := 𝕜) (f := f) hus] with y hy
+      simp [pullbackWithin, hy]
+    · apply nhdsWithin_le_nhds
+      filter_upwards [fderivWithin_eventually_congr_set (𝕜 := 𝕜) (f := f) hus] with y hy
+      simp [pullbackWithin, hy]
+  _ = lieBracketWithin 𝕜 (pullbackWithin 𝕜 f V s) (pullbackWithin 𝕜 f W s) s x :=
+    lieBracketWithin_congr_set hus
 
 中文:
 引理 pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt_of_eventuallyEq
@@ -1886,7 +2035,18 @@ lemma pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt_of_eventuallyEq
     congr 2
     exact fderivWithin_congr_set hus.symm
   _ = lieBracketWithin 𝕜 (pullbackWithin 𝕜 f V u) (pullbackWithin 𝕜 f W u) u x :=
-    pullbackWi
+    pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt
+      (hf.congr_set hus.symm) (h'f.congr_set hus.symm) hV hW hu hx hst
+  _ = lieBracketWithin 𝕜 (pullbackWithin 𝕜 f V s) (pullbackWithin 𝕜 f W s) u x := by
+    apply Filter.EventuallyEq.lieBracketWithin_vectorField_eq_of_mem _ _ hx
+    · apply nhdsWithin_le_nhds
+      filter_upwards [fderivWithin_eventually_congr_set (𝕜 := 𝕜) (f := f) hus] with y hy
+      simp [pullbackWithin, hy]
+    · apply nhdsWithin_le_nhds
+      filter_upwards [fderivWithin_eventually_congr_set (𝕜 := 𝕜) (f := f) hus] with y hy
+      simp [pullbackWithin, hy]
+  _ = lieBracketWithin 𝕜 (pullbackWithin 𝕜 f V s) (pullbackWithin 𝕜 f W s) s x :=
+    lieBracketWithin_congr_set hus
 -/
 lemma pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt_of_eventuallyEq
     {f : E -> F} {V W : F -> F} {x : E} {t : Set F} {u : Set E}

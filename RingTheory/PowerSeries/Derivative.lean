@@ -232,7 +232,7 @@ theorem trunc_derivative
   · have : d + 1 < n + 1 := succ_lt_succ_iff.2 h
     rw [coeff_derivative]; rw [Polynomial.coeff_derivative]; rw [coeff_trunc]; rw [if_pos this]
   · have : ¬d + 1 < n + 1 := by rwa [succ_lt_succ_iff]
-    rw [Polynomial.coeff_derivative]; rw [coeff_tru
+    rw [Polynomial.coeff_derivative]; rw [coeff_trunc]; rw [if_neg this]; rw [zero_mul]
 
 中文:
 定理 trunc_derivative
@@ -244,7 +244,7 @@ theorem trunc_derivative
   · have : d + 1 < n + 1 := succ_lt_succ_iff.2 h
     rw [coeff_derivative]; rw [Polynomial.coeff_derivative]; rw [coeff_trunc]; rw [if_pos this]
   · have : ¬d + 1 < n + 1 := by rwa [succ_lt_succ_iff]
-    rw [Polynomial.coeff_derivative]; rw [coeff_tru
+    rw [Polynomial.coeff_derivative]; rw [coeff_trunc]; rw [if_neg this]; rw [zero_mul]
 
 Depends on / 依赖: Polynomial, Polynomial.coeff_derivative, coeff_derivative, coeff_trunc, if_neg, if_pos, split_ifs, succ_lt_succ_iff, zero_mul
 -/
@@ -420,7 +420,14 @@ theorem derivative_subst
   have : coeff (n + 1) (f.subst g) = coeff (n + 1) ((↑(trunc (m + 1) f) : R⟦X⟧).subst g) := by
     rw [coeff_subst' hg]; rw [coeff_subst' hg]
     refine finsum_congr fun d => ?_
-    obtain hd | hd := lt_o
+    obtain hd | hd := lt_or_ge d m
+    · rw [coeff_coe_trunc_of_lt (by lia)]
+    · simp [coeff_trunc, hd, hm]
+  rw [coeff_derivative]; rw [this]; rw [← coeff_derivative]; rw [derivative_subst_coe _ hg]; rw [coeff_mul]; rw [coeff_mul]
+  refine Finset.sum_congr rfl fun ⟨i, j⟩ hij => ?_
+  congr 1
+  simp only [coeff_subst' hg, coeff_derivative, coeff_coe, coeff_trunc]
+  exact finsum_congr fun d => by split_ifs <;> simp (disch := grind [Finset.mem_antidiagonal]) [hm]
 
 中文:
 定理 derivative_subst
@@ -431,7 +438,14 @@ theorem derivative_subst
   have : coeff (n + 1) (f.subst g) = coeff (n + 1) ((↑(trunc (m + 1) f) : R⟦X⟧).subst g) := by
     rw [coeff_subst' hg]; rw [coeff_subst' hg]
     refine finsum_congr fun d => ?_
-    obtain hd | hd := lt_o
+    obtain hd | hd := lt_or_ge d m
+    · rw [coeff_coe_trunc_of_lt (by lia)]
+    · simp [coeff_trunc, hd, hm]
+  rw [coeff_derivative]; rw [this]; rw [← coeff_derivative]; rw [derivative_subst_coe _ hg]; rw [coeff_mul]; rw [coeff_mul]
+  refine Finset.sum_congr rfl fun ⟨i, j⟩ hij => ?_
+  congr 1
+  simp only [coeff_subst' hg, coeff_derivative, coeff_coe, coeff_trunc]
+  exact finsum_congr fun d => by split_ifs <;> simp (disch := grind [Finset.mem_antidiagonal]) [hm]
 
 Depends on / 依赖: Finset, Finset.sum_co, coeff_coe_trunc_of_lt, coeff_derivative, coeff_mul, coeff_subst, coeff_trunc, derivative_subst_coe, eventually_coeff_pow_eq_zero, exists_forall_of_atTop, f.subst, finsum_congr, hg.eventually_coeff_pow_eq_zero, lt_or_ge, sum_co
 -/
@@ -557,7 +571,7 @@ theorem derivativeFun_smul
 
 @[deprecated (since := "2026-06-26")] alias derivativeFun_coe := derivative_coe
 
-@[deprecated (since := "2026
+@[deprecated (since := "2026-06-26")] alias trunc_derivativeFun := trunc_derivative
 
 中文:
 定理 derivativeFun_smul
@@ -571,7 +585,7 @@ theorem derivativeFun_smul
 
 @[deprecated (since := "2026-06-26")] alias derivativeFun_coe := derivative_coe
 
-@[deprecated (since := "2026
+@[deprecated (since := "2026-06-26")] alias trunc_derivativeFun := trunc_derivative
 
 Depends on / 依赖: derivative, map_smul
 -/

@@ -43,7 +43,29 @@ definition applyTheConstructor
       (fun _ => throwTacticEx `constructor mvarId
                   m!"target is not an inductive datatype{indentExpr target}")
       fun ival us => do
-        ma
+        match ival.ctors with
+        | [ctor] =>
+          let cinfo ← getConstInfoCtor ctor
+          let ctorConst := Lean.mkConst ctor us
+          let (args, binderInfos, _) ← forallMetaTelescopeReducing (← inferType ctorConst)
+          let mut explicit := #[]
+          let mut implicit := #[]
+          let mut insts := #[]
+          for arg in args, binderInfo in binderInfos, i in [0:args.size] do
+            if cinfo.numParams <= i ∧ binderInfo.isExplicit then
+              explicit := explicit.push arg.mvarId!
+            else
+              implicit := implicit.push arg.mvarId!
+              if binderInfo.isInstImplicit then
+                insts := insts.push arg.mvarId!
+          let e := mkAppN ctorConst args
+          let eType ← inferType e
+          unless (← withAssignableSyntheticOpaque <| isDefEq eType target) do
+            throwError m!"type mismatch{indentExpr e}\n{← mkHasTypeButIsExpectedMsg eType target}"
+          mvarId.assign e
+          return (explicit.toList, implicit.toList, insts.toList)
+        | _ => throwTacticEx `constructor mvarId
+                m!"target inductive type does not have exactly one constructor{indentExpr target}"
 
 中文:
 定义 applyTheConstructor
@@ -56,7 +78,29 @@ definition applyTheConstructor
       (fun _ => throwTacticEx `constructor mvarId
                   m!"target is not an inductive datatype{indentExpr target}")
       fun ival us => do
-        ma
+        match ival.ctors with
+        | [ctor] =>
+          let cinfo ← getConstInfoCtor ctor
+          let ctorConst := Lean.mkConst ctor us
+          let (args, binderInfos, _) ← forallMetaTelescopeReducing (← inferType ctorConst)
+          let mut explicit := #[]
+          let mut implicit := #[]
+          let mut insts := #[]
+          for arg in args, binderInfo in binderInfos, i in [0:args.size] do
+            if cinfo.numParams <= i ∧ binderInfo.isExplicit then
+              explicit := explicit.push arg.mvarId!
+            else
+              implicit := implicit.push arg.mvarId!
+              if binderInfo.isInstImplicit then
+                insts := insts.push arg.mvarId!
+          let e := mkAppN ctorConst args
+          let eType ← inferType e
+          unless (← withAssignableSyntheticOpaque <| isDefEq eType target) do
+            throwError m!"type mismatch{indentExpr e}\n{← mkHasTypeButIsExpectedMsg eType target}"
+          mvarId.assign e
+          return (explicit.toList, implicit.toList, insts.toList)
+        | _ => throwTacticEx `constructor mvarId
+                m!"target inductive type does not have exactly one constructor{indentExpr target}"
 -/
 def applyTheConstructor (mvarId : MVarId) :
     MetaM (List MVarId × List MVarId × List MVarId) := do
@@ -115,7 +159,29 @@ definition useLoop
     throwErrorAt arg "too many arguments supplied to `use`"
   | g :: gs', arg :: args' => g.withContext do
     if ← g.isAssigned then
-      -- Goals migh
+      -- Goals might become assigned in inductive types with indices.
+      -- Let's check that what's supplied is defeq to what's already there.
+      let e ← Term.elabTermEnsuringType arg (← g.getType)
+      unless ← isDefEq e (.mvar g) do
+        throwErrorAt arg
+          "argument is not definitionally equal to inferred value{indentExpr (.mvar g)}"
+      return ← useLoop eager gs' args' acc insts
+    -- Type ascription is a workaround for `refine` ensuring the type after synthesizing mvars.
+    let refineArg ← `(tactic| refine ($arg : $(← Term.exprToSyntax (← g.getType))))
+    if eager then
+      -- In eager mode, first try refining with the argument before applying the constructor
+      if let some newGoals ← observing? (run g do withoutRecover <| evalTactic refineArg) then
+        return ← useLoop eager gs' args' (acc ++ newGoals) insts
+    if eager || gs'.isEmpty then
+      if let some (expl, impl, insts') ← observing? do
+                try applyTheConstructor g
+                catch e => trace[tactic.use] "Constructor. {e.toMessageData}"; throw e then
+        trace[tactic.use] "expl.length = {expl.length}, impl.length = {impl.length}"
+        return ← useLoop eager (expl ++ gs') args (acc ++ impl) (insts ++ insts')
+    -- In eager mode, the following will give an error, which hopefully is more informative than
+    -- the one provided by `applyTheConstructor`.
+    let newGoals ← run g do evalTactic refineArg
+    useLoop eager gs' args' (acc ++ newGoals) insts
 
 中文:
 定义 useLoop
@@ -129,7 +195,29 @@ definition useLoop
     throwErrorAt arg "too many arguments supplied to `use`"
   | g :: gs', arg :: args' => g.withContext do
     if ← g.isAssigned then
-      -- Goals migh
+      -- Goals might become assigned in inductive types with indices.
+      -- Let's check that what's supplied is defeq to what's already there.
+      let e ← Term.elabTermEnsuringType arg (← g.getType)
+      unless ← isDefEq e (.mvar g) do
+        throwErrorAt arg
+          "argument is not definitionally equal to inferred value{indentExpr (.mvar g)}"
+      return ← useLoop eager gs' args' acc insts
+    -- Type ascription is a workaround for `refine` ensuring the type after synthesizing mvars.
+    let refineArg ← `(tactic| refine ($arg : $(← Term.exprToSyntax (← g.getType))))
+    if eager then
+      -- In eager mode, first try refining with the argument before applying the constructor
+      if let some newGoals ← observing? (run g do withoutRecover <| evalTactic refineArg) then
+        return ← useLoop eager gs' args' (acc ++ newGoals) insts
+    if eager || gs'.isEmpty then
+      if let some (expl, impl, insts') ← observing? do
+                try applyTheConstructor g
+                catch e => trace[tactic.use] "Constructor. {e.toMessageData}"; throw e then
+        trace[tactic.use] "expl.length = {expl.length}, impl.length = {impl.length}"
+        return ← useLoop eager (expl ++ gs') args (acc ++ impl) (insts ++ insts')
+    -- In eager mode, the following will give an error, which hopefully is more informative than
+    -- the one provided by `applyTheConstructor`.
+    let newGoals ← run g do evalTactic refineArg
+    useLoop eager gs' args' (acc ++ newGoals) insts
 -/
 def useLoop (eager : Bool) (gs : List MVarId) (args : List Term) (acc insts : List MVarId) :
     TermElabM (List MVarId × List MVarId × List MVarId) := do
@@ -178,7 +266,18 @@ definition runUse
     for inst in insts do
       if !(← inst.isAssigned) then
 discard inst.withContext observing? do inst.assign (← synthInstance (← inst.getType))
-    -- Set the 
+    -- Set the goals.
+    setGoals (egoals ++ acc)
+    pruneSolvedGoals
+    pure egoals
+  -- Run the discharger on non-assigned proposition metavariables
+  -- (`trivial` uses `assumption`, which isn't great for non-propositions)
+  for g in egoals do
+    if !(← g.isAssigned) then
+      g.withContext do
+        if ← isProp (← g.getType) then
+          trace[tactic.use] "running discharger on {g}"
+discard run g discharger
 
 中文:
 定义 runUse
@@ -190,7 +289,18 @@ discard inst.withContext observing? do inst.assign (← synthInstance (← inst.
     for inst in insts do
       if !(← inst.isAssigned) then
 discard inst.withContext observing? do inst.assign (← synthInstance (← inst.getType))
-    -- Set the 
+    -- Set the goals.
+    setGoals (egoals ++ acc)
+    pruneSolvedGoals
+    pure egoals
+  -- Run the discharger on non-assigned proposition metavariables
+  -- (`trivial` uses `assumption`, which isn't great for non-propositions)
+  for g in egoals do
+    if !(← g.isAssigned) then
+      g.withContext do
+        if ← isProp (← g.getType) then
+          trace[tactic.use] "running discharger on {g}"
+discard run g discharger
 -/
 def runUse (eager : Bool) (discharger : TacticM Unit) (args : List Term) : TacticM Unit := do
   let egoals ← focus do

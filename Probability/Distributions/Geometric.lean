@@ -299,7 +299,8 @@ lemma hasSum_integral_geometricMeasure
     ext n; rw [ENNReal.toReal_ofReal (geometricMeasure_nonneg p n)]
   rw [this]; rw [geometricMeasure_eq hp]
   apply hasSum_integral_sum_dirac (by simp)
-  convert! (integrable
+  convert! (integrable_geometricMeasure_iff hp).1 hf with n
+  rw [ENNReal.toReal_ofReal (geometricMeasure_nonneg p n)]
 
 中文:
 引理 hasSum_integral_geometricMeasure
@@ -310,7 +311,8 @@ lemma hasSum_integral_geometricMeasure
     ext n; rw [ENNReal.toReal_ofReal (geometricMeasure_nonneg p n)]
   rw [this]; rw [geometricMeasure_eq hp]
   apply hasSum_integral_sum_dirac (by simp)
-  convert! (integrable
+  convert! (integrable_geometricMeasure_iff hp).1 hf with n
+  rw [ENNReal.toReal_ofReal (geometricMeasure_nonneg p n)]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal_ofReal, convert, geometricMeasure_eq, geometricMeasure_nonneg, hasSum_integral_sum_dirac, integrable_geometricMeasure_iff, ofReal, toReal, toReal_ofReal
 -/
@@ -415,7 +417,7 @@ lemma geometricPMFRealSum
   rw [inv_mul_eq_div]; rw [div_self hp_pos.ne'] at this
   exact this
 
-@[deprecated geometri
+@[deprecated geometricMeasure_real_singleton_pos (since := "2026-03-08")]
 
 中文:
 引理 geometricPMF实数Sum
@@ -428,7 +430,7 @@ lemma geometricPMFRealSum
   rw [inv_mul_eq_div]; rw [div_self hp_pos.ne'] at this
   exact this
 
-@[deprecated geometri
+@[deprecated geometricMeasure_real_singleton_pos (since := "2026-03-08")]
 
 Depends on / 依赖: div_self, geometricPMFReal, hasSum_geometric_of_lt_one, hasSum_mul_right_iff, hp_le_one, hp_pos, hp_pos.ne, inv_mul_eq_div, sub_lt_self, sub_nonneg, sub_nonneg.mpr, sub_sub_cancel
 -/

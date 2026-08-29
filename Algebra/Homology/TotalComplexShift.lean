@@ -179,7 +179,21 @@ instance :
         simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
         lia⟩
       invFun := fun ⟨⟨a, b⟩, h⟩ => ⟨(a - x, b), by
-  
+        simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
+        lia⟩
+      left_inv := by
+        rintro ⟨⟨a, b⟩, h⟩
+        ext
+        · dsimp
+          lia
+        · rfl
+      right_inv := by
+        intro ⟨⟨a, b⟩, h⟩
+        ext
+        · dsimp
+          lia
+        · rfl }
+    (fun _ => Iso.refl _)
 
 中文:
 实例 :
@@ -190,7 +204,21 @@ instance :
         simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
         lia⟩
       invFun := fun ⟨⟨a, b⟩, h⟩ => ⟨(a - x, b), by
-  
+        simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
+        lia⟩
+      left_inv := by
+        rintro ⟨⟨a, b⟩, h⟩
+        ext
+        · dsimp
+          lia
+        · rfl
+      right_inv := by
+        intro ⟨⟨a, b⟩, h⟩
+        ext
+        · dsimp
+          lia
+        · rfl }
+    (fun _ => Iso.refl _)
 -/
 instance : ((shiftFunctor₁ C x).obj K).HasTotal (up Int) := fun n =>
   hasCoproduct_of_equiv_of_iso (K.toGradedObject.mapObjFun (π (up Int) (up Int) (up Int)) (n + x)) _
@@ -226,7 +254,11 @@ instance :
         simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
         lia⟩
       invFun := fun ⟨⟨a, b⟩, h⟩ => ⟨(a, b - y), by
-  
+        simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
+        lia⟩
+      left_inv _ := by simp
+      right_inv _ := by simp }
+    (fun _ => Iso.refl _)
 
 中文:
 实例 :
@@ -237,7 +269,11 @@ instance :
         simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
         lia⟩
       invFun := fun ⟨⟨a, b⟩, h⟩ => ⟨(a, b - y), by
-  
+        simp only [Set.mem_preimage, π_def, Set.mem_singleton_iff] at h ⊢
+        lia⟩
+      left_inv _ := by simp
+      right_inv _ := by simp }
+    (fun _ => Iso.refl _)
 -/
 instance : ((shiftFunctor₂ C y).obj K).HasTotal (up Int) := fun n =>
   hasCoproduct_of_equiv_of_iso (K.toGradedObject.mapObjFun (π (up Int) (up Int) (up Int)) (n + y)) _
@@ -312,7 +348,14 @@ definition totalShift₁XIso
       ((shiftFunctor₁ C x).obj K).ιTotal (up Int) (p - x) q n
         (by dsimp at hpq ⊢; lia))
   hom_inv_id := by
-    
+    ext p q h
+    dsimp
+    simp only [ι_totalDesc_assoc, CochainComplex.shiftFunctor_obj_X', ι_totalDesc, comp_id]
+    exact ((shiftFunctor₁ C x).obj K).XXIsoOfEq_inv_ιTotal _ (by lia) rfl _ _
+  inv_hom_id := by
+    ext
+    dsimp
+    simp only [ι_totalDesc_assoc, Category.assoc, ι_totalDesc, XXIsoOfEq_inv_ιTotal, comp_id]
 
 中文:
 定义 totalShift₁XIso
@@ -323,7 +366,14 @@ definition totalShift₁XIso
       ((shiftFunctor₁ C x).obj K).ιTotal (up Int) (p - x) q n
         (by dsimp at hpq ⊢; lia))
   hom_inv_id := by
-    
+    ext p q h
+    dsimp
+    simp only [ι_totalDesc_assoc, CochainComplex.shiftFunctor_obj_X', ι_totalDesc, comp_id]
+    exact ((shiftFunctor₁ C x).obj K).XXIsoOfEq_inv_ιTotal _ (by lia) rfl _ _
+  inv_hom_id := by
+    ext
+    dsimp
+    simp only [ι_totalDesc_assoc, Category.assoc, ι_totalDesc, XXIsoOfEq_inv_ιTotal, comp_id]
 
 Depends on / 依赖: totalDesc
 -/
@@ -359,7 +409,11 @@ lemma D₁_totalShift₁XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₁XIso]
-    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₁]; rw [((shiftFunctor₁ C x).obj K).d₁_eq _ rfl _ _ (by dsimp; lia)]; rw [K.d₁_eq _ (show p +
+    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₁]; rw [((shiftFunctor₁ C x).obj K).d₁_eq _ rfl _ _ (by dsimp; lia)]; rw [K.d₁_eq _ (show p + x + 1 = p + 1 + x by lia) _ _ (by dsimp; lia)]
+    dsimp
+    rw [one_smul]; rw [Category.assoc]; rw [ι_totalDesc]; rw [one_smul]; rw [Linear.units_smul_comp]
+  · rw [D₁_shape _ _ _ _ h, zero_comp, D₁_shape, comp_zero, smul_zero]
+    grind [up_Rel]
 
 中文:
 引理 D₁_totalShift₁XIso_hom
@@ -370,7 +424,11 @@ lemma D₁_totalShift₁XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₁XIso]
-    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₁]; rw [((shiftFunctor₁ C x).obj K).d₁_eq _ rfl _ _ (by dsimp; lia)]; rw [K.d₁_eq _ (show p +
+    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₁]; rw [((shiftFunctor₁ C x).obj K).d₁_eq _ rfl _ _ (by dsimp; lia)]; rw [K.d₁_eq _ (show p + x + 1 = p + 1 + x by lia) _ _ (by dsimp; lia)]
+    dsimp
+    rw [one_smul]; rw [Category.assoc]; rw [ι_totalDesc]; rw [one_smul]; rw [Linear.units_smul_comp]
+  · rw [D₁_shape _ _ _ _ h, zero_comp, D₁_shape, comp_zero, smul_zero]
+    grind [up_Rel]
 
 Depends on / 依赖: Category, Category.assoc, Linear, Linear.comp_units_smul, Linear.units_smul_comp, comp_units_smul, comp_zero, hom_ext, one_smul, smul_zero, total.hom_ext, units_smul_comp, zero_comp
 -/
@@ -403,7 +461,12 @@ lemma D₂_totalShift₁XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₁XIso]
-    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₂]; rw [((shiftFunctor₁ C x).obj K).d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [K.d₂_eq _ _ rfl _ (
+    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₂]; rw [((shiftFunctor₁ C x).obj K).d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [K.d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [smul_smul]; rw [Linear.units_smul_comp]; rw [Category.assoc]; rw [ι_totalDesc]
+    dsimp
+    congr 1
+    rw [add_comm p]; rw [Int.negOnePow_add]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
+  · rw [D₂_shape _ _ _ _ h, zero_comp, D₂_shape, comp_zero, smul_zero]
+    grind [up_Rel]
 
 中文:
 引理 D₂_totalShift₁XIso_hom
@@ -414,7 +477,12 @@ lemma D₂_totalShift₁XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₁XIso]
-    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₂]; rw [((shiftFunctor₁ C x).obj K).d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [K.d₂_eq _ _ rfl _ (
+    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [ι_D₂]; rw [((shiftFunctor₁ C x).obj K).d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [K.d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [smul_smul]; rw [Linear.units_smul_comp]; rw [Category.assoc]; rw [ι_totalDesc]
+    dsimp
+    congr 1
+    rw [add_comm p]; rw [Int.negOnePow_add]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
+  · rw [D₂_shape _ _ _ _ h, zero_comp, D₂_shape, comp_zero, smul_zero]
+    grind [up_Rel]
 
 Depends on / 依赖: Category, Category.assoc, Int.negOnePow_add, Int.units_mul_self, Linear, Linear.comp_units_smul, Linear.units_smul_comp, add_comm, comp_units_smul, hom_ext, mul_assoc, negOnePow_add, one_mul, smul_smul, total.hom_ext, units_mul_self, units_smul_comp
 -/
@@ -445,7 +513,7 @@ definition totalShift₁Iso
       dsimp
       simp only [total_d, Preadditive.add_comp, Preadditive.comp_add, smul_add,
         Linear.comp_units_smul, K.D₁_totalShift₁XIso_hom x n n' _ _ rfl rfl,
-        K.D₂_totalShift₁X
+        K.D₂_totalShift₁XIso_hom x n n' _ _ rfl rfl])
 
 中文:
 定义 totalShift₁Iso
@@ -455,7 +523,7 @@ definition totalShift₁Iso
       dsimp
       simp only [total_d, Preadditive.add_comp, Preadditive.comp_add, smul_add,
         Linear.comp_units_smul, K.D₁_totalShift₁XIso_hom x n n' _ _ rfl rfl,
-        K.D₂_totalShift₁X
+        K.D₂_totalShift₁XIso_hom x n n' _ _ rfl rfl])
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, K.totalShift, Linear, Linear.comp_units_smul, Preadditive, Preadditive.add_comp, Preadditive.comp_add, add_comp, comp_add, comp_units_smul, isoOfComponents, smul_add, total_d
 -/
@@ -588,7 +656,19 @@ definition totalShift₂XIso
     (by dsimp at hpq ⊢; lia))
   inv := totalDesc _ (fun p q hpq => (p * y).negOnePow •
     (K.XXIsoOfEq _ _ _ rfl (Int.sub_add_cancel q y)).inv ≫
-      ((shiftFunctor₂ C y).obj K).ιTotal (up Int) p (q - y) n (by dsimp at 
+      ((shiftFunctor₂ C y).obj K).ιTotal (up Int) p (q - y) n (by dsimp at hpq ⊢; lia))
+  hom_inv_id := by
+    ext p q h
+    dsimp
+    simp only [ι_totalDesc_assoc, Linear.units_smul_comp, ι_totalDesc, smul_smul,
+      Int.units_mul_self, one_smul, comp_id]
+    exact ((shiftFunctor₂ C y).obj K).XXIsoOfEq_inv_ιTotal _ rfl (by lia) _ _
+  inv_hom_id := by
+    ext
+    dsimp
+    simp only [ι_totalDesc_assoc, Linear.units_smul_comp, Category.assoc, ι_totalDesc,
+      Linear.comp_units_smul, XXIsoOfEq_inv_ιTotal, smul_smul, Int.units_mul_self, one_smul,
+      comp_id]
 
 中文:
 定义 totalShift₂XIso
@@ -597,7 +677,19 @@ definition totalShift₂XIso
     (by dsimp at hpq ⊢; lia))
   inv := totalDesc _ (fun p q hpq => (p * y).negOnePow •
     (K.XXIsoOfEq _ _ _ rfl (Int.sub_add_cancel q y)).inv ≫
-      ((shiftFunctor₂ C y).obj K).ιTotal (up Int) p (q - y) n (by dsimp at 
+      ((shiftFunctor₂ C y).obj K).ιTotal (up Int) p (q - y) n (by dsimp at hpq ⊢; lia))
+  hom_inv_id := by
+    ext p q h
+    dsimp
+    simp only [ι_totalDesc_assoc, Linear.units_smul_comp, ι_totalDesc, smul_smul,
+      Int.units_mul_self, one_smul, comp_id]
+    exact ((shiftFunctor₂ C y).obj K).XXIsoOfEq_inv_ιTotal _ rfl (by lia) _ _
+  inv_hom_id := by
+    ext
+    dsimp
+    simp only [ι_totalDesc_assoc, Linear.units_smul_comp, Category.assoc, ι_totalDesc,
+      Linear.comp_units_smul, XXIsoOfEq_inv_ιTotal, smul_smul, Int.units_mul_self, one_smul,
+      comp_id]
 
 Depends on / 依赖: negOnePow, totalDesc
 -/
@@ -636,7 +728,13 @@ lemma D₁_totalShift₂XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₂XIso]
-    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [ι_D₁]; rw [smul_smul]; rw [((shiftFunctor₂ C y).obj K).d₁_eq _ rfl 
+    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [ι_D₁]; rw [smul_smul]; rw [((shiftFunctor₂ C y).obj K).d₁_eq _ rfl _ _ (by dsimp; lia)]; rw [K.d₁_eq _ rfl _ _ (by dsimp; lia)]
+    dsimp
+    rw [one_smul]; rw [one_smul]; rw [Category.assoc]; rw [ι_totalDesc]; rw [Linear.comp_units_smul]; rw [← Int.negOnePow_add]
+    congr 2
+    linarith
+  · rw [D₁_shape _ _ _ _ h, zero_comp, D₁_shape, comp_zero, smul_zero]
+    grind [up_Rel]
 
 中文:
 引理 D₁_totalShift₂XIso_hom
@@ -647,7 +745,13 @@ lemma D₁_totalShift₂XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₂XIso]
-    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [ι_D₁]; rw [smul_smul]; rw [((shiftFunctor₂ C y).obj K).d₁_eq _ rfl 
+    rw [ι_D₁_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [ι_D₁]; rw [smul_smul]; rw [((shiftFunctor₂ C y).obj K).d₁_eq _ rfl _ _ (by dsimp; lia)]; rw [K.d₁_eq _ rfl _ _ (by dsimp; lia)]
+    dsimp
+    rw [one_smul]; rw [one_smul]; rw [Category.assoc]; rw [ι_totalDesc]; rw [Linear.comp_units_smul]; rw [← Int.negOnePow_add]
+    congr 2
+    linarith
+  · rw [D₁_shape _ _ _ _ h, zero_comp, D₁_shape, comp_zero, smul_zero]
+    grind [up_Rel]
 
 Depends on / 依赖: Category, Category.assoc, Int.negOnePow_add, Linear, Linear.comp_units_smul, Linear.units_smul_comp, comp_units_smul, hom_ext, negOnePow_add, one_smul, smul_smul, total.hom_ext, units_smul_comp
 -/
@@ -682,7 +786,14 @@ lemma D₂_totalShift₂XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₂XIso]
-    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [smul_smul]; rw [ι_D₂]; rw [((shiftFunctor₂ C y).obj K).d₂_eq _ _ rf
+    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [smul_smul]; rw [ι_D₂]; rw [((shiftFunctor₂ C y).obj K).d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [K.d₂_eq _ _ (show q + y + 1 = q + 1 + y by lia) _ (by dsimp; lia)]; rw [Linear.units_smul_comp]; rw [Category.assoc]; rw [smul_smul]; rw [ι_totalDesc]
+    dsimp
+    rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [smul_smul]; rw [← Int.negOnePow_add]; rw [← Int.negOnePow_add]; rw [← Int.negOnePow_add]; rw [← Int.negOnePow_add]
+    congr 2
+    lia
+  · rw [D₂_shape _ _ _ _ h, zero_comp, D₂_shape, comp_zero, smul_zero]
+    simp_all only [up_Rel]
+    grind
 
 中文:
 引理 D₂_totalShift₂XIso_hom
@@ -693,7 +804,14 @@ lemma D₂_totalShift₂XIso_hom
     intro p q hpq
     dsimp at h hpq
     dsimp [totalShift₂XIso]
-    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [smul_smul]; rw [ι_D₂]; rw [((shiftFunctor₂ C y).obj K).d₂_eq _ _ rf
+    rw [ι_D₂_assoc]; rw [Linear.comp_units_smul]; rw [ι_totalDesc_assoc]; rw [Linear.units_smul_comp]; rw [smul_smul]; rw [ι_D₂]; rw [((shiftFunctor₂ C y).obj K).d₂_eq _ _ rfl _ (by dsimp; lia)]; rw [K.d₂_eq _ _ (show q + y + 1 = q + 1 + y by lia) _ (by dsimp; lia)]; rw [Linear.units_smul_comp]; rw [Category.assoc]; rw [smul_smul]; rw [ι_totalDesc]
+    dsimp
+    rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [smul_smul]; rw [← Int.negOnePow_add]; rw [← Int.negOnePow_add]; rw [← Int.negOnePow_add]; rw [← Int.negOnePow_add]
+    congr 2
+    lia
+  · rw [D₂_shape _ _ _ _ h, zero_comp, D₂_shape, comp_zero, smul_zero]
+    simp_all only [up_Rel]
+    grind
 
 Depends on / 依赖: Category, Category.assoc, Linear, Linear.comp_units_smul, Linear.units_smul_comp, comp_units_smul, hom_ext, smul_smul, total.hom_ext, units_smul_comp
 -/
@@ -726,7 +844,7 @@ definition totalShift₂Iso
       dsimp
       simp only [total_d, Preadditive.add_comp, Preadditive.comp_add, smul_add,
         Linear.comp_units_smul, K.D₁_totalShift₂XIso_hom y n n' _ _ rfl rfl,
-        K.D₂_totalShift₂X
+        K.D₂_totalShift₂XIso_hom y n n' _ _ rfl rfl])
 
 中文:
 定义 totalShift₂Iso
@@ -736,7 +854,7 @@ definition totalShift₂Iso
       dsimp
       simp only [total_d, Preadditive.add_comp, Preadditive.comp_add, smul_add,
         Linear.comp_units_smul, K.D₁_totalShift₂XIso_hom y n n' _ _ rfl rfl,
-        K.D₂_totalShift₂X
+        K.D₂_totalShift₂XIso_hom y n n' _ _ rfl rfl])
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, K.totalShift, Linear, Linear.comp_units_smul, Preadditive, Preadditive.add_comp, Preadditive.comp_add, add_comp, comp_add, comp_units_smul, isoOfComponents, smul_add, total_d
 -/
@@ -836,7 +954,7 @@ lemma totalShift₂Iso_hom_naturality
   dsimp at h ⊢
   rw [ιTotal_map_assoc]; rw [L.ι_totalShift₂Iso_hom_f y i₁ i₂ n h _ rfl _ rfl]; rw [K.ι_totalShift₂Iso_hom_f_assoc y i₁ i₂ n h _ rfl _ rfl]
   dsimp
-  rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [comp_id]; rw [Linear.comp_units_smul]; rw [Linear.units_smul_comp]; rw
+  rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [comp_id]; rw [Linear.comp_units_smul]; rw [Linear.units_smul_comp]; rw [ιTotal_map]
 
 中文:
 引理 totalShift₂Iso_hom_naturality
@@ -846,7 +964,7 @@ lemma totalShift₂Iso_hom_naturality
   dsimp at h ⊢
   rw [ιTotal_map_assoc]; rw [L.ι_totalShift₂Iso_hom_f y i₁ i₂ n h _ rfl _ rfl]; rw [K.ι_totalShift₂Iso_hom_f_assoc y i₁ i₂ n h _ rfl _ rfl]
   dsimp
-  rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [comp_id]; rw [Linear.comp_units_smul]; rw [Linear.units_smul_comp]; rw
+  rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [comp_id]; rw [Linear.comp_units_smul]; rw [Linear.units_smul_comp]; rw [ιTotal_map]
 
 Depends on / 依赖: Linear, Linear.comp_units_smul, Linear.units_smul_comp, comp_id, comp_units_smul, id_comp, units_smul_comp
 -/
@@ -891,7 +1009,11 @@ lemma totalShift₁Iso_trans_totalShift₂Iso
   dsimp at h ⊢
   rw [Linear.comp_units_smul]; rw [ι_totalShift₁Iso_hom_f_assoc _ x n₁ n₂ n h _ rfl _ rfl]; rw [ιTotal_map_assoc]; rw [ι_totalShift₂Iso_hom_f_assoc _ y n₁ n₂ n h _ rfl _ rfl]; rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]
   dsimp [shiftFunctor₁₂CommIso]
- 
+  rw [id_comp]; rw [id_comp]; rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [ι_totalShift₂Iso_hom_f _ y (n₁ + x) n₂ (n + x) (by lia) _ rfl _ rfl]; rw [smul_smul]; rw [← Int.negOnePow_add]; rw [add_mul]; rw [add_comm (x * y)]
+  dsimp
+  rw [id_comp]; rw [comp_id]; rw [ι_totalShift₁Iso_hom_f_assoc _ x n₁ (n₂ + y) (n + y) (by lia) _ rfl (n + x + y) (by lia)]; rw [CochainComplex.shiftFunctorComm_hom_app_f]
+  dsimp
+  rw [Iso.inv_hom_id]; rw [comp_id]; rw [id_comp]
 
 中文:
 引理 totalShift₁Iso_trans_totalShift₂Iso
@@ -900,7 +1022,11 @@ lemma totalShift₁Iso_trans_totalShift₂Iso
   dsimp at h ⊢
   rw [Linear.comp_units_smul]; rw [ι_totalShift₁Iso_hom_f_assoc _ x n₁ n₂ n h _ rfl _ rfl]; rw [ιTotal_map_assoc]; rw [ι_totalShift₂Iso_hom_f_assoc _ y n₁ n₂ n h _ rfl _ rfl]; rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]
   dsimp [shiftFunctor₁₂CommIso]
- 
+  rw [id_comp]; rw [id_comp]; rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [ι_totalShift₂Iso_hom_f _ y (n₁ + x) n₂ (n + x) (by lia) _ rfl _ rfl]; rw [smul_smul]; rw [← Int.negOnePow_add]; rw [add_mul]; rw [add_comm (x * y)]
+  dsimp
+  rw [id_comp]; rw [comp_id]; rw [ι_totalShift₁Iso_hom_f_assoc _ x n₁ (n₂ + y) (n + y) (by lia) _ rfl (n + x + y) (by lia)]; rw [CochainComplex.shiftFunctorComm_hom_app_f]
+  dsimp
+  rw [Iso.inv_hom_id]; rw [comp_id]; rw [id_comp]
 
 Depends on / 依赖: Int.negOnePow_add, Linear, Linear.comp_units_smul, Linear.units_smul_comp, add_c, add_mul, comp_id, comp_units_smul, id_comp, negOnePow_add, smul_smul, units_smul_comp
 -/

@@ -58,7 +58,16 @@ lemma tendstoLocallyUniformly_of_forall_tendsto
   have F_le_f (x : α) (n : ι) : F n x <= f x := by
     refine _root_.ge_of_tendsto (h_tendsto x) ?_
     filter_upwards [Ici_mem_atTop n] with m hnm
- 
+    exact hF_mono hnm x
+  simp_rw [Metric.tendstoLocallyUniformly_iff, dist_eq_norm']
+  intro ε ε_pos x
+  simp_rw +singlePass [tendsto_iff_norm_sub_tendsto_zero] at h_tendsto
+.exists obtain ⟨n, hn⟩ := (h_tendsto x).eventually (eventually_lt_nhds ε_pos)
+.mem_nhds hn, ?_⟩⟩ refine ⟨{y | ‖F n y - f y‖ < ε}, ⟨isOpen_lt (by fun_prop) continuous_const
+  filter_upwards [eventually_ge_atTop n] with m hnm z hz
+.trans_lt hz refine norm_le_norm_of_abs_le_abs ?_
+  simp only [abs_of_nonpos (sub_nonpos_of_le (F_le_f _ _)), neg_sub, sub_le_sub_iff_left]
+  exact hF_mono hnm z
 
 中文:
 引理 tendstoLocallyUniformly_of_对任意_tendsto
@@ -68,7 +77,16 @@ lemma tendstoLocallyUniformly_of_forall_tendsto
   have F_le_f (x : α) (n : ι) : F n x <= f x := by
     refine _root_.ge_of_tendsto (h_tendsto x) ?_
     filter_upwards [Ici_mem_atTop n] with m hnm
- 
+    exact hF_mono hnm x
+  simp_rw [Metric.tendstoLocallyUniformly_iff, dist_eq_norm']
+  intro ε ε_pos x
+  simp_rw +singlePass [tendsto_iff_norm_sub_tendsto_zero] at h_tendsto
+.exists obtain ⟨n, hn⟩ := (h_tendsto x).eventually (eventually_lt_nhds ε_pos)
+.mem_nhds hn, ?_⟩⟩ refine ⟨{y | ‖F n y - f y‖ < ε}, ⟨isOpen_lt (by fun_prop) continuous_const
+  filter_upwards [eventually_ge_atTop n] with m hnm z hz
+.trans_lt hz refine norm_le_norm_of_abs_le_abs ?_
+  simp only [abs_of_nonpos (sub_nonpos_of_le (F_le_f _ _)), neg_sub, sub_le_sub_iff_left]
+  exact hF_mono hnm z
 
 Depends on / 依赖: F_le_f, Filter, Ici_mem_atTop, Metric, Metric.tendstoLocallyUniformly_iff, _root_, _root_.ge_of_tendsto, dist_eq_norm, eq_bot, eq_or_neBot, eq_or_neBot.elim, eventually, filter_upwards, ge_of_tendsto, hF_mono, h_tendsto, simp_rw, singlePass, tendstoLocallyUniformly_iff, tendstoLocallyUniformly_iff_forall_tendsto
 -/

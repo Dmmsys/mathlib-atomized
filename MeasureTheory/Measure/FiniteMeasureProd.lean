@@ -507,7 +507,38 @@ theorem continuous_prod
   refine continuous_iff_continuousAt.2 (fun μ => ?_)
   /- It suffices to check the convergence along elements of a π-system containing arbitrarily
   small neighborhoods of any point, by `tendsto_probabilityMeasure_of_tendsto_of_mem`.
-  We take as a π-system the sets of the form `a ×ˢ b` where `a`
+  We take as a π-system the sets of the form `a ×ˢ b` where `a` and `b` have null frontier. -/
+  let S : Set (Set (α × β)) := {t | exists (a : Set α) (b : Set β),
+    MeasurableSet a ∧ μ.1 (frontier a) = 0 ∧ MeasurableSet b ∧ μ.2 (frontier b) = 0
+    ∧ t = a ×ˢ b}
+  have : IsPiSystem S := by
+    rintro - ⟨a, b, ameas, ha, bmeas, hb, rfl⟩ - ⟨a', b', a'meas, ha', b'meas, hb', rfl⟩ -
+    refine ⟨a inter a', b inter b', ameas.inter a'meas, ?_, bmeas.inter b'meas, ?_, prod_inter_prod⟩
+    · rw [null_iff_toMeasure_null] at ha ha' ⊢
+      exact null_frontier_inter ha ha'
+    · rw [null_iff_toMeasure_null] at hb hb' ⊢
+      exact null_frontier_inter hb hb'
+  apply this.tendsto_probabilityMeasure_of_tendsto_of_mem
+  · rintro s ⟨a, b, ameas, -, bmeas, -, rfl⟩
+    exact ameas.prod bmeas
+  · let : PseudoMetricSpace α := TopologicalSpace.pseudoMetrizableSpacePseudoMetric α
+    let : PseudoMetricSpace β := TopologicalSpace.pseudoMetrizableSpacePseudoMetric β
+    intro u u_open x xu
+    obtain ⟨ε, εpos, hε⟩ : exists ε > 0, ball x ε subseteq u := Metric.isOpen_iff.1 u_open x xu
+    rcases exists_null_frontier_thickening (μ.1 : Measure α) {x.1} εpos with ⟨r, hr, μr⟩
+    rcases exists_null_frontier_thickening (μ.2 : Measure β) {x.2} εpos with ⟨r', hr', μr'⟩
+    simp only [thickening_singleton] at μr μr'
+    refine ⟨ball x.1 r ×ˢ ball x.2 r', ⟨ball x.1 r, ball x.2 r', measurableSet_ball,
+      by simp [coeFn_def, μr], measurableSet_ball, by simp [coeFn_def, μr'], rfl⟩, ?_, ?_⟩
+    · exact (isOpen_ball.prod isOpen_ball).mem_nhds (by simp [hr.1, hr'.1])
+    · calc ball x.1 r ×ˢ ball x.2 r'
+      _ subseteq ball x.1 ε ×ˢ ball x.2 ε := by gcongr; exacts [hr.2.le, hr'.2.le]
+      _ subseteq _ := by rwa [ball_prod_same]
+  · rintro s ⟨a, b, ameas, ha, bmeas, hb, rfl⟩
+    simp only [prod_prod]
+    apply Filter.Tendsto.mul
+    · exact tendsto_measure_of_null_frontier_of_tendsto tendsto_id.fst_nhds ha
+    · exact tendsto_measure_of_null_frontier_of_tendsto tendsto_id.snd_nhds hb
 
 中文:
 定理 continuous_prod
@@ -516,7 +547,38 @@ theorem continuous_prod
   refine continuous_iff_continuousAt.2 (fun μ => ?_)
   /- It suffices to check the convergence along elements of a π-system containing arbitrarily
   small neighborhoods of any point, by `tendsto_probabilityMeasure_of_tendsto_of_mem`.
-  We take as a π-system the sets of the form `a ×ˢ b` where `a`
+  We take as a π-system the sets of the form `a ×ˢ b` where `a` and `b` have null frontier. -/
+  let S : Set (Set (α × β)) := {t | exists (a : Set α) (b : Set β),
+    MeasurableSet a ∧ μ.1 (frontier a) = 0 ∧ MeasurableSet b ∧ μ.2 (frontier b) = 0
+    ∧ t = a ×ˢ b}
+  have : IsPiSystem S := by
+    rintro - ⟨a, b, ameas, ha, bmeas, hb, rfl⟩ - ⟨a', b', a'meas, ha', b'meas, hb', rfl⟩ -
+    refine ⟨a inter a', b inter b', ameas.inter a'meas, ?_, bmeas.inter b'meas, ?_, prod_inter_prod⟩
+    · rw [null_iff_toMeasure_null] at ha ha' ⊢
+      exact null_frontier_inter ha ha'
+    · rw [null_iff_toMeasure_null] at hb hb' ⊢
+      exact null_frontier_inter hb hb'
+  apply this.tendsto_probabilityMeasure_of_tendsto_of_mem
+  · rintro s ⟨a, b, ameas, -, bmeas, -, rfl⟩
+    exact ameas.prod bmeas
+  · let : PseudoMetricSpace α := TopologicalSpace.pseudoMetrizableSpacePseudoMetric α
+    let : PseudoMetricSpace β := TopologicalSpace.pseudoMetrizableSpacePseudoMetric β
+    intro u u_open x xu
+    obtain ⟨ε, εpos, hε⟩ : exists ε > 0, ball x ε subseteq u := Metric.isOpen_iff.1 u_open x xu
+    rcases exists_null_frontier_thickening (μ.1 : Measure α) {x.1} εpos with ⟨r, hr, μr⟩
+    rcases exists_null_frontier_thickening (μ.2 : Measure β) {x.2} εpos with ⟨r', hr', μr'⟩
+    simp only [thickening_singleton] at μr μr'
+    refine ⟨ball x.1 r ×ˢ ball x.2 r', ⟨ball x.1 r, ball x.2 r', measurableSet_ball,
+      by simp [coeFn_def, μr], measurableSet_ball, by simp [coeFn_def, μr'], rfl⟩, ?_, ?_⟩
+    · exact (isOpen_ball.prod isOpen_ball).mem_nhds (by simp [hr.1, hr'.1])
+    · calc ball x.1 r ×ˢ ball x.2 r'
+      _ subseteq ball x.1 ε ×ˢ ball x.2 ε := by gcongr; exacts [hr.2.le, hr'.2.le]
+      _ subseteq _ := by rwa [ball_prod_same]
+  · rintro s ⟨a, b, ameas, ha, bmeas, hb, rfl⟩
+    simp only [prod_prod]
+    apply Filter.Tendsto.mul
+    · exact tendsto_measure_of_null_frontier_of_tendsto tendsto_id.fst_nhds ha
+    · exact tendsto_measure_of_null_frontier_of_tendsto tendsto_id.snd_nhds hb
 
 Depends on / 依赖: continuous_iff_continuousAt
 -/

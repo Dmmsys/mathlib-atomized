@@ -158,7 +158,7 @@ lemma continuousGeneratedBy_iff_uncurry
   exact forall_congr' (fun i₁ => forall_congr' (fun f₁ =>
     forall_congr' (fun i₂ => forall_congr' (fun f₂ =>
       ⟨fun h => ContinuousMap.continuous_uncurry_of_continuous ⟨_, h⟩,
-        fun h => (ContinuousMap.curry ⟨_, h⟩).continuous⟩)
+        fun h => (ContinuousMap.curry ⟨_, h⟩).continuous⟩))))
 
 中文:
 引理 continuousGeneratedBy_iff_uncurry
@@ -168,7 +168,7 @@ lemma continuousGeneratedBy_iff_uncurry
   exact forall_congr' (fun i₁ => forall_congr' (fun f₁ =>
     forall_congr' (fun i₂ => forall_congr' (fun f₂ =>
       ⟨fun h => ContinuousMap.continuous_uncurry_of_continuous ⟨_, h⟩,
-        fun h => (ContinuousMap.curry ⟨_, h⟩).continuous⟩)
+        fun h => (ContinuousMap.curry ⟨_, h⟩).continuous⟩))))
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.continuous_uncurry_of_continuous, ContinuousMap.curry, continuous, continuousGeneratedBy_def, continuous_iff, continuous_uncurry_of_continuous, forall_congr
 -/
@@ -196,7 +196,11 @@ lemma continuousGeneratedBy_dom_prod_iff
     let φ : X i₁ × X i₂ -> Y × Z := fun (x₁, x₂) => (f₂ x₂, f₁ x₁)
     replace h := h.comp (show Continuous φ by fun_prop).continuousGeneratedBy
     rw [continuousGeneratedBy_def] at h
-    exact 
+    exact h p
+  · rw [continuousGeneratedBy_def]
+    intro i f
+    exact (h i (ContinuousMap.snd.comp f) i (ContinuousMap.fst.comp f)).comp
+      (Continuous.prodMk continuous_id continuous_id)
 
 中文:
 引理 continuousGeneratedBy_dom_prod_iff
@@ -208,7 +212,11 @@ lemma continuousGeneratedBy_dom_prod_iff
     let φ : X i₁ × X i₂ -> Y × Z := fun (x₁, x₂) => (f₂ x₂, f₁ x₁)
     replace h := h.comp (show Continuous φ by fun_prop).continuousGeneratedBy
     rw [continuousGeneratedBy_def] at h
-    exact 
+    exact h p
+  · rw [continuousGeneratedBy_def]
+    intro i f
+    exact (h i (ContinuousMap.snd.comp f) i (ContinuousMap.fst.comp f)).comp
+      (Continuous.prodMk continuous_id continuous_id)
 
 Depends on / 依赖: Continuous, Continuous.prodMk, ContinuousMap, ContinuousMap.fst.comp, ContinuousMap.snd.comp, IsGeneratedBy, IsGeneratedBy.continuous_iff, continuousGeneratedBy, continuousGeneratedBy_def, continuous_id, continuous_iff, fun_prop, h.comp, prodMk, replace
 -/
@@ -244,7 +252,10 @@ definition curryEquiv
   invFun g :=
     { toFun x := g x.2 x.1
       prop := by
-        simpa only [
+        simpa only [continuousGeneratedBy_iff_uncurry,
+          continuousGeneratedBy_dom_prod_iff] using! g.prop }
+
+@[simp]
 
 中文:
 定义 curryEquiv
@@ -256,7 +267,10 @@ definition curryEquiv
   invFun g :=
     { toFun x := g x.2 x.1
       prop := by
-        simpa only [
+        simpa only [continuousGeneratedBy_iff_uncurry,
+          continuousGeneratedBy_dom_prod_iff] using! g.prop }
+
+@[simp]
 
 Depends on / 依赖: Continuous, Continuous.prodMk_left, continuousGeneratedBy, continuousGeneratedBy_dom_prod_iff, continuousGeneratedBy_iff_uncurry, g.comp, g.prop, invFun, prodMk_left
 -/

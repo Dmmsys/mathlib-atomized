@@ -598,7 +598,9 @@ zpow_zero' _ := unop_injective zpow_zero _
 zpow_succ' _ _ := unop_injective by
     simp_rw [HPow.hPow, Pow.pow]
     rw [unop_op]; rw [zpow_natCast]; rw [pow_succ']; rw [unop_mul]; rw [unop_op]; rw [zpow_natCast]
-zpow_neg' _ _ := unop_injective 
+zpow_neg' _ _ := unop_injective DivInvMonoid.zpow_neg' _ _
+
+@[to_additive]
 
 中文:
 实例 instDivInvMonoid
@@ -610,7 +612,9 @@ zpow_zero' _ := unop_injective zpow_zero _
 zpow_succ' _ _ := unop_injective by
     simp_rw [HPow.hPow, Pow.pow]
     rw [unop_op]; rw [zpow_natCast]; rw [pow_succ']; rw [unop_mul]; rw [unop_op]; rw [zpow_natCast]
-zpow_neg' _ _ := unop_injective 
+zpow_neg' _ _ := unop_injective DivInvMonoid.zpow_neg' _ _
+
+@[to_additive]
 
 Depends on / 依赖: instMonoid
 -/

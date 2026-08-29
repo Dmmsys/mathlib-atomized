@@ -524,7 +524,11 @@ definition ofCardinalInter
   sets_of_superset := h_mono _ _
   inter_sets {s t} hs ht := sInter_pair s t ▸ by
     apply hl _ (?_) (insert_subset_iff.2 ⟨hs, singleton_subset_iff.2 ht⟩)
-    have : #({s, t} : Set (Se
+    have : #({s, t} : Set (Set α)) <= 2 := by
+      calc
+      _ <= #({t} : Set (Set α)) + 1 := Cardinal.mk_insert_le
+      _ = 2 := by norm_num
+    exact lt_of_le_of_lt this hc
 
 中文:
 定义 ofCardinal整数er
@@ -535,7 +539,11 @@ definition ofCardinalInter
   sets_of_superset := h_mono _ _
   inter_sets {s t} hs ht := sInter_pair s t ▸ by
     apply hl _ (?_) (insert_subset_iff.2 ⟨hs, singleton_subset_iff.2 ht⟩)
-    have : #({s, t} : Set (Se
+    have : #({s, t} : Set (Set α)) <= 2 := by
+      calc
+      _ <= #({t} : Set (Set α)) + 1 := Cardinal.mk_insert_le
+      _ = 2 := by norm_num
+    exact lt_of_le_of_lt this hc
 -/
 def ofCardinalInter (l : Set (Set α)) (hc : 2 < c)
     (hl : forall S : Set (Set α), (#S < c) -> S subseteq l -> ⋂₀ S in l)
@@ -610,7 +618,9 @@ definition ofCardinalUnion
     rw [mem_image] at hs
     rcases hs with ⟨t, ht, rfl⟩
     apply hSp ht
-  · rw [mem_ofPred_eq
+  · rw [mem_ofPred_eq]
+    rw [← compl_subset_compl] at hsub
+    exact hmono sᶜ ht tᶜ hsub
 
 中文:
 定义 ofCardinalUnion
@@ -623,7 +633,9 @@ definition ofCardinalUnion
     rw [mem_image] at hs
     rcases hs with ⟨t, ht, rfl⟩
     apply hSp ht
-  · rw [mem_ofPred_eq
+  · rw [mem_ofPred_eq]
+    rw [← compl_subset_compl] at hsub
+    exact hmono sᶜ ht tᶜ hsub
 
 Depends on / 依赖: compl_sInter, compl_subset_compl, hUnion, lt_of_le_of_lt, mem_image, mem_ofPred_eq, mk_image_le, ofCardinalInter
 -/
@@ -773,7 +785,8 @@ instance cardinalInterFilter_inf_eq
   replace hs : (⋂ i in S, s i ‹_›) in l₁ := (cardinal_bInter_mem hSc).2 hs
   replace ht : (⋂ i in S, t i ‹_›) in l₂ := (cardinal_bInter_mem hSc).2 ht
   refine mem_of_superset (inter_mem_inf hs ht) (subset_sInter fun i hi => ?_)
-  rw [h
+  rw [hst i hi]
+  apply inter_subset_inter <;> exact iInter_subset_of_subset i (iInter_subset _ _)
 
 中文:
 实例 cardinal整数erFilter_inf_eq
@@ -784,7 +797,8 @@ instance cardinalInterFilter_inf_eq
   replace hs : (⋂ i in S, s i ‹_›) in l₁ := (cardinal_bInter_mem hSc).2 hs
   replace ht : (⋂ i in S, t i ‹_›) in l₂ := (cardinal_bInter_mem hSc).2 ht
   refine mem_of_superset (inter_mem_inf hs ht) (subset_sInter fun i hi => ?_)
-  rw [h
+  rw [hst i hi]
+  apply inter_subset_inter <;> exact iInter_subset_of_subset i (iInter_subset _ _)
 
 Depends on / 依赖: cardinal_bInter_mem, iInter_subset, iInter_subset_of_subset, inter_mem_inf, inter_subset_inter, mem_of_superset, replace, subset_sInter
 -/
@@ -978,7 +992,18 @@ theorem mem_cardinalGenerate_iff
       simpa [subset_refl] using IsRegular.nat_lt hreg 1
     | univ =>
       exact ⟨∅, ⟨empty_subset g, mk_eq_zero (∅ : Set <| Set α) ▸ IsRegular.nat_lt hreg 0, by simp⟩⟩
-    | s
+    | superset _ _ ih => exact Exists.imp (by tauto) ih
+    | @sInter S Sct _ ih =>
+      choose T Tg Tct hT using ih
+      refine ⟨⋃ (s) (H : s in S), T s H, by simpa,
+        (Cardinal.card_biUnion_lt_iff_forall_of_isRegular hreg Sct).2 Tct, ?_⟩
+      apply subset_sInter
+      apply fun s H => subset_trans (sInter_subset_sInter (subset_iUnion₂ s H)) (hT s H)
+  rcases h with ⟨S, Sg, Sct, hS⟩
+  have : CardinalInterFilter (cardinalGenerate g (IsRegular.nat_lt hreg 2)) c :=
+    cardinalInter_ofCardinalGenerate _ _
+  exact mem_of_superset ((cardinal_sInter_mem Sct).mpr
+    (fun s H => CardinalGenerateSets.basic (Sg H))) hS
 
 中文:
 定理 mem_cardinalGenerate_iff
@@ -991,7 +1016,18 @@ theorem mem_cardinalGenerate_iff
       simpa [subset_refl] using IsRegular.nat_lt hreg 1
     | univ =>
       exact ⟨∅, ⟨empty_subset g, mk_eq_zero (∅ : Set <| Set α) ▸ IsRegular.nat_lt hreg 0, by simp⟩⟩
-    | s
+    | superset _ _ ih => exact Exists.imp (by tauto) ih
+    | @sInter S Sct _ ih =>
+      choose T Tg Tct hT using ih
+      refine ⟨⋃ (s) (H : s in S), T s H, by simpa,
+        (Cardinal.card_biUnion_lt_iff_forall_of_isRegular hreg Sct).2 Tct, ?_⟩
+      apply subset_sInter
+      apply fun s H => subset_trans (sInter_subset_sInter (subset_iUnion₂ s H)) (hT s H)
+  rcases h with ⟨S, Sg, Sct, hS⟩
+  have : CardinalInterFilter (cardinalGenerate g (IsRegular.nat_lt hreg 2)) c :=
+    cardinalInter_ofCardinalGenerate _ _
+  exact mem_of_superset ((cardinal_sInter_mem Sct).mpr
+    (fun s H => CardinalGenerateSets.basic (Sg H))) hS
 
 Depends on / 依赖: Cardinal, Cardinal.card_biUnion_lt_iff_forall_of_isRegular, Exists, Exists.imp, IsRegular, IsRegular.nat_lt, card_biUnion_lt_iff_forall_of_isRegular, empty_subset, mk_eq_zero, nat_lt, sInter, singleton_subset_iff, singleton_subset_iff.mpr, subset_refl, subset_sInt, superset
 -/

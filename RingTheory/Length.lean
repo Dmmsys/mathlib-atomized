@@ -237,7 +237,15 @@ lemma Module.length_compositionSeries
   have := (isFiniteLength_iff_isNoetherian_isArtinian.mp H).2
   rw [← WithBot.coe_inj]; rw [Module.coe_length]
   apply le_antisymm
-  · exact (Order.LTSeries.length_le_k
+  · exact (Order.LTSeries.length_le_krullDim <| s.map ⟨id, fun h => h.1⟩)
+  · rw [Order.krullDim, iSup_le_iff]
+    intro t
+    refine WithBot.coe_le_coe.mpr ?_
+    obtain ⟨t', i, hi, ht₁, ht₂⟩ := t.exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
+    have := (s.jordan_holder t' (h₁.trans ht₁.symm) (h₂.trans ht₂.symm)).choose
+    have h : t.length <= t'.length := by simpa using Fintype.card_le_of_embedding i
+    have h' : t'.length = s.length := by simpa using Fintype.card_congr this.symm
+    simpa using h.trans h'.le
 
 中文:
 引理 模.length_compositionSeries
@@ -248,7 +256,15 @@ lemma Module.length_compositionSeries
   have := (isFiniteLength_iff_isNoetherian_isArtinian.mp H).2
   rw [← WithBot.coe_inj]; rw [Module.coe_length]
   apply le_antisymm
-  · exact (Order.LTSeries.length_le_k
+  · exact (Order.LTSeries.length_le_krullDim <| s.map ⟨id, fun h => h.1⟩)
+  · rw [Order.krullDim, iSup_le_iff]
+    intro t
+    refine WithBot.coe_le_coe.mpr ?_
+    obtain ⟨t', i, hi, ht₁, ht₂⟩ := t.exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
+    have := (s.jordan_holder t' (h₁.trans ht₁.symm) (h₂.trans ht₂.symm)).choose
+    have h : t.length <= t'.length := by simpa using Fintype.card_le_of_embedding i
+    have h' : t'.length = s.length := by simpa using Fintype.card_congr this.symm
+    simpa using h.trans h'.le
 
 Depends on / 依赖: LTSeries, Module, Module.coe_length, Order.LTSeries.length_le_krullDim, Order.krullDim, WithBot, WithBot.coe_inj, WithBot.coe_le_coe.mpr, coe_inj, coe_le_coe, coe_length, exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot, iSup_le_iff, isFiniteLength_iff_isNoetherian_isArtinian, isFiniteLength_iff_isNoetherian_isArtinian.mp, isFiniteLength_of_exists_compositionSeries, krullDim, le_antisymm, length_le_krullDim, s.map
 -/
@@ -318,7 +334,12 @@ lemma Module.length_ne_top_iff
   · rw [length_ne_top_iff_finiteDimensionalOrder] at h
     rw [isFiniteLength_iff_isNoetherian_isArtinian]; rw [isNoetherian_iff]; rw [isArtinian_iff]
     let R : SetRel (Submodule R M) (Submodule R M) :=
-      {(N₁, N₂) : Submodule R M × Submodule R M | N₁ < N
+      {(N₁, N₂) : Submodule R M × Submodule R M | N₁ < N₂}
+    change R.inv.IsWellFounded ∧ R.IsWellFounded
+    exact ⟨.of_finiteDimensional R.inv, .of_finiteDimensional R⟩
+  · obtain ⟨s, hs₁, hs₂⟩ := isFiniteLength_iff_exists_compositionSeries.mp H
+    rw [← length_compositionSeries s hs₁ hs₂]
+    simp
 
 中文:
 引理 模.length_ne_top_iff
@@ -328,7 +349,12 @@ lemma Module.length_ne_top_iff
   · rw [length_ne_top_iff_finiteDimensionalOrder] at h
     rw [isFiniteLength_iff_isNoetherian_isArtinian]; rw [isNoetherian_iff]; rw [isArtinian_iff]
     let R : SetRel (Submodule R M) (Submodule R M) :=
-      {(N₁, N₂) : Submodule R M × Submodule R M | N₁ < N
+      {(N₁, N₂) : Submodule R M × Submodule R M | N₁ < N₂}
+    change R.inv.IsWellFounded ∧ R.IsWellFounded
+    exact ⟨.of_finiteDimensional R.inv, .of_finiteDimensional R⟩
+  · obtain ⟨s, hs₁, hs₂⟩ := isFiniteLength_iff_exists_compositionSeries.mp H
+    rw [← length_compositionSeries s hs₁ hs₂]
+    simp
 
 Depends on / 依赖: IsWellFounded, R.IsWellFounded, R.inv, R.inv.IsWellFounded, SetRel, Submodule, isArtinian_iff, isFiniteLength_iff_exists_compositionSeries, isFiniteLength_iff_exists_compositionSeries.mp, isFiniteLength_iff_isNoetherian_isArtinian, isNoetherian_iff, length_compositionSeries, length_ne_top_iff_finiteDimensionalOrder, of_finiteDimensional
 -/
@@ -628,7 +654,24 @@ lemma Module.length_eq_add_of_exact
     · obtain ⟨s, hs₁, hs₂⟩ := isFiniteLength_iff_exists_compositionSeries.mp hP
       obtain ⟨t, ht₁, ht₂⟩ := isFiniteLength_iff_exists_compositionSeries.mp hN
       let s' : CompositionSeries (Submodule R M) :=
-        s.map
+        s.map ⟨Submodule.comap g, Submodule.comap_covBy_of_surjective hg⟩
+      let t' : CompositionSeries (Submodule R M) :=
+        t.map ⟨Submodule.map f, Submodule.map_covBy_of_injective hf⟩
+      have hfg : Submodule.map f ⊤ = Submodule.comap g ⊥ := by
+        rw [Submodule.map_top]; rw [Submodule.comap_bot]; rw [LinearMap.exact_iff.mp H]
+      let r := t'.smash s' (by simpa [s', t', hs₁, ht₂] using hfg)
+      rw [← Module.length_compositionSeries s hs₁ hs₂]; rw [← Module.length_compositionSeries t ht₁ ht₂]; rw [← Module.length_compositionSeries r
+          (by simpa [r]; rw [t']; rw [ht₁]; rw [-Submodule.map_bot] using Submodule.map_bot f)
+          (by simpa [r, s', hs₂, -Submodule.comap_top] using Submodule.comap_top g)]
+      simp_rw [r, RelSeries.smash_length, Nat.cast_add, s', t', RelSeries.map_length]
+    · have := mt (IsFiniteLength.of_injective · hf) hN
+      rw [← Module.length_ne_top_iff]; rw [ne_eq]; rw [not_not] at hN this
+      rw [hN]; rw [this]; rw [top_add]
+  · have := mt (IsFiniteLength.of_surjective · hg) hP
+    rw [← Module.length_ne_top_iff]; rw [ne_eq]; rw [not_not] at hP this
+    rw [hP]; rw [this]; rw [add_top]
+
+include hf in
 
 中文:
 引理 模.length_eq_add_of_exact
@@ -638,7 +681,24 @@ lemma Module.length_eq_add_of_exact
     · obtain ⟨s, hs₁, hs₂⟩ := isFiniteLength_iff_exists_compositionSeries.mp hP
       obtain ⟨t, ht₁, ht₂⟩ := isFiniteLength_iff_exists_compositionSeries.mp hN
       let s' : CompositionSeries (Submodule R M) :=
-        s.map
+        s.map ⟨Submodule.comap g, Submodule.comap_covBy_of_surjective hg⟩
+      let t' : CompositionSeries (Submodule R M) :=
+        t.map ⟨Submodule.map f, Submodule.map_covBy_of_injective hf⟩
+      have hfg : Submodule.map f ⊤ = Submodule.comap g ⊥ := by
+        rw [Submodule.map_top]; rw [Submodule.comap_bot]; rw [LinearMap.exact_iff.mp H]
+      let r := t'.smash s' (by simpa [s', t', hs₁, ht₂] using hfg)
+      rw [← Module.length_compositionSeries s hs₁ hs₂]; rw [← Module.length_compositionSeries t ht₁ ht₂]; rw [← Module.length_compositionSeries r
+          (by simpa [r]; rw [t']; rw [ht₁]; rw [-Submodule.map_bot] using Submodule.map_bot f)
+          (by simpa [r, s', hs₂, -Submodule.comap_top] using Submodule.comap_top g)]
+      simp_rw [r, RelSeries.smash_length, Nat.cast_add, s', t', RelSeries.map_length]
+    · have := mt (IsFiniteLength.of_injective · hf) hN
+      rw [← Module.length_ne_top_iff]; rw [ne_eq]; rw [not_not] at hN this
+      rw [hN]; rw [this]; rw [top_add]
+  · have := mt (IsFiniteLength.of_surjective · hg) hP
+    rw [← Module.length_ne_top_iff]; rw [ne_eq]; rw [not_not] at hP this
+    rw [hP]; rw [this]; rw [add_top]
+
+include hf in
 
 Depends on / 依赖: CompositionSeries, IsFiniteLength, Submodule, Submodule.comap, Submodule.comap_covBy_of_surjective, Submodule.map, Submodule.map_covBy_of_injective, comap_covBy_of_surjective, isFiniteLength_iff_exists_compositionSeries, isFiniteLength_iff_exists_compositionSeries.mp, map_covBy_of_injective, s.map, t.map
 -/
@@ -759,7 +819,9 @@ lemma Module.length_pi_of_fintype
   · intro M _ _
     simp [Module.length_eq_zero]
   · intro ι _ IH M _ _
-    rw [(LinearEqui
+    rw [(LinearEquiv.piOptionEquivProd _).length_eq]; rw [Module.length_prod]; rw [IH]; rw [add_comm]; rw [Fintype.sum_option]; rw [add_comm]
+
+@[simp]
 
 中文:
 引理 模.length_pi_of_fintype
@@ -772,7 +834,9 @@ lemma Module.length_pi_of_fintype
   · intro M _ _
     simp [Module.length_eq_zero]
   · intro ι _ IH M _ _
-    rw [(LinearEqui
+    rw [(LinearEquiv.piOptionEquivProd _).length_eq]; rw [Module.length_prod]; rw [IH]; rw [add_comm]; rw [Fintype.sum_option]; rw [add_comm]
+
+@[simp]
 
 Depends on / 依赖: Fintype, Fintype.induction_empty_option, Fintype.sum_option, LinearEquiv, LinearEquiv.piCongrLeft, LinearEquiv.piOptionEquivProd, Module, Module.length_eq_zero, Module.length_prod, add_comm, e.sum_comp, e.symm, induction_empty_option, length, length_eq, length_eq_zero, length_prod, ofEquiv, piCongrLeft, piOptionEquivProd
 -/
@@ -802,7 +866,15 @@ lemma Module.length_finsupp
   nontriviality M
   rw [ENat.card_eq_top_of_infinite]; rw [ENat.top_mul length_pos.ne']; rw [ENat.eq_top_iff_forall_ge]
   intro m
-  obtain ⟨s, hs⟩ := Infinite.exists_subset_card_e
+  obtain ⟨s, hs⟩ := Infinite.exists_subset_card_eq ι m
+  have : length R (s ->₀ M) = ↑m * length R M := by
+    simp [(Finsupp.linearEquivFunOnFinite R M _).length_eq, hs]
+  refine le_trans ?_ (Module.length_le_of_injective (Finsupp.lmapDomain M R ((↑) : s -> ι))
+    (Finsupp.mapDomain_injective Subtype.val_injective))
+  rw [this]
+  exact ENat.self_le_mul_right _ length_pos.ne'
+
+@[simp]
 
 中文:
 引理 模.length_finsupp
@@ -814,7 +886,15 @@ lemma Module.length_finsupp
   nontriviality M
   rw [ENat.card_eq_top_of_infinite]; rw [ENat.top_mul length_pos.ne']; rw [ENat.eq_top_iff_forall_ge]
   intro m
-  obtain ⟨s, hs⟩ := Infinite.exists_subset_card_e
+  obtain ⟨s, hs⟩ := Infinite.exists_subset_card_eq ι m
+  have : length R (s ->₀ M) = ↑m * length R M := by
+    simp [(Finsupp.linearEquivFunOnFinite R M _).length_eq, hs]
+  refine le_trans ?_ (Module.length_le_of_injective (Finsupp.lmapDomain M R ((↑) : s -> ι))
+    (Finsupp.mapDomain_injective Subtype.val_injective))
+  rw [this]
+  exact ENat.self_le_mul_right _ length_pos.ne'
+
+@[simp]
 
 Depends on / 依赖: ENat.card_eq_top_of_infinite, ENat.eq_top_iff_forall_ge, ENat.top_mul, Finsupp, Finsupp.linearEquivFunOnFinite, Finsupp.lmapDomain, Finsupp.m, Infinite, Infinite.exists_subset_card_eq, Module, Module.length_le_of_injective, card_eq_top_of_infinite, eq_top_iff_forall_ge, exists_subset_card_eq, finite_or_infinite, le_trans, length, length_eq, length_le_of_injective, length_pos
 -/
@@ -848,7 +928,7 @@ lemma Module.length_pi
   nontriviality M
   rw [ENat.card_eq_top_of_infinite]; rw [ENat.top_mul length_pos.ne']; rw [← top_le_iff]
   refine le_trans ?_ (Module.length_le_of_injective Finsupp.lcoeFun DFunLike.coe_injective)
-  simp [ENat.top_mul length_pos
+  simp [ENat.top_mul length_pos.ne']
 
 中文:
 引理 模.length_pi
@@ -860,7 +940,7 @@ lemma Module.length_pi
   nontriviality M
   rw [ENat.card_eq_top_of_infinite]; rw [ENat.top_mul length_pos.ne']; rw [← top_le_iff]
   refine le_trans ?_ (Module.length_le_of_injective Finsupp.lcoeFun DFunLike.coe_injective)
-  simp [ENat.top_mul length_pos
+  simp [ENat.top_mul length_pos.ne']
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, ENat.card_eq_top_of_infinite, ENat.top_mul, Finsupp, Finsupp.lcoeFun, Module, Module.length_le_of_injective, card_eq_top_of_infinite, coe_injective, finite_or_infinite, lcoeFun, le_trans, length_le_of_injective, length_pos, length_pos.ne, nonempty_fintype, nontriviality, top_le_iff, top_mul
 -/
@@ -891,7 +971,8 @@ lemma Module.length_of_free
   · simp [b.repr.length_eq, H, rank_pos_of_free.ne']
   rw [← ne_eq]; rw [Module.length_ne_top_iff]; rw [isFiniteLength_iff_isNoetherian_isArtinian] at H
   cases H
-  let b := Module.Free
+  let b := Module.Free.chooseBasis R M
+  rw [b.repr.length_eq]; rw [Module.length_finsupp]; rw [Free.rank_eq_card_chooseBasisIndex]; rw [ENat.card]
 
 中文:
 引理 模.length_of_free
@@ -904,7 +985,8 @@ lemma Module.length_of_free
   · simp [b.repr.length_eq, H, rank_pos_of_free.ne']
   rw [← ne_eq]; rw [Module.length_ne_top_iff]; rw [isFiniteLength_iff_isNoetherian_isArtinian] at H
   cases H
-  let b := Module.Free
+  let b := Module.Free.chooseBasis R M
+  rw [b.repr.length_eq]; rw [Module.length_finsupp]; rw [Free.rank_eq_card_chooseBasisIndex]; rw [ENat.card]
 
 Depends on / 依赖: ENat.card, Free.rank_eq_card_chooseBasisIndex, Module, Module.Free.chooseBasis, Module.length, Module.length_finsupp, Module.length_ne_top_iff, b.repr.length_eq, chooseBasis, isFiniteLength_iff_isNoetherian_isArtinian, length, length_eq, length_finsupp, length_ne_top_iff, ne_eq, nontriviality, rank_eq_card_chooseBasisIndex, rank_pos_of_free, rank_pos_of_free.ne
 -/

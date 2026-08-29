@@ -139,7 +139,7 @@ definition prodEquiv
   invFun q := q.1.liftOn₂' q.2 (fun g h => (g, h))
     (by simp [QuotientGroup.leftRel_apply, Subgroup.mem_prod, QuotientGroup.eq, ← and_imp])
   left_inv q := q.inductionOn' (by simp)
-
+  right_inv := fun (q₁, q₂) => Quotient.inductionOn₂' q₁ q₂ (by simp)
 
 中文:
 定义 prodEquiv
@@ -149,7 +149,7 @@ definition prodEquiv
   invFun q := q.1.liftOn₂' q.2 (fun g h => (g, h))
     (by simp [QuotientGroup.leftRel_apply, Subgroup.mem_prod, QuotientGroup.eq, ← and_imp])
   left_inv q := q.inductionOn' (by simp)
-
+  right_inv := fun (q₁, q₂) => Quotient.inductionOn₂' q₁ q₂ (by simp)
 
 Depends on / 依赖: liftOn, q.liftOn
 -/
@@ -686,7 +686,7 @@ definition equivQuotientZPowOfEquiv
     (homQuotientZPowOfHom_comp_of_rightInverse (e : A ->* B) (e.symm : B ->* A) n e.right_inv)
     -- Porting note: had to explicitly coerce the `MulEquiv`s to `MonoidHom`s
 
-@[to_ad
+@[to_additive (attr := simp)]
 
 中文:
 定义 equivQuotientZPowOfEquiv
@@ -696,7 +696,7 @@ definition equivQuotientZPowOfEquiv
     (homQuotientZPowOfHom_comp_of_rightInverse (e : A ->* B) (e.symm : B ->* A) n e.right_inv)
     -- Porting note: had to explicitly coerce the `MulEquiv`s to `MonoidHom`s
 
-@[to_ad
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, e.left_inv, e.right_inv, e.symm, homQuotientZPowOfHom_comp_of_rightInverse, left_inv, right_inv, toMulEquiv
 -/
@@ -807,7 +807,22 @@ definition quotientInfEquivProdNormalizerQuotient
     letI := Subgroup.normal_subgroupOf_sup_of_le_normalizer hLE
     H ⧸ N.subgroupOf H ≃* (H ⊔ N : Subgroup G) ⧸ N.subgroupOf (H ⊔ N) :=
   letI := Subgroup.normal_subgroupOf_of_le_normalizer hLE
-  letI := Subgroup.normal_subgroupOf_sup_of_le_normalizer
+  letI := Subgroup.normal_subgroupOf_sup_of_le_normalizer hLE
+  -- φ is the natural homomorphism H →* (HN)/N.
+  let φ : H ->* _ ⧸ N.subgroupOf (H ⊔ N) :=
+    (mk' <| N.subgroupOf (H ⊔ N)).comp (inclusion le_sup_left)
+  have φ_surjective : Surjective φ := fun x =>
+x.inductionOn' by
+      rintro ⟨y, hy : y in (H ⊔ N)⟩
+      rw [← SetLike.mem_coe] at hy
+      rw [coe_mul_of_left_le_normalizer_right H N hLE] at hy
+      rcases hy with ⟨h, hh, n, hn, rfl⟩
+      simp only [SetLike.mem_coe] at hn
+      use ⟨h, hh⟩
+      refine Quotient.eq.mpr ?_
+      simp [leftRel_apply, inclusion, mem_subgroupOf, hn]
+  (quotientMulEquivOfEq (by simp [φ, ← comap_ker])).trans
+    (quotientKerEquivOfSurjective φ φ_surjective)
 
 中文:
 定义 quotientInfEquivProdNormalizerQuotient
@@ -816,7 +831,22 @@ definition quotientInfEquivProdNormalizerQuotient
     letI := Subgroup.normal_subgroupOf_sup_of_le_normalizer hLE
     H ⧸ N.subgroupOf H ≃* (H ⊔ N : Subgroup G) ⧸ N.subgroupOf (H ⊔ N) :=
   letI := Subgroup.normal_subgroupOf_of_le_normalizer hLE
-  letI := Subgroup.normal_subgroupOf_sup_of_le_normalizer
+  letI := Subgroup.normal_subgroupOf_sup_of_le_normalizer hLE
+  -- φ is the natural homomorphism H →* (HN)/N.
+  let φ : H ->* _ ⧸ N.subgroupOf (H ⊔ N) :=
+    (mk' <| N.subgroupOf (H ⊔ N)).comp (inclusion le_sup_left)
+  have φ_surjective : Surjective φ := fun x =>
+x.inductionOn' by
+      rintro ⟨y, hy : y in (H ⊔ N)⟩
+      rw [← SetLike.mem_coe] at hy
+      rw [coe_mul_of_left_le_normalizer_right H N hLE] at hy
+      rcases hy with ⟨h, hh, n, hn, rfl⟩
+      simp only [SetLike.mem_coe] at hn
+      use ⟨h, hh⟩
+      refine Quotient.eq.mpr ?_
+      simp [leftRel_apply, inclusion, mem_subgroupOf, hn]
+  (quotientMulEquivOfEq (by simp [φ, ← comap_ker])).trans
+    (quotientKerEquivOfSurjective φ φ_surjective)
 
 Depends on / 依赖: Subgroup, Subgroup.normal_subgroupOf_of_le_normalizer, normal_subgroupOf_of_le_normalizer
 -/
@@ -1226,7 +1256,7 @@ invFun f := ⟨f.comp (QuotientGroup.mk' H), domRestrict_eq_one_iff.mpr le_comap
   left_inv _ := by simp
   right_inv _ := by ext; simp
 
-@[s
+@[simp]
 
 中文:
 定义 _root_.幺半群态射.domRestrictHomKerEquiv
@@ -1238,7 +1268,7 @@ invFun f := ⟨f.comp (QuotientGroup.mk' H), domRestrict_eq_one_iff.mpr le_comap
   left_inv _ := by simp
   right_inv _ := by ext; simp
 
-@[s
+@[simp]
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.lift
 -/
@@ -1286,7 +1316,10 @@ theorem _root_.MonoidHom.domRestrictHomKerEquiv_symm_coe_apply
 alias _root_.MonoidHom.restrictHomKerEquiv := _root_.MonoidHom.domRestrictHomKerEquiv
 @[deprecated (since := "2026-07-19")]
 alias _root_.AddMonoidHom.restrictHomKerEquiv := _root_.AddMonoidHom.domRestrictHomKerEquiv
-@[deprecated (since := "2026-07-19")] ali
+@[deprecated (since := "2026-07-19")] alias _root_.MonoidHom.restrictHomKerEquiv_apply_coe :=
+  _root_.MonoidHom.domRestrictHomKerEquiv_apply_coe
+@[deprecated (since := "2026-07-19")] alias _root_.MonoidHom.restrictHomKerEquiv_symm_coe_apply :=
+  _root_.MonoidHom.domRestrictHomKerEquiv_symm_coe_apply
 
 中文:
 定理 _root_.幺半群态射.domRestrictHomKerEquiv_symm_coe_apply
@@ -1297,7 +1330,10 @@ alias _root_.AddMonoidHom.restrictHomKerEquiv := _root_.AddMonoidHom.domRestrict
 alias _root_.MonoidHom.restrictHomKerEquiv := _root_.MonoidHom.domRestrictHomKerEquiv
 @[deprecated (since := "2026-07-19")]
 alias _root_.AddMonoidHom.restrictHomKerEquiv := _root_.AddMonoidHom.domRestrictHomKerEquiv
-@[deprecated (since := "2026-07-19")] ali
+@[deprecated (since := "2026-07-19")] alias _root_.MonoidHom.restrictHomKerEquiv_apply_coe :=
+  _root_.MonoidHom.domRestrictHomKerEquiv_apply_coe
+@[deprecated (since := "2026-07-19")] alias _root_.MonoidHom.restrictHomKerEquiv_symm_coe_apply :=
+  _root_.MonoidHom.domRestrictHomKerEquiv_symm_coe_apply
 -/
 theorem _root_.MonoidHom.domRestrictHomKerEquiv_symm_coe_apply (A : Type*) [CommGroup A]
     (H : Subgroup G) [H.Normal] (f : G ⧸ H ->* A) (g : G) :
@@ -1398,7 +1434,9 @@ definition mulEquivPiModRangePowMonoidHom
   }
 liftEquiv (φ := φ) _ (fun y => ⟨fun i => Quotient.out (y i), by simp [φ]⟩) by
     ext x : 1
-    simpa [φ, funext_iff] using
+    simpa [φ, funext_iff] using (Classical.skolem (p := fun i a => a ^ n = x i)).symm
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 mulEquivPiModRangePowMonoidHom
@@ -1410,7 +1448,9 @@ liftEquiv (φ := φ) _ (fun y => ⟨fun i => Quotient.out (y i), by simp [φ]⟩
   }
 liftEquiv (φ := φ) _ (fun y => ⟨fun i => Quotient.out (y i), by simp [φ]⟩) by
     ext x : 1
-    simpa [φ, funext_iff] using
+    simpa [φ, funext_iff] using (Classical.skolem (p := fun i a => a ^ n = x i)).symm
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Classical, Classical.skolem, Pi.mul_def, Pi.one_def, Quotient, Quotient.out, funext_iff, liftEquiv, map_mul, map_one, mul_def, one_def, powMonoidHom, skolem
 -/

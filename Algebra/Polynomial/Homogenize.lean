@@ -412,7 +412,9 @@ lemma coeff_homogenize
   | monomial k c =>
     rcases le_or_gt k n with hkn | hnk
     · rw [homogenize_monomial hkn, coeff_monomial, MvPolynomial.coeff_monomial]
-      have : (fun₀ | 0 => m 0 | 1 => m 1) = m := by ext i; 
+      have : (fun₀ | 0 => m 0 | 1 => m 1) = m := by ext i; fin_cases i <;> simp
+      aesop
+    · aesop (add simp homogenize_monomial_of_lt) (add simp coeff_monomial)
 
 中文:
 引理 coeff_homogenize
@@ -424,7 +426,9 @@ lemma coeff_homogenize
   | monomial k c =>
     rcases le_or_gt k n with hkn | hnk
     · rw [homogenize_monomial hkn, coeff_monomial, MvPolynomial.coeff_monomial]
-      have : (fun₀ | 0 => m 0 | 1 => m 1) = m := by ext i; 
+      have : (fun₀ | 0 => m 0 | 1 => m 1) = m := by ext i; fin_cases i <;> simp
+      aesop
+    · aesop (add simp homogenize_monomial_of_lt) (add simp coeff_monomial)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.coeff_monomial, Polynomial, Polynomial.induction_on, coeff_monomial, fin_cases, homogenize_monomial, homogenize_monomial_of_lt, induction_on, ite_add_ite, le_or_gt, monomial
 -/
@@ -635,7 +639,8 @@ lemma homogenize_eq_of_isHomogeneous
   rw [MvPolynomial.monomial_eq]
   congr 1
 obtain rfl : m.weight 1 = n := hq by simpa using hm
-  s
+  simp [Finsupp.prod_fintype, Finsupp.weight_apply, Finsupp.sum_fintype, Fin.prod_univ_two,
+    Fin.sum_univ_two]
 
 中文:
 引理 homogenize_eq_of_isHomogeneous
@@ -649,7 +654,8 @@ obtain rfl : m.weight 1 = n := hq by simpa using hm
   rw [MvPolynomial.monomial_eq]
   congr 1
 obtain rfl : m.weight 1 = n := hq by simpa using hm
-  s
+  simp [Finsupp.prod_fintype, Finsupp.weight_apply, Finsupp.sum_fintype, Fin.prod_univ_two,
+    Fin.sum_univ_two]
 
 Depends on / 依赖: C_eq_algebraMap, Fin.prod_univ_two, Fin.sum_univ_two, Finset, Finset.sum_congr, Finsupp, Finsupp.prod_fintype, Finsupp.sum_fintype, Finsupp.weight_apply, MvPolynomial, MvPolynomial.aeval_monomial, MvPolynomial.aeval_sum, MvPolynomial.monomial_eq, Submonoid, Submonoid.center.smulCommClass_left, aeval_monomial, aeval_sum, as_sum, center, homogenize_C_mul
 -/
@@ -834,7 +840,9 @@ lemma eval_homogenize
   simp only [homogenize, Polynomial.eval_eq_sum_range' (Nat.lt_succ_iff.mpr hn),
     Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Finset.sum_mul, MvPolynomial.eval_sum]
   refine Finset.sum_congr rfl fun k hk => ?_
-  rw [MvPolynomial.eval_monomial]; rw [Finsupp.update_eq_add_single]; rw [Fins
+  rw [MvPolynomial.eval_monomial]; rw [Finsupp.update_eq_add_single]; rw [Finsupp.prod_add_index']; rw [Finsupp.prod_single_index]; rw [Finsupp.prod_single_index]; rw [pow_sub₀]
+  · ring
+  all_goals simp_all [pow_add]
 
 中文:
 引理 eval_homogenize
@@ -843,7 +851,9 @@ lemma eval_homogenize
   simp only [homogenize, Polynomial.eval_eq_sum_range' (Nat.lt_succ_iff.mpr hn),
     Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Finset.sum_mul, MvPolynomial.eval_sum]
   refine Finset.sum_congr rfl fun k hk => ?_
-  rw [MvPolynomial.eval_monomial]; rw [Finsupp.update_eq_add_single]; rw [Fins
+  rw [MvPolynomial.eval_monomial]; rw [Finsupp.update_eq_add_single]; rw [Finsupp.prod_add_index']; rw [Finsupp.prod_single_index]; rw [Finsupp.prod_single_index]; rw [pow_sub₀]
+  · ring
+  all_goals simp_all [pow_add]
 
 Depends on / 依赖: Finset, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Finset.sum_congr, Finset.sum_mul, Finsupp, Finsupp.prod_add_index, Finsupp.prod_single_index, Finsupp.update_eq_add_single, MvPolynomial, MvPolynomial.eval_monomial, MvPolynomial.eval_sum, Nat.lt_succ_iff.mpr, Polynomial, Polynomial.eval_eq_sum_range, all_goals, eval_eq_sum_range, eval_monomial, eval_sum, homogenize, lt_succ_iff
 -/
@@ -1033,7 +1043,15 @@ lemma finsuppSum_homogenize_eq
   -- We set up a bijection between the sets indexing the terms on both sides
   -- and show that it maps the terms in the one sum to those in the other.
   refine Finset.sum_nbij' (fun s => s 0) (fun n => fun₀ | 0 => n | 1 => p.natDegree - n)
-    (fun s h
+    (fun s hs => ?_) (fun n hn => ?_) (fun s hs => ?_) (fun n hn => by simp)
+    fun s hs => ?_
+  · simpa [coeff_homogenize, sum_eq_natDegree_of_mem_support_homogenize p hs] using hs
+  · simpa [coeff_homogenize, mem_support_iff.mp hn]
+using Nat.add_sub_of_le le_natDegree_of_mem_supp n hn
+  · -- speeds up `grind` quite a bit
+    grind only [= Finsupp.update_apply, = Finsupp.single_apply,
+      sum_eq_natDegree_of_mem_support_homogenize p hs]
+  · simp [coeff_homogenize, sum_eq_natDegree_of_mem_support_homogenize p hs]
 
 中文:
 引理 finsuppSum_homogenize_eq
@@ -1043,7 +1061,15 @@ lemma finsuppSum_homogenize_eq
   -- We set up a bijection between the sets indexing the terms on both sides
   -- and show that it maps the terms in the one sum to those in the other.
   refine Finset.sum_nbij' (fun s => s 0) (fun n => fun₀ | 0 => n | 1 => p.natDegree - n)
-    (fun s h
+    (fun s hs => ?_) (fun n hn => ?_) (fun s hs => ?_) (fun n hn => by simp)
+    fun s hs => ?_
+  · simpa [coeff_homogenize, sum_eq_natDegree_of_mem_support_homogenize p hs] using hs
+  · simpa [coeff_homogenize, mem_support_iff.mp hn]
+using Nat.add_sub_of_le le_natDegree_of_mem_supp n hn
+  · -- speeds up `grind` quite a bit
+    grind only [= Finsupp.update_apply, = Finsupp.single_apply,
+      sum_eq_natDegree_of_mem_support_homogenize p hs]
+  · simp [coeff_homogenize, sum_eq_natDegree_of_mem_support_homogenize p hs]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.sum_def, SubsemiringClass, SubsemiringClass.nonUnitalSubsemiringClass, nonUnitalSubsemiringClass, sum_def
 -/

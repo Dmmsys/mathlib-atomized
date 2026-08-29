@@ -96,7 +96,7 @@ lemma hasBasis_totalLengthFilter
   ext ε E
   simp only [mem_ofPred_eq, zero_sub, zero_add, mem_preimage, mem_Ioo, iff_and_self]
   suffices 0 <= ∑ i in Finset.range E.1, dist (E.2 i).1 (E.2 i).2 by grind
-  exact Finset.sum_nonneg (fun _ _ => dist_nonneg
+  exact Finset.sum_nonneg (fun _ _ => dist_nonneg)
 
 中文:
 引理 hasBasis_totalLengthFilter
@@ -106,7 +106,7 @@ lemma hasBasis_totalLengthFilter
   ext ε E
   simp only [mem_ofPred_eq, zero_sub, zero_add, mem_preimage, mem_Ioo, iff_and_self]
   suffices 0 <= ∑ i in Finset.range E.1, dist (E.2 i).1 (E.2 i).2 by grind
-  exact Finset.sum_nonneg (fun _ _ => dist_nonneg
+  exact Finset.sum_nonneg (fun _ _ => dist_nonneg)
 
 Depends on / 依赖: Filter, Filter.HasBasis.comap, Finset, Finset.range, Finset.sum_nonneg, HasBasis, convert, dist_nonneg, iff_and_self, mem_Ioo, mem_ofPred_eq, mem_preimage, nhds_basis_Ioo_pos, sum_nonneg, zero_add, zero_sub
 -/
@@ -247,7 +247,11 @@ lemma tendsto_volume_totalLengthFilter_nhds_zero
   · intro; simp
   · intro E
     simp only
-    grw [measure_biUnion_fins
+    grw [measure_biUnion_finset_le]
+    rw [ENNReal.ofReal_sum_of_nonneg (fun _ _ => dist_nonneg)]
+    apply Eq.le
+    apply Finset.sum_congr rfl
+    simp [uIoc, Real.dist_eq, max_sub_min_eq_abs']
 
 中文:
 引理 tendsto_volume_totalLengthFilter_nhds_zero
@@ -259,7 +263,11 @@ lemma tendsto_volume_totalLengthFilter_nhds_zero
   · intro; simp
   · intro E
     simp only
-    grw [measure_biUnion_fins
+    grw [measure_biUnion_finset_le]
+    rw [ENNReal.ofReal_sum_of_nonneg (fun _ _ => dist_nonneg)]
+    apply Eq.le
+    apply Finset.sum_congr rfl
+    simp [uIoc, Real.dist_eq, max_sub_min_eq_abs']
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_sum_of_nonneg, ENNReal.tendsto_ofReal, Eq.le, Filter, Filter.tendsto_comap, Finset, Finset.range, Finset.sum_congr, Real.dist_eq, convert, dist_eq, dist_nonneg, max_sub_min_eq_abs, measure_biUnion_finset_le, ofReal, ofReal_sum_of_nonneg, sum_congr, tendsto_comap
 -/
@@ -292,7 +300,8 @@ lemma tendsto_volume_restrict_totalLengthFilter_disjWithin_nhds_zero
     simp
   · intro; simp
   · intro E
-    simp only [Finse
+    simp only [Finset.mem_range]
+    apply Measure.restrict_le_self
 
 中文:
 引理 tendsto_volume_restrict_totalLengthFilter_disjWithin_nhds_zero
@@ -304,7 +313,8 @@ lemma tendsto_volume_restrict_totalLengthFilter_disjWithin_nhds_zero
     simp
   · intro; simp
   · intro E
-    simp only [Finse
+    simp only [Finset.mem_range]
+    apply Measure.restrict_le_self
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.range, Measure, Measure.restrict_le_self, mem_range, mono_left, restrict_le_self, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_volume_totalLengthFilter_nhds_zero, tendsto_volume_totalLengthFilter_nhds_zero.mono_left, volume
 -/
@@ -604,7 +614,13 @@ theorem uniformContinuousOn
   · simp only [comap_inf, comap_principal]
     congr
     ext p
-    simp only [disjWithin,
+    simp only [disjWithin, Finset.mem_range, preimage_ofPred_eq, Nat.lt_one_iff,
+      forall_eq, mem_ofPred_eq, mem_prod]
+    simp
+  · simp [totalLengthFilter, comap_comap, Function.comp_def]
+
+@[deprecated (since := "2026-02-03")] alias uniformlyContinuousOn :=
+  uniformContinuousOn
 
 中文:
 定理 uniformContinuousOn
@@ -616,7 +632,13 @@ theorem uniformContinuousOn
   · simp only [comap_inf, comap_principal]
     congr
     ext p
-    simp only [disjWithin,
+    simp only [disjWithin, Finset.mem_range, preimage_ofPred_eq, Nat.lt_one_iff,
+      forall_eq, mem_ofPred_eq, mem_prod]
+    simp
+  · simp [totalLengthFilter, comap_comap, Function.comp_def]
+
+@[deprecated (since := "2026-02-03")] alias uniformlyContinuousOn :=
+  uniformContinuousOn
 
 Depends on / 依赖: AbsolutelyContinuousOnInterval, Filter, Filter.comap_mono, Filter.tendsto_iff_comap, Finset, Finset.mem_range, Function, Function.comp_def, Nat.lt_one_iff, UniformContinuousOn, comap_comap, comap_inf, comap_mono, comap_principal, comp_def, convert, disjWithin, forall_eq, lt_one_iff, mem_ofPred_eq
 -/
@@ -690,7 +712,23 @@ theorem smul
   apply squeeze_zero' ?_ ?_
     (by simpa using (hg.const_mul C).add (hf.const_mul D))
 · exact Filter.Eventually.of_forall fun _ => Finset.sum_nonneg (fun i hi => dist_nonneg)
-
+  rw [eventually_inf_principal]
+  filter_upwards with (n, I) hnI
+  simp only [Finset.mul_sum, ← Finset.sum_add_distrib]
+  gcongr with i hi
+  trans dist (f (I i).1 • g (I i).1) (f (I i).1 • g (I i).2) +
+    dist (f (I i).1 • g (I i).2) (f (I i).2 • g (I i).2)
+  · exact dist_triangle _ _ _
+  · simp only [disjWithin, mem_ofPred_eq] at hnI
+    gcongr
+    · rw [dist_smul₀]
+      gcongr
+      exact hC _ (hnI.left i hi |>.left)
+    · rw [mul_comm]
+      grw [dist_pair_smul]
+      gcongr
+      rw [dist_zero_right]
+      exact hD _ (hnI.left i hi |>.right)
 
 中文:
 定理 smul
@@ -702,7 +740,23 @@ theorem smul
   apply squeeze_zero' ?_ ?_
     (by simpa using (hg.const_mul C).add (hf.const_mul D))
 · exact Filter.Eventually.of_forall fun _ => Finset.sum_nonneg (fun i hi => dist_nonneg)
-
+  rw [eventually_inf_principal]
+  filter_upwards with (n, I) hnI
+  simp only [Finset.mul_sum, ← Finset.sum_add_distrib]
+  gcongr with i hi
+  trans dist (f (I i).1 • g (I i).1) (f (I i).1 • g (I i).2) +
+    dist (f (I i).1 • g (I i).2) (f (I i).2 • g (I i).2)
+  · exact dist_triangle _ _ _
+  · simp only [disjWithin, mem_ofPred_eq] at hnI
+    gcongr
+    · rw [dist_smul₀]
+      gcongr
+      exact hC _ (hnI.left i hi |>.left)
+    · rw [mul_comm]
+      grw [dist_pair_smul]
+      gcongr
+      rw [dist_zero_right]
+      exact hD _ (hnI.left i hi |>.right)
 
 Depends on / 依赖: AbsolutelyContinuousOnInterval, Eventually, Filter, Filter.Eventually.of_forall, Finset, Finset.mul_sum, Finset.sum_add_distrib, Finset.sum_nonneg, const_mul, dist_nonneg, eventually_inf_principal, exists_bound, filter_upwards, hf.const_mul, hf.exists_bound, hg.const_mul, hg.exists_bound, mul_sum, of_forall, squeeze_zero
 -/
@@ -771,7 +825,13 @@ theorem _root_.LipschitzOnWith.absolutelyContinuousOnInterval
     _ <= ∑ i in Finset.range n, K * dist (I i).1 (I i).2 := by
       apply Finset.sum_le_sum
       intro i hi
-      have := hfK (hnI₁.left i hi).left (hnI₁.left i hi).ri
+      have := hfK (hnI₁.left i hi).left (hnI₁.left i hi).right
+      apply ENNReal.toReal_mono (Ne.symm (not_eq_of_beq_eq_false rfl)) at this
+      rwa [ENNReal.toReal_mul, ← dist_edist, ← dist_edist] at this
+    _ = K * ∑ i in Finset.range n, dist (I i).1 (I i).2 := by symm; exact Finset.mul_sum _ _ _
+    _ <= K * (ε / (K + 1)) := by gcongr
+    _ < (K + 1) * (ε / (K + 1)) := by gcongr; linarith
+    _ = ε := by field
 
 中文:
 定理 _root_.LipschitzOnWith.absolutelyContinuousOn整数erval
@@ -784,7 +844,13 @@ theorem _root_.LipschitzOnWith.absolutelyContinuousOnInterval
     _ <= ∑ i in Finset.range n, K * dist (I i).1 (I i).2 := by
       apply Finset.sum_le_sum
       intro i hi
-      have := hfK (hnI₁.left i hi).left (hnI₁.left i hi).ri
+      have := hfK (hnI₁.left i hi).left (hnI₁.left i hi).right
+      apply ENNReal.toReal_mono (Ne.symm (not_eq_of_beq_eq_false rfl)) at this
+      rwa [ENNReal.toReal_mul, ← dist_edist, ← dist_edist] at this
+    _ = K * ∑ i in Finset.range n, dist (I i).1 (I i).2 := by symm; exact Finset.mul_sum _ _ _
+    _ <= K * (ε / (K + 1)) := by gcongr
+    _ < (K + 1) * (ε / (K + 1)) := by gcongr; linarith
+    _ = ε := by field
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_mono, ENNReal.toReal_mul, Finset, Finset.mul_sum, Finset.range, Finset.sum_le_sum, Ne.symm, absolutelyContinuousOnInterval_iff, dist_edist, mul_sum, not_eq_of_beq_eq_false, sum_le_sum, toReal_mono, toReal_mul
 -/
@@ -845,7 +911,80 @@ theorem boundedVariationOn
   -- Split the cases `a = b` (which is trivial) and `a < b`.
   rcases hab₀.eq_or_lt with rfl | hab
   · simp [BoundedVariationOn]
-  
+  -- Now remains the case `a < b`.
+  -- Use the `ε`-`δ` definition of AC to get a `δ > 0` such that whenever a finite set of disjoint
+  -- intervals `uIoc (a i) (b i)`, `i < n` have total length `< δ` and `a i, b i` are all in
+  -- `[a, b]`, we have `∑ i ∈ range n, dist (f (a i)) (f (b i)) < 1`.
+  rw [absolutelyContinuousOnInterval_iff] at hf
+  obtain ⟨δ, hδ₁, hδ₂⟩ := hf 1 (by linarith)
+  have hab₁ : 0 < b - a := by linarith
+  -- Split `[a, b]` into subintervals `[a + i * δ', a + (i + 1) * δ']` for `i = 0, ..., n`, where
+  -- `a + (n + 1) * δ' = b` and `δ' < δ`.
+  obtain ⟨n, hn⟩ := exists_nat_one_div_lt (div_pos hδ₁ hab₁)
+  set δ' := (b - a) / (n + 1)
+  have hδ₃ : δ' < δ := by
+    dsimp only [δ']
+    convert! mul_lt_mul_of_pos_right hn hab₁ using 1 <;> field
+  have h_mono : Monotone fun (i : Nat) => a + ↑i * δ' := by
+    apply Monotone.const_add
+    apply Monotone.mul_const Nat.mono_cast
+    simp only [δ']
+    refine div_nonneg ?_ ?_ <;> linarith
+  -- The variation of `f` on `[a, b]` is the sum of the variations on these subintervals.
+  have v_sum : eVariationOn f (Icc a b) =
+      ∑ i in Finset.range (n + 1), eVariationOn f (Icc (a + i * δ') (a + (i + 1) * δ')) := by
+.symm convert! eVariationOn.sum' f (I := fun i => a + i * δ') h_mono
+    · simp
+    · simp only [Nat.cast_add, Nat.cast_one, δ']; field
+    · norm_cast
+  -- The variation of `f` on any subinterval `[x, y]` of `[a, b]` of length `< δ` is `≤ 1`.
+  have v_each (x y : Real) (_ : a <= x) (_ : x <= y) (_ : y < x + δ) (_ : y <= b) :
+      eVariationOn f (Icc x y) <= 1 := by
+    simp only [eVariationOn, iSup_le_iff]
+    intro p
+    obtain ⟨hp₁, hp₂⟩ := p.2.property
+    -- Focus on a partition `p` of `[x, y]` and show its variation with `f` is `≤ 1`.
+    have vf : ∑ i in Finset.range p.1, dist (f (p.2.val i)) (f (p.2.val (i + 1))) < 1 := by
+      apply hδ₂ (p.1, (fun i => (p.2.val i, p.2.val (i + 1))))
+      · constructor
+        · have : Icc x y subseteq uIcc a b := by rw [uIcc_of_le hab₀]; gcongr
+          intro i hi
+          constructor <;> exact this (hp₂ _)
+        · rw [PairwiseDisjoint]
+          convert! hp₁.pairwise_disjoint_on_Ioc_succ.set_pairwise (Finset.range p.1) using 3
+          rw [uIoc_of_le (hp₁ (by lia))]; rw [Nat.succ_eq_succ]
+      · suffices p.2.val p.1 - p.2.val 0 < δ by
+          convert! this
+          rw [← Finset.sum_range_sub]
+          congr; ext i
+          rw [dist_comm]; rw [Real.dist_eq]; rw [abs_eq_self.mpr]
+          linarith [@hp₁ i (i + 1) (by lia)]
+        linarith [mem_Icc.mp (hp₂ p.1), mem_Icc.mp (hp₂ 0)]
+    -- Reduce edist in the goal to dist and clear up
+    have veq : (∑ i in Finset.range p.1, edist (f (p.2.val (i + 1))) (f (p.2.val i))).toReal =
+        ∑ i in Finset.range p.1, dist (f (p.2.val i)) (f (p.2.val (i + 1))) := by
+      rw [ENNReal.toReal_sum (by simp [edist_ne_top])]
+      simp_rw [← dist_edist]; congr; ext i; nth_rw 1 [dist_comm]
+    have not_top : ∑ i in Finset.range p.1, edist (f (p.2.val (i + 1))) (f (p.2.val i)) != ⊤ := by
+      simp [edist_ne_top]
+    rw [← ENNReal.ofReal_toReal not_top]
+    convert! ENNReal.ofReal_le_ofReal (veq.symm ▸ vf.le)
+    simp
+  -- Reduce to goal that the variation of `f` on each of these subintervals is finite.
+  simp only [BoundedVariationOn, v_sum, ne_eq, ENNReal.sum_eq_top, Finset.mem_range, not_exists,
+    not_and]
+  intro i hi
+  -- Reduce finiteness to `≤ 1`.
+  suffices eVariationOn f (Icc (a + i * δ') (a + (i + 1) * δ')) <= 1 from
+    fun hC => by simp [hC] at this
+  -- Verify that `[a + i * δ', a + (i + 1) * δ']` is indeed a subinterval of `[a, b]`
+  apply v_each
+  · convert! h_mono (show 0 <= i by lia); simp
+  · convert! h_mono (show i <= i + 1 by lia); norm_cast
+  · rw [add_mul, ← add_assoc]; simpa
+  · convert! h_mono (show i + 1 <= n + 1 by lia)
+    · norm_cast
+    · simp only [Nat.cast_add, Nat.cast_one, δ']; field
 
 中文:
 定理 boundedVariationOn
@@ -859,7 +998,80 @@ theorem boundedVariationOn
   -- Split the cases `a = b` (which is trivial) and `a < b`.
   rcases hab₀.eq_or_lt with rfl | hab
   · simp [BoundedVariationOn]
-  
+  -- Now remains the case `a < b`.
+  -- Use the `ε`-`δ` definition of AC to get a `δ > 0` such that whenever a finite set of disjoint
+  -- intervals `uIoc (a i) (b i)`, `i < n` have total length `< δ` and `a i, b i` are all in
+  -- `[a, b]`, we have `∑ i ∈ range n, dist (f (a i)) (f (b i)) < 1`.
+  rw [absolutelyContinuousOnInterval_iff] at hf
+  obtain ⟨δ, hδ₁, hδ₂⟩ := hf 1 (by linarith)
+  have hab₁ : 0 < b - a := by linarith
+  -- Split `[a, b]` into subintervals `[a + i * δ', a + (i + 1) * δ']` for `i = 0, ..., n`, where
+  -- `a + (n + 1) * δ' = b` and `δ' < δ`.
+  obtain ⟨n, hn⟩ := exists_nat_one_div_lt (div_pos hδ₁ hab₁)
+  set δ' := (b - a) / (n + 1)
+  have hδ₃ : δ' < δ := by
+    dsimp only [δ']
+    convert! mul_lt_mul_of_pos_right hn hab₁ using 1 <;> field
+  have h_mono : Monotone fun (i : Nat) => a + ↑i * δ' := by
+    apply Monotone.const_add
+    apply Monotone.mul_const Nat.mono_cast
+    simp only [δ']
+    refine div_nonneg ?_ ?_ <;> linarith
+  -- The variation of `f` on `[a, b]` is the sum of the variations on these subintervals.
+  have v_sum : eVariationOn f (Icc a b) =
+      ∑ i in Finset.range (n + 1), eVariationOn f (Icc (a + i * δ') (a + (i + 1) * δ')) := by
+.symm convert! eVariationOn.sum' f (I := fun i => a + i * δ') h_mono
+    · simp
+    · simp only [Nat.cast_add, Nat.cast_one, δ']; field
+    · norm_cast
+  -- The variation of `f` on any subinterval `[x, y]` of `[a, b]` of length `< δ` is `≤ 1`.
+  have v_each (x y : Real) (_ : a <= x) (_ : x <= y) (_ : y < x + δ) (_ : y <= b) :
+      eVariationOn f (Icc x y) <= 1 := by
+    simp only [eVariationOn, iSup_le_iff]
+    intro p
+    obtain ⟨hp₁, hp₂⟩ := p.2.property
+    -- Focus on a partition `p` of `[x, y]` and show its variation with `f` is `≤ 1`.
+    have vf : ∑ i in Finset.range p.1, dist (f (p.2.val i)) (f (p.2.val (i + 1))) < 1 := by
+      apply hδ₂ (p.1, (fun i => (p.2.val i, p.2.val (i + 1))))
+      · constructor
+        · have : Icc x y subseteq uIcc a b := by rw [uIcc_of_le hab₀]; gcongr
+          intro i hi
+          constructor <;> exact this (hp₂ _)
+        · rw [PairwiseDisjoint]
+          convert! hp₁.pairwise_disjoint_on_Ioc_succ.set_pairwise (Finset.range p.1) using 3
+          rw [uIoc_of_le (hp₁ (by lia))]; rw [Nat.succ_eq_succ]
+      · suffices p.2.val p.1 - p.2.val 0 < δ by
+          convert! this
+          rw [← Finset.sum_range_sub]
+          congr; ext i
+          rw [dist_comm]; rw [Real.dist_eq]; rw [abs_eq_self.mpr]
+          linarith [@hp₁ i (i + 1) (by lia)]
+        linarith [mem_Icc.mp (hp₂ p.1), mem_Icc.mp (hp₂ 0)]
+    -- Reduce edist in the goal to dist and clear up
+    have veq : (∑ i in Finset.range p.1, edist (f (p.2.val (i + 1))) (f (p.2.val i))).toReal =
+        ∑ i in Finset.range p.1, dist (f (p.2.val i)) (f (p.2.val (i + 1))) := by
+      rw [ENNReal.toReal_sum (by simp [edist_ne_top])]
+      simp_rw [← dist_edist]; congr; ext i; nth_rw 1 [dist_comm]
+    have not_top : ∑ i in Finset.range p.1, edist (f (p.2.val (i + 1))) (f (p.2.val i)) != ⊤ := by
+      simp [edist_ne_top]
+    rw [← ENNReal.ofReal_toReal not_top]
+    convert! ENNReal.ofReal_le_ofReal (veq.symm ▸ vf.le)
+    simp
+  -- Reduce to goal that the variation of `f` on each of these subintervals is finite.
+  simp only [BoundedVariationOn, v_sum, ne_eq, ENNReal.sum_eq_top, Finset.mem_range, not_exists,
+    not_and]
+  intro i hi
+  -- Reduce finiteness to `≤ 1`.
+  suffices eVariationOn f (Icc (a + i * δ') (a + (i + 1) * δ')) <= 1 from
+    fun hC => by simp [hC] at this
+  -- Verify that `[a + i * δ', a + (i + 1) * δ']` is indeed a subinterval of `[a, b]`
+  apply v_each
+  · convert! h_mono (show 0 <= i by lia); simp
+  · convert! h_mono (show i <= i + 1 by lia); norm_cast
+  · rw [add_mul, ← add_assoc]; simpa
+  · convert! h_mono (show i + 1 <= n + 1 by lia)
+    · norm_cast
+    · simp only [Nat.cast_add, Nat.cast_one, δ']; field
 -/
 theorem boundedVariationOn (hf : AbsolutelyContinuousOnInterval f a b) :
     BoundedVariationOn f (uIcc a b) := by
@@ -976,7 +1188,41 @@ theorem _root_.IntervalIntegrable.absolutelyContinuousOnInterval_intervalIntegra
   -- Step 1: Use `MeasureTheory.tendsto_setLIntegral_zero` to conclude that the function sending
   -- `E` to `∫⁻ (x : ℝ) in s E, ‖f x‖ₑ ∂volume.restrict (uIoc a b))` tends to `0` along
   -- `totalLengthFilter ⊓ 𝓟 (disjWithin a b)`.
-  let s := fun E : Nat × (Nat -> Real × Real) => ⋃ i in Finset.ra
+  let s := fun E : Nat × (Nat -> Real × Real) => ⋃ i in Finset.range E.1, uIoc (E.2 i).1 (E.2 i).2
+  have : Tendsto (fun i => ∫⁻ (x : Real) in s i, ‖f x‖ₑ ∂volume.restrict (uIoc a b))
+      (totalLengthFilter ⊓ 𝓟 (disjWithin a b)) (𝓝 0) :=
+    tendsto_setLIntegral_zero
+    (ne_of_lt <| intervalIntegrable_iff.mp h |>.hasFiniteIntegral)
+    (tendsto_volume_restrict_totalLengthFilter_disjWithin_nhds_zero _ _)
+  -- Step 2: Use the lintegral in Step 1 to bound the sum of the distances between
+  -- `∫ v in c..(E.2 i).2, f v` and `∫ v in c..(E.2 i).2, f v` that occurs in the definition
+  -- of absolutely continuous.
+  have := ENNReal.toReal_zero ▸ (ENNReal.continuousAt_toReal (by simp)).tendsto.comp this
+  refine squeeze_zero' ?_ ?_ this
+  · filter_upwards with (n, I)
+    exact Finset.sum_nonneg (fun _ _ => dist_nonneg)
+  simp only [comp_apply, s]
+  have : forallᶠ (E : Nat × (Nat -> Real × Real)) in totalLengthFilter ⊓ 𝓟 (disjWithin a b),
+      E in disjWithin a b :=
+    eventually_inf_principal.mpr (by simp)
+  filter_upwards [this] with (n, I) hnI
+  obtain ⟨hnI1, hnI2⟩ := mem_ofPred_eq ▸ hnI
+  simp only
+  rw [← integral_norm_eq_lintegral_enorm (h.aestronglyMeasurable_restrict_uIoc.restrict)]; rw [integral_biUnion_finset _ (by simp +contextual [uIoc]) hnI2]
+  · refine Finset.sum_le_sum (fun i hi => ?_)
+    rw [Real.dist_eq]; rw [intervalIntegral.integral_interval_sub_left
+          (by apply IntervalIntegrable.mono_set' h; grind [uIoc]; rw [uIcc])
+          (by apply IntervalIntegrable.mono_set' h; grind [uIoc, uIcc]),
+        Measure.restrict_restrict_of_subset
+          (uIoc_subset_of_mem_disjWithin hnI (Finset.mem_range.mp hi)),
+        intervalIntegral.integral_symm, abs_neg,
+        intervalIntegral.abs_intervalIntegral_eq]
+    exact abs_integral_le_integral_abs
+  · intro i hi
+    unfold IntegrableOn
+    have h_subset := uIoc_subset_of_mem_disjWithin hnI (Finset.mem_range.mp hi)
+    rw [Measure.restrict_restrict_of_subset h_subset]
+.integrable exact IntegrableOn.mono_set h.def'.norm h_subset
 
 中文:
 定理 _root_.整数erval整数egrable.absolutelyContinuousOn整数erval_interval整数egral
@@ -985,7 +1231,41 @@ theorem _root_.IntervalIntegrable.absolutelyContinuousOnInterval_intervalIntegra
   -- Step 1: Use `MeasureTheory.tendsto_setLIntegral_zero` to conclude that the function sending
   -- `E` to `∫⁻ (x : ℝ) in s E, ‖f x‖ₑ ∂volume.restrict (uIoc a b))` tends to `0` along
   -- `totalLengthFilter ⊓ 𝓟 (disjWithin a b)`.
-  let s := fun E : Nat × (Nat -> Real × Real) => ⋃ i in Finset.ra
+  let s := fun E : Nat × (Nat -> Real × Real) => ⋃ i in Finset.range E.1, uIoc (E.2 i).1 (E.2 i).2
+  have : Tendsto (fun i => ∫⁻ (x : Real) in s i, ‖f x‖ₑ ∂volume.restrict (uIoc a b))
+      (totalLengthFilter ⊓ 𝓟 (disjWithin a b)) (𝓝 0) :=
+    tendsto_setLIntegral_zero
+    (ne_of_lt <| intervalIntegrable_iff.mp h |>.hasFiniteIntegral)
+    (tendsto_volume_restrict_totalLengthFilter_disjWithin_nhds_zero _ _)
+  -- Step 2: Use the lintegral in Step 1 to bound the sum of the distances between
+  -- `∫ v in c..(E.2 i).2, f v` and `∫ v in c..(E.2 i).2, f v` that occurs in the definition
+  -- of absolutely continuous.
+  have := ENNReal.toReal_zero ▸ (ENNReal.continuousAt_toReal (by simp)).tendsto.comp this
+  refine squeeze_zero' ?_ ?_ this
+  · filter_upwards with (n, I)
+    exact Finset.sum_nonneg (fun _ _ => dist_nonneg)
+  simp only [comp_apply, s]
+  have : forallᶠ (E : Nat × (Nat -> Real × Real)) in totalLengthFilter ⊓ 𝓟 (disjWithin a b),
+      E in disjWithin a b :=
+    eventually_inf_principal.mpr (by simp)
+  filter_upwards [this] with (n, I) hnI
+  obtain ⟨hnI1, hnI2⟩ := mem_ofPred_eq ▸ hnI
+  simp only
+  rw [← integral_norm_eq_lintegral_enorm (h.aestronglyMeasurable_restrict_uIoc.restrict)]; rw [integral_biUnion_finset _ (by simp +contextual [uIoc]) hnI2]
+  · refine Finset.sum_le_sum (fun i hi => ?_)
+    rw [Real.dist_eq]; rw [intervalIntegral.integral_interval_sub_left
+          (by apply IntervalIntegrable.mono_set' h; grind [uIoc]; rw [uIcc])
+          (by apply IntervalIntegrable.mono_set' h; grind [uIoc, uIcc]),
+        Measure.restrict_restrict_of_subset
+          (uIoc_subset_of_mem_disjWithin hnI (Finset.mem_range.mp hi)),
+        intervalIntegral.integral_symm, abs_neg,
+        intervalIntegral.abs_intervalIntegral_eq]
+    exact abs_integral_le_integral_abs
+  · intro i hi
+    unfold IntegrableOn
+    have h_subset := uIoc_subset_of_mem_disjWithin hnI (Finset.mem_range.mp hi)
+    rw [Measure.restrict_restrict_of_subset h_subset]
+.integrable exact IntegrableOn.mono_set h.def'.norm h_subset
 -/
 theorem _root_.IntervalIntegrable.absolutelyContinuousOnInterval_intervalIntegral {f : Real -> Real}
     {a b c : Real} (h : IntervalIntegrable f volume a b) (hc : c in uIcc a b) :

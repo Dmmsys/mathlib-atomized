@@ -427,7 +427,11 @@ lemma ιNormalizedChainComplex_eq_zero
   obtain _ | n := n
   · simp at hx
   · simp only [degenerate_eq_iUnion_range_σ, Set.mem_iUnion, Set.mem_range] at hx
-    let X' := ((SimplicialObject.whiskering _
+    let X' := ((SimplicialObject.whiskering _ _).obj (sigmaConst.obj R)).obj X
+    obtain ⟨i, y, rfl⟩ := hx
+    trans X.ιChainComplex y ≫ X'.σ i ≫ (PInfty (X := X')).f _
+    · simp [ιChainComplex, X']
+    · simp
 
 中文:
 引理 ιNormalizedChainComplex_eq_zero
@@ -437,7 +441,11 @@ lemma ιNormalizedChainComplex_eq_zero
   obtain _ | n := n
   · simp at hx
   · simp only [degenerate_eq_iUnion_range_σ, Set.mem_iUnion, Set.mem_range] at hx
-    let X' := ((SimplicialObject.whiskering _
+    let X' := ((SimplicialObject.whiskering _ _).obj (sigmaConst.obj R)).obj X
+    obtain ⟨i, y, rfl⟩ := hx
+    trans X.ιChainComplex y ≫ X'.σ i ≫ (PInfty (X := X')).f _
+    · simp [ιChainComplex, X']
+    · simp
 
 Depends on / 依赖: PInfty, Set.mem_iUnion, Set.mem_range, SimplicialObject, SimplicialObject.whiskering, X.fromNormalizedChainComplex, cancel_mono, fromNormalizedChainComplex, mem_iUnion, mem_range, sigmaConst, sigmaConst.obj, whiskering, zero_comp
 -/

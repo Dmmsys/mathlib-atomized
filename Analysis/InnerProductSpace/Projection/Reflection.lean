@@ -73,7 +73,7 @@ definition reflection
       convert norm_sub_eq_norm_add this
       · dsimp [reflectionLinearEquiv, v, w]
         abel
-     
+      · simp only [v, add_sub_cancel] }
 
 中文:
 定义 reflection
@@ -87,7 +87,7 @@ definition reflection
       convert norm_sub_eq_norm_add this
       · dsimp [reflectionLinearEquiv, v, w]
         abel
-     
+      · simp only [v, add_sub_cancel] }
 
 Depends on / 依赖: K.orthogonalProjectionOnto, K.reflectionLinearEquiv, add_sub_cancel, convert, norm_map, norm_sub_eq_norm_add, orthogonalProjectionOnto, reflectionLinearEquiv, starProjection_inner_eq_zero
 -/
@@ -491,7 +491,14 @@ theorem reflection_sub
     apply smul_right_injective F (by simp : (2 : Real) != 0)
     simpa [two_smul] using this
   have h₁ : R (v - w) = -(v - w) := reflection_orthogonalComplement_singleton_eq_neg (v - w)
-  have h₂ : R (v + w) =
+  have h₂ : R (v + w) = v + w := by
+    apply reflection_mem_subspace_eq_self
+    rw [Submodule.mem_orthogonal_singleton_iff_inner_left]
+    rw [real_inner_add_sub_eq_zero_iff]
+    exact h
+  convert! congr_arg₂ (· + ·) h₂ h₁ using 1
+  · simp
+  · abel
 
 中文:
 定理 reflection_sub
@@ -503,7 +510,14 @@ theorem reflection_sub
     apply smul_right_injective F (by simp : (2 : Real) != 0)
     simpa [two_smul] using this
   have h₁ : R (v - w) = -(v - w) := reflection_orthogonalComplement_singleton_eq_neg (v - w)
-  have h₂ : R (v + w) =
+  have h₂ : R (v + w) = v + w := by
+    apply reflection_mem_subspace_eq_self
+    rw [Submodule.mem_orthogonal_singleton_iff_inner_left]
+    rw [real_inner_add_sub_eq_zero_iff]
+    exact h
+  convert! congr_arg₂ (· + ·) h₂ h₁ using 1
+  · simp
+  · abel
 
 Depends on / 依赖: Submodule, Submodule.mem_orthogonal_singleton_iff_inner_left, convert, mem_orthogonal_singleton_iff_inner_left, real_inner_add_sub_eq_zero_iff, reflection, reflection_mem_subspace_eq_self, reflection_orthogonalComplement_singleton_eq_neg, smul_right_injective, two_smul
 -/

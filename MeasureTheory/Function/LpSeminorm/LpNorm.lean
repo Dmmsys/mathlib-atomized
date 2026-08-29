@@ -146,7 +146,7 @@ lemma lpNorm_eq_integral_norm_rpow_toReal
   · simp_rw [← ofReal_norm]
     borelize E
     fun_prop
-  · exact .of_forall fun x => ENNReal.rpow_lt_top_of_nonneg (by positivity) (
+  · exact .of_forall fun x => ENNReal.rpow_lt_top_of_nonneg (by positivity) (by simp)
 
 中文:
 引理 lpNorm_eq_integral_norm_rpow_to实数
@@ -157,7 +157,7 @@ lemma lpNorm_eq_integral_norm_rpow_toReal
   · simp_rw [← ofReal_norm]
     borelize E
     fun_prop
-  · exact .of_forall fun x => ENNReal.rpow_lt_top_of_nonneg (by positivity) (
+  · exact .of_forall fun x => ENNReal.rpow_lt_top_of_nonneg (by positivity) (by simp)
 
 Depends on / 依赖: ENNReal, ENNReal.rpow_lt_top_of_nonneg, ENNReal.toReal_rpow, borelize, eLpNorm_eq_lintegral_rpow_enorm_toReal, fun_prop, integral_toReal, ofReal_norm, of_forall, rpow_lt_top_of_nonneg, simp_rw, toReal_eLpNorm, toReal_rpow
 -/
@@ -791,7 +791,10 @@ lemma lpNorm_add_le
       ← toReal_eLpNorm hf.aestronglyMeasurable, ← toReal_eLpNorm hg.aestronglyMeasurable,
       ← ENNReal.toReal_add hf.eLpNorm_ne_top hg.eLpNorm_ne_top]
     gcongr
-    exacts [ENNReal.add_ne_top.2 ⟨hf.eLpNorm_
+    exacts [ENNReal.add_ne_top.2 ⟨hf.eLpNorm_ne_top, hg.eLpNorm_ne_top⟩,
+      eLpNorm_add_le hf.aestronglyMeasurable hg.aestronglyMeasurable hp]
+  · rw [lpNorm_of_not_memLp fun hfg => hg <| by simpa using hfg.sub hf, lpNorm_of_not_memLp hg]
+    simp
 
 中文:
 引理 lpNorm_add_le
@@ -802,7 +805,10 @@ lemma lpNorm_add_le
       ← toReal_eLpNorm hf.aestronglyMeasurable, ← toReal_eLpNorm hg.aestronglyMeasurable,
       ← ENNReal.toReal_add hf.eLpNorm_ne_top hg.eLpNorm_ne_top]
     gcongr
-    exacts [ENNReal.add_ne_top.2 ⟨hf.eLpNorm_
+    exacts [ENNReal.add_ne_top.2 ⟨hf.eLpNorm_ne_top, hg.eLpNorm_ne_top⟩,
+      eLpNorm_add_le hf.aestronglyMeasurable hg.aestronglyMeasurable hp]
+  · rw [lpNorm_of_not_memLp fun hfg => hg <| by simpa using hfg.sub hf, lpNorm_of_not_memLp hg]
+    simp
 
 Depends on / 依赖: ENNReal, ENNReal.add_ne_top, ENNReal.toReal_add, add_ne_top, aestronglyMeasurable, eLpNorm_add_le, eLpNorm_ne_top, exacts, hf.add, hf.aestronglyMeasurable, hf.eLpNorm_ne_top, hfg.sub, hg.aestronglyMeasurable, hg.eLpNorm_ne_top, lpNorm_of_not_memLp, toReal_add, toReal_eLpNorm
 -/
@@ -952,14 +958,16 @@ lemma lpNorm_sum_le
   statement: {ι : Type*} {s : Finset ι} {f : ι -> α -> E} (hf : forall i in s, MemLp (f i) p μ)
   proof: by
   rw [← Finset.sum_congr rfl fun i hi => toReal_eLpNorm (hf i hi).aestronglyMeasurable]; rw [← ENNReal.toReal_sum fun i hi => (hf i hi).2.ne]; rw [← toReal_eLpNorm (Finset.aestronglyMeasurable_sum _ fun i hi => (hf i hi).aestronglyMeasurable)]
-  grw [eLpNorm_sum_le (fun i hi => (hf _ hi).aestrong
+  grw [eLpNorm_sum_le (fun i hi => (hf _ hi).aestronglyMeasurable) hp]
+  simpa using fun i hi => (hf i hi).2.ne
 
 中文:
 引理 lpNorm_sum_le
   结论: {ι : 类型} {s : 有限集 ι} {f : ι -> α -> E} (hf : 对任意 i in s, MemLp (f i) p μ)
   证明: by
   rw [← Finset.sum_congr rfl fun i hi => toReal_eLpNorm (hf i hi).aestronglyMeasurable]; rw [← ENNReal.toReal_sum fun i hi => (hf i hi).2.ne]; rw [← toReal_eLpNorm (Finset.aestronglyMeasurable_sum _ fun i hi => (hf i hi).aestronglyMeasurable)]
-  grw [eLpNorm_sum_le (fun i hi => (hf _ hi).aestrong
+  grw [eLpNorm_sum_le (fun i hi => (hf _ hi).aestronglyMeasurable) hp]
+  simpa using fun i hi => (hf i hi).2.ne
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_sum, Finset, Finset.aestronglyMeasurable_sum, Finset.sum_congr, aestronglyMeasurable, aestronglyMeasurable_sum, eLpNorm_sum_le, sum_congr, toReal_eLpNorm, toReal_sum
 -/
@@ -1045,7 +1053,8 @@ lemma lpNorm_smul_measure_of_ne_zero
   · simp [← toReal_eLpNorm, hf, hf.smul_measure, eLpNorm_smul_measure_of_ne_zero' hc f p μ]
     simp [ENNReal.smul_def, NNReal.smul_def]
   · rw [lpNorm_of_not_aestronglyMeasurable hf, lpNorm_of_not_aestronglyMeasurable fun h => hf <| by
-      simpa [hc] us
+      simpa [hc] using h.smul_measure c⁻¹]
+    simp
 
 中文:
 引理 lpNorm_smul_measure_of_ne_zero
@@ -1055,7 +1064,8 @@ lemma lpNorm_smul_measure_of_ne_zero
   · simp [← toReal_eLpNorm, hf, hf.smul_measure, eLpNorm_smul_measure_of_ne_zero' hc f p μ]
     simp [ENNReal.smul_def, NNReal.smul_def]
   · rw [lpNorm_of_not_aestronglyMeasurable hf, lpNorm_of_not_aestronglyMeasurable fun h => hf <| by
-      simpa [hc] us
+      simpa [hc] using h.smul_measure c⁻¹]
+    simp
 
 Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.smul_def, NNReal, NNReal.smul_def, eLpNorm_smul_measure_of_ne_zero, h.smul_measure, hf.smul_measure, lpNorm_of_not_aestronglyMeasurable, smul_def, smul_measure, toReal_eLpNorm
 -/
@@ -1081,7 +1091,11 @@ lemma lpNorm_smul_measure_of_ne_top
   obtain rfl | hp₀ := eq_or_ne p 0
   · simp
   obtain rfl | hc := eq_or_ne c 0
-  · rw [NNReal.zero_rpow (by simp [ENNReal.toRea
+  · rw [NNReal.zero_rpow (by simp [ENNReal.toReal_eq_zero_iff, *])]
+    simp
+  rw [lpNorm_of_not_aestronglyMeasurable hf]; rw [lpNorm_of_not_aestronglyMeasurable fun h => hf <| by
+    simpa [hc] using h.smul_measure c⁻¹]
+  simp
 
 中文:
 引理 lpNorm_smul_measure_of_ne_top
@@ -1093,7 +1107,11 @@ lemma lpNorm_smul_measure_of_ne_top
   obtain rfl | hp₀ := eq_or_ne p 0
   · simp
   obtain rfl | hc := eq_or_ne c 0
-  · rw [NNReal.zero_rpow (by simp [ENNReal.toRea
+  · rw [NNReal.zero_rpow (by simp [ENNReal.toReal_eq_zero_iff, *])]
+    simp
+  rw [lpNorm_of_not_aestronglyMeasurable hf]; rw [lpNorm_of_not_aestronglyMeasurable fun h => hf <| by
+    simpa [hc] using h.smul_measure c⁻¹]
+  simp
 
 Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.smul_def, ENNReal.toReal_eq_zero_iff, NNReal, NNReal.smul_def, NNReal.zero_rpow, eLpNorm_smul_measure_of_ne_top, eq_or_ne, h.smul_measure, hf.smul_measure, lpNorm_of_not_aestronglyMeasurable, smul_def, smul_measure, toReal_eLpNorm, toReal_eq_zero_iff, zero_rpow
 -/
@@ -1123,7 +1141,8 @@ lemma lpNorm_conj
     · simp
     · exact (continuous_star.measurable.comp_aemeasurable hf.aemeasurable).aestronglyMeasurable
   · rw [lpNorm_of_not_aestronglyMeasurable hf, lpNorm_of_not_aestronglyMeasurable fun h => hf ?_]
-    simpa 
+    simpa [Function.comp_def]
+      using (continuous_star.measurable.comp_aemeasurable h.aemeasurable).aestronglyMeasurable
 
 中文:
 引理 lpNorm_conj
@@ -1134,7 +1153,8 @@ lemma lpNorm_conj
     · simp
     · exact (continuous_star.measurable.comp_aemeasurable hf.aemeasurable).aestronglyMeasurable
   · rw [lpNorm_of_not_aestronglyMeasurable hf, lpNorm_of_not_aestronglyMeasurable fun h => hf ?_]
-    simpa 
+    simpa [Function.comp_def]
+      using (continuous_star.measurable.comp_aemeasurable h.aemeasurable).aestronglyMeasurable
 -/
 @[simp] lemma lpNorm_conj {K : Type*} [RCLike K] (f : α -> K) (p : Real>=0∞) (μ : Measure α) :
     lpNorm (conj f) p μ = lpNorm f p μ := by

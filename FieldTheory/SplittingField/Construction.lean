@@ -200,7 +200,8 @@ lemma isCoprime_iff_aeval_ne_zero
     rw [h.left]; rw [h.right]; rw [map_zero]; rw [and_self]
   · rintro ⟨_, rfl⟩ ⟨_, rfl⟩
 replace h := not_and_or.mpr h AdjoinRoot.root x.factor
-    s
+    simp only [AdjoinRoot.aeval_eq, AdjoinRoot.mk_eq_zero,
+dvd_mul_of_dvd_left factor_dvd_of_not_isUnit hx, true_and, not_true] at h
 
 中文:
 引理 isCoprime_iff_aeval_ne_zero
@@ -213,7 +214,8 @@ replace h := not_and_or.mpr h AdjoinRoot.root x.factor
     rw [h.left]; rw [h.right]; rw [map_zero]; rw [and_self]
   · rintro ⟨_, rfl⟩ ⟨_, rfl⟩
 replace h := not_and_or.mpr h AdjoinRoot.root x.factor
-    s
+    simp only [AdjoinRoot.aeval_eq, AdjoinRoot.mk_eq_zero,
+dvd_mul_of_dvd_left factor_dvd_of_not_isUnit hx, true_and, not_true] at h
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.aeval_eq, AdjoinRoot.mk_eq_zero, AdjoinRoot.root, aeval_eq, aeval_ne_zero_of_isCoprime, and_self, contrapose, dvd_mul_of_dvd_left, factor, factor_dvd_of_not_isUnit, h.left, h.right, isCoprime_of_dvd, map_zero, mk_eq_zero, not_and_or, not_and_or.mpr, not_true, replace
 -/
@@ -328,7 +330,7 @@ definition SplittingFieldAuxAux
     (fun {K} _ _ => ⟨K, inferInstance, inferInstance⟩)
     fun _ ih _ _ f =>
       let ⟨L, fL, _⟩ := ih f.removeFactor
-      ⟨L, 
+      ⟨L, fL, (RingHom.comp (algebraMap _ _) (AdjoinRoot.of f.factor)).toAlgebra⟩
 
 中文:
 定义 SplittingFieldAuxAux
@@ -339,7 +341,7 @@ definition SplittingFieldAuxAux
     (fun {K} _ _ => ⟨K, inferInstance, inferInstance⟩)
     fun _ ih _ _ f =>
       let ⟨L, fL, _⟩ := ih f.removeFactor
-      ⟨L, 
+      ⟨L, fL, (RingHom.comp (algebraMap _ _) (AdjoinRoot.of f.factor)).toAlgebra⟩
 -/
 def SplittingFieldAuxAux (n : Nat) : forall {K : Type u} [Field K], K[X] ->
     Σ (L : Type u) (_ : Field L), Algebra K L :=
@@ -533,7 +535,11 @@ theorem splits
       Splits (f.map (algebraMap K <| SplittingFieldAux n f))) n
     (fun {_} _ _ hf =>
 Splits.of_degree_le_one degree_map_le.trans
-        (le_trans degree_le_natDegree <| hf.symm ▸ WithBot.coe_l
+        (le_trans degree_le_natDegree <| hf.symm ▸ WithBot.coe_le_coe.2 zero_le_one))
+    fun n ih {K} _ f hf => by
+    rw [algebraMap_succ]; rw [← map_map]; rw [← X_sub_C_mul_removeFactor f fun h => by rw [h] at hf; cases hf]
+    rw [Polynomial.map_mul]
+    exact Splits.mul ((Splits.X_sub_C _).map _) (ih _ (natDegree_removeFactor' hf))
 
 中文:
 定理 splits
@@ -542,7 +548,11 @@ Splits.of_degree_le_one degree_map_le.trans
       Splits (f.map (algebraMap K <| SplittingFieldAux n f))) n
     (fun {_} _ _ hf =>
 Splits.of_degree_le_one degree_map_le.trans
-        (le_trans degree_le_natDegree <| hf.symm ▸ WithBot.coe_l
+        (le_trans degree_le_natDegree <| hf.symm ▸ WithBot.coe_le_coe.2 zero_le_one))
+    fun n ih {K} _ f hf => by
+    rw [algebraMap_succ]; rw [← map_map]; rw [← X_sub_C_mul_removeFactor f fun h => by rw [h] at hf; cases hf]
+    rw [Polynomial.map_mul]
+    exact Splits.mul ((Splits.X_sub_C _).map _) (ih _ (natDegree_removeFactor' hf))
 -/
 protected theorem splits (n : Nat) :
     forall {K : Type u} [Field K], forall (f : K[X]) (_hfn : f.natDegree = n),
@@ -570,7 +580,18 @@ theorem adjoin_rootSet
         Algebra.adjoin K (f.rootSet (SplittingFieldAux n f)) = ⊤)
     n (fun {_} _ _ _hf => Algebra.eq_top_iff.2 fun x => Subalgebra.range_le _ ⟨x, rfl⟩)
     fun n ih {K} _ f hfn => by
-
+    have hndf : f.natDegree != 0 := by intro h; rw [h] at hfn; cases hfn
+    have hfn0 : f != 0 := by intro h; rw [h] at hndf; exact hndf rfl
+    have hmf0 : map (algebraMap K (SplittingFieldAux n.succ f)) f != 0 := map_ne_zero hfn0
+    classical
+    rw [rootSet_def]; rw [aroots_def]
+    rw [algebraMap_succ]; rw [← map_map]; rw [← X_sub_C_mul_removeFactor _ hndf]; rw [Polynomial.map_mul] at hmf0 ⊢
+    rw [roots_mul hmf0]; rw [Polynomial.map_sub]; rw [map_X]; rw [map_C]; rw [roots_X_sub_C]; rw [Multiset.toFinset_add]; rw [Finset.coe_union]; rw [Multiset.toFinset_singleton]; rw [Finset.coe_singleton]; rw [← Set.image_singleton]
+    simp only [SplittingFieldAux.succ]
+    rw [← Algebra.adjoin_eq_adjoin_union K {AdjoinRoot.root f.factor}
+      ((map (algebraMap (AdjoinRoot f.factor) (SplittingFieldAux n f.removeFactor))
+        f.removeFactor).roots.toFinset : Set (SplittingFieldAux n f.removeFactor))
+      AdjoinRoot.adjoinRoot_eq_top]; rw [← rootSet_def]; rw [ih _ (natDegree_removeFactor' hfn)]; rw [Subalgebra.restrictScalars_top]
 
 中文:
 定理 adjoin_rootSet
@@ -581,7 +602,18 @@ theorem adjoin_rootSet
         Algebra.adjoin K (f.rootSet (SplittingFieldAux n f)) = ⊤)
     n (fun {_} _ _ _hf => Algebra.eq_top_iff.2 fun x => Subalgebra.range_le _ ⟨x, rfl⟩)
     fun n ih {K} _ f hfn => by
-
+    have hndf : f.natDegree != 0 := by intro h; rw [h] at hfn; cases hfn
+    have hfn0 : f != 0 := by intro h; rw [h] at hndf; exact hndf rfl
+    have hmf0 : map (algebraMap K (SplittingFieldAux n.succ f)) f != 0 := map_ne_zero hfn0
+    classical
+    rw [rootSet_def]; rw [aroots_def]
+    rw [algebraMap_succ]; rw [← map_map]; rw [← X_sub_C_mul_removeFactor _ hndf]; rw [Polynomial.map_mul] at hmf0 ⊢
+    rw [roots_mul hmf0]; rw [Polynomial.map_sub]; rw [map_X]; rw [map_C]; rw [roots_X_sub_C]; rw [Multiset.toFinset_add]; rw [Finset.coe_union]; rw [Multiset.toFinset_singleton]; rw [Finset.coe_singleton]; rw [← Set.image_singleton]
+    simp only [SplittingFieldAux.succ]
+    rw [← Algebra.adjoin_eq_adjoin_union K {AdjoinRoot.root f.factor}
+      ((map (algebraMap (AdjoinRoot f.factor) (SplittingFieldAux n f.removeFactor))
+        f.removeFactor).roots.toFinset : Set (SplittingFieldAux n f.removeFactor))
+      AdjoinRoot.adjoinRoot_eq_top]; rw [← rootSet_def]; rw [ih _ (natDegree_removeFactor' hfn)]; rw [Subalgebra.restrictScalars_top]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.eq_top_iff, Nat.recOn, SplittingFieldAux, Subalgebra, Subalgebra.range_le, _hfn, adjoin, algebraMap, eq_top_iff, f.natDegree, f.rootSet, map_ne_zero, motive, n.succ, natDegree, neg_ne_zero, range_le, rootSet
 -/
@@ -742,7 +774,12 @@ instance instField
   nnqsmul := (· • ·)
   qsmul := (· • ·)
   nnratCast_def q := by change algebraMap K _ _ = _; simp_rw [NNRat.cast_def, map_div₀, map_natCast]
-  ratCast_def q := 
+  ratCast_def q := by
+    change algebraMap K _ _ = _; rw [Rat.cast_def, map_div₀, map_intCast, map_natCast]
+nnqsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, NNRat.smul_def]
+qsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, Rat.smul_def]
 
 中文:
 实例 instField
@@ -754,7 +791,12 @@ instance instField
   nnqsmul := (· • ·)
   qsmul := (· • ·)
   nnratCast_def q := by change algebraMap K _ _ = _; simp_rw [NNRat.cast_def, map_div₀, map_natCast]
-  ratCast_def q := 
+  ratCast_def q := by
+    change algebraMap K _ _ = _; rw [Rat.cast_def, map_div₀, map_intCast, map_natCast]
+nnqsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, NNRat.smul_def]
+qsmul_def q x := Quotient.inductionOn x fun p => congr_arg Quotient.mk'' by
+    ext; simp [MvPolynomial.algebraMap_eq, Rat.smul_def]
 
 Depends on / 依赖: CommRing, SplittingField
 -/

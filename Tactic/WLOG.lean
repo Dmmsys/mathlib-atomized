@@ -88,7 +88,45 @@ definition _root_.Lean.MVarId.wlog
   let h := h.getD `h
   /- Compute the type for H and keep track of the FVarId's reverted in doing so. (Do not modify the
   tactic state.) -/
-  let HSuffix := Expr.forallE h P (← goal.getType) .de
+  let HSuffix := Expr.forallE h P (← goal.getType) .default
+  let fvars ← getFVarIdsAt goal xs
+  let fvars := fvars.map Expr.fvar
+  let lctx := (← goal.getDecl).lctx
+  let (revertedFVars, HType) ← liftMkBindingM fun ctx => (do
+    let f ← collectForwardDeps lctx fvars
+    let revertedFVars := filterOutImplementationDetails lctx (f.map Expr.fvarId!)
+    let HType ← withFreshCache do
+      mkAuxMVarType lctx (revertedFVars.map Expr.fvar) .natural HSuffix (usedLetOnly := false)
+    return (revertedFVars, HType))
+      { preserveOrder := false, quotContext := ctx.quotContext }
+  /- Set up the goal which will suppose `h`; this begins as a goal with type H (hence HExpr), and h
+  is obtained through `introNP` -/
+  let HExpr ← mkFreshExprSyntheticOpaqueMVar HType
+  let hGoal := HExpr.mvarId!
+  /- Begin the "reduction goal" which will contain hypotheses `H` and `¬h`. For now, it only
+  contains `H`. Keep track of that hypothesis' FVarId. -/
+  let (HFVarId, reductionGoal) ←
+    goal.assertHypotheses #[{ userName := H, type := HType, value := HExpr }]
+  let HFVarId := HFVarId[0]!
+  /- Clear the reverted fvars from the branch that will contain `h` as a hypothesis. -/
+  let hGoal ← hGoal.tryClearMany revertedFVars
+  /- Introduce all of the reverted fvars to the context in order to restore the original target as
+  well as finally introduce the hypothesis `h`. -/
+  let (_, hGoal) ← hGoal.introNP revertedFVars.size
+  -- keep track of the hypothesis' FVarId
+  let (hFVar, hGoal) ← if inaccessible then hGoal.intro1 else hGoal.intro1P
+  /- Split the reduction goal by cases on `h`. Keep the one with `¬h` as the reduction goal,
+  and prove the easy goal by applying `H` to all its premises, which are fvars in the context. -/
+  let (⟨easyGoal, hyp⟩, ⟨reductionGoal, negHyp⟩) ←
+reductionGoal.byCases P if inaccessible then `_ else h
+  easyGoal.withContext do
+    -- Exclude ldecls from the `mkAppN` arguments
+    let HArgFVarIds ← revertedFVars.filterM (notM ·.isLetVar)
+let HApp ← instantiateMVars
+.app (.fvar hyp) mkAppN (.fvar HFVarId) (HArgFVarIds.map .fvar)
+    ensureHasNoMVars HApp
+    easyGoal.assign HApp
+  return ⟨reductionGoal, (HFVarId, negHyp), hGoal, hFVar, revertedFVars⟩
 
 中文:
 定义 _root_.Lean.MVarId.wlog
@@ -100,7 +138,45 @@ definition _root_.Lean.MVarId.wlog
   let h := h.getD `h
   /- Compute the type for H and keep track of the FVarId's reverted in doing so. (Do not modify the
   tactic state.) -/
-  let HSuffix := Expr.forallE h P (← goal.getType) .de
+  let HSuffix := Expr.forallE h P (← goal.getType) .default
+  let fvars ← getFVarIdsAt goal xs
+  let fvars := fvars.map Expr.fvar
+  let lctx := (← goal.getDecl).lctx
+  let (revertedFVars, HType) ← liftMkBindingM fun ctx => (do
+    let f ← collectForwardDeps lctx fvars
+    let revertedFVars := filterOutImplementationDetails lctx (f.map Expr.fvarId!)
+    let HType ← withFreshCache do
+      mkAuxMVarType lctx (revertedFVars.map Expr.fvar) .natural HSuffix (usedLetOnly := false)
+    return (revertedFVars, HType))
+      { preserveOrder := false, quotContext := ctx.quotContext }
+  /- Set up the goal which will suppose `h`; this begins as a goal with type H (hence HExpr), and h
+  is obtained through `introNP` -/
+  let HExpr ← mkFreshExprSyntheticOpaqueMVar HType
+  let hGoal := HExpr.mvarId!
+  /- Begin the "reduction goal" which will contain hypotheses `H` and `¬h`. For now, it only
+  contains `H`. Keep track of that hypothesis' FVarId. -/
+  let (HFVarId, reductionGoal) ←
+    goal.assertHypotheses #[{ userName := H, type := HType, value := HExpr }]
+  let HFVarId := HFVarId[0]!
+  /- Clear the reverted fvars from the branch that will contain `h` as a hypothesis. -/
+  let hGoal ← hGoal.tryClearMany revertedFVars
+  /- Introduce all of the reverted fvars to the context in order to restore the original target as
+  well as finally introduce the hypothesis `h`. -/
+  let (_, hGoal) ← hGoal.introNP revertedFVars.size
+  -- keep track of the hypothesis' FVarId
+  let (hFVar, hGoal) ← if inaccessible then hGoal.intro1 else hGoal.intro1P
+  /- Split the reduction goal by cases on `h`. Keep the one with `¬h` as the reduction goal,
+  and prove the easy goal by applying `H` to all its premises, which are fvars in the context. -/
+  let (⟨easyGoal, hyp⟩, ⟨reductionGoal, negHyp⟩) ←
+reductionGoal.byCases P if inaccessible then `_ else h
+  easyGoal.withContext do
+    -- Exclude ldecls from the `mkAppN` arguments
+    let HArgFVarIds ← revertedFVars.filterM (notM ·.isLetVar)
+let HApp ← instantiateMVars
+.app (.fvar hyp) mkAppN (.fvar HFVarId) (HArgFVarIds.map .fvar)
+    ensureHasNoMVars HApp
+    easyGoal.assign HApp
+  return ⟨reductionGoal, (HFVarId, negHyp), hGoal, hFVar, revertedFVars⟩
 -/
 def _root_.Lean.MVarId.wlog (goal : MVarId) (h : Option Name) (P : Expr)
     (xs : Option (TSyntaxArray `ident) := none) (H : Option Name := none) :
@@ -166,7 +242,12 @@ definition wlogCore
   let P ← elabType P
   let goal ← getMainGoal
   let { reductionGoal, hypothesisGoal, reductionFVarIds .. } ← goal.wlog h P xs H
-  replaceMainGoal [reductionGoal, hypot
+  replaceMainGoal [reductionGoal, hypothesisGoal]
+  if let some cfg := pushConfig then
+    reductionGoal.withContext do
+let negHygName := mkIdent ← reductionFVarIds.2.getUserName
+      Push.push (← Push.elabPushConfig cfg) none (.const ``Not) (.targets #[(negHygName)] false)
+        (ifUnchanged := .error)
 
 中文:
 定义 wlogCore
@@ -180,7 +261,12 @@ definition wlogCore
   let P ← elabType P
   let goal ← getMainGoal
   let { reductionGoal, hypothesisGoal, reductionFVarIds .. } ← goal.wlog h P xs H
-  replaceMainGoal [reductionGoal, hypot
+  replaceMainGoal [reductionGoal, hypothesisGoal]
+  if let some cfg := pushConfig then
+    reductionGoal.withContext do
+let negHygName := mkIdent ← reductionFVarIds.2.getUserName
+      Push.push (← Push.elabPushConfig cfg) none (.const ``Not) (.targets #[(negHygName)] false)
+        (ifUnchanged := .error)
 -/
 def wlogCore (h : TSyntax ``binderIdent) (P : Term) (xs : Option (TSyntaxArray `ident))
     (H : Option (TSyntax `ident)) (pushConfig : Option (TSyntax ``optConfig) := none) :

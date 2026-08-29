@@ -61,7 +61,12 @@ definition crossProduct
   · intros
     simp_rw [smul_vec3, Pi.smul_apply, smul_sub, smul_mul_assoc]
   · intros
-    simp_r
+    simp_rw [vec3_add, Pi.add_apply]
+    apply vec3_eq <;> ring
+  · intros
+    simp_rw [smul_vec3, Pi.smul_apply, smul_sub, mul_smul_comm]
+
+@[inherit_doc] scoped[Matrix] infixl:74 " ⨯₃ " => crossProduct
 
 中文:
 定义 crossProduct
@@ -75,7 +80,12 @@ definition crossProduct
   · intros
     simp_rw [smul_vec3, Pi.smul_apply, smul_sub, smul_mul_assoc]
   · intros
-    simp_r
+    simp_rw [vec3_add, Pi.add_apply]
+    apply vec3_eq <;> ring
+  · intros
+    simp_rw [smul_vec3, Pi.smul_apply, smul_sub, mul_smul_comm]
+
+@[inherit_doc] scoped[Matrix] infixl:74 " ⨯₃ " => crossProduct
 
 Depends on / 依赖: LinearMap, LinearMap.mk, Pi.add_apply, Pi.smul_apply, add_apply, intros, mul_smul_comm, simp_rw, smul_apply, smul_mul_assoc, smul_sub, smul_vec3, vec3_add, vec3_eq
 -/
@@ -461,7 +471,17 @@ lemma crossProduct_ne_zero_iff_linearIndependent
   · rw [LinearIndependent.pair_iff' hv, not_forall_not]
     rintro ⟨a, rfl⟩
     rw [map_smul]; rw [cross_self]; rw [smul_zero]
-  have hv' : v =
+  have hv' : v = ![v 0, v 1, v 2] := by simp [← List.ofFn_inj]
+  have hw' : w = ![w 0, w 1, w 2] := by simp [← List.ofFn_inj]
+  intro h1 h2
+  simp_rw [cross_apply, cons_eq_zero_iff, zero_empty, and_true, sub_eq_zero] at h1
+  have h20 := LinearIndependent.pair_iff.mp h2 (- w 0) (v 0)
+  have h21 := LinearIndependent.pair_iff.mp h2 (- w 1) (v 1)
+  have h22 := LinearIndependent.pair_iff.mp h2 (- w 2) (v 2)
+  rw [neg_smul]; rw [neg_add_eq_zero]; rw [hv']; rw [hw']; rw [smul_vec3]; rw [smul_vec3]; rw [← hv']; rw [← hw'] at h20 h21 h22
+  simp only [smul_eq_mul, mul_comm (w 0), mul_comm (w 1), mul_comm (w 2), h1] at h20 h21 h22
+  rw [hv']; rw [cons_eq_zero_iff]; rw [cons_eq_zero_iff]; rw [cons_eq_zero_iff]; rw [zero_empty] at hv
+  exact hv ⟨(h20 trivial).2, (h21 trivial).2, (h22 trivial).2, rfl⟩
 
 中文:
 引理 crossProduct_ne_zero_iff_linearIndependent
@@ -475,7 +495,17 @@ lemma crossProduct_ne_zero_iff_linearIndependent
   · rw [LinearIndependent.pair_iff' hv, not_forall_not]
     rintro ⟨a, rfl⟩
     rw [map_smul]; rw [cross_self]; rw [smul_zero]
-  have hv' : v =
+  have hv' : v = ![v 0, v 1, v 2] := by simp [← List.ofFn_inj]
+  have hw' : w = ![w 0, w 1, w 2] := by simp [← List.ofFn_inj]
+  intro h1 h2
+  simp_rw [cross_apply, cons_eq_zero_iff, zero_empty, and_true, sub_eq_zero] at h1
+  have h20 := LinearIndependent.pair_iff.mp h2 (- w 0) (v 0)
+  have h21 := LinearIndependent.pair_iff.mp h2 (- w 1) (v 1)
+  have h22 := LinearIndependent.pair_iff.mp h2 (- w 2) (v 2)
+  rw [neg_smul]; rw [neg_add_eq_zero]; rw [hv']; rw [hw']; rw [smul_vec3]; rw [smul_vec3]; rw [← hv']; rw [← hw'] at h20 h21 h22
+  simp only [smul_eq_mul, mul_comm (w 0), mul_comm (w 1), mul_comm (w 2), h1] at h20 h21 h22
+  rw [hv']; rw [cons_eq_zero_iff]; rw [cons_eq_zero_iff]; rw [cons_eq_zero_iff]; rw [zero_empty] at hv
+  exact hv ⟨(h20 trivial).2, (h21 trivial).2, (h22 trivial).2, rfl⟩
 
 Depends on / 依赖: LinearIndep, LinearIndependent, LinearIndependent.pair_iff, LinearMap, LinearMap.zero_apply, List.ofFn_inj, and_true, cons_eq_zero_iff, cross_apply, cross_self, eq_self, h.ne_zero, iff_true, map_smul, map_zero, ne_zero, not_forall_not, not_iff_comm, ofFn_inj, pair_iff
 -/

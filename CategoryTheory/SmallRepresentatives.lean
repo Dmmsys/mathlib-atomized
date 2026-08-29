@@ -286,7 +286,13 @@ definition arrowEquiv
     · rintro ⟨x, y, f⟩ ⟨x', y', g⟩ hfg
       obtain rfl : x = x' := by simpa using! congr_arg Arrow.leftFunc.obj hfg
       obtain rfl : y = y' := by simpa using! congr_arg Arrow.rightFunc.obj hfg
-      obtain rfl : f = g := by simpa [Arrow
+      obtain rfl : f = g := by simpa [Arrow.mk_eq_mk_iff] using! hfg
+      rfl
+    · rintro ⟨X, Y, f⟩
+      obtain ⟨x, rfl⟩ := h.objEquiv.surjective X
+      obtain ⟨y, rfl⟩ := h.objEquiv.surjective Y
+      obtain ⟨f, rfl⟩ := h.homEquiv.surjective f
+      exact ⟨Arrow.mk f, rfl⟩)
 
 中文:
 定义 arrowEquiv
@@ -296,7 +302,13 @@ definition arrowEquiv
     · rintro ⟨x, y, f⟩ ⟨x', y', g⟩ hfg
       obtain rfl : x = x' := by simpa using! congr_arg Arrow.leftFunc.obj hfg
       obtain rfl : y = y' := by simpa using! congr_arg Arrow.rightFunc.obj hfg
-      obtain rfl : f = g := by simpa [Arrow
+      obtain rfl : f = g := by simpa [Arrow.mk_eq_mk_iff] using! hfg
+      rfl
+    · rintro ⟨X, Y, f⟩
+      obtain ⟨x, rfl⟩ := h.objEquiv.surjective X
+      obtain ⟨y, rfl⟩ := h.objEquiv.surjective Y
+      obtain ⟨f, rfl⟩ := h.homEquiv.surjective f
+      exact ⟨Arrow.mk f, rfl⟩)
 
 Depends on / 依赖: Arrow.leftFunc.obj, Arrow.mk, Arrow.mk_eq_mk_iff, Arrow.rightFunc.obj, Equiv.ofBijective, congr_arg, functor, h.functor.mapArrow.obj, h.homEquiv.surjective, h.objEquiv.surjective, homEquiv, leftFunc, mapArrow, mk_eq_mk_iff, objEquiv, ofBijective, rightFunc, surjective
 -/
@@ -332,7 +344,8 @@ lemma exists_equivalence
     { obj := Set.range f₁
       hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
       objEquiv := e.symm
-      
+      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
+  exact ⟨h.smallCategoryOfSet, ⟨h.equivalence⟩⟩
 
 中文:
 引理 存在_equivalence
@@ -345,7 +358,8 @@ lemma exists_equivalence
     { obj := Set.range f₁
       hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
       objEquiv := e.symm
-      
+      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
+  exact ⟨h.smallCategoryOfSet, ⟨h.equivalence⟩⟩
 
 Depends on / 依赖: Cardinal, Cardinal.lift_mk_le, CoreSmallCategoryOfSet, Equiv.ofInjective, Set.range, e.symm, equivalence, h.equivalence, h.smallCategoryOfSet, homEquiv, injective, lift_mk_le, objEquiv, ofInjective, smallCategoryOfSet
 -/
@@ -433,7 +447,25 @@ lemma exists_equivalence
   have h₁ : Cardinal.lift.{w} (Cardinal.mk C) <=
       Cardinal.lift.{u} (Cardinal.mk Ω) := by
     rw [Cardinal.lift_mk_le']
-    refine ⟨Function.Embedding.trans { toFun 
+    refine ⟨Function.Embedding.trans { toFun X := Arrow.mk (𝟙 X), inj' := ?_ } ι⟩
+    intro X Y h
+    exact congr_arg Arrow.leftFunc.obj h
+  have h₂ (X Y : C) : Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <=
+      Cardinal.lift.{v} (Cardinal.mk Ω) := by
+    rw [Cardinal.lift_mk_le']
+    refine ⟨Function.Embedding.trans { toFun f := Arrow.mk f, inj' := ?_ } ι⟩
+    intro f g h
+    simpa [Arrow.mk_eq_mk_iff] using h
+  let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
+  let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
+  let e := Equiv.ofInjective _ f₁.injective
+  let h : CoreSmallCategoryOfSet Ω C :=
+    { obj := Set.range f₁
+      hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
+      objEquiv := e.symm
+      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
+  refine ⟨⟨h.smallCategoryOfSet, ?_⟩, ⟨h.equivalence⟩⟩
+  rwa [hasCardinalLT_iff_of_equiv h.arrowEquiv]
 
 中文:
 引理 存在_equivalence
@@ -446,7 +478,25 @@ lemma exists_equivalence
   have h₁ : Cardinal.lift.{w} (Cardinal.mk C) <=
       Cardinal.lift.{u} (Cardinal.mk Ω) := by
     rw [Cardinal.lift_mk_le']
-    refine ⟨Function.Embedding.trans { toFun 
+    refine ⟨Function.Embedding.trans { toFun X := Arrow.mk (𝟙 X), inj' := ?_ } ι⟩
+    intro X Y h
+    exact congr_arg Arrow.leftFunc.obj h
+  have h₂ (X Y : C) : Cardinal.lift.{w} (Cardinal.mk (X ⟶ Y)) <=
+      Cardinal.lift.{v} (Cardinal.mk Ω) := by
+    rw [Cardinal.lift_mk_le']
+    refine ⟨Function.Embedding.trans { toFun f := Arrow.mk f, inj' := ?_ } ι⟩
+    intro f g h
+    simpa [Arrow.mk_eq_mk_iff] using h
+  let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
+  let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
+  let e := Equiv.ofInjective _ f₁.injective
+  let h : CoreSmallCategoryOfSet Ω C :=
+    { obj := Set.range f₁
+      hom X Y := Set.range (f₂ (e.symm X) (e.symm Y))
+      objEquiv := e.symm
+      homEquiv {_ _} := by simpa using (Equiv.ofInjective _ ((f₂ _ _).injective)).symm }
+  refine ⟨⟨h.smallCategoryOfSet, ?_⟩, ⟨h.equivalence⟩⟩
+  rwa [hasCardinalLT_iff_of_equiv h.arrowEquiv]
 
 Depends on / 依赖: Arrow.leftFunc.obj, Arrow.mk, Cardinal, Cardinal.lift, Cardinal.lift_mk_le, Cardinal.mk, Embedding, Function, Function.Embedding.trans, Nonempty, Nonempty.some, ToType, congr_arg, hC.le, leftFunc, lift_mk_le, ord.ToType
 -/

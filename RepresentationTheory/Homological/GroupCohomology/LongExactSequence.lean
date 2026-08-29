@@ -56,7 +56,10 @@ lemma map_cochainsFunctor_shortExact
     exact := by
       have : LinearMap.range X.f.hom.toLinearMap = LinearMap.ker X.g.hom.toLinearMap :=
         (hX.exact.map (forget₂ (Rep k G) (ModuleCat k))).moduleCat_range_eq_ker
-      simp [moduleCat_exact_iff_range_eq_ker, Li
+      simp [moduleCat_exact_iff_range_eq_ker, LinearMap.range_compLeft,
+        LinearMap.ker_compLeft, this]
+    mono_f := letI := hX.mono_f; cochainsMap_id_f_map_mono X.f i
+    epi_g := letI := hX.epi_g; cochainsMap_id_f_map_epi X.g i }
 
 中文:
 引理 map_cochainsFunctor_shortExact
@@ -64,7 +67,10 @@ lemma map_cochainsFunctor_shortExact
     exact := by
       have : LinearMap.range X.f.hom.toLinearMap = LinearMap.ker X.g.hom.toLinearMap :=
         (hX.exact.map (forget₂ (Rep k G) (ModuleCat k))).moduleCat_range_eq_ker
-      simp [moduleCat_exact_iff_range_eq_ker, Li
+      simp [moduleCat_exact_iff_range_eq_ker, LinearMap.range_compLeft,
+        LinearMap.ker_compLeft, this]
+    mono_f := letI := hX.mono_f; cochainsMap_id_f_map_mono X.f i
+    epi_g := letI := hX.epi_g; cochainsMap_id_f_map_epi X.g i }
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.shortExact_of_degreewise_shortExact, LinearMap, LinearMap.ker, LinearMap.ker_compLeft, LinearMap.range, LinearMap.range_compLeft, ModuleCat, X.f.hom.toLinearMap, X.g.hom.toLinearMap, cochainsMap_id_f_map_epi, cochainsMap_id_f_map_mono, epi_g, hX.epi_g, hX.exact.map, hX.mono_f, ker_compLeft, moduleCat_exact_iff_range_eq_ker, moduleCat_range_eq_ker, mono_f
 -/
@@ -366,7 +372,11 @@ theorem δ₀_apply
     δ_apply hX rfl ((cochainsIso₀ X.X₃).inv z.1) (by
       rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]; simp)
       ((cochainsIso₀ X.X₂).inv y)
-(by ext; simp [← hy, cochainsIso₀]) ((cochainsIso
+(by ext; simp [← hy, cochainsIso₀]) ((cochainsIso₁ X.X₁).inv x) by
+      ext g
+      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]
+      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
+        ⟨cochainsMap_f_1_comp_cochainsIso₁ (MonoidHom.id G) X.f⟩).w) x)) g
 
 中文:
 定理 δ₀_apply
@@ -375,7 +385,11 @@ theorem δ₀_apply
     δ_apply hX rfl ((cochainsIso₀ X.X₃).inv z.1) (by
       rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]; simp)
       ((cochainsIso₀ X.X₂).inv y)
-(by ext; simp [← hy, cochainsIso₀]) ((cochainsIso
+(by ext; simp [← hy, cochainsIso₀]) ((cochainsIso₁ X.X₁).inv x) by
+      ext g
+      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]
+      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
+        ⟨cochainsMap_f_1_comp_cochainsIso₁ (MonoidHom.id G) X.f⟩).w) x)) g
 
 Depends on / 依赖: CommSq, CommSq.vert_inv, LinearMap, LinearMap.comp_apply, ModuleCat, ModuleCat.hom_comp, MonoidHom, MonoidHom.id, comp_apply, congr_fun, hom_comp, vert_inv
 -/
@@ -433,7 +447,12 @@ theorem δ₁_apply
   simpa [H1π, H2π, ← cocyclesMk₂_eq X.X₁, ← cocyclesMk₁_eq X.X₃] using!
     δ_apply hX rfl ((cochainsIso₁ X.X₃).inv z) (by
       rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
-      simp [cocycles₁.d₁₂_apply z]) ((cochainsIso₁ X.X₂).inv y) (by ext; simp [cochainsIso₁
+      simp [cocycles₁.d₁₂_apply z]) ((cochainsIso₁ X.X₂).inv y) (by ext; simp [cochainsIso₁, ← hy])
+((cochainsIso₂ X.X₁).inv x) by
+      ext g
+      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
+      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
+        ⟨cochainsMap_f_2_comp_cochainsIso₂ (MonoidHom.id G) X.f⟩).w) x)) g
 
 中文:
 定理 δ₁_apply
@@ -441,7 +460,12 @@ theorem δ₁_apply
   simpa [H1π, H2π, ← cocyclesMk₂_eq X.X₁, ← cocyclesMk₁_eq X.X₃] using!
     δ_apply hX rfl ((cochainsIso₁ X.X₃).inv z) (by
       rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
-      simp [cocycles₁.d₁₂_apply z]) ((cochainsIso₁ X.X₂).inv y) (by ext; simp [cochainsIso₁
+      simp [cocycles₁.d₁₂_apply z]) ((cochainsIso₁ X.X₂).inv y) (by ext; simp [cochainsIso₁, ← hy])
+((cochainsIso₂ X.X₁).inv x) by
+      ext g
+      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
+      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
+        ⟨cochainsMap_f_2_comp_cochainsIso₂ (MonoidHom.id G) X.f⟩).w) x)) g
 
 Depends on / 依赖: CommSq, CommSq.vert_inv, LinearMap, LinearMap.comp_apply, ModuleCat, ModuleCat.hom_comp, Valuation, Valuation.map_one, comp_apply, congr_fun, hom_comp, map_one, vert_inv
 -/

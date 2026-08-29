@@ -54,7 +54,22 @@ theorem lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator
   apply @Measurable.ennreal_induction _ Mf
   · intro c' s' h_meas_s'
     simp_rw [← inter_indicator_mul]
-    rw [l
+    rw [lintegral_indicator (MeasurableSet.inter (hMf _ h_meas_s') h_meas_T)]; rw [lintegral_indicator (hMf _ h_meas_s')]; rw [lintegral_indicator h_meas_T]
+    simp only [lintegral_const, univ_inter,
+      MeasurableSet.univ, Measure.restrict_apply]
+    rw [IndepSets_iff] at h_ind
+    rw [mul_mul_mul_comm]; rw [h_ind s' T h_meas_s' (Set.mem_singleton _)]
+  · intro f' g _ h_meas_f' _ h_ind_f' h_ind_g
+    have h_measM_f' : Measurable f' := h_meas_f'.mono hMf le_rfl
+    simp_rw [Pi.add_apply, right_distrib]
+    rw [lintegral_add_left (h_mul_indicator _ h_measM_f')]; rw [lintegral_add_left h_measM_f']; rw [right_distrib]; rw [h_ind_f']; rw [h_ind_g]
+  · intro f h_meas_f h_mono_f h_ind_f
+    have h_measM_f : forall n, Measurable (f n) := fun n => (h_meas_f n).mono hMf le_rfl
+    simp_rw [iSup_mul]
+    rw [lintegral_iSup h_measM_f h_mono_f]; rw [lintegral_iSup]; rw [iSup_mul]
+    · simp_rw [← h_ind_f]
+    · exact fun n => h_mul_indicator _ (h_measM_f n)
+    · exact fun m n h_le a => mul_le_mul_left (h_mono_f h_le a) _
 
 中文:
 定理 lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator
@@ -66,7 +81,22 @@ theorem lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator
   apply @Measurable.ennreal_induction _ Mf
   · intro c' s' h_meas_s'
     simp_rw [← inter_indicator_mul]
-    rw [l
+    rw [lintegral_indicator (MeasurableSet.inter (hMf _ h_meas_s') h_meas_T)]; rw [lintegral_indicator (hMf _ h_meas_s')]; rw [lintegral_indicator h_meas_T]
+    simp only [lintegral_const, univ_inter,
+      MeasurableSet.univ, Measure.restrict_apply]
+    rw [IndepSets_iff] at h_ind
+    rw [mul_mul_mul_comm]; rw [h_ind s' T h_meas_s' (Set.mem_singleton _)]
+  · intro f' g _ h_meas_f' _ h_ind_f' h_ind_g
+    have h_measM_f' : Measurable f' := h_meas_f'.mono hMf le_rfl
+    simp_rw [Pi.add_apply, right_distrib]
+    rw [lintegral_add_left (h_mul_indicator _ h_measM_f')]; rw [lintegral_add_left h_measM_f']; rw [right_distrib]; rw [h_ind_f']; rw [h_ind_g]
+  · intro f h_meas_f h_mono_f h_ind_f
+    have h_measM_f : forall n, Measurable (f n) := fun n => (h_meas_f n).mono hMf le_rfl
+    simp_rw [iSup_mul]
+    rw [lintegral_iSup h_measM_f h_mono_f]; rw [lintegral_iSup]; rw [iSup_mul]
+    · simp_rw [← h_ind_f]
+    · exact fun n => h_mul_indicator _ (h_measM_f n)
+    · exact fun m n h_le a => mul_le_mul_left (h_mono_f h_le a) _
 
 Depends on / 依赖: Measurable, Measurable.ennreal_induction, MeasurableSet, MeasurableSet.inter, MeasurableSet.univ, Measure, Measure.rest, T.indicator, ennreal_induction, h_meas_T, h_meas_s, h_mg, h_mg.mul, h_mul_indicator, indicator, inter_indicator_mul, lintegral_const, lintegral_indicator, measurable_const, measurable_const.indicator
 -/
@@ -110,7 +140,18 @@ theorem lintegral_mul_eq_lintegral_mul_lintegral_of_independent_measurableSpace
   · intro c s h_s
     apply lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator hMf _ (hMg _ h_s) _ h_meas_f
     apply indepSets_of_indepSets_of_le_right h_ind
-    rwa [singl
+    rwa [singleton_subset_iff]
+  · intro f' g _ h_measMg_f' _ h_ind_f' h_ind_g'
+    have h_measM_f' : Measurable f' := h_measMg_f'.mono hMg le_rfl
+    simp_rw [Pi.add_apply, left_distrib]
+    rw [lintegral_add_left h_measM_f']; rw [lintegral_add_left (h_measM_f.fun_mul h_measM_f')]; rw [left_distrib]; rw [h_ind_f']; rw [h_ind_g']
+  · intro f' h_meas_f' h_mono_f' h_ind_f'
+    have h_measM_f' : forall n, Measurable (f' n) := fun n => (h_meas_f' n).mono hMg le_rfl
+    simp_rw [mul_iSup]
+    rw [lintegral_iSup]; rw [lintegral_iSup h_measM_f' h_mono_f']; rw [mul_iSup]
+    · simp_rw [← h_ind_f']
+    · exact fun n => h_measM_f.mul (h_measM_f' n)
+    · exact fun n m (h_le : n <= m) a => mul_le_mul_right (h_mono_f' h_le a) _
 
 中文:
 定理 lintegral_mul_eq_lintegral_mul_lintegral_of_independent_measurableSpace
@@ -121,7 +162,18 @@ theorem lintegral_mul_eq_lintegral_mul_lintegral_of_independent_measurableSpace
   · intro c s h_s
     apply lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator hMf _ (hMg _ h_s) _ h_meas_f
     apply indepSets_of_indepSets_of_le_right h_ind
-    rwa [singl
+    rwa [singleton_subset_iff]
+  · intro f' g _ h_measMg_f' _ h_ind_f' h_ind_g'
+    have h_measM_f' : Measurable f' := h_measMg_f'.mono hMg le_rfl
+    simp_rw [Pi.add_apply, left_distrib]
+    rw [lintegral_add_left h_measM_f']; rw [lintegral_add_left (h_measM_f.fun_mul h_measM_f')]; rw [left_distrib]; rw [h_ind_f']; rw [h_ind_g']
+  · intro f' h_meas_f' h_mono_f' h_ind_f'
+    have h_measM_f' : forall n, Measurable (f' n) := fun n => (h_meas_f' n).mono hMg le_rfl
+    simp_rw [mul_iSup]
+    rw [lintegral_iSup]; rw [lintegral_iSup h_measM_f' h_mono_f']; rw [mul_iSup]
+    · simp_rw [← h_ind_f']
+    · exact fun n => h_measM_f.mul (h_measM_f' n)
+    · exact fun n m (h_le : n <= m) a => mul_le_mul_right (h_mono_f' h_le a) _
 
 Depends on / 依赖: Measurable, Measurable.ennreal_induction, Pi.add_apply, add_apply, ennreal_induction, h_ind, h_ind_f, h_ind_g, h_measM_f, h_measMg_f, h_meas_f, h_meas_f.mono, indepSets_of_indepSets_of_le_right, le_rfl, left_distrib, lintegral_add_le, lintegral_add_left, lintegral_mul_indicator_eq_lintegral_mul_lintegral_indicator, revert, simp_rw
 -/
@@ -183,7 +235,9 @@ theorem lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'
   proof: by
   have fg_ae : f * g =ᵐ[μ] h_meas_f.mk _ * h_meas_g.mk _ := h_meas_f.ae_eq_mk.mul h_meas_g.ae_eq_mk
   rw [lintegral_congr_ae h_meas_f.ae_eq_mk]; rw [lintegral_congr_ae h_meas_g.ae_eq_mk]; rw [lintegral_congr_ae fg_ae]
-  apply lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun h_meas_f.measurabl
+  apply lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun h_meas_f.measurable_mk
+      h_meas_g.measurable_mk
+  exact h_indep_fun.congr h_meas_f.ae_eq_mk h_meas_g.ae_eq_mk
 
 中文:
 定理 lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'
@@ -191,7 +245,9 @@ theorem lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'
   证明: by
   have fg_ae : f * g =ᵐ[μ] h_meas_f.mk _ * h_meas_g.mk _ := h_meas_f.ae_eq_mk.mul h_meas_g.ae_eq_mk
   rw [lintegral_congr_ae h_meas_f.ae_eq_mk]; rw [lintegral_congr_ae h_meas_g.ae_eq_mk]; rw [lintegral_congr_ae fg_ae]
-  apply lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun h_meas_f.measurabl
+  apply lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun h_meas_f.measurable_mk
+      h_meas_g.measurable_mk
+  exact h_indep_fun.congr h_meas_f.ae_eq_mk h_meas_g.ae_eq_mk
 
 Depends on / 依赖: ae_eq_mk, fg_ae, h_indep_fun, h_indep_fun.congr, h_meas_f, h_meas_f.ae_eq_mk, h_meas_f.ae_eq_mk.mul, h_meas_f.measurable_mk, h_meas_f.mk, h_meas_g, h_meas_g.ae_eq_mk, h_meas_g.measurable_mk, h_meas_g.mk, lintegral_congr_ae, lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun, measurable_mk
 -/
@@ -236,7 +292,10 @@ theorem lintegral_prod_eq_prod_lintegral_of_indepFun
   | empty => simp only [Finset.prod_empty, lintegral_const, measure_univ, mul_one]
   | cons j s hj ihs =>
     simp only [← Finset.prod_apply, Finset.prod_cons, ← ihs]
-    apply lintegral_mul_
+    apply lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'
+    · exact (x_mea j).aemeasurable
+    · exact s.aemeasurable_prod (fun i _ => (x_mea i).aemeasurable)
+    · exact (iIndepFun.indepFun_finsetProd_of_notMem hX x_mea hj).symm
 
 中文:
 定理 lintegral_prod_eq_prod_lintegral_of_indepFun
@@ -247,7 +306,10 @@ theorem lintegral_prod_eq_prod_lintegral_of_indepFun
   | empty => simp only [Finset.prod_empty, lintegral_const, measure_univ, mul_one]
   | cons j s hj ihs =>
     simp only [← Finset.prod_apply, Finset.prod_cons, ← ihs]
-    apply lintegral_mul_
+    apply lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'
+    · exact (x_mea j).aemeasurable
+    · exact s.aemeasurable_prod (fun i _ => (x_mea i).aemeasurable)
+    · exact (iIndepFun.indepFun_finsetProd_of_notMem hX x_mea hj).symm
 
 Depends on / 依赖: Finset, Finset.cons_induction, Finset.prod_apply, Finset.prod_cons, Finset.prod_empty, IsProbabilityMeasure, aemeasurable, aemeasurable_prod, cons_induction, cyclotomic, hX.isProbabilityMeasure, iIndepFun, iIndepFun.indepFun_finsetProd_of_notMem, indepFun_finsetProd_of_notMem, isProbabilityMeasure, lintegral_const, lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun, measure_univ, mul_one, primitiveRoots_zero
 -/
@@ -283,7 +345,9 @@ theorem IndepFun.integrable_op
     gcongr with ω
     simp [← mul_assoc, hB]
   _ = C * ((∫⁻ ω, ‖X ω‖ₑ ∂μ) * (∫⁻ ω, ‖Y ω‖ₑ ∂μ)) := by
-    rw [lintegra
+    rw [lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'' hX.1.enorm hY.1.enorm
+        (hXY.comp measurable_enorm measurable_enorm)]
+  _ < ∞ := mul_lt_top (by finiteness) (mul_lt_top hX.2 hY.2)
 
 中文:
 定理 IndepFun.integrable_op
@@ -296,7 +360,9 @@ theorem IndepFun.integrable_op
     gcongr with ω
     simp [← mul_assoc, hB]
   _ = C * ((∫⁻ ω, ‖X ω‖ₑ ∂μ) * (∫⁻ ω, ‖Y ω‖ₑ ∂μ)) := by
-    rw [lintegra
+    rw [lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'' hX.1.enorm hY.1.enorm
+        (hXY.comp measurable_enorm measurable_enorm)]
+  _ < ∞ := mul_lt_top (by finiteness) (mul_lt_top hX.2 hY.2)
 
 Depends on / 依赖: Finset, Finset.prod_singleton, HasFiniteIntegral, IsPrimitiveRoot, IsPrimitiveRoot.primitiveRoots_one, cB.comp_aestronglyMeasurable, cyclotomic, finiteness, fun_prop, hXY.comp, lintegral_const_mul, lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun, map_one, measurable_enorm, mul_assoc, mul_lt_top, primitiveRoots_one, prod_singleton
 -/
@@ -363,7 +429,17 @@ theorem IndepFun.integrable_left_of_integrable_op
     apply h'Y
     filter_upwards [I] with ω hω
     simpa using hω
-refine hasFiniteIntegral_iff_enorm.mpr lt_top_iff_ne_top.2 fun H => 
+refine hasFiniteIntegral_iff_enorm.mpr lt_top_iff_ne_top.2 fun H => ?_
+  have J : (‖X ·‖ₑ) ⟂ᵢ[μ] (‖Y ·‖ₑ) := hXY.comp measurable_enorm measurable_enorm
+  have : ∞ < ∞ := calc
+    ∞ = c * ((∫⁻ ω, ‖X ω‖ₑ ∂μ) * (∫⁻ ω, ‖Y ω‖ₑ ∂μ)) := by
+      rw [H]; rw [top_mul I]; rw [mul_top (by simpa)]
+    _ <= ∫⁻ ω, ‖B (X ω) (Y ω)‖ₑ ∂μ := by
+      rw [← lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'' hX.enorm hY.enorm J]; rw [← lintegral_const_mul'' _ (by fun_prop)]
+      gcongr with ω
+      simp [hB, ← mul_assoc]
+    _ < ∞ := h'XY.2
+  contradiction
 
 中文:
 定理 IndepFun.integrable_left_of_integrable_op
@@ -374,7 +450,17 @@ refine hasFiniteIntegral_iff_enorm.mpr lt_top_iff_ne_top.2 fun H =>
     apply h'Y
     filter_upwards [I] with ω hω
     simpa using hω
-refine hasFiniteIntegral_iff_enorm.mpr lt_top_iff_ne_top.2 fun H => 
+refine hasFiniteIntegral_iff_enorm.mpr lt_top_iff_ne_top.2 fun H => ?_
+  have J : (‖X ·‖ₑ) ⟂ᵢ[μ] (‖Y ·‖ₑ) := hXY.comp measurable_enorm measurable_enorm
+  have : ∞ < ∞ := calc
+    ∞ = c * ((∫⁻ ω, ‖X ω‖ₑ ∂μ) * (∫⁻ ω, ‖Y ω‖ₑ ∂μ)) := by
+      rw [H]; rw [top_mul I]; rw [mul_top (by simpa)]
+    _ <= ∫⁻ ω, ‖B (X ω) (Y ω)‖ₑ ∂μ := by
+      rw [← lintegral_mul_eq_lintegral_mul_lintegral_of_indepFun'' hX.enorm hY.enorm J]; rw [← lintegral_const_mul'' _ (by fun_prop)]
+      gcongr with ω
+      simp [hB, ← mul_assoc]
+    _ < ∞ := h'XY.2
+  contradiction
 
 Depends on / 依赖: filter_upwards, hXY.comp, hY.enorm, hasFiniteIntegral_iff_enorm, hasFiniteIntegral_iff_enorm.mpr, lintegral_eq_zero_iff, lt_top_iff_ne_top, measurable_enorm, monic_X_sub_C, monic_prod_of_monic, mul_top, top_mul
 -/
@@ -450,7 +536,12 @@ theorem IndepFun.integral_bilin_comp_comp
     simp [integral_congr_ae h1, integral_congr_ae h]
   borelize E F
   have : IsProbabilityMeasure μ :=
-    (hf.comp_aemeasurable hX).isProbabilit
+    (hf.comp_aemeasurable hX).isProbabilityMeasure_of_indepFun (f ∘ X) (g ∘ Y) h
+      (hXY.comp₀ hX hY hf.1.aemeasurable hg.1.aemeasurable)
+  rw [← integral_map (f := fun z => B (f z.1) (g z.2)) (φ := fun ω => (X ω]; rw [Y ω)) (by fun_prop)]; rw [hXY.map_prod_eq_prod_map_map hX hY]; rw [integral_prod_bilin _ hf hg]; rw [integral_map hX hf.1]; rw [integral_map hY hg.1]
+  rw [hXY.map_prod_eq_prod_map_map hX hY]
+  exact Continuous.comp_aestronglyMeasurable₂ (g := (B · ·)) (by fun_prop)
+    hf.1.comp_fst hg.1.comp_snd
 
 中文:
 定理 IndepFun.integral_bilin_comp_comp
@@ -462,7 +553,12 @@ theorem IndepFun.integral_bilin_comp_comp
     simp [integral_congr_ae h1, integral_congr_ae h]
   borelize E F
   have : IsProbabilityMeasure μ :=
-    (hf.comp_aemeasurable hX).isProbabilit
+    (hf.comp_aemeasurable hX).isProbabilityMeasure_of_indepFun (f ∘ X) (g ∘ Y) h
+      (hXY.comp₀ hX hY hf.1.aemeasurable hg.1.aemeasurable)
+  rw [← integral_map (f := fun z => B (f z.1) (g z.2)) (φ := fun ω => (X ω]; rw [Y ω)) (by fun_prop)]; rw [hXY.map_prod_eq_prod_map_map hX hY]; rw [integral_prod_bilin _ hf hg]; rw [integral_map hX hf.1]; rw [integral_map hY hg.1]
+  rw [hXY.map_prod_eq_prod_map_map hX hY]
+  exact Continuous.comp_aestronglyMeasurable₂ (g := (B · ·)) (by fun_prop)
+    hf.1.comp_fst hg.1.comp_snd
 
 Depends on / 依赖: IsProbabilityMeasure, aemeasurable, borelize, comp_aemeasurable, filter_upwards, fun_prop, hXY.comp, hXY.map_prod_eq_prod_map_map, hf.comp_aemeasurable, integral_congr_ae, integral_map, isProbabilityMeasure_of_indepFun, map_prod_eq_prod_map_map
 -/
@@ -500,7 +596,28 @@ theorem IndepFun.integral_bilin_comp_comp'
   have hgY := (hg.comp_aemeasurable hY)
   by_cases h'X : forallᵐ ω ∂μ, f (X ω) = 0
   · have h' : forallᵐ ω ∂μ, B (f (X ω)) (g (Y ω)) = 0 := by
-      filter_upwards [h'X] with ω
+      filter_upwards [h'X] with ω hω
+      simp [hω]
+    simp [integral_congr_ae h'X, integral_congr_ae h']
+  by_cases h'Y : forallᵐ ω ∂μ, g (Y ω) = 0
+  · have h' : forallᵐ ω ∂μ, B (f (X ω)) (g (Y ω)) = 0 := by
+      filter_upwards [h'Y] with ω hω
+      simp [hω]
+    simp [integral_congr_ae h'Y, integral_congr_ae h']
+  have hB x y : c * ‖x‖ₑ * ‖y‖ₑ <= ‖B x y‖ₑ := by
+    rw [← toReal_le_toReal]
+    · simpa using hB x y
+    all_goals finiteness
+  by_cases h : Integrable (fun ω => B (f (X ω)) (g (Y ω))) μ
+· have h1 : Integrable f (μ.map X) := (integrable_map_measure hf hX).2
+      hfXgY.integrable_left_of_integrable_op (B · ·) c hc hB h hfX hgY h'Y
+have h2 : Integrable g (μ.map Y) := (integrable_map_measure hg hY).2
+      hfXgY.integrable_right_of_integrable_op (B · ·) c hc hB h hfX hgY h'X
+    exact hXY.integral_bilin_comp_comp hX hY h1 h2 B
+  · rw [integral_undef h]
+    obtain h | h : ¬(Integrable (fun ω => f (X ω)) μ) ∨ ¬(Integrable (fun ω => g (Y ω)) μ) :=
+      not_and_or.1 fun ⟨HX, HY⟩ => h (hfXgY.integrable_bilin HX HY B)
+    all_goals simp [integral_undef h]
 
 中文:
 定理 IndepFun.integral_bilin_comp_comp'
@@ -511,7 +628,28 @@ theorem IndepFun.integral_bilin_comp_comp'
   have hgY := (hg.comp_aemeasurable hY)
   by_cases h'X : forallᵐ ω ∂μ, f (X ω) = 0
   · have h' : forallᵐ ω ∂μ, B (f (X ω)) (g (Y ω)) = 0 := by
-      filter_upwards [h'X] with ω
+      filter_upwards [h'X] with ω hω
+      simp [hω]
+    simp [integral_congr_ae h'X, integral_congr_ae h']
+  by_cases h'Y : forallᵐ ω ∂μ, g (Y ω) = 0
+  · have h' : forallᵐ ω ∂μ, B (f (X ω)) (g (Y ω)) = 0 := by
+      filter_upwards [h'Y] with ω hω
+      simp [hω]
+    simp [integral_congr_ae h'Y, integral_congr_ae h']
+  have hB x y : c * ‖x‖ₑ * ‖y‖ₑ <= ‖B x y‖ₑ := by
+    rw [← toReal_le_toReal]
+    · simpa using hB x y
+    all_goals finiteness
+  by_cases h : Integrable (fun ω => B (f (X ω)) (g (Y ω))) μ
+· have h1 : Integrable f (μ.map X) := (integrable_map_measure hf hX).2
+      hfXgY.integrable_left_of_integrable_op (B · ·) c hc hB h hfX hgY h'Y
+have h2 : Integrable g (μ.map Y) := (integrable_map_measure hg hY).2
+      hfXgY.integrable_right_of_integrable_op (B · ·) c hc hB h hfX hgY h'X
+    exact hXY.integral_bilin_comp_comp hX hY h1 h2 B
+  · rw [integral_undef h]
+    obtain h | h : ¬(Integrable (fun ω => f (X ω)) μ) ∨ ¬(Integrable (fun ω => g (Y ω)) μ) :=
+      not_and_or.1 fun ⟨HX, HY⟩ => h (hfXgY.integrable_bilin HX HY B)
+    all_goals simp [integral_undef h]
 
 Depends on / 依赖: aemeasurable, borelize, comp_aemeasurable, filter_upwards, hXY.comp, hf.aemeasurable, hf.comp_aemeasurable, hg.aemeasurable, hg.comp_aemeasurable, integra, integral_congr_ae
 -/
@@ -864,7 +1002,12 @@ theorem indepFun_iff_integral_comp_mul
   rintro h _ _ ⟨A, hA, rfl⟩ ⟨B, hB, rfl⟩
   specialize
     h (measurable_one.indicator hA) (measurable_one.indicator hB)
-  
+      ((integrable_const 1).indicator (hfm.comp measurable_id hA))
+      ((integrable_const 1).indicator (hgm.comp measurable_id hB))
+  rwa [← toReal_eq_toReal_iff' (measure_ne_top μ _), toReal_mul, ← measureReal_def,
+    ← measureReal_def, ← measureReal_def, ← integral_indicator_one ((hfm hA).inter (hgm hB)),
+    ← integral_indicator_one (hfm hA), ← integral_indicator_one (hgm hB), Set.inter_indicator_one]
+  exact mul_ne_top (measure_ne_top μ _) (measure_ne_top μ _)
 
 中文:
 定理 indepFun_iff_integral_comp_mul
@@ -876,7 +1019,12 @@ theorem indepFun_iff_integral_comp_mul
   rintro h _ _ ⟨A, hA, rfl⟩ ⟨B, hB, rfl⟩
   specialize
     h (measurable_one.indicator hA) (measurable_one.indicator hB)
-  
+      ((integrable_const 1).indicator (hfm.comp measurable_id hA))
+      ((integrable_const 1).indicator (hgm.comp measurable_id hB))
+  rwa [← toReal_eq_toReal_iff' (measure_ne_top μ _), toReal_mul, ← measureReal_def,
+    ← measureReal_def, ← measureReal_def, ← integral_indicator_one ((hfm hA).inter (hgm hB)),
+    ← integral_indicator_one (hfm hA), ← integral_indicator_one (hgm hB), Set.inter_indicator_one]
+  exact mul_ne_top (measure_ne_top μ _) (measure_ne_top μ _)
 
 Depends on / 依赖: IndepFun_iff, aemeasurable, aestronglyMeasurable, hfg.integral_comp_mul_comp, hfm.aemeasurable, hfm.comp, hgm.aemeasurable, hgm.comp, indicator, integrable_const, integral_comp_mul_comp, measurable_id, measurable_one, measurable_one.indicator, measureReal_de, measureReal_def, measure_ne_top, specialize, toReal_eq_toReal_iff, toReal_mul
 -/
@@ -913,7 +1061,10 @@ lemma iIndepFun.integral_fun_prod_comp
   rw [← integral_map (f := fun x => ∏ i]; rw [f i (x i)) (φ := fun ω => (X · ω))]; rw [hX.map_fun_eq_pi_map mX]; rw [integral_fintype_prod_eq_prod]
   · congr with i
     rw [integral_map (mX i) (hf i)]
-  · fun
+  · fun_prop
+  rw [hX.map_fun_eq_pi_map mX]
+  exact Finset.aestronglyMeasurable_fun_prod Finset.univ fun i _ =>
+    (hf i).comp_quasiMeasurePreserving (Measure.quasiMeasurePreserving_eval _ i)
 
 中文:
 引理 iIndepFun.integral_fun_prod_comp
@@ -924,7 +1075,10 @@ lemma iIndepFun.integral_fun_prod_comp
   rw [← integral_map (f := fun x => ∏ i]; rw [f i (x i)) (φ := fun ω => (X · ω))]; rw [hX.map_fun_eq_pi_map mX]; rw [integral_fintype_prod_eq_prod]
   · congr with i
     rw [integral_map (mX i) (hf i)]
-  · fun
+  · fun_prop
+  rw [hX.map_fun_eq_pi_map mX]
+  exact Finset.aestronglyMeasurable_fun_prod Finset.univ fun i _ =>
+    (hf i).comp_quasiMeasurePreserving (Measure.quasiMeasurePreserving_eval _ i)
 
 Depends on / 依赖: Finset, Finset.aestronglyMeasurable_fun_prod, Finset.univ, Measure, Measure.quasiMeasurePreserving_eval, aestronglyMeasurable_fun_prod, comp_quasiMeasurePreserving, fun_prop, hX.isProbabilityMeasure, hX.map_fun_eq_pi_map, integral_fintype_prod_eq_prod, integral_map, isProbabilityMeasure, map_fun_eq_pi_map, quasiMeasurePreserving_eval
 -/
@@ -1021,7 +1175,10 @@ lemma Indep.setIntegral_eq_smul
         congr with ω
         by_cases hω : ω in A <;> simp [hω]
   _ = P.real A • ∫ ω, f (X ω) ∂P := by
-    rw [IndepFun.integral_fun_comp_smul_comp _ _ hX (by fun_p
+    rw [IndepFun.integral_fun_comp_smul_comp _ _ hX (by fun_prop) hf]
+    · simp [hm A hA2]
+    · exact hA1.indicator_indepFun 1 hA2
+    · exact (aemeasurable_indicator_const_iff 1).2 (hm A hA2).nullMeasurableSet
 
 中文:
 引理 Indep.set整数egral_eq_smul
@@ -1032,7 +1189,10 @@ lemma Indep.setIntegral_eq_smul
         congr with ω
         by_cases hω : ω in A <;> simp [hω]
   _ = P.real A • ∫ ω, f (X ω) ∂P := by
-    rw [IndepFun.integral_fun_comp_smul_comp _ _ hX (by fun_p
+    rw [IndepFun.integral_fun_comp_smul_comp _ _ hX (by fun_prop) hf]
+    · simp [hm A hA2]
+    · exact hA1.indicator_indepFun 1 hA2
+    · exact (aemeasurable_indicator_const_iff 1).2 (hm A hA2).nullMeasurableSet
 
 Depends on / 依赖: A.indicator, IndepFun, IndepFun.integral_fun_comp_smul_comp, P.real, aemeasurable_indicator_const_iff, fun_prop, hA1.indicator_indepFun, indicator, indicator_indepFun, integral_fun_comp_smul_comp, integral_indicator, nullMeasurableSet
 -/

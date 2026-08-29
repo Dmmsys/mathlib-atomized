@@ -279,7 +279,7 @@ theorem one_smul'
   apply DirectSum.addHom_ext; intro i xi
   rw [show (1 : DirectSum ιA fun i => A i) = (of A 0) GOne.one by rfl]
   rw [smulAddMonoidHom_apply_of_of]
-  exact DirectSum.of_eq_of_gradedMonoid_eq (one_smul (G
+  exact DirectSum.of_eq_of_gradedMonoid_eq (one_smul (GradedMonoid A) <| GradedMonoid.mk i xi)
 
 中文:
 定理 one_smul'
@@ -289,7 +289,7 @@ theorem one_smul'
   apply DirectSum.addHom_ext; intro i xi
   rw [show (1 : DirectSum ιA fun i => A i) = (of A 0) GOne.one by rfl]
   rw [smulAddMonoidHom_apply_of_of]
-  exact DirectSum.of_eq_of_gradedMonoid_eq (one_smul (G
+  exact DirectSum.of_eq_of_gradedMonoid_eq (one_smul (GradedMonoid A) <| GradedMonoid.mk i xi)
 -/
 private theorem one_smul' [DecidableEq ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M]
     (x : ⨁ i, M i) :
@@ -316,7 +316,14 @@ theorem mul_smul'
         (DirectSum.mulHom A) =
       (AddMonoidHom.compHom AddMonoidHom.flipHom <|
 (smulAddMonoidHom A M).flip.compHom.comp smulAddMonoidHom A M).flip
-    from -- `fun a b 
+    from -- `fun a b c ↦ a • (b • c)` as a bundled hom
+      DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this a) b) c
+  ext ai ax bi bx ci cx : 6
+  dsimp only [coe_comp, Function.comp_apply, compHom_apply_apply, flip_apply, flipHom_apply]
+  rw [smulAddMonoidHom_apply_of_of]; rw [smulAddMonoidHom_apply_of_of]; rw [DirectSum.mulHom_of_of]; rw [smulAddMonoidHom_apply_of_of]
+  exact
+    DirectSum.of_eq_of_gradedMonoid_eq
+      (mul_smul (GradedMonoid.mk ai ax) (GradedMonoid.mk bi bx) (GradedMonoid.mk ci cx))
 
 中文:
 定理 mul_smul'
@@ -329,7 +336,14 @@ theorem mul_smul'
         (DirectSum.mulHom A) =
       (AddMonoidHom.compHom AddMonoidHom.flipHom <|
 (smulAddMonoidHom A M).flip.compHom.comp smulAddMonoidHom A M).flip
-    from -- `fun a b 
+    from -- `fun a b c ↦ a • (b • c)` as a bundled hom
+      DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this a) b) c
+  ext ai ax bi bx ci cx : 6
+  dsimp only [coe_comp, Function.comp_apply, compHom_apply_apply, flip_apply, flipHom_apply]
+  rw [smulAddMonoidHom_apply_of_of]; rw [smulAddMonoidHom_apply_of_of]; rw [DirectSum.mulHom_of_of]; rw [smulAddMonoidHom_apply_of_of]
+  exact
+    DirectSum.of_eq_of_gradedMonoid_eq
+      (mul_smul (GradedMonoid.mk ai ax) (GradedMonoid.mk bi bx) (GradedMonoid.mk ci cx))
 -/
 private theorem mul_smul' [DecidableEq ιA] [DecidableEq ιB] [GSemiring A] [Gmodule A M]
     (a b : ⨁ i, A i)
@@ -361,7 +375,7 @@ instance module
   smul_add r := (smulAddMonoidHom A M r).map_add
   smul_zero r := (smulAddMonoidHom A M r).map_zero
   add_smul r s x := by simp only [smul_def, map_add, AddMonoidHom.add_apply]
-  zero_smul x := by simp only [smul_def, map_zero, AddMonoidHom
+  zero_smul x := by simp only [smul_def, map_zero, AddMonoidHom.zero_apply]
 
 中文:
 实例 module
@@ -371,7 +385,7 @@ instance module
   smul_add r := (smulAddMonoidHom A M r).map_add
   smul_zero r := (smulAddMonoidHom A M r).map_zero
   add_smul r s x := by simp only [smul_def, map_add, AddMonoidHom.add_apply]
-  zero_smul x := by simp only [smul_def, map_zero, AddMonoidHom
+  zero_smul x := by simp only [smul_def, map_zero, AddMonoidHom.zero_apply]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.add_apply, AddMonoidHom.zero_apply, add_apply, add_smul, map_add, map_zero, mul_smul, one_smul, smulAddMonoidHom, smul_add, smul_def, smul_zero, zero_apply, zero_smul
 -/
@@ -531,7 +545,16 @@ definition linearEquiv
     (DirectSum.decomposeAddEquiv 𝓜).right_inv⟩
   intro x y
   classical
-  rw [AddHom.toFun_eq_coe]; rw [← DirectSum.sum_suppo
+  rw [AddHom.toFun_eq_coe]; rw [← DirectSum.sum_support_decompose 𝓐 x]; rw [map_sum]; rw [Finset.sum_smul]; rw [AddEquiv.coe_toAddHom]; rw [map_sum]; rw [Finset.sum_smul]
+  refine Finset.sum_congr rfl (fun i _hi => ?_)
+  rw [RingHom.id_apply]; rw [← DirectSum.sum_support_decompose 𝓜 y]; rw [map_sum]; rw [Finset.smul_sum]; rw [map_sum]; rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun j _hj => ?_)
+  rw [show (decompose 𝓐 x i : A) • (decomposeAddEquiv 𝓜 ↑(decompose 𝓜 y j) : (⨁ i]; rw [𝓜 i)) =
+    DirectSum.Gmodule.smulAddMonoidHom _ _ (decompose 𝓐 ↑(decompose 𝓐 x i))
+    (decomposeAddEquiv 𝓜 ↑(decompose 𝓜 y j)) from DirectSum.Gmodule.smul_def _ _ _ _]
+  simp only [decomposeAddEquiv_apply, decompose_coe, Gmodule.smulAddMonoidHom_apply_of_of]
+  convert! DirectSum.decompose_coe 𝓜 _
+  rfl
 
 中文:
 定义 linearEquiv
@@ -543,7 +566,16 @@ definition linearEquiv
     (DirectSum.decomposeAddEquiv 𝓜).right_inv⟩
   intro x y
   classical
-  rw [AddHom.toFun_eq_coe]; rw [← DirectSum.sum_suppo
+  rw [AddHom.toFun_eq_coe]; rw [← DirectSum.sum_support_decompose 𝓐 x]; rw [map_sum]; rw [Finset.sum_smul]; rw [AddEquiv.coe_toAddHom]; rw [map_sum]; rw [Finset.sum_smul]
+  refine Finset.sum_congr rfl (fun i _hi => ?_)
+  rw [RingHom.id_apply]; rw [← DirectSum.sum_support_decompose 𝓜 y]; rw [map_sum]; rw [Finset.smul_sum]; rw [map_sum]; rw [Finset.smul_sum]
+  refine Finset.sum_congr rfl (fun j _hj => ?_)
+  rw [show (decompose 𝓐 x i : A) • (decomposeAddEquiv 𝓜 ↑(decompose 𝓜 y j) : (⨁ i]; rw [𝓜 i)) =
+    DirectSum.Gmodule.smulAddMonoidHom _ _ (decompose 𝓐 ↑(decompose 𝓐 x i))
+    (decomposeAddEquiv 𝓜 ↑(decompose 𝓜 y j)) from DirectSum.Gmodule.smul_def _ _ _ _]
+  simp only [decomposeAddEquiv_apply, decompose_coe, Gmodule.smulAddMonoidHom_apply_of_of]
+  convert! DirectSum.decompose_coe 𝓜 _
+  rfl
 
 Depends on / 依赖: AddEquiv, AddEquiv.coe_toAddHom, AddHom, AddHom.toFun_eq_coe, DirectSum, DirectSum.decomposeAddEquiv, DirectSum.sum_support_decompose, Finset, Finset.sum_congr, Finset.sum_smul, RingHom, RingHom.id_apply, classical, coe_toAddHom, decomposeAddEquiv, id_apply, infer_instance, isModule, left_inv, map_sum
 -/

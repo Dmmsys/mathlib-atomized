@@ -863,7 +863,10 @@ theorem associated_of_dvd_dvd
     rw [con]; rw [zero_mul] at a_eq
     apply ha0 a_eq
   have : a * (c * d) = a * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
-  have hcd : c * d = 1 := mul_left_ca
+  have hcd : c * d = 1 := mul_left_cancel₀ ha0 this
+  have : a * c * (d * c) = a * c * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
+  have hdc : d * c = 1 := mul_left_cancel₀ hac0 this
+  exact ⟨⟨c, d, hcd, hdc⟩, rfl⟩
 
 中文:
 定理 associated_of_dvd_dvd
@@ -878,7 +881,10 @@ theorem associated_of_dvd_dvd
     rw [con]; rw [zero_mul] at a_eq
     apply ha0 a_eq
   have : a * (c * d) = a * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
-  have hcd : c * d = 1 := mul_left_ca
+  have hcd : c * d = 1 := mul_left_cancel₀ ha0 this
+  have : a * c * (d * c) = a * c * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
+  have hdc : d * c = 1 := mul_left_cancel₀ hac0 this
+  exact ⟨⟨c, d, hcd, hdc⟩, rfl⟩
 
 Depends on / 依赖: a_eq, mul_assoc, mul_one, zero_mul
 -/
@@ -1073,7 +1079,10 @@ theorem prime_mul_iff
     · exact Or.inr ⟨hx, (associated_unit_mul_left y x hx).prime h⟩
     · exact Or.inl ⟨(associated_mul_unit_left x y hy).prime h, hy⟩
   · rintro (⟨hx, hy⟩ | ⟨hx, hy⟩)
-    · exact (associated_mul_unit_left x y hy).
+    · exact (associated_mul_unit_left x y hy).symm.prime hx
+    · exact (associated_unit_mul_right y x hx).prime hy
+
+@[simp]
 
 中文:
 定理 prime_mul_iff
@@ -1084,7 +1093,10 @@ theorem prime_mul_iff
     · exact Or.inr ⟨hx, (associated_unit_mul_left y x hx).prime h⟩
     · exact Or.inl ⟨(associated_mul_unit_left x y hy).prime h, hy⟩
   · rintro (⟨hx, hy⟩ | ⟨hx, hy⟩)
-    · exact (associated_mul_unit_left x y hy).
+    · exact (associated_mul_unit_left x y hy).symm.prime hx
+    · exact (associated_unit_mul_right y x hx).prime hy
+
+@[simp]
 
 Depends on / 依赖: Or.inl, Or.inr, associated_mul_unit_left, associated_unit_mul_left, associated_unit_mul_right, h.irreducible, irreducible, of_irreducible_mul, symm.prime
 -/
@@ -2094,7 +2106,7 @@ instance instCommMonoid
     Quotient.inductionOn₃ a' b' c' fun a b c =>
       show ⟦a * b * c⟧ = ⟦a * (b * c)⟧ by rw [mul_assoc]
   mul_comm a' b' :=
-    Quotient.in
+    Quotient.inductionOn₂ a' b' fun a b => show ⟦a * b⟧ = ⟦b * a⟧ by rw [mul_comm]
 
 中文:
 实例 instCommMonoid
@@ -2105,7 +2117,7 @@ instance instCommMonoid
     Quotient.inductionOn₃ a' b' c' fun a b c =>
       show ⟦a * b * c⟧ = ⟦a * (b * c)⟧ by rw [mul_assoc]
   mul_comm a' b' :=
-    Quotient.in
+    Quotient.inductionOn₂ a' b' fun a b => show ⟦a * b⟧ = ⟦b * a⟧ by rw [mul_comm]
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
 -/
@@ -2614,7 +2626,9 @@ theorem isPrimal_mk
   constructor <;> intro h b c dvd <;> obtain ⟨a₁, a₂, h₁, h₂, eq⟩ := @h b c dvd
   · obtain ⟨u, rfl⟩ := mk_eq_mk_iff_associated.mp eq.symm
     exact ⟨a₁, a₂ * u, h₁, Units.mul_right_dvd.mpr h₂, mul_assoc _ _ _⟩
-  ·
+  · exact ⟨a₁, a₂, h₁, h₂, congr_arg _ eq⟩
+
+@[simp]
 
 中文:
 定理 isPrimal_mk
@@ -2625,7 +2639,9 @@ theorem isPrimal_mk
   constructor <;> intro h b c dvd <;> obtain ⟨a₁, a₂, h₁, h₂, eq⟩ := @h b c dvd
   · obtain ⟨u, rfl⟩ := mk_eq_mk_iff_associated.mp eq.symm
     exact ⟨a₁, a₂ * u, h₁, Units.mul_right_dvd.mpr h₂, mul_assoc _ _ _⟩
-  ·
+  · exact ⟨a₁, a₂, h₁, h₂, congr_arg _ eq⟩
+
+@[simp]
 
 Depends on / 依赖: IsPrimal, Units.mul_right_dvd.mpr, congr_arg, eq.symm, forall_associated, mk_dvd_mk, mk_eq_mk_iff_associated, mk_eq_mk_iff_associated.mp, mk_mul_mk, mk_surjective, mk_surjective.exists, mul_assoc, mul_right_dvd, simp_rw
 -/
@@ -3560,7 +3576,12 @@ theorem dvd_prime_pow
     refine ⟨fun h => ?_, fun ⟨i, hi, hq⟩ => hq.dvd.trans (pow_dvd_pow p hi)⟩
     rw [pow_succ'] at h
     rcases hp.left_dvd_or_dvd_right_of_dvd_mul h with (⟨q, rfl⟩ | hno)
-   
+    · rw [mul_dvd_mul_iff_left hp.ne_zero, ih] at h
+      rcases h with ⟨i, hi, hq⟩
+      refine ⟨i + 1, Nat.succ_le_succ hi, (hq.mul_left p).trans ?_⟩
+      rw [pow_succ']
+    · obtain ⟨i, hi, hq⟩ := ih.mp hno
+      exact ⟨i, hi.trans n.le_succ, hq⟩
 
 中文:
 定理 dvd_prime_pow
@@ -3573,7 +3594,12 @@ theorem dvd_prime_pow
     refine ⟨fun h => ?_, fun ⟨i, hi, hq⟩ => hq.dvd.trans (pow_dvd_pow p hi)⟩
     rw [pow_succ'] at h
     rcases hp.left_dvd_or_dvd_right_of_dvd_mul h with (⟨q, rfl⟩ | hno)
-   
+    · rw [mul_dvd_mul_iff_left hp.ne_zero, ih] at h
+      rcases h with ⟨i, hi, hq⟩
+      refine ⟨i + 1, Nat.succ_le_succ hi, (hq.mul_left p).trans ?_⟩
+      rw [pow_succ']
+    · obtain ⟨i, hi, hq⟩ := ih.mp hno
+      exact ⟨i, hi.trans n.le_succ, hq⟩
 
 Depends on / 依赖: Nat.succ_le_succ, associated_one_iff_isUnit, generalizing, hi.trans, hp.left_dvd_or_dvd_right_of_dvd_mul, hp.ne_zero, hq.dvd.trans, hq.mul_left, ih.mp, isUnit_iff_dvd_one, le_succ, left_dvd_or_dvd_right_of_dvd_mul, mul_dvd_mul_iff_left, mul_left, n.le_succ, ne_zero, pow_dvd_pow, pow_succ, succ_le_succ
 -/

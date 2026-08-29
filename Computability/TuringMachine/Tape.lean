@@ -167,7 +167,7 @@ theorem BlankExtends.above_of_le
   rw [List.append_assoc]; rw [← List.replicate_add]; rw [Nat.sub_add_cancel]
   apply_fun List.length at e
   simp only [List.length_append, List.length_replicate] at e
-  rwa [← Nat.add_le_add_iff_left, e, Nat
+  rwa [← Nat.add_le_add_iff_left, e, Nat.add_le_add_iff_right]
 
 中文:
 定理 BlankExtends.above_of_le
@@ -178,7 +178,7 @@ theorem BlankExtends.above_of_le
   rw [List.append_assoc]; rw [← List.replicate_add]; rw [Nat.sub_add_cancel]
   apply_fun List.length at e
   simp only [List.length_append, List.length_replicate] at e
-  rwa [← Nat.add_le_add_iff_left, e, Nat
+  rwa [← Nat.add_le_add_iff_left, e, Nat.add_le_add_iff_right]
 
 Depends on / 依赖: List.append_assoc, List.append_cancel_right, List.length, List.length_append, List.length_replicate, List.replicate_add, Nat.add_le_add_iff_left, Nat.add_le_add_iff_right, Nat.sub_add_cancel, add_le_add_iff_left, add_le_add_iff_right, append_assoc, append_cancel_right, apply_fun, e.symm.trans, length, length_append, length_replicate, replicate_add, sub_add_cancel
 -/
@@ -781,7 +781,9 @@ definition ListBlank.nth
   rw [List.getI_eq_default _ h]
   rcases le_or_gt _ n with h₂ | h₂
   · rw [List.getI_eq_default _ h₂]
-  rw [List.getI_eq_getElem _ h₂]; rw [List.getElem_append_right 
+  rw [List.getI_eq_getElem _ h₂]; rw [List.getElem_append_right h]; rw [List.getElem_replicate]
+
+@[simp]
 
 中文:
 定义 ListBlank.nth
@@ -794,7 +796,9 @@ definition ListBlank.nth
   rw [List.getI_eq_default _ h]
   rcases le_or_gt _ n with h₂ | h₂
   · rw [List.getI_eq_default _ h₂]
-  rw [List.getI_eq_getElem _ h₂]; rw [List.getElem_append_right 
+  rw [List.getI_eq_getElem _ h₂]; rw [List.getElem_append_right h]; rw [List.getElem_replicate]
+
+@[simp]
 
 Depends on / 依赖: List.getElem_append_right, List.getElem_replicate, List.getI, List.getI_append, List.getI_eq_default, List.getI_eq_getElem, getElem_append_right, getElem_replicate, getI_append, getI_eq_default, getI_eq_getElem, l.liftOn, le_or_gt, liftOn, lt_or_ge
 -/
@@ -909,7 +913,13 @@ theorem ListBlank.ext
     intro
     rw [H]
   refine Quotient.sound' (Or.inl ⟨l₂.length - l₁.length, ?_⟩)
-  re
+  refine List.ext_getElem ?_ fun i h h₂ => Eq.symm ?_
+  · simp only [Nat.add_sub_cancel' h, List.length_append, List.length_replicate]
+  simp only [ListBlank.nth_mk] at H
+  rcases lt_or_ge i l₁.length with h' | h'
+  · simp [h', List.getElem_append h₂, ← List.getI_eq_getElem _ h, ← List.getI_eq_getElem _ h', H]
+  · rw [List.getElem_append_right h', List.getElem_replicate,
+      ← List.getI_eq_default _ h', H, List.getI_eq_getElem _ h]
 
 中文:
 定理 ListBlank.ext
@@ -921,7 +931,13 @@ theorem ListBlank.ext
     intro
     rw [H]
   refine Quotient.sound' (Or.inl ⟨l₂.length - l₁.length, ?_⟩)
-  re
+  refine List.ext_getElem ?_ fun i h h₂ => Eq.symm ?_
+  · simp only [Nat.add_sub_cancel' h, List.length_append, List.length_replicate]
+  simp only [ListBlank.nth_mk] at H
+  rcases lt_or_ge i l₁.length with h' | h'
+  · simp [h', List.getElem_append h₂, ← List.getI_eq_getElem _ h, ← List.getI_eq_getElem _ h', H]
+  · rw [List.getElem_append_right h', List.getElem_replicate,
+      ← List.getI_eq_default _ h', H, List.getI_eq_getElem _ h]
 
 Depends on / 依赖: Eq.symm, List.ext_getElem, List.length_append, List.length_replicate, ListBlank, ListBlank.induction_on, ListBlank.nth_mk, Nat.add_sub_cancel, Or.inl, Quotient, Quotient.sound, add_sub_cancel, ext_getElem, induction_on, le_total, length, length_append, length_replicate, lt_or_ge, nth_mk
 -/
@@ -972,7 +988,8 @@ theorem ListBlank.nth_modifyNth
   | succ n IH =>
     cases i
     · rw [if_neg (Nat.succ_ne_zero _).symm]
-      s
+      simp only [ListBlank.nth_zero, ListBlank.head_cons, ListBlank.modifyNth]
+    · simp only [IH, ListBlank.modifyNth, ListBlank.nth_succ, ListBlank.tail_cons, Nat.succ.injEq]
 
 中文:
 定理 ListBlank.nth_modifyNth
@@ -985,7 +1002,8 @@ theorem ListBlank.nth_modifyNth
   | succ n IH =>
     cases i
     · rw [if_neg (Nat.succ_ne_zero _).symm]
-      s
+      simp only [ListBlank.nth_zero, ListBlank.head_cons, ListBlank.modifyNth]
+    · simp only [IH, ListBlank.modifyNth, ListBlank.nth_succ, ListBlank.tail_cons, Nat.succ.injEq]
 
 Depends on / 依赖: ListBlank, ListBlank.head_cons, ListBlank.modifyNth, ListBlank.nth_succ, ListBlank.nth_zero, ListBlank.tail_cons, Nat.succ.injEq, Nat.succ_ne_zero, generalizing, head_cons, if_false, if_neg, if_true, modifyNth, nth_succ, nth_zero, reduceCtorEq, succ_ne_zero, tail_cons
 -/
@@ -1418,7 +1436,10 @@ definition ListBlank.flatMap
   induction i with
   | zero => rfl
   | succ i IH =>
-    simp only [IH, e, List.replicate_add, Nat.mul_suc
+    simp only [IH, e, List.replicate_add, Nat.mul_succ, add_comm, List.replicate_succ,
+      List.flatMap_cons]
+
+@[simp]
 
 中文:
 定义 ListBlank.flatMap
@@ -1430,7 +1451,10 @@ definition ListBlank.flatMap
   induction i with
   | zero => rfl
   | succ i IH =>
-    simp only [IH, e, List.replicate_add, Nat.mul_suc
+    simp only [IH, e, List.replicate_add, Nat.mul_succ, add_comm, List.replicate_succ,
+      List.flatMap_cons]
+
+@[simp]
 
 Depends on / 依赖: List.flatMap_append, List.flatMap_cons, List.replicate_add, List.replicate_succ, ListBlank, ListBlank.mk, Nat.mul_succ, Or.inl, Quotient, Quotient.sound, add_comm, flatMap, flatMap_append, flatMap_cons, l.flatMap, l.liftOn, liftOn, mul_comm, mul_succ, replicate_add
 -/

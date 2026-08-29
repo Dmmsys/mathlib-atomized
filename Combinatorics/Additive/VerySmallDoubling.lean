@@ -58,7 +58,22 @@ lemma smul_stabilizer_of_no_doubling_aux
     eq_of_subset_of_card_le (smul_finset_subset_mul ha) (by simpa)
   have A_smul {a} (ha : a in A) : A <• a = A * A :=
     eq_of_subset_of_card_le (op_smul_finset_subset_mul ha) (by simpa)
-  have smul_A_eq_A_smul {a} (ha : a in A) : a •> A = A <
+  have smul_A_eq_A_smul {a} (ha : a in A) : a •> A = A <• a := by rw [smul_A ha, A_smul ha]
+  have mul_mem_A_comm {x a} (ha : a in A) : x * a in A ↔ a * x in A := by
+    rw [← smul_mem_smul_finset_iff a]; rw [smul_A_eq_A_smul ha]; rw [← op_smul_eq_mul]; rw [smul_comm]; rw [smul_mem_smul_finset_iff]; rw [smul_eq_mul]
+  let H := stabilizer G A
+  have inv_smul_A {a} (ha : a in A) : a⁻¹ • (A : Set G) = H := by
+    ext x
+    rw [Set.mem_inv_smul_set_iff]; rw [smul_eq_mul]
+    refine ⟨fun hx => ?_, fun hx => ?_⟩
+    · simpa [← smul_A ha, mul_smul] using! smul_A hx
+    · norm_cast
+      rwa [← mul_mem_A_comm ha, ← smul_eq_mul, ← mem_inv_smul_finset_iff, inv_mem hx]
+  refine ⟨?_, ?_⟩
+  · rw [← inv_smul_A ha, smul_inv_smul]
+  · rw [← inv_smul_A ha, smul_comm]
+    norm_cast
+    rw [← smul_A_eq_A_smul ha]; rw [inv_smul_smul]
 
 中文:
 引理 smul_stabilizer_of_no_doubling_aux
@@ -68,7 +83,22 @@ lemma smul_stabilizer_of_no_doubling_aux
     eq_of_subset_of_card_le (smul_finset_subset_mul ha) (by simpa)
   have A_smul {a} (ha : a in A) : A <• a = A * A :=
     eq_of_subset_of_card_le (op_smul_finset_subset_mul ha) (by simpa)
-  have smul_A_eq_A_smul {a} (ha : a in A) : a •> A = A <
+  have smul_A_eq_A_smul {a} (ha : a in A) : a •> A = A <• a := by rw [smul_A ha, A_smul ha]
+  have mul_mem_A_comm {x a} (ha : a in A) : x * a in A ↔ a * x in A := by
+    rw [← smul_mem_smul_finset_iff a]; rw [smul_A_eq_A_smul ha]; rw [← op_smul_eq_mul]; rw [smul_comm]; rw [smul_mem_smul_finset_iff]; rw [smul_eq_mul]
+  let H := stabilizer G A
+  have inv_smul_A {a} (ha : a in A) : a⁻¹ • (A : Set G) = H := by
+    ext x
+    rw [Set.mem_inv_smul_set_iff]; rw [smul_eq_mul]
+    refine ⟨fun hx => ?_, fun hx => ?_⟩
+    · simpa [← smul_A ha, mul_smul] using! smul_A hx
+    · norm_cast
+      rwa [← mul_mem_A_comm ha, ← smul_eq_mul, ← mem_inv_smul_finset_iff, inv_mem hx]
+  refine ⟨?_, ?_⟩
+  · rw [← inv_smul_A ha, smul_inv_smul]
+  · rw [← inv_smul_A ha, smul_comm]
+    norm_cast
+    rw [← smul_A_eq_A_smul ha]; rw [inv_smul_smul]
 -/
 private lemma smul_stabilizer_of_no_doubling_aux (hA : #(A * A) <= #A) (ha : a in A) :
     a •> (stabilizer G A : Set G) = A ∧ (stabilizer G A : Set G) <• a = A := by
@@ -275,7 +305,10 @@ lemma mul_inv_eq_inv_mul_of_doubling_lt_two_aux
   rintro x hx y hy rfl
   have ⟨t, ht⟩ : (x • A inter y • A).Nonempty := by
     simpa using lt_card_smul_inter_smul (K := 2) (mod_cast h) hx hy
-  simp only [mem_inter, mem_smul_finset, smul_eq_mul]
+  simp only [mem_inter, mem_smul_finset, smul_eq_mul] at ht
+  obtain ⟨⟨z, hz, hzxwy⟩, w, hw, rfl⟩ := ht
+  refine ⟨z, hz, w, hw, ?_⟩
+  rw [mul_inv_eq_iff_eq_mul]; rw [mul_assoc]; rw [← hzxwy]; rw [inv_mul_cancel_left]
 
 中文:
 引理 mul_inv_eq_inv_mul_of_doubling_lt_two_aux
@@ -287,7 +320,10 @@ lemma mul_inv_eq_inv_mul_of_doubling_lt_two_aux
   rintro x hx y hy rfl
   have ⟨t, ht⟩ : (x • A inter y • A).Nonempty := by
     simpa using lt_card_smul_inter_smul (K := 2) (mod_cast h) hx hy
-  simp only [mem_inter, mem_smul_finset, smul_eq_mul]
+  simp only [mem_inter, mem_smul_finset, smul_eq_mul] at ht
+  obtain ⟨⟨z, hz, hzxwy⟩, w, hw, rfl⟩ := ht
+  refine ⟨z, hz, w, hw, ?_⟩
+  rw [mul_inv_eq_iff_eq_mul]; rw [mul_assoc]; rw [← hzxwy]; rw [inv_mul_cancel_left]
 -/
 private lemma mul_inv_eq_inv_mul_of_doubling_lt_two_aux (h : #(A * A) < 2 * #A) :
     A⁻¹ * A subseteq A * A⁻¹ := by
@@ -399,7 +435,37 @@ definition invMulSubgroup
     simp only [Set.mem_mul, Set.mem_inv, coe_inv, forall_exists_index, mem_coe,
       and_imp]
     rintro a ha b hb rfl
-    exact ⟨b⁻¹, by si
+    exact ⟨b⁻¹, by simpa using hb, a⁻¹, ha, by simp⟩
+  mul_mem' := by
+    norm_cast
+    have h₁ x (hx : x in A) y (hy : y in A) : (1 / 2 : Rat) * #A < #(x • A inter y • A) := by
+      convert! lt_card_smul_inter_smul (by simpa using Rat.cast_strictMono (K := Real) h) hx hy
+      norm_num
+      simp [← Rat.cast_lt (K := Real)]
+    intro a c ha hc
+    simp only [mem_mul, mem_inv'] at ha hc
+    obtain ⟨a, ha, b, hb, rfl⟩ := ha
+    obtain ⟨c, hc, d, hd, rfl⟩ := hc
+    have h₂ : (1 / 2 : Rat) * #A < #(A inter (a * b)⁻¹ • A) := by
+      refine (h₁ b hb _ ha).trans_le ?_
+      rw [← card_smul_finset b⁻¹]
+      simp [smul_smul, smul_finset_inter]
+    have h₃ : (1 / 2 : Rat) * #A < #(A inter (c * d) • A) := by
+      refine (h₁ _ hc d hd).trans_le ?_
+      rw [← card_smul_finset c]
+      simp [smul_smul, smul_finset_inter]
+    have ⟨t, ht⟩ : ((A inter (c * d) • A) inter (A inter (a * b)⁻¹ • A)).Nonempty := by
+      rw [← card_pos]; rw [← Nat.cast_pos (α := Rat)]
+      have := card_inter_add_card_union (A inter (c * d) • A) (A inter (a * b)⁻¹ • A)
+      rw [← Nat.cast_inj (R := Rat)]; rw [Nat.cast_add]; rw [Nat.cast_add] at this
+      have : (#((A inter (c * d) • A) union (A inter (a * b)⁻¹ • A)) : Rat) <= #A := by
+        rw [Nat.cast_le]; rw [← inter_union_distrib_left]
+        exact card_le_card inter_subset_left
+      linarith
+    simp only [inter_inter_inter_comm, inter_self, mem_inter, ← inv_smul_mem_iff, inv_inv,
+      smul_eq_mul, mul_assoc, mul_inv_rev] at ht
+    rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]; rw [mem_mul]
+    exact ⟨a * b * t, by simp [ht, mul_assoc], ((c * d)⁻¹ * t)⁻¹, by simp [ht, mul_assoc]⟩
 
 中文:
 定义 invMulSubgroup
@@ -413,7 +479,37 @@ definition invMulSubgroup
     simp only [Set.mem_mul, Set.mem_inv, coe_inv, forall_exists_index, mem_coe,
       and_imp]
     rintro a ha b hb rfl
-    exact ⟨b⁻¹, by si
+    exact ⟨b⁻¹, by simpa using hb, a⁻¹, ha, by simp⟩
+  mul_mem' := by
+    norm_cast
+    have h₁ x (hx : x in A) y (hy : y in A) : (1 / 2 : Rat) * #A < #(x • A inter y • A) := by
+      convert! lt_card_smul_inter_smul (by simpa using Rat.cast_strictMono (K := Real) h) hx hy
+      norm_num
+      simp [← Rat.cast_lt (K := Real)]
+    intro a c ha hc
+    simp only [mem_mul, mem_inv'] at ha hc
+    obtain ⟨a, ha, b, hb, rfl⟩ := ha
+    obtain ⟨c, hc, d, hd, rfl⟩ := hc
+    have h₂ : (1 / 2 : Rat) * #A < #(A inter (a * b)⁻¹ • A) := by
+      refine (h₁ b hb _ ha).trans_le ?_
+      rw [← card_smul_finset b⁻¹]
+      simp [smul_smul, smul_finset_inter]
+    have h₃ : (1 / 2 : Rat) * #A < #(A inter (c * d) • A) := by
+      refine (h₁ _ hc d hd).trans_le ?_
+      rw [← card_smul_finset c]
+      simp [smul_smul, smul_finset_inter]
+    have ⟨t, ht⟩ : ((A inter (c * d) • A) inter (A inter (a * b)⁻¹ • A)).Nonempty := by
+      rw [← card_pos]; rw [← Nat.cast_pos (α := Rat)]
+      have := card_inter_add_card_union (A inter (c * d) • A) (A inter (a * b)⁻¹ • A)
+      rw [← Nat.cast_inj (R := Rat)]; rw [Nat.cast_add]; rw [Nat.cast_add] at this
+      have : (#((A inter (c * d) • A) union (A inter (a * b)⁻¹ • A)) : Rat) <= #A := by
+        rw [Nat.cast_le]; rw [← inter_union_distrib_left]
+        exact card_le_card inter_subset_left
+      linarith
+    simp only [inter_inter_inter_comm, inter_self, mem_inter, ← inv_smul_mem_iff, inv_inv,
+      smul_eq_mul, mul_assoc, mul_inv_rev] at ht
+    rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]; rw [mem_mul]
+    exact ⟨a * b * t, by simp [ht, mul_assoc], ((c * d)⁻¹ * t)⁻¹, by simp [ht, mul_assoc]⟩
 -/
 def invMulSubgroup (A : Finset G) (h : #(A * A) < (3 / 2 : Rat) * #A) : Subgroup G where
   carrier := A⁻¹ * A
@@ -519,7 +615,18 @@ lemma weak_invMulSubgroup_bound
     convert! lt_card_mul_inv_eq (by simpa using Rat.cast_strictMono (K := Real) h) ha
     norm_num
     simp [← Rat.cast_lt (K := Real)]
-  have h₂ : for
+  have h₂ : forall x in A ×ˢ A, (fun ⟨x, y⟩ => x * y⁻¹) x in A⁻¹ * A := by
+    rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]
+    simp only [mem_product, Prod.forall, mem_mul, and_imp, mem_inv]
+    intro a b ha hb
+    exact ⟨a, ha, b⁻¹, by simp [hb], rfl⟩
+  have : ((1 / 2 : Rat) * #A) * #(A⁻¹ * A) < (#A : Rat) ^ 2 := by
+    rw [← Nat.cast_pow]; rw [sq]; rw [← card_product]; rw [card_eq_sum_card_fiberwise h₂]; rw [Nat.cast_sum]
+    refine (sum_lt_sum_of_nonempty (by simp [h₀]) h₁).trans_eq' ?_
+    simp only [sum_const, nsmul_eq_mul, mul_comm]
+  rw [← Nat.cast_lt (α := Rat)]; rw [Nat.cast_mul]; rw [Nat.cast_two]
+  -- passing between ℕ- and ℚ-inequalities is annoying, here and above
+  nlinarith
 
 中文:
 引理 weak_invMulSubgroup_bound
@@ -530,7 +637,18 @@ lemma weak_invMulSubgroup_bound
     convert! lt_card_mul_inv_eq (by simpa using Rat.cast_strictMono (K := Real) h) ha
     norm_num
     simp [← Rat.cast_lt (K := Real)]
-  have h₂ : for
+  have h₂ : forall x in A ×ˢ A, (fun ⟨x, y⟩ => x * y⁻¹) x in A⁻¹ * A := by
+    rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]
+    simp only [mem_product, Prod.forall, mem_mul, and_imp, mem_inv]
+    intro a b ha hb
+    exact ⟨a, ha, b⁻¹, by simp [hb], rfl⟩
+  have : ((1 / 2 : Rat) * #A) * #(A⁻¹ * A) < (#A : Rat) ^ 2 := by
+    rw [← Nat.cast_pow]; rw [sq]; rw [← card_product]; rw [card_eq_sum_card_fiberwise h₂]; rw [Nat.cast_sum]
+    refine (sum_lt_sum_of_nonempty (by simp [h₀]) h₁).trans_eq' ?_
+    simp only [sum_const, nsmul_eq_mul, mul_comm]
+  rw [← Nat.cast_lt (α := Rat)]; rw [Nat.cast_mul]; rw [Nat.cast_two]
+  -- passing between ℕ- and ℚ-inequalities is annoying, here and above
+  nlinarith
 -/
 private lemma weak_invMulSubgroup_bound (h : #(A * A) < (3 / 2 : Rat) * #A) :
     #(A⁻¹ * A) < 2 * #A := by
@@ -585,7 +703,11 @@ lemma subgroup_strong_bound_left
   have h₁ : (A⁻¹ * A) * (A⁻¹ * A) = A⁻¹ * A := by
     rw [← coe_inj]; rw [coe_mul]; rw [coe_mul]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [coe_mul_coe]
   have h₂ : a • op a • (A⁻¹ * A) = (a • (A⁻¹ * A)) * (op a • (A⁻¹ * A)) := by
-    rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h₁]; rw [smul_com
+    rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h₁]; rw [smul_comm]
+  rw [h₂]
+  refine mul_subset_mul (A_subset_aH a ha) ?_
+  rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]; rw [← mul_smul_comm]
+  exact subset_mul_left _ (by simp [← inv_smul_mem_iff, inv_mem_inv ha])
 
 中文:
 引理 subgroup_strong_bound_left
@@ -594,7 +716,11 @@ lemma subgroup_strong_bound_left
   have h₁ : (A⁻¹ * A) * (A⁻¹ * A) = A⁻¹ * A := by
     rw [← coe_inj]; rw [coe_mul]; rw [coe_mul]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [coe_mul_coe]
   have h₂ : a • op a • (A⁻¹ * A) = (a • (A⁻¹ * A)) * (op a • (A⁻¹ * A)) := by
-    rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h₁]; rw [smul_com
+    rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h₁]; rw [smul_comm]
+  rw [h₂]
+  refine mul_subset_mul (A_subset_aH a ha) ?_
+  rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]; rw [← mul_smul_comm]
+  exact subset_mul_left _ (by simp [← inv_smul_mem_iff, inv_mem_inv ha])
 -/
 private lemma subgroup_strong_bound_left (h : #(A * A) < (3 / 2 : Rat) * #A) (a : G) (ha : a in A) :
     A * A subseteq a • op a • (A⁻¹ * A) := by
@@ -620,7 +746,36 @@ lemma subgroup_strong_bound_right
   obtain ⟨d, ⟨b, hb, c, hc, rfl⟩, hz⟩ := hz
   let l : Finset G := A inter ((z * a⁻¹) • (A⁻¹ * A))
     -- ^ set of x ∈ A st ∃ y ∈ H a with x y = z
-  let r : Fins
+  let r : Finset G := (a • (A⁻¹ * A)) inter (z • A⁻¹)
+    -- ^ set of x ∈ a H st ∃ y ∈ A with x y = z
+  have : (A⁻¹ * A) * (A⁻¹ * A) = A⁻¹ * A := by
+    rw [← coe_inj]; rw [coe_mul]; rw [coe_mul]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [coe_mul_coe]
+  have hl : l = A := by
+    rw [inter_eq_left]; rw [← this]; rw [subset_smul_finset_iff]
+    simp only [← hz, mul_inv_rev, inv_inv, ← mul_assoc]
+    refine smul_finset_subset_mul ?_
+    simp [mul_mem_mul, ha, hb, hc]
+  have hr : r = z • A⁻¹ := by
+    rw [inter_eq_right]; rw [← this]; rw [mul_assoc _ A]; rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]; rw [subset_smul_finset_iff]
+    simp only [← mul_assoc, smul_smul]
+    refine smul_finset_subset_mul ?_
+    simp [← hz, mul_mem_mul, ha, hb, hc]
+  have lr : l union r subseteq a • (A⁻¹ * A) := by
+    rw [union_subset_iff]; rw [hl]
+    exact ⟨A_subset_aH a ha, inter_subset_left⟩
+  have : #l = #A := by rw [hl]
+  have : #r = #A := by rw [hr, card_smul_finset, card_inv]
+  have : #(l union r) < 2 * #A := by
+    refine (card_le_card lr).trans_lt ?_
+    rw [card_smul_finset]
+    exact weak_invMulSubgroup_bound h
+  have ⟨t, ht⟩ : (l inter r).Nonempty := by
+    rw [← card_pos]
+    linarith [card_inter_add_card_union l r]
+  simp only [hl, hr, mem_inter, ← inv_smul_mem_iff, smul_eq_mul, mem_inv', mul_inv_rev,
+    inv_inv] at ht
+  rw [mem_mul]
+  exact ⟨t, ht.1, t⁻¹ * z, ht.2, by simp⟩
 
 中文:
 引理 subgroup_strong_bound_right
@@ -632,7 +787,36 @@ lemma subgroup_strong_bound_right
   obtain ⟨d, ⟨b, hb, c, hc, rfl⟩, hz⟩ := hz
   let l : Finset G := A inter ((z * a⁻¹) • (A⁻¹ * A))
     -- ^ set of x ∈ A st ∃ y ∈ H a with x y = z
-  let r : Fins
+  let r : Finset G := (a • (A⁻¹ * A)) inter (z • A⁻¹)
+    -- ^ set of x ∈ a H st ∃ y ∈ A with x y = z
+  have : (A⁻¹ * A) * (A⁻¹ * A) = A⁻¹ * A := by
+    rw [← coe_inj]; rw [coe_mul]; rw [coe_mul]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [coe_mul_coe]
+  have hl : l = A := by
+    rw [inter_eq_left]; rw [← this]; rw [subset_smul_finset_iff]
+    simp only [← hz, mul_inv_rev, inv_inv, ← mul_assoc]
+    refine smul_finset_subset_mul ?_
+    simp [mul_mem_mul, ha, hb, hc]
+  have hr : r = z • A⁻¹ := by
+    rw [inter_eq_right]; rw [← this]; rw [mul_assoc _ A]; rw [← mul_inv_eq_inv_mul_of_doubling_lt_two (weaken_doubling h)]; rw [subset_smul_finset_iff]
+    simp only [← mul_assoc, smul_smul]
+    refine smul_finset_subset_mul ?_
+    simp [← hz, mul_mem_mul, ha, hb, hc]
+  have lr : l union r subseteq a • (A⁻¹ * A) := by
+    rw [union_subset_iff]; rw [hl]
+    exact ⟨A_subset_aH a ha, inter_subset_left⟩
+  have : #l = #A := by rw [hl]
+  have : #r = #A := by rw [hr, card_smul_finset, card_inv]
+  have : #(l union r) < 2 * #A := by
+    refine (card_le_card lr).trans_lt ?_
+    rw [card_smul_finset]
+    exact weak_invMulSubgroup_bound h
+  have ⟨t, ht⟩ : (l inter r).Nonempty := by
+    rw [← card_pos]
+    linarith [card_inter_add_card_union l r]
+  simp only [hl, hr, mem_inter, ← inv_smul_mem_iff, smul_eq_mul, mem_inv', mul_inv_rev,
+    inv_inv] at ht
+  rw [mem_mul]
+  exact ⟨t, ht.1, t⁻¹ * z, ht.2, by simp⟩
 -/
 private lemma subgroup_strong_bound_right (h : #(A * A) < (3 / 2 : Rat) * #A) (a : G) (ha : a in A) :
     a • op a • (A⁻¹ * A) subseteq A * A := by
@@ -730,7 +914,16 @@ lemma smul_inv_mul_eq_inv_mul_opSMul
       a •> (A⁻¹ * A) <• a⁻¹ subseteq a •> (A⁻¹ * A) * A⁻¹ := op_smul_finset_subset_mul (by simpa)
       _ subseteq A * (A⁻¹ * A) * A⁻¹ := by grw [smul_finset_subset_mul (by simpa)]
       _ = A⁻¹ * A := by
-        si
+        simp_rw [← coe_inj, coe_mul]
+        rw [← mul_assoc]; rw [← invMulSubgroup_eq_mul_inv _ h]; rw [mul_assoc]; rw [← invMulSubgroup_eq_mul_inv _ h]; rw [coe_mul_coe]; rw [invMulSubgroup_eq_inv_mul]
+  · rw [subset_smul_finset_iff]
+    calc
+      a⁻¹ •> ((A⁻¹ * A) <• a) subseteq A⁻¹ * (A⁻¹ * A) <• a := smul_finset_subset_mul (by simpa)
+      _ subseteq A⁻¹ * ((A⁻¹ * A) * A) := by grw [op_smul_finset_subset_mul (by simpa)]
+      _ = A⁻¹ * A := by
+        rw [← mul_inv_eq_inv_mul_of_doubling_lt_two <| weaken_doubling h]
+        simp_rw [← coe_inj, coe_mul]
+        rw [mul_assoc]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [← mul_assoc]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [← invMulSubgroup_eq_mul_inv _ h]; rw [coe_mul_coe]
 
 中文:
 引理 smul_inv_mul_eq_inv_mul_opSMul
@@ -742,7 +935,16 @@ lemma smul_inv_mul_eq_inv_mul_opSMul
       a •> (A⁻¹ * A) <• a⁻¹ subseteq a •> (A⁻¹ * A) * A⁻¹ := op_smul_finset_subset_mul (by simpa)
       _ subseteq A * (A⁻¹ * A) * A⁻¹ := by grw [smul_finset_subset_mul (by simpa)]
       _ = A⁻¹ * A := by
-        si
+        simp_rw [← coe_inj, coe_mul]
+        rw [← mul_assoc]; rw [← invMulSubgroup_eq_mul_inv _ h]; rw [mul_assoc]; rw [← invMulSubgroup_eq_mul_inv _ h]; rw [coe_mul_coe]; rw [invMulSubgroup_eq_inv_mul]
+  · rw [subset_smul_finset_iff]
+    calc
+      a⁻¹ •> ((A⁻¹ * A) <• a) subseteq A⁻¹ * (A⁻¹ * A) <• a := smul_finset_subset_mul (by simpa)
+      _ subseteq A⁻¹ * ((A⁻¹ * A) * A) := by grw [op_smul_finset_subset_mul (by simpa)]
+      _ = A⁻¹ * A := by
+        rw [← mul_inv_eq_inv_mul_of_doubling_lt_two <| weaken_doubling h]
+        simp_rw [← coe_inj, coe_mul]
+        rw [mul_assoc]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [← mul_assoc]; rw [← invMulSubgroup_eq_inv_mul _ h]; rw [← invMulSubgroup_eq_mul_inv _ h]; rw [coe_mul_coe]
 
 Depends on / 依赖: coe_inj, coe_mul, coe_mul_coe, invMulSubgroup_eq_inv_mul, invMulSubgroup_eq_mul_inv, mul_assoc, op_inv, op_smul_finset_subset_mul, simp_rw, smul_finset_subset_mul, subset_antisymm, subset_smul_finset_iff, subseteq
 -/
@@ -777,7 +979,11 @@ theorem doubling_lt_three_halves
   refine ⟨H, inferInstance, ?_, fun a ha => ⟨?_, ?_⟩⟩
   · simp only [invMulSubgroup, ← coe_mul, Subgroup.mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk,
       mem_coe, ← Nat.card_eq_fintype_card, H]
-    rwa [Nat.card_eq_finsetCard, card_inv_mul_of_doubling_lt_three_ha
+    rwa [Nat.card_eq_finsetCard, card_inv_mul_of_doubling_lt_three_halves h]
+  · rw [invMulSubgroup_eq_inv_mul]
+    exact_mod_cast A_subset_aH a ha
+  · simpa [H, invMulSubgroup_eq_inv_mul, ← coe_inv, ← coe_mul, ← coe_smul_finset]
+      using smul_inv_mul_eq_inv_mul_opSMul h ha
 
 中文:
 定理 doubling_lt_three_halves
@@ -787,7 +993,11 @@ theorem doubling_lt_three_halves
   refine ⟨H, inferInstance, ?_, fun a ha => ⟨?_, ?_⟩⟩
   · simp only [invMulSubgroup, ← coe_mul, Subgroup.mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk,
       mem_coe, ← Nat.card_eq_fintype_card, H]
-    rwa [Nat.card_eq_finsetCard, card_inv_mul_of_doubling_lt_three_ha
+    rwa [Nat.card_eq_finsetCard, card_inv_mul_of_doubling_lt_three_halves h]
+  · rw [invMulSubgroup_eq_inv_mul]
+    exact_mod_cast A_subset_aH a ha
+  · simpa [H, invMulSubgroup_eq_inv_mul, ← coe_inv, ← coe_mul, ← coe_smul_finset]
+      using smul_inv_mul_eq_inv_mul_opSMul h ha
 
 Depends on / 依赖: A_subset_aH, Nat.card_eq_finsetCard, Nat.card_eq_fintype_card, Subgroup, Subgroup.mem_mk, Submonoid, Submonoid.mem_mk, Subsemigroup, Subsemigroup.mem_mk, card_eq_finsetCard, card_eq_fintype_card, card_inv_mul_of_doubling_lt_three_halves, coe_inv, coe_mul, coe_smul_finset, invMulSubgroup, invMulSubgroup_eq_inv_mul, mem_coe, mem_mk, smul_inv_mul_eq_inv_mul_opSMul
 -/
@@ -819,7 +1029,9 @@ lemma op_smul_eq_iff_mem
   obtain ⟨⟨a⟩, rfl⟩ := hc
   change _ = _ <• _
   rw [eq_comm]; rw [smul_eq_iff_eq_inv_smul]; rw [← op_inv]; rw [op_smul_op_smul]; rw [rightCoset_mem_rightCoset]
-  rwa [← op_smul
+  rwa [← op_smul_eq_mul, op_inv, ← SetLike.mem_coe, ← Set.mem_smul_set_iff_inv_smul_mem]
+
+omit [DecidableEq G] in
 
 中文:
 引理 op_smul_eq_iff_mem
@@ -830,7 +1042,9 @@ lemma op_smul_eq_iff_mem
   obtain ⟨⟨a⟩, rfl⟩ := hc
   change _ = _ <• _
   rw [eq_comm]; rw [smul_eq_iff_eq_inv_smul]; rw [← op_inv]; rw [op_smul_op_smul]; rw [rightCoset_mem_rightCoset]
-  rwa [← op_smul
+  rwa [← op_smul_eq_mul, op_inv, ← SetLike.mem_coe, ← Set.mem_smul_set_iff_inv_smul_mem]
+
+omit [DecidableEq G] in
 -/
 private lemma op_smul_eq_iff_mem {H : Subgroup G} {c : Set G} {x : G}
     (hc : c in orbit Gᵐᵒᵖ (H : Set G)) : x in c ↔ H <• x = c := by
@@ -947,7 +1161,119 @@ theorem doubling_lt_golden_ratio
   have hKφ' : 0 < φ - K := by linarith
   have hKψ' : 0 < K - ψ := by linarith [Real.goldenConj_neg]
   have hK₂' : 0 < 2 - K := by linarith [Real.goldenRatio_lt_two]
-  have const_pos : 0
+  have const_pos : 0 < K * (2 - K) / ((φ - K) * (K - ψ)) := by positivity
+  -- We dispatch the trivial case `A = ∅` separately.
+  obtain rfl | A_nonempty := A.eq_empty_or_nonempty
+  · exact ⟨⊥, inferInstance, ∅, by simp; positivity⟩
+  -- In the case where `A` is non-empty, we consider the set `S := A * A⁻¹` and its stabilizer `H`.
+  let S := A * A⁻¹
+  let H := stabilizer G S
+  -- `S` is finite and non-empty (because `A` is), and therefore `H` is finite too.
+  have S_nonempty : S.Nonempty := by simpa [S]
+  have : Finite H := by simpa [H] using! stabilizer_finite (by simpa) S.finite_toSet
+  cases nonempty_fintype H
+  -- By definition, `H * S = S`.
+  have H_mul_S : (H : Set G) * S = S := by simp [H, ← stabilizer_coe_finset]
+  -- Since `H` is a subgroup, find a finite set `Z ⊆ S` such that `H * Z = S` and `|H| * |Z| = |S|`.
+  obtain ⟨Z, hZ⟩ := exists_subset_mul_eq_mul_injOn H S
+  have H_mul_Z : (H : Set G) * Z = S := by simp [hZ.2.1, H_mul_S]
+  have H_toFinset_mul_Z : Set.toFinset H * Z = S := by simpa [← Finset.coe_inj]
+  have card_H_mul_card_Z : Fintype.card H * #Z = #S := by
+    simpa [card_mul_eq_mul_card_of_injOn_opSMul hZ.2.2] using! congr_arg _ H_toFinset_mul_Z
+  -- It remains to show that `|Z| ≤ C(K)` for some `C(K)` depending only on `K`.
+  refine ⟨H, inferInstance, Z, ?_, mod_cast H_mul_Z⟩
+  -- This is equivalent to showing that `|H| ≥ c(K)|S|` for some `c(K)` depending only on `K`.
+  suffices ((φ - K) * (K - ψ)) / ((2 - K) * K) * #S <= Fintype.card H by
+    calc
+          (#Z : Real)
+      _ = (Fintype.card H / #S : Real)⁻¹ := by simp [← card_H_mul_card_Z]
+      _ <= (((φ - K) * (K - ψ) / ((2 - K) * K) * #S) / #S)⁻¹ := by gcongr
+      _ = (2 - K) * K / ((φ - K) * (K - ψ)) := by
+        have : (#S : Real) != 0 := by positivity
+        simp [this]
+  -- Write `r(z)` the number of representations of `z ∈ S` as `x * y⁻¹` for `x, y ∈ A`.
+  let r z : Nat := A.convolution A⁻¹ z
+  -- `r` is invariant under inverses.
+  have r_inv z : r z⁻¹ = r z := by simp [r, inv_inv]
+  -- We show that every `z ∈ S` with at least `(K - 1)|A|` representations lies in `H`,
+  -- and that such `z` make up a proportion of at least `(2 - K) / ((φ - K) * (K - ψ))` of `S`.
+  calc
+        (φ - K) * (K - ψ) / ((2 - K) * K) * #S
+    _ <= #{z in S | (K - 1) * #A < r z} := ?_
+    _ <= #(H : Set G).toFinset := ?_
+    _ = Fintype.card H := by simp
+  -- First, let's show that a large proportion of all `z ∈ S` have many representations.
+  · -- Let `l` be that number.
+    set l : Nat := #{z in S | (K - 1) * #A < r z} with hk
+    -- By upper-bounding `r(z)` by `(K - 1)|A|` for the `z` with few representations,
+    -- and by `|A|` for the `z` with many representations,
+    -- we get `|A|² ≤ l|A| + (|S| - l)(K - 1)|A| = ((2 - K)l + (K - 1)|S|)|A|`.
+    have ineq : #A * #A <= ((2 - K) * l + (K - 1) * #S) * #A := by
+      calc
+            (#A : Real) * #A
+        _ = #A * #A⁻¹ := by simp
+        _ = #(A ×ˢ A⁻¹) := by simp
+        _ = ∑ z in S, ↑(r z) := by
+          norm_cast
+          exact card_eq_sum_card_fiberwise fun xy hxy =>
+            mul_mem_mul (mem_product.mp hxy).1 (mem_product.mp hxy).2
+        _ = ∑ z in S with (K - 1) * #A < r z, ↑(r z) + ∑ z in S with r z <= (K - 1) * #A, ↑(r z) := by
+          norm_cast; simp_rw [← not_lt, sum_filter_add_sum_filter_not]
+        _ <= ∑ z in S with (K - 1) * #A < r z, ↑(#A)
+          + ∑ z in S with r z <= (K - 1) * #A, (K - 1) * #A := by
+          gcongr with z hz z hz
+          · exact convolution_le_card_left
+          · simp_all
+        _ = l * #A + (#S - l) * (K - 1) * #A := by
+          simp [hk, ← not_lt, mul_assoc,
+            ← S.card_filter_add_card_filter_not fun z => (K - 1) * #A < r z]
+        _ = ((2 - K) * l + (K - 1) * #S) * #A := by ring
+    -- By cancelling `|A|` on both sides, we get `|A| ≤ (2 - K)l + (K - 1)|S|`.
+    -- By composing with `|S| ≤ K|A|`, we get `|S| ≤ (2 - K)Kl + (K - 1)K|S|`.
+    have : 0 < #A := by positivity
+    replace ineq := calc
+          (#S : Real)
+      _ <= K * #A := ‹_›
+      _ <= K * ((2 - K) * l + (K - 1) * #S) := by
+gcongr; exact le_of_mul_le_mul_right ineq by positivity
+      _ = (2 - K) * K * l + (K - 1) * K * #S := by ring
+    -- Now, we are done.
+    calc
+          (φ - K) * (K - ψ) / ((2 - K) * K) * #S
+      _ = (φ - K) * (K - ψ) * #S / ((2 - K) * K) := div_mul_eq_mul_div ..
+      _ <= (2 - K) * K * l / ((2 - K) * K) := by
+        have := Real.goldenRatio_mul_goldenConj
+        have := Real.goldenRatio_add_goldenConj
+        rw [show (φ - K) * (K - ψ) = 1 - (K - 1) * K by grind]
+        gcongr ?_ / _
+        linarith [ineq]
+      _ = l := by field
+  -- Second, let's show that the `z ∈ S` with many representations are in `H`.
+  · gcongr
+    simp only [subset_iff, mem_filter, Set.mem_toFinset, SetLike.mem_coe, and_imp]
+    rintro z hz hrz
+    -- It's enough to show that `z * w ∈ S` for all `w ∈ S`.
+    rw [mem_stabilizer_finset']
+    rintro w hw
+    -- Since `w ∈ S` and `|A⁻¹ * A| ≤ K|A|`, we know that `r(w) ≥ (2 - K)|A|`.
+    have hrw : (2 - K) * #A <= r w := by
+      simpa [card_mul_inv_eq_convolution_inv] using! le_card_mul_inv_eq hA₁ (by simpa)
+    -- But also `r(z⁻¹) = r(z) > (K - 1)|A|`.
+    rw [← r_inv] at hrz
+    simp only [r, ← card_inter_smul] at hrz hrw
+    -- By inclusion-exclusion, we get that `(z⁻¹ •> A) ∩ (w •> A)` is non-empty.
+    have : (0 : Real) < #((z⁻¹ •> A) inter (w •> A)) := by
+      have : (#((A inter z⁻¹ •> A) inter (A inter w •> A)) : Real) <= #(z⁻¹ •> A inter w •> A) := by
+        gcongr <;> exact inter_subset_right
+      have : (#((A inter z⁻¹ •> A) union (A inter w •> A)) : Real) <= #A := by
+        gcongr; exact union_subset inter_subset_left inter_subset_left
+      have :
+          (#((A inter z⁻¹ •> A) inter (A inter w •> A)) + #((A inter z⁻¹ •> A) union (A inter w •> A)) : Real) =
+            #(A inter z⁻¹ •> A) + #(A inter w •> A) := mod_cast card_inter_add_card_union ..
+      linarith
+    -- This is exactly what we set out to prove.
+    simpa [S, card_smul_inter_smul, Finset.Nonempty, mem_mul, mem_inv, -mem_inv', and_assoc]
+      using! this
 
 中文:
 定理 doubling_lt_golden_ratio
@@ -959,7 +1285,119 @@ theorem doubling_lt_golden_ratio
   have hKφ' : 0 < φ - K := by linarith
   have hKψ' : 0 < K - ψ := by linarith [Real.goldenConj_neg]
   have hK₂' : 0 < 2 - K := by linarith [Real.goldenRatio_lt_two]
-  have const_pos : 0
+  have const_pos : 0 < K * (2 - K) / ((φ - K) * (K - ψ)) := by positivity
+  -- We dispatch the trivial case `A = ∅` separately.
+  obtain rfl | A_nonempty := A.eq_empty_or_nonempty
+  · exact ⟨⊥, inferInstance, ∅, by simp; positivity⟩
+  -- In the case where `A` is non-empty, we consider the set `S := A * A⁻¹` and its stabilizer `H`.
+  let S := A * A⁻¹
+  let H := stabilizer G S
+  -- `S` is finite and non-empty (because `A` is), and therefore `H` is finite too.
+  have S_nonempty : S.Nonempty := by simpa [S]
+  have : Finite H := by simpa [H] using! stabilizer_finite (by simpa) S.finite_toSet
+  cases nonempty_fintype H
+  -- By definition, `H * S = S`.
+  have H_mul_S : (H : Set G) * S = S := by simp [H, ← stabilizer_coe_finset]
+  -- Since `H` is a subgroup, find a finite set `Z ⊆ S` such that `H * Z = S` and `|H| * |Z| = |S|`.
+  obtain ⟨Z, hZ⟩ := exists_subset_mul_eq_mul_injOn H S
+  have H_mul_Z : (H : Set G) * Z = S := by simp [hZ.2.1, H_mul_S]
+  have H_toFinset_mul_Z : Set.toFinset H * Z = S := by simpa [← Finset.coe_inj]
+  have card_H_mul_card_Z : Fintype.card H * #Z = #S := by
+    simpa [card_mul_eq_mul_card_of_injOn_opSMul hZ.2.2] using! congr_arg _ H_toFinset_mul_Z
+  -- It remains to show that `|Z| ≤ C(K)` for some `C(K)` depending only on `K`.
+  refine ⟨H, inferInstance, Z, ?_, mod_cast H_mul_Z⟩
+  -- This is equivalent to showing that `|H| ≥ c(K)|S|` for some `c(K)` depending only on `K`.
+  suffices ((φ - K) * (K - ψ)) / ((2 - K) * K) * #S <= Fintype.card H by
+    calc
+          (#Z : Real)
+      _ = (Fintype.card H / #S : Real)⁻¹ := by simp [← card_H_mul_card_Z]
+      _ <= (((φ - K) * (K - ψ) / ((2 - K) * K) * #S) / #S)⁻¹ := by gcongr
+      _ = (2 - K) * K / ((φ - K) * (K - ψ)) := by
+        have : (#S : Real) != 0 := by positivity
+        simp [this]
+  -- Write `r(z)` the number of representations of `z ∈ S` as `x * y⁻¹` for `x, y ∈ A`.
+  let r z : Nat := A.convolution A⁻¹ z
+  -- `r` is invariant under inverses.
+  have r_inv z : r z⁻¹ = r z := by simp [r, inv_inv]
+  -- We show that every `z ∈ S` with at least `(K - 1)|A|` representations lies in `H`,
+  -- and that such `z` make up a proportion of at least `(2 - K) / ((φ - K) * (K - ψ))` of `S`.
+  calc
+        (φ - K) * (K - ψ) / ((2 - K) * K) * #S
+    _ <= #{z in S | (K - 1) * #A < r z} := ?_
+    _ <= #(H : Set G).toFinset := ?_
+    _ = Fintype.card H := by simp
+  -- First, let's show that a large proportion of all `z ∈ S` have many representations.
+  · -- Let `l` be that number.
+    set l : Nat := #{z in S | (K - 1) * #A < r z} with hk
+    -- By upper-bounding `r(z)` by `(K - 1)|A|` for the `z` with few representations,
+    -- and by `|A|` for the `z` with many representations,
+    -- we get `|A|² ≤ l|A| + (|S| - l)(K - 1)|A| = ((2 - K)l + (K - 1)|S|)|A|`.
+    have ineq : #A * #A <= ((2 - K) * l + (K - 1) * #S) * #A := by
+      calc
+            (#A : Real) * #A
+        _ = #A * #A⁻¹ := by simp
+        _ = #(A ×ˢ A⁻¹) := by simp
+        _ = ∑ z in S, ↑(r z) := by
+          norm_cast
+          exact card_eq_sum_card_fiberwise fun xy hxy =>
+            mul_mem_mul (mem_product.mp hxy).1 (mem_product.mp hxy).2
+        _ = ∑ z in S with (K - 1) * #A < r z, ↑(r z) + ∑ z in S with r z <= (K - 1) * #A, ↑(r z) := by
+          norm_cast; simp_rw [← not_lt, sum_filter_add_sum_filter_not]
+        _ <= ∑ z in S with (K - 1) * #A < r z, ↑(#A)
+          + ∑ z in S with r z <= (K - 1) * #A, (K - 1) * #A := by
+          gcongr with z hz z hz
+          · exact convolution_le_card_left
+          · simp_all
+        _ = l * #A + (#S - l) * (K - 1) * #A := by
+          simp [hk, ← not_lt, mul_assoc,
+            ← S.card_filter_add_card_filter_not fun z => (K - 1) * #A < r z]
+        _ = ((2 - K) * l + (K - 1) * #S) * #A := by ring
+    -- By cancelling `|A|` on both sides, we get `|A| ≤ (2 - K)l + (K - 1)|S|`.
+    -- By composing with `|S| ≤ K|A|`, we get `|S| ≤ (2 - K)Kl + (K - 1)K|S|`.
+    have : 0 < #A := by positivity
+    replace ineq := calc
+          (#S : Real)
+      _ <= K * #A := ‹_›
+      _ <= K * ((2 - K) * l + (K - 1) * #S) := by
+gcongr; exact le_of_mul_le_mul_right ineq by positivity
+      _ = (2 - K) * K * l + (K - 1) * K * #S := by ring
+    -- Now, we are done.
+    calc
+          (φ - K) * (K - ψ) / ((2 - K) * K) * #S
+      _ = (φ - K) * (K - ψ) * #S / ((2 - K) * K) := div_mul_eq_mul_div ..
+      _ <= (2 - K) * K * l / ((2 - K) * K) := by
+        have := Real.goldenRatio_mul_goldenConj
+        have := Real.goldenRatio_add_goldenConj
+        rw [show (φ - K) * (K - ψ) = 1 - (K - 1) * K by grind]
+        gcongr ?_ / _
+        linarith [ineq]
+      _ = l := by field
+  -- Second, let's show that the `z ∈ S` with many representations are in `H`.
+  · gcongr
+    simp only [subset_iff, mem_filter, Set.mem_toFinset, SetLike.mem_coe, and_imp]
+    rintro z hz hrz
+    -- It's enough to show that `z * w ∈ S` for all `w ∈ S`.
+    rw [mem_stabilizer_finset']
+    rintro w hw
+    -- Since `w ∈ S` and `|A⁻¹ * A| ≤ K|A|`, we know that `r(w) ≥ (2 - K)|A|`.
+    have hrw : (2 - K) * #A <= r w := by
+      simpa [card_mul_inv_eq_convolution_inv] using! le_card_mul_inv_eq hA₁ (by simpa)
+    -- But also `r(z⁻¹) = r(z) > (K - 1)|A|`.
+    rw [← r_inv] at hrz
+    simp only [r, ← card_inter_smul] at hrz hrw
+    -- By inclusion-exclusion, we get that `(z⁻¹ •> A) ∩ (w •> A)` is non-empty.
+    have : (0 : Real) < #((z⁻¹ •> A) inter (w •> A)) := by
+      have : (#((A inter z⁻¹ •> A) inter (A inter w •> A)) : Real) <= #(z⁻¹ •> A inter w •> A) := by
+        gcongr <;> exact inter_subset_right
+      have : (#((A inter z⁻¹ •> A) union (A inter w •> A)) : Real) <= #A := by
+        gcongr; exact union_subset inter_subset_left inter_subset_left
+      have :
+          (#((A inter z⁻¹ •> A) inter (A inter w •> A)) + #((A inter z⁻¹ •> A) union (A inter w •> A)) : Real) =
+            #(A inter z⁻¹ •> A) + #(A inter w •> A) := mod_cast card_inter_add_card_union ..
+      linarith
+    -- This is exactly what we set out to prove.
+    simpa [S, card_smul_inter_smul, Finset.Nonempty, mem_mul, mem_inv, -mem_inv', and_assoc]
+      using! this
 -/
 theorem doubling_lt_golden_ratio (hK₁ : 1 < K) (hKφ : K < φ)
     (hA₁ : #(A⁻¹ * A) <= K * #A) (hA₂ : #(A * A⁻¹) <= K * #A) :
@@ -1231,7 +1669,10 @@ lemma expansion_submodularity
   have : (#(A inter B) + #(A union B) : Real) = #A + #B := mod_cast card_inter_add_card_union A B
   have : K * #(A inter B) + K * #(A union B) = K * #A + K * #B := by simp only [← mul_add, this]
   have : (#(A * S inter (B * S)) + #(A * S union B * S) : Real) = #(A * S) + #(B * S) :=
-    mod_cast 
+    mod_cast card_inter_add_card_union (A * S) (B * S)
+  have : (#((A inter B) * S) : Real) <= #(A * S inter (B * S)) := by grw [inter_mul_subset]
+  simp_rw [expansion, union_mul]
+  nlinarith
 
 中文:
 引理 expansion_submodularity
@@ -1239,7 +1680,10 @@ lemma expansion_submodularity
   have : (#(A inter B) + #(A union B) : Real) = #A + #B := mod_cast card_inter_add_card_union A B
   have : K * #(A inter B) + K * #(A union B) = K * #A + K * #B := by simp only [← mul_add, this]
   have : (#(A * S inter (B * S)) + #(A * S union B * S) : Real) = #(A * S) + #(B * S) :=
-    mod_cast 
+    mod_cast card_inter_add_card_union (A * S) (B * S)
+  have : (#((A inter B) * S) : Real) <= #(A * S inter (B * S)) := by grw [inter_mul_subset]
+  simp_rw [expansion, union_mul]
+  nlinarith
 -/
 private lemma expansion_submodularity :
     expansion K S (A inter B) + expansion K S (A union B) <= expansion K S A + expansion K S B := by
@@ -1522,7 +1966,7 @@ replace hA := hA.2 hAB by grw [inter_subset_left]
 replace hB := hB.2 hAB by grw [inter_subset_right]
   replace hA := eq_of_subset_of_card_le inter_subset_left hA
   replace hB := eq_of_subset_of_card_le inter_subset_right hB
-  exact hA.s
+  exact hA.symm.trans hB
 
 中文:
 引理 IsAtom.eq_of_inter_nonempty
@@ -1533,7 +1977,7 @@ replace hA := hA.2 hAB by grw [inter_subset_left]
 replace hB := hB.2 hAB by grw [inter_subset_right]
   replace hA := eq_of_subset_of_card_le inter_subset_left hA
   replace hB := eq_of_subset_of_card_le inter_subset_right hB
-  exact hA.s
+  exact hA.symm.trans hB
 
 Depends on / 依赖: Dir.left, L.exists_cons, List.Vector.toList, List.length_reverse, List.reverseAux, List.reverse_reverse, ListBlank, ListBlank.append, ListBlank.cons_flatMap, ListBlank.head_cons, ListBlank.tail_cons, Tape.mk, Tape.move, Vector, Vector.toList_length, append, cons_flatMap, exists_cons, head_cons, length
 -/
@@ -1557,7 +2001,49 @@ lemma exists_nonempty_isFragment
   -- We will show this lemma by contradiction. So we suppose that the infimum in the definition of
   -- connectivity is not attained by a nonempty finite subset of `G`, or, equivalently, that for
   -- every `κ < k` where `κ` is the connectivity, there is nonempty `A` such that `κ < ex A < k`.
-  b
+  by_contra! H
+  let ex := expansion K S
+  let κ := connectivity K S
+  -- Some useful calculations
+  have κ_add_one_pos : 0 < κ + 1 := by linarith [connectivity_nonneg hK.le hS]
+  have one_sub_K_pos : 0 < 1 - K := by linarith
+  -- First we show that for large enough `A`, `κ + 1 < ex A`. Calculations show that
+  -- `#A > ⌊(κ + 1) / (1 - K)⌋` suffices. We will actually use the contrapositive of this result: if
+  -- `ex A` is near `κ`, then `A` will need to be small.
+  let t := Nat.floor ((κ + 1) / (1 - K))
+  have largeA {A : Finset G} (hA : t < #A) : κ + 1 < ex A := by
+    rw [Nat.lt_iff_add_one_le] at hA
+    calc
+          κ + 1
+      _ = (κ + 1) / ((κ + 1) / (1 - K)) * ((κ + 1) / (1 - K)) := by field
+      _ < (κ + 1) / ((κ + 1) / (1 - K)) * (t + 1) := by gcongr; exact Nat.lt_floor_add_one _
+      _ = (1 - K) * (t + 1) := by field
+      _ <= (1 - K) * #A := by norm_cast; gcongr
+      _ <= ex A := mul_card_le_expansion hS
+  -- On the other hand, we essentially show that there are only finitely many possible values for
+  -- `A` with `#A ≤ t`, and these values are found in the set `M = (⟦#S, t#S⟧ - K⟦1, t⟧) ∩ (κ, ∞)`.
+  let M := {x in ((Icc #S (t * #S)).map Nat.castEmbedding -
+    K • (Icc 1 t).map Nat.castEmbedding : Finset Real) | κ < x}
+  have smallA {A : Finset G} (hA : A.Nonempty) (hAt : #A <= t) : ex A in M := by
+    rw [mem_filter]
+refine ⟨sub_mem_sub ?_ ?_, (connectivity_le_expansion hK.le hS hA).lt_of_ne' H _ hA⟩
+    · apply mem_map_of_mem
+      exact mem_Icc.2 ⟨card_le_card_mul_left hA, by grw [card_mul_le, hAt]⟩
+    · apply smul_mem_smul_finset
+      apply mem_map_of_mem
+      exact mem_Icc.2 ⟨Nat.one_le_iff_ne_zero.mpr hA.card_ne_zero, hAt⟩
+  -- Now we take the minimum value of `M` (union `{κ + 1}` to handle the eventual emptiness of `M`
+  -- and get better bounds). This will be strictly larger than `κ` by definition.
+  have : (M union {κ + 1}).Nonempty := by simp
+  let k := (M union {κ + 1}).min' this
+  have : κ < k := by simp [k, M]
+  -- By the property of infimum and the previous claim, there is `A` with `κ < ex A < k ≤ κ + 1`.
+  -- But then the claim about large `A` implies that `#A ≤ t` and thus `ex A ∈ M` and `k ≤ ex A`,
+  -- a contradiction.
+  obtain ⟨A, hA, hAk⟩ := (connectivity_lt_iff hK.le hS).mp this
+have : ex A <= κ + 1 := hAk.le.trans min'_le _ _ (by simp)
+  have := not_lt.mp (mt largeA this.not_gt)
+exact hAk.not_ge min'_le (M union {κ + 1}) _ subset_union_left smallA hA this
 
 中文:
 引理 存在_nonempty_isFragment
@@ -1566,7 +2052,49 @@ lemma exists_nonempty_isFragment
   -- We will show this lemma by contradiction. So we suppose that the infimum in the definition of
   -- connectivity is not attained by a nonempty finite subset of `G`, or, equivalently, that for
   -- every `κ < k` where `κ` is the connectivity, there is nonempty `A` such that `κ < ex A < k`.
-  b
+  by_contra! H
+  let ex := expansion K S
+  let κ := connectivity K S
+  -- Some useful calculations
+  have κ_add_one_pos : 0 < κ + 1 := by linarith [connectivity_nonneg hK.le hS]
+  have one_sub_K_pos : 0 < 1 - K := by linarith
+  -- First we show that for large enough `A`, `κ + 1 < ex A`. Calculations show that
+  -- `#A > ⌊(κ + 1) / (1 - K)⌋` suffices. We will actually use the contrapositive of this result: if
+  -- `ex A` is near `κ`, then `A` will need to be small.
+  let t := Nat.floor ((κ + 1) / (1 - K))
+  have largeA {A : Finset G} (hA : t < #A) : κ + 1 < ex A := by
+    rw [Nat.lt_iff_add_one_le] at hA
+    calc
+          κ + 1
+      _ = (κ + 1) / ((κ + 1) / (1 - K)) * ((κ + 1) / (1 - K)) := by field
+      _ < (κ + 1) / ((κ + 1) / (1 - K)) * (t + 1) := by gcongr; exact Nat.lt_floor_add_one _
+      _ = (1 - K) * (t + 1) := by field
+      _ <= (1 - K) * #A := by norm_cast; gcongr
+      _ <= ex A := mul_card_le_expansion hS
+  -- On the other hand, we essentially show that there are only finitely many possible values for
+  -- `A` with `#A ≤ t`, and these values are found in the set `M = (⟦#S, t#S⟧ - K⟦1, t⟧) ∩ (κ, ∞)`.
+  let M := {x in ((Icc #S (t * #S)).map Nat.castEmbedding -
+    K • (Icc 1 t).map Nat.castEmbedding : Finset Real) | κ < x}
+  have smallA {A : Finset G} (hA : A.Nonempty) (hAt : #A <= t) : ex A in M := by
+    rw [mem_filter]
+refine ⟨sub_mem_sub ?_ ?_, (connectivity_le_expansion hK.le hS hA).lt_of_ne' H _ hA⟩
+    · apply mem_map_of_mem
+      exact mem_Icc.2 ⟨card_le_card_mul_left hA, by grw [card_mul_le, hAt]⟩
+    · apply smul_mem_smul_finset
+      apply mem_map_of_mem
+      exact mem_Icc.2 ⟨Nat.one_le_iff_ne_zero.mpr hA.card_ne_zero, hAt⟩
+  -- Now we take the minimum value of `M` (union `{κ + 1}` to handle the eventual emptiness of `M`
+  -- and get better bounds). This will be strictly larger than `κ` by definition.
+  have : (M union {κ + 1}).Nonempty := by simp
+  let k := (M union {κ + 1}).min' this
+  have : κ < k := by simp [k, M]
+  -- By the property of infimum and the previous claim, there is `A` with `κ < ex A < k ≤ κ + 1`.
+  -- But then the claim about large `A` implies that `#A ≤ t` and thus `ex A ∈ M` and `k ≤ ex A`,
+  -- a contradiction.
+  obtain ⟨A, hA, hAk⟩ := (connectivity_lt_iff hK.le hS).mp this
+have : ex A <= κ + 1 := hAk.le.trans min'_le _ _ (by simp)
+  have := not_lt.mp (mt largeA this.not_gt)
+exact hAk.not_ge min'_le (M union {κ + 1}) _ subset_union_left smallA hA this
 
 Depends on / 依赖: Dir.left, Dir.right, Eq.symm, ListBlank, ListBlank.cons_head_tail, ListBlank.head_cons, ListBlank.tail_cons, Tape.move, Tape.move_left_right, _move_left, cons_head_tail, head_cons, iterate_succ_apply, move_left_right, tail_cons, trTape
 -/
@@ -1746,7 +2274,34 @@ lemma exists_subgroup_isAtom
   -- We take any atom `N` of `G` with respect to `K` and `S`. Since left multiples of `N` (which
   -- are atoms as well) partition `G` by `IsAtom.eq_of_inter_nonempty`, we will deduce that a left
   -- multiple that contains `1` is a (finite) subgroup of `G`.
-  obtain ⟨N, hN⟩ := exists_isAtom hK h
+  obtain ⟨N, hN⟩ := exists_isAtom hK hS
+  obtain ⟨n, hn⟩ := IsAtom.nonempty hK hS hN
+  have one_mem_carrier : 1 in n⁻¹ •> N := by simpa [mem_inv_smul_finset_iff]
+  have self_mem_smul_carrier (x : G) : x in x • n⁻¹ • N := by
+    apply smul_mem_smul_finset (a := x) at one_mem_carrier
+    simpa only [smul_eq_mul, mul_one] using! one_mem_carrier
+  let H : Subgroup G := {
+    carrier := n⁻¹ •> N
+    one_mem' := mod_cast one_mem_carrier
+    mul_mem' {a b} ha hb := by
+      rw [← coe_smul_finset]; rw [mem_coe] at *
+      apply smul_mem_smul_finset (a := a) at hb
+      rw [smul_eq_mul] at hb
+      have : (n⁻¹ •> N inter a •> n⁻¹ •> N).Nonempty := ⟨a, by
+        simpa only [mem_inter] using! ⟨ha, self_mem_smul_carrier a⟩⟩
+      simpa only [← (hN.smul_finset n⁻¹).eq_of_inter_nonempty hK.le hS
+        ((hN.smul_finset n⁻¹).smul_finset a) this] using! hb
+    inv_mem' {a} ha := by
+      rw [← coe_smul_finset]; rw [mem_coe] at *
+      apply smul_mem_smul_finset (a := a⁻¹) at ha
+      rw [smul_eq_mul]; rw [inv_mul_cancel] at ha
+      have : (n⁻¹ •> N inter a⁻¹ •> n⁻¹ •> N).Nonempty := ⟨1, by simpa using! ⟨one_mem_carrier, ha⟩⟩
+      simpa only [← (hN.smul_finset n⁻¹).eq_of_inter_nonempty hK.le hS
+        ((hN.smul_finset n⁻¹).smul_finset a⁻¹) this] using! self_mem_smul_carrier a⁻¹
+  }
+  refine ⟨H, Fintype.ofFinset (n⁻¹ •> N) fun a => ?_, ?_⟩
+  · simpa only [← mem_coe, coe_smul_finset] using! H.mem_carrier
+  · simpa [Set.toFinset_smul_set, toFinset_coe, H] using! IsAtom.smul_finset n⁻¹ hN
 
 中文:
 引理 存在_subgroup_isAtom
@@ -1755,7 +2310,34 @@ lemma exists_subgroup_isAtom
   -- We take any atom `N` of `G` with respect to `K` and `S`. Since left multiples of `N` (which
   -- are atoms as well) partition `G` by `IsAtom.eq_of_inter_nonempty`, we will deduce that a left
   -- multiple that contains `1` is a (finite) subgroup of `G`.
-  obtain ⟨N, hN⟩ := exists_isAtom hK h
+  obtain ⟨N, hN⟩ := exists_isAtom hK hS
+  obtain ⟨n, hn⟩ := IsAtom.nonempty hK hS hN
+  have one_mem_carrier : 1 in n⁻¹ •> N := by simpa [mem_inv_smul_finset_iff]
+  have self_mem_smul_carrier (x : G) : x in x • n⁻¹ • N := by
+    apply smul_mem_smul_finset (a := x) at one_mem_carrier
+    simpa only [smul_eq_mul, mul_one] using! one_mem_carrier
+  let H : Subgroup G := {
+    carrier := n⁻¹ •> N
+    one_mem' := mod_cast one_mem_carrier
+    mul_mem' {a b} ha hb := by
+      rw [← coe_smul_finset]; rw [mem_coe] at *
+      apply smul_mem_smul_finset (a := a) at hb
+      rw [smul_eq_mul] at hb
+      have : (n⁻¹ •> N inter a •> n⁻¹ •> N).Nonempty := ⟨a, by
+        simpa only [mem_inter] using! ⟨ha, self_mem_smul_carrier a⟩⟩
+      simpa only [← (hN.smul_finset n⁻¹).eq_of_inter_nonempty hK.le hS
+        ((hN.smul_finset n⁻¹).smul_finset a) this] using! hb
+    inv_mem' {a} ha := by
+      rw [← coe_smul_finset]; rw [mem_coe] at *
+      apply smul_mem_smul_finset (a := a⁻¹) at ha
+      rw [smul_eq_mul]; rw [inv_mul_cancel] at ha
+      have : (n⁻¹ •> N inter a⁻¹ •> n⁻¹ •> N).Nonempty := ⟨1, by simpa using! ⟨one_mem_carrier, ha⟩⟩
+      simpa only [← (hN.smul_finset n⁻¹).eq_of_inter_nonempty hK.le hS
+        ((hN.smul_finset n⁻¹).smul_finset a⁻¹) this] using! self_mem_smul_carrier a⁻¹
+  }
+  refine ⟨H, Fintype.ofFinset (n⁻¹ •> N) fun a => ?_, ?_⟩
+  · simpa only [← mem_coe, coe_smul_finset] using! H.mem_carrier
+  · simpa [Set.toFinset_smul_set, toFinset_coe, H] using! IsAtom.smul_finset n⁻¹ hN
 -/
 private lemma exists_subgroup_isAtom (hK : K < 1) (hS : S.Nonempty) :
     exists (H : Subgroup G) (_ : Fintype H), IsAtom K S (Set.toFinset H) := by
@@ -1804,7 +2386,61 @@ theorem card_mul_finset_lt_two
   let ex := expansion K S
   let κ := connectivity K S
   -- We will show that an atomic subgroup `H ≤ G` with respect to `K` and `S` and the right coset
-  -- representing finset of `S` acting on `H` are adequate choices for the 
+  -- representing finset of `S` acting on `H` are adequate choices for the theorem
+  obtain ⟨H, _, hH⟩ := exists_subgroup_isAtom hK hS
+  obtain ⟨Z, hZS, hHZS, hZinj⟩ := exists_subset_mul_eq_mul_injOn H S
+  -- We only use the existence of `A` given by assumption to get a good bound on `ex H` solely
+  -- in terms of `#S` and `ε`.
+  obtain ⟨A, hA₁, hA₂⟩ := hA
+  have calc₁ : ex (Set.toFinset H) <= (1 - ε / 2) * #S := by
+    calc
+          ex (Set.toFinset H)
+      _ = κ := hH.isFragment
+      _ <= #(A * S) - K * #A :=
+connectivity_le_expansion hK.le hS card_pos.mp hS.card_pos.trans_le hA₁
+      _ <= (2 - ε) * #S - (1 - ε / 2) * #S := by gcongr; linarith
+      _ = (1 - ε / 2) * #S := by linarith
+  refine ⟨H, inferInstance, Z, ?cardH, ?cardZ, by
+    simpa only [hHZS] using Set.subset_mul_right _ H.one_mem⟩
+  -- Bound on `#H` follows easily from the previous calculation.
+  case cardH =>
+    rw [← mul_le_mul_iff_right₀ (a := ε / 2) (by positivity)]
+    calc
+            ε / 2 * (Fintype.card H)
+        _ = ε / 2 * #(H : Set G).toFinset := by
+          simp only [Set.toFinset_card, SetLike.coe_sort_coe]
+        _ = (1 - K) * #(H : Set G).toFinset := by ring
+        _ <= ex (Set.toFinset H) := mul_card_le_expansion hS
+        _ <= (1 - ε / 2) * #S := calc₁
+        _ = ε / 2 * ((2 / ε - 1) * #S) := by field
+  -- To show the bound on `#Z`, we note that `#Z = #(HS) / #H` and show `#(HS) ≤ (2 / ε - 1) * #H`.
+  case cardZ =>
+    calc
+          (#Z : Real)
+      _ = #(H : Set G).toFinset * #Z / #(H : Set G).toFinset := by field
+      _ = #(Set.toFinset H * Z) / #(H : Set G).toFinset := by
+        simp [← card_mul_eq_mul_card_of_injOn_opSMul hZinj, Nat.cast_mul]
+      _ = #(Set.toFinset H * S) / #(H : Set G).toFinset := by
+        congr 3; simpa using congr(($hHZS).toFinset)
+      _ <= (2 / ε - 1) * #(H : Set G).toFinset / #(H : Set G).toFinset := ?_
+      _ = 2 / ε - 1 := by field
+    gcongr
+    -- Finally, to show `#(HS) ≤ (2 / ε - 1) * #H`, we multiply both sides by `1 - K = ε / 2` and
+    -- show `#(HS) = K * #H + ex H ≤ K * #H + (1 - ε / 2) * #S ≤ K * #H + (1 - ε / 2) * #(HS)`,
+    -- where we used `calc₁` again.
+    rw [← mul_le_mul_iff_right₀ (show 0 < 1 - K by linarith [hK])]
+    suffices (1 - K) * #(Set.toFinset H * S) <= (1 - ε / 2) * #(H : Set G).toFinset by
+      apply le_of_le_of_eq this; simp [K]; field
+    rw [sub_mul]; rw [one_mul]; rw [sub_le_iff_le_add]
+    calc
+          (#(Set.toFinset H * S) : Real)
+      _ = K * #(H : Set G).toFinset + (#(Set.toFinset H * S) - K * #(H : Set G).toFinset) := by ring
+      _ = K * #(H : Set G).toFinset + ex (Set.toFinset H) := rfl
+      _ <= K * #(H : Set G).toFinset + (1 - ε / 2) * #(Set.toFinset H * S) := by
+        grw [calc₁]
+        gcongr
+        · linarith
+        · simp only [Set.mem_toFinset, SetLike.mem_coe, H.one_mem, subset_mul_right]
 
 中文:
 定理 card_mul_finset_lt_two
@@ -1815,7 +2451,61 @@ theorem card_mul_finset_lt_two
   let ex := expansion K S
   let κ := connectivity K S
   -- We will show that an atomic subgroup `H ≤ G` with respect to `K` and `S` and the right coset
-  -- representing finset of `S` acting on `H` are adequate choices for the 
+  -- representing finset of `S` acting on `H` are adequate choices for the theorem
+  obtain ⟨H, _, hH⟩ := exists_subgroup_isAtom hK hS
+  obtain ⟨Z, hZS, hHZS, hZinj⟩ := exists_subset_mul_eq_mul_injOn H S
+  -- We only use the existence of `A` given by assumption to get a good bound on `ex H` solely
+  -- in terms of `#S` and `ε`.
+  obtain ⟨A, hA₁, hA₂⟩ := hA
+  have calc₁ : ex (Set.toFinset H) <= (1 - ε / 2) * #S := by
+    calc
+          ex (Set.toFinset H)
+      _ = κ := hH.isFragment
+      _ <= #(A * S) - K * #A :=
+connectivity_le_expansion hK.le hS card_pos.mp hS.card_pos.trans_le hA₁
+      _ <= (2 - ε) * #S - (1 - ε / 2) * #S := by gcongr; linarith
+      _ = (1 - ε / 2) * #S := by linarith
+  refine ⟨H, inferInstance, Z, ?cardH, ?cardZ, by
+    simpa only [hHZS] using Set.subset_mul_right _ H.one_mem⟩
+  -- Bound on `#H` follows easily from the previous calculation.
+  case cardH =>
+    rw [← mul_le_mul_iff_right₀ (a := ε / 2) (by positivity)]
+    calc
+            ε / 2 * (Fintype.card H)
+        _ = ε / 2 * #(H : Set G).toFinset := by
+          simp only [Set.toFinset_card, SetLike.coe_sort_coe]
+        _ = (1 - K) * #(H : Set G).toFinset := by ring
+        _ <= ex (Set.toFinset H) := mul_card_le_expansion hS
+        _ <= (1 - ε / 2) * #S := calc₁
+        _ = ε / 2 * ((2 / ε - 1) * #S) := by field
+  -- To show the bound on `#Z`, we note that `#Z = #(HS) / #H` and show `#(HS) ≤ (2 / ε - 1) * #H`.
+  case cardZ =>
+    calc
+          (#Z : Real)
+      _ = #(H : Set G).toFinset * #Z / #(H : Set G).toFinset := by field
+      _ = #(Set.toFinset H * Z) / #(H : Set G).toFinset := by
+        simp [← card_mul_eq_mul_card_of_injOn_opSMul hZinj, Nat.cast_mul]
+      _ = #(Set.toFinset H * S) / #(H : Set G).toFinset := by
+        congr 3; simpa using congr(($hHZS).toFinset)
+      _ <= (2 / ε - 1) * #(H : Set G).toFinset / #(H : Set G).toFinset := ?_
+      _ = 2 / ε - 1 := by field
+    gcongr
+    -- Finally, to show `#(HS) ≤ (2 / ε - 1) * #H`, we multiply both sides by `1 - K = ε / 2` and
+    -- show `#(HS) = K * #H + ex H ≤ K * #H + (1 - ε / 2) * #S ≤ K * #H + (1 - ε / 2) * #(HS)`,
+    -- where we used `calc₁` again.
+    rw [← mul_le_mul_iff_right₀ (show 0 < 1 - K by linarith [hK])]
+    suffices (1 - K) * #(Set.toFinset H * S) <= (1 - ε / 2) * #(H : Set G).toFinset by
+      apply le_of_le_of_eq this; simp [K]; field
+    rw [sub_mul]; rw [one_mul]; rw [sub_le_iff_le_add]
+    calc
+          (#(Set.toFinset H * S) : Real)
+      _ = K * #(H : Set G).toFinset + (#(Set.toFinset H * S) - K * #(H : Set G).toFinset) := by ring
+      _ = K * #(H : Set G).toFinset + ex (Set.toFinset H) := rfl
+      _ <= K * #(H : Set G).toFinset + (1 - ε / 2) * #(Set.toFinset H * S) := by
+        grw [calc₁]
+        gcongr
+        · linarith
+        · simp only [Set.mem_toFinset, SetLike.mem_coe, H.one_mem, subset_mul_right]
 
 Depends on / 依赖: connectivity, expansion
 -/

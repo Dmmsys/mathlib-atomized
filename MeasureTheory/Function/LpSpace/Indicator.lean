@@ -45,7 +45,20 @@ theorem exists_eLpNorm_indicator_le
   have hp₀ : 0 < p := bot_lt_iff_ne_bot.2 h'p
   have hp₀' : 0 <= 1 / p.toReal := div_nonneg zero_le_one ENNReal.toReal_nonneg
   have hp₀'' : 0 < p.toReal := ENNReal.toReal_pos hp₀.ne' hp
-  obtain ⟨η, hη_pos, hη_
+  obtain ⟨η, hη_pos, hη_le⟩ : exists η : Real>=0, 0 < η ∧ ‖c‖ₑ * (η : Real>=0∞) ^ (1 / p.toReal) <= ε := by
+    have :
+      Filter.Tendsto (fun x : Real>=0 => ((‖c‖₊ * x ^ (1 / p.toReal) : Real>=0) : Real>=0∞)) (𝓝 0)
+        (𝓝 (0 : Real>=0)) := by
+      rw [ENNReal.tendsto_coe]
+      convert! (NNReal.continuousAt_rpow_const (Or.inr hp₀')).tendsto.const_mul _
+      simp [hp₀''.ne']
+    have hε' : 0 < ε := hε.bot_lt
+    obtain ⟨δ, hδ, hδε'⟩ := NNReal.nhds_zero_basis.eventually_iff.mp (this.eventually_le_const hε')
+    obtain ⟨η, hη, hηδ⟩ := exists_between hδ
+    refine ⟨η, hη, ?_⟩
+    simpa only [← ENNReal.coe_rpow_of_nonneg _ hp₀', enorm, ← ENNReal.coe_mul] using hδε' hηδ
+  refine ⟨η, hη_pos, fun s hs => ?_⟩
+  grw [eLpNorm_indicator_const_le, ← hη_le, hs]
 
 中文:
 定理 存在_eLpNorm_indicator_le
@@ -56,7 +69,20 @@ theorem exists_eLpNorm_indicator_le
   have hp₀ : 0 < p := bot_lt_iff_ne_bot.2 h'p
   have hp₀' : 0 <= 1 / p.toReal := div_nonneg zero_le_one ENNReal.toReal_nonneg
   have hp₀'' : 0 < p.toReal := ENNReal.toReal_pos hp₀.ne' hp
-  obtain ⟨η, hη_pos, hη_
+  obtain ⟨η, hη_pos, hη_le⟩ : exists η : Real>=0, 0 < η ∧ ‖c‖ₑ * (η : Real>=0∞) ^ (1 / p.toReal) <= ε := by
+    have :
+      Filter.Tendsto (fun x : Real>=0 => ((‖c‖₊ * x ^ (1 / p.toReal) : Real>=0) : Real>=0∞)) (𝓝 0)
+        (𝓝 (0 : Real>=0)) := by
+      rw [ENNReal.tendsto_coe]
+      convert! (NNReal.continuousAt_rpow_const (Or.inr hp₀')).tendsto.const_mul _
+      simp [hp₀''.ne']
+    have hε' : 0 < ε := hε.bot_lt
+    obtain ⟨δ, hδ, hδε'⟩ := NNReal.nhds_zero_basis.eventually_iff.mp (this.eventually_le_const hε')
+    obtain ⟨η, hη, hηδ⟩ := exists_between hδ
+    refine ⟨η, hη, ?_⟩
+    simpa only [← ENNReal.coe_rpow_of_nonneg _ hp₀', enorm, ← ENNReal.coe_mul] using hδε' hηδ
+  refine ⟨η, hη_pos, fun s hs => ?_⟩
+  grw [eLpNorm_indicator_const_le, ← hη_le, hs]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, ENNReal.toReal_pos, Filter, Filter.Tendsto, Tendsto, bot_lt_iff_ne_bot, div_nonneg, eq_or_ne, p.toReal, toReal, toReal_nonneg, toReal_pos, zero_le_one, zero_lt_one
 -/
@@ -383,7 +409,7 @@ theorem norm_indicatorConstLp_le
   refine ENNReal.toReal_le_of_le_ofReal (by positivity) ?_
   refine (eLpNorm_indicator_const_le _ _).trans_eq ?_
   rw [ENNReal.ofReal_mul (norm_nonneg _)]; rw [ofReal_norm]; rw [measureReal_def]; rw [ENNReal.toReal_rpow]; rw [ENNReal.ofReal_toReal]
-  fin
+  finiteness
 
 中文:
 定理 norm_indicatorConstLp_le
@@ -392,7 +418,7 @@ theorem norm_indicatorConstLp_le
   refine ENNReal.toReal_le_of_le_ofReal (by positivity) ?_
   refine (eLpNorm_indicator_const_le _ _).trans_eq ?_
   rw [ENNReal.ofReal_mul (norm_nonneg _)]; rw [ofReal_norm]; rw [measureReal_def]; rw [ENNReal.toReal_rpow]; rw [ENNReal.ofReal_toReal]
-  fin
+  finiteness
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_mul, ENNReal.ofReal_toReal, ENNReal.toReal_le_of_le_ofReal, ENNReal.toReal_rpow, Lp.norm_toLp, eLpNorm_indicator_const_le, finiteness, indicatorConstLp, measureReal_def, norm_nonneg, norm_toLp, ofReal_mul, ofReal_norm, ofReal_toReal, toReal_le_of_le_ofReal, toReal_rpow, trans_eq
 -/
@@ -508,7 +534,8 @@ theorem tendsto_indicatorConstLp_set
   simp only [dist_indicatorConstLp_eq_norm, norm_indicatorConstLp hp₀ hp]
   convert!
     tendsto_const_nhds.mul (((ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp h).rpow_const _)
-  · simp [ENNReal.toReal_
+  · simp [ENNReal.toReal_eq_zero_iff, hp, hp₀]
+  · simp
 
 中文:
 定理 tendsto_indicatorConstLp_set
@@ -519,7 +546,8 @@ theorem tendsto_indicatorConstLp_set
   simp only [dist_indicatorConstLp_eq_norm, norm_indicatorConstLp hp₀ hp]
   convert!
     tendsto_const_nhds.mul (((ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp h).rpow_const _)
-  · simp [ENNReal.toReal_
+  · simp [ENNReal.toReal_eq_zero_iff, hp, hp₀]
+  · simp
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_toReal, ENNReal.toReal_eq_zero_iff, ENNReal.zero_ne_top, convert, dist_indicatorConstLp_eq_norm, norm_indicatorConstLp, one_pos, one_pos.trans_le, rpow_const, tendsto_const_nhds, tendsto_const_nhds.mul, tendsto_iff_dist_tendsto_zero, tendsto_toReal, toReal_eq_zero_iff, trans_le, zero_ne_top
 -/
@@ -950,7 +978,11 @@ theorem indicatorConstLp_eq_toSpanSingleton_compLp
     (ContinuousLinearMap.toSpanSingleton Real x).coeFn_compLp (indicatorConstLp 2 hs hμs (1 : Real))
   rw [← EventuallyEq] at h_compLp
   refine EventuallyEq.trans ?_ h_compLp.symm
-  refine (@indicatorConstLp_coeFn _ _ _ 2 μ _ s hs
+  refine (@indicatorConstLp_coeFn _ _ _ 2 μ _ s hs hμs (1 : Real)).mono fun y hy => ?_
+  dsimp only
+  rw [hy]
+  simp_rw [ContinuousLinearMap.toSpanSingleton_apply]
+  by_cases hy_mem : y in s <;> simp [hy_mem]
 
 中文:
 定理 indicatorConstLp_eq_toSpanSingleton_compLp
@@ -962,7 +994,11 @@ theorem indicatorConstLp_eq_toSpanSingleton_compLp
     (ContinuousLinearMap.toSpanSingleton Real x).coeFn_compLp (indicatorConstLp 2 hs hμs (1 : Real))
   rw [← EventuallyEq] at h_compLp
   refine EventuallyEq.trans ?_ h_compLp.symm
-  refine (@indicatorConstLp_coeFn _ _ _ 2 μ _ s hs
+  refine (@indicatorConstLp_coeFn _ _ _ 2 μ _ s hs hμs (1 : Real)).mono fun y hy => ?_
+  dsimp only
+  rw [hy]
+  simp_rw [ContinuousLinearMap.toSpanSingleton_apply]
+  by_cases hy_mem : y in s <;> simp [hy_mem]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.toSpanSingleton, ContinuousLinearMap.toSpanSingleton_apply, EventuallyEq, EventuallyEq.trans, coeFn_compLp, h_compLp, h_compLp.symm, hy_mem, indicatorConstLp, indicatorConstLp_coeFn, indicatorConstLp_coeFn.trans, simp_rw, toSpanSingleton, toSpanSingleton_apply
 -/

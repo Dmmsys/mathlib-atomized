@@ -40,7 +40,13 @@ theorem isReduced_localizationPreserves
   let hx' := congr_arg (· ^ n.succ) hx
   simp only [mul_pow, e, zero_mul, ← map_pow] at hx'
   rw [← (algebraMap R S).map_zero] at hx'
-  obtain
+  obtain ⟨m', hm'⟩ := (IsLocalization.eq_iff_exists M S).mp hx'
+  apply_fun (· * (m' : R) ^ n) at hm'
+  simp only [mul_assoc, zero_mul, mul_zero] at hm'
+  rw [← mul_left_comm]; rw [← pow_succ']; rw [← mul_pow] at hm'
+  replace hm' := IsNilpotent.eq_zero ⟨_, hm'.symm⟩
+  rw [← (IsLocalization.map_units S m).mul_left_inj]; rw [hx]; rw [zero_mul]; rw [IsLocalization.map_eq_zero_iff M]
+  exact ⟨m', by rw [← hm', mul_comm]⟩
 
 中文:
 定理 isReduced_localizationPreserves
@@ -55,7 +61,13 @@ theorem isReduced_localizationPreserves
   let hx' := congr_arg (· ^ n.succ) hx
   simp only [mul_pow, e, zero_mul, ← map_pow] at hx'
   rw [← (algebraMap R S).map_zero] at hx'
-  obtain
+  obtain ⟨m', hm'⟩ := (IsLocalization.eq_iff_exists M S).mp hx'
+  apply_fun (· * (m' : R) ^ n) at hm'
+  simp only [mul_assoc, zero_mul, mul_zero] at hm'
+  rw [← mul_left_comm]; rw [← pow_succ']; rw [← mul_pow] at hm'
+  replace hm' := IsNilpotent.eq_zero ⟨_, hm'.symm⟩
+  rw [← (IsLocalization.map_units S m).mul_left_inj]; rw [hx]; rw [zero_mul]; rw [IsLocalization.map_eq_zero_iff M]
+  exact ⟨m', by rw [← hm', mul_comm]⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.surj, algebraMap, apply_fun, congr_arg, eq_iff_exists, introv, map_pow, map_zero, mul_assoc, mul_left_comm, mul_pow, mul_zero, n.succ, pow_succ, replace, zero_mul
 -/

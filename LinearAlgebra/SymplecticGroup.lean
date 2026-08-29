@@ -481,7 +481,13 @@ theorem transpose_mem
       rw [J_inv]
       simp
     _ = (-Aᵀ) * (A * J l R * Aᵀ)⁻¹ * A := by rw [hA]
+    _ = -(Aᵀ * (Aᵀ⁻¹ * (J l R)⁻¹)) * A⁻¹ * A := by
+      simp only [Matrix.mul_inv_rev, Matrix.mul_assoc, Matrix.neg_mul]
+    _ = -(J l R)⁻¹ := by
+      rw [mul_nonsing_inv_cancel_left _ _ huAT]; rw [nonsing_inv_mul_cancel_right _ _ huA]
+    _ = J l R := by simp [J_inv]
 
+@[simp]
 
 中文:
 定理 transpose_mem
@@ -499,7 +505,13 @@ theorem transpose_mem
       rw [J_inv]
       simp
     _ = (-Aᵀ) * (A * J l R * Aᵀ)⁻¹ * A := by rw [hA]
+    _ = -(Aᵀ * (Aᵀ⁻¹ * (J l R)⁻¹)) * A⁻¹ * A := by
+      simp only [Matrix.mul_inv_rev, Matrix.mul_assoc, Matrix.neg_mul]
+    _ = -(J l R)⁻¹ := by
+      rw [mul_nonsing_inv_cancel_left _ _ huAT]; rw [nonsing_inv_mul_cancel_right _ _ huA]
+    _ = J l R := by simp [J_inv]
 
+@[simp]
 
 Depends on / 依赖: IsUnit, J_inv, Matrix, Matrix.det_transpose, Matrix.mul_assoc, Matrix.mul_inv_rev, Matrix.neg_mul, det_transpose, mem_iff, mul_assoc, mul_inv_rev, mul_nonsing_inv_cancel_left, neg_mul, nonsing_inv_mul_cancel_right, symplectic_det, transpose_transpose
 -/
@@ -612,7 +624,8 @@ theorem inv_left_mul_aux
       rw [mem_iff'] at hA
       rw [hA]
     _ = (-1 : R) • (J l R * J l R) := by simp only [Matrix.neg_mul, neg_smul, one_smul]
-    _ = (-1 : R) • 
+    _ = (-1 : R) • (-1 : Matrix _ _ _) := by rw [J_squared]
+    _ = 1 := by simp only [neg_smul_neg, one_smul]
 
 中文:
 定理 inv_left_mul_aux
@@ -625,7 +638,8 @@ theorem inv_left_mul_aux
       rw [mem_iff'] at hA
       rw [hA]
     _ = (-1 : R) • (J l R * J l R) := by simp only [Matrix.neg_mul, neg_smul, one_smul]
-    _ = (-1 : R) • 
+    _ = (-1 : R) • (-1 : Matrix _ _ _) := by rw [J_squared]
+    _ = 1 := by simp only [neg_smul_neg, one_smul]
 
 Depends on / 依赖: J_squared, Matrix, Matrix.mul_assoc, Matrix.neg_mul, mem_iff, mul_assoc, neg_mul, neg_smul, neg_smul_neg, one_smul
 -/
@@ -729,7 +743,11 @@ theorem fromBlocks_mem_iff
         (Dᵀ * A - Bᵀ * C) (Dᵀ * B - Bᵀ * D) = J l R := by
       simpa [mem_iff, fromBlocks_transpose, J, fromBlocks_multiply,
         sub_eq_add_neg] using transpose_mem h
-    obtain ⟨
+    obtain ⟨h_eq1, h_eq2, _, h_eq3⟩ := fromBlocks_inj.1 h_final
+    exact ⟨(sub_eq_zero.1 h_eq1).symm, (sub_eq_zero.1 h_eq3).symm, by grind⟩
+  · simp only [fromBlocks_transpose, J, fromBlocks_multiply, mul_zero, mul_one, zero_add, mul_neg,
+      add_zero, neg_mul, ← sub_eq_add_neg, fromBlocks_inj, sub_eq_zero]
+    exact ⟨h.1.symm, by grind, by simpa using congr(transpose $(h.2.2)), h.2.1.symm⟩
 
 中文:
 定理 fromBlocks_mem_iff
@@ -739,7 +757,11 @@ theorem fromBlocks_mem_iff
         (Dᵀ * A - Bᵀ * C) (Dᵀ * B - Bᵀ * D) = J l R := by
       simpa [mem_iff, fromBlocks_transpose, J, fromBlocks_multiply,
         sub_eq_add_neg] using transpose_mem h
-    obtain ⟨
+    obtain ⟨h_eq1, h_eq2, _, h_eq3⟩ := fromBlocks_inj.1 h_final
+    exact ⟨(sub_eq_zero.1 h_eq1).symm, (sub_eq_zero.1 h_eq3).symm, by grind⟩
+  · simp only [fromBlocks_transpose, J, fromBlocks_multiply, mul_zero, mul_one, zero_add, mul_neg,
+      add_zero, neg_mul, ← sub_eq_add_neg, fromBlocks_inj, sub_eq_zero]
+    exact ⟨h.1.symm, by grind, by simpa using congr(transpose $(h.2.2)), h.2.1.symm⟩
 
 Depends on / 依赖: add_zero, fromBlocks, fromBlocks_inj, fromBlocks_multiply, fromBlocks_transpose, h_eq1, h_eq2, h_eq3, h_final, mem_iff, mul_neg, mul_one, mul_zero, sub_eq_add_neg, sub_eq_zero, transpose_mem, zero_add
 -/
@@ -793,7 +815,58 @@ lemma exists_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot
   rcases exists_rank_normal_form C with ⟨V, U, s, hV, hU, heq⟩
   set P := V * C * U with P_def; set Q := Vᵀ⁻¹ * A * U with Q_def
   set f := fun (x : Matrix l l R) => x.submatrix s.symm s.symm
-  have hf (x) :
+  have hf (x) : f x = x.submatrix s.symm s.symm := rfl
+  have f_unit {x} : IsUnit x -> IsUnit (f x) := (isUnit_submatrix_equiv ..).2
+  have f_mul (x y) : f (x * y) = f x * f y := submatrix_mul _ _ _ _ _ s.symm.bijective
+  have _ : Invertible V := hV.invertible
+  have _ : Invertible U := hU.invertible
+  have _ : Invertible (f Vᵀ) := (f_unit (V.isUnit_transpose.2 hV)).invertible
+  -- The hypothesis that the only vector annihilated by both matrices is 0, holds for `P` and `Q`.
+  have con1 (x : Fin C.rank oplus Fin (Fintype.card l - C.rank) -> R)
+      (heq1 : (f Q) • x = 0) (heq2 : (f P) • x = 0) : x = 0 := by
+    refine (f_unit hU).smul_left_cancel.1 ?_
+    rw [f_mul]; rw [f_mul]; rw [mul_assoc]; rw [mul_smul]; rw [IsUnit.smul_eq_zero]; rw [mul_smul]; rw [hf]; rw [smul_eq_mulVec]; rw [submatrix_mulVec_equiv]; rw [Equiv.symm_symm] at heq1 heq2
+    · rw [Equiv.comp_symm_eq, Pi.zero_comp] at heq1 heq2
+exact s.surjective.injective_comp_right by simpa using hker _ heq1 heq2
+    · exact f_unit hV
+· exact f_unit isUnit_nonsing_inv_iff.2 V.isUnit_transpose.2 hV
+  -- The symmetry relation also holds for `P` and `Q`.
+  have con2 : Qᵀ * P = Pᵀ * Q := by
+    simp only [P_def, mul_assoc, transpose_mul, transpose_nonsing_inv, transpose_transpose, Q_def,
+      inv_mul_cancel_left_of_invertible, mul_inv_cancel_left_of_invertible]
+    rw [← mul_assoc Aᵀ]; rw [hsymm]; rw [mul_assoc]
+  replace con2 : (f Q).toBlocks₁₁ᵀ = (f Q).toBlocks₁₁ ∧ (f Q).toBlocks₁₂ = 0 := by
+    apply_fun reindex s s at con2
+    rw [reindex_apply]; rw [reindex_apply]; rw [← hf]; rw [← hf]; rw [f_mul]; rw [f_mul Pᵀ]; rw [heq]; rw [hf]; rw [← transpose_submatrix]; rw [← hf Q]; rw [← (f Q).fromBlocks_toBlocks]; rw [hf (_)ᵀ]; rw [hf
+      ((fromBlocks 1 0 0 0).submatrix _ _)] at con2
+    simp [fromBlocks_transpose, fromBlocks_multiply] at con2; tauto
+  -- The lower-right block of `Q` is invertible.
+  have con3 : IsUnit (f Q).toBlocks₂₂ := by
+    refine mulVec_injective_iff_isUnit.1 ?_
+    rw [← coe_mulVecLin]; rw [← LinearMap.ker_eq_bot]
+refine ker_mulVecLin_eq_bot_iff.2 fun x hx => Sum.elim_injective'
+      (con1 _ ?_ ?_).trans Sum.elim_zero_zero.symm
+    · rw [← (f Q).fromBlocks_toBlocks]; simp [hx, con2.2, fromBlocks_mulVec]
+    · simp [hf, heq, fromBlocks_mulVec]
+  set Y : Matrix (Fin C.rank oplus Fin (Fintype.card l - C.rank)) (Fin C.rank oplus
+    Fin (Fintype.card l - C.rank)) R := fromBlocks (1 - (f Q).toBlocks₁₁) 0 0 0 with Y_def
+  have hY_symm : Y.IsSymm := by
+    rw [Y_def]; rw [isSymm_fromBlocks_iff]
+    exact ⟨IsSymm.sub isSymm_one con2.1, by simp⟩
+  -- We now take `X = Vᵀ * Y * V` and this gives the desired matrix `X.submatrix s s`.
+  set X := (f Vᵀ) * Y * (f V) with X_def
+  refine ⟨X.submatrix s s, IsSymm.submatrix ?_ s, (isUnit_submatrix_equiv s.symm s.symm).1 ?_⟩
+  · simp_rw [X_def, Matrix.IsSymm, transpose_mul, hY_symm.eq, hf, transpose_submatrix,
+      transpose_transpose, mul_assoc]
+  · have heq' : f (A + X.submatrix s s * C) = (f Vᵀ) * (f Q + Y * (f P)) * f (U⁻¹) := by
+      simp_rw [hf, submatrix_add, Pi.add_apply, Q_def, P_def, ← hf, f_mul, hf, mul_add, ← mul_assoc,
+        ← inv_submatrix_equiv, add_mul, mul_assoc _ (U.submatrix _ _), mul_inv_of_invertible]
+      simp [X_def]; rfl
+    rw [← hf]; rw [heq']; rw [IsUnit.mul_iff]; rw [IsUnit.mul_iff]
+    refine ⟨⟨isUnit_of_invertible _, ?_⟩, ?_⟩
+    · nth_rw 1 [Y_def, heq, ← (f Q).fromBlocks_toBlocks, con2.2]
+      simpa [hf, fromBlocks_multiply, fromBlocks_add]
+· exact f_unit isUnit_nonsing_inv_iff.2 hU
 
 中文:
 引理 存在_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot
@@ -803,7 +876,58 @@ lemma exists_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot
   rcases exists_rank_normal_form C with ⟨V, U, s, hV, hU, heq⟩
   set P := V * C * U with P_def; set Q := Vᵀ⁻¹ * A * U with Q_def
   set f := fun (x : Matrix l l R) => x.submatrix s.symm s.symm
-  have hf (x) :
+  have hf (x) : f x = x.submatrix s.symm s.symm := rfl
+  have f_unit {x} : IsUnit x -> IsUnit (f x) := (isUnit_submatrix_equiv ..).2
+  have f_mul (x y) : f (x * y) = f x * f y := submatrix_mul _ _ _ _ _ s.symm.bijective
+  have _ : Invertible V := hV.invertible
+  have _ : Invertible U := hU.invertible
+  have _ : Invertible (f Vᵀ) := (f_unit (V.isUnit_transpose.2 hV)).invertible
+  -- The hypothesis that the only vector annihilated by both matrices is 0, holds for `P` and `Q`.
+  have con1 (x : Fin C.rank oplus Fin (Fintype.card l - C.rank) -> R)
+      (heq1 : (f Q) • x = 0) (heq2 : (f P) • x = 0) : x = 0 := by
+    refine (f_unit hU).smul_left_cancel.1 ?_
+    rw [f_mul]; rw [f_mul]; rw [mul_assoc]; rw [mul_smul]; rw [IsUnit.smul_eq_zero]; rw [mul_smul]; rw [hf]; rw [smul_eq_mulVec]; rw [submatrix_mulVec_equiv]; rw [Equiv.symm_symm] at heq1 heq2
+    · rw [Equiv.comp_symm_eq, Pi.zero_comp] at heq1 heq2
+exact s.surjective.injective_comp_right by simpa using hker _ heq1 heq2
+    · exact f_unit hV
+· exact f_unit isUnit_nonsing_inv_iff.2 V.isUnit_transpose.2 hV
+  -- The symmetry relation also holds for `P` and `Q`.
+  have con2 : Qᵀ * P = Pᵀ * Q := by
+    simp only [P_def, mul_assoc, transpose_mul, transpose_nonsing_inv, transpose_transpose, Q_def,
+      inv_mul_cancel_left_of_invertible, mul_inv_cancel_left_of_invertible]
+    rw [← mul_assoc Aᵀ]; rw [hsymm]; rw [mul_assoc]
+  replace con2 : (f Q).toBlocks₁₁ᵀ = (f Q).toBlocks₁₁ ∧ (f Q).toBlocks₁₂ = 0 := by
+    apply_fun reindex s s at con2
+    rw [reindex_apply]; rw [reindex_apply]; rw [← hf]; rw [← hf]; rw [f_mul]; rw [f_mul Pᵀ]; rw [heq]; rw [hf]; rw [← transpose_submatrix]; rw [← hf Q]; rw [← (f Q).fromBlocks_toBlocks]; rw [hf (_)ᵀ]; rw [hf
+      ((fromBlocks 1 0 0 0).submatrix _ _)] at con2
+    simp [fromBlocks_transpose, fromBlocks_multiply] at con2; tauto
+  -- The lower-right block of `Q` is invertible.
+  have con3 : IsUnit (f Q).toBlocks₂₂ := by
+    refine mulVec_injective_iff_isUnit.1 ?_
+    rw [← coe_mulVecLin]; rw [← LinearMap.ker_eq_bot]
+refine ker_mulVecLin_eq_bot_iff.2 fun x hx => Sum.elim_injective'
+      (con1 _ ?_ ?_).trans Sum.elim_zero_zero.symm
+    · rw [← (f Q).fromBlocks_toBlocks]; simp [hx, con2.2, fromBlocks_mulVec]
+    · simp [hf, heq, fromBlocks_mulVec]
+  set Y : Matrix (Fin C.rank oplus Fin (Fintype.card l - C.rank)) (Fin C.rank oplus
+    Fin (Fintype.card l - C.rank)) R := fromBlocks (1 - (f Q).toBlocks₁₁) 0 0 0 with Y_def
+  have hY_symm : Y.IsSymm := by
+    rw [Y_def]; rw [isSymm_fromBlocks_iff]
+    exact ⟨IsSymm.sub isSymm_one con2.1, by simp⟩
+  -- We now take `X = Vᵀ * Y * V` and this gives the desired matrix `X.submatrix s s`.
+  set X := (f Vᵀ) * Y * (f V) with X_def
+  refine ⟨X.submatrix s s, IsSymm.submatrix ?_ s, (isUnit_submatrix_equiv s.symm s.symm).1 ?_⟩
+  · simp_rw [X_def, Matrix.IsSymm, transpose_mul, hY_symm.eq, hf, transpose_submatrix,
+      transpose_transpose, mul_assoc]
+  · have heq' : f (A + X.submatrix s s * C) = (f Vᵀ) * (f Q + Y * (f P)) * f (U⁻¹) := by
+      simp_rw [hf, submatrix_add, Pi.add_apply, Q_def, P_def, ← hf, f_mul, hf, mul_add, ← mul_assoc,
+        ← inv_submatrix_equiv, add_mul, mul_assoc _ (U.submatrix _ _), mul_inv_of_invertible]
+      simp [X_def]; rfl
+    rw [← hf]; rw [heq']; rw [IsUnit.mul_iff]; rw [IsUnit.mul_iff]
+    refine ⟨⟨isUnit_of_invertible _, ?_⟩, ?_⟩
+    · nth_rw 1 [Y_def, heq, ← (f Q).fromBlocks_toBlocks, con2.2]
+      simpa [hf, fromBlocks_multiply, fromBlocks_add]
+· exact f_unit isUnit_nonsing_inv_iff.2 hU
 -/
 private lemma exists_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot {R : Type*} [Field R]
     {A C : Matrix l l R} (hker : forall (x : l -> R), (A • x = 0) -> (C • x = 0) -> x = 0)
@@ -877,7 +1001,28 @@ lemma exists_symmetric_X_isUnit_det_add_mul_of_symplectic
   set k := IsLocalRing.ResidueField R; set f := IsLocalRing.residue R
   set A' := f.mapMatrix A; set C' := f.mapMatrix C
   set F' := fromBlocks A' (f.mapMatrix B) C' (f.mapMatrix D) with F'_def
-  have 
+  have hF' : IsUnit F' := by
+    refine F'.isUnit_iff_isUnit_det.2 ?_
+    convert (symplectic_det hA).map f
+    rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [Matrix.fromBlocks_map]; rfl
+  have hker (x : l -> k) (hx1 : A' *ᵥ x = 0) (hx2 : C' *ᵥ x = 0) : x = 0 := by
+    have hv0 : F' *ᵥ (Sum.elim x 0) = F' *ᵥ (Sum.elim 0 0) := by
+      simp [fromBlocks_mulVec, hx1, hx2, F'_def]
+    exact (Sum.elim_eq_iff.1 (mulVec_injective_iff_isUnit.2 hF' hv0)).1
+  -- Now we have a symmetric matrix `Y` over the residue field s.t. `A' + Y * C'` is invertible
+  -- where `A'` and `C'` are images of `A` and `C` under quotient map from `R` to its residue field.
+  obtain ⟨Y, hY_symm, hY_det⟩ :=
+exists_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot hker by
+      change f.mapMatrix Aᵀ * f.mapMatrix C = f.mapMatrix Cᵀ * f.mapMatrix A
+      rw [← map_mul]; rw [(fromBlocks_mem_iff.1 hA).1]; rw [map_mul]
+  -- Lift `Y` back to the ring `R` and we have the `X` we need.
+  obtain ⟨X, hX_symm, hXY⟩ : exists X : Matrix l l R, X.IsSymm ∧ X.map f = Y := by
+    choose s hs using @IsLocalRing.residue_surjective R _ _
+    exact ⟨Y.map s, hY_symm.map s, Matrix.ext fun i j => hs (Y i j)⟩
+  refine ⟨X, hX_symm, (IsLocalRing.residue_ne_zero_iff_isUnit _).1 ?_⟩
+  -- Ensure `A + X * C` is still invertible in `R`.
+  rw [RingHom.map_det]; rw [map_add]; rw [map_mul]; rw [RingHom.mapMatrix_apply _ X]; rw [hXY]
+  exact ((isUnit_iff_isUnit_det _).1 hY_det).ne_zero
 
 中文:
 引理 存在_symmetric_X_isUnit_det_add_mul_of_symplectic
@@ -887,7 +1032,28 @@ lemma exists_symmetric_X_isUnit_det_add_mul_of_symplectic
   set k := IsLocalRing.ResidueField R; set f := IsLocalRing.residue R
   set A' := f.mapMatrix A; set C' := f.mapMatrix C
   set F' := fromBlocks A' (f.mapMatrix B) C' (f.mapMatrix D) with F'_def
-  have 
+  have hF' : IsUnit F' := by
+    refine F'.isUnit_iff_isUnit_det.2 ?_
+    convert (symplectic_det hA).map f
+    rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [Matrix.fromBlocks_map]; rfl
+  have hker (x : l -> k) (hx1 : A' *ᵥ x = 0) (hx2 : C' *ᵥ x = 0) : x = 0 := by
+    have hv0 : F' *ᵥ (Sum.elim x 0) = F' *ᵥ (Sum.elim 0 0) := by
+      simp [fromBlocks_mulVec, hx1, hx2, F'_def]
+    exact (Sum.elim_eq_iff.1 (mulVec_injective_iff_isUnit.2 hF' hv0)).1
+  -- Now we have a symmetric matrix `Y` over the residue field s.t. `A' + Y * C'` is invertible
+  -- where `A'` and `C'` are images of `A` and `C` under quotient map from `R` to its residue field.
+  obtain ⟨Y, hY_symm, hY_det⟩ :=
+exists_symmetric_X_invertible_add_mul_of_ker_inter_eq_bot hker by
+      change f.mapMatrix Aᵀ * f.mapMatrix C = f.mapMatrix Cᵀ * f.mapMatrix A
+      rw [← map_mul]; rw [(fromBlocks_mem_iff.1 hA).1]; rw [map_mul]
+  -- Lift `Y` back to the ring `R` and we have the `X` we need.
+  obtain ⟨X, hX_symm, hXY⟩ : exists X : Matrix l l R, X.IsSymm ∧ X.map f = Y := by
+    choose s hs using @IsLocalRing.residue_surjective R _ _
+    exact ⟨Y.map s, hY_symm.map s, Matrix.ext fun i j => hs (Y i j)⟩
+  refine ⟨X, hX_symm, (IsLocalRing.residue_ne_zero_iff_isUnit _).1 ?_⟩
+  -- Ensure `A + X * C` is still invertible in `R`.
+  rw [RingHom.map_det]; rw [map_add]; rw [map_mul]; rw [RingHom.mapMatrix_apply _ X]; rw [hXY]
+  exact ((isUnit_iff_isUnit_det _).1 hY_det).ne_zero
 
 Depends on / 依赖: ENNReal, ENNReal.Tendsto.const_mul, ENNReal.coe_zero, ENNReal.tendsto_coe, NNReal, NNReal.coe_zero, NNReal.tendsto_coe, Tendsto, coe_nnnorm, coe_zero, const_mul, enorm_integral_le_lintegral_enorm, enorm_integral_le_lintegral_enorm.trans, mul_zero, ne_of_lt, simp_rw, tendsto_coe, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_setLIntegral_zero
 -/
@@ -932,7 +1098,20 @@ lemma det_eq_one_of_isLocalRing
   set C := M.toBlocks₂₁; set D := M.toBlocks₂₂
 obtain ⟨X, hX_symm, hA_isUnit⟩ := exists_symmetric_X_isUnit_det_add_mul_of_symplectic
     M.fromBlocks_toBlocks ▸ hM
-  -- `fromBlocks 1 X 0 1` turns the upper-left block of `M` into an invertible matrix,
+  -- `fromBlocks 1 X 0 1` turns the upper-left block of `M` into an invertible matrix, here `X`
+  -- is obtained via previous result.
+  have Lx_mul : (fromBlocks 1 X 0 1) * M = fromBlocks (A + X * C) (B + X * D) C D := by
+    rw [← M.fromBlocks_toBlocks]; rw [fromBlocks_multiply]
+    simp only [one_mul, zero_mul, zero_add]; rfl
+  have h_fromBlocks_in : fromBlocks (A + X * C) (B + X * D) C D in symplecticGroup l R := by
+    rw [← Lx_mul]
+    refine (symplecticGroup l R).mul_mem ?_ hM
+    simp [mem_iff, fromBlocks_transpose, hX_symm.eq, J, fromBlocks_multiply]
+  have _ : Invertible (A + X * C) := (A + X * C).invertibleOfIsUnitDet hA_isUnit
+  -- And we know that a symmetric matrix with invertible upper-left block has determinant 1.
+  have h_main : ((fromBlocks 1 X 0 1) * M).det = 1 := by
+    rw [Lx_mul]; rw [det_one_if_fromBlocks_invertible h_fromBlocks_in]
+  rwa [det_mul, det_fromBlocks_zero₂₁, det_one, one_mul, one_mul] at h_main
 
 中文:
 引理 det_eq_one_of_isLocalRing
@@ -942,7 +1121,20 @@ obtain ⟨X, hX_symm, hA_isUnit⟩ := exists_symmetric_X_isUnit_det_add_mul_of_s
   set C := M.toBlocks₂₁; set D := M.toBlocks₂₂
 obtain ⟨X, hX_symm, hA_isUnit⟩ := exists_symmetric_X_isUnit_det_add_mul_of_symplectic
     M.fromBlocks_toBlocks ▸ hM
-  -- `fromBlocks 1 X 0 1` turns the upper-left block of `M` into an invertible matrix,
+  -- `fromBlocks 1 X 0 1` turns the upper-left block of `M` into an invertible matrix, here `X`
+  -- is obtained via previous result.
+  have Lx_mul : (fromBlocks 1 X 0 1) * M = fromBlocks (A + X * C) (B + X * D) C D := by
+    rw [← M.fromBlocks_toBlocks]; rw [fromBlocks_multiply]
+    simp only [one_mul, zero_mul, zero_add]; rfl
+  have h_fromBlocks_in : fromBlocks (A + X * C) (B + X * D) C D in symplecticGroup l R := by
+    rw [← Lx_mul]
+    refine (symplecticGroup l R).mul_mem ?_ hM
+    simp [mem_iff, fromBlocks_transpose, hX_symm.eq, J, fromBlocks_multiply]
+  have _ : Invertible (A + X * C) := (A + X * C).invertibleOfIsUnitDet hA_isUnit
+  -- And we know that a symmetric matrix with invertible upper-left block has determinant 1.
+  have h_main : ((fromBlocks 1 X 0 1) * M).det = 1 := by
+    rw [Lx_mul]; rw [det_one_if_fromBlocks_invertible h_fromBlocks_in]
+  rwa [det_mul, det_fromBlocks_zero₂₁, det_one, one_mul, one_mul] at h_main
 -/
 private lemma det_eq_one_of_isLocalRing [IsLocalRing R] {M : Matrix (l oplus l) (l oplus l) R}
     (hM : M in symplecticGroup l R) : M.det = 1 := by

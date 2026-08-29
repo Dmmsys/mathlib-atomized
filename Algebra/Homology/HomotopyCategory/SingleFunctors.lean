@@ -50,7 +50,22 @@ definition singleFunctors
         by_cases h : i = a
         · subst h
           simp only [Functor.comp_obj, shiftFunctor_obj_X', single_obj_X_self]
-        · dsim
+        · dsimp [single]
+          rw [if_neg h]; rw [if_neg (fun h' => h (by lia))])))
+    (fun {X Y} f => by
+      obtain rfl : a' = a + n := by lia
+      ext
+      simp [single])
+  shiftIso_zero a := by
+    ext
+    dsimp
+    simp only [single, shiftFunctorZero_eq, shiftFunctorZero'_hom_app_f,
+      XIsoOfEq, eqToIso.hom]
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext
+    dsimp
+    simp only [shiftFunctorAdd_eq, shiftFunctorAdd'_hom_app_f, XIsoOfEq,
+      eqToIso.hom, eqToHom_trans, id_comp]
 
 中文:
 定义 singleFunctors
@@ -63,7 +78,22 @@ definition singleFunctors
         by_cases h : i = a
         · subst h
           simp only [Functor.comp_obj, shiftFunctor_obj_X', single_obj_X_self]
-        · dsim
+        · dsimp [single]
+          rw [if_neg h]; rw [if_neg (fun h' => h (by lia))])))
+    (fun {X Y} f => by
+      obtain rfl : a' = a + n := by lia
+      ext
+      simp [single])
+  shiftIso_zero a := by
+    ext
+    dsimp
+    simp only [single, shiftFunctorZero_eq, shiftFunctorZero'_hom_app_f,
+      XIsoOfEq, eqToIso.hom]
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext
+    dsimp
+    simp only [shiftFunctorAdd_eq, shiftFunctorAdd'_hom_app_f, XIsoOfEq,
+      eqToIso.hom, eqToHom_trans, id_comp]
 
 Depends on / 依赖: single
 -/

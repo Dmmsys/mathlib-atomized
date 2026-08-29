@@ -386,7 +386,8 @@ definition Cofan.IsColimit.op
     (Discrete.functor Z).op := Discrete.natIso (fun _ => Iso.refl _)
   refine IsLimit.ofIsoLimit ((IsLimit.postcomposeInvEquiv e _).2
     (IsLimit.whiskerEquivalence hc.op (Discrete.opposite α).symm))
-    (Cone.ext 
+    (Cone.ext (Iso.refl _) (fun ⟨a⟩ => ?_))
+  simp [e, Cofan.inj]
 
 中文:
 定义 Cofan.是余极限.op
@@ -396,7 +397,8 @@ definition Cofan.IsColimit.op
     (Discrete.functor Z).op := Discrete.natIso (fun _ => Iso.refl _)
   refine IsLimit.ofIsoLimit ((IsLimit.postcomposeInvEquiv e _).2
     (IsLimit.whiskerEquivalence hc.op (Discrete.opposite α).symm))
-    (Cone.ext 
+    (Cone.ext (Iso.refl _) (fun ⟨a⟩ => ?_))
+  simp [e, Cofan.inj]
 
 Depends on / 依赖: Cofan.inj, Cone.ext, Discrete, Discrete.functor, Discrete.natIso, Discrete.opposite, IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeInvEquiv, IsLimit.whiskerEquivalence, Iso.refl, Opposite, Opposite.op, functor, hc.op, inverse, natIso, ofIsoLimit, opposite, postcomposeInvEquiv
 -/
@@ -528,7 +530,11 @@ theorem opCoproductIsoProduct'_comp_self
   simp only [unop_op, unop_comp, Discrete.functor_obj, Iso.op_inv,
     Quiver.Hom.unop_op, IsColimit.comp_coconePointUniqueUpToIso_inv]
   apply Quiver.Hom.op_inj
-  simp only [op_comp, op_unop, Quiver.Hom.op_unop
+  simp only [op_comp, op_unop, Quiver.Hom.op_unop, Category.assoc,
+    opCoproductIsoProduct'_inv_comp_inj]
+  rw [← opCoproductIsoProduct'_inv_comp_inj hc hf]
+  simp only [Iso.hom_inv_id_assoc]
+  rfl
 
 中文:
 定理 opCoproductIsoProduct'_comp_self
@@ -541,7 +547,11 @@ theorem opCoproductIsoProduct'_comp_self
   simp only [unop_op, unop_comp, Discrete.functor_obj, Iso.op_inv,
     Quiver.Hom.unop_op, IsColimit.comp_coconePointUniqueUpToIso_inv]
   apply Quiver.Hom.op_inj
-  simp only [op_comp, op_unop, Quiver.Hom.op_unop
+  simp only [op_comp, op_unop, Quiver.Hom.op_unop, Category.assoc,
+    opCoproductIsoProduct'_inv_comp_inj]
+  rw [← opCoproductIsoProduct'_inv_comp_inj hc hf]
+  simp only [Iso.hom_inv_id_assoc]
+  rfl
 -/
 theorem opCoproductIsoProduct'_comp_self {c c' : Cofan Z} {f : Fan (op <| Z ·)}
     (hc : IsColimit c) (hc' : IsColimit c') (hf : IsLimit f) :
@@ -591,7 +601,8 @@ theorem desc_op_comp_opCoproductIsoProduct'_hom
   refine (Iso.eq_comp_inv _).mp (Quiver.Hom.unop_inj (hc.hom_ext (fun ⟨j⟩ => Quiver.Hom.op_inj ?_)))
   simp only [unop_op, Discrete.functor_obj, Quiver.Hom.unop_op, IsColimit.fac,
     Cofan.op, unop_comp, op_comp, op_unop, Quiver.Hom.op_unop, Category.assoc]
-  erw [opCoproductIsoProduct'_inv_comp
+  erw [opCoproductIsoProduct'_inv_comp_inj, IsLimit.fac]
+  rfl
 
 中文:
 定理 desc_op_comp_opCoproductIsoProduct'_hom
@@ -600,7 +611,8 @@ theorem desc_op_comp_opCoproductIsoProduct'_hom
   refine (Iso.eq_comp_inv _).mp (Quiver.Hom.unop_inj (hc.hom_ext (fun ⟨j⟩ => Quiver.Hom.op_inj ?_)))
   simp only [unop_op, Discrete.functor_obj, Quiver.Hom.unop_op, IsColimit.fac,
     Cofan.op, unop_comp, op_comp, op_unop, Quiver.Hom.op_unop, Category.assoc]
-  erw [opCoproductIsoProduct'_inv_comp
+  erw [opCoproductIsoProduct'_inv_comp_inj, IsLimit.fac]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, Cofan.op, Discrete, Discrete.functor_obj, IsColimit, IsColimit.fac, IsLimit, IsLimit.fac, Iso.eq_comp_inv, Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, _inv_comp_inj, eq_comp_inv, functor_obj, hc.hom_ext, hom_ext
 -/
@@ -751,7 +763,8 @@ definition Fan.IsLimit.op
     (Discrete.functor Z).op := Discrete.natIso (fun _ => Iso.refl _)
   refine IsColimit.ofIsoColimit ((IsColimit.precomposeHomEquiv e _).2
     (IsColimit.whiskerEquivalence hf.op (Discrete.opposite α).symm))
-    (Co
+    (Cocone.ext (Iso.refl _) (fun ⟨a⟩ => ?_))
+  simp [e, Fan.proj]
 
 中文:
 定义 Fan.是极限.op
@@ -761,7 +774,8 @@ definition Fan.IsLimit.op
     (Discrete.functor Z).op := Discrete.natIso (fun _ => Iso.refl _)
   refine IsColimit.ofIsoColimit ((IsColimit.precomposeHomEquiv e _).2
     (IsColimit.whiskerEquivalence hf.op (Discrete.opposite α).symm))
-    (Co
+    (Cocone.ext (Iso.refl _) (fun ⟨a⟩ => ?_))
+  simp [e, Fan.proj]
 
 Depends on / 依赖: Cocone, Cocone.ext, Discrete, Discrete.functor, Discrete.natIso, Discrete.opposite, Fan.proj, IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeHomEquiv, IsColimit.whiskerEquivalence, Iso.refl, Opposite, Opposite.op, functor, hf.op, inverse, natIso, ofIsoColimit, opposite
 -/
@@ -849,7 +863,10 @@ theorem opProductIsoCoproduct'_comp_self
   simp only [unop_op, unop_comp, Category.assoc, Discrete.functor_obj, Iso.op_inv,
     Quiver.Hom.unop_op, IsLimit.conePointUniqueUpToIso_inv_comp]
   apply Quiver.Hom.op_inj
-  simp only [op_comp, op_unop, Quiver.
+  simp only [op_comp, op_unop, Quiver.Hom.op_unop, proj_comp_opProductIsoCoproduct'_hom]
+  rw [← proj_comp_opProductIsoCoproduct'_hom hf' hc]
+  simp only [Category.assoc, Iso.hom_inv_id, Category.comp_id]
+  rfl
 
 中文:
 定理 opProductIsoCoproduct'_comp_self
@@ -862,7 +879,10 @@ theorem opProductIsoCoproduct'_comp_self
   simp only [unop_op, unop_comp, Category.assoc, Discrete.functor_obj, Iso.op_inv,
     Quiver.Hom.unop_op, IsLimit.conePointUniqueUpToIso_inv_comp]
   apply Quiver.Hom.op_inj
-  simp only [op_comp, op_unop, Quiver.
+  simp only [op_comp, op_unop, Quiver.Hom.op_unop, proj_comp_opProductIsoCoproduct'_hom]
+  rw [← proj_comp_opProductIsoCoproduct'_hom hf' hc]
+  simp only [Category.assoc, Iso.hom_inv_id, Category.comp_id]
+  rfl
 -/
 theorem opProductIsoCoproduct'_comp_self {f f' : Fan Z} {c : Cofan (op <| Z ·)}
     (hf : IsLimit f) (hf' : IsLimit f') (hc : IsColimit c) :
@@ -911,7 +931,8 @@ theorem opProductIsoCoproduct'_inv_comp_lift
   refine (Iso.inv_comp_eq _).mpr (Quiver.Hom.unop_inj (hf.hom_ext (fun ⟨j⟩ => Quiver.Hom.op_inj ?_)))
   simp only [Discrete.functor_obj, unop_op, Quiver.Hom.unop_op, IsLimit.fac, Fan.op, unop_comp,
     Category.assoc, op_comp, op_unop, Quiver.Hom.op_unop]
-  erw [← Category.assoc, proj_comp_opProd
+  erw [← Category.assoc, proj_comp_opProductIsoCoproduct'_hom, IsColimit.fac]
+  rfl
 
 中文:
 定理 opProductIsoCoproduct'_inv_comp_lift
@@ -920,7 +941,8 @@ theorem opProductIsoCoproduct'_inv_comp_lift
   refine (Iso.inv_comp_eq _).mpr (Quiver.Hom.unop_inj (hf.hom_ext (fun ⟨j⟩ => Quiver.Hom.op_inj ?_)))
   simp only [Discrete.functor_obj, unop_op, Quiver.Hom.unop_op, IsLimit.fac, Fan.op, unop_comp,
     Category.assoc, op_comp, op_unop, Quiver.Hom.op_unop]
-  erw [← Category.assoc, proj_comp_opProd
+  erw [← Category.assoc, proj_comp_opProductIsoCoproduct'_hom, IsColimit.fac]
+  rfl
 -/
 theorem opProductIsoCoproduct'_inv_comp_lift {f : Fan Z} {c : Cofan (op <| Z ·)}
     (hf : IsLimit f) (hc : IsColimit c) (f' : Fan Z) :
@@ -1020,7 +1042,8 @@ definition opProdIsoCoprod
   inv_hom_id := by
     ext <;>
     · simp only [colimit.ι_desc_assoc]
-      apply Quiver.H
+      apply Quiver.Hom.unop_inj
+      simp
 
 中文:
 定义 opProdIsoCoprod
@@ -1036,7 +1059,8 @@ definition opProdIsoCoprod
   inv_hom_id := by
     ext <;>
     · simp only [colimit.ι_desc_assoc]
-      apply Quiver.H
+      apply Quiver.Hom.unop_inj
+      simp
 
 Depends on / 依赖: coprod, coprod.inl.unop, coprod.inr.unop, prod.lift
 -/

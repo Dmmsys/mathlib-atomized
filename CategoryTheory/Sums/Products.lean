@@ -49,7 +49,7 @@ definition functorEquiv
       map η := NatTrans.sum' η.1 η.2 }
 unitIso := NatIso.ofComponents fun F => F.isoSum
   counitIso := NatIso.ofComponents (fun F =>
-    
+    (Functor.inlCompSum' _ _).prod (Functor.inrCompSum' _ _) ≪≫ prod.etaIso F)
 
 中文:
 定义 functorEquiv
@@ -61,7 +61,7 @@ unitIso := NatIso.ofComponents fun F => F.isoSum
       map η := NatTrans.sum' η.1 η.2 }
 unitIso := NatIso.ofComponents fun F => F.isoSum
   counitIso := NatIso.ofComponents (fun F =>
-    
+    (Functor.inlCompSum' _ _).prod (Functor.inrCompSum' _ _) ≪≫ prod.etaIso F)
 
 Depends on / 依赖: F.isoSum, Functor, Functor.inlCompSum, Functor.inrCompSum, Functor.sum, NatIso, NatIso.ofComponents, NatTrans, NatTrans.sum, counitIso, etaIso, inlCompSum, inl_, inrCompSum, inr_, inverse, isoSum, ofComponents, prod.etaIso, unitIso
 -/
@@ -452,7 +452,15 @@ definition associativityFunctorEquivNaturalityFunctorIso
     ((Functor.associator _ _ _).symm ≪≫
       isoWhiskerRight (sum.inlCompInverseAssociator A A' T) E ≪≫ Functor.associator _ _ _)
     (Iso.prod
-      (isoWhiskerLeft _ (Functor.associator _ _ E).symm ≪≫ (Functor.associator _ _ E).s
+      (isoWhiskerLeft _ (Functor.associator _ _ E).symm ≪≫ (Functor.associator _ _ E).symm ≪≫
+        isoWhiskerRight (sum.inlCompInrCompInverseAssociator A A' T) E ≪≫ Functor.associator _ _ E)
+      (isoWhiskerLeft _ (Functor.associator _ _ E).symm ≪≫ (Functor.associator _ _ E).symm ≪≫
+        isoWhiskerRight (sum.inrCompInrCompInverseAssociator A A' T) E))) (by
+      intros
+      ext
+      all_goals
+        dsimp
+        simp only [Category.comp_id, Category.id_comp, NatTrans.naturality])
 
 中文:
 定义 associativityFunctorEquiv自然数uralityFunctorIso
@@ -462,7 +470,15 @@ definition associativityFunctorEquivNaturalityFunctorIso
     ((Functor.associator _ _ _).symm ≪≫
       isoWhiskerRight (sum.inlCompInverseAssociator A A' T) E ≪≫ Functor.associator _ _ _)
     (Iso.prod
-      (isoWhiskerLeft _ (Functor.associator _ _ E).symm ≪≫ (Functor.associator _ _ E).s
+      (isoWhiskerLeft _ (Functor.associator _ _ E).symm ≪≫ (Functor.associator _ _ E).symm ≪≫
+        isoWhiskerRight (sum.inlCompInrCompInverseAssociator A A' T) E ≪≫ Functor.associator _ _ E)
+      (isoWhiskerLeft _ (Functor.associator _ _ E).symm ≪≫ (Functor.associator _ _ E).symm ≪≫
+        isoWhiskerRight (sum.inrCompInrCompInverseAssociator A A' T) E))) (by
+      intros
+      ext
+      all_goals
+        dsimp
+        simp only [Category.comp_id, Category.id_comp, NatTrans.naturality])
 
 Depends on / 依赖: associativity, prod.associativity
 -/

@@ -483,7 +483,7 @@ theorem volumeForm_robust
       simp_rw [volumeForm, Or.by_cases, dif_pos this, Nat.rec_zero, Basis.det_isEmpty]
   · simp_rw [volumeForm]
     rw [same_orientation_iff_det_eq_det]; rw [hb]
-    exact o.finOrthonormalB
+    exact o.finOrthonormalBasis_orientation _ _
 
 中文:
 定理 volumeForm_robust
@@ -495,7 +495,7 @@ theorem volumeForm_robust
       simp_rw [volumeForm, Or.by_cases, dif_pos this, Nat.rec_zero, Basis.det_isEmpty]
   · simp_rw [volumeForm]
     rw [same_orientation_iff_det_eq_det]; rw [hb]
-    exact o.finOrthonormalB
+    exact o.finOrthonormalBasis_orientation _ _
 
 Depends on / 依赖: Basis.det_isEmpty, Nat.rec_zero, Or.by_cases, b.toBasis.orientation_isEmpty, classical, det_isEmpty, dif_pos, finOrthonormalBasis_orientation, hb.symm.trans, o.finOrthonormalBasis_orientation, orientation_isEmpty, positiveOrientation, rec_zero, same_orientation_iff_det_eq_det, simp_rw, toBasis, volumeForm
 -/
@@ -520,7 +520,13 @@ theorem volumeForm_robust_neg
   · classical
       have : positiveOrientation != o := by rwa [b.toBasis.orientation_isEmpty] at hb
       simp_rw [volumeForm, Or.by_cases, dif_neg this.symm, Nat.rec_zero, Basis.det_isEmpty]
-  let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos 
+  let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos Fact.out
+  simp_rw [volumeForm]
+  apply e.det_eq_neg_det_of_opposite_orientation b
+  convert! hb.symm
+  exact o.finOrthonormalBasis_orientation _ _
+
+@[simp]
 
 中文:
 定理 volumeForm_robust_neg
@@ -530,7 +536,13 @@ theorem volumeForm_robust_neg
   · classical
       have : positiveOrientation != o := by rwa [b.toBasis.orientation_isEmpty] at hb
       simp_rw [volumeForm, Or.by_cases, dif_neg this.symm, Nat.rec_zero, Basis.det_isEmpty]
-  let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos 
+  let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos Fact.out
+  simp_rw [volumeForm]
+  apply e.det_eq_neg_det_of_opposite_orientation b
+  convert! hb.symm
+  exact o.finOrthonormalBasis_orientation _ _
+
+@[simp]
 
 Depends on / 依赖: Basis.det_isEmpty, Fact.out, Nat.rec_zero, Or.by_cases, OrthonormalBasis, b.toBasis.orientation_isEmpty, classical, convert, det_eq_neg_det_of_opposite_orientation, det_isEmpty, dif_neg, e.det_eq_neg_det_of_opposite_orientation, finOrthonormalBasis, finOrthonormalBasis_orientation, hb.symm, n.succ, n.succ_pos, o.finOrthonormalBasis, o.finOrthonormalBasis_orientation, orientation_isEmpty
 -/
@@ -559,7 +571,11 @@ theorem volumeForm_neg_orientation
     · simp [volumeForm_zero_neg]
     · simp [volumeForm_zero_neg]
   let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos Fact.out
-  have h₁ : e.toBasis.orientation = o := o.finOrthonor
+  have h₁ : e.toBasis.orientation = o := o.finOrthonormalBasis_orientation _ _
+  have h₂ : e.toBasis.orientation != -o := by
+    symm
+    rw [e.toBasis.orientation_ne_iff_eq_neg]; rw [h₁]
+  rw [o.volumeForm_robust e h₁]; rw [(-o).volumeForm_robust_neg e h₂]
 
 中文:
 定理 volumeForm_neg_orientation
@@ -570,7 +586,11 @@ theorem volumeForm_neg_orientation
     · simp [volumeForm_zero_neg]
     · simp [volumeForm_zero_neg]
   let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos Fact.out
-  have h₁ : e.toBasis.orientation = o := o.finOrthonor
+  have h₁ : e.toBasis.orientation = o := o.finOrthonormalBasis_orientation _ _
+  have h₂ : e.toBasis.orientation != -o := by
+    symm
+    rw [e.toBasis.orientation_ne_iff_eq_neg]; rw [h₁]
+  rw [o.volumeForm_robust e h₁]; rw [(-o).volumeForm_robust_neg e h₂]
 
 Depends on / 依赖: Fact.out, OrthonormalBasis, e.toBasis.orientation, e.toBasis.orientation_ne_iff_eq_neg, eq_or_eq_neg_of_isEmpty, finOrthonormalBasis, finOrthonormalBasis_orientation, n.succ, n.succ_pos, o.eq_or_eq_neg_of_isEmpty.elim, o.finOrthonormalBasis, o.finOrthonormalBasis_orientation, o.volumeForm_robust, orientation, orientation_ne_iff_eq_neg, succ_pos, toBasis, volumeForm_robust, volumeForm_robust_neg, volumeForm_zero_neg
 -/
@@ -628,7 +648,15 @@ theorem abs_volumeForm_apply_le
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp
   have : FiniteDimensional Real E := .of_fact_finrank_eq_succ n
   have : finrank Real E = Fintype.card (Fin n.succ) := by simpa using _i.out
-  let b : OrthonormalBasis (Fin n.succ) Real E := gramSchmidtO
+  let b : OrthonormalBasis (Fin n.succ) Real E := gramSchmidtOrthonormalBasis this v
+  have hb : b.toBasis.det v = ∏ i, ⟪b i, v i⟫ := gramSchmidtOrthonormalBasis_det this v
+  rw [o.volumeForm_robust' b]; rw [hb]; rw [Finset.abs_prod]
+  apply Finset.prod_le_prod
+  · intro i _
+    positivity
+  intro i _
+  convert! abs_real_inner_le_norm (b i) (v i)
+  simp [b.orthonormal.1 i]
 
 中文:
 定理 abs_volumeForm_apply_le
@@ -639,7 +667,15 @@ theorem abs_volumeForm_apply_le
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp
   have : FiniteDimensional Real E := .of_fact_finrank_eq_succ n
   have : finrank Real E = Fintype.card (Fin n.succ) := by simpa using _i.out
-  let b : OrthonormalBasis (Fin n.succ) Real E := gramSchmidtO
+  let b : OrthonormalBasis (Fin n.succ) Real E := gramSchmidtOrthonormalBasis this v
+  have hb : b.toBasis.det v = ∏ i, ⟪b i, v i⟫ := gramSchmidtOrthonormalBasis_det this v
+  rw [o.volumeForm_robust' b]; rw [hb]; rw [Finset.abs_prod]
+  apply Finset.prod_le_prod
+  · intro i _
+    positivity
+  intro i _
+  convert! abs_real_inner_le_norm (b i) (v i)
+  simp [b.orthonormal.1 i]
 
 Depends on / 依赖: FiniteDimensional, Finset, Finset.abs_prod, Finset.prod_le_prod, Fintype, Fintype.card, OrthonormalBasis, _i.out, abs_prod, b.toBasis.det, eq_or_eq_neg_of_isEmpty, finrank, gramSchmidtOrthonormalBasis, gramSchmidtOrthonormalBasis_det, n.succ, o.eq_or_eq_neg_of_isEmpty.elim, o.volumeForm_robust, of_fact_finrank_eq_succ, prod_le_prod, toBasis
 -/
@@ -689,7 +725,20 @@ theorem abs_volumeForm_apply_of_pairwise_orthogonal
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp
   have : FiniteDimensional Real E := .of_fact_finrank_eq_succ n
   have hdim : finrank Real E = Fintype.card (Fin n.succ) := by simpa using _i.out
-  let b : OrthonormalBasis (Fin n.succ) Real E := gramSch
+  let b : OrthonormalBasis (Fin n.succ) Real E := gramSchmidtOrthonormalBasis hdim v
+  have hb : b.toBasis.det v = ∏ i, ⟪b i, v i⟫ := gramSchmidtOrthonormalBasis_det hdim v
+  rw [o.volumeForm_robust' b]; rw [hb]; rw [Finset.abs_prod]
+  by_cases! h : exists i, v i = 0
+  · obtain ⟨i, hi⟩ := h
+    rw [Finset.prod_eq_zero (Finset.mem_univ i)]; rw [Finset.prod_eq_zero (Finset.mem_univ i)] <;>
+      simp [hi]
+  congr
+  ext i
+  have hb : b i = ‖v i‖⁻¹ • v i := gramSchmidtOrthonormalBasis_apply_of_orthogonal hdim hv (h i)
+  simp only [hb, inner_smul_left, real_inner_self_eq_norm_mul_norm, RCLike.conj_to_real]
+  rw [abs_of_nonneg]
+  · field
+  · positivity
 
 中文:
 定理 abs_volumeForm_apply_of_pairwise_orthogonal
@@ -699,7 +748,20 @@ theorem abs_volumeForm_apply_of_pairwise_orthogonal
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp
   have : FiniteDimensional Real E := .of_fact_finrank_eq_succ n
   have hdim : finrank Real E = Fintype.card (Fin n.succ) := by simpa using _i.out
-  let b : OrthonormalBasis (Fin n.succ) Real E := gramSch
+  let b : OrthonormalBasis (Fin n.succ) Real E := gramSchmidtOrthonormalBasis hdim v
+  have hb : b.toBasis.det v = ∏ i, ⟪b i, v i⟫ := gramSchmidtOrthonormalBasis_det hdim v
+  rw [o.volumeForm_robust' b]; rw [hb]; rw [Finset.abs_prod]
+  by_cases! h : exists i, v i = 0
+  · obtain ⟨i, hi⟩ := h
+    rw [Finset.prod_eq_zero (Finset.mem_univ i)]; rw [Finset.prod_eq_zero (Finset.mem_univ i)] <;>
+      simp [hi]
+  congr
+  ext i
+  have hb : b i = ‖v i‖⁻¹ • v i := gramSchmidtOrthonormalBasis_apply_of_orthogonal hdim hv (h i)
+  simp only [hb, inner_smul_left, real_inner_self_eq_norm_mul_norm, RCLike.conj_to_real]
+  rw [abs_of_nonneg]
+  · field
+  · positivity
 
 Depends on / 依赖: FiniteDimensional, Finset, Finset.abs_prod, Fintype, Fintype.card, OrthonormalBasis, _i.out, abs_prod, b.toBasis.det, eq_or_eq_neg_of_isEmpty, finrank, gramSchmidtOrthonormalBasis, gramSchmidtOrthonormalBasis_det, n.succ, o.eq_or_eq_neg_of_isEmpty.elim, o.volumeForm_robust, of_fact_finrank_eq_succ, toBasis, volumeForm_robust
 -/
@@ -757,7 +819,12 @@ theorem volumeForm_map
   let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos Fact.out
   have he : e.toBasis.orientation = o :=
     o.finOrthonormalBasis_orientation n.succ_pos Fact.out
-  have heφ :
+  have heφ : (e.map φ).toBasis.orientation = Orientation.map (Fin n.succ) φ.toLinearEquiv o := by
+    rw [← he]
+    exact e.toBasis.orientation_map φ.toLinearEquiv
+  rw [(Orientation.map (Fin n.succ) φ.toLinearEquiv o).volumeForm_robust (e.map φ) heφ]
+  rw [o.volumeForm_robust e he]
+  simp
 
 中文:
 定理 volumeForm_map
@@ -768,7 +835,12 @@ theorem volumeForm_map
   let e : OrthonormalBasis (Fin n.succ) Real E := o.finOrthonormalBasis n.succ_pos Fact.out
   have he : e.toBasis.orientation = o :=
     o.finOrthonormalBasis_orientation n.succ_pos Fact.out
-  have heφ :
+  have heφ : (e.map φ).toBasis.orientation = Orientation.map (Fin n.succ) φ.toLinearEquiv o := by
+    rw [← he]
+    exact e.toBasis.orientation_map φ.toLinearEquiv
+  rw [(Orientation.map (Fin n.succ) φ.toLinearEquiv o).volumeForm_robust (e.map φ) heφ]
+  rw [o.volumeForm_robust e he]
+  simp
 
 Depends on / 依赖: Fact.out, Orientation, Orientation.map, OrthonormalBasis, e.map, e.toBasis.orientation, e.toBasis.orientation_map, eq_or_eq_neg_of_isEmpty, finOrthonormalBasis, finOrthonormalBasis_orientation, n.succ, n.succ_pos, o.eq_or_eq_neg_of_isEmpty.elim, o.finOrthonormalBasis, o.finOrthonormalBasis_orientation, orientation, orientation_map, succ_pos, toBasis, toBasis.orientation
 -/
@@ -800,7 +872,9 @@ theorem volumeForm_comp_linearIsometryEquiv
   convert! o.volumeForm_map φ (φ ∘ x)
   · symm
     rwa [← o.map_eq_iff_det_pos φ.toLinearEquiv] at hφ
-    rw [_i.out]; rw [Fintype.card_fin
+    rw [_i.out]; rw [Fintype.card_fin]
+  · ext
+    simp
 
 中文:
 定理 volumeForm_comp_linearIsometryEquiv
@@ -812,7 +886,9 @@ theorem volumeForm_comp_linearIsometryEquiv
   convert! o.volumeForm_map φ (φ ∘ x)
   · symm
     rwa [← o.map_eq_iff_det_pos φ.toLinearEquiv] at hφ
-    rw [_i.out]; rw [Fintype.card_fin
+    rw [_i.out]; rw [Fintype.card_fin]
+  · ext
+    simp
 
 Depends on / 依赖: FiniteDimensional, Fintype, Fintype.card_fin, _i.out, card_fin, convert, eq_or_eq_neg_of_isEmpty, map_eq_iff_det_pos, o.eq_or_eq_neg_of_isEmpty.elim, o.map_eq_iff_det_pos, o.volumeForm_map, of_fact_finrank_eq_succ, toLinearEquiv, volumeForm_map
 -/

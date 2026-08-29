@@ -195,7 +195,9 @@ theorem exists_associated_mem_of_dvd_prod
     rw [Multiset.prod_cons] at hps
     rcases hp.dvd_or_dvd hps with h | h
     · have hap := hs a (Multiset.mem_cons.2 (Or.inl rfl))
-      exact ⟨a, Multiset.mem_cons_self a _, hp.associated_of_dvd hap 
+      exact ⟨a, Multiset.mem_cons_self a _, hp.associated_of_dvd hap h⟩
+    · rcases ih (fun r hr => hs _ (Multiset.mem_cons.2 (Or.inr hr))) h with ⟨q, hq₁, hq₂⟩
+      exact ⟨q, Multiset.mem_cons.2 (Or.inr hq₁), hq₂⟩
 
 中文:
 定理 存在_associated_mem_of_dvd_prod
@@ -204,7 +206,9 @@ theorem exists_associated_mem_of_dvd_prod
     rw [Multiset.prod_cons] at hps
     rcases hp.dvd_or_dvd hps with h | h
     · have hap := hs a (Multiset.mem_cons.2 (Or.inl rfl))
-      exact ⟨a, Multiset.mem_cons_self a _, hp.associated_of_dvd hap 
+      exact ⟨a, Multiset.mem_cons_self a _, hp.associated_of_dvd hap h⟩
+    · rcases ih (fun r hr => hs _ (Multiset.mem_cons.2 (Or.inr hr))) h with ⟨q, hq₁, hq₂⟩
+      exact ⟨q, Multiset.mem_cons.2 (Or.inr hq₁), hq₂⟩
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.mem_cons, Multiset.mem_cons_self, Multiset.prod_cons, Or.inl, Or.inr, associated_of_dvd, dvd_or_dvd, hp.associated_of_dvd, hp.dvd_or_dvd, hp.not_isUnit, induction_on, isUnit_iff_dvd_one, mem_cons, mem_cons_self, not_isUnit, prod_cons
 -/
@@ -235,7 +239,30 @@ theorem divisor_closure_eq_closure
     simp only [Multiset.prod_zero] at hprod
     left; exact .of_mul_eq_one _ hprod.symm
   | cons c s hind =>
-    simp on
+    simp only [Multiset.mem_cons, forall_eq_or_imp, Set.mem_ofPred] at hm
+    simp only [Multiset.prod_cons] at hprod
+    simp only [Set.mem_ofPred_eq] at hind
+    obtain ⟨ha₁ | ha₂, hs⟩ := hm
+    · rcases ha₁.exists_right_inv with ⟨k, hk⟩
+      refine hind x (y * k) ?_ hs ?_
+      · simp only [← mul_assoc, ← hprod, ← Multiset.prod_cons, mul_comm]
+        refine multiset_prod_mem _ _ (Multiset.forall_mem_cons.2 ⟨subset_closure ?_,
+          Multiset.forall_mem_cons.2 ⟨subset_closure ?_, fun t ht => subset_closure (hs t ht)⟩⟩)
+        · left; exact .of_mul_eq_one_right _ hk
+        · left; exact ha₁
+      · rw [← mul_one s.prod, ← hk, ← mul_assoc, ← mul_assoc, mul_eq_mul_right_iff, mul_comm]
+        left; exact hprod
+    · rcases ha₂.dvd_mul.1 (Dvd.intro _ hprod) with ⟨c, hc⟩ | ⟨c, hc⟩
+      · rw [hc]; rw [hc, mul_assoc] at hprod
+        refine Submonoid.mul_mem _ (subset_closure ?_)
+          (hind _ _ ?_ hs (mul_left_cancel₀ ha₂.ne_zero hprod))
+        · right; exact ha₂
+        rw [← mul_left_cancel₀ ha₂.ne_zero hprod]
+        exact multiset_prod_mem _ _ (fun t ht => subset_closure (hs t ht))
+      rw [hc]; rw [mul_comm x _]; rw [mul_assoc]; rw [mul_comm c _] at hprod
+      refine hind x c ?_ hs (mul_left_cancel₀ ha₂.ne_zero hprod)
+      rw [← mul_left_cancel₀ ha₂.ne_zero hprod]
+      exact multiset_prod_mem _ _ (fun t ht => subset_closure (hs t ht))
 
 中文:
 定理 divisor_closure_eq_closure
@@ -249,7 +276,30 @@ theorem divisor_closure_eq_closure
     simp only [Multiset.prod_zero] at hprod
     left; exact .of_mul_eq_one _ hprod.symm
   | cons c s hind =>
-    simp on
+    simp only [Multiset.mem_cons, forall_eq_or_imp, Set.mem_ofPred] at hm
+    simp only [Multiset.prod_cons] at hprod
+    simp only [Set.mem_ofPred_eq] at hind
+    obtain ⟨ha₁ | ha₂, hs⟩ := hm
+    · rcases ha₁.exists_right_inv with ⟨k, hk⟩
+      refine hind x (y * k) ?_ hs ?_
+      · simp only [← mul_assoc, ← hprod, ← Multiset.prod_cons, mul_comm]
+        refine multiset_prod_mem _ _ (Multiset.forall_mem_cons.2 ⟨subset_closure ?_,
+          Multiset.forall_mem_cons.2 ⟨subset_closure ?_, fun t ht => subset_closure (hs t ht)⟩⟩)
+        · left; exact .of_mul_eq_one_right _ hk
+        · left; exact ha₁
+      · rw [← mul_one s.prod, ← hk, ← mul_assoc, ← mul_assoc, mul_eq_mul_right_iff, mul_comm]
+        left; exact hprod
+    · rcases ha₂.dvd_mul.1 (Dvd.intro _ hprod) with ⟨c, hc⟩ | ⟨c, hc⟩
+      · rw [hc]; rw [hc, mul_assoc] at hprod
+        refine Submonoid.mul_mem _ (subset_closure ?_)
+          (hind _ _ ?_ hs (mul_left_cancel₀ ha₂.ne_zero hprod))
+        · right; exact ha₂
+        rw [← mul_left_cancel₀ ha₂.ne_zero hprod]
+        exact multiset_prod_mem _ _ (fun t ht => subset_closure (hs t ht))
+      rw [hc]; rw [mul_comm x _]; rw [mul_assoc]; rw [mul_comm c _] at hprod
+      refine hind x c ?_ hs (mul_left_cancel₀ ha₂.ne_zero hprod)
+      rw [← mul_left_cancel₀ ha₂.ne_zero hprod]
+      exact multiset_prod_mem _ _ (fun t ht => subset_closure (hs t ht))
 
 Depends on / 依赖: Multiset, Multiset.induction, Multiset.mem_cons, Multiset.prod_cons, Multiset.prod_zero, Set.mem_ofPred, Set.mem_ofPred_eq, exists_multiset_of_mem_closure, exists_right_inv, forall_eq_or_imp, generalizing, hprod.symm, mem_cons, mem_ofPred, mem_ofPred_eq, of_mul_eq_one, prod_cons, prod_zero, subset_closure
 -/
@@ -302,7 +352,16 @@ theorem Multiset.prod_primes_dvd
     rw [Multiset.prod_cons]
     obtain ⟨k, rfl⟩ : a ∣ n := div a (Multiset.mem_cons_self a s)
     gcongr
-    refine induct _ (fun a ha => h a (Multiset.mem_con
+    refine induct _ (fun a ha => h a (Multiset.mem_cons_of_mem ha)) (fun b b_in_s => ?_)
+      fun a => (Multiset.countP_le_of_le _ (Multiset.le_cons_self _ _)).trans (uniq a)
+    have b_div_n := div b (Multiset.mem_cons_of_mem b_in_s)
+    have a_prime := h a (Multiset.mem_cons_self a s)
+    have b_prime := h b (Multiset.mem_cons_of_mem b_in_s)
+    refine (b_prime.dvd_or_dvd b_div_n).resolve_left fun b_div_a => ?_
+    have assoc := b_prime.associated_of_dvd a_prime b_div_a
+    have := uniq a
+    rw [Multiset.countP_cons_of_pos _ (Associated.refl _)]; rw [Nat.succ_le_succ_iff]; rw [← not_lt]; rw [Multiset.countP_pos] at this
+    exact this ⟨b, b_in_s, assoc.symm⟩
 
 中文:
 定理 Multiset.prod_primes_dvd
@@ -314,7 +373,16 @@ theorem Multiset.prod_primes_dvd
     rw [Multiset.prod_cons]
     obtain ⟨k, rfl⟩ : a ∣ n := div a (Multiset.mem_cons_self a s)
     gcongr
-    refine induct _ (fun a ha => h a (Multiset.mem_con
+    refine induct _ (fun a ha => h a (Multiset.mem_cons_of_mem ha)) (fun b b_in_s => ?_)
+      fun a => (Multiset.countP_le_of_le _ (Multiset.le_cons_self _ _)).trans (uniq a)
+    have b_div_n := div b (Multiset.mem_cons_of_mem b_in_s)
+    have a_prime := h a (Multiset.mem_cons_self a s)
+    have b_prime := h b (Multiset.mem_cons_of_mem b_in_s)
+    refine (b_prime.dvd_or_dvd b_div_n).resolve_left fun b_div_a => ?_
+    have assoc := b_prime.associated_of_dvd a_prime b_div_a
+    have := uniq a
+    rw [Multiset.countP_cons_of_pos _ (Associated.refl _)]; rw [Nat.succ_le_succ_iff]; rw [← not_lt]; rw [Multiset.countP_pos] at this
+    exact this ⟨b, b_in_s, assoc.symm⟩
 
 Depends on / 依赖: Multiset, Multiset.countP_le_of_le, Multiset.induction_on, Multiset.le_cons_self, Multiset.mem_cons_of_mem, Multiset.mem_cons_self, Multiset.prod_cons, Multiset.prod_zero, a_prime, b_div_n, b_in_s, countP_le_of_le, generalizing, induct, induction_on, le_cons_self, mem_cons_of_mem, mem_cons_self, one_dvd, prod_cons
 -/
@@ -351,7 +419,7 @@ theorem Finset.prod_primes_dvd
         (by simpa only [Multiset.map_id', Finset.mem_def] using div)
         (by
           simp only [Multiset.map_id', associated_eq_eq, Multiset.countP_eq_card_filter,
-            ←
+            ← s.val.count_eq_card_filter_eq, ← Multiset.nodup_iff_count_le_one, s.nodup])
 
 中文:
 定理 有限集.prod_primes_dvd
@@ -363,7 +431,7 @@ theorem Finset.prod_primes_dvd
         (by simpa only [Multiset.map_id', Finset.mem_def] using div)
         (by
           simp only [Multiset.map_id', associated_eq_eq, Multiset.countP_eq_card_filter,
-            ←
+            ← s.val.count_eq_card_filter_eq, ← Multiset.nodup_iff_count_le_one, s.nodup])
 
 Depends on / 依赖: Finset, Finset.mem_def, Multiset, Multiset.countP_eq_card_filter, Multiset.map_id, Multiset.nodup_iff_count_le_one, Multiset.prod_primes_dvd, associated_eq_eq, classical, countP_eq_card_filter, count_eq_card_filter_eq, map_id, mem_def, nodup_iff_count_le_one, prod_primes_dvd, s.nodup, s.val.count_eq_card_filter_eq
 -/
@@ -526,7 +594,7 @@ theorem exists_mem_multiset_le_of_prime
     | Or.inl h => ⟨a, Multiset.mem_cons_self a s, h⟩
     | Or.inr h =>
       let ⟨a, has, h⟩ := ih h
-      ⟨a, M
+      ⟨a, Multiset.mem_cons_of_mem has, h⟩
 
 中文:
 定理 存在_mem_multiset_le_of_prime
@@ -538,7 +606,7 @@ theorem exists_mem_multiset_le_of_prime
     | Or.inl h => ⟨a, Multiset.mem_cons_self a s, h⟩
     | Or.inr h =>
       let ⟨a, has, h⟩ := ih h
-      ⟨a, M
+      ⟨a, Multiset.mem_cons_of_mem has, h⟩
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.mem_cons_of_mem, Multiset.mem_cons_self, Or.inl, Or.inr, Prime.le_or_le, eq.symm, hp.ne_one, induction_on, le_or_le, mem_cons_of_mem, mem_cons_self, mul_eq_one, ne_one, s.prod
 -/

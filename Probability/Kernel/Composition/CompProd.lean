@@ -134,7 +134,25 @@ theorem compProd_apply
   proof: by
   rw [compProd]; rw [comp_apply]; rw [copy_apply]; rw [Measure.dirac_bind (by fun_prop)]; rw [comp_apply]; rw [parallelComp_apply]; rw [Kernel.id_apply]; rw [Measure.bind_apply hs (by fun_prop)]; rw [lintegral_prod _ (Kernel.measurable_coe _ hs).aemeasurable]; rw [lintegral_dirac']
   swap
-  · suf
+  · suffices Measurable fun p : α × β =>
+      (swap γ β ∘ₖ (η ∥ₖ Kernel.id)
+        ∘ₖ deterministic MeasurableEquiv.prodAssoc.symm (MeasurableEquiv.measurable _)
+        ∘ₖ (Kernel.id ∥ₖ copy β)) p s by fun_prop
+    exact Kernel.measurable_coe _ hs
+  congr with b
+  rw [comp_apply]; rw [parallelComp_apply]; rw [Kernel.id_apply]; rw [copy_apply]; rw [Measure.dirac_prod_dirac]; rw [Measure.dirac_bind (by fun_prop)]; rw [comp_apply]; rw [deterministic_apply (by fun_prop)]; rw [Measure.dirac_bind (by fun_prop)]; rw [comp_apply]
+  simp only [MeasurableEquiv.prodAssoc, MeasurableEquiv.symm_mk, MeasurableEquiv.coe_mk,
+    Equiv.prodAssoc_symm_apply]
+  rw [parallelComp_apply]; rw [Kernel.id_apply]; rw [Measure.bind_apply hs (by fun_prop)]; rw [lintegral_prod _ (Kernel.measurable_coe _ hs).aemeasurable]
+  classical
+  have h_int x : ∫⁻ y, swap γ β (x, y) s ∂Measure.dirac b = (Prod.mk b ⁻¹' s).indicator 1 x := by
+    rw [lintegral_dirac']
+    · simp [swap_apply' _ hs, Set.indicator_apply]
+    · simpa [swap_apply' _ hs, Prod.swap_prod_mk] using!
+        measurable_const.indicator (measurable_prodMk_right hs)
+  simp_rw [h_int]
+  rw [lintegral_indicator_one]
+  exact measurable_prodMk_left hs
 
 中文:
 定理 compProd_apply
@@ -142,7 +160,25 @@ theorem compProd_apply
   证明: by
   rw [compProd]; rw [comp_apply]; rw [copy_apply]; rw [Measure.dirac_bind (by fun_prop)]; rw [comp_apply]; rw [parallelComp_apply]; rw [Kernel.id_apply]; rw [Measure.bind_apply hs (by fun_prop)]; rw [lintegral_prod _ (Kernel.measurable_coe _ hs).aemeasurable]; rw [lintegral_dirac']
   swap
-  · suf
+  · suffices Measurable fun p : α × β =>
+      (swap γ β ∘ₖ (η ∥ₖ Kernel.id)
+        ∘ₖ deterministic MeasurableEquiv.prodAssoc.symm (MeasurableEquiv.measurable _)
+        ∘ₖ (Kernel.id ∥ₖ copy β)) p s by fun_prop
+    exact Kernel.measurable_coe _ hs
+  congr with b
+  rw [comp_apply]; rw [parallelComp_apply]; rw [Kernel.id_apply]; rw [copy_apply]; rw [Measure.dirac_prod_dirac]; rw [Measure.dirac_bind (by fun_prop)]; rw [comp_apply]; rw [deterministic_apply (by fun_prop)]; rw [Measure.dirac_bind (by fun_prop)]; rw [comp_apply]
+  simp only [MeasurableEquiv.prodAssoc, MeasurableEquiv.symm_mk, MeasurableEquiv.coe_mk,
+    Equiv.prodAssoc_symm_apply]
+  rw [parallelComp_apply]; rw [Kernel.id_apply]; rw [Measure.bind_apply hs (by fun_prop)]; rw [lintegral_prod _ (Kernel.measurable_coe _ hs).aemeasurable]
+  classical
+  have h_int x : ∫⁻ y, swap γ β (x, y) s ∂Measure.dirac b = (Prod.mk b ⁻¹' s).indicator 1 x := by
+    rw [lintegral_dirac']
+    · simp [swap_apply' _ hs, Set.indicator_apply]
+    · simpa [swap_apply' _ hs, Prod.swap_prod_mk] using!
+        measurable_const.indicator (measurable_prodMk_right hs)
+  simp_rw [h_int]
+  rw [lintegral_indicator_one]
+  exact measurable_prodMk_left hs
 
 Depends on / 依赖: Kernel, Kernel.id, Kernel.id_apply, Kernel.measurab, Kernel.measurable_coe, Measurable, MeasurableEquiv, MeasurableEquiv.measurable, MeasurableEquiv.prodAssoc.symm, Measure, Measure.bind_apply, Measure.dirac_bind, aemeasurable, bind_apply, compProd, comp_apply, copy_apply, deterministic, dirac_bind, fun_prop
 -/
@@ -182,7 +218,10 @@ theorem le_compProd_apply
         ∫⁻ b, η (a, b) {c | (b, c) in toMeasurable ((κ otimesₖ η) a) s} ∂κ a :=
       lintegral_mono fun _ => measure_mono fun _ h_mem => subset_toMeasurable _ _ h_mem
     _ = (κ otimesₖ η) a (toMeasurable ((κ otimesₖ η) a) s) :=
-      (compProd_appl
+      (compProd_apply (measurableSet_toMeasurable _ _) κ η a).symm
+    _ = (κ otimesₖ η) a s := measure_toMeasurable s
+
+@[simp]
 
 中文:
 定理 le_compProd_apply
@@ -192,7 +231,10 @@ theorem le_compProd_apply
         ∫⁻ b, η (a, b) {c | (b, c) in toMeasurable ((κ otimesₖ η) a) s} ∂κ a :=
       lintegral_mono fun _ => measure_mono fun _ h_mem => subset_toMeasurable _ _ h_mem
     _ = (κ otimesₖ η) a (toMeasurable ((κ otimesₖ η) a) s) :=
-      (compProd_appl
+      (compProd_apply (measurableSet_toMeasurable _ _) κ η a).symm
+    _ = (κ otimesₖ η) a s := measure_toMeasurable s
+
+@[simp]
 
 Depends on / 依赖: compProd_apply, h_mem, lintegral_mono, measurableSet_toMeasurable, measure_mono, measure_toMeasurable, subset_toMeasurable, toMeasurable
 -/
@@ -388,7 +430,8 @@ lemma compProd_eq_zero_iff
     · exact (η.measurable_coe .univ).comp measurable_prodMk_left
     · rw [← setLIntegral_univ, ← Kernel.compProd_apply_prod .univ .univ, h]
       simp
-  · rw [← K
+  · rw [← Kernel.compProd_zero_right κ]
+    exact Kernel.compProd_congr h
 
 中文:
 引理 compProd_eq_zero_iff
@@ -400,7 +443,8 @@ lemma compProd_eq_zero_iff
     · exact (η.measurable_coe .univ).comp measurable_prodMk_left
     · rw [← setLIntegral_univ, ← Kernel.compProd_apply_prod .univ .univ, h]
       simp
-  · rw [← K
+  · rw [← Kernel.compProd_zero_right κ]
+    exact Kernel.compProd_congr h
 
 Depends on / 依赖: Kernel, Kernel.compProd_apply_prod, Kernel.compProd_congr, Kernel.compProd_zero_right, Measure, Measure.measure_univ_eq_zero, compProd_apply_prod, compProd_congr, compProd_zero_right, lintegral_eq_zero_iff, measurable_coe, measurable_prodMk_left, measure_univ_eq_zero, setLIntegral_univ, simp_rw
 -/
@@ -429,7 +473,7 @@ lemma compProd_preimage_fst
     intro b
     by_cases hb : b in s <;> simp [hb]
   simp_rw [this]
-  rw [lintegral_indica
+  rw [lintegral_indicator_const hs]; rw [one_mul]
 
 中文:
 引理 compProd_preimage_fst
@@ -441,7 +485,7 @@ lemma compProd_preimage_fst
     intro b
     by_cases hb : b in s <;> simp [hb]
   simp_rw [this]
-  rw [lintegral_indica
+  rw [lintegral_indicator_const hs]; rw [one_mul]
 
 Depends on / 依赖: Function, Function.const_apply, Prod.fst_comp_mk, Set.preimage, Set.preimage_comp, compProd_apply, const_apply, fst_comp_mk, indicator, lintegral_indicator_const, measurable_fst, one_mul, preimage, preimage_comp, s.indicator, simp_rw
 -/
@@ -469,7 +513,17 @@ lemma compProd_deterministic_apply
   let t := {b | (b, f (x, b)) in s}
   have ht : MeasurableSet t := (measurable_id.prodMk (hf.comp measurable_prodMk_left)) hs
   rw [← lintegral_add_compl _ ht]
-  convert! a
+  convert! add_zero _
+  · suffices forall b in tᶜ, (if f (x, b) in Prod.mk b ⁻¹' s then (1 : Real>=0∞) else 0) = 0 by
+      rw [setLIntegral_congr_fun ht.compl this]; rw [lintegral_zero]
+    intro b hb
+    simp only [t, Set.mem_compl_iff, Set.mem_ofPred_eq] at hb
+    simp [hb]
+  · suffices forall b in t, (if f (x, b) in Prod.mk b ⁻¹' s then (1 : Real>=0∞) else 0) = 1 by
+      rw [setLIntegral_congr_fun ht this]; rw [setLIntegral_one]
+    intro b hb
+    simp only [t, Set.mem_ofPred_eq] at hb
+    simp [hb]
 
 中文:
 引理 compProd_deterministic_apply
@@ -481,7 +535,17 @@ lemma compProd_deterministic_apply
   let t := {b | (b, f (x, b)) in s}
   have ht : MeasurableSet t := (measurable_id.prodMk (hf.comp measurable_prodMk_left)) hs
   rw [← lintegral_add_compl _ ht]
-  convert! a
+  convert! add_zero _
+  · suffices forall b in tᶜ, (if f (x, b) in Prod.mk b ⁻¹' s then (1 : Real>=0∞) else 0) = 0 by
+      rw [setLIntegral_congr_fun ht.compl this]; rw [lintegral_zero]
+    intro b hb
+    simp only [t, Set.mem_compl_iff, Set.mem_ofPred_eq] at hb
+    simp [hb]
+  · suffices forall b in t, (if f (x, b) in Prod.mk b ⁻¹' s then (1 : Real>=0∞) else 0) = 1 by
+      rw [setLIntegral_congr_fun ht this]; rw [setLIntegral_one]
+    intro b hb
+    simp only [t, Set.mem_ofPred_eq] at hb
+    simp [hb]
 
 Depends on / 依赖: MeasurableSet, Measure, Measure.dirac_apply, Pi.one_apply, Prod.mk, Set.indicator_apply, Set.m, Set.mem_compl_iff, add_zero, classical, compProd_apply, convert, deterministic_apply, dirac_apply, hf.comp, ht.compl, indicator_apply, lintegral_add_compl, lintegral_zero, measurable_id
 -/
@@ -524,7 +588,12 @@ theorem ae_kernel_lt_top
   have : forall b : β, η (a, b) (Prod.mk b ⁻¹' s) <= η (a, b) (Prod.mk b ⁻¹' t) := fun b =>
     measure_mono (Set.preimage_mono (subset_toMeasurable _ _))
   have ht : MeasurableSet t := measurableSet_toMeasurable _ _
-  have h2t : (κ otimesₖ η) a t != ∞ 
+  have h2t : (κ otimesₖ η) a t != ∞ := by rwa [measure_toMeasurable]
+  have ht_lt_top : forallᵐ b ∂κ a, η (a, b) (Prod.mk b ⁻¹' t) < ∞ := by
+    rw [Kernel.compProd_apply ht] at h2t
+    exact ae_lt_top (Kernel.measurable_kernel_prodMk_left' ht a) h2t
+  filter_upwards [ht_lt_top] with b hb
+  exact (this b).trans_lt hb
 
 中文:
 定理 ae_kernel_lt_top
@@ -534,7 +603,12 @@ theorem ae_kernel_lt_top
   have : forall b : β, η (a, b) (Prod.mk b ⁻¹' s) <= η (a, b) (Prod.mk b ⁻¹' t) := fun b =>
     measure_mono (Set.preimage_mono (subset_toMeasurable _ _))
   have ht : MeasurableSet t := measurableSet_toMeasurable _ _
-  have h2t : (κ otimesₖ η) a t != ∞ 
+  have h2t : (κ otimesₖ η) a t != ∞ := by rwa [measure_toMeasurable]
+  have ht_lt_top : forallᵐ b ∂κ a, η (a, b) (Prod.mk b ⁻¹' t) < ∞ := by
+    rw [Kernel.compProd_apply ht] at h2t
+    exact ae_lt_top (Kernel.measurable_kernel_prodMk_left' ht a) h2t
+  filter_upwards [ht_lt_top] with b hb
+  exact (this b).trans_lt hb
 
 Depends on / 依赖: Kernel, Kernel.compProd_apply, Kernel.measurable_kernel_prodMk_left, MeasurableSet, Prod.mk, Set.preimage_mono, ae_lt_top, compProd_apply, filter_, ht_lt_top, measurableSet_toMeasurable, measurable_kernel_prodMk_left, measure_mono, measure_toMeasurable, preimage_mono, subset_toMeasurable, toMeasurable
 -/
@@ -588,7 +662,7 @@ theorem ae_null_of_compProd_null
   exact
     ⟨Filter.EventuallyLE.trans_eq
         (Filter.Eventually.of_forall fun x => measure_mono (Set.preimage_mono hst)) ht,
-      Filter.Eventually.
+      Filter.Eventually.of_forall fun x => zero_le⟩
 
 中文:
 定理 ae_null_of_compProd_null
@@ -600,7 +674,7 @@ theorem ae_null_of_compProd_null
   exact
     ⟨Filter.EventuallyLE.trans_eq
         (Filter.Eventually.of_forall fun x => measure_mono (Set.preimage_mono hst)) ht,
-      Filter.Eventually.
+      Filter.Eventually.of_forall fun x => zero_le⟩
 
 Depends on / 依赖: Eventually, EventuallyLE, Filter, Filter.Eventually.of_forall, Filter.EventuallyLE.trans_eq, Filter.eventuallyLE_antisymm_iff, Set.preimage_mono, compProd_null, eventuallyLE_antisymm_iff, exists_measurable_superset_of_null, measure_mono, of_forall, preimage_mono, simp_rw, trans_eq, zero_le
 -/
@@ -714,7 +788,14 @@ theorem compProd_restrict
   simp only [restrict_apply, Set.preimage, Measure.restrict_apply' ht, Set.mem_inter_iff,
     Set.mem_prod]
   have (b : _) : η (a, b) {c : γ | (b, c) in u ∧ b in s ∧ c in t} =
-      s
+      s.indicator (fun b => η (a, b) ({c : γ | (b, c) in u} inter t)) b := by
+    classical
+    rw [Set.indicator_apply]
+    split_ifs with h
+    · simp only [h, true_and, Set.inter_def, Set.mem_ofPred]
+    · simp only [h, false_and, and_false, Set.ofPred_false, measure_empty]
+  simp_rw [this]
+  rw [lintegral_indicator hs]
 
 中文:
 定理 compProd_restrict
@@ -725,7 +806,14 @@ theorem compProd_restrict
   simp only [restrict_apply, Set.preimage, Measure.restrict_apply' ht, Set.mem_inter_iff,
     Set.mem_prod]
   have (b : _) : η (a, b) {c : γ | (b, c) in u ∧ b in s ∧ c in t} =
-      s
+      s.indicator (fun b => η (a, b) ({c : γ | (b, c) in u} inter t)) b := by
+    classical
+    rw [Set.indicator_apply]
+    split_ifs with h
+    · simp only [h, true_and, Set.inter_def, Set.mem_ofPred]
+    · simp only [h, false_and, and_false, Set.ofPred_false, measure_empty]
+  simp_rw [this]
+  rw [lintegral_indicator hs]
 
 Depends on / 依赖: Measure, Measure.restrict_apply, Set.indicator_apply, Set.inter_def, Set.mem_inter_iff, Set.mem_ofPred, Set.mem_prod, Set.preimage, and_false, classical, compProd_apply, false_and, hs.prod, hu.inter, indicator, indicator_apply, inter_def, mem_inter_iff, mem_ofPred, mem_prod
 -/
@@ -811,7 +899,53 @@ theorem lintegral_compProd'
   have h : forall a, ⨆ n, F n a = Function.uncurry f a := SimpleFunc.iSup_eapprox_apply hf
   simp only [Prod.forall, Function.uncurry_apply_pair] at h
   simp_rw [← h]
-  have h_mono : Monotone F := fun i j hij 
+  have h_mono : Monotone F := fun i j hij b =>
+    SimpleFunc.monotone_eapprox (Function.uncurry f) hij _
+  rw [lintegral_iSup (fun n => (F n).measurable) h_mono]
+  have : forall b, ∫⁻ c, ⨆ n, F n (b, c) ∂η (a, b) = ⨆ n, ∫⁻ c, F n (b, c) ∂η (a, b) := by
+    intro a
+    rw [lintegral_iSup]
+    · exact fun n => (F n).measurable.comp measurable_prodMk_left
+    · exact fun i j hij b => h_mono hij _
+  simp_rw [this]
+  have h_some_meas_integral :
+    forall f' : SimpleFunc (β × γ) Real>=0∞, Measurable fun b => ∫⁻ c, f' (b, c) ∂η (a, b) := by
+    intro f'
+    have :
+      (fun b => ∫⁻ c, f' (b, c) ∂η (a, b)) =
+        (fun ab => ∫⁻ c, f' (ab.2, c) ∂η ab) ∘ fun b => (a, b) := by
+      ext1 ab; rfl
+    rw [this]
+    fun_prop
+  rw [lintegral_iSup]
+  rotate_left
+  · exact fun n => h_some_meas_integral (F n)
+  · exact fun i j hij b => lintegral_mono fun c => h_mono hij _
+  congr
+  ext1 n
+  refine SimpleFunc.induction ?_ ?_ (F n)
+  · intro c s hs
+    simp +unfoldPartialApp only [SimpleFunc.const_zero,
+      SimpleFunc.coe_piecewise, SimpleFunc.coe_const, SimpleFunc.coe_zero,
+      Set.piecewise_eq_indicator, Function.const, lintegral_indicator_const hs]
+    rw [compProd_apply hs]; rw [← lintegral_const_mul c _]
+    swap
+    · exact (measurable_kernel_prodMk_left ((measurable_fst.snd.prodMk measurable_snd) hs)).comp
+        measurable_prodMk_left
+    congr
+    ext1 b
+    rw [lintegral_indicator_const_comp measurable_prodMk_left hs]
+  · intro f f' _ hf_eq hf'_eq
+    simp_rw [SimpleFunc.coe_add, Pi.add_apply]
+    change
+      ∫⁻ x, (f : β × γ -> Real>=0∞) x + f' x ∂(κ otimesₖ η) a =
+        ∫⁻ b, ∫⁻ c : γ, f (b, c) + f' (b, c) ∂η (a, b) ∂κ a
+    rw [lintegral_add_left (SimpleFunc.measurable _)]; rw [hf_eq]; rw [hf'_eq]; rw [← lintegral_add_left]
+    swap
+    · exact h_some_meas_integral f
+    congr with b
+    rw [lintegral_add_left]
+    exact (SimpleFunc.measurable _).comp measurable_prodMk_left
 
 中文:
 定理 lintegral_compProd'
@@ -821,7 +955,53 @@ theorem lintegral_compProd'
   have h : forall a, ⨆ n, F n a = Function.uncurry f a := SimpleFunc.iSup_eapprox_apply hf
   simp only [Prod.forall, Function.uncurry_apply_pair] at h
   simp_rw [← h]
-  have h_mono : Monotone F := fun i j hij 
+  have h_mono : Monotone F := fun i j hij b =>
+    SimpleFunc.monotone_eapprox (Function.uncurry f) hij _
+  rw [lintegral_iSup (fun n => (F n).measurable) h_mono]
+  have : forall b, ∫⁻ c, ⨆ n, F n (b, c) ∂η (a, b) = ⨆ n, ∫⁻ c, F n (b, c) ∂η (a, b) := by
+    intro a
+    rw [lintegral_iSup]
+    · exact fun n => (F n).measurable.comp measurable_prodMk_left
+    · exact fun i j hij b => h_mono hij _
+  simp_rw [this]
+  have h_some_meas_integral :
+    forall f' : SimpleFunc (β × γ) Real>=0∞, Measurable fun b => ∫⁻ c, f' (b, c) ∂η (a, b) := by
+    intro f'
+    have :
+      (fun b => ∫⁻ c, f' (b, c) ∂η (a, b)) =
+        (fun ab => ∫⁻ c, f' (ab.2, c) ∂η ab) ∘ fun b => (a, b) := by
+      ext1 ab; rfl
+    rw [this]
+    fun_prop
+  rw [lintegral_iSup]
+  rotate_left
+  · exact fun n => h_some_meas_integral (F n)
+  · exact fun i j hij b => lintegral_mono fun c => h_mono hij _
+  congr
+  ext1 n
+  refine SimpleFunc.induction ?_ ?_ (F n)
+  · intro c s hs
+    simp +unfoldPartialApp only [SimpleFunc.const_zero,
+      SimpleFunc.coe_piecewise, SimpleFunc.coe_const, SimpleFunc.coe_zero,
+      Set.piecewise_eq_indicator, Function.const, lintegral_indicator_const hs]
+    rw [compProd_apply hs]; rw [← lintegral_const_mul c _]
+    swap
+    · exact (measurable_kernel_prodMk_left ((measurable_fst.snd.prodMk measurable_snd) hs)).comp
+        measurable_prodMk_left
+    congr
+    ext1 b
+    rw [lintegral_indicator_const_comp measurable_prodMk_left hs]
+  · intro f f' _ hf_eq hf'_eq
+    simp_rw [SimpleFunc.coe_add, Pi.add_apply]
+    change
+      ∫⁻ x, (f : β × γ -> Real>=0∞) x + f' x ∂(κ otimesₖ η) a =
+        ∫⁻ b, ∫⁻ c : γ, f (b, c) + f' (b, c) ∂η (a, b) ∂κ a
+    rw [lintegral_add_left (SimpleFunc.measurable _)]; rw [hf_eq]; rw [hf'_eq]; rw [← lintegral_add_left]
+    swap
+    · exact h_some_meas_integral f
+    congr with b
+    rw [lintegral_add_left]
+    exact (SimpleFunc.measurable _).comp measurable_prodMk_left
 
 Depends on / 依赖: Function, Function.uncurry, Function.uncurry_apply_pair, Monotone, Prod.forall, SimpleFunc, SimpleFunc.eapprox, SimpleFunc.iSup_eapprox_apply, SimpleFunc.monotone_eapprox, eapprox, h_mono, iSup_eapprox_apply, lintegral_iSup, measurable, monotone_eapprox, simp_rw, uncurry, uncurry_apply_pair
 -/
@@ -924,7 +1104,9 @@ theorem lintegral_compProd₀
   have A : ∫⁻ z, f z ∂(κ otimesₖ η) a = ∫⁻ z, hf.mk f z ∂(κ otimesₖ η) a := lintegral_congr_ae hf.ae_eq_mk
   have B : ∫⁻ x, ∫⁻ y, f (x, y) ∂η (a, x) ∂κ a = ∫⁻ x, ∫⁻ y, hf.mk f (x, y) ∂η (a, x) ∂κ a := by
     apply lintegral_congr_ae
-    filter_upwards [ae_ae_of_ae_compProd hf.ae_eq_mk] with _ ha 
+    filter_upwards [ae_ae_of_ae_compProd hf.ae_eq_mk] with _ ha using lintegral_congr_ae ha
+  rw [A]; rw [B]; rw [lintegral_compProd]
+  exact hf.measurable_mk
 
 中文:
 定理 lintegral_compProd₀
@@ -933,7 +1115,9 @@ theorem lintegral_compProd₀
   have A : ∫⁻ z, f z ∂(κ otimesₖ η) a = ∫⁻ z, hf.mk f z ∂(κ otimesₖ η) a := lintegral_congr_ae hf.ae_eq_mk
   have B : ∫⁻ x, ∫⁻ y, f (x, y) ∂η (a, x) ∂κ a = ∫⁻ x, ∫⁻ y, hf.mk f (x, y) ∂η (a, x) ∂κ a := by
     apply lintegral_congr_ae
-    filter_upwards [ae_ae_of_ae_compProd hf.ae_eq_mk] with _ ha 
+    filter_upwards [ae_ae_of_ae_compProd hf.ae_eq_mk] with _ ha using lintegral_congr_ae ha
+  rw [A]; rw [B]; rw [lintegral_compProd]
+  exact hf.measurable_mk
 
 Depends on / 依赖: ae_ae_of_ae_compProd, ae_eq_mk, filter_upwards, hf.ae_eq_mk, hf.measurable_mk, hf.mk, lintegral_compProd, lintegral_congr_ae, measurable_mk
 -/
@@ -1174,7 +1358,8 @@ theorem compProd_apply_univ_le
   calc
     ∫⁻ b, η (a, b) Set.univ ∂κ a <= ∫⁻ _, Cη ∂κ a :=
       lintegral_mono fun b => measure_le_bound η (a, b) Set.univ
-    _ = Cη * κ a Set.
+    _ = Cη * κ a Set.univ := MeasureTheory.lintegral_const Cη
+    _ = κ a Set.univ * Cη := mul_comm _ _
 
 中文:
 定理 compProd_apply_univ_le
@@ -1189,7 +1374,8 @@ theorem compProd_apply_univ_le
   calc
     ∫⁻ b, η (a, b) Set.univ ∂κ a <= ∫⁻ _, Cη ∂κ a :=
       lintegral_mono fun b => measure_le_bound η (a, b) Set.univ
-    _ = Cη * κ a Set.
+    _ = Cη * κ a Set.univ := MeasureTheory.lintegral_const Cη
+    _ = κ a Set.univ * Cη := mul_comm _ _
 
 Depends on / 依赖: IsSFiniteKernel, MeasureTheory, MeasureTheory.lintegral_const, Set.univ, compProd_apply, compProd_of_not_isSFiniteKernel_left, lintegral_const, lintegral_mono, measure_le_bound, mul_comm
 -/
@@ -1271,7 +1457,19 @@ lemma compProd_assoc
   · have : ¬ IsSFiniteKernel
         (ξ.comap MeasurableEquiv.prodAssoc (MeasurableEquiv.measurable _)) := by
       refine fun h_sfin => hξ ?_
-     
+      have : ξ = (ξ.comap MeasurableEquiv.prodAssoc (MeasurableEquiv.measurable _)).comap
+          MeasurableEquiv.prodAssoc.symm (MeasurableEquiv.measurable _) := by
+        simp [← comap_comp_right]
+      rw [this]
+      infer_instance
+    simp [hξ, this]
+  ext a s hs
+  rw [compProd_apply hs]; rw [map_apply' _ (by fun_prop) _ hs]; rw [compProd_apply (hs.preimage (by fun_prop))]; rw [lintegral_compProd]
+  swap; · exact measurable_kernel_prodMk_left' hs a
+  congr with b
+  rw [compProd_apply]
+  · congr
+  · exact hs.preimage (by fun_prop)
 
 中文:
 引理 compProd_assoc
@@ -1286,7 +1484,19 @@ lemma compProd_assoc
   · have : ¬ IsSFiniteKernel
         (ξ.comap MeasurableEquiv.prodAssoc (MeasurableEquiv.measurable _)) := by
       refine fun h_sfin => hξ ?_
-     
+      have : ξ = (ξ.comap MeasurableEquiv.prodAssoc (MeasurableEquiv.measurable _)).comap
+          MeasurableEquiv.prodAssoc.symm (MeasurableEquiv.measurable _) := by
+        simp [← comap_comp_right]
+      rw [this]
+      infer_instance
+    simp [hξ, this]
+  ext a s hs
+  rw [compProd_apply hs]; rw [map_apply' _ (by fun_prop) _ hs]; rw [compProd_apply (hs.preimage (by fun_prop))]; rw [lintegral_compProd]
+  swap; · exact measurable_kernel_prodMk_left' hs a
+  congr with b
+  rw [compProd_apply]
+  · congr
+  · exact hs.preimage (by fun_prop)
 
 Depends on / 依赖: IsSFiniteKernel, MeasurableEquiv, MeasurableEquiv.measurable, MeasurableEquiv.prodAssoc, MeasurableEquiv.prodAssoc.symm, comap_comp_right, h_sfin, infer_instance, measurable, prodAssoc
 -/
@@ -1435,7 +1645,7 @@ lemma compProd_sum_right
   · congr with i
     rw [Measure.sum_apply]
     exact measurable_prodMk_left hs
-  · exact fun _ => (measurable_
+  · exact fun _ => (measurable_kernel_prodMk_left' hs a).aemeasurable
 
 中文:
 引理 compProd_sum_right
@@ -1449,7 +1659,7 @@ lemma compProd_sum_right
   · congr with i
     rw [Measure.sum_apply]
     exact measurable_prodMk_left hs
-  · exact fun _ => (measurable_
+  · exact fun _ => (measurable_kernel_prodMk_left' hs a).aemeasurable
 
 Depends on / 依赖: IsSFiniteKernel, Measure, Measure.sum_apply, aemeasurable, compProd_apply, lintegral_tsum, measurable_kernel_prodMk_left, measurable_prodMk_left, simp_rw, sum_apply
 -/
@@ -1480,7 +1690,7 @@ lemma comapRight_compProd_id_prod
     · congr with x
       grind
     · exact measurable_prodMk_left ht
-  · exact (MeasurableEmbedding.id.prodMap hf).measurableSet_image.mpr 
+  · exact (MeasurableEmbedding.id.prodMap hf).measurableSet_image.mpr ht
 
 中文:
 引理 comapRight_compProd_id_prod
@@ -1493,7 +1703,7 @@ lemma comapRight_compProd_id_prod
     · congr with x
       grind
     · exact measurable_prodMk_left ht
-  · exact (MeasurableEmbedding.id.prodMap hf).measurableSet_image.mpr 
+  · exact (MeasurableEmbedding.id.prodMap hf).measurableSet_image.mpr ht
 
 Depends on / 依赖: MeasurableEmbedding, MeasurableEmbedding.id.prodMap, comapRight_apply, compProd_apply, lintegral_congr, measurableSet_image, measurableSet_image.mpr, measurable_prodMk_left, prodMap
 -/

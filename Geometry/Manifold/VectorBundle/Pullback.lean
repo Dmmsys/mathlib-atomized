@@ -45,7 +45,8 @@ instance ContMDiffVectorBundle.pullback
     refine ((contMDiffOn_coordChangeL e e').comp f.contMDiff.contMDiffOn fun b hb => hb).congr ?_
     rintro b (hb : f b in e.baseSet inter e'.baseSet); ext v
     change ((e.pullback f).coordChangeL 𝕜 (e'.pullback f) b) v = (e.coordChangeL 𝕜 e' (f b)) v
-
+    rw [e.coordChangeL_apply e' hb]; rw [(e.pullback f).coordChangeL_apply' _]
+    exacts [rfl, hb]
 
 中文:
 实例 余ntMDiffVectorBundle.pullback
@@ -55,7 +56,8 @@ instance ContMDiffVectorBundle.pullback
     refine ((contMDiffOn_coordChangeL e e').comp f.contMDiff.contMDiffOn fun b hb => hb).congr ?_
     rintro b (hb : f b in e.baseSet inter e'.baseSet); ext v
     change ((e.pullback f).coordChangeL 𝕜 (e'.pullback f) b) v = (e.coordChangeL 𝕜 e' (f b)) v
-
+    rw [e.coordChangeL_apply e' hb]; rw [(e.pullback f).coordChangeL_apply' _]
+    exacts [rfl, hb]
 
 Depends on / 依赖: baseSet, contMDiff, contMDiffOn, contMDiffOn_coordChangeL, coordChangeL, coordChangeL_apply, e.baseSet, e.coordChangeL, e.coordChangeL_apply, e.pullback, exacts, f.contMDiff.contMDiffOn, pullback
 -/

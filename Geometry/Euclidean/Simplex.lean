@@ -45,7 +45,14 @@ lemma Equilateral.angle_eq_pi_div_three
   rcases he with ⟨r, hr⟩
   rw [angle]; rw [InnerProductGeometry.angle]; rw [real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]
   refine Real.arccos_eq_of_eq_cos (by linarith [Real.pi_nonneg]) (by linarith [Real.pi_nonneg]) ?_
-  simp only [vsub_sub_vsub_cancel_right, ← di
+  simp only [vsub_sub_vsub_cancel_right, ← dist_eq_norm_vsub, hr _ _ h₁₂, hr _ _ h₁₃,
+    hr _ _ h₂₃.symm, Real.cos_pi_div_three]
+  have hr0 : r != 0 := by
+    rintro rfl
+    replace hr := hr _ _ h₁₂
+    rw [dist_eq_zero] at hr
+    exact h₁₂ (s.independent.injective hr)
+  field
 
 中文:
 引理 Equilateral.angle_eq_pi_div_three
@@ -54,7 +61,14 @@ lemma Equilateral.angle_eq_pi_div_three
   rcases he with ⟨r, hr⟩
   rw [angle]; rw [InnerProductGeometry.angle]; rw [real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]
   refine Real.arccos_eq_of_eq_cos (by linarith [Real.pi_nonneg]) (by linarith [Real.pi_nonneg]) ?_
-  simp only [vsub_sub_vsub_cancel_right, ← di
+  simp only [vsub_sub_vsub_cancel_right, ← dist_eq_norm_vsub, hr _ _ h₁₂, hr _ _ h₁₃,
+    hr _ _ h₂₃.symm, Real.cos_pi_div_three]
+  have hr0 : r != 0 := by
+    rintro rfl
+    replace hr := hr _ _ h₁₂
+    rw [dist_eq_zero] at hr
+    exact h₁₂ (s.independent.injective hr)
+  field
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle, Real.arccos_eq_of_eq_cos, Real.cos_pi_div_three, Real.pi_nonneg, arccos_eq_of_eq_cos, b.constr_basis, constr_basis, cos_pi_div_three, dist_eq_norm_vsub, dist_eq_zero, independent, injective, pi_nonneg, real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two, replace, s.independent.injective, vsub_sub_vsub_cancel_right
 -/
@@ -213,7 +227,10 @@ lemma acuteAngled_iff_angle_lt
                    h _ _ _ (by decide) (by decide) (by decide)⟩,
           fun ⟨h012, h120, h201⟩ => ?_⟩
   have h210 := angle_comm (t.points 0) _ _ ▸ h012
-  have h021 :
+  have h021 := angle_comm (t.points 1) _ _ ▸ h120
+  have h102 := angle_comm (t.points 2) _ _ ▸ h201
+  intro i₁ i₂ i₃ h₁₂ h₁₃ h₂₃
+  fin_cases i₁ <;> fin_cases i₂ <;> fin_cases i₃ <;> simp [*] at *
 
 中文:
 引理 acuteAngled_iff_angle_lt
@@ -225,7 +242,10 @@ lemma acuteAngled_iff_angle_lt
                    h _ _ _ (by decide) (by decide) (by decide)⟩,
           fun ⟨h012, h120, h201⟩ => ?_⟩
   have h210 := angle_comm (t.points 0) _ _ ▸ h012
-  have h021 :
+  have h021 := angle_comm (t.points 1) _ _ ▸ h120
+  have h102 := angle_comm (t.points 2) _ _ ▸ h201
+  intro i₁ i₂ i₃ h₁₂ h₁₃ h₂₃
+  fin_cases i₁ <;> fin_cases i₂ <;> fin_cases i₃ <;> simp [*] at *
 
 Depends on / 依赖: angle_comm, fin_cases, points, t.points
 -/

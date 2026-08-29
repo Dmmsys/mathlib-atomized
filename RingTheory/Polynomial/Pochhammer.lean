@@ -131,7 +131,7 @@ theorem monic_ascPochhammer
   | zero => simp
   | succ n hn =>
     have : leadingCoeff (X + 1 : S[X]) = 1 := leadingCoeff_X_add_C 1
-    rw [ascPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCoeff_comp (ne_zero_of_eq_one <| natDegree_X_add_C 1 : natDegree (X + 1) != 0)]; rw [hn]; r
+    rw [ascPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCoeff_comp (ne_zero_of_eq_one <| natDegree_X_add_C 1 : natDegree (X + 1) != 0)]; rw [hn]; rw [monic_X]; rw [one_mul]; rw [one_mul]; rw [this]; rw [one_pow]
 
 中文:
 定理 monic_ascPochhammer
@@ -141,7 +141,7 @@ theorem monic_ascPochhammer
   | zero => simp
   | succ n hn =>
     have : leadingCoeff (X + 1 : S[X]) = 1 := leadingCoeff_X_add_C 1
-    rw [ascPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCoeff_comp (ne_zero_of_eq_one <| natDegree_X_add_C 1 : natDegree (X + 1) != 0)]; rw [hn]; r
+    rw [ascPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCoeff_comp (ne_zero_of_eq_one <| natDegree_X_add_C 1 : natDegree (X + 1) != 0)]; rw [hn]; rw [monic_X]; rw [one_mul]; rw [one_mul]; rw [this]; rw [one_pow]
 
 Depends on / 依赖: Monic.def, ascPochhammer_succ_left, continuousMul_induced, leadingCoeff, leadingCoeff_X_add_C, leadingCoeff_comp, leadingCoeff_mul, monic_X, natDegree, natDegree_X_add_C, ne_zero_of_eq_one, one_mul, one_pow, opMulEquiv, opMulEquiv.symm
 -/
@@ -338,7 +338,9 @@ theorem ascPochhammer_succ_right
       Polynomial.map_natCast] using h
   induction n with
   | zero => simp
- 
+  | succ n ih =>
+    conv_lhs =>
+      rw [ascPochhammer_succ_left]; rw [ih]; rw [mul_comp]; rw [← mul_assoc]; rw [← ascPochhammer_succ_left]; rw [add_comp]; rw [X_comp]; rw [natCast_comp]; rw [add_assoc]; rw [add_comm (1 : Nat[X]), ← Nat.cast_succ]
 
 中文:
 定理 ascPochhammer_succ_right
@@ -350,7 +352,9 @@ theorem ascPochhammer_succ_right
       Polynomial.map_natCast] using h
   induction n with
   | zero => simp
- 
+  | succ n ih =>
+    conv_lhs =>
+      rw [ascPochhammer_succ_left]; rw [ih]; rw [mul_comp]; rw [← mul_assoc]; rw [← ascPochhammer_succ_left]; rw [add_comp]; rw [X_comp]; rw [natCast_comp]; rw [add_assoc]; rw [add_comm (1 : Nat[X]), ← Nat.cast_succ]
 
 Depends on / 依赖: Polynomial, Polynomial.map, Polynomial.map_add, Polynomial.map_mul, Polynomial.map_natCast, X_comp, add_assoc, add_comm, add_comp, algebraMap, apply_fun, ascPochhammer, ascPochhammer_map, ascPochhammer_succ_left, conv_lhs, map_X, map_add, map_mul, map_natCast, mul_assoc
 -/
@@ -398,7 +402,8 @@ theorem ascPochhammer_succ_comp_X_add_one
       ascPochhammer Nat (n + 1) + (n + 1) * (ascPochhammer Nat n).comp (X + 1)
     by simpa [map_comp] using congr_arg (Polynomial.map (Nat.castRingHom S)) this
   nth_rw 2 [ascPochhammer_succ_left]
-  rw [← add_mul]; rw [ascPochhammer_succ_righ
+  rw [← add_mul]; rw [ascPochhammer_succ_right Nat n]; rw [mul_comp]; rw [mul_comm]; rw [add_comp]; rw [X_comp]; rw [natCast_comp]; rw [add_comm]; rw [← add_assoc]
+  ring
 
 中文:
 定理 ascPochhammer_succ_comp_X_add_one
@@ -408,7 +413,8 @@ theorem ascPochhammer_succ_comp_X_add_one
       ascPochhammer Nat (n + 1) + (n + 1) * (ascPochhammer Nat n).comp (X + 1)
     by simpa [map_comp] using congr_arg (Polynomial.map (Nat.castRingHom S)) this
   nth_rw 2 [ascPochhammer_succ_left]
-  rw [← add_mul]; rw [ascPochhammer_succ_righ
+  rw [← add_mul]; rw [ascPochhammer_succ_right Nat n]; rw [mul_comp]; rw [mul_comm]; rw [add_comp]; rw [X_comp]; rw [natCast_comp]; rw [add_comm]; rw [← add_assoc]
+  ring
 
 Depends on / 依赖: Nat.castRingHom, Polynomial, Polynomial.map, X_comp, add_assoc, add_comm, add_comp, add_mul, ascPochhammer, ascPochhammer_succ_left, ascPochhammer_succ_right, castRingHom, congr_arg, map_comp, mul_comm, mul_comp, natCast_comp, nth_rw
 -/
@@ -557,7 +563,7 @@ theorem ascPochhammer_natDegree
     rw [ascPochhammer_succ_right]; rw [natDegree_mul _ (ne_zero_of_natDegree_gt <| this.symm ▸ Nat.zero_lt_one)]; rw [hn]; rw [this]
     cases n
     · simp
-· refine ne_zero_
+· refine ne_zero_of_natDegree_gt hn.symm ▸ Nat.add_one_pos _
 
 中文:
 定理 ascPochhammer_natDegree
@@ -570,7 +576,7 @@ theorem ascPochhammer_natDegree
     rw [ascPochhammer_succ_right]; rw [natDegree_mul _ (ne_zero_of_natDegree_gt <| this.symm ▸ Nat.zero_lt_one)]; rw [hn]; rw [this]
     cases n
     · simp
-· refine ne_zero_
+· refine ne_zero_of_natDegree_gt hn.symm ▸ Nat.add_one_pos _
 
 Depends on / 依赖: Nat.add_one_pos, Nat.zero_lt_one, add_one_pos, ascPochhammer_succ_right, hn.symm, natDegree, natDegree_X_add_C, natDegree_mul, ne_zero_of_natDegree_gt, this.symm, zero_lt_one
 -/
@@ -605,7 +611,7 @@ theorem ascPochhammer_pos
     exact zero_lt_one
   | succ n ih =>
     rw [ascPochhammer_succ_right]; rw [mul_add]; rw [eval_add]; rw [← Nat.cast_comm]; rw [eval_natCast_mul]; rw [eval_mul_X]; rw [Nat.cast_comm]; rw [← mul_add]
-    exact mul_pos ih 
+    exact mul_pos ih (lt_of_lt_of_le h (le_add_of_nonneg_right (Nat.cast_nonneg n)))
 
 中文:
 定理 ascPochhammer_pos
@@ -618,7 +624,7 @@ theorem ascPochhammer_pos
     exact zero_lt_one
   | succ n ih =>
     rw [ascPochhammer_succ_right]; rw [mul_add]; rw [eval_add]; rw [← Nat.cast_comm]; rw [eval_natCast_mul]; rw [eval_mul_X]; rw [Nat.cast_comm]; rw [← mul_add]
-    exact mul_pos ih 
+    exact mul_pos ih (lt_of_lt_of_le h (le_add_of_nonneg_right (Nat.cast_nonneg n)))
 
 Depends on / 依赖: Nat.cast_comm, Nat.cast_nonneg, ascPochhammer_succ_right, ascPochhammer_zero, cast_comm, cast_nonneg, eval_add, eval_mul_X, eval_natCast_mul, eval_one, le_add_of_nonneg_right, lt_of_lt_of_le, mul_add, mul_pos, zero_lt_one
 -/
@@ -757,7 +763,8 @@ theorem cast_descFactorial
     simp_rw [add_succ, Nat.add_one_sub_one]
     obtain h | h := le_total a b
     · rw [descFactorial_of_lt (lt_succ_of_le h), descFactorial_of_lt (lt_succ_of_le _)]
-      rw
+      rw [tsub_eq_zero_iff_le.mpr h]; rw [zero_add]
+    · rw [tsub_add_cancel_of_le h]
 
 中文:
 定理 cast_descFactorial
@@ -769,7 +776,8 @@ theorem cast_descFactorial
     simp_rw [add_succ, Nat.add_one_sub_one]
     obtain h | h := le_total a b
     · rw [descFactorial_of_lt (lt_succ_of_le h), descFactorial_of_lt (lt_succ_of_le _)]
-      rw
+      rw [tsub_eq_zero_iff_le.mpr h]; rw [zero_add]
+    · rw [tsub_add_cancel_of_le h]
 
 Depends on / 依赖: Nat.add_one_sub_one, add_one_sub_one, add_succ, ascPochhammer_eval_cast, ascPochhammer_nat_eq_descFactorial, descFactorial_of_lt, le_total, lt_succ_of_le, simp_rw, tsub_add_cancel_of_le, tsub_eq_zero_iff_le, tsub_eq_zero_iff_le.mpr, zero_add
 -/
@@ -900,7 +908,7 @@ theorem monic_descPochhammer
   | succ n hn =>
     have h : leadingCoeff (X - 1 : R[X]) = 1 := leadingCoeff_X_sub_C 1
 have : natDegree (X - (1 : R[X])) != 0 := ne_zero_of_eq_one natDegree_X_sub_C (1 : R)
-    rw [descPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCo
+    rw [descPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCoeff_comp this]; rw [hn]; rw [monic_X]; rw [one_mul]; rw [one_mul]; rw [h]; rw [one_pow]
 
 中文:
 定理 monic_descPochhammer
@@ -911,7 +919,7 @@ have : natDegree (X - (1 : R[X])) != 0 := ne_zero_of_eq_one natDegree_X_sub_C (1
   | succ n hn =>
     have h : leadingCoeff (X - 1 : R[X]) = 1 := leadingCoeff_X_sub_C 1
 have : natDegree (X - (1 : R[X])) != 0 := ne_zero_of_eq_one natDegree_X_sub_C (1 : R)
-    rw [descPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCo
+    rw [descPochhammer_succ_left]; rw [Monic.def]; rw [leadingCoeff_mul]; rw [leadingCoeff_comp this]; rw [hn]; rw [monic_X]; rw [one_mul]; rw [one_mul]; rw [h]; rw [one_pow]
 
 Depends on / 依赖: Monic.def, descPochhammer_succ_left, leadingCoeff, leadingCoeff_X_sub_C, leadingCoeff_comp, leadingCoeff_mul, monic_X, natDegree, natDegree_X_sub_C, ne_zero_of_eq_one, one_mul, one_pow
 -/
@@ -1063,7 +1071,13 @@ theorem descPochhammer_succ_right
     simpa [descPochhammer_map, Polynomial.map_mul, Polynomial.map_add, map_X,
       Polynomial.map_intCast] using h
   induction n with
-  | zero => simp [de
+  | zero => simp [descPochhammer]
+  | succ n ih =>
+    conv_lhs =>
+      rw [descPochhammer_succ_left]; rw [ih]; rw [mul_comp]; rw [← mul_assoc]; rw [← descPochhammer_succ_left]; rw [sub_comp]; rw [X_comp]; rw [natCast_comp]
+    rw [Nat.cast_add]; rw [Nat.cast_one]; rw [sub_add_eq_sub_sub_swap]
+
+@[simp]
 
 中文:
 定理 descPochhammer_succ_right
@@ -1074,7 +1088,13 @@ theorem descPochhammer_succ_right
     simpa [descPochhammer_map, Polynomial.map_mul, Polynomial.map_add, map_X,
       Polynomial.map_intCast] using h
   induction n with
-  | zero => simp [de
+  | zero => simp [descPochhammer]
+  | succ n ih =>
+    conv_lhs =>
+      rw [descPochhammer_succ_left]; rw [ih]; rw [mul_comp]; rw [← mul_assoc]; rw [← descPochhammer_succ_left]; rw [sub_comp]; rw [X_comp]; rw [natCast_comp]
+    rw [Nat.cast_add]; rw [Nat.cast_one]; rw [sub_add_eq_sub_sub_swap]
+
+@[simp]
 
 Depends on / 依赖: Nat.cast_add, Polynomial, Polynomial.map, Polynomial.map_add, Polynomial.map_intCast, Polynomial.map_mul, X_comp, algebraMap, apply_fun, cast_add, conv_lhs, descPochhammer, descPochhammer_map, descPochhammer_succ_left, map_X, map_add, map_intCast, map_mul, mul_assoc, mul_comp
 -/
@@ -1106,7 +1126,7 @@ theorem descPochhammer_natDegree
     rw [descPochhammer_succ_right]; rw [natDegree_mul _ (ne_zero_of_natDegree_gt <| this.symm ▸ Nat.zero_lt_one)]; rw [hn]; rw [this]
     cases n
     · simp
-· refine ne_zero
+· refine ne_zero_of_natDegree_gt hn.symm ▸ Nat.add_one_pos _
 
 中文:
 定理 descPochhammer_natDegree
@@ -1119,7 +1139,7 @@ theorem descPochhammer_natDegree
     rw [descPochhammer_succ_right]; rw [natDegree_mul _ (ne_zero_of_natDegree_gt <| this.symm ▸ Nat.zero_lt_one)]; rw [hn]; rw [this]
     cases n
     · simp
-· refine ne_zero
+· refine ne_zero_of_natDegree_gt hn.symm ▸ Nat.add_one_pos _
 
 Depends on / 依赖: Nat.add_one_pos, Nat.zero_lt_one, add_one_pos, descPochhammer_succ_right, hn.symm, natDegree, natDegree_X_sub_C, natDegree_mul, ne_zero_of_natDegree_gt, this.symm, zero_lt_one
 -/
@@ -1166,7 +1186,8 @@ theorem descPochhammer_succ_comp_X_sub_one
       descPochhammer Int (n + 1) - (n + 1) * (descPochhammer Int n).comp (X - 1)
     by simpa [map_comp] using congr_arg (Polynomial.map (Int.castRingHom R)) this
   nth_rw 2 [descPochhammer_succ_left]
-  rw [← sub_mul]; rw [descPochhammer_succ
+  rw [← sub_mul]; rw [descPochhammer_succ_right Int n]; rw [mul_comp]; rw [mul_comm]; rw [sub_comp]; rw [X_comp]; rw [natCast_comp]
+  ring
 
 中文:
 定理 descPochhammer_succ_comp_X_sub_one
@@ -1176,7 +1197,8 @@ theorem descPochhammer_succ_comp_X_sub_one
       descPochhammer Int (n + 1) - (n + 1) * (descPochhammer Int n).comp (X - 1)
     by simpa [map_comp] using congr_arg (Polynomial.map (Int.castRingHom R)) this
   nth_rw 2 [descPochhammer_succ_left]
-  rw [← sub_mul]; rw [descPochhammer_succ
+  rw [← sub_mul]; rw [descPochhammer_succ_right Int n]; rw [mul_comp]; rw [mul_comm]; rw [sub_comp]; rw [X_comp]; rw [natCast_comp]
+  ring
 
 Depends on / 依赖: Int.castRingHom, Polynomial, Polynomial.map, X_comp, castRingHom, congr_arg, descPochhammer, descPochhammer_succ_left, descPochhammer_succ_right, map_comp, mul_comm, mul_comp, natCast_comp, nth_rw, sub_comp, sub_mul
 -/
@@ -1200,7 +1222,7 @@ theorem descPochhammer_eq_ascPochhammer
   induction n with
   | zero => rw [descPochhammer_zero, ascPochhammer_zero, one_comp]
   | succ n ih =>
-    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [ascPochhammer_succ_left]; rw [ih]; rw [X_mul]; rw [mul_X_comp]; rw [comp_assoc]; rw [add_comp
+    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [ascPochhammer_succ_left]; rw [ih]; rw [X_mul]; rw [mul_X_comp]; rw [comp_assoc]; rw [add_comp]; rw [X_comp]; rw [one_comp]
 
 中文:
 定理 descPochhammer_eq_ascPochhammer
@@ -1209,7 +1231,7 @@ theorem descPochhammer_eq_ascPochhammer
   induction n with
   | zero => rw [descPochhammer_zero, ascPochhammer_zero, one_comp]
   | succ n ih =>
-    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [ascPochhammer_succ_left]; rw [ih]; rw [X_mul]; rw [mul_X_comp]; rw [comp_assoc]; rw [add_comp
+    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [ascPochhammer_succ_left]; rw [ih]; rw [X_mul]; rw [mul_X_comp]; rw [comp_assoc]; rw [add_comp]; rw [X_comp]; rw [one_comp]
 
 Depends on / 依赖: Nat.cast_succ, X_comp, X_mul, add_comp, add_sub_cancel_right, ascPochhammer_succ_left, ascPochhammer_zero, cast_succ, comp_assoc, descPochhammer_succ_right, descPochhammer_zero, mul_X_comp, one_comp, sub_add
 -/
@@ -1230,7 +1252,9 @@ theorem descPochhammer_eval_eq_ascPochhammer
   induction n with
   | zero => rw [descPochhammer_zero, eval_one, ascPochhammer_zero, eval_one]
   | succ n ih =>
-    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_eval]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [eval_mul_X]; rw [show (X + 1 : R[
+    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_eval]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [eval_mul_X]; rw [show (X + 1 : R[X]) =
+      (X + 1 : Nat[X]).map (algebraMap Nat R) by simp only [Polynomial.map_add, map_X,
+      Polynomial.map_one], ascPochhammer_eval_comp, eval₂_add, eval₂_X, eval₂_one]
 
 中文:
 定理 descPochhammer_eval_eq_ascPochhammer
@@ -1239,7 +1263,9 @@ theorem descPochhammer_eval_eq_ascPochhammer
   induction n with
   | zero => rw [descPochhammer_zero, eval_one, ascPochhammer_zero, eval_one]
   | succ n ih =>
-    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_eval]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [eval_mul_X]; rw [show (X + 1 : R[
+    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_eval]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [eval_mul_X]; rw [show (X + 1 : R[X]) =
+      (X + 1 : Nat[X]).map (algebraMap Nat R) by simp only [Polynomial.map_add, map_X,
+      Polynomial.map_one], ascPochhammer_eval_comp, eval₂_add, eval₂_X, eval₂_one]
 
 Depends on / 依赖: Finite, I.IsMaximal, IsMaximal, Nat.cast_succ, Polynomial, Polynomial.map_add, Polynomial.map_one, X_mul, add_sub_cancel_right, algebraMap, ascPochhammer_eval_comp, ascPochhammer_succ_left, ascPochhammer_zero, cast_succ, descPochhammer_succ_eval, descPochhammer_zero, eval_mul_X, eval_one, map_X, map_add
 -/
@@ -1313,7 +1339,10 @@ theorem descPochhammer_eval_eq_descFactorial
   induction k with
   | zero => rw [descPochhammer_zero, eval_one, Nat.descFactorial_zero, Nat.cast_one]
   | succ k ih =>
-    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [mul_sub]; rw [eval_sub]; rw [eval_mul_X]; rw [← Nat.cast_comm k]; rw [eval_natCast_mul]; rw [← Nat.cast_com
+    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [mul_sub]; rw [eval_sub]; rw [eval_mul_X]; rw [← Nat.cast_comm k]; rw [eval_natCast_mul]; rw [← Nat.cast_comm n]; rw [← sub_mul]; rw [ih]
+    by_cases! h : n < k
+    · rw [Nat.descFactorial_eq_zero_iff_lt.mpr h, Nat.cast_zero, mul_zero, mul_zero, Nat.cast_zero]
+    · rw [Nat.cast_mul, Nat.cast_sub h]
 
 中文:
 定理 descPochhammer_eval_eq_descFactorial
@@ -1322,7 +1351,10 @@ theorem descPochhammer_eval_eq_descFactorial
   induction k with
   | zero => rw [descPochhammer_zero, eval_one, Nat.descFactorial_zero, Nat.cast_one]
   | succ k ih =>
-    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [mul_sub]; rw [eval_sub]; rw [eval_mul_X]; rw [← Nat.cast_comm k]; rw [eval_natCast_mul]; rw [← Nat.cast_com
+    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [mul_sub]; rw [eval_sub]; rw [eval_mul_X]; rw [← Nat.cast_comm k]; rw [eval_natCast_mul]; rw [← Nat.cast_comm n]; rw [← sub_mul]; rw [ih]
+    by_cases! h : n < k
+    · rw [Nat.descFactorial_eq_zero_iff_lt.mpr h, Nat.cast_zero, mul_zero, mul_zero, Nat.cast_zero]
+    · rw [Nat.cast_mul, Nat.cast_sub h]
 
 Depends on / 依赖: Nat.cast_comm, Nat.cast_mul, Nat.cast_one, Nat.cast_sub, Nat.cast_zero, Nat.descFactorial_eq_zero_iff_lt.mpr, Nat.descFactorial_succ, Nat.descFactorial_zero, cast_comm, cast_mul, cast_one, cast_sub, cast_zero, descFactorial_eq_zero_iff_lt, descFactorial_succ, descFactorial_zero, descPochhammer_succ_right, descPochhammer_zero, eval_mul_X, eval_natCast_mul
 -/
@@ -1418,7 +1450,13 @@ theorem ascPochhammer_eval_eq_zero_iff
       rw [ascPochhammer_succ_eval]; rw [mul_eq_zero] at zero'
       cases zero' with
       | inl h =>
-        obtain ⟨rn, hrn, 
+        obtain ⟨rn, hrn, rrn⟩ := ih h
+        exact ⟨rn, by lia, rrn⟩
+      | inr h =>
+        exact ⟨n, lt_add_one n, eq_neg_of_add_eq_zero_right h⟩
+  · obtain ⟨rn, hrn, rnn⟩ := hrn
+    convert! ascPochhammer_eval_neg_coe_nat_of_lt hrn
+    simp [rnn]
 
 中文:
 定理 ascPochhammer_eval_eq_zero_iff
@@ -1431,7 +1469,13 @@ theorem ascPochhammer_eval_eq_zero_iff
       rw [ascPochhammer_succ_eval]; rw [mul_eq_zero] at zero'
       cases zero' with
       | inl h =>
-        obtain ⟨rn, hrn, 
+        obtain ⟨rn, hrn, rrn⟩ := ih h
+        exact ⟨rn, by lia, rrn⟩
+      | inr h =>
+        exact ⟨n, lt_add_one n, eq_neg_of_add_eq_zero_right h⟩
+  · obtain ⟨rn, hrn, rnn⟩ := hrn
+    convert! ascPochhammer_eval_neg_coe_nat_of_lt hrn
+    simp [rnn]
 
 Depends on / 依赖: Polynomial, Polynomial.eval_one, ascPochhammer_eval_neg_coe_nat_of_lt, ascPochhammer_succ_eval, ascPochhammer_zero, convert, eq_neg_of_add_eq_zero_right, eval_one, lt_add_one, mul_eq_zero, one_ne_zero
 -/
@@ -1581,7 +1625,9 @@ theorem pow_le_descPochhammer_eval
   | succ n ih =>
     rw [Nat.cast_add_one]; rw [add_sub_cancel_right]; rw [← sub_nonneg] at h
     have hsub1 : n - 1 <= s := (sub_le_self (n : S) zero_le_one).trans (le_of_sub_nonneg h)
-    rw [pow_succ]; rw [descPochhammer_succ_eval]; rw [Nat.cast_add_one]; rw
+    rw [pow_succ]; rw [descPochhammer_succ_eval]; rw [Nat.cast_add_one]; rw [sub_add]; rw [add_sub_cancel_right]
+    apply mul_le_mul _ le_rfl h (descPochhammer_nonneg hsub1)
+exact (ih hsub1).trans' pow_le_pow_left₀ h (le_add_of_nonneg_right zero_le_one) n
 
 中文:
 定理 pow_le_descPochhammer_eval
@@ -1592,7 +1638,9 @@ theorem pow_le_descPochhammer_eval
   | succ n ih =>
     rw [Nat.cast_add_one]; rw [add_sub_cancel_right]; rw [← sub_nonneg] at h
     have hsub1 : n - 1 <= s := (sub_le_self (n : S) zero_le_one).trans (le_of_sub_nonneg h)
-    rw [pow_succ]; rw [descPochhammer_succ_eval]; rw [Nat.cast_add_one]; rw
+    rw [pow_succ]; rw [descPochhammer_succ_eval]; rw [Nat.cast_add_one]; rw [sub_add]; rw [add_sub_cancel_right]
+    apply mul_le_mul _ le_rfl h (descPochhammer_nonneg hsub1)
+exact (ih hsub1).trans' pow_le_pow_left₀ h (le_add_of_nonneg_right zero_le_one) n
 
 Depends on / 依赖: Nat.cast_add_one, add_sub_cancel_right, cast_add_one, descPochhammer_nonneg, descPochhammer_succ_eval, le_add_of_nonneg_right, le_of_sub_nonneg, le_rfl, mul_le_mul, pow_succ, sub_add, sub_le_self, sub_nonneg, zero_le_one
 -/
@@ -1620,7 +1668,10 @@ theorem monotoneOn_descPochhammer_eval
     intro a ha b hb hab
     rw [Set.mem_Ici]; rw [Nat.cast_add_one]; rw [add_sub_cancel_right] at ha hb
     have ha_sub1 : n - 1 <= a := (sub_le_self (n : S) zero_le_one).trans ha
-    have hb_sub1 : n - 1 <= b := (sub_le_self
+    have hb_sub1 : n - 1 <= b := (sub_le_self (n : S) zero_le_one).trans hb
+    simp_rw [descPochhammer_succ_eval]
+    exact mul_le_mul (ih ha_sub1 hb_sub1 hab) (sub_le_sub_right hab (n : S))
+      (sub_nonneg_of_le ha) (descPochhammer_nonneg hb_sub1)
 
 中文:
 定理 monotoneOn_descPochhammer_eval
@@ -1632,7 +1683,10 @@ theorem monotoneOn_descPochhammer_eval
     intro a ha b hb hab
     rw [Set.mem_Ici]; rw [Nat.cast_add_one]; rw [add_sub_cancel_right] at ha hb
     have ha_sub1 : n - 1 <= a := (sub_le_self (n : S) zero_le_one).trans ha
-    have hb_sub1 : n - 1 <= b := (sub_le_self
+    have hb_sub1 : n - 1 <= b := (sub_le_self (n : S) zero_le_one).trans hb
+    simp_rw [descPochhammer_succ_eval]
+    exact mul_le_mul (ih ha_sub1 hb_sub1 hab) (sub_le_sub_right hab (n : S))
+      (sub_nonneg_of_le ha) (descPochhammer_nonneg hb_sub1)
 
 Depends on / 依赖: Nat.cast_add_one, Set.mem_Ici, add_sub_cancel_right, cast_add_one, descPochhammer_nonneg, descPochhammer_succ_eval, ha_sub1, hb_sub1, mem_Ici, monotoneOn_const, mul_le_mul, simp_rw, sub_le_self, sub_le_sub_right, sub_nonneg_of_le, zero_le_one
 -/

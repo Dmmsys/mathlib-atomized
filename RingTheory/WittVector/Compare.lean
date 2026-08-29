@@ -55,7 +55,9 @@ theorem eq_of_le_of_cast_pow_eq_zero
     rw [map_pow]; rw [map_natCast]
   rw [this]; rw [ne_eq]; rw [TruncatedWittVector.ext_iff]; rw [not_forall]; clear this
   use ⟨i, hin⟩
-
+  rw [WittVector.coeff_truncate]; rw [coeff_zero]; rw [Fin.val_mk]; rw [WittVector.coeff_p_pow]
+  have : Nontrivial R := CharP.nontrivial_of_char_ne_one hp.1.ne_one
+  exact one_ne_zero
 
 中文:
 定理 eq_of_le_of_cast_pow_eq_zero
@@ -67,7 +69,9 @@ theorem eq_of_le_of_cast_pow_eq_zero
     rw [map_pow]; rw [map_natCast]
   rw [this]; rw [ne_eq]; rw [TruncatedWittVector.ext_iff]; rw [not_forall]; clear this
   use ⟨i, hin⟩
-
+  rw [WittVector.coeff_truncate]; rw [coeff_zero]; rw [Fin.val_mk]; rw [WittVector.coeff_p_pow]
+  have : Nontrivial R := CharP.nontrivial_of_char_ne_one hp.1.ne_one
+  exact one_ne_zero
 
 Depends on / 依赖: CharP.nontrivial_of_char_ne_one, Fin.val_mk, Nontrivial, TruncatedWittVector, TruncatedWittVector.ext_iff, WittVector, WittVector.coeff_p_pow, WittVector.coeff_truncate, WittVector.truncate, coeff_p_pow, coeff_truncate, coeff_zero, contrapose, ext_iff, lt_of_le_of_ne, map_natCast, map_pow, ne_eq, ne_one, nontrivial_of_char_ne_one
 -/
@@ -293,7 +297,8 @@ theorem toZModPow_compat
     _ = ((zmodEquivTrunc p m).symm.toRingHom.comp (TruncatedWittVector.truncate h)).comp
           (truncate n) := by
       rw [commutes_symm]; rw [RingHom.comp_assoc]
-    _ = (zmodEquivTrunc p m).s
+    _ = (zmodEquivTrunc p m).symm.toRingHom.comp (truncate m) := by
+      rw [RingHom.comp_assoc]; rw [truncate_comp_wittVector_truncate]
 
 中文:
 定理 toZModPow_compat
@@ -303,7 +308,8 @@ theorem toZModPow_compat
     _ = ((zmodEquivTrunc p m).symm.toRingHom.comp (TruncatedWittVector.truncate h)).comp
           (truncate n) := by
       rw [commutes_symm]; rw [RingHom.comp_assoc]
-    _ = (zmodEquivTrunc p m).s
+    _ = (zmodEquivTrunc p m).symm.toRingHom.comp (truncate m) := by
+      rw [RingHom.comp_assoc]; rw [truncate_comp_wittVector_truncate]
 
 Depends on / 依赖: RingHom, RingHom.comp_assoc, TruncatedWittVector, TruncatedWittVector.truncate, ZMod.castHom, castHom, commutes_symm, comp_assoc, symm.toRingHom.comp, toRingHom, truncate, truncate_comp_wittVector_truncate, zmodEquivTrunc
 -/
@@ -391,7 +397,7 @@ theorem toPadicInt_comp_fromPadicInt
   rw [← RingHom.comp_assoc]; rw [toPadicInt]; rw [PadicInt.lift_spec]
   simp only [fromPadicInt, toZModPow, RingHom.comp_id]
   rw [RingHom.comp_assoc]; rw [truncate_comp_lift]; rw [← RingHom.comp_assoc]
-  simp only [RingEquiv.symm_toRingHom_comp_to
+  simp only [RingEquiv.symm_toRingHom_comp_toRingHom, RingHom.id_comp]
 
 中文:
 定理 toPadic整数_comp_fromPadic整数
@@ -402,7 +408,7 @@ theorem toPadicInt_comp_fromPadicInt
   rw [← RingHom.comp_assoc]; rw [toPadicInt]; rw [PadicInt.lift_spec]
   simp only [fromPadicInt, toZModPow, RingHom.comp_id]
   rw [RingHom.comp_assoc]; rw [truncate_comp_lift]; rw [← RingHom.comp_assoc]
-  simp only [RingEquiv.symm_toRingHom_comp_to
+  simp only [RingEquiv.symm_toRingHom_comp_toRingHom, RingHom.id_comp]
 
 Depends on / 依赖: PadicInt, PadicInt.lift_spec, PadicInt.toZModPow_eq_iff_ext, RingEquiv, RingEquiv.symm_toRingHom_comp_toRingHom, RingHom, RingHom.comp_assoc, RingHom.comp_id, RingHom.id_comp, comp_assoc, comp_id, fromPadicInt, id_comp, lift_spec, symm_toRingHom_comp_toRingHom, toPadicInt, toZModPow, toZModPow_eq_iff_ext, truncate_comp_lift
 -/

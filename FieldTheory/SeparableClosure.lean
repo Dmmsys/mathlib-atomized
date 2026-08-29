@@ -620,7 +620,8 @@ abbreviation separableClosureOperator
   · let _ := (inclusion le).toAlgebra
     have : IsScalarTower K L E := .of_algebraMap_eq' rfl
     exact hx.tower_top _
-  · obtain ⟨x, rfl⟩ := (separa
+  · obtain ⟨x, rfl⟩ := (separableClosure.separableClosure_eq_bot K E).le hx
+    exact x.2
 
 中文:
 缩写 separableClosureOperator
@@ -631,7 +632,8 @@ abbreviation separableClosureOperator
   · let _ := (inclusion le).toAlgebra
     have : IsScalarTower K L E := .of_algebraMap_eq' rfl
     exact hx.tower_top _
-  · obtain ⟨x, rfl⟩ := (separa
+  · obtain ⟨x, rfl⟩ := (separableClosure.separableClosure_eq_bot K E).le hx
+    exact x.2
 
 Depends on / 依赖: IsScalarTower, hx.tower_top, inclusion, le_restrictScalars_separableClosure, of_algebraMap_eq, restrictScalars, separableClosure, separableClosure.separableClosure_eq_bot, separableClosure_eq_bot, toAlgebra, tower_top
 -/
@@ -1055,7 +1057,26 @@ lemma exists_finset_maximalFor_isTranscendenceBasis_separableClosure
   have Hexists : {s : Finset E | IsTranscendenceBasis F ((↑) : s -> E)}.Nonempty := by
     have ⟨s, hs⟩ := IntermediateField.fg_top F E
     have : Algebra.IsAlgebraic (Algebra.adjoin F (s : Set E)) E := by
-      rw [← isAlgeb
+      rw [← isAlgebraic_adjoin_iff_top]; rw [hs]; rw [Algebra.isAlgebraic_iff_isIntegral]
+      refine Algebra.isIntegral_of_surjective topEquiv.surjective
+    have ⟨t, hts, ht⟩ := exists_isTranscendenceBasis_subset (R := F) (s : Set E)
+    lift t to Finset E using s.finite_toSet.subset hts
+    exact ⟨t, ht⟩
+  let s := d.argminOn _ Hexists
+  have hs := d.argminOn_mem _ Hexists
+  refine ⟨s, hs, fun t ht => not_lt_iff_le_imp_ge.mp fun H => ?_⟩
+  have : t.Finite := by
+    simp [Set.Finite, ← Cardinal.mk_lt_aleph0_iff, ht.cardinalMk_eq hs, Cardinal.natCast_lt_aleph0]
+  lift t to Finset E using this
+  have : Module.Finite (adjoin F (s : Set E)) E := by
+    apply +allowSynthFailures Algebra.finite_of_essFiniteType_of_isAlgebraic
+    · exact .of_comp F _ _
+    · convert! hs.isAlgebraic_field <;> simp [s]
+  have : Module.Finite ((separableClosure (adjoin F (s : Set E)) E).restrictScalars F) E :=
+inferInstanceAs Module.Finite (separableClosure (adjoin F (s : Set E)) E) E
+  exact d.not_lt_argminOn _ ht (by apply finrank_lt_of_gt H)
+
+@[simp]
 
 中文:
 引理 存在_finset_maximalFor_isTranscendenceBasis_separableClosure
@@ -1064,7 +1085,26 @@ lemma exists_finset_maximalFor_isTranscendenceBasis_separableClosure
   have Hexists : {s : Finset E | IsTranscendenceBasis F ((↑) : s -> E)}.Nonempty := by
     have ⟨s, hs⟩ := IntermediateField.fg_top F E
     have : Algebra.IsAlgebraic (Algebra.adjoin F (s : Set E)) E := by
-      rw [← isAlgeb
+      rw [← isAlgebraic_adjoin_iff_top]; rw [hs]; rw [Algebra.isAlgebraic_iff_isIntegral]
+      refine Algebra.isIntegral_of_surjective topEquiv.surjective
+    have ⟨t, hts, ht⟩ := exists_isTranscendenceBasis_subset (R := F) (s : Set E)
+    lift t to Finset E using s.finite_toSet.subset hts
+    exact ⟨t, ht⟩
+  let s := d.argminOn _ Hexists
+  have hs := d.argminOn_mem _ Hexists
+  refine ⟨s, hs, fun t ht => not_lt_iff_le_imp_ge.mp fun H => ?_⟩
+  have : t.Finite := by
+    simp [Set.Finite, ← Cardinal.mk_lt_aleph0_iff, ht.cardinalMk_eq hs, Cardinal.natCast_lt_aleph0]
+  lift t to Finset E using this
+  have : Module.Finite (adjoin F (s : Set E)) E := by
+    apply +allowSynthFailures Algebra.finite_of_essFiniteType_of_isAlgebraic
+    · exact .of_comp F _ _
+    · convert! hs.isAlgebraic_field <;> simp [s]
+  have : Module.Finite ((separableClosure (adjoin F (s : Set E)) E).restrictScalars F) E :=
+inferInstanceAs Module.Finite (separableClosure (adjoin F (s : Set E)) E) E
+  exact d.not_lt_argminOn _ ht (by apply finrank_lt_of_gt H)
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.adjoin, Algebra.isAlgebraic_iff_isIntegral, Algebra.isIntegral_of_surjective, Field.finInsepDegree, Finset, Hexists, IntermediateField, IntermediateField.fg_top, IsAlgebraic, IsTranscendenceBasis, Nonempty, adjoin, exists_isTranscendenceBasis_subset, fg_top, finInsepDegree, isAlgebraic_adjoin_iff_top, isAlgebraic_iff_isIntegral, isIntegral_of_surjective
 -/
@@ -1362,7 +1402,7 @@ lemma _root_.Field.insepDegree_top_le_insepDegree_of_isScalarTower
   have : IsScalarTower (separableClosure F K) ((separableClosure E K).restrictScalars F) K :=
     .of_algebraMap_eq' rfl
   exact Module.rank_top_le_rank_of_isScalarTower
-    (separableClosure F K) ((separ
+    (separableClosure F K) ((separableClosure E K).restrictScalars F) K
 
 中文:
 引理 _root_.域.insepDegree_top_le_insepDegree_of_isScalarTower
@@ -1371,7 +1411,7 @@ lemma _root_.Field.insepDegree_top_le_insepDegree_of_isScalarTower
   have : IsScalarTower (separableClosure F K) ((separableClosure E K).restrictScalars F) K :=
     .of_algebraMap_eq' rfl
   exact Module.rank_top_le_rank_of_isScalarTower
-    (separableClosure F K) ((separ
+    (separableClosure F K) ((separableClosure E K).restrictScalars F) K
 
 Depends on / 依赖: IntermediateField, IntermediateField.inclusion, IsScalarTower, Module, Module.rank_top_le_rank_of_isScalarTower, inclusion, le_restrictScalars, of_algebraMap_eq, rank_top_le_rank_of_isScalarTower, restrictScalars, separableClosure, separableClosure.le_restrictScalars, toAlgebra
 -/
@@ -1423,7 +1463,7 @@ lemma _root_.Field.finInsepDegree_top_le_finInsepDegree_of_isScalarTower
   have : IsScalarTower (separableClosure F K) ((separableClosure E K).restrictScalars F) K :=
     .of_algebraMap_eq' rfl
   exact Module.finrank_top_le_finrank_of_isScalarTower
-    (separableClosure F K) (
+    (separableClosure F K) ((separableClosure E K).restrictScalars F) K
 
 中文:
 引理 _root_.域.finInsepDegree_top_le_finInsepDegree_of_isScalarTower
@@ -1433,7 +1473,7 @@ lemma _root_.Field.finInsepDegree_top_le_finInsepDegree_of_isScalarTower
   have : IsScalarTower (separableClosure F K) ((separableClosure E K).restrictScalars F) K :=
     .of_algebraMap_eq' rfl
   exact Module.finrank_top_le_finrank_of_isScalarTower
-    (separableClosure F K) (
+    (separableClosure F K) ((separableClosure E K).restrictScalars F) K
 
 Depends on / 依赖: IntermediateField, IntermediateField.inclusion, IsScalarTower, Module, Module.finrank_top_le_finrank_of_isScalarTower, finrank_top_le_finrank_of_isScalarTower, inclusion, le_restrictScalars, of_algebraMap_eq, restrictScalars, separableClosure, separableClosure.le_restrictScalars, toAlgebra
 -/

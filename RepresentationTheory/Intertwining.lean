@@ -2220,7 +2220,15 @@ definition equivLinearMapAsModule
         induction m using MonoidAlgebra.induction_linear with
           | zero => simp [f.toLinearMap.map_zero]
           | add x y hx hy => simp [add_smul, map_add, hx, hy]
-          | single g a => simp [f.
+          | single g a => simp [f.isIntertwining]; rfl }
+  invFun f :=
+    { toLinearMap := { f with
+        map_smul' a v := by simp }
+      isIntertwining' g := by ext v; simpa using! f.map_smul' (MonoidAlgebra.single g 1) v }
+  map_add' g₁ g₂ := by ext; simp
+  map_smul' t g := by ext; simp
+  left_inv f := rfl
+  right_inv f := rfl
 
 中文:
 定义 equivLinearMapAsModule
@@ -2231,7 +2239,15 @@ definition equivLinearMapAsModule
         induction m using MonoidAlgebra.induction_linear with
           | zero => simp [f.toLinearMap.map_zero]
           | add x y hx hy => simp [add_smul, map_add, hx, hy]
-          | single g a => simp [f.
+          | single g a => simp [f.isIntertwining]; rfl }
+  invFun f :=
+    { toLinearMap := { f with
+        map_smul' a v := by simp }
+      isIntertwining' g := by ext v; simpa using! f.map_smul' (MonoidAlgebra.single g 1) v }
+  map_add' g₁ g₂ := by ext; simp
+  map_smul' t g := by ext; simp
+  left_inv f := rfl
+  right_inv f := rfl
 
 Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.induction_linear, MonoidAlgebra.single, add_smul, f.isIntertwining, f.map_smul, f.toLinearMap, f.toLinearMap.map_add, f.toLinearMap.map_zero, induction_linear, invFun, isIntertwining, left_inv, map_add, map_smul, map_zero, single, toLinearMap
 -/
@@ -2265,7 +2281,8 @@ definition llcomp
       (by intro γ v; simp [f.isIntertwining, g.isIntertwining]))
       map_add' _ _ := by ext; simp [map_add, toLinearMap_apply]
       map_smul' _ _ := by ext; simp [toLinearMap_apply] }
-  map_add' _ _ := by ex
+  map_add' _ _ := by ext; simp [toLinearMap_apply]
+  map_smul' _ _ := by ext; simp [toLinearMap_apply]
 
 中文:
 定义 llcomp
@@ -2274,7 +2291,8 @@ definition llcomp
       (by intro γ v; simp [f.isIntertwining, g.isIntertwining]))
       map_add' _ _ := by ext; simp [map_add, toLinearMap_apply]
       map_smul' _ _ := by ext; simp [toLinearMap_apply] }
-  map_add' _ _ := by ex
+  map_add' _ _ := by ext; simp [toLinearMap_apply]
+  map_smul' _ _ := by ext; simp [toLinearMap_apply]
 
 Depends on / 依赖: f.isIntertwining, f.toLinearMap.comp, g.isIntertwining, g.toLinearMap, intertwiningMap_of_isIntertwiningMap, isIntertwining, map_add, map_smul, toLinearMap, toLinearMap_apply
 -/
@@ -2521,7 +2539,7 @@ instance instSemiring
       induction n with
       | zero => rfl
       | succ n ih => simp [ih, pow_succ])
-    (fun
+    (fun _ => rfl)
 
 中文:
 实例 instSemiring
@@ -2534,7 +2552,7 @@ instance instSemiring
       induction n with
       | zero => rfl
       | succ n ih => simp [ih, pow_succ])
-    (fun
+    (fun _ => rfl)
 
 Depends on / 依赖: Function, Function.Injective.semiring, Injective, IntertwiningMap, f.toLinearMap, fast_instance, pow_succ, semiring, toLinearMap, toLinearMap_injective
 -/

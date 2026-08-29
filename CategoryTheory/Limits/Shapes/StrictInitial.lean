@@ -622,7 +622,24 @@ theorem limit_π_isIso_of_is_strict_terminal
       split_ifs with h h_1 h_1
       · cases h
         cases h_1
-        obtain rfl : f = 𝟙 _ 
+        obtain rfl : f = 𝟙 _ := Subsingleton.elim _ _
+        simp
+      · cases h
+        have : IsIso (F.map f) := (H _ h_1).isIso_from _
+        rw [← IsIso.comp_inv_eq]
+        apply (H _ h_1).hom_ext
+      · cases h_1
+        apply (H _ h).hom_ext
+      · apply (H _ h).hom_ext
+    · ext
+      rw [assoc]; rw [limit.lift_π]
+      dsimp only
+      split_ifs with h
+      · cases h
+        rw [id_comp]; rw [eqToHom_refl]
+        exact comp_id _
+      · apply (H _ h).hom_ext
+    · simp
 
 中文:
 定理 limit_π_isIso_of_is_strict_terminal
@@ -638,7 +655,24 @@ theorem limit_π_isIso_of_is_strict_terminal
       split_ifs with h h_1 h_1
       · cases h
         cases h_1
-        obtain rfl : f = 𝟙 _ 
+        obtain rfl : f = 𝟙 _ := Subsingleton.elim _ _
+        simp
+      · cases h
+        have : IsIso (F.map f) := (H _ h_1).isIso_from _
+        rw [← IsIso.comp_inv_eq]
+        apply (H _ h_1).hom_ext
+      · cases h_1
+        apply (H _ h).hom_ext
+      · apply (H _ h).hom_ext
+    · ext
+      rw [assoc]; rw [limit.lift_π]
+      dsimp only
+      split_ifs with h
+      · cases h
+        rw [id_comp]; rw [eqToHom_refl]
+        exact comp_id _
+      · apply (H _ h).hom_ext
+    · simp
 
 Depends on / 依赖: F.map, IsIso.comp_inv_eq, Subsingleton, Subsingleton.elim, classical, comp_inv_eq, eqToHom, hom_ext, isIso_from, limit.lift, limit.lift_, split_ifs
 -/

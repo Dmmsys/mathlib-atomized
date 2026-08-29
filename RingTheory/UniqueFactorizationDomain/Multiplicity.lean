@@ -40,7 +40,7 @@ theorem WfDvdMonoid.max_power_factor'
     {a | exists n, x ^ n * a = a₀} ⟨a₀, 0, by rw [pow_zero, one_mul]⟩
   refine ⟨n, a, ?_, rfl⟩; rintro ⟨d, rfl⟩
   exact hm d ⟨n + 1, by rw [pow_succ, mul_assoc]⟩
-    ⟨(right_ne_zero_of_mul <| right_ne_zero_of_mul h), x, hx, mul_comm _ _
+    ⟨(right_ne_zero_of_mul <| right_ne_zero_of_mul h), x, hx, mul_comm _ _⟩
 
 中文:
 定理 WfDvdMonoid.max_power_factor'
@@ -50,7 +50,7 @@ theorem WfDvdMonoid.max_power_factor'
     {a | exists n, x ^ n * a = a₀} ⟨a₀, 0, by rw [pow_zero, one_mul]⟩
   refine ⟨n, a, ?_, rfl⟩; rintro ⟨d, rfl⟩
   exact hm d ⟨n + 1, by rw [pow_succ, mul_assoc]⟩
-    ⟨(right_ne_zero_of_mul <| right_ne_zero_of_mul h), x, hx, mul_comm _ _
+    ⟨(right_ne_zero_of_mul <| right_ne_zero_of_mul h), x, hx, mul_comm _ _⟩
 
 Depends on / 依赖: has_min, mul_assoc, mul_comm, one_mul, pow_succ, pow_zero, right_ne_zero_of_mul, wellFounded_dvdNotUnit, wellFounded_dvdNotUnit.has_min
 -/
@@ -150,7 +150,12 @@ theorem le_emultiplicity_iff_replicate_le_normalizedFactors
   constructor
   · rintro ⟨c, rfl⟩
     rw [Ne]; rw [pow_succ']; rw [mul_assoc]; rw [mul_eq_zero]; rw [not_or] at hb
-    rw [pow_succ']; rw [mul_assoc]; rw [normalizedFactors_mul hb
+    rw [pow_succ']; rw [mul_assoc]; rw [normalizedFactors_mul hb.1 hb.2]; rw [replicate_succ]; rw [normalizedFactors_irreducible ha]; rw [singleton_add]; rw [cons_le_cons_iff]; rw [← ih hb.2]
+    apply Dvd.intro _ rfl
+  · rw [Multiset.le_iff_exists_add]
+    rintro ⟨u, hu⟩
+    rw [← (prod_normalizedFactors hb).dvd_iff_dvd_right]; rw [hu]; rw [prod_add]; rw [prod_replicate]
+    exact (Associated.pow_pow <| associated_normalize a).dvd.trans (Dvd.intro u.prod rfl)
 
 中文:
 定理 le_emultiplicity_iff_replicate_le_normalizedFactors
@@ -165,7 +170,12 @@ theorem le_emultiplicity_iff_replicate_le_normalizedFactors
   constructor
   · rintro ⟨c, rfl⟩
     rw [Ne]; rw [pow_succ']; rw [mul_assoc]; rw [mul_eq_zero]; rw [not_or] at hb
-    rw [pow_succ']; rw [mul_assoc]; rw [normalizedFactors_mul hb
+    rw [pow_succ']; rw [mul_assoc]; rw [normalizedFactors_mul hb.1 hb.2]; rw [replicate_succ]; rw [normalizedFactors_irreducible ha]; rw [singleton_add]; rw [cons_le_cons_iff]; rw [← ih hb.2]
+    apply Dvd.intro _ rfl
+  · rw [Multiset.le_iff_exists_add]
+    rintro ⟨u, hu⟩
+    rw [← (prod_normalizedFactors hb).dvd_iff_dvd_right]; rw [hu]; rw [prod_add]; rw [prod_replicate]
+    exact (Associated.pow_pow <| associated_normalize a).dvd.trans (Dvd.intro u.prod rfl)
 
 Depends on / 依赖: Dvd.intro, Multiset, Multiset.le_iff_exists_add, cons_le_cons_iff, le_iff_exists_add, mul_assoc, mul_eq_zero, normalizedFactors_irreducible, normalizedFactors_mul, not_or, pow_dvd_iff_le_emultiplicity, pow_succ, prod_normalizedFac, replicate_succ, revert, singleton_add
 -/
@@ -201,7 +211,7 @@ theorem emultiplicity_eq_count_normalizedFactors
   · apply Order.le_of_lt_add_one
     rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [lt_iff_not_ge]; rw [le_emultiplicity_iff_replicate_le_normalizedFactors ha hb]; rw [← le_count_iff_replicate_le]
     simp
-  rw [le_emultiplicity_iff_replicate_le_normalizedFactors ha hb]; rw [← 
+  rw [le_emultiplicity_iff_replicate_le_normalizedFactors ha hb]; rw [← le_count_iff_replicate_le]
 
 中文:
 定理 emultiplicity_eq_count_normalizedFactors
@@ -211,7 +221,7 @@ theorem emultiplicity_eq_count_normalizedFactors
   · apply Order.le_of_lt_add_one
     rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [lt_iff_not_ge]; rw [le_emultiplicity_iff_replicate_le_normalizedFactors ha hb]; rw [← le_count_iff_replicate_le]
     simp
-  rw [le_emultiplicity_iff_replicate_le_normalizedFactors ha hb]; rw [← 
+  rw [le_emultiplicity_iff_replicate_le_normalizedFactors ha hb]; rw [← le_count_iff_replicate_le]
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, Order.le_of_lt_add_one, cast_add, cast_one, le_antisymm, le_count_iff_replicate_le, le_emultiplicity_iff_replicate_le_normalizedFactors, le_of_lt_add_one, lt_iff_not_ge
 -/
@@ -381,7 +391,15 @@ lemma dvd_iff_emultiplicity_le
   by_cases hb : b = 0
   · simp_all
   let : StrongNormalizationMonoid R := UniqueFactorizationMonoid.strongNormalizationMonoid
-  rw [dvd_iff_normalizedFactors_le_normalizedFactors ha hb]; rw [Multiset.le
+  rw [dvd_iff_normalizedFactors_le_normalizedFactors ha hb]; rw [Multiset.le_iff_count]
+  intro q
+  by_cases hq : q in normalizedFactors a
+  · have hqprime : Prime q := prime_of_normalized_factor q hq
+    have h1 := emultiplicity_eq_count_normalizedFactors hqprime.irreducible ha
+    have h2 := emultiplicity_eq_count_normalizedFactors hqprime.irreducible hb
+    rw [normalize_normalized_factor q hq] at h1 h2
+    simpa [h1, h2] using h q hqprime
+  · simp [Multiset.count_eq_zero_of_notMem hq]
 
 中文:
 引理 dvd_iff_emultiplicity_le
@@ -392,7 +410,15 @@ lemma dvd_iff_emultiplicity_le
   by_cases hb : b = 0
   · simp_all
   let : StrongNormalizationMonoid R := UniqueFactorizationMonoid.strongNormalizationMonoid
-  rw [dvd_iff_normalizedFactors_le_normalizedFactors ha hb]; rw [Multiset.le
+  rw [dvd_iff_normalizedFactors_le_normalizedFactors ha hb]; rw [Multiset.le_iff_count]
+  intro q
+  by_cases hq : q in normalizedFactors a
+  · have hqprime : Prime q := prime_of_normalized_factor q hq
+    have h1 := emultiplicity_eq_count_normalizedFactors hqprime.irreducible ha
+    have h2 := emultiplicity_eq_count_normalizedFactors hqprime.irreducible hb
+    rw [normalize_normalized_factor q hq] at h1 h2
+    simpa [h1, h2] using h q hqprime
+  · simp [Multiset.count_eq_zero_of_notMem hq]
 
 Depends on / 依赖: Multiset, Multiset.le_iff_count, StrongNormalizationMonoid, UniqueFactorizationMonoid, UniqueFactorizationMonoid.strongNormalizationMonoid, classical, dvd_iff_normalizedFactors_le_normalizedFactors, emultip, emultiplicity_eq_count_normalizedFactors, emultiplicity_le_emultiplicity_of_dvd_right, hqprime, hqprime.irreducible, irreducible, le_iff_count, normalizedFactors, prime_of_normalized_factor, strongNormalizationMonoid
 -/
@@ -428,7 +454,9 @@ lemma pow_dvd_pow_iff_dvd
   intro H p hp
   have := H p hp
   rwa [emultiplicity_pow hp, emultiplicity_pow hp,
-    ENat.mul_le_mul_left_iff (by exact_mod
+    ENat.mul_le_mul_left_iff (by exact_mod_cast hn) (ENat.natCast_ne_top _)] at this
+
+@[fun_prop]
 
 中文:
 引理 pow_dvd_pow_iff_dvd
@@ -442,7 +470,9 @@ lemma pow_dvd_pow_iff_dvd
   intro H p hp
   have := H p hp
   rwa [emultiplicity_pow hp, emultiplicity_pow hp,
-    ENat.mul_le_mul_left_iff (by exact_mod
+    ENat.mul_le_mul_left_iff (by exact_mod_cast hn) (ENat.natCast_ne_top _)] at this
+
+@[fun_prop]
 
 Depends on / 依赖: ENat.mul_le_mul_left_iff, ENat.natCast_ne_top, dvd_iff_emultiplicity_le, emultiplicity_pow, mul_le_mul_left_iff, natCast_ne_top, pow_dvd_pow_of_dvd, pow_ne_zero
 -/

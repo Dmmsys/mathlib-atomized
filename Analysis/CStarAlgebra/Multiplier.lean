@@ -1147,7 +1147,7 @@ instance instRing
   body: toProdMulOpposite_injective.ring _ rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _x _n => Prod.ext rfl <| MulOpposite.op_smul _ _)
     (fun _x _n => Prod.ext rfl <| MulOpposite.op_smul _ _)
-    (fun _x _n => Prod.ext rfl <| MulOpposite.op_pow _ _) (fun _ => rfl) 
+    (fun _x _n => Prod.ext rfl <| MulOpposite.op_pow _ _) (fun _ => rfl) fun _ => rfl
 
 中文:
 实例 instRing
@@ -1155,7 +1155,7 @@ instance instRing
   定义体: toProdMulOpposite_injective.ring _ rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _x _n => Prod.ext rfl <| MulOpposite.op_smul _ _)
     (fun _x _n => Prod.ext rfl <| MulOpposite.op_smul _ _)
-    (fun _x _n => Prod.ext rfl <| MulOpposite.op_pow _ _) (fun _ => rfl) 
+    (fun _x _n => Prod.ext rfl <| MulOpposite.op_pow _ _) (fun _ => rfl) fun _ => rfl
 
 Depends on / 依赖: MulOpposite, MulOpposite.op_pow, MulOpposite.op_smul, Prod.ext, op_pow, op_smul, toProdMulOpposite_injective, toProdMulOpposite_injective.ring
 -/
@@ -1254,7 +1254,20 @@ instance instAlgebra
         central := fun x y => by
           simp_rw [Prod.algebraMap_apply, Algebra.algebraMap_eq_smul_one, smul_apply,
             one_apply_eq_self, mul_smul_comm, smul_mul_assoc] }
-map_one' := ext (𝕜 := 𝕜) (A := A) _ _ map
+map_one' := ext (𝕜 := 𝕜) (A := A) _ _ map_one algebraMap 𝕜 ((A ->L[𝕜] A) × (A ->L[𝕜] A))
+    map_mul' _ _ :=
+ext (𝕜 := 𝕜) (A := A) _ _
+        Prod.ext (map_mul (algebraMap 𝕜 (A ->L[𝕜] A)) _ _)
+          ((map_mul (algebraMap 𝕜 (A ->L[𝕜] A)) _ _).trans (Algebra.commutes _ _))
+map_zero' := ext (𝕜 := 𝕜) (A := A) _ _ map_zero algebraMap 𝕜 ((A ->L[𝕜] A) × (A ->L[𝕜] A))
+map_add' _ _ := ext (𝕜 := 𝕜) (A := A) _ _
+      map_add (algebraMap 𝕜 ((A ->L[𝕜] A) × (A ->L[𝕜] A))) _ _ }
+commutes' _ _ := ext (𝕜 := 𝕜) (A := A) _ _
+    Prod.ext (Algebra.commutes _ _) (Algebra.commutes _ _).symm
+smul_def' _ _ := ext (𝕜 := 𝕜) (A := A) _ _
+    Prod.ext (Algebra.smul_def _ _) ((Algebra.smul_def _ _).trans <| Algebra.commutes _ _)
+
+@[simp]
 
 中文:
 实例 instAlgebra
@@ -1264,7 +1277,20 @@ map_one' := ext (𝕜 := 𝕜) (A := A) _ _ map
         central := fun x y => by
           simp_rw [Prod.algebraMap_apply, Algebra.algebraMap_eq_smul_one, smul_apply,
             one_apply_eq_self, mul_smul_comm, smul_mul_assoc] }
-map_one' := ext (𝕜 := 𝕜) (A := A) _ _ map
+map_one' := ext (𝕜 := 𝕜) (A := A) _ _ map_one algebraMap 𝕜 ((A ->L[𝕜] A) × (A ->L[𝕜] A))
+    map_mul' _ _ :=
+ext (𝕜 := 𝕜) (A := A) _ _
+        Prod.ext (map_mul (algebraMap 𝕜 (A ->L[𝕜] A)) _ _)
+          ((map_mul (algebraMap 𝕜 (A ->L[𝕜] A)) _ _).trans (Algebra.commutes _ _))
+map_zero' := ext (𝕜 := 𝕜) (A := A) _ _ map_zero algebraMap 𝕜 ((A ->L[𝕜] A) × (A ->L[𝕜] A))
+map_add' _ _ := ext (𝕜 := 𝕜) (A := A) _ _
+      map_add (algebraMap 𝕜 ((A ->L[𝕜] A) × (A ->L[𝕜] A))) _ _ }
+commutes' _ _ := ext (𝕜 := 𝕜) (A := A) _ _
+    Prod.ext (Algebra.commutes _ _) (Algebra.commutes _ _).symm
+smul_def' _ _ := ext (𝕜 := 𝕜) (A := A) _ _
+    Prod.ext (Algebra.smul_def _ _) ((Algebra.smul_def _ _).trans <| Algebra.commutes _ _)
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Algebra.commutes, Prod.algebraMap_apply, Prod.ext, algebraMap, algebraMap_apply, algebraMap_eq_smul_one, central, commutes, map_mul, map_one, map_zero, mul_smul_comm, one_apply_eq_self, simp_rw, smul_apply, smul_mul_assoc, toProd
 -/
@@ -1365,7 +1391,10 @@ instance instStar
         (((starₗᵢ 𝕜 : A ≃ₗᵢ⋆[𝕜] A) : A ->L⋆[𝕜] A).comp a.fst).comp
           ((starₗᵢ 𝕜 : A ≃ₗᵢ⋆[𝕜] A) : A ->L⋆[𝕜] A)
       central := fun x y => by
-        sim
+        simpa only [star_mul, star_star]
+          using! (congr_arg star (a.central (star y) (star x))).symm }
+
+@[simp]
 
 中文:
 实例 instStar
@@ -1377,7 +1406,10 @@ instance instStar
         (((starₗᵢ 𝕜 : A ≃ₗᵢ⋆[𝕜] A) : A ->L⋆[𝕜] A).comp a.fst).comp
           ((starₗᵢ 𝕜 : A ≃ₗᵢ⋆[𝕜] A) : A ->L⋆[𝕜] A)
       central := fun x y => by
-        sim
+        simpa only [star_mul, star_star]
+          using! (congr_arg star (a.central (star y) (star x))).symm }
+
+@[simp]
 
 Depends on / 依赖: a.central, a.fst, a.snd, central, congr_arg, star_mul, star_star
 -/
@@ -1645,7 +1677,10 @@ map_zero' := ext _ _ _ _ Prod.ext (map_zero _) (map_zero _)
 map_add' _ _ := ext _ _ _ _ Prod.ext (map_add _ _ _) (map_add _ _ _)
 map_mul' _ _ := ext _ _ _ _ Prod.ext
     (ContinuousLinearMap.ext fun _ => (mul_assoc _ _ _))
-   
+    (ContinuousLinearMap.ext fun _ => (mul_assoc _ _ _).symm)
+map_star' _ := ext _ _ _ _ Prod.ext
+    (ContinuousLinearMap.ext fun _ => (star_star_mul _ _).symm)
+    (ContinuousLinearMap.ext fun _ => (star_mul_star _ _).symm)
 
 中文:
 定义 coeHom
@@ -1656,7 +1691,10 @@ map_zero' := ext _ _ _ _ Prod.ext (map_zero _) (map_zero _)
 map_add' _ _ := ext _ _ _ _ Prod.ext (map_add _ _ _) (map_add _ _ _)
 map_mul' _ _ := ext _ _ _ _ Prod.ext
     (ContinuousLinearMap.ext fun _ => (mul_assoc _ _ _))
-   
+    (ContinuousLinearMap.ext fun _ => (mul_assoc _ _ _).symm)
+map_star' _ := ext _ _ _ _ Prod.ext
+    (ContinuousLinearMap.ext fun _ => (star_star_mul _ _).symm)
+    (ContinuousLinearMap.ext fun _ => (star_mul_star _ _).symm)
 -/
 noncomputable def coeHom [StarRing 𝕜] [StarRing A] [StarModule 𝕜 A] [NormedStarGroup A] :
     A ->⋆ₙₐ[𝕜] 𝓜(𝕜, A) where
@@ -1875,7 +1913,31 @@ theorem norm_fst_eq_snd
   have h0 : forall f : A ->L[𝕜] A, forall C : Real>=0, (forall b : A, ‖f b‖₊ ^ 2 <= C * ‖f b‖₊ * ‖b‖₊) -> ‖f‖₊ <= C := by
     intro f C h
     have h1 b : C * ‖f b‖₊ * ‖b‖₊ <= C * ‖f‖₊ * ‖b‖₊ ^ 2 := by grw [f.le_opNNNorm b]; ring_nf; rfl
-have := NNReal.div_le_of_l
+have := NNReal.div_le_of_le_mul f.opNNNorm_le_bound _ by
+simpa only [sqrt_sq, sqrt_mul] using fun b => sqrt_le_sqrt.2 (h b).trans (h1 b)
+    convert! NNReal.rpow_le_rpow this two_pos.le
+    · simp only [NNReal.rpow_two, div_pow, sq_sqrt]
+      simp only [sq, mul_self_div_self]
+    · simp only [NNReal.rpow_two, sq_sqrt]
+  have h1 : forall b, ‖a.fst b‖₊ ^ 2 <= ‖a.snd‖₊ * ‖a.fst b‖₊ * ‖b‖₊ := by
+    intro b
+    calc
+      ‖a.fst b‖₊ ^ 2 = ‖star (a.fst b) * a.fst b‖₊ := by
+        simpa only [← sq] using CStarRing.nnnorm_star_mul_self.symm
+      _ <= ‖a.snd (star (a.fst b))‖₊ * ‖b‖₊ := (a.central (star (a.fst b)) b ▸ nnnorm_mul_le _ _)
+      _ <= ‖a.snd‖₊ * ‖a.fst b‖₊ * ‖b‖₊ :=
+        nnnorm_star (a.fst b) ▸ mul_le_mul_left (a.snd.le_opNNNorm _) _
+  have h2 : forall b, ‖a.snd b‖₊ ^ 2 <= ‖a.fst‖₊ * ‖a.snd b‖₊ * ‖b‖₊ := by
+    intro b
+    calc
+      ‖a.snd b‖₊ ^ 2 = ‖a.snd b * star (a.snd b)‖₊ := by
+        simpa only [← sq] using CStarRing.nnnorm_self_mul_star.symm
+      _ <= ‖b‖₊ * ‖a.fst (star (a.snd b))‖₊ :=
+        ((a.central b (star (a.snd b))).symm ▸ nnnorm_mul_le _ _)
+      _ = ‖a.fst (star (a.snd b))‖₊ * ‖b‖₊ := mul_comm _ _
+      _ <= ‖a.fst‖₊ * ‖a.snd b‖₊ * ‖b‖₊ :=
+        nnnorm_star (a.snd b) ▸ mul_le_mul_left (a.fst.le_opNNNorm _) _
+  exact le_antisymm (h0 _ _ h1) (h0 _ _ h2)
 
 中文:
 定理 norm_fst_eq_snd
@@ -1886,7 +1948,31 @@ have := NNReal.div_le_of_l
   have h0 : forall f : A ->L[𝕜] A, forall C : Real>=0, (forall b : A, ‖f b‖₊ ^ 2 <= C * ‖f b‖₊ * ‖b‖₊) -> ‖f‖₊ <= C := by
     intro f C h
     have h1 b : C * ‖f b‖₊ * ‖b‖₊ <= C * ‖f‖₊ * ‖b‖₊ ^ 2 := by grw [f.le_opNNNorm b]; ring_nf; rfl
-have := NNReal.div_le_of_l
+have := NNReal.div_le_of_le_mul f.opNNNorm_le_bound _ by
+simpa only [sqrt_sq, sqrt_mul] using fun b => sqrt_le_sqrt.2 (h b).trans (h1 b)
+    convert! NNReal.rpow_le_rpow this two_pos.le
+    · simp only [NNReal.rpow_two, div_pow, sq_sqrt]
+      simp only [sq, mul_self_div_self]
+    · simp only [NNReal.rpow_two, sq_sqrt]
+  have h1 : forall b, ‖a.fst b‖₊ ^ 2 <= ‖a.snd‖₊ * ‖a.fst b‖₊ * ‖b‖₊ := by
+    intro b
+    calc
+      ‖a.fst b‖₊ ^ 2 = ‖star (a.fst b) * a.fst b‖₊ := by
+        simpa only [← sq] using CStarRing.nnnorm_star_mul_self.symm
+      _ <= ‖a.snd (star (a.fst b))‖₊ * ‖b‖₊ := (a.central (star (a.fst b)) b ▸ nnnorm_mul_le _ _)
+      _ <= ‖a.snd‖₊ * ‖a.fst b‖₊ * ‖b‖₊ :=
+        nnnorm_star (a.fst b) ▸ mul_le_mul_left (a.snd.le_opNNNorm _) _
+  have h2 : forall b, ‖a.snd b‖₊ ^ 2 <= ‖a.fst‖₊ * ‖a.snd b‖₊ * ‖b‖₊ := by
+    intro b
+    calc
+      ‖a.snd b‖₊ ^ 2 = ‖a.snd b * star (a.snd b)‖₊ := by
+        simpa only [← sq] using CStarRing.nnnorm_self_mul_star.symm
+      _ <= ‖b‖₊ * ‖a.fst (star (a.snd b))‖₊ :=
+        ((a.central b (star (a.snd b))).symm ▸ nnnorm_mul_le _ _)
+      _ = ‖a.fst (star (a.snd b))‖₊ * ‖b‖₊ := mul_comm _ _
+      _ <= ‖a.fst‖₊ * ‖a.snd b‖₊ * ‖b‖₊ :=
+        nnnorm_star (a.snd b) ▸ mul_le_mul_left (a.fst.le_opNNNorm _) _
+  exact le_antisymm (h0 _ _ h1) (h0 _ _ h2)
 -/
 theorem norm_fst_eq_snd (a : 𝓜(𝕜, A)) : ‖a.fst‖ = ‖a.snd‖ := by
   -- a handy lemma for this proof
@@ -2058,7 +2144,48 @@ instance instCStarRing
     show ‖star a * a‖₊ = ‖a‖₊ * ‖a‖₊ by
     /- The essence of the argument is this: let `a = (L,R)` and recall `‖a‖ = ‖L‖`.
     `star a = (star ∘ R ∘ star, star ∘ L ∘ star)`. Then for any `x y : A`, we have
-    `‖star a * a‖ = ‖
+    `‖star a * a‖ = ‖(star a * a).snd‖ = ‖R (star (L (star x))) * y‖ = ‖star (L (star x)) * L y‖`
+    Now, on the one hand,
+    `‖star (L (star x)) * L y‖ ≤ ‖star (L (star x))‖ * ‖L y‖ = ‖L (star x)‖ * ‖L y‖ ≤ ‖L‖ ^ 2`
+    whenever `‖x‖, ‖y‖ ≤ 1`, so the supremum over all such `x, y` is at most `‖L‖ ^ 2`.
+    On the other hand, for any `‖z‖ ≤ 1`, we may choose `x := star z` and `y := z` to get:
+    `‖star (L (star x)) * L y‖ = ‖star (L z) * (L z)‖ = ‖L z‖ ^ 2`, and taking the supremum over
+    all such `z` yields that the supremum is at least `‖L‖ ^ 2`. It is the latter part of the
+    argument where `DenselyNormedField 𝕜` is required (for `sSup_unitClosedBall_eq_nnnorm`). -/
+      have hball : (Metric.closedBall (0 : A) 1).Nonempty :=
+        Metric.nonempty_closedBall.2 zero_le_one
+      have key :
+        forall x y, ‖x‖₊ <= 1 -> ‖y‖₊ <= 1 -> ‖a.snd (star (a.fst (star x))) * y‖₊ <= ‖a‖₊ * ‖a‖₊ := by
+        intro x y hx hy
+        rw [a.central]
+        calc
+          ‖star (a.fst (star x)) * a.fst y‖₊ <= ‖a.fst (star x)‖₊ * ‖a.fst y‖₊ :=
+            nnnorm_star (a.fst (star x)) ▸ nnnorm_mul_le _ _
+          _ <= ‖a.fst‖₊ * 1 * (‖a.fst‖₊ * 1) :=
+            (mul_le_mul' (a.fst.le_opNorm_of_le ((nnnorm_star x).trans_le hx))
+              (a.fst.le_opNorm_of_le hy))
+          _ <= ‖a‖₊ * ‖a‖₊ := by simp only [mul_one, nnnorm_fst, le_rfl]
+      rw [← nnnorm_snd]
+      simp only [mul_snd, ← sSup_unitClosedBall_eq_nnnorm, star_snd, mul_apply_eq_comp]
+      simp only [← @opNNNorm_mul_apply 𝕜 _ A]
+      simp only [← sSup_unitClosedBall_eq_nnnorm, mul_apply']
+      refine csSup_eq_of_forall_le_of_forall_lt_exists_gt (hball.image _) ?_ fun r hr => ?_
+      · rintro - ⟨x, hx, rfl⟩
+        refine csSup_le (hball.image _) ?_
+        rintro - ⟨y, hy, rfl⟩
+        exact key x y (mem_closedBall_zero_iff.1 hx) (mem_closedBall_zero_iff.1 hy)
+      · simp only [Set.mem_image, exists_exists_and_eq_and]
+        have hr' : NNReal.sqrt r < ‖a‖₊ := ‖a‖₊.sqrt_mul_self ▸ NNReal.sqrt_lt_sqrt.2 hr
+        simp_rw [← nnnorm_fst, ← sSup_unitClosedBall_eq_nnnorm] at hr'
+        obtain ⟨_, ⟨x, hx, rfl⟩, hxr⟩ := exists_lt_of_lt_csSup (hball.image _) hr'
+        have hx' : ‖x‖₊ <= 1 := mem_closedBall_zero_iff.1 hx
+        refine ⟨star x, mem_closedBall_zero_iff.2 ((nnnorm_star x).trans_le hx'), ?_⟩
+        refine lt_csSup_of_lt ?_ ⟨x, hx, rfl⟩ ?_
+        · refine ⟨‖a‖₊ * ‖a‖₊, ?_⟩
+          rintro - ⟨y, hy, rfl⟩
+          exact key (star x) y ((nnnorm_star x).trans_le hx') (mem_closedBall_zero_iff.1 hy)
+        · simpa [a.central, CStarRing.nnnorm_star_mul_self, ← sq]
+            using pow_lt_pow_left₀ hxr zero_le two_ne_zero
 
 中文:
 实例 instCStarRing
@@ -2067,7 +2194,48 @@ instance instCStarRing
     show ‖star a * a‖₊ = ‖a‖₊ * ‖a‖₊ by
     /- The essence of the argument is this: let `a = (L,R)` and recall `‖a‖ = ‖L‖`.
     `star a = (star ∘ R ∘ star, star ∘ L ∘ star)`. Then for any `x y : A`, we have
-    `‖star a * a‖ = ‖
+    `‖star a * a‖ = ‖(star a * a).snd‖ = ‖R (star (L (star x))) * y‖ = ‖star (L (star x)) * L y‖`
+    Now, on the one hand,
+    `‖star (L (star x)) * L y‖ ≤ ‖star (L (star x))‖ * ‖L y‖ = ‖L (star x)‖ * ‖L y‖ ≤ ‖L‖ ^ 2`
+    whenever `‖x‖, ‖y‖ ≤ 1`, so the supremum over all such `x, y` is at most `‖L‖ ^ 2`.
+    On the other hand, for any `‖z‖ ≤ 1`, we may choose `x := star z` and `y := z` to get:
+    `‖star (L (star x)) * L y‖ = ‖star (L z) * (L z)‖ = ‖L z‖ ^ 2`, and taking the supremum over
+    all such `z` yields that the supremum is at least `‖L‖ ^ 2`. It is the latter part of the
+    argument where `DenselyNormedField 𝕜` is required (for `sSup_unitClosedBall_eq_nnnorm`). -/
+      have hball : (Metric.closedBall (0 : A) 1).Nonempty :=
+        Metric.nonempty_closedBall.2 zero_le_one
+      have key :
+        forall x y, ‖x‖₊ <= 1 -> ‖y‖₊ <= 1 -> ‖a.snd (star (a.fst (star x))) * y‖₊ <= ‖a‖₊ * ‖a‖₊ := by
+        intro x y hx hy
+        rw [a.central]
+        calc
+          ‖star (a.fst (star x)) * a.fst y‖₊ <= ‖a.fst (star x)‖₊ * ‖a.fst y‖₊ :=
+            nnnorm_star (a.fst (star x)) ▸ nnnorm_mul_le _ _
+          _ <= ‖a.fst‖₊ * 1 * (‖a.fst‖₊ * 1) :=
+            (mul_le_mul' (a.fst.le_opNorm_of_le ((nnnorm_star x).trans_le hx))
+              (a.fst.le_opNorm_of_le hy))
+          _ <= ‖a‖₊ * ‖a‖₊ := by simp only [mul_one, nnnorm_fst, le_rfl]
+      rw [← nnnorm_snd]
+      simp only [mul_snd, ← sSup_unitClosedBall_eq_nnnorm, star_snd, mul_apply_eq_comp]
+      simp only [← @opNNNorm_mul_apply 𝕜 _ A]
+      simp only [← sSup_unitClosedBall_eq_nnnorm, mul_apply']
+      refine csSup_eq_of_forall_le_of_forall_lt_exists_gt (hball.image _) ?_ fun r hr => ?_
+      · rintro - ⟨x, hx, rfl⟩
+        refine csSup_le (hball.image _) ?_
+        rintro - ⟨y, hy, rfl⟩
+        exact key x y (mem_closedBall_zero_iff.1 hx) (mem_closedBall_zero_iff.1 hy)
+      · simp only [Set.mem_image, exists_exists_and_eq_and]
+        have hr' : NNReal.sqrt r < ‖a‖₊ := ‖a‖₊.sqrt_mul_self ▸ NNReal.sqrt_lt_sqrt.2 hr
+        simp_rw [← nnnorm_fst, ← sSup_unitClosedBall_eq_nnnorm] at hr'
+        obtain ⟨_, ⟨x, hx, rfl⟩, hxr⟩ := exists_lt_of_lt_csSup (hball.image _) hr'
+        have hx' : ‖x‖₊ <= 1 := mem_closedBall_zero_iff.1 hx
+        refine ⟨star x, mem_closedBall_zero_iff.2 ((nnnorm_star x).trans_le hx'), ?_⟩
+        refine lt_csSup_of_lt ?_ ⟨x, hx, rfl⟩ ?_
+        · refine ⟨‖a‖₊ * ‖a‖₊, ?_⟩
+          rintro - ⟨y, hy, rfl⟩
+          exact key (star x) y ((nnnorm_star x).trans_le hx') (mem_closedBall_zero_iff.1 hy)
+        · simpa [a.central, CStarRing.nnnorm_star_mul_self, ← sq]
+            using pow_lt_pow_left₀ hxr zero_le two_ne_zero
 
 Depends on / 依赖: Eq.symm, congr_arg, le_of_eq
 -/

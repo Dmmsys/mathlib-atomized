@@ -581,7 +581,8 @@ theorem balancedCoreAux_balanced
   have h'' : 1 <= ‖a⁻¹ • r‖ := by
     rw [norm_smul]; rw [norm_inv]
     exact one_le_mul_of_one_le_of_one_le ((one_le_inv₀ (norm_pos_iff.mpr h)).2 ha) hr
- 
+  have h' := hy (a⁻¹ • r) h''
+  rwa [smul_assoc, mem_inv_smul_set_iff₀ h] at h'
 
 中文:
 定理 balancedCoreAux_balanced
@@ -595,7 +596,8 @@ theorem balancedCoreAux_balanced
   have h'' : 1 <= ‖a⁻¹ • r‖ := by
     rw [norm_smul]; rw [norm_inv]
     exact one_le_mul_of_one_le_of_one_le ((one_le_inv₀ (norm_pos_iff.mpr h)).2 ha) hr
- 
+  have h' := hy (a⁻¹ • r) h''
+  rwa [smul_assoc, mem_inv_smul_set_iff₀ h] at h'
 
 Depends on / 依赖: eq_or_ne, mem_balancedCoreAux_iff, norm_inv, norm_pos_iff, norm_pos_iff.mpr, norm_smul, one_le_mul_of_one_le_of_one_le, simp_rw, smul_assoc, zero_smul
 -/
@@ -754,7 +756,13 @@ theorem IsClosed.balancedCore
     have ha' := lt_of_lt_of_le zero_lt_one ha
     rw [norm_pos_iff] at ha'
     exact isClosedMap_smul_of_ne_zero ha' U hU
-  · have : balancedCore 𝕜 U = ∅ :=
+  · have : balancedCore 𝕜 U = ∅ := by
+      contrapose! h
+      exact balancedCore_nonempty_iff.mp h
+    rw [this]
+    exact isClosed_empty
+
+omit [ContinuousSMul 𝕜 E] in
 
 中文:
 定理 是闭集.balancedCore
@@ -768,7 +776,13 @@ theorem IsClosed.balancedCore
     have ha' := lt_of_lt_of_le zero_lt_one ha
     rw [norm_pos_iff] at ha'
     exact isClosedMap_smul_of_ne_zero ha' U hU
-  · have : balancedCore 𝕜 U = ∅ :=
+  · have : balancedCore 𝕜 U = ∅ := by
+      contrapose! h
+      exact balancedCore_nonempty_iff.mp h
+    rw [this]
+    exact isClosed_empty
+
+omit [ContinuousSMul 𝕜 E] in
 -/
 protected theorem IsClosed.balancedCore (hU : IsClosed U) : IsClosed (balancedCore 𝕜 U) := by
   by_cases h : (0 : E) in U
@@ -796,7 +810,9 @@ theorem IsOpen.balancedHull
     refine subset_antisymm (Set.iUnion₂_mono' fun r hr => ?_) (Set.iUnion₂_mono' (by grind))
     obtain rfl | hr_ne := eq_or_ne r 0
     · exact ⟨1, by simp, by simpa [Set.zero_smul_set ⟨0, hzero⟩]⟩
-   
+    · use r
+  rw [balancedHull]; rw [this]
+  exact isOpen_biUnion (fun r hr => hs.smul₀ hr.2)
 
 中文:
 定理 是开集.balancedHull
@@ -806,7 +822,9 @@ theorem IsOpen.balancedHull
     refine subset_antisymm (Set.iUnion₂_mono' fun r hr => ?_) (Set.iUnion₂_mono' (by grind))
     obtain rfl | hr_ne := eq_or_ne r 0
     · exact ⟨1, by simp, by simpa [Set.zero_smul_set ⟨0, hzero⟩]⟩
-   
+    · use r
+  rw [balancedHull]; rw [this]
+  exact isOpen_biUnion (fun r hr => hs.smul₀ hr.2)
 -/
 protected theorem IsOpen.balancedHull [ContinuousConstSMul 𝕜 E] {s : Set E} (hs : IsOpen s)
     (hzero : 0 in s) : IsOpen (balancedHull 𝕜 s) := by
@@ -832,7 +850,21 @@ theorem balancedCore_mem_nhds_zero
   -- Getting neighborhoods of the origin for `0 : 𝕜` and `0 : E`
   obtain ⟨r, V, hr, hV, hrVU⟩ : exists (r : Real) (V : Set E),
       0 < r ∧ V in 𝓝 (0 : E) ∧ forall (c : 𝕜) (y : E), ‖c‖ < r -> y in V -> c • y in U := by
-    have h : Filter.Tendsto (fun x : 𝕜 × E => x.fst • x.snd) (𝓝 (0, 0)) (𝓝 0
+    have h : Filter.Tendsto (fun x : 𝕜 × E => x.fst • x.snd) (𝓝 (0, 0)) (𝓝 0) :=
+      continuous_smul.tendsto' (0, 0) _ (smul_zero _)
+    simpa only [← Prod.exists', ← Prod.forall', ← and_imp, ← and_assoc, exists_prop] using!
+      h.basis_left (NormedAddGroup.nhds_zero_basis_norm_lt.prod_nhds (𝓝 _).basis_sets) U hU
+  obtain ⟨y, hyr, hy₀⟩ : exists y : 𝕜, ‖y‖ < r ∧ y != 0 :=
+Filter.nonempty_of_mem
+      (nhdsWithin_hasBasis NormedAddGroup.nhds_zero_basis_norm_lt {0}ᶜ).mem_of_mem hr
+  have : y • V in 𝓝 (0 : E) := (set_smul_mem_nhds_zero_iff hy₀).mpr hV
+  -- It remains to show that `y • V ⊆ balancedCore 𝕜 U`
+  refine Filter.mem_of_superset this (subset_balancedCore (mem_of_mem_nhds hU) fun a ha => ?_)
+  rw [smul_smul]
+  rintro _ ⟨z, hz, rfl⟩
+  refine hrVU _ _ ?_ hz
+  rw [norm_mul]; rw [← one_mul r]
+  exact mul_lt_mul' ha hyr (norm_nonneg y) one_pos
 
 中文:
 定理 balancedCore_mem_nhds_zero
@@ -842,7 +874,21 @@ theorem balancedCore_mem_nhds_zero
   -- Getting neighborhoods of the origin for `0 : 𝕜` and `0 : E`
   obtain ⟨r, V, hr, hV, hrVU⟩ : exists (r : Real) (V : Set E),
       0 < r ∧ V in 𝓝 (0 : E) ∧ forall (c : 𝕜) (y : E), ‖c‖ < r -> y in V -> c • y in U := by
-    have h : Filter.Tendsto (fun x : 𝕜 × E => x.fst • x.snd) (𝓝 (0, 0)) (𝓝 0
+    have h : Filter.Tendsto (fun x : 𝕜 × E => x.fst • x.snd) (𝓝 (0, 0)) (𝓝 0) :=
+      continuous_smul.tendsto' (0, 0) _ (smul_zero _)
+    simpa only [← Prod.exists', ← Prod.forall', ← and_imp, ← and_assoc, exists_prop] using!
+      h.basis_left (NormedAddGroup.nhds_zero_basis_norm_lt.prod_nhds (𝓝 _).basis_sets) U hU
+  obtain ⟨y, hyr, hy₀⟩ : exists y : 𝕜, ‖y‖ < r ∧ y != 0 :=
+Filter.nonempty_of_mem
+      (nhdsWithin_hasBasis NormedAddGroup.nhds_zero_basis_norm_lt {0}ᶜ).mem_of_mem hr
+  have : y • V in 𝓝 (0 : E) := (set_smul_mem_nhds_zero_iff hy₀).mpr hV
+  -- It remains to show that `y • V ⊆ balancedCore 𝕜 U`
+  refine Filter.mem_of_superset this (subset_balancedCore (mem_of_mem_nhds hU) fun a ha => ?_)
+  rw [smul_smul]
+  rintro _ ⟨z, hz, rfl⟩
+  refine hrVU _ _ ?_ hz
+  rw [norm_mul]; rw [← one_mul r]
+  exact mul_lt_mul' ha hyr (norm_nonneg y) one_pos
 -/
 theorem balancedCore_mem_nhds_zero (hU : U in 𝓝 (0 : E)) : balancedCore 𝕜 U in 𝓝 (0 : E) := by
   -- Getting neighborhoods of the origin for `0 : 𝕜` and `0 : E`

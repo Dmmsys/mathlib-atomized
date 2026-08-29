@@ -904,7 +904,8 @@ theorem measurable_fun_prod
   intro _ u Hu v Hv Heq
   simp_rw [← Heq, Measure.prod_prod]
   apply Measurable.mul
-  · exact (Measure.measurable_coe
+  · exact (Measure.measurable_coe Hu).comp (measurable_subtype_coe.comp measurable_fst)
+  · exact (Measure.measurable_coe Hv).comp (measurable_subtype_coe.comp measurable_snd)
 
 中文:
 定理 measurable_fun_prod
@@ -916,7 +917,8 @@ theorem measurable_fun_prod
   intro _ u Hu v Hv Heq
   simp_rw [← Heq, Measure.prod_prod]
   apply Measurable.mul
-  · exact (Measure.measurable_coe
+  · exact (Measure.measurable_coe Hu).comp (measurable_subtype_coe.comp measurable_fst)
+  · exact (Measure.measurable_coe Hv).comp (measurable_subtype_coe.comp measurable_snd)
 
 Depends on / 依赖: Measurable, Measurable.measure_of_isPiSystem_of_isProbabilityMeasure, Measurable.mul, Measure, Measure.measurable_coe, Measure.prod_prod, and_imp, forall_exists_index, generateFrom_prod, generateFrom_prod.symm, isPiSystem_prod, measurable_coe, measurable_fst, measurable_snd, measurable_subtype_coe, measurable_subtype_coe.comp, measure_of_isPiSystem_of_isProbabilityMeasure, mem_image2, mem_ofPred_eq, prod_prod
 -/
@@ -1473,7 +1475,9 @@ definition normalize
       property := by
         refine ⟨?_⟩
         simp only [Measure.coe_smul, Pi.smul_apply, Measure.nnreal_smul_coe_apply,
-          ENNReal.coe_inv zero, e
+          ENNReal.coe_inv zero, ennreal_mass]
+        rw [← Ne]; rw [← ENNReal.coe_ne_zero]; rw [ennreal_mass] at zero
+        exact ENNReal.inv_mul_cancel zero μ.prop.measure_univ_lt_top.ne }
 
 中文:
 定义 normalize
@@ -1484,7 +1488,9 @@ definition normalize
       property := by
         refine ⟨?_⟩
         simp only [Measure.coe_smul, Pi.smul_apply, Measure.nnreal_smul_coe_apply,
-          ENNReal.coe_inv zero, e
+          ENNReal.coe_inv zero, ennreal_mass]
+        rw [← Ne]; rw [← ENNReal.coe_ne_zero]; rw [ennreal_mass] at zero
+        exact ENNReal.inv_mul_cancel zero μ.prop.measure_univ_lt_top.ne }
 
 Depends on / 依赖: ENNReal, ENNReal.coe_inv, ENNReal.coe_ne_zero, ENNReal.inv_mul_cancel, Measure, Measure.coe_smul, Measure.dirac, Measure.dirac.isProbabilityMeasure, Measure.nnreal_smul_coe_apply, Nonempty, Pi.smul_apply, coe_inv, coe_ne_zero, coe_smul, ennreal_mass, inv_mul_cancel, isProbabilityMeasure, measure_univ_lt_top, nnreal_smul_coe_apply, prop.measure_univ_lt_top.ne
 -/
@@ -1767,7 +1773,13 @@ theorem tendsto_testAgainstNN_of_tendsto_normalize_testAgainstNN_of_tendsto_mass
   · simp only [μ.mass_zero_iff.mp h_mass, zero_testAgainstNN_apply, zero_mass] at mass_lim ⊢
     exact tendsto_zero_testAgainstNN_of_tendsto_zero_mass mass_lim f
   simp_rw [fun i => (μs i).testAgainstNN_eq_mass_mul f, μ.testAgainstNN_eq_mass_mul f]
-  rw [Probability
+  rw [ProbabilityMeasure.tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds] at μs_lim
+  rw [tendsto_iff_forall_testAgainstNN_tendsto] at μs_lim
+  have lim_pair :
+    Tendsto (fun i => (⟨(μs i).mass, (μs i).normalize.toFiniteMeasure.testAgainstNN f⟩ : Real>=0 × Real>=0))
+      F (𝓝 ⟨μ.mass, μ.normalize.toFiniteMeasure.testAgainstNN f⟩) :=
+    (Prod.tendsto_iff _ _).mpr ⟨mass_lim, μs_lim f⟩
+  exact tendsto_mul.comp lim_pair
 
 中文:
 定理 tendsto_testAgainstNN_of_tendsto_normalize_testAgainstNN_of_tendsto_mass
@@ -1777,7 +1789,13 @@ theorem tendsto_testAgainstNN_of_tendsto_normalize_testAgainstNN_of_tendsto_mass
   · simp only [μ.mass_zero_iff.mp h_mass, zero_testAgainstNN_apply, zero_mass] at mass_lim ⊢
     exact tendsto_zero_testAgainstNN_of_tendsto_zero_mass mass_lim f
   simp_rw [fun i => (μs i).testAgainstNN_eq_mass_mul f, μ.testAgainstNN_eq_mass_mul f]
-  rw [Probability
+  rw [ProbabilityMeasure.tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds] at μs_lim
+  rw [tendsto_iff_forall_testAgainstNN_tendsto] at μs_lim
+  have lim_pair :
+    Tendsto (fun i => (⟨(μs i).mass, (μs i).normalize.toFiniteMeasure.testAgainstNN f⟩ : Real>=0 × Real>=0))
+      F (𝓝 ⟨μ.mass, μ.normalize.toFiniteMeasure.testAgainstNN f⟩) :=
+    (Prod.tendsto_iff _ _).mpr ⟨mass_lim, μs_lim f⟩
+  exact tendsto_mul.comp lim_pair
 
 Depends on / 依赖: ProbabilityMeasure, ProbabilityMeasure.tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds, Tendsto, h_mass, lim_pair, mass_lim, mass_zero_iff, mass_zero_iff.mp, normalize, normalize.toFiniteMeasure.testAgain, simp_rw, tendsto_iff_forall_testAgainstNN_tendsto, tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds, tendsto_zero_testAgainstNN_of_tendsto_zero_mass, testAgain, testAgainstNN_eq_mass_mul, toFiniteMeasure, zero_mass, zero_testAgainstNN_apply
 -/
@@ -1812,7 +1830,19 @@ theorem tendsto_normalize_testAgainstNN_of_tendsto
     simp_rw [← mass_nonzero_iff]
     exact lim_mass aux
   have eve : forallᶠ i in F,
-      (
+      (μs i).normalize.toFiniteMeasure.testAgainstNN f =
+        (μs i).mass⁻¹ * (μs i).testAgainstNN f := by
+    filter_upwards [eventually_iff.mp eventually_nonzero]
+    intro i hi
+    apply normalize_testAgainstNN _ hi
+  simp_rw [tendsto_congr' eve, μ.normalize_testAgainstNN nonzero]
+  have lim_pair :
+    Tendsto (fun i => (⟨(μs i).mass⁻¹, (μs i).testAgainstNN f⟩ : Real>=0 × Real>=0)) F
+      (𝓝 ⟨μ.mass⁻¹, μ.testAgainstNN f⟩) := by
+    refine (Prod.tendsto_iff _ _).mpr ⟨?_, ?_⟩
+    · exact (continuousOn_inv₀.continuousAt aux).tendsto.comp lim_mass
+    · exact tendsto_iff_forall_testAgainstNN_tendsto.mp μs_lim f
+  exact tendsto_mul.comp lim_pair
 
 中文:
 定理 tendsto_normalize_testAgainstNN_of_tendsto
@@ -1825,7 +1855,19 @@ theorem tendsto_normalize_testAgainstNN_of_tendsto
     simp_rw [← mass_nonzero_iff]
     exact lim_mass aux
   have eve : forallᶠ i in F,
-      (
+      (μs i).normalize.toFiniteMeasure.testAgainstNN f =
+        (μs i).mass⁻¹ * (μs i).testAgainstNN f := by
+    filter_upwards [eventually_iff.mp eventually_nonzero]
+    intro i hi
+    apply normalize_testAgainstNN _ hi
+  simp_rw [tendsto_congr' eve, μ.normalize_testAgainstNN nonzero]
+  have lim_pair :
+    Tendsto (fun i => (⟨(μs i).mass⁻¹, (μs i).testAgainstNN f⟩ : Real>=0 × Real>=0)) F
+      (𝓝 ⟨μ.mass⁻¹, μ.testAgainstNN f⟩) := by
+    refine (Prod.tendsto_iff _ _).mpr ⟨?_, ?_⟩
+    · exact (continuousOn_inv₀.continuousAt aux).tendsto.comp lim_mass
+    · exact tendsto_iff_forall_testAgainstNN_tendsto.mp μs_lim f
+  exact tendsto_mul.comp lim_pair
 
 Depends on / 依赖: eventually_iff, eventually_iff.mp, eventually_nonzero, filter_upwards, isOpen_compl_singleton, isOpen_compl_singleton.mem_nhds, lim_mass, mass_nonzero_iff, mass_nonzero_iff.mpr, mem_nhds, nonzero, normalize, normalize.toFiniteMeasure.testAgainstNN, normalize_testAgainstNN, s_lim.mass, simp_rw, tendsto_congr, testAgainstNN, toFiniteMeasure
 -/
@@ -2068,7 +2110,7 @@ lemma tendsto_map_of_tendsto_of_continuous
   convert! lim (g.compContinuous ⟨f, f_cont⟩) <;>
   · simp only [map, compContinuous_apply, ContinuousMap.coe_mk]
     refine lintegral_map ?_ f_cont.measurable
-    exact (ENNReal.continuous_coe.comp g.continuous).me
+    exact (ENNReal.continuous_coe.comp g.continuous).measurable
 
 中文:
 引理 tendsto_map_of_tendsto_of_continuous
@@ -2079,7 +2121,7 @@ lemma tendsto_map_of_tendsto_of_continuous
   convert! lim (g.compContinuous ⟨f, f_cont⟩) <;>
   · simp only [map, compContinuous_apply, ContinuousMap.coe_mk]
     refine lintegral_map ?_ f_cont.measurable
-    exact (ENNReal.continuous_coe.comp g.continuous).me
+    exact (ENNReal.continuous_coe.comp g.continuous).measurable
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, ENNReal, ENNReal.continuous_coe.comp, ProbabilityMeasure, ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto, coe_mk, compContinuous, compContinuous_apply, continuous, continuous_coe, convert, f_cont, f_cont.measurable, g.compContinuous, g.continuous, lintegral_map, measurable, tendsto_iff_forall_lintegral_tendsto
 -/

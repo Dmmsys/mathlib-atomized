@@ -433,7 +433,20 @@ lemma IsOneHypercoverDense.of_hasPullbacks
       Y i j := U (pullback (f _ i) (f _ j))
       p₁ i j k := F.preimage (f _ k ≫ pullback.fst _ _)
       p₂ i j k := F.preimage (f _ k ≫ pullback.snd _ _)
-      w 
+      w i j k := by simp [pullback.condition]
+      mem₀ := hf S
+      mem₁₀ i j W₀ p₁ p₂ hp := by
+        have := IsDenseSubsite.isCoverDense J₀ J F
+        rw [← functorPushforward_mem_iff J₀ J F]
+        refine J.superset_covering ?_
+          (IsCoverDense.functorPullback_pushforward_covering
+            ⟨_, J.pullback_stable (pullback.lift _ _ hp) (hf (pullback (f _ i) (f _ j)))⟩)
+        rintro T _ ⟨Z, q, r, ⟨_, s, _, ⟨k⟩, fac⟩, rfl⟩
+        have fac₁ := fac =≫ pullback.fst _ _
+        have fac₂ := fac =≫ pullback.snd _ _
+        simp only [Category.assoc, pullback.lift_fst, pullback.lift_snd] at fac₁ fac₂
+        exact ⟨Z, q, r, ⟨k, F.preimage s, F.map_injective (by simp [fac₁]),
+          F.map_injective (by simp [fac₂])⟩, rfl⟩ }⟩
 
 中文:
 引理 是OneHypercoverDense.of_hasPullbacks
@@ -448,7 +461,20 @@ lemma IsOneHypercoverDense.of_hasPullbacks
       Y i j := U (pullback (f _ i) (f _ j))
       p₁ i j k := F.preimage (f _ k ≫ pullback.fst _ _)
       p₂ i j k := F.preimage (f _ k ≫ pullback.snd _ _)
-      w 
+      w i j k := by simp [pullback.condition]
+      mem₀ := hf S
+      mem₁₀ i j W₀ p₁ p₂ hp := by
+        have := IsDenseSubsite.isCoverDense J₀ J F
+        rw [← functorPushforward_mem_iff J₀ J F]
+        refine J.superset_covering ?_
+          (IsCoverDense.functorPullback_pushforward_covering
+            ⟨_, J.pullback_stable (pullback.lift _ _ hp) (hf (pullback (f _ i) (f _ j)))⟩)
+        rintro T _ ⟨Z, q, r, ⟨_, s, _, ⟨k⟩, fac⟩, rfl⟩
+        have fac₁ := fac =≫ pullback.fst _ _
+        have fac₂ := fac =≫ pullback.snd _ _
+        simp only [Category.assoc, pullback.lift_fst, pullback.lift_snd] at fac₁ fac₂
+        exact ⟨Z, q, r, ⟨k, F.preimage s, F.map_injective (by simp [fac₁]),
+          F.map_injective (by simp [fac₂])⟩, rfl⟩ }⟩
 
 Depends on / 依赖: F.preimage, IsCoverDense, IsCoverDense.functorPullback_pushforward_covering, IsDenseSubsite, IsDenseSubsite.isCoverDense, J.pullba, J.superset_covering, condition, functorPullback_pushforward_covering, functorPushforward_mem_iff, isCoverDense, preimage, pullba, pullback, pullback.condition, pullback.fst, pullback.snd, superset_covering
 -/
@@ -503,7 +529,37 @@ lemma mem₁
     (fun Y f hf => ((F.imageSieve (hf.some.map ≫ p₁) ⊓
         F.imageSieve (hf.some.map ≫ p₂)).functorPushforward F).pullback hf.some.lift)
   let T := Sieve.bind S.arrows (fun Z g hg => by
-    letI
+    letI str := Presieve.getFunctorPushforwardStructure hg.bindStruct.hg
+    exact Sieve.pullback str.lift
+      (Sieve.functorPushforward F (data.sieve₁₀ str.cover.1.choose str.cover.2.choose)))
+  have hS : S in J W := by
+    apply J.bind_covering
+    · apply is_cover_of_isCoverDense
+    · intro Y f hf
+      apply J.pullback_stable
+      rw [Functor.functorPushforward_mem_iff J₀]
+      apply J₀.intersection_covering
+      all_goals apply IsDenseSubsite.imageSieve_mem J₀ J
+  have hT : T in J W := J.bind_covering hS (fun Z g hg => by
+    apply J.pullback_stable
+    rw [Functor.functorPushforward_mem_iff J₀]
+    let str := Presieve.getFunctorPushforwardStructure hg.bindStruct.hg
+    apply data.mem₁₀
+    simp only [str.cover.1.choose_spec, str.cover.2.choose_spec, assoc, w])
+  refine J.superset_covering ?_ hT
+  rintro U f ⟨V, a, b, hb, h, _, rfl⟩
+  let str := Presieve.getFunctorPushforwardStructure hb.bindStruct.hg
+  obtain ⟨W₀, c : _ ⟶ _, d, ⟨j, e, h₁, h₂⟩, fac⟩ := h
+  dsimp
+  refine ⟨j, d ≫ F.map e, ?_, ?_⟩
+  · rw [assoc, assoc, ← F.map_comp, ← h₁, F.map_comp, ← reassoc_of% fac,
+      str.cover.1.choose_spec, ← reassoc_of% str.fac,
+      Presieve.CoverByImageStructure.fac_assoc,
+      Presieve.BindStruct.fac_assoc]
+  · rw [assoc, assoc, ← F.map_comp, ← h₂, F.map_comp, ← reassoc_of% fac,
+      str.cover.2.choose_spec, ← reassoc_of% str.fac,
+      Presieve.CoverByImageStructure.fac_assoc,
+      Presieve.BindStruct.fac_assoc]
 
 中文:
 引理 mem₁
@@ -514,7 +570,37 @@ lemma mem₁
     (fun Y f hf => ((F.imageSieve (hf.some.map ≫ p₁) ⊓
         F.imageSieve (hf.some.map ≫ p₂)).functorPushforward F).pullback hf.some.lift)
   let T := Sieve.bind S.arrows (fun Z g hg => by
-    letI
+    letI str := Presieve.getFunctorPushforwardStructure hg.bindStruct.hg
+    exact Sieve.pullback str.lift
+      (Sieve.functorPushforward F (data.sieve₁₀ str.cover.1.choose str.cover.2.choose)))
+  have hS : S in J W := by
+    apply J.bind_covering
+    · apply is_cover_of_isCoverDense
+    · intro Y f hf
+      apply J.pullback_stable
+      rw [Functor.functorPushforward_mem_iff J₀]
+      apply J₀.intersection_covering
+      all_goals apply IsDenseSubsite.imageSieve_mem J₀ J
+  have hT : T in J W := J.bind_covering hS (fun Z g hg => by
+    apply J.pullback_stable
+    rw [Functor.functorPushforward_mem_iff J₀]
+    let str := Presieve.getFunctorPushforwardStructure hg.bindStruct.hg
+    apply data.mem₁₀
+    simp only [str.cover.1.choose_spec, str.cover.2.choose_spec, assoc, w])
+  refine J.superset_covering ?_ hT
+  rintro U f ⟨V, a, b, hb, h, _, rfl⟩
+  let str := Presieve.getFunctorPushforwardStructure hb.bindStruct.hg
+  obtain ⟨W₀, c : _ ⟶ _, d, ⟨j, e, h₁, h₂⟩, fac⟩ := h
+  dsimp
+  refine ⟨j, d ≫ F.map e, ?_, ?_⟩
+  · rw [assoc, assoc, ← F.map_comp, ← h₁, F.map_comp, ← reassoc_of% fac,
+      str.cover.1.choose_spec, ← reassoc_of% str.fac,
+      Presieve.CoverByImageStructure.fac_assoc,
+      Presieve.BindStruct.fac_assoc]
+  · rw [assoc, assoc, ← F.map_comp, ← h₂, F.map_comp, ← reassoc_of% fac,
+      str.cover.2.choose_spec, ← reassoc_of% str.fac,
+      Presieve.CoverByImageStructure.fac_assoc,
+      Presieve.BindStruct.fac_assoc]
 
 Depends on / 依赖: F.imageSieve, IsDenseSubsite, IsDenseSubsite.isCoverDense, J.bind_coveri, Presieve, Presieve.getFunctorPushforwardStructure, S.arrows, Sieve.bind, Sieve.coverByImage, Sieve.functorPushforward, Sieve.pullback, arrows, bindStruct, bind_coveri, coverByImage, data.sieve, functorPushforward, getFunctorPushforwardStructure, hf.some.lift, hf.some.map
 -/
@@ -660,7 +746,22 @@ lemma sieve_mem
   rw [← functorPushforward_mem_iff J₀ J F]
   let R : ⦃W : C⦄ -> ⦃p : W ⟶ F.obj X₀⦄ ->
     (Sieve.pullback f data.toOneHypercover.sieve₀).arrows p -> Sieve W := fun W p hp =>
-      Sieve.bind (Sieve.coverByI
+      Sieve.bind (Sieve.coverByImage F W).arrows (fun U π hπ =>
+        Sieve.pullback hπ.some.lift
+          (Sieve.functorPushforward F (F.imageSieve (hπ.some.map ≫ p))))
+  refine J.superset_covering ?_
+    (J.bind_covering (J.pullback_stable f (data.toOneHypercover.mem₀)) (R := R)
+    (fun W p hp => J.bind_covering (F.is_cover_of_isCoverDense J W) ?_))
+  · rintro W' _ ⟨W, _, p, hp, ⟨Y₀, a, b, hb, ⟨U, c, d, ⟨x₁, w₁⟩, fac⟩, rfl⟩, rfl⟩
+    have hp' := Sieve.ofArrows.fac hp
+    dsimp at hp'
+    refine ⟨U, x₁, d, ⟨Sieve.ofArrows.i hp,
+      F.map c ≫ (Nonempty.some hb).map ≫ Sieve.ofArrows.h hp, ?_⟩, ?_⟩
+    · rw [w₁, assoc, assoc, assoc, assoc, hp']
+    · rw [w₁, assoc, ← reassoc_of% fac, hb.some.fac_assoc]
+  · intro U π hπ
+    apply J.pullback_stable
+    apply functorPushforward_imageSieve_mem
 
 中文:
 引理 sieve_mem
@@ -671,7 +772,22 @@ lemma sieve_mem
   rw [← functorPushforward_mem_iff J₀ J F]
   let R : ⦃W : C⦄ -> ⦃p : W ⟶ F.obj X₀⦄ ->
     (Sieve.pullback f data.toOneHypercover.sieve₀).arrows p -> Sieve W := fun W p hp =>
-      Sieve.bind (Sieve.coverByI
+      Sieve.bind (Sieve.coverByImage F W).arrows (fun U π hπ =>
+        Sieve.pullback hπ.some.lift
+          (Sieve.functorPushforward F (F.imageSieve (hπ.some.map ≫ p))))
+  refine J.superset_covering ?_
+    (J.bind_covering (J.pullback_stable f (data.toOneHypercover.mem₀)) (R := R)
+    (fun W p hp => J.bind_covering (F.is_cover_of_isCoverDense J W) ?_))
+  · rintro W' _ ⟨W, _, p, hp, ⟨Y₀, a, b, hb, ⟨U, c, d, ⟨x₁, w₁⟩, fac⟩, rfl⟩, rfl⟩
+    have hp' := Sieve.ofArrows.fac hp
+    dsimp at hp'
+    refine ⟨U, x₁, d, ⟨Sieve.ofArrows.i hp,
+      F.map c ≫ (Nonempty.some hb).map ≫ Sieve.ofArrows.h hp, ?_⟩, ?_⟩
+    · rw [w₁, assoc, assoc, assoc, assoc, hp']
+    · rw [w₁, assoc, ← reassoc_of% fac, hb.some.fac_assoc]
+  · intro U π hπ
+    apply J.pullback_stable
+    apply functorPushforward_imageSieve_mem
 
 Depends on / 依赖: F.imageSieve, F.obj, IsDenseSubsite, IsDenseSubsite.isCoverDense, IsDenseSubsite.isLocallyFull, J.bind_covering, J.pullback_stable, J.superset_covering, Sieve.bind, Sieve.coverByImage, Sieve.functorPushforward, Sieve.pullback, arrows, bind_covering, coverByImage, data.toOneHypercover.mem, data.toOneHypercover.sieve, functorPushforward, functorPushforward_mem_iff, imageSieve
 -/
@@ -725,7 +841,8 @@ definition noncomputable
       exact s.condition
         { fst := ⟨_, _, ha⟩
           snd := ⟨_, _, hb⟩
-          r := ⟨_, F.ma
+          r := ⟨_, F.map p₁, F.map p₂, by
+              simp only [← Functor.map_comp_assoc, fac]⟩ })
 
 中文:
 定义 noncomputable
@@ -736,7 +853,8 @@ definition noncomputable
       exact s.condition
         { fst := ⟨_, _, ha⟩
           snd := ⟨_, _, hb⟩
-          r := ⟨_, F.ma
+          r := ⟨_, F.map p₁, F.map p₂, by
+              simp only [← Functor.map_comp_assoc, fac]⟩ })
 -/
 private noncomputable def liftAux (i : (data X).I₀) : s.pt ⟶ G.obj (op (F.obj ((data X).X i))) :=
   hG₀.amalgamate ⟨_, cover_lift F J₀ _ (J.pullback_stable ((data X).f i) S.2)⟩
@@ -782,7 +900,13 @@ definition noncomputable
         (J.pullback_stable (F.map ((data X).p₁ j) ≫ (data X).f i₁) S.2)⟩ _ _ ?_
     rintro ⟨W₀, a, ha⟩
     dsimp
-    simp o
+    simp only [assoc, ← Functor.map_comp, ← op_comp]
+    have ha₁ : S (F.map (a ≫ (data X).p₁ j) ≫ (data X).f i₁) := by simpa using ha
+    have ha₂ : S (F.map (a ≫ (data X).p₂ j) ≫ (data X).f i₂) := by
+      rwa [Functor.map_comp_assoc, ← (data X).w j]
+    rw [liftAux_fac _ _ _ ha₁]; rw [liftAux_fac _ _ _ ha₂]
+    congr 2
+    rw [map_comp_assoc]; rw [map_comp_assoc]; rw [(data X).w j])
 
 中文:
 定义 noncomputable
@@ -795,7 +919,13 @@ definition noncomputable
         (J.pullback_stable (F.map ((data X).p₁ j) ≫ (data X).f i₁) S.2)⟩ _ _ ?_
     rintro ⟨W₀, a, ha⟩
     dsimp
-    simp o
+    simp only [assoc, ← Functor.map_comp, ← op_comp]
+    have ha₁ : S (F.map (a ≫ (data X).p₁ j) ≫ (data X).f i₁) := by simpa using ha
+    have ha₂ : S (F.map (a ≫ (data X).p₂ j) ≫ (data X).f i₂) := by
+      rwa [Functor.map_comp_assoc, ← (data X).w j]
+    rw [liftAux_fac _ _ _ ha₁]; rw [liftAux_fac _ _ _ ha₂]
+    congr 2
+    rw [map_comp_assoc]; rw [map_comp_assoc]; rw [(data X).w j])
 -/
 private noncomputable def lift : s.pt ⟶ G.obj (op X) :=
   Multifork.IsLimit.lift (hG X) (fun i => liftAux hG₀ s i) (by
@@ -849,7 +979,20 @@ lemma fac
         rintro ⟨X₀, b, ⟨_, c, _, h, fac₁⟩⟩
         obtain ⟨j⟩ := h
         refine Presheaf.IsSheaf.hom_ext hG₀
-          ⟨
+          ⟨_, IsDenseSubsite.imageSieve_mem J₀ J F c⟩ _ _ ?_
+        rintro ⟨Y₀, d, e, fac₂⟩
+        dsimp at i j c fac₁ ⊢
+        have he : S (F.map e ≫ (data X).f j) := by
+          rw [fac₂]; rw [assoc]; rw [fac₁]
+          simpa only [assoc] using S.1.downward_closed a.hf (F.map d ≫ F.map b ≫ (data a.Y).f i)
+        simp only [assoc, ← Functor.map_comp, ← op_comp, ← fac₁]
+        conv_lhs => simp only [op_comp, Functor.map_comp, assoc, lift_map_assoc]
+        rw [← Functor.map_comp]; rw [← op_comp]; rw [← fac₂]; rw [liftAux_fac _ _ _ he]
+        simpa using s.condition
+          { fst := { hf := he, .. }
+            snd := a
+            r := ⟨_, 𝟙 _, F.map d ≫ F.map b ≫ (data a.Y).f i, by
+              simp only [fac₁, fac₂, assoc, id_comp]⟩ }))
 
 中文:
 引理 fac
@@ -861,7 +1004,20 @@ lemma fac
         rintro ⟨X₀, b, ⟨_, c, _, h, fac₁⟩⟩
         obtain ⟨j⟩ := h
         refine Presheaf.IsSheaf.hom_ext hG₀
-          ⟨
+          ⟨_, IsDenseSubsite.imageSieve_mem J₀ J F c⟩ _ _ ?_
+        rintro ⟨Y₀, d, e, fac₂⟩
+        dsimp at i j c fac₁ ⊢
+        have he : S (F.map e ≫ (data X).f j) := by
+          rw [fac₂]; rw [assoc]; rw [fac₁]
+          simpa only [assoc] using S.1.downward_closed a.hf (F.map d ≫ F.map b ≫ (data a.Y).f i)
+        simp only [assoc, ← Functor.map_comp, ← op_comp, ← fac₁]
+        conv_lhs => simp only [op_comp, Functor.map_comp, assoc, lift_map_assoc]
+        rw [← Functor.map_comp]; rw [← op_comp]; rw [← fac₂]; rw [liftAux_fac _ _ _ he]
+        simpa using s.condition
+          { fst := { hf := he, .. }
+            snd := a
+            r := ⟨_, 𝟙 _, F.map d ≫ F.map b ≫ (data a.Y).f i, by
+              simp only [fac₁, fac₂, assoc, id_comp]⟩ }))
 -/
 private lemma fac (a : S.Arrow) :
     lift hG₀ hG s ≫ G.map a.f.op = s.ι a :=
@@ -1100,7 +1256,12 @@ lemma presheafObj_mapPreimage_condition
       (IsDenseSubsite.imageSieve_mem J₀ J F p₂)⟩ _ _ ?_
   intro ⟨W₀, a, ⟨b₁, h₁⟩, ⟨b₂, h₂⟩⟩
   refine Presheaf.IsSheaf.hom_ext G₀.property
-    ⟨_, (data X).mem₁₀ i₁ i₂ b₁ b₂ (by
+    ⟨_, (data X).mem₁₀ i₁ i₂ b₁ b₂ (by simp only [h₁, h₂, assoc, fac])⟩ _ _ ?_
+  intro ⟨U₀, c, ⟨j, t, fac₁, fac₂⟩⟩
+  simp only [assoc, ← Functor.map_comp, ← op_comp,
+    IsDenseSubsite.mapPreimage_map_of_fac J F G₀ p₁ (c ≫ a) (c ≫ b₁) (by simp [← h₁]),
+    IsDenseSubsite.mapPreimage_map_of_fac J F G₀ p₂ (c ≫ a) (c ≫ b₂) (by simp [← h₂])]
+  simpa [fac₁, fac₂] using presheafObj_condition_assoc _ _ _ _ _ _ _
 
 中文:
 引理 presheafObj_mapPreimage_condition
@@ -1110,7 +1271,12 @@ lemma presheafObj_mapPreimage_condition
       (IsDenseSubsite.imageSieve_mem J₀ J F p₂)⟩ _ _ ?_
   intro ⟨W₀, a, ⟨b₁, h₁⟩, ⟨b₂, h₂⟩⟩
   refine Presheaf.IsSheaf.hom_ext G₀.property
-    ⟨_, (data X).mem₁₀ i₁ i₂ b₁ b₂ (by
+    ⟨_, (data X).mem₁₀ i₁ i₂ b₁ b₂ (by simp only [h₁, h₂, assoc, fac])⟩ _ _ ?_
+  intro ⟨U₀, c, ⟨j, t, fac₁, fac₂⟩⟩
+  simp only [assoc, ← Functor.map_comp, ← op_comp,
+    IsDenseSubsite.mapPreimage_map_of_fac J F G₀ p₁ (c ≫ a) (c ≫ b₁) (by simp [← h₁]),
+    IsDenseSubsite.mapPreimage_map_of_fac J F G₀ p₂ (c ≫ a) (c ≫ b₂) (by simp [← h₂])]
+  simpa [fac₁, fac₂] using presheafObj_condition_assoc _ _ _ _ _ _ _
 
 Depends on / 依赖: Functor, Functor.map_comp, IsDenseSubsit, IsDenseSubsite, IsDenseSubsite.imageSieve_mem, IsDenseSubsite.mapPreimage_map_of_fac, IsSheaf, Presheaf, Presheaf.IsSheaf.hom_ext, hom_ext, imageSieve_mem, intersection_covering, mapPreimage_map_of_fac, map_comp, op_comp, property
 -/
@@ -1208,7 +1374,12 @@ lemma res_eq_res
       (IsDenseSubsite.imageSieve_mem J₀ J F h₂.q)⟩ _ _ ?_
   rintro ⟨Z₀, a, ⟨b₁, w₁⟩, ⟨b₂, w₂⟩⟩
   refine Presheaf.IsSheaf.hom_ext G₀.property
-    ⟨_, (data X).mem₁₀ h₁.i₀ h₂.i
+    ⟨_, (data X).mem₁₀ h₁.i₀ h₂.i₀ b₁ b₂ (by rw [w₁, w₂, assoc, assoc, h₁.fac, h₂.fac])⟩ _ _ ?_
+  rintro ⟨W₀, c, hc⟩
+  dsimp [res]
+  simp only [assoc, IsDenseSubsite.mapPreimage_comp_map]
+  apply presheafObj_mapPreimage_condition
+  simp
 
 中文:
 引理 res_eq_res
@@ -1219,7 +1390,12 @@ lemma res_eq_res
       (IsDenseSubsite.imageSieve_mem J₀ J F h₂.q)⟩ _ _ ?_
   rintro ⟨Z₀, a, ⟨b₁, w₁⟩, ⟨b₂, w₂⟩⟩
   refine Presheaf.IsSheaf.hom_ext G₀.property
-    ⟨_, (data X).mem₁₀ h₁.i₀ h₂.i
+    ⟨_, (data X).mem₁₀ h₁.i₀ h₂.i₀ b₁ b₂ (by rw [w₁, w₂, assoc, assoc, h₁.fac, h₂.fac])⟩ _ _ ?_
+  rintro ⟨W₀, c, hc⟩
+  dsimp [res]
+  simp only [assoc, IsDenseSubsite.mapPreimage_comp_map]
+  apply presheafObj_mapPreimage_condition
+  simp
 
 Depends on / 依赖: IsDenseSubsite, IsDenseSubsite.imageSieve_mem, IsDenseSubsite.mapPreimage_comp_map, IsSheaf, Presheaf, Presheaf.IsSheaf.hom_ext, hom_ext, imageSieve_mem, intersection_covering, mapPreimage_comp_map, presheafObj_mapPreimage_condition, property
 -/
@@ -1251,7 +1427,19 @@ definition restriction
       rintro ⟨Z₁, g₁, ⟨h₁⟩⟩ ⟨Z₂, g₂, ⟨h₂⟩⟩ ⟨T₀, p₁, p₂, w⟩
       dsimp at g₁ g₂ p₁ p₂ w ⊢
       rw [restriction.res_eq_res data G₀ _ h₁]; rw [restriction.res_eq_res data G₀ _ h₂]
-      refine Presh
+      refine Presheaf.IsSheaf.hom_ext G₀.property
+        ⟨_, J₀.intersection_covering
+          (IsDenseSubsite.imageSieve_mem J₀ J F (F.map p₁ ≫ h₁.q))
+          (IsDenseSubsite.imageSieve_mem J₀ J F (F.map p₂ ≫ h₂.q))⟩ _ _ ?_
+      rintro ⟨W₀, a, ⟨q₁, w₁⟩, ⟨q₂, w₂⟩⟩
+      refine Presheaf.IsSheaf.hom_ext G₀.property
+        ⟨_, (data X).mem₁₀ h₁.i₀ h₂.i₀ q₁ q₂ (by
+        simp only [w₁, w₂, assoc, h₁.fac, h₂.fac, ← Functor.map_comp_assoc, w])⟩ _ _ ?_
+      rintro ⟨U₀, b, hb⟩
+      dsimp
+      simp only [assoc, restriction.res, IsDenseSubsite.mapPreimage_comp_map]
+      apply presheafObj_mapPreimage_condition
+      simp only [assoc, h₁.fac, h₂.fac, ← Functor.map_comp_assoc, w])
 
 中文:
 定义 restriction
@@ -1261,7 +1449,19 @@ definition restriction
       rintro ⟨Z₁, g₁, ⟨h₁⟩⟩ ⟨Z₂, g₂, ⟨h₂⟩⟩ ⟨T₀, p₁, p₂, w⟩
       dsimp at g₁ g₂ p₁ p₂ w ⊢
       rw [restriction.res_eq_res data G₀ _ h₁]; rw [restriction.res_eq_res data G₀ _ h₂]
-      refine Presh
+      refine Presheaf.IsSheaf.hom_ext G₀.property
+        ⟨_, J₀.intersection_covering
+          (IsDenseSubsite.imageSieve_mem J₀ J F (F.map p₁ ≫ h₁.q))
+          (IsDenseSubsite.imageSieve_mem J₀ J F (F.map p₂ ≫ h₂.q))⟩ _ _ ?_
+      rintro ⟨W₀, a, ⟨q₁, w₁⟩, ⟨q₂, w₂⟩⟩
+      refine Presheaf.IsSheaf.hom_ext G₀.property
+        ⟨_, (data X).mem₁₀ h₁.i₀ h₂.i₀ q₁ q₂ (by
+        simp only [w₁, w₂, assoc, h₁.fac, h₂.fac, ← Functor.map_comp_assoc, w])⟩ _ _ ?_
+      rintro ⟨U₀, b, hb⟩
+      dsimp
+      simp only [assoc, restriction.res, IsDenseSubsite.mapPreimage_comp_map]
+      apply presheafObj_mapPreimage_condition
+      simp only [assoc, h₁.fac, h₂.fac, ← Functor.map_comp_assoc, w])
 
 Depends on / 依赖: F.map, IsDenseSubsite, IsDenseSubsite.imageSieve_mem, IsSheaf, Presheaf, Presheaf.IsSheaf.hom_ext, amalgamate, hg.some, hom_ext, imageSieve_mem, intersection_covering, property, res_eq_res, restriction, restriction.res, restriction.res_eq_res, sieve_mem
 -/
@@ -1359,7 +1559,13 @@ definition presheafMap
     rintro ⟨⟨i₁, i₂⟩, j⟩
     obtain ⟨a, h₁, h₂⟩ : exists a, a = F.map ((data X).p₁ j) ≫ (data X).f i₁ ≫ f ∧
         a = F.map ((data X).p₂ j) ≫ (data X).f i₂ ≫ f := ⟨_, rfl, (data X).w_assoc j _⟩
-    refine Presheaf.IsSh
+    refine Presheaf.IsSheaf.hom_ext G₀.property
+      ⟨_, cover_lift F J₀ _ (J.pullback_stable a (data Y).mem₀)⟩ _ _ ?_
+    rintro ⟨W₀, b, ⟨_, p, _, ⟨i⟩, fac⟩⟩
+    dsimp at fac ⊢
+    simp only [assoc, ← map_comp, ← op_comp]
+    rw [restriction_map (p := p)]; rw [restriction_map (p := p)]
+    all_goals simp_all)
 
 中文:
 定义 presheafMap
@@ -1368,7 +1574,13 @@ definition presheafMap
     rintro ⟨⟨i₁, i₂⟩, j⟩
     obtain ⟨a, h₁, h₂⟩ : exists a, a = F.map ((data X).p₁ j) ≫ (data X).f i₁ ≫ f ∧
         a = F.map ((data X).p₂ j) ≫ (data X).f i₂ ≫ f := ⟨_, rfl, (data X).w_assoc j _⟩
-    refine Presheaf.IsSh
+    refine Presheaf.IsSheaf.hom_ext G₀.property
+      ⟨_, cover_lift F J₀ _ (J.pullback_stable a (data Y).mem₀)⟩ _ _ ?_
+    rintro ⟨W₀, b, ⟨_, p, _, ⟨i⟩, fac⟩⟩
+    dsimp at fac ⊢
+    simp only [assoc, ← map_comp, ← op_comp]
+    rw [restriction_map (p := p)]; rw [restriction_map (p := p)]
+    all_goals simp_all)
 
 Depends on / 依赖: F.map, IsSheaf, J.pullback_stable, Multiequalizer, Multiequalizer.lift, Presheaf, Presheaf.IsSheaf.hom_ext, cover_lift, hom_ext, map_comp, op_comp, property, pullback_stable, restriction, restriction_map, w_assoc
 -/
@@ -1421,7 +1633,29 @@ lemma presheafMap_restriction
   refine Presheaf.IsSheaf.hom_ext G₀.property ⟨_, GrothendieckTopology.bind_covering
     (hS := cover_lift F J₀ J (J.pullback_stable f (data X).mem₀)) (hR := fun Y₀ a ha =>
       cover_lift F J₀ J (J.pullback_stable
-        (Sieve.ofArrows.h ha ≫ (data X).f (Sieve.ofArrows.i ha) ≫ g) (data Y).mem
+        (Sieve.ofArrows.h ha ≫ (data X).f (Sieve.ofArrows.i ha) ≫ g) (data Y).mem₀))⟩ _ _ ?_
+  rintro ⟨U₀, _, Y₀, c, d, hd, hc, rfl⟩
+  have hc' := Sieve.ofArrows.fac hc
+  have hd' := Sieve.ofArrows.fac hd
+  dsimp at hc hd hc' hd' ⊢
+  /- #adaptation_note Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed the `fac`
+  arguments below (i.e. `fac := by grind`). It is not yet clear whether this is due to defeq
+  abuse in Mathlib or a problem in the new canonicalizer; a minimization would help. -/
+  rw [assoc]; rw [← op_comp]; rw [restriction_map (i := Sieve.ofArrows.i hd)
+    (p := F.map c ≫ Sieve.ofArrows.h hd) (fac := by simp; grind)]; rw [restriction_map (i := Sieve.ofArrows.i hc) (p := Sieve.ofArrows.h hc) (fac := by simp; grind)]; rw [presheafMap_π_assoc]
+  dsimp
+  have := J₀.intersection_covering (IsDenseSubsite.imageSieve_mem J₀ J F (Sieve.ofArrows.h hc))
+    (J₀.pullback_stable c (IsDenseSubsite.imageSieve_mem J₀ J F (Sieve.ofArrows.h hd)))
+  refine Presheaf.IsSheaf.hom_ext G₀.property ⟨_, this⟩ _ _ ?_
+  rintro ⟨V₀, a, ⟨x₁, fac₁⟩, ⟨x₂, fac₂⟩⟩
+  dsimp
+  rw [assoc]; rw [assoc]; rw [IsDenseSubsite.mapPreimage_map_of_fac J F G₀ _ _ x₂ (by simpa using fac₂.symm)]; rw [IsDenseSubsite.mapPreimage_map_of_fac J F G₀ _ _ x₁ fac₁.symm]
+  /- #adaptation_note Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), the last argument below was
+  `by grind` (now `by simp_all`). It is not yet clear whether this is due to defeq abuse in
+  Mathlib or a problem in the new canonicalizer; a minimization would help. -/
+  rw [restriction_map data G₀ _ _ (F.map x₁) (by simp_all)]; rw [IsDenseSubsite.mapPreimage_map]
 
 中文:
 引理 presheafMap_restriction
@@ -1430,7 +1664,29 @@ lemma presheafMap_restriction
   refine Presheaf.IsSheaf.hom_ext G₀.property ⟨_, GrothendieckTopology.bind_covering
     (hS := cover_lift F J₀ J (J.pullback_stable f (data X).mem₀)) (hR := fun Y₀ a ha =>
       cover_lift F J₀ J (J.pullback_stable
-        (Sieve.ofArrows.h ha ≫ (data X).f (Sieve.ofArrows.i ha) ≫ g) (data Y).mem
+        (Sieve.ofArrows.h ha ≫ (data X).f (Sieve.ofArrows.i ha) ≫ g) (data Y).mem₀))⟩ _ _ ?_
+  rintro ⟨U₀, _, Y₀, c, d, hd, hc, rfl⟩
+  have hc' := Sieve.ofArrows.fac hc
+  have hd' := Sieve.ofArrows.fac hd
+  dsimp at hc hd hc' hd' ⊢
+  /- #adaptation_note Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed the `fac`
+  arguments below (i.e. `fac := by grind`). It is not yet clear whether this is due to defeq
+  abuse in Mathlib or a problem in the new canonicalizer; a minimization would help. -/
+  rw [assoc]; rw [← op_comp]; rw [restriction_map (i := Sieve.ofArrows.i hd)
+    (p := F.map c ≫ Sieve.ofArrows.h hd) (fac := by simp; grind)]; rw [restriction_map (i := Sieve.ofArrows.i hc) (p := Sieve.ofArrows.h hc) (fac := by simp; grind)]; rw [presheafMap_π_assoc]
+  dsimp
+  have := J₀.intersection_covering (IsDenseSubsite.imageSieve_mem J₀ J F (Sieve.ofArrows.h hc))
+    (J₀.pullback_stable c (IsDenseSubsite.imageSieve_mem J₀ J F (Sieve.ofArrows.h hd)))
+  refine Presheaf.IsSheaf.hom_ext G₀.property ⟨_, this⟩ _ _ ?_
+  rintro ⟨V₀, a, ⟨x₁, fac₁⟩, ⟨x₂, fac₂⟩⟩
+  dsimp
+  rw [assoc]; rw [assoc]; rw [IsDenseSubsite.mapPreimage_map_of_fac J F G₀ _ _ x₂ (by simpa using fac₂.symm)]; rw [IsDenseSubsite.mapPreimage_map_of_fac J F G₀ _ _ x₁ fac₁.symm]
+  /- #adaptation_note Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), the last argument below was
+  `by grind` (now `by simp_all`). It is not yet clear whether this is due to defeq abuse in
+  Mathlib or a problem in the new canonicalizer; a minimization would help. -/
+  rw [restriction_map data G₀ _ _ (F.map x₁) (by simp_all)]; rw [IsDenseSubsite.mapPreimage_map]
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.bind_covering, IsSheaf, J.pullback_stable, Presheaf, Presheaf.IsSheaf.hom_ext, Sieve.ofArrows.fac, Sieve.ofArrows.h, Sieve.ofArrows.i, bind_covering, cover_lift, hom_ext, ofArrows, property, pullback_stable
 -/
@@ -1565,7 +1821,12 @@ definition hom
       IsDenseSubsite.mapPreimage J F G₀ (Sieve.ofArrows.h ha)) (by
         rintro ⟨W₀, a, ha⟩ ⟨T₀, b, hb⟩ ⟨U₀, p₁, p₂, fac⟩
         have ha' := Sieve.ofArrows.fac ha
- 
+        have hb' := Sieve.ofArrows.fac hb
+        dsimp at ha hb ha' hb' p₁ p₂ fac ⊢
+        rw [assoc]; rw [assoc]; rw [IsDenseSubsite.mapPreimage_comp_map]; rw [IsDenseSubsite.mapPreimage_comp_map]; rw [← restriction_eq_of_fac data G₀ (F.map (p₁ ≫ a))
+            (F.map p₁ ≫ Sieve.ofArrows.h ha) (by rw [assoc]; rw [ha']; rw [map_comp]),
+          restriction_eq_of_fac data G₀ (F.map (p₁ ≫ a))
+            (F.map p₂ ≫ Sieve.ofArrows.h hb) (by rw [assoc, hb', fac, map_comp])])
 
 中文:
 定义 hom
@@ -1575,7 +1836,12 @@ definition hom
       IsDenseSubsite.mapPreimage J F G₀ (Sieve.ofArrows.h ha)) (by
         rintro ⟨W₀, a, ha⟩ ⟨T₀, b, hb⟩ ⟨U₀, p₁, p₂, fac⟩
         have ha' := Sieve.ofArrows.fac ha
- 
+        have hb' := Sieve.ofArrows.fac hb
+        dsimp at ha hb ha' hb' p₁ p₂ fac ⊢
+        rw [assoc]; rw [assoc]; rw [IsDenseSubsite.mapPreimage_comp_map]; rw [IsDenseSubsite.mapPreimage_comp_map]; rw [← restriction_eq_of_fac data G₀ (F.map (p₁ ≫ a))
+            (F.map p₁ ≫ Sieve.ofArrows.h ha) (by rw [assoc]; rw [ha']; rw [map_comp]),
+          restriction_eq_of_fac data G₀ (F.map (p₁ ≫ a))
+            (F.map p₂ ≫ Sieve.ofArrows.h hb) (by rw [assoc, hb', fac, map_comp])])
 
 Depends on / 依赖: F.map, F.obj, IsDenseSubsite, IsDenseSubsite.mapPreimage, IsDenseSubsite.mapPreimage_comp_map, Sieve.ofArrows.fac, Sieve.ofArrows.h, Sieve.ofArrows.i, amalgamate, cover_lift, mapPreimage, mapPreimage_comp_map, ofArrows, restriction_eq_of_fac
 -/
@@ -1751,7 +2017,13 @@ lemma inv_restriction
   refine Presheaf.IsSheaf.hom_ext G₀.property
     ⟨_, J₀.pullback_stable b (cover_lift F J₀ _ (data (F.obj X₀)).mem₀)⟩ _ _ ?_
   rintro ⟨T₀, c, _, d, _, ⟨i⟩, fac₂⟩
-  dsimp
+  dsimp at i d fac₂ ⊢
+  simp only [assoc, ← Functor.map_comp, ← op_comp]
+  rw [restriction_map data G₀ f (c ≫ a) d
+    (by rw [fac₂]; rw [map_comp]; rw [map_comp_assoc]; rw [fac₁]), inv_π_assoc,
+    ← IsDenseSubsite.mapPreimage_comp, fac₂,
+    IsDenseSubsite.mapPreimage_comp_map J F G₀, map_comp,
+      map_comp_assoc, fac₁]
 
 中文:
 引理 inv_restriction
@@ -1763,7 +2035,13 @@ lemma inv_restriction
   refine Presheaf.IsSheaf.hom_ext G₀.property
     ⟨_, J₀.pullback_stable b (cover_lift F J₀ _ (data (F.obj X₀)).mem₀)⟩ _ _ ?_
   rintro ⟨T₀, c, _, d, _, ⟨i⟩, fac₂⟩
-  dsimp
+  dsimp at i d fac₂ ⊢
+  simp only [assoc, ← Functor.map_comp, ← op_comp]
+  rw [restriction_map data G₀ f (c ≫ a) d
+    (by rw [fac₂]; rw [map_comp]; rw [map_comp_assoc]; rw [fac₁]), inv_π_assoc,
+    ← IsDenseSubsite.mapPreimage_comp, fac₂,
+    IsDenseSubsite.mapPreimage_comp_map J F G₀, map_comp,
+      map_comp_assoc, fac₁]
 
 Depends on / 依赖: F.obj, Functor, Functor.map_comp, IsDenseSubsite, IsDenseSubsite.imageSieve_mem, IsDenseSubsite.mapPreimage_comp, IsSheaf, Presheaf, Presheaf.IsSheaf.hom_ext, cover_lift, hom_ext, imageSieve_mem, mapPreimage_comp, map_comp, map_comp_assoc, op_comp, property, pullback_stable, restriction_map
 -/
@@ -1797,7 +2075,13 @@ definition presheafObjObjIso
   body: presheafObjObjIso.hom data G₀ X₀
   inv := presheafObjObjIso.inv data G₀ X₀
   hom_inv_id := presheafObj_hom_ext fun i => by
-    rw [assoc]; rw [presheafObjObjIso.inv_π]; rw [id_comp]; rw [presheafObjObjIso.hom_mapPreimage data G₀ _ (𝟙 _) (fac := by simp)]; rw [IsDenseSubsite.mapPreimage_id]; rw [comp
+    rw [assoc]; rw [presheafObjObjIso.inv_π]; rw [id_comp]; rw [presheafObjObjIso.hom_mapPreimage data G₀ _ (𝟙 _) (fac := by simp)]; rw [IsDenseSubsite.mapPreimage_id]; rw [comp_id]
+  inv_hom_id := by
+    refine Presheaf.IsSheaf.hom_ext G₀.property
+      ⟨_, cover_lift F J₀ _ (data (F.obj X₀)).mem₀⟩ _ _ ?_
+    rintro ⟨Y₀, a, X, b, c, ⟨i⟩, fac⟩
+    dsimp at i b fac ⊢
+    simp [presheafObjObjIso.hom_map data G₀ _ b fac, ← IsDenseSubsite.mapPreimage_comp, fac]
 
 中文:
 定义 presheafObjObjIso
@@ -1805,7 +2089,13 @@ definition presheafObjObjIso
   定义体: presheafObjObjIso.hom data G₀ X₀
   inv := presheafObjObjIso.inv data G₀ X₀
   hom_inv_id := presheafObj_hom_ext fun i => by
-    rw [assoc]; rw [presheafObjObjIso.inv_π]; rw [id_comp]; rw [presheafObjObjIso.hom_mapPreimage data G₀ _ (𝟙 _) (fac := by simp)]; rw [IsDenseSubsite.mapPreimage_id]; rw [comp
+    rw [assoc]; rw [presheafObjObjIso.inv_π]; rw [id_comp]; rw [presheafObjObjIso.hom_mapPreimage data G₀ _ (𝟙 _) (fac := by simp)]; rw [IsDenseSubsite.mapPreimage_id]; rw [comp_id]
+  inv_hom_id := by
+    refine Presheaf.IsSheaf.hom_ext G₀.property
+      ⟨_, cover_lift F J₀ _ (data (F.obj X₀)).mem₀⟩ _ _ ?_
+    rintro ⟨Y₀, a, X, b, c, ⟨i⟩, fac⟩
+    dsimp at i b fac ⊢
+    simp [presheafObjObjIso.hom_map data G₀ _ b fac, ← IsDenseSubsite.mapPreimage_comp, fac]
 
 Depends on / 依赖: presheafObjObjIso, presheafObjObjIso.hom
 -/
@@ -1930,7 +2220,11 @@ lemma isSheaf
     refine ⟨(IsLimit.postcomposeHomEquiv
       (WalkingMulticospan.functorExt
           (fun _ => presheafObjObjIso _ _ _) (fun _ => presheafObjObjIso _ _ _)
-         
+          (fun _ => (compPresheafIso _ _).hom.naturality _)
+          (fun _ => (compPresheafIso _ _).hom.naturality _)) _).1
+      (IsLimit.ofIsoLimit (presheafObjIsLimit data G₀ X)
+        (Multifork.ext (Iso.refl _) (fun i => ?_)))⟩
+    simp [Multifork.ι, PreOneHypercover.multifork, MulticospanIndex.multicospan]
 
 中文:
 引理 isSheaf
@@ -1943,7 +2237,11 @@ lemma isSheaf
     refine ⟨(IsLimit.postcomposeHomEquiv
       (WalkingMulticospan.functorExt
           (fun _ => presheafObjObjIso _ _ _) (fun _ => presheafObjObjIso _ _ _)
-         
+          (fun _ => (compPresheafIso _ _).hom.naturality _)
+          (fun _ => (compPresheafIso _ _).hom.naturality _)) _).1
+      (IsLimit.ofIsoLimit (presheafObjIsLimit data G₀ X)
+        (Multifork.ext (Iso.refl _) (fun i => ?_)))⟩
+    simp [Multifork.ι, PreOneHypercover.multifork, MulticospanIndex.multicospan]
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeHomEquiv, Iso.refl, Multifork, Multifork.ext, PreOneHypercover, Presheaf, Presheaf.isSheaf_of_iso_iff, WalkingMulticospan, WalkingMulticospan.functorExt, compPresheafIso, functorExt, hom.naturality, isSheaf_iff, isSheaf_of_iso_iff, naturality, ofIsoLimit, postcomposeHomEquiv, presheafObjIsLimit
 -/

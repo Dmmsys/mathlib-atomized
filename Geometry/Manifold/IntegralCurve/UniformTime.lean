@@ -127,7 +127,12 @@ lemma isMIntegralCurve_abs_add_one_of_isMIntegralCurveOn_Ioo
     exact lt_add_one _
   apply HasMFDerivAt.congr_of_eventuallyEq (f := γ (|t| + 1))
 .hasMFDerivAt (Ioo_mem_nhds ht.1 ht.2) · exact hγ (|t| + 1) (by positivity) _ ht
-  · rw [Filter.eventuallyEq_iff_exists_
+  · rw [Filter.eventuallyEq_iff_exists_mem]
+    refine ⟨Ioo (-(|t| + 1)) (|t| + 1), ?_,
+      eqOn_abs_add_one_of_isMIntegralCurveOn_Ioo hv γ hγx hγ⟩
+    have : |t| < |t| + 1 := lt_add_of_pos_right |t| zero_lt_one
+    rw [abs_lt] at this
+    exact Ioo_mem_nhds this.1 this.2
 
 中文:
 引理 isM整数egralCurve_abs_add_one_of_isM整数egralCurveOn_Ioo
@@ -139,7 +144,12 @@ lemma isMIntegralCurve_abs_add_one_of_isMIntegralCurveOn_Ioo
     exact lt_add_one _
   apply HasMFDerivAt.congr_of_eventuallyEq (f := γ (|t| + 1))
 .hasMFDerivAt (Ioo_mem_nhds ht.1 ht.2) · exact hγ (|t| + 1) (by positivity) _ ht
-  · rw [Filter.eventuallyEq_iff_exists_
+  · rw [Filter.eventuallyEq_iff_exists_mem]
+    refine ⟨Ioo (-(|t| + 1)) (|t| + 1), ?_,
+      eqOn_abs_add_one_of_isMIntegralCurveOn_Ioo hv γ hγx hγ⟩
+    have : |t| < |t| + 1 := lt_add_of_pos_right |t| zero_lt_one
+    rw [abs_lt] at this
+    exact Ioo_mem_nhds this.1 this.2
 
 Depends on / 依赖: Filter, Filter.eventuallyEq_iff_exists_mem, HasMFDerivAt, HasMFDerivAt.congr_of_eventuallyEq, Ioo_mem_nhds, abs_lt, congr_of_eventuallyEq, eqOn_abs_add_one_of_isMIntegralCurveOn_Ioo, eventuallyEq_iff_exists_mem, hasMFDerivAt, lt_add_of_pos_right, lt_add_one, mem_Ioo, zero_lt_one
 -/
@@ -207,7 +217,9 @@ lemma eqOn_piecewise_of_isMIntegralCurveOn_Ioo
       simp [ht.1, ht.2, hmem.1, hmem.2]
     · rw [piecewise, if_neg hmem]
   apply isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless _ hv
-    (h
+    (hγ.mono (Ioo_subset_Ioo (le_max_left ..) (min_le_left ..)))
+    (hγ'.mono (Ioo_subset_Ioo (le_max_right ..) (min_le_right ..))) h
+  exact ⟨max_lt ht₀.1.1 ht₀.2.1, lt_min ht₀.1.2 ht₀.2.2⟩
 
 中文:
 引理 eqOn_piecewise_of_isM整数egralCurveOn_Ioo
@@ -221,7 +233,9 @@ lemma eqOn_piecewise_of_isMIntegralCurveOn_Ioo
       simp [ht.1, ht.2, hmem.1, hmem.2]
     · rw [piecewise, if_neg hmem]
   apply isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless _ hv
-    (h
+    (hγ.mono (Ioo_subset_Ioo (le_max_left ..) (min_le_left ..)))
+    (hγ'.mono (Ioo_subset_Ioo (le_max_right ..) (min_le_right ..))) h
+  exact ⟨max_lt ht₀.1.1 ht₀.2.1, lt_min ht₀.1.2 ht₀.2.2⟩
 
 Depends on / 依赖: Ioo_subset_Ioo, if_neg, if_pos, isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless, le_max_left, le_max_right, lt_min, max_lt, min_le_left, min_le_right, piecewise
 -/
@@ -256,7 +270,20 @@ lemma isMIntegralCurveOn_piecewise
 .hasMFDerivWithinAt .hasMFDerivAt (Ioo_mem_nhds hmem.1 hmem.2) apply hγ t hmem
 .congr_of_eventuallyEq _ (by rw [piecewise, if_pos hmem]) (s := Ioo a b union Ioo a' b')
     rw [Filter.eventuallyEq_iff_exists_mem]
-    refin
+    refine ⟨Ioo a b, ?_, fun _ ht' => by rw [piecewise, if_pos ht']⟩
+    rw [(isOpen_Ioo.union isOpen_Ioo).nhdsWithin_eq ht]
+    exact Ioo_mem_nhds hmem.1 hmem.2
+  · have ht' := ht
+    rw [mem_union]; rw [or_iff_not_imp_left] at ht
+    rw [piecewise]; rw [if_neg hmem]
+.hasMFDerivAt (Ioo_mem_nhds (ht hmem).1 (ht hmem).2) apply hγ' t (ht hmem)
+.hasMFDerivWithinAt (s := Ioo a b union Ioo a' b')
+.congr_of_eventuallyEq _ (by rw [piecewise, if_neg hmem])
+    rw [Filter.eventuallyEq_iff_exists_mem]
+    refine ⟨Ioo a' b', ?_,
+      eqOn_piecewise_of_isMIntegralCurveOn_Ioo hv hγ hγ' ht₀ h⟩
+    rw [(isOpen_Ioo.union isOpen_Ioo).nhdsWithin_eq ht']
+    exact Ioo_mem_nhds (ht hmem).1 (ht hmem).2
 
 中文:
 引理 isM整数egralCurveOn_piecewise
@@ -268,7 +295,20 @@ lemma isMIntegralCurveOn_piecewise
 .hasMFDerivWithinAt .hasMFDerivAt (Ioo_mem_nhds hmem.1 hmem.2) apply hγ t hmem
 .congr_of_eventuallyEq _ (by rw [piecewise, if_pos hmem]) (s := Ioo a b union Ioo a' b')
     rw [Filter.eventuallyEq_iff_exists_mem]
-    refin
+    refine ⟨Ioo a b, ?_, fun _ ht' => by rw [piecewise, if_pos ht']⟩
+    rw [(isOpen_Ioo.union isOpen_Ioo).nhdsWithin_eq ht]
+    exact Ioo_mem_nhds hmem.1 hmem.2
+  · have ht' := ht
+    rw [mem_union]; rw [or_iff_not_imp_left] at ht
+    rw [piecewise]; rw [if_neg hmem]
+.hasMFDerivAt (Ioo_mem_nhds (ht hmem).1 (ht hmem).2) apply hγ' t (ht hmem)
+.hasMFDerivWithinAt (s := Ioo a b union Ioo a' b')
+.congr_of_eventuallyEq _ (by rw [piecewise, if_neg hmem])
+    rw [Filter.eventuallyEq_iff_exists_mem]
+    refine ⟨Ioo a' b', ?_,
+      eqOn_piecewise_of_isMIntegralCurveOn_Ioo hv hγ hγ' ht₀ h⟩
+    rw [(isOpen_Ioo.union isOpen_Ioo).nhdsWithin_eq ht']
+    exact Ioo_mem_nhds (ht hmem).1 (ht hmem).2
 
 Depends on / 依赖: Filter, Filter.eventuallyEq_iff_exists_mem, Ioo_mem_nhds, congr_of_eventuallyEq, eventuallyEq_iff_exists_mem, hasMFDerivAt, hasMFDerivWithinAt, if_pos, isOpen_Ioo, isOpen_Ioo.union, mem_union, nhdsWithin_eq, or_iff_not_imp_left, piecewise
 -/
@@ -312,7 +352,48 @@ lemma exists_isMIntegralCurve_of_isMIntegralCurveOn
     rw [exists_isMIntegralCurve_iff_exists_isMIntegralCurveOn_Ioo hv]
     intro a
     obtain ⟨y, ⟨γ, hγ1, hγ2⟩, hlt⟩ := hbdd a
-exact ⟨γ, hγ1, hγ2.mono Ioo_
+exact ⟨γ, hγ1, hγ2.mono Ioo_subset_Ioo (neg_le_neg hlt.le) hlt.le⟩
+  intro hbdd
+  set asup := sSup s with hasup
+  -- we will obtain two integral curves, one centred at some `t₀ > 0` with
+  -- `0 ≤ asup - ε < t₀ < asup`; let `t₀ = asup - ε / 2`
+  -- another centred at 0 with domain up to `a ∈ S` with `t₀ < a < asup`
+  obtain ⟨a, ha, hlt⟩ := Real.add_neg_lt_sSup (⟨ε, h x⟩ : Set.Nonempty s) (ε := - (ε / 2))
+    (by rw [neg_lt, neg_zero]; exact half_pos hε)
+  rw [mem_ofPred] at ha
+  rw [← hasup]; rw [← sub_eq_add_neg] at hlt
+  -- integral curve defined on `Ioo (-a) a`
+  obtain ⟨γ, h0, hγ⟩ := ha
+  -- integral curve starting at `-(asup - ε / 2)` with radius `ε`
+  obtain ⟨γ1_aux, h1_aux, hγ1⟩ := h (γ (-(asup - ε / 2)))
+  rw [← isMIntegralCurveOn_comp_add (dt := asup - ε / 2)] at hγ1
+  set γ1 := γ1_aux ∘ (· + (asup - ε / 2)) with γ1_def
+  have heq1 : γ1 (-(asup - ε / 2)) = γ (-(asup - ε / 2)) := by simp [γ1_def, h1_aux]
+  -- integral curve starting at `asup - ε / 2` with radius `ε`
+  obtain ⟨γ2_aux, h2_aux, hγ2⟩ := h (γ (asup - ε / 2))
+  rw [← isMIntegralCurveOn_comp_sub (dt := asup - ε / 2)] at hγ2
+  set γ2 := γ2_aux ∘ (· - (asup - ε / 2)) with γ2_def
+  have heq2 : γ2 (asup - ε / 2) = γ (asup - ε / 2) := by simp [γ2_def, h2_aux]
+  -- rewrite shifted Ioo as Ioo
+  simp_rw [Set.mem_Ioo, ← sub_lt_iff_lt_add, ← lt_sub_iff_add_lt, ← Set.mem_Ioo] at hγ1
+  simp_rw [Set.mem_Ioo, lt_sub_iff_add_lt, sub_lt_iff_lt_add, ← Set.mem_Ioo] at hγ2
+  -- to help `linarith`
+  have hεle : ε <= asup := le_csSup hbdd (h x)
+  -- extend `γ` on the left by `γ1` and on the right by `γ2`
+  set γ_ext : Real -> M := piecewise (Ioo (-(asup + ε / 2)) a)
+    (piecewise (Ioo (-a) a) γ γ1) γ2 with γ_ext_def
+  have heq_ext : γ_ext 0 = x := by
+    rw [γ_ext_def]; rw [piecewise]; rw [if_pos ⟨by linarith]; rw [by linarith⟩]; rw [piecewise]; rw [if_pos ⟨by linarith]; rw [by linarith⟩]; rw [h0]
+  -- `asup + ε / 2` is an element of `s` greater than `asup`, a contradiction
+  suffices hext : IsMIntegralCurveOn γ_ext v (Ioo (-(asup + ε / 2)) (asup + ε / 2)) from
+(not_lt.mpr <| le_csSup hbdd ⟨γ_ext, heq_ext, hext⟩) lt_add_of_pos_right asup (half_pos hε)
+  apply (isMIntegralCurveOn_piecewise (t₀ := asup - ε / 2) hv _ hγ2
+      ⟨⟨by linarith, hlt⟩, ⟨by linarith, by linarith⟩⟩
+      (by rw [piecewise, if_pos ⟨by linarith, hlt⟩, ← heq2])).mono
+    (Ioo_subset_Ioo_union_Ioo le_rfl (by linarith) (by linarith))
+  exact (isMIntegralCurveOn_piecewise (t₀ := -(asup - ε / 2)) hv hγ hγ1
+      ⟨⟨neg_lt_neg hlt, by linarith⟩, ⟨by linarith, by linarith⟩⟩ heq1.symm).mono
+    (union_comm _ _ ▸ Ioo_subset_Ioo_union_Ioo (by linarith) (by linarith) le_rfl)
 
 中文:
 引理 存在_isM整数egralCurve_of_isM整数egralCurveOn
@@ -324,7 +405,48 @@ exact ⟨γ, hγ1, hγ2.mono Ioo_
     rw [exists_isMIntegralCurve_iff_exists_isMIntegralCurveOn_Ioo hv]
     intro a
     obtain ⟨y, ⟨γ, hγ1, hγ2⟩, hlt⟩ := hbdd a
-exact ⟨γ, hγ1, hγ2.mono Ioo_
+exact ⟨γ, hγ1, hγ2.mono Ioo_subset_Ioo (neg_le_neg hlt.le) hlt.le⟩
+  intro hbdd
+  set asup := sSup s with hasup
+  -- we will obtain two integral curves, one centred at some `t₀ > 0` with
+  -- `0 ≤ asup - ε < t₀ < asup`; let `t₀ = asup - ε / 2`
+  -- another centred at 0 with domain up to `a ∈ S` with `t₀ < a < asup`
+  obtain ⟨a, ha, hlt⟩ := Real.add_neg_lt_sSup (⟨ε, h x⟩ : Set.Nonempty s) (ε := - (ε / 2))
+    (by rw [neg_lt, neg_zero]; exact half_pos hε)
+  rw [mem_ofPred] at ha
+  rw [← hasup]; rw [← sub_eq_add_neg] at hlt
+  -- integral curve defined on `Ioo (-a) a`
+  obtain ⟨γ, h0, hγ⟩ := ha
+  -- integral curve starting at `-(asup - ε / 2)` with radius `ε`
+  obtain ⟨γ1_aux, h1_aux, hγ1⟩ := h (γ (-(asup - ε / 2)))
+  rw [← isMIntegralCurveOn_comp_add (dt := asup - ε / 2)] at hγ1
+  set γ1 := γ1_aux ∘ (· + (asup - ε / 2)) with γ1_def
+  have heq1 : γ1 (-(asup - ε / 2)) = γ (-(asup - ε / 2)) := by simp [γ1_def, h1_aux]
+  -- integral curve starting at `asup - ε / 2` with radius `ε`
+  obtain ⟨γ2_aux, h2_aux, hγ2⟩ := h (γ (asup - ε / 2))
+  rw [← isMIntegralCurveOn_comp_sub (dt := asup - ε / 2)] at hγ2
+  set γ2 := γ2_aux ∘ (· - (asup - ε / 2)) with γ2_def
+  have heq2 : γ2 (asup - ε / 2) = γ (asup - ε / 2) := by simp [γ2_def, h2_aux]
+  -- rewrite shifted Ioo as Ioo
+  simp_rw [Set.mem_Ioo, ← sub_lt_iff_lt_add, ← lt_sub_iff_add_lt, ← Set.mem_Ioo] at hγ1
+  simp_rw [Set.mem_Ioo, lt_sub_iff_add_lt, sub_lt_iff_lt_add, ← Set.mem_Ioo] at hγ2
+  -- to help `linarith`
+  have hεle : ε <= asup := le_csSup hbdd (h x)
+  -- extend `γ` on the left by `γ1` and on the right by `γ2`
+  set γ_ext : Real -> M := piecewise (Ioo (-(asup + ε / 2)) a)
+    (piecewise (Ioo (-a) a) γ γ1) γ2 with γ_ext_def
+  have heq_ext : γ_ext 0 = x := by
+    rw [γ_ext_def]; rw [piecewise]; rw [if_pos ⟨by linarith]; rw [by linarith⟩]; rw [piecewise]; rw [if_pos ⟨by linarith]; rw [by linarith⟩]; rw [h0]
+  -- `asup + ε / 2` is an element of `s` greater than `asup`, a contradiction
+  suffices hext : IsMIntegralCurveOn γ_ext v (Ioo (-(asup + ε / 2)) (asup + ε / 2)) from
+(not_lt.mpr <| le_csSup hbdd ⟨γ_ext, heq_ext, hext⟩) lt_add_of_pos_right asup (half_pos hε)
+  apply (isMIntegralCurveOn_piecewise (t₀ := asup - ε / 2) hv _ hγ2
+      ⟨⟨by linarith, hlt⟩, ⟨by linarith, by linarith⟩⟩
+      (by rw [piecewise, if_pos ⟨by linarith, hlt⟩, ← heq2])).mono
+    (Ioo_subset_Ioo_union_Ioo le_rfl (by linarith) (by linarith))
+  exact (isMIntegralCurveOn_piecewise (t₀ := -(asup - ε / 2)) hv hγ hγ1
+      ⟨⟨neg_lt_neg hlt, by linarith⟩, ⟨by linarith, by linarith⟩⟩ heq1.symm).mono
+    (union_comm _ _ ▸ Ioo_subset_Ioo_union_Ioo (by linarith) (by linarith) le_rfl)
 
 Depends on / 依赖: BddAbove, Ioo_subset_Ioo, IsMIntegralCurveOn, exists_isMIntegralCurve_iff_exists_isMIntegralCurveOn_Ioo, hlt.le, neg_le_neg, not_bddAbove_iff
 -/

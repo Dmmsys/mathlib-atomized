@@ -387,7 +387,7 @@ lemma ext_iff_of_exists
     subst h
     ext
     · rfl
-    · exact heq_of_eq (hg₁.symm
+    · exact heq_of_eq (hg₁.symm.trans hg₂)
 
 中文:
 引理 ext_iff_of_存在
@@ -404,7 +404,7 @@ lemma ext_iff_of_exists
     subst h
     ext
     · rfl
-    · exact heq_of_eq (hg₁.symm
+    · exact heq_of_eq (hg₁.symm.trans hg₂)
 
 Depends on / 依赖: Quotient, Quotient.out_eq, and_self, groupElts, groupElts.out, heq_of_eq, out_eq, symm.trans, true_and
 -/
@@ -440,7 +440,7 @@ lemma ext_iff_of_preimage
     ext
     · rfl
     · exact heq_of_eq (Set.singleton_eq_singleton_iff.1
-        ((Set.preimage_eq_preimage Quotient.mk''_su
+        ((Set.preimage_eq_preimage Quotient.mk''_surjective).1 hq))
 
 中文:
 引理 ext_iff_of_preimage
@@ -456,7 +456,7 @@ lemma ext_iff_of_preimage
     ext
     · rfl
     · exact heq_of_eq (Set.singleton_eq_singleton_iff.1
-        ((Set.preimage_eq_preimage Quotient.mk''_su
+        ((Set.preimage_eq_preimage Quotient.mk''_surjective).1 hq))
 
 Depends on / 依赖: Quotient, Quotient.mk, Set.preimage_eq_preimage, Set.singleton_eq_singleton_iff, _surjective, and_self, heq_of_eq, preimage_eq_preimage, singleton_eq_singleton_iff
 -/

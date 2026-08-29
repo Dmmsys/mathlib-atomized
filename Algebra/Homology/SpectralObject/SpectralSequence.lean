@@ -162,7 +162,10 @@ definition pageD
       X.d (homOfLE (data.le₀₁ r pq'))
         (homOfLE (data.le₁₂' pq' rfl (data.hc₀₂ r pq pq' hpq)))
         (homOfLE (data.le₀₁ r pq)) (homOfLE (data.le₁₂ pq)) (homOfLE (data.le₂₃ r pq))
-        (data.deg pq - 1) (data.deg pq) (data.deg pq + 1) (data.deg pq + 2) 
+        (data.deg pq - 1) (data.deg pq) (data.deg pq + 1) (data.deg pq + 2) ≫
+      (pageXIso _ _ _ _ _ _ _ _ _ rfl rfl
+        (data.hc₀₂ r pq pq' hpq) (data.hc₁₃ r pq pq' hpq) _ _ _ (data.hc r pq pq' hpq) rfl _).inv
+    else 0
 
 中文:
 定义 pageD
@@ -172,7 +175,10 @@ definition pageD
       X.d (homOfLE (data.le₀₁ r pq'))
         (homOfLE (data.le₁₂' pq' rfl (data.hc₀₂ r pq pq' hpq)))
         (homOfLE (data.le₀₁ r pq)) (homOfLE (data.le₁₂ pq)) (homOfLE (data.le₂₃ r pq))
-        (data.deg pq - 1) (data.deg pq) (data.deg pq + 1) (data.deg pq + 2) 
+        (data.deg pq - 1) (data.deg pq) (data.deg pq + 1) (data.deg pq + 2) ≫
+      (pageXIso _ _ _ _ _ _ _ _ _ rfl rfl
+        (data.hc₀₂ r pq pq' hpq) (data.hc₁₃ r pq pq' hpq) _ _ _ (data.hc r pq pq' hpq) rfl _).inv
+    else 0
 
 Depends on / 依赖: data.deg, data.hc, data.le, homOfLE, pageXIso
 -/
@@ -256,7 +262,23 @@ lemma pageD_pageD
   · by_cases hpq' : (c r).Rel pq' pq''
     · rw [pageD_eq X data r hr pq pq' hpq (homOfLE (data.le₂₃ r pq''))
           (homOfLE (data.le₁₂' pq' (data.hc₁₃ r pq' pq'' hpq').symm
-          (data.hc₀₂ r pq pq' hpq))) (homOfLE (data.le₀₁ r pq)) (homOfLE (data.le₁₂ p
+          (data.hc₀₂ r pq pq' hpq))) (homOfLE (data.le₀₁ r pq)) (homOfLE (data.le₁₂ pq))
+          (homOfLE (data.le₂₃ r pq))
+          (data.hc₀₂ r pq' pq'' hpq').symm (data.hc₁₃ r pq' pq'' hpq').symm rfl rfl rfl rfl
+          (data.deg pq - 1) (data.deg pq) (data.deg pq + 1) (data.deg pq + 2) rfl,
+        pageD_eq X data r hr pq' pq'' hpq' (homOfLE (data.le₀₁ r pq''))
+          (homOfLE (data.le₁₂ pq'')) (homOfLE (data.le₂₃ r pq''))
+          (homOfLE (data.le₁₂' pq' (data.hc₁₃ r pq' pq'' hpq').symm (data.hc₀₂ r pq pq' hpq)))
+          (homOfLE (data.le₀₁ r pq)) rfl rfl
+          (data.hc₀₂ r pq' pq'' hpq').symm (data.hc₁₃ r pq' pq'' hpq').symm
+          (data.hc₀₂ r pq pq' hpq) (data.hc₁₃ r pq pq' hpq)
+          _ _ (data.deg pq + 2) _ (data.hc r pq pq' hpq) rfl (by lia) rfl,
+        Category.assoc, Category.assoc, Iso.inv_hom_id_assoc,
+        d_d_assoc .., zero_comp, comp_zero]
+    · dsimp only [pageD]
+      rw [dif_neg hpq']; rw [comp_zero]
+  · dsimp only [pageD]
+    rw [dif_neg hpq]; rw [zero_comp]
 
 中文:
 引理 pageD_pageD
@@ -266,7 +288,23 @@ lemma pageD_pageD
   · by_cases hpq' : (c r).Rel pq' pq''
     · rw [pageD_eq X data r hr pq pq' hpq (homOfLE (data.le₂₃ r pq''))
           (homOfLE (data.le₁₂' pq' (data.hc₁₃ r pq' pq'' hpq').symm
-          (data.hc₀₂ r pq pq' hpq))) (homOfLE (data.le₀₁ r pq)) (homOfLE (data.le₁₂ p
+          (data.hc₀₂ r pq pq' hpq))) (homOfLE (data.le₀₁ r pq)) (homOfLE (data.le₁₂ pq))
+          (homOfLE (data.le₂₃ r pq))
+          (data.hc₀₂ r pq' pq'' hpq').symm (data.hc₁₃ r pq' pq'' hpq').symm rfl rfl rfl rfl
+          (data.deg pq - 1) (data.deg pq) (data.deg pq + 1) (data.deg pq + 2) rfl,
+        pageD_eq X data r hr pq' pq'' hpq' (homOfLE (data.le₀₁ r pq''))
+          (homOfLE (data.le₁₂ pq'')) (homOfLE (data.le₂₃ r pq''))
+          (homOfLE (data.le₁₂' pq' (data.hc₁₃ r pq' pq'' hpq').symm (data.hc₀₂ r pq pq' hpq)))
+          (homOfLE (data.le₀₁ r pq)) rfl rfl
+          (data.hc₀₂ r pq' pq'' hpq').symm (data.hc₁₃ r pq' pq'' hpq').symm
+          (data.hc₀₂ r pq pq' hpq) (data.hc₁₃ r pq pq' hpq)
+          _ _ (data.deg pq + 2) _ (data.hc r pq pq' hpq) rfl (by lia) rfl,
+        Category.assoc, Category.assoc, Iso.inv_hom_id_assoc,
+        d_d_assoc .., zero_comp, comp_zero]
+    · dsimp only [pageD]
+      rw [dif_neg hpq']; rw [comp_zero]
+  · dsimp only [pageD]
+    rw [dif_neg hpq]; rw [zero_comp]
 
 Depends on / 依赖: data.deg, data.hc, data.le, homOfL, homOfLE, pageD_eq
 -/
@@ -331,7 +369,14 @@ definition shortComplexIso
     (pageXIso _ _ _ hr _ _ _ _ _ rfl rfl rfl rfl _ _ _ (by have := data.hc r pq pq' hpq; lia))
     (pageXIso _ _ _ hr _ _ _ _ _ (by rw [data.hc₀₂ r pq' pq'' hpq'])
     (by rw [data.hc₁₃ r pq' pq'' hpq'])
-    (by rw [data.hc₀₂ r pq pq' hpq]) (by rw [data.hc₁₃ r pq pq' h
+    (by rw [data.hc₀₂ r pq pq' hpq]) (by rw [data.hc₁₃ r pq pq' hpq]) _ _ _ hn₂')
+    (pageXIso _ _ _ hr _ _ _ _ _ rfl rfl rfl rfl _ _ _ (by have := data.hc r pq' pq'' hpq'; lia))
+    ?_ ?_
+  · simp only [← Iso.comp_inv_eq, Category.assoc]
+    exact (pageD_eq X data r hr pq pq' hpq _ _ _ _ _ (data.hc₀₂ r pq' pq'' hpq').symm
+      (data.hc₁₃ r pq' pq'' hpq').symm ..).symm
+  · simp only [← Iso.comp_inv_eq, Category.assoc]
+    exact (pageD_eq X data r hr pq' pq'' hpq' _ _ _ _ _ rfl rfl ..).symm
 
 中文:
 定义 shortComplexIso
@@ -341,7 +386,14 @@ definition shortComplexIso
     (pageXIso _ _ _ hr _ _ _ _ _ rfl rfl rfl rfl _ _ _ (by have := data.hc r pq pq' hpq; lia))
     (pageXIso _ _ _ hr _ _ _ _ _ (by rw [data.hc₀₂ r pq' pq'' hpq'])
     (by rw [data.hc₁₃ r pq' pq'' hpq'])
-    (by rw [data.hc₀₂ r pq pq' hpq]) (by rw [data.hc₁₃ r pq pq' h
+    (by rw [data.hc₀₂ r pq pq' hpq]) (by rw [data.hc₁₃ r pq pq' hpq]) _ _ _ hn₂')
+    (pageXIso _ _ _ hr _ _ _ _ _ rfl rfl rfl rfl _ _ _ (by have := data.hc r pq' pq'' hpq'; lia))
+    ?_ ?_
+  · simp only [← Iso.comp_inv_eq, Category.assoc]
+    exact (pageD_eq X data r hr pq pq' hpq _ _ _ _ _ (data.hc₀₂ r pq' pq'' hpq').symm
+      (data.hc₁₃ r pq' pq'' hpq').symm ..).symm
+  · simp only [← Iso.comp_inv_eq, Category.assoc]
+    exact (pageD_eq X data r hr pq' pq'' hpq' _ _ _ _ _ rfl rfl ..).symm
 
 Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, ShortComplex, ShortComplex.isoMk, comp_inv_eq, data.hc, pageD_eq, pageXIso
 -/
@@ -399,7 +451,10 @@ lemma kf_w
     rw [pageD_eq X data r hr pq' pq'' h
       (homOfLE (by simpa only [hi₀']; rw [data.i₀_prev r r' _ _ h] using data.le₀₁ r pq''))
       (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
-      (homOfLE (data.le₁₂' pq'
+      (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃)) rfl
+      (by rw [hi₀', data.i₀_prev r r' pq' pq'' h]) hi₀ hi₁ hi₂ hi₃ _ _ _ _ hn₁' hn₁ hn₂ rfl,
+      Category.assoc, Iso.inv_hom_id_assoc, map_fourδ₁Toδ₀_d_assoc .., zero_comp]
+  · rw [HomologicalComplex.shape _ _ _ h, comp_zero]
 
 中文:
 引理 kf_w
@@ -410,7 +465,10 @@ lemma kf_w
     rw [pageD_eq X data r hr pq' pq'' h
       (homOfLE (by simpa only [hi₀']; rw [data.i₀_prev r r' _ _ h] using data.le₀₁ r pq''))
       (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
-      (homOfLE (data.le₁₂' pq'
+      (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃)) rfl
+      (by rw [hi₀', data.i₀_prev r r' pq' pq'' h]) hi₀ hi₁ hi₂ hi₃ _ _ _ _ hn₁' hn₁ hn₂ rfl,
+      Category.assoc, Iso.inv_hom_id_assoc, map_fourδ₁Toδ₀_d_assoc .., zero_comp]
+  · rw [HomologicalComplex.shape _ _ _ h, comp_zero]
 
 Depends on / 依赖: X.mapFour, data.i, data.le, homOfLE, pageD_eq, pageXIso
 -/
@@ -536,7 +594,27 @@ lemma kfSc_exact
       (X.dKernelSequence_exact
         (homOfLE (show data.i₀ r pq'' <= i₀' by
           simpa only [hi₀', data.i₀_prev r r' _ _ h] using data.le₀₁ r pq''))
-        (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (h
+        (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
+        (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃)) _ rfl
+        n₀ n₁ n₂ (n₂ + 1) hn₁ hn₂ rfl)
+    refine ShortComplex.isoMk (Iso.refl _)
+      (pageXIso X data _ hr _ _ _ _ _ hi₀ hi₁ hi₂ hi₃ _ _ _ hn₁')
+      (pageXIso X data _ hr _ _ _ _ _ rfl (by rw [hi₀', data.i₀_prev r r' _ _ h])
+      (by rw [hi₀, data.hc₀₂ r _ _ h]) (by rw [hi₁, data.hc₁₃ r _ _ h]) _ _ _
+      (by have := data.hc r _ _ h; lia)) ?_ ?_
+    · simp
+    · dsimp
+      rw [pageD_eq X data r hr pq' pq'' h
+        (homOfLE (data.le₀₁' r hr pq'' rfl (by simpa [← data.i₀_prev r r' _ _ h])))
+        (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
+        (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃))
+        rfl (by rw [hi₀', data.i₀_prev r r' _ _ h]) hi₀ hi₁ hi₂ hi₃ n₀ n₁ n₂ (n₂ + 1) hn₁',
+        Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id]
+  · rw [ShortComplex.exact_iff_epi _ ((page X data r hr).shape _ _ h)]
+    have := isIso_mapFourδ₁Toδ₀' X data r r' hrr' hr pq' pq'' hpq'
+      i₀' i₀ i₁ i₂ i₃ hi₀' hi₀ hi₁ hi₂ hi₃ n₀ n₁ n₂ hn₁' h
+    dsimp
+    infer_instance
 
 中文:
 引理 kfSc_exact
@@ -547,7 +625,27 @@ lemma kfSc_exact
       (X.dKernelSequence_exact
         (homOfLE (show data.i₀ r pq'' <= i₀' by
           simpa only [hi₀', data.i₀_prev r r' _ _ h] using data.le₀₁ r pq''))
-        (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (h
+        (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
+        (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃)) _ rfl
+        n₀ n₁ n₂ (n₂ + 1) hn₁ hn₂ rfl)
+    refine ShortComplex.isoMk (Iso.refl _)
+      (pageXIso X data _ hr _ _ _ _ _ hi₀ hi₁ hi₂ hi₃ _ _ _ hn₁')
+      (pageXIso X data _ hr _ _ _ _ _ rfl (by rw [hi₀', data.i₀_prev r r' _ _ h])
+      (by rw [hi₀, data.hc₀₂ r _ _ h]) (by rw [hi₁, data.hc₁₃ r _ _ h]) _ _ _
+      (by have := data.hc r _ _ h; lia)) ?_ ?_
+    · simp
+    · dsimp
+      rw [pageD_eq X data r hr pq' pq'' h
+        (homOfLE (data.le₀₁' r hr pq'' rfl (by simpa [← data.i₀_prev r r' _ _ h])))
+        (homOfLE (data.i₀_le' hrr' hr pq' hi₀' hi₀)) (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
+        (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃))
+        rfl (by rw [hi₀', data.i₀_prev r r' _ _ h]) hi₀ hi₁ hi₂ hi₃ n₀ n₁ n₂ (n₂ + 1) hn₁',
+        Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id]
+  · rw [ShortComplex.exact_iff_epi _ ((page X data r hr).shape _ _ h)]
+    have := isIso_mapFourδ₁Toδ₀' X data r r' hrr' hr pq' pq'' hpq'
+      i₀' i₀ i₁ i₂ i₃ hi₀' hi₀ hi₁ hi₂ hi₃ n₀ n₁ n₂ hn₁' h
+    dsimp
+    infer_instance
 
 Depends on / 依赖: Iso.symm, ShortComplex, ShortComplex.exact_of_iso, X.dKernelSequence_exact, dKernelSequence_exact, data.i, data.le, exact_of_iso, homOfLE
 -/
@@ -618,7 +716,14 @@ lemma cc_w
     rw [pageD_eq X data r hr pq pq' h (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
       (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃))
       (homOfLE (data.le₃₃' hrr' hr pq' hi₃ hi₃'))
-      (homOfLE (by simpa only [hi₃']; rw [data
+      (homOfLE (by simpa only [hi₃']; rw [data.i₃_next r r' _ _ h] using data.le₂₃ r pq))
+      hi₀ hi₁ (by rw [hi₂, data.hc₀₂ r _ _ h])
+      (by rw [hi₃, data.hc₁₃ r _ _ h]) (by rw [hi₃', data.i₃_next r r' _ _ h]) rfl
+      (n₀ - 1) n₀ n₁ n₂ (by have := data.hc r pq pq' h; lia) (by simp) hn₁ hn₂,
+      Category.assoc, Category.assoc, Iso.inv_hom_id_assoc,
+      d_map_fourδ₄Toδ₃ .., comp_zero]
+    rfl
+  · rw [HomologicalComplex.shape _ _ _ h, zero_comp]
 
 中文:
 引理 cc_w
@@ -629,7 +734,14 @@ lemma cc_w
     rw [pageD_eq X data r hr pq pq' h (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
       (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃))
       (homOfLE (data.le₃₃' hrr' hr pq' hi₃ hi₃'))
-      (homOfLE (by simpa only [hi₃']; rw [data
+      (homOfLE (by simpa only [hi₃']; rw [data.i₃_next r r' _ _ h] using data.le₂₃ r pq))
+      hi₀ hi₁ (by rw [hi₂, data.hc₀₂ r _ _ h])
+      (by rw [hi₃, data.hc₁₃ r _ _ h]) (by rw [hi₃', data.i₃_next r r' _ _ h]) rfl
+      (n₀ - 1) n₀ n₁ n₂ (by have := data.hc r pq pq' h; lia) (by simp) hn₁ hn₂,
+      Category.assoc, Category.assoc, Iso.inv_hom_id_assoc,
+      d_map_fourδ₄Toδ₃ .., comp_zero]
+    rfl
+  · rw [HomologicalComplex.shape _ _ _ h, zero_comp]
 
 Depends on / 依赖: X.mapFour, data.le, homOfLE, pageD_eq, pageXIso
 -/
@@ -759,7 +871,28 @@ lemma ccSc_exact
       (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
       (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃))
       (homOfLE (data.le₃₃' hrr' hr pq' hi₃ hi₃'))
-    
+      (show i₃' ⟶ data.i₃ r pq from homOfLE (by
+        simpa only [hi₃', data.i₃_next r r' _ _ h] using data.le₂₃ r pq)) _ rfl
+      (n₀ - 1) n₀ n₁ n₂ (by simp) hn₁ hn₂)
+    refine ShortComplex.isoMk
+      (pageXIso X data _ hr _ _ _ _ _
+        (by rw [hi₂, data.hc₀₂ r _ _ h]) (by rw [hi₃, data.hc₁₃ r _ _ h])
+        (by rw [hi₃', data.i₃_next r r' _ _ h]) rfl _ _ _ (by have := data.hc r _ _ h; lia))
+      (pageXIso X data _ hr _ _ _ _ _ hi₀ hi₁ hi₂ hi₃ _ _ _ hn₁') (Iso.refl _) ?_ (by simp)
+    dsimp
+    rw [pageD_eq X data r hr pq pq' h
+          (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁)) (homOfLE (data.le₁₂' pq' hi₁ hi₂))
+          (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃)) (homOfLE (data.le₃₃' hrr' hr pq' hi₃ hi₃'))
+          (homOfLE (data.le₂₃' r hr pq (by rw [hi₃']; rw [data.i₃_next r r' pq pq' h]) rfl))
+          hi₀ hi₁ (hi₂.trans (data.hc₀₂ r pq pq' h).symm)
+          (hi₃.trans (data.hc₁₃ r pq pq' h).symm) (hi₃'.trans (data.i₃_next r r' pq pq' h)) rfl
+          (n₀ - 1) n₀ n₁ n₂ (by have := data.hc r _ _ h; lia),
+        Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id]
+  · refine (ShortComplex.exact_iff_mono _ ((page X data r hr).shape _ _ h)).mpr ?_
+    have := isIso_mapFourδ₄Toδ₃' X data r r' hrr' hr pq pq' hpq
+      i₀ i₁ i₂ i₃ i₃' hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁' h
+    dsimp
+    infer_instance
 
 中文:
 引理 ccSc_exact
@@ -771,7 +904,28 @@ lemma ccSc_exact
       (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁))
       (homOfLE (data.le₁₂' pq' hi₁ hi₂)) (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃))
       (homOfLE (data.le₃₃' hrr' hr pq' hi₃ hi₃'))
-    
+      (show i₃' ⟶ data.i₃ r pq from homOfLE (by
+        simpa only [hi₃', data.i₃_next r r' _ _ h] using data.le₂₃ r pq)) _ rfl
+      (n₀ - 1) n₀ n₁ n₂ (by simp) hn₁ hn₂)
+    refine ShortComplex.isoMk
+      (pageXIso X data _ hr _ _ _ _ _
+        (by rw [hi₂, data.hc₀₂ r _ _ h]) (by rw [hi₃, data.hc₁₃ r _ _ h])
+        (by rw [hi₃', data.i₃_next r r' _ _ h]) rfl _ _ _ (by have := data.hc r _ _ h; lia))
+      (pageXIso X data _ hr _ _ _ _ _ hi₀ hi₁ hi₂ hi₃ _ _ _ hn₁') (Iso.refl _) ?_ (by simp)
+    dsimp
+    rw [pageD_eq X data r hr pq pq' h
+          (homOfLE (data.le₀₁' r hr pq' hi₀ hi₁)) (homOfLE (data.le₁₂' pq' hi₁ hi₂))
+          (homOfLE (data.le₂₃' r hr pq' hi₂ hi₃)) (homOfLE (data.le₃₃' hrr' hr pq' hi₃ hi₃'))
+          (homOfLE (data.le₂₃' r hr pq (by rw [hi₃']; rw [data.i₃_next r r' pq pq' h]) rfl))
+          hi₀ hi₁ (hi₂.trans (data.hc₀₂ r pq pq' h).symm)
+          (hi₃.trans (data.hc₁₃ r pq pq' h).symm) (hi₃'.trans (data.i₃_next r r' pq pq' h)) rfl
+          (n₀ - 1) n₀ n₁ n₂ (by have := data.hc r _ _ h; lia),
+        Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id]
+  · refine (ShortComplex.exact_iff_mono _ ((page X data r hr).shape _ _ h)).mpr ?_
+    have := isIso_mapFourδ₄Toδ₃' X data r r' hrr' hr pq pq' hpq
+      i₀ i₁ i₂ i₃ i₃' hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁' h
+    dsimp
+    infer_instance
 
 Depends on / 依赖: Iso.symm, ShortComplex, ShortComplex.exact_of_iso, X.dCokernelSequence_exact, dCokernelSequence_exact, data.i, data.le, exact_of_iso, homOfLE
 -/
@@ -880,7 +1034,9 @@ definition homologyData
     (isLimitKf X data r r' hrr' hr pq' pq'' hpq' i₀' i₀ i₁ i₂ i₃
       hi₀' hi₀ hi₁ hi₂ hi₃ n₀ n₁ n₂ hn₁')
     (isColimitCc X data r r' hrr' hr pq pq' hpq i₀ i₁ i₂ i₃ i₃'
-      hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁
+      hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁')
+    (fac X data r r' hrr' hr pq pq' pq'' i₀' i₀ i₁ i₂ i₃ i₃'
+      hi₀' hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁')
 
 中文:
 定义 homologyData
@@ -890,7 +1046,9 @@ definition homologyData
     (isLimitKf X data r r' hrr' hr pq' pq'' hpq' i₀' i₀ i₁ i₂ i₃
       hi₀' hi₀ hi₁ hi₂ hi₃ n₀ n₁ n₂ hn₁')
     (isColimitCc X data r r' hrr' hr pq pq' hpq i₀ i₁ i₂ i₃ i₃'
-      hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁
+      hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁')
+    (fac X data r r' hrr' hr pq pq' pq'' i₀' i₀ i₁ i₂ i₃ i₃'
+      hi₀' hi₀ hi₁ hi₂ hi₃ hi₃' n₀ n₁ n₂ hn₁')
 
 Depends on / 依赖: HomologyData, ShortComplex, ShortComplex.HomologyData.ofEpiMonoFactorisation, isColimitCc, isLimitKf, ofEpiMonoFactorisation
 -/

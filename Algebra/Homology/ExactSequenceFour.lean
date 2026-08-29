@@ -223,7 +223,8 @@ lemma epi_cokerToKer'
   let h := hS'.leftHomologyDataOfIsLimitKernelFork kf hkf
   have := h.exact_iff_epi_f'.1 hS'
   have fac : cc.π ≫ hS.cokerToKer' k hk cc kf hcc hkf = h.f' := by
-    rw [← cancel_mono h.i]; rw [h.f'_i]; rw [ShortComplex.Exact.leftHomologyDataOfI
+    rw [← cancel_mono h.i]; rw [h.f'_i]; rw [ShortComplex.Exact.leftHomologyDataOfIsLimitKernelFork_i]; rw [assoc]; rw [IsComplex.cokerToKer'_fac]
+  exact epi_of_epi_fac fac
 
 中文:
 引理 epi_cokerToKer'
@@ -234,7 +235,8 @@ lemma epi_cokerToKer'
   let h := hS'.leftHomologyDataOfIsLimitKernelFork kf hkf
   have := h.exact_iff_epi_f'.1 hS'
   have fac : cc.π ≫ hS.cokerToKer' k hk cc kf hcc hkf = h.f' := by
-    rw [← cancel_mono h.i]; rw [h.f'_i]; rw [ShortComplex.Exact.leftHomologyDataOfI
+    rw [← cancel_mono h.i]; rw [h.f'_i]; rw [ShortComplex.Exact.leftHomologyDataOfIsLimitKernelFork_i]; rw [assoc]; rw [IsComplex.cokerToKer'_fac]
+  exact epi_of_epi_fac fac
 
 Depends on / 依赖: IsComplex, IsComplex.cokerToKer, ShortComplex, ShortComplex.Exact.leftHomologyDataOfIsLimitKernelFork_i, _fac, cancel_mono, cokerToKer, epi_of_epi_fac, exact_iff_epi_f, h.exact_iff_epi_f, hS.cokerToKer, hasHomology, hasZeroObject, leftHomologyDataOfIsLimitKernelFork, leftHomologyDataOfIsLimitKernelFork_i
 -/
@@ -261,7 +263,8 @@ lemma mono_cokerToKer'
   let h := hS'.rightHomologyDataOfIsColimitCokernelCofork cc hcc
   have := h.exact_iff_mono_g'.1 hS'
   have fac : hS.cokerToKer' k hk cc kf hcc hkf ≫ kf.ι = h.g' := by
-    rw [← cancel_epi h.p]; rw [h.p_g']; rw [ShortComplex.Exact.rightHomolog
+    rw [← cancel_epi h.p]; rw [h.p_g']; rw [ShortComplex.Exact.rightHomologyDataOfIsColimitCokernelCofork_p]; rw [cokerToKer'_fac]
+  exact mono_of_mono_fac fac
 
 中文:
 引理 mono_cokerToKer'
@@ -272,7 +275,8 @@ lemma mono_cokerToKer'
   let h := hS'.rightHomologyDataOfIsColimitCokernelCofork cc hcc
   have := h.exact_iff_mono_g'.1 hS'
   have fac : hS.cokerToKer' k hk cc kf hcc hkf ≫ kf.ι = h.g' := by
-    rw [← cancel_epi h.p]; rw [h.p_g']; rw [ShortComplex.Exact.rightHomolog
+    rw [← cancel_epi h.p]; rw [h.p_g']; rw [ShortComplex.Exact.rightHomologyDataOfIsColimitCokernelCofork_p]; rw [cokerToKer'_fac]
+  exact mono_of_mono_fac fac
 
 Depends on / 依赖: ShortComplex, ShortComplex.Exact.rightHomologyDataOfIsColimitCokernelCofork_p, _fac, cancel_epi, cokerToKer, exact_iff_mono_g, h.exact_iff_mono_g, h.p_g, hS.cokerToKer, hasHomology, hasZeroObject, mono_of_mono_fac, rightHomologyDataOfIsColimitCokernelCofork, rightHomologyDataOfIsColimitCokernelCofork_p
 -/

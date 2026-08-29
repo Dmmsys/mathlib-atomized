@@ -94,7 +94,7 @@ definition oldObtainLinter
     if (← MonadState.get).messages.hasErrors then
       return
     if let some head := stx.find? isObtainWithoutProof then
-      Linter.logLint linter.oldObtain head m!"Please remove stream-
+      Linter.logLint linter.oldObtain head m!"Please remove stream-of-consciousness `obtain` syntax"
 
 中文:
 定义 oldObtainLinter
@@ -105,7 +105,7 @@ definition oldObtainLinter
     if (← MonadState.get).messages.hasErrors then
       return
     if let some head := stx.find? isObtainWithoutProof then
-      Linter.logLint linter.oldObtain head m!"Please remove stream-
+      Linter.logLint linter.oldObtain head m!"Please remove stream-of-consciousness `obtain` syntax"
 
 Depends on / 依赖: withSetOptionIn
 -/

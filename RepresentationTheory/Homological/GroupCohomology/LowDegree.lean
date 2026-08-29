@@ -308,7 +308,8 @@ definition d₂₃
     map_add' x y :=
       funext fun g => by
         dsimp
-        rw [map_add]; rw [add_sub_add_comm (A.ρ _ _)]; rw [add_sub_assoc]; rw [add_sub_add_comm]; rw [add_ad
+        rw [map_add]; rw [add_sub_add_comm (A.ρ _ _)]; rw [add_sub_assoc]; rw [add_sub_add_comm]; rw [add_add_add_comm]; rw [add_sub_assoc]; rw [add_sub_assoc]
+    map_smul' r x := funext fun g => by dsimp; simp only [map_smul, smul_add, smul_sub] }
 
 中文:
 定义 d₂₃
@@ -319,7 +320,8 @@ definition d₂₃
     map_add' x y :=
       funext fun g => by
         dsimp
-        rw [map_add]; rw [add_sub_add_comm (A.ρ _ _)]; rw [add_sub_assoc]; rw [add_sub_add_comm]; rw [add_ad
+        rw [map_add]; rw [add_sub_add_comm (A.ρ _ _)]; rw [add_sub_assoc]; rw [add_sub_add_comm]; rw [add_add_add_comm]; rw [add_sub_assoc]; rw [add_sub_assoc]
+    map_smul' r x := funext fun g => by dsimp; simp only [map_smul, smul_add, smul_sub] }
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom, add_add_add_comm, add_sub_add_comm, add_sub_assoc, map_add, map_smul, smul_add, smul_sub
 -/
@@ -343,7 +345,14 @@ theorem comp_d₀₁_eq
   simp only [cochainsIso₀, LinearEquiv.toModuleIso_hom, ModuleCat.hom_comp,
     ConcreteCategory.hom_ofHom, LinearMap.coe_comp, LinearEquiv.coe_coe,
     LinearEquiv.funUnique_apply, LinearMap.coe_single, Function.comp_apply, Function.eval,
-    d₀₁_hom_apply, zero_add, ↓reduceDIte, Nat
+    d₀₁_hom_apply, zero_add, ↓reduceDIte, Nat.reduceAdd, eqToHom_refl, Category.comp_id,
+    cochainsIso₁, Iso.symm_hom, LinearEquiv.toModuleIso_inv, LinearEquiv.funCongrLeft_symm,
+    LinearEquiv.funCongrLeft_apply, Equiv.funUnique_symm_apply, LinearMap.funLeft_apply,
+    inhomogeneousCochains.d_hom_apply, Fin.isValue, uniqueElim_const, Finset.univ_unique,
+    Fin.default_eq_zero, Fin.val_eq_zero, pow_one, neg_smul, one_smul, Finset.sum_neg_distrib,
+    Finset.sum_singleton, ← sub_eq_add_neg, CochainComplex.of.d]
+  rw [← Subsingleton.elim (α := Fin 0 -> G) default (fun i => y)]; rw [Subsingleton.elim
+    (Fin.contractNth 0 _) default]; rw [Pi.default_def]
 
 中文:
 定理 comp_d₀₁_eq
@@ -352,7 +361,14 @@ theorem comp_d₀₁_eq
   simp only [cochainsIso₀, LinearEquiv.toModuleIso_hom, ModuleCat.hom_comp,
     ConcreteCategory.hom_ofHom, LinearMap.coe_comp, LinearEquiv.coe_coe,
     LinearEquiv.funUnique_apply, LinearMap.coe_single, Function.comp_apply, Function.eval,
-    d₀₁_hom_apply, zero_add, ↓reduceDIte, Nat
+    d₀₁_hom_apply, zero_add, ↓reduceDIte, Nat.reduceAdd, eqToHom_refl, Category.comp_id,
+    cochainsIso₁, Iso.symm_hom, LinearEquiv.toModuleIso_inv, LinearEquiv.funCongrLeft_symm,
+    LinearEquiv.funCongrLeft_apply, Equiv.funUnique_symm_apply, LinearMap.funLeft_apply,
+    inhomogeneousCochains.d_hom_apply, Fin.isValue, uniqueElim_const, Finset.univ_unique,
+    Fin.default_eq_zero, Fin.val_eq_zero, pow_one, neg_smul, one_smul, Finset.sum_neg_distrib,
+    Finset.sum_singleton, ← sub_eq_add_neg, CochainComplex.of.d]
+  rw [← Subsingleton.elim (α := Fin 0 -> G) default (fun i => y)]; rw [Subsingleton.elim
+    (Fin.contractNth 0 _) default]; rw [Pi.default_def]
 
 Depends on / 依赖: Category, Category.comp_id, ConcreteCategory, ConcreteCategory.hom_ofHom, Equiv.funUnique_symm_apply, Function, Function.comp_apply, Function.eval, Iso.symm_hom, LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.funCongrLeft_apply, LinearEquiv.funCongrLeft_symm, LinearEquiv.funUnique_apply, LinearEquiv.toModuleIso_hom, LinearEquiv.toModuleIso_inv, LinearMap, LinearMap.coe_comp, LinearMap.coe_single, LinearMap.funLeft_apply
 -/
@@ -459,7 +475,7 @@ theorem comp_d₂₃_eq
   rw [Fin.sum_univ_three]
   simp only [sub_eq_add_neg, add_assoc, Fin.val_zero, zero_add, pow_one, neg_smul,
     one_smul, Fin.val_one, Fin.val_two, pow_succ' (-1 : k) 2, neg_sq, Nat.one_add, one_pow, mul_one]
-  rcongr i <;> fin_c
+  rcongr i <;> fin_cases i <;> rfl
 
 中文:
 定理 comp_d₂₃_eq
@@ -470,7 +486,7 @@ theorem comp_d₂₃_eq
   rw [Fin.sum_univ_three]
   simp only [sub_eq_add_neg, add_assoc, Fin.val_zero, zero_add, pow_one, neg_smul,
     one_smul, Fin.val_one, Fin.val_two, pow_succ' (-1 : k) 2, neg_sq, Nat.one_add, one_pow, mul_one]
-  rcongr i <;> fin_c
+  rcongr i <;> fin_cases i <;> rfl
 
 Depends on / 依赖: Fin.sum_univ_three, Fin.val_one, Fin.val_two, Fin.val_zero, Nat.one_add, add_assoc, fin_cases, mul_one, neg_smul, neg_sq, one_add, one_pow, one_smul, pow_one, pow_succ, rcongr, sub_eq_add_neg, sum_univ_three, val_one, val_two
 -/
@@ -937,7 +953,7 @@ definition cocycles₁IsoOfIsTrivial
     map_smul' _ _ := rfl
     invFun f :=
       { val := f
-        property := mem_cocycles₁_of_addMonoidH
+        property := mem_cocycles₁_of_addMonoidHom f } }
 
 中文:
 定义 cocycles₁IsoOfIsTrivial
@@ -951,7 +967,7 @@ definition cocycles₁IsoOfIsTrivial
     map_smul' _ _ := rfl
     invFun f :=
       { val := f
-        property := mem_cocycles₁_of_addMonoidH
+        property := mem_cocycles₁_of_addMonoidHom f } }
 
 Depends on / 依赖: Additive, Additive.toMul, LinearEquiv, LinearEquiv.toModuleIso, invFun, map_add, map_smul, map_zero, property, toModuleIso
 -/
@@ -2652,7 +2668,10 @@ lemma cocyclesMk₁_eq
 (AddCommGrpCat.mono_iff_injective _).1 (forget₂ _ _).map_mono _
   have := (isoCocycles₁_inv_comp_iCocycles_apply _ x).symm
   rw [HomologicalComplex.i_cyclesMk]
-  simp only [ModuleCat.forget₂_obj, ModuleCat.forget₂_map, Con
+  simp only [ModuleCat.forget₂_obj, ModuleCat.forget₂_map, ConcreteCategory.hom_ofHom,
+    AddMonoidHom.coe_coe]
+  rw [← this]
+  rfl
 
 中文:
 引理 cocyclesMk₁_eq
@@ -2662,7 +2681,10 @@ lemma cocyclesMk₁_eq
 (AddCommGrpCat.mono_iff_injective _).1 (forget₂ _ _).map_mono _
   have := (isoCocycles₁_inv_comp_iCocycles_apply _ x).symm
   rw [HomologicalComplex.i_cyclesMk]
-  simp only [ModuleCat.forget₂_obj, ModuleCat.forget₂_map, Con
+  simp only [ModuleCat.forget₂_obj, ModuleCat.forget₂_map, ConcreteCategory.hom_ofHom,
+    AddMonoidHom.coe_coe]
+  rw [← this]
+  rfl
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.mono_iff_injective, AddMonoidHom, AddMonoidHom.coe_coe, ConcreteCategory, ConcreteCategory.hom_ofHom, HomologicalComplex, HomologicalComplex.i_cyclesMk, ModuleCat, ModuleCat.forget, apply_fun, coe_coe, hom_ofHom, iCycles, i_cyclesMk, inhomogeneousCochains, map_mono, mono_iff_injective
 -/
@@ -3062,7 +3084,10 @@ lemma H1π_eq_zero_iff
     (shortComplexH1 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousCochains A).sc 1).leftHomologyIso.hom
   simp only [H1π, isoCocycles₁, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, l
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, coboundaries₁, shortComplexH1, cocycles₁]
 
 中文:
 引理 H1π_eq_zero_iff
@@ -3073,7 +3098,10 @@ lemma H1π_eq_zero_iff
     (shortComplexH1 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousCochains A).sc 1).leftHomologyIso.hom
   simp only [H1π, isoCocycles₁, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, l
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, coboundaries₁, shortComplexH1, cocycles₁]
 
 Depends on / 依赖: Function, Function.comp_apply, HomologicalComplex, HomologicalComplex.homology, LinearMap, LinearMap.coe_comp, LinearMap.range_codRestrict, ModuleCat, ModuleCat.hom_comp, ModuleCat.mono_iff_injective, _assoc, _inv, coe_comp, comp_apply, cyclesMapIso, hom_comp, inhomogeneousCochains, isoShortComplexH1, leftHomologyData, leftHomologyIso
 -/
@@ -3330,7 +3358,10 @@ lemma H2π_eq_zero_iff
     (shortComplexH2 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousCochains A).sc 2).leftHomologyIso.hom
   simp only [H2π, isoCocycles₂, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, l
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, coboundaries₂, shortComplexH2, cocycles₂]
 
 中文:
 引理 H2π_eq_zero_iff
@@ -3341,7 +3372,10 @@ lemma H2π_eq_zero_iff
     (shortComplexH2 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousCochains A).sc 2).leftHomologyIso.hom
   simp only [H2π, isoCocycles₂, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, l
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, coboundaries₂, shortComplexH2, cocycles₂]
 
 Depends on / 依赖: Function, Function.comp_apply, HomologicalComplex, HomologicalComplex.homology, LinearMap, LinearMap.coe_comp, LinearMap.range_codRestrict, ModuleCat, ModuleCat.hom_comp, ModuleCat.mono_iff_injective, _assoc, _inv, coe_comp, comp_apply, cyclesMapIso, hom_comp, inhomogeneousCochains, isoShortComplexH2, leftHomologyData, leftHomologyIso
 -/

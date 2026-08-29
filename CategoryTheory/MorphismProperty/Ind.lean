@@ -138,7 +138,14 @@ lemma ind_iff_ind_underMk
   · refine ⟨J, ‹_›, ‹_›, ⟨Under.lift D t, ?_, ?_⟩, ?_⟩
     · exact { app j := CategoryTheory.Under.homMk (s.app j) (by simp [hst]) }
     · have : Nonempty J := IsFiltered.nonempty
-      exact Under.isColimitLiftCoc
+      exact Under.isColimitLiftCocone _ _ _ _ (by simp [hst]) hs
+    · simp [underObj, hst]
+  · refine ⟨J, ‹_›, ‹_›, pres.diag ⋙ CategoryTheory.Under.forget _, ?_, ?_, ?_, fun j => ⟨?_, ?_⟩⟩
+    · exact { app j := (pres.diag.obj j).hom }
+    · exact Functor.whiskerRight pres.ι (CategoryTheory.Under.forget X)
+    · exact isColimitOfPreserves (CategoryTheory.Under.forget _) pres.isColimit
+    · exact hpres j
+    · simp
 
 中文:
 引理 ind_iff_ind_underMk
@@ -148,7 +155,14 @@ lemma ind_iff_ind_underMk
   · refine ⟨J, ‹_›, ‹_›, ⟨Under.lift D t, ?_, ?_⟩, ?_⟩
     · exact { app j := CategoryTheory.Under.homMk (s.app j) (by simp [hst]) }
     · have : Nonempty J := IsFiltered.nonempty
-      exact Under.isColimitLiftCoc
+      exact Under.isColimitLiftCocone _ _ _ _ (by simp [hst]) hs
+    · simp [underObj, hst]
+  · refine ⟨J, ‹_›, ‹_›, pres.diag ⋙ CategoryTheory.Under.forget _, ?_, ?_, ?_, fun j => ⟨?_, ?_⟩⟩
+    · exact { app j := (pres.diag.obj j).hom }
+    · exact Functor.whiskerRight pres.ι (CategoryTheory.Under.forget X)
+    · exact isColimitOfPreserves (CategoryTheory.Under.forget _) pres.isColimit
+    · exact hpres j
+    · simp
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Under.forget, CategoryTheory.Under.homMk, Functor, Functor.whiskerR, IsFiltered, IsFiltered.nonempty, Nonempty, Under.isColimitLiftCocone, Under.lift, forget, isColimitLiftCocone, nonempty, pres.diag, pres.diag.obj, s.app, underObj, whiskerR
 -/
@@ -363,7 +377,14 @@ lemma ind_iff_exists
   · refine ⟨fun H Z p g hp hpg => ?_, fun H Z g hZ => ?_⟩
     · have : IsFinitelyPresentable (CategoryTheory.Under.mk p) := hp
       obtain ⟨W, u, v, huv, hW⟩ := H (CategoryTheory.Under.homMk (U := CategoryTheory.Under.mk p)
-        (
+        (V := CategoryTheory.Under.mk f) g hpg)
+      use W.right, u.right, v.right, congr($(huv).right)
+      rwa [show p ≫ u.right = W.hom from CategoryTheory.Under.w u]
+    · obtain ⟨W, u, v, huv, hW⟩ := H Z.hom g.right hZ (CategoryTheory.Under.w g)
+      exact ⟨CategoryTheory.Under.mk (Z.hom ≫ u), CategoryTheory.Under.homMk u,
+          CategoryTheory.Under.homMk v, by ext; simpa, hW⟩
+  · intro Y hY
+    exact H _ hY
 
 中文:
 引理 ind_iff_存在
@@ -373,7 +394,14 @@ lemma ind_iff_exists
   · refine ⟨fun H Z p g hp hpg => ?_, fun H Z g hZ => ?_⟩
     · have : IsFinitelyPresentable (CategoryTheory.Under.mk p) := hp
       obtain ⟨W, u, v, huv, hW⟩ := H (CategoryTheory.Under.homMk (U := CategoryTheory.Under.mk p)
-        (
+        (V := CategoryTheory.Under.mk f) g hpg)
+      use W.right, u.right, v.right, congr($(huv).right)
+      rwa [show p ≫ u.right = W.hom from CategoryTheory.Under.w u]
+    · obtain ⟨W, u, v, huv, hW⟩ := H Z.hom g.right hZ (CategoryTheory.Under.w g)
+      exact ⟨CategoryTheory.Under.mk (Z.hom ≫ u), CategoryTheory.Under.homMk u,
+          CategoryTheory.Under.homMk v, by ext; simpa, hW⟩
+  · intro Y hY
+    exact H _ hY
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Under, CategoryTheory.Under.homMk, CategoryTheory.Under.mk, CategoryTheory.Under.w, IsFinitelyPresentable, ObjectProperty, ObjectProperty.ind_iff_exists, W.hom, W.right, Z.hom, g.right, ind_iff_exists, ind_iff_ind_underMk, u.right, v.right
 -/
@@ -437,7 +465,30 @@ lemma IsStableUnderComposition.ind_of_preIndSpreads
     obtain ⟨J₁, _, _, D₁, s₁, t₁, ht₁, h₁⟩ := hf
     obtain ⟨J₂, _, _, D₂, s₂, t₂, ht₂, h₂⟩ := hg
     have : IsFinitelyPresentable (CategoryTheory.Under.mk p) := hp
-    obtain ⟨j₂, q, hcomp, hu⟩ := IsFinitelyPresentable.exists_hom_of_isColimit_unde
+    obtain ⟨j₂, q, hcomp, hu⟩ := IsFinitelyPresentable.exists_hom_of_isColimit_under
+ht₂ p ((Functor.const _).map f ≫ s₂) u by simp [h₂, hpu]
+    obtain ⟨j₁, W, f', g', h, hf'⟩ :=
+      P.exists_isPushout_of_isFiltered ht₁ (s₂.app j₂) (h₂ j₂).left
+    let D' : Under j₁ ⥤ C :=
+      (Under.post D₁ ⋙ Under.pushout f') ⋙ CategoryTheory.Under.forget _
+    let c' : Cocone D' :=
+      (Under.pushout f' ⋙ CategoryTheory.Under.forget _).mapCocone
+.extend h.isoPushout.inv ((Cocone.mk _ t₁).underPost j₁)
+    let hc' : IsColimit c' :=
+IsColimit.extendIso _ isColimitOfPreserves _ (ht₁.underPost j₁)
+    let s' : (Functor.const (Under j₁)).obj X ⟶ D' :=
+      { app k := s₁.app k.right ≫ pushout.inl _ _
+        naturality k l a := by
+          have h2 := s₁.naturality a.right
+          simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.id_comp] at h2
+          simp [h2, D'] }
+    obtain ⟨j₃, v, hcomp', hq⟩ := IsFinitelyPresentable.exists_hom_of_isColimit_under
+hc' p s' q fun k => by
+      simp [c', s', hcomp, reassoc_of% (h₁ k.right).right]
+    refine ⟨D'.obj j₃, v, c'.ι.app j₃ ≫ t₂.app j₂, ?_, ?_⟩
+    · rwa [reassoc_of% hq]
+    · rw [hcomp']
+      exact P.comp_mem _ _ (h₁ _).left (P.pushout_inl _ _ hf')
 
 中文:
 引理 是StableUnderComposition.ind_of_preIndSpreads
@@ -447,7 +498,30 @@ lemma IsStableUnderComposition.ind_of_preIndSpreads
     obtain ⟨J₁, _, _, D₁, s₁, t₁, ht₁, h₁⟩ := hf
     obtain ⟨J₂, _, _, D₂, s₂, t₂, ht₂, h₂⟩ := hg
     have : IsFinitelyPresentable (CategoryTheory.Under.mk p) := hp
-    obtain ⟨j₂, q, hcomp, hu⟩ := IsFinitelyPresentable.exists_hom_of_isColimit_unde
+    obtain ⟨j₂, q, hcomp, hu⟩ := IsFinitelyPresentable.exists_hom_of_isColimit_under
+ht₂ p ((Functor.const _).map f ≫ s₂) u by simp [h₂, hpu]
+    obtain ⟨j₁, W, f', g', h, hf'⟩ :=
+      P.exists_isPushout_of_isFiltered ht₁ (s₂.app j₂) (h₂ j₂).left
+    let D' : Under j₁ ⥤ C :=
+      (Under.post D₁ ⋙ Under.pushout f') ⋙ CategoryTheory.Under.forget _
+    let c' : Cocone D' :=
+      (Under.pushout f' ⋙ CategoryTheory.Under.forget _).mapCocone
+.extend h.isoPushout.inv ((Cocone.mk _ t₁).underPost j₁)
+    let hc' : IsColimit c' :=
+IsColimit.extendIso _ isColimitOfPreserves _ (ht₁.underPost j₁)
+    let s' : (Functor.const (Under j₁)).obj X ⟶ D' :=
+      { app k := s₁.app k.right ≫ pushout.inl _ _
+        naturality k l a := by
+          have h2 := s₁.naturality a.right
+          simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.id_comp] at h2
+          simp [h2, D'] }
+    obtain ⟨j₃, v, hcomp', hq⟩ := IsFinitelyPresentable.exists_hom_of_isColimit_under
+hc' p s' q fun k => by
+      simp [c', s', hcomp, reassoc_of% (h₁ k.right).right]
+    refine ⟨D'.obj j₃, v, c'.ι.app j₃ ≫ t₂.app j₂, ?_, ?_⟩
+    · rwa [reassoc_of% hq]
+    · rw [hcomp']
+      exact P.comp_mem _ _ (h₁ _).left (P.pushout_inl _ _ hf')
 
 Depends on / 依赖: Categor, CategoryTheory, CategoryTheory.Under.mk, Functor, Functor.const, IsFinitelyPresentable, IsFinitelyPresentable.exists_hom_of_isColimit_under, P.exists_isPushout_of_isFiltered, Under.post, Under.pushout, exists_hom_of_isColimit_under, exists_isPushout_of_isFiltered, ind_iff_exists, pushout
 -/

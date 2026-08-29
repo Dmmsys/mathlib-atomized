@@ -62,7 +62,25 @@ lemma IsUnramifiedAt.of_liesOver_of_ne_bot
   let := Localization.AtPrime.algebraOfLiesOver p P
   let := Localization.AtPrime.algebraOfLiesOver p₀ P
   have hp₀ : p₀ = P.under R := Ideal.LiesOver.over
-  have : EssFini
+  have : EssFiniteType S T := .of_comp R S T
+  have := Algebra.EssFiniteType.isNoetherianRing S T
+  rw [isUnramifiedAt_iff_map_eq R p₀ p]
+  have ⟨h₁, h₂⟩ := (isUnramifiedAt_iff_map_eq R p₀ P).mp ‹_›
+  refine ⟨Algebra.isSeparable_tower_bot_of_isSeparable _ _ P.ResidueField, ?_⟩
+  by_cases hp : p = ⊥
+  · have : p₀.map (algebraMap R S) = p := by
+      subst hp
+      exact le_bot_iff.mp (Ideal.map_comap_le)
+    rw [IsScalarTower.algebraMap_eq _ S]; rw [← Ideal.map_map]; rw [this]; rw [Localization.AtPrime.map_eq_maximalIdeal]
+  rw [← Ideal.IsDedekindDomain.ramificationIdx'_eq_one_iff hp Ideal.map_comap_le]; rw [← not_ne_iff]; rw [Ideal.ramificationIdx'_ne_one_iff Ideal.map_comap_le]
+  intro H
+  have := Ideal.ramificationIdx'_eq_one_of_map_localization
+    (hp₀ ▸ Ideal.map_comap_le) (hP₂ hp) hP₁ h₂
+  rw [← not_ne_iff]; rw [Ideal.ramificationIdx'_ne_one_iff (hp₀ ▸ Ideal.map_comap_le)] at this
+  replace H := Ideal.map_mono (f := algebraMap S T) H
+  rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Ideal.map_pow] at H
+  refine this (H.trans (Ideal.pow_right_mono ?_ _))
+  exact Ideal.map_le_iff_le_comap.mpr Ideal.LiesOver.over.le
 
 中文:
 引理 IsUnramifiedAt.of_liesOver_of_ne_bot
@@ -73,7 +91,25 @@ lemma IsUnramifiedAt.of_liesOver_of_ne_bot
   let := Localization.AtPrime.algebraOfLiesOver p P
   let := Localization.AtPrime.algebraOfLiesOver p₀ P
   have hp₀ : p₀ = P.under R := Ideal.LiesOver.over
-  have : EssFini
+  have : EssFiniteType S T := .of_comp R S T
+  have := Algebra.EssFiniteType.isNoetherianRing S T
+  rw [isUnramifiedAt_iff_map_eq R p₀ p]
+  have ⟨h₁, h₂⟩ := (isUnramifiedAt_iff_map_eq R p₀ P).mp ‹_›
+  refine ⟨Algebra.isSeparable_tower_bot_of_isSeparable _ _ P.ResidueField, ?_⟩
+  by_cases hp : p = ⊥
+  · have : p₀.map (algebraMap R S) = p := by
+      subst hp
+      exact le_bot_iff.mp (Ideal.map_comap_le)
+    rw [IsScalarTower.algebraMap_eq _ S]; rw [← Ideal.map_map]; rw [this]; rw [Localization.AtPrime.map_eq_maximalIdeal]
+  rw [← Ideal.IsDedekindDomain.ramificationIdx'_eq_one_iff hp Ideal.map_comap_le]; rw [← not_ne_iff]; rw [Ideal.ramificationIdx'_ne_one_iff Ideal.map_comap_le]
+  intro H
+  have := Ideal.ramificationIdx'_eq_one_of_map_localization
+    (hp₀ ▸ Ideal.map_comap_le) (hP₂ hp) hP₁ h₂
+  rw [← not_ne_iff]; rw [Ideal.ramificationIdx'_ne_one_iff (hp₀ ▸ Ideal.map_comap_le)] at this
+  replace H := Ideal.map_mono (f := algebraMap S T) H
+  rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Ideal.map_pow] at H
+  refine this (H.trans (Ideal.pow_right_mono ?_ _))
+  exact Ideal.map_le_iff_le_comap.mpr Ideal.LiesOver.over.le
 
 Depends on / 依赖: Algebra, Algebra.EssFiniteType.isNoetherianRing, Algebra.isSeparable_tower_bot, AtPrime, EssFiniteType, Ideal.LiesOver.over, LiesOver, Localization, Localization.AtPrime.algebraOfLiesOver, P.LiesOver, P.under, algebraOfLiesOver, isNoetherianRing, isSeparable_tower_bot, isUnramifiedAt_iff_map_eq, of_comp, p.under
 -/
@@ -168,7 +204,15 @@ theorem isUnramifiedAt_bot
   have : IsFractionRing S (Localization.AtPrime (⊥ : Ideal S)) := by
     simpa [Ideal.primeCompl_bot] using Localization.isLocalization (M := (⊥ : Ideal S).primeCompl)
   let : Field (Localization.AtPrime (⊥ : Ideal S)) := IsFractionRing.toField S
-  have : FaithfulSMul R (Localization.AtPrime (⊥ :
+  have : FaithfulSMul R (Localization.AtPrime (⊥ : Ideal S)) := by
+    rw [faithfulSMul_iff_algebraMap_injective]; rw [IsScalarTower.algebraMap_eq R S (Localization.AtPrime ⊥)]
+    exact (IsFractionRing.injective S _).comp (FaithfulSMul.algebraMap_injective R S)
+  let := FractionRing.liftAlgebra R (Localization.AtPrime (⊥ : Ideal S))
+  have : Algebra.IsAlgebraic (FractionRing R) (Localization.AtPrime ⊥) :=
+    isAlgebraic_of_isFractionRing R S (FractionRing R) (Localization.AtPrime (⊥ : Ideal S))
+  have : FormallyUnramified (FractionRing R) (Localization.AtPrime (⊥ : Ideal S)) :=
+    FormallyUnramified.of_isSeparable _ _
+  exact FormallyUnramified.comp R (FractionRing R) (Localization.AtPrime ⊥)
 
 中文:
 定理 isUnramifiedAt_bot
@@ -177,7 +221,15 @@ theorem isUnramifiedAt_bot
   have : IsFractionRing S (Localization.AtPrime (⊥ : Ideal S)) := by
     simpa [Ideal.primeCompl_bot] using Localization.isLocalization (M := (⊥ : Ideal S).primeCompl)
   let : Field (Localization.AtPrime (⊥ : Ideal S)) := IsFractionRing.toField S
-  have : FaithfulSMul R (Localization.AtPrime (⊥ :
+  have : FaithfulSMul R (Localization.AtPrime (⊥ : Ideal S)) := by
+    rw [faithfulSMul_iff_algebraMap_injective]; rw [IsScalarTower.algebraMap_eq R S (Localization.AtPrime ⊥)]
+    exact (IsFractionRing.injective S _).comp (FaithfulSMul.algebraMap_injective R S)
+  let := FractionRing.liftAlgebra R (Localization.AtPrime (⊥ : Ideal S))
+  have : Algebra.IsAlgebraic (FractionRing R) (Localization.AtPrime ⊥) :=
+    isAlgebraic_of_isFractionRing R S (FractionRing R) (Localization.AtPrime (⊥ : Ideal S))
+  have : FormallyUnramified (FractionRing R) (Localization.AtPrime (⊥ : Ideal S)) :=
+    FormallyUnramified.of_isSeparable _ _
+  exact FormallyUnramified.comp R (FractionRing R) (Localization.AtPrime ⊥)
 
 Depends on / 依赖: AtPrime, FaithfulSMul, FaithfulSMul.algebraMap_injective, Ideal.primeCompl_bot, IsFractionRing, IsFractionRing.injective, IsFractionRing.toField, IsScalarTower, IsScalarTower.algebraMap_eq, Localization, Localization.AtPrime, Localization.isLocalization, algebraMap_eq, algebraMap_injective, faithfulSMul_iff_algebraMap_injective, injective, isLocalization, primeCompl, primeCompl_bot, toField
 -/

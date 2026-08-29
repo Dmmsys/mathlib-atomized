@@ -528,6 +528,19 @@ theorem mk_bijOn
     intro x hx y hy
     simp only [mem_carrier_iff_mk_eq, mk_eq_mk_iff_isConj] at hx hy
     rw [hx.eq_of_right_mem_center hg]; rw [hy.eq_of_right_mem_center hg]
+  · rw [mk_eq_mk_iff_isConj] at H
+    exact H.eq_of_left_mem_center hx
+  · rintro ⟨g⟩ hg
+    refine ⟨g, ?_, rfl⟩
+    simp only [mem_noncenter, Set.compl_def, Set.mem_ofPred, Set.not_nontrivial_iff] at hg
+    rw [SetLike.mem_coe]; rw [Subgroup.mem_center_iff]
+    intro h
+    rw [← mul_inv_eq_iff_eq_mul]
+    refine hg ?_ mem_carrier_mk
+    rw [mem_carrier_iff_mk_eq]
+    apply mk_eq_mk_iff_isConj.mpr
+    rw [isConj_comm]; rw [isConj_iff]
+    exact ⟨h, rfl⟩
 
 中文:
 定理 mk_bijOn
@@ -538,6 +551,19 @@ theorem mk_bijOn
     intro x hx y hy
     simp only [mem_carrier_iff_mk_eq, mk_eq_mk_iff_isConj] at hx hy
     rw [hx.eq_of_right_mem_center hg]; rw [hy.eq_of_right_mem_center hg]
+  · rw [mk_eq_mk_iff_isConj] at H
+    exact H.eq_of_left_mem_center hx
+  · rintro ⟨g⟩ hg
+    refine ⟨g, ?_, rfl⟩
+    simp only [mem_noncenter, Set.compl_def, Set.mem_ofPred, Set.not_nontrivial_iff] at hg
+    rw [SetLike.mem_coe]; rw [Subgroup.mem_center_iff]
+    intro h
+    rw [← mul_inv_eq_iff_eq_mul]
+    refine hg ?_ mem_carrier_mk
+    rw [mem_carrier_iff_mk_eq]
+    apply mk_eq_mk_iff_isConj.mpr
+    rw [isConj_comm]; rw [isConj_iff]
+    exact ⟨h, rfl⟩
 
 Depends on / 依赖: H.eq_of_left_mem_center, Set.compl_def, Set.mem_ofPred, Set.not_nontrivial_iff, SetLike, SetLike.mem_coe, compl_def, eq_of_left_mem_center, eq_of_right_mem_center, hx.eq_of_right_mem_center, hy.eq_of_right_mem_center, mem_carrier_iff_mk_eq, mem_coe, mem_noncenter, mem_ofPred, mk_eq_mk_iff_isConj, not_nontrivial_iff
 -/

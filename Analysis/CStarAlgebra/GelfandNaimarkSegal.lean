@@ -331,14 +331,32 @@ definition leftMulMapPreGNS
   signature: (a : A)
   body: .mkContinuous ‖a‖ fun x => by f.toPreGNS.toLinearMap ∘ₗ mul Complex A a ∘ₗ f.ofPreGNS.toLinearMap
     rw [← sq_le_sq₀ (by positivity) (by positivity)]; rw [mul_pow]; rw [← RCLike.ofReal_le_ofReal (K := Complex)]; rw [RCLike.ofReal_pow]; rw [RCLike.ofReal_eq_complex_ofReal]; rw [preGNS_norm_sq]
-    h
+    have : star (f.ofPreGNS x) * star a * (a * f.ofPreGNS x) <=
+        ‖a‖ ^ 2 • star (f.ofPreGNS x) * f.ofPreGNS x := by
+      rw [← mul_assoc]; rw [mul_assoc _ (star a)]; rw [sq]; rw [← CStarRing.norm_star_mul_self (x := a)]; rw [smul_mul_assoc]
+      exact CStarAlgebra.star_left_conjugate_le_norm_smul
+    calc
+      _ <= f (‖a‖ ^ 2 • star (f.ofPreGNS x) * f.ofPreGNS x) := by
+        simpa using OrderHomClass.mono f this
+      _ = _ := by simp [← Complex.coe_smul, preGNS_norm_sq, smul_mul_assoc]
+
+@[simp]
 
 中文:
 定义 leftMulMapPreGNS
   签名: (a : A)
   定义体: .mkContinuous ‖a‖ fun x => by f.toPreGNS.toLinearMap ∘ₗ mul Complex A a ∘ₗ f.ofPreGNS.toLinearMap
     rw [← sq_le_sq₀ (by positivity) (by positivity)]; rw [mul_pow]; rw [← RCLike.ofReal_le_ofReal (K := Complex)]; rw [RCLike.ofReal_pow]; rw [RCLike.ofReal_eq_complex_ofReal]; rw [preGNS_norm_sq]
-    h
+    have : star (f.ofPreGNS x) * star a * (a * f.ofPreGNS x) <=
+        ‖a‖ ^ 2 • star (f.ofPreGNS x) * f.ofPreGNS x := by
+      rw [← mul_assoc]; rw [mul_assoc _ (star a)]; rw [sq]; rw [← CStarRing.norm_star_mul_self (x := a)]; rw [smul_mul_assoc]
+      exact CStarAlgebra.star_left_conjugate_le_norm_smul
+    calc
+      _ <= f (‖a‖ ^ 2 • star (f.ofPreGNS x) * f.ofPreGNS x) := by
+        simpa using OrderHomClass.mono f this
+      _ = _ := by simp [← Complex.coe_smul, preGNS_norm_sq, smul_mul_assoc]
+
+@[simp]
 
 Depends on / 依赖: CStarRing, CStarRing.norm_star_mul_self, RCLike, RCLike.ofReal_eq_complex_ofReal, RCLike.ofReal_le_ofReal, RCLike.ofReal_pow, f.ofPreGNS, f.ofPreGNS.toLinearMap, f.toPreGNS.toLinearMap, mkContinuous, mul_assoc, mul_pow, norm_star_mul_self, ofPreGNS, ofReal_eq_complex_ofReal, ofReal_le_ofReal, ofReal_pow, preGNS_norm_sq, toLinearMap, toPreGNS
 -/
@@ -429,7 +447,18 @@ definition gnsNonUnitalStarAlgHom
     induction c using induction_on with
       | hp => apply isClosed_eq <;> fun_prop
       | ih c => simp [add_mul, Completion.coe_add]
-  m
+  map_mul' _ _ := by
+    ext c
+    induction c using induction_on with
+      | hp => apply isClosed_eq <;> fun_prop
+      | ih c => simp
+  map_star' a := by
+    refine (eq_adjoint_iff (f.leftMulMapPreGNS (star a)).completion
+      (f.leftMulMapPreGNS a).completion).mpr ?_
+    intro x y
+    induction x, y using induction_on₂ with
+    | hp => apply isClosed_eq <;> fun_prop
+    | ih x y => simp [mul_assoc, preGNS_inner_def]
 
 中文:
 定义 gnsNonUnitalStarAlgHom
@@ -442,7 +471,18 @@ definition gnsNonUnitalStarAlgHom
     induction c using induction_on with
       | hp => apply isClosed_eq <;> fun_prop
       | ih c => simp [add_mul, Completion.coe_add]
-  m
+  map_mul' _ _ := by
+    ext c
+    induction c using induction_on with
+      | hp => apply isClosed_eq <;> fun_prop
+      | ih c => simp
+  map_star' a := by
+    refine (eq_adjoint_iff (f.leftMulMapPreGNS (star a)).completion
+      (f.leftMulMapPreGNS a).completion).mpr ?_
+    intro x y
+    induction x, y using induction_on₂ with
+    | hp => apply isClosed_eq <;> fun_prop
+    | ih x y => simp [mul_assoc, preGNS_inner_def]
 
 Depends on / 依赖: completion, f.leftMulMapPreGNS, leftMulMapPreGNS
 -/

@@ -53,7 +53,33 @@ definition quotEquivPowQuotPowSucc
   let ϖ := h.principal.choose
   have hI : I = Ideal.span {ϖ} := h.principal.choose_spec
   have hϖ : ϖ ^ n in I ^ n := hI ▸ (Ideal.pow_mem_pow (Ideal.mem_span_singleton_self _) n)
-
+  let g : R ->ₗ[R] (I ^ n : Ideal R) := (LinearMap.mulRight R ϖ ^ n).codRestrict _ fun x => by
+    simp only [LinearMap.pow_mulRight, LinearMap.mulRight_apply]
+    -- TODO: change argument of Ideal.pow_mem_of_mem
+    exact Ideal.mul_mem_left _ _ hϖ
+  have : I = LinearMap.ker (f.comp g) := by
+    ext x
+    simp only [LinearMap.codRestrict, LinearMap.pow_mulRight, LinearMap.mulRight_apply,
+      LinearMap.mem_ker, LinearMap.coe_comp, LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
+      Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero, Submodule.mem_smul_top_iff, smul_eq_mul,
+      f, g]
+    constructor <;> intro hx
+    · exact Submodule.mul_mem_mul hx hϖ
+    · rw [← pow_succ', hI, Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hx
+      obtain ⟨y, hy⟩ := hx
+      rw [mul_comm]; rw [pow_succ]; rw [mul_assoc]; rw [mul_right_inj' (pow_ne_zero _ _)] at hy
+      · rw [hI, Ideal.mem_span_singleton]
+        exact ⟨y, hy⟩
+      · contrapose h'
+        rw [hI]; rw [h']; rw [Ideal.span_singleton_eq_bot]
+  let e : (R ⧸ I) ≃ₗ[R] R ⧸ (LinearMap.ker (f.comp g)) :=
+    Submodule.quotEquivOfEq I (LinearMap.ker (f ∘ₗ g)) this
+  refine e.trans ((f.comp g).quotKerEquivOfSurjective ?_)
+  refine (Submodule.mkQ_surjective _).comp ?_
+  rintro ⟨x, hx⟩
+  rw [hI]; rw [Ideal.span_singleton_pow]; rw [Ideal.mem_span_singleton] at hx
+  refine hx.imp ?_
+  simp [g, LinearMap.codRestrict, eq_comm, mul_comm]
 
 中文:
 定义 quotEquivPowQuotPowSucc
@@ -64,7 +90,33 @@ definition quotEquivPowQuotPowSucc
   let ϖ := h.principal.choose
   have hI : I = Ideal.span {ϖ} := h.principal.choose_spec
   have hϖ : ϖ ^ n in I ^ n := hI ▸ (Ideal.pow_mem_pow (Ideal.mem_span_singleton_self _) n)
-
+  let g : R ->ₗ[R] (I ^ n : Ideal R) := (LinearMap.mulRight R ϖ ^ n).codRestrict _ fun x => by
+    simp only [LinearMap.pow_mulRight, LinearMap.mulRight_apply]
+    -- TODO: change argument of Ideal.pow_mem_of_mem
+    exact Ideal.mul_mem_left _ _ hϖ
+  have : I = LinearMap.ker (f.comp g) := by
+    ext x
+    simp only [LinearMap.codRestrict, LinearMap.pow_mulRight, LinearMap.mulRight_apply,
+      LinearMap.mem_ker, LinearMap.coe_comp, LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
+      Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero, Submodule.mem_smul_top_iff, smul_eq_mul,
+      f, g]
+    constructor <;> intro hx
+    · exact Submodule.mul_mem_mul hx hϖ
+    · rw [← pow_succ', hI, Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hx
+      obtain ⟨y, hy⟩ := hx
+      rw [mul_comm]; rw [pow_succ]; rw [mul_assoc]; rw [mul_right_inj' (pow_ne_zero _ _)] at hy
+      · rw [hI, Ideal.mem_span_singleton]
+        exact ⟨y, hy⟩
+      · contrapose h'
+        rw [hI]; rw [h']; rw [Ideal.span_singleton_eq_bot]
+  let e : (R ⧸ I) ≃ₗ[R] R ⧸ (LinearMap.ker (f.comp g)) :=
+    Submodule.quotEquivOfEq I (LinearMap.ker (f ∘ₗ g)) this
+  refine e.trans ((f.comp g).quotKerEquivOfSurjective ?_)
+  refine (Submodule.mkQ_surjective _).comp ?_
+  rintro ⟨x, hx⟩
+  rw [hI]; rw [Ideal.span_singleton_pow]; rw [Ideal.mem_span_singleton] at hx
+  refine hx.imp ?_
+  simp [g, LinearMap.codRestrict, eq_comm, mul_comm]
 
 Depends on / 依赖: Ideal.mem_span_singleton_self, Ideal.pow_mem_pow, Ideal.span, LinearMap, LinearMap.mulRight, LinearMap.mulRight_apply, LinearMap.pow_mulRight, Submodule, Submodule.mkQ, choose_spec, codRestrict, h.principal.choose, h.principal.choose_spec, mem_span_singleton_self, mulRight, mulRight_apply, pow_mem_pow, pow_mulRight, principal
 -/

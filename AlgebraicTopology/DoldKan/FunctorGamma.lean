@@ -377,7 +377,23 @@ theorem mapMono_comp
   -- case where i' : Δ'' ⟶ Δ' is the identity
   by_cases h₂ : Δ' = Δ''
   · subst h₂
-    simp only [SimplexCategory.eq_id_of_mono i', comp_
+    simp only [SimplexCategory.eq_id_of_mono i', comp_id, id_comp, mapMono_id K]
+  -- then the RHS is always zero
+  obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_lt (len_lt_of_mono i h₁)
+  obtain ⟨k', hk'⟩ := Nat.exists_eq_add_of_lt (len_lt_of_mono i' h₂)
+  have eq : Δ.len = Δ''.len + (k + k' + 2) := by lia
+  rw [mapMono_eq_zero K (i' ≫ i) _ _]; rotate_left
+  · by_contra h
+    simp only [left_eq_add, h, add_eq_zero, and_false, reduceCtorEq] at eq
+  · by_contra h
+    simp only [h.1, add_right_inj] at eq
+    lia
+  -- in all cases, the LHS is also zero, either by definition, or because d ≫ d = 0
+  by_cases h₃ : Isδ₀ i
+  · by_cases h₄ : Isδ₀ i'
+    · rw [mapMono_δ₀' K i h₃, mapMono_δ₀' K i' h₄, HomologicalComplex.d_comp_d]
+    · simp only [mapMono_eq_zero K i' h₂ h₄, comp_zero]
+  · simp only [mapMono_eq_zero K i h₁ h₃, zero_comp]
 
 中文:
 定理 mapMono_comp
@@ -390,7 +406,23 @@ theorem mapMono_comp
   -- case where i' : Δ'' ⟶ Δ' is the identity
   by_cases h₂ : Δ' = Δ''
   · subst h₂
-    simp only [SimplexCategory.eq_id_of_mono i', comp_
+    simp only [SimplexCategory.eq_id_of_mono i', comp_id, id_comp, mapMono_id K]
+  -- then the RHS is always zero
+  obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_lt (len_lt_of_mono i h₁)
+  obtain ⟨k', hk'⟩ := Nat.exists_eq_add_of_lt (len_lt_of_mono i' h₂)
+  have eq : Δ.len = Δ''.len + (k + k' + 2) := by lia
+  rw [mapMono_eq_zero K (i' ≫ i) _ _]; rotate_left
+  · by_contra h
+    simp only [left_eq_add, h, add_eq_zero, and_false, reduceCtorEq] at eq
+  · by_contra h
+    simp only [h.1, add_right_inj] at eq
+    lia
+  -- in all cases, the LHS is also zero, either by definition, or because d ≫ d = 0
+  by_cases h₃ : Isδ₀ i
+  · by_cases h₄ : Isδ₀ i'
+    · rw [mapMono_δ₀' K i h₃, mapMono_δ₀' K i' h₄, HomologicalComplex.d_comp_d]
+    · simp only [mapMono_eq_zero K i' h₂ h₄, comp_zero]
+  · simp only [mapMono_eq_zero K i h₁ h₃, zero_comp]
 -/
 theorem mapMono_comp (i' : Δ'' ⟶ Δ') (i : Δ' ⟶ Δ) [Mono i'] [Mono i] :
     mapMono K i ≫ mapMono K i' = mapMono K (i' ≫ i) := by
@@ -530,7 +562,15 @@ definition obj
     have fac : A.e ≫ 𝟙 A.1.unop = (𝟙 Δ).unop ≫ A.e := by rw [unop_id, comp_id, id_comp]
     rw [Obj.map_on_summand₀ K A fac]; rw [Obj.Termwise.mapMono_id]; rw [id_comp]
     dsimp only [Obj.obj₂]
-    rw [comp_i
+    rw [comp_id]
+    rfl)
+  map_comp {Δ'' Δ' Δ} θ' θ := colimit.hom_ext (fun ⟨A⟩ => by
+    have fac : θ.unop ≫ θ'.unop ≫ A.e = (θ' ≫ θ).unop ≫ A.e := by rw [unop_comp, assoc]
+    rw [← image.fac (θ'.unop ≫ A.e)]; rw [← assoc]; rw [←
+      image.fac (θ.unop ≫ factorThruImage (θ'.unop ≫ A.e))]; rw [assoc] at fac
+    simp only [Obj.map_on_summand₀'_assoc K A θ', Obj.map_on_summand₀' K _ θ,
+      Obj.Termwise.mapMono_comp_assoc, Obj.map_on_summand₀ K A fac]
+    rfl)
 
 中文:
 定义 obj
@@ -542,7 +582,15 @@ definition obj
     have fac : A.e ≫ 𝟙 A.1.unop = (𝟙 Δ).unop ≫ A.e := by rw [unop_id, comp_id, id_comp]
     rw [Obj.map_on_summand₀ K A fac]; rw [Obj.Termwise.mapMono_id]; rw [id_comp]
     dsimp only [Obj.obj₂]
-    rw [comp_i
+    rw [comp_id]
+    rfl)
+  map_comp {Δ'' Δ' Δ} θ' θ := colimit.hom_ext (fun ⟨A⟩ => by
+    have fac : θ.unop ≫ θ'.unop ≫ A.e = (θ' ≫ θ).unop ≫ A.e := by rw [unop_comp, assoc]
+    rw [← image.fac (θ'.unop ≫ A.e)]; rw [← assoc]; rw [←
+      image.fac (θ.unop ≫ factorThruImage (θ'.unop ≫ A.e))]; rw [assoc] at fac
+    simp only [Obj.map_on_summand₀'_assoc K A θ', Obj.map_on_summand₀' K _ θ,
+      Obj.Termwise.mapMono_comp_assoc, Obj.map_on_summand₀ K A fac]
+    rfl)
 
 Depends on / 依赖: Obj.obj
 -/
@@ -577,7 +625,11 @@ definition splitting
   isColimit' Δ := IsColimit.ofIsoColimit (colimit.isColimit _) (Cofan.ext (Iso.refl _) (by
       intro A
       dsimp [Splitting.cofan']
-      rw [comp_id]; rw [Γ₀.Obj.map_on_summand₀ K (SimplicialObject.Splitting.Ind
+      rw [comp_id]; rw [Γ₀.Obj.map_on_summand₀ K (SimplicialObject.Splitting.IndexSet.id A.1)
+        (show A.e ≫ 𝟙 _ = A.e.op.unop ≫ 𝟙 _ by rfl)]; rw [Γ₀.Obj.Termwise.mapMono_id]
+      dsimp
+      rw [id_comp]
+      rfl))
 
 中文:
 定义 splitting
@@ -587,7 +639,11 @@ definition splitting
   isColimit' Δ := IsColimit.ofIsoColimit (colimit.isColimit _) (Cofan.ext (Iso.refl _) (by
       intro A
       dsimp [Splitting.cofan']
-      rw [comp_id]; rw [Γ₀.Obj.map_on_summand₀ K (SimplicialObject.Splitting.Ind
+      rw [comp_id]; rw [Γ₀.Obj.map_on_summand₀ K (SimplicialObject.Splitting.IndexSet.id A.1)
+        (show A.e ≫ 𝟙 _ = A.e.op.unop ≫ 𝟙 _ by rfl)]; rw [Γ₀.Obj.Termwise.mapMono_id]
+      dsimp
+      rw [id_comp]
+      rfl))
 -/
 def splitting (K : ChainComplex C Nat) : SimplicialObject.Splitting (Γ₀.obj K) where
   N n := K.X n
@@ -616,7 +672,15 @@ theorem Obj.map_on_summand
   rw [assoc]; rw [← Functor.map_comp]
   dsimp [splitting]
   rw [Γ₀.Obj.map_on_summand₀ K (Splitting.IndexSet.id A.1)
-    (show e ≫ i = ((Splitting.IndexSet.e A).op ≫ θ).unop ≫ 𝟙 _ by rw [comp_id]; rw [fac]; rfl)
+    (show e ≫ i = ((Splitting.IndexSet.e A).op ≫ θ).unop ≫ 𝟙 _ by rw [comp_id]; rw [fac]; rfl)]
+  dsimp only [Splitting.IndexSet.id_fst, Splitting.IndexSet.mk, op_unop, Splitting.IndexSet.e]
+  rw [Γ₀.Obj.map_on_summand₀ K (Splitting.IndexSet.id (op Δ''))
+      (show e ≫ 𝟙 Δ'' = e.op.unop ≫ 𝟙 _ by simp)]; rw [Termwise.mapMono_id]
+  dsimp only [Splitting.IndexSet.id_fst]
+  rw [id_comp]
+  rfl
+
+@[reassoc]
 
 中文:
 定理 Obj.map_on_summand
@@ -627,7 +691,15 @@ theorem Obj.map_on_summand
   rw [assoc]; rw [← Functor.map_comp]
   dsimp [splitting]
   rw [Γ₀.Obj.map_on_summand₀ K (Splitting.IndexSet.id A.1)
-    (show e ≫ i = ((Splitting.IndexSet.e A).op ≫ θ).unop ≫ 𝟙 _ by rw [comp_id]; rw [fac]; rfl)
+    (show e ≫ i = ((Splitting.IndexSet.e A).op ≫ θ).unop ≫ 𝟙 _ by rw [comp_id]; rw [fac]; rfl)]
+  dsimp only [Splitting.IndexSet.id_fst, Splitting.IndexSet.mk, op_unop, Splitting.IndexSet.e]
+  rw [Γ₀.Obj.map_on_summand₀ K (Splitting.IndexSet.id (op Δ''))
+      (show e ≫ 𝟙 Δ'' = e.op.unop ≫ 𝟙 _ by simp)]; rw [Termwise.mapMono_id]
+  dsimp only [Splitting.IndexSet.id_fst]
+  rw [id_comp]
+  rfl
+
+@[reassoc]
 
 Depends on / 依赖: A.e.op, Functor, Functor.map_comp, IndexSet, Obj.map_on_summand, Splitting, Splitting.IndexSet.e, Splitting.IndexSet.id, Splitting.IndexSet.id_fst, Splitting.IndexSet.mk, Splitting.cofan, Termwise, comp_id, e.op.unop, id_fst, map_comp, op_unop, splitting
 -/
@@ -743,7 +815,8 @@ definition map
     apply (Γ₀.splitting K).hom_ext'
     intro A
     simp only [(splitting K).ι_desc_assoc, Obj.map_on_summand'_assoc K _ θ, (splitting K).ι_desc,
-      assoc, Obj.map_on_summand' K' 
+      assoc, Obj.map_on_summand' K' _ θ]
+    apply Obj.Termwise.mapMono_naturality_assoc
 
 中文:
 定义 map
@@ -754,7 +827,8 @@ definition map
     apply (Γ₀.splitting K).hom_ext'
     intro A
     simp only [(splitting K).ι_desc_assoc, Obj.map_on_summand'_assoc K _ θ, (splitting K).ι_desc,
-      assoc, Obj.map_on_summand' K' 
+      assoc, Obj.map_on_summand' K' _ θ]
+    apply Obj.Termwise.mapMono_naturality_assoc
 
 Depends on / 依赖: splitting, unop.len
 -/
@@ -875,7 +949,10 @@ theorem HigherFacesVanish.on_Γ₀_summand_id
   rw [Γ₀.Obj.Termwise.mapMono_eq_zero K]; rw [zero_comp] at eq; rotate_left
   · intro h
     exact (Nat.succ_ne_self n) (congr_arg SimplexCategory.len h)
-  · exact fun h => Fin.succ_ne_zero j (by simpa only [Isδ₀.if
+  · exact fun h => Fin.succ_ne_zero j (by simpa only [Isδ₀.iff] using h)
+  exact eq
+
+@[reassoc (attr := simp)]
 
 中文:
 定理 HigherFacesVanish.on_Γ₀_summand_id
@@ -886,7 +963,10 @@ theorem HigherFacesVanish.on_Γ₀_summand_id
   rw [Γ₀.Obj.Termwise.mapMono_eq_zero K]; rw [zero_comp] at eq; rotate_left
   · intro h
     exact (Nat.succ_ne_self n) (congr_arg SimplexCategory.len h)
-  · exact fun h => Fin.succ_ne_zero j (by simpa only [Isδ₀.if
+  · exact fun h => Fin.succ_ne_zero j (by simpa only [Isδ₀.iff] using h)
+  exact eq
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Fin.succ_ne_zero, Nat.succ_ne_self, Obj.Termwise.mapMono_eq_zero, Obj.mapMono_on_summand_id, SimplexCategory, SimplexCategory.len, Termwise, congr_arg, j.succ, mapMono_eq_zero, mapMono_on_summand_id, rotate_left, succ_ne_self, succ_ne_zero, zero_comp
 -/

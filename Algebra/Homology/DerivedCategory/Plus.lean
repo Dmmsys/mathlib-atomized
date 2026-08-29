@@ -62,7 +62,8 @@ lemma quasiIso_eq_subcategoryAcyclic_trW
   obtain ⟨M, g, h, mem⟩ := CategoryTheory.Pretriangulated.distinguished_cocone_triangle f
   have := (HomotopyCategory.subcategoryAcyclic C).trW_iff_of_distinguished _
     ((HomotopyCategory.Plus.ι C).map_distinguished _ mem)
-  rw [← HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic]
+  rw [← HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic] at this
+  rwa [dsimp% (subcategoryAcyclic C).trW_iff_of_distinguished _ mem]
 
 中文:
 引理 quasiIso_eq_subcategoryAcyclic_trW
@@ -71,7 +72,8 @@ lemma quasiIso_eq_subcategoryAcyclic_trW
   obtain ⟨M, g, h, mem⟩ := CategoryTheory.Pretriangulated.distinguished_cocone_triangle f
   have := (HomotopyCategory.subcategoryAcyclic C).trW_iff_of_distinguished _
     ((HomotopyCategory.Plus.ι C).map_distinguished _ mem)
-  rw [← HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic]
+  rw [← HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic] at this
+  rwa [dsimp% (subcategoryAcyclic C).trW_iff_of_distinguished _ mem]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Pretriangulated.distinguished_cocone_triangle, HomotopyCategory, HomotopyCategory.Plus, HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic, HomotopyCategory.subcategoryAcyclic, Pretriangulated, distinguished_cocone_triangle, map_distinguished, quasiIso_eq_trW_subcategoryAcyclic, subcategoryAcyclic, trW_iff_of_distinguished
 -/
@@ -213,7 +215,16 @@ instance :
     obtain ⟨L : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
     simp only [HomotopyCategory.plus_quotient_obj_iff] at hL
     obtain ⟨n, hn⟩ := hL
-    obtain ⟨φ, rfl⟩ := (HomotopyCateg
+    obtain ⟨φ, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective φ
+    rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hK
+    refine ⟨(HomotopyCategory.quotient _ _).obj (K.truncGE n),
+      (HomotopyCategory.quotient _ _).map (K.πTruncGE n),
+      (HomotopyCategory.quotient _ _).map (CochainComplex.truncGEMap φ n ≫ inv (L.πTruncGE n)),
+      ?_, ?_, by simp [← Functor.map_comp]⟩
+    · simp only [HomotopyCategory.plus_quotient_obj_iff]
+      exact ⟨n, inferInstance⟩
+    · rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic]
+      exact hK.truncGE _
 
 中文:
 实例 :
@@ -223,7 +234,16 @@ instance :
     obtain ⟨L : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
     simp only [HomotopyCategory.plus_quotient_obj_iff] at hL
     obtain ⟨n, hn⟩ := hL
-    obtain ⟨φ, rfl⟩ := (HomotopyCateg
+    obtain ⟨φ, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective φ
+    rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hK
+    refine ⟨(HomotopyCategory.quotient _ _).obj (K.truncGE n),
+      (HomotopyCategory.quotient _ _).map (K.πTruncGE n),
+      (HomotopyCategory.quotient _ _).map (CochainComplex.truncGEMap φ n ≫ inv (L.πTruncGE n)),
+      ?_, ?_, by simp [← Functor.map_comp]⟩
+    · simp only [HomotopyCategory.plus_quotient_obj_iff]
+      exact ⟨n, inferInstance⟩
+    · rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic]
+      exact hK.truncGE _
 
 Depends on / 依赖: CochainComplex, HomotopyCategory, HomotopyCategory.plus_quotient_obj_iff, HomotopyCategory.quotient, HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic, HomotopyCategory.quotient_obj_surjective, K.truncGE, map_surjective, plus_quotient_obj_iff, quotient, quotient_obj_mem_subcategoryAcyclic_iff_acyclic, quotient_obj_surjective, truncGE
 -/

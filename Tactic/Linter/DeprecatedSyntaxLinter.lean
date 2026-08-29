@@ -161,7 +161,17 @@ definition isDecideNative
     let config := args[1]![0]
     -- Check all configuration arguments in order to determine the final
     -- toggling of the native decide option.
-    if let (.node _ _ config_args) :=
+    if let (.node _ _ config_args) := config then
+      let natives := config_args.filterMap (match ·[0] with
+        | `(Parser.Tactic.posConfigItem| +native) => some true
+        | `(Parser.Tactic.negConfigItem| -native) => some false
+        | `(Parser.Tactic.valConfigItem| (config := {native := true})) => some true
+        | `(Parser.Tactic.valConfigItem| (config := {native := false})) => some false
+        | _ => none)
+      natives.back? == some true
+    else
+      false
+  | _ => false
 
 中文:
 定义 isDecide自然数ive
@@ -172,7 +182,17 @@ definition isDecideNative
     let config := args[1]![0]
     -- Check all configuration arguments in order to determine the final
     -- toggling of the native decide option.
-    if let (.node _ _ config_args) :=
+    if let (.node _ _ config_args) := config then
+      let natives := config_args.filterMap (match ·[0] with
+        | `(Parser.Tactic.posConfigItem| +native) => some true
+        | `(Parser.Tactic.negConfigItem| -native) => some false
+        | `(Parser.Tactic.valConfigItem| (config := {native := true})) => some true
+        | `(Parser.Tactic.valConfigItem| (config := {native := false})) => some false
+        | _ => none)
+      natives.back? == some true
+    else
+      false
+  | _ => false
 
 Depends on / 依赖: Lean.Parser.Tactic.decide, Parser, Tactic
 -/
@@ -211,7 +231,43 @@ definition getDeprecatedSyntax
          please strongly consider using `refine` or `apply` instead.")
     | `Mathlib.Tactic.cases' =>
       rargs.push (kind, stx,
-
+        "The `cases'` tactic is discouraged: \
+         please strongly consider using `obtain`, `rcases` or `cases` instead.")
+    | `Mathlib.Tactic.induction' =>
+      rargs.push (kind, stx,
+        "The `induction'` tactic is discouraged: \
+         please strongly consider using `induction` instead.")
+    | ``Lean.Parser.Tactic.tacticAdmit =>
+      rargs.push (kind, stx,
+        "The `admit` tactic is discouraged: \
+         please strongly consider using the synonymous `sorry` instead.")
+    | ``Lean.Parser.Tactic.decide =>
+      if isDecideNative stx then
+        rargs.push (kind, stx, "Using `decide +native` is not allowed in mathlib: \
+        because it trusts the entire Lean compiler (not just the Lean kernel), \
+        it could quite possibly be used to prove false.")
+      else
+        rargs
+    | ``Lean.Parser.Tactic.nativeDecide =>
+      rargs.push (kind, stx, "Using `native_decide` is not allowed in mathlib: \
+        because it trusts the entire Lean compiler (not just the Lean kernel), \
+        it could quite possibly be used to prove false.")
+    | ``Lean.Parser.Command.in =>
+      match getSetOptionMaxHeartbeatsComment stx with
+      | none => rargs
+      | some (opt, n, trailing) =>
+        -- Since we are now seeing the currently outermost `maxHeartbeats` option,
+        -- we remove all subsequent potential flags and only decide whether to lint or not
+        -- based on whether the current option has a comment.
+        let rargs := rargs.filter (·.1 != `MaxHeartbeats)
+        if trailing.toString.trimAsciiStart.isEmpty then
+          rargs.push (`MaxHeartbeats, stx,
+            s!"Please, add a comment explaining the need for modifying the maxHeartbeat limit, \
+              as in\nset_option {opt} {n} in\n-- reason for change\n...")
+        else
+          rargs
+    | _ => rargs
+  | _ => default
 
 中文:
 定义 getDeprecatedSyntax
@@ -224,7 +280,43 @@ definition getDeprecatedSyntax
          please strongly consider using `refine` or `apply` instead.")
     | `Mathlib.Tactic.cases' =>
       rargs.push (kind, stx,
-
+        "The `cases'` tactic is discouraged: \
+         please strongly consider using `obtain`, `rcases` or `cases` instead.")
+    | `Mathlib.Tactic.induction' =>
+      rargs.push (kind, stx,
+        "The `induction'` tactic is discouraged: \
+         please strongly consider using `induction` instead.")
+    | ``Lean.Parser.Tactic.tacticAdmit =>
+      rargs.push (kind, stx,
+        "The `admit` tactic is discouraged: \
+         please strongly consider using the synonymous `sorry` instead.")
+    | ``Lean.Parser.Tactic.decide =>
+      if isDecideNative stx then
+        rargs.push (kind, stx, "Using `decide +native` is not allowed in mathlib: \
+        because it trusts the entire Lean compiler (not just the Lean kernel), \
+        it could quite possibly be used to prove false.")
+      else
+        rargs
+    | ``Lean.Parser.Tactic.nativeDecide =>
+      rargs.push (kind, stx, "Using `native_decide` is not allowed in mathlib: \
+        because it trusts the entire Lean compiler (not just the Lean kernel), \
+        it could quite possibly be used to prove false.")
+    | ``Lean.Parser.Command.in =>
+      match getSetOptionMaxHeartbeatsComment stx with
+      | none => rargs
+      | some (opt, n, trailing) =>
+        -- Since we are now seeing the currently outermost `maxHeartbeats` option,
+        -- we remove all subsequent potential flags and only decide whether to lint or not
+        -- based on whether the current option has a comment.
+        let rargs := rargs.filter (·.1 != `MaxHeartbeats)
+        if trailing.toString.trimAsciiStart.isEmpty then
+          rargs.push (`MaxHeartbeats, stx,
+            s!"Please, add a comment explaining the need for modifying the maxHeartbeat limit, \
+              as in\nset_option {opt} {n} in\n-- reason for change\n...")
+        else
+          rargs
+    | _ => rargs
+  | _ => default
 
 Depends on / 依赖: args.flatMap, flatMap, getDeprecatedSyntax
 -/
@@ -287,7 +379,28 @@ definition deprecatedSyntaxLinter
       getLinterValue linter.style.cases (← getLinterOptions) ||
       getLinterValue linter.style.induction (← getLinterOptions) ||
       getLinterValue linter.style.admit (← getLinterOptions) ||
-      getLinterValue linter.style
+      getLinterValue linter.style.maxHeartbeats (← getLinterOptions) ||
+      getLinterValue linter.style.nativeDecide (← getLinterOptions) do
+    return
+  if (← MonadState.get).messages.hasErrors then
+    return
+  let deprecations := getDeprecatedSyntax stx
+  -- Using `withSetOptionIn` here, allows the linter to parse also the "leading" `set_option`s
+  -- but then flagging them only if the corresponding option is still set after elaborating the
+  -- leading `set_option`s.
+  -- In particular, this means that the linter "sees" `set_option maxHeartbeats 10 in ...`,
+  -- records it in `deprecations` and then acts on it, according to the correct options.
+  (withSetOptionIn fun _ => do
+    for (kind, stx', msg) in deprecations do
+      match kind with
+      | ``Lean.Parser.Tactic.refine' => Linter.logLintIf linter.style.refine stx' msg
+      | `Mathlib.Tactic.cases' => Linter.logLintIf linter.style.cases stx' msg
+      | `Mathlib.Tactic.induction' => Linter.logLintIf linter.style.induction stx' msg
+      | ``Lean.Parser.Tactic.tacticAdmit => Linter.logLintIf linter.style.admit stx' msg
+      | ``Lean.Parser.Tactic.nativeDecide | ``Lean.Parser.Tactic.decide =>
+        Linter.logLintIf linter.style.nativeDecide stx' msg
+      | `MaxHeartbeats => Linter.logLintIf linter.style.maxHeartbeats stx' msg
+      | _ => continue) stx
 
 中文:
 定义 deprecatedSyntaxLinter
@@ -297,7 +410,28 @@ definition deprecatedSyntaxLinter
       getLinterValue linter.style.cases (← getLinterOptions) ||
       getLinterValue linter.style.induction (← getLinterOptions) ||
       getLinterValue linter.style.admit (← getLinterOptions) ||
-      getLinterValue linter.style
+      getLinterValue linter.style.maxHeartbeats (← getLinterOptions) ||
+      getLinterValue linter.style.nativeDecide (← getLinterOptions) do
+    return
+  if (← MonadState.get).messages.hasErrors then
+    return
+  let deprecations := getDeprecatedSyntax stx
+  -- Using `withSetOptionIn` here, allows the linter to parse also the "leading" `set_option`s
+  -- but then flagging them only if the corresponding option is still set after elaborating the
+  -- leading `set_option`s.
+  -- In particular, this means that the linter "sees" `set_option maxHeartbeats 10 in ...`,
+  -- records it in `deprecations` and then acts on it, according to the correct options.
+  (withSetOptionIn fun _ => do
+    for (kind, stx', msg) in deprecations do
+      match kind with
+      | ``Lean.Parser.Tactic.refine' => Linter.logLintIf linter.style.refine stx' msg
+      | `Mathlib.Tactic.cases' => Linter.logLintIf linter.style.cases stx' msg
+      | `Mathlib.Tactic.induction' => Linter.logLintIf linter.style.induction stx' msg
+      | ``Lean.Parser.Tactic.tacticAdmit => Linter.logLintIf linter.style.admit stx' msg
+      | ``Lean.Parser.Tactic.nativeDecide | ``Lean.Parser.Tactic.decide =>
+        Linter.logLintIf linter.style.nativeDecide stx' msg
+      | `MaxHeartbeats => Linter.logLintIf linter.style.maxHeartbeats stx' msg
+      | _ => continue) stx
 -/
 def deprecatedSyntaxLinter : Linter where run stx := do
   unless getLinterValue linter.style.refine (← getLinterOptions) ||

@@ -157,7 +157,12 @@ theorem localization_surjective
   obtain ⟨r₁, s, rfl⟩ := IsLocalization.exists_mk'_eq S r'
   rsuffices ⟨r₂, h⟩ : exists r : R, IsLocalization.mk' L 1 s = algebraMap R L r
   · exact ⟨r₁ * r₂, by rw [IsLocalization.mk'_eq_mul_mk'_one, map_mul, h]⟩
-  obtain ⟨n, r, hr⟩ := IsArtinian.exists_pow_succ_smul_dvd (s : R) (1 : 
+  obtain ⟨n, r, hr⟩ := IsArtinian.exists_pow_succ_smul_dvd (s : R) (1 : R)
+  use r
+  rw [smul_eq_mul]; rw [smul_eq_mul]; rw [pow_succ]; rw [mul_assoc] at hr
+  apply_fun algebraMap R L at hr
+  simp only [map_mul] at hr
+  rw [← IsLocalization.mk'_one (M := S) L]; rw [IsLocalization.mk'_eq_iff_eq]; rw [mul_one]; rw [Submonoid.coe_one]; rw [← (IsLocalization.map_units L (s ^ n)).mul_left_cancel hr]; rw [map_mul]
 
 中文:
 定理 localization_surjective
@@ -167,7 +172,12 @@ theorem localization_surjective
   obtain ⟨r₁, s, rfl⟩ := IsLocalization.exists_mk'_eq S r'
   rsuffices ⟨r₂, h⟩ : exists r : R, IsLocalization.mk' L 1 s = algebraMap R L r
   · exact ⟨r₁ * r₂, by rw [IsLocalization.mk'_eq_mul_mk'_one, map_mul, h]⟩
-  obtain ⟨n, r, hr⟩ := IsArtinian.exists_pow_succ_smul_dvd (s : R) (1 : 
+  obtain ⟨n, r, hr⟩ := IsArtinian.exists_pow_succ_smul_dvd (s : R) (1 : R)
+  use r
+  rw [smul_eq_mul]; rw [smul_eq_mul]; rw [pow_succ]; rw [mul_assoc] at hr
+  apply_fun algebraMap R L at hr
+  simp only [map_mul] at hr
+  rw [← IsLocalization.mk'_one (M := S) L]; rw [IsLocalization.mk'_eq_iff_eq]; rw [mul_one]; rw [Submonoid.coe_one]; rw [← (IsLocalization.map_units L (s ^ n)).mul_left_cancel hr]; rw [map_mul]
 
 Depends on / 依赖: IsArtinian, IsArtinian.exists_pow_succ_smul_dvd, IsLocalization, IsLocalization.exists_mk, IsLocalization.mk, _eq_iff_, _eq_mul_mk, _one, algebraMap, apply_fun, exists_mk, exists_pow_succ_smul_dvd, map_mul, mul_assoc, pow_succ, rsuffices, smul_eq_mul
 -/

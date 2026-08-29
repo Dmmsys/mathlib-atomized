@@ -998,7 +998,15 @@ lemma induction
   Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
     suffices motive (single a (f a) + f.erase a) by rwa [single_add_erase] at this
     classical
-      apply s
+      apply single_add
+      · rw [support_erase, mem_erase]
+        exact fun H => H.1 rfl
+      · rw [← mem_support_iff, hf]
+        exact mem_cons_self _ _
+      · apply ih _ _
+        rw [support_erase]; rw [hf]; rw [Finset.erase_cons]
+
+@[elab_as_elim]
 
 中文:
 引理 induction
@@ -1008,7 +1016,15 @@ lemma induction
   Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
     suffices motive (single a (f a) + f.erase a) by rwa [single_add_erase] at this
     classical
-      apply s
+      apply single_add
+      · rw [support_erase, mem_erase]
+        exact fun H => H.1 rfl
+      · rw [← mem_support_iff, hf]
+        exact mem_cons_self _ _
+      · apply ih _ _
+        rw [support_erase]; rw [hf]; rw [Finset.erase_cons]
+
+@[elab_as_elim]
 -/
 protected lemma induction {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M) (zero : motive 0)
     (single_add : forall (a b) (f : ι ->₀ M),
@@ -1098,7 +1114,11 @@ lemma induction_on_max
   refine fun s => s.induction_on_max (fun f h => ?_) (fun a s hm hf f hs => ?_)
   · rwa [support_eq_empty.1 h]
   · have hs' : (erase a f).support = s := by
-      rw [support_erase]; rw [hs]; rw [erase_insert (fun ha 
+      rw [support_erase]; rw [hs]; rw [erase_insert (fun ha => (hm a ha).false)]
+    rw [← single_add_erase a f]
+    refine single_add _ _ _ (fun c hc => hm _ <| hs'.symm ▸ hc) ?_ (hf _ hs')
+    rw [← mem_support_iff]; rw [hs]
+    exact mem_insert_self a s
 
 中文:
 引理 induction_on_max
@@ -1108,7 +1128,11 @@ lemma induction_on_max
   refine fun s => s.induction_on_max (fun f h => ?_) (fun a s hm hf f hs => ?_)
   · rwa [support_eq_empty.1 h]
   · have hs' : (erase a f).support = s := by
-      rw [support_erase]; rw [hs]; rw [erase_insert (fun ha 
+      rw [support_erase]; rw [hs]; rw [erase_insert (fun ha => (hm a ha).false)]
+    rw [← single_add_erase a f]
+    refine single_add _ _ _ (fun c hc => hm _ <| hs'.symm ▸ hc) ?_ (hf _ hs')
+    rw [← mem_support_iff]; rw [hs]
+    exact mem_insert_self a s
 
 Depends on / 依赖: erase_insert, f.support, induction_on_max, mem_insert_self, mem_support_iff, motive, s.induction_on_max, single_add, single_add_erase, support, support_eq_empty, support_erase
 -/

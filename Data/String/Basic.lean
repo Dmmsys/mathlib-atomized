@@ -70,7 +70,7 @@ definition ltb.inductionOn.{u}
         ind it₁.s it₂.s it₁.i it₂.i h₂ h₁ heq (inductionOn it₁.next it₂.next ind eq base₁ base₂)
       else eq it₁.s it₂.s it₁.i it₂.i h₂ h₁ heq
     else base₁ it₁.s it₂.s it₁.i it₂.i h₂ h₁
-  else base₂ it₁
+  else base₂ it₁.s it₂.s it₁.i it₂.i h₂
 
 中文:
 定义 ltb.inductionOn.{u}
@@ -81,7 +81,7 @@ definition ltb.inductionOn.{u}
         ind it₁.s it₂.s it₁.i it₂.i h₂ h₁ heq (inductionOn it₁.next it₂.next ind eq base₁ base₂)
       else eq it₁.s it₂.s it₁.i it₂.i h₂ h₁ heq
     else base₁ it₁.s it₂.s it₁.i it₂.i h₂ h₁
-  else base₂ it₁
+  else base₂ it₁.s it₂.s it₁.i it₂.i h₂
 -/
 @[no_expose] def ltb.inductionOn.{u} {motive : Legacy.Iterator -> Legacy.Iterator -> Sort u}
     (it₁ it₂ : Legacy.Iterator)
@@ -114,7 +114,17 @@ theorem ltb_cons_addChar'
   fun_induction ltb s₁ s₂ with
   | case1 s₁ s₂ h₁ h₂ h ih =>
     rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_pos (by simpa using h₁)]; rw [if_pos (by simpa using h₂)]; rw [if_pos]; rw [← ih]
-    · simp only [Legacy.Iterator.next, Pos.Raw.
+    · simp only [Legacy.Iterator.next, Pos.Raw.next, get_cons_addChar, ofList_toList]
+      congr 2 <;> apply Pos.Raw.add_char_right_comm
+    · simpa only [Legacy.Iterator.curr, get_cons_addChar, ofList_toList] using h
+  | case2 s₁ s₂ h₁ h₂ h =>
+    rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_pos (by simpa using h₁)]; rw [if_pos (by simpa using h₂)]; rw [if_neg]
+    · simp only [Legacy.Iterator.curr, get_cons_addChar, ofList_toList]
+    · simpa only [Legacy.Iterator.curr, get_cons_addChar, ofList_toList] using h
+  | case3 s₁ s₂ h₁ h₂ =>
+    rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_pos (by simpa using h₁)]; rw [if_neg (by simpa using h₂)]
+  | case4 s₁ s₂ h₁ =>
+    rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_neg (by simpa using h₁)]
 
 中文:
 定理 ltb_cons_addChar'
@@ -123,7 +133,17 @@ theorem ltb_cons_addChar'
   fun_induction ltb s₁ s₂ with
   | case1 s₁ s₂ h₁ h₂ h ih =>
     rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_pos (by simpa using h₁)]; rw [if_pos (by simpa using h₂)]; rw [if_pos]; rw [← ih]
-    · simp only [Legacy.Iterator.next, Pos.Raw.
+    · simp only [Legacy.Iterator.next, Pos.Raw.next, get_cons_addChar, ofList_toList]
+      congr 2 <;> apply Pos.Raw.add_char_right_comm
+    · simpa only [Legacy.Iterator.curr, get_cons_addChar, ofList_toList] using h
+  | case2 s₁ s₂ h₁ h₂ h =>
+    rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_pos (by simpa using h₁)]; rw [if_pos (by simpa using h₂)]; rw [if_neg]
+    · simp only [Legacy.Iterator.curr, get_cons_addChar, ofList_toList]
+    · simpa only [Legacy.Iterator.curr, get_cons_addChar, ofList_toList] using h
+  | case3 s₁ s₂ h₁ h₂ =>
+    rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_pos (by simpa using h₁)]; rw [if_neg (by simpa using h₂)]
+  | case4 s₁ s₂ h₁ =>
+    rw [ltb]; rw [Legacy.Iterator.hasNext_cons_addChar]; rw [if_neg (by simpa using h₁)]
 
 Depends on / 依赖: Iterator, Legacy, Legacy.Iter, Legacy.Iterator.curr, Legacy.Iterator.hasNext_cons_addChar, Legacy.Iterator.next, Pos.Raw.add_char_right_comm, Pos.Raw.next, add_char_right_comm, fun_induction, get_cons_addChar, hasNext_cons_addChar, if_pos, ofList_toList
 -/
@@ -208,7 +228,32 @@ theorem lt_iff_ltb
   simp only [lt_iff_toList_lt, String.Legacy.iter, String.Legacy.mkIterator, String.toList_ofList]
   induction s₁ generalizing s₂ <;> cases s₂
   · unfold ltb; decide
-  · rename_i c₂ cs₂; apply iff_
+  · rename_i c₂ cs₂; apply iff_of_true
+    · unfold ltb
+      simp [Legacy.Iterator.hasNext, Char.utf8Size_pos]
+    · apply List.nil_lt_cons
+  · rename_i c₁ cs₁ ih; apply iff_of_false
+    · unfold ltb
+      simp [Legacy.Iterator.hasNext]
+    · apply not_lt_of_gt; apply List.nil_lt_cons
+  · rename_i c₁ cs₁ ih c₂ cs₂; unfold ltb
+    simp only [Legacy.Iterator.hasNext, Pos.Raw.byteIdx_zero, rawEndPos_ofList, utf8Len_cons,
+      add_pos_iff, Char.utf8Size_pos, or_true, decide_true, ↓reduceIte, Legacy.Iterator.curr,
+      Pos.Raw.get, String.toList_ofList, Pos.Raw.utf8GetAux, Legacy.Iterator.next, Pos.Raw.next,
+      Bool.ite_eq_true_distrib, decide_eq_true_eq]
+    split_ifs with h
+    · subst c₂
+      suffices ltb ⟨ofList (c₁ :: cs₁), (0 : Pos.Raw) + c₁⟩
+          ⟨ofList (c₁ :: cs₂), (0 : Pos.Raw) + c₁⟩ =
+            ltb ⟨ofList cs₁, 0⟩ ⟨ofList cs₂, 0⟩ by
+        rw [this]; exact (ih cs₂).trans List.lex_cons_iff.symm
+      apply ltb_cons_addChar
+    · refine ⟨List.Lex.rel, fun e => ?_⟩
+      cases e <;> rename_i h'
+      · assumption
+      · contradiction
+
+@[deprecated "Use the new String API" (since := "2026-04-01")]
 
 中文:
 定理 lt_iff_ltb
@@ -220,7 +265,32 @@ theorem lt_iff_ltb
   simp only [lt_iff_toList_lt, String.Legacy.iter, String.Legacy.mkIterator, String.toList_ofList]
   induction s₁ generalizing s₂ <;> cases s₂
   · unfold ltb; decide
-  · rename_i c₂ cs₂; apply iff_
+  · rename_i c₂ cs₂; apply iff_of_true
+    · unfold ltb
+      simp [Legacy.Iterator.hasNext, Char.utf8Size_pos]
+    · apply List.nil_lt_cons
+  · rename_i c₁ cs₁ ih; apply iff_of_false
+    · unfold ltb
+      simp [Legacy.Iterator.hasNext]
+    · apply not_lt_of_gt; apply List.nil_lt_cons
+  · rename_i c₁ cs₁ ih c₂ cs₂; unfold ltb
+    simp only [Legacy.Iterator.hasNext, Pos.Raw.byteIdx_zero, rawEndPos_ofList, utf8Len_cons,
+      add_pos_iff, Char.utf8Size_pos, or_true, decide_true, ↓reduceIte, Legacy.Iterator.curr,
+      Pos.Raw.get, String.toList_ofList, Pos.Raw.utf8GetAux, Legacy.Iterator.next, Pos.Raw.next,
+      Bool.ite_eq_true_distrib, decide_eq_true_eq]
+    split_ifs with h
+    · subst c₂
+      suffices ltb ⟨ofList (c₁ :: cs₁), (0 : Pos.Raw) + c₁⟩
+          ⟨ofList (c₁ :: cs₂), (0 : Pos.Raw) + c₁⟩ =
+            ltb ⟨ofList cs₁, 0⟩ ⟨ofList cs₂, 0⟩ by
+        rw [this]; exact (ih cs₂).trans List.lex_cons_iff.symm
+      apply ltb_cons_addChar
+    · refine ⟨List.Lex.rel, fun e => ?_⟩
+      cases e <;> rename_i h'
+      · assumption
+      · contradiction
+
+@[deprecated "Use the new String API" (since := "2026-04-01")]
 
 Depends on / 依赖: Char.utf8Size_pos, Iff.comm, Iterator, Legacy, Legacy.Iterator.hasNext, List.nil_lt_cons, String.Legacy.iter, String.Legacy.mkIterator, String.toList_ofList, exists_eq_ofList, generalizing, hasNext, iff_of_false, iff_of_true, lt_iff_toList_lt, mkIterator, nil_lt_cons, not_lt_of_gt, rename_i, toList_ofList
 -/
@@ -361,7 +431,13 @@ instance :
   le_antisymm a b := by
     simp only [le_iff_toList_le, ← toList_inj]
     apply le_antisymm
-  le_t
+  le_total a b := by
+    simp only [le_iff_toList_le]
+    apply le_total
+  toDecidableLE := inferInstance
+  toDecidableEq := inferInstance
+  toDecidableLT := String.decidableLT
+  compare_eq_compareOfLessAndEq a b := by simp [Ord.compare, String.compare]
 
 中文:
 实例 :
@@ -375,7 +451,13 @@ instance :
   le_antisymm a b := by
     simp only [le_iff_toList_le, ← toList_inj]
     apply le_antisymm
-  le_t
+  le_total a b := by
+    simp only [le_iff_toList_le]
+    apply le_total
+  toDecidableLE := inferInstance
+  toDecidableEq := inferInstance
+  toDecidableLT := String.decidableLT
+  compare_eq_compareOfLessAndEq a b := by simp [Ord.compare, String.compare]
 
 Depends on / 依赖: le_iff_toList_le, le_iff_toList_le.mpr, le_rfl
 -/

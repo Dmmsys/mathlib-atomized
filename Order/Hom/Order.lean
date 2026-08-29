@@ -467,7 +467,17 @@ theorem iterate_sup_le_sup_iff
       | succ n ih =>
         intro a₁ a₂
         calc
-          f^[n + 1] (a₁ ⊔ a₂) = f^[n] (f
+          f^[n + 1] (a₁ ⊔ a₂) = f^[n] (f (a₁ ⊔ a₂)) := Function.iterate_succ_apply f n _
+          _ <= f^[n] (f a₁ ⊔ a₂) := f.mono.iterate n (h a₁ a₂)
+          _ <= f^[n] (f a₁) ⊔ a₂ := ih _ _
+          _ = f^[n + 1] a₁ ⊔ a₂ := by rw [← Function.iterate_succ_apply]
+    calc
+      f^[n₁ + n₂] (a₁ ⊔ a₂) = f^[n₁] (f^[n₂] (a₁ ⊔ a₂)) :=
+        Function.iterate_add_apply f n₁ n₂ _
+      _ = f^[n₁] (f^[n₂] (a₂ ⊔ a₁)) := by rw [sup_comm]
+      _ <= f^[n₁] (f^[n₂] a₂ ⊔ a₁) := f.mono.iterate n₁ (h' n₂ _ _)
+      _ = f^[n₁] (a₁ ⊔ f^[n₂] a₂) := by rw [sup_comm]
+      _ <= f^[n₁] a₁ ⊔ f^[n₂] a₂ := h' n₁ a₁ _
 
 中文:
 定理 iterate_sup_le_sup_iff
@@ -483,7 +493,17 @@ theorem iterate_sup_le_sup_iff
       | succ n ih =>
         intro a₁ a₂
         calc
-          f^[n + 1] (a₁ ⊔ a₂) = f^[n] (f
+          f^[n + 1] (a₁ ⊔ a₂) = f^[n] (f (a₁ ⊔ a₂)) := Function.iterate_succ_apply f n _
+          _ <= f^[n] (f a₁ ⊔ a₂) := f.mono.iterate n (h a₁ a₂)
+          _ <= f^[n] (f a₁) ⊔ a₂ := ih _ _
+          _ = f^[n + 1] a₁ ⊔ a₂ := by rw [← Function.iterate_succ_apply]
+    calc
+      f^[n₁ + n₂] (a₁ ⊔ a₂) = f^[n₁] (f^[n₂] (a₁ ⊔ a₂)) :=
+        Function.iterate_add_apply f n₁ n₂ _
+      _ = f^[n₁] (f^[n₂] (a₂ ⊔ a₁)) := by rw [sup_comm]
+      _ <= f^[n₁] (f^[n₂] a₂ ⊔ a₁) := f.mono.iterate n₁ (h' n₂ _ _)
+      _ = f^[n₁] (a₁ ⊔ f^[n₂] a₂) := by rw [sup_comm]
+      _ <= f^[n₁] a₁ ⊔ f^[n₂] a₂ := h' n₁ a₁ _
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, f.mono.iterate, iterate, iterate_succ_apply
 -/

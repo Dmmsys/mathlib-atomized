@@ -77,14 +77,32 @@ theorem sign_discr
   proof: by
   classical
   have : 0 <= (discr K : Complex) ↔ Even (nrComplexPlaces K) := by
-    rw [discr_eq_basisMatrix_det_sq]; rw [Complex.sq_nonneg_iff]; rw [← conj_eq_iff_im]; rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [conj_basisMatrix]; rw [reindex_apply]; rw [Equiv.refl_symm]; rw [Equiv.co
+    rw [discr_eq_basisMatrix_det_sq]; rw [Complex.sq_nonneg_iff]; rw [← conj_eq_iff_im]; rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [conj_basisMatrix]; rw [reindex_apply]; rw [Equiv.refl_symm]; rw [Equiv.coe_refl]; rw [Function.Involutive.toPerm_symm]; rw [det_permute']; rw [mul_eq_right₀]; rw [ComplexEmbedding.conjugate_sign]
+    · simp only [Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one, Int.reduceNeg,
+        Int.cast_pow, Int.cast_neg, Int.cast_one]
+      rw [neg_one_pow_eq_one_iff_even (by norm_num)]
+    · exact det_of_basisMatrix_non_zero K
+  obtain h | h | h := Int.lt_trichotomy 0 (discr K)
+  · rw [Int.sign_eq_one_of_pos h, Even.neg_one_pow (this.mp <| Int.cast_nonneg h.le)]
+  · grind [discr_ne_zero]
+  · rw [Int.sign_eq_neg_one_of_neg h, Odd.neg_one_pow]
+    rwa [← Nat.not_even_iff_odd, ← this, Int.cast_nonneg_iff, not_le]
 
 中文:
 定理 sign_discr
   证明: by
   classical
   have : 0 <= (discr K : Complex) ↔ Even (nrComplexPlaces K) := by
-    rw [discr_eq_basisMatrix_det_sq]; rw [Complex.sq_nonneg_iff]; rw [← conj_eq_iff_im]; rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [conj_basisMatrix]; rw [reindex_apply]; rw [Equiv.refl_symm]; rw [Equiv.co
+    rw [discr_eq_basisMatrix_det_sq]; rw [Complex.sq_nonneg_iff]; rw [← conj_eq_iff_im]; rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [conj_basisMatrix]; rw [reindex_apply]; rw [Equiv.refl_symm]; rw [Equiv.coe_refl]; rw [Function.Involutive.toPerm_symm]; rw [det_permute']; rw [mul_eq_right₀]; rw [ComplexEmbedding.conjugate_sign]
+    · simp only [Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one, Int.reduceNeg,
+        Int.cast_pow, Int.cast_neg, Int.cast_one]
+      rw [neg_one_pow_eq_one_iff_even (by norm_num)]
+    · exact det_of_basisMatrix_non_zero K
+  obtain h | h | h := Int.lt_trichotomy 0 (discr K)
+  · rw [Int.sign_eq_one_of_pos h, Even.neg_one_pow (this.mp <| Int.cast_nonneg h.le)]
+  · grind [discr_ne_zero]
+  · rw [Int.sign_eq_neg_one_of_neg h, Odd.neg_one_pow]
+    rwa [← Nat.not_even_iff_odd, ← this, Int.cast_nonneg_iff, not_le]
 
 Depends on / 依赖: Complex.sq_nonneg_iff, ComplexEmbedding, ComplexEmbedding.conjugate_sign, Equiv.coe_refl, Equiv.refl_symm, Function, Function.Involutive.toPerm_symm, Int.reduceNeg, Involutive, RingHom, RingHom.mapMatrix_apply, RingHom.map_det, Units.val_neg, Units.val_one, Units.val_pow_eq_pow_val, classical, coe_refl, conj_basisMatrix, conj_eq_iff_im, conjugate_sign
 -/
@@ -175,7 +193,27 @@ theorem _root_.NumberField.mixedEmbedding.volume_fundamentalDomain_latticeBasis
   let f : Module.Free.ChooseBasisIndex Int (𝓞 K) ≃ (K ->+* Complex) :=
     (canonicalEmbedding.latticeBasis K).indexEquiv (Pi.basisFun Complex _)
   let e : (index K) ≃ Module.Free.ChooseBasisIndex Int (𝓞 K) := (indexEquiv K).trans f.symm
-  let M := (mixedEmbedding.stdBasis K).toMatrix ((latticeBa
+  let M := (mixedEmbedding.stdBasis K).toMatrix ((latticeBasis K).reindex e.symm)
+  let N := Algebra.embeddingsMatrixReindex Rat Complex (integralBasis K ∘ f.symm)
+    (RingHom.equivRatAlgHom K Complex)
+  suffices M.map ofRealHom = matrixToStdBasis K *
+      (Matrix.reindex (indexEquiv K).symm (indexEquiv K).symm N).transpose by
+    calc volume (fundamentalDomain (latticeBasis K))
+      _ = ‖((mixedEmbedding.stdBasis K).toMatrix ((latticeBasis K).reindex e.symm)).det‖₊ := by
+        rw [← fundamentalDomain_reindex _ e.symm]; rw [← norm_toNNReal]; rw [measure_fundamentalDomain
+          ((latticeBasis K).reindex e.symm)]; rw [volume_fundamentalDomain_stdBasis]; rw [mul_one]
+        rfl
+      _ = ‖(matrixToStdBasis K).det * N.det‖₊ := by
+        rw [← nnnorm_real]; rw [← ofRealHom_eq_coe]; rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [this]; rw [det_mul]; rw [det_transpose]; rw [det_reindex_self]
+      _ = (2 : Real>=0∞)⁻¹ ^ Fintype.card {w : InfinitePlace K // IsComplex w} * sqrt ‖N.det ^ 2‖₊ := by
+        have : ‖Complex.I‖₊ = 1 := by rw [← norm_toNNReal, norm_I, Real.toNNReal_one]
+        rw [det_matrixToStdBasis]; rw [nnnorm_mul]; rw [nnnorm_pow]; rw [nnnorm_mul]; rw [this]; rw [mul_one]; rw [nnnorm_inv]; rw [coe_mul]; rw [ENNReal.coe_pow]; rw [← norm_toNNReal]; rw [RCLike.norm_two]; rw [Real.toNNReal_ofNat]; rw [coe_inv two_ne_zero]; rw [coe_ofNat]; rw [nnnorm_pow]; rw [NNReal.sqrt_sq]
+      _ = (2 : Real>=0∞)⁻¹ ^ Fintype.card { w // IsComplex w } * NNReal.sqrt ‖discr K‖₊ := by
+        rw [← Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two]; rw [Algebra.discr_reindex]; rw [← coe_discr]; rw [map_intCast]; rw [← Complex.nnnorm_intCast]
+  ext : 2
+  dsimp only [M]
+  rw [Matrix.map_apply]; rw [Basis.toMatrix_apply]; rw [Basis.coe_reindex]; rw [Function.comp_apply]; rw [Equiv.symm_symm]; rw [latticeBasis_apply]; rw [← commMap_canonical_eq_mixed]; rw [Complex.ofRealHom_eq_coe]; rw [stdBasis_repr_eq_matrixToStdBasis_mul K _ (fun _ => rfl)]
+  rfl
 
 中文:
 定理 _root_.数域.mixedEmbedding.volume_fundamentalDomain_latticeBasis
@@ -183,7 +221,27 @@ theorem _root_.NumberField.mixedEmbedding.volume_fundamentalDomain_latticeBasis
   let f : Module.Free.ChooseBasisIndex Int (𝓞 K) ≃ (K ->+* Complex) :=
     (canonicalEmbedding.latticeBasis K).indexEquiv (Pi.basisFun Complex _)
   let e : (index K) ≃ Module.Free.ChooseBasisIndex Int (𝓞 K) := (indexEquiv K).trans f.symm
-  let M := (mixedEmbedding.stdBasis K).toMatrix ((latticeBa
+  let M := (mixedEmbedding.stdBasis K).toMatrix ((latticeBasis K).reindex e.symm)
+  let N := Algebra.embeddingsMatrixReindex Rat Complex (integralBasis K ∘ f.symm)
+    (RingHom.equivRatAlgHom K Complex)
+  suffices M.map ofRealHom = matrixToStdBasis K *
+      (Matrix.reindex (indexEquiv K).symm (indexEquiv K).symm N).transpose by
+    calc volume (fundamentalDomain (latticeBasis K))
+      _ = ‖((mixedEmbedding.stdBasis K).toMatrix ((latticeBasis K).reindex e.symm)).det‖₊ := by
+        rw [← fundamentalDomain_reindex _ e.symm]; rw [← norm_toNNReal]; rw [measure_fundamentalDomain
+          ((latticeBasis K).reindex e.symm)]; rw [volume_fundamentalDomain_stdBasis]; rw [mul_one]
+        rfl
+      _ = ‖(matrixToStdBasis K).det * N.det‖₊ := by
+        rw [← nnnorm_real]; rw [← ofRealHom_eq_coe]; rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]; rw [this]; rw [det_mul]; rw [det_transpose]; rw [det_reindex_self]
+      _ = (2 : Real>=0∞)⁻¹ ^ Fintype.card {w : InfinitePlace K // IsComplex w} * sqrt ‖N.det ^ 2‖₊ := by
+        have : ‖Complex.I‖₊ = 1 := by rw [← norm_toNNReal, norm_I, Real.toNNReal_one]
+        rw [det_matrixToStdBasis]; rw [nnnorm_mul]; rw [nnnorm_pow]; rw [nnnorm_mul]; rw [this]; rw [mul_one]; rw [nnnorm_inv]; rw [coe_mul]; rw [ENNReal.coe_pow]; rw [← norm_toNNReal]; rw [RCLike.norm_two]; rw [Real.toNNReal_ofNat]; rw [coe_inv two_ne_zero]; rw [coe_ofNat]; rw [nnnorm_pow]; rw [NNReal.sqrt_sq]
+      _ = (2 : Real>=0∞)⁻¹ ^ Fintype.card { w // IsComplex w } * NNReal.sqrt ‖discr K‖₊ := by
+        rw [← Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two]; rw [Algebra.discr_reindex]; rw [← coe_discr]; rw [map_intCast]; rw [← Complex.nnnorm_intCast]
+  ext : 2
+  dsimp only [M]
+  rw [Matrix.map_apply]; rw [Basis.toMatrix_apply]; rw [Basis.coe_reindex]; rw [Function.comp_apply]; rw [Equiv.symm_symm]; rw [latticeBasis_apply]; rw [← commMap_canonical_eq_mixed]; rw [Complex.ofRealHom_eq_coe]; rw [stdBasis_repr_eq_matrixToStdBasis_mul K _ (fun _ => rfl)]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.embeddingsMatrixReindex, ChooseBasisIndex, M.map, Matrix, Matrix.reindex, Module, Module.Free.ChooseBasisIndex, Pi.basisFun, RingHom, RingHom.equivRatAlgHom, basisFun, canonicalEmbedding, canonicalEmbedding.latticeBasis, e.symm, embeddingsMatrixReindex, equivRatAlgHom, f.symm, indexEq, indexEquiv
 -/
@@ -222,12 +280,12 @@ theorem `_root_.NumberField.mixedEmbedding.covolume_integerLattice` / 定理 `_r
 English:
 theorem _root_.NumberField.mixedEmbedding.covolume_integerLattice
   proof: by
-  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_integerLattice K)]; rw [measureReal_def]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqr
+  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_integerLattice K)]; rw [measureReal_def]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqrt]; rw [coe_nnnorm]; rw [Int.norm_eq_abs]
 
 中文:
 定理 _root_.数域.mixedEmbedding.covolume_integerLattice
   证明: by
-  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_integerLattice K)]; rw [measureReal_def]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqr
+  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_integerLattice K)]; rw [measureReal_def]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqrt]; rw [coe_nnnorm]; rw [Int.norm_eq_abs]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_toReal, ENNReal.toReal_inv, ENNReal.toReal_mul, ENNReal.toReal_pow, Int.norm_eq_abs, Real.coe_sqrt, ZLattice, ZLattice.covolume_eq_measure_fundamentalDomain, coe_nnnorm, coe_sqrt, coe_toReal, covolume_eq_measure_fundamentalDomain, fundamentalDomain_integerLattice, measureReal_def, norm_eq_abs, toReal_inv, toReal_mul, toReal_ofNat, toReal_pow
 -/
@@ -244,13 +302,13 @@ English:
 theorem _root_.NumberField.mixedEmbedding.covolume_idealLattice
   given: (I : (FractionalIdeal (𝓞 K)⁰ K)ˣ)
   proof: by
-  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_idealLattice K I)]; rw [measureReal_def]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; r
+  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_idealLattice K I)]; rw [measureReal_def]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqrt]; rw [coe_nnnorm]; rw [Int.norm_eq_abs]; rw [ENNReal.toReal_ofReal (Rat.cast_nonneg.mpr (FractionalIdeal.absNorm_nonneg I.val))]; rw [mul_assoc]
 
 中文:
 定理 _root_.数域.mixedEmbedding.covolume_idealLattice
   条件: (I : (FractionalIdeal (𝓞 K)⁰ K)ˣ)
   证明: by
-  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_idealLattice K I)]; rw [measureReal_def]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; r
+  rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_idealLattice K I)]; rw [measureReal_def]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqrt]; rw [coe_nnnorm]; rw [Int.norm_eq_abs]; rw [ENNReal.toReal_ofReal (Rat.cast_nonneg.mpr (FractionalIdeal.absNorm_nonneg I.val))]; rw [mul_assoc]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_toReal, ENNReal.toReal_inv, ENNReal.toReal_mul, ENNReal.toReal_ofReal, ENNReal.toReal_pow, FractionalIdeal, FractionalIdeal.absNorm_non, Int.norm_eq_abs, Rat.cast_nonneg.mpr, Real.coe_sqrt, ZLattice, ZLattice.covolume_eq_measure_fundamentalDomain, absNorm_non, cast_nonneg, coe_nnnorm, coe_sqrt, coe_toReal, covolume_eq_measure_fundamentalDomain, fundamentalDomain_idealLattice
 -/
@@ -272,7 +330,41 @@ theorem exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr
   let B := (minkowskiBound K I * (convexBodySumFactor K)⁻¹).toReal ^ (1 / (finrank Rat K : Real))
   have h_le : (minkowskiBound K I) <= volume (convexBodySum K B) := by
     refine le_of_eq ?_
-    rw [convexBody
+    rw [convexBodySum_volume]; rw [← ENNReal.ofReal_pow (by positivity)]; rw [← Real.rpow_natCast]; rw [← Real.rpow_mul toReal_nonneg]; rw [div_mul_cancel₀]; rw [Real.rpow_one]; rw [ofReal_toReal]; rw [mul_comm]; rw [mul_assoc]; rw [← coe_mul]; rw [inv_mul_cancel₀ (convexBodySumFactor_ne_zero K)]; rw [ENNReal.coe_one]; rw [mul_one]
+    · exact mul_ne_top (ne_of_lt (minkowskiBound_lt_top K I)) coe_ne_top
+    · exact (Nat.cast_ne_zero.mpr (ne_of_gt finrank_pos))
+  convert! exists_ne_zero_mem_ideal_of_norm_le K I h_le
+  rw [div_pow B]; rw [← Real.rpow_natCast B]; rw [← Real.rpow_mul (by positivity)]; rw [div_mul_cancel₀ _
+    (Nat.cast_ne_zero.mpr <| ne_of_gt finrank_pos)]; rw [Real.rpow_one]; rw [mul_comm_div]; rw [mul_div_assoc']
+  congr 1
+  rw [eq_comm]
+  calc
+    _ = FractionalIdeal.absNorm I.1 * (2 : Real)⁻¹ ^ nrComplexPlaces K * sqrt ‖discr K‖₊ *
+          (2 : Real) ^ finrank Rat K * ((2 : Real) ^ nrRealPlaces K * (π / 2) ^ nrComplexPlaces K /
+            (Nat.factorial (finrank Rat K)))⁻¹ := by
+      simp_rw [minkowskiBound, convexBodySumFactor,
+        volume_fundamentalDomain_fractionalIdealLatticeBasis,
+        volume_fundamentalDomain_latticeBasis, toReal_mul, toReal_pow, toReal_inv, coe_toReal,
+        toReal_ofNat, mixedEmbedding.finrank, mul_assoc]
+      rw [ENNReal.toReal_ofReal (Rat.cast_nonneg.mpr (FractionalIdeal.absNorm_nonneg I.1))]
+      simp_rw [NNReal.coe_inv, NNReal.coe_div, NNReal.coe_mul, NNReal.coe_pow, NNReal.coe_div,
+        coe_real_pi, NNReal.coe_ofNat, NNReal.coe_natCast]
+    _ = FractionalIdeal.absNorm I.1 * (2 : Real) ^ (finrank Rat K - nrComplexPlaces K - nrRealPlaces K +
+          nrComplexPlaces K : Int) * Real.sqrt ‖discr K‖ * Nat.factorial (finrank Rat K) *
+            π⁻¹ ^ (nrComplexPlaces K) := by
+      simp_rw [inv_div, div_eq_mul_inv, mul_inv, ← zpow_neg_one, ← zpow_natCast, mul_zpow,
+        ← zpow_mul, neg_one_mul, mul_neg_one, neg_neg, Real.coe_sqrt, coe_nnnorm, sub_eq_add_neg,
+        zpow_add₀ (two_ne_zero : (2 : Real) != 0)]
+      ring
+    _ = FractionalIdeal.absNorm I.1 * (2 : Real) ^ (2 * nrComplexPlaces K : Int) * Real.sqrt ‖discr K‖ *
+          Nat.factorial (finrank Rat K) * π⁻¹ ^ (nrComplexPlaces K) := by
+      congr
+      rw [← card_add_two_mul_card_eq_rank]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Nat.cast_ofNat]
+      ring
+    _ = FractionalIdeal.absNorm I.1 * (4 / π) ^ nrComplexPlaces K * (finrank Rat K).factorial *
+          Real.sqrt |discr K| := by
+      rw [Int.norm_eq_abs]; rw [zpow_mul]; rw [show (2 : Real) ^ (2 : Int) = 4 by norm_cast]; rw [div_pow]; rw [inv_eq_one_div]; rw [div_pow]; rw [one_pow]; rw [zpow_natCast]
+      ring
 
 中文:
 定理 存在_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr
@@ -283,7 +375,41 @@ theorem exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr
   let B := (minkowskiBound K I * (convexBodySumFactor K)⁻¹).toReal ^ (1 / (finrank Rat K : Real))
   have h_le : (minkowskiBound K I) <= volume (convexBodySum K B) := by
     refine le_of_eq ?_
-    rw [convexBody
+    rw [convexBodySum_volume]; rw [← ENNReal.ofReal_pow (by positivity)]; rw [← Real.rpow_natCast]; rw [← Real.rpow_mul toReal_nonneg]; rw [div_mul_cancel₀]; rw [Real.rpow_one]; rw [ofReal_toReal]; rw [mul_comm]; rw [mul_assoc]; rw [← coe_mul]; rw [inv_mul_cancel₀ (convexBodySumFactor_ne_zero K)]; rw [ENNReal.coe_one]; rw [mul_one]
+    · exact mul_ne_top (ne_of_lt (minkowskiBound_lt_top K I)) coe_ne_top
+    · exact (Nat.cast_ne_zero.mpr (ne_of_gt finrank_pos))
+  convert! exists_ne_zero_mem_ideal_of_norm_le K I h_le
+  rw [div_pow B]; rw [← Real.rpow_natCast B]; rw [← Real.rpow_mul (by positivity)]; rw [div_mul_cancel₀ _
+    (Nat.cast_ne_zero.mpr <| ne_of_gt finrank_pos)]; rw [Real.rpow_one]; rw [mul_comm_div]; rw [mul_div_assoc']
+  congr 1
+  rw [eq_comm]
+  calc
+    _ = FractionalIdeal.absNorm I.1 * (2 : Real)⁻¹ ^ nrComplexPlaces K * sqrt ‖discr K‖₊ *
+          (2 : Real) ^ finrank Rat K * ((2 : Real) ^ nrRealPlaces K * (π / 2) ^ nrComplexPlaces K /
+            (Nat.factorial (finrank Rat K)))⁻¹ := by
+      simp_rw [minkowskiBound, convexBodySumFactor,
+        volume_fundamentalDomain_fractionalIdealLatticeBasis,
+        volume_fundamentalDomain_latticeBasis, toReal_mul, toReal_pow, toReal_inv, coe_toReal,
+        toReal_ofNat, mixedEmbedding.finrank, mul_assoc]
+      rw [ENNReal.toReal_ofReal (Rat.cast_nonneg.mpr (FractionalIdeal.absNorm_nonneg I.1))]
+      simp_rw [NNReal.coe_inv, NNReal.coe_div, NNReal.coe_mul, NNReal.coe_pow, NNReal.coe_div,
+        coe_real_pi, NNReal.coe_ofNat, NNReal.coe_natCast]
+    _ = FractionalIdeal.absNorm I.1 * (2 : Real) ^ (finrank Rat K - nrComplexPlaces K - nrRealPlaces K +
+          nrComplexPlaces K : Int) * Real.sqrt ‖discr K‖ * Nat.factorial (finrank Rat K) *
+            π⁻¹ ^ (nrComplexPlaces K) := by
+      simp_rw [inv_div, div_eq_mul_inv, mul_inv, ← zpow_neg_one, ← zpow_natCast, mul_zpow,
+        ← zpow_mul, neg_one_mul, mul_neg_one, neg_neg, Real.coe_sqrt, coe_nnnorm, sub_eq_add_neg,
+        zpow_add₀ (two_ne_zero : (2 : Real) != 0)]
+      ring
+    _ = FractionalIdeal.absNorm I.1 * (2 : Real) ^ (2 * nrComplexPlaces K : Int) * Real.sqrt ‖discr K‖ *
+          Nat.factorial (finrank Rat K) * π⁻¹ ^ (nrComplexPlaces K) := by
+      congr
+      rw [← card_add_two_mul_card_eq_rank]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Nat.cast_ofNat]
+      ring
+    _ = FractionalIdeal.absNorm I.1 * (4 / π) ^ nrComplexPlaces K * (finrank Rat K).factorial *
+          Real.sqrt |discr K| := by
+      rw [Int.norm_eq_abs]; rw [zpow_mul]; rw [show (2 : Real) ^ (2 : Int) = 4 by norm_cast]; rw [div_pow]; rw [inv_eq_one_div]; rw [div_pow]; rw [one_pow]; rw [zpow_natCast]
+      ring
 
 Depends on / 依赖: classical
 -/
@@ -374,7 +500,14 @@ theorem abs_discr_ge'
   -- We use `exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_discr` to get a nonzero
   -- algebraic integer `x` of small norm and the fact that `1 ≤ |Norm x|` to get a lower bound
   -- on `sqrt |discr K|`.
-  obtain ⟨x, h_nz, h_bd⟩ := exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_dis
+  obtain ⟨x, h_nz, h_bd⟩ := exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_discr K
+  have h_nm : (1 : Real) <= |Algebra.norm Rat (x : K)| := by
+    rw [← Algebra.coe_norm_int]; rw [← Int.cast_one]; rw [← Int.cast_abs]; rw [Rat.cast_intCast]; rw [Int.cast_le]
+    exact Int.one_le_abs (Algebra.norm_ne_zero_iff.mpr h_nz)
+  replace h_bd := le_trans h_nm h_bd
+  rwa [← inv_mul_le_iff₀, inv_div, mul_one, Real.le_sqrt (by positivity) (by positivity),
+    ← Int.cast_abs, div_pow, mul_pow, ← pow_mul, mul_comm _ 2, ← pow_mul, mul_comm _ 2] at h_bd
+exact div_pos (by positivity) pow_pos (Nat.cast_pos.mpr finrank_pos) (finrank Rat K)
 
 中文:
 定理 abs_discr_ge'
@@ -382,7 +515,14 @@ theorem abs_discr_ge'
   -- We use `exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_discr` to get a nonzero
   -- algebraic integer `x` of small norm and the fact that `1 ≤ |Norm x|` to get a lower bound
   -- on `sqrt |discr K|`.
-  obtain ⟨x, h_nz, h_bd⟩ := exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_dis
+  obtain ⟨x, h_nz, h_bd⟩ := exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_discr K
+  have h_nm : (1 : Real) <= |Algebra.norm Rat (x : K)| := by
+    rw [← Algebra.coe_norm_int]; rw [← Int.cast_one]; rw [← Int.cast_abs]; rw [Rat.cast_intCast]; rw [Int.cast_le]
+    exact Int.one_le_abs (Algebra.norm_ne_zero_iff.mpr h_nz)
+  replace h_bd := le_trans h_nm h_bd
+  rwa [← inv_mul_le_iff₀, inv_div, mul_one, Real.le_sqrt (by positivity) (by positivity),
+    ← Int.cast_abs, div_pow, mul_pow, ← pow_mul, mul_comm _ 2, ← pow_mul, mul_comm _ 2] at h_bd
+exact div_pos (by positivity) pow_pos (Nat.cast_pos.mpr finrank_pos) (finrank Rat K)
 -/
 theorem abs_discr_ge' :
     (finrank Rat K) ^ (2 * finrank Rat K) / ((4 / π) ^ (2 * nrComplexPlaces K) *
@@ -433,7 +573,8 @@ theorem abs_discr_rpow_ge_of_isTotallyComplex
   proof: by
   have h : 0 < (finrank Rat K : Real) := Nat.cast_pos.mpr finrank_pos
   rw [← Real.rpow_le_rpow_iff (z := finrank Rat K) (by positivity) (by positivity) h]; rw [Real.div_rpow
-    (by positivity) (by positivity)]; rw [← Real.rpow_mul (by positivity)]; rw [inv_mul_cancel₀ h.ne']; rw [Real.rpow_one]
+    (by positivity) (by positivity)]; rw [← Real.rpow_mul (by positivity)]; rw [inv_mul_cancel₀ h.ne']; rw [Real.rpow_one]; rw [Real.mul_rpow (by positivity) (by positivity)]; rw [Real.rpow_natCast]; rw [Real.rpow_natCast]; rw [← pow_mul]; rw [← Real.rpow_mul (by positivity)]; rw [inv_mul_cancel_right₀ h.ne']; rw [Real.rpow_two]
+  exact abs_discr_ge_of_isTotallyComplex K
 
 中文:
 定理 abs_discr_rpow_ge_of_isTotallyComplex
@@ -441,7 +582,8 @@ theorem abs_discr_rpow_ge_of_isTotallyComplex
   证明: by
   have h : 0 < (finrank Rat K : Real) := Nat.cast_pos.mpr finrank_pos
   rw [← Real.rpow_le_rpow_iff (z := finrank Rat K) (by positivity) (by positivity) h]; rw [Real.div_rpow
-    (by positivity) (by positivity)]; rw [← Real.rpow_mul (by positivity)]; rw [inv_mul_cancel₀ h.ne']; rw [Real.rpow_one]
+    (by positivity) (by positivity)]; rw [← Real.rpow_mul (by positivity)]; rw [inv_mul_cancel₀ h.ne']; rw [Real.rpow_one]; rw [Real.mul_rpow (by positivity) (by positivity)]; rw [Real.rpow_natCast]; rw [Real.rpow_natCast]; rw [← pow_mul]; rw [← Real.rpow_mul (by positivity)]; rw [inv_mul_cancel_right₀ h.ne']; rw [Real.rpow_two]
+  exact abs_discr_ge_of_isTotallyComplex K
 
 Depends on / 依赖: Nat.cast_pos.mpr, Real.div_rpow, Real.mul_rpow, Real.rpow_le_rpow_iff, Real.rpow_mul, Real.rpow_natCast, Real.rpow_one, Real.rpow_two, cast_pos, div_rpow, finrank, finrank_pos, h.ne, mul_rpow, pow_mul, rpow_le_rpow_iff, rpow_mul, rpow_natCast, rpow_one, rpow_two
 -/
@@ -466,7 +608,29 @@ theorem abs_discr_ge
   -- The sequence `a n` is a lower bound for `|discr K|`. We prove below by induction a uniform
   -- lower bound for this sequence from which we deduce the result.
   rw [mul_comm 2 _]
-  let a : Nat -> Real := fun n => (n : Real) ^ (n * 2) / ((4 / π) ^ n * (n
+  let a : Nat -> Real := fun n => (n : Real) ^ (n * 2) / ((4 / π) ^ n * (n.factorial : Real) ^ 2)
+  suffices forall n, 2 <= n -> (4 / 9 : Real) * (3 * π / 4) ^ n <= a n by
+    refine le_trans (this (finrank Rat K) h) ?_
+    simp only [a]
+    gcongr
+    · exact (one_le_div Real.pi_pos).2 Real.pi_le_four
+    · rw [← card_add_two_mul_card_eq_rank, mul_comm]
+      exact Nat.le_add_left _ _
+  intro n hn
+  induction n, hn using Nat.le_induction with
+| base => exact le_of_eq by simp [a, Nat.factorial_two]; field
+  | succ m _ h_m =>
+      suffices (3 : Real) <= (1 + 1 / m : Real) ^ (2 * m) by
+        convert_to _ <= (a m) * (1 + 1 / m : Real) ^ (2 * m) / (4 / π)
+        · simp_rw [a, add_mul, one_mul, pow_succ, Nat.factorial_succ]
+          field_simp
+          simp [field, div_pow]
+          ring
+        · rw [_root_.le_div_iff₀ (by positivity), pow_succ]
+          convert! (mul_le_mul h_m this (by positivity) (by positivity)) using 1
+          field
+      refine le_trans (le_of_eq (by simp [field]; norm_num)) (one_add_mul_le_pow ?_ (2 * m))
+      exact le_trans (by norm_num : (-2 : Real) <= 0) (by positivity)
 
 中文:
 定理 abs_discr_ge
@@ -476,7 +640,29 @@ theorem abs_discr_ge
   -- The sequence `a n` is a lower bound for `|discr K|`. We prove below by induction a uniform
   -- lower bound for this sequence from which we deduce the result.
   rw [mul_comm 2 _]
-  let a : Nat -> Real := fun n => (n : Real) ^ (n * 2) / ((4 / π) ^ n * (n
+  let a : Nat -> Real := fun n => (n : Real) ^ (n * 2) / ((4 / π) ^ n * (n.factorial : Real) ^ 2)
+  suffices forall n, 2 <= n -> (4 / 9 : Real) * (3 * π / 4) ^ n <= a n by
+    refine le_trans (this (finrank Rat K) h) ?_
+    simp only [a]
+    gcongr
+    · exact (one_le_div Real.pi_pos).2 Real.pi_le_four
+    · rw [← card_add_two_mul_card_eq_rank, mul_comm]
+      exact Nat.le_add_left _ _
+  intro n hn
+  induction n, hn using Nat.le_induction with
+| base => exact le_of_eq by simp [a, Nat.factorial_two]; field
+  | succ m _ h_m =>
+      suffices (3 : Real) <= (1 + 1 / m : Real) ^ (2 * m) by
+        convert_to _ <= (a m) * (1 + 1 / m : Real) ^ (2 * m) / (4 / π)
+        · simp_rw [a, add_mul, one_mul, pow_succ, Nat.factorial_succ]
+          field_simp
+          simp [field, div_pow]
+          ring
+        · rw [_root_.le_div_iff₀ (by positivity), pow_succ]
+          convert! (mul_le_mul h_m this (by positivity) (by positivity)) using 1
+          field
+      refine le_trans (le_of_eq (by simp [field]; norm_num)) (one_add_mul_le_pow ?_ (2 * m))
+      exact le_trans (by norm_num : (-2 : Real) <= 0) (by positivity)
 
 Depends on / 依赖: abs_discr_ge, le_trans
 -/
@@ -601,7 +787,7 @@ refine Set.finite_coe_iff.mp Finite.of_injective
     (fun ⟨F, hF⟩ => (⟨(h F hF).choose, (h F hF).choose_spec.1⟩ : T)) (fun _ _ h_eq => ?_)
   rw [Subtype.ext_iff]; rw [Subtype.ext_iff]
   convert! congr_arg (Rat⟮·⟯) (Subtype.mk_eq_mk.mp h_eq)
-  all_goals exact (h _
+  all_goals exact (h _ (Subtype.mem _)).choose_spec.2
 
 中文:
 定理 finite_of_finite_generating_set
@@ -612,7 +798,7 @@ refine Set.finite_coe_iff.mp Finite.of_injective
     (fun ⟨F, hF⟩ => (⟨(h F hF).choose, (h F hF).choose_spec.1⟩ : T)) (fun _ _ h_eq => ?_)
   rw [Subtype.ext_iff]; rw [Subtype.ext_iff]
   convert! congr_arg (Rat⟮·⟯) (Subtype.mk_eq_mk.mp h_eq)
-  all_goals exact (h _
+  all_goals exact (h _ (Subtype.mem _)).choose_spec.2
 
 Depends on / 依赖: Finite, Finite.of_injective, Set.finite_coe_iff, Set.finite_coe_iff.mp, Subtype, Subtype.ext_iff, Subtype.mem, Subtype.mk_eq_mk.mp, all_goals, choose_spec, congr_arg, convert, ext_iff, finite_coe_iff, h_eq, mk_eq_mk, of_injective
 -/
@@ -679,7 +865,22 @@ theorem rank_le_rankOfDiscrBdd
   have h₂ : 1 < 3 * π / 4 := by
     rw [_root_.lt_div_iff₀ (by positivity)]; rw [← _root_.div_lt_iff₀' (by positivity)]; rw [one_mul]
     linarith [Real.pi_gt_three]
-  obtain h | h :
+  obtain h | h := lt_or_ge 1 (finrank Rat K)
+  · apply le_max_of_le_right
+    rw [Nat.le_floor_iff]
+    · have h := le_trans (abs_discr_ge h) (Int.cast_le.mpr hK)
+      contrapose! h
+      rw [← Real.rpow_natCast]
+      rw [Real.log_div_log] at h
+      refine lt_of_le_of_lt ?_ (mul_lt_mul_of_pos_left
+        (Real.rpow_lt_rpow_of_exponent_lt h₂ h) (by positivity : (0 : Real) < 4 / 9))
+      rw [Real.rpow_logb (lt_trans zero_lt_one h₂) (ne_of_gt h₂) (by positivity)]; rw [← mul_assoc]; rw [← inv_div]; rw [inv_mul_cancel₀ (by simp)]; rw [one_mul]; rw [Int.cast_natCast]
+    · refine div_nonneg (Real.log_nonneg ?_) (Real.log_nonneg (le_of_lt h₂))
+      rw [mul_comm]; rw [← mul_div_assoc]; rw [_root_.le_div_iff₀ (by positivity)]; rw [one_mul]; rw [← _root_.div_le_iff₀ (by positivity)]
+      exact le_trans (by norm_num) (Nat.one_le_cast.mpr (Nat.one_le_iff_ne_zero.mpr h_nz))
+  · exact le_max_of_le_left h
+
+include hK in
 
 中文:
 定理 rank_le_rankOfDiscrBdd
@@ -690,7 +891,22 @@ theorem rank_le_rankOfDiscrBdd
   have h₂ : 1 < 3 * π / 4 := by
     rw [_root_.lt_div_iff₀ (by positivity)]; rw [← _root_.div_lt_iff₀' (by positivity)]; rw [one_mul]
     linarith [Real.pi_gt_three]
-  obtain h | h :
+  obtain h | h := lt_or_ge 1 (finrank Rat K)
+  · apply le_max_of_le_right
+    rw [Nat.le_floor_iff]
+    · have h := le_trans (abs_discr_ge h) (Int.cast_le.mpr hK)
+      contrapose! h
+      rw [← Real.rpow_natCast]
+      rw [Real.log_div_log] at h
+      refine lt_of_le_of_lt ?_ (mul_lt_mul_of_pos_left
+        (Real.rpow_lt_rpow_of_exponent_lt h₂ h) (by positivity : (0 : Real) < 4 / 9))
+      rw [Real.rpow_logb (lt_trans zero_lt_one h₂) (ne_of_gt h₂) (by positivity)]; rw [← mul_assoc]; rw [← inv_div]; rw [inv_mul_cancel₀ (by simp)]; rw [one_mul]; rw [Int.cast_natCast]
+    · refine div_nonneg (Real.log_nonneg ?_) (Real.log_nonneg (le_of_lt h₂))
+      rw [mul_comm]; rw [← mul_div_assoc]; rw [_root_.le_div_iff₀ (by positivity)]; rw [one_mul]; rw [← _root_.div_le_iff₀ (by positivity)]
+      exact le_trans (by norm_num) (Nat.one_le_cast.mpr (Nat.one_le_iff_ne_zero.mpr h_nz))
+  · exact le_max_of_le_left h
+
+include hK in
 
 Depends on / 依赖: Int.cast_le.mpr, Nat.cast_zero, Nat.le_floor_iff, Real.log_div_log, Real.pi_gt_three, Real.rpow_natCast, _root_, _root_.div_lt_iff, _root_.lt_div_iff, abs_discr_ge, abs_nonpos_iff, cast_le, cast_zero, contrapose, discr_ne_zero, finrank, h_nz, le_floor_iff, le_max_of_le_right, le_trans
 -/
@@ -728,7 +944,15 @@ theorem minkowskiBound_lt_boundOfDiscBdd
   have : boundOfDiscBdd N - 1 < boundOfDiscBdd N := by
     simp_rw [boundOfDiscBdd, add_tsub_cancel_right, lt_add_iff_pos_right, zero_lt_one]
   refine lt_of_le_of_lt ?_ (coe_lt_coe.mpr this)
-  rw [minkowskiBound]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [boundOfDiscBdd]; rw 
+  rw [minkowskiBound]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [boundOfDiscBdd]; rw [add_tsub_cancel_right]; rw [Units.val_one]; rw [FractionalIdeal.absNorm_one]; rw [Rat.cast_one]; rw [ENNReal.ofReal_one]; rw [one_mul]; rw [mixedEmbedding.finrank]; rw [volume_fundamentalDomain_latticeBasis]; rw [coe_mul]; rw [ENNReal.coe_pow]; rw [coe_ofNat]; rw [show sqrt N = (1 : Real>=0∞) * sqrt N by rw [one_mul]]
+  gcongr
+  · exact pow_le_one₀ (by positivity) (by simp)
+  · rwa [← NNReal.coe_le_coe, coe_nnnorm, Int.norm_eq_abs, ← Int.cast_abs,
+      NNReal.coe_natCast, ← Int.cast_natCast, Int.cast_le]
+  · exact one_le_two
+  · exact rank_le_rankOfDiscrBdd hK
+
+include hK in
 
 中文:
 定理 minkowskiBound_lt_boundOfDiscBdd
@@ -737,7 +961,15 @@ theorem minkowskiBound_lt_boundOfDiscBdd
   have : boundOfDiscBdd N - 1 < boundOfDiscBdd N := by
     simp_rw [boundOfDiscBdd, add_tsub_cancel_right, lt_add_iff_pos_right, zero_lt_one]
   refine lt_of_le_of_lt ?_ (coe_lt_coe.mpr this)
-  rw [minkowskiBound]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [boundOfDiscBdd]; rw 
+  rw [minkowskiBound]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [boundOfDiscBdd]; rw [add_tsub_cancel_right]; rw [Units.val_one]; rw [FractionalIdeal.absNorm_one]; rw [Rat.cast_one]; rw [ENNReal.ofReal_one]; rw [one_mul]; rw [mixedEmbedding.finrank]; rw [volume_fundamentalDomain_latticeBasis]; rw [coe_mul]; rw [ENNReal.coe_pow]; rw [coe_ofNat]; rw [show sqrt N = (1 : Real>=0∞) * sqrt N by rw [one_mul]]
+  gcongr
+  · exact pow_le_one₀ (by positivity) (by simp)
+  · rwa [← NNReal.coe_le_coe, coe_nnnorm, Int.norm_eq_abs, ← Int.cast_abs,
+      NNReal.coe_natCast, ← Int.cast_natCast, Int.cast_le]
+  · exact one_le_two
+  · exact rank_le_rankOfDiscrBdd hK
+
+include hK in
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_one, FractionalIdeal, FractionalIdeal.absNorm_one, Rat.cast_one, Units.val_one, absNorm_one, add_tsub_cancel_right, boundOfDiscBdd, cast_one, coe_lt_coe, coe_lt_coe.mpr, finrank, lt_add_iff_pos_right, lt_of_le_of_lt, minkowskiBound, mixedEmbedding, mixedEmbedding.finrank, ofReal_one, one_mul
 -/
@@ -794,7 +1026,41 @@ theorem finite_of_discr_bdd_of_isReal
   let B := boundOfDiscBdd N
   -- The bound on the coefficients of the generating polynomials
   let C := Nat.ceil ((max B 1) ^ D * Nat.choose D (D / 2))
-  refine
+  refine finite_of_finite_generating_set A _ (bUnion_roots_finite (algebraMap Int A) D
+      (Set.finite_Icc (-C : Int) C)) (fun ⟨K, hK₀⟩ ⟨hK₁, hK₂⟩ => ?_)
+  -- We now need to prove that each field is generated by an element of the union of the root set
+  simp_rw [Set.mem_iUnion]
+  -- this is purely an optimization
+  have : CharZero K := SubsemiringClass.instCharZero K
+  have : NumberField K := @NumberField.mk _ _ inferInstance hK₀
+  obtain ⟨w₀, hw₀⟩ := hK₁
+  suffices minkowskiBound K ↑1 < (convexBodyLTFactor K) * B by
+    obtain ⟨x, hx₁, hx₂⟩ := exists_primitive_element_lt_of_isReal K hw₀ this
+    have hx := x.isIntegral_coe
+    refine ⟨x, ⟨⟨minpoly Int (x : K), ⟨?_, fun i => ?_⟩, ?_⟩, ?_⟩⟩
+    · exact natDegree_le_rankOfDiscrBdd hK₂ x hx₁
+    · rw [Set.mem_Icc, ← abs_le, ← @Int.cast_le Real]
+      refine (Eq.trans_le ?_ <| Embeddings.coeff_bdd_of_norm_le
+          ((le_iff_le (x : K) _).mp (fun w => le_of_lt (hx₂ w))) i).trans ?_
+      · rw [minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx, coeff_map, eq_intCast,
+          Int.norm_cast_rat, Int.norm_eq_abs, Int.cast_abs]
+      · refine le_trans ?_ (Nat.le_ceil _)
+        rw [show max ↑(max (B : Real>=0) 1) (1 : Real) = max (B : Real) 1 by simp]; rw [val_eq_coe]; rw [NNReal.coe_mul]; rw [NNReal.coe_pow]; rw [NNReal.coe_max]; rw [NNReal.coe_one]; rw [NNReal.coe_natCast]
+        gcongr
+        · exact le_max_right _ 1
+        · exact rank_le_rankOfDiscrBdd hK₂
+        · exact (Nat.choose_le_choose _ (rank_le_rankOfDiscrBdd hK₂)).trans
+            (Nat.choose_le_middle _ _)
+    · refine mem_rootSet.mpr ⟨minpoly.ne_zero hx, ?_⟩
+      exact (aeval_algebraMap_eq_zero_iff A (x : K) _).mpr (minpoly.aeval Int (x : K))
+    · rw [← (IntermediateField.lift_injective _).eq_iff, eq_comm] at hx₁
+      convert! hx₁
+      · simp only [IntermediateField.lift_top]
+      · simp only [IntermediateField.lift_adjoin, Set.image_singleton]
+  calc
+    minkowskiBound K 1 < B := minkowskiBound_lt_boundOfDiscBdd hK₂
+    _ = 1 * B := by rw [one_mul]
+    _ <= convexBodyLTFactor K * B := by gcongr; exact mod_cast one_le_convexBodyLTFactor K
 
 中文:
 定理 finite_of_discr_bdd_of_is实数
@@ -806,7 +1072,41 @@ theorem finite_of_discr_bdd_of_isReal
   let B := boundOfDiscBdd N
   -- The bound on the coefficients of the generating polynomials
   let C := Nat.ceil ((max B 1) ^ D * Nat.choose D (D / 2))
-  refine
+  refine finite_of_finite_generating_set A _ (bUnion_roots_finite (algebraMap Int A) D
+      (Set.finite_Icc (-C : Int) C)) (fun ⟨K, hK₀⟩ ⟨hK₁, hK₂⟩ => ?_)
+  -- We now need to prove that each field is generated by an element of the union of the root set
+  simp_rw [Set.mem_iUnion]
+  -- this is purely an optimization
+  have : CharZero K := SubsemiringClass.instCharZero K
+  have : NumberField K := @NumberField.mk _ _ inferInstance hK₀
+  obtain ⟨w₀, hw₀⟩ := hK₁
+  suffices minkowskiBound K ↑1 < (convexBodyLTFactor K) * B by
+    obtain ⟨x, hx₁, hx₂⟩ := exists_primitive_element_lt_of_isReal K hw₀ this
+    have hx := x.isIntegral_coe
+    refine ⟨x, ⟨⟨minpoly Int (x : K), ⟨?_, fun i => ?_⟩, ?_⟩, ?_⟩⟩
+    · exact natDegree_le_rankOfDiscrBdd hK₂ x hx₁
+    · rw [Set.mem_Icc, ← abs_le, ← @Int.cast_le Real]
+      refine (Eq.trans_le ?_ <| Embeddings.coeff_bdd_of_norm_le
+          ((le_iff_le (x : K) _).mp (fun w => le_of_lt (hx₂ w))) i).trans ?_
+      · rw [minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx, coeff_map, eq_intCast,
+          Int.norm_cast_rat, Int.norm_eq_abs, Int.cast_abs]
+      · refine le_trans ?_ (Nat.le_ceil _)
+        rw [show max ↑(max (B : Real>=0) 1) (1 : Real) = max (B : Real) 1 by simp]; rw [val_eq_coe]; rw [NNReal.coe_mul]; rw [NNReal.coe_pow]; rw [NNReal.coe_max]; rw [NNReal.coe_one]; rw [NNReal.coe_natCast]
+        gcongr
+        · exact le_max_right _ 1
+        · exact rank_le_rankOfDiscrBdd hK₂
+        · exact (Nat.choose_le_choose _ (rank_le_rankOfDiscrBdd hK₂)).trans
+            (Nat.choose_le_middle _ _)
+    · refine mem_rootSet.mpr ⟨minpoly.ne_zero hx, ?_⟩
+      exact (aeval_algebraMap_eq_zero_iff A (x : K) _).mpr (minpoly.aeval Int (x : K))
+    · rw [← (IntermediateField.lift_injective _).eq_iff, eq_comm] at hx₁
+      convert! hx₁
+      · simp only [IntermediateField.lift_top]
+      · simp only [IntermediateField.lift_adjoin, Set.image_singleton]
+  calc
+    minkowskiBound K 1 < B := minkowskiBound_lt_boundOfDiscBdd hK₂
+    _ = 1 * B := by rw [one_mul]
+    _ <= convexBodyLTFactor K * B := by gcongr; exact mod_cast one_le_convexBodyLTFactor K
 
 Depends on / 依赖: K.prop, NumberField, NumberField.mk
 -/
@@ -870,7 +1170,43 @@ theorem finite_of_discr_bdd_of_isComplex
   -- The bound on the Minkowski bound
   let B := boundOfDiscBdd N
   -- The bound on the coefficients of the generating polynomials
-  let C := Nat.ceil ((max (sqrt (1 + B ^ 2)) 1) ^ D * Nat.choose D 
+  let C := Nat.ceil ((max (sqrt (1 + B ^ 2)) 1) ^ D * Nat.choose D (D / 2))
+  refine finite_of_finite_generating_set A _ (bUnion_roots_finite (algebraMap Int A) D
+      (Set.finite_Icc (-C : Int) C)) (fun ⟨K, hK₀⟩ ⟨hK₁, hK₂⟩ => ?_)
+  -- We now need to prove that each field is generated by an element of the union of the root set
+  simp_rw [Set.mem_iUnion]
+  -- this is purely an optimization
+  have : CharZero K := SubsemiringClass.instCharZero K
+  have : NumberField K := @NumberField.mk _ _ inferInstance hK₀
+  obtain ⟨w₀, hw₀⟩ := hK₁
+  suffices minkowskiBound K ↑1 < (convexBodyLT'Factor K) * boundOfDiscBdd N by
+    obtain ⟨x, hx₁, hx₂⟩ := exists_primitive_element_lt_of_isComplex K hw₀ this
+    have hx := x.isIntegral_coe
+    refine ⟨x, ⟨⟨minpoly Int (x : K), ⟨?_, fun i => ?_⟩, ?_⟩, ?_⟩⟩
+    · exact natDegree_le_rankOfDiscrBdd hK₂ x hx₁
+    · rw [Set.mem_Icc, ← abs_le, ← @Int.cast_le Real]
+      refine (Eq.trans_le ?_ <| Embeddings.coeff_bdd_of_norm_le
+          ((le_iff_le (x : K) _).mp (fun w => le_of_lt (hx₂ w))) i).trans ?_
+      · rw [minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx, coeff_map, eq_intCast,
+          Int.norm_cast_rat, Int.norm_eq_abs, Int.cast_abs]
+      · refine le_trans ?_ (Nat.le_ceil _)
+        rw [val_eq_coe]; rw [NNReal.coe_mul]; rw [NNReal.coe_pow]; rw [NNReal.coe_max]; rw [NNReal.coe_one]; rw [Real.coe_sqrt]; rw [NNReal.coe_add 1]; rw [NNReal.coe_one]; rw [NNReal.coe_pow]
+        gcongr
+        · exact le_max_right _ 1
+        · exact rank_le_rankOfDiscrBdd hK₂
+        · rw [NNReal.coe_natCast, Nat.cast_le]
+          exact (Nat.choose_le_choose _ (rank_le_rankOfDiscrBdd hK₂)).trans
+            (Nat.choose_le_middle _ _)
+    · refine mem_rootSet.mpr ⟨minpoly.ne_zero hx, ?_⟩
+      exact (aeval_algebraMap_eq_zero_iff A (x : K) _).mpr (minpoly.aeval Int (x : K))
+    · rw [← (IntermediateField.lift_injective _).eq_iff, eq_comm] at hx₁
+      convert! hx₁
+      · simp only [IntermediateField.lift_top]
+      · simp only [IntermediateField.lift_adjoin, Set.image_singleton]
+  calc
+    minkowskiBound K 1 < B := minkowskiBound_lt_boundOfDiscBdd hK₂
+    _ = 1 * B := by rw [one_mul]
+    _ <= convexBodyLT'Factor K * B := by gcongr; exact mod_cast one_le_convexBodyLT'Factor K
 
 中文:
 定理 finite_of_discr_bdd_of_isComplex
@@ -881,7 +1217,43 @@ theorem finite_of_discr_bdd_of_isComplex
   -- The bound on the Minkowski bound
   let B := boundOfDiscBdd N
   -- The bound on the coefficients of the generating polynomials
-  let C := Nat.ceil ((max (sqrt (1 + B ^ 2)) 1) ^ D * Nat.choose D 
+  let C := Nat.ceil ((max (sqrt (1 + B ^ 2)) 1) ^ D * Nat.choose D (D / 2))
+  refine finite_of_finite_generating_set A _ (bUnion_roots_finite (algebraMap Int A) D
+      (Set.finite_Icc (-C : Int) C)) (fun ⟨K, hK₀⟩ ⟨hK₁, hK₂⟩ => ?_)
+  -- We now need to prove that each field is generated by an element of the union of the root set
+  simp_rw [Set.mem_iUnion]
+  -- this is purely an optimization
+  have : CharZero K := SubsemiringClass.instCharZero K
+  have : NumberField K := @NumberField.mk _ _ inferInstance hK₀
+  obtain ⟨w₀, hw₀⟩ := hK₁
+  suffices minkowskiBound K ↑1 < (convexBodyLT'Factor K) * boundOfDiscBdd N by
+    obtain ⟨x, hx₁, hx₂⟩ := exists_primitive_element_lt_of_isComplex K hw₀ this
+    have hx := x.isIntegral_coe
+    refine ⟨x, ⟨⟨minpoly Int (x : K), ⟨?_, fun i => ?_⟩, ?_⟩, ?_⟩⟩
+    · exact natDegree_le_rankOfDiscrBdd hK₂ x hx₁
+    · rw [Set.mem_Icc, ← abs_le, ← @Int.cast_le Real]
+      refine (Eq.trans_le ?_ <| Embeddings.coeff_bdd_of_norm_le
+          ((le_iff_le (x : K) _).mp (fun w => le_of_lt (hx₂ w))) i).trans ?_
+      · rw [minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx, coeff_map, eq_intCast,
+          Int.norm_cast_rat, Int.norm_eq_abs, Int.cast_abs]
+      · refine le_trans ?_ (Nat.le_ceil _)
+        rw [val_eq_coe]; rw [NNReal.coe_mul]; rw [NNReal.coe_pow]; rw [NNReal.coe_max]; rw [NNReal.coe_one]; rw [Real.coe_sqrt]; rw [NNReal.coe_add 1]; rw [NNReal.coe_one]; rw [NNReal.coe_pow]
+        gcongr
+        · exact le_max_right _ 1
+        · exact rank_le_rankOfDiscrBdd hK₂
+        · rw [NNReal.coe_natCast, Nat.cast_le]
+          exact (Nat.choose_le_choose _ (rank_le_rankOfDiscrBdd hK₂)).trans
+            (Nat.choose_le_middle _ _)
+    · refine mem_rootSet.mpr ⟨minpoly.ne_zero hx, ?_⟩
+      exact (aeval_algebraMap_eq_zero_iff A (x : K) _).mpr (minpoly.aeval Int (x : K))
+    · rw [← (IntermediateField.lift_injective _).eq_iff, eq_comm] at hx₁
+      convert! hx₁
+      · simp only [IntermediateField.lift_top]
+      · simp only [IntermediateField.lift_adjoin, Set.image_singleton]
+  calc
+    minkowskiBound K 1 < B := minkowskiBound_lt_boundOfDiscBdd hK₂
+    _ = 1 * B := by rw [one_mul]
+    _ <= convexBodyLT'Factor K * B := by gcongr; exact mod_cast one_le_convexBodyLT'Factor K
 
 Depends on / 依赖: K.prop, NumberField, NumberField.mk
 -/
@@ -944,7 +1316,13 @@ theorem _root_.NumberField.finite_of_discr_bdd
   rintro ⟨K, hK₀⟩ hK₁
   -- this is purely an optimization
   have : CharZero K := SubsemiringClass.instCharZero K
-  have : NumberField K := @NumberField.mk _ _ inferInsta
+  have : NumberField K := @NumberField.mk _ _ inferInstance hK₀
+  obtain ⟨w₀⟩ := (inferInstance : Nonempty (InfinitePlace K))
+  by_cases hw₀ : IsReal w₀
+  · apply Set.mem_union_left
+    exact ⟨⟨w₀, hw₀⟩, hK₁⟩
+  · apply Set.mem_union_right
+    exact ⟨⟨w₀, not_isReal_iff_isComplex.mp hw₀⟩, hK₁⟩
 
 中文:
 定理 _root_.数域.finite_of_discr_bdd
@@ -954,7 +1332,13 @@ theorem _root_.NumberField.finite_of_discr_bdd
   rintro ⟨K, hK₀⟩ hK₁
   -- this is purely an optimization
   have : CharZero K := SubsemiringClass.instCharZero K
-  have : NumberField K := @NumberField.mk _ _ inferInsta
+  have : NumberField K := @NumberField.mk _ _ inferInstance hK₀
+  obtain ⟨w₀⟩ := (inferInstance : Nonempty (InfinitePlace K))
+  by_cases hw₀ : IsReal w₀
+  · apply Set.mem_union_left
+    exact ⟨⟨w₀, hw₀⟩, hK₁⟩
+  · apply Set.mem_union_right
+    exact ⟨⟨w₀, not_isReal_iff_isComplex.mp hw₀⟩, hK₁⟩
 
 Depends on / 依赖: K.prop, NumberField, NumberField.mk
 -/

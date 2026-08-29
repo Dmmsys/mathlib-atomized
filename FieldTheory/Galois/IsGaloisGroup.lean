@@ -147,7 +147,10 @@ theorem card_eq_finrank
     rw [← IntermediateField.finrank_bot']; rw [← fixedPoints_eq_bot G]; rw [Nat.card_eq_fintype_card]
     exact (FixedPoints.finrank_eq_card G L).symm
   · rw [Nat.card_eq_zero_of_infinite, eq_comm]
-    contrapose! 
+    contrapose! hG
+    have : FiniteDimensional K L := FiniteDimensional.of_finrank_pos (Nat.zero_lt_of_ne_zero hG)
+    exact Finite.of_injective (MulSemiringAction.toAlgAut G K L)
+      (fun _ _ => (faithful K).eq_of_smul_eq_smul ∘ DFunLike.ext_iff.mp)
 
 中文:
 定理 card_eq_finrank
@@ -159,7 +162,10 @@ theorem card_eq_finrank
     rw [← IntermediateField.finrank_bot']; rw [← fixedPoints_eq_bot G]; rw [Nat.card_eq_fintype_card]
     exact (FixedPoints.finrank_eq_card G L).symm
   · rw [Nat.card_eq_zero_of_infinite, eq_comm]
-    contrapose! 
+    contrapose! hG
+    have : FiniteDimensional K L := FiniteDimensional.of_finrank_pos (Nat.zero_lt_of_ne_zero hG)
+    exact Finite.of_injective (MulSemiringAction.toAlgAut G K L)
+      (fun _ _ => (faithful K).eq_of_smul_eq_smul ∘ DFunLike.ext_iff.mp)
 
 Depends on / 依赖: DFunLike, DFunLike.ext_if, FaithfulSMul, Finite, Finite.of_injective, FiniteDimensional, FiniteDimensional.of_finrank_pos, FixedPoints, FixedPoints.finrank_eq_card, IntermediateField, IntermediateField.finrank_bot, MulSemiringAction, MulSemiringAction.toAlgAut, Nat.card_eq_fintype_card, Nat.card_eq_zero_of_infinite, Nat.zero_lt_of_ne_zero, card_eq_fintype_card, card_eq_zero_of_infinite, contrapose, eq_comm
 -/
@@ -206,7 +212,11 @@ theorem finite
   let := IsFractionRing.mulSemiringAction G B (FractionRing B)
   let : Algebra R A := (algebraMap R B).rangeRestrict.toAlgebra
   have : IsScalarTower R A B := IsScalarTower.of_algebraMap_eq' rfl
-  h
+  have : Module.Finite A B := Module.Finite.of_restrictScalars_finite R A B
+  have := IsGaloisGroup.to_isFractionRing_of_isIntegral G A B (FractionRing A) (FractionRing B)
+  apply Nat.finite_of_card_ne_zero
+  rw [card_eq_finrank G (FractionRing A) (FractionRing B)]
+  exact Module.finrank_pos.ne'
 
 中文:
 定理 finite
@@ -217,7 +227,11 @@ theorem finite
   let := IsFractionRing.mulSemiringAction G B (FractionRing B)
   let : Algebra R A := (algebraMap R B).rangeRestrict.toAlgebra
   have : IsScalarTower R A B := IsScalarTower.of_algebraMap_eq' rfl
-  h
+  have : Module.Finite A B := Module.Finite.of_restrictScalars_finite R A B
+  have := IsGaloisGroup.to_isFractionRing_of_isIntegral G A B (FractionRing A) (FractionRing B)
+  apply Nat.finite_of_card_ne_zero
+  rw [card_eq_finrank G (FractionRing A) (FractionRing B)]
+  exact Module.finrank_pos.ne'
 -/
 protected theorem finite (R B : Type*) [CommRing R] [CommRing B] [Algebra R B] [Module.Finite R B]
     [IsDomain B] [MulSemiringAction G B] [IsGaloisGroup G R B] : Finite G := by
@@ -250,6 +264,8 @@ theorem card_eq_finrank'
   let := IsFractionRing.mulSemiringAction G B (FractionRing B)
   rw [IsGaloisGroup.card_eq_finrank G (FractionRing A) (FractionRing B)]; rw [IsFractionRing.finrank_eq A (FractionRing A) B (FractionRing B)]
 
+@[simp]
+
 中文:
 定理 card_eq_finrank'
   结论: 自然数.card G = 模.finrank A B
@@ -258,6 +274,8 @@ theorem card_eq_finrank'
   let := FractionRing.liftAlgebra A (FractionRing B)
   let := IsFractionRing.mulSemiringAction G B (FractionRing B)
   rw [IsGaloisGroup.card_eq_finrank G (FractionRing A) (FractionRing B)]; rw [IsFractionRing.finrank_eq A (FractionRing A) B (FractionRing B)]
+
+@[simp]
 
 Depends on / 依赖: FractionRing, FractionRing.liftAlgebra, IsDomain, IsDomain.of_faithfulSMul, IsFractionRing, IsFractionRing.finrank_eq, IsFractionRing.mulSemiringAction, IsGaloisGroup, IsGaloisGroup.card_eq_finrank, card_eq_finrank, finrank_eq, liftAlgebra, mulSemiringAction, of_faithfulSMul
 -/
@@ -1040,7 +1058,22 @@ theorem fixingSubgroup_range_algebraMap
   let K := FractionRing A
   let L := FractionRing C
   let : MulSemiringAction G L := IsFractionRing.mulSemiringAction G C L
-  have : IsGaloisGroup H (Fra
+  have : IsGaloisGroup H (FractionRing B) L := IsGaloisGroup.toFractionRing H B C
+  rw [← fixingSubgroup_range_algebraMap' G K L H (FractionRing B)]
+  ext g
+  simp only [mem_fixingSubgroup_iff, Set.mem_range]
+  refine ⟨?_, ?_⟩
+  · rintro h _ ⟨x, rfl⟩
+    have {x} : g • (algebraMap B L) x = (algebraMap B L) x := by
+      rw [IsScalarTower.algebraMap_apply B C L]; rw [← algebraMap.smul']; rw [h _ ⟨x]; rw [rfl⟩]
+    obtain ⟨a, b, _, rfl⟩ := IsFractionRing.div_surjective B x
+    simp only [map_div₀, ← IsScalarTower.algebraMap_apply, smul_div₀', this]
+  · rintro h _ ⟨x, rfl⟩
+    apply FaithfulSMul.algebraMap_injective C L
+    rw [algebraMap.smul']
+    apply h
+    use algebraMap B (FractionRing B) x
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]
 
 中文:
 定理 fixingSubgroup_range_algebraMap
@@ -1051,7 +1084,22 @@ theorem fixingSubgroup_range_algebraMap
   let K := FractionRing A
   let L := FractionRing C
   let : MulSemiringAction G L := IsFractionRing.mulSemiringAction G C L
-  have : IsGaloisGroup H (Fra
+  have : IsGaloisGroup H (FractionRing B) L := IsGaloisGroup.toFractionRing H B C
+  rw [← fixingSubgroup_range_algebraMap' G K L H (FractionRing B)]
+  ext g
+  simp only [mem_fixingSubgroup_iff, Set.mem_range]
+  refine ⟨?_, ?_⟩
+  · rintro h _ ⟨x, rfl⟩
+    have {x} : g • (algebraMap B L) x = (algebraMap B L) x := by
+      rw [IsScalarTower.algebraMap_apply B C L]; rw [← algebraMap.smul']; rw [h _ ⟨x]; rw [rfl⟩]
+    obtain ⟨a, b, _, rfl⟩ := IsFractionRing.div_surjective B x
+    simp only [map_div₀, ← IsScalarTower.algebraMap_apply, smul_div₀', this]
+  · rintro h _ ⟨x, rfl⟩
+    apply FaithfulSMul.algebraMap_injective C L
+    rw [algebraMap.smul']
+    apply h
+    use algebraMap B (FractionRing B) x
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, IsDomain, IsFractionRing, IsFractionRing.mulSemiringAction, IsGaloisGroup, IsGaloisGroup.toFractionRing, MulSemiringAction, Set.mem_range, algebraMap_injective, fixingSubgroup_range_algebraMap, isDomain, mem_fixingSubgroup_iff, mem_range, mulSemiringAction, toFractionRing
 -/
@@ -1094,7 +1142,9 @@ theorem normal_of_isGalois
   have : IsGalois K F := .of_algEquiv (IsScalarTower.toAlgHom K E L).equivFieldRange
   have hFL : IsGaloisGroup H F L := inferInstanceAs (IsGaloisGroup H (algebraMap E L).range L)
   have := isGalois G K L
-  have : Finite Gal(L/K) := Finite.of_e
+  have : Finite Gal(L/K) := Finite.of_equiv _ (mulEquivAlgEquiv G K L).toEquiv
+  rw [← fixingSubgroup_fixedPoints G K L H]; rw [subgroup_iff.mp hFL]; rw [← mulEquivCongr_mapSubgroup_fixingSubgroup Gal(L/K) G K]; rw [MulEquiv.normal_map_iff]
+  exact IsGalois.fixingSubgroup_normal_of_isGalois F
 
 中文:
 定理 normal_of_isGalois
@@ -1104,7 +1154,9 @@ theorem normal_of_isGalois
   have : IsGalois K F := .of_algEquiv (IsScalarTower.toAlgHom K E L).equivFieldRange
   have hFL : IsGaloisGroup H F L := inferInstanceAs (IsGaloisGroup H (algebraMap E L).range L)
   have := isGalois G K L
-  have : Finite Gal(L/K) := Finite.of_e
+  have : Finite Gal(L/K) := Finite.of_equiv _ (mulEquivAlgEquiv G K L).toEquiv
+  rw [← fixingSubgroup_fixedPoints G K L H]; rw [subgroup_iff.mp hFL]; rw [← mulEquivCongr_mapSubgroup_fixingSubgroup Gal(L/K) G K]; rw [MulEquiv.normal_map_iff]
+  exact IsGalois.fixingSubgroup_normal_of_isGalois F
 
 Depends on / 依赖: Finite, Finite.of_equiv, IsGalois, IsGaloisGroup, IsScalarTower, IsScalarTower.toAlgHom, MulEquiv, MulEquiv.normal_map_iff, algebraMap, equivFieldRange, fieldRange, fixingSubgroup_fixedPoints, isGalois, mulEquivAlgEquiv, mulEquivCongr_mapSubgroup_fixingSubgroup, normal_map_iff, of_algEquiv, of_equiv, subgroup_iff, subgroup_iff.mp
 -/
@@ -1139,7 +1191,19 @@ theorem quotient
     have : FaithfulSMul A C := FaithfulSMul.trans A B C
     have h' : forall g : G, (forall x : B, g • x = x) -> g in N := by
       simp [← fixingSubgroup_range_algebraMap G A B C N, mem_fixingSubgroup_iff, ← algebraMap.smul',
-        (
+        (FaithfulSMul.algebraMap_injective B C).eq_iff]
+    have {g : G} : Quotient.mk'' g = QuotientGroup.mk' N g := rfl
+    simp_rw [← inv_smul_eq_iff, this, ← map_inv, smul_smul, ← map_mul,
+      QuotientGroup.mk'_apply, MulAction.coe_quotient_smul] at h
+    have := h' _ h
+    rwa [QuotientGroup.eq, ← Subgroup.inv_mem_iff, mul_inv_rev, inv_inv]
+  commutes := inferInstance
+  isInvariant.isInvariant x h := by
+    simp_rw [← (FaithfulSMul.algebraMap_injective B C).eq_iff, ← IsScalarTower.algebraMap_apply]
+    apply hG.isInvariant.isInvariant (algebraMap B C x)
+    intro g
+have := (FaithfulSMul.algebraMap_injective B C).eq_iff.mpr h g
+    rwa [MulAction.coe_quotient_smul, algebraMap.smul'] at this
 
 中文:
 定理 quotient
@@ -1148,7 +1212,19 @@ theorem quotient
     have : FaithfulSMul A C := FaithfulSMul.trans A B C
     have h' : forall g : G, (forall x : B, g • x = x) -> g in N := by
       simp [← fixingSubgroup_range_algebraMap G A B C N, mem_fixingSubgroup_iff, ← algebraMap.smul',
-        (
+        (FaithfulSMul.algebraMap_injective B C).eq_iff]
+    have {g : G} : Quotient.mk'' g = QuotientGroup.mk' N g := rfl
+    simp_rw [← inv_smul_eq_iff, this, ← map_inv, smul_smul, ← map_mul,
+      QuotientGroup.mk'_apply, MulAction.coe_quotient_smul] at h
+    have := h' _ h
+    rwa [QuotientGroup.eq, ← Subgroup.inv_mem_iff, mul_inv_rev, inv_inv]
+  commutes := inferInstance
+  isInvariant.isInvariant x h := by
+    simp_rw [← (FaithfulSMul.algebraMap_injective B C).eq_iff, ← IsScalarTower.algebraMap_apply]
+    apply hG.isInvariant.isInvariant (algebraMap B C x)
+    intro g
+have := (FaithfulSMul.algebraMap_injective B C).eq_iff.mpr h g
+    rwa [MulAction.coe_quotient_smul, algebraMap.smul'] at this
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FaithfulSMul.trans, MulAction, MulAction.coe_quotien, Quotient, Quotient.inductionOn, Quotient.mk, QuotientGroup, QuotientGroup.mk, _apply, algebraMap, algebraMap.smul, algebraMap_injective, coe_quotien, eq_iff, fixingSubgroup_range_algebraMap, inv_smul_eq_iff, map_inv, map_mul
 -/
@@ -1230,7 +1306,7 @@ theorem algebraMap_quotientMulEquiv_smul
   have := quotient G A B C N
   rw [← algebraMap_smulOfNormal G B C N g x]
   congr
-  apply mulEqui
+  apply mulEquivCongr_apply_smul
 
 中文:
 定理 algebraMap_quotientMulEquiv_smul
@@ -1243,7 +1319,7 @@ theorem algebraMap_quotientMulEquiv_smul
   have := quotient G A B C N
   rw [← algebraMap_smulOfNormal G B C N g x]
   congr
-  apply mulEqui
+  apply mulEquivCongr_apply_smul
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsDomain, algebraMap_injective, algebraMap_smulOfNormal, isDomain, mulEquivCongr_apply_smul, mulSemiringActionOfNormal, mulSemiringActionQuotient, quotient, smulCommClassQuotient
 -/
@@ -1272,7 +1348,15 @@ definition restrictHom
   haveI : FaithfulSMul A C := FaithfulSMul.trans A B C
   letI : MulSemiringAction G (FractionRing C) :=
     IsFractionRing.mulSemiringAction G C (FractionRing C)
-  letI N := fixingSubgroup G (Set.
+  letI N := fixingSubgroup G (Set.range (algebraMap (FractionRing B) (FractionRing C)))
+  haveI : IsGaloisGroup N (FractionRing B) (FractionRing C) :=
+    of_isScalarTower G (FractionRing A) (FractionRing C) (FractionRing B)
+  letI : MulSemiringAction G' (FractionRing B) :=
+    IsFractionRing.mulSemiringAction G' B (FractionRing B)
+  haveI := isGalois G' (FractionRing A) (FractionRing B)
+  haveI : N.Normal := normal_of_isGalois G (FractionRing A) (FractionRing C) N (FractionRing B)
+  (quotientMulEquiv G G' (FractionRing A) (FractionRing B) (FractionRing C) N).toMonoidHom.comp
+    (QuotientGroup.mk' N)
 
 中文:
 定义 restrictHom
@@ -1282,7 +1366,15 @@ definition restrictHom
   haveI : FaithfulSMul A C := FaithfulSMul.trans A B C
   letI : MulSemiringAction G (FractionRing C) :=
     IsFractionRing.mulSemiringAction G C (FractionRing C)
-  letI N := fixingSubgroup G (Set.
+  letI N := fixingSubgroup G (Set.range (algebraMap (FractionRing B) (FractionRing C)))
+  haveI : IsGaloisGroup N (FractionRing B) (FractionRing C) :=
+    of_isScalarTower G (FractionRing A) (FractionRing C) (FractionRing B)
+  letI : MulSemiringAction G' (FractionRing B) :=
+    IsFractionRing.mulSemiringAction G' B (FractionRing B)
+  haveI := isGalois G' (FractionRing A) (FractionRing B)
+  haveI : N.Normal := normal_of_isGalois G (FractionRing A) (FractionRing C) N (FractionRing B)
+  (quotientMulEquiv G G' (FractionRing A) (FractionRing B) (FractionRing C) N).toMonoidHom.comp
+    (QuotientGroup.mk' N)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.trans, FractionRing, IsDomain, IsDomain.of_faithfulSMul, IsFractionRing, IsFractionRing.mulSemiringAction, IsGaloisGroup, MulSemiringAction, Set.range, algebraMap, fixingSubgroup, mulSemiringAction, of_faithfulSMul, of_isScalarTower
 -/
@@ -1318,7 +1410,13 @@ theorem algebraMap_restrictHom_smul
   have : FaithfulSMul A C := FaithfulSMul.trans A B C
   let : MulSemiringAction G (FractionRing C) :=
     IsFractionRing.mulSemiringAction G C (FractionRing C)
-  let : MulSemiringAction G' (Fra
+  let : MulSemiringAction G' (FractionRing B) :=
+    IsFractionRing.mulSemiringAction G' B (FractionRing B)
+  apply FaithfulSMul.algebraMap_injective C (FractionRing C)
+  rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply B (FractionRing B) (FractionRing C)]
+  simp only [restrictHom, MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_comp, MonoidHom.coe_coe,
+    QuotientGroup.coe_mk', Function.comp_apply]
+  rw [algebraMap.smul']; rw [algebraMap_quotientMulEquiv_smul]; rw [← IsScalarTower.algebraMap_apply]; rw [algebraMap.smul']; rw [← IsScalarTower.algebraMap_apply]
 
 中文:
 定理 algebraMap_restrictHom_smul
@@ -1329,7 +1427,13 @@ theorem algebraMap_restrictHom_smul
   have : FaithfulSMul A C := FaithfulSMul.trans A B C
   let : MulSemiringAction G (FractionRing C) :=
     IsFractionRing.mulSemiringAction G C (FractionRing C)
-  let : MulSemiringAction G' (Fra
+  let : MulSemiringAction G' (FractionRing B) :=
+    IsFractionRing.mulSemiringAction G' B (FractionRing B)
+  apply FaithfulSMul.algebraMap_injective C (FractionRing C)
+  rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply B (FractionRing B) (FractionRing C)]
+  simp only [restrictHom, MulEquiv.toMonoidHom_eq_coe, MonoidHom.coe_comp, MonoidHom.coe_coe,
+    QuotientGroup.coe_mk', Function.comp_apply]
+  rw [algebraMap.smul']; rw [algebraMap_quotientMulEquiv_smul]; rw [← IsScalarTower.algebraMap_apply]; rw [algebraMap.smul']; rw [← IsScalarTower.algebraMap_apply]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FaithfulSMul.trans, Fractio, FractionRing, IsDomain, IsDomain.of_faithfulSMul, IsFractionRing, IsFractionRing.mulSemiringAction, IsScalarTower, IsScalarTower.algebraMap_apply, MulSemiringAction, algebraMap_apply, algebraMap_injective, mulSemiringAction, of_faithfulSMul
 -/
@@ -1442,7 +1546,23 @@ theorem map_quotientMk'
   let : Algebra E F := (IntermediateField.inclusion h).toAlgebra
   let : SMul G F := smulOfNormal G F L N
   have : SMulDistribClass G F L := smulDistribClass_smulOfNormal G F L N
-  let := mulSemiringActi
+  let := mulSemiringActionOfSmulDistribClass F L G
+  have : IsScalarTower E F L := IsScalarTower.of_algebraMap_eq' rfl
+  { faithful := have := (inferInstance : IsGaloisGroup (G ⧸ N) K F).faithful; inferInstance
+    commutes := ⟨by
+      intro ⟨_, g, hg, rfl⟩ x y
+      apply FaithfulSMul.algebraMap_injective F L
+      simpa [MulAction.subgroup_smul_def, algebraMap.coe_smul', algebraMap.coe_smul]
+        using hE.commutes.smul_comm ⟨g, hg⟩ x (y : L)⟩
+    isInvariant := ⟨fun x h => by
+      obtain ⟨a, ha⟩ := hE.isInvariant.isInvariant (algebraMap F L x) (by
+        rintro ⟨g, hg⟩
+        rw [MulAction.subgroup_smul_def]; rw [← algebraMap.smul']
+exact congr_arg (algebraMap F L) h ⟨g, ⟨g, hg, rfl⟩⟩)
+      exact ⟨a, FaithfulSMul.algebraMap_injective F L
+        (by rw [← IsScalarTower.algebraMap_apply, ha])⟩⟩ }
+
+@[deprecated (since := "2026-04-21")] alias quotientMap := map_quotientMk'
 
 中文:
 定理 map_quotientMk'
@@ -1452,7 +1572,23 @@ theorem map_quotientMk'
   let : Algebra E F := (IntermediateField.inclusion h).toAlgebra
   let : SMul G F := smulOfNormal G F L N
   have : SMulDistribClass G F L := smulDistribClass_smulOfNormal G F L N
-  let := mulSemiringActi
+  let := mulSemiringActionOfSmulDistribClass F L G
+  have : IsScalarTower E F L := IsScalarTower.of_algebraMap_eq' rfl
+  { faithful := have := (inferInstance : IsGaloisGroup (G ⧸ N) K F).faithful; inferInstance
+    commutes := ⟨by
+      intro ⟨_, g, hg, rfl⟩ x y
+      apply FaithfulSMul.algebraMap_injective F L
+      simpa [MulAction.subgroup_smul_def, algebraMap.coe_smul', algebraMap.coe_smul]
+        using hE.commutes.smul_comm ⟨g, hg⟩ x (y : L)⟩
+    isInvariant := ⟨fun x h => by
+      obtain ⟨a, ha⟩ := hE.isInvariant.isInvariant (algebraMap F L x) (by
+        rintro ⟨g, hg⟩
+        rw [MulAction.subgroup_smul_def]; rw [← algebraMap.smul']
+exact congr_arg (algebraMap F L) h ⟨g, ⟨g, hg, rfl⟩⟩)
+      exact ⟨a, FaithfulSMul.algebraMap_injective F L
+        (by rw [← IsScalarTower.algebraMap_apply, ha])⟩⟩ }
+
+@[deprecated (since := "2026-04-21")] alias quotientMap := map_quotientMk'
 
 Depends on / 依赖: IntermediateField, IntermediateField.inclusion, inclusion, toAlgebra
 -/

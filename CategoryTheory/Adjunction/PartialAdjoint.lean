@@ -317,7 +317,7 @@ definition partialLeftAdjoint
     simp [partialLeftAdjointHomEquiv_map]
   map_comp {X Y Z} f g := by
     apply F.partialLeftAdjointHomEquiv.injective
-    simp [partialLeftAdjointHomEquiv_comp, ← F.partialLef
+    simp [partialLeftAdjointHomEquiv_comp, ← F.partialLeftAdjointHomEquiv_comp]
 
 中文:
 定义 partialLeftAdjoint
@@ -329,7 +329,7 @@ definition partialLeftAdjoint
     simp [partialLeftAdjointHomEquiv_map]
   map_comp {X Y Z} f g := by
     apply F.partialLeftAdjointHomEquiv.injective
-    simp [partialLeftAdjointHomEquiv_comp, ← F.partialLef
+    simp [partialLeftAdjointHomEquiv_comp, ← F.partialLeftAdjointHomEquiv_comp]
 
 Depends on / 依赖: F.partialLeftAdjointObj, partialLeftAdjointObj
 -/
@@ -355,7 +355,7 @@ lemma isRightAdjoint_of_leftAdjointObjIsDefined_eq_top
     simp only [← leftAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
   exact (Adjunction.adjunctionOfEquivLeft
     (fun X Y => (F ⋙ coyoneda.obj (op X)).corepresentableBy.homEquiv)
-    (fun X Y Y' g f =
+    (fun X Y Y' g f => by apply CorepresentableBy.homEquiv_comp)).isRightAdjoint
 
 中文:
 引理 isRightAdjoint_of_leftAdjointObjIsDefined_eq_top
@@ -364,7 +364,7 @@ lemma isRightAdjoint_of_leftAdjointObjIsDefined_eq_top
     simp only [← leftAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
   exact (Adjunction.adjunctionOfEquivLeft
     (fun X Y => (F ⋙ coyoneda.obj (op X)).corepresentableBy.homEquiv)
-    (fun X Y Y' g f =
+    (fun X Y Y' g f => by apply CorepresentableBy.homEquiv_comp)).isRightAdjoint
 
 Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivLeft, CorepresentableBy, CorepresentableBy.homEquiv_comp, IsCorepresentable, Pi.top_apply, Prop.top_eq_true, adjunctionOfEquivLeft, corepresentableBy, corepresentableBy.homEquiv, coyoneda, coyoneda.obj, homEquiv, homEquiv_comp, isRightAdjoint, leftAdjointObjIsDefined_iff, replace, top_apply, top_eq_true
 -/
@@ -419,7 +419,19 @@ definition corepresentableByCompCoyonedaObjOfIsColimit
             dsimp
             rw [comp_id]; rw [← c'.w φ]; rw [← partialLeftAdjointHomEquiv_map_comp]; rw [assoc]
             dsimp })
-      invFu
+      invFun := fun g => hc'.desc (Cocone.mk _
+        { app := fun j => F.partialLeftAdjointHomEquiv.symm (c.ι.app j ≫ g)
+          naturality := fun j j' φ => by
+            apply F.partialLeftAdjointHomEquiv.injective
+            have := c.w φ
+            dsimp at this ⊢
+            rw [comp_id]; rw [Equiv.apply_symm_apply]; rw [partialLeftAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [reassoc_of% this] })
+      left_inv := fun f => hc'.hom_ext (fun j => by simp)
+      right_inv := fun g => hc.hom_ext (fun j => by simp) }
+  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
+    dsimp
+    simp only [IsColimit.fac, IsColimit.fac_assoc, partialLeftAdjointHomEquiv_comp,
+      F.map_comp, assoc])
 
 中文:
 定义 corepresentableByCompCoyonedaObjOfIsColimit
@@ -430,7 +442,19 @@ definition corepresentableByCompCoyonedaObjOfIsColimit
             dsimp
             rw [comp_id]; rw [← c'.w φ]; rw [← partialLeftAdjointHomEquiv_map_comp]; rw [assoc]
             dsimp })
-      invFu
+      invFun := fun g => hc'.desc (Cocone.mk _
+        { app := fun j => F.partialLeftAdjointHomEquiv.symm (c.ι.app j ≫ g)
+          naturality := fun j j' φ => by
+            apply F.partialLeftAdjointHomEquiv.injective
+            have := c.w φ
+            dsimp at this ⊢
+            rw [comp_id]; rw [Equiv.apply_symm_apply]; rw [partialLeftAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [reassoc_of% this] })
+      left_inv := fun f => hc'.hom_ext (fun j => by simp)
+      right_inv := fun g => hc.hom_ext (fun j => by simp) }
+  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
+    dsimp
+    simp only [IsColimit.fac, IsColimit.fac_assoc, partialLeftAdjointHomEquiv_comp,
+      F.map_comp, assoc])
 
 Depends on / 依赖: Cocone, Cocone.mk, Equiv.apply_symm_apply, F.partialLeftAdjointHomEquiv, F.partialLeftAdjointHomEquiv.injective, F.partialLeftAdjointHomEquiv.symm, apply_symm_apply, comp_id, hc.desc, injective, invFun, naturality, partialLeftAdjointHomEquiv, partialLeftAdjointHomEquiv_map_comp
 -/
@@ -780,7 +804,7 @@ definition partialRightAdjoint
     simp [partialRightAdjointHomEquiv_map]
   map_comp {X Y Z} f g := by
     apply F.partialRightAdjointHomEquiv.injective
-    simp [partialRightAdjointHomEquiv_comp, ← assoc,
+    simp [partialRightAdjointHomEquiv_comp, ← assoc, ← F.partialRightAdjointHomEquiv_comp]
 
 中文:
 定义 partialRightAdjoint
@@ -792,7 +816,7 @@ definition partialRightAdjoint
     simp [partialRightAdjointHomEquiv_map]
   map_comp {X Y Z} f g := by
     apply F.partialRightAdjointHomEquiv.injective
-    simp [partialRightAdjointHomEquiv_comp, ← assoc,
+    simp [partialRightAdjointHomEquiv_comp, ← assoc, ← F.partialRightAdjointHomEquiv_comp]
 
 Depends on / 依赖: F.partialRightAdjointObj, partialRightAdjointObj
 -/
@@ -818,7 +842,7 @@ lemma isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top
     simp only [← rightAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
   exact (Adjunction.adjunctionOfEquivRight
     (fun X Y => (F.op ⋙ yoneda.obj Y).representableBy.homEquiv.symm)
-    (fun X Y Y' g f => (Re
+    (fun X Y Y' g f => (RepresentableBy.comp_homEquiv_symm ..).symm)).isLeftAdjoint
 
 中文:
 引理 isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top
@@ -827,7 +851,7 @@ lemma isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top
     simp only [← rightAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
   exact (Adjunction.adjunctionOfEquivRight
     (fun X Y => (F.op ⋙ yoneda.obj Y).representableBy.homEquiv.symm)
-    (fun X Y Y' g f => (Re
+    (fun X Y Y' g f => (RepresentableBy.comp_homEquiv_symm ..).symm)).isLeftAdjoint
 
 Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivRight, F.op, IsRepresentable, Pi.top_apply, Prop.top_eq_true, RepresentableBy, RepresentableBy.comp_homEquiv_symm, adjunctionOfEquivRight, comp_homEquiv_symm, homEquiv, isLeftAdjoint, replace, representableBy, representableBy.homEquiv.symm, rightAdjointObjIsDefined_iff, top_apply, top_eq_true, yoneda, yoneda.obj
 -/
@@ -882,7 +906,18 @@ definition representableByCompYonedaObjOfIsLimit
             dsimp
             rw [id_comp]; rw [← c'.w φ]; rw [← partialRightAdjointHomEquiv_map_comp]; rw [← assoc]
             dsimp })
-      inv
+      invFun := fun g => hc'.lift (Cone.mk _
+        { app := fun j => F.partialRightAdjointHomEquiv.symm (g ≫ c.π.app j)
+          naturality := fun j j' φ => by
+            apply F.partialRightAdjointHomEquiv.injective
+            have := c.w φ
+            dsimp at this ⊢
+            rw [id_comp]; rw [Equiv.apply_symm_apply]; rw [partialRightAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [assoc]; rw [this] })
+      left_inv := fun f => hc'.hom_ext (fun j => by simp)
+      right_inv := fun g => hc.hom_ext (fun j => by simp) }
+  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
+    dsimp
+    simp only [IsLimit.fac, partialRightAdjointHomEquiv_comp, assoc])
 
 中文:
 定义 representableByCompYonedaObjOfIsLimit
@@ -893,7 +928,18 @@ definition representableByCompYonedaObjOfIsLimit
             dsimp
             rw [id_comp]; rw [← c'.w φ]; rw [← partialRightAdjointHomEquiv_map_comp]; rw [← assoc]
             dsimp })
-      inv
+      invFun := fun g => hc'.lift (Cone.mk _
+        { app := fun j => F.partialRightAdjointHomEquiv.symm (g ≫ c.π.app j)
+          naturality := fun j j' φ => by
+            apply F.partialRightAdjointHomEquiv.injective
+            have := c.w φ
+            dsimp at this ⊢
+            rw [id_comp]; rw [Equiv.apply_symm_apply]; rw [partialRightAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [assoc]; rw [this] })
+      left_inv := fun f => hc'.hom_ext (fun j => by simp)
+      right_inv := fun g => hc.hom_ext (fun j => by simp) }
+  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
+    dsimp
+    simp only [IsLimit.fac, partialRightAdjointHomEquiv_comp, assoc])
 
 Depends on / 依赖: Cone.mk, Equiv.apply_symm_apply, F.partialRightAdjointHomEquiv, F.partialRightAdjointHomEquiv.injective, F.partialRightAdjointHomEquiv.symm, apply_symm_apply, hc.lift, id_comp, injective, invFun, naturality, partialRightAdjointHomEquiv, partialRightAdjointHomEquiv_map_comp
 -/

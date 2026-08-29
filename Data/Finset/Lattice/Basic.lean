@@ -104,7 +104,10 @@ le_sup_left := fun _ _ _ h => mem_ndunion.2 Or.inl h
 le_sup_right := fun _ _ _ h => mem_ndunion.2 Or.inr h
   inf := (· inter ·)
   le_inf := fun _ _ _ ht hu _ h => mem_ndinter.2 ⟨ht h, hu h⟩
-  inf_le
+  inf_le_left := fun _ _ _ h => (mem_ndinter.1 h).1
+  inf_le_right := fun _ _ _ h => (mem_ndinter.1 h).2
+
+@[simp]
 
 中文:
 实例 :
@@ -115,7 +118,10 @@ le_sup_left := fun _ _ _ h => mem_ndunion.2 Or.inl h
 le_sup_right := fun _ _ _ h => mem_ndunion.2 Or.inr h
   inf := (· inter ·)
   le_inf := fun _ _ _ ht hu _ h => mem_ndinter.2 ⟨ht h, hu h⟩
-  inf_le
+  inf_le_left := fun _ _ _ h => (mem_ndinter.1 h).1
+  inf_le_right := fun _ _ _ h => (mem_ndinter.1 h).2
+
+@[simp]
 -/
 instance : Lattice (Finset α) where
   sup := (· union ·)

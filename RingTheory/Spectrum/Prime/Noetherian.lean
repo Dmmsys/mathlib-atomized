@@ -56,7 +56,7 @@ lemma finite_setOfPred_isMin
   simp_rw [isMin_iff]
   exact (minimalPrimes.finite_of_isNoetherianRing R).subset (Set.image_preimage_subset _ _)
 
-@[deprecated (since := "2026-07-09")] alias 
+@[deprecated (since := "2026-07-09")] alias finite_setOf_isMin := finite_setOfPred_isMin
 
 中文:
 引理 finite_setOfPred_isMin
@@ -66,7 +66,7 @@ lemma finite_setOfPred_isMin
   simp_rw [isMin_iff]
   exact (minimalPrimes.finite_of_isNoetherianRing R).subset (Set.image_preimage_subset _ _)
 
-@[deprecated (since := "2026-07-09")] alias 
+@[deprecated (since := "2026-07-09")] alias finite_setOf_isMin := finite_setOfPred_isMin
 
 Depends on / 依赖: Finite, Function, Function.Injective, Injective, PrimeSpectrum, PrimeSpectrum.ext, Set.Finite.of_finite_image, Set.image_preimage_subset, asIdeal, finite_of_isNoetherianRing, image_preimage_subset, isMin_iff, minimalPrimes, minimalPrimes.finite_of_isNoetherianRing, of_finite_image, simp_rw, subset, this.injOn
 -/
@@ -135,6 +135,18 @@ lemma exists_not_mem_forall_mem_of_ne
   have : algebraMap R (Localization p.primeCompl) r = 1 := by
     simpa [PrimeSpectrum.toPiLocalization,
       -FaithfulSMul.algebraMap_eq_one_iff] using funext_iff.mp hr ⟨p, inferInstance⟩
+  refine ⟨r, ?_, ?_, ?_⟩
+  · rw [← IsLocalization.AtPrime.to_map_mem_maximal_iff (Localization.AtPrime p) p, this]
+    simp
+  · apply PrimeSpectrum.toPiLocalization_bijective.injective
+    simp [map_mul, hr, ← Pi.single_mul]
+  · intro q hq e
+    have : PrimeSpectrum.mk q inferInstance != ⟨p, inferInstance⟩ := ne_of_apply_ne (·.1) e
+    have : (algebraMap R (Localization.AtPrime q)) r = 0 := by
+      simpa [PrimeSpectrum.toPiLocalization, this,
+        -FaithfulSMul.algebraMap_eq_zero_iff] using funext_iff.mp hr ⟨q, inferInstance⟩
+    rw [← IsLocalization.AtPrime.to_map_mem_maximal_iff (Localization.AtPrime q) q]; rw [this]
+    simp
 
 中文:
 引理 存在_not_mem_对任意_mem_of_ne
@@ -145,6 +157,18 @@ lemma exists_not_mem_forall_mem_of_ne
   have : algebraMap R (Localization p.primeCompl) r = 1 := by
     simpa [PrimeSpectrum.toPiLocalization,
       -FaithfulSMul.algebraMap_eq_one_iff] using funext_iff.mp hr ⟨p, inferInstance⟩
+  refine ⟨r, ?_, ?_, ?_⟩
+  · rw [← IsLocalization.AtPrime.to_map_mem_maximal_iff (Localization.AtPrime p) p, this]
+    simp
+  · apply PrimeSpectrum.toPiLocalization_bijective.injective
+    simp [map_mul, hr, ← Pi.single_mul]
+  · intro q hq e
+    have : PrimeSpectrum.mk q inferInstance != ⟨p, inferInstance⟩ := ne_of_apply_ne (·.1) e
+    have : (algebraMap R (Localization.AtPrime q)) r = 0 := by
+      simpa [PrimeSpectrum.toPiLocalization, this,
+        -FaithfulSMul.algebraMap_eq_zero_iff] using funext_iff.mp hr ⟨q, inferInstance⟩
+    rw [← IsLocalization.AtPrime.to_map_mem_maximal_iff (Localization.AtPrime q) q]; rw [this]
+    simp
 
 Depends on / 依赖: AtPrime, FaithfulSMul, FaithfulSMul.algebraMap_eq_one_iff, IsLocalization, IsLocalization.AtPrime.to_map_mem_maximal_iff, Localization, Localization.AtPrime, Pi.single, Pi.single_mul, PrimeSpectrum, PrimeSpectrum.toPiLocalization, PrimeSpectrum.toPiLocalization_bijective, PrimeSpectrum.toPiLocalization_bijective.injective, algebraMap, algebraMap_eq_one_iff, classical, funext_iff, funext_iff.mp, injective, map_mul
 -/
@@ -179,7 +203,8 @@ theorem finrank_eq_sum_primeSpectrum
   proof: have (p : Ideal R) [p.IsPrime] : Module.Finite F (Localization.AtPrime p) :=
     Module.Finite.of_surjective (Algebra.algHom F R (Localization.AtPrime p)).toLinearMap
       (localization_surjective p.primeCompl (Localization.AtPrime p))
-  ((toPiLocalizationEquiv R).restrictScalars F).toLinearEquiv.f
+  ((toPiLocalizationEquiv R).restrictScalars F).toLinearEquiv.finrank_eq.trans
+    (Module.finrank_pi_fintype F)
 
 中文:
 定理 finrank_eq_sum_primeSpectrum
@@ -187,7 +212,8 @@ theorem finrank_eq_sum_primeSpectrum
   证明: have (p : Ideal R) [p.IsPrime] : Module.Finite F (Localization.AtPrime p) :=
     Module.Finite.of_surjective (Algebra.algHom F R (Localization.AtPrime p)).toLinearMap
       (localization_surjective p.primeCompl (Localization.AtPrime p))
-  ((toPiLocalizationEquiv R).restrictScalars F).toLinearEquiv.f
+  ((toPiLocalizationEquiv R).restrictScalars F).toLinearEquiv.finrank_eq.trans
+    (Module.finrank_pi_fintype F)
 
 Depends on / 依赖: Algebra, Algebra.algHom, AtPrime, Finite, IsPrime, Localization, Localization.AtPrime, Module, Module.Finite, Module.Finite.of_surjective, Module.finrank_pi_fintype, algHom, finrank_eq, finrank_pi_fintype, localization_surjective, of_surjective, p.IsPrime, p.primeCompl, primeCompl, restrictScalars
 -/

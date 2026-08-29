@@ -140,7 +140,9 @@ definition Seminorm.ofSMulLE
     rw [← mul_le_mul_iff_right₀ (inv_pos.mpr (norm_pos_iff.mpr h))]
     rw [inv_mul_cancel_left₀ (norm_ne_zero_iff.mpr h)]
     specialize smul_le r⁻¹ (r • x)
-    rw [norm_inv] a
+    rw [norm_inv] at smul_le
+    convert! smul_le
+    simp [h]
 
 中文:
 定义 半范数.ofSMulLE
@@ -152,7 +154,9 @@ definition Seminorm.ofSMulLE
     rw [← mul_le_mul_iff_right₀ (inv_pos.mpr (norm_pos_iff.mpr h))]
     rw [inv_mul_cancel_left₀ (norm_ne_zero_iff.mpr h)]
     specialize smul_le r⁻¹ (r • x)
-    rw [norm_inv] a
+    rw [norm_inv] at smul_le
+    convert! smul_le
+    simp [h]
 
 Depends on / 依赖: Seminorm, Seminorm.of, add_le, convert, inv_pos, inv_pos.mpr, le_antisymm, map_zero, norm_inv, norm_ne_zero_iff, norm_ne_zero_iff.mpr, norm_pos_iff, norm_pos_iff.mpr, smul_le, specialize
 -/
@@ -689,7 +693,7 @@ theorem smul_sup
       mul_max_of_nonneg x y (r • (1 : Real>=0) : Real>=0).coe_nonneg
   ext fun _ => real.smul_max _ _
 
-@[simp, norm_c
+@[simp, norm_cast]
 
 中文:
 定理 smul_sup
@@ -699,7 +703,7 @@ theorem smul_sup
       mul_max_of_nonneg x y (r • (1 : Real>=0) : Real>=0).coe_nonneg
   ext fun _ => real.smul_max _ _
 
-@[simp, norm_c
+@[simp, norm_cast]
 
 Depends on / 依赖: NNReal, NNReal.smul_def, coe_nonneg, mul_max_of_nonneg, real.smul_max, smul_def, smul_eq_mul, smul_max, smul_one_smul
 -/
@@ -1207,7 +1211,7 @@ theorem finset_sup_apply
     rw [Finset.sup_empty]; rw [Finset.sup_empty]; rw [coe_bot]; rw [_root_.bot_eq_zero]; rw [Pi.zero_apply]
     norm_cast
   | cons a s ha ih =>
-    rw [Finset.sup_cons]; rw [Finset.sup_cons]; rw [coe_sup]; rw [Pi.sup_apply]; rw [NNRea
+    rw [Finset.sup_cons]; rw [Finset.sup_cons]; rw [coe_sup]; rw [Pi.sup_apply]; rw [NNReal.coe_max]; rw [NNReal.coe_mk]; rw [ih]
 
 中文:
 定理 finset_sup_apply
@@ -1218,7 +1222,7 @@ theorem finset_sup_apply
     rw [Finset.sup_empty]; rw [Finset.sup_empty]; rw [coe_bot]; rw [_root_.bot_eq_zero]; rw [Pi.zero_apply]
     norm_cast
   | cons a s ha ih =>
-    rw [Finset.sup_cons]; rw [Finset.sup_cons]; rw [coe_sup]; rw [Pi.sup_apply]; rw [NNRea
+    rw [Finset.sup_cons]; rw [Finset.sup_cons]; rw [coe_sup]; rw [Pi.sup_apply]; rw [NNReal.coe_max]; rw [NNReal.coe_mk]; rw [ih]
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, Finset.sup_cons, Finset.sup_empty, NNReal, NNReal.coe_max, NNReal.coe_mk, Pi.sup_apply, Pi.zero_apply, _root_, _root_.bot_eq_zero, bot_eq_zero, coe_bot, coe_max, coe_mk, coe_sup, cons_induction_on, sup_apply, sup_cons, sup_empty
 -/
@@ -1537,7 +1541,16 @@ instance instInf
         · rw [norm_zero, zero_mul, zero_smul]
           refine
             ciInf_eq_of_forall_ge_of_forall_gt_exists_lt
-    
+              (fun i => by positivity)
+              fun x hx => ⟨0, by rwa [map_zero, sub_zero, map_zero, add_zero]⟩
+        simp_rw [Real.mul_iInf_of_nonneg (norm_nonneg a), mul_add, ← map_smul_eq_mul p, ←
+          map_smul_eq_mul q, smul_sub]
+        refine
+          Function.Surjective.iInf_congr ((a⁻¹ • ·) : E -> E)
+            (fun u => ⟨a • u, inv_smul_smul₀ ha u⟩) fun u => ?_
+        rw [smul_inv_smul₀ ha] }
+
+@[simp]
 
 中文:
 实例 instInf
@@ -1550,7 +1563,16 @@ instance instInf
         · rw [norm_zero, zero_mul, zero_smul]
           refine
             ciInf_eq_of_forall_ge_of_forall_gt_exists_lt
-    
+              (fun i => by positivity)
+              fun x hx => ⟨0, by rwa [map_zero, sub_zero, map_zero, add_zero]⟩
+        simp_rw [Real.mul_iInf_of_nonneg (norm_nonneg a), mul_add, ← map_smul_eq_mul p, ←
+          map_smul_eq_mul q, smul_sub]
+        refine
+          Function.Surjective.iInf_congr ((a⁻¹ • ·) : E -> E)
+            (fun u => ⟨a • u, inv_smul_smul₀ ha u⟩) fun u => ?_
+        rw [smul_inv_smul₀ ha] }
+
+@[simp]
 
 Depends on / 依赖: Function, Function.Surjective.iInf_congr, Real.mul_iInf_of_nonneg, Surjective, add_zero, ciInf_eq_of_forall_ge_of_forall_gt_exists_lt, eq_or_ne, iInf_congr, map_smul_eq_mul, map_zero, mul_add, mul_iInf_of_nonneg, norm_nonneg, norm_zero, p.toAddGroupSeminorm, q.toAddGroupSeminorm, simp_rw, smul_sub, sub_zero, toAddGroupSeminorm
 -/
@@ -1605,7 +1627,9 @@ ciInf_le_of_le bddBelow_range_add x by
         simp only [sub_self, map_zero, add_zero]; rfl
     inf_le_right := fun p q x =>
 ciInf_le_of_le bddBelow_range_add 0 by
-        simp only [map_zero, zero_add, sub_zero];
+        simp only [map_zero, zero_add, sub_zero]; rfl
+    le_inf := fun a _ _ hab hac _ =>
+le_ciInf fun _ => (le_map_add_map_sub a _ _).trans add_le_add (hab _) (hac _) }
 
 中文:
 实例 instLattice
@@ -1617,7 +1641,9 @@ ciInf_le_of_le bddBelow_range_add x by
         simp only [sub_self, map_zero, add_zero]; rfl
     inf_le_right := fun p q x =>
 ciInf_le_of_le bddBelow_range_add 0 by
-        simp only [map_zero, zero_add, sub_zero];
+        simp only [map_zero, zero_add, sub_zero]; rfl
+    le_inf := fun a _ _ hab hac _ =>
+le_ciInf fun _ => (le_map_add_map_sub a _ _).trans add_le_add (hab _) (hac _) }
 
 Depends on / 依赖: Seminorm, Seminorm.instSemilatticeSup, add_le_add, add_zero, bddBelow_range_add, ciInf_le_of_le, inf_le_left, inf_le_right, instSemilatticeSup, le_ciInf, le_inf, le_map_add_map_sub, map_zero, sub_self, sub_zero, zero_add
 -/
@@ -1677,7 +1703,31 @@ instance instSupSet
           rename_i _ _ _ i
           exact map_zero i.1
         add_le' := fun x y => by
-   
+          rcases h with ⟨q, hq⟩
+          obtain rfl | h := s.eq_empty_or_nonempty
+          · simp [Real.iSup_of_isEmpty]
+          have : Nonempty ↑s := h.coe_sort
+          simp only [iSup_apply]
+          refine ciSup_le fun i =>
+((i : Seminorm 𝕜 E).add_le' x y).trans add_le_add
+              -- Porting note: `f` is provided to force `Subtype.val` to appear.
+              -- A type ascription on `_` would have also worked, but would have been more verbose.
+              (le_ciSup (f := fun i => (Subtype.val i : Seminorm 𝕜 E).toFun x) ⟨q x, ?_⟩ i)
+              (le_ciSup (f := fun i => (Subtype.val i : Seminorm 𝕜 E).toFun y) ⟨q y, ?_⟩ i)
+          <;> rw [mem_upperBounds, forall_mem_range]
+          <;> exact fun j => hq (mem_image_of_mem _ j.2) _
+        neg' := fun x => by
+          simp only [iSup_apply]
+          congr! 2
+          rename_i _ _ _ i
+          exact i.1.neg' _
+        smul' := fun a x => by
+          simp only [iSup_apply]
+          rw [← smul_eq_mul]; rw [Real.smul_iSup_of_nonneg (norm_nonneg a) fun i : s => (i : Seminorm 𝕜 E) x]
+          congr!
+          rename_i _ _ _ i
+          exact i.1.smul' a x }
+    else ⊥
 
 中文:
 实例 instSupSet
@@ -1690,7 +1740,31 @@ instance instSupSet
           rename_i _ _ _ i
           exact map_zero i.1
         add_le' := fun x y => by
-   
+          rcases h with ⟨q, hq⟩
+          obtain rfl | h := s.eq_empty_or_nonempty
+          · simp [Real.iSup_of_isEmpty]
+          have : Nonempty ↑s := h.coe_sort
+          simp only [iSup_apply]
+          refine ciSup_le fun i =>
+((i : Seminorm 𝕜 E).add_le' x y).trans add_le_add
+              -- Porting note: `f` is provided to force `Subtype.val` to appear.
+              -- A type ascription on `_` would have also worked, but would have been more verbose.
+              (le_ciSup (f := fun i => (Subtype.val i : Seminorm 𝕜 E).toFun x) ⟨q x, ?_⟩ i)
+              (le_ciSup (f := fun i => (Subtype.val i : Seminorm 𝕜 E).toFun y) ⟨q y, ?_⟩ i)
+          <;> rw [mem_upperBounds, forall_mem_range]
+          <;> exact fun j => hq (mem_image_of_mem _ j.2) _
+        neg' := fun x => by
+          simp only [iSup_apply]
+          congr! 2
+          rename_i _ _ _ i
+          exact i.1.neg' _
+        smul' := fun a x => by
+          simp only [iSup_apply]
+          rw [← smul_eq_mul]; rw [Real.smul_iSup_of_nonneg (norm_nonneg a) fun i : s => (i : Seminorm 𝕜 E) x]
+          congr!
+          rename_i _ _ _ i
+          exact i.1.smul' a x }
+    else ⊥
 
 Depends on / 依赖: BddAbove, Nonempty, Real.iSup_const_zero, Real.iSup_of_isEmpty, Seminorm, add_le, add_le_add, ciSup_le, coe_sort, eq_empty_or_nonempty, h.coe_sort, iSup_apply, iSup_const_zero, iSup_of_isEmpty, map_zero, rename_i, s.eq_empty_or_nonempty
 -/
@@ -3378,7 +3452,9 @@ theorem ball_norm_mul_subset
     rw [Set.mem_smul_set]; rw [Seminorm.mem_ball_zero]
     refine fun hx => ⟨k⁻¹ • x, ?_, ?_⟩
     · rwa [Seminorm.mem_ball_zero, map_smul_eq_mul, norm_inv, ←
-mul_lt_m
+mul_lt_mul_iff_right₀ norm_pos_iff.mpr hk, ← mul_assoc, ← div_eq_mul_inv ‖k‖ ‖k‖,
+        div_self (ne_of_gt <| norm_pos_iff.mpr hk), one_mul]
+    rw [← smul_assoc]; rw [smul_eq_mul]; rw [← div_eq_mul_inv]; rw [div_self hk]; rw [one_smul]
 
 中文:
 定理 ball_norm_mul_subset
@@ -3391,7 +3467,9 @@ mul_lt_m
     rw [Set.mem_smul_set]; rw [Seminorm.mem_ball_zero]
     refine fun hx => ⟨k⁻¹ • x, ?_, ?_⟩
     · rwa [Seminorm.mem_ball_zero, map_smul_eq_mul, norm_inv, ←
-mul_lt_m
+mul_lt_mul_iff_right₀ norm_pos_iff.mpr hk, ← mul_assoc, ← div_eq_mul_inv ‖k‖ ‖k‖,
+        div_self (ne_of_gt <| norm_pos_iff.mpr hk), one_mul]
+    rw [← smul_assoc]; rw [smul_eq_mul]; rw [← div_eq_mul_inv]; rw [div_self hk]; rw [one_smul]
 
 Depends on / 依赖: Seminorm, Seminorm.mem_ball_zero, Set.mem_smul_set, ball_eq_emptyset, div_eq_mul_inv, div_self, empty_subset, eq_or_ne, le_rfl, map_smul_eq_mul, mem_ball_zero, mem_smul_set, mul_assoc, ne_of_gt, norm_inv, norm_pos_iff, norm_pos_iff.mpr, norm_zero, one_mul, one_smul
 -/
@@ -3474,7 +3552,7 @@ theorem smul_closedBall_zero
   rw [Set.mem_smul_set]; rw [Seminorm.mem_closedBall_zero]
   refine fun hx => ⟨k⁻¹ • x, ?_, ?_⟩
   · rwa [Seminorm.mem_closedBall_zero, map_smul_eq_mul, norm_inv, inv_mul_le_iff₀ hk]
-  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← div_eq_mu
+  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← div_eq_mul_inv]; rw [div_self (norm_pos_iff.mp hk)]; rw [one_smul]
 
 中文:
 定理 smul_closedBall_zero
@@ -3485,7 +3563,7 @@ theorem smul_closedBall_zero
   rw [Set.mem_smul_set]; rw [Seminorm.mem_closedBall_zero]
   refine fun hx => ⟨k⁻¹ • x, ?_, ?_⟩
   · rwa [Seminorm.mem_closedBall_zero, map_smul_eq_mul, norm_inv, inv_mul_le_iff₀ hk]
-  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← div_eq_mu
+  rw [← smul_assoc]; rw [smul_eq_mul]; rw [← div_eq_mul_inv]; rw [div_self (norm_pos_iff.mp hk)]; rw [one_smul]
 
 Depends on / 依赖: Seminorm, Seminorm.mem_closedBall_zero, Set.mem_smul_set, div_eq_mul_inv, div_self, map_smul_eq_mul, mem_closedBall_zero, mem_smul_set, norm_inv, norm_pos_iff, norm_pos_iff.mp, one_smul, smul_assoc, smul_closedBall_subset, smul_eq_mul, subset_antisymm
 -/
@@ -3749,7 +3827,8 @@ theorem convexOn
     p (a • x + b • y) <= p (a • x) + p (b • y) := map_add_le_add p _ _
     _ = ‖a • (1 : 𝕜)‖ * p x + ‖b • (1 : 𝕜)‖ * p y := by
       rw [← map_smul_eq_mul p]; rw [← map_smul_eq_mul p]; rw [smul_one_smul]; rw [smul_one_smul]
-    _ = a * 
+    _ = a * p x + b * p y := by
+      rw [norm_smul]; rw [norm_smul]; rw [norm_one]; rw [mul_one]; rw [mul_one]; rw [Real.norm_of_nonneg ha]; rw [Real.norm_of_nonneg hb]
 
 中文:
 定理 convexOn
@@ -3760,7 +3839,8 @@ theorem convexOn
     p (a • x + b • y) <= p (a • x) + p (b • y) := map_add_le_add p _ _
     _ = ‖a • (1 : 𝕜)‖ * p x + ‖b • (1 : 𝕜)‖ * p y := by
       rw [← map_smul_eq_mul p]; rw [← map_smul_eq_mul p]; rw [smul_one_smul]; rw [smul_one_smul]
-    _ = a * 
+    _ = a * p x + b * p y := by
+      rw [norm_smul]; rw [norm_smul]; rw [norm_one]; rw [mul_one]; rw [mul_one]; rw [Real.norm_of_nonneg ha]; rw [Real.norm_of_nonneg hb]
 -/
 protected theorem convexOn : ConvexOn Real univ p := by
   refine ⟨convex_univ, fun x _ y _ a b ha hb _ => ?_⟩
@@ -3973,7 +4053,7 @@ theorem continuousAt_zero'
     · use 1; simpa using hr.trans_lt hε
     · simpa [lt_div_iff₀ hr] using exists_norm_lt 𝕜 (div_pos hε hr)
   grw [← hk]
-  rwa [← set_smul_me
+  rwa [← set_smul_mem_nhds_zero_iff (norm_pos_iff.1 hk₀), smul_closedBall_zero hk₀] at hp
 
 中文:
 定理 continuousAt_zero'
@@ -3985,7 +4065,7 @@ theorem continuousAt_zero'
     · use 1; simpa using hr.trans_lt hε
     · simpa [lt_div_iff₀ hr] using exists_norm_lt 𝕜 (div_pos hε hr)
   grw [← hk]
-  rwa [← set_smul_me
+  rwa [← set_smul_mem_nhds_zero_iff (norm_pos_iff.1 hk₀), smul_closedBall_zero hk₀] at hp
 
 Depends on / 依赖: continuousAt_zero_of_forall, div_pos, exists_norm_lt, hr.trans_lt, le_or_gt, norm_pos_iff, set_smul_mem_nhds_zero_iff, smul_closedBall_zero, trans_lt
 -/
@@ -4051,7 +4131,8 @@ theorem uniformContinuous_of_continuousAt_zero
   have hp : Filter.Tendsto p (𝓝 0) (𝓝 0) := map_zero p ▸ hp
   rw [UniformContinuous]; rw [uniformity_eq_comap_nhds_zero_swapped]; rw [Metric.uniformity_eq_comap_nhds_zero]; rw [Filter.tendsto_comap_iff]
   exact
-    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds (hp.comp Filter.tends
+    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds (hp.comp Filter.tendsto_comap)
+      (fun xy => dist_nonneg) fun xy => p.norm_sub_map_le_sub _ _
 
 中文:
 定理 uniformContinuous_of_continuousAt_zero
@@ -4060,7 +4141,8 @@ theorem uniformContinuous_of_continuousAt_zero
   have hp : Filter.Tendsto p (𝓝 0) (𝓝 0) := map_zero p ▸ hp
   rw [UniformContinuous]; rw [uniformity_eq_comap_nhds_zero_swapped]; rw [Metric.uniformity_eq_comap_nhds_zero]; rw [Filter.tendsto_comap_iff]
   exact
-    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds (hp.comp Filter.tends
+    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds (hp.comp Filter.tendsto_comap)
+      (fun xy => dist_nonneg) fun xy => p.norm_sub_map_le_sub _ _
 -/
 protected theorem uniformContinuous_of_continuousAt_zero [UniformSpace E] [IsUniformAddGroup E]
     {p : Seminorm 𝕝 E} (hp : ContinuousAt p 0) : UniformContinuous p := by
@@ -4372,7 +4454,11 @@ lemma uniformSpace_eq_of_hasBasis
   apply le_antisymm
   · rw [← @comap_norm_nhds_zero E p.toAddGroupSeminorm.toSeminormedAddGroup, ← tendsto_iff_comap]
     suffices Continuous p from this.tendsto' 0 _ (map_zero p)
-    rcas
+    rcases h₁ with ⟨r, hr⟩
+    exact p.continuous' hr
+  · rw [(@NormedAddGroup.nhds_zero_basis_norm_lt E
+      p.toAddGroupSeminorm.toSeminormedAddGroup).le_basis_iff hb]
+    simpa only [subset_def, mem_ball_zero] using! h₂
 
 中文:
 引理 uniformSpace_eq_of_hasBasis
@@ -4382,7 +4468,11 @@ lemma uniformSpace_eq_of_hasBasis
   apply le_antisymm
   · rw [← @comap_norm_nhds_zero E p.toAddGroupSeminorm.toSeminormedAddGroup, ← tendsto_iff_comap]
     suffices Continuous p from this.tendsto' 0 _ (map_zero p)
-    rcas
+    rcases h₁ with ⟨r, hr⟩
+    exact p.continuous' hr
+  · rw [(@NormedAddGroup.nhds_zero_basis_norm_lt E
+      p.toAddGroupSeminorm.toSeminormedAddGroup).le_basis_iff hb]
+    simpa only [subset_def, mem_ball_zero] using! h₂
 
 Depends on / 依赖: Continuous, IsUniformAddGroup, IsUniformAddGroup.ext, NormedAddGroup, NormedAddGroup.nhds_zero_basis_norm_lt, comap_norm_nhds_zero, continuous, le_antisymm, le_basis_iff, map_zero, mem_ball_zero, nhds_zero_basis_norm_lt, p.continuous, p.toAddGroupSeminorm.toSeminormedAddCommGroup.to_isUniformAddGroup, p.toAddGroupSeminorm.toSeminormedAddGroup, subset_def, tendsto, tendsto_iff_comap, this.tendsto, toAddGroupSeminorm
 -/
@@ -4448,7 +4538,17 @@ lemma rescale_to_shell_zpow
   have cpos : 0 < ‖c‖ := by positivity
   have cnpos : 0 < ‖c ^ (n + 1)‖ := by rw [norm_zpow]; exact xεpos.trans hn.2
   refine ⟨-(n + 1), ?_, ?_, ?_, ?_⟩
-  · show c ^ (-(n + 1)) != 0; exact zpow_ne_zer
+  · show c ^ (-(n + 1)) != 0; exact zpow_ne_zero _ (norm_pos_iff.1 cpos)
+  · show p ((c ^ (-(n + 1))) • x) < ε
+    rw [map_smul_eq_mul]; rw [zpow_neg]; rw [norm_inv]; rw [← div_eq_inv_mul]; rw [div_lt_iff₀ cnpos]; rw [mul_comm]; rw [norm_zpow]
+    exact (div_lt_iff₀ εpos).1 (hn.2)
+  · show ε / ‖c‖ <= p (c ^ (-(n + 1)) • x)
+    rw [zpow_neg]; rw [div_le_iff₀ cpos]; rw [map_smul_eq_mul]; rw [norm_inv]; rw [norm_zpow]; rw [zpow_add₀ (ne_of_gt cpos)]; rw [zpow_one]; rw [mul_inv_rev]; rw [mul_comm]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_cancel₀ (ne_of_gt cpos)]; rw [one_mul]; rw [← div_eq_inv_mul]; rw [le_div_iff₀ (zpow_pos cpos _)]; rw [mul_comm]
+    exact (le_div_iff₀ εpos).1 hn.1
+  · show ‖(c ^ (-(n + 1)))‖⁻¹ <= ε⁻¹ * ‖c‖ * p x
+    have : ε⁻¹ * ‖c‖ * p x = ε⁻¹ * p x * ‖c‖ := by ring
+    rw [zpow_neg]; rw [norm_inv]; rw [inv_inv]; rw [norm_zpow]; rw [zpow_add₀ (ne_of_gt cpos)]; rw [zpow_one]; rw [this]; rw [← div_eq_inv_mul]
+    gcongr; exact hn.1
 
 中文:
 引理 rescale_to_shell_zpow
@@ -4459,7 +4559,17 @@ lemma rescale_to_shell_zpow
   have cpos : 0 < ‖c‖ := by positivity
   have cnpos : 0 < ‖c ^ (n + 1)‖ := by rw [norm_zpow]; exact xεpos.trans hn.2
   refine ⟨-(n + 1), ?_, ?_, ?_, ?_⟩
-  · show c ^ (-(n + 1)) != 0; exact zpow_ne_zer
+  · show c ^ (-(n + 1)) != 0; exact zpow_ne_zero _ (norm_pos_iff.1 cpos)
+  · show p ((c ^ (-(n + 1))) • x) < ε
+    rw [map_smul_eq_mul]; rw [zpow_neg]; rw [norm_inv]; rw [← div_eq_inv_mul]; rw [div_lt_iff₀ cnpos]; rw [mul_comm]; rw [norm_zpow]
+    exact (div_lt_iff₀ εpos).1 (hn.2)
+  · show ε / ‖c‖ <= p (c ^ (-(n + 1)) • x)
+    rw [zpow_neg]; rw [div_le_iff₀ cpos]; rw [map_smul_eq_mul]; rw [norm_inv]; rw [norm_zpow]; rw [zpow_add₀ (ne_of_gt cpos)]; rw [zpow_one]; rw [mul_inv_rev]; rw [mul_comm]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_cancel₀ (ne_of_gt cpos)]; rw [one_mul]; rw [← div_eq_inv_mul]; rw [le_div_iff₀ (zpow_pos cpos _)]; rw [mul_comm]
+    exact (le_div_iff₀ εpos).1 hn.1
+  · show ‖(c ^ (-(n + 1)))‖⁻¹ <= ε⁻¹ * ‖c‖ * p x
+    have : ε⁻¹ * ‖c‖ * p x = ε⁻¹ * p x * ‖c‖ := by ring
+    rw [zpow_neg]; rw [norm_inv]; rw [inv_inv]; rw [norm_zpow]; rw [zpow_add₀ (ne_of_gt cpos)]; rw [zpow_one]; rw [this]; rw [← div_eq_inv_mul]
+    gcongr; exact hn.1
 
 Depends on / 依赖: div_eq_inv_mul, exists_mem_Ico_zpow, map_smul_eq_mul, mul_comm, norm_inv, norm_pos_iff, norm_zpow, pos.trans, zpow_ne_zero, zpow_neg
 -/
@@ -4561,7 +4671,8 @@ lemma bound_of_shell_sup
     ne_of_gt ((hjx.symm.lt_of_le <| apply_nonneg _ _).trans_le (le_finset_sup_apply hj))
   refine (s.sup p).bound_of_shell_smul q ε_pos hc (fun y hle hlt => ?_) this
   rcases exists_apply_eq_finset_sup p ⟨j, hj⟩ y with ⟨i, hi, hiy⟩
-  rw [
+  rw [smul_apply]; rw [hiy]
+  exact hf y (fun k hk => (le_finset_sup_apply hk).trans_lt hlt) i hi (hiy ▸ hle)
 
 中文:
 引理 bound_of_shell_sup
@@ -4572,7 +4683,8 @@ lemma bound_of_shell_sup
     ne_of_gt ((hjx.symm.lt_of_le <| apply_nonneg _ _).trans_le (le_finset_sup_apply hj))
   refine (s.sup p).bound_of_shell_smul q ε_pos hc (fun y hle hlt => ?_) this
   rcases exists_apply_eq_finset_sup p ⟨j, hj⟩ y with ⟨i, hi, hiy⟩
-  rw [
+  rw [smul_apply]; rw [hiy]
+  exact hf y (fun k hk => (le_finset_sup_apply hk).trans_lt hlt) i hi (hiy ▸ hle)
 
 Depends on / 依赖: apply_nonneg, bound_of_shell_smul, exists_apply_eq_finset_sup, hjx.symm.lt_of_le, le_finset_sup_apply, lt_of_le, ne_of_gt, s.sup, smul_apply, trans_le, trans_lt
 -/
@@ -4608,7 +4720,7 @@ lemma bddAbove_of_absorbent
     (eventually_mem_nhdsWithin.and (hs.eventually_nhdsNE_zero x)).exists
   rcases h _ hc with ⟨M, hM⟩
   refine ⟨M / ‖c‖, forall_mem_range.mpr fun i => (le_div_iff₀' (norm_pos_iff.2 hc₀)).2 ?_⟩
-
+  exact hM ⟨i, map_smul_eq_mul ..⟩
 
 中文:
 引理 bddAbove_of_absorbent
@@ -4620,7 +4732,7 @@ lemma bddAbove_of_absorbent
     (eventually_mem_nhdsWithin.and (hs.eventually_nhdsNE_zero x)).exists
   rcases h _ hc with ⟨M, hM⟩
   refine ⟨M / ‖c‖, forall_mem_range.mpr fun i => (le_div_iff₀' (norm_pos_iff.2 hc₀)).2 ?_⟩
-
+  exact hM ⟨i, map_smul_eq_mul ..⟩
 
 Depends on / 依赖: Seminorm, Seminorm.bddAbove_range_iff, bddAbove_range_iff, eventually_mem_nhdsWithin, eventually_mem_nhdsWithin.and, eventually_nhdsNE_zero, forall_mem_range, forall_mem_range.mpr, hs.eventually_nhdsNE_zero, map_smul_eq_mul, norm_pos_iff
 -/

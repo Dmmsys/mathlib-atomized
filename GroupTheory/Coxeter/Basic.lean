@@ -176,7 +176,8 @@ theorem reindex_relationsSet
   _ = Set.range (FreeGroup.freeGroupCongr e ∘ uncurry M.relation) := by
       apply congrArg Set.range
       ext ⟨i, i'⟩
-      simp [relation, reindex_apply,
+      simp [relation, reindex_apply, M']
+  _ = _ := by simp [Set.range_comp, relationsSet]
 
 中文:
 定理 reindex_relationsSet
@@ -186,7 +187,8 @@ theorem reindex_relationsSet
   _ = Set.range (FreeGroup.freeGroupCongr e ∘ uncurry M.relation) := by
       apply congrArg Set.range
       ext ⟨i, i'⟩
-      simp [relation, reindex_apply,
+      simp [relation, reindex_apply, M']
+  _ = _ := by simp [Set.range_comp, relationsSet]
 
 Depends on / 依赖: M.reindex, Matrix, Matrix.toLinAlgEquiv, apply_symm_apply, reindex, toLinAlgEquiv
 -/
@@ -212,7 +214,7 @@ definition reindexGroupEquiv
     (Subgroup.normalClosure (M.reindex e).relationsSet)
     (FreeGroup.freeGroupCongr e)
     (by
-      rw [reindex_relationsSet]; rw [Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective)]; rw [Mo
+      rw [reindex_relationsSet]; rw [Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective)]; rw [MonoidHom.coe_coe])
 
 中文:
 定义 reindexGroupEquiv
@@ -222,7 +224,7 @@ definition reindexGroupEquiv
     (Subgroup.normalClosure (M.reindex e).relationsSet)
     (FreeGroup.freeGroupCongr e)
     (by
-      rw [reindex_relationsSet]; rw [Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective)]; rw [Mo
+      rw [reindex_relationsSet]; rw [Subgroup.map_normalClosure _ _ (by simpa using (FreeGroup.freeGroupCongr e).surjective)]; rw [MonoidHom.coe_coe])
 
 Depends on / 依赖: FreeGroup, FreeGroup.freeGroupCongr, M.reindex, M.relationsSet, MonoidHom, MonoidHom.coe_coe, QuotientGroup, QuotientGroup.congr, Subgroup, Subgroup.map_normalClosure, Subgroup.normalClosure, coe_coe, freeGroupCongr, map_normalClosure, normalClosure, reindex, reindex_relationsSet, relationsSet, surjective
 -/
@@ -476,7 +478,10 @@ theorem simple_mul_simple_self
   have : (PresentedGroup.mk _ (FreeGroup.of i * FreeGroup.of i) : M.Group) = 1 :=
     (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
   unfold simple
-  rw [← map_mul]; rw [Presente
+  rw [← map_mul]; rw [PresentedGroup.of]; rw [map_mul]
+  exact map_mul_eq_one cs.mulEquiv.symm this
+
+@[simp]
 
 中文:
 定理 simple_mul_simple_self
@@ -487,7 +492,10 @@ theorem simple_mul_simple_self
   have : (PresentedGroup.mk _ (FreeGroup.of i * FreeGroup.of i) : M.Group) = 1 :=
     (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
   unfold simple
-  rw [← map_mul]; rw [Presente
+  rw [← map_mul]; rw [PresentedGroup.of]; rw [map_mul]
+  exact map_mul_eq_one cs.mulEquiv.symm this
+
+@[simp]
 
 Depends on / 依赖: FreeGroup, FreeGroup.of, M.Group, M.relationsSet, PresentedGroup, PresentedGroup.mk, PresentedGroup.of, QuotientGroup, QuotientGroup.eq_one_iff, Subgroup, Subgroup.subset_normalClosure, cs.mulEquiv.symm, eq_one_iff, map_mul, map_mul_eq_one, mulEquiv, relation, relationsSet, simple, subset_normalClosure
 -/
@@ -605,7 +613,8 @@ theorem simple_mul_simple_pow
   have : (PresentedGroup.mk _ ((FreeGroup.of i * FreeGroup.of i') ^ M i i') : M.Group) = 1 :=
     (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
   unfold simple
-  rw [← map_mul]; rw [← 
+  rw [← map_mul]; rw [← map_pow]
+  exact (MulEquiv.map_eq_one_iff cs.mulEquiv.symm).mpr this
 
 中文:
 定理 simple_mul_simple_pow
@@ -616,7 +625,8 @@ theorem simple_mul_simple_pow
   have : (PresentedGroup.mk _ ((FreeGroup.of i * FreeGroup.of i') ^ M i i') : M.Group) = 1 :=
     (QuotientGroup.eq_one_iff _).mpr (Subgroup.subset_normalClosure this)
   unfold simple
-  rw [← map_mul]; rw [← 
+  rw [← map_mul]; rw [← map_pow]
+  exact (MulEquiv.map_eq_one_iff cs.mulEquiv.symm).mpr this
 
 Depends on / 依赖: FreeGroup, FreeGroup.of, M.Group, M.relationsSet, MulEquiv, MulEquiv.map_eq_one_iff, PresentedGroup, PresentedGroup.mk, QuotientGroup, QuotientGroup.eq_one_iff, Subgroup, Subgroup.subset_normalClosure, cs.mulEquiv.symm, eq_one_iff, map_eq_one_iff, map_mul, map_pow, mulEquiv, relationsSet, simple
 -/
@@ -741,7 +751,8 @@ theorem simple_induction_left
   induction this using Submonoid.closure_induction_left with
   | one => exact one
   | mul_left i mi y my ih =>
-    rw [Set.mem_ra
+    rw [Set.mem_range] at mi
+    exact mi.choose_spec ▸ mul_simple_left _ _ ih
 
 中文:
 定理 simple_induction_left
@@ -753,7 +764,8 @@ theorem simple_induction_left
   induction this using Submonoid.closure_induction_left with
   | one => exact one
   | mul_left i mi y my ih =>
-    rw [Set.mem_ra
+    rw [Set.mem_range] at mi
+    exact mi.choose_spec ▸ mul_simple_left _ _ ih
 
 Depends on / 依赖: Set.mem_range, Set.range, Submonoid, Submonoid.closure, Submonoid.closure_induction_left, Submonoid.mem_top, choose_spec, closure, closure_induction_left, cs.simple, cs.submonoid_closure_range_simple.symm, mem_range, mem_top, mi.choose_spec, mul_left, mul_simple_left, simple, submonoid_closure_range_simple
 -/
@@ -781,7 +793,8 @@ theorem simple_induction_right
   induction this using Submonoid.closure_induction_right with
   | one => exact one
   | mul_right y my i mi ih =>
-    rw [Set.me
+    rw [Set.mem_range] at mi
+    exact mi.choose_spec ▸ mul_simple_right _ _ ih
 
 中文:
 定理 simple_induction_right
@@ -793,7 +806,8 @@ theorem simple_induction_right
   induction this using Submonoid.closure_induction_right with
   | one => exact one
   | mul_right y my i mi ih =>
-    rw [Set.me
+    rw [Set.mem_range] at mi
+    exact mi.choose_spec ▸ mul_simple_right _ _ ih
 
 Depends on / 依赖: Set.mem_range, Set.range, Submonoid, Submonoid.closure, Submonoid.closure_induction_right, Submonoid.mem_top, choose_spec, closure, closure_induction_right, cs.simple, cs.submonoid_closure_range_simple.symm, mem_range, mem_top, mi.choose_spec, mul_right, mul_simple_right, simple, submonoid_closure_range_simple
 -/
@@ -951,7 +965,19 @@ definition lift
     (show forall i i', ((restrictUnit f.property) i * (restrictUnit f.property) i') ^ M i i' = 1 from
       fun i i' => Units.ext (f.property i i')))
   invFun ι := ⟨ι ∘ cs.simple, fun i i' => by
-    rw [comp_apply]; rw [comp_apply]; rw [← map_mul]; rw [←
+    rw [comp_apply]; rw [comp_apply]; rw [← map_mul]; rw [← map_pow]; rw [simple_mul_simple_pow]; rw [map_one]⟩
+  left_inv f := by
+    ext i
+    simp only [MonoidHom.comp_apply, comp_apply, groupLift, simple]
+    rw [← MonoidHom.toFun_eq_coe]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [Units.coeHom_apply]; rw [restrictUnit]
+  right_inv ι := by
+    apply cs.ext_simple
+    intro i
+    dsimp only
+    rw [groupLift]; rw [simple]; rw [MonoidHom.comp_apply]; rw [MonoidHom.comp_apply]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [CoxeterSystem.restrictUnit]; rw [Units.coeHom_apply]
+    simp only [comp_apply, simple]
+
+@[simp]
 
 中文:
 定义 lift
@@ -960,7 +986,19 @@ definition lift
     (show forall i i', ((restrictUnit f.property) i * (restrictUnit f.property) i') ^ M i i' = 1 from
       fun i i' => Units.ext (f.property i i')))
   invFun ι := ⟨ι ∘ cs.simple, fun i i' => by
-    rw [comp_apply]; rw [comp_apply]; rw [← map_mul]; rw [←
+    rw [comp_apply]; rw [comp_apply]; rw [← map_mul]; rw [← map_pow]; rw [simple_mul_simple_pow]; rw [map_one]⟩
+  left_inv f := by
+    ext i
+    simp only [MonoidHom.comp_apply, comp_apply, groupLift, simple]
+    rw [← MonoidHom.toFun_eq_coe]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [Units.coeHom_apply]; rw [restrictUnit]
+  right_inv ι := by
+    apply cs.ext_simple
+    intro i
+    dsimp only
+    rw [groupLift]; rw [simple]; rw [MonoidHom.comp_apply]; rw [MonoidHom.comp_apply]; rw [toMonoidHom_apply_symm_apply]; rw [PresentedGroup.toGroup.of]; rw [CoxeterSystem.restrictUnit]; rw [Units.coeHom_apply]
+    simp only [comp_apply, simple]
+
+@[simp]
 
 Depends on / 依赖: MonoidHom, MonoidHom.comp, Units.coeHom, coeHom, cs.groupLift, groupLift
 -/
@@ -1383,7 +1421,8 @@ lemma getElem_alternatingWord_swapIndices
   · rw [if_pos h_even, ← add_assoc]
     simp only [ite_eq_right_iff, isEmpty_Prop, Nat.not_even_iff_odd, Even.add_one h_even,
       IsEmpty.forall_iff]
-  · rw [if_
+  · rw [if_neg h_even, ← add_assoc]
+    simp [Odd.add_one (Nat.not_even_iff_odd.mp h_even)]
 
 中文:
 引理 getElem_alternatingWord_swapIndices
@@ -1394,7 +1433,8 @@ lemma getElem_alternatingWord_swapIndices
   · rw [if_pos h_even, ← add_assoc]
     simp only [ite_eq_right_iff, isEmpty_Prop, Nat.not_even_iff_odd, Even.add_one h_even,
       IsEmpty.forall_iff]
-  · rw [if_
+  · rw [if_neg h_even, ← add_assoc]
+    simp [Odd.add_one (Nat.not_even_iff_odd.mp h_even)]
 
 Depends on / 依赖: Even.add_one, IsEmpty, IsEmpty.forall_iff, Nat.not_even_iff_odd, Nat.not_even_iff_odd.mp, Odd.add_one, add_assoc, add_one, forall_iff, getElem_alternatingWord, h_even, if_neg, if_pos, isEmpty_Prop, ite_eq_right_iff, not_even_iff_odd
 -/
@@ -1424,7 +1464,17 @@ lemma listTake_alternatingWord
       apply h' at hk
       by_cases h_even : Even k
       · simp only [h_even, ↓reduceIte] at hk
-        simp only [Nat.not_even_iff_odd.mpr 
+        simp only [Nat.not_even_iff_odd.mpr (Even.add_one h_even), ↓reduceIte]
+        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [← hk]
+        apply congr_arg
+        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
+        simp [(by apply Nat.even_add.mpr; simp [h_even] : Even (2 * p + k))]
+      · simp only [h_even, ↓reduceIte] at hk
+        simp only [Odd.add_one (by simpa using h_even), ↓reduceIte]
+        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [hk]
+        apply congr_arg
+        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
+        simp [(by apply Nat.odd_add.mpr; simp [h_even] : Odd (2 * p + k))]
 
 中文:
 引理 listTake_alternatingWord
@@ -1438,7 +1488,17 @@ lemma listTake_alternatingWord
       apply h' at hk
       by_cases h_even : Even k
       · simp only [h_even, ↓reduceIte] at hk
-        simp only [Nat.not_even_iff_odd.mpr 
+        simp only [Nat.not_even_iff_odd.mpr (Even.add_one h_even), ↓reduceIte]
+        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [← hk]
+        apply congr_arg
+        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
+        simp [(by apply Nat.even_add.mpr; simp [h_even] : Even (2 * p + k))]
+      · simp only [h_even, ↓reduceIte] at hk
+        simp only [Odd.add_one (by simpa using h_even), ↓reduceIte]
+        rw [← List.take_concat_get (by simp; lia)]; rw [alternatingWord_succ]; rw [hk]
+        apply congr_arg
+        rw [getElem_alternatingWord i j (2 * p) k (by lia)]
+        simp [(by apply Nat.odd_add.mpr; simp [h_even] : Odd (2 * p + k))]
 
 Depends on / 依赖: Even.add_one, Even.zero, List.take_concat_get, Nat.even_add.mpr, Nat.not_even_iff_odd.mpr, add_one, alternatingWord, alternatingWord_succ, congr_arg, even_add, getElem_alternatingWord, h_even, not_even_iff_odd, reduceIte, take_concat_get, take_zero
 -/
@@ -1475,7 +1535,8 @@ lemma listTake_succ_alternatingWord
   rw [listTake_alternatingWord j i p k (by lia)]; rw [listTake_alternatingWord i j p (k + 1) h]
   by_cases h_even : Even k
   · simp [Nat.not_even_iff_odd.mpr (Even.add_one h_even), alternatingWord_succ', h_even]
-  · simp [(by rw [Nat.not_even_iff_odd] at h_even; exact Odd.add_one h_even : Even (k
+  · simp [(by rw [Nat.not_even_iff_odd] at h_even; exact Odd.add_one h_even : Even (k + 1)),
+      alternatingWord_succ', h_even]
 
 中文:
 引理 listTake_succ_alternatingWord
@@ -1484,7 +1545,8 @@ lemma listTake_succ_alternatingWord
   rw [listTake_alternatingWord j i p k (by lia)]; rw [listTake_alternatingWord i j p (k + 1) h]
   by_cases h_even : Even k
   · simp [Nat.not_even_iff_odd.mpr (Even.add_one h_even), alternatingWord_succ', h_even]
-  · simp [(by rw [Nat.not_even_iff_odd] at h_even; exact Odd.add_one h_even : Even (k
+  · simp [(by rw [Nat.not_even_iff_odd] at h_even; exact Odd.add_one h_even : Even (k + 1)),
+      alternatingWord_succ', h_even]
 
 Depends on / 依赖: Even.add_one, Nat.not_even_iff_odd, Nat.not_even_iff_odd.mpr, Odd.add_one, add_one, alternatingWord_succ, h_even, listTake_alternatingWord, not_even_iff_odd
 -/
@@ -1510,7 +1572,11 @@ theorem prod_alternatingWord_eq_mul_pow
     rw [alternatingWord_succ']; rw [wordProd_cons]; rw [ih]
     by_cases hm : Even m
     · have h₁ : ¬ Even (m + 1) := by simp [hm, parity_simps]
-have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_two_
+have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_two_dvd]
+      simp [hm, h₁, h₂]
+    · have h₁ : Even (m + 1) := by simp [hm, parity_simps]
+      have h₂ : (m + 1) / 2 = m / 2 + 1 := Nat.succ_div_of_dvd h₁.two_dvd
+      simp [hm, h₁, h₂, ← pow_succ', ← mul_assoc]
 
 中文:
 定理 prod_alternatingWord_eq_mul_pow
@@ -1522,7 +1588,11 @@ have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_
     rw [alternatingWord_succ']; rw [wordProd_cons]; rw [ih]
     by_cases hm : Even m
     · have h₁ : ¬ Even (m + 1) := by simp [hm, parity_simps]
-have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_two_
+have h₂ : (m + 1) / 2 = m / 2 := Nat.succ_div_of_not_dvd by rwa [← even_iff_two_dvd]
+      simp [hm, h₁, h₂]
+    · have h₁ : Even (m + 1) := by simp [hm, parity_simps]
+      have h₂ : (m + 1) / 2 = m / 2 + 1 := Nat.succ_div_of_dvd h₁.two_dvd
+      simp [hm, h₁, h₂, ← pow_succ', ← mul_assoc]
 
 Depends on / 依赖: Nat.succ_div_of_dvd, Nat.succ_div_of_not_dvd, alternatingWord, alternatingWord_succ, even_iff_two_dvd, mul_assoc, parity_simps, pow_succ, succ_div_of_dvd, succ_div_of_not_dvd, two_dvd, wordProd_cons
 -/
@@ -1553,7 +1623,20 @@ theorem prod_alternatingWord_eq_prod_alternatingWord_sub
   simp_rw [← zpow_natCast, Int.natCast_ediv, Int.ofNat_sub hm]
   generalize (m : Int) = m'
   clear hm
-  pus
+  push_cast
+  rcases Int.even_or_odd' m' with ⟨k, rfl | rfl⟩
+  · rw [if_pos (by use k; ring), if_pos (by use -k + (M i i'); ring), mul_comm 2 k, ← sub_mul]
+    repeat rw [Int.mul_ediv_cancel _ (by simp)]
+    rw [zpow_sub]; rw [zpow_natCast]; rw [simple_mul_simple_pow' cs i i']; rw [← inv_zpow]
+    simp
+  · have : ¬Even (2 * k + 1) := Int.not_even_iff_odd.2 ⟨k, rfl⟩
+    rw [if_neg this]
+    have : ¬Even (↑(M i i') * 2 - (2 * k + 1)) :=
+      Int.not_even_iff_odd.2 ⟨↑(M i i') - k - 1, by ring⟩
+    rw [if_neg this]
+    rw [(by ring : ↑(M i i') * 2 - (2 * k + 1) = -1 + (-k + ↑(M i i')) * 2)]; rw [(by ring : 2 * k + 1 = 1 + k * 2)]
+    repeat rw [Int.add_mul_ediv_right _ _ (by simp)]
+    simp [zpow_add, simple_mul_simple_pow', ← inv_zpow, ← mul_assoc]
 
 中文:
 定理 prod_alternatingWord_eq_prod_alternatingWord_sub
@@ -1565,7 +1648,20 @@ theorem prod_alternatingWord_eq_prod_alternatingWord_sub
   simp_rw [← zpow_natCast, Int.natCast_ediv, Int.ofNat_sub hm]
   generalize (m : Int) = m'
   clear hm
-  pus
+  push_cast
+  rcases Int.even_or_odd' m' with ⟨k, rfl | rfl⟩
+  · rw [if_pos (by use k; ring), if_pos (by use -k + (M i i'); ring), mul_comm 2 k, ← sub_mul]
+    repeat rw [Int.mul_ediv_cancel _ (by simp)]
+    rw [zpow_sub]; rw [zpow_natCast]; rw [simple_mul_simple_pow' cs i i']; rw [← inv_zpow]
+    simp
+  · have : ¬Even (2 * k + 1) := Int.not_even_iff_odd.2 ⟨k, rfl⟩
+    rw [if_neg this]
+    have : ¬Even (↑(M i i') * 2 - (2 * k + 1)) :=
+      Int.not_even_iff_odd.2 ⟨↑(M i i') - k - 1, by ring⟩
+    rw [if_neg this]
+    rw [(by ring : ↑(M i i') * 2 - (2 * k + 1) = -1 + (-k + ↑(M i i')) * 2)]; rw [(by ring : 2 * k + 1 = 1 + k * 2)]
+    repeat rw [Int.add_mul_ediv_right _ _ (by simp)]
+    simp [zpow_add, simple_mul_simple_pow', ← inv_zpow, ← mul_assoc]
 
 Depends on / 依赖: Int.even_coe_nat, even_coe_nat, prod_alternatingWord_eq_mul_pow, simp_rw
 -/

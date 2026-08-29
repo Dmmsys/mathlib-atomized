@@ -68,7 +68,21 @@ definition multiforkEvaluationCone
           (by
             intro i
             simp only [Category.assoc]
-            erw [← (E.π.app k).naturality, ← (E.π.app k)
+            erw [← (E.π.app k).naturality, ← (E.π.app k).naturality]
+            dsimp
+            simp only [← Category.assoc]
+            congr 1
+            apply S.condition)
+      naturality := by
+        intro i j f
+        dsimp [Presheaf.isLimitOfIsSheaf]
+        rw [Category.id_comp]
+        apply Presheaf.IsSheaf.hom_ext (F.obj j).2 W
+        intro ii
+        rw [Presheaf.IsSheaf.amalgamate_map]; rw [Category.assoc]; rw [← (F.map f).hom.naturality]; rw [←
+          Category.assoc]; rw [Presheaf.IsSheaf.amalgamate_map]
+        erw [Category.assoc, ← E.w f]
+        cat_disch }
 
 中文:
 定义 multiforkEvaluationCone
@@ -80,7 +94,21 @@ definition multiforkEvaluationCone
           (by
             intro i
             simp only [Category.assoc]
-            erw [← (E.π.app k).naturality, ← (E.π.app k)
+            erw [← (E.π.app k).naturality, ← (E.π.app k).naturality]
+            dsimp
+            simp only [← Category.assoc]
+            congr 1
+            apply S.condition)
+      naturality := by
+        intro i j f
+        dsimp [Presheaf.isLimitOfIsSheaf]
+        rw [Category.id_comp]
+        apply Presheaf.IsSheaf.hom_ext (F.obj j).2 W
+        intro ii
+        rw [Presheaf.IsSheaf.amalgamate_map]; rw [Category.assoc]; rw [← (F.map f).hom.naturality]; rw [←
+          Category.assoc]; rw [Presheaf.IsSheaf.amalgamate_map]
+        erw [Category.assoc, ← E.w f]
+        cat_disch }
 
 Depends on / 依赖: S.pt
 -/
@@ -128,7 +156,27 @@ definition isLimitMultiforkOfIsLimit
       apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op i.Y)) hE).hom_ext
       intro k
       dsimp [Multifork.ofι]
-      erw [Cat
+      erw [Category.assoc, (E.π.app k).naturality]
+      dsimp
+      rw [← Category.assoc]
+      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac
+        (multiforkEvaluationCone F E X W S)]
+      dsimp [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
+      rw [Presheaf.IsSheaf.amalgamate_map])
+    (by
+      intro S m hm
+      apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).hom_ext
+      intro k
+      dsimp
+      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac]
+      apply Presheaf.IsSheaf.hom_ext (F.obj k).2 W
+      intro i
+      dsimp only [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
+      rw [(F.obj k).property.amalgamate_map]
+      dsimp [Multifork.ofι]
+      change _ = S.ι i ≫ _
+      erw [← hm, Category.assoc, ← (E.π.app k).naturality, Category.assoc]
+      rfl)
 
 中文:
 定义 isLimitMultiforkOfIsLimit
@@ -141,7 +189,27 @@ definition isLimitMultiforkOfIsLimit
       apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op i.Y)) hE).hom_ext
       intro k
       dsimp [Multifork.ofι]
-      erw [Cat
+      erw [Category.assoc, (E.π.app k).naturality]
+      dsimp
+      rw [← Category.assoc]
+      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac
+        (multiforkEvaluationCone F E X W S)]
+      dsimp [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
+      rw [Presheaf.IsSheaf.amalgamate_map])
+    (by
+      intro S m hm
+      apply (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).hom_ext
+      intro k
+      dsimp
+      erw [(isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).fac]
+      apply Presheaf.IsSheaf.hom_ext (F.obj k).2 W
+      intro i
+      dsimp only [multiforkEvaluationCone, Presheaf.isLimitOfIsSheaf]
+      rw [(F.obj k).property.amalgamate_map]
+      dsimp [Multifork.ofι]
+      change _ = S.ι i ≫ _
+      erw [← hm, Category.assoc, ← (E.π.app k).naturality, Category.assoc]
+      rfl)
 
 Depends on / 依赖: Category, Category.assoc, IsLimit, Multifork, Multifork.IsLimit.mk, Multifork.of, Presheaf, Presheaf.IsShe, Presheaf.isLimitOfIsSheaf, evaluation, hom_ext, isLimitOfIsSheaf, isLimitOfPreserves, multiforkEvaluationCone, naturality
 -/
@@ -404,7 +472,7 @@ lemma sheafifyCocone_ι_app_val
   dsimp [sheafifyCocone]
   rw [← ObjectProperty.FullSubcategory.comp_hom_assoc]; rw [← NatTrans.comp_app]; rw [IsIso.hom_inv_id]; rw [NatTrans.id_app]
   dsimp
-  rw [Category.id_comp]; rw [toS
+  rw [Category.id_comp]; rw [toSheafify_naturality]; rw [sheafificationAdjunction_counit_app_val]; rw [sheafifyLift_id_toSheafify_assoc]
 
 中文:
 引理 sheafifyCocone_ι_app_val
@@ -414,7 +482,7 @@ lemma sheafifyCocone_ι_app_val
   dsimp [sheafifyCocone]
   rw [← ObjectProperty.FullSubcategory.comp_hom_assoc]; rw [← NatTrans.comp_app]; rw [IsIso.hom_inv_id]; rw [NatTrans.id_app]
   dsimp
-  rw [Category.id_comp]; rw [toS
+  rw [Category.id_comp]; rw [toSheafify_naturality]; rw [sheafificationAdjunction_counit_app_val]; rw [sheafifyLift_id_toSheafify_assoc]
 
 Depends on / 依赖: Category, Category.id_comp, F.obj, FullSubcategory, IsIso.hom_inv_id, NatTrans, NatTrans.comp_app, NatTrans.id_app, ObjectProperty, ObjectProperty.FullSubcategory.comp_hom_assoc, cancel_epi, comp_app, comp_hom_assoc, counit, counit.app, hom_inv_id, id_app, id_comp, sheafToPresheaf, sheafificationAdjunction
 -/
@@ -540,7 +608,12 @@ definition createsColimitOfIsSheaf
 ⟨fun _ => ⟨E.ι.app _⟩, fun _ _ _ => Sheaf.hom_ext E.ι.naturality _⟩⟩
       validLift := Cocone.ext (eqToIso rfl) fun j => by simp
       makesColimit :=
-        { desc := fun S => ⟨hE.desc ((sheafToPresheaf J D).mapCocone 
+        { desc := fun S => ⟨hE.desc ((sheafToPresheaf J D).mapCocone S)⟩
+          fac := fun S j => by ext1; dsimp; rw [hE.fac]; rfl
+          uniq := fun S m hm => by
+            ext1
+            exact hE.uniq ((sheafToPresheaf J D).mapCocone S) m.hom fun j =>
+              (ObjectProperty.ι _).congr_map (hm j) } }
 
 中文:
 定义 createsColimitOfIsSheaf
@@ -550,7 +623,12 @@ definition createsColimitOfIsSheaf
 ⟨fun _ => ⟨E.ι.app _⟩, fun _ _ _ => Sheaf.hom_ext E.ι.naturality _⟩⟩
       validLift := Cocone.ext (eqToIso rfl) fun j => by simp
       makesColimit :=
-        { desc := fun S => ⟨hE.desc ((sheafToPresheaf J D).mapCocone 
+        { desc := fun S => ⟨hE.desc ((sheafToPresheaf J D).mapCocone S)⟩
+          fac := fun S j => by ext1; dsimp; rw [hE.fac]; rfl
+          uniq := fun S m hm => by
+            ext1
+            exact hE.uniq ((sheafToPresheaf J D).mapCocone S) m.hom fun j =>
+              (ObjectProperty.ι _).congr_map (hm j) } }
 
 Depends on / 依赖: Cocone, Cocone.ext, E.pt, ObjectProperty, Sheaf.hom_ext, congr_map, createsColimitOfReflectsIso, eqToIso, hE.desc, hE.fac, hE.uniq, hom_ext, liftedCocone, m.hom, makesColimit, mapCocone, naturality, sheafToPresheaf, validLift
 -/

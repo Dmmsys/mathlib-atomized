@@ -512,7 +512,7 @@ definition isoOfHomotopyEquiv
     exact eq_of_homotopy _ _ f.homotopyHomInvId
   inv_hom_id := by
     rw [← (quotient V c).map_comp]; rw [← (quotient V c).map_id]
-    exact eq_of_homotopy 
+    exact eq_of_homotopy _ _ f.homotopyInvHomId
 
 中文:
 定义 isoOfHomotopyEquiv
@@ -524,7 +524,7 @@ definition isoOfHomotopyEquiv
     exact eq_of_homotopy _ _ f.homotopyHomInvId
   inv_hom_id := by
     rw [← (quotient V c).map_comp]; rw [← (quotient V c).map_id]
-    exact eq_of_homotopy 
+    exact eq_of_homotopy _ _ f.homotopyInvHomId
 
 Depends on / 依赖: f.hom, quotient
 -/
@@ -620,7 +620,8 @@ lemma inverseImage_quotient_isomorphisms
   exact ⟨{
     hom := f
     inv := g
-    h
+    homotopyHomInvId := homotopyOfEq _ _ (by simp [hg])
+    homotopyInvHomId := homotopyOfEq _ _ (by simp [hg]) }, rfl⟩
 
 中文:
 引理 inverseImage_quotient_isomorphisms
@@ -632,7 +633,8 @@ lemma inverseImage_quotient_isomorphisms
   exact ⟨{
     hom := f
     inv := g
-    h
+    homotopyHomInvId := homotopyOfEq _ _ (by simp [hg])
+    homotopyInvHomId := homotopyOfEq _ _ (by simp [hg]) }, rfl⟩
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.inverseImage_iff, MorphismProperty.isomorphisms.iff, homotopyHomInvId, homotopyInvHomId, homotopyOfEq, inverseImage_iff, isomorphisms, map_surjective, quotient, quotient_inverts_homotopyEquivalences
 -/
@@ -1001,7 +1003,8 @@ lemma isIso_quotient_map_iff_homotopyEquivalences
     { hom := f
       inv := g
       homotopyHomInvId := HomotopyCategory.homotopyOfEq _ _ (by cat_disch)
- 
+      homotopyInvHomId := HomotopyCategory.homotopyOfEq _ _ (by cat_disch) }
+  exact ⟨e, rfl⟩
 
 中文:
 引理 isIso_quotient_map_iff_homotopyEquivalences
@@ -1012,7 +1015,8 @@ lemma isIso_quotient_map_iff_homotopyEquivalences
     { hom := f
       inv := g
       homotopyHomInvId := HomotopyCategory.homotopyOfEq _ _ (by cat_disch)
- 
+      homotopyInvHomId := HomotopyCategory.homotopyOfEq _ _ (by cat_disch) }
+  exact ⟨e, rfl⟩
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.homotopyOfEq, HomotopyEquiv, cat_disch, homotopyHomInvId, homotopyInvHomId, homotopyOfEq, map_surjective, quotient, quotient_inverts_homotopyEquivalences
 -/

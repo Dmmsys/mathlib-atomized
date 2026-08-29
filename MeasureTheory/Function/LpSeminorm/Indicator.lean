@@ -47,7 +47,12 @@ lemma eLpNorm_indicator_eq_eLpNorm_restrict
   by_cases hp_top : p = ∞
   · simp_rw [hp_top, eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm,
        enorm_indicator_eq_indicator_enorm, ENNReal.essSup_indicator_eq_essSup_restrict hs]
-  simp_rw [eLpNorm_eq_lintegral_
+  simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_zero hp_top]
+  rw [← lintegral_indicator hs]
+  congr
+  simp_rw [enorm_indicator_eq_indicator_enorm]
+  rw [eq_comm]; rw [← Function.comp_def (fun x : Real>=0∞ => x ^ p.toReal)]; rw [Set.indicator_comp_of_zero]; rw [Function.comp_def]
+  simp [ENNReal.toReal_pos hp_zero hp_top]
 
 中文:
 引理 eLpNorm_indicator_eq_eLpNorm_restrict
@@ -58,7 +63,12 @@ lemma eLpNorm_indicator_eq_eLpNorm_restrict
   by_cases hp_top : p = ∞
   · simp_rw [hp_top, eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm,
        enorm_indicator_eq_indicator_enorm, ENNReal.essSup_indicator_eq_essSup_restrict hs]
-  simp_rw [eLpNorm_eq_lintegral_
+  simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_zero hp_top]
+  rw [← lintegral_indicator hs]
+  congr
+  simp_rw [enorm_indicator_eq_indicator_enorm]
+  rw [eq_comm]; rw [← Function.comp_def (fun x : Real>=0∞ => x ^ p.toReal)]; rw [Set.indicator_comp_of_zero]; rw [Function.comp_def]
+  simp [ENNReal.toReal_pos hp_zero hp_top]
 
 Depends on / 依赖: ENNReal, ENNReal.essSup_indicator_eq_essSup_restrict, Function, Function.comp_def, Set.indicator_comp_of_z, comp_def, eLpNormEssSup_eq_essSup_enorm, eLpNorm_eq_lintegral_rpow_enorm_toReal, eLpNorm_exponent_top, eLpNorm_exponent_zero, enorm_indicator_eq_indicator_enorm, eq_comm, essSup_indicator_eq_essSup_restrict, hp_top, hp_zero, indicator_comp_of_z, lintegral_indicator, p.toReal, simp_rw, toReal
 -/
@@ -244,7 +254,13 @@ lemma eLpNorm_indicator_const₀
     eLpNorm (s.indicator fun _ => c) p μ
       = (∫⁻ x, (‖(s.indicator fun _ => c) x‖ₑ ^ p.toReal) ∂μ) ^ (1 / p.toReal) :=
           eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp_top
-    _ = (∫⁻ x, (s.indicator fun _ => ‖c‖ₑ ^ p.toReal
+    _ = (∫⁻ x, (s.indicator fun _ => ‖c‖ₑ ^ p.toReal) x ∂μ) ^ (1 / p.toReal) := by
+      congr 2
+      refine (Set.comp_indicator_const c (fun x => (‖x‖ₑ) ^ p.toReal) ?_)
+      simp [hp_pos]
+    _ = ‖c‖ₑ * μ s ^ (1 / p.toReal) := by
+      rw [lintegral_indicator_const₀ hs]; rw [ENNReal.mul_rpow_of_nonneg]; rw [← ENNReal.rpow_mul]; rw [mul_one_div_cancel hp_pos.ne']; rw [ENNReal.rpow_one]
+      positivity
 
 中文:
 引理 eLpNorm_indicator_const₀
@@ -254,7 +270,13 @@ lemma eLpNorm_indicator_const₀
     eLpNorm (s.indicator fun _ => c) p μ
       = (∫⁻ x, (‖(s.indicator fun _ => c) x‖ₑ ^ p.toReal) ∂μ) ^ (1 / p.toReal) :=
           eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp_top
-    _ = (∫⁻ x, (s.indicator fun _ => ‖c‖ₑ ^ p.toReal
+    _ = (∫⁻ x, (s.indicator fun _ => ‖c‖ₑ ^ p.toReal) x ∂μ) ^ (1 / p.toReal) := by
+      congr 2
+      refine (Set.comp_indicator_const c (fun x => (‖x‖ₑ) ^ p.toReal) ?_)
+      simp [hp_pos]
+    _ = ‖c‖ₑ * μ s ^ (1 / p.toReal) := by
+      rw [lintegral_indicator_const₀ hs]; rw [ENNReal.mul_rpow_of_nonneg]; rw [← ENNReal.rpow_mul]; rw [mul_one_div_cancel hp_pos.ne']; rw [ENNReal.rpow_one]
+      positivity
 
 Depends on / 依赖: ENNReal, ENNReal.mul_rpow_of_nonneg, ENNReal.toReal_pos, NNReal, NNReal.pi, Set.comp_indicator_const, comp_indicator_const, eLpNorm, eLpNorm_eq_lintegral_rpow_enorm_toReal, hp_pos, hp_top, indicator, mul_rpow_of_nonneg, nrComplexPlaces, nrRealPlaces, p.toReal, s.indicator, toReal, toReal_pos
 -/
@@ -335,7 +357,11 @@ lemma eLpNorm_indicator_const_le
     exact eLpNormEssSup_indicator_const_le _ _
   let t := toMeasurable μ s
   calc
-    eLpNorm (s.indicator fun 
+    eLpNorm (s.indicator fun _ => c) p μ <= eLpNorm (t.indicator fun _ => c) p μ :=
+      eLpNorm_mono_enorm (enorm_indicator_le_of_subset (subset_toMeasurable _ _) _)
+    _ = ‖c‖ₑ * μ t ^ (1 / p.toReal) :=
+      eLpNorm_indicator_const (measurableSet_toMeasurable ..) hp h'p
+    _ = ‖c‖ₑ * μ s ^ (1 / p.toReal) := by rw [measure_toMeasurable]
 
 中文:
 引理 eLpNorm_indicator_const_le
@@ -349,7 +375,11 @@ lemma eLpNorm_indicator_const_le
     exact eLpNormEssSup_indicator_const_le _ _
   let t := toMeasurable μ s
   calc
-    eLpNorm (s.indicator fun 
+    eLpNorm (s.indicator fun _ => c) p μ <= eLpNorm (t.indicator fun _ => c) p μ :=
+      eLpNorm_mono_enorm (enorm_indicator_le_of_subset (subset_toMeasurable _ _) _)
+    _ = ‖c‖ₑ * μ t ^ (1 / p.toReal) :=
+      eLpNorm_indicator_const (measurableSet_toMeasurable ..) hp h'p
+    _ = ‖c‖ₑ * μ s ^ (1 / p.toReal) := by rw [measure_toMeasurable]
 
 Depends on / 依赖: Complex.measurableEquivRealProd_symm_apply, Complex.volume_preserving_equiv_real_prod.symm, ENNReal, ENNReal.rpow_zero, ENNReal.toReal_top, Set.Ioo, Set.mem_Ioo, Set.mem_ofPred_eq, Set.mem_prod, Set.preimage_ofPred_eq, _root_, _root_.div_zero, abs_lt, div_zero, eLpNorm, eLpNormEssSup_indicator_const_le, eLpNorm_exponent_top, eLpNorm_indicator_const, eLpNorm_mono_enorm, enorm_indicator_le_of_subset
 -/
@@ -503,7 +533,18 @@ lemma MemLp.piecewise
   refine ⟨AEStronglyMeasurable.piecewise hs hf.1 hg.1, ?_⟩
   obtain rfl | hp_top := eq_or_ne p ∞
   · rw [eLpNorm_top_piecewise f g hs]
-    exact max_lt hf.
+    exact max_lt hf.2 hg.2
+  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp_zero hp_top]; rw [← lintegral_add_compl _ hs]; rw [ENNReal.add_lt_top]
+  constructor
+  · have h (x) (hx : x in s) : ‖Set.piecewise s f g x‖ₑ ^ p.toReal = ‖f x‖ₑ ^ p.toReal := by
+      simp [hx]
+    rw [setLIntegral_congr_fun hs h]
+    exact lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top hp_zero hp_top hf.2
+  · have h (x) (hx : x in sᶜ) : ‖Set.piecewise s f g x‖ₑ ^ p.toReal = ‖g x‖ₑ ^ p.toReal := by
+      have hx' : x ∉ s := hx
+      simp [hx']
+    rw [setLIntegral_congr_fun hs.compl h]
+    exact lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top hp_zero hp_top hg.2
 
 中文:
 引理 MemLp.piecewise
@@ -515,7 +556,18 @@ lemma MemLp.piecewise
   refine ⟨AEStronglyMeasurable.piecewise hs hf.1 hg.1, ?_⟩
   obtain rfl | hp_top := eq_or_ne p ∞
   · rw [eLpNorm_top_piecewise f g hs]
-    exact max_lt hf.
+    exact max_lt hf.2 hg.2
+  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp_zero hp_top]; rw [← lintegral_add_compl _ hs]; rw [ENNReal.add_lt_top]
+  constructor
+  · have h (x) (hx : x in s) : ‖Set.piecewise s f g x‖ₑ ^ p.toReal = ‖f x‖ₑ ^ p.toReal := by
+      simp [hx]
+    rw [setLIntegral_congr_fun hs h]
+    exact lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top hp_zero hp_top hf.2
+  · have h (x) (hx : x in sᶜ) : ‖Set.piecewise s f g x‖ₑ ^ p.toReal = ‖g x‖ₑ ^ p.toReal := by
+      have hx' : x ∉ s := hx
+      simp [hx']
+    rw [setLIntegral_congr_fun hs.compl h]
+    exact lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top hp_zero hp_top hg.2
 -/
 protected lemma MemLp.piecewise {f : α -> ε} [DecidablePred (· in s)] {g} (hs : MeasurableSet s)
     (hf : MemLp f p (μ.restrict s)) (hg : MemLp g p (μ.restrict sᶜ)) :
@@ -553,7 +605,10 @@ theorem eLpNorm_indicator_sub_le_of_dist_bdd
     by_cases hx : x in s
     · rw [Set.indicator_of_mem hx, Set.indicator_of_mem hx, Pi.sub_apply, ← dist_eq_norm,
         Real.norm_eq_abs, abs_of_nonneg hc]
-      exa
+      exact hf x hx
+    · simp [Set.indicator_of_notMem hx]
+  grw [eLpNorm_mono this, eLpNorm_indicator_const hs hp hp', ← ofReal_norm,
+    Real.norm_eq_abs, abs_of_nonneg hc]
 
 中文:
 定理 eLpNorm_indicator_sub_le_of_dist_bdd
@@ -566,7 +621,10 @@ theorem eLpNorm_indicator_sub_le_of_dist_bdd
     by_cases hx : x in s
     · rw [Set.indicator_of_mem hx, Set.indicator_of_mem hx, Pi.sub_apply, ← dist_eq_norm,
         Real.norm_eq_abs, abs_of_nonneg hc]
-      exa
+      exact hf x hx
+    · simp [Set.indicator_of_notMem hx]
+  grw [eLpNorm_mono this, eLpNorm_indicator_const hs hp hp', ← ofReal_norm,
+    Real.norm_eq_abs, abs_of_nonneg hc]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, MeasurableSet, Pi.sub_apply, Real.norm_eq_abs, Set.indicator_of_mem, abs_of_nonneg, dist_eq_norm, eLpNorm, indicator, indicator_of_mem, norm_eq_abs, ofReal, p.toReal, s.indicator, sub_apply, toReal, volume_tac
 -/
@@ -637,7 +695,12 @@ theorem MemLp.exists_eLpNorm_indicator_compl_lt
   · obtain ⟨s, hsm, hs, hε⟩ :
         exists s, MeasurableSet s ∧ μ s < ∞ ∧ ∫⁻ a in sᶜ, (‖f a‖ₑ) ^ p.toReal ∂μ < ε ^ p.toReal := by
       apply exists_setLIntegral_compl_lt
-      · exact ((eL
+      · exact ((eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp₀ hp_top).1 hf.2).ne
+      · simp [*]
+    refine ⟨s, hsm, hs, ?_⟩
+    rwa [eLpNorm_indicator_eq_eLpNorm_restrict hsm.compl,
+      eLpNorm_eq_lintegral_rpow_enorm_toReal hp₀ hp_top, one_div, ENNReal.rpow_inv_lt_iff]
+    simp [ENNReal.toReal_pos, *]
 
 中文:
 定理 MemLp.存在_eLpNorm_indicator_compl_lt
@@ -648,7 +711,12 @@ theorem MemLp.exists_eLpNorm_indicator_compl_lt
   · obtain ⟨s, hsm, hs, hε⟩ :
         exists s, MeasurableSet s ∧ μ s < ∞ ∧ ∫⁻ a in sᶜ, (‖f a‖ₑ) ^ p.toReal ∂μ < ε ^ p.toReal := by
       apply exists_setLIntegral_compl_lt
-      · exact ((eL
+      · exact ((eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp₀ hp_top).1 hf.2).ne
+      · simp [*]
+    refine ⟨s, hsm, hs, ?_⟩
+    rwa [eLpNorm_indicator_eq_eLpNorm_restrict hsm.compl,
+      eLpNorm_eq_lintegral_rpow_enorm_toReal hp₀ hp_top, one_div, ENNReal.rpow_inv_lt_iff]
+    simp [ENNReal.toReal_pos, *]
 
 Depends on / 依赖: ENNReal, ENNReal.r, MeasurableSet, eLpNorm_eq_lintegral_rpow_enorm_toReal, eLpNorm_indicator_eq_eLpNorm_restrict, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top, eq_or_ne, exists_setLIntegral_compl_lt, hp_top, hsm.compl, one_div, p.toReal, pos_iff_ne_zero, toReal
 -/

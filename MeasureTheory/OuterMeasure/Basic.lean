@@ -197,7 +197,7 @@ theorem measure_iUnion_le
     μ (⋃ i, t i) = μ (⋃ i, disjointed t i) := by rw [iUnion_disjointed]
     _ <= ∑' i, μ (disjointed t i) :=
       OuterMeasureClass.measure_iUnion_nat_le _ _ (disjoint_disjointed _)
-    _ <= ∑' i, μ (t i) := by gcongr; exact 
+    _ <= ∑' i, μ (t i) := by gcongr; exact disjointed_subset ..
 
 中文:
 定理 measure_iUnion_le
@@ -209,7 +209,7 @@ theorem measure_iUnion_le
     μ (⋃ i, t i) = μ (⋃ i, disjointed t i) := by rw [iUnion_disjointed]
     _ <= ∑' i, μ (disjointed t i) :=
       OuterMeasureClass.measure_iUnion_nat_le _ _ (disjoint_disjointed _)
-    _ <= ∑' i, μ (t i) := by gcongr; exact 
+    _ <= ∑' i, μ (t i) := by gcongr; exact disjointed_subset ..
 
 Depends on / 依赖: OuterMeasureClass, OuterMeasureClass.measure_iUnion_nat_le, disjoint_disjointed, disjointed, disjointed_subset, iUnion_disjointed, measure_empty, measure_iUnion_nat_le, rel_iSup_tsum
 -/
@@ -549,7 +549,10 @@ refine le_antisymm ?_ iSup_le fun n => measure_mono subset_iUnion _ _
   set M := ⨆ n, μ (s n)
   have A : forall k, μ S <= M + μ (S \ s k) := fun k => calc
     μ S <= μ (S inter s k) + μ (S \ s k) := measure_le_inter_add_sdiff _ _ _
-    _ <= μ (s k) + μ (S \ s k) := by gcongr; 
+    _ <= μ (s k) + μ (S \ s k) := by gcongr; apply inter_subset_right
+    _ <= M + μ (S \ s k) := by gcongr; exact le_iSup (μ ∘ s) k
+  have B : Tendsto (fun k => M + μ (S \ s k)) l (𝓝 M) := by simpa using tendsto_const_nhds.add h0
+  exact ge_of_tendsto' B A
 
 中文:
 定理 measure_iUnion_of_tendsto_zero
@@ -560,7 +563,10 @@ refine le_antisymm ?_ iSup_le fun n => measure_mono subset_iUnion _ _
   set M := ⨆ n, μ (s n)
   have A : forall k, μ S <= M + μ (S \ s k) := fun k => calc
     μ S <= μ (S inter s k) + μ (S \ s k) := measure_le_inter_add_sdiff _ _ _
-    _ <= μ (s k) + μ (S \ s k) := by gcongr; 
+    _ <= μ (s k) + μ (S \ s k) := by gcongr; apply inter_subset_right
+    _ <= M + μ (S \ s k) := by gcongr; exact le_iSup (μ ∘ s) k
+  have B : Tendsto (fun k => M + μ (S \ s k)) l (𝓝 M) := by simpa using tendsto_const_nhds.add h0
+  exact ge_of_tendsto' B A
 
 Depends on / 依赖: Tendsto, ge_of_tendsto, iSup_le, inter_subset_right, le_antisymm, le_iSup, measure_le_inter_add_sdiff, measure_mono, subset_iUnion, tendsto_const_nhds, tendsto_const_nhds.add
 -/
@@ -674,7 +680,18 @@ theorem iUnion_nat_of_monotone_of_tsum_ne_top
   refine tendsto_nhds_bot_mono' (ENNReal.tendsto_sum_nat_add _ h0) fun n => ?_
   refine (m.mono ?_).trans (measure_iUnion_le _)
   -- Current goal: `(⋃ k, s k) \ s n ⊆ ⋃ k, s (k + n + 1) \ s (k + n)`
-  have h' : Monotone s := @monotone
+  have h' : Monotone s := @monotone_nat_of_le_succ (Set α) _ _ h_mono
+  simp only [sdiff_subset_iff, iUnion_subset_iff]
+  intro i x hx
+  have : exists i, x in s i := by exists i
+  rcases Nat.findX this with ⟨j, hj, hlt⟩
+  clear hx i
+  rcases le_or_gt j n with hjn | hnj
+  · exact Or.inl (h' hjn hj)
+  have : j - (n + 1) + n + 1 = j := by lia
+  refine Or.inr (mem_iUnion.2 ⟨j - (n + 1), ?_, hlt _ ?_⟩)
+  · rwa [this]
+  · rw [← Nat.succ_le_iff, Nat.succ_eq_add_one, this]
 
 中文:
 定理 iUnion_nat_of_monotone_of_tsum_ne_top
@@ -685,7 +702,18 @@ theorem iUnion_nat_of_monotone_of_tsum_ne_top
   refine tendsto_nhds_bot_mono' (ENNReal.tendsto_sum_nat_add _ h0) fun n => ?_
   refine (m.mono ?_).trans (measure_iUnion_le _)
   -- Current goal: `(⋃ k, s k) \ s n ⊆ ⋃ k, s (k + n + 1) \ s (k + n)`
-  have h' : Monotone s := @monotone
+  have h' : Monotone s := @monotone_nat_of_le_succ (Set α) _ _ h_mono
+  simp only [sdiff_subset_iff, iUnion_subset_iff]
+  intro i x hx
+  have : exists i, x in s i := by exists i
+  rcases Nat.findX this with ⟨j, hj, hlt⟩
+  clear hx i
+  rcases le_or_gt j n with hjn | hnj
+  · exact Or.inl (h' hjn hj)
+  have : j - (n + 1) + n + 1 = j := by lia
+  refine Or.inr (mem_iUnion.2 ⟨j - (n + 1), ?_, hlt _ ?_⟩)
+  · rwa [this]
+  · rw [← Nat.succ_le_iff, Nat.succ_eq_add_one, this]
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_sum_nat_add, classical, m.mono, measure_iUnion_le, measure_iUnion_of_tendsto_zero, tendsto_nhds_bot_mono, tendsto_sum_nat_add
 -/

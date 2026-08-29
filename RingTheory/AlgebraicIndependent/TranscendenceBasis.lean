@@ -168,7 +168,10 @@ theorem AlgebraicIndependent.isTranscendenceBasis_iff
   · intro p
     use i
     intro w i' h
-    specialize p w ((↑) : w -> 
+    specialize p w ((↑) : w -> A) i' (fun i => ⟨x i, range_subset_iff.mp h i⟩) (by ext; simp)
+    have q := congr_arg (fun s => ((↑) : w -> A) '' s) p.range_eq
+    rw [← image_univ]; rw [image_image] at q
+    simpa using q
 
 中文:
 定理 AlgebraicIndependent.isTranscendenceBasis_iff
@@ -182,7 +185,10 @@ theorem AlgebraicIndependent.isTranscendenceBasis_iff
   · intro p
     use i
     intro w i' h
-    specialize p w ((↑) : w -> 
+    specialize p w ((↑) : w -> A) i' (fun i => ⟨x i, range_subset_iff.mp h i⟩) (by ext; simp)
+    have q := congr_arg (fun s => ((↑) : w -> A) '' s) p.range_eq
+    rw [← image_univ]; rw [image_image] at q
+    simpa using q
 
 Depends on / 依赖: coe_range, congr_arg, fconstructor, image_image, image_injective, image_injective.mpr, image_univ, injective, p.range_eq, range_comp, range_comp_subset_range, range_eq, range_eq_univ, range_eq_univ.mp, range_subset_iff, range_subset_iff.mp, specialize
 -/
@@ -220,7 +226,14 @@ theorem IsTranscendenceBasis.isAlgebraic
     exact ⟨some y, rfl⟩
   have h₂ : range x != range fun o : Option ι => o.elim a x := by
     intro h
-  
+    have : a in range x := by
+      rw [h]
+      exact ⟨none, rfl⟩
+    rcases this with ⟨b, rfl⟩
+    have : some b = none := ai.injective rfl
+    simpa
+  exact h₂ (hx.2 (Set.range fun o : Option ι => o.elim a x)
+    ((algebraicIndependent_subtype_range ai.injective).2 ai) h₁)
 
 中文:
 定理 IsTranscendenceBasis.isAlgebraic
@@ -235,7 +248,14 @@ theorem IsTranscendenceBasis.isAlgebraic
     exact ⟨some y, rfl⟩
   have h₂ : range x != range fun o : Option ι => o.elim a x := by
     intro h
-  
+    have : a in range x := by
+      rw [h]
+      exact ⟨none, rfl⟩
+    rcases this with ⟨b, rfl⟩
+    have : some b = none := ai.injective rfl
+    simpa
+  exact h₂ (hx.2 (Set.range fun o : Option ι => o.elim a x)
+    ((algebraicIndependent_subtype_range ai.injective).2 ai) h₁)
 
 Depends on / 依赖: Set.range, ai.inje, ai.injective, algebraicIndependent_subtype_range, injective, not_iff_comm, o.elim, option_iff_transcendental, subseteq
 -/
@@ -269,7 +289,9 @@ theorem AlgebraicIndependent.isTranscendenceBasis_iff_isAlgebraic
   have : ¬ s subseteq range x := (hxs' <| hxs.antisymm ·)
   have ⟨a, has, hax⟩ := not_subset.mp this
   rw [show range x = Subtype.val '' range (Set.inclusion hxs) by
-    rw [← range_comp]; rw [val_comp_incl
+    rw [← range_comp]; rw [val_comp_inclusion]; rw [Subtype.range_val]] at alg
+  refine ind_s.transcendental_adjoin (s := range (inclusion hxs)) (i := ⟨a, has⟩) ?_ (alg.1 _)
+  simpa using hax
 
 中文:
 定理 AlgebraicIndependent.isTranscendenceBasis_iff_isAlgebraic
@@ -278,7 +300,9 @@ theorem AlgebraicIndependent.isTranscendenceBasis_iff_isAlgebraic
   have : ¬ s subseteq range x := (hxs' <| hxs.antisymm ·)
   have ⟨a, has, hax⟩ := not_subset.mp this
   rw [show range x = Subtype.val '' range (Set.inclusion hxs) by
-    rw [← range_comp]; rw [val_comp_incl
+    rw [← range_comp]; rw [val_comp_inclusion]; rw [Subtype.range_val]] at alg
+  refine ind_s.transcendental_adjoin (s := range (inclusion hxs)) (i := ⟨a, has⟩) ?_ (alg.1 _)
+  simpa using hax
 
 Depends on / 依赖: Set.inclusion, Subtype, Subtype.range_val, Subtype.val, antisymm, hxs.antisymm, inclusion, ind_s, ind_s.transcendental_adjoin, isAlgebraic, not_subset, not_subset.mp, of_not_not, range_comp, range_val, subseteq, transcendental_adjoin, val_comp_inclusion
 -/
@@ -327,7 +351,12 @@ lemma IsTranscendenceBasis.algebraMap_comp
 .isTranscendenceBasis_iff_isAlgebraic.mpr ?_
   rw [Set.range_comp]; rw [← AlgHom.map_adjoin]
   set Rx := adjoin R (range x)
-  let e := Rx.equivMapOfInjective f (FaithfulSMul.algebraMap
+  let e := Rx.equivMapOfInjective f (FaithfulSMul.algebraMap_injective S A)
+  let := e.toRingHom.toAlgebra
+  have : IsScalarTower Rx (Rx.map f) A := .of_algebraMap_eq fun x => rfl
+  have : Algebra.IsAlgebraic Rx S := hx.isAlgebraic
+  have : Algebra.IsAlgebraic Rx A := .trans _ S _
+  exact .extendScalars e.injective
 
 中文:
 引理 IsTranscendenceBasis.algebraMap_comp
@@ -337,7 +366,12 @@ lemma IsTranscendenceBasis.algebraMap_comp
 .isTranscendenceBasis_iff_isAlgebraic.mpr ?_
   rw [Set.range_comp]; rw [← AlgHom.map_adjoin]
   set Rx := adjoin R (range x)
-  let e := Rx.equivMapOfInjective f (FaithfulSMul.algebraMap
+  let e := Rx.equivMapOfInjective f (FaithfulSMul.algebraMap_injective S A)
+  let := e.toRingHom.toAlgebra
+  have : IsScalarTower Rx (Rx.map f) A := .of_algebraMap_eq fun x => rfl
+  have : Algebra.IsAlgebraic Rx S := hx.isAlgebraic
+  have : Algebra.IsAlgebraic Rx A := .trans _ S _
+  exact .extendScalars e.injective
 
 Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.IsAlgebraic, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsAlgebraic, IsScalarTower, IsScalarTower.toAlgHom, Rx.equivMapOfInjective, Rx.map, Set.range_comp, adjoin, algebraMap_injective, e.toRingHom.toAlgebra, equivMapOfInjective, hx.isAlgebraic, isAlgebraic, isTranscendenceBasis_iff_isAlgebraic, isTranscendenceBasis_iff_isAlgebraic.mpr
 -/
@@ -369,7 +403,13 @@ lemma IsTranscendenceBasis.isAlgebraic_iff
   have : Algebra.IsAlgebraic S Sv := by
     simpa [Sv, ← Subalgebra.isAlgebraic_iff, isAlgebraic_adjoin_iff]
   have le : Rv <= Sv.restrictScalars R := by
-    rw [
+    rw [Subalgebra.restrictScalars_adjoin]; exact le_sup_right
+  let : Algebra Rv Sv := (Subalgebra.inclusion le).toAlgebra
+  have : IsScalarTower Rv Sv A := .of_algebraMap_eq fun x => rfl
+  have := (algebraMap R S).domain_nontrivial
+  have := hv.isAlgebraic
+  have : Algebra.IsAlgebraic Sv A := .extendScalars (Subalgebra.inclusion_injective le)
+  exact .trans _ Sv _
 
 中文:
 引理 IsTranscendenceBasis.isAlgebraic_iff
@@ -381,7 +421,13 @@ lemma IsTranscendenceBasis.isAlgebraic_iff
   have : Algebra.IsAlgebraic S Sv := by
     simpa [Sv, ← Subalgebra.isAlgebraic_iff, isAlgebraic_adjoin_iff]
   have le : Rv <= Sv.restrictScalars R := by
-    rw [
+    rw [Subalgebra.restrictScalars_adjoin]; exact le_sup_right
+  let : Algebra Rv Sv := (Subalgebra.inclusion le).toAlgebra
+  have : IsScalarTower Rv Sv A := .of_algebraMap_eq fun x => rfl
+  have := (algebraMap R S).domain_nontrivial
+  have := hv.isAlgebraic
+  have : Algebra.IsAlgebraic Sv A := .extendScalars (Subalgebra.inclusion_injective le)
+  exact .trans _ Sv _
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, IsScalarTower, Subalgebra, Subalgebra.inclusion, Subalgebra.isAlgebraic_iff, Subalgebra.restrictScalars_adjoin, Sv.restrictScalars, adjoin, algebraMap, domain_nontrivia, inclusion, isAlgebraic, isAlgebraic_adjoin_iff, isAlgebraic_iff, le_sup_right, of_algebraMap_eq, restrictScalars
 -/
@@ -505,7 +551,25 @@ theorem IsTranscendenceBasis.sumElim_comp
   rw [(hx.1.sumElim_comp hy.1).isTranscendenceBasis_iff_isAlgebraic]
   set Rx := adjoin R (range x)
   let Rxy := adjoin Rx (range y)
-  rw [show adjoin R (range <| Sum.elim y (algebraMap 
+  rw [show adjoin R (range <| Sum.elim y (algebraMap S A ∘ x)) = Rxy.restrictScalars R by
+    rw [← adjoin_algebraMap_image_union_eq_adjoin_adjoin]; rw [Sum.elim_range]; rw [union_comm]; rw [range_comp]]
+  change Algebra.IsAlgebraic Rxy A
+  have := hx.1.algebraMap_injective.nontrivial
+  have := hy.1.algebraMap_injective.nontrivial
+  have := hy.isAlgebraic
+  set Sy := adjoin S (range y)
+  let _ : Algebra Rxy Sy := by
+    refine (Subalgebra.inclusion (T := Sy.restrictScalars Rx) <| adjoin_le ?_).toAlgebra
+    rintro _ ⟨i, rfl⟩; exact subset_adjoin (s := range y) ⟨i, rfl⟩
+  have : IsScalarTower Rxy Sy A := .of_algebraMap_eq fun ⟨a, _⟩ => show a = _ from rfl
+  have : IsScalarTower Rx Rxy Sy := .of_algebraMap_eq fun ⟨a, _⟩ => Subtype.ext rfl
+  have : Algebra.IsAlgebraic Rxy Sy := by
+    refine ⟨fun ⟨a, ha⟩ => adjoin_induction ?_ (fun _ => .extendScalars (R := Rx) ?_ ?_)
+      (fun _ _ _ _ => .add) (fun _ _ _ _ => .mul) ha⟩
+    · rintro _ ⟨i, rfl⟩; exact isAlgebraic_algebraMap (⟨y i, subset_adjoin ⟨i, rfl⟩⟩ : Rxy)
+    · exact fun _ _ => (Subtype.ext <| hy.1.algebraMap_injective <| Subtype.ext_iff.mp ·)
+    · exact (hx.isAlgebraic.1 _).algHom (IsScalarTower.toAlgHom Rx S Sy)
+  exact .trans _ Sy _
 
 中文:
 定理 IsTranscendenceBasis.sumElim_comp
@@ -516,7 +580,25 @@ theorem IsTranscendenceBasis.sumElim_comp
   rw [(hx.1.sumElim_comp hy.1).isTranscendenceBasis_iff_isAlgebraic]
   set Rx := adjoin R (range x)
   let Rxy := adjoin Rx (range y)
-  rw [show adjoin R (range <| Sum.elim y (algebraMap 
+  rw [show adjoin R (range <| Sum.elim y (algebraMap S A ∘ x)) = Rxy.restrictScalars R by
+    rw [← adjoin_algebraMap_image_union_eq_adjoin_adjoin]; rw [Sum.elim_range]; rw [union_comm]; rw [range_comp]]
+  change Algebra.IsAlgebraic Rxy A
+  have := hx.1.algebraMap_injective.nontrivial
+  have := hy.1.algebraMap_injective.nontrivial
+  have := hy.isAlgebraic
+  set Sy := adjoin S (range y)
+  let _ : Algebra Rxy Sy := by
+    refine (Subalgebra.inclusion (T := Sy.restrictScalars Rx) <| adjoin_le ?_).toAlgebra
+    rintro _ ⟨i, rfl⟩; exact subset_adjoin (s := range y) ⟨i, rfl⟩
+  have : IsScalarTower Rxy Sy A := .of_algebraMap_eq fun ⟨a, _⟩ => show a = _ from rfl
+  have : IsScalarTower Rx Rxy Sy := .of_algebraMap_eq fun ⟨a, _⟩ => Subtype.ext rfl
+  have : Algebra.IsAlgebraic Rxy Sy := by
+    refine ⟨fun ⟨a, ha⟩ => adjoin_induction ?_ (fun _ => .extendScalars (R := Rx) ?_ ?_)
+      (fun _ _ _ _ => .add) (fun _ _ _ _ => .mul) ha⟩
+    · rintro _ ⟨i, rfl⟩; exact isAlgebraic_algebraMap (⟨y i, subset_adjoin ⟨i, rfl⟩⟩ : Rxy)
+    · exact fun _ _ => (Subtype.ext <| hy.1.algebraMap_injective <| Subtype.ext_iff.mp ·)
+    · exact (hx.isAlgebraic.1 _).algHom (IsScalarTower.toAlgHom Rx S Sy)
+  exact .trans _ Sy _
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, IsAlgebraic, Rxy.restrictScalars, Sum.elim, Sum.elim_range, adjoin, adjoin_algebraMap_image_union_eq_adjoin_adjoin, algebraMap, algebraMap_injectiv, elim_range, infer_instance, isTranscendenceBasis_iff_isAlgebraic, isTranscendenceBasis_iff_of_subsingleton, range_comp, restrictScalars, subsingleton_or_nontrivial, sumElim_comp, union_comm
 -/
@@ -613,7 +695,8 @@ theorem IsTranscendenceBasis.isAlgebraic_field
   let : Algebra (adjoin F S) (IntermediateField.adjoin F S) :=
     (Subalgebra.inclusion (IntermediateField.algebra_adjoin_le_adjoin F S)).toRingHom.toAlgebra
   have : IsScalarTower (adjoin F S) (IntermediateField.adjoin F S) E :=
-    IsScalarTower.of_a
+    IsScalarTower.of_algebraMap_eq (congrFun rfl)
+  exact Algebra.IsAlgebraic.extendScalars (R := adjoin F S) (Subalgebra.inclusion_injective _)
 
 中文:
 定理 IsTranscendenceBasis.isAlgebraic_field
@@ -624,7 +707,8 @@ theorem IsTranscendenceBasis.isAlgebraic_field
   let : Algebra (adjoin F S) (IntermediateField.adjoin F S) :=
     (Subalgebra.inclusion (IntermediateField.algebra_adjoin_le_adjoin F S)).toRingHom.toAlgebra
   have : IsScalarTower (adjoin F S) (IntermediateField.adjoin F S) E :=
-    IsScalarTower.of_a
+    IsScalarTower.of_algebraMap_eq (congrFun rfl)
+  exact Algebra.IsAlgebraic.extendScalars (R := adjoin F S) (Subalgebra.inclusion_injective _)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.extendScalars, IntermediateField, IntermediateField.adjoin, IntermediateField.algebra_adjoin_le_adjoin, IsAlgebraic, IsScalarTower, IsScalarTower.of_algebraMap_eq, Subalgebra, Subalgebra.inclusion, Subalgebra.inclusion_injective, adjoin, algebra_adjoin_le_adjoin, extendScalars, hx.isAlgebraic, inclusion, inclusion_injective, isAlgebraic, of_algebraMap_eq, toAlgebra
 -/
@@ -661,7 +745,20 @@ definition indepMatroid
   indep_aug I B I_ind h B_base := by
     contrapose! h
     rw [← isTranscendenceBasis_iff_maximal] at B_base ⊢
-    cases subsingleton_
+    cases subsingleton_or_nontrivial R
+    · rw [isTranscendenceBasis_iff_of_subsingleton] at B_base ⊢
+      by_contra this
+      have ⟨b, hb⟩ := B_base
+      exact h b ⟨hb, fun hbI => this ⟨b, hbI⟩⟩ .of_subsingleton
+    apply I_ind.isTranscendenceBasis_iff_isAlgebraic.mpr
+    replace B_base := B_base.isAlgebraic
+    simp_rw +instances [id_eq]
+    rw [Subtype.range_val] at B_base ⊢
+    refine ⟨fun a => (B_base.1 a).adjoin_of_forall_isAlgebraic fun x hx => ?_⟩
+    contrapose! h
+exact ⟨x, hx, I_ind.insert by rwa [image_id]⟩
+  indep_maximal X _ I ind hIX := exists_maximal_algebraicIndependent I X hIX ind
+  subset_ground _ _ := subset_univ _
 
 中文:
 定义 indepMatroid
@@ -673,7 +770,20 @@ definition indepMatroid
   indep_aug I B I_ind h B_base := by
     contrapose! h
     rw [← isTranscendenceBasis_iff_maximal] at B_base ⊢
-    cases subsingleton_
+    cases subsingleton_or_nontrivial R
+    · rw [isTranscendenceBasis_iff_of_subsingleton] at B_base ⊢
+      by_contra this
+      have ⟨b, hb⟩ := B_base
+      exact h b ⟨hb, fun hbI => this ⟨b, hbI⟩⟩ .of_subsingleton
+    apply I_ind.isTranscendenceBasis_iff_isAlgebraic.mpr
+    replace B_base := B_base.isAlgebraic
+    simp_rw +instances [id_eq]
+    rw [Subtype.range_val] at B_base ⊢
+    refine ⟨fun a => (B_base.1 a).adjoin_of_forall_isAlgebraic fun x hx => ?_⟩
+    contrapose! h
+exact ⟨x, hx, I_ind.insert by rwa [image_id]⟩
+  indep_maximal X _ I ind hIX := exists_maximal_algebraicIndependent I X hIX ind
+  subset_ground _ _ := subset_univ _
 -/
 private def indepMatroid : IndepMatroid A where
   E := univ
@@ -827,7 +937,10 @@ theorem matroid_isBasis_iff
   rw [Matroid.IsBasis]; rw [maximal_iff_forall_insert fun s t h hst => ⟨h.1.subset hst]; rw [hst.trans h.2⟩]
   simp_rw [matroid_indep_iff, ← and_assoc, matroid_e, subset_univ, and_true]
   exact and_congr_right fun h => ⟨fun max a ha => of_not_not fun tr => max _
-    (fun ha => tr (isAlgebraic_alg
+    (fun ha => tr (isAlgebraic_algebraMap (⟨a, subset_adjoin ha⟩ : adjoin R s)))
+      ⟨.insert h.1 (by rwa [image_id]), insert_subset ha h.2⟩,
+fun alg a ha h => ((AlgebraicIndepOn.insert_iff ha).mp h.1).2 by
+rw [image_id]; exact alg _ h.2 mem_insert ..⟩
 
 中文:
 定理 matroid_isBasis_iff
@@ -837,7 +950,10 @@ theorem matroid_isBasis_iff
   rw [Matroid.IsBasis]; rw [maximal_iff_forall_insert fun s t h hst => ⟨h.1.subset hst]; rw [hst.trans h.2⟩]
   simp_rw [matroid_indep_iff, ← and_assoc, matroid_e, subset_univ, and_true]
   exact and_congr_right fun h => ⟨fun max a ha => of_not_not fun tr => max _
-    (fun ha => tr (isAlgebraic_alg
+    (fun ha => tr (isAlgebraic_algebraMap (⟨a, subset_adjoin ha⟩ : adjoin R s)))
+      ⟨.insert h.1 (by rwa [image_id]), insert_subset ha h.2⟩,
+fun alg a ha h => ((AlgebraicIndepOn.insert_iff ha).mp h.1).2 by
+rw [image_id]; exact alg _ h.2 mem_insert ..⟩
 
 Depends on / 依赖: AlgebraicIndepOn, AlgebraicIndepOn.insert_iff, IsBasis, Matroid, Matroid.IsBasis, adjoin, and_assoc, and_congr_right, and_true, hst.trans, image_id, insert, insert_iff, insert_subset, isAlgebraic_algebraMap, matroid_e, matroid_indep_iff, maximal_iff_forall_insert, mem_insert, of_not_not
 -/
@@ -890,7 +1006,7 @@ theorem isAlgebraic_adjoin_iff_of_matroid_isBasis
   · apply iff_of_false <;> apply is_transcendental_of_subsingleton
   have := (isDomain_iff_noZeroDivisors_and_nontrivial A).mpr ⟨inferInstance, inferInstance⟩
   exact ⟨(·.adjoin_of_forall_isAlgebraic fun x hx => (hx.2 <| h.1.1.2 hx.1).elim),
-    (·.adjoin_of_f
+    (·.adjoin_of_forall_isAlgebraic fun x hx => (matroid_isBasis_iff.mp h).2.2 _ hx.1)⟩
 
 中文:
 定理 isAlgebraic_adjoin_iff_of_matroid_isBasis
@@ -900,7 +1016,7 @@ theorem isAlgebraic_adjoin_iff_of_matroid_isBasis
   · apply iff_of_false <;> apply is_transcendental_of_subsingleton
   have := (isDomain_iff_noZeroDivisors_and_nontrivial A).mpr ⟨inferInstance, inferInstance⟩
   exact ⟨(·.adjoin_of_forall_isAlgebraic fun x hx => (hx.2 <| h.1.1.2 hx.1).elim),
-    (·.adjoin_of_f
+    (·.adjoin_of_forall_isAlgebraic fun x hx => (matroid_isBasis_iff.mp h).2.2 _ hx.1)⟩
 
 Depends on / 依赖: adjoin_of_forall_isAlgebraic, iff_of_false, isDomain_iff_noZeroDivisors_and_nontrivial, is_transcendental_of_subsingleton, matroid_isBasis_iff, matroid_isBasis_iff.mp, subsingleton_or_nontrivial
 -/
@@ -922,7 +1038,9 @@ theorem matroid_closure_eq
   have ⟨B, hB⟩ := (matroid R A).exists_isBasis s
   simp_rw [← hB.closure_eq_closure, hB.1.1.1.closure_eq_setOfPred_isBasis_insert, Set.ext_iff,
     mem_ofPred, matroid_isBasis_iff, ← matroid_indep_iff, hB.1.1.1, subset_insert, true_and,
-    SetLike.mem_coe, mem_algebraicClosure, ← isAlgebraic_adj
+    SetLike.mem_coe, mem_algebraicClosure, ← isAlgebraic_adjoin_iff_of_matroid_isBasis hB,
+    forall_mem_insert]
+  exact fun _ => and_iff_left fun x hx => isAlgebraic_algebraMap (⟨x, subset_adjoin hx⟩ : adjoin R B)
 
 中文:
 定理 matroid_closure_eq
@@ -931,7 +1049,9 @@ theorem matroid_closure_eq
   have ⟨B, hB⟩ := (matroid R A).exists_isBasis s
   simp_rw [← hB.closure_eq_closure, hB.1.1.1.closure_eq_setOfPred_isBasis_insert, Set.ext_iff,
     mem_ofPred, matroid_isBasis_iff, ← matroid_indep_iff, hB.1.1.1, subset_insert, true_and,
-    SetLike.mem_coe, mem_algebraicClosure, ← isAlgebraic_adj
+    SetLike.mem_coe, mem_algebraicClosure, ← isAlgebraic_adjoin_iff_of_matroid_isBasis hB,
+    forall_mem_insert]
+  exact fun _ => and_iff_left fun x hx => isAlgebraic_algebraMap (⟨x, subset_adjoin hx⟩ : adjoin R B)
 
 Depends on / 依赖: Set.ext_iff, SetLike, SetLike.mem_coe, adjoin, and_iff_left, closure_eq_closure, closure_eq_setOfPred_isBasis_insert, exists_isBasis, ext_iff, forall_mem_insert, hB.closure_eq_closure, isAlgebraic_adjoin_iff_of_matroid_isBasis, isAlgebraic_algebraMap, matroid, matroid_indep_iff, matroid_isBasis_iff, mem_algebraicClosure, mem_coe, mem_ofPred, simp_rw
 -/
@@ -957,7 +1077,8 @@ theorem matroid_isFlat_iff
   refine ⟨fun eq => ⟨S.restrictScalars R, eq, fun a (h : IsAlgebraic S _) => ?_⟩, ?_⟩
   · rw [← eq]; exact h.restrictScalars (adjoin R s)
   rintro ⟨s, rfl, hs⟩
-  refine Set.ext fun a => ⟨(hs _
+  refine Set.ext fun a => ⟨(hs _ <| adjoin_eq s ▸ ·), fun h => ?_⟩
+  exact isAlgebraic_algebraMap (A := A) (by exact (⟨a, subset_adjoin h⟩ : adjoin R s))
 
 中文:
 定理 matroid_isFlat_iff
@@ -968,7 +1089,8 @@ theorem matroid_isFlat_iff
   refine ⟨fun eq => ⟨S.restrictScalars R, eq, fun a (h : IsAlgebraic S _) => ?_⟩, ?_⟩
   · rw [← eq]; exact h.restrictScalars (adjoin R s)
   rintro ⟨s, rfl, hs⟩
-  refine Set.ext fun a => ⟨(hs _
+  refine Set.ext fun a => ⟨(hs _ <| adjoin_eq s ▸ ·), fun h => ?_⟩
+  exact isAlgebraic_algebraMap (A := A) (by exact (⟨a, subset_adjoin h⟩ : adjoin R s))
 
 Depends on / 依赖: IsAlgebraic, Matroid, Matroid.isFlat_iff_closure_eq, S.restrictScalars, Set.ext, adjoin, adjoin_eq, algebraicClosure, h.restrictScalars, isAlgebraic_algebraMap, isFlat_iff_closure_eq, matroid_closure_eq, restrictScalars, subset_adjoin
 -/
@@ -1094,7 +1216,10 @@ theorem exists_isTranscendenceBasis_between
   have := Subtype.val_injective (p := (· in adjoin R t)).nontrivial
   have := (isDomain_iff_noZeroDivisors_and_nontrivial A).mpr ⟨inferInstance, inferInstance⟩
   have := (faithfulSMul_iff_algebraMap_injective R A).mpr hs.algebraMap_injective
-  rw [← matroid_spanning_iff] a
+  rw [← matroid_spanning_iff] at ht
+  rw [← matroid_indep_iff] at hs
+  have ⟨B, base, hsB, hBt⟩ := hs.exists_isBase_subset_spanning ht hst
+  exact ⟨B, hsB, hBt, base⟩
 
 中文:
 定理 存在_isTranscendenceBasis_between
@@ -1104,7 +1229,10 @@ theorem exists_isTranscendenceBasis_between
   have := Subtype.val_injective (p := (· in adjoin R t)).nontrivial
   have := (isDomain_iff_noZeroDivisors_and_nontrivial A).mpr ⟨inferInstance, inferInstance⟩
   have := (faithfulSMul_iff_algebraMap_injective R A).mpr hs.algebraMap_injective
-  rw [← matroid_spanning_iff] a
+  rw [← matroid_spanning_iff] at ht
+  rw [← matroid_indep_iff] at hs
+  have ⟨B, base, hsB, hBt⟩ := hs.exists_isBase_subset_spanning ht hst
+  exact ⟨B, hsB, hBt, base⟩
 
 Depends on / 依赖: Subtype, Subtype.val_injective, adjoin, algebraMap_injective, exists_isBase_subset_spanning, faithfulSMul_iff_algebraMap_injective, hs.algebraMap_injective, hs.exists_isBase_subset_spanning, ht.nontrivial, isDomain_iff_noZeroDivisors_and_nontrivial, matroid_indep_iff, matroid_spanning_iff, nontrivial, val_injective
 -/
@@ -1423,7 +1551,9 @@ theorem isTranscendenceBasis_of_lift_le_trdeg_of_finite
   have ⟨_, h⟩ := lift_mk_le'.mp (le.trans <| lift_le.mpr <| trdeg_le_cardinalMk R (range x))
   have := rangeFactorization_surjective.bijective_of_nat_card_le (Nat.card_le_card_of_injective _ h)
   refine .of_subtype_range (fun _ _ => (this.1 <| Subtype.ext ·)) ?_
-  have := isDomain_of_adjoin_range
+  have := isDomain_of_adjoin_range R (range x)
+  rw [← matroid_spanning_iff]; rw [← matroid_cRank_eq] at *
+  exact alg.isBase_of_le_cRank_of_finite (lift_le.mp <| mk_range_le_lift.trans le) (finite_range x)
 
 中文:
 定理 isTranscendenceBasis_of_lift_le_trdeg_of_finite
@@ -1431,7 +1561,9 @@ theorem isTranscendenceBasis_of_lift_le_trdeg_of_finite
   have ⟨_, h⟩ := lift_mk_le'.mp (le.trans <| lift_le.mpr <| trdeg_le_cardinalMk R (range x))
   have := rangeFactorization_surjective.bijective_of_nat_card_le (Nat.card_le_card_of_injective _ h)
   refine .of_subtype_range (fun _ _ => (this.1 <| Subtype.ext ·)) ?_
-  have := isDomain_of_adjoin_range
+  have := isDomain_of_adjoin_range R (range x)
+  rw [← matroid_spanning_iff]; rw [← matroid_cRank_eq] at *
+  exact alg.isBase_of_le_cRank_of_finite (lift_le.mp <| mk_range_le_lift.trans le) (finite_range x)
 
 Depends on / 依赖: Nat.card_le_card_of_injective, Subtype, Subtype.ext, alg.isBase_of_le_cRank_of_finite, bijective_of_nat_card_le, card_le_card_of_injective, finite_range, isBase_of_le_cRank_of_finite, isDomain_of_adjoin_range, le.trans, lift_le, lift_le.mp, lift_le.mpr, lift_mk_le, matroid_cRank_eq, matroid_spanning_iff, mk_range_le_lift, mk_range_le_lift.trans, of_subtype_range, rangeFactorization_surjective
 -/
@@ -1524,7 +1656,8 @@ theorem isTranscendenceBasis_of_lift_trdeg_le
   have := (faithfulSMul_iff_algebraMap_injective R A).mpr hx.algebraMap_injective
   rw [← matroid_cRank_eq]; rw [← Matroid.rankFinite_iff_cRank_lt_aleph0] at fin
 exact .of_subtype_range hx.injective matroid_indep_iff.mpr hx.to_subtype_range
-.isBase_of_cRank_le lift_le.mp (matroid_cRank_eq R A ▸ l
+.isBase_of_cRank_le lift_le.mp (matroid_cRank_eq R A ▸ le).trans_eq
+      (mk_range_eq_of_injective hx.injective).symm
 
 中文:
 定理 isTranscendenceBasis_of_lift_trdeg_le
@@ -1533,7 +1666,8 @@ exact .of_subtype_range hx.injective matroid_indep_iff.mpr hx.to_subtype_range
   have := (faithfulSMul_iff_algebraMap_injective R A).mpr hx.algebraMap_injective
   rw [← matroid_cRank_eq]; rw [← Matroid.rankFinite_iff_cRank_lt_aleph0] at fin
 exact .of_subtype_range hx.injective matroid_indep_iff.mpr hx.to_subtype_range
-.isBase_of_cRank_le lift_le.mp (matroid_cRank_eq R A ▸ l
+.isBase_of_cRank_le lift_le.mp (matroid_cRank_eq R A ▸ le).trans_eq
+      (mk_range_eq_of_injective hx.injective).symm
 
 Depends on / 依赖: Matroid, Matroid.rankFinite_iff_cRank_lt_aleph0, algebraMap_injective, faithfulSMul_iff_algebraMap_injective, hx.algebraMap_injective, hx.injective, hx.to_subtype_range, injective, isBase_of_cRank_le, lift_le, lift_le.mp, matroid_cRank_eq, matroid_indep_iff, matroid_indep_iff.mpr, mk_range_eq_of_injective, of_subtype_range, rankFinite_iff_cRank_lt_aleph0, to_subtype_range, trans_eq
 -/
@@ -1621,7 +1755,7 @@ theorem lift_trdeg_add_eq
   have ⟨t, ht⟩ := exists_isTranscendenceBasis S A
   have := (FaithfulSMul.algebraMap_injective S A).noZeroDivisors _ (map_zero _) (map_mul _)
   have := (FaithfulSMul.algebraMap_injective R S).nontrivial
-  rw [← hs.cardinalMk_eq_trdeg]; rw [← ht.ca
+  rw [← hs.cardinalMk_eq_trdeg]; rw [← ht.cardinalMk_eq_trdeg]; rw [← lift_umax.{w}]; rw [add_comm]; rw [← (hs.sumElim_comp ht).lift_cardinalMk_eq_trdeg]; rw [mk_sum]; rw [lift_add]; rw [lift_lift]; rw [lift_lift]
 
 中文:
 定理 lift_trdeg_add_eq
@@ -1631,7 +1765,7 @@ theorem lift_trdeg_add_eq
   have ⟨t, ht⟩ := exists_isTranscendenceBasis S A
   have := (FaithfulSMul.algebraMap_injective S A).noZeroDivisors _ (map_zero _) (map_mul _)
   have := (FaithfulSMul.algebraMap_injective R S).nontrivial
-  rw [← hs.cardinalMk_eq_trdeg]; rw [← ht.ca
+  rw [← hs.cardinalMk_eq_trdeg]; rw [← ht.cardinalMk_eq_trdeg]; rw [← lift_umax.{w}]; rw [add_comm]; rw [← (hs.sumElim_comp ht).lift_cardinalMk_eq_trdeg]; rw [mk_sum]; rw [lift_add]; rw [lift_lift]; rw [lift_lift]
 -/
 @[stacks 030H] theorem lift_trdeg_add_eq [Nontrivial R] [NoZeroDivisors A] [FaithfulSMul R S]
     [FaithfulSMul S A] : lift.{w} (trdeg R S) + lift.{v} (trdeg S A) = lift.{v} (trdeg R A) := by
@@ -1680,7 +1814,37 @@ lemma of_isAlgebraic_adjoin_insert_sdiff
   have := (isDomain_iff_noZeroDivisors_and_nontrivial S).mpr ⟨‹_›, ‹_›⟩
   have := Module.nontrivial R S
   rw [← mem_algebraicClosure]; rw [← SetLike.mem_coe]; rw [← matroid_closure_eq] at H₂
-  have
+  have inj := injOn_iff_injective.mpr H₁.1.injective
+  have H' := image_eq_range .. ▸ matroid_isBase_iff.mpr H₁.to_subtype_range
+  obtain hj' | hj := (em (j in s)).symm
+  · cases hj.resolve_right hj'; rwa [insert_sdiff_self_of_notMem hj']
+  have Hj := H'.indep.notMem_closure_sdiff_of_mem ⟨j, hj, rfl⟩
+have hi : i ∉ s := fun hi => Hj by
+    rw [← image_singleton]; rw [← inj.image_sdiff_subset (singleton_subset_iff.mpr hj)]
+    rwa [insert_eq_of_mem hi] at H₂
+  obtain eq | ne := eq_or_ne (v i) (v j)
+  · classical
+    convert!
+H₁.comp_equiv
+.symm
+((Equiv.swap j i).image s).trans
+.setCongr Equiv.image_swap_of_mem_of_notMem hj hi with
+      ⟨x, rfl | hxi, hxj⟩
+    · simp [eq]
+    · simp [Equiv.swap_apply_of_ne_of_ne hxj (ne_of_mem_of_not_mem hxi hi)]
+have hi' : v i ∉ v '' s := fun his => Hj by
+    refine Matroid.closure_subset_closure _ ?_ H₂
+    rintro x ⟨k, ⟨rfl | hks, hkj⟩, rfl⟩
+    · exact ⟨his, ne⟩
+    · exact ⟨⟨k, hks, rfl⟩, inj.ne hks hj hkj⟩
+  have : (insert i s).InjOn v := (injOn_insert hi).mpr ⟨inj, hi'⟩
+  rw [← isTranscendenceBasis_subtype_range
+    (by exact injOn_iff_injective.1 (this.mono sdiff_subset))]; rw [← matroid_isBase_iff]; rw [← image_eq_range]
+  rw [this.image_sdiff_subset (singleton_subset_iff.mpr (.inr hj))]; rw [image_singleton]; rw [image_insert_eq] at H₂ ⊢
+  exact H'.isBase_insert_sdiff_of_mem_closure H₂ (.inr ⟨j, hj, rfl⟩)
+
+@[deprecated (since := "2026-06-03")]
+alias of_isAlgebraic_adjoin_insert_diff := of_isAlgebraic_adjoin_insert_sdiff
 
 中文:
 引理 of_isAlgebraic_adjoin_insert_sdiff
@@ -1691,7 +1855,37 @@ lemma of_isAlgebraic_adjoin_insert_sdiff
   have := (isDomain_iff_noZeroDivisors_and_nontrivial S).mpr ⟨‹_›, ‹_›⟩
   have := Module.nontrivial R S
   rw [← mem_algebraicClosure]; rw [← SetLike.mem_coe]; rw [← matroid_closure_eq] at H₂
-  have
+  have inj := injOn_iff_injective.mpr H₁.1.injective
+  have H' := image_eq_range .. ▸ matroid_isBase_iff.mpr H₁.to_subtype_range
+  obtain hj' | hj := (em (j in s)).symm
+  · cases hj.resolve_right hj'; rwa [insert_sdiff_self_of_notMem hj']
+  have Hj := H'.indep.notMem_closure_sdiff_of_mem ⟨j, hj, rfl⟩
+have hi : i ∉ s := fun hi => Hj by
+    rw [← image_singleton]; rw [← inj.image_sdiff_subset (singleton_subset_iff.mpr hj)]
+    rwa [insert_eq_of_mem hi] at H₂
+  obtain eq | ne := eq_or_ne (v i) (v j)
+  · classical
+    convert!
+H₁.comp_equiv
+.symm
+((Equiv.swap j i).image s).trans
+.setCongr Equiv.image_swap_of_mem_of_notMem hj hi with
+      ⟨x, rfl | hxi, hxj⟩
+    · simp [eq]
+    · simp [Equiv.swap_apply_of_ne_of_ne hxj (ne_of_mem_of_not_mem hxi hi)]
+have hi' : v i ∉ v '' s := fun his => Hj by
+    refine Matroid.closure_subset_closure _ ?_ H₂
+    rintro x ⟨k, ⟨rfl | hks, hkj⟩, rfl⟩
+    · exact ⟨his, ne⟩
+    · exact ⟨⟨k, hks, rfl⟩, inj.ne hks hj hkj⟩
+  have : (insert i s).InjOn v := (injOn_insert hi).mpr ⟨inj, hi'⟩
+  rw [← isTranscendenceBasis_subtype_range
+    (by exact injOn_iff_injective.1 (this.mono sdiff_subset))]; rw [← matroid_isBase_iff]; rw [← image_eq_range]
+  rw [this.image_sdiff_subset (singleton_subset_iff.mpr (.inr hj))]; rw [image_singleton]; rw [image_insert_eq] at H₂ ⊢
+  exact H'.isBase_insert_sdiff_of_mem_closure H₂ (.inr ⟨j, hj, rfl⟩)
+
+@[deprecated (since := "2026-06-03")]
+alias of_isAlgebraic_adjoin_insert_diff := of_isAlgebraic_adjoin_insert_sdiff
 
 Depends on / 依赖: Module, Module.nontrivial, SetLike, SetLike.mem_coe, adjoin, hj.resolve_right, image_eq_range, injOn_iff_injective, injOn_iff_injective.mpr, injective, insert, insert_sdiff_self_, isDomain_iff_noZeroDivisors_and_nontrivial, matroid_closure_eq, matroid_isBase_iff, matroid_isBase_iff.mpr, mem_algebraicClosure, mem_coe, nontrivial, resolve_right
 -/

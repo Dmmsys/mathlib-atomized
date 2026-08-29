@@ -345,7 +345,12 @@ lemma nneg_mul_add_sq_of_abs_le_one
     rwa [neg_add_cancel] at this
   have hnx' : n < 0 -> x + n <= 0 := fun hn => by
     have := _root_.add_le_add (le_of_abs_le hx) (cast_le_neg_one_of_neg hn)
-    rwa [add_
+    rwa [add_neg_cancel] at this
+  rw [← mul_add]; rw [mul_nonneg_iff]
+  rcases lt_trichotomy n 0 with (h | rfl | h)
+  · exact Or.inr ⟨mod_cast h.le, hnx' h⟩
+  · simp [le_total 0 x]
+  · exact Or.inl ⟨mod_cast h.le, hnx h⟩
 
 中文:
 引理 nneg_mul_add_sq_of_abs_le_one
@@ -357,7 +362,12 @@ lemma nneg_mul_add_sq_of_abs_le_one
     rwa [neg_add_cancel] at this
   have hnx' : n < 0 -> x + n <= 0 := fun hn => by
     have := _root_.add_le_add (le_of_abs_le hx) (cast_le_neg_one_of_neg hn)
-    rwa [add_
+    rwa [add_neg_cancel] at this
+  rw [← mul_add]; rw [mul_nonneg_iff]
+  rcases lt_trichotomy n 0 with (h | rfl | h)
+  · exact Or.inr ⟨mod_cast h.le, hnx' h⟩
+  · simp [le_total 0 x]
+  · exact Or.inl ⟨mod_cast h.le, hnx h⟩
 
 Depends on / 依赖: Or.inl, Or.inr, _root_, _root_.add_le_add, add_le_add, add_neg_cancel, cast_le_neg_one_of_neg, cast_one_le_of_pos, h.le, le_of_abs_le, le_total, lt_trichotomy, mod_cast, mul_add, mul_nonneg_iff, neg_add_cancel, neg_le_of_abs_le
 -/

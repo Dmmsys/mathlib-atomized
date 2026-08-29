@@ -81,7 +81,19 @@ lemma image_T_subset_S
   all_goals
     simp only [mul_neg]
     gcongr ∑ _ : β, ?_ with j _ -- Get rid of sums
-    rw [← mul_comm (v j)] -- Move A i
+    rw [← mul_comm (v j)] -- Move A i j to the right of the products
+    -- We have to distinguish cases: we have now 4 goals
+    rcases le_total 0 (A i j) with hsign | hsign
+  · rw [negPart_eq_zero.2 hsign]
+    exact mul_nonneg (hv.1 j) hsign
+  · rw [negPart_eq_neg.2 hsign]
+    simp only [mul_neg, neg_neg]
+    exact mul_le_mul_of_nonpos_right (hv.2 j) hsign
+  · rw [posPart_eq_self.2 hsign]
+    gcongr
+    apply hv.2
+  · rw [posPart_eq_zero.2 hsign]
+    exact mul_nonpos_of_nonneg_of_nonpos (hv.1 j) hsign
 
 中文:
 引理 image_T_subset_S
@@ -96,7 +108,19 @@ lemma image_T_subset_S
   all_goals
     simp only [mul_neg]
     gcongr ∑ _ : β, ?_ with j _ -- Get rid of sums
-    rw [← mul_comm (v j)] -- Move A i
+    rw [← mul_comm (v j)] -- Move A i j to the right of the products
+    -- We have to distinguish cases: we have now 4 goals
+    rcases le_total 0 (A i j) with hsign | hsign
+  · rw [negPart_eq_zero.2 hsign]
+    exact mul_nonneg (hv.1 j) hsign
+  · rw [negPart_eq_neg.2 hsign]
+    simp only [mul_neg, neg_neg]
+    exact mul_le_mul_of_nonpos_right (hv.2 j) hsign
+  · rw [posPart_eq_self.2 hsign]
+    gcongr
+    apply hv.2
+  · rw [posPart_eq_zero.2 hsign]
+    exact mul_nonpos_of_nonneg_of_nonpos (hv.1 j) hsign
 -/
 private lemma image_T_subset_S [DecidableEq α] [DecidableEq β] (v) (hv : v in T) : A *ᵥ v in S := by
   rw [mem_Icc] at hv ⊢
@@ -289,7 +313,34 @@ lemma card_S_lt_card_T
   calc
   ∏ x : α, (∑ x_1 : β, ↑B * ↑(A x x_1)⁺ - ∑ x_1 : β, ↑B * -↑(A x x_1)⁻ + 1)
     <= ∏ x : α, (n * max 1 ‖A‖ * B + 1) := by
-      refine Finset.prod_le_pro
+      refine Finset.prod_le_prod (fun i _ => ?_) (fun i _ => ?_)
+      · have h := N_le_P_add_one A i
+        rify at h
+        linarith only [h]
+      · simp only [mul_neg, sum_neg_distrib, sub_neg_eq_add, add_le_add_iff_right]
+        have h1 : n * max 1 ‖A‖ * B = ∑ _ : β, max 1 ‖A‖ * B := by
+          simp
+          ring
+        simp_rw [h1, ← Finset.sum_add_distrib, ← mul_add, mul_comm (max 1 ‖A‖), ← Int.cast_add]
+        gcongr with j _
+        rw [posPart_add_negPart (A i j)]; rw [Int.cast_abs]
+        exact le_trans (norm_entry_le_entrywise_sup_norm A) (le_max_right ..)
+  _ = (n * max 1 ‖A‖ * B + 1) ^ m := by simp
+  _ <= (n * max 1 ‖A‖) ^ m * (B + 1) ^ m := by
+        rw [← mul_pow]; rw [mul_add]; rw [mul_one]
+        gcongr
+        have H : 1 <= (n : Real) := mod_cast (hm.trans hn)
+exact one_le_mul_of_one_le_of_one_le H le_max_left ..
+  _ = ((n * max 1 ‖A‖) ^ (m / ((n : Real) - m))) ^ ((n : Real) - m) * (B + 1) ^ m := by
+        congr 1
+        rw [← rpow_mul (mul_nonneg (Nat.cast_nonneg' n) (le_trans zero_le_one (le_max_left ..)))]; rw [← Real.rpow_natCast]; rw [div_mul_cancel₀]
+        exact sub_ne_zero_of_ne (mod_cast hn.ne')
+  _ < (B + 1) ^ ((n : Real) - m) * (B + 1) ^ m := by
+        gcongr
+        · exact sub_pos.mpr (mod_cast hn)
+        · exact Nat.lt_floor_add_one ((n * max 1 ‖A‖) ^ e)
+  _ = (B + 1) ^ n := by
+        rw [← rpow_natCast]; rw [← rpow_add (Nat.cast_add_one_pos B)]; rw [← rpow_natCast]; rw [sub_add_cancel]
 
 中文:
 引理 card_S_lt_card_T
@@ -301,7 +352,34 @@ lemma card_S_lt_card_T
   calc
   ∏ x : α, (∑ x_1 : β, ↑B * ↑(A x x_1)⁺ - ∑ x_1 : β, ↑B * -↑(A x x_1)⁻ + 1)
     <= ∏ x : α, (n * max 1 ‖A‖ * B + 1) := by
-      refine Finset.prod_le_pro
+      refine Finset.prod_le_prod (fun i _ => ?_) (fun i _ => ?_)
+      · have h := N_le_P_add_one A i
+        rify at h
+        linarith only [h]
+      · simp only [mul_neg, sum_neg_distrib, sub_neg_eq_add, add_le_add_iff_right]
+        have h1 : n * max 1 ‖A‖ * B = ∑ _ : β, max 1 ‖A‖ * B := by
+          simp
+          ring
+        simp_rw [h1, ← Finset.sum_add_distrib, ← mul_add, mul_comm (max 1 ‖A‖), ← Int.cast_add]
+        gcongr with j _
+        rw [posPart_add_negPart (A i j)]; rw [Int.cast_abs]
+        exact le_trans (norm_entry_le_entrywise_sup_norm A) (le_max_right ..)
+  _ = (n * max 1 ‖A‖ * B + 1) ^ m := by simp
+  _ <= (n * max 1 ‖A‖) ^ m * (B + 1) ^ m := by
+        rw [← mul_pow]; rw [mul_add]; rw [mul_one]
+        gcongr
+        have H : 1 <= (n : Real) := mod_cast (hm.trans hn)
+exact one_le_mul_of_one_le_of_one_le H le_max_left ..
+  _ = ((n * max 1 ‖A‖) ^ (m / ((n : Real) - m))) ^ ((n : Real) - m) * (B + 1) ^ m := by
+        congr 1
+        rw [← rpow_mul (mul_nonneg (Nat.cast_nonneg' n) (le_trans zero_le_one (le_max_left ..)))]; rw [← Real.rpow_natCast]; rw [div_mul_cancel₀]
+        exact sub_ne_zero_of_ne (mod_cast hn.ne')
+  _ < (B + 1) ^ ((n : Real) - m) * (B + 1) ^ m := by
+        gcongr
+        · exact sub_pos.mpr (mod_cast hn)
+        · exact Nat.lt_floor_add_one ((n * max 1 ‖A‖) ^ e)
+  _ = (B + 1) ^ n := by
+        rw [← rpow_natCast]; rw [← rpow_add (Nat.cast_add_one_pos B)]; rw [← rpow_natCast]; rw [sub_add_cancel]
 -/
 private lemma card_S_lt_card_T [DecidableEq α] [DecidableEq β]
     (hn : Fintype.card α < Fintype.card β) (hm : 0 < Fintype.card α) :
@@ -355,7 +433,28 @@ theorem exists_ne_zero_int_vec_norm_le
     (card_S_lt_card_T A hn hm) (image_T_subset_S A)
     with ⟨x, hxT, y, hyT, hneq, hfeq⟩
   -- Proofs that x - y ≠ 0 and x - y is a solution
-  refine ⟨x - y, sub_ne_zero.mpr hneq, by simp only [mulVec_sub, sub_eq_z
+  refine ⟨x - y, sub_ne_zero.mpr hneq, by simp only [mulVec_sub, sub_eq_zero, hfeq], ?_⟩
+  -- Inequality
+  have n_mul_norm_A_pow_e_nonneg : 0 <= (n * max 1 ‖A‖) ^ e := by positivity
+  rw [← norm_replicateCol (ι := Unit)]; rw [norm_le_iff n_mul_norm_A_pow_e_nonneg]
+  intro i j
+  simp only [replicateCol_apply, Pi.sub_apply]
+  rw [Int.norm_eq_abs]; rw [← Int.cast_abs]
+  refine le_trans ?_ (Nat.floor_le n_mul_norm_A_pow_e_nonneg)
+  norm_cast
+  rw [abs_le]
+  rw [Finset.mem_Icc] at hxT hyT
+  constructor
+  · simp only [neg_le_sub_iff_le_add]
+    apply le_trans (hyT.2 i)
+    norm_cast
+    simp only [le_add_iff_nonneg_left]
+    exact hxT.1 i
+  · simp only [tsub_le_iff_right]
+    apply le_trans (hxT.2 i)
+    norm_cast
+    simp only [le_add_iff_nonneg_right]
+    exact hyT.1 i
 
 中文:
 定理 存在_ne_zero_int_vec_norm_le
@@ -366,7 +465,28 @@ theorem exists_ne_zero_int_vec_norm_le
     (card_S_lt_card_T A hn hm) (image_T_subset_S A)
     with ⟨x, hxT, y, hyT, hneq, hfeq⟩
   -- Proofs that x - y ≠ 0 and x - y is a solution
-  refine ⟨x - y, sub_ne_zero.mpr hneq, by simp only [mulVec_sub, sub_eq_z
+  refine ⟨x - y, sub_ne_zero.mpr hneq, by simp only [mulVec_sub, sub_eq_zero, hfeq], ?_⟩
+  -- Inequality
+  have n_mul_norm_A_pow_e_nonneg : 0 <= (n * max 1 ‖A‖) ^ e := by positivity
+  rw [← norm_replicateCol (ι := Unit)]; rw [norm_le_iff n_mul_norm_A_pow_e_nonneg]
+  intro i j
+  simp only [replicateCol_apply, Pi.sub_apply]
+  rw [Int.norm_eq_abs]; rw [← Int.cast_abs]
+  refine le_trans ?_ (Nat.floor_le n_mul_norm_A_pow_e_nonneg)
+  norm_cast
+  rw [abs_le]
+  rw [Finset.mem_Icc] at hxT hyT
+  constructor
+  · simp only [neg_le_sub_iff_le_add]
+    apply le_trans (hyT.2 i)
+    norm_cast
+    simp only [le_add_iff_nonneg_left]
+    exact hxT.1 i
+  · simp only [tsub_le_iff_right]
+    apply le_trans (hxT.2 i)
+    norm_cast
+    simp only [le_add_iff_nonneg_right]
+    exact hyT.1 i
 
 Depends on / 依赖: classical
 -/

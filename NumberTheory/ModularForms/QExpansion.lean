@@ -164,7 +164,9 @@ theorem differentiableAt_cuspFunction
       (eventually_of_mem (preimage_mem_comap (Ioi_mem_atTop 0))
         (fun z hz => UpperHalfPlane.mdifferentiableAt_iff.mp (hfhol ⟨z, hz⟩)))
       (hfbdd.comp_tendsto tendsto_comap_im_ofComplex)
-  · exact
+  · exact Periodic.qParam_right_inv hh.ne' hq' ▸
+hfper.differentiableAt_cuspFunction hh.ne' UpperHalfPlane.mdifferentiableAt_iff.mp
+        hfhol ⟨_, Periodic.im_invQParam_pos_of_norm_lt_one hh hq hq'⟩
 
 中文:
 定理 differentiableAt_cuspFunction
@@ -175,7 +177,9 @@ theorem differentiableAt_cuspFunction
       (eventually_of_mem (preimage_mem_comap (Ioi_mem_atTop 0))
         (fun z hz => UpperHalfPlane.mdifferentiableAt_iff.mp (hfhol ⟨z, hz⟩)))
       (hfbdd.comp_tendsto tendsto_comap_im_ofComplex)
-  · exact
+  · exact Periodic.qParam_right_inv hh.ne' hq' ▸
+hfper.differentiableAt_cuspFunction hh.ne' UpperHalfPlane.mdifferentiableAt_iff.mp
+        hfhol ⟨_, Periodic.im_invQParam_pos_of_norm_lt_one hh hq hq'⟩
 
 Depends on / 依赖: Ioi_mem_atTop, Periodic, Periodic.im_invQParam_pos_of_norm_lt_one, Periodic.qParam_right_inv, UpperHalfPlane, UpperHalfPlane.mdifferentiableAt_iff.mp, comp_tendsto, differentiableAt_cuspFunction, differentiableAt_cuspFunction_zero, eq_or_ne, eventually_of_mem, hfbdd.comp_tendsto, hfper.differentiableAt_cuspFunction, hfper.differentiableAt_cuspFunction_zero, hh.ne, im_invQParam_pos_of_norm_lt_one, mdifferentiableAt_iff, preimage_mem_comap, qParam_right_inv, tendsto_comap_im_ofComplex
 -/
@@ -289,7 +293,8 @@ theorem periodic_comp_ofComplex
     convert! SlashInvariantForm.vAdd_apply_of_mem_strictPeriods f ⟨w, hw⟩ hΓ using 2
     ext
     simp [add_comm]
-  · have : im (w 
+  · have : im (w + h) <= 0 := by simpa using hw
+    simp [ofComplex_apply_of_im_nonpos this, ofComplex_apply_of_im_nonpos hw]
 
 中文:
 定理 periodic_comp_ofComplex
@@ -302,7 +307,8 @@ theorem periodic_comp_ofComplex
     convert! SlashInvariantForm.vAdd_apply_of_mem_strictPeriods f ⟨w, hw⟩ hΓ using 2
     ext
     simp [add_comm]
-  · have : im (w 
+  · have : im (w + h) <= 0 := by simpa using hw
+    simp [ofComplex_apply_of_im_nonpos this, ofComplex_apply_of_im_nonpos hw]
 
 Depends on / 依赖: SlashInvariantForm, SlashInvariantForm.vAdd_apply_of_mem_strictPeriods, add_comm, comp_apply, convert, ofComplex_apply_of_im_nonpos, ofComplex_apply_of_im_pos, vAdd_apply_of_mem_strictPeriods
 -/
@@ -614,6 +620,8 @@ lemma qExpansionFormalMultilinearSeries_radius
   simp only [qExpansionFormalMultilinearSeries_apply_norm]
   rw [← r.abs_eq]
   simp_rw [← Real.norm_eq_abs, ← Complex.norm_real, ← norm_pow, ← norm_mul]
+  exact (UpperHalfPlane.hasSum_qExpansion_of_norm_lt hh hfper hfhol hfbdd
+    (by simpa using hr)).summable.norm
 
 中文:
 引理 qExpansionFormalMultilinearSeries_radius
@@ -625,6 +633,8 @@ lemma qExpansionFormalMultilinearSeries_radius
   simp only [qExpansionFormalMultilinearSeries_apply_norm]
   rw [← r.abs_eq]
   simp_rw [← Real.norm_eq_abs, ← Complex.norm_real, ← norm_pow, ← norm_mul]
+  exact (UpperHalfPlane.hasSum_qExpansion_of_norm_lt hh hfper hfhol hfbdd
+    (by simpa using hr)).summable.norm
 
 Depends on / 依赖: Complex.norm_real, FormalMultilinearSeries, FormalMultilinearSeries.le_radius_of_summable, NNReal, Real.norm_eq_abs, UpperHalfPlane, UpperHalfPlane.hasSum_qExpansion_of_norm_lt, abs_eq, hasSum_qExpansion_of_norm_lt, hr.ne_top, le_of_forall_lt_imp_le_of_dense, le_radius_of_summable, ne_top, norm_eq_abs, norm_mul, norm_pow, norm_real, qExpansionFormalMultilinearSeries_apply_norm, r.abs_eq, simp_rw
 -/
@@ -652,7 +662,7 @@ lemma hasSum_cuspFunction_of_hasSum_punctured
   have h2 := (Periodic.cuspFunction_eq_of_nonzero h (f ∘ ofComplex) hq1)
   have : cuspFunction h f q = f τ := by simpa [UpperHalfPlane.ofComplex_apply_of_im_pos h1]
     using! h2
-  grind [h
+  grind [hf τ, Periodic.qParam_right_inv]
 
 中文:
 引理 hasSum_cuspFunction_of_hasSum_punctured
@@ -663,7 +673,7 @@ lemma hasSum_cuspFunction_of_hasSum_punctured
   have h2 := (Periodic.cuspFunction_eq_of_nonzero h (f ∘ ofComplex) hq1)
   have : cuspFunction h f q = f τ := by simpa [UpperHalfPlane.ofComplex_apply_of_im_pos h1]
     using! h2
-  grind [h
+  grind [hf τ, Periodic.qParam_right_inv]
 -/
 private lemma hasSum_cuspFunction_of_hasSum_punctured {f : ℍ -> Complex} (hh : 0 < h) {c : Nat -> Complex}
     (hf : forall (τ : ℍ), HasSum (fun m => c m • 𝕢 h τ ^ m) (f τ)) {q : Complex} (hq : ‖q‖ < 1)
@@ -688,7 +698,17 @@ lemma hasFPowerSeriesOnBall_update
     · simp
     · lift r to NNReal using hr.ne_top
       let : FiniteDimensional Real Complex := basisOneI.finiteDimensional_of_finite
-      apply FormalMultilinearSeries.le_radius_of_sum
+      apply FormalMultilinearSeries.le_radius_of_summable
+      simpa [smul_eq_mul, norm_mul, mul_comm, mul_left_comm, mul_assoc] using
+        (hasSum_cuspFunction_of_hasSum_punctured hh hf (q := r) (by simpa using hr)
+          (mod_cast hr')).summable.norm
+  · simp
+  · intro y hy
+    rw [← ENNReal.coe_one]; rw [Metric.eball_coe]; rw [NNReal.coe_one]; rw [mem_ball_zero_iff] at hy
+    rcases eq_or_ne y 0 with rfl | hy'
+    · simpa +contextual [zero_pow_eq] using hasSum_ite_eq 0 (c 0)
+    · simpa [update_of_ne hy', mul_comm]
+        using hasSum_cuspFunction_of_hasSum_punctured hh hf hy hy'
 
 中文:
 引理 hasFPowerSeriesOnBall_update
@@ -700,7 +720,17 @@ lemma hasFPowerSeriesOnBall_update
     · simp
     · lift r to NNReal using hr.ne_top
       let : FiniteDimensional Real Complex := basisOneI.finiteDimensional_of_finite
-      apply FormalMultilinearSeries.le_radius_of_sum
+      apply FormalMultilinearSeries.le_radius_of_summable
+      simpa [smul_eq_mul, norm_mul, mul_comm, mul_left_comm, mul_assoc] using
+        (hasSum_cuspFunction_of_hasSum_punctured hh hf (q := r) (by simpa using hr)
+          (mod_cast hr')).summable.norm
+  · simp
+  · intro y hy
+    rw [← ENNReal.coe_one]; rw [Metric.eball_coe]; rw [NNReal.coe_one]; rw [mem_ball_zero_iff] at hy
+    rcases eq_or_ne y 0 with rfl | hy'
+    · simpa +contextual [zero_pow_eq] using hasSum_ite_eq 0 (c 0)
+    · simpa [update_of_ne hy', mul_comm]
+        using hasSum_cuspFunction_of_hasSum_punctured hh hf hy hy'
 -/
 private lemma hasFPowerSeriesOnBall_update {f : ℍ -> Complex} (hh : 0 < h) {c : Nat -> Complex}
     (hf : forall τ : ℍ, HasSum (fun m : Nat => (c m) • 𝕢 h τ ^ m) (f τ)) :
@@ -735,7 +765,13 @@ theorem isBoundedAtImInfty_of_hasSum_qExpansion
     rw [update_of_ne (Periodic.qParam_ne_zero _)]
     exact (hf τ).unique (hasSum_cuspFunction_of_hasSum_punctured hh hf
       (Periodic.norm_qParam_lt_one hh τ.im_pos) (exp_ne_zero _))
-  have htend : Tend
+  have htend : Tendsto f atImInfty (𝓝 (c 0)) := by
+    rw [hfeq]
+    simpa [update_self, Function.comp_def] using
+      (hasFPowerSeriesOnBall_update hh hf).hasFPowerSeriesAt.continuousAt.tendsto.comp
+        (qParam_tendsto_atImInfty hh)
+  -- `IsBoundedAtImInfty f = BoundedAtFilter atImInfty f = (f =O[atImInfty] 1)` by definition.
+  exact htend.isBigO_one Real
 
 中文:
 定理 isBoundedAtImInfty_of_hasSum_qExpansion
@@ -746,7 +782,13 @@ theorem isBoundedAtImInfty_of_hasSum_qExpansion
     rw [update_of_ne (Periodic.qParam_ne_zero _)]
     exact (hf τ).unique (hasSum_cuspFunction_of_hasSum_punctured hh hf
       (Periodic.norm_qParam_lt_one hh τ.im_pos) (exp_ne_zero _))
-  have htend : Tend
+  have htend : Tendsto f atImInfty (𝓝 (c 0)) := by
+    rw [hfeq]
+    simpa [update_self, Function.comp_def] using
+      (hasFPowerSeriesOnBall_update hh hf).hasFPowerSeriesAt.continuousAt.tendsto.comp
+        (qParam_tendsto_atImInfty hh)
+  -- `IsBoundedAtImInfty f = BoundedAtFilter atImInfty f = (f =O[atImInfty] 1)` by definition.
+  exact htend.isBigO_one Real
 
 Depends on / 依赖: Function, Function.comp_def, Periodic, Periodic.norm_qParam_lt_one, Periodic.qParam_ne_zero, Tendsto, atImInfty, comp_def, continuousAt, cuspFunction, exp_ne_zero, hasFPowerSeriesAt, hasFPowerSeriesAt.continuousAt.tendsto.comp, hasFPowerSeriesOnBall_update, hasSum_cuspFunction_of_hasSum_punctured, im_pos, norm_qParam_lt_one, qParam_ne_zero, qParam_tendsto_atImInfty, tendsto
 -/
@@ -776,7 +818,14 @@ lemma hasFPowerSeriesOnBall_cuspFunction
   have H1 : HasFPowerSeriesOnBall (update (cuspFunction h f) 0 (c 0)) (.ofScalars Complex c) 0 1 :=
     hasFPowerSeriesOnBall_update hh hf
   -- now just need to check values at 0 match
-  -- use continuity of both functions & we know it everywhe
+  -- use continuity of both functions & we know it everywhere else
+  have H2 : c 0 = cuspFunction h f 0 := by
+    have L1 := H1.hasFPowerSeriesAt.continuousAt
+    have L2 := hfanalytic.continuousAt
+have := (L1.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE L2).mp
+      by filter_upwards [self_mem_nhdsWithin] with a ha using update_of_ne ha ..
+    simpa [update_self] using this.eq_of_nhds
+  rwa [update_eq_self_iff.mpr H2] at H1
 
 中文:
 引理 hasFPowerSeriesOnBall_cuspFunction
@@ -786,7 +835,14 @@ lemma hasFPowerSeriesOnBall_cuspFunction
   have H1 : HasFPowerSeriesOnBall (update (cuspFunction h f) 0 (c 0)) (.ofScalars Complex c) 0 1 :=
     hasFPowerSeriesOnBall_update hh hf
   -- now just need to check values at 0 match
-  -- use continuity of both functions & we know it everywhe
+  -- use continuity of both functions & we know it everywhere else
+  have H2 : c 0 = cuspFunction h f 0 := by
+    have L1 := H1.hasFPowerSeriesAt.continuousAt
+    have L2 := hfanalytic.continuousAt
+have := (L1.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE L2).mp
+      by filter_upwards [self_mem_nhdsWithin] with a ha using update_of_ne ha ..
+    simpa [update_self] using this.eq_of_nhds
+  rwa [update_eq_self_iff.mpr H2] at H1
 -/
 lemma hasFPowerSeriesOnBall_cuspFunction {f : ℍ -> Complex} {c : Nat -> Complex} (hh : 0 < h)
     (hfanalytic : AnalyticAt Complex (cuspFunction h f) 0)
@@ -815,7 +871,8 @@ lemma qExpansion_coeff_eq_circleIntegral
   have := ((differentiableOn_cuspFunction_ball hh hfper hfhol hfbdd).mono
     (Metric.closedBall_subset_ball hR')).circleIntegral_one_div_sub_center_pow_smul hR n
   rw [smul_eq_mul]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [mul_comm]; rw [← div_eq_iff two_pi_I_ne_zero] at this
-  simp_rw [qExpansi
+  simp_rw [qExpansion, PowerSeries.coeff_mk, ← this, sub_zero, smul_eq_mul, one_div_mul_eq_div,
+    div_eq_inv_mul]
 
 中文:
 引理 qExpansion_coeff_eq_circle整数egral
@@ -824,7 +881,8 @@ lemma qExpansion_coeff_eq_circleIntegral
   have := ((differentiableOn_cuspFunction_ball hh hfper hfhol hfbdd).mono
     (Metric.closedBall_subset_ball hR')).circleIntegral_one_div_sub_center_pow_smul hR n
   rw [smul_eq_mul]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [mul_comm]; rw [← div_eq_iff two_pi_I_ne_zero] at this
-  simp_rw [qExpansi
+  simp_rw [qExpansion, PowerSeries.coeff_mk, ← this, sub_zero, smul_eq_mul, one_div_mul_eq_div,
+    div_eq_inv_mul]
 
 Depends on / 依赖: Metric, Metric.closedBall_subset_ball, PowerSeries, PowerSeries.coeff_mk, circleIntegral_one_div_sub_center_pow_smul, closedBall_subset_ball, coeff_mk, differentiableOn_cuspFunction_ball, div_eq_iff, div_eq_inv_mul, div_eq_mul_inv, mul_assoc, mul_comm, one_div_mul_eq_div, qExpansion, simp_rw, smul_eq_mul, sub_zero, two_pi_I_ne_zero
 -/
@@ -849,7 +907,26 @@ lemma qExpansion_coeff_eq_intervalIntegral
   let R := Real.exp (-2 * π * t / h)
   have hR0 : 0 < R := Real.exp_pos _
 have hR1 : R < 1 := Real.exp_lt_one_iff.2 by simpa [neg_div] using div_pos (by positivity) hh
-  -- First apply `qExpansion_coeff_eq_circl
+  -- First apply `qExpansion_coeff_eq_circleIntegral` and rescale from `0 .. 2 * π` to `0 .. h`.
+  rw [qExpansion_coeff_eq_circleIntegral hh hfper hfhol hfbdd n hR0 hR1]; rw [circleIntegral]; rw [show 2 * π = h * (2 * π / h) by field_simp]
+  conv => enter [1, 2, 2]; rw [show 0 = 0 * (2 * π / h) by simp]
+  simp_rw [← intervalIntegral.smul_integral_comp_mul_right, real_smul, ← mul_assoc,
+    ← intervalIntegral.integral_const_mul]
+  -- Compare the integrands
+  congr 1 with u
+  let τ : ℍ := ⟨u + t * I, by simpa using ht⟩
+  have : circleMap 0 R (u * (2 * π / h)) = 𝕢 h τ := by
+    simp only [circleMap, ofReal_exp, ← exp_add, zero_add, τ, R]
+    congr 1
+    push_cast
+    have := I_sq
+    grind
+  -- now just complex exponential arithmetic to finish
+  simp_rw [deriv_circleMap, this, show ↑I = Complex.I by rfl, show u + t * Complex.I = τ by rfl,
+    show ⟨↑τ, τ.2⟩ = τ by rfl, eq_cuspFunction _ hh.ne' hfper, smul_eq_mul, pow_succ]
+  field_simp [(show 𝕢 h τ != 0 from Complex.exp_ne_zero _), Real.pi_ne_zero, NeZero.ne]
+  push_cast
+  ring
 
 中文:
 引理 qExpansion_coeff_eq_interval整数egral
@@ -859,7 +936,26 @@ have hR1 : R < 1 := Real.exp_lt_one_iff.2 by simpa [neg_div] using div_pos (by p
   let R := Real.exp (-2 * π * t / h)
   have hR0 : 0 < R := Real.exp_pos _
 have hR1 : R < 1 := Real.exp_lt_one_iff.2 by simpa [neg_div] using div_pos (by positivity) hh
-  -- First apply `qExpansion_coeff_eq_circl
+  -- First apply `qExpansion_coeff_eq_circleIntegral` and rescale from `0 .. 2 * π` to `0 .. h`.
+  rw [qExpansion_coeff_eq_circleIntegral hh hfper hfhol hfbdd n hR0 hR1]; rw [circleIntegral]; rw [show 2 * π = h * (2 * π / h) by field_simp]
+  conv => enter [1, 2, 2]; rw [show 0 = 0 * (2 * π / h) by simp]
+  simp_rw [← intervalIntegral.smul_integral_comp_mul_right, real_smul, ← mul_assoc,
+    ← intervalIntegral.integral_const_mul]
+  -- Compare the integrands
+  congr 1 with u
+  let τ : ℍ := ⟨u + t * I, by simpa using ht⟩
+  have : circleMap 0 R (u * (2 * π / h)) = 𝕢 h τ := by
+    simp only [circleMap, ofReal_exp, ← exp_add, zero_add, τ, R]
+    congr 1
+    push_cast
+    have := I_sq
+    grind
+  -- now just complex exponential arithmetic to finish
+  simp_rw [deriv_circleMap, this, show ↑I = Complex.I by rfl, show u + t * Complex.I = τ by rfl,
+    show ⟨↑τ, τ.2⟩ = τ by rfl, eq_cuspFunction _ hh.ne' hfper, smul_eq_mul, pow_succ]
+  field_simp [(show 𝕢 h τ != 0 from Complex.exp_ne_zero _), Real.pi_ne_zero, NeZero.ne]
+  push_cast
+  ring
 -/
 lemma qExpansion_coeff_eq_intervalIntegral {f : ℍ -> Complex} (hh : 0 < h)
     (hfper : Periodic (f ∘ ofComplex) h) (hfhol : MDiff f) (hfbdd : IsBoundedAtImInfty f)
@@ -902,7 +998,10 @@ theorem exp_decay_sub_atImInfty
     (hfper.exp_decay_sub_of_bounded_at_inf hh
           (eventually_of_mem (preimage_mem_comap (Ioi_mem_atTop 0)) fun z hz => by
             simpa using (UpperHalfPlane.mdifferentiableAt_iff.mp <| hfhol ⟨z, hz⟩))
-          this).c
+          this).comp_tendsto
+      tendsto_coe_atImInfty
+  simpa [cuspFunction] using
+    (cuspFunction_apply_zero hh (analyticAt_cuspFunction_zero hh hfper hfhol hfbdd) hfper).symm
 
 中文:
 定理 exp_decay_sub_atImInfty
@@ -913,7 +1012,10 @@ theorem exp_decay_sub_atImInfty
     (hfper.exp_decay_sub_of_bounded_at_inf hh
           (eventually_of_mem (preimage_mem_comap (Ioi_mem_atTop 0)) fun z hz => by
             simpa using (UpperHalfPlane.mdifferentiableAt_iff.mp <| hfhol ⟨z, hz⟩))
-          this).c
+          this).comp_tendsto
+      tendsto_coe_atImInfty
+  simpa [cuspFunction] using
+    (cuspFunction_apply_zero hh (analyticAt_cuspFunction_zero hh hfper hfhol hfbdd) hfper).symm
 
 Depends on / 依赖: Ioi_mem_atTop, UpperHalfPlane, UpperHalfPlane.mdifferentiableAt_iff.mp, analyticAt_cuspFunction_zero, comp_tendsto, convert, cuspFunction, cuspFunction_apply_zero, eventually_of_mem, exp_decay_sub_of_bounded_at_inf, hfbdd.comp_tendsto, hfper.exp_decay_sub_of_bounded_at_inf, mdifferentiableAt_iff, preimage_mem_comap, tendsto_coe_atImInfty, tendsto_comap_im_ofComplex
 -/
@@ -1033,7 +1135,9 @@ theorem exp_decay_sub_atImInfty'
   have hh : 0 < Γ.strictWidthInfty := Γ.strictWidthInfty_pos_iff.mpr Fact.out
   have hΓ : Γ.strictWidthInfty in Γ.strictPeriods := Γ.strictWidthInfty_mem_strictPeriods
   refine ⟨2 * π / Γ.strictWidthInfty, div_pos Real.two_pi_pos hh, ?_⟩
-  convert! exp_decay_sub_atImInfty hh (periodic_comp_ofComp
+  convert! exp_decay_sub_atImInfty hh (periodic_comp_ofComplex f hΓ) (holo f) (bdd_at_infty f) using
+    3 with τ
+  ring_nf
 
 中文:
 定理 exp_decay_sub_atImInfty'
@@ -1042,7 +1146,9 @@ theorem exp_decay_sub_atImInfty'
   have hh : 0 < Γ.strictWidthInfty := Γ.strictWidthInfty_pos_iff.mpr Fact.out
   have hΓ : Γ.strictWidthInfty in Γ.strictPeriods := Γ.strictWidthInfty_mem_strictPeriods
   refine ⟨2 * π / Γ.strictWidthInfty, div_pos Real.two_pi_pos hh, ?_⟩
-  convert! exp_decay_sub_atImInfty hh (periodic_comp_ofComp
+  convert! exp_decay_sub_atImInfty hh (periodic_comp_ofComplex f hΓ) (holo f) (bdd_at_infty f) using
+    3 with τ
+  ring_nf
 
 Depends on / 依赖: Fact.out, Real.two_pi_pos, bdd_at_infty, convert, div_pos, exp_decay_sub_atImInfty, periodic_comp_ofComplex, ring_nf, strictPeriods, strictWidthInfty, strictWidthInfty_mem_strictPeriods, strictWidthInfty_pos_iff, strictWidthInfty_pos_iff.mpr, two_pi_pos
 -/
@@ -1370,7 +1476,8 @@ lemma qExpansion_mul
     iteratedDeriv_mul hf.contDiffAt hg.contDiffAt, Finset.mul_sum, PowerSeries.coeff_mul,
     Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Nat.succ_eq_add_one]
   refine Finset.sum_congr rfl fun i hi => ?_
-
+  rw [Nat.cast_choose _ (by grind)]
+  field_simp [Nat.factorial_ne_zero]
 
 中文:
 引理 qExpansion_mul
@@ -1381,7 +1488,8 @@ lemma qExpansion_mul
     iteratedDeriv_mul hf.contDiffAt hg.contDiffAt, Finset.mul_sum, PowerSeries.coeff_mul,
     Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Nat.succ_eq_add_one]
   refine Finset.sum_congr rfl fun i hi => ?_
-
+  rw [Nat.cast_choose _ (by grind)]
+  field_simp [Nat.factorial_ne_zero]
 
 Depends on / 依赖: Finset, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Finset.mul_sum, Finset.sum_congr, Nat.cast_choose, Nat.factorial_ne_zero, Nat.succ_eq_add_one, PowerSeries, PowerSeries.coeff_mul, cast_choose, coeff_mul, contDiffAt, continuousAt, cuspFunction_mul, factorial_ne_zero, hf.contDiffAt, hf.continuousAt, hg.contDiffAt, hg.continuousAt, iteratedDeriv_mul
 -/
@@ -1578,7 +1686,9 @@ lemma qExpansion_one
     rcases eq_or_ne q 0 with rfl | hq
     · simpa [cuspFunction, Periodic.cuspFunction] using! tendsto_const_nhds.limUnder_eq
     · simp [cuspFunction, Periodic.cuspFunction_eq_of_nonzero h _ hq]
-  have h2 : iteratedDeriv m (1 : Complex -> 
+  have h2 : iteratedDeriv m (1 : Complex -> Complex) 0 = if m = 0 then 1 else 0 := by
+    simpa [ite_apply] using! iteratedDeriv_const
+  simp +contextual [qExpansion_coeff, h1, h2]
 
 中文:
 引理 qExpansion_one
@@ -1591,7 +1701,9 @@ lemma qExpansion_one
     rcases eq_or_ne q 0 with rfl | hq
     · simpa [cuspFunction, Periodic.cuspFunction] using! tendsto_const_nhds.limUnder_eq
     · simp [cuspFunction, Periodic.cuspFunction_eq_of_nonzero h _ hq]
-  have h2 : iteratedDeriv m (1 : Complex -> 
+  have h2 : iteratedDeriv m (1 : Complex -> Complex) 0 = if m = 0 then 1 else 0 := by
+    simpa [ite_apply] using! iteratedDeriv_const
+  simp +contextual [qExpansion_coeff, h1, h2]
 
 Depends on / 依赖: Periodic, Periodic.cuspFunction, Periodic.cuspFunction_eq_of_nonzero, contextual, cuspFunction, cuspFunction_eq_of_nonzero, eq_or_ne, ite_apply, iteratedDeriv, iteratedDeriv_const, limUnder_eq, qExpansion_coeff, tendsto_const_nhds, tendsto_const_nhds.limUnder_eq
 -/
@@ -2130,7 +2242,8 @@ lemma hasFPowerSeries_cuspFunction
   have h1 := (hasFPowerSeriesOnBall_cuspFunction hh hfanalytic hf).hasFPowerSeriesAt
   have h2 : HasFPowerSeriesAt (cuspFunction h f) (qExpansionFormalMultilinearSeries h f) 0 := by
     simpa [qExpansionFormalMultilinearSeries, qExpansion_coeff, div_eq_mul_inv, mul_comm]
-      using hfanalytic.ha
+      using hfanalytic.hasFPowerSeriesAt
+  simpa [h1.eq_formalMultilinearSeries h2] using hasFPowerSeriesOnBall_cuspFunction hh hfanalytic hf
 
 中文:
 引理 hasFPowerSeries_cuspFunction
@@ -2139,7 +2252,8 @@ lemma hasFPowerSeries_cuspFunction
   have h1 := (hasFPowerSeriesOnBall_cuspFunction hh hfanalytic hf).hasFPowerSeriesAt
   have h2 : HasFPowerSeriesAt (cuspFunction h f) (qExpansionFormalMultilinearSeries h f) 0 := by
     simpa [qExpansionFormalMultilinearSeries, qExpansion_coeff, div_eq_mul_inv, mul_comm]
-      using hfanalytic.ha
+      using hfanalytic.hasFPowerSeriesAt
+  simpa [h1.eq_formalMultilinearSeries h2] using hasFPowerSeriesOnBall_cuspFunction hh hfanalytic hf
 
 Depends on / 依赖: HasFPowerSeriesAt, cuspFunction, div_eq_mul_inv, eq_formalMultilinearSeries, h1.eq_formalMultilinearSeries, hasFPowerSeriesAt, hasFPowerSeriesOnBall_cuspFunction, hfanalytic, hfanalytic.hasFPowerSeriesAt, mul_comm, qExpansionFormalMultilinearSeries, qExpansion_coeff
 -/

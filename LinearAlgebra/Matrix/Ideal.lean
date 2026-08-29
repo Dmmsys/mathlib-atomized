@@ -216,7 +216,16 @@ theorem single_mem_jacobson_matrix
   simp_rw [Ideal.mem_jacobson_iff]
   intro x xIJ p q M
   have ⟨z, zMx⟩ := xIJ (M q p)
-  let N : Matrix n n R := 1 - ∑ i, single i q (if i = q then 1 - z else (M i p) * x * 
+  let N : Matrix n n R := 1 - ∑ i, single i q (if i = q then 1 - z else (M i p) * x * z)
+  use N
+  intro i j
+  obtain rfl | qj := eq_or_ne q j
+  · by_cases iq : i = q
+    · simp [iq, N, zMx, single, mul_apply, sum_apply, ite_and, sub_mul]
+    · convert! I.mul_mem_left (-M i p * x) zMx
+      simp [iq, N, single, mul_apply, sum_apply, ite_and, sub_mul]
+      simp [sub_add, mul_add, mul_sub, mul_assoc]
+  · simp [N, qj, sum_apply, mul_apply]
 
 中文:
 定理 single_mem_jacobson_matrix
@@ -227,7 +236,16 @@ theorem single_mem_jacobson_matrix
   simp_rw [Ideal.mem_jacobson_iff]
   intro x xIJ p q M
   have ⟨z, zMx⟩ := xIJ (M q p)
-  let N : Matrix n n R := 1 - ∑ i, single i q (if i = q then 1 - z else (M i p) * x * 
+  let N : Matrix n n R := 1 - ∑ i, single i q (if i = q then 1 - z else (M i p) * x * z)
+  use N
+  intro i j
+  obtain rfl | qj := eq_or_ne q j
+  · by_cases iq : i = q
+    · simp [iq, N, zMx, single, mul_apply, sum_apply, ite_and, sub_mul]
+    · convert! I.mul_mem_left (-M i p * x) zMx
+      simp [iq, N, single, mul_apply, sum_apply, ite_and, sub_mul]
+      simp [sub_add, mul_add, mul_sub, mul_assoc]
+  · simp [N, qj, sum_apply, mul_apply]
 -/
 theorem single_mem_jacobson_matrix (I : Ideal R) :
     forall x in I.jacobson, forall (i j : n), single i j x in (I.matrix n).jacobson := by
@@ -309,7 +327,9 @@ definition matrix
 iseqv.symm h := fun _ _ => c.symm h _ _
   iseqv.trans h₁ h₂ := fun _ _ => c.trans (h₁ _ _) (h₂ _ _)
   add' h₁ h₂ := fun _ _ => c.add (h₁ _ _) (h₂ _ _)
-  mu
+  mul' h₁ h₂ := fun _ _ => c.finsetSum _ fun _ _ => c.mul (h₁ _ _) (h₂ _ _)
+
+@[simp low]
 
 中文:
 定义 matrix
@@ -320,7 +340,9 @@ iseqv.symm h := fun _ _ => c.symm h _ _
 iseqv.symm h := fun _ _ => c.symm h _ _
   iseqv.trans h₁ h₂ := fun _ _ => c.trans (h₁ _ _) (h₂ _ _)
   add' h₁ h₂ := fun _ _ => c.add (h₁ _ _) (h₂ _ _)
-  mu
+  mul' h₁ h₂ := fun _ _ => c.finsetSum _ fun _ _ => c.mul (h₁ _ _) (h₂ _ _)
+
+@[simp low]
 -/
 def matrix (c : RingCon R) : RingCon (Matrix n n R) where
   r M N := forall i j, c (M i j) (N i j)
@@ -510,7 +532,9 @@ definition ofMatrix
 iseqv.symm h := fun _ _ => c.symm h _ _
   iseqv.trans h₁ h₂ := fun _ _ => c.trans (h₁ _ _) (h₂ _ _)
   add' h₁ h₂ := fun _ _ => by simpa [single_add] using c.add (h₁ _ _) (h₂ _ _)
-  mul' h₁ h₂ := fun i j => by simpa usi
+  mul' h₁ h₂ := fun i j => by simpa using c.mul (h₁ i i) (h₂ i j)
+
+@[simp]
 
 中文:
 定义 ofMatrix
@@ -520,7 +544,9 @@ iseqv.symm h := fun _ _ => c.symm h _ _
 iseqv.symm h := fun _ _ => c.symm h _ _
   iseqv.trans h₁ h₂ := fun _ _ => c.trans (h₁ _ _) (h₂ _ _)
   add' h₁ h₂ := fun _ _ => by simpa [single_add] using c.add (h₁ _ _) (h₂ _ _)
-  mul' h₁ h₂ := fun i j => by simpa usi
+  mul' h₁ h₂ := fun i j => by simpa using c.mul (h₁ i i) (h₂ i j)
+
+@[simp]
 
 Depends on / 依赖: single
 -/
@@ -1013,7 +1039,11 @@ lemma jacobson_matrix_le
   rw [mem_jacobson_iff]
   replace Mmem := mul_mem_right _ _ (single q p 1) Mmem
   rw [mem_jacobson_iff] at Mmem
-  int
+  intro y
+  specialize Mmem (y • single p p 1)
+  have ⟨N, NxMI⟩ := Mmem
+  use N p p
+  simpa [mul_apply, single, ite_and] using! NxMI p p
 
 中文:
 引理 jacobson_matrix_le
@@ -1026,7 +1056,11 @@ lemma jacobson_matrix_le
   rw [mem_jacobson_iff]
   replace Mmem := mul_mem_right _ _ (single q p 1) Mmem
   rw [mem_jacobson_iff] at Mmem
-  int
+  intro y
+  specialize Mmem (y • single p p 1)
+  have ⟨N, NxMI⟩ := Mmem
+  use N p p
+  simpa [mul_apply, single, ite_and] using! NxMI p p
 -/
 private lemma jacobson_matrix_le (I : TwoSidedIdeal R) :
     (I.matrix n).jacobson <= I.jacobson.matrix n := by

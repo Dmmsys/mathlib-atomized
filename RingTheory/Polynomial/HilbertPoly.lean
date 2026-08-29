@@ -103,7 +103,11 @@ lemma coeff_preHilbertPoly_self
     (natDegree_preHilbertPoly F d k).symm.trans (natDegree_smul _ (inv_ne_zero hne))
   nth_rw 3 [heq]
   calc
-  _ = (d ! : F)⁻¹ • ((ascPochham
+  _ = (d ! : F)⁻¹ • ((ascPochhammer F d).comp (X - C ((k : F) - 1))).leadingCoeff := by
+    simp only [sub_add, ← C_1, ← map_sub, coeff_smul, coeff_natDegree]
+  _ = (d ! : F)⁻¹ := by
+    simp only [leadingCoeff_comp (ne_of_eq_of_ne (natDegree_X_sub_C _) one_ne_zero), Monic.def.1
+      (monic_ascPochhammer _ _), leadingCoeff_X_sub_C, one_pow, smul_eq_mul, mul_one]
 
 中文:
 引理 coeff_preHilbertPoly_self
@@ -115,7 +119,11 @@ lemma coeff_preHilbertPoly_self
     (natDegree_preHilbertPoly F d k).symm.trans (natDegree_smul _ (inv_ne_zero hne))
   nth_rw 3 [heq]
   calc
-  _ = (d ! : F)⁻¹ • ((ascPochham
+  _ = (d ! : F)⁻¹ • ((ascPochhammer F d).comp (X - C ((k : F) - 1))).leadingCoeff := by
+    simp only [sub_add, ← C_1, ← map_sub, coeff_smul, coeff_natDegree]
+  _ = (d ! : F)⁻¹ := by
+    simp only [leadingCoeff_comp (ne_of_eq_of_ne (natDegree_X_sub_C _) one_ne_zero), Monic.def.1
+      (monic_ascPochhammer _ _), leadingCoeff_X_sub_C, one_pow, smul_eq_mul, mul_one]
 
 Depends on / 依赖: ascPochhammer, coeff_natDegree, coeff_smul, inv_ne_zero, leadingCoeff, leadingCoeff_comp, map_sub, natDegree, natDegree_X_sub_C, natDegree_preHilbertPoly, natDegree_smul, ne_of_eq_of_ne, nth_rw, one_, preHilbertPoly, sub_add, symm.trans
 -/
@@ -341,7 +349,7 @@ lemma hilbertPoly_smul
   | succ d _ =>
       simp only
       rw [← sum_def _ fun _ r => r • _]; rw [← sum_def _ fun _ r => r • _]; rw [Polynomial.smul_sum]; rw [sum_smul_index' _ _ _ fun i => zero_smul F (preHilbertPoly F d i)]
-      simp only [sm
+      simp only [smul_assoc]
 
 中文:
 引理 hilbertPoly_smul
@@ -353,7 +361,7 @@ lemma hilbertPoly_smul
   | succ d _ =>
       simp only
       rw [← sum_def _ fun _ r => r • _]; rw [← sum_def _ fun _ r => r • _]; rw [Polynomial.smul_sum]; rw [sum_smul_index' _ _ _ fun i => zero_smul F (preHilbertPoly F d i)]
-      simp only [sm
+      simp only [smul_assoc]
 
 Depends on / 依赖: Polynomial, Polynomial.smul_sum, hilbertPoly, preHilbertPoly, smul_assoc, smul_sum, smul_zero, sum_def, sum_smul_index, zero_smul
 -/
@@ -406,7 +414,20 @@ theorem coeff_mul_invOneSubPow_eq_hilbertPoly_eval
   | succ d hd =>
       simp only [eval_finsetSum, eval_smul, smul_eq_mul]
       rw [← Finset.sum_coe_sort]
-      have h_
+      have h_le (i : p.support) : (i : Nat) <= n :=
+        le_trans (le_natDegree_of_ne_zero <| mem_support_iff.1 i.2) hn.le
+      have h (i : p.support) : eval ↑n (preHilbertPoly F d ↑i) = (n + d - ↑i).choose d := by
+        rw [preHilbertPoly_eq_choose_sub_add _ _ (h_le i)]; rw [Nat.sub_add_comm (h_le i)]
+      simp_rw [h]
+      rw [Finset.sum_coe_sort _ (fun x => (p.coeff ↑x) * (_ + d - ↑x).choose _)]; rw [PowerSeries.coeff_mul]; rw [Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk]; rw [invOneSubPow_val_eq_mk_sub_one_add_choose_of_pos _ _ (zero_lt_succ d)]
+      simp only [coeff_coe, coeff_mk]
+      symm
+      refine Finset.sum_subset_zero_on_sdiff (fun s hs => ?_) (fun x hx => ?_) (fun x hx => ?_)
+      · rw [Finset.mem_range_succ_iff]
+        exact h_le ⟨s, hs⟩
+      · simp only [Finset.mem_sdiff, mem_support_iff, not_not] at hx
+        rw [hx.2]; rw [zero_mul]
+      · rw [add_comm, Nat.add_sub_assoc (h_le ⟨x, hx⟩), succ_eq_add_one, add_tsub_cancel_right]
 
 中文:
 定理 coeff_mul_invOneSubPow_eq_hilbertPoly_eval
@@ -417,7 +438,20 @@ theorem coeff_mul_invOneSubPow_eq_hilbertPoly_eval
   | succ d hd =>
       simp only [eval_finsetSum, eval_smul, smul_eq_mul]
       rw [← Finset.sum_coe_sort]
-      have h_
+      have h_le (i : p.support) : (i : Nat) <= n :=
+        le_trans (le_natDegree_of_ne_zero <| mem_support_iff.1 i.2) hn.le
+      have h (i : p.support) : eval ↑n (preHilbertPoly F d ↑i) = (n + d - ↑i).choose d := by
+        rw [preHilbertPoly_eq_choose_sub_add _ _ (h_le i)]; rw [Nat.sub_add_comm (h_le i)]
+      simp_rw [h]
+      rw [Finset.sum_coe_sort _ (fun x => (p.coeff ↑x) * (_ + d - ↑x).choose _)]; rw [PowerSeries.coeff_mul]; rw [Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk]; rw [invOneSubPow_val_eq_mk_sub_one_add_choose_of_pos _ _ (zero_lt_succ d)]
+      simp only [coeff_coe, coeff_mk]
+      symm
+      refine Finset.sum_subset_zero_on_sdiff (fun s hs => ?_) (fun x hx => ?_) (fun x hx => ?_)
+      · rw [Finset.mem_range_succ_iff]
+        exact h_le ⟨s, hs⟩
+      · simp only [Finset.mem_sdiff, mem_support_iff, not_not] at hx
+        rw [hx.2]; rw [zero_mul]
+      · rw [add_comm, Nat.add_sub_assoc (h_le ⟨x, hx⟩), succ_eq_add_one, add_tsub_cancel_right]
 
 Depends on / 依赖: Finset, Finset.sum_coe_sort, Units.val_one, coeff_coe, coeff_eq_zero_of_natDegree_lt, eval_finsetSum, eval_smul, eval_zero, h_le, hilbertPoly, hn.le, invOneSubPow_zero, le_natDegree_of_ne_zero, le_trans, mem_support_iff, mul_one, p.support, preHilbertPoly, preHilbertPoly_eq_choose_sub_add, smul_eq_mul
 -/
@@ -458,7 +492,9 @@ theorem existsUnique_hilbertPoly
   · rintro h ⟨N, hhN⟩
     apply eq_of_infinite_eval_eq h (hilbertPoly p d)
     apply ((Set.Ioi_infinite (max N p.natDegree)).image cast_injective.injOn).mono
-    rintro x ⟨n, hn,
+    rintro x ⟨n, hn, rfl⟩
+    simp only [Set.mem_Ioi, sup_lt_iff, Set.mem_ofPred_eq] at hn ⊢
+    rw [← coeff_mul_invOneSubPow_eq_hilbertPoly_eval d hn.2]; rw [hhN n hn.1]
 
 中文:
 定理 存在Unique_hilbertPoly
@@ -470,7 +506,9 @@ theorem existsUnique_hilbertPoly
   · rintro h ⟨N, hhN⟩
     apply eq_of_infinite_eval_eq h (hilbertPoly p d)
     apply ((Set.Ioi_infinite (max N p.natDegree)).image cast_injective.injOn).mono
-    rintro x ⟨n, hn,
+    rintro x ⟨n, hn, rfl⟩
+    simp only [Set.mem_Ioi, sup_lt_iff, Set.mem_ofPred_eq] at hn ⊢
+    rw [← coeff_mul_invOneSubPow_eq_hilbertPoly_eval d hn.2]; rw [hhN n hn.1]
 
 Depends on / 依赖: Ioi_infinite, Set.Ioi_infinite, Set.mem_Ioi, Set.mem_ofPred_eq, cast_injective, cast_injective.injOn, coeff_mul_invOneSubPow_eq_hilbertPoly_eval, eq_of_infinite_eval_eq, hilbertPoly, mem_Ioi, mem_ofPred_eq, natDegree, p.natDegree, sup_lt_iff
 -/
@@ -519,7 +557,7 @@ lemma hilbertPoly_mul_one_sub_succ
   apply eq_hilbertPoly_of_forall_coeff_eq_eval (p * (1 - X)).natDegree
   intro n hn
   have heq : 1 - PowerSeries.X = ((1 - X : F[X]) : F⟦X⟧) := by simp only [coe_sub, coe_one, coe_X]
-  rw [← one_sub_pow_mul_invOneSubPow_val_add_eq_invOneSubPow_val F d 1]; rw [pow_one]; rw [← mul_assoc]; rw [heq];
+  rw [← one_sub_pow_mul_invOneSubPow_val_add_eq_invOneSubPow_val F d 1]; rw [pow_one]; rw [← mul_assoc]; rw [heq]; rw [← coe_mul]; rw [coeff_mul_invOneSubPow_eq_hilbertPoly_eval (d + 1) hn]
 
 中文:
 引理 hilbertPoly_mul_one_sub_succ
@@ -528,7 +566,7 @@ lemma hilbertPoly_mul_one_sub_succ
   apply eq_hilbertPoly_of_forall_coeff_eq_eval (p * (1 - X)).natDegree
   intro n hn
   have heq : 1 - PowerSeries.X = ((1 - X : F[X]) : F⟦X⟧) := by simp only [coe_sub, coe_one, coe_X]
-  rw [← one_sub_pow_mul_invOneSubPow_val_add_eq_invOneSubPow_val F d 1]; rw [pow_one]; rw [← mul_assoc]; rw [heq];
+  rw [← one_sub_pow_mul_invOneSubPow_val_add_eq_invOneSubPow_val F d 1]; rw [pow_one]; rw [← mul_assoc]; rw [heq]; rw [← coe_mul]; rw [coeff_mul_invOneSubPow_eq_hilbertPoly_eval (d + 1) hn]
 
 Depends on / 依赖: PowerSeries, PowerSeries.X, coe_X, coe_mul, coe_one, coe_sub, coeff_mul_invOneSubPow_eq_hilbertPoly_eval, eq_hilbertPoly_of_forall_coeff_eq_eval, mul_assoc, natDegree, one_sub_pow_mul_invOneSubPow_val_add_eq_invOneSubPow_val, pow_one
 -/
@@ -577,7 +615,8 @@ lemma hilbertPoly_eq_zero_of_le_rootMultiplicity_one
   · rcases exists_eq_pow_rootMultiplicity_mul_and_not_dvd p hp 1 with ⟨q, hq1, hq2⟩
     have heq : p = q * (-1) ^ p.rootMultiplicity 1 * (1 - X) ^ p.rootMultiplicity 1 := by
       simp only [mul_assoc, ← mul_pow, neg_mul, one_mul, neg_sub]
-
+      exact hq1.trans (mul_comm _ _)
+    rw [heq]; rw [← zero_add d]; rw [← Nat.sub_add_cancel hdp]; rw [pow_add (1 - X)]; rw [← mul_assoc]; rw [hilbertPoly_mul_one_sub_pow_add]; rw [hilbertPoly]
 
 中文:
 引理 hilbertPoly_eq_zero_of_le_rootMultiplicity_one
@@ -587,7 +626,8 @@ lemma hilbertPoly_eq_zero_of_le_rootMultiplicity_one
   · rcases exists_eq_pow_rootMultiplicity_mul_and_not_dvd p hp 1 with ⟨q, hq1, hq2⟩
     have heq : p = q * (-1) ^ p.rootMultiplicity 1 * (1 - X) ^ p.rootMultiplicity 1 := by
       simp only [mul_assoc, ← mul_pow, neg_mul, one_mul, neg_sub]
-
+      exact hq1.trans (mul_comm _ _)
+    rw [heq]; rw [← zero_add d]; rw [← Nat.sub_add_cancel hdp]; rw [pow_add (1 - X)]; rw [← mul_assoc]; rw [hilbertPoly_mul_one_sub_pow_add]; rw [hilbertPoly]
 
 Depends on / 依赖: Nat.sub_add_cancel, exists_eq_pow_rootMultiplicity_mul_and_not_dvd, hilbertPoly, hilbertPoly_mul_one_sub_pow_add, hilbertPoly_zero_left, hq1.trans, mul_assoc, mul_comm, mul_pow, neg_mul, neg_sub, one_mul, p.rootMultiplicity, pow_add, rootMultiplicity, sub_add_cancel, zero_add
 -/
@@ -612,7 +652,19 @@ theorem natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt
   have heq : p = q * (-1) ^ p.rootMultiplicity 1 * (1 - X) ^ p.rootMultiplicity 1 := by
     simp only [mul_assoc, ← mul_pow, neg_mul, one_mul, neg_sub]
     exact hq1.trans (mul_comm _ _)
-  nth_rw 1 [heq, ← Nat.sub_a
+  nth_rw 1 [heq, ← Nat.sub_add_cancel (le_of_lt hpd), hilbertPoly_mul_one_sub_pow_add,
+    ← Nat.sub_add_cancel (Nat.le_sub_of_add_le' <| add_one_le_of_lt hpd)]
+  delta hilbertPoly
+  apply natDegree_eq_of_le_of_coeff_ne_zero
+· apply natDegree_sum_le_of_forall_le _ _ fun _ _ => ?_
+    apply le_trans (natDegree_smul_le _ _)
+    rw [natDegree_preHilbertPoly]
+  · have : (fun (x : Nat) (a : F) => a) = fun x a => a * 1 ^ x := by simp only [one_pow, mul_one]
+    simp only [finsetSum_coeff, coeff_smul, smul_eq_mul, coeff_preHilbertPoly_self,
+      ← Finset.sum_mul, ← sum_def _ (fun _ a => a), this, ← eval_eq_sum, eval_mul, eval_pow,
+      eval_neg, eval_one, _root_.mul_eq_zero, pow_eq_zero_iff', neg_eq_zero, one_ne_zero, ne_eq,
+      false_and, or_false, inv_eq_zero, cast_eq_zero, not_or]
+    exact ⟨(not_iff_not.2 dvd_iff_isRoot).1 hq2, factorial_ne_zero _⟩
 
 中文:
 定理 natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt
@@ -621,7 +673,19 @@ theorem natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt
   have heq : p = q * (-1) ^ p.rootMultiplicity 1 * (1 - X) ^ p.rootMultiplicity 1 := by
     simp only [mul_assoc, ← mul_pow, neg_mul, one_mul, neg_sub]
     exact hq1.trans (mul_comm _ _)
-  nth_rw 1 [heq, ← Nat.sub_a
+  nth_rw 1 [heq, ← Nat.sub_add_cancel (le_of_lt hpd), hilbertPoly_mul_one_sub_pow_add,
+    ← Nat.sub_add_cancel (Nat.le_sub_of_add_le' <| add_one_le_of_lt hpd)]
+  delta hilbertPoly
+  apply natDegree_eq_of_le_of_coeff_ne_zero
+· apply natDegree_sum_le_of_forall_le _ _ fun _ _ => ?_
+    apply le_trans (natDegree_smul_le _ _)
+    rw [natDegree_preHilbertPoly]
+  · have : (fun (x : Nat) (a : F) => a) = fun x a => a * 1 ^ x := by simp only [one_pow, mul_one]
+    simp only [finsetSum_coeff, coeff_smul, smul_eq_mul, coeff_preHilbertPoly_self,
+      ← Finset.sum_mul, ← sum_def _ (fun _ a => a), this, ← eval_eq_sum, eval_mul, eval_pow,
+      eval_neg, eval_one, _root_.mul_eq_zero, pow_eq_zero_iff', neg_eq_zero, one_ne_zero, ne_eq,
+      false_and, or_false, inv_eq_zero, cast_eq_zero, not_or]
+    exact ⟨(not_iff_not.2 dvd_iff_isRoot).1 hq2, factorial_ne_zero _⟩
 
 Depends on / 依赖: Nat.le_sub_of_add_le, Nat.sub_add_cancel, add_one_le_of_lt, exists_eq_pow_rootMultiplicity_mul_and_not_dvd, hilbertPoly, hilbertPoly_mul_one_sub_pow_add, hq1.trans, le_of_lt, le_sub_of_add_le, mul_assoc, mul_comm, mul_pow, natDegree_eq_of_le_of_coeff_ne_zero, natDegree_sum_le_, neg_mul, neg_sub, nth_rw, one_mul, p.rootMultiplicity, rootMultiplicity
 -/
@@ -659,7 +723,7 @@ theorem natDegree_hilbertPoly_of_ne_zero
   have hpd : p.rootMultiplicity 1 < d := by
     by_contra h
     exact hh (hilbertPoly_eq_zero_of_le_rootMultiplicity_one <| not_lt.1 h)
-  exact natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt hp h
+  exact natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt hp hpd
 
 中文:
 定理 natDegree_hilbertPoly_of_ne_zero
@@ -671,7 +735,7 @@ theorem natDegree_hilbertPoly_of_ne_zero
   have hpd : p.rootMultiplicity 1 < d := by
     by_contra h
     exact hh (hilbertPoly_eq_zero_of_le_rootMultiplicity_one <| not_lt.1 h)
-  exact natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt hp h
+  exact natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt hp hpd
 
 Depends on / 依赖: hilbertPoly_eq_zero_of_le_rootMultiplicity_one, hilbertPoly_zero_left, natDegree_hilbertPoly_of_ne_zero_of_rootMultiplicity_lt, not_lt, p.rootMultiplicity, rootMultiplicity
 -/

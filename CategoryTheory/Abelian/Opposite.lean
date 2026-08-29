@@ -69,7 +69,10 @@ cokernel.desc f (kernel.ι f.op).unop by
     rw [← unop_id]; rw [← (cokernel.desc f _ _).unop_op]; rw [← unop_comp]
     congr 1
     ext
-    
+    simp [← op_comp]
+  inv_hom_id := by
+    ext
+    simp [← unop_comp]
 
 中文:
 定义 kernelOpUnop
@@ -83,7 +86,10 @@ cokernel.desc f (kernel.ι f.op).unop by
     rw [← unop_id]; rw [← (cokernel.desc f _ _).unop_op]; rw [← unop_comp]
     congr 1
     ext
-    
+    simp [← op_comp]
+  inv_hom_id := by
+    ext
+    simp [← unop_comp]
 
 Depends on / 依赖: cokernel, f.op, kernel, kernel.lift, op_comp
 -/
@@ -120,7 +126,10 @@ definition cokernelOpUnop
     rw [← unop_id]; rw [← (kernel.lift f _ _).unop_op]; rw [← unop_comp]
     congr 1
     ext
-    si
+    simp [← op_comp]
+  inv_hom_id := by
+    ext
+    simp [← unop_comp]
 
 中文:
 定义 cokernelOpUnop
@@ -133,7 +142,10 @@ definition cokernelOpUnop
     rw [← unop_id]; rw [← (kernel.lift f _ _).unop_op]; rw [← unop_comp]
     congr 1
     ext
-    si
+    simp [← op_comp]
+  inv_hom_id := by
+    ext
+    simp [← unop_comp]
 
 Depends on / 依赖: cokernel, cokernel.desc, f.op, f.unop_op, hom_inv_id, inv_hom_id, kernel, kernel.lift, op_comp, unop_comp, unop_id, unop_op
 -/
@@ -438,7 +450,10 @@ theorem image_ι_op_comp_imageUnopOp_hom
   simp only [imageUnopOp, Iso.trans, Iso.symm, Iso.op, cokernelOpOp_inv, cokernelEpiComp_hom,
     cokernelCompIsIso_hom, Abelian.coimageIsoImage'_hom, ← Category.assoc, ← op_comp]
   simp only [Category.assoc, Abelian.imageIsoImage_hom_comp_image_ι, kernel.lift_ι,
-    Quiver.Hom.op_unop, cokernelI
+    Quiver.Hom.op_unop, cokernelIsoOfEq_hom_comp_desc_assoc, cokernel.π_desc_assoc,
+    cokernel.π_desc]
+  simp only [eqToHom_refl]
+  rw [IsIso.inv_id]; rw [Category.id_comp]
 
 中文:
 定理 image_ι_op_comp_imageUnopOp_hom
@@ -446,7 +461,10 @@ theorem image_ι_op_comp_imageUnopOp_hom
   simp only [imageUnopOp, Iso.trans, Iso.symm, Iso.op, cokernelOpOp_inv, cokernelEpiComp_hom,
     cokernelCompIsIso_hom, Abelian.coimageIsoImage'_hom, ← Category.assoc, ← op_comp]
   simp only [Category.assoc, Abelian.imageIsoImage_hom_comp_image_ι, kernel.lift_ι,
-    Quiver.Hom.op_unop, cokernelI
+    Quiver.Hom.op_unop, cokernelIsoOfEq_hom_comp_desc_assoc, cokernel.π_desc_assoc,
+    cokernel.π_desc]
+  simp only [eqToHom_refl]
+  rw [IsIso.inv_id]; rw [Category.id_comp]
 
 Depends on / 依赖: Abelian, Abelian.coimageIsoImage, Abelian.imageIsoImage_hom_comp_image_, Category, Category.assoc, Category.id_comp, IsIso.inv_id, Iso.op, Iso.symm, Iso.trans, Quiver, Quiver.Hom.op_unop, _hom, coimageIsoImage, cokernel, cokernelCompIsIso_hom, cokernelEpiComp_hom, cokernelIsoOfEq_hom_comp_desc_assoc, cokernelOpOp_inv, eqToHom_refl
 -/

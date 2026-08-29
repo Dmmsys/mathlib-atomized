@@ -61,7 +61,8 @@ instance :
         rw [Types.isLimit_iff ((uliftFunctor.{v]; rw [u}).mapCone c)]
         intro s hs
         obtain ⟨x, hx₁, hx₂⟩ := (Types.isLimit_iff c).mp ⟨hc⟩ _ ((sectionsEquiv K).symm ⟨s, hs⟩).2
-        exact ⟨⟨x⟩, fun i => ULift.ext 
+        exact ⟨⟨x⟩, fun i => ULift.ext _ _ (hx₁ i),
+          fun y hy => ULift.ext _ _ (hx₂ y.down fun i => ULift.ext_iff.mp (hy i))⟩ } }
 
 中文:
 实例 :
@@ -72,7 +73,8 @@ instance :
         rw [Types.isLimit_iff ((uliftFunctor.{v]; rw [u}).mapCone c)]
         intro s hs
         obtain ⟨x, hx₁, hx₂⟩ := (Types.isLimit_iff c).mp ⟨hc⟩ _ ((sectionsEquiv K).symm ⟨s, hs⟩).2
-        exact ⟨⟨x⟩, fun i => ULift.ext 
+        exact ⟨⟨x⟩, fun i => ULift.ext _ _ (hx₁ i),
+          fun y hy => ULift.ext _ _ (hx₂ y.down fun i => ULift.ext_iff.mp (hy i))⟩ } }
 -/
 noncomputable instance : PreservesLimitsOfSize.{w', w} uliftFunctor.{v, u} where
   preservesLimitsOfShape {J} := {
@@ -116,7 +118,7 @@ instance :
         rw [isColimit_iff_coconeTypesIsColimit]
         exact (((isColimit_iff_coconeTypesIsColimit _).1 ⟨hc⟩).precompose
           (G := F ⋙ uliftFunctor.{v}) (fun _ => Equiv.ulift)
-          (fun _ => rfl)).of_equiv Equiv.ulift.s
+          (fun _ => rfl)).of_equiv Equiv.ulift.symm (fun _ _ => rfl) } }
 
 中文:
 实例 :
@@ -126,7 +128,7 @@ instance :
         rw [isColimit_iff_coconeTypesIsColimit]
         exact (((isColimit_iff_coconeTypesIsColimit _).1 ⟨hc⟩).precompose
           (G := F ⋙ uliftFunctor.{v}) (fun _ => Equiv.ulift)
-          (fun _ => rfl)).of_equiv Equiv.ulift.s
+          (fun _ => rfl)).of_equiv Equiv.ulift.symm (fun _ _ => rfl) } }
 
 Depends on / 依赖: Equiv.ulift, Equiv.ulift.symm, isColimit_iff_coconeTypesIsColimit, of_equiv, precompose, preserves, preservesColimit, uliftFunctor
 -/

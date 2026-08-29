@@ -68,7 +68,7 @@ lemma hasFiniteLimits_of_hasLimitsOfSize
     haveI := hasLimitsOfSizeShrink.{0, 0} C
     let F := @FinCategory.equivAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ'
     @hasLimitsOfShape_of_equivalence (@FinCategory.AsType J (@FinCategory.fintypeObj J hJ hJ'))
-    (@FinCategory.categoryAsType J (@FinCategory.fintypeObj J 
+    (@FinCategory.categoryAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ') _ _ J hJ F _
 
 中文:
 引理 hasFiniteLimits_of_hasLimitsOfSize
@@ -77,7 +77,7 @@ lemma hasFiniteLimits_of_hasLimitsOfSize
     haveI := hasLimitsOfSizeShrink.{0, 0} C
     let F := @FinCategory.equivAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ'
     @hasLimitsOfShape_of_equivalence (@FinCategory.AsType J (@FinCategory.fintypeObj J hJ hJ'))
-    (@FinCategory.categoryAsType J (@FinCategory.fintypeObj J 
+    (@FinCategory.categoryAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ') _ _ J hJ F _
 -/
 lemma hasFiniteLimits_of_hasLimitsOfSize [HasLimitsOfSize.{v', u'} C] :
     HasFiniteLimits C where
@@ -108,7 +108,8 @@ have := h (ULiftHom.{w} (ULift.{w} J)) @CategoryTheory.finCategoryUlift J hJ hhJ
     have l : @Equivalence J (ULiftHom (ULift J)) hJ
                           (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) :=
       @ULiftHomULiftCategory.equiv J hJ
-    apply @hasLimitsOfShap
+    apply @hasLimitsOfShape_of_equivalence (ULiftHom (ULift J))
+      (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) C _ J hJ l.symm _
 
 中文:
 定理 hasFiniteLimits_of_hasFiniteLimits_of_size
@@ -117,7 +118,8 @@ have := h (ULiftHom.{w} (ULift.{w} J)) @CategoryTheory.finCategoryUlift J hJ hhJ
     have l : @Equivalence J (ULiftHom (ULift J)) hJ
                           (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) :=
       @ULiftHomULiftCategory.equiv J hJ
-    apply @hasLimitsOfShap
+    apply @hasLimitsOfShape_of_equivalence (ULiftHom (ULift J))
+      (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) C _ J hJ l.symm _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.finCategoryUlift, Equivalence, ULiftHom, ULiftHom.category, ULiftHomULiftCategory, ULiftHomULiftCategory.equiv, category, finCategoryUlift, hasLimitsOfShape_of_equivalence, l.symm, uliftCategory
 -/
@@ -168,7 +170,7 @@ lemma hasFiniteColimits_of_hasColimitsOfSize
     haveI := hasColimitsOfSizeShrink.{0, 0} C
     let F := @FinCategory.equivAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ'
     @hasColimitsOfShape_of_equivalence (@FinCategory.AsType J (@FinCategory.fintypeObj J hJ hJ'))
-    (@FinCategory.categoryAsType J (@FinCategory.fintypeOb
+    (@FinCategory.categoryAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ') _ _ J hJ F _
 
 中文:
 引理 hasFiniteColimits_of_hasColimitsOfSize
@@ -177,7 +179,7 @@ lemma hasFiniteColimits_of_hasColimitsOfSize
     haveI := hasColimitsOfSizeShrink.{0, 0} C
     let F := @FinCategory.equivAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ'
     @hasColimitsOfShape_of_equivalence (@FinCategory.AsType J (@FinCategory.fintypeObj J hJ hJ'))
-    (@FinCategory.categoryAsType J (@FinCategory.fintypeOb
+    (@FinCategory.categoryAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ') _ _ J hJ F _
 -/
 lemma hasFiniteColimits_of_hasColimitsOfSize [HasColimitsOfSize.{v', u'} C] :
     HasFiniteColimits C where
@@ -204,7 +206,10 @@ have := h (ULiftHom.{w} (ULift.{w} J)) @CategoryTheory.finCategoryUlift J hJ hhJ
     have l : @Equivalence J (ULiftHom (ULift J)) hJ
                            (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) :=
       @ULiftHomULiftCategory.equiv J hJ
-    apply @hasColimitsOfS
+    apply @hasColimitsOfShape_of_equivalence (ULiftHom (ULift J))
+      (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) C _ J hJ
+      (@Equivalence.symm J hJ (ULiftHom (ULift J))
+      (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) l) _
 
 中文:
 定理 hasFiniteColimits_of_hasFiniteColimits_of_size
@@ -213,7 +218,10 @@ have := h (ULiftHom.{w} (ULift.{w} J)) @CategoryTheory.finCategoryUlift J hJ hhJ
     have l : @Equivalence J (ULiftHom (ULift J)) hJ
                            (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) :=
       @ULiftHomULiftCategory.equiv J hJ
-    apply @hasColimitsOfS
+    apply @hasColimitsOfShape_of_equivalence (ULiftHom (ULift J))
+      (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) C _ J hJ
+      (@Equivalence.symm J hJ (ULiftHom (ULift J))
+      (@ULiftHom.category (ULift J) (@uliftCategory J hJ)) l) _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.finCategoryUlift, Equivalence, Equivalence.symm, ULiftHom, ULiftHom.category, ULiftHomULiftCategory, ULiftHomULiftCategory.equiv, category, finCategoryUlift, hasColimitsOfShape_of_equivalence, uliftCategory
 -/

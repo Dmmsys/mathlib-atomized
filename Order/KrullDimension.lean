@@ -283,7 +283,8 @@ lemma height_le
   -- We replace the last element in the series with `a`
   let p' := p.eraseLast.snoc a (lt_of_lt_of_le (p.eraseLast_last_rel_last (by simp_all)) hlast)
   rw [show p.length = p'.length by simp [p']; lia]
-  apply 
+  apply h
+  simp [p']
 
 中文:
 引理 height_le
@@ -296,7 +297,8 @@ lemma height_le
   -- We replace the last element in the series with `a`
   let p' := p.eraseLast.snoc a (lt_of_lt_of_le (p.eraseLast_last_rel_last (by simp_all)) hlast)
   rw [show p.length = p'.length by simp [p']; lia]
-  apply 
+  apply h
+  simp [p']
 
 Depends on / 依赖: height_le_iff, height_le_iff.mpr, hlenpos, length, p.length
 -/
@@ -459,7 +461,14 @@ lemma length_le_height
         simp only [Fin.succ_mk, RelSeries.last, Fin.last]
         congr; lia)
     suffices p'.length <= height x by
-      simp only [
+      simp only [RelSeries.snoc_length, RelSeries.eraseLast_length, Nat.cast_add, ENat.natCast_sub,
+        Nat.cast_one, p'] at this
+      convert! this
+      norm_cast
+      lia
+    refine le_iSup₂_of_le p' ?_ le_rfl
+    simp [p']
+  · simp_all
 
 中文:
 引理 length_le_height
@@ -473,7 +482,14 @@ lemma length_le_height
         simp only [Fin.succ_mk, RelSeries.last, Fin.last]
         congr; lia)
     suffices p'.length <= height x by
-      simp only [
+      simp only [RelSeries.snoc_length, RelSeries.eraseLast_length, Nat.cast_add, ENat.natCast_sub,
+        Nat.cast_one, p'] at this
+      convert! this
+      norm_cast
+      lia
+    refine le_iSup₂_of_le p' ?_ le_rfl
+    simp [p']
+  · simp_all
 
 Depends on / 依赖: ENat.natCast_sub, Fin.last, Fin.succ_mk, Nat.cast_add, Nat.cast_one, RelSeries, RelSeries.eraseLast_length, RelSeries.last, RelSeries.snoc_length, cast_add, cast_one, convert, eraseLast, eraseLast_length, height, le_rfl, length, lt_of_lt_of_le, natCast_sub, p.eraseLast.snoc
 -/
@@ -940,7 +956,9 @@ lemma coheight_eq_of_strictMono
   | singleton x => simp
   | cons p x hx ih =>
     simp only [RelSeries.head_cons] at hp
-    obtain ⟨a', haa', 
+    obtain ⟨a', haa', ha'⟩ := h a p.head (by grind)
+    grw [RelSeries.cons_length, Nat.cast_add, Nat.cast_one, ih a' ha'.symm]
+    exact coheight_add_one_le haa'
 
 中文:
 引理 coheight_eq_of_strictMono
@@ -952,7 +970,9 @@ lemma coheight_eq_of_strictMono
   | singleton x => simp
   | cons p x hx ih =>
     simp only [RelSeries.head_cons] at hp
-    obtain ⟨a', haa', 
+    obtain ⟨a', haa', ha'⟩ := h a p.head (by grind)
+    grw [RelSeries.cons_length, Nat.cast_add, Nat.cast_one, ih a' ha'.symm]
+    exact coheight_add_one_le haa'
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, Order.coheight_le_coheight_apply_of_strictMono, RelSeries, RelSeries.cons_length, RelSeries.head_cons, RelSeries.inductionOn, cast_add, cast_one, coheight_add_one_le, coheight_le_coheight_apply_of_strictMono, coheight_le_iff, cons_length, generalizing, head_cons, inductionOn, le_antisymm, p.head, singleton
 -/
@@ -1092,7 +1112,19 @@ lemma exists_series_of_le_height
     rw [height_eq_iSup_last_eq]; rw [iSup_subtype']; rw [ENat.iSup_natCast_eq_top]; rw [bddAbove_def] at ha
     contrapose! ha
     use n
-    rintro m ⟨⟨p, rfl
+    rintro m ⟨⟨p, rfl⟩, hp⟩
+    simp only at hp
+    by_contra! hnm
+    apply ha (p.drop ⟨m-n, by lia⟩) (by simp) (by simp; lia)
+  | coe m =>
+    rw [ha]; rw [Nat.cast_le] at h
+    rw [height_eq_iSup_last_eq]; rw [iSup_subtype'] at ha
+    obtain ⟨⟨p, hlast⟩, hlen⟩ := exists_eq_iSup_of_iSup_eq_coe ha
+    simp only [Nat.cast_inj] at hlen
+    use p.drop ⟨m-n, by lia⟩
+    constructor
+    · simp [hlast]
+    · simp [hlen]; lia
 
 中文:
 引理 存在_series_of_le_height
@@ -1105,7 +1137,19 @@ lemma exists_series_of_le_height
     rw [height_eq_iSup_last_eq]; rw [iSup_subtype']; rw [ENat.iSup_natCast_eq_top]; rw [bddAbove_def] at ha
     contrapose! ha
     use n
-    rintro m ⟨⟨p, rfl
+    rintro m ⟨⟨p, rfl⟩, hp⟩
+    simp only at hp
+    by_contra! hnm
+    apply ha (p.drop ⟨m-n, by lia⟩) (by simp) (by simp; lia)
+  | coe m =>
+    rw [ha]; rw [Nat.cast_le] at h
+    rw [height_eq_iSup_last_eq]; rw [iSup_subtype'] at ha
+    obtain ⟨⟨p, hlast⟩, hlen⟩ := exists_eq_iSup_of_iSup_eq_coe ha
+    simp only [Nat.cast_inj] at hlen
+    use p.drop ⟨m-n, by lia⟩
+    constructor
+    · simp [hlast]
+    · simp [hlen]; lia
 
 Depends on / 依赖: ENat.iSup_natCast_eq_top, LTSeries, Nat.cast_le, Nonempty, RelSeries, RelSeries.singleton, bddAbove_def, cast_le, contrapose, height, height_eq_iSup_last_eq, iSup_natCast_eq_top, iSup_subtype, p.drop, p.last, singleton
 -/
@@ -1211,7 +1255,11 @@ lemma height_eq_iSup_lt_height
       apply le_iSup_of_le p.eraseLast.last
       apply le_iSup_of_le (by rw [← hp]; exact p.eraseLast_last_rel_last (by lia))
       rw [height_add_const]
-      apply le_iSup₂_o
+      apply le_iSup₂_of_le p.eraseLast (by rfl) (by simp [hlen])
+  · apply iSup₂_le; intro y hyx
+    rw [height_add_const]
+    apply iSup₂_le; intro p hp
+    apply le_iSup₂_of_le (p.snoc x (hp ▸ hyx)) (by simp) (by simp)
 
 中文:
 引理 height_eq_iSup_lt_height
@@ -1227,7 +1275,11 @@ lemma height_eq_iSup_lt_height
       apply le_iSup_of_le p.eraseLast.last
       apply le_iSup_of_le (by rw [← hp]; exact p.eraseLast_last_rel_last (by lia))
       rw [height_add_const]
-      apply le_iSup₂_o
+      apply le_iSup₂_of_le p.eraseLast (by rfl) (by simp [hlen])
+  · apply iSup₂_le; intro y hyx
+    rw [height_add_const]
+    apply iSup₂_le; intro p hp
+    apply le_iSup₂_of_le (p.snoc x (hp ▸ hyx)) (by simp) (by simp)
 
 Depends on / 依赖: eraseLast, eraseLast_last_rel_last, height_add_const, height_le, le_antisymm, le_iSup_of_le, length, p.eraseLast, p.eraseLast.last, p.eraseLast_last_rel_last, p.length, p.snoc
 -/
@@ -1335,7 +1387,7 @@ lemma height_eq_top_iff
     push Not
     intro n
     obtain ⟨p, hlast, hp⟩ := h (n + 1)
-    exact ⟨p.length, ⟨⟨⟨p, hlast⟩, by simp [hp]⟩, by sim
+    exact ⟨p.length, ⟨⟨⟨p, hlast⟩, by simp [hp]⟩, by simp [hp]⟩⟩
 
 中文:
 引理 height_eq_top_iff
@@ -1348,7 +1400,7 @@ lemma height_eq_top_iff
     push Not
     intro n
     obtain ⟨p, hlast, hp⟩ := h (n + 1)
-    exact ⟨p.length, ⟨⟨⟨p, hlast⟩, by simp [hp]⟩, by sim
+    exact ⟨p.length, ⟨⟨⟨p, hlast⟩, by simp [hp]⟩, by simp [hp]⟩⟩
 
 Depends on / 依赖: ENat.iSup_natCast_eq_top, bddAbove_def, exists_series_of_le_height, height_eq_iSup_last_eq, iSup_natCast_eq_top, iSup_subtype, length, p.length
 -/
@@ -1616,7 +1668,9 @@ lemma coe_lt_height_iff
     · rw [← hp]
       apply LTSeries.strictMono
       simp [Fin.last]; lia
-    · ex
+    · exact height_eq_index_of_length_eq_height_last (by simp [hlen, hp, hx]) ⟨n, by lia⟩
+  mpr := fun ⟨y, hyx, hy⟩ =>
+    hy ▸ height_strictMono hyx (lt_of_le_of_lt (height_mono hyx.le) hfin)
 
 中文:
 引理 coe_lt_height_iff
@@ -1630,7 +1684,9 @@ lemma coe_lt_height_iff
     · rw [← hp]
       apply LTSeries.strictMono
       simp [Fin.last]; lia
-    · ex
+    · exact height_eq_index_of_length_eq_height_last (by simp [hlen, hp, hx]) ⟨n, by lia⟩
+  mpr := fun ⟨y, hyx, hy⟩ =>
+    hy ▸ height_strictMono hyx (lt_of_le_of_lt (height_mono hyx.le) hfin)
 
 Depends on / 依赖: Fin.last, LTSeries, LTSeries.strictMono, Option.ne_none_iff_exists, exists_series_of_height_eq_coe, height, height_eq_index_of_length_eq_height_last, height_mono, height_strictMono, hfin.ne_top, hyx.le, lt_of_le_of_lt, ne_none_iff_exists, ne_top, strictMono
 -/
@@ -1683,7 +1739,7 @@ lemma height_eq_coe_add_one_iff
     simp [ENat.add_one_le_iff]
   · congr! 1
     · exact coe_lt_height_iff hfin
-    · simpa [hfin, ENat.lt_add_one_if
+    · simpa [hfin, ENat.lt_add_one_iff] using height_le_coe_iff (x := x) (n := n + 1)
 
 中文:
 引理 height_eq_coe_add_one_iff
@@ -1697,7 +1753,7 @@ lemma height_eq_coe_add_one_iff
     simp [ENat.add_one_le_iff]
   · congr! 1
     · exact coe_lt_height_iff hfin
-    · simpa [hfin, ENat.lt_add_one_if
+    · simpa [hfin, ENat.lt_add_one_iff] using height_le_coe_iff (x := x) (n := n + 1)
 
 Depends on / 依赖: ENat.add_one_le_iff, ENat.lt_add_one_iff, Nat.cast_add, Nat.cast_add_one, add_one_le_iff, and_comm, cast_add, cast_add_one, coe_lt_height_iff, height, height_le_coe_iff, le_antisymm_iff, lt_add_one_iff, true_and
 -/
@@ -1749,6 +1805,9 @@ lemma height_eq_coe_iff
     simp only [Nat.cast_add, Nat.cast_one, add_eq_zero, one_ne_zero, and_false, false_or]
     rw [height_eq_coe_add_one_iff]
     simp only [hfin, true_and]
+    congr! 3
+    rename_i y _
+    cases height y <;> simp; norm_cast; lia
 
 中文:
 引理 height_eq_coe_iff
@@ -1763,6 +1822,9 @@ lemma height_eq_coe_iff
     simp only [Nat.cast_add, Nat.cast_one, add_eq_zero, one_ne_zero, and_false, false_or]
     rw [height_eq_coe_add_one_iff]
     simp only [hfin, true_and]
+    congr! 3
+    rename_i y _
+    cases height y <;> simp; norm_cast; lia
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, add_eq_zero, and_false, cast_add, cast_one, false_or, height, height_eq_coe_add_one_iff, isMin_iff_forall_not_lt, one_ne_zero, rename_i, true_and
 -/
@@ -1816,7 +1878,10 @@ lemma height_eq_coe_iff_minimal_le_height
         coe_lt_height_iff, *]
   · suffices exists x < a, ↑n <= height x by
       simp_all [minimal_iff_forall_lt]
-    simp only [top_
+    simp only [top_le_iff, height_eq_top_iff] at hfin
+    obtain ⟨p, rfl, hp⟩ := hfin (n + 1)
+    use p.eraseLast.last, p.eraseLast_last_rel_last (by lia)
+    simpa [hp] using length_le_height_last (p := p.eraseLast)
 
 中文:
 引理 height_eq_coe_iff_minimal_le_height
@@ -1829,7 +1894,10 @@ lemma height_eq_coe_iff_minimal_le_height
         coe_lt_height_iff, *]
   · suffices exists x < a, ↑n <= height x by
       simp_all [minimal_iff_forall_lt]
-    simp only [top_
+    simp only [top_le_iff, height_eq_top_iff] at hfin
+    obtain ⟨p, rfl, hp⟩ := hfin (n + 1)
+    use p.eraseLast.last, p.eraseLast_last_rel_last (by lia)
+    simpa [hp] using length_le_height_last (p := p.eraseLast)
 
 Depends on / 依赖: ENat.add_one_le_iff, add_one_le_iff, coe_lt_height_iff, eraseLast, eraseLast_last_rel_last, height, height_eq_coe_add_one_iff, height_eq_top_iff, length_le_height_last, minimal_iff_forall_lt, p.eraseLast, p.eraseLast.last, p.eraseLast_last_rel_last, top_le_iff
 -/
@@ -1879,7 +1947,10 @@ lemma one_lt_height_iff
   · obtain ⟨p, hp, hlen⟩ := Order.exists_series_of_le_height x (n := 2) h
     refine ⟨p 1, p 0, p.rel_of_lt ?_, hp ▸ p.rel_of_lt ?_⟩ <;> simp [Fin.lt_def, hlen]
   · rintro ⟨y, z, hzy, hyx⟩
-    let p :
+    let p : LTSeries α := RelSeries.fromListIsChain [z, y, x] (List.cons_ne_nil z [y, x])
+      (List.IsChain.cons_cons hzy <| List.isChain_pair.mpr hyx)
+    have : p.last = x := by simp [p, ← RelSeries.getLast_toList]
+    exact Order.length_le_height this.le
 
 中文:
 引理 one_lt_height_iff
@@ -1891,7 +1962,10 @@ lemma one_lt_height_iff
   · obtain ⟨p, hp, hlen⟩ := Order.exists_series_of_le_height x (n := 2) h
     refine ⟨p 1, p 0, p.rel_of_lt ?_, hp ▸ p.rel_of_lt ?_⟩ <;> simp [Fin.lt_def, hlen]
   · rintro ⟨y, z, hzy, hyx⟩
-    let p :
+    let p : LTSeries α := RelSeries.fromListIsChain [z, y, x] (List.cons_ne_nil z [y, x])
+      (List.IsChain.cons_cons hzy <| List.isChain_pair.mpr hyx)
+    have : p.last = x := by simp [p, ← RelSeries.getLast_toList]
+    exact Order.length_le_height this.le
 
 Depends on / 依赖: ENat.add_one_le_iff, ENat.one_ne_top, Fin.lt_def, IsChain, LTSeries, List.IsChain.cons_cons, List.cons_ne_nil, List.isChain_pair.mpr, Order.exists_series_of_le_height, Order.length, RelSeries, RelSeries.fromListIsChain, RelSeries.getLast_toList, add_one_le_iff, cons_cons, cons_ne_nil, exists_series_of_le_height, fromListIsChain, getLast_toList, isChain_pair
 -/
@@ -2161,7 +2235,7 @@ lemma krullDim_le_one_iff
     iterate 2 · cases hl'.not_ge (by simp)
     exact ⟨l 1, ⟨l 0, hl 0⟩, l 2, hl 1⟩
   · rintro ⟨x, ⟨y, hxy⟩, z, hzx⟩
-    exact ⟨⟨2, ![y, x, z], fun i
+    exact ⟨⟨2, ![y, x, z], fun i => by fin_cases i <;> simpa⟩, by simp⟩
 
 中文:
 引理 krullDim_le_one_iff
@@ -2174,7 +2248,7 @@ lemma krullDim_le_one_iff
     iterate 2 · cases hl'.not_ge (by simp)
     exact ⟨l 1, ⟨l 0, hl 0⟩, l 2, hl 1⟩
   · rintro ⟨x, ⟨y, hxy⟩, z, hzx⟩
-    exact ⟨⟨2, ![y, x, z], fun i
+    exact ⟨⟨2, ![y, x, z], fun i => by fin_cases i <;> simpa⟩, by simp⟩
 
 Depends on / 依赖: contrapose, fin_cases, iSup_le_iff, isMax_iff_forall_not_lt, isMin_iff_forall_not_lt, iterate, krullDim, not_ge, simp_rw
 -/
@@ -2496,7 +2570,9 @@ lemma krullDim_eq_top
 exact not_le_of_gt (WithBot.bot_lt_coe _ : ⊥ < (0 : WithBot (WithTop Nat))) hm default
   | ⊤, _ => le_refl _
   | m, hm => by
-    rw [top_le_iff]; rw [ENat.Wi
+    rw [top_le_iff]; rw [ENat.WithBot.eq_top_iff_forall_ge]
+    intro n
+    simpa using hm (LTSeries.withLength _ n)
 
 中文:
 引理 krullDim_eq_top
@@ -2507,7 +2583,9 @@ exact not_le_of_gt (WithBot.bot_lt_coe _ : ⊥ < (0 : WithBot (WithTop Nat))) hm
 exact not_le_of_gt (WithBot.bot_lt_coe _ : ⊥ < (0 : WithBot (WithTop Nat))) hm default
   | ⊤, _ => le_refl _
   | m, hm => by
-    rw [top_le_iff]; rw [ENat.Wi
+    rw [top_le_iff]; rw [ENat.WithBot.eq_top_iff_forall_ge]
+    intro n
+    simpa using hm (LTSeries.withLength _ n)
 
 Depends on / 依赖: ENat.WithBot.eq_top_iff_forall_ge, False.elim, Inhabited, LTSeries, LTSeries.withLength, WithBot, WithBot.bot_lt_coe, WithTop, bot_lt_coe, eq_top_iff_forall_ge, le_antisymm, le_iSup_iff, le_iSup_iff.mpr, le_refl, le_top, not_le_of_gt, top_le_iff, withLength
 -/
@@ -2575,7 +2653,8 @@ lemma le_krullDim_iff
   · rw [krullDim_eq_length_of_finiteDimensionalOrder, Nat.cast_le]
     constructor
     · exact fun H => ⟨(LTSeries.longestOf α).take ⟨_, Nat.lt_succ_of_le H⟩, rfl⟩
-    · exact fun
+    · exact fun ⟨l, hl⟩ => hl ▸ l.longestOf_is_longest
+  · simpa [krullDim_eq_top] using SetRel.InfiniteDimensional.exists_relSeries_with_length n
 
 中文:
 引理 le_krullDim_iff
@@ -2588,7 +2667,8 @@ lemma le_krullDim_iff
   · rw [krullDim_eq_length_of_finiteDimensionalOrder, Nat.cast_le]
     constructor
     · exact fun H => ⟨(LTSeries.longestOf α).take ⟨_, Nat.lt_succ_of_le H⟩, rfl⟩
-    · exact fun
+    · exact fun ⟨l, hl⟩ => hl ▸ l.longestOf_is_longest
+  · simpa [krullDim_eq_top] using SetRel.InfiniteDimensional.exists_relSeries_with_length n
 
 Depends on / 依赖: InfiniteDimensional, LTSeries, LTSeries.longestOf, Nat.cast_le, Nat.lt_succ_of_le, SetRel, SetRel.InfiniteDimensional.exists_relSeries_with_length, cast_le, exists_relSeries_with_length, finiteDimensionalOrder_or_infiniteDimensionalOrder, isEmpty_or_nonempty, krullDim_eq_bot, krullDim_eq_length_of_finiteDimensionalOrder, krullDim_eq_top, l.longestOf_is_longest, longestOf, longestOf_is_longest, lt_succ_of_le
 -/
@@ -2840,7 +2920,7 @@ lemma krullDim_eq_iSup_height_of_nonempty
     apply le_iSup_of_le p.last (length_le_height_last (p := p))
   · rw [WithBot.coe_iSup (by bddDefault)]
     apply iSup_le
-    apply height_le_krullDi
+    apply height_le_krullDim
 
 中文:
 引理 krullDim_eq_iSup_height_of_nonempty
@@ -2854,7 +2934,7 @@ lemma krullDim_eq_iSup_height_of_nonempty
     apply le_iSup_of_le p.last (length_le_height_last (p := p))
   · rw [WithBot.coe_iSup (by bddDefault)]
     apply iSup_le
-    apply height_le_krullDi
+    apply height_le_krullDim
 
 Depends on / 依赖: WithBot, WithBot.coe_iSup, WithBot.unbotD_le_iff, bddDefault, coe_iSup, height, height_le_krullDim, iSup_le, le_antisymm, le_iSup_of_le, length, length_le_height_last, p.last, p.length, unbotD_le_iff
 -/
@@ -2904,7 +2984,17 @@ lemma krullDim_eq_iSup_height_add_coheight_of_nonempty
     rw [krullDim_eq_iSup_length]; rw [WithBot.coe_le_coe]
     apply iSup_le
     intro a
-    have : height a < ⊤ := W
+    have : height a < ⊤ := WithBot.coe_lt_coe.mp (lt_of_le_of_lt (height_le_krullDim a) hnottop)
+    have : coheight a < ⊤ := WithBot.coe_lt_coe.mp (lt_of_le_of_lt (coheight_le_krullDim a) hnottop)
+    cases hh : height a with
+    | top => simp_all
+    | coe n =>
+      cases hch : coheight a with
+      | top => simp_all
+      | coe m =>
+        obtain ⟨p₁, hlast, hlen₁⟩ := exists_series_of_height_eq_coe a hh
+        obtain ⟨p₂, hhead, hlen₂⟩ := exists_series_of_coheight_eq_coe a hch
+        apply le_iSup_of_le ((p₁.smash p₂) (by simp [*])) (by simp [*])
 
 中文:
 引理 krullDim_eq_iSup_height_add_coheight_of_nonempty
@@ -2918,7 +3008,17 @@ lemma krullDim_eq_iSup_height_add_coheight_of_nonempty
     rw [krullDim_eq_iSup_length]; rw [WithBot.coe_le_coe]
     apply iSup_le
     intro a
-    have : height a < ⊤ := W
+    have : height a < ⊤ := WithBot.coe_lt_coe.mp (lt_of_le_of_lt (height_le_krullDim a) hnottop)
+    have : coheight a < ⊤ := WithBot.coe_lt_coe.mp (lt_of_le_of_lt (coheight_le_krullDim a) hnottop)
+    cases hh : height a with
+    | top => simp_all
+    | coe n =>
+      cases hch : coheight a with
+      | top => simp_all
+      | coe m =>
+        obtain ⟨p₁, hlast, hlen₁⟩ := exists_series_of_height_eq_coe a hh
+        obtain ⟨p₂, hhead, hlen₂⟩ := exists_series_of_coheight_eq_coe a hch
+        apply le_iSup_of_le ((p₁.smash p₂) (by simp [*])) (by simp [*])
 
 Depends on / 依赖: WithBot, WithBot.coe_le_coe, WithBot.coe_lt_coe.mp, bddDefault, ciSup_mono, coe_le_coe, coe_lt_coe, coheight, coheight_le_krullDim, height, height_le_krullDim, hnottop, iSup_le, krullDim, krullDim_eq_iSup_height_of_nonempty, krullDim_eq_iSup_length, le_antisymm, lt_of_le_of_lt
 -/
@@ -3077,7 +3177,14 @@ lemma height_eq_krullDim_Iic
   apply le_antisymm
   · apply iSup_le; intro p; apply iSup_le; intro hp
     let q := LTSeries.mk p.length (fun i => (⟨p.toFun i, le_trans (p.monotone (Fin.le_last _)) hp⟩
-     : Set.Iic x)) (fun _ _ h => p.strictMono 
+     : Set.Iic x)) (fun _ _ h => p.strictMono h)
+    simp only [le_top, iSup_pos, ge_iff_le]
+    exact le_iSup (fun p => (p.length : Nat∞)) q
+  · apply iSup_le; intro p; apply iSup_le; intro _
+    have mono : StrictMono (fun (y : Set.Iic x) => y.1) := fun _ _ h => h
+    rw [← LTSeries.map_length p (fun x => x.1) mono, ]
+    refine le_iSup₂ (f := fun p hp => (p.length : Nat∞)) (p.map (fun x => x.1) mono) ?_
+    exact (p.toFun (Fin.last p.length)).2
 
 中文:
 引理 height_eq_krullDim_Iic
@@ -3088,7 +3195,14 @@ lemma height_eq_krullDim_Iic
   apply le_antisymm
   · apply iSup_le; intro p; apply iSup_le; intro hp
     let q := LTSeries.mk p.length (fun i => (⟨p.toFun i, le_trans (p.monotone (Fin.le_last _)) hp⟩
-     : Set.Iic x)) (fun _ _ h => p.strictMono 
+     : Set.Iic x)) (fun _ _ h => p.strictMono h)
+    simp only [le_top, iSup_pos, ge_iff_le]
+    exact le_iSup (fun p => (p.length : Nat∞)) q
+  · apply iSup_le; intro p; apply iSup_le; intro _
+    have mono : StrictMono (fun (y : Set.Iic x) => y.1) := fun _ _ h => h
+    rw [← LTSeries.map_length p (fun x => x.1) mono, ]
+    refine le_iSup₂ (f := fun p hp => (p.length : Nat∞)) (p.map (fun x => x.1) mono) ?_
+    exact (p.toFun (Fin.last p.length)).2
 
 Depends on / 依赖: Fin.le_last, LTSeries, LTSeries.mk, Set.Iic, StrictMono, WithBot, WithBot.coe_inj, coe_inj, ge_iff_le, height, height_top_eq_krullDim, iSup_le, iSup_pos, le_antisymm, le_iSup, le_last, le_top, le_trans, length, monotone
 -/
@@ -3378,7 +3492,10 @@ lemma coheight_of_noMaxOrder
     intro ⟨i, hi⟩
     by_cases hzero : i = 0
     · subst i
-  
+      exact (f 1).prop
+    · suffices f i < f (i + 1) by simp [Fin.ext_iff, hzero, this]
+      apply hstrictmono
+      lia
 
 中文:
 引理 coheight_of_noMaxOrder
@@ -3394,7 +3511,10 @@ lemma coheight_of_noMaxOrder
     intro ⟨i, hi⟩
     by_cases hzero : i = 0
     · subst i
-  
+      exact (f 1).prop
+    · suffices f i < f (i + 1) by simp [Fin.ext_iff, hzero, this]
+      apply hstrictmono
+      lia
 -/
 @[simp] lemma coheight_of_noMaxOrder [NoMaxOrder α] (a : α) : coheight a = ⊤ := by
   obtain ⟨f, hstrictmono⟩ := Nat.exists_strictMono ↑(Set.Ioi a)
@@ -3581,7 +3701,22 @@ lemma height_coe_withBot
     let p' : LTSeries α := {
       length := p.length - 1
       toFun := fun ⟨i, hi⟩ => (p ⟨i+1, by lia⟩).unbot (by
-        apply ne_bot_of_gt (b
+        apply ne_bot_of_gt (b := p.head)
+        apply p.strictMono
+        exact compare_gt_iff_gt.mp rfl)
+      step := fun i => by simpa [WithBot.unbot_lt_iff] using! p.step ⟨i + 1, by lia⟩ }
+    have hlast' : p'.last = x := by
+      simp only [p', RelSeries.last, WithBot.unbot_eq_iff, ← hlast, Fin.last]
+      congr
+      lia
+    suffices p'.length <= height p'.last by
+      simpa [p', hlast'] using! this
+    apply length_le_height_last
+  · rw [height_add_const]
+    apply iSup₂_le
+    intro p hlast
+    let p' := (p.map _ WithBot.coe_strictMono).cons ⊥ (by simp)
+    apply le_iSup₂_of_le p' (by simp [p', hlast]) (by simp [p'])
 
 中文:
 引理 height_coe_withBot
@@ -3597,7 +3732,22 @@ lemma height_coe_withBot
     let p' : LTSeries α := {
       length := p.length - 1
       toFun := fun ⟨i, hi⟩ => (p ⟨i+1, by lia⟩).unbot (by
-        apply ne_bot_of_gt (b
+        apply ne_bot_of_gt (b := p.head)
+        apply p.strictMono
+        exact compare_gt_iff_gt.mp rfl)
+      step := fun i => by simpa [WithBot.unbot_lt_iff] using! p.step ⟨i + 1, by lia⟩ }
+    have hlast' : p'.last = x := by
+      simp only [p', RelSeries.last, WithBot.unbot_eq_iff, ← hlast, Fin.last]
+      congr
+      lia
+    suffices p'.length <= height p'.last by
+      simpa [p', hlast'] using! this
+    apply length_le_height_last
+  · rw [height_add_const]
+    apply iSup₂_le
+    intro p hlast
+    let p' := (p.map _ WithBot.coe_strictMono).cons ⊥ (by simp)
+    apply le_iSup₂_of_le p' (by simp [p', hlast]) (by simp [p'])
 -/
 @[simp] lemma height_coe_withBot (x : α) : height (x : WithBot α) = height x + 1 := by
   apply le_antisymm
@@ -3661,7 +3811,20 @@ lemma height_coe_withTop
       toFun := fun i => (p i).untop (by
         apply WithTop.lt_top_iff_ne_top.mp
         apply lt_of_le_of_lt
-        · exact p.monotone (Fin.le_l
+        · exact p.monotone (Fin.le_last _)
+        · rw [RelSeries.last] at hlast
+          simp [hlast])
+      step := fun i => by simpa [WithTop.untop_lt_iff, WithTop.coe_untop] using p.step i }
+    have hlast' : p'.last = x := by
+      simp only [p', RelSeries.last, WithTop.untop_eq_iff, ← hlast]
+    suffices p'.length <= height p'.last by
+      rw [hlast'] at this
+      simpa [p'] using this
+    apply length_le_height_last
+  · apply height_le
+    intro p hlast
+    let p' := p.map _ WithTop.coe_strictMono
+    apply le_iSup₂_of_le p' (by simp [p', hlast]) (by simp [p'])
 
 中文:
 引理 height_coe_withTop
@@ -3677,7 +3840,20 @@ lemma height_coe_withTop
       toFun := fun i => (p i).untop (by
         apply WithTop.lt_top_iff_ne_top.mp
         apply lt_of_le_of_lt
-        · exact p.monotone (Fin.le_l
+        · exact p.monotone (Fin.le_last _)
+        · rw [RelSeries.last] at hlast
+          simp [hlast])
+      step := fun i => by simpa [WithTop.untop_lt_iff, WithTop.coe_untop] using p.step i }
+    have hlast' : p'.last = x := by
+      simp only [p', RelSeries.last, WithTop.untop_eq_iff, ← hlast]
+    suffices p'.length <= height p'.last by
+      rw [hlast'] at this
+      simpa [p'] using this
+    apply length_le_height_last
+  · apply height_le
+    intro p hlast
+    let p' := p.map _ WithTop.coe_strictMono
+    apply le_iSup₂_of_le p' (by simp [p', hlast]) (by simp [p'])
 -/
 @[simp] lemma height_coe_withTop (x : α) : height (x : WithTop α) = height x := by
   apply le_antisymm
@@ -3896,7 +4072,29 @@ lemma height_le_of_krullDim_preimage_le
   cases n with | top => simp | coe n =>
     induction n using Nat.strong_induction_on generalizing x with | h n ih =>
     refine height_le_iff.mpr fun p hp => le_of_not_gt fun h_len => ?_
-    let i : Fin (p.length + 1) := ⟨p.length - (m + 1), Nat.sub_lt_su
+    let i : Fin (p.length + 1) := ⟨p.length - (m + 1), Nat.sub_lt_succ p.length _⟩
+    suffices h'' : f (p i) < f x by
+      obtain ⟨n', hn'⟩ : exists (n' : Nat), n' = height (f (p i)) := ENat.ne_top_iff_exists.mp
+        ((height_mono h''.le).trans_lt (h' ▸ ENat.natCast_lt_top _)).ne
+      have h_lt : n' < n := ENat.natCast_lt_natCast.mp
+        (h' ▸ hn' ▸ height_strictMono h'' (hn' ▸ ENat.natCast_lt_top _))
+have := (length_le_height_last (p := p.take i)).trans ih n' h_lt (p i) hn'.symm
+      rw [RelSeries.take_length]; rw [ENat.natCast_sub]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [tsub_le_iff_right]; rw [add_assoc]; rw [add_comm _ (_ + 1)]; rw [← add_assoc]; rw [← mul_add_one] at this
+      refine not_lt_of_ge ?_ (h_len.trans_le this)
+      gcongr
+      rwa [← ENat.natCast_one, ← ENat.natCast_add, ENat.natCast_le_natCast]
+    refine (f.monotone ((p.monotone (Fin.le_last _)).trans hp)).lt_of_not_ge fun h'' => ?_
+    let q' : LTSeries α := p.drop i
+    let q : LTSeries (f ⁻¹' {f x}) := ⟨q'.length, fun j => ⟨q' j, le_antisymm
+      (f.monotone (le_trans (b := q'.last) (q'.monotone (Fin.le_last _)) (p.last_drop _ ▸ hp)))
+      (le_trans (b := f q'.head) (p.head_drop _ ▸ h'')
+        (f.monotone (q'.monotone (Fin.zero_le _))))⟩, fun i => q'.step i⟩
+    have := (LTSeries.length_le_krullDim q).trans (h (f x))
+    simp only [RelSeries.drop_length, Nat.cast_le, tsub_le_iff_right, q', i, q] at this
+    have : p.length > m := ENat.natCast_lt_natCast.mp ((le_add_left le_rfl).trans_lt h_len)
+    lia
+
+include h in
 
 中文:
 引理 height_le_of_krullDim_preimage_le
@@ -3906,7 +4104,29 @@ lemma height_le_of_krullDim_preimage_le
   cases n with | top => simp | coe n =>
     induction n using Nat.strong_induction_on generalizing x with | h n ih =>
     refine height_le_iff.mpr fun p hp => le_of_not_gt fun h_len => ?_
-    let i : Fin (p.length + 1) := ⟨p.length - (m + 1), Nat.sub_lt_su
+    let i : Fin (p.length + 1) := ⟨p.length - (m + 1), Nat.sub_lt_succ p.length _⟩
+    suffices h'' : f (p i) < f x by
+      obtain ⟨n', hn'⟩ : exists (n' : Nat), n' = height (f (p i)) := ENat.ne_top_iff_exists.mp
+        ((height_mono h''.le).trans_lt (h' ▸ ENat.natCast_lt_top _)).ne
+      have h_lt : n' < n := ENat.natCast_lt_natCast.mp
+        (h' ▸ hn' ▸ height_strictMono h'' (hn' ▸ ENat.natCast_lt_top _))
+have := (length_le_height_last (p := p.take i)).trans ih n' h_lt (p i) hn'.symm
+      rw [RelSeries.take_length]; rw [ENat.natCast_sub]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [tsub_le_iff_right]; rw [add_assoc]; rw [add_comm _ (_ + 1)]; rw [← add_assoc]; rw [← mul_add_one] at this
+      refine not_lt_of_ge ?_ (h_len.trans_le this)
+      gcongr
+      rwa [← ENat.natCast_one, ← ENat.natCast_add, ENat.natCast_le_natCast]
+    refine (f.monotone ((p.monotone (Fin.le_last _)).trans hp)).lt_of_not_ge fun h'' => ?_
+    let q' : LTSeries α := p.drop i
+    let q : LTSeries (f ⁻¹' {f x}) := ⟨q'.length, fun j => ⟨q' j, le_antisymm
+      (f.monotone (le_trans (b := q'.last) (q'.monotone (Fin.le_last _)) (p.last_drop _ ▸ hp)))
+      (le_trans (b := f q'.head) (p.head_drop _ ▸ h'')
+        (f.monotone (q'.monotone (Fin.zero_le _))))⟩, fun i => q'.step i⟩
+    have := (LTSeries.length_le_krullDim q).trans (h (f x))
+    simp only [RelSeries.drop_length, Nat.cast_le, tsub_le_iff_right, q', i, q] at this
+    have : p.length > m := ENat.natCast_lt_natCast.mp ((le_add_left le_rfl).trans_lt h_len)
+    lia
+
+include h in
 
 Depends on / 依赖: ENat.natCast_lt_top, ENat.ne_top_iff_exists.mp, Nat.strong_induction_on, Nat.sub_lt_succ, Order.height, generalize, generalizing, h_len, h_lt, height, height_le_iff, height_le_iff.mpr, height_mono, le_of_not_gt, length, natCast_lt_top, ne_top_iff_exists, p.length, strong_induction_on, sub_lt_succ
 -/

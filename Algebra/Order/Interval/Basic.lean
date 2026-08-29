@@ -1526,7 +1526,9 @@ theorem mul_eq_one_iff
     have := (mul_le_mul_iff_of_ge s.fst_le_snd t.fst_le_snd).1 (h.2.trans h.1.symm).le
     refine ⟨s.fst, t.fst, ?_, ?_, h.1⟩ <;> apply NonemptyInterval.ext <;> dsimp [pure]
     · nth_rw 2 [this.1]
-    · nth_rw 2 [thi
+    · nth_rw 2 [this.2]
+  · rintro ⟨b, c, rfl, rfl, h⟩
+    rw [pure_mul_pure]; rw [h]; rw [pure_one]
 
 中文:
 定理 mul_eq_one_iff
@@ -1537,7 +1539,9 @@ theorem mul_eq_one_iff
     have := (mul_le_mul_iff_of_ge s.fst_le_snd t.fst_le_snd).1 (h.2.trans h.1.symm).le
     refine ⟨s.fst, t.fst, ?_, ?_, h.1⟩ <;> apply NonemptyInterval.ext <;> dsimp [pure]
     · nth_rw 2 [this.1]
-    · nth_rw 2 [thi
+    · nth_rw 2 [this.2]
+  · rintro ⟨b, c, rfl, rfl, h⟩
+    rw [pure_mul_pure]; rw [h]; rw [pure_one]
 -/
 protected theorem mul_eq_one_iff : s * t = 1 ↔ exists a b, s = pure a ∧ t = pure b ∧ a * b = 1 := by
   refine ⟨fun h => ?_, ?_⟩
@@ -1562,7 +1566,13 @@ instance subtractionCommMonoid
   neg_add_rev := fun s t => by
     refine NonemptyInterval.ext (Prod.ext ?_ ?_) <;>
     exact neg_add_rev _ _
-  neg_eq_of_add := fun s 
+  neg_eq_of_add := fun s t h => by
+    obtain ⟨a, b, rfl, rfl, hab⟩ := NonemptyInterval.add_eq_zero_iff.1 h
+    rw [neg_pure]; rw [neg_eq_of_add_eq_zero_right hab]
+  -- TODO: use a better defeq
+  zsmul := zsmulRec
+
+@[to_additive existing NonemptyInterval.subtractionCommMonoid]
 
 中文:
 实例 subtractionCommMonoid
@@ -1574,7 +1584,13 @@ instance subtractionCommMonoid
   neg_add_rev := fun s t => by
     refine NonemptyInterval.ext (Prod.ext ?_ ?_) <;>
     exact neg_add_rev _ _
-  neg_eq_of_add := fun s 
+  neg_eq_of_add := fun s t h => by
+    obtain ⟨a, b, rfl, rfl, hab⟩ := NonemptyInterval.add_eq_zero_iff.1 h
+    rw [neg_pure]; rw [neg_eq_of_add_eq_zero_right hab]
+  -- TODO: use a better defeq
+  zsmul := zsmulRec
+
+@[to_additive existing NonemptyInterval.subtractionCommMonoid]
 
 Depends on / 依赖: NonemptyInterval, NonemptyInterval.add_eq_zero_iff, NonemptyInterval.ext, Prod.ext, add_eq_zero_iff, neg_add_rev, neg_eq_of_add, neg_eq_of_add_eq_zero_right, neg_neg, neg_pure, sub_eq_add_neg
 -/
@@ -1608,7 +1624,9 @@ instance divisionCommMonoid
   mul_inv_rev := fun s t => by
     refine NonemptyInterval.ext (Prod.ext ?_ ?_) <;>
     exact mul_inv_rev _ _
-  inv_eq_of_mul := fun s 
+  inv_eq_of_mul := fun s t h => by
+    obtain ⟨a, b, rfl, rfl, hab⟩ := NonemptyInterval.mul_eq_one_iff.1 h
+    rw [inv_pure]; rw [inv_eq_of_mul_eq_one_right hab]
 
 中文:
 实例 divisionCommMonoid
@@ -1620,7 +1638,9 @@ instance divisionCommMonoid
   mul_inv_rev := fun s t => by
     refine NonemptyInterval.ext (Prod.ext ?_ ?_) <;>
     exact mul_inv_rev _ _
-  inv_eq_of_mul := fun s 
+  inv_eq_of_mul := fun s t h => by
+    obtain ⟨a, b, rfl, rfl, hab⟩ := NonemptyInterval.mul_eq_one_iff.1 h
+    rw [inv_pure]; rw [inv_eq_of_mul_eq_one_right hab]
 
 Depends on / 依赖: NonemptyInterval, NonemptyInterval.ext, NonemptyInterval.mul_eq_one_iff, Prod.ext, div_eq_mul_inv, inv_eq_of_mul, inv_eq_of_mul_eq_one_right, inv_inv, inv_pure, mul_eq_one_iff, mul_inv_rev
 -/
@@ -1692,7 +1712,15 @@ instance subtractionCommMonoid
   neg_neg := by rintro (_ | s) <;> first | rfl | exact congr_arg WithBot.some (neg_neg _)
   neg_add_rev := by
     rintro (_ | s) (_ | t) <;> first | rfl | exact congr_arg WithBot.some (neg_add_rev _ _)
+  neg_eq_of_add := by
+    rintro (_ | s) (_ | t) h <;>
+      first
+        | cases h
+        | exact congr_arg WithBot.some (neg_eq_of_add_eq_zero_right <| WithBot.coe_injective h)
+  -- TODO: use a better defeq
+  zsmul := zsmulRec
 
+@[to_additive existing Interval.subtractionCommMonoid]
 
 中文:
 实例 subtractionCommMonoid
@@ -1702,7 +1730,15 @@ instance subtractionCommMonoid
   neg_neg := by rintro (_ | s) <;> first | rfl | exact congr_arg WithBot.some (neg_neg _)
   neg_add_rev := by
     rintro (_ | s) (_ | t) <;> first | rfl | exact congr_arg WithBot.some (neg_add_rev _ _)
+  neg_eq_of_add := by
+    rintro (_ | s) (_ | t) h <;>
+      first
+        | cases h
+        | exact congr_arg WithBot.some (neg_eq_of_add_eq_zero_right <| WithBot.coe_injective h)
+  -- TODO: use a better defeq
+  zsmul := zsmulRec
 
+@[to_additive existing Interval.subtractionCommMonoid]
 
 Depends on / 依赖: WithBot, WithBot.coe_injective, WithBot.some, coe_injective, congr_arg, neg_add_rev, neg_eq_of_add, neg_eq_of_add_eq_zero_right, neg_neg, sub_eq_add_neg
 -/
@@ -1734,7 +1770,11 @@ instance divisionCommMonoid
   inv_inv := by rintro (_ | s) <;> first | rfl | exact congr_arg WithBot.some (inv_inv _)
   mul_inv_rev := by
     rintro (_ | s) (_ | t) <;> first | rfl | exact congr_arg WithBot.some (mul_inv_rev _ _)
-
+  inv_eq_of_mul := by
+    rintro (_ | s) (_ | t) h <;>
+      first
+        | cases h
+        | exact congr_arg WithBot.some (inv_eq_of_mul_eq_one_right <| WithBot.coe_injective h)
 
 中文:
 实例 divisionCommMonoid
@@ -1744,7 +1784,11 @@ instance divisionCommMonoid
   inv_inv := by rintro (_ | s) <;> first | rfl | exact congr_arg WithBot.some (inv_inv _)
   mul_inv_rev := by
     rintro (_ | s) (_ | t) <;> first | rfl | exact congr_arg WithBot.some (mul_inv_rev _ _)
-
+  inv_eq_of_mul := by
+    rintro (_ | s) (_ | t) h <;>
+      first
+        | cases h
+        | exact congr_arg WithBot.some (inv_eq_of_mul_eq_one_right <| WithBot.coe_injective h)
 
 Depends on / 依赖: WithBot, WithBot.coe_injective, WithBot.some, coe_injective, congr_arg, div_eq_mul_inv, inv_eq_of_mul, inv_eq_of_mul_eq_one_right, inv_inv, mul_inv_rev
 -/

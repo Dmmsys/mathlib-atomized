@@ -428,7 +428,7 @@ theorem card_aux₂
     rw [stepBound]; rw [← Nat.div_div_eq_div_mul]
     exact Nat.div_mul_le_self _ _
   rw [Nat.add_sub_of_le this] at hucard
-  rw [(hP.card_parts_eq_average hu).resolve_left hucard]; rw [mul_add]; rw [mul_one]; rw [← add_assoc]; rw [← add_mul]; 
+  rw [(hP.card_parts_eq_average hu).resolve_left hucard]; rw [mul_add]; rw [mul_one]; rw [← add_assoc]; rw [← add_mul]; rw [Nat.sub_add_cancel a_add_one_le_four_pow_parts_card]; rw [← add_assoc]; rw [mul_comm]; rw [Nat.add_sub_of_le this]; rw [card_univ]
 
 中文:
 定理 card_aux₂
@@ -438,7 +438,7 @@ theorem card_aux₂
     rw [stepBound]; rw [← Nat.div_div_eq_div_mul]
     exact Nat.div_mul_le_self _ _
   rw [Nat.add_sub_of_le this] at hucard
-  rw [(hP.card_parts_eq_average hu).resolve_left hucard]; rw [mul_add]; rw [mul_one]; rw [← add_assoc]; rw [← add_mul]; 
+  rw [(hP.card_parts_eq_average hu).resolve_left hucard]; rw [mul_add]; rw [mul_one]; rw [← add_assoc]; rw [← add_mul]; rw [Nat.sub_add_cancel a_add_one_le_four_pow_parts_card]; rw [← add_assoc]; rw [mul_comm]; rw [Nat.add_sub_of_le this]; rw [card_univ]
 
 Depends on / 依赖: Nat.add_sub_of_le, Nat.div_div_eq_div_mul, Nat.div_mul_le_self, Nat.sub_add_cancel, P.parts, a_add_one_le_four_pow_parts_card, add_assoc, add_mul, add_sub_of_le, card_parts_eq_average, card_univ, div_div_eq_div_mul, div_mul_le_self, hP.card_parts_eq_average, hucard, mul_add, mul_comm, mul_one, resolve_left, stepBound
 -/
@@ -561,6 +561,7 @@ theorem hundred_lt_pow_initialBound_mul
   · push_cast
     exact lt_max_of_lt_right (lt_max_of_lt_right <| Nat.lt_floor_add_one _)
   · exact log_pos (by simp)
+  · exact div_pos (by simp) (pow_pos hε 5)
 
 中文:
 定理 hundred_lt_pow_initialBound_mul
@@ -571,6 +572,7 @@ theorem hundred_lt_pow_initialBound_mul
   · push_cast
     exact lt_max_of_lt_right (lt_max_of_lt_right <| Nat.lt_floor_add_one _)
   · exact log_pos (by simp)
+  · exact div_pos (by simp) (pow_pos hε 5)
 
 Depends on / 依赖: Nat.cast_max, Nat.lt_floor_add_one, cast_max, div_pos, initialBound, log_pos, lt_floor_add_one, lt_max_of_lt_right, lt_rpow_iff_log_lt, pow_pos, rpow_natCast, zero_lt_four
 -/
@@ -701,7 +703,20 @@ theorem add_div_le_sum_sq_div_card
   obtain hscard | hscard := ((#s).cast_nonneg : (0 : 𝕜) <= #s).eq_or_lt
   · simpa [← hscard] using ht.trans sum_div_card_sq_le_sum_sq_div_card
   have htcard : (0 : 𝕜) < #t := hscard.trans_le (Nat.cast_le.2 (card_le_card hst))
-  have h₁ : x ^ 2 <= ((∑ i in s, f i) / #s - (∑ i in t, f i) / #t) ^ 2 
+  have h₁ : x ^ 2 <= ((∑ i in s, f i) / #s - (∑ i in t, f i) / #t) ^ 2 :=
+    sq_le_sq.2 (by rwa [abs_of_nonneg hx])
+  have h₂ : x ^ 2 <= ((∑ i in s, (f i - (∑ j in t, f j) / #t)) / #s) ^ 2 := by
+    apply h₁.trans
+    rw [sum_sub_distrib]; rw [sum_const]; rw [nsmul_eq_mul]; rw [sub_div]; rw [mul_div_cancel_left₀ _ hscard.ne']
+  grw [ht]
+  rw [← mul_div_right_comm]; rw [le_div_iff₀ htcard]; rw [add_mul]; rw [div_mul_cancel₀ _ htcard.ne']
+  have h₃ := mul_sq_le_sum_sq hst (fun i => (f i - (∑ j in t, f j) / #t)) h₂ hscard.ne'
+  grw [h₃]
+  simp only [sub_div' htcard.ne', div_pow, ← sum_div, ← mul_div_right_comm _ (#t : 𝕜), ← add_div,
+    div_le_iff₀ (sq_pos_of_ne_zero htcard.ne'), sub_sq, sum_add_distrib, sum_const,
+    sum_sub_distrib, mul_pow, ← sum_mul, nsmul_eq_mul, two_mul]
+  ring_nf
+  rfl
 
 中文:
 定理 add_div_le_sum_sq_div_card
@@ -710,7 +725,20 @@ theorem add_div_le_sum_sq_div_card
   obtain hscard | hscard := ((#s).cast_nonneg : (0 : 𝕜) <= #s).eq_or_lt
   · simpa [← hscard] using ht.trans sum_div_card_sq_le_sum_sq_div_card
   have htcard : (0 : 𝕜) < #t := hscard.trans_le (Nat.cast_le.2 (card_le_card hst))
-  have h₁ : x ^ 2 <= ((∑ i in s, f i) / #s - (∑ i in t, f i) / #t) ^ 2 
+  have h₁ : x ^ 2 <= ((∑ i in s, f i) / #s - (∑ i in t, f i) / #t) ^ 2 :=
+    sq_le_sq.2 (by rwa [abs_of_nonneg hx])
+  have h₂ : x ^ 2 <= ((∑ i in s, (f i - (∑ j in t, f j) / #t)) / #s) ^ 2 := by
+    apply h₁.trans
+    rw [sum_sub_distrib]; rw [sum_const]; rw [nsmul_eq_mul]; rw [sub_div]; rw [mul_div_cancel_left₀ _ hscard.ne']
+  grw [ht]
+  rw [← mul_div_right_comm]; rw [le_div_iff₀ htcard]; rw [add_mul]; rw [div_mul_cancel₀ _ htcard.ne']
+  have h₃ := mul_sq_le_sum_sq hst (fun i => (f i - (∑ j in t, f j) / #t)) h₂ hscard.ne'
+  grw [h₃]
+  simp only [sub_div' htcard.ne', div_pow, ← sum_div, ← mul_div_right_comm _ (#t : 𝕜), ← add_div,
+    div_le_iff₀ (sq_pos_of_ne_zero htcard.ne'), sub_sq, sum_add_distrib, sum_const,
+    sum_sub_distrib, mul_pow, ← sum_mul, nsmul_eq_mul, two_mul]
+  ring_nf
+  rfl
 
 Depends on / 依赖: Nat.cast_le, abs_of_nonneg, card_le_card, cast_le, cast_nonneg, eq_or_lt, hscard, hscard.trans_le, ht.trans, htcard, nsmul_eq_mul, sq_le_sq, sub_div, sum_const, sum_div_card_sq_le_sum_sq_div_card, sum_sub_distrib, trans_le
 -/

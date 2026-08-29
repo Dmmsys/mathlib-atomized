@@ -96,7 +96,8 @@ theorem parallelepiped_basis_eq
   simp_rw [mem_parallelepiped_iff, mem_ofPred_eq, b.ext_elem_iff, _root_.map_sum,
     map_smul, Finset.sum_apply', Basis.repr_self, Finsupp.smul_single, smul_eq_mul,
     mul_one, Finsupp.single_apply, Finset.sum_ite_eq', Finset.mem_univ, ite_true, mem_Icc,
-    Pi.le_def, Pi.ze
+    Pi.le_def, Pi.zero_apply, Pi.one_apply, ← forall_and]
+  aesop
 
 中文:
 定理 parallelepiped_basis_eq
@@ -107,7 +108,8 @@ theorem parallelepiped_basis_eq
   simp_rw [mem_parallelepiped_iff, mem_ofPred_eq, b.ext_elem_iff, _root_.map_sum,
     map_smul, Finset.sum_apply', Basis.repr_self, Finsupp.smul_single, smul_eq_mul,
     mul_one, Finsupp.single_apply, Finset.sum_ite_eq', Finset.mem_univ, ite_true, mem_Icc,
-    Pi.le_def, Pi.ze
+    Pi.le_def, Pi.zero_apply, Pi.one_apply, ← forall_and]
+  aesop
 
 Depends on / 依赖: Basis.repr_self, Finset, Finset.mem_univ, Finset.sum_apply, Finset.sum_ite_eq, Finsupp, Finsupp.single_apply, Finsupp.smul_single, Pi.le_def, Pi.one_apply, Pi.zero_apply, _root_, _root_.map_sum, b.ext_elem_iff, classical, ext_elem_iff, forall_and, ite_true, le_def, map_smul
 -/
@@ -162,7 +164,18 @@ theorem parallelepiped_comp_equiv
   have : Icc (0 : ι -> Real) 1 = K '' Icc (0 : ι' -> Real) 1 := by
     rw [← Equiv.preimage_eq_iff_eq_image]
     ext x
-    simp only [K, mem_preimage, mem_Icc, Pi.le_def, Pi.zero_apply,
+    simp only [K, mem_preimage, mem_Icc, Pi.le_def, Pi.zero_apply, Equiv.piCongrLeft'_apply,
+      Pi.one_apply]
+    refine
+      ⟨fun h => ⟨fun i => ?_, fun i => ?_⟩, fun h =>
+        ⟨fun i => h.1 (e.symm i), fun i => h.2 (e.symm i)⟩⟩
+    · simpa only [Equiv.symm_apply_apply] using h.1 (e i)
+    · simpa only [Equiv.symm_apply_apply] using h.2 (e i)
+  rw [this]; rw [← image_comp]
+  ext x
+  have := fun z : ι' -> Real => e.symm.sum_comp fun i => z i • v (e i)
+  simp_rw [Equiv.apply_symm_apply] at this
+  simp_rw [Function.comp_apply, mem_image, mem_Icc, K, Equiv.piCongrLeft'_apply, this]
 
 中文:
 定理 parallelepiped_comp_equiv
@@ -173,7 +186,18 @@ theorem parallelepiped_comp_equiv
   have : Icc (0 : ι -> Real) 1 = K '' Icc (0 : ι' -> Real) 1 := by
     rw [← Equiv.preimage_eq_iff_eq_image]
     ext x
-    simp only [K, mem_preimage, mem_Icc, Pi.le_def, Pi.zero_apply,
+    simp only [K, mem_preimage, mem_Icc, Pi.le_def, Pi.zero_apply, Equiv.piCongrLeft'_apply,
+      Pi.one_apply]
+    refine
+      ⟨fun h => ⟨fun i => ?_, fun i => ?_⟩, fun h =>
+        ⟨fun i => h.1 (e.symm i), fun i => h.2 (e.symm i)⟩⟩
+    · simpa only [Equiv.symm_apply_apply] using h.1 (e i)
+    · simpa only [Equiv.symm_apply_apply] using h.2 (e i)
+  rw [this]; rw [← image_comp]
+  ext x
+  have := fun z : ι' -> Real => e.symm.sum_comp fun i => z i • v (e i)
+  simp_rw [Equiv.apply_symm_apply] at this
+  simp_rw [Function.comp_apply, mem_image, mem_Icc, K, Equiv.piCongrLeft'_apply, this]
 
 Depends on / 依赖: Equiv.piCongrLeft, Equiv.preimage_eq_iff_eq_image, Equiv.symm_apply_apply, Pi.le_def, Pi.one_apply, Pi.zero_apply, _apply, e.symm, le_def, mem_Icc, mem_preimage, one_apply, parallelepiped, piCongrLeft, preimage_eq_iff_eq_image, symm_apply_apply, zero_apply
 -/
@@ -212,7 +236,25 @@ theorem parallelepiped_orthonormalBasis_one_dim
     convert! parallelepiped_comp_equiv b e.symm
     ext i
     simp only [OrthonormalBasis.coe_reindex]
-  r
+  rw [← B]
+  let F : Real -> Fin 1 -> Real := fun t _i => t
+  have A : Icc (0 : Fin 1 -> Real) 1 = F '' Icc (0 : Real) 1 := by
+    apply Subset.antisymm
+    · intro x hx
+      refine ⟨x 0, ⟨hx.1 0, hx.2 0⟩, ?_⟩
+      ext j
+      simp only [F, Subsingleton.elim j 0]
+    · rintro x ⟨y, hy, rfl⟩
+      exact ⟨fun _j => hy.1, fun _j => hy.2⟩
+  rcases orthonormalBasis_one_dim (b.reindex e) with (H | H)
+  · left
+    simp_rw [parallelepiped, H, A, smul_eq_mul, mul_one]
+    simp only [F, Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton,
+      ← image_comp, Function.comp_apply, image_id']
+  · right
+    simp_rw [H, parallelepiped, smul_eq_mul, A]
+    simp only [F, Finset.univ_unique, Fin.default_eq_zero, mul_neg, mul_one, Finset.sum_neg_distrib,
+      Finset.sum_singleton, ← image_comp, Function.comp, image_neg_eq_neg, neg_Icc, neg_zero]
 
 中文:
 定理 parallelepiped_orthonormalBasis_one_dim
@@ -225,7 +267,25 @@ theorem parallelepiped_orthonormalBasis_one_dim
     convert! parallelepiped_comp_equiv b e.symm
     ext i
     simp only [OrthonormalBasis.coe_reindex]
-  r
+  rw [← B]
+  let F : Real -> Fin 1 -> Real := fun t _i => t
+  have A : Icc (0 : Fin 1 -> Real) 1 = F '' Icc (0 : Real) 1 := by
+    apply Subset.antisymm
+    · intro x hx
+      refine ⟨x 0, ⟨hx.1 0, hx.2 0⟩, ?_⟩
+      ext j
+      simp only [F, Subsingleton.elim j 0]
+    · rintro x ⟨y, hy, rfl⟩
+      exact ⟨fun _j => hy.1, fun _j => hy.2⟩
+  rcases orthonormalBasis_one_dim (b.reindex e) with (H | H)
+  · left
+    simp_rw [parallelepiped, H, A, smul_eq_mul, mul_one]
+    simp only [F, Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton,
+      ← image_comp, Function.comp_apply, image_id']
+  · right
+    simp_rw [H, parallelepiped, smul_eq_mul, A]
+    simp only [F, Finset.univ_unique, Fin.default_eq_zero, mul_neg, mul_one, Finset.sum_neg_distrib,
+      Finset.sum_singleton, ← image_comp, Function.comp, image_neg_eq_neg, neg_Icc, neg_zero]
 
 Depends on / 依赖: Fintype, Fintype.equivFinOfCardEq, OrthonormalBasis, OrthonormalBasis.coe_reindex, Subset, Subset.antisymm, Subsingleton, Subsingleton.eli, antisymm, b.reindex, b.toBasis, coe_reindex, convert, e.symm, equivFinOfCardEq, finrank_eq_card_basis, finrank_self, parallelepiped, parallelepiped_comp_equiv, reindex
 -/
@@ -273,7 +333,9 @@ theorem parallelepiped_eq_sum_segment
   · rintro ⟨t, ht, rfl⟩
     exact ⟨t • v, fun {i} => ⟨t i, ht _, by simp⟩, rfl⟩
   rintro ⟨g, hg, rfl⟩
-  cho
+  choose t ht hg using @hg
+  refine ⟨@t, @ht, ?_⟩
+  simp_rw [hg]
 
 中文:
 定理 parallelepiped_eq_sum_segment
@@ -287,7 +349,9 @@ theorem parallelepiped_eq_sum_segment
   · rintro ⟨t, ht, rfl⟩
     exact ⟨t • v, fun {i} => ⟨t i, ht _, by simp⟩, rfl⟩
   rintro ⟨g, hg, rfl⟩
-  cho
+  choose t ht hg using @hg
+  refine ⟨@t, @ht, ?_⟩
+  simp_rw [hg]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Set.mem_finsetSum, Set.mem_univ_pi, Set.pi_univ_Icc, forall_true_left, mem_finsetSum, mem_parallelepiped_iff, mem_univ, mem_univ_pi, pi_univ_Icc, segment_eq_image, simp_rw, smul_zero, zero_add
 -/
@@ -363,7 +427,26 @@ theorem parallelepiped_single
   constructor
   · rintro ⟨t, ht, rfl⟩ i
     specialize ht i
-    
+    simp_rw [smul_eq_mul, Pi.mul_apply]
+    rcases le_total (a i) 0 with hai | hai
+    · rw [sup_eq_left.mpr hai, inf_eq_right.mpr hai]
+      exact ⟨le_mul_of_le_one_left hai ht.2, mul_nonpos_of_nonneg_of_nonpos ht.1 hai⟩
+    · rw [sup_eq_right.mpr hai, inf_eq_left.mpr hai]
+      exact ⟨mul_nonneg ht.1 hai, mul_le_of_le_one_left hai ht.2⟩
+  · intro h
+    refine ⟨fun i => x i / a i, fun i => ?_, funext fun i => ?_⟩
+    · specialize h i
+      rcases le_total (a i) 0 with hai | hai
+      · rw [sup_eq_left.mpr hai, inf_eq_right.mpr hai] at h
+        exact ⟨div_nonneg_of_nonpos h.2 hai, div_le_one_of_ge h.1 hai⟩
+      · rw [sup_eq_right.mpr hai, inf_eq_left.mpr hai] at h
+        exact ⟨div_nonneg h.1 hai, div_le_one_of_le₀ h.2 hai⟩
+    · specialize h i
+      simp only [smul_eq_mul, Pi.mul_apply]
+      rcases eq_or_ne (a i) 0 with hai | hai
+      · rw [hai, inf_idem, sup_idem, ← le_antisymm_iff] at h
+        rw [hai]; rw [← h]; rw [zero_div]; rw [zero_mul]
+      · rw [div_mul_cancel₀ _ hai]
 
 中文:
 定理 parallelepiped_single
@@ -376,7 +459,26 @@ theorem parallelepiped_single
   constructor
   · rintro ⟨t, ht, rfl⟩ i
     specialize ht i
-    
+    simp_rw [smul_eq_mul, Pi.mul_apply]
+    rcases le_total (a i) 0 with hai | hai
+    · rw [sup_eq_left.mpr hai, inf_eq_right.mpr hai]
+      exact ⟨le_mul_of_le_one_left hai ht.2, mul_nonpos_of_nonneg_of_nonpos ht.1 hai⟩
+    · rw [sup_eq_right.mpr hai, inf_eq_left.mpr hai]
+      exact ⟨mul_nonneg ht.1 hai, mul_le_of_le_one_left hai ht.2⟩
+  · intro h
+    refine ⟨fun i => x i / a i, fun i => ?_, funext fun i => ?_⟩
+    · specialize h i
+      rcases le_total (a i) 0 with hai | hai
+      · rw [sup_eq_left.mpr hai, inf_eq_right.mpr hai] at h
+        exact ⟨div_nonneg_of_nonpos h.2 hai, div_le_one_of_ge h.1 hai⟩
+      · rw [sup_eq_right.mpr hai, inf_eq_left.mpr hai] at h
+        exact ⟨div_nonneg h.1 hai, div_le_one_of_le₀ h.2 hai⟩
+    · specialize h i
+      simp only [smul_eq_mul, Pi.mul_apply]
+      rcases eq_or_ne (a i) 0 with hai | hai
+      · rw [hai, inf_idem, sup_idem, ← le_antisymm_iff] at h
+        rw [hai]; rw [← h]; rw [zero_div]; rw [zero_mul]
+      · rw [div_mul_cancel₀ _ hai]
 
 Depends on / 依赖: Finset, Finset.univ_sum_single, Pi.inf_apply, Pi.le_def, Pi.mul_apply, Pi.one_apply, Pi.single_smul, Pi.smul_apply, Pi.sup_apply, Pi.zero_apply, Set.mem_Icc, Set.uIcc, forall_and, inf_apply, inf_eq_right, inf_eq_right.mpr, le_def, le_mul_of_le_one_left, le_total, mem_Icc
 -/
@@ -430,7 +532,16 @@ definition parallelepiped
         fun (i : ι) (_H : i in Finset.univ) => by fun_prop)
   interior_nonempty' := by
     suffices H : Set.Nonempty (interior (b.equivFunL.symm.toHomeomorph '' Icc 0 1)) by
-      dsimp only
+      dsimp only [_root_.parallelepiped]
+      convert! H
+      exact (b.equivFun_symm_apply _).symm
+    have A : Set.Nonempty (interior (Icc (0 : ι -> Real) 1)) := by
+      rw [← pi_univ_Icc]; rw [interior_pi_set (@finite_univ ι _)]
+      simp only [univ_pi_nonempty_iff, Pi.zero_apply, Pi.one_apply, interior_Icc, nonempty_Ioo,
+        zero_lt_one, imp_true_iff]
+    rwa [← Homeomorph.image_interior, image_nonempty]
+
+@[simp]
 
 中文:
 定义 parallelepiped
@@ -441,7 +552,16 @@ definition parallelepiped
         fun (i : ι) (_H : i in Finset.univ) => by fun_prop)
   interior_nonempty' := by
     suffices H : Set.Nonempty (interior (b.equivFunL.symm.toHomeomorph '' Icc 0 1)) by
-      dsimp only
+      dsimp only [_root_.parallelepiped]
+      convert! H
+      exact (b.equivFun_symm_apply _).symm
+    have A : Set.Nonempty (interior (Icc (0 : ι -> Real) 1)) := by
+      rw [← pi_univ_Icc]; rw [interior_pi_set (@finite_univ ι _)]
+      simp only [univ_pi_nonempty_iff, Pi.zero_apply, Pi.one_apply, interior_Icc, nonempty_Ioo,
+        zero_lt_one, imp_true_iff]
+    rwa [← Homeomorph.image_interior, image_nonempty]
+
+@[simp]
 
 Depends on / 依赖: _root_, _root_.parallelepiped, parallelepiped
 -/
@@ -544,7 +664,24 @@ theorem prod_parallelepiped
     constructor
     · use t ∘ Sum.inl
       constructor
-      · exact ⟨(ht1.1 <| Sum.inl ·), (ht1.2 <| Sum
+      · exact ⟨(ht1.1 <| Sum.inl ·), (ht1.2 <| Sum.inl ·)⟩
+      simp [ht2, Prod.fst_sum]
+    · use t ∘ Sum.inr
+      constructor
+      · exact ⟨(ht1.1 <| Sum.inr ·), (ht1.2 <| Sum.inr ·)⟩
+      simp [ht2, Prod.snd_sum]
+  intro h
+  rcases h with ⟨⟨t, ht1, ht2⟩, ⟨s, hs1, hs2⟩⟩
+  use Sum.elim t s
+  constructor
+  · constructor
+    · change forall x : ι oplus ι', 0 <= Sum.elim t s x
+      aesop
+    · change forall x : ι oplus ι', Sum.elim t s x <= 1
+      aesop
+  ext
+  · simp [ht2, Prod.fst_sum]
+  · simp [hs2, Prod.snd_sum]
 
 中文:
 定理 prod_parallelepiped
@@ -559,7 +696,24 @@ theorem prod_parallelepiped
     constructor
     · use t ∘ Sum.inl
       constructor
-      · exact ⟨(ht1.1 <| Sum.inl ·), (ht1.2 <| Sum
+      · exact ⟨(ht1.1 <| Sum.inl ·), (ht1.2 <| Sum.inl ·)⟩
+      simp [ht2, Prod.fst_sum]
+    · use t ∘ Sum.inr
+      constructor
+      · exact ⟨(ht1.1 <| Sum.inr ·), (ht1.2 <| Sum.inr ·)⟩
+      simp [ht2, Prod.snd_sum]
+  intro h
+  rcases h with ⟨⟨t, ht1, ht2⟩, ⟨s, hs1, hs2⟩⟩
+  use Sum.elim t s
+  constructor
+  · constructor
+    · change forall x : ι oplus ι', 0 <= Sum.elim t s x
+      aesop
+    · change forall x : ι oplus ι', Sum.elim t s x <= 1
+      aesop
+  ext
+  · simp [ht2, Prod.fst_sum]
+  · simp [hs2, Prod.snd_sum]
 
 Depends on / 依赖: Basis.coe_parallelepiped, PositiveCompacts, Prod.fst_sum, Prod.snd_sum, Set.mem_prod, Sum.elim, Sum.inl, Sum.inr, TopologicalSpace, TopologicalSpace.PositiveCompacts.coe_prod, coe_parallelepiped, coe_prod, constructo, fst_sum, mem_parallelepiped_iff, mem_prod, snd_sum
 -/

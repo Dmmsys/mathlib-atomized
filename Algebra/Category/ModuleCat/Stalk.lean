@@ -49,7 +49,18 @@ definition colimit.smul
     letI a : R.obj (max Ua.1 Vb.1) := R.map (leftToMax Ua.1 Vb.1) Ua.2
     letI b : M.obj (max Ua.1 Vb.1) := M.map (rightToMax Ua.1 Vb.1) Vb.2
     a • b) ?_ ?_
-  · rintro ⟨U, a⟩ ⟨V₁, b₁⟩ ⟨V₂, b₂⟩ ⟨f : V₁ ⟶ V₂, rfl :
+  · rintro ⟨U, a⟩ ⟨V₁, b₁⟩ ⟨V₂, b₂⟩ ⟨f : V₁ ⟶ V₂, rfl : b₂ = M.map _ b₁⟩
+    obtain ⟨s, α, β, h₁, h₂⟩ :=
+      bowtie (leftToMax U V₁) (leftToMax U V₂)
+        (rightToMax U V₁) (f ≫ rightToMax U V₂)
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ α β ?_
+    simp [*, ← R.map_comp_apply, ← M.map_comp_apply, -Functor.map_comp]
+  · rintro ⟨U₁, a₁⟩ ⟨U₂, a₂⟩ ⟨V, b⟩ ⟨f : U₁ ⟶ U₂, rfl : a₂ = R.map _ a₁⟩
+    obtain ⟨s, α, β, h₁, h₂⟩ :=
+      bowtie (leftToMax U₁ V) (f ≫ leftToMax U₂ V)
+        (rightToMax U₁ V) (rightToMax U₂ V)
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ α β ?_
+    simp [*, ← R.map_comp_apply, ← M.map_comp_apply, -Functor.map_comp]
 
 中文:
 定义 colimit.smul
@@ -59,7 +70,18 @@ definition colimit.smul
     letI a : R.obj (max Ua.1 Vb.1) := R.map (leftToMax Ua.1 Vb.1) Ua.2
     letI b : M.obj (max Ua.1 Vb.1) := M.map (rightToMax Ua.1 Vb.1) Vb.2
     a • b) ?_ ?_
-  · rintro ⟨U, a⟩ ⟨V₁, b₁⟩ ⟨V₂, b₂⟩ ⟨f : V₁ ⟶ V₂, rfl :
+  · rintro ⟨U, a⟩ ⟨V₁, b₁⟩ ⟨V₂, b₂⟩ ⟨f : V₁ ⟶ V₂, rfl : b₂ = M.map _ b₁⟩
+    obtain ⟨s, α, β, h₁, h₂⟩ :=
+      bowtie (leftToMax U V₁) (leftToMax U V₂)
+        (rightToMax U V₁) (f ≫ rightToMax U V₂)
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ α β ?_
+    simp [*, ← R.map_comp_apply, ← M.map_comp_apply, -Functor.map_comp]
+  · rintro ⟨U₁, a₁⟩ ⟨U₂, a₂⟩ ⟨V, b⟩ ⟨f : U₁ ⟶ U₂, rfl : a₂ = R.map _ a₁⟩
+    obtain ⟨s, α, β, h₁, h₂⟩ :=
+      bowtie (leftToMax U₁ V) (f ≫ leftToMax U₂ V)
+        (rightToMax U₁ V) (rightToMax U₂ V)
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ α β ?_
+    simp [*, ← R.map_comp_apply, ← M.map_comp_apply, -Functor.map_comp]
 
 Depends on / 依赖: Functor, M.map, M.obj, Quot.liftOn, R.map, R.map_comp_apply, R.obj, bowtie, leftToMax, map_comp_apply, rightToMax
 -/
@@ -95,7 +117,56 @@ mul_smul r s m := Quot.induction_on₃ r s m by
     rintro ⟨U₁, a₁⟩ ⟨U₂, a₂⟩ ⟨V, b⟩
     obtain ⟨s, α, β, h₁, h₂, h₃⟩ := crown₃
       (leftToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V) (leftToMax U₁ (max U₂ V))
-      (rightToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V) (leftToMax U₂ V ≫ rightToMax 
+      (rightToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V) (leftToMax U₂ V ≫ rightToMax U₁ (max U₂ V))
+      (rightToMax (max U₁ U₂) V) (rightToMax U₂ V ≫ rightToMax U₁ (max U₂ V))
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ α β ?_
+    dsimp
+    simp only [map_mul, ← ConcreteCategory.comp_apply, ← Functor.map_comp, mul_smul, *]
+one_smul m := Quot.induction_on m by
+    rintro ⟨V, b⟩
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (𝟙 _) (rightToMax _ _) ?_
+    dsimp
+    simp only [map_one, ← ConcreteCategory.comp_apply, ← Functor.map_comp, one_smul,
+      Category.comp_id]
+smul_zero r := Quot.induction_on r by
+    rintro ⟨U, a⟩
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (𝟙 _) (rightToMax _ _) ?_
+    dsimp
+    simp only [map_zero, smul_zero]
+smul_add r m n := Quot.induction_on₃ r m n by
+    rintro ⟨U, a⟩ ⟨V₁, b₁⟩ ⟨V₂, b₂⟩
+    obtain ⟨s, α, β, h₁, h₂, h₃, h₄⟩ := crown₄
+      (leftToMax U V₁ ≫ leftToMax (max U V₁) (max U V₂)) (leftToMax U (max V₁ V₂))
+      (leftToMax U V₂ ≫ rightToMax (max U V₁) (max U V₂)) (leftToMax U (max V₁ V₂))
+      (rightToMax U V₁ ≫ leftToMax (max U V₁) (max U V₂))
+      (leftToMax V₁ V₂ ≫ rightToMax U (max V₁ V₂))
+      (rightToMax U V₂ ≫ rightToMax (max U V₁) (max U V₂))
+      (rightToMax V₁ V₂ ≫ rightToMax U (max V₁ V₂))
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ β α ?_
+    dsimp
+    -- We use this pattern instead of a single `simp` to avoid heatbeat modifications
+    rw [H]; rw [H]; rw [H]
+    simp only [← ConcreteCategory.comp_apply, ← Functor.map_comp]
+    simp only [map_add, ← ConcreteCategory.comp_apply, ← Functor.map_comp, h₁, h₂, h₃, h₄, H]
+    simp only [Functor.map_comp, RingCat.hom_comp, RingHom.coe_comp, Function.comp_apply,
+      Category.assoc, AddCommGrpCat.hom_comp, AddMonoidHom.coe_comp, smul_add]
+add_smul r s m := Quot.induction_on₃ r s m by
+    rintro ⟨U₁, a₁⟩ ⟨U₂, a₂⟩ ⟨V, b⟩
+    obtain ⟨s, α, β, h₁, h₂, h₃, h₄⟩ := crown₄
+      (rightToMax U₁ V ≫ leftToMax (max U₁ V) (max U₂ V)) (rightToMax (max U₁ U₂) V)
+      (rightToMax U₂ V ≫ rightToMax (max U₁ V) (max U₂ V)) (rightToMax (max U₁ U₂) V)
+      (leftToMax U₁ V ≫ leftToMax (max U₁ V) (max U₂ V))
+      (leftToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V)
+      (leftToMax U₂ V ≫ rightToMax (max U₁ V) (max U₂ V))
+      (rightToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V)
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ β α ?_
+    dsimp
+    simp only [add_smul, map_add, ← ConcreteCategory.comp_apply, ← Functor.map_comp, *]
+zero_smul m := Quot.induction_on m by
+    rintro ⟨V, b⟩
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (𝟙 _) (leftToMax _ _) ?_
+    dsimp
+    simp only [map_zero, zero_smul]
 
 中文:
 缩写 filteredColimitsModule
@@ -105,7 +176,56 @@ mul_smul r s m := Quot.induction_on₃ r s m by
     rintro ⟨U₁, a₁⟩ ⟨U₂, a₂⟩ ⟨V, b⟩
     obtain ⟨s, α, β, h₁, h₂, h₃⟩ := crown₃
       (leftToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V) (leftToMax U₁ (max U₂ V))
-      (rightToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V) (leftToMax U₂ V ≫ rightToMax 
+      (rightToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V) (leftToMax U₂ V ≫ rightToMax U₁ (max U₂ V))
+      (rightToMax (max U₁ U₂) V) (rightToMax U₂ V ≫ rightToMax U₁ (max U₂ V))
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ α β ?_
+    dsimp
+    simp only [map_mul, ← ConcreteCategory.comp_apply, ← Functor.map_comp, mul_smul, *]
+one_smul m := Quot.induction_on m by
+    rintro ⟨V, b⟩
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (𝟙 _) (rightToMax _ _) ?_
+    dsimp
+    simp only [map_one, ← ConcreteCategory.comp_apply, ← Functor.map_comp, one_smul,
+      Category.comp_id]
+smul_zero r := Quot.induction_on r by
+    rintro ⟨U, a⟩
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (𝟙 _) (rightToMax _ _) ?_
+    dsimp
+    simp only [map_zero, smul_zero]
+smul_add r m n := Quot.induction_on₃ r m n by
+    rintro ⟨U, a⟩ ⟨V₁, b₁⟩ ⟨V₂, b₂⟩
+    obtain ⟨s, α, β, h₁, h₂, h₃, h₄⟩ := crown₄
+      (leftToMax U V₁ ≫ leftToMax (max U V₁) (max U V₂)) (leftToMax U (max V₁ V₂))
+      (leftToMax U V₂ ≫ rightToMax (max U V₁) (max U V₂)) (leftToMax U (max V₁ V₂))
+      (rightToMax U V₁ ≫ leftToMax (max U V₁) (max U V₂))
+      (leftToMax V₁ V₂ ≫ rightToMax U (max V₁ V₂))
+      (rightToMax U V₂ ≫ rightToMax (max U V₁) (max U V₂))
+      (rightToMax V₁ V₂ ≫ rightToMax U (max V₁ V₂))
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ β α ?_
+    dsimp
+    -- We use this pattern instead of a single `simp` to avoid heatbeat modifications
+    rw [H]; rw [H]; rw [H]
+    simp only [← ConcreteCategory.comp_apply, ← Functor.map_comp]
+    simp only [map_add, ← ConcreteCategory.comp_apply, ← Functor.map_comp, h₁, h₂, h₃, h₄, H]
+    simp only [Functor.map_comp, RingCat.hom_comp, RingHom.coe_comp, Function.comp_apply,
+      Category.assoc, AddCommGrpCat.hom_comp, AddMonoidHom.coe_comp, smul_add]
+add_smul r s m := Quot.induction_on₃ r s m by
+    rintro ⟨U₁, a₁⟩ ⟨U₂, a₂⟩ ⟨V, b⟩
+    obtain ⟨s, α, β, h₁, h₂, h₃, h₄⟩ := crown₄
+      (rightToMax U₁ V ≫ leftToMax (max U₁ V) (max U₂ V)) (rightToMax (max U₁ U₂) V)
+      (rightToMax U₂ V ≫ rightToMax (max U₁ V) (max U₂ V)) (rightToMax (max U₁ U₂) V)
+      (leftToMax U₁ V ≫ leftToMax (max U₁ V) (max U₂ V))
+      (leftToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V)
+      (leftToMax U₂ V ≫ rightToMax (max U₁ V) (max U₂ V))
+      (rightToMax U₁ U₂ ≫ leftToMax (max U₁ U₂) V)
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ β α ?_
+    dsimp
+    simp only [add_smul, map_add, ← ConcreteCategory.comp_apply, ← Functor.map_comp, *]
+zero_smul m := Quot.induction_on m by
+    rintro ⟨V, b⟩
+    refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (𝟙 _) (leftToMax _ _) ?_
+    dsimp
+    simp only [map_zero, zero_smul]
 
 Depends on / 依赖: colimit, colimit.smul
 -/
@@ -177,7 +297,10 @@ abbreviation IsColimit.module
   letI : Module (RingCat.FilteredColimits.colimit R) cM.pt :=
     AddEquiv.module (β := AddCommGrpCat.FilteredColimits.colimit M) _
         (IsColimit.coconePointUniqueUpToIso hcM
-          (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit M)).addCommGroupIs
+          (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit M)).addCommGroupIsoToAddEquiv
+  .compHom (R := RingCat.FilteredColimits.colimit R) _
+    (IsColimit.coconePointUniqueUpToIso hcR
+          (RingCat.FilteredColimits.colimitCoconeIsColimit R)).ringCatIsoToRingEquiv.toRingHom
 
 中文:
 缩写 是余极限.module
@@ -186,7 +309,10 @@ abbreviation IsColimit.module
   letI : Module (RingCat.FilteredColimits.colimit R) cM.pt :=
     AddEquiv.module (β := AddCommGrpCat.FilteredColimits.colimit M) _
         (IsColimit.coconePointUniqueUpToIso hcM
-          (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit M)).addCommGroupIs
+          (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit M)).addCommGroupIsoToAddEquiv
+  .compHom (R := RingCat.FilteredColimits.colimit R) _
+    (IsColimit.coconePointUniqueUpToIso hcR
+          (RingCat.FilteredColimits.colimitCoconeIsColimit R)).ringCatIsoToRingEquiv.toRingHom
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.FilteredColimits.colimit, AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit, AddEquiv, AddEquiv.module, FilteredColimits, IsColimit, IsColimit.coconePointUniqueUpToIso, Module, RingCat, RingCat.FilteredColimits.colimit, RingCat.FilteredColimits.colimitCoconeIsColimit, addCommGroupIsoToAddEquiv, cM.pt, coconePointUniqueUpToIso, colimit, colimitCoconeIsColimit, compHom, filteredColimitsModule, module
 -/
@@ -215,7 +341,17 @@ lemma IsColimit.ι_smul
   let := filteredColimitsModule R M H
   let α := IsColimit.coconePointUniqueUpToIso hcM
     (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit M)
-  let β := IsC
+  let β := IsColimit.coconePointUniqueUpToIso hcR
+    (RingCat.FilteredColimits.colimitCoconeIsColimit R)
+  apply α.addCommGroupIsoToAddEquiv.eq_symm_apply.mpr ?_
+  change (cM.ι.app i ≫ α.hom) _ = (HSMul.hSMul (α := RingCat.FilteredColimits.colimit R)
+    (β := AddCommGrpCat.FilteredColimits.colimit M)
+    ((cR.ι.app i ≫ β.hom) r) ((cM.ι.app i ≫ α.hom) m))
+  simp only [Functor.const_obj_obj, comp_coconePointUniqueUpToIso_hom, α, β]
+  obtain ⟨s, α, H⟩ := IsFilteredOrEmpty.cocone_maps (leftToMax i i) (rightToMax i i)
+  refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (leftToMax _ _ ≫ α) α ?_
+  dsimp
+  simp only [← ConcreteCategory.comp_apply, ← Functor.map_comp, *]
 
 中文:
 引理 是余极限.ι_smul
@@ -226,7 +362,17 @@ lemma IsColimit.ι_smul
   let := filteredColimitsModule R M H
   let α := IsColimit.coconePointUniqueUpToIso hcM
     (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit M)
-  let β := IsC
+  let β := IsColimit.coconePointUniqueUpToIso hcR
+    (RingCat.FilteredColimits.colimitCoconeIsColimit R)
+  apply α.addCommGroupIsoToAddEquiv.eq_symm_apply.mpr ?_
+  change (cM.ι.app i ≫ α.hom) _ = (HSMul.hSMul (α := RingCat.FilteredColimits.colimit R)
+    (β := AddCommGrpCat.FilteredColimits.colimit M)
+    ((cR.ι.app i ≫ β.hom) r) ((cM.ι.app i ≫ α.hom) m))
+  simp only [Functor.const_obj_obj, comp_coconePointUniqueUpToIso_hom, α, β]
+  obtain ⟨s, α, H⟩ := IsFilteredOrEmpty.cocone_maps (leftToMax i i) (rightToMax i i)
+  refine Functor.ιColimitType_eq_of_map_eq_map _ _ _ (leftToMax _ _ ≫ α) α ?_
+  dsimp
+  simp only [← ConcreteCategory.comp_apply, ← Functor.map_comp, *]
 
 Depends on / 依赖: IsColimit, IsColimit.module, module
 -/
@@ -271,7 +417,7 @@ instance :
       (((OpenNhds.inclusion x).op ⋙ M.presheaf).obj i) := by
     dsimp; infer_instance
   Limits.IsColimit.module ((OpenNhds.inclusion x).op ⋙ R) ((OpenNhds.inclusion x).op ⋙ M.presheaf)
-    (fun f r m => M.map_smul _ _ _) (Li
+    (fun f r m => M.map_smul _ _ _) (Limits.colimit.isColimit _) (Limits.colimit.isColimit _)
 
 中文:
 实例 :
@@ -280,7 +426,7 @@ instance :
       (((OpenNhds.inclusion x).op ⋙ M.presheaf).obj i) := by
     dsimp; infer_instance
   Limits.IsColimit.module ((OpenNhds.inclusion x).op ⋙ R) ((OpenNhds.inclusion x).op ⋙ M.presheaf)
-    (fun f r m => M.map_smul _ _ _) (Li
+    (fun f r m => M.map_smul _ _ _) (Limits.colimit.isColimit _) (Limits.colimit.isColimit _)
 
 Depends on / 依赖: IsColimit, Limits, Limits.IsColimit.module, Limits.colimit.isColimit, M.map_smul, M.presheaf, Module, OpenNhds, OpenNhds.inclusion, colimit, inclusion, infer_instance, isColimit, map_smul, module, presheaf
 -/
@@ -304,7 +450,7 @@ lemma germ_ringCat_smul
     dsimp; infer_instance
   Limits.IsColimit.ι_smul ((OpenNhds.inclusion x).op ⋙ R) ((OpenNhds.inclusion x).op ⋙ M.presheaf)
     (fun f r m => M.map_smul _ _ _)
-   
+      (Limits.colimit.isColimit _) (Limits.colimit.isColimit _) ⟨_, _⟩ _ _
 
 中文:
 引理 germ_ringCat_smul
@@ -314,7 +460,7 @@ lemma germ_ringCat_smul
     dsimp; infer_instance
   Limits.IsColimit.ι_smul ((OpenNhds.inclusion x).op ⋙ R) ((OpenNhds.inclusion x).op ⋙ M.presheaf)
     (fun f r m => M.map_smul _ _ _)
-   
+      (Limits.colimit.isColimit _) (Limits.colimit.isColimit _) ⟨_, _⟩ _ _
 
 Depends on / 依赖: IsColimit, Limits, Limits.IsColimit, Limits.colimit.isColimit, M.map_smul, M.presheaf, Module, OpenNhds, OpenNhds.inclusion, colimit, inclusion, infer_instance, isColimit, map_smul, presheaf
 -/
@@ -358,7 +504,9 @@ lemma germ_smul
     dsimp; infer_instance
   Limits.IsColimit.ι_smul ((OpenNhds.inclusion x).op ⋙ R ⋙ forget₂ _ _)
     ((OpenNhds.inclusion x).op ⋙ M.presheaf)
- 
+    (fun f r m => M.map_smul _ _ _) (Limits.isColimitOfPreserves (forget₂ _ _)
+      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙ R))) (Limits.colimit.isColimit _)
+      ⟨_, _⟩ _ _
 
 中文:
 引理 germ_smul
@@ -368,7 +516,9 @@ lemma germ_smul
     dsimp; infer_instance
   Limits.IsColimit.ι_smul ((OpenNhds.inclusion x).op ⋙ R ⋙ forget₂ _ _)
     ((OpenNhds.inclusion x).op ⋙ M.presheaf)
- 
+    (fun f r m => M.map_smul _ _ _) (Limits.isColimitOfPreserves (forget₂ _ _)
+      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙ R))) (Limits.colimit.isColimit _)
+      ⟨_, _⟩ _ _
 
 Depends on / 依赖: IsColimit, Limits, Limits.IsColimit, Limits.colimit.isColimit, Limits.isColimitOfPreserves, M.map_smul, M.presheaf, Module, OpenNhds, OpenNhds.inclusion, RingCat, colimit, inclusion, infer_instance, isColimit, isColimitOfPreserves, map_smul, presheaf
 -/

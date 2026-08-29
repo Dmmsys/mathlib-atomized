@@ -59,7 +59,7 @@ instance [Abelian
       g := P.homMk (cokernel.π f.hom)
       w := by cat_disch
       isLimit := isLimitOfReflects P.ι ((KernelFork.isLimitMapConeEquiv _ _).symm
-        (Abelian.monoIsKernelOfCoke
+        (Abelian.monoIsKernelOfCokernel _ (cokernelIsCokernel (P.ι.map f)) :))}⟩
 
 中文:
 实例 [交换
@@ -69,7 +69,7 @@ instance [Abelian
       g := P.homMk (cokernel.π f.hom)
       w := by cat_disch
       isLimit := isLimitOfReflects P.ι ((KernelFork.isLimitMapConeEquiv _ _).symm
-        (Abelian.monoIsKernelOfCoke
+        (Abelian.monoIsKernelOfCokernel _ (cokernelIsCokernel (P.ι.map f)) :))}⟩
 
 Depends on / 依赖: Abelian, Abelian.monoIsKernelOfCokernel, KernelFork, KernelFork.isLimitMapConeEquiv, P.homMk, P.preservesMonomorphisms_, P.prop_cokernel, X.property, Y.property, cat_disch, cokernel, cokernelIsCokernel, f.hom, isLimit, isLimitMapConeEquiv, isLimitOfReflects, monoIsKernelOfCokernel, prop_cokernel, property
 -/
@@ -117,7 +117,7 @@ instance [Abelian
       g := P.homMk (kernel.ι f.hom)
       w := by cat_disch
       isColimit := isColimitOfReflects P.ι ((CokernelCofork.isColimitMapCoconeEquiv _ _).symm
-        (Abelian.epiIsCoker
+        (Abelian.epiIsCokernelOfKernel _ (kernelIsKernel (P.ι.map f)) :))}⟩
 
 中文:
 实例 [交换
@@ -127,7 +127,7 @@ instance [Abelian
       g := P.homMk (kernel.ι f.hom)
       w := by cat_disch
       isColimit := isColimitOfReflects P.ι ((CokernelCofork.isColimitMapCoconeEquiv _ _).symm
-        (Abelian.epiIsCoker
+        (Abelian.epiIsCokernelOfKernel _ (kernelIsKernel (P.ι.map f)) :))}⟩
 
 Depends on / 依赖: Abelian, Abelian.epiIsCokernelOfKernel, CokernelCofork, CokernelCofork.isColimitMapCoconeEquiv, P.homMk, P.preservesEpimorphisms_, P.prop_kernel, X.property, Y.property, cat_disch, epiIsCokernelOfKernel, f.hom, isColimit, isColimitMapCoconeEquiv, isColimitOfReflects, kernel, kernelIsKernel, prop_kernel, property
 -/

@@ -33,7 +33,10 @@ theorem isFiltered_of_nonempty_limit_colimit_to_colimit_limit
   suffices Nonempty (limit (colimit (F.op ⋙ coyoneda).flip)) by
     obtain ⟨X, y, -⟩ := Types.jointly_surjective' (this.map (h (F.op ⋙ coyoneda)).some).some
     exact ⟨X, ⟨(limitObjIsoLimitCompEvaluation (F.op ⋙ coyoneda) _).hom y⟩⟩
- 
+  let _ (j : Jᵒᵖ) : Unique ((colimit (F.op ⋙ coyoneda).flip).obj j) :=
+    ((colimitObjIsoColimitCompEvaluation (F.op ⋙ coyoneda).flip _ ≪≫
+      Coyoneda.colimitCoyonedaIso _)).toEquiv.unique
+  exact ⟨Types.Limit.mk (colimit (F.op ⋙ coyoneda).flip) (fun j => default) (by subsingleton)⟩
 
 中文:
 定理 isFiltered_of_nonempty_limit_colimit_to_colimit_limit
@@ -42,7 +45,10 @@ theorem isFiltered_of_nonempty_limit_colimit_to_colimit_limit
   suffices Nonempty (limit (colimit (F.op ⋙ coyoneda).flip)) by
     obtain ⟨X, y, -⟩ := Types.jointly_surjective' (this.map (h (F.op ⋙ coyoneda)).some).some
     exact ⟨X, ⟨(limitObjIsoLimitCompEvaluation (F.op ⋙ coyoneda) _).hom y⟩⟩
- 
+  let _ (j : Jᵒᵖ) : Unique ((colimit (F.op ⋙ coyoneda).flip).obj j) :=
+    ((colimitObjIsoColimitCompEvaluation (F.op ⋙ coyoneda).flip _ ≪≫
+      Coyoneda.colimitCoyonedaIso _)).toEquiv.unique
+  exact ⟨Types.Limit.mk (colimit (F.op ⋙ coyoneda).flip) (fun j => default) (by subsingleton)⟩
 
 Depends on / 依赖: Coyoneda, Coyoneda.colimitCoyonedaIso, F.op, IsFiltered, IsFiltered.iff_nonempty_limit, Nonempty, Types.Limit.mk, Types.jointly_surjective, Unique, colimit, colimitCoyonedaIso, colimitObjIsoColimitCompEvaluation, coyoneda, iff_nonempty_limit, jointly_surjective, limitObjIsoLimitCompEvaluation, this.map, toEquiv, toEquiv.unique, unique
 -/

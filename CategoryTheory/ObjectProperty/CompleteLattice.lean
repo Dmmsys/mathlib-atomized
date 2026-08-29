@@ -129,7 +129,7 @@ lemma isoClosure_sup
     · exact Or.inr ⟨Y, hY, ⟨e⟩⟩
   · rintro (hY | hY)
     · exact monotone_isoClosure le_sup_left _ hY
-    · exact monotone_isoClosur
+    · exact monotone_isoClosure le_sup_right _ hY
 
 中文:
 引理 isoClosure_sup
@@ -145,7 +145,7 @@ lemma isoClosure_sup
     · exact Or.inr ⟨Y, hY, ⟨e⟩⟩
   · rintro (hY | hY)
     · exact monotone_isoClosure le_sup_left _ hY
-    · exact monotone_isoClosur
+    · exact monotone_isoClosure le_sup_right _ hY
 
 Depends on / 依赖: Or.inl, Or.inr, le_sup_left, le_sup_right, monotone_isoClosure, prop_sup_iff
 -/

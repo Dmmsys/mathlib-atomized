@@ -1077,7 +1077,7 @@ theorem decode_ge_two
     rw [Nat.le_div_iff_mul_le]
     exacts [h, by decide]
   obtain ⟨m, e⟩ := exists_eq_succ_of_ne_zero (_root_.ne_of_gt this)
-  simp only [decodeSum, div2_val]; cases bodd n <;> 
+  simp only [decodeSum, div2_val]; cases bodd n <;> simp [e]
 
 中文:
 定理 decode_ge_two
@@ -1092,7 +1092,7 @@ theorem decode_ge_two
     rw [Nat.le_div_iff_mul_le]
     exacts [h, by decide]
   obtain ⟨m, e⟩ := exists_eq_succ_of_ne_zero (_root_.ne_of_gt this)
-  simp only [decodeSum, div2_val]; cases bodd n <;> 
+  simp only [decodeSum, div2_val]; cases bodd n <;> simp [e]
 
 Depends on / 依赖: Nat.le_div_iff_mul_le, _root_, _root_.ne_of_gt, decodeSum, div2_val, exacts, exists_eq_succ_of_ne_zero, le_div_iff_mul_le, ne_of_gt
 -/

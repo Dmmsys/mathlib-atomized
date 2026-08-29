@@ -50,7 +50,71 @@ theorem exists_lift_nhds
   choose q mem_source hpq using homeo
   /- Using the hypothesis `cont_a`, we partition the unit interval so that for each
     subinterval `[tₙ, tₙ₊₁]`, the image `g ([tₙ, tₙ₊₁] × {a})` is contained in the
-    domain of som
+    domain of some local homeomorphism `q e`. -/
+  obtain ⟨t, t_0, t_mono, ⟨n_max, h_max⟩, t_sub⟩ :=
+    exists_monotone_Icc_subset_open_cover_unitInterval
+      (fun e => (q e).open_source.preimage cont_a)
+      fun t _ => Set.mem_iUnion.mpr ⟨g (t, a), mem_source _⟩
+  /- We aim to inductively prove the existence of Nₙ and g' continuous on [0, tₙ] × Nₙ for each n,
+    and get the desired result by taking some n with tₙ = 1. -/
+  suffices forall n, exists N, a in N ∧ IsOpen N ∧ exists g' : I × A -> E, ContinuousOn g' (Set.Icc 0 (t n) ×ˢ N) ∧
+      p ∘ g' = f ∧ (forall a, g' (0, a) = g (0, a)) ∧ forall t' <= t n, g' (t', a) = g (t', a) by
+    obtain ⟨N, haN, N_open, hN⟩ := this n_max
+    simp_rw [h_max _ le_rfl] at hN
+    refine ⟨N, N_open.mem_nhds haN, ?_⟩; convert! hN
+    · rw [eq_comm, Set.eq_univ_iff_forall]; exact fun t => ⟨bot_le, le_top⟩
+    · rw [imp_iff_right]; exact le_top
+  refine Nat.rec ⟨_, Set.mem_univ a, isOpen_univ, g, ?_, g_lifts, fun a => rfl, fun _ _ => rfl⟩
+    (fun n ⟨N, haN, N_open, g', cont_g', g'_lifts, g'_0, g'_a⟩ => ?_)
+  · -- the n = 0 case is covered by the hypothesis cont_0.
+    refine (cont_0.comp continuous_snd).continuousOn.congr (fun ta ⟨ht, _⟩ => ?_)
+    rw [t_0]; rw [Set.Icc_self]; rw [Set.mem_singleton_iff] at ht; rw [← ta.eta, ht]; rfl
+  /- Since g ([tₙ, tₙ₊₁] × {a}) is contained in the domain of some local homeomorphism `q e` and
+    g lifts f, f ([tₙ, tₙ₊₁] × {a}) is contained in the codomain (`target`) of `q e`. -/
+  obtain ⟨e, h_sub⟩ := t_sub n
+  have : Set.Icc (t n) (t (n + 1)) ×ˢ {a} subseteq f ⁻¹' (q e).target := by
+    rintro ⟨t0, a'⟩ ⟨ht, ha⟩
+    rw [Set.mem_singleton_iff] at ha; dsimp only at ha
+    rw [← g_lifts]; rw [hpq e]; rw [ha]
+    exact (q e).map_source (h_sub ht)
+  /- Using compactness of [tₙ, tₙ₊₁], we can find a neighborhood v of a such that
+    f ([tₙ, tₙ₊₁] × v) is contained in the codomain of `q e`. -/
+  obtain ⟨u, v, -, v_open, hu, hav, huv⟩ := generalized_tube_lemma isClosed_Icc.isCompact
+    isCompact_singleton ((q e).open_target.preimage f.continuous) this
+  classical
+  /- Use the inverse of `q e` to extend g' from [0, tₙ] × Nₙ₊₁ to [0, tₙ₊₁] × Nₙ₊₁, where
+    Nₙ₊₁ ⊆ v ∩ Nₙ is such that {tₙ} × Nₙ₊₁ is mapped to the domain (`source`) of `q e` by `g'`. -/
+refine ⟨_, ?_, v_open.inter (cont_g'.comp (Continuous.prodMk_right <| t n).continuousOn
+      fun a ha => ⟨?_, ha⟩).isOpen_inter_preimage N_open (q e).open_source,
+    fun ta => if ta.1 <= t n then g' ta else if f ta in (q e).target then (q e).symm (f ta) else g ta,
+    .if (fun ta ⟨⟨_, hav, _, ha⟩, hfr⟩ => ?_) (cont_g'.mono fun ta ⟨hta, ht⟩ => ?_) ?_,
+    ?_, fun a => ?_, fun t0 htn1 => ?_⟩
+  · refine ⟨Set.singleton_subset_iff.mp hav, haN, ?_⟩
+    change g' (t n, a) in (q e).source; rw [g'_a _ le_rfl]
+    exact h_sub ⟨le_rfl, t_mono n.le_succ⟩
+  · rw [← t_0]; exact ⟨t_mono n.zero_le, le_rfl⟩
+  · have ht := Set.mem_ofPred.mp (frontier_le_subset_eq continuous_fst continuous_const hfr)
+    have : f ta in (q e).target := huv ⟨hu (by rw [ht]; exact ⟨le_rfl, t_mono n.le_succ⟩), hav⟩
+    rw [if_pos this]
+    -- here we use that {tₙ} × Nₙ₊₁ is mapped to the domain of `q e`
+    apply (q e).injOn (by rwa [← ta.eta, ht]) ((q e).map_target this)
+    rw [(q e).right_inv this]; rw [← hpq e]; exact congr($g'_lifts ta)
+  · rw [closure_le_eq continuous_fst continuous_const] at ht
+    exact ⟨⟨hta.1.1, ht⟩, hta.2.2.1⟩
+  · simp_rw [not_le]; exact (ContinuousOn.congr ((q e).continuousOn_invFun.comp f.2.continuousOn
+      fun _ h => huv ⟨hu ⟨h.2, h.1.1.2⟩, h.1.2.1⟩)
+fun _ h => if_pos huv ⟨hu ⟨h.2, h.1.1.2⟩, h.1.2.1⟩).mono
+        (Set.inter_subset_inter_right _ <| closure_lt_subset_le continuous_const continuous_fst)
+  · ext ta; rw [Function.comp_apply]; split_ifs with _ hv
+    · exact congr($g'_lifts ta)
+    · rw [hpq e, (q e).right_inv hv]
+    · exact congr($g_lifts ta)
+  · rw [← g'_0]; exact if_pos bot_le
+  · dsimp only; split_ifs with htn hf
+    · exact g'_a t0 htn
+    · apply (q e).injOn ((q e).map_target hf) (h_sub ⟨le_of_not_ge htn, htn1⟩)
+      rw [(q e).right_inv hf]; rw [← hpq e]; exact congr($g_lifts _).symm
+    · rfl
 
 中文:
 定理 存在_lift_nhds
@@ -60,7 +124,71 @@ theorem exists_lift_nhds
   choose q mem_source hpq using homeo
   /- Using the hypothesis `cont_a`, we partition the unit interval so that for each
     subinterval `[tₙ, tₙ₊₁]`, the image `g ([tₙ, tₙ₊₁] × {a})` is contained in the
-    domain of som
+    domain of some local homeomorphism `q e`. -/
+  obtain ⟨t, t_0, t_mono, ⟨n_max, h_max⟩, t_sub⟩ :=
+    exists_monotone_Icc_subset_open_cover_unitInterval
+      (fun e => (q e).open_source.preimage cont_a)
+      fun t _ => Set.mem_iUnion.mpr ⟨g (t, a), mem_source _⟩
+  /- We aim to inductively prove the existence of Nₙ and g' continuous on [0, tₙ] × Nₙ for each n,
+    and get the desired result by taking some n with tₙ = 1. -/
+  suffices forall n, exists N, a in N ∧ IsOpen N ∧ exists g' : I × A -> E, ContinuousOn g' (Set.Icc 0 (t n) ×ˢ N) ∧
+      p ∘ g' = f ∧ (forall a, g' (0, a) = g (0, a)) ∧ forall t' <= t n, g' (t', a) = g (t', a) by
+    obtain ⟨N, haN, N_open, hN⟩ := this n_max
+    simp_rw [h_max _ le_rfl] at hN
+    refine ⟨N, N_open.mem_nhds haN, ?_⟩; convert! hN
+    · rw [eq_comm, Set.eq_univ_iff_forall]; exact fun t => ⟨bot_le, le_top⟩
+    · rw [imp_iff_right]; exact le_top
+  refine Nat.rec ⟨_, Set.mem_univ a, isOpen_univ, g, ?_, g_lifts, fun a => rfl, fun _ _ => rfl⟩
+    (fun n ⟨N, haN, N_open, g', cont_g', g'_lifts, g'_0, g'_a⟩ => ?_)
+  · -- the n = 0 case is covered by the hypothesis cont_0.
+    refine (cont_0.comp continuous_snd).continuousOn.congr (fun ta ⟨ht, _⟩ => ?_)
+    rw [t_0]; rw [Set.Icc_self]; rw [Set.mem_singleton_iff] at ht; rw [← ta.eta, ht]; rfl
+  /- Since g ([tₙ, tₙ₊₁] × {a}) is contained in the domain of some local homeomorphism `q e` and
+    g lifts f, f ([tₙ, tₙ₊₁] × {a}) is contained in the codomain (`target`) of `q e`. -/
+  obtain ⟨e, h_sub⟩ := t_sub n
+  have : Set.Icc (t n) (t (n + 1)) ×ˢ {a} subseteq f ⁻¹' (q e).target := by
+    rintro ⟨t0, a'⟩ ⟨ht, ha⟩
+    rw [Set.mem_singleton_iff] at ha; dsimp only at ha
+    rw [← g_lifts]; rw [hpq e]; rw [ha]
+    exact (q e).map_source (h_sub ht)
+  /- Using compactness of [tₙ, tₙ₊₁], we can find a neighborhood v of a such that
+    f ([tₙ, tₙ₊₁] × v) is contained in the codomain of `q e`. -/
+  obtain ⟨u, v, -, v_open, hu, hav, huv⟩ := generalized_tube_lemma isClosed_Icc.isCompact
+    isCompact_singleton ((q e).open_target.preimage f.continuous) this
+  classical
+  /- Use the inverse of `q e` to extend g' from [0, tₙ] × Nₙ₊₁ to [0, tₙ₊₁] × Nₙ₊₁, where
+    Nₙ₊₁ ⊆ v ∩ Nₙ is such that {tₙ} × Nₙ₊₁ is mapped to the domain (`source`) of `q e` by `g'`. -/
+refine ⟨_, ?_, v_open.inter (cont_g'.comp (Continuous.prodMk_right <| t n).continuousOn
+      fun a ha => ⟨?_, ha⟩).isOpen_inter_preimage N_open (q e).open_source,
+    fun ta => if ta.1 <= t n then g' ta else if f ta in (q e).target then (q e).symm (f ta) else g ta,
+    .if (fun ta ⟨⟨_, hav, _, ha⟩, hfr⟩ => ?_) (cont_g'.mono fun ta ⟨hta, ht⟩ => ?_) ?_,
+    ?_, fun a => ?_, fun t0 htn1 => ?_⟩
+  · refine ⟨Set.singleton_subset_iff.mp hav, haN, ?_⟩
+    change g' (t n, a) in (q e).source; rw [g'_a _ le_rfl]
+    exact h_sub ⟨le_rfl, t_mono n.le_succ⟩
+  · rw [← t_0]; exact ⟨t_mono n.zero_le, le_rfl⟩
+  · have ht := Set.mem_ofPred.mp (frontier_le_subset_eq continuous_fst continuous_const hfr)
+    have : f ta in (q e).target := huv ⟨hu (by rw [ht]; exact ⟨le_rfl, t_mono n.le_succ⟩), hav⟩
+    rw [if_pos this]
+    -- here we use that {tₙ} × Nₙ₊₁ is mapped to the domain of `q e`
+    apply (q e).injOn (by rwa [← ta.eta, ht]) ((q e).map_target this)
+    rw [(q e).right_inv this]; rw [← hpq e]; exact congr($g'_lifts ta)
+  · rw [closure_le_eq continuous_fst continuous_const] at ht
+    exact ⟨⟨hta.1.1, ht⟩, hta.2.2.1⟩
+  · simp_rw [not_le]; exact (ContinuousOn.congr ((q e).continuousOn_invFun.comp f.2.continuousOn
+      fun _ h => huv ⟨hu ⟨h.2, h.1.1.2⟩, h.1.2.1⟩)
+fun _ h => if_pos huv ⟨hu ⟨h.2, h.1.1.2⟩, h.1.2.1⟩).mono
+        (Set.inter_subset_inter_right _ <| closure_lt_subset_le continuous_const continuous_fst)
+  · ext ta; rw [Function.comp_apply]; split_ifs with _ hv
+    · exact congr($g'_lifts ta)
+    · rw [hpq e, (q e).right_inv hv]
+    · exact congr($g_lifts ta)
+  · rw [← g'_0]; exact if_pos bot_le
+  · dsimp only; split_ifs with htn hf
+    · exact g'_a t0 htn
+    · apply (q e).injOn ((q e).map_target hf) (h_sub ⟨le_of_not_ge htn, htn1⟩)
+      rw [(q e).right_inv hf]; rw [← hpq e]; exact congr($g_lifts _).symm
+    · rfl
 -/
 theorem exists_lift_nhds {f : C(I × A, X)} {g : I × A -> E} (g_lifts : p ∘ g = f)
     (cont_0 : Continuous (g ⟨0, ·⟩)) (a : A) (cont_a : Continuous (g ⟨·, a⟩)) :
@@ -151,7 +279,9 @@ theorem continuous_lift
   obtain ⟨N, haN, g', cont_g', g'_lifts, g'_0, -⟩ :=
     homeo.exists_lift_nhds g_lifts cont_0 a (cont_A a)
   refine (cont_g'.congr fun ⟨t, a⟩ ⟨_, ha⟩ => ?_).continuousAt (prod_mem_nhds Filter.univ_mem haN)
-  refine congr_fun (sep.eq_of_comp_eq ho
+  refine congr_fun (sep.eq_of_comp_eq homeo.isLocallyInjective (cont_A a)
+    (cont_g'.comp_continuous (.prodMk_left a) fun _ => ⟨⟨⟩, ha⟩) ?_ 0 (g'_0 a).symm) t
+  ext t; apply congr_fun (g_lifts.trans g'_lifts.symm)
 
 中文:
 定理 continuous_lift
@@ -162,7 +292,9 @@ theorem continuous_lift
   obtain ⟨N, haN, g', cont_g', g'_lifts, g'_0, -⟩ :=
     homeo.exists_lift_nhds g_lifts cont_0 a (cont_A a)
   refine (cont_g'.congr fun ⟨t, a⟩ ⟨_, ha⟩ => ?_).continuousAt (prod_mem_nhds Filter.univ_mem haN)
-  refine congr_fun (sep.eq_of_comp_eq ho
+  refine congr_fun (sep.eq_of_comp_eq homeo.isLocallyInjective (cont_A a)
+    (cont_g'.comp_continuous (.prodMk_left a) fun _ => ⟨⟨⟩, ha⟩) ?_ 0 (g'_0 a).symm) t
+  ext t; apply congr_fun (g_lifts.trans g'_lifts.symm)
 
 Depends on / 依赖: Filter, Filter.univ_mem, _lifts, _lifts.symm, comp_continuous, congr_fun, cont_0, cont_A, cont_g, continuousAt, continuous_iff_continuousAt, eq_of_comp_eq, exists_lift_nhds, g_lifts, g_lifts.trans, homeo.exists_lift_nhds, homeo.isLocallyInjective, isLocallyInjective, prodMk_left, prod_mem_nhds
 -/
@@ -188,7 +320,10 @@ theorem monodromy_theorem
   · apply sep.const_of_comp homeo.isLocallyInjective (this.comp (.prodMk_right 1))
     intro t t'; change p (Γ _ _) = p (Γ _ _); simp_rw [Γ_lifts, γ.eq_fst _ (.inr rfl)]
   · ext; apply Γ_lifts
-  · simp_r
+  · simp_rw [Γ_0]; exact continuous_const
+  · exact fun t => (Γ t).2
+
+omit sep
 
 中文:
 定理 monodromy_theorem
@@ -198,7 +333,10 @@ theorem monodromy_theorem
   · apply sep.const_of_comp homeo.isLocallyInjective (this.comp (.prodMk_right 1))
     intro t t'; change p (Γ _ _) = p (Γ _ _); simp_rw [Γ_lifts, γ.eq_fst _ (.inr rfl)]
   · ext; apply Γ_lifts
-  · simp_r
+  · simp_rw [Γ_0]; exact continuous_const
+  · exact fun t => (Γ t).2
+
+omit sep
 
 Depends on / 依赖: const_of_comp, continuous_const, continuous_lift, eq_fst, homeo.continuous_lift, homeo.isLocallyInjective, isLocallyInjective, prodMk_right, prodSwap, sep.const_of_comp, simp_rw, this.comp
 -/
@@ -225,7 +363,31 @@ theorem existsUnique_continuousMap_lifts
   let F (a : A) : E := Γ _ (somePath a₀ a).source 1
   have (a : A) : p (F a) = f a := by simpa using congr_fun (Γ_lifts _ (Path.source _)) 1
   refine ⟨⟨F, continuous_iff_continuousAt.mpr fun a => ?_⟩, ⟨?_, funext this⟩, fun F' ⟨F'_0, hpF'⟩ =>
-    DFunLike.ext _ _ f
+    DFunLike.ext _ _ fun a => ?_⟩
+  · obtain ⟨p, hep, rfl⟩ := homeo (F a)
+    have hfap : f a in p.target := by rw [← this]; exact p.map_source hep
+    refine ContinuousAt.congr (f := p.symm ∘ f)
+      ((p.continuousAt_symm hfap).comp f.2.continuousAt) ?_
+    have ⟨U, ⟨haU, U_conn⟩, hUp⟩ := (path_connected_basis a).mem_iff.mp
+      ((p.open_target.preimage f.continuous).mem_nhds hfap)
+    refine Filter.mem_of_superset haU fun x hxU => ?_
+    have ⟨γ, hγ⟩ := U_conn.joinedIn _ (mem_of_mem_nhds haU) _ hxU
+    let Γ' : Path e₀ ((p.symm ∘ f) a) :=
+      ⟨Γ _ (somePath a₀ a).source, Γ_0 .., by simp [← this, hep, F]⟩
+    specialize uniq ((somePath a₀ a).trans γ) _ (Γ'.trans <| γ.map' <| p.continuousOn_symm.comp
+f.2.continuousOn by rintro _ ⟨t, rfl⟩; exact hUp (hγ _)) _ (by simp) (somePath a₀ x).source
+      (by simp) (Γ_0 _ (somePath a₀ x).source) _ (Γ_lifts ..) (by simp)
+    · ext
+      simp only [Function.comp, ContinuousMap.coe_coe, Path.trans_apply, ContinuousMap.coe_comp]
+      split_ifs
+      · apply congr_fun (Γ_lifts ..)
+      · simp [Path.map', p.right_inv (hUp (hγ _))]
+    simpa using uniq
+  · exact uniq _ (.const I a₀) _ (.const I e₀) (somePath a₀ a₀).source rfl (Γ_0 ..) rfl (Γ_lifts ..)
+      (by simpa) (Path.target _)
+  · let γ := somePath a₀ a
+    simpa using uniq _ _ (F'.comp γ) (Γ _ γ.source) γ.source γ.source (by simpa) (Γ_0 ..)
+      (by simp [← Function.comp_assoc, hpF']) (Γ_lifts ..) rfl
 
 中文:
 定理 存在Unique_continuousMap_lifts
@@ -235,7 +397,31 @@ theorem existsUnique_continuousMap_lifts
   let F (a : A) : E := Γ _ (somePath a₀ a).source 1
   have (a : A) : p (F a) = f a := by simpa using congr_fun (Γ_lifts _ (Path.source _)) 1
   refine ⟨⟨F, continuous_iff_continuousAt.mpr fun a => ?_⟩, ⟨?_, funext this⟩, fun F' ⟨F'_0, hpF'⟩ =>
-    DFunLike.ext _ _ f
+    DFunLike.ext _ _ fun a => ?_⟩
+  · obtain ⟨p, hep, rfl⟩ := homeo (F a)
+    have hfap : f a in p.target := by rw [← this]; exact p.map_source hep
+    refine ContinuousAt.congr (f := p.symm ∘ f)
+      ((p.continuousAt_symm hfap).comp f.2.continuousAt) ?_
+    have ⟨U, ⟨haU, U_conn⟩, hUp⟩ := (path_connected_basis a).mem_iff.mp
+      ((p.open_target.preimage f.continuous).mem_nhds hfap)
+    refine Filter.mem_of_superset haU fun x hxU => ?_
+    have ⟨γ, hγ⟩ := U_conn.joinedIn _ (mem_of_mem_nhds haU) _ hxU
+    let Γ' : Path e₀ ((p.symm ∘ f) a) :=
+      ⟨Γ _ (somePath a₀ a).source, Γ_0 .., by simp [← this, hep, F]⟩
+    specialize uniq ((somePath a₀ a).trans γ) _ (Γ'.trans <| γ.map' <| p.continuousOn_symm.comp
+f.2.continuousOn by rintro _ ⟨t, rfl⟩; exact hUp (hγ _)) _ (by simp) (somePath a₀ x).source
+      (by simp) (Γ_0 _ (somePath a₀ x).source) _ (Γ_lifts ..) (by simp)
+    · ext
+      simp only [Function.comp, ContinuousMap.coe_coe, Path.trans_apply, ContinuousMap.coe_comp]
+      split_ifs
+      · apply congr_fun (Γ_lifts ..)
+      · simp [Path.map', p.right_inv (hUp (hγ _))]
+    simpa using uniq
+  · exact uniq _ (.const I a₀) _ (.const I e₀) (somePath a₀ a₀).source rfl (Γ_0 ..) rfl (Γ_lifts ..)
+      (by simpa) (Path.target _)
+  · let γ := somePath a₀ a
+    simpa using uniq _ _ (F'.comp γ) (Γ _ γ.source) γ.source γ.source (by simpa) (Γ_0 ..)
+      (by simp [← Function.comp_assoc, hpF']) (Γ_lifts ..) rfl
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.congr, DFunLike, DFunLike.ext, Path.source, congr_fun, continuousA, continuousAt_symm, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, map_source, p.continuousAt_symm, p.map_source, p.symm, p.target, somePath, source, target
 -/
@@ -296,7 +482,40 @@ theorem exists_path_lifts
   choose mem_base U_open _ H _ using fun x => (cov x).2.choose_spec
   obtain ⟨t, t_0, t_mono, ⟨n_max, h_max⟩, t_sub⟩ :=
     exists_monotone_Icc_subset_open_cover_unitInterval
-    (fun x => (U_open x).preimage γ.continuous) fun t _ => Set.mem_iUnion.2 ⟨γ t, mem_base _
+    (fun x => (U_open x).preimage γ.continuous) fun t _ => Set.mem_iUnion.2 ⟨γ t, mem_base _⟩
+  suffices forall n, exists Γ : I -> E, ContinuousOn Γ (Set.Icc 0 (t n)) ∧
+      (Set.Icc 0 (t n)).EqOn (p ∘ Γ) γ ∧ Γ 0 = e by
+    obtain ⟨Γ, cont, eqOn, Γ_0⟩ := this n_max
+    rw [h_max _ le_rfl] at cont eqOn
+    exact ⟨⟨Γ, continuousOn_univ.mp
+      (by convert! cont; rw [eq_comm, Set.eq_univ_iff_forall]; exact fun t => ⟨bot_le, le_top⟩)⟩,
+      funext fun _ => eqOn ⟨bot_le, le_top⟩, Γ_0⟩
+  intro n
+  induction n with
+  | zero =>
+    refine ⟨fun _ => e, continuous_const.continuousOn, fun t ht => ?_, rfl⟩
+    rw [t_0]; rw [Set.Icc_self]; rw [Set.mem_singleton_iff] at ht; subst ht; exact γ_0.symm
+  | succ n ih => ?_
+  obtain ⟨Γ, cont, eqOn, Γ_0⟩ := ih
+  obtain ⟨x, t_sub⟩ := t_sub n
+  have pΓtn : p (Γ (t n)) = γ (t n) := eqOn ⟨t_0 ▸ t_mono n.zero_le, le_rfl⟩
+  have : Nonempty (p ⁻¹' {x}) :=
+    ⟨(H x ⟨Γ (t n), Set.mem_preimage.mpr (pΓtn ▸ t_sub ⟨le_rfl, t_mono n.le_succ⟩)⟩).2⟩
+  let q := (cov x).toTrivialization
+  refine ⟨fun s => if s <= t n then Γ s else q.invFun (γ s, (q (Γ (t n))).2),
+    .if (fun s hs => ?_) (cont.mono fun _ h => ?_) ?_, fun s hs => ?_, ?_⟩
+  · cases frontier_Iic_subset _ hs.2
+    rw [← pΓtn]
+    refine (q.symm_apply_mk_proj ?_).symm
+    rw [q.mem_source]; rw [pΓtn]
+    exact t_sub ⟨le_rfl, t_mono n.le_succ⟩
+  · rw [closure_le_eq continuous_id' continuous_const] at h; exact ⟨h.1.1, h.2⟩
+  · apply q.continuousOn_invFun.comp ((Continuous.prodMk_left _).comp γ.2).continuousOn
+    simp_rw [not_le, q.target_eq]; intro s h
+    exact ⟨t_sub ⟨closure_lt_subset_le continuous_const continuous_subtype_val h.2, h.1.2⟩, ⟨⟩⟩
+  · rw [Function.comp_apply]; split_ifs with h
+    exacts [eqOn ⟨hs.1, h⟩, q.proj_symm_apply' (t_sub ⟨le_of_not_ge h, hs.2⟩)]
+  · dsimp only; rwa [if_pos (t_0 ▸ t_mono n.zero_le)]
 
 中文:
 定理 存在_path_lifts
@@ -306,7 +525,40 @@ theorem exists_path_lifts
   choose mem_base U_open _ H _ using fun x => (cov x).2.choose_spec
   obtain ⟨t, t_0, t_mono, ⟨n_max, h_max⟩, t_sub⟩ :=
     exists_monotone_Icc_subset_open_cover_unitInterval
-    (fun x => (U_open x).preimage γ.continuous) fun t _ => Set.mem_iUnion.2 ⟨γ t, mem_base _
+    (fun x => (U_open x).preimage γ.continuous) fun t _ => Set.mem_iUnion.2 ⟨γ t, mem_base _⟩
+  suffices forall n, exists Γ : I -> E, ContinuousOn Γ (Set.Icc 0 (t n)) ∧
+      (Set.Icc 0 (t n)).EqOn (p ∘ Γ) γ ∧ Γ 0 = e by
+    obtain ⟨Γ, cont, eqOn, Γ_0⟩ := this n_max
+    rw [h_max _ le_rfl] at cont eqOn
+    exact ⟨⟨Γ, continuousOn_univ.mp
+      (by convert! cont; rw [eq_comm, Set.eq_univ_iff_forall]; exact fun t => ⟨bot_le, le_top⟩)⟩,
+      funext fun _ => eqOn ⟨bot_le, le_top⟩, Γ_0⟩
+  intro n
+  induction n with
+  | zero =>
+    refine ⟨fun _ => e, continuous_const.continuousOn, fun t ht => ?_, rfl⟩
+    rw [t_0]; rw [Set.Icc_self]; rw [Set.mem_singleton_iff] at ht; subst ht; exact γ_0.symm
+  | succ n ih => ?_
+  obtain ⟨Γ, cont, eqOn, Γ_0⟩ := ih
+  obtain ⟨x, t_sub⟩ := t_sub n
+  have pΓtn : p (Γ (t n)) = γ (t n) := eqOn ⟨t_0 ▸ t_mono n.zero_le, le_rfl⟩
+  have : Nonempty (p ⁻¹' {x}) :=
+    ⟨(H x ⟨Γ (t n), Set.mem_preimage.mpr (pΓtn ▸ t_sub ⟨le_rfl, t_mono n.le_succ⟩)⟩).2⟩
+  let q := (cov x).toTrivialization
+  refine ⟨fun s => if s <= t n then Γ s else q.invFun (γ s, (q (Γ (t n))).2),
+    .if (fun s hs => ?_) (cont.mono fun _ h => ?_) ?_, fun s hs => ?_, ?_⟩
+  · cases frontier_Iic_subset _ hs.2
+    rw [← pΓtn]
+    refine (q.symm_apply_mk_proj ?_).symm
+    rw [q.mem_source]; rw [pΓtn]
+    exact t_sub ⟨le_rfl, t_mono n.le_succ⟩
+  · rw [closure_le_eq continuous_id' continuous_const] at h; exact ⟨h.1.1, h.2⟩
+  · apply q.continuousOn_invFun.comp ((Continuous.prodMk_left _).comp γ.2).continuousOn
+    simp_rw [not_le, q.target_eq]; intro s h
+    exact ⟨t_sub ⟨closure_lt_subset_le continuous_const continuous_subtype_val h.2, h.1.2⟩, ⟨⟩⟩
+  · rw [Function.comp_apply]; split_ifs with h
+    exacts [eqOn ⟨hs.1, h⟩, q.proj_symm_apply' (t_sub ⟨le_of_not_ge h, hs.2⟩)]
+  · dsimp only; rwa [if_pos (t_0 ▸ t_mono n.zero_le)]
 
 Depends on / 依赖: ContinuousOn, Set.Icc, Set.mem_iUnion, U_open, choose_spec, continu, continuous, exists_monotone_Icc_subset_open_cover_unitInterval, h_max, le_rfl, mem_base, mem_iUnion, n_max, preimage, t_mono, t_sub
 -/
@@ -487,7 +739,11 @@ lemma liftPath_trans
     cov.liftPath (γ.trans γ') e (by simpa) = (⟨Γ, liftPath_zero .., rfl⟩ : Path e (Γ 1)).trans
       ⟨cov.liftPath γ' (Γ 1) (by simpa using congr($(cov.liftPath_lifts γ ..) 1).symm),
         liftPath_zero .., rfl⟩ := by
-refine .symm (cov.eq_liftPath_iff' _).mpr 
+refine .symm (cov.eq_liftPath_iff' _).mpr ⟨funext fun _ => ?_, by simp⟩
+  simp only [ContinuousMap.coe_coe, Function.comp_apply, Path.trans_apply]; split_ifs
+  · exact congr_fun (cov.liftPath_lifts γ e (γ.source.trans hpe)) _
+  · refine congr_fun (cov.liftPath_lifts γ' _ ?_) _
+    simpa using congr($(cov.liftPath_lifts γ ..) 1).symm
 
 中文:
 引理 liftPath_trans
@@ -496,7 +752,11 @@ refine .symm (cov.eq_liftPath_iff' _).mpr
     cov.liftPath (γ.trans γ') e (by simpa) = (⟨Γ, liftPath_zero .., rfl⟩ : Path e (Γ 1)).trans
       ⟨cov.liftPath γ' (Γ 1) (by simpa using congr($(cov.liftPath_lifts γ ..) 1).symm),
         liftPath_zero .., rfl⟩ := by
-refine .symm (cov.eq_liftPath_iff' _).mpr 
+refine .symm (cov.eq_liftPath_iff' _).mpr ⟨funext fun _ => ?_, by simp⟩
+  simp only [ContinuousMap.coe_coe, Function.comp_apply, Path.trans_apply]; split_ifs
+  · exact congr_fun (cov.liftPath_lifts γ e (γ.source.trans hpe)) _
+  · refine congr_fun (cov.liftPath_lifts γ' _ ?_) _
+    simpa using congr($(cov.liftPath_lifts γ ..) 1).symm
 
 Depends on / 依赖: cov.liftPath, liftPath, source, source.trans
 -/
@@ -526,7 +786,8 @@ definition liftHomotopy
     (f ta.2) (H_0 ta.2) ta.1
   continuous_toFun := cov.isLocalHomeomorph.continuous_lift cov.isSeparatedMap H
     (by ext ⟨t, a⟩; exact congr_fun (cov.liftPath_lifts ..) t)
-    (by convert! f.continuous with a; exact cov.liftPath_
+    (by convert! f.continuous with a; exact cov.liftPath_zero ..)
+    fun a => by dsimp only; exact (cov.liftPath (γ_0 := by simp [*])).2
 
 中文:
 定义 liftHomotopy
@@ -535,7 +796,8 @@ definition liftHomotopy
     (f ta.2) (H_0 ta.2) ta.1
   continuous_toFun := cov.isLocalHomeomorph.continuous_lift cov.isSeparatedMap H
     (by ext ⟨t, a⟩; exact congr_fun (cov.liftPath_lifts ..) t)
-    (by convert! f.continuous with a; exact cov.liftPath_
+    (by convert! f.continuous with a; exact cov.liftPath_zero ..)
+    fun a => by dsimp only; exact (cov.liftPath (γ_0 := by simp [*])).2
 -/
 @[simps] def liftHomotopy : C(I × A, E) where
   toFun ta := cov.liftPath (H.comp <| (ContinuousMap.id I).prodMk <| .const I ta.2)
@@ -594,7 +856,8 @@ lemma eq_liftHomotopy_iff
   refine ⟨?_, fun ⟨H'_cont, H'_lifts, H'_0⟩ => funext fun ⟨t, a⟩ => ?_⟩
   · rintro rfl; refine ⟨fun a => ?_, cov.liftHomotopy_lifts H f H_0, cov.liftHomotopy_zero H f H_0⟩
     simp_rw [liftHomotopy_apply]; exact (cov.liftPath _ _ <| H_0 a).2
-  · apply congr_fun ((cov.eq_liftPath_iff _).mpr ⟨H'_co
+  · apply congr_fun ((cov.eq_liftPath_iff _).mpr ⟨H'_cont a, _, H'_0 a⟩) t
+    ext ⟨t, a⟩; exact congr_fun H'_lifts _
 
 中文:
 引理 eq_liftHomotopy_iff
@@ -604,7 +867,8 @@ lemma eq_liftHomotopy_iff
   refine ⟨?_, fun ⟨H'_cont, H'_lifts, H'_0⟩ => funext fun ⟨t, a⟩ => ?_⟩
   · rintro rfl; refine ⟨fun a => ?_, cov.liftHomotopy_lifts H f H_0, cov.liftHomotopy_zero H f H_0⟩
     simp_rw [liftHomotopy_apply]; exact (cov.liftPath _ _ <| H_0 a).2
-  · apply congr_fun ((cov.eq_liftPath_iff _).mpr ⟨H'_co
+  · apply congr_fun ((cov.eq_liftPath_iff _).mpr ⟨H'_cont a, _, H'_0 a⟩) t
+    ext ⟨t, a⟩; exact congr_fun H'_lifts _
 
 Depends on / 依赖: _cont, _lifts, congr_fun, cov.eq_liftPath_iff, cov.liftHomotopy_lifts, cov.liftHomotopy_zero, cov.liftPath, eq_liftPath_iff, liftHomotopy_apply, liftHomotopy_lifts, liftHomotopy_zero, liftPath, simp_rw
 -/
@@ -653,7 +917,19 @@ definition liftHomotopyRel
   body: have F_0 : forall a, F (0, a) = p (f₀' a) := fun a => (F.apply_zero a).trans (congr_fun h₀ a).symm
   have rel : forall t, forall a in S, cov.liftHomotopy F f₀' F_0 (t, a) = f₀' a := fun t a ha => by
     rw [liftHomotopy_apply]; rw [cov.const_of_comp (ContinuousMap.continuous _) _ t 0]
-    · apply co
+    · apply cov.liftPath_zero
+    · intro t t'; simp_rw [← p.comp_apply, cov.liftPath_lifts]
+      exact (F.prop t a ha).trans (F.prop t' a ha).symm
+  { toContinuousMap := cov.liftHomotopy F f₀' F_0
+    map_zero_left := cov.liftHomotopy_zero F f₀' F_0
+    map_one_left := by
+      obtain ⟨a, ha, he⟩ := he
+      simp_rw [toFun_eq_coe, ← ContinuousMap.curry_apply]
+      refine congr_fun (cov.eq_of_comp_eq
+(ContinuousMap.continuous _) f₁'.continuous ?_ a (rel 1 a ha).trans he)
+      ext a; rw [h₁, Function.comp_apply, ContinuousMap.curry_apply]
+      exact (congr_fun (cov.liftHomotopy_lifts F f₀' _) (1, a)).trans (F.apply_one a)
+    prop' := rel }
 
 中文:
 定义 liftHomotopyRel
@@ -661,7 +937,19 @@ definition liftHomotopyRel
   定义体: have F_0 : forall a, F (0, a) = p (f₀' a) := fun a => (F.apply_zero a).trans (congr_fun h₀ a).symm
   have rel : forall t, forall a in S, cov.liftHomotopy F f₀' F_0 (t, a) = f₀' a := fun t a ha => by
     rw [liftHomotopy_apply]; rw [cov.const_of_comp (ContinuousMap.continuous _) _ t 0]
-    · apply co
+    · apply cov.liftPath_zero
+    · intro t t'; simp_rw [← p.comp_apply, cov.liftPath_lifts]
+      exact (F.prop t a ha).trans (F.prop t' a ha).symm
+  { toContinuousMap := cov.liftHomotopy F f₀' F_0
+    map_zero_left := cov.liftHomotopy_zero F f₀' F_0
+    map_one_left := by
+      obtain ⟨a, ha, he⟩ := he
+      simp_rw [toFun_eq_coe, ← ContinuousMap.curry_apply]
+      refine congr_fun (cov.eq_of_comp_eq
+(ContinuousMap.continuous _) f₁'.continuous ?_ a (rel 1 a ha).trans he)
+      ext a; rw [h₁, Function.comp_apply, ContinuousMap.curry_apply]
+      exact (congr_fun (cov.liftHomotopy_lifts F f₀' _) (1, a)).trans (F.apply_one a)
+    prop' := rel }
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.continuous, F.apply_zero, F.prop, apply_zero, comp_apply, congr_fun, const_of_comp, continuous, cov.const_of_comp, cov.liftHomotopy, cov.liftHomotopy_zer, cov.liftPath_lifts, cov.liftPath_zero, liftHomotopy, liftHomotopy_apply, liftHomotopy_zer, liftPath_lifts, liftPath_zero, map_zero_left
 -/
@@ -790,7 +1078,12 @@ definition liftPathQuotient
   let g (γ : Path x y) : Path.Homotopic.Quotient (e : E) (cov.liftPath γ (e : E) (he γ) 1) :=
     .mk ⟨cov.liftPath γ (e : E) (he γ), cov.liftPath_zero .., rfl⟩
   let _i : Setoid (Path x y) := Path.Homotopic.setoid x y
-  have hg (γ γ' : Path x y) 
+  have hg (γ γ' : Path x y) (hγ : γ ≈ γ') : g γ ≍ g γ' := by
+    refine .trans (heq_of_eq ?_) (Path.Homotopic.Quotient.cast_heq rfl
+      (cov.liftPath_apply_one_eq_of_homotopicRel hγ _ (he γ) _))
+    rw [← Path.Homotopic.Quotient.mk_cast]; rw [Path.Homotopic.Quotient.eq]
+    exact cov.homotopicRel_liftPath hγ _ (by aesop) (by aesop)
+  γ.hrecOn g hg
 
 中文:
 定义 liftPathQuotient
@@ -799,7 +1092,12 @@ definition liftPathQuotient
   let g (γ : Path x y) : Path.Homotopic.Quotient (e : E) (cov.liftPath γ (e : E) (he γ) 1) :=
     .mk ⟨cov.liftPath γ (e : E) (he γ), cov.liftPath_zero .., rfl⟩
   let _i : Setoid (Path x y) := Path.Homotopic.setoid x y
-  have hg (γ γ' : Path x y) 
+  have hg (γ γ' : Path x y) (hγ : γ ≈ γ') : g γ ≍ g γ' := by
+    refine .trans (heq_of_eq ?_) (Path.Homotopic.Quotient.cast_heq rfl
+      (cov.liftPath_apply_one_eq_of_homotopicRel hγ _ (he γ) _))
+    rw [← Path.Homotopic.Quotient.mk_cast]; rw [Path.Homotopic.Quotient.eq]
+    exact cov.homotopicRel_liftPath hγ _ (by aesop) (by aesop)
+  γ.hrecOn g hg
 
 Depends on / 依赖: Homotopic, Path.Ho, Path.Homotopic.Quotient, Path.Homotopic.Quotient.cast_heq, Path.Homotopic.Quotient.mk_cast, Path.Homotopic.setoid, Quotient, Setoid, cast_heq, cov.liftPath, cov.liftPath_apply_one_eq_of_homotopicRel, cov.liftPath_zero, heq_of_eq, liftPath, liftPath_apply_one_eq_of_homotopicRel, liftPath_zero, mk_cast, setoid
 -/
@@ -1096,7 +1394,14 @@ theorem existsUnique_continuousMap_lifts
     fun γ γ' Γ Γ' γ_0 γ'_0 Γ_0 Γ'_0 Γ_lifts Γ'_lifts γγ'1 => ?_
   · simpa [and_comm] using cov.exists_path_lifts (f.comp γ) e₀ (by simp [γ_0, he])
   let pγ : Path a₀ (γ 1) := ⟨γ, γ_0, rfl⟩
-  let pγ' : Pat
+  let pγ' : Path a₀ (γ 1) := ⟨γ', γ'_0, γγ'1.symm⟩
+  convert!
+    cov.liftPath_apply_one_eq_of_homotopicRel
+      (ContinuousMap.HomotopicRel.comp_continuousMap (SimplyConnectedSpace.paths_homotopic pγ pγ')
+        f)
+      e₀ (by simp [he]) (by simp [he]) <;>
+    rw [eq_liftPath_iff']
+  exacts [⟨Γ_lifts, Γ_0⟩, ⟨Γ'_lifts, Γ'_0⟩]
 
 中文:
 定理 存在Unique_continuousMap_lifts
@@ -1106,7 +1411,14 @@ theorem existsUnique_continuousMap_lifts
     fun γ γ' Γ Γ' γ_0 γ'_0 Γ_0 Γ'_0 Γ_lifts Γ'_lifts γγ'1 => ?_
   · simpa [and_comm] using cov.exists_path_lifts (f.comp γ) e₀ (by simp [γ_0, he])
   let pγ : Path a₀ (γ 1) := ⟨γ, γ_0, rfl⟩
-  let pγ' : Pat
+  let pγ' : Path a₀ (γ 1) := ⟨γ', γ'_0, γγ'1.symm⟩
+  convert!
+    cov.liftPath_apply_one_eq_of_homotopicRel
+      (ContinuousMap.HomotopicRel.comp_continuousMap (SimplyConnectedSpace.paths_homotopic pγ pγ')
+        f)
+      e₀ (by simp [he]) (by simp [he]) <;>
+    rw [eq_liftPath_iff']
+  exacts [⟨Γ_lifts, Γ_0⟩, ⟨Γ'_lifts, Γ'_0⟩]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopicRel.comp_continuousMap, HomotopicRel, SimplyConnectedSpace, SimplyConnectedSpace.paths_homotopic, _lifts, and_comm, comp_continuousMap, convert, cov.exists_path_lifts, cov.isLocalHomeomorph.existsUnique_continuousMap_lifts, cov.liftPath_apply_one_eq_of_homotopicRel, existsUnique_continuousMap_lifts, exists_path_lifts, f.comp, isLocalHomeomorph, liftPath_apply_one_eq_of_homotopicRel, paths_homotopic
 -/
@@ -1137,7 +1449,21 @@ theorem existsUnique_continuousMap_lifts_of_range_le
   refine cov.isLocalHomeomorph.existsUnique_continuousMap_lifts f a₀ e₀ he (fun γ γ_0 => ?_)
     fun γ γ' Γ Γ' γ_0 γ'_0 Γ_0 Γ'_0 Γ_lifts Γ'_lifts γγ'1 => ?_
   · simpa [and_comm] using cov.exists_path_lifts (f.comp γ) e₀ (by simp [γ_0, he])
-  rw [(cov.eq_liftPath_iff' <| by simp [γ_0]; rw [he]).mp
+  rw [(cov.eq_liftPath_iff' <| by simp [γ_0]; rw [he]).mpr ⟨Γ_lifts, Γ_0⟩,
+    (cov.eq_liftPath_iff' <| by simp [γ'_0, he]).mpr ⟨Γ'_lifts, Γ'_0⟩]
+  let pγ : Path a₀ (γ 1) := ⟨γ, γ_0, rfl⟩
+  let pγ' : Path a₀ (γ 1) := ⟨γ', γ'_0, γγ'1.symm⟩
+  change (cov.monodromy (.mk <| pγ.map f.continuous) ⟨e₀, he⟩).1 =
+    (cov.monodromy (.mk <| pγ'.map f.continuous) ⟨e₀, he⟩).1
+  rw [← Subtype.ext_iff]
+  apply (cov.monodromy_bijective <| .mk (pγ'.map f.continuous).symm).1
+  simp_rw [← monodromy_trans_apply, ← mk_trans]
+  conv_rhs => rw [← eq.2 ⟨.reflTransSymm _⟩, mk_refl, monodromy_refl]
+  rw [Path.map_symm]; rw [← Path.map_trans]
+  set pγγ' : Path a₀ a₀ := pγ.trans pγ'.symm
+  obtain ⟨⟨pΓΓ'⟩, eq⟩ := le ⟨fromPath (.mk pγγ'), rfl⟩
+  rw [mapOfEq_apply]; rw [map_apply]; rw [← mk_map] at eq
+  exact eq ▸ Subtype.ext congr($(cov.monodromy_map <| .mk _))
 
 中文:
 定理 存在Unique_continuousMap_lifts_of_range_le
@@ -1145,7 +1471,21 @@ theorem existsUnique_continuousMap_lifts_of_range_le
   refine cov.isLocalHomeomorph.existsUnique_continuousMap_lifts f a₀ e₀ he (fun γ γ_0 => ?_)
     fun γ γ' Γ Γ' γ_0 γ'_0 Γ_0 Γ'_0 Γ_lifts Γ'_lifts γγ'1 => ?_
   · simpa [and_comm] using cov.exists_path_lifts (f.comp γ) e₀ (by simp [γ_0, he])
-  rw [(cov.eq_liftPath_iff' <| by simp [γ_0]; rw [he]).mp
+  rw [(cov.eq_liftPath_iff' <| by simp [γ_0]; rw [he]).mpr ⟨Γ_lifts, Γ_0⟩,
+    (cov.eq_liftPath_iff' <| by simp [γ'_0, he]).mpr ⟨Γ'_lifts, Γ'_0⟩]
+  let pγ : Path a₀ (γ 1) := ⟨γ, γ_0, rfl⟩
+  let pγ' : Path a₀ (γ 1) := ⟨γ', γ'_0, γγ'1.symm⟩
+  change (cov.monodromy (.mk <| pγ.map f.continuous) ⟨e₀, he⟩).1 =
+    (cov.monodromy (.mk <| pγ'.map f.continuous) ⟨e₀, he⟩).1
+  rw [← Subtype.ext_iff]
+  apply (cov.monodromy_bijective <| .mk (pγ'.map f.continuous).symm).1
+  simp_rw [← monodromy_trans_apply, ← mk_trans]
+  conv_rhs => rw [← eq.2 ⟨.reflTransSymm _⟩, mk_refl, monodromy_refl]
+  rw [Path.map_symm]; rw [← Path.map_trans]
+  set pγγ' : Path a₀ a₀ := pγ.trans pγ'.symm
+  obtain ⟨⟨pΓΓ'⟩, eq⟩ := le ⟨fromPath (.mk pγγ'), rfl⟩
+  rw [mapOfEq_apply]; rw [map_apply]; rw [← mk_map] at eq
+  exact eq ▸ Subtype.ext congr($(cov.monodromy_map <| .mk _))
 
 Depends on / 依赖: _lifts, and_comm, cov.eq_liftPath_iff, cov.exists_path_lifts, cov.isLocalHomeomorph.existsUnique_continuousMap_lifts, cov.monodromy, eq_liftPath_iff, existsUnique_continuousMap_lifts, exists_path_lifts, f.comp, isLocalHomeomorph, monodromy
 -/
@@ -1188,7 +1528,17 @@ theorem IsCoveringMapOn.existsUnique_continuousMap_lifts
     ⟨⟨fun a => ⟨f a, hs a⟩, by fun_prop⟩, rfl⟩
   lift e₀ to p ⁻¹' s using by rw [Set.mem_preimage, he]; apply hs
   rcases cov.isCoveringMap_restrictPreimage.existsUnique_continuousMap_lifts f a₀ e₀
-    (Subtype.ex
+    (Subtype.ext he) with ⟨F, ⟨rfl, hF⟩, hF_unique⟩
+  refine ⟨.comp ⟨Subtype.val, by fun_prop⟩ F, ⟨rfl, ?_⟩, ?_⟩
+  · simp [← hF, Function.comp_def]
+  · rintro F' ⟨hF'₁, hF'₂⟩
+    simp only [ContinuousMap.coe_comp, ContinuousMap.coe_mk, funext_iff,
+      Function.comp_apply] at hF'₂
+    specialize hF_unique
+      ⟨fun a => ⟨F' a, by rw [Set.mem_preimage, hF'₂]; exact (f a).2⟩, by fun_prop⟩
+      ⟨Subtype.ext hF'₁, ?_⟩
+    · ext; simp [← hF'₂]
+    · ext; simp [← hF_unique]
 
 中文:
 定理 IsCoveringMapOn.存在Unique_continuousMap_lifts
@@ -1198,7 +1548,17 @@ theorem IsCoveringMapOn.existsUnique_continuousMap_lifts
     ⟨⟨fun a => ⟨f a, hs a⟩, by fun_prop⟩, rfl⟩
   lift e₀ to p ⁻¹' s using by rw [Set.mem_preimage, he]; apply hs
   rcases cov.isCoveringMap_restrictPreimage.existsUnique_continuousMap_lifts f a₀ e₀
-    (Subtype.ex
+    (Subtype.ext he) with ⟨F, ⟨rfl, hF⟩, hF_unique⟩
+  refine ⟨.comp ⟨Subtype.val, by fun_prop⟩ F, ⟨rfl, ?_⟩, ?_⟩
+  · simp [← hF, Function.comp_def]
+  · rintro F' ⟨hF'₁, hF'₂⟩
+    simp only [ContinuousMap.coe_comp, ContinuousMap.coe_mk, funext_iff,
+      Function.comp_apply] at hF'₂
+    specialize hF_unique
+      ⟨fun a => ⟨F' a, by rw [Set.mem_preimage, hF'₂]; exact (f a).2⟩, by fun_prop⟩
+      ⟨Subtype.ext hF'₁, ?_⟩
+    · ext; simp [← hF'₂]
+    · ext; simp [← hF_unique]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_comp, ContinuousMap.coe_mk, Function, Function.comp_def, Set.mem_preimage, Subtype, Subtype.ext, Subtype.val, coe_comp, coe_mk, comp_def, cov.isCoveringMap_restrictPreimage.existsUnique_continuousMap_lifts, existsUnique_continuousMap_lifts, fun_prop, hF_unique, isCoveringMap_restrictPreimage, mem_preimage
 -/
@@ -1238,7 +1598,13 @@ theorem monodromy_toPermFiber
   let Γ := hp.isCoveringMap.liftPathQuotient γ e
   let g' : C(E, E) := ⟨_, hp.toContinuousConstSMul.continuous_const_smul g⟩
   let p' : C(E, X) := ⟨p, hp.continuous⟩
-  have hgp : p'.comp g' = p'
+  have hgp : p'.comp g' = p' := by ext; simp [g', p', hp.map_smul]
+hp.isCoveringMap.monodromy_eq_of_map_eq (Γ.map g') show (Γ.map g').map p' = _ by
+    rw [← Path.Homotopic.Quotient.map_comp]
+    convert hp.isCoveringMap.map_liftPathQuotient γ e using 2
+    · simp [g', p', hp.map_smul]
+    · simp [g', p', hp.map_smul]
+    · grind
 
 中文:
 定理 monodromy_toPermFiber
@@ -1248,7 +1614,13 @@ theorem monodromy_toPermFiber
   let Γ := hp.isCoveringMap.liftPathQuotient γ e
   let g' : C(E, E) := ⟨_, hp.toContinuousConstSMul.continuous_const_smul g⟩
   let p' : C(E, X) := ⟨p, hp.continuous⟩
-  have hgp : p'.comp g' = p'
+  have hgp : p'.comp g' = p' := by ext; simp [g', p', hp.map_smul]
+hp.isCoveringMap.monodromy_eq_of_map_eq (Γ.map g') show (Γ.map g').map p' = _ by
+    rw [← Path.Homotopic.Quotient.map_comp]
+    convert hp.isCoveringMap.map_liftPathQuotient γ e using 2
+    · simp [g', p', hp.map_smul]
+    · simp [g', p', hp.map_smul]
+    · grind
 
 Depends on / 依赖: hp.isCoveringMap.monodromy, isCoveringMap, monodromy
 -/
@@ -1367,7 +1739,8 @@ theorem ker_monodromyPerm
     aesop
   · obtain ⟨γ, rfl⟩ := h
 refine DFunLike.ext'
-(hp.m
+(hp.monodromy_eq_id_iff e).mpr hp.isCoveringMap.monodromy_eq_of_map_eq γ ?_
+    aesop (add simp FundamentalGroup.mapOfEq_apply)
 
 中文:
 定理 ker_monodromyPerm
@@ -1378,7 +1751,8 @@ refine DFunLike.ext'
     aesop
   · obtain ⟨γ, rfl⟩ := h
 refine DFunLike.ext'
-(hp.m
+(hp.monodromy_eq_id_iff e).mpr hp.isCoveringMap.monodromy_eq_of_map_eq γ ?_
+    aesop (add simp FundamentalGroup.mapOfEq_apply)
 
 Depends on / 依赖: DFunLike, DFunLike.ext, FundamentalGroup, FundamentalGroup.mapOfEq_apply, Homotopic, IsCoveringMap, IsCoveringMap.map_liftPathQuotient, Path.Homotopic.Quotient.map_cast, Quotient, h.symm, hp.isCoveringMap.liftPathQuotient, hp.isCoveringMap.monodromy_eq_of_map_eq, hp.monodromy_eq_id_iff, isCoveringMap, liftPathQuotient, mapOfEq_apply, map_cast, map_liftPathQuotient, monodromy_eq_id_iff, monodromy_eq_of_map_eq
 -/
@@ -1405,7 +1779,8 @@ theorem monodromyPerm_injective
   rw [← MonoidHom.ker_eq_bot_iff]; rw [hp.ker_monodromyPerm e]
   set f : FundamentalGroup E (e : E) ->* FundamentalGroup X x :=
     FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ e.2
-  have : Subsingleton f.range := (Set
+  have : Subsingleton f.range := (Set.subsingleton_coe _).mpr f.subsingleton_coe_range
+  exact Subgroup.eq_bot_of_subsingleton _
 
 中文:
 定理 monodromyPerm_injective
@@ -1415,7 +1790,8 @@ theorem monodromyPerm_injective
   rw [← MonoidHom.ker_eq_bot_iff]; rw [hp.ker_monodromyPerm e]
   set f : FundamentalGroup E (e : E) ->* FundamentalGroup X x :=
     FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ e.2
-  have : Subsingleton f.range := (Set
+  have : Subsingleton f.range := (Set.subsingleton_coe _).mpr f.subsingleton_coe_range
+  exact Subgroup.eq_bot_of_subsingleton _
 
 Depends on / 依赖: FundamentalGroup, FundamentalGroup.mapOfEq, MonoidHom, MonoidHom.ker_eq_bot_iff, Set.subsingleton_coe, Subgroup, Subgroup.eq_bot_of_subsingleton, Subsingleton, choose_spec, continuous, eq_bot_of_subsingleton, f.range, f.subsingleton_coe_range, hp.continuous, hp.ker_monodromyPerm, hp.surjective, ker_eq_bot_iff, ker_monodromyPerm, mapOfEq, subsingleton_coe
 -/
@@ -1439,7 +1815,12 @@ definition fundamentalGroupToMulOpposite
   map_one' := by rw [FundamentalGroup.one_def, IsCoveringMap.monodromy_refl]; simp
   map_mul' γ γ' := by
     rw [FundamentalGroup.mul_def]; rw [IsCoveringMap.monodromy_trans_apply]; rw [← op_mul]; rw [op_inj]
-    apply hp.isCancelSMul.right_ca
+    apply hp.isCancelSMul.right_cancel _ _ e.1
+    simp_rw [mul_smul, fiberEquivGroup_smul_self, ← hp.toPermFiber_apply_apply_coe]
+    congr
+    refine .trans ?_ hp.monodromy_toPermFiber
+    congr
+    exact Subtype.ext (fiberEquivGroup_smul_self ..).symm
 
 中文:
 定义 fundamentalGroupToMulOpposite
@@ -1448,7 +1829,12 @@ definition fundamentalGroupToMulOpposite
   map_one' := by rw [FundamentalGroup.one_def, IsCoveringMap.monodromy_refl]; simp
   map_mul' γ γ' := by
     rw [FundamentalGroup.mul_def]; rw [IsCoveringMap.monodromy_trans_apply]; rw [← op_mul]; rw [op_inj]
-    apply hp.isCancelSMul.right_ca
+    apply hp.isCancelSMul.right_cancel _ _ e.1
+    simp_rw [mul_smul, fiberEquivGroup_smul_self, ← hp.toPermFiber_apply_apply_coe]
+    congr
+    refine .trans ?_ hp.monodromy_toPermFiber
+    congr
+    exact Subtype.ext (fiberEquivGroup_smul_self ..).symm
 
 Depends on / 依赖: fiberEquivGroup, hp.fiberEquivGroup, hp.isCoveringMap.monodromy, isCoveringMap, monodromy
 -/
@@ -1569,7 +1955,13 @@ theorem fundamentalGroupToMulOpposite_surjective
     { toFun := PathConnectedSpace.somePath (e : E) (e' : E)
       continuous_toFun := by fun_prop
       source' := by simp
- 
+      target' := by simp }
+  set γ : Path x x := (Γ.map hp.continuous).cast
+    (by simpa using e.property.symm) (by simpa using e'.property.symm)
+  use .fromPath ⟦γ⟧
+  rw [fundamentalGroupToMulOpposite_apply_eq_Iff]
+  change (e' : E) = _
+  rw [← hp.isCoveringMap.monodromy_eq_of_map_eq (γ := ⟦γ⟧) (Γ := ⟦Γ⟧) rfl]
 
 中文:
 定理 fundamentalGroupToMulOpposite_surjective
@@ -1582,7 +1974,13 @@ theorem fundamentalGroupToMulOpposite_surjective
     { toFun := PathConnectedSpace.somePath (e : E) (e' : E)
       continuous_toFun := by fun_prop
       source' := by simp
- 
+      target' := by simp }
+  set γ : Path x x := (Γ.map hp.continuous).cast
+    (by simpa using e.property.symm) (by simpa using e'.property.symm)
+  use .fromPath ⟦γ⟧
+  rw [fundamentalGroupToMulOpposite_apply_eq_Iff]
+  change (e' : E) = _
+  rw [← hp.isCoveringMap.monodromy_eq_of_map_eq (γ := ⟦γ⟧) (Γ := ⟦Γ⟧) rfl]
 
 Depends on / 依赖: MulOpposite, MulOpposite.unop, PathConnectedSpace, PathConnectedSpace.somePath, continuous, continuous_toFun, e.property.symm, fromPath, fun_prop, fundamentalGroupToMulOpposite_apply_eq_Iff, hp.continuous, hp.map_smul, map_smul, property, property.symm, somePath, source, target
 -/

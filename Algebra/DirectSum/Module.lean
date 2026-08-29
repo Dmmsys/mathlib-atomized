@@ -1790,7 +1790,9 @@ theorem isInternal_submodule_iff_isCompl
   proof: by
   have : forall k, k = i ∨ k = j := fun k => by simpa using Set.ext_iff.mp h k
   rw [isInternal_submodule_iff_iSupIndep_and_iSup_eq_top]; rw [iSup]; rw [← Set.image_univ]; rw [h]; rw [Set.image_insert_eq]; rw [Set.image_singleton]; rw [sSup_pair]; rw [iSupIndep_pair hij this]
-  exact ⟨fun ⟨hd, ht
+  exact ⟨fun ⟨hd, ht⟩ => ⟨hd, codisjoint_iff.mpr ht⟩, fun ⟨hd, ht⟩ => ⟨hd, ht.eq_top⟩⟩
+
+@[simp]
 
 中文:
 定理 is整数ernal_submodule_iff_isCompl
@@ -1798,7 +1800,9 @@ theorem isInternal_submodule_iff_isCompl
   证明: by
   have : forall k, k = i ∨ k = j := fun k => by simpa using Set.ext_iff.mp h k
   rw [isInternal_submodule_iff_iSupIndep_and_iSup_eq_top]; rw [iSup]; rw [← Set.image_univ]; rw [h]; rw [Set.image_insert_eq]; rw [Set.image_singleton]; rw [sSup_pair]; rw [iSupIndep_pair hij this]
-  exact ⟨fun ⟨hd, ht
+  exact ⟨fun ⟨hd, ht⟩ => ⟨hd, codisjoint_iff.mpr ht⟩, fun ⟨hd, ht⟩ => ⟨hd, ht.eq_top⟩⟩
+
+@[simp]
 
 Depends on / 依赖: Set.ext_iff.mp, Set.image_insert_eq, Set.image_singleton, Set.image_univ, codisjoint_iff, codisjoint_iff.mpr, eq_top, ext_iff, ht.eq_top, iSupIndep_pair, image_insert_eq, image_singleton, image_univ, isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, sSup_pair
 -/
@@ -1841,7 +1845,12 @@ lemma isInternal_biSup_submodule_of_iSupIndep
   let p := ⨆ i in s, A i
   have hp : forall i in s, A i <= p := fun i hi => le_biSup A hi
   let e : Submodule R p ≃o Set.Iic p := p.mapIic
-  suffices (e ∘ fun i : s => (A i).comap p.subtype) = fun i =
+  suffices (e ∘ fun i : s => (A i).comap p.subtype) = fun i => ⟨A i, hp i i.property⟩ by
+    rw [← iSupIndep_map_orderIso_iff e]; rw [this]
+    exact .of_coe_Iic_comp h
+  ext i m
+  change m in ((A i).comap p.subtype).map p.subtype ↔ _
+  rw [Submodule.map_comap_subtype]; rw [inf_of_le_right (hp i i.property)]
 
 中文:
 引理 is整数ernal_biSup_submodule_of_iSupIndep
@@ -1851,7 +1860,12 @@ lemma isInternal_biSup_submodule_of_iSupIndep
   let p := ⨆ i in s, A i
   have hp : forall i in s, A i <= p := fun i hi => le_biSup A hi
   let e : Submodule R p ≃o Set.Iic p := p.mapIic
-  suffices (e ∘ fun i : s => (A i).comap p.subtype) = fun i =
+  suffices (e ∘ fun i : s => (A i).comap p.subtype) = fun i => ⟨A i, hp i i.property⟩ by
+    rw [← iSupIndep_map_orderIso_iff e]; rw [this]
+    exact .of_coe_Iic_comp h
+  ext i m
+  change m in ((A i).comap p.subtype).map p.subtype ↔ _
+  rw [Submodule.map_comap_subtype]; rw [inf_of_le_right (hp i i.property)]
 
 Depends on / 依赖: Set.Iic, Submodule, Submodule.map_comap_subtype, i.property, iSupIndep_map_orderIso_iff, iSup_subtype, inf_of_le_, isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, le_biSup, mapIic, map_comap_subtype, of_coe_Iic_comp, p.mapIic, p.subtype, property, subtype
 -/

@@ -74,7 +74,12 @@ definition homDiagram
     · exact congr_hom (limit.w (F ⋙ Cat.objects) f) Y
   map_id X := by
     ext f
-    let :
+    let : Category (objects.obj (F.obj X)) := (inferInstance : Category (F.obj X))
+    simp [Functor.congr_hom congr($(F.map_id X).toFunctor) f]
+  map_comp {_ _ Z} f g := by
+    ext h
+    let : Category (objects.obj (F.obj Z)) := (inferInstance : Category (F.obj Z))
+    simp [Functor.congr_hom congr($(F.map_comp f g).toFunctor) h, eqToHom_map]
 
 中文:
 定义 homDiagram
@@ -86,7 +91,12 @@ definition homDiagram
     · exact congr_hom (limit.w (F ⋙ Cat.objects) f) Y
   map_id X := by
     ext f
-    let :
+    let : Category (objects.obj (F.obj X)) := (inferInstance : Category (F.obj X))
+    simp [Functor.congr_hom congr($(F.map_id X).toFunctor) f]
+  map_comp {_ _ Z} f g := by
+    ext h
+    let : Category (objects.obj (F.obj Z)) := (inferInstance : Category (F.obj Z))
+    simp [Functor.congr_hom congr($(F.map_comp f g).toFunctor) h, eqToHom_map]
 
 Depends on / 依赖: Cat.objects, objects
 -/
@@ -161,7 +171,7 @@ definition limitCone
           map := fun f => limit.π (homDiagram _ _) j f }
 naturality := fun _ _ f => Cat.Hom.ext
         CategoryTheory.Functor.ext (fun X => (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm)
-     
+          fun X Y h => (congr_hom (limit.w (homDiagram X Y) f) h).symm }
 
 中文:
 定义 limitCone
@@ -173,7 +183,7 @@ naturality := fun _ _ f => Cat.Hom.ext
           map := fun f => limit.π (homDiagram _ _) j f }
 naturality := fun _ _ f => Cat.Hom.ext
         CategoryTheory.Functor.ext (fun X => (congr_hom (limit.w (F ⋙ Cat.objects) f) X).symm)
-     
+          fun X Y h => (congr_hom (limit.w (homDiagram X Y) f) h).symm }
 
 Depends on / 依赖: limitConeX
 -/
@@ -207,7 +217,17 @@ definition limitConeLift
               naturality := fun _ _ f => objects.congr_map (s.π.naturality f) } }
     map f := by
       fapply Types.Limit.mk.{v, v}
-      · i
+      · intro j
+        refine eqToHom ?_ ≫ (s.π.app j).toFunctor.map f ≫ eqToHom ?_ <;> simp
+      · intro j j' h
+        dsimp [Functor.comp_obj, homDiagram_obj]
+        simp only [Functor.map_comp, eqToHom_map, ← Functor.comp_map, Category.assoc, eqToHom_trans,
+          eqToHom_trans_assoc]
+        have := congr($((s.π.naturality h).symm).toFunctor)
+        dsimp at this
+        rw [Functor.id_comp] at this
+        rw [Functor.congr_hom this f]
+        simp }
 
 中文:
 定义 limitConeLift
@@ -221,7 +241,17 @@ definition limitConeLift
               naturality := fun _ _ f => objects.congr_map (s.π.naturality f) } }
     map f := by
       fapply Types.Limit.mk.{v, v}
-      · i
+      · intro j
+        refine eqToHom ?_ ≫ (s.π.app j).toFunctor.map f ≫ eqToHom ?_ <;> simp
+      · intro j j' h
+        dsimp [Functor.comp_obj, homDiagram_obj]
+        simp only [Functor.map_comp, eqToHom_map, ← Functor.comp_map, Category.assoc, eqToHom_trans,
+          eqToHom_trans_assoc]
+        have := congr($((s.π.naturality h).symm).toFunctor)
+        dsimp at this
+        rw [Functor.id_comp] at this
+        rw [Functor.congr_hom this f]
+        simp }
 
 Depends on / 依赖: Cat.objects, Category, Category.assoc, Functor, Functor.comp_map, Functor.comp_obj, Functor.map_comp, Functor.toCatHom, Types.Limit.mk, comp_map, comp_obj, congr_map, eqToHom, eqToHom_map, eqToHom_trans, eqToHom_trans_assoc, fapply, homDiagram_obj, limit.lift, map_comp
 -/
@@ -292,7 +322,12 @@ fac s j := Cat.Hom.ext CategoryTheory.Functor.ext (by intro; simp [← comp_appl
     ext1
     refine CategoryTheory.Functor.ext ?_ ?_
     · intro X
-      apply Typ
+      apply Types.limit_ext.{v, v}
+      intro j
+      simp [← comp_apply, ← w j]
+    · intro X Y f
+      have (j : _) := Functor.congr_hom congr($((w j).symm).toFunctor) f
+      simp [this, -homDiagram_obj, limit_π_homDiagram_eqToHom]
 
 中文:
 定义 limitConeIsLimit
@@ -307,7 +342,12 @@ fac s j := Cat.Hom.ext CategoryTheory.Functor.ext (by intro; simp [← comp_appl
     ext1
     refine CategoryTheory.Functor.ext ?_ ?_
     · intro X
-      apply Typ
+      apply Types.limit_ext.{v, v}
+      intro j
+      simp [← comp_apply, ← w j]
+    · intro X Y f
+      have (j : _) := Functor.congr_hom congr($((w j).symm).toFunctor) f
+      simp [this, -homDiagram_obj, limit_π_homDiagram_eqToHom]
 
 Depends on / 依赖: limitConeLift
 -/

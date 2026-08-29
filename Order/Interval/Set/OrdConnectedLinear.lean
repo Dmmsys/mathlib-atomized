@@ -90,7 +90,19 @@ lemma Set.ordConnected_iff_disjoint_Ioo_empty
   · suffices forall z, x < z -> y <= z by ext z; simpa using this z
     intro z hz
     suffices z ∉ Ioo x y by simp_all
-exact fun contra => hxy contr
+exact fun contra => hxy contra h'.out hx hy mem_Icc_of_Ioo contra
+  · by_contra hz'
+    obtain ⟨x', hx', hx''⟩ :=
+      ((finite_Icc x z).inter_of_right I).exists_le_maximal ⟨hx, le_refl _, hz.1.le⟩
+    have hxz : x' < z := lt_of_le_of_ne hx''.1.2.2 (ne_of_mem_of_not_mem hx''.1.1 hz')
+    obtain ⟨y', hy', hy''⟩ :=
+      ((finite_Icc z y).inter_of_right I).exists_le_minimal ⟨hy, hz.2.le, le_refl _⟩
+    have hzy : z < y' := lt_of_le_of_ne' hy''.1.2.1 (ne_of_mem_of_not_mem hy''.1.1 hz')
+    have h₃ : Ioc x' z subseteq Iᶜ := fun t ht ht' => hx''.not_gt (⟨ht', le_trans hx' ht.1.le, ht.2⟩) ht.1
+    have h₄ : Ico z y' subseteq Iᶜ := fun t ht ht' => hy''.not_lt (⟨ht', ht.1, le_trans ht.2.le hy'⟩) ht.2
+    have h₅ : Ioo x' y' subseteq Iᶜ := by
+      simp only [← Ioc_union_Ico_eq_Ioo hxz hzy, union_subset_iff, and_true, h₃, h₄]
+    exact eq_empty_iff_forall_notMem.1 (h' x' hx''.prop.1 y' hy''.prop.1 h₅) z ⟨hxz, hzy⟩
 
 中文:
 引理 集合.ordConnected_iff_disjoint_Ioo_empty
@@ -101,7 +113,19 @@ exact fun contra => hxy contr
   · suffices forall z, x < z -> y <= z by ext z; simpa using this z
     intro z hz
     suffices z ∉ Ioo x y by simp_all
-exact fun contra => hxy contr
+exact fun contra => hxy contra h'.out hx hy mem_Icc_of_Ioo contra
+  · by_contra hz'
+    obtain ⟨x', hx', hx''⟩ :=
+      ((finite_Icc x z).inter_of_right I).exists_le_maximal ⟨hx, le_refl _, hz.1.le⟩
+    have hxz : x' < z := lt_of_le_of_ne hx''.1.2.2 (ne_of_mem_of_not_mem hx''.1.1 hz')
+    obtain ⟨y', hy', hy''⟩ :=
+      ((finite_Icc z y).inter_of_right I).exists_le_minimal ⟨hy, hz.2.le, le_refl _⟩
+    have hzy : z < y' := lt_of_le_of_ne' hy''.1.2.1 (ne_of_mem_of_not_mem hy''.1.1 hz')
+    have h₃ : Ioc x' z subseteq Iᶜ := fun t ht ht' => hx''.not_gt (⟨ht', le_trans hx' ht.1.le, ht.2⟩) ht.1
+    have h₄ : Ico z y' subseteq Iᶜ := fun t ht ht' => hy''.not_lt (⟨ht', ht.1, le_trans ht.2.le hy'⟩) ht.2
+    have h₅ : Ioo x' y' subseteq Iᶜ := by
+      simp only [← Ioc_union_Ico_eq_Ioo hxz hzy, union_subset_iff, and_true, h₃, h₄]
+    exact eq_empty_iff_forall_notMem.1 (h' x' hx''.prop.1 y' hy''.prop.1 h₅) z ⟨hxz, hzy⟩
 
 Depends on / 依赖: Set.subset_compl_iff_disjoint_right, contra, exists_le_maximal, finite_Icc, inter_of_right, le_refl, lt_of_le_of_ne, mem_Icc_of_Ioo, ne_of_me, ordConnected_of_Ioo, simp_rw, subset_compl_iff_disjoint_right
 -/

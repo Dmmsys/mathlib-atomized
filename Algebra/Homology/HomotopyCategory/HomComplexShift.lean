@@ -1360,7 +1360,12 @@ lemma leftShift_comp
   simp only [Cochain.comp_v _ _ h' p (p + n') q rfl (by lia),
     γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia),
     (γ.comp γ' h).leftShift_v a t' (by lia) p q hpq (p + a) (by lia),
-    smul_smul, Linear.units_smul_comp, assoc, Int
+    smul_smul, Linear.units_smul_comp, assoc, Int.negOnePow_add, ← mul_assoc, ← h',
+    comp_v _ _ h (p + a) (p + n') q (by lia) (by lia)]
+  congr 2
+  rw [add_comm n']; rw [mul_add]; rw [Int.negOnePow_add]
+
+@[simp]
 
 中文:
 引理 leftShift_comp
@@ -1372,7 +1377,12 @@ lemma leftShift_comp
   simp only [Cochain.comp_v _ _ h' p (p + n') q rfl (by lia),
     γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia),
     (γ.comp γ' h).leftShift_v a t' (by lia) p q hpq (p + a) (by lia),
-    smul_smul, Linear.units_smul_comp, assoc, Int
+    smul_smul, Linear.units_smul_comp, assoc, Int.negOnePow_add, ← mul_assoc, ← h',
+    comp_v _ _ h (p + a) (p + n') q (by lia) (by lia)]
+  congr 2
+  rw [add_comm n']; rw [mul_add]; rw [Int.negOnePow_add]
+
+@[simp]
 
 Depends on / 依赖: Cochain, Cochain.comp_v, Int.negOnePow_add, Linear, Linear.units_smul_comp, add_comm, comp_v, leftShift_v, mul_add, mul_assoc, negOnePow_add, smul_smul, units_smul_comp
 -/
@@ -1426,7 +1436,15 @@ lemma δ_rightShift
   · have hnm' : n' + 1 = m' := by lia
     ext p q hpq
     dsimp
-    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl]; rw [δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.rightShift_v a n' hn
+    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl]; rw [δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.rightShift_v a n' hn' p (p + n') rfl (p + n) rfl]; rw [γ.rightShift_v a n' hn' (p + 1) q _ (p + m) (by lia)]
+    simp only [shiftFunctorObjXIso, shiftFunctor_obj_d',
+      Linear.comp_units_smul, assoc, HomologicalComplex.XIsoOfEq_inv_comp_d,
+      add_comp, HomologicalComplex.d_comp_XIsoOfEq_inv, Linear.units_smul_comp, smul_add,
+      add_right_inj, smul_smul]
+    simp only [← hm', add_comm m', Int.negOnePow_add, ← mul_assoc,
+      Int.units_mul_self, one_mul]
+  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
+    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [rightShift_zero]; rw [smul_zero]
 
 中文:
 引理 δ_rightShift
@@ -1436,7 +1454,15 @@ lemma δ_rightShift
   · have hnm' : n' + 1 = m' := by lia
     ext p q hpq
     dsimp
-    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl]; rw [δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.rightShift_v a n' hn
+    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl]; rw [δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.rightShift_v a n' hn' p (p + n') rfl (p + n) rfl]; rw [γ.rightShift_v a n' hn' (p + 1) q _ (p + m) (by lia)]
+    simp only [shiftFunctorObjXIso, shiftFunctor_obj_d',
+      Linear.comp_units_smul, assoc, HomologicalComplex.XIsoOfEq_inv_comp_d,
+      add_comp, HomologicalComplex.d_comp_XIsoOfEq_inv, Linear.units_smul_comp, smul_add,
+      add_right_inj, smul_smul]
+    simp only [← hm', add_comm m', Int.negOnePow_add, ← mul_assoc,
+      Int.units_mul_self, one_mul]
+  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
+    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [rightShift_zero]; rw [smul_zero]
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.XIsoOfEq_inv_comp_d, Linear, Linear.comp_units_smul, XIsoOfEq_inv_comp_d, comp_units_smul, rightShift_v, shiftFunctorObjXIso, shiftFunctor_obj_d
 -/
@@ -1502,7 +1528,18 @@ lemma δ_leftShift
   · have hnm' : n' + 1 = m' := by lia
     ext p q hpq
     dsimp
-    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia)]; rw [δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia)]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; r
+    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia)]; rw [δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia)]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia)]; rw [γ.leftShift_v a n' hn' (p + 1) q (by lia) (p + 1 + a) (by lia)]
+    simp only [shiftFunctor_obj_X, shiftFunctorObjXIso, HomologicalComplex.XIsoOfEq_rfl,
+      Iso.refl_hom, id_comp, Linear.units_smul_comp, shiftFunctor_obj_d',
+      Linear.comp_units_smul, smul_add, smul_smul]
+    congr 2
+    · rw [← hnm', add_comm n', mul_add, mul_one]
+      simp only [Int.negOnePow_add, ← mul_assoc, Int.units_mul_self, one_mul]
+    · simp only [← Int.negOnePow_add, ← hn', ← hm', ← hnm]
+      congr 1
+      linarith
+  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
+    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [leftShift_zero]; rw [smul_zero]
 
 中文:
 引理 δ_leftShift
@@ -1512,7 +1549,18 @@ lemma δ_leftShift
   · have hnm' : n' + 1 = m' := by lia
     ext p q hpq
     dsimp
-    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia)]; rw [δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia)]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; r
+    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia)]; rw [δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia)]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia)]; rw [γ.leftShift_v a n' hn' (p + 1) q (by lia) (p + 1 + a) (by lia)]
+    simp only [shiftFunctor_obj_X, shiftFunctorObjXIso, HomologicalComplex.XIsoOfEq_rfl,
+      Iso.refl_hom, id_comp, Linear.units_smul_comp, shiftFunctor_obj_d',
+      Linear.comp_units_smul, smul_add, smul_smul]
+    congr 2
+    · rw [← hnm', add_comm n', mul_add, mul_one]
+      simp only [Int.negOnePow_add, ← mul_assoc, Int.units_mul_self, one_mul]
+    · simp only [← Int.negOnePow_add, ← hn', ← hm', ← hnm]
+      congr 1
+      linarith
+  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
+    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [leftShift_zero]; rw [smul_zero]
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.XIsoOfEq_rfl, XIsoOfEq_rfl, leftShift_v, shiftFunctorObjXIso, shiftFunctor_obj_X
 -/
@@ -1584,7 +1632,9 @@ lemma δ_shift
       δ_v n m hnm _ p q hpq (q - 1) (p + 1) rfl rfl,
       δ_v n m hnm _ (p + a) (q + a) (by lia) (q - 1 + a) (p + 1 + a)
         (by lia) (by lia),
-      smul_add, Linear.units_smul_comp, Linear.co
+      smul_add, Linear.units_smul_comp, Linear.comp_units_smul, add_right_inj]
+    rw [smul_comm]
+  · rw [δ_shape _ _ hnm, δ_shape _ _ hnm, shift_zero, smul_zero]
 
 中文:
 引理 δ_shift
@@ -1597,7 +1647,9 @@ lemma δ_shift
       δ_v n m hnm _ p q hpq (q - 1) (p + 1) rfl rfl,
       δ_v n m hnm _ (p + a) (q + a) (by lia) (q - 1 + a) (p + 1 + a)
         (by lia) (by lia),
-      smul_add, Linear.units_smul_comp, Linear.co
+      smul_add, Linear.units_smul_comp, Linear.comp_units_smul, add_right_inj]
+    rw [smul_comm]
+  · rw [δ_shape _ _ hnm, δ_shape _ _ hnm, shift_zero, smul_zero]
 
 Depends on / 依赖: Linear, Linear.comp_units_smul, Linear.units_smul_comp, add_right_inj, comp_units_smul, shiftFunctor_obj_d, shift_v, shift_zero, smul_add, smul_comm, smul_zero, units_smul_comp
 -/

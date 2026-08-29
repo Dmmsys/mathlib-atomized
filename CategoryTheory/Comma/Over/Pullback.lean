@@ -105,7 +105,12 @@ definition mapPullbackAdj
 invFun := fun v => Over.homMk (v.left ≫ pullback.fst _ _) by
             simp [← Over.w v, pullback.condition]
           left_inv := by cat_disch
-          
+          right_inv := fun v => by
+            ext
+            dsimp
+            ext
+            · simp
+            · simpa using (Over.w v).symm } }
 
 中文:
 定义 mapPullbackAdj
@@ -117,7 +122,12 @@ invFun := fun v => Over.homMk (v.left ≫ pullback.fst _ _) by
 invFun := fun v => Over.homMk (v.left ≫ pullback.fst _ _) by
             simp [← Over.w v, pullback.condition]
           left_inv := by cat_disch
-          
+          right_inv := fun v => by
+            ext
+            dsimp
+            ext
+            · simp
+            · simpa using (Over.w v).symm } }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Over.homMk, Over.w, cat_disch, condition, homEquiv, invFun, left_inv, mkOfHomEquiv, pullback, pullback.condition, pullback.fst, pullback.lift, right_inv, u.left, v.left, x.hom
 -/
@@ -517,7 +527,16 @@ toFun := fun u => Under.homMk (pushout.inl _ _ ≫ u.right) by
         rw [← Under.w u]
         simp only [map_obj_right, pushout_obj, mk_right, mk_hom]
         rw [← assoc]; rw [← assoc]; rw [pushout.condition]
-   
+      invFun := fun v => Under.homMk (pushout.desc v.right y.hom <| by simp)
+      left_inv := fun u => by
+        ext
+        dsimp
+        ext
+        · simp
+        · simpa using (Under.w u).symm
+      right_inv := by cat_disch
+    }
+  }
 
 中文:
 定义 mapPushoutAdj
@@ -529,7 +548,16 @@ toFun := fun u => Under.homMk (pushout.inl _ _ ≫ u.right) by
         rw [← Under.w u]
         simp only [map_obj_right, pushout_obj, mk_right, mk_hom]
         rw [← assoc]; rw [← assoc]; rw [pushout.condition]
-   
+      invFun := fun v => Under.homMk (pushout.desc v.right y.hom <| by simp)
+      left_inv := fun u => by
+        ext
+        dsimp
+        ext
+        · simp
+        · simpa using (Under.w u).symm
+      right_inv := by cat_disch
+    }
+  }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Under.homMk, Under.w, cat_disch, condition, homEquiv, invFun, left_inv, map_obj_hom, map_obj_right, mkOfHomEquiv, mk_hom, mk_right, pushout, pushout.condition, pushout.desc, pushout.inl, pushout_obj, right_inv
 -/

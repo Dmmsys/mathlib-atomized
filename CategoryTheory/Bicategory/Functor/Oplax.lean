@@ -380,7 +380,25 @@ definition comp
   mapComp := fun f g => (G.mapFunctor _ _).map (F.mapComp f g) ≫ G.mapComp (F.map f) (F.map g)
   mapComp_naturality_left := fun η g => by
     dsimp
-    rw [← G.map₂_comp_assoc]; rw [ma
+    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [assoc]
+  mapComp_naturality_right := fun η => by
+    dsimp
+    intros
+    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [assoc]
+  map₂_associator := fun f g h => by
+    dsimp
+    simp only [map₂_associator, ← PrelaxFunctor.map₂_comp_assoc, ← mapComp_naturality_right_assoc,
+      whiskerLeft_comp, assoc]
+    simp only [map₂_associator, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
+      comp_whiskerRight, assoc]
+  map₂_leftUnitor := fun f => by
+    dsimp
+    simp only [map₂_leftUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
+      comp_whiskerRight, assoc]
+  map₂_rightUnitor := fun f => by
+    dsimp
+    simp only [map₂_rightUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_right_assoc,
+      whiskerLeft_comp, assoc]
 
 中文:
 定义 comp
@@ -390,7 +408,25 @@ definition comp
   mapComp := fun f g => (G.mapFunctor _ _).map (F.mapComp f g) ≫ G.mapComp (F.map f) (F.map g)
   mapComp_naturality_left := fun η g => by
     dsimp
-    rw [← G.map₂_comp_assoc]; rw [ma
+    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_left]; rw [assoc]
+  mapComp_naturality_right := fun η => by
+    dsimp
+    intros
+    rw [← G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [G.map₂_comp_assoc]; rw [mapComp_naturality_right]; rw [assoc]
+  map₂_associator := fun f g h => by
+    dsimp
+    simp only [map₂_associator, ← PrelaxFunctor.map₂_comp_assoc, ← mapComp_naturality_right_assoc,
+      whiskerLeft_comp, assoc]
+    simp only [map₂_associator, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
+      comp_whiskerRight, assoc]
+  map₂_leftUnitor := fun f => by
+    dsimp
+    simp only [map₂_leftUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_left_assoc,
+      comp_whiskerRight, assoc]
+  map₂_rightUnitor := fun f => by
+    dsimp
+    simp only [map₂_rightUnitor, PrelaxFunctor.map₂_comp, mapComp_naturality_right_assoc,
+      whiskerLeft_comp, assoc]
 
 Depends on / 依赖: F.toPrelaxFunctor.comp, G.toPrelaxFunctor, toPrelaxFunctor
 -/

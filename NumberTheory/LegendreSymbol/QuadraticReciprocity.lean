@@ -197,7 +197,11 @@ theorem quadratic_reciprocity
   have hq₁ := (Prime.eq_two_or_odd <| @Fact.out q.Prime _).resolve_left hq
   have hq₂ : ringChar (ZMod q) != 2 := (ringChar_zmod_n q).substr hq
   have h :=
-    quadraticChar_odd_prime ((ringChar_zmod_n p).substr hp) hq ((r
+    quadraticChar_odd_prime ((ringChar_zmod_n p).substr hp) hq ((ringChar_zmod_n p).substr hpq)
+  rw [card p] at h
+  have nc : forall n r : Nat, ((n : Int) : ZMod r) = n := fun n r => by norm_cast
+  have nc' : (((-1) ^ (p / 2) : Int) : ZMod q) = (-1) ^ (p / 2) := by norm_cast
+  rw [legendreSym]; rw [legendreSym]; rw [nc]; rw [nc]; rw [h]; rw [map_mul]; rw [mul_rotate']; rw [mul_comm (p / 2)]; rw [← pow_two]; rw [quadraticChar_sq_one (prime_ne_zero q p hpq.symm)]; rw [mul_one]; rw [pow_mul]; rw [χ₄_eq_neg_one_pow hp₁]; rw [nc']; rw [map_pow]; rw [quadraticChar_neg_one hq₂]; rw [card q]; rw [χ₄_eq_neg_one_pow hq₁]
 
 中文:
 定理 quadratic_reciprocity
@@ -207,7 +211,11 @@ theorem quadratic_reciprocity
   have hq₁ := (Prime.eq_two_or_odd <| @Fact.out q.Prime _).resolve_left hq
   have hq₂ : ringChar (ZMod q) != 2 := (ringChar_zmod_n q).substr hq
   have h :=
-    quadraticChar_odd_prime ((ringChar_zmod_n p).substr hp) hq ((r
+    quadraticChar_odd_prime ((ringChar_zmod_n p).substr hp) hq ((ringChar_zmod_n p).substr hpq)
+  rw [card p] at h
+  have nc : forall n r : Nat, ((n : Int) : ZMod r) = n := fun n r => by norm_cast
+  have nc' : (((-1) ^ (p / 2) : Int) : ZMod q) = (-1) ^ (p / 2) := by norm_cast
+  rw [legendreSym]; rw [legendreSym]; rw [nc]; rw [nc]; rw [h]; rw [map_mul]; rw [mul_rotate']; rw [mul_comm (p / 2)]; rw [← pow_two]; rw [quadraticChar_sq_one (prime_ne_zero q p hpq.symm)]; rw [mul_one]; rw [pow_mul]; rw [χ₄_eq_neg_one_pow hp₁]; rw [nc']; rw [map_pow]; rw [quadraticChar_neg_one hq₂]; rw [card q]; rw [χ₄_eq_neg_one_pow hq₁]
 
 Depends on / 依赖: Fact.out, Prime.eq_two_or_odd, eq_two_or_odd, p.Prime, q.Prime, quadraticChar_odd_prime, resolve_left, ringChar, ringChar_zmod_n, substr
 -/
@@ -234,7 +242,7 @@ theorem quadratic_reciprocity'
   · rw [(eq_zero_iff p p).mpr (mod_cast natCast_self p), mul_zero]
   · have qr := congr_arg (· * legendreSym p q) (quadratic_reciprocity hp hq h)
     have : ((q : Int) : ZMod p) != 0 := mod_cast prime_ne_zero p q h
-    simpa only [mul_assoc, ← pow_two, sq_one p 
+    simpa only [mul_assoc, ← pow_two, sq_one p this, mul_one] using qr
 
 中文:
 定理 quadratic_reciprocity'
@@ -244,7 +252,7 @@ theorem quadratic_reciprocity'
   · rw [(eq_zero_iff p p).mpr (mod_cast natCast_self p), mul_zero]
   · have qr := congr_arg (· * legendreSym p q) (quadratic_reciprocity hp hq h)
     have : ((q : Int) : ZMod p) != 0 := mod_cast prime_ne_zero p q h
-    simpa only [mul_assoc, ← pow_two, sq_one p 
+    simpa only [mul_assoc, ← pow_two, sq_one p this, mul_one] using qr
 
 Depends on / 依赖: congr_arg, eq_or_ne, eq_zero_iff, legendreSym, mod_cast, mul_assoc, mul_one, mul_zero, natCast_self, pow_two, prime_ne_zero, quadratic_reciprocity, sq_one
 -/

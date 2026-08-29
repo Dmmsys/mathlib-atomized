@@ -54,7 +54,10 @@ lemma map_eq_one_of_forall_lt
     simp [← Units.val_lt_val, ← map_pow, h.not_gt] at hk
   · simpa [Units.ext_iff] using H
   · rw [← inv_lt_one'] at H
-   
+    obtain ⟨k, hk⟩ := exists_pow_lt H r
+    specialize h (x ^ (-k : Int)) (by simp [hx])
+    simp only [zpow_neg, zpow_natCast, map_inv₀, map_pow] at h
+    simp [← Units.val_lt_val, h.not_gt, inv_pow] at hk
 
 中文:
 引理 map_eq_one_of_对任意_lt
@@ -67,7 +70,10 @@ lemma map_eq_one_of_forall_lt
     simp [← Units.val_lt_val, ← map_pow, h.not_gt] at hk
   · simpa [Units.ext_iff] using H
   · rw [← inv_lt_one'] at H
-   
+    obtain ⟨k, hk⟩ := exists_pow_lt H r
+    specialize h (x ^ (-k : Int)) (by simp [hx])
+    simp only [zpow_neg, zpow_natCast, map_inv₀, map_pow] at h
+    simp [← Units.val_lt_val, h.not_gt, inv_pow] at hk
 
 Depends on / 依赖: IsUnit, IsUnit.mk0, Units.ext_iff, Units.mk0, Units.val_lt_val, exists_pow_lt, ext_iff, h.not_gt, inv_lt_one, inv_pow, lt_trichotomy, map_pow, not_gt, specialize, val_lt_val, zpow_natCast, zpow_neg
 -/
@@ -99,7 +105,51 @@ theorem subgroups_basis
       tauto
     mul := by
       rintro γ
-      obtain ⟨γ₀, h⟩ := exists
+      obtain ⟨γ₀, h⟩ := exists_square_le γ
+      use γ₀
+      rintro - ⟨r, r_in, s, s_in, rfl⟩
+      simp only [ltAddSubgroup, Units.coe_map, MonoidHom.coe_coe, AddSubgroup.coe_set_mk,
+        AddSubmonoid.coe_set_mk, AddSubsemigroup.coe_set_mk, mem_ofPred_eq] at r_in s_in
+      simp only [coe_ltAddSubgroup, Units.coe_map, MonoidHom.coe_coe, mem_ofPred_eq]
+      rw [← restrict_lt_iff_lt_embedding] at *
+      calc
+        v.restrict (r * s) = v.restrict r * v.restrict s := Valuation.map_mul _ _ _
+        _ < γ₀.1 * γ₀.1 := by gcongr <;> exact zero_le
+        _ <= γ := mod_cast h
+    leftMul := by
+      rintro x γ
+      rcases GroupWithZero.eq_zero_or_unit (v x) with (Hx | ⟨γx, Hx⟩)
+      · use (1 : (ValueGroup₀ (.ofClass v))ˣ)
+        rintro y _
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq]
+        rw [Valuation.map_mul]; rw [Hx]; rw [zero_mul]
+        exact Units.zero_lt _
+      · set u : (ValueGroup₀ (.ofClass v))ˣ := Units.mk0 ((restrict₀ (.ofClass v)) x)
+          (by simp [restrict₀_apply]; aesop) with hu_def
+        have hu : ValueGroup₀.embedding u⁻¹.1 = γx⁻¹ := by
+          simp [restrict₀_apply, embedding_apply, hu_def, Hx]
+        use u⁻¹ * γ
+        rintro y (vy_lt : v y < ValueGroup₀.embedding (u⁻¹ * γ).1)
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq]
+        rw [Valuation.map_mul]; rw [Hx]; rw [mul_comm]
+        rw [Units.val_mul]; rw [mul_comm]; rw [map_mul]; rw [hu] at vy_lt
+        simpa using mul_inv_lt_of_lt_mul₀ vy_lt
+    rightMul := by
+      rintro x γ
+      rcases GroupWithZero.eq_zero_or_unit (v x) with (Hx | ⟨γx, Hx⟩)
+      · use 1
+        rintro y _
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq, Valuation.map_mul, Hx,
+          mul_zero, Units.zero_lt]
+      · set u : (ValueGroup₀ (.ofClass v))ˣ := Units.mk0 ((restrict₀ (.ofClass v)) x)
+          (by simp [restrict₀_apply]; aesop) with hu_def
+        have hu : ValueGroup₀.embedding u⁻¹.1 = γx⁻¹ := by simp [restrict₀_apply, embedding_apply,
+          hu_def, Hx]
+        use u⁻¹ * γ
+        rintro y (vy_lt : v y < ValueGroup₀.embedding (u⁻¹ * γ).1)
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq, Valuation.map_mul, Hx]
+        rw [Units.val_mul]; rw [mul_comm]; rw [map_mul]; rw [hu] at vy_lt
+        simpa using mul_inv_lt_of_lt_mul₀ vy_lt }
 
 中文:
 定理 subgroups_basis
@@ -112,7 +162,51 @@ theorem subgroups_basis
       tauto
     mul := by
       rintro γ
-      obtain ⟨γ₀, h⟩ := exists
+      obtain ⟨γ₀, h⟩ := exists_square_le γ
+      use γ₀
+      rintro - ⟨r, r_in, s, s_in, rfl⟩
+      simp only [ltAddSubgroup, Units.coe_map, MonoidHom.coe_coe, AddSubgroup.coe_set_mk,
+        AddSubmonoid.coe_set_mk, AddSubsemigroup.coe_set_mk, mem_ofPred_eq] at r_in s_in
+      simp only [coe_ltAddSubgroup, Units.coe_map, MonoidHom.coe_coe, mem_ofPred_eq]
+      rw [← restrict_lt_iff_lt_embedding] at *
+      calc
+        v.restrict (r * s) = v.restrict r * v.restrict s := Valuation.map_mul _ _ _
+        _ < γ₀.1 * γ₀.1 := by gcongr <;> exact zero_le
+        _ <= γ := mod_cast h
+    leftMul := by
+      rintro x γ
+      rcases GroupWithZero.eq_zero_or_unit (v x) with (Hx | ⟨γx, Hx⟩)
+      · use (1 : (ValueGroup₀ (.ofClass v))ˣ)
+        rintro y _
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq]
+        rw [Valuation.map_mul]; rw [Hx]; rw [zero_mul]
+        exact Units.zero_lt _
+      · set u : (ValueGroup₀ (.ofClass v))ˣ := Units.mk0 ((restrict₀ (.ofClass v)) x)
+          (by simp [restrict₀_apply]; aesop) with hu_def
+        have hu : ValueGroup₀.embedding u⁻¹.1 = γx⁻¹ := by
+          simp [restrict₀_apply, embedding_apply, hu_def, Hx]
+        use u⁻¹ * γ
+        rintro y (vy_lt : v y < ValueGroup₀.embedding (u⁻¹ * γ).1)
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq]
+        rw [Valuation.map_mul]; rw [Hx]; rw [mul_comm]
+        rw [Units.val_mul]; rw [mul_comm]; rw [map_mul]; rw [hu] at vy_lt
+        simpa using mul_inv_lt_of_lt_mul₀ vy_lt
+    rightMul := by
+      rintro x γ
+      rcases GroupWithZero.eq_zero_or_unit (v x) with (Hx | ⟨γx, Hx⟩)
+      · use 1
+        rintro y _
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq, Valuation.map_mul, Hx,
+          mul_zero, Units.zero_lt]
+      · set u : (ValueGroup₀ (.ofClass v))ˣ := Units.mk0 ((restrict₀ (.ofClass v)) x)
+          (by simp [restrict₀_apply]; aesop) with hu_def
+        have hu : ValueGroup₀.embedding u⁻¹.1 = γx⁻¹ := by simp [restrict₀_apply, embedding_apply,
+          hu_def, Hx]
+        use u⁻¹ * γ
+        rintro y (vy_lt : v y < ValueGroup₀.embedding (u⁻¹ * γ).1)
+        simp only [coe_ltAddSubgroup, preimage_ofPred_eq, mem_ofPred_eq, Valuation.map_mul, Hx]
+        rw [Units.val_mul]; rw [mul_comm]; rw [map_mul]; rw [hu] at vy_lt
+        simpa using mul_inv_lt_of_lt_mul₀ vy_lt }
 
 Depends on / 依赖: ofClass
 -/
@@ -215,7 +309,11 @@ definition mk'
     toUniformSpace := @IsTopologicalAddGroup.rightUniformSpace R _ v.subgroups_basis.topology _
     toIsUniformAddGroup := @isUniformAddGroup_of_addCommGroup _ _ v.subgroups_basis.topology _
     is_topological_valuation := by
-      let := @IsTopologicalAddGroup.rightUniformSpace R _ v.subgroups_
+      let := @IsTopologicalAddGroup.rightUniformSpace R _ v.subgroups_basis.topology _
+      intro s
+      rw [Filter.hasBasis_iff.mp v.subgroups_basis.hasBasis_nhds_zero s]
+      simp_rw [restrict_lt_iff_lt_embedding]
+      exact exists_congr fun γ => by rw [true_and]; rfl }
 
 中文:
 定义 mk'
@@ -224,7 +322,11 @@ definition mk'
     toUniformSpace := @IsTopologicalAddGroup.rightUniformSpace R _ v.subgroups_basis.topology _
     toIsUniformAddGroup := @isUniformAddGroup_of_addCommGroup _ _ v.subgroups_basis.topology _
     is_topological_valuation := by
-      let := @IsTopologicalAddGroup.rightUniformSpace R _ v.subgroups_
+      let := @IsTopologicalAddGroup.rightUniformSpace R _ v.subgroups_basis.topology _
+      intro s
+      rw [Filter.hasBasis_iff.mp v.subgroups_basis.hasBasis_nhds_zero s]
+      simp_rw [restrict_lt_iff_lt_embedding]
+      exact exists_congr fun γ => by rw [true_and]; rfl }
 
 Depends on / 依赖: Filter, Filter.hasBasis_iff.mp, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, exists_congr, hasBasis_iff, hasBasis_nhds_zero, isUniformAddGroup_of_addCommGroup, is_topological_valuation, restrict_lt_iff_lt_embedding, rightUniformSpace, simp_rw, subgroups_basis, toIsUniformAddGroup, toUniformSpace, topology, true_and, v.subgroups_basis.hasBasis_nhds_zero, v.subgroups_basis.topology
 -/
@@ -426,7 +528,7 @@ lemma discreteTopology_of_forall_map_eq_one
   contrapose! h
   obtain ⟨x, hx, hx'⟩ := h
   rw [restrict_lt_iff_lt_embedding]; rw [Units.val_one]; rw [map_one] at hx
-  exac
+  exact ⟨x, hx', hx.ne⟩
 
 中文:
 引理 discreteTopology_of_对任意_map_eq_one
@@ -438,7 +540,7 @@ lemma discreteTopology_of_forall_map_eq_one
   contrapose! h
   obtain ⟨x, hx, hx'⟩ := h
   rw [restrict_lt_iff_lt_embedding]; rw [Units.val_one]; rw [map_one] at hx
-  exac
+  exact ⟨x, hx', hx.ne⟩
 
 Depends on / 依赖: Units.val_one, contrapose, discreteTopology_iff_isOpen_singleton_zero, forall_eq, hx.ne, isOpen_iff_mem_nhds, map_one, mem_nhds_zero, mem_ofPred_eq, mem_singleton_iff, restrict_lt_iff_lt_embedding, subset_singleton_iff, val_one
 -/
@@ -489,7 +591,9 @@ theorem cauchy_iff
   · intro h γ
     simp_rw [restrict_lt_iff_lt_embedding]
     exact h _ (Valued.v.subgroups_basis.mem_addGroupFilterBasis γ)
-  · ri
+  · rintro h - ⟨γ, rfl⟩
+    simp_rw [restrict_lt_iff_lt_embedding] at h
+    exact h γ
 
 中文:
 定理 cauchy_iff
@@ -503,7 +607,9 @@ theorem cauchy_iff
   · intro h γ
     simp_rw [restrict_lt_iff_lt_embedding]
     exact h _ (Valued.v.subgroups_basis.mem_addGroupFilterBasis γ)
-  · ri
+  · rintro h - ⟨γ, rfl⟩
+    simp_rw [restrict_lt_iff_lt_embedding] at h
+    exact h γ
 
 Depends on / 依赖: AddGroupFilterBasis, AddGroupFilterBasis.cauchy_iff, Iff.rfl, Valued, Valued.v.subgroups_basis.mem_addGroupFilterBasis, Valued.v.subgroups_basis.mem_addGroupFilterBasis_iff, and_congr, cauchy_iff, mem_addGroupFilterBasis, mem_addGroupFilterBasis_iff, restrict_lt_iff_lt_embedding, simp_rw, subgroups_basis, toUniformSpace_eq
 -/
@@ -664,7 +770,7 @@ theorem isClosed_closedBall
   rw [mem_nhds]
   have hx' : v.restrict x != 0 := hx.ne_zero
 exact ⟨Units.mk0 _ hx', fun y hy hy' => ne_of_lt hy map_sub_swap v.restrict x y ▸
-      (Valuation.map_sub_eq_of_l
+      (Valuation.map_sub_eq_of_lt_left _ <| lt_of_le_of_lt hy' hx)⟩
 
 中文:
 定理 isClosed_closedBall
@@ -676,7 +782,7 @@ exact ⟨Units.mk0 _ hx', fun y hy hy' => ne_of_lt hy map_sub_swap v.restrict x 
   rw [mem_nhds]
   have hx' : v.restrict x != 0 := hx.ne_zero
 exact ⟨Units.mk0 _ hx', fun y hy hy' => ne_of_lt hy map_sub_swap v.restrict x y ▸
-      (Valuation.map_sub_eq_of_l
+      (Valuation.map_sub_eq_of_lt_left _ <| lt_of_le_of_lt hy' hx)⟩
 
 Depends on / 依赖: Units.mk0, Valuation, Valuation.map_sub_eq_of_lt_left, hx.ne_zero, isOpen_compl_iff, isOpen_iff_mem_nhds, lt_of_le_of_lt, map_sub_eq_of_lt_left, map_sub_swap, mem_compl_iff, mem_nhds, mem_ofPred_eq, ne_of_lt, ne_zero, not_le, restrict, v.restrict
 -/

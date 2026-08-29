@@ -202,7 +202,12 @@ lemma Module.mem_support_iff_of_span_eq_top
   · contrapose
     rw [notMem_support_iff]; rw [LocalizedModule.subsingleton_iff_ker_eq_top]; rw [← top_le_iff]; rw [← hs]; rw [Submodule.span_le]; rw [Set.subset_def]
     simp_rw [SetLike.le_def, Submodule.mem_annihilator_span_singleton, SetLike.mem_coe,
-      LocalizedModule.mem_k
+      LocalizedModule.mem_ker_mkLinearMap_iff]
+    push Not
+    simp_rw [and_comm]
+    exact id
+  · intro ⟨m, _, hm⟩
+    exact mem_support_iff_exists_annihilator.mpr ⟨m, hm⟩
 
 中文:
 引理 模.mem_support_iff_of_span_eq_top
@@ -212,7 +217,12 @@ lemma Module.mem_support_iff_of_span_eq_top
   · contrapose
     rw [notMem_support_iff]; rw [LocalizedModule.subsingleton_iff_ker_eq_top]; rw [← top_le_iff]; rw [← hs]; rw [Submodule.span_le]; rw [Set.subset_def]
     simp_rw [SetLike.le_def, Submodule.mem_annihilator_span_singleton, SetLike.mem_coe,
-      LocalizedModule.mem_k
+      LocalizedModule.mem_ker_mkLinearMap_iff]
+    push Not
+    simp_rw [and_comm]
+    exact id
+  · intro ⟨m, _, hm⟩
+    exact mem_support_iff_exists_annihilator.mpr ⟨m, hm⟩
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mem_ker_mkLinearMap_iff, LocalizedModule.subsingleton_iff_ker_eq_top, Set.subset_def, SetLike, SetLike.le_def, SetLike.mem_coe, Submodule, Submodule.mem_annihilator_span_singleton, Submodule.span_le, and_comm, contrapose, le_def, mem_annihilator_span_singleton, mem_coe, mem_ker_mkLinearMap_iff, mem_support_iff_exists_annihilator, mem_support_iff_exists_annihilator.mpr, notMem_support_iff, simp_rw
 -/
@@ -266,7 +276,16 @@ lemma LocalizedModule.subsingleton_iff_support_subset
     obtain ⟨m, hm⟩ := Module.mem_support_iff_exists_annihilator.mp hx'
     obtain ⟨_, ⟨n, rfl⟩, e⟩ := H m
     exact Ideal.IsPrime.mem_of_pow_mem inferInstance n
-      (hm ((Submodule.mem_annihilator_span_singleton _ _)
+      (hm ((Submodule.mem_annihilator_span_singleton _ _).mpr e))
+  · intro H m
+    by_cases h : (Submodule.span R {m}).annihilator = ⊤
+    · rw [Submodule.annihilator_eq_top_iff, Submodule.span_singleton_eq_bot] at h
+      exact ⟨1, one_mem _, by simpa using h⟩
+    obtain ⟨n, hn⟩ : f in (Submodule.span R {m}).annihilator.radical := by
+      rw [Ideal.radical_eq_sInf]; rw [Ideal.mem_sInf]
+      rintro p ⟨hp, hp'⟩
+      simpa using H (Module.mem_support_iff_exists_annihilator (p := ⟨p, hp'⟩).mpr ⟨_, hp⟩)
+    exact ⟨_, ⟨n, rfl⟩, (Submodule.mem_annihilator_span_singleton _ _).mp hn⟩
 
 中文:
 引理 LocalizedModule.subsingleton_iff_support_subset
@@ -278,7 +297,16 @@ lemma LocalizedModule.subsingleton_iff_support_subset
     obtain ⟨m, hm⟩ := Module.mem_support_iff_exists_annihilator.mp hx'
     obtain ⟨_, ⟨n, rfl⟩, e⟩ := H m
     exact Ideal.IsPrime.mem_of_pow_mem inferInstance n
-      (hm ((Submodule.mem_annihilator_span_singleton _ _)
+      (hm ((Submodule.mem_annihilator_span_singleton _ _).mpr e))
+  · intro H m
+    by_cases h : (Submodule.span R {m}).annihilator = ⊤
+    · rw [Submodule.annihilator_eq_top_iff, Submodule.span_singleton_eq_bot] at h
+      exact ⟨1, one_mem _, by simpa using h⟩
+    obtain ⟨n, hn⟩ : f in (Submodule.span R {m}).annihilator.radical := by
+      rw [Ideal.radical_eq_sInf]; rw [Ideal.mem_sInf]
+      rintro p ⟨hp, hp'⟩
+      simpa using H (Module.mem_support_iff_exists_annihilator (p := ⟨p, hp'⟩).mpr ⟨_, hp⟩)
+    exact ⟨_, ⟨n, rfl⟩, (Submodule.mem_annihilator_span_singleton _ _).mp hn⟩
 
 Depends on / 依赖: Ideal.IsPrime.mem_of_pow_mem, IsPrime, LocalizedModule, LocalizedModule.subsingleton_iff, Module, Module.mem_support_iff_exists_annihilator.mp, Submodule, Submodule.annihilator_eq_top_iff, Submodule.mem_annihilator_span_singleton, Submodule.s, Submodule.span, Submodule.span_singleton_eq_bot, annihilator, annihilator_eq_top_iff, mem_annihilator_span_singleton, mem_of_pow_mem, mem_support_iff_exists_annihilator, one_mem, span_singleton_eq_bot, subsingleton_iff
 -/
@@ -393,7 +421,7 @@ lemma Module.support_of_algebra
   simp only [mem_support_iff', ne_eq, PrimeSpectrum.mem_zeroLocus, SetLike.coe_subset_coe]
   refine ⟨fun ⟨m, hm⟩ x hx => not_not.mp fun hx' => ?_, fun H => ⟨1, fun r hr e => ?_⟩⟩
   · simpa [Algebra.smul_def, (show _ = _ from hx)] using hm _ hx'
-  · exact hr (H ((Algebra.algebraMap_eq_smul
+  · exact hr (H ((Algebra.algebraMap_eq_smul_one _).trans e))
 
 中文:
 引理 模.support_of_algebra
@@ -403,7 +431,7 @@ lemma Module.support_of_algebra
   simp only [mem_support_iff', ne_eq, PrimeSpectrum.mem_zeroLocus, SetLike.coe_subset_coe]
   refine ⟨fun ⟨m, hm⟩ x hx => not_not.mp fun hx' => ?_, fun H => ⟨1, fun r hr e => ?_⟩⟩
   · simpa [Algebra.smul_def, (show _ = _ from hx)] using hm _ hx'
-  · exact hr (H ((Algebra.algebraMap_eq_smul
+  · exact hr (H ((Algebra.algebraMap_eq_smul_one _).trans e))
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Algebra.smul_def, PrimeSpectrum, PrimeSpectrum.mem_zeroLocus, SetLike, SetLike.coe_subset_coe, algebraMap_eq_smul_one, coe_subset_coe, mem_support_iff, mem_zeroLocus, ne_eq, not_not, not_not.mp, smul_def
 -/
@@ -525,7 +553,10 @@ lemma Module.support_of_exact
   simp only [Set.mem_union, not_or, and_imp, notMem_support_iff']
   intro H₁ H₂ m
   obtain ⟨r, hr, e₁⟩ := H₂ (g m)
-  rw [← map_smul]; rw [
+  rw [← map_smul]; rw [h] at e₁
+  obtain ⟨m', hm'⟩ := e₁
+  obtain ⟨s, hs, e₁⟩ := H₁ m'
+  exact ⟨_, x.asIdeal.primeCompl.mul_mem hs hr, by rw [mul_smul, ← hm', ← map_smul, e₁, map_zero]⟩
 
 中文:
 引理 模.support_of_exact
@@ -538,7 +569,10 @@ lemma Module.support_of_exact
   simp only [Set.mem_union, not_or, and_imp, notMem_support_iff']
   intro H₁ H₂ m
   obtain ⟨r, hr, e₁⟩ := H₂ (g m)
-  rw [← map_smul]; rw [
+  rw [← map_smul]; rw [h] at e₁
+  obtain ⟨m', hm'⟩ := e₁
+  obtain ⟨s, hs, e₁⟩ := H₁ m'
+  exact ⟨_, x.asIdeal.primeCompl.mul_mem hs hr, by rw [mul_smul, ← hm', ← map_smul, e₁, map_zero]⟩
 
 Depends on / 依赖: Module, Module.support_subset_of_injective, Module.support_subset_of_surjective, Set.mem_union, Set.union_subset, and_imp, asIdeal, contrapose, map_smul, map_zero, mem_union, mul_mem, mul_smul, notMem_support_iff, not_or, primeCompl, subset_antisymm, support_subset_of_injective, support_subset_of_surjective, union_subset
 -/
@@ -596,7 +630,12 @@ lemma Module.mem_support_iff_of_finite
   simp only [SetLike.le_def, Submodule.mem_annihilator_span_singleton] at H ⊢
   contrapose! H
   choose x hx hx' using Subtype.forall'.mp H
-  refine ⟨s.attach.prod 
+  refine ⟨s.attach.prod x, ?_, ?_⟩
+  · rw [← Submodule.annihilator_top, ← hs, Submodule.mem_annihilator_span]
+    intro m
+    obtain ⟨k, hk⟩ := Finset.dvd_prod_of_mem x (Finset.mem_attach _ m)
+    rw [hk]; rw [mul_comm]; rw [mul_smul]; rw [hx]; rw [smul_zero]
+  · exact p.asIdeal.primeCompl.prod_mem (fun x _ => hx' x)
 
 中文:
 引理 模.mem_support_iff_of_finite
@@ -606,7 +645,12 @@ lemma Module.mem_support_iff_of_finite
   simp only [SetLike.le_def, Submodule.mem_annihilator_span_singleton] at H ⊢
   contrapose! H
   choose x hx hx' using Subtype.forall'.mp H
-  refine ⟨s.attach.prod 
+  refine ⟨s.attach.prod x, ?_, ?_⟩
+  · rw [← Submodule.annihilator_top, ← hs, Submodule.mem_annihilator_span]
+    intro m
+    obtain ⟨k, hk⟩ := Finset.dvd_prod_of_mem x (Finset.mem_attach _ m)
+    rw [hk]; rw [mul_comm]; rw [mul_smul]; rw [hx]; rw [smul_zero]
+  · exact p.asIdeal.primeCompl.prod_mem (fun x _ => hx' x)
 
 Depends on / 依赖: Finite, Finset, Finset.dvd_prod_of_mem, Finset.mem_attach, Module, Module.Finite, SetLike, SetLike.le_def, Submodule, Submodule.annihilator_top, Submodule.mem_annihilator_span, Submodule.mem_annihilator_span_singleton, Subtype, Subtype.forall, annihilator_le_of_mem_support, annihilator_top, attach, contrapose, dvd_prod_of_mem, le_def
 -/
@@ -653,7 +697,9 @@ lemma LocalizedModule.exists_subsingleton_away
   have : ⟨p, inferInstance⟩ in (Module.support R M)ᶜ := by
     simpa [Module.notMem_support_iff]
   rw [Module.support_eq_zeroLocus]; rw [← Set.biUnion_of_singleton (Module.annihilator R M : Set R)]; rw [PrimeSpectrum.zeroLocus_iUnion₂]; rw [Set.compl_iInter₂]; rw [Set.mem_iUnion₂] at this
-  obtai
+  obtain ⟨f, hf, hf'⟩ := this
+  exact ⟨f, by simpa using hf', subsingleton_iff.mpr
+    fun m => ⟨f, Submonoid.mem_powers f, Module.mem_annihilator.mp hf _⟩⟩
 
 中文:
 引理 LocalizedModule.存在_subsingleton_away
@@ -662,7 +708,9 @@ lemma LocalizedModule.exists_subsingleton_away
   have : ⟨p, inferInstance⟩ in (Module.support R M)ᶜ := by
     simpa [Module.notMem_support_iff]
   rw [Module.support_eq_zeroLocus]; rw [← Set.biUnion_of_singleton (Module.annihilator R M : Set R)]; rw [PrimeSpectrum.zeroLocus_iUnion₂]; rw [Set.compl_iInter₂]; rw [Set.mem_iUnion₂] at this
-  obtai
+  obtain ⟨f, hf, hf'⟩ := this
+  exact ⟨f, by simpa using hf', subsingleton_iff.mpr
+    fun m => ⟨f, Submonoid.mem_powers f, Module.mem_annihilator.mp hf _⟩⟩
 
 Depends on / 依赖: Module, Module.annihilator, Module.mem_annihilator.mp, Module.notMem_support_iff, Module.support, Module.support_eq_zeroLocus, PrimeSpectrum, PrimeSpectrum.zeroLocus_iUnion, Set.biUnion_of_singleton, Set.compl_iInter, Set.mem_iUnion, Submonoid, Submonoid.mem_powers, annihilator, biUnion_of_singleton, mem_annihilator, mem_powers, notMem_support_iff, subsingleton_iff, subsingleton_iff.mpr
 -/
@@ -745,7 +793,23 @@ theorem Module.support_quotient
     · rw [support_eq_zeroLocus]
       apply PrimeSpectrum.zeroLocus_anti_mono_ideal
       rw [Submodule.annihilator_quotient]
-      exact fun x hx => Submodule.
+      exact fun x hx => Submodule.mem_colon.mpr fun p hp => Submodule.smul_mem_smul hx hp
+  · rintro p ⟨hp₁, hp₂⟩
+    rw [Module.mem_support_iff] at hp₁ ⊢
+    let Rₚ := Localization.AtPrime p.asIdeal
+    let Mₚ := LocalizedModule p.asIdeal.primeCompl M
+    set Mₚ' := LocalizedModule p.asIdeal.primeCompl (M ⧸ (I • ⊤ : Submodule R M))
+    let Mₚ'' := Mₚ ⧸ I.map (algebraMap R Rₚ) • (⊤ : Submodule Rₚ Mₚ)
+    let e : Mₚ' ≃ₗ[Rₚ] Mₚ'' := (localizedQuotientEquiv _ _).symm ≪≫ₗ
+      Submodule.quotEquivOfEq _ _ (by rw [Submodule.localized,
+        Submodule.localized'_smul, Ideal.localized'_eq_map, Submodule.localized'_top])
+    have : Nontrivial Mₚ'' := by
+      rw [Submodule.Quotient.nontrivial_iff]; rw [ne_comm]
+      apply Submodule.top_ne_ideal_smul_of_le_jacobson_annihilator
+      refine trans ?_ (IsLocalRing.maximalIdeal_le_jacobson _)
+      rw [← Localization.AtPrime.map_eq_maximalIdeal]
+      exact Ideal.map_mono hp₂
+    exact e.nontrivial
 
 中文:
 定理 模.support_quotient
@@ -757,7 +821,23 @@ theorem Module.support_quotient
     · rw [support_eq_zeroLocus]
       apply PrimeSpectrum.zeroLocus_anti_mono_ideal
       rw [Submodule.annihilator_quotient]
-      exact fun x hx => Submodule.
+      exact fun x hx => Submodule.mem_colon.mpr fun p hp => Submodule.smul_mem_smul hx hp
+  · rintro p ⟨hp₁, hp₂⟩
+    rw [Module.mem_support_iff] at hp₁ ⊢
+    let Rₚ := Localization.AtPrime p.asIdeal
+    let Mₚ := LocalizedModule p.asIdeal.primeCompl M
+    set Mₚ' := LocalizedModule p.asIdeal.primeCompl (M ⧸ (I • ⊤ : Submodule R M))
+    let Mₚ'' := Mₚ ⧸ I.map (algebraMap R Rₚ) • (⊤ : Submodule Rₚ Mₚ)
+    let e : Mₚ' ≃ₗ[Rₚ] Mₚ'' := (localizedQuotientEquiv _ _).symm ≪≫ₗ
+      Submodule.quotEquivOfEq _ _ (by rw [Submodule.localized,
+        Submodule.localized'_smul, Ideal.localized'_eq_map, Submodule.localized'_top])
+    have : Nontrivial Mₚ'' := by
+      rw [Submodule.Quotient.nontrivial_iff]; rw [ne_comm]
+      apply Submodule.top_ne_ideal_smul_of_le_jacobson_annihilator
+      refine trans ?_ (IsLocalRing.maximalIdeal_le_jacobson _)
+      rw [← Localization.AtPrime.map_eq_maximalIdeal]
+      exact Ideal.map_mono hp₂
+    exact e.nontrivial
 
 Depends on / 依赖: AtPrime, Localization, Localization.AtPrime, LocalizedModul, LocalizedModule, Module, Module.mem_support_iff, Module.support_subset_of_surjective, PrimeSpectrum, PrimeSpectrum.zeroLocus_anti_mono_ideal, Set.subset_inter, Submodule, Submodule.annihilator_quotient, Submodule.mem_colon.mpr, Submodule.mkQ_surjective, Submodule.smul_mem_smul, annihilator_quotient, asIdeal, mem_colon, mem_support_iff
 -/

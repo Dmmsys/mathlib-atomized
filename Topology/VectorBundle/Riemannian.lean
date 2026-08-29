@@ -142,7 +142,10 @@ lemma ContinuousWithinAt.inner_bundle
     exact hv.1
   simp only [hg]
   have : ContinuousWithinAt
-      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) 
+      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) (v m) (w m))) s x :=
+    (g_cont.continuousAt.comp_continuousWithinAt hf).clm_bundle_apply₂ (F₁ := F) (F₂ := F) hv hw
+  simp only [FiberBundle.continuousWithinAt_totalSpace] at this
+  exact this.2
 
 中文:
 引理 ContinuousWithinAt.inner_bundle
@@ -153,7 +156,10 @@ lemma ContinuousWithinAt.inner_bundle
     exact hv.1
   simp only [hg]
   have : ContinuousWithinAt
-      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) 
+      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) (v m) (w m))) s x :=
+    (g_cont.continuousAt.comp_continuousWithinAt hf).clm_bundle_apply₂ (F₁ := F) (F₂ := F) hv hw
+  simp only [FiberBundle.continuousWithinAt_totalSpace] at this
+  exact this.2
 
 Depends on / 依赖: Bundle, Bundle.Trivial, ContinuousWithinAt, FiberBundle, FiberBundle.continuousWithinAt_totalSpace, TotalSpace, TotalSpace.mk, Trivial, comp_continuousWithinAt, continuousAt, continuousWithinAt_totalSpace, exists_continuous, g_cont, g_cont.continuousAt.comp_continuousWithinAt, h.exists_continuous
 -/
@@ -251,7 +257,82 @@ lemma eventually_norm_symmL_trivializationAt_self_comp_lt
   /- We will expand the definition of continuity of the inner product structure, in the chart.
   Denote `g' x` the metric in the fiber of `x`, read in the chart. For `y` close to `x`, then
   `g' y` and `g' x` are close. The inequality we have to prove reduces to comparing
-  `g' y w w` and `g' x w
+  `g' y w w` and `g' x w w`, where `w` is the image in the chart of a tangent vector `v` at `y`.
+  Their difference is controlled by `δ ‖w‖ ^ 2` for any small `δ > 0`. To conclude, we argue that
+  `‖w‖` is comparable to the norm inside the fiber over `x`, i.e., `g' x w w`, because there
+  is a continuous linear equivalence between these two spaces by definition of vector bundles. -/
+  obtain ⟨r', hr', r'r⟩ : exists r', 1 < r' ∧ r' < r := exists_between hr
+  have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+  let G := (trivializationAt F E x).continuousLinearEquivAt Real x h'x
+  let C := (‖(G : E x ->L[Real] F)‖) ^ 2
+  -- choose `δ` small enough that the computation below works when the metrics at `x` and `y`
+  -- are `δ` close. When writing this proof, I have followed my nose in the computation, and
+  -- recorded only in the end how small `δ` needs to be. The reader should skip the precise
+  -- condition for now, as it doesn't give any useful insight.
+  obtain ⟨δ, δpos, hδ⟩ : exists δ, 0 < δ ∧ (r' ^ 2)⁻¹ < 1 - δ * C := by
+    have A : forallᶠ δ in 𝓝[>] (0 : Real), 0 < δ := self_mem_nhdsWithin
+    have B : Tendsto (fun δ => 1 - δ * C) (𝓝[>] 0) (𝓝 (1 - 0 * C)) := by
+      apply tendsto_inf_left
+      exact tendsto_const_nhds.sub (tendsto_id.mul tendsto_const_nhds)
+    have B' : forallᶠ δ in 𝓝[>] 0, (r' ^ 2)⁻¹ < 1 - δ * C := by
+      apply (tendsto_order.1 B).1
+      simpa using inv_lt_one_of_one_lt₀ (by nlinarith)
+    exact (A.and B').exists
+  rcases h.exists_continuous with ⟨g, g_cont, hg⟩
+  let g' : B -> F ->L[Real] F ->L[Real] Real := fun y =>
+    inCoordinates F E (F ->L[Real] Real) (fun x => E x ->L[Real] Real) x y x y (g y)
+  have hg' : ContinuousAt g' x := by
+    have W := g_cont.continuousAt (x := x)
+    simp only [continuousAt_hom_bundle] at W
+    exact W.2
+  have : forallᶠ y in 𝓝 x, dist (g' y) (g' x) < δ := by
+    rw [Metric.continuousAt_iff'] at hg'
+    apply hg' _ δpos
+  filter_upwards [this, (trivializationAt F E x).open_baseSet.mem_nhds h'x] with y hy h'y
+  have : ‖g' x - g' y‖ <= δ := by rw [← dist_eq_norm']; exact hy.le
+  -- To show that the norm of the composition is bounded by `r'`, we start from a vector
+  -- `‖v‖`. We will show that its image has a controlled norm.
+  apply (opNorm_le_bound _ (by linarith) (fun v => ?_)).trans_lt r'r
+  -- rewrite the norm of `‖v‖` and of its image in terms of norms in the model space
+  let w := (trivializationAt F E x).continuousLinearMapAt Real y v
+  suffices ‖((trivializationAt F E x).symmL Real x) w‖ ^ 2 <= r' ^ 2 * ‖v‖ ^ 2 from
+    le_of_sq_le_sq (by simpa [mul_pow]) (by positivity)
+  simp only [Trivialization.symmL_apply, mem_baseSet_trivializationAt,
+    ← real_inner_self_eq_norm_sq, hg]
+  have hgy : g y v v = g' y w w := by
+    rw [inCoordinates_apply_eq₂ h'y h'y (Set.mem_univ _)]
+    have A : ((trivializationAt F E x).symm y)
+       ((trivializationAt F E x).linearMapAt Real y v) = v := by
+      convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'y).symm_apply_apply v
+      simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'y]
+    simp [A, w]
+  have hgx : g x ((trivializationAt F E x).symm x w) ((trivializationAt F E x).symm x w) =
+      g' x w w := by
+    rw [inCoordinates_apply_eq₂ h'x h'x (Set.mem_univ _)]
+    simp
+  rw [hgx]; rw [hgy]
+  -- get a good control for the norms of `w` in the model space, using continuity
+  have : g' x w w <= δ * C * g' x w w + g' y w w := calc
+        g' x w w
+    _ = (g' x - g' y) w w + g' y w w := by simp
+    _ <= ‖g' x - g' y‖ * ‖w‖ * ‖w‖ + g' y w w := by
+      grw [← le_opNorm₂, ← Real.le_norm_self]
+    _ <= δ * ‖w‖ ^ 2 + g' y w w := by
+      rw [pow_two]; rw [mul_assoc]; gcongr
+    _ <= δ * (‖(G : E x ->L[Real] F)‖ * ‖G.symm w‖) ^ 2 + g' y w w := by
+      grw [← le_opNorm]
+      simp
+    _ = δ * C * ‖G.symm w‖ ^ 2 + g' y w w := by ring
+    _ = δ * C * g x (G.symm w) (G.symm w) + g' y w w := by simp [← hg]
+    _ = δ * C * g' x w w + g' y w w := by
+      rw [← hgx]; rfl
+  have : (1 - δ * C) * g' x w w <= g' y w w := by linarith
+  rw [← (le_div_iff₀' (lt_of_le_of_lt (by positivity) hδ))]; rw [div_eq_inv_mul] at this
+  grw [this]
+  gcongr
+  · rw [← hgy, ← hg, real_inner_self_eq_norm_sq]
+    positivity
+  · exact inv_le_of_inv_le₀ (by positivity) hδ.le
 
 中文:
 引理 eventually_norm_symmL_trivializationAt_self_comp_lt
@@ -260,7 +341,82 @@ lemma eventually_norm_symmL_trivializationAt_self_comp_lt
   /- We will expand the definition of continuity of the inner product structure, in the chart.
   Denote `g' x` the metric in the fiber of `x`, read in the chart. For `y` close to `x`, then
   `g' y` and `g' x` are close. The inequality we have to prove reduces to comparing
-  `g' y w w` and `g' x w
+  `g' y w w` and `g' x w w`, where `w` is the image in the chart of a tangent vector `v` at `y`.
+  Their difference is controlled by `δ ‖w‖ ^ 2` for any small `δ > 0`. To conclude, we argue that
+  `‖w‖` is comparable to the norm inside the fiber over `x`, i.e., `g' x w w`, because there
+  is a continuous linear equivalence between these two spaces by definition of vector bundles. -/
+  obtain ⟨r', hr', r'r⟩ : exists r', 1 < r' ∧ r' < r := exists_between hr
+  have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+  let G := (trivializationAt F E x).continuousLinearEquivAt Real x h'x
+  let C := (‖(G : E x ->L[Real] F)‖) ^ 2
+  -- choose `δ` small enough that the computation below works when the metrics at `x` and `y`
+  -- are `δ` close. When writing this proof, I have followed my nose in the computation, and
+  -- recorded only in the end how small `δ` needs to be. The reader should skip the precise
+  -- condition for now, as it doesn't give any useful insight.
+  obtain ⟨δ, δpos, hδ⟩ : exists δ, 0 < δ ∧ (r' ^ 2)⁻¹ < 1 - δ * C := by
+    have A : forallᶠ δ in 𝓝[>] (0 : Real), 0 < δ := self_mem_nhdsWithin
+    have B : Tendsto (fun δ => 1 - δ * C) (𝓝[>] 0) (𝓝 (1 - 0 * C)) := by
+      apply tendsto_inf_left
+      exact tendsto_const_nhds.sub (tendsto_id.mul tendsto_const_nhds)
+    have B' : forallᶠ δ in 𝓝[>] 0, (r' ^ 2)⁻¹ < 1 - δ * C := by
+      apply (tendsto_order.1 B).1
+      simpa using inv_lt_one_of_one_lt₀ (by nlinarith)
+    exact (A.and B').exists
+  rcases h.exists_continuous with ⟨g, g_cont, hg⟩
+  let g' : B -> F ->L[Real] F ->L[Real] Real := fun y =>
+    inCoordinates F E (F ->L[Real] Real) (fun x => E x ->L[Real] Real) x y x y (g y)
+  have hg' : ContinuousAt g' x := by
+    have W := g_cont.continuousAt (x := x)
+    simp only [continuousAt_hom_bundle] at W
+    exact W.2
+  have : forallᶠ y in 𝓝 x, dist (g' y) (g' x) < δ := by
+    rw [Metric.continuousAt_iff'] at hg'
+    apply hg' _ δpos
+  filter_upwards [this, (trivializationAt F E x).open_baseSet.mem_nhds h'x] with y hy h'y
+  have : ‖g' x - g' y‖ <= δ := by rw [← dist_eq_norm']; exact hy.le
+  -- To show that the norm of the composition is bounded by `r'`, we start from a vector
+  -- `‖v‖`. We will show that its image has a controlled norm.
+  apply (opNorm_le_bound _ (by linarith) (fun v => ?_)).trans_lt r'r
+  -- rewrite the norm of `‖v‖` and of its image in terms of norms in the model space
+  let w := (trivializationAt F E x).continuousLinearMapAt Real y v
+  suffices ‖((trivializationAt F E x).symmL Real x) w‖ ^ 2 <= r' ^ 2 * ‖v‖ ^ 2 from
+    le_of_sq_le_sq (by simpa [mul_pow]) (by positivity)
+  simp only [Trivialization.symmL_apply, mem_baseSet_trivializationAt,
+    ← real_inner_self_eq_norm_sq, hg]
+  have hgy : g y v v = g' y w w := by
+    rw [inCoordinates_apply_eq₂ h'y h'y (Set.mem_univ _)]
+    have A : ((trivializationAt F E x).symm y)
+       ((trivializationAt F E x).linearMapAt Real y v) = v := by
+      convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'y).symm_apply_apply v
+      simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'y]
+    simp [A, w]
+  have hgx : g x ((trivializationAt F E x).symm x w) ((trivializationAt F E x).symm x w) =
+      g' x w w := by
+    rw [inCoordinates_apply_eq₂ h'x h'x (Set.mem_univ _)]
+    simp
+  rw [hgx]; rw [hgy]
+  -- get a good control for the norms of `w` in the model space, using continuity
+  have : g' x w w <= δ * C * g' x w w + g' y w w := calc
+        g' x w w
+    _ = (g' x - g' y) w w + g' y w w := by simp
+    _ <= ‖g' x - g' y‖ * ‖w‖ * ‖w‖ + g' y w w := by
+      grw [← le_opNorm₂, ← Real.le_norm_self]
+    _ <= δ * ‖w‖ ^ 2 + g' y w w := by
+      rw [pow_two]; rw [mul_assoc]; gcongr
+    _ <= δ * (‖(G : E x ->L[Real] F)‖ * ‖G.symm w‖) ^ 2 + g' y w w := by
+      grw [← le_opNorm]
+      simp
+    _ = δ * C * ‖G.symm w‖ ^ 2 + g' y w w := by ring
+    _ = δ * C * g x (G.symm w) (G.symm w) + g' y w w := by simp [← hg]
+    _ = δ * C * g' x w w + g' y w w := by
+      rw [← hgx]; rfl
+  have : (1 - δ * C) * g' x w w <= g' y w w := by linarith
+  rw [← (le_div_iff₀' (lt_of_le_of_lt (by positivity) hδ))]; rw [div_eq_inv_mul] at this
+  grw [this]
+  gcongr
+  · rw [← hgy, ← hg, real_inner_self_eq_norm_sq]
+    positivity
+  · exact inv_le_of_inv_le₀ (by positivity) hδ.le
 -/
 lemma eventually_norm_symmL_trivializationAt_self_comp_lt (x : B) {r : Real} (hr : 1 < r) :
     forallᶠ y in 𝓝 x, ‖((trivializationAt F E x).symmL Real x)
@@ -355,7 +511,18 @@ lemma eventually_norm_trivializationAt_lt
   refine ⟨(1 + ‖(trivializationAt F E x).continuousLinearMapAt Real x‖) * 2, by positivity, ?_⟩
   filter_upwards [eventually_norm_symmL_trivializationAt_self_comp_lt F E x one_lt_two] with y hy
   have A : ((trivializationAt F E x).continuousLinearMapAt Real x) ∘L
-      ((trivializationAt F E x).s
+      ((trivializationAt F E x).symmL Real x) = ContinuousLinearMap.id _ _ := by
+    ext v
+    have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+    simp only [Trivialization.continuousLinearMapAt_apply, Trivialization.symmL_apply,
+      mem_baseSet_trivializationAt, comp_apply, id_apply]
+    convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'x).apply_symm_apply v
+    simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'x]
+  have : (trivializationAt F E x).continuousLinearMapAt Real y =
+    (ContinuousLinearMap.id _ _) ∘L ((trivializationAt F E x).continuousLinearMapAt Real y) := by simp
+  grw [this, ← A, comp_assoc, opNorm_comp_le]
+  gcongr
+  linarith
 
 中文:
 引理 eventually_norm_trivializationAt_lt
@@ -364,7 +531,18 @@ lemma eventually_norm_trivializationAt_lt
   refine ⟨(1 + ‖(trivializationAt F E x).continuousLinearMapAt Real x‖) * 2, by positivity, ?_⟩
   filter_upwards [eventually_norm_symmL_trivializationAt_self_comp_lt F E x one_lt_two] with y hy
   have A : ((trivializationAt F E x).continuousLinearMapAt Real x) ∘L
-      ((trivializationAt F E x).s
+      ((trivializationAt F E x).symmL Real x) = ContinuousLinearMap.id _ _ := by
+    ext v
+    have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+    simp only [Trivialization.continuousLinearMapAt_apply, Trivialization.symmL_apply,
+      mem_baseSet_trivializationAt, comp_apply, id_apply]
+    convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'x).apply_symm_apply v
+    simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'x]
+  have : (trivializationAt F E x).continuousLinearMapAt Real y =
+    (ContinuousLinearMap.id _ _) ∘L ((trivializationAt F E x).continuousLinearMapAt Real y) := by simp
+  grw [this, ← A, comp_assoc, opNorm_comp_le]
+  gcongr
+  linarith
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, FiberBundle, FiberBundle.mem_baseSet_trivializationAt, Trivial, Trivialization, Trivialization.continuousLinearMapAt_apply, baseSet, continuousLinearMapAt, continuousLinearMapAt_apply, eventually_norm_symmL_trivializationAt_self_comp_lt, filter_upwards, mem_baseSet_trivializationAt, one_lt_two, trivializationAt
 -/
@@ -396,7 +574,82 @@ lemma eventually_norm_symmL_trivializationAt_comp_self_lt
   /- We will expand the definition of continuity of the inner product structure, in the chart.
   Denote `g' x` the metric in the fiber of `x`, read in the chart. For `y` close to `x`, then
   `g' y` and `g' x` are close. The inequality we have to prove reduces to comparing
-  `g' y w w` and `g' x w
+  `g' y w w` and `g' x w w`, where `w` is the image in the chart of a tangent vector `v` at `x`.
+  Their difference is controlled by `δ ‖w‖ ^ 2` for any small `δ > 0`. To conclude, we argue that
+  `‖w‖` is comparable to the norm inside the fiber over `x`, i.e., `g' x w w`, because there
+  is a continuous linear equivalence between these two spaces by definition of vector bundles. -/
+  obtain ⟨r', hr', r'r⟩ : exists r', 1 < r' ∧ r' < r := exists_between hr
+  have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+  let G := (trivializationAt F E x).continuousLinearEquivAt Real x h'x
+  let C := (‖(G : E x ->L[Real] F)‖) ^ 2
+  -- choose `δ` small enough that the computation below works when the metrics at `x` and `y`
+  -- are `δ` close. When writing this proof, I have followed my nose in the computation, and
+  -- recorded only in the end how small `δ` needs to be. The reader should skip the precise
+  -- condition for now, as it doesn't give any useful insight.
+  obtain ⟨δ, δpos, h'δ⟩ : exists δ, 0 < δ ∧ (1 + δ * C) < r' ^ 2 := by
+    have A : forallᶠ δ in 𝓝[>] (0 : Real), 0 < δ := self_mem_nhdsWithin
+    have B : Tendsto (fun δ => 1 + δ * C) (𝓝[>] 0) (𝓝 (1 + 0 * C)) := by
+      apply tendsto_inf_left
+      exact tendsto_const_nhds.add (tendsto_id.mul tendsto_const_nhds)
+    have B' : forallᶠ δ in 𝓝[>] 0, 1 + δ * C < r' ^ 2 := by
+      apply (tendsto_order.1 B).2
+      simpa using hr'.trans_le (le_abs_self _)
+    exact (A.and B').exists
+  rcases h.exists_continuous with ⟨g, g_cont, hg⟩
+  let g' : B -> F ->L[Real] F ->L[Real] Real := fun y =>
+    inCoordinates F E (F ->L[Real] Real) (fun x => E x ->L[Real] Real) x y x y (g y)
+  have hg' : ContinuousAt g' x := by
+    have W := g_cont.continuousAt (x := x)
+    simp only [continuousAt_hom_bundle] at W
+    exact W.2
+  have : forallᶠ y in 𝓝 x, dist (g' y) (g' x) < δ := by
+    rw [Metric.continuousAt_iff'] at hg'
+    apply hg' _ δpos
+  filter_upwards [this, (trivializationAt F E x).open_baseSet.mem_nhds h'x] with y hy h'y
+  have : ‖g' y - g' x‖ <= δ := by rw [← dist_eq_norm]; exact hy.le
+  -- To show that the norm of the composition is bounded by `r'`, we start from a vector
+  -- `‖v‖`. We will show that its image has a controlled norm.
+  apply (opNorm_le_bound _ (by linarith) (fun v => ?_)).trans_lt r'r
+  -- rewrite the norm of `‖v‖` and of its image in terms of norms in the model space
+  let w := (trivializationAt F E x).continuousLinearMapAt Real x v
+  suffices ‖((trivializationAt F E x).symmL Real y) w‖ ^ 2 <= r' ^ 2 * ‖v‖ ^ 2 from
+    le_of_sq_le_sq (by simpa [mul_pow]) (by positivity)
+  simp only [Trivialization.symmL_apply, h'y, ← real_inner_self_eq_norm_sq, hg]
+  have hgx : g x v v = g' x w w := by
+    rw [inCoordinates_apply_eq₂ h'x h'x (Set.mem_univ _)]
+    have A : ((trivializationAt F E x).symm x)
+       ((trivializationAt F E x).linearMapAt Real x v) = v := by
+      convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'x).symm_apply_apply v
+      simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'x]
+    simp [A, w]
+  have hgy : g y ((trivializationAt F E x).symm y w) ((trivializationAt F E x).symm y w)
+      = g' y w w := by
+    rw [inCoordinates_apply_eq₂ h'y h'y (Set.mem_univ _)]
+    simp
+  rw [hgx]; rw [hgy]
+  -- get a good control for the norms of `w` in the model space, using continuity
+  calc g' y w w
+    _ = (g' y - g' x) w w + g' x w w := by simp
+    _ <= ‖g' y - g' x‖ * ‖w‖ * ‖w‖ + g' x w w := by
+      grw [← le_opNorm₂, ← Real.le_norm_self]
+    _ <= δ * ‖w‖ ^ 2 + g' x w w := by
+      rw [pow_two]; rw [mul_assoc]; gcongr
+    _ <= δ * (‖(G : E x ->L[Real] F)‖ * ‖G.symm w‖) ^ 2 + g' x w w := by
+      grw [← le_opNorm]
+      simp
+    _ = δ * C * ‖G.symm w‖ ^ 2 + g' x w w := by ring
+    _ = δ * C * g x (G.symm w) (G.symm w) + g' x w w := by simp [← hg]
+    _ = δ * C * g' x w w + g' x w w := by
+      congr
+      rw [inCoordinates_apply_eq₂ h'x h'x (Set.mem_univ _)]
+      simp only [Trivial.fiberBundle_trivializationAt', Trivial.linearMapAt_trivialization,
+        LinearMap.id_coe, id_eq, w]
+      rfl
+    _ = (1 + δ * C) * g' x w w := by ring
+    _ <= r' ^ 2 * g' x w w := by
+      gcongr
+      rw [← hgx]; rw [← hg]; rw [real_inner_self_eq_norm_sq]
+      positivity
 
 中文:
 引理 eventually_norm_symmL_trivializationAt_comp_self_lt
@@ -405,7 +658,82 @@ lemma eventually_norm_symmL_trivializationAt_comp_self_lt
   /- We will expand the definition of continuity of the inner product structure, in the chart.
   Denote `g' x` the metric in the fiber of `x`, read in the chart. For `y` close to `x`, then
   `g' y` and `g' x` are close. The inequality we have to prove reduces to comparing
-  `g' y w w` and `g' x w
+  `g' y w w` and `g' x w w`, where `w` is the image in the chart of a tangent vector `v` at `x`.
+  Their difference is controlled by `δ ‖w‖ ^ 2` for any small `δ > 0`. To conclude, we argue that
+  `‖w‖` is comparable to the norm inside the fiber over `x`, i.e., `g' x w w`, because there
+  is a continuous linear equivalence between these two spaces by definition of vector bundles. -/
+  obtain ⟨r', hr', r'r⟩ : exists r', 1 < r' ∧ r' < r := exists_between hr
+  have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+  let G := (trivializationAt F E x).continuousLinearEquivAt Real x h'x
+  let C := (‖(G : E x ->L[Real] F)‖) ^ 2
+  -- choose `δ` small enough that the computation below works when the metrics at `x` and `y`
+  -- are `δ` close. When writing this proof, I have followed my nose in the computation, and
+  -- recorded only in the end how small `δ` needs to be. The reader should skip the precise
+  -- condition for now, as it doesn't give any useful insight.
+  obtain ⟨δ, δpos, h'δ⟩ : exists δ, 0 < δ ∧ (1 + δ * C) < r' ^ 2 := by
+    have A : forallᶠ δ in 𝓝[>] (0 : Real), 0 < δ := self_mem_nhdsWithin
+    have B : Tendsto (fun δ => 1 + δ * C) (𝓝[>] 0) (𝓝 (1 + 0 * C)) := by
+      apply tendsto_inf_left
+      exact tendsto_const_nhds.add (tendsto_id.mul tendsto_const_nhds)
+    have B' : forallᶠ δ in 𝓝[>] 0, 1 + δ * C < r' ^ 2 := by
+      apply (tendsto_order.1 B).2
+      simpa using hr'.trans_le (le_abs_self _)
+    exact (A.and B').exists
+  rcases h.exists_continuous with ⟨g, g_cont, hg⟩
+  let g' : B -> F ->L[Real] F ->L[Real] Real := fun y =>
+    inCoordinates F E (F ->L[Real] Real) (fun x => E x ->L[Real] Real) x y x y (g y)
+  have hg' : ContinuousAt g' x := by
+    have W := g_cont.continuousAt (x := x)
+    simp only [continuousAt_hom_bundle] at W
+    exact W.2
+  have : forallᶠ y in 𝓝 x, dist (g' y) (g' x) < δ := by
+    rw [Metric.continuousAt_iff'] at hg'
+    apply hg' _ δpos
+  filter_upwards [this, (trivializationAt F E x).open_baseSet.mem_nhds h'x] with y hy h'y
+  have : ‖g' y - g' x‖ <= δ := by rw [← dist_eq_norm]; exact hy.le
+  -- To show that the norm of the composition is bounded by `r'`, we start from a vector
+  -- `‖v‖`. We will show that its image has a controlled norm.
+  apply (opNorm_le_bound _ (by linarith) (fun v => ?_)).trans_lt r'r
+  -- rewrite the norm of `‖v‖` and of its image in terms of norms in the model space
+  let w := (trivializationAt F E x).continuousLinearMapAt Real x v
+  suffices ‖((trivializationAt F E x).symmL Real y) w‖ ^ 2 <= r' ^ 2 * ‖v‖ ^ 2 from
+    le_of_sq_le_sq (by simpa [mul_pow]) (by positivity)
+  simp only [Trivialization.symmL_apply, h'y, ← real_inner_self_eq_norm_sq, hg]
+  have hgx : g x v v = g' x w w := by
+    rw [inCoordinates_apply_eq₂ h'x h'x (Set.mem_univ _)]
+    have A : ((trivializationAt F E x).symm x)
+       ((trivializationAt F E x).linearMapAt Real x v) = v := by
+      convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'x).symm_apply_apply v
+      simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'x]
+    simp [A, w]
+  have hgy : g y ((trivializationAt F E x).symm y w) ((trivializationAt F E x).symm y w)
+      = g' y w w := by
+    rw [inCoordinates_apply_eq₂ h'y h'y (Set.mem_univ _)]
+    simp
+  rw [hgx]; rw [hgy]
+  -- get a good control for the norms of `w` in the model space, using continuity
+  calc g' y w w
+    _ = (g' y - g' x) w w + g' x w w := by simp
+    _ <= ‖g' y - g' x‖ * ‖w‖ * ‖w‖ + g' x w w := by
+      grw [← le_opNorm₂, ← Real.le_norm_self]
+    _ <= δ * ‖w‖ ^ 2 + g' x w w := by
+      rw [pow_two]; rw [mul_assoc]; gcongr
+    _ <= δ * (‖(G : E x ->L[Real] F)‖ * ‖G.symm w‖) ^ 2 + g' x w w := by
+      grw [← le_opNorm]
+      simp
+    _ = δ * C * ‖G.symm w‖ ^ 2 + g' x w w := by ring
+    _ = δ * C * g x (G.symm w) (G.symm w) + g' x w w := by simp [← hg]
+    _ = δ * C * g' x w w + g' x w w := by
+      congr
+      rw [inCoordinates_apply_eq₂ h'x h'x (Set.mem_univ _)]
+      simp only [Trivial.fiberBundle_trivializationAt', Trivial.linearMapAt_trivialization,
+        LinearMap.id_coe, id_eq, w]
+      rfl
+    _ = (1 + δ * C) * g' x w w := by ring
+    _ <= r' ^ 2 * g' x w w := by
+      gcongr
+      rw [← hgx]; rw [← hg]; rw [real_inner_self_eq_norm_sq]
+      positivity
 -/
 lemma eventually_norm_symmL_trivializationAt_comp_self_lt (x : B) {r : Real} (hr : 1 < r) :
     forallᶠ y in 𝓝 x, ‖((trivializationAt F E x).symmL Real y)
@@ -500,7 +828,18 @@ lemma eventually_norm_symmL_trivializationAt_lt
   refine ⟨2 * (1 + ‖(trivializationAt F E x).symmL Real x‖), by positivity, ?_⟩
   filter_upwards [eventually_norm_symmL_trivializationAt_comp_self_lt F E x one_lt_two] with y hy
   have A : ((trivializationAt F E x).continuousLinearMapAt Real x) ∘L
-      ((trivializationAt F E x).symmL Real x) = C
+      ((trivializationAt F E x).symmL Real x) = ContinuousLinearMap.id _ _ := by
+    ext v
+    have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+    simp only [Trivialization.continuousLinearMapAt_apply, Trivialization.symmL_apply,
+      mem_baseSet_trivializationAt, comp_apply, id_apply]
+    convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'x).apply_symm_apply v
+    simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'x]
+  have : (trivializationAt F E x).symmL Real y =
+     ((trivializationAt F E x).symmL Real y) ∘L (ContinuousLinearMap.id _ _) := by simp
+  grw [this, ← A, ← comp_assoc, opNorm_comp_le]
+  gcongr
+  linarith
 
 中文:
 引理 eventually_norm_symmL_trivializationAt_lt
@@ -509,7 +848,18 @@ lemma eventually_norm_symmL_trivializationAt_lt
   refine ⟨2 * (1 + ‖(trivializationAt F E x).symmL Real x‖), by positivity, ?_⟩
   filter_upwards [eventually_norm_symmL_trivializationAt_comp_self_lt F E x one_lt_two] with y hy
   have A : ((trivializationAt F E x).continuousLinearMapAt Real x) ∘L
-      ((trivializationAt F E x).symmL Real x) = C
+      ((trivializationAt F E x).symmL Real x) = ContinuousLinearMap.id _ _ := by
+    ext v
+    have h'x : x in (trivializationAt F E x).baseSet := FiberBundle.mem_baseSet_trivializationAt' x
+    simp only [Trivialization.continuousLinearMapAt_apply, Trivialization.symmL_apply,
+      mem_baseSet_trivializationAt, comp_apply, id_apply]
+    convert! ((trivializationAt F E x).continuousLinearEquivAt Real _ h'x).apply_symm_apply v
+    simp [Trivialization.coe_continuousLinearEquivAt_eq _ h'x]
+  have : (trivializationAt F E x).symmL Real y =
+     ((trivializationAt F E x).symmL Real y) ∘L (ContinuousLinearMap.id _ _) := by simp
+  grw [this, ← A, ← comp_assoc, opNorm_comp_le]
+  gcongr
+  linarith
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, FiberBundle, FiberBundle.mem_baseSet_trivializationAt, Trivialization, Trivialization.continuousLinearMapAt_apply, Trivialization.symmL_ap, baseSet, continuousLinearMapAt, continuousLinearMapAt_apply, eventually_norm_symmL_trivializationAt_comp_self_lt, filter_upwards, mem_baseSet_trivializationAt, one_lt_two, symmL_ap, trivializationAt
 -/
@@ -724,7 +1074,13 @@ definition ContinuousRiemannianMetric.toRiemannianMetric
   continuousAt b := by
     -- Continuity of bilinear maps is only true on normed spaces. As `F` is a normed space by
     -- assumption, we transfer everything to `F` and argue there.
-    let e : E b ≃L[Real] F := Trivializati
+    let e : E b ≃L[Real] F := Trivialization.continuousLinearEquivAt Real (trivializationAt F E b) _
+      (FiberBundle.mem_baseSet_trivializationAt' b)
+    let m : (E b ->L[Real] E b ->L[Real] Real) ≃L[Real] (F ->L[Real] F ->L[Real] Real) :=
+      e.arrowCongr (e.arrowCongr (ContinuousLinearEquiv.refl Real Real))
+    have A (v : E b) : g.inner b v v = ((fun w => m (g.inner b) w w) ∘ e) v := by simp [m]
+    simp only [A]
+    fun_prop
 
 中文:
 定义 余ntinuousRiemannianMetric.toRiemannianMetric
@@ -736,7 +1092,13 @@ definition ContinuousRiemannianMetric.toRiemannianMetric
   continuousAt b := by
     -- Continuity of bilinear maps is only true on normed spaces. As `F` is a normed space by
     -- assumption, we transfer everything to `F` and argue there.
-    let e : E b ≃L[Real] F := Trivializati
+    let e : E b ≃L[Real] F := Trivialization.continuousLinearEquivAt Real (trivializationAt F E b) _
+      (FiberBundle.mem_baseSet_trivializationAt' b)
+    let m : (E b ->L[Real] E b ->L[Real] Real) ≃L[Real] (F ->L[Real] F ->L[Real] Real) :=
+      e.arrowCongr (e.arrowCongr (ContinuousLinearEquiv.refl Real Real))
+    have A (v : E b) : g.inner b v v = ((fun w => m (g.inner b) w w) ∘ e) v := by simp [m]
+    simp only [A]
+    fun_prop
 
 Depends on / 依赖: g.inner
 -/

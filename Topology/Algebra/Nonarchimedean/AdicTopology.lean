@@ -68,7 +68,21 @@ theorem adic_basis
       suffices forall i j : Nat, exists k, I ^ k <= I ^ i ∧ I ^ k <= I ^ j by
         simpa only [smul_eq_mul, mul_top, Algebra.algebraMap_self, map_id, le_inf_iff] using! this
       intro i j
-      exact ⟨max i j, pow_le_pow_right (le_max_left i j), pow_le_pow_right (le_max_right i j)
+      exact ⟨max i j, pow_le_pow_right (le_max_left i j), pow_le_pow_right (le_max_right i j)⟩
+    leftMul := by
+      suffices forall (a : R) (i : Nat), exists j : Nat, a • I ^ j <= I ^ i by
+        simpa only [smul_top_eq_map, Algebra.algebraMap_self, map_id] using! this
+      intro r n
+      use n
+      rintro a ⟨x, hx, rfl⟩
+      exact (I ^ n).smul_mem r hx
+    mul := by
+      suffices forall i : Nat, exists j : Nat, (↑(I ^ j) * ↑(I ^ j) : Set R) subseteq (↑(I ^ i) : Set R) by
+        simpa only [smul_top_eq_map, Algebra.algebraMap_self, map_id] using! this
+      intro n
+      use n
+      rintro a ⟨x, _hx, b, hb, rfl⟩
+      exact (I ^ n).smul_mem x hb }
 
 中文:
 定理 adic_basis
@@ -78,7 +92,21 @@ theorem adic_basis
       suffices forall i j : Nat, exists k, I ^ k <= I ^ i ∧ I ^ k <= I ^ j by
         simpa only [smul_eq_mul, mul_top, Algebra.algebraMap_self, map_id, le_inf_iff] using! this
       intro i j
-      exact ⟨max i j, pow_le_pow_right (le_max_left i j), pow_le_pow_right (le_max_right i j)
+      exact ⟨max i j, pow_le_pow_right (le_max_left i j), pow_le_pow_right (le_max_right i j)⟩
+    leftMul := by
+      suffices forall (a : R) (i : Nat), exists j : Nat, a • I ^ j <= I ^ i by
+        simpa only [smul_top_eq_map, Algebra.algebraMap_self, map_id] using! this
+      intro r n
+      use n
+      rintro a ⟨x, hx, rfl⟩
+      exact (I ^ n).smul_mem r hx
+    mul := by
+      suffices forall i : Nat, exists j : Nat, (↑(I ^ j) * ↑(I ^ j) : Set R) subseteq (↑(I ^ i) : Set R) by
+        simpa only [smul_top_eq_map, Algebra.algebraMap_self, map_id] using! this
+      intro n
+      use n
+      rintro a ⟨x, _hx, b, hb, rfl⟩
+      exact (I ^ n).smul_mem x hb }
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self, algebraMap_self, le_inf_iff, le_max_left, le_max_right, leftMul, map_id, mul_top, pow_le_pow_right, smul_eq_mul, smul_mem, smul_top_eq_map
 -/
@@ -273,7 +301,8 @@ theorem adic_module_basis
 smul_mono_left pow_le_pow_right (le_max_right i j)⟩⟩
     smul := fun m i =>
       ⟨(I ^ i • ⊤ : Ideal R), ⟨i, by simp⟩, fun a a_in => by
-        replace a_in : a in I ^ i := by simpa [(I 
+        replace a_in : a in I ^ i := by simpa [(I ^ i).mul_top] using a_in
+        exact smul_mem_smul a_in mem_top⟩ }
 
 中文:
 定理 adic_module_basis
@@ -284,7 +313,8 @@ smul_mono_left pow_le_pow_right (le_max_right i j)⟩⟩
 smul_mono_left pow_le_pow_right (le_max_right i j)⟩⟩
     smul := fun m i =>
       ⟨(I ^ i • ⊤ : Ideal R), ⟨i, by simp⟩, fun a a_in => by
-        replace a_in : a in I ^ i := by simpa [(I 
+        replace a_in : a in I ^ i := by simpa [(I ^ i).mul_top] using a_in
+        exact smul_mem_smul a_in mem_top⟩ }
 
 Depends on / 依赖: a_in, le_inf_iff, le_inf_iff.mpr, le_max_left, le_max_right, mem_top, mul_top, pow_le_pow_right, replace, smul_mem_smul, smul_mono_left
 -/
@@ -397,7 +427,17 @@ theorem isAdic_iff
       simpa using J.hasBasis_nhds_zero_adic.mem_iff.mp hs
   · rintro ⟨H₁, H₂⟩
     apply IsTopologicalAddGroup.ext
-    · app
+    · apply @IsTopologicalRing.to_topologicalAddGroup
+    · apply (RingSubgroupsBasis.toRingFilterBasis _).toAddGroupFilterBasis.isTopologicalAddGroup
+    · ext s
+      let := Ideal.adic_basis J
+      rw [J.hasBasis_nhds_zero_adic.mem_iff]
+      constructor <;> intro H
+      · rcases H₂ s H with ⟨n, h⟩
+        exact ⟨n, trivial, h⟩
+      · rcases H with ⟨n, -, hn⟩
+        rw [mem_nhds_iff]
+        exact ⟨_, hn, H₁ n, (J ^ n).zero_mem⟩
 
 中文:
 定理 isAdic_iff
@@ -415,7 +455,17 @@ theorem isAdic_iff
       simpa using J.hasBasis_nhds_zero_adic.mem_iff.mp hs
   · rintro ⟨H₁, H₂⟩
     apply IsTopologicalAddGroup.ext
-    · app
+    · apply @IsTopologicalRing.to_topologicalAddGroup
+    · apply (RingSubgroupsBasis.toRingFilterBasis _).toAddGroupFilterBasis.isTopologicalAddGroup
+    · ext s
+      let := Ideal.adic_basis J
+      rw [J.hasBasis_nhds_zero_adic.mem_iff]
+      constructor <;> intro H
+      · rcases H₂ s H with ⟨n, h⟩
+        exact ⟨n, trivial, h⟩
+      · rcases H with ⟨n, -, hn⟩
+        rw [mem_nhds_iff]
+        exact ⟨_, hn, H₁ n, (J ^ n).zero_mem⟩
 
 Depends on / 依赖: Ideal.adic_basis, IsTopologicalAddGroup, IsTopologicalAddGroup.ext, IsTopologicalRing, IsTopologicalRing.to_topologicalAddGroup, J.adicTopology, J.hasBasis_nhds_zero_adic.mem_iff, J.hasBasis_nhds_zero_adic.mem_iff.mp, J.openAddSubgroup, RingSubgroupsBasis, RingSubgroupsBasis.toRingFilterBasis, adicTopology, adic_basis, hasBasis_nhds_zero_adic, isOpen, isTopologicalAddGroup, mem_iff, openAddSubgroup, toAddGroupFilterBasis, toAddGroupFilterBasis.isTopologicalAddGroup
 -/
@@ -470,7 +520,8 @@ theorem is_ideal_adic_pow
     · exfalso
       exact Nat.not_succ_le_zero 0 hn
     rw [← pow_mul]; rw [Nat.succ_mul]
-    apply Idea
+    apply Ideal.pow_le_pow_right
+    apply Nat.le_add_left
 
 中文:
 定理 is_ideal_adic_pow
@@ -490,7 +541,8 @@ theorem is_ideal_adic_pow
     · exfalso
       exact Nat.not_succ_le_zero 0 hn
     rw [← pow_mul]; rw [Nat.succ_mul]
-    apply Idea
+    apply Ideal.pow_le_pow_right
+    apply Nat.le_add_left
 
 Depends on / 依赖: Ideal.pow_le_pow_right, Nat.le_add_left, Nat.not_succ_le_zero, Nat.succ_mul, Set.Subset.trans, Subset, h.left, h.right, isAdic_iff, le_add_left, not_succ_le_zero, pow_le_pow_right, pow_mul, succ_mul
 -/

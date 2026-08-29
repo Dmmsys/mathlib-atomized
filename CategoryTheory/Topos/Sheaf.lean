@@ -153,7 +153,10 @@ lemma Presheaf.isPullback_χ_truth
   refine ⟨congr(($(comp_χ_eq m)).app X), ?_, ?_⟩
   · simpa using! (mono_iff_injective (m.app X)).mp (inferInstance)
   · simp only [Functor.const_obj_obj, Functor.sieves_obj, χ_app, Opposite.op_unop,
-      TypeCat
+      TypeCat.hom_ofHom, TypeCat.Fun.coe_mk, truth_app, Functor.isTerminalConst_from_app,
+      Types.isTerminalPUnit_from_apply, and_true, forall_const]
+    intro p hp
+    simpa [eq_comm] using! congr($(hp).arrows (𝟙 _))
 
 中文:
 引理 预层.isPullback_χ_truth
@@ -164,7 +167,10 @@ lemma Presheaf.isPullback_χ_truth
   refine ⟨congr(($(comp_χ_eq m)).app X), ?_, ?_⟩
   · simpa using! (mono_iff_injective (m.app X)).mp (inferInstance)
   · simp only [Functor.const_obj_obj, Functor.sieves_obj, χ_app, Opposite.op_unop,
-      TypeCat
+      TypeCat.hom_ofHom, TypeCat.Fun.coe_mk, truth_app, Functor.isTerminalConst_from_app,
+      Types.isTerminalPUnit_from_apply, and_true, forall_const]
+    intro p hp
+    simpa [eq_comm] using! congr($(hp).arrows (𝟙 _))
 
 Depends on / 依赖: Functor, Functor.const_obj_obj, Functor.isTerminalConst_from_app, Functor.sieves_obj, IsPullback, IsPullback.of_forall_isPullback_app, Opposite, Opposite.op_unop, TypeCat, TypeCat.Fun.coe_mk, TypeCat.hom_ofHom, Types.isPullback_iff, Types.isTerminalPUnit_from_apply, and_true, arrows, coe_mk, const_obj_obj, eq_comm, forall_const, hom_ofHom
 -/
@@ -194,7 +200,20 @@ lemma Presheaf.χ_unique
     Functor.isTerminalConst_from_app, truth_app, Types.isPullback_iff,
     Types.isTerminalPUnit_from_apply, and_true, TypeCat.hom_ofHom, TypeCat.Fun.coe_mk,
     forall_const, forall_and] at hχ'
-  obtain ⟨h₁, h₂
+  obtain ⟨h₁, h₂, h₃⟩ := hχ'
+  refine Sieve.ext fun Y f => ?_
+  simp only [χ_app, Opposite.op_unop]
+  rw [Sieve.mem_iff_pullback_eq_top]; rw [← Quiver.Hom.unop_op f]
+  dsimp
+  have := ConcreteCategory.congr_hom (Functor.sieves_map C (f.op)) (χ'.app X x)
+  rw [← dsimp% this]; rw [← dsimp% NatTrans.naturality_apply χ' f.op x]
+  constructor
+  · intro h
+    obtain ⟨z, hz⟩ := h₃ _ _ h
+    use z, hz.symm
+  · rintro ⟨a, h⟩
+    rw [h]
+    simpa using congr($(h₁ (.op Y)) a)
 
 中文:
 引理 预层.χ_unique
@@ -205,7 +224,20 @@ lemma Presheaf.χ_unique
     Functor.isTerminalConst_from_app, truth_app, Types.isPullback_iff,
     Types.isTerminalPUnit_from_apply, and_true, TypeCat.hom_ofHom, TypeCat.Fun.coe_mk,
     forall_const, forall_and] at hχ'
-  obtain ⟨h₁, h₂
+  obtain ⟨h₁, h₂, h₃⟩ := hχ'
+  refine Sieve.ext fun Y f => ?_
+  simp only [χ_app, Opposite.op_unop]
+  rw [Sieve.mem_iff_pullback_eq_top]; rw [← Quiver.Hom.unop_op f]
+  dsimp
+  have := ConcreteCategory.congr_hom (Functor.sieves_map C (f.op)) (χ'.app X x)
+  rw [← dsimp% this]; rw [← dsimp% NatTrans.naturality_apply χ' f.op x]
+  constructor
+  · intro h
+    obtain ⟨z, hz⟩ := h₃ _ _ h
+    use z, hz.symm
+  · rintro ⟨a, h⟩
+    rw [h]
+    simpa using congr($(h₁ (.op Y)) a)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Functor, Functor.const_obj_obj, Functor.isTerminalConst_from_app, Functor.sieves_map, Functor.sieves_obj, IsPullback, IsPullback.iff_app, Opposite, Opposite.op_unop, Quiver, Quiver.Hom.unop_op, Sieve.ext, Sieve.mem_iff_pullback_eq_top, TypeCat, TypeCat.Fun.coe_mk, TypeCat.hom_ofHom, Types.isPullback_iff, Types.isTerminalPUnit_from_apply
 -/
@@ -298,7 +330,10 @@ lemma GrothendieckTopology.isClosed_χ_app_apply_of_isSheaf_of_isSeparated
   refine ⟨(hF _ hf).amalgamate a ?_, ?_⟩
   · introv Y₁ h
     apply (mono_iff_injective (m.app (.op Z))).mp inferInstance
-    simp_rw
+    simp_rw [NatTrans.naturality_apply, ← ha, ← Functor.map_comp_apply, ← op_comp,
+      reassoc_of% h]
+  · refine (hG _ hf).ext fun Z f' hf' => ?_
+    rw [← NatTrans.naturality_apply]; rw [(hF _ hf).valid_glue _ _ hf']; rw [← (ha _ _ _)]; rw [op_comp]; rw [Functor.map_comp_apply]
 
 中文:
 引理 Grothendieck拓扑.isClosed_χ_app_apply_of_isSheaf_of_isSeparated
@@ -309,7 +344,10 @@ lemma GrothendieckTopology.isClosed_χ_app_apply_of_isSheaf_of_isSeparated
   refine ⟨(hF _ hf).amalgamate a ?_, ?_⟩
   · introv Y₁ h
     apply (mono_iff_injective (m.app (.op Z))).mp inferInstance
-    simp_rw
+    simp_rw [NatTrans.naturality_apply, ← ha, ← Functor.map_comp_apply, ← op_comp,
+      reassoc_of% h]
+  · refine (hG _ hf).ext fun Z f' hf' => ?_
+    rw [← NatTrans.naturality_apply]; rw [(hF _ hf).valid_glue _ _ hf']; rw [← (ha _ _ _)]; rw [op_comp]; rw [Functor.map_comp_apply]
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, NatTrans, NatTrans.naturality_apply, Opposite, Opposite.op_unop, Presheaf, Sieve.pullback, amalgamate, arrows, introv, m.app, map_comp_apply, mono_iff_injective, naturality_apply, op_comp, op_unop, pullback, reassoc_of, simp_rw
 -/
@@ -400,7 +438,7 @@ definition χ
     simp only [Subfunctor.range_obj, closedSieves_obj, Set.range_subset_iff]
     exact J.isClosed_χ_app_apply_of_isSheaf_of_isSeparated m.hom
       ((isSheaf_iff_isSheaf_of_type _ _).mp F.property)
-      ((isSheaf_iff_isSheaf_of_type _ _).mp G
+      ((isSheaf_iff_isSheaf_of_type _ _).mp G.property).isSeparated _)
 
 中文:
 定义 χ
@@ -410,7 +448,7 @@ definition χ
     simp only [Subfunctor.range_obj, closedSieves_obj, Set.range_subset_iff]
     exact J.isClosed_χ_app_apply_of_isSheaf_of_isSeparated m.hom
       ((isSheaf_iff_isSheaf_of_type _ _).mp F.property)
-      ((isSheaf_iff_isSheaf_of_type _ _).mp G
+      ((isSheaf_iff_isSheaf_of_type _ _).mp G.property).isSeparated _)
 
 Depends on / 依赖: F.property, G.property, J.isClosed_, Presheaf, Set.range_subset_iff, Subfunctor, Subfunctor.range_obj, closedSieves, closedSieves_obj, isSeparated, isSheaf_iff_isSheaf_of_type, m.hom, property, range_obj, range_subset_iff
 -/
@@ -436,7 +474,13 @@ lemma isPullback_χ_truth
     simp only [Ω_obj, ObjectProperty.FullSubcategory.comp_hom, χ_hom, terminal_obj, truth_hom,
       ← cancel_mono (closedSieves J).ι, Category.assoc, Subfunctor.lift_ι]
     exact Presheaf.comp_χ_eq m.hom
-  · simp only [ObjectProperty.ι_
+  · simp only [ObjectProperty.ι_obj, terminal_obj, Ω_obj, ObjectProperty.ι_map, χ_hom, truth_hom]
+    apply IsPullback.of_right _
+      ((cancel_mono ((closedSieves J).ι)).mp (by simpa using Presheaf.comp_χ_eq _))
+      (.of_horiz_isIso_mono ⟨_⟩ : IsPullback (𝟙 _) _ (Presheaf.χ m.hom) (closedSieves J).ι)
+    · simp only [Category.comp_id]
+      exact Presheaf.isPullback_χ_truth m.hom
+    · simp_all
 
 中文:
 引理 isPullback_χ_truth
@@ -447,7 +491,13 @@ lemma isPullback_χ_truth
     simp only [Ω_obj, ObjectProperty.FullSubcategory.comp_hom, χ_hom, terminal_obj, truth_hom,
       ← cancel_mono (closedSieves J).ι, Category.assoc, Subfunctor.lift_ι]
     exact Presheaf.comp_χ_eq m.hom
-  · simp only [ObjectProperty.ι_
+  · simp only [ObjectProperty.ι_obj, terminal_obj, Ω_obj, ObjectProperty.ι_map, χ_hom, truth_hom]
+    apply IsPullback.of_right _
+      ((cancel_mono ((closedSieves J).ι)).mp (by simpa using Presheaf.comp_χ_eq _))
+      (.of_horiz_isIso_mono ⟨_⟩ : IsPullback (𝟙 _) _ (Presheaf.χ m.hom) (closedSieves J).ι)
+    · simp only [Category.comp_id]
+      exact Presheaf.isPullback_χ_truth m.hom
+    · simp_all
 
 Depends on / 依赖: Category, Category.assoc, FullSubcategory, IsPullback, IsPullback.of_map, IsPullback.of_right, ObjectProperty, ObjectProperty.FullSubcategory.comp_hom, Presheaf, Presheaf.comp_, Subfunctor, Subfunctor.lift_, cancel_mono, closedSieves, comp_hom, m.hom, of_horiz_isIso_mono, of_map, of_right, sheafToPresheaf
 -/
@@ -479,7 +529,9 @@ lemma χ_unique
   apply Presheaf.χ_unique _
   have pb : IsPullback (𝟙 G.obj) χ'.hom (χ'.hom ≫ (closedSieves J).ι)
     (closedSieves J).ι := IsPullback.of_horiz_isIso_mono (by simp)
-have : IsPullback m.hom ?_ χ'.hom (truth J).ho
+have : IsPullback m.hom ?_ χ'.hom (truth J).hom := by
+    simpa using hχ'.map (sheafToPresheaf J _)
+  simpa using this.paste_horiz pb
 
 中文:
 引理 χ_unique
@@ -490,7 +542,9 @@ have : IsPullback m.hom ?_ χ'.hom (truth J).ho
   apply Presheaf.χ_unique _
   have pb : IsPullback (𝟙 G.obj) χ'.hom (χ'.hom ≫ (closedSieves J).ι)
     (closedSieves J).ι := IsPullback.of_horiz_isIso_mono (by simp)
-have : IsPullback m.hom ?_ χ'.hom (truth J).ho
+have : IsPullback m.hom ?_ χ'.hom (truth J).hom := by
+    simpa using hχ'.map (sheafToPresheaf J _)
+  simpa using this.paste_horiz pb
 
 Depends on / 依赖: G.obj, IsPullback, IsPullback.of_horiz_isIso_mono, Presheaf, Subfunctor, Subfunctor.lift_, cancel_mono, closedSieves, m.hom, of_horiz_isIso_mono, paste_horiz, sheafToPresheaf, this.paste_horiz
 -/

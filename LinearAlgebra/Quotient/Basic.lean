@@ -1159,7 +1159,12 @@ theorem span_preimage_eq
     have hy : y in s := Classical.choose_spec h₀
     rw [ker_le_iff]
     use y, h₁ hy
-    rw [← Set.singleton_subset_iff
+    rw [← Set.singleton_subset_iff] at hy
+    exact Set.Subset.trans subset_span (span_mono (Set.preimage_mono hy))
+  rw [← left_eq_sup] at hk
+  rw [coe_range f] at h₁
+  rw [hk]; rw [← LinearMap.map_le_map_iff]; rw [map_span]; rw [map_comap_eq]; rw [Set.image_preimage_eq_of_subset h₁]
+  exact inf_le_right
 
 中文:
 定理 span_preimage_eq
@@ -1171,7 +1176,12 @@ theorem span_preimage_eq
     have hy : y in s := Classical.choose_spec h₀
     rw [ker_le_iff]
     use y, h₁ hy
-    rw [← Set.singleton_subset_iff
+    rw [← Set.singleton_subset_iff] at hy
+    exact Set.Subset.trans subset_span (span_mono (Set.preimage_mono hy))
+  rw [← left_eq_sup] at hk
+  rw [coe_range f] at h₁
+  rw [hk]; rw [← LinearMap.map_le_map_iff]; rw [map_span]; rw [map_comap_eq]; rw [Set.image_preimage_eq_of_subset h₁]
+  exact inf_le_right
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, LinearMap, LinearMap.map_le_map_iff, Set.Subset.trans, Set.image_preimage, Set.preimage_mono, Set.singleton_subset_iff, Subset, choose_spec, coe_range, image_preimage, ker_le_iff, le_antisymm, left_eq_sup, map_comap_eq, map_le_map_iff, map_span, preimage_mono
 -/

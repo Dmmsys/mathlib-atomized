@@ -914,7 +914,10 @@ theorem diagonalSuccIsoTensorTrivial_inv_hom_apply
   | succ n hn =>
     funext x
     induction x using Fin.cases with
-    | z
+    | zero => simp; rfl
+    | succ i =>
+      simpa [diagonalSuccIsoTensorTrivial, types_tensorObj_def, mul_assoc, Fin.partialProd_succ',
+        ofMulAction_V] using! congrFun (hn (g * f 0) (Fin.tail f)) i
 
 中文:
 定理 diagonalSuccIsoTensorTrivial_inv_hom_apply
@@ -928,7 +931,10 @@ theorem diagonalSuccIsoTensorTrivial_inv_hom_apply
   | succ n hn =>
     funext x
     induction x using Fin.cases with
-    | z
+    | zero => simp; rfl
+    | succ i =>
+      simpa [diagonalSuccIsoTensorTrivial, types_tensorObj_def, mul_assoc, Fin.partialProd_succ',
+        ofMulAction_V] using! congrFun (hn (g * f 0) (Fin.tail f)) i
 
 Depends on / 依赖: Fin.cases, Fin.partialProd_succ, Fin.tail, Subsingleton, Subsingleton.elim, diagonalOneIsoLeftRegular, diagonalSuccIsoTensorTrivial, generalizing, mul_assoc, ofMulAction_V, partialProd_succ, types_tensorObj_def, types_tensorUnit_def
 -/
@@ -976,7 +982,11 @@ instance [F.LaxMonoidal]
   μ X Y :=
     { hom := μ F X.V Y.V
       comm := fun g => μ_natural F (X.ρ g) (Y.ρ g) }
-  μ_natural_left _ _ := by ext; 
+  μ_natural_left _ _ := by ext; simp
+  μ_natural_right _ _ := by ext; simp
+  associativity _ _ _ := by ext; simp
+  left_unitality _ := by ext; simp
+  right_unitality _ := by ext; simp
 
 中文:
 实例 [F.松弛幺半群]
@@ -988,7 +998,11 @@ instance [F.LaxMonoidal]
   μ X Y :=
     { hom := μ F X.V Y.V
       comm := fun g => μ_natural F (X.ρ g) (Y.ρ g) }
-  μ_natural_left _ _ := by ext; 
+  μ_natural_left _ _ := by ext; simp
+  μ_natural_right _ _ := by ext; simp
+  associativity _ _ _ := by ext; simp
+  left_unitality _ := by ext; simp
+  right_unitality _ := by ext; simp
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, F.map_id, Functor, Functor.mapAction, FunctorCategoryEquivalence, FunctorCategoryEquivalence.inverse, associativity, comp_id, id_comp, inverse, left_unitality, mapAction, map_id, right_unitality
 -/
@@ -1059,7 +1073,11 @@ instance [F.OplaxMonoidal]
   δ X Y :=
     { hom := δ F X.V Y.V
       comm := fun g => (δ_natural F (X.ρ g) (Y.ρ g)).symm }
-  δ_natural_left _ _ := by 
+  δ_natural_left _ _ := by ext; simp
+  δ_natural_right _ _ := by ext; simp
+  oplax_associativity _ _ _ := by ext; simp
+  oplax_left_unitality _ := by ext; simp
+  oplax_right_unitality _ := by ext; simp
 
 中文:
 实例 [F.反松弛幺半群]
@@ -1071,7 +1089,11 @@ instance [F.OplaxMonoidal]
   δ X Y :=
     { hom := δ F X.V Y.V
       comm := fun g => (δ_natural F (X.ρ g) (Y.ρ g)).symm }
-  δ_natural_left _ _ := by 
+  δ_natural_left _ _ := by ext; simp
+  δ_natural_right _ _ := by ext; simp
+  oplax_associativity _ _ _ := by ext; simp
+  oplax_left_unitality _ := by ext; simp
+  oplax_right_unitality _ := by ext; simp
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Functor, Functor.mapAction, FunctorCategoryEquivalence, FunctorCategoryEquivalence.inverse, comp_id, id_comp, inverse, mapAction, map_id, oplax_associativity, oplax_left_unitality, oplax_right_unitality
 -/

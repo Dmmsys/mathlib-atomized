@@ -231,7 +231,9 @@ lemma le_prod_max_one
   have : f i = ∏ j in s, if i = j then f i else 1 := by
     rw [prod_eq_single_of_mem i hi fun _ _ _ => by grind]
     simp
-  exact this ▸ prod_le_prod (fun _ _ =>
+  exact this ▸ prod_le_prod (fun _ _ => by grind [zero_le_one]) fun _ _ => by grind
+
+@[gcongr]
 
 中文:
 引理 le_prod_max_one
@@ -243,7 +245,9 @@ lemma le_prod_max_one
   have : f i = ∏ j in s, if i = j then f i else 1 := by
     rw [prod_eq_single_of_mem i hi fun _ _ _ => by grind]
     simp
-  exact this ▸ prod_le_prod (fun _ _ =>
+  exact this ▸ prod_le_prod (fun _ _ => by grind [zero_le_one]) fun _ _ => by grind
+
+@[gcongr]
 
 Depends on / 依赖: classical, hf.trans_le, le_sup_of_le_right, lt_or_ge, prod_eq_single_of_mem, prod_le_prod, prod_nonneg, trans_le, zero_le_one
 -/
@@ -272,7 +276,7 @@ theorem prod_le_prod_of_subset_of_one_le
       ∏ i in s, f i <= (∏ i in t \ s, f i) * ∏ i in s, f i :=
 le_mul_of_one_le_left (prod_nonneg hf0) one_le_prod by simpa only [mem_sdiff, and_imp]
       _ = ∏ i in t \ s union s, f i := (prod_union sdiff_disjoint).symm
-    
+      _ = ∏ i in t, f i := by rw [sdiff_union_of_subset h]
 
 中文:
 定理 prod_le_prod_of_subset_of_one_le
@@ -284,7 +288,7 @@ le_mul_of_one_le_left (prod_nonneg hf0) one_le_prod by simpa only [mem_sdiff, an
       ∏ i in s, f i <= (∏ i in t \ s, f i) * ∏ i in s, f i :=
 le_mul_of_one_le_left (prod_nonneg hf0) one_le_prod by simpa only [mem_sdiff, and_imp]
       _ = ∏ i in t \ s union s, f i := (prod_union sdiff_disjoint).symm
-    
+      _ = ∏ i in t, f i := by rw [sdiff_union_of_subset h]
 
 Depends on / 依赖: PosMulMono, and_imp, classical, le_mul_of_one_le_left, mem_sdiff, one_le_prod, posMulMono_iff_mulPosMono, prod_nonneg, prod_union, sdiff_disjoint, sdiff_union_of_subset
 -/
@@ -312,7 +316,7 @@ theorem prod_le_prod_of_subset_of_le_one
     ∏ i in t, f i = ∏ i in t \ s union s, f i := by rw [sdiff_union_of_subset h]
     _ = (∏ i in t \ s, f i) * ∏ i in s, f i := prod_union sdiff_disjoint
     _ <= ∏ i in s, f i :=
-      mul_le_of_le_one_left (prod_nonneg (by 
+      mul_le_of_le_one_left (prod_nonneg (by grind)) (prod_le_one (by grind) (by grind))
 
 中文:
 定理 prod_le_prod_of_subset_of_le_one
@@ -324,7 +328,7 @@ theorem prod_le_prod_of_subset_of_le_one
     ∏ i in t, f i = ∏ i in t \ s union s, f i := by rw [sdiff_union_of_subset h]
     _ = (∏ i in t \ s, f i) * ∏ i in s, f i := prod_union sdiff_disjoint
     _ <= ∏ i in s, f i :=
-      mul_le_of_le_one_left (prod_nonneg (by 
+      mul_le_of_le_one_left (prod_nonneg (by grind)) (prod_le_one (by grind) (by grind))
 
 Depends on / 依赖: PosMulMono, classical, mul_le_of_le_one_left, posMulMono_iff_mulPosMono, prod_le_one, prod_nonneg, prod_union, sdiff_disjoint, sdiff_union_of_subset
 -/
@@ -418,7 +422,10 @@ lemma prod_lt_prod
   rw [← insert_erase hi]; rw [prod_insert (notMem_erase _ _)]; rw [prod_insert (notMem_erase _ _)]
   have := posMulStrictMono_iff_mulPosStrictMono.1 ‹PosMulStrictMono R›
   refine mul_lt_mul_of_pos_of_nonneg' hilt ?_ ?_ ?_
-  · exact prod_le_prod (fun j hj 
+  · exact prod_le_prod (fun j hj => le_of_lt (hf j (mem_of_mem_erase hj)))
+      (fun _ hj => hfg _ <| mem_of_mem_erase hj)
+  · exact prod_pos fun j hj => hf j (mem_of_mem_erase hj)
+  · exact (hf i hi).le.trans hilt.le
 
 中文:
 引理 prod_lt_prod
@@ -429,7 +436,10 @@ lemma prod_lt_prod
   rw [← insert_erase hi]; rw [prod_insert (notMem_erase _ _)]; rw [prod_insert (notMem_erase _ _)]
   have := posMulStrictMono_iff_mulPosStrictMono.1 ‹PosMulStrictMono R›
   refine mul_lt_mul_of_pos_of_nonneg' hilt ?_ ?_ ?_
-  · exact prod_le_prod (fun j hj 
+  · exact prod_le_prod (fun j hj => le_of_lt (hf j (mem_of_mem_erase hj)))
+      (fun _ hj => hfg _ <| mem_of_mem_erase hj)
+  · exact prod_pos fun j hj => hf j (mem_of_mem_erase hj)
+  · exact (hf i hi).le.trans hilt.le
 
 Depends on / 依赖: PosMulStrictMono, classical, hilt.le, insert_erase, le.trans, le_of_lt, mem_of_mem_erase, mul_lt_mul_of_pos_of_nonneg, notMem_erase, posMulStrictMono_iff_mulPosStrictMono, prod_insert, prod_le_prod, prod_pos
 -/

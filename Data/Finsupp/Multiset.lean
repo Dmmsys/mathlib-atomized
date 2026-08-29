@@ -37,7 +37,8 @@ definition toMultiset
   -- Porting note: have to specify `h` or add a `dsimp only` before `sum_add_index'`.
   -- see also: https://github.com/leanprover-community/mathlib4/issues/12129
   map_add' _f _g := sum_add_index' (h := fun _ n => n • _)
-    (fun _ => zero_nsmul _) (fun _ => add_nsm
+    (fun _ => zero_nsmul _) (fun _ => add_nsmul _)
+  map_zero' := sum_zero_index
 
 中文:
 定义 toMultiset
@@ -46,7 +47,8 @@ definition toMultiset
   -- Porting note: have to specify `h` or add a `dsimp only` before `sum_add_index'`.
   -- see also: https://github.com/leanprover-community/mathlib4/issues/12129
   map_add' _f _g := sum_add_index' (h := fun _ n => n • _)
-    (fun _ => zero_nsmul _) (fun _ => add_nsm
+    (fun _ => zero_nsmul _) (fun _ => add_nsmul _)
+  map_zero' := sum_zero_index
 
 Depends on / 依赖: Finsupp, Finsupp.sum
 -/
@@ -218,7 +220,10 @@ theorem toMultiset_map
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.map_zero, mapDomain_zero, toMultiset_zero]
   · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.map_add]; rw [ih]; rw [mapDomain_add]; rw [mapDomain_single]; rw [toMultiset_single]; rw [toMultiset_add]; rw [toMultiset_single]; r
+    rw [toMultiset_add]; rw [Multiset.map_add]; rw [ih]; rw [mapDomain_add]; rw [mapDomain_single]; rw [toMultiset_single]; rw [toMultiset_add]; rw [toMultiset_single]; rw [← Multiset.coe_mapAddMonoidHom]; rw [(Multiset.mapAddMonoidHom g).map_nsmul]
+    rfl
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 toMultiset_map
@@ -227,7 +232,10 @@ theorem toMultiset_map
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.map_zero, mapDomain_zero, toMultiset_zero]
   · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.map_add]; rw [ih]; rw [mapDomain_add]; rw [mapDomain_single]; rw [toMultiset_single]; rw [toMultiset_add]; rw [toMultiset_single]; r
+    rw [toMultiset_add]; rw [Multiset.map_add]; rw [ih]; rw [mapDomain_add]; rw [mapDomain_single]; rw [toMultiset_single]; rw [toMultiset_add]; rw [toMultiset_single]; rw [← Multiset.coe_mapAddMonoidHom]; rw [(Multiset.mapAddMonoidHom g).map_nsmul]
+    rfl
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Multiset, Multiset.coe_mapAddMonoidHom, Multiset.mapAddMonoidHom, Multiset.map_add, Multiset.map_zero, coe_mapAddMonoidHom, f.induction, mapAddMonoidHom, mapDomain_add, mapDomain_single, mapDomain_zero, map_add, map_nsmul, map_zero, toMultiset_add, toMultiset_single, toMultiset_zero
 -/
@@ -250,7 +258,10 @@ theorem prod_toMultiset
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.prod_zero, Finsupp.prod_zero_index]
   · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.prod_add]; rw [ih]; rw [toMultiset_single]; rw [Multiset.prod_nsmul]; rw [Finsupp.prod_add_index' pow_zero pow_add]; rw [Finsupp.prod_singl
+    rw [toMultiset_add]; rw [Multiset.prod_add]; rw [ih]; rw [toMultiset_single]; rw [Multiset.prod_nsmul]; rw [Finsupp.prod_add_index' pow_zero pow_add]; rw [Finsupp.prod_single_index]; rw [Multiset.prod_singleton]
+    exact pow_zero a
+
+@[simp]
 
 中文:
 定理 prod_toMultiset
@@ -259,7 +270,10 @@ theorem prod_toMultiset
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.prod_zero, Finsupp.prod_zero_index]
   · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.prod_add]; rw [ih]; rw [toMultiset_single]; rw [Multiset.prod_nsmul]; rw [Finsupp.prod_add_index' pow_zero pow_add]; rw [Finsupp.prod_singl
+    rw [toMultiset_add]; rw [Multiset.prod_add]; rw [ih]; rw [toMultiset_single]; rw [Multiset.prod_nsmul]; rw [Finsupp.prod_add_index' pow_zero pow_add]; rw [Finsupp.prod_single_index]; rw [Multiset.prod_singleton]
+    exact pow_zero a
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.prod_add_index, Finsupp.prod_single_index, Finsupp.prod_zero_index, Multiset, Multiset.prod_add, Multiset.prod_nsmul, Multiset.prod_singleton, Multiset.prod_zero, f.induction, pow_add, pow_zero, prod_add, prod_add_index, prod_nsmul, prod_single_index, prod_singleton, prod_zero, prod_zero_index, toMultiset_add
 -/
@@ -283,7 +297,11 @@ theorem toFinset_toMultiset
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.toFinset_zero, support_zero]
   · intro a n f ha hn ih
-    rw [toMultiset_add]; rw [Multiset.toFinset_add]; rw [ih]; rw [toMultiset_single]; rw [support_add_eq]; rw [support_single _ hn]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset
+    rw [toMultiset_add]; rw [Multiset.toFinset_add]; rw [ih]; rw [toMultiset_single]; rw [support_add_eq]; rw [support_single _ hn]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset.toFinset_singleton]
+    refine Disjoint.mono_left support_single_subset ?_
+    rwa [Finset.disjoint_singleton_left]
+
+@[simp]
 
 中文:
 定理 toFinset_toMultiset
@@ -293,7 +311,11 @@ theorem toFinset_toMultiset
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.toFinset_zero, support_zero]
   · intro a n f ha hn ih
-    rw [toMultiset_add]; rw [Multiset.toFinset_add]; rw [ih]; rw [toMultiset_single]; rw [support_add_eq]; rw [support_single _ hn]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset
+    rw [toMultiset_add]; rw [Multiset.toFinset_add]; rw [ih]; rw [toMultiset_single]; rw [support_add_eq]; rw [support_single _ hn]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset.toFinset_singleton]
+    refine Disjoint.mono_left support_single_subset ?_
+    rwa [Finset.disjoint_singleton_left]
+
+@[simp]
 
 Depends on / 依赖: Disjoint, Disjoint.mono_left, Finset, Finset.disjoint_singleton_left, Multiset, Multiset.toFinset_add, Multiset.toFinset_nsmul, Multiset.toFinset_singleton, Multiset.toFinset_zero, disjoint_singleton_left, f.induction, mono_left, support_add_eq, support_single, support_single_subset, support_zero, toFinset_add, toFinset_nsmul, toFinset_singleton, toFinset_zero
 -/
@@ -317,7 +339,11 @@ theorem count_toMultiset
     (toMultiset f).count a = Finsupp.sum f (fun x n => (n • {x} : Multiset α).count a) := by
       rw [toMultiset_apply]; exact map_sum (Multiset.countAddMonoidHom a) _ f.support
     _ = f.sum fun x n => n * ({x} : Multiset α).count a := by simp only [Multiset.count_nsmul]
-    _ = f a * ({a} : 
+    _ = f a * ({a} : Multiset α).count a :=
+      sum_eq_single _
+        (fun a' _ H => by simp only [Multiset.count_singleton, if_false, H.symm, mul_zero])
+        (fun _ => zero_mul _)
+    _ = f a := by rw [Multiset.count_singleton_self, mul_one]
 
 中文:
 定理 count_toMultiset
@@ -327,7 +353,11 @@ theorem count_toMultiset
     (toMultiset f).count a = Finsupp.sum f (fun x n => (n • {x} : Multiset α).count a) := by
       rw [toMultiset_apply]; exact map_sum (Multiset.countAddMonoidHom a) _ f.support
     _ = f.sum fun x n => n * ({x} : Multiset α).count a := by simp only [Multiset.count_nsmul]
-    _ = f a * ({a} : 
+    _ = f a * ({a} : Multiset α).count a :=
+      sum_eq_single _
+        (fun a' _ H => by simp only [Multiset.count_singleton, if_false, H.symm, mul_zero])
+        (fun _ => zero_mul _)
+    _ = f a := by rw [Multiset.count_singleton_self, mul_one]
 
 Depends on / 依赖: Finsupp, Finsupp.sum, H.symm, Multiset, Multiset.countAddMonoidHom, Multiset.count_nsmul, Multiset.count_singleton, Multiset.count_singleton_self, countAddMonoidHom, count_nsmul, count_singleton, count_singleton_self, f.sum, f.support, if_false, map_sum, mul_one, mul_zero, sum_eq_single, support
 -/
@@ -441,7 +471,13 @@ definition toFinsupp
   right_inv f :=
     Finsupp.ext fun a => by
       simp only [Finsupp.toMultiset_apply, Finsupp.sum, Multiset.count_sum',
-        Multiset.count_singleton, mul
+        Multiset.count_singleton, mul_boole, Finsupp.coe_mk, Finsupp.mem_support_iff,
+        Multiset.count_nsmul, Finset.sum_ite_eq, ite_not, ite_eq_right_iff]
+      exact Eq.symm
+  left_inv s := by simp only [Finsupp.toMultiset_apply, Finsupp.sum, Finsupp.coe_mk,
+    Multiset.toFinset_sum_count_nsmul_eq]
+
+@[simp]
 
 中文:
 定义 toFinsupp
@@ -452,7 +488,13 @@ definition toFinsupp
   right_inv f :=
     Finsupp.ext fun a => by
       simp only [Finsupp.toMultiset_apply, Finsupp.sum, Multiset.count_sum',
-        Multiset.count_singleton, mul
+        Multiset.count_singleton, mul_boole, Finsupp.coe_mk, Finsupp.mem_support_iff,
+        Multiset.count_nsmul, Finset.sum_ite_eq, ite_not, ite_eq_right_iff]
+      exact Eq.symm
+  left_inv s := by simp only [Finsupp.toMultiset_apply, Finsupp.sum, Finsupp.coe_mk,
+    Multiset.toFinset_sum_count_nsmul_eq]
+
+@[simp]
 
 Depends on / 依赖: s.count, s.toFinset, toFinset
 -/

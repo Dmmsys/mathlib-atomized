@@ -36,7 +36,16 @@ lemma add_pow_prime_pow_eq'
   _ = ∑ k in Icc 0 (p ^ n), x ^ k * y ^ (p ^ n - k) * (p ^ n).choose k := by
     rw [h.add_pow]; rw [← Nat.Ico_zero_eq_range]; rw [Ico_add_one_right_eq_Icc]
   _ = x ^ p ^ n + y ^ p ^ n + ∑ k in Ioo 0 (p ^ n), x ^ k * y ^ (p ^ n - k) * (p ^ n).choose k := by
-    simp_rw [Icc_eq_cons_Ico zero_le,
+    simp_rw [Icc_eq_cons_Ico zero_le, Ico_eq_cons_Ioo (pow_pos hp.pos _)]
+    simp [-cons_eq_insert, add_assoc]
+  _ = _ := by
+    simp_rw [mul_sum]
+    congr! 2 with k hk
+    obtain ⟨hk₀, hk⟩ := mem_Ioo.1 hk
+    -- The maths is over now. We just commute things to their place.
+    rw [Nat.cast_comm]; rw [mul_assoc (_ * _)]
+    norm_cast
+    rw [Nat.div_mul_cancel (hp.dvd_choose_pow _ _)] <;> lia
 
 中文:
 引理 add_pow_prime_pow_eq'
@@ -45,7 +54,16 @@ lemma add_pow_prime_pow_eq'
   _ = ∑ k in Icc 0 (p ^ n), x ^ k * y ^ (p ^ n - k) * (p ^ n).choose k := by
     rw [h.add_pow]; rw [← Nat.Ico_zero_eq_range]; rw [Ico_add_one_right_eq_Icc]
   _ = x ^ p ^ n + y ^ p ^ n + ∑ k in Ioo 0 (p ^ n), x ^ k * y ^ (p ^ n - k) * (p ^ n).choose k := by
-    simp_rw [Icc_eq_cons_Ico zero_le,
+    simp_rw [Icc_eq_cons_Ico zero_le, Ico_eq_cons_Ioo (pow_pos hp.pos _)]
+    simp [-cons_eq_insert, add_assoc]
+  _ = _ := by
+    simp_rw [mul_sum]
+    congr! 2 with k hk
+    obtain ⟨hk₀, hk⟩ := mem_Ioo.1 hk
+    -- The maths is over now. We just commute things to their place.
+    rw [Nat.cast_comm]; rw [mul_assoc (_ * _)]
+    norm_cast
+    rw [Nat.div_mul_cancel (hp.dvd_choose_pow _ _)] <;> lia
 -/
 protected lemma add_pow_prime_pow_eq' (h : Commute x y) (n : Nat) :
     (x + y) ^ p ^ n =
@@ -76,7 +94,7 @@ lemma add_pow_prime_pow_eq
   congr! 3 with k hk
   obtain ⟨hk₀, hk⟩ := mem_Ioo.1 hk
   rw [← mul_pow_sub_one (by lia)]; rw [← mul_pow_sub_one (n := p ^ n - k) (by lia)]
-  rw [(h.pow_left _).mul_mul_mul_comm]; rw [mul_assoc (x * y)
+  rw [(h.pow_left _).mul_mul_mul_comm]; rw [mul_assoc (x * y)]
 
 中文:
 引理 add_pow_prime_pow_eq
@@ -86,7 +104,7 @@ lemma add_pow_prime_pow_eq
   congr! 3 with k hk
   obtain ⟨hk₀, hk⟩ := mem_Ioo.1 hk
   rw [← mul_pow_sub_one (by lia)]; rw [← mul_pow_sub_one (n := p ^ n - k) (by lia)]
-  rw [(h.pow_left _).mul_mul_mul_comm]; rw [mul_assoc (x * y)
+  rw [(h.pow_left _).mul_mul_mul_comm]; rw [mul_assoc (x * y)]
 -/
 protected lemma add_pow_prime_pow_eq (h : Commute x y) (n : Nat) :
     (x + y) ^ p ^ n =

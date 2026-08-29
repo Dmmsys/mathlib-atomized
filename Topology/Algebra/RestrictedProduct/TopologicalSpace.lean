@@ -561,7 +561,23 @@ theorem weaklyLocallyCompactSpace_of_principal
     classical
     have : forall i, exists K, IsCompact K ∧ K in 𝓝 (x i) := fun i => exists_compact_mem_nhds (x i)
     choose K K_compact hK using this
-    set Q : Set (Π i, R i) := univ.pi (fun i => if i in S then A i else K i) with Q_de
+    set Q : Set (Π i, R i) := univ.pi (fun i => if i in S then A i else K i) with Q_def
+    have Q_compact : IsCompact Q := isCompact_univ_pi fun i => by
+      split_ifs with his
+      · exact hAcompact i his
+      · exact K_compact i
+    set U : Set (Π i, R i) := Sᶜ.pi K
+    have U_nhds : U in 𝓝 (x : Π i, R i) := set_pi_mem_nhds hS fun i _ => hK i
+    have QU : (↑) ⁻¹' U subseteq ((↑) ⁻¹' Q : Set (Πʳ i, [R i, A i]_[𝓟 S])) := fun y H i _ => by
+      dsimp only
+      split_ifs with hi
+      · exact y.2 hi
+      · exact H i hi
+    refine ⟨((↑) ⁻¹' Q), ?_, mem_of_superset ?_ QU⟩
+.mpr Q_compact · refine isEmbedding_coe_of_principal.isCompact_preimage_iff ?_
+      simp_rw [range_coe_principal, Q_def, pi_if, mem_univ, true_and]
+      exact inter_subset_left
+    · simpa only [isEmbedding_coe_of_principal.nhds_eq_comap] using preimage_mem_comap U_nhds
 
 中文:
 定理 weaklyLocallyCompactSpace_of_principal
@@ -571,7 +587,23 @@ theorem weaklyLocallyCompactSpace_of_principal
     classical
     have : forall i, exists K, IsCompact K ∧ K in 𝓝 (x i) := fun i => exists_compact_mem_nhds (x i)
     choose K K_compact hK using this
-    set Q : Set (Π i, R i) := univ.pi (fun i => if i in S then A i else K i) with Q_de
+    set Q : Set (Π i, R i) := univ.pi (fun i => if i in S then A i else K i) with Q_def
+    have Q_compact : IsCompact Q := isCompact_univ_pi fun i => by
+      split_ifs with his
+      · exact hAcompact i his
+      · exact K_compact i
+    set U : Set (Π i, R i) := Sᶜ.pi K
+    have U_nhds : U in 𝓝 (x : Π i, R i) := set_pi_mem_nhds hS fun i _ => hK i
+    have QU : (↑) ⁻¹' U subseteq ((↑) ⁻¹' Q : Set (Πʳ i, [R i, A i]_[𝓟 S])) := fun y H i _ => by
+      dsimp only
+      split_ifs with hi
+      · exact y.2 hi
+      · exact H i hi
+    refine ⟨((↑) ⁻¹' Q), ?_, mem_of_superset ?_ QU⟩
+.mpr Q_compact · refine isEmbedding_coe_of_principal.isCompact_preimage_iff ?_
+      simp_rw [range_coe_principal, Q_def, pi_if, mem_univ, true_and]
+      exact inter_subset_left
+    · simpa only [isEmbedding_coe_of_principal.nhds_eq_comap] using preimage_mem_comap U_nhds
 
 Depends on / 依赖: IsCompact, K_compact, Q_compact, Q_def, U_nhds, classical, exists_compact_mem_nhds, hAcompact, isCompact_univ_pi, le_principal_iff, mem_cofinite, set_pi_mem_nhds, split_ifs, univ.pi
 -/
@@ -1011,7 +1043,11 @@ theorem weaklyLocallyCompactSpace_of_cofinite
     have hS : cofinite <= 𝓟 S := le_principal_iff.mpr (hAcompact.and x.2)
     have hSx : forall i in S, x i in A i := fun i hi => hi.2
     have hSA : forall i in S, IsCompact (A i) := fun i hi => hi.1
-    have := weaklyLocallyCompactSpace_o
+    have := weaklyLocallyCompactSpace_of_principal hS hSA
+    rcases exists_inclusion_eq_of_eventually R A hS hSx with ⟨x', hxx'⟩
+    rw [← hxx']; rw [nhds_eq_map_inclusion hAopen]
+    rcases exists_compact_mem_nhds x' with ⟨K, K_compact, hK⟩
+    exact ⟨inclusion R A hS '' K, K_compact.image (continuous_inclusion hS), image_mem_map hK⟩
 
 中文:
 定理 weaklyLocallyCompactSpace_of_cofinite
@@ -1021,7 +1057,11 @@ theorem weaklyLocallyCompactSpace_of_cofinite
     have hS : cofinite <= 𝓟 S := le_principal_iff.mpr (hAcompact.and x.2)
     have hSx : forall i in S, x i in A i := fun i hi => hi.2
     have hSA : forall i in S, IsCompact (A i) := fun i hi => hi.1
-    have := weaklyLocallyCompactSpace_o
+    have := weaklyLocallyCompactSpace_of_principal hS hSA
+    rcases exists_inclusion_eq_of_eventually R A hS hSx with ⟨x', hxx'⟩
+    rw [← hxx']; rw [nhds_eq_map_inclusion hAopen]
+    rcases exists_compact_mem_nhds x' with ⟨K, K_compact, hK⟩
+    exact ⟨inclusion R A hS '' K, K_compact.image (continuous_inclusion hS), image_mem_map hK⟩
 
 Depends on / 依赖: IsCompact, K_compact, cofinite, exists_compact_mem_nhds, exists_inclusion_eq_of_eventually, hAcompact, hAcompact.and, hAopen, inclusion, le_principal_iff, le_principal_iff.mpr, nhds_eq_map_inclusion, weaklyLocallyCompactSpace_of_principal
 -/
@@ -1080,7 +1120,10 @@ theorem continuous_dom_prod_right
   rintro ⟨x, y⟩
   set S : Set ι := {i | x i in A i}
   have hS : cofinite <= 𝓟 S := le_principal_iff.mpr x.2
-  have hxS : forall i in S, x i in A
+  have hxS : forall i in S, x i in A i := fun i hi => hi
+  rcases exists_inclusion_eq_of_eventually R A hS hxS with ⟨x', hxx'⟩
+  rw [← hxx']; rw [nhds_prod_eq]; rw [nhds_eq_map_inclusion hAopen hS x']; rw [← Filter.map_id (f := 𝓝 y)]; rw [prod_map_map_eq]; rw [← nhds_prod_eq]; rw [tendsto_map'_iff]
+.tendsto ⟨x', y⟩ exact H S hS
 
 中文:
 定理 continuous_dom_prod_right
@@ -1092,7 +1135,10 @@ theorem continuous_dom_prod_right
   rintro ⟨x, y⟩
   set S : Set ι := {i | x i in A i}
   have hS : cofinite <= 𝓟 S := le_principal_iff.mpr x.2
-  have hxS : forall i in S, x i in A
+  have hxS : forall i in S, x i in A i := fun i hi => hi
+  rcases exists_inclusion_eq_of_eventually R A hS hxS with ⟨x', hxx'⟩
+  rw [← hxx']; rw [nhds_prod_eq]; rw [nhds_eq_map_inclusion hAopen hS x']; rw [← Filter.map_id (f := 𝓝 y)]; rw [prod_map_map_eq]; rw [← nhds_prod_eq]; rw [tendsto_map'_iff]
+.tendsto ⟨x', y⟩ exact H S hS
 
 Depends on / 依赖: ContinuousAt, Filter, Filter.map_id, H.comp, cofinite, continuous_id, continuous_iff_continuousAt, continuous_inclusion, exists_inclusion_eq_of_eventually, hAopen, le_principal_iff, le_principal_iff.mpr, map_id, nhds_eq_map_inclusion, nhds_prod_eq, prodMap, prod_map_map_eq, simp_rw
 -/
@@ -1126,7 +1172,12 @@ theorem continuous_dom_prod_left
   rintro ⟨y, x⟩
   set S : Set ι := {i | x i in A i}
   have hS : cofinite <= 𝓟 S := le_principal_iff.mpr x.2
-  have hxS : forall i in S, x i in A
+  have hxS : forall i in S, x i in A i := fun i hi => hi
+  rcases exists_inclusion_eq_of_eventually R A hS hxS with ⟨x', hxx'⟩
+  rw [← hxx']; rw [nhds_prod_eq]; rw [nhds_eq_map_inclusion hAopen hS x']; rw [← Filter.map_id (f := 𝓝 y)]; rw [prod_map_map_eq]; rw [← nhds_prod_eq]; rw [tendsto_map'_iff]
+.tendsto ⟨y, x'⟩ exact H S hS
+
+include hAopen in
 
 中文:
 定理 continuous_dom_prod_left
@@ -1138,7 +1189,12 @@ theorem continuous_dom_prod_left
   rintro ⟨y, x⟩
   set S : Set ι := {i | x i in A i}
   have hS : cofinite <= 𝓟 S := le_principal_iff.mpr x.2
-  have hxS : forall i in S, x i in A
+  have hxS : forall i in S, x i in A i := fun i hi => hi
+  rcases exists_inclusion_eq_of_eventually R A hS hxS with ⟨x', hxx'⟩
+  rw [← hxx']; rw [nhds_prod_eq]; rw [nhds_eq_map_inclusion hAopen hS x']; rw [← Filter.map_id (f := 𝓝 y)]; rw [prod_map_map_eq]; rw [← nhds_prod_eq]; rw [tendsto_map'_iff]
+.tendsto ⟨y, x'⟩ exact H S hS
+
+include hAopen in
 
 Depends on / 依赖: ContinuousAt, Filter, Filter.map_id, H.comp, cofinite, continuous_id, continuous_id.prodMap, continuous_iff_continuousAt, continuous_inclusion, exists_inclusion_eq_of_eventually, hAopen, le_principal_iff, le_principal_iff.mpr, map_id, nhds_eq_map_inclusion, nhds_prod_eq, prodMap, prod_map_map_eq, simp_rw
 -/
@@ -1170,7 +1226,8 @@ theorem continuous_dom_prod
   set U := S inter T
   have hU : cofinite <= 𝓟 (S inter T) := inf_principal ▸ le_inf hS hT
   have hSU : 𝓟 U <= 𝓟 S := principal_mono.mpr inter_subset_left
-  h
+  have hTU : 𝓟 U <= 𝓟 T := principal_mono.mpr inter_subset_right
+  exact (H U hU).comp ((continuous_inclusion hSU).prodMap (continuous_inclusion hTU))
 
 中文:
 定理 continuous_dom_prod
@@ -1181,7 +1238,8 @@ theorem continuous_dom_prod
   set U := S inter T
   have hU : cofinite <= 𝓟 (S inter T) := inf_principal ▸ le_inf hS hT
   have hSU : 𝓟 U <= 𝓟 S := principal_mono.mpr inter_subset_left
-  h
+  have hTU : 𝓟 U <= 𝓟 T := principal_mono.mpr inter_subset_right
+  exact (H U hU).comp ((continuous_inclusion hSU).prodMap (continuous_inclusion hTU))
 
 Depends on / 依赖: cofinite, continuous_dom_prod_left, continuous_dom_prod_right, continuous_inclusion, hAopen, inf_principal, inter_subset_left, inter_subset_right, le_inf, principal_mono, principal_mono.mpr, prodMap, simp_rw
 -/
@@ -1213,7 +1271,12 @@ theorem continuous_dom_pi
   have hS : cofinite <= 𝓟 S := by
     rw [le_principal_iff]
     change forallᶠ i in cofinite, forall j : n, x j i in C j i
-    simp [-eventually_co
+    simp [-eventually_cofinite]
+  let x' (j : n) : Πʳ i : ι, [A j i, C j i]_[𝓟 S] := .mk (fun i => x j i) (fun i hi => hi _)
+  have hxx' : Pi.map (fun j => inclusion _ _ hS) x' = x := rfl
+  simp_rw [← hxx', nhds_pi, Pi.map_apply, nhds_eq_map_inclusion (hCopen _), ← map_piMap_pi_finite,
+    tendsto_map'_iff, ← nhds_pi]
+  exact (H _ _).tendsto _
 
 中文:
 定理 continuous_dom_pi
@@ -1226,7 +1289,12 @@ theorem continuous_dom_pi
   have hS : cofinite <= 𝓟 S := by
     rw [le_principal_iff]
     change forallᶠ i in cofinite, forall j : n, x j i in C j i
-    simp [-eventually_co
+    simp [-eventually_cofinite]
+  let x' (j : n) : Πʳ i : ι, [A j i, C j i]_[𝓟 S] := .mk (fun i => x j i) (fun i hi => hi _)
+  have hxx' : Pi.map (fun j => inclusion _ _ hS) x' = x := rfl
+  simp_rw [← hxx', nhds_pi, Pi.map_apply, nhds_eq_map_inclusion (hCopen _), ← map_piMap_pi_finite,
+    tendsto_map'_iff, ← nhds_pi]
+  exact (H _ _).tendsto _
 
 Depends on / 依赖: ContinuousAt, Pi.map, Pi.map_apply, cofinite, continuous_iff_continuousAt, eventually_cofinite, fun_prop, inclusion, le_principal_iff, map_apply, nhds_eq_map_inclusion, nhds_pi, simp_rw
 -/
@@ -1578,7 +1646,7 @@ instance [Π
     ⟨x • (B i : Set (R i)), .smul _ (isCompact_iff_compactSpace.mpr inferInstance),
 .mem_nhds by .smul _ hBopen.out i
       simpa using smul_mem_smul_set (a := x) (one_mem (B i))⟩
-locallyCompactS
+locallyCompactSpace_of_group _ .of_forall fun _ => isCompact_iff_compactSpace.mpr inferInstance
 
 中文:
 实例 [Π
@@ -1588,7 +1656,7 @@ locallyCompactS
     ⟨x • (B i : Set (R i)), .smul _ (isCompact_iff_compactSpace.mpr inferInstance),
 .mem_nhds by .smul _ hBopen.out i
       simpa using smul_mem_smul_set (a := x) (one_mem (B i))⟩
-locallyCompactS
+locallyCompactSpace_of_group _ .of_forall fun _ => isCompact_iff_compactSpace.mpr inferInstance
 -/
 instance [Π i, Group (R i)] [forall i, SubgroupClass (S i) (R i)] [forall i, IsTopologicalGroup (R i)]
     [hAcompact : forall i, CompactSpace (B i)] : LocallyCompactSpace (Πʳ i, [R i, B i]) :=
@@ -1628,7 +1696,13 @@ theorem mapAlong_continuous
     rw [le_principal_iff] at hS ⊢
     exact inter_mem (hf hS) hφ
   have hf' : Tendsto f (𝓟 T) (𝓟 S) := by aesop
-  have hφ' : forallᶠ j in 𝓟 T, MapsTo (φ j) (A₁ (f j)) (A₂ j
+  have hφ' : forallᶠ j in 𝓟 T, MapsTo (φ j) (A₁ (f j)) (A₂ j) := by aesop
+  have key : mapAlong R₁ R₂ f hf φ hφ ∘ inclusion R₁ A₁ hS =
+      inclusion R₂ A₂ hT ∘ mapAlong R₁ R₂ f hf' φ hφ' := rfl
+  rw [key]
+.comp exact continuous_inclusion _
+continuous_rng_of_principal.mpr
+.comp continuous_eval (f j) continuous_pi fun j => φ_cont j
 
 中文:
 定理 mapAlong_continuous
@@ -1641,7 +1715,13 @@ theorem mapAlong_continuous
     rw [le_principal_iff] at hS ⊢
     exact inter_mem (hf hS) hφ
   have hf' : Tendsto f (𝓟 T) (𝓟 S) := by aesop
-  have hφ' : forallᶠ j in 𝓟 T, MapsTo (φ j) (A₁ (f j)) (A₂ j
+  have hφ' : forallᶠ j in 𝓟 T, MapsTo (φ j) (A₁ (f j)) (A₂ j) := by aesop
+  have key : mapAlong R₁ R₂ f hf φ hφ ∘ inclusion R₁ A₁ hS =
+      inclusion R₂ A₂ hT ∘ mapAlong R₁ R₂ f hf' φ hφ' := rfl
+  rw [key]
+.comp exact continuous_inclusion _
+continuous_rng_of_principal.mpr
+.comp continuous_eval (f j) continuous_pi fun j => φ_cont j
 
 Depends on / 依赖: MapsTo, Tendsto, continuous, continuous_dom, continuous_inclusion, continuous_rng_of_principal, continuous_rng_of_principal.mpr, inclusion, inter_mem, le_principal_iff, mapAlong
 -/

@@ -126,7 +126,13 @@ theorem le_measure_compl_liminf_of_limsup_measure_le
     simpa only [measure_univ] using measure_compl E_mble (measure_lt_top μ E).ne
   have meas_i_Ec : forall i, μs i Eᶜ = 1 - μs i E := by
     intro i
-    simpa only [measure_univ] using m
+    simpa only [measure_univ] using measure_compl E_mble (measure_lt_top (μs i) E).ne
+  simp_rw [meas_Ec, meas_i_Ec]
+  rw [show (L.liminf fun i : ι => 1 - μs i E) = L.liminf ((fun x => 1 - x) ∘ fun i : ι => μs i E)
+      from rfl]
+  have key := antitone_const_tsub.map_limsup_of_continuousAt (F := L)
+    (fun i => μs i E) (ENNReal.continuous_sub_left ENNReal.one_ne_top).continuousAt
+  simpa [← key] using antitone_const_tsub h
 
 中文:
 定理 le_measure_compl_liminf_of_limsup_measure_le
@@ -138,7 +144,13 @@ theorem le_measure_compl_liminf_of_limsup_measure_le
     simpa only [measure_univ] using measure_compl E_mble (measure_lt_top μ E).ne
   have meas_i_Ec : forall i, μs i Eᶜ = 1 - μs i E := by
     intro i
-    simpa only [measure_univ] using m
+    simpa only [measure_univ] using measure_compl E_mble (measure_lt_top (μs i) E).ne
+  simp_rw [meas_Ec, meas_i_Ec]
+  rw [show (L.liminf fun i : ι => 1 - μs i E) = L.liminf ((fun x => 1 - x) ∘ fun i : ι => μs i E)
+      from rfl]
+  have key := antitone_const_tsub.map_limsup_of_continuousAt (F := L)
+    (fun i => μs i E) (ENNReal.continuous_sub_left ENNReal.one_ne_top).continuousAt
+  simpa [← key] using antitone_const_tsub h
 
 Depends on / 依赖: E_mble, L.eq_or_neBot, L.liminf, antitone_const_tsub, antitone_const_tsub.map_, eq_or_neBot, le_top, liminf, liminf_bot, map_, meas_Ec, meas_i_Ec, measure_compl, measure_lt_top, measure_univ, simp_rw
 -/
@@ -194,7 +206,13 @@ theorem limsup_measure_compl_le_of_le_liminf_measure
     simpa only [measure_univ] using measure_compl E_mble (measure_lt_top μ E).ne
   have meas_i_Ec : forall i, μs i Eᶜ = 1 - μs i E := by
     intro i
-    simpa only [measure_univ] using m
+    simpa only [measure_univ] using measure_compl E_mble (measure_lt_top (μs i) E).ne
+  simp_rw [meas_Ec, meas_i_Ec]
+  rw [show (L.limsup fun i : ι => 1 - μs i E) = L.limsup ((fun x => 1 - x) ∘ fun i : ι => μs i E)
+      from rfl]
+  have key := antitone_const_tsub.map_liminf_of_continuousAt (F := L)
+    (fun i => μs i E) (ENNReal.continuous_sub_left ENNReal.one_ne_top).continuousAt
+  simpa [← key] using antitone_const_tsub h
 
 中文:
 定理 limsup_measure_compl_le_of_le_liminf_measure
@@ -206,7 +224,13 @@ theorem limsup_measure_compl_le_of_le_liminf_measure
     simpa only [measure_univ] using measure_compl E_mble (measure_lt_top μ E).ne
   have meas_i_Ec : forall i, μs i Eᶜ = 1 - μs i E := by
     intro i
-    simpa only [measure_univ] using m
+    simpa only [measure_univ] using measure_compl E_mble (measure_lt_top (μs i) E).ne
+  simp_rw [meas_Ec, meas_i_Ec]
+  rw [show (L.limsup fun i : ι => 1 - μs i E) = L.limsup ((fun x => 1 - x) ∘ fun i : ι => μs i E)
+      from rfl]
+  have key := antitone_const_tsub.map_liminf_of_continuousAt (F := L)
+    (fun i => μs i E) (ENNReal.continuous_sub_left ENNReal.one_ne_top).continuousAt
+  simpa [← key] using antitone_const_tsub h
 
 Depends on / 依赖: E_mble, L.eq_or_neBot, L.limsup, antitone_const_tsub, antitone_const_tsub.map_, bot_le, eq_or_neBot, limsup, limsup_bot, map_, meas_Ec, meas_i_Ec, measure_compl, measure_lt_top, measure_univ, simp_rw
 -/
@@ -264,7 +288,7 @@ theorem limsup_measure_closed_le_iff_liminf_measure_open_ge
       G_open.measurableSet (h Gᶜ (isClosed_compl_iff.mpr G_open))
   · intro h F F_closed
     exact limsup_measure_le_of_le_liminf_measure_compl
-      F_closed.measurableSet (h Fᶜ (isOpen_compl_iff.mpr F_clos
+      F_closed.measurableSet (h Fᶜ (isOpen_compl_iff.mpr F_closed))
 
 中文:
 定理 limsup_measure_closed_le_iff_liminf_measure_open_ge
@@ -276,7 +300,7 @@ theorem limsup_measure_closed_le_iff_liminf_measure_open_ge
       G_open.measurableSet (h Gᶜ (isClosed_compl_iff.mpr G_open))
   · intro h F F_closed
     exact limsup_measure_le_of_le_liminf_measure_compl
-      F_closed.measurableSet (h Fᶜ (isOpen_compl_iff.mpr F_clos
+      F_closed.measurableSet (h Fᶜ (isOpen_compl_iff.mpr F_closed))
 
 Depends on / 依赖: F_closed, F_closed.measurableSet, G_open, G_open.measurableSet, isClosed_compl_iff, isClosed_compl_iff.mpr, isOpen_compl_iff, isOpen_compl_iff.mpr, le_measure_liminf_of_limsup_measure_compl_le, limsup_measure_le_of_le_liminf_measure_compl, measurableSet
 -/
@@ -330,7 +354,18 @@ theorem tendsto_measure_of_le_liminf_measure_of_limsup_measure_le
     calc
       μ E = μ E₀ := measure_congr E₀_ae_eq_E.symm
       _ <= L.liminf fun i => μs i E₀ := h_E₀
-
+      _ <= L.liminf fun i => μs i E :=
+        liminf_le_liminf (.of_forall fun _ => measure_mono E₀_subset)
+  · have E_ae_eq_E₁ : E =ᵐ[μ] E₁ :=
+      EventuallyLE.antisymm subset_E₁.eventuallyLE
+        ((ae_le_set.mpr nulldiff).trans E₀_subset.eventuallyLE)
+    calc
+      (L.limsup fun i => μs i E) <= L.limsup fun i => μs i E₁ :=
+        limsup_le_limsup (.of_forall fun _ => measure_mono subset_E₁)
+      _ <= μ E₁ := h_E₁
+      _ = μ E := measure_congr E_ae_eq_E₁.symm
+  · infer_param
+  · infer_param
 
 中文:
 定理 tendsto_measure_of_le_liminf_measure_of_limsup_measure_le
@@ -343,7 +378,18 @@ theorem tendsto_measure_of_le_liminf_measure_of_limsup_measure_le
     calc
       μ E = μ E₀ := measure_congr E₀_ae_eq_E.symm
       _ <= L.liminf fun i => μs i E₀ := h_E₀
-
+      _ <= L.liminf fun i => μs i E :=
+        liminf_le_liminf (.of_forall fun _ => measure_mono E₀_subset)
+  · have E_ae_eq_E₁ : E =ᵐ[μ] E₁ :=
+      EventuallyLE.antisymm subset_E₁.eventuallyLE
+        ((ae_le_set.mpr nulldiff).trans E₀_subset.eventuallyLE)
+    calc
+      (L.limsup fun i => μs i E) <= L.limsup fun i => μs i E₁ :=
+        limsup_le_limsup (.of_forall fun _ => measure_mono subset_E₁)
+      _ <= μ E₁ := h_E₁
+      _ = μ E := measure_congr E_ae_eq_E₁.symm
+  · infer_param
+  · infer_param
 
 Depends on / 依赖: EventuallyLE, EventuallyLE.antisymm, L.liminf, _ae_eq_E.symm, _subset.eventuallyLE, ae_le_set, ae_le_set.mpr, antisymm, eventuallyLE, eventuallyLE.trans, liminf, liminf_le_liminf, measure_congr, measure_mono, nulldiff, of_forall, tendsto_of_le_liminf_of_limsup_le
 -/
@@ -382,7 +428,7 @@ theorem tendsto_measure_of_null_frontier
   proof: haveI h_closeds : forall F, IsClosed F -> (L.limsup fun i => μs i F) <= μ F :=
     limsup_measure_closed_le_iff_liminf_measure_open_ge.mpr h_opens
   tendsto_measure_of_le_liminf_measure_of_limsup_measure_le interior_subset subset_closure
-    E_nullbdry (h_opens _ isOpen_interior) (h_closeds _ isClos
+    E_nullbdry (h_opens _ isOpen_interior) (h_closeds _ isClosed_closure)
 
 中文:
 定理 tendsto_measure_of_null_frontier
@@ -390,7 +436,7 @@ theorem tendsto_measure_of_null_frontier
   证明: haveI h_closeds : forall F, IsClosed F -> (L.limsup fun i => μs i F) <= μ F :=
     limsup_measure_closed_le_iff_liminf_measure_open_ge.mpr h_opens
   tendsto_measure_of_le_liminf_measure_of_limsup_measure_le interior_subset subset_closure
-    E_nullbdry (h_opens _ isOpen_interior) (h_closeds _ isClos
+    E_nullbdry (h_opens _ isOpen_interior) (h_closeds _ isClosed_closure)
 
 Depends on / 依赖: BooleanAlgebra, BooleanAlgebra.toBoundedOrder, BoundedOrder, E_nullbdry, IsClosed, L.limsup, h_closeds, h_opens, interior_subset, isClosed_closure, isOpen_interior, limsup, limsup_measure_closed_le_iff_liminf_measure_open_ge, limsup_measure_closed_le_iff_liminf_measure_open_ge.mpr, subset_closure, tendsto_measure_of_le_liminf_measure_of_limsup_measure_le, toBoundedOrder
 -/
@@ -441,7 +487,23 @@ theorem FiniteMeasure.limsup_measure_closed_le_of_tendsto
   intro ε ε_pos _
   have ε_pos' := (ENNReal.half_pos (ENNReal.coe_ne_zero.mpr ε_pos.ne.symm)).ne.symm
   let fs := F_closed.apprSeq
-  have key₁ : Tendsto (fun n => ∫⁻ ω, (fs n ω : Real>
+  have key₁ : Tendsto (fun n => ∫⁻ ω, (fs n ω : Real>=0∞) ∂μ) atTop (𝓝 ((μ : Measure Ω) F)) :=
+    HasOuterApproxClosed.tendsto_lintegral_apprSeq F_closed (μ : Measure Ω)
+  have room₁ : (μ : Measure Ω) F < (μ : Measure Ω) F + ε / 2 :=
+    ENNReal.lt_add_right (measure_lt_top (μ : Measure Ω) F).ne ε_pos'
+obtain ⟨M, hM⟩ := eventually_atTop.mp key₁.eventually_lt_const room₁
+  have key₂ := FiniteMeasure.tendsto_iff_forall_lintegral_tendsto.mp μs_lim (fs M)
+  have room₂ :
+    (lintegral (μ : Measure Ω) fun a => fs M a) <
+      (lintegral (μ : Measure Ω) fun a => fs M a) + ε / 2 :=
+    ENNReal.lt_add_right (ne_of_lt ((fs M).lintegral_lt_top_of_nnreal _)) ε_pos'
+  have ev_near := key₂.eventually_le_const room₂
+  have ev_near' := ev_near.mono
+    (fun n => le_trans (HasOuterApproxClosed.measure_le_lintegral F_closed (μs n) M))
+  apply (Filter.limsup_le_limsup ev_near').trans
+  rw [limsup_const]
+  apply le_trans (add_le_add (hM M rfl.le).le (le_refl (ε / 2 : Real>=0∞)))
+  simp only [add_assoc, ENNReal.add_halves, le_refl]
 
 中文:
 定理 有限测度.limsup_measure_closed_le_of_tendsto
@@ -453,7 +515,23 @@ theorem FiniteMeasure.limsup_measure_closed_le_of_tendsto
   intro ε ε_pos _
   have ε_pos' := (ENNReal.half_pos (ENNReal.coe_ne_zero.mpr ε_pos.ne.symm)).ne.symm
   let fs := F_closed.apprSeq
-  have key₁ : Tendsto (fun n => ∫⁻ ω, (fs n ω : Real>
+  have key₁ : Tendsto (fun n => ∫⁻ ω, (fs n ω : Real>=0∞) ∂μ) atTop (𝓝 ((μ : Measure Ω) F)) :=
+    HasOuterApproxClosed.tendsto_lintegral_apprSeq F_closed (μ : Measure Ω)
+  have room₁ : (μ : Measure Ω) F < (μ : Measure Ω) F + ε / 2 :=
+    ENNReal.lt_add_right (measure_lt_top (μ : Measure Ω) F).ne ε_pos'
+obtain ⟨M, hM⟩ := eventually_atTop.mp key₁.eventually_lt_const room₁
+  have key₂ := FiniteMeasure.tendsto_iff_forall_lintegral_tendsto.mp μs_lim (fs M)
+  have room₂ :
+    (lintegral (μ : Measure Ω) fun a => fs M a) <
+      (lintegral (μ : Measure Ω) fun a => fs M a) + ε / 2 :=
+    ENNReal.lt_add_right (ne_of_lt ((fs M).lintegral_lt_top_of_nnreal _)) ε_pos'
+  have ev_near := key₂.eventually_le_const room₂
+  have ev_near' := ev_near.mono
+    (fun n => le_trans (HasOuterApproxClosed.measure_le_lintegral F_closed (μs n) M))
+  apply (Filter.limsup_le_limsup ev_near').trans
+  rw [limsup_const]
+  apply le_trans (add_le_add (hM M rfl.le).le (le_refl (ε / 2 : Real>=0∞)))
+  simp only [add_assoc, ENNReal.add_halves, le_refl]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_zero.mpr, ENNReal.half_pos, ENNReal.le_of_forall_pos_le_add, ENNReal.lt_add_right, F_closed, F_closed.apprSeq, HasOuterApproxClosed, HasOuterApproxClosed.tendsto_lintegral_apprSeq, L.eq_or_neBot, Measure, Tendsto, _pos.ne.symm, apprSeq, bot_le, coe_ne_zero, eq_or_neBot, half_pos, le_of_forall_pos_le_add, limsup_bot
 -/
@@ -661,7 +739,10 @@ theorem exists_null_frontier_thickening
     fun r => isClosed_frontier.measurableSet
   have disjs := Metric.frontier_thickening_disjoint s
   have key := Measure.countable_meas_pos_of_disjoint_iUnion (μ := μ) mbles disjs
-  have aux := measure_sdiff_null 
+  have aux := measure_sdiff_null (s := Ioo a b) (Set.Countable.measure_zero key volume)
+  have len_pos : 0 < ENNReal.ofReal (b - a) := by simp only [hab, ENNReal.ofReal_pos, sub_pos]
+  rw [← Real.volume_Ioo]; rw [← aux] at len_pos
+  simpa [Set.Nonempty] using nonempty_of_measure_ne_zero len_pos.ne'
 
 中文:
 定理 存在_null_frontier_thickening
@@ -671,7 +752,10 @@ theorem exists_null_frontier_thickening
     fun r => isClosed_frontier.measurableSet
   have disjs := Metric.frontier_thickening_disjoint s
   have key := Measure.countable_meas_pos_of_disjoint_iUnion (μ := μ) mbles disjs
-  have aux := measure_sdiff_null 
+  have aux := measure_sdiff_null (s := Ioo a b) (Set.Countable.measure_zero key volume)
+  have len_pos : 0 < ENNReal.ofReal (b - a) := by simp only [hab, ENNReal.ofReal_pos, sub_pos]
+  rw [← Real.volume_Ioo]; rw [← aux] at len_pos
+  simpa [Set.Nonempty] using nonempty_of_measure_ne_zero len_pos.ne'
 
 Depends on / 依赖: Countable, ENNReal, ENNReal.ofReal, ENNReal.ofReal_pos, MeasurableSet, Measure, Measure.countable_meas_pos_of_disjoint_iUnion, Metric, Metric.frontier_thickening_disjoint, Metric.thickening, Nonempt, Real.volume_Ioo, Set.Countable.measure_zero, Set.Nonempt, countable_meas_pos_of_disjoint_iUnion, frontier, frontier_thickening_disjoint, isClosed_frontier, isClosed_frontier.measurableSet, len_pos
 -/
@@ -697,7 +781,8 @@ theorem exists_null_frontiers_thickening
   have obs := fun n : Nat => exists_null_frontier_thickening μ s (Rs_pos n)
   refine ⟨fun n : Nat => (obs n).choose, ⟨?_, ?_⟩⟩
   · exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds Rs_lim
-      (fu
+      (fun n => (obs n).choose_spec.1.1.le) fun n => (obs n).choose_spec.1.2.le
+  · exact fun n => ⟨(obs n).choose_spec.1.1, (obs n).choose_spec.2⟩
 
 中文:
 定理 存在_null_frontiers_thickening
@@ -707,7 +792,8 @@ theorem exists_null_frontiers_thickening
   have obs := fun n : Nat => exists_null_frontier_thickening μ s (Rs_pos n)
   refine ⟨fun n : Nat => (obs n).choose, ⟨?_, ?_⟩⟩
   · exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds Rs_lim
-      (fu
+      (fun n => (obs n).choose_spec.1.1.le) fun n => (obs n).choose_spec.1.2.le
+  · exact fun n => ⟨(obs n).choose_spec.1.1, (obs n).choose_spec.2⟩
 
 Depends on / 依赖: Rs_lim, Rs_pos, choose_spec, exists_null_frontier_thickening, exists_seq_strictAnti_tendsto, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le
 -/
@@ -736,7 +822,27 @@ lemma limsup_measure_closed_le_of_forall_tendsto_measure
   · simp only [limsup_bot, bot_eq_zero', zero_le]
   have ex := exists_null_frontiers_thickening μ F
   let rs := Classical.choose ex
-  have rs_lim : Tendsto rs atTop (𝓝 0) := (Cl
+  have rs_lim : Tendsto rs atTop (𝓝 0) := (Classical.choose_spec ex).1
+  have rs_pos : forall n, 0 < rs n := fun n => ((Classical.choose_spec ex).2 n).1
+  have rs_null : forall n, μ (frontier (Metric.thickening (rs n) F)) = 0 :=
+    fun n => ((Classical.choose_spec ex).2 n).2
+  have Fthicks_open : forall n, IsOpen (Metric.thickening (rs n) F) :=
+    fun n => Metric.isOpen_thickening
+  have key := fun (n : Nat) => h (Fthicks_open n).measurableSet (rs_null n)
+  apply ENNReal.le_of_forall_pos_le_add
+  intro ε ε_pos μF_finite
+  have keyB := tendsto_measure_cthickening_of_isClosed (μ := μ) (s := F)
+                ⟨1, ⟨by simp only [gt_iff_lt, zero_lt_one], measure_ne_top _ _⟩⟩ F_closed
+  have nhds : Iio (μ F + ε) in 𝓝 (μ F) :=
+Iio_mem_nhds ENNReal.lt_add_right μF_finite.ne (ENNReal.coe_pos.mpr ε_pos).ne'
+  specialize rs_lim (keyB nhds)
+  simp only [mem_map, mem_atTop_sets, mem_preimage, mem_Iio] at rs_lim
+  obtain ⟨m, hm⟩ := rs_lim
+  have aux : (fun i => (μs i F)) <=ᶠ[L] (fun i => μs i (Metric.thickening (rs m) F)) :=
+.of_forall fun i => measure_mono (Metric.self_subset_thickening (rs_pos m) F)
+  refine (limsup_le_limsup aux).trans ?_
+  rw [Tendsto.limsup_eq (key m)]
+  apply (measure_mono (Metric.thickening_subset_cthickening (rs m) F)).trans (hm m rfl.le).le
 
 中文:
 引理 limsup_measure_closed_le_of_对任意_tendsto_measure
@@ -746,7 +852,27 @@ lemma limsup_measure_closed_le_of_forall_tendsto_measure
   · simp only [limsup_bot, bot_eq_zero', zero_le]
   have ex := exists_null_frontiers_thickening μ F
   let rs := Classical.choose ex
-  have rs_lim : Tendsto rs atTop (𝓝 0) := (Cl
+  have rs_lim : Tendsto rs atTop (𝓝 0) := (Classical.choose_spec ex).1
+  have rs_pos : forall n, 0 < rs n := fun n => ((Classical.choose_spec ex).2 n).1
+  have rs_null : forall n, μ (frontier (Metric.thickening (rs n) F)) = 0 :=
+    fun n => ((Classical.choose_spec ex).2 n).2
+  have Fthicks_open : forall n, IsOpen (Metric.thickening (rs n) F) :=
+    fun n => Metric.isOpen_thickening
+  have key := fun (n : Nat) => h (Fthicks_open n).measurableSet (rs_null n)
+  apply ENNReal.le_of_forall_pos_le_add
+  intro ε ε_pos μF_finite
+  have keyB := tendsto_measure_cthickening_of_isClosed (μ := μ) (s := F)
+                ⟨1, ⟨by simp only [gt_iff_lt, zero_lt_one], measure_ne_top _ _⟩⟩ F_closed
+  have nhds : Iio (μ F + ε) in 𝓝 (μ F) :=
+Iio_mem_nhds ENNReal.lt_add_right μF_finite.ne (ENNReal.coe_pos.mpr ε_pos).ne'
+  specialize rs_lim (keyB nhds)
+  simp only [mem_map, mem_atTop_sets, mem_preimage, mem_Iio] at rs_lim
+  obtain ⟨m, hm⟩ := rs_lim
+  have aux : (fun i => (μs i F)) <=ᶠ[L] (fun i => μs i (Metric.thickening (rs m) F)) :=
+.of_forall fun i => measure_mono (Metric.self_subset_thickening (rs_pos m) F)
+  refine (limsup_le_limsup aux).trans ?_
+  rw [Tendsto.limsup_eq (key m)]
+  apply (measure_mono (Metric.thickening_subset_cthickening (rs m) F)).trans (hm m rfl.le).le
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, L.eq_or_neBot, Metric, Metric.thickening, PseudoMetricSpace, Tendsto, TopologicalSpace, TopologicalSpace.pseudoMetrizableSpacePseudoMetric, bot_eq_zero, choose_spec, eq_or_neBot, exists_null_frontiers_thickening, frontier, limsup_bot, pseudoMetrizableSpacePseudoMetric, rs_lim, rs_null, rs_pos
 -/
@@ -841,7 +967,13 @@ lemma lintegral_le_liminf_lintegral_of_forall_isOpen_measure_le_liminf_measure
   simp_rw [lintegral_eq_lintegral_meas_lt _ (Eventually.of_forall f_nn) f_cont.aemeasurable]
   calc ∫⁻ (t : Real) in Set.Ioi 0, μ {a | t < f a}
       <= ∫⁻ (t : Real) in Set.Ioi 0, atTop.liminf (fun i => (μs i) {a | t < f a}) := ?_ -- (i)
-    _ <= atTop.liminf (fun i => ∫⁻ (t : Real) in Set.Ioi 0
+    _ <= atTop.liminf (fun i => ∫⁻ (t : Real) in Set.Ioi 0, (μs i) {a | t < f a}) := ?_ -- (ii)
+  · -- (i)
+    exact (lintegral_mono (fun t => h_opens _ (continuous_def.mp f_cont _ isOpen_Ioi))).trans
+            (le_refl _)
+  · -- (ii)
+    exact lintegral_liminf_le (fun n => Antitone.measurable (fun s t hst =>
+            measure_mono (fun ω hω => lt_of_le_of_lt hst hω)))
 
 中文:
 引理 lintegral_le_liminf_lintegral_of_对任意_isOpen_measure_le_liminf_measure
@@ -849,7 +981,13 @@ lemma lintegral_le_liminf_lintegral_of_forall_isOpen_measure_le_liminf_measure
   simp_rw [lintegral_eq_lintegral_meas_lt _ (Eventually.of_forall f_nn) f_cont.aemeasurable]
   calc ∫⁻ (t : Real) in Set.Ioi 0, μ {a | t < f a}
       <= ∫⁻ (t : Real) in Set.Ioi 0, atTop.liminf (fun i => (μs i) {a | t < f a}) := ?_ -- (i)
-    _ <= atTop.liminf (fun i => ∫⁻ (t : Real) in Set.Ioi 0
+    _ <= atTop.liminf (fun i => ∫⁻ (t : Real) in Set.Ioi 0, (μs i) {a | t < f a}) := ?_ -- (ii)
+  · -- (i)
+    exact (lintegral_mono (fun t => h_opens _ (continuous_def.mp f_cont _ isOpen_Ioi))).trans
+            (le_refl _)
+  · -- (ii)
+    exact lintegral_liminf_le (fun n => Antitone.measurable (fun s t hst =>
+            measure_mono (fun ω hω => lt_of_le_of_lt hst hω)))
 
 Depends on / 依赖: Antitone, Antitone.measurable, Eventually, Eventually.of_forall, Set.Ioi, aemeasurable, atTop.liminf, continuous_def, continuous_def.mp, f_cont, f_cont.aemeasurable, f_nn, h_opens, isOpen_Ioi, le_refl, liminf, lintegral_eq_lintegral_meas_lt, lintegral_liminf_le, lintegral_mono, measurable
 -/
@@ -878,7 +1016,29 @@ lemma integral_le_liminf_integral_of_forall_isOpen_measure_le_liminf_measure
                   f.continuous f_nn h_opens
   rw [@integral_eq_lintegral_of_nonneg_ae Ω _ μ f (Eventually.of_forall f_nn)
         f.continuous.measurable.aestronglyMeasurable]
-  convert! ENNReal.toReal_mono ?_
+  convert! ENNReal.toReal_mono ?_ same
+  · simp only [fun i => @integral_eq_lintegral_of_nonneg_ae Ω _ (μs i) f (Eventually.of_forall f_nn)
+                        f.continuous.measurable.aestronglyMeasurable]
+    let g := BoundedContinuousFunction.comp _ Real.lipschitzWith_toNNReal f
+    have bound : forall i, ∫⁻ x, ENNReal.ofReal (f x) ∂(μs i) <= nndist 0 g := fun i => by
+      simpa only [coe_nnreal_ennreal_nndist, measure_univ, mul_one, ge_iff_le] using!
+            BoundedContinuousFunction.lintegral_le_edist_mul (μ := μs i) g
+    apply ENNReal.liminf_toReal_eq ENNReal.coe_ne_top (Eventually.of_forall bound)
+  · apply ne_of_lt
+    have obs := fun (i : Nat) => @BoundedContinuousFunction.lintegral_nnnorm_le Ω _ _ (μs i) Real _ f
+    simp only [measure_univ, mul_one] at obs
+    apply lt_of_le_of_lt _ (show (‖f‖₊ : Real>=0∞) < ∞ from ENNReal.coe_lt_top)
+    apply liminf_le_of_le
+    · refine ⟨0, .of_forall (by simp)⟩
+    · intro x hx
+      obtain ⟨i, hi⟩ := hx.exists
+      apply le_trans hi
+      convert! obs i with x
+      have aux := ENNReal.ofReal_eq_coe_nnreal (f_nn x)
+      simp only [ContinuousMap.toFun_eq_coe, BoundedContinuousFunction.coe_toContinuousMap] at aux
+      rw [aux]
+      congr
+      exact (Real.norm_of_nonneg (f_nn x)).symm
 
 中文:
 引理 integral_le_liminf_integral_of_对任意_isOpen_measure_le_liminf_measure
@@ -887,7 +1047,29 @@ lemma integral_le_liminf_integral_of_forall_isOpen_measure_le_liminf_measure
                   f.continuous f_nn h_opens
   rw [@integral_eq_lintegral_of_nonneg_ae Ω _ μ f (Eventually.of_forall f_nn)
         f.continuous.measurable.aestronglyMeasurable]
-  convert! ENNReal.toReal_mono ?_
+  convert! ENNReal.toReal_mono ?_ same
+  · simp only [fun i => @integral_eq_lintegral_of_nonneg_ae Ω _ (μs i) f (Eventually.of_forall f_nn)
+                        f.continuous.measurable.aestronglyMeasurable]
+    let g := BoundedContinuousFunction.comp _ Real.lipschitzWith_toNNReal f
+    have bound : forall i, ∫⁻ x, ENNReal.ofReal (f x) ∂(μs i) <= nndist 0 g := fun i => by
+      simpa only [coe_nnreal_ennreal_nndist, measure_univ, mul_one, ge_iff_le] using!
+            BoundedContinuousFunction.lintegral_le_edist_mul (μ := μs i) g
+    apply ENNReal.liminf_toReal_eq ENNReal.coe_ne_top (Eventually.of_forall bound)
+  · apply ne_of_lt
+    have obs := fun (i : Nat) => @BoundedContinuousFunction.lintegral_nnnorm_le Ω _ _ (μs i) Real _ f
+    simp only [measure_univ, mul_one] at obs
+    apply lt_of_le_of_lt _ (show (‖f‖₊ : Real>=0∞) < ∞ from ENNReal.coe_lt_top)
+    apply liminf_le_of_le
+    · refine ⟨0, .of_forall (by simp)⟩
+    · intro x hx
+      obtain ⟨i, hi⟩ := hx.exists
+      apply le_trans hi
+      convert! obs i with x
+      have aux := ENNReal.ofReal_eq_coe_nnreal (f_nn x)
+      simp only [ContinuousMap.toFun_eq_coe, BoundedContinuousFunction.coe_toContinuousMap] at aux
+      rw [aux]
+      congr
+      exact (Real.norm_of_nonneg (f_nn x)).symm
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.comp, ENNReal, ENNReal.toReal_mono, Eventually, Eventually.of_forall, Real.lipschitzWith_toNNReal, aestronglyMeasurable, continuous, convert, f.continuous, f.continuous.measurable.aestronglyMeasurable, f_nn, h_opens, integral_eq_lintegral_of_nonneg_ae, lintegral_le_liminf_lintegral_of_forall_isOpen_measure_le_liminf_measure, lipschitzWith_toNNReal, measurable, of_forall, toReal_mono
 -/
@@ -964,7 +1146,14 @@ theorem tendsto_of_forall_isOpen_le_liminf_nat
   specialize h_opens G G_open
   have aux : ENNReal.ofNNReal (liminf (fun i => μs i G) atTop) =
           liminf (ENNReal.ofNNReal ∘ fun i => μs i G) atTop := by
-    refine Monotone.map_liminf_of_continuousAt (F := atTop) ENNReal.
+    refine Monotone.map_liminf_of_continuousAt (F := atTop) ENNReal.coe_mono (μs · G) ?_ ?_ ?_
+    · exact ENNReal.continuous_coe.continuousAt
+    · exact IsBoundedUnder.isCoboundedUnder_ge ⟨1, by simp⟩
+    · exact ⟨0, by simp⟩
+  have obs := ENNReal.coe_mono h_opens
+  simp only [ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure, aux] at obs
+  convert! obs
+  simp only [Function.comp_apply, ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure]
 
 中文:
 定理 tendsto_of_对任意_isOpen_le_liminf_nat
@@ -974,7 +1163,14 @@ theorem tendsto_of_forall_isOpen_le_liminf_nat
   specialize h_opens G G_open
   have aux : ENNReal.ofNNReal (liminf (fun i => μs i G) atTop) =
           liminf (ENNReal.ofNNReal ∘ fun i => μs i G) atTop := by
-    refine Monotone.map_liminf_of_continuousAt (F := atTop) ENNReal.
+    refine Monotone.map_liminf_of_continuousAt (F := atTop) ENNReal.coe_mono (μs · G) ?_ ?_ ?_
+    · exact ENNReal.continuous_coe.continuousAt
+    · exact IsBoundedUnder.isCoboundedUnder_ge ⟨1, by simp⟩
+    · exact ⟨0, by simp⟩
+  have obs := ENNReal.coe_mono h_opens
+  simp only [ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure, aux] at obs
+  convert! obs
+  simp only [Function.comp_apply, ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_mono, ENNReal.continuous_coe.continuousAt, ENNReal.ofNNReal, G_open, IsBoundedUnder, IsBoundedUnder.isCoboundedUnder_ge, Monotone, Monotone.map_liminf_of_continuousAt, ProbabilityMeasure, ProbabilityMeasure.ennre, coe_mono, continuousAt, continuous_coe, h_opens, isCoboundedUnder_ge, liminf, map_liminf_of_continuousAt, ofNNReal, specialize
 -/
@@ -1036,7 +1232,7 @@ theorem tendsto_of_forall_isOpen_le_liminf
   change _ <= atTop.liminf ((fun i => μs i G) ∘ u)
   rw [liminf_comp]
   refine liminf_le_liminf_of_le hu (by isBoundedDefault) ?_
-.isCoboundedUnder_ge exact isBo
+.isCoboundedUnder_ge exact isBoundedUnder_of ⟨1, by simp⟩
 
 中文:
 定理 tendsto_of_对任意_isOpen_le_liminf
@@ -1047,7 +1243,7 @@ theorem tendsto_of_forall_isOpen_le_liminf
   change _ <= atTop.liminf ((fun i => μs i G) ∘ u)
   rw [liminf_comp]
   refine liminf_le_liminf_of_le hu (by isBoundedDefault) ?_
-.isCoboundedUnder_ge exact isBo
+.isCoboundedUnder_ge exact isBoundedUnder_of ⟨1, by simp⟩
 
 Depends on / 依赖: Filter, Filter.tendsto_of_seq_tendsto, atTop.liminf, h_opens, isBoundedDefault, isBoundedUnder_of, isCoboundedUnder_ge, liminf, liminf_comp, liminf_le_liminf_of_le, tendsto_of_forall_isOpen_le_liminf_nat, tendsto_of_seq_tendsto
 -/
@@ -1104,7 +1300,12 @@ lemma tendsto_of_forall_isClosed_limsup_le_nat
   specialize h F hF_closed
   have aux : ENNReal.ofNNReal (limsup (fun i => μs i F) atTop) =
       limsup (ENNReal.ofNNReal ∘ fun i => μs i F) atTop :=
-    Monotone.map_limsup_of_continuousAt (F := atTop) ENNReal.coe_mono (μs · F
+    Monotone.map_limsup_of_continuousAt (F := atTop) ENNReal.coe_mono (μs · F) (by fun_prop)
+      ⟨1, by simp⟩ ⟨0, by simp⟩
+  have obs := ENNReal.coe_mono h
+  simp only [ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure, aux] at obs
+  convert! obs
+  simp
 
 中文:
 引理 tendsto_of_对任意_isClosed_limsup_le_nat
@@ -1114,7 +1315,12 @@ lemma tendsto_of_forall_isClosed_limsup_le_nat
   specialize h F hF_closed
   have aux : ENNReal.ofNNReal (limsup (fun i => μs i F) atTop) =
       limsup (ENNReal.ofNNReal ∘ fun i => μs i F) atTop :=
-    Monotone.map_limsup_of_continuousAt (F := atTop) ENNReal.coe_mono (μs · F
+    Monotone.map_limsup_of_continuousAt (F := atTop) ENNReal.coe_mono (μs · F) (by fun_prop)
+      ⟨1, by simp⟩ ⟨0, by simp⟩
+  have obs := ENNReal.coe_mono h
+  simp only [ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure, aux] at obs
+  convert! obs
+  simp
 
 Depends on / 依赖: ENNReal, ENNReal.coe_mono, ENNReal.ofNNReal, Monotone, Monotone.map_limsup_of_continuousAt, ProbabilityMeasure, ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure, coe_mono, convert, ennreal_coeFn_eq_coeFn_toMeasure, fun_prop, hF_closed, limsup, map_limsup_of_continuousAt, ofNNReal, specialize, tendsto_of_forall_isClosed_limsup_le
 -/
@@ -1193,7 +1399,21 @@ refine tendsto_of_forall_isClosed_limsup_le fun F hF_closed => ?_
   rw [← ENNReal.coe_le_coe]; rw [ENNReal.ofNNReal_limsup <|
       isBoundedUnder_of_eventually_le (a := 1) (by simp)]
 refine ENNReal.le_of_forall_pos_le_add fun ε hε _ => ?_
-  obtain ⟨K, h
+  obtain ⟨K, hKc, hK_le⟩ := isTightMeasureSet_iff_exists_isCompact_measure_compl_le.mp
+    h₁ ε (by positivity)
+  grw [limsup_le_limsup (v := fun i => μs i (F inter K) + (ε : ENNReal))]
+  · rw [limsup_add_const _ _ _ (by isBoundedDefault) (by isBoundedDefault)]
+    apply add_le_add _ (by simp)
+specialize h₂ (F inter K) hKc.inter_left hF_closed
+    rw [← ENNReal.coe_le_coe]; rw [ENNReal.ofNNReal_limsup <|
+      isBoundedUnder_of_eventually_le (a := 1) (by simp)] at h₂
+    grw [h₂]
+    simp [measure_mono]
+  · refine .of_forall (fun i => ?_)
+    simp_rw [ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure]
+    grw [measure_mono (t := (F inter K) union F \ K) (by simp), measure_union_le]
+    gcongr
+exact le_trans (measure_mono (by simp)) hK_le (μs i) by simp
 
 中文:
 定理 tendsto_of_对任意_isCompact_of_isTightMeasureSet
@@ -1204,7 +1424,21 @@ refine tendsto_of_forall_isClosed_limsup_le fun F hF_closed => ?_
   rw [← ENNReal.coe_le_coe]; rw [ENNReal.ofNNReal_limsup <|
       isBoundedUnder_of_eventually_le (a := 1) (by simp)]
 refine ENNReal.le_of_forall_pos_le_add fun ε hε _ => ?_
-  obtain ⟨K, h
+  obtain ⟨K, hKc, hK_le⟩ := isTightMeasureSet_iff_exists_isCompact_measure_compl_le.mp
+    h₁ ε (by positivity)
+  grw [limsup_le_limsup (v := fun i => μs i (F inter K) + (ε : ENNReal))]
+  · rw [limsup_add_const _ _ _ (by isBoundedDefault) (by isBoundedDefault)]
+    apply add_le_add _ (by simp)
+specialize h₂ (F inter K) hKc.inter_left hF_closed
+    rw [← ENNReal.coe_le_coe]; rw [ENNReal.ofNNReal_limsup <|
+      isBoundedUnder_of_eventually_le (a := 1) (by simp)] at h₂
+    grw [h₂]
+    simp [measure_mono]
+  · refine .of_forall (fun i => ?_)
+    simp_rw [ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure]
+    grw [measure_mono (t := (F inter K) union F \ K) (by simp), measure_union_le]
+    gcongr
+exact le_trans (measure_mono (by simp)) hK_le (μs i) by simp
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.le_of_forall_pos_le_add, ENNReal.ofNNReal_limsup, L.eq_or_neBot, coe_le_coe, eq_or_neBot, hF_closed, hK_le, isBoundedDefaul, isBoundedUnder_of_eventually_le, isTightMeasureSet_iff_exists_isCompact_measure_compl_le, isTightMeasureSet_iff_exists_isCompact_measure_compl_le.mp, le_of_forall_pos_le_add, limsup_add_const, limsup_le_limsup, ofNNReal_limsup, tendsto_of_forall_isClosed_limsup_le
 -/
@@ -1250,7 +1484,44 @@ theorem tendsto_iff_forall_lipschitz_integral_tendsto
     -- know that weak convergence implies convergence of their integrals
     intro h f hf_bounded hf_lip
     simp_rw [ProbabilityMeasure.tendsto_iff_forall_integral_tendsto] at h
-    l
+    let f' : BoundedContinuousFunction Ω Real :=
+    { toFun := f
+      continuous_toFun := hf_lip.choose_spec.continuous
+      map_bounded' := hf_bounded }
+    simpa using! h f'
+  -- To prove the other direction, we prove convergence of the measure of closed sets.
+  -- We approximate the indicator function of a closed set by bounded Lipschitz functions.
+  rcases F.eq_or_neBot with rfl | hne
+  · simp
+  refine fun h => tendsto_of_forall_isClosed_limsup_real_le' fun s hs => ?_
+  refine le_of_forall_pos_le_add fun ε ε_pos => ?_
+  let fs : Nat -> Ω -> Real := fun n ω => thickenedIndicator (δ := (1 : Real) / (n + 1)) (by positivity) s ω
+  have key₁ : Tendsto (fun n => ∫ ω, fs n ω ∂μ) atTop (𝓝 ((μ : Measure Ω).real s)) :=
+    tendsto_integral_thickenedIndicator_of_isClosed μ hs (δs := fun n => (1 : Real) / (n + 1))
+      (fun _ => by positivity) tendsto_one_div_add_atTop_nhds_zero_nat
+  have room₁ : (μ : Measure Ω).real s < (μ : Measure Ω).real s + ε / 2 := by simp [ε_pos]
+obtain ⟨M, hM⟩ := eventually_atTop.mp key₁.eventually_lt_const room₁
+  have key₂ : Tendsto (fun i => ∫ ω, fs M ω ∂(μs i)) F (𝓝 (∫ ω, fs M ω ∂μ)) :=
+    h (fs M) ⟨1, fun x y => ?_⟩
+      ⟨_, lipschitzWith_thickenedIndicator (δ := (1 : Real) / (M + 1)) (by positivity) s⟩
+  swap
+  · simp only [Real.dist_eq, abs_le]
+    have h1 x : fs M x <= 1 := thickenedIndicator_le_one _ _ _
+    have h2 x : 0 <= fs M x := by simp [fs]
+    grind
+  have room₂ : ∫ a, fs M a ∂μ < ∫ a, fs M a ∂μ + ε / 2 := by simp [ε_pos]
+  have ev_near : forallᶠ x in F, (μs x : Measure Ω).real s <= ∫ a, fs M a ∂μ + ε / 2 := by
+    refine (key₂.eventually_le_const room₂).mono fun x hx => le_trans ?_ hx
+    rw [← integral_indicator_one hs.measurableSet]
+    refine integral_mono ?_ (integrable_thickenedIndicator _ _) ?_
+    · exact (integrable_indicator_iff hs.measurableSet).mpr (integrable_const _).integrableOn
+    · have h : _ <= fs M :=
+        indicator_le_thickenedIndicator (δ := (1 : Real) / (M + 1)) (by positivity) s
+      simpa using! h
+  apply (Filter.limsup_le_of_le ?_ ev_near).trans
+  · apply (add_le_add (hM M rfl.le).le (le_refl (ε / 2))).trans_eq
+    ring
+  · exact isCoboundedUnder_le_of_le F (x := 0) (by simp)
 
 中文:
 定理 tendsto_iff_对任意_lipschitz_integral_tendsto
@@ -1261,7 +1532,44 @@ theorem tendsto_iff_forall_lipschitz_integral_tendsto
     -- know that weak convergence implies convergence of their integrals
     intro h f hf_bounded hf_lip
     simp_rw [ProbabilityMeasure.tendsto_iff_forall_integral_tendsto] at h
-    l
+    let f' : BoundedContinuousFunction Ω Real :=
+    { toFun := f
+      continuous_toFun := hf_lip.choose_spec.continuous
+      map_bounded' := hf_bounded }
+    simpa using! h f'
+  -- To prove the other direction, we prove convergence of the measure of closed sets.
+  -- We approximate the indicator function of a closed set by bounded Lipschitz functions.
+  rcases F.eq_or_neBot with rfl | hne
+  · simp
+  refine fun h => tendsto_of_forall_isClosed_limsup_real_le' fun s hs => ?_
+  refine le_of_forall_pos_le_add fun ε ε_pos => ?_
+  let fs : Nat -> Ω -> Real := fun n ω => thickenedIndicator (δ := (1 : Real) / (n + 1)) (by positivity) s ω
+  have key₁ : Tendsto (fun n => ∫ ω, fs n ω ∂μ) atTop (𝓝 ((μ : Measure Ω).real s)) :=
+    tendsto_integral_thickenedIndicator_of_isClosed μ hs (δs := fun n => (1 : Real) / (n + 1))
+      (fun _ => by positivity) tendsto_one_div_add_atTop_nhds_zero_nat
+  have room₁ : (μ : Measure Ω).real s < (μ : Measure Ω).real s + ε / 2 := by simp [ε_pos]
+obtain ⟨M, hM⟩ := eventually_atTop.mp key₁.eventually_lt_const room₁
+  have key₂ : Tendsto (fun i => ∫ ω, fs M ω ∂(μs i)) F (𝓝 (∫ ω, fs M ω ∂μ)) :=
+    h (fs M) ⟨1, fun x y => ?_⟩
+      ⟨_, lipschitzWith_thickenedIndicator (δ := (1 : Real) / (M + 1)) (by positivity) s⟩
+  swap
+  · simp only [Real.dist_eq, abs_le]
+    have h1 x : fs M x <= 1 := thickenedIndicator_le_one _ _ _
+    have h2 x : 0 <= fs M x := by simp [fs]
+    grind
+  have room₂ : ∫ a, fs M a ∂μ < ∫ a, fs M a ∂μ + ε / 2 := by simp [ε_pos]
+  have ev_near : forallᶠ x in F, (μs x : Measure Ω).real s <= ∫ a, fs M a ∂μ + ε / 2 := by
+    refine (key₂.eventually_le_const room₂).mono fun x hx => le_trans ?_ hx
+    rw [← integral_indicator_one hs.measurableSet]
+    refine integral_mono ?_ (integrable_thickenedIndicator _ _) ?_
+    · exact (integrable_indicator_iff hs.measurableSet).mpr (integrable_const _).integrableOn
+    · have h : _ <= fs M :=
+        indicator_le_thickenedIndicator (δ := (1 : Real) / (M + 1)) (by positivity) s
+      simpa using! h
+  apply (Filter.limsup_le_of_le ?_ ev_near).trans
+  · apply (add_le_add (hM M rfl.le).le (le_refl (ε / 2))).trans_eq
+    ring
+  · exact isCoboundedUnder_le_of_le F (x := 0) (by simp)
 
 Depends on / 依赖: Lipschitz, already, bounded, continuous, function, particular
 -/
@@ -1332,7 +1640,19 @@ lemma _root_.IsPiSystem.tendsto_measureReal_biUnion
   /- This statement is not completely obvious, as `⋃ s ∈ t, s` does not belong to the π-system `S`.
   However, thanks to the inclusion-exclusion formula one may express its measure in terms of
   measures of elements of `S`, from which the result follows. -/
-  have A (i) : (μ i).real (⋃ s in t, s)
+  have A (i) : (μ i).real (⋃ s in t, s) = ∑ u in t.powerset with u.Nonempty,
+      (-1 : Real) ^ (#u + 1) * (μ i).real (⋂ s in u, s) :=
+    measureReal_biUnion_eq_sum_powerset (fun s hs => hmeas _ (ht _ hs))
+      (fun s hs => hμ _ (ht _ hs) i)
+  simp_rw [A, measureReal_biUnion_eq_sum_powerset (fun s hs => hmeas _ (ht _ hs))
+    (fun s hs => hν _ (ht _ hs))]
+  refine tendsto_finsetSum _ (fun u hu => ?_)
+  simp only [Finset.mem_filter, Finset.mem_powerset] at hu
+  apply Filter.Tendsto.const_mul
+  rcases eq_empty_or_nonempty (⋂ s in u, s) with h'u | h'u
+  · simpa [h'u] using tendsto_const_nhds
+  apply h
+  exact hS.biInter_mem hu.2 (fun s hs => ht _ (hu.1 hs)) h'u
 
 中文:
 引理 _root_.IsPiSystem.tendsto_measure实数_biUnion
@@ -1340,7 +1660,19 @@ lemma _root_.IsPiSystem.tendsto_measureReal_biUnion
   /- This statement is not completely obvious, as `⋃ s ∈ t, s` does not belong to the π-system `S`.
   However, thanks to the inclusion-exclusion formula one may express its measure in terms of
   measures of elements of `S`, from which the result follows. -/
-  have A (i) : (μ i).real (⋃ s in t, s)
+  have A (i) : (μ i).real (⋃ s in t, s) = ∑ u in t.powerset with u.Nonempty,
+      (-1 : Real) ^ (#u + 1) * (μ i).real (⋂ s in u, s) :=
+    measureReal_biUnion_eq_sum_powerset (fun s hs => hmeas _ (ht _ hs))
+      (fun s hs => hμ _ (ht _ hs) i)
+  simp_rw [A, measureReal_biUnion_eq_sum_powerset (fun s hs => hmeas _ (ht _ hs))
+    (fun s hs => hν _ (ht _ hs))]
+  refine tendsto_finsetSum _ (fun u hu => ?_)
+  simp only [Finset.mem_filter, Finset.mem_powerset] at hu
+  apply Filter.Tendsto.const_mul
+  rcases eq_empty_or_nonempty (⋂ s in u, s) with h'u | h'u
+  · simpa [h'u] using tendsto_const_nhds
+  apply h
+  exact hS.biInter_mem hu.2 (fun s hs => ht _ (hu.1 hs)) h'u
 
 Depends on / 依赖: Tendsto, finiteness
 -/
@@ -1412,7 +1744,29 @@ lemma ProbabilityMeasure.exists_lt_measure_biUnion_of_isOpen
   obtain ⟨T, TS, T_count, hT⟩ : exists T : Set (Set Ω), T subseteq S ∧ T.Countable ∧ ⋃ t in T, t = G := by
     have : forall (x : G), exists s in S, s in 𝓝 (x : Ω) ∧ s subseteq G := fun x => h G hG x x.2
     choose! s hsS hs_nhds hsG using this
-    rcases TopologicalSpace.isOpen_iUnion_countable 
+    rcases TopologicalSpace.isOpen_iUnion_countable (fun i => interior (s i))
+      (fun i => isOpen_interior) with ⟨T₀, T₀_count, hT₀⟩
+    refine ⟨s '' T₀, by grind, T₀_count.image s, ?_⟩
+    refine Subset.antisymm (by simp; grind) ?_
+    have : G subseteq ⋃ i, interior (s i) := by
+      intro y hy
+      simpa using ⟨y, hy, mem_interior_iff_mem_nhds.2 (hs_nhds ⟨y, hy⟩)⟩
+    apply this.trans
+    rw [← hT₀]; rw [biUnion_image]
+    exact iUnion₂_mono fun i j => interior_subset
+  have : T.Nonempty := by
+    contrapose! hr
+    simp [← hT, hr]
+  rcases T_count.exists_eq_range this with ⟨f, hf⟩
+  have G_eq : G = ⋃ n, f n := by simp [← hT, hf]
+  have : Tendsto (fun i => ν (accumulate f i)) atTop (𝓝 (ν (⋃ i, f i))) :=
+    (ENNReal.tendsto_toNNReal_iff (by simp) (by simp)).2 tendsto_measure_iUnion_accumulate
+  rw [← G_eq] at this
+  rcases ((tendsto_order.1 this).1 r hr).exists with ⟨n, hn⟩
+  refine ⟨(Finset.range (n + 1)).image f, by grind, ?_, ?_⟩
+  · convert! hn
+    simp [accumulate_def]
+  · simpa [G_eq] using fun i _ => subset_iUnion f i
 
 中文:
 引理 概率测度.存在_lt_measure_biUnion_of_isOpen
@@ -1420,7 +1774,29 @@ lemma ProbabilityMeasure.exists_lt_measure_biUnion_of_isOpen
   obtain ⟨T, TS, T_count, hT⟩ : exists T : Set (Set Ω), T subseteq S ∧ T.Countable ∧ ⋃ t in T, t = G := by
     have : forall (x : G), exists s in S, s in 𝓝 (x : Ω) ∧ s subseteq G := fun x => h G hG x x.2
     choose! s hsS hs_nhds hsG using this
-    rcases TopologicalSpace.isOpen_iUnion_countable 
+    rcases TopologicalSpace.isOpen_iUnion_countable (fun i => interior (s i))
+      (fun i => isOpen_interior) with ⟨T₀, T₀_count, hT₀⟩
+    refine ⟨s '' T₀, by grind, T₀_count.image s, ?_⟩
+    refine Subset.antisymm (by simp; grind) ?_
+    have : G subseteq ⋃ i, interior (s i) := by
+      intro y hy
+      simpa using ⟨y, hy, mem_interior_iff_mem_nhds.2 (hs_nhds ⟨y, hy⟩)⟩
+    apply this.trans
+    rw [← hT₀]; rw [biUnion_image]
+    exact iUnion₂_mono fun i j => interior_subset
+  have : T.Nonempty := by
+    contrapose! hr
+    simp [← hT, hr]
+  rcases T_count.exists_eq_range this with ⟨f, hf⟩
+  have G_eq : G = ⋃ n, f n := by simp [← hT, hf]
+  have : Tendsto (fun i => ν (accumulate f i)) atTop (𝓝 (ν (⋃ i, f i))) :=
+    (ENNReal.tendsto_toNNReal_iff (by simp) (by simp)).2 tendsto_measure_iUnion_accumulate
+  rw [← G_eq] at this
+  rcases ((tendsto_order.1 this).1 r hr).exists with ⟨n, hn⟩
+  refine ⟨(Finset.range (n + 1)).image f, by grind, ?_, ?_⟩
+  · convert! hn
+    simp [accumulate_def]
+  · simpa [G_eq] using fun i _ => subset_iUnion f i
 
 Depends on / 依赖: Countable, Subset, Subset.antisymm, T.Countable, T_count, TopologicalSpace, TopologicalSpace.isOpen_iUnion_countable, _count.image, antisymm, hs_nhds, interior, isOpen_iUnion_countable, isOpen_interior, subseteq
 -/
@@ -1466,7 +1842,27 @@ lemma _root_.IsPiSystem.tendsto_probabilityMeasure_of_tendsto_of_mem
   /- We apply the portmanteau theorem: it suffices to show that, given an open set `G`
   and `r < ν G`, then for large `i` one has `r < μᵢ G`. For this, we approximate `G` from inside by
   a finite union `G'` of elements of `S`, still with measure `> r`, by Lemma
-  `ProbabilityMeasure.exists_lt_m
+  `ProbabilityMeasure.exists_lt_measure_biUnion_of_isOpen`. If we have `μᵢ G' → ν G'`,
+  then we deduce `r < μᵢ G'` for large `i`, and therefore `r < μᵢ G`.
+
+  Our assumption does not give directly `μᵢ G' → ν G'`, as `G'` does not belong to the π-system `S`.
+  However, the inclusion-exclusion formula makes it possible to express `μᵢ G'` and `ν G'` in terms
+  of the measures of intersections of elements of `S`, for which we have the convergence. It follows
+  that `μᵢ G' → ν G'` holds, concluding the proof. This second step is already formalized in the
+  lemma `IsPiSystem.tendsto_probabilityMeasure_biUnion`. -/
+  rcases l.eq_or_neBot with rfl | hl
+  · simp
+  apply tendsto_of_forall_isOpen_le_liminf
+  intro G hG
+  refine (le_liminf_iff (isCoboundedUnder_ge_of_le (x := 1) l (by simp)) (by isBoundedDefault)).2
+    (fun r hr => ?_)
+  obtain ⟨T, TS, T_meas, TG⟩ :
+      exists T : Finset (Set Ω), (forall t in T, t in S) ∧ (r < ν (⋃ t in T, t)) ∧ (⋃ t in T, t) subseteq G :=
+    ν.exists_lt_measure_biUnion_of_isOpen h hG hr
+  have : Tendsto (fun i => μ i (⋃ t in T, t)) l (𝓝 (ν (⋃ t in T, t))) :=
+    hS.tendsto_probabilityMeasure_biUnion TS hmeas h'
+  filter_upwards [(tendsto_order.1 this).1 r T_meas] with i hi
+exact hi.trans_le ProbabilityMeasure.apply_mono _ TG
 
 中文:
 引理 _root_.IsPiSystem.tendsto_probabilityMeasure_of_tendsto_of_mem
@@ -1474,7 +1870,27 @@ lemma _root_.IsPiSystem.tendsto_probabilityMeasure_of_tendsto_of_mem
   /- We apply the portmanteau theorem: it suffices to show that, given an open set `G`
   and `r < ν G`, then for large `i` one has `r < μᵢ G`. For this, we approximate `G` from inside by
   a finite union `G'` of elements of `S`, still with measure `> r`, by Lemma
-  `ProbabilityMeasure.exists_lt_m
+  `ProbabilityMeasure.exists_lt_measure_biUnion_of_isOpen`. If we have `μᵢ G' → ν G'`,
+  then we deduce `r < μᵢ G'` for large `i`, and therefore `r < μᵢ G`.
+
+  Our assumption does not give directly `μᵢ G' → ν G'`, as `G'` does not belong to the π-system `S`.
+  However, the inclusion-exclusion formula makes it possible to express `μᵢ G'` and `ν G'` in terms
+  of the measures of intersections of elements of `S`, for which we have the convergence. It follows
+  that `μᵢ G' → ν G'` holds, concluding the proof. This second step is already formalized in the
+  lemma `IsPiSystem.tendsto_probabilityMeasure_biUnion`. -/
+  rcases l.eq_or_neBot with rfl | hl
+  · simp
+  apply tendsto_of_forall_isOpen_le_liminf
+  intro G hG
+  refine (le_liminf_iff (isCoboundedUnder_ge_of_le (x := 1) l (by simp)) (by isBoundedDefault)).2
+    (fun r hr => ?_)
+  obtain ⟨T, TS, T_meas, TG⟩ :
+      exists T : Finset (Set Ω), (forall t in T, t in S) ∧ (r < ν (⋃ t in T, t)) ∧ (⋃ t in T, t) subseteq G :=
+    ν.exists_lt_measure_biUnion_of_isOpen h hG hr
+  have : Tendsto (fun i => μ i (⋃ t in T, t)) l (𝓝 (ν (⋃ t in T, t))) :=
+    hS.tendsto_probabilityMeasure_biUnion TS hmeas h'
+  filter_upwards [(tendsto_order.1 this).1 r T_meas] with i hi
+exact hi.trans_le ProbabilityMeasure.apply_mono _ TG
 -/
 lemma _root_.IsPiSystem.tendsto_probabilityMeasure_of_tendsto_of_mem
     [TopologicalSpace Ω] [SecondCountableTopology Ω] [OpensMeasurableSpace Ω]

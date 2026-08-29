@@ -299,7 +299,12 @@ definition lift
         { toFun := (·.restrictScalars R)
           map_add' := fun _ _ => LinearMap.ext fun _ => rfl
           map_smul' := fun _ _ => LinearMap.ext fun _ => rfl }
-LinearMap.flip (restr ∘ₗ Lin
+LinearMap.flip (restr ∘ₗ LinearMap.mul S C ∘ₗ f.toLinearMap).flip ∘ₗ g)
+    (fun a₁ a₂ b₁ b₂ => show f (a₁ * a₂) * g (b₁ * b₂) = f a₁ * g b₁ * (f a₂ * g b₂) by
+      rw [map_mul]; rw [map_mul]; rw [(hfg a₂ b₁).mul_mul_mul_comm])
+    (show f 1 * g 1 = 1 by rw [map_one, map_one, one_mul])
+
+@[simp]
 
 中文:
 定义 lift
@@ -310,7 +315,12 @@ LinearMap.flip (restr ∘ₗ Lin
         { toFun := (·.restrictScalars R)
           map_add' := fun _ _ => LinearMap.ext fun _ => rfl
           map_smul' := fun _ _ => LinearMap.ext fun _ => rfl }
-LinearMap.flip (restr ∘ₗ Lin
+LinearMap.flip (restr ∘ₗ LinearMap.mul S C ∘ₗ f.toLinearMap).flip ∘ₗ g)
+    (fun a₁ a₂ b₁ b₂ => show f (a₁ * a₂) * g (b₁ * b₂) = f a₁ * g b₁ * (f a₂ * g b₂) by
+      rw [map_mul]; rw [map_mul]; rw [(hfg a₂ b₁).mul_mul_mul_comm])
+    (show f 1 * g 1 = 1 by rw [map_one, map_one, one_mul])
+
+@[simp]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lift, LinearMap, LinearMap.ext, LinearMap.flip, LinearMap.mul, algHomOfLinearMapTensorProduct, f.toLinearMap, map_add, map_mul, map_one, map_smul, mul_mul_mul_comm, restrictScalars, toLinearMap
 -/
@@ -1307,7 +1317,13 @@ definition mapRingHom
   letI := fT.toAlgebra
   letI : IsScalarTower R R' S' := .of_algebraMap_eq' rfl
   letI : IsScalarTower R R' T' := .of_algebraMap_eq' rfl
-  letI : IsScalarTowe
+  letI : IsScalarTower R S S' := .of_algebraMap_eq' HS.symm
+  letI : IsScalarTower R T T' := .of_algebraMap_eq' HT.symm
+  (lift (R := R) (S := R) (includeLeft.comp (IsScalarTower.toAlgHom R S S'))
+    ((includeRight.restrictScalars R).comp (IsScalarTower.toAlgHom R T T'))
+    (fun _ _ => .all _ _)).toRingHom
+
+@[simp]
 
 中文:
 定义 mapRingHom
@@ -1319,7 +1335,13 @@ definition mapRingHom
   letI := fT.toAlgebra
   letI : IsScalarTower R R' S' := .of_algebraMap_eq' rfl
   letI : IsScalarTower R R' T' := .of_algebraMap_eq' rfl
-  letI : IsScalarTowe
+  letI : IsScalarTower R S S' := .of_algebraMap_eq' HS.symm
+  letI : IsScalarTower R T T' := .of_algebraMap_eq' HT.symm
+  (lift (R := R) (S := R) (includeLeft.comp (IsScalarTower.toAlgHom R S S'))
+    ((includeRight.restrictScalars R).comp (IsScalarTower.toAlgHom R T T'))
+    (fun _ _ => .all _ _)).toRingHom
+
+@[simp]
 
 Depends on / 依赖: HS.symm, HT.symm, IsScalarTower, IsScalarTower.toAlgHom, algebraMap, fR.toAlgebra, fS.toAlgebra, fT.toAlgebra, includeLeft, includeLeft.comp, includeRight, includeRight.restrictScalars, of_algebraMap_eq, restrictScalars, toAlgHom, toAlgebra
 -/
@@ -1649,7 +1671,8 @@ theorem map_range
     rintro _ ⟨_, ⟨a, b, rfl⟩, rfl⟩
     rw [map_tmul]; rw [← mul_one (f a)]; rw [← one_mul (g b)]; rw [← tmul_mul_tmul]
     exact mul_mem_sup (AlgHom.mem_range_self _ a) (AlgHom.mem_range_self _ b)
-  · rw [
+  · rw [← map_comp_includeLeft f g, ← map_comp_includeRight f g]
+    exact sup_le (AlgHom.range_comp_le_range _ _) (AlgHom.range_comp_le_range _ _)
 
 中文:
 定理 map_range
@@ -1660,7 +1683,8 @@ theorem map_range
     rintro _ ⟨_, ⟨a, b, rfl⟩, rfl⟩
     rw [map_tmul]; rw [← mul_one (f a)]; rw [← one_mul (g b)]; rw [← tmul_mul_tmul]
     exact mul_mem_sup (AlgHom.mem_range_self _ a) (AlgHom.mem_range_self _ b)
-  · rw [
+  · rw [← map_comp_includeLeft f g, ← map_comp_includeRight f g]
+    exact sup_le (AlgHom.range_comp_le_range _ _) (AlgHom.range_comp_le_range _ _)
 
 Depends on / 依赖: AlgHom, AlgHom.mem_range_self, AlgHom.range_comp_le_range, Compacts, TopologicalSpace, TopologicalSpace.Compacts.instCompactSpaceSubtypeMem, adjoin_image, adjoin_le_iff, adjoin_tmul_eq_top, instCompactSpaceSubtypeMem, le_antisymm, map_comp_includeLeft, map_comp_includeRight, map_tmul, map_top, mem_range_self, mul_mem_sup, mul_one, one_mul, range_comp_le_range
 -/
@@ -2126,7 +2150,8 @@ lemma includeLeft_bijective
       map (.id S A) (Algebra.ofId R B) := by ext; simp
   rw [← Function.Bijective.of_comp_iff _ (TensorProduct.rid R S A).bijective]
   convert_to Function.Bijective (map (.id R A) (Algebra.ofId R B))
-  · exa
+  · exact DFunLike.coe_fn_eq.mpr this
+  · exact Algebra.TensorProduct.map_bijective Function.bijective_id h
 
 中文:
 引理 includeLeft_bijective
@@ -2136,7 +2161,8 @@ lemma includeLeft_bijective
       map (.id S A) (Algebra.ofId R B) := by ext; simp
   rw [← Function.Bijective.of_comp_iff _ (TensorProduct.rid R S A).bijective]
   convert_to Function.Bijective (map (.id R A) (Algebra.ofId R B))
-  · exa
+  · exact DFunLike.coe_fn_eq.mpr this
+  · exact Algebra.TensorProduct.map_bijective Function.bijective_id h
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.map_bijective, Algebra.ofId, Bijective, DFunLike, DFunLike.coe_fn_eq.mpr, Function, Function.Bijective, Function.Bijective.of_comp_iff, Function.bijective_id, TensorProduct, TensorProduct.rid, bijective, bijective_id, coe_fn_eq, convert_to, includeLeft, map_bijective, of_comp_iff, otimes
 -/
@@ -2667,7 +2693,16 @@ definition tensorProductEnd
       apply LinearMap.ext
       intro x
       simp only [tensorProduct, mul_comm a b, Module.End.mul_eq_comp,
-        TensorProduct.AlgebraTensorModule.lift_apply, TensorProduct.lift.tmu
+        TensorProduct.AlgebraTensorModule.lift_apply, TensorProduct.lift.tmul, coe_restrictScalars,
+        coe_mk, AddHom.coe_mk, mul_smul, smul_apply, baseChangeHom_apply, baseChange_comp,
+        comp_apply, Algebra.mul_smul_comm, Algebra.smul_mul_assoc])
+    (by
+      apply LinearMap.ext
+      intro x
+      simp only [tensorProduct, TensorProduct.AlgebraTensorModule.lift_apply,
+        TensorProduct.lift.tmul, coe_restrictScalars, coe_mk, AddHom.coe_mk, one_smul,
+        baseChangeHom_apply, baseChange_eq_ltensor, Module.End.one_eq_id,
+        lTensor_id, LinearMap.id_apply])
 
 中文:
 定义 tensorProductEnd
@@ -2678,7 +2713,16 @@ definition tensorProductEnd
       apply LinearMap.ext
       intro x
       simp only [tensorProduct, mul_comm a b, Module.End.mul_eq_comp,
-        TensorProduct.AlgebraTensorModule.lift_apply, TensorProduct.lift.tmu
+        TensorProduct.AlgebraTensorModule.lift_apply, TensorProduct.lift.tmul, coe_restrictScalars,
+        coe_mk, AddHom.coe_mk, mul_smul, smul_apply, baseChangeHom_apply, baseChange_comp,
+        comp_apply, Algebra.mul_smul_comm, Algebra.smul_mul_assoc])
+    (by
+      apply LinearMap.ext
+      intro x
+      simp only [tensorProduct, TensorProduct.AlgebraTensorModule.lift_apply,
+        TensorProduct.lift.tmul, coe_restrictScalars, coe_mk, AddHom.coe_mk, one_smul,
+        baseChangeHom_apply, baseChange_eq_ltensor, Module.End.one_eq_id,
+        lTensor_id, LinearMap.id_apply])
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, Algebra, Algebra.TensorProduct.algHomOfLinearMapTensorProduct, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, AlgebraTensorModule, LinearMap, LinearMap.ext, LinearMap.tensorProduct, Module, Module.End.mul_eq_comp, TensorPro, TensorProduct, TensorProduct.AlgebraTensorModule.lift_apply, TensorProduct.lift.tmul, algHomOfLinearMapTensorProduct, baseChangeHom_apply, baseChange_comp, coe_mk
 -/

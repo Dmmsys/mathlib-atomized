@@ -41,7 +41,17 @@ theorem isInternal_prime_power_torsion_of_is_torsion_by_ideal
     prime_of_factor p (Multiset.mem_toFinset.mp hp)
   apply torsionBySet_isInternal (p := fun p => p ^ P.count p) _
   · convert! hM
-    rw [← Finset.inf_eq_iInf]; rw [IsDedekindDomain.inf_pow_eq_prod_of_prime]; rw [← Fins
+    rw [← Finset.inf_eq_iInf]; rw [IsDedekindDomain.inf_pow_eq_prod_of_prime]; rw [← Finset.prod_multiset_count]; rw [← associated_iff_eq]
+    · exact factors_prod hI
+    · exact prime_of_mem
+    · exact fun _ _ _ _ ij => ij
+  · intro p hp q hq pq
+    rw [Ideal.irreducible_pow_sup]
+    · suffices (normalizedFactors _).count p = 0 by rw [this, zero_min, pow_zero, Ideal.one_eq_top]
+      rw [Multiset.count_eq_zero]; rw [normalizedFactors_of_irreducible_pow (prime_of_mem q hq).irreducible]; rw [Multiset.mem_replicate]
+exact fun H => pq H.2.trans normalize_eq q
+    · rw [← Ideal.zero_eq_bot]; apply pow_ne_zero; exact (prime_of_mem q hq).ne_zero
+    · exact (prime_of_mem p hp).irreducible
 
 中文:
 定理 is整数ernal_prime_power_torsion_of_is_torsion_by_ideal
@@ -51,7 +61,17 @@ theorem isInternal_prime_power_torsion_of_is_torsion_by_ideal
     prime_of_factor p (Multiset.mem_toFinset.mp hp)
   apply torsionBySet_isInternal (p := fun p => p ^ P.count p) _
   · convert! hM
-    rw [← Finset.inf_eq_iInf]; rw [IsDedekindDomain.inf_pow_eq_prod_of_prime]; rw [← Fins
+    rw [← Finset.inf_eq_iInf]; rw [IsDedekindDomain.inf_pow_eq_prod_of_prime]; rw [← Finset.prod_multiset_count]; rw [← associated_iff_eq]
+    · exact factors_prod hI
+    · exact prime_of_mem
+    · exact fun _ _ _ _ ij => ij
+  · intro p hp q hq pq
+    rw [Ideal.irreducible_pow_sup]
+    · suffices (normalizedFactors _).count p = 0 by rw [this, zero_min, pow_zero, Ideal.one_eq_top]
+      rw [Multiset.count_eq_zero]; rw [normalizedFactors_of_irreducible_pow (prime_of_mem q hq).irreducible]; rw [Multiset.mem_replicate]
+exact fun H => pq H.2.trans normalize_eq q
+    · rw [← Ideal.zero_eq_bot]; apply pow_ne_zero; exact (prime_of_mem q hq).ne_zero
+    · exact (prime_of_mem p hp).irreducible
 
 Depends on / 依赖: Finset, Finset.inf_eq_iInf, Finset.prod_multiset_count, Ideal.irreducible_pow_sup, IsDedekindDomain, IsDedekindDomain.inf_pow_eq_prod_of_prime, Multiset, Multiset.mem_toFinset.mp, P.count, P.toFinset, associated_iff_eq, convert, factors, factors_prod, inf_eq_iInf, inf_pow_eq_prod_of_prime, irreducible_pow_sup, mem_toFinset, normalizedFactors, prime_of_factor
 -/

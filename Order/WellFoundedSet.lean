@@ -123,7 +123,13 @@ theorem wellFoundedOn_iff
   rw [WellFounded.wellFounded_iff_has_min]
   intro t ht
   by_cases hst : (s inter t).Nonempty
-  · rw [← Subtype.preimage_coe_none
+  · rw [← Subtype.preimage_coe_nonempty] at hst
+    rcases h.has_min (Subtype.val ⁻¹' t) hst with ⟨⟨m, ms⟩, mt, hm⟩
+    exact ⟨m, mt, fun x xt ⟨xm, xs, _⟩ => hm ⟨x, xs⟩ xt xm⟩
+  · rcases ht with ⟨m, mt⟩
+    exact ⟨m, mt, fun x _ ⟨_, _, ms⟩ => hst ⟨m, ⟨ms, mt⟩⟩⟩
+
+@[simp]
 
 中文:
 定理 wellFoundedOn_iff
@@ -134,7 +140,13 @@ theorem wellFoundedOn_iff
   rw [WellFounded.wellFounded_iff_has_min]
   intro t ht
   by_cases hst : (s inter t).Nonempty
-  · rw [← Subtype.preimage_coe_none
+  · rw [← Subtype.preimage_coe_nonempty] at hst
+    rcases h.has_min (Subtype.val ⁻¹' t) hst with ⟨⟨m, ms⟩, mt, hm⟩
+    exact ⟨m, mt, fun x xt ⟨xm, xs, _⟩ => hm ⟨x, xs⟩ xt xm⟩
+  · rcases ht with ⟨m, mt⟩
+    exact ⟨m, mt, fun x _ ⟨_, _, ms⟩ => hst ⟨m, ⟨ms, mt⟩⟩⟩
+
+@[simp]
 
 Depends on / 依赖: Nonempty, RelEmbedding, Subrel, Subtype, Subtype.coe_injective, Subtype.preimage_coe_nonempty, Subtype.val, WellFounded, WellFounded.wellFounded_iff_has_min, coe_injective, f.wellFounded, h.has_min, has_min, preimage_coe_nonempty, wellFounded, wellFounded_iff_has_min
 -/
@@ -368,7 +380,11 @@ theorem acc_iff_wellFoundedOn
     obtain h' | h' := reflTransGen_iff_eq_or_transGen.1 b.2
     · rwa [h'] at h
     · exact h.inv h'
-  tfae_have 2 -> 3 := fun h => h.subset fun _ => TransGen.to_reflTrans
+  tfae_have 2 -> 3 := fun h => h.subset fun _ => TransGen.to_reflTransGen
+  tfae_have 3 -> 1 := by
+    refine fun h => Acc.intro _ (fun b hb => (h.apply ⟨b, .single hb⟩).of_fibration Subtype.val ?_)
+    exact fun ⟨c, hc⟩ d h => ⟨⟨d, .head h hc⟩, h, rfl⟩
+  tfae_finish
 
 中文:
 定理 acc_iff_wellFoundedOn
@@ -380,7 +396,11 @@ theorem acc_iff_wellFoundedOn
     obtain h' | h' := reflTransGen_iff_eq_or_transGen.1 b.2
     · rwa [h'] at h
     · exact h.inv h'
-  tfae_have 2 -> 3 := fun h => h.subset fun _ => TransGen.to_reflTrans
+  tfae_have 2 -> 3 := fun h => h.subset fun _ => TransGen.to_reflTransGen
+  tfae_have 3 -> 1 := by
+    refine fun h => Acc.intro _ (fun b hb => (h.apply ⟨b, .single hb⟩).of_fibration Subtype.val ?_)
+    exact fun ⟨c, hc⟩ d h => ⟨⟨d, .head h hc⟩, h, rfl⟩
+  tfae_finish
 
 Depends on / 依赖: Acc.intro, InvImage, InvImage.accessible, Subtype, Subtype.val, TransGen, TransGen.to_reflTransGen, acc_transGen_iff, accessible, h.apply, h.inv, h.subset, of_fibration, reflTransGen_iff_eq_or_transGen, single, subset, tfae_finish, tfae_have, to_reflTransGen
 -/
@@ -442,7 +462,9 @@ theorem wellFoundedOn_iff_no_descending_seq
     have H : forall n, f n in s := fun n => (hf.2 n.lt_succ_self).2.2
     refine ⟨⟨f, ?_⟩, H⟩
     simpa only [H, and_true] using @hf
-  · rint
+  · rintro ⟨⟨f, hf⟩, hfs : forall n, f n in s⟩
+    refine ⟨⟨f, ?_⟩⟩
+    simpa only [hfs, and_true] using @hf
 
 中文:
 定理 wellFoundedOn_iff_no_descending_seq
@@ -454,7 +476,9 @@ theorem wellFoundedOn_iff_no_descending_seq
     have H : forall n, f n in s := fun n => (hf.2 n.lt_succ_self).2.2
     refine ⟨⟨f, ?_⟩, H⟩
     simpa only [H, and_true] using @hf
-  · rint
+  · rintro ⟨⟨f, hf⟩, hfs : forall n, f n in s⟩
+    refine ⟨⟨f, ?_⟩⟩
+    simpa only [hfs, and_true] using @hf
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.wellFounded_iff_isEmpty, and_true, lt_succ_self, n.lt_succ_self, not_exists, not_iff_not, not_nonempty_iff, wellFoundedOn_iff, wellFounded_iff_isEmpty
 -/
@@ -1101,7 +1125,17 @@ theorem partiallyWellOrderedOn_iff_finite_antichains
   by_contra! H
   refine infinite_range_of_injective (fun m n hmn => ?_) (hs _ (range_subset_iff.2 hf) ?_)
   · obtain h | h | h := lt_trichotomy m n
-    · r
+    · refine (H _ _ h ?_).elim
+      rw [hmn]
+      exact refl _
+    · exact h
+    · refine (H _ _ h ?_).elim
+      rw [hmn]
+      exact refl _
+  rintro _ ⟨m, hm, rfl⟩ _ ⟨n, hn, rfl⟩ hmn
+  obtain h | h := (ne_of_apply_ne _ hmn).lt_or_gt
+  · exact H _ _ h
+  · exact mt symm (H _ _ h)
 
 中文:
 定理 partiallyWellOrderedOn_iff_finite_antichains
@@ -1113,7 +1147,17 @@ theorem partiallyWellOrderedOn_iff_finite_antichains
   by_contra! H
   refine infinite_range_of_injective (fun m n hmn => ?_) (hs _ (range_subset_iff.2 hf) ?_)
   · obtain h | h | h := lt_trichotomy m n
-    · r
+    · refine (H _ _ h ?_).elim
+      rw [hmn]
+      exact refl _
+    · exact h
+    · refine (H _ _ h ?_).elim
+      rw [hmn]
+      exact refl _
+  rintro _ ⟨m, hm, rfl⟩ _ ⟨n, hn, rfl⟩ hmn
+  obtain h | h := (ne_of_apply_ne _ hmn).lt_or_gt
+  · exact H _ _ h
+  · exact mt symm (H _ _ h)
 
 Depends on / 依赖: finite_of_partiallyWellOrderedOn, h.mono, hrt.finite_of_partiallyWellOrderedOn, infinite_range_of_injective, lt_or_gt, lt_trichotomy, ne_of_apply_ne, partiallyWellOrderedOn_iff_exists_lt, range_subset_iff
 -/
@@ -1230,7 +1274,21 @@ theorem PartiallyWellOrderedOn.pi
   have : IsPreorder (forall i, α i) (fun a b : forall i, α i => forall i, r i (a i) (b i)) :=
     { refl a i := refl (a i)
       trans a b c hab hbc i := _root_.trans (hab i) (hbc i) }
-  suffices forall (t : Finset ι), forall (f : Nat -> forall i, α i), (forall n i, f
+  suffices forall (t : Finset ι), forall (f : Nat -> forall i, α i), (forall n i, f n i in s i) ->
+    exists g : Nat ↪o Nat, forall ⦃a b : Nat⦄, a <= b -> forall i, i in t -> r i ((f ∘ g) a i) ((f ∘ g) b i) by
+    rw [partiallyWellOrderedOn_iff_exists_monotone_subseq]
+    intro f hf
+    simp only [mem_pi, mem_univ, forall_const] at hf
+    simpa only [Finset.mem_univ, true_imp_iff] using! this Finset.univ f hf
+  refine Finset.cons_induction ?_ ?_
+  · intro f hf
+    exists RelEmbedding.refl (· <= ·)
+    simp only [IsEmpty.forall_iff, imp_true_iff, Finset.notMem_empty]
+  · intro i t hi ih f hf
+    obtain ⟨g, hg⟩ := (hs i).exists_monotone_subseq (hf · i)
+    obtain ⟨g', hg'⟩ := ih (f ∘ g) (hf <| g ·)
+    refine ⟨g'.trans g, fun a b hab => (Finset.forall_mem_cons _ _).2 ?_⟩
+    exact ⟨hg _ _ (OrderHomClass.mono g' hab), hg' hab⟩
 
 中文:
 定理 PartiallyWellOrderedOn.pi
@@ -1240,7 +1298,21 @@ theorem PartiallyWellOrderedOn.pi
   have : IsPreorder (forall i, α i) (fun a b : forall i, α i => forall i, r i (a i) (b i)) :=
     { refl a i := refl (a i)
       trans a b c hab hbc i := _root_.trans (hab i) (hbc i) }
-  suffices forall (t : Finset ι), forall (f : Nat -> forall i, α i), (forall n i, f
+  suffices forall (t : Finset ι), forall (f : Nat -> forall i, α i), (forall n i, f n i in s i) ->
+    exists g : Nat ↪o Nat, forall ⦃a b : Nat⦄, a <= b -> forall i, i in t -> r i ((f ∘ g) a i) ((f ∘ g) b i) by
+    rw [partiallyWellOrderedOn_iff_exists_monotone_subseq]
+    intro f hf
+    simp only [mem_pi, mem_univ, forall_const] at hf
+    simpa only [Finset.mem_univ, true_imp_iff] using! this Finset.univ f hf
+  refine Finset.cons_induction ?_ ?_
+  · intro f hf
+    exists RelEmbedding.refl (· <= ·)
+    simp only [IsEmpty.forall_iff, imp_true_iff, Finset.notMem_empty]
+  · intro i t hi ih f hf
+    obtain ⟨g, hg⟩ := (hs i).exists_monotone_subseq (hf · i)
+    obtain ⟨g', hg'⟩ := ih (f ∘ g) (hf <| g ·)
+    refine ⟨g'.trans g, fun a b hab => (Finset.forall_mem_cons _ _).2 ?_⟩
+    exact ⟨hg _ _ (OrderHomClass.mono g' hab), hg' hab⟩
 -/
 protected theorem PartiallyWellOrderedOn.pi {α : ι -> Type*} [Finite ι] {r : forall i, α i -> α i -> Prop}
     [forall i, IsPreorder (α i) (r i)] {s : forall i, Set (α i)}
@@ -1740,7 +1812,7 @@ theorem IsPWO.exists_le_minimal
     (hs.wellFounded.min t h).2, fun y hy hle => ?_⟩
   by_contra hnle
   exact hs.wellFounded.not_lt_min t (x := ⟨y, hy⟩) (hle.trans (hs.wellFounded.min_mem t h))
-
+    ⟨hle, hnle⟩
 
 中文:
 定理 IsPWO.存在_le_minimal
@@ -1752,7 +1824,7 @@ theorem IsPWO.exists_le_minimal
     (hs.wellFounded.min t h).2, fun y hy hle => ?_⟩
   by_contra hnle
   exact hs.wellFounded.not_lt_min t (x := ⟨y, hy⟩) (hle.trans (hs.wellFounded.min_mem t h))
-
+    ⟨hle, hnle⟩
 
 Depends on / 依赖: Nonempty, hle.trans, hs.wellFounded.min, hs.wellFounded.min_mem, hs.wellFounded.not_lt_min, le_rfl, min_mem, not_lt_min, t.Nonempty, wellFounded
 -/
@@ -2697,7 +2769,9 @@ theorem bddAbove_preimage
   obtain ⟨φ, hφm, hφs⟩ := Nat.exists_strictMono_subsequence
     fun n => (hf n).casesOn fun m h => h.casesOn fun hs hmn => Exists.intro m ⟨hmn, hs⟩
   rw [partiallyWellOrderedOn_iff_exists_lt] at hs
-  obtain ⟨m, n, hmn, hr⟩ := hs (fun n => f (φ n)) hφ
+  obtain ⟨m, n, hmn, hr⟩ := hs (fun n => f (φ n)) hφs
+  use (φ m), (φ n)
+  exact ⟨hφm hmn, hr⟩
 
 中文:
 定理 bddAbove_preimage
@@ -2708,7 +2782,9 @@ theorem bddAbove_preimage
   obtain ⟨φ, hφm, hφs⟩ := Nat.exists_strictMono_subsequence
     fun n => (hf n).casesOn fun m h => h.casesOn fun hs hmn => Exists.intro m ⟨hmn, hs⟩
   rw [partiallyWellOrderedOn_iff_exists_lt] at hs
-  obtain ⟨m, n, hmn, hr⟩ := hs (fun n => f (φ n)) hφ
+  obtain ⟨m, n, hmn, hr⟩ := hs (fun n => f (φ n)) hφs
+  use (φ m), (φ n)
+  exact ⟨hφm hmn, hr⟩
 
 Depends on / 依赖: Exists, Exists.intro, Nat.exists_strictMono_subsequence, casesOn, contrapose, exists_strictMono_subsequence, h.casesOn, not_bddAbove_iff, partiallyWellOrderedOn_iff_exists_lt
 -/
@@ -2823,7 +2899,9 @@ definition minBadSeqOfBadSeq
     have h : exists (k : Nat) (g : Nat -> α), (forall m, m < n -> f m = g m) ∧ IsBadSeq r s g ∧ rk (g n) = k :=
       ⟨_, f, fun _ _ => rfl, hf, rfl⟩
     obtain ⟨h1, h2, h3⟩ := Classical.choose_spec (Nat.find_spec h)
-    refine ⟨Classical.choose (Nat.find_spec h), h1, by convert! h2, 
+    refine ⟨Classical.choose (Nat.find_spec h), h1, by convert! h2, fun g hg1 hg2 con => ?_⟩
+    refine Nat.find_min h ?_ ⟨g, fun m mn => (h1 m mn).trans (hg1 m mn), con, rfl⟩
+    rwa [← h3]
 
 中文:
 定义 minBadSeqOfBadSeq
@@ -2833,7 +2911,9 @@ definition minBadSeqOfBadSeq
     have h : exists (k : Nat) (g : Nat -> α), (forall m, m < n -> f m = g m) ∧ IsBadSeq r s g ∧ rk (g n) = k :=
       ⟨_, f, fun _ _ => rfl, hf, rfl⟩
     obtain ⟨h1, h2, h3⟩ := Classical.choose_spec (Nat.find_spec h)
-    refine ⟨Classical.choose (Nat.find_spec h), h1, by convert! h2, 
+    refine ⟨Classical.choose (Nat.find_spec h), h1, by convert! h2, fun g hg1 hg2 con => ?_⟩
+    refine Nat.find_min h ?_ ⟨g, fun m mn => (h1 m mn).trans (hg1 m mn), con, rfl⟩
+    rwa [← h3]
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, IsBadSeq, Nat.find_min, Nat.find_spec, choose_spec, classical, convert, find_min, find_spec
 -/
@@ -2859,7 +2939,22 @@ theorem exists_min_bad_of_exists_bad
   let fs : forall n : Nat, { f : Nat -> α // IsBadSeq r s f ∧ IsMinBadSeq r rk s n f } := by
     refine Nat.rec ?_ fun n fn => ?_
     · exact ⟨(minBadSeqOfBadSeq r rk s 0 f0 hf0).1, (minBadSeqOfBadSeq r rk s 0 f0 hf0).2.2⟩
-    · exact ⟨(minBadSeqOfBadSeq r rk 
+    · exact ⟨(minBadSeqOfBadSeq r rk s (n + 1) fn.1 fn.2.1).1,
+        (minBadSeqOfBadSeq r rk s (n + 1) fn.1 fn.2.1).2.2⟩
+  have h : forall m n, m <= n -> (fs m).1 m = (fs n).1 m := fun m n mn => by
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le mn; clear mn
+    induction k with
+    | zero => rfl
+    | succ k ih =>
+      rw [ih]; rw [(minBadSeqOfBadSeq r rk s (m + k + 1) (fs (m + k)).1 (fs (m + k)).2.1).2.1 m
+        (Nat.lt_succ_iff.2 (Nat.add_le_add_left k.zero_le m))]
+      rfl
+  refine ⟨fun n => (fs n).1 n, ⟨fun n => (fs n).2.1.1 n, fun m n mn => ?_⟩, fun n g hg1 hg2 => ?_⟩
+  · dsimp
+    rw [h m n mn.le]
+    exact (fs n).2.1.2 m n mn
+  · refine (fs n).2.2 g (fun m mn => ?_) hg2
+    rw [← h m n mn.le]; rw [← hg1 m mn]
 
 中文:
 定理 存在_min_bad_of_存在_bad
@@ -2869,7 +2964,22 @@ theorem exists_min_bad_of_exists_bad
   let fs : forall n : Nat, { f : Nat -> α // IsBadSeq r s f ∧ IsMinBadSeq r rk s n f } := by
     refine Nat.rec ?_ fun n fn => ?_
     · exact ⟨(minBadSeqOfBadSeq r rk s 0 f0 hf0).1, (minBadSeqOfBadSeq r rk s 0 f0 hf0).2.2⟩
-    · exact ⟨(minBadSeqOfBadSeq r rk 
+    · exact ⟨(minBadSeqOfBadSeq r rk s (n + 1) fn.1 fn.2.1).1,
+        (minBadSeqOfBadSeq r rk s (n + 1) fn.1 fn.2.1).2.2⟩
+  have h : forall m n, m <= n -> (fs m).1 m = (fs n).1 m := fun m n mn => by
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le mn; clear mn
+    induction k with
+    | zero => rfl
+    | succ k ih =>
+      rw [ih]; rw [(minBadSeqOfBadSeq r rk s (m + k + 1) (fs (m + k)).1 (fs (m + k)).2.1).2.1 m
+        (Nat.lt_succ_iff.2 (Nat.add_le_add_left k.zero_le m))]
+      rfl
+  refine ⟨fun n => (fs n).1 n, ⟨fun n => (fs n).2.1.1 n, fun m n mn => ?_⟩, fun n g hg1 hg2 => ?_⟩
+  · dsimp
+    rw [h m n mn.le]
+    exact (fs n).2.1.2 m n mn
+  · refine (fs n).2.2 g (fun m mn => ?_) hg2
+    rw [← h m n mn.le]; rw [← hg1 m mn]
 
 Depends on / 依赖: IsBadSeq, IsMinBadSeq, Nat.exists_eq_add_of_le, Nat.rec, exists_eq_add_of_le, inducti, minBadSeqOfBadSeq
 -/
@@ -2942,7 +3052,32 @@ theorem partiallyWellOrderedOn_sublistForall₂
   rw [iff_not_exists_isMinBadSeq List.length]
   rintro ⟨f, hf1, hf2⟩
   have hnil : forall n, f n != List.nil := fun n con =>
-    hf1.2 n n.succ n.lt_succ_self (con.symm ▸ List.SublistForall₂.n
+    hf1.2 n n.succ n.lt_succ_self (con.symm ▸ List.SublistForall₂.nil)
+  obtain ⟨g, hg⟩ := h.exists_monotone_subseq fun n => hf1.1 n _ (List.head!_mem_self (hnil n))
+  have hf' :=
+    hf2 (g 0) (fun n => if n < g 0 then f n else List.tail (f (g (n - g 0))))
+      (fun m hm => (if_pos hm).symm) ?_
+  swap
+  · simp only [if_neg (lt_irrefl (g 0)), Nat.sub_self]
+    rw [List.length_tail]; rw [← Nat.pred_eq_sub_one]
+    exact Nat.pred_lt fun con => hnil _ (List.length_eq_zero_iff.1 con)
+  rw [IsBadSeq] at hf'
+  push Not at hf'
+  obtain ⟨m, n, mn, hmn⟩ := hf' fun n x hx => by
+    split_ifs at hx with hn
+    exacts [hf1.1 _ _ hx, hf1.1 _ _ (List.tail_subset _ hx)]
+  by_cases hn : n < g 0
+  · apply hf1.2 m n mn
+    rwa [if_pos hn, if_pos (mn.trans hn)] at hmn
+  · obtain ⟨n', rfl⟩ := Nat.exists_eq_add_of_le (not_lt.1 hn)
+    rw [if_neg hn]; rw [add_comm (g 0) n']; rw [Nat.add_sub_cancel_right] at hmn
+    split_ifs at hmn with hm
+    · apply hf1.2 m (g n') (lt_of_lt_of_le hm (g.monotone n'.zero_le))
+      exact _root_.trans hmn (List.tail_sublistForall₂_self _)
+    · rw [← Nat.sub_lt_iff_lt_add' (le_of_not_gt hm)] at mn
+      apply hf1.2 _ _ (g.lt_iff_lt.2 mn)
+      rw [← List.cons_head!_tail (hnil (g (m - g 0)))]; rw [← List.cons_head!_tail (hnil (g n'))]
+      exact List.SublistForall₂.cons (hg _ _ (le_of_lt mn)) hmn
 
 中文:
 定理 partiallyWellOrderedOn_sublistForall₂
@@ -2954,7 +3089,32 @@ theorem partiallyWellOrderedOn_sublistForall₂
   rw [iff_not_exists_isMinBadSeq List.length]
   rintro ⟨f, hf1, hf2⟩
   have hnil : forall n, f n != List.nil := fun n con =>
-    hf1.2 n n.succ n.lt_succ_self (con.symm ▸ List.SublistForall₂.n
+    hf1.2 n n.succ n.lt_succ_self (con.symm ▸ List.SublistForall₂.nil)
+  obtain ⟨g, hg⟩ := h.exists_monotone_subseq fun n => hf1.1 n _ (List.head!_mem_self (hnil n))
+  have hf' :=
+    hf2 (g 0) (fun n => if n < g 0 then f n else List.tail (f (g (n - g 0))))
+      (fun m hm => (if_pos hm).symm) ?_
+  swap
+  · simp only [if_neg (lt_irrefl (g 0)), Nat.sub_self]
+    rw [List.length_tail]; rw [← Nat.pred_eq_sub_one]
+    exact Nat.pred_lt fun con => hnil _ (List.length_eq_zero_iff.1 con)
+  rw [IsBadSeq] at hf'
+  push Not at hf'
+  obtain ⟨m, n, mn, hmn⟩ := hf' fun n x hx => by
+    split_ifs at hx with hn
+    exacts [hf1.1 _ _ hx, hf1.1 _ _ (List.tail_subset _ hx)]
+  by_cases hn : n < g 0
+  · apply hf1.2 m n mn
+    rwa [if_pos hn, if_pos (mn.trans hn)] at hmn
+  · obtain ⟨n', rfl⟩ := Nat.exists_eq_add_of_le (not_lt.1 hn)
+    rw [if_neg hn]; rw [add_comm (g 0) n']; rw [Nat.add_sub_cancel_right] at hmn
+    split_ifs at hmn with hm
+    · apply hf1.2 m (g n') (lt_of_lt_of_le hm (g.monotone n'.zero_le))
+      exact _root_.trans hmn (List.tail_sublistForall₂_self _)
+    · rw [← Nat.sub_lt_iff_lt_add' (le_of_not_gt hm)] at mn
+      apply hf1.2 _ _ (g.lt_iff_lt.2 mn)
+      rw [← List.cons_head!_tail (hnil (g (m - g 0)))]; rw [← List.cons_head!_tail (hnil (g n'))]
+      exact List.SublistForall₂.cons (hg _ _ (le_of_lt mn)) hmn
 
 Depends on / 依赖: List.SublistForall, List.head, List.length, List.nil, List.tail, _mem_self, con.symm, exists_monotone_subseq, h.exists_monotone_subseq, if_pos, iff_not_exists_isMinBadSeq, inhabit, isEmpty_or_nonempty, length, lt_succ_self, n.lt_succ_self, n.succ, partiallyWellOrderedOn, subsingleton_of_subsingleton, subsingleton_of_subsingleton.partiallyWellOrderedOn
 -/
@@ -3006,7 +3166,28 @@ theorem subsetProdLex
   rw [isPWO_iff_exists_monotone_subseq] at hα
   obtain ⟨g, hg⟩ : exists (g : (Nat ↪o Nat)), Monotone fun n => (ofLex f (g n)).1 :=
     hα (fun n => (ofLex f n).1) (fun k => mem_image_of_mem (fun x => (ofLex x).1) (hf k))
-  have 
+  have hhg : forall n, (ofLex f (g 0)).1 <= (ofLex f (g n)).1 := fun n => hg n.zero_le
+  by_cases! hc : exists n, (ofLex f (g 0)).1 < (ofLex f (g n)).1
+  · obtain ⟨n, hn⟩ := hc
+    use (g 0), (g n)
+    constructor
+    · by_contra hx
+      simp_all
+· exact Prod.Lex.toLex_le_toLex.mpr .inl hn
+  · have hhc : forall n, (ofLex f (g 0)).1 = (ofLex f (g n)).1 := by
+      intro n
+      exact (hhg n).eq_of_not_lt (hc n)
+    obtain ⟨g', hg'⟩ : exists g' : Nat ↪o Nat, Monotone ((fun n => (ofLex f (g (g' n))).2)) := by
+      simp_rw [isPWO_iff_exists_monotone_subseq] at hβ
+      apply hβ (ofLex f (g 0)).1 fun n => (ofLex f (g n)).2
+      intro n
+      rw [hhc n]
+      simpa using! hf _
+    use (g (g' 0)), (g (g' 1))
+    suffices (f (g (g' 0))) <= (f (g (g' 1))) by simpa
+· refine Prod.Lex.toLex_le_toLex.mpr .inr ⟨?_, ?_⟩
+      · exact (hhc (g' 0)).symm.trans (hhc (g' 1))
+      · exact hg' (Nat.zero_le 1)
 
 中文:
 定理 subsetProdLex
@@ -3017,7 +3198,28 @@ theorem subsetProdLex
   rw [isPWO_iff_exists_monotone_subseq] at hα
   obtain ⟨g, hg⟩ : exists (g : (Nat ↪o Nat)), Monotone fun n => (ofLex f (g n)).1 :=
     hα (fun n => (ofLex f n).1) (fun k => mem_image_of_mem (fun x => (ofLex x).1) (hf k))
-  have 
+  have hhg : forall n, (ofLex f (g 0)).1 <= (ofLex f (g n)).1 := fun n => hg n.zero_le
+  by_cases! hc : exists n, (ofLex f (g 0)).1 < (ofLex f (g n)).1
+  · obtain ⟨n, hn⟩ := hc
+    use (g 0), (g n)
+    constructor
+    · by_contra hx
+      simp_all
+· exact Prod.Lex.toLex_le_toLex.mpr .inl hn
+  · have hhc : forall n, (ofLex f (g 0)).1 = (ofLex f (g n)).1 := by
+      intro n
+      exact (hhg n).eq_of_not_lt (hc n)
+    obtain ⟨g', hg'⟩ : exists g' : Nat ↪o Nat, Monotone ((fun n => (ofLex f (g (g' n))).2)) := by
+      simp_rw [isPWO_iff_exists_monotone_subseq] at hβ
+      apply hβ (ofLex f (g 0)).1 fun n => (ofLex f (g n)).2
+      intro n
+      rw [hhc n]
+      simpa using! hf _
+    use (g (g' 0)), (g (g' 1))
+    suffices (f (g (g' 0))) <= (f (g (g' 1))) by simpa
+· refine Prod.Lex.toLex_le_toLex.mpr .inr ⟨?_, ?_⟩
+      · exact (hhc (g' 0)).symm.trans (hhc (g' 1))
+      · exact hg' (Nat.zero_le 1)
 
 Depends on / 依赖: Monotone, isPWO_iff_exists_monotone_subseq, mem_image_of_mem, n.zero_le, partiallyWellOrderedOn_iff_exists_lt, zero_le
 -/
@@ -3085,7 +3287,10 @@ theorem fiberProdLex
   rw [h]
   apply IsPWO.image_of_monotoneOn (hαβ.mono inter_subset_left)
   rintro b ⟨-, hb⟩ c ⟨-, hc⟩ hbc
-  simp only [mem_preimage, mem_sin
+  simp only [mem_preimage, mem_singleton_iff] at hb hc
+  have : (ofLex b).1 < (ofLex c).1 ∨ (ofLex b).1 = (ofLex c).1 ∧ f b <= f c :=
+    Prod.Lex.toLex_le_toLex.mp hbc
+  simp_all only [lt_self_iff_false, true_and, false_or]
 
 中文:
 定理 fiberProdLex
@@ -3098,7 +3303,10 @@ theorem fiberProdLex
   rw [h]
   apply IsPWO.image_of_monotoneOn (hαβ.mono inter_subset_left)
   rintro b ⟨-, hb⟩ c ⟨-, hc⟩ hbc
-  simp only [mem_preimage, mem_sin
+  simp only [mem_preimage, mem_singleton_iff] at hb hc
+  have : (ofLex b).1 < (ofLex c).1 ∨ (ofLex b).1 = (ofLex c).1 ∧ f b <= f c :=
+    Prod.Lex.toLex_le_toLex.mp hbc
+  simp_all only [lt_self_iff_false, true_and, false_or]
 
 Depends on / 依赖: IsPWO.image_of_monotoneOn, Prod.Lex.toLex_le_toLex.mp, Prod.ext_iff, ext_iff, false_or, image_of_monotoneOn, inter_subset_left, lt_self_iff_false, mem_preimage, mem_singleton_iff, toLex_le_toLex, true_and
 -/
@@ -3153,7 +3361,8 @@ theorem WellFounded.prod_lex_of_wellFoundedOn_fiber
   obtain h' | h' := Prod.lex_iff.1 h
   · exact PSigma.Lex.left _ _ h'
   · dsimp only [InvImage, (· on ·)] at h' ⊢
-    convert! PSigma.Lex.right (⟨_, c', rfl⟩ : ra
+    convert! PSigma.Lex.right (⟨_, c', rfl⟩ : range f) _ using 1; swap
+    exacts [⟨c, h'.1⟩, PSigma.subtype_ext (Subtype.ext h'.1) rfl, h'.2]
 
 中文:
 定理 良基.prod_lex_of_wellFoundedOn_fiber
@@ -3164,7 +3373,8 @@ theorem WellFounded.prod_lex_of_wellFoundedOn_fiber
   obtain h' | h' := Prod.lex_iff.1 h
   · exact PSigma.Lex.left _ _ h'
   · dsimp only [InvImage, (· on ·)] at h' ⊢
-    convert! PSigma.Lex.right (⟨_, c', rfl⟩ : ra
+    convert! PSigma.Lex.right (⟨_, c', rfl⟩ : range f) _ using 1; swap
+    exacts [⟨c, h'.1⟩, PSigma.subtype_ext (Subtype.ext h'.1) rfl, h'.2]
 
 Depends on / 依赖: InvImage, PSigma, PSigma.Lex.left, PSigma.Lex.right, PSigma.subtype_ext, Prod.lex_iff, Subtype, Subtype.ext, convert, exacts, lex_iff, psigma_lex, subtype_ext, wellFoundedOn_range
 -/
@@ -3220,7 +3430,11 @@ theorem WellFounded.sigma_lex_of_wellFoundedOn_fiber
   obtain h' | ⟨h', h''⟩ := Sigma.lex_iff.1 h
   · exact PSigma.Lex.left _ _ h'
   · dsimp only [InvImage, (· on ·)] at h' ⊢
-    convert! PSigma.Lex.right (⟨_, c', r
+    convert! PSigma.Lex.right (⟨_, c', rfl⟩ : range f) _ using 1; swap
+    · exact ⟨c, h'⟩
+    · exact PSigma.subtype_ext (Subtype.ext h') rfl
+    · dsimp only [Subtype.coe_mk, Subrel, Order.Preimage] at *
+      grind
 
 中文:
 定理 良基.sigma_lex_of_wellFoundedOn_fiber
@@ -3231,7 +3445,11 @@ theorem WellFounded.sigma_lex_of_wellFoundedOn_fiber
   obtain h' | ⟨h', h''⟩ := Sigma.lex_iff.1 h
   · exact PSigma.Lex.left _ _ h'
   · dsimp only [InvImage, (· on ·)] at h' ⊢
-    convert! PSigma.Lex.right (⟨_, c', r
+    convert! PSigma.Lex.right (⟨_, c', rfl⟩ : range f) _ using 1; swap
+    · exact ⟨c, h'⟩
+    · exact PSigma.subtype_ext (Subtype.ext h') rfl
+    · dsimp only [Subtype.coe_mk, Subrel, Order.Preimage] at *
+      grind
 
 Depends on / 依赖: InvImage, Order.Preimage, PSigma, PSigma.Lex.left, PSigma.Lex.right, PSigma.subtype_ext, Preimage, Sigma.lex_iff, Subrel, Subtype, Subtype.coe_mk, Subtype.ext, coe_mk, convert, lex_iff, psigma_lex, subtype_ext, wellFoundedOn_range
 -/

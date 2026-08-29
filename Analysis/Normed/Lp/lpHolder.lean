@@ -53,7 +53,13 @@ definition mapCLM
     { toFun x := ⟨fun i => T i (⇑x i), lp.memℓp x |>.norm.const_mul K |>.mono
 .of_norm⟩ (fun _ => by simpa [abs_of_nonneg hK] using key ..)
       map_add' _ _ := by ext; simp
-      map_smul' 
+      map_smul' _ _ := by ext; simp }
+    K
+    fun x => by
+      rw [← norm_toNorm]
+      conv_rhs => rw [← norm_toNorm, ← abs_of_nonneg hK, ← Real.norm_eq_abs, ← norm_smul]
+      apply norm_mono (zero_lt_one.trans_le Fact.out).ne' fun i => ?_
+      simpa [abs_of_nonneg hK] using key ..
 
 中文:
 定义 mapCLM
@@ -63,7 +69,13 @@ definition mapCLM
     { toFun x := ⟨fun i => T i (⇑x i), lp.memℓp x |>.norm.const_mul K |>.mono
 .of_norm⟩ (fun _ => by simpa [abs_of_nonneg hK] using key ..)
       map_add' _ _ := by ext; simp
-      map_smul' 
+      map_smul' _ _ := by ext; simp }
+    K
+    fun x => by
+      rw [← norm_toNorm]
+      conv_rhs => rw [← norm_toNorm, ← abs_of_nonneg hK, ← Real.norm_eq_abs, ← norm_smul]
+      apply norm_mono (zero_lt_one.trans_le Fact.out).ne' fun i => ?_
+      simpa [abs_of_nonneg hK] using key ..
 
 Depends on / 依赖: Fact.out, LinearMap, LinearMap.mkContinuous, Real.norm_eq_abs, abs_of_n, abs_of_nonneg, const_mul, conv_rhs, le_of_opNorm_le, lp.mem, map_add, map_smul, mkContinuous, norm.const_mul, norm_eq_abs, norm_mono, norm_smul, norm_toNorm, of_norm, trans_le
 -/
@@ -151,7 +163,9 @@ theorem bilin_of_top_left
     simpa [memℓp_infty_iff, BddAbove, Set.Nonempty, Set.range, upperBounds] using he
 .mono fun i => ?_ refine hf.norm.const_mul (K * C)
 .trans hBK _ have hK_nonneg : 0 <= K := norm_nonneg (B (Classical.arbitrary ι))
-
+  calc
+    ‖B i (e i) (f i)‖ <= ‖B i‖ * ‖e i‖ * ‖f i‖ := (B i (e i)).le_of_opNorm_le ((B i).le_opNorm _) _
+    _ <= K * C * ‖f i‖ := by gcongr; exacts [hBK i, hC i]
 
 中文:
 定理 bilin_of_top_left
@@ -163,7 +177,9 @@ theorem bilin_of_top_left
     simpa [memℓp_infty_iff, BddAbove, Set.Nonempty, Set.range, upperBounds] using he
 .mono fun i => ?_ refine hf.norm.const_mul (K * C)
 .trans hBK _ have hK_nonneg : 0 <= K := norm_nonneg (B (Classical.arbitrary ι))
-
+  calc
+    ‖B i (e i) (f i)‖ <= ‖B i‖ * ‖e i‖ * ‖f i‖ := (B i (e i)).le_of_opNorm_le ((B i).le_opNorm _) _
+    _ <= K * C * ‖f i‖ := by gcongr; exacts [hBK i, hC i]
 
 Depends on / 依赖: BddAbove, Classical, Classical.arbitrary, Nonempty, Set.Nonempty, Set.range, arbitrary, const_mul, exacts, hK_nonneg, hf.norm.const_mul, isEmpty_or_nonempty, le_of_opNorm_le, le_opNorm, norm_nonneg, upperBounds
 -/
@@ -314,7 +330,22 @@ lemma holder_gen_bound
       C ^ (r.toReal / p.toReal) * D ^ (r.toReal / q.toReal) from calc
     ∑ i in s, ‖B i (e i) (f i)‖ ^ r.toReal
     _ <= K ^ r.toReal * ∑ i in s, (‖e i‖ * ‖f i‖) ^ r.toReal := by
-      rw
+      rw [s.mul_sum]
+      gcongr with i hi
+      rw [← Real.mul_rpow (by positivity) (by positivity)]; rw [← mul_assoc]
+      gcongr
+      exact (B i (e i)).le_of_opNorm_le ((B i).le_of_opNorm_le (hBK i) _) _
+    _ <= _ := by
+      rw [mul_assoc]
+      gcongr
+  calc
+    _ <= (∑ i in s, ‖e i‖ ^ p.toReal) ^ (r.toReal / p.toReal) *
+        (∑ i in s, ‖f i‖ ^ q.toReal) ^ (r.toReal / q.toReal) := by
+      apply Real.Lr_rpow_le_Lp_mul_Lq_of_nonneg s hpqr <;> (intros; positivity)
+    _ <= _ := by
+      gcongr
+      · exact hCe s
+      · exact hDf s
 
 中文:
 引理 holder_gen_bound
@@ -326,7 +357,22 @@ lemma holder_gen_bound
       C ^ (r.toReal / p.toReal) * D ^ (r.toReal / q.toReal) from calc
     ∑ i in s, ‖B i (e i) (f i)‖ ^ r.toReal
     _ <= K ^ r.toReal * ∑ i in s, (‖e i‖ * ‖f i‖) ^ r.toReal := by
-      rw
+      rw [s.mul_sum]
+      gcongr with i hi
+      rw [← Real.mul_rpow (by positivity) (by positivity)]; rw [← mul_assoc]
+      gcongr
+      exact (B i (e i)).le_of_opNorm_le ((B i).le_of_opNorm_le (hBK i) _) _
+    _ <= _ := by
+      rw [mul_assoc]
+      gcongr
+  calc
+    _ <= (∑ i in s, ‖e i‖ ^ p.toReal) ^ (r.toReal / p.toReal) *
+        (∑ i in s, ‖f i‖ ^ q.toReal) ^ (r.toReal / q.toReal) := by
+      apply Real.Lr_rpow_le_Lp_mul_Lq_of_nonneg s hpqr <;> (intros; positivity)
+    _ <= _ := by
+      gcongr
+      · exact hCe s
+      · exact hDf s
 
 Depends on / 依赖: Real.mul_rpow, hpqr.pos, hpqr.toReal, le_of_opNorm_le, mul_assoc, mul_rpow, mul_sum, p.toReal, q.toReal, r.toReal, s.mul_sum, toReal
 -/
@@ -374,7 +420,16 @@ lemma holder
   obtain (rfl | rfl | hp) := p.trichotomy
   · simp_all only [ENNReal.inv_zero, top_add, inv_eq_top]
     exact he.bilin_of_zero_left B
-  · 
+  · simp_all only [inv_top, zero_add, inv_inj]
+    exact he.bilin_of_top_left B hBK hf
+  obtain (rfl | rfl | hq) := q.trichotomy
+  · simp_all only [ENNReal.inv_zero, add_top, inv_eq_top]
+    exact hf.bilin_of_zero_right B
+  · simp_all only [inv_top, add_zero, inv_inj]
+    exact he.bilin_of_top_right B hBK hf
+.mp he obtain ⟨C, hC, hCe⟩ := memℓp_gen_iff'' hp
+.mp hf obtain ⟨D, hD, hDf⟩ := memℓp_gen_iff'' hq
+exact memℓp_gen' holder_gen_bound r hp hq B hBK hK hC hCe hDf
 
 中文:
 引理 holder
@@ -387,7 +442,16 @@ lemma holder
   obtain (rfl | rfl | hp) := p.trichotomy
   · simp_all only [ENNReal.inv_zero, top_add, inv_eq_top]
     exact he.bilin_of_zero_left B
-  · 
+  · simp_all only [inv_top, zero_add, inv_inj]
+    exact he.bilin_of_top_left B hBK hf
+  obtain (rfl | rfl | hq) := q.trichotomy
+  · simp_all only [ENNReal.inv_zero, add_top, inv_eq_top]
+    exact hf.bilin_of_zero_right B
+  · simp_all only [inv_top, add_zero, inv_inj]
+    exact he.bilin_of_top_right B hBK hf
+.mp he obtain ⟨C, hC, hCe⟩ := memℓp_gen_iff'' hp
+.mp hf obtain ⟨D, hD, hDf⟩ := memℓp_gen_iff'' hq
+exact memℓp_gen' holder_gen_bound r hp hq B hBK hK hC hCe hDf
 
 Depends on / 依赖: Classical, Classical.arbitrary, ENNReal, ENNReal.inv_zero, add_top, arbitrary, bilin_of_top_left, bilin_of_zero_left, bilin_of_zero_right, he.bilin_of_top_left, he.bilin_of_zero_left, hf.bilin_of_zero_right, hpqr.inv_eq, inv_eq, inv_eq_top, inv_inj, inv_top, inv_zero, isEmpty_or_nonempty, norm_nonneg
 -/
@@ -474,7 +538,37 @@ definition holderL
     obtain ⟨(rfl | hp), (rfl | hq)⟩ := And.intro p.dichotomy q.dichotomy
     · obtain rfl : r = ⊤ := ENNReal.HolderTriple.unique ∞ ∞ r ∞
       refine norm_le_of_forall_le (by positivity) fun i => ?_
-      refine (B i).le_of_opNorm₂_le_of_le (hBK i) ?_ ?
+      refine (B i).le_of_opNorm₂_le_of_le (hBK i) ?_ ?_
+      all_goals exact norm_apply_le_norm (by simp) ..
+    · obtain rfl : r = q := ENNReal.HolderTriple.unique ∞ q r q
+      refine norm_le_of_forall_sum_le (zero_lt_one.trans_le hq) (by positivity) fun s => ?_
+      rw [Real.mul_rpow (by positivity) (by positivity)]
+      refine Memℓp.holder_top_left_bound B hBK
+        (by positivity) (by positivity) (norm_apply_le_norm (by simp) _) ?_ s
+      exact sum_rpow_le_norm_rpow (zero_lt_one.trans_le hq) f
+    · obtain rfl : r = p := ENNReal.HolderTriple.unique p ∞ r p
+      refine norm_le_of_forall_sum_le (zero_lt_one.trans_le hp) (by positivity) fun s => ?_
+      rw [mul_right_comm]; rw [Real.mul_rpow (by positivity) (by positivity)]
+      refine Memℓp.holder_top_right_bound B hBK
+        (by positivity) (by positivity) ?_ (norm_apply_le_norm (by simp) _) s
+      exact sum_rpow_le_norm_rpow (zero_lt_one.trans_le hp) e
+    · have hpqr := hpqr.toReal r (zero_lt_one.trans_le hp) (zero_lt_one.trans_le hq)
+      have hp := hpqr.pos
+      have hq := hpqr.symm.pos
+      refine norm_le_of_forall_sum_le hpqr.pos' (by positivity) fun s => ?_
+      simp only [holderₗ_apply_apply_coe]
+      calc
+        _ <= K ^ r.toReal * (‖e‖ ^ p.toReal) ^ (r.toReal / p.toReal) *
+          (‖f‖ ^ q.toReal) ^ (r.toReal / q.toReal) :=
+          Memℓp.holder_gen_bound r hp hq B hBK (by positivity) (by positivity)
+            (sum_rpow_le_norm_rpow hp e) (sum_rpow_le_norm_rpow hq f) s
+        _ <= _ := by
+          rw [← Real.rpow_mul]; rw [← Real.rpow_mul]
+          · simp only [← mul_div_assoc, ne_eq, hp.ne', not_false_eq_true, mul_div_cancel_left₀,
+            hq.ne', fieldLe]
+            rw [Real.mul_rpow]; rw [Real.mul_rpow]
+            all_goals positivity
+          all_goals positivity
 
 中文:
 定义 holderL
@@ -483,7 +577,37 @@ definition holderL
     obtain ⟨(rfl | hp), (rfl | hq)⟩ := And.intro p.dichotomy q.dichotomy
     · obtain rfl : r = ⊤ := ENNReal.HolderTriple.unique ∞ ∞ r ∞
       refine norm_le_of_forall_le (by positivity) fun i => ?_
-      refine (B i).le_of_opNorm₂_le_of_le (hBK i) ?_ ?
+      refine (B i).le_of_opNorm₂_le_of_le (hBK i) ?_ ?_
+      all_goals exact norm_apply_le_norm (by simp) ..
+    · obtain rfl : r = q := ENNReal.HolderTriple.unique ∞ q r q
+      refine norm_le_of_forall_sum_le (zero_lt_one.trans_le hq) (by positivity) fun s => ?_
+      rw [Real.mul_rpow (by positivity) (by positivity)]
+      refine Memℓp.holder_top_left_bound B hBK
+        (by positivity) (by positivity) (norm_apply_le_norm (by simp) _) ?_ s
+      exact sum_rpow_le_norm_rpow (zero_lt_one.trans_le hq) f
+    · obtain rfl : r = p := ENNReal.HolderTriple.unique p ∞ r p
+      refine norm_le_of_forall_sum_le (zero_lt_one.trans_le hp) (by positivity) fun s => ?_
+      rw [mul_right_comm]; rw [Real.mul_rpow (by positivity) (by positivity)]
+      refine Memℓp.holder_top_right_bound B hBK
+        (by positivity) (by positivity) ?_ (norm_apply_le_norm (by simp) _) s
+      exact sum_rpow_le_norm_rpow (zero_lt_one.trans_le hp) e
+    · have hpqr := hpqr.toReal r (zero_lt_one.trans_le hp) (zero_lt_one.trans_le hq)
+      have hp := hpqr.pos
+      have hq := hpqr.symm.pos
+      refine norm_le_of_forall_sum_le hpqr.pos' (by positivity) fun s => ?_
+      simp only [holderₗ_apply_apply_coe]
+      calc
+        _ <= K ^ r.toReal * (‖e‖ ^ p.toReal) ^ (r.toReal / p.toReal) *
+          (‖f‖ ^ q.toReal) ^ (r.toReal / q.toReal) :=
+          Memℓp.holder_gen_bound r hp hq B hBK (by positivity) (by positivity)
+            (sum_rpow_le_norm_rpow hp e) (sum_rpow_le_norm_rpow hq f) s
+        _ <= _ := by
+          rw [← Real.rpow_mul]; rw [← Real.rpow_mul]
+          · simp only [← mul_div_assoc, ne_eq, hp.ne', not_false_eq_true, mul_div_cancel_left₀,
+            hq.ne', fieldLe]
+            rw [Real.mul_rpow]; rw [Real.mul_rpow]
+            all_goals positivity
+          all_goals positivity
 
 Depends on / 依赖: And.intro, ENNReal, ENNReal.HolderTriple.unique, HolderTriple, Real.mul_rpow, all_goals, dichotomy, mul_rpow, norm_apply_le_norm, norm_le_of_forall_le, norm_le_of_forall_sum_le, p.dichotomy, q.dichotomy, trans_le, unique, zero_lt_one, zero_lt_one.trans_le
 -/

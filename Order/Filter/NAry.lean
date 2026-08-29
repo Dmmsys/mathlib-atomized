@@ -958,7 +958,7 @@ theorem map₂_distrib_le_left
   refine ⟨u₁ inter u₂, inter_mem hu₁ hu₂, _, image2_mem_map₂ hv hw, ?_⟩
   refine (image2_distrib_subset_left h_distrib).trans ((image2_subset ?_ ?_).trans hs)
   · exact (image2_subset_right inter_subset_left).trans ht₁
-  · exac
+  · exact (image2_subset_right inter_subset_right).trans ht₂
 
 中文:
 定理 map₂_distrib_le_left
@@ -968,7 +968,7 @@ theorem map₂_distrib_le_left
   refine ⟨u₁ inter u₂, inter_mem hu₁ hu₂, _, image2_mem_map₂ hv hw, ?_⟩
   refine (image2_distrib_subset_left h_distrib).trans ((image2_subset ?_ ?_).trans hs)
   · exact (image2_subset_right inter_subset_left).trans ht₁
-  · exac
+  · exact (image2_subset_right inter_subset_right).trans ht₂
 
 Depends on / 依赖: h_distrib, image2_distrib_subset_left, image2_subset, image2_subset_right, inter_mem, inter_subset_left, inter_subset_right
 -/
@@ -992,7 +992,7 @@ theorem map₂_distrib_le_right
   refine ⟨_, image2_mem_map₂ hu hv, w₁ inter w₂, inter_mem hw₁ hw₂, ?_⟩
   refine (image2_distrib_subset_right h_distrib).trans ((image2_subset ?_ ?_).trans hs)
   · exact (image2_subset_left inter_subset_left).trans ht₁
-  · exac
+  · exact (image2_subset_left inter_subset_right).trans ht₂
 
 中文:
 定理 map₂_distrib_le_right
@@ -1002,7 +1002,7 @@ theorem map₂_distrib_le_right
   refine ⟨_, image2_mem_map₂ hu hv, w₁ inter w₂, inter_mem hw₁ hw₂, ?_⟩
   refine (image2_distrib_subset_right h_distrib).trans ((image2_subset ?_ ?_).trans hs)
   · exact (image2_subset_left inter_subset_left).trans ht₁
-  · exac
+  · exact (image2_subset_left inter_subset_right).trans ht₂
 
 Depends on / 依赖: h_distrib, image2_distrib_subset_right, image2_subset, image2_subset_left, inter_mem, inter_subset_left, inter_subset_right
 -/

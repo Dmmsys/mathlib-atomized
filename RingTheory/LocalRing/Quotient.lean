@@ -42,7 +42,25 @@ theorem quotient_span_eq_top_iff_span_eq_top
   proof: by
   have H : (span (R ⧸ p) ((Ideal.Quotient.mk (I := pS)) '' s)).restrictScalars R =
       (span R s).map (IsScalarTower.toAlgHom R S (S ⧸ pS) : S ->ₗ[R] S ⧸ pS) := by
-    rw [map_span]; rw [← restrictScalars_span R (R ⧸ p) Ideal.Quotient.mk_surjective]; rw [LinearMap.coe_coe]; rw [IsScalarTower.co
+    rw [map_span]; rw [← restrictScalars_span R (R ⧸ p) Ideal.Quotient.mk_surjective]; rw [LinearMap.coe_coe]; rw [IsScalarTower.coe_toAlgHom']; rw [Ideal.Quotient.algebraMap_eq]
+  constructor
+  · intro hs
+    rw [← top_le_iff]
+    apply le_of_le_smul_of_le_jacobson_bot
+    · exact Module.finite_def.mp ‹_›
+    · exact (jacobson_eq_maximalIdeal ⊥ bot_ne_top).ge
+    · rw [Ideal.smul_top_eq_map]
+      rintro x -
+      have : LinearMap.ker (IsScalarTower.toAlgHom R S (S ⧸ pS) : S ->ₗ[R] S ⧸ pS) =
+          Submodule.restrictScalars R pS := by
+        ext; simp [Ideal.Quotient.eq_zero_iff_mem]
+      rw [← this]; rw [← comap_map_eq]; rw [mem_comap]; rw [← H]; rw [hs]; rw [restrictScalars_top]
+      exact mem_top
+  · intro hs
+    rwa [hs, Submodule.map_top, LinearMap.range_eq_top.mpr,
+      restrictScalars_eq_top_iff] at H
+    rw [LinearMap.coe_coe]; rw [IsScalarTower.coe_toAlgHom']; rw [Ideal.Quotient.algebraMap_eq]
+    exact Ideal.Quotient.mk_surjective
 
 中文:
 定理 quotient_span_eq_top_iff_span_eq_top
@@ -50,7 +68,25 @@ theorem quotient_span_eq_top_iff_span_eq_top
   证明: by
   have H : (span (R ⧸ p) ((Ideal.Quotient.mk (I := pS)) '' s)).restrictScalars R =
       (span R s).map (IsScalarTower.toAlgHom R S (S ⧸ pS) : S ->ₗ[R] S ⧸ pS) := by
-    rw [map_span]; rw [← restrictScalars_span R (R ⧸ p) Ideal.Quotient.mk_surjective]; rw [LinearMap.coe_coe]; rw [IsScalarTower.co
+    rw [map_span]; rw [← restrictScalars_span R (R ⧸ p) Ideal.Quotient.mk_surjective]; rw [LinearMap.coe_coe]; rw [IsScalarTower.coe_toAlgHom']; rw [Ideal.Quotient.algebraMap_eq]
+  constructor
+  · intro hs
+    rw [← top_le_iff]
+    apply le_of_le_smul_of_le_jacobson_bot
+    · exact Module.finite_def.mp ‹_›
+    · exact (jacobson_eq_maximalIdeal ⊥ bot_ne_top).ge
+    · rw [Ideal.smul_top_eq_map]
+      rintro x -
+      have : LinearMap.ker (IsScalarTower.toAlgHom R S (S ⧸ pS) : S ->ₗ[R] S ⧸ pS) =
+          Submodule.restrictScalars R pS := by
+        ext; simp [Ideal.Quotient.eq_zero_iff_mem]
+      rw [← this]; rw [← comap_map_eq]; rw [mem_comap]; rw [← H]; rw [hs]; rw [restrictScalars_top]
+      exact mem_top
+  · intro hs
+    rwa [hs, Submodule.map_top, LinearMap.range_eq_top.mpr,
+      restrictScalars_eq_top_iff] at H
+    rw [LinearMap.coe_coe]; rw [IsScalarTower.coe_toAlgHom']; rw [Ideal.Quotient.algebraMap_eq]
+    exact Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Ideal.Quotient.algebraMap_eq, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.toAlgHom, LinearMap, LinearMap.coe_coe, Module, Module.finite_def.mp, Quotient, algebraMap_eq, coe_coe, coe_toAlgHom, finite_def, jacobson_, le_of_le_smul_of_le_jacobson_bot, map_span, mk_surjective, restrictScalars
 -/
@@ -94,7 +130,14 @@ theorem finrank_quotient_map
     conv_rhs => rw [finrank_eq_card_chooseBasisIndex]
     apply finrank_le_of_span_eq_top
     rw [Set.range_comp]
-    apply (quotient_span_eq_top_i
+    apply (quotient_span_eq_top_iff_span_eq_top _).mpr b.span_eq
+  · let b := Module.Free.chooseBasis (R ⧸ p) (S ⧸ pS)
+    choose b' hb' using fun i => Ideal.Quotient.mk_surjective (b i)
+    conv_rhs => rw [finrank_eq_card_chooseBasisIndex]
+    refine finrank_le_of_span_eq_top (v := b') ?_
+    apply (quotient_span_eq_top_iff_span_eq_top _).mp
+    rw [← Set.range_comp]; rw [show Ideal.Quotient.mk pS ∘ b' = ⇑b from funext hb']
+    exact b.span_eq
 
 中文:
 定理 finrank_quotient_map
@@ -105,7 +148,14 @@ theorem finrank_quotient_map
     conv_rhs => rw [finrank_eq_card_chooseBasisIndex]
     apply finrank_le_of_span_eq_top
     rw [Set.range_comp]
-    apply (quotient_span_eq_top_i
+    apply (quotient_span_eq_top_iff_span_eq_top _).mpr b.span_eq
+  · let b := Module.Free.chooseBasis (R ⧸ p) (S ⧸ pS)
+    choose b' hb' using fun i => Ideal.Quotient.mk_surjective (b i)
+    conv_rhs => rw [finrank_eq_card_chooseBasisIndex]
+    refine finrank_le_of_span_eq_top (v := b') ?_
+    apply (quotient_span_eq_top_iff_span_eq_top _).mp
+    rw [← Set.range_comp]; rw [show Ideal.Quotient.mk pS ∘ b' = ⇑b from funext hb']
+    exact b.span_eq
 
 Depends on / 依赖: Finite, Ideal.Quotient.mk_surjective, Module, Module.Finite, Module.Finite.of_restrictScalars_finite, Module.Free.chooseBasis, Quotient, Set.range_comp, b.span_eq, chooseBasis, conv_rhs, finrank_eq_card_chooseBasisIndex, finrank_le_of_spa, finrank_le_of_span_eq_top, le_antisymm, mk_surjective, of_restrictScalars_finite, quotient_span_eq_top_iff_span_eq_top, range_comp, span_eq
 -/
@@ -194,7 +244,10 @@ lemma basisQuotient_repr
   apply (basisQuotient b).repr.symm.injective
   simp only [Finsupp.linearEquivFunOnFinite_symm_coe, LinearEquiv.symm_apply_apply,
     Basis.repr_symm_apply]
-  rw [Fins
+  rw [Finsupp.linearCombination_eq_fintype_linearCombination_apply (R ⧸ p)]; rw [Fintype.linearCombination_apply]
+  simp only [Function.comp_apply, basisQuotient_apply,
+    Ideal.Quotient.mk_smul_mk_quotient_map_quotient, ← Algebra.smul_def]
+  rw [← map_sum]; rw [Basis.sum_repr b x]
 
 中文:
 引理 basisQuotient_repr
@@ -205,7 +258,10 @@ lemma basisQuotient_repr
   apply (basisQuotient b).repr.symm.injective
   simp only [Finsupp.linearEquivFunOnFinite_symm_coe, LinearEquiv.symm_apply_apply,
     Basis.repr_symm_apply]
-  rw [Fins
+  rw [Finsupp.linearCombination_eq_fintype_linearCombination_apply (R ⧸ p)]; rw [Fintype.linearCombination_apply]
+  simp only [Function.comp_apply, basisQuotient_apply,
+    Ideal.Quotient.mk_smul_mk_quotient_map_quotient, ← Algebra.smul_def]
+  rw [← map_sum]; rw [Basis.sum_repr b x]
 
 Depends on / 依赖: Algebr, Basis.repr_symm_apply, Finsupp, Finsupp.linearCombination_eq_fintype_linearCombination_apply, Finsupp.linearEquivFunOnFinite, Finsupp.linearEquivFunOnFinite_symm_coe, Fintype, Fintype.linearCombination_apply, Function, Function.comp_apply, H.isNormal, Ideal.Quotient.mk, Ideal.Quotient.mk_smul_mk_quotient_map_quotient, LinearEquiv, LinearEquiv.symm_apply_apply, Quotient, b.repr, basisQuotient, basisQuotient_apply, comp_apply
 -/
@@ -233,7 +289,13 @@ lemma exists_maximalIdeal_pow_le_of_isArtinianRing_quotient
   have : Nontrivial (R ⧸ I) := Ideal.Quotient.nontrivial_iff.mpr hI
   have := IsLocalRing.of_surjective' (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
   have := IsLocalHom.of_surjective (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
-  obtain ⟨n, hn⟩ :=
+  obtain ⟨n, hn⟩ := IsArtinianRing.isNilpotent_jacobson_bot (R := R ⧸ I)
+  have : (maximalIdeal R).map (Ideal.Quotient.mk I) = maximalIdeal (R ⧸ I) := by
+    ext x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp [sup_eq_left.mpr (le_maximalIdeal hI)]
+  rw [jacobson_eq_maximalIdeal _ bot_ne_top]; rw [← this]; rw [← Ideal.map_pow]; rw [Ideal.zero_eq_bot]; rw [Ideal.map_eq_bot_iff_le_ker]; rw [Ideal.mk_ker] at hn
+  exact ⟨n, hn⟩
 
 中文:
 引理 存在_maximalIdeal_pow_le_of_isArtinianRing_quotient
@@ -243,7 +305,13 @@ lemma exists_maximalIdeal_pow_le_of_isArtinianRing_quotient
   have : Nontrivial (R ⧸ I) := Ideal.Quotient.nontrivial_iff.mpr hI
   have := IsLocalRing.of_surjective' (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
   have := IsLocalHom.of_surjective (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective
-  obtain ⟨n, hn⟩ :=
+  obtain ⟨n, hn⟩ := IsArtinianRing.isNilpotent_jacobson_bot (R := R ⧸ I)
+  have : (maximalIdeal R).map (Ideal.Quotient.mk I) = maximalIdeal (R ⧸ I) := by
+    ext x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp [sup_eq_left.mpr (le_maximalIdeal hI)]
+  rw [jacobson_eq_maximalIdeal _ bot_ne_top]; rw [← this]; rw [← Ideal.map_pow]; rw [Ideal.zero_eq_bot]; rw [Ideal.map_eq_bot_iff_le_ker]; rw [Ideal.mk_ker] at hn
+  exact ⟨n, hn⟩
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.Quotient.nontrivial_iff.mpr, IsArtinianRing, IsArtinianRing.isNilpotent_jacobson_bot, IsLocalHom, IsLocalHom.of_surjective, IsLocalRing, IsLocalRing.of_surjective, Nontrivial, Quotient, isNilpotent_jacobson_bot, maximalIdeal, mk_surjective, nontrivial_iff, of_surjective, sup_eq_left, sup_eq_left.mpr
 -/

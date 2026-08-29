@@ -104,7 +104,21 @@ definition subtypeEquiv
         forall a, a in fixedPoints f -> ¬p a } := by
       refine (Perm.subtypeEquivSubtypePerm p).subtypeEquiv fun f => ⟨fun hf a hfa ha => ?_, ?_⟩
       · refine hf ⟨a, ha⟩ (Subtype.ext ?_)
-        
+        simp_rw [mem_fixedPoints, IsFixedPt, Perm.subtypeEquivSubtypePerm,
+        Equiv.coe_fn_mk, Perm.ofSubtype_apply_of_mem _ ha] at hfa
+        assumption
+      rintro hf ⟨a, ha⟩ hfa
+      refine hf _ ?_ ha
+      simp only [Perm.subtypeEquivSubtypePerm_apply_coe, mem_fixedPoints]
+      dsimp [IsFixedPt]
+      simp_rw [Perm.ofSubtype_apply_of_mem _ ha, hfa]
+    _ ≃ { f : Perm α // exists _h : forall a, ¬p a -> a in fixedPoints f, forall a, a in fixedPoints f -> ¬p a } :=
+      subtypeSubtypeEquivSubtypeExists _ _
+    _ ≃ { f : Perm α // forall a, ¬p a ↔ a in fixedPoints f } :=
+      subtypeEquivRight fun f => by
+        simp_rw [exists_prop, ← forall_and, ← iff_iff_implies_and_implies]
+
+universe u
 
 中文:
 定义 subtypeEquiv
@@ -114,7 +128,21 @@ definition subtypeEquiv
         forall a, a in fixedPoints f -> ¬p a } := by
       refine (Perm.subtypeEquivSubtypePerm p).subtypeEquiv fun f => ⟨fun hf a hfa ha => ?_, ?_⟩
       · refine hf ⟨a, ha⟩ (Subtype.ext ?_)
-        
+        simp_rw [mem_fixedPoints, IsFixedPt, Perm.subtypeEquivSubtypePerm,
+        Equiv.coe_fn_mk, Perm.ofSubtype_apply_of_mem _ ha] at hfa
+        assumption
+      rintro hf ⟨a, ha⟩ hfa
+      refine hf _ ?_ ha
+      simp only [Perm.subtypeEquivSubtypePerm_apply_coe, mem_fixedPoints]
+      dsimp [IsFixedPt]
+      simp_rw [Perm.ofSubtype_apply_of_mem _ ha, hfa]
+    _ ≃ { f : Perm α // exists _h : forall a, ¬p a -> a in fixedPoints f, forall a, a in fixedPoints f -> ¬p a } :=
+      subtypeSubtypeEquivSubtypeExists _ _
+    _ ≃ { f : Perm α // forall a, ¬p a ↔ a in fixedPoints f } :=
+      subtypeEquivRight fun f => by
+        simp_rw [exists_prop, ← forall_and, ← iff_iff_implies_and_implies]
+
+universe u
 -/
 protected def subtypeEquiv (p : α -> Prop) [DecidablePred p] :
     derangements (Subtype p) ≃ { f : Perm α // forall a, ¬p a ↔ a in fixedPoints f } :=
@@ -149,7 +177,28 @@ definition atMostOneFixedPointEquivSum_derangements
         { f : { f : Perm α // fixedPoints f subseteq {a} } // a in fixedPoints f } oplus
           { f : { f : Perm α // fixedPoints f subseteq {a} } // a ∉ fixedPoints f } :=
       (Equiv.sumCompl _).symm
-    _ ≃ { f : Perm α // fixedPoints f 
+    _ ≃ { f : Perm α // fixedPoints f subseteq {a} ∧ a in fixedPoints f } oplus
+          { f : Perm α // fixedPoints f subseteq {a} ∧ a ∉ fixedPoints f } := by
+      refine Equiv.sumCongr ?_ ?_
+      · exact subtypeSubtypeEquivSubtypeInter
+          (fun x : Perm α => fixedPoints x subseteq {a})
+          (a in fixedPoints ·)
+      · exact subtypeSubtypeEquivSubtypeInter
+          (fun x : Perm α => fixedPoints x subseteq {a})
+          (a ∉ fixedPoints ·)
+    _ ≃ { f : Perm α // fixedPoints f = {a} } oplus { f : Perm α // fixedPoints f = ∅ } := by
+      refine Equiv.sumCongr (subtypeEquivRight fun f => ?_) (subtypeEquivRight fun f => ?_)
+      · rw [Set.eq_singleton_iff_unique_mem, and_comm]
+        rfl
+      · rw [Set.eq_empty_iff_forall_notMem]
+        exact ⟨fun h x hx => h.2 (h.1 hx ▸ hx), fun h => ⟨fun x hx => (h _ hx).elim, h _⟩⟩
+    _ ≃ derangements ({a}ᶜ : Set α) oplus derangements α := by
+      refine
+        Equiv.sumCongr ((derangements.subtypeEquiv _).trans <|
+            subtypeEquivRight fun x => ?_).symm
+          (subtypeEquivRight fun f => mem_derangements_iff_fixedPoints_eq_empty.symm)
+      rw [eq_comm]; rw [Set.ext_iff]
+      simp_rw [Set.mem_compl_iff, Classical.not_not]
 
 中文:
 定义 atMostOneFixedPointEquivSum_derangements
@@ -159,7 +208,28 @@ definition atMostOneFixedPointEquivSum_derangements
         { f : { f : Perm α // fixedPoints f subseteq {a} } // a in fixedPoints f } oplus
           { f : { f : Perm α // fixedPoints f subseteq {a} } // a ∉ fixedPoints f } :=
       (Equiv.sumCompl _).symm
-    _ ≃ { f : Perm α // fixedPoints f 
+    _ ≃ { f : Perm α // fixedPoints f subseteq {a} ∧ a in fixedPoints f } oplus
+          { f : Perm α // fixedPoints f subseteq {a} ∧ a ∉ fixedPoints f } := by
+      refine Equiv.sumCongr ?_ ?_
+      · exact subtypeSubtypeEquivSubtypeInter
+          (fun x : Perm α => fixedPoints x subseteq {a})
+          (a in fixedPoints ·)
+      · exact subtypeSubtypeEquivSubtypeInter
+          (fun x : Perm α => fixedPoints x subseteq {a})
+          (a ∉ fixedPoints ·)
+    _ ≃ { f : Perm α // fixedPoints f = {a} } oplus { f : Perm α // fixedPoints f = ∅ } := by
+      refine Equiv.sumCongr (subtypeEquivRight fun f => ?_) (subtypeEquivRight fun f => ?_)
+      · rw [Set.eq_singleton_iff_unique_mem, and_comm]
+        rfl
+      · rw [Set.eq_empty_iff_forall_notMem]
+        exact ⟨fun h x hx => h.2 (h.1 hx ▸ hx), fun h => ⟨fun x hx => (h _ hx).elim, h _⟩⟩
+    _ ≃ derangements ({a}ᶜ : Set α) oplus derangements α := by
+      refine
+        Equiv.sumCongr ((derangements.subtypeEquiv _).trans <|
+            subtypeEquivRight fun x => ?_).symm
+          (subtypeEquivRight fun f => mem_derangements_iff_fixedPoints_eq_empty.symm)
+      rw [eq_comm]; rw [Set.ext_iff]
+      simp_rw [Set.mem_compl_iff, Classical.not_not]
 
 Depends on / 依赖: Equiv.sumCompl, Equiv.sumCongr, clear.clear, copy.copy, decidable_of_iff, fixedPoints, generalizing, move.move, push.push, read.read, subseteq, subtypeSubtypeEquivSubtypeInter, sumCompl, sumCongr
 -/
@@ -285,7 +355,27 @@ theorem RemoveNone.fiber_some
     apply_fun some at x_fixed
     rcases Fx : F (some x) with - | y
     · rwa [removeNone_none F Fx, F_none, Option.some_inj, eq_comm] at x_fixed
-    · 
+    · exfalso
+      rw [removeNone_some F ⟨y]; rw [Fx⟩] at x_fixed
+      exact F_derangement _ x_fixed
+  · intro h_opfp
+    use Equiv.Perm.decomposeOption.symm (some a, f)
+    constructor
+    · intro x
+      apply_fun fun x => Equiv.swap none (some a) x
+      simp only [Perm.decomposeOption_symm_apply, Perm.coe_mul]
+      rcases x with - | x
+      · simp
+      simp only [comp, optionCongr_apply, Option.map_some, swap_apply_self]
+      by_cases x_vs_a : x = a
+      · rw [x_vs_a, swap_apply_right]
+        apply Option.some_ne_none
+      have ne_1 : some x != none := Option.some_ne_none _
+      have ne_2 : some x != some a := (Option.some_injective α).ne_iff.mpr x_vs_a
+      rw [swap_apply_of_ne_of_ne ne_1 ne_2]; rw [(Option.some_injective α).ne_iff]
+      intro contra
+      exact x_vs_a (h_opfp contra)
+    · rw [apply_symm_apply]
 
 中文:
 定理 RemoveNone.fiber_some
@@ -299,7 +389,27 @@ theorem RemoveNone.fiber_some
     apply_fun some at x_fixed
     rcases Fx : F (some x) with - | y
     · rwa [removeNone_none F Fx, F_none, Option.some_inj, eq_comm] at x_fixed
-    · 
+    · exfalso
+      rw [removeNone_some F ⟨y]; rw [Fx⟩] at x_fixed
+      exact F_derangement _ x_fixed
+  · intro h_opfp
+    use Equiv.Perm.decomposeOption.symm (some a, f)
+    constructor
+    · intro x
+      apply_fun fun x => Equiv.swap none (some a) x
+      simp only [Perm.decomposeOption_symm_apply, Perm.coe_mul]
+      rcases x with - | x
+      · simp
+      simp only [comp, optionCongr_apply, Option.map_some, swap_apply_self]
+      by_cases x_vs_a : x = a
+      · rw [x_vs_a, swap_apply_right]
+        apply Option.some_ne_none
+      have ne_1 : some x != none := Option.some_ne_none _
+      have ne_2 : some x != some a := (Option.some_injective α).ne_iff.mpr x_vs_a
+      rw [swap_apply_of_ne_of_ne ne_1 ne_2]; rw [(Option.some_injective α).ne_iff]
+      intro contra
+      exact x_vs_a (h_opfp contra)
+    · rw [apply_symm_apply]
 
 Depends on / 依赖: Equiv.Perm.decomposeOption.symm, Equiv.swap, F_derangement, F_none, Option.some_inj, RemoveNone, RemoveNone.mem_fiber, apply_fun, decomposeOption, eq_comm, h_opfp, mem_fiber, mem_fixedPoints_iff, removeNone_none, removeNone_some, some_inj, x_fixed
 -/
@@ -354,7 +464,12 @@ definition derangementsOptionEquivSigmaAtMostOneFixedPoint
   calc
     derangements (Option α) ≃ Equiv.Perm.decomposeOption '' derangements (Option α) :=
       Equiv.image _ _
-    _ ≃ Σ a : Option α, ↥(Equiv.RemoveNone.
+    _ ≃ Σ a : Option α, ↥(Equiv.RemoveNone.fiber a) := setProdEquivSigma _
+    _ ≃ Σ a : α, ↥(Equiv.RemoveNone.fiber (some a)) :=
+      sigmaOptionEquivOfSome _ fiber_none_is_false
+    _ ≃ Σ a : α, { f : Perm α | fixedPoints f subseteq {a} } := by
+      simp_rw [Equiv.RemoveNone.fiber_some]
+      rfl
 
 中文:
 定义 derangementsOptionEquivSigmaAtMostOneFixedPoint
@@ -366,7 +481,12 @@ definition derangementsOptionEquivSigmaAtMostOneFixedPoint
   calc
     derangements (Option α) ≃ Equiv.Perm.decomposeOption '' derangements (Option α) :=
       Equiv.image _ _
-    _ ≃ Σ a : Option α, ↥(Equiv.RemoveNone.
+    _ ≃ Σ a : Option α, ↥(Equiv.RemoveNone.fiber a) := setProdEquivSigma _
+    _ ≃ Σ a : α, ↥(Equiv.RemoveNone.fiber (some a)) :=
+      sigmaOptionEquivOfSome _ fiber_none_is_false
+    _ ≃ Σ a : α, { f : Perm α | fixedPoints f subseteq {a} } := by
+      simp_rw [Equiv.RemoveNone.fiber_some]
+      rfl
 
 Depends on / 依赖: Equiv.Perm.decomposeOption, Equiv.RemoveNone.fiber, Equiv.RemoveNone.fiber_none, Equiv.RemoveNone.fiber_som, Equiv.image, IsEmpty, IsEmpty.false, RemoveNone, decomposeOption, derangements, fiber_none, fiber_none_is_false, fiber_som, fixedPoints, setProdEquivSigma, sigmaOptionEquivOfSome, simp_rw, subseteq
 -/

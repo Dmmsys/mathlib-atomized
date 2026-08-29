@@ -49,7 +49,7 @@ definition pointwiseMulAction
   mul_smul _a₁ _a₂ S :=
     (congr_arg (fun f => S.map f) (RingHom.ext <| mul_smul _ _)).trans (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Subsemiring.
+scoped[Pointwise] attribute [instance] Subsemiring.pointwiseMulAction
 
 中文:
 定义 pointwiseMulAction
@@ -59,7 +59,7 @@ scoped[Pointwise] attribute [instance] Subsemiring.
   mul_smul _a₁ _a₂ S :=
     (congr_arg (fun f => S.map f) (RingHom.ext <| mul_smul _ _)).trans (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Subsemiring.
+scoped[Pointwise] attribute [instance] Subsemiring.pointwiseMulAction
 -/
 protected def pointwiseMulAction : MulAction M (Subsemiring R) where
   smul a S := S.map (MulSemiringAction.toRingHom _ _ a)

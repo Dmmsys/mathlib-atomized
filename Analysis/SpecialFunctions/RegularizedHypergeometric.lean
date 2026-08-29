@@ -161,7 +161,15 @@ theorem regularizedHGFunCoeff_add_one
     congrm ((a.map ?_).prod / (?_ * Multiset.prod ?_))
     · ext j
       simp [ascPochhammer_succ_right]
-    · 
+    · rw [Nat.factorial_succ]
+      grind
+    · refine Multiset.map_congr rfl (fun j hj => ?_)
+      simp only [Nat.cast_add, Nat.cast_one, ← add_assoc]
+      grind
+  _ = _ := by
+    unfold regularizedHGFunCoeff
+    simp_rw [div_mul_div_comm, Multiset.prod_map_mul]
+    ring
 
 中文:
 定理 regularizedHGFunCoeff_add_one
@@ -173,7 +181,15 @@ theorem regularizedHGFunCoeff_add_one
     congrm ((a.map ?_).prod / (?_ * Multiset.prod ?_))
     · ext j
       simp [ascPochhammer_succ_right]
-    · 
+    · rw [Nat.factorial_succ]
+      grind
+    · refine Multiset.map_congr rfl (fun j hj => ?_)
+      simp only [Nat.cast_add, Nat.cast_one, ← add_assoc]
+      grind
+  _ = _ := by
+    unfold regularizedHGFunCoeff
+    simp_rw [div_mul_div_comm, Multiset.prod_map_mul]
+    ring
 -/
 theorem regularizedHGFunCoeff_add_one (hb : forall k in b, k != -n) :
     regularizedHGFunCoeff a b (n + 1) = regularizedHGFunCoeff a b n *
@@ -281,7 +297,9 @@ theorem multiset_prod_div_multiset_prod_mul
     _ = n * n ^ b.card * n ^ (a.card - b.card - (1 : Int)) *
         (a.map (fun x : Complex => (x + n) / n)).prod := by
       congr 1
-      rw [← pow_succ']; rw [← z
+      rw [← pow_succ']; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← zpow_add' (by left; norm_cast)]
+      grind
+    _ = _ := by ring
 
 中文:
 定理 multiset_prod_div_multiset_prod_mul
@@ -294,7 +312,9 @@ theorem multiset_prod_div_multiset_prod_mul
     _ = n * n ^ b.card * n ^ (a.card - b.card - (1 : Int)) *
         (a.map (fun x : Complex => (x + n) / n)).prod := by
       congr 1
-      rw [← pow_succ']; rw [← z
+      rw [← pow_succ']; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← zpow_add' (by left; norm_cast)]
+      grind
+    _ = _ := by ring
 
 Depends on / 依赖: a.card, a.map, b.card, multiset_prod_eq_pow_mul_multiset_prod, pow_succ, zpow_add, zpow_natCast
 -/
@@ -448,7 +468,11 @@ theorem eventually_atTop_regularizedHGFunCoeff_ne_zero
   · suffices (m : Real) < 0 by grind
     suffices -j.re < n by
       have h : j = -m - n := by grind
-      simpa [h] u
+      simpa [h] using this
+    calc
+      -j.re <= ⌈-j.re⌉₊ := Nat.le_ceil (-j.re)
+      _ <= b.toFinset.sup (⌈-re ·⌉₊) := mod_cast Finset.le_sup (by grind) (f := (⌈-re ·⌉₊))
+      _ < n := by norm_cast
 
 中文:
 定理 eventually_atTop_regularizedHGFunCoeff_ne_zero
@@ -463,7 +487,11 @@ theorem eventually_atTop_regularizedHGFunCoeff_ne_zero
   · suffices (m : Real) < 0 by grind
     suffices -j.re < n by
       have h : j = -m - n := by grind
-      simpa [h] u
+      simpa [h] using this
+    calc
+      -j.re <= ⌈-j.re⌉₊ := Nat.le_ceil (-j.re)
+      _ <= b.toFinset.sup (⌈-re ·⌉₊) := mod_cast Finset.le_sup (by grind) (f := (⌈-re ·⌉₊))
+      _ < n := by norm_cast
 
 Depends on / 依赖: Filter, Filter.eventually_atTop, Finset, Finset.le_sup, Nat.le_ceil, b.toFinset.sup, eventually_atTop, j.re, le_ceil, le_sup, mod_cast, regularizedHGFunCoeff_eq_zero_iff, toFinset
 -/
@@ -521,7 +549,9 @@ theorem tendsto_multiset_prod_div_multiset_prod_mul
   have h : Tendsto (fun n : Nat => (n : Complex)⁻¹) atTop (𝓝 0) := tendsto_inv_atTop_nhds_zero_nat
   have := (tendsto_multiset_prod_div_add_one a).div
     ((tendsto_multiset_prod_div_add_one b).mul <| h.const_add 1) (by simp)
-  simp only [add_zero, mul_one, ne_eq, one_ne_zero, not_false_eq_true, 
+  simp only [add_zero, mul_one, ne_eq, one_ne_zero, not_false_eq_true, div_self] at this
+  apply this.congr
+  simp
 
 中文:
 定理 tendsto_multiset_prod_div_multiset_prod_mul
@@ -529,7 +559,9 @@ theorem tendsto_multiset_prod_div_multiset_prod_mul
   have h : Tendsto (fun n : Nat => (n : Complex)⁻¹) atTop (𝓝 0) := tendsto_inv_atTop_nhds_zero_nat
   have := (tendsto_multiset_prod_div_add_one a).div
     ((tendsto_multiset_prod_div_add_one b).mul <| h.const_add 1) (by simp)
-  simp only [add_zero, mul_one, ne_eq, one_ne_zero, not_false_eq_true, 
+  simp only [add_zero, mul_one, ne_eq, one_ne_zero, not_false_eq_true, div_self] at this
+  apply this.congr
+  simp
 -/
 private theorem tendsto_multiset_prod_div_multiset_prod_mul :
     Tendsto (fun n : Nat => (a.map (· / (n : Complex) + 1)).prod /
@@ -555,7 +587,20 @@ theorem radius_regularizedHGFunSeries_eq_top
     apply radius_regularizedHGFunSeries_eq_top_of_finite hj ha
   apply FormalMultilinearSeries.ofScalars_radius_eq_top_of_tendsto
   · apply eventually_atTop_regularizedHGFunCoeff_ne_zero b ha
-  · simp only [Nat
+  · simp only [Nat.succ_eq_add_one]
+    have h₁ : Tendsto (fun (n : Nat) => (n : Complex) ^ (a.card - (b.card : Int) - 1)) atTop (𝓝 0) := by
+      have := (tendsto_one_div_atTop_nhds_zero_nat (𝕜 := Complex)).pow (b.card + 1 - a.card)
+      rw [zero_pow (by grind)] at this
+      apply this.congr
+      intro n
+      rw [one_div]; rw [inv_pow]; rw [← zpow_natCast]; rw [← zpow_neg]; rw [Int.ofNat_sub (by grind)]; rw [Int.natCast_add_one]
+      ring_nf
+    have := (h₁.mul (tendsto_multiset_prod_div_multiset_prod_mul a b)).norm
+    simp only [mul_one, norm_zero] at this
+    apply this.congr'
+    have h_ne := eventually_atTop_regularizedHGFunCoeff_ne_zero b ha
+    filter_upwards [h_ne, Filter.eventually_ne_atTop 0] with n hn₁ hn₂
+    rw [← Complex.norm_div]; rw [regularizedHGFunCoeff_add_one_div_self hn₁]; rw [multiset_prod_div_multiset_prod_mul a b hn₂]; rw [mul_div]
 
 中文:
 定理 radius_regularizedHGFunSeries_eq_top
@@ -566,7 +611,20 @@ theorem radius_regularizedHGFunSeries_eq_top
     apply radius_regularizedHGFunSeries_eq_top_of_finite hj ha
   apply FormalMultilinearSeries.ofScalars_radius_eq_top_of_tendsto
   · apply eventually_atTop_regularizedHGFunCoeff_ne_zero b ha
-  · simp only [Nat
+  · simp only [Nat.succ_eq_add_one]
+    have h₁ : Tendsto (fun (n : Nat) => (n : Complex) ^ (a.card - (b.card : Int) - 1)) atTop (𝓝 0) := by
+      have := (tendsto_one_div_atTop_nhds_zero_nat (𝕜 := Complex)).pow (b.card + 1 - a.card)
+      rw [zero_pow (by grind)] at this
+      apply this.congr
+      intro n
+      rw [one_div]; rw [inv_pow]; rw [← zpow_natCast]; rw [← zpow_neg]; rw [Int.ofNat_sub (by grind)]; rw [Int.natCast_add_one]
+      ring_nf
+    have := (h₁.mul (tendsto_multiset_prod_div_multiset_prod_mul a b)).norm
+    simp only [mul_one, norm_zero] at this
+    apply this.congr'
+    have h_ne := eventually_atTop_regularizedHGFunCoeff_ne_zero b ha
+    filter_upwards [h_ne, Filter.eventually_ne_atTop 0] with n hn₁ hn₂
+    rw [← Complex.norm_div]; rw [regularizedHGFunCoeff_add_one_div_self hn₁]; rw [multiset_prod_div_multiset_prod_mul a b hn₂]; rw [mul_div]
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.ofScalars_radius_eq_top_of_tendsto, Nat.succ_eq_add_one, Tendsto, a.card, b.card, eventually_atTop_regularizedHGFunCoeff_ne_zero, ofScalars_radius_eq_top_of_tendsto, radius_regularizedHGFunSeries_eq_top_of_finite, succ_eq_add_one, tendsto_one_div_atTop_nhds_zero_nat
 -/
@@ -607,7 +665,12 @@ theorem radius_regularizedHGFunSeries_eq_one
     have := (tendsto_multiset_prod_div_multiset_prod_mul a b).norm
     simp only [norm_one] at this
     apply this.congr'
-    have h_ne := eventually_atTop_regularizedHGFunCoeff_
+    have h_ne := eventually_atTop_regularizedHGFunCoeff_ne_zero b h'
+    filter_upwards [h_ne, Filter.eventually_ne_atTop 0] with n hn₁ hn₂
+    simp [Nat.succ_eq_add_one, ← Complex.norm_div, regularizedHGFunCoeff_add_one_div_self hn₁,
+      multiset_prod_div_multiset_prod_mul a b hn₂, h]
+  have := FormalMultilinearSeries.ofScalars_radius_eq_inv_of_tendsto (r := 1) Complex _ (by simp) this
+  simpa
 
 中文:
 定理 radius_regularizedHGFunSeries_eq_one
@@ -618,7 +681,12 @@ theorem radius_regularizedHGFunSeries_eq_one
     have := (tendsto_multiset_prod_div_multiset_prod_mul a b).norm
     simp only [norm_one] at this
     apply this.congr'
-    have h_ne := eventually_atTop_regularizedHGFunCoeff_
+    have h_ne := eventually_atTop_regularizedHGFunCoeff_ne_zero b h'
+    filter_upwards [h_ne, Filter.eventually_ne_atTop 0] with n hn₁ hn₂
+    simp [Nat.succ_eq_add_one, ← Complex.norm_div, regularizedHGFunCoeff_add_one_div_self hn₁,
+      multiset_prod_div_multiset_prod_mul a b hn₂, h]
+  have := FormalMultilinearSeries.ofScalars_radius_eq_inv_of_tendsto (r := 1) Complex _ (by simp) this
+  simpa
 
 Depends on / 依赖: Complex.norm_div, Filter, Filter.eventually_ne_atTop, Nat.succ_eq_add_one, Tendsto, eventually_atTop_regularizedHGFunCoeff_ne_zero, eventually_ne_atTop, filter_upwards, h_ne, multiset_prod_div_multiset_prod_mul, n.succ, norm_div, norm_one, regularizedHGFunCoeff, regularizedHGFunCoeff_add_one_div_self, succ_eq_add_one, tendsto_multiset_prod_div_multiset_prod_mul, this.congr
 -/

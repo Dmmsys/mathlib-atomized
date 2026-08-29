@@ -232,7 +232,11 @@ theorem isClosed_closedBall
 nonrec theorem closure_ball (x : E) {r : Real} (h : r != 0) : closure (ball x r) = closedBall x r := by
   rw [ball_eq_preimage]; rw [← toEuclidean.preimage_closure]; rw [closure_ball (toEuclidean x) h]; rw [closedBall_eq_preimage]
 
-nonrec theorem exists_pos_lt_subset_b
+nonrec theorem exists_pos_lt_subset_ball {R : Real} {s : Set E} {x : E} (hR : 0 < R) (hs : IsClosed s)
+    (h : s subseteq ball x R) : exists r in Ioo 0 R, s subseteq ball x r := by
+  rw [ball_eq_preimage]; rw [← image_subset_iff] at h
+  rcases exists_pos_lt_subset_ball hR (toEuclidean.isClosed_image.2 hs) h with ⟨r, hr, hsr⟩
+  exact ⟨r, hr, image_subset_iff.1 hsr⟩
 
 中文:
 定理 isClosed_closedBall
@@ -243,7 +247,11 @@ nonrec theorem exists_pos_lt_subset_b
 nonrec theorem closure_ball (x : E) {r : Real} (h : r != 0) : closure (ball x r) = closedBall x r := by
   rw [ball_eq_preimage]; rw [← toEuclidean.preimage_closure]; rw [closure_ball (toEuclidean x) h]; rw [closedBall_eq_preimage]
 
-nonrec theorem exists_pos_lt_subset_b
+nonrec theorem exists_pos_lt_subset_ball {R : Real} {s : Set E} {x : E} (hR : 0 < R) (hs : IsClosed s)
+    (h : s subseteq ball x R) : exists r in Ioo 0 R, s subseteq ball x r := by
+  rw [ball_eq_preimage]; rw [← image_subset_iff] at h
+  rcases exists_pos_lt_subset_ball hR (toEuclidean.isClosed_image.2 hs) h with ⟨r, hr, hsr⟩
+  exact ⟨r, hr, image_subset_iff.1 hsr⟩
 
 Depends on / 依赖: isClosed, isCompact_closedBall, isCompact_closedBall.isClosed
 -/

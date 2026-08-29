@@ -421,7 +421,8 @@ definition Equiv
 left_inv x := ext (by simp [toList]) by ext; dsimp; apply List.get_ofFn
   right_inv x := by
     refine Subtype.ext (List.ext_get ?_ fun n hn1 _ => by dsimp; apply List.get_ofFn)
-have := Nat.succ_pred_eq_of_pos List.le
+have := Nat.succ_pred_eq_of_pos List.length_pos_iff.mpr x.2.1
+    simp_all [toList]
 
 中文:
 定义 等价
@@ -431,7 +432,8 @@ have := Nat.succ_pred_eq_of_pos List.le
 left_inv x := ext (by simp [toList]) by ext; dsimp; apply List.get_ofFn
   right_inv x := by
     refine Subtype.ext (List.ext_get ?_ fun n hn1 _ => by dsimp; apply List.get_ofFn)
-have := Nat.succ_pred_eq_of_pos List.le
+have := Nat.succ_pred_eq_of_pos List.length_pos_iff.mpr x.2.1
+    simp_all [toList]
 -/
 protected def Equiv : RelSeries r ≃ {x : List α | x != [] ∧ x.IsChain (· ~[r] ·)} where
   toFun x := ⟨_, x.toList_ne_nil, x.isChain_toList⟩
@@ -1158,7 +1160,24 @@ definition append
       lt_trichotomy i (Fin.castLE (by lia) (Fin.last _ : Fin (p.length + 1)))
     · convert! p.step ⟨i.1, hi⟩ <;> convert! Fin.append_left p q _ <;> rfl
     · convert! connect
-      · con
+      · convert! Fin.append_left p q _
+      · convert! Fin.append_right p q _; rfl
+    · set x := _; set y := _
+      change Fin.append p q x ~[r] Fin.append p q y
+have hx : x = Fin.natAdd _ ⟨i - (p.length + 1), Nat.sub_lt_left_of_lt_add hi
+i.2.trans by lia⟩ := by
+        ext; dsimp [x, y]; rw [Nat.add_sub_cancel']; exact hi
+      have hy : y = Fin.natAdd _ ⟨i - p.length, Nat.sub_lt_left_of_lt_add (le_of_lt hi)
+          (by exact i.2)⟩ := by
+        ext
+        dsimp
+        conv_rhs => rw [Nat.add_comm p.length 1, add_assoc,
+Nat.add_sub_cancel' le_of_lt (show p.length < i.1 from hi), add_comm]
+        rfl
+      rw [hx]; rw [Fin.append_right]; rw [hy]; rw [Fin.append_right]
+convert! q.step ⟨i - (p.length + 1), Nat.sub_lt_left_of_lt_add hi by lia⟩
+      rw [Fin.succ_mk]; rw [Nat.sub_eq_iff_eq_add (le_of_lt hi : p.length <= i)]; rw [Nat.add_assoc _ 1]; rw [add_comm 1]; rw [Nat.sub_add_cancel]
+      exact hi
 
 中文:
 定义 append
@@ -1170,7 +1189,24 @@ definition append
       lt_trichotomy i (Fin.castLE (by lia) (Fin.last _ : Fin (p.length + 1)))
     · convert! p.step ⟨i.1, hi⟩ <;> convert! Fin.append_left p q _ <;> rfl
     · convert! connect
-      · con
+      · convert! Fin.append_left p q _
+      · convert! Fin.append_right p q _; rfl
+    · set x := _; set y := _
+      change Fin.append p q x ~[r] Fin.append p q y
+have hx : x = Fin.natAdd _ ⟨i - (p.length + 1), Nat.sub_lt_left_of_lt_add hi
+i.2.trans by lia⟩ := by
+        ext; dsimp [x, y]; rw [Nat.add_sub_cancel']; exact hi
+      have hy : y = Fin.natAdd _ ⟨i - p.length, Nat.sub_lt_left_of_lt_add (le_of_lt hi)
+          (by exact i.2)⟩ := by
+        ext
+        dsimp
+        conv_rhs => rw [Nat.add_comm p.length 1, add_assoc,
+Nat.add_sub_cancel' le_of_lt (show p.length < i.1 from hi), add_comm]
+        rfl
+      rw [hx]; rw [Fin.append_right]; rw [hy]; rw [Fin.append_right]
+convert! q.step ⟨i - (p.length + 1), Nat.sub_lt_left_of_lt_add hi by lia⟩
+      rw [Fin.succ_mk]; rw [Nat.sub_eq_iff_eq_add (le_of_lt hi : p.length <= i)]; rw [Nat.add_assoc _ 1]; rw [add_comm 1]; rw [Nat.sub_add_cancel]
+      exact hi
 
 Depends on / 依赖: length, p.length, q.length
 -/
@@ -1469,7 +1505,46 @@ definition insertNth
     · convert! p.step ⟨m, hm.trans i.2⟩
       · change Fin.insertNth _ _ _ _ = _
         rw [Fin.insertNth_apply_below]
-        pick
+        pick_goal 2
+        · exact hm.trans (lt_add_one _)
+        simp
+      · change Fin.insertNth _ _ _ _ = _
+        rw [Fin.insertNth_apply_below]
+        pick_goal 2
+        · change m.1 + 1 < i.1 + 1; rwa [add_lt_add_iff_right]
+        simp; rfl
+    · rw [show x = p m from show Fin.insertNth _ _ _ _ = _ by
+        rw [Fin.insertNth_apply_below]
+        pick_goal 2
+        · change m.1 < i.1 + 1; exact hm ▸ lt_add_one _
+        simp]
+      convert! prev_connect
+      · ext; exact hm
+      · change Fin.insertNth _ _ _ _ = _
+        rw [show m.succ = i.succ.castSucc by ext; change _ + 1 = _ + 1; rw [hm],
+          Fin.insertNth_apply_same]
+    · rw [Nat.lt_iff_add_one_le, le_iff_lt_or_eq] at hm
+      obtain hm | hm := hm
+      · convert! p.step ⟨m.1 - 1, Nat.sub_lt_right_of_lt_add (by lia) m.2⟩
+        · change Fin.insertNth _ _ _ _ = _
+          rw [Fin.insertNth_apply_above (h := hm)]
+          aesop
+        · change Fin.insertNth _ _ _ _ = _
+          rw [Fin.insertNth_apply_above]
+          swap
+          · exact hm.trans (lt_add_one _)
+          simp only [Fin.pred_succ, eq_rec_constant, Fin.succ_mk]
+          congr
+exact Fin.ext Eq.symm Nat.succ_pred_eq_of_pos (lt_trans (Nat.zero_lt_succ _) hm)
+      · convert! connect_next
+        · change Fin.insertNth _ _ _ _ = _
+          rw [show m.castSucc = i.succ.castSucc from Fin.ext hm.symm]; rw [Fin.insertNth_apply_same]
+        · change Fin.insertNth _ _ _ _ = _
+          rw [Fin.insertNth_apply_above]
+          swap
+          · change i.1 + 1 < m.1 + 1; lia
+          simp only [Fin.pred_succ, eq_rec_constant]
+          congr; ext; exact hm.symm
 
 中文:
 定义 insertNth
@@ -1482,7 +1557,46 @@ definition insertNth
     · convert! p.step ⟨m, hm.trans i.2⟩
       · change Fin.insertNth _ _ _ _ = _
         rw [Fin.insertNth_apply_below]
-        pick
+        pick_goal 2
+        · exact hm.trans (lt_add_one _)
+        simp
+      · change Fin.insertNth _ _ _ _ = _
+        rw [Fin.insertNth_apply_below]
+        pick_goal 2
+        · change m.1 + 1 < i.1 + 1; rwa [add_lt_add_iff_right]
+        simp; rfl
+    · rw [show x = p m from show Fin.insertNth _ _ _ _ = _ by
+        rw [Fin.insertNth_apply_below]
+        pick_goal 2
+        · change m.1 < i.1 + 1; exact hm ▸ lt_add_one _
+        simp]
+      convert! prev_connect
+      · ext; exact hm
+      · change Fin.insertNth _ _ _ _ = _
+        rw [show m.succ = i.succ.castSucc by ext; change _ + 1 = _ + 1; rw [hm],
+          Fin.insertNth_apply_same]
+    · rw [Nat.lt_iff_add_one_le, le_iff_lt_or_eq] at hm
+      obtain hm | hm := hm
+      · convert! p.step ⟨m.1 - 1, Nat.sub_lt_right_of_lt_add (by lia) m.2⟩
+        · change Fin.insertNth _ _ _ _ = _
+          rw [Fin.insertNth_apply_above (h := hm)]
+          aesop
+        · change Fin.insertNth _ _ _ _ = _
+          rw [Fin.insertNth_apply_above]
+          swap
+          · exact hm.trans (lt_add_one _)
+          simp only [Fin.pred_succ, eq_rec_constant, Fin.succ_mk]
+          congr
+exact Fin.ext Eq.symm Nat.succ_pred_eq_of_pos (lt_trans (Nat.zero_lt_succ _) hm)
+      · convert! connect_next
+        · change Fin.insertNth _ _ _ _ = _
+          rw [show m.castSucc = i.succ.castSucc from Fin.ext hm.symm]; rw [Fin.insertNth_apply_same]
+        · change Fin.insertNth _ _ _ _ = _
+          rw [Fin.insertNth_apply_above]
+          swap
+          · change i.1 + 1 < m.1 + 1; lia
+          simp only [Fin.pred_succ, eq_rec_constant]
+          congr; ext; exact hm.symm
 
 Depends on / 依赖: length, p.length
 -/
@@ -1556,7 +1670,8 @@ definition reverse
     convert! p.step ⟨p.length - (i.1 + 1), Nat.sub_lt_self (by lia) hi⟩
     · ext; simp
     · ext
-      simp only [Fin.val_rev, Fin.v
+      simp only [Fin.val_rev, Fin.val_castSucc, Fin.val_succ]
+      lia
 
 中文:
 定义 reverse
@@ -1569,7 +1684,8 @@ definition reverse
     convert! p.step ⟨p.length - (i.1 + 1), Nat.sub_lt_self (by lia) hi⟩
     · ext; simp
     · ext
-      simp only [Fin.val_rev, Fin.v
+      simp only [Fin.val_rev, Fin.val_castSucc, Fin.val_succ]
+      lia
 
 Depends on / 依赖: length, p.length
 -/
@@ -1978,7 +2094,8 @@ lemma mem_snoc
       (Fin.append_left _ _ _).symm⟩) i
   · intro h
     rcases h with (⟨i, rfl⟩ | rfl)
-    · exact ⟨i.castSucc, Fin.append_l
+    · exact ⟨i.castSucc, Fin.append_left _ _ _⟩
+    · exact ⟨Fin.last _, Fin.append_right _ _ 0⟩
 
 中文:
 引理 mem_snoc
@@ -1991,7 +2108,8 @@ lemma mem_snoc
       (Fin.append_left _ _ _).symm⟩) i
   · intro h
     rcases h with (⟨i, rfl⟩ | rfl)
-    · exact ⟨i.castSucc, Fin.append_l
+    · exact ⟨i.castSucc, Fin.append_left _ _ _⟩
+    · exact ⟨Fin.last _, Fin.append_right _ _ 0⟩
 
 Depends on / 依赖: Fin.append_left, Fin.append_right, Fin.last, Fin.lastCases, Or.inl, Or.inr, Set.mem_range, append, append_left, append_right, castSucc, i.castSucc, lastCases, mem_def, mem_range
 -/
@@ -2216,7 +2334,12 @@ definition inductionOn
       simp [show n = 0 by lia, apply_zero]
     | succ d hd =>
       have lq := p.tail_length (heq ▸ d.zero_ne_add_one.symm)
-      n
+      nth_rw 3 [heq] at lq
+      convert!
+        cons (p.tail (heq ▸ d.zero_ne_add_one.symm)) p.head (p.3 ⟨0, heq ▸ d.zero_lt_succ⟩)
+          (hd _ lq)
+      exact (p.cons_self_tail (heq ▸ d.zero_ne_add_one.symm)).symm
+  exact this rfl
 
 中文:
 定义 inductionOn
@@ -2231,7 +2354,12 @@ definition inductionOn
       simp [show n = 0 by lia, apply_zero]
     | succ d hd =>
       have lq := p.tail_length (heq ▸ d.zero_ne_add_one.symm)
-      n
+      nth_rw 3 [heq] at lq
+      convert!
+        cons (p.tail (heq ▸ d.zero_ne_add_one.symm)) p.head (p.3 ⟨0, heq ▸ d.zero_lt_succ⟩)
+          (hd _ lq)
+      exact (p.cons_self_tail (heq ▸ d.zero_ne_add_one.symm)).symm
+  exact this rfl
 
 Depends on / 依赖: apply_zero, cons_self_tail, convert, d.zero_lt_succ, d.zero_ne_add_one.symm, generalizing, length, motive, nth_rw, p.cons_self_tail, p.head, p.length, p.tail, p.tail_length, singleton, tail_length, zero_lt_succ, zero_ne_add_one
 -/
@@ -2444,7 +2572,10 @@ definition inductionOn'
       · simp [show n = 0 by lia, apply_zero]
     | succ d hd =>
       have ne0 : p.length != 0 := by simp [heq]
-      have len : p.
+      have len : p.eraseLast.length = d := by simp [heq]
+      convert! snoc p.eraseLast p.last (p.eraseLast_last_rel_last ne0) (hd _ len)
+      exact (p.snoc_self_eraseLast ne0).symm
+  exact this rfl
 
 中文:
 定义 inductionOn'
@@ -2459,7 +2590,10 @@ definition inductionOn'
       · simp [show n = 0 by lia, apply_zero]
     | succ d hd =>
       have ne0 : p.length != 0 := by simp [heq]
-      have len : p.
+      have len : p.eraseLast.length = d := by simp [heq]
+      convert! snoc p.eraseLast p.last (p.eraseLast_last_rel_last ne0) (hd _ len)
+      exact (p.snoc_self_eraseLast ne0).symm
+  exact this rfl
 
 Depends on / 依赖: apply_zero, convert, eraseLast, eraseLast_last_rel_last, generalizing, length, motive, p.eraseLast, p.eraseLast.length, p.eraseLast_last_rel_last, p.head, p.last, p.length, p.snoc_self_eraseLast, singleton, snoc_self_eraseLast
 -/
@@ -2500,7 +2634,9 @@ definition smash
     · simp_rw [Fin.castSucc_castAdd, Fin.addCases_left, Fin.succ_castAdd]
       convert! p.step i
       split_ifs with h
-      · rw [Fin.addCases_right
+      · rw [Fin.addCases_right, h, ← last, connect, head]
+      · apply Fin.addCases_left
+    simpa only [Fin.castSucc_natAdd, Fin.succ_natAdd, Fin.addCases_right] using q.step i
 
 中文:
 定义 smash
@@ -2512,7 +2648,9 @@ definition smash
     · simp_rw [Fin.castSucc_castAdd, Fin.addCases_left, Fin.succ_castAdd]
       convert! p.step i
       split_ifs with h
-      · rw [Fin.addCases_right
+      · rw [Fin.addCases_right, h, ← last, connect, head]
+      · apply Fin.addCases_left
+    simpa only [Fin.castSucc_natAdd, Fin.succ_natAdd, Fin.addCases_right] using q.step i
 
 Depends on / 依赖: length, p.length, q.length
 -/
@@ -2868,7 +3006,10 @@ lemma SetRel.not_finiteDimensional_iff
     | succ n IH =>
       obtain ⟨l, hl⟩ := IH
       obtain ⟨l', hl'⟩ := H l
-      exact ⟨l'.take ⟨n + 1,
+      exact ⟨l'.take ⟨n + 1, by simpa [hl] using hl'⟩, rfl⟩
+  · intro H l
+    obtain ⟨l', hl'⟩ := H (l.length + 1)
+    exact ⟨l', by simp [hl']⟩
 
 中文:
 引理 SetRel.not_finiteDimensional_iff
@@ -2883,7 +3024,10 @@ lemma SetRel.not_finiteDimensional_iff
     | succ n IH =>
       obtain ⟨l, hl⟩ := IH
       obtain ⟨l', hl'⟩ := H l
-      exact ⟨l'.take ⟨n + 1,
+      exact ⟨l'.take ⟨n + 1, by simpa [hl] using hl'⟩, rfl⟩
+  · intro H l
+    obtain ⟨l', hl'⟩ := H (l.length + 1)
+    exact ⟨l', by simp [hl']⟩
 
 Depends on / 依赖: Nonempty, _root_, _root_.Nonempty.some, finiteDimensional_iff, infiniteDimensional_iff, l.length, length
 -/
@@ -3414,7 +3558,10 @@ definition injStrictMono
     have leq := congr($(e).length)
     rw [mk_length lf f mf]; rw [mk_length lg g mg]; rw [Fin.val_eq_val] at leq
     subst leq
-    simp_rw [Subtype.mk_eq_mk, Sigma.mk.inj_iff,
+    simp_rw [Subtype.mk_eq_mk, Sigma.mk.inj_iff, heq_eq_eq, true_and]
+    have feq := fun i => congr($(e).toFun i)
+    simp_rw [mk_toFun lf f mf, mk_toFun lf g mg, mk_length lf f mf] at feq
+    rwa [funext_iff]
 
 中文:
 定义 injStrictMono
@@ -3427,7 +3574,10 @@ definition injStrictMono
     have leq := congr($(e).length)
     rw [mk_length lf f mf]; rw [mk_length lg g mg]; rw [Fin.val_eq_val] at leq
     subst leq
-    simp_rw [Subtype.mk_eq_mk, Sigma.mk.inj_iff,
+    simp_rw [Subtype.mk_eq_mk, Sigma.mk.inj_iff, heq_eq_eq, true_and]
+    have feq := fun i => congr($(e).toFun i)
+    simp_rw [mk_toFun lf f mf, mk_toFun lf g mg, mk_length lf f mf] at feq
+    rwa [funext_iff]
 -/
 def injStrictMono (n : Nat) :
     {f : (l : Fin n) × (Fin (l + 1) -> α) // StrictMono f.2} ↪ LTSeries α where
@@ -3634,7 +3784,22 @@ theorem exists_relSeries_covBy
   | succ n IH =>
     obtain ⟨t₁, i, ht, hi₁, hi₂⟩ := IH (s ∘ Fin.castSucc) fun _ => h _
     obtain ⟨t₂, h₁, m, h₂, ht₂⟩ :=
-      exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_
+      exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le (h (.last _)).le
+    let t₃ : RelSeries {(a, b) : α × α | a ⋖ b} := ⟨m, (t₂ ·), fun i => by simpa using! ht₂ i⟩
+    have H : t₁.last = t₂ 0 := (congr(t₁ $hi₂.symm).trans (congr_fun ht _)).trans h₁.symm
+    refine ⟨t₁.smash t₃ H, ⟨Fin.snoc (Fin.castLE (by simp) ∘ i) (.last _), ?_⟩, ?_, ?_, ?_⟩
+    · refine Fin.lastCases (Fin.lastCases (fun _ => rfl) fun j eq => ?_) fun j => Fin.lastCases
+        (fun eq => ?_) fun k eq => Fin.ext (congr_arg Fin.val (by simpa using! eq) :)
+      on_goal 2 => rw [eq_comm] at eq
+      all_goals
+        rw [Fin.snoc_castSucc] at eq
+        obtain rfl : m = 0 := by simpa [t₃] using! (congr_arg Fin.val eq).trans_lt (i j).2
+        cases (h (.last _)).ne' (h₂.symm.trans h₁)
+    · refine funext (Fin.lastCases ?_ fun j => ?_)
+      · convert! h₂; simpa using! RelSeries.last_smash ..
+      convert! congr_fun ht j using 1
+      simp [RelSeries.smash_castLE]
+    all_goals simp [Fin.snoc, Fin.castPred_zero, hi₁]
 
 中文:
 定理 存在_relSeries_covBy
@@ -3645,7 +3810,22 @@ theorem exists_relSeries_covBy
   | succ n IH =>
     obtain ⟨t₁, i, ht, hi₁, hi₂⟩ := IH (s ∘ Fin.castSucc) fun _ => h _
     obtain ⟨t₂, h₁, m, h₂, ht₂⟩ :=
-      exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_
+      exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le (h (.last _)).le
+    let t₃ : RelSeries {(a, b) : α × α | a ⋖ b} := ⟨m, (t₂ ·), fun i => by simpa using! ht₂ i⟩
+    have H : t₁.last = t₂ 0 := (congr(t₁ $hi₂.symm).trans (congr_fun ht _)).trans h₁.symm
+    refine ⟨t₁.smash t₃ H, ⟨Fin.snoc (Fin.castLE (by simp) ∘ i) (.last _), ?_⟩, ?_, ?_, ?_⟩
+    · refine Fin.lastCases (Fin.lastCases (fun _ => rfl) fun j eq => ?_) fun j => Fin.lastCases
+        (fun eq => ?_) fun k eq => Fin.ext (congr_arg Fin.val (by simpa using! eq) :)
+      on_goal 2 => rw [eq_comm] at eq
+      all_goals
+        rw [Fin.snoc_castSucc] at eq
+        obtain rfl : m = 0 := by simpa [t₃] using! (congr_arg Fin.val eq).trans_lt (i j).2
+        cases (h (.last _)).ne' (h₂.symm.trans h₁)
+    · refine funext (Fin.lastCases ?_ fun j => ?_)
+      · convert! h₂; simpa using! RelSeries.last_smash ..
+      convert! congr_fun ht j using 1
+      simp [RelSeries.smash_castLE]
+    all_goals simp [Fin.snoc, Fin.castPred_zero, hi₁]
 
 Depends on / 依赖: Equiv.refl, Fin.castSucc, RelSeries, castSucc, congr_fun, exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le, toEmbedding
 -/
@@ -3688,7 +3868,13 @@ theorem exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
     exact ⟨t, ⟨fun j => i (j.succ.cast (by simp)), fun _ _ => by simp⟩,
       funext fun j => (congr_fun hi _).trans (RelSeries.cons_cast_succ _ _ _ _), ht⟩
   wlog h₂ : s.last = ⊤
-  · obtain ⟨t, i, 
+  · obtain ⟨t, i, hi, ht⟩ := this (s.snoc ⊤ (lt_top_iff_ne_top.mpr h₂)) (by simp [h₁]) (by simp)
+    exact ⟨t, ⟨fun j => i (.cast (by simp) j.castSucc), fun _ _ => by simp⟩,
+      funext fun j => (congr_fun hi _).trans (RelSeries.snoc_cast_castSucc _ _ _ _), ht⟩
+  obtain ⟨t, i, hit, hi₁, hi₂⟩ := s.exists_relSeries_covBy
+  refine ⟨t, i, hit, ?_, ?_⟩
+  · rw [← h₁, RelSeries.head, RelSeries.head, ← hi₁, ← hit, Function.comp]
+  · rw [← h₂, RelSeries.last, RelSeries.last, ← hi₂, ← hit, Function.comp]
 
 中文:
 定理 存在_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
@@ -3698,7 +3884,13 @@ theorem exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
     exact ⟨t, ⟨fun j => i (j.succ.cast (by simp)), fun _ _ => by simp⟩,
       funext fun j => (congr_fun hi _).trans (RelSeries.cons_cast_succ _ _ _ _), ht⟩
   wlog h₂ : s.last = ⊤
-  · obtain ⟨t, i, 
+  · obtain ⟨t, i, hi, ht⟩ := this (s.snoc ⊤ (lt_top_iff_ne_top.mpr h₂)) (by simp [h₁]) (by simp)
+    exact ⟨t, ⟨fun j => i (.cast (by simp) j.castSucc), fun _ _ => by simp⟩,
+      funext fun j => (congr_fun hi _).trans (RelSeries.snoc_cast_castSucc _ _ _ _), ht⟩
+  obtain ⟨t, i, hit, hi₁, hi₂⟩ := s.exists_relSeries_covBy
+  refine ⟨t, i, hit, ?_, ?_⟩
+  · rw [← h₁, RelSeries.head, RelSeries.head, ← hi₁, ← hit, Function.comp]
+  · rw [← h₂, RelSeries.last, RelSeries.last, ← hi₂, ← hit, Function.comp]
 
 Depends on / 依赖: RelSeries, RelSeries.cons_cast_succ, RelSeries.snoc_cast_castSu, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, castSucc, congr_fun, cons_cast_succ, j.castSucc, j.succ.cast, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, s.cons, s.head, s.last, s.snoc, snoc_cast_castSu
 -/
@@ -3782,7 +3974,10 @@ lemma apply_add_index_le_apply_add_index_int
   simp only at *
   induction j, hij using Nat.le_induction with
   | base => simp
-  | s
+  | succ j _hij ih =>
+    specialize ih (Nat.lt_of_succ_lt hj)
+    have step : p ⟨j, _⟩ < p ⟨j + 1, _⟩ := p.step ⟨j, by lia⟩
+    lia
 
 中文:
 引理 apply_add_index_le_apply_add_index_int
@@ -3796,7 +3991,10 @@ lemma apply_add_index_le_apply_add_index_int
   simp only at *
   induction j, hij using Nat.le_induction with
   | base => simp
-  | s
+  | succ j _hij ih =>
+    specialize ih (Nat.lt_of_succ_lt hj)
+    have step : p ⟨j, _⟩ < p ⟨j + 1, _⟩ := p.step ⟨j, by lia⟩
+    lia
 -/
 lemma apply_add_index_le_apply_add_index_int (p : LTSeries Int) (i j : Fin (p.length + 1))
     (hij : i <= j) : p i + j <= p j + i := by

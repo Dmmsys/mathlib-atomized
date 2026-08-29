@@ -486,7 +486,9 @@ instance instTorsor
   mul_smul _ _ _ := Prod.ext (mul_smul _ _ _) (mul_smul _ _ _)
   sdiv p₁ p₂ := (p₁.1 /ₛ p₂.1, p₁.2 /ₛ p₂.2)
   sdiv_smul' _ _ := Prod.ext (sdiv_smul _ _) (sdiv_smul _ _)
-  smul_sdiv' _ _ := Prod.ext (smul_sdiv _ _) (smul_sd
+  smul_sdiv' _ _ := Prod.ext (smul_sdiv _ _) (smul_sdiv _ _)
+
+@[to_additive (attr := simp)]
 
 中文:
 实例 instTorsor
@@ -496,7 +498,9 @@ instance instTorsor
   mul_smul _ _ _ := Prod.ext (mul_smul _ _ _) (mul_smul _ _ _)
   sdiv p₁ p₂ := (p₁.1 /ₛ p₂.1, p₁.2 /ₛ p₂.2)
   sdiv_smul' _ _ := Prod.ext (sdiv_smul _ _) (sdiv_smul _ _)
-  smul_sdiv' _ _ := Prod.ext (smul_sdiv _ _) (smul_sd
+  smul_sdiv' _ _ := Prod.ext (smul_sdiv _ _) (smul_sdiv _ _)
+
+@[to_additive (attr := simp)]
 -/
 instance instTorsor : Torsor (G × G') (P × P') where
   smul v p := (v.1 • p.1, v.2 • p.2)

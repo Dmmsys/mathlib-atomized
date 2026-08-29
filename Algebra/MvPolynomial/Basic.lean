@@ -1270,7 +1270,9 @@ theorem prod_X_pow
   · exact Finset.prod_congr rfl (fun _ hi => by simp [Finsupp.indicator, hi])
   · intro i hi hi'
     rw [Finsupp.mem_support_iff]; rw [ne_eq]; rw [not_not] at hi'
-    rw [hi']; rw
+    rw [hi']; rw [pow_zero]
+
+@[elab_as_elim]
 
 中文:
 定理 prod_X_pow
@@ -1280,7 +1282,9 @@ theorem prod_X_pow
   · exact Finset.prod_congr rfl (fun _ hi => by simp [Finsupp.indicator, hi])
   · intro i hi hi'
     rw [Finsupp.mem_support_iff]; rw [ne_eq]; rw [not_not] at hi'
-    rw [hi']; rw
+    rw [hi']; rw [pow_zero]
+
+@[elab_as_elim]
 
 Depends on / 依赖: Finset, Finset.prod_congr, Finset.prod_subset, Finsupp, Finsupp.indicator, Finsupp.mem_support_iff, Finsupp.prod, indicator, mem_support_iff, monomial_eq, ne_eq, not_not, one_mul, pow_zero, prod_congr, prod_subset, support_indicator_subset
 -/
@@ -1309,7 +1313,8 @@ theorem induction_on_monomial
       intro e
       induction e with
       | zero => simp [ih]
-      | succ e e_ih => simp [pow_succ, (mul
+      | succ e e_ih => simp [pow_succ, (mul_assoc _ _ _).symm, mul_X, e_ih]
+    simp [add_comm, monomial_add_single, this]
 
 中文:
 定理 induction_on_monomial
@@ -1324,7 +1329,8 @@ theorem induction_on_monomial
       intro e
       induction e with
       | zero => simp [ih]
-      | succ e e_ih => simp [pow_succ, (mul
+      | succ e e_ih => simp [pow_succ, (mul_assoc _ _ _).symm, mul_X, e_ih]
+    simp [add_comm, monomial_add_single, this]
 
 Depends on / 依赖: Finsupp, Finsupp.induction, _hpn, add_comm, e_ih, monomial, monomial_add_single, motive, mul_X, mul_assoc, pow_succ
 -/
@@ -1474,7 +1480,10 @@ theorem ringHom_ext
   -- probably because of the type synonym
   · ext x
     exact hC _
-  · apply Finsupp.mulHom_ext'; intr
+  · apply Finsupp.mulHom_ext'; intro x
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `Finsupp.mulHom_ext'` needs to have increased priority
+    apply MonoidHom.ext_mnat
+    exact hX _
 
 中文:
 定理 ringHom_ext
@@ -1485,7 +1494,10 @@ theorem ringHom_ext
   -- probably because of the type synonym
   · ext x
     exact hC _
-  · apply Finsupp.mulHom_ext'; intr
+  · apply Finsupp.mulHom_ext'; intro x
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `Finsupp.mulHom_ext'` needs to have increased priority
+    apply MonoidHom.ext_mnat
+    exact hX _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.ringHom_ext, ringHom_ext
 -/
@@ -1653,7 +1665,9 @@ theorem adjoin_range_X
   induction p using MvPolynomial.induction_on with
   | C => exact S.algebraMap_mem _
   | add p q hp hq => exact S.add_mem hp hq
-  | mul_X p i hp => exact S.mul_mem hp (Algebra.subset_adjoi
+  | mul_X p i hp => exact S.mul_mem hp (Algebra.subset_adjoin <| mem_range_self _)
+
+@[ext]
 
 中文:
 定理 adjoin_range_X
@@ -1664,7 +1678,9 @@ theorem adjoin_range_X
   induction p using MvPolynomial.induction_on with
   | C => exact S.algebraMap_mem _
   | add p q hp hq => exact S.add_mem hp hq
-  | mul_X p i hp => exact S.mul_mem hp (Algebra.subset_adjoi
+  | mul_X p i hp => exact S.mul_mem hp (Algebra.subset_adjoin <| mem_range_self _)
+
+@[ext]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, MvPolynomial, MvPolynomial.induction_on, S.add_mem, S.algebraMap_mem, S.mul_mem, add_mem, adjoin, algebraMap_mem, induction_on, mem_range_self, mul_X, mul_mem, subset_adjoin, top_unique
 -/
@@ -2976,7 +2992,8 @@ theorem coeff_mul_monomial'
     rw [← mem_support_iff] at h
     obtain ⟨j, -, rfl⟩ : exists j in support p, j + s = m := by
       simpa [Finset.mem_add]
-using Finset.add_subset_add_left support_mon
+using Finset.add_subset_add_left support_monomial_subset support_mul _ _ h
+    exact le_add_left le_rfl
 
 中文:
 定理 coeff_mul_monomial'
@@ -2990,7 +3007,8 @@ using Finset.add_subset_add_left support_mon
     rw [← mem_support_iff] at h
     obtain ⟨j, -, rfl⟩ : exists j in support p, j + s = m := by
       simpa [Finset.mem_add]
-using Finset.add_subset_add_left support_mon
+using Finset.add_subset_add_left support_monomial_subset support_mul _ _ h
+    exact le_add_left le_rfl
 
 Depends on / 依赖: Finset, Finset.add_subset_add_left, Finset.mem_add, add_subset_add_left, classical, coeff_mul_monomial, contrapose, conv_rhs, le_add_left, le_rfl, mem_add, mem_support_iff, split_ifs, support, support_monomial_subset, support_mul, tsub_add_cancel_of_le
 -/
@@ -3390,7 +3408,13 @@ theorem C_dvd_iff_dvd_coeff
       let c' : (σ ->₀ Nat) -> R := fun i => if i in φ.support then C i else 0
       let ψ : MvPolynomial σ R := ∑ i in φ.support, monomial i (c' i)
       use ψ
-      
+      apply MvPolynomial.ext
+      intro i
+      simp only [ψ, c', coeff_C_mul, coeff_sum, coeff_monomial, Finset.sum_ite_eq']
+      split_ifs with hi
+      · rw [hc]
+      · rw [notMem_support_iff] at hi
+        rwa [mul_zero]
 
 中文:
 定理 C_dvd_iff_dvd_coeff
@@ -3407,7 +3431,13 @@ theorem C_dvd_iff_dvd_coeff
       let c' : (σ ->₀ Nat) -> R := fun i => if i in φ.support then C i else 0
       let ψ : MvPolynomial σ R := ∑ i in φ.support, monomial i (c' i)
       use ψ
-      
+      apply MvPolynomial.ext
+      intro i
+      simp only [ψ, c', coeff_C_mul, coeff_sum, coeff_monomial, Finset.sum_ite_eq']
+      split_ifs with hi
+      · rw [hc]
+      · rw [notMem_support_iff] at hi
+        rwa [mul_zero]
 
 Depends on / 依赖: Finset, Finset.sum_ite_eq, MvPolynomial, MvPolynomial.ext, classical, coeff_C_mul, coeff_monomial, coeff_sum, dvd_mul_right, monomial, mul_zero, notMem_support_iff, split_ifs, sum_ite_eq, support
 -/
@@ -3811,7 +3841,17 @@ lemma coeffs_add
   simp only [mem_coeffs_iff, mem_support_iff, coeff_add, ne_eq, Finset.mem_union]
   have hl (n : σ ->₀ Nat) (hne : p.coeff n != 0) : q.coeff n = 0 :=
 notMem_support_iff.mp h.notMem_of_mem_left_finset (mem_support_iff.mpr hne)
-  have hr (n : σ ->₀ Nat) (hne : q.coeff n != 0) : p.coeff n = 
+  have hr (n : σ ->₀ Nat) (hne : q.coeff n != 0) : p.coeff n = 0 :=
+notMem_support_iff.mp h.notMem_of_mem_right_finset (mem_support_iff.mpr hne)
+  have hor (n) (h : ¬coeff n p + coeff n q = 0) : coeff n p != 0 ∨ coeff n q != 0 := by
+    by_cases hp : coeff n p = 0 <;> simp_all
+  refine ⟨fun ⟨n, hn1, hn2⟩ => ?_, ?_⟩
+  · obtain (h | h) := hor n hn1
+    · exact Or.inl ⟨n, by simp [h, hn2, hl n h]⟩
+    · exact Or.inr ⟨n, by simp [h, hn2, hr n h]⟩
+  · rintro (⟨n, hn, rfl⟩ | ⟨n, hn, rfl⟩)
+    · exact ⟨n, by simp [hl n hn, hn]⟩
+    · exact ⟨n, by simp [hr n hn, hn]⟩
 
 中文:
 引理 coeffs_add
@@ -3821,7 +3861,17 @@ notMem_support_iff.mp h.notMem_of_mem_left_finset (mem_support_iff.mpr hne)
   simp only [mem_coeffs_iff, mem_support_iff, coeff_add, ne_eq, Finset.mem_union]
   have hl (n : σ ->₀ Nat) (hne : p.coeff n != 0) : q.coeff n = 0 :=
 notMem_support_iff.mp h.notMem_of_mem_left_finset (mem_support_iff.mpr hne)
-  have hr (n : σ ->₀ Nat) (hne : q.coeff n != 0) : p.coeff n = 
+  have hr (n : σ ->₀ Nat) (hne : q.coeff n != 0) : p.coeff n = 0 :=
+notMem_support_iff.mp h.notMem_of_mem_right_finset (mem_support_iff.mpr hne)
+  have hor (n) (h : ¬coeff n p + coeff n q = 0) : coeff n p != 0 ∨ coeff n q != 0 := by
+    by_cases hp : coeff n p = 0 <;> simp_all
+  refine ⟨fun ⟨n, hn1, hn2⟩ => ?_, ?_⟩
+  · obtain (h | h) := hor n hn1
+    · exact Or.inl ⟨n, by simp [h, hn2, hl n h]⟩
+    · exact Or.inr ⟨n, by simp [h, hn2, hr n h]⟩
+  · rintro (⟨n, hn, rfl⟩ | ⟨n, hn, rfl⟩)
+    · exact ⟨n, by simp [hl n hn, hn]⟩
+    · exact ⟨n, by simp [hr n hn, hn]⟩
 
 Depends on / 依赖: Finset, Finset.mem_union, coeff_add, h.notMem_of_mem_left_finset, h.notMem_of_mem_right_finset, mem_coeffs_iff, mem_support_iff, mem_support_iff.mpr, mem_union, ne_eq, notMem_of_mem_left_finset, notMem_of_mem_right_finset, notMem_support_iff, notMem_support_iff.mp, p.coeff, q.coeff
 -/
@@ -4436,7 +4486,11 @@ lemma coeffsIn_mul
       rw [← add_zero s]; rw [← monomial_mul]
       apply Submodule.mul_mem_mul <;> simpa
     | add x _ y _ hx hy =>
-      simpa [map_add] 
+      simpa [map_add] using add_mem hx hy
+  · rw [Submodule.mul_le]
+    intro x hx y hy k
+    rw [MvPolynomial.coeff_mul]
+    exact sum_mem fun c hc => Submodule.mul_mem_mul (hx _) (hy _)
 
 中文:
 引理 coeffsIn_mul
@@ -4451,7 +4505,11 @@ lemma coeffsIn_mul
       rw [← add_zero s]; rw [← monomial_mul]
       apply Submodule.mul_mem_mul <;> simpa
     | add x _ y _ hx hy =>
-      simpa [map_add] 
+      simpa [map_add] using add_mem hx hy
+  · rw [Submodule.mul_le]
+    intro x hx y hy k
+    rw [MvPolynomial.coeff_mul]
+    exact sum_mem fun c hc => Submodule.mul_mem_mul (hx _) (hy _)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.coeff_mul, Submodule, Submodule.mul_induction_on, Submodule.mul_le, Submodule.mul_mem_mul, add_mem, add_zero, classical, coeff_mul, coeffsIn_le, le_antisymm, map_add, mem_mul_mem, monomial_mul, mul_induction_on, mul_le, mul_mem_mul, sum_mem
 -/

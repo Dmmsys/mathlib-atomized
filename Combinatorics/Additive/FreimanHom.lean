@@ -272,7 +272,7 @@ lemma IsMulFreimanIso.symm
   map_prod_eq_map_prod := fun s t hsB htB hs ht => by
     rw [← hf.map_prod_eq_map_prod _ _ (by simp [hs]) (by simp [ht]), map_map, map_congr rfl, map_id,
       map_map, map_congr rfl, map_id]
-    all_goals aes
+    all_goals aesop
 
 中文:
 引理 是MulFreimanIso.symm
@@ -281,7 +281,7 @@ lemma IsMulFreimanIso.symm
   map_prod_eq_map_prod := fun s t hsB htB hs ht => by
     rw [← hf.map_prod_eq_map_prod _ _ (by simp [hs]) (by simp [ht]), map_map, map_congr rfl, map_id,
       map_map, map_congr rfl, map_id]
-    all_goals aes
+    all_goals aesop
 
 Depends on / 依赖: InjOn.rightInvOn_of_leftInvOn, hf.bijOn.injOn, hf.bijOn.mapsTo, hf.bijOn.symm, mapsTo, rightInvOn_of_leftInvOn
 -/
@@ -315,7 +315,10 @@ lemma IsMulFreimanHom.to_isMulFreimanIso
     have : (map g (map f s)).prod = (map g (map f t)).prod := by
       have := hf.mapsTo
       apply hg.map_prod_eq_map_prod <;> simp_all [MapsTo]
-    rwa [map_
+    rwa [map_map, map_congr rfl fun x hx => ?g1, map_id, map_map,
+      map_congr rfl fun x hx => ?g2, map_id] at this
+    case g1 => exact h.1 (hsA hx)
+    case g2 => exact h.1 (htA hx)
 
 中文:
 引理 是MulFreiman态射.to_isMulFreimanIso
@@ -326,7 +329,10 @@ lemma IsMulFreimanHom.to_isMulFreimanIso
     have : (map g (map f s)).prod = (map g (map f t)).prod := by
       have := hf.mapsTo
       apply hg.map_prod_eq_map_prod <;> simp_all [MapsTo]
-    rwa [map_
+    rwa [map_map, map_congr rfl fun x hx => ?g1, map_id, map_map,
+      map_congr rfl fun x hx => ?g2, map_id] at this
+    case g1 => exact h.1 (hsA hx)
+    case g2 => exact h.1 (htA hx)
 
 Depends on / 依赖: h.bijOn, hf.mapsTo, hg.mapsTo, mapsTo
 -/
@@ -549,7 +555,7 @@ lemma IsMulFreimanHom.comp
     refine hg.map_prod_eq_map_prod ?_ ?_ (by rwa [card_map]) (by rwa [card_map])
       (hf.map_prod_eq_map_prod hsA htA hs ht h)
     · simpa using fun a h => hf.mapsTo (hsA h)
-    · simpa usi
+    · simpa using fun a h => hf.mapsTo (htA h)
 
 中文:
 引理 是MulFreiman态射.comp
@@ -560,7 +566,7 @@ lemma IsMulFreimanHom.comp
     refine hg.map_prod_eq_map_prod ?_ ?_ (by rwa [card_map]) (by rwa [card_map])
       (hf.map_prod_eq_map_prod hsA htA hs ht h)
     · simpa using fun a h => hf.mapsTo (hsA h)
-    · simpa usi
+    · simpa using fun a h => hf.mapsTo (htA h)
 -/
 @[to_additive] lemma IsMulFreimanHom.comp (hg : IsMulFreimanHom n B C g)
     (hf : IsMulFreimanHom n A B f) : IsMulFreimanHom n A C (g ∘ f) where
@@ -584,7 +590,7 @@ lemma IsMulFreimanIso.comp
     rw [hg.map_prod_eq_map_prod _ _ (by rwa [card_map]) (by rwa [card_map]),
       hf.map_prod_eq_map_prod hsA htA hs ht]
     · simpa using fun a h => hf.bijOn.mapsTo (hsA h)
-    · simpa using fu
+    · simpa using fun a h => hf.bijOn.mapsTo (htA h)
 
 中文:
 引理 是MulFreimanIso.comp
@@ -595,7 +601,7 @@ lemma IsMulFreimanIso.comp
     rw [hg.map_prod_eq_map_prod _ _ (by rwa [card_map]) (by rwa [card_map]),
       hf.map_prod_eq_map_prod hsA htA hs ht]
     · simpa using fun a h => hf.bijOn.mapsTo (hsA h)
-    · simpa using fu
+    · simpa using fun a h => hf.bijOn.mapsTo (htA h)
 -/
 @[to_additive] lemma IsMulFreimanIso.comp (hg : IsMulFreimanIso n B C g)
     (hf : IsMulFreimanIso n A B f) : IsMulFreimanIso n A C (g ∘ f) where
@@ -875,7 +881,10 @@ lemma MulHomClass.isMulFreimanHom
         h, map_multiset_ne_zero_prod _ (by grind [Multiset.card_eq_zero])]
 
 @[deprecated (since := "2026-04-29")]
-alias MonoidHo
+alias MonoidHomClass.isMulFreimanHom := MulHomClass.isMulFreimanHom
+
+@[deprecated (since := "2026-04-29")]
+alias AddMonoidHomClass.isAddFreimanHom := AddHomClass.isAddFreimanHom
 
 中文:
 引理 乘法态射类.isMulFreimanHom
@@ -887,7 +896,10 @@ alias MonoidHo
         h, map_multiset_ne_zero_prod _ (by grind [Multiset.card_eq_zero])]
 
 @[deprecated (since := "2026-04-29")]
-alias MonoidHo
+alias MonoidHomClass.isMulFreimanHom := MulHomClass.isMulFreimanHom
+
+@[deprecated (since := "2026-04-29")]
+alias AddMonoidHomClass.isAddFreimanHom := AddHomClass.isAddFreimanHom
 -/
 @[to_additive] lemma MulHomClass.isMulFreimanHom [FunLike F α β] [MulHomClass F α β] (f : F)
     (hfAB : MapsTo f A B) : IsMulFreimanHom n A B f :=
@@ -968,7 +980,10 @@ lemma isMulFreimanHom_antitone
       | 0 => by aesop
       | n + 1 => by
         have ⟨a, ha⟩ : exists a, a in s := card_pos_iff_exists_mem.1 (by simp [hs])
-        simpa [*] using hf.map_prod_eq_map_pro
+        simpa [*] using hf.map_prod_eq_map_prod (s := a ::ₘ s) (t := a ::ₘ t)
+            (by simpa [hsA ha]) (by simpa [hsA ha]) }
+
+@[to_additive]
 
 中文:
 引理 isMulFreimanHom_antitone
@@ -979,7 +994,10 @@ lemma isMulFreimanHom_antitone
       | 0 => by aesop
       | n + 1 => by
         have ⟨a, ha⟩ : exists a, a in s := card_pos_iff_exists_mem.1 (by simp [hs])
-        simpa [*] using hf.map_prod_eq_map_pro
+        simpa [*] using hf.map_prod_eq_map_prod (s := a ::ₘ s) (t := a ::ₘ t)
+            (by simpa [hsA ha]) (by simpa [hsA ha]) }
+
+@[to_additive]
 
 Depends on / 依赖: antitone_nat_of_succ_le, card_pos_iff_exists_mem, hf.map_prod_eq_map_prod, hf.mapsTo, map_prod_eq_map_prod, mapsTo
 -/
@@ -1275,7 +1293,14 @@ lemma isAddFreimanIso_Iic
   bijOn.right.right x (hx : x <= _) :=
     ⟨x, by simpa [le_iff_val_le_val, -val_fin_le, Nat.mod_eq_of_lt, aux hm hkmn, hx.trans_lt]⟩
   map_sum_eq_map_sum s t hsA htA hs ht := by
-    have
+    have (u : Multiset (Fin (n + 1))) : Nat.castRingHom _ (u.map val).sum = u.sum := by simp
+    rw [← this]; rw [← this]
+    have {u : Multiset (Fin (n + 1))} (huk : forall x in u, x <= k) (hu : card u = m) :
+(u.map val).sum < (n + 1) := Nat.lt_succ_iff.2 hkmn.trans' by
+      rw [← hu]; rw [← card_map]
+      refine sum_le_card_nsmul (u.map val) k ?_
+      simpa [le_iff_val_le_val, -val_fin_le, Nat.mod_eq_of_lt, aux hm hkmn] using huk
+    exact ⟨congr_arg _, CharP.natCast_injOn_Iio _ (n + 1) (this hsA hs) (this htA ht)⟩
 
 中文:
 引理 isAddFreimanIso_Iic
@@ -1285,7 +1310,14 @@ lemma isAddFreimanIso_Iic
   bijOn.right.right x (hx : x <= _) :=
     ⟨x, by simpa [le_iff_val_le_val, -val_fin_le, Nat.mod_eq_of_lt, aux hm hkmn, hx.trans_lt]⟩
   map_sum_eq_map_sum s t hsA htA hs ht := by
-    have
+    have (u : Multiset (Fin (n + 1))) : Nat.castRingHom _ (u.map val).sum = u.sum := by simp
+    rw [← this]; rw [← this]
+    have {u : Multiset (Fin (n + 1))} (huk : forall x in u, x <= k) (hu : card u = m) :
+(u.map val).sum < (n + 1) := Nat.lt_succ_iff.2 hkmn.trans' by
+      rw [← hu]; rw [← card_map]
+      refine sum_le_card_nsmul (u.map val) k ?_
+      simpa [le_iff_val_le_val, -val_fin_le, Nat.mod_eq_of_lt, aux hm hkmn] using huk
+    exact ⟨congr_arg _, CharP.natCast_injOn_Iio _ (n + 1) (this hsA hs) (this htA ht)⟩
 
 Depends on / 依赖: Fin.le_iff_val_le_val, MapsTo, Multiset, Nat.castRingHom, Nat.mod_eq_of_lt, bijOn.right.left, bijOn.right.right, castRingHom, hx.trans_lt, le_iff_val_le_val, map_sum_eq_map_sum, mod_eq_of_lt, trans_lt, u.map, u.sum, val_fin_le, val_injective, val_injective.injOn
 -/
@@ -1317,7 +1349,10 @@ lemma isAddFreimanIso_Iio
   have hkmn' : m * k <= n := (Nat.mul_le_mul_left _ k.le_succ).trans hkmn
   convert! isAddFreimanIso_Iic hm hkmn' using 1 <;> ext x
   · simp only [Nat.cast_add, Nat.cast_one, mem_Iio, lt_def, mem_Iic, le_iff_val_le_val,
-      val_natCast, aux hm hkmn', Nat.mod_eq_of_l
+      val_natCast, aux hm hkmn', Nat.mod_eq_of_lt]
+    simp_rw [← Nat.cast_add_one]
+    rw [Fin.val_cast_of_lt (aux hm hkmn)]; rw [Nat.lt_succ_iff]
+  · simp [Nat.lt_succ_iff]
 
 中文:
 引理 isAddFreimanIso_Iio
@@ -1328,7 +1363,10 @@ lemma isAddFreimanIso_Iio
   have hkmn' : m * k <= n := (Nat.mul_le_mul_left _ k.le_succ).trans hkmn
   convert! isAddFreimanIso_Iic hm hkmn' using 1 <;> ext x
   · simp only [Nat.cast_add, Nat.cast_one, mem_Iio, lt_def, mem_Iic, le_iff_val_le_val,
-      val_natCast, aux hm hkmn', Nat.mod_eq_of_l
+      val_natCast, aux hm hkmn', Nat.mod_eq_of_lt]
+    simp_rw [← Nat.cast_add_one]
+    rw [Fin.val_cast_of_lt (aux hm hkmn)]; rw [Nat.lt_succ_iff]
+  · simp [Nat.lt_succ_iff]
 
 Depends on / 依赖: Fin.val_cast_of_lt, Nat.cast_add, Nat.cast_add_one, Nat.cast_one, Nat.lt_succ_iff, Nat.mod_eq_of_lt, Nat.mul_le_mul_left, cast_add, cast_add_one, cast_one, convert, isAddFreimanIso_Iic, k.le_succ, le_iff_val_le_val, le_succ, lt_def, lt_succ_iff, mem_Iic, mem_Iio, mod_eq_of_lt
 -/

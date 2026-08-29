@@ -944,7 +944,7 @@ theorem Rel.countP_eq
     obtain ⟨b, bs, hb1, hb2, rfl⟩ := rel_cons_left.mp h
     rw [countP_cons]; rw [countP_cons]; rw [ih hb2]
     simp only [Nat.add_right_inj]
-    exact (if_congr ⟨fun h => _root_.
+    exact (if_congr ⟨fun h => _root_.trans h hb1, fun h => _root_.trans h (symm hb1)⟩ rfl rfl)
 
 中文:
 定理 关系.countP_eq
@@ -956,7 +956,7 @@ theorem Rel.countP_eq
     obtain ⟨b, bs, hb1, hb2, rfl⟩ := rel_cons_left.mp h
     rw [countP_cons]; rw [countP_cons]; rw [ih hb2]
     simp only [Nat.add_right_inj]
-    exact (if_congr ⟨fun h => _root_.
+    exact (if_congr ⟨fun h => _root_.trans h hb1, fun h => _root_.trans h (symm hb1)⟩ rfl rfl)
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Nat.add_right_inj, _root_, _root_.trans, add_right_inj, countP_cons, generalizing, if_congr, induction_on, rel_cons_left, rel_cons_left.mp, rel_zero_left, rel_zero_left.mp
 -/

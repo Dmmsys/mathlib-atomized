@@ -517,7 +517,9 @@ instance :
     one_mem' := Set.mem_iInter₂.mpr fun _ _ => one_mem _
     mulSaturated := by
       convert! Submonoid.MulSaturated.sInf (f := toSubmonoid '' f) (by simp)
-      ext; simp [Sub
+      ext; simp [Submonoid.mem_sInf] }
+
+@[to_additive]
 
 中文:
 实例 :
@@ -527,7 +529,9 @@ instance :
     one_mem' := Set.mem_iInter₂.mpr fun _ _ => one_mem _
     mulSaturated := by
       convert! Submonoid.MulSaturated.sInf (f := toSubmonoid '' f) (by simp)
-      ext; simp [Sub
+      ext; simp [Submonoid.mem_sInf] }
+
+@[to_additive]
 
 Depends on / 依赖: MulSaturated, Set.mem_iInter, Submonoid, Submonoid.MulSaturated.sInf, Submonoid.mem_sInf, carrier, convert, mem_sInf, mulSaturated, mul_mem, one_mem, toSubmonoid
 -/
@@ -765,7 +769,7 @@ theorem saturation_induction
 one_mem' := ⟨_ , mem 1 one_mem s⟩
     mul_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, mul _ _ _ _ hpx hpy⟩
     mulSaturated := fun x y ⟨_, hpxy⟩ => ⟨⟨_, (of_mul _ _ _ hpxy).1⟩, ⟨_, (of_mul _ _ _ hpxy).2⟩⟩ }
-.2 exact SaturatedSub
+.2 exact SaturatedSubmonoid.mem_sInf.mp hx s' (fun _ h => ⟨_, mem _ h⟩)
 
 中文:
 定理 saturation_induction
@@ -776,7 +780,7 @@ one_mem' := ⟨_ , mem 1 one_mem s⟩
 one_mem' := ⟨_ , mem 1 one_mem s⟩
     mul_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, mul _ _ _ _ hpx hpy⟩
     mulSaturated := fun x y ⟨_, hpxy⟩ => ⟨⟨_, (of_mul _ _ _ hpxy).1⟩, ⟨_, (of_mul _ _ _ hpxy).2⟩⟩ }
-.2 exact SaturatedSub
+.2 exact SaturatedSubmonoid.mem_sInf.mp hx s' (fun _ h => ⟨_, mem _ h⟩)
 
 Depends on / 依赖: SaturatedSubmonoid, SaturatedSubmonoid.mem_sInf.mp, carrier, mem_sInf, mulSaturated, mul_mem, of_mul, one_mem
 -/
@@ -814,7 +818,12 @@ theorem mem_saturation_iff
   | mem _ hx => exact ⟨1, by simpa⟩
   | mul _ _ _ _ ih₁ ih₂ =>
     exact ih₁.elim fun y₁ h₁ => ih₂.elim fun y₂ h₂ =>
-      ⟨y₁ * y₂, by rw [mul_mul_mul_comm]; 
+      ⟨y₁ * y₂, by rw [mul_mul_mul_comm]; exact mul_mem h₁ h₂⟩
+  | of_mul x₁ x₂ _ ih =>
+    exact ih.elim fun y h => ⟨⟨x₂ * y, by rwa [← mul_assoc]⟩,
+      ⟨x₁ * y, by rwa [mul_left_comm, ← mul_assoc]⟩⟩
+
+@[to_additive]
 
 中文:
 定理 mem_saturation_iff
@@ -825,7 +834,12 @@ theorem mem_saturation_iff
   | mem _ hx => exact ⟨1, by simpa⟩
   | mul _ _ _ _ ih₁ ih₂ =>
     exact ih₁.elim fun y₁ h₁ => ih₂.elim fun y₂ h₂ =>
-      ⟨y₁ * y₂, by rw [mul_mul_mul_comm]; 
+      ⟨y₁ * y₂, by rw [mul_mul_mul_comm]; exact mul_mem h₁ h₂⟩
+  | of_mul x₁ x₂ _ ih =>
+    exact ih.elim fun y h => ⟨⟨x₂ * y, by rwa [← mul_assoc]⟩,
+      ⟨x₁ * y, by rwa [mul_left_comm, ← mul_assoc]⟩⟩
+
+@[to_additive]
 
 Depends on / 依赖: ih.elim, le_toSubmonoid_saturation, mul_assoc, mul_left_comm, mul_mem, mul_mul_mul_comm, of_mul, s.saturation, saturation, saturation_induction
 -/

@@ -43,7 +43,8 @@ definition tensor
   relation
     | .inl ⟨r₁, g₂⟩ => Finsupp.embDomain (Function.Embedding.sectL relations₁.G g₂)
         (relations₁.relation r₁)
-    | .inr ⟨g₁, r₂⟩ => Finsupp.embDomain (Function.Embedding.sectR g₁ rel
+    | .inr ⟨g₁, r₂⟩ => Finsupp.embDomain (Function.Embedding.sectR g₁ relations₂.G)
+        (relations₂.relation r₂)
 
 中文:
 定义 tensor
@@ -53,7 +54,8 @@ definition tensor
   relation
     | .inl ⟨r₁, g₂⟩ => Finsupp.embDomain (Function.Embedding.sectL relations₁.G g₂)
         (relations₁.relation r₁)
-    | .inr ⟨g₁, r₂⟩ => Finsupp.embDomain (Function.Embedding.sectR g₁ rel
+    | .inr ⟨g₁, r₂⟩ => Finsupp.embDomain (Function.Embedding.sectR g₁ relations₂.G)
+        (relations₂.relation r₂)
 -/
 noncomputable def tensor :
     Relations A where
@@ -87,7 +89,10 @@ definition tensor
     · dsimp
       rw [Finsupp.linearCombination_embDomain]
       exact (solution₁.postcomp (curry (TensorProduct.comm A M₂ M₁).toLinearMap
-        (solution₂.var g₂))).li
+        (solution₂.var g₂))).linearCombination_var_relation r₁
+    · dsimp
+      rw [Finsupp.linearCombination_embDomain]
+      exact (solution₂.postcomp (curry .id (solution₁.var g₁))).linearCombination_var_relation r₂
 
 中文:
 定义 tensor
@@ -98,7 +103,10 @@ definition tensor
     · dsimp
       rw [Finsupp.linearCombination_embDomain]
       exact (solution₁.postcomp (curry (TensorProduct.comm A M₂ M₁).toLinearMap
-        (solution₂.var g₂))).li
+        (solution₂.var g₂))).linearCombination_var_relation r₁
+    · dsimp
+      rw [Finsupp.linearCombination_embDomain]
+      exact (solution₂.postcomp (curry .id (solution₁.var g₁))).linearCombination_var_relation r₂
 -/
 noncomputable def tensor : (relations₁.tensor relations₂).Solution (M₁ otimes[A] M₂) where
   var := fun ⟨g₁, g₂⟩ => solution₁.var g₁ otimesₜ solution₂.var g₂
@@ -128,7 +136,24 @@ definition isPresentationCoreTensor
           linearCombination_var_relation := fun r₂ => by
             erw [← Finsupp.linearCombination_embDomain A
               (Function.Embedding.sectR g₁ relations₂.G)]
-            exact s.linearComb
+            exact s.linearCombination_var_relation (.inr ⟨g₁, r₂⟩) }
+      linearCombination_var_relation := fun r₁ => h₂.postcomp_injective (by
+        ext g₂
+        dsimp
+        erw [Finsupp.apply_linearCombination A (LinearMap.applyₗ (solution₂.var g₂))]
+        have := s.linearCombination_var_relation (.inl ⟨r₁, g₂⟩)
+        erw [Finsupp.linearCombination_embDomain] at this
+        convert! this
+        ext g₁
+        simp) })
+  postcomp_desc _ := by aesop
+  postcomp_injective h := curry_injective (h₁.postcomp_injective (by
+    ext g₁ : 2
+    refine h₂.postcomp_injective ?_
+    ext g₂
+    exact congr_var h ⟨g₁, g₂⟩))
+
+include h₁ h₂ in
 
 中文:
 定义 isPresentationCoreTensor
@@ -139,7 +164,24 @@ definition isPresentationCoreTensor
           linearCombination_var_relation := fun r₂ => by
             erw [← Finsupp.linearCombination_embDomain A
               (Function.Embedding.sectR g₁ relations₂.G)]
-            exact s.linearComb
+            exact s.linearCombination_var_relation (.inr ⟨g₁, r₂⟩) }
+      linearCombination_var_relation := fun r₁ => h₂.postcomp_injective (by
+        ext g₂
+        dsimp
+        erw [Finsupp.apply_linearCombination A (LinearMap.applyₗ (solution₂.var g₂))]
+        have := s.linearCombination_var_relation (.inl ⟨r₁, g₂⟩)
+        erw [Finsupp.linearCombination_embDomain] at this
+        convert! this
+        ext g₁
+        simp) })
+  postcomp_desc _ := by aesop
+  postcomp_injective h := curry_injective (h₁.postcomp_injective (by
+    ext g₁ : 2
+    refine h₂.postcomp_injective ?_
+    ext g₂
+    exact congr_var h ⟨g₁, g₂⟩))
+
+include h₁ h₂ in
 
 Depends on / 依赖: uncurry
 -/

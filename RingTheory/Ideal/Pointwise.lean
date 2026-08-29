@@ -53,7 +53,7 @@ definition pointwiseDistribMulAction
   smul_zero _ := Ideal.map_bot
   smul_add _ I J := Ideal.map_sup _ I J
 
-scop
+scoped[Pointwise] attribute [instance] Ideal.pointwiseDistribMulAction
 
 中文:
 定义 pointwiseDistribMulAction
@@ -66,7 +66,7 @@ scop
   smul_zero _ := Ideal.map_bot
   smul_add _ I J := Ideal.map_sup _ I J
 
-scop
+scoped[Pointwise] attribute [instance] Ideal.pointwiseDistribMulAction
 -/
 protected def pointwiseDistribMulAction : DistribMulAction M (Ideal R) where
   smul a := Ideal.map (MulSemiringAction.toRingHom _ _ a)

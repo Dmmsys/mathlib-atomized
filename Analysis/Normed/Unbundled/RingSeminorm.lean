@@ -333,7 +333,11 @@ instance [DecidableEq
             · change _ <= ite _ _ _
               split_ifs
               exacts [le_rfl, zero_le_one]
-        · change ite _ _ _ <= ite _ _ _ * 
+        · change ite _ _ _ <= ite _ _ _ * ite _ _ _
+          simp only [if_false, h, left_ne_zero_of_mul h, right_ne_zero_of_mul h, mul_one,
+            le_refl] }⟩
+
+@[simp]
 
 中文:
 实例 [DecidableEq
@@ -345,7 +349,11 @@ instance [DecidableEq
             · change _ <= ite _ _ _
               split_ifs
               exacts [le_rfl, zero_le_one]
-        · change ite _ _ _ <= ite _ _ _ * 
+        · change ite _ _ _ <= ite _ _ _ * ite _ _ _
+          simp only [if_false, h, left_ne_zero_of_mul h, right_ne_zero_of_mul h, mul_one,
+            le_refl] }⟩
+
+@[simp]
 
 Depends on / 依赖: AddGroupSeminorm, exacts, if_false, if_pos, le_refl, le_rfl, left_ne_zero_of_mul, mul_le, mul_nonneg, mul_one, right_ne_zero_of_mul, split_ifs, trans_le, zero_le_one
 -/
@@ -401,7 +409,8 @@ theorem seminorm_one_eq_one_iff_ne_zero
   · exfalso
     refine h (ext fun x => (apply_nonneg _ _).antisymm' ?_)
     simpa only [hp0, mul_one, mul_zero] using map_mul_le_mul p x 1
-  · refi
+  · refine hp.antisymm ((le_mul_iff_one_le_left hp0).1 ?_)
+    simpa only [one_mul] using map_mul_le_mul p (1 : R) _
 
 中文:
 定理 seminorm_one_eq_one_iff_ne_zero
@@ -415,7 +424,8 @@ theorem seminorm_one_eq_one_iff_ne_zero
   · exfalso
     refine h (ext fun x => (apply_nonneg _ _).antisymm' ?_)
     simpa only [hp0, mul_one, mul_zero] using map_mul_le_mul p x 1
-  · refi
+  · refine hp.antisymm ((le_mul_iff_one_le_left hp0).1 ?_)
+    simpa only [one_mul] using map_mul_le_mul p (1 : R) _
 
 Depends on / 依赖: antisymm, apply_nonneg, eq_or_lt, hp.antisymm, le_mul_iff_one_le_left, map_mul_le_mul, mul_one, mul_zero, ne_zero_iff, ne_zero_iff.mpr, one_mul, one_ne_zero
 -/
@@ -564,7 +574,13 @@ theorem isBoundedUnder
     rw [← mul_one_div (s (ψ m) : Real)]; rw [rpow_mul (apply_nonneg p x)]; rw [rpow_natCast]
     grw [map_pow_le_pow' hp x]
   apply isBoundedUnder_of
-  cases le_or_gt (p
+  cases le_or_gt (p x) 1 with
+  | inl hfx =>
+    use 1, fun m => le_trans (h_le m) (rpow_le_one (by positivity) hfx (by positivity))
+  | inr hfx =>
+    use p x
+refine fun m => le_trans (h_le m) rpow_le_self_of_one_le hfx.le ?_
+    exact div_le_one_of_le₀ (mod_cast hs_le _) (cast_nonneg _)
 
 中文:
 定理 isBoundedUnder
@@ -575,7 +591,13 @@ theorem isBoundedUnder
     rw [← mul_one_div (s (ψ m) : Real)]; rw [rpow_mul (apply_nonneg p x)]; rw [rpow_natCast]
     grw [map_pow_le_pow' hp x]
   apply isBoundedUnder_of
-  cases le_or_gt (p
+  cases le_or_gt (p x) 1 with
+  | inl hfx =>
+    use 1, fun m => le_trans (h_le m) (rpow_le_one (by positivity) hfx (by positivity))
+  | inr hfx =>
+    use p x
+refine fun m => le_trans (h_le m) rpow_le_self_of_one_le hfx.le ?_
+    exact div_le_one_of_le₀ (mod_cast hs_le _) (cast_nonneg _)
 
 Depends on / 依赖: apply_nonneg, div_le_one_of_le, h_le, hfx.le, isBoundedUnder_of, le_or_gt, le_trans, map_pow_le_pow, mul_one_div, rpow_le_one, rpow_le_self_of_one_le, rpow_mul, rpow_natCast
 -/
@@ -1192,7 +1214,13 @@ definition mulRingNormEquivAbsoluteValue
     toFun := v.toFun
     map_zero' := (v.eq_zero' 0).mpr rfl
     add_le' := v.add_le'
-    neg' := v.m
+    neg' := v.map_neg
+    map_one' := v.map_one
+    map_mul' := v.map_mul'
+    eq_zero_of_map_eq_zero' x := (v.eq_zero' x).mp
+  }
+  left_inv N := by constructor
+  right_inv v := by ext1 x; simp
 
 中文:
 定义 mulRingNormEquivAbsoluteValue
@@ -1208,7 +1236,13 @@ definition mulRingNormEquivAbsoluteValue
     toFun := v.toFun
     map_zero' := (v.eq_zero' 0).mpr rfl
     add_le' := v.add_le'
-    neg' := v.m
+    neg' := v.map_neg
+    map_one' := v.map_one
+    map_mul' := v.map_mul'
+    eq_zero_of_map_eq_zero' x := (v.eq_zero' x).mp
+  }
+  left_inv N := by constructor
+  right_inv v := by ext1 x; simp
 -/
 def mulRingNormEquivAbsoluteValue : MulRingNorm R ≃ AbsoluteValue R Real where
   toFun N := {
@@ -1279,7 +1313,12 @@ definition RingSeminorm.toRingNorm
       have hc0 : f c = 0 := by
         rw [← mul_one c]; rw [← mul_inv_cancel₀ hn0]; rw [← mul_assoc]; rw [mul_comm c]; rw [mul_assoc]
         exact
-          le_antisym
+          le_antisymm
+            (le_trans (map_mul_le_mul f _ _)
+              (by rw [← RingSeminorm.toFun_eq_coe, ← AddGroupSeminorm.toFun_eq_coe, hx,
+                zero_mul]))
+            (apply_nonneg f _)
+      exact hc hc0 }
 
 中文:
 定义 环半范数.toRingNorm
@@ -1291,7 +1330,12 @@ definition RingSeminorm.toRingNorm
       have hc0 : f c = 0 := by
         rw [← mul_one c]; rw [← mul_inv_cancel₀ hn0]; rw [← mul_assoc]; rw [mul_comm c]; rw [mul_assoc]
         exact
-          le_antisym
+          le_antisymm
+            (le_trans (map_mul_le_mul f _ _)
+              (by rw [← RingSeminorm.toFun_eq_coe, ← AddGroupSeminorm.toFun_eq_coe, hx,
+                zero_mul]))
+            (apply_nonneg f _)
+      exact hc hc0 }
 
 Depends on / 依赖: AddGroupSeminorm, AddGroupSeminorm.toFun_eq_coe, RingSeminorm, RingSeminorm.ne_zero_iff.mp, RingSeminorm.toFun_eq_coe, apply_nonneg, eq_zero_of_map_eq_zero, le_antisymm, le_trans, map_mul_le_mul, mul_assoc, mul_comm, mul_one, ne_zero_iff, toFun_eq_coe, zero_mul
 -/

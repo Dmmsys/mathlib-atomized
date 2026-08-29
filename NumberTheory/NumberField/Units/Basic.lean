@@ -496,7 +496,9 @@ theorem mem_torsion
   rw [eq_iff_eq (x : K) 1]; rw [torsion]; rw [CommGroup.mem_torsion]
   refine ⟨fun hx φ => (((φ.comp <| algebraMap (𝓞 K) K).toMonoidHom.comp <|
     Units.coeHom _).isOfFinOrder hx).norm_eq_one, fun h => isOfFinOrder_iff_pow_eq_one.2 ?_⟩
-  obtain ⟨n, hn, hx⟩ := Embeddings.pow_eq_one_of_norm_eq_one
+  obtain ⟨n, hn, hx⟩ := Embeddings.pow_eq_one_of_norm_eq_one K Complex x.val.isIntegral_coe h
+  exact ⟨n, hn, by ext; rw [NumberField.RingOfIntegers.coe_eq_algebraMap, coe_pow, hx,
+    NumberField.RingOfIntegers.coe_eq_algebraMap, coe_one]⟩
 
 中文:
 定理 mem_torsion
@@ -505,7 +507,9 @@ theorem mem_torsion
   rw [eq_iff_eq (x : K) 1]; rw [torsion]; rw [CommGroup.mem_torsion]
   refine ⟨fun hx φ => (((φ.comp <| algebraMap (𝓞 K) K).toMonoidHom.comp <|
     Units.coeHom _).isOfFinOrder hx).norm_eq_one, fun h => isOfFinOrder_iff_pow_eq_one.2 ?_⟩
-  obtain ⟨n, hn, hx⟩ := Embeddings.pow_eq_one_of_norm_eq_one
+  obtain ⟨n, hn, hx⟩ := Embeddings.pow_eq_one_of_norm_eq_one K Complex x.val.isIntegral_coe h
+  exact ⟨n, hn, by ext; rw [NumberField.RingOfIntegers.coe_eq_algebraMap, coe_pow, hx,
+    NumberField.RingOfIntegers.coe_eq_algebraMap, coe_one]⟩
 
 Depends on / 依赖: CommGroup, CommGroup.mem_torsion, Embeddings, Embeddings.pow_eq_one_of_norm_eq_one, NumberField, NumberField.RingOfIntegers.coe_eq_algebraMap, RingOfIntegers, Units.coeHom, algebraMap, coeHom, coe_eq_algebraMap, coe_one, coe_pow, eq_iff_eq, isIntegral_coe, isOfFinOrder, isOfFinOrder_iff_pow_eq_one, mem_torsion, norm_eq_one, pow_eq_one_of_norm_eq_one
 -/
@@ -661,7 +665,10 @@ theorem rootsOfUnity_eq_one
   refine orderOf_eq_one_iff.mp (Nat.eq_one_of_dvd_coprimes hc ?_ ?_)
   · exact orderOf_dvd_of_pow_eq_one h
   · have hζ : ζ in torsion K := by
-      rw [torsion]; rw [CommGroup.mem_torsion]; rw [isOfFinOrder_iff_pow_eq_one
+      rw [torsion]; rw [CommGroup.mem_torsion]; rw [isOfFinOrder_iff_pow_eq_one]
+      exact ⟨k, k.prop, h⟩
+    rw [orderOf_submonoid (⟨ζ]; rw [hζ⟩ : torsion K)]
+    apply orderOf_dvd_natCard
 
 中文:
 定理 rootsOfUnity_eq_one
@@ -672,7 +679,10 @@ theorem rootsOfUnity_eq_one
   refine orderOf_eq_one_iff.mp (Nat.eq_one_of_dvd_coprimes hc ?_ ?_)
   · exact orderOf_dvd_of_pow_eq_one h
   · have hζ : ζ in torsion K := by
-      rw [torsion]; rw [CommGroup.mem_torsion]; rw [isOfFinOrder_iff_pow_eq_one
+      rw [torsion]; rw [CommGroup.mem_torsion]; rw [isOfFinOrder_iff_pow_eq_one]
+      exact ⟨k, k.prop, h⟩
+    rw [orderOf_submonoid (⟨ζ]; rw [hζ⟩ : torsion K)]
+    apply orderOf_dvd_natCard
 
 Depends on / 依赖: CommGroup, CommGroup.mem_torsion, Nat.eq_one_of_dvd_coprimes, eq_one_of_dvd_coprimes, isOfFinOrder_iff_pow_eq_one, k.prop, mem_rootsOfUnity, mem_torsion, one_pow, orderOf_dvd_natCard, orderOf_dvd_of_pow_eq_one, orderOf_eq_one_iff, orderOf_eq_one_iff.mp, orderOf_submonoid, torsion
 -/
@@ -734,7 +744,7 @@ theorem map_complexEmbedding_torsion
     exact map_rootsOfUnity _ (torsionOrder K)
   · let e := ((torsion K).equivMapOfInjective (Units.complexEmbedding φ)
       (Units.complexEmbedding_injective φ)).symm.toEquiv
-    rw [Complex.card_rootsOfUnity]; rw [Nat.card_
+    rw [Complex.card_rootsOfUnity]; rw [Nat.card_congr e]; rw [torsionOrder]
 
 中文:
 定理 map_complexEmbedding_torsion
@@ -745,7 +755,7 @@ theorem map_complexEmbedding_torsion
     exact map_rootsOfUnity _ (torsionOrder K)
   · let e := ((torsion K).equivMapOfInjective (Units.complexEmbedding φ)
       (Units.complexEmbedding_injective φ)).symm.toEquiv
-    rw [Complex.card_rootsOfUnity]; rw [Nat.card_
+    rw [Complex.card_rootsOfUnity]; rw [Nat.card_congr e]; rw [torsionOrder]
 
 Depends on / 依赖: Complex.card_rootsOfUnity, Nat.card_congr, Subgroup, Subgroup.eq_of_le_of_card_ge, Units.complexEmbedding, Units.complexEmbedding_injective, card_congr, card_rootsOfUnity, complexEmbedding, complexEmbedding_injective, eq_of_le_of_card_ge, equivMapOfInjective, map_rootsOfUnity, rootsOfUnity_eq_torsion, symm.toEquiv, toEquiv, torsion, torsionOrder
 -/
@@ -801,7 +811,11 @@ theorem torsion_eq_one_or_neg_one_of_odd_finrank
   · rw [← orderOf_units, ← orderOf_submonoid] at hc
     linarith [IsPrimitiveRoot.nrRealPlaces_eq_zero_of_two_lt hc (IsPrimitiveRoot.orderOf (x.1 : K)),
         NumberField.InfinitePlace.nrRealPlaces_pos_of_odd_finrank h]
-  · interval_cases hi : orderOf (
+  · interval_cases hi : orderOf (x : (𝓞 K)ˣ)
+    · linarith [orderOf_pos_iff.2 ((CommGroup.mem_torsion x.1).1 x.2)]
+    · exact Or.intro_left _ (orderOf_eq_one_iff.1 hi)
+    · rw [← orderOf_units, CharP.orderOf_eq_two_iff 0 (by decide)] at hi
+      simp [← Units.val_inj, ← Units.val_inj, Units.val_neg, Units.val_one, hi]
 
 中文:
 定理 torsion_eq_one_or_neg_one_of_odd_finrank
@@ -810,7 +824,11 @@ theorem torsion_eq_one_or_neg_one_of_odd_finrank
   · rw [← orderOf_units, ← orderOf_submonoid] at hc
     linarith [IsPrimitiveRoot.nrRealPlaces_eq_zero_of_two_lt hc (IsPrimitiveRoot.orderOf (x.1 : K)),
         NumberField.InfinitePlace.nrRealPlaces_pos_of_odd_finrank h]
-  · interval_cases hi : orderOf (
+  · interval_cases hi : orderOf (x : (𝓞 K)ˣ)
+    · linarith [orderOf_pos_iff.2 ((CommGroup.mem_torsion x.1).1 x.2)]
+    · exact Or.intro_left _ (orderOf_eq_one_iff.1 hi)
+    · rw [← orderOf_units, CharP.orderOf_eq_two_iff 0 (by decide)] at hi
+      simp [← Units.val_inj, ← Units.val_inj, Units.val_neg, Units.val_one, hi]
 
 Depends on / 依赖: CharP.orderOf_eq_two_iff, CommGroup, CommGroup.mem_torsion, InfinitePlace, IsPrimitiveRoot, IsPrimitiveRoot.nrRealPlaces_eq_zero_of_two_lt, IsPrimitiveRoot.orderOf, NumberField, NumberField.InfinitePlace.nrRealPlaces_pos_of_odd_finrank, Or.intro_left, Units.val_in, interval_cases, intro_left, mem_torsion, nrRealPlaces_eq_zero_of_two_lt, nrRealPlaces_pos_of_odd_finrank, orderOf, orderOf_eq_one_iff, orderOf_eq_two_iff, orderOf_pos_iff
 -/
@@ -838,7 +856,8 @@ theorem torsionOrder_eq_two_of_odd_finrank
   rw [torsionOrder]; rw [Nat.card_eq_fintype_card]
   refine (Finset.card_eq_two.2 ⟨1, ⟨-1, neg_one_mem_torsion⟩,
     by simp [← Subtype.coe_ne_coe], Finset.ext fun x => ⟨fun _ => ?_, fun _ => Finset.mem_univ _⟩⟩)
-  rw [Finset.mem_insert]; rw [Fins
+  rw [Finset.mem_insert]; rw [Finset.mem_singleton]; rw [← Subtype.val_inj]; rw [← Subtype.val_inj]
+  exact torsion_eq_one_or_neg_one_of_odd_finrank h x
 
 中文:
 定理 torsionOrder_eq_two_of_odd_finrank
@@ -849,7 +868,8 @@ theorem torsionOrder_eq_two_of_odd_finrank
   rw [torsionOrder]; rw [Nat.card_eq_fintype_card]
   refine (Finset.card_eq_two.2 ⟨1, ⟨-1, neg_one_mem_torsion⟩,
     by simp [← Subtype.coe_ne_coe], Finset.ext fun x => ⟨fun _ => ?_, fun _ => Finset.mem_univ _⟩⟩)
-  rw [Finset.mem_insert]; rw [Fins
+  rw [Finset.mem_insert]; rw [Finset.mem_singleton]; rw [← Subtype.val_inj]; rw [← Subtype.val_inj]
+  exact torsion_eq_one_or_neg_one_of_odd_finrank h x
 
 Depends on / 依赖: Finset, Finset.card_eq_two, Finset.ext, Finset.mem_insert, Finset.mem_singleton, Finset.mem_univ, Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, Subtype, Subtype.coe_ne_coe, Subtype.val_inj, card_eq_fintype_card, card_eq_two, classical, coe_ne_coe, mem_insert, mem_singleton, mem_univ, neg_one_mem_torsion
 -/

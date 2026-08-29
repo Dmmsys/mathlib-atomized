@@ -48,7 +48,13 @@ definition mkFinCons
     rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
   Basis.mk (v := Fin.cons y (N.subtype ∘ b))
     ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finCons' _ _
-      
+      (by
+        intro c x hx hc
+        rw [← span_b] at hx
+        exact hli c x hx hc))
+    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
+
+@[simp]
 
 中文:
 定义 mkFinCons
@@ -57,7 +63,13 @@ definition mkFinCons
     rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
   Basis.mk (v := Fin.cons y (N.subtype ∘ b))
     ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finCons' _ _
-      
+      (by
+        intro c x hx hc
+        rw [← span_b] at hx
+        exact hli c x hx hc))
+    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
+
+@[simp]
 
 Depends on / 依赖: Basis.mk, Fin.cons, N.subtype, Set.range, Set.range_comp, Submodule, Submodule.ker_subtype, Submodule.map_subtype_top, Submodule.mem_span_insert, Submodule.span, Submodule.span_image, b.linearIndependent.map, b.span_eq, finCons, ker_subtype, linearIndependent, map_subtype_top, mem_span_insert, range_comp, span_b
 -/
@@ -163,7 +175,13 @@ definition mkFinSnoc
     rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
   Basis.mk (v := Fin.snoc (N.subtype ∘ b) y)
     ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finSnoc' _ _
-      
+      (by
+        intro c x hx hc
+        rw [← span_b] at hx
+        exact hli c x hx hc))
+    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
+
+@[simp]
 
 中文:
 定义 mkFinSnoc
@@ -172,7 +190,13 @@ definition mkFinSnoc
     rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
   Basis.mk (v := Fin.snoc (N.subtype ∘ b) y)
     ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finSnoc' _ _
-      
+      (by
+        intro c x hx hc
+        rw [← span_b] at hx
+        exact hli c x hx hc))
+    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
+
+@[simp]
 
 Depends on / 依赖: Basis.mk, Fin.snoc, N.subtype, Set.range, Set.range_comp, Submodule, Submodule.ker_subtype, Submodule.map_subtype_top, Submodule.mem_span_insert, Submodule.span, Submodule.span_image, b.linearIndependent.map, b.span_eq, finSnoc, ker_subtype, linearIndependent, map_subtype_top, mem_span_insert, range_comp, span_b
 -/

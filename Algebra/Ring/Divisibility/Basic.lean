@@ -85,7 +85,7 @@ theorem MulEquiv.decompositionMonoid
     obtain ⟨a₁, a₂, h⟩ := DecompositionMonoid.primal _ h
     refine ⟨EquivLike.inv f a₁, EquivLike.inv f a₂, ?_⟩
     simp_rw [← map_dvd_iff f, EquivLike.apply_inv_apply, h, true_and, ← EquivLike.apply_eq_iff_eq f,
-      h.2.2, map_mul, EquivLike.apply_i
+      h.2.2, map_mul, EquivLike.apply_inv_apply]
 
 中文:
 定理 乘法等价.decompositionMonoid
@@ -96,7 +96,7 @@ theorem MulEquiv.decompositionMonoid
     obtain ⟨a₁, a₂, h⟩ := DecompositionMonoid.primal _ h
     refine ⟨EquivLike.inv f a₁, EquivLike.inv f a₂, ?_⟩
     simp_rw [← map_dvd_iff f, EquivLike.apply_inv_apply, h, true_and, ← EquivLike.apply_eq_iff_eq f,
-      h.2.2, map_mul, EquivLike.apply_i
+      h.2.2, map_mul, EquivLike.apply_inv_apply]
 
 Depends on / 依赖: DecompositionMonoid, DecompositionMonoid.primal, EquivLike, EquivLike.apply_eq_iff_eq, EquivLike.apply_inv_apply, EquivLike.inv, apply_eq_iff_eq, apply_inv_apply, map_dvd_iff, map_mul, primal, simp_rw, true_and
 -/

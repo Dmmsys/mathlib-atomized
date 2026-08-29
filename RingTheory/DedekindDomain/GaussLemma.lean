@@ -63,7 +63,16 @@ theorem gaussNorm_lt_one_iff_contentIdeal_le
   simp only [gaussNorm, hsupp_nonempty, ↓reduceDIte, one_pow, mul_one, contentIdeal, Ideal.span_le,
     Set.subset_def, SetLike.mem_coe, ← v.intAdicAbv_lt_one_iff hb]
   constructor
-  · 
+  · contrapose!
+    simp only [mem_coeffs_iff, mem_support_iff, ↓existsAndEq, and_true, forall_exists_index,
+      and_imp]
+    intro _ h1 h2
+    exact Finset.le_sup'_of_le (fun n => (v.intAdicAbv hb) (p.coeff n)) (by simp [h1]) h2
+  · intro h
+    rw [Finset.sup'_lt_iff]
+    intro n hn
+    rw [mem_support_iff] at hn
+exact h _ p.coeff_mem_coeffs hn
 
 中文:
 定理 gaussNorm_lt_one_iff_contentIdeal_le
@@ -74,7 +83,16 @@ theorem gaussNorm_lt_one_iff_contentIdeal_le
   simp only [gaussNorm, hsupp_nonempty, ↓reduceDIte, one_pow, mul_one, contentIdeal, Ideal.span_le,
     Set.subset_def, SetLike.mem_coe, ← v.intAdicAbv_lt_one_iff hb]
   constructor
-  · 
+  · contrapose!
+    simp only [mem_coeffs_iff, mem_support_iff, ↓existsAndEq, and_true, forall_exists_index,
+      and_imp]
+    intro _ h1 h2
+    exact Finset.le_sup'_of_le (fun n => (v.intAdicAbv hb) (p.coeff n)) (by simp [h1]) h2
+  · intro h
+    rw [Finset.sup'_lt_iff]
+    intro n hn
+    rw [mem_support_iff] at hn
+exact h _ p.coeff_mem_coeffs hn
 
 Depends on / 依赖: Finset, Finset.le_sup, Ideal.span_le, Nonempty, Set.subset_def, SetLike, SetLike.mem_coe, _of_le, and_imp, and_true, contentIdeal, contrapose, existsAndEq, forall_exists_index, gaussNorm, hsupp_nonempty, intAdicAbv, intAdicAbv_lt_one_iff, le_sup, mem_coe
 -/

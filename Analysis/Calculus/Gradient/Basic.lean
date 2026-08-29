@@ -231,7 +231,9 @@ alias ⟨HasGradientWithinAt.hasFDerivWithinAt, _⟩ := hasGradientWithinAt_iff_
 
 alias ⟨HasFDerivWithinAt.hasGradientWithinAt, _⟩ := hasFDerivWithinAt_iff_hasGradientWithinAt
 
-alias ⟨HasGradientAt.hasF
+alias ⟨HasGradientAt.hasFDerivAt, _⟩ := hasGradientAt_iff_hasFDerivAt
+
+alias ⟨HasFDerivAt.hasGradientAt, _⟩ := hasFDerivAt_iff_hasGradientAt
 
 中文:
 定理 hasFDerivAt_iff_hasGradientAt
@@ -243,7 +245,9 @@ alias ⟨HasGradientWithinAt.hasFDerivWithinAt, _⟩ := hasGradientWithinAt_iff_
 
 alias ⟨HasFDerivWithinAt.hasGradientWithinAt, _⟩ := hasFDerivWithinAt_iff_hasGradientWithinAt
 
-alias ⟨HasGradientAt.hasF
+alias ⟨HasGradientAt.hasFDerivAt, _⟩ := hasGradientAt_iff_hasFDerivAt
+
+alias ⟨HasFDerivAt.hasGradientAt, _⟩ := hasFDerivAt_iff_hasGradientAt
 
 Depends on / 依赖: apply_symm_apply, frechet, hasGradientAt_iff_hasFDerivAt, toDual
 -/

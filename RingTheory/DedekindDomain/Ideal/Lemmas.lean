@@ -272,7 +272,7 @@ theorem prime_span_singleton_iff
   · rw [Set.singleton_zero, span_zero, ← zero_eq_bot, ← not_iff_not]
     simp only [not_prime_zero, not_false_eq_true]
   · have ha' : span {a} != ⊥ := by simpa only [ne_eq, span_singleton_eq_bot] using ha
-    rw [prime_iff_isPrime ha']; rw [span_singleton_prime
+    rw [prime_iff_isPrime ha']; rw [span_singleton_prime ha]
 
 中文:
 定理 prime_span_singleton_iff
@@ -283,7 +283,7 @@ theorem prime_span_singleton_iff
   · rw [Set.singleton_zero, span_zero, ← zero_eq_bot, ← not_iff_not]
     simp only [not_prime_zero, not_false_eq_true]
   · have ha' : span {a} != ⊥ := by simpa only [ne_eq, span_singleton_eq_bot] using ha
-    rw [prime_iff_isPrime ha']; rw [span_singleton_prime
+    rw [prime_iff_isPrime ha']; rw [span_singleton_prime ha]
 
 Depends on / 依赖: Set.singleton_zero, eq_or_ne, ne_eq, not_false_eq_true, not_iff_not, not_prime_zero, prime_iff_isPrime, singleton_zero, span_singleton_eq_bot, span_singleton_prime, span_zero, zero_eq_bot
 -/
@@ -339,6 +339,7 @@ theorem mem_primesOver_iff_mem_normalizedFactors
   rw [primesOver]; rw [Set.mem_ofPred_eq]; rw [mem_normalizedFactors_iff (map_ne_bot_of_ne_bot hp)]; rw [liesOver_iff]; rw [under_def]; rw [and_congr_right_iff]; rw [map_le_iff_le_comap]
   intro hP
   refine ⟨fun h => le_of_eq h, fun h' => ((IsCoatom.le_iff_eq (isMaximal_def.mp h) ?_).mp h').symm⟩
+  exact comap_ne_top (algebraMap R A) (IsPrime.ne_top hP)
 
 中文:
 定理 mem_primesOver_iff_mem_normalizedFactors
@@ -347,6 +348,7 @@ theorem mem_primesOver_iff_mem_normalizedFactors
   rw [primesOver]; rw [Set.mem_ofPred_eq]; rw [mem_normalizedFactors_iff (map_ne_bot_of_ne_bot hp)]; rw [liesOver_iff]; rw [under_def]; rw [and_congr_right_iff]; rw [map_le_iff_le_comap]
   intro hP
   refine ⟨fun h => le_of_eq h, fun h' => ((IsCoatom.le_iff_eq (isMaximal_def.mp h) ?_).mp h').symm⟩
+  exact comap_ne_top (algebraMap R A) (IsPrime.ne_top hP)
 
 Depends on / 依赖: IsCoatom, IsCoatom.le_iff_eq, IsPrime, IsPrime.ne_top, Set.mem_ofPred_eq, algebraMap, and_congr_right_iff, comap_ne_top, isMaximal_def, isMaximal_def.mp, le_iff_eq, le_of_eq, liesOver_iff, map_le_iff_le_comap, map_ne_bot_of_ne_bot, mem_normalizedFactors_iff, mem_ofPred_eq, ne_top, primesOver, under_def
 -/
@@ -440,7 +442,9 @@ theorem eq_prime_pow_of_succ_lt_of_le
   have h1 : I != ⊥ := (lt_of_le_of_lt bot_le hlt).ne'
   have := pow_ne_zero i hP
   have h3 := pow_ne_zero (i + 1) hP
-  rw [← dvdNotUnit_iff_lt]; rw [dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors h1 h3]; rw [normali
+  rw [← dvdNotUnit_iff_lt]; rw [dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors h1 h3]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible P_prime'.irreducible]; rw [Multiset.nsmul_singleton]; rw [Multiset.lt_replicate_succ] at hlt
+  rw [← dvd_iff_le]; rw [dvd_iff_normalizedFactors_le_normalizedFactors]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible P_prime'.irreducible]; rw [Multiset.nsmul_singleton]
+  all_goals assumption
 
 中文:
 定理 eq_prime_pow_of_succ_lt_of_le
@@ -451,7 +455,9 @@ theorem eq_prime_pow_of_succ_lt_of_le
   have h1 : I != ⊥ := (lt_of_le_of_lt bot_le hlt).ne'
   have := pow_ne_zero i hP
   have h3 := pow_ne_zero (i + 1) hP
-  rw [← dvdNotUnit_iff_lt]; rw [dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors h1 h3]; rw [normali
+  rw [← dvdNotUnit_iff_lt]; rw [dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors h1 h3]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible P_prime'.irreducible]; rw [Multiset.nsmul_singleton]; rw [Multiset.lt_replicate_succ] at hlt
+  rw [← dvd_iff_le]; rw [dvd_iff_normalizedFactors_le_normalizedFactors]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible P_prime'.irreducible]; rw [Multiset.nsmul_singleton]
+  all_goals assumption
 
 Depends on / 依赖: Multiset, Multiset.lt_replicate_succ, Multiset.nsmul_singleton, P_prime, bot_le, dvdNotUnit_iff_lt, dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors, dvd_iff_le, dvd_iff_normalizedFactors_le_normalizedFactor, irreducible, le_antisymm, lt_of_le_of_lt, lt_replicate_succ, normalizedFactors_irreducible, normalizedFactors_pow, nsmul_singleton, pow_ne_zero, prime_of_isPrime
 -/
@@ -602,7 +608,28 @@ theorem exist_integer_multiples_notMem
   have hI0 : I != 0 := spanFinset_ne_zero.mpr ⟨j, hjs, hjf⟩
   -- We claim the multiplier `a` we're looking for is in `I⁻¹ \ (J / I)`.
   suffices ↑J / I < I⁻¹ by
-    obtain ⟨_, a, hI, hpI
+    obtain ⟨_, a, hI, hpI⟩ := SetLike.lt_iff_le_and_exists.mp this
+    rw [mem_inv_iff hI0] at hI
+    refine ⟨a, fun i hi => ?_, ?_⟩
+    -- By definition, `a ∈ I⁻¹` multiplies elements of `I` into elements of `1`,
+    -- in other words, `a * f i` is an integer.
+    · exact (mem_one_iff _).mp (hI (f i) (Submodule.subset_span (Set.mem_image_of_mem f hi)))
+    · contrapose! hpI
+      -- And if all `a`-multiples of `I` are an element of `J`,
+      -- then `a` is actually an element of `J / I`, contradiction.
+      refine (mem_div_iff_of_ne_zero hI0).mpr fun y hy => Submodule.span_induction ?_ ?_ ?_ ?_ hy
+      · rintro _ ⟨i, hi, rfl⟩; exact hpI i hi
+      · rw [mul_zero]; exact Submodule.zero_mem _
+      · intro x y _ _ hx hy; rw [mul_add]; exact Submodule.add_mem _ hx hy
+      · intro b x _ hx; rw [mul_smul_comm]; exact Submodule.smul_mem _ b hx
+  -- To show the inclusion of `J / I` into `I⁻¹ = 1 / I`, note that `J < I`.
+  rw [div_eq_mul_inv]
+  refine mul_lt_of_lt_one_left (by simpa [pos_iff_ne_zero]) ?_
+  rw [← coeIdeal_top]
+  -- And multiplying by `I⁻¹` is indeed strictly monotone.
+  exact
+    strictMono_of_le_iff_le (fun _ _ => (coeIdeal_le_coeIdeal K).symm)
+      (lt_top_iff_ne_top.mpr hJ)
 
 中文:
 定理 exist_integer_multiples_notMem
@@ -613,7 +640,28 @@ theorem exist_integer_multiples_notMem
   have hI0 : I != 0 := spanFinset_ne_zero.mpr ⟨j, hjs, hjf⟩
   -- We claim the multiplier `a` we're looking for is in `I⁻¹ \ (J / I)`.
   suffices ↑J / I < I⁻¹ by
-    obtain ⟨_, a, hI, hpI
+    obtain ⟨_, a, hI, hpI⟩ := SetLike.lt_iff_le_and_exists.mp this
+    rw [mem_inv_iff hI0] at hI
+    refine ⟨a, fun i hi => ?_, ?_⟩
+    -- By definition, `a ∈ I⁻¹` multiplies elements of `I` into elements of `1`,
+    -- in other words, `a * f i` is an integer.
+    · exact (mem_one_iff _).mp (hI (f i) (Submodule.subset_span (Set.mem_image_of_mem f hi)))
+    · contrapose! hpI
+      -- And if all `a`-multiples of `I` are an element of `J`,
+      -- then `a` is actually an element of `J / I`, contradiction.
+      refine (mem_div_iff_of_ne_zero hI0).mpr fun y hy => Submodule.span_induction ?_ ?_ ?_ ?_ hy
+      · rintro _ ⟨i, hi, rfl⟩; exact hpI i hi
+      · rw [mul_zero]; exact Submodule.zero_mem _
+      · intro x y _ _ hx hy; rw [mul_add]; exact Submodule.add_mem _ hx hy
+      · intro b x _ hx; rw [mul_smul_comm]; exact Submodule.smul_mem _ b hx
+  -- To show the inclusion of `J / I` into `I⁻¹ = 1 / I`, note that `J < I`.
+  rw [div_eq_mul_inv]
+  refine mul_lt_of_lt_one_left (by simpa [pos_iff_ne_zero]) ?_
+  rw [← coeIdeal_top]
+  -- And multiplying by `I⁻¹` is indeed strictly monotone.
+  exact
+    strictMono_of_le_iff_le (fun _ _ => (coeIdeal_le_coeIdeal K).symm)
+      (lt_top_iff_ne_top.mpr hJ)
 -/
 theorem exist_integer_multiples_notMem {J : Ideal A} (hJ : J != ⊤) {ι : Type*} (s : Finset ι)
     (f : ι -> K) {j} (hjs : j in s) (hjf : f j != 0) :
@@ -661,7 +709,9 @@ lemma mul_iInf
   have H : ⨅ i, I * J i <= I := (iInf_le _ (Nonempty.some ‹_›)).trans mul_le_left
   obtain ⟨K, hK⟩ := dvd_iff_le.mpr H
   grw [hK, le_iInf (a := K) fun i => ?_]
-  rw [← mul_le_mul_iff_of_pos_le
+  rw [← mul_le_mul_iff_of_pos_left (a := I)]; rw [← hK]
+  · exact iInf_le _ _
+  · exact bot_lt_iff_ne_bot.mpr hI
 
 中文:
 引理 mul_iInf
@@ -673,7 +723,9 @@ lemma mul_iInf
   have H : ⨅ i, I * J i <= I := (iInf_le _ (Nonempty.some ‹_›)).trans mul_le_left
   obtain ⟨K, hK⟩ := dvd_iff_le.mpr H
   grw [hK, le_iInf (a := K) fun i => ?_]
-  rw [← mul_le_mul_iff_of_pos_le
+  rw [← mul_le_mul_iff_of_pos_left (a := I)]; rw [← hK]
+  · exact iInf_le _ _
+  · exact bot_lt_iff_ne_bot.mpr hI
 
 Depends on / 依赖: Nonempty, Nonempty.some, antisymm, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, dvd_iff_le, dvd_iff_le.mpr, iInf_le, le_iInf, mul_le_left, mul_le_mul_iff_of_pos_left, mul_mono_right
 -/
@@ -824,7 +876,15 @@ theorem sup_mul_inf
     rw [gcd_eq_normalize _ _]; rw [normalize_eq]
     · rw [dvd_iff_le, sup_le_iff, ← dvd_iff_le, ← dvd_iff_le]
       exact ⟨gcd_dvd_left _ _, gcd_dvd_right _ _⟩
-    · rw [dvd_gcd_iff, dvd_iff_le
+    · rw [dvd_gcd_iff, dvd_iff_le, dvd_iff_le]
+      simp
+  have hlcm : lcm I J = I ⊓ J := by
+    rw [lcm_eq_normalize _ _]; rw [normalize_eq]
+    · rw [lcm_dvd_iff, dvd_iff_le, dvd_iff_le]
+      simp
+    · rw [dvd_iff_le, le_inf_iff, ← dvd_iff_le, ← dvd_iff_le]
+      exact ⟨dvd_lcm_left _ _, dvd_lcm_right _ _⟩
+  rw [← hgcd]; rw [← hlcm]; rw [associated_iff_eq.mp (gcd_mul_lcm _ _)]
 
 中文:
 定理 sup_mul_inf
@@ -836,7 +896,15 @@ theorem sup_mul_inf
     rw [gcd_eq_normalize _ _]; rw [normalize_eq]
     · rw [dvd_iff_le, sup_le_iff, ← dvd_iff_le, ← dvd_iff_le]
       exact ⟨gcd_dvd_left _ _, gcd_dvd_right _ _⟩
-    · rw [dvd_gcd_iff, dvd_iff_le
+    · rw [dvd_gcd_iff, dvd_iff_le, dvd_iff_le]
+      simp
+  have hlcm : lcm I J = I ⊓ J := by
+    rw [lcm_eq_normalize _ _]; rw [normalize_eq]
+    · rw [lcm_dvd_iff, dvd_iff_le, dvd_iff_le]
+      simp
+    · rw [dvd_iff_le, le_inf_iff, ← dvd_iff_le, ← dvd_iff_le]
+      exact ⟨dvd_lcm_left _ _, dvd_lcm_right _ _⟩
+  rw [← hgcd]; rw [← hlcm]; rw [associated_iff_eq.mp (gcd_mul_lcm _ _)]
 
 Depends on / 依赖: UniqueFactorizationMonoid, UniqueFactorizationMonoid.toNormalizedGCDMonoid, dvd_gcd_iff, dvd_iff_le, dvd_lcm_lef, gcd_dvd_left, gcd_dvd_right, gcd_eq_normalize, lcm_dvd_iff, lcm_eq_normalize, le_inf_iff, normalize_eq, sup_le_iff, toNormalizedGCDMonoid
 -/
@@ -868,7 +936,13 @@ instance :
     gcd_dvd_right := fun _ _ => by simpa only [dvd_iff_le] using le_sup_right
     dvd_gcd := by
       simp only [dvd_iff_le]
-      exact fun h1 h2 => @sup_le (Ideal A) _ _ 
+      exact fun h1 h2 => @sup_le (Ideal A) _ _ _ _ h1 h2
+    lcm := (· ⊓ ·)
+    lcm_zero_left := fun _ => by simp only [zero_eq_bot, bot_inf_eq]
+    lcm_zero_right := fun _ => by simp only [zero_eq_bot, inf_bot_eq]
+    gcd_mul_lcm := fun _ _ => by rw [associated_iff_eq, sup_mul_inf]
+    normalize_gcd := fun _ _ => normalize_eq _
+    normalize_lcm := fun _ _ => normalize_eq _ }
 
 中文:
 实例 :
@@ -879,7 +953,13 @@ instance :
     gcd_dvd_right := fun _ _ => by simpa only [dvd_iff_le] using le_sup_right
     dvd_gcd := by
       simp only [dvd_iff_le]
-      exact fun h1 h2 => @sup_le (Ideal A) _ _ 
+      exact fun h1 h2 => @sup_le (Ideal A) _ _ _ _ h1 h2
+    lcm := (· ⊓ ·)
+    lcm_zero_left := fun _ => by simp only [zero_eq_bot, bot_inf_eq]
+    lcm_zero_right := fun _ => by simp only [zero_eq_bot, inf_bot_eq]
+    gcd_mul_lcm := fun _ _ => by rw [associated_iff_eq, sup_mul_inf]
+    normalize_gcd := fun _ _ => normalize_eq _
+    normalize_lcm := fun _ _ => normalize_eq _ }
 
 Depends on / 依赖: associated_iff_eq, bot_inf_eq, dvd_gcd, dvd_iff_le, gcd_dvd_left, gcd_dvd_right, gcd_mul_lcm, inf_bot_eq, lcm_zero_left, lcm_zero_right, le_sup_left, le_sup_right, normali, strongNormalizationMonoid, sup_le, sup_mul_inf, zero_eq_bot
 -/
@@ -975,7 +1055,7 @@ theorem factors_span_eq
   have : forall q in (factors p).map (fun q => span {q}), Prime q := fun q hq => by
     obtain ⟨r, hr, rfl⟩ := Multiset.mem_map.mp hq
 exact prime_span_singleton_iff.mpr prime_of_factor r hr
-  rw [← spa
+  rw [← span_singleton_eq_span_singleton.mpr (factors_prod hp)]; rw [← multiset_prod_span_singleton]; rw [factors_eq_normalizedFactors]; rw [normalizedFactors_prod_of_prime this]
 
 中文:
 定理 factors_span_eq
@@ -986,7 +1066,7 @@ exact prime_span_singleton_iff.mpr prime_of_factor r hr
   have : forall q in (factors p).map (fun q => span {q}), Prime q := fun q hq => by
     obtain ⟨r, hr, rfl⟩ := Multiset.mem_map.mp hq
 exact prime_span_singleton_iff.mpr prime_of_factor r hr
-  rw [← spa
+  rw [← span_singleton_eq_span_singleton.mpr (factors_prod hp)]; rw [← multiset_prod_span_singleton]; rw [factors_eq_normalizedFactors]; rw [normalizedFactors_prod_of_prime this]
 
 Depends on / 依赖: Multiset, Multiset.mem_map.mp, Set.singleton_zero, eq_or_ne, factors, factors_eq_normalizedFactors, factors_prod, mem_map, multiset_prod_span_singleton, normalizedFactors_prod_of_prime, normalizedFactors_zero, prime_of_factor, prime_span_singleton_iff, prime_span_singleton_iff.mpr, singleton_zero, span_singleton_eq_span_singleton, span_singleton_eq_span_singleton.mpr
 -/
@@ -1009,7 +1089,11 @@ lemma FractionalIdeal.sup_mul_inf
   apply mul_left_injective₀ (b := spanSingleton A⁰ (algebraMap A K
     (I.den.1 * I.den.1 * J.den.1 * J.den.1))) (by simp [spanSingleton_eq_zero_iff])
   have := Ideal.sup_mul_inf (Ideal.span {J.den.1} * I.num) (Ideal.span {I.den.1} * J.num)
-  simp only [← coeIdeal_inj (K := K), coeIdeal_mul, coeI
+  simp only [← coeIdeal_inj (K := K), coeIdeal_mul, coeIdeal_sup, coeIdeal_inf,
+    ← den_mul_self_eq_num', coeIdeal_span_singleton] at this
+  rw [mul_left_comm]; rw [← mul_add]; rw [← mul_add]; rw [← mul_inf₀ (FractionalIdeal.zero_le _)]; rw [← mul_inf₀ (FractionalIdeal.zero_le _)] at this
+  simp only [FractionalIdeal.sup_eq_add, _root_.map_mul, ← spanSingleton_mul_spanSingleton]
+  convert! this using 1 <;> ring
 
 中文:
 引理 FractionalIdeal.sup_mul_inf
@@ -1018,7 +1102,11 @@ lemma FractionalIdeal.sup_mul_inf
   apply mul_left_injective₀ (b := spanSingleton A⁰ (algebraMap A K
     (I.den.1 * I.den.1 * J.den.1 * J.den.1))) (by simp [spanSingleton_eq_zero_iff])
   have := Ideal.sup_mul_inf (Ideal.span {J.den.1} * I.num) (Ideal.span {I.den.1} * J.num)
-  simp only [← coeIdeal_inj (K := K), coeIdeal_mul, coeI
+  simp only [← coeIdeal_inj (K := K), coeIdeal_mul, coeIdeal_sup, coeIdeal_inf,
+    ← den_mul_self_eq_num', coeIdeal_span_singleton] at this
+  rw [mul_left_comm]; rw [← mul_add]; rw [← mul_add]; rw [← mul_inf₀ (FractionalIdeal.zero_le _)]; rw [← mul_inf₀ (FractionalIdeal.zero_le _)] at this
+  simp only [FractionalIdeal.sup_eq_add, _root_.map_mul, ← spanSingleton_mul_spanSingleton]
+  convert! this using 1 <;> ring
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.zero_le, I.den, I.num, Ideal.span, Ideal.sup_mul_inf, J.den, J.num, algebraMap, coeIdeal_inf, coeIdeal_inj, coeIdeal_mul, coeIdeal_span_singleton, coeIdeal_sup, den_mul_self_eq_num, mul_add, mul_left_comm, spanSingleton, spanSingleton_eq_zero_iff, sup_mul_inf
 -/
@@ -1116,7 +1204,16 @@ theorem sup_eq_prod_inf_factors
   · rw [sup_le_iff, ← dvd_iff_le, ← dvd_iff_le]
     constructor <;>
       rw [dvd_iff_normalizedFactors_le_normalizedFactors this (by assumption)]; rw [normalizedFactors_prod_inter_eq_inter]
-    exacts [inf_le_left, inf_le_rig
+    exacts [inf_le_left, inf_le_right]
+  · rw [← dvd_iff_le, dvd_iff_normalizedFactors_le_normalizedFactors ?H this,
+      normalizedFactors_prod_inter_eq_inter, le_iff_count]
+    case H => exact ne_bot_of_le_ne_bot hI le_sup_left
+    intro a
+    rw [Multiset.count_inter]
+    exact le_min (count_le_of_ideal_ge le_sup_left hI a) (count_le_of_ideal_ge le_sup_right hJ a)
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.sup_eq_prod_inf_factors := sup_eq_prod_inf_factors
 
 中文:
 定理 sup_eq_prod_inf_factors
@@ -1127,7 +1224,16 @@ theorem sup_eq_prod_inf_factors
   · rw [sup_le_iff, ← dvd_iff_le, ← dvd_iff_le]
     constructor <;>
       rw [dvd_iff_normalizedFactors_le_normalizedFactors this (by assumption)]; rw [normalizedFactors_prod_inter_eq_inter]
-    exacts [inf_le_left, inf_le_rig
+    exacts [inf_le_left, inf_le_right]
+  · rw [← dvd_iff_le, dvd_iff_normalizedFactors_le_normalizedFactors ?H this,
+      normalizedFactors_prod_inter_eq_inter, le_iff_count]
+    case H => exact ne_bot_of_le_ne_bot hI le_sup_left
+    intro a
+    rw [Multiset.count_inter]
+    exact le_min (count_le_of_ideal_ge le_sup_left hI a) (count_le_of_ideal_ge le_sup_right hJ a)
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.sup_eq_prod_inf_factors := sup_eq_prod_inf_factors
 
 Depends on / 依赖: Multiset, Multiset.count_inter, count_inter, dvd_iff_le, dvd_iff_normalizedFactors_le_normalizedFactors, exacts, inf_le_left, inf_le_right, le_antisymm, le_iff_count, le_sup_left, ne_bot_of_le_ne_bot, normalizedFactors_prod_inter_eq_inter, prod_inter_normalizedFactors_ne_zero, sup_le_iff
 -/
@@ -1231,7 +1337,11 @@ theorem irreducible_pow_sup_of_ge
     rw [← emultiplicity_lt_top]
     apply hn.trans_lt
     simp
-  · rw
+  · rw [emultiplicity_eq_count_normalizedFactors hJ hI, normalize_eq J] at hn
+    exact_mod_cast hn
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.irreducible_pow_sup_of_ge := irreducible_pow_sup_of_ge
 
 中文:
 定理 irreducible_pow_sup_of_ge
@@ -1243,7 +1353,11 @@ theorem irreducible_pow_sup_of_ge
     rw [← emultiplicity_lt_top]
     apply hn.trans_lt
     simp
-  · rw
+  · rw [emultiplicity_eq_count_normalizedFactors hJ hI, normalize_eq J] at hn
+    exact_mod_cast hn
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.irreducible_pow_sup_of_ge := irreducible_pow_sup_of_ge
 
 Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.emultiplicity_eq_multiplicity, Nat.cast_inj, cast_inj, emultiplicity_eq_count_normalizedFactors, emultiplicity_eq_multiplicity, emultiplicity_lt_top, hn.trans_lt, irreducible_pow_sup, min_eq_left, normalize_eq, trans_lt
 -/
@@ -1272,7 +1386,9 @@ theorem eq_prime_pow_mul_coprime
   constructor
   · refine P.sup_multiset_prod_eq_top (fun p hpi => ?_)
     have hp : Prime p := prime_of_normalized_factor p (filter_subset _ (normalizedFactors I) hpi)
-    exact hpm.coprime_of_ne ((isPrime_of_prime hp).isMaximal hp.ne_zero) (of_
+    exact hpm.coprime_of_ne ((isPrime_of_prime hp).isMaximal hp.ne_zero) (of_mem_filter hpi)
+  · nth_rw 1 [← prod_normalizedFactors_eq_self hI, ← filter_add_not (P = ·) (normalizedFactors I)]
+    rw [prod_add]; rw [pow_count]
 
 中文:
 定理 eq_prime_pow_mul_coprime
@@ -1282,7 +1398,9 @@ theorem eq_prime_pow_mul_coprime
   constructor
   · refine P.sup_multiset_prod_eq_top (fun p hpi => ?_)
     have hp : Prime p := prime_of_normalized_factor p (filter_subset _ (normalizedFactors I) hpi)
-    exact hpm.coprime_of_ne ((isPrime_of_prime hp).isMaximal hp.ne_zero) (of_
+    exact hpm.coprime_of_ne ((isPrime_of_prime hp).isMaximal hp.ne_zero) (of_mem_filter hpi)
+  · nth_rw 1 [← prod_normalizedFactors_eq_self hI, ← filter_add_not (P = ·) (normalizedFactors I)]
+    rw [prod_add]; rw [pow_count]
 
 Depends on / 依赖: P.sup_multiset_prod_eq_top, coprime_of_ne, filter, filter_add_not, filter_subset, hp.ne_zero, hpm.coprime_of_ne, isMaximal, isPrime_of_prime, ne_zero, normalizedFactors, nth_rw, of_mem_filter, pow_count, prime_of_normalized_factor, prod_add, prod_normalizedFactors_eq_self, sup_multiset_prod_eq_top
 -/
@@ -1659,7 +1777,10 @@ theorem iInf_localization_eq_bot
   · rcases Function.bijective_iff_has_inverse.mp
       (IsField.localization_map_bijective (Rₘ := K) (flip nonZeroDivisors.ne_zero rfl : 0 ∉ R⁰) hR)
       with ⟨algebra_map_inv, _, algebra_map_right_inv⟩
-    exac
+    exact fun _ => Algebra.mem_bot.mpr ⟨algebra_map_inv x, algebra_map_right_inv x⟩
+  all_goals rw [← MaximalSpectrum.iInf_localization_eq_bot, Algebra.mem_iInf]
+  · exact fun hx ⟨v, hv⟩ => hx ((equivMaximalSpectrum hR).symm ⟨v, hv⟩)
+  · exact fun hx ⟨v, hv, hbot⟩ => hx ⟨v, hv.isMaximal hbot⟩
 
 中文:
 定理 iInf_localization_eq_bot
@@ -1672,7 +1793,10 @@ theorem iInf_localization_eq_bot
   · rcases Function.bijective_iff_has_inverse.mp
       (IsField.localization_map_bijective (Rₘ := K) (flip nonZeroDivisors.ne_zero rfl : 0 ∉ R⁰) hR)
       with ⟨algebra_map_inv, _, algebra_map_right_inv⟩
-    exac
+    exact fun _ => Algebra.mem_bot.mpr ⟨algebra_map_inv x, algebra_map_right_inv x⟩
+  all_goals rw [← MaximalSpectrum.iInf_localization_eq_bot, Algebra.mem_iInf]
+  · exact fun hx ⟨v, hv⟩ => hx ((equivMaximalSpectrum hR).symm ⟨v, hv⟩)
+  · exact fun hx ⟨v, hv, hbot⟩ => hx ⟨v, hv.isMaximal hbot⟩
 
 Depends on / 依赖: Algebra, Algebra.mem_bot.mpr, Algebra.mem_iInf, Function, Function.bijective_iff_has_inverse.mp, IsField, IsField.localization_map_bijective, MaximalSpectrum, MaximalSpectrum.iInf_localization_eq_bot, algebra_map_inv, algebra_map_right_inv, all_goals, bijective_iff_has_inverse, equivMaximalSpectrum, iInf_localization_eq_bot, localization_map_bijective, mem_bot, mem_iInf, ne_zero, nonZeroDivisors
 -/
@@ -1738,7 +1862,8 @@ definition equivOfRingEquiv
   right_inv x := by
     ext
     rw [← Ideal.map_comap_eq_self_of_equiv e x.asIdeal]
-    simp only [comap_asIdeal, Ideal.mem_comap, RingHom.coe_coe, Ideal.symm_apply_mem_of
+    simp only [comap_asIdeal, Ideal.mem_comap, RingHom.coe_coe, Ideal.symm_apply_mem_of_equiv_iff]
+    exact Iff.rfl
 
 中文:
 定义 equivOfRingEquiv
@@ -1749,7 +1874,8 @@ definition equivOfRingEquiv
   right_inv x := by
     ext
     rw [← Ideal.map_comap_eq_self_of_equiv e x.asIdeal]
-    simp only [comap_asIdeal, Ideal.mem_comap, RingHom.coe_coe, Ideal.symm_apply_mem_of
+    simp only [comap_asIdeal, Ideal.mem_comap, RingHom.coe_coe, Ideal.symm_apply_mem_of_equiv_iff]
+    exact Iff.rfl
 
 Depends on / 依赖: HeightOneSpectrum, HeightOneSpectrum.comap, e.symm, e.symm.surjective, surjective
 -/
@@ -1812,7 +1938,21 @@ definition idealFactorsFunOfQuotHom
       ker_le_comap (Ideal.Quotient.mk J)
     rw [mk_ker] at this
     exact dvd_iff_le.mpr this⟩
-  monoto
+  monotone' := by
+    rintro ⟨X, hX⟩ ⟨Y, hY⟩ h
+    rw [← Subtype.coe_le_coe]; rw [Subtype.coe_mk]; rw [Subtype.coe_mk] at h ⊢
+    rw [Subtype.coe_mk]; rw [comap_le_comap_iff_of_surjective (Ideal.Quotient.mk J)
+      Ideal.Quotient.mk_surjective]; rw [map_le_iff_le_comap]; rw [Subtype.coe_mk]; rw [comap_map_of_surjective _ hf (map (Ideal.Quotient.mk I) Y)]
+    suffices map (Ideal.Quotient.mk I) X <= map (Ideal.Quotient.mk I) Y by
+      exact le_sup_of_le_left this
+    rwa [map_le_iff_le_comap, comap_map_of_surjective (Ideal.Quotient.mk I)
+      Ideal.Quotient.mk_surjective, ← RingHom.ker_eq_comap_bot, mk_ker,
+sup_eq_left.mpr le_of_dvd hY]
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsFunOfQuotHom := idealFactorsFunOfQuotHom
+
+@[simp]
 
 中文:
 定义 idealFactorsFunOfQuotHom
@@ -1823,7 +1963,21 @@ definition idealFactorsFunOfQuotHom
       ker_le_comap (Ideal.Quotient.mk J)
     rw [mk_ker] at this
     exact dvd_iff_le.mpr this⟩
-  monoto
+  monotone' := by
+    rintro ⟨X, hX⟩ ⟨Y, hY⟩ h
+    rw [← Subtype.coe_le_coe]; rw [Subtype.coe_mk]; rw [Subtype.coe_mk] at h ⊢
+    rw [Subtype.coe_mk]; rw [comap_le_comap_iff_of_surjective (Ideal.Quotient.mk J)
+      Ideal.Quotient.mk_surjective]; rw [map_le_iff_le_comap]; rw [Subtype.coe_mk]; rw [comap_map_of_surjective _ hf (map (Ideal.Quotient.mk I) Y)]
+    suffices map (Ideal.Quotient.mk I) X <= map (Ideal.Quotient.mk I) Y by
+      exact le_sup_of_le_left this
+    rwa [map_le_iff_le_comap, comap_map_of_surjective (Ideal.Quotient.mk I)
+      Ideal.Quotient.mk_surjective, ← RingHom.ker_eq_comap_bot, mk_ker,
+sup_eq_left.mpr le_of_dvd hY]
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsFunOfQuotHom := idealFactorsFunOfQuotHom
+
+@[simp]
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Quotient, RingHom, RingHom.ker, Subtype, Subtype.coe_le_coe, Subtype.coe_mk, coe_le_coe, coe_mk, comap_le_comap_iff_of_surjective, dvd_iff_le, dvd_iff_le.mpr, ker_le_comap, mk_ker, mk_surjective, monotone
 -/
@@ -1860,7 +2014,10 @@ theorem idealFactorsFunOfQuotHom_id
       simp only [idealFactorsFunOfQuotHom, map_id, OrderHom.coe_mk, OrderHom.id_coe, id,
         comap_map_of_surjective (Ideal.Quotient.mk J) Ideal.Quotient.mk_surjective, ←
         RingHom.ker_eq_comap_bot (Ideal.Quotient.mk J), mk_ker,
-        sup_eq_left.
+        sup_eq_left.mpr (dvd_iff_le.mp X.prop), Subtype.coe_eta])
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsFunOfQuotHom_id := idealFactorsFunOfQuotHom_id
 
 中文:
 定理 idealFactorsFunOfQuotHom_id
@@ -1869,7 +2026,10 @@ theorem idealFactorsFunOfQuotHom_id
       simp only [idealFactorsFunOfQuotHom, map_id, OrderHom.coe_mk, OrderHom.id_coe, id,
         comap_map_of_surjective (Ideal.Quotient.mk J) Ideal.Quotient.mk_surjective, ←
         RingHom.ker_eq_comap_bot (Ideal.Quotient.mk J), mk_ker,
-        sup_eq_left.
+        sup_eq_left.mpr (dvd_iff_le.mp X.prop), Subtype.coe_eta])
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsFunOfQuotHom_id := idealFactorsFunOfQuotHom_id
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, OrderHom, OrderHom.coe_mk, OrderHom.ext, OrderHom.id_coe, Quotient, RingHom, RingHom.ker_eq_comap_bot, Subtype, Subtype.coe_eta, X.prop, coe_eta, coe_mk, comap_map_of_surjective, dvd_iff_le, dvd_iff_le.mp, id_coe, idealFactorsFunOfQuotHom, ker_eq_comap_bot
 -/
@@ -1895,14 +2055,22 @@ theorem idealFactorsFunOfQuotHom_comp
   statement: {f : R ⧸ I ->+* A ⧸ J} {g : A ⧸ J ->+* B ⧸ L}
   proof: by
   refine OrderHom.ext _ _ (funext fun x => ?_)
-  rw [idealFactorsFunOfQuotHom]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.comp_coe]; rw [OrderHom.coe_mk]; rw [OrderHom.coe_mk]; rw [Function.comp_apply]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.coe_mk]; rw [Subtype.mk_eq_mk]; rw [Subtype.coe_
+  rw [idealFactorsFunOfQuotHom]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.comp_coe]; rw [OrderHom.coe_mk]; rw [OrderHom.coe_mk]; rw [Function.comp_apply]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.coe_mk]; rw [Subtype.mk_eq_mk]; rw [Subtype.coe_mk]; rw [map_comap_of_surjective (Ideal.Quotient.mk J)
+    Ideal.Quotient.mk_surjective]; rw [map_map]
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsFunOfQuotHom_comp := idealFactorsFunOfQuotHom_comp
 
 中文:
 定理 idealFactorsFunOfQuotHom_comp
   结论: {f : R ⧸ I ->+* A ⧸ J} {g : A ⧸ J ->+* B ⧸ L}
   证明: by
   refine OrderHom.ext _ _ (funext fun x => ?_)
-  rw [idealFactorsFunOfQuotHom]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.comp_coe]; rw [OrderHom.coe_mk]; rw [OrderHom.coe_mk]; rw [Function.comp_apply]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.coe_mk]; rw [Subtype.mk_eq_mk]; rw [Subtype.coe_
+  rw [idealFactorsFunOfQuotHom]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.comp_coe]; rw [OrderHom.coe_mk]; rw [OrderHom.coe_mk]; rw [Function.comp_apply]; rw [idealFactorsFunOfQuotHom]; rw [OrderHom.coe_mk]; rw [Subtype.mk_eq_mk]; rw [Subtype.coe_mk]; rw [map_comap_of_surjective (Ideal.Quotient.mk J)
+    Ideal.Quotient.mk_surjective]; rw [map_map]
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsFunOfQuotHom_comp := idealFactorsFunOfQuotHom_comp
 
 Depends on / 依赖: Function, Function.comp_apply, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, OrderHom, OrderHom.coe_mk, OrderHom.comp_coe, OrderHom.ext, Quotient, Subtype, Subtype.coe_mk, Subtype.mk_eq_mk, coe_mk, comp_apply, comp_coe, idealFactorsFunOfQuotHom, map_comap_of_surjective, map_map, mk_eq_mk, mk_surjective
 -/
@@ -1930,7 +2098,11 @@ definition idealFactorsEquivOfQuotEquiv
   have fsym_surj : Function.Surjective (f.symm : A ⧸ J ->+* R ⧸ I) := f.symm.surjective
   refine OrderIso.ofHomInv (idealFactorsFunOfQuotHom f_surj) (idealFactorsFunOfQuotHom fsym_surj)
     ?_ ?_
-  · simpa using! idealFact
+  · simpa using! idealFactorsFunOfQuotHom_comp fsym_surj f_surj
+  · simpa using! idealFactorsFunOfQuotHom_comp f_surj fsym_surj
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsEquivOfQuotEquiv := idealFactorsEquivOfQuotEquiv
 
 中文:
 定义 idealFactorsEquivOfQuotEquiv
@@ -1940,7 +2112,11 @@ definition idealFactorsEquivOfQuotEquiv
   have fsym_surj : Function.Surjective (f.symm : A ⧸ J ->+* R ⧸ I) := f.symm.surjective
   refine OrderIso.ofHomInv (idealFactorsFunOfQuotHom f_surj) (idealFactorsFunOfQuotHom fsym_surj)
     ?_ ?_
-  · simpa using! idealFact
+  · simpa using! idealFactorsFunOfQuotHom_comp fsym_surj f_surj
+  · simpa using! idealFactorsFunOfQuotHom_comp f_surj fsym_surj
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsEquivOfQuotEquiv := idealFactorsEquivOfQuotEquiv
 
 Depends on / 依赖: Function, Function.Surjective, OrderIso, OrderIso.ofHomInv, Surjective, f.surjective, f.symm, f.symm.surjective, f_surj, fsym_surj, idealFactorsFunOfQuotHom, idealFactorsFunOfQuotHom_comp, ofHomInv, surjective
 -/
@@ -1992,7 +2168,8 @@ theorem idealFactorsEquivOfQuotEquiv_is_dvd_iso
     by rw [dvd_iff_le, dvd_iff_le, Subtype.coe_le_coe, this, Subtype.mk_le_mk]
   exact (idealFactorsEquivOfQuotEquiv f).le_iff_le
 
-@[deprecated (s
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsEquivOfQuotEquiv_is_dvd_iso := idealFactorsEquivOfQuotEquiv_is_dvd_iso
 
 中文:
 定理 idealFactorsEquivOfQuotEquiv_is_dvd_iso
@@ -2004,7 +2181,8 @@ theorem idealFactorsEquivOfQuotEquiv_is_dvd_iso
     by rw [dvd_iff_le, dvd_iff_le, Subtype.coe_le_coe, this, Subtype.mk_le_mk]
   exact (idealFactorsEquivOfQuotEquiv f).le_iff_le
 
-@[deprecated (s
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsEquivOfQuotEquiv_is_dvd_iso := idealFactorsEquivOfQuotEquiv_is_dvd_iso
 
 Depends on / 依赖: Subtype, Subtype.coe_le_coe, Subtype.mk_le_mk, coe_le_coe, dvd_iff_le, idealFactorsEquivOfQuotEquiv, le_iff_le, mk_le_mk
 -/
@@ -2034,7 +2212,14 @@ theorem idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFact
     rw [hI]; rw [bot_eq_zero]; rw [normalizedFactors_zero]; rw [← Multiset.empty_eq_zero] at hL
     exact Finset.notMem_empty _ hL
   refine mem_normalizedFactors_factor_dvd_iso_of_mem_normalizedFactors hI hJ hL
-    (d := (idealFactorsEquivOfQuotEquiv f).toEqu
+    (d := (idealFactorsEquivOfQuotEquiv f).toEquiv) ?_
+  rintro ⟨l, hl⟩ ⟨l', hl'⟩
+  rw [Subtype.coe_mk]; rw [Subtype.coe_mk]
+  apply idealFactorsEquivOfQuotEquiv_is_dvd_iso f
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors :=
+  idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors
 
 中文:
 定理 idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors
@@ -2045,7 +2230,14 @@ theorem idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFact
     rw [hI]; rw [bot_eq_zero]; rw [normalizedFactors_zero]; rw [← Multiset.empty_eq_zero] at hL
     exact Finset.notMem_empty _ hL
   refine mem_normalizedFactors_factor_dvd_iso_of_mem_normalizedFactors hI hJ hL
-    (d := (idealFactorsEquivOfQuotEquiv f).toEqu
+    (d := (idealFactorsEquivOfQuotEquiv f).toEquiv) ?_
+  rintro ⟨l, hl⟩ ⟨l', hl'⟩
+  rw [Subtype.coe_mk]; rw [Subtype.coe_mk]
+  apply idealFactorsEquivOfQuotEquiv_is_dvd_iso f
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors :=
+  idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors
 
 Depends on / 依赖: Finset, Finset.notMem_empty, Multiset, Multiset.empty_eq_zero, Subtype, Subtype.coe_mk, bot_eq_zero, coe_mk, empty_eq_zero, idealFactorsEquivOfQuotEquiv, idealFactorsEquivOfQuotEquiv_is_dvd_iso, mem_normalizedFactors_factor_dvd_iso_of_mem_normalizedFactors, normalizedFactors_zero, notMem_empty, toEquiv
 -/
@@ -2078,7 +2270,17 @@ definition normalizedFactorsEquivOfQuotEquiv
       idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors f hJ j.prop⟩
   invFun j :=
     ⟨(idealFactorsEquivOfQuotEquiv f).symm ⟨↑j, dvd_of_mem_normalizedFactors j.prop⟩, by
-      rw [idealFactorsEquiv
+      rw [idealFactorsEquivOfQuotEquiv_symm]
+      exact
+        idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors f.symm hI
+          j.prop⟩
+  left_inv := fun ⟨j, hj⟩ => by simp
+  right_inv := fun ⟨j, hj⟩ => by simp
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.normalizedFactorsEquivOfQuotEquiv := normalizedFactorsEquivOfQuotEquiv
+
+@[simp]
 
 中文:
 定义 normalizedFactorsEquivOfQuotEquiv
@@ -2087,7 +2289,17 @@ definition normalizedFactorsEquivOfQuotEquiv
       idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors f hJ j.prop⟩
   invFun j :=
     ⟨(idealFactorsEquivOfQuotEquiv f).symm ⟨↑j, dvd_of_mem_normalizedFactors j.prop⟩, by
-      rw [idealFactorsEquiv
+      rw [idealFactorsEquivOfQuotEquiv_symm]
+      exact
+        idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors f.symm hI
+          j.prop⟩
+  left_inv := fun ⟨j, hj⟩ => by simp
+  right_inv := fun ⟨j, hj⟩ => by simp
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.normalizedFactorsEquivOfQuotEquiv := normalizedFactorsEquivOfQuotEquiv
+
+@[simp]
 
 Depends on / 依赖: dvd_of_mem_normalizedFactors, f.symm, idealFactorsEquivOfQuotEquiv, idealFactorsEquivOfQuotEquiv_mem_normalizedFactors_of_mem_normalizedFactors, idealFactorsEquivOfQuotEquiv_symm, invFun, j.prop, left_inv, right_inv
 -/
@@ -2146,7 +2358,11 @@ theorem normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity
   rw [normalizedFactorsEquivOfQuotEquiv]; rw [Equiv.coe_fn_mk]; rw [Subtype.coe_mk]
   refine emultiplicity_factor_dvd_iso_eq_emultiplicity_of_mem_normalizedFactors hI hJ hL
     (d := (idealFactorsEquivOfQuotEquiv f).toEquiv) ?_
-  exact fun ⟨l, hl⟩ ⟨l', hl'⟩ => idealFactorsEquivOfQuotEquiv_is_dvd_
+  exact fun ⟨l, hl⟩ ⟨l', hl'⟩ => idealFactorsEquivOfQuotEquiv_is_dvd_iso f hl hl'
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity :=
+  normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity
 
 中文:
 定理 normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity
@@ -2155,7 +2371,11 @@ theorem normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity
   rw [normalizedFactorsEquivOfQuotEquiv]; rw [Equiv.coe_fn_mk]; rw [Subtype.coe_mk]
   refine emultiplicity_factor_dvd_iso_eq_emultiplicity_of_mem_normalizedFactors hI hJ hL
     (d := (idealFactorsEquivOfQuotEquiv f).toEquiv) ?_
-  exact fun ⟨l, hl⟩ ⟨l', hl'⟩ => idealFactorsEquivOfQuotEquiv_is_dvd_
+  exact fun ⟨l, hl⟩ ⟨l', hl'⟩ => idealFactorsEquivOfQuotEquiv_is_dvd_iso f hl hl'
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity :=
+  normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity
 
 Depends on / 依赖: Equiv.coe_fn_mk, Subtype, Subtype.coe_mk, coe_fn_mk, coe_mk, emultiplicity_factor_dvd_iso_eq_emultiplicity_of_mem_normalizedFactors, idealFactorsEquivOfQuotEquiv, idealFactorsEquivOfQuotEquiv_is_dvd_iso, normalizedFactorsEquivOfQuotEquiv, toEquiv
 -/
@@ -2298,7 +2518,13 @@ theorem count_associates_factors_eq
     simpa only [Associates.irreducible_mk] using (prime_of_isPrime hJ₀ hJ).irreducible
   apply (count_normalizedFactors_eq (p := J) (x := I) _ _).symm
   all_goals
-    rw [← dvd_iff
+    rw [← dvd_iff_le]; rw [← Associates.mk_dvd_mk]; rw [Associates.mk_pow]
+    simp only [Associates.dvd_eq_le]
+    rw [Associates.prime_pow_dvd_iff_le hI hJ']
+  lia
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.count_associates_factors_eq := count_associates_factors_eq
 
 中文:
 定理 count_associates_factors_eq
@@ -2308,7 +2534,13 @@ theorem count_associates_factors_eq
     simpa only [Associates.irreducible_mk] using (prime_of_isPrime hJ₀ hJ).irreducible
   apply (count_normalizedFactors_eq (p := J) (x := I) _ _).symm
   all_goals
-    rw [← dvd_iff
+    rw [← dvd_iff_le]; rw [← Associates.mk_dvd_mk]; rw [Associates.mk_pow]
+    simp only [Associates.dvd_eq_le]
+    rw [Associates.prime_pow_dvd_iff_le hI hJ']
+  lia
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.count_associates_factors_eq := count_associates_factors_eq
 
 Depends on / 依赖: Associates, Associates.dvd_eq_le, Associates.irreducible_mk, Associates.mk, Associates.mk_dvd_mk, Associates.mk_ne_zero.mpr, Associates.mk_pow, Associates.prime_pow_dvd_iff_le, Irreducible, all_goals, count_normalizedFactors_eq, dvd_eq_le, dvd_iff_le, irreducible, irreducible_mk, mk_dvd_mk, mk_ne_zero, mk_pow, prime_of_isPrime, prime_pow_dvd_iff_le
 -/
@@ -2339,7 +2571,14 @@ theorem count_associates_eq
   · exact (prime_span_singleton_iff.mpr hx).irreducible
   · exact normalize_eq _
   · simp only [span_singleton_pow, heq, dvd_span_singleton]
-    exact mul_mem_righ
+    exact mul_mem_right _ _ (mem_span_singleton_self (x ^ n))
+  · simp only [span_singleton_pow, heq, dvd_span_singleton, mem_span_singleton]
+    rw [pow_add]; rw [pow_one]; rw [mul_dvd_mul_iff_left (pow_ne_zero n hx0)]
+    exact ha
+  · simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot]
+    aesop
+  · exact (span_singleton_prime hx0).mpr hx
+  · simp only [ne_eq, span_singleton_eq_bot]; exact hx0
 
 中文:
 定理 count_associates_eq
@@ -2349,7 +2588,14 @@ theorem count_associates_eq
   · exact (prime_span_singleton_iff.mpr hx).irreducible
   · exact normalize_eq _
   · simp only [span_singleton_pow, heq, dvd_span_singleton]
-    exact mul_mem_righ
+    exact mul_mem_right _ _ (mem_span_singleton_self (x ^ n))
+  · simp only [span_singleton_pow, heq, dvd_span_singleton, mem_span_singleton]
+    rw [pow_add]; rw [pow_one]; rw [mul_dvd_mul_iff_left (pow_ne_zero n hx0)]
+    exact ha
+  · simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot]
+    aesop
+  · exact (span_singleton_prime hx0).mpr hx
+  · simp only [ne_eq, span_singleton_eq_bot]; exact hx0
 
 Depends on / 依赖: Prime.ne_zero, UniqueFactorizationMonoid, UniqueFactorizationMonoid.count_normalizedFactors_eq, count_associates_factors_eq, count_normalizedFactors_eq, dvd_span_singleton, irreducible, mem_span_singleton, mem_span_singleton_self, mul_dvd_mul_iff_left, mul_mem_right, ne_zero, normalize_eq, pow_add, pow_ne_zero, pow_one, prime_span_singleton_iff, prime_span_singleton_iff.mpr, span_singleton_pow
 -/
@@ -2424,7 +2670,7 @@ theorem le_mul_of_no_prime_factors
   rw [mul_comm]
   refine mul_dvd_mul_left K
     (UniqueFactorizationMonoid.dvd_of_dvd_mul_right_of_no_prime_factors (b := K) hJ0 ?_ hJ)
-  exact fun hPJ hPK => mt i
+  exact fun hPJ hPK => mt isPrime_of_prime (coprime _ hPJ hPK)
 
 中文:
 定理 le_mul_of_no_prime_factors
@@ -2437,7 +2683,7 @@ theorem le_mul_of_no_prime_factors
   rw [mul_comm]
   refine mul_dvd_mul_left K
     (UniqueFactorizationMonoid.dvd_of_dvd_mul_right_of_no_prime_factors (b := K) hJ0 ?_ hJ)
-  exact fun hPJ hPK => mt i
+  exact fun hPJ hPK => mt isPrime_of_prime (coprime _ hPJ hPK)
 
 Depends on / 依赖: UniqueFactorizationMonoid, UniqueFactorizationMonoid.dvd_of_dvd_mul_right_of_no_prime_factors, coprime, dvd_iff_le, dvd_of_dvd_mul_right_of_no_prime_factors, isPrime_of_prime, mul_comm, mul_dvd_mul_left, zero_mul
 -/
@@ -2498,7 +2744,11 @@ theorem inf_pow_eq_prod_of_prime
   intro i hi j hj hij
   exact Ideal.isCoprime_iff_sup_eq.mpr (pow_sup_pow_eq_top (IsMaximal.coprime_of_ne
     (IsPrime.isMaximal (isPrime_of_prime (prime i hi)) (prime i hi).ne_zero)
-    (IsPrime.isMaximal (
+    (IsPrime.isMaximal (isPrime_of_prime (prime j hj)) (prime j hj).ne_zero)
+    (coprime i hi j hj hij)))
+
+@[deprecated (since := "2026-03-10")] alias inf_prime_pow_eq_prod :=
+  inf_pow_eq_prod_of_prime
 
 中文:
 定理 inf_pow_eq_prod_of_prime
@@ -2508,7 +2758,11 @@ theorem inf_pow_eq_prod_of_prime
   intro i hi j hj hij
   exact Ideal.isCoprime_iff_sup_eq.mpr (pow_sup_pow_eq_top (IsMaximal.coprime_of_ne
     (IsPrime.isMaximal (isPrime_of_prime (prime i hi)) (prime i hi).ne_zero)
-    (IsPrime.isMaximal (
+    (IsPrime.isMaximal (isPrime_of_prime (prime j hj)) (prime j hj).ne_zero)
+    (coprime i hi j hj hij)))
+
+@[deprecated (since := "2026-03-10")] alias inf_prime_pow_eq_prod :=
+  inf_pow_eq_prod_of_prime
 
 Depends on / 依赖: Finset, Finset.inf_eq_iInf, Ideal.isCoprime_iff_sup_eq.mpr, IsMaximal, IsMaximal.coprime_of_ne, IsPrime, IsPrime.isMaximal, coprime, coprime_of_ne, inf_eq_iInf, isCoprime_iff_sup_eq, isMaximal, isPrime_of_prime, ne_zero, pow_sup_pow_eq_top, prod_eq_iInf_of_pairwise_isCoprime
 -/
@@ -2591,7 +2845,13 @@ definition quotientEquivPiFactors
     (fun _ _ hij => Subtype.coe_injective.ne hij)
     (calc
       (∏ P : (factors I).toFinset, (P : Ideal R) ^ (factors I).count (P : Ideal R)) =
-          ∏ P in (factors I).toFin
+          ∏ P in (factors I).toFinset, P ^ (factors I).count P :=
+        (factors I).toFinset.prod_coe_sort fun P => P ^ (factors I).count P
+      _ = ((factors I).map fun P => P).prod := (Finset.prod_multiset_map_count (factors I) id).symm
+      _ = (factors I).prod := by rw [Multiset.map_id']
+      _ = I := associated_iff_eq.mp (factors_prod hI))
+
+@[simp]
 
 中文:
 定义 quotientEquivPiFactors
@@ -2601,7 +2861,13 @@ definition quotientEquivPiFactors
     (fun _ _ hij => Subtype.coe_injective.ne hij)
     (calc
       (∏ P : (factors I).toFinset, (P : Ideal R) ^ (factors I).count (P : Ideal R)) =
-          ∏ P in (factors I).toFin
+          ∏ P in (factors I).toFinset, P ^ (factors I).count P :=
+        (factors I).toFinset.prod_coe_sort fun P => P ^ (factors I).count P
+      _ = ((factors I).map fun P => P).prod := (Finset.prod_multiset_map_count (factors I) id).symm
+      _ = (factors I).prod := by rw [Multiset.map_id']
+      _ = I := associated_iff_eq.mp (factors_prod hI))
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.prod_multiset_map_count, Multiset, Multiset.mem_toFinset.mp, P.prop, Subtype, Subtype.coe_injective.ne, coe_injective, factors, mem_toFinset, prime_of_factor, prod_coe_sort, prod_multiset_map_count, quotientEquivPiOfProdEq, toFinset, toFinset.prod_coe_sort
 -/
@@ -2752,7 +3018,9 @@ theorem span_singleton_dvd_span_singleton_iff_dvd
     dvd_iff_le.mpr fun _d hd => mem_span_singleton.mpr (dvd_trans h (mem_span_singleton.mp hd))⟩
 
 @[deprecated (since := "2026-04-16")]
-alias _root_.span_singleton_dvd_span_singleton_iff_dvd := span_sin
+alias _root_.span_singleton_dvd_span_singleton_iff_dvd := span_singleton_dvd_span_singleton_iff_dvd
+
+@[simp]
 
 中文:
 定理 span_singleton_dvd_span_singleton_iff_dvd
@@ -2761,7 +3029,9 @@ alias _root_.span_singleton_dvd_span_singleton_iff_dvd := span_sin
     dvd_iff_le.mpr fun _d hd => mem_span_singleton.mpr (dvd_trans h (mem_span_singleton.mp hd))⟩
 
 @[deprecated (since := "2026-04-16")]
-alias _root_.span_singleton_dvd_span_singleton_iff_dvd := span_sin
+alias _root_.span_singleton_dvd_span_singleton_iff_dvd := span_singleton_dvd_span_singleton_iff_dvd
+
+@[simp]
 
 Depends on / 依赖: dvd_iff_le, dvd_iff_le.mp, dvd_iff_le.mpr, dvd_refl, dvd_trans, mem_span_singleton, mem_span_singleton.mp, mem_span_singleton.mpr
 -/
@@ -2786,7 +3056,7 @@ theorem squarefree_span_singleton
     simpa using h _ hx
   · rw [← span_singleton_generator I, span_singleton_mul_span_singleton,
       span_singleton_dvd_span_singleton_iff_dvd] at hI
-exac
+exact isUnit_iff.mpr eq_top_of_isUnit_mem _ (Submodule.IsPrincipal.generator_mem I) (h _ hI)
 
 中文:
 定理 squarefree_span_singleton
@@ -2797,7 +3067,7 @@ exac
     simpa using h _ hx
   · rw [← span_singleton_generator I, span_singleton_mul_span_singleton,
       span_singleton_dvd_span_singleton_iff_dvd] at hI
-exac
+exact isUnit_iff.mpr eq_top_of_isUnit_mem _ (Submodule.IsPrincipal.generator_mem I) (h _ hI)
 
 Depends on / 依赖: IsPrincipal, Submodule, Submodule.IsPrincipal.generator_mem, eq_top_of_isUnit_mem, generator_mem, isUnit_iff, isUnit_iff.mpr, span_singleton_dvd_span_singleton_iff_dvd, span_singleton_generator, span_singleton_mul_span_singleton
 -/
@@ -2822,7 +3092,20 @@ theorem singleton_span_mem_normalizedFactors_of_mem_normalizedFactors
     rw [hb]; rw [normalizedFactors_zero] at ha
     exact absurd ha (Multiset.notMem_zero a)
   · suffices Prime (span ({a} : Set R)) by
-      obtain ⟨c, hc, hc'⟩ := exists_mem_normalizedFactors_of_dvd 
+      obtain ⟨c, hc, hc'⟩ := exists_mem_normalizedFactors_of_dvd ?_ this.irreducible
+          (dvd_iff_le.mpr (span_singleton_le_span_singleton.mpr (dvd_of_mem_normalizedFactors ha)))
+      rwa [associated_iff_eq.mp hc']
+    · by_contra h
+      exact hb (span_singleton_eq_bot.mp h)
+    rw [prime_iff_isPrime]
+    · exact (span_singleton_prime (prime_of_normalized_factor a ha).ne_zero).mpr
+        (prime_of_normalized_factor a ha)
+    · by_contra h
+      exact (prime_of_normalized_factor a ha).ne_zero (span_singleton_eq_bot.mp h)
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.singleton_span_mem_normalizedFactors_of_mem_normalizedFactors :=
+  singleton_span_mem_normalizedFactors_of_mem_normalizedFactors
 
 中文:
 定理 singleton_span_mem_normalizedFactors_of_mem_normalizedFactors
@@ -2833,7 +3116,20 @@ theorem singleton_span_mem_normalizedFactors_of_mem_normalizedFactors
     rw [hb]; rw [normalizedFactors_zero] at ha
     exact absurd ha (Multiset.notMem_zero a)
   · suffices Prime (span ({a} : Set R)) by
-      obtain ⟨c, hc, hc'⟩ := exists_mem_normalizedFactors_of_dvd 
+      obtain ⟨c, hc, hc'⟩ := exists_mem_normalizedFactors_of_dvd ?_ this.irreducible
+          (dvd_iff_le.mpr (span_singleton_le_span_singleton.mpr (dvd_of_mem_normalizedFactors ha)))
+      rwa [associated_iff_eq.mp hc']
+    · by_contra h
+      exact hb (span_singleton_eq_bot.mp h)
+    rw [prime_iff_isPrime]
+    · exact (span_singleton_prime (prime_of_normalized_factor a ha).ne_zero).mpr
+        (prime_of_normalized_factor a ha)
+    · by_contra h
+      exact (prime_of_normalized_factor a ha).ne_zero (span_singleton_eq_bot.mp h)
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.singleton_span_mem_normalizedFactors_of_mem_normalizedFactors :=
+  singleton_span_mem_normalizedFactors_of_mem_normalizedFactors
 
 Depends on / 依赖: Multiset, Multiset.notMem_zero, absurd, associated_iff_eq, associated_iff_eq.mp, bot_eq_zero, dvd_iff_le, dvd_iff_le.mpr, dvd_of_mem_normalizedFactors, exists_mem_normalizedFactors_of_dvd, irreducible, normalizedFactors_zero, notMem_zero, prime_iff_isPrime, span_singleton_eq_bot, span_singleton_eq_bot.mp, span_singleton_eq_bot.mpr, span_singleton_le_span_singleton, span_singleton_le_span_singleton.mpr, this.irreducible
 -/
@@ -2873,7 +3169,15 @@ theorem emultiplicity_eq_emultiplicity_span
       rw [span_singleton_pow]; rw [span_singleton_dvd_span_singleton_iff_dvd]
     · exact pow_multiplicity_dvd a b
     · apply h.not_pow_dvd_of_multiplicity_lt
-      app
+      apply lt_add_one
+  · suffices ¬FiniteMultiplicity (span ({a} : Set R)) (span ({b} : Set R)) by
+      rw [emultiplicity_eq_top.2 h]; rw [emultiplicity_eq_top.2 this]
+    exact FiniteMultiplicity.not_iff_forall.mpr fun n => by
+      rw [span_singleton_pow]; rw [span_singleton_dvd_span_singleton_iff_dvd]
+      exact FiniteMultiplicity.not_iff_forall.mp h n
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.emultiplicity_eq_emultiplicity_span := emultiplicity_eq_emultiplicity_span
 
 中文:
 定理 emultiplicity_eq_emultiplicity_span
@@ -2885,7 +3189,15 @@ theorem emultiplicity_eq_emultiplicity_span
       rw [span_singleton_pow]; rw [span_singleton_dvd_span_singleton_iff_dvd]
     · exact pow_multiplicity_dvd a b
     · apply h.not_pow_dvd_of_multiplicity_lt
-      app
+      apply lt_add_one
+  · suffices ¬FiniteMultiplicity (span ({a} : Set R)) (span ({b} : Set R)) by
+      rw [emultiplicity_eq_top.2 h]; rw [emultiplicity_eq_top.2 this]
+    exact FiniteMultiplicity.not_iff_forall.mpr fun n => by
+      rw [span_singleton_pow]; rw [span_singleton_dvd_span_singleton_iff_dvd]
+      exact FiniteMultiplicity.not_iff_forall.mp h n
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.emultiplicity_eq_emultiplicity_span := emultiplicity_eq_emultiplicity_span
 
 Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.not_iff_forall.mpr, emultiplicity_eq_multiplicity, emultiplicity_eq_of_dvd_of_not_dvd, emultiplicity_eq_top, h.emultiplicity_eq_multiplicity, h.not_pow_dvd_of_multiplicity_lt, lt_add_one, not_iff_forall, not_pow_dvd_of_multiplicity_lt, pow_multiplicity_dvd, span_singleton, span_singleton_dvd_span_singleton_iff_dvd, span_singleton_pow
 -/
@@ -2923,7 +3235,24 @@ definition normalizedFactorsEquivSpanNormalizedFactors
       ⟨span {↑d}, singleton_span_mem_normalizedFactors_of_mem_normalizedFactors d.prop⟩
   · refine ⟨?_, ?_⟩
     · rintro ⟨a, ha⟩ ⟨b, hb⟩ h
-      rw [Subtype.mk_eq_mk]; rw [span_singleton_eq_span_singleton]; rw [Subtype.coe_mk]; rw [Subtype.coe_m
+      rw [Subtype.mk_eq_mk]; rw [span_singleton_eq_span_singleton]; rw [Subtype.coe_mk]; rw [Subtype.coe_mk] at h
+      exact Subtype.mk_eq_mk.mpr (mem_normalizedFactors_eq_of_associated ha hb h)
+    · rintro ⟨i, hi⟩
+      have : i.IsPrime := isPrime_of_prime (prime_of_normalized_factor i hi)
+      have := exists_mem_normalizedFactors_of_dvd hr
+        (Submodule.IsPrincipal.prime_generator_of_isPrime i
+        (prime_of_normalized_factor i hi).ne_zero).irreducible ?_
+      · obtain ⟨a, ha, ha'⟩ := this
+        use ⟨a, ha⟩
+        simp only [← span_singleton_eq_span_singleton.mpr ha',
+            span_singleton_generator]
+      · exact (Submodule.IsPrincipal.mem_iff_generator_dvd i).mp
+          ((show span {r} <= i from dvd_iff_le.mp (dvd_of_mem_normalizedFactors hi))
+            (mem_span_singleton.mpr (dvd_refl r)))
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.normalizedFactorsEquivSpanNormalizedFactors :=
+  normalizedFactorsEquivSpanNormalizedFactors
 
 中文:
 定义 normalizedFactorsEquivSpanNormalizedFactors
@@ -2934,7 +3263,24 @@ definition normalizedFactorsEquivSpanNormalizedFactors
       ⟨span {↑d}, singleton_span_mem_normalizedFactors_of_mem_normalizedFactors d.prop⟩
   · refine ⟨?_, ?_⟩
     · rintro ⟨a, ha⟩ ⟨b, hb⟩ h
-      rw [Subtype.mk_eq_mk]; rw [span_singleton_eq_span_singleton]; rw [Subtype.coe_mk]; rw [Subtype.coe_m
+      rw [Subtype.mk_eq_mk]; rw [span_singleton_eq_span_singleton]; rw [Subtype.coe_mk]; rw [Subtype.coe_mk] at h
+      exact Subtype.mk_eq_mk.mpr (mem_normalizedFactors_eq_of_associated ha hb h)
+    · rintro ⟨i, hi⟩
+      have : i.IsPrime := isPrime_of_prime (prime_of_normalized_factor i hi)
+      have := exists_mem_normalizedFactors_of_dvd hr
+        (Submodule.IsPrincipal.prime_generator_of_isPrime i
+        (prime_of_normalized_factor i hi).ne_zero).irreducible ?_
+      · obtain ⟨a, ha, ha'⟩ := this
+        use ⟨a, ha⟩
+        simp only [← span_singleton_eq_span_singleton.mpr ha',
+            span_singleton_generator]
+      · exact (Submodule.IsPrincipal.mem_iff_generator_dvd i).mp
+          ((show span {r} <= i from dvd_iff_le.mp (dvd_of_mem_normalizedFactors hi))
+            (mem_span_singleton.mpr (dvd_refl r)))
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.normalizedFactorsEquivSpanNormalizedFactors :=
+  normalizedFactorsEquivSpanNormalizedFactors
 
 Depends on / 依赖: Equiv.ofBijective, IsPrime, Subtype, Subtype.coe_mk, Subtype.mk_eq_mk, Subtype.mk_eq_mk.mpr, coe_mk, d.prop, exists_mem_normalizedFactors_of_dvd, i.IsPrime, isPrime_of_prime, mem_normalizedFactors_eq_of_associated, mk_eq_mk, ofBijective, prime_of_normalized_factor, singleton_span_mem_normalizedFactors_of_mem_normalizedFactors, span_singleton_eq_span_singleton
 -/
@@ -2978,7 +3324,7 @@ theorem emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplici
 
 @[deprecated (since := "2026-04-16")]
 alias _root_.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity :=
-  emultiplicity_normalizedF
+  emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity
 
 中文:
 定理 emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity
@@ -2989,7 +3335,7 @@ alias _root_.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emulti
 
 @[deprecated (since := "2026-04-16")]
 alias _root_.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity :=
-  emultiplicity_normalizedF
+  emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity
 
 Depends on / 依赖: Equiv.ofBijective_apply, Subtype, Subtype.coe_mk, coe_mk, emultiplicity_eq_emultiplicity_span, normalizedFactorsEquivSpanNormalizedFactors, ofBijective_apply
 -/
@@ -3017,7 +3363,8 @@ theorem emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emulti
   rw [hx.symm]; rw [Equiv.symm_apply_apply]; rw [Subtype.coe_mk]; rw [emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity hr ha]
 
 @[deprecated (since := "2026-04-16")]
-al
+alias _root_.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity :=
+  emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity
 
 中文:
 定理 emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity
@@ -3028,7 +3375,8 @@ al
   rw [hx.symm]; rw [Equiv.symm_apply_apply]; rw [Subtype.coe_mk]; rw [emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity hr ha]
 
 @[deprecated (since := "2026-04-16")]
-al
+alias _root_.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity :=
+  emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity
 
 Depends on / 依赖: Equiv.symm_apply_apply, Subtype, Subtype.coe_mk, coe_mk, emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_eq_emultiplicity, hx.symm, normalizedFactorsEquivSpanNormalizedFactors, surjective, symm_apply_apply
 -/
@@ -3054,14 +3402,26 @@ theorem count_span_normalizedFactors_eq
   given: {r X : R} (hr : r != 0) (hX : Prime X)
   proof: by
   have := emultiplicity_eq_emultiplicity_span (R := R) (a := X) (b := r)
-  rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible hX) hr]; rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible ?_)]; rw [normalize_apply]; rw [normUnit_eq_one]; rw [Units.val_one]; rw [one_eq_top]
+  rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible hX) hr]; rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible ?_)]; rw [normalize_apply]; rw [normUnit_eq_one]; rw [Units.val_one]; rw [one_eq_top]; rw [mul_top]; rw [Nat.cast_inj] at this
+  · simp only [normalize_apply, this]
+  · simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot, hr, not_false_eq_true]
+  · simpa only [prime_span_singleton_iff]
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.count_span_normalizedFactors_eq := count_span_normalizedFactors_eq
 
 中文:
 定理 count_span_normalizedFactors_eq
   条件: {r X : R} (hr : r != 0) (hX : 素 X)
   证明: by
   have := emultiplicity_eq_emultiplicity_span (R := R) (a := X) (b := r)
-  rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible hX) hr]; rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible ?_)]; rw [normalize_apply]; rw [normUnit_eq_one]; rw [Units.val_one]; rw [one_eq_top]
+  rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible hX) hr]; rw [emultiplicity_eq_count_normalizedFactors (Prime.irreducible ?_)]; rw [normalize_apply]; rw [normUnit_eq_one]; rw [Units.val_one]; rw [one_eq_top]; rw [mul_top]; rw [Nat.cast_inj] at this
+  · simp only [normalize_apply, this]
+  · simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot, hr, not_false_eq_true]
+  · simpa only [prime_span_singleton_iff]
+
+@[deprecated (since := "2026-04-16")]
+alias _root_.count_span_normalizedFactors_eq := count_span_normalizedFactors_eq
 
 Depends on / 依赖: Nat.cast_inj, Prime.irreducible, Submodule, Submodule.zero_eq_bot, Units.val_one, cast_inj, emultiplicity_eq_count_normalizedFactors, emultiplicity_eq_emultiplicity_span, irreducible, mul_top, ne_eq, normUnit_eq_one, normalize_apply, not_false_eq_true, one_eq_top, prime_span_singleton_if, span_singleton_eq_bot, val_one, zero_eq_bot
 -/
@@ -3355,7 +3715,7 @@ theorem primesOver_finite
   · rw [← coe_primesOverFinset hpb B]
     exact (primesOverFinset p B).finite_toSet
 
-@[deprecated (since := "2026-04-16")] alias _root_.prim
+@[deprecated (since := "2026-04-16")] alias _root_.primesOver_finite := primesOver_finite
 
 中文:
 定理 primesOver_finite
@@ -3369,7 +3729,7 @@ theorem primesOver_finite
   · rw [← coe_primesOverFinset hpb B]
     exact (primesOverFinset p B).finite_toSet
 
-@[deprecated (since := "2026-04-16")] alias _root_.prim
+@[deprecated (since := "2026-04-16")] alias _root_.primesOver_finite := primesOver_finite
 
 Depends on / 依赖: IsDomain, IsDomain.of_bot_isPrime, Set.finite_singleton, coe_primesOverFinset, finite_singleton, finite_toSet, of_bot_isPrime, primesOverFinset, primesOver_bot
 -/
@@ -3476,7 +3836,8 @@ lemma Algebra.IsIntegral.nontrivial_heightOneSpectrum
   let f (p : HeightOneSpectrum A) : HeightOneSpectrum R := p.under R
   have : Function.Surjective f := fun ⟨p, _, hp⟩ => by
     obtain ⟨P, hP, rfl⟩ := p.exists_ideal_over_prime_of_isIntegral_of_isDomain (S := A) (by simp)
-    exact ⟨⟨P, h
+    exact ⟨⟨P, hP, by aesop⟩, rfl⟩
+  exact this.nontrivial
 
 中文:
 引理 代数.是整.nontrivial_heightOneSpectrum
@@ -3486,7 +3847,8 @@ lemma Algebra.IsIntegral.nontrivial_heightOneSpectrum
   let f (p : HeightOneSpectrum A) : HeightOneSpectrum R := p.under R
   have : Function.Surjective f := fun ⟨p, _, hp⟩ => by
     obtain ⟨P, hP, rfl⟩ := p.exists_ideal_over_prime_of_isIntegral_of_isDomain (S := A) (by simp)
-    exact ⟨⟨P, h
+    exact ⟨⟨P, hP, by aesop⟩, rfl⟩
+  exact this.nontrivial
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, Function, Function.Surjective, HeightOneSpectrum, Surjective, algebraMap_injective, exists_ideal_over_prime_of_isIntegral_of_isDomain, isDomain, nontrivial, p.exists_ideal_over_prime_of_isIntegral_of_isDomain, p.under, this.nontrivial
 -/

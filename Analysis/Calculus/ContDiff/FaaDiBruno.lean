@@ -302,7 +302,8 @@ lemma injective_embSigma
   have : plength = qlength := hpq.1
   subst this
   simp_all only [Sigma.mk.inj_iff, heq_eq_eq, true_and, and_true]
-  ext 
+  ext i
+  exact mk.inj_iff.mp (congr_fun hpq.1 i)
 
 中文:
 引理 injective_embSigma
@@ -315,7 +316,8 @@ lemma injective_embSigma
   have : plength = qlength := hpq.1
   subst this
   simp_all only [Sigma.mk.inj_iff, heq_eq_eq, true_and, and_true]
-  ext 
+  ext i
+  exact mk.inj_iff.mp (congr_fun hpq.1 i)
 
 Depends on / 依赖: Fin.mk.injEq, Sigma.mk.inj_iff, and_true, congr_fun, embSigma, heq_eq_eq, inj_iff, mk.injEq, mk.inj_iff.mp, plength, qlength, true_and
 -/
@@ -411,7 +413,7 @@ lemma emb_injective
       c.disjoint (mem_univ m) (mem_univ m') h
     apply disjoint_iff_forall_ne.1 A (mem_range_self r) (mem_range_self r')
   subst this
-  sim
+  simpa using (c.emb_strictMono m).injective h
 
 中文:
 引理 emb_injective
@@ -424,7 +426,7 @@ lemma emb_injective
       c.disjoint (mem_univ m) (mem_univ m') h
     apply disjoint_iff_forall_ne.1 A (mem_range_self r) (mem_range_self r')
   subst this
-  sim
+  simpa using (c.emb_strictMono m).injective h
 
 Depends on / 依赖: Disjoint, c.disjoint, c.emb, c.emb_strictMono, contrapose, disjoint, disjoint_iff_forall_ne, emb_strictMono, injective, mem_range_self, mem_univ
 -/
@@ -632,7 +634,9 @@ instance instUniqueOne
     have h₂ (i) : c.partSize i = 1 := le_antisymm (c.partSize_le _) (c.partSize_pos _)
     have h₃ (i j) : c.emb i j = 0 := Subsingleton.elim _ _
     rcases c with ⟨length, partSize, _, emb, _, _, _, _⟩
-    subst
+    subst h₁
+    obtain rfl : partSize = fun _ => 1 := funext h₂
+    simpa [OrderedFinpartition.ext_iff, funext_iff, Fin.forall_fin_one] using h₃ _ _
 
 中文:
 实例 instUniqueOne
@@ -642,7 +646,9 @@ instance instUniqueOne
     have h₂ (i) : c.partSize i = 1 := le_antisymm (c.partSize_le _) (c.partSize_pos _)
     have h₃ (i j) : c.emb i j = 0 := Subsingleton.elim _ _
     rcases c with ⟨length, partSize, _, emb, _, _, _, _⟩
-    subst
+    subst h₁
+    obtain rfl : partSize = fun _ => 1 := funext h₂
+    simpa [OrderedFinpartition.ext_iff, funext_iff, Fin.forall_fin_one] using h₃ _ _
 
 Depends on / 依赖: Fin.forall_fin_one, Nat.zero_lt_one, OrderedFinpartition, OrderedFinpartition.ext_iff, Subsingleton, Subsingleton.elim, c.emb, c.length, c.length_le, c.length_pos, c.partSize, c.partSize_le, c.partSize_pos, ext_iff, forall_fin_one, funext_iff, le_antisymm, length, length_le, length_pos
 -/
@@ -724,7 +730,18 @@ lemma one_lt_partSize_index_zero
   rcases eq_or_ne (c.index 0) 0 with h | h
   · rw [← h] at hc
     have : {0} ⊂ range (c.emb (c.index 0)) := by
-      apply ssubset_of_
+      apply ssubset_of_subset_of_ne ?_ hc.symm
+      simpa only [singleton_subset_iff, mem_range] using ⟨0, emb_zero c⟩
+    simpa using Set.Finite.card_lt_card (finite_range _) this
+  · apply one_lt_two.trans_le
+    have : {c.emb (c.index 0) 0,
+        c.emb (c.index 0) ⟨c.partSize (c.index 0) - 1, Nat.sub_one_lt_of_lt (c.partSize_pos _)⟩}
+          subseteq range (c.emb (c.index 0)) := by simp [insert_subset]
+    simp only [emb_zero] at this
+    convert! Nat.card_mono Subtype.finite this
+    simp only [Nat.card_eq_fintype_card, Fintype.card_ofFinset, toFinset_singleton]
+    apply (Finset.card_pair ?_).symm
+    exact ((Fin.zero_le _).trans_lt (c.parts_strictMono ((pos_iff_ne_zero' (c.index 0)).mpr h))).ne
 
 中文:
 引理 one_lt_partSize_index_zero
@@ -736,7 +753,18 @@ lemma one_lt_partSize_index_zero
   rcases eq_or_ne (c.index 0) 0 with h | h
   · rw [← h] at hc
     have : {0} ⊂ range (c.emb (c.index 0)) := by
-      apply ssubset_of_
+      apply ssubset_of_subset_of_ne ?_ hc.symm
+      simpa only [singleton_subset_iff, mem_range] using ⟨0, emb_zero c⟩
+    simpa using Set.Finite.card_lt_card (finite_range _) this
+  · apply one_lt_two.trans_le
+    have : {c.emb (c.index 0) 0,
+        c.emb (c.index 0) ⟨c.partSize (c.index 0) - 1, Nat.sub_one_lt_of_lt (c.partSize_pos _)⟩}
+          subseteq range (c.emb (c.index 0)) := by simp [insert_subset]
+    simp only [emb_zero] at this
+    convert! Nat.card_mono Subtype.finite this
+    simp only [Nat.card_eq_fintype_card, Fintype.card_ofFinset, toFinset_singleton]
+    apply (Finset.card_pair ?_).symm
+    exact ((Fin.zero_le _).trans_lt (c.parts_strictMono ((pos_iff_ne_zero' (c.index 0)).mpr h))).ne
 
 Depends on / 依赖: Finite, Nat.card, Nat.card_range_of_injective, Set.Finite.card_lt_card, c.emb, c.emb_strictMono, c.index, c.partSize, card_lt_card, card_range_of_injective, emb_strictMono, emb_zero, eq_or_ne, finite_range, hc.symm, injective, mem_range, one_lt_two, one_lt_two.trans_le, partSize
 -/
@@ -793,7 +821,43 @@ definition extendLeft
   emb := Fin.cases (fun _ => 0) (fun m => Fin.succ ∘ c.emb m)
   emb_strictMono := by
     refine Fin.cases ?_ (fun i => ?_)
-    · exact @Subsingleton.strictMono _ _ _ _ (by simp; infer_in
+    · exact @Subsingleton.strictMono _ _ _ _ (by simp; infer_instance) _
+    · exact strictMono_succ.comp (c.emb_strictMono i)
+  parts_strictMono i j hij := by
+    induction j using Fin.induction with
+    | zero => simp at hij
+    | succ j => induction i using Fin.induction with
+      | zero => simp
+      | succ i =>
+        simp only [cons_succ, cases_succ, comp_apply, succ_lt_succ_iff]
+        exact c.parts_strictMono (by simpa using hij)
+  disjoint i hi j hj hij := by
+    wlog! h : j < i generalizing i j
+    · exact .symm
+        (this j (mem_univ j) i (mem_univ i) hij.symm (lt_of_le_of_ne h hij))
+    induction i using Fin.induction with
+    | zero => simp at h
+    | succ i =>
+      induction j using Fin.induction with
+      | zero =>
+        simp only [onFun, cases_succ, cases_zero]
+        apply Set.disjoint_iff_forall_ne.2
+        simp only [mem_range, comp_apply, exists_prop', cons_zero, ne_eq, and_imp,
+          Nonempty.forall, forall_const, forall_eq', forall_exists_index, forall_apply_eq_imp_iff]
+        exact fun _ => succ_ne_zero _
+      | succ j =>
+        simp only [onFun, cases_succ]
+        apply Set.disjoint_iff_forall_ne.2
+        simp only [mem_range, comp_apply, ne_eq, forall_exists_index, forall_apply_eq_imp_iff,
+          succ_inj]
+        intro a b
+        apply c.emb_ne_emb_of_ne (by simpa using hij)
+  cover := by
+    refine Fin.cases ?_ (fun i => ?_)
+    · simp only [mem_range]
+      exact ⟨0, ⟨0, by simp⟩, by simp⟩
+    · simp only [mem_range]
+      exact ⟨Fin.succ (c.index i), Fin.cast (by simp) (c.invEmbedding i), by simp⟩
 
 中文:
 定义 extendLeft
@@ -804,7 +868,43 @@ definition extendLeft
   emb := Fin.cases (fun _ => 0) (fun m => Fin.succ ∘ c.emb m)
   emb_strictMono := by
     refine Fin.cases ?_ (fun i => ?_)
-    · exact @Subsingleton.strictMono _ _ _ _ (by simp; infer_in
+    · exact @Subsingleton.strictMono _ _ _ _ (by simp; infer_instance) _
+    · exact strictMono_succ.comp (c.emb_strictMono i)
+  parts_strictMono i j hij := by
+    induction j using Fin.induction with
+    | zero => simp at hij
+    | succ j => induction i using Fin.induction with
+      | zero => simp
+      | succ i =>
+        simp only [cons_succ, cases_succ, comp_apply, succ_lt_succ_iff]
+        exact c.parts_strictMono (by simpa using hij)
+  disjoint i hi j hj hij := by
+    wlog! h : j < i generalizing i j
+    · exact .symm
+        (this j (mem_univ j) i (mem_univ i) hij.symm (lt_of_le_of_ne h hij))
+    induction i using Fin.induction with
+    | zero => simp at h
+    | succ i =>
+      induction j using Fin.induction with
+      | zero =>
+        simp only [onFun, cases_succ, cases_zero]
+        apply Set.disjoint_iff_forall_ne.2
+        simp only [mem_range, comp_apply, exists_prop', cons_zero, ne_eq, and_imp,
+          Nonempty.forall, forall_const, forall_eq', forall_exists_index, forall_apply_eq_imp_iff]
+        exact fun _ => succ_ne_zero _
+      | succ j =>
+        simp only [onFun, cases_succ]
+        apply Set.disjoint_iff_forall_ne.2
+        simp only [mem_range, comp_apply, ne_eq, forall_exists_index, forall_apply_eq_imp_iff,
+          succ_inj]
+        intro a b
+        apply c.emb_ne_emb_of_ne (by simpa using hij)
+  cover := by
+    refine Fin.cases ?_ (fun i => ?_)
+    · simp only [mem_range]
+      exact ⟨0, ⟨0, by simp⟩, by simp⟩
+    · simp only [mem_range]
+      exact ⟨Fin.succ (c.index i), Fin.cast (by simp) (c.invEmbedding i), by simp⟩
 
 Depends on / 依赖: c.length, length
 -/
@@ -896,7 +996,80 @@ definition extendMiddle
   emb := by
     intro m
     by_cases h : m = k
-    · have : update c.partSize k (c.partSize k + 1) m = c.partSize k + 1 := by 
+    · have : update c.partSize k (c.partSize k + 1) m = c.partSize k + 1 := by rw [h]; simp
+      exact Fin.cases 0 (succ ∘ c.emb k) ∘ Fin.cast this
+    · have : update c.partSize k (c.partSize k + 1) m = c.partSize m := by simp [h]
+      exact succ ∘ c.emb m ∘ Fin.cast this
+  emb_strictMono := by
+    intro m
+    rcases eq_or_ne m k with rfl | hm
+    · suffices forall (a' b' : Fin (c.partSize m + 1)), a' < b' ->
+          (cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb m)) a' <
+          (cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb m)) b' by
+        simp only [↓reduceDIte]
+        intro a b hab
+        exact this _ _ hab
+      intro a' b' h'
+      induction b' using Fin.induction with
+      | zero => simp at h'
+      | succ b =>
+        induction a' using Fin.induction with
+        | zero => simp
+        | succ a' =>
+          simp only [cases_succ, comp_apply, succ_lt_succ_iff]
+          exact c.emb_strictMono m (by simpa using h')
+    · simp only [hm, ↓reduceDIte]
+      exact strictMono_succ.comp ((c.emb_strictMono m).comp (by exact fun ⦃a b⦄ h => h))
+  parts_strictMono := by
+    convert! strictMono_succ.comp c.parts_strictMono with m
+    rcases eq_or_ne m k with rfl | hm
+    · simp only [↓reduceDIte, update_self, add_tsub_cancel_right, comp_apply, cast_mk]
+      let a : Fin (c.partSize m + 1) := ⟨c.partSize m, lt_add_one (c.partSize m)⟩
+      let b : Fin (c.partSize m) := ⟨c.partSize m - 1, Nat.sub_one_lt_of_lt (c.partSize_pos m)⟩
+      change (cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb m)) a = succ (c.emb m b)
+      have : a = succ b := by
+        simpa [a, b, succ] using (Nat.sub_eq_iff_eq_add (c.partSize_pos m)).mp rfl
+      simp [this]
+    · simp [hm]
+  disjoint i hi j hj hij := by
+    wlog h : i != k generalizing i j
+    · apply Disjoint.symm
+        (this j (mem_univ j) i (mem_univ i) hij.symm ?_)
+      simp only [ne_eq, Decidable.not_not] at h
+      simpa [h] using hij.symm
+    rcases eq_or_ne j k with rfl | hj
+    · simp only [onFun, ↓reduceDIte]
+      suffices forall (a' : Fin (c.partSize i)) (b' : Fin (c.partSize j + 1)),
+          succ (c.emb i a') != cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb j) b' by
+        apply Set.disjoint_iff_forall_ne.2
+        simp only [hij, ↓reduceDIte, mem_range, comp_apply, ne_eq, forall_exists_index,
+          forall_apply_eq_imp_iff]
+        intro a b
+        apply this
+      intro a' b'
+      induction b' using Fin.induction with
+      | zero => simp
+      | succ b' =>
+        simp only [cases_succ, comp_apply, ne_eq, succ_inj]
+        apply c.emb_ne_emb_of_ne hij
+    · simp only [onFun, h, ↓reduceDIte, hj]
+      apply Set.disjoint_iff_forall_ne.2
+      simp only [mem_range, comp_apply, ne_eq, forall_exists_index, forall_apply_eq_imp_iff,
+        succ_inj]
+      intro a b
+      apply c.emb_ne_emb_of_ne hij
+  cover := by
+    refine Fin.cases ?_ (fun i => ?_)
+    · simp only [mem_range]
+      exact ⟨k, ⟨0, by simp⟩, by simp⟩
+    · simp only [mem_range]
+      rcases eq_or_ne (c.index i) k with rfl | hi
+      · have A : update c.partSize (c.index i) (c.partSize (c.index i) + 1) (c.index i) =
+          c.partSize (c.index i) + 1 := by simp
+        exact ⟨c.index i, (succ (c.invEmbedding i)).cast A.symm, by simp⟩
+      · have A : update c.partSize k (c.partSize k + 1) (c.index i) = c.partSize (c.index i) := by
+          simp [hi]
+        exact ⟨c.index i, (c.invEmbedding i).cast A.symm, by simp [hi]⟩
 
 中文:
 定义 extendMiddle
@@ -910,7 +1083,80 @@ definition extendMiddle
   emb := by
     intro m
     by_cases h : m = k
-    · have : update c.partSize k (c.partSize k + 1) m = c.partSize k + 1 := by 
+    · have : update c.partSize k (c.partSize k + 1) m = c.partSize k + 1 := by rw [h]; simp
+      exact Fin.cases 0 (succ ∘ c.emb k) ∘ Fin.cast this
+    · have : update c.partSize k (c.partSize k + 1) m = c.partSize m := by simp [h]
+      exact succ ∘ c.emb m ∘ Fin.cast this
+  emb_strictMono := by
+    intro m
+    rcases eq_or_ne m k with rfl | hm
+    · suffices forall (a' b' : Fin (c.partSize m + 1)), a' < b' ->
+          (cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb m)) a' <
+          (cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb m)) b' by
+        simp only [↓reduceDIte]
+        intro a b hab
+        exact this _ _ hab
+      intro a' b' h'
+      induction b' using Fin.induction with
+      | zero => simp at h'
+      | succ b =>
+        induction a' using Fin.induction with
+        | zero => simp
+        | succ a' =>
+          simp only [cases_succ, comp_apply, succ_lt_succ_iff]
+          exact c.emb_strictMono m (by simpa using h')
+    · simp only [hm, ↓reduceDIte]
+      exact strictMono_succ.comp ((c.emb_strictMono m).comp (by exact fun ⦃a b⦄ h => h))
+  parts_strictMono := by
+    convert! strictMono_succ.comp c.parts_strictMono with m
+    rcases eq_or_ne m k with rfl | hm
+    · simp only [↓reduceDIte, update_self, add_tsub_cancel_right, comp_apply, cast_mk]
+      let a : Fin (c.partSize m + 1) := ⟨c.partSize m, lt_add_one (c.partSize m)⟩
+      let b : Fin (c.partSize m) := ⟨c.partSize m - 1, Nat.sub_one_lt_of_lt (c.partSize_pos m)⟩
+      change (cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb m)) a = succ (c.emb m b)
+      have : a = succ b := by
+        simpa [a, b, succ] using (Nat.sub_eq_iff_eq_add (c.partSize_pos m)).mp rfl
+      simp [this]
+    · simp [hm]
+  disjoint i hi j hj hij := by
+    wlog h : i != k generalizing i j
+    · apply Disjoint.symm
+        (this j (mem_univ j) i (mem_univ i) hij.symm ?_)
+      simp only [ne_eq, Decidable.not_not] at h
+      simpa [h] using hij.symm
+    rcases eq_or_ne j k with rfl | hj
+    · simp only [onFun, ↓reduceDIte]
+      suffices forall (a' : Fin (c.partSize i)) (b' : Fin (c.partSize j + 1)),
+          succ (c.emb i a') != cases (motive := fun _ => Fin (n + 1)) 0 (succ ∘ c.emb j) b' by
+        apply Set.disjoint_iff_forall_ne.2
+        simp only [hij, ↓reduceDIte, mem_range, comp_apply, ne_eq, forall_exists_index,
+          forall_apply_eq_imp_iff]
+        intro a b
+        apply this
+      intro a' b'
+      induction b' using Fin.induction with
+      | zero => simp
+      | succ b' =>
+        simp only [cases_succ, comp_apply, ne_eq, succ_inj]
+        apply c.emb_ne_emb_of_ne hij
+    · simp only [onFun, h, ↓reduceDIte, hj]
+      apply Set.disjoint_iff_forall_ne.2
+      simp only [mem_range, comp_apply, ne_eq, forall_exists_index, forall_apply_eq_imp_iff,
+        succ_inj]
+      intro a b
+      apply c.emb_ne_emb_of_ne hij
+  cover := by
+    refine Fin.cases ?_ (fun i => ?_)
+    · simp only [mem_range]
+      exact ⟨k, ⟨0, by simp⟩, by simp⟩
+    · simp only [mem_range]
+      rcases eq_or_ne (c.index i) k with rfl | hi
+      · have A : update c.partSize (c.index i) (c.partSize (c.index i) + 1) (c.index i) =
+          c.partSize (c.index i) + 1 := by simp
+        exact ⟨c.index i, (succ (c.invEmbedding i)).cast A.symm, by simp⟩
+      · have A : update c.partSize k (c.partSize k + 1) (c.index i) = c.partSize (c.index i) := by
+          simp [hi]
+        exact ⟨c.index i, (c.invEmbedding i).cast A.symm, by simp [hi]⟩
 
 Depends on / 依赖: c.length, length
 -/
@@ -1044,7 +1290,15 @@ lemma range_emb_extendMiddle_ne_singleton_zero
       rw [← h]
       simp only [Nat.succ_eq_add_one, mem_range]
       have A : (c.extendMiddle j).partSize j = c.partSize j + 1 := by simp [extendMiddle]
-      refine ⟨Fin.cast A.symm 
+      refine ⟨Fin.cast A.symm (succ 0), ?_⟩
+      simp only [extendMiddle, ↓reduceDIte, comp_apply, Fin.cast_cast, cast_eq_self, cases_succ]
+    simp only [mem_singleton_iff] at this
+    exact Fin.succ_ne_zero _ this
+  · have : (c.extendMiddle i).emb j 0 in range ((c.extendMiddle i).emb j) :=
+      mem_range_self 0
+    rw [h] at this
+    simp only [extendMiddle, hij, ↓reduceDIte, comp_apply, mem_singleton_iff] at this
+    exact Fin.succ_ne_zero _ this
 
 中文:
 引理 range_emb_extendMiddle_ne_singleton_zero
@@ -1056,7 +1310,15 @@ lemma range_emb_extendMiddle_ne_singleton_zero
       rw [← h]
       simp only [Nat.succ_eq_add_one, mem_range]
       have A : (c.extendMiddle j).partSize j = c.partSize j + 1 := by simp [extendMiddle]
-      refine ⟨Fin.cast A.symm 
+      refine ⟨Fin.cast A.symm (succ 0), ?_⟩
+      simp only [extendMiddle, ↓reduceDIte, comp_apply, Fin.cast_cast, cast_eq_self, cases_succ]
+    simp only [mem_singleton_iff] at this
+    exact Fin.succ_ne_zero _ this
+  · have : (c.extendMiddle i).emb j 0 in range ((c.extendMiddle i).emb j) :=
+      mem_range_self 0
+    rw [h] at this
+    simp only [extendMiddle, hij, ↓reduceDIte, comp_apply, mem_singleton_iff] at this
+    exact Fin.succ_ne_zero _ this
 
 Depends on / 依赖: A.symm, Fin.cast, Fin.cast_cast, Fin.succ, Fin.succ_ne_zero, Nat.succ_eq_add_one, c.emb, c.extendMi, c.extendMiddle, c.partSize, cases_succ, cast_cast, cast_eq_self, comp_apply, eq_or_ne, extendMi, extendMiddle, mem_range, mem_singleton_iff, n.succ
 -/
@@ -1154,7 +1416,41 @@ definition eraseLeft
     exact fun i => c.partSize (Fin.cast this (succ i))
   partSize_pos i := c.partSize_pos _
   emb i j := by
-    have : c.length - 1 + 1 = c.length := Nat.sub_add_cancel (c.l
+    have : c.length - 1 + 1 = c.length := Nat.sub_add_cancel (c.length_pos (Nat.zero_lt_succ n))
+    refine Fin.pred (c.emb (Fin.cast this (succ i)) j) ?_
+    have := c.disjoint (mem_univ (Fin.cast this (succ i))) (mem_univ 0) (ne_of_beq_false rfl)
+    exact Set.disjoint_iff_forall_ne.1 this (by simp) (by simp only [mem_singleton_iff, hc])
+  emb_strictMono i a b hab := by
+    simp only [pred_lt_pred_iff, Nat.succ_eq_add_one]
+    apply c.emb_strictMono _ hab
+  parts_strictMono := by
+    intro i j hij
+    simp only [pred_lt_pred_iff, Nat.succ_eq_add_one]
+    apply c.parts_strictMono (cast_strictMono _ (strictMono_succ hij))
+  disjoint i _ j _ hij := by
+    apply Set.disjoint_iff_forall_ne.2
+    simp only [mem_range, ne_eq, forall_exists_index, forall_apply_eq_imp_iff, pred_inj]
+    intro a b
+    exact c.emb_ne_emb_of_ne ((cast_injective _).ne (by simpa using hij))
+  cover x := by
+    simp only [mem_range]
+    obtain ⟨i, j, hij⟩ : exists (i : Fin c.length), exists (j : Fin (c.partSize i)), c.emb i j = succ x :=
+      ⟨c.index (succ x), c.invEmbedding (succ x), by simp⟩
+    have A : c.length = c.length - 1 + 1 :=
+      (Nat.sub_add_cancel (c.length_pos (Nat.zero_lt_succ n))).symm
+    have i_ne : i != 0 := by
+      intro h
+      have : succ x in range (c.emb i) := by rw [← hij]; apply mem_range_self
+      rw [h]; rw [hc]; rw [mem_singleton_iff] at this
+      exact Fin.succ_ne_zero _ this
+    refine ⟨pred (Fin.cast A i) (by simpa using i_ne), Fin.cast (by simp) j, ?_⟩
+    have : x = pred (succ x) (succ_ne_zero x) := rfl
+    rw [this]
+    congr
+    rw [← hij]
+    congr 1
+    · simp
+    · simp [Fin.heq_ext_iff]
 
 中文:
 定义 eraseLeft
@@ -1165,7 +1461,41 @@ definition eraseLeft
     exact fun i => c.partSize (Fin.cast this (succ i))
   partSize_pos i := c.partSize_pos _
   emb i j := by
-    have : c.length - 1 + 1 = c.length := Nat.sub_add_cancel (c.l
+    have : c.length - 1 + 1 = c.length := Nat.sub_add_cancel (c.length_pos (Nat.zero_lt_succ n))
+    refine Fin.pred (c.emb (Fin.cast this (succ i)) j) ?_
+    have := c.disjoint (mem_univ (Fin.cast this (succ i))) (mem_univ 0) (ne_of_beq_false rfl)
+    exact Set.disjoint_iff_forall_ne.1 this (by simp) (by simp only [mem_singleton_iff, hc])
+  emb_strictMono i a b hab := by
+    simp only [pred_lt_pred_iff, Nat.succ_eq_add_one]
+    apply c.emb_strictMono _ hab
+  parts_strictMono := by
+    intro i j hij
+    simp only [pred_lt_pred_iff, Nat.succ_eq_add_one]
+    apply c.parts_strictMono (cast_strictMono _ (strictMono_succ hij))
+  disjoint i _ j _ hij := by
+    apply Set.disjoint_iff_forall_ne.2
+    simp only [mem_range, ne_eq, forall_exists_index, forall_apply_eq_imp_iff, pred_inj]
+    intro a b
+    exact c.emb_ne_emb_of_ne ((cast_injective _).ne (by simpa using hij))
+  cover x := by
+    simp only [mem_range]
+    obtain ⟨i, j, hij⟩ : exists (i : Fin c.length), exists (j : Fin (c.partSize i)), c.emb i j = succ x :=
+      ⟨c.index (succ x), c.invEmbedding (succ x), by simp⟩
+    have A : c.length = c.length - 1 + 1 :=
+      (Nat.sub_add_cancel (c.length_pos (Nat.zero_lt_succ n))).symm
+    have i_ne : i != 0 := by
+      intro h
+      have : succ x in range (c.emb i) := by rw [← hij]; apply mem_range_self
+      rw [h]; rw [hc]; rw [mem_singleton_iff] at this
+      exact Fin.succ_ne_zero _ this
+    refine ⟨pred (Fin.cast A i) (by simpa using i_ne), Fin.cast (by simp) j, ?_⟩
+    have : x = pred (succ x) (succ_ne_zero x) := rfl
+    rw [this]
+    congr
+    rw [← hij]
+    congr 1
+    · simp
+    · simp [Fin.heq_ext_iff]
 
 Depends on / 依赖: c.length, length
 -/
@@ -1226,7 +1556,105 @@ definition eraseMiddle
     · simpa using c.one_lt_partSize_index_zero hc
     · simp only [ne_eq, hi, not_false_eq_true, update_of_ne]
       exact c.partSize_pos i
-  emb i
+  emb i j := by
+    by_cases h : i = c.index 0
+    · refine Fin.pred (c.emb i (Fin.cast ?_ (succ j))) ?_
+      · rw [h]
+        simpa using Nat.sub_add_cancel (c.partSize_pos (c.index 0))
+      · have : 0 <= c.emb i 0 := Fin.zero_le _
+        exact (this.trans_lt (c.emb_strictMono _ (succ_pos _))).ne'
+    · refine Fin.pred (c.emb i (Fin.cast ?_ j)) ?_
+      · simp [h]
+      · conv_rhs => rw [← c.emb_invEmbedding 0]
+        exact c.emb_ne_emb_of_ne h
+  emb_strictMono i a b hab := by
+    rcases eq_or_ne i (c.index 0) with rfl | hi
+    · simp only [↓reduceDIte, Nat.succ_eq_add_one, pred_lt_pred_iff]
+      exact (c.emb_strictMono _).comp (cast_strictMono _) (by simpa using hab)
+    · simp only [hi, ↓reduceDIte, pred_lt_pred_iff, Nat.succ_eq_add_one]
+      exact (c.emb_strictMono _).comp (cast_strictMono _) hab
+  parts_strictMono i j hij := by
+    simp only [Fin.lt_def]
+    rw [← Nat.add_lt_add_iff_right (k := 1)]
+    convert! Fin.lt_def.1 (c.parts_strictMono hij)
+    · rcases eq_or_ne i (c.index 0) with rfl | hi
+      -- We do not yet replace `omega` with `lia` here, as it is measurably slower.
+      · simp only [↓reduceDIte, update_self, succ_mk, cast_mk, val_pred]
+        have A := c.one_lt_partSize_index_zero hc
+        rw [Nat.sub_add_cancel]
+        · congr; omega
+        · rw [Order.one_le_iff_pos]
+          conv_lhs => rw [show (0 : Nat) = c.emb (c.index 0) 0 by simp [emb_zero]]
+          rw [← lt_def]
+          apply c.emb_strictMono
+          simp [lt_def]
+      · simp only [hi, ↓reduceDIte, ne_eq, not_false_eq_true, update_of_ne, cast_mk, val_pred]
+        apply Nat.sub_add_cancel
+        have : c.emb i ⟨c.partSize i - 1, Nat.sub_one_lt_of_lt (c.partSize_pos i)⟩
+            != c.emb (c.index 0) 0 := c.emb_ne_emb_of_ne hi
+        simp only [c.emb_zero, ne_eq, ← val_eq_val, val_zero] at this
+        omega
+    · rcases eq_or_ne j (c.index 0) with rfl | hj
+      · simp only [↓reduceDIte, update_self, succ_mk, cast_mk, val_pred]
+        have A := c.one_lt_partSize_index_zero hc
+        rw [Nat.sub_add_cancel]
+        · congr; lia
+        · rw [Order.one_le_iff_pos]
+          conv_lhs => rw [show (0 : Nat) = c.emb (c.index 0) 0 by simp [emb_zero]]
+          rw [← lt_def]
+          apply c.emb_strictMono
+          simp [lt_def]
+      · simp only [hj, ↓reduceDIte, ne_eq, not_false_eq_true, update_of_ne, cast_mk, val_pred]
+        apply Nat.sub_add_cancel
+        have : c.emb j ⟨c.partSize j - 1, Nat.sub_one_lt_of_lt (c.partSize_pos j)⟩
+            != c.emb (c.index 0) 0 := c.emb_ne_emb_of_ne hj
+        simp only [c.emb_zero, ne_eq, ← val_eq_val, val_zero] at this
+        lia
+  disjoint i _ j _ hij := by
+    wlog h : i != c.index 0 generalizing i j
+    · apply Disjoint.symm
+        (this j (mem_univ j) i (mem_univ i) hij.symm ?_)
+      simp only [ne_eq, Decidable.not_not] at h
+      simpa [h] using hij.symm
+    rcases eq_or_ne j (c.index 0) with rfl | hj
+    · simp only [onFun, hij, ↓reduceDIte]
+      apply Set.disjoint_iff_forall_ne.2
+      simp only [mem_range, ne_eq, forall_exists_index, forall_apply_eq_imp_iff, pred_inj]
+      intro a b
+      exact c.emb_ne_emb_of_ne hij
+    · simp only [onFun, h, ↓reduceDIte, hj]
+      apply Set.disjoint_iff_forall_ne.2
+      simp only [mem_range, ne_eq, forall_exists_index, forall_apply_eq_imp_iff, pred_inj]
+      intro a b
+      exact c.emb_ne_emb_of_ne hij
+  cover x := by
+    simp only [mem_range]
+    obtain ⟨i, j, hij⟩ : exists (i : Fin c.length), exists (j : Fin (c.partSize i)), c.emb i j = succ x :=
+      ⟨c.index (succ x), c.invEmbedding (succ x), by simp⟩
+    rcases eq_or_ne i (c.index 0) with rfl | hi
+    · refine ⟨c.index 0, ?_⟩
+      have j_ne : j != 0 := by
+        rintro rfl
+        simp only [c.emb_zero] at hij
+        exact (Fin.succ_ne_zero _).symm hij
+      have je_ne' : (j : Nat) != 0 := by simpa
+      simp only [↓reduceDIte]
+      have A : c.partSize (c.index 0) - 1 + 1 = c.partSize (c.index 0) :=
+        Nat.sub_add_cancel (c.partSize_pos _)
+      have B : update c.partSize (c.index 0) (c.partSize (c.index 0) - 1) (c.index 0) =
+        c.partSize (c.index 0) - 1 := by simp
+      refine ⟨Fin.cast B.symm (pred (Fin.cast A.symm j) ?_), ?_⟩
+      · simpa using j_ne
+      · have : x = pred (succ x) (succ_ne_zero x) := rfl
+        rw [this]
+        simp only [pred_inj, ← hij]
+        congr 1
+        rw [← val_eq_val]
+        simp only [val_cast, val_succ, val_pred]
+        omega
+    · have A : update c.partSize (c.index 0) (c.partSize (c.index 0) - 1) i = c.partSize i := by
+        simp [hi]
+      exact ⟨i, Fin.cast A.symm j, by simp [hi, hij]⟩
 
 中文:
 定义 eraseMiddle
@@ -1238,7 +1666,105 @@ definition eraseMiddle
     · simpa using c.one_lt_partSize_index_zero hc
     · simp only [ne_eq, hi, not_false_eq_true, update_of_ne]
       exact c.partSize_pos i
-  emb i
+  emb i j := by
+    by_cases h : i = c.index 0
+    · refine Fin.pred (c.emb i (Fin.cast ?_ (succ j))) ?_
+      · rw [h]
+        simpa using Nat.sub_add_cancel (c.partSize_pos (c.index 0))
+      · have : 0 <= c.emb i 0 := Fin.zero_le _
+        exact (this.trans_lt (c.emb_strictMono _ (succ_pos _))).ne'
+    · refine Fin.pred (c.emb i (Fin.cast ?_ j)) ?_
+      · simp [h]
+      · conv_rhs => rw [← c.emb_invEmbedding 0]
+        exact c.emb_ne_emb_of_ne h
+  emb_strictMono i a b hab := by
+    rcases eq_or_ne i (c.index 0) with rfl | hi
+    · simp only [↓reduceDIte, Nat.succ_eq_add_one, pred_lt_pred_iff]
+      exact (c.emb_strictMono _).comp (cast_strictMono _) (by simpa using hab)
+    · simp only [hi, ↓reduceDIte, pred_lt_pred_iff, Nat.succ_eq_add_one]
+      exact (c.emb_strictMono _).comp (cast_strictMono _) hab
+  parts_strictMono i j hij := by
+    simp only [Fin.lt_def]
+    rw [← Nat.add_lt_add_iff_right (k := 1)]
+    convert! Fin.lt_def.1 (c.parts_strictMono hij)
+    · rcases eq_or_ne i (c.index 0) with rfl | hi
+      -- We do not yet replace `omega` with `lia` here, as it is measurably slower.
+      · simp only [↓reduceDIte, update_self, succ_mk, cast_mk, val_pred]
+        have A := c.one_lt_partSize_index_zero hc
+        rw [Nat.sub_add_cancel]
+        · congr; omega
+        · rw [Order.one_le_iff_pos]
+          conv_lhs => rw [show (0 : Nat) = c.emb (c.index 0) 0 by simp [emb_zero]]
+          rw [← lt_def]
+          apply c.emb_strictMono
+          simp [lt_def]
+      · simp only [hi, ↓reduceDIte, ne_eq, not_false_eq_true, update_of_ne, cast_mk, val_pred]
+        apply Nat.sub_add_cancel
+        have : c.emb i ⟨c.partSize i - 1, Nat.sub_one_lt_of_lt (c.partSize_pos i)⟩
+            != c.emb (c.index 0) 0 := c.emb_ne_emb_of_ne hi
+        simp only [c.emb_zero, ne_eq, ← val_eq_val, val_zero] at this
+        omega
+    · rcases eq_or_ne j (c.index 0) with rfl | hj
+      · simp only [↓reduceDIte, update_self, succ_mk, cast_mk, val_pred]
+        have A := c.one_lt_partSize_index_zero hc
+        rw [Nat.sub_add_cancel]
+        · congr; lia
+        · rw [Order.one_le_iff_pos]
+          conv_lhs => rw [show (0 : Nat) = c.emb (c.index 0) 0 by simp [emb_zero]]
+          rw [← lt_def]
+          apply c.emb_strictMono
+          simp [lt_def]
+      · simp only [hj, ↓reduceDIte, ne_eq, not_false_eq_true, update_of_ne, cast_mk, val_pred]
+        apply Nat.sub_add_cancel
+        have : c.emb j ⟨c.partSize j - 1, Nat.sub_one_lt_of_lt (c.partSize_pos j)⟩
+            != c.emb (c.index 0) 0 := c.emb_ne_emb_of_ne hj
+        simp only [c.emb_zero, ne_eq, ← val_eq_val, val_zero] at this
+        lia
+  disjoint i _ j _ hij := by
+    wlog h : i != c.index 0 generalizing i j
+    · apply Disjoint.symm
+        (this j (mem_univ j) i (mem_univ i) hij.symm ?_)
+      simp only [ne_eq, Decidable.not_not] at h
+      simpa [h] using hij.symm
+    rcases eq_or_ne j (c.index 0) with rfl | hj
+    · simp only [onFun, hij, ↓reduceDIte]
+      apply Set.disjoint_iff_forall_ne.2
+      simp only [mem_range, ne_eq, forall_exists_index, forall_apply_eq_imp_iff, pred_inj]
+      intro a b
+      exact c.emb_ne_emb_of_ne hij
+    · simp only [onFun, h, ↓reduceDIte, hj]
+      apply Set.disjoint_iff_forall_ne.2
+      simp only [mem_range, ne_eq, forall_exists_index, forall_apply_eq_imp_iff, pred_inj]
+      intro a b
+      exact c.emb_ne_emb_of_ne hij
+  cover x := by
+    simp only [mem_range]
+    obtain ⟨i, j, hij⟩ : exists (i : Fin c.length), exists (j : Fin (c.partSize i)), c.emb i j = succ x :=
+      ⟨c.index (succ x), c.invEmbedding (succ x), by simp⟩
+    rcases eq_or_ne i (c.index 0) with rfl | hi
+    · refine ⟨c.index 0, ?_⟩
+      have j_ne : j != 0 := by
+        rintro rfl
+        simp only [c.emb_zero] at hij
+        exact (Fin.succ_ne_zero _).symm hij
+      have je_ne' : (j : Nat) != 0 := by simpa
+      simp only [↓reduceDIte]
+      have A : c.partSize (c.index 0) - 1 + 1 = c.partSize (c.index 0) :=
+        Nat.sub_add_cancel (c.partSize_pos _)
+      have B : update c.partSize (c.index 0) (c.partSize (c.index 0) - 1) (c.index 0) =
+        c.partSize (c.index 0) - 1 := by simp
+      refine ⟨Fin.cast B.symm (pred (Fin.cast A.symm j) ?_), ?_⟩
+      · simpa using j_ne
+      · have : x = pred (succ x) (succ_ne_zero x) := rfl
+        rw [this]
+        simp only [pred_inj, ← hij]
+        congr 1
+        rw [← val_eq_val]
+        simp only [val_cast, val_succ, val_pred]
+        omega
+    · have A : update c.partSize (c.index 0) (c.partSize (c.index 0) - 1) i = c.partSize i := by
+        simp [hi]
+      exact ⟨i, Fin.cast A.symm j, by simp [hi, hij]⟩
 
 Depends on / 依赖: c.length, length
 -/
@@ -1369,7 +1895,82 @@ definition extendEquiv
     match o with
     | none =>
       simp only [extend, range_extendLeft_zero, ↓reduceDIte, Sigma.mk.inj_iff, heq_eq_eq,
-        and_tr
+        and_true]
+      rfl
+    | some i =>
+      simp only [extend, range_emb_extendMiddle_ne_singleton_zero, ↓reduceDIte,
+        Sigma.mk.inj_iff, heq_eq_eq, and_true, eraseMiddle,
+        index_extendMiddle_zero]
+      ext
+      · rfl
+      · simp only [heq_eq_eq, index_extendMiddle_zero]
+        ext j
+        rcases eq_or_ne i j with rfl | hij
+        · simp [extendMiddle]
+        · simp [hij.symm, extendMiddle]
+      · refine HEq.symm (hfunext rfl ?_)
+        simp only [heq_eq_eq, forall_eq']
+        intro a
+        rcases eq_or_ne a i with rfl | hij
+        · refine (Fin.heq_fun_iff ?_).mpr ?_
+          · rw [index_extendMiddle_zero]
+            simp [extendMiddle]
+          · simp [extendMiddle]
+        · refine (Fin.heq_fun_iff ?_).mpr ?_
+          · rw [index_extendMiddle_zero]
+            simp [extendMiddle]
+          · simp [extendMiddle, hij]
+  right_inv c := by
+    by_cases h : range (c.emb 0) = {0}
+    · have A : c.length - 1 + 1 = c.length := Nat.sub_add_cancel (c.length_pos (Nat.zero_lt_succ n))
+      dsimp only
+      rw [dif_pos h]
+      simp only [extend, extendLeft, eraseLeft]
+      ext
+      · exact A
+      · refine (Fin.heq_fun_iff A).mpr (fun i => ?_)
+        induction i using Fin.induction with
+        | zero => change 1 = c.partSize 0; simp [c.partSize_eq_one_of_range_emb_eq_singleton h]
+        | succ i => simp only [cons_succ, val_succ]; rfl
+      · refine hfunext (congrArg Fin A) ?_
+        simp only
+        intro i i' h'
+        have : i' = Fin.cast A i := eq_of_val_eq (by apply val_eq_val_of_heq h'.symm)
+        subst this
+        refine (Fin.heq_fun_iff ?_).mpr ?_
+        · induction i using Fin.induction with
+          | zero => simp [c.partSize_eq_one_of_range_emb_eq_singleton h]
+          | succ i => simp
+        · intro j
+          induction i using Fin.induction with
+          | zero =>
+            simp only [cases_zero, cast_zero, val_eq_zero]
+            exact (apply_eq_of_range_eq_singleton h _).symm
+          | succ i => simp
+    · dsimp only
+      rw [dif_neg h]
+      have B : c.partSize (c.index 0) - 1 + 1 = c.partSize (c.index 0) :=
+        Nat.sub_add_cancel (c.partSize_pos (c.index 0))
+      simp only [extend, extendMiddle, eraseMiddle, ↓reduceDIte]
+      ext
+      · rfl
+      · simp only [update_self, update_idem, heq_eq_eq, update_eq_self_iff, B]
+      · refine hfunext rfl ?_
+        simp only [heq_eq_eq, forall_eq']
+        intro i
+        refine ((Fin.heq_fun_iff ?_).mpr ?_).symm
+        · simp only [update_self, B, update_idem, update_eq_self]
+        · intro j
+          rcases eq_or_ne i (c.index 0) with rfl | hi
+          · simp only [↓reduceDIte, comp_apply]
+            rcases eq_or_ne j 0 with rfl | hj
+            · simpa using c.emb_zero
+            · let j' := Fin.pred (j.cast B.symm) (by simpa using hj)
+              have : j = (succ j').cast B := by simp [j']
+              simp only [this, val_cast, val_succ, cast_mk, cases_succ', comp_apply, succ_mk,
+                succ_pred]
+              rfl
+          · simp [hi]
 
 中文:
 定义 extendEquiv
@@ -1382,7 +1983,82 @@ definition extendEquiv
     match o with
     | none =>
       simp only [extend, range_extendLeft_zero, ↓reduceDIte, Sigma.mk.inj_iff, heq_eq_eq,
-        and_tr
+        and_true]
+      rfl
+    | some i =>
+      simp only [extend, range_emb_extendMiddle_ne_singleton_zero, ↓reduceDIte,
+        Sigma.mk.inj_iff, heq_eq_eq, and_true, eraseMiddle,
+        index_extendMiddle_zero]
+      ext
+      · rfl
+      · simp only [heq_eq_eq, index_extendMiddle_zero]
+        ext j
+        rcases eq_or_ne i j with rfl | hij
+        · simp [extendMiddle]
+        · simp [hij.symm, extendMiddle]
+      · refine HEq.symm (hfunext rfl ?_)
+        simp only [heq_eq_eq, forall_eq']
+        intro a
+        rcases eq_or_ne a i with rfl | hij
+        · refine (Fin.heq_fun_iff ?_).mpr ?_
+          · rw [index_extendMiddle_zero]
+            simp [extendMiddle]
+          · simp [extendMiddle]
+        · refine (Fin.heq_fun_iff ?_).mpr ?_
+          · rw [index_extendMiddle_zero]
+            simp [extendMiddle]
+          · simp [extendMiddle, hij]
+  right_inv c := by
+    by_cases h : range (c.emb 0) = {0}
+    · have A : c.length - 1 + 1 = c.length := Nat.sub_add_cancel (c.length_pos (Nat.zero_lt_succ n))
+      dsimp only
+      rw [dif_pos h]
+      simp only [extend, extendLeft, eraseLeft]
+      ext
+      · exact A
+      · refine (Fin.heq_fun_iff A).mpr (fun i => ?_)
+        induction i using Fin.induction with
+        | zero => change 1 = c.partSize 0; simp [c.partSize_eq_one_of_range_emb_eq_singleton h]
+        | succ i => simp only [cons_succ, val_succ]; rfl
+      · refine hfunext (congrArg Fin A) ?_
+        simp only
+        intro i i' h'
+        have : i' = Fin.cast A i := eq_of_val_eq (by apply val_eq_val_of_heq h'.symm)
+        subst this
+        refine (Fin.heq_fun_iff ?_).mpr ?_
+        · induction i using Fin.induction with
+          | zero => simp [c.partSize_eq_one_of_range_emb_eq_singleton h]
+          | succ i => simp
+        · intro j
+          induction i using Fin.induction with
+          | zero =>
+            simp only [cases_zero, cast_zero, val_eq_zero]
+            exact (apply_eq_of_range_eq_singleton h _).symm
+          | succ i => simp
+    · dsimp only
+      rw [dif_neg h]
+      have B : c.partSize (c.index 0) - 1 + 1 = c.partSize (c.index 0) :=
+        Nat.sub_add_cancel (c.partSize_pos (c.index 0))
+      simp only [extend, extendMiddle, eraseMiddle, ↓reduceDIte]
+      ext
+      · rfl
+      · simp only [update_self, update_idem, heq_eq_eq, update_eq_self_iff, B]
+      · refine hfunext rfl ?_
+        simp only [heq_eq_eq, forall_eq']
+        intro i
+        refine ((Fin.heq_fun_iff ?_).mpr ?_).symm
+        · simp only [update_self, B, update_idem, update_eq_self]
+        · intro j
+          rcases eq_or_ne i (c.index 0) with rfl | hi
+          · simp only [↓reduceDIte, comp_apply]
+            rcases eq_or_ne j 0 with rfl | hj
+            · simpa using c.emb_zero
+            · let j' := Fin.pred (j.cast B.symm) (by simpa using hj)
+              have : j = (succ j').cast B := by simp [j']
+              simp only [this, val_cast, val_succ, cast_mk, cases_succ', comp_apply, succ_mk,
+                succ_pred]
+              rfl
+          · simp [hi]
 
 Depends on / 依赖: extend
 -/
@@ -1546,7 +2222,13 @@ theorem applyOrderedFinpartition_update_right
     · simp
     · exact (c.emb_strictMono (c.index j)).injective
   · simp only [applyOrderedFinpartition, ne_eq, h, not_false_eq_true,
-   
+      update_of_ne]
+    congr 1
+    apply Function.update_comp_eq_of_notMem_range
+    have A : Disjoint (range (c.emb m)) (range (c.emb (c.index j))) :=
+      c.disjoint (mem_univ m) (mem_univ (c.index j)) h
+    have : j in range (c.emb (c.index j)) := mem_range.2 ⟨c.invEmbedding j, by simp⟩
+    exact Set.disjoint_right.1 A this
 
 中文:
 定理 applyOrderedFinpartition_update_right
@@ -1560,7 +2242,13 @@ theorem applyOrderedFinpartition_update_right
     · simp
     · exact (c.emb_strictMono (c.index j)).injective
   · simp only [applyOrderedFinpartition, ne_eq, h, not_false_eq_true,
-   
+      update_of_ne]
+    congr 1
+    apply Function.update_comp_eq_of_notMem_range
+    have A : Disjoint (range (c.emb m)) (range (c.emb (c.index j))) :=
+      c.disjoint (mem_univ m) (mem_univ (c.index j)) h
+    have : j in range (c.emb (c.index j)) := mem_range.2 ⟨c.invEmbedding j, by simp⟩
+    exact Set.disjoint_right.1 A this
 
 Depends on / 依赖: Disjoint, Function, Function.update_comp_eq_of_injective, Function.update_comp_eq_of_notMem_range, applyOrderedFinpartition, c.disjoint, c.emb, c.emb_strictMono, c.index, disjoint, emb_strictMono, injective, mem_ra, mem_univ, ne_eq, not_false_eq_true, update_comp_eq_of_injective, update_comp_eq_of_notMem_range, update_of_ne, update_self
 -/
@@ -1635,7 +2323,11 @@ definition compAlongOrderedFinpartition
           ContinuousMultilinearMap.map_update_add])
       (fun v i c x => by
         simp only [applyOrderedFinpartition_update_right,
-          Continu
+          ContinuousMultilinearMap.map_update_smul])
+  cont := by
+    apply f.cont.comp
+    change Continuous (fun v m => p m (v ∘ c.emb m))
+    fun_prop
 
 中文:
 定义 compAlongOrderedFinpartition
@@ -1646,7 +2338,11 @@ definition compAlongOrderedFinpartition
           ContinuousMultilinearMap.map_update_add])
       (fun v i c x => by
         simp only [applyOrderedFinpartition_update_right,
-          Continu
+          ContinuousMultilinearMap.map_update_smul])
+  cont := by
+    apply f.cont.comp
+    change Continuous (fun v m => p m (v ∘ c.emb m))
+    fun_prop
 
 Depends on / 依赖: Continuous, ContinuousMultilinearMap, ContinuousMultilinearMap.map_update_add, ContinuousMultilinearMap.map_update_smul, MultilinearMap, MultilinearMap.mk, applyOrderedFinpartition, applyOrderedFinpartition_update_right, c.applyOrderedFinpartition, c.emb, f.cont.comp, fun_prop, map_update_add, map_update_smul
 -/
@@ -1852,7 +2548,13 @@ theorem norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le
   _ <= ‖c.compAlongOrderedFinpartition f₁ g₁ - c.compAlongOrderedFinpartition f₁ g₂‖ +
       ‖c.compAlongOrderedFinpartition f₁ g₂ - c.compAlongOrderedFinpartition f₂ g₂‖ :=
     norm_sub_le_norm_sub_add_norm_sub ..
-  _ <= ‖f₁‖ * c.length * (max ‖g₁‖ ‖g₂‖) ^ (c.length - 1) * ‖g₁ - g₂‖ + ‖f₁ - f₂
+  _ <= ‖f₁‖ * c.length * (max ‖g₁‖ ‖g₂‖) ^ (c.length - 1) * ‖g₁ - g₂‖ + ‖f₁ - f₂‖ * ∏ i, ‖g₂ i‖ := by
+    gcongr ?_ + ?_
+    · refine ((c.compAlongOrderedFinpartitionL 𝕜 E F G f₁).norm_image_sub_le g₁ g₂).trans ?_
+      simp only [Fintype.card_fin]
+      gcongr
+      apply norm_compAlongOrderedFinpartitionL_apply_le
+    · exact c.norm_compAlongOrderedFinpartition_le (f₁ - f₂) g₂
 
 中文:
 定理 norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le
@@ -1860,7 +2562,13 @@ theorem norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le
   _ <= ‖c.compAlongOrderedFinpartition f₁ g₁ - c.compAlongOrderedFinpartition f₁ g₂‖ +
       ‖c.compAlongOrderedFinpartition f₁ g₂ - c.compAlongOrderedFinpartition f₂ g₂‖ :=
     norm_sub_le_norm_sub_add_norm_sub ..
-  _ <= ‖f₁‖ * c.length * (max ‖g₁‖ ‖g₂‖) ^ (c.length - 1) * ‖g₁ - g₂‖ + ‖f₁ - f₂
+  _ <= ‖f₁‖ * c.length * (max ‖g₁‖ ‖g₂‖) ^ (c.length - 1) * ‖g₁ - g₂‖ + ‖f₁ - f₂‖ * ∏ i, ‖g₂ i‖ := by
+    gcongr ?_ + ?_
+    · refine ((c.compAlongOrderedFinpartitionL 𝕜 E F G f₁).norm_image_sub_le g₁ g₂).trans ?_
+      simp only [Fintype.card_fin]
+      gcongr
+      apply norm_compAlongOrderedFinpartitionL_apply_le
+    · exact c.norm_compAlongOrderedFinpartition_le (f₁ - f₂) g₂
 -/
 theorem norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le
     (f₁ f₂ : F [×c.length]->L[𝕜] G) (g₁ g₂ : forall i, E [×c.partSize i]->L[𝕜] F) :
@@ -1956,7 +2664,20 @@ theorem taylorComp_sub_taylorComp_isBigO
   refine .trans (.of_norm_le fun _ =>
     c.norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le ..) ?_
   refine .add ?_ ?_
-  · have H₁ : (p₁ · c.length) =O[l] (1 : α -> Rea
+  · have H₁ : (p₁ · c.length) =O[l] (1 : α -> Real) := (hp_bdd _ c.length_le).isBigO_one Real
+    have H₂ : forall m, (q₁ · (c.partSize m)) =O[l] (1 : α -> Real) := fun m =>
+      (hq₁_bdd _ <| c.partSize_le _).isBigO_one Real
+    have H₃ : forall m, (q₂ · (c.partSize m)) =O[l] (1 : α -> Real) := fun m =>
+      (hq₂_bdd _ <| c.partSize_le _).isBigO_one Real
+    have H₄ : forall m, (fun a => q₁ a (c.partSize m) - q₂ a (c.partSize m)) =O[l] f := fun m =>
+hqf _ c.partSize_le _
+    rw [← Asymptotics.isBigO_pi] at H₂ H₃ H₄
+    have H₅ := ((H₂.prod_left H₃).norm_left.pow (c.length - 1)).mul H₄.norm_norm
+simpa [mul_assoc] using! H₁.norm_left.mul H₅.const_mul_left c.length
+  · have H₁ : (fun a => p₁ a c.length - p₂ a c.length) =O[l] f := hpf _ c.length_le
+    have H₂ : forall i, (q₂ · (c.partSize i)) =O[l] (1 : α -> Real) := fun i =>
+      (hq₂_bdd _ <| c.partSize_le i).isBigO_one Real
+simpa using H₁.norm_norm.mul .finsetProd fun i _ => (H₂ i).norm_left
 
 中文:
 定理 taylorComp_sub_taylorComp_isBigO
@@ -1966,7 +2687,20 @@ theorem taylorComp_sub_taylorComp_isBigO
   refine .trans (.of_norm_le fun _ =>
     c.norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le ..) ?_
   refine .add ?_ ?_
-  · have H₁ : (p₁ · c.length) =O[l] (1 : α -> Rea
+  · have H₁ : (p₁ · c.length) =O[l] (1 : α -> Real) := (hp_bdd _ c.length_le).isBigO_one Real
+    have H₂ : forall m, (q₁ · (c.partSize m)) =O[l] (1 : α -> Real) := fun m =>
+      (hq₁_bdd _ <| c.partSize_le _).isBigO_one Real
+    have H₃ : forall m, (q₂ · (c.partSize m)) =O[l] (1 : α -> Real) := fun m =>
+      (hq₂_bdd _ <| c.partSize_le _).isBigO_one Real
+    have H₄ : forall m, (fun a => q₁ a (c.partSize m) - q₂ a (c.partSize m)) =O[l] f := fun m =>
+hqf _ c.partSize_le _
+    rw [← Asymptotics.isBigO_pi] at H₂ H₃ H₄
+    have H₅ := ((H₂.prod_left H₃).norm_left.pow (c.length - 1)).mul H₄.norm_norm
+simpa [mul_assoc] using! H₁.norm_left.mul H₅.const_mul_left c.length
+  · have H₁ : (fun a => p₁ a c.length - p₂ a c.length) =O[l] f := hpf _ c.length_le
+    have H₂ : forall i, (q₂ · (c.partSize i)) =O[l] (1 : α -> Real) := fun i =>
+      (hq₂_bdd _ <| c.partSize_le i).isBigO_one Real
+simpa using H₁.norm_norm.mul .finsetProd fun i _ => (H₂ i).norm_left
 
 Depends on / 依赖: Finset, Finset.sum_sub_distrib, FormalMultilinearSeries, FormalMultilinearSeries.taylorComp, c.length, c.length_le, c.norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le, c.partSize, c.partSize_le, fun_sum, hp_bdd, isBigO_one, length, length_le, norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le, of_norm_le, partSize, partSize_le, sum_sub_distrib, taylorComp
 -/
@@ -2009,7 +2743,10 @@ theorem taylorComp_sub_taylorComp_isLittleO
                     fun k : Fin (n + 1) => q₁ a k - q₂ a k) := by
     refine taylorComp_sub_taylorComp_isBigO hp_bdd ?_ hq₁_bdd hq₂_bdd ?_
     all_goals simp only [← Nat.lt_succ_iff, Nat.forall_lt_iff_fin, ← Asymptotics.isBigO_pi]
-    
+    exacts [Asymptotics.isBigO_fst_prod, Asymptotics.isBigO_snd_prod]
+  _ =o[l] f :=
+    .prod_left (Asymptotics.isLittleO_pi.2 fun k => hpf k (by grind))
+      (Asymptotics.isLittleO_pi.2 fun k => hqf k (by grind))
 
 中文:
 定理 taylorComp_sub_taylorComp_isLittleO
@@ -2018,7 +2755,10 @@ theorem taylorComp_sub_taylorComp_isLittleO
                     fun k : Fin (n + 1) => q₁ a k - q₂ a k) := by
     refine taylorComp_sub_taylorComp_isBigO hp_bdd ?_ hq₁_bdd hq₂_bdd ?_
     all_goals simp only [← Nat.lt_succ_iff, Nat.forall_lt_iff_fin, ← Asymptotics.isBigO_pi]
-    
+    exacts [Asymptotics.isBigO_fst_prod, Asymptotics.isBigO_snd_prod]
+  _ =o[l] f :=
+    .prod_left (Asymptotics.isLittleO_pi.2 fun k => hpf k (by grind))
+      (Asymptotics.isLittleO_pi.2 fun k => hqf k (by grind))
 -/
 theorem taylorComp_sub_taylorComp_isLittleO
     {α H : Type*} [NormedAddCommGroup H] {l : Filter α} {p₁ p₂ : α -> FormalMultilinearSeries 𝕜 F G}
@@ -2050,7 +2790,10 @@ theorem analyticOn_taylorComp
   let B := c.compAlongOrderedFinpartitionL 𝕜 E F G
   change AnalyticOn 𝕜
     ((fun p => B p.1 p.2) ∘ (fun x => (q (f x) c.length, fun m => p x (c.partSize m)))) s
-  apply B.analyticOnNhd_uncurry_of_multilinear.comp_analyticOn ?_ (mapsTo_univ _ _
+  apply B.analyticOnNhd_uncurry_of_multilinear.comp_analyticOn ?_ (mapsTo_univ _ _)
+  apply AnalyticOn.prod
+  · exact (hq c.length).comp hf h
+  · exact AnalyticOn.pi (fun i => hp _)
 
 中文:
 定理 analyticOn_taylorComp
@@ -2059,7 +2802,10 @@ theorem analyticOn_taylorComp
   let B := c.compAlongOrderedFinpartitionL 𝕜 E F G
   change AnalyticOn 𝕜
     ((fun p => B p.1 p.2) ∘ (fun x => (q (f x) c.length, fun m => p x (c.partSize m)))) s
-  apply B.analyticOnNhd_uncurry_of_multilinear.comp_analyticOn ?_ (mapsTo_univ _ _
+  apply B.analyticOnNhd_uncurry_of_multilinear.comp_analyticOn ?_ (mapsTo_univ _ _)
+  apply AnalyticOn.prod
+  · exact (hq c.length).comp hf h
+  · exact AnalyticOn.pi (fun i => hp _)
 
 Depends on / 依赖: AnalyticOn, AnalyticOn.pi, AnalyticOn.prod, B.analyticOnNhd_uncurry_of_multilinear.comp_analyticOn, Finset, Finset.analyticOn_fun_sum, analyticOnNhd_uncurry_of_multilinear, analyticOn_fun_sum, c.compAlongOrderedFinpartitionL, c.length, c.partSize, compAlongOrderedFinpartitionL, comp_analyticOn, length, mapsTo_univ, partSize
 -/
@@ -2090,7 +2836,12 @@ lemma faaDiBruno_aux1
   simp only [Nat.succ_eq_add_one, OrderedFinpartition.extend, extendLeft,
     ContinuousMultilinearMap.curryLeft_apply,
     FormalMultilinearSeries.compAlongOrderedFinpartition_apply, applyOrderedFinpartition_apply,
-    ContinuousLinearMap.comp_apply, continuousMultilinearCurryFin1_appl
+    ContinuousLinearMap.comp_apply, continuousMultilinearCurryFin1_apply,
+    Matrix.zero_empty, ContinuousLinearMap.flipMultilinear_apply_apply,
+    compAlongOrderedFinpartitionL_apply, compAlongOrderFinpartition_apply]
+  congr
+  ext j
+  exact Fin.cases rfl (fun i => rfl) j
 
 中文:
 引理 faaDiBruno_aux1
@@ -2100,7 +2851,12 @@ lemma faaDiBruno_aux1
   simp only [Nat.succ_eq_add_one, OrderedFinpartition.extend, extendLeft,
     ContinuousMultilinearMap.curryLeft_apply,
     FormalMultilinearSeries.compAlongOrderedFinpartition_apply, applyOrderedFinpartition_apply,
-    ContinuousLinearMap.comp_apply, continuousMultilinearCurryFin1_appl
+    ContinuousLinearMap.comp_apply, continuousMultilinearCurryFin1_apply,
+    Matrix.zero_empty, ContinuousLinearMap.flipMultilinear_apply_apply,
+    compAlongOrderedFinpartitionL_apply, compAlongOrderFinpartition_apply]
+  congr
+  ext j
+  exact Fin.cases rfl (fun i => rfl) j
 -/
 private lemma faaDiBruno_aux1 {m : Nat} (q : FormalMultilinearSeries 𝕜 F G)
     (p : FormalMultilinearSeries 𝕜 E F) (c : OrderedFinpartition m) :
@@ -2129,7 +2885,22 @@ lemma faaDiBruno_aux2
   simp? [OrderedFinpartition.extend, extendMiddle, applyOrderedFinpartition_apply] says
     simp only [OrderedFinpartition.extend, extendMiddle, ContinuousMultilinearMap.curryLeft_apply,
       Nat.succ_eq_add_one, FormalMultilinearSeries.compAlongOrderedFinpartition_apply,
-      applyOr
+      applyOrderedFinpartition_apply, ContinuousLinearMap.comp_apply,
+      ContinuousMultilinearMap.toContinuousLinearMap_apply, compAlongOrderedFinpartitionL_apply,
+      compAlongOrderFinpartition_apply]
+  congr
+  ext j
+  rcases eq_or_ne j i with rfl | hij
+  · simp only [↓reduceDIte, update_self, ContinuousMultilinearMap.curryLeft_apply,
+      Nat.succ_eq_add_one]
+    apply FormalMultilinearSeries.congr _ (by simp)
+    intro a ha h'a
+    match a with
+    | 0 => simp
+    | a + 1 => simp [cons]
+  · simp only [hij, ↓reduceDIte, ne_eq, not_false_eq_true, update_of_ne]
+    apply FormalMultilinearSeries.congr _ (by simp [hij])
+    simp
 
 中文:
 引理 faaDiBruno_aux2
@@ -2139,7 +2910,22 @@ lemma faaDiBruno_aux2
   simp? [OrderedFinpartition.extend, extendMiddle, applyOrderedFinpartition_apply] says
     simp only [OrderedFinpartition.extend, extendMiddle, ContinuousMultilinearMap.curryLeft_apply,
       Nat.succ_eq_add_one, FormalMultilinearSeries.compAlongOrderedFinpartition_apply,
-      applyOr
+      applyOrderedFinpartition_apply, ContinuousLinearMap.comp_apply,
+      ContinuousMultilinearMap.toContinuousLinearMap_apply, compAlongOrderedFinpartitionL_apply,
+      compAlongOrderFinpartition_apply]
+  congr
+  ext j
+  rcases eq_or_ne j i with rfl | hij
+  · simp only [↓reduceDIte, update_self, ContinuousMultilinearMap.curryLeft_apply,
+      Nat.succ_eq_add_one]
+    apply FormalMultilinearSeries.congr _ (by simp)
+    intro a ha h'a
+    match a with
+    | 0 => simp
+    | a + 1 => simp [cons]
+  · simp only [hij, ↓reduceDIte, ne_eq, not_false_eq_true, update_of_ne]
+    apply FormalMultilinearSeries.congr _ (by simp [hij])
+    simp
 -/
 private lemma faaDiBruno_aux2 {m : Nat} (q : FormalMultilinearSeries 𝕜 F G)
     (p : FormalMultilinearSeries 𝕜 E F) (c : OrderedFinpartition m) (i : Fin c.length) :
@@ -2179,7 +2965,61 @@ theorem HasFTaylorSeriesUpToOn.comp
   /- One has to check that the `m+1`-th term is the derivative of the `m`-th term. The `m`-th term
   is a sum, that one can differentiate term by term. Each term is a linear map into continuous
   multilinear maps, applied to parts of `p` and `q`. One knows how to differentiate such a map,
-  thank
+  thanks to `HasFDerivWithinAt.linear_multilinear_comp`. The terms that show up are matched, using
+  `faaDiBruno_aux1` and `faaDiBruno_aux2`, with terms of the same form at order `m+1`. Then, one
+  needs to check that one gets each term once and exactly once, which is given by the bijection
+  `OrderedFinpartition.extendEquiv m`. -/
+  constructor
+  · intro x hx
+    simp [FormalMultilinearSeries.taylorComp, default, HasFTaylorSeriesUpToOn.zero_eq' hg (h hx)]
+  · intro m hm x hx
+    have A (c : OrderedFinpartition m) :
+      HasFDerivWithinAt (fun x => (q (f x)).compAlongOrderedFinpartition (p x) c)
+        (∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)).curryLeft) s x := by
+      let B := c.compAlongOrderedFinpartitionL 𝕜 E F G
+      change HasFDerivWithinAt (fun y => B (q (f y) c.length) (fun i => p y (c.partSize i)))
+        (∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)).curryLeft) s x
+      have cm : (c.length : WithTop Nat∞) <= m := mod_cast OrderedFinpartition.length_le c
+      have cp i : (c.partSize i : WithTop Nat∞) <= m := by
+        exact_mod_cast OrderedFinpartition.partSize_le c i
+      have I i : HasFDerivWithinAt (fun x => p x (c.partSize i))
+          (p x (c.partSize i).succ).curryLeft s x :=
+        hf.fderivWithin (c.partSize i) ((cp i).trans_lt hm) x hx
+      have J : HasFDerivWithinAt (fun x => q x c.length) (q (f x) c.length.succ).curryLeft
+        t (f x) := hg.fderivWithin c.length (cm.trans_lt hm) (f x) (h hx)
+      have K : HasFDerivWithinAt f ((continuousMultilinearCurryFin1 𝕜 E F) (p x 1)) s x :=
+        hf.hasFDerivWithinAt hm.ne_bot hx
+      convert! HasFDerivWithinAt.linear_multilinear_comp (J.comp x K h) I B
+      simp only [B, Nat.succ_eq_add_one, Fintype.sum_option, comp_apply, faaDiBruno_aux1,
+        faaDiBruno_aux2]
+    have B : HasFDerivWithinAt (fun x => (q (f x)).taylorComp (p x) m)
+        (∑ c : OrderedFinpartition m, ∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)).curryLeft) s x :=
+      HasFDerivWithinAt.fun_sum (fun c _ => A c)
+    suffices ∑ c : OrderedFinpartition m, ∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)) =
+        (q (f x)).taylorComp (p x) (m + 1) by
+      rw [← this]
+      convert! B
+      ext v
+      simp only [Nat.succ_eq_add_one, Fintype.sum_option, ContinuousMultilinearMap.curryLeft_apply,
+        FormalMultilinearSeries.compAlongOrderedFinpartition_apply, sum_apply, add_apply]
+    rw [Finset.sum_sigma']
+    exact Fintype.sum_equiv (OrderedFinpartition.extendEquiv m) _ _ (fun p => rfl)
+  · intro m hm
+    apply continuousOn_finsetSum _ (fun c _ => ?_)
+    let B := c.compAlongOrderedFinpartitionL 𝕜 E F G
+    change ContinuousOn
+      ((fun p => B p.1 p.2) ∘ (fun x => (q (f x) c.length, fun i => p x (c.partSize i)))) s
+    apply B.continuous_uncurry_of_multilinear.comp_continuousOn (ContinuousOn.prodMk ?_ ?_)
+    · have : (c.length : WithTop Nat∞) <= m := mod_cast OrderedFinpartition.length_le c
+      exact (hg.cont c.length (this.trans hm)).comp hf.continuousOn h
+    · apply continuousOn_pi.2 (fun i => ?_)
+      have : (c.partSize i : WithTop Nat∞) <= m := by
+        exact_mod_cast OrderedFinpartition.partSize_le c i
+      exact hf.cont _ (this.trans hm)
 
 中文:
 定理 有FTaylorSeriesUpToOn.comp
@@ -2188,7 +3028,61 @@ theorem HasFTaylorSeriesUpToOn.comp
   /- One has to check that the `m+1`-th term is the derivative of the `m`-th term. The `m`-th term
   is a sum, that one can differentiate term by term. Each term is a linear map into continuous
   multilinear maps, applied to parts of `p` and `q`. One knows how to differentiate such a map,
-  thank
+  thanks to `HasFDerivWithinAt.linear_multilinear_comp`. The terms that show up are matched, using
+  `faaDiBruno_aux1` and `faaDiBruno_aux2`, with terms of the same form at order `m+1`. Then, one
+  needs to check that one gets each term once and exactly once, which is given by the bijection
+  `OrderedFinpartition.extendEquiv m`. -/
+  constructor
+  · intro x hx
+    simp [FormalMultilinearSeries.taylorComp, default, HasFTaylorSeriesUpToOn.zero_eq' hg (h hx)]
+  · intro m hm x hx
+    have A (c : OrderedFinpartition m) :
+      HasFDerivWithinAt (fun x => (q (f x)).compAlongOrderedFinpartition (p x) c)
+        (∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)).curryLeft) s x := by
+      let B := c.compAlongOrderedFinpartitionL 𝕜 E F G
+      change HasFDerivWithinAt (fun y => B (q (f y) c.length) (fun i => p y (c.partSize i)))
+        (∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)).curryLeft) s x
+      have cm : (c.length : WithTop Nat∞) <= m := mod_cast OrderedFinpartition.length_le c
+      have cp i : (c.partSize i : WithTop Nat∞) <= m := by
+        exact_mod_cast OrderedFinpartition.partSize_le c i
+      have I i : HasFDerivWithinAt (fun x => p x (c.partSize i))
+          (p x (c.partSize i).succ).curryLeft s x :=
+        hf.fderivWithin (c.partSize i) ((cp i).trans_lt hm) x hx
+      have J : HasFDerivWithinAt (fun x => q x c.length) (q (f x) c.length.succ).curryLeft
+        t (f x) := hg.fderivWithin c.length (cm.trans_lt hm) (f x) (h hx)
+      have K : HasFDerivWithinAt f ((continuousMultilinearCurryFin1 𝕜 E F) (p x 1)) s x :=
+        hf.hasFDerivWithinAt hm.ne_bot hx
+      convert! HasFDerivWithinAt.linear_multilinear_comp (J.comp x K h) I B
+      simp only [B, Nat.succ_eq_add_one, Fintype.sum_option, comp_apply, faaDiBruno_aux1,
+        faaDiBruno_aux2]
+    have B : HasFDerivWithinAt (fun x => (q (f x)).taylorComp (p x) m)
+        (∑ c : OrderedFinpartition m, ∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)).curryLeft) s x :=
+      HasFDerivWithinAt.fun_sum (fun c _ => A c)
+    suffices ∑ c : OrderedFinpartition m, ∑ i : Option (Fin c.length),
+          ((q (f x)).compAlongOrderedFinpartition (p x) (c.extend i)) =
+        (q (f x)).taylorComp (p x) (m + 1) by
+      rw [← this]
+      convert! B
+      ext v
+      simp only [Nat.succ_eq_add_one, Fintype.sum_option, ContinuousMultilinearMap.curryLeft_apply,
+        FormalMultilinearSeries.compAlongOrderedFinpartition_apply, sum_apply, add_apply]
+    rw [Finset.sum_sigma']
+    exact Fintype.sum_equiv (OrderedFinpartition.extendEquiv m) _ _ (fun p => rfl)
+  · intro m hm
+    apply continuousOn_finsetSum _ (fun c _ => ?_)
+    let B := c.compAlongOrderedFinpartitionL 𝕜 E F G
+    change ContinuousOn
+      ((fun p => B p.1 p.2) ∘ (fun x => (q (f x) c.length, fun i => p x (c.partSize i)))) s
+    apply B.continuous_uncurry_of_multilinear.comp_continuousOn (ContinuousOn.prodMk ?_ ?_)
+    · have : (c.length : WithTop Nat∞) <= m := mod_cast OrderedFinpartition.length_le c
+      exact (hg.cont c.length (this.trans hm)).comp hf.continuousOn h
+    · apply continuousOn_pi.2 (fun i => ?_)
+      have : (c.partSize i : WithTop Nat∞) <= m := by
+        exact_mod_cast OrderedFinpartition.partSize_le c i
+      exact hf.cont _ (this.trans hm)
 -/
 theorem HasFTaylorSeriesUpToOn.comp {n : WithTop Nat∞} {g : F -> G} {f : E -> F}
     (hg : HasFTaylorSeriesUpToOn n g q t) (hf : HasFTaylorSeriesUpToOn n f p s) (h : MapsTo f s t) :

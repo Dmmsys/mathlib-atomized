@@ -926,7 +926,9 @@ definition codRestrict₂
   body: let e : LinearMap.range i ≃ₗ[R] M₃ := (LinearEquiv.ofInjective i hi).symm
   { toFun := fun x => e.comp <| (f x).codRestrict (p := LinearMap.range i) (hf x)
     map_add' := by intro x₁ x₂; ext y; simp [f.map_add, ← e.map_add, codRestrict]
-    map_smul' := by intro t x; ext y; simp [f.map_smul, ← e.ma
+    map_smul' := by intro t x; ext y; simp [f.map_smul, ← e.map_smul, codRestrict] }
+
+@[simp]
 
 中文:
 定义 codRestrict₂
@@ -934,7 +936,9 @@ definition codRestrict₂
   定义体: let e : LinearMap.range i ≃ₗ[R] M₃ := (LinearEquiv.ofInjective i hi).symm
   { toFun := fun x => e.comp <| (f x).codRestrict (p := LinearMap.range i) (hf x)
     map_add' := by intro x₁ x₂; ext y; simp [f.map_add, ← e.map_add, codRestrict]
-    map_smul' := by intro t x; ext y; simp [f.map_smul, ← e.ma
+    map_smul' := by intro t x; ext y; simp [f.map_smul, ← e.map_smul, codRestrict] }
+
+@[simp]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, LinearMap, LinearMap.range, codRestrict, e.comp, e.map_add, e.map_smul, f.map_add, f.map_smul, map_add, map_smul, ofInjective
 -/

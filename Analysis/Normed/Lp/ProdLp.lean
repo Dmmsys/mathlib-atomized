@@ -874,7 +874,22 @@ definition prodPseudoEMetricAux
     rcases p.dichotomy with (rfl | hp)
     · simp only [prod_edist_eq_sup]
       exact sup_le ((edist_triangle _ g.fst _).trans <| add_le_add le_sup_left le_sup_left)
-        ((edist_triangle _ g.snd _).trans <| add_le_
+        ((edist_triangle _ g.snd _).trans <| add_le_add le_sup_right le_sup_right)
+    · simp only [prod_edist_eq_add (zero_lt_one.trans_le hp)]
+      calc
+        (edist f.fst h.fst ^ p.toReal + edist f.snd h.snd ^ p.toReal) ^ (1 / p.toReal) <=
+            ((edist f.fst g.fst + edist g.fst h.fst) ^ p.toReal +
+              (edist f.snd g.snd + edist g.snd h.snd) ^ p.toReal) ^ (1 / p.toReal) := by
+          gcongr <;> apply edist_triangle
+        _ <=
+            (edist f.fst g.fst ^ p.toReal + edist f.snd g.snd ^ p.toReal) ^ (1 / p.toReal) +
+              (edist g.fst h.fst ^ p.toReal + edist g.snd h.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          have := ENNReal.Lp_add_le {0, 1}
+            (if · = 0 then edist f.fst g.fst else edist f.snd g.snd)
+            (if · = 0 then edist g.fst h.fst else edist g.snd h.snd) hp
+          simp only [Finset.mem_singleton, not_false_eq_true, Finset.sum_insert,
+            Finset.sum_singleton, reduceCtorEq] at this
+          exact this
 
 中文:
 定义 prodPseudoEMetricAux
@@ -885,7 +900,22 @@ definition prodPseudoEMetricAux
     rcases p.dichotomy with (rfl | hp)
     · simp only [prod_edist_eq_sup]
       exact sup_le ((edist_triangle _ g.fst _).trans <| add_le_add le_sup_left le_sup_left)
-        ((edist_triangle _ g.snd _).trans <| add_le_
+        ((edist_triangle _ g.snd _).trans <| add_le_add le_sup_right le_sup_right)
+    · simp only [prod_edist_eq_add (zero_lt_one.trans_le hp)]
+      calc
+        (edist f.fst h.fst ^ p.toReal + edist f.snd h.snd ^ p.toReal) ^ (1 / p.toReal) <=
+            ((edist f.fst g.fst + edist g.fst h.fst) ^ p.toReal +
+              (edist f.snd g.snd + edist g.snd h.snd) ^ p.toReal) ^ (1 / p.toReal) := by
+          gcongr <;> apply edist_triangle
+        _ <=
+            (edist f.fst g.fst ^ p.toReal + edist f.snd g.snd ^ p.toReal) ^ (1 / p.toReal) +
+              (edist g.fst h.fst ^ p.toReal + edist g.snd h.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          have := ENNReal.Lp_add_le {0, 1}
+            (if · = 0 then edist f.fst g.fst else edist f.snd g.snd)
+            (if · = 0 then edist g.fst h.fst else edist g.snd h.snd) hp
+          simp only [Finset.mem_singleton, not_false_eq_true, Finset.sum_insert,
+            Finset.sum_singleton, reduceCtorEq] at this
+          exact this
 
 Depends on / 依赖: prod_edist_self
 -/
@@ -954,7 +984,11 @@ abbreviation prodPseudoMetricAux
         split_ifs with hp' <;> positivity)
     fun f g => by
     rcases p.dichotomy with (rfl | h)
-    · refine 
+    · refine ENNReal.eq_of_forall_le_nnreal_iff fun r => ?_
+      simp [prod_edist_eq_sup, prod_dist_eq_sup]
+    · have : 0 < p.toReal := by rw [ENNReal.toReal_pos_iff_ne_top]; rintro rfl; norm_num at h
+      simp only [prod_edist_eq_add, edist_dist, one_div, prod_dist_eq_add, this]
+      rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [ENNReal.ofReal_add]; rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [← ENNReal.ofReal_rpow_of_nonneg] <;> simp [Real.rpow_nonneg, add_nonneg]
 
 中文:
 缩写 prodPseudoMetricAux
@@ -967,7 +1001,11 @@ abbreviation prodPseudoMetricAux
         split_ifs with hp' <;> positivity)
     fun f g => by
     rcases p.dichotomy with (rfl | h)
-    · refine 
+    · refine ENNReal.eq_of_forall_le_nnreal_iff fun r => ?_
+      simp [prod_edist_eq_sup, prod_dist_eq_sup]
+    · have : 0 < p.toReal := by rw [ENNReal.toReal_pos_iff_ne_top]; rintro rfl; norm_num at h
+      simp only [prod_edist_eq_add, edist_dist, one_div, prod_dist_eq_add, this]
+      rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [ENNReal.ofReal_add]; rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [← ENNReal.ofReal_rpow_of_nonneg] <;> simp [Real.rpow_nonneg, add_nonneg]
 
 Depends on / 依赖: ENNReal, ENNReal.eq_of_forall_le_nnreal_iff, ENNReal.toReal_pos_iff_ne_top, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, dichotomy, dite_eq_ite, edist_dist, eq_of_forall_le_nnreal_iff, one_div, p.dichotomy, p.toReal, prod_dist_e, prod_dist_eq_sup, prod_edist_eq_add, prod_edist_eq_sup, split_ifs, toPseudoMetricSpaceOfDist, toReal, toReal_pos_iff_ne_top
 -/
@@ -1003,7 +1041,17 @@ theorem edist_proj_le_edist_aux
     rw [prod_edist_eq_add (zero_lt_one.trans_le h)]
     constructor
     · calc
-        edist x.fst y.fst <= (edist x.fst y.fst ^ p.toR
+        edist x.fst y.fst <= (edist x.fst y.fst ^ p.toReal) ^ (1 / p.toReal) := by
+          simp only [← ENNReal.rpow_mul, cancel, ENNReal.rpow_one, le_refl]
+        _ <= (edist x.fst y.fst ^ p.toReal + edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          gcongr
+          simp only [self_le_add_right]
+    · calc
+        edist x.snd y.snd <= (edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          simp only [← ENNReal.rpow_mul, cancel, ENNReal.rpow_one, le_refl]
+        _ <= (edist x.fst y.fst ^ p.toReal + edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          gcongr
+          simp only [self_le_add_left]
 
 中文:
 定理 edist_proj_le_edist_aux
@@ -1015,7 +1063,17 @@ theorem edist_proj_le_edist_aux
     rw [prod_edist_eq_add (zero_lt_one.trans_le h)]
     constructor
     · calc
-        edist x.fst y.fst <= (edist x.fst y.fst ^ p.toR
+        edist x.fst y.fst <= (edist x.fst y.fst ^ p.toReal) ^ (1 / p.toReal) := by
+          simp only [← ENNReal.rpow_mul, cancel, ENNReal.rpow_one, le_refl]
+        _ <= (edist x.fst y.fst ^ p.toReal + edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          gcongr
+          simp only [self_le_add_right]
+    · calc
+        edist x.snd y.snd <= (edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          simp only [← ENNReal.rpow_mul, cancel, ENNReal.rpow_one, le_refl]
+        _ <= (edist x.fst y.fst ^ p.toReal + edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) := by
+          gcongr
+          simp only [self_le_add_left]
 -/
 private theorem edist_proj_le_edist_aux [PseudoEMetricSpace α] [PseudoEMetricSpace β]
     (x y : WithLp p (α × β)) :
@@ -1079,7 +1137,16 @@ lemma prod_antilipschitzWith_ofLp_aux
   · have pos : 0 < p.toReal := by positivity
     have nonneg : 0 <= 1 / p.toReal := by positivity
     have cancel : p.toReal * (1 / p.toReal) = 1 := mul_div_cancel₀ 1 (ne_of_gt pos)
-    rw [prod_edist_eq_add pos]; rw [ENNReal.toReal
+    rw [prod_edist_eq_add pos]; rw [ENNReal.toReal_div 1 p]
+    simp only [edist, ENNReal.toReal_one]
+    calc
+      (edist x.fst y.fst ^ p.toReal + edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) <=
+          (edist (ofLp x) (ofLp y) ^ p.toReal +
+          edist (ofLp x) (ofLp y) ^ p.toReal) ^ (1 / p.toReal) := by
+        gcongr <;> simp [edist]
+      _ = (2 ^ (1 / p.toReal) : Real>=0) * edist (ofLp x) (ofLp y) := by
+        simp only [← two_mul, ENNReal.mul_rpow_of_nonneg _ _ nonneg, ← ENNReal.rpow_mul, cancel,
+          ENNReal.rpow_one, ENNReal.coe_rpow_of_nonneg _ nonneg, coe_ofNat]
 
 中文:
 引理 prod_antilipschitzWith_ofLp_aux
@@ -1091,7 +1158,16 @@ lemma prod_antilipschitzWith_ofLp_aux
   · have pos : 0 < p.toReal := by positivity
     have nonneg : 0 <= 1 / p.toReal := by positivity
     have cancel : p.toReal * (1 / p.toReal) = 1 := mul_div_cancel₀ 1 (ne_of_gt pos)
-    rw [prod_edist_eq_add pos]; rw [ENNReal.toReal
+    rw [prod_edist_eq_add pos]; rw [ENNReal.toReal_div 1 p]
+    simp only [edist, ENNReal.toReal_one]
+    calc
+      (edist x.fst y.fst ^ p.toReal + edist x.snd y.snd ^ p.toReal) ^ (1 / p.toReal) <=
+          (edist (ofLp x) (ofLp y) ^ p.toReal +
+          edist (ofLp x) (ofLp y) ^ p.toReal) ^ (1 / p.toReal) := by
+        gcongr <;> simp [edist]
+      _ = (2 ^ (1 / p.toReal) : Real>=0) * edist (ofLp x) (ofLp y) := by
+        simp only [← two_mul, ENNReal.mul_rpow_of_nonneg _ _ nonneg, ← ENNReal.rpow_mul, cancel,
+          ENNReal.rpow_one, ENNReal.coe_rpow_of_nonneg _ nonneg, coe_ofNat]
 -/
 private lemma prod_antilipschitzWith_ofLp_aux [PseudoEMetricSpace α] [PseudoEMetricSpace β] :
     AntilipschitzWith ((2 : Real>=0) ^ (1 / p).toReal) (@ofLp p (α × β)) := by
@@ -2208,7 +2284,13 @@ example [NormedAddCommGroup α] [NormedAddCommGroup β] :
     instProdTopologicalSpace p α β :=
   rfl
 
-example [NormedAdd
+example [NormedAddCommGroup α] [NormedAddCommGroup β] :
+    (instProdNormedAddCommGroup p α β).toMetricSpace.toUniformSpace = instProdUniformSpace p α β :=
+  rfl
+
+example [NormedAddCommGroup α] [NormedAddCommGroup β] :
+    (instProdNormedAddCommGroup p α β).toMetricSpace.toBornology = instProdBornology p α β :=
+  rfl
 
 中文:
 实例 instProdNormedAddCommGroup
@@ -2221,7 +2303,13 @@ example [NormedAddCommGroup α] [NormedAddCommGroup β] :
     instProdTopologicalSpace p α β :=
   rfl
 
-example [NormedAdd
+example [NormedAddCommGroup α] [NormedAddCommGroup β] :
+    (instProdNormedAddCommGroup p α β).toMetricSpace.toUniformSpace = instProdUniformSpace p α β :=
+  rfl
+
+example [NormedAddCommGroup α] [NormedAddCommGroup β] :
+    (instProdNormedAddCommGroup p α β).toMetricSpace.toBornology = instProdBornology p α β :=
+  rfl
 
 Depends on / 依赖: eq_of_dist_eq_zero, instProdSeminormedAddCommGroup
 -/
@@ -2720,7 +2808,7 @@ lemma nnnorm_toLp_inr
     have hp0 : (p : Real) != 0 := mod_cast (zero_lt_one.trans_le <| Fact.out (p := 1 <= (p : Real>=0∞))).ne'
     simp [prod_nnnorm_eq_add, NNReal.zero_rpow hp0, ← NNReal.rpow_mul, mul_inv_cancel₀ hp0]
 
-@[simp
+@[simp]
 
 中文:
 引理 nnnorm_toLp_inr
@@ -2734,7 +2822,7 @@ lemma nnnorm_toLp_inr
     have hp0 : (p : Real) != 0 := mod_cast (zero_lt_one.trans_le <| Fact.out (p := 1 <= (p : Real>=0∞))).ne'
     simp [prod_nnnorm_eq_add, NNReal.zero_rpow hp0, ← NNReal.rpow_mul, mul_inv_cancel₀ hp0]
 
-@[simp
+@[simp]
 -/
 @[simp] lemma nnnorm_toLp_inr (y : β) : ‖toLp p ((0 : α), y)‖₊ = ‖y‖₊ := by
   induction p generalizing hp with
@@ -2961,7 +3049,8 @@ instance instProdIsBoundedSMul
       exact norm_smul_le _ _
     · have hp0 : 0 < p.toReal := zero_lt_one.trans_le hp
       have hpt : p != ⊤ := p.toReal_pos_iff_ne_top.mp hp0
-      rw [prod_nnnorm_eq_add hpt]; r
+      rw [prod_nnnorm_eq_add hpt]; rw [prod_nnnorm_eq_add hpt]; rw [one_div]; rw [NNReal.rpow_inv_le_iff hp0]; rw [NNReal.mul_rpow]; rw [← NNReal.rpow_mul]; rw [inv_mul_cancel₀ hp0.ne']; rw [NNReal.rpow_one]; rw [mul_add]; rw [← NNReal.mul_rpow]; rw [← NNReal.mul_rpow]
+      gcongr <;> exact nnnorm_smul_le _ _
 
 中文:
 实例 instProdIsBoundedSMul
@@ -2972,7 +3061,8 @@ instance instProdIsBoundedSMul
       exact norm_smul_le _ _
     · have hp0 : 0 < p.toReal := zero_lt_one.trans_le hp
       have hpt : p != ⊤ := p.toReal_pos_iff_ne_top.mp hp0
-      rw [prod_nnnorm_eq_add hpt]; r
+      rw [prod_nnnorm_eq_add hpt]; rw [prod_nnnorm_eq_add hpt]; rw [one_div]; rw [NNReal.rpow_inv_le_iff hp0]; rw [NNReal.mul_rpow]; rw [← NNReal.rpow_mul]; rw [inv_mul_cancel₀ hp0.ne']; rw [NNReal.rpow_one]; rw [mul_add]; rw [← NNReal.mul_rpow]; rw [← NNReal.mul_rpow]
+      gcongr <;> exact nnnorm_smul_le _ _
 
 Depends on / 依赖: NNReal, NNReal.mul_rp, NNReal.mul_rpow, NNReal.rpow_inv_le_iff, NNReal.rpow_mul, NNReal.rpow_one, dichotomy, hp0.ne, mul_add, mul_rp, mul_rpow, norm_smul_le, ofLp_smul, of_nnnorm_smul_le, one_div, p.dichotomy, p.toReal, p.toReal_pos_iff_ne_top.mp, prod_nnnorm_eq_add, prod_nnnorm_ofLp
 -/
@@ -3029,7 +3119,7 @@ instance instProdNormSMulClass
     · simp only [← prod_nnnorm_ofLp, WithLp.ofLp_smul, nnnorm_smul]
     · have hp0 : 0 < p.toReal := zero_lt_one.trans_le hp
       have hpt : p != ⊤ := p.toReal_pos_iff_ne_top.mp hp0
-      rw [prod_nnnorm_eq_add hpt]; rw [prod_nnno
+      rw [prod_nnnorm_eq_add hpt]; rw [prod_nnnorm_eq_add hpt]; rw [one_div]; rw [NNReal.rpow_inv_eq_iff hp0.ne']; rw [NNReal.mul_rpow]; rw [← NNReal.rpow_mul]; rw [inv_mul_cancel₀ hp0.ne']; rw [NNReal.rpow_one]; rw [mul_add]; rw [← NNReal.mul_rpow]; rw [← NNReal.mul_rpow]; rw [smul_fst]; rw [smul_snd]; rw [nnnorm_smul]; rw [nnnorm_smul]
 
 中文:
 实例 instProdNormSMulClass
@@ -3039,7 +3129,7 @@ instance instProdNormSMulClass
     · simp only [← prod_nnnorm_ofLp, WithLp.ofLp_smul, nnnorm_smul]
     · have hp0 : 0 < p.toReal := zero_lt_one.trans_le hp
       have hpt : p != ⊤ := p.toReal_pos_iff_ne_top.mp hp0
-      rw [prod_nnnorm_eq_add hpt]; rw [prod_nnno
+      rw [prod_nnnorm_eq_add hpt]; rw [prod_nnnorm_eq_add hpt]; rw [one_div]; rw [NNReal.rpow_inv_eq_iff hp0.ne']; rw [NNReal.mul_rpow]; rw [← NNReal.rpow_mul]; rw [inv_mul_cancel₀ hp0.ne']; rw [NNReal.rpow_one]; rw [mul_add]; rw [← NNReal.mul_rpow]; rw [← NNReal.mul_rpow]; rw [smul_fst]; rw [smul_snd]; rw [nnnorm_smul]; rw [nnnorm_smul]
 
 Depends on / 依赖: NNReal, NNReal.mul_rpow, NNReal.rpow_inv_eq_iff, NNReal.rpow_mul, NNReal.rpow_one, WithLp, WithLp.ofLp_smul, dichotomy, hp0.ne, mul_add, mul_rpow, nnnorm_smul, ofLp_smul, of_nnnorm_smul, one_div, p.dichotomy, p.toReal, p.toReal_pos_iff_ne_top.mp, prod_nnnorm_eq_add, prod_nnnorm_ofLp
 -/
@@ -3435,7 +3525,7 @@ lemma isBoundedSMulSeminormedAddCommGroupToProd
   let := pseudoMetricSpaceToProd p α β
   refine ⟨fun x y z => ?_, fun x y z => ?_⟩
   · simpa [dist_pseudoMetricSpaceToProd] using dist_smul_pair x (toLp p y) (toLp p z)
-  · simpa [dist_pseudoMetricSpaceToProd] using dist_pair_smul x y (
+  · simpa [dist_pseudoMetricSpaceToProd] using dist_pair_smul x y (toLp p z)
 
 中文:
 引理 isBoundedSMulSeminormedAddCommGroupToProd
@@ -3444,7 +3534,7 @@ lemma isBoundedSMulSeminormedAddCommGroupToProd
   let := pseudoMetricSpaceToProd p α β
   refine ⟨fun x y z => ?_, fun x y z => ?_⟩
   · simpa [dist_pseudoMetricSpaceToProd] using dist_smul_pair x (toLp p y) (toLp p z)
-  · simpa [dist_pseudoMetricSpaceToProd] using dist_pair_smul x y (
+  · simpa [dist_pseudoMetricSpaceToProd] using dist_pair_smul x y (toLp p z)
 
 Depends on / 依赖: pseudoMetricSpaceToProd
 -/
@@ -3524,7 +3614,7 @@ abbreviation normedAddCommGroupToProd
     rw [dist_pseudoMetricSpaceToProd]; rw [SeminormedAddCommGroup.dist_eq]; rw [toLp_add]; rw [toLp_neg]
   eq_of_dist_eq_zero {x y} h := by
     rw [dist_pseudoMetricSpaceToProd] at h
-    exact toLp_injective p (eq_
+    exact toLp_injective p (eq_of_dist_eq_zero h)
 
 中文:
 缩写 normedAddCommGroupToProd
@@ -3535,7 +3625,7 @@ abbreviation normedAddCommGroupToProd
     rw [dist_pseudoMetricSpaceToProd]; rw [SeminormedAddCommGroup.dist_eq]; rw [toLp_add]; rw [toLp_neg]
   eq_of_dist_eq_zero {x y} h := by
     rw [dist_pseudoMetricSpaceToProd] at h
-    exact toLp_injective p (eq_
+    exact toLp_injective p (eq_of_dist_eq_zero h)
 -/
 abbrev normedAddCommGroupToProd [NormedAddCommGroup α] [NormedAddCommGroup β] :
     NormedAddCommGroup (α × β) where
@@ -3708,7 +3798,7 @@ definition withLpProdAssoc
     rcases p.trichotomy with rfl | rfl | hp
     · absurd hp.elim; simp
     · simp [WithLp.prod_edist_eq_sup, max_assoc]
-    · simp [WithLp.prod_edist_eq_add hp, EN
+    · simp [WithLp.prod_edist_eq_add hp, ENNReal.rpow_inv_rpow hp.ne', add_assoc]
 
 中文:
 定义 withLpProdAssoc
@@ -3719,7 +3809,7 @@ definition withLpProdAssoc
     rcases p.trichotomy with rfl | rfl | hp
     · absurd hp.elim; simp
     · simp [WithLp.prod_edist_eq_sup, max_assoc]
-    · simp [WithLp.prod_edist_eq_add hp, EN
+    · simp [WithLp.prod_edist_eq_add hp, ENNReal.rpow_inv_rpow hp.ne', add_assoc]
 
 Depends on / 依赖: x.fst.fst, x.fst.snd, x.snd
 -/
@@ -3745,7 +3835,8 @@ definition withLpProdUnique
     rcases p.trichotomy with rfl | rfl | hp
     · absurd hp.elim; simp
     · simp_rw [WithLp.prod_edist_eq_sup, Unique.eq_default, edist_self, max_zero]
-    · simp_rw [WithLp.prod_edist_eq_add 
+    · simp_rw [WithLp.prod_edist_eq_add hp, Unique.eq_default, edist_self,
+        ENNReal.zero_rpow_of_pos hp, add_zero, one_div, ENNReal.rpow_rpow_inv hp.ne']
 
 中文:
 定义 withLpProdUnique
@@ -3755,7 +3846,8 @@ definition withLpProdUnique
     rcases p.trichotomy with rfl | rfl | hp
     · absurd hp.elim; simp
     · simp_rw [WithLp.prod_edist_eq_sup, Unique.eq_default, edist_self, max_zero]
-    · simp_rw [WithLp.prod_edist_eq_add 
+    · simp_rw [WithLp.prod_edist_eq_add hp, Unique.eq_default, edist_self,
+        ENNReal.zero_rpow_of_pos hp, add_zero, one_div, ENNReal.rpow_rpow_inv hp.ne']
 
 Depends on / 依赖: Equiv.prodUnique, WithLp, WithLp.equiv, prodUnique
 -/

@@ -369,7 +369,9 @@ let f := dirichletSummandHom χ ne_zero_of_one_lt_re hs
     rcases eq_or_ne n 0 with rfl | hn
     · simp only [term_zero, map_zero]
     · simp only [ne_eq, hn, not_false_eq_true, term_of_ne_zero, div_eq_mul_inv,
-        dirichletSummandHom, cpow_neg, MonoidWith
+        dirichletSummandHom, cpow_neg, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, f]
+  simpa only [LSeries, h]
+using! exp_tsum_primes_log_eq_tsum (f := f) summable_dirichletSummand χ hs
 
 中文:
 定理 DirichletCharacter.LSeries_eulerProduct_exp_log
@@ -380,7 +382,9 @@ let f := dirichletSummandHom χ ne_zero_of_one_lt_re hs
     rcases eq_or_ne n 0 with rfl | hn
     · simp only [term_zero, map_zero]
     · simp only [ne_eq, hn, not_false_eq_true, term_of_ne_zero, div_eq_mul_inv,
-        dirichletSummandHom, cpow_neg, MonoidWith
+        dirichletSummandHom, cpow_neg, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, f]
+  simpa only [LSeries, h]
+using! exp_tsum_primes_log_eq_tsum (f := f) summable_dirichletSummand χ hs
 
 Depends on / 依赖: LSeries, MonoidWithZeroHom, MonoidWithZeroHom.coe_mk, ZeroHom, ZeroHom.coe_mk, coe_mk, cpow_neg, dirichletSummandHom, div_eq_mul_inv, eq_or_ne, exp_tsum_primes_log_eq_tsum, map_zero, ne_eq, ne_zero_of_one_lt_re, not_false_eq_true, summable_dirichletSummand, term_of_ne_zero, term_zero
 -/
@@ -460,7 +464,35 @@ lemma DirichletCharacter.LSeries_changeLevel
   proof: by
   rw [prod_eq_tprod_mulIndicator]; rw [← DirichletCharacter.LSeries_eulerProduct_tprod _ hs]; rw [← DirichletCharacter.LSeries_eulerProduct_tprod _ hs]
   -- convert to a form suitable for `tprod_subtype`
-  have (f : Primes -> Complex) : ∏' (p : Primes), f p = ∏' (p : ↑{p : Nat | p.Prime}), f p :=
+  have (f : Primes -> Complex) : ∏' (p : Primes), f p = ∏' (p : ↑{p : Nat | p.Prime}), f p := rfl
+  rw [this]; rw [tprod_subtype _ fun p : Nat => (1 - (changeLevel hMN χ) p * p ^ (-s))⁻¹]; rw [this]; rw [tprod_subtype _ fun p : Nat => (1 - χ p * p ^ (-s))⁻¹]; rw [← Multipliable.tprod_mul]
+  rotate_left -- deal with convergence goals first
+  · exact multipliable_subtype_iff_mulIndicator.mp
+      (DirichletCharacter.LSeries_eulerProduct_hasProd χ hs).multipliable
+  · exact multipliable_subtype_iff_mulIndicator.mp Multipliable.of_finite
+  · congr 1 with p
+    simp only [Set.mulIndicator_apply, Set.mem_ofPred_eq, Finset.mem_coe, Nat.mem_primeFactors,
+      ne_eq, mul_ite, mul_one]
+    by_cases h : p.Prime; swap
+    · simp only [h, false_and, if_false]
+    simp only [h, true_and, if_true]
+    by_cases hp' : p ∣ N; swap
+    · simp only [hp', false_and, ↓reduceIte, inv_inj, sub_right_inj, mul_eq_mul_right_iff,
+        cpow_eq_zero_iff, Nat.cast_eq_zero, h.ne_zero, ne_eq, neg_eq_zero, or_false]
+      have hq : IsUnit (p : ZMod N) := (ZMod.isUnit_prime_iff_not_dvd h).mpr hp'
+      simp only [hq.unit_spec ▸ DirichletCharacter.changeLevel_eq_cast_of_dvd χ hMN hq.unit,
+        ZMod.cast_natCast hMN]
+    · simp only [hp', NeZero.ne N, not_false_eq_true, and_self, ↓reduceIte]
+      have : ¬IsUnit (p : ZMod N) := by rwa [ZMod.isUnit_prime_iff_not_dvd h, not_not]
+      rw [MulChar.map_nonunit _ this]; rw [zero_mul]; rw [sub_zero]; rw [inv_one]
+      refine (inv_mul_cancel₀ ?_).symm
+      rw [sub_ne_zero]; rw [ne_comm]
+      -- Remains to show `χ p * p ^ (-s) ≠ 1`. We show its norm is strictly `< 1`.
+      apply_fun (‖·‖)
+      simp only [norm_mul, norm_one]
+      have ha : ‖χ p‖ <= 1 := χ.norm_le_one p
+      have hb : ‖(p : Complex) ^ (-s)‖ <= 1 / 2 := norm_prime_cpow_le_one_half ⟨p, h⟩ hs
+      exact ((mul_le_mul ha hb (norm_nonneg _) zero_le_one).trans_lt (by norm_num)).ne
 
 中文:
 引理 DirichletCharacter.LSeries_changeLevel
@@ -468,7 +500,35 @@ lemma DirichletCharacter.LSeries_changeLevel
   证明: by
   rw [prod_eq_tprod_mulIndicator]; rw [← DirichletCharacter.LSeries_eulerProduct_tprod _ hs]; rw [← DirichletCharacter.LSeries_eulerProduct_tprod _ hs]
   -- convert to a form suitable for `tprod_subtype`
-  have (f : Primes -> Complex) : ∏' (p : Primes), f p = ∏' (p : ↑{p : Nat | p.Prime}), f p :=
+  have (f : Primes -> Complex) : ∏' (p : Primes), f p = ∏' (p : ↑{p : Nat | p.Prime}), f p := rfl
+  rw [this]; rw [tprod_subtype _ fun p : Nat => (1 - (changeLevel hMN χ) p * p ^ (-s))⁻¹]; rw [this]; rw [tprod_subtype _ fun p : Nat => (1 - χ p * p ^ (-s))⁻¹]; rw [← Multipliable.tprod_mul]
+  rotate_left -- deal with convergence goals first
+  · exact multipliable_subtype_iff_mulIndicator.mp
+      (DirichletCharacter.LSeries_eulerProduct_hasProd χ hs).multipliable
+  · exact multipliable_subtype_iff_mulIndicator.mp Multipliable.of_finite
+  · congr 1 with p
+    simp only [Set.mulIndicator_apply, Set.mem_ofPred_eq, Finset.mem_coe, Nat.mem_primeFactors,
+      ne_eq, mul_ite, mul_one]
+    by_cases h : p.Prime; swap
+    · simp only [h, false_and, if_false]
+    simp only [h, true_and, if_true]
+    by_cases hp' : p ∣ N; swap
+    · simp only [hp', false_and, ↓reduceIte, inv_inj, sub_right_inj, mul_eq_mul_right_iff,
+        cpow_eq_zero_iff, Nat.cast_eq_zero, h.ne_zero, ne_eq, neg_eq_zero, or_false]
+      have hq : IsUnit (p : ZMod N) := (ZMod.isUnit_prime_iff_not_dvd h).mpr hp'
+      simp only [hq.unit_spec ▸ DirichletCharacter.changeLevel_eq_cast_of_dvd χ hMN hq.unit,
+        ZMod.cast_natCast hMN]
+    · simp only [hp', NeZero.ne N, not_false_eq_true, and_self, ↓reduceIte]
+      have : ¬IsUnit (p : ZMod N) := by rwa [ZMod.isUnit_prime_iff_not_dvd h, not_not]
+      rw [MulChar.map_nonunit _ this]; rw [zero_mul]; rw [sub_zero]; rw [inv_one]
+      refine (inv_mul_cancel₀ ?_).symm
+      rw [sub_ne_zero]; rw [ne_comm]
+      -- Remains to show `χ p * p ^ (-s) ≠ 1`. We show its norm is strictly `< 1`.
+      apply_fun (‖·‖)
+      simp only [norm_mul, norm_one]
+      have ha : ‖χ p‖ <= 1 := χ.norm_le_one p
+      have hb : ‖(p : Complex) ^ (-s)‖ <= 1 / 2 := norm_prime_cpow_le_one_half ⟨p, h⟩ hs
+      exact ((mul_le_mul ha hb (norm_nonneg _) zero_le_one).trans_lt (by norm_num)).ne
 
 Depends on / 依赖: DirichletCharacter, DirichletCharacter.LSeries_eulerProduct_tprod, LSeries_eulerProduct_tprod, prod_eq_tprod_mulIndicator
 -/
@@ -525,7 +585,35 @@ theorem DirichletCharacter.eulerProduct_log_eq_LSeries
   have hpow_le (p : Primes) : ‖χ p * (p : Complex) ^ (-s)‖ < 1 := by
     grw [norm_mul, norm_le_one, norm_natCast_cpow_of_pos (mod_cast p.prop.pos), neg_re, one_mul]
     apply rpow_lt_one_of_one_lt_of_neg (mod_cast p.prop.one_lt) (by linarith)
-  rw [tsum_congr (fun p => (hasSum_taylorSeries_neg_l
+  rw [tsum_congr (fun p => (hasSum_taylorSeries_neg_log' (hpow_le p)).tsum_eq.symm)]; rw [LSeries_def₀ (by simp)]
+  let f : Nat -> Complex := fun n => χ n * Λ n / Real.log n * ((n : Complex) ^ (-s))
+  calc
+    _ = ∑' (p : Primes) (k : Nat), (χ (p ^ (k + 1)) * ((p ^ (k + 1) : Nat) : Complex) ^ (-s)) *
+          Λ (p ^ (k + 1)) / Real.log (p ^ (k + 1)) := by
+      refine tsum_congr fun p => tsum_congr fun k => ?_
+      have : Complex.log p != 0 := mod_cast p.prop.log_ne_zero
+      simp [mul_pow, ← cpow_nat_mul, ← natCast_cpow_natCast_mul, vonMangoldt_apply_pow,
+        vonMangoldt_apply_prime p.2, field]
+    _ = ∑' n : {n : Nat // IsPrimePow n}, f n := by
+      rw [← tsum_primes_pow_eq]
+      · exact tsum_congr fun p => tsum_congr fun k => (by unfold f; simp; ring)
+      · apply comp_injective _ Subtype.coe_injective (f := f)
+        apply of_norm_bounded_eventually_nat (g := (↑· ^ (-s.re)))
+        · simp [hs]
+        · filter_upwards [eventually_gt_atTop 1] with n hn
+          simp only [f, norm_mul, norm_div, norm_real, norm_eq_abs]
+          grw [norm_le_one, vonMangoldt_le_log]
+          have := log_pos (x := n) (mod_cast hn)
+          field_simp
+          rw [← ofReal_natCast n]; rw [norm_cpow_eq_rpow_re_of_nonneg (by simp) (by simp; grind)]
+          simp
+    _ = _ := by
+      simp only [div_eq_mul_inv _ (_ ^ _), ← cpow_neg]
+      suffices (Function.support f) subseteq {n | IsPrimePow n} from
+        tsum_subtype_eq_of_support_subset this
+      intro n hn
+      contrapose! hn
+      simp [f, vonMangoldt_eq_zero_iff.mpr hn]
 
 中文:
 定理 DirichletCharacter.eulerProduct_log_eq_LSeries
@@ -534,7 +622,35 @@ theorem DirichletCharacter.eulerProduct_log_eq_LSeries
   have hpow_le (p : Primes) : ‖χ p * (p : Complex) ^ (-s)‖ < 1 := by
     grw [norm_mul, norm_le_one, norm_natCast_cpow_of_pos (mod_cast p.prop.pos), neg_re, one_mul]
     apply rpow_lt_one_of_one_lt_of_neg (mod_cast p.prop.one_lt) (by linarith)
-  rw [tsum_congr (fun p => (hasSum_taylorSeries_neg_l
+  rw [tsum_congr (fun p => (hasSum_taylorSeries_neg_log' (hpow_le p)).tsum_eq.symm)]; rw [LSeries_def₀ (by simp)]
+  let f : Nat -> Complex := fun n => χ n * Λ n / Real.log n * ((n : Complex) ^ (-s))
+  calc
+    _ = ∑' (p : Primes) (k : Nat), (χ (p ^ (k + 1)) * ((p ^ (k + 1) : Nat) : Complex) ^ (-s)) *
+          Λ (p ^ (k + 1)) / Real.log (p ^ (k + 1)) := by
+      refine tsum_congr fun p => tsum_congr fun k => ?_
+      have : Complex.log p != 0 := mod_cast p.prop.log_ne_zero
+      simp [mul_pow, ← cpow_nat_mul, ← natCast_cpow_natCast_mul, vonMangoldt_apply_pow,
+        vonMangoldt_apply_prime p.2, field]
+    _ = ∑' n : {n : Nat // IsPrimePow n}, f n := by
+      rw [← tsum_primes_pow_eq]
+      · exact tsum_congr fun p => tsum_congr fun k => (by unfold f; simp; ring)
+      · apply comp_injective _ Subtype.coe_injective (f := f)
+        apply of_norm_bounded_eventually_nat (g := (↑· ^ (-s.re)))
+        · simp [hs]
+        · filter_upwards [eventually_gt_atTop 1] with n hn
+          simp only [f, norm_mul, norm_div, norm_real, norm_eq_abs]
+          grw [norm_le_one, vonMangoldt_le_log]
+          have := log_pos (x := n) (mod_cast hn)
+          field_simp
+          rw [← ofReal_natCast n]; rw [norm_cpow_eq_rpow_re_of_nonneg (by simp) (by simp; grind)]
+          simp
+    _ = _ := by
+      simp only [div_eq_mul_inv _ (_ ^ _), ← cpow_neg]
+      suffices (Function.support f) subseteq {n | IsPrimePow n} from
+        tsum_subtype_eq_of_support_subset this
+      intro n hn
+      contrapose! hn
+      simp [f, vonMangoldt_eq_zero_iff.mpr hn]
 
 Depends on / 依赖: Primes, Real.log, hasSum_taylorSeries_neg_log, hpow_le, mod_cast, neg_re, norm_le_one, norm_mul, norm_natCast_cpow_of_pos, one_lt, one_mul, p.prop.one_lt, p.prop.pos, rpow_lt_one_of_one_lt_of_neg, tsum_congr, tsum_eq, tsum_eq.symm
 -/

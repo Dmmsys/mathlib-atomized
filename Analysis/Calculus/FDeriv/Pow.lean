@@ -46,7 +46,9 @@ theorem aux
   simp_rw [smul_comm (_ : 𝔸) (_ : 𝔸ᵐᵒᵖ), smul_smul, ← pow_succ']
   congr! 5 with x hx
   simp only [Finset.mem_range, Nat.lt_succ_iff] at hx
-  rw [ts
+  rw [tsub_add_eq_add_tsub hx]
+
+@[to_fun]
 
 中文:
 定理 aux
@@ -57,7 +59,9 @@ theorem aux
   simp_rw [smul_comm (_ : 𝔸) (_ : 𝔸ᵐᵒᵖ), smul_smul, ← pow_succ']
   congr! 5 with x hx
   simp only [Finset.mem_range, Nat.lt_succ_iff] at hx
-  rw [ts
+  rw [tsub_add_eq_add_tsub hx]
+
+@[to_fun]
 -/
 private theorem aux (f : E -> 𝔸) (f' : E ->L[𝕜] 𝔸) (x : E) (n : Nat) :
     f x •> ∑ i in Finset.range (n + 1), f x ^ ((n + 1).pred - i) •> f' <• f x ^ i

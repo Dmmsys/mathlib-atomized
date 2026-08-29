@@ -154,7 +154,7 @@ definition conjBy
   le_closure' _ := e.symm_apply_le.mp (c.le_closure' _)
   idempotent' _ :=
 congrArg e Eq.trans (congrArg c (e.symm_apply_apply _)) (c.idempotent' _)
-  isClosed_iff := I
+  isClosed_iff := Iff.trans c.isClosed_iff e.eq_symm_apply
 
 中文:
 定义 conjBy
@@ -166,7 +166,7 @@ congrArg e Eq.trans (congrArg c (e.symm_apply_apply _)) (c.idempotent' _)
   le_closure' _ := e.symm_apply_le.mp (c.le_closure' _)
   idempotent' _ :=
 congrArg e Eq.trans (congrArg c (e.symm_apply_apply _)) (c.idempotent' _)
-  isClosed_iff := I
+  isClosed_iff := Iff.trans c.isClosed_iff e.eq_symm_apply
 
 Depends on / 依赖: e.conj
 -/

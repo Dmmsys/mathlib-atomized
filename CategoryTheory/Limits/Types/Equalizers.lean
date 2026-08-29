@@ -40,7 +40,7 @@ definition typeEqualizerOfUnique
       exact (Classical.choose_spec (t (s.ι i) (congr_hom s.condition i))).1
     · intro m hm
       ext i
-      exact (Classical.choose_spec (t (
+      exact (Classical.choose_spec (t (s.ι i) (congr_hom s.condition i))).2 _ (congr_hom hm i)
 
 中文:
 定义 typeEqualizerOfUnique
@@ -53,7 +53,7 @@ definition typeEqualizerOfUnique
       exact (Classical.choose_spec (t (s.ι i) (congr_hom s.condition i))).1
     · intro m hm
       ext i
-      exact (Classical.choose_spec (t (
+      exact (Classical.choose_spec (t (s.ι i) (congr_hom s.condition i))).2 _ (congr_hom hm i)
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Fork.IsLimit.mk, IsLimit, choose_spec, condition, congr_hom, s.condition
 -/
@@ -82,7 +82,10 @@ theorem unique_of_type_equalizer
   intro x' hx'
   suffices (fun _ : PUnit => x') = (Fork.IsLimit.lift' t y' hy').1 by
     rw [← this]
-  apply TypeCat.ho
+  apply TypeCat.homEquiv.symm.injective
+  apply Fork.IsLimit.hom_ext t
+  ext ⟨⟩
+  apply hx'.trans (congr_hom (Fork.IsLimit.lift' t _ hy').2 ⟨⟩).symm
 
 中文:
 定理 unique_of_type_equalizer
@@ -94,7 +97,10 @@ theorem unique_of_type_equalizer
   intro x' hx'
   suffices (fun _ : PUnit => x') = (Fork.IsLimit.lift' t y' hy').1 by
     rw [← this]
-  apply TypeCat.ho
+  apply TypeCat.homEquiv.symm.injective
+  apply Fork.IsLimit.hom_ext t
+  ext ⟨⟩
+  apply hx'.trans (congr_hom (Fork.IsLimit.lift' t _ hy').2 ⟨⟩).symm
 
 Depends on / 依赖: Fork.IsLimit.hom_ext, Fork.IsLimit.lift, IsLimit, TypeCat, TypeCat.homEquiv.symm.injective, congr_hom, homEquiv, hom_ext, injective
 -/

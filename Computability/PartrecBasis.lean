@@ -75,7 +75,9 @@ theorem to_part
   | rfind _ hf =>
     have := hf.comp (vector_cons.comp snd fst)
     have :=
-      ((Primrec.eq.decide.comp _root_.Primrec.id (_root_.Primrec.const 0)).to_comp.co
+      ((Primrec.eq.decide.comp _root_.Primrec.id (_root_.Primrec.const 0)).to_comp.comp
+        this).to₂.partrec₂
+    exact _root_.Partrec.rfind this
 
 中文:
 定理 to_part
@@ -88,7 +90,9 @@ theorem to_part
   | rfind _ hf =>
     have := hf.comp (vector_cons.comp snd fst)
     have :=
-      ((Primrec.eq.decide.comp _root_.Primrec.id (_root_.Primrec.const 0)).to_comp.co
+      ((Primrec.eq.decide.comp _root_.Primrec.id (_root_.Primrec.const 0)).to_comp.comp
+        this).to₂.partrec₂
+    exact _root_.Partrec.rfind this
 
 Depends on / 依赖: Partrec, Partrec.vector_mOfFn, Primrec, Primrec.eq.decide.comp, _root_, _root_.Partrec.rfind, _root_.Primrec.const, _root_.Primrec.id, hf.comp, hf.to_prim.to_comp, to_comp, to_comp.comp, to_prim, vector_cons, vector_cons.comp, vector_mOfFn
 -/
@@ -364,7 +368,19 @@ theorem rfindOpt
     ((prim Nat.Primrec'.pred).comp₁ Nat.pred hf)).of_eq
     fun v =>
     Part.ext fun b => by
-      simp only [Nat.rfindOpt, Nat.sub_eq_zero_iff_le, 
+      simp only [Nat.rfindOpt, Nat.sub_eq_zero_iff_le, PFun.coe_val, Part.mem_bind_iff,
+        Part.mem_some_iff, Option.mem_def, Part.mem_coe]
+      refine
+        exists_congr fun a => (and_congr (iff_of_eq ?_) Iff.rfl).trans (and_congr_right fun h => ?_)
+      · congr
+        funext n
+        cases f (n ::ᵥ v) <;> simp <;> rfl
+      · have := Nat.rfind_spec h
+        simp only [Part.coe_some, Part.mem_some_iff] at this
+        revert this; rcases f (a ::ᵥ v) with - | c <;> intro this
+        · cases this
+        rw [← Option.some_inj]; rw [eq_comm]
+        rfl
 
 中文:
 定理 rfindOpt
@@ -375,7 +391,19 @@ theorem rfindOpt
     ((prim Nat.Primrec'.pred).comp₁ Nat.pred hf)).of_eq
     fun v =>
     Part.ext fun b => by
-      simp only [Nat.rfindOpt, Nat.sub_eq_zero_iff_le, 
+      simp only [Nat.rfindOpt, Nat.sub_eq_zero_iff_le, PFun.coe_val, Part.mem_bind_iff,
+        Part.mem_some_iff, Option.mem_def, Part.mem_coe]
+      refine
+        exists_congr fun a => (and_congr (iff_of_eq ?_) Iff.rfl).trans (and_congr_right fun h => ?_)
+      · congr
+        funext n
+        cases f (n ::ᵥ v) <;> simp <;> rfl
+      · have := Nat.rfind_spec h
+        simp only [Part.coe_some, Part.mem_some_iff] at this
+        revert this; rcases f (a ::ᵥ v) with - | c <;> intro this
+        · cases this
+        rw [← Option.some_inj]; rw [eq_comm]
+        rfl
 
 Depends on / 依赖: Iff.rfl, Nat.Primrec, Nat.pred, Nat.rfindOpt, Nat.sub_eq_zero_iff_le, Option.mem_def, PFun.coe_val, Part.ext, Part.mem_bind_iff, Part.mem_coe, Part.mem_some_iff, Part.some, Primrec, Primrec.nat_sub.comp, Primrec.vector_head, _root_, _root_.Primrec.const, and_congr, and_congr_right, coe_val
 -/
@@ -413,7 +441,17 @@ theorem of_part
       let g := fun n₁ =>
         (Part.ofOption (decode (α := List.Vector Nat n) n₁)).bind (fun a => Part.map encode (f a))
       exact
-        (comp₁ g (this g hf) (prim Nat.Primrec'.encode)).of_eq fun i => 
+        (comp₁ g (this g hf) (prim Nat.Primrec'.encode)).of_eq fun i => by
+          dsimp only [g]; simp [encodek, Part.map_id']
+    fun f hf => by
+    obtain ⟨c, rfl⟩ := exists_code.1 hf
+    simpa [eval_eq_rfindOpt] using
+rfindOpt
+of_prim
+Primrec.encode_iff.2
+primrec_evaln.comp
+(Primrec.vector_head.pair (_root_.Primrec.const c)).pair
+                Primrec.vector_head.comp Primrec.vector_tail)
 
 中文:
 定理 of_part
@@ -422,7 +460,17 @@ theorem of_part
       let g := fun n₁ =>
         (Part.ofOption (decode (α := List.Vector Nat n) n₁)).bind (fun a => Part.map encode (f a))
       exact
-        (comp₁ g (this g hf) (prim Nat.Primrec'.encode)).of_eq fun i => 
+        (comp₁ g (this g hf) (prim Nat.Primrec'.encode)).of_eq fun i => by
+          dsimp only [g]; simp [encodek, Part.map_id']
+    fun f hf => by
+    obtain ⟨c, rfl⟩ := exists_code.1 hf
+    simpa [eval_eq_rfindOpt] using
+rfindOpt
+of_prim
+Primrec.encode_iff.2
+primrec_evaln.comp
+(Primrec.vector_head.pair (_root_.Primrec.const c)).pair
+                Primrec.vector_head.comp Primrec.vector_tail)
 
 Depends on / 依赖: Lex.isStrictOrder, List.Vector, Nat.Partrec, Nat.Primrec, Part.map, Part.map_id, Part.ofOption, Partrec, Primrec, Primrec.encode_iff, Primrec.vector_head.pair, Vector, _root_, _root_.Primrec, decode, encode, encode_iff, encodek, eval_eq_rfindOpt, exists_code
 -/

@@ -66,7 +66,12 @@ lemma sum_Ico_le_integral_of_le
     rify at hi
     exact hg.mono (by grind) le_rfl
   calc
-  _ = ∑ i in .Ico a b, (∫ x in
+  _ = ∑ i in .Ico a b, (∫ x in (i : Real)..↑(i + 1), f i) := by simp
+  _ <= ∑ i in .Ico a b, (∫ x in (i : Real)..↑(i + 1), g x) := by
+    gcongr with i hi
+    apply integral_mono_on_of_le_Ioo (by simp) (by simp) (A _ hi) (fun x hx => ?_)
+    exact h _ (by simpa using hi) _ (Ioo_subset_Ico_self hx)
+  _ = _ := by rw [sum_integral_adjacent_intervals_Ico (a := (↑·)) hab]; grind
 
 中文:
 引理 sum_Ico_le_integral_of_le
@@ -78,7 +83,12 @@ lemma sum_Ico_le_integral_of_le
     rify at hi
     exact hg.mono (by grind) le_rfl
   calc
-  _ = ∑ i in .Ico a b, (∫ x in
+  _ = ∑ i in .Ico a b, (∫ x in (i : Real)..↑(i + 1), f i) := by simp
+  _ <= ∑ i in .Ico a b, (∫ x in (i : Real)..↑(i + 1), g x) := by
+    gcongr with i hi
+    apply integral_mono_on_of_le_Ioo (by simp) (by simp) (A _ hi) (fun x hx => ?_)
+    exact h _ (by simpa using hi) _ (Ioo_subset_Ico_self hx)
+  _ = _ := by rw [sum_integral_adjacent_intervals_Ico (a := (↑·)) hab]; grind
 
 Depends on / 依赖: Finset, Finset.Ico, Finset.mem_Ico, IntervalIntegrable, Nat.add_one_le_iff, add_one_le_iff, hg.mono, integral_mono_on_of_le_Ioo, intervalIntegrable_iff_integrableOn_Ico_of_le, le_rfl, mem_Ico, volume
 -/
@@ -160,7 +170,11 @@ theorem AntitoneOn.integral_le_sum
     simp
   _ <= ∑ i in .range a, ∫ _ in x₀ + i..x₀ + ↑(i + 1), f (x₀ + i) := by
     gcongr with i hi
-    rw [Finset.mem_range]; rw [← Nat.add_one_le_if
+    rw [Finset.mem_range]; rw [← Nat.add_one_le_iff] at hi
+    have := hf.intervalIntegrable_subset _ hi
+    rify at hi this ⊢
+    refine integral_mono_on (by simp) this (by simp) fun _ _ => by apply hf <;> grind
+  _ = _ := by simp
 
 中文:
 定理 AntitoneOn.integral_le_sum
@@ -171,7 +185,11 @@ theorem AntitoneOn.integral_le_sum
     simp
   _ <= ∑ i in .range a, ∫ _ in x₀ + i..x₀ + ↑(i + 1), f (x₀ + i) := by
     gcongr with i hi
-    rw [Finset.mem_range]; rw [← Nat.add_one_le_if
+    rw [Finset.mem_range]; rw [← Nat.add_one_le_iff] at hi
+    have := hf.intervalIntegrable_subset _ hi
+    rify at hi this ⊢
+    refine integral_mono_on (by simp) this (by simp) fun _ _ => by apply hf <;> grind
+  _ = _ := by simp
 -/
 theorem AntitoneOn.integral_le_sum (hf : AntitoneOn f (Icc x₀ (x₀ + a))) :
     ∫ x in x₀..x₀ + a, f x <= ∑ i in .range a, f (x₀ + i) := calc
@@ -196,7 +214,7 @@ theorem AntitoneOn.integral_le_sum_Ico
   suffices ∫ x in a..a + ↑(b - a), f x <= ∑ x in .Ico (0 + a) (b - a + a), f x by simp_all
   rw [← Finset.sum_Ico_add]; rw [Nat.Ico_zero_eq_range]
   suffices ∫ x in a..a + ↑(b - a), f x <= ∑ x in .range (b - a), f (a + x) by simp_all
-  exact AntitoneOn.integral_le_sum (by simp only [hf, hab, Nat.
+  exact AntitoneOn.integral_le_sum (by simp only [hf, hab, Nat.cast_sub, add_sub_cancel])
 
 中文:
 定理 AntitoneOn.integral_le_sum_Ico
@@ -205,7 +223,7 @@ theorem AntitoneOn.integral_le_sum_Ico
   suffices ∫ x in a..a + ↑(b - a), f x <= ∑ x in .Ico (0 + a) (b - a + a), f x by simp_all
   rw [← Finset.sum_Ico_add]; rw [Nat.Ico_zero_eq_range]
   suffices ∫ x in a..a + ↑(b - a), f x <= ∑ x in .range (b - a), f (a + x) by simp_all
-  exact AntitoneOn.integral_le_sum (by simp only [hf, hab, Nat.
+  exact AntitoneOn.integral_le_sum (by simp only [hf, hab, Nat.cast_sub, add_sub_cancel])
 
 Depends on / 依赖: AntitoneOn, AntitoneOn.integral_le_sum, Finset, Finset.sum_Ico_add, Ico_zero_eq_range, Nat.Ico_zero_eq_range, Nat.cast_sub, add_sub_cancel, cast_sub, integral_le_sum, sum_Ico_add
 -/
@@ -229,7 +247,10 @@ theorem AntitoneOn.sum_le_integral
     rw [Finset.mem_range]; rw [← Nat.add_one_le_iff] at hi
     have := hf.intervalIntegrable_subset _ hi
     rify at hi this ⊢
- 
+    exact integral_mono_on (by simp) (by simp) this fun _ _ => by apply hf <;> grind
+  _ = _ := by
+    convert! sum_integral_adjacent_intervals hf.intervalIntegrable_subset
+    simp [-Nat.cast_add]
 
 中文:
 定理 AntitoneOn.sum_le_integral
@@ -241,7 +262,10 @@ theorem AntitoneOn.sum_le_integral
     rw [Finset.mem_range]; rw [← Nat.add_one_le_iff] at hi
     have := hf.intervalIntegrable_subset _ hi
     rify at hi this ⊢
- 
+    exact integral_mono_on (by simp) (by simp) this fun _ _ => by apply hf <;> grind
+  _ = _ := by
+    convert! sum_integral_adjacent_intervals hf.intervalIntegrable_subset
+    simp [-Nat.cast_add]
 -/
 theorem AntitoneOn.sum_le_integral (hf : AntitoneOn f (Icc x₀ (x₀ + a))) :
     ∑ i in .range a, f (x₀ + ↑(i + 1)) <= ∫ x in x₀..x₀ + a, f x := calc
@@ -266,7 +290,7 @@ theorem AntitoneOn.sum_le_integral_Ico
   suffices ∑ i in .Ico (0 + a) (b - a + a), f ↑(i + 1) <= ∫ x in a..a + ↑(b - a), f x by simp_all
   simp_rw [← Finset.sum_Ico_add, Nat.Ico_zero_eq_range, add_assoc]
   suffices ∑ x in .range (b - a), f (a + ↑(x + 1)) <= ∫ x in a..a + ↑(b - a), f x by simp_all
-  exact AntitoneOn.sum_le_integral (by
+  exact AntitoneOn.sum_le_integral (by simp [hf, hab])
 
 中文:
 定理 AntitoneOn.sum_le_integral_Ico
@@ -275,7 +299,7 @@ theorem AntitoneOn.sum_le_integral_Ico
   suffices ∑ i in .Ico (0 + a) (b - a + a), f ↑(i + 1) <= ∫ x in a..a + ↑(b - a), f x by simp_all
   simp_rw [← Finset.sum_Ico_add, Nat.Ico_zero_eq_range, add_assoc]
   suffices ∑ x in .range (b - a), f (a + ↑(x + 1)) <= ∫ x in a..a + ↑(b - a), f x by simp_all
-  exact AntitoneOn.sum_le_integral (by
+  exact AntitoneOn.sum_le_integral (by simp [hf, hab])
 
 Depends on / 依赖: AntitoneOn, AntitoneOn.sum_le_integral, Finset, Finset.sum_Ico_add, Ico_zero_eq_range, Nat.Ico_zero_eq_range, add_assoc, simp_rw, sum_Ico_add, sum_le_integral
 -/
@@ -396,7 +420,12 @@ lemma sum_mul_Ico_le_integral_of_monotone_antitone
     · grw [gpos]; apply hg <;> grind
     · grw [fpos]; apply hf <;> grind
     · apply hf <;> grind
-    ·
+    · apply hg <;> grind
+  · apply Integrable.mono_measure _ (volume.restrict_mono_set Ico_subset_Icc_self)
+    apply (hf.integrableOn_isCompact isCompact_Icc).mul_of_top_left
+    apply AntitoneOn.memLp_isCompact isCompact_Icc
+    intro _ _ _ _ _
+    apply hg <;> grind
 
 中文:
 引理 sum_mul_Ico_le_integral_of_monotone_antitone
@@ -409,7 +438,12 @@ lemma sum_mul_Ico_le_integral_of_monotone_antitone
     · grw [gpos]; apply hg <;> grind
     · grw [fpos]; apply hf <;> grind
     · apply hf <;> grind
-    ·
+    · apply hg <;> grind
+  · apply Integrable.mono_measure _ (volume.restrict_mono_set Ico_subset_Icc_self)
+    apply (hf.integrableOn_isCompact isCompact_Icc).mul_of_top_left
+    apply AntitoneOn.memLp_isCompact isCompact_Icc
+    intro _ _ _ _ _
+    apply hg <;> grind
 
 Depends on / 依赖: AntitoneOn, AntitoneOn.memLp_isCompact, Ico_subset_Icc_self, Integrable, Integrable.mono_measure, Nat.add_one_le_iff, Nat.cast_add, Nat.cast_one, add_one_le_iff, cast_add, cast_one, hf.integrableOn_isCompact, integrableOn_isCompact, isCompact_Icc, memLp_isCompact, mem_Ico, mono_measure, mul_of_top_left, restrict_mono_set, sum_Ico_le_integral_of_le
 -/
@@ -446,7 +480,12 @@ lemma integral_le_sum_mul_Ico_of_antitone_monotone
     · grw [gpos]; apply hg <;> grind
     · grw [fpos]; apply hf <;> grind
     · apply hf <;> grind
-    ·
+    · apply hg <;> grind
+  · apply Integrable.mono_measure _ (volume.restrict_mono_set Ico_subset_Icc_self)
+    apply (hf.integrableOn_isCompact isCompact_Icc).mul_of_top_left
+    apply MonotoneOn.memLp_isCompact isCompact_Icc
+    intro _ _ _ _ _
+    apply hg <;> grind
 
 中文:
 引理 integral_le_sum_mul_Ico_of_antitone_monotone
@@ -459,7 +498,12 @@ lemma integral_le_sum_mul_Ico_of_antitone_monotone
     · grw [gpos]; apply hg <;> grind
     · grw [fpos]; apply hf <;> grind
     · apply hf <;> grind
-    ·
+    · apply hg <;> grind
+  · apply Integrable.mono_measure _ (volume.restrict_mono_set Ico_subset_Icc_self)
+    apply (hf.integrableOn_isCompact isCompact_Icc).mul_of_top_left
+    apply MonotoneOn.memLp_isCompact isCompact_Icc
+    intro _ _ _ _ _
+    apply hg <;> grind
 
 Depends on / 依赖: Ico_subset_Icc_self, Integrable, Integrable.mono_measure, MonotoneOn, MonotoneOn.memLp_isCompact, Nat.add_one_le_iff, Nat.cast_add, Nat.cast_one, add_one_le_iff, cast_add, cast_one, hf.integrableOn_isCompact, integrableOn_isCompact, integral_le_sum_Ico_of_le, isCompact_Icc, memLp_isCompact, mem_Ico, mono_measure, mul_of_top_left, restrict_mono_set
 -/
@@ -495,7 +539,7 @@ lemma AntitoneOn.sum_Ico_le_integral
   · simpa [Finset.Ico_eq_empty_of_le hab.le] using setIntegral_nonneg measurableSet_Ioi nonneg
   grw [anti.sum_le_integral_Ico hab, integral_of_le (mod_cast hab)]
   apply setIntegral_mono_set integrable _ (Ioc_subset_Ioi_self.eventuallyLE)
-  exact ae_restrict_of_forall_mem
+  exact ae_restrict_of_forall_mem measurableSet_Ioi nonneg
 
 中文:
 引理 AntitoneOn.sum_Ico_le_integral
@@ -505,7 +549,7 @@ lemma AntitoneOn.sum_Ico_le_integral
   · simpa [Finset.Ico_eq_empty_of_le hab.le] using setIntegral_nonneg measurableSet_Ioi nonneg
   grw [anti.sum_le_integral_Ico hab, integral_of_le (mod_cast hab)]
   apply setIntegral_mono_set integrable _ (Ioc_subset_Ioi_self.eventuallyLE)
-  exact ae_restrict_of_forall_mem
+  exact ae_restrict_of_forall_mem measurableSet_Ioi nonneg
 
 Depends on / 依赖: Finset, Finset.Ico_eq_empty_of_le, Ico_eq_empty_of_le, Ioc_subset_Ioi_self, Ioc_subset_Ioi_self.eventuallyLE, ae_restrict_of_forall_mem, anti.sum_le_integral_Ico, eventuallyLE, hab.le, integrable, integral_of_le, measurableSet_Ioi, mod_cast, nonneg, setIntegral_mono_set, setIntegral_nonneg, sum_le_integral_Ico
 -/
@@ -557,7 +601,7 @@ theorem AntitoneOn.summable_of_integrableOn_Ioi
   refine summable_of_sum_range_le (c := ∫ t in Ioi (N : Real), f t) (by grind) fun M => ?_
   calc
     _ = ∑ n in Finset.Ico N (N + M), f (n + 1 : Nat) := by rw [Finset.sum_Ico_eq_sum_range]; grind
-    _ <= _ := (anti.mono Icc_subset_Ici_self).sum_Ico_le_integ
+    _ <= _ := (anti.mono Icc_subset_Ici_self).sum_Ico_le_integral integrable nonneg
 
 中文:
 定理 AntitoneOn.summable_of_integrableOn_Ioi
@@ -567,7 +611,7 @@ theorem AntitoneOn.summable_of_integrableOn_Ioi
   refine summable_of_sum_range_le (c := ∫ t in Ioi (N : Real), f t) (by grind) fun M => ?_
   calc
     _ = ∑ n in Finset.Ico N (N + M), f (n + 1 : Nat) := by rw [Finset.sum_Ico_eq_sum_range]; grind
-    _ <= _ := (anti.mono Icc_subset_Ici_self).sum_Ico_le_integ
+    _ <= _ := (anti.mono Icc_subset_Ici_self).sum_Ico_le_integral integrable nonneg
 
 Depends on / 依赖: Finset, Finset.Ico, Finset.sum_Ico_eq_sum_range, Icc_subset_Ici_self, anti.mono, integrable, nonneg, sum_Ico_eq_sum_range, sum_Ico_le_integral, summable_nat_add_iff, summable_of_sum_range_le
 -/
@@ -613,7 +657,10 @@ theorem AntitoneOn.tsum_comp_add_le_integral
 .exists · obtain ⟨t, ht⟩ := tendsto_finset_range.eventually (Ici_mem_atTop s)
     calc
       ∑ i in s, f ↑(i + N + 1) <= ∑ i in range t, f ↑(i + N + 1) :=
-sum_le_
+sum_le_sum_of_subset_of_nonneg ht by grind
+      _ = ∑ i in Ico N (N + t), f ↑(i + 1) := by rw [Finset.sum_Ico_eq_sum_range]; grind
+      _ <= ∫ (x : Real) in Set.Ioi (N : Real), f x :=
+        (anti.mono <| by grind).sum_Ico_le_integral integrable nonneg
 
 中文:
 定理 AntitoneOn.tsum_comp_add_le_integral
@@ -624,7 +671,10 @@ sum_le_
 .exists · obtain ⟨t, ht⟩ := tendsto_finset_range.eventually (Ici_mem_atTop s)
     calc
       ∑ i in s, f ↑(i + N + 1) <= ∑ i in range t, f ↑(i + N + 1) :=
-sum_le_
+sum_le_sum_of_subset_of_nonneg ht by grind
+      _ = ∑ i in Ico N (N + t), f ↑(i + 1) := by rw [Finset.sum_Ico_eq_sum_range]; grind
+      _ <= ∫ (x : Real) in Set.Ioi (N : Real), f x :=
+        (anti.mono <| by grind).sum_Ico_le_integral integrable nonneg
 
 Depends on / 依赖: Finset, Finset.sum_Ico_eq_sum_range, Ici_mem_atTop, Set.Ioi, ae_restrict_mem, anti.mono, eventually, filter_upwards, integral_nonneg_of_ae, measurableSet_Ioi, nonneg, sum_Ico_eq_sum_range, sum_Ico_le_integral, sum_le_sum_of_subset_of_nonneg, tendsto_finset_range, tendsto_finset_range.eventually, tsum_le_of_sum_le
 -/
@@ -700,7 +750,10 @@ theorem AntitoneOn.abs_tsum_sub_sum_range_le_integral
   proof: by
   rw [← (AntitoneOn.summable_of_integrableOn_Ioi (mod_cast anti) (mod_cast integrable)
     (mod_cast nonneg)).sum_add_tsum_nat_add N]; rw [add_sub_cancel_left]; rw [abs_of_nonneg (tsum_nonneg <| by grind)]
-  convert! AntitoneOn.tsum_comp_add_le_integral (N - 1) (mod_cast anti) (mod_cast integrabl
+  convert! AntitoneOn.tsum_comp_add_le_integral (N - 1) (mod_cast anti) (mod_cast integrable)
+      (mod_cast nonneg) using 1
+  · congr; ext; congr 2; grind
+  · norm_cast
 
 中文:
 定理 AntitoneOn.abs_tsum_sub_sum_range_le_integral
@@ -708,7 +761,10 @@ theorem AntitoneOn.abs_tsum_sub_sum_range_le_integral
   证明: by
   rw [← (AntitoneOn.summable_of_integrableOn_Ioi (mod_cast anti) (mod_cast integrable)
     (mod_cast nonneg)).sum_add_tsum_nat_add N]; rw [add_sub_cancel_left]; rw [abs_of_nonneg (tsum_nonneg <| by grind)]
-  convert! AntitoneOn.tsum_comp_add_le_integral (N - 1) (mod_cast anti) (mod_cast integrabl
+  convert! AntitoneOn.tsum_comp_add_le_integral (N - 1) (mod_cast anti) (mod_cast integrable)
+      (mod_cast nonneg) using 1
+  · congr; ext; congr 2; grind
+  · norm_cast
 
 Depends on / 依赖: AntitoneOn, AntitoneOn.summable_of_integrableOn_Ioi, AntitoneOn.tsum_comp_add_le_integral, abs_of_nonneg, add_sub_cancel_left, convert, integrable, mod_cast, nonneg, sum_add_tsum_nat_add, summable_of_integrableOn_Ioi, tsum_comp_add_le_integral, tsum_nonneg
 -/
@@ -735,7 +791,15 @@ theorem AntitoneOn.integrableOn_Ioi_of_summable_comp_add
     (tendsto_atTop_add_const_right atTop (N : Real) tendsto_natCast_atTop_atTop) ?_
   · intro n
     rw [← intervalIntegrable_iff_integrableOn_Ioc_of_le (by grind)]
-    exact (anti.mono <| by grind [uIc
+    exact (anti.mono <| by grind [uIcc_of_le]).intervalIntegrable
+  · filter_upwards [eventually_gt_atTop 0] with M hM
+    calc
+      _ = ∫ x in N..M+N, f x := by
+        refine intervalIntegral.integral_congr_uIoo fun x => ?_
+        grind [Real.norm_of_nonneg, uIoo_of_le]
+      _ <= ∑ n in Finset.range M, f (n + N : Nat) := by
+        convert! AntitoneOn.integral_le_sum (anti.mono _) using 2 <;> grind
+      _ <= _ := by grind [summable.sum_le_tsum, Nat.cast_pos]
 
 中文:
 定理 AntitoneOn.integrableOn_Ioi_of_summable_comp_add
@@ -745,7 +809,15 @@ theorem AntitoneOn.integrableOn_Ioi_of_summable_comp_add
     (tendsto_atTop_add_const_right atTop (N : Real) tendsto_natCast_atTop_atTop) ?_
   · intro n
     rw [← intervalIntegrable_iff_integrableOn_Ioc_of_le (by grind)]
-    exact (anti.mono <| by grind [uIc
+    exact (anti.mono <| by grind [uIcc_of_le]).intervalIntegrable
+  · filter_upwards [eventually_gt_atTop 0] with M hM
+    calc
+      _ = ∫ x in N..M+N, f x := by
+        refine intervalIntegral.integral_congr_uIoo fun x => ?_
+        grind [Real.norm_of_nonneg, uIoo_of_le]
+      _ <= ∑ n in Finset.range M, f (n + N : Nat) := by
+        convert! AntitoneOn.integral_le_sum (anti.mono _) using 2 <;> grind
+      _ <= _ := by grind [summable.sum_le_tsum, Nat.cast_pos]
 
 Depends on / 依赖: Real.norm_of_nonneg, anti.mono, eventually_gt_atTop, filter_upwards, integrableOn_Ioi_of_intervalIntegral_norm_bounded, integral_congr_uIoo, intervalIntegrable, intervalIntegrable_iff_integrableOn_Ioc_of_le, intervalIntegral, intervalIntegral.integral_congr_uIoo, norm_of_nonneg, tendsto_atTop_add_const_right, tendsto_natCast_atTop_atTop, uIcc_of_le, uIoo_of_le
 -/
@@ -801,7 +873,14 @@ theorem AntitoneOn.integral_le_tsum_comp_add
   have lim := summable.tendsto_sum_tsum_nat
   have := tendsto_atTop_add_const_right atTop (N : Real) tendsto_natCast_atTop_atTop
   have integrable := anti.integrableOn_Ioi_of_summable_comp_add summable nonneg
-  refine le_of_tendsto_of_tendsto (intervalI
+  refine le_of_tendsto_of_tendsto (intervalIntegral_tendsto_integral_Ioi N integrable this) lim ?_
+  filter_upwards with M
+  calc
+    _ <= ∑ n in Finset.Ico N (N + M), f n := by
+      convert! AntitoneOn.integral_le_sum_Ico _ _ using 2 <;> grind [anti.mono]
+    _ = _ := by
+      rw [Finset.sum_Ico_eq_sum_range]
+      grind
 
 中文:
 定理 AntitoneOn.integral_le_tsum_comp_add
@@ -811,7 +890,14 @@ theorem AntitoneOn.integral_le_tsum_comp_add
   have lim := summable.tendsto_sum_tsum_nat
   have := tendsto_atTop_add_const_right atTop (N : Real) tendsto_natCast_atTop_atTop
   have integrable := anti.integrableOn_Ioi_of_summable_comp_add summable nonneg
-  refine le_of_tendsto_of_tendsto (intervalI
+  refine le_of_tendsto_of_tendsto (intervalIntegral_tendsto_integral_Ioi N integrable this) lim ?_
+  filter_upwards with M
+  calc
+    _ <= ∑ n in Finset.Ico N (N + M), f n := by
+      convert! AntitoneOn.integral_le_sum_Ico _ _ using 2 <;> grind [anti.mono]
+    _ = _ := by
+      rw [Finset.sum_Ico_eq_sum_range]
+      grind
 
 Depends on / 依赖: AntitoneOn, AntitoneOn.integral_le_sum_Ico, Finset, Finset.Ico, anti.integrableOn_Ioi_of_summable_comp_add, anti.mono, convert, filter_upwards, integrable, integrableOn_Ioi_of_summable_comp_add, integral_le_sum_Ico, intervalIntegral_tendsto_integral_Ioi, le_of_tendsto_of_tendsto, nonneg, summable, summable.tendsto_sum_tsum_nat, summable_nat_add_iff, tendsto_atTop_add_const_right, tendsto_natCast_atTop_atTop, tendsto_sum_tsum_nat
 -/

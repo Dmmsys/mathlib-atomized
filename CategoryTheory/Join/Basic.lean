@@ -147,7 +147,10 @@ instance :
     tauto
   id_comp {x y} f := by
     cases x <;> cases y <;> simp only [Hom, id, comp, Category.id_comp] <;> tauto
-  comp
+  comp_id {x y} f := by
+    cases x <;> cases y <;> simp only [Hom, id, comp, Category.comp_id] <;> tauto
+
+@[aesop safe destruct (rule_sets := [CategoryTheory])]
 
 中文:
 实例 :
@@ -164,7 +167,10 @@ instance :
     tauto
   id_comp {x y} f := by
     cases x <;> cases y <;> simp only [Hom, id, comp, Category.id_comp] <;> tauto
-  comp
+  comp_id {x y} f := by
+    cases x <;> cases y <;> simp only [Hom, id, comp, Category.comp_id] <;> tauto
+
+@[aesop safe destruct (rule_sets := [CategoryTheory])]
 -/
 instance : Category.{max v₁ v₂} (C ⋆ D) where
   Hom X Y := Hom X Y
@@ -414,7 +420,7 @@ definition inclRightFullyFaithful
 
 .faithful instance inclLeftFaithful : (inclLeft C D).Faithful := inclLeftFullyFaithful C D
 
-.faithful instance inclRightFaithful 
+.faithful instance inclRightFaithful : (inclRight C D).Faithful := inclRightFullyFaithful C D
 
 中文:
 定义 inclRightFullyFaithful
@@ -427,7 +433,7 @@ definition inclRightFullyFaithful
 
 .faithful instance inclLeftFaithful : (inclLeft C D).Faithful := inclLeftFullyFaithful C D
 
-.faithful instance inclRightFaithful 
+.faithful instance inclRightFaithful : (inclRight C D).Faithful := inclRightFullyFaithful C D
 
 Depends on / 依赖: f.down
 -/
@@ -526,6 +532,14 @@ definition mkFunctor
     cases x
     · dsimp only [id_left, homInduction_left]
       simp
+    · dsimp only [id_right, homInduction_right]
+      simp
+  map_comp {x y z} f g := by
+    cases f <;> cases g
+    · simp [← Functor.map_comp]
+    · case left.edge f d => simpa using! (α.naturality <| (Prod.sectL _ d).map f).symm
+    · simp [← Functor.map_comp]
+· case edge.right c _ _ f => simpa using! α.naturality (Prod.sectR c _).map f
 
 中文:
 定义 mkFunctor
@@ -543,6 +557,14 @@ definition mkFunctor
     cases x
     · dsimp only [id_left, homInduction_left]
       simp
+    · dsimp only [id_right, homInduction_right]
+      simp
+  map_comp {x y z} f g := by
+    cases f <;> cases g
+    · simp [← Functor.map_comp]
+    · case left.edge f d => simpa using! (α.naturality <| (Prod.sectL _ d).map f).symm
+    · simp [← Functor.map_comp]
+· case edge.right c _ _ f => simpa using! α.naturality (Prod.sectR c _).map f
 
 Depends on / 依赖: F.map, F.obj, Functor, Functor.map_comp, G.map, G.obj, Prod.sectL, edge.right, homInduction, homInduction_left, homInduction_right, id_left, id_right, left.edge, map_comp, map_id, naturality
 -/
@@ -1201,7 +1223,11 @@ definition mapPairComp
       (isoWhiskerLeft Fₗ (mapPairLeft Gₗ Gᵣ).symm) ≪≫
       (Functor.associator Fₗ (inclLeft E E') (mapPair Gₗ Gᵣ)).symm ≪≫
       isoWhiskerRight (mapPairLeft Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
-    (mapPairRi
+    (mapPairRight (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≪≫
+      Functor.associator Fᵣ Gᵣ (inclRight J K) ≪≫
+      (isoWhiskerLeft Fᵣ (mapPairRight Gₗ Gᵣ).symm) ≪≫
+      (Functor.associator Fᵣ (inclRight E E') (mapPair Gₗ Gᵣ)).symm ≪≫
+      isoWhiskerRight (mapPairRight Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
 
 中文:
 定义 mapPairComp
@@ -1212,7 +1238,11 @@ definition mapPairComp
       (isoWhiskerLeft Fₗ (mapPairLeft Gₗ Gᵣ).symm) ≪≫
       (Functor.associator Fₗ (inclLeft E E') (mapPair Gₗ Gᵣ)).symm ≪≫
       isoWhiskerRight (mapPairLeft Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
-    (mapPairRi
+    (mapPairRight (Fₗ ⋙ Gₗ) (Fᵣ ⋙ Gᵣ) ≪≫
+      Functor.associator Fᵣ Gᵣ (inclRight J K) ≪≫
+      (isoWhiskerLeft Fᵣ (mapPairRight Gₗ Gᵣ).symm) ≪≫
+      (Functor.associator Fᵣ (inclRight E E') (mapPair Gₗ Gᵣ)).symm ≪≫
+      isoWhiskerRight (mapPairRight Fₗ Fᵣ).symm (mapPair Gₗ Gᵣ))
 
 Depends on / 依赖: Functor, Functor.associator, associator, inclLeft, inclRight, isoWhiskerLeft, isoWhiskerRight, mapPair, mapPairLeft, mapPairRight, mkNatIso
 -/
@@ -1759,7 +1789,12 @@ definition mapPairEquiv
       mapPairComp _ _ _ _
   counitIso :=
     (mapPairComp _ _ _ _).symm ≪≫
-      mapIsoWhiskerRight e.counitIso _ 
+      mapIsoWhiskerRight e.counitIso _ ≪≫
+      mapIsoWhiskerLeft _ e'.counitIso ≪≫
+      mapPairId
+  functor_unitIso_comp x := by
+    cases x <;>
+    simp [← (inclLeft C' D').map_comp, ← (inclRight C' D').map_comp]
 
 中文:
 定义 mapPairEquiv
@@ -1773,7 +1808,12 @@ definition mapPairEquiv
       mapPairComp _ _ _ _
   counitIso :=
     (mapPairComp _ _ _ _).symm ≪≫
-      mapIsoWhiskerRight e.counitIso _ 
+      mapIsoWhiskerRight e.counitIso _ ≪≫
+      mapIsoWhiskerLeft _ e'.counitIso ≪≫
+      mapPairId
+  functor_unitIso_comp x := by
+    cases x <;>
+    simp [← (inclLeft C' D').map_comp, ← (inclRight C' D').map_comp]
 
 Depends on / 依赖: e.functor, functor, mapPair
 -/

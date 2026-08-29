@@ -86,7 +86,10 @@ theorem Unitary.spectrum_subset_circle
   · simpa only [CStarRing.norm_coe_unitary u] using norm_le_norm_of_mem hk
   · rw [← Unitary.val_toUnits_apply u] at hk
     have hnk := ne_zero_of_mem_of_unit hk
-    rw [← inv_inv (Unitary.toUnits u)]; rw [← s
+    rw [← inv_inv (Unitary.toUnits u)]; rw [← spectrum.map_inv]; rw [Set.mem_inv] at hk
+    have : ‖k‖⁻¹ <= ‖(↑(Unitary.toUnits u)⁻¹ : E)‖ := by
+      simpa only [norm_inv] using norm_le_norm_of_mem hk
+    simpa using inv_le_of_inv_le₀ (norm_pos_iff.mpr hnk) this
 
 中文:
 定理 酉.spectrum_subset_circle
@@ -97,7 +100,10 @@ theorem Unitary.spectrum_subset_circle
   · simpa only [CStarRing.norm_coe_unitary u] using norm_le_norm_of_mem hk
   · rw [← Unitary.val_toUnits_apply u] at hk
     have hnk := ne_zero_of_mem_of_unit hk
-    rw [← inv_inv (Unitary.toUnits u)]; rw [← s
+    rw [← inv_inv (Unitary.toUnits u)]; rw [← spectrum.map_inv]; rw [Set.mem_inv] at hk
+    have : ‖k‖⁻¹ <= ‖(↑(Unitary.toUnits u)⁻¹ : E)‖ := by
+      simpa only [norm_inv] using norm_le_norm_of_mem hk
+    simpa using inv_le_of_inv_le₀ (norm_pos_iff.mpr hnk) this
 
 Depends on / 依赖: CStarRing, CStarRing.norm_coe_unitary, Set.mem_inv, Unitary, Unitary.toUnits, Unitary.val_toUnits_apply, inv_inv, le_antisymm, map_inv, mem_inv, mem_sphere_zero_iff_norm, mem_sphere_zero_iff_norm.mpr, ne_zero_of_mem_of_unit, nontriviality, norm_coe_unitary, norm_inv, norm_le_norm_of_mem, norm_pos_iff, norm_pos_iff.mpr, spectrum
 -/
@@ -204,7 +210,9 @@ theorem IsSelfAdjoint.spectralRadius_eq_nnnorm
   convert!
     (spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius (a : A)).comp
       (tendsto_pow_atTop_atTop_of_one_lt one_lt_two) using 1
-  refine funext f
+  refine funext fun n => ?_
+  rw [Function.comp_apply]; rw [ha.nnnorm_pow_two_pow]; rw [ENNReal.coe_pow]; rw [← rpow_natCast]; rw [← rpow_mul]
+  simp
 
 中文:
 定理 IsSelfAdjoint.spectralRadius_eq_nnnorm
@@ -215,7 +223,9 @@ theorem IsSelfAdjoint.spectralRadius_eq_nnnorm
   convert!
     (spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius (a : A)).comp
       (tendsto_pow_atTop_atTop_of_one_lt one_lt_two) using 1
-  refine funext f
+  refine funext fun n => ?_
+  rw [Function.comp_apply]; rw [ha.nnnorm_pow_two_pow]; rw [ENNReal.coe_pow]; rw [← rpow_natCast]; rw [← rpow_mul]
+  simp
 
 Depends on / 依赖: ENNReal, ENNReal.coe_pow, ENNReal.ofReal_le_ofReal_iff, Function, Function.comp_apply, Tendsto, coe_pow, comp_apply, convert, ha.nnnorm_pow_two_pow, hconst, nnnorm_pow_two_pow, norm_nonneg, ofReal_le_ofReal_iff, ofReal_norm, one_lt_two, pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius, rpow_mul, rpow_natCast, spectrum
 -/
@@ -263,7 +273,14 @@ theorem IsStarNormal.spectralRadius_eq_nnnorm
     (fun n : Nat => (‖(a⋆ * a) ^ n‖₊ : Real>=0∞) ^ (1 / n : Real)) =
       (fun x => x ^ 2) ∘ fun n : Nat => (‖a ^ n‖₊ : Real>=0∞) ^ (1 / n : Real) := by
     funext n
-    rw [Function.comp_apply]; rw [← rpow_natCast]; r
+    rw [Function.comp_apply]; rw [← rpow_natCast]; rw [← rpow_mul]; rw [mul_comm]; rw [rpow_mul]; rw [rpow_natCast]; rw [←
+      coe_pow]; rw [sq]; rw [← nnnorm_star_mul_self]; rw [Commute.mul_pow (star_comm_self' a)]; rw [star_pow]
+  have h₂ :=
+    ((ENNReal.continuous_pow 2).tendsto (spectralRadius Complex a)).comp
+      (spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius a)
+  rw [← heq] at h₂
+  convert! tendsto_nhds_unique h₂ (pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius (a⋆ * a))
+  rw [(IsSelfAdjoint.star_mul_self a).spectralRadius_eq_nnnorm]; rw [sq]; rw [nnnorm_star_mul_self]; rw [coe_mul]
 
 中文:
 定理 是StarNormal.spectralRadius_eq_nnnorm
@@ -274,7 +291,14 @@ theorem IsStarNormal.spectralRadius_eq_nnnorm
     (fun n : Nat => (‖(a⋆ * a) ^ n‖₊ : Real>=0∞) ^ (1 / n : Real)) =
       (fun x => x ^ 2) ∘ fun n : Nat => (‖a ^ n‖₊ : Real>=0∞) ^ (1 / n : Real) := by
     funext n
-    rw [Function.comp_apply]; rw [← rpow_natCast]; r
+    rw [Function.comp_apply]; rw [← rpow_natCast]; rw [← rpow_mul]; rw [mul_comm]; rw [rpow_mul]; rw [rpow_natCast]; rw [←
+      coe_pow]; rw [sq]; rw [← nnnorm_star_mul_self]; rw [Commute.mul_pow (star_comm_self' a)]; rw [star_pow]
+  have h₂ :=
+    ((ENNReal.continuous_pow 2).tendsto (spectralRadius Complex a)).comp
+      (spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius a)
+  rw [← heq] at h₂
+  convert! tendsto_nhds_unique h₂ (pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius (a⋆ * a))
+  rw [(IsSelfAdjoint.star_mul_self a).spectralRadius_eq_nnnorm]; rw [sq]; rw [nnnorm_star_mul_self]; rw [coe_mul]
 
 Depends on / 依赖: Commute, Commute.mul_pow, ENNReal, ENNReal.continuous_pow, ENNReal.pow_right_strictMono, Function, Function.comp_apply, coe_pow, comp_apply, continuous_pow, injective, mul_comm, mul_pow, nnnorm_star_mul_self, pow_right_strictMono, rpow_mul, rpow_natCast, star_comm_self, star_pow, tendsto
 -/
@@ -393,7 +417,12 @@ theorem IsSelfAdjoint.mem_spectrum_eq_re
   have hu := exp_mem_unitary_of_mem_skewAdjoint (ha.smul_mem_skewAdjoint conj_I)
   let Iu := Units.mk0 I I_ne_zero
   have : NormedSpace.exp (I • z) in spectrum Complex (NormedSpace.exp (I • a)) := by
-    simpa only [Units.smul_
+    simpa only [Units.smul_def, Units.val_mk0] using!
+      spectrum.exp_mem_exp (Iu • a) (smul_mem_smul_iff.mpr hz)
+exact Complex.ext (ofReal_re _) by
+    simpa only [← Complex.exp_eq_exp_Complex, mem_sphere_zero_iff_norm, norm_exp, Real.exp_eq_one_iff,
+      smul_eq_mul, I_mul, neg_eq_zero] using!
+      spectrum.subset_circle_of_unitary hu this
 
 中文:
 定理 IsSelfAdjoint.mem_spectrum_eq_re
@@ -403,7 +432,12 @@ theorem IsSelfAdjoint.mem_spectrum_eq_re
   have hu := exp_mem_unitary_of_mem_skewAdjoint (ha.smul_mem_skewAdjoint conj_I)
   let Iu := Units.mk0 I I_ne_zero
   have : NormedSpace.exp (I • z) in spectrum Complex (NormedSpace.exp (I • a)) := by
-    simpa only [Units.smul_
+    simpa only [Units.smul_def, Units.val_mk0] using!
+      spectrum.exp_mem_exp (Iu • a) (smul_mem_smul_iff.mpr hz)
+exact Complex.ext (ofReal_re _) by
+    simpa only [← Complex.exp_eq_exp_Complex, mem_sphere_zero_iff_norm, norm_exp, Real.exp_eq_one_iff,
+      smul_eq_mul, I_mul, neg_eq_zero] using!
+      spectrum.subset_circle_of_unitary hu this
 
 Depends on / 依赖: Complex.exp_eq_exp_Complex, Complex.ext, I_ne_zero, NormedAlgebra, NormedSpace, NormedSpace.exp, Real.exp_eq_one, Units.mk0, Units.smul_def, Units.val_mk0, conj_I, exp_eq_exp_Complex, exp_eq_one, exp_mem_exp, exp_mem_unitary_of_mem_skewAdjoint, ha.smul_mem_skewAdjoint, mem_sphere_zero_iff_norm, nondep, norm_exp, ofReal_re
 -/
@@ -515,7 +549,18 @@ lemma IsSelfAdjoint.isConnected_spectrum_compl
     rw [← Set.inter_union_distrib_left]; rw [← Set.ofPred_or] at this
     rw [← Set.inter_univ (σ Complex a)ᶜ]
     convert this
-exact Eq.symm Set.eq_univ_of_forall (fun z => le_total 0 z.
+exact Eq.symm Set.eq_univ_of_forall (fun z => le_total 0 z.im)
+  refine IsConnected.union ?nonempty ?upper ?lower
+  case nonempty =>
+have := Filter.NeBot.nonempty_of_mem inferInstance Filter.mem_map.mp
+      Complex.isometry_ofReal.antilipschitz.tendsto_cobounded (spectrum.isBounded a |>.compl)
+.mono by simp exact this.image Complex.ofReal
+case' upper => apply Complex.isConnected_of_upperHalfPlane ?_ Set.inter_subset_right
+case' lower => apply Complex.isConnected_of_lowerHalfPlane ?_ Set.inter_subset_right
+  all_goals
+    refine Set.subset_inter (fun z hz hz' => ?_) (fun _ => by simpa using le_of_lt)
+    rw [Set.mem_ofPred_eq]; rw [ha.im_eq_zero_of_mem_spectrum hz'] at hz
+    simp_all
 
 中文:
 引理 IsSelfAdjoint.isConnected_spectrum_compl
@@ -525,7 +570,18 @@ exact Eq.symm Set.eq_univ_of_forall (fun z => le_total 0 z.
     rw [← Set.inter_union_distrib_left]; rw [← Set.ofPred_or] at this
     rw [← Set.inter_univ (σ Complex a)ᶜ]
     convert this
-exact Eq.symm Set.eq_univ_of_forall (fun z => le_total 0 z.
+exact Eq.symm Set.eq_univ_of_forall (fun z => le_total 0 z.im)
+  refine IsConnected.union ?nonempty ?upper ?lower
+  case nonempty =>
+have := Filter.NeBot.nonempty_of_mem inferInstance Filter.mem_map.mp
+      Complex.isometry_ofReal.antilipschitz.tendsto_cobounded (spectrum.isBounded a |>.compl)
+.mono by simp exact this.image Complex.ofReal
+case' upper => apply Complex.isConnected_of_upperHalfPlane ?_ Set.inter_subset_right
+case' lower => apply Complex.isConnected_of_lowerHalfPlane ?_ Set.inter_subset_right
+  all_goals
+    refine Set.subset_inter (fun z hz hz' => ?_) (fun _ => by simpa using le_of_lt)
+    rw [Set.mem_ofPred_eq]; rw [ha.im_eq_zero_of_mem_spectrum hz'] at hz
+    simp_all
 
 Depends on / 依赖: Complex.isometry_ofReal.antilipschitz.tendsto_cobounded, Eq.symm, Filter, Filter.NeBot.nonempty_of_mem, Filter.mem_map.mp, IsConnected, IsConnected.union, Set.eq_univ_of_forall, Set.inter_union_distrib_left, Set.inter_univ, Set.ofPred_or, antilipschitz, convert, eq_univ_of_forall, inter_union_distrib_left, inter_univ, isBounded, isometry_ofReal, le_total, mem_map
 -/
@@ -565,7 +621,13 @@ lemma coe_isUnit
   have ha₂ := ha.mul ha.star
   have spec_eq {x : S} (hx : IsSelfAdjoint x) : spectrum Complex x = spectrum Complex (x : A) :=
 Subalgebra.spectrum_eq_of_isPreconnected_compl S _
-      (hx.map S.subtype).isConnected_spectrum
+      (hx.map S.subtype).isConnected_spectrum_compl.isPreconnected
+  rw [← StarMemClass.coe_star]; rw [← MulMemClass.coe_mul]; rw [← spectrum.zero_notMem_iff Complex]; rw [← spec_eq]; rw [spectrum.zero_notMem_iff] at ha₁ ha₂
+  · have h₁ : ha₁.unit⁻¹ * star a * a = 1 := mul_assoc _ _ a ▸ ha₁.val_inv_mul
+    have h₂ : a * (star a * ha₂.unit⁻¹) = 1 := (mul_assoc a _ _).symm ▸ ha₂.mul_val_inv
+    exact ⟨⟨a, ha₁.unit⁻¹ * star a, left_inv_eq_right_inv h₁ h₂ ▸ h₂, h₁⟩, rfl⟩
+  · exact IsSelfAdjoint.mul_star_self a
+  · exact IsSelfAdjoint.star_mul_self a
 
 中文:
 引理 coe_isUnit
@@ -577,7 +639,13 @@ Subalgebra.spectrum_eq_of_isPreconnected_compl S _
   have ha₂ := ha.mul ha.star
   have spec_eq {x : S} (hx : IsSelfAdjoint x) : spectrum Complex x = spectrum Complex (x : A) :=
 Subalgebra.spectrum_eq_of_isPreconnected_compl S _
-      (hx.map S.subtype).isConnected_spectrum
+      (hx.map S.subtype).isConnected_spectrum_compl.isPreconnected
+  rw [← StarMemClass.coe_star]; rw [← MulMemClass.coe_mul]; rw [← spectrum.zero_notMem_iff Complex]; rw [← spec_eq]; rw [spectrum.zero_notMem_iff] at ha₁ ha₂
+  · have h₁ : ha₁.unit⁻¹ * star a * a = 1 := mul_assoc _ _ a ▸ ha₁.val_inv_mul
+    have h₂ : a * (star a * ha₂.unit⁻¹) = 1 := (mul_assoc a _ _).symm ▸ ha₂.mul_val_inv
+    exact ⟨⟨a, ha₁.unit⁻¹ * star a, left_inv_eq_right_inv h₁ h₂ ▸ h₂, h₁⟩, rfl⟩
+  · exact IsSelfAdjoint.mul_star_self a
+  · exact IsSelfAdjoint.star_mul_self a
 
 Depends on / 依赖: IsSelfAdjoint, IsUnit, IsUnit.map, MulMemClass, MulMemClass.coe_mul, S.subtype, StarMemClass, StarMemClass.coe_star, Subalgebra, Subalgebra.spectrum_eq_of_isPreconnected_compl, coe_mul, coe_star, ha.mul, ha.star, ha.star.mul, hx.map, isConnected_spectrum_compl, isConnected_spectrum_compl.isPreconnected, isPreconnected, spec_eq
 -/
@@ -659,7 +727,14 @@ lemma nnnorm_apply_le
       ‖ψ x‖₊ <= ‖x‖₊ := by
     suffices forall {s}, IsSelfAdjoint s -> ‖ψ s‖₊ <= ‖s‖₊ by
       refine nonneg_le_nonneg_of_sq_le_sq zero_le ?_
-      simp_rw [← nnnorm_star_mul_self, ← map_star, ←
+      simp_rw [← nnnorm_star_mul_self, ← map_star, ← map_mul]
+exact this .star_mul_self x
+    intro s hs
+    suffices this : spectralRadius Complex (ψ s) <= spectralRadius Complex s by
+      rwa [(hs.map ψ).spectralRadius_eq_nnnorm, hs.spectralRadius_eq_nnnorm, coe_le_coe]
+        at this
+    exact iSup_le_iSup_of_subset (AlgHom.spectrum_apply_subset ψ s)
+  simpa [nnnorm_inr] using h (starLift (inrNonUnitalStarAlgHom Complex B |>.comp (φ : A ->⋆ₙₐ[Complex] B))) a
 
 中文:
 引理 nnnorm_apply_le
@@ -670,7 +745,14 @@ lemma nnnorm_apply_le
       ‖ψ x‖₊ <= ‖x‖₊ := by
     suffices forall {s}, IsSelfAdjoint s -> ‖ψ s‖₊ <= ‖s‖₊ by
       refine nonneg_le_nonneg_of_sq_le_sq zero_le ?_
-      simp_rw [← nnnorm_star_mul_self, ← map_star, ←
+      simp_rw [← nnnorm_star_mul_self, ← map_star, ← map_mul]
+exact this .star_mul_self x
+    intro s hs
+    suffices this : spectralRadius Complex (ψ s) <= spectralRadius Complex s by
+      rwa [(hs.map ψ).spectralRadius_eq_nnnorm, hs.spectralRadius_eq_nnnorm, coe_le_coe]
+        at this
+    exact iSup_le_iSup_of_subset (AlgHom.spectrum_apply_subset ψ s)
+  simpa [nnnorm_inr] using h (starLift (inrNonUnitalStarAlgHom Complex B |>.comp (φ : A ->⋆ₙₐ[Complex] B))) a
 
 Depends on / 依赖: IsSelfAdjoint, Unitization, coe_le_coe, hs.map, hs.spectralRadius_eq_nnnorm, map_mul, map_star, nnnorm_star_mul_self, nonneg_le_nonneg_of_sq_le_sq, simp_rw, spectralRadius, spectralRadius_eq_nnnorm, star_mul_self, zero_le
 -/

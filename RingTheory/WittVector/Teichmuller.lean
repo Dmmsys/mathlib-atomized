@@ -180,7 +180,9 @@ definition teichmuller
     intro x y
     rcases counit_surjective R x with ⟨x, rfl⟩
     rcases counit_surjective R y with ⟨y, rfl⟩
-    simp only [← map_teichmullerFun, ← m
+    simp only [← map_teichmullerFun, ← map_mul, teichmuller_mul_aux₂]
+
+@[simp]
 
 中文:
 定义 teichmuller
@@ -194,7 +196,9 @@ definition teichmuller
     intro x y
     rcases counit_surjective R x with ⟨x, rfl⟩
     rcases counit_surjective R y with ⟨y, rfl⟩
-    simp only [← map_teichmullerFun, ← m
+    simp only [← map_teichmullerFun, ← map_mul, teichmuller_mul_aux₂]
+
+@[simp]
 
 Depends on / 依赖: teichmullerFun
 -/

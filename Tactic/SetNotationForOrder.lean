@@ -52,7 +52,12 @@ definition mkUsesSetNotationForOrderInstance
   let app := mkAppN (.const declName (cinfo.levelParams.map .param)) xs
 addDecl Declaration.defnDecl {
     name := instName
-    levelParams := c
+    levelParams := cinfo.levelParams
+type := ← mkForallFVars xs ← mkAppM ``UsesSetNotationForOrder #[app]
+value := ← mkLambdaFVars xs ← mkAppOptM ``UsesSetNotationForOrder.mk #[app]
+    hints := .regular 0
+    safety := .safe }
+  registerInstance instName kind (eval_prio default)
 
 中文:
 定义 mkUsesSetNotationForOrderInstance
@@ -64,7 +69,12 @@ addDecl Declaration.defnDecl {
   let app := mkAppN (.const declName (cinfo.levelParams.map .param)) xs
 addDecl Declaration.defnDecl {
     name := instName
-    levelParams := c
+    levelParams := cinfo.levelParams
+type := ← mkForallFVars xs ← mkAppM ``UsesSetNotationForOrder #[app]
+value := ← mkLambdaFVars xs ← mkAppOptM ``UsesSetNotationForOrder.mk #[app]
+    hints := .regular 0
+    safety := .safe }
+  registerInstance instName kind (eval_prio default)
 
 Depends on / 依赖: Declaration, Declaration.defnDecl, MetaM.run, UsesSetNotationForOrder, UsesSetNotationForOrder.mk, addDecl, cinfo.levelParams, cinfo.levelParams.map, cinfo.type, declName, defnDecl, forallTelescope, getConstInfo, instName, instUsesSetNotationForOrder, levelParams, mkAppM, mkAppN, mkAppOptM, mkForallFVars
 -/
@@ -173,7 +183,22 @@ definition elabSubsetLike
   let e ← elabApp rel expectedType?
   let_expr f@SubsetElabAux α x y := e | throwError "unexpected result {e} when elaborating {rel}"
   -- If the type cannot be determined yet, we postpone elaboration until it is known.
-  -- This behaviour is inspired by `resolv
+  -- This behaviour is inspired by `resolveLValLoop` from the file `Lean.Elab.App`.
+  if ← isMVarApp α then
+    tryPostpone
+    synthesizeSyntheticMVarsUsingDefault
+    if ← isMVarApp α then
+      Linter.logLintIf linter.setNotationForOrder (← getRef)
+        m!"Ambiguous use of subset notation: the type is a metavariable.\n\
+        Consider adding a type annotation, e.g. `(_ : Set _) subseteq _`.\n\
+        The term will elaborate to a different constant depending on \
+        whether the type is tagged with `@[use_set_notation_for_order]`."
+  let (rel, cls) := if ← useSetNotationFor α then (le, leCls) else (sub, subCls)
+let inst ← mkInstMVar .app (.const cls f.constLevels!) α
+  let rel := mkApp2 (.const rel f.constLevels!) α inst
+  -- Add the relation (e.g. `LE.le : Set Nat → Set Nat → Prop`) as a hover on the whole term
+  addTermInfo' (← getRef) rel (isDisplayableTerm := true)
+  return mkApp2 rel x y
 
 中文:
 定义 elabSubsetLike
@@ -183,7 +208,22 @@ definition elabSubsetLike
   let e ← elabApp rel expectedType?
   let_expr f@SubsetElabAux α x y := e | throwError "unexpected result {e} when elaborating {rel}"
   -- If the type cannot be determined yet, we postpone elaboration until it is known.
-  -- This behaviour is inspired by `resolv
+  -- This behaviour is inspired by `resolveLValLoop` from the file `Lean.Elab.App`.
+  if ← isMVarApp α then
+    tryPostpone
+    synthesizeSyntheticMVarsUsingDefault
+    if ← isMVarApp α then
+      Linter.logLintIf linter.setNotationForOrder (← getRef)
+        m!"Ambiguous use of subset notation: the type is a metavariable.\n\
+        Consider adding a type annotation, e.g. `(_ : Set _) subseteq _`.\n\
+        The term will elaborate to a different constant depending on \
+        whether the type is tagged with `@[use_set_notation_for_order]`."
+  let (rel, cls) := if ← useSetNotationFor α then (le, leCls) else (sub, subCls)
+let inst ← mkInstMVar .app (.const cls f.constLevels!) α
+  let rel := mkApp2 (.const rel f.constLevels!) α inst
+  -- Add the relation (e.g. `LE.le : Set Nat → Set Nat → Prop`) as a hover on the whole term
+  addTermInfo' (← getRef) rel (isDisplayableTerm := true)
+  return mkApp2 rel x y
 -/
 def elabSubsetLike (x y : Term) (le leCls sub subCls : Name) (expectedType? : Option Expr) :
     TermElabM Expr := do

@@ -66,7 +66,7 @@ theorem orthogonalFamily_eigenspace_inf_eigenspace
     obtain (h₁ | h₂) : i.1 != j.1 ∨ i.2 != j.2 := by rwa [Ne.eq_def, Prod.ext_iff, not_and_or] at hij
     all_goals intro w ⟨hw1, hw2⟩
     · exact hB.orthogonalFamily_eigenspaces.pairwise h₁ hv2 w hw2
-    · exact hA.orthogonalFamily_eigensp
+    · exact hA.orthogonalFamily_eigenspaces.pairwise h₂ hv1 w hw1
 
 中文:
 定理 orthogonalFamily_eigenspace_inf_eigenspace
@@ -75,7 +75,7 @@ theorem orthogonalFamily_eigenspace_inf_eigenspace
     obtain (h₁ | h₂) : i.1 != j.1 ∨ i.2 != j.2 := by rwa [Ne.eq_def, Prod.ext_iff, not_and_or] at hij
     all_goals intro w ⟨hw1, hw2⟩
     · exact hB.orthogonalFamily_eigenspaces.pairwise h₁ hv2 w hw2
-    · exact hA.orthogonalFamily_eigensp
+    · exact hA.orthogonalFamily_eigenspaces.pairwise h₂ hv1 w hw1
 
 Depends on / 依赖: Ne.eq_def, OrthogonalFamily, OrthogonalFamily.of_pairwise, Prod.ext_iff, all_goals, eq_def, ext_iff, hA.orthogonalFamily_eigenspaces.pairwise, hB.orthogonalFamily_eigenspaces.pairwise, not_and_or, of_pairwise, orthogonalFamily_eigenspaces, pairwise
 -/
@@ -101,7 +101,7 @@ theorem orthogonalFamily_iInf_eigenspaces
   simp only [Submodule.coe_subtypeₗᵢ, Submodule.coe_subtype, Subtype.forall] at H
   apply H
   · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (f _)).mp Ef.2 _
-  · exact (Su
+  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (g _)).mp Eg.2 _
 
 中文:
 定理 orthogonalFamily_iInf_eigenspaces
@@ -113,7 +113,7 @@ theorem orthogonalFamily_iInf_eigenspaces
   simp only [Submodule.coe_subtypeₗᵢ, Submodule.coe_subtype, Subtype.forall] at H
   apply H
   · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (f _)).mp Ef.2 _
-  · exact (Su
+  · exact (Submodule.mem_iInf <| fun _ => eigenspace (T _) (g _)).mp Eg.2 _
 
 Depends on / 依赖: Function, Function.ne_iff.mp, Submodule, Submodule.coe_subtype, Submodule.mem_iInf, Subtype, Subtype.forall, coe_subtype, eigenspace, mem_iInf, ne_iff, orthogonalFamily_eigenspaces
 -/
@@ -144,7 +144,8 @@ theorem iSup_eigenspace_inf_eigenspace_of_commute
     (eigenspace A α).inf_genEigenspace _ (mapsTo_genEigenspace_of_comm hAB α 1)]
   congr 1
   simpa only [genEigenspace_eq_eigenspace, Submodule.orthogonal_eq_bot_iff]
-using orthogonalComplement_iSup_eigenspac
+using orthogonalComplement_iSup_eigenspaces_eq_bot
+hB.restrict_invariant mapsTo_genEigenspace_of_comm hAB α 1
 
 中文:
 定理 iSup_eigenspace_inf_eigenspace_of_commute
@@ -155,7 +156,8 @@ using orthogonalComplement_iSup_eigenspac
     (eigenspace A α).inf_genEigenspace _ (mapsTo_genEigenspace_of_comm hAB α 1)]
   congr 1
   simpa only [genEigenspace_eq_eigenspace, Submodule.orthogonal_eq_bot_iff]
-using orthogonalComplement_iSup_eigenspac
+using orthogonalComplement_iSup_eigenspaces_eq_bot
+hB.restrict_invariant mapsTo_genEigenspace_of_comm hAB α 1
 
 Depends on / 依赖: Submodule, Submodule.map_iSup, Submodule.orthogonal_eq_bot_iff, conv_rhs, eigenspace, genEigenspace_eq_eigenspace, hB.restrict_invariant, inf_genEigenspace, map_iSup, map_subtype_top, mapsTo_genEigenspace_of_comm, orthogonalComplement_iSup_eigenspaces_eq_bot, orthogonal_eq_bot_iff, restrict_invariant
 -/
@@ -236,7 +238,7 @@ theorem iSup_iInf_eq_top_of_commute
  (maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) (χ _))).symm
   _ = ⊤ :=
     iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute T h fun _ => by
-    rw [← orthogonal_eq_
+    rw [← orthogonal_eq_bot_iff]; rw [congr(⨆ μ]; rw [$(maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) μ))]; rw [(hT _).orthogonalComplement_iSup_eigenspaces_eq_bot]
 
 中文:
 定理 iSup_iInf_eq_top_of_commute
@@ -247,7 +249,7 @@ theorem iSup_iInf_eq_top_of_commute
  (maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) (χ _))).symm
   _ = ⊤ :=
     iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute T h fun _ => by
-    rw [← orthogonal_eq_
+    rw [← orthogonal_eq_bot_iff]; rw [congr(⨆ μ]; rw [$(maxGenEigenspace_eq_eigenspace (isFinitelySemisimple <| hT _) μ))]; rw [(hT _).orthogonalComplement_iSup_eigenspaces_eq_bot]
 
 Depends on / 依赖: iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute, isFinitelySemisimple, maxGenEigenspace, maxGenEigenspace_eq_eigenspace, orthogonalComplement_iSup_eigenspaces_eq_bot, orthogonal_eq_bot_iff
 -/

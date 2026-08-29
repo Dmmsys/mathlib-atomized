@@ -43,7 +43,7 @@ theorem commutator_pi_pi_of_finite
         by_cases h : j = i
         · subst h
           simpa using hx
-      
+        · simp [h, one_mem]
 
 中文:
 定理 commutator_pi_pi_of_finite
@@ -61,7 +61,7 @@ theorem commutator_pi_pi_of_finite
         by_cases h : j = i
         · subst h
           simpa using hx
-      
+        · simp [h, one_mem]
 
 Depends on / 依赖: classical, commutator_mono, commutator_pi_pi_le, le_antisymm, le_pi_iff, map_commutator, one_mem, pi_le_iff
 -/

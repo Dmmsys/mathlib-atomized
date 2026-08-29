@@ -95,7 +95,7 @@ lemma AlgHom.mulLeftRightMatrix.comp_inv
     map_smul, stdBasis_eq_single, LinearMap.coe_sum, Finset.sum_apply,
     LinearMap.smul_apply, LinearMap.id_coe, id_eq]
   ext k l
-  simp
+  simp [sum_apply, Matrix.mul_apply, single, Fintype.sum_prod_type, ite_and]
 
 中文:
 引理 代数态射.mulLeftRightMatrix.comp_inv
@@ -107,7 +107,7 @@ lemma AlgHom.mulLeftRightMatrix.comp_inv
     map_smul, stdBasis_eq_single, LinearMap.coe_sum, Finset.sum_apply,
     LinearMap.smul_apply, LinearMap.id_coe, id_eq]
   ext k l
-  simp
+  simp [sum_apply, Matrix.mul_apply, single, Fintype.sum_prod_type, ite_and]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, Finset, Finset.sum_apply, Fintype, Fintype.sum_prod_type, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.coe_mk, LinearMap.coe_sum, LinearMap.id_coe, LinearMap.smul_apply, Matrix, Matrix.mul_apply, Matrix.stdBasis, coe_comp, coe_mk, coe_sum
 -/

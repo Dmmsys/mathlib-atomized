@@ -626,7 +626,7 @@ lemma map_injective
     simp_rw [map_add, CoordinateRing.map_smul, map_one, map_mk, map_X] at hy
     obtain ⟨hp, hq⟩ := smul_basis_eq_zero hy
     rw [Polynomial.map_eq_zero_iff hf] at hp hq
-    simp_rw [hp, hq, zero_smul, 
+    simp_rw [hp, hq, zero_smul, add_zero]
 
 中文:
 引理 map_injective
@@ -637,7 +637,7 @@ lemma map_injective
     simp_rw [map_add, CoordinateRing.map_smul, map_one, map_mk, map_X] at hy
     obtain ⟨hp, hq⟩ := smul_basis_eq_zero hy
     rw [Polynomial.map_eq_zero_iff hf] at hp hq
-    simp_rw [hp, hq, zero_smul, 
+    simp_rw [hp, hq, zero_smul, add_zero]
 
 Depends on / 依赖: CoordinateRing, CoordinateRing.map_smul, Polynomial, Polynomial.map_eq_zero_iff, add_zero, exists_smul_basis_eq, injective_iff_map_eq_zero, map_X, map_add, map_eq_zero_iff, map_mk, map_one, map_smul, simp_rw, smul_basis_eq_zero, zero_smul
 -/
@@ -898,7 +898,9 @@ lemma XYIdeal_add_eq
   rw [sub_sub <| -(Y : R[X][Y]), neg_sub_left (Y : R[X][Y]), map_neg, span_singleton_neg, sup_comm,
 ← span_insert, ← span_pair_add_left_mul _ _ mk W' C C W'.a₁ + ℓ, ← map_mul,
     ← map_add]
-  congr 
+  congr 4
+  C_simp
+  ring1
 
 中文:
 引理 XYIdeal_add_eq
@@ -909,7 +911,9 @@ lemma XYIdeal_add_eq
   rw [sub_sub <| -(Y : R[X][Y]), neg_sub_left (Y : R[X][Y]), map_neg, span_singleton_neg, sup_comm,
 ← span_insert, ← span_pair_add_left_mul _ _ mk W' C C W'.a₁ + ℓ, ← map_mul,
     ← map_add]
-  congr 
+  congr 4
+  C_simp
+  ring1
 
 Depends on / 依赖: C_simp, XClass, XIdeal, XYIdeal, YClass, linePolynomial, map_add, map_mul, map_neg, negAddY, negPolynomial, neg_sub_left, span_insert, span_pair_add_left_mul, span_singleton_neg, sub_sub, sup_comm
 -/
@@ -972,7 +976,15 @@ lemma XYIdeal_eq₂
     · have hy : y₁ != W.negY x₂ y₂ := fun h => hxy ⟨hx, h⟩
       rcases hx, Y_eq_of_Y_ne h₁ h₂ hx hy with ⟨rfl, rfl⟩
       simp [linePolynomial]
-    · simp [field, linePolynomial, slope_of_X_ne
+    · simp [field, linePolynomial, slope_of_X_ne hx]
+      ring1
+  nth_rw 1 [hy₂]
+  simp only [XYIdeal, XClass, YClass, linePolynomial]
+  rw [← span_pair_add_left_mul _ _ <| mk W <| C <| C <| -W.slope x₁ x₂ y₁ y₂]; rw [← map_mul]; rw [← map_add]
+  congr 4
+  simp only [eval_C, eval_X, eval_add, eval_sub, eval_mul]
+  C_simp
+  ring1
 
 中文:
 引理 XYIdeal_eq₂
@@ -983,7 +995,15 @@ lemma XYIdeal_eq₂
     · have hy : y₁ != W.negY x₂ y₂ := fun h => hxy ⟨hx, h⟩
       rcases hx, Y_eq_of_Y_ne h₁ h₂ hx hy with ⟨rfl, rfl⟩
       simp [linePolynomial]
-    · simp [field, linePolynomial, slope_of_X_ne
+    · simp [field, linePolynomial, slope_of_X_ne hx]
+      ring1
+  nth_rw 1 [hy₂]
+  simp only [XYIdeal, XClass, YClass, linePolynomial]
+  rw [← span_pair_add_left_mul _ _ <| mk W <| C <| C <| -W.slope x₁ x₂ y₁ y₂]; rw [← map_mul]; rw [← map_add]
+  congr 4
+  simp only [eval_C, eval_X, eval_add, eval_sub, eval_mul]
+  C_simp
+  ring1
 
 Depends on / 依赖: W.negY, W.slope, XClass, XYIdeal, YClass, Y_eq_of_Y_ne, eval_, eval_C, eval_X, linePolynomial, map_add, map_mul, nth_rw, slope_of_X_ne, span_pair_add_left_mul
 -/
@@ -1016,7 +1036,30 @@ lemma XYIdeal_neg_mul
       C (X - C x) * (C (X ^ 2 + C (x + W.a₂) * X + C (x ^ 2 + W.a₂ * x + W.a₄)) - C (C W.a₁) * Y) =
         W.polynomial * 1 := by
     linear_combination (norm := (rw [negY, polynomial]; C_simp; ring1))
-      congr_arg C (congr_arg C ((equ
+      congr_arg C (congr_arg C ((equation_iff ..).mp h.left).symm)
+  simp_rw [XYIdeal, XClass, YClass, span_pair_mul_span_pair, mul_comm, ← map_mul,
+    AdjoinRoot.mk_eq_mk.mpr ⟨1, Y_rw⟩, map_mul, span_insert, ← span_singleton_mul_span_singleton,
+    ← Ideal.mul_sup, ← span_insert]
+  convert! mul_top (_ : Ideal W.CoordinateRing) using 2
+  on_goal 2 => infer_instance
+  simp_rw [← Set.image_singleton (f := mk W), ← Set.image_insert_eq, ← map_span]
+  convert! map_top (R := F[X][Y]) (mk W) using 1
+  apply congr_arg
+  simp_rw [eq_top_iff_one, mem_span_insert', mem_span_singleton']
+  rcases ((nonsingular_iff' ..).mp h).right with hx | hy
+  · let W_X := W.a₁ * y - (3 * x ^ 2 + 2 * W.a₂ * x + W.a₄)
+    refine
+⟨C C W_X⁻¹ * -(X + C (2 * x + W.a₂)), C C W_X⁻¹ * W.a₁, 0, C C W_X⁻¹ * -1, ?_⟩
+    rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hx]
+    simp only [W_X, mul_add, ← mul_assoc, ← C_mul, mul_inv_cancel₀ hx]
+    C_simp
+    ring1
+  · let W_Y := 2 * y + W.a₁ * x + W.a₃
+refine ⟨0, C C W_Y⁻¹, C C W_Y⁻¹ * -1, 0, ?_⟩
+    rw [negY]; rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hy]
+    simp only [W_Y, mul_add, ← mul_assoc, ← C_mul, mul_inv_cancel₀ hy]
+    C_simp
+    ring1
 
 中文:
 引理 XYIdeal_neg_mul
@@ -1026,7 +1069,30 @@ lemma XYIdeal_neg_mul
       C (X - C x) * (C (X ^ 2 + C (x + W.a₂) * X + C (x ^ 2 + W.a₂ * x + W.a₄)) - C (C W.a₁) * Y) =
         W.polynomial * 1 := by
     linear_combination (norm := (rw [negY, polynomial]; C_simp; ring1))
-      congr_arg C (congr_arg C ((equ
+      congr_arg C (congr_arg C ((equation_iff ..).mp h.left).symm)
+  simp_rw [XYIdeal, XClass, YClass, span_pair_mul_span_pair, mul_comm, ← map_mul,
+    AdjoinRoot.mk_eq_mk.mpr ⟨1, Y_rw⟩, map_mul, span_insert, ← span_singleton_mul_span_singleton,
+    ← Ideal.mul_sup, ← span_insert]
+  convert! mul_top (_ : Ideal W.CoordinateRing) using 2
+  on_goal 2 => infer_instance
+  simp_rw [← Set.image_singleton (f := mk W), ← Set.image_insert_eq, ← map_span]
+  convert! map_top (R := F[X][Y]) (mk W) using 1
+  apply congr_arg
+  simp_rw [eq_top_iff_one, mem_span_insert', mem_span_singleton']
+  rcases ((nonsingular_iff' ..).mp h).right with hx | hy
+  · let W_X := W.a₁ * y - (3 * x ^ 2 + 2 * W.a₂ * x + W.a₄)
+    refine
+⟨C C W_X⁻¹ * -(X + C (2 * x + W.a₂)), C C W_X⁻¹ * W.a₁, 0, C C W_X⁻¹ * -1, ?_⟩
+    rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hx]
+    simp only [W_X, mul_add, ← mul_assoc, ← C_mul, mul_inv_cancel₀ hx]
+    C_simp
+    ring1
+  · let W_Y := 2 * y + W.a₁ * x + W.a₃
+refine ⟨0, C C W_Y⁻¹, C C W_Y⁻¹ * -1, 0, ?_⟩
+    rw [negY]; rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hy]
+    simp only [W_Y, mul_add, ← mul_assoc, ← C_mul, mul_inv_cancel₀ hy]
+    C_simp
+    ring1
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk_eq_mk.mpr, C_simp, Ideal.mul_sup, W.negY, W.polynomial, XClass, XYIdeal, YClass, Y_rw, congr_arg, equation_iff, h.left, linear_combination, map_mul, mk_eq_mk, mul_comm, mul_sup, polynomial, simp_rw
 -/
@@ -1070,7 +1136,35 @@ lemma XYIdeal_mul_XYIdeal
   proof: by
   have sup_rw : forall a b c d : Ideal W.CoordinateRing, a ⊔ (b ⊔ (c ⊔ d)) = a ⊔ d ⊔ b ⊔ c :=
     fun _ _ c _ => by rw [← sup_assoc, sup_comm c, sup_sup_sup_comm, ← sup_assoc]
-  rw [XYIdeal_add_eq]; rw [XIdeal]; rw [mul_comm]; rw [XYIdeal_eq₁ x₁ y₁ <| W.slope x₁ x₂ y₁ y₂]; rw [XYIdeal]; rw [XYIde
+  rw [XYIdeal_add_eq]; rw [XIdeal]; rw [mul_comm]; rw [XYIdeal_eq₁ x₁ y₁ <| W.slope x₁ x₂ y₁ y₂]; rw [XYIdeal]; rw [XYIdeal_eq₂ h₁ h₂ hxy]; rw [XYIdeal]; rw [span_pair_mul_span_pair]
+  simp_rw [span_insert, sup_rw, Ideal.sup_mul, span_singleton_mul_span_singleton]
+  rw [← neg_eq_iff_eq_neg.mpr <| C_addPolynomial_slope h₁ h₂ hxy]; rw [span_singleton_neg]; rw [C_addPolynomial]; rw [map_mul]; rw [YClass]
+  simp_rw [mul_comm <| XClass W x₁, mul_assoc, ← span_singleton_mul_span_singleton, ← Ideal.mul_sup]
+  rw [span_singleton_mul_span_singleton]; rw [← span_insert]; rw [← span_pair_add_left_mul _ _ -(XClass W <| W.addX x₁ x₂ <| W.slope x₁ x₂ y₁ y₂)]; rw [mul_neg]; rw [← sub_eq_add_neg]; rw [← sub_mul]; rw [← map_sub mk W]; rw [sub_sub_sub_cancel_right]; rw [span_insert]; rw [← span_singleton_mul_span_singleton]; rw [← sup_rw]; rw [← Ideal.sup_mul]; rw [← Ideal.sup_mul]
+  apply congr_arg (_ ∘ _)
+  convert! top_mul (_ : Ideal W.CoordinateRing)
+  simp_rw [XClass, ← Set.image_singleton (f := mk W), ← map_span, ← Ideal.map_sup, eq_top_iff_one,
+    mem_map_iff_of_surjective _ AdjoinRoot.mk_surjective, ← span_insert, mem_span_insert',
+    mem_span_singleton']
+  by_cases hx : x₁ = x₂
+  · have hy : y₁ != W.negY x₂ y₂ := fun h => hxy ⟨hx, h⟩
+    rcases hx, Y_eq_of_Y_ne h₁ h₂ hx hy with ⟨rfl, rfl⟩
+    let y := (y₁ - W.negY x₁ y₁) ^ 2
+replace hxy := pow_ne_zero 2 sub_ne_zero_of_ne hy
+    refine ⟨1 + C (C <| y⁻¹ * 4) * W.polynomial,
+⟨C C y⁻¹ * (C 4 * X ^ 2 + C (4 * x₁ + W.b₂) * X + C (4 * x₁ ^ 2 + W.b₂ * x₁ + 2 * W.b₄)),
+        0, C (C y⁻¹) * (Y - W.negPolynomial), ?_⟩, by
+      rw [map_add]; rw [map_one]; rw [map_mul <| mk W]; rw [AdjoinRoot.mk_self]; rw [mul_zero]; rw [add_zero]⟩
+    rw [polynomial]; rw [negPolynomial]; rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hxy]
+    simp only [y, mul_add, ← mul_assoc, ← C_mul, mul_inv_cancel₀ hxy]
+    linear_combination (norm := (rw [b₂, b₄, negY]; C_simp; ring1))
+      -4 * congr_arg C (congr_arg C <| (equation_iff ..).mp h₁)
+  · replace hx := sub_ne_zero_of_ne hx
+refine ⟨_, ⟨⟨C C (x₁ - x₂)⁻¹, C C (x₁ - x₂)⁻¹ * -1, 0, ?_⟩, map_one _⟩⟩
+    rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hx]
+    simp only [← mul_assoc, mul_add, ← C_mul, mul_inv_cancel₀ hx]
+    C_simp
+    ring1
 
 中文:
 引理 XYIdeal_mul_XYIdeal
@@ -1078,7 +1172,35 @@ lemma XYIdeal_mul_XYIdeal
   证明: by
   have sup_rw : forall a b c d : Ideal W.CoordinateRing, a ⊔ (b ⊔ (c ⊔ d)) = a ⊔ d ⊔ b ⊔ c :=
     fun _ _ c _ => by rw [← sup_assoc, sup_comm c, sup_sup_sup_comm, ← sup_assoc]
-  rw [XYIdeal_add_eq]; rw [XIdeal]; rw [mul_comm]; rw [XYIdeal_eq₁ x₁ y₁ <| W.slope x₁ x₂ y₁ y₂]; rw [XYIdeal]; rw [XYIde
+  rw [XYIdeal_add_eq]; rw [XIdeal]; rw [mul_comm]; rw [XYIdeal_eq₁ x₁ y₁ <| W.slope x₁ x₂ y₁ y₂]; rw [XYIdeal]; rw [XYIdeal_eq₂ h₁ h₂ hxy]; rw [XYIdeal]; rw [span_pair_mul_span_pair]
+  simp_rw [span_insert, sup_rw, Ideal.sup_mul, span_singleton_mul_span_singleton]
+  rw [← neg_eq_iff_eq_neg.mpr <| C_addPolynomial_slope h₁ h₂ hxy]; rw [span_singleton_neg]; rw [C_addPolynomial]; rw [map_mul]; rw [YClass]
+  simp_rw [mul_comm <| XClass W x₁, mul_assoc, ← span_singleton_mul_span_singleton, ← Ideal.mul_sup]
+  rw [span_singleton_mul_span_singleton]; rw [← span_insert]; rw [← span_pair_add_left_mul _ _ -(XClass W <| W.addX x₁ x₂ <| W.slope x₁ x₂ y₁ y₂)]; rw [mul_neg]; rw [← sub_eq_add_neg]; rw [← sub_mul]; rw [← map_sub mk W]; rw [sub_sub_sub_cancel_right]; rw [span_insert]; rw [← span_singleton_mul_span_singleton]; rw [← sup_rw]; rw [← Ideal.sup_mul]; rw [← Ideal.sup_mul]
+  apply congr_arg (_ ∘ _)
+  convert! top_mul (_ : Ideal W.CoordinateRing)
+  simp_rw [XClass, ← Set.image_singleton (f := mk W), ← map_span, ← Ideal.map_sup, eq_top_iff_one,
+    mem_map_iff_of_surjective _ AdjoinRoot.mk_surjective, ← span_insert, mem_span_insert',
+    mem_span_singleton']
+  by_cases hx : x₁ = x₂
+  · have hy : y₁ != W.negY x₂ y₂ := fun h => hxy ⟨hx, h⟩
+    rcases hx, Y_eq_of_Y_ne h₁ h₂ hx hy with ⟨rfl, rfl⟩
+    let y := (y₁ - W.negY x₁ y₁) ^ 2
+replace hxy := pow_ne_zero 2 sub_ne_zero_of_ne hy
+    refine ⟨1 + C (C <| y⁻¹ * 4) * W.polynomial,
+⟨C C y⁻¹ * (C 4 * X ^ 2 + C (4 * x₁ + W.b₂) * X + C (4 * x₁ ^ 2 + W.b₂ * x₁ + 2 * W.b₄)),
+        0, C (C y⁻¹) * (Y - W.negPolynomial), ?_⟩, by
+      rw [map_add]; rw [map_one]; rw [map_mul <| mk W]; rw [AdjoinRoot.mk_self]; rw [mul_zero]; rw [add_zero]⟩
+    rw [polynomial]; rw [negPolynomial]; rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hxy]
+    simp only [y, mul_add, ← mul_assoc, ← C_mul, mul_inv_cancel₀ hxy]
+    linear_combination (norm := (rw [b₂, b₄, negY]; C_simp; ring1))
+      -4 * congr_arg C (congr_arg C <| (equation_iff ..).mp h₁)
+  · replace hx := sub_ne_zero_of_ne hx
+refine ⟨_, ⟨⟨C C (x₁ - x₂)⁻¹, C C (x₁ - x₂)⁻¹ * -1, 0, ?_⟩, map_one _⟩⟩
+    rw [← mul_right_inj' <| C_ne_zero.mpr <| C_ne_zero.mpr hx]
+    simp only [← mul_assoc, mul_add, ← C_mul, mul_inv_cancel₀ hx]
+    C_simp
+    ring1
 
 Depends on / 依赖: C_addPolynomial_slope, CoordinateRing, Ideal.sup_mul, W.CoordinateRing, W.slope, XIdeal, XYIdeal, XYIdeal_add_eq, mul_comm, neg_eq_iff_eq_neg, neg_eq_iff_eq_neg.mpr, simp_rw, span_insert, span_pair_mul_span_pair, span_singleton_mul_span_singleton, sup_assoc, sup_comm, sup_mul, sup_rw, sup_sup_sup_comm
 -/
@@ -1128,14 +1250,14 @@ definition XYIdeal'
   signature: {x y : F} (h : W.Nonsingular x y)
   body: Units.mkOfMulEqOne (XYIdeal W x (C y)) (XYIdeal W x (C <| W.negY x y) *
       (XIdeal W x : FractionalIdeal W.CoordinateRing⁰ W.FunctionField)⁻¹) <| by
-    rw [← mul_assoc]; rw [← coeIdeal_mul]; rw [mul_comm <| XYIdeal W ..]; rw [XYIdeal_neg_mul h]; rw [XIdeal]; rw [FractionalIdeal.coe_ideal_span_si
+    rw [← mul_assoc]; rw [← coeIdeal_mul]; rw [mul_comm <| XYIdeal W ..]; rw [XYIdeal_neg_mul h]; rw [XIdeal]; rw [FractionalIdeal.coe_ideal_span_singleton_mul_inv W.FunctionField XClass_ne_zero x]
 
 中文:
 定义 XYIdeal'
   签名: {x y : F} (h : W.非奇异 x y)
   定义体: Units.mkOfMulEqOne (XYIdeal W x (C y)) (XYIdeal W x (C <| W.negY x y) *
       (XIdeal W x : FractionalIdeal W.CoordinateRing⁰ W.FunctionField)⁻¹) <| by
-    rw [← mul_assoc]; rw [← coeIdeal_mul]; rw [mul_comm <| XYIdeal W ..]; rw [XYIdeal_neg_mul h]; rw [XIdeal]; rw [FractionalIdeal.coe_ideal_span_si
+    rw [← mul_assoc]; rw [← coeIdeal_mul]; rw [mul_comm <| XYIdeal W ..]; rw [XYIdeal_neg_mul h]; rw [XIdeal]; rw [FractionalIdeal.coe_ideal_span_singleton_mul_inv W.FunctionField XClass_ne_zero x]
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.coe_ideal_span_singleton_mul_inv, FunctionField, Units.mkOfMulEqOne, W.CoordinateRing, W.FunctionField, W.negY, XClass_ne_zero, XIdeal, XYIdeal, XYIdeal_neg_mul, coeIdeal_mul, coe_ideal_span_singleton_mul_inv, mkOfMulEqOne, mul_assoc, mul_comm
 -/
@@ -1230,7 +1352,8 @@ lemma norm_smul_basis
   simp_rw [Algebra.norm_eq_matrix_det <| CoordinateRing.basis W', Matrix.det_fin_two,
     Algebra.leftMulMatrix_eq_repr_mul, basis_zero, mul_one, basis_one, smul_basis_mul_Y, map_add,
     Finsupp.add_apply, map_smul, Finsupp.smul_apply, ← basis_zero, ← basis_one,
-    Basis.repr_self_apply, if_pos
+    Basis.repr_self_apply, if_pos, one_ne_zero, if_false, smul_eq_mul]
+  ring1
 
 中文:
 引理 norm_smul_basis
@@ -1240,7 +1363,8 @@ lemma norm_smul_basis
   simp_rw [Algebra.norm_eq_matrix_det <| CoordinateRing.basis W', Matrix.det_fin_two,
     Algebra.leftMulMatrix_eq_repr_mul, basis_zero, mul_one, basis_one, smul_basis_mul_Y, map_add,
     Finsupp.add_apply, map_smul, Finsupp.smul_apply, ← basis_zero, ← basis_one,
-    Basis.repr_self_apply, if_pos
+    Basis.repr_self_apply, if_pos, one_ne_zero, if_false, smul_eq_mul]
+  ring1
 
 Depends on / 依赖: Algebra, Algebra.leftMulMatrix_eq_repr_mul, Algebra.norm_eq_matrix_det, Basis.repr_self_apply, CoordinateRing, CoordinateRing.basis, Finsupp, Finsupp.add_apply, Finsupp.smul_apply, Matrix, Matrix.det_fin_two, add_apply, basis_one, basis_zero, det_fin_two, if_false, if_pos, leftMulMatrix_eq_repr_mul, map_add, map_smul
 -/
@@ -1285,7 +1409,37 @@ lemma degree_norm_smul_basis
   have hdpq : (p * q * (C W'.a₁ * X + C W'.a₃)).degree <= p.degree + q.degree + 1 := by
     grw [degree_mul, degree_mul, degree_linear_le]
   have hdq :
-      (q ^ 2 * (X ^ 3 + C W'.a₂ * X ^ 2 + C W'.a₄ * X + C W'.a₆)).degree = 2 • q.deg
+      (q ^ 2 * (X ^ 3 + C W'.a₂ * X ^ 2 + C W'.a₄ * X + C W'.a₆)).degree = 2 • q.degree + 3 := by
+    rw [degree_mul]; rw [degree_pow]; rw [← one_mul <| X ^ 3]; rw [← C_1]; rw [degree_cubic <| one_ne_zero' R]
+  rw [norm_smul_basis]
+  by_cases hp : p = 0
+  · simp only [hp, hdq, neg_zero, zero_sub, zero_mul, zero_pow two_ne_zero, degree_neg]
+    exact (max_bot_left _).symm
+  · by_cases hq : q = 0
+    · simp only [hq, hdp, sub_zero, zero_mul, mul_zero, zero_pow two_ne_zero]
+      exact (max_bot_right _).symm
+    · rw [← not_congr degree_eq_bot] at hp hq
+      -- Porting note: BUG `cases` tactic does not modify assumptions in `hp'` and `hq'`
+      rcases hp' : p.degree with _ | dp -- `hp' : ` should be redundant
+      · exact (hp hp').elim -- `hp'` should be `rfl`
+      · rw [hp'] at hdp hdpq -- line should be redundant
+        rcases hq' : q.degree with _ | dq -- `hq' : ` should be redundant
+        · exact (hq hq').elim -- `hq'` should be `rfl`
+        · rw [hq'] at hdpq hdq -- line should be redundant
+          rcases le_or_gt dp (dq + 1) with hpq | hpq
+          · convert!
+            (degree_sub_eq_right_of_degree_lt <|
+(degree_sub_le _ _).trans_lt
+                    max_lt_iff.mpr ⟨hdp.trans_lt _, hdpq.trans_lt _⟩).trans
+              (max_eq_right_of_lt _).symm <;> rw [hdq] <;>
+exact WithBot.coe_lt_coe.mpr by dsimp; linarith only [hpq]
+          · rw [sub_sub]
+            convert!
+              (degree_sub_eq_left_of_degree_lt <|
+(degree_add_le _ _).trans_lt
+                      max_lt_iff.mpr ⟨hdpq.trans_lt _, hdq.trans_lt _⟩).trans
+                (max_eq_left_of_lt _).symm <;> rw [hdp] <;>
+exact WithBot.coe_lt_coe.mpr by dsimp; linarith only [hpq]
 
 中文:
 引理 degree_norm_smul_basis
@@ -1295,7 +1449,37 @@ lemma degree_norm_smul_basis
   have hdpq : (p * q * (C W'.a₁ * X + C W'.a₃)).degree <= p.degree + q.degree + 1 := by
     grw [degree_mul, degree_mul, degree_linear_le]
   have hdq :
-      (q ^ 2 * (X ^ 3 + C W'.a₂ * X ^ 2 + C W'.a₄ * X + C W'.a₆)).degree = 2 • q.deg
+      (q ^ 2 * (X ^ 3 + C W'.a₂ * X ^ 2 + C W'.a₄ * X + C W'.a₆)).degree = 2 • q.degree + 3 := by
+    rw [degree_mul]; rw [degree_pow]; rw [← one_mul <| X ^ 3]; rw [← C_1]; rw [degree_cubic <| one_ne_zero' R]
+  rw [norm_smul_basis]
+  by_cases hp : p = 0
+  · simp only [hp, hdq, neg_zero, zero_sub, zero_mul, zero_pow two_ne_zero, degree_neg]
+    exact (max_bot_left _).symm
+  · by_cases hq : q = 0
+    · simp only [hq, hdp, sub_zero, zero_mul, mul_zero, zero_pow two_ne_zero]
+      exact (max_bot_right _).symm
+    · rw [← not_congr degree_eq_bot] at hp hq
+      -- Porting note: BUG `cases` tactic does not modify assumptions in `hp'` and `hq'`
+      rcases hp' : p.degree with _ | dp -- `hp' : ` should be redundant
+      · exact (hp hp').elim -- `hp'` should be `rfl`
+      · rw [hp'] at hdp hdpq -- line should be redundant
+        rcases hq' : q.degree with _ | dq -- `hq' : ` should be redundant
+        · exact (hq hq').elim -- `hq'` should be `rfl`
+        · rw [hq'] at hdpq hdq -- line should be redundant
+          rcases le_or_gt dp (dq + 1) with hpq | hpq
+          · convert!
+            (degree_sub_eq_right_of_degree_lt <|
+(degree_sub_le _ _).trans_lt
+                    max_lt_iff.mpr ⟨hdp.trans_lt _, hdpq.trans_lt _⟩).trans
+              (max_eq_right_of_lt _).symm <;> rw [hdq] <;>
+exact WithBot.coe_lt_coe.mpr by dsimp; linarith only [hpq]
+          · rw [sub_sub]
+            convert!
+              (degree_sub_eq_left_of_degree_lt <|
+(degree_add_le _ _).trans_lt
+                      max_lt_iff.mpr ⟨hdpq.trans_lt _, hdq.trans_lt _⟩).trans
+                (max_eq_left_of_lt _).symm <;> rw [hdp] <;>
+exact WithBot.coe_lt_coe.mpr by dsimp; linarith only [hpq]
 
 Depends on / 依赖: degree, degree_cubic, degree_linear_le, degree_mul, degree_pow, neg_zero, norm_smul_basis, one_mul, one_ne_zero, p.degree, q.degree, zero_mul, zero_sub
 -/
@@ -2389,7 +2573,10 @@ definition toClass
     rintro (_ | ⟨x₁, y₁, h₁⟩) (_ | ⟨x₂, y₂, h₂⟩)
     any_goals simp only [← zero_def, zero_add, add_zero]
     by_cases hxy : x₁ = x₂ ∧ y₁ = W.negY x₂ y₂
-    · simp on
+    · simp only [hxy.left, hxy.right, add_of_Y_eq rfl rfl]
+      exact (CoordinateRing.mk_XYIdeal'_neg_mul h₂).symm
+    · simp only [add_some hxy]
+      exact (CoordinateRing.mk_XYIdeal'_mul_mk_XYIdeal' h₁ h₂ hxy).symm
 
 中文:
 定义 toClass
@@ -2402,7 +2589,10 @@ definition toClass
     rintro (_ | ⟨x₁, y₁, h₁⟩) (_ | ⟨x₂, y₂, h₂⟩)
     any_goals simp only [← zero_def, zero_add, add_zero]
     by_cases hxy : x₁ = x₂ ∧ y₁ = W.negY x₂ y₂
-    · simp on
+    · simp only [hxy.left, hxy.right, add_of_Y_eq rfl rfl]
+      exact (CoordinateRing.mk_XYIdeal'_neg_mul h₂).symm
+    · simp only [add_some hxy]
+      exact (CoordinateRing.mk_XYIdeal'_mul_mk_XYIdeal' h₁ h₂ hxy).symm
 -/
 noncomputable def toClass : W.Point ->+ Additive (ClassGroup W.CoordinateRing) where
   toFun P := match P with
@@ -2468,7 +2658,7 @@ lemma add_eq_zero
     constructor
     · contrapose
       exact fun hxy => by simpa only [add_some hxy] using some_ne_zero _
-    · exact fu
+    · exact fun ⟨hx, hy⟩ => add_of_Y_eq hx hy
 
 中文:
 引理 add_eq_zero
@@ -2482,7 +2672,7 @@ lemma add_eq_zero
     constructor
     · contrapose
       exact fun hxy => by simpa only [add_some hxy] using some_ne_zero _
-    · exact fu
+    · exact fun ⟨hx, hy⟩ => add_of_Y_eq hx hy
 -/
 private lemma add_eq_zero (P Q : W.Point) : P + Q = 0 ↔ P = -Q := by
   rcases P, Q with ⟨_ | ⟨x₁, y₁, _⟩, _ | ⟨x₂, y₂, _⟩⟩
@@ -2508,7 +2698,8 @@ lemma toClass_eq_zero
     · rfl
     · rcases (ClassGroup.mk_eq_one_of_coe_ideal <| by rfl).mp hP with ⟨p, h0, hp⟩
       apply (p.natDegree_norm_ne_one _).elim
-      rw [← finrank_quotient_span_eq_natDegree_norm (CoordinateRing.basis W) h0]; rw [← (quotien
+      rw [← finrank_quotient_span_eq_natDegree_norm (CoordinateRing.basis W) h0]; rw [← (quotientEquivAlgOfEq F hp).toLinearEquiv.finrank_eq]; rw [(CoordinateRing.quotientXYIdealEquiv h).toLinearEquiv.finrank_eq]; rw [Module.finrank_self]
+  · exact congr_arg toClass
 
 中文:
 引理 toClass_eq_zero
@@ -2521,7 +2712,8 @@ lemma toClass_eq_zero
     · rfl
     · rcases (ClassGroup.mk_eq_one_of_coe_ideal <| by rfl).mp hP with ⟨p, h0, hp⟩
       apply (p.natDegree_norm_ne_one _).elim
-      rw [← finrank_quotient_span_eq_natDegree_norm (CoordinateRing.basis W) h0]; rw [← (quotien
+      rw [← finrank_quotient_span_eq_natDegree_norm (CoordinateRing.basis W) h0]; rw [← (quotientEquivAlgOfEq F hp).toLinearEquiv.finrank_eq]; rw [(CoordinateRing.quotientXYIdealEquiv h).toLinearEquiv.finrank_eq]; rw [Module.finrank_self]
+  · exact congr_arg toClass
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk_eq_one_of_coe_ideal, CoordinateRing, CoordinateRing.basis, CoordinateRing.quotientXYIdealEquiv, Module, Module.finrank_self, congr_arg, finrank_eq, finrank_quotient_span_eq_natDegree_norm, finrank_self, mk_eq_one_of_coe_ideal, natDegree_norm_ne_one, p.natDegree_norm_ne_one, quotientEquivAlgOfEq, quotientXYIdealEquiv, toClass, toLinearEquiv, toLinearEquiv.finrank_eq
 -/
@@ -2642,7 +2834,9 @@ definition map
     any_goals rfl
     by_cases hxy : x₁ = x₂ ∧ y₁ = (W'⁄F).negY x₂ y₂
     · rw [add_of_Y_eq hxy.left hxy.right,
-add
+add_of_Y_eq (congr_arg _ hxy.left) by rw [hxy.right, baseChange_negY]]
+    · simpa only [add_some hxy, ← baseChange_addX, ← baseChange_addY, ← baseChange_slope] using!
+        (add_some fun h => hxy ⟨f.injective h.1, f.injective (W'.baseChange_negY f .. ▸ h).2⟩).symm
 
 中文:
 定义 map
@@ -2656,7 +2850,9 @@ add
     any_goals rfl
     by_cases hxy : x₁ = x₂ ∧ y₁ = (W'⁄F).negY x₂ y₂
     · rw [add_of_Y_eq hxy.left hxy.right,
-add
+add_of_Y_eq (congr_arg _ hxy.left) by rw [hxy.right, baseChange_negY]]
+    · simpa only [add_some hxy, ← baseChange_addX, ← baseChange_addY, ← baseChange_slope] using!
+        (add_some fun h => hxy ⟨f.injective h.1, f.injective (W'.baseChange_negY f .. ▸ h).2⟩).symm
 -/
 noncomputable def map : (W'⁄F).Point ->+ (W'⁄K).Point where
   toFun P := match P with

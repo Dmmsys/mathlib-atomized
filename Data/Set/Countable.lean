@@ -673,7 +673,11 @@ theorem exists_seq_iSup_eq_top_iff_countable
     rcases eq_empty_or_nonempty S with (rfl | hne)
     · rw [sSup_empty] at hS
       have := subsingleton_of_bot_eq_top hS
-      rcases h wit
+      rcases h with ⟨x, hx⟩
+      exact ⟨fun _ => x, fun _ => hx, Subsingleton.elim _ _⟩
+    · rcases (Set.countable_iff_exists_surjective hne).1 hSc with ⟨s, hs⟩
+      refine ⟨fun n => s n, fun n => hps _ (s n).coe_prop, ?_⟩
+      rwa [hs.iSup_comp, ← sSup_eq_iSup']
 
 中文:
 定理 存在_seq_iSup_eq_top_iff_countable
@@ -687,7 +691,11 @@ theorem exists_seq_iSup_eq_top_iff_countable
     rcases eq_empty_or_nonempty S with (rfl | hne)
     · rw [sSup_empty] at hS
       have := subsingleton_of_bot_eq_top hS
-      rcases h wit
+      rcases h with ⟨x, hx⟩
+      exact ⟨fun _ => x, fun _ => hx, Subsingleton.elim _ _⟩
+    · rcases (Set.countable_iff_exists_surjective hne).1 hSc with ⟨s, hs⟩
+      refine ⟨fun n => s n, fun n => hps _ (s n).coe_prop, ?_⟩
+      rwa [hs.iSup_comp, ← sSup_eq_iSup']
 
 Depends on / 依赖: Set.countable_iff_exists_surjective, Subsingleton, Subsingleton.elim, coe_prop, countable_iff_exists_surjective, countable_range, eq_empty_or_nonempty, forall_mem_range, hs.iSup_comp, iSup_comp, sSup_empty, sSup_eq_iSup, sSup_range, subsingleton_of_bot_eq_top
 -/
@@ -1090,7 +1098,7 @@ theorem countable_ofPred_finite_subset
   exact mem_range_self _
 
 @[deprecated (since := "2026-07-09")]
-alia
+alias countable_setOf_finite_subset := countable_ofPred_finite_subset
 
 中文:
 定理 countable_ofPred_finite_subset
@@ -1104,7 +1112,7 @@ alia
   exact mem_range_self _
 
 @[deprecated (since := "2026-07-09")]
-alia
+alias countable_setOf_finite_subset := countable_ofPred_finite_subset
 
 Depends on / 依赖: Finset, Subtype, Subtype.val, Subtype.val_injective.injOn, countable_range, hs.to_subtype, ht.of_finite_image, mem_range_self, of_finite_image, to_subtype, val_injective
 -/
@@ -1267,7 +1275,17 @@ theorem countable_ofPred_nonempty_of_disjoint
   choose F hF using this
   have A : Injective F := by
     rintro ⟨t, ht⟩ ⟨t', ht'⟩ htt'
-    have A : (f t inter f t').Nonempty :
+    have A : (f t inter f t').Nonempty := by
+      refine ⟨F ⟨t, ht⟩, hF ⟨t, _⟩, ?_⟩
+      rw [htt']
+      exact hF ⟨t', _⟩
+    simp only [Subtype.mk.injEq]
+    by_contra H
+    exact not_disjoint_iff_nonempty_inter.2 A (hf H)
+  exact Injective.countable A
+
+@[deprecated (since := "2026-07-09")]
+alias countable_setOf_nonempty_of_disjoint := countable_ofPred_nonempty_of_disjoint
 
 中文:
 定理 countable_ofPred_nonempty_of_disjoint
@@ -1280,7 +1298,17 @@ theorem countable_ofPred_nonempty_of_disjoint
   choose F hF using this
   have A : Injective F := by
     rintro ⟨t, ht⟩ ⟨t', ht'⟩ htt'
-    have A : (f t inter f t').Nonempty :
+    have A : (f t inter f t').Nonempty := by
+      refine ⟨F ⟨t, ht⟩, hF ⟨t, _⟩, ?_⟩
+      rw [htt']
+      exact hF ⟨t', _⟩
+    simp only [Subtype.mk.injEq]
+    by_contra H
+    exact not_disjoint_iff_nonempty_inter.2 A (hf H)
+  exact Injective.countable A
+
+@[deprecated (since := "2026-07-09")]
+alias countable_setOf_nonempty_of_disjoint := countable_ofPred_nonempty_of_disjoint
 
 Depends on / 依赖: Injective, Injective.countable, Nonempty, Set.countable_coe_iff, Subtype, Subtype.mk.injEq, countable, countable_coe_iff, not_disjoint_iff_nonempty_inter
 -/

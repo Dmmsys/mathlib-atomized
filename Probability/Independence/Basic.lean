@@ -2266,7 +2266,14 @@ alias ⟨iIndepFun.congr, _⟩ := iIndepFun_congr
 
 nonrec lemma iIndepFun.comp {β γ : ι -> Type*} {mβ : forall i, MeasurableSpace (β i)}
     {mγ : forall i, MeasurableSpace (γ i)} {f : forall i, Ω -> β i}
-    (h : iIndepFun f μ) (g : forall i, β i -> γ i) (hg : for
+    (h : iIndepFun f μ) (g : forall i, β i -> γ i) (hg : forall i, Measurable (g i)) :
+    iIndepFun (fun i => g i ∘ f i) μ := h.comp _ hg
+
+nonrec lemma iIndepFun.comp₀ {β γ : ι -> Type*} {mβ : forall i, MeasurableSpace (β i)}
+    {mγ : forall i, MeasurableSpace (γ i)} {f : forall i, Ω -> β i}
+    (h : iIndepFun f μ) (g : forall i, β i -> γ i)
+    (hf : forall i, AEMeasurable (f i) μ) (hg : forall i, AEMeasurable (g i) (μ.map (f i))) :
+    iIndepFun (fun i => g i ∘ f i) μ := h.comp₀ _ (by simp [hf]) (by simp [hg])
 
 中文:
 定理 iIndepFun_congr
@@ -2277,7 +2284,14 @@ alias ⟨iIndepFun.congr, _⟩ := iIndepFun_congr
 
 nonrec lemma iIndepFun.comp {β γ : ι -> Type*} {mβ : forall i, MeasurableSpace (β i)}
     {mγ : forall i, MeasurableSpace (γ i)} {f : forall i, Ω -> β i}
-    (h : iIndepFun f μ) (g : forall i, β i -> γ i) (hg : for
+    (h : iIndepFun f μ) (g : forall i, β i -> γ i) (hg : forall i, Measurable (g i)) :
+    iIndepFun (fun i => g i ∘ f i) μ := h.comp _ hg
+
+nonrec lemma iIndepFun.comp₀ {β γ : ι -> Type*} {mβ : forall i, MeasurableSpace (β i)}
+    {mγ : forall i, MeasurableSpace (γ i)} {f : forall i, Ω -> β i}
+    (h : iIndepFun f μ) (g : forall i, β i -> γ i)
+    (hf : forall i, AEMeasurable (f i) μ) (hg : forall i, AEMeasurable (g i) (μ.map (f i))) :
+    iIndepFun (fun i => g i ∘ f i) μ := h.comp₀ _ (by simp [hf]) (by simp [hg])
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun_congr, iIndepFun_congr
 -/
@@ -2332,7 +2346,13 @@ theorem indepFun_iff_map_prod_eq_prod_map_map'
   have h₀ {s : Set β} {t : Set β'} (hs : MeasurableSet s) (ht : MeasurableSet t) :
       μ (f ⁻¹' s) * μ (g ⁻¹' t) = μ.map f s * μ.map g t ∧
       μ (f ⁻¹' s inter g ⁻¹' t) = μ.map (fun ω => (f ω, g ω)) (s ×ˢ t) :=
-    ⟨by rw [Measure.map_apply_of
+    ⟨by rw [Measure.map_apply_of_aemeasurable hf hs, Measure.map_apply_of_aemeasurable hg ht],
+      (Measure.map_apply_of_aemeasurable (hf.prodMk hg) (hs.prod ht)).symm⟩
+  constructor
+  · refine fun h => (Measure.prod_eq fun s t hs ht => ?_).symm
+    rw [← (h₀ hs ht).1]; rw [← (h₀ hs ht).2]; rw [h s t hs ht]
+  · intro h s t hs ht
+    rw [(h₀ hs ht).1]; rw [(h₀ hs ht).2]; rw [h]; rw [Measure.prod_prod]
 
 中文:
 定理 indepFun_iff_map_prod_eq_prod_map_map'
@@ -2342,7 +2362,13 @@ theorem indepFun_iff_map_prod_eq_prod_map_map'
   have h₀ {s : Set β} {t : Set β'} (hs : MeasurableSet s) (ht : MeasurableSet t) :
       μ (f ⁻¹' s) * μ (g ⁻¹' t) = μ.map f s * μ.map g t ∧
       μ (f ⁻¹' s inter g ⁻¹' t) = μ.map (fun ω => (f ω, g ω)) (s ×ˢ t) :=
-    ⟨by rw [Measure.map_apply_of
+    ⟨by rw [Measure.map_apply_of_aemeasurable hf hs, Measure.map_apply_of_aemeasurable hg ht],
+      (Measure.map_apply_of_aemeasurable (hf.prodMk hg) (hs.prod ht)).symm⟩
+  constructor
+  · refine fun h => (Measure.prod_eq fun s t hs ht => ?_).symm
+    rw [← (h₀ hs ht).1]; rw [← (h₀ hs ht).2]; rw [h s t hs ht]
+  · intro h s t hs ht
+    rw [(h₀ hs ht).1]; rw [(h₀ hs ht).2]; rw [h]; rw [Measure.prod_prod]
 
 Depends on / 依赖: MeasurableSet, Measure, Measure.map_apply_of_aemeasurable, Measure.prod_eq, hf.prodMk, hs.prod, indepFun_iff_measure_inter_preimage_eq_mul, map_apply_of_aemeasurable, prodMk, prod_eq
 -/
@@ -2375,7 +2401,7 @@ alias ⟨IndepFun.map_prod_eq_prod_map_map, _⟩ := indepFun_iff_map_prod_eq_pro
 
 @[symm]
 nonrec theorem IndepFun.symm {_ : MeasurableSpace β} {_ : MeasurableSpace β'}
-    (hfg : f ⟂ᵢ[μ] g) : g ⟂ᵢ[μ
+    (hfg : f ⟂ᵢ[μ] g) : g ⟂ᵢ[μ] f := hfg.symm
 
 中文:
 定理 indepFun_iff_map_prod_eq_prod_map_map
@@ -2387,7 +2413,7 @@ alias ⟨IndepFun.map_prod_eq_prod_map_map, _⟩ := indepFun_iff_map_prod_eq_pro
 
 @[symm]
 nonrec theorem IndepFun.symm {_ : MeasurableSpace β} {_ : MeasurableSpace β'}
-    (hfg : f ⟂ᵢ[μ] g) : g ⟂ᵢ[μ
+    (hfg : f ⟂ᵢ[μ] g) : g ⟂ᵢ[μ] f := hfg.symm
 
 Depends on / 依赖: IsFiniteMeasure, IsFiniteMeasure.toSigmaFinite, indepFun_iff_map_prod_eq_prod_map_map, toSigmaFinite
 -/
@@ -2441,7 +2467,8 @@ lemma indepFun_prod
 .symm convert! Measure.map_prod_map μ ν mX mY
   · rw [← Function.comp_def, ← Measure.map_map mX measurable_fst, Measure.map_fst_prod,
       measure_univ, one_smul]
-  · rw [← Function.comp_def, ← Measure.map_map mY meas
+  · rw [← Function.comp_def, ← Measure.map_map mY measurable_snd, Measure.map_snd_prod,
+      measure_univ, one_smul]
 
 中文:
 引理 indepFun_prod
@@ -2451,7 +2478,8 @@ lemma indepFun_prod
 .symm convert! Measure.map_prod_map μ ν mX mY
   · rw [← Function.comp_def, ← Measure.map_map mX measurable_fst, Measure.map_fst_prod,
       measure_univ, one_smul]
-  · rw [← Function.comp_def, ← Measure.map_map mY meas
+  · rw [← Function.comp_def, ← Measure.map_map mY measurable_snd, Measure.map_snd_prod,
+      measure_univ, one_smul]
 
 Depends on / 依赖: Function, Function.comp_def, Measure, Measure.map_fst_prod, Measure.map_map, Measure.map_prod_map, Measure.map_snd_prod, comp_def, convert, fun_prop, indepFun_iff_map_prod_eq_prod_map_map, map_fst_prod, map_map, map_prod_map, map_snd_prod, measurable_fst, measurable_snd, measure_univ, one_smul
 -/
@@ -2477,7 +2505,13 @@ lemma indepFun_prod₀
   · rw [← Function.comp_def, ← Function.comp_def]
     apply ae_eq_comp
     · exact measurable_fst.aemeasurable
-    · rw [measurePreserving_fst.map_e
+    · rw [measurePreserving_fst.map_eq]
+      exact (AEMeasurable.ae_eq_mk mX).symm
+  · rw [← Function.comp_def, ← Function.comp_def]
+    apply ae_eq_comp
+    · exact measurable_snd.aemeasurable
+    · rw [measurePreserving_snd.map_eq]
+      exact (AEMeasurable.ae_eq_mk mY).symm
 
 中文:
 引理 indepFun_prod₀
@@ -2489,7 +2523,13 @@ lemma indepFun_prod₀
   · rw [← Function.comp_def, ← Function.comp_def]
     apply ae_eq_comp
     · exact measurable_fst.aemeasurable
-    · rw [measurePreserving_fst.map_e
+    · rw [measurePreserving_fst.map_eq]
+      exact (AEMeasurable.ae_eq_mk mX).symm
+  · rw [← Function.comp_def, ← Function.comp_def]
+    apply ae_eq_comp
+    · exact measurable_snd.aemeasurable
+    · rw [measurePreserving_snd.map_eq]
+      exact (AEMeasurable.ae_eq_mk mY).symm
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.ae_eq_mk, Function, Function.comp_def, ae_eq_comp, ae_eq_mk, aemeasurable, comp_def, indepFun_prod, mX.measurable_mk, mX.mk, mY.measurable_mk, mY.mk, map_eq, measurable_fst, measurable_fst.aemeasurable, measurable_mk, measurable_snd, measurable_snd.aemeasurable, measurePreserving_fst
 -/
@@ -2789,7 +2829,7 @@ lemma iIndepFun_iff_finset
     rw [← Finset.prod_coe_sort]; rw [this]
     exact (h s).meas_iInter fun i => hs i i.2
 
-alias ⟨iIndepFun.restrict, _⟩ := iIndepFun_iff
+alias ⟨iIndepFun.restrict, _⟩ := iIndepFun_iff_finset
 
 中文:
 引理 iIndepFun_iff_finset
@@ -2802,7 +2842,7 @@ alias ⟨iIndepFun.restrict, _⟩ := iIndepFun_iff
     rw [← Finset.prod_coe_sort]; rw [this]
     exact (h s).meas_iInter fun i => hs i i.2
 
-alias ⟨iIndepFun.restrict, _⟩ := iIndepFun_iff
+alias ⟨iIndepFun.restrict, _⟩ := iIndepFun_iff_finset
 
 Depends on / 依赖: Subtype, Subtype.val_injective, h.precomp, precomp, val_injective
 -/
@@ -2828,7 +2868,17 @@ theorem iIndepFun.map_fun_eq_pi_map
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul] at h
   have h₀ {s : forall i, Set (β i)} (hm : forall (i : ι), MeasurableSet (s i)) :
       ∏ i : ι, μ (f i ⁻¹' s i) = ∏ i : ι, μ.map (f i) (s i) ∧
-      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun ω i => f i ω) (univ
+      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun ω i => f i ω) (univ.pi s) := by
+    constructor
+    · congr with x
+      rw [Measure.map_apply_of_aemeasurable (hf x) (hm x)]
+    · rw [Measure.map_apply_of_aemeasurable (aemeasurable_pi_lambda _ fun x => hf x)
+        (.univ_pi hm)]
+      congr with x
+      simp
+  refine (Measure.pi_eq fun h' hm => ?_).symm
+  rw [← (h₀ hm).1]; rw [← (h₀ hm).2]
+  simpa [hm] using h Finset.univ (sets := h')
 
 中文:
 定理 iIndepFun.map_fun_eq_pi_map
@@ -2838,7 +2888,17 @@ theorem iIndepFun.map_fun_eq_pi_map
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul] at h
   have h₀ {s : forall i, Set (β i)} (hm : forall (i : ι), MeasurableSet (s i)) :
       ∏ i : ι, μ (f i ⁻¹' s i) = ∏ i : ι, μ.map (f i) (s i) ∧
-      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun ω i => f i ω) (univ
+      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun ω i => f i ω) (univ.pi s) := by
+    constructor
+    · congr with x
+      rw [Measure.map_apply_of_aemeasurable (hf x) (hm x)]
+    · rw [Measure.map_apply_of_aemeasurable (aemeasurable_pi_lambda _ fun x => hf x)
+        (.univ_pi hm)]
+      congr with x
+      simp
+  refine (Measure.pi_eq fun h' hm => ?_).symm
+  rw [← (h₀ hm).1]; rw [← (h₀ hm).2]
+  simpa [hm] using h Finset.univ (sets := h')
 
 Depends on / 依赖: MeasurableSet, Measure, Measure.map_apply_of_aemeasurable, aemeasurable_pi_lambda, h.isProbabilityMeasure, iIndepFun_iff_measure_inter_preimage_eq_mul, isProbabilityMeasure, map_apply_of_aemeasurable, univ.pi, univ_pi
 -/
@@ -2874,7 +2934,21 @@ theorem iIndepFun_iff_map_fun_eq_pi_map
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul]
   have h₀ {s : forall i, Set (β i)} (hm : forall (i : ι), MeasurableSet (s i)) :
       ∏ i : ι, μ (f i ⁻¹' s i) = ∏ i : ι, μ.map (f i) (s i) ∧
-      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun
+      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun ω i => f i ω) (univ.pi s) := by
+    constructor
+    · congr with x
+      rw [Measure.map_apply_of_aemeasurable (hf x) (hm x)]
+    · rw [Measure.map_apply_of_aemeasurable (aemeasurable_pi_lambda _ fun x => hf x)
+        (.univ_pi hm)]
+      congr with x
+      simp
+  intro h S s hs
+  specialize h₀ (s := fun i => if i in S then s i else univ)
+    fun i => by split_ifs with hiS <;> simp [hiS, hs]
+  simp only [apply_ite, preimage_univ, measure_univ, Finset.prod_ite_mem, Finset.univ_inter,
+    Finset.prod_ite, Finset.filter_univ_mem, iInter_ite, iInter_univ, inter_univ, h,
+    Measure.pi_pi] at h₀
+  rw [h₀.2]; rw [← h₀.1]
 
 中文:
 定理 iIndepFun_iff_map_fun_eq_pi_map
@@ -2885,7 +2959,21 @@ theorem iIndepFun_iff_map_fun_eq_pi_map
   rw [iIndepFun_iff_measure_inter_preimage_eq_mul]
   have h₀ {s : forall i, Set (β i)} (hm : forall (i : ι), MeasurableSet (s i)) :
       ∏ i : ι, μ (f i ⁻¹' s i) = ∏ i : ι, μ.map (f i) (s i) ∧
-      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun
+      μ (⋂ i : ι, (f i ⁻¹' s i)) = μ.map (fun ω i => f i ω) (univ.pi s) := by
+    constructor
+    · congr with x
+      rw [Measure.map_apply_of_aemeasurable (hf x) (hm x)]
+    · rw [Measure.map_apply_of_aemeasurable (aemeasurable_pi_lambda _ fun x => hf x)
+        (.univ_pi hm)]
+      congr with x
+      simp
+  intro h S s hs
+  specialize h₀ (s := fun i => if i in S then s i else univ)
+    fun i => by split_ifs with hiS <;> simp [hiS, hs]
+  simp only [apply_ite, preimage_univ, measure_univ, Finset.prod_ite_mem, Finset.univ_inter,
+    Finset.prod_ite, Finset.filter_univ_mem, iInter_ite, iInter_univ, inter_univ, h,
+    Measure.pi_pi] at h₀
+  rw [h₀.2]; rw [← h₀.1]
 
 Depends on / 依赖: MeasurableSet, Measure, Measure.map_apply_of_aemeasurable, aemeasurable_pi_lambda, classical, iIndepFun, iIndepFun.map_fun_eq_pi_map, iIndepFun_iff_measure_inter_preimage_eq_mul, map_apply_of_aemeasurable, map_fun_eq_pi_map, univ.pi, univ_pi
 -/
@@ -2930,7 +3018,10 @@ lemma iIndepFun_pi
   rw [Measure.pi_map_pi mX]
   congr
   ext i : 1
-  rw [← (measurePreserving_eval μ i).map_eq]; rw [AEMeasurable.map_map_of_aemeasurable]; rw [Function.com
+  rw [← (measurePreserving_eval μ i).map_eq]; rw [AEMeasurable.map_map_of_aemeasurable]; rw [Function.comp_def]
+  · rw [(measurePreserving_eval μ i).map_eq]
+    exact mX i
+  · exact (measurable_pi_apply i).aemeasurable
 
 中文:
 引理 iIndepFun_pi
@@ -2941,7 +3032,10 @@ lemma iIndepFun_pi
   rw [Measure.pi_map_pi mX]
   congr
   ext i : 1
-  rw [← (measurePreserving_eval μ i).map_eq]; rw [AEMeasurable.map_map_of_aemeasurable]; rw [Function.com
+  rw [← (measurePreserving_eval μ i).map_eq]; rw [AEMeasurable.map_map_of_aemeasurable]; rw [Function.comp_def]
+  · rw [(measurePreserving_eval μ i).map_eq]
+    exact mX i
+  · exact (measurable_pi_apply i).aemeasurable
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, Function, Function.comp_def, Measure, Measure.pi_map_pi, Measure.quasiMeasurePreserving_eval, aemeasurable, comp_def, comp_quasiMeasurePreserving, iIndepFun_iff_map_fun_eq_pi_map, map_eq, map_map_of_aemeasurable, measurable_pi_apply, measurePreserving_eval, pi_map_pi, quasiMeasurePreserving_eval
 -/
@@ -3281,7 +3375,9 @@ lemma iIndepFun.indepFun_finsetProd_of_notMem
 alias iIndepFun.indepFun_finset_sum_of_notMem := iIndepFun.indepFun_finsetSum_of_notMem
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias iIndepFun.indepFun_finset_prod_of_notMe
+alias iIndepFun.indepFun_finset_prod_of_notMem := iIndepFun.indepFun_finsetProd_of_notMem
+
+@[to_additive]
 
 中文:
 引理 iIndepFun.indepFun_finsetProd_of_notMem
@@ -3292,7 +3388,9 @@ alias iIndepFun.indepFun_finset_prod_of_notMe
 alias iIndepFun.indepFun_finset_sum_of_notMem := iIndepFun.indepFun_finsetSum_of_notMem
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias iIndepFun.indepFun_finset_prod_of_notMe
+alias iIndepFun.indepFun_finset_prod_of_notMem := iIndepFun.indepFun_finsetProd_of_notMem
+
+@[to_additive]
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_finsetProd_of_notMem, hf_Indep, hf_meas, iIndepFun, indepFun_finsetProd_of_notMem
 -/
@@ -3320,7 +3418,9 @@ lemma iIndepFun.indepFun_finsetProd_of_notMem₀
 alias iIndepFun.indepFun_finset_sum_of_notMem₀ := iIndepFun.indepFun_finsetSum_of_notMem₀
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias iIndepFun.indepFun_finse
+alias iIndepFun.indepFun_finset_prod_of_notMem₀ := iIndepFun.indepFun_finsetProd_of_notMem₀
+
+@[to_additive]
 
 中文:
 引理 iIndepFun.indepFun_finsetProd_of_notMem₀
@@ -3331,7 +3431,9 @@ alias iIndepFun.indepFun_finse
 alias iIndepFun.indepFun_finset_sum_of_notMem₀ := iIndepFun.indepFun_finsetSum_of_notMem₀
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias iIndepFun.indepFun_finse
+alias iIndepFun.indepFun_finset_prod_of_notMem₀ := iIndepFun.indepFun_finsetProd_of_notMem₀
+
+@[to_additive]
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.indepFun_finsetProd_of_notMem, hf_Indep, hf_meas, iIndepFun
 -/
@@ -3453,7 +3555,34 @@ lemma cond_iInter
   let g (i' : ι) := if i' in s then Y i' ⁻¹' t i' inter f i' else Y i' ⁻¹' t i'
   calc
     _ = (μ (⋂ i, Y i ⁻¹' t i))⁻¹ * μ ((⋂ i, Y i ⁻¹' t i) inter ⋂ i in s, f i) := by
-      rw [
+      rw [cond_apply]; exact .iInter fun i => hY i (ht i)
+    _ = (μ (⋂ i, Y i ⁻¹' t i))⁻¹ * μ (⋂ i, g i) := by
+      congr
+      calc
+        _ = (⋂ i, Y i ⁻¹' t i) inter ⋂ i, if i in s then f i else .univ := by
+          simp only [Set.iInter_ite, Set.iInter_univ, Set.inter_univ]
+        _ = ⋂ i, Y i ⁻¹' t i inter (if i in s then f i else .univ) := by rw [Set.iInter_inter_distrib]
+        _ = _ := Set.iInter_congr fun i => by by_cases hi : i in s <;> simp [hi, g]
+    _ = (∏ i, μ (Y i ⁻¹' t i))⁻¹ * μ (⋂ i, g i) := by
+      rw [hindep.meas_iInter]
+      exact fun i => ⟨.univ ×ˢ t i, MeasurableSet.univ.prod (ht _), by ext; simp⟩
+    _ = (∏ i, μ (Y i ⁻¹' t i))⁻¹ * ∏ i, μ (g i) := by
+      rw [hindep.meas_iInter]
+      intro i
+      by_cases hi : i in s <;> simp only [hi, ↓reduceIte, g]
+      · obtain ⟨A, hA, hA'⟩ := hf i hi
+        exact .inter ⟨.univ ×ˢ t i, MeasurableSet.univ.prod (ht _), by ext; simp⟩
+          ⟨A ×ˢ Set.univ, hA.prod .univ, by ext; simp [← hA']⟩
+      · exact ⟨.univ ×ˢ t i, MeasurableSet.univ.prod (ht _), by ext; simp⟩
+    _ = ∏ i, (μ (Y i ⁻¹' t i))⁻¹ * μ (g i) := by
+      rw [Finset.prod_mul_distrib]; rw [ENNReal.prod_inv_distrib]
+exact fun _ _ i _ _ => .inr measure_ne_top _ _
+    _ = ∏ i, if i in s then μ[f i | Y i ⁻¹' t i] else 1 := by
+      refine Finset.prod_congr rfl fun i _ => ?_
+      by_cases hi : i in s
+      · simp only [hi, ↓reduceIte, g, cond_apply (hY i (ht i))]
+      · simp only [hi, ↓reduceIte, g, ENNReal.inv_mul_cancel (hy i hi) (measure_ne_top μ _)]
+    _ = _ := by simp
 
 中文:
 引理 cond_i整数er
@@ -3465,7 +3594,34 @@ lemma cond_iInter
   let g (i' : ι) := if i' in s then Y i' ⁻¹' t i' inter f i' else Y i' ⁻¹' t i'
   calc
     _ = (μ (⋂ i, Y i ⁻¹' t i))⁻¹ * μ ((⋂ i, Y i ⁻¹' t i) inter ⋂ i in s, f i) := by
-      rw [
+      rw [cond_apply]; exact .iInter fun i => hY i (ht i)
+    _ = (μ (⋂ i, Y i ⁻¹' t i))⁻¹ * μ (⋂ i, g i) := by
+      congr
+      calc
+        _ = (⋂ i, Y i ⁻¹' t i) inter ⋂ i, if i in s then f i else .univ := by
+          simp only [Set.iInter_ite, Set.iInter_univ, Set.inter_univ]
+        _ = ⋂ i, Y i ⁻¹' t i inter (if i in s then f i else .univ) := by rw [Set.iInter_inter_distrib]
+        _ = _ := Set.iInter_congr fun i => by by_cases hi : i in s <;> simp [hi, g]
+    _ = (∏ i, μ (Y i ⁻¹' t i))⁻¹ * μ (⋂ i, g i) := by
+      rw [hindep.meas_iInter]
+      exact fun i => ⟨.univ ×ˢ t i, MeasurableSet.univ.prod (ht _), by ext; simp⟩
+    _ = (∏ i, μ (Y i ⁻¹' t i))⁻¹ * ∏ i, μ (g i) := by
+      rw [hindep.meas_iInter]
+      intro i
+      by_cases hi : i in s <;> simp only [hi, ↓reduceIte, g]
+      · obtain ⟨A, hA, hA'⟩ := hf i hi
+        exact .inter ⟨.univ ×ˢ t i, MeasurableSet.univ.prod (ht _), by ext; simp⟩
+          ⟨A ×ˢ Set.univ, hA.prod .univ, by ext; simp [← hA']⟩
+      · exact ⟨.univ ×ˢ t i, MeasurableSet.univ.prod (ht _), by ext; simp⟩
+    _ = ∏ i, (μ (Y i ⁻¹' t i))⁻¹ * μ (g i) := by
+      rw [Finset.prod_mul_distrib]; rw [ENNReal.prod_inv_distrib]
+exact fun _ _ i _ _ => .inr measure_ne_top _ _
+    _ = ∏ i, if i in s then μ[f i | Y i ⁻¹' t i] else 1 := by
+      refine Finset.prod_congr rfl fun i _ => ?_
+      by_cases hi : i in s
+      · simp only [hi, ↓reduceIte, g, cond_apply (hY i (ht i))]
+      · simp only [hi, ↓reduceIte, g, ENNReal.inv_mul_cancel (hy i hi) (measure_ne_top μ _)]
+    _ = _ := by simp
 
 Depends on / 依赖: IsProbabilityMeasure, Measure, Set.iInter_ite, Set.iInter_uni, classical, cond_apply, hindep, hindep.isProbabilityMeasure, iInter, iInter_ite, iInter_uni, isProbabilityMeasure, nonempty_fintype
 -/

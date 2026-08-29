@@ -125,7 +125,10 @@ definition isColimitCokernelCoforkChainComplexDOneZero
       ((isColimitMapCoconeCoforkEquiv _ _).1
         (isColimitOfPreserves (sigmaConst.obj R) X.isColimitCoforkπ₀)))
   · refine parallelPair.ext (-Iso.refl _) (Iso.refl _) ?_ (by simp)
-    simp [c
+    simp [chainComplex, SSet.chainComplexFunctor, sub_eq_neg_add]
+  · refine Cofork.ext (Iso.refl _) ?_
+    ext
+    simp [chainComplex, SSet.chainComplexFunctor, π₀.fromChainComplexXZero]
 
 中文:
 定义 isColimitCokernelCoforkChainComplexDOneZero
@@ -136,7 +139,10 @@ definition isColimitCokernelCoforkChainComplexDOneZero
       ((isColimitMapCoconeCoforkEquiv _ _).1
         (isColimitOfPreserves (sigmaConst.obj R) X.isColimitCoforkπ₀)))
   · refine parallelPair.ext (-Iso.refl _) (Iso.refl _) ?_ (by simp)
-    simp [c
+    simp [chainComplex, SSet.chainComplexFunctor, sub_eq_neg_add]
+  · refine Cofork.ext (Iso.refl _) ?_
+    ext
+    simp [chainComplex, SSet.chainComplexFunctor, π₀.fromChainComplexXZero]
 
 Depends on / 依赖: Cofork, Cofork.ext, IsColimit, IsColimit.equivOfNatIsoOfIso, Iso.refl, Preadditive, Preadditive.isColimitCokernelCoforkOfCofork, SSet.chainComplexFunctor, X.isColimitCofork, chainComplex, chainComplexFunctor, equivOfNatIsoOfIso, fromChainComplexXZero, isColimitCokernelCoforkOfCofork, isColimitMapCoconeCoforkEquiv, isColimitOfPreserves, parallelPair, parallelPair.ext, sigmaConst, sigmaConst.obj
 -/

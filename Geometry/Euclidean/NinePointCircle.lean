@@ -205,7 +205,8 @@ theorem ninePointCircle_restrict
       Set.mem_of_mem_of_subset (s.ninePointCircle_center_mem_affineSpan) hS⟩,
       radius := s.ninePointCircle.radius } := by
   ext
-  · simp [ninePointCircle_c
+  · simp [ninePointCircle_center, centroid_restrict]
+  · simp [ninePointCircle_radius]
 
 中文:
 定理 ninePointCircle_restrict
@@ -216,7 +217,8 @@ theorem ninePointCircle_restrict
       Set.mem_of_mem_of_subset (s.ninePointCircle_center_mem_affineSpan) hS⟩,
       radius := s.ninePointCircle.radius } := by
   ext
-  · simp [ninePointCircle_c
+  · simp [ninePointCircle_center, centroid_restrict]
+  · simp [ninePointCircle_radius]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.inclusion, Nonempty, Nonempty.map, inclusion
 -/
@@ -242,7 +244,7 @@ theorem faceOppositeCentroid_mem_ninePointCircle
   simp_rw [dist_eq_norm_vsub]
   rw [eq_div_iff_mul_eq (by simpa using NeZero.ne n)]; rw [mul_comm]
   nth_rw 1 [show (n : Real) = ‖(n : Real)‖ by simp]
-  rw [← norm_smul]; rw 
+  rw [← norm_smul]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [smul_smul]; rw [mul_div_cancel₀ _ (by simpa using NeZero.ne n)]; rw [add_smul]; rw [one_smul]; rw [← sub_sub]; rw [← smul_sub]; rw [vsub_sub_vsub_cancel_right]; rw [← centroid_vsub_point_eq_smul_vsub]; rw [vsub_sub_vsub_cancel_left]
 
 中文:
 定理 faceOppositeCentroid_mem_ninePointCircle
@@ -252,7 +254,7 @@ theorem faceOppositeCentroid_mem_ninePointCircle
   simp_rw [dist_eq_norm_vsub]
   rw [eq_div_iff_mul_eq (by simpa using NeZero.ne n)]; rw [mul_comm]
   nth_rw 1 [show (n : Real) = ‖(n : Real)‖ by simp]
-  rw [← norm_smul]; rw 
+  rw [← norm_smul]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [smul_smul]; rw [mul_div_cancel₀ _ (by simpa using NeZero.ne n)]; rw [add_smul]; rw [one_smul]; rw [← sub_sub]; rw [← smul_sub]; rw [vsub_sub_vsub_cancel_right]; rw [← centroid_vsub_point_eq_smul_vsub]; rw [vsub_sub_vsub_cancel_left]
 
 Depends on / 依赖: NeZero, NeZero.ne, add_smul, dist_circumcenter_eq_circumradius, dist_eq_norm_vsub, eq_div_iff_mul_eq, mem_sphere, mul_comm, ninePointCircle_center, ninePointCircle_radius, norm_smul, nth_rw, one_smul, simp_rw, smul_smul, smul_sub, sub_sub, vsub_sub_vsub_cancel_right, vsub_vadd_eq_vsub_sub
 -/
@@ -418,7 +420,8 @@ theorem points_vsub_eulerPoint
     have hrange : Set.range s.points = {s.points i} := by simp [Subsingleton.eq_zero (α := Fin 1) i]
     obtain hmonge := s.mongePoint_mem_affineSpan
     rw [hrange]; rw [mem_affineSpan_singleton] at hmonge
- 
+    simp [hmonge]
+  rw [sub_div]; rw [div_self (by simpa using hn)]; rw [one_div]; rw [sub_smul]; rw [one_smul]
 
 中文:
 定理 points_vsub_eulerPoint
@@ -430,7 +433,8 @@ theorem points_vsub_eulerPoint
     have hrange : Set.range s.points = {s.points i} := by simp [Subsingleton.eq_zero (α := Fin 1) i]
     obtain hmonge := s.mongePoint_mem_affineSpan
     rw [hrange]; rw [mem_affineSpan_singleton] at hmonge
- 
+    simp [hmonge]
+  rw [sub_div]; rw [div_self (by simpa using hn)]; rw [one_div]; rw [sub_smul]; rw [one_smul]
 
 Depends on / 依赖: Set.range, Subsingleton, Subsingleton.eq_zero, div_self, eq_zero, eulerPoint, hmonge, hrange, mem_affineSpan_singleton, mongePoint_mem_affineSpan, one_div, one_smul, points, s.mongePoint_mem_affineSpan, s.points, sub_div, sub_smul, vsub_vadd_eq_vsub_sub
 -/
@@ -456,7 +460,27 @@ theorem midpoint_faceOppositeCentroid_eulerPoint
   rw [ninePointCircle_center]; rw [midpoint_vsub]; rw [vadd_vsub]; rw [eulerPoint]; rw [mongePoint_eq_smul_vsub_vadd_circumcenter]; rw [← centroid]
   by_cases hn1 : n = 1
   · obtain rfl := hn1
-    suffices (2⁻¹ : Real) • (s.faceOppositeCentroid i -ᵥ 
+    suffices (2⁻¹ : Real) • (s.faceOppositeCentroid i -ᵥ s.centroid) +
+        (2⁻¹ : Real) • (s.points i -ᵥ s.centroid) = 0 by
+      simpa [circumcenter_eq_centroid, centroid]
+    rw [faceOppositeCentroid_vsub_centroid_eq_smul_vsub]; rw [← smul_add]
+    exact (smul_eq_zero_of_right _ (by simp))
+  have hltn : 1 < n := by
+    have _ := hn.out
+    lia
+  have hnsub1 : (n - 1 : Nat) = (n : Real) - 1 := by
+    push_cast [hltn]
+    rfl
+  rw [vadd_vadd]; rw [vadd_vsub]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [sub_add]; rw [smul_smul]; rw [← sub_smul]; rw [← sub_one_mul]; rw [show ((n : Real)⁻¹ - 1) = -(n - 1) / n by field [hn.out],
+    neg_div, neg_mul, hnsub1, div_mul_div_cancel₀' (by simpa [sub_eq_zero] using hn1),
+    neg_smul, sub_neg_eq_add, faceOppositeCentroid_eq_smul_vsub_vadd_point,
+    ← smul_add, vadd_vsub_assoc, add_add_add_comm, ← smul_add, vsub_add_vsub_cancel, ← add_assoc]
+  push_cast
+  have : (n : Real)⁻¹ • (s.centroid -ᵥ s.circumcenter) + (s.centroid -ᵥ s.circumcenter) =
+      (((n + 1) / n : Real)) • (s.centroid -ᵥ s.circumcenter) := by
+    rw [add_comm (n : Real) 1]; rw [add_div]; rw [div_self (by simpa using hn.out)]; rw [add_smul]; rw [one_smul]; rw [one_div]
+  rw [this]; rw [← two_smul Real]; rw [smul_smul]
+  norm_num
 
 中文:
 定理 midpoint_faceOppositeCentroid_eulerPoint
@@ -466,7 +490,27 @@ theorem midpoint_faceOppositeCentroid_eulerPoint
   rw [ninePointCircle_center]; rw [midpoint_vsub]; rw [vadd_vsub]; rw [eulerPoint]; rw [mongePoint_eq_smul_vsub_vadd_circumcenter]; rw [← centroid]
   by_cases hn1 : n = 1
   · obtain rfl := hn1
-    suffices (2⁻¹ : Real) • (s.faceOppositeCentroid i -ᵥ 
+    suffices (2⁻¹ : Real) • (s.faceOppositeCentroid i -ᵥ s.centroid) +
+        (2⁻¹ : Real) • (s.points i -ᵥ s.centroid) = 0 by
+      simpa [circumcenter_eq_centroid, centroid]
+    rw [faceOppositeCentroid_vsub_centroid_eq_smul_vsub]; rw [← smul_add]
+    exact (smul_eq_zero_of_right _ (by simp))
+  have hltn : 1 < n := by
+    have _ := hn.out
+    lia
+  have hnsub1 : (n - 1 : Nat) = (n : Real) - 1 := by
+    push_cast [hltn]
+    rfl
+  rw [vadd_vadd]; rw [vadd_vsub]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [sub_add]; rw [smul_smul]; rw [← sub_smul]; rw [← sub_one_mul]; rw [show ((n : Real)⁻¹ - 1) = -(n - 1) / n by field [hn.out],
+    neg_div, neg_mul, hnsub1, div_mul_div_cancel₀' (by simpa [sub_eq_zero] using hn1),
+    neg_smul, sub_neg_eq_add, faceOppositeCentroid_eq_smul_vsub_vadd_point,
+    ← smul_add, vadd_vsub_assoc, add_add_add_comm, ← smul_add, vsub_add_vsub_cancel, ← add_assoc]
+  push_cast
+  have : (n : Real)⁻¹ • (s.centroid -ᵥ s.circumcenter) + (s.centroid -ᵥ s.circumcenter) =
+      (((n + 1) / n : Real)) • (s.centroid -ᵥ s.circumcenter) := by
+    rw [add_comm (n : Real) 1]; rw [add_div]; rw [div_self (by simpa using hn.out)]; rw [add_smul]; rw [one_smul]; rw [one_div]
+  rw [this]; rw [← two_smul Real]; rw [smul_smul]
+  norm_num
 
 Depends on / 依赖: centroid, circumcenter, circumcenter_eq_centroid, eulerPoint, faceOppositeCentroid, faceOppositeCentroid_vsub_centroid_eq_smul_vsub, midpoint_vsub, mongePoint_eq_smul_vsub_vadd_circumcenter, ninePointCircle_center, points, s.centroid, s.circumcenter, s.faceOppositeCentroid, s.points, smul_add, smul_eq_zero_of_right, vadd_vsub, vsub_left_cancel
 -/
@@ -608,7 +652,9 @@ theorem altitudeFoot_mem_ninePointCircle
   rw [Simplex.altitudeFoot]
   unfold Simplex.orthogonalProjectionSpan
   congr 1
-  rw [orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem]; rw [Simplex.points_vsub_eulerPoint]; rw [Submodule.smul_mem_iff _ (by norm_num)]
+  rw [orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem]; rw [Simplex.points_vsub_eulerPoint]; rw [Submodule.smul_mem_iff _ (by norm_num)]; rw [← orthocenter_eq_mongePoint]; rw [direction_affineSpan]; rw [Simplex.range_faceOpposite_points]
+  refine Set.mem_of_mem_of_subset ?_ (s.vectorSpan_isOrtho_altitude_direction i).ge
+  exact vsub_mem_direction (s.mem_altitude i) (s.orthocenter_mem_altitude)
 
 中文:
 定理 altitudeFoot_mem_ninePointCircle
@@ -618,7 +664,9 @@ theorem altitudeFoot_mem_ninePointCircle
   rw [Simplex.altitudeFoot]
   unfold Simplex.orthogonalProjectionSpan
   congr 1
-  rw [orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem]; rw [Simplex.points_vsub_eulerPoint]; rw [Submodule.smul_mem_iff _ (by norm_num)]
+  rw [orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem]; rw [Simplex.points_vsub_eulerPoint]; rw [Submodule.smul_mem_iff _ (by norm_num)]; rw [← orthocenter_eq_mongePoint]; rw [direction_affineSpan]; rw [Simplex.range_faceOpposite_points]
+  refine Set.mem_of_mem_of_subset ?_ (s.vectorSpan_isOrtho_altitude_direction i).ge
+  exact vsub_mem_direction (s.mem_altitude i) (s.orthocenter_mem_altitude)
 
 Depends on / 依赖: Set.mem_of_mem_of_subset, Simplex, Simplex.altitudeFoot, Simplex.orthogonalProjectionSpan, Simplex.points_vsub_eulerPoint, Simplex.range_faceOpposite_points, Submodule, Submodule.smul_mem_iff, altitudeFoot, convert, direction_affineSpan, mem_of_mem_of_subset, orthocenter_eq_mongePoint, orthogonalProjectionSpan, orthogonalProjectionSpan_eulerPoint_mem_ninePointCircle, orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem, points_vsub_eulerPoint, range_faceOpposite_points, s.orthogonalProjectionSpan_eulerPoint_mem_ninePointCircle, s.vectorSpan_isOrtho_altitude_direction
 -/

@@ -96,7 +96,8 @@ inj' _ _ h := SetCoe.ext Sym2.map.injective f.injective Subtype.mk.inj h
   map_rel_iff' := by
     simp only [lineGraph, Function.Embedding.coeFn_mk, Sym2.coe_map, ne_eq]
 refine .and ?_ Set.image_inter f.injective ▸ Set.image_nonempty
- 
+    rw [Subtype.mk.injEq]; rw [Subtype.mk.injEq]
+.eq_iff.not exact Sym2.map.injective f.injective
 
 中文:
 定义 余py.toLineGraphEmbedding
@@ -106,7 +107,8 @@ inj' _ _ h := SetCoe.ext Sym2.map.injective f.injective Subtype.mk.inj h
   map_rel_iff' := by
     simp only [lineGraph, Function.Embedding.coeFn_mk, Sym2.coe_map, ne_eq]
 refine .and ?_ Set.image_inter f.injective ▸ Set.image_nonempty
- 
+    rw [Subtype.mk.injEq]; rw [Subtype.mk.injEq]
+.eq_iff.not exact Sym2.map.injective f.injective
 
 Depends on / 依赖: e.val.map, f.toHom.map_adj, map_adj
 -/

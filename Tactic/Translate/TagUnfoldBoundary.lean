@@ -82,7 +82,30 @@ definition elabInsertCastAux
   let addDecl (name : Name) (type value : Expr) : MetaM Unit := do
 addDecl ←
       if castKind matches .eq then
-        mkThmOrUnsafeDef { name, type, value, levelParams := info.leve
+        mkThmOrUnsafeDef { name, type, value, levelParams := info.levelParams }
+      else
+.defnDecl < > mkDefinitionValInferringUnsafe name info.levelParams type value .opaque
+  let name ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
+  -- To obtain the unfolded form of `declName`, we telescope into its value.
+  let (type, numFVars) ← lambdaTelescope (cleanupAnnotations := true) info.value fun xs body => do
+    -- First, create the casting theorem/def that is proved by rfl/id respectively.
+    let lhs := mkAppN (.const info.name <| info.levelParams.map mkLevelParam) xs
+    let type ← mkForallFVars xs (← castKind.mkRel lhs body)
+    let value ← mkLambdaFVars xs (← castKind.mkProof lhs)
+    addDecl name type value
+    return (type, xs.size)
+  -- Then, create the translated version, using `stx` to construct the value.
+  let (newType, _) ← (applyReplacementFun t type).run #[] #[]
+  let newValue ← forallBoundedTelescope newType numFVars fun xs goalType => do
+    -- Make the goal easier to prove by unfolding the new lhs
+    let goalType := (← unfoldLHS? castKind goalType).getD goalType
+    let newValue ← elabTermEnsuringType stx goalType <* synthesizeSyntheticMVarsNoPostponing
+    mkLambdaFVars xs (← instantiateMVars newValue)
+  let newName ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
+  addDecl newName newType newValue
+  -- Now add the translation attribute to relate the two new declarations
+  _ ← addTranslationAttr t name { target := newName, existing := true, ref := .missing }
+  return (name, newName)
 
 中文:
 定义 elabInsertCastAux
@@ -92,7 +115,30 @@ addDecl ←
   let addDecl (name : Name) (type value : Expr) : MetaM Unit := do
 addDecl ←
       if castKind matches .eq then
-        mkThmOrUnsafeDef { name, type, value, levelParams := info.leve
+        mkThmOrUnsafeDef { name, type, value, levelParams := info.levelParams }
+      else
+.defnDecl < > mkDefinitionValInferringUnsafe name info.levelParams type value .opaque
+  let name ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
+  -- To obtain the unfolded form of `declName`, we telescope into its value.
+  let (type, numFVars) ← lambdaTelescope (cleanupAnnotations := true) info.value fun xs body => do
+    -- First, create the casting theorem/def that is proved by rfl/id respectively.
+    let lhs := mkAppN (.const info.name <| info.levelParams.map mkLevelParam) xs
+    let type ← mkForallFVars xs (← castKind.mkRel lhs body)
+    let value ← mkLambdaFVars xs (← castKind.mkProof lhs)
+    addDecl name type value
+    return (type, xs.size)
+  -- Then, create the translated version, using `stx` to construct the value.
+  let (newType, _) ← (applyReplacementFun t type).run #[] #[]
+  let newValue ← forallBoundedTelescope newType numFVars fun xs goalType => do
+    -- Make the goal easier to prove by unfolding the new lhs
+    let goalType := (← unfoldLHS? castKind goalType).getD goalType
+    let newValue ← elabTermEnsuringType stx goalType <* synthesizeSyntheticMVarsNoPostponing
+    mkLambdaFVars xs (← instantiateMVars newValue)
+  let newName ← mkAuxDeclName ((t.attrName.appendBefore "_").appendAfter "_cast")
+  addDecl newName newType newValue
+  -- Now add the translation attribute to relate the two new declarations
+  _ ← addTranslationAttr t name { target := newName, existing := true, ref := .missing }
+  return (name, newName)
 
 Depends on / 依赖: Command, Command.liftTermElabM, _cast, addDecl, appendAfter, appendBefore, attrName, castKind, declName, defnDecl, getConstInfoDefn, info.levelParams, levelParams, liftTermElabM, matches, mkAuxDeclName, mkDefinitionValInferringUnsafe, mkThmOrUnsafeDef, opaque, t.attrName.appendBefore
 -/

@@ -179,7 +179,26 @@ instance :
   sup_le F G H h₁ h₂ U := by simp [h₁ U, h₂ U]
   inf S T :=
     { obj _ := S.obj _ ⊓ T.obj _
-      map _ _ h := ⟨S.map _ h.1, 
+      map _ _ h := ⟨S.map _ h.1, T.map _ h.2⟩ }
+  inf_le_left _ _ _ _ h := h.1
+  inf_le_right _ _ _ _ h := h.2
+  le_inf _ _ _ h₁ h₂ _ _ h := ⟨h₁ _ h, h₂ _ h⟩
+  sSup S :=
+    { obj _ := ⨆ F in S, F.obj _
+      map {U V} f := by
+        grw [← Submonoid.monotone_comap.le_map_iSup₂]
+        exact iSup₂_mono fun F _ => F.map f }
+  isLUB_sSup _ := ⟨fun a ha U => le_iSup₂_of_le a ha le_rfl, fun _ _ _ => by aesop⟩
+  sInf S :=
+    { obj _ := ⨅ F in S, F.obj _
+      map f := by
+        rw [(Submonoid.gc_map_comap (M.map f).hom).u_iInf₂]
+        exact iInf₂_mono fun F _ => F.map f }
+  isGLB_sInf _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
+  bot := { obj _ := ⊥ }
+  bot_le _ _ := bot_le
+  top := { obj _ := ⊤ }
+  le_top _ _ := le_top
 
 中文:
 实例 :
@@ -191,7 +210,26 @@ instance :
   sup_le F G H h₁ h₂ U := by simp [h₁ U, h₂ U]
   inf S T :=
     { obj _ := S.obj _ ⊓ T.obj _
-      map _ _ h := ⟨S.map _ h.1, 
+      map _ _ h := ⟨S.map _ h.1, T.map _ h.2⟩ }
+  inf_le_left _ _ _ _ h := h.1
+  inf_le_right _ _ _ _ h := h.2
+  le_inf _ _ _ h₁ h₂ _ _ h := ⟨h₁ _ h, h₂ _ h⟩
+  sSup S :=
+    { obj _ := ⨆ F in S, F.obj _
+      map {U V} f := by
+        grw [← Submonoid.monotone_comap.le_map_iSup₂]
+        exact iSup₂_mono fun F _ => F.map f }
+  isLUB_sSup _ := ⟨fun a ha U => le_iSup₂_of_le a ha le_rfl, fun _ _ _ => by aesop⟩
+  sInf S :=
+    { obj _ := ⨅ F in S, F.obj _
+      map f := by
+        rw [(Submonoid.gc_map_comap (M.map f).hom).u_iInf₂]
+        exact iInf₂_mono fun F _ => F.map f }
+  isGLB_sInf _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
+  bot := { obj _ := ⊥ }
+  bot_le _ _ := bot_le
+  top := { obj _ := ⊤ }
+  le_top _ _ := le_top
 
 Depends on / 依赖: F.map, F.obj, G.map, G.obj, S.map, S.obj, Submonoid, Submonoid.monotone_comap, Submonoid.monotone_comap.le_map_iSup, T.map, T.obj, inf_le_left, inf_le_right, le_inf, le_map_sup, le_sup_left, le_sup_right, monotone_comap, sup_le
 -/

@@ -1124,6 +1124,13 @@ definition unitsCentralizerEquiv
           have : (u : ConjAct Mˣ) • x = x := u.2
           rwa [ConjAct.smul_def, mul_inv_eq_iff_eq_mul, Units.ext_iff, eq_comm] at this⟩,
         map_one' := rfl,
+        map_mul' := fun _ _ => rfl }
+    invFun := fun u =>
+      ⟨ConjAct.toConjAct (Units.map (Submonoid.centralizer ({↑x} : Set M)).subtype u), by
+      change _ • _ = _
+      simp only [ConjAct.smul_def, ConjAct.ofConjAct_toConjAct, mul_inv_eq_iff_eq_mul]
+exact Units.ext (u.1.2 x <| Set.mem_singleton _).symm⟩
+    map_mul' := map_mul _ }
 
 中文:
 定义 unitsCentralizerEquiv
@@ -1135,6 +1142,13 @@ definition unitsCentralizerEquiv
           have : (u : ConjAct Mˣ) • x = x := u.2
           rwa [ConjAct.smul_def, mul_inv_eq_iff_eq_mul, Units.ext_iff, eq_comm] at this⟩,
         map_one' := rfl,
+        map_mul' := fun _ _ => rfl }
+    invFun := fun u =>
+      ⟨ConjAct.toConjAct (Units.map (Submonoid.centralizer ({↑x} : Set M)).subtype u), by
+      change _ • _ = _
+      simp only [ConjAct.smul_def, ConjAct.ofConjAct_toConjAct, mul_inv_eq_iff_eq_mul]
+exact Units.ext (u.1.2 x <| Set.mem_singleton _).symm⟩
+    map_mul' := map_mul _ }
 
 Depends on / 依赖: ConjAct, ConjAct.ofConjAct, ConjAct.ofConjAct_toConjAct, ConjAct.smul_def, ConjAct.toConjAct, MonoidHom, MonoidHom.toHomUnits, MulEquiv, MulEquiv.symm, Submonoid, Submonoid.centralizer, Units.ext, Units.ext_iff, Units.map, centralizer, eq_comm, ext_iff, invFun, map_mul, map_one
 -/

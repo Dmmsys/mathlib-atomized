@@ -86,7 +86,19 @@ definition restrictScalars'
     (span K (range P.root)).subtype (span K (range P.coroot)).subtype (Algebra.linearMap K L)
     (FaithfulSMul.algebraMap_injective K L) P.toLinearMap fun x y =>
       P.toLinearMap_apply_apply_mem_range_algebraMap K x x.property y y.property
-  isPerfPair_toLinearMap
+  isPerfPair_toLinearMap := .restrictScalars_of_field P.toLinearMap _ _
+    (injective_subtype _) (injective_subtype _) (by simpa using IsBalanced.isPerfectCompl) _
+  root := ⟨fun i => ⟨_, subset_span (mem_range_self i)⟩, fun i j h => by simpa using h⟩
+  coroot := ⟨fun i => ⟨_, subset_span (mem_range_self i)⟩, fun i j h => by simpa using h⟩
+  root_coroot_two i := by
+    have : algebraMap K L 2 = 2 := by
+      rw [← Int.cast_two (R := K)]; rw [← Int.cast_two (R := L)]; rw [map_intCast]
+exact FaithfulSMul.algebraMap_injective K L by simp [this]
+  reflectionPerm := P.reflectionPerm
+  reflectionPerm_root i j := by
+    ext; simpa [algebra_compatible_smul L] using P.reflectionPerm_root i j
+  reflectionPerm_coroot i j := by
+    ext; simpa [algebra_compatible_smul L] using P.reflectionPerm_coroot i j
 
 中文:
 定义 restrictScalars'
@@ -95,7 +107,19 @@ definition restrictScalars'
     (span K (range P.root)).subtype (span K (range P.coroot)).subtype (Algebra.linearMap K L)
     (FaithfulSMul.algebraMap_injective K L) P.toLinearMap fun x y =>
       P.toLinearMap_apply_apply_mem_range_algebraMap K x x.property y y.property
-  isPerfPair_toLinearMap
+  isPerfPair_toLinearMap := .restrictScalars_of_field P.toLinearMap _ _
+    (injective_subtype _) (injective_subtype _) (by simpa using IsBalanced.isPerfectCompl) _
+  root := ⟨fun i => ⟨_, subset_span (mem_range_self i)⟩, fun i j h => by simpa using h⟩
+  coroot := ⟨fun i => ⟨_, subset_span (mem_range_self i)⟩, fun i j h => by simpa using h⟩
+  root_coroot_two i := by
+    have : algebraMap K L 2 = 2 := by
+      rw [← Int.cast_two (R := K)]; rw [← Int.cast_two (R := L)]; rw [map_intCast]
+exact FaithfulSMul.algebraMap_injective K L by simp [this]
+  reflectionPerm := P.reflectionPerm
+  reflectionPerm_root i j := by
+    ext; simpa [algebra_compatible_smul L] using P.reflectionPerm_root i j
+  reflectionPerm_coroot i j := by
+    ext; simpa [algebra_compatible_smul L] using P.reflectionPerm_coroot i j
 -/
 def restrictScalars' :
     RootPairing ι K (span K (range P.root)) (span K (range P.coroot)) where

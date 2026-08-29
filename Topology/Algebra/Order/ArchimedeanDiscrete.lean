@@ -44,7 +44,14 @@ instance instDiscreteTopologyZMultiples
   · rw [zpowers_one_eq_bot]
     exact Subsingleton.discreteTopology
   rw [discreteTopology_iff_isOpen_singleton_one]; rw [isOpen_induced_iff]
-  ref
+  refine ⟨Set.Ioo (g ^ (-1 : Int)) (g ^ (1 : Int)), isOpen_Ioo, ?_⟩
+  ext ⟨_, ⟨n, rfl⟩⟩
+  constructor
+  · simp only [Set.mem_preimage, Set.mem_Ioo, Set.mem_singleton_iff, and_imp]
+    intro hn hn'
+    rw [zpow_lt_zpow_iff_right ha] at hn hn'
+    simp only [Subtype.ext_iff, show n = 0 by lia, zpow_zero, coe_one]
+  · simp_all
 
 中文:
 实例 instDiscreteTopologyZMultiples
@@ -57,7 +64,14 @@ instance instDiscreteTopologyZMultiples
   · rw [zpowers_one_eq_bot]
     exact Subsingleton.discreteTopology
   rw [discreteTopology_iff_isOpen_singleton_one]; rw [isOpen_induced_iff]
-  ref
+  refine ⟨Set.Ioo (g ^ (-1 : Int)) (g ^ (1 : Int)), isOpen_Ioo, ?_⟩
+  ext ⟨_, ⟨n, rfl⟩⟩
+  constructor
+  · simp only [Set.mem_preimage, Set.mem_Ioo, Set.mem_singleton_iff, and_imp]
+    intro hn hn'
+    rw [zpow_lt_zpow_iff_right ha] at hn hn'
+    simp only [Subtype.ext_iff, show n = 0 by lia, zpow_zero, coe_one]
+  · simp_all
 
 Depends on / 依赖: Set.Ioo, Set.mem_Ioo, Set.mem_preimage, Set.mem_singleton_iff, Subsingleton, Subsingleton.discreteTopology, and_imp, discreteTopology, discreteTopology_iff_isOpen_singleton_one, eq_or_lt_of_le, isOpen_Ioo, isOpen_induced_iff, le_of_not_ge, mem_Ioo, mem_preimage, mem_singleton_iff, one_le_inv, specialize, zpow_lt_zpow_iff_right, zpowers_inv
 -/
@@ -126,7 +140,12 @@ lemma discrete_iff_cyclic
     infer_instance
   · have := H.dense_or_cyclic
     simp only [← Subgroup.zpowers_eq_closure, Eq.comm (a := H)] at this
-    refine 
+    refine fun hA => this.elim (fun h => ?_) id
+    -- remains to show a contradiction assuming `H` is both dense and discrete
+    obtain rfl : H = ⊤ := by
+      rw [← coe_eq_univ]; rw [← (dense_iff_closure_eq.mp h)]; rw [H.isClosed_of_discrete.closure_eq]
+    have : DiscreteTopology G := by rwa [← (Homeomorph.Set.univ G).discreteTopology_iff]
+    exact isCyclic_iff_exists_zpowers_eq_top.mp inferInstance
 
 中文:
 引理 discrete_iff_cyclic
@@ -140,7 +159,12 @@ lemma discrete_iff_cyclic
     infer_instance
   · have := H.dense_or_cyclic
     simp only [← Subgroup.zpowers_eq_closure, Eq.comm (a := H)] at this
-    refine 
+    refine fun hA => this.elim (fun h => ?_) id
+    -- remains to show a contradiction assuming `H` is both dense and discrete
+    obtain rfl : H = ⊤ := by
+      rw [← coe_eq_univ]; rw [← (dense_iff_closure_eq.mp h)]; rw [H.isClosed_of_discrete.closure_eq]
+    have : DiscreteTopology G := by rwa [← (Homeomorph.Set.univ G).discreteTopology_iff]
+    exact isCyclic_iff_exists_zpowers_eq_top.mp inferInstance
 
 Depends on / 依赖: Eq.comm, H.dense_or_cyclic, Subgroup, Subgroup.isCyclic_iff_exists_zpowers_eq_top, Subgroup.zpowers_eq_closure, Subsingleton, Subsingleton.discreteTopology, dense_or_cyclic, discreteTopology, infer_instance, isCyclic_iff_exists_zpowers_eq_top, isCyclic_of_subsingleton, nontriviality, this.elim, zpowers_eq_closure
 -/

@@ -106,7 +106,7 @@ theorem integral_deriv_mul_eq_sub_of_hasDerivWithinAt
     (fun x hx => (hv x hx).continuousWithinAt)
     (fun x hx => hu x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
     (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
-  
+    hu' hv'
 
 中文:
 定理 integral_deriv_mul_eq_sub_of_hasDerivWithinAt
@@ -115,7 +115,7 @@ theorem integral_deriv_mul_eq_sub_of_hasDerivWithinAt
     (fun x hx => (hv x hx).continuousWithinAt)
     (fun x hx => hu x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
     (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
-  
+    hu' hv'
 
 Depends on / 依赖: Icc_mem_nhds, continuousWithinAt, hasDerivAt, integral_deriv_mul_eq_sub_of_hasDerivAt, mem_Icc_of_Ioo
 -/
@@ -219,7 +219,8 @@ theorem integral_mul_deriv_eq_deriv_mul_of_hasDerivWithinAt
     (fun x hx => (hu x hx).continuousWithinAt)
     (fun x hx => (hv x hx).continuousWithinAt)
     (fun x hx => hu x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
-    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.
+    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
+    hu' hv'
 
 中文:
 定理 integral_mul_deriv_eq_deriv_mul_of_hasDerivWithinAt
@@ -227,7 +228,8 @@ theorem integral_mul_deriv_eq_deriv_mul_of_hasDerivWithinAt
     (fun x hx => (hu x hx).continuousWithinAt)
     (fun x hx => (hv x hx).continuousWithinAt)
     (fun x hx => hu x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
-    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.
+    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
+    hu' hv'
 
 Depends on / 依赖: Icc_mem_nhds, continuousWithinAt, hasDerivAt, integral_mul_deriv_eq_deriv_mul_of_hasDerivAt, mem_Icc_of_Ioo
 -/
@@ -373,7 +375,8 @@ theorem integral_smul_deriv_eq_deriv_smul_of_hasDerivWithinAt
     (fun x hx => (hu x hx).continuousWithinAt)
     (fun x hx => (hv x hx).continuousWithinAt)
     (fun x hx => hu x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
-    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 h
+    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
+    hu' hv'
 
 中文:
 定理 integral_smul_deriv_eq_deriv_smul_of_hasDerivWithinAt
@@ -381,7 +384,8 @@ theorem integral_smul_deriv_eq_deriv_smul_of_hasDerivWithinAt
     (fun x hx => (hu x hx).continuousWithinAt)
     (fun x hx => (hv x hx).continuousWithinAt)
     (fun x hx => hu x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
-    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 h
+    (fun x hx => hv x (mem_Icc_of_Ioo hx) |>.hasDerivAt (Icc_mem_nhds hx.1 hx.2))
+    hu' hv'
 
 Depends on / 依赖: Icc_mem_nhds, continuousWithinAt, hasDerivAt, integral_smul_deriv_eq_deriv_smul_of_hasDerivAt, mem_Icc_of_Ioo
 -/
@@ -443,7 +447,40 @@ theorem integral_deriv_smul_comp'''
   rw [hf.image_uIcc]; rw [← intervalIntegrable_iff'] at hg1
   have h_cont : ContinuousOn (fun u => ∫ t in f a..f u, g t) [[a, b]] := by
     refine (continuousOn_primitive_interval' hg1 ?_).comp hf ?_
-    · rw [← hf.im
+    · rw [← hf.image_uIcc]; exact mem_image_of_mem f left_mem_uIcc
+    · rw [← hf.image_uIcc]; exact mapsTo_image _ _
+  have h_der :
+    forall x in Ioo (min a b) (max a b),
+      HasDerivWithinAt (fun u => ∫ t in f a..f u, g t) (f' x • (g ∘ f) x) (Ioi x) x := by
+    intro x hx
+    obtain ⟨c, hc⟩ := nonempty_Ioo.mpr hx.1
+    obtain ⟨d, hd⟩ := nonempty_Ioo.mpr hx.2
+    have cdsub : [[c, d]] subseteq Ioo (min a b) (max a b) := by
+      rw [uIcc_of_le (hc.2.trans hd.1).le]
+      exact Icc_subset_Ioo hc.1 hd.2
+    replace hg_cont := hg_cont.mono (image_mono cdsub)
+    let J := [[sInf (f '' [[c, d]]), sSup (f '' [[c, d]])]]
+    have hJ : f '' [[c, d]] = J := (hf.mono (cdsub.trans Ioo_subset_Icc_self)).image_uIcc
+    rw [hJ] at hg_cont
+    have h2x : f x in J := by rw [← hJ]; exact mem_image_of_mem _ (mem_uIcc_of_le hc.2.le hd.1.le)
+    have h2g : IntervalIntegrable g volume (f a) (f x) := by
+      refine hg1.mono_set ?_
+      rw [← hf.image_uIcc]
+      exact hf.surjOn_uIcc left_mem_uIcc (Ioo_subset_Icc_self hx)
+    have h3g : StronglyMeasurableAtFilter g (𝓝[J] f x) :=
+      hg_cont.stronglyMeasurableAtFilter_nhdsWithin measurableSet_Icc (f x)
+    have : Fact (f x in J) := ⟨h2x⟩
+    have : HasDerivWithinAt (fun u => ∫ x in f a..u, g x) (g (f x)) J (f x) :=
+      intervalIntegral.integral_hasDerivWithinAt_right h2g h3g (hg_cont (f x) h2x)
+    refine (this.scomp x ((hff' x hx).Ioo_of_Ioi hd.1) ?_).Ioi_of_Ioo hd.1
+    rw [← hJ]
+    refine (mapsTo_image _ _).mono ?_ Subset.rfl
+    exact Ioo_subset_Icc_self.trans ((Icc_subset_Icc_left hc.2.le).trans Icc_subset_uIcc)
+  rw [← intervalIntegrable_iff'] at hg2
+  simp_rw [integral_eq_sub_of_hasDeriv_right h_cont h_der hg2, integral_same, sub_zero]
+
+@[deprecated (since := "2026-03-19")]
+alias integral_comp_smul_deriv''' := integral_deriv_smul_comp'''
 
 中文:
 定理 integral_deriv_smul_comp'''
@@ -454,7 +491,40 @@ theorem integral_deriv_smul_comp'''
   rw [hf.image_uIcc]; rw [← intervalIntegrable_iff'] at hg1
   have h_cont : ContinuousOn (fun u => ∫ t in f a..f u, g t) [[a, b]] := by
     refine (continuousOn_primitive_interval' hg1 ?_).comp hf ?_
-    · rw [← hf.im
+    · rw [← hf.image_uIcc]; exact mem_image_of_mem f left_mem_uIcc
+    · rw [← hf.image_uIcc]; exact mapsTo_image _ _
+  have h_der :
+    forall x in Ioo (min a b) (max a b),
+      HasDerivWithinAt (fun u => ∫ t in f a..f u, g t) (f' x • (g ∘ f) x) (Ioi x) x := by
+    intro x hx
+    obtain ⟨c, hc⟩ := nonempty_Ioo.mpr hx.1
+    obtain ⟨d, hd⟩ := nonempty_Ioo.mpr hx.2
+    have cdsub : [[c, d]] subseteq Ioo (min a b) (max a b) := by
+      rw [uIcc_of_le (hc.2.trans hd.1).le]
+      exact Icc_subset_Ioo hc.1 hd.2
+    replace hg_cont := hg_cont.mono (image_mono cdsub)
+    let J := [[sInf (f '' [[c, d]]), sSup (f '' [[c, d]])]]
+    have hJ : f '' [[c, d]] = J := (hf.mono (cdsub.trans Ioo_subset_Icc_self)).image_uIcc
+    rw [hJ] at hg_cont
+    have h2x : f x in J := by rw [← hJ]; exact mem_image_of_mem _ (mem_uIcc_of_le hc.2.le hd.1.le)
+    have h2g : IntervalIntegrable g volume (f a) (f x) := by
+      refine hg1.mono_set ?_
+      rw [← hf.image_uIcc]
+      exact hf.surjOn_uIcc left_mem_uIcc (Ioo_subset_Icc_self hx)
+    have h3g : StronglyMeasurableAtFilter g (𝓝[J] f x) :=
+      hg_cont.stronglyMeasurableAtFilter_nhdsWithin measurableSet_Icc (f x)
+    have : Fact (f x in J) := ⟨h2x⟩
+    have : HasDerivWithinAt (fun u => ∫ x in f a..u, g x) (g (f x)) J (f x) :=
+      intervalIntegral.integral_hasDerivWithinAt_right h2g h3g (hg_cont (f x) h2x)
+    refine (this.scomp x ((hff' x hx).Ioo_of_Ioi hd.1) ?_).Ioi_of_Ioo hd.1
+    rw [← hJ]
+    refine (mapsTo_image _ _).mono ?_ Subset.rfl
+    exact Ioo_subset_Icc_self.trans ((Icc_subset_Icc_left hc.2.le).trans Icc_subset_uIcc)
+  rw [← intervalIntegrable_iff'] at hg2
+  simp_rw [integral_eq_sub_of_hasDeriv_right h_cont h_der hg2, integral_same, sub_zero]
+
+@[deprecated (since := "2026-03-19")]
+alias integral_comp_smul_deriv''' := integral_deriv_smul_comp'''
 
 Depends on / 依赖: CompleteSpace, ContinuousOn, HasDerivWithinAt, continuousOn_primitive_interval, h_cont, h_der, hf.image_uIcc, image_uIcc, integral, intervalIntegrable_iff, intervalIntegral, left_mem_uIcc, mapsTo_image, mem_image_of_mem
 -/
@@ -516,7 +586,7 @@ theorem integral_deriv_smul_comp''
   exact hg.integrableOn_Icc
 
 @[deprecated (since := "2026-03-19")]
-alias integral_comp_smul_deriv'' :=
+alias integral_comp_smul_deriv'' := integral_deriv_smul_comp''
 
 中文:
 定理 integral_deriv_smul_comp''
@@ -528,7 +598,7 @@ alias integral_comp_smul_deriv'' :=
   exact hg.integrableOn_Icc
 
 @[deprecated (since := "2026-03-19")]
-alias integral_comp_smul_deriv'' :=
+alias integral_comp_smul_deriv'' := integral_deriv_smul_comp''
 
 Depends on / 依赖: Ioo_subset_Icc_self, hf.image_uIcc, hg.comp, hg.integrableOn_Icc, hg.mono, image_mono, image_uIcc, integrableOn_Icc, integral_deriv_smul_comp, subset_preimage_image
 -/
@@ -618,7 +688,23 @@ theorem integral_deriv_smul_comp_of_deriv_nonneg
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [integral_of_le hab, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonneg, integral_of_le, ← integral_Icc_eq_integral_Ioc]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [integral_of_ge hab.le, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonneg, integral_of_ge, ← integral_Icc_eq_integral_Ioc]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 中文:
 定理 integral_deriv_smul_comp_of_deriv_nonneg
@@ -630,7 +716,23 @@ theorem integral_deriv_smul_comp_of_deriv_nonneg
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [integral_of_le hab, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonneg, integral_of_le, ← integral_Icc_eq_integral_Ioc]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [integral_of_ge hab.le, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonneg, integral_of_ge, ← integral_Icc_eq_integral_Ioc]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 Depends on / 依赖: Function, Function.comp_apply, MonotoneOn, comp_apply, convex_uIcc, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt, integral_Icc_deriv_smul_of_deriv_nonneg, integral_Icc_eq_integral_Ioc, integral_of_le, interior_Icc, le_or_gt, left_m, monotoneOn_of_deriv_nonneg
 -/
@@ -675,7 +777,25 @@ lemma integrable_deriv_smul_comp_iff_of_deriv_nonneg
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [intervalIntegrable_iff_integrableOn_Icc_of_le hab,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonneg,
+      intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le hab.le,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonneg,
+      IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 中文:
 引理 integrable_deriv_smul_comp_iff_of_deriv_nonneg
@@ -687,7 +807,25 @@ lemma integrable_deriv_smul_comp_iff_of_deriv_nonneg
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [intervalIntegrable_iff_integrableOn_Icc_of_le hab,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonneg,
+      intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le hab.le,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonneg,
+      IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 Depends on / 依赖: Function, Function.comp_apply, MonotoneOn, comp_apply, convex_uIcc, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt, integrableOn_Icc_deriv_smul_iff_of_deriv_nonneg, interior_Icc, intervalIntegrable_iff_integrableOn_Icc_of_le, le_or_gt, monotoneOn_of_deriv_nonneg
 -/
@@ -735,7 +873,24 @@ theorem integral_deriv_smul_comp_of_deriv_nonpos
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [integral_of_le hab, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonpos, integral_of_ge, ← integral_Icc_eq_integral_Ioc]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [integral_of_ge hab.le, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonpos, integral_of_le, ← integral_Icc_eq_integral_Ioc,
+      neg_neg]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 中文:
 定理 integral_deriv_smul_comp_of_deriv_nonpos
@@ -747,7 +902,24 @@ theorem integral_deriv_smul_comp_of_deriv_nonpos
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [integral_of_le hab, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonpos, integral_of_ge, ← integral_Icc_eq_integral_Ioc]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [integral_of_ge hab.le, ← integral_Icc_eq_integral_Ioc,
+      integral_Icc_deriv_smul_of_deriv_nonpos, integral_of_le, ← integral_Icc_eq_integral_Ioc,
+      neg_neg]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 Depends on / 依赖: AntitoneOn, Function, Function.comp_apply, antitoneOn_of_deriv_nonpos, comp_apply, convex_uIcc, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt, integral_Icc_deriv_smul_of_deriv_nonpos, integral_Icc_eq_integral_Ioc, integral_of_ge, integral_of_le, interior_Icc, le_or_gt, left_m
 -/
@@ -793,7 +965,25 @@ lemma integrable_deriv_smul_comp_iff_of_deriv_nonpos
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [intervalIntegrable_iff_integrableOn_Icc_of_le hab,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonpos,
+      IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le hab.le,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonpos,
+      intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 中文:
 引理 integrable_deriv_smul_comp_iff_of_deriv_nonpos
@@ -805,7 +995,25 @@ lemma integrable_deriv_smul_comp_iff_of_deriv_nonpos
       exact fun z hz => (hff' z hz).differentiableAt.differentiableWithinAt
     · rw [uIcc, interior_Icc]
       intro z hz
-      simpa [(hff' z hz).deriv] using hf' z h
+      simpa [(hff' z hz).deriv] using hf' z hz
+  simp only [Function.comp_apply]
+  rcases le_or_gt a b with hab | hab
+  · rw [intervalIntegrable_iff_integrableOn_Icc_of_le hab,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonpos,
+      IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M left_mem_uIcc right_mem_uIcc hab
+    · rwa [uIcc_of_le hab] at hf
+    · grind
+    · grind
+    · exact hab
+  · rw [IntervalIntegrable.symm_iff, intervalIntegrable_iff_integrableOn_Icc_of_le hab.le,
+      integrableOn_Icc_deriv_smul_iff_of_deriv_nonpos,
+      intervalIntegrable_iff_integrableOn_Icc_of_le]
+    · apply M right_mem_uIcc left_mem_uIcc hab.le
+    · rwa [uIcc_of_ge hab.le] at hf
+    · grind
+    · grind
+    · exact hab.le
 
 Depends on / 依赖: AntitoneOn, Function, Function.comp_apply, IntervalIntegrable, IntervalIntegrable.symm_iff, antitoneOn_of_deriv_nonpos, comp_apply, convex_uIcc, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt, integrableOn_Icc_deriv_smul_iff_of_deriv_nonpos, interior_Icc, intervalIntegrable_iff_integ, intervalIntegrable_iff_integrableOn_Icc_of_le, le_or_gt, symm_iff
 -/

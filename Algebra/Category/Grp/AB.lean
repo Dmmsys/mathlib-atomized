@@ -44,7 +44,14 @@ instance :
     intro x (hx : _ = _)
     dsimp at hx
     rcases Concrete.colimit_exists_rep S.X₂ x with ⟨j, y, rfl⟩
-    rw [← Concret
+    rw [← ConcreteCategory.comp_apply]; rw [colimMap_eq]; rw [colimit.ι_map]; rw [ConcreteCategory.comp_apply]; rw [← map_zero (colimit.ι S.X₃ j).hom] at hx
+    rcases Concrete.colimit_exists_of_rep_eq.{u, u, u} S.X₃ _ _ hx with ⟨k, e₁, e₂, hk⟩
+    rw [map_zero]; rw [← ConcreteCategory.comp_apply]; rw [← NatTrans.naturality]; rw [ConcreteCategory.comp_apply]
+      at hk
+    rcases hS k hk with ⟨t, ht⟩
+    use colimit.ι S.X₁ k t
+    erw [← ConcreteCategory.comp_apply, colimit.ι_map, ConcreteCategory.comp_apply, ht]
+    exact colimit.w_apply S.X₂ e₁ y)
 
 中文:
 实例 :
@@ -54,7 +61,14 @@ instance :
     intro x (hx : _ = _)
     dsimp at hx
     rcases Concrete.colimit_exists_rep S.X₂ x with ⟨j, y, rfl⟩
-    rw [← Concret
+    rw [← ConcreteCategory.comp_apply]; rw [colimMap_eq]; rw [colimit.ι_map]; rw [ConcreteCategory.comp_apply]; rw [← map_zero (colimit.ι S.X₃ j).hom] at hx
+    rcases Concrete.colimit_exists_of_rep_eq.{u, u, u} S.X₃ _ _ hx with ⟨k, e₁, e₂, hk⟩
+    rw [map_zero]; rw [← ConcreteCategory.comp_apply]; rw [← NatTrans.naturality]; rw [ConcreteCategory.comp_apply]
+      at hk
+    rcases hS k hk with ⟨t, ht⟩
+    use colimit.ι S.X₁ k t
+    erw [← ConcreteCategory.comp_apply, colimit.ι_map, ConcreteCategory.comp_apply, ht]
+    exact colimit.w_apply S.X₂ e₁ y)
 
 Depends on / 依赖: AddCommGrpCat, PreservesHomology
 -/
@@ -159,7 +173,29 @@ instance :
   exact {
     preserves {X Y} f hf := by
       let iX : limit X ≅ AddCommGrpCat.of ((i : J) -> X.obj ⟨i⟩) := (Pi.isoLimit X).symm ≪≫
-        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLim
+        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
+      let iY : limit Y ≅ AddCommGrpCat.of ((i : J) -> Y.obj ⟨i⟩) := (Pi.isoLimit Y).symm ≪≫
+        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
+      have : Pi.map (fun i => f.app ⟨i⟩) = iX.inv ≫ lim.map f ≫ iY.hom := by
+        simp only [Discrete.functor_obj_eq_as, Discrete.mk_as, Pi.isoLimit,
+          IsLimit.conePointUniqueUpToIso, limit.cone, AddCommGrpCat.HasLimit.productLimitCone,
+          Iso.trans_inv, Functor.mapIso_inv, IsLimit.uniqueUpToIso_inv, Cone.forget_map,
+          IsLimit.liftConeMorphism_hom, limit.isLimit_lift, Iso.symm_inv, Functor.mapIso_hom,
+          IsLimit.uniqueUpToIso_hom, lim_map, Iso.trans_hom, Iso.symm_hom,
+          AddCommGrpCat.HasLimit.lift, Category.assoc, limit.lift_map_assoc, iX, iY]
+        ext g j
+        change _ = (_ ≫ limit.π (Discrete.functor fun j => Y.obj { as := j }) ⟨j⟩) _
+        simp only [Discrete.functor_obj_eq_as, productIsProduct', limit.lift_π,
+          Fan.mk_π_app, Pi.map_apply]
+        change _ = (_ ≫ _ ≫ limit.π Y ⟨j⟩) _
+        simp
+      suffices Epi (iX.hom ≫ (iX.inv ≫ lim.map f ≫ iY.hom) ≫ iY.inv) by simpa using this
+      suffices Epi (iX.inv ≫ lim.map f ≫ iY.hom) from inferInstance
+      rw [AddCommGrpCat.epi_iff_surjective]; rw [← this]
+      simp_rw [CategoryTheory.NatTrans.epi_iff_epi_app, AddCommGrpCat.epi_iff_surjective] at hf
+      refine fun b => ⟨fun i => (hf ⟨i⟩ (b i)).choose, ?_⟩
+      funext i
+      exact (hf ⟨i⟩ (b i)).choose_spec }
 
 中文:
 实例 :
@@ -169,7 +205,29 @@ instance :
   exact {
     preserves {X Y} f hf := by
       let iX : limit X ≅ AddCommGrpCat.of ((i : J) -> X.obj ⟨i⟩) := (Pi.isoLimit X).symm ≪≫
-        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLim
+        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
+      let iY : limit Y ≅ AddCommGrpCat.of ((i : J) -> Y.obj ⟨i⟩) := (Pi.isoLimit Y).symm ≪≫
+        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
+      have : Pi.map (fun i => f.app ⟨i⟩) = iX.inv ≫ lim.map f ≫ iY.hom := by
+        simp only [Discrete.functor_obj_eq_as, Discrete.mk_as, Pi.isoLimit,
+          IsLimit.conePointUniqueUpToIso, limit.cone, AddCommGrpCat.HasLimit.productLimitCone,
+          Iso.trans_inv, Functor.mapIso_inv, IsLimit.uniqueUpToIso_inv, Cone.forget_map,
+          IsLimit.liftConeMorphism_hom, limit.isLimit_lift, Iso.symm_inv, Functor.mapIso_hom,
+          IsLimit.uniqueUpToIso_hom, lim_map, Iso.trans_hom, Iso.symm_hom,
+          AddCommGrpCat.HasLimit.lift, Category.assoc, limit.lift_map_assoc, iX, iY]
+        ext g j
+        change _ = (_ ≫ limit.π (Discrete.functor fun j => Y.obj { as := j }) ⟨j⟩) _
+        simp only [Discrete.functor_obj_eq_as, productIsProduct', limit.lift_π,
+          Fan.mk_π_app, Pi.map_apply]
+        change _ = (_ ≫ _ ≫ limit.π Y ⟨j⟩) _
+        simp
+      suffices Epi (iX.hom ≫ (iX.inv ≫ lim.map f ≫ iY.hom) ≫ iY.inv) by simpa using this
+      suffices Epi (iX.inv ≫ lim.map f ≫ iY.hom) from inferInstance
+      rw [AddCommGrpCat.epi_iff_surjective]; rw [← this]
+      simp_rw [CategoryTheory.NatTrans.epi_iff_epi_app, AddCommGrpCat.epi_iff_surjective] at hf
+      refine fun b => ⟨fun i => (hf ⟨i⟩ (b i)).choose, ?_⟩
+      funext i
+      exact (hf ⟨i⟩ (b i)).choose_spec }
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.HasLimit.productLimitCone, AddCommGrpCat.of, HasLimit, Pi.isoLimit, Pi.map, X.obj, Y.obj, allowSynthFailures, conePointUniqueUpToIso, f.app, hasExactLimitsOfShape_of_preservesEpi, isLimit, isoLimit, limit.isLimit, preserves, productLimitCone
 -/
@@ -229,7 +287,7 @@ instance :
     intro A B f g h; simp_all only [ObjectProperty.singleton_iff, AddCommGrpCat.ext_iff,
       AddCommGrpCat.hom_comp, AddMonoidHom.coe_comp, Function.comp_apply, forall_eq', ULift.forall]
     (intro x; specialize h (AddCommGrpCat.ofHom
-    (AddMonoidHom.mk' (
+    (AddMonoidHom.mk' (fun y => y • x) fun y z => by simp only [add_smul])) 1; aesop)
 
 中文:
 实例 :
@@ -239,7 +297,7 @@ instance :
     intro A B f g h; simp_all only [ObjectProperty.singleton_iff, AddCommGrpCat.ext_iff,
       AddCommGrpCat.hom_comp, AddMonoidHom.coe_comp, Function.comp_apply, forall_eq', ULift.forall]
     (intro x; specialize h (AddCommGrpCat.ofHom
-    (AddMonoidHom.mk' (
+    (AddMonoidHom.mk' (fun y => y • x) fun y z => by simp only [add_smul])) 1; aesop)
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ext_iff, AddCommGrpCat.hom_comp, AddCommGrpCat.of, AddCommGrpCat.ofHom, AddMonoidHom, AddMonoidHom.coe_comp, AddMonoidHom.mk, Function, Function.comp_apply, ObjectProperty, ObjectProperty.singleton_iff, ULift.forall, add_smul, coe_comp, comp_apply, ext_iff, forall_eq, hom_comp, singleton_iff
 -/

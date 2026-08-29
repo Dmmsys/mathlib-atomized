@@ -35,7 +35,8 @@ theorem FloorSemiring.eventually_mul_pow_lt_factorial_sub
     _ = ↑(⌈|a|⌉₊ * ⌈|c|⌉₊ ^ n) := ?_
     _ < (n - d)! := Nat.cast_lt.mpr h
   · rw [abs_mul, abs_pow]
-    gcongr <;> t
+    gcongr <;> try first | positivity | apply Nat.le_ceil
+  · simp_rw [Nat.cast_mul, Nat.cast_pow]
 
 中文:
 定理 FloorSemiring.eventually_mul_pow_lt_factorial_sub
@@ -48,7 +49,8 @@ theorem FloorSemiring.eventually_mul_pow_lt_factorial_sub
     _ = ↑(⌈|a|⌉₊ * ⌈|c|⌉₊ ^ n) := ?_
     _ < (n - d)! := Nat.cast_lt.mpr h
   · rw [abs_mul, abs_pow]
-    gcongr <;> t
+    gcongr <;> try first | positivity | apply Nat.le_ceil
+  · simp_rw [Nat.cast_mul, Nat.cast_pow]
 
 Depends on / 依赖: Nat.cast_lt.mpr, Nat.cast_mul, Nat.cast_pow, Nat.eventually_mul_pow_lt_factorial_sub, Nat.le_ceil, abs_mul, abs_pow, cast_lt, cast_mul, cast_pow, eventually_mul_pow_lt_factorial_sub, filter_upwards, le_abs_self, le_ceil, simp_rw
 -/

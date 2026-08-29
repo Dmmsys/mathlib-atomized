@@ -449,14 +449,26 @@ lemma hurwitzZeta_one_sub
   statement: (a : UnitAddCircle) {s : Complex}
   proof: by
   rw [hurwitzZeta]; rw [hurwitzZetaEven_one_sub a hs hs']; rw [hurwitzZetaOdd_one_sub a hs]; rw [expZeta]; rw [expZeta]; rw [Complex.cos]; rw [Complex.sin]; rw [sinZeta_neg]; rw [cosZeta_neg]
-  rw [show ↑π * I * s / 2 = ↑π * s / 2 * I by ring]; rw [show -↑π * I * s / 2 = -(↑π * s / 2) * I by ring
+  rw [show ↑π * I * s / 2 = ↑π * s / 2 * I by ring]; rw [show -↑π * I * s / 2 = -(↑π * s / 2) * I by ring]
+  -- these `generalize` commands are not strictly needed for the `ring_nf` call to succeed, but
+  -- make it run faster:
+  generalize (2 * π : Complex) ^ (-s) = x
+  generalize (↑π * s / 2 * I).exp = y
+  generalize (-(↑π * s / 2) * I).exp = z
+  ring_nf
 
 中文:
 引理 hurwitzZeta_one_sub
   结论: (a : UnitAddCircle) {s : 复形}
   证明: by
   rw [hurwitzZeta]; rw [hurwitzZetaEven_one_sub a hs hs']; rw [hurwitzZetaOdd_one_sub a hs]; rw [expZeta]; rw [expZeta]; rw [Complex.cos]; rw [Complex.sin]; rw [sinZeta_neg]; rw [cosZeta_neg]
-  rw [show ↑π * I * s / 2 = ↑π * s / 2 * I by ring]; rw [show -↑π * I * s / 2 = -(↑π * s / 2) * I by ring
+  rw [show ↑π * I * s / 2 = ↑π * s / 2 * I by ring]; rw [show -↑π * I * s / 2 = -(↑π * s / 2) * I by ring]
+  -- these `generalize` commands are not strictly needed for the `ring_nf` call to succeed, but
+  -- make it run faster:
+  generalize (2 * π : Complex) ^ (-s) = x
+  generalize (↑π * s / 2 * I).exp = y
+  generalize (-(↑π * s / 2) * I).exp = z
+  ring_nf
 
 Depends on / 依赖: Complex.cos, Complex.sin, cosZeta_neg, expZeta, hurwitzZeta, hurwitzZetaEven_one_sub, hurwitzZetaOdd_one_sub, sinZeta_neg
 -/
@@ -485,7 +497,15 @@ lemma expZeta_one_sub
     push_cast
     ring
   rw [expZeta]; rw [cosZeta_one_sub a hs]; rw [sinZeta_one_sub a hs']; rw [hurwitzZeta]; rw [hurwitzZeta]; rw [hurwitzZetaEven_neg]; rw [hurwitzZetaOdd_neg]; rw [Complex.cos]; rw [Complex.sin]
-  rw [show 
+  rw [show ↑π * I * s / 2 = ↑π * s / 2 * I by ring]; rw [show -↑π * I * s / 2 = -(↑π * s / 2) * I by ring]
+  -- these `generalize` commands are not strictly needed for the `ring_nf` call to succeed, but
+  -- make it run faster:
+  generalize (2 * π : Complex) ^ (-s) = x
+  generalize (↑π * s / 2 * I).exp = y
+  generalize (-(↑π * s / 2) * I).exp = z
+  ring_nf
+  rw [I_sq]
+  ring_nf
 
 中文:
 引理 expZeta_one_sub
@@ -496,7 +516,15 @@ lemma expZeta_one_sub
     push_cast
     ring
   rw [expZeta]; rw [cosZeta_one_sub a hs]; rw [sinZeta_one_sub a hs']; rw [hurwitzZeta]; rw [hurwitzZeta]; rw [hurwitzZetaEven_neg]; rw [hurwitzZetaOdd_neg]; rw [Complex.cos]; rw [Complex.sin]
-  rw [show 
+  rw [show ↑π * I * s / 2 = ↑π * s / 2 * I by ring]; rw [show -↑π * I * s / 2 = -(↑π * s / 2) * I by ring]
+  -- these `generalize` commands are not strictly needed for the `ring_nf` call to succeed, but
+  -- make it run faster:
+  generalize (2 * π : Complex) ^ (-s) = x
+  generalize (↑π * s / 2 * I).exp = y
+  generalize (-(↑π * s / 2) * I).exp = z
+  ring_nf
+  rw [I_sq]
+  ring_nf
 
 Depends on / 依赖: Complex.cos, Complex.sin, convert, cosZeta_one_sub, expZeta, hurwitzZeta, hurwitzZetaEven_neg, hurwitzZetaOdd_neg, sinZeta_one_sub
 -/

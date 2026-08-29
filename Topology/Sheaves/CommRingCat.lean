@@ -120,7 +120,10 @@ map {_ _} i := CommRingCat.ofHom IsLocalization.map _ (F.map i).hom (G.map i)
     exact IsLocalization.map_id x
   map_comp {U V W} i j := by
     delta CommRingCat.ofHom CommRingCat.of Bundled.of
-    simp_rw [F.ma
+    simp_rw [F.map_comp]
+    ext : 1
+    dsimp
+    rw [IsLocalization.map_comp_map]
 
 中文:
 定义 noncomputable
@@ -133,7 +136,10 @@ map {_ _} i := CommRingCat.ofHom IsLocalization.map _ (F.map i).hom (G.map i)
     exact IsLocalization.map_id x
   map_comp {U V W} i j := by
     delta CommRingCat.ofHom CommRingCat.of Bundled.of
-    simp_rw [F.ma
+    simp_rw [F.map_comp]
+    ext : 1
+    dsimp
+    rw [IsLocalization.map_comp_map]
 -/
 protected noncomputable def SubmonoidPresheaf.localizationPresheaf : X.Presheaf CommRingCat where
 obj U := CommRingCat.of Localization (G.obj U)
@@ -643,7 +649,11 @@ definition commRingYoneda
       map_comp := fun {_ _ _} _ _ => rfl }
   map {_ _} φ :=
     { app := fun X => continuousFunctions.map X φ
-      naturality := fun _ _ _ => rf
+      naturality := fun _ _ _ => rfl }
+  map_id X := by
+    ext
+    rfl
+  map_comp {_ _ _} _ _ := rfl
 
 中文:
 定义 commRingYoneda
@@ -656,7 +666,11 @@ definition commRingYoneda
       map_comp := fun {_ _ _} _ _ => rfl }
   map {_ _} φ :=
     { app := fun X => continuousFunctions.map X φ
-      naturality := fun _ _ _ => rf
+      naturality := fun _ _ _ => rfl }
+  map_id X := by
+    ext
+    rfl
+  map_comp {_ _ _} _ _ := rfl
 
 Depends on / 依赖: continuousFunctions, continuousFunctions.map, continuousFunctions.pullback, map_comp, map_id, naturality, pullback
 -/
@@ -916,7 +930,16 @@ theorem objSupIsoProdEqLocus_inv_eq_iff
     simp only [← CommRingCat.comp_apply, ← Functor.map_comp, ← op_comp,
       homOfLE_comp, and_self]
   · rintro ⟨e₁, e₂⟩
-    refine F.eq_of_locally_eq
+    refine F.eq_of_locally_eq₂
+      (homOfLE (inf_le_right : U ⊓ W <= W)) (homOfLE (inf_le_right : V ⊓ W <= W)) ?_ _ _ ?_ ?_
+    · rw [← inf_sup_right]
+      exact le_inf e le_rfl
+    · rw [← e₁, ← TopCat.Sheaf.objSupIsoProdEqLocus_inv_fst]
+      simp only [← CommRingCat.comp_apply, ← Functor.map_comp, ← op_comp,
+        homOfLE_comp]
+    · rw [← e₂, ← TopCat.Sheaf.objSupIsoProdEqLocus_inv_snd]
+      simp only [← CommRingCat.comp_apply, ← Functor.map_comp, ← op_comp,
+        homOfLE_comp]
 
 中文:
 定理 objSupIsoProdEqLocus_inv_eq_iff
@@ -929,7 +952,16 @@ theorem objSupIsoProdEqLocus_inv_eq_iff
     simp only [← CommRingCat.comp_apply, ← Functor.map_comp, ← op_comp,
       homOfLE_comp, and_self]
   · rintro ⟨e₁, e₂⟩
-    refine F.eq_of_locally_eq
+    refine F.eq_of_locally_eq₂
+      (homOfLE (inf_le_right : U ⊓ W <= W)) (homOfLE (inf_le_right : V ⊓ W <= W)) ?_ _ _ ?_ ?_
+    · rw [← inf_sup_right]
+      exact le_inf e le_rfl
+    · rw [← e₁, ← TopCat.Sheaf.objSupIsoProdEqLocus_inv_fst]
+      simp only [← CommRingCat.comp_apply, ← Functor.map_comp, ← op_comp,
+        homOfLE_comp]
+    · rw [← e₂, ← TopCat.Sheaf.objSupIsoProdEqLocus_inv_snd]
+      simp only [← CommRingCat.comp_apply, ← Functor.map_comp, ← op_comp,
+        homOfLE_comp]
 
 Depends on / 依赖: CommRingCat, CommRingCat.comp_app, CommRingCat.comp_apply, F.eq_of_locally_eq, Functor, Functor.map_comp, TopCat, TopCat.Sheaf.objSupIsoProdEqLocus_inv_fst, TopCat.Sheaf.objSupIsoProdEqLocus_inv_snd, and_self, comp_app, comp_apply, homOfLE, homOfLE_comp, inf_le_right, inf_sup_right, le_inf, le_rfl, map_comp, objSupIsoProdEqLocus_inv_fst
 -/

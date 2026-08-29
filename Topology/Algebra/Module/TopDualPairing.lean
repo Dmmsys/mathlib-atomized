@@ -42,7 +42,10 @@ instance topDualPairing_isContPerfPair
     have : IsModuleTopology 𝕜 (E ->L[𝕜] 𝕜) := isModuleTopologyOfFiniteDimensional
     exact IsModuleTopology.continuous_bilinear_of_finite_left (topDualPairing 𝕜 E)
   bijective_left := Function.bijective_id
-  bijective_right :
+  bijective_right := by
+    refine LinearMap.toContinuousLinearMap.bijective.comp ?_
+    rw [LinearMap.flip_bijective_iff₁]
+    exact LinearMap.toContinuousLinearMap.symm.bijective
 
 中文:
 实例 topDualPairing_isContPerfPair
@@ -52,7 +55,10 @@ instance topDualPairing_isContPerfPair
     have : IsModuleTopology 𝕜 (E ->L[𝕜] 𝕜) := isModuleTopologyOfFiniteDimensional
     exact IsModuleTopology.continuous_bilinear_of_finite_left (topDualPairing 𝕜 E)
   bijective_left := Function.bijective_id
-  bijective_right :
+  bijective_right := by
+    refine LinearMap.toContinuousLinearMap.bijective.comp ?_
+    rw [LinearMap.flip_bijective_iff₁]
+    exact LinearMap.toContinuousLinearMap.symm.bijective
 
 Depends on / 依赖: Function, Function.bijective_id, IsModuleTopology, IsModuleTopology.continuous_bilinear_of_finite_left, LinearMap, LinearMap.flip_bijective_iff, LinearMap.toContinuousLinearMap.bijective.comp, LinearMap.toContinuousLinearMap.symm.bijective, bijective, bijective_id, bijective_left, bijective_right, continuous_bilinear_of_finite_left, isModuleTopologyOfFiniteDimensional, toContinuousLinearMap, topDualPairing
 -/

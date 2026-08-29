@@ -140,7 +140,10 @@ theorem leftAdjointUniq_hom_counit
     conjugateIsoEquiv_symm_apply_inv, Iso.refl_inv, NatTrans.comp_app, whiskerLeft_app,
     conjugateEquiv_symm_apply_app, NatTrans.id_app, Functor.map_id, Category.id_comp,
     Category.assoc]
-  rw [← adj1.coun
+  rw [← adj1.counit_naturality]; rw [← Category.assoc]; rw [← F.map_comp]
+  simp
+
+@[reassoc (attr := simp)]
 
 中文:
 定理 leftAdjointUniq_hom_counit
@@ -151,7 +154,10 @@ theorem leftAdjointUniq_hom_counit
     conjugateIsoEquiv_symm_apply_inv, Iso.refl_inv, NatTrans.comp_app, whiskerLeft_app,
     conjugateEquiv_symm_apply_app, NatTrans.id_app, Functor.map_id, Category.id_comp,
     Category.assoc]
-  rw [← adj1.coun
+  rw [← adj1.counit_naturality]; rw [← Category.assoc]; rw [← F.map_comp]
+  simp
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.map_comp, Functor, Functor.comp_obj, Functor.id_obj, Functor.map_id, Iso.refl_inv, Iso.symm_hom, NatTrans, NatTrans.comp_app, NatTrans.id_app, adj1.counit_naturality, comp_app, comp_obj, conjugateEquiv_symm_apply_app, conjugateIsoEquiv_symm_apply_inv, counit_naturality, id_app
 -/

@@ -318,7 +318,8 @@ instance homCategory
     rintro f g ⟨η⟩
     exact Quot.sound (Rel.comp_id η)
   assoc := by
-    rint
+    rintro f g h i ⟨η⟩ ⟨θ⟩ ⟨ι⟩
+    exact Quot.sound (Rel.assoc η θ ι)
 
 中文:
 实例 homCategory
@@ -333,7 +334,8 @@ instance homCategory
     rintro f g ⟨η⟩
     exact Quot.sound (Rel.comp_id η)
   assoc := by
-    rint
+    rintro f g h i ⟨η⟩ ⟨θ⟩ ⟨ι⟩
+    exact Quot.sound (Rel.assoc η θ ι)
 -/
 instance homCategory (a b : FreeBicategory B) : Category (a ⟶ b) where
   Hom f g := Quot (@Rel _ _ a b f g)
@@ -359,7 +361,48 @@ instance bicategory
   whiskerLeft := @fun _ _ _ f g h η => Quot.map (Hom₂.whisker_left f) (Rel.whisker_left f g h) η
   whiskerLeft_id := @fun _ _ _ f g => Quot.sound (Rel.whisker_left_id f g)
   associator := @fun _ _ _ _ f g h =>
-    { hom := Quot.mk Rel (Hom₂.associator
+    { hom := Quot.mk Rel (Hom₂.associator f g h)
+      inv := Quot.mk Rel (Hom₂.associator_inv f g h)
+      hom_inv_id := Quot.sound (Rel.associator_hom_inv f g h)
+      inv_hom_id := Quot.sound (Rel.associator_inv_hom f g h) }
+  leftUnitor := @fun _ _ f =>
+    { hom := Quot.mk Rel (Hom₂.left_unitor f)
+      inv := Quot.mk Rel (Hom₂.left_unitor_inv f)
+      hom_inv_id := Quot.sound (Rel.left_unitor_hom_inv f)
+      inv_hom_id := Quot.sound (Rel.left_unitor_inv_hom f) }
+  rightUnitor := @fun _ _ f =>
+    { hom := Quot.mk Rel (Hom₂.right_unitor f)
+      inv := Quot.mk Rel (Hom₂.right_unitor_inv f)
+      hom_inv_id := Quot.sound (Rel.right_unitor_hom_inv f)
+      inv_hom_id := Quot.sound (Rel.right_unitor_inv_hom f) }
+  whiskerLeft_comp := by
+    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
+    exact Quot.sound (Rel.whisker_left_comp f η θ)
+  id_whiskerLeft := by
+    rintro a b f g ⟨η⟩
+    exact Quot.sound (Rel.id_whisker_left η)
+  comp_whiskerLeft := by
+    rintro a b c d f g h h' ⟨η⟩
+    exact Quot.sound (Rel.comp_whisker_left f g η)
+  whiskerRight := @fun _ _ _ f g η h => Quot.map (Hom₂.whisker_right h) (Rel.whisker_right f g h) η
+  id_whiskerRight := @fun _ _ _ f g => Quot.sound (Rel.id_whisker_right f g)
+  comp_whiskerRight := by
+    rintro a b c f g h ⟨η⟩ ⟨θ⟩ i
+    exact Quot.sound (Rel.comp_whisker_right i η θ)
+  whiskerRight_id := by
+    rintro a b f g ⟨η⟩
+    exact Quot.sound (Rel.whisker_right_id η)
+  whiskerRight_comp := by
+    rintro a b c d f f' ⟨η⟩ g h
+    exact Quot.sound (Rel.whisker_right_comp g h η)
+  whisker_assoc := by
+    rintro a b c d f g g' ⟨η⟩ h
+    exact Quot.sound (Rel.whisker_assoc f η h)
+  whisker_exchange := by
+    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
+    exact Quot.sound (Rel.whisker_exchange η θ)
+  pentagon := @fun _ _ _ _ _ f g h i => Quot.sound (Rel.pentagon f g h i)
+  triangle := @fun _ _ _ f g => Quot.sound (Rel.triangle f g)
 
 中文:
 实例 bicategory
@@ -368,7 +411,48 @@ instance bicategory
   whiskerLeft := @fun _ _ _ f g h η => Quot.map (Hom₂.whisker_left f) (Rel.whisker_left f g h) η
   whiskerLeft_id := @fun _ _ _ f g => Quot.sound (Rel.whisker_left_id f g)
   associator := @fun _ _ _ _ f g h =>
-    { hom := Quot.mk Rel (Hom₂.associator
+    { hom := Quot.mk Rel (Hom₂.associator f g h)
+      inv := Quot.mk Rel (Hom₂.associator_inv f g h)
+      hom_inv_id := Quot.sound (Rel.associator_hom_inv f g h)
+      inv_hom_id := Quot.sound (Rel.associator_inv_hom f g h) }
+  leftUnitor := @fun _ _ f =>
+    { hom := Quot.mk Rel (Hom₂.left_unitor f)
+      inv := Quot.mk Rel (Hom₂.left_unitor_inv f)
+      hom_inv_id := Quot.sound (Rel.left_unitor_hom_inv f)
+      inv_hom_id := Quot.sound (Rel.left_unitor_inv_hom f) }
+  rightUnitor := @fun _ _ f =>
+    { hom := Quot.mk Rel (Hom₂.right_unitor f)
+      inv := Quot.mk Rel (Hom₂.right_unitor_inv f)
+      hom_inv_id := Quot.sound (Rel.right_unitor_hom_inv f)
+      inv_hom_id := Quot.sound (Rel.right_unitor_inv_hom f) }
+  whiskerLeft_comp := by
+    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
+    exact Quot.sound (Rel.whisker_left_comp f η θ)
+  id_whiskerLeft := by
+    rintro a b f g ⟨η⟩
+    exact Quot.sound (Rel.id_whisker_left η)
+  comp_whiskerLeft := by
+    rintro a b c d f g h h' ⟨η⟩
+    exact Quot.sound (Rel.comp_whisker_left f g η)
+  whiskerRight := @fun _ _ _ f g η h => Quot.map (Hom₂.whisker_right h) (Rel.whisker_right f g h) η
+  id_whiskerRight := @fun _ _ _ f g => Quot.sound (Rel.id_whisker_right f g)
+  comp_whiskerRight := by
+    rintro a b c f g h ⟨η⟩ ⟨θ⟩ i
+    exact Quot.sound (Rel.comp_whisker_right i η θ)
+  whiskerRight_id := by
+    rintro a b f g ⟨η⟩
+    exact Quot.sound (Rel.whisker_right_id η)
+  whiskerRight_comp := by
+    rintro a b c d f f' ⟨η⟩ g h
+    exact Quot.sound (Rel.whisker_right_comp g h η)
+  whisker_assoc := by
+    rintro a b c d f g g' ⟨η⟩ h
+    exact Quot.sound (Rel.whisker_assoc f η h)
+  whisker_exchange := by
+    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
+    exact Quot.sound (Rel.whisker_exchange η θ)
+  pentagon := @fun _ _ _ _ _ f g h i => Quot.sound (Rel.pentagon f g h i)
+  triangle := @fun _ _ _ f g => Quot.sound (Rel.triangle f g)
 
 Depends on / 依赖: FreeBicategory, FreeBicategory.homCategory, homCategory
 -/
@@ -846,7 +930,16 @@ definition lift
   -- Porting note: We'd really prefer not to be doing this by hand.
   -- in mathlib3 `tidy` did these inductions for us.
   map₂_comp := by
-    intro a b f g h
+    intro a b f g h η θ
+    induction η using Quot.rec
+    · induction θ using Quot.rec <;> rfl
+    · rfl
+  map₂_whisker_left := by
+    intro a b c f g h η
+    induction η using Quot.rec
+    · cat_disch
+    · rfl
+  map₂_whisker_right := by intro _ _ _ _ _ η h; dsimp; induction η using Quot.rec <;> cat_disch
 
 中文:
 定义 lift
@@ -859,7 +952,16 @@ definition lift
   -- Porting note: We'd really prefer not to be doing this by hand.
   -- in mathlib3 `tidy` did these inductions for us.
   map₂_comp := by
-    intro a b f g h
+    intro a b f g h η θ
+    induction η using Quot.rec
+    · induction θ using Quot.rec <;> rfl
+    · rfl
+  map₂_whisker_left := by
+    intro a b c f g h η
+    induction η using Quot.rec
+    · cat_disch
+    · rfl
+  map₂_whisker_right := by intro _ _ _ _ _ η h; dsimp; induction η using Quot.rec <;> cat_disch
 
 Depends on / 依赖: F.obj
 -/

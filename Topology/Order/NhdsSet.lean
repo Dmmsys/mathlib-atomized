@@ -779,7 +779,7 @@ theorem hasBasis_nhdsSet_Iic_Iio
   refine ⟨fun s => ⟨fun hs => ?_, fun ⟨b, hab, hb⟩ => mem_of_superset (Iio_mem_nhdsSet_Iic hab) hb⟩⟩
   rw [nhdsSet_Iic]; rw [mem_sup]; rw [mem_principal] at hs
   rcases exists_Ico_subset_of_mem_nhds hs.1 (Set.nonempty_coe_sort.1 h) with ⟨b, hab, hbs⟩
-  exact ⟨b, hab, Iio_subset_Iio_union_Ico.tran
+  exact ⟨b, hab, Iio_subset_Iio_union_Ico.trans (union_subset hs.2 hbs)⟩
 
 中文:
 定理 hasBasis_nhdsSet_Iic_Iio
@@ -788,7 +788,7 @@ theorem hasBasis_nhdsSet_Iic_Iio
   refine ⟨fun s => ⟨fun hs => ?_, fun ⟨b, hab, hb⟩ => mem_of_superset (Iio_mem_nhdsSet_Iic hab) hb⟩⟩
   rw [nhdsSet_Iic]; rw [mem_sup]; rw [mem_principal] at hs
   rcases exists_Ico_subset_of_mem_nhds hs.1 (Set.nonempty_coe_sort.1 h) with ⟨b, hab, hbs⟩
-  exact ⟨b, hab, Iio_subset_Iio_union_Ico.tran
+  exact ⟨b, hab, Iio_subset_Iio_union_Ico.trans (union_subset hs.2 hbs)⟩
 
 Depends on / 依赖: Iio_mem_nhdsSet_Iic, Iio_subset_Iio_union_Ico, Iio_subset_Iio_union_Ico.trans, Set.nonempty_coe_sort, exists_Ico_subset_of_mem_nhds, mem_of_superset, mem_principal, mem_sup, nhdsSet_Iic, nonempty_coe_sort, union_subset
 -/
@@ -810,7 +810,9 @@ theorem hasBasis_nhdsSet_Iic_Iic
     (Filter.nonempty_of_mem (self_mem_nhdsWithin : Ioi a in 𝓝[>] a)).to_subtype
   refine (hasBasis_nhdsSet_Iic_Iio _).to_hasBasis
     (fun c hc => ?_) (fun _ h => ⟨_, h, Iio_subset_Iic_self⟩)
-  simpa only [Iic_subset_Iio] using! Filter.nonempty_of_mem (Ioo_mem_nhdsGT 
+  simpa only [Iic_subset_Iio] using! Filter.nonempty_of_mem (Ioo_mem_nhdsGT hc)
+
+@[simp]
 
 中文:
 定理 hasBasis_nhdsSet_Iic_Iic
@@ -820,7 +822,9 @@ theorem hasBasis_nhdsSet_Iic_Iic
     (Filter.nonempty_of_mem (self_mem_nhdsWithin : Ioi a in 𝓝[>] a)).to_subtype
   refine (hasBasis_nhdsSet_Iic_Iio _).to_hasBasis
     (fun c hc => ?_) (fun _ h => ⟨_, h, Iio_subset_Iic_self⟩)
-  simpa only [Iic_subset_Iio] using! Filter.nonempty_of_mem (Ioo_mem_nhdsGT 
+  simpa only [Iic_subset_Iio] using! Filter.nonempty_of_mem (Ioo_mem_nhdsGT hc)
+
+@[simp]
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, Iic_subset_Iio, Iio_subset_Iic_self, Ioo_mem_nhdsGT, Nonempty, hasBasis_nhdsSet_Iic_Iio, nonempty_of_mem, self_mem_nhdsWithin, to_hasBasis, to_subtype
 -/

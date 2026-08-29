@@ -184,7 +184,14 @@ theorem reduce.red
       split_ifs with h
       · cases hd1
         cases hd2
-      
+        cases h
+        dsimp at *
+        subst_vars
+        apply Red.trans (Red.cons_cons ih)
+        exact Red.Step.cons_not_rev.to_red
+      · exact Red.cons_cons ih
+
+@[to_additive]
 
 中文:
 定理 reduce.red
@@ -204,7 +211,14 @@ theorem reduce.red
       split_ifs with h
       · cases hd1
         cases hd2
-      
+        cases h
+        dsimp at *
+        subst_vars
+        apply Red.trans (Red.cons_cons ih)
+        exact Red.Step.cons_not_rev.to_red
+      · exact Red.cons_cons ih
+
+@[to_additive]
 
 Depends on / 依赖: Red.Step.cons_not_rev.to_red, Red.cons_cons, Red.trans, cons_cons, cons_not_rev, generalize, revert, split_ifs, to_red
 -/
@@ -248,7 +262,10 @@ theorem reduce.not
       rcases L2 with (_ | ⟨a, L2⟩)
       · injections; subst_vars
         simp at h
-   
+      · refine @reduce.not _ L1 L2 L3 x' b' ?_
+        rw [List.cons_append] at H
+        injection H with _ H
+        rw [r]; rw [H]
 
 中文:
 定理 reduce.not
@@ -264,7 +281,10 @@ theorem reduce.not
       rcases L2 with (_ | ⟨a, L2⟩)
       · injections; subst_vars
         simp at h
-   
+      · refine @reduce.not _ L1 L2 L3 x' b' ?_
+        rw [List.cons_append] at H
+        injection H with _ H
+        rw [r]; rw [H]
 
 Depends on / 依赖: List.length, congr_arg, length
 -/

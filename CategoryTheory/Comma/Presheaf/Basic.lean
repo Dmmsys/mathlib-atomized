@@ -1639,7 +1639,10 @@ refine OverArrows.ext YonedaCollection.ext (by simp) ?_
     apply Quiver.Hom.unop_inj
     simp
   have : F.map (CostructuredArrow.mkPrecomp
-      (YonedaCollection.fst (
+      (YonedaCollection.fst (counitForward F (unop t) x).val) f.unop.left).op
+      (F.map (eqToHom (by simp; rfl)) x) = _ :=
+    map_mkPrecomp_eqToHom (h := by simp)
+  cat_disch
 
 中文:
 引理 counitForward_naturality₂
@@ -1651,7 +1654,10 @@ refine OverArrows.ext YonedaCollection.ext (by simp) ?_
     apply Quiver.Hom.unop_inj
     simp
   have : F.map (CostructuredArrow.mkPrecomp
-      (YonedaCollection.fst (
+      (YonedaCollection.fst (counitForward F (unop t) x).val) f.unop.left).op
+      (F.map (eqToHom (by simp; rfl)) x) = _ :=
+    map_mkPrecomp_eqToHom (h := by simp)
+  cat_disch
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.eq_mk, CostructuredArrow.mkPrecomp, F.map, OverArrows, OverArrows.ext, Quiver, Quiver.Hom.unop_inj, YonedaCollection, YonedaCollection.ext, YonedaCollection.fst, cat_disch, counitForward, eqToHom, eq_mk, f.unop.left, map_mkPrecomp_eqToHom, mkPrecomp, t.unop.hom, unop_inj
 -/

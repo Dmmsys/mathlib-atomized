@@ -819,7 +819,11 @@ theorem leadingCoeff_ne_zero_iff
     rw [leadingCoeff]; rw [← mem_support_iff]; rw [degree]
     suffices f.support.sup m.toSyn in m.toSyn '' f.support by
       obtain ⟨d, hd, hd'⟩ := this
-      rw [←
+      rw [← hd']; rw [AddEquiv.symm_apply_apply]
+      exact hd
+    exact Finset.sup_mem_of_nonempty hf
+
+@[simp]
 
 中文:
 定理 leadingCoeff_ne_zero_iff
@@ -834,7 +838,11 @@ theorem leadingCoeff_ne_zero_iff
     rw [leadingCoeff]; rw [← mem_support_iff]; rw [degree]
     suffices f.support.sup m.toSyn in m.toSyn '' f.support by
       obtain ⟨d, hd, hd'⟩ := this
-      rw [←
+      rw [← hd']; rw [AddEquiv.symm_apply_apply]
+      exact hd
+    exact Finset.sup_mem_of_nonempty hf
+
+@[simp]
 
 Depends on / 依赖: AddEquiv, AddEquiv.symm_apply_apply, Finset, Finset.sup_mem_of_nonempty, degree, f.support, f.support.sup, leadingCoeff, leadingCoeff_zero, m.toSyn, mem_support_iff, not_imp_not, sup_mem_of_nonempty, support, support_nonempty, symm_apply_apply
 -/
@@ -973,7 +981,11 @@ theorem degree_eq_zero_iff_totalDegree_eq_zero
   apply forall_congr'
   intro d
   apply imp_congr (rfl.to_iff)
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [← eq_
+  rw [map_zero]; rw [← m.bot_eq_zero]; rw [← eq_bot_iff]; rw [m.bot_eq_zero]
+  simp only [EmbeddingLike.map_eq_zero_iff]
+  exact Finsupp.ext_iff
+
+@[simp]
 
 中文:
 定理 degree_eq_zero_iff_totalDegree_eq_zero
@@ -986,7 +998,11 @@ theorem degree_eq_zero_iff_totalDegree_eq_zero
   apply forall_congr'
   intro d
   apply imp_congr (rfl.to_iff)
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [← eq_
+  rw [map_zero]; rw [← m.bot_eq_zero]; rw [← eq_bot_iff]; rw [m.bot_eq_zero]
+  simp only [EmbeddingLike.map_eq_zero_iff]
+  exact Finsupp.ext_iff
+
+@[simp]
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.map_eq_zero_iff, Finsupp, Finsupp.ext_iff, bot_eq_zero, degree_le_iff, eq_bot_iff, eq_iff, ext_iff, forall_congr, imp_congr, injective, m.bot_eq_zero, m.toSyn.injective.eq_iff, m.toSyn.map_zero, map_eq_zero_iff, map_zero, rfl.to_iff, to_iff, totalDegree_eq_zero_iff
 -/
@@ -1067,7 +1083,7 @@ theorem eq_C_of_degree_eq_zero
   · rw [coeff_C, if_neg (Ne.symm hd)]
     apply coeff_eq_zero_of_lt (m := m)
     rw [hf]; rw [map_zero]; rw [lt_iff_le_and_ne]; rw [ne_eq]; rw [eq_comm]; rw [EmbeddingLike.map_eq_zero_iff]
-    exact ⟨bot_le, hd
+    exact ⟨bot_le, hd⟩
 
 中文:
 定理 eq_C_of_degree_eq_zero
@@ -1081,7 +1097,7 @@ theorem eq_C_of_degree_eq_zero
   · rw [coeff_C, if_neg (Ne.symm hd)]
     apply coeff_eq_zero_of_lt (m := m)
     rw [hf]; rw [map_zero]; rw [lt_iff_le_and_ne]; rw [ne_eq]; rw [eq_comm]; rw [EmbeddingLike.map_eq_zero_iff]
-    exact ⟨bot_le, hd
+    exact ⟨bot_le, hd⟩
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.map_eq_zero_iff, IsDiscrete, IsDiscrete.image_of_isOpenMap, IsOpenMap, IsOpenMap.of_inverse, Ne.symm, SetLike, SetLike.coe_sort_coe, bot_le, classical, coe_sort_coe, coeff_C, coeff_eq_zero_of_lt, continuous_const_smul, eq_comm, if_neg, image_of_isOpenMap, isDiscrete_iff_discreteTopology, leadingCoeff
 -/
@@ -1133,7 +1149,7 @@ theorem degree_add_le
   · right
     apply m.le_degree
     simp only [notMem_support_iff] at hf
-    simpa only [mem
+    simpa only [mem_support_iff, coeff_add, hf, zero_add] using hb
 
 中文:
 定理 degree_add_le
@@ -1149,7 +1165,7 @@ theorem degree_add_le
   · right
     apply m.le_degree
     simp only [notMem_support_iff] at hf
-    simpa only [mem
+    simpa only [mem_support_iff, coeff_add, hf, zero_add] using hb
 
 Depends on / 依赖: AddEquiv, AddEquiv.apply_symm_apply, apply_symm_apply, coeff_add, conv_rhs, degree_le_iff, f.support, le_degree, le_sup_iff, m.le_degree, m.toSyn.apply_symm_apply, mem_support_iff, notMem_support_iff, support, zero_add
 -/
@@ -1213,7 +1229,11 @@ theorem degree_add_of_lt
     simp only [sup_le_iff, le_refl, true_and, le_of_lt h]
   · apply le_degree
     rw [mem_support_iff]; rw [coeff_add]; rw [m.coeff_eq_zero_of_lt h]; rw [add_zero]; rw [← leadingCoeff]; rw [leadingCoeff_ne_zero_iff]
-  
+    intro hf
+    rw [← not_le]; rw [hf] at h
+    apply h
+    simp only [degree_zero, map_zero]
+    apply bot_le
 
 中文:
 定理 degree_add_of_lt
@@ -1225,7 +1245,11 @@ theorem degree_add_of_lt
     simp only [sup_le_iff, le_refl, true_and, le_of_lt h]
   · apply le_degree
     rw [mem_support_iff]; rw [coeff_add]; rw [m.coeff_eq_zero_of_lt h]; rw [add_zero]; rw [← leadingCoeff]; rw [leadingCoeff_ne_zero_iff]
-  
+    intro hf
+    rw [← not_le]; rw [hf] at h
+    apply h
+    simp only [degree_zero, map_zero]
+    apply bot_le
 
 Depends on / 依赖: add_zero, bot_le, coeff_add, coeff_eq_zero_of_lt, degree_add_le, degree_zero, injective, le_antisymm, le_degree, le_of_lt, le_refl, le_trans, leadingCoeff, leadingCoeff_ne_zero_iff, m.coeff_eq_zero_of_lt, m.toSyn.injective, map_zero, mem_support_iff, not_le, sup_le_iff
 -/
@@ -1361,7 +1385,13 @@ theorem degree_mul_le
   simp only [Finset.mem_antidiagonal] at hde
   dsimp only
   by_cases hd : m.degree f ≺[m] d
-  · rw [m.coeff_eq_zero_of_lt h
+  · rw [m.coeff_eq_zero_of_lt hd, zero_mul]
+  · suffices m.degree g ≺[m] e by
+      rw [m.coeff_eq_zero_of_lt this]; rw [mul_zero]
+    simp only [not_lt] at hd
+    apply lt_of_add_lt_add_left (a := m.toSyn d)
+    grw [← map_add _ _ e, hd, ← map_add, hde]
+    exact hc
 
 中文:
 定理 degree_mul_le
@@ -1378,7 +1408,13 @@ theorem degree_mul_le
   simp only [Finset.mem_antidiagonal] at hde
   dsimp only
   by_cases hd : m.degree f ≺[m] d
-  · rw [m.coeff_eq_zero_of_lt h
+  · rw [m.coeff_eq_zero_of_lt hd, zero_mul]
+  · suffices m.degree g ≺[m] e by
+      rw [m.coeff_eq_zero_of_lt this]; rw [mul_zero]
+    simp only [not_lt] at hd
+    apply lt_of_add_lt_add_left (a := m.toSyn d)
+    grw [← map_add _ _ e, hd, ← map_add, hde]
+    exact hc
 
 Depends on / 依赖: Finset, Finset.mem_antidiagonal, Finset.sum_eq_zero, classical, coeff_eq_zero_of_lt, coeff_mul, degree, degree_le_iff, lt_of_add_lt_add_left, m.coeff_eq_zero_of_lt, m.degree, m.toSyn, map_add, mem_antidiagonal, mem_support_iff, mul_zero, not_imp_not, not_lt, sum_eq_zero, zero_mul
 -/
@@ -1417,7 +1453,20 @@ theorem coeff_mul_of_add_of_degree_le
     by_cases hf : m.degree f ≺[m] c
     · rw [m.coeff_eq_zero_of_lt hf, zero_mul]
     · suffices m.degree g ≺[m] d by
-        rw [coeff_eq_zero_of_lt this]; r
+        rw [coeff_eq_zero_of_lt this]; rw [mul_zero]
+      rw [not_lt] at hf
+      rw [← not_le]
+      intro hf'
+      apply h
+      suffices c = a by
+        simpa [Prod.mk.injEq, this] using hcd
+      apply m.toSyn.injective
+      apply le_antisymm (le_trans hf ha)
+      apply le_of_add_le_add_right (a := m.toSyn b)
+      rw [← map_add]; rw [← hcd]; rw [map_add]
+      simp only [add_le_add_iff_left]
+      exact le_trans hf' hb
+  · simp
 
 中文:
 定理 coeff_mul_of_add_of_degree_le
@@ -1430,7 +1479,20 @@ theorem coeff_mul_of_add_of_degree_le
     by_cases hf : m.degree f ≺[m] c
     · rw [m.coeff_eq_zero_of_lt hf, zero_mul]
     · suffices m.degree g ≺[m] d by
-        rw [coeff_eq_zero_of_lt this]; r
+        rw [coeff_eq_zero_of_lt this]; rw [mul_zero]
+      rw [not_lt] at hf
+      rw [← not_le]
+      intro hf'
+      apply h
+      suffices c = a by
+        simpa [Prod.mk.injEq, this] using hcd
+      apply m.toSyn.injective
+      apply le_antisymm (le_trans hf ha)
+      apply le_of_add_le_add_right (a := m.toSyn b)
+      rw [← map_add]; rw [← hcd]; rw [map_add]
+      simp only [add_le_add_iff_left]
+      exact le_trans hf' hb
+  · simp
 
 Depends on / 依赖: Finset, Finset.mem_antidiagonal, Finset.sum_eq_single, Prod.mk.injEq, classical, coeff_eq_zero_of_lt, coeff_mul, degree, injective, le_antisymm, le_of_add_le_add_right, le_trans, m.coeff_eq_zero_of_lt, m.degree, m.toSyn, m.toSyn.injective, mem_antidiagonal, mul_zero, not_le, not_lt
 -/
@@ -1759,7 +1821,7 @@ theorem Monic.mul
     rw [Monic]; rw [MonomialOrder.leadingCoeff]; rw [degree_mul_of_mul_leadingCoeff_ne_zero]; rw [coeff_mul_of_degree_add]; rw [this]
     rw [this]
     exact one_ne_zero
-  rw [hf.leadingCoeff_eq_one]; rw [hg.leadingCoeff_eq_o
+  rw [hf.leadingCoeff_eq_one]; rw [hg.leadingCoeff_eq_one]; rw [one_mul]
 
 中文:
 定理 Monic.mul
@@ -1770,7 +1832,7 @@ theorem Monic.mul
     rw [Monic]; rw [MonomialOrder.leadingCoeff]; rw [degree_mul_of_mul_leadingCoeff_ne_zero]; rw [coeff_mul_of_degree_add]; rw [this]
     rw [this]
     exact one_ne_zero
-  rw [hf.leadingCoeff_eq_one]; rw [hg.leadingCoeff_eq_o
+  rw [hf.leadingCoeff_eq_one]; rw [hg.leadingCoeff_eq_one]; rw [one_mul]
 -/
 theorem Monic.mul {f g : MvPolynomial σ R} (hf : m.Monic f) (hg : m.Monic g) :
     m.Monic (f * g) := by
@@ -2099,7 +2161,7 @@ theorem degree_smul_of_mem_nonZeroDivisors
   apply le_degree
   simp only [mem_support_iff, smul_eq_C_mul]
   rw [← zero_add (degree m f)]; rw [← degree_C r]; rw [coeff_mul_of_degree_add]
-  simp [not_imp_not.mpr ((mem_nonZeroDivisors_iff.mp hr).
+  simp [not_imp_not.mpr ((mem_nonZeroDivisors_iff.mp hr).1 _) <| m.leadingCoeff_ne_zero_iff.mpr hf]
 
 中文:
 定理 degree_smul_of_mem_nonZeroDivisors
@@ -2112,7 +2174,7 @@ theorem degree_smul_of_mem_nonZeroDivisors
   apply le_degree
   simp only [mem_support_iff, smul_eq_C_mul]
   rw [← zero_add (degree m f)]; rw [← degree_C r]; rw [coeff_mul_of_degree_add]
-  simp [not_imp_not.mpr ((mem_nonZeroDivisors_iff.mp hr).
+  simp [not_imp_not.mpr ((mem_nonZeroDivisors_iff.mp hr).1 _) <| m.leadingCoeff_ne_zero_iff.mpr hf]
 
 Depends on / 依赖: coeff_mul_of_degree_add, degree, degree_C, degree_smul_le, injective, le_antisymm, le_degree, leadingCoeff_ne_zero_iff, m.leadingCoeff_ne_zero_iff.mpr, m.toSyn.injective, mem_nonZeroDivisors_iff, mem_nonZeroDivisors_iff.mp, mem_support_iff, not_imp_not, not_imp_not.mpr, smul_eq_C_mul, zero_add
 -/
@@ -2162,7 +2224,7 @@ theorem degree_prod_le
   | insert a s has hrec =>
     rw [Finset.prod_insert has]; rw [Finset.sum_insert has]
     apply le_trans degree_mul_le
-    simp
+    simp only [map_add, add_le_add_iff_left, hrec]
 
 中文:
 定理 degree_prod_le
@@ -2176,7 +2238,7 @@ theorem degree_prod_le
   | insert a s has hrec =>
     rw [Finset.prod_insert has]; rw [Finset.sum_insert has]
     apply le_trans degree_mul_le
-    simp
+    simp only [map_add, add_le_add_iff_left, hrec]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.prod_empty, Finset.prod_insert, Finset.sum_empty, Finset.sum_insert, add_le_add_iff_left, classical, degree_C, degree_mul_le, induction_on, insert, le_trans, m.degree_C, map_add, map_zero, prod_empty, prod_insert, sum_empty, sum_insert
 -/
@@ -2244,7 +2306,7 @@ theorem degree_prod_of_mem_nonZeroDivisors
     apply m.toSyn.injective
     refine le_antisymm degree_prod_le (m.le_degree ?_)
     rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
-    exact nonZeroDivisors.ne_zero (prod_m
+    exact nonZeroDivisors.ne_zero (prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors H)
 
 中文:
 定理 degree_prod_of_mem_nonZeroDivisors
@@ -2256,7 +2318,7 @@ theorem degree_prod_of_mem_nonZeroDivisors
     apply m.toSyn.injective
     refine le_antisymm degree_prod_le (m.le_degree ?_)
     rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
-    exact nonZeroDivisors.ne_zero (prod_m
+    exact nonZeroDivisors.ne_zero (prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors H)
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.topologicalGroup, MvPolynomial, S.subtype, Subsingleton, Subsingleton.elim, coeff_prod_sum_degree, degree_prod_le, injective, le_antisymm, le_degree, m.coeff_prod_sum_degree, m.le_degree, m.toSyn.injective, mem_support_iff, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors, subsingleton_or_nontrivial
 -/
@@ -3332,7 +3394,7 @@ lemma withBotDegree_mul_of_left_mem_nonZeroDivisors
   suffices f * g != 0 by simp [withBotDegree_eq, m.degree_mul_of_left_mem_nonZeroDivisors hf, *]
   apply mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors at hf
   rw [mem_nonZeroDivisors_iff_left] at hf
-  ta
+  tauto
 
 中文:
 引理 withBotDegree_mul_of_left_mem_nonZeroDivisors
@@ -3344,7 +3406,7 @@ lemma withBotDegree_mul_of_left_mem_nonZeroDivisors
   suffices f * g != 0 by simp [withBotDegree_eq, m.degree_mul_of_left_mem_nonZeroDivisors hf, *]
   apply mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors at hf
   rw [mem_nonZeroDivisors_iff_left] at hf
-  ta
+  tauto
 
 Depends on / 依赖: classical, degree_mul_of_left_mem_nonZeroDivisors, m.degree_mul_of_left_mem_nonZeroDivisors, mem_nonZeroDivisors_iff_left, mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors, withBotDegree_eq
 -/
@@ -3679,7 +3741,10 @@ lemma withBotDegree_add_of_lt
   · simp [hg]
   simp only [withBotDegree_lt_withBotDegree_iff, hg, ne_eq, false_and, or_false] at h
   simp only [withBotDegree_eq_withBotDegree_iff, show f != 0 by contrapose h; simp [h], iff_false]
-  apply (show forall {p q}, p -> (p -> q) -> (p ∧ q) by tauto) (m.degree_add
+  apply (show forall {p q}, p -> (p -> q) -> (p ∧ q) by tauto) (m.degree_add_of_lt h)
+  intro h'
+  contrapose! h
+  simp [← h', h]
 
 中文:
 引理 withBotDegree_add_of_lt
@@ -3689,7 +3754,10 @@ lemma withBotDegree_add_of_lt
   · simp [hg]
   simp only [withBotDegree_lt_withBotDegree_iff, hg, ne_eq, false_and, or_false] at h
   simp only [withBotDegree_eq_withBotDegree_iff, show f != 0 by contrapose h; simp [h], iff_false]
-  apply (show forall {p q}, p -> (p -> q) -> (p ∧ q) by tauto) (m.degree_add
+  apply (show forall {p q}, p -> (p -> q) -> (p ∧ q) by tauto) (m.degree_add_of_lt h)
+  intro h'
+  contrapose! h
+  simp [← h', h]
 
 Depends on / 依赖: contrapose, degree_add_of_lt, false_and, iff_false, m.degree_add_of_lt, ne_eq, or_false, withBotDegree_eq_withBotDegree_iff, withBotDegree_lt_withBotDegree_iff
 -/
@@ -4079,7 +4147,7 @@ theorem degree_sub_leadingTerm_lt_degree
     simp only [EmbeddingLike.apply_eq_iff_eq] at h'
     apply m.degree_mem_support at hl
     rw [h']; rw [mem_support_iff] at hl
-    
+    simp [leadingTerm, leadingCoeff] at hl
 
 中文:
 定理 degree_sub_leadingTerm_lt_degree
@@ -4093,7 +4161,7 @@ theorem degree_sub_leadingTerm_lt_degree
     simp only [EmbeddingLike.apply_eq_iff_eq] at h'
     apply m.degree_mem_support at hl
     rw [h']; rw [mem_support_iff] at hl
-    
+    simp [leadingTerm, leadingCoeff] at hl
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, apply_eq_iff_eq, classical, degree_mem_support, degree_sub_leadingTerm_le, leadingCoeff, leadingTerm, lt_of_le_of_ne, m.degree_mem_support, m.degree_sub_leadingTerm_le, m.leadingTerm, mem_support_iff, toSyn_lt_iff_ne_zero
 -/
@@ -4320,7 +4388,12 @@ lemma degree_sPolynomial
     nth_rewrite 1 [degree_eq_zero_iff.mp h₁]
     nth_rewrite 2 [degree_eq_zero_iff.mp h₂]
     ring
-  · rw [or_if
+  · rw [or_iff_not_imp_right]
+    intro hs
+    apply (m.degree_sPolynomial_le f g).lt_of_ne
+    apply m.toSyn.injective.ne
+    contrapose hs
+    rw [← m.coeff_degree_eq_zero_iff]; rw [hs]; rw [m.coeff_sPolynomial_sup_eq_zero]
 
 中文:
 引理 degree_sPolynomial
@@ -4333,7 +4406,12 @@ lemma degree_sPolynomial
     nth_rewrite 1 [degree_eq_zero_iff.mp h₁]
     nth_rewrite 2 [degree_eq_zero_iff.mp h₂]
     ring
-  · rw [or_if
+  · rw [or_iff_not_imp_right]
+    intro hs
+    apply (m.degree_sPolynomial_le f g).lt_of_ne
+    apply m.toSyn.injective.ne
+    contrapose hs
+    rw [← m.coeff_degree_eq_zero_iff]; rw [hs]; rw [m.coeff_sPolynomial_sup_eq_zero]
 
 Depends on / 依赖: coeff_degree_eq_zero_iff, coeff_sPolynomial_sup_eq_zero, continuous_neg, contrapose, degree, degree_eq_zero_iff, degree_eq_zero_iff.mp, degree_sPolynomial_le, injective, leadingCoeff, lt_of_ne, m.coeff_degree_eq_zero_iff, m.coeff_sPolynomial_sup_eq_zero, m.degree, m.degree_sPolynomial_le, m.leadingCoeff, m.toSyn.injective.ne, nth_rewrite, or_iff_not_imp_right, sPolynomial_def
 -/
@@ -4408,7 +4486,11 @@ lemma sPolynomial_monomial_mul
   rcases H with ⟨hc1, hc2, hp1, hp2⟩
   have hm1 := (monomial_eq_zero (s := d₁)).not.mpr hc1
   have hm2 := (monomial_eq_zero (s := d₂)).not.mpr hc2
-
+  simp_rw [m.degree_mul hm1 hp1, m.degree_mul hm2 hp2,
+    mul_sub, ← mul_assoc _ _ p₁, ← mul_assoc _ _ p₂, monomial_mul,
+    m.leadingCoeff_mul, m.leadingCoeff_monomial,
+    degree_monomial, hc1, hc2, reduceIte, mul_right_comm, mul_comm c₂ c₁]
+  rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_eq_add_tsub le_sup_left]; rw [tsub_add_eq_add_tsub le_sup_right]; rw [add_comm d₁]; rw [add_comm d₂]; rw [add_tsub_add_eq_tsub_right]; rw [add_tsub_add_eq_tsub_right]
 
 中文:
 引理 sPolynomial_monomial_mul
@@ -4421,7 +4503,11 @@ lemma sPolynomial_monomial_mul
   rcases H with ⟨hc1, hc2, hp1, hp2⟩
   have hm1 := (monomial_eq_zero (s := d₁)).not.mpr hc1
   have hm2 := (monomial_eq_zero (s := d₂)).not.mpr hc2
-
+  simp_rw [m.degree_mul hm1 hp1, m.degree_mul hm2 hp2,
+    mul_sub, ← mul_assoc _ _ p₁, ← mul_assoc _ _ p₂, monomial_mul,
+    m.leadingCoeff_mul, m.leadingCoeff_monomial,
+    degree_monomial, hc1, hc2, reduceIte, mul_right_comm, mul_comm c₂ c₁]
+  rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_eq_add_tsub le_sup_left]; rw [tsub_add_eq_add_tsub le_sup_right]; rw [add_comm d₁]; rw [add_comm d₂]; rw [add_tsub_add_eq_tsub_right]; rw [add_tsub_add_eq_tsub_right]
 
 Depends on / 依赖: classical, degree_monomial, degree_mul, distrib, leadingCoeff_monomial, leadingCoeff_mul, m.degree_mul, m.leadingCoeff_monomial, m.leadingCoeff_mul, monomial_eq_zero, monomial_mul, mul_assoc, mul_right_comm, mul_sub, not.mpr, reduceIte, sPolynomial_def, simp_rw
 -/
@@ -4548,7 +4634,32 @@ lemma sPolynomial_decomposition
     · simp_all
     simp? [Finset.sum_insert hb, hb0] at hfd hd says
       simp only [Finset.sum_insert hb, Finset.mem_insert, forall_eq_or_imp, hb0, or_false]
-        at hf
+        at hfd hd
+    obtain ⟨⟨rfl, isunit_gb⟩, hd⟩ := hd
+    use fun b₁ b₂ => if b₂ = b then ↑isunit_gb.unit⁻¹ else 0
+    simp? [Finset.sum_insert hb, hb] says
+      simp only [Finset.sum_insert hb, ite_smul, zero_smul, ↓reduceIte, Finset.sum_ite_eq', hb,
+        add_zero, sPolynomial_self, smul_zero, zero_add]
+    simp only [m.toSyn.injective.eq_iff] at *
+    trans ∑ b' in B, (g b' - (m.leadingCoeff (g b') * ↑isunit_gb.unit⁻¹) • g b)
+    · suffices (-(∑ i in B, m.leadingCoeff (g i))) = m.leadingCoeff (g b) by
+        rw [add_comm]; rw [Finset.sum_sub_distrib]; rw [sub_eq_add_neg]; rw [← Finset.sum_smul]; rw [← Finset.sum_mul]; rw [← neg_smul]; rw [← neg_mul]; rw [this]; rw [isunit_gb.mul_val_inv]; rw [one_smul]
+      rw [← add_eq_zero_iff_neg_eq']
+      trans (g b).coeff (m.degree <| g b) + ∑ i in B, (g i).coeff (m.degree <| g b)
+      · unfold leadingCoeff
+        congr 1
+        apply Finset.sum_congr rfl
+        intro b' hb'
+        rcases hd b' hb' with h | h <;> simp [h]
+      · rw [← coeff_sum, ← coeff_add, ← notMem_support_iff]
+        exact m.notMem_support_of_degree_lt hfd
+    · apply Finset.sum_congr rfl
+      intro b' hb'
+      rw [sPolynomial]
+      obtain (⟨h, -⟩ | h) := hd b' hb' <;>
+        simp [h, ← smul_eq_C_mul, smul_sub, ← mul_smul, mul_comm (m.leadingCoeff (g b'))]
+
+@[simp]
 
 中文:
 引理 sPolynomial_decomposition
@@ -4562,7 +4673,32 @@ lemma sPolynomial_decomposition
     · simp_all
     simp? [Finset.sum_insert hb, hb0] at hfd hd says
       simp only [Finset.sum_insert hb, Finset.mem_insert, forall_eq_or_imp, hb0, or_false]
-        at hf
+        at hfd hd
+    obtain ⟨⟨rfl, isunit_gb⟩, hd⟩ := hd
+    use fun b₁ b₂ => if b₂ = b then ↑isunit_gb.unit⁻¹ else 0
+    simp? [Finset.sum_insert hb, hb] says
+      simp only [Finset.sum_insert hb, ite_smul, zero_smul, ↓reduceIte, Finset.sum_ite_eq', hb,
+        add_zero, sPolynomial_self, smul_zero, zero_add]
+    simp only [m.toSyn.injective.eq_iff] at *
+    trans ∑ b' in B, (g b' - (m.leadingCoeff (g b') * ↑isunit_gb.unit⁻¹) • g b)
+    · suffices (-(∑ i in B, m.leadingCoeff (g i))) = m.leadingCoeff (g b) by
+        rw [add_comm]; rw [Finset.sum_sub_distrib]; rw [sub_eq_add_neg]; rw [← Finset.sum_smul]; rw [← Finset.sum_mul]; rw [← neg_smul]; rw [← neg_mul]; rw [this]; rw [isunit_gb.mul_val_inv]; rw [one_smul]
+      rw [← add_eq_zero_iff_neg_eq']
+      trans (g b).coeff (m.degree <| g b) + ∑ i in B, (g i).coeff (m.degree <| g b)
+      · unfold leadingCoeff
+        congr 1
+        apply Finset.sum_congr rfl
+        intro b' hb'
+        rcases hd b' hb' with h | h <;> simp [h]
+      · rw [← coeff_sum, ← coeff_add, ← notMem_support_iff]
+        exact m.notMem_support_of_degree_lt hfd
+    · apply Finset.sum_congr rfl
+      intro b' hb'
+      rw [sPolynomial]
+      obtain (⟨h, -⟩ | h) := hd b' hb' <;>
+        simp [h, ← smul_eq_C_mul, smul_sub, ← mul_smul, mul_comm (m.leadingCoeff (g b'))]
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.sum_insert, Finset.sum_ite_eq, add_zero, classical, forall_eq_or_imp, induction_on, insert, isunit_gb, isunit_gb.unit, ite_smul, mem_insert, or_false, reduceIte, sum_insert, sum_ite_eq, zero_smul
 -/

@@ -50,7 +50,14 @@ definition double
     rintro i j k hij hjk
     dsimp
     by_cases hi : i = i₀
-    ·
+    · subst hi
+      by_cases hj : j = i₁
+      · subst hj
+        nth_rw 2 [dif_neg (by tauto)]
+        rw [comp_zero]
+      · rw [dif_neg (by tauto), zero_comp]
+    · rw [dif_neg (by tauto), zero_comp]
+  shape i j hij := dif_neg (by aesop)
 
 中文:
 定义 double
@@ -66,7 +73,14 @@ definition double
     rintro i j k hij hjk
     dsimp
     by_cases hi : i = i₀
-    ·
+    · subst hi
+      by_cases hj : j = i₁
+      · subst hj
+        nth_rw 2 [dif_neg (by tauto)]
+        rw [comp_zero]
+      · rw [dif_neg (by tauto), zero_comp]
+    · rw [dif_neg (by tauto), zero_comp]
+  shape i j hij := dif_neg (by aesop)
 -/
 noncomputable def double : HomologicalComplex C c where
   X k := if k = i₀ then X₀ else if k = i₁ then X₁ else 0
@@ -307,7 +321,17 @@ definition mkHomFromDouble
   comm' k₀ k₁ hk := by
     by_cases h₀ : k₀ = i₀
     · subst h₀
-    
+      rw [dif_pos rfl]
+      obtain rfl := c.next_eq hk hi₀₁
+      simp [dif_neg h.symm, double_d f hi₀₁ h, comm]
+    · rw [dif_neg h₀]
+      by_cases h₁ : k₀ = i₁
+      · subst h₁
+        dsimp
+        rw [if_pos rfl]; rw [comp_id]; rw [id_comp]; rw [assoc]; rw [hφ k₁ hk]; rw [comp_zero]; rw [double_d_eq_zero₀ _ _ _ _ h.symm]; rw [zero_comp]
+      · apply (isZero_double_X f hi₀₁ k₀ h₀ h₁).eq_of_src
+
+@[simp, reassoc]
 
 中文:
 定义 mkHomFromDouble
@@ -320,7 +344,17 @@ definition mkHomFromDouble
   comm' k₀ k₁ hk := by
     by_cases h₀ : k₀ = i₀
     · subst h₀
-    
+      rw [dif_pos rfl]
+      obtain rfl := c.next_eq hk hi₀₁
+      simp [dif_neg h.symm, double_d f hi₀₁ h, comm]
+    · rw [dif_neg h₀]
+      by_cases h₁ : k₀ = i₁
+      · subst h₁
+        dsimp
+        rw [if_pos rfl]; rw [comp_id]; rw [id_comp]; rw [assoc]; rw [hφ k₁ hk]; rw [comp_zero]; rw [double_d_eq_zero₀ _ _ _ _ h.symm]; rw [zero_comp]
+      · apply (isZero_double_X f hi₀₁ k₀ h₀ h₁).eq_of_src
+
+@[simp, reassoc]
 
 Depends on / 依赖: c.next_eq, comp_, comp_id, dif_neg, dif_pos, double_d, eqToHom, h.symm, id_comp, if_pos, next_eq
 -/

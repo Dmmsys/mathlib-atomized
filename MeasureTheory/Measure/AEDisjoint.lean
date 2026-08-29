@@ -53,7 +53,15 @@ theorem exists_null_pairwise_disjoint_sdiff
     measurableSet_toMeasurable _ _, fun i => ?_, ?_⟩
   · simp only [measure_toMeasurable, inter_iUnion]
     exact (measure_biUnion_null_iff <| to_countable _).2 fun j hj => hd (Ne.symm hj)
-  · simp only [Pairwise, 
+  · simp only [Pairwise, disjoint_left, onFun, mem_sdiff, not_and, and_imp, Classical.not_not]
+    intro i j hne x hi hU hj
+    replace hU : x ∉ s i inter iUnion fun j => iUnion fun _ => s j :=
+      fun h => hU (subset_toMeasurable _ _ h)
+    simp only [mem_inter_iff, mem_iUnion, not_and, not_exists] at hU
+    exact (hU hi j hne.symm hj).elim
+
+@[deprecated (since := "2026-06-03")]
+alias exists_null_pairwise_disjoint_diff := exists_null_pairwise_disjoint_sdiff
 
 中文:
 定理 存在_null_pairwise_disjoint_sdiff
@@ -63,7 +71,15 @@ theorem exists_null_pairwise_disjoint_sdiff
     measurableSet_toMeasurable _ _, fun i => ?_, ?_⟩
   · simp only [measure_toMeasurable, inter_iUnion]
     exact (measure_biUnion_null_iff <| to_countable _).2 fun j hj => hd (Ne.symm hj)
-  · simp only [Pairwise, 
+  · simp only [Pairwise, disjoint_left, onFun, mem_sdiff, not_and, and_imp, Classical.not_not]
+    intro i j hne x hi hU hj
+    replace hU : x ∉ s i inter iUnion fun j => iUnion fun _ => s j :=
+      fun h => hU (subset_toMeasurable _ _ h)
+    simp only [mem_inter_iff, mem_iUnion, not_and, not_exists] at hU
+    exact (hU hi j hne.symm hj).elim
+
+@[deprecated (since := "2026-06-03")]
+alias exists_null_pairwise_disjoint_diff := exists_null_pairwise_disjoint_sdiff
 
 Depends on / 依赖: Classical, Classical.not_not, Ne.symm, Pairwise, and_imp, disjoint_left, iUnion, inter_iUnion, measurableSet_toMeasurable, measure_biUnion_null_iff, measure_toMeasurable, mem_sdiff, not_and, not_not, replace, subset_toMeasurable, toMeasurable, to_countable
 -/

@@ -96,7 +96,9 @@ lemma arithGeom_eq_add_sum
   | succ n hn =>
     rw [arithGeom_succ]; rw [hn]; rw [mul_add]; rw [← mul_assoc]; rw [add_comm n]; rw [pow_add]; rw [pow_one]; rw [add_assoc]
     congr
-    rw [add_comm _ n]; rw [Finset.sum_range_succ']; rw [Finset.mul_sum]; rw [pow_zero]; rw [mul_add]; rw [mu
+    rw [add_comm _ n]; rw [Finset.sum_range_succ']; rw [Finset.mul_sum]; rw [pow_zero]; rw [mul_add]; rw [mul_one]; rw [Finset.mul_sum]; rw [Finset.mul_sum]
+    congr with k
+    ring
 
 中文:
 引理 arithGeom_eq_add_sum
@@ -107,7 +109,9 @@ lemma arithGeom_eq_add_sum
   | succ n hn =>
     rw [arithGeom_succ]; rw [hn]; rw [mul_add]; rw [← mul_assoc]; rw [add_comm n]; rw [pow_add]; rw [pow_one]; rw [add_assoc]
     congr
-    rw [add_comm _ n]; rw [Finset.sum_range_succ']; rw [Finset.mul_sum]; rw [pow_zero]; rw [mul_add]; rw [mu
+    rw [add_comm _ n]; rw [Finset.sum_range_succ']; rw [Finset.mul_sum]; rw [pow_zero]; rw [mul_add]; rw [mul_one]; rw [Finset.mul_sum]; rw [Finset.mul_sum]
+    congr with k
+    ring
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_range_succ, add_assoc, add_comm, arithGeom_succ, category, mul_add, mul_assoc, mul_one, mul_sum, pow_add, pow_one, pow_zero, sum_range_succ
 -/

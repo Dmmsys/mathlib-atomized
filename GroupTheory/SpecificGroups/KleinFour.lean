@@ -338,7 +338,16 @@ definition mulEquiv'
     by_cases hx : x = 1 <;> by_cases hy : y = 1
     all_goals try simp only [hx, hy, mul_one, one_mul, Equiv.toFun_as_coe, he]
     by_cases hxy : x = y
-    · simp [hxy, mul_self, ← pow_two (
+    · simp [hxy, mul_self, ← pow_two (e y), h ▸ Monoid.pow_exponent_eq_one (e y), he]
+    · classical
+      have univ₂ : {e (x * y), e x, e y, (1 : G₂)} = Finset.univ := by
+        simpa [map_univ_equiv e, map_insert, he]
+          using congr(Finset.map e.toEmbedding $(eq_finset_univ hx hy hxy))
+      rw [← Ne]; rw [← e.injective.ne_iff] at hx hy hxy
+      rw [he] at hx hy
+      symm
+apply eq_of_mem_insert_of_notMem univ₂.symm ▸ mem_univ _
+      simpa using mul_notMem_of_exponent_two h hx hy hxy
 
 中文:
 定义 mulEquiv'
@@ -351,7 +360,16 @@ definition mulEquiv'
     by_cases hx : x = 1 <;> by_cases hy : y = 1
     all_goals try simp only [hx, hy, mul_one, one_mul, Equiv.toFun_as_coe, he]
     by_cases hxy : x = y
-    · simp [hxy, mul_self, ← pow_two (
+    · simp [hxy, mul_self, ← pow_two (e y), h ▸ Monoid.pow_exponent_eq_one (e y), he]
+    · classical
+      have univ₂ : {e (x * y), e x, e y, (1 : G₂)} = Finset.univ := by
+        simpa [map_univ_equiv e, map_insert, he]
+          using congr(Finset.map e.toEmbedding $(eq_finset_univ hx hy hxy))
+      rw [← Ne]; rw [← e.injective.ne_iff] at hx hy hxy
+      rw [he] at hx hy
+      symm
+apply eq_of_mem_insert_of_notMem univ₂.symm ▸ mem_univ _
+      simpa using mul_notMem_of_exponent_two h hx hy hxy
 -/
 def mulEquiv' (e : G₁ ≃ G₂) (he : e 1 = 1) (h : Monoid.exponent G₂ = 2) : G₁ ≃* G₂ where
   toEquiv := e

@@ -101,7 +101,7 @@ theorem isMulCommutative_iff_card_le_two
   rintro ⟨a, b, c, _, _, _, hab, hac, hbc⟩
   apply hbc
   simp_rw [Perm.ext_iff] at h
-  simpa [swap_apply_of_ne_of_ne hab hac] using h (
+  simpa [swap_apply_of_ne_of_ne hab hac] using h (swap a b) (swap b c) a
 
 中文:
 定理 isMulCommutative_iff_card_le_two
@@ -113,7 +113,7 @@ theorem isMulCommutative_iff_card_le_two
   rintro ⟨a, b, c, _, _, _, hab, hac, hbc⟩
   apply hbc
   simp_rw [Perm.ext_iff] at h
-  simpa [swap_apply_of_ne_of_ne hab hac] using h (
+  simpa [swap_apply_of_ne_of_ne hab hac] using h (swap a b) (swap b c) a
 
 Depends on / 依赖: Perm.ext_iff, Set.ncard_univ, Set.two_lt_ncard_iff, classical, ext_iff, isCyclic_of_card_le_two, isMulCommutative, ncard_univ, not_lt, simp_rw, swap_apply_of_ne_of_ne, two_lt_ncard_iff
 -/

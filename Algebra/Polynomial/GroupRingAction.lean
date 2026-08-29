@@ -119,7 +119,7 @@ theorem smul_eval_smul
   statement: (m • f).eval (m • x) = m • f.eval x
   proof: Polynomial.induction_on f (fun r => by rw [smul_C, eval_C, eval_C])
     (fun f g ihf ihg => by rw [smul_add, eval_add, ihf, ihg, eval_add, smul_add]) fun n r _ => by
-    rw [smul_mul']; rw [smul_pow']; rw [smul_C]; rw [smul_X]; rw [eval_mul]; rw [eval_C]; rw [eval_X_pow]; rw [eval_mul]; rw [eval_C];
+    rw [smul_mul']; rw [smul_pow']; rw [smul_C]; rw [smul_X]; rw [eval_mul]; rw [eval_C]; rw [eval_X_pow]; rw [eval_mul]; rw [eval_C]; rw [eval_X_pow]; rw [smul_mul']; rw [smul_pow']
 
 中文:
 定理 smul_eval_smul
@@ -127,7 +127,7 @@ theorem smul_eval_smul
   结论: (m • f).eval (m • x) = m • f.eval x
   证明: Polynomial.induction_on f (fun r => by rw [smul_C, eval_C, eval_C])
     (fun f g ihf ihg => by rw [smul_add, eval_add, ihf, ihg, eval_add, smul_add]) fun n r _ => by
-    rw [smul_mul']; rw [smul_pow']; rw [smul_C]; rw [smul_X]; rw [eval_mul]; rw [eval_C]; rw [eval_X_pow]; rw [eval_mul]; rw [eval_C];
+    rw [smul_mul']; rw [smul_pow']; rw [smul_C]; rw [smul_X]; rw [eval_mul]; rw [eval_C]; rw [eval_X_pow]; rw [eval_mul]; rw [eval_C]; rw [eval_X_pow]; rw [smul_mul']; rw [smul_pow']
 
 Depends on / 依赖: Polynomial, Polynomial.induction_on, eval_C, eval_X_pow, eval_add, eval_mul, induction_on, smul_C, smul_X, smul_add, smul_mul, smul_pow
 -/
@@ -331,7 +331,17 @@ definition noncomputable
       (fun b => by rw [MonoidHom.id_apply, smul_C, map_C, coe_fn_coe, g.map_smul, map_C,
           coe_fn_coe, smul_C])
       (fun p q ihp ihq => by
-        rw [smul_add]; rw [Polynomial.map_add]; rw [ihp]; rw [ihq]; rw [Polynomial.map_add]; rw 
+        rw [smul_add]; rw [Polynomial.map_add]; rw [ihp]; rw [ihq]; rw [Polynomial.map_add]; rw [smul_add])
+      fun n b _ => by rw [MonoidHom.id_apply, smul_mul', smul_C, smul_pow', smul_X,
+        Polynomial.map_mul, map_C, Polynomial.map_pow,
+        map_X, coe_fn_coe, g.map_smul, Polynomial.map_mul, map_C, Polynomial.map_pow, map_X,
+        smul_mul', smul_C, smul_pow', smul_X, coe_fn_coe]
+  map_zero' := Polynomial.map_zero (g : P ->+* Q)
+  map_add' _ _ := Polynomial.map_add (g : P ->+* Q)
+  map_one' := Polynomial.map_one (g : P ->+* Q)
+  map_mul' _ _ := Polynomial.map_mul (g : P ->+* Q)
+
+@[simp]
 
 中文:
 定义 noncomputable
@@ -342,7 +352,17 @@ definition noncomputable
       (fun b => by rw [MonoidHom.id_apply, smul_C, map_C, coe_fn_coe, g.map_smul, map_C,
           coe_fn_coe, smul_C])
       (fun p q ihp ihq => by
-        rw [smul_add]; rw [Polynomial.map_add]; rw [ihp]; rw [ihq]; rw [Polynomial.map_add]; rw 
+        rw [smul_add]; rw [Polynomial.map_add]; rw [ihp]; rw [ihq]; rw [Polynomial.map_add]; rw [smul_add])
+      fun n b _ => by rw [MonoidHom.id_apply, smul_mul', smul_C, smul_pow', smul_X,
+        Polynomial.map_mul, map_C, Polynomial.map_pow,
+        map_X, coe_fn_coe, g.map_smul, Polynomial.map_mul, map_C, Polynomial.map_pow, map_X,
+        smul_mul', smul_C, smul_pow', smul_X, coe_fn_coe]
+  map_zero' := Polynomial.map_zero (g : P ->+* Q)
+  map_add' _ _ := Polynomial.map_add (g : P ->+* Q)
+  map_one' := Polynomial.map_one (g : P ->+* Q)
+  map_mul' _ _ := Polynomial.map_mul (g : P ->+* Q)
+
+@[simp]
 -/
 protected noncomputable def polynomial (g : P ->+*[M] Q) : P[X] ->+*[M] Q[X] where
   toFun := map g

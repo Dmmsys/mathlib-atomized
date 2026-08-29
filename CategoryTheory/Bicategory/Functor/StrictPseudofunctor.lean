@@ -173,7 +173,14 @@ definition mk'
 mapComp f g := eqToIso S.map_comp f g
   map₂_left_unitor f := by
     simpa using S.map₂_left_unitor f
-  
+  map₂_right_unitor f := by
+    simpa using S.map₂_right_unitor f
+  map₂_associator f g h := by
+    simpa using S.map₂_associator f g h
+  map₂_whisker_left f _ _ η := by
+    simpa using S.map₂_whisker_left f η
+  map₂_whisker_right η f := by
+    simpa using S.map₂_whisker_right η f
 
 中文:
 定义 mk'
@@ -190,7 +197,14 @@ mapComp f g := eqToIso S.map_comp f g
 mapComp f g := eqToIso S.map_comp f g
   map₂_left_unitor f := by
     simpa using S.map₂_left_unitor f
-  
+  map₂_right_unitor f := by
+    simpa using S.map₂_right_unitor f
+  map₂_associator f g h := by
+    simpa using S.map₂_associator f g h
+  map₂_whisker_left f _ _ η := by
+    simpa using S.map₂_whisker_left f η
+  map₂_whisker_right η f := by
+    simpa using S.map₂_whisker_right η f
 
 Depends on / 依赖: S.obj, cat_disch, extendIso
 -/
@@ -310,7 +324,9 @@ definition mk''
   map_comp := S.map_comp
 mapComp f g := eqToIso S.map_comp f g
   map₂_whisker_left f _ _ η := by
-    simpa using S.map₂_whisker_l
+    simpa using S.map₂_whisker_left f η
+  map₂_whisker_right η f := by
+    simpa using S.map₂_whisker_right η f
 
 中文:
 定义 mk''
@@ -326,7 +342,9 @@ mapComp f g := eqToIso S.map_comp f g
   map_comp := S.map_comp
 mapComp f g := eqToIso S.map_comp f g
   map₂_whisker_left f _ _ η := by
-    simpa using S.map₂_whisker_l
+    simpa using S.map₂_whisker_left f η
+  map₂_whisker_right η f := by
+    simpa using S.map₂_whisker_right η f
 
 Depends on / 依赖: S.obj
 -/

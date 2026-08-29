@@ -262,7 +262,9 @@ instance :
   refine ⟨?_, ?_⟩
   · exact GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable _
   · intro R S f hf₁ hf₂
-    have : IsRegularEpi (Sp
+    have : IsRegularEpi (Spec.map f) :=
+      isRegularEpi_of_flat_of_surjective_of_isAffine _
+    exact .singleton_of_isRepresentable_of_effectiveEpi _ _
 
 中文:
 实例 :
@@ -273,7 +275,9 @@ instance :
   refine ⟨?_, ?_⟩
   · exact GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable _
   · intro R S f hf₁ hf₂
-    have : IsRegularEpi (Sp
+    have : IsRegularEpi (Spec.map f) :=
+      isRegularEpi_of_flat_of_surjective_of_isAffine _
+    exact .singleton_of_isRepresentable_of_effectiveEpi _ _
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable, GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj, IsRegularEpi, Spec.map, Subcanonical, fpqcTopology_eq_propQCTopology, isRegularEpi_of_flat_of_surjective_of_isAffine, isSheaf_of_isRepresentable, isSheaf_type_propQCTopology_iff, of_isSheaf_yoneda_obj, singleton_of_isRepresentable_of_effectiveEpi
 -/

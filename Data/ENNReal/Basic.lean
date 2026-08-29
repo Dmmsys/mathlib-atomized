@@ -3153,7 +3153,8 @@ theorem lt_iff_exists_rat_btwn
     rcases exists_between h with ⟨c, pc, cb⟩
     rcases lt_iff_exists_coe.1 cb with ⟨r, rfl, _⟩
     rcases (NNReal.lt_iff_exists_rat_btwn _ _).1 (coe_lt_coe.1 pc) with ⟨q, hq0, pq, qr⟩
-    exact ⟨q, hq0, coe_lt_coe.2 pq, lt_trans (coe_lt
+    exact ⟨q, hq0, coe_lt_coe.2 pq, lt_trans (coe_lt_coe.2 qr) cb⟩,
+      fun ⟨_, _, qa, qb⟩ => lt_trans qa qb⟩
 
 中文:
 定理 lt_iff_存在_rat_btwn
@@ -3162,7 +3163,8 @@ theorem lt_iff_exists_rat_btwn
     rcases exists_between h with ⟨c, pc, cb⟩
     rcases lt_iff_exists_coe.1 cb with ⟨r, rfl, _⟩
     rcases (NNReal.lt_iff_exists_rat_btwn _ _).1 (coe_lt_coe.1 pc) with ⟨q, hq0, pq, qr⟩
-    exact ⟨q, hq0, coe_lt_coe.2 pq, lt_trans (coe_lt
+    exact ⟨q, hq0, coe_lt_coe.2 pq, lt_trans (coe_lt_coe.2 qr) cb⟩,
+      fun ⟨_, _, qa, qb⟩ => lt_trans qa qb⟩
 
 Depends on / 依赖: NNReal, NNReal.lt_iff_exists_rat_btwn, coe_lt_coe, exists_between, lt_iff_exists_coe, lt_iff_exists_rat_btwn, lt_trans
 -/

@@ -432,14 +432,14 @@ theorem logMap_real
   given: (c : Real)
   proof: by
   ext
-  rw [logMap_apply]; rw [normAtPlace_smul]; rw [norm_smul]; rw [map_one]; rw [map_one]; rw [mul_one]; rw [mul_one]; rw [Real.log_pow]; rw [mul_comm (finrank Rat K : Real) _]; rw [mul_assoc]; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.mpr finrank_pos.ne')]; rw [mul_one]; rw [sub_self]; rw [mul_ze
+  rw [logMap_apply]; rw [normAtPlace_smul]; rw [norm_smul]; rw [map_one]; rw [map_one]; rw [mul_one]; rw [mul_one]; rw [Real.log_pow]; rw [mul_comm (finrank Rat K : Real) _]; rw [mul_assoc]; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.mpr finrank_pos.ne')]; rw [mul_one]; rw [sub_self]; rw [mul_zero]; rw [Pi.zero_apply]
 
 中文:
 定理 logMap_real
   条件: (c : 实数)
   证明: by
   ext
-  rw [logMap_apply]; rw [normAtPlace_smul]; rw [norm_smul]; rw [map_one]; rw [map_one]; rw [mul_one]; rw [mul_one]; rw [Real.log_pow]; rw [mul_comm (finrank Rat K : Real) _]; rw [mul_assoc]; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.mpr finrank_pos.ne')]; rw [mul_one]; rw [sub_self]; rw [mul_ze
+  rw [logMap_apply]; rw [normAtPlace_smul]; rw [norm_smul]; rw [map_one]; rw [map_one]; rw [mul_one]; rw [mul_one]; rw [Real.log_pow]; rw [mul_comm (finrank Rat K : Real) _]; rw [mul_assoc]; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.mpr finrank_pos.ne')]; rw [mul_one]; rw [sub_self]; rw [mul_zero]; rw [Pi.zero_apply]
 
 Depends on / 依赖: Nat.cast_ne_zero.mpr, Pi.zero_apply, Real.log_pow, cast_ne_zero, finrank, finrank_pos, finrank_pos.ne, logMap_apply, log_pow, map_one, mul_assoc, mul_comm, mul_one, mul_zero, normAtPlace_smul, norm_smul, sub_self, zero_apply
 -/
@@ -544,7 +544,8 @@ theorem measurableSet_fundamentalCone
 refine MeasurableSet.preimage (ZSpan.fundamentalDomain_measurableSet _)
       measurable_pi_iff.mpr fun w => measurable_const.mul ?_
 exact (continuous_normAtPlace _).measurable.log.sub
-      (mixedEmbedding.continuous_norm _).measura
+      (mixedEmbedding.continuous_norm _).measurable.log.mul measurable_const
+  · exact measurableSet_eq_fun (mixedEmbedding.continuous_norm K).measurable measurable_const
 
 中文:
 定理 measurableSet_fundamentalCone
@@ -555,7 +556,8 @@ exact (continuous_normAtPlace _).measurable.log.sub
 refine MeasurableSet.preimage (ZSpan.fundamentalDomain_measurableSet _)
       measurable_pi_iff.mpr fun w => measurable_const.mul ?_
 exact (continuous_normAtPlace _).measurable.log.sub
-      (mixedEmbedding.continuous_norm _).measura
+      (mixedEmbedding.continuous_norm _).measurable.log.mul measurable_const
+  · exact measurableSet_eq_fun (mixedEmbedding.continuous_norm K).measurable measurable_const
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.diff, MeasurableSet.preimage, ZSpan.fundamentalDomain_measurableSet, classical, continuous_norm, continuous_normAtPlace, fundamentalDomain_measurableSet, logMap, measurable, measurable.log.mul, measurable.log.sub, measurableSet_eq_fun, measurable_const, measurable_const.mul, measurable_pi_iff, measurable_pi_iff.mpr, mixedEmbedding, mixedEmbedding.continuous_norm, preimage
 -/
@@ -715,7 +717,8 @@ theorem exists_unit_smul_mem
   let B := (basisUnitLattice K).ofZLatticeBasis Real
   rsuffices ⟨⟨_, ⟨u, _, rfl⟩⟩, hu⟩ : exists e : unitLattice K, e + logMap x in ZSpan.fundamentalDomain B
   · exact ⟨u, by rwa [Set.mem_preimage, logMap_unit_smul u hx], by simp [hx]⟩
-  · obtain ⟨⟨e, h₁⟩, h₂, -⟩ := ZSpan.exist_unique
+  · obtain ⟨⟨e, h₁⟩, h₂, -⟩ := ZSpan.exist_unique_vadd_mem_fundamentalDomain B (logMap x)
+    exact ⟨⟨e, by rwa [← Module.Basis.ofZLatticeBasis_span Real (unitLattice K)]⟩, h₂⟩
 
 中文:
 定理 存在_unit_smul_mem
@@ -725,7 +728,8 @@ theorem exists_unit_smul_mem
   let B := (basisUnitLattice K).ofZLatticeBasis Real
   rsuffices ⟨⟨_, ⟨u, _, rfl⟩⟩, hu⟩ : exists e : unitLattice K, e + logMap x in ZSpan.fundamentalDomain B
   · exact ⟨u, by rwa [Set.mem_preimage, logMap_unit_smul u hx], by simp [hx]⟩
-  · obtain ⟨⟨e, h₁⟩, h₂, -⟩ := ZSpan.exist_unique
+  · obtain ⟨⟨e, h₁⟩, h₂, -⟩ := ZSpan.exist_unique_vadd_mem_fundamentalDomain B (logMap x)
+    exact ⟨⟨e, by rwa [← Module.Basis.ofZLatticeBasis_span Real (unitLattice K)]⟩, h₂⟩
 
 Depends on / 依赖: Module, Module.Basis.ofZLatticeBasis_span, Set.mem_preimage, ZSpan.exist_unique_vadd_mem_fundamentalDomain, ZSpan.fundamentalDomain, basisUnitLattice, classical, exist_unique_vadd_mem_fundamentalDomain, fundamentalDomain, logMap, logMap_unit_smul, mem_preimage, ofZLatticeBasis, ofZLatticeBasis_span, rsuffices, unitLattice
 -/
@@ -783,7 +787,13 @@ theorem unit_smul_mem_iff_mem_torsion
   rw [← logEmbedding_eq_zero_iff]
   let B := (basisUnitLattice K).ofZLatticeBasis Real
 refine (Subtype.mk_eq_mk (h := ?_) (h' := Submodule.zero_mem _)).mp
-    (ZSpan.exist_unique_vadd_mem_fundamentalDomain B (logMap x)).uni
+    (ZSpan.exist_unique_vadd_mem_fundamentalDomain B (logMap x)).unique ?_ ?_
+  · rw [Module.Basis.ofZLatticeBasis_span Real (unitLattice K)]
+    exact ⟨u, trivial, rfl⟩
+  · rw [AddSubmonoid.mk_vadd, vadd_eq_add, ← logMap_unit_smul _ hx.2]
+    exact h.1
+  · rw [AddSubmonoid.mk_vadd, vadd_eq_add, zero_add]
+    exact hx.1
 
 中文:
 定理 unit_smul_mem_iff_mem_torsion
@@ -794,7 +804,13 @@ refine (Subtype.mk_eq_mk (h := ?_) (h' := Submodule.zero_mem _)).mp
   rw [← logEmbedding_eq_zero_iff]
   let B := (basisUnitLattice K).ofZLatticeBasis Real
 refine (Subtype.mk_eq_mk (h := ?_) (h' := Submodule.zero_mem _)).mp
-    (ZSpan.exist_unique_vadd_mem_fundamentalDomain B (logMap x)).uni
+    (ZSpan.exist_unique_vadd_mem_fundamentalDomain B (logMap x)).unique ?_ ?_
+  · rw [Module.Basis.ofZLatticeBasis_span Real (unitLattice K)]
+    exact ⟨u, trivial, rfl⟩
+  · rw [AddSubmonoid.mk_vadd, vadd_eq_add, ← logMap_unit_smul _ hx.2]
+    exact h.1
+  · rw [AddSubmonoid.mk_vadd, vadd_eq_add, zero_add]
+    exact hx.1
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mk_vadd, Module, Module.Basis.ofZLatticeBasis_span, Submodule, Submodule.zero_mem, Subtype, Subtype.mk_eq_mk, ZSpan.exist_unique_vadd_mem_fundamentalDomain, basisUnitLattice, classical, exist_unique_vadd_mem_fundamentalDomain, logEmbedding_eq_zero_iff, logMap, logMap_unit_smul, mk_eq_mk, mk_vadd, ofZLatticeBasis, ofZLatticeBasis_span, torsion_smul_mem_of_mem
 -/
@@ -999,7 +1015,7 @@ theorem exists_unitSMul_mem_integerSet
       (norm_eq_zero_iff' (Set.mem_range_of_mem_image (mixedEmbedding K) _ hx')).not.mpr hx
   obtain ⟨u, hu⟩ := exists_unit_smul_mem hx
   obtain ⟨_, ⟨x, rfl⟩, _, rfl⟩ := hx'
-  exact ⟨u, mem_integerSet.mpr ⟨hu, u * x, by simp_rw [unitSMul_smul, ← map_mul
+  exact ⟨u, mem_integerSet.mpr ⟨hu, u * x, by simp_rw [unitSMul_smul, ← map_mul]⟩⟩
 
 中文:
 定理 存在_unitSMul_mem_integerSet
@@ -1009,7 +1025,7 @@ theorem exists_unitSMul_mem_integerSet
       (norm_eq_zero_iff' (Set.mem_range_of_mem_image (mixedEmbedding K) _ hx')).not.mpr hx
   obtain ⟨u, hu⟩ := exists_unit_smul_mem hx
   obtain ⟨_, ⟨x, rfl⟩, _, rfl⟩ := hx'
-  exact ⟨u, mem_integerSet.mpr ⟨hu, u * x, by simp_rw [unitSMul_smul, ← map_mul
+  exact ⟨u, mem_integerSet.mpr ⟨hu, u * x, by simp_rw [unitSMul_smul, ← map_mul]⟩⟩
 
 Depends on / 依赖: Set.mem_range_of_mem_image, exists_unit_smul_mem, map_mul, mem_integerSet, mem_integerSet.mpr, mem_range_of_mem_image, mixedEmbedding, mixedEmbedding.norm, norm_eq_zero_iff, not.mpr, replace, simp_rw, unitSMul_smul
 -/
@@ -1234,7 +1250,12 @@ theorem integerSetToAssociates_surjective
   obtain ⟨u, hu⟩ : exists u : (𝓞 K)ˣ, u • mixedEmbedding K (x : 𝓞 K) in integerSet K := by
     refine exists_unitSMul_mem_integerSet ?_ ⟨(x : 𝓞 K), Set.mem_range_self _, rfl⟩
 exact (map_ne_zero _).mpr RingOfIntegers.coe_ne_zero_iff.mpr (nonZeroDivisors.coe_ne_zero _)
-  refine ⟨⟨u • m
+  refine ⟨⟨u • mixedEmbedding K (x : 𝓞 K), hu⟩,
+    Quotient.sound ⟨unitsNonZeroDivisorsEquiv.symm u⁻¹, ?_⟩⟩
+  simp_rw [Subtype.ext_iff, RingOfIntegers.ext_iff, ← (mixedEmbedding_injective K).eq_iff,
+    Submonoid.coe_mul, map_mul, mixedEmbedding_preimageOfMemIntegerSet,
+    unitSMul_smul, ← map_mul, mul_comm, map_inv, val_inv_unitsNonZeroDivisorsEquiv_symm_apply_coe,
+    Units.mul_inv_cancel_right]
 
 中文:
 定理 integerSetToAssociates_surjective
@@ -1243,7 +1264,12 @@ exact (map_ne_zero _).mpr RingOfIntegers.coe_ne_zero_iff.mpr (nonZeroDivisors.co
   obtain ⟨u, hu⟩ : exists u : (𝓞 K)ˣ, u • mixedEmbedding K (x : 𝓞 K) in integerSet K := by
     refine exists_unitSMul_mem_integerSet ?_ ⟨(x : 𝓞 K), Set.mem_range_self _, rfl⟩
 exact (map_ne_zero _).mpr RingOfIntegers.coe_ne_zero_iff.mpr (nonZeroDivisors.coe_ne_zero _)
-  refine ⟨⟨u • m
+  refine ⟨⟨u • mixedEmbedding K (x : 𝓞 K), hu⟩,
+    Quotient.sound ⟨unitsNonZeroDivisorsEquiv.symm u⁻¹, ?_⟩⟩
+  simp_rw [Subtype.ext_iff, RingOfIntegers.ext_iff, ← (mixedEmbedding_injective K).eq_iff,
+    Submonoid.coe_mul, map_mul, mixedEmbedding_preimageOfMemIntegerSet,
+    unitSMul_smul, ← map_mul, mul_comm, map_inv, val_inv_unitsNonZeroDivisorsEquiv_symm_apply_coe,
+    Units.mul_inv_cancel_right]
 
 Depends on / 依赖: Quotient, Quotient.sound, RingOfIntegers, RingOfIntegers.coe_ne_zero_iff.mpr, RingOfIntegers.ext_iff, Set.mem_range_self, Submonoid, Submonoid.coe_mul, Subtype, Subtype.ext_iff, coe_mul, coe_ne_zero, coe_ne_zero_iff, eq_iff, exists_unitSMul_mem_integerSet, ext_iff, integerSet, map_mul, map_ne_zero, mem_range_self
 -/
@@ -1270,7 +1296,10 @@ theorem integerSetToAssociates_eq_iff
   simp_rw [integerSetToAssociates_apply, Associates.quotient_mk_eq_mk,
     Associates.mk_eq_mk_iff_associated, Associated, mul_comm, Subtype.ext_iff,
     RingOfIntegers.ext_iff, ← (mixedEmbedding_injective K).eq_iff, Submonoid.coe_mul, map_mul,
-    mixedEmbedding_preimageOfMemIntegerSet, integerS
+    mixedEmbedding_preimageOfMemIntegerSet, integerSetTorsionSMul_smul_coe]
+  refine ⟨fun ⟨u, h⟩ => ⟨⟨unitsNonZeroDivisorsEquiv u, ?_⟩, by simpa using h⟩,
+    fun ⟨⟨u, _⟩, h⟩ => ⟨unitsNonZeroDivisorsEquiv.symm u, by simpa using h⟩⟩
+  exact (unit_smul_mem_iff_mem_torsion a.prop.1 _).mp (by simpa [h] using b.prop.1)
 
 中文:
 定理 integerSetToAssociates_eq_iff
@@ -1279,7 +1308,10 @@ theorem integerSetToAssociates_eq_iff
   simp_rw [integerSetToAssociates_apply, Associates.quotient_mk_eq_mk,
     Associates.mk_eq_mk_iff_associated, Associated, mul_comm, Subtype.ext_iff,
     RingOfIntegers.ext_iff, ← (mixedEmbedding_injective K).eq_iff, Submonoid.coe_mul, map_mul,
-    mixedEmbedding_preimageOfMemIntegerSet, integerS
+    mixedEmbedding_preimageOfMemIntegerSet, integerSetTorsionSMul_smul_coe]
+  refine ⟨fun ⟨u, h⟩ => ⟨⟨unitsNonZeroDivisorsEquiv u, ?_⟩, by simpa using h⟩,
+    fun ⟨⟨u, _⟩, h⟩ => ⟨unitsNonZeroDivisorsEquiv.symm u, by simpa using h⟩⟩
+  exact (unit_smul_mem_iff_mem_torsion a.prop.1 _).mp (by simpa [h] using b.prop.1)
 
 Depends on / 依赖: Associated, Associates, Associates.mk_eq_mk_iff_associated, Associates.quotient_mk_eq_mk, RingOfIntegers, RingOfIntegers.ext_iff, Submonoid, Submonoid.coe_mul, Subtype, Subtype.ext_iff, coe_mul, eq_iff, ext_iff, integerSetToAssociates_apply, integerSetTorsionSMul_smul_coe, map_mul, mixedEmbedding_injective, mixedEmbedding_preimageOfMemIntegerSet, mk_eq_mk_iff_associated, mul_comm
 -/
@@ -1306,7 +1338,10 @@ definition integerSetQuotEquivAssociates
       fun _ _ h => ((integerSetToAssociates_eq_iff _ _).mpr h).symm)
 .mpr by ⟨Setoid.lift_injective_iff_ker_eq_of_le _
         ext a b
-        rw [Setoid.ker_def]; rw [eq_comm]; rw [integerSetToAssociates_eq_iff b a]; rw [MulAction.orbi
+        rw [Setoid.ker_def]; rw [eq_comm]; rw [integerSetToAssociates_eq_iff b a]; rw [MulAction.orbitRel_apply]; rw [MulAction.mem_orbit_iff],
+        (Quot.surjective_lift _).mpr (integerSetToAssociates_surjective K)⟩
+
+@[simp]
 
 中文:
 定义 integerSetQuotEquivAssociates
@@ -1316,7 +1351,10 @@ definition integerSetQuotEquivAssociates
       fun _ _ h => ((integerSetToAssociates_eq_iff _ _).mpr h).symm)
 .mpr by ⟨Setoid.lift_injective_iff_ker_eq_of_le _
         ext a b
-        rw [Setoid.ker_def]; rw [eq_comm]; rw [integerSetToAssociates_eq_iff b a]; rw [MulAction.orbi
+        rw [Setoid.ker_def]; rw [eq_comm]; rw [integerSetToAssociates_eq_iff b a]; rw [MulAction.orbitRel_apply]; rw [MulAction.mem_orbit_iff],
+        (Quot.surjective_lift _).mpr (integerSetToAssociates_surjective K)⟩
+
+@[simp]
 
 Depends on / 依赖: Equiv.ofBijective, MulAction, MulAction.mem_orbit_iff, MulAction.orbitRel_apply, Quot.surjective_lift, Quotient, Quotient.lift, Setoid, Setoid.ker_def, Setoid.lift_injective_iff_ker_eq_of_le, eq_comm, integerSetToAssociates, integerSetToAssociates_eq_iff, integerSetToAssociates_surjective, ker_def, lift_injective_iff_ker_eq_of_le, mem_orbit_iff, ofBijective, orbitRel_apply, surjective_lift
 -/
@@ -1357,7 +1395,9 @@ theorem integerSetTorsionSMul_stabilizer
   refine (Subgroup.eq_bot_iff_forall _).mpr fun ζ hζ => ?_
   rwa [MulAction.mem_stabilizer_iff, Subtype.ext_iff, integerSetTorsionSMul_smul_coe,
     unitSMul_smul, ← mixedEmbedding_preimageOfMemIntegerSet, ← map_mul,
-    (mixedEmbedding_injective K).eq_iff, ← map_mul, ← RingOfIntegers.ext_iff, mu
+    (mixedEmbedding_injective K).eq_iff, ← map_mul, ← RingOfIntegers.ext_iff, mul_eq_right₀,
+    Units.val_eq_one, OneMemClass.coe_eq_one] at hζ
+  exact nonZeroDivisors.coe_ne_zero _
 
 中文:
 定理 integerSetTorsionSMul_stabilizer
@@ -1366,7 +1406,9 @@ theorem integerSetTorsionSMul_stabilizer
   refine (Subgroup.eq_bot_iff_forall _).mpr fun ζ hζ => ?_
   rwa [MulAction.mem_stabilizer_iff, Subtype.ext_iff, integerSetTorsionSMul_smul_coe,
     unitSMul_smul, ← mixedEmbedding_preimageOfMemIntegerSet, ← map_mul,
-    (mixedEmbedding_injective K).eq_iff, ← map_mul, ← RingOfIntegers.ext_iff, mu
+    (mixedEmbedding_injective K).eq_iff, ← map_mul, ← RingOfIntegers.ext_iff, mul_eq_right₀,
+    Units.val_eq_one, OneMemClass.coe_eq_one] at hζ
+  exact nonZeroDivisors.coe_ne_zero _
 
 Depends on / 依赖: MulAction, MulAction.mem_stabilizer_iff, OneMemClass, OneMemClass.coe_eq_one, RingOfIntegers, RingOfIntegers.ext_iff, Subgroup, Subgroup.eq_bot_iff_forall, Subtype, Subtype.ext_iff, Units.val_eq_one, coe_eq_one, coe_ne_zero, eq_bot_iff_forall, eq_iff, ext_iff, integerSetTorsionSMul_smul_coe, map_mul, mem_stabilizer_iff, mixedEmbedding_injective
 -/
@@ -1393,7 +1435,10 @@ definition integerSetEquiv
         intro _
         simp_rw [integerSetTorsionSMul_stabilizer]
         exact QuotientGroup.quotientBot.toEquiv)).trans
-      (Equiv.prodCongrLeft (fun _ => (integerSetQuotEqu
+      (Equiv.prodCongrLeft (fun _ => (integerSetQuotEquivAssociates K).trans
+        (Ideal.associatesNonZeroDivisorsEquivIsPrincipal (𝓞 K)))))
+
+@[simp]
 
 中文:
 定义 integerSetEquiv
@@ -1403,7 +1448,10 @@ definition integerSetEquiv
         intro _
         simp_rw [integerSetTorsionSMul_stabilizer]
         exact QuotientGroup.quotientBot.toEquiv)).trans
-      (Equiv.prodCongrLeft (fun _ => (integerSetQuotEqu
+      (Equiv.prodCongrLeft (fun _ => (integerSetQuotEquivAssociates K).trans
+        (Ideal.associatesNonZeroDivisorsEquivIsPrincipal (𝓞 K)))))
+
+@[simp]
 
 Depends on / 依赖: Equiv.prodCongrLeft, Equiv.sigmaEquivProdOfEquiv, Ideal.associatesNonZeroDivisorsEquivIsPrincipal, MulAction, MulAction.selfEquivSigmaOrbitsQuotientStabilizer, QuotientGroup, QuotientGroup.quotientBot.toEquiv, associatesNonZeroDivisorsEquivIsPrincipal, integerSet, integerSetQuotEquivAssociates, integerSetTorsionSMul_stabilizer, prodCongrLeft, quotientBot, selfEquivSigmaOrbitsQuotientStabilizer, sigmaEquivProdOfEquiv, simp_rw, toEquiv, torsion
 -/
@@ -1446,7 +1494,15 @@ definition integerSetEquivNorm
           absNorm (I.1 : Ideal (𝓞 K)) = n} :=
       Equiv.subtypeEquiv (integerSetEquiv K) fun _ => by simp_rw [← intNorm_coe, intNorm,
         Nat.cast_inj, integerSetEquiv_apply_fst, absNorm_span_singleton]
-    _ ≃ {I : {I : 
+    _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1} // absNorm (I.1 : Ideal (𝓞 K)) = n} ×
+          torsion K := Equiv.prodSubtypeFstEquivSubtypeProd
+      (p := fun I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1} => absNorm (I : Ideal (𝓞 K)) = n)
+    _ ≃ {I : (Ideal (𝓞 K))⁰ // IsPrincipal (I : Ideal (𝓞 K)) ∧
+          absNorm (I : Ideal (𝓞 K)) = n} × (torsion K) := Equiv.prodCongrLeft fun _ =>
+      (Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun I : (Ideal (𝓞 K))⁰ => IsPrincipal I.1) (fun I => absNorm I.1 = n))
+
+@[simp]
 
 中文:
 定义 integerSetEquivNorm
@@ -1456,7 +1512,15 @@ definition integerSetEquivNorm
           absNorm (I.1 : Ideal (𝓞 K)) = n} :=
       Equiv.subtypeEquiv (integerSetEquiv K) fun _ => by simp_rw [← intNorm_coe, intNorm,
         Nat.cast_inj, integerSetEquiv_apply_fst, absNorm_span_singleton]
-    _ ≃ {I : {I : 
+    _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1} // absNorm (I.1 : Ideal (𝓞 K)) = n} ×
+          torsion K := Equiv.prodSubtypeFstEquivSubtypeProd
+      (p := fun I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1} => absNorm (I : Ideal (𝓞 K)) = n)
+    _ ≃ {I : (Ideal (𝓞 K))⁰ // IsPrincipal (I : Ideal (𝓞 K)) ∧
+          absNorm (I : Ideal (𝓞 K)) = n} × (torsion K) := Equiv.prodCongrLeft fun _ =>
+      (Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun I : (Ideal (𝓞 K))⁰ => IsPrincipal I.1) (fun I => absNorm I.1 = n))
+
+@[simp]
 
 Depends on / 依赖: Equiv.prodSubtypeFstEquivSubtypeProd, Equiv.subtypeEquiv, IsPrincipal, Nat.cast_inj, absNorm, absNorm_span_singleton, cast_inj, intNorm, intNorm_coe, integerSetEquiv, integerSetEquiv_apply_fst, prodSubtypeFstEquivSubtypeProd, simp_rw, subtypeEquiv, torsion
 -/
@@ -1566,7 +1630,8 @@ theorem mem_idealSet
   simp_rw [idealSet, Set.mem_inter_iff, idealLattice, SetLike.mem_coe, FractionalIdeal.coe_mk0,
     LinearMap.mem_range, LinearMap.coe_comp, LinearMap.coe_restrictScalars, coe_subtype,
     Function.comp_apply, AlgHom.toLinearMap_apply, RingHom.toIntAlgHom_coe, Subtype.exists,
-    FractionalIdeal.
+    FractionalIdeal.mem_coe, FractionalIdeal.mem_coeIdeal, exists_prop', nonempty_prop,
+    exists_exists_and_eq_and]
 
 中文:
 定理 mem_idealSet
@@ -1574,7 +1639,8 @@ theorem mem_idealSet
   simp_rw [idealSet, Set.mem_inter_iff, idealLattice, SetLike.mem_coe, FractionalIdeal.coe_mk0,
     LinearMap.mem_range, LinearMap.coe_comp, LinearMap.coe_restrictScalars, coe_subtype,
     Function.comp_apply, AlgHom.toLinearMap_apply, RingHom.toIntAlgHom_coe, Subtype.exists,
-    FractionalIdeal.
+    FractionalIdeal.mem_coe, FractionalIdeal.mem_coeIdeal, exists_prop', nonempty_prop,
+    exists_exists_and_eq_and]
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap_apply, FractionalIdeal, FractionalIdeal.coe_mk0, FractionalIdeal.mem_coe, FractionalIdeal.mem_coeIdeal, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearMap.mem_range, RingHom, RingHom.toIntAlgHom_coe, Set.mem_inter_iff, SetLike, SetLike.mem_coe, Subtype, Subtype.exists, coe_comp
 -/
@@ -1668,7 +1734,7 @@ definition idealSetEquiv
         simp_rw [Subtype.ext_iff, idealSetMap_apply] at h
         rwa [Subtype.ext_iff]),
     fun ⟨a, ha₂⟩ => ⟨⟨a.val, mem_idealSet.mpr ⟨a.prop.1,
-        ⟨preimageOfMemIntegerSet a, ha₂, mixedEmbed
+        ⟨preimageOfMemIntegerSet a, ha₂, mixedEmbedding_preimageOfMemIntegerSet a⟩⟩⟩, rfl⟩⟩
 
 中文:
 定义 idealSetEquiv
@@ -1678,7 +1744,7 @@ definition idealSetEquiv
         simp_rw [Subtype.ext_iff, idealSetMap_apply] at h
         rwa [Subtype.ext_iff]),
     fun ⟨a, ha₂⟩ => ⟨⟨a.val, mem_idealSet.mpr ⟨a.prop.1,
-        ⟨preimageOfMemIntegerSet a, ha₂, mixedEmbed
+        ⟨preimageOfMemIntegerSet a, ha₂, mixedEmbedding_preimageOfMemIntegerSet a⟩⟩⟩, rfl⟩⟩
 
 Depends on / 依赖: Equiv.ofBijective, Subtype, Subtype.ext_iff, a.prop, a.val, ext_iff, idealSetMap, idealSetMap_apply, mem_idealSet, mem_idealSet.mpr, mixedEmbedding_preimageOfMemIntegerSet, ofBijective, preimageOfMemIntegerSet, preimage_of_IdealSetMap, simp_rw
 -/
@@ -1765,7 +1831,29 @@ definition idealSetEquivNorm
             mixedEmbedding.norm a.1.1 = n} := by
         convert! (Equiv.subtypeEquivOfSubtype (idealSetEquiv K J).symm).symm using 3
         rw [idealSetEquiv_symm_apply]
-    _ ≃ {a : integerSet K // (preimageOfMemInteg
+    _ ≃ {a : integerSet K // (preimageOfMemIntegerSet a).1 in J.1 ∧
+          mixedEmbedding.norm a.1 = n} := Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun a : integerSet K => (preimageOfMemIntegerSet a).1 in J.1)
+        (fun a => mixedEmbedding.norm a.1 = n)
+    _ ≃ {a : {a :integerSet K // mixedEmbedding.norm a.1 = n} //
+          (preimageOfMemIntegerSet a.1).1 in J.1} := ((Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun a : integerSet K => mixedEmbedding.norm a.1 = n)
+        (fun a => (preimageOfMemIntegerSet a).1 in J.1)).trans
+        (Equiv.subtypeEquivRight (fun _ => by simp [and_comm]))).symm
+    _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1 ∧ absNorm I.1 = n} × (torsion K) //
+          J.1 ∣ I.1.1} := by
+      convert! Equiv.subtypeEquivOfSubtype (p := fun I => J.1 ∣ I.1) (integerSetEquivNorm K n)
+      rw [integerSetEquivNorm_apply_fst]; rw [dvd_span_singleton]
+    _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1 ∧ absNorm I.1 = n} // J.1 ∣ I.1} ×
+        (torsion K) := Equiv.prodSubtypeFstEquivSubtypeProd
+        (p := fun I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1 ∧ absNorm I.1 = n} => J.1 ∣ I.1)
+    _ ≃ {I : (Ideal (𝓞 K))⁰ // (IsPrincipal I.1 ∧ absNorm I.1 = n) ∧ J.1 ∣ I.1} × (torsion K) :=
+      Equiv.prodCongrLeft fun _ => (Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun I : (Ideal (𝓞 K))⁰ => IsPrincipal I.1 ∧ absNorm I.1 = n)
+        (fun I => J.1 ∣ I.1))
+    _ ≃ {I : (Ideal (𝓞 K))⁰ // J.1 ∣ I.1 ∧ IsPrincipal I.1 ∧ absNorm I.1 = n} ×
+          (Units.torsion K) :=
+      Equiv.prodCongrLeft fun _ => Equiv.subtypeEquivRight fun _ => by rw [and_comm]
 
 中文:
 定义 idealSetEquivNorm
@@ -1775,7 +1863,29 @@ definition idealSetEquivNorm
             mixedEmbedding.norm a.1.1 = n} := by
         convert! (Equiv.subtypeEquivOfSubtype (idealSetEquiv K J).symm).symm using 3
         rw [idealSetEquiv_symm_apply]
-    _ ≃ {a : integerSet K // (preimageOfMemInteg
+    _ ≃ {a : integerSet K // (preimageOfMemIntegerSet a).1 in J.1 ∧
+          mixedEmbedding.norm a.1 = n} := Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun a : integerSet K => (preimageOfMemIntegerSet a).1 in J.1)
+        (fun a => mixedEmbedding.norm a.1 = n)
+    _ ≃ {a : {a :integerSet K // mixedEmbedding.norm a.1 = n} //
+          (preimageOfMemIntegerSet a.1).1 in J.1} := ((Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun a : integerSet K => mixedEmbedding.norm a.1 = n)
+        (fun a => (preimageOfMemIntegerSet a).1 in J.1)).trans
+        (Equiv.subtypeEquivRight (fun _ => by simp [and_comm]))).symm
+    _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1 ∧ absNorm I.1 = n} × (torsion K) //
+          J.1 ∣ I.1.1} := by
+      convert! Equiv.subtypeEquivOfSubtype (p := fun I => J.1 ∣ I.1) (integerSetEquivNorm K n)
+      rw [integerSetEquivNorm_apply_fst]; rw [dvd_span_singleton]
+    _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1 ∧ absNorm I.1 = n} // J.1 ∣ I.1} ×
+        (torsion K) := Equiv.prodSubtypeFstEquivSubtypeProd
+        (p := fun I : {I : (Ideal (𝓞 K))⁰ // IsPrincipal I.1 ∧ absNorm I.1 = n} => J.1 ∣ I.1)
+    _ ≃ {I : (Ideal (𝓞 K))⁰ // (IsPrincipal I.1 ∧ absNorm I.1 = n) ∧ J.1 ∣ I.1} × (torsion K) :=
+      Equiv.prodCongrLeft fun _ => (Equiv.subtypeSubtypeEquivSubtypeInter
+        (fun I : (Ideal (𝓞 K))⁰ => IsPrincipal I.1 ∧ absNorm I.1 = n)
+        (fun I => J.1 ∣ I.1))
+    _ ≃ {I : (Ideal (𝓞 K))⁰ // J.1 ∣ I.1 ∧ IsPrincipal I.1 ∧ absNorm I.1 = n} ×
+          (Units.torsion K) :=
+      Equiv.prodCongrLeft fun _ => Equiv.subtypeEquivRight fun _ => by rw [and_comm]
 
 Depends on / 依赖: Equiv.subtypeEquivOfSubtype, Equiv.subtypeSubtypeEquivSubtypeInter, convert, idealSetEquiv, idealSetEquiv_symm_apply, integerSet, mixedEmbedding, mixedEmbedding.norm, preimageOfMemIntegerSet, subtypeEquivOfSubtype, subtypeSubtypeEquivSubtypeInter
 -/
@@ -1824,7 +1934,27 @@ theorem card_isPrincipal_dvd_norm_le
     rw [torsionOrder]; rw [← Nat.card_prod]
 refine Nat.card_congr @Equiv.ofFiberEquiv _ (γ := Finset.Iic ⌊s⌋₊) _
       (fun I => ⟨absNorm I.1.val.1, Finset.mem_Iic.mpr I.1.prop.2.2⟩)
-      (fun a =
+      (fun a => ⟨intNorm (idealSetEquiv K J a.1).1, Finset.mem_Iic.mpr a.prop⟩) fun ⟨i, hi⟩ => ?_
+    simp_rw [Subtype.mk.injEq]
+    calc _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // _ ∧ _ ∧ _} // absNorm I.1.1 = i} × torsion K :=
+        Equiv.prodSubtypeFstEquivSubtypeProd
+      _ ≃ {I : (Ideal (𝓞 K))⁰ // (_ ∧ _ ∧ absNorm I.1 <= ⌊s⌋₊) ∧ absNorm I.1 = i}
+            × torsion K := Equiv.prodCongrLeft fun _ => (Equiv.subtypeSubtypeEquivSubtypeInter
+        (p := fun I : (Ideal (𝓞 K))⁰ => J.1 ∣ I.1 ∧ IsPrincipal I.1 ∧ absNorm I.1 <= ⌊s⌋₊)
+        (q := fun I => absNorm I.1 = i))
+      _ ≃ {I : (Ideal (𝓞 K))⁰ // J.1 ∣ I.1 ∧ IsPrincipal I.1 ∧ absNorm I.1 = i}
+            × torsion K := Equiv.prodCongrLeft fun _ => Equiv.subtypeEquivRight fun _ => by grind
+      _ ≃ {a : idealSet K J // mixedEmbedding.norm (a : mixedSpace K) = i} :=
+            (idealSetEquivNorm K J i).symm
+      _ ≃ {a : idealSet K J // intNorm (idealSetEquiv K J a).1 = i} := by
+        simp_rw [← intNorm_idealSetEquiv_apply, Nat.cast_inj]
+        rfl
+      _ ≃ {b : {a : idealSet K J // intNorm (idealSetEquiv K J a).1 <= ⌊s⌋₊} //
+            intNorm (idealSetEquiv K J b).1 = i} :=
+        (Equiv.subtypeSubtypeEquivSubtype fun h => Finset.mem_Iic.mp (h ▸ hi)).symm
+  · simp_rw [lt_iff_not_ge.mp (lt_of_lt_of_le hs (Nat.cast_nonneg _)), lt_iff_not_ge.mp
+      (lt_of_lt_of_le hs (mixedEmbedding.norm_nonneg _)), and_false, Nat.card_of_isEmpty,
+      zero_mul]
 
 中文:
 定理 card_isPrincipal_dvd_norm_le
@@ -1835,7 +1965,27 @@ refine Nat.card_congr @Equiv.ofFiberEquiv _ (γ := Finset.Iic ⌊s⌋₊) _
     rw [torsionOrder]; rw [← Nat.card_prod]
 refine Nat.card_congr @Equiv.ofFiberEquiv _ (γ := Finset.Iic ⌊s⌋₊) _
       (fun I => ⟨absNorm I.1.val.1, Finset.mem_Iic.mpr I.1.prop.2.2⟩)
-      (fun a =
+      (fun a => ⟨intNorm (idealSetEquiv K J a.1).1, Finset.mem_Iic.mpr a.prop⟩) fun ⟨i, hi⟩ => ?_
+    simp_rw [Subtype.mk.injEq]
+    calc _ ≃ {I : {I : (Ideal (𝓞 K))⁰ // _ ∧ _ ∧ _} // absNorm I.1.1 = i} × torsion K :=
+        Equiv.prodSubtypeFstEquivSubtypeProd
+      _ ≃ {I : (Ideal (𝓞 K))⁰ // (_ ∧ _ ∧ absNorm I.1 <= ⌊s⌋₊) ∧ absNorm I.1 = i}
+            × torsion K := Equiv.prodCongrLeft fun _ => (Equiv.subtypeSubtypeEquivSubtypeInter
+        (p := fun I : (Ideal (𝓞 K))⁰ => J.1 ∣ I.1 ∧ IsPrincipal I.1 ∧ absNorm I.1 <= ⌊s⌋₊)
+        (q := fun I => absNorm I.1 = i))
+      _ ≃ {I : (Ideal (𝓞 K))⁰ // J.1 ∣ I.1 ∧ IsPrincipal I.1 ∧ absNorm I.1 = i}
+            × torsion K := Equiv.prodCongrLeft fun _ => Equiv.subtypeEquivRight fun _ => by grind
+      _ ≃ {a : idealSet K J // mixedEmbedding.norm (a : mixedSpace K) = i} :=
+            (idealSetEquivNorm K J i).symm
+      _ ≃ {a : idealSet K J // intNorm (idealSetEquiv K J a).1 = i} := by
+        simp_rw [← intNorm_idealSetEquiv_apply, Nat.cast_inj]
+        rfl
+      _ ≃ {b : {a : idealSet K J // intNorm (idealSetEquiv K J a).1 <= ⌊s⌋₊} //
+            intNorm (idealSetEquiv K J b).1 = i} :=
+        (Equiv.subtypeSubtypeEquivSubtype fun h => Finset.mem_Iic.mp (h ▸ hi)).symm
+  · simp_rw [lt_iff_not_ge.mp (lt_of_lt_of_le hs (Nat.cast_nonneg _)), lt_iff_not_ge.mp
+      (lt_of_lt_of_le hs (mixedEmbedding.norm_nonneg _)), and_false, Nat.card_of_isEmpty,
+      zero_mul]
 
 Depends on / 依赖: Equiv.ofFiberEquiv, Equiv.prodSubtypeFstEqui, Finset, Finset.Iic, Finset.mem_Iic.mpr, Nat.card_congr, Nat.card_prod, Nat.le_floor_iff, Subtype, Subtype.mk.injEq, a.prop, absNorm, card_congr, card_prod, idealSetEquiv, intNorm, intNorm_idealSetEquiv_apply, le_floor_iff, le_or_gt, mem_Iic
 -/

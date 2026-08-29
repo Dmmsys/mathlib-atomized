@@ -121,7 +121,11 @@ lemma exists_triangle
   let T := (Triangle.shiftFunctor C (-n₀)).obj (Triangle.mk f g h)
   let e := (shiftEquiv C n₀).unitIso.symm.app A
   have hT' : Triangle.mk (T.mor₁ ≫ e.hom) (e.inv ≫ T.mor₂) T.mor₃ in distTriang C := by
-    refine isomorp
+    refine isomorphic_distinguished _ (Triangle.shift_distinguished _ mem (-n₀)) _ ?_
+    refine Triangle.isoMk _ _ (Iso.refl _) e.symm (Iso.refl _) ?_ ?_ ?_
+    all_goals simp [T]
+  exact ⟨_, _, t.le_shift _ _ _ (neg_add_cancel n₀) _ hX,
+    t.ge_shift _ _ _ (by lia) _ hY, _, _, _, hT'⟩
 
 中文:
 引理 存在_triangle
@@ -131,7 +135,11 @@ lemma exists_triangle
   let T := (Triangle.shiftFunctor C (-n₀)).obj (Triangle.mk f g h)
   let e := (shiftEquiv C n₀).unitIso.symm.app A
   have hT' : Triangle.mk (T.mor₁ ≫ e.hom) (e.inv ≫ T.mor₂) T.mor₃ in distTriang C := by
-    refine isomorp
+    refine isomorphic_distinguished _ (Triangle.shift_distinguished _ mem (-n₀)) _ ?_
+    refine Triangle.isoMk _ _ (Iso.refl _) e.symm (Iso.refl _) ?_ ?_ ?_
+    all_goals simp [T]
+  exact ⟨_, _, t.le_shift _ _ _ (neg_add_cancel n₀) _ hX,
+    t.ge_shift _ _ _ (by lia) _ hY, _, _, _, hT'⟩
 
 Depends on / 依赖: Iso.refl, T.mor, Triangle, Triangle.isoMk, Triangle.mk, Triangle.shiftFunctor, Triangle.shift_distinguished, all_goals, distTriang, e.hom, e.inv, e.symm, exists_triangle_zero_one, isomorphic_distinguished, le_shift, neg_add_cancel, shiftEquiv, shiftFunctor, shift_distinguished, t.exists_triangle_zero_one
 -/
@@ -241,7 +249,19 @@ lemma le_monotone
     apply this
   have H_zero : H 0 := fun n => by
     simp only [Nat.cast_zero, add_zero]
-    
+    rfl
+  have H_one : H 1 := fun n X hX => by
+    rw [← t.shift_le n 1 (n + (1 : Nat)) rfl]; rw [ObjectProperty.prop_shift_iff]
+    rw [← t.shift_le n 0 n (add_zero n)]; rw [ObjectProperty.prop_shift_iff] at hX
+    exact t.le_zero_le _ hX
+  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
+    intro a b c h ha hb n
+    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
+    exact (ha n).trans (hb (n + a))
+  intro a
+  induction a with
+  | zero => exact H_zero
+  | succ a ha => exact H_add a 1 _ rfl ha H_one
 
 中文:
 引理 le_monotone
@@ -255,7 +275,19 @@ lemma le_monotone
     apply this
   have H_zero : H 0 := fun n => by
     simp only [Nat.cast_zero, add_zero]
-    
+    rfl
+  have H_one : H 1 := fun n X hX => by
+    rw [← t.shift_le n 1 (n + (1 : Nat)) rfl]; rw [ObjectProperty.prop_shift_iff]
+    rw [← t.shift_le n 0 n (add_zero n)]; rw [ObjectProperty.prop_shift_iff] at hX
+    exact t.le_zero_le _ hX
+  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
+    intro a b c h ha hb n
+    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
+    exact (ha n).trans (hb (n + a))
+  intro a
+  induction a with
+  | zero => exact H_zero
+  | succ a ha => exact H_add a 1 _ rfl ha H_one
 
 Depends on / 依赖: H_one, H_zero, Int.nonneg_def, Nat.cast_zero, ObjectProperty, ObjectProperty.prop_shift_iff, add_zero, cast_zero, le_zero_le, nonneg_def, prop_shift_iff, shift_le, t.le, t.le_zero_le, t.shift_le
 -/
@@ -297,7 +329,19 @@ lemma ge_antitone
     apply this
   have H_zero : H 0 := fun n => by
     simp only [Nat.cast_zero, add_zero]
-    
+    rfl
+  have H_one : H 1 := fun n X hX => by
+    rw [← t.shift_ge n 1 (n + (1 : Nat)) (by simp)]; rw [ObjectProperty.prop_shift_iff] at hX
+    rw [← t.shift_ge n 0 n (add_zero n)]
+    exact t.ge_one_le _ hX
+  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
+    intro a b c h ha hb n
+    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
+    exact (hb (n + a)).trans (ha n)
+  intro a
+  induction a with
+  | zero => exact H_zero
+  | succ a ha => exact H_add a 1 _ rfl ha H_one
 
 中文:
 引理 ge_antitone
@@ -311,7 +355,19 @@ lemma ge_antitone
     apply this
   have H_zero : H 0 := fun n => by
     simp only [Nat.cast_zero, add_zero]
-    
+    rfl
+  have H_one : H 1 := fun n X hX => by
+    rw [← t.shift_ge n 1 (n + (1 : Nat)) (by simp)]; rw [ObjectProperty.prop_shift_iff] at hX
+    rw [← t.shift_ge n 0 n (add_zero n)]
+    exact t.ge_one_le _ hX
+  have H_add : forall (a b c : Nat) (_ : a + b = c) (_ : H a) (_ : H b), H c := by
+    intro a b c h ha hb n
+    rw [← h]; rw [Nat.cast_add]; rw [← add_assoc]
+    exact (hb (n + a)).trans (ha n)
+  intro a
+  induction a with
+  | zero => exact H_zero
+  | succ a ha => exact H_add a 1 _ rfl ha H_one
 
 Depends on / 依赖: H_add, H_one, H_zero, Int.nonneg_def, Nat.cast_zero, ObjectProperty, ObjectProperty.prop_shift_iff, add_zero, cast_zero, ge_one_le, nonneg_def, prop_shift_iff, shift_ge, t.ge, t.ge_one_le, t.shift_ge
 -/

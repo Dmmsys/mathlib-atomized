@@ -146,7 +146,9 @@ instance [ObjectProperty.EssentiallySmall.{w}
   refine ⟨comma F₁ F₂ Q₁ Q₂, inferInstance, fun f hf => ?_⟩
   simp only [comma_iff] at hf
   obtain ⟨X₁, hX₁, ⟨e₁⟩⟩ := h₁' _ hf.1
-  obtain ⟨X₂, hX₂, ⟨e₂⟩⟩ := h₂
+  obtain ⟨X₂, hX₂, ⟨e₂⟩⟩ := h₂' _ hf.2
+  exact ⟨Comma.mk _ _ (F₁.map e₁.inv ≫ f.hom ≫ F₂.map e₂.hom), by tauto,
+    ⟨Comma.isoMk e₁ e₂⟩⟩
 
 中文:
 实例 [ObjectProperty.EssentiallySmall.{w}
@@ -157,7 +159,9 @@ instance [ObjectProperty.EssentiallySmall.{w}
   refine ⟨comma F₁ F₂ Q₁ Q₂, inferInstance, fun f hf => ?_⟩
   simp only [comma_iff] at hf
   obtain ⟨X₁, hX₁, ⟨e₁⟩⟩ := h₁' _ hf.1
-  obtain ⟨X₂, hX₂, ⟨e₂⟩⟩ := h₂
+  obtain ⟨X₂, hX₂, ⟨e₂⟩⟩ := h₂' _ hf.2
+  exact ⟨Comma.mk _ _ (F₁.map e₁.inv ≫ f.hom ≫ F₂.map e₂.hom), by tauto,
+    ⟨Comma.isoMk e₁ e₂⟩⟩
 
 Depends on / 依赖: Comma.isoMk, Comma.mk, EssentiallySmall, EssentiallySmall.exists_small_le, comma_iff, exists_small_le, f.hom
 -/

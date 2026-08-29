@@ -630,7 +630,7 @@ definition toLin'
       (by rw [← toLin'_mul, ← coe_mul, mul_inv_cancel, coe_one, toLin'_one])
       (by rw [← toLin'_mul, ← coe_mul, inv_mul_cancel, coe_one, toLin'_one])
   map_one' := LinearEquiv.toLinearMap_injective Matrix.toLin'_one
-map_mul' A B :
+map_mul' A B := LinearEquiv.toLinearMap_injective Matrix.toLin'_mul ↑ₘA ↑ₘB
 
 中文:
 定义 toLin'
@@ -639,7 +639,7 @@ map_mul' A B :
       (by rw [← toLin'_mul, ← coe_mul, mul_inv_cancel, coe_one, toLin'_one])
       (by rw [← toLin'_mul, ← coe_mul, inv_mul_cancel, coe_one, toLin'_one])
   map_one' := LinearEquiv.toLinearMap_injective Matrix.toLin'_one
-map_mul' A B :
+map_mul' A B := LinearEquiv.toLinearMap_injective Matrix.toLin'_mul ↑ₘA ↑ₘB
 -/
 def toLin' : SpecialLinearGroup n R ->* (n -> R) ≃ₗ[R] n -> R where
   toFun A :=
@@ -848,7 +848,10 @@ theorem mem_center_iff
   rcases isEmpty_or_nonempty n with hn | ⟨⟨i⟩⟩; · exact ⟨by aesop, by simp [Subsingleton.elim A 1]⟩
   refine ⟨fun h => ⟨A i i, ?_, ?_⟩, fun ⟨r, _, hr⟩ => Subgroup.mem_center_iff.mpr fun B => ?_⟩
   · have : det ((scalar n) (A i i)) = 1 := (scalar_eq_self_of_mem_center h i).symm ▸ A.property
-    si
+    simpa using! this
+  · exact scalar_eq_self_of_mem_center h i
+  · suffices ↑ₘ(B * A) = ↑ₘ(A * B) from Subtype.val_injective this
+    simpa only [coe_mul, ← hr] using! (scalar_commute (n := n) r (Commute.all r) B).symm
 
 中文:
 定理 mem_center_iff
@@ -857,7 +860,10 @@ theorem mem_center_iff
   rcases isEmpty_or_nonempty n with hn | ⟨⟨i⟩⟩; · exact ⟨by aesop, by simp [Subsingleton.elim A 1]⟩
   refine ⟨fun h => ⟨A i i, ?_, ?_⟩, fun ⟨r, _, hr⟩ => Subgroup.mem_center_iff.mpr fun B => ?_⟩
   · have : det ((scalar n) (A i i)) = 1 := (scalar_eq_self_of_mem_center h i).symm ▸ A.property
-    si
+    simpa using! this
+  · exact scalar_eq_self_of_mem_center h i
+  · suffices ↑ₘ(B * A) = ↑ₘ(A * B) from Subtype.val_injective this
+    simpa only [coe_mul, ← hr] using! (scalar_commute (n := n) r (Commute.all r) B).symm
 
 Depends on / 依赖: A.property, Commute, Commute.all, Subgroup, Subgroup.mem_center_iff.mpr, Subsingleton, Subsingleton.elim, Subtype, Subtype.val_injective, coe_mul, isEmpty_or_nonempty, mem_center_iff, property, scalar, scalar_commute, scalar_eq_self_of_mem_center, val_injective
 -/
@@ -886,7 +892,20 @@ rootsOfUnity.mkOfPowEq (↑ₘA i i) by
       replace hr' : A.val i i = r := by simp only [← hr', scalar_apply, diagonal_apply_eq]
       simp only [hr', hr]
   invFun a := ⟨⟨a • (1 : Matrix n n R), by aesop⟩,
-Subgroup.mem
+Subgroup.mem_center_iff.mpr fun B => Subtype.val_injective by simp [coe_mul]⟩
+  left_inv A := by
+refine SetCoe.ext SetCoe.ext ?_
+    obtain ⟨r, _, hr⟩ := mem_center_iff.mp A.property
+    simpa [← hr, Submonoid.smul_def, Units.smul_def] using! smul_one_eq_diagonal r
+  right_inv a := by
+    obtain ⟨⟨a, _⟩, ha⟩ := a
+exact SetCoe.ext Units.ext by simp
+  map_mul' A B := by
+    dsimp
+    ext
+    simp only [rootsOfUnity.val_mkOfPowEq_coe, Subgroup.coe_mul, Units.val_mul]
+    rw [← scalar_eq_coe_self_center A i]; rw [← scalar_eq_coe_self_center B i]
+    simp
 
 中文:
 定义 center_equiv_rootsOfUnity'
@@ -897,7 +916,20 @@ rootsOfUnity.mkOfPowEq (↑ₘA i i) by
       replace hr' : A.val i i = r := by simp only [← hr', scalar_apply, diagonal_apply_eq]
       simp only [hr', hr]
   invFun a := ⟨⟨a • (1 : Matrix n n R), by aesop⟩,
-Subgroup.mem
+Subgroup.mem_center_iff.mpr fun B => Subtype.val_injective by simp [coe_mul]⟩
+  left_inv A := by
+refine SetCoe.ext SetCoe.ext ?_
+    obtain ⟨r, _, hr⟩ := mem_center_iff.mp A.property
+    simpa [← hr, Submonoid.smul_def, Units.smul_def] using! smul_one_eq_diagonal r
+  right_inv a := by
+    obtain ⟨⟨a, _⟩, ha⟩ := a
+exact SetCoe.ext Units.ext by simp
+  map_mul' A B := by
+    dsimp
+    ext
+    simp only [rootsOfUnity.val_mkOfPowEq_coe, Subgroup.coe_mul, Units.val_mul]
+    rw [← scalar_eq_coe_self_center A i]; rw [← scalar_eq_coe_self_center B i]
+    simp
 
 Depends on / 依赖: A.property, A.val, Matrix, Nonempty, SetCoe, SetCoe.ext, Subgroup, Subgroup.mem_center_iff.mpr, Submonoid, Submonoid.smul_def, Subtype, Subtype.val_injective, Units.smul_def, coe_mul, diagonal_apply_eq, invFun, left_inv, mem_center_iff, mem_center_iff.mp, mkOfPowEq
 -/
@@ -938,7 +970,7 @@ definition center_equiv_rootsOfUnity
     exact MulEquiv.ofUnique)
   (fun _ =>
     (max_eq_left (NeZero.one_le : 1 <= Fintype.card n)).symm ▸
-      center_equiv_ro
+      center_equiv_rootsOfUnity' (Classical.arbitrary n))
 
 中文:
 定义 center_equiv_rootsOfUnity
@@ -949,7 +981,7 @@ definition center_equiv_rootsOfUnity
     exact MulEquiv.ofUnique)
   (fun _ =>
     (max_eq_left (NeZero.one_le : 1 <= Fintype.card n)).symm ▸
-      center_equiv_ro
+      center_equiv_rootsOfUnity' (Classical.arbitrary n))
 
 Depends on / 依赖: Classical, Classical.arbitrary, Fintype, Fintype.card, Fintype.card_eq_zero, MulEquiv, MulEquiv.ofUnique, NeZero, NeZero.one_le, arbitrary, card_eq_zero, center_eq_bot_of_subsingleton, center_equiv_rootsOfUnity, isEmpty_or_nonempty, max_eq_left, max_eq_right_of_lt, ofUnique, one_le, rootsOfUnity_one, zero_lt_one
 -/
@@ -2236,7 +2268,8 @@ lemma diag_decompose
   rw [det_diagonal]; rw [show Finset.univ = insert i₀ ({i | i != i₀} : Finset ι) by grind]; rw [Finset.prod_insert (by grind)]; rw [mul_eq_one_iff_eq_inv₀ (by grind)]; rw [← Finset.prod_inv_distrib] at hD
   ext x
   by_cases hx : x = i₀
-  · simpa [hx, hD, -Finset.prod_inv_distrib] using Finset.pro
+  · simpa [hx, hD, -Finset.prod_inv_distrib] using Finset.prod_congr rfl (by grind)
+  · simp [hx]
 
 中文:
 引理 diag_decompose
@@ -2245,7 +2278,8 @@ lemma diag_decompose
   rw [det_diagonal]; rw [show Finset.univ = insert i₀ ({i | i != i₀} : Finset ι) by grind]; rw [Finset.prod_insert (by grind)]; rw [mul_eq_one_iff_eq_inv₀ (by grind)]; rw [← Finset.prod_inv_distrib] at hD
   ext x
   by_cases hx : x = i₀
-  · simpa [hx, hD, -Finset.prod_inv_distrib] using Finset.pro
+  · simpa [hx, hD, -Finset.prod_inv_distrib] using Finset.prod_congr rfl (by grind)
+  · simp [hx]
 -/
 private lemma diag_decompose (i₀ : ι) (D : ι -> F) (hD : det (diagonal D) = 1) :
     Finset.prod {i | i != i₀} (fun i k => if k = i then D i else
@@ -2325,7 +2359,11 @@ lemma diag_eq_diag2n_prod
   rw [Finset.map_noncommProd]
   simp_rw [coeMonoidHom_apply, apply_dite, coe_one]
   rw [Finset.noncommProd_congr (s₂ := {i | i != i₀}) rfl (fun i hi =>
-      (dif_po
+      (dif_pos (Finset.mem_filter.1 hi).2 : _ = (diag2n (Finset.mem_filter.1 hi).2 _ _).1))]
+  convert_to! _ = Finset.noncommProd {i | i != i₀} (fun x => diagonal (g x)) _
+  simp_rw [← diagonalRingHom_apply]
+  rw [← Finset.map_noncommProd _ _ (fun _ _ _ _ _ => Commute.all _ _)]; rw [Finset.noncommProd_eq_prod]
+  rw [diag_decompose i₀ D hD]
 
 中文:
 引理 diag_eq_diag2n_prod
@@ -2336,7 +2374,11 @@ lemma diag_eq_diag2n_prod
   rw [Finset.map_noncommProd]
   simp_rw [coeMonoidHom_apply, apply_dite, coe_one]
   rw [Finset.noncommProd_congr (s₂ := {i | i != i₀}) rfl (fun i hi =>
-      (dif_po
+      (dif_pos (Finset.mem_filter.1 hi).2 : _ = (diag2n (Finset.mem_filter.1 hi).2 _ _).1))]
+  convert_to! _ = Finset.noncommProd {i | i != i₀} (fun x => diagonal (g x)) _
+  simp_rw [← diagonalRingHom_apply]
+  rw [← Finset.map_noncommProd _ _ (fun _ _ _ _ _ => Commute.all _ _)]; rw [Finset.noncommProd_eq_prod]
+  rw [diag_decompose i₀ D hD]
 
 Depends on / 依赖: Finset, Finset.map_noncommP, Finset.map_noncommProd, Finset.mem_filter, Finset.noncommProd, Finset.noncommProd_congr, apply_dite, coeMonoidHom_apply, coeMonoidHom_injective, coe_one, convert_to, diag2n, diagonal, diagonalRingHom_apply, dif_pos, hg_def, map_noncommP, map_noncommProd, mem_filter, noncommProd
 -/
@@ -2366,7 +2408,7 @@ theorem exists_list_transvec_mul_diagonal_mul_list_transvec
   obtain ⟨L, L', D, hM⟩ := Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec M.1
 refine ⟨L, L', D, by simpa [hM] using M.2, Subtype.ext ?_⟩
   simp_rw [coe_mul, ← coeMonoidHom_apply, map_list_prod, List.map_map, Function.comp_def,
-    coeMonoidHom_apply, TransvectionStruct.toSpecialLinearG
+    coeMonoidHom_apply, TransvectionStruct.toSpecialLinearGroup_coe, hM]
 
 中文:
 定理 存在_list_transvec_mul_diagonal_mul_list_transvec
@@ -2375,7 +2417,7 @@ refine ⟨L, L', D, by simpa [hM] using M.2, Subtype.ext ?_⟩
   obtain ⟨L, L', D, hM⟩ := Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec M.1
 refine ⟨L, L', D, by simpa [hM] using M.2, Subtype.ext ?_⟩
   simp_rw [coe_mul, ← coeMonoidHom_apply, map_list_prod, List.map_map, Function.comp_def,
-    coeMonoidHom_apply, TransvectionStruct.toSpecialLinearG
+    coeMonoidHom_apply, TransvectionStruct.toSpecialLinearGroup_coe, hM]
 
 Depends on / 依赖: Function, Function.comp_def, List.map_map, Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec, Subtype, Subtype.ext, TransvectionStruct, TransvectionStruct.toSpecialLinearGroup_coe, coeMonoidHom_apply, coe_mul, comp_def, exists_list_transvec_mul_diagonal_mul_list_transvec, map_list_prod, map_map, simp_rw, toSpecialLinearGroup_coe
 -/
@@ -2399,7 +2441,17 @@ theorem diagonal_transvection_induction'
   have hP1 : P 1 := transvection_coeff_zero (F := F) hij₀ ▸ htransvec i₀ j₀ hij₀ 0
   have hdiagonal (D : ι -> F) (hD : det (diagonal D) = 1) : P ⟨diagonal D, hD⟩ := by
     rw [diag_eq_diag2n_prod i₀ D hD]
-    refine Finset.noncommProd_induction _ _ _ P 
+    refine Finset.noncommProd_induction _ _ _ P hmul hP1 fun i hi => ?_
+    simp [(Finset.mem_filter.1 hi).2, hdiag]
+  have hlist (L : List (TransvectionStruct ι F)) :
+      P (L.map TransvectionStruct.toSpecialLinearGroup).prod := by
+    induction L with
+    | nil => simpa using hP1
+    | cons t L ih =>
+      rw [List.map_cons]; rw [List.prod_cons]; rw [t.toSpecialLinearGroup_def]
+      exact hmul _ _ (htransvec t.i t.j t.hij t.c) ih
+  obtain ⟨L, L', D, hD, hM⟩ := exists_list_transvec_mul_diagonal_mul_list_transvec M
+  exact hM ▸ hmul _ _ (hmul _ _ (hlist L) (hdiagonal D hD)) (hlist L')
 
 中文:
 定理 diagonal_transvection_induction'
@@ -2409,7 +2461,17 @@ theorem diagonal_transvection_induction'
   have hP1 : P 1 := transvection_coeff_zero (F := F) hij₀ ▸ htransvec i₀ j₀ hij₀ 0
   have hdiagonal (D : ι -> F) (hD : det (diagonal D) = 1) : P ⟨diagonal D, hD⟩ := by
     rw [diag_eq_diag2n_prod i₀ D hD]
-    refine Finset.noncommProd_induction _ _ _ P 
+    refine Finset.noncommProd_induction _ _ _ P hmul hP1 fun i hi => ?_
+    simp [(Finset.mem_filter.1 hi).2, hdiag]
+  have hlist (L : List (TransvectionStruct ι F)) :
+      P (L.map TransvectionStruct.toSpecialLinearGroup).prod := by
+    induction L with
+    | nil => simpa using hP1
+    | cons t L ih =>
+      rw [List.map_cons]; rw [List.prod_cons]; rw [t.toSpecialLinearGroup_def]
+      exact hmul _ _ (htransvec t.i t.j t.hij t.c) ih
+  obtain ⟨L, L', D, hD, hM⟩ := exists_list_transvec_mul_diagonal_mul_list_transvec M
+  exact hM ▸ hmul _ _ (hmul _ _ (hlist L) (hdiagonal D hD)) (hlist L')
 
 Depends on / 依赖: Finset, Finset.mem_filter, Finset.noncommProd_induction, L.map, TransvectionStruct, TransvectionStruct.toSpecialLinearGroup, diag_eq_diag2n_prod, diagonal, exists_pair_ne, hdiagonal, htransvec, mem_filter, noncommProd_induction, toSpecialLinearGroup, transvection_coeff_zero
 -/
@@ -2452,7 +2514,8 @@ lemma commutator_diag2_transvection
 refine Subtype.ext Matrix.ext fun i j => ?_
   fin_cases i <;> fin_cases j
   <;> simp [hc, SpecialLinearGroup.transvection_coe, diag2_coe, mul_add, add_mul,
-    mul_inv_cancel₀ ha, inv_mul_can
+    mul_inv_cancel₀ ha, inv_mul_cancel₀ ha, mul_comm a b, mul_assoc b a a, ← pow_two,
+    mul_sub_one, ← sub_eq_add_neg]
 
 中文:
 引理 commutator_diag2_transvection
@@ -2462,7 +2525,8 @@ refine Subtype.ext Matrix.ext fun i j => ?_
 refine Subtype.ext Matrix.ext fun i j => ?_
   fin_cases i <;> fin_cases j
   <;> simp [hc, SpecialLinearGroup.transvection_coe, diag2_coe, mul_add, add_mul,
-    mul_inv_cancel₀ ha, inv_mul_can
+    mul_inv_cancel₀ ha, inv_mul_cancel₀ ha, mul_comm a b, mul_assoc b a a, ← pow_two,
+    mul_sub_one, ← sub_eq_add_neg]
 
 Depends on / 依赖: Matrix, Matrix.ext, SpecialLinearGroup, SpecialLinearGroup.transvection_coe, SpecialLinearGroup.transvection_inv, Subtype, Subtype.ext, add_mul, commutatorElement_def, diag2_coe, diag2_inv, fin_cases, mul_add, mul_assoc, mul_comm, mul_sub_one, pow_two, sub_eq_add_neg, transvection_coe, transvection_inv
 -/
@@ -2513,7 +2577,14 @@ lemma transvection_mem_commutator₁
   have (b c' : F) (hc : c' = b * (a ^ 2 - 1)) :
       ⁅diag2 a⁻¹ (inv_ne_zero ha), SpecialLinearGroup.transvection one_ne_zero b⁆ =
       (SpecialLinearGroup.transvection one_ne_zero c' : SL(2, F)) := by
-    rw [commutatorElement_def]; rw [diag2_inv a⁻¹ (inv_ne_zero ha)]; rw [SpecialLinearGroup.t
+    rw [commutatorElement_def]; rw [diag2_inv a⁻¹ (inv_ne_zero ha)]; rw [SpecialLinearGroup.transvection_inv one_ne_zero b]
+refine Subtype.ext Matrix.ext fun i j => ?_
+    fin_cases i <;> fin_cases j <;>
+    simp [hc, SpecialLinearGroup.transvection_coe, diag2_coe, inv_inv, mul_add, add_mul,
+      mul_inv_cancel₀ ha, inv_mul_cancel₀ ha, mul_comm a b, mul_assoc b a a, ← pow_two,
+      mul_sub_one, ← sub_eq_add_neg]
+  rw [← this (c / (a ^ 2 - 1)) c (div_mul_cancel₀ c (sub_ne_zero_of_ne hasq)).symm]
+  exact Subgroup.commutator_mem_commutator (Subgroup.mem_top _) (Subgroup.mem_top _)
 
 中文:
 引理 transvection_mem_commutator₁
@@ -2522,7 +2593,14 @@ lemma transvection_mem_commutator₁
   have (b c' : F) (hc : c' = b * (a ^ 2 - 1)) :
       ⁅diag2 a⁻¹ (inv_ne_zero ha), SpecialLinearGroup.transvection one_ne_zero b⁆ =
       (SpecialLinearGroup.transvection one_ne_zero c' : SL(2, F)) := by
-    rw [commutatorElement_def]; rw [diag2_inv a⁻¹ (inv_ne_zero ha)]; rw [SpecialLinearGroup.t
+    rw [commutatorElement_def]; rw [diag2_inv a⁻¹ (inv_ne_zero ha)]; rw [SpecialLinearGroup.transvection_inv one_ne_zero b]
+refine Subtype.ext Matrix.ext fun i j => ?_
+    fin_cases i <;> fin_cases j <;>
+    simp [hc, SpecialLinearGroup.transvection_coe, diag2_coe, inv_inv, mul_add, add_mul,
+      mul_inv_cancel₀ ha, inv_mul_cancel₀ ha, mul_comm a b, mul_assoc b a a, ← pow_two,
+      mul_sub_one, ← sub_eq_add_neg]
+  rw [← this (c / (a ^ 2 - 1)) c (div_mul_cancel₀ c (sub_ne_zero_of_ne hasq)).symm]
+  exact Subgroup.commutator_mem_commutator (Subgroup.mem_top _) (Subgroup.mem_top _)
 
 Depends on / 依赖: Matrix, Matrix.ext, SpecialLinearGroup, SpecialLinearGroup.transvection, SpecialLinearGroup.transvection_coe, SpecialLinearGroup.transvection_inv, Subtype, Subtype.ext, add_mul, commutatorElement_def, diag2_coe, diag2_inv, fin_cases, inv_inv, inv_mu, inv_ne_zero, mul_add, one_ne_zero, transvection, transvection_coe
 -/
@@ -2618,7 +2696,12 @@ theorem SL2.transvection_induction
     change P (diag2 c hc)
     rw [diag2_decompose c hc]
     refine hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ ?_ ?_) ?_) ?_) ?_) ?_
-    all_
+    all_goals exact htransvec _ _ _ _
+  · obtain rfl : j = 0 := by fin_cases j <;> tauto
+    rw [show diag2n hij c hc = diag2 c⁻¹ (inv_ne_zero hc) by
+      ext; simp [diag2n_coe]; rw [diagonal_apply]; grind, diag2_decompose c⁻¹ (inv_ne_zero hc)]
+    refine hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ ?_ ?_) ?_) ?_) ?_) ?_
+    all_goals exact htransvec _ _ _ _
 
 中文:
 定理 SL2.transvection_induction
@@ -2630,7 +2713,12 @@ theorem SL2.transvection_induction
     change P (diag2 c hc)
     rw [diag2_decompose c hc]
     refine hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ ?_ ?_) ?_) ?_) ?_) ?_
-    all_
+    all_goals exact htransvec _ _ _ _
+  · obtain rfl : j = 0 := by fin_cases j <;> tauto
+    rw [show diag2n hij c hc = diag2 c⁻¹ (inv_ne_zero hc) by
+      ext; simp [diag2n_coe]; rw [diagonal_apply]; grind, diag2_decompose c⁻¹ (inv_ne_zero hc)]
+    refine hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ (hmul _ _ ?_ ?_) ?_) ?_) ?_) ?_
+    all_goals exact htransvec _ _ _ _
 
 Depends on / 依赖: all_goals, diag2_decompose, diag2n, diag2n_coe, diagonal_apply, diagonal_transvection_induction, fin_cases, htransvec, inv_ne_zero
 -/
@@ -2807,7 +2895,10 @@ theorem coe_T_zpow
     congrm !![_, ?_; _, _]
     rw [mul_one]; rw [mul_one]; rw [add_comm]
   | pred n h =>
-    simp_rw [zpow_sub, zpow_one, coe_mul, h, 
+    simp_rw [zpow_sub, zpow_one, coe_mul, h, coe_T_inv, Matrix.mul_fin_two]
+    congrm !![?_, ?_; _, _] <;> ring
+
+@[simp]
 
 中文:
 定理 coe_T_zpow
@@ -2821,7 +2912,10 @@ theorem coe_T_zpow
     congrm !![_, ?_; _, _]
     rw [mul_one]; rw [mul_one]; rw [add_comm]
   | pred n h =>
-    simp_rw [zpow_sub, zpow_one, coe_mul, h, 
+    simp_rw [zpow_sub, zpow_one, coe_mul, h, coe_T_inv, Matrix.mul_fin_two]
+    congrm !![?_, ?_; _, _] <;> ring
+
+@[simp]
 
 Depends on / 依赖: Matrix, Matrix.mul_fin_two, Matrix.one_fin_two, add_comm, coe_T, coe_T_inv, coe_mul, coe_one, congrm, mul_fin_two, mul_one, one_fin_two, simp_rw, zpow_add, zpow_one, zpow_sub, zpow_zero
 -/

@@ -615,7 +615,8 @@ theorem isUnit_of_self_mul_dvd_separable
     dsimp only [Separable] at hp
     convert! hp using 1
     rw [derivative_mul]; rw [derivative_mul]
-
+    ring
+  exact IsCoprime.of_mul_right_left (IsCoprime.of_mul_left_left this)
 
 中文:
 定理 isUnit_of_self_mul_dvd_separable
@@ -629,7 +630,8 @@ theorem isUnit_of_self_mul_dvd_separable
     dsimp only [Separable] at hp
     convert! hp using 1
     rw [derivative_mul]; rw [derivative_mul]
-
+    ring
+  exact IsCoprime.of_mul_right_left (IsCoprime.of_mul_left_left this)
 
 Depends on / 依赖: IsCoprime, IsCoprime.of_mul_left_left, IsCoprime.of_mul_right_left, Separable, convert, derivative, derivative_mul, isCoprime_self, isCoprime_self.mp, mul_add, mul_assoc, of_mul_left_left, of_mul_right_left
 -/
@@ -771,7 +773,7 @@ theorem separable_prod'
     simp_rw [Finset.forall_mem_insert, forall_and] at h1 h2; rw [prod_insert has]
     exact
       h2.1.mul (ih h1.2.2 h2.2)
-        (IsCoprime.prod_right fun i his => h1.1.2 i his <| Ne.symm <| ne_of_m
+        (IsCoprime.prod_right fun i his => h1.1.2 i his <| Ne.symm <| ne_of_mem_of_not_mem his has)
 
 中文:
 定理 separable_prod'
@@ -782,7 +784,7 @@ theorem separable_prod'
     simp_rw [Finset.forall_mem_insert, forall_and] at h1 h2; rw [prod_insert has]
     exact
       h2.1.mul (ih h1.2.2 h2.2)
-        (IsCoprime.prod_right fun i his => h1.1.2 i his <| Ne.symm <| ne_of_m
+        (IsCoprime.prod_right fun i his => h1.1.2 i his <| Ne.symm <| ne_of_mem_of_not_mem his has)
 
 Depends on / 依赖: Finset, Finset.forall_mem_insert, Finset.induction_on, IsCoprime, IsCoprime.prod_right, Ne.symm, classical, forall_and, forall_mem_insert, induction_on, ne_of_mem_of_not_mem, prod_insert, prod_right, separable_one, simp_rw
 -/
@@ -828,7 +830,7 @@ theorem Separable.inj_of_prod_X_sub_C
   rw [← insert_erase hx]; rw [prod_insert (notMem_erase _ _)]; rw [←
     insert_erase (mem_erase_of_ne_of_mem (Ne.symm hxy) hy)]; rw [prod_insert (notMem_erase _ _)]; rw [←
     mul_assoc]; rw [hfxy]; rw [← sq] at hfs
-  cases (hfs.of_mul_left.of_pow (not_isUnit_X_sub_C 
+  cases (hfs.of_mul_left.of_pow (not_isUnit_X_sub_C _) two_ne_zero).2
 
 中文:
 定理 可分.inj_of_prod_X_sub_C
@@ -839,7 +841,7 @@ theorem Separable.inj_of_prod_X_sub_C
   rw [← insert_erase hx]; rw [prod_insert (notMem_erase _ _)]; rw [←
     insert_erase (mem_erase_of_ne_of_mem (Ne.symm hxy) hy)]; rw [prod_insert (notMem_erase _ _)]; rw [←
     mul_assoc]; rw [hfxy]; rw [← sq] at hfs
-  cases (hfs.of_mul_left.of_pow (not_isUnit_X_sub_C 
+  cases (hfs.of_mul_left.of_pow (not_isUnit_X_sub_C _) two_ne_zero).2
 
 Depends on / 依赖: Ne.symm, classical, hfs.of_mul_left.of_pow, insert_erase, mem_erase_of_ne_of_mem, mul_assoc, notMem_erase, not_isUnit_X_sub_C, of_mul_left, of_pow, prod_insert, two_ne_zero
 -/
@@ -915,7 +917,15 @@ theorem separable_X_pow_sub_C_unit
   apply (separable_def' (X ^ n - C (u : R))).2
   obtain ⟨n', hn'⟩ := hn.exists_left_inv
   refine ⟨-C ↑u⁻¹, C (↑u⁻¹ : R) * C n' * X, ?_⟩
-  rw [derivative_sub]; rw [derivative_C]; rw [sub_zero]; rw [derivative_pow X n]; rw
+  rw [derivative_sub]; rw [derivative_C]; rw [sub_zero]; rw [derivative_pow X n]; rw [derivative_X]; rw [mul_one]
+  calc
+    -C ↑u⁻¹ * (X ^ n - C ↑u) + C ↑u⁻¹ * C n' * X * (↑n * X ^ (n - 1)) =
+        C (↑u⁻¹ * ↑u) - C ↑u⁻¹ * X ^ n + C ↑u⁻¹ * C (n' * ↑n) * (X * X ^ (n - 1)) := by
+      simp only [C.map_mul, C_eq_natCast]
+      ring
+    _ = 1 := by
+      simp only [Units.inv_mul, hn', C.map_one, mul_one, ← pow_succ',
+        Nat.sub_add_cancel (show 1 <= n from hpos), sub_add_cancel]
 
 中文:
 定理 separable_X_pow_sub_C_unit
@@ -927,7 +937,15 @@ theorem separable_X_pow_sub_C_unit
   apply (separable_def' (X ^ n - C (u : R))).2
   obtain ⟨n', hn'⟩ := hn.exists_left_inv
   refine ⟨-C ↑u⁻¹, C (↑u⁻¹ : R) * C n' * X, ?_⟩
-  rw [derivative_sub]; rw [derivative_C]; rw [sub_zero]; rw [derivative_pow X n]; rw
+  rw [derivative_sub]; rw [derivative_C]; rw [sub_zero]; rw [derivative_pow X n]; rw [derivative_X]; rw [mul_one]
+  calc
+    -C ↑u⁻¹ * (X ^ n - C ↑u) + C ↑u⁻¹ * C n' * X * (↑n * X ^ (n - 1)) =
+        C (↑u⁻¹ * ↑u) - C ↑u⁻¹ * X ^ n + C ↑u⁻¹ * C (n' * ↑n) * (X * X ^ (n - 1)) := by
+      simp only [C.map_mul, C_eq_natCast]
+      ring
+    _ = 1 := by
+      simp only [Units.inv_mul, hn', C.map_one, mul_one, ← pow_succ',
+        Nat.sub_add_cancel (show 1 <= n from hpos), sub_add_cancel]
 
 Depends on / 依赖: C.map_mul, C_eq_natC, derivative_C, derivative_X, derivative_pow, derivative_sub, eq_zero_or_pos, exists_left_inv, hn.exists_left_inv, map_mul, mul_one, n.eq_zero_or_pos, nontriviality, separable_def, sub_zero
 -/
@@ -960,7 +978,7 @@ theorem separable_C_mul_X_pow_add_C_mul_X_add_C
   refine ⟨-derivative f, f + C e, ?_⟩
   have hderiv : derivative f = C b := by
     simp [hn, f, map_add derivative, derivative_C, derivative_X_pow]
-  rw [hderiv]; rw [right_distrib]; rw [← add_assoc]; rw [neg_mul]; rw [
+  rw [hderiv]; rw [right_distrib]; rw [← add_assoc]; rw [neg_mul]; rw [mul_comm]; rw [neg_add_cancel]; rw [zero_add]; rw [← map_mul]; rw [hb]; rw [map_one]
 
 中文:
 定理 separable_C_mul_X_pow_add_C_mul_X_add_C
@@ -970,7 +988,7 @@ theorem separable_C_mul_X_pow_add_C_mul_X_add_C
   refine ⟨-derivative f, f + C e, ?_⟩
   have hderiv : derivative f = C b := by
     simp [hn, f, map_add derivative, derivative_C, derivative_X_pow]
-  rw [hderiv]; rw [right_distrib]; rw [← add_assoc]; rw [neg_mul]; rw [
+  rw [hderiv]; rw [right_distrib]; rw [← add_assoc]; rw [neg_mul]; rw [mul_comm]; rw [neg_add_cancel]; rw [zero_add]; rw [← map_mul]; rw [hb]; rw [map_one]
 
 Depends on / 依赖: add_assoc, derivative, derivative_C, derivative_X_pow, exists_left_inv, hb.exists_left_inv, hderiv, map_add, map_mul, map_one, mul_comm, neg_add_cancel, neg_mul, right_distrib, zero_add
 -/
@@ -1107,7 +1125,9 @@ theorem separable_iff_derivative_ne_zero
       let ⟨u, hu⟩ := (hf.isUnit_or_isUnit hg3).resolve_left hg1
       have : f ∣ derivative f := by
         conv_lhs => rw [hg3, ← hu]
-        rwa
+        rwa [Units.mul_right_dvd]
+not_lt_of_ge (natDegree_le_of_dvd this h)
+natDegree_derivative_lt mt derivative_of_natDegree_zero h⟩
 
 中文:
 定理 separable_iff_derivative_ne_zero
@@ -1117,7 +1137,9 @@ theorem separable_iff_derivative_ne_zero
       let ⟨u, hu⟩ := (hf.isUnit_or_isUnit hg3).resolve_left hg1
       have : f ∣ derivative f := by
         conv_lhs => rw [hg3, ← hu]
-        rwa
+        rwa [Units.mul_right_dvd]
+not_lt_of_ge (natDegree_le_of_dvd this h)
+natDegree_derivative_lt mt derivative_of_natDegree_zero h⟩
 
 Depends on / 依赖: And.right, EuclideanDomain, EuclideanDomain.isCoprime_of_dvd, Units.mul_right_dvd, _hg2, conv_lhs, derivative, derivative_of_natDegree_zero, hf.isUnit_or_isUnit, hf.not_isUnit, isCoprime_of_dvd, isCoprime_zero_right, isUnit_or_isUnit, mul_right_dvd, natDegree_derivative_lt, natDegree_le_of_dvd, not_isUnit, not_lt_of_ge, resolve_left
 -/
@@ -1175,7 +1197,8 @@ theorem separable_prod_X_sub_C_iff'
       separable_prod'
         (fun x _hx y _hy hxy =>
           @pairwise_coprime_X_sub_C _ _ { x // x in s } (fun x => f x)
-            (fun x y hxy => Subtype.ext <| H x.1 x.2 y.1 y.2 hxy) _
+            (fun x y hxy => Subtype.ext <| H x.1 x.2 y.1 y.2 hxy) _ _ hxy)
+        fun _ _ => separable_X_sub_C⟩
 
 中文:
 定理 separable_prod_X_sub_C_iff'
@@ -1186,7 +1209,8 @@ theorem separable_prod_X_sub_C_iff'
       separable_prod'
         (fun x _hx y _hy hxy =>
           @pairwise_coprime_X_sub_C _ _ { x // x in s } (fun x => f x)
-            (fun x y hxy => Subtype.ext <| H x.1 x.2 y.1 y.2 hxy) _
+            (fun x y hxy => Subtype.ext <| H x.1 x.2 y.1 y.2 hxy) _ _ hxy)
+        fun _ _ => separable_X_sub_C⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, hfs.inj_of_prod_X_sub_C, inj_of_prod_X_sub_C, pairwise_coprime_X_sub_C, prod_attach, separable_X_sub_C, separable_prod
 -/
@@ -1238,7 +1262,13 @@ theorem separable_or
       have := derivative_eq_zero.1 H
       have := (natDegree_pos_iff_degree_pos.mpr <| degree_pos_of_irreducible hf).ne'
       contradiction
-    have := isLocal
+    have := isLocalHom_expand F hp
+    exact
+      Or.inr
+        ⟨by rw [separable_iff_derivative_ne_zero hf, Classical.not_not, H], contract p f,
+          Irreducible.of_map (by rwa [← expand_contract p H hp.ne'] at hf),
+          expand_contract p H hp.ne'⟩
+else Or.inl (separable_iff_derivative_ne_zero hf).2 H
 
 中文:
 定理 separable_or
@@ -1251,7 +1281,13 @@ theorem separable_or
       have := derivative_eq_zero.1 H
       have := (natDegree_pos_iff_degree_pos.mpr <| degree_pos_of_irreducible hf).ne'
       contradiction
-    have := isLocal
+    have := isLocalHom_expand F hp
+    exact
+      Or.inr
+        ⟨by rw [separable_iff_derivative_ne_zero hf, Classical.not_not, H], contract p f,
+          Irreducible.of_map (by rwa [← expand_contract p H hp.ne'] at hf),
+          expand_contract p H hp.ne'⟩
+else Or.inl (separable_iff_derivative_ne_zero hf).2 H
 
 Depends on / 依赖: CharP.charP_to_charZero, Classical, Classical.not_not, Irreducible, Irreducible.of_map, Or.inl, Or.inr, charP_to_charZero, classical, contract, degree_pos_of_irreducible, derivative, derivative_eq_zero, eq_zero_or_pos, expand_contract, hp.ne, isLocalHom_expand, natDegree_pos_iff_degree_pos, natDegree_pos_iff_degree_pos.mpr, not_not
 -/
@@ -1284,7 +1320,23 @@ theorem exists_separable_of_irreducible
   rcases separable_or p hf with (h | ⟨h1, g, hg, hgf⟩)
   · refine ⟨0, f, h, ?_⟩
     rw [pow_zero]; rw [expand_one]
-  · rcases N with
+  · rcases N with - | N
+    · rw [natDegree_eq_zero_iff_degree_le_zero, degree_le_zero_iff] at hn
+      rw [hn]; rw [separable_C]; rw [isUnit_iff_ne_zero]; rw [Classical.not_not] at h1
+      have hf0 : f != 0 := hf.ne_zero
+      rw [h1]; rw [C_0] at hn
+      exact absurd hn hf0
+    have hg1 : g.natDegree * p = N.succ := by rwa [← natDegree_expand, hgf]
+    have hg2 : g.natDegree != 0 := by
+      intro this
+      rw [this]; rw [zero_mul] at hg1
+      cases hg1
+    have hg3 : g.natDegree < N.succ := by
+      rw [← mul_one g.natDegree]; rw [← hg1]
+      exact Nat.mul_lt_mul_of_pos_left hp.one_lt hg2.bot_lt
+    rcases ih _ hg3 hg rfl with ⟨n, g, hg4, rfl⟩
+    refine ⟨n + 1, g, hg4, ?_⟩
+    rw [← hgf]; rw [expand_expand]; rw [pow_succ']
 
 中文:
 定理 存在_separable_of_irreducible
@@ -1295,7 +1347,23 @@ theorem exists_separable_of_irreducible
   rcases separable_or p hf with (h | ⟨h1, g, hg, hgf⟩)
   · refine ⟨0, f, h, ?_⟩
     rw [pow_zero]; rw [expand_one]
-  · rcases N with
+  · rcases N with - | N
+    · rw [natDegree_eq_zero_iff_degree_le_zero, degree_le_zero_iff] at hn
+      rw [hn]; rw [separable_C]; rw [isUnit_iff_ne_zero]; rw [Classical.not_not] at h1
+      have hf0 : f != 0 := hf.ne_zero
+      rw [h1]; rw [C_0] at hn
+      exact absurd hn hf0
+    have hg1 : g.natDegree * p = N.succ := by rwa [← natDegree_expand, hgf]
+    have hg2 : g.natDegree != 0 := by
+      intro this
+      rw [this]; rw [zero_mul] at hg1
+      cases hg1
+    have hg3 : g.natDegree < N.succ := by
+      rw [← mul_one g.natDegree]; rw [← hg1]
+      exact Nat.mul_lt_mul_of_pos_left hp.one_lt hg2.bot_lt
+    rcases ih _ hg3 hg rfl with ⟨n, g, hg4, rfl⟩
+    refine ⟨n + 1, g, hg4, ?_⟩
+    rw [← hgf]; rw [expand_expand]; rw [pow_succ']
 
 Depends on / 依赖: CharP.char_is_prime_or_zero, Classical, Classical.not_not, Nat.strong_induction_on, char_is_prime_or_zero, degree_le_zero_iff, expand_one, f.natDegree, generalizing, hf.ne_zero, isUnit_iff_ne_zero, natDegree, natDegree_eq_zero_iff_degree_le_zero, ne_zero, not_not, p.Prime, pow_zero, replace, resolve_right, separable_C
 -/
@@ -1335,7 +1403,10 @@ theorem isUnit_or_eq_zero_of_separable_expand
   rintro hn : n != 0
   have hf2 : derivative (expand F (p ^ n) f) = 0 := by
     rw [derivative_expand]; rw [Nat.cast_pow]; rw [CharP.cast_eq_zero]; rw [zero_pow hn]; rw [zero_mul]; rw [mul_zero]
-  rw [separable_def]; rw [hf2]; rw [isCoprime_zero_right]; rw [isUnit_iff]
+  rw [separable_def]; rw [hf2]; rw [isCoprime_zero_right]; rw [isUnit_iff] at hf
+  rcases hf with ⟨r, hr, hrf⟩
+  rw [eq_comm]; rw [expand_eq_C (pow_pos hp _)] at hrf
+  rwa [hrf, isUnit_C]
 
 中文:
 定理 isUnit_or_eq_zero_of_separable_expand
@@ -1345,7 +1416,10 @@ theorem isUnit_or_eq_zero_of_separable_expand
   rintro hn : n != 0
   have hf2 : derivative (expand F (p ^ n) f) = 0 := by
     rw [derivative_expand]; rw [Nat.cast_pow]; rw [CharP.cast_eq_zero]; rw [zero_pow hn]; rw [zero_mul]; rw [mul_zero]
-  rw [separable_def]; rw [hf2]; rw [isCoprime_zero_right]; rw [isUnit_iff]
+  rw [separable_def]; rw [hf2]; rw [isCoprime_zero_right]; rw [isUnit_iff] at hf
+  rcases hf with ⟨r, hr, hrf⟩
+  rw [eq_comm]; rw [expand_eq_C (pow_pos hp _)] at hrf
+  rwa [hrf, isUnit_C]
 
 Depends on / 依赖: CharP.cast_eq_zero, Nat.cast_pow, cast_eq_zero, cast_pow, derivative, derivative_expand, eq_comm, expand, expand_eq_C, isCoprime_zero_right, isUnit_C, isUnit_iff, mul_zero, or_iff_not_imp_right, pow_pos, separable_def, zero_mul, zero_pow
 -/
@@ -1374,7 +1448,16 @@ theorem unique_separable_of_irreducible
   intro g₁ hg₁ hgf₁ g₂ hg₂ hgf₂
   rw [le_iff_exists_add] at hn
   rcases hn with ⟨k, rfl⟩
-  rw [← hgf₁]; rw [pow_add]; rw [expand_mul]; rw [
+  rw [← hgf₁]; rw [pow_add]; rw [expand_mul]; rw [expand_inj (pow_pos hp n₁)] at hgf₂
+  subst hgf₂
+  subst hgf₁
+  rcases isUnit_or_eq_zero_of_separable_expand p k hp hg₁ with (h | rfl)
+  · rw [isUnit_iff] at h
+    rcases h with ⟨r, hr, rfl⟩
+    simp_rw [expand_C] at hf
+    exact absurd (isUnit_C.2 hr) hf.1
+  · rw [add_zero, pow_zero, expand_one]
+    constructor <;> rfl
 
 中文:
 定理 unique_separable_of_irreducible
@@ -1387,7 +1470,16 @@ theorem unique_separable_of_irreducible
   intro g₁ hg₁ hgf₁ g₂ hg₂ hgf₂
   rw [le_iff_exists_add] at hn
   rcases hn with ⟨k, rfl⟩
-  rw [← hgf₁]; rw [pow_add]; rw [expand_mul]; rw [
+  rw [← hgf₁]; rw [pow_add]; rw [expand_mul]; rw [expand_inj (pow_pos hp n₁)] at hgf₂
+  subst hgf₂
+  subst hgf₁
+  rcases isUnit_or_eq_zero_of_separable_expand p k hp hg₁ with (h | rfl)
+  · rw [isUnit_iff] at h
+    rcases h with ⟨r, hr, rfl⟩
+    simp_rw [expand_C] at hf
+    exact absurd (isUnit_C.2 hr) hf.1
+  · rw [add_zero, pow_zero, expand_one]
+    constructor <;> rfl
 
 Depends on / 依赖: absurd, eq_comm, expand_C, expand_inj, expand_mul, isUnit_iff, isUnit_or_eq_zero_of_separable_expand, le_iff_exists_add, le_of_not_ge, pow_add, pow_pos, revert, simp_rw
 -/
@@ -1550,7 +1642,7 @@ theorem nodup_roots_iff_of_splits
   rw [Separable]; rw [← gcd_isUnit_iff]; rw [isUnit_iff_degree_eq_zero] at hnsep
   obtain ⟨x, hx⟩ := Splits.exists_eval_eq_zero (Splits.of_dvd h hf (gcd_dvd_left f _)) hnsep
   simp_rw [Multiset.nodup_iff_count_le_one, not_forall, not_le]
- 
+  exact ⟨x, ((one_lt_rootMultiplicity_iff_isRoot_gcd hf).2 hx).trans_eq f.count_roots.symm⟩
 
 中文:
 定理 nodup_roots_iff_of_splits
@@ -1561,7 +1653,7 @@ theorem nodup_roots_iff_of_splits
   rw [Separable]; rw [← gcd_isUnit_iff]; rw [isUnit_iff_degree_eq_zero] at hnsep
   obtain ⟨x, hx⟩ := Splits.exists_eval_eq_zero (Splits.of_dvd h hf (gcd_dvd_left f _)) hnsep
   simp_rw [Multiset.nodup_iff_count_le_one, not_forall, not_le]
- 
+  exact ⟨x, ((one_lt_rootMultiplicity_iff_isRoot_gcd hf).2 hx).trans_eq f.count_roots.symm⟩
 
 Depends on / 依赖: Multiset, Multiset.nodup_iff_count_le_one, Separable, Splits, Splits.exists_eval_eq_zero, Splits.of_dvd, classical, count_roots, exists_eval_eq_zero, f.count_roots.symm, gcd_dvd_left, gcd_isUnit_iff, isUnit_iff_degree_eq_zero, nodup_iff_count_le_one, nodup_roots, not_forall, not_le, of_dvd, one_lt_rootMultiplicity_iff_isRoot_gcd, simp_rw
 -/
@@ -1646,6 +1738,13 @@ theorem eq_X_sub_C_of_separable_of_root_eq
   apply Finset.mk.inj
   · change _ = {i x}
     rw [Finset.eq_singleton_iff_unique_mem]
+    constructor
+    · apply Finset.mem_mk.mpr
+      · rw [mem_roots (show h.map i != 0 from map_ne_zero h_ne_zero)]
+        rw [IsRoot.def]; rw [← eval₂_eq_eval_map]; rw [eval₂_hom]; rw [h_root]
+        exact map_zero i
+      · exact nodup_roots (Separable.map h_sep)
+    · exact h_roots
 
 中文:
 定理 eq_X_sub_C_of_separable_of_root_eq
@@ -1659,6 +1758,13 @@ theorem eq_X_sub_C_of_separable_of_root_eq
   apply Finset.mk.inj
   · change _ = {i x}
     rw [Finset.eq_singleton_iff_unique_mem]
+    constructor
+    · apply Finset.mem_mk.mpr
+      · rw [mem_roots (show h.map i != 0 from map_ne_zero h_ne_zero)]
+        rw [IsRoot.def]; rw [← eval₂_eq_eval_map]; rw [eval₂_hom]; rw [h_root]
+        exact map_zero i
+      · exact nodup_roots (Separable.map h_sep)
+    · exact h_roots
 
 Depends on / 依赖: Finset, Finset.eq_singleton_iff_unique_mem, Finset.mem_mk.mpr, Finset.mk.inj, IsRoot, IsRoot.def, Separable, Separable.ma, eq_X_sub_C_of_single_root, eq_singleton_iff_unique_mem, h.map, h_ne_zero, h_root, h_sep, h_splits, h_splits.eq_X_sub_C_of_single_root, i.injective, injective, map_injective, map_ne_zero
 -/
@@ -2383,7 +2489,15 @@ lemma IsSeparable.of_equiv_equiv
     { (algebraMap A₁ B₁).comp e₁.symm.toRingHom with
         algebraMap := (algebraMap A₁ B₁).comp e₁.symm.toRingHom
         smul := fun a b => ((algebraMap A₁ B₁).comp e₁.symm.toRingHom a) * b
-        commutes' := fun r x => (Algebra.commutes
+        commutes' := fun r x => (Algebra.commutes) (e₁.symm.toRingHom r) x
+        smul_def' := fun _ _ => rfl }
+haveI : IsScalarTower A₁ A₂ B₁ := IsScalarTower.of_algebraMap_eq fun x =>
+(algebraMap A₁ B₁).congr_arg id ((e₁.symm_apply_apply x).symm)
+  let e : B₁ ≃ₐ[A₂] B₂ :=
+    { e₂ with
+      commutes' := fun x => by
+        simpa [RingHom.algebraMap_toAlgebra] using! DFunLike.congr_fun he.symm (e₁.symm x) }
+(AlgEquiv.isSeparable_iff e).mpr IsSeparable.tower_top A₂ h
 
 中文:
 引理 是可分.of_equiv_equiv
@@ -2394,7 +2508,15 @@ lemma IsSeparable.of_equiv_equiv
     { (algebraMap A₁ B₁).comp e₁.symm.toRingHom with
         algebraMap := (algebraMap A₁ B₁).comp e₁.symm.toRingHom
         smul := fun a b => ((algebraMap A₁ B₁).comp e₁.symm.toRingHom a) * b
-        commutes' := fun r x => (Algebra.commutes
+        commutes' := fun r x => (Algebra.commutes) (e₁.symm.toRingHom r) x
+        smul_def' := fun _ _ => rfl }
+haveI : IsScalarTower A₁ A₂ B₁ := IsScalarTower.of_algebraMap_eq fun x =>
+(algebraMap A₁ B₁).congr_arg id ((e₁.symm_apply_apply x).symm)
+  let e : B₁ ≃ₐ[A₂] B₂ :=
+    { e₂ with
+      commutes' := fun x => by
+        simpa [RingHom.algebraMap_toAlgebra] using! DFunLike.congr_fun he.symm (e₁.symm x) }
+(AlgEquiv.isSeparable_iff e).mpr IsSeparable.tower_top A₂ h
 
 Depends on / 依赖: Algebra, Algebra.commutes, IsScalarTower, IsScalarTower.of_algebraMap_eq, algebraMap, commutes, congr_arg, of_algebraMap_eq, smul_def, symm.toRingHom, symm_apply_apply, toAlgebra, toRingHom, toRingHom.toAlgebra
 -/
@@ -2480,7 +2602,7 @@ theorem AlgHom.natCard_of_powerBasis
   proof: by
   classical
   rw [Nat.card_congr pb.liftEquiv']; rw [Nat.subtype_card _ (fun x => Multiset.mem_toFinset)]; rw [← pb.natDegree_minpoly]; rw [← natDegree_map (algebraMap K L)]; rw [h_splits.natDegree_eq_card_roots]; rw [Multiset.toFinset_card_of_nodup]
-  exact nodup_roots ((separable_map (algebraMa
+  exact nodup_roots ((separable_map (algebraMap K L)).mpr h_sep)
 
 中文:
 定理 代数态射.natCard_of_powerBasis
@@ -2488,7 +2610,7 @@ theorem AlgHom.natCard_of_powerBasis
   证明: by
   classical
   rw [Nat.card_congr pb.liftEquiv']; rw [Nat.subtype_card _ (fun x => Multiset.mem_toFinset)]; rw [← pb.natDegree_minpoly]; rw [← natDegree_map (algebraMap K L)]; rw [h_splits.natDegree_eq_card_roots]; rw [Multiset.toFinset_card_of_nodup]
-  exact nodup_roots ((separable_map (algebraMa
+  exact nodup_roots ((separable_map (algebraMap K L)).mpr h_sep)
 
 Depends on / 依赖: Multiset, Multiset.mem_toFinset, Multiset.toFinset_card_of_nodup, Nat.card_congr, Nat.subtype_card, algebraMap, card_congr, classical, h_sep, h_splits, h_splits.natDegree_eq_card_roots, liftEquiv, mem_toFinset, natDegree_eq_card_roots, natDegree_map, natDegree_minpoly, nodup_roots, pb.liftEquiv, pb.natDegree_minpoly, separable_map
 -/

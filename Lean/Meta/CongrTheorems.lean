@@ -282,7 +282,14 @@ definition withSubsingletonAsFast
   let insts2 := (← getLocalInstances).filter fun inst => inst.className == ``IsEmpty
   let mkInst (f : Name) (inst : Expr) : MetaM Expr := do
     forallTelescopeReducing (← inferType inst) fun args _ => do
-m
+mkLambdaFVars args ← mkAppOptM f #[none, mkAppN inst args]
+  let vals := (← insts1.mapM fun inst => mkInst ``FastSubsingleton.mk inst.fvar)
+    ++ (← insts2.mapM fun inst => mkInst ``FastIsEmpty.mk inst.fvar)
+  let tys ← vals.mapM inferType
+  withLocalDeclsD (tys.map fun ty => (`inst, fun _ => pure ty)) fun args =>
+    withNewLocalInstances args 0 do
+      let elim (e : Expr) : Expr := e.replaceFVars args vals
+      mx elim
 
 中文:
 定义 withSubsingletonAsFast
@@ -292,7 +299,14 @@ m
   let insts2 := (← getLocalInstances).filter fun inst => inst.className == ``IsEmpty
   let mkInst (f : Name) (inst : Expr) : MetaM Expr := do
     forallTelescopeReducing (← inferType inst) fun args _ => do
-m
+mkLambdaFVars args ← mkAppOptM f #[none, mkAppN inst args]
+  let vals := (← insts1.mapM fun inst => mkInst ``FastSubsingleton.mk inst.fvar)
+    ++ (← insts2.mapM fun inst => mkInst ``FastIsEmpty.mk inst.fvar)
+  let tys ← vals.mapM inferType
+  withLocalDeclsD (tys.map fun ty => (`inst, fun _ => pure ty)) fun args =>
+    withNewLocalInstances args 0 do
+      let elim (e : Expr) : Expr := e.replaceFVars args vals
+      mx elim
 -/
 def withSubsingletonAsFast {α : Type} [Inhabited α] (mx : (Expr -> Expr) -> MetaM α) : MetaM α := do
   let insts1 := (← getLocalInstances).filter fun inst => inst.className == ``Subsingleton
@@ -320,7 +334,11 @@ definition fastSubsingletonElim
       let tgt ← withReducible mvarId.getType'
       let some (_, lhs, rhs) := tgt.eq? | failure
       -- Note: `mkAppM` uses `withNewMCtxDepth`, which prevents `Sort _` from specializing to `Prop`
- 
+      let pf ← withSubsingletonAsFast fun elim =>
+elim < > mkAppM ``FastSubsingleton.elim #[lhs, rhs]
+      mvarId.assign pf
+      return true
+    return res.getD false
 
 中文:
 定义 fastSubsingletonElim
@@ -331,7 +349,11 @@ definition fastSubsingletonElim
       let tgt ← withReducible mvarId.getType'
       let some (_, lhs, rhs) := tgt.eq? | failure
       -- Note: `mkAppM` uses `withNewMCtxDepth`, which prevents `Sort _` from specializing to `Prop`
- 
+      let pf ← withSubsingletonAsFast fun elim =>
+elim < > mkAppM ``FastSubsingleton.elim #[lhs, rhs]
+      mvarId.assign pf
+      return true
+    return res.getD false
 
 Depends on / 依赖: checkNotAssigned, failure, fastSubsingletonElim, getType, mvarId, mvarId.checkNotAssigned, mvarId.getType, mvarId.withContext, observing, tgt.eq, withContext, withReducible
 -/
@@ -359,7 +381,65 @@ definition mkRichHCongr
   trace[Meta.CongrTheorems] "deps: {info.paramInfo.map (fun p => p.backDeps)}"
   trace[Meta.CongrTheorems] "fixedFun={fixedFun}, fixedParams={fixedParams}"
   doubleTelescope fType info.getArity fixedParams fun xs ys fixedParams => do
-    trace[Meta.Con
+    trace[Meta.CongrTheorems] "xs = {xs}"
+    trace[Meta.CongrTheorems] "ys = {ys}"
+    trace[Meta.CongrTheorems] "computed fixedParams={fixedParams}"
+    let lctx := (← getLCtx) -- checkpoint for a local context that only has the parameters
+    withLocalDeclD `f fType fun ef => withLocalDeclD `f' fType fun pef' => do
+    let ef' := if fixedFun then ef else pef'
+    withLocalDeclD `e (← mkEq ef ef') fun ee => do
+    withNewEqs xs ys fixedParams fun kinds eqs => do
+      let fParams := if fixedFun then #[ef] else #[ef, ef', ee]
+      let mut hs := fParams -- parameters to the basic congruence lemma
+      let mut hs' := fParams -- parameters to the richer congruence lemma
+      let mut vals' := fParams -- how to calculate the basic parameters from the richer ones
+      for i in [0 : info.getArity] do
+        hs := hs.push xs[i]!
+        hs' := hs'.push xs[i]!
+        vals' := vals'.push xs[i]!
+        if let some (eq, eq', val) := eqs[i]! then
+          -- Not a fixed argument
+.push eq hs := hs.push ys[i]!
+.push eq' hs' := hs'.push ys[i]!
+.push val vals' := vals'.push ys[i]!
+      -- Generate the theorem with respect to the simpler hypotheses
+      let mkConcl := if forceHEq then mkHEq else mkEqHEq
+      let congrType ← mkForallFVars hs (← mkConcl (mkAppN ef xs) (mkAppN ef' ys))
+      trace[Meta.CongrTheorems] "simple congrType: {congrType}"
+let some proof ← withLCtx lctx (← getLocalInstances) trySolve congrType
+        | throwError "Internal error when constructing congruence lemma proof"
+      -- At this point, `mkLambdaFVars hs' (mkAppN proof vals')` is the richer proof.
+      -- We try to precompute some of the arguments using `trySolve`.
+      let mut hs'' := #[] -- eq' parameters that are actually used beyond those in `fParams`
+      let mut pfVars := #[] -- eq' parameters that can be solved for already
+      let mut pfVals := #[] -- the values to use for these parameters
+      let mut kinds' : Array CongrArgKind := #[if fixedFun then .fixed else .eq]
+      for i in [0 : info.getArity] do
+        hs'' := hs''.push xs[i]!
+        if let some (_, eq', _) := eqs[i]! then
+          -- Not a fixed argument
+          hs'' := hs''.push ys[i]!
+let pf? ← withLCtx lctx (← getLocalInstances) trySolve (← inferType eq')
+          if let some pf := pf? then
+            pfVars := pfVars.push eq'
+            pfVals := pfVals.push pf
+            kinds' := kinds'.push .subsingletonInst
+          else
+            hs'' := hs''.push eq'
+            kinds' := kinds'.push kinds[i]!
+        else
+          kinds' := kinds'.push .fixed
+      trace[Meta.CongrTheorems] "CongrArgKinds: {repr kinds'}"
+      -- Take `proof`, abstract the pfVars and provide the solved-for proofs (as an
+      -- optimization for proof term size) then abstract the remaining variables.
+      -- The `usedOnly` probably has no affect.
+      -- Note that since we are doing `proof.beta vals'` there is technically some quadratic
+      -- complexity, but it shouldn't be too bad since they're some applications of just variables.
+      let proof' ← mkLambdaFVars fParams (← mkLambdaFVars (usedOnly := true) hs''
+                    (mkAppN (← mkLambdaFVars pfVars (proof.beta vals')) pfVals))
+      let congrType' ← inferType proof'
+      trace[Meta.CongrTheorems] "rich congrType: {congrType'}"
+      return {proof := proof', type := congrType', argKinds := kinds'}
 
 中文:
 定义 mkRichHCongr
@@ -369,7 +449,65 @@ definition mkRichHCongr
   trace[Meta.CongrTheorems] "deps: {info.paramInfo.map (fun p => p.backDeps)}"
   trace[Meta.CongrTheorems] "fixedFun={fixedFun}, fixedParams={fixedParams}"
   doubleTelescope fType info.getArity fixedParams fun xs ys fixedParams => do
-    trace[Meta.Con
+    trace[Meta.CongrTheorems] "xs = {xs}"
+    trace[Meta.CongrTheorems] "ys = {ys}"
+    trace[Meta.CongrTheorems] "computed fixedParams={fixedParams}"
+    let lctx := (← getLCtx) -- checkpoint for a local context that only has the parameters
+    withLocalDeclD `f fType fun ef => withLocalDeclD `f' fType fun pef' => do
+    let ef' := if fixedFun then ef else pef'
+    withLocalDeclD `e (← mkEq ef ef') fun ee => do
+    withNewEqs xs ys fixedParams fun kinds eqs => do
+      let fParams := if fixedFun then #[ef] else #[ef, ef', ee]
+      let mut hs := fParams -- parameters to the basic congruence lemma
+      let mut hs' := fParams -- parameters to the richer congruence lemma
+      let mut vals' := fParams -- how to calculate the basic parameters from the richer ones
+      for i in [0 : info.getArity] do
+        hs := hs.push xs[i]!
+        hs' := hs'.push xs[i]!
+        vals' := vals'.push xs[i]!
+        if let some (eq, eq', val) := eqs[i]! then
+          -- Not a fixed argument
+.push eq hs := hs.push ys[i]!
+.push eq' hs' := hs'.push ys[i]!
+.push val vals' := vals'.push ys[i]!
+      -- Generate the theorem with respect to the simpler hypotheses
+      let mkConcl := if forceHEq then mkHEq else mkEqHEq
+      let congrType ← mkForallFVars hs (← mkConcl (mkAppN ef xs) (mkAppN ef' ys))
+      trace[Meta.CongrTheorems] "simple congrType: {congrType}"
+let some proof ← withLCtx lctx (← getLocalInstances) trySolve congrType
+        | throwError "Internal error when constructing congruence lemma proof"
+      -- At this point, `mkLambdaFVars hs' (mkAppN proof vals')` is the richer proof.
+      -- We try to precompute some of the arguments using `trySolve`.
+      let mut hs'' := #[] -- eq' parameters that are actually used beyond those in `fParams`
+      let mut pfVars := #[] -- eq' parameters that can be solved for already
+      let mut pfVals := #[] -- the values to use for these parameters
+      let mut kinds' : Array CongrArgKind := #[if fixedFun then .fixed else .eq]
+      for i in [0 : info.getArity] do
+        hs'' := hs''.push xs[i]!
+        if let some (_, eq', _) := eqs[i]! then
+          -- Not a fixed argument
+          hs'' := hs''.push ys[i]!
+let pf? ← withLCtx lctx (← getLocalInstances) trySolve (← inferType eq')
+          if let some pf := pf? then
+            pfVars := pfVars.push eq'
+            pfVals := pfVals.push pf
+            kinds' := kinds'.push .subsingletonInst
+          else
+            hs'' := hs''.push eq'
+            kinds' := kinds'.push kinds[i]!
+        else
+          kinds' := kinds'.push .fixed
+      trace[Meta.CongrTheorems] "CongrArgKinds: {repr kinds'}"
+      -- Take `proof`, abstract the pfVars and provide the solved-for proofs (as an
+      -- optimization for proof term size) then abstract the remaining variables.
+      -- The `usedOnly` probably has no affect.
+      -- Note that since we are doing `proof.beta vals'` there is technically some quadratic
+      -- complexity, but it shouldn't be too bad since they're some applications of just variables.
+      let proof' ← mkLambdaFVars fParams (← mkLambdaFVars (usedOnly := true) hs''
+                    (mkAppN (← mkLambdaFVars pfVars (proof.beta vals')) pfVals))
+      let congrType' ← inferType proof'
+      trace[Meta.CongrTheorems] "rich congrType: {congrType'}"
+      return {proof := proof', type := congrType', argKinds := kinds'}
 -/
 partial def mkRichHCongr (fType : Expr) (info : FunInfo)
     (fixedFun : Bool := false) (fixedParams : Array Bool := #[])

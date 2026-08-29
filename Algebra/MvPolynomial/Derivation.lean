@@ -271,7 +271,17 @@ theorem leibniz_iff_X
   have : forall p i, D (p * X i) = p • D (X i) + (X i : MvPolynomial σ R) • D p := by
     intro p i
     induction p using MvPolynomial.induction_on' with
-    |
+    | monomial s r =>
+      rw [← mul_one r]; rw [← C_mul_monomial]; rw [mul_assoc]; rw [C_mul']; rw [D.map_smul]; rw [H]; rw [C_mul']; rw [smul_assoc]; rw [smul_add]; rw [D.map_smul]; rw [smul_comm r (X i)]
+    | add p q hp hq => rw [add_mul, map_add, map_add, hp, hq, add_smul, smul_add, add_add_add_comm]
+  intro p q
+  induction q using MvPolynomial.induction_on with
+  | C c =>
+    rw [mul_comm]; rw [C_mul']; rw [hC]; rw [smul_zero]; rw [zero_add]; rw [D.map_smul]; rw [C_eq_smul_one]; rw [smul_one_smul]
+  | add q₁ q₂ h₁ h₂ => simp only [mul_add, map_add, h₁, h₂, smul_add, add_smul]; abel
+  | mul_X q i hq =>
+    simp only [this, ← mul_assoc, hq, mul_smul, smul_add, add_assoc]
+    rw [smul_comm (X i)]; rw [smul_comm (X i)]
 
 中文:
 定理 leibniz_iff_X
@@ -282,7 +292,17 @@ theorem leibniz_iff_X
   have : forall p i, D (p * X i) = p • D (X i) + (X i : MvPolynomial σ R) • D p := by
     intro p i
     induction p using MvPolynomial.induction_on' with
-    |
+    | monomial s r =>
+      rw [← mul_one r]; rw [← C_mul_monomial]; rw [mul_assoc]; rw [C_mul']; rw [D.map_smul]; rw [H]; rw [C_mul']; rw [smul_assoc]; rw [smul_add]; rw [D.map_smul]; rw [smul_comm r (X i)]
+    | add p q hp hq => rw [add_mul, map_add, map_add, hp, hq, add_smul, smul_add, add_add_add_comm]
+  intro p q
+  induction q using MvPolynomial.induction_on with
+  | C c =>
+    rw [mul_comm]; rw [C_mul']; rw [hC]; rw [smul_zero]; rw [zero_add]; rw [D.map_smul]; rw [C_eq_smul_one]; rw [smul_one_smul]
+  | add q₁ q₂ h₁ h₂ => simp only [mul_add, map_add, h₁, h₂, smul_add, add_smul]; abel
+  | mul_X q i hq =>
+    simp only [this, ← mul_assoc, hq, mul_smul, smul_add, add_assoc]
+    rw [smul_comm (X i)]; rw [smul_comm (X i)]
 
 Depends on / 依赖: C_eq_smul_one, C_mul, C_mul_monomial, D.map_smul, MvPolynomial, MvPolynomial.induction_on, induction_on, map_smul, monomial, mul_assoc, mul_one, smul_add, smul_assoc, smul_comm, smul_zero
 -/
@@ -320,7 +340,14 @@ definition mkDerivation
     (leibniz_iff_X (mkDerivationₗ R f) (mkDerivationₗ_C _ 1)).2 fun s i => by
       simp only [mkDerivationₗ_monomial, X, monomial_mul, one_smul, one_mul]
       rw [Finsupp.sum_add_index'] <;>
-        [skip; simp; (intros; sim
+        [skip; simp; (intros; simp only [Nat.cast_add, (monomial _).map_add, add_smul])]
+      rw [Finsupp.sum_single_index]; rw [Finsupp.sum_single_index] <;> [skip; simp; simp]
+      rw [tsub_self]; rw [add_tsub_cancel_right]; rw [Nat.cast_one]; rw [← C_apply]; rw [C_1]; rw [one_smul]; rw [add_comm]; rw [Finsupp.smul_sum]
+      refine congr_arg₂ (· + ·) rfl (Finset.sum_congr rfl fun j hj => ?_); dsimp only
+      rw [smul_smul]; rw [monomial_mul]; rw [one_mul]; rw [add_comm s]; rw [add_tsub_assoc_of_le]
+      rwa [Finsupp.single_le_iff, Nat.succ_le_iff, pos_iff_ne_zero, ← Finsupp.mem_support_iff]
+
+@[simp]
 
 中文:
 定义 mkDerivation
@@ -331,7 +358,14 @@ definition mkDerivation
     (leibniz_iff_X (mkDerivationₗ R f) (mkDerivationₗ_C _ 1)).2 fun s i => by
       simp only [mkDerivationₗ_monomial, X, monomial_mul, one_smul, one_mul]
       rw [Finsupp.sum_add_index'] <;>
-        [skip; simp; (intros; sim
+        [skip; simp; (intros; simp only [Nat.cast_add, (monomial _).map_add, add_smul])]
+      rw [Finsupp.sum_single_index]; rw [Finsupp.sum_single_index] <;> [skip; simp; simp]
+      rw [tsub_self]; rw [add_tsub_cancel_right]; rw [Nat.cast_one]; rw [← C_apply]; rw [C_1]; rw [one_smul]; rw [add_comm]; rw [Finsupp.smul_sum]
+      refine congr_arg₂ (· + ·) rfl (Finset.sum_congr rfl fun j hj => ?_); dsimp only
+      rw [smul_smul]; rw [monomial_mul]; rw [one_mul]; rw [add_comm s]; rw [add_tsub_assoc_of_le]
+      rwa [Finsupp.single_le_iff, Nat.succ_le_iff, pos_iff_ne_zero, ← Finsupp.mem_support_iff]
+
+@[simp]
 -/
 def mkDerivation (f : σ -> A) : Derivation R (MvPolynomial σ R) A where
   toLinearMap := mkDerivationₗ R f

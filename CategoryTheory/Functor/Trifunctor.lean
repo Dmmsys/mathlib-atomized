@@ -120,7 +120,10 @@ definition bifunctorComp₁₂FunctorObj
             ext X₃
             dsimp
             simp only [← NatTrans.comp_app, NatTrans.naturality] }
-      naturalit
+      naturality X₁ Y₁ f := by
+        ext X₂ X₃
+        dsimp
+        simp only [← NatTrans.comp_app, NatTrans.naturality] }
 
 中文:
 定义 bifunctorComp₁₂FunctorObj
@@ -134,7 +137,10 @@ definition bifunctorComp₁₂FunctorObj
             ext X₃
             dsimp
             simp only [← NatTrans.comp_app, NatTrans.naturality] }
-      naturalit
+      naturality X₁ Y₁ f := by
+        ext X₂ X₃
+        dsimp
+        simp only [← NatTrans.comp_app, NatTrans.naturality] }
 -/
 def bifunctorComp₁₂FunctorObj (F₁₂ : C₁ ⥤ C₂ ⥤ C₁₂) :
     (C₁₂ ⥤ C₃ ⥤ C₄) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ C₄ where
@@ -170,7 +176,12 @@ definition bifunctorComp₁₂FunctorMap
             simp only [← NatTrans.comp_app, NatTrans.naturality, ← G.map_comp] }
       naturality X₁ Y₁ f := by
         ext X₂ X₃
-        ds
+        dsimp
+        simp only [← NatTrans.comp_app, NatTrans.naturality, ← G.map_comp] }
+  naturality G G' f := by
+    ext X₁ X₂ X₃
+    dsimp
+    simp only [← NatTrans.comp_app, NatTrans.naturality]
 
 中文:
 定义 bifunctorComp₁₂FunctorMap
@@ -183,7 +194,12 @@ definition bifunctorComp₁₂FunctorMap
             simp only [← NatTrans.comp_app, NatTrans.naturality, ← G.map_comp] }
       naturality X₁ Y₁ f := by
         ext X₂ X₃
-        ds
+        dsimp
+        simp only [← NatTrans.comp_app, NatTrans.naturality, ← G.map_comp] }
+  naturality G G' f := by
+    ext X₁ X₂ X₃
+    dsimp
+    simp only [← NatTrans.comp_app, NatTrans.naturality]
 -/
 def bifunctorComp₁₂FunctorMap {F₁₂ F₁₂' : C₁ ⥤ C₂ ⥤ C₁₂} (φ : F₁₂ ⟶ F₁₂') :
     bifunctorComp₁₂FunctorObj (C₃ := C₃) (C₄ := C₄) F₁₂ ⟶ bifunctorComp₁₂FunctorObj F₁₂' where
@@ -318,7 +334,10 @@ definition bifunctorComp₂₃FunctorObj
               naturality X₃ Y₃ f := by
                 dsimp
                 simp only [← Functor.map_comp, NatTrans.naturality] }
-          naturality X₂ Y₂ f :
+          naturality X₂ Y₂ f := by
+            ext X₃
+            dsimp
+            simp only [← NatTrans.comp_app, ← Functor.map_comp, NatTrans.naturality] } }
 
 中文:
 定义 bifunctorComp₂₃FunctorObj
@@ -331,7 +350,10 @@ definition bifunctorComp₂₃FunctorObj
               naturality X₃ Y₃ f := by
                 dsimp
                 simp only [← Functor.map_comp, NatTrans.naturality] }
-          naturality X₂ Y₂ f :
+          naturality X₂ Y₂ f := by
+            ext X₃
+            dsimp
+            simp only [← NatTrans.comp_app, ← Functor.map_comp, NatTrans.naturality] } }
 -/
 def bifunctorComp₂₃FunctorObj (F : C₁ ⥤ C₂₃ ⥤ C₄) :
     (C₂ ⥤ C₃ ⥤ C₂₃) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ C₄ where

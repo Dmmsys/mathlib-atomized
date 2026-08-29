@@ -45,7 +45,14 @@ theorem free_and_finite_fin
         Module.Finite.equiv (constLinearEquivOfIsEmpty R R N M₂)⟩
   | succ n ih =>
     suffices
-      Module.Free R (N 
+      Module.Free R (N 0 ->ₗ[R] MultilinearMap R (fun i : Fin n => N i.succ) M₂) ∧
+        Module.Finite R (N 0 ->ₗ[R] MultilinearMap R (fun i : Fin n => N i.succ) M₂) by
+      cases this
+      exact
+        ⟨Module.Free.of_equiv (multilinearCurryLeftEquiv R N M₂).symm,
+          Module.Finite.equiv (multilinearCurryLeftEquiv R N M₂).symm⟩
+    cases ih fun i => N i.succ
+    exact ⟨Module.Free.linearMap _ _ _ _, Module.Finite.linearMap _ _ _ _⟩
 
 中文:
 定理 free_and_finite_fin
@@ -59,7 +66,14 @@ theorem free_and_finite_fin
         Module.Finite.equiv (constLinearEquivOfIsEmpty R R N M₂)⟩
   | succ n ih =>
     suffices
-      Module.Free R (N 
+      Module.Free R (N 0 ->ₗ[R] MultilinearMap R (fun i : Fin n => N i.succ) M₂) ∧
+        Module.Finite R (N 0 ->ₗ[R] MultilinearMap R (fun i : Fin n => N i.succ) M₂) by
+      cases this
+      exact
+        ⟨Module.Free.of_equiv (multilinearCurryLeftEquiv R N M₂).symm,
+          Module.Finite.equiv (multilinearCurryLeftEquiv R N M₂).symm⟩
+    cases ih fun i => N i.succ
+    exact ⟨Module.Free.linearMap _ _ _ _, Module.Finite.linearMap _ _ _ _⟩
 -/
 private theorem free_and_finite_fin (n : Nat) (N : Fin n -> Type*) [forall i, AddCommGroup (N i)]
     [forall i, Module R (N i)] [forall i, Module.Finite R (N i)] [forall i, Module.Free R (N i)] :

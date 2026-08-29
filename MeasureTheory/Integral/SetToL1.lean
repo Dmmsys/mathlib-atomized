@@ -98,7 +98,11 @@ theorem norm_eq_sum_mul
   rw [SimpleFunc.lintegral_eq_lintegral]; rw [SimpleFunc.map_lintegral]; rw [ENNReal.toReal_sum]
   · congr
     ext1 x
-    rw [ENNReal.toRea
+    rw [ENNReal.toReal_mul]; rw [mul_comm]; rw [← ofReal_norm]; rw [ENNReal.toReal_ofReal (norm_nonneg _)]
+  · intro x _
+    by_cases hx0 : x = 0
+    · rw [hx0]; simp
+    · finiteness [SimpleFunc.measure_preimage_lt_top_of_integrable _ (SimpleFunc.integrable f) hx0]
 
 中文:
 定理 norm_eq_sum_mul
@@ -110,7 +114,11 @@ theorem norm_eq_sum_mul
   rw [SimpleFunc.lintegral_eq_lintegral]; rw [SimpleFunc.map_lintegral]; rw [ENNReal.toReal_sum]
   · congr
     ext1 x
-    rw [ENNReal.toRea
+    rw [ENNReal.toReal_mul]; rw [mul_comm]; rw [← ofReal_norm]; rw [ENNReal.toReal_ofReal (norm_nonneg _)]
+  · intro x _
+    by_cases hx0 : x = 0
+    · rw [hx0]; simp
+    · finiteness [SimpleFunc.measure_preimage_lt_top_of_integrable _ (SimpleFunc.integrable f) hx0]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_mul, ENNReal.toReal_ofReal, ENNReal.toReal_sum, SimpleFunc, SimpleFunc.integ, SimpleFunc.lintegral_eq_lintegral, SimpleFunc.map_apply, SimpleFunc.map_lintegral, SimpleFunc.measure_preimage_lt_top_of_integrable, eLpNorm_one_eq_lintegral_enorm, finiteness, h_eq, lintegral_eq_lintegral, map_apply, map_lintegral, measureReal_def, measure_preimage_lt_top_of_integrable, mul_comm, norm_nonneg
 -/
@@ -265,7 +273,8 @@ theorem setToL1S_congr_measure
   refine SimpleFunc.setToSimpleFunc_congr T h_zero h_add (SimpleFunc.integrable f) ?_
   refine (toSimpleFunc_eq_toFun f).trans ?_
   suffices (f' : α -> E) =ᵐ[μ] simpleFunc.toSimpleFunc f' from h.trans this
-  have goal' : (f' : α -> E) =ᵐ[μ'] simpleFunc.toSimpleFunc f' := (toSimpleFunc_eq_toFun f'
+  have goal' : (f' : α -> E) =ᵐ[μ'] simpleFunc.toSimpleFunc f' := (toSimpleFunc_eq_toFun f').symm
+  exact hμ.ae_eq goal'
 
 中文:
 定理 setToL1S_congr_measure
@@ -274,7 +283,8 @@ theorem setToL1S_congr_measure
   refine SimpleFunc.setToSimpleFunc_congr T h_zero h_add (SimpleFunc.integrable f) ?_
   refine (toSimpleFunc_eq_toFun f).trans ?_
   suffices (f' : α -> E) =ᵐ[μ] simpleFunc.toSimpleFunc f' from h.trans this
-  have goal' : (f' : α -> E) =ᵐ[μ'] simpleFunc.toSimpleFunc f' := (toSimpleFunc_eq_toFun f'
+  have goal' : (f' : α -> E) =ᵐ[μ'] simpleFunc.toSimpleFunc f' := (toSimpleFunc_eq_toFun f').symm
+  exact hμ.ae_eq goal'
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_congr, ae_eq, h.trans, h_add, h_zero, integrable, setToSimpleFunc_congr, simpleFunc, simpleFunc.toSimpleFunc, toSimpleFunc, toSimpleFunc_eq_toFun
 -/
@@ -561,7 +571,7 @@ theorem setToL1S_indicatorConst
   rw [setToL1S_eq_setToSimpleFunc]
   refine Eq.trans ?_ (SimpleFunc.setToSimpleFunc_indicator T h_empty hs x)
   refine SimpleFunc.setToSimpleFunc_congr T h_zero h_add (SimpleFunc.integrable _) ?_
-  exact toSimpleFunc_indicator
+  exact toSimpleFunc_indicatorConst hs hμs.ne x
 
 中文:
 定理 setToL1S_indicatorConst
@@ -571,7 +581,7 @@ theorem setToL1S_indicatorConst
   rw [setToL1S_eq_setToSimpleFunc]
   refine Eq.trans ?_ (SimpleFunc.setToSimpleFunc_indicator T h_empty hs x)
   refine SimpleFunc.setToSimpleFunc_congr T h_zero h_add (SimpleFunc.integrable _) ?_
-  exact toSimpleFunc_indicator
+  exact toSimpleFunc_indicatorConst hs hμs.ne x
 
 Depends on / 依赖: Eq.trans, MeasurableSet, MeasurableSet.empty, SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_congr, SimpleFunc.setToSimpleFunc_indicator, h_add, h_empty, h_zero, integrable, measure_empty, s.ne, setToL1S_eq_setToSimpleFunc, setToSimpleFunc_congr, setToSimpleFunc_indicator, toSimpleFunc_indicatorConst
 -/
@@ -669,7 +679,7 @@ theorem setToL1S_nonneg
     (Lp.simpleFunc.toSimpleFunc_eq_toFun f).trans hff'
   rw [SimpleFunc.setToSimpleFunc_congr _ h_zero h_add (SimpleFunc.integrable _) hff']
   exact
-    Simple
+    SimpleFunc.setToSimpleFunc_nonneg' T hT_nonneg _ hf' ((SimpleFunc.integrable f).congr hff')
 
 中文:
 定理 setToL1S_nonneg
@@ -681,7 +691,7 @@ theorem setToL1S_nonneg
     (Lp.simpleFunc.toSimpleFunc_eq_toFun f).trans hff'
   rw [SimpleFunc.setToSimpleFunc_congr _ h_zero h_add (SimpleFunc.integrable _) hff']
   exact
-    Simple
+    SimpleFunc.setToSimpleFunc_nonneg' T hT_nonneg _ hf' ((SimpleFunc.integrable f).congr hff')
 
 Depends on / 依赖: Lp.simpleFunc.toSimpleFunc_eq_toFun, SimpleFunc, SimpleFunc.integrable, SimpleFunc.setToSimpleFunc_congr, SimpleFunc.setToSimpleFunc_nonneg, exists_simpleFunc_nonneg_ae_eq, hT_nonneg, h_add, h_zero, integrable, replace, setToL1S, setToSimpleFunc_congr, setToSimpleFunc_nonneg, simp_rw, simpleFunc, simpleFunc.toSimpleFunc, toSimpleFunc, toSimpleFunc_eq_toFun
 -/
@@ -1319,7 +1329,9 @@ theorem setToL1_eq_setToL1'
   apply Dense.induction (P := fun f : α ->₁[μ] E => (setToL1 hT) f = (setToL1' 𝕜 hT h_smul) f) h₁
   · intro f ⟨f', hf⟩
     simp [← hf]
-  · exact isClosed_eq (setToL1 hT).continuous (setToL1' 𝕜 hT h_smul)
+  · exact isClosed_eq (setToL1 hT).continuous (setToL1' 𝕜 hT h_smul).continuous
+
+@[simp]
 
 中文:
 定理 setToL1_eq_setToL1'
@@ -1329,7 +1341,9 @@ theorem setToL1_eq_setToL1'
   apply Dense.induction (P := fun f : α ->₁[μ] E => (setToL1 hT) f = (setToL1' 𝕜 hT h_smul) f) h₁
   · intro f ⟨f', hf⟩
     simp [← hf]
-  · exact isClosed_eq (setToL1 hT).continuous (setToL1' 𝕜 hT h_smul)
+  · exact isClosed_eq (setToL1 hT).continuous (setToL1' 𝕜 hT h_smul).continuous
+
+@[simp]
 
 Depends on / 依赖: Dense.induction, Set.range, coeToLp, continuous, denseRange, h_smul, isClosed_eq, one_ne_top, setToL1, simpleFunc, simpleFunc.denseRange
 -/
@@ -1664,7 +1678,9 @@ theorem setToL1_mono_left'
     rw [setToL1_simpleFunc_indicatorConst hT hs hμs]; rw [setToL1_simpleFunc_indicatorConst hT' hs hμs]
     exact hTT' s hs hμs c
   | @add f g hf hg _ hf_le hg_le =>
-    rw [(setToL1 hT).map_add]; rw
+    rw [(setToL1 hT).map_add]; rw [(setToL1 hT').map_add]
+    exact add_le_add hf_le hg_le
+  | isClosed => exact isClosed_le (setToL1 hT).continuous (setToL1 hT').continuous
 
 中文:
 定理 setToL1_mono_left'
@@ -1675,7 +1691,9 @@ theorem setToL1_mono_left'
     rw [setToL1_simpleFunc_indicatorConst hT hs hμs]; rw [setToL1_simpleFunc_indicatorConst hT' hs hμs]
     exact hTT' s hs hμs c
   | @add f g hf hg _ hf_le hg_le =>
-    rw [(setToL1 hT).map_add]; rw
+    rw [(setToL1 hT).map_add]; rw [(setToL1 hT').map_add]
+    exact add_le_add hf_le hg_le
+  | isClosed => exact isClosed_le (setToL1 hT).continuous (setToL1 hT').continuous
 
 Depends on / 依赖: Lp.induction, add_le_add, continuous, hf_le, hg_le, hp_ne_top, indicatorConst, isClosed, isClosed_le, map_add, one_ne_top, setToL1, setToL1_simpleFunc_indicatorConst
 -/
@@ -1724,7 +1742,12 @@ theorem setToL1_nonneg
   refine fun g =>
     @isClosed_property { g : α ->₁ₛ[μ] G' // 0 <= g } { g : α ->₁[μ] G' // 0 <= g } _ _
       (fun g => 0 <= setToL1 hT g)
-      (denseRange_coeSimpleFu
+      (denseRange_coeSimpleFuncNonnegToLpNonneg 1 μ G' one_ne_top) ?_ ?_ g
+  · exact (isClosed_Ici (a := 0)).preimage ((setToL1 hT).continuous.comp continuous_induced_dom)
+  · intro g
+    have : (coeSimpleFuncNonnegToLpNonneg 1 μ G' g : α ->₁[μ] G') = (g : α ->₁ₛ[μ] G') := rfl
+    rw [this]; rw [setToL1_eq_setToL1SCLM]
+    exact setToL1S_nonneg (fun s => hT.eq_zero_of_measure_zero) hT.1 hT_nonneg g.2
 
 中文:
 定理 setToL1_nonneg
@@ -1735,7 +1758,12 @@ theorem setToL1_nonneg
   refine fun g =>
     @isClosed_property { g : α ->₁ₛ[μ] G' // 0 <= g } { g : α ->₁[μ] G' // 0 <= g } _ _
       (fun g => 0 <= setToL1 hT g)
-      (denseRange_coeSimpleFu
+      (denseRange_coeSimpleFuncNonnegToLpNonneg 1 μ G' one_ne_top) ?_ ?_ g
+  · exact (isClosed_Ici (a := 0)).preimage ((setToL1 hT).continuous.comp continuous_induced_dom)
+  · intro g
+    have : (coeSimpleFuncNonnegToLpNonneg 1 μ G' g : α ->₁[μ] G') = (g : α ->₁ₛ[μ] G') := rfl
+    rw [this]; rw [setToL1_eq_setToL1SCLM]
+    exact setToL1S_nonneg (fun s => hT.eq_zero_of_measure_zero) hT.1 hT_nonneg g.2
 
 Depends on / 依赖: coeSimpleFuncNonnegToLpNonneg, continuous, continuous.comp, continuous_induced_dom, denseRange_coeSimpleFuncNonnegToLpNonneg, isClosed_Ici, isClosed_property, one_ne_top, preimage, setToL1
 -/
@@ -1799,7 +1827,7 @@ theorem norm_setToL1_le_norm_setToL1SCLM
           (simpleFunc.denseRange one_ne_top) fun x => le_of_eq ?_
       rw [NNReal.coe_one]; rw [one_mul]
       simp [coeToLp]
-    _ = ‖setToL1SCLM α
+    _ = ‖setToL1SCLM α E μ hT‖ := by rw [NNReal.coe_one, one_mul]
 
 中文:
 定理 norm_setToL1_le_norm_setToL1SCLM
@@ -1811,7 +1839,7 @@ theorem norm_setToL1_le_norm_setToL1SCLM
           (simpleFunc.denseRange one_ne_top) fun x => le_of_eq ?_
       rw [NNReal.coe_one]; rw [one_mul]
       simp [coeToLp]
-    _ = ‖setToL1SCLM α
+    _ = ‖setToL1SCLM α E μ hT‖ := by rw [NNReal.coe_one, one_mul]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_extend_le, NNReal, NNReal.coe_one, coeToLp, coe_one, denseRange, le_of_eq, one_mul, one_ne_top, opNorm_extend_le, setToL1, setToL1SCLM, simpleFunc, simpleFunc.denseRange
 -/
@@ -2441,7 +2469,11 @@ theorem setToFun_finsetSum'
   · intro i s his ih hf
     simp only [his, Finset.sum_insert, not_false_iff]
     rw [setToFun_add hT (hf i (Finset.mem_insert_self i s)) _]
-    · rw [ih fun i hi => hf i (Fins
+    · rw [ih fun i hi => hf i (Finset.mem_insert_of_mem hi)]
+    · convert! integrable_finsetSum s fun i hi => hf i (Finset.mem_insert_of_mem hi) with x
+      simp
+
+@[deprecated (since := "2026-04-08")] alias setToFun_finset_sum' := setToFun_finsetSum'
 
 中文:
 定理 setToFun_finsetSum'
@@ -2455,7 +2487,11 @@ theorem setToFun_finsetSum'
   · intro i s his ih hf
     simp only [his, Finset.sum_insert, not_false_iff]
     rw [setToFun_add hT (hf i (Finset.mem_insert_self i s)) _]
-    · rw [ih fun i hi => hf i (Fins
+    · rw [ih fun i hi => hf i (Finset.mem_insert_of_mem hi)]
+    · convert! integrable_finsetSum s fun i hi => hf i (Finset.mem_insert_of_mem hi) with x
+      simp
+
+@[deprecated (since := "2026-04-08")] alias setToFun_finset_sum' := setToFun_finsetSum'
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_empty, Finset.sum_insert, classical, convert, induction_on, integrable_finsetSum, mem_insert_of_mem, mem_insert_self, not_false_iff, revert, setToFun_add, setToFun_zero, sum_empty, sum_insert
 -/
@@ -2599,7 +2635,8 @@ theorem setToFun_smul
       L1.setToL1_smul hT h_smul c]
   · by_cases hr : c = 0
     · rw [hr]; simp
-    · have hf' : ¬Integrable (c • f) μ := 
+    · have hf' : ¬Integrable (c • f) μ := by rwa [integrable_smul_iff hr f]
+      rw [setToFun_undef hT hf]; rw [setToFun_undef hT hf']; rw [smul_zero]
 
 中文:
 定理 setToFun_smul
@@ -2612,7 +2649,8 @@ theorem setToFun_smul
       L1.setToL1_smul hT h_smul c]
   · by_cases hr : c = 0
     · rw [hr]; simp
-    · have hf' : ¬Integrable (c • f) μ := 
+    · have hf' : ¬Integrable (c • f) μ := by rwa [integrable_smul_iff hr f]
+      rw [setToFun_undef hT hf]; rw [setToFun_undef hT hf']; rw [smul_zero]
 
 Depends on / 依赖: CompleteSpace, Integrable, Integrable.toL1_smul, L1.setToL1_smul, h_smul, hf.smul, integrable_smul_iff, setToFun, setToFun_eq, setToFun_undef, setToL1_smul, smul_zero, toL1_smul
 -/
@@ -2642,7 +2680,8 @@ theorem setToFun_congr_ae
   by_cases hfi : Integrable f μ
   · have hgi : Integrable g μ := hfi.congr h
     rw [setToFun_eq hT hfi]; rw [setToFun_eq hT hgi]; rw [(Integrable.toL1_eq_toL1_iff f g hfi hgi).2 h]
-  · have hgi : ¬Integrable g μ := by rw [integrable_c
+  · have hgi : ¬Integrable g μ := by rw [integrable_congr h] at hfi; exact hfi
+    rw [setToFun_undef hT hfi]; rw [setToFun_undef hT hgi]
 
 中文:
 定理 setToFun_congr_ae
@@ -2653,7 +2692,8 @@ theorem setToFun_congr_ae
   by_cases hfi : Integrable f μ
   · have hgi : Integrable g μ := hfi.congr h
     rw [setToFun_eq hT hfi]; rw [setToFun_eq hT hgi]; rw [(Integrable.toL1_eq_toL1_iff f g hfi hgi).2 h]
-  · have hgi : ¬Integrable g μ := by rw [integrable_c
+  · have hgi : ¬Integrable g μ := by rw [integrable_congr h] at hfi; exact hfi
+    rw [setToFun_undef hT hfi]; rw [setToFun_undef hT hgi]
 
 Depends on / 依赖: CompleteSpace, Integrable, Integrable.toL1_eq_toL1_iff, hfi.congr, integrable_congr, setToFun, setToFun_eq, setToFun_undef, toL1_eq_toL1_iff
 -/
@@ -2796,7 +2836,8 @@ theorem setToFun_simpleFunc
   let g := f.toLp h'f
   have A : f =ᵐ[μ] g := h'f.coeFn_toLp.symm
   rw [setToFun_congr_ae hT A]; rw [L1.setToFun_eq_setToL1 hT]; rw [L1.setToL1_eq_setToL1SCLM]
-  apply (SimpleFunc.setToSimpleFunc_congr T (fun s => hT.eq_zero_of_measure_z
+  apply (SimpleFunc.setToSimpleFunc_congr T (fun s => hT.eq_zero_of_measure_zero) hT.1 hf _).symm
+  grw [A, Lp.simpleFunc.toSimpleFunc_eq_toFun]
 
 中文:
 定理 setToFun_simpleFunc
@@ -2806,7 +2847,8 @@ theorem setToFun_simpleFunc
   let g := f.toLp h'f
   have A : f =ᵐ[μ] g := h'f.coeFn_toLp.symm
   rw [setToFun_congr_ae hT A]; rw [L1.setToFun_eq_setToL1 hT]; rw [L1.setToL1_eq_setToL1SCLM]
-  apply (SimpleFunc.setToSimpleFunc_congr T (fun s => hT.eq_zero_of_measure_z
+  apply (SimpleFunc.setToSimpleFunc_congr T (fun s => hT.eq_zero_of_measure_zero) hT.1 hf _).symm
+  grw [A, Lp.simpleFunc.toSimpleFunc_eq_toFun]
 
 Depends on / 依赖: L1.setToFun_eq_setToL1, L1.setToL1_eq_setToL1SCLM, Lp.simpleFunc.toSimpleFunc_eq_toFun, SimpleFunc, SimpleFunc.setToSimpleFunc_congr, coeFn_toLp, eq_zero_of_measure_zero, f.coeFn_toLp.symm, f.toLp, hT.eq_zero_of_measure_zero, memLp_one_iff_integrable, memLp_one_iff_integrable.mpr, setToFun_congr_ae, setToFun_eq_setToL1, setToL1_eq_setToL1SCLM, setToSimpleFunc_congr, simpleFunc, toSimpleFunc_eq_toFun
 -/
@@ -3021,7 +3063,27 @@ theorem tendsto_setToFun_of_L1
   have hfi : Integrable f μ := by
     obtain ⟨i, hi, h'i⟩ : exists i, ∫⁻ x, ‖fs i x - f x‖ₑ ∂μ < 1 ∧ Integrable (fs i) μ :=
       (((tendsto_order.1 hfs).2 _ zero_lt_one).and hfsi).exists
-    have : Integrable (fs i - f) μ := ⟨h'i.aestrong
+    have : Integrable (fs i - f) μ := ⟨h'i.aestronglyMeasurable.sub hf, hi.trans one_lt_top⟩
+    convert h'i.sub this
+    abel
+  let f_lp := hfi.toL1 f
+  let F_lp i := if hFi : Integrable (fs i) μ then hFi.toL1 (fs i) else 0
+  have tendsto_L1 : Tendsto F_lp l (𝓝 f_lp) := by
+    rw [Lp.tendsto_Lp_iff_tendsto_eLpNorm']
+    simp_rw [eLpNorm_one_eq_lintegral_enorm, Pi.sub_apply]
+    refine (tendsto_congr' ?_).mp hfs
+    filter_upwards [hfsi] with i hi
+    refine lintegral_congr_ae ?_
+    filter_upwards [hi.coeFn_toL1, hfi.coeFn_toL1] with x hxi hxf
+    simp_rw [F_lp, dif_pos hi, hxi, f_lp, hxf]
+  suffices Tendsto (fun i => setToFun μ T hT (F_lp i)) l (𝓝 (setToFun μ T hT f)) by
+    refine (tendsto_congr' ?_).mp this
+    filter_upwards [hfsi] with i hi
+    suffices h_ae_eq : F_lp i =ᵐ[μ] fs i from setToFun_congr_ae hT h_ae_eq
+    simp_rw [F_lp, dif_pos hi]
+    exact hi.coeFn_toL1
+  rw [setToFun_congr_ae hT hfi.coeFn_toL1.symm]
+  exact ((continuous_setToFun hT).tendsto f_lp).comp tendsto_L1
 
 中文:
 定理 tendsto_setToFun_of_L1
@@ -3033,7 +3095,27 @@ theorem tendsto_setToFun_of_L1
   have hfi : Integrable f μ := by
     obtain ⟨i, hi, h'i⟩ : exists i, ∫⁻ x, ‖fs i x - f x‖ₑ ∂μ < 1 ∧ Integrable (fs i) μ :=
       (((tendsto_order.1 hfs).2 _ zero_lt_one).and hfsi).exists
-    have : Integrable (fs i - f) μ := ⟨h'i.aestrong
+    have : Integrable (fs i - f) μ := ⟨h'i.aestronglyMeasurable.sub hf, hi.trans one_lt_top⟩
+    convert h'i.sub this
+    abel
+  let f_lp := hfi.toL1 f
+  let F_lp i := if hFi : Integrable (fs i) μ then hFi.toL1 (fs i) else 0
+  have tendsto_L1 : Tendsto F_lp l (𝓝 f_lp) := by
+    rw [Lp.tendsto_Lp_iff_tendsto_eLpNorm']
+    simp_rw [eLpNorm_one_eq_lintegral_enorm, Pi.sub_apply]
+    refine (tendsto_congr' ?_).mp hfs
+    filter_upwards [hfsi] with i hi
+    refine lintegral_congr_ae ?_
+    filter_upwards [hi.coeFn_toL1, hfi.coeFn_toL1] with x hxi hxf
+    simp_rw [F_lp, dif_pos hi, hxi, f_lp, hxf]
+  suffices Tendsto (fun i => setToFun μ T hT (F_lp i)) l (𝓝 (setToFun μ T hT f)) by
+    refine (tendsto_congr' ?_).mp this
+    filter_upwards [hfsi] with i hi
+    suffices h_ae_eq : F_lp i =ᵐ[μ] fs i from setToFun_congr_ae hT h_ae_eq
+    simp_rw [F_lp, dif_pos hi]
+    exact hi.coeFn_toL1
+  rw [setToFun_congr_ae hT hfi.coeFn_toL1.symm]
+  exact ((continuous_setToFun hT).tendsto f_lp).comp tendsto_L1
 
 Depends on / 依赖: F_lp, Integrable, Lp.tends, Tendsto, aestronglyMeasurable, classical, convert, eq_or_neBot, f_lp, hFi.toL1, hfi.toL1, hi.trans, i.aestronglyMeasurable.sub, i.sub, one_lt_top, tendsto_L1, tendsto_order, zero_lt_one
 -/
@@ -3137,6 +3219,20 @@ theorem setToFun_of_le_map_of_stronglyMeasurable
     ((integrable_map_measure hfm.aestronglyMeasurable hφ.aemeasurable).2 hf).mono_measure hμ'
   borelize E
   have : SeparableSpace (range f union {0} : Set E) := hfm.separableSpace_range_union_singleton
+  refine tendsto_nhds_unique
+    (tendsto_setToFun_approxOn_of_measurable_of_range_subset
+      hT' hfm.measurable hfi' _ Subset.rfl) ?_
+  convert tendsto_setToFun_approxOn_of_measurable_of_range_subset
+    hT (hfm.measurable.comp hφ) hf (range f union {0})
+    (union_subset_union_left {0} (range_comp_subset_range φ f)) using 1
+  ext i : 1
+  rw [setToFun_simpleFunc _ _ (SimpleFunc.integrable_approxOn_range _ hfi' _)]; rw [setToFun_simpleFunc]; rw [SimpleFunc.approxOn_comp hfm.measurable hφ]; swap
+  · apply SimpleFunc.integrable_approxOn _ hf (by simp) (by simp)
+  simp only [union_singleton, SimpleFunc.measurableSet_preimage, h, ← preimage_comp,
+    SimpleFunc.coe_comp]
+  refine (Finset.sum_subset (SimpleFunc.range_comp_subset_range _ hφ) fun y _ hy => ?_).symm
+  rw [SimpleFunc.mem_range]; rw [← Set.preimage_singleton_eq_empty]; rw [SimpleFunc.coe_comp] at hy
+  simp [hy, hT.1.map_empty_eq_zero]
 
 中文:
 定理 setToFun_of_le_map_of_stronglyMeasurable
@@ -3147,6 +3243,20 @@ theorem setToFun_of_le_map_of_stronglyMeasurable
     ((integrable_map_measure hfm.aestronglyMeasurable hφ.aemeasurable).2 hf).mono_measure hμ'
   borelize E
   have : SeparableSpace (range f union {0} : Set E) := hfm.separableSpace_range_union_singleton
+  refine tendsto_nhds_unique
+    (tendsto_setToFun_approxOn_of_measurable_of_range_subset
+      hT' hfm.measurable hfi' _ Subset.rfl) ?_
+  convert tendsto_setToFun_approxOn_of_measurable_of_range_subset
+    hT (hfm.measurable.comp hφ) hf (range f union {0})
+    (union_subset_union_left {0} (range_comp_subset_range φ f)) using 1
+  ext i : 1
+  rw [setToFun_simpleFunc _ _ (SimpleFunc.integrable_approxOn_range _ hfi' _)]; rw [setToFun_simpleFunc]; rw [SimpleFunc.approxOn_comp hfm.measurable hφ]; swap
+  · apply SimpleFunc.integrable_approxOn _ hf (by simp) (by simp)
+  simp only [union_singleton, SimpleFunc.measurableSet_preimage, h, ← preimage_comp,
+    SimpleFunc.coe_comp]
+  refine (Finset.sum_subset (SimpleFunc.range_comp_subset_range _ hφ) fun y _ hy => ?_).symm
+  rw [SimpleFunc.mem_range]; rw [← Set.preimage_singleton_eq_empty]; rw [SimpleFunc.coe_comp] at hy
+  simp [hy, hT.1.map_empty_eq_zero]
 
 Depends on / 依赖: CompleteSpace, Integrable, SeparableSpace, Subset, Subset.rfl, aemeasurable, aestronglyMeasurable, borelize, convert, hfm.aestronglyMeasurable, hfm.measurable, hfm.measurable.comp, hfm.separableSpace_range_union_singleton, integrable_map_measure, measurable, mono_measure, separableSpace_range_union_singleton, setToFun, tendsto_nhds_unique, tendsto_setToFun_approxOn_of_measurable_of_range_subset
 -/
@@ -3191,7 +3301,8 @@ theorem setToFun_of_le_map
     apply setToFun_congr_ae
     exact ae_of_ae_map hφ.aemeasurable hfm.ae_eq_mk
   rw [A]; rw [B]
-  exac
+  exact setToFun_of_le_map_of_stronglyMeasurable _ _
+    (hf.congr (ae_of_ae_map hφ.aemeasurable hfm.ae_eq_mk)) hfm.stronglyMeasurable_mk hφ hμ' h
 
 中文:
 定理 setToFun_of_le_map
@@ -3203,7 +3314,8 @@ theorem setToFun_of_le_map
     apply setToFun_congr_ae
     exact ae_of_ae_map hφ.aemeasurable hfm.ae_eq_mk
   rw [A]; rw [B]
-  exac
+  exact setToFun_of_le_map_of_stronglyMeasurable _ _
+    (hf.congr (ae_of_ae_map hφ.aemeasurable hfm.ae_eq_mk)) hfm.stronglyMeasurable_mk hφ hμ' h
 
 Depends on / 依赖: ae_eq_mk, ae_mono, ae_of_ae_map, aemeasurable, hf.congr, hfm.ae_eq_mk, hfm.mk, hfm.stronglyMeasurable_mk, setToFun, setToFun_congr_ae, setToFun_of_le_map_of_stronglyMeasurable, stronglyMeasurable_mk
 -/
@@ -3237,7 +3349,34 @@ theorem continuous_L1_toL1
       (fun f : α ->₁[μ] G =>
           (Integrable.of_measure_le_smul hc' hμ'_le (L1.integrable_coeFn f)).toL1 f) =
         0 := by
-      ext1 f; ext1
+      ext1 f; ext1; simp_rw [hμ'0]; simp only [ae_zero, EventuallyEq, eventually_bot]
+    rw [h_im_zero]
+    exact continuous_zero
+  rw [Metric.continuous_iff]
+  intro f ε hε_pos
+  use ε / 2 / c'.toReal
+  refine ⟨div_pos (half_pos hε_pos) (toReal_pos hc'0 hc'), ?_⟩
+  intro g hfg
+  rw [Lp.dist_def] at hfg ⊢
+  let h_int := fun f' : α ->₁[μ] G => (L1.integrable_coeFn f').of_measure_le_smul hc' hμ'_le
+  have :
+    eLpNorm (⇑(Integrable.toL1 g (h_int g)) - ⇑(Integrable.toL1 f (h_int f))) 1 μ' =
+      eLpNorm (⇑g - ⇑f) 1 μ' :=
+    eLpNorm_congr_ae ((Integrable.coeFn_toL1 _).sub (Integrable.coeFn_toL1 _))
+  rw [this]
+  have h_eLpNorm_ne_top : eLpNorm (⇑g - ⇑f) 1 μ != ∞ := by
+    rw [← eLpNorm_congr_ae (Lp.coeFn_sub _ _)]; exact Lp.eLpNorm_ne_top _
+  calc
+    (eLpNorm (⇑g - ⇑f) 1 μ').toReal <= (c' * eLpNorm (⇑g - ⇑f) 1 μ).toReal := by
+      refine toReal_mono (ENNReal.mul_ne_top hc' h_eLpNorm_ne_top) ?_
+      refine (eLpNorm_mono_measure (⇑g - ⇑f) hμ'_le).trans_eq ?_
+      rw [eLpNorm_smul_measure_of_ne_zero hc'0]; rw [smul_eq_mul]
+      simp
+    _ = c'.toReal * (eLpNorm (⇑g - ⇑f) 1 μ).toReal := toReal_mul
+    _ <= c'.toReal * (ε / 2 / c'.toReal) := by gcongr
+    _ = ε / 2 := by
+      refine mul_div_cancel₀ (ε / 2) ?_; rw [Ne, toReal_eq_zero_iff]; simp [hc', hc'0]
+    _ < ε := half_lt_self hε_pos
 
 中文:
 定理 continuous_L1_toL1
@@ -3249,7 +3388,34 @@ theorem continuous_L1_toL1
       (fun f : α ->₁[μ] G =>
           (Integrable.of_measure_le_smul hc' hμ'_le (L1.integrable_coeFn f)).toL1 f) =
         0 := by
-      ext1 f; ext1
+      ext1 f; ext1; simp_rw [hμ'0]; simp only [ae_zero, EventuallyEq, eventually_bot]
+    rw [h_im_zero]
+    exact continuous_zero
+  rw [Metric.continuous_iff]
+  intro f ε hε_pos
+  use ε / 2 / c'.toReal
+  refine ⟨div_pos (half_pos hε_pos) (toReal_pos hc'0 hc'), ?_⟩
+  intro g hfg
+  rw [Lp.dist_def] at hfg ⊢
+  let h_int := fun f' : α ->₁[μ] G => (L1.integrable_coeFn f').of_measure_le_smul hc' hμ'_le
+  have :
+    eLpNorm (⇑(Integrable.toL1 g (h_int g)) - ⇑(Integrable.toL1 f (h_int f))) 1 μ' =
+      eLpNorm (⇑g - ⇑f) 1 μ' :=
+    eLpNorm_congr_ae ((Integrable.coeFn_toL1 _).sub (Integrable.coeFn_toL1 _))
+  rw [this]
+  have h_eLpNorm_ne_top : eLpNorm (⇑g - ⇑f) 1 μ != ∞ := by
+    rw [← eLpNorm_congr_ae (Lp.coeFn_sub _ _)]; exact Lp.eLpNorm_ne_top _
+  calc
+    (eLpNorm (⇑g - ⇑f) 1 μ').toReal <= (c' * eLpNorm (⇑g - ⇑f) 1 μ).toReal := by
+      refine toReal_mono (ENNReal.mul_ne_top hc' h_eLpNorm_ne_top) ?_
+      refine (eLpNorm_mono_measure (⇑g - ⇑f) hμ'_le).trans_eq ?_
+      rw [eLpNorm_smul_measure_of_ne_zero hc'0]; rw [smul_eq_mul]
+      simp
+    _ = c'.toReal * (eLpNorm (⇑g - ⇑f) 1 μ).toReal := toReal_mul
+    _ <= c'.toReal * (ε / 2 / c'.toReal) := by gcongr
+    _ = ε / 2 := by
+      refine mul_div_cancel₀ (ε / 2) ?_; rw [Ne, toReal_eq_zero_iff]; simp [hc', hc'0]
+    _ < ε := half_lt_self hε_pos
 
 Depends on / 依赖: EventuallyEq, Integrable, Integrable.of_measure_le_smul, L1.integrable_coeFn, Measure, Measure.nonpos_iff_eq_zero, Metric, Metric.continuous_iff, _le.trans, ae_zero, continuous_iff, continuous_zero, div_pos, eventually_bot, h_im_zero, half_pos, integrable_coeFn, nonpos_iff_eq_zero, of_measure_le_smul, simp_rw
 -/
@@ -3304,7 +3470,25 @@ theorem setToFun_congr_measure_of_integrable
   have h_int : forall g : α -> E, Integrable g μ -> Integrable g μ' := fun g hg =>
     Integrable.of_measure_le_smul hc' hμ'_le hg
   -- We use `Integrable.induction`
-  apply hf
+  apply hfμ.induction (P := fun f => setToFun μ T hT f = setToFun μ' T hT' f)
+  · intro c s hs hμs
+    have hμ's : μ' s != ∞ := by
+      refine ((hμ'_le s).trans_lt ?_).ne
+      rw [Measure.smul_apply]; rw [smul_eq_mul]
+      exact ENNReal.mul_lt_top hc'.lt_top hμs
+    rw [setToFun_indicator_const hT hs hμs.ne]; rw [setToFun_indicator_const hT' hs hμ's]
+  · intro f₂ g₂ _ hf₂ hg₂ h_eq_f h_eq_g
+    rw [setToFun_add hT hf₂ hg₂]; rw [setToFun_add hT' (h_int f₂ hf₂) (h_int g₂ hg₂)]; rw [h_eq_f]; rw [h_eq_g]
+  · refine isClosed_eq (continuous_setToFun hT) ?_
+    have :
+      (fun f : α ->₁[μ] E => setToFun μ' T hT' f) = fun f : α ->₁[μ] E =>
+        setToFun μ' T hT' ((h_int f (L1.integrable_coeFn f)).toL1 f) := by
+      ext1 f; exact setToFun_congr_ae hT' (Integrable.coeFn_toL1 _).symm
+    rw [this]
+    exact (continuous_setToFun hT').comp (continuous_L1_toL1 c' hc' hμ'_le)
+  · intro f₂ g₂ hfg _ hf_eq
+    have hfg' : f₂ =ᵐ[μ'] g₂ := (Measure.absolutelyContinuous_of_le_smul hμ'_le).ae_eq hfg
+    rw [← setToFun_congr_ae hT hfg]; rw [hf_eq]; rw [setToFun_congr_ae hT' hfg']
 
 中文:
 定理 setToFun_congr_measure_of_integrable
@@ -3316,7 +3500,25 @@ theorem setToFun_congr_measure_of_integrable
   have h_int : forall g : α -> E, Integrable g μ -> Integrable g μ' := fun g hg =>
     Integrable.of_measure_le_smul hc' hμ'_le hg
   -- We use `Integrable.induction`
-  apply hf
+  apply hfμ.induction (P := fun f => setToFun μ T hT f = setToFun μ' T hT' f)
+  · intro c s hs hμs
+    have hμ's : μ' s != ∞ := by
+      refine ((hμ'_le s).trans_lt ?_).ne
+      rw [Measure.smul_apply]; rw [smul_eq_mul]
+      exact ENNReal.mul_lt_top hc'.lt_top hμs
+    rw [setToFun_indicator_const hT hs hμs.ne]; rw [setToFun_indicator_const hT' hs hμ's]
+  · intro f₂ g₂ _ hf₂ hg₂ h_eq_f h_eq_g
+    rw [setToFun_add hT hf₂ hg₂]; rw [setToFun_add hT' (h_int f₂ hf₂) (h_int g₂ hg₂)]; rw [h_eq_f]; rw [h_eq_g]
+  · refine isClosed_eq (continuous_setToFun hT) ?_
+    have :
+      (fun f : α ->₁[μ] E => setToFun μ' T hT' f) = fun f : α ->₁[μ] E =>
+        setToFun μ' T hT' ((h_int f (L1.integrable_coeFn f)).toL1 f) := by
+      ext1 f; exact setToFun_congr_ae hT' (Integrable.coeFn_toL1 _).symm
+    rw [this]
+    exact (continuous_setToFun hT').comp (continuous_L1_toL1 c' hc' hμ'_le)
+  · intro f₂ g₂ hfg _ hf_eq
+    have hfg' : f₂ =ᵐ[μ'] g₂ := (Measure.absolutelyContinuous_of_le_smul hμ'_le).ae_eq hfg
+    rw [← setToFun_congr_ae hT hfg]; rw [hf_eq]; rw [setToFun_congr_ae hT' hfg']
 
 Depends on / 依赖: CompleteSpace, setToFun
 -/
@@ -3362,7 +3564,7 @@ theorem setToFun_congr_measure
   · -- if `f` is not integrable, both `setToFun` are 0.
     have h_int : forall g : α -> E, ¬Integrable g μ -> ¬Integrable g μ' := fun g =>
       mt fun h => h.of_measure_le_smul hc hμ_le
-    s
+    simp_rw [setToFun_undef _ hf, setToFun_undef _ (h_int f hf)]
 
 中文:
 定理 setToFun_congr_measure
@@ -3373,7 +3575,7 @@ theorem setToFun_congr_measure
   · -- if `f` is not integrable, both `setToFun` are 0.
     have h_int : forall g : α -> E, ¬Integrable g μ -> ¬Integrable g μ' := fun g =>
       mt fun h => h.of_measure_le_smul hc hμ_le
-    s
+    simp_rw [setToFun_undef _ hf, setToFun_undef _ (h_int f hf)]
 
 Depends on / 依赖: Integrable, h.of_measure_le_smul, h_int, integrable, of_measure_le_smul, setToFun, setToFun_congr_measure_of_integrable, setToFun_undef, simp_rw
 -/
@@ -3460,7 +3662,11 @@ theorem setToFun_add_measure
   have hTν_add : DominatedFinMeasAdditive (μ + ν) T' (max C' 0) :=
     (hTν.of_le (le_max_left C' 0)).add_measure_left μ ν (le_max_right C' 0)
   calc
-    setToFun
+    setToFun (μ + ν) (T + T') (hTμ.add_measure μ ν hTν) f =
+      setToFun (μ + ν) T hTμ_add f + setToFun (μ + ν) T' hTν_add f :=
+        setToFun_add_left hTμ_add hTν_add f
+    _ = setToFun μ T hTμ f + setToFun ν T' hTν f := by
+      rw [setToFun_congr_measure_of_add_right hTμ_add hTμ f (hμ.add_measure hν)]; rw [setToFun_congr_measure_of_add_left hTν_add hTν f (hμ.add_measure hν)]
 
 中文:
 定理 setToFun_add_measure
@@ -3470,7 +3676,11 @@ theorem setToFun_add_measure
   have hTν_add : DominatedFinMeasAdditive (μ + ν) T' (max C' 0) :=
     (hTν.of_le (le_max_left C' 0)).add_measure_left μ ν (le_max_right C' 0)
   calc
-    setToFun
+    setToFun (μ + ν) (T + T') (hTμ.add_measure μ ν hTν) f =
+      setToFun (μ + ν) T hTμ_add f + setToFun (μ + ν) T' hTν_add f :=
+        setToFun_add_left hTμ_add hTν_add f
+    _ = setToFun μ T hTμ f + setToFun ν T' hTν f := by
+      rw [setToFun_congr_measure_of_add_right hTμ_add hTμ f (hμ.add_measure hν)]; rw [setToFun_congr_measure_of_add_left hTν_add hTν f (hμ.add_measure hν)]
 
 Depends on / 依赖: DominatedFinMeasAdditive, add_measure, add_measure_left, add_measure_right, le_max_left, le_max_right, of_le, setToFun, setToFun_add_left, setToFun_cong
 -/
@@ -3524,7 +3734,8 @@ theorem setToFun_finsetSum_measure
   | @cons i s his hs' ih =>
     simpa [his, ih fun j hj => hf j (Finset.mem_cons_of_mem hj)] using!
       setToFun_add_measure (hTs i) (DominatedFinMeasAdditive.finsetSum_measure hs' μ T C hTs)
-      (hf i (Finset.me
+      (hf i (Finset.mem_cons_self i s))
+      (integrable_finsetSum_measure.2 fun j hj => hf j (Finset.mem_cons_of_mem hj))
 
 中文:
 定理 setToFun_finsetSum_measure
@@ -3535,7 +3746,8 @@ theorem setToFun_finsetSum_measure
   | @cons i s his hs' ih =>
     simpa [his, ih fun j hj => hf j (Finset.mem_cons_of_mem hj)] using!
       setToFun_add_measure (hTs i) (DominatedFinMeasAdditive.finsetSum_measure hs' μ T C hTs)
-      (hf i (Finset.me
+      (hf i (Finset.mem_cons_self i s))
+      (integrable_finsetSum_measure.2 fun j hj => hf j (Finset.mem_cons_of_mem hj))
 
 Depends on / 依赖: DominatedFinMeasAdditive, DominatedFinMeasAdditive.finsetSum_measure, Finset, Finset.Nonempty.cons_induction, Finset.mem_cons_of_mem, Finset.mem_cons_self, Nonempty, cons_induction, finsetSum_measure, integrable_finsetSum_measure, mem_cons_of_mem, mem_cons_self, setToFun_add_measure, singleton
 -/
@@ -3599,7 +3811,9 @@ theorem setToFun_congr_smul_measure
     have h : forall s, MeasurableSet s -> μ s < ∞ -> T s = 0 := fun s hs _ => hT_smul.eq_zero hs
     rw [setToFun_zero_left' _ h]; rw [setToFun_measure_zero]
     simp [hc0]
-  refine setToFun_congr_measure c⁻¹ c ?_ hc_ne_top (le_of_eq ?_) le_rfl hT 
+  refine setToFun_congr_measure c⁻¹ c ?_ hc_ne_top (le_of_eq ?_) le_rfl hT hT_smul f
+  · simp [hc0]
+  · rw [smul_smul, ENNReal.inv_mul_cancel hc0 hc_ne_top, one_smul]
 
 中文:
 定理 setToFun_congr_smul_measure
@@ -3610,7 +3824,9 @@ theorem setToFun_congr_smul_measure
     have h : forall s, MeasurableSet s -> μ s < ∞ -> T s = 0 := fun s hs _ => hT_smul.eq_zero hs
     rw [setToFun_zero_left' _ h]; rw [setToFun_measure_zero]
     simp [hc0]
-  refine setToFun_congr_measure c⁻¹ c ?_ hc_ne_top (le_of_eq ?_) le_rfl hT 
+  refine setToFun_congr_measure c⁻¹ c ?_ hc_ne_top (le_of_eq ?_) le_rfl hT hT_smul f
+  · simp [hc0]
+  · rw [smul_smul, ENNReal.inv_mul_cancel hc0 hc_ne_top, one_smul]
 
 Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, MeasurableSet, WellFounded, WellFounded.fix_eq, eq_zero, fix_eq, hT_smul, hT_smul.eq_zero, hc_ne_top, inv_mul_cancel, le_of_eq, le_rfl, one_smul, setToFun_congr_measure, setToFun_measure_zero, setToFun_zero_left, smul_smul
 -/
@@ -3662,7 +3878,14 @@ theorem setToFun_add_left''
   have A : setToFun (μ + μ') T I f = setToFun μ T hT f :=
     setToFun_congr_measure_of_add_right _ _ _ (hf.add_measure hf')
   have I' : DominatedFinMeasAdditive (μ + μ') T' C' := .add_measure_left _ _ hT' hC'
-  have
+  have A' : setToFun (μ + μ') T' I' f = setToFun μ' T' hT' f :=
+    setToFun_congr_measure_of_add_left _ _ _ (hf.add_measure hf')
+  have I'' : DominatedFinMeasAdditive (μ + μ') T'' C'' := .of_measure_le hμ hT'' hC''
+  have A'' : setToFun (μ + μ') T'' I'' f = setToFun μ'' T'' hT'' f := by
+    apply setToFun_congr_measure_of_integrable (c' := 1) (by simp) (by simpa using hμ)
+    apply hf.add_measure hf'
+  rw [← A]; rw [← A']; rw [← A'']
+  apply setToFun_add_left' _ _ _ h
 
 中文:
 定理 setToFun_add_left''
@@ -3672,7 +3895,14 @@ theorem setToFun_add_left''
   have A : setToFun (μ + μ') T I f = setToFun μ T hT f :=
     setToFun_congr_measure_of_add_right _ _ _ (hf.add_measure hf')
   have I' : DominatedFinMeasAdditive (μ + μ') T' C' := .add_measure_left _ _ hT' hC'
-  have
+  have A' : setToFun (μ + μ') T' I' f = setToFun μ' T' hT' f :=
+    setToFun_congr_measure_of_add_left _ _ _ (hf.add_measure hf')
+  have I'' : DominatedFinMeasAdditive (μ + μ') T'' C'' := .of_measure_le hμ hT'' hC''
+  have A'' : setToFun (μ + μ') T'' I'' f = setToFun μ'' T'' hT'' f := by
+    apply setToFun_congr_measure_of_integrable (c' := 1) (by simp) (by simpa using hμ)
+    apply hf.add_measure hf'
+  rw [← A]; rw [← A']; rw [← A'']
+  apply setToFun_add_left' _ _ _ h
 
 Depends on / 依赖: DominatedFinMeasAdditive, add_measure, add_measure_left, add_measure_right, hf.add_measure, of_measure_le, setToFun, setToFun_congr_measure_of_add_left, setToFun_congr_measure_of_add_right
 -/
@@ -3840,7 +4070,11 @@ theorem enorm_setToFun_le
   · simp [setToFun_undef _ hf]
   apply (ENNReal.toReal_le_toReal (by simp)
     (ENNReal.mul_ne_top (by simp) hf.hasFiniteIntegral.ne)).1
-  simp only [toReal_enorm, toReal_mul, coe_toReal, NNReal.coe
+  simp only [toReal_enorm, toReal_mul, coe_toReal, NNReal.coe_mk]
+  apply (norm_setToFun_le hT hf hC).trans
+  gcongr
+  apply le_of_eq
+  rw [Integrable.norm_toL1_eq_lintegral_enorm]
 
 中文:
 定理 enorm_setToFun_le
@@ -3852,7 +4086,11 @@ theorem enorm_setToFun_le
   · simp [setToFun_undef _ hf]
   apply (ENNReal.toReal_le_toReal (by simp)
     (ENNReal.mul_ne_top (by simp) hf.hasFiniteIntegral.ne)).1
-  simp only [toReal_enorm, toReal_mul, coe_toReal, NNReal.coe
+  simp only [toReal_enorm, toReal_mul, coe_toReal, NNReal.coe_mk]
+  apply (norm_setToFun_le hT hf hC).trans
+  gcongr
+  apply le_of_eq
+  rw [Integrable.norm_toL1_eq_lintegral_enorm]
 
 Depends on / 依赖: CompleteSpace, ENNReal, ENNReal.mul_ne_top, ENNReal.toReal_le_toReal, Integrable, Integrable.norm_toL1_eq_lintegral_enorm, NNReal, NNReal.coe_mk, coe_mk, coe_toReal, hasFiniteIntegral, hf.hasFiniteIntegral.ne, le_of_eq, mul_ne_top, norm_setToFun_le, norm_toL1_eq_lintegral_enorm, setToFun, setToFun_undef, toReal_enorm, toReal_le_toReal
 -/
@@ -3883,7 +4121,11 @@ theorem norm_setToFun_le_toReal
   by_cases hf : Integrable f μ; swap
   · simp only [setToFun_undef _ hf, norm_zero, NNReal.coe_mk, ofReal_norm]
     positivity
-  apply (norm_setToFun_le hT hf hC).
+  apply (norm_setToFun_le hT hf hC).trans
+  gcongr
+  · simp
+  rw [Integrable.norm_toL1_eq_lintegral_enorm]
+  simp
 
 中文:
 定理 norm_setToFun_le_to实数
@@ -3895,7 +4137,11 @@ theorem norm_setToFun_le_toReal
   by_cases hf : Integrable f μ; swap
   · simp only [setToFun_undef _ hf, norm_zero, NNReal.coe_mk, ofReal_norm]
     positivity
-  apply (norm_setToFun_le hT hf hC).
+  apply (norm_setToFun_le hT hf hC).trans
+  gcongr
+  · simp
+  rw [Integrable.norm_toL1_eq_lintegral_enorm]
+  simp
 
 Depends on / 依赖: CompleteSpace, Integrable, Integrable.norm_toL1_eq_lintegral_enorm, NNReal, NNReal.coe_mk, coe_mk, norm_setToFun_le, norm_toL1_eq_lintegral_enorm, norm_zero, ofReal_norm, reduceDIte, setToFun, setToFun_undef
 -/
@@ -3925,7 +4171,37 @@ theorem tendsto_setToFun_of_dominated_convergence
   -- `f` is a.e.-measurable, since it is the a.e.-pointwise limit of a.e.-measurable functions.
   have f_measurable : AEStronglyMeasurable f μ :=
     aestronglyMeasurable_of_tendsto_ae _ fs_measurable h_lim
-  -- all functions we consid
+  -- all functions we consider are integrable
+  have fs_int : forall n, Integrable (fs n) μ := fun n =>
+    bound_integrable.mono' (fs_measurable n) (h_bound _)
+  have f_int : Integrable f μ :=
+    ⟨f_measurable,
+      hasFiniteIntegral_of_dominated_convergence bound_integrable.hasFiniteIntegral h_bound
+        h_lim⟩
+  -- it suffices to prove the result for the corresponding L1 functions
+  suffices
+    Tendsto (fun n => L1.setToL1 hT ((fs_int n).toL1 (fs n))) atTop
+      (𝓝 (L1.setToL1 hT (f_int.toL1 f))) by
+    convert! this with n
+    · exact setToFun_eq hT (fs_int n)
+    · exact setToFun_eq hT f_int
+  -- the convergence of setToL1 follows from the convergence of the L1 functions
+  refine L1.tendsto_setToL1 hT _ _ ?_
+  -- up to some rewriting, what we need to prove is `h_lim`
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  have lintegral_norm_tendsto_zero :
+    Tendsto (fun n => ENNReal.toReal <| ∫⁻ a, ENNReal.ofReal ‖fs n a - f a‖ ∂μ) atTop (𝓝 0) :=
+    (tendsto_toReal zero_ne_top).comp
+      (tendsto_lintegral_norm_of_dominated_convergence fs_measurable
+        bound_integrable.hasFiniteIntegral h_bound h_lim)
+  convert! lintegral_norm_tendsto_zero with n
+  rw [L1.norm_def]
+  congr 1
+  refine lintegral_congr_ae ?_
+  rw [← Integrable.toL1_sub]
+  refine ((fs_int n).sub f_int).coeFn_toL1.mono fun x hx => ?_
+  dsimp only
+  rw [hx]; rw [ofReal_norm]; rw [Pi.sub_apply]
 
 中文:
 定理 tendsto_setToFun_of_dominated_convergence
@@ -3936,7 +4212,37 @@ theorem tendsto_setToFun_of_dominated_convergence
   -- `f` is a.e.-measurable, since it is the a.e.-pointwise limit of a.e.-measurable functions.
   have f_measurable : AEStronglyMeasurable f μ :=
     aestronglyMeasurable_of_tendsto_ae _ fs_measurable h_lim
-  -- all functions we consid
+  -- all functions we consider are integrable
+  have fs_int : forall n, Integrable (fs n) μ := fun n =>
+    bound_integrable.mono' (fs_measurable n) (h_bound _)
+  have f_int : Integrable f μ :=
+    ⟨f_measurable,
+      hasFiniteIntegral_of_dominated_convergence bound_integrable.hasFiniteIntegral h_bound
+        h_lim⟩
+  -- it suffices to prove the result for the corresponding L1 functions
+  suffices
+    Tendsto (fun n => L1.setToL1 hT ((fs_int n).toL1 (fs n))) atTop
+      (𝓝 (L1.setToL1 hT (f_int.toL1 f))) by
+    convert! this with n
+    · exact setToFun_eq hT (fs_int n)
+    · exact setToFun_eq hT f_int
+  -- the convergence of setToL1 follows from the convergence of the L1 functions
+  refine L1.tendsto_setToL1 hT _ _ ?_
+  -- up to some rewriting, what we need to prove is `h_lim`
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  have lintegral_norm_tendsto_zero :
+    Tendsto (fun n => ENNReal.toReal <| ∫⁻ a, ENNReal.ofReal ‖fs n a - f a‖ ∂μ) atTop (𝓝 0) :=
+    (tendsto_toReal zero_ne_top).comp
+      (tendsto_lintegral_norm_of_dominated_convergence fs_measurable
+        bound_integrable.hasFiniteIntegral h_bound h_lim)
+  convert! lintegral_norm_tendsto_zero with n
+  rw [L1.norm_def]
+  congr 1
+  refine lintegral_congr_ae ?_
+  rw [← Integrable.toL1_sub]
+  refine ((fs_int n).sub f_int).coeFn_toL1.mono fun x hx => ?_
+  dsimp only
+  rw [hx]; rw [ofReal_norm]; rw [Pi.sub_apply]
 
 Depends on / 依赖: CompleteSpace, setToFun
 -/
@@ -3996,7 +4302,15 @@ theorem tendsto_setToFun_filter_of_dominated_convergence
   have h :
     { x : ι | (fun n => AEStronglyMeasurable (fs n) μ) x } inter
         { x : ι | (fun n => forallᵐ a ∂μ, ‖fs n a‖ <= bound a) x } in l :=
-    int
+    inter_mem hfs_meas h_bound
+  obtain ⟨k, h⟩ := hxl _ h
+  rw [← tendsto_add_atTop_iff_nat k]
+  refine tendsto_setToFun_of_dominated_convergence hT bound ?_ bound_integrable ?_ ?_
+  · exact fun n => (h _ (self_le_add_left _ _)).1
+  · exact fun n => (h _ (self_le_add_left _ _)).2
+  · filter_upwards [h_lim]
+    refine fun a h_lin => @Tendsto.comp _ _ _ (fun n => x (n + k)) (fun n => fs n a) _ _ _ h_lin ?_
+    rwa [tendsto_add_atTop_iff_nat]
 
 中文:
 定理 tendsto_setToFun_filter_of_dominated_convergence
@@ -4008,7 +4322,15 @@ theorem tendsto_setToFun_filter_of_dominated_convergence
   have h :
     { x : ι | (fun n => AEStronglyMeasurable (fs n) μ) x } inter
         { x : ι | (fun n => forallᵐ a ∂μ, ‖fs n a‖ <= bound a) x } in l :=
-    int
+    inter_mem hfs_meas h_bound
+  obtain ⟨k, h⟩ := hxl _ h
+  rw [← tendsto_add_atTop_iff_nat k]
+  refine tendsto_setToFun_of_dominated_convergence hT bound ?_ bound_integrable ?_ ?_
+  · exact fun n => (h _ (self_le_add_left _ _)).1
+  · exact fun n => (h _ (self_le_add_left _ _)).2
+  · filter_upwards [h_lim]
+    refine fun a h_lin => @Tendsto.comp _ _ _ (fun n => x (n + k)) (fun n => fs n a) _ _ _ h_lin ?_
+    rwa [tendsto_add_atTop_iff_nat]
 
 Depends on / 依赖: AEStronglyMeasurable, bound_integrable, h_bound, hfs_meas, inter_mem, self_le_add_left, tendsto_add_atTop_iff_nat, tendsto_atTop, tendsto_iff_seq_tendsto, tendsto_setToFun_of_dominated_convergence
 -/
@@ -4046,7 +4368,20 @@ theorem hasSum_setToFun_of_dominated_convergence
   have hb_le_tsum : forall n, bound n <=ᵐ[μ] fun a => ∑' n, bound n a := by
     intro n
     filter_upwards [hb_nonneg, bound_summable]
-      with
+      with _ ha0 ha_sum using ha_sum.le_tsum _ fun i _ => ha0 i
+  have hF_integrable : forall n, Integrable (F n) μ := by
+    refine fun n => bound_integrable.mono' (hF_meas n) ?_
+    exact EventuallyLE.trans (h_bound n) (hb_le_tsum n)
+  simp only [HasSum, ← setToFun_finsetSum _ _ fun n _ => hF_integrable n]
+  refine tendsto_setToFun_filter_of_dominated_convergence _
+      (fun a => ∑' n, bound n a) ?_ ?_ bound_integrable h_lim
+  · exact Eventually.of_forall fun s => s.aestronglyMeasurable_fun_sum fun n _ => hF_meas n
+  · filter_upwards with s
+    filter_upwards [eventually_countable_forall.2 h_bound, hb_nonneg, bound_summable]
+      with a hFa ha0 has
+    calc
+      ‖∑ n in s, F n a‖ <= ∑ n in s, bound n a := norm_sum_le_of_le _ fun n _ => hFa n
+      _ <= ∑' n, bound n a := has.sum_le_tsum _ (fun n _ => ha0 n)
 
 中文:
 定理 hasSum_setToFun_of_dominated_convergence
@@ -4057,7 +4392,20 @@ theorem hasSum_setToFun_of_dominated_convergence
   have hb_le_tsum : forall n, bound n <=ᵐ[μ] fun a => ∑' n, bound n a := by
     intro n
     filter_upwards [hb_nonneg, bound_summable]
-      with
+      with _ ha0 ha_sum using ha_sum.le_tsum _ fun i _ => ha0 i
+  have hF_integrable : forall n, Integrable (F n) μ := by
+    refine fun n => bound_integrable.mono' (hF_meas n) ?_
+    exact EventuallyLE.trans (h_bound n) (hb_le_tsum n)
+  simp only [HasSum, ← setToFun_finsetSum _ _ fun n _ => hF_integrable n]
+  refine tendsto_setToFun_filter_of_dominated_convergence _
+      (fun a => ∑' n, bound n a) ?_ ?_ bound_integrable h_lim
+  · exact Eventually.of_forall fun s => s.aestronglyMeasurable_fun_sum fun n _ => hF_meas n
+  · filter_upwards with s
+    filter_upwards [eventually_countable_forall.2 h_bound, hb_nonneg, bound_summable]
+      with a hFa ha0 has
+    calc
+      ‖∑ n in s, F n a‖ <= ∑ n in s, bound n a := norm_sum_le_of_le _ fun n _ => hFa n
+      _ <= ∑' n, bound n a := has.sum_le_tsum _ (fun n _ => ha0 n)
 
 Depends on / 依赖: EventuallyLE, EventuallyLE.trans, Integrable, bound_integrable, bound_integrable.mono, bound_summable, eventually_countable_forall, filter_upwards, hF_integrable, hF_meas, h_bound, ha_sum, ha_sum.le_tsum, hb_le_tsum, hb_nonneg, le_tsum, norm_nonneg
 -/
@@ -4102,7 +4450,25 @@ theorem setToFun_tsum
   have hhh : forallᵐ a : α ∂μ, Summable fun n => (‖f n a‖₊ : Real) := by
     rw [← lintegral_tsum hf''] at hf'
     refine (ae_lt_top' (AEMeasurable.tsum hf'') hf').mono ?_
-    i
+    intro x hx
+    rw [← ENNReal.tsum_coe_ne_top_iff_summable_coe]
+    exact hx.ne
+  convert!
+    (MeasureTheory.hasSum_setToFun_of_dominated_convergence hT (fun i a => ‖f i a‖₊) hf _ hhh ⟨_, _⟩
+        _).tsum_eq.symm
+  · intro n
+    filter_upwards with x
+    rfl
+  · fun_prop
+  · dsimp [HasFiniteIntegral]
+    have : ∫⁻ a, ∑' n, ‖f n a‖ₑ ∂μ < ⊤ := by rwa [lintegral_tsum hf'', lt_top_iff_ne_top]
+    convert! this using 1
+    apply lintegral_congr_ae
+    simp_rw [← coe_nnnorm, ← NNReal.coe_tsum, enorm_eq_nnnorm, NNReal.nnnorm_eq]
+    filter_upwards [hhh] with a ha
+    exact ENNReal.coe_tsum (NNReal.summable_coe.mp ha)
+  · filter_upwards [hhh] with x hx
+    exact hx.of_norm.hasSum
 
 中文:
 定理 setToFun_tsum
@@ -4114,7 +4480,25 @@ theorem setToFun_tsum
   have hhh : forallᵐ a : α ∂μ, Summable fun n => (‖f n a‖₊ : Real) := by
     rw [← lintegral_tsum hf''] at hf'
     refine (ae_lt_top' (AEMeasurable.tsum hf'') hf').mono ?_
-    i
+    intro x hx
+    rw [← ENNReal.tsum_coe_ne_top_iff_summable_coe]
+    exact hx.ne
+  convert!
+    (MeasureTheory.hasSum_setToFun_of_dominated_convergence hT (fun i a => ‖f i a‖₊) hf _ hhh ⟨_, _⟩
+        _).tsum_eq.symm
+  · intro n
+    filter_upwards with x
+    rfl
+  · fun_prop
+  · dsimp [HasFiniteIntegral]
+    have : ∫⁻ a, ∑' n, ‖f n a‖ₑ ∂μ < ⊤ := by rwa [lintegral_tsum hf'', lt_top_iff_ne_top]
+    convert! this using 1
+    apply lintegral_congr_ae
+    simp_rw [← coe_nnnorm, ← NNReal.coe_tsum, enorm_eq_nnnorm, NNReal.nnnorm_eq]
+    filter_upwards [hhh] with a ha
+    exact ENNReal.coe_tsum (NNReal.summable_coe.mp ha)
+  · filter_upwards [hhh] with x hx
+    exact hx.of_norm.hasSum
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.tsum, CompleteSpace, ENNReal, ENNReal.tsum_coe_ne_top_iff_summable_coe, MeasureTheory, MeasureTheory.hasSum_setToFun_of_dominated_convergence, Summable, ae_lt_top, convert, filter_upwards, hasSum_setToFun_of_dominated_convergence, hx.ne, lintegral_tsum, setToFun, tsum_coe_ne_top_iff_summable_coe, tsum_eq, tsum_eq.symm
 -/
@@ -4227,7 +4611,44 @@ theorem StronglyMeasurable.setToFun_prod_right
   have : SeparableSpace (range (Function.uncurry f) union {0} : Set E) :=
     hf.separableSpace_range_union_singleton
   let s : Nat -> SimpleFunc (β × α) E :=
-    SimpleFunc.approxOn 
+    SimpleFunc.approxOn _ hf.measurable (range (Function.uncurry f) union {0}) 0 (by simp)
+  let s' : Nat -> β -> SimpleFunc α E := fun n x => (s n).comp (Prod.mk x) measurable_prodMk_left
+  let f' : Nat -> β -> F := fun n =>
+    {x | Integrable (f x) μ}.indicator fun x => (s' n x).setToSimpleFunc T
+  have hf' n : StronglyMeasurable (f' n) := by
+    refine StronglyMeasurable.indicator ?_ (measurableSet_integrable hf)
+    have : forall x, ((s' n x).range.filter fun x => x != 0) subseteq (s n).range := by
+      intro x; refine Finset.Subset.trans (Finset.filter_subset _ _) ?_; intro y
+      simp_rw [SimpleFunc.mem_range]; rintro ⟨z, rfl⟩; exact ⟨(x, z), rfl⟩
+    simp_rw [SimpleFunc.setToSimpleFunc_eq_sum_of_subset T hT.1.map_empty_eq_zero (this _)]
+    refine Finset.stronglyMeasurable_fun_sum _ fun x _ => ?_
+    simp only [s', SimpleFunc.coe_comp, preimage_comp]
+    apply StronglyMeasurable.apply_continuousLinearMap
+    apply h'T
+    exact (s n).measurableSet_fiber x
+  have h2f' : Tendsto f' atTop (𝓝 fun x : β => setToFun μ T hT (f x)) := by
+    apply tendsto_pi_nhds.2 fun x => ?_
+    by_cases hfx : Integrable (f x) μ
+    · have (n : _) : Integrable (s' n x) μ := by
+        apply (hfx.norm.add hfx.norm).mono' (s' n x).aestronglyMeasurable
+        filter_upwards with y
+        simp_rw [s', SimpleFunc.coe_comp]; exact SimpleFunc.norm_approxOn_zero_le _ _ (x, y) n
+      simp only [mem_ofPred_eq, hfx, indicator_of_mem, this,
+        ← setToFun_simpleFunc_eq_setToSimpleFunc hT, f']
+      refine
+        tendsto_setToFun_of_dominated_convergence hT (fun y => ‖f x y‖ + ‖f x y‖)
+          (fun n => (s' n x).aestronglyMeasurable) (hfx.norm.add hfx.norm) ?_ ?_
+      · refine fun n => Eventually.of_forall fun y =>
+          SimpleFunc.norm_approxOn_zero_le ?_ ?_ (x, y) n
+        · exact hf.measurable
+        · simp
+      · refine Eventually.of_forall fun y => SimpleFunc.tendsto_approxOn ?_ ?_ ?_
+        · exact hf.measurable.of_uncurry_left
+        · simp
+        apply subset_closure
+        simp [-Function.uncurry_apply_pair]
+    · simp [f', hfx, setToFun_undef]
+  exact stronglyMeasurable_of_tendsto _ hf' h2f'
 
 中文:
 定理 StronglyMeasurable.setToFun_prod_right
@@ -4240,7 +4661,44 @@ theorem StronglyMeasurable.setToFun_prod_right
   have : SeparableSpace (range (Function.uncurry f) union {0} : Set E) :=
     hf.separableSpace_range_union_singleton
   let s : Nat -> SimpleFunc (β × α) E :=
-    SimpleFunc.approxOn 
+    SimpleFunc.approxOn _ hf.measurable (range (Function.uncurry f) union {0}) 0 (by simp)
+  let s' : Nat -> β -> SimpleFunc α E := fun n x => (s n).comp (Prod.mk x) measurable_prodMk_left
+  let f' : Nat -> β -> F := fun n =>
+    {x | Integrable (f x) μ}.indicator fun x => (s' n x).setToSimpleFunc T
+  have hf' n : StronglyMeasurable (f' n) := by
+    refine StronglyMeasurable.indicator ?_ (measurableSet_integrable hf)
+    have : forall x, ((s' n x).range.filter fun x => x != 0) subseteq (s n).range := by
+      intro x; refine Finset.Subset.trans (Finset.filter_subset _ _) ?_; intro y
+      simp_rw [SimpleFunc.mem_range]; rintro ⟨z, rfl⟩; exact ⟨(x, z), rfl⟩
+    simp_rw [SimpleFunc.setToSimpleFunc_eq_sum_of_subset T hT.1.map_empty_eq_zero (this _)]
+    refine Finset.stronglyMeasurable_fun_sum _ fun x _ => ?_
+    simp only [s', SimpleFunc.coe_comp, preimage_comp]
+    apply StronglyMeasurable.apply_continuousLinearMap
+    apply h'T
+    exact (s n).measurableSet_fiber x
+  have h2f' : Tendsto f' atTop (𝓝 fun x : β => setToFun μ T hT (f x)) := by
+    apply tendsto_pi_nhds.2 fun x => ?_
+    by_cases hfx : Integrable (f x) μ
+    · have (n : _) : Integrable (s' n x) μ := by
+        apply (hfx.norm.add hfx.norm).mono' (s' n x).aestronglyMeasurable
+        filter_upwards with y
+        simp_rw [s', SimpleFunc.coe_comp]; exact SimpleFunc.norm_approxOn_zero_le _ _ (x, y) n
+      simp only [mem_ofPred_eq, hfx, indicator_of_mem, this,
+        ← setToFun_simpleFunc_eq_setToSimpleFunc hT, f']
+      refine
+        tendsto_setToFun_of_dominated_convergence hT (fun y => ‖f x y‖ + ‖f x y‖)
+          (fun n => (s' n x).aestronglyMeasurable) (hfx.norm.add hfx.norm) ?_ ?_
+      · refine fun n => Eventually.of_forall fun y =>
+          SimpleFunc.norm_approxOn_zero_le ?_ ?_ (x, y) n
+        · exact hf.measurable
+        · simp
+      · refine Eventually.of_forall fun y => SimpleFunc.tendsto_approxOn ?_ ?_ ?_
+        · exact hf.measurable.of_uncurry_left
+        · simp
+        apply subset_closure
+        simp [-Function.uncurry_apply_pair]
+    · simp [f', hfx, setToFun_undef]
+  exact stronglyMeasurable_of_tendsto _ hf' h2f'
 
 Depends on / 依赖: CompleteSpace, Function, Function.uncurry, Integrable, Prod.mk, SeparableSpace, SimpleFunc, SimpleFunc.approxOn, approxOn, borelize, classical, hf.measurable, hf.separableSpace_range_union_singleton, measurable, measurable_prodMk_left, separableSpace_range_union_singleton, setToFun, stronglyMeasurable_const, uncurry
 -/

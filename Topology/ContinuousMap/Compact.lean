@@ -87,7 +87,10 @@ theorem isUniformInducing_equivBoundedOfCompact
       exact fun s =>
         ⟨fun ⟨⟨a, b⟩, ⟨_, ⟨ε, hε, hb⟩⟩, hs⟩ =>
           ⟨{ p | forall x, (p.1 x, p.2 x) in b }, ⟨ε, hε, fun _ h x => hb ((dist_le hε.le).mp h x)⟩,
-   
+            fun f g h => hs fun x _ => h x⟩,
+          fun ⟨_, ⟨ε, hε, ht⟩, hs⟩ =>
+          ⟨⟨Set.univ, { p | dist p.1 p.2 <= ε }⟩, ⟨isCompact_univ, ⟨ε, hε, fun _ h => h⟩⟩,
+            fun ⟨f, g⟩ h => hs _ _ (ht ((dist_le hε.le).mpr fun x => h x (mem_univ x)))⟩⟩)
 
 中文:
 定理 isUniformInducing_equivBoundedOfCompact
@@ -98,7 +101,10 @@ theorem isUniformInducing_equivBoundedOfCompact
       exact fun s =>
         ⟨fun ⟨⟨a, b⟩, ⟨_, ⟨ε, hε, hb⟩⟩, hs⟩ =>
           ⟨{ p | forall x, (p.1 x, p.2 x) in b }, ⟨ε, hε, fun _ h x => hb ((dist_le hε.le).mp h x)⟩,
-   
+            fun f g h => hs fun x _ => h x⟩,
+          fun ⟨_, ⟨ε, hε, ht⟩, hs⟩ =>
+          ⟨⟨Set.univ, { p | dist p.1 p.2 <= ε }⟩, ⟨isCompact_univ, ⟨ε, hε, fun _ h => h⟩⟩,
+            fun ⟨f, g⟩ h => hs _ _ (ht ((dist_le hε.le).mpr fun x => h x (mem_univ x)))⟩⟩)
 
 Depends on / 依赖: IsUniformInducing, IsUniformInducing.mk, Set.univ, dist_le, hasBasis_compactConvergenceUniformity, hasBasis_compactConvergenceUniformity.mem_iff, isCompact_univ, mem_iff, mem_univ, uniformity_basis_dist_le, uniformity_basis_dist_le.mem_iff
 -/
@@ -1589,6 +1595,9 @@ theorem summable_of_locally_summable_norm
     intro s
     ext1 x
     -- TODO: there is a non-confluence problem in the lemmas here,
+    -- and `SetLike.coe_sort_coe` prevents `restrict_apply` from being used.
+    simp [-SetLike.coe_sort_coe]
+  simpa only [HasSum, A] using! (hF K).of_norm
 
 中文:
 定理 summable_of_locally_summable_norm
@@ -1600,6 +1609,9 @@ theorem summable_of_locally_summable_norm
     intro s
     ext1 x
     -- TODO: there is a non-confluence problem in the lemmas here,
+    -- and `SetLike.coe_sort_coe` prevents `restrict_apply` from being used.
+    simp [-SetLike.coe_sort_coe]
+  simpa only [HasSum, A] using! (hF K).of_norm
 
 Depends on / 依赖: Compacts, ContinuousMap, ContinuousMap.exists_tendsto_compactOpen_iff_forall, Finset, exists_tendsto_compactOpen_iff_forall, restrict
 -/

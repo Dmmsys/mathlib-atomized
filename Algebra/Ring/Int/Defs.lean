@@ -42,7 +42,12 @@ instance instCommRing
   npow n x := x ^ n
   npow_zero _ := by simp
   npow_succ _ _ := by simp [Int.pow_succ]
-  nat
+  natCast := (·)
+  natCast_zero := rfl
+  natCast_succ _ := rfl
+  intCast := (·)
+  intCast_ofNat _ := rfl
+  intCast_negSucc _ := rfl
 
 中文:
 实例 instCommRing
@@ -58,7 +63,12 @@ instance instCommRing
   npow n x := x ^ n
   npow_zero _ := by simp
   npow_succ _ _ := by simp [Int.pow_succ]
-  nat
+  natCast := (·)
+  natCast_zero := rfl
+  natCast_succ _ := rfl
+  intCast := (·)
+  intCast_ofNat _ := rfl
+  intCast_negSucc _ := rfl
 
 Depends on / 依赖: instAddCommGroup
 -/

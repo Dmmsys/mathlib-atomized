@@ -46,7 +46,11 @@ lemma RingHom.HasFiniteProducts.isClosedUnderLimitsOfShape
   let e : A ≅ CommRingCat.mkUnder R (Π i, pres.diag.obj ⟨i⟩) :=
     (limit.isoLimitCone ⟨_, pres.isLimit⟩).symm ≪≫
       HasLimit.isoOfNatIso (Discrete.natIso fun i => eqToIso <| by simp) ≪≫
-limit.isoLimitCo
+limit.isoLimitCone ⟨CommRingCat.Under.piFan fun i => (pres.diag.obj ⟨i⟩),
+CommRingCat.Under.piFanIsLimit fun i => (pres.diag.obj ⟨i⟩)⟩
+  have : (toMorphismProperty Q).RespectsIso := toMorphismProperty_respectsIso_iff.mp hQi
+  rw [underObj_iff]; rw [← Under.w e.inv]; rw [(toMorphismProperty Q).cancel_right_of_respectsIso]
+  exact hQp _ fun i => hpres _
 
 中文:
 引理 环态射.有FiniteProducts.isClosedUnderLimitsOfShape
@@ -56,7 +60,11 @@ limit.isoLimitCo
   let e : A ≅ CommRingCat.mkUnder R (Π i, pres.diag.obj ⟨i⟩) :=
     (limit.isoLimitCone ⟨_, pres.isLimit⟩).symm ≪≫
       HasLimit.isoOfNatIso (Discrete.natIso fun i => eqToIso <| by simp) ≪≫
-limit.isoLimitCo
+limit.isoLimitCone ⟨CommRingCat.Under.piFan fun i => (pres.diag.obj ⟨i⟩),
+CommRingCat.Under.piFanIsLimit fun i => (pres.diag.obj ⟨i⟩)⟩
+  have : (toMorphismProperty Q).RespectsIso := toMorphismProperty_respectsIso_iff.mp hQi
+  rw [underObj_iff]; rw [← Under.w e.inv]; rw [(toMorphismProperty Q).cancel_right_of_respectsIso]
+  exact hQp _ fun i => hpres _
 
 Depends on / 依赖: CommRingCat, CommRingCat.Under.piFan, CommRingCat.Under.piFanIsLimit, CommRingCat.mkUnder, Discrete, Discrete.natIso, HasLimit, HasLimit.isoOfNatIso, IsClosedUnderFiniteProducts, RespectsIso, eqToIso, isLimit, isoLimitCone, isoOfNatIso, limit.isoLimitCone, mkUnder, natIso, of_isClosedUnderLimitsOfShape, piFanIsLimit, pres.diag.obj
 -/
@@ -88,7 +96,13 @@ lemma RingHom.HasEqualizers.isClosedUnderLimitsOfShape
           (CommRingCat.toAlgHom (pres.diag.map .left))
           (CommRingCat.toAlgHom (pres.diag.map .right))) :=
     (limit.isoLimitCone ⟨_, pres.isLimit⟩).symm ≪≫
-      HasLimit.is
+      HasLimit.isoOfNatIso (diagramIsoParallelPair _) ≪≫ limit.isoLimitCone
+        ⟨CommRingCat.Under.equalizerFork (pres.diag.map .left) (pres.diag.map .right),
+          CommRingCat.Under.equalizerForkIsLimit
+            (pres.diag.map .left) (pres.diag.map .right)⟩
+  have : (toMorphismProperty Q).RespectsIso := toMorphismProperty_respectsIso_iff.mp hQi
+  rw [underObj_iff]; rw [← Under.w e.inv]; rw [(toMorphismProperty Q).cancel_right_of_respectsIso]
+  exact hQe _ _ (hpres .zero) (hpres .one)
 
 中文:
 引理 环态射.HasEqualizers.isClosedUnderLimitsOfShape
@@ -101,7 +115,13 @@ lemma RingHom.HasEqualizers.isClosedUnderLimitsOfShape
           (CommRingCat.toAlgHom (pres.diag.map .left))
           (CommRingCat.toAlgHom (pres.diag.map .right))) :=
     (limit.isoLimitCone ⟨_, pres.isLimit⟩).symm ≪≫
-      HasLimit.is
+      HasLimit.isoOfNatIso (diagramIsoParallelPair _) ≪≫ limit.isoLimitCone
+        ⟨CommRingCat.Under.equalizerFork (pres.diag.map .left) (pres.diag.map .right),
+          CommRingCat.Under.equalizerForkIsLimit
+            (pres.diag.map .left) (pres.diag.map .right)⟩
+  have : (toMorphismProperty Q).RespectsIso := toMorphismProperty_respectsIso_iff.mp hQi
+  rw [underObj_iff]; rw [← Under.w e.inv]; rw [(toMorphismProperty Q).cancel_right_of_respectsIso]
+  exact hQe _ _ (hpres .zero) (hpres .one)
 
 Depends on / 依赖: AlgHom, AlgHom.equalizer, CommRingCat, CommRingCat.Under.equalizerFork, CommRingCat.Under.equalizerForkIsLimit, CommRingCat.mkUnder, CommRingCat.toAlgHom, HasLimit, HasLimit.isoOfNatIso, IsClosedUnderLimitsOfShape, WalkingParallelPair, diagramIsoParallelPair, equalizer, equalizerFork, equalizerForkIsLimit, isLimit, isoLimitCone, isoOfNatIso, limit.isoLimitCone, mkUnder
 -/
@@ -195,7 +215,8 @@ lemma RingHom.HasFiniteProducts.preservesFiniteProducts_pushout
   have : PreservesLimit K (Under.pushout (toMorphismProperty Q) ⊤ f ⋙
         Under.forget (toMorphismProperty Q) ⊤ S) := by
     rw [preservesLimit_iff_of_natIso _ (Under.pushoutCompForgetIso _)]
-    infer_instanc
+    infer_instance
+  exact preservesLimit_of_reflects_of_preserves _ (MorphismProperty.Under.forget _ ⊤ S)
 
 中文:
 引理 环态射.有FiniteProducts.preservesFiniteProducts_pushout
@@ -206,7 +227,8 @@ lemma RingHom.HasFiniteProducts.preservesFiniteProducts_pushout
   have : PreservesLimit K (Under.pushout (toMorphismProperty Q) ⊤ f ⋙
         Under.forget (toMorphismProperty Q) ⊤ S) := by
     rw [preservesLimit_iff_of_natIso _ (Under.pushoutCompForgetIso _)]
-    infer_instanc
+    infer_instance
+  exact preservesLimit_of_reflects_of_preserves _ (MorphismProperty.Under.forget _ ⊤ S)
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Under.forget, PreservesLimit, Under.forget, Under.pushout, Under.pushoutCompForgetIso, createsFiniteProductsForget, forget, hQp.createsFiniteProductsForget, infer_instance, preservesLimit_iff_of_natIso, preservesLimit_of_reflects_of_preserves, pushout, pushoutCompForgetIso, toMorphismProperty
 -/
@@ -357,7 +379,21 @@ lemma CommRingCat.preservesLimit_parallelPair_tensorProd_iff_tensorEqualizer_bij
   let ι : R.mkUnder (AlgHom.equalizer (toAlgHom f) (toAlgHom g)) ⟶ A :=
     (AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder
   let h' := (R.tensorProd S).map ι
-  have w' : h' ≫ (tensorProd
+  have w' : h' ≫ (tensorProd R S).map f = h' ≫ (tensorProd R S).map g := by
+    simpa using! congr((R.tensorProd S).map $(CommRingCat.Under.equalizer_comp f g))
+  let e : IsLimit ((R.tensorProd S).mapCone c) ≃ IsLimit (Fork.ofι h' w') :=
+    isLimitMapConeForkEquiv (tensorProd R S) (Under.equalizer_comp f g)
+  rw [preservesLimit_iff_isLimit_mapCone hc]; rw [e.nonempty_congr]; rw [(Under.equalizerForkIsLimit _ _).nonempty_isLimit_iff_isIso_lift]
+  have heq : (Under.equalizerForkIsLimit _ _).lift (Fork.ofι h' w') =
+      (AlgHom.tensorEqualizer S S (toAlgHom f) (toAlgHom g)).toUnder ≫
+        Under.homMk (CommRingCat.ofHom (.id _)) := by
+    refine Fork.IsLimit.hom_ext (Under.equalizerForkIsLimit _ _) ?_
+    rw [Fork.IsLimit.lift_ι]
+    ext : 2
+    dsimp
+    ext x <;> rfl
+  rw [heq]; rw [← isIso_iff_of_reflects_iso _ (CategoryTheory.Under.forget S)]; rw [ConcreteCategory.isIso_iff_bijective]
+  rfl
 
 中文:
 引理 交换环范畴.preservesLimit_parallelPair_tensorProd_iff_tensorEqualizer_bijective
@@ -367,7 +403,21 @@ lemma CommRingCat.preservesLimit_parallelPair_tensorProd_iff_tensorEqualizer_bij
   let ι : R.mkUnder (AlgHom.equalizer (toAlgHom f) (toAlgHom g)) ⟶ A :=
     (AlgHom.equalizer (toAlgHom f) (toAlgHom g)).val.toUnder
   let h' := (R.tensorProd S).map ι
-  have w' : h' ≫ (tensorProd
+  have w' : h' ≫ (tensorProd R S).map f = h' ≫ (tensorProd R S).map g := by
+    simpa using! congr((R.tensorProd S).map $(CommRingCat.Under.equalizer_comp f g))
+  let e : IsLimit ((R.tensorProd S).mapCone c) ≃ IsLimit (Fork.ofι h' w') :=
+    isLimitMapConeForkEquiv (tensorProd R S) (Under.equalizer_comp f g)
+  rw [preservesLimit_iff_isLimit_mapCone hc]; rw [e.nonempty_congr]; rw [(Under.equalizerForkIsLimit _ _).nonempty_isLimit_iff_isIso_lift]
+  have heq : (Under.equalizerForkIsLimit _ _).lift (Fork.ofι h' w') =
+      (AlgHom.tensorEqualizer S S (toAlgHom f) (toAlgHom g)).toUnder ≫
+        Under.homMk (CommRingCat.ofHom (.id _)) := by
+    refine Fork.IsLimit.hom_ext (Under.equalizerForkIsLimit _ _) ?_
+    rw [Fork.IsLimit.lift_ι]
+    ext : 2
+    dsimp
+    ext x <;> rfl
+  rw [heq]; rw [← isIso_iff_of_reflects_iso _ (CategoryTheory.Under.forget S)]; rw [ConcreteCategory.isIso_iff_bijective]
+  rfl
 
 Depends on / 依赖: AlgHom, AlgHom.equalizer, CommRingCat, CommRingCat.Under.equalizer_comp, Fork.of, IsLimit, R.mkUnder, R.tensorProd, Under.equalizerFork, Under.equalizerForkIsLimit, equalizer, equalizerFork, equalizerForkIsLimit, equalizer_comp, isLimitMap, mapCone, mkUnder, tensorProd, toAlgHom, toUnder
 -/
@@ -432,7 +482,13 @@ lemma RingHom.HasStableEqualizers.preservesEqualizers_pushout
   algebraize [f.hom]
   have : PreservesLimit (K ⋙ Under.forget (toMorphismProperty P) ⊤ R)
       (CategoryTheory.Under.pushout f) := by
-    rw [← CommRingCat.ofHom_hom f]; rw [← preservesLimit_iff_of_natIso _ (CommRingC
+    rw [← CommRingCat.ofHom_hom f]; rw [← preservesLimit_iff_of_natIso _ (CommRingCat.tensorProdIsoPushout R S)]; rw [← preservesLimit_iff_of_iso_diagram _ (diagramIsoParallelPair _).symm]
+    exact hPse.preservesLimit_parallelPair_tensorProd _ _ ((K.obj _).prop) ((K.obj _).prop)
+  have : PreservesLimit K (Under.pushout (toMorphismProperty P) ⊤ f ⋙
+        Under.forget (toMorphismProperty P) ⊤ S) := by
+    rw [preservesLimit_iff_of_natIso _ (Under.pushoutCompForgetIso _)]
+    infer_instance
+  exact preservesLimit_of_reflects_of_preserves _ (Under.forget _ ⊤ S)
 
 中文:
 引理 环态射.HasStableEqualizers.preservesEqualizers_pushout
@@ -443,7 +499,13 @@ lemma RingHom.HasStableEqualizers.preservesEqualizers_pushout
   algebraize [f.hom]
   have : PreservesLimit (K ⋙ Under.forget (toMorphismProperty P) ⊤ R)
       (CategoryTheory.Under.pushout f) := by
-    rw [← CommRingCat.ofHom_hom f]; rw [← preservesLimit_iff_of_natIso _ (CommRingC
+    rw [← CommRingCat.ofHom_hom f]; rw [← preservesLimit_iff_of_natIso _ (CommRingCat.tensorProdIsoPushout R S)]; rw [← preservesLimit_iff_of_iso_diagram _ (diagramIsoParallelPair _).symm]
+    exact hPse.preservesLimit_parallelPair_tensorProd _ _ ((K.obj _).prop) ((K.obj _).prop)
+  have : PreservesLimit K (Under.pushout (toMorphismProperty P) ⊤ f ⋙
+        Under.forget (toMorphismProperty P) ⊤ S) := by
+    rw [preservesLimit_iff_of_natIso _ (Under.pushoutCompForgetIso _)]
+    infer_instance
+  exact preservesLimit_of_reflects_of_preserves _ (Under.forget _ ⊤ S)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Under.pushout, CommRingCat, CommRingCat.ofHom_hom, CommRingCat.tensorProdIsoPushout, K.obj, PreservesLimit, Under.forget, algebraize, createsLimitsWalkingParallelPair, diagramIsoParallelPair, f.hom, forget, hPe.createsLimitsWalkingParallelPair, hPse.preservesLimit_parallelPair_tensorProd, ofHom_hom, preservesLimit_iff_of_iso_diagram, preservesLimit_iff_of_natIso, preservesLimit_parallelPair_tensorProd, pushout
 -/

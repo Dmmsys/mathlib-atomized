@@ -92,7 +92,11 @@ instance PiLp.innerProductSpace
     rintro z -
     apply inner_conj_symm
   add_left x y z :=
-    show (∑ i, ⟪x i 
+    show (∑ i, ⟪x i + y i, z i⟫ = ∑ i, ⟪x i, z i⟫ + ∑ i, ⟪y i, z i⟫) by
+      simp only [inner_add_left, Finset.sum_add_distrib]
+  smul_left x y r :=
+    show (∑ i : ι, ⟪r • x i, y i⟫ = conj r * ∑ i, ⟪x i, y i⟫) by
+      simp only [Finset.mul_sum, inner_smul_left]
 
 中文:
 实例 PiLp.innerProductSpace
@@ -108,7 +112,11 @@ instance PiLp.innerProductSpace
     rintro z -
     apply inner_conj_symm
   add_left x y z :=
-    show (∑ i, ⟪x i 
+    show (∑ i, ⟪x i + y i, z i⟫ = ∑ i, ⟪x i, z i⟫ + ∑ i, ⟪y i, z i⟫) by
+      simp only [inner_add_left, Finset.sum_add_distrib]
+  smul_left x y r :=
+    show (∑ i : ι, ⟪r • x i, y i⟫ = conj r * ∑ i, ⟪x i, y i⟫) by
+      simp only [Finset.mul_sum, inner_smul_left]
 -/
 instance PiLp.innerProductSpace {ι : Type*} [Fintype ι] (f : ι -> Type*)
     [forall i, NormedAddCommGroup (f i)] [forall i, InnerProductSpace 𝕜 (f i)] :
@@ -603,7 +611,14 @@ definition DirectSum.IsInternal.isometryL2OfOrthogonalFamily
   let e₂ := LinearEquiv.ofBijective (DirectSum.coeLinearMap V) hV
   refine LinearEquiv.isometryOfInner ((e₂.symm.trans e₁).trans
     (WithLp.linearEquiv 2 𝕜 (Π i, V i)).symm) ?_
-  suffices forall (v w : PiLp 2 fun i => V i), ⟪v, w⟫ = 
+  suffices forall (v w : PiLp 2 fun i => V i), ⟪v, w⟫ = ⟪e₂ (e₁.symm v), e₂ (e₁.symm w)⟫ by
+    intro v₀ w₀
+    simp only [LinearEquiv.trans_apply]
+    convert! this (toLp 2 (e₁ (e₂.symm v₀))) (toLp 2 (e₁ (e₂.symm w₀))) <;> simp
+  intro v w
+  trans ⟪∑ i, (V i).subtypeₗᵢ (v i), ∑ i, (V i).subtypeₗᵢ (w i)⟫
+  · simp only [sum_inner, hV'.inner_right_fintype, PiLp.inner_apply]
+  · congr <;> simp
 
 中文:
 定义 直和.Is整数ernal.isometryL2OfOrthogonalFamily
@@ -613,7 +628,14 @@ definition DirectSum.IsInternal.isometryL2OfOrthogonalFamily
   let e₂ := LinearEquiv.ofBijective (DirectSum.coeLinearMap V) hV
   refine LinearEquiv.isometryOfInner ((e₂.symm.trans e₁).trans
     (WithLp.linearEquiv 2 𝕜 (Π i, V i)).symm) ?_
-  suffices forall (v w : PiLp 2 fun i => V i), ⟪v, w⟫ = 
+  suffices forall (v w : PiLp 2 fun i => V i), ⟪v, w⟫ = ⟪e₂ (e₁.symm v), e₂ (e₁.symm w)⟫ by
+    intro v₀ w₀
+    simp only [LinearEquiv.trans_apply]
+    convert! this (toLp 2 (e₁ (e₂.symm v₀))) (toLp 2 (e₁ (e₂.symm w₀))) <;> simp
+  intro v w
+  trans ⟪∑ i, (V i).subtypeₗᵢ (v i), ∑ i, (V i).subtypeₗᵢ (w i)⟫
+  · simp only [sum_inner, hV'.inner_right_fintype, PiLp.inner_apply]
+  · congr <;> simp
 
 Depends on / 依赖: DirectSum, DirectSum.coeLinearMap, DirectSum.linearEquivFunOnFintype, LinearEquiv, LinearEquiv.isometryOfInner, LinearEquiv.ofBijective, LinearEquiv.trans_apply, WithLp, WithLp.linearEquiv, coeLinearMap, convert, isometryOfInner, linearEquiv, linearEquivFunOnFintype, ofBijective, symm.trans, trans_apply
 -/
@@ -647,7 +669,8 @@ theorem DirectSum.IsInternal.isometryL2OfOrthogonalFamily_symm_apply
     let e₁ := DirectSum.linearEquivFunOnFintype 𝕜 ι fun i => V i
     let e₂ := LinearEquiv.ofBijective (DirectSum.coeLinearMap V) hV
     suffices forall v : ⨁ i, V i, e₂ v = ∑ i, e₁ v i by exact this (e₁.symm w)
-    simp [e₁, e₂, DirectSum.coeLinearMap, DirectSum.toModule, DFinsupp.ls
+    simp [e₁, e₂, DirectSum.coeLinearMap, DirectSum.toModule, DFinsupp.lsum,
+      DFinsupp.sumAddHom_apply]
 
 中文:
 定理 直和.Is整数ernal.isometryL2OfOrthogonalFamily_symm_apply
@@ -657,7 +680,8 @@ theorem DirectSum.IsInternal.isometryL2OfOrthogonalFamily_symm_apply
     let e₁ := DirectSum.linearEquivFunOnFintype 𝕜 ι fun i => V i
     let e₂ := LinearEquiv.ofBijective (DirectSum.coeLinearMap V) hV
     suffices forall v : ⨁ i, V i, e₂ v = ∑ i, e₁ v i by exact this (e₁.symm w)
-    simp [e₁, e₂, DirectSum.coeLinearMap, DirectSum.toModule, DFinsupp.ls
+    simp [e₁, e₂, DirectSum.coeLinearMap, DirectSum.toModule, DFinsupp.lsum,
+      DFinsupp.sumAddHom_apply]
 
 Depends on / 依赖: DFinsupp, DFinsupp.lsum, DFinsupp.sumAddHom_apply, DirectSum, DirectSum.coeLinearMap, DirectSum.linearEquivFunOnFintype, DirectSum.toModule, LinearEquiv, LinearEquiv.ofBijective, classical, coeLinearMap, linearEquivFunOnFintype, ofBijective, sumAddHom_apply, toModule
 -/
@@ -1177,7 +1201,18 @@ instance instFunLike
 coe_injective b b' h := repr_injective LinearIsometryEquiv.toLinearEquiv_injective
 LinearEquiv.symm_bijective.injective LinearEquiv.toLinearMap_injective by
       classical
-        rw [← LinearMap.cancel_right (WithLp.linearEquiv 2 𝕜 (
+        rw [← LinearMap.cancel_right (WithLp.linearEquiv 2 𝕜 (_ -> 𝕜)).symm.surjective]
+        simp +instances only
+        refine LinearMap.pi_ext fun i k => ?_
+        have : k = k • (1 : 𝕜) := by rw [smul_eq_mul, mul_one]
+        rw [this]; rw [Pi.single_smul]
+        replace h := congr_fun h i
+        simp only [LinearEquiv.comp_coe, map_smul, LinearEquiv.coe_coe, LinearEquiv.trans_apply,
+          coe_symm_linearEquiv, PiLp.toLp_single,
+          LinearIsometryEquiv.coe_symm_toLinearEquiv] at h ⊢
+        rw [h]
+
+@[simp]
 
 中文:
 实例 instFunLike
@@ -1186,7 +1221,18 @@ LinearEquiv.symm_bijective.injective LinearEquiv.toLinearMap_injective by
 coe_injective b b' h := repr_injective LinearIsometryEquiv.toLinearEquiv_injective
 LinearEquiv.symm_bijective.injective LinearEquiv.toLinearMap_injective by
       classical
-        rw [← LinearMap.cancel_right (WithLp.linearEquiv 2 𝕜 (
+        rw [← LinearMap.cancel_right (WithLp.linearEquiv 2 𝕜 (_ -> 𝕜)).symm.surjective]
+        simp +instances only
+        refine LinearMap.pi_ext fun i k => ?_
+        have : k = k • (1 : 𝕜) := by rw [smul_eq_mul, mul_one]
+        rw [this]; rw [Pi.single_smul]
+        replace h := congr_fun h i
+        simp only [LinearEquiv.comp_coe, map_smul, LinearEquiv.coe_coe, LinearEquiv.trans_apply,
+          coe_symm_linearEquiv, PiLp.toLp_single,
+          LinearIsometryEquiv.coe_symm_toLinearEquiv] at h ⊢
+        rw [h]
+
+@[simp]
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.single, LinearEquiv, LinearEquiv.symm_bijective.injective, LinearEquiv.toLinearMap_injective, LinearIsometryEquiv, LinearIsometryEquiv.toLinearEquiv_injective, LinearMap, LinearMap.cancel_right, LinearMap.pi_ext, Pi.single_smul, WithLp, WithLp.linearEquiv, b.repr.symm, cancel_right, classical, coe_injective, congr_fun, injective, instances
 -/
@@ -1772,7 +1818,12 @@ lemma norm_le_card_mul_iSup_norm_inner
     gcongr with i
     exact le_ciSup (f := fun j => ‖⟪b j, x⟫‖) (by simp) i
   _ = √(Fintype.card ι) * ⨆ i, ‖⟪b i, x⟫‖ := by
-    simp only [Finset
+    simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, Nat.cast_nonneg, Real.sqrt_mul]
+    congr
+    rw [Real.sqrt_sq]
+    cases isEmpty_or_nonempty ι
+    · simp
+    · exact le_ciSup_of_le (by simp) (Nonempty.some inferInstance) (by positivity)
 
 中文:
 引理 norm_le_card_mul_iSup_norm_inner
@@ -1784,7 +1835,12 @@ lemma norm_le_card_mul_iSup_norm_inner
     gcongr with i
     exact le_ciSup (f := fun j => ‖⟪b j, x⟫‖) (by simp) i
   _ = √(Fintype.card ι) * ⨆ i, ‖⟪b i, x⟫‖ := by
-    simp only [Finset
+    simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, Nat.cast_nonneg, Real.sqrt_mul]
+    congr
+    rw [Real.sqrt_sq]
+    cases isEmpty_or_nonempty ι
+    · simp
+    · exact le_ciSup_of_le (by simp) (Nonempty.some inferInstance) (by positivity)
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.sum_const, Fintype, Fintype.card, Nat.cast_nonneg, Nonempty, Nonempty.some, Real.sqrt_mul, Real.sqrt_sq, card_univ, cast_nonneg, isEmpty_or_nonempty, le_ciSup, le_ciSup_of_le, nsmul_eq_mul, sqrt_mul, sqrt_sq, sum_const, sum_sq_norm_inner_right
 -/
@@ -1992,7 +2048,13 @@ definition _root_.Module.Basis.toOrthonormalBasis
         intro x y
         let p : EuclideanSpace 𝕜 ι := toLp 2 (v.equivFun x)
         let q : EuclideanSpace 𝕜 ι := toLp 2 (v.equivFun y)
-        have key : ⟪p, q⟫ = ⟪∑ i, p i 
+        have key : ⟪p, q⟫ = ⟪∑ i, p i • v i, ∑ i, q i • v i⟫ := by
+          simp [inner_sum, inner_smul_right, hv.inner_left_fintype, PiLp.inner_apply]
+        convert! key
+        · rw [← v.equivFun.symm_apply_apply x, v.equivFun_symm_apply]
+        · rw [← v.equivFun.symm_apply_apply y, v.equivFun_symm_apply])
+
+@[simp]
 
 中文:
 定义 _root_.模.基.toOrthonormalBasis
@@ -2003,7 +2065,13 @@ definition _root_.Module.Basis.toOrthonormalBasis
         intro x y
         let p : EuclideanSpace 𝕜 ι := toLp 2 (v.equivFun x)
         let q : EuclideanSpace 𝕜 ι := toLp 2 (v.equivFun y)
-        have key : ⟪p, q⟫ = ⟪∑ i, p i 
+        have key : ⟪p, q⟫ = ⟪∑ i, p i • v i, ∑ i, q i • v i⟫ := by
+          simp [inner_sum, inner_smul_right, hv.inner_left_fintype, PiLp.inner_apply]
+        convert! key
+        · rw [← v.equivFun.symm_apply_apply x, v.equivFun_symm_apply]
+        · rw [← v.equivFun.symm_apply_apply y, v.equivFun_symm_apply])
+
+@[simp]
 
 Depends on / 依赖: EuclideanSpace, LinearEquiv, LinearEquiv.isometryOfInner, OrthonormalBasis, OrthonormalBasis.ofRepr, PiLp.inner_apply, WithLp, WithLp.linearEquiv, convert, equivFun, equivFun_symm_apply, hv.inner_left_fintype, inner_apply, inner_left_fintype, inner_smul_right, inner_sum, isometryOfInner, linearEquiv, ofRepr, symm_apply_apply
 -/
@@ -2306,7 +2374,13 @@ theorem _root_.Pi.orthonormalBasis_apply
   simp only [Pi.orthonormalBasis, coe_ofRepr, LinearIsometryEquiv.symm_trans,
     LinearIsometryEquiv.symm_symm, LinearIsometryEquiv.piLpCongrRight_symm,
     LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.piLpCongrRight_apply,
-    LinearIsometryEquiv
+    LinearIsometryEquiv.piLpCurry_apply, PiLp.ofLp_single, PiLp.toLp_apply,
+    Sigma.curry_single (γ := fun _ _ => 𝕜)]
+  obtain rfl | hi := Decidable.eq_or_ne i k
+  · simp
+  · simp [hi]
+
+@[simp]
 
 中文:
 定理 _root_.依赖函数类型.orthonormalBasis_apply
@@ -2318,7 +2392,13 @@ theorem _root_.Pi.orthonormalBasis_apply
   simp only [Pi.orthonormalBasis, coe_ofRepr, LinearIsometryEquiv.symm_trans,
     LinearIsometryEquiv.symm_symm, LinearIsometryEquiv.piLpCongrRight_symm,
     LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.piLpCongrRight_apply,
-    LinearIsometryEquiv
+    LinearIsometryEquiv.piLpCurry_apply, PiLp.ofLp_single, PiLp.toLp_apply,
+    Sigma.curry_single (γ := fun _ _ => 𝕜)]
+  obtain rfl | hi := Decidable.eq_or_ne i k
+  · simp
+  · simp [hi]
+
+@[simp]
 
 Depends on / 依赖: Decidable, Decidable.eq_or_ne, LinearIsometryEquiv, LinearIsometryEquiv.piLpCongrRight_apply, LinearIsometryEquiv.piLpCongrRight_symm, LinearIsometryEquiv.piLpCurry_apply, LinearIsometryEquiv.symm_symm, LinearIsometryEquiv.symm_trans, LinearIsometryEquiv.trans_apply, Pi.orthonormalBasis, PiLp.ofLp_single, PiLp.toLp_apply, Sigma.curry_single, classical, coe_ofRepr, curry_single, eq_or_ne, ofLp_single, orthonormalBasis, piLpCongrRight_apply
 -/
@@ -2415,7 +2495,15 @@ definition span
       (by
         convert! orthonormal_span (h.comp ((↑) : s -> ι') Subtype.val_injective)
         simp [e₀', Basis.span_apply])
-     
+      e₀'.span_eq.ge
+  let φ : span 𝕜 (s.image v' : Set E) ≃ₗᵢ[𝕜] span 𝕜 (range (v' ∘ ((↑) : s -> ι'))) :=
+    LinearIsometryEquiv.ofEq _ _
+      (by
+        rw [Finset.coe_image]; rw [image_eq_range]
+        rfl)
+  e₀.map φ.symm
+
+@[simp]
 
 中文:
 定义 span
@@ -2427,7 +2515,15 @@ definition span
       (by
         convert! orthonormal_span (h.comp ((↑) : s -> ι') Subtype.val_injective)
         simp [e₀', Basis.span_apply])
-     
+      e₀'.span_eq.ge
+  let φ : span 𝕜 (s.image v' : Set E) ≃ₗᵢ[𝕜] span 𝕜 (range (v' ∘ ((↑) : s -> ι'))) :=
+    LinearIsometryEquiv.ofEq _ _
+      (by
+        rw [Finset.coe_image]; rw [image_eq_range]
+        rfl)
+  e₀.map φ.symm
+
+@[simp]
 -/
 protected def span [DecidableEq E] {v' : ι' -> E} (h : Orthonormal 𝕜 v') (s : Finset ι') :
     OrthonormalBasis s 𝕜 (span 𝕜 (s.image v' : Set E)) :=
@@ -3489,7 +3585,12 @@ theorem Orthonormal.exists_orthonormalBasis_extension
   rw [maximal_orthonormal_iff_orthogonalComplement_eq_bot hu₀] at hu₀_max
   have hu₀_finite : u₀.Finite := hu₀.linearIndependent.setFinite
   let u : Finset E := hu₀_finite.toFinset
-  let fu : ↥u ≃ ↥u₀ := hu₀_finite.subtypeEquivToF
+  let fu : ↥u ≃ ↥u₀ := hu₀_finite.subtypeEquivToFinset.symm
+  have hu : Orthonormal 𝕜 ((↑) : u -> E) := by simpa using! hu₀.comp _ fu.injective
+  refine ⟨u, OrthonormalBasis.mkOfOrthogonalEqBot hu ?_, ?_, ?_⟩
+  · simpa [u] using! hu₀_max
+  · simpa [u] using! hu₀s
+  · simp
 
 中文:
 定理 Orthonormal.存在_orthonormalBasis_extension
@@ -3499,7 +3600,12 @@ theorem Orthonormal.exists_orthonormalBasis_extension
   rw [maximal_orthonormal_iff_orthogonalComplement_eq_bot hu₀] at hu₀_max
   have hu₀_finite : u₀.Finite := hu₀.linearIndependent.setFinite
   let u : Finset E := hu₀_finite.toFinset
-  let fu : ↥u ≃ ↥u₀ := hu₀_finite.subtypeEquivToF
+  let fu : ↥u ≃ ↥u₀ := hu₀_finite.subtypeEquivToFinset.symm
+  have hu : Orthonormal 𝕜 ((↑) : u -> E) := by simpa using! hu₀.comp _ fu.injective
+  refine ⟨u, OrthonormalBasis.mkOfOrthogonalEqBot hu ?_, ?_, ?_⟩
+  · simpa [u] using! hu₀_max
+  · simpa [u] using! hu₀s
+  · simp
 
 Depends on / 依赖: Finite, Finset, Orthonormal, OrthonormalBasis, OrthonormalBasis.mkOfOrthogonalEqBot, _finite.subtypeEquivToFinset.symm, _finite.toFinset, exists_maximal_orthonormal, fu.injective, injective, linearIndependent, linearIndependent.setFinite, maximal_orthonormal_iff_orthogonalComplement_eq_bot, mkOfOrthogonalEqBot, setFinite, subtypeEquivToFinset, toFinset
 -/
@@ -3528,7 +3634,16 @@ theorem Orthonormal.exists_orthonormalBasis_extension_of_card_eq
     rwa [orthonormal_subtype_range hsv]
   obtain ⟨Y, b₀, hX, hb₀⟩ := hX.exists_orthonormalBasis_extension
   have hιY : Fintype.card ι = Y.card := by
-
+    refine card_ι.symm.trans ?_
+    exact Module.finrank_eq_card_finset_basis b₀.toBasis
+  have hvsY : s.MapsTo v Y := (s.mapsTo_image v).mono_right (by rwa [← range_domRestrict])
+  have hsv' : Set.InjOn v s := by
+    rw [Set.injOn_iff_injective]
+    exact hsv
+  obtain ⟨g, hg⟩ := hvsY.exists_equiv_extend_of_card_eq hιY hsv'
+  use b₀.reindex g.symm
+  intro i hi
+  simp [hb₀, hg i hi]
 
 中文:
 定理 Orthonormal.存在_orthonormalBasis_extension_of_card_eq
@@ -3539,7 +3654,16 @@ theorem Orthonormal.exists_orthonormalBasis_extension_of_card_eq
     rwa [orthonormal_subtype_range hsv]
   obtain ⟨Y, b₀, hX, hb₀⟩ := hX.exists_orthonormalBasis_extension
   have hιY : Fintype.card ι = Y.card := by
-
+    refine card_ι.symm.trans ?_
+    exact Module.finrank_eq_card_finset_basis b₀.toBasis
+  have hvsY : s.MapsTo v Y := (s.mapsTo_image v).mono_right (by rwa [← range_domRestrict])
+  have hsv' : Set.InjOn v s := by
+    rw [Set.injOn_iff_injective]
+    exact hsv
+  obtain ⟨g, hg⟩ := hvsY.exists_equiv_extend_of_card_eq hιY hsv'
+  use b₀.reindex g.symm
+  intro i hi
+  simp [hb₀, hg i hi]
 
 Depends on / 依赖: Fintype, Fintype.card, Injective, MapsTo, Module, Module.finrank_eq_card_finset_basis, Orthonormal, Set.InjOn, Set.in, Set.range, Y.card, domRestrict, exists_orthonormalBasis_extension, finrank_eq_card_finset_basis, hX.exists_orthonormalBasis_extension, hv.linearIndependent.injective, injective, linearIndependent, mapsTo_image, mono_right
 -/
@@ -3668,7 +3792,7 @@ theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate
   simpa only [DirectSum.IsInternal.subordinateOrthonormalBasis, OrthonormalBasis.coe_reindex,
     DirectSum.IsInternal.subordinateOrthonormalBasisIndex] using!
     hV.collectedOrthonormalBasis_mem hV' (fun i => stdOrthonormalBasis 𝕜 (V i))
-      ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a
+      ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a)
 
 中文:
 定理 直和.Is整数ernal.subordinateOrthonormalBasis_subordinate
@@ -3677,7 +3801,7 @@ theorem DirectSum.IsInternal.subordinateOrthonormalBasis_subordinate
   simpa only [DirectSum.IsInternal.subordinateOrthonormalBasis, OrthonormalBasis.coe_reindex,
     DirectSum.IsInternal.subordinateOrthonormalBasisIndex] using!
     hV.collectedOrthonormalBasis_mem hV' (fun i => stdOrthonormalBasis 𝕜 (V i))
-      ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a
+      ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a)
 
 Depends on / 依赖: DirectSum, DirectSum.IsInternal.subordinateOrthonormalBasis, DirectSum.IsInternal.subordinateOrthonormalBasisIndex, IsInternal, OrthonormalBasis, OrthonormalBasis.coe_reindex, coe_reindex, collectedOrthonormalBasis_mem, hV.collectedOrthonormalBasis_mem, hV.sigmaOrthonormalBasisIndexEquiv, sigmaOrthonormalBasisIndexEquiv, stdOrthonormalBasis, subordinateOrthonormalBasis, subordinateOrthonormalBasisIndex
 -/
@@ -3721,7 +3845,8 @@ definition DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
     ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).snd
   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
     by simp [subordinateOrthonormalBasisIndex_def]⟩
-  left_inv := by grind [subordinateOrthonormalBasisI
+  left_inv := by grind [subordinateOrthonormalBasisIndex_def, Fin.cast_eq_self]
+  right_inv := by grind
 
 中文:
 定义 直和.Is整数ernal.subordinateOrthonormalBasisIndexFiberEquiv
@@ -3729,7 +3854,8 @@ definition DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
     ((hV.sigmaOrthonormalBasisIndexEquiv hn hV').symm a).snd
   invFun b := ⟨hV.sigmaOrthonormalBasisIndexEquiv hn hV' ⟨i, b⟩,
     by simp [subordinateOrthonormalBasisIndex_def]⟩
-  left_inv := by grind [subordinateOrthonormalBasisI
+  left_inv := by grind [subordinateOrthonormalBasisIndex_def, Fin.cast_eq_self]
+  right_inv := by grind
 -/
 private def DirectSum.IsInternal.subordinateOrthonormalBasisIndexFiberEquiv
     (hV' : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (i : ι) :
@@ -3811,7 +3937,46 @@ definition LinearIsometry.extend
     have dim_LS_perp : finrank 𝕜 LSᗮ = d :=
       calc
         finrank 𝕜 LSᗮ = finrank 𝕜 V - finrank 𝕜 LS := by
-          simp only [← 
+          simp only [← LS.finrank_add_finrank_orthogonal, add_tsub_cancel_left]
+        _ = finrank 𝕜 V - finrank 𝕜 S := by
+          simp only [LS, LinearMap.finrank_range_of_inj L.injective]
+        _ = finrank 𝕜 Sᗮ := by simp only [← S.finrank_add_finrank_orthogonal, add_tsub_cancel_left]
+    exact
+      (stdOrthonormalBasis 𝕜 Sᗮ).repr.trans
+        ((stdOrthonormalBasis 𝕜 LSᗮ).reindex <| finCongr dim_LS_perp).repr.symm
+  let L3 := LSᗮ.subtypeₗᵢ.comp E.toLinearIsometry
+  -- Project onto S and Sᗮ
+  haveI : CompleteSpace S := FiniteDimensional.complete 𝕜 S
+  haveI : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+  let p1 := S.orthogonalProjectionOnto.toLinearMap
+  let p2 := Sᗮ.orthogonalProjectionOnto.toLinearMap
+  -- Build a linear map from the isometries on S and Sᗮ
+  let M := L.toLinearMap.comp p1 + L3.toLinearMap.comp p2
+  -- Prove that M is an isometry
+  have M_norm_map : forall x : V, ‖M x‖ = ‖x‖ := by
+    intro x
+    -- Apply M to the orthogonal decomposition of x
+    have Mx_decomp : M x = L (p1 x) + L3 (p2 x) := by
+      simp only [M, LinearMap.add_apply, LinearMap.comp_apply, LinearMap.comp_apply,
+        LinearIsometry.coe_toLinearMap]
+    -- Mx_decomp is the orthogonal decomposition of M x
+    have Mx_orth : ⟪L (p1 x), L3 (p2 x)⟫ = 0 := by
+      have Lp1x : L (p1 x) in LinearMap.range L.toLinearMap :=
+        LinearMap.mem_range_self L.toLinearMap (p1 x)
+      have Lp2x : L3 (p2 x) in (LinearMap.range L.toLinearMap)ᗮ := by
+        simp only [LS,
+          ← Submodule.range_subtype LSᗮ]
+        apply LinearMap.mem_range_self
+      apply Submodule.inner_right_of_mem_orthogonal Lp1x Lp2x
+    -- Apply the Pythagorean theorem and simplify
+    rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]; rw [norm_sq_eq_add_norm_sq_projection x S]
+    simp only [sq, Mx_decomp]
+    rw [norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (L (p1 x)) (L3 (p2 x)) Mx_orth]
+    simp only [p1, p2, LinearIsometry.norm_map,
+      ContinuousLinearMap.coe_coe, Submodule.coe_norm]
+  exact
+    { toLinearMap := M
+      norm_map' := M_norm_map }
 
 中文:
 定义 线性等距.extend
@@ -3824,7 +3989,46 @@ definition LinearIsometry.extend
     have dim_LS_perp : finrank 𝕜 LSᗮ = d :=
       calc
         finrank 𝕜 LSᗮ = finrank 𝕜 V - finrank 𝕜 LS := by
-          simp only [← 
+          simp only [← LS.finrank_add_finrank_orthogonal, add_tsub_cancel_left]
+        _ = finrank 𝕜 V - finrank 𝕜 S := by
+          simp only [LS, LinearMap.finrank_range_of_inj L.injective]
+        _ = finrank 𝕜 Sᗮ := by simp only [← S.finrank_add_finrank_orthogonal, add_tsub_cancel_left]
+    exact
+      (stdOrthonormalBasis 𝕜 Sᗮ).repr.trans
+        ((stdOrthonormalBasis 𝕜 LSᗮ).reindex <| finCongr dim_LS_perp).repr.symm
+  let L3 := LSᗮ.subtypeₗᵢ.comp E.toLinearIsometry
+  -- Project onto S and Sᗮ
+  haveI : CompleteSpace S := FiniteDimensional.complete 𝕜 S
+  haveI : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+  let p1 := S.orthogonalProjectionOnto.toLinearMap
+  let p2 := Sᗮ.orthogonalProjectionOnto.toLinearMap
+  -- Build a linear map from the isometries on S and Sᗮ
+  let M := L.toLinearMap.comp p1 + L3.toLinearMap.comp p2
+  -- Prove that M is an isometry
+  have M_norm_map : forall x : V, ‖M x‖ = ‖x‖ := by
+    intro x
+    -- Apply M to the orthogonal decomposition of x
+    have Mx_decomp : M x = L (p1 x) + L3 (p2 x) := by
+      simp only [M, LinearMap.add_apply, LinearMap.comp_apply, LinearMap.comp_apply,
+        LinearIsometry.coe_toLinearMap]
+    -- Mx_decomp is the orthogonal decomposition of M x
+    have Mx_orth : ⟪L (p1 x), L3 (p2 x)⟫ = 0 := by
+      have Lp1x : L (p1 x) in LinearMap.range L.toLinearMap :=
+        LinearMap.mem_range_self L.toLinearMap (p1 x)
+      have Lp2x : L3 (p2 x) in (LinearMap.range L.toLinearMap)ᗮ := by
+        simp only [LS,
+          ← Submodule.range_subtype LSᗮ]
+        apply LinearMap.mem_range_self
+      apply Submodule.inner_right_of_mem_orthogonal Lp1x Lp2x
+    -- Apply the Pythagorean theorem and simplify
+    rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]; rw [norm_sq_eq_add_norm_sq_projection x S]
+    simp only [sq, Mx_decomp]
+    rw [norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (L (p1 x)) (L3 (p2 x)) Mx_orth]
+    simp only [p1, p2, LinearIsometry.norm_map,
+      ContinuousLinearMap.coe_coe, Submodule.coe_norm]
+  exact
+    { toLinearMap := M
+      norm_map' := M_norm_map }
 -/
 noncomputable def LinearIsometry.extend (L : S ->ₗᵢ[𝕜] V) : V ->ₗᵢ[𝕜] V := by
   -- Build an isometry from Sᗮ to L(S)ᗮ through `EuclideanSpace`
@@ -4164,14 +4368,14 @@ theorem InnerProductSpace.toMatrix_rankOne
   statement: {𝕜 E F ι ι' : Type*} [RCLike 𝕜]
   proof: by
   have := Fintype.ofFinite ι
-  rw [rankOne_def']; rw [ContinuousLinearMap.toLinearMap_comp]; rw [toLinearMap_toSpanSingleton]; rw [toMatrix_comp _ (OrthonormalBasis.singleton Unit 𝕜).toBasis]; rw [toMatrix_toSpanSingleton]; rw [toLinearMap_innerSL_apply]; rw [toMatrix_innerₛₗ_apply]; rw [Orthonor
+  rw [rankOne_def']; rw [ContinuousLinearMap.toLinearMap_comp]; rw [toLinearMap_toSpanSingleton]; rw [toMatrix_comp _ (OrthonormalBasis.singleton Unit 𝕜).toBasis]; rw [toMatrix_toSpanSingleton]; rw [toLinearMap_innerSL_apply]; rw [toMatrix_innerₛₗ_apply]; rw [OrthonormalBasis.toBasis_singleton]; rw [Basis.coe_singleton]; rw [Matrix.vecMulVec_one]; rw [OrthonormalBasis.coe_singleton]; rw [star_one]; rw [Matrix.one_vecMulVec]; rw [Matrix.vecMulVec_eq Unit]
 
 中文:
 定理 内积空间.toMatrix_rankOne
   结论: {𝕜 E F ι ι' : 类型} [RCLike 𝕜]
   证明: by
   have := Fintype.ofFinite ι
-  rw [rankOne_def']; rw [ContinuousLinearMap.toLinearMap_comp]; rw [toLinearMap_toSpanSingleton]; rw [toMatrix_comp _ (OrthonormalBasis.singleton Unit 𝕜).toBasis]; rw [toMatrix_toSpanSingleton]; rw [toLinearMap_innerSL_apply]; rw [toMatrix_innerₛₗ_apply]; rw [Orthonor
+  rw [rankOne_def']; rw [ContinuousLinearMap.toLinearMap_comp]; rw [toLinearMap_toSpanSingleton]; rw [toMatrix_comp _ (OrthonormalBasis.singleton Unit 𝕜).toBasis]; rw [toMatrix_toSpanSingleton]; rw [toLinearMap_innerSL_apply]; rw [toMatrix_innerₛₗ_apply]; rw [OrthonormalBasis.toBasis_singleton]; rw [Basis.coe_singleton]; rw [Matrix.vecMulVec_one]; rw [OrthonormalBasis.coe_singleton]; rw [star_one]; rw [Matrix.one_vecMulVec]; rw [Matrix.vecMulVec_eq Unit]
 
 Depends on / 依赖: Basis.coe_singleton, ContinuousLinearMap, ContinuousLinearMap.toLinearMap_comp, Fintype, Fintype.ofFinite, Matrix, Matrix.one_vecMulVec, Matrix.vecMulVec_eq, Matrix.vecMulVec_one, OrthonormalBasis, OrthonormalBasis.coe_singleton, OrthonormalBasis.singleton, OrthonormalBasis.toBasis_singleton, coe_singleton, ofFinite, one_vecMulVec, rankOne_def, singleton, star_one, toBasis
 -/

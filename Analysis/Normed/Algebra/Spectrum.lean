@@ -301,7 +301,9 @@ theorem mem_resolventSet_of_norm_lt_mul
   have hk : k != 0 :=
     ne_zero_of_norm_ne_zero ((mul_nonneg (norm_nonneg _) (norm_nonneg _)).trans_lt h).ne'
   let ku := Units.map ↑ₐ.toMonoidHom (Units.mk0 k hk)
-  rw [← inv_inv ‖(1 : A)‖]; rw [
+  rw [← inv_inv ‖(1 : A)‖]; rw [mul_inv_lt_iff₀' (inv_pos.2 <| norm_pos_iff.2 (one_ne_zero : (1 : A) != 0))] at h
+  have hku : ‖-a‖ < ‖(↑ku⁻¹ : A)‖⁻¹ := by simpa [ku, norm_algebraMap] using h
+  simpa [ku, sub_eq_add_neg, Algebra.algebraMap_eq_smul_one] using (ku.add (-a) hku).isUnit
 
 中文:
 定理 mem_resolventSet_of_norm_lt_mul
@@ -313,7 +315,9 @@ theorem mem_resolventSet_of_norm_lt_mul
   have hk : k != 0 :=
     ne_zero_of_norm_ne_zero ((mul_nonneg (norm_nonneg _) (norm_nonneg _)).trans_lt h).ne'
   let ku := Units.map ↑ₐ.toMonoidHom (Units.mk0 k hk)
-  rw [← inv_inv ‖(1 : A)‖]; rw [
+  rw [← inv_inv ‖(1 : A)‖]; rw [mul_inv_lt_iff₀' (inv_pos.2 <| norm_pos_iff.2 (one_ne_zero : (1 : A) != 0))] at h
+  have hku : ‖-a‖ < ‖(↑ku⁻¹ : A)‖⁻¹ := by simpa [ku, norm_algebraMap] using h
+  simpa [ku, sub_eq_add_neg, Algebra.algebraMap_eq_smul_one] using (ku.add (-a) hku).isUnit
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_on, Algebra.algebraMap_eq_smul_one, Set.mem_ofPred_eq, Units.map, Units.mk0, algebraMap_eq_smul_on, algebraMap_eq_smul_one, inv_inv, inv_pos, mem_ofPred_eq, mul_nonneg, ne_zero_of_norm_ne_zero, nontriviality, norm_algebraMap, norm_nonneg, norm_pos_iff, one_ne_zero, resolventSet, sub_eq_add_neg
 -/
@@ -822,7 +826,18 @@ theorem spectralRadius_le_pow_nnnorm_pow_one_div
   -- apply easy direction of the spectral mapping theorem for polynomials
   have pow_mem : k ^ (n + 1) in σ (a ^ (n + 1)) := by
     simpa only [one_mul, Algebra.algebraMap_eq_smul_one, one_smul, aeval_monomial, one_mul,
-      eval_monomial] using subset_polynomial
+      eval_monomial] using subset_polynomial_aeval a (@monomial 𝕜 _ (n + 1) (1 : 𝕜)) ⟨k, hk, rfl⟩
+  -- power of the norm is bounded by norm of the power
+  have nnnorm_pow_le : (↑(‖k‖₊ ^ (n + 1)) : Real>=0∞) <= ‖a ^ (n + 1)‖₊ * ‖(1 : A)‖₊ := by
+    simpa only [Real.toNNReal_mul (norm_nonneg _), norm_toNNReal, nnnorm_pow k (n + 1),
+      ENNReal.coe_mul] using coe_mono (Real.toNNReal_mono (norm_le_norm_mul_of_mem pow_mem))
+  -- take (n + 1)ᵗʰ roots and clean up the left-hand side
+  have hn : 0 < ((n + 1 : Nat) : Real) := mod_cast Nat.succ_pos'
+  convert monotone_rpow_of_nonneg (one_div_pos.mpr hn).le nnnorm_pow_le
+  all_goals dsimp
+  · rw [one_div, pow_rpow_inv_natCast]
+    positivity
+  rw [Nat.cast_succ]; rw [ENNReal.coe_mul_rpow]
 
 中文:
 定理 spectralRadius_le_pow_nnnorm_pow_one_div
@@ -832,7 +847,18 @@ theorem spectralRadius_le_pow_nnnorm_pow_one_div
   -- apply easy direction of the spectral mapping theorem for polynomials
   have pow_mem : k ^ (n + 1) in σ (a ^ (n + 1)) := by
     simpa only [one_mul, Algebra.algebraMap_eq_smul_one, one_smul, aeval_monomial, one_mul,
-      eval_monomial] using subset_polynomial
+      eval_monomial] using subset_polynomial_aeval a (@monomial 𝕜 _ (n + 1) (1 : 𝕜)) ⟨k, hk, rfl⟩
+  -- power of the norm is bounded by norm of the power
+  have nnnorm_pow_le : (↑(‖k‖₊ ^ (n + 1)) : Real>=0∞) <= ‖a ^ (n + 1)‖₊ * ‖(1 : A)‖₊ := by
+    simpa only [Real.toNNReal_mul (norm_nonneg _), norm_toNNReal, nnnorm_pow k (n + 1),
+      ENNReal.coe_mul] using coe_mono (Real.toNNReal_mono (norm_le_norm_mul_of_mem pow_mem))
+  -- take (n + 1)ᵗʰ roots and clean up the left-hand side
+  have hn : 0 < ((n + 1 : Nat) : Real) := mod_cast Nat.succ_pos'
+  convert monotone_rpow_of_nonneg (one_div_pos.mpr hn).le nnnorm_pow_le
+  all_goals dsimp
+  · rw [one_div, pow_rpow_inv_natCast]
+    positivity
+  rw [Nat.cast_succ]; rw [ENNReal.coe_mul_rpow]
 -/
 theorem spectralRadius_le_pow_nnnorm_pow_one_div (a : A) (n : Nat) :
     spectralRadius 𝕜 a <= (‖a ^ (n + 1)‖₊ : Real>=0∞) ^ (1 / (n + 1) : Real) *
@@ -867,7 +893,15 @@ theorem spectralRadius_le_liminf_pow_nnnorm_pow_one_div
   simp only [ENNReal.mul_le_iff_le_inv h (hε.trans_le le_top).ne, mul_comm ε⁻¹,
     liminf_eq_iSup_iInf_of_nat', ENNReal.iSup_mul]
   conv_rhs => arg 1; intro i; rw [ENNReal.iInf_mul (by simp [h])]
-  rw [←
+  rw [← ENNReal.inv_lt_inv]; rw [inv_one] at hε
+  obtain ⟨N, hN⟩ := eventually_atTop.mp
+    (ENNReal.eventually_pow_one_div_le (ENNReal.coe_ne_top : ↑‖(1 : A)‖₊ != ∞) hε)
+  refine le_trans ?_ (le_iSup _ (N + 1))
+  refine le_iInf fun n => ?_
+  simp only [← add_assoc]
+  refine (spectralRadius_le_pow_nnnorm_pow_one_div 𝕜 a (n + N)).trans ?_
+  norm_cast
+  grw [hN (n + N + 1) (by lia)]
 
 中文:
 定理 spectralRadius_le_liminf_pow_nnnorm_pow_one_div
@@ -879,7 +913,15 @@ theorem spectralRadius_le_liminf_pow_nnnorm_pow_one_div
   simp only [ENNReal.mul_le_iff_le_inv h (hε.trans_le le_top).ne, mul_comm ε⁻¹,
     liminf_eq_iSup_iInf_of_nat', ENNReal.iSup_mul]
   conv_rhs => arg 1; intro i; rw [ENNReal.iInf_mul (by simp [h])]
-  rw [←
+  rw [← ENNReal.inv_lt_inv]; rw [inv_one] at hε
+  obtain ⟨N, hN⟩ := eventually_atTop.mp
+    (ENNReal.eventually_pow_one_div_le (ENNReal.coe_ne_top : ↑‖(1 : A)‖₊ != ∞) hε)
+  refine le_trans ?_ (le_iSup _ (N + 1))
+  refine le_iInf fun n => ?_
+  simp only [← add_assoc]
+  refine (spectralRadius_le_pow_nnnorm_pow_one_div 𝕜 a (n + N)).trans ?_
+  norm_cast
+  grw [hN (n + N + 1) (by lia)]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, ENNReal.eventually_pow_one_div_le, ENNReal.iInf_mul, ENNReal.iSup_mul, ENNReal.inv_lt_inv, ENNReal.le_of_forall_lt_one_mul_le, ENNReal.mul_le_iff_le_inv, coe_ne_top, conv_rhs, eventually_atTop, eventually_atTop.mp, eventually_pow_one_div_le, iInf_mul, iSup_mul, inv_lt_inv, inv_one, le_iInf, le_iSup, le_of_forall_lt_one_mul_le
 -/
@@ -949,7 +991,12 @@ theorem resolvent_isBigO_inv
       (NormedRing.inverse_one_sub_norm (R := A)).comp_tendsto
         (by simpa using (tendsto_inv₀_cobounded (α := 𝕜)).smul_const a)
   calc
-    resolvent a =ᶠ[c
+    resolvent a =ᶠ[cobounded 𝕜] fun z => z⁻¹ • resolvent (z⁻¹ • a) (1 : 𝕜) := by
+      filter_upwards [isBounded_singleton (x := 0)] with z hz
+      lift z to 𝕜ˣ using Ne.isUnit hz
+      simpa [Units.smul_def] using congr(z⁻¹ • $(units_smul_resolvent_self (r := z) (a := a)))
+_ =O[cobounded 𝕜] (· ⁻¹) := .of_norm_right by
+      simpa using (isBigO_refl (· ⁻¹) (cobounded 𝕜)).norm_right.smul h
 
 中文:
 定理 resolvent_isBigO_inv
@@ -960,7 +1007,12 @@ theorem resolvent_isBigO_inv
       (NormedRing.inverse_one_sub_norm (R := A)).comp_tendsto
         (by simpa using (tendsto_inv₀_cobounded (α := 𝕜)).smul_const a)
   calc
-    resolvent a =ᶠ[c
+    resolvent a =ᶠ[cobounded 𝕜] fun z => z⁻¹ • resolvent (z⁻¹ • a) (1 : 𝕜) := by
+      filter_upwards [isBounded_singleton (x := 0)] with z hz
+      lift z to 𝕜ˣ using Ne.isUnit hz
+      simpa [Units.smul_def] using congr(z⁻¹ • $(units_smul_resolvent_self (r := z) (a := a)))
+_ =O[cobounded 𝕜] (· ⁻¹) := .of_norm_right by
+      simpa using (isBigO_refl (· ⁻¹) (cobounded 𝕜)).norm_right.smul h
 
 Depends on / 依赖: Function, Function.comp_def, Ne.isUnit, NormedRing, NormedRing.inverse_one_sub_norm, Units.smul_def, cobounded, comp_def, comp_tendsto, filter_upwards, inverse_one_sub_norm, isBounded_singleton, isUnit, resolvent, smul_const, smul_def, units_smul_resolvent_self
 -/
@@ -1021,7 +1073,21 @@ theorem hasFPowerSeriesOnBall_inverse_one_sub_smul
       rcases n with - | n
       · simp
       · grw [nnnorm_pow_le' a n.succ_pos, ← le_max_left]
-        b
+        by_cases h : ‖a‖₊ = 0
+        · simp [h, pow_succ']
+        · rw [← coe_inv h, coe_lt_coe, NNReal.lt_inv_iff_mul_lt h] at hr
+          simpa only [← mul_pow, mul_comm] using! pow_le_one' hr.le n.succ
+    r_pos := ENNReal.inv_pos.mpr coe_ne_top
+    hasSum := fun {y} hy => by
+      have norm_lt : ‖y • a‖ < 1 := by
+        by_cases h : ‖a‖₊ = 0
+        · simp only [nnnorm_eq_zero.mp h, norm_zero, zero_lt_one, smul_zero]
+        · have nnnorm_lt : ‖y‖₊ < ‖a‖₊⁻¹ := by
+            simpa only [← coe_inv h, mem_ball_zero_iff, Metric.eball_coe] using! hy
+          rwa [← coe_nnnorm, ← Real.lt_toNNReal_iff_coe_lt, Real.toNNReal_one, nnnorm_smul,
+            ← NNReal.lt_inv_iff_mul_lt h]
+      simpa [← smul_pow, (summable_geometric_of_norm_lt_one norm_lt).hasSum_iff] using!
+        (NormedRing.inverse_one_sub _ norm_lt).symm }
 
 中文:
 定理 hasFPowerSeriesOnBall_inverse_one_sub_smul
@@ -1033,7 +1099,21 @@ theorem hasFPowerSeriesOnBall_inverse_one_sub_smul
       rcases n with - | n
       · simp
       · grw [nnnorm_pow_le' a n.succ_pos, ← le_max_left]
-        b
+        by_cases h : ‖a‖₊ = 0
+        · simp [h, pow_succ']
+        · rw [← coe_inv h, coe_lt_coe, NNReal.lt_inv_iff_mul_lt h] at hr
+          simpa only [← mul_pow, mul_comm] using! pow_le_one' hr.le n.succ
+    r_pos := ENNReal.inv_pos.mpr coe_ne_top
+    hasSum := fun {y} hy => by
+      have norm_lt : ‖y • a‖ < 1 := by
+        by_cases h : ‖a‖₊ = 0
+        · simp only [nnnorm_eq_zero.mp h, norm_zero, zero_lt_one, smul_zero]
+        · have nnnorm_lt : ‖y‖₊ < ‖a‖₊⁻¹ := by
+            simpa only [← coe_inv h, mem_ball_zero_iff, Metric.eball_coe] using! hy
+          rwa [← coe_nnnorm, ← Real.lt_toNNReal_iff_coe_lt, Real.toNNReal_one, nnnorm_smul,
+            ← NNReal.lt_inv_iff_mul_lt h]
+      simpa [← smul_pow, (summable_geometric_of_norm_lt_one norm_lt).hasSum_iff] using!
+        (NormedRing.inverse_one_sub _ norm_lt).symm }
 
 Depends on / 依赖: ENNReal, ENNReal.inv_pos.mpr, NNReal, NNReal.lt_inv_iff_mul_lt, coe_inv, coe_lt_coe, coe_ne_top, hasSum, hr.le, inv_pos, le_max_left, le_of_forall_nnreal_lt, le_radius_of_bound_nnreal, lt_inv_iff_mul_lt, mul_comm, mul_pow, n.succ, n.succ_pos, nnnorm_pow_le, norm_mkPiRing
 -/
@@ -1075,7 +1155,10 @@ theorem isUnit_one_sub_smul_of_lt_inv_radius
   · let u := Units.mk0 z hz
     suffices hu : IsUnit (u⁻¹ • (1 : A) - a) by
       rwa [IsUnit.smul_sub_iff_sub_inv_smul, inv_inv u] at hu
-    rw [Units.smul_def]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← mem_resolventSe
+    rw [Units.smul_def]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← mem_resolventSet_iff]
+    refine mem_resolventSet_of_spectralRadius_lt ?_
+    rwa [Units.val_inv_eq_inv_val, nnnorm_inv,
+      coe_inv (nnnorm_ne_zero_iff.mpr (Units.val_mk0 hz ▸ hz : (u : 𝕜) != 0)), lt_inv_iff_lt_inv]
 
 中文:
 定理 isUnit_one_sub_smul_of_lt_inv_radius
@@ -1086,7 +1169,10 @@ theorem isUnit_one_sub_smul_of_lt_inv_radius
   · let u := Units.mk0 z hz
     suffices hu : IsUnit (u⁻¹ • (1 : A) - a) by
       rwa [IsUnit.smul_sub_iff_sub_inv_smul, inv_inv u] at hu
-    rw [Units.smul_def]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← mem_resolventSe
+    rw [Units.smul_def]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← mem_resolventSet_iff]
+    refine mem_resolventSet_of_spectralRadius_lt ?_
+    rwa [Units.val_inv_eq_inv_val, nnnorm_inv,
+      coe_inv (nnnorm_ne_zero_iff.mpr (Units.val_mk0 hz ▸ hz : (u : 𝕜) != 0)), lt_inv_iff_lt_inv]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsUnit, IsUnit.smul_sub_iff_sub_inv_smul, Units.mk0, Units.smul_def, Units.val_inv_eq_inv_val, Units.val_mk0, algebraMap_eq_smul_one, coe_inv, inv_inv, isUnit_one, lt_inv_iff_lt_inv, mem_resolventSet_iff, mem_resolventSet_of_spectralRadius_lt, nnnorm_inv, nnnorm_ne_zero_iff, nnnorm_ne_zero_iff.mpr, smul_def, smul_sub_iff_sub_inv_smul
 -/
@@ -1119,7 +1205,25 @@ theorem exp_mem_exp
   let +nondep : NormedAlgebra Rat A := .restrictScalars Rat 𝕜 A
   have hexpmul : exp a = exp (a - ↑ₐ z) * ↑ₐ (exp z) := by
     rw [algebraMap_exp_comm z]; rw [← exp_add_of_commute (Algebra.commutes z (a - ↑ₐ z)).symm]; rw [sub_add_cancel]
-  let b := ∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ
+  let b := ∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ n
+  have hb : Summable fun n : Nat => ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ n := by
+    refine .of_norm_bounded_eventually (Real.summable_pow_div_factorial ‖a - ↑ₐ z‖) ?_
+    filter_upwards [Filter.eventually_cofinite_ne 0] with n hn
+    rw [norm_smul]; rw [mul_comm]; rw [norm_inv]; rw [RCLike.norm_natCast]; rw [← div_eq_mul_inv]
+    gcongr
+    · exact norm_pow_le' _ (pos_iff_ne_zero.mpr hn)
+    · exact n.le_succ
+  have h₀ : (∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ (n + 1)) = (a - ↑ₐ z) * b := by
+    simpa only [mul_smul_comm, pow_succ'] using hb.tsum_mul_left (a - ↑ₐ z)
+  have h₁ : (∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ (n + 1)) = b * (a - ↑ₐ z) := by
+    simpa only [pow_succ, Algebra.smul_mul_assoc] using hb.tsum_mul_right (a - ↑ₐ z)
+  have h₃ : exp (a - ↑ₐ z) = 1 + (a - ↑ₐ z) * b := by
+    rw [exp_eq_tsum 𝕜]
+    convert! (expSeries_summable' (𝕂 := 𝕜) (a - ↑ₐ z)).tsum_eq_zero_add
+    · simp only [Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero, one_smul]
+    · exact h₀.symm
+  rw [spectrum.mem_iff]; rw [IsUnit.sub_iff]; rw [← one_mul (↑ₐ (exp z))]; rw [hexpmul]; rw [← _root_.sub_mul]; rw [Commute.isUnit_mul_iff (Algebra.commutes (exp z) (exp (a - ↑ₐ z) - 1)).symm]; rw [sub_eq_iff_eq_add'.mpr h₃]; rw [Commute.isUnit_mul_iff (h₀ ▸ h₁ : (a - ↑ₐ z) * b = b * (a - ↑ₐ z))]
+  exact not_and_of_not_left _ (not_and_of_not_left _ ((not_iff_not.mpr IsUnit.sub_iff).mp hz))
 
 中文:
 定理 exp_mem_exp
@@ -1128,7 +1232,25 @@ theorem exp_mem_exp
   let +nondep : NormedAlgebra Rat A := .restrictScalars Rat 𝕜 A
   have hexpmul : exp a = exp (a - ↑ₐ z) * ↑ₐ (exp z) := by
     rw [algebraMap_exp_comm z]; rw [← exp_add_of_commute (Algebra.commutes z (a - ↑ₐ z)).symm]; rw [sub_add_cancel]
-  let b := ∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ
+  let b := ∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ n
+  have hb : Summable fun n : Nat => ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ n := by
+    refine .of_norm_bounded_eventually (Real.summable_pow_div_factorial ‖a - ↑ₐ z‖) ?_
+    filter_upwards [Filter.eventually_cofinite_ne 0] with n hn
+    rw [norm_smul]; rw [mul_comm]; rw [norm_inv]; rw [RCLike.norm_natCast]; rw [← div_eq_mul_inv]
+    gcongr
+    · exact norm_pow_le' _ (pos_iff_ne_zero.mpr hn)
+    · exact n.le_succ
+  have h₀ : (∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ (n + 1)) = (a - ↑ₐ z) * b := by
+    simpa only [mul_smul_comm, pow_succ'] using hb.tsum_mul_left (a - ↑ₐ z)
+  have h₁ : (∑' n : Nat, ((n + 1).factorial⁻¹ : 𝕜) • (a - ↑ₐ z) ^ (n + 1)) = b * (a - ↑ₐ z) := by
+    simpa only [pow_succ, Algebra.smul_mul_assoc] using hb.tsum_mul_right (a - ↑ₐ z)
+  have h₃ : exp (a - ↑ₐ z) = 1 + (a - ↑ₐ z) * b := by
+    rw [exp_eq_tsum 𝕜]
+    convert! (expSeries_summable' (𝕂 := 𝕜) (a - ↑ₐ z)).tsum_eq_zero_add
+    · simp only [Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero, one_smul]
+    · exact h₀.symm
+  rw [spectrum.mem_iff]; rw [IsUnit.sub_iff]; rw [← one_mul (↑ₐ (exp z))]; rw [hexpmul]; rw [← _root_.sub_mul]; rw [Commute.isUnit_mul_iff (Algebra.commutes (exp z) (exp (a - ↑ₐ z) - 1)).symm]; rw [sub_eq_iff_eq_add'.mpr h₃]; rw [Commute.isUnit_mul_iff (h₀ ▸ h₁ : (a - ↑ₐ z) * b = b * (a - ↑ₐ z))]
+  exact not_and_of_not_left _ (not_and_of_not_left _ ((not_iff_not.mpr IsUnit.sub_iff).mp hz))
 
 Depends on / 依赖: Algebra, Algebra.commutes, Filter, Filter.eventually_co, NormedAlgebra, Real.summable_pow_div_factorial, Summable, algebraMap_exp_comm, commutes, eventually_co, exp_add_of_commute, factorial, filter_upwards, hexpmul, nondep, of_norm_bounded_eventually, restrictScalars, sub_add_cancel, summable_pow_div_factorial
 -/
@@ -1405,7 +1527,15 @@ lemma _root_.Subalgebra.isUnit_of_isUnit_val_of_eventually
 exact (NormedRing.inverse_continuousAt _).tendsto.comp
 continuousAt_subtype_val.tendsto.comp map_mono hla
   suffices mem : (↑ha.unit⁻¹ : A) in S by
-    refine ⟨⟨a, ⟨(↑ha.unit⁻¹ : A), mem⟩, ?
+    refine ⟨⟨a, ⟨(↑ha.unit⁻¹ : A), mem⟩, ?_, ?_⟩, rfl⟩
+    all_goals ext; simp
+  apply hS.mem_of_tendsto hla₂
+  rw [Filter.eventually_map]
+  apply hl.mono fun x hx => ?_
+  suffices Ring.inverse (val S x) = (val S ↑hx.unit⁻¹) from this ▸ Subtype.property _
+  rw [← (hx.map (val S)).unit_spec]; rw [Ring.inverse_unit (hx.map (val S)).unit]; rw [val]
+  apply Units.mul_eq_one_iff_inv_eq.mp
+  simpa [-IsUnit.mul_val_inv] using congr(($hx.mul_val_inv : A))
 
 中文:
 引理 _root_.子代数.isUnit_of_isUnit_val_of_eventually
@@ -1416,7 +1546,15 @@ continuousAt_subtype_val.tendsto.comp map_mono hla
 exact (NormedRing.inverse_continuousAt _).tendsto.comp
 continuousAt_subtype_val.tendsto.comp map_mono hla
   suffices mem : (↑ha.unit⁻¹ : A) in S by
-    refine ⟨⟨a, ⟨(↑ha.unit⁻¹ : A), mem⟩, ?
+    refine ⟨⟨a, ⟨(↑ha.unit⁻¹ : A), mem⟩, ?_, ?_⟩, rfl⟩
+    all_goals ext; simp
+  apply hS.mem_of_tendsto hla₂
+  rw [Filter.eventually_map]
+  apply hl.mono fun x hx => ?_
+  suffices Ring.inverse (val S x) = (val S ↑hx.unit⁻¹) from this ▸ Subtype.property _
+  rw [← (hx.map (val S)).unit_spec]; rw [Ring.inverse_unit (hx.map (val S)).unit]; rw [val]
+  apply Units.mul_eq_one_iff_inv_eq.mp
+  simpa [-IsUnit.mul_val_inv] using congr(($hx.mul_val_inv : A))
 
 Depends on / 依赖: Filter, Filter.eventually_map, NormedRing, NormedRing.inverse_continuousAt, Ring.inverse, Ring.inverse_unit, Subtype, Subtype.property, Tendsto, all_goals, continuousAt_subtype_val, continuousAt_subtype_val.tendsto.comp, eventually_map, hS.mem_of_tendsto, ha.unit, hl.mono, hx.unit, inverse, inverse_continuousAt, inverse_unit
 -/
@@ -1453,7 +1591,14 @@ lemma _root_.Subalgebra.frontier_spectrum
   obtain ⟨hμ₁, hμ₂⟩ := hμ
   rw [mem_closure_iff_clusterPt] at hμ₁
   apply hμ₂
-  rw [me
+  rw [mem_compl_iff]; rw [spectrum.notMem_iff]
+refine Subalgebra.isUnit_of_isUnit_val_of_eventually S h ?_ ?_ .map hμ₁ (algebraMap 𝕜 S · - x)
+  · calc
+      _ <= map _ (𝓝 μ) := map_mono (by simp)
+      _ <= _ := by rw [← Filter.Tendsto, ← ContinuousAt]; fun_prop
+  · rw [eventually_map]
+    apply Eventually.filter_mono inf_le_right
+    simp [spectrum.notMem_iff]
 
 中文:
 引理 _root_.子代数.frontier_spectrum
@@ -1467,7 +1612,14 @@ lemma _root_.Subalgebra.frontier_spectrum
   obtain ⟨hμ₁, hμ₂⟩ := hμ
   rw [mem_closure_iff_clusterPt] at hμ₁
   apply hμ₂
-  rw [me
+  rw [mem_compl_iff]; rw [spectrum.notMem_iff]
+refine Subalgebra.isUnit_of_isUnit_val_of_eventually S h ?_ ?_ .map hμ₁ (algebraMap 𝕜 S · - x)
+  · calc
+      _ <= map _ (𝓝 μ) := map_mono (by simp)
+      _ <= _ := by rw [← Filter.Tendsto, ← ContinuousAt]; fun_prop
+  · rw [eventually_map]
+    apply Eventually.filter_mono inf_le_right
+    simp [spectrum.notMem_iff]
 
 Depends on / 依赖: CompleteSpace, Filter, Filter.Tendsto, Set.mem_sdiff, Subalgebra, Subalgebra.isUnit_of_isUnit_val_of_eventually, Tendsto, algebraMap, completeSpace_coe, frontier_compl, frontier_eq, hS.completeSpace_coe, isClosed, isOpen_compl, isOpen_compl.frontier_eq, isUnit_of_isUnit_val_of_eventually, map_mono, mem_closure_iff_clusterPt, mem_compl_iff, mem_sdiff
 -/
@@ -1529,7 +1681,14 @@ lemma Subalgebra.spectrum_sUnion_connectedComponentIn
     rw [← this.biUnion_connectedComponentIn (sdiff_subset_compl _ _)]; rw [union_sdiff_cancel (spectrum.subset_subalgebra x)]
   have : CompleteSpace S := hS.completeSpace_coe
   have h_open : IsOpen (σ 𝕜 x \ σ 𝕜 (x : A)) := by
-  
+    rw [← (spectrum.isClosed (𝕜 := 𝕜) x).closure_eq]; rw [closure_eq_interior_union_frontier]; rw [union_sdiff_distrib]; rw [sdiff_eq_empty.mpr (frontier_spectrum S x)]; rw [sdiff_eq_compl_inter]; rw [union_empty]
+    exact (spectrum.isClosed _).isOpen_compl.inter isOpen_interior
+  apply isClopen_preimage_val h_open
+  suffices h_frontier : frontier (σ 𝕜 x \ σ 𝕜 (x : A)) subseteq frontier (σ 𝕜 (x : A)) from
+disjoint_of_subset_left h_frontier disjoint_compl_right.frontier_left
+      (spectrum.isClosed _).isOpen_compl
+  grw [sdiff_eq_compl_inter, frontier_inter_subset, inter_subset_left, inter_subset_right,
+    frontier_compl, frontier_subset_frontier, union_self]
 
 中文:
 引理 子代数.spectrum_sUnion_connectedComponentIn
@@ -1538,7 +1697,14 @@ lemma Subalgebra.spectrum_sUnion_connectedComponentIn
     rw [← this.biUnion_connectedComponentIn (sdiff_subset_compl _ _)]; rw [union_sdiff_cancel (spectrum.subset_subalgebra x)]
   have : CompleteSpace S := hS.completeSpace_coe
   have h_open : IsOpen (σ 𝕜 x \ σ 𝕜 (x : A)) := by
-  
+    rw [← (spectrum.isClosed (𝕜 := 𝕜) x).closure_eq]; rw [closure_eq_interior_union_frontier]; rw [union_sdiff_distrib]; rw [sdiff_eq_empty.mpr (frontier_spectrum S x)]; rw [sdiff_eq_compl_inter]; rw [union_empty]
+    exact (spectrum.isClosed _).isOpen_compl.inter isOpen_interior
+  apply isClopen_preimage_val h_open
+  suffices h_frontier : frontier (σ 𝕜 x \ σ 𝕜 (x : A)) subseteq frontier (σ 𝕜 (x : A)) from
+disjoint_of_subset_left h_frontier disjoint_compl_right.frontier_left
+      (spectrum.isClosed _).isOpen_compl
+  grw [sdiff_eq_compl_inter, frontier_inter_subset, inter_subset_left, inter_subset_right,
+    frontier_compl, frontier_subset_frontier, union_self]
 
 Depends on / 依赖: CompleteSpace, IsClopen, IsOpen, biUnion_connectedComponentIn, closure_eq, closure_eq_interior_union_frontier, completeSpace_coe, frontier_spectrum, hS.completeSpace_coe, h_open, isClosed, sdiff_eq_compl_inter, sdiff_eq_empty, sdiff_eq_empty.mpr, sdiff_subset_compl, spectrum, spectrum.isClosed, spectrum.subset_subalgebra, subset_subalgebra, this.biUnion_connectedComponentIn
 -/
@@ -1568,7 +1734,8 @@ lemma Subalgebra.spectrum_isBounded_connectedComponentIn
   · simp [connectedComponentIn_eq_empty (show z ∉ (σ 𝕜 (x : A))ᶜ from not_not.mpr hz')]
   · have : CompleteSpace S := hS.completeSpace_coe
 .subset this suffices connectedComponentIn (σ 𝕜 (x : A))ᶜ z subseteq σ 𝕜 x from spectrum.isBounded x
-    rw [spectrum_sUnion
+    rw [spectrum_sUnion_connectedComponentIn S]
+.trans subset_union_right exact subset_biUnion_of_mem (mem_sdiff_of_mem hz hz')
 
 中文:
 引理 子代数.spectrum_isBounded_connectedComponentIn
@@ -1578,7 +1745,8 @@ lemma Subalgebra.spectrum_isBounded_connectedComponentIn
   · simp [connectedComponentIn_eq_empty (show z ∉ (σ 𝕜 (x : A))ᶜ from not_not.mpr hz')]
   · have : CompleteSpace S := hS.completeSpace_coe
 .subset this suffices connectedComponentIn (σ 𝕜 (x : A))ᶜ z subseteq σ 𝕜 x from spectrum.isBounded x
-    rw [spectrum_sUnion
+    rw [spectrum_sUnion_connectedComponentIn S]
+.trans subset_union_right exact subset_biUnion_of_mem (mem_sdiff_of_mem hz hz')
 
 Depends on / 依赖: CompleteSpace, completeSpace_coe, connectedComponentIn, connectedComponentIn_eq_empty, hS.completeSpace_coe, isBounded, mem_sdiff_of_mem, not_not, not_not.mpr, spectrum, spectrum.isBounded, spectrum_sUnion_connectedComponentIn, subset, subset_biUnion_of_mem, subset_union_right, subseteq
 -/
@@ -1609,7 +1777,8 @@ lemma Subalgebra.spectrum_eq_of_isPreconnected_compl
   refine eq_empty_of_forall_notMem fun z hz => NormedSpace.unbounded_univ 𝕜 𝕜 ?_
 .mp hz obtain ⟨hz, hz'⟩ := mem_sdiff _
 have := (spectrum.isBounded (x : A)).union
-    h.connectedComponentIn hz'
+    h.connectedComponentIn hz' ▸ spectrum_isBounded_connectedComponentIn S x hz
+  simpa
 
 中文:
 引理 子代数.spectrum_eq_of_isPreconnected_compl
@@ -1621,7 +1790,8 @@ have := (spectrum.isBounded (x : A)).union
   refine eq_empty_of_forall_notMem fun z hz => NormedSpace.unbounded_univ 𝕜 𝕜 ?_
 .mp hz obtain ⟨hz, hz'⟩ := mem_sdiff _
 have := (spectrum.isBounded (x : A)).union
-    h.connectedComponentIn hz'
+    h.connectedComponentIn hz' ▸ spectrum_isBounded_connectedComponentIn S x hz
+  simpa
 
 Depends on / 依赖: NormedSpace, NormedSpace.unbounded_univ, connectedComponentIn, eq_empty_of_forall_notMem, h.connectedComponentIn, isBounded, mem_sdiff, spectrum, spectrum.isBounded, spectrum_isBounded_connectedComponentIn, spectrum_sUnion_connectedComponentIn, unbounded_univ
 -/
@@ -1654,7 +1824,10 @@ lemma spectralRadius_eq
   apply le_antisymm
   all_goals apply iSup₂_le fun x hx => ?_
 .symm.trans_le le_iSup₂ (α := Real>=0∞) _ ?_ · refine congr_arg ((↑) : Real>=0 -> Real>=0∞) (this x)
-    exact (spectrum.
+    exact (spectrum.algebraMap_mem_iff _).mpr hx
+  · have ⟨y, hy, hy'⟩ := h.algebraMap_image.symm ▸ hx
+    subst hy'
+    exact this y ▸ le_iSup₂ (α := Real>=0∞) y hy
 
 中文:
 引理 spectralRadius_eq
@@ -1665,7 +1838,10 @@ lemma spectralRadius_eq
   apply le_antisymm
   all_goals apply iSup₂_le fun x hx => ?_
 .symm.trans_le le_iSup₂ (α := Real>=0∞) _ ?_ · refine congr_arg ((↑) : Real>=0 -> Real>=0∞) (this x)
-    exact (spectrum.
+    exact (spectrum.algebraMap_mem_iff _).mpr hx
+  · have ⟨y, hy, hy'⟩ := h.algebraMap_image.symm ▸ hx
+    subst hy'
+    exact this y ▸ le_iSup₂ (α := Real>=0∞) y hy
 
 Depends on / 依赖: algebraMap_image, algebraMap_isometry, algebraMap_mem_iff, all_goals, congr_arg, h.algebraMap_image.symm, le_antisymm, map_zero, nnnorm_map_of_map_zero, spectralRadius, spectrum, spectrum.algebraMap_mem_iff, symm.trans_le, trans_le
 -/
@@ -1697,7 +1873,18 @@ lemma nnreal_iff_spectralRadius_le
     rw [Set.mem_Icc]; rw [← abs_le]; rw [← Real.norm_eq_abs]; rw [← coe_nnnorm]; rw [NNReal.coe_le_coe]; rw [← ENNReal.coe_le_coe]
 .trans ht exact le_iSup₂ (α := Real>=0∞) x hx
   rw [nnreal_iff]
-  refine ⟨fun h => iSup₂_le fun 
+  refine ⟨fun h => iSup₂_le fun x hx => ?_, fun h => ?_⟩
+  · rw [← spectrum.singleton_sub_eq] at hx
+    obtain ⟨y, hy, rfl⟩ : exists y in spectrum Real a, ↑t - y = x := by simpa using hx
+obtain ⟨hty, hyt⟩ := Set.mem_Icc.mp this hy
+    lift y to Real>=0 using h y hy
+    rw [← NNReal.coe_sub (by exact_mod_cast hyt)]
+    simp
+  · replace h : forall x in spectrum Real a, ‖t - x‖₊ <= t := by
+      simpa [spectralRadius, iSup₂_le_iff, ← spectrum.singleton_sub_eq] using h
+    peel h with x hx h_le
+    rw [← NNReal.coe_le_coe]; rw [coe_nnnorm]; rw [Real.norm_eq_abs]; rw [abs_le] at h_le
+    linarith [h_le.2]
 
 中文:
 引理 nnreal_iff_spectralRadius_le
@@ -1708,7 +1895,18 @@ lemma nnreal_iff_spectralRadius_le
     rw [Set.mem_Icc]; rw [← abs_le]; rw [← Real.norm_eq_abs]; rw [← coe_nnnorm]; rw [NNReal.coe_le_coe]; rw [← ENNReal.coe_le_coe]
 .trans ht exact le_iSup₂ (α := Real>=0∞) x hx
   rw [nnreal_iff]
-  refine ⟨fun h => iSup₂_le fun 
+  refine ⟨fun h => iSup₂_le fun x hx => ?_, fun h => ?_⟩
+  · rw [← spectrum.singleton_sub_eq] at hx
+    obtain ⟨y, hy, rfl⟩ : exists y in spectrum Real a, ↑t - y = x := by simpa using hx
+obtain ⟨hty, hyt⟩ := Set.mem_Icc.mp this hy
+    lift y to Real>=0 using h y hy
+    rw [← NNReal.coe_sub (by exact_mod_cast hyt)]
+    simp
+  · replace h : forall x in spectrum Real a, ‖t - x‖₊ <= t := by
+      simpa [spectralRadius, iSup₂_le_iff, ← spectrum.singleton_sub_eq] using h
+    peel h with x hx h_le
+    rw [← NNReal.coe_le_coe]; rw [coe_nnnorm]; rw [Real.norm_eq_abs]; rw [abs_le] at h_le
+    linarith [h_le.2]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, NNReal, NNReal.coe_le_coe, Real.norm_eq_abs, Set.Icc, Set.mem_Icc, Set.mem_Icc.mp, abs_le, coe_le_coe, coe_nnnorm, mem_Icc, nnreal_iff, norm_eq_abs, singleton_sub_eq, spectrum, spectrum.singleton_sub_eq, subseteq
 -/
@@ -1871,7 +2069,21 @@ lemma upperHemicontinuous_spectrum
   `x n ∈ spectrum 𝕜 (a n)`. -/
   rw [upperHemicontinuous_iff]
   refine fun a₀ => .of_sequences
-(isCompact_closedBall 0 ((‖
+(isCompact_closedBall 0 ((‖a₀‖ + 1) * ‖(1 : A)‖)).isSeqCompact ?_
+    fun a ha x hx_mem x₀ hx => ?_
+  /- We must show that `spectrum 𝕜 (a n)` is eventually contained in some fixed compact set
+  (we've chosen `closedBall 0 ((‖a₀‖ + 1) * ‖(1 : A)‖)`). This follows since the spectrum of any
+  `b` is bounded `‖b‖ * ‖1‖` and `a` converges to `a₀`. -/
+  · filter_upwards [Metric.closedBall_mem_nhds a₀ zero_lt_one] with a ha
+.trans Metric.closedBall_subset_closedBall ?_ apply spectrum.subset_closedBall_norm_mul a
+    gcongr
+.trans apply norm_le_norm_add_norm_sub' a a₀
+    gcongr
+    simpa [dist_eq_norm] using ha
+  /- Finally, `x₀ ∈ spectrum 𝕜 a₀` since `algebraMap 𝕜 A x₀ - a₀` is not invertible, being itself
+  the limit of the non-invertible elements `algebraMap 𝕜 A (x n) - (a n)`. -/
+  · exact nonunits.isClosed.mem_of_tendsto
+(continuous_algebraMap 𝕜 A |>.tendsto x₀ |>.comp hx |>.sub ha) .of_forall hx_mem
 
 中文:
 引理 upperHemicontinuous_spectrum
@@ -1882,7 +2094,21 @@ lemma upperHemicontinuous_spectrum
   `x n ∈ spectrum 𝕜 (a n)`. -/
   rw [upperHemicontinuous_iff]
   refine fun a₀ => .of_sequences
-(isCompact_closedBall 0 ((‖
+(isCompact_closedBall 0 ((‖a₀‖ + 1) * ‖(1 : A)‖)).isSeqCompact ?_
+    fun a ha x hx_mem x₀ hx => ?_
+  /- We must show that `spectrum 𝕜 (a n)` is eventually contained in some fixed compact set
+  (we've chosen `closedBall 0 ((‖a₀‖ + 1) * ‖(1 : A)‖)`). This follows since the spectrum of any
+  `b` is bounded `‖b‖ * ‖1‖` and `a` converges to `a₀`. -/
+  · filter_upwards [Metric.closedBall_mem_nhds a₀ zero_lt_one] with a ha
+.trans Metric.closedBall_subset_closedBall ?_ apply spectrum.subset_closedBall_norm_mul a
+    gcongr
+.trans apply norm_le_norm_add_norm_sub' a a₀
+    gcongr
+    simpa [dist_eq_norm] using ha
+  /- Finally, `x₀ ∈ spectrum 𝕜 a₀` since `algebraMap 𝕜 A x₀ - a₀` is not invertible, being itself
+  the limit of the non-invertible elements `algebraMap 𝕜 A (x n) - (a n)`. -/
+  · exact nonunits.isClosed.mem_of_tendsto
+(continuous_algebraMap 𝕜 A |>.tendsto x₀ |>.comp hx |>.sub ha) .of_forall hx_mem
 -/
 lemma upperHemicontinuous_spectrum [NormedField 𝕜] [ProperSpace 𝕜]
     [NormedRing A] [NormedAlgebra 𝕜 A] [CompleteSpace A] :

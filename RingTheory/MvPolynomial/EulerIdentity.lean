@@ -39,7 +39,14 @@ lemma IsWeightedHomogeneous.pderiv
   rw [← mem_weightedHomogeneousSubmodule]; rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [AddMonoidAlgebra.supported_eq_span_single] at h
   refine Submodule.span_induction ?_ ?_ (fun p q _ _ hp hq => ?_) (fun r p _ h => ?_) h
   · rintro _ ⟨m, hm, rfl⟩
-    simp_rw [single_eq_monomial,
+    simp_rw [single_eq_monomial, pderiv_monomial, one_mul]
+    by_cases hi : m i = 0
+    · rw [hi, Nat.cast_zero, monomial_zero]; apply isWeightedHomogeneous_zero
+    convert! isWeightedHomogeneous_monomial ..
+    rw [← add_right_cancel_iff (a := w i)]; rw [h']; rw [← hm]; rw [weight_sub_single_add hi]
+  · rw [map_zero]; apply isWeightedHomogeneous_zero
+  · rw [map_add]; exact hp.add hq
+  · rw [(pderiv i).map_smul]; exact (weightedHomogeneousSubmodule ..).smul_mem _ h
 
 中文:
 引理 IsWeightedHomogeneous.pderiv
@@ -48,7 +55,14 @@ lemma IsWeightedHomogeneous.pderiv
   rw [← mem_weightedHomogeneousSubmodule]; rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [AddMonoidAlgebra.supported_eq_span_single] at h
   refine Submodule.span_induction ?_ ?_ (fun p q _ _ hp hq => ?_) (fun r p _ h => ?_) h
   · rintro _ ⟨m, hm, rfl⟩
-    simp_rw [single_eq_monomial,
+    simp_rw [single_eq_monomial, pderiv_monomial, one_mul]
+    by_cases hi : m i = 0
+    · rw [hi, Nat.cast_zero, monomial_zero]; apply isWeightedHomogeneous_zero
+    convert! isWeightedHomogeneous_monomial ..
+    rw [← add_right_cancel_iff (a := w i)]; rw [h']; rw [← hm]; rw [weight_sub_single_add hi]
+  · rw [map_zero]; apply isWeightedHomogeneous_zero
+  · rw [map_add]; exact hp.add hq
+  · rw [(pderiv i).map_smul]; exact (weightedHomogeneousSubmodule ..).smul_mem _ h
 -/
 protected lemma IsWeightedHomogeneous.pderiv [AddCancelCommMonoid M] {w : σ -> M} {n n' : M} {i : σ}
     (h : φ.IsWeightedHomogeneous w n) (h' : n' + w i = n) :
@@ -107,7 +121,13 @@ theorem IsWeightedHomogeneous.sum_weight_X_mul_pderiv
   rw [← mem_weightedHomogeneousSubmodule]; rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [AddMonoidAlgebra.supported_eq_span_single] at h
   refine Submodule.span_induction ?_ ?_ (fun p q _ _ hp hq => ?_) (fun r p _ h => ?_) h
   · rintro _ ⟨m, hm, rfl⟩
-    simp_rw [single_eq_monomial,
+    simp_rw [single_eq_monomial, X_mul_pderiv_monomial, smul_smul, ← sum_smul, mul_comm (w _)]
+    congr
+    rwa [Set.mem_ofPred, weight_apply, sum_fintype] at hm
+    intro; apply zero_smul
+  · simp
+  · simp_rw [map_add, left_distrib, smul_add, sum_add_distrib, hp, hq]
+  · simp_rw [(pderiv _).map_smul, nsmul_eq_mul, mul_smul_comm, ← Finset.smul_sum, ← nsmul_eq_mul, h]
 
 中文:
 定理 IsWeightedHomogeneous.sum_weight_X_mul_pderiv
@@ -116,7 +136,13 @@ theorem IsWeightedHomogeneous.sum_weight_X_mul_pderiv
   rw [← mem_weightedHomogeneousSubmodule]; rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [AddMonoidAlgebra.supported_eq_span_single] at h
   refine Submodule.span_induction ?_ ?_ (fun p q _ _ hp hq => ?_) (fun r p _ h => ?_) h
   · rintro _ ⟨m, hm, rfl⟩
-    simp_rw [single_eq_monomial,
+    simp_rw [single_eq_monomial, X_mul_pderiv_monomial, smul_smul, ← sum_smul, mul_comm (w _)]
+    congr
+    rwa [Set.mem_ofPred, weight_apply, sum_fintype] at hm
+    intro; apply zero_smul
+  · simp
+  · simp_rw [map_add, left_distrib, smul_add, sum_add_distrib, hp, hq]
+  · simp_rw [(pderiv _).map_smul, nsmul_eq_mul, mul_smul_comm, ← Finset.smul_sum, ← nsmul_eq_mul, h]
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supported_eq_span_single, Set.mem_ofPred, Submodule, Submodule.span_induction, X_mul_pderiv_monomial, left_distrib, map_add, mem_ofPred, mem_weightedHomogeneousSubmodule, mul_comm, simp_rw, single_eq_monomial, smul_add, smul_smul, span_induction, sum_add_distr, sum_fintype, sum_smul, supported_eq_span_single
 -/

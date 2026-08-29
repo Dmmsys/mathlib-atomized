@@ -1841,7 +1841,13 @@ lemma ProperlyDiscontinuousSMul.exists_nhds_image_smul_eq_self
   let Γ₀ := {γ : Γ | ((γ • ·) '' V inter V).Nonempty ∧ γ • x != x}
   have : Finite Γ₀ := (finite_disjoint_inter_image V_cpt V_cpt).subset fun _ => And.left
   choose u v hu hv u_v_disjoint using fun γ : Γ₀ => t2_separation_nhds γ.2.2
-  refine
+  refine ⟨V inter ⋂ γ : Γ₀, (γ.1 • ·) ⁻¹' u γ inter v γ, inter_mem V_nhd (iInter_mem.mpr fun γ =>
+    inter_mem ((continuous_const_smul _).continuousAt <| hu γ) (hv γ)), fun γ hγ => ?_⟩
+  obtain ⟨_, ⟨z, hz, rfl⟩, hγz⟩ := hγ
+  by_contra h
+  rw [mem_inter_iff]; rw [mem_iInter] at hz hγz
+  let γ : Γ₀ := ⟨γ, ⟨_, ⟨z, hz.1, rfl⟩, hγz.1⟩, h⟩
+  exact (u_v_disjoint γ).le_bot ⟨(hz.2 γ).1, (hγz.2 γ).2⟩
 
 中文:
 引理 ProperlyDiscontinuousSMul.存在_nhds_image_smul_eq_self
@@ -1850,7 +1856,13 @@ lemma ProperlyDiscontinuousSMul.exists_nhds_image_smul_eq_self
   let Γ₀ := {γ : Γ | ((γ • ·) '' V inter V).Nonempty ∧ γ • x != x}
   have : Finite Γ₀ := (finite_disjoint_inter_image V_cpt V_cpt).subset fun _ => And.left
   choose u v hu hv u_v_disjoint using fun γ : Γ₀ => t2_separation_nhds γ.2.2
-  refine
+  refine ⟨V inter ⋂ γ : Γ₀, (γ.1 • ·) ⁻¹' u γ inter v γ, inter_mem V_nhd (iInter_mem.mpr fun γ =>
+    inter_mem ((continuous_const_smul _).continuousAt <| hu γ) (hv γ)), fun γ hγ => ?_⟩
+  obtain ⟨_, ⟨z, hz, rfl⟩, hγz⟩ := hγ
+  by_contra h
+  rw [mem_inter_iff]; rw [mem_iInter] at hz hγz
+  let γ : Γ₀ := ⟨γ, ⟨_, ⟨z, hz.1, rfl⟩, hγz.1⟩, h⟩
+  exact (u_v_disjoint γ).le_bot ⟨(hz.2 γ).1, (hγz.2 γ).2⟩
 -/
 @[to_additive] lemma ProperlyDiscontinuousSMul.exists_nhds_image_smul_eq_self :
     exists U in 𝓝 x, forall γ : Γ, ((γ • ·) '' U inter U).Nonempty -> γ • x = x := by

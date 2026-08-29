@@ -177,7 +177,8 @@ Continuous.comp (continuous_apply (A := φ) i) continuous_subtype_val
     Continuous.subtype_mk
       (continuous_pi fun i => by
         dsimp
-        split_ifs <;> [apply continuous_apply; ex
+        split_ifs <;> [apply continuous_apply; exact continuous_zero])
+      _
 
 中文:
 定义 iInfKerProjEquiv
@@ -190,7 +191,8 @@ Continuous.comp (continuous_apply (A := φ) i) continuous_subtype_val
     Continuous.subtype_mk
       (continuous_pi fun i => by
         dsimp
-        split_ifs <;> [apply continuous_apply; ex
+        split_ifs <;> [apply continuous_apply; exact continuous_zero])
+      _
 
 Depends on / 依赖: LinearMap, LinearMap.iInfKerProjEquiv, iInfKerProjEquiv
 -/
@@ -1415,7 +1417,7 @@ definition prodAssoc
   continuous_invFun := (continuous_fst.prodMk (continuous_fst.comp continuous_snd)).prodMk
     (continuous_snd.comp continuous_snd)
 
-@[s
+@[simp]
 
 中文:
 定义 prodAssoc
@@ -1426,7 +1428,7 @@ definition prodAssoc
   continuous_invFun := (continuous_fst.prodMk (continuous_fst.comp continuous_snd)).prodMk
     (continuous_snd.comp continuous_snd)
 
-@[s
+@[simp]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.prodAssoc, prodAssoc
 -/
@@ -2689,7 +2691,8 @@ definition arrowCongrEquiv
     ContinuousLinearMap.ext fun x => by
       simp only [ContinuousLinearMap.comp_apply, symm_apply_apply, coe_coe]
   right_inv f :=
-   
+    ContinuousLinearMap.ext fun x => by
+      simp only [ContinuousLinearMap.comp_apply, apply_symm_apply, coe_coe]
 
 中文:
 定义 arrowCongrEquiv
@@ -2700,7 +2703,8 @@ definition arrowCongrEquiv
     ContinuousLinearMap.ext fun x => by
       simp only [ContinuousLinearMap.comp_apply, symm_apply_apply, coe_coe]
   right_inv f :=
-   
+    ContinuousLinearMap.ext fun x => by
+      simp only [ContinuousLinearMap.comp_apply, apply_symm_apply, coe_coe]
 
 Depends on / 依赖: f.comp
 -/
@@ -2957,7 +2961,7 @@ definition ofUnit
       right_inv := fun x =>
         show (f.val * f.inv) x = x by
           rw [f.val_inv]
-          si
+          simp }
 
 中文:
 定义 ofUnit
@@ -2973,7 +2977,7 @@ definition ofUnit
       right_inv := fun x =>
         show (f.val * f.inv) x = x by
           rw [f.val_inv]
-          si
+          simp }
 
 Depends on / 依赖: f.inv, f.inv_val, f.val, f.val_inv, invFun, inv_val, left_inv, map_add, map_smul, right_inv, val_inv
 -/
@@ -3105,7 +3109,9 @@ definition unitsEquivAut
       (ContinuousLinearMap.smulRight (1 : R ->L[R] R) ↑u⁻¹) (fun x => by simp) fun x => by simp
   invFun e :=
     ⟨e 1, e.symm 1, by rw [← smul_eq_mul, ← map_smul, smul_eq_mul, mul_one, symm_apply_apply], by
-      rw [← smul_eq_mul];
+      rw [← smul_eq_mul]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [apply_symm_apply]⟩
+left_inv u := Units.ext by simp
+right_inv e := ext₁ by simp
 
 中文:
 定义 unitsEquivAut
@@ -3114,7 +3120,9 @@ definition unitsEquivAut
       (ContinuousLinearMap.smulRight (1 : R ->L[R] R) ↑u⁻¹) (fun x => by simp) fun x => by simp
   invFun e :=
     ⟨e 1, e.symm 1, by rw [← smul_eq_mul, ← map_smul, smul_eq_mul, mul_one, symm_apply_apply], by
-      rw [← smul_eq_mul];
+      rw [← smul_eq_mul]; rw [← map_smul]; rw [smul_eq_mul]; rw [mul_one]; rw [apply_symm_apply]⟩
+left_inv u := Units.ext by simp
+right_inv e := ext₁ by simp
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.smulRight, Units.ext, apply_symm_apply, e.symm, equivOfInverse, invFun, left_inv, map_smul, mul_one, right_inv, smulRight, smul_eq_mul, symm_apply_apply
 -/
@@ -3803,7 +3811,13 @@ theorem isInvertible_zero_iff
     let e : M ≃L[R] M₂ :=
     { toFun := 0
       invFun := 0
-      left_inv 
+      left_inv x := Subsingleton.elim _ _
+      right_inv x := Subsingleton.elim _ _
+      map_add' x y := Subsingleton.elim _ _
+      map_smul' c x := Subsingleton.elim _ _ }
+    refine ⟨e, ?_⟩
+    ext x
+    exact Subsingleton.elim _ _
 
 中文:
 定理 isInvertible_zero_iff
@@ -3817,7 +3831,13 @@ theorem isInvertible_zero_iff
     let e : M ≃L[R] M₂ :=
     { toFun := 0
       invFun := 0
-      left_inv 
+      left_inv x := Subsingleton.elim _ _
+      right_inv x := Subsingleton.elim _ _
+      map_add' x y := Subsingleton.elim _ _
+      map_smul' c x := Subsingleton.elim _ _ }
+    refine ⟨e, ?_⟩
+    ext x
+    exact Subsingleton.elim _ _
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_coe, Subsingleton, Subsingleton.elim, coe_coe, e.injective, e.toEquiv.symm.subsingleton, injective, invFun, left_inv, map_add, map_smul, right_inv, subsingleton, toEquiv
 -/
@@ -4246,7 +4266,11 @@ theorem inverse_eq_ringInverse
   · suffices ¬IsUnit ((e.symm : M₂ ->L[R] M).comp f) by simp [this, h₁]
     contrapose h₁
     rcases h₁ with ⟨F, hF⟩
-    use (Contin
+    use (ContinuousLinearEquiv.unitsEquiv _ _ F).trans e
+    ext
+    dsimp
+    rw [hF]
+    simp
 
 中文:
 定理 inverse_eq_ringInverse
@@ -4261,7 +4285,11 @@ theorem inverse_eq_ringInverse
   · suffices ¬IsUnit ((e.symm : M₂ ->L[R] M).comp f) by simp [this, h₁]
     contrapose h₁
     rcases h₁ with ⟨F, hF⟩
-    use (Contin
+    use (ContinuousLinearEquiv.unitsEquiv _ _ F).trans e
+    ext
+    dsimp
+    rw [hF]
+    simp
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.unitsEquiv, IsInvertible, IsUnit, contrapose, e.symm, f.IsInvertible, unitsEquiv
 -/
@@ -4641,7 +4669,7 @@ definition ofEq
     exact (Homeomorph.ofEqSubtypes h').continuous
   continuous_invFun := by
     have h' : (fun x => x in p) = (fun x => x in q) := by simp [h]
-    exact (Homeomorph.ofEqSubtypes h').sym
+    exact (Homeomorph.ofEqSubtypes h').symm.continuous
 
 中文:
 定义 ofEq
@@ -4652,7 +4680,7 @@ definition ofEq
     exact (Homeomorph.ofEqSubtypes h').continuous
   continuous_invFun := by
     have h' : (fun x => x in p) = (fun x => x in q) := by simp [h]
-    exact (Homeomorph.ofEqSubtypes h').sym
+    exact (Homeomorph.ofEqSubtypes h').symm.continuous
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofEq
 -/

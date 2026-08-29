@@ -52,7 +52,19 @@ theorem exists_eq_const_mul_intervalIntegral_of_ae_nonneg
   · simp only [not_lt] at hab
     obtain ⟨c, c_in_uIcc, that⟩ :=
       this (by rwa [uIcc_comm]) hg.symm (by rwa [uIoc_comm]) (by lia) (lt_of_le_of_ne' hab h)
-    exact ⟨c, by rwa [uIcc_comm], by 
+    exact ⟨c, by rwa [uIcc_comm], by simpa [integral_symm b a]⟩
+  let s := Ι a b
+  have hs : s = Ioc a b := uIoc_of_le hab.le
+  have hs' : s subseteq [[a, b]] := uIoc_subset_uIcc
+  have hs_conn : IsConnected s := by simpa [hs] using isConnected_Ioc hab
+  have hfg : IntegrableOn (fun x => f x * g x) s μ := by
+    rw [← intervalIntegrable_iff]
+    exact hg.continuousOn_smul hf
+  obtain ⟨c, hc, h⟩ := exists_eq_const_mul_setIntegral_of_ae_nonneg
+    hs_conn measurableSet_uIoc (hf.mono hs') (by rwa [← intervalIntegrable_iff]) hfg hg0
+  have h' : ∫ (x : Real) in a..b, f x * g x ∂μ = f c * ∫ (x : Real) in a..b, g x ∂μ := by
+    simpa [intervalIntegral.integral_of_le hab.le, hs] using h
+  exact ⟨c, mem_of_subset_of_mem hs' hc, h'⟩
 
 中文:
 定理 存在_eq_const_mul_interval整数egral_of_ae_nonneg
@@ -64,7 +76,19 @@ theorem exists_eq_const_mul_intervalIntegral_of_ae_nonneg
   · simp only [not_lt] at hab
     obtain ⟨c, c_in_uIcc, that⟩ :=
       this (by rwa [uIcc_comm]) hg.symm (by rwa [uIoc_comm]) (by lia) (lt_of_le_of_ne' hab h)
-    exact ⟨c, by rwa [uIcc_comm], by 
+    exact ⟨c, by rwa [uIcc_comm], by simpa [integral_symm b a]⟩
+  let s := Ι a b
+  have hs : s = Ioc a b := uIoc_of_le hab.le
+  have hs' : s subseteq [[a, b]] := uIoc_subset_uIcc
+  have hs_conn : IsConnected s := by simpa [hs] using isConnected_Ioc hab
+  have hfg : IntegrableOn (fun x => f x * g x) s μ := by
+    rw [← intervalIntegrable_iff]
+    exact hg.continuousOn_smul hf
+  obtain ⟨c, hc, h⟩ := exists_eq_const_mul_setIntegral_of_ae_nonneg
+    hs_conn measurableSet_uIoc (hf.mono hs') (by rwa [← intervalIntegrable_iff]) hfg hg0
+  have h' : ∫ (x : Real) in a..b, f x * g x ∂μ = f c * ∫ (x : Real) in a..b, g x ∂μ := by
+    simpa [intervalIntegral.integral_of_le hab.le, hs] using h
+  exact ⟨c, mem_of_subset_of_mem hs' hc, h'⟩
 
 Depends on / 依赖: Integra, IsConnected, c_in_uIcc, generalizing, hab.le, hg.symm, hs_conn, integral_symm, isConnected_Ioc, lt_of_le_of_ne, not_lt, subseteq, uIcc_comm, uIoc_comm, uIoc_of_le, uIoc_subset_uIcc
 -/

@@ -36,7 +36,7 @@ instance forget₂_addCommGroup_full
               map_add' := map_add f.hom }
             (fun n x => by
               convert! AddMonoidHom.map_zsmul f.hom n x <;>
-                ext <;> app
+                ext <;> apply int_smul_eq_zsmul), rfl⟩
 
 中文:
 实例 forget₂_addCommGroup_full
@@ -47,7 +47,7 @@ instance forget₂_addCommGroup_full
               map_add' := map_add f.hom }
             (fun n x => by
               convert! AddMonoidHom.map_zsmul f.hom n x <;>
-                ext <;> app
+                ext <;> apply int_smul_eq_zsmul), rfl⟩
 
 Depends on / 依赖: A.isModule, B.isModule, ModuleCat, ModuleCat.ofHom, isModule
 -/

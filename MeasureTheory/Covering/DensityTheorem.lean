@@ -77,7 +77,36 @@ theorem closedBall_mem_vitaliFamily_of_dist_le_mul
   simp only [vitaliFamily, VitaliFamily.enlarge, Vitali.vitaliFamily, mem_union, mem_ofPred_eq,
     isClosed_closedBall, true_and, (nonempty_ball.2 rpos).mono ball_subset_interior_closedBall,
     measurableSet_closedBall]
-  /- The measure is doublin
+  /- The measure is doubling on scales smaller than `R`. Therefore, we treat differently small
+    and large balls. For large balls, this follows directly from the enlargement we used in the
+    definition. -/
+  by_cases H : closedBall y r subseteq closedBall x (R / 4)
+  swap; · exact Or.inr H
+  left
+  /- For small balls, there is the difficulty that `r` could be large but still the ball could be
+    small, if the annulus `{y | ε ≤ dist y x ≤ R/4}` is empty. We split between the cases `r ≤ R`
+    and `r > R`, and use the doubling for the former and rough estimates for the latter. -/
+  rcases le_or_gt r R with (hr | hr)
+  · refine ⟨(K + 1) * r, ?_⟩
+    constructor
+    · apply closedBall_subset_closedBall'
+      rw [dist_comm]
+      linarith
+    · have I1 : closedBall x (3 * ((K + 1) * r)) subseteq closedBall y ((4 * K + 3) * r) := by
+        apply closedBall_subset_closedBall'
+        linarith
+      have I2 : closedBall y ((4 * K + 3) * r) subseteq closedBall y (max (4 * K + 3) 3 * r) := by
+        gcongr
+        exact le_max_left ..
+      apply (measure_mono (I1.trans I2)).trans
+      exact measure_mul_le_scalingConstantOf_mul _
+        ⟨zero_lt_three.trans_le (le_max_right _ _), le_rfl⟩ hr
+  · refine ⟨_, H, ?_⟩
+    grw [scalingConstantOf, ← le_max_right, ENNReal.coe_one, one_mul,
+      closedBall_subset_closedBall' (y := y)]
+    have A : y in closedBall y r := mem_closedBall_self rpos.le
+    have B := mem_closedBall'.1 (H A)
+    linarith
 
 中文:
 定理 closedBall_mem_vitaliFamily_of_dist_le_mul
@@ -87,7 +116,36 @@ theorem closedBall_mem_vitaliFamily_of_dist_le_mul
   simp only [vitaliFamily, VitaliFamily.enlarge, Vitali.vitaliFamily, mem_union, mem_ofPred_eq,
     isClosed_closedBall, true_and, (nonempty_ball.2 rpos).mono ball_subset_interior_closedBall,
     measurableSet_closedBall]
-  /- The measure is doublin
+  /- The measure is doubling on scales smaller than `R`. Therefore, we treat differently small
+    and large balls. For large balls, this follows directly from the enlargement we used in the
+    definition. -/
+  by_cases H : closedBall y r subseteq closedBall x (R / 4)
+  swap; · exact Or.inr H
+  left
+  /- For small balls, there is the difficulty that `r` could be large but still the ball could be
+    small, if the annulus `{y | ε ≤ dist y x ≤ R/4}` is empty. We split between the cases `r ≤ R`
+    and `r > R`, and use the doubling for the former and rough estimates for the latter. -/
+  rcases le_or_gt r R with (hr | hr)
+  · refine ⟨(K + 1) * r, ?_⟩
+    constructor
+    · apply closedBall_subset_closedBall'
+      rw [dist_comm]
+      linarith
+    · have I1 : closedBall x (3 * ((K + 1) * r)) subseteq closedBall y ((4 * K + 3) * r) := by
+        apply closedBall_subset_closedBall'
+        linarith
+      have I2 : closedBall y ((4 * K + 3) * r) subseteq closedBall y (max (4 * K + 3) 3 * r) := by
+        gcongr
+        exact le_max_left ..
+      apply (measure_mono (I1.trans I2)).trans
+      exact measure_mul_le_scalingConstantOf_mul _
+        ⟨zero_lt_three.trans_le (le_max_right _ _), le_rfl⟩ hr
+  · refine ⟨_, H, ?_⟩
+    grw [scalingConstantOf, ← le_max_right, ENNReal.coe_one, one_mul,
+      closedBall_subset_closedBall' (y := y)]
+    have A : y in closedBall y r := mem_closedBall_self rpos.le
+    have B := mem_closedBall'.1 (H A)
+    linarith
 
 Depends on / 依赖: Vitali, Vitali.vitaliFamily, VitaliFamily, VitaliFamily.enlarge, ball_subset_interior_closedBall, enlarge, isClosed_closedBall, measurableSet_closedBall, mem_ofPred_eq, mem_union, nonempty_ball, scalingScaleOf, true_and, vitaliFamily
 -/
@@ -141,7 +199,18 @@ theorem tendsto_closedBall_filterAt
   · rcases l.eq_or_neBot with rfl | h
     · simp
     have hK : 0 <= K := by
-      rcases (xmem.
+      rcases (xmem.and (δlim self_mem_nhdsWithin)).exists with ⟨j, hj, h'j⟩
+      have : 0 <= K * δ j := nonempty_closedBall.1 ⟨x, hj⟩
+      exact (mul_nonneg_iff_left_nonneg_of_pos (mem_Ioi.1 h'j)).1 this
+    have δpos := eventually_mem_of_tendsto_nhdsWithin δlim
+    replace δlim := tendsto_nhds_of_tendsto_nhdsWithin δlim
+    replace hK : 0 < K + 1 := by linarith
+    apply (((Metric.tendsto_nhds.mp δlim _ (div_pos hε hK)).and δpos).and xmem).mono
+    rintro j ⟨⟨hjε, hj₀ : 0 < δ j⟩, hx⟩ y hy
+    replace hjε : (K + 1) * δ j < ε := by
+      simpa [abs_eq_self.mpr hj₀.le] using (lt_div_iff₀' hK).mp hjε
+    simp only [mem_closedBall] at hx hy ⊢
+    linarith [dist_triangle_right y x (w j)]
 
 中文:
 定理 tendsto_closedBall_filterAt
@@ -153,7 +222,18 @@ theorem tendsto_closedBall_filterAt
   · rcases l.eq_or_neBot with rfl | h
     · simp
     have hK : 0 <= K := by
-      rcases (xmem.
+      rcases (xmem.and (δlim self_mem_nhdsWithin)).exists with ⟨j, hj, h'j⟩
+      have : 0 <= K * δ j := nonempty_closedBall.1 ⟨x, hj⟩
+      exact (mul_nonneg_iff_left_nonneg_of_pos (mem_Ioi.1 h'j)).1 this
+    have δpos := eventually_mem_of_tendsto_nhdsWithin δlim
+    replace δlim := tendsto_nhds_of_tendsto_nhdsWithin δlim
+    replace hK : 0 < K + 1 := by linarith
+    apply (((Metric.tendsto_nhds.mp δlim _ (div_pos hε hK)).and δpos).and xmem).mono
+    rintro j ⟨⟨hjε, hj₀ : 0 < δ j⟩, hx⟩ y hy
+    replace hjε : (K + 1) * δ j < ε := by
+      simpa [abs_eq_self.mpr hj₀.le] using (lt_div_iff₀' hK).mp hjε
+    simp only [mem_closedBall] at hx hy ⊢
+    linarith [dist_triangle_right y x (w j)]
 
 Depends on / 依赖: closedBall_mem_vitaliFamily_of_dist_le_mul, eq_or_neBot, eventually_mem_of_tendsto_nhdsWithin, filter_upwards, l.eq_or_neBot, mem_Ioi, mul_nonneg_iff_left_nonneg_of_pos, nonempty_closedBall, self_mem_nhdsWithin, tendsto_filterAt_iff, tendsto_filterAt_iff.mpr, vitaliFamily, xmem.and
 -/

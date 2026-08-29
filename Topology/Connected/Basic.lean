@@ -250,7 +250,14 @@ theorem isPreconnected_of_forall
     exact ts xt
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11215): TODO: use `wlog xu : x ∈ u := hs xs using u v y z, v u z y`
   cases hs xs with
-  | inl
+  | inl xu =>
+    rcases H y ys with ⟨t, ts, xt, yt, ht⟩
+    have := ht u v hu hv (ts.trans hs) ⟨x, xt, xu⟩ ⟨y, yt, yv⟩
+    exact this.imp fun z hz => ⟨ts hz.1, hz.2⟩
+  | inr xv =>
+    rcases H z zs with ⟨t, ts, xt, zt, ht⟩
+    have := ht v u hv hu (ts.trans <| by rwa [union_comm]) ⟨x, xt, xv⟩ ⟨z, zt, zu⟩
+    exact this.imp fun _ h => ⟨ts h.1, h.2.2, h.2.1⟩
 
 中文:
 定理 isPreconnected_of_对任意
@@ -262,7 +269,14 @@ theorem isPreconnected_of_forall
     exact ts xt
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11215): TODO: use `wlog xu : x ∈ u := hs xs using u v y z, v u z y`
   cases hs xs with
-  | inl
+  | inl xu =>
+    rcases H y ys with ⟨t, ts, xt, yt, ht⟩
+    have := ht u v hu hv (ts.trans hs) ⟨x, xt, xu⟩ ⟨y, yt, yv⟩
+    exact this.imp fun z hz => ⟨ts hz.1, hz.2⟩
+  | inr xv =>
+    rcases H z zs with ⟨t, ts, xt, zt, ht⟩
+    have := ht v u hv hu (ts.trans <| by rwa [union_comm]) ⟨x, xt, xv⟩ ⟨z, zt, zu⟩
+    exact this.imp fun _ h => ⟨ts h.1, h.2.2, h.2.1⟩
 -/
 theorem isPreconnected_of_forall {s : Set α} (x : α)
     (H : forall y in s, exists t, t subseteq s ∧ x in t ∧ y in t ∧ IsPreconnected t) : IsPreconnected s := by
@@ -438,7 +452,9 @@ theorem IsPreconnected.sUnion_directed
   rintro u v hu hv Huv ⟨a, ⟨s, hsS, has⟩, hau⟩ ⟨b, ⟨t, htS, hbt⟩, hbv⟩
   obtain ⟨r, hrS, hsr, htr⟩ : exists r in S, s subseteq r ∧ t subseteq r := K s hsS t htS
   have Hnuv : (r inter (u inter v)).Nonempty :=
-    H _ hrS u v hu hv ((subset_sUnion_of_mem hrS).trans Huv) ⟨a, hsr has, hau⟩ ⟨b, htr h
+    H _ hrS u v hu hv ((subset_sUnion_of_mem hrS).trans Huv) ⟨a, hsr has, hau⟩ ⟨b, htr hbt, hbv⟩
+  have Kruv : r inter (u inter v) subseteq ⋃₀ S inter (u inter v) := inter_subset_inter_left _ (subset_sUnion_of_mem hrS)
+  exact Hnuv.mono Kruv
 
 中文:
 定理 是预连通.sUnion_directed
@@ -447,7 +463,9 @@ theorem IsPreconnected.sUnion_directed
   rintro u v hu hv Huv ⟨a, ⟨s, hsS, has⟩, hau⟩ ⟨b, ⟨t, htS, hbt⟩, hbv⟩
   obtain ⟨r, hrS, hsr, htr⟩ : exists r in S, s subseteq r ∧ t subseteq r := K s hsS t htS
   have Hnuv : (r inter (u inter v)).Nonempty :=
-    H _ hrS u v hu hv ((subset_sUnion_of_mem hrS).trans Huv) ⟨a, hsr has, hau⟩ ⟨b, htr h
+    H _ hrS u v hu hv ((subset_sUnion_of_mem hrS).trans Huv) ⟨a, hsr has, hau⟩ ⟨b, htr hbt, hbv⟩
+  have Kruv : r inter (u inter v) subseteq ⋃₀ S inter (u inter v) := inter_subset_inter_left _ (subset_sUnion_of_mem hrS)
+  exact Hnuv.mono Kruv
 
 Depends on / 依赖: Hnuv.mono, Nonempty, inter_subset_inter_left, subset_sUnion_of_mem, subseteq
 -/
@@ -472,7 +490,24 @@ theorem IsPreconnected.biUnion_of_reflTransGen
       exists p, p subseteq t ∧ i in p ∧ j in p ∧ IsPreconnected (⋃ j in p, s j) := fun i hi j hj h => by
     induction h with
     | refl =>
-      refine ⟨{i}, singl
+      refine ⟨{i}, singleton_subset_iff.mpr hi, mem_singleton i, mem_singleton i, ?_⟩
+      rw [biUnion_singleton]
+      exact H i hi
+    | @tail j k _ hjk ih =>
+      obtain ⟨p, hpt, hip, hjp, hp⟩ := ih hjk.2
+      refine ⟨insert k p, insert_subset_iff.mpr ⟨hj, hpt⟩, mem_insert_of_mem k hip,
+        mem_insert k p, ?_⟩
+      rw [biUnion_insert]
+      refine (H k hj).union' (hjk.1.mono ?_) hp
+      rw [inter_comm]
+      exact inter_subset_inter_right _ (subset_biUnion_of_mem hjp)
+  refine isPreconnected_of_forall_pair ?_
+  intro x hx y hy
+  obtain ⟨i : ι, hi : i in t, hxi : x in s i⟩ := mem_iUnion₂.1 hx
+  obtain ⟨j : ι, hj : j in t, hyj : y in s j⟩ := mem_iUnion₂.1 hy
+  obtain ⟨p, hpt, hip, hjp, hp⟩ := P i hi j hj (K i hi j hj)
+  exact ⟨⋃ j in p, s j, biUnion_subset_biUnion_left hpt, mem_biUnion hip hxi,
+    mem_biUnion hjp hyj, hp⟩
 
 中文:
 定理 是预连通.biUnion_of_reflTransGen
@@ -483,7 +518,24 @@ theorem IsPreconnected.biUnion_of_reflTransGen
       exists p, p subseteq t ∧ i in p ∧ j in p ∧ IsPreconnected (⋃ j in p, s j) := fun i hi j hj h => by
     induction h with
     | refl =>
-      refine ⟨{i}, singl
+      refine ⟨{i}, singleton_subset_iff.mpr hi, mem_singleton i, mem_singleton i, ?_⟩
+      rw [biUnion_singleton]
+      exact H i hi
+    | @tail j k _ hjk ih =>
+      obtain ⟨p, hpt, hip, hjp, hp⟩ := ih hjk.2
+      refine ⟨insert k p, insert_subset_iff.mpr ⟨hj, hpt⟩, mem_insert_of_mem k hip,
+        mem_insert k p, ?_⟩
+      rw [biUnion_insert]
+      refine (H k hj).union' (hjk.1.mono ?_) hp
+      rw [inter_comm]
+      exact inter_subset_inter_right _ (subset_biUnion_of_mem hjp)
+  refine isPreconnected_of_forall_pair ?_
+  intro x hx y hy
+  obtain ⟨i : ι, hi : i in t, hxi : x in s i⟩ := mem_iUnion₂.1 hx
+  obtain ⟨j : ι, hj : j in t, hyj : y in s j⟩ := mem_iUnion₂.1 hy
+  obtain ⟨p, hpt, hip, hjp, hp⟩ := P i hi j hj (K i hi j hj)
+  exact ⟨⋃ j in p, s j, biUnion_subset_biUnion_left hpt, mem_biUnion hip hxi,
+    mem_biUnion hjp hyj, hp⟩
 
 Depends on / 依赖: IsPreconnected, Nonempty, ReflTransGen, biUnion_singleton, insert, insert_subset_iff, insert_subset_iff.mpr, mem_ins, mem_singleton, singleton_subset_iff, singleton_subset_iff.mpr, subseteq
 -/
@@ -605,7 +657,15 @@ lemma IsPreconnected.transGen_of_iUnion
   have hsplit : (⋃ n, s n) = U union V := iSup_split s (· in S)
   obtain ⟨a, ha⟩ := hi
   obtain ⟨b, hb⟩ := hj
-  let hi_S : i in S := Relat
+  let hi_S : i in S := Relation.TransGen.single ⟨a, ha, ha⟩
+  have hUne : ((⋃ n, s n) inter U).Nonempty := ⟨a, mem_iUnion_of_mem i ha, mem_iUnion₂_of_mem hi_S ha⟩
+  have hVne : ((⋃ n, s n) inter V).Nonempty := ⟨b, mem_iUnion_of_mem j hb, mem_iUnion₂_of_mem hij hb⟩
+  obtain ⟨x, -, hxU, hxV⟩ := hs U V (isOpen_biUnion fun i a => hs' i)
+    (isOpen_biUnion fun i a => hs' i) hsplit.le hUne hVne
+  simp only [mem_iUnion, exists_prop, mem_compl_iff, U, V] at hxU hxV
+  obtain ⟨k, hk, hxk⟩ := hxU
+  obtain ⟨l, hl, hxl⟩ := hxV
+  exact hl (hk.tail ⟨x, hxk, hxl⟩)
 
 中文:
 引理 是预连通.transGen_of_iUnion
@@ -618,7 +678,15 @@ lemma IsPreconnected.transGen_of_iUnion
   have hsplit : (⋃ n, s n) = U union V := iSup_split s (· in S)
   obtain ⟨a, ha⟩ := hi
   obtain ⟨b, hb⟩ := hj
-  let hi_S : i in S := Relat
+  let hi_S : i in S := Relation.TransGen.single ⟨a, ha, ha⟩
+  have hUne : ((⋃ n, s n) inter U).Nonempty := ⟨a, mem_iUnion_of_mem i ha, mem_iUnion₂_of_mem hi_S ha⟩
+  have hVne : ((⋃ n, s n) inter V).Nonempty := ⟨b, mem_iUnion_of_mem j hb, mem_iUnion₂_of_mem hij hb⟩
+  obtain ⟨x, -, hxU, hxV⟩ := hs U V (isOpen_biUnion fun i a => hs' i)
+    (isOpen_biUnion fun i a => hs' i) hsplit.le hUne hVne
+  simp only [mem_iUnion, exists_prop, mem_compl_iff, U, V] at hxU hxV
+  obtain ⟨k, hk, hxk⟩ := hxU
+  obtain ⟨l, hl, hxl⟩ := hxV
+  exact hl (hk.tail ⟨x, hxk, hxl⟩)
 
 Depends on / 依赖: Nonempty, Relation, Relation.TransGen.single, TransGen, hi_S, hsplit, iSup_split, mem_iUnion, mem_iUnion_of_mem, single
 -/
@@ -700,7 +768,11 @@ theorem IsPreconnected.biUnion_of_chain
     ht.out hi hj (Ico_subset_Icc_self hk)
   have h2 : forall {i j k : β}, i in t -> j in t -> k in Ico i j -> succ k in t := fun hi hj hk =>
 ht.out hi hj ⟨hk.1.trans le_succ _, succ_le_of_lt hk.2⟩
-  have
+  have h3 : forall {i j k : β}, i in t -> j in t -> k in Ico i j -> (s k inter s (succ k)).Nonempty :=
+    fun hi hj hk => K _ (h1 hi hj hk) (h2 hi hj hk)
+  refine IsPreconnected.biUnion_of_reflTransGen H fun i hi j hj => ?_
+  exact reflTransGen_of_succ _ (fun k hk => ⟨h3 hi hj hk, h1 hi hj hk⟩) fun k hk =>
+      ⟨by rw [inter_comm]; exact h3 hj hi hk, h2 hj hi hk⟩
 
 中文:
 定理 是预连通.biUnion_of_chain
@@ -710,7 +782,11 @@ ht.out hi hj ⟨hk.1.trans le_succ _, succ_le_of_lt hk.2⟩
     ht.out hi hj (Ico_subset_Icc_self hk)
   have h2 : forall {i j k : β}, i in t -> j in t -> k in Ico i j -> succ k in t := fun hi hj hk =>
 ht.out hi hj ⟨hk.1.trans le_succ _, succ_le_of_lt hk.2⟩
-  have
+  have h3 : forall {i j k : β}, i in t -> j in t -> k in Ico i j -> (s k inter s (succ k)).Nonempty :=
+    fun hi hj hk => K _ (h1 hi hj hk) (h2 hi hj hk)
+  refine IsPreconnected.biUnion_of_reflTransGen H fun i hi j hj => ?_
+  exact reflTransGen_of_succ _ (fun k hk => ⟨h3 hi hj hk, h1 hi hj hk⟩) fun k hk =>
+      ⟨by rw [inter_comm]; exact h3 hj hi hk, h2 hj hi hk⟩
 
 Depends on / 依赖: Ico_subset_Icc_self, IsPreconnected, IsPreconnected.biUnion_of_reflTransGen, Nonempty, biUnion_of_reflTransGen, ht.out, le_succ, succ_le_of_lt
 -/
@@ -846,6 +922,17 @@ theorem IsPreconnected.image
   rcases continuousOn_iff'.1 hf u hu with ⟨u', hu', u'_eq⟩
   rcases continuousOn_iff'.1 hf v hv with ⟨v', hv', v'_eq⟩
   -- Reformulate `huv : f '' s ⊆ u ∪ v` in terms of `u'` and `v'`
+  replace huv : s subseteq u' union v' := by
+    rw [image_subset_iff]; rw [preimage_union] at huv
+    replace huv := subset_inter huv Subset.rfl
+    rw [union_inter_distrib_right]; rw [u'_eq]; rw [v'_eq]; rw [← union_inter_distrib_right] at huv
+    exact (subset_inter_iff.1 huv).1
+  -- Now `s ⊆ u' ∪ v'`, so we can apply `‹IsPreconnected s›`
+  obtain ⟨z, hz⟩ : (s inter (u' inter v')).Nonempty := by
+    refine H u' v' hu' hv' huv ⟨x, ?_⟩ ⟨y, ?_⟩ <;> rw [inter_comm]
+    exacts [u'_eq ▸ ⟨xu, xs⟩, v'_eq ▸ ⟨yv, ys⟩]
+  rw [← inter_self s]; rw [inter_assoc]; rw [inter_left_comm s u']; rw [← inter_assoc]; rw [inter_comm s]; rw [inter_comm s]; rw [← u'_eq]; rw [← v'_eq] at hz
+  exact ⟨f z, ⟨z, hz.1.2, rfl⟩, hz.1.1, hz.2.1⟩
 
 中文:
 定理 是预连通.像
@@ -856,6 +943,17 @@ theorem IsPreconnected.image
   rcases continuousOn_iff'.1 hf u hu with ⟨u', hu', u'_eq⟩
   rcases continuousOn_iff'.1 hf v hv with ⟨v', hv', v'_eq⟩
   -- Reformulate `huv : f '' s ⊆ u ∪ v` in terms of `u'` and `v'`
+  replace huv : s subseteq u' union v' := by
+    rw [image_subset_iff]; rw [preimage_union] at huv
+    replace huv := subset_inter huv Subset.rfl
+    rw [union_inter_distrib_right]; rw [u'_eq]; rw [v'_eq]; rw [← union_inter_distrib_right] at huv
+    exact (subset_inter_iff.1 huv).1
+  -- Now `s ⊆ u' ∪ v'`, so we can apply `‹IsPreconnected s›`
+  obtain ⟨z, hz⟩ : (s inter (u' inter v')).Nonempty := by
+    refine H u' v' hu' hv' huv ⟨x, ?_⟩ ⟨y, ?_⟩ <;> rw [inter_comm]
+    exacts [u'_eq ▸ ⟨xu, xs⟩, v'_eq ▸ ⟨yv, ys⟩]
+  rw [← inter_self s]; rw [inter_assoc]; rw [inter_left_comm s u']; rw [← inter_assoc]; rw [inter_comm s]; rw [inter_comm s]; rw [← u'_eq]; rw [← v'_eq] at hz
+  exact ⟨f z, ⟨z, hz.1.2, rfl⟩, hz.1.1, hz.2.1⟩
 -/
 protected theorem IsPreconnected.image [TopologicalSpace β] {s : Set α} (H : IsPreconnected s)
     (f : α -> β) (hf : ContinuousOn f s) : IsPreconnected (f '' s) := by
@@ -905,7 +1003,18 @@ theorem isPreconnected_closed_iff
       intro h'
       have xt' : x ∉ t' := (h' xs).resolve_left (absurd xt)
       have yt : y ∉ t := (h' ys).resolve_right (absurd yt')
- 
+      have := h _ _ ht.isOpen_compl ht'.isOpen_compl h' ⟨y, ys, yt⟩ ⟨x, xs, xt'⟩
+      rw [← compl_union] at this
+      exact this.ne_empty htt'.disjoint_compl_right.inter_eq,
+    by
+      rintro h u v hu hv huv ⟨x, xs, xu⟩ ⟨y, ys, yv⟩
+      rw [← not_disjoint_iff_nonempty_inter]; rw [← subset_compl_iff_disjoint_right]; rw [compl_inter]
+      intro h'
+      have xv : x ∉ v := (h' xs).elim (absurd xu) id
+      have yu : y ∉ u := (h' ys).elim id (absurd yv)
+      have := h _ _ hu.isClosed_compl hv.isClosed_compl h' ⟨y, ys, yu⟩ ⟨x, xs, xv⟩
+      rw [← compl_union] at this
+      exact this.ne_empty huv.disjoint_compl_right.inter_eq⟩
 
 中文:
 定理 isPreconnected_closed_iff
@@ -916,7 +1025,18 @@ theorem isPreconnected_closed_iff
       intro h'
       have xt' : x ∉ t' := (h' xs).resolve_left (absurd xt)
       have yt : y ∉ t := (h' ys).resolve_right (absurd yt')
- 
+      have := h _ _ ht.isOpen_compl ht'.isOpen_compl h' ⟨y, ys, yt⟩ ⟨x, xs, xt'⟩
+      rw [← compl_union] at this
+      exact this.ne_empty htt'.disjoint_compl_right.inter_eq,
+    by
+      rintro h u v hu hv huv ⟨x, xs, xu⟩ ⟨y, ys, yv⟩
+      rw [← not_disjoint_iff_nonempty_inter]; rw [← subset_compl_iff_disjoint_right]; rw [compl_inter]
+      intro h'
+      have xv : x ∉ v := (h' xs).elim (absurd xu) id
+      have yu : y ∉ u := (h' ys).elim id (absurd yv)
+      have := h _ _ hu.isClosed_compl hv.isClosed_compl h' ⟨y, ys, yu⟩ ⟨x, xs, xv⟩
+      rw [← compl_union] at this
+      exact this.ne_empty huv.disjoint_compl_right.inter_eq⟩
 
 Depends on / 依赖: absurd, compl_inter, compl_union, disjoint_compl_right, disjoint_compl_right.inter_eq, ht.isOpen_compl, inter_eq, isOpen_compl, ne_empty, not_disjoint_iff_, not_disjoint_iff_nonempty_inter, resolve_left, resolve_right, subset_compl_iff_disjoint_right, this.ne_empty
 -/
@@ -954,7 +1074,9 @@ theorem Topology.IsInducing.isPreconnected_image
   rcases hf.isOpen_iff.1 hu' with ⟨u, hu, rfl⟩
   rcases hf.isOpen_iff.1 hv' with ⟨v, hv, rfl⟩
   replace huv : f '' s subseteq u union v := by rwa [image_subset_iff]
-  rcases 
+  rcases h u v hu hv huv ⟨f x, mem_image_of_mem _ hxs, hxu⟩ ⟨f y, mem_image_of_mem _ hys, hyv⟩ with
+    ⟨_, ⟨z, hzs, rfl⟩, hzuv⟩
+  exact ⟨z, hzs, hzuv⟩
 
 中文:
 定理 拓扑.是Inducing.isPreconnected_image
@@ -965,7 +1087,9 @@ theorem Topology.IsInducing.isPreconnected_image
   rcases hf.isOpen_iff.1 hu' with ⟨u, hu, rfl⟩
   rcases hf.isOpen_iff.1 hv' with ⟨v, hv, rfl⟩
   replace huv : f '' s subseteq u union v := by rwa [image_subset_iff]
-  rcases 
+  rcases h u v hu hv huv ⟨f x, mem_image_of_mem _ hxs, hxu⟩ ⟨f y, mem_image_of_mem _ hys, hyv⟩ with
+    ⟨_, ⟨z, hzs, rfl⟩, hzuv⟩
+  exact ⟨z, hzs, hzuv⟩
 
 Depends on / 依赖: continuous, continuousOn, h.image, hf.continuous.continuousOn, hf.isOpen_iff, image_subset_iff, isOpen_iff, mem_image_of_mem, replace, subseteq
 -/
@@ -991,7 +1115,10 @@ theorem IsPreconnected.preimage_of_isOpenMap
   replace hsf : f '' f ⁻¹' s = s := image_preimage_eq_of_subset hsf
   obtain ⟨_, has, ⟨a, hau, rfl⟩, hav⟩ : (s inter (f '' u inter f '' v)).Nonempty := by
     refine hs (f '' u) (f '' v) (hf u hu) (hf v hv) ?_ ?_ ?_
-    · simpa only [hsf, image_union] using image_mon
+    · simpa only [hsf, image_union] using image_mono (f := f) hsuv
+    · simpa only [image_preimage_inter] using hsu.image f
+    · simpa only [image_preimage_inter] using hsv.image f
+  · exact ⟨a, has, hau, hinj.mem_set_image.1 hav⟩
 
 中文:
 定理 是预连通.preimage_of_isOpenMap
@@ -1000,7 +1127,10 @@ theorem IsPreconnected.preimage_of_isOpenMap
   replace hsf : f '' f ⁻¹' s = s := image_preimage_eq_of_subset hsf
   obtain ⟨_, has, ⟨a, hau, rfl⟩, hav⟩ : (s inter (f '' u inter f '' v)).Nonempty := by
     refine hs (f '' u) (f '' v) (hf u hu) (hf v hv) ?_ ?_ ?_
-    · simpa only [hsf, image_union] using image_mon
+    · simpa only [hsf, image_union] using image_mono (f := f) hsuv
+    · simpa only [image_preimage_inter] using hsu.image f
+    · simpa only [image_preimage_inter] using hsv.image f
+  · exact ⟨a, has, hau, hinj.mem_set_image.1 hav⟩
 
 Depends on / 依赖: Nonempty, hinj.mem_set_image, hsu.image, hsv.image, image_mono, image_preimage_eq_of_subset, image_preimage_inter, image_union, mem_set_image, replace
 -/
@@ -1024,7 +1154,11 @@ theorem IsPreconnected.preimage_of_isClosedMap
   proof: isPreconnected_closed_iff.2 fun u v hu hv hsuv hsu hsv => by
     replace hsf : f '' f ⁻¹' s = s := image_preimage_eq_of_subset hsf
     obtain ⟨_, has, ⟨a, hau, rfl⟩, hav⟩ : (s inter (f '' u inter f '' v)).Nonempty := by
-      refine isPreconnected_closed_iff.1 hs (f '' u) (f '' v) (hf u hu) (hf v hv
+      refine isPreconnected_closed_iff.1 hs (f '' u) (f '' v) (hf u hu) (hf v hv) ?_ ?_ ?_
+      · simpa only [hsf, image_union] using image_mono (f := f) hsuv
+      · simpa only [image_preimage_inter] using hsu.image f
+      · simpa only [image_preimage_inter] using hsv.image f
+    · exact ⟨a, has, hau, hinj.mem_set_image.1 hav⟩
 
 中文:
 定理 是预连通.preimage_of_isClosedMap
@@ -1032,7 +1166,11 @@ theorem IsPreconnected.preimage_of_isClosedMap
   证明: isPreconnected_closed_iff.2 fun u v hu hv hsuv hsu hsv => by
     replace hsf : f '' f ⁻¹' s = s := image_preimage_eq_of_subset hsf
     obtain ⟨_, has, ⟨a, hau, rfl⟩, hav⟩ : (s inter (f '' u inter f '' v)).Nonempty := by
-      refine isPreconnected_closed_iff.1 hs (f '' u) (f '' v) (hf u hu) (hf v hv
+      refine isPreconnected_closed_iff.1 hs (f '' u) (f '' v) (hf u hu) (hf v hv) ?_ ?_ ?_
+      · simpa only [hsf, image_union] using image_mono (f := f) hsuv
+      · simpa only [image_preimage_inter] using hsu.image f
+      · simpa only [image_preimage_inter] using hsv.image f
+    · exact ⟨a, has, hau, hinj.mem_set_image.1 hav⟩
 
 Depends on / 依赖: Nonempty, hinj.mem_s, hsu.image, hsv.image, image_mono, image_preimage_eq_of_subset, image_preimage_inter, image_union, isPreconnected_closed_iff, mem_s, replace
 -/
@@ -1100,7 +1238,8 @@ theorem IsPreconnected.subset_or_subset
   · exact Or.inr ((Set.disjoint_iff_inter_eq_empty.2 hsu).subset_right_of_subset_union hsuv)
   · replace hs := mt (hs hsu)
     simp_rw [Set.not_nonempty_iff_eq_empty, ← Set.disjoint_iff_inter_eq_empty,
-      dis
+      disjoint_iff_inter_eq_empty.1 huv] at hs
+    exact Or.inl ((hs s.disjoint_empty).subset_left_of_subset_union hsuv)
 
 中文:
 定理 是预连通.subset_or_subset
@@ -1111,7 +1250,8 @@ theorem IsPreconnected.subset_or_subset
   · exact Or.inr ((Set.disjoint_iff_inter_eq_empty.2 hsu).subset_right_of_subset_union hsuv)
   · replace hs := mt (hs hsu)
     simp_rw [Set.not_nonempty_iff_eq_empty, ← Set.disjoint_iff_inter_eq_empty,
-      dis
+      disjoint_iff_inter_eq_empty.1 huv] at hs
+    exact Or.inl ((hs s.disjoint_empty).subset_left_of_subset_union hsuv)
 
 Depends on / 依赖: Or.inl, Or.inr, Set.disjoint_iff_inter_eq_empty, Set.not_nonempty_iff_eq_empty, disjoint_empty, disjoint_iff_inter_eq_empty, eq_empty_or_nonempty, not_nonempty_iff_eq_empty, replace, s.disjoint_empty, simp_rw, specialize, subset_left_of_subset_union, subset_right_of_subset_union
 -/
@@ -1263,7 +1403,7 @@ theorem IsPreconnected.subset_of_closure_inter_subset
       intro h'x
       exact xu (h (mem_inter h'x hx))
   apply hs.subset_left_of_subset_union hu isClosed_closure.isOpen_compl _ A h'u
-  exact disjoint_compl_right.mono_right 
+  exact disjoint_compl_right.mono_right (compl_subset_compl.2 subset_closure)
 
 中文:
 定理 是预连通.subset_of_closure_inter_subset
@@ -1277,7 +1417,7 @@ theorem IsPreconnected.subset_of_closure_inter_subset
       intro h'x
       exact xu (h (mem_inter h'x hx))
   apply hs.subset_left_of_subset_union hu isClosed_closure.isOpen_compl _ A h'u
-  exact disjoint_compl_right.mono_right 
+  exact disjoint_compl_right.mono_right (compl_subset_compl.2 subset_closure)
 
 Depends on / 依赖: Or.inl, closure, compl_subset_compl, disjoint_compl_right, disjoint_compl_right.mono_right, hs.subset_left_of_subset_union, isClosed_closure, isClosed_closure.isOpen_compl, isOpen_compl, mem_inter, mono_right, subset_closure, subset_left_of_subset_union, subseteq
 -/
@@ -1305,7 +1445,8 @@ theorem IsPreconnected.prod
   refine ⟨Prod.mk a₁ '' t union flip Prod.mk b₂ '' s, ?_, .inl ⟨b₁, hb₁, rfl⟩, .inr ⟨a₂, ha₂, rfl⟩, ?_⟩
   · rintro _ (⟨y, hy, rfl⟩ | ⟨x, hx, rfl⟩)
     exacts [⟨ha₁, hy⟩, ⟨hx, hb₂⟩]
-  · exact (ht.image _ (by fun
+  · exact (ht.image _ (by fun_prop)).union (a₁, b₂) ⟨b₂, hb₂, rfl⟩
+      ⟨a₁, ha₁, rfl⟩ (hs.image _ (Continuous.prodMk_left _).continuousOn)
 
 中文:
 定理 是预连通.乘积
@@ -1316,7 +1457,8 @@ theorem IsPreconnected.prod
   refine ⟨Prod.mk a₁ '' t union flip Prod.mk b₂ '' s, ?_, .inl ⟨b₁, hb₁, rfl⟩, .inr ⟨a₂, ha₂, rfl⟩, ?_⟩
   · rintro _ (⟨y, hy, rfl⟩ | ⟨x, hx, rfl⟩)
     exacts [⟨ha₁, hy⟩, ⟨hx, hb₂⟩]
-  · exact (ht.image _ (by fun
+  · exact (ht.image _ (by fun_prop)).union (a₁, b₂) ⟨b₂, hb₂, rfl⟩
+      ⟨a₁, ha₁, rfl⟩ (hs.image _ (Continuous.prodMk_left _).continuousOn)
 -/
 theorem IsPreconnected.prod [TopologicalSpace β] {s : Set α} {t : Set β} (hs : IsPreconnected s)
     (ht : IsPreconnected t) : IsPreconnected (s ×ˢ t) := by
@@ -1360,7 +1502,22 @@ theorem isPreconnected_univ_pi
     refine ⟨g, hgs, ⟨?_, hgv⟩⟩
     simpa using hI
   | insert i I _ ihI =>
-    rw [Finset.piec
+    rw [Finset.piecewise_insert] at hI
+    have := I.piecewise_mem_set_pi hfs hgs
+    refine (hsuv this).elim ihI fun h => ?_
+    set S := update (I.piecewise f g) i '' s i
+    have hsub : S subseteq pi univ s := by
+      refine image_subset_iff.2 fun z hz => ?_
+      rwa [update_preimage_univ_pi]
+      exact fun j _ => this j trivial
+    have hconn : IsPreconnected S :=
+      (hs i).image _ (continuous_const.update i continuous_id).continuousOn
+    have hSu : (S inter u).Nonempty := ⟨_, mem_image_of_mem _ (hfs _ trivial), hI⟩
+    have hSv : (S inter v).Nonempty := ⟨_, ⟨_, this _ trivial, update_eq_self _ _⟩, h⟩
+    refine (hconn u v uo vo (hsub.trans hsuv) hSu hSv).mono ?_
+    exact inter_subset_inter_left _ hsub
+
+@[simp]
 
 中文:
 定理 isPreconnected_univ_pi
@@ -1374,7 +1531,22 @@ theorem isPreconnected_univ_pi
     refine ⟨g, hgs, ⟨?_, hgv⟩⟩
     simpa using hI
   | insert i I _ ihI =>
-    rw [Finset.piec
+    rw [Finset.piecewise_insert] at hI
+    have := I.piecewise_mem_set_pi hfs hgs
+    refine (hsuv this).elim ihI fun h => ?_
+    set S := update (I.piecewise f g) i '' s i
+    have hsub : S subseteq pi univ s := by
+      refine image_subset_iff.2 fun z hz => ?_
+      rwa [update_preimage_univ_pi]
+      exact fun j _ => this j trivial
+    have hconn : IsPreconnected S :=
+      (hs i).image _ (continuous_const.update i continuous_id).continuousOn
+    have hSu : (S inter u).Nonempty := ⟨_, mem_image_of_mem _ (hfs _ trivial), hI⟩
+    have hSv : (S inter v).Nonempty := ⟨_, ⟨_, this _ trivial, update_eq_self _ _⟩, h⟩
+    refine (hconn u v uo vo (hsub.trans hsuv) hSu hSv).mono ?_
+    exact inter_subset_inter_left _ hsub
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.piecewise_insert, I.piecewise, I.piecewise_mem_set_pi, classical, exists_finset_piecewise_mem_of_mem_nhds, image_subset_iff, induction_on, insert, mem_nhds, piecewise, piecewise_insert, piecewise_mem_set_pi, subseteq, uo.mem_nhds, update
 -/
@@ -1743,7 +1915,10 @@ theorem IsPreconnected.subset_connectedComponentIn
   have h2xs : (⟨x, hsF hxs⟩ : F) in (↑) ⁻¹' s := by
     rw [mem_preimage]
     exact hxs
-  have := this.subset_connectedComp
+  have := this.subset_connectedComponent h2xs
+  rw [connectedComponentIn_eq_image (hsF hxs)]
+  refine Subset.trans ?_ (image_mono this)
+  rw [Subtype.image_preimage_coe]; rw [inter_eq_right.mpr hsF]
 
 中文:
 定理 是预连通.subset_connectedComponentIn
@@ -1755,7 +1930,10 @@ theorem IsPreconnected.subset_connectedComponentIn
   have h2xs : (⟨x, hsF hxs⟩ : F) in (↑) ⁻¹' s := by
     rw [mem_preimage]
     exact hxs
-  have := this.subset_connectedComp
+  have := this.subset_connectedComponent h2xs
+  rw [connectedComponentIn_eq_image (hsF hxs)]
+  refine Subset.trans ?_ (image_mono this)
+  rw [Subtype.image_preimage_coe]; rw [inter_eq_right.mpr hsF]
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.isPreconnected_image.mp, IsPreconnected, Subset, Subset.trans, Subtype, Subtype.image_preimage_coe, connectedComponentIn_eq_image, image_mono, image_preimage_coe, inter_eq_right, inter_eq_right.mpr, isPreconnected_image, mem_preimage, subset_connectedComponent, subtypeVal, this.subset_connectedComponent
 -/
@@ -1999,7 +2177,7 @@ theorem ContinuousOn.image_connectedComponentIn_subset
 .subset_connectedComponentIn (mem_image_of_mem _ <| mem_connectedComponentIn hx)
       (image_mono <| connectedComponentIn_subset _ _)
 
-@[deprecated ContinuousOn.image_connectedComponentIn_subset (since := "2
+@[deprecated ContinuousOn.image_connectedComponentIn_subset (since := "2026-07-27")]
 
 中文:
 定理 ContinuousOn.image_connectedComponentIn_subset
@@ -2008,7 +2186,7 @@ theorem ContinuousOn.image_connectedComponentIn_subset
 .subset_connectedComponentIn (mem_image_of_mem _ <| mem_connectedComponentIn hx)
       (image_mono <| connectedComponentIn_subset _ _)
 
-@[deprecated ContinuousOn.image_connectedComponentIn_subset (since := "2
+@[deprecated ContinuousOn.image_connectedComponentIn_subset (since := "2026-07-27")]
 
 Depends on / 依赖: connectedComponentIn_subset, hf.mono, image_mono, isPreconnected_connectedComponentIn, isPreconnected_connectedComponentIn.image, mem_connectedComponentIn, mem_image_of_mem, subset_connectedComponentIn
 -/
@@ -2195,7 +2373,8 @@ theorem connectedComponentIn_mono
   · rw [connectedComponentIn_eq_image hx, connectedComponentIn_eq_image (h hx), ←
       show ((↑) : G -> α) ∘ inclusion h = (↑) from rfl, image_comp]
     exact image_mono ((continuous_inclusion h).image_connectedComponent_subset ⟨x, hx⟩)
-  · rw [connectedComponentIn_eq_empt
+  · rw [connectedComponentIn_eq_empty hx]
+    exact Set.empty_subset _
 
 中文:
 定理 connectedComponentIn_mono
@@ -2205,7 +2384,8 @@ theorem connectedComponentIn_mono
   · rw [connectedComponentIn_eq_image hx, connectedComponentIn_eq_image (h hx), ←
       show ((↑) : G -> α) ∘ inclusion h = (↑) from rfl, image_comp]
     exact image_mono ((continuous_inclusion h).image_connectedComponent_subset ⟨x, hx⟩)
-  · rw [connectedComponentIn_eq_empt
+  · rw [connectedComponentIn_eq_empty hx]
+    exact Set.empty_subset _
 
 Depends on / 依赖: Set.empty_subset, connectedComponentIn_eq_empty, connectedComponentIn_eq_image, continuous_inclusion, empty_subset, image_comp, image_connectedComponent_subset, image_mono, inclusion
 -/
@@ -2229,7 +2409,7 @@ theorem ContinuousOn.preimage_connectedComponentIn
   · exact mem_biUnion hz (mem_connectedComponentIn (connectedComponentIn_subset F y hz))
   · rw [mem_preimage, connectedComponentIn_eq hx]
     exact connectedComponentIn_mono _ (image_preimage_subset f F)
-      (hf.map
+      (hf.mapsTo_connectedComponentIn (connectedComponentIn_subset F y hx) hz)
 
 中文:
 定理 ContinuousOn.preimage_connectedComponentIn
@@ -2239,7 +2419,7 @@ theorem ContinuousOn.preimage_connectedComponentIn
   · exact mem_biUnion hz (mem_connectedComponentIn (connectedComponentIn_subset F y hz))
   · rw [mem_preimage, connectedComponentIn_eq hx]
     exact connectedComponentIn_mono _ (image_preimage_subset f F)
-      (hf.map
+      (hf.mapsTo_connectedComponentIn (connectedComponentIn_subset F y hx) hz)
 
 Depends on / 依赖: connectedComponentIn_eq, connectedComponentIn_mono, connectedComponentIn_subset, hf.mapsTo_connectedComponentIn, image_preimage_subset, mapsTo_connectedComponentIn, mem_biUnion, mem_connectedComponentIn, mem_preimage, subset_antisymm
 -/
@@ -2556,7 +2736,9 @@ exact eq_univ_of_univ_subset isPreconnected_univ.subset_connectedComponent (mem_
   · intro h
     rcases isEmpty_or_nonempty α with hα | hα
     · exact ⟨by rw [univ_eq_empty_iff.mpr hα]; exact isPreconnected_empty⟩
-    · exact ⟨by rw [← h (Classical.choice hα)]; 
+    · exact ⟨by rw [← h (Classical.choice hα)]; exact isPreconnected_connectedComponent⟩
+
+@[simp]
 
 中文:
 定理 preconnectedSpace_iff_connectedComponent
@@ -2567,7 +2749,9 @@ exact eq_univ_of_univ_subset isPreconnected_univ.subset_connectedComponent (mem_
   · intro h
     rcases isEmpty_or_nonempty α with hα | hα
     · exact ⟨by rw [univ_eq_empty_iff.mpr hα]; exact isPreconnected_empty⟩
-    · exact ⟨by rw [← h (Classical.choice hα)]; 
+    · exact ⟨by rw [← h (Classical.choice hα)]; exact isPreconnected_connectedComponent⟩
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.choice, choice, eq_univ_of_univ_subset, isEmpty_or_nonempty, isPreconnected_connectedComponent, isPreconnected_empty, isPreconnected_univ, isPreconnected_univ.subset_connectedComponent, mem_univ, subset_connectedComponent, univ_eq_empty_iff, univ_eq_empty_iff.mpr
 -/

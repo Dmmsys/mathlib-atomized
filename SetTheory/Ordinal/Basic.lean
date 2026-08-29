@@ -958,7 +958,20 @@ instance partialOrder
 ⟨fun ⟨h⟩ => ⟨f.symm.toInitialSeg.trans h.trans g.toInitialSeg⟩, fun ⟨h⟩ =>
 ⟨f.toInitialSeg.trans h.trans g.symm.toInitialSeg⟩⟩
   lt a b :=
-    Quotient.liftOn₂ a b (fun ⟨_, r, _⟩ ⟨_, s, _⟩ => Non
+    Quotient.liftOn₂ a b (fun ⟨_, r, _⟩ ⟨_, s, _⟩ => Nonempty (r ≺i s))
+      fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
+⟨fun ⟨h⟩ => ⟨PrincipalSeg.relIsoTrans f.symm h.transRelIso g⟩,
+fun ⟨h⟩ => ⟨PrincipalSeg.relIsoTrans f h.transRelIso g.symm⟩⟩
+  le_refl := Quot.ind fun ⟨_, _, _⟩ => ⟨InitialSeg.refl _⟩
+  le_trans a b c :=
+    Quotient.inductionOn₃ a b c fun _ _ _ ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩
+  lt_iff_le_not_ge a b :=
+    Quotient.inductionOn₂ a b fun _ _ =>
+      ⟨fun ⟨f⟩ => ⟨⟨f⟩, fun ⟨g⟩ => (f.transInitial g).irrefl⟩, fun ⟨⟨f⟩, h⟩ =>
+        f.principalSumRelIso.recOn (fun g => ⟨g⟩) fun g => (h ⟨g.symm.toInitialSeg⟩).elim⟩
+  le_antisymm a b :=
+    Quotient.inductionOn₂ a b fun _ _ ⟨h₁⟩ ⟨h₂⟩ =>
+      Quot.sound ⟨InitialSeg.antisymm h₁ h₂⟩
 
 中文:
 实例 partialOrder
@@ -968,7 +981,20 @@ instance partialOrder
 ⟨fun ⟨h⟩ => ⟨f.symm.toInitialSeg.trans h.trans g.toInitialSeg⟩, fun ⟨h⟩ =>
 ⟨f.toInitialSeg.trans h.trans g.symm.toInitialSeg⟩⟩
   lt a b :=
-    Quotient.liftOn₂ a b (fun ⟨_, r, _⟩ ⟨_, s, _⟩ => Non
+    Quotient.liftOn₂ a b (fun ⟨_, r, _⟩ ⟨_, s, _⟩ => Nonempty (r ≺i s))
+      fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
+⟨fun ⟨h⟩ => ⟨PrincipalSeg.relIsoTrans f.symm h.transRelIso g⟩,
+fun ⟨h⟩ => ⟨PrincipalSeg.relIsoTrans f h.transRelIso g.symm⟩⟩
+  le_refl := Quot.ind fun ⟨_, _, _⟩ => ⟨InitialSeg.refl _⟩
+  le_trans a b c :=
+    Quotient.inductionOn₃ a b c fun _ _ _ ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩
+  lt_iff_le_not_ge a b :=
+    Quotient.inductionOn₂ a b fun _ _ =>
+      ⟨fun ⟨f⟩ => ⟨⟨f⟩, fun ⟨g⟩ => (f.transInitial g).irrefl⟩, fun ⟨⟨f⟩, h⟩ =>
+        f.principalSumRelIso.recOn (fun g => ⟨g⟩) fun g => (h ⟨g.symm.toInitialSeg⟩).elim⟩
+  le_antisymm a b :=
+    Quotient.inductionOn₂ a b fun _ _ ⟨h₁⟩ ⟨h₂⟩ =>
+      Quot.sound ⟨InitialSeg.antisymm h₁ h₂⟩
 
 Depends on / 依赖: Nonempty, PrincipalSeg, PrincipalSeg.relIsoTrans, Quot.ind, Quotient, Quotient.liftOn, f.symm, f.symm.toInitialSeg.trans, f.toInitialSeg.trans, g.symm, g.symm.toInitialSeg, g.toInitialSeg, h.trans, h.transRelIso, le_refl, propext, relIsoTrans, toInitialSeg, transRelIso
 -/
@@ -1294,7 +1320,11 @@ definition typein
   · exact ha
   · rintro ⟨b, rfl⟩
     exact (PrincipalSeg.ofElement _ _).ordinal_type_lt
-  · refine inductio
+  · refine inductionOn a ?_
+    rintro β s wo ⟨g⟩
+    exact ⟨_, g.subrelIso.ordinalType_congr⟩
+
+@[simp]
 
 中文:
 定义 typein
@@ -1307,7 +1337,11 @@ definition typein
   · exact ha
   · rintro ⟨b, rfl⟩
     exact (PrincipalSeg.ofElement _ _).ordinal_type_lt
-  · refine inductio
+  · refine inductionOn a ?_
+    rintro β s wo ⟨g⟩
+    exact ⟨_, g.subrelIso.ordinalType_congr⟩
+
+@[simp]
 
 Depends on / 依赖: PrincipalSeg, PrincipalSeg.ofElement, RelEmbedding, RelEmbedding.ofMonotone, codRestrict, g.subrelIso.ordinalType_congr, inductionOn, ofElement, ofMonotone, ordinalType_congr, ordinal_type_lt, subrelIso
 -/
@@ -2691,7 +2725,7 @@ theorem lift_type_lt
   · exact (f.relIsoTrans (RelIso.preimage Equiv.ulift r)).transInitial
       (RelIso.preimage Equiv.ulift s).symm.toInitialSeg
 
-@
+@[simp]
 
 中文:
 定理 lift_type_lt
@@ -2703,7 +2737,7 @@ theorem lift_type_lt
   · exact (f.relIsoTrans (RelIso.preimage Equiv.ulift r)).transInitial
       (RelIso.preimage Equiv.ulift s).symm.toInitialSeg
 
-@
+@[simp]
 
 Depends on / 依赖: Equiv.ulift, RelIso, RelIso.preimage, f.relIsoTrans, preimage, relIsoTrans, symm.toInitialSeg, toInitialSeg, transInitial
 -/
@@ -2879,7 +2913,9 @@ definition liftInitialSeg
   rw [RelEmbedding.ofMonotone_coe]; rw [← lift_id'.{max u v} (type s)]; rw [← lift_umax.{v]; rw [u}]; rw [lift_type_lt] at h
   obtain ⟨f⟩ := h
   use typein r f.top
-  rw [RelEmbed
+  rw [RelEmbedding.ofMonotone_coe]; rw [← lift_umax]; rw [lift_typein_top]; rw [lift_id']
+
+@[simp]
 
 中文:
 定义 liftInitialSeg
@@ -2890,7 +2926,9 @@ definition liftInitialSeg
   rw [RelEmbedding.ofMonotone_coe]; rw [← lift_id'.{max u v} (type s)]; rw [← lift_umax.{v]; rw [u}]; rw [lift_type_lt] at h
   obtain ⟨f⟩ := h
   use typein r f.top
-  rw [RelEmbed
+  rw [RelEmbedding.ofMonotone_coe]; rw [← lift_umax]; rw [lift_typein_top]; rw [lift_id']
+
+@[simp]
 
 Depends on / 依赖: Ordinal, Ordinal.inductionOn, RelEmbedding, RelEmbedding.ofMonotone, RelEmbedding.ofMonotone_coe, f.top, lift_id, lift_type_lt, lift_typein_top, lift_umax, ofMonotone, ofMonotone_coe, typein
 -/
@@ -3584,7 +3622,7 @@ theorem succ_le_iff'
   · refine ⟨((InitialSeg.leAdd _ _).trans f).toPrincipalSeg fun h => ?_⟩
     simpa using h (f (Sum.inr PUnit.unit))
   · apply (RelEmbedding.ofMonotone (Sum.recOn · f fun _ => f.top) ?_).ordinal_type_le
-    simpa [f.map_rel_iff] 
+    simpa [f.map_rel_iff] using f.lt_top
 
 中文:
 定理 succ_le_iff'
@@ -3595,7 +3633,7 @@ theorem succ_le_iff'
   · refine ⟨((InitialSeg.leAdd _ _).trans f).toPrincipalSeg fun h => ?_⟩
     simpa using h (f (Sum.inr PUnit.unit))
   · apply (RelEmbedding.ofMonotone (Sum.recOn · f fun _ => f.top) ?_).ordinal_type_le
-    simpa [f.map_rel_iff] 
+    simpa [f.map_rel_iff] using f.lt_top
 -/
 private theorem succ_le_iff' {a b : Ordinal} : a + 1 <= b ↔ a < b := by
   refine inductionOn₂ a b fun α r _ β s _ => ⟨?_, ?_⟩ <;> rintro ⟨f⟩
@@ -4053,7 +4091,12 @@ theorem type_lt_mem_range_succ_iff
     · rw [mem_Iio, ← ha, lt_succ_iff]
     · rw [← enum_typein (α := α) (· < ·) b, ← not_lt, enum_le_enum (r := (· < ·)),
         Subtype.mk_le_mk, ← lt_succ_iff, ha]
-      exact t
+      exact typein_lt_type ..
+  · refine ⟨typein (α := α) (· < ·) a, eq_of_forall_lt_iff fun o => ?_⟩
+    rw [lt_succ_iff]
+    refine ⟨fun h => h.trans_lt (typein_lt_type _ _), fun h => ?_⟩
+    rw [← typein_enum _ h]; rw [typein_le_typein]; rw [not_lt]
+    apply ha
 
 中文:
 定理 type_lt_mem_range_succ_iff
@@ -4065,7 +4108,12 @@ theorem type_lt_mem_range_succ_iff
     · rw [mem_Iio, ← ha, lt_succ_iff]
     · rw [← enum_typein (α := α) (· < ·) b, ← not_lt, enum_le_enum (r := (· < ·)),
         Subtype.mk_le_mk, ← lt_succ_iff, ha]
-      exact t
+      exact typein_lt_type ..
+  · refine ⟨typein (α := α) (· < ·) a, eq_of_forall_lt_iff fun o => ?_⟩
+    rw [lt_succ_iff]
+    refine ⟨fun h => h.trans_lt (typein_lt_type _ _), fun h => ?_⟩
+    rw [← typein_enum _ h]; rw [typein_le_typein]; rw [not_lt]
+    apply ha
 
 Depends on / 依赖: Subtype, Subtype.mk_le_mk, enum_le_enum, enum_typein, eq_of_forall_lt_iff, h.trans_lt, isTop_iff_isMax, lt_succ_iff, mem_Iio, mk_le_mk, not_lt, simp_rw, trans_lt, typein, typein_enum, typein_le_typein, typein_lt_type
 -/
@@ -4406,7 +4454,7 @@ theorem gc_ord_card
   · obtain ⟨f⟩ := h
     have g := RelEmbedding.preimage f s
     have := RelEmbedding.isWellOrder g
-    exact (ord_le_type 
+    exact (ord_le_type _).trans g.ordinal_type_le
 
 中文:
 定理 gc_ord_card
@@ -4420,7 +4468,7 @@ theorem gc_ord_card
   · obtain ⟨f⟩ := h
     have g := RelEmbedding.preimage f s
     have := RelEmbedding.isWellOrder g
-    exact (ord_le_type 
+    exact (ord_le_type _).trans g.ordinal_type_le
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.isWellOrder, RelEmbedding.preimage, c.inductionOn, card_le_card, exists_ord_eq, g.ordinal_type_le, inductionOn, isWellOrder, o.inductionOn, ord_le_type, ordinal_type_le, preimage
 -/
@@ -6025,7 +6073,9 @@ theorem List.SortedGT.lt_ord_of_lt
       intro i hi
       suffices h : i <= a by refine lt_of_le_of_lt ?_ (hlt a mem_cons_self); simpa
       cases hi with
-
+      | head as => exact List.head_le_of_lt hmltl
+      | tail b hi => exact le_of_lt (lt_of_lt_of_le (List.rel_of_pairwise_cons hm.pairwise hi)
+          (List.head_le_of_lt hmltl))
 
 中文:
 定理 列表.SortedGT.lt_ord_of_lt
@@ -6041,7 +6091,9 @@ theorem List.SortedGT.lt_ord_of_lt
       intro i hi
       suffices h : i <= a by refine lt_of_le_of_lt ?_ (hlt a mem_cons_self); simpa
       cases hi with
-
+      | head as => exact List.head_le_of_lt hmltl
+      | tail b hi => exact le_of_lt (lt_of_lt_of_le (List.rel_of_pairwise_cons hm.pairwise hi)
+          (List.head_le_of_lt hmltl))
 -/
 theorem List.SortedGT.lt_ord_of_lt [LinearOrder α] [WellFoundedLT α] {l m : List α}
     {o : Ordinal} (hl : l.SortedGT) (hm : m.SortedGT) (hmltl : m < l)

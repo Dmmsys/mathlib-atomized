@@ -403,7 +403,9 @@ lemma restrict_compl_sigmaFiniteSet
   simp only [Measure.smul_apply, smul_eq_mul]
   rw [Measure.restrict_apply ht]; rw [Measure.restrict_apply ht]
   by_cases hμt : μ (t inter (μ.sigmaFiniteSetWRT μ)ᶜ) = 0
-  · rw [hμ
+  · rw [hμt, toFinite_absolutelyContinuous μ hμt]
+  · rw [ENNReal.top_mul hμt, ENNReal.top_mul]
+    exact fun h => hμt (absolutelyContinuous_toFinite μ h)
 
 中文:
 引理 restrict_compl_sigmaFiniteSet
@@ -414,7 +416,9 @@ lemma restrict_compl_sigmaFiniteSet
   simp only [Measure.smul_apply, smul_eq_mul]
   rw [Measure.restrict_apply ht]; rw [Measure.restrict_apply ht]
   by_cases hμt : μ (t inter (μ.sigmaFiniteSetWRT μ)ᶜ) = 0
-  · rw [hμ
+  · rw [hμt, toFinite_absolutelyContinuous μ hμt]
+  · rw [ENNReal.top_mul hμt, ENNReal.top_mul]
+    exact fun h => hμt (absolutelyContinuous_toFinite μ h)
 
 Depends on / 依赖: AbsolutelyContinuous, ENNReal, ENNReal.top_mul, Measure, Measure.AbsolutelyContinuous.refl, Measure.restrict_apply, Measure.sigmaFiniteSet, Measure.smul_apply, absolutelyContinuous_toFinite, restrict_apply, restrict_compl_sigmaFiniteSetWRT, sigmaFiniteSet, sigmaFiniteSetWRT, smul_apply, smul_eq_mul, toFinite_absolutelyContinuous, top_mul
 -/

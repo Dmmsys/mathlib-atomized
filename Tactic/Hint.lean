@@ -103,7 +103,21 @@ definition suggestion
   let postInfo? ← if goals.isEmpty then pure none else
     let mut str := "\nRemaining subgoals:"
     for g in goals do
-      let
+      let e ← PrettyPrinter.ppExpr (← instantiateMVars (← g.getType))
+      str := str ++ Format.pretty ("\n⊢ " ++ e)
+    pure (some str)
+  /-
+  #adaptation_note 2025-08-27
+  Suggestion styling was deprecated in lean4#9966.
+  We use emojis for now instead.
+  -/
+  -- let style? := if goals.isEmpty then some .success else none
+  let preInfo? := if goals.isEmpty then some "🎉️ " else none
+  let suggestions := collectTryThisSuggestions trees
+  let suggestion := match suggestions[0]? with
+  | some s => s.suggestion
+  | none => SuggestionText.tsyntax tac
+  return { preInfo?, suggestion, postInfo? }
 
 中文:
 定义 suggestion
@@ -115,7 +129,21 @@ definition suggestion
   let postInfo? ← if goals.isEmpty then pure none else
     let mut str := "\nRemaining subgoals:"
     for g in goals do
-      let
+      let e ← PrettyPrinter.ppExpr (← instantiateMVars (← g.getType))
+      str := str ++ Format.pretty ("\n⊢ " ++ e)
+    pure (some str)
+  /-
+  #adaptation_note 2025-08-27
+  Suggestion styling was deprecated in lean4#9966.
+  We use emojis for now instead.
+  -/
+  -- let style? := if goals.isEmpty then some .success else none
+  let preInfo? := if goals.isEmpty then some "🎉️ " else none
+  let suggestions := collectTryThisSuggestions trees
+  let suggestion := match suggestions[0]? with
+  | some s => s.suggestion
+  | none => SuggestionText.tsyntax tac
+  return { preInfo?, suggestion, postInfo? }
 -/
 def suggestion (tac : TSyntax `tactic) (trees : PersistentArray InfoTree) : TacticM Suggestion := do
   -- TODO `addExactSuggestion` has an option to construct `postInfo?`
@@ -154,7 +182,20 @@ definition hint
   let tacs := Nondet.ofList tacs
   let results := tacs.filterMapM fun t : TSyntax `tactic => do
     if let some { msgs, trees, .. } ← observing? (withResetServerInfo (evalTactic t)) then
-      if msgs.hasErrors t
+      if msgs.hasErrors then
+        return none
+      else
+        return some (← getGoals, ← suggestion t trees)
+    else
+      return none
+  let results ← (results.toMLList.takeUpToFirst fun r => r.1.1.isEmpty).asArray
+  let results := results.qsort (·.1.1.length < ·.1.1.length)
+  addSuggestions stx (results.map (·.1.2))
+  match results.find? (·.1.1.isEmpty) with
+  | some r =>
+    -- We don't restore the entire state, as that would delete the suggestion messages.
+    setMCtx r.2.term.meta.meta.mctx
+  | none => admitGoal (← getMainGoal)
 
 中文:
 定义 hint
@@ -164,7 +205,20 @@ definition hint
   let tacs := Nondet.ofList tacs
   let results := tacs.filterMapM fun t : TSyntax `tactic => do
     if let some { msgs, trees, .. } ← observing? (withResetServerInfo (evalTactic t)) then
-      if msgs.hasErrors t
+      if msgs.hasErrors then
+        return none
+      else
+        return some (← getGoals, ← suggestion t trees)
+    else
+      return none
+  let results ← (results.toMLList.takeUpToFirst fun r => r.1.1.isEmpty).asArray
+  let results := results.qsort (·.1.1.length < ·.1.1.length)
+  addSuggestions stx (results.map (·.1.2))
+  match results.find? (·.1.1.isEmpty) with
+  | some r =>
+    -- We don't restore the entire state, as that would delete the suggestion messages.
+    setMCtx r.2.term.meta.meta.mctx
+  | none => admitGoal (← getMainGoal)
 
 Depends on / 依赖: withMainContext
 -/

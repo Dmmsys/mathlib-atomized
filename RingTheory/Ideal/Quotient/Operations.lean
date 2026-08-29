@@ -150,7 +150,7 @@ definition quotientKerEquivOfRightInverse
         Function.comp_apply, hf (f x)]
     right_inv := hf }
 
-
+@[simp]
 
 中文:
 定义 quotientKerEquivOfRightInverse
@@ -165,7 +165,7 @@ definition quotientKerEquivOfRightInverse
         Function.comp_apply, hf (f x)]
     right_inv := hf }
 
-
+@[simp]
 
 Depends on / 依赖: Function, Function.comp_apply, Ideal.Quotient.mk, Ideal.Quotient.mk_eq_mk, Quotient, Submodule, Submodule.Quotient.quot_mk_eq_mk, comp_apply, invFun, kerLift, kerLift_injective, kerLift_mk, left_inv, mk_eq_mk, quot_mk_eq_mk, right_inv
 -/
@@ -457,7 +457,11 @@ theorem ker_quotient_lift
     rw [mem_ker]; rw [← hy]; rw [Ideal.Quotient.lift_mk]; rw [← mem_ker] at hx
     rw [← hy]; rw [mem_map_iff_of_surjective (Quotient.mk I) Quotient.mk_surjective]
     exact ⟨y, hx, rfl⟩
-  · intr
+  · intro hx
+    rw [mem_map_iff_of_surjective (Quotient.mk I) Quotient.mk_surjective] at hx
+    obtain ⟨y, hy⟩ := hx
+    rw [mem_ker]; rw [← hy.right]; rw [Ideal.Quotient.lift_mk]
+    exact hy.left
 
 中文:
 定理 ker_quotient_lift
@@ -471,7 +475,11 @@ theorem ker_quotient_lift
     rw [mem_ker]; rw [← hy]; rw [Ideal.Quotient.lift_mk]; rw [← mem_ker] at hx
     rw [← hy]; rw [mem_map_iff_of_surjective (Quotient.mk I) Quotient.mk_surjective]
     exact ⟨y, hx, rfl⟩
-  · intr
+  · intro hx
+    rw [mem_map_iff_of_surjective (Quotient.mk I) Quotient.mk_surjective] at hx
+    obtain ⟨y, hy⟩ := hx
+    rw [mem_ker]; rw [← hy.right]; rw [Ideal.Quotient.lift_mk]
+    exact hy.left
 
 Depends on / 依赖: Ideal.Quotient.lift_mk, Ideal.ext, Quotient, Quotient.mk, Quotient.mk_surjective, hy.left, hy.right, lift_mk, mem_ker, mem_map_iff_of_surjective, mk_surjective
 -/
@@ -730,7 +738,19 @@ lemma quotientInfToPiQuotient_surj
     intro i
     have hI' : forall j in ({i} : Finset ι)ᶜ, IsCoprime (I i) (I j) := by
       intro j hj
- 
+      exact hI (by simpa [ne_comm, isCoprime_iff_add] using hj)
+    rcases isCoprime_iff_exists.mp (isCoprime_biInf hI') with ⟨u, hu, e, he, hue⟩
+    replace he : forall j, j != i -> e in I j := by simpa using he
+    refine ⟨e, ?_, ?_⟩
+    · simp [eq_sub_of_add_eq' hue, map_sub, eq_zero_iff_mem.mpr hu]
+    · exact fun j hj => eq_zero_iff_mem.mpr (he j hj)
+  choose e he using key
+  use mk _ (∑ i, f i * e i)
+  ext i
+  rw [quotientInfToPiQuotient_mk']; rw [map_sum]; rw [Fintype.sum_eq_single i]
+  · simp [(he i).1, hf]
+  · intro j hj
+    simp [(he j).2 i hj.symm]
 
 中文:
 引理 quotientInfToPiQuotient_surj
@@ -744,7 +764,19 @@ lemma quotientInfToPiQuotient_surj
     intro i
     have hI' : forall j in ({i} : Finset ι)ᶜ, IsCoprime (I i) (I j) := by
       intro j hj
- 
+      exact hI (by simpa [ne_comm, isCoprime_iff_add] using hj)
+    rcases isCoprime_iff_exists.mp (isCoprime_biInf hI') with ⟨u, hu, e, he, hue⟩
+    replace he : forall j, j != i -> e in I j := by simpa using he
+    refine ⟨e, ?_, ?_⟩
+    · simp [eq_sub_of_add_eq' hue, map_sub, eq_zero_iff_mem.mpr hu]
+    · exact fun j hj => eq_zero_iff_mem.mpr (he j hj)
+  choose e he using key
+  use mk _ (∑ i, f i * e i)
+  ext i
+  rw [quotientInfToPiQuotient_mk']; rw [map_sum]; rw [Fintype.sum_eq_single i]
+  · simp [(he i).1, hf]
+  · intro j hj
+    simp [(he j).2 i hj.symm]
 
 Depends on / 依赖: Finset, IsCoprime, classical, isCoprime_biInf, isCoprime_iff_add, isCoprime_iff_exists, isCoprime_iff_exists.mp, mk_surjective, ne_comm, nonempty_fintype, replace
 -/
@@ -881,7 +913,9 @@ definition quotientInfEquivQuotientProd
     · assumption
     · exact coprime.symm
 (Ideal.quotEquivOfEq (by simp [f, iInf, inf_comm])).trans
-(Ideal.quotientInfRingEquivPiQuotient f hf).trans 
+(Ideal.quotientInfRingEquivPiQuotient f hf).trans RingEquiv.piFinTwo fun i => R ⧸ f i
+
+@[simp]
 
 中文:
 定义 quotientInfEquivQuotientProd
@@ -893,7 +927,9 @@ definition quotientInfEquivQuotientProd
     · assumption
     · exact coprime.symm
 (Ideal.quotEquivOfEq (by simp [f, iInf, inf_comm])).trans
-(Ideal.quotientInfRingEquivPiQuotient f hf).trans 
+(Ideal.quotientInfRingEquivPiQuotient f hf).trans RingEquiv.piFinTwo fun i => R ⧸ f i
+
+@[simp]
 
 Depends on / 依赖: Ideal.quotEquivOfEq, Ideal.quotientInfRingEquivPiQuotient, IsCoprime, Pairwise, RingEquiv, RingEquiv.piFinTwo, coprime, coprime.symm, fin_cases, inf_comm, piFinTwo, quotEquivOfEq, quotientInfRingEquivPiQuotient
 -/
@@ -1606,7 +1642,9 @@ definition Quotient.liftₐ
       I (f : A ->+* B) hI with
     commutes' := fun r => by
       have : algebraMap R₁ (A ⧸ I) r = Ideal.Quotient.mk I (algebraMap R₁ A r) := rfl
-      rw
+      rw [this]; rw [RingHom.toFun_eq_coe]; rw [Ideal.Quotient.lift_mk]; rw [AlgHom.coe_toRingHom]; rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [map_one] }
+
+@[simp]
 
 中文:
 定义 商.liftₐ
@@ -1617,7 +1655,9 @@ definition Quotient.liftₐ
       I (f : A ->+* B) hI with
     commutes' := fun r => by
       have : algebraMap R₁ (A ⧸ I) r = Ideal.Quotient.mk I (algebraMap R₁ A r) := rfl
-      rw
+      rw [this]; rw [RingHom.toFun_eq_coe]; rw [Ideal.Quotient.lift_mk]; rw [AlgHom.coe_toRingHom]; rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [map_one] }
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.Algebra.Tower, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap_apply
 -/
@@ -2158,6 +2198,10 @@ definition quotientEquiv
     rintro ⟨r⟩
     simp only [Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk, RingHom.toFun_eq_coe,
       quotientMap_mk, RingEquiv.coe_toRingHom, RingEquiv.symm_apply_apply]
+  right_inv := by
+    rintro ⟨s⟩
+    simp only [Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk, RingHom.toFun_eq_coe,
+      quotientMap_mk, RingEquiv.coe_toRingHom, RingEquiv.apply_symm_apply]
 
 中文:
 定义 quotientEquiv
@@ -2168,6 +2212,10 @@ definition quotientEquiv
     rintro ⟨r⟩
     simp only [Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk, RingHom.toFun_eq_coe,
       quotientMap_mk, RingEquiv.coe_toRingHom, RingEquiv.symm_apply_apply]
+  right_inv := by
+    rintro ⟨s⟩
+    simp only [Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk, RingHom.toFun_eq_coe,
+      quotientMap_mk, RingEquiv.coe_toRingHom, RingEquiv.apply_symm_apply]
 
 Depends on / 依赖: le_comap_map, quotientMap
 -/
@@ -2308,7 +2356,9 @@ theorem comp_quotientMap_eq_of_comp_eq
     (quotientMap I f' le_rfl).comp (quotientMap (I.comap f') g leq) := by
   refine RingHom.ext fun a => ?_
   obtain ⟨r, rfl⟩ := Quotient.mk_surjective a
-  simp
+  simp only [RingHom.comp_apply, quotientMap_mk]
+  exact (Ideal.Quotient.mk I).congr_arg (_root_.trans (g'.comp_apply f r).symm
+    (hfg ▸ f'.comp_apply g r))
 
 中文:
 定理 comp_quotientMap_eq_of_comp_eq
@@ -2318,7 +2368,9 @@ theorem comp_quotientMap_eq_of_comp_eq
     (quotientMap I f' le_rfl).comp (quotientMap (I.comap f') g leq) := by
   refine RingHom.ext fun a => ?_
   obtain ⟨r, rfl⟩ := Quotient.mk_surjective a
-  simp
+  simp only [RingHom.comp_apply, quotientMap_mk]
+  exact (Ideal.Quotient.mk I).congr_arg (_root_.trans (g'.comp_apply f r).symm
+    (hfg ▸ f'.comp_apply g r))
 
 Depends on / 依赖: _root_, _root_.trans, comap_comap, le_of_eq
 -/
@@ -2488,7 +2540,9 @@ smul := Quotient.lift₂ (⟦· • ·⟧) fun r₁ a₁ r₂ a₂ hr ha => Quot
     have := h (p.quotientRel_def.mp hr)
     rw [mem_comap]; rw [map_sub] at this
     simpa only [Algebra.smul_def] using P.quotientRel_def.mpr
-      (P.mul_sub_mul_mem this <| P.quotientRel_d
+      (P.mul_sub_mul_mem this <| P.quotientRel_def.mp ha)
+  smul_def' := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (⟦·⟧) (Algebra.smul_def _ _)
+  commutes' := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (⟦·⟧) (Algebra.commutes _ _)
 
 中文:
 缩写 商.algebraQuotientOfLEComap
@@ -2498,7 +2552,9 @@ smul := Quotient.lift₂ (⟦· • ·⟧) fun r₁ a₁ r₂ a₂ hr ha => Quot
     have := h (p.quotientRel_def.mp hr)
     rw [mem_comap]; rw [map_sub] at this
     simpa only [Algebra.smul_def] using P.quotientRel_def.mpr
-      (P.mul_sub_mul_mem this <| P.quotientRel_d
+      (P.mul_sub_mul_mem this <| P.quotientRel_def.mp ha)
+  smul_def' := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (⟦·⟧) (Algebra.smul_def _ _)
+  commutes' := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (⟦·⟧) (Algebra.commutes _ _)
 
 Depends on / 依赖: algebraMap, quotientMap
 -/
@@ -4028,6 +4084,18 @@ definition powQuotPowSuccLinearEquivMapMkPowSuccPow
     Equiv.ofBijective _ ⟨?_, ?_⟩ with }
   · intro
     simp [Submodule.mem_smul_top_iff, pow_succ']
+  · intro x
+    obtain ⟨⟨y, hy⟩, rfl⟩ := Submodule.Quotient.mk_surjective _ x
+    simp [Ideal.mem_sup_left hy]
+  · intro a b
+    obtain ⟨⟨x, hx⟩, rfl⟩ := Submodule.Quotient.mk_surjective _ a
+    obtain ⟨⟨y, hy⟩, rfl⟩ := Submodule.Quotient.mk_surjective _ b
+    simp [Ideal.Quotient.eq, Submodule.Quotient.eq, Submodule.mem_smul_top_iff, pow_succ']
+  · intro ⟨x, hx⟩
+    rw [Ideal.mem_map_iff_of_surjective _ Ideal.Quotient.mk_surjective] at hx
+    obtain ⟨y, hy, rfl⟩ := hx
+    refine ⟨Submodule.Quotient.mk ⟨y, hy⟩, ?_⟩
+    simp
 
 中文:
 定义 powQuotPowSuccLinearEquivMapMkPowSuccPow
@@ -4039,6 +4107,18 @@ definition powQuotPowSuccLinearEquivMapMkPowSuccPow
     Equiv.ofBijective _ ⟨?_, ?_⟩ with }
   · intro
     simp [Submodule.mem_smul_top_iff, pow_succ']
+  · intro x
+    obtain ⟨⟨y, hy⟩, rfl⟩ := Submodule.Quotient.mk_surjective _ x
+    simp [Ideal.mem_sup_left hy]
+  · intro a b
+    obtain ⟨⟨x, hx⟩, rfl⟩ := Submodule.Quotient.mk_surjective _ a
+    obtain ⟨⟨y, hy⟩, rfl⟩ := Submodule.Quotient.mk_surjective _ b
+    simp [Ideal.Quotient.eq, Submodule.Quotient.eq, Submodule.mem_smul_top_iff, pow_succ']
+  · intro ⟨x, hx⟩
+    rw [Ideal.mem_map_iff_of_surjective _ Ideal.Quotient.mk_surjective] at hx
+    obtain ⟨y, hy, rfl⟩ := hx
+    refine ⟨Submodule.Quotient.mk ⟨y, hy⟩, ?_⟩
+    simp
 
 Depends on / 依赖: Equiv.ofBijective, Ideal.Quotient.mk, Ideal.map, Ideal.mem_sup_left, LinearMap, LinearMap.codRestrict, Quotient, Submodule, Submodule.Quotient, Submodule.Quotient.mk_surjective, Submodule.mapQ, Submodule.mem_smul_top_iff, Submodule.restrictScalars, Submodule.subtype, codRestrict, mem_smul_top_iff, mem_sup_left, mk_surjective, ofBijective, pow_succ
 -/

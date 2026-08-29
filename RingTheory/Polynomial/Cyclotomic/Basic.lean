@@ -133,7 +133,7 @@ theorem cyclotomic'_two
   have prim_root_two : primitiveRoots 2 R = {(-1 : R)} := by
     simp only [Finset.eq_singleton_iff_unique_mem, mem_primitiveRoots two_pos]
     exact ⟨IsPrimitiveRoot.neg_one p hp, fun x => IsPrimitiveRoot.eq_neg_one_of_two_right⟩
-  simp only [prim_root_two, Finset.prod_singlet
+  simp only [prim_root_two, Finset.prod_singleton, map_neg, map_one, sub_neg_eq_add]
 
 中文:
 定理 cyclotomic'_two
@@ -143,7 +143,7 @@ theorem cyclotomic'_two
   have prim_root_two : primitiveRoots 2 R = {(-1 : R)} := by
     simp only [Finset.eq_singleton_iff_unique_mem, mem_primitiveRoots two_pos]
     exact ⟨IsPrimitiveRoot.neg_one p hp, fun x => IsPrimitiveRoot.eq_neg_one_of_two_right⟩
-  simp only [prim_root_two, Finset.prod_singlet
+  simp only [prim_root_two, Finset.prod_singleton, map_neg, map_one, sub_neg_eq_add]
 -/
 theorem cyclotomic'_two (R : Type*) [CommRing R] [IsDomain R] (p : Nat) [CharP R p] (hp : p != 2) :
     cyclotomic' 2 R = X + 1 := by
@@ -279,7 +279,9 @@ theorem X_pow_sub_one_eq_prod
   rw [nthRoots]
   have hmonic : (X ^ n - C (1 : R)).Monic := monic_X_pow_sub_C (1 : R) (ne_of_lt hpos).symm
   symm
-  apply prod_multiset_X_sub_C_of_monic_of_roots_car
+  apply prod_multiset_X_sub_C_of_monic_of_roots_card_eq hmonic
+  rw [@natDegree_X_pow_sub_C R _ _ n 1]; rw [← nthRoots]
+  exact IsPrimitiveRoot.card_nthRoots_one h
 
 中文:
 定理 X_pow_sub_one_eq_prod
@@ -291,7 +293,9 @@ theorem X_pow_sub_one_eq_prod
   rw [nthRoots]
   have hmonic : (X ^ n - C (1 : R)).Monic := monic_X_pow_sub_C (1 : R) (ne_of_lt hpos).symm
   symm
-  apply prod_multiset_X_sub_C_of_monic_of_roots_car
+  apply prod_multiset_X_sub_C_of_monic_of_roots_card_eq hmonic
+  rw [@natDegree_X_pow_sub_C R _ _ n 1]; rw [← nthRoots]
+  exact IsPrimitiveRoot.card_nthRoots_one h
 
 Depends on / 依赖: Finset, Finset.prod_mk, IsPrimitiveRoot, IsPrimitiveRoot.card_nthRoots_one, IsPrimitiveRoot.nthRoots_one_nodup, Multiset, Multiset.toFinset_eq, TopologicalSpace, card_nthRoots_one, classical, hmonic, monic_X_pow_sub_C, natDegree_X_pow_sub_C, ne_of_lt, nthRoots, nthRootsFinset, nthRoots_one_nodup, prod_mk, prod_multiset_X_sub_C_of_monic_of_roots_card_eq, toFinset_eq
 -/
@@ -408,7 +412,12 @@ theorem cyclotomic'_eq_X_pow_sub_one_div
     apply monic_prod_of_monic
     intro i _
     exact cyclotomic'.monic i K
-  rw [(div_modByMonic_u
+  rw [(div_modByMonic_unique (cyclotomic' n K) 0 prod_monic _).1]
+  simp only [degree_zero, zero_add]
+  refine ⟨by rw [mul_comm], ?_⟩
+  rw [bot_lt_iff_ne_bot]
+  intro h
+  exact Monic.ne_zero prod_monic (degree_eq_bot.1 h)
 
 中文:
 定理 cyclotomic'_eq_X_pow_sub_one_div
@@ -419,7 +428,12 @@ theorem cyclotomic'_eq_X_pow_sub_one_div
     apply monic_prod_of_monic
     intro i _
     exact cyclotomic'.monic i K
-  rw [(div_modByMonic_u
+  rw [(div_modByMonic_unique (cyclotomic' n K) 0 prod_monic _).1]
+  simp only [degree_zero, zero_add]
+  refine ⟨by rw [mul_comm], ?_⟩
+  rw [bot_lt_iff_ne_bot]
+  intro h
+  exact Monic.ne_zero prod_monic (degree_eq_bot.1 h)
 
 Depends on / 依赖: IsLinearTopology, i.isLinearTopology, isLinearTopology
 -/
@@ -450,7 +464,31 @@ theorem int_coeff_of_cyclotomic'
   rcases k.eq_zero_or_pos with (rfl | hpos)
   · use 1
     simp only [cyclotomic'_zero, coe_mapRingHom, Polynomial.map_one]
-  let B : K[X] := ∏ i in Nat.prope
+  let B : K[X] := ∏ i in Nat.properDivisors k, cyclotomic' i K
+  have Bmo : B.Monic := by
+    apply monic_prod_of_monic
+    intro i _
+    exact cyclotomic'.monic i K
+  have Bint : B in lifts (Int.castRingHom K) := by
+    refine Subsemiring.prod_mem (lifts (Int.castRingHom K)) ?_
+    intro x hx
+    have xsmall := (Nat.mem_properDivisors.1 hx).2
+    obtain ⟨d, hd⟩ := (Nat.mem_properDivisors.1 hx).1
+    rw [mul_comm] at hd
+    exact ihk x xsmall (h.pow hpos hd)
+  replace Bint := lifts_and_degree_eq_and_monic Bint Bmo
+  obtain ⟨B₁, hB₁, _, hB₁mo⟩ := Bint
+  let Q₁ : Int[X] := (X ^ k - 1) /ₘ B₁
+  have huniq : 0 + B * cyclotomic' k K = X ^ k - 1 ∧ (0 : K[X]).degree < B.degree := by
+    constructor
+    · rw [zero_add, mul_comm, ← prod_cyclotomic'_eq_X_pow_sub_one hpos h, ←
+        Nat.cons_self_properDivisors hpos.ne', Finset.prod_cons]
+    · simpa only [degree_zero, bot_lt_iff_ne_bot, Ne, degree_eq_bot] using Bmo.ne_zero
+  replace huniq := div_modByMonic_unique (cyclotomic' k K) (0 : K[X]) Bmo huniq
+  simp only [lifts, RingHom.mem_rangeS]
+  use Q₁
+  rw [coe_mapRingHom]; rw [map_divByMonic (Int.castRingHom K) hB₁mo]; rw [hB₁]; rw [← huniq.1]
+  simp
 
 中文:
 定理 int_coeff_of_cyclotomic'
@@ -461,7 +499,31 @@ theorem int_coeff_of_cyclotomic'
   rcases k.eq_zero_or_pos with (rfl | hpos)
   · use 1
     simp only [cyclotomic'_zero, coe_mapRingHom, Polynomial.map_one]
-  let B : K[X] := ∏ i in Nat.prope
+  let B : K[X] := ∏ i in Nat.properDivisors k, cyclotomic' i K
+  have Bmo : B.Monic := by
+    apply monic_prod_of_monic
+    intro i _
+    exact cyclotomic'.monic i K
+  have Bint : B in lifts (Int.castRingHom K) := by
+    refine Subsemiring.prod_mem (lifts (Int.castRingHom K)) ?_
+    intro x hx
+    have xsmall := (Nat.mem_properDivisors.1 hx).2
+    obtain ⟨d, hd⟩ := (Nat.mem_properDivisors.1 hx).1
+    rw [mul_comm] at hd
+    exact ihk x xsmall (h.pow hpos hd)
+  replace Bint := lifts_and_degree_eq_and_monic Bint Bmo
+  obtain ⟨B₁, hB₁, _, hB₁mo⟩ := Bint
+  let Q₁ : Int[X] := (X ^ k - 1) /ₘ B₁
+  have huniq : 0 + B * cyclotomic' k K = X ^ k - 1 ∧ (0 : K[X]).degree < B.degree := by
+    constructor
+    · rw [zero_add, mul_comm, ← prod_cyclotomic'_eq_X_pow_sub_one hpos h, ←
+        Nat.cons_self_properDivisors hpos.ne', Finset.prod_cons]
+    · simpa only [degree_zero, bot_lt_iff_ne_bot, Ne, degree_eq_bot] using Bmo.ne_zero
+  replace huniq := div_modByMonic_unique (cyclotomic' k K) (0 : K[X]) Bmo huniq
+  simp only [lifts, RingHom.mem_rangeS]
+  use Q₁
+  rw [coe_mapRingHom]; rw [map_divByMonic (Int.castRingHom K) hB₁mo]; rw [hB₁]; rw [← huniq.1]
+  simp
 
 Depends on / 依赖: B.Monic, Int.castRin, Int.castRingHom, Nat.properDivisors, Nat.strong_induction_on, Polynomial, Polynomial.map_one, Subsemiring, Subsemiring.prod_mem, _zero, castRin, castRingHom, coe_mapRingHom, cyclotomic, eq_zero_or_pos, generalizing, k.eq_zero_or_pos, lifts_and_degree_eq_and_monic, map_one, monic_prod_of_monic
 -/
@@ -873,7 +935,9 @@ theorem degree_cyclotomic
   · rcases n with - | k
     · simp only [cyclotomic, degree_one, dif_pos, Nat.totient_zero, CharP.cast_eq_zero]
     rw [← degree_cyclotomic' (Complex.isPrimitiveRoot_exp k.succ (Nat.succ_ne_zero k))]
-  
+    exact (int_cyclotomic_spec k.succ).2.1
+  simp only [(int_cyclotomic_spec n).right.right, eq_intCast, Monic.leadingCoeff, Int.cast_one,
+    Ne, not_false_iff, one_ne_zero]
 
 中文:
 定理 degree_cyclotomic
@@ -884,7 +948,9 @@ theorem degree_cyclotomic
   · rcases n with - | k
     · simp only [cyclotomic, degree_one, dif_pos, Nat.totient_zero, CharP.cast_eq_zero]
     rw [← degree_cyclotomic' (Complex.isPrimitiveRoot_exp k.succ (Nat.succ_ne_zero k))]
-  
+    exact (int_cyclotomic_spec k.succ).2.1
+  simp only [(int_cyclotomic_spec n).right.right, eq_intCast, Monic.leadingCoeff, Int.cast_one,
+    Ne, not_false_iff, one_ne_zero]
 
 Depends on / 依赖: CharP.cast_eq_zero, Complex.isPrimitiveRoot_exp, Int.castRingHom, Int.cast_one, Monic.leadingCoeff, Nat.succ_ne_zero, Nat.totient_zero, castRingHom, cast_eq_zero, cast_one, cyclotomic, degree_cyclotomic, degree_map_eq_of_leadingCoeff_ne_zero, degree_one, dif_pos, eq_intCast, int_cyclotomic_spec, isPrimitiveRoot_exp, k.succ, leadingCoeff
 -/
@@ -978,7 +1044,9 @@ theorem prod_cyclotomic_eq_X_pow_sub_one
     apply map_injective (Int.castRingHom Complex) Int.cast_injective
     simp only [Polynomial.map_prod, int_cyclotomic_spec, Polynomial.map_pow, map_X,
       Polynomial.map_one, Polynomial.map_sub]
-    exact prod_cyclotom
+    exact prod_cyclotomic'_eq_X_pow_sub_one hpos (Complex.isPrimitiveRoot_exp n hpos.ne')
+  simpa only [Polynomial.map_prod, map_cyclotomic_int, Polynomial.map_sub, Polynomial.map_one,
+    Polynomial.map_pow, Polynomial.map_X] using congr_arg (map (Int.castRingHom R)) integer
 
 中文:
 定理 prod_cyclotomic_eq_X_pow_sub_one
@@ -988,7 +1056,9 @@ theorem prod_cyclotomic_eq_X_pow_sub_one
     apply map_injective (Int.castRingHom Complex) Int.cast_injective
     simp only [Polynomial.map_prod, int_cyclotomic_spec, Polynomial.map_pow, map_X,
       Polynomial.map_one, Polynomial.map_sub]
-    exact prod_cyclotom
+    exact prod_cyclotomic'_eq_X_pow_sub_one hpos (Complex.isPrimitiveRoot_exp n hpos.ne')
+  simpa only [Polynomial.map_prod, map_cyclotomic_int, Polynomial.map_sub, Polynomial.map_one,
+    Polynomial.map_pow, Polynomial.map_X] using congr_arg (map (Int.castRingHom R)) integer
 
 Depends on / 依赖: Complex.isPrimitiveRoot_exp, Int.castRingHom, Int.cast_injective, Nat.divisors, Polynomial, Polynomial.map_X, Polynomial.map_one, Polynomial.map_pow, Polynomial.map_prod, Polynomial.map_sub, _eq_X_pow_sub_one, castRingHom, cast_injective, congr_arg, cyclotomic, divisors, hpos.ne, int_cyclotomic_spec, integer, isPrimitiveRoot_exp
 -/
@@ -1014,7 +1084,8 @@ theorem cyclotomic.dvd_X_pow_sub_one
       Polynomial.map_X] using Polynomial.map_dvd (Int.castRingHom R) this
   rcases n.eq_zero_or_pos with (rfl | hn)
   · simp
-  rw [← prod_cyclotomic_eq_X_pow_
+  rw [← prod_cyclotomic_eq_X_pow_sub_one hn]
+  exact Finset.dvd_prod_of_mem _ (n.mem_divisors_self hn.ne')
 
 中文:
 定理 cyclotomic.dvd_X_pow_sub_one
@@ -1025,7 +1096,8 @@ theorem cyclotomic.dvd_X_pow_sub_one
       Polynomial.map_X] using Polynomial.map_dvd (Int.castRingHom R) this
   rcases n.eq_zero_or_pos with (rfl | hn)
   · simp
-  rw [← prod_cyclotomic_eq_X_pow_
+  rw [← prod_cyclotomic_eq_X_pow_sub_one hn]
+  exact Finset.dvd_prod_of_mem _ (n.mem_divisors_self hn.ne')
 
 Depends on / 依赖: Finset, Finset.dvd_prod_of_mem, Int.castRingHom, Polynomial, Polynomial.map_X, Polynomial.map_dvd, Polynomial.map_one, Polynomial.map_pow, Polynomial.map_sub, castRingHom, cyclotomic, dvd_prod_of_mem, eq_zero_or_pos, hn.ne, map_X, map_cyclotomic_int, map_dvd, map_one, map_pow, map_sub
 -/
@@ -1049,7 +1121,7 @@ theorem prod_cyclotomic_eq_geom_sum
   suffices (∏ i in n.divisors.erase 1, cyclotomic i Int) = ∑ i in Finset.range n, X ^ i by
     simpa only [Polynomial.map_prod, map_cyclotomic_int, Polynomial.map_sum, Polynomial.map_pow,
       Polynomial.map_X] using congr_arg (map (Int.castRingHom R)) this
-  rw [← mul_left_inj' (cyclotomic_ne_z
+  rw [← mul_left_inj' (cyclotomic_ne_zero 1 Int)]; rw [prod_erase_mul _ _ (Nat.one_mem_divisors.2 h.ne')]; rw [cyclotomic_one]; rw [geom_sum_mul]; rw [prod_cyclotomic_eq_X_pow_sub_one h]
 
 中文:
 定理 prod_cyclotomic_eq_geom_sum
@@ -1058,7 +1130,7 @@ theorem prod_cyclotomic_eq_geom_sum
   suffices (∏ i in n.divisors.erase 1, cyclotomic i Int) = ∑ i in Finset.range n, X ^ i by
     simpa only [Polynomial.map_prod, map_cyclotomic_int, Polynomial.map_sum, Polynomial.map_pow,
       Polynomial.map_X] using congr_arg (map (Int.castRingHom R)) this
-  rw [← mul_left_inj' (cyclotomic_ne_z
+  rw [← mul_left_inj' (cyclotomic_ne_zero 1 Int)]; rw [prod_erase_mul _ _ (Nat.one_mem_divisors.2 h.ne')]; rw [cyclotomic_one]; rw [geom_sum_mul]; rw [prod_cyclotomic_eq_X_pow_sub_one h]
 
 Depends on / 依赖: Finset, Finset.range, Int.castRingHom, Nat.one_mem_divisors, Polynomial, Polynomial.map_X, Polynomial.map_pow, Polynomial.map_prod, Polynomial.map_sum, castRingHom, congr_arg, cyclotomic, cyclotomic_ne_zero, cyclotomic_one, divisors, geom_sum_mul, h.ne, map_X, map_cyclotomic_int, map_pow
 -/
@@ -1079,7 +1151,7 @@ theorem cyclotomic_prime
   suffices cyclotomic p Int = ∑ i in range p, X ^ i by
     simpa only [map_cyclotomic_int, Polynomial.map_sum, Polynomial.map_pow, Polynomial.map_X] using
       congr_arg (map (Int.castRingHom R)) this
-  rw [← prod_cyclotomic_eq_geom_sum hp.out.pos]; rw [hp.out.divisors]; rw [erase_insert (mem_si
+  rw [← prod_cyclotomic_eq_geom_sum hp.out.pos]; rw [hp.out.divisors]; rw [erase_insert (mem_singleton.not.2 hp.out.ne_one.symm)]; rw [prod_singleton]
 
 中文:
 定理 cyclotomic_prime
@@ -1088,7 +1160,7 @@ theorem cyclotomic_prime
   suffices cyclotomic p Int = ∑ i in range p, X ^ i by
     simpa only [map_cyclotomic_int, Polynomial.map_sum, Polynomial.map_pow, Polynomial.map_X] using
       congr_arg (map (Int.castRingHom R)) this
-  rw [← prod_cyclotomic_eq_geom_sum hp.out.pos]; rw [hp.out.divisors]; rw [erase_insert (mem_si
+  rw [← prod_cyclotomic_eq_geom_sum hp.out.pos]; rw [hp.out.divisors]; rw [erase_insert (mem_singleton.not.2 hp.out.ne_one.symm)]; rw [prod_singleton]
 
 Depends on / 依赖: Int.castRingHom, NonarchimedeanRing, NonarchimedeanRing.to_nonarchimedeanAddGroup, Polynomial, Polynomial.map_X, Polynomial.map_pow, Polynomial.map_sum, castRingHom, congr_arg, cyclotomic, divisors, erase_insert, hp.out.divisors, hp.out.ne_one.symm, hp.out.pos, map_X, map_cyclotomic_int, map_pow, map_sum, mem_singleton
 -/
@@ -1181,7 +1253,8 @@ theorem cyclotomic_dvd_geom_sum_of_dvd
   rcases n.eq_zero_or_pos with (rfl | hn)
   · simp
   rw [← prod_cyclotomic_eq_geom_sum hn]
-  app
+  apply Finset.dvd_prod_of_mem
+  simp [hd, hdn, hn.ne']
 
 中文:
 定理 cyclotomic_dvd_geom_sum_of_dvd
@@ -1193,7 +1266,8 @@ theorem cyclotomic_dvd_geom_sum_of_dvd
   rcases n.eq_zero_or_pos with (rfl | hn)
   · simp
   rw [← prod_cyclotomic_eq_geom_sum hn]
-  app
+  apply Finset.dvd_prod_of_mem
+  simp [hd, hdn, hn.ne']
 
 Depends on / 依赖: Finset, Finset.dvd_prod_of_mem, Finset.range, Int.castRingHom, Polynomial, Polynomial.map_X, Polynomial.map_pow, Polynomial.map_sum, castRingHom, cyclotomic, dvd_prod_of_mem, eq_zero_or_pos, hn.ne, map_X, map_cyclotomic_int, map_dvd, map_pow, map_sum, n.eq_zero_or_pos, prod_cyclotomic_eq_geom_sum
 -/
@@ -1243,7 +1317,9 @@ theorem X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd
   rw [Nat.mem_properDivisors] at h
   use ∏ x in n.properDivisors \ d.divisors, cyclotomic x R
   rw [← X_pow_sub_one_mul_prod_cyclotomic_eq_X_pow_sub_one_of_dvd R h.1 h.2.ne_bot]; rw [← Nat.insert_self_properDivisors]; rw [Finset.insert_sdiff_of_notMem]; rw [Finset.prod_insert]; rw [mul_assoc]
-  ·
+  · exact Finset.notMem_sdiff_of_notMem_left Nat.self_notMem_properDivisors
+· exact fun hk => h.2.not_ge Nat.divisor_le hk
+  · exact h.2.ne_bot
 
 中文:
 定理 X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd
@@ -1252,7 +1328,9 @@ theorem X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd
   rw [Nat.mem_properDivisors] at h
   use ∏ x in n.properDivisors \ d.divisors, cyclotomic x R
   rw [← X_pow_sub_one_mul_prod_cyclotomic_eq_X_pow_sub_one_of_dvd R h.1 h.2.ne_bot]; rw [← Nat.insert_self_properDivisors]; rw [Finset.insert_sdiff_of_notMem]; rw [Finset.prod_insert]; rw [mul_assoc]
-  ·
+  · exact Finset.notMem_sdiff_of_notMem_left Nat.self_notMem_properDivisors
+· exact fun hk => h.2.not_ge Nat.divisor_le hk
+  · exact h.2.ne_bot
 
 Depends on / 依赖: Finset, Finset.insert_sdiff_of_notMem, Finset.notMem_sdiff_of_notMem_left, Finset.prod_insert, Nat.divisor_le, Nat.insert_self_properDivisors, Nat.mem_properDivisors, Nat.self_notMem_properDivisors, X_pow_sub_one_mul_prod_cyclotomic_eq_X_pow_sub_one_of_dvd, cyclotomic, d.divisors, divisor_le, divisors, insert_sdiff_of_notMem, insert_self_properDivisors, mem_properDivisors, mul_assoc, n.properDivisors, ne_bot, notMem_sdiff_of_notMem_left
 -/
@@ -1285,7 +1363,12 @@ theorem cyclotomic_eq_prod_X_pow_sub_one_pow_moebius
       algebraMap _ _ (X ^ n - 1 : R[X]) := by
     intro n hn
     rw [← prod_cyclotomic_eq_X_pow_sub_one hn R]; rw [map_prod]
-  rw [(prod_eq
+  rw [(prod_eq_iff_prod_pow_moebius_eq_of_nonzero (fun n hn => _) fun n hn => _).1 h n hpos] <;>
+    simp_rw [Ne, IsFractionRing.to_map_eq_zero_iff]
+  · simp [cyclotomic_ne_zero]
+  · intro n hn
+    apply Monic.ne_zero
+    apply monic_X_pow_sub_C _ (ne_of_gt hn)
 
 中文:
 定理 cyclotomic_eq_prod_X_pow_sub_one_pow_moebius
@@ -1297,7 +1380,12 @@ theorem cyclotomic_eq_prod_X_pow_sub_one_pow_moebius
       algebraMap _ _ (X ^ n - 1 : R[X]) := by
     intro n hn
     rw [← prod_cyclotomic_eq_X_pow_sub_one hn R]; rw [map_prod]
-  rw [(prod_eq
+  rw [(prod_eq_iff_prod_pow_moebius_eq_of_nonzero (fun n hn => _) fun n hn => _).1 h n hpos] <;>
+    simp_rw [Ne, IsFractionRing.to_map_eq_zero_iff]
+  · simp [cyclotomic_ne_zero]
+  · intro n hn
+    apply Monic.ne_zero
+    apply monic_X_pow_sub_C _ (ne_of_gt hn)
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.to_map_eq_zero_iff, Monic.ne_zero, Nat.divisors, RatFunc, algebraMap, cyclotomic, cyclotomic_ne_zero, divisors, eq_zero_or_pos, map_prod, monic_X_pow_sub_C, n.eq_zero_or_pos, ne_zero, prod_cyclotomic_eq_X_pow_sub_one, prod_eq_iff_prod_pow_moebius_eq_of_nonzero, simp_rw, to_map_eq_zero_iff
 -/
@@ -1332,7 +1420,13 @@ theorem cyclotomic_eq_X_pow_sub_one_div
     apply monic_prod_of_monic
     intro i _
     exact cyclotomic.monic i R
-  rw [(div
+  rw [(div_modByMonic_unique (cyclotomic n R) 0 prod_monic _).1]
+  simp only [degree_zero, zero_add]
+  constructor
+  · rw [mul_comm]
+  rw [bot_lt_iff_ne_bot]
+  intro h
+  exact Monic.ne_zero prod_monic (degree_eq_bot.1 h)
 
 中文:
 定理 cyclotomic_eq_X_pow_sub_one_div
@@ -1344,7 +1438,13 @@ theorem cyclotomic_eq_X_pow_sub_one_div
     apply monic_prod_of_monic
     intro i _
     exact cyclotomic.monic i R
-  rw [(div
+  rw [(div_modByMonic_unique (cyclotomic n R) 0 prod_monic _).1]
+  simp only [degree_zero, zero_add]
+  constructor
+  · rw [mul_comm]
+  rw [bot_lt_iff_ne_bot]
+  intro h
+  exact Monic.ne_zero prod_monic (degree_eq_bot.1 h)
 
 Depends on / 依赖: Finset, Finset.prod_cons, Monic.ne_zero, Nat.cons_self_properDivisors, Nat.properDivisors, bot_lt_iff_ne_bot, cons_self_properDivisors, cyclotomic, cyclotomic.monic, degree_eq_bot, degree_zero, div_modByMonic_unique, hpos.ne, monic_prod_of_monic, mul_comm, ne_zero, nontriviality, prod_cons, prod_cyclotomic_eq_X_pow_sub_one, prod_monic
 -/
@@ -1374,7 +1474,8 @@ theorem X_pow_sub_one_dvd_prod_cyclotomic
   replace hm := Nat.mem_properDivisors.2
     ⟨hm, lt_of_le_of_ne (Nat.divisor_le (Nat.mem_divisors.2 ⟨hm, hpos.ne'⟩)) hdiff⟩
   rw [← Finset.sdiff_union_of_subset (Nat.divisors_subset_properDivisors (ne_of_lt hpos).symm
-    (Nat.mem_properDivisors.1 hm).1 (ne_of_lt (Nat.mem_properDivisors.1 hm).2)
+    (Nat.mem_properDivisors.1 hm).1 (ne_of_lt (Nat.mem_properDivisors.1 hm).2))]; rw [Finset.prod_union Finset.sdiff_disjoint]; rw [prod_cyclotomic_eq_X_pow_sub_one (Nat.pos_of_mem_properDivisors hm)]
+  exact ⟨∏ x in n.properDivisors \ m.divisors, cyclotomic x R, by rw [mul_comm]⟩
 
 中文:
 定理 X_pow_sub_one_dvd_prod_cyclotomic
@@ -1383,7 +1484,8 @@ theorem X_pow_sub_one_dvd_prod_cyclotomic
   replace hm := Nat.mem_properDivisors.2
     ⟨hm, lt_of_le_of_ne (Nat.divisor_le (Nat.mem_divisors.2 ⟨hm, hpos.ne'⟩)) hdiff⟩
   rw [← Finset.sdiff_union_of_subset (Nat.divisors_subset_properDivisors (ne_of_lt hpos).symm
-    (Nat.mem_properDivisors.1 hm).1 (ne_of_lt (Nat.mem_properDivisors.1 hm).2)
+    (Nat.mem_properDivisors.1 hm).1 (ne_of_lt (Nat.mem_properDivisors.1 hm).2))]; rw [Finset.prod_union Finset.sdiff_disjoint]; rw [prod_cyclotomic_eq_X_pow_sub_one (Nat.pos_of_mem_properDivisors hm)]
+  exact ⟨∏ x in n.properDivisors \ m.divisors, cyclotomic x R, by rw [mul_comm]⟩
 
 Depends on / 依赖: Finset, Finset.prod_union, Finset.sdiff_disjoint, Finset.sdiff_union_of_subset, Nat.divisor_le, Nat.divisors_subset_properDivisors, Nat.mem_divisors, Nat.mem_properDivisors, Nat.pos_of_mem_properDivisors, NonarchimedeanAddGroup, NonarchimedeanAddGroup.is_nonarchimedean, cyclotomic, divisor_le, divisors, divisors_subset_properDivisors, hpos.ne, is_nonarchimedean, lt_of_le_of_ne, m.divisors, mem_divisors
 -/
@@ -1408,7 +1510,10 @@ theorem cyclotomic_eq_prod_X_sub_primitiveRoots
   · simp only [hzero, cyclotomic'_zero, cyclotomic_zero]
   have h : forall i in k.properDivisors, cyclotomic i K = cyclotomic' i K := by
     intro i hi
-    obtai
+    obtain ⟨d, hd⟩ := (Nat.mem_properDivisors.1 hi).1
+    rw [mul_comm] at hd
+    exact hk i (Nat.mem_properDivisors.1 hi).2 (IsPrimitiveRoot.pow hpos hz hd)
+  rw [@cyclotomic_eq_X_pow_sub_one_div _ _ _ hpos]; rw [cyclotomic'_eq_X_pow_sub_one_div hpos hz]; rw [Finset.prod_congr (refl k.properDivisors) h]
 
 中文:
 定理 cyclotomic_eq_prod_X_sub_primitiveRoots
@@ -1420,7 +1525,10 @@ theorem cyclotomic_eq_prod_X_sub_primitiveRoots
   · simp only [hzero, cyclotomic'_zero, cyclotomic_zero]
   have h : forall i in k.properDivisors, cyclotomic i K = cyclotomic' i K := by
     intro i hi
-    obtai
+    obtain ⟨d, hd⟩ := (Nat.mem_properDivisors.1 hi).1
+    rw [mul_comm] at hd
+    exact hk i (Nat.mem_properDivisors.1 hi).2 (IsPrimitiveRoot.pow hpos hz hd)
+  rw [@cyclotomic_eq_X_pow_sub_one_div _ _ _ hpos]; rw [cyclotomic'_eq_X_pow_sub_one_div hpos hz]; rw [Finset.prod_congr (refl k.properDivisors) h]
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.pow, Nat.mem_properDivisors, Nat.strong_induction_on, _eq_X_pow_su, _zero, cyclotomic, cyclotomic_eq_X_pow_sub_one_div, cyclotomic_zero, eq_zero_or_pos, generalizing, k.eq_zero_or_pos, k.properDivisors, mem_properDivisors, mul_comm, properDivisors, strong_induction_on
 -/
@@ -1450,7 +1558,13 @@ theorem eq_cyclotomic_iff
       Finset.prod_cons]
   · have prod_monic : (∏ i in Nat.properDivisors n, cyclotomic i R).Monic := by
       apply monic_prod_of_monic
-   
+      intro i _
+      exact cyclotomic.monic i R
+    rw [@cyclotomic_eq_X_pow_sub_one_div R _ _ hpos]; rw [(div_modByMonic_unique P 0 prod_monic _).1]
+    refine ⟨by rwa [zero_add, mul_comm], ?_⟩
+    rw [degree_zero]; rw [bot_lt_iff_ne_bot]
+    intro h
+    exact Monic.ne_zero prod_monic (degree_eq_bot.1 h)
 
 中文:
 定理 eq_cyclotomic_iff
@@ -1462,7 +1576,13 @@ theorem eq_cyclotomic_iff
       Finset.prod_cons]
   · have prod_monic : (∏ i in Nat.properDivisors n, cyclotomic i R).Monic := by
       apply monic_prod_of_monic
-   
+      intro i _
+      exact cyclotomic.monic i R
+    rw [@cyclotomic_eq_X_pow_sub_one_div R _ _ hpos]; rw [(div_modByMonic_unique P 0 prod_monic _).1]
+    refine ⟨by rwa [zero_add, mul_comm], ?_⟩
+    rw [degree_zero]; rw [bot_lt_iff_ne_bot]
+    intro h
+    exact Monic.ne_zero prod_monic (degree_eq_bot.1 h)
 
 Depends on / 依赖: Finset, Finset.prod_cons, Nat.cons_self_properDivisors, Nat.properDivisors, TotallySeparatedSpace, bot_lt_iff_ne_bot, cons_self_properDivisors, cyclotomic, cyclotomic.monic, cyclotomic_eq_X_pow_sub_one_div, degree_zero, div_modByMonic_unique, hpos.ne, instTotallySeparated, monic_prod_of_monic, mul_comm, nontriviality, prod_cons, prod_cyclotomic_eq_X_pow_sub_one, prod_monic
 -/
@@ -1494,7 +1614,18 @@ theorem cyclotomic_prime_pow_eq_geom_sum
       ((∑ i in Finset.range p, (X ^ p ^ m) ^ i) *
         ∏ x in Finset.range (m + 1), cyclotomic (p ^ x) R) = X ^ p ^ (m + 1) - 1 := by
     intro m
-    have := eq_cyclotomic_iff (R := R) (P := ∑ i in range
+    have := eq_cyclotomic_iff (R := R) (P := ∑ i in range p, (X ^ p ^ m) ^ i)
+      (pow_pos hp.pos (m + 1))
+    rw [eq_comm] at this
+    rw [this]; rw [Nat.prod_properDivisors_prime_pow hp]
+  induction n with
+  | zero => have := Fact.mk hp; simp [cyclotomic_prime]
+  | succ n_n n_ih =>
+    rw [← (eq_cyclotomic_iff (pow_pos hp.pos (n_n + 1 + 1)) _).mpr ?_]
+    rw [Nat.prod_properDivisors_prime_pow hp]; rw [Finset.prod_range_succ]; rw [n_ih]
+    rw [this] at n_ih
+    rw [mul_comm _ (∑ i in _]; rw [_)]; rw [n_ih]; rw [geom_sum_mul]; rw [sub_left_inj]; rw [← pow_mul]
+    simp only [pow_add, pow_one]
 
 中文:
 定理 cyclotomic_prime_pow_eq_geom_sum
@@ -1504,7 +1635,18 @@ theorem cyclotomic_prime_pow_eq_geom_sum
       ((∑ i in Finset.range p, (X ^ p ^ m) ^ i) *
         ∏ x in Finset.range (m + 1), cyclotomic (p ^ x) R) = X ^ p ^ (m + 1) - 1 := by
     intro m
-    have := eq_cyclotomic_iff (R := R) (P := ∑ i in range
+    have := eq_cyclotomic_iff (R := R) (P := ∑ i in range p, (X ^ p ^ m) ^ i)
+      (pow_pos hp.pos (m + 1))
+    rw [eq_comm] at this
+    rw [this]; rw [Nat.prod_properDivisors_prime_pow hp]
+  induction n with
+  | zero => have := Fact.mk hp; simp [cyclotomic_prime]
+  | succ n_n n_ih =>
+    rw [← (eq_cyclotomic_iff (pow_pos hp.pos (n_n + 1 + 1)) _).mpr ?_]
+    rw [Nat.prod_properDivisors_prime_pow hp]; rw [Finset.prod_range_succ]; rw [n_ih]
+    rw [this] at n_ih
+    rw [mul_comm _ (∑ i in _]; rw [_)]; rw [n_ih]; rw [geom_sum_mul]; rw [sub_left_inj]; rw [← pow_mul]
+    simp only [pow_add, pow_one]
 
 Depends on / 依赖: Fact.mk, Finset, Finset.range, Nat.prod_properDivisors_prime_pow, cyclotomic, cyclotomic_prime, eq_comm, eq_cycl, eq_cyclotomic_iff, hp.pos, n_ih, pow_pos, prod_properDivisors_prime_pow
 -/
@@ -1559,7 +1701,27 @@ theorem cyclotomic_coeff_zero
   induction n using Nat.strong_induction_on with | _ n hi
   have hprod : (∏ i in Nat.properDivisors n, (Polynomial.cyclotomic i R).coeff 0) = -1 := by
     rw [← Finset.insert_erase (Nat.one_mem_properDivisors_iff_one_lt.2
-      (lt_of_lt_of_le one_lt_two hn))]; rw [Finset.prod_insert (Finset.notM
+      (lt_of_lt_of_le one_lt_two hn))]; rw [Finset.prod_insert (Finset.notMem_erase 1 _)]; rw [cyclotomic_one R]
+    have hleq : forall j in n.properDivisors.erase 1, 2 <= j := by
+      intro j hj
+      apply Nat.succ_le_of_lt
+      exact (Ne.le_iff_lt (Finset.mem_erase.1 hj).1.symm).mp
+        (Nat.succ_le_of_lt (Nat.pos_of_mem_properDivisors (Finset.mem_erase.1 hj).2))
+    have hcongr : forall j in n.properDivisors.erase 1, (cyclotomic j R).coeff 0 = 1 := by
+      intro j hj
+      exact hi j (Nat.mem_properDivisors.1 (Finset.mem_erase.1 hj).2).2 (hleq j hj)
+    have hrw : (∏ x in n.properDivisors.erase 1, (cyclotomic x R).coeff 0) = 1 := by
+      rw [Finset.prod_congr (refl (n.properDivisors.erase 1)) hcongr]
+      simp only [Finset.prod_const_one]
+    simp only [hrw, mul_one, zero_sub, coeff_one_zero, coeff_X_zero, coeff_sub]
+  have heq : (X ^ n - 1 : R[X]).coeff 0 = -(cyclotomic n R).coeff 0 := by
+    rw [← prod_cyclotomic_eq_X_pow_sub_one (zero_le_one.trans_lt hn)]; rw [←
+      Nat.cons_self_properDivisors hn.ne_bot]; rw [Finset.prod_cons]; rw [mul_coeff_zero]; rw [coeff_zero_prod]; rw [hprod]; rw [mul_neg]; rw [mul_one]
+  have hzero : (X ^ n - 1 : R[X]).coeff 0 = (-1 : R) := by
+    rw [coeff_zero_eq_eval_zero _]
+    simp only [zero_pow (by positivity : n != 0), eval_X, eval_one, zero_sub, eval_pow, eval_sub]
+  rw [hzero] at heq
+  exact neg_inj.mp (Eq.symm heq)
 
 中文:
 定理 cyclotomic_coeff_zero
@@ -1568,7 +1730,27 @@ theorem cyclotomic_coeff_zero
   induction n using Nat.strong_induction_on with | _ n hi
   have hprod : (∏ i in Nat.properDivisors n, (Polynomial.cyclotomic i R).coeff 0) = -1 := by
     rw [← Finset.insert_erase (Nat.one_mem_properDivisors_iff_one_lt.2
-      (lt_of_lt_of_le one_lt_two hn))]; rw [Finset.prod_insert (Finset.notM
+      (lt_of_lt_of_le one_lt_two hn))]; rw [Finset.prod_insert (Finset.notMem_erase 1 _)]; rw [cyclotomic_one R]
+    have hleq : forall j in n.properDivisors.erase 1, 2 <= j := by
+      intro j hj
+      apply Nat.succ_le_of_lt
+      exact (Ne.le_iff_lt (Finset.mem_erase.1 hj).1.symm).mp
+        (Nat.succ_le_of_lt (Nat.pos_of_mem_properDivisors (Finset.mem_erase.1 hj).2))
+    have hcongr : forall j in n.properDivisors.erase 1, (cyclotomic j R).coeff 0 = 1 := by
+      intro j hj
+      exact hi j (Nat.mem_properDivisors.1 (Finset.mem_erase.1 hj).2).2 (hleq j hj)
+    have hrw : (∏ x in n.properDivisors.erase 1, (cyclotomic x R).coeff 0) = 1 := by
+      rw [Finset.prod_congr (refl (n.properDivisors.erase 1)) hcongr]
+      simp only [Finset.prod_const_one]
+    simp only [hrw, mul_one, zero_sub, coeff_one_zero, coeff_X_zero, coeff_sub]
+  have heq : (X ^ n - 1 : R[X]).coeff 0 = -(cyclotomic n R).coeff 0 := by
+    rw [← prod_cyclotomic_eq_X_pow_sub_one (zero_le_one.trans_lt hn)]; rw [←
+      Nat.cons_self_properDivisors hn.ne_bot]; rw [Finset.prod_cons]; rw [mul_coeff_zero]; rw [coeff_zero_prod]; rw [hprod]; rw [mul_neg]; rw [mul_one]
+  have hzero : (X ^ n - 1 : R[X]).coeff 0 = (-1 : R) := by
+    rw [coeff_zero_eq_eval_zero _]
+    simp only [zero_pow (by positivity : n != 0), eval_X, eval_one, zero_sub, eval_pow, eval_sub]
+  rw [hzero] at heq
+  exact neg_inj.mp (Eq.symm heq)
 
 Depends on / 依赖: Finset, Finset.insert_erase, Finset.mem_erase, Finset.notMem_erase, Finset.prod_insert, Nat.one_mem_properDivisors_iff_one_lt, Nat.properDivisors, Nat.strong_induction_on, Nat.succ_le_of_lt, Ne.le_iff_lt, Polynomial, Polynomial.cyclotomic, cyclotomic, cyclotomic_one, insert_erase, le_iff_lt, lt_of_lt_of_le, mem_erase, n.properDivisors.erase, notMem_erase
 -/
@@ -1612,7 +1794,11 @@ theorem coprime_of_root_cyclotomic
   replace h := (ZMod.natCast_eq_zero_iff a p).2 h
   rw [IsRoot.def]; rw [eq_natCast]; rw [h]; rw [← coeff_zero_eq_eval_zero] at hroot
   by_cases hone : n = 1
-  · simp only [hone, cyclotomic_one, zero_sub, coeff_one_zero, coeff
+  · simp only [hone, cyclotomic_one, zero_sub, coeff_one_zero, coeff_X_zero, neg_eq_zero,
+      one_ne_zero, coeff_sub] at hroot
+  rw [cyclotomic_coeff_zero (ZMod p) (Nat.succ_le_of_lt
+    (lt_of_le_of_ne (Nat.succ_le_of_lt hpos) (Ne.symm hone)))] at hroot
+  exact one_ne_zero hroot
 
 中文:
 定理 coprime_of_root_cyclotomic
@@ -1624,7 +1810,11 @@ theorem coprime_of_root_cyclotomic
   replace h := (ZMod.natCast_eq_zero_iff a p).2 h
   rw [IsRoot.def]; rw [eq_natCast]; rw [h]; rw [← coeff_zero_eq_eval_zero] at hroot
   by_cases hone : n = 1
-  · simp only [hone, cyclotomic_one, zero_sub, coeff_one_zero, coeff
+  · simp only [hone, cyclotomic_one, zero_sub, coeff_one_zero, coeff_X_zero, neg_eq_zero,
+      one_ne_zero, coeff_sub] at hroot
+  rw [cyclotomic_coeff_zero (ZMod p) (Nat.succ_le_of_lt
+    (lt_of_le_of_ne (Nat.succ_le_of_lt hpos) (Ne.symm hone)))] at hroot
+  exact one_ne_zero hroot
 
 Depends on / 依赖: Coprime, IsRoot, IsRoot.def, Nat.Coprime.symm, Nat.succ_le_of_lt, Ne.symm, ZMod.natCast_eq_zero_iff, coeff_X_zero, coeff_one_zero, coeff_sub, coeff_zero_eq_eval_zero, coprime_iff_not_dvd, cyclotomic_coeff_zero, cyclotomic_one, eq_natCast, hprime, lt_of_le_of_ne, natCast_eq_zero_iff, neg_eq_zero, one_ne_zero
 -/
@@ -1657,7 +1847,9 @@ theorem orderOf_root_cyclotomic_dvd
   suffices hpow : eval (Nat.castRingHom (ZMod p) a) (X ^ n - 1 : (ZMod p)[X]) = 0 by
     simp only [eval_X, eval_one, eval_pow, eval_sub, eq_natCast] at hpow
     apply Units.val_eq_one.1
-    simp only [sub_eq_zero.mp hpow, ZMod.coe_unitOfCoprime, Units.val_pow_eq
+    simp only [sub_eq_zero.mp hpow, ZMod.coe_unitOfCoprime, Units.val_pow_eq_pow_val]
+  rw [IsRoot.def] at hroot
+  rw [← prod_cyclotomic_eq_X_pow_sub_one hpos (ZMod p)]; rw [← Nat.cons_self_properDivisors hpos.ne']; rw [Finset.prod_cons]; rw [eval_mul]; rw [hroot]; rw [zero_mul]
 
 中文:
 定理 orderOf_root_cyclotomic_dvd
@@ -1667,7 +1859,9 @@ theorem orderOf_root_cyclotomic_dvd
   suffices hpow : eval (Nat.castRingHom (ZMod p) a) (X ^ n - 1 : (ZMod p)[X]) = 0 by
     simp only [eval_X, eval_one, eval_pow, eval_sub, eq_natCast] at hpow
     apply Units.val_eq_one.1
-    simp only [sub_eq_zero.mp hpow, ZMod.coe_unitOfCoprime, Units.val_pow_eq
+    simp only [sub_eq_zero.mp hpow, ZMod.coe_unitOfCoprime, Units.val_pow_eq_pow_val]
+  rw [IsRoot.def] at hroot
+  rw [← prod_cyclotomic_eq_X_pow_sub_one hpos (ZMod p)]; rw [← Nat.cons_self_properDivisors hpos.ne']; rw [Finset.prod_cons]; rw [eval_mul]; rw [hroot]; rw [zero_mul]
 
 Depends on / 依赖: Finset, Finset.prod_cons, IsRoot, IsRoot.def, Nat.castRingHom, Nat.cons_self_properDivisors, Units.val_eq_one, Units.val_pow_eq_pow_val, ZMod.coe_unitOfCoprime, castRingHom, coe_unitOfCoprime, cons_self_properDivisors, eq_natCast, eval_X, eval_mul, eval_one, eval_pow, eval_sub, hpos.ne, orderOf_dvd_of_pow_eq_one
 -/
@@ -1700,7 +1894,7 @@ lemma dvd_C_mul_X_sub_one_pow_add_one
   have := hpri.dvd_add_pow_sub_pow_of_dvd (C a * X) (-1) (r := C r) ?_ ?_
   · rwa [← sub_eq_add_neg, (hpri.odd_of_ne_two hp).neg_pow, one_pow, sub_neg_eq_add] at this
   · simp only [mul_pow, ← map_pow, dvd_mul_right, (_root_.map_dvd C h₁).trans]
-  simp only [map_mul, map_natCast, ← mul_assoc, dvd
+  simp only [map_mul, map_natCast, ← mul_assoc, dvd_mul_right, (_root_.map_dvd C h₂).trans]
 
 中文:
 引理 dvd_C_mul_X_sub_one_pow_add_one
@@ -1709,7 +1903,7 @@ lemma dvd_C_mul_X_sub_one_pow_add_one
   have := hpri.dvd_add_pow_sub_pow_of_dvd (C a * X) (-1) (r := C r) ?_ ?_
   · rwa [← sub_eq_add_neg, (hpri.odd_of_ne_two hp).neg_pow, one_pow, sub_neg_eq_add] at this
   · simp only [mul_pow, ← map_pow, dvd_mul_right, (_root_.map_dvd C h₁).trans]
-  simp only [map_mul, map_natCast, ← mul_assoc, dvd
+  simp only [map_mul, map_natCast, ← mul_assoc, dvd_mul_right, (_root_.map_dvd C h₂).trans]
 
 Depends on / 依赖: _root_, _root_.map_dvd, dvd_add_pow_sub_pow_of_dvd, dvd_mul_right, hpri.dvd_add_pow_sub_pow_of_dvd, hpri.odd_of_ne_two, map_dvd, map_mul, map_natCast, map_pow, mul_assoc, mul_pow, neg_pow, odd_of_ne_two, one_pow, sub_eq_add_neg, sub_neg_eq_add
 -/
@@ -1734,7 +1928,8 @@ theorem _root_.IsPrimitiveRoot.pow_sub_pow_eq_prod_sub_mul_field
   convert!
 congr_arg (eval (x / y) · * y ^ card (nthRootsFinset n (1 : K)))
       X_pow_sub_one_eq_prod hpos h using 1
-  · simp [sub_mul, div_pow, h
+  · simp [sub_mul, div_pow, hy, h.card_nthRootsFinset]
+  · simp [eval_prod, prod_mul_pow_card, sub_mul, hy]
 
 中文:
 定理 _root_.是PrimitiveRoot.pow_sub_pow_eq_prod_sub_mul_field
@@ -1747,7 +1942,8 @@ congr_arg (eval (x / y) · * y ^ card (nthRootsFinset n (1 : K)))
   convert!
 congr_arg (eval (x / y) · * y ^ card (nthRootsFinset n (1 : K)))
       X_pow_sub_one_eq_prod hpos h using 1
-  · simp [sub_mul, div_pow, h
+  · simp [sub_mul, div_pow, hy, h.card_nthRootsFinset]
+  · simp [eval_prod, prod_mul_pow_card, sub_mul, hy]
 -/
 private theorem _root_.IsPrimitiveRoot.pow_sub_pow_eq_prod_sub_mul_field {K : Type*}
     [Field K] {ζ : K} (x y : K) (hpos : 0 < n) (h : IsPrimitiveRoot ζ n) :
@@ -1777,7 +1973,15 @@ theorem _root_.IsPrimitiveRoot.pow_sub_pow_eq_prod_sub_mul
   simp_rw [map_sub, map_mul]
   have h' : IsPrimitiveRoot (algebraMap R K ζ) n :=
 h.map_of_injective FaithfulSMul.algebraMap_injective R K
-  rw [h'.pow_sub_pow_eq_prod_
+  rw [h'.pow_sub_pow_eq_prod_sub_mul_field _ _ hpos]
+  refine (prod_nbij (algebraMap R K) (fun a ha => map_mem_nthRootsFinset_one ha _)
+    (fun a _ b _ H => FaithfulSMul.algebraMap_injective R K H) (fun a ha => ?_) (fun _ _ => rfl)).symm
+  have := Set.surj_on_of_inj_on_of_ncard_le (s := nthRootsFinset n (1 : R))
+    (t := nthRootsFinset n (1 : K)) _ (fun _ hr => map_mem_nthRootsFinset_one hr _)
+    (fun a _ b _ H => FaithfulSMul.algebraMap_injective R K H)
+    (by simp [h.card_nthRootsFinset, h'.card_nthRootsFinset])
+  obtain ⟨x, hx, hx1⟩ := this _ ha
+  exact ⟨x, hx, hx1.symm⟩
 
 中文:
 定理 _root_.是PrimitiveRoot.pow_sub_pow_eq_prod_sub_mul
@@ -1789,7 +1993,15 @@ h.map_of_injective FaithfulSMul.algebraMap_injective R K
   simp_rw [map_sub, map_mul]
   have h' : IsPrimitiveRoot (algebraMap R K ζ) n :=
 h.map_of_injective FaithfulSMul.algebraMap_injective R K
-  rw [h'.pow_sub_pow_eq_prod_
+  rw [h'.pow_sub_pow_eq_prod_sub_mul_field _ _ hpos]
+  refine (prod_nbij (algebraMap R K) (fun a ha => map_mem_nthRootsFinset_one ha _)
+    (fun a _ b _ H => FaithfulSMul.algebraMap_injective R K H) (fun a ha => ?_) (fun _ _ => rfl)).symm
+  have := Set.surj_on_of_inj_on_of_ncard_le (s := nthRootsFinset n (1 : R))
+    (t := nthRootsFinset n (1 : K)) _ (fun _ hr => map_mem_nthRootsFinset_one hr _)
+    (fun a _ b _ H => FaithfulSMul.algebraMap_injective R K H)
+    (by simp [h.card_nthRootsFinset, h'.card_nthRootsFinset])
+  obtain ⟨x, hx, hx1⟩ := this _ ha
+  exact ⟨x, hx, hx1.symm⟩
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, IsPrimitiveRoot, algebraMap, algebraMap_injective, h.map_of_injective, map_mem_nthRootsFinset_one, map_mul, map_of_injective, map_pow, map_prod, map_sub, pow_sub_pow_eq_prod_sub_mul_field, prod_nbij, simp_rw
 -/

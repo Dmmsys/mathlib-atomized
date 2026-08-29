@@ -820,7 +820,7 @@ lemma sigmaMk_mk
       Scheme.forgetToTop.map (Sigma.ι f i) x
   congr 2
   refine (colimit.isoColimitCocone_ι_inv_assoc ⟨_, TopCat.sigmaCofanIsColimit _⟩ _ _).trans ?_
-  exa
+  exact ι_comp_sigmaComparison Scheme.forgetToTop _ _
 
 中文:
 引理 sigmaMk_mk
@@ -831,7 +831,7 @@ lemma sigmaMk_mk
       Scheme.forgetToTop.map (Sigma.ι f i) x
   congr 2
   refine (colimit.isoColimitCocone_ι_inv_assoc ⟨_, TopCat.sigmaCofanIsColimit _⟩ _ _).trans ?_
-  exa
+  exact ι_comp_sigmaComparison Scheme.forgetToTop _ _
 
 Depends on / 依赖: Scheme, Scheme.forgetToTop, Scheme.forgetToTop.map, TopCat, TopCat.sigmaCofan, TopCat.sigmaCofanIsColimit, colimit, colimit.isoColimitCocone, colimit.isoColimitCocone_, forgetToTop, isoColimitCocone, sigmaCofan, sigmaCofanIsColimit, toTopCat
 -/
@@ -860,7 +860,23 @@ lemma isOpenImmersion_sigmaDesc_aux
     refine .of_continuous_injective_isOpenMap ?_ ?_ ?_
     · fun_prop
     · rintro ⟨ix, x⟩ ⟨iy, y⟩ e
-   
+      have : α ix x = α iy y := by
+        simpa [← Scheme.Hom.comp_apply] using e
+      obtain rfl : ix = iy := by
+        by_contra h
+        exact Set.disjoint_iff_forall_ne.mp (hα h) ⟨x, rfl⟩ ⟨y, this.symm⟩ rfl
+      rw [(α ix).isOpenEmbedding.injective this]
+    · rw [isOpenMap_sigma]
+      intro i
+      simpa [← Scheme.Hom.comp_apply] using (α i).isOpenEmbedding.isOpenMap
+  · intro x
+    have ⟨y, hy⟩ := (Scheme.IsLocallyDirected.openCover (Discrete.functor f)).covers x
+    rw [← hy]
+    refine IsIso.of_isIso_fac_right
+      (f := ((Scheme.IsLocallyDirected.openCover (Discrete.functor f)).f _).stalkMap y)
+      (h := (X.presheaf.stalkCongr (.of_eq ?_)).hom ≫ (α _).stalkMap _) ?_
+    · simp [← Scheme.Hom.comp_apply]
+    · simp [← Scheme.Hom.stalkMap_comp, Scheme.Hom.stalkMap_congr_hom _ _ (colimit.ι_desc _ _)]
 
 中文:
 引理 isOpenImmersion_sigmaDesc_aux
@@ -872,7 +888,23 @@ lemma isOpenImmersion_sigmaDesc_aux
     refine .of_continuous_injective_isOpenMap ?_ ?_ ?_
     · fun_prop
     · rintro ⟨ix, x⟩ ⟨iy, y⟩ e
-   
+      have : α ix x = α iy y := by
+        simpa [← Scheme.Hom.comp_apply] using e
+      obtain rfl : ix = iy := by
+        by_contra h
+        exact Set.disjoint_iff_forall_ne.mp (hα h) ⟨x, rfl⟩ ⟨y, this.symm⟩ rfl
+      rw [(α ix).isOpenEmbedding.injective this]
+    · rw [isOpenMap_sigma]
+      intro i
+      simpa [← Scheme.Hom.comp_apply] using (α i).isOpenEmbedding.isOpenMap
+  · intro x
+    have ⟨y, hy⟩ := (Scheme.IsLocallyDirected.openCover (Discrete.functor f)).covers x
+    rw [← hy]
+    refine IsIso.of_isIso_fac_right
+      (f := ((Scheme.IsLocallyDirected.openCover (Discrete.functor f)).f _).stalkMap y)
+      (h := (X.presheaf.stalkCongr (.of_eq ?_)).hom ≫ (α _).stalkMap _) ?_
+    · simp [← Scheme.Hom.comp_apply]
+    · simp [← Scheme.Hom.stalkMap_comp, Scheme.Hom.stalkMap_congr_hom _ _ (colimit.ι_desc _ _)]
 -/
 private lemma isOpenImmersion_sigmaDesc_aux
     {X : Scheme.{u}} (α : forall i, f i ⟶ X) [forall i, IsOpenImmersion (α i)]
@@ -919,7 +951,7 @@ lemma isOpenImmersion_sigmaDesc
     simp
   · apply isOpenImmersion_sigmaDesc_aux
     intro i j hij
-    exact
+    exact hα (fun h => hij (e.symm.injective h))
 
 中文:
 引理 isOpenImmersion_sigmaDesc
@@ -932,7 +964,7 @@ lemma isOpenImmersion_sigmaDesc
     simp
   · apply isOpenImmersion_sigmaDesc_aux
     intro i j hij
-    exact
+    exact hα (fun h => hij (e.symm.injective h))
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.comp, Sigma.desc, Sigma.hom_ext, Sigma.reindex, Small.equiv_small, convert, e.symm, e.symm.injective, e.symm.surjective, equiv_small, hom_ext, injective, isOpenImmersion_sigmaDesc_aux, reindex, surjective
 -/
@@ -963,7 +995,13 @@ lemma nonempty_isColimit_cofanMk_of
     refine isOpenImmersion_sigmaDesc _ _ (fun i j hij => ?_)
     simpa [Function.onFun_apply, disjoint_iff, Opens.ext_iff] using hdisj hij
   simp only [Cofan.nonempty_isColimit_iff_isIso_sigmaDesc (Cofan.mk S f), cofan_mk_inj, Cofan.mk_pt]
-  apply isI
+  apply isIso_of_isOpenImmersion_of_opensRange_eq_top
+  rw [eq_top_iff]
+  intro x hx
+  have : x in ⨆ i, (f i).opensRange := by rwa [hcov]
+  obtain ⟨i, y, rfl⟩ := by simpa only [Opens.iSup_mk, Opens.mem_mk, Set.mem_iUnion] using this
+  use Sigma.ι X i y
+  simp [← Scheme.Hom.comp_apply]
 
 中文:
 引理 nonempty_isColimit_cofanMk_of
@@ -973,7 +1011,13 @@ lemma nonempty_isColimit_cofanMk_of
     refine isOpenImmersion_sigmaDesc _ _ (fun i j hij => ?_)
     simpa [Function.onFun_apply, disjoint_iff, Opens.ext_iff] using hdisj hij
   simp only [Cofan.nonempty_isColimit_iff_isIso_sigmaDesc (Cofan.mk S f), cofan_mk_inj, Cofan.mk_pt]
-  apply isI
+  apply isIso_of_isOpenImmersion_of_opensRange_eq_top
+  rw [eq_top_iff]
+  intro x hx
+  have : x in ⨆ i, (f i).opensRange := by rwa [hcov]
+  obtain ⟨i, y, rfl⟩ := by simpa only [Opens.iSup_mk, Opens.mem_mk, Set.mem_iUnion] using this
+  use Sigma.ι X i y
+  simp [← Scheme.Hom.comp_apply]
 
 Depends on / 依赖: Cofan.mk, Cofan.mk_pt, Cofan.nonempty_isColimit_iff_isIso_sigmaDesc, Function, Function.onFun_apply, IsOpenImmersion, Opens.ext_iff, Opens.iSup_mk, Opens.mem_mk, Set.mem_iUnion, Sigma.desc, cofan_mk_inj, disjoint_iff, eq_top_iff, ext_iff, iSup_mk, isIso_of_isOpenImmersion_of_opensRange_eq_top, isOpenImmersion_sigmaDesc, mem_iUnion, mem_mk
 -/
@@ -1227,7 +1271,9 @@ lemma coprodMk_inl
       Scheme.forgetToTop.map coprod.inl x
   congr 2
   refine (colimit.isoColimitCocone_ι_inv_assoc ⟨_, TopCat.binaryCofanIsColimit _ _⟩ _ _).trans ?_
-  exact coprodComparison_
+  exact coprodComparison_inl Scheme.forgetToTop
+
+@[simp]
 
 中文:
 引理 coprodMk_inl
@@ -1238,7 +1284,9 @@ lemma coprodMk_inl
       Scheme.forgetToTop.map coprod.inl x
   congr 2
   refine (colimit.isoColimitCocone_ι_inv_assoc ⟨_, TopCat.binaryCofanIsColimit _ _⟩ _ _).trans ?_
-  exact coprodComparison_
+  exact coprodComparison_inl Scheme.forgetToTop
+
+@[simp]
 
 Depends on / 依赖: Scheme, Scheme.forgetToTop, Scheme.forgetToTop.map, TopCat, TopCat.binaryCofan, TopCat.binaryCofanIsColimit, binaryCofan, binaryCofanIsColimit, colimit, colimit.isoColimitCocone, colimit.isoColimitCocone_, coprod, coprod.inl, coprodComparison_inl, forgetToTop, isoColimitCocone
 -/
@@ -1264,7 +1312,7 @@ lemma coprodMk_inr
       Scheme.forgetToTop.map coprod.inr x
   congr 2
   refine (colimit.isoColimitCocone_ι_inv_assoc ⟨_, TopCat.binaryCofanIsColimit _ _⟩ _ _).trans ?_
-  exact coprodComparison_
+  exact coprodComparison_inr Scheme.forgetToTop
 
 中文:
 引理 coprodMk_inr
@@ -1275,7 +1323,7 @@ lemma coprodMk_inr
       Scheme.forgetToTop.map coprod.inr x
   congr 2
   refine (colimit.isoColimitCocone_ι_inv_assoc ⟨_, TopCat.binaryCofanIsColimit _ _⟩ _ _).trans ?_
-  exact coprodComparison_
+  exact coprodComparison_inr Scheme.forgetToTop
 
 Depends on / 依赖: Scheme, Scheme.forgetToTop, Scheme.forgetToTop.map, TopCat, TopCat.binaryCofan, TopCat.binaryCofanIsColimit, binaryCofan, binaryCofanIsColimit, colimit, colimit.isoColimitCocone, colimit.isoColimitCocone_, coprod, coprod.inr, coprodComparison_inr, forgetToTop, isoColimitCocone
 -/
@@ -1303,7 +1351,13 @@ definition coprodOpenCover.{w}
   mem₀ := by
     rw [Scheme.presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun x => x.rec (fun _ => inferInstance) (fun _ => inferInstance)⟩
-    use ((copro
+    use ((coprodMk X Y).symm x).elim (fun _ => Sum.inl .unit) (fun _ => Sum.inr .unit)
+    obtain ⟨x, rfl⟩ := (coprodMk X Y).surjective x
+    simp only [Sum.elim_inl, Sum.elim_inr, Set.mem_range]
+    rw [Homeomorph.symm_apply_apply]
+    obtain (x | x) := x
+    · simp only [Sum.elim_inl, coprodMk_inl, exists_apply_eq_apply]
+    · simp only [Sum.elim_inr, coprodMk_inr, exists_apply_eq_apply]
 
 中文:
 定义 coprodOpenCover.{w}
@@ -1314,7 +1368,13 @@ definition coprodOpenCover.{w}
   mem₀ := by
     rw [Scheme.presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun x => x.rec (fun _ => inferInstance) (fun _ => inferInstance)⟩
-    use ((copro
+    use ((coprodMk X Y).symm x).elim (fun _ => Sum.inl .unit) (fun _ => Sum.inr .unit)
+    obtain ⟨x, rfl⟩ := (coprodMk X Y).surjective x
+    simp only [Sum.elim_inl, Sum.elim_inr, Set.mem_range]
+    rw [Homeomorph.symm_apply_apply]
+    obtain (x | x) := x
+    · simp only [Sum.elim_inl, coprodMk_inl, exists_apply_eq_apply]
+    · simp only [Sum.elim_inr, coprodMk_inr, exists_apply_eq_apply]
 -/
 def coprodOpenCover.{w} : (X ⨿ Y).OpenCover where
   I₀ := PUnit.{w + 1} oplus PUnit.{w + 1}
@@ -1344,7 +1404,15 @@ lemma nonempty_isColimit_binaryCofanMk_of_isCompl
     .mk S fun j => WalkingPair.casesOn j f g
   let i : BinaryCofan.mk f g ≅ c' := Cofan.ext (Iso.refl _) (by rintro (b | b) <;> rfl)
   refine ⟨IsColimit.ofIsoColimit (Nonempty.some ?_) i.symm⟩
-  let fi (j : WalkingPair) : Walki
+  let fi (j : WalkingPair) : WalkingPair.casesOn j X Y ⟶ S := WalkingPair.casesOn j f g
+  convert! nonempty_isColimit_cofanMk_of fi _ _
+  · intro i
+    cases i <;> (simp [fi]; infer_instance)
+  · simpa [← WalkingPair.equivBool.symm.iSup_comp, iSup_bool_eq, ← codisjoint_iff] using hf.2
+  · intro i j hij
+    match i, j with
+    | .left, .right => simpa [fi] using hf.1
+    | .right, .left => simpa [fi] using hf.1.symm
 
 中文:
 引理 nonempty_isColimit_binaryCofanMk_of_isCompl
@@ -1354,7 +1422,15 @@ lemma nonempty_isColimit_binaryCofanMk_of_isCompl
     .mk S fun j => WalkingPair.casesOn j f g
   let i : BinaryCofan.mk f g ≅ c' := Cofan.ext (Iso.refl _) (by rintro (b | b) <;> rfl)
   refine ⟨IsColimit.ofIsoColimit (Nonempty.some ?_) i.symm⟩
-  let fi (j : WalkingPair) : Walki
+  let fi (j : WalkingPair) : WalkingPair.casesOn j X Y ⟶ S := WalkingPair.casesOn j f g
+  convert! nonempty_isColimit_cofanMk_of fi _ _
+  · intro i
+    cases i <;> (simp [fi]; infer_instance)
+  · simpa [← WalkingPair.equivBool.symm.iSup_comp, iSup_bool_eq, ← codisjoint_iff] using hf.2
+  · intro i j hij
+    match i, j with
+    | .left, .right => simpa [fi] using hf.1
+    | .right, .left => simpa [fi] using hf.1.symm
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.mk, Cofan.ext, IsColimit, IsColimit.ofIsoColimit, Iso.refl, Nonempty, Nonempty.some, Scheme, WalkingPair, WalkingPair.casesOn, WalkingPair.equivBool.symm.iSup_comp, casesOn, convert, equivBool, i.symm, iSup_bool_eq, iSup_comp, infer_instance, nonempty_isColimit_cofanMk_of
 -/
@@ -1388,7 +1464,10 @@ lemma isPullback_inl_inl_coprodMap
   · rintro x ⟨y, hxy⟩
     obtain ⟨(x | x), rfl⟩ := (coprodMk _ _).surjective x
     · rw [← SetLike.mem_coe]; simp -- TODO : add `Scheme.Hom.mem_opensRange`
-    · simp only [coprodMk_inr, ← Scheme.Hom.comp_apply, coprod.i
+    · simp only [coprodMk_inr, ← Scheme.Hom.comp_apply, coprod.inr_map] at hxy
+      cases Set.disjoint_iff_forall_ne.mp (isCompl_range_inl_inr _ _).1 ⟨y, rfl⟩ ⟨_, rfl⟩ hxy
+  · rintro _ ⟨x, rfl⟩
+    exact ⟨f x, by simp [← Scheme.Hom.comp_apply, -Scheme.Hom.comp_base]⟩
 
 中文:
 引理 isPullback_inl_inl_coprodMap
@@ -1399,7 +1478,10 @@ lemma isPullback_inl_inl_coprodMap
   · rintro x ⟨y, hxy⟩
     obtain ⟨(x | x), rfl⟩ := (coprodMk _ _).surjective x
     · rw [← SetLike.mem_coe]; simp -- TODO : add `Scheme.Hom.mem_opensRange`
-    · simp only [coprodMk_inr, ← Scheme.Hom.comp_apply, coprod.i
+    · simp only [coprodMk_inr, ← Scheme.Hom.comp_apply, coprod.inr_map] at hxy
+      cases Set.disjoint_iff_forall_ne.mp (isCompl_range_inl_inr _ _).1 ⟨y, rfl⟩ ⟨_, rfl⟩ hxy
+  · rintro _ ⟨x, rfl⟩
+    exact ⟨f x, by simp [← Scheme.Hom.comp_apply, -Scheme.Hom.comp_base]⟩
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isPullback, Scheme, Scheme.Hom.comp_apply, Scheme.Hom.comp_base, Scheme.Hom.mem_opensRange, Set.disjoint_iff_forall_ne.mp, SetLike, SetLike.mem_coe, comp_apply, comp_base, coprod, coprod.inr_map, coprodMk, coprodMk_inr, disjoint_iff_forall_ne, inr_map, isCompl_range_inl_inr, isPullback, le_antisymm
 -/
@@ -1451,7 +1533,19 @@ instance :
     suffices IsVanKampenColimit (BinaryCofan.mk (P := X ⨿ Y) coprod.inl coprod.inr) from
       this.of_iso (hc.uniqueUpToIso (coprodIsCoprod _ _)).symm
     refine BinaryCofan.isVanKampen_mk _ _ (fun _ _ => coprodIsCoprod _ _) _
-      (fun _ _ => pullbackI
+      (fun _ _ => pullbackIsPullback _ _) ?_ ?_
+    · intro X' Y' αX αY f h₁ h₂
+      have h₁' (x : _) := congr($h₁ x).symm
+      have h₂' (x : _) := congr($h₂ x).symm
+      dsimp at h₁ h₂ h₁' h₂'
+      refine ⟨(IsOpenImmersion.isPullback _ _ _ _ h₁.symm ?_).flip,
+        (IsOpenImmersion.isPullback _ _ _ _ h₂.symm ?_).flip⟩ <;>
+        ext x <;> obtain ⟨x | x, rfl⟩ := (coprodMk _ _).surjective x <;> simp_all
+    · dsimp
+      refine fun {Z} f => (nonempty_isColimit_binaryCofanMk_of_isCompl _ _ ?_).some
+      rw [Scheme.Hom.opensRange_pullbackFst]; rw [Scheme.Hom.opensRange_pullbackFst]
+      convert! (isCompl_range_inl_inr X Y).map (CompleteLatticeHom.setPreimage f)
+      simp [isCompl_iff, disjoint_iff, codisjoint_iff, ← TopologicalSpace.Opens.coe_inj]
 
 中文:
 实例 :
@@ -1461,7 +1555,19 @@ instance :
     suffices IsVanKampenColimit (BinaryCofan.mk (P := X ⨿ Y) coprod.inl coprod.inr) from
       this.of_iso (hc.uniqueUpToIso (coprodIsCoprod _ _)).symm
     refine BinaryCofan.isVanKampen_mk _ _ (fun _ _ => coprodIsCoprod _ _) _
-      (fun _ _ => pullbackI
+      (fun _ _ => pullbackIsPullback _ _) ?_ ?_
+    · intro X' Y' αX αY f h₁ h₂
+      have h₁' (x : _) := congr($h₁ x).symm
+      have h₂' (x : _) := congr($h₂ x).symm
+      dsimp at h₁ h₂ h₁' h₂'
+      refine ⟨(IsOpenImmersion.isPullback _ _ _ _ h₁.symm ?_).flip,
+        (IsOpenImmersion.isPullback _ _ _ _ h₂.symm ?_).flip⟩ <;>
+        ext x <;> obtain ⟨x | x, rfl⟩ := (coprodMk _ _).surjective x <;> simp_all
+    · dsimp
+      refine fun {Z} f => (nonempty_isColimit_binaryCofanMk_of_isCompl _ _ ?_).some
+      rw [Scheme.Hom.opensRange_pullbackFst]; rw [Scheme.Hom.opensRange_pullbackFst]
+      convert! (isCompl_range_inl_inr X Y).map (CompleteLatticeHom.setPreimage f)
+      simp [isCompl_iff, disjoint_iff, codisjoint_iff, ← TopologicalSpace.Opens.coe_inj]
 -/
 instance : FinitaryExtensive Scheme where
   hasFiniteCoproducts.out := inferInstance
@@ -1496,7 +1602,12 @@ definition Scheme.coprodPresheafObjIso
   haveI h₁ : ι₁ ''ᵁ ι₁ ⁻¹ᵁ U ⊔ ι₂ ''ᵁ ι₂ ⁻¹ᵁ U = U := by
     simp_rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
     rw [← inf_sup_right]; rw [(isCompl_opensRange_inl_inr X Y).sup_eq_top]; rw [top_inf_eq]
-  haveI h₂ : ι₁ ''ᵁ ι₁ 
+  haveI h₂ : ι₁ ''ᵁ ι₁ ⁻¹ᵁ U ⊓ ι₂ ''ᵁ ι₂ ⁻¹ᵁ U = ⊥ := by
+    simp_rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
+    rw [← inf_inf_distrib_right]; rw [(isCompl_opensRange_inl_inr X Y).inf_eq_bot]; rw [bot_inf_eq]
+  (X ⨿ Y).presheaf.mapIso (eqToIso h₁).op ≪≫
+    ((X ⨿ Y).sheaf.isProductOfDisjoint _ _ h₂).conePointUniqueUpToIso (limit.isLimit _) ≪≫
+    prod.mapIso (ι₁.appIso _) (ι₂.appIso _)
 
 中文:
 定义 概形.coprodPresheafObjIso
@@ -1506,7 +1617,12 @@ definition Scheme.coprodPresheafObjIso
   haveI h₁ : ι₁ ''ᵁ ι₁ ⁻¹ᵁ U ⊔ ι₂ ''ᵁ ι₂ ⁻¹ᵁ U = U := by
     simp_rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
     rw [← inf_sup_right]; rw [(isCompl_opensRange_inl_inr X Y).sup_eq_top]; rw [top_inf_eq]
-  haveI h₂ : ι₁ ''ᵁ ι₁ 
+  haveI h₂ : ι₁ ''ᵁ ι₁ ⁻¹ᵁ U ⊓ ι₂ ''ᵁ ι₂ ⁻¹ᵁ U = ⊥ := by
+    simp_rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
+    rw [← inf_inf_distrib_right]; rw [(isCompl_opensRange_inl_inr X Y).inf_eq_bot]; rw [bot_inf_eq]
+  (X ⨿ Y).presheaf.mapIso (eqToIso h₁).op ≪≫
+    ((X ⨿ Y).sheaf.isProductOfDisjoint _ _ h₂).conePointUniqueUpToIso (limit.isLimit _) ≪≫
+    prod.mapIso (ι₁.appIso _) (ι₂.appIso _)
 
 Depends on / 依赖: Scheme, coprod, coprod.inr
 -/
@@ -1659,7 +1775,8 @@ lemma coprodSpec_coprodMk
       coprodSpec, coprod.inl_desc, coprod.inr_desc]
   · change Ideal.comap _ _ = x.asIdeal.prod ⊤
     ext; simp [Ideal.prod, CommRingCat.ofHom]
-  · change Ideal.comap _ _ = Idea
+  · change Ideal.comap _ _ = Ideal.prod ⊤ x.asIdeal
+    ext; simp [Ideal.prod, CommRingCat.ofHom]
 
 中文:
 引理 coprodSpec_coprodMk
@@ -1671,7 +1788,8 @@ lemma coprodSpec_coprodMk
       coprodSpec, coprod.inl_desc, coprod.inr_desc]
   · change Ideal.comap _ _ = x.asIdeal.prod ⊤
     ext; simp [Ideal.prod, CommRingCat.ofHom]
-  · change Ideal.comap _ _ = Idea
+  · change Ideal.comap _ _ = Ideal.prod ⊤ x.asIdeal
+    ext; simp [Ideal.prod, CommRingCat.ofHom]
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Ideal.comap, Ideal.prod, PrimeSpectrum, PrimeSpectrum.ext, Scheme, Scheme.Hom.comp_apply, asIdeal, comp_apply, coprod, coprod.inl_desc, coprod.inr_desc, coprodMk_inl, coprodMk_inr, coprodSpec, inl_desc, inr_desc, x.asIdeal, x.asIdeal.prod
 -/
@@ -1719,7 +1837,17 @@ lemma isIso_stalkMap_coprodSpec
   · have := Scheme.Hom.stalkMap_comp coprod.inl (coprodSpec R S) x
     rw [← IsIso.comp_inv_eq]; rw [Scheme.Hom.stalkMap_congr_hom _ (Spec.map _) (coprodSpec_inl R S)] at this
     rw [coprodMk_inl]; rw [← this]
-    let := (RingHom.fst R S).toAl
+    let := (RingHom.fst R S).toAlgebra
+    have : IsOpenImmersion (Spec.map (CommRingCat.ofHom (RingHom.fst R S))) :=
+      IsOpenImmersion.of_isLocalization (1, 0)
+    infer_instance
+  · have := Scheme.Hom.stalkMap_comp coprod.inr (coprodSpec R S) x
+    rw [← IsIso.comp_inv_eq]; rw [Scheme.Hom.stalkMap_congr_hom _ (Spec.map _) (coprodSpec_inr R S)] at this
+    rw [coprodMk_inr]; rw [← this]
+    let := (RingHom.snd R S).toAlgebra
+    have : IsOpenImmersion (Spec.map (CommRingCat.ofHom (RingHom.snd R S))) :=
+      IsOpenImmersion.of_isLocalization (0, 1)
+    infer_instance
 
 中文:
 引理 isIso_stalkMap_coprodSpec
@@ -1729,7 +1857,17 @@ lemma isIso_stalkMap_coprodSpec
   · have := Scheme.Hom.stalkMap_comp coprod.inl (coprodSpec R S) x
     rw [← IsIso.comp_inv_eq]; rw [Scheme.Hom.stalkMap_congr_hom _ (Spec.map _) (coprodSpec_inl R S)] at this
     rw [coprodMk_inl]; rw [← this]
-    let := (RingHom.fst R S).toAl
+    let := (RingHom.fst R S).toAlgebra
+    have : IsOpenImmersion (Spec.map (CommRingCat.ofHom (RingHom.fst R S))) :=
+      IsOpenImmersion.of_isLocalization (1, 0)
+    infer_instance
+  · have := Scheme.Hom.stalkMap_comp coprod.inr (coprodSpec R S) x
+    rw [← IsIso.comp_inv_eq]; rw [Scheme.Hom.stalkMap_congr_hom _ (Spec.map _) (coprodSpec_inr R S)] at this
+    rw [coprodMk_inr]; rw [← this]
+    let := (RingHom.snd R S).toAlgebra
+    have : IsOpenImmersion (Spec.map (CommRingCat.ofHom (RingHom.snd R S))) :=
+      IsOpenImmersion.of_isLocalization (0, 1)
+    infer_instance
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsIso.co, IsIso.comp_inv_eq, IsOpenImmersion, IsOpenImmersion.of_isLocalization, RingHom, RingHom.fst, Scheme, Scheme.Hom.stalkMap_comp, Scheme.Hom.stalkMap_congr_hom, Spec.map, comp_inv_eq, coprod, coprod.inl, coprod.inr, coprodMk, coprodMk_inl, coprodSpec, coprodSpec_inl
 -/
@@ -1763,7 +1901,7 @@ instance :
   convert_to IsIso (TopCat.isoOfHomeo (X := Spec (.of <| R × S)) <|
     PrimeSpectrum.primeSpectrumProdHomeo.trans (coprodMk (Spec <| .of R) (Spec <| .of S))).inv
   · ext x; exact coprodSpec_apply R S x
-  · infer_instanc
+  · infer_instance
 
 中文:
 实例 :
@@ -1774,7 +1912,7 @@ instance :
   convert_to IsIso (TopCat.isoOfHomeo (X := Spec (.of <| R × S)) <|
     PrimeSpectrum.primeSpectrumProdHomeo.trans (coprodMk (Spec <| .of R) (Spec <| .of S))).inv
   · ext x; exact coprodSpec_apply R S x
-  · infer_instanc
+  · infer_instance
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.primeSpectrumProdHomeo.trans, TopCat, TopCat.isoOfHomeo, convert_to, coprodMk, coprodSpec_apply, infer_instance, isIso_iff_isIso_stalkMap, isIso_stalkMap_coprodSpec, isoOfHomeo, primeSpectrumProdHomeo
 -/
@@ -1839,7 +1977,7 @@ instance :
     @Function.isEmpty _ _ spec_punit_isEmpty (Scheme.Spec.mapIso
       (initialIsoIsInitial (initialOpOfTerminal CommRingCat.punitIsTerminal))).hom
   have := preservesInitial_of_iso Scheme.Spec (asIso (initial.to _))
-  exact preservesColimi
+  exact preservesColimitsOfShape_pempty_of_preservesInitial _
 
 中文:
 实例 :
@@ -1849,7 +1987,7 @@ instance :
     @Function.isEmpty _ _ spec_punit_isEmpty (Scheme.Spec.mapIso
       (initialIsoIsInitial (initialOpOfTerminal CommRingCat.punitIsTerminal))).hom
   have := preservesInitial_of_iso Scheme.Spec (asIso (initial.to _))
-  exact preservesColimi
+  exact preservesColimitsOfShape_pempty_of_preservesInitial _
 
 Depends on / 依赖: CommRingCat, CommRingCat.punitIsTerminal, Function, Function.isEmpty, IsEmpty, Scheme, Scheme.Spec, Scheme.Spec.mapIso, Scheme.Spec.obj, initial, initial.to, initialIsoIsInitial, initialOpOfTerminal, isEmpty, mapIso, preservesColimitsOfShape_pempty_of_preservesInitial, preservesInitial_of_iso, punitIsTerminal, spec_punit_isEmpty
 -/
@@ -2037,7 +2175,8 @@ lemma IsAffineOpen.iSup_of_disjoint_aux
   convert! isAffineOpen_opensRange (Sigma.desc fun i => (U i).ι)
   · ext
     simp [(sigmaMk _).symm.exists_congr_left, ← Scheme.Hom.comp_apply, Scheme.Opens.exists_toScheme]
- 
+  · have (i : _) : IsAffine _ := hU i
+    infer_instance
 
 中文:
 引理 是仿射开集.iSup_of_disjoint_aux
@@ -2048,7 +2187,8 @@ lemma IsAffineOpen.iSup_of_disjoint_aux
   convert! isAffineOpen_opensRange (Sigma.desc fun i => (U i).ι)
   · ext
     simp [(sigmaMk _).symm.exists_congr_left, ← Scheme.Hom.comp_apply, Scheme.Opens.exists_toScheme]
- 
+  · have (i : _) : IsAffine _ := hU i
+    infer_instance
 -/
 private lemma IsAffineOpen.iSup_of_disjoint_aux [Finite ι] {U : ι -> X.Opens}
     (hU : forall i, IsAffineOpen (U i)) (hU' : Pairwise (Disjoint on U)) :
@@ -2228,7 +2368,8 @@ lemma Scheme.isAffine_of_isLimit
   have (i : _) : IsIso (α.app i) := IsAffine.affine
   have : IsIso α := NatIso.isIso_of_isIso_app α
   have : c.pt ≅ Spec Γ(c.pt, ⊤) := hc.conePointUniqueUpToIso ((IsLimit.postcomposeHomEquiv
-    (asIso α).sy
+    (asIso α).symm _).symm (isLimitOfPreserves (Scheme.Γ.rightOp ⋙ Scheme.Spec) hc))
+  exact .of_isIso this.hom
 
 中文:
 引理 概形.isAffine_of_isLimit
@@ -2238,7 +2379,8 @@ lemma Scheme.isAffine_of_isLimit
   have (i : _) : IsIso (α.app i) := IsAffine.affine
   have : IsIso α := NatIso.isIso_of_isIso_app α
   have : c.pt ≅ Spec Γ(c.pt, ⊤) := hc.conePointUniqueUpToIso ((IsLimit.postcomposeHomEquiv
-    (asIso α).sy
+    (asIso α).symm _).symm (isLimitOfPreserves (Scheme.Γ.rightOp ⋙ Scheme.Spec) hc))
+  exact .of_isIso this.hom
 
 Depends on / 依赖: D.whiskerLeft, IsAffine, IsAffine.affine, IsLimit, IsLimit.postcomposeHomEquiv, NatIso, NatIso.isIso_of_isIso_app, Scheme, Scheme.Spec, SimplicialObject, SimplicialObject.Truncated.sk.fullyFaithful, Spec.adjunction.unit, Truncated, adjunction, affine, c.pt, conePointUniqueUpToIso, fullyFaithful, hc.conePointUniqueUpToIso, isIso_of_isIso_app
 -/

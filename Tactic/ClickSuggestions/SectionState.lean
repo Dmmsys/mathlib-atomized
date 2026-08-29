@@ -179,7 +179,8 @@ definition SectionState.insertResult
     if let .internal id _ := ex then
       if id == interruptExceptionId then
         return default
-    panic! s!"an error occurred when checking for d
+    panic! s!"an error occurred when checking for duplicate entries:\n{← ex.toMessageData.toString}"
+  return { results, errors }
 
 中文:
 定义 SectionState.insertResult
@@ -191,7 +192,8 @@ definition SectionState.insertResult
     if let .internal id _ := ex then
       if id == interruptExceptionId then
         return default
-    panic! s!"an error occurred when checking for d
+    panic! s!"an error occurred when checking for duplicate entries:\n{← ex.toMessageData.toString}"
+  return { results, errors }
 -/
 def SectionState.insertResult (s : SectionState α) (res : Result α)
     (isDup : α -> α -> MetaM Bool) : MetaM (SectionState α) := do
@@ -235,7 +237,20 @@ definition renderSection
     return .text ""
   let pattern := if let some head := results[0]? then head.pattern else .text ""
 let mut all := .element "div" #[] results.map (·.unfiltered)
-let mut filtered := .element "div" #[] results.filter
+let mut filtered := .element "div" #[] results.filterMap (·.filtered)
+  unless errors.isEmpty do
+    all := <div> {all} {renderErrors errors} </div>
+    filtered := <div> {filtered} {renderErrors errors} </div>
+  let suffix := match kind with
+    | .hyp => " (local hypotheses)"
+    | .currFile => " (current file)"
+    | .imported => ""
+  let header := <span> {.text s!"{tactic} ("} {pattern} {.text ")"} {.text suffix} </span>
+  if kind matches .imported then
+    return <FilterDetails summary={header} all={all} filtered={filtered} initiallyFiltered={true} />
+  else
+    -- We don't filter local results, because there aren't that many of them.
+    return <details «open»={true}> <summary> {header} </summary> {all} </details>
 
 中文:
 定义 renderSection
@@ -246,7 +261,20 @@ let mut filtered := .element "div" #[] results.filter
     return .text ""
   let pattern := if let some head := results[0]? then head.pattern else .text ""
 let mut all := .element "div" #[] results.map (·.unfiltered)
-let mut filtered := .element "div" #[] results.filter
+let mut filtered := .element "div" #[] results.filterMap (·.filtered)
+  unless errors.isEmpty do
+    all := <div> {all} {renderErrors errors} </div>
+    filtered := <div> {filtered} {renderErrors errors} </div>
+  let suffix := match kind with
+    | .hyp => " (local hypotheses)"
+    | .currFile => " (current file)"
+    | .imported => ""
+  let header := <span> {.text s!"{tactic} ("} {pattern} {.text ")"} {.text suffix} </span>
+  if kind matches .imported then
+    return <FilterDetails summary={header} all={all} filtered={filtered} initiallyFiltered={true} />
+  else
+    -- We don't filter local results, because there aren't that many of them.
+    return <details «open»={true}> <summary> {header} </summary> {all} </details>
 
 Depends on / 依赖: Id.run
 -/
@@ -294,7 +322,24 @@ definition spawnTask
     the first thing we do is check if it has been cancelled already. -/
     Core.checkInterrupted
     /- Each thread counts its own number of heartbeats, so it is important
-  
+    to use `withCurrHeartbeats` to avoid stray maxHeartbeats errors. -/
+    withCurrHeartbeats do
+      try
+        return .ok (some (← k))
+      catch ex =>
+        /- By default, we catch the errors from failed lemma applications
+        (apart from runtime exceptions, i.e. max heartbeats or max recursion depth,
+        which aren't caught by the `try`-`catch` block).
+        The `click_suggestions.debug` option allows the user to still see all errors. -/
+        if click_suggestions.debug.get (← getOptions) then
+          throw ex
+        return .ok none
+BaseIO.asTask act.catchExceptions fun ex =>
+    return .error <li>
+        {premiseHtml} failed:
+        <br/>
+        <InteractiveMessage msg={← Server.WithRpcRef.mk ex.toMessageData} />
+      </li>
 
 中文:
 定义 spawnTask
@@ -306,7 +351,24 @@ definition spawnTask
     the first thing we do is check if it has been cancelled already. -/
     Core.checkInterrupted
     /- Each thread counts its own number of heartbeats, so it is important
-  
+    to use `withCurrHeartbeats` to avoid stray maxHeartbeats errors. -/
+    withCurrHeartbeats do
+      try
+        return .ok (some (← k))
+      catch ex =>
+        /- By default, we catch the errors from failed lemma applications
+        (apart from runtime exceptions, i.e. max heartbeats or max recursion depth,
+        which aren't caught by the `try`-`catch` block).
+        The `click_suggestions.debug` option allows the user to still see all errors. -/
+        if click_suggestions.debug.get (← getOptions) then
+          throw ex
+        return .ok none
+BaseIO.asTask act.catchExceptions fun ex =>
+    return .error <li>
+        {premiseHtml} failed:
+        <br/>
+        <InteractiveMessage msg={← Server.WithRpcRef.mk ex.toMessageData} />
+      </li>
 -/
 def spawnTask {α} (premise : Premise) (k : ClickSuggestionsM α) :
 ClickSuggestionsM Task (Except Html (Option α)) := do

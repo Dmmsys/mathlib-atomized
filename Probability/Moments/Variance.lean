@@ -201,7 +201,9 @@ theorem evariance_lt_top
   rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]; rw [← ENNReal.rpow_two]
     at this
   simp only [ENNReal.toReal_ofNat, Pi.sub_apply, one_div] at this
-  rw [← ENNReal.rpow_mul]; rw [inv_mul_canc
+  rw [← ENNReal.rpow_mul]; rw [inv_mul_cancel₀ (two_ne_zero : (2 : Real) != 0)]; rw [ENNReal.rpow_one] at this
+  simp_rw [ENNReal.rpow_two] at this
+  exact this
 
 中文:
 定理 evariance_lt_top
@@ -212,7 +214,9 @@ theorem evariance_lt_top
   rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]; rw [← ENNReal.rpow_two]
     at this
   simp only [ENNReal.toReal_ofNat, Pi.sub_apply, one_div] at this
-  rw [← ENNReal.rpow_mul]; rw [inv_mul_canc
+  rw [← ENNReal.rpow_mul]; rw [inv_mul_cancel₀ (two_ne_zero : (2 : Real) != 0)]; rw [ENNReal.rpow_one] at this
+  simp_rw [ENNReal.rpow_two] at this
+  exact this
 
 Depends on / 依赖: ENNReal, ENNReal.ofNat_ne_top, ENNReal.pow_lt_top, ENNReal.rpow_mul, ENNReal.rpow_one, ENNReal.rpow_two, ENNReal.toReal_ofNat, Pi.sub_apply, eLpNorm_eq_lintegral_rpow_enorm_toReal, hX.sub, memLp_const, ofNat_ne_top, one_div, pow_lt_top, rpow_mul, rpow_one, rpow_two, simp_rw, sub_apply, toReal_ofNat
 -/
@@ -258,7 +262,11 @@ theorem evariance_eq_top
     refine ⟨by fun_prop, ?_⟩
     rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
     simp only [ENNReal.toReal_ofNat, ENNReal.rpow_two]
-    exact ENNReal.rpow_lt_to
+    exact ENNReal.rpow_lt_top_of_nonneg (by linarith) h.ne
+  refine hX ?_
+  convert! this.add (memLp_const μ[X])
+  ext ω
+  rw [Pi.add_apply]; rw [sub_add_cancel]
 
 中文:
 定理 evariance_eq_top
@@ -270,7 +278,11 @@ theorem evariance_eq_top
     refine ⟨by fun_prop, ?_⟩
     rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
     simp only [ENNReal.toReal_ofNat, ENNReal.rpow_two]
-    exact ENNReal.rpow_lt_to
+    exact ENNReal.rpow_lt_top_of_nonneg (by linarith) h.ne
+  refine hX ?_
+  convert! this.add (memLp_const μ[X])
+  ext ω
+  rw [Pi.add_apply]; rw [sub_add_cancel]
 
 Depends on / 依赖: ENNReal, ENNReal.ofNat_ne_top, ENNReal.rpow_lt_top_of_nonneg, ENNReal.rpow_two, ENNReal.toReal_ofNat, Pi.add_apply, add_apply, convert, eLpNorm_eq_lintegral_rpow_enorm_toReal, fun_prop, h.ne, lt_top_iff_ne_top, memLp_const, ofNat_ne_top, rpow_lt_top_of_nonneg, rpow_two, sub_add_cancel, this.add, toReal_ofNat, two_ne_zero
 -/
@@ -383,7 +395,7 @@ theorem ofReal_variance
 
 protected alias _root_.MeasureTheory.MemLp.evariance_lt_top := evariance_lt_top
 protected alias _root_.MeasureTheory.MemLp.evariance_ne_top := evariance_ne_top
-protected alias _root_.MeasureTheory.MemLp.ofReal_variance_eq :=
+protected alias _root_.MeasureTheory.MemLp.ofReal_variance_eq := ofReal_variance
 
 中文:
 定理 of实数_variance
@@ -394,7 +406,7 @@ protected alias _root_.MeasureTheory.MemLp.ofReal_variance_eq :=
 
 protected alias _root_.MeasureTheory.MemLp.evariance_lt_top := evariance_lt_top
 protected alias _root_.MeasureTheory.MemLp.evariance_ne_top := evariance_ne_top
-protected alias _root_.MeasureTheory.MemLp.ofReal_variance_eq :=
+protected alias _root_.MeasureTheory.MemLp.ofReal_variance_eq := ofReal_variance
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_toReal, evariance_ne_top, ofReal_toReal, variance
 -/
@@ -466,7 +478,7 @@ lemma ae_eq_integral_of_variance_eq_zero
   · exact fun _ => by positivity
   · simp_rw [sub_sq]
     exact (hX.integrable_sq.sub (((hX.integrable (by simp)).const_mul _).mul_const _)).add
-      (i
+      (integrable_const _)
 
 中文:
 引理 ae_eq_integral_of_variance_eq_zero
@@ -479,7 +491,7 @@ lemma ae_eq_integral_of_variance_eq_zero
   · exact fun _ => by positivity
   · simp_rw [sub_sq]
     exact (hX.integrable_sq.sub (((hX.integrable (by simp)).const_mul _).mul_const _)).add
-      (i
+      (integrable_const _)
 
 Depends on / 依赖: aemeasurable, const_mul, filter_upwards, hX.aemeasurable, hX.integrable, hX.integrable_sq.sub, integrable, integrable_const, integrable_sq, integral_eq_zero_iff_of_nonneg, mul_const, simp_rw, sub_sq, variance_eq_integral
 -/
@@ -791,7 +803,11 @@ lemma variance_add_const
   · have hX_int : Integrable X μ := hX_Lp.integrable one_le_two
     rw [variance_eq_integral (hX.add_const _).aemeasurable]; rw [integral_add hX_int (by fun_prop)]; rw [integral_const]; rw [variance_eq_integral hX.aemeasurable]
     simp
-  · rw [variance_of_not_memLp
+  · rw [variance_of_not_memLp (hX.add_const _), variance_of_not_memLp hX hX_Lp]
+    refine fun h_memLp => hX_Lp ?_
+    have : X = fun ω => X ω + c - c := by ext; ring
+    rw [this]
+    exact h_memLp.sub (memLp_const c)
 
 中文:
 引理 variance_add_const
@@ -801,7 +817,11 @@ lemma variance_add_const
   · have hX_int : Integrable X μ := hX_Lp.integrable one_le_two
     rw [variance_eq_integral (hX.add_const _).aemeasurable]; rw [integral_add hX_int (by fun_prop)]; rw [integral_const]; rw [variance_eq_integral hX.aemeasurable]
     simp
-  · rw [variance_of_not_memLp
+  · rw [variance_of_not_memLp (hX.add_const _), variance_of_not_memLp hX hX_Lp]
+    refine fun h_memLp => hX_Lp ?_
+    have : X = fun ω => X ω + c - c := by ext; ring
+    rw [this]
+    exact h_memLp.sub (memLp_const c)
 
 Depends on / 依赖: Integrable, add_const, aemeasurable, fun_prop, hX.add_const, hX.aemeasurable, hX_Lp, hX_Lp.integrable, hX_int, h_memLp, h_memLp.sub, integrable, integral_add, integral_const, memLp_const, one_le_two, variance_eq_integral, variance_of_not_memLp
 -/
@@ -937,7 +957,7 @@ lemma variance_add
   · ring
   · exact hY.aemeasurable
   · exact hX.aemeasurable
-  · exact hX.aemeasurable.add
+  · exact hX.aemeasurable.add hY.aemeasurable
 
 中文:
 引理 variance_add
@@ -947,7 +967,7 @@ lemma variance_add
   · ring
   · exact hY.aemeasurable
   · exact hX.aemeasurable
-  · exact hX.aemeasurable.add
+  · exact hX.aemeasurable.add hY.aemeasurable
 
 Depends on / 依赖: aemeasurable, covariance_add_left, covariance_add_right, covariance_comm, covariance_self, hX.add, hX.aemeasurable, hX.aemeasurable.add, hY.aemeasurable
 -/
@@ -1268,7 +1288,18 @@ theorem variance_le_expectation_sq
   rw [variance]; rw [evariance_eq_lintegral_ofReal]; rw [← integral_eq_lintegral_of_nonneg_ae]
   · by_cases hint : Integrable X μ; swap
     · simp only [integral_undef hint, Pi.pow_apply, sub_zero]
-
+      exact le_rfl
+    · rw [integral_undef]
+      · exact integral_nonneg fun a => sq_nonneg _
+      intro h
+      have A : MemLp (X - fun ω : Ω => μ[X]) 2 μ :=
+        (memLp_two_iff_integrable_sq (by fun_prop)).2 h
+      have B : MemLp (fun _ : Ω => μ[X]) 2 μ := memLp_const _
+      apply hX
+      convert! A.add B
+      simp
+  · exact Eventually.of_forall fun x => sq_nonneg _
+  · exact (AEMeasurable.pow_const (hm.aemeasurable.sub_const _) _).aestronglyMeasurable
 
 中文:
 定理 variance_le_expectation_sq
@@ -1280,7 +1311,18 @@ theorem variance_le_expectation_sq
   rw [variance]; rw [evariance_eq_lintegral_ofReal]; rw [← integral_eq_lintegral_of_nonneg_ae]
   · by_cases hint : Integrable X μ; swap
     · simp only [integral_undef hint, Pi.pow_apply, sub_zero]
-
+      exact le_rfl
+    · rw [integral_undef]
+      · exact integral_nonneg fun a => sq_nonneg _
+      intro h
+      have A : MemLp (X - fun ω : Ω => μ[X]) 2 μ :=
+        (memLp_two_iff_integrable_sq (by fun_prop)).2 h
+      have B : MemLp (fun _ : Ω => μ[X]) 2 μ := memLp_const _
+      apply hX
+      convert! A.add B
+      simp
+  · exact Eventually.of_forall fun x => sq_nonneg _
+  · exact (AEMeasurable.pow_const (hm.aemeasurable.sub_const _) _).aestronglyMeasurable
 
 Depends on / 依赖: Integrable, Pi.pow_apply, evariance_eq_lintegral_ofReal, fun_prop, integral_eq_lintegral_of_nonneg_ae, integral_nonneg, integral_undef, le_rfl, memLp_two_iff_integrable_sq, pow_apply, sq_nonneg, sub_le_self_iff, sub_zero, variance, variance_eq_sub
 -/
@@ -1320,7 +1362,14 @@ theorem evariance_def'
     · simp
     · simpa using hℒ.abs.integrable_sq
   · symm
-    rw [evariance_eq_top hX hℒ]; rw [ENNReal.s
+    rw [evariance_eq_top hX hℒ]; rw [ENNReal.sub_eq_top_iff]
+    refine ⟨?_, ENNReal.ofReal_ne_top⟩
+    rw [MemLp]; rw [not_and] at hℒ
+    specialize hℒ hX
+    simp only [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top, not_lt,
+      top_le_iff, ENNReal.toReal_ofNat, one_div, ENNReal.rpow_eq_top_iff, inv_lt_zero, inv_pos,
+      and_true, or_iff_not_imp_left, not_and_or, zero_lt_two] at hℒ
+    exact mod_cast hℒ fun _ => zero_le_two
 
 中文:
 定理 evariance_def'
@@ -1334,7 +1383,14 @@ theorem evariance_def'
     · simp
     · simpa using hℒ.abs.integrable_sq
   · symm
-    rw [evariance_eq_top hX hℒ]; rw [ENNReal.s
+    rw [evariance_eq_top hX hℒ]; rw [ENNReal.sub_eq_top_iff]
+    refine ⟨?_, ENNReal.ofReal_ne_top⟩
+    rw [MemLp]; rw [not_and] at hℒ
+    specialize hℒ hX
+    simp only [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top, not_lt,
+      top_le_iff, ENNReal.toReal_ofNat, one_div, ENNReal.rpow_eq_top_iff, inv_lt_zero, inv_pos,
+      and_true, or_iff_not_imp_left, not_and_or, zero_lt_two] at hℒ
+    exact mod_cast hℒ fun _ => zero_le_two
 
 Depends on / 依赖: ENNReal, ENNReal.ofNat_ne_top, ENNReal.ofReal_ne_top, ENNReal.ofReal_sub, ENNReal.sub_eq_top_iff, ENNReal.toReal_ofNat, abs.integrable_sq, eLpNorm_eq_lintegral_rpow_enorm_toReal, enorm_pow, evariance_eq_top, integrable_sq, lintegral_coe_eq_integral, not_and, not_lt, ofNat_ne_top, ofReal_ne_top, ofReal_sub, ofReal_variance, one_di, simp_rw
 -/
@@ -1370,7 +1426,12 @@ theorem meas_ge_le_evariance_div_sq
       meas_ge_le_mul_pow_eLpNorm_enorm μ two_ne_zero ENNReal.ofNat_ne_top (hX.sub B) A (by simp)
     using 1
   · norm_cast
-  rw [eLpNor
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
+  simp only [ENNReal.toReal_ofNat, one_div, Pi.sub_apply]
+  rw [div_eq_mul_inv]; rw [ENNReal.inv_pow]; rw [mul_comm]; rw [ENNReal.rpow_two]
+  congr
+  simp_rw [← ENNReal.rpow_mul, inv_mul_cancel₀ (two_ne_zero : (2 : Real) != 0), ENNReal.rpow_two,
+    ENNReal.rpow_one, evariance]
 
 中文:
 定理 meas_ge_le_evariance_div_sq
@@ -1382,7 +1443,12 @@ theorem meas_ge_le_evariance_div_sq
       meas_ge_le_mul_pow_eLpNorm_enorm μ two_ne_zero ENNReal.ofNat_ne_top (hX.sub B) A (by simp)
     using 1
   · norm_cast
-  rw [eLpNor
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal two_ne_zero ENNReal.ofNat_ne_top]
+  simp only [ENNReal.toReal_ofNat, one_div, Pi.sub_apply]
+  rw [div_eq_mul_inv]; rw [ENNReal.inv_pow]; rw [mul_comm]; rw [ENNReal.rpow_two]
+  congr
+  simp_rw [← ENNReal.rpow_mul, inv_mul_cancel₀ (two_ne_zero : (2 : Real) != 0), ENNReal.rpow_two,
+    ENNReal.rpow_one, evariance]
 
 Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.coe_eq_zero, ENNReal.inv_pow, ENNReal.ofNat_ne_top, ENNReal.rpow_two, ENNReal.toReal_ofNat, Pi.sub_apply, aestronglyMeasurable_const, coe_eq_zero, convert, div_eq_mul_inv, eLpNorm_eq_lintegral_rpow_enorm_toReal, hX.sub, inv_pow, meas_ge_le_mul_pow_eLpNorm_enorm, mul_comm, ofNat_ne_top, one_div, rpow_two
 -/
@@ -1503,7 +1569,10 @@ lemma variance_sum_pi
     rw [← variance_map]; rw [(measurePreserving_eval _ i).map_eq]
     · rw [(measurePreserving_eval _ i).map_eq]
       exact (h i).aestronglyMeasurable.aemeasurable
-    · exact Measurable.aemeas
+    · exact Measurable.aemeasurable (by fun_prop)
+  · exact fun i _ => (h i).comp_measurePreserving (measurePreserving_eval _ i)
+  · exact fun i _ j _ hij =>
+      (iIndepFun_pi fun i => (h i).aestronglyMeasurable.aemeasurable).indepFun hij
 
 中文:
 引理 variance_sum_pi
@@ -1515,7 +1584,10 @@ lemma variance_sum_pi
     rw [← variance_map]; rw [(measurePreserving_eval _ i).map_eq]
     · rw [(measurePreserving_eval _ i).map_eq]
       exact (h i).aestronglyMeasurable.aemeasurable
-    · exact Measurable.aemeas
+    · exact Measurable.aemeasurable (by fun_prop)
+  · exact fun i _ => (h i).comp_measurePreserving (measurePreserving_eval _ i)
+  · exact fun i _ j _ hij =>
+      (iIndepFun_pi fun i => (h i).aestronglyMeasurable.aemeasurable).indepFun hij
 
 Depends on / 依赖: IndepFun, IndepFun.variance_sum, Measurable, Measurable.aemeasurable, Measure, Measure.pi, aemeasurable, aestronglyMeasurable, aestronglyMeasurable.aemeasurable, comp_measurePreserving, fun_prop, iIndepFun_pi, indepFun, map_eq, measurePreserving_eval, variance_map, variance_sum
 -/
@@ -1545,7 +1617,27 @@ lemma variance_le_sub_mul_sub
   have hb : forallᵐ ω ∂μ, X ω <= b := h.mono fun ω h => h.2
   have hX_int₂ : Integrable (fun ω => -X ω ^ 2) μ :=
     (memLp_of_bounded h hX.aestronglyMeasurable 2).integrable_sq.neg
-  have hX_int₁ : Integrable (fun ω => (a + b) * X ω) μ 
+  have hX_int₁ : Integrable (fun ω => (a + b) * X ω) μ :=
+    ((integrable_const (max |a| |b|)).mono' hX.aestronglyMeasurable
+      (by filter_upwards [ha, hb] with ω using abs_le_max_abs_abs)).const_mul (a + b)
+  have h0 : 0 <= -μ[X ^ 2] + (a + b) * μ[X] - a * b :=
+    calc
+      _ <= ∫ ω, (b - X ω) * (X ω - a) ∂μ := by
+        apply integral_nonneg_of_ae
+        filter_upwards [ha, hb] with ω ha' hb'
+        exact mul_nonneg (by linarith : 0 <= b - X ω) (by linarith : 0 <= X ω - a)
+      _ = ∫ ω, -X ω ^ 2 + (a + b) * X ω - a * b ∂μ :=
+integral_congr_ae ae_of_all μ fun ω => by ring
+      _ = ∫ ω, - X ω ^ 2 + (a + b) * X ω ∂μ - ∫ _, a * b ∂μ :=
+        integral_sub (by fun_prop) (integrable_const (a * b))
+      _ = ∫ ω, - X ω ^ 2 + (a + b) * X ω ∂μ - a * b := by simp
+      _ = - μ[X ^ 2] + (a + b) * μ[X] - a * b := by
+        simp [← integral_neg, ← integral_const_mul, integral_add hX_int₂ hX_int₁]
+  calc
+    _ <= (a + b) * μ[X] - a * b - μ[X] ^ 2 := by
+      rw [variance_eq_sub (memLp_of_bounded h hX.aestronglyMeasurable 2)]
+      linarith
+    _ = (b - μ[X]) * (μ[X] - a) := by ring
 
 中文:
 引理 variance_le_sub_mul_sub
@@ -1555,7 +1647,27 @@ lemma variance_le_sub_mul_sub
   have hb : forallᵐ ω ∂μ, X ω <= b := h.mono fun ω h => h.2
   have hX_int₂ : Integrable (fun ω => -X ω ^ 2) μ :=
     (memLp_of_bounded h hX.aestronglyMeasurable 2).integrable_sq.neg
-  have hX_int₁ : Integrable (fun ω => (a + b) * X ω) μ 
+  have hX_int₁ : Integrable (fun ω => (a + b) * X ω) μ :=
+    ((integrable_const (max |a| |b|)).mono' hX.aestronglyMeasurable
+      (by filter_upwards [ha, hb] with ω using abs_le_max_abs_abs)).const_mul (a + b)
+  have h0 : 0 <= -μ[X ^ 2] + (a + b) * μ[X] - a * b :=
+    calc
+      _ <= ∫ ω, (b - X ω) * (X ω - a) ∂μ := by
+        apply integral_nonneg_of_ae
+        filter_upwards [ha, hb] with ω ha' hb'
+        exact mul_nonneg (by linarith : 0 <= b - X ω) (by linarith : 0 <= X ω - a)
+      _ = ∫ ω, -X ω ^ 2 + (a + b) * X ω - a * b ∂μ :=
+integral_congr_ae ae_of_all μ fun ω => by ring
+      _ = ∫ ω, - X ω ^ 2 + (a + b) * X ω ∂μ - ∫ _, a * b ∂μ :=
+        integral_sub (by fun_prop) (integrable_const (a * b))
+      _ = ∫ ω, - X ω ^ 2 + (a + b) * X ω ∂μ - a * b := by simp
+      _ = - μ[X ^ 2] + (a + b) * μ[X] - a * b := by
+        simp [← integral_neg, ← integral_const_mul, integral_add hX_int₂ hX_int₁]
+  calc
+    _ <= (a + b) * μ[X] - a * b - μ[X] ^ 2 := by
+      rw [variance_eq_sub (memLp_of_bounded h hX.aestronglyMeasurable 2)]
+      linarith
+    _ = (b - μ[X]) * (μ[X] - a) := by ring
 
 Depends on / 依赖: Integrable, abs_le_max_abs_abs, aestronglyMeasurable, const_mul, filter_upwards, h.mono, hX.aestronglyMeasurable, integrable_const, integrable_sq, integrable_sq.neg, memLp_of_bounded
 -/

@@ -349,7 +349,15 @@ lemma klDiv_eq_lintegral_klFun
     (f := fun x => klFun (μ.rnDeriv ν x).toReal) (μ := ν) ?_ ?_
   rotate_left
   · exact Measurable.aestronglyMeasurable (by fun_prop)
-  · exact ae_of_all _ fun _ =
+  · exact ae_of_all _ fun _ => klFun_nonneg ENNReal.toReal_nonneg
+  by_cases h_int : Integrable (llr μ ν) μ
+  · simp only [hμν, h_int, and_self, ↓reduceIte]
+    rw [ofReal_integral_eq_lintegral_ofReal]
+    · rwa [integrable_klFun_rnDeriv_iff hμν]
+    · exact ae_of_all _ fun _ => klFun_nonneg ENNReal.toReal_nonneg
+  · rw [← not_iff_not, ne_eq, Decidable.not_not] at h_int_iff
+    symm
+    simp [hμν, h_int, h_int_iff, integrable_klFun_rnDeriv_iff hμν]
 
 中文:
 引理 klDiv_eq_lintegral_klFun
@@ -361,7 +369,15 @@ lemma klDiv_eq_lintegral_klFun
     (f := fun x => klFun (μ.rnDeriv ν x).toReal) (μ := ν) ?_ ?_
   rotate_left
   · exact Measurable.aestronglyMeasurable (by fun_prop)
-  · exact ae_of_all _ fun _ =
+  · exact ae_of_all _ fun _ => klFun_nonneg ENNReal.toReal_nonneg
+  by_cases h_int : Integrable (llr μ ν) μ
+  · simp only [hμν, h_int, and_self, ↓reduceIte]
+    rw [ofReal_integral_eq_lintegral_ofReal]
+    · rwa [integrable_klFun_rnDeriv_iff hμν]
+    · exact ae_of_all _ fun _ => klFun_nonneg ENNReal.toReal_nonneg
+  · rw [← not_iff_not, ne_eq, Decidable.not_not] at h_int_iff
+    symm
+    simp [hμν, h_int, h_int_iff, integrable_klFun_rnDeriv_iff hμν]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, Integrable, Measurable, Measurable.aestronglyMeasurable, ae_o, ae_of_all, aestronglyMeasurable, and_self, fun_prop, h_int, h_int_iff, integrable_klFun_rnDeriv_iff, klDiv_eq_integral_klFun, klFun_nonneg, lintegral_ofReal_ne_top_iff_integrable, ofReal_integral_eq_lintegral_ofReal, reduceIte, rnDeriv, rotate_left
 -/
@@ -498,7 +514,7 @@ lemma toReal_klDiv_eq_integral_klFun
     exact integral_nonneg fun _ => klFun_nonneg ENNReal.toReal_nonneg
   · rw [integral_undef]
     · rw [klDiv_of_not_integrable h_int, ENNReal.toReal_top]
-    · rwa [integrable_klF
+    · rwa [integrable_klFun_rnDeriv_iff h]
 
 中文:
 引理 to实数_klDiv_eq_integral_klFun
@@ -509,7 +525,7 @@ lemma toReal_klDiv_eq_integral_klFun
     exact integral_nonneg fun _ => klFun_nonneg ENNReal.toReal_nonneg
   · rw [integral_undef]
     · rw [klDiv_of_not_integrable h_int, ENNReal.toReal_top]
-    · rwa [integrable_klF
+    · rwa [integrable_klFun_rnDeriv_iff h]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, ENNReal.toReal_ofReal, ENNReal.toReal_top, Integrable, h_int, if_pos, integrable_klFun_rnDeriv_iff, integral_nonneg, integral_undef, klDiv_eq_integral_klFun, klDiv_of_not_integrable, klFun_nonneg, toReal_nonneg, toReal_ofReal, toReal_top
 -/
@@ -537,7 +553,11 @@ lemma toReal_klDiv_smul_left
   · refine Integrable.smul_measure_nnreal ?_
     rw [integrable_congr h_llr]
     fun_prop
-  simp only [integral_smul
+  simp only [integral_smul_nnreal_measure, measureReal_nnreal_smul_apply]
+  rw [integral_congr_ae h_llr]; rw [integral_add h_int (integrable_const _)]
+  have h_smul (a : Real) : c • a = c * a := rfl
+  simp [h_smul]
+  ring
 
 中文:
 引理 to实数_klDiv_smul_left
@@ -551,7 +571,11 @@ lemma toReal_klDiv_smul_left
   · refine Integrable.smul_measure_nnreal ?_
     rw [integrable_congr h_llr]
     fun_prop
-  simp only [integral_smul
+  simp only [integral_smul_nnreal_measure, measureReal_nnreal_smul_apply]
+  rw [integral_congr_ae h_llr]; rw [integral_add h_int (integrable_const _)]
+  have h_smul (a : Real) : c • a = c * a := rfl
+  simp [h_smul]
+  ring
 
 Depends on / 依赖: Integrable, Integrable.smul_measure_nnreal, fun_prop, h_int, h_llr, h_smul, integrable_congr, integrable_const, integral_add, integral_congr_ae, integral_smul_nnreal_measure, llr_smul_nnreal_left, measureReal_def, measureReal_nnreal_smul_apply, smul_left, smul_measure_nnreal, toReal_klDiv
 -/
@@ -584,7 +608,20 @@ lemma toReal_klDiv_smul_right_eq_smul_left
     rcases eq_zero_or_neZero μ with rfl | hμ <;> simp
   have h_llr_left := llr_smul_nnreal_left hμν c⁻¹ (by simpa)
   have h_llr_right := llr_smul_nnreal_right hμν c (by simpa)
-  rw [toReal_kl
+  rw [toReal_klDiv]; rw [toReal_klDiv]
+  rotate_left
+  · exact hμν.smul_left _
+  · refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr h_llr_left]
+    fun_prop
+  · exact hμν.smul_right (by simpa)
+  · rw [integrable_congr h_llr_right]
+    fun_prop
+  have h_smul (c : Real>=0) (a : Real) : c • a = c * a := rfl
+  simp only [measureReal_nnreal_smul_apply, integral_smul_nnreal_measure, h_smul, NNReal.coe_inv]
+  have h_llr_smul_inv := llr_smul_inv_left_eq_smul_right hμν c (by simpa) (by simp)
+  simp only [← ENNReal.coe_inv hc, Measure.coe_nnreal_smul] at h_llr_smul_inv
+  rw [integral_congr_ae h_llr_smul_inv]; rw [mul_sub]; rw [mul_add]; rw [mul_inv_cancel_left₀ (by simpa)]; rw [mul_inv_cancel_left₀ (by simpa)]
 
 中文:
 引理 to实数_klDiv_smul_right_eq_smul_left
@@ -595,7 +632,20 @@ lemma toReal_klDiv_smul_right_eq_smul_left
     rcases eq_zero_or_neZero μ with rfl | hμ <;> simp
   have h_llr_left := llr_smul_nnreal_left hμν c⁻¹ (by simpa)
   have h_llr_right := llr_smul_nnreal_right hμν c (by simpa)
-  rw [toReal_kl
+  rw [toReal_klDiv]; rw [toReal_klDiv]
+  rotate_left
+  · exact hμν.smul_left _
+  · refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr h_llr_left]
+    fun_prop
+  · exact hμν.smul_right (by simpa)
+  · rw [integrable_congr h_llr_right]
+    fun_prop
+  have h_smul (c : Real>=0) (a : Real) : c • a = c * a := rfl
+  simp only [measureReal_nnreal_smul_apply, integral_smul_nnreal_measure, h_smul, NNReal.coe_inv]
+  have h_llr_smul_inv := llr_smul_inv_left_eq_smul_right hμν c (by simpa) (by simp)
+  simp only [← ENNReal.coe_inv hc, Measure.coe_nnreal_smul] at h_llr_smul_inv
+  rw [integral_congr_ae h_llr_smul_inv]; rw [mul_sub]; rw [mul_add]; rw [mul_inv_cancel_left₀ (by simpa)]; rw [mul_inv_cancel_left₀ (by simpa)]
 
 Depends on / 依赖: Integrable, Integrable.smul_measure_nnreal, NNReal, NNReal.coe_zero, coe_zero, eq_zero_or_neZero, fun_prop, h_llr_left, h_llr_right, integrable_congr, inv_zero, klDiv_zero_left, llr_smul_nnreal_left, llr_smul_nnreal_right, rotate_left, smul_left, smul_measure_nnreal, smul_right, toReal_klDiv, zero_mul
 -/
@@ -704,7 +754,43 @@ lemma klDiv_smul_right_eq_smul_left
   have hν_smul : ν = c⁻¹ • (c • ν) := by rw [smul_smul, inv_mul_cancel₀ hc, one_smul]
   by_cases hμν : μ ≪ ν
   swap
-  · rw [klDiv_of_not_ac, klDiv_of_not_ac, ENNReal.
+  · rw [klDiv_of_not_ac, klDiv_of_not_ac, ENNReal.mul_top hc']
+    · refine fun h_contra => hμν ?_
+      rw [hμ_smul]
+      exact h_contra.smul_left _
+    · refine fun h_contra => hμν ?_
+      rw [hν_smul]
+      exact h_contra.smul_right (by simpa)
+  have hμν_right := hμν.smul_right hc'
+  simp only [Measure.coe_nnreal_smul] at hμν_right
+  by_cases h_int : Integrable (llr μ ν) μ
+  swap
+  · rw [klDiv_of_not_integrable, klDiv_of_not_integrable, ENNReal.mul_top hc']
+    · refine fun h_contra => h_int ?_
+      rw [hμ_smul]
+      refine Integrable.smul_measure_nnreal ?_
+      rw [integrable_congr (llr_smul_nnreal_left (hμν.smul_left _) c hc)]
+      fun_prop
+    · refine fun h_contra => h_int ?_
+      rw [hν_smul]
+      have : IsFiniteMeasure ((c : Real>=0∞) • ν) := by
+        simp only [Measure.coe_nnreal_smul]
+        infer_instance
+      have h := llr_smul_nnreal_right (hμν.smul_right hc') c⁻¹ (by simpa)
+      simp only [Measure.coe_nnreal_smul, NNReal.coe_inv, log_inv, sub_neg_eq_add] at h
+      rw [integrable_congr h]
+      fun_prop
+  have h_int_left : Integrable (llr (c⁻¹ • μ) ν) (c⁻¹ • μ) := by
+    refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr (llr_smul_nnreal_left hμν c⁻¹ (by simpa))]
+    fun_prop
+  have h_int_right : Integrable (llr μ (c • ν)) μ := by
+    rw [integrable_congr (llr_smul_nnreal_right hμν c (by simpa))]
+    fun_prop
+  rw [← ENNReal.ofReal_toReal (klDiv_ne_top hμν_right h_int_right)]; rw [toReal_klDiv_smul_right_eq_smul_left hμν h_int c]
+  simp only [NNReal.zero_le_coe, ENNReal.ofReal_mul, ENNReal.ofReal_coe_nnreal]
+  rw [ENNReal.ofReal_toReal]
+  exact klDiv_ne_top (hμν.smul_left _) h_int_left
 
 中文:
 引理 klDiv_smul_right_eq_smul_left
@@ -715,7 +801,43 @@ lemma klDiv_smul_right_eq_smul_left
   have hν_smul : ν = c⁻¹ • (c • ν) := by rw [smul_smul, inv_mul_cancel₀ hc, one_smul]
   by_cases hμν : μ ≪ ν
   swap
-  · rw [klDiv_of_not_ac, klDiv_of_not_ac, ENNReal.
+  · rw [klDiv_of_not_ac, klDiv_of_not_ac, ENNReal.mul_top hc']
+    · refine fun h_contra => hμν ?_
+      rw [hμ_smul]
+      exact h_contra.smul_left _
+    · refine fun h_contra => hμν ?_
+      rw [hν_smul]
+      exact h_contra.smul_right (by simpa)
+  have hμν_right := hμν.smul_right hc'
+  simp only [Measure.coe_nnreal_smul] at hμν_right
+  by_cases h_int : Integrable (llr μ ν) μ
+  swap
+  · rw [klDiv_of_not_integrable, klDiv_of_not_integrable, ENNReal.mul_top hc']
+    · refine fun h_contra => h_int ?_
+      rw [hμ_smul]
+      refine Integrable.smul_measure_nnreal ?_
+      rw [integrable_congr (llr_smul_nnreal_left (hμν.smul_left _) c hc)]
+      fun_prop
+    · refine fun h_contra => h_int ?_
+      rw [hν_smul]
+      have : IsFiniteMeasure ((c : Real>=0∞) • ν) := by
+        simp only [Measure.coe_nnreal_smul]
+        infer_instance
+      have h := llr_smul_nnreal_right (hμν.smul_right hc') c⁻¹ (by simpa)
+      simp only [Measure.coe_nnreal_smul, NNReal.coe_inv, log_inv, sub_neg_eq_add] at h
+      rw [integrable_congr h]
+      fun_prop
+  have h_int_left : Integrable (llr (c⁻¹ • μ) ν) (c⁻¹ • μ) := by
+    refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr (llr_smul_nnreal_left hμν c⁻¹ (by simpa))]
+    fun_prop
+  have h_int_right : Integrable (llr μ (c • ν)) μ := by
+    rw [integrable_congr (llr_smul_nnreal_right hμν c (by simpa))]
+    fun_prop
+  rw [← ENNReal.ofReal_toReal (klDiv_ne_top hμν_right h_int_right)]; rw [toReal_klDiv_smul_right_eq_smul_left hμν h_int c]
+  simp only [NNReal.zero_le_coe, ENNReal.ofReal_mul, ENNReal.ofReal_coe_nnreal]
+  rw [ENNReal.ofReal_toReal]
+  exact klDiv_ne_top (hμν.smul_left _) h_int_left
 
 Depends on / 依赖: ENNReal, ENNReal.mul_top, h_contra, h_contra.smul_left, h_contra.smul_right, klDiv_of_not_ac, mul_top, one_smul, smul_left, smul_right, smul_smul
 -/
@@ -779,7 +901,23 @@ lemma klDiv_smul_same
   by_cases hμν : μ ≪ ν
   swap
   · rw [klDiv_of_not_ac hμν, klDiv_of_not_ac, ENNReal.mul_top hc']
-   
+    refine fun h_contra => hμν ?_
+    rw [hμ_smul μ]; rw [hμ_smul ν]
+    exact h_contra.smul _
+  by_cases h_int : Integrable (llr μ ν) μ
+  swap
+  · rw [klDiv_of_not_integrable h_int, klDiv_of_not_integrable, ENNReal.mul_top hc']
+    refine fun h_contra => h_int ?_
+    rw [hμ_smul μ]; rw [hμ_smul ν]
+    refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr (llr_smul_nnreal_same (hμν.smul c) c⁻¹ (by simpa))]
+    fun_prop
+  rw [← ENNReal.ofReal_toReal (klDiv_ne_top (hμν.smul c) _)]; rw [← ENNReal.ofReal_toReal (klDiv_ne_top hμν h_int)]
+  swap
+  · refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr (llr_smul_nnreal_same hμν c hc)]
+    fun_prop
+  simp [toReal_klDiv_smul_same hμν h_int]
 
 中文:
 引理 klDiv_smul_same
@@ -793,7 +931,23 @@ lemma klDiv_smul_same
   by_cases hμν : μ ≪ ν
   swap
   · rw [klDiv_of_not_ac hμν, klDiv_of_not_ac, ENNReal.mul_top hc']
-   
+    refine fun h_contra => hμν ?_
+    rw [hμ_smul μ]; rw [hμ_smul ν]
+    exact h_contra.smul _
+  by_cases h_int : Integrable (llr μ ν) μ
+  swap
+  · rw [klDiv_of_not_integrable h_int, klDiv_of_not_integrable, ENNReal.mul_top hc']
+    refine fun h_contra => h_int ?_
+    rw [hμ_smul μ]; rw [hμ_smul ν]
+    refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr (llr_smul_nnreal_same (hμν.smul c) c⁻¹ (by simpa))]
+    fun_prop
+  rw [← ENNReal.ofReal_toReal (klDiv_ne_top (hμν.smul c) _)]; rw [← ENNReal.ofReal_toReal (klDiv_ne_top hμν h_int)]
+  swap
+  · refine Integrable.smul_measure_nnreal ?_
+    rw [integrable_congr (llr_smul_nnreal_same hμν c hc)]
+    fun_prop
+  simp [toReal_klDiv_smul_same hμν h_int]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_top, Integrable, Measure, h_contra, h_contra.smul, h_int, klDiv_of_not_ac, klDiv_of_not_integrable, mul_top, one_smul, smul_smul
 -/
@@ -845,7 +999,13 @@ lemma integral_llr_add_mul_log_nonneg
   have : NeZero ν := ⟨hν⟩
   let ν' := (ν univ)⁻¹ • ν
   have hμν' : μ ≪ ν' := hμν.trans (Measure.absolutelyContinuous_smul (by simp))
-  have h
+  have h := integral_llr_add_sub_measure_univ_nonneg hμν' ?_
+  swap
+  · rw [integrable_congr (llr_smul_right hμν (ν univ)⁻¹ (by simp) (by simp [hν]))]
+    exact h_int.sub (integrable_const _)
+  rw [integral_congr_ae (llr_smul_right hμν (ν univ)⁻¹ (by simp) (by simp [hν])),
+    integral_sub h_int (integrable_const _), integral_const, smul_eq_mul] at h
+  simpa using! h
 
 中文:
 引理 integral_llr_add_mul_log_nonneg
@@ -860,7 +1020,13 @@ lemma integral_llr_add_mul_log_nonneg
   have : NeZero ν := ⟨hν⟩
   let ν' := (ν univ)⁻¹ • ν
   have hμν' : μ ≪ ν' := hμν.trans (Measure.absolutelyContinuous_smul (by simp))
-  have h
+  have h := integral_llr_add_sub_measure_univ_nonneg hμν' ?_
+  swap
+  · rw [integrable_congr (llr_smul_right hμν (ν univ)⁻¹ (by simp) (by simp [hν]))]
+    exact h_int.sub (integrable_const _)
+  rw [integral_congr_ae (llr_smul_right hμν (ν univ)⁻¹ (by simp) (by simp [hν])),
+    integral_sub h_int (integrable_const _), integral_const, smul_eq_mul] at h
+  simpa using! h
 
 Depends on / 依赖: Measure, Measure.absolutelyContinuous_smul, Measure.absolutelyContinuous_zero_iff.mp, NeZero, absolutelyContinuous_smul, absolutelyContinuous_zero_iff, absurd, h_int, h_int.sub, integrable_congr, integrable_const, integral_congr_ae, integral_llr_add_sub_measure_univ_nonneg, llr_smul_right
 -/
@@ -894,7 +1060,7 @@ lemma mul_klFun_le_toReal_klDiv
   _ <= ∫ x, klFun (μ.rnDeriv ν x).toReal ∂ν := by
     refine mul_le_integral_rnDeriv_of_ac convexOn_klFun continuous_klFun.continuousWithinAt ?_ hμν
     rwa [integrable_klFun_rnDeriv_iff hμν]
-  _ = (klDiv μ ν).toReal := by rw [toReal_klDiv_eq
+  _ = (klDiv μ ν).toReal := by rw [toReal_klDiv_eq_integral_klFun hμν]
 
 中文:
 引理 mul_klFun_le_to实数_klDiv
@@ -904,7 +1070,7 @@ lemma mul_klFun_le_toReal_klDiv
   _ <= ∫ x, klFun (μ.rnDeriv ν x).toReal ∂ν := by
     refine mul_le_integral_rnDeriv_of_ac convexOn_klFun continuous_klFun.continuousWithinAt ?_ hμν
     rwa [integrable_klFun_rnDeriv_iff hμν]
-  _ = (klDiv μ ν).toReal := by rw [toReal_klDiv_eq
+  _ = (klDiv μ ν).toReal := by rw [toReal_klDiv_eq_integral_klFun hμν]
 
 Depends on / 依赖: continuousWithinAt, continuous_klFun, continuous_klFun.continuousWithinAt, convexOn_klFun, integrable_klFun_rnDeriv_iff, mul_le_integral_rnDeriv_of_ac, rnDeriv, toReal, toReal_klDiv_eq_integral_klFun
 -/
@@ -930,7 +1096,9 @@ lemma mul_log_le_toReal_klDiv
     rw [hν] at hμν
     exact Measure.absolutelyContinuous_zero_iff.mp hμν
   refine (le_of_eq ?_).trans (mul_klFun_le_toReal_klDiv hμν h_int)
-  have : ν.real univ * (μ.real univ / ν.real univ) = μ.re
+  have : ν.real univ * (μ.real univ / ν.real univ) = μ.real univ := by
+    rw [mul_div_cancel₀]; simp [ENNReal.toReal_eq_zero_iff, hν, measureReal_def]
+  rw [klFun]; rw [mul_sub]; rw [mul_add]; rw [mul_one]; rw [← mul_assoc]; rw [this]
 
 中文:
 引理 mul_log_le_to实数_klDiv
@@ -943,7 +1111,9 @@ lemma mul_log_le_toReal_klDiv
     rw [hν] at hμν
     exact Measure.absolutelyContinuous_zero_iff.mp hμν
   refine (le_of_eq ?_).trans (mul_klFun_le_toReal_klDiv hμν h_int)
-  have : ν.real univ * (μ.real univ / ν.real univ) = μ.re
+  have : ν.real univ * (μ.real univ / ν.real univ) = μ.real univ := by
+    rw [mul_div_cancel₀]; simp [ENNReal.toReal_eq_zero_iff, hν, measureReal_def]
+  rw [klFun]; rw [mul_sub]; rw [mul_add]; rw [mul_one]; rw [← mul_assoc]; rw [this]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_eq_zero_iff, Measure, Measure.absolutelyContinuous_zero_iff.mp, absolutelyContinuous_zero_iff, absurd, h_int, le_of_eq, measureReal_def, mul_add, mul_assoc, mul_klFun_le_toReal_klDiv, mul_one, mul_sub, toReal_eq_zero_iff
 -/
@@ -1019,7 +1189,10 @@ lemma klDiv_eq_zero_iff
   rw [klDiv_ne_top_iff] at h_ne
   rw [klDiv_eq_lintegral_klFun]; rw [if_pos h_ne.1]; rw [lintegral_eq_zero_iff (by fun_prop)] at h
   refine (Measure.rnDeriv_eq_one_iff_eq h_ne.1).mp ?_
-  filter_upwards [
+  filter_upwards [h] with x hx
+  simp only [Pi.zero_apply, ENNReal.ofReal_eq_zero] at hx
+  have hx' : klFun (μ.rnDeriv ν x).toReal = 0 := le_antisymm hx (klFun_nonneg ENNReal.toReal_nonneg)
+  rwa [klFun_eq_zero_iff ENNReal.toReal_nonneg, ENNReal.toReal_eq_one_iff] at hx'
 
 中文:
 引理 klDiv_eq_zero_iff
@@ -1030,7 +1203,10 @@ lemma klDiv_eq_zero_iff
   rw [klDiv_ne_top_iff] at h_ne
   rw [klDiv_eq_lintegral_klFun]; rw [if_pos h_ne.1]; rw [lintegral_eq_zero_iff (by fun_prop)] at h
   refine (Measure.rnDeriv_eq_one_iff_eq h_ne.1).mp ?_
-  filter_upwards [
+  filter_upwards [h] with x hx
+  simp only [Pi.zero_apply, ENNReal.ofReal_eq_zero] at hx
+  have hx' : klFun (μ.rnDeriv ν x).toReal = 0 := le_antisymm hx (klFun_nonneg ENNReal.toReal_nonneg)
+  rwa [klFun_eq_zero_iff ENNReal.toReal_nonneg, ENNReal.toReal_eq_one_iff] at hx'
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_eq_zero, ENNReal.toReal_nonneg, Measure, Measure.rnDeriv_eq_one_iff_eq, Pi.zero_apply, filter_upwards, fun_prop, h_ne, if_pos, klDiv_eq_lintegral_klFun, klDiv_ne_top_iff, klDiv_self, klFun_eq_zero_iff, klFun_nonneg, le_antisymm, lintegral_eq_zero_iff, ofReal_eq_zero, rnDeriv, rnDeriv_eq_one_iff_eq
 -/

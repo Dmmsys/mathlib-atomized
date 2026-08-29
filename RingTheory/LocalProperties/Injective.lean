@@ -47,7 +47,18 @@ theorem Module.injective_of_isLocalizedModule
   simp only [← Baer.iff_injective, Module.Baer.iff_surjective] at MB ⊢
   intro Iₛ g
   obtain ⟨I, rfl⟩ : exists I, .localized' Rₛ S (Algebra.linearMap R Rₛ) I = Iₛ :=
-    ⟨Iₛ.comap (algebraMap R Rₛ), by simp [Ideal.localized'_eq_map, IsLocalization.map
+    ⟨Iₛ.comap (algebraMap R Rₛ), by simp [Ideal.localized'_eq_map, IsLocalization.map_under S]⟩
+  have : FinitePresentation R I := finitePresentation_of_finite R I
+  obtain ⟨⟨g', a⟩, e : a.1 • g = _⟩ := surj S (mapExtendScalars S (I.toLocalized' _ _ _) f Rₛ) g
+  obtain ⟨g', rfl⟩ := MB I g'
+  refine ⟨IsLocalization.mk' Rₛ 1 a • mapExtendScalars S (Algebra.linearMap _ _) f _ g', ?_⟩
+  apply ((Module.End.isUnit_iff _).mp ((IsLocalization.map_units Rₛ a).map
+    (algebraMap _ (Module.End Rₛ _)))).1
+  simp_rw [algebraMap_end_apply, map_smul, ← mul_smul, algebraMap_smul, IsLocalization.mk'_spec', e]
+  apply LinearMap.restrictScalars_injective R
+  refine IsLocalizedModule.linearMap_ext S (I.toLocalized' Rₛ S (Algebra.linearMap R Rₛ)) f ?_
+  ext
+  simp [-Algebra.linearMap_apply]
 
 中文:
 定理 模.injective_of_isLocalizedModule
@@ -57,7 +68,18 @@ theorem Module.injective_of_isLocalizedModule
   simp only [← Baer.iff_injective, Module.Baer.iff_surjective] at MB ⊢
   intro Iₛ g
   obtain ⟨I, rfl⟩ : exists I, .localized' Rₛ S (Algebra.linearMap R Rₛ) I = Iₛ :=
-    ⟨Iₛ.comap (algebraMap R Rₛ), by simp [Ideal.localized'_eq_map, IsLocalization.map
+    ⟨Iₛ.comap (algebraMap R Rₛ), by simp [Ideal.localized'_eq_map, IsLocalization.map_under S]⟩
+  have : FinitePresentation R I := finitePresentation_of_finite R I
+  obtain ⟨⟨g', a⟩, e : a.1 • g = _⟩ := surj S (mapExtendScalars S (I.toLocalized' _ _ _) f Rₛ) g
+  obtain ⟨g', rfl⟩ := MB I g'
+  refine ⟨IsLocalization.mk' Rₛ 1 a • mapExtendScalars S (Algebra.linearMap _ _) f _ g', ?_⟩
+  apply ((Module.End.isUnit_iff _).mp ((IsLocalization.map_units Rₛ a).map
+    (algebraMap _ (Module.End Rₛ _)))).1
+  simp_rw [algebraMap_end_apply, map_smul, ← mul_smul, algebraMap_smul, IsLocalization.mk'_spec', e]
+  apply LinearMap.restrictScalars_injective R
+  refine IsLocalizedModule.linearMap_ext S (I.toLocalized' Rₛ S (Algebra.linearMap R Rₛ)) f ?_
+  ext
+  simp [-Algebra.linearMap_apply]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Baer.iff_injective, Baer.of_injective, FinitePresentation, I.toLocalized, Ideal.localized, IsLocalization, IsLocalization.map_under, Module, Module.Baer.iff_surjective, _eq_map, algebraMap, finitePresentation_of_finite, iff_injective, iff_surjective, linearMap, localized, mapExtendScalars, map_under
 -/
@@ -97,7 +119,28 @@ theorem Module.injective_of_localization_maximal
   apply surjective_of_localized_maximal _ (fun m _ => ?_)
   let Rₘ := Localization.AtPrime m
   let Mₘ := LocalizedModule m.primeCompl M
-  let f := LocalizedModule.m
+  let f := LocalizedModule.mkLinearMap m.primeCompl M
+  let h : R ->ₗ[R] Rₘ := Algebra.linearMap R Rₘ
+  let Iₘ : Ideal Rₘ := Submodule.localized' Rₘ m.primeCompl h I
+  let g : I ->ₗ[R] Iₘ := I.toLocalized' Rₘ m.primeCompl h
+  let gM := IsLocalizedModule.mapExtendScalars m.primeCompl g f Rₘ
+  let hM := IsLocalizedModule.mapExtendScalars m.primeCompl h f Rₘ
+  have eq'' : Iₘ.subtype.restrictScalars R = IsLocalizedModule.map m.primeCompl g h I.subtype :=
+    IsLocalizedModule.ext m.primeCompl g (IsLocalizedModule.map_units h) (by ext; simp [g, h, Iₘ])
+  have eq' : (Iₘ.subtype.lcomp Rₘ Mₘ).restrictScalars R =
+    IsLocalizedModule.map m.primeCompl hM gM (I.subtype.lcomp R M) :=
+IsLocalizedModule.ext m.primeCompl hM (IsLocalizedModule.map_units gM) LinearMap.ext
+      fun l => LinearMap.restrictScalars_injective R (IsLocalizedModule.ext m.primeCompl g
+        (IsLocalizedModule.map_units f) (by ext; simp +zetaDelta [-Algebra.linearMap_apply]))
+  have eq : Iₘ.subtype.lcomp Rₘ Mₘ = IsLocalizedModule.mapExtendScalars m.primeCompl hM gM Rₘ
+    (I.subtype.lcomp R M) := by
+    simp [IsLocalizedModule.mapExtendScalars, ← eq']
+  have MB : Baer Rₘ Mₘ := Baer.of_injective (H m ‹_›)
+  have surj : Function.Surjective (LinearMap.lcomp Rₘ Mₘ (Submodule.subtype Iₘ)) :=
+    Baer.iff_surjective.mp MB Iₘ
+  rw [eq] at surj
+  rw [← LinearMap.coe_restrictScalars (R := R)]; rw [LocalizedModule.restrictScalars_map_eq m.primeCompl hM gM]
+  simpa using! surj
 
 中文:
 定理 模.injective_of_localization_maximal
@@ -109,7 +152,28 @@ theorem Module.injective_of_localization_maximal
   apply surjective_of_localized_maximal _ (fun m _ => ?_)
   let Rₘ := Localization.AtPrime m
   let Mₘ := LocalizedModule m.primeCompl M
-  let f := LocalizedModule.m
+  let f := LocalizedModule.mkLinearMap m.primeCompl M
+  let h : R ->ₗ[R] Rₘ := Algebra.linearMap R Rₘ
+  let Iₘ : Ideal Rₘ := Submodule.localized' Rₘ m.primeCompl h I
+  let g : I ->ₗ[R] Iₘ := I.toLocalized' Rₘ m.primeCompl h
+  let gM := IsLocalizedModule.mapExtendScalars m.primeCompl g f Rₘ
+  let hM := IsLocalizedModule.mapExtendScalars m.primeCompl h f Rₘ
+  have eq'' : Iₘ.subtype.restrictScalars R = IsLocalizedModule.map m.primeCompl g h I.subtype :=
+    IsLocalizedModule.ext m.primeCompl g (IsLocalizedModule.map_units h) (by ext; simp [g, h, Iₘ])
+  have eq' : (Iₘ.subtype.lcomp Rₘ Mₘ).restrictScalars R =
+    IsLocalizedModule.map m.primeCompl hM gM (I.subtype.lcomp R M) :=
+IsLocalizedModule.ext m.primeCompl hM (IsLocalizedModule.map_units gM) LinearMap.ext
+      fun l => LinearMap.restrictScalars_injective R (IsLocalizedModule.ext m.primeCompl g
+        (IsLocalizedModule.map_units f) (by ext; simp +zetaDelta [-Algebra.linearMap_apply]))
+  have eq : Iₘ.subtype.lcomp Rₘ Mₘ = IsLocalizedModule.mapExtendScalars m.primeCompl hM gM Rₘ
+    (I.subtype.lcomp R M) := by
+    simp [IsLocalizedModule.mapExtendScalars, ← eq']
+  have MB : Baer Rₘ Mₘ := Baer.of_injective (H m ‹_›)
+  have surj : Function.Surjective (LinearMap.lcomp Rₘ Mₘ (Submodule.subtype Iₘ)) :=
+    Baer.iff_surjective.mp MB Iₘ
+  rw [eq] at surj
+  rw [← LinearMap.coe_restrictScalars (R := R)]; rw [LocalizedModule.restrictScalars_map_eq m.primeCompl hM gM]
+  simpa using! surj
 
 Depends on / 依赖: Algebra, Algebra.linearMap, AtPrime, Baer.iff_injective, Baer.iff_surjective, FinitePresentation, I.toLocalized, IsLocalizedMod, Localization, Localization.AtPrime, LocalizedModule, LocalizedModule.mkLinearMap, Submodule, Submodule.localized, finitePresentation_of_finite, iff_injective, iff_surjective, linearMap, localized, m.primeCompl
 -/
@@ -179,7 +243,15 @@ theorem Module.injective_of_localization_maximal'
   refine Module.Injective.of_ringEquiv (M := Mₚ P)
     (IsLocalization.algEquiv P.primeCompl (Rₚ P) (Localization.AtPrime P)).toRingEquiv
     { __ := IsLocalizedModule.linearEquiv P.primeCompl (f P)
-        (LocalizedModule.mkLinearMap
+        (LocalizedModule.mkLinearMap P.primeCompl M)
+      map_smul' := ?_ }
+  · intro r m
+    obtain ⟨r, s, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl r
+    apply ((Module.End.isUnit_iff _).mp
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap P.primeCompl M) s)).1
+    dsimp
+    simp only [← map_smul, ← smul_assoc, IsLocalization.smul_mk'_self, algebraMap_smul,
+      IsLocalization.map_id_mk']
 
 中文:
 定理 模.injective_of_localization_maximal'
@@ -190,7 +262,15 @@ theorem Module.injective_of_localization_maximal'
   refine Module.Injective.of_ringEquiv (M := Mₚ P)
     (IsLocalization.algEquiv P.primeCompl (Rₚ P) (Localization.AtPrime P)).toRingEquiv
     { __ := IsLocalizedModule.linearEquiv P.primeCompl (f P)
-        (LocalizedModule.mkLinearMap
+        (LocalizedModule.mkLinearMap P.primeCompl M)
+      map_smul' := ?_ }
+  · intro r m
+    obtain ⟨r, s, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl r
+    apply ((Module.End.isUnit_iff _).mp
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap P.primeCompl M) s)).1
+    dsimp
+    simp only [← map_smul, ← smul_assoc, IsLocalization.smul_mk'_self, algebraMap_smul,
+      IsLocalization.map_id_mk']
 
 Depends on / 依赖: AtPrime, Injective, IsLocalization, IsLocalization.algEquiv, IsLocalization.exists_mk, IsLocalizedModule, IsLocalizedModule.linearEquiv, IsLocalizedModule.map_units, Localization, Localization.AtPrime, LocalizedModule, LocalizedModule.mkLinearMap, Module, Module.End.isUnit_iff, Module.Injective.of_ringEquiv, Module.injective_of_localization_maximal, P.primeCompl, algEquiv, exists_mk, injective_of_localization_maximal
 -/

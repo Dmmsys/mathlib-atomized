@@ -560,7 +560,8 @@ lemma Reachable.mem_subgraphVerts
   decreasing_by {
     rw [← Walk.length_tail_add_one hnp]
     lia
-
+  }
+  exact aux hu hr.some
 
 中文:
 引理 Reachable.mem_subgraphVerts
@@ -574,7 +575,8 @@ lemma Reachable.mem_subgraphVerts
   decreasing_by {
     rw [← Walk.length_tail_add_one hnp]
     lia
-
+  }
+  exact aux hu hr.some
 
 Depends on / 依赖: G.Walk, H.edge_vert, H.verts, Walk.adj_snd, Walk.length_tail_add_one, adj_snd, decreasing_by, edge_vert, hnp.eq, hr.some, length, length_tail_add_one, p.Nil, p.length, p.tail, termination_by
 -/
@@ -1608,7 +1610,7 @@ theorem reachable_or_reachable_compl
 .resolve_left huv · have huv' := G.reachable_or_compl_adj ..
 .resolve_left fun hvw => huv huw.trans hvw.symm have hvw' := G.reachable_or_compl_adj ..
     exact huv'.reachable.trans hvw'.reachable
-.reachable .resolve_l
+.reachable .resolve_left huw exact G.reachable_or_compl_adj ..
 
 中文:
 定理 reachable_or_reachable_compl
@@ -1620,7 +1622,7 @@ theorem reachable_or_reachable_compl
 .resolve_left huv · have huv' := G.reachable_or_compl_adj ..
 .resolve_left fun hvw => huv huw.trans hvw.symm have hvw' := G.reachable_or_compl_adj ..
     exact huv'.reachable.trans hvw'.reachable
-.reachable .resolve_l
+.reachable .resolve_left huw exact G.reachable_or_compl_adj ..
 
 Depends on / 依赖: G.Reachable, G.reachable_or_compl_adj, Reachable, huw.trans, hvw.symm, or_iff_not_imp_left, or_iff_not_imp_left.mpr, reachable, reachable.trans, reachable_or_compl_adj, resolve_left
 -/
@@ -2878,7 +2880,8 @@ lemma adj_spanningCoe_toSimpleGraph
     exact ⟨a, h₁⟩
   · simp only [toSimpleGraph, map_adj, comap_adj, Embedding.subtype_apply, Subtype.exists,
       exists_and_left, and_imp]
-   
+    intro h hadj
+    exact ⟨v, h, w, hadj, rfl, (C.mem_supp_congr_adj hadj).mp h, rfl⟩
 
 中文:
 引理 adj_spanningCoe_toSimpleGraph
@@ -2891,7 +2894,8 @@ lemma adj_spanningCoe_toSimpleGraph
     exact ⟨a, h₁⟩
   · simp only [toSimpleGraph, map_adj, comap_adj, Embedding.subtype_apply, Subtype.exists,
       exists_and_left, and_imp]
-   
+    intro h hadj
+    exact ⟨v, h, w, hadj, rfl, (C.mem_supp_congr_adj hadj).mp h, rfl⟩
 
 Depends on / 依赖: C.mem_supp_congr_adj, Embedding, Embedding.subtype_apply, Iff.intro, SetLike, SetLike.coe_sort_coe, Subtype, Subtype.exists, and_imp, coe_sort_coe, comap_adj, exists_and_left, map_adj, mem_supp_congr_adj, mem_supp_iff, subtype_apply, toSimpleGraph
 -/
@@ -3028,7 +3032,8 @@ theorem maximal_connected_induce_iff
     suffices s <= (G.connectedComponentMk v).supp from
       ⟨G.connectedComponentMk v, le_antisymm (h (connected_toSimpleGraph _) this) this⟩
 exact fun u hu => ConnectedComponent.sound
-.map .toHom Embedding.indu
+.map .toHom Embedding.induce s hconn.preconnected ⟨u, hu⟩ ⟨v, hv⟩
+  · exact h ▸ maximal_connected_induce_supp _
 
 中文:
 定理 maximal_connected_induce_iff
@@ -3039,7 +3044,8 @@ exact fun u hu => ConnectedComponent.sound
     suffices s <= (G.connectedComponentMk v).supp from
       ⟨G.connectedComponentMk v, le_antisymm (h (connected_toSimpleGraph _) this) this⟩
 exact fun u hu => ConnectedComponent.sound
-.map .toHom Embedding.indu
+.map .toHom Embedding.induce s hconn.preconnected ⟨u, hu⟩ ⟨v, hv⟩
+  · exact h ▸ maximal_connected_induce_supp _
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.sound, Embedding, Embedding.induce, G.connectedComponentMk, connectedComponentMk, connected_toSimpleGraph, hconn.nonempty, hconn.preconnected, induce, le_antisymm, maximal_connected_induce_supp, nonempty, preconnected
 -/
@@ -3068,7 +3074,8 @@ definition homOfConnectedComponents
   map_rel' := fun hab => by
     have h : (G.connectedComponentMk _).toSimpleGraph.Adj ⟨_, rfl⟩
         ⟨_, ((G.connectedComponentMk _).mem_supp_congr_adj hab).1 rfl⟩ := by simpa using! hab
-    convert (C (G.conn
+    convert (C (G.connectedComponentMk _)).map_rel h using 3 <;>
+      rw [ConnectedComponent.connectedComponentMk_eq_of_adj hab]
 
 中文:
 定义 homOfConnectedComponents
@@ -3077,7 +3084,8 @@ definition homOfConnectedComponents
   map_rel' := fun hab => by
     have h : (G.connectedComponentMk _).toSimpleGraph.Adj ⟨_, rfl⟩
         ⟨_, ((G.connectedComponentMk _).mem_supp_congr_adj hab).1 rfl⟩ := by simpa using! hab
-    convert (C (G.conn
+    convert (C (G.connectedComponentMk _)).map_rel h using 3 <;>
+      rw [ConnectedComponent.connectedComponentMk_eq_of_adj hab]
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.connectedComponentMk_mem, G.connectedComponentMk, connectedComponentMk, connectedComponentMk_mem
 -/
@@ -3344,7 +3352,10 @@ theorem reachable_deleteEdges_iff_exists_walk
   · rintro ⟨p, h⟩
     refine ⟨p.transfer _ fun e ep => ?_⟩
     rw [edgeSet_deleteEdges]
-    exa
+    exact ⟨p.edges_subset_edgeSet ep, fun h' => h (h' ▸ ep)⟩
+
+@[deprecated (since := "2026-03-18")]
+alias reachable_delete_edges_iff_exists_walk := reachable_deleteEdges_iff_exists_walk
 
 中文:
 定理 reachable_deleteEdges_iff_存在_walk
@@ -3359,7 +3370,10 @@ theorem reachable_deleteEdges_iff_exists_walk
   · rintro ⟨p, h⟩
     refine ⟨p.transfer _ fun e ep => ?_⟩
     rw [edgeSet_deleteEdges]
-    exa
+    exact ⟨p.edges_subset_edgeSet ep, fun h' => h (h' ▸ ep)⟩
+
+@[deprecated (since := "2026-03-18")]
+alias reachable_delete_edges_iff_exists_walk := reachable_deleteEdges_iff_exists_walk
 
 Depends on / 依赖: Hom.ofLE_apply, List.mem_map, Sym2.map_id, Walk.edges_map, edgeSet_deleteEdges, edges_map, edges_subset_edgeSet, map_id, mem_map, ofLE_apply, p.edges_subset_edgeSet, p.map, p.transfer, simp_rw, transfer
 -/
@@ -3423,7 +3437,19 @@ theorem reachable_deleteEdges_iff_exists_cycle.aux
   let puw := (c.takeUntil v hv).takeUntil w hw
   let pwv := (c.takeUntil v hv).dropUntil w hw
   let pvu := c.dropUntil v hv
-  have : c = (puw.append pwv).append pvu := by simp [puw
+  have : c = (puw.append pwv).append pvu := by simp [puw, pwv, pvu]
+  -- We have two walks from v to w
+  -- pvu puw
+  -- v ----> u ----> w
+  -- | ^
+  -- `-------------'
+  -- pwv.reverse
+  -- so they both contain the edge s(v, w), but that's a contradiction since c is a trail.
+  have hbq := hb (pvu.append puw)
+  have hpq' := hb pwv.reverse
+  rw [Walk.edges_reverse]; rw [List.mem_reverse] at hpq'
+  rw [Walk.isTrail_def]; rw [this]; rw [Walk.edges_append]; rw [Walk.edges_append]; rw [List.nodup_append_comm]; rw [← List.append_assoc]; rw [← Walk.edges_append] at hc
+  exact List.disjoint_of_nodup_append hc hbq hpq'
 
 中文:
 定理 reachable_deleteEdges_iff_存在_cycle.aux
@@ -3436,7 +3462,19 @@ theorem reachable_deleteEdges_iff_exists_cycle.aux
   let puw := (c.takeUntil v hv).takeUntil w hw
   let pwv := (c.takeUntil v hv).dropUntil w hw
   let pvu := c.dropUntil v hv
-  have : c = (puw.append pwv).append pvu := by simp [puw
+  have : c = (puw.append pwv).append pvu := by simp [puw, pwv, pvu]
+  -- We have two walks from v to w
+  -- pvu puw
+  -- v ----> u ----> w
+  -- | ^
+  -- `-------------'
+  -- pwv.reverse
+  -- so they both contain the edge s(v, w), but that's a contradiction since c is a trail.
+  have hbq := hb (pvu.append puw)
+  have hpq' := hb pwv.reverse
+  rw [Walk.edges_reverse]; rw [List.mem_reverse] at hpq'
+  rw [Walk.isTrail_def]; rw [this]; rw [Walk.edges_append]; rw [Walk.edges_append]; rw [List.nodup_append_comm]; rw [← List.append_assoc]; rw [← Walk.edges_append] at hc
+  exact List.disjoint_of_nodup_append hc hbq hpq'
 
 Depends on / 依赖: c.fst_mem_support_of_mem_edges, fst_mem_support_of_mem_edges
 -/
@@ -3482,7 +3520,16 @@ theorem adj_and_reachable_delete_edges_iff_exists_cycle
       intro h
       cases hp (Walk.edges_toPath_subset_edges p h)
     · simp
-  · rintro ⟨u, c, hc, h
+  · rintro ⟨u, c, hc, he⟩
+    refine ⟨c.adj_of_mem_edges he, ?_⟩
+    by_contra! hb
+    have hb' : forall p : G.Walk w v, s(w, v) in p.edges := by
+      intro p
+      simpa [Sym2.eq_swap] using hb p.reverse
+    have hvc : v in c.support := Walk.fst_mem_support_of_mem_edges c he
+    refine reachable_deleteEdges_iff_exists_cycle.aux hb' (c.rotate v hvc) (hc.isTrail.rotate hvc)
+      ?_ (Walk.start_mem_support _)
+    rwa [(c.rotate_edges v hvc).mem_iff, Sym2.eq_swap]
 
 中文:
 定理 adj_and_reachable_delete_edges_iff_存在_cycle
@@ -3498,7 +3545,16 @@ theorem adj_and_reachable_delete_edges_iff_exists_cycle
       intro h
       cases hp (Walk.edges_toPath_subset_edges p h)
     · simp
-  · rintro ⟨u, c, hc, h
+  · rintro ⟨u, c, hc, he⟩
+    refine ⟨c.adj_of_mem_edges he, ?_⟩
+    by_contra! hb
+    have hb' : forall p : G.Walk w v, s(w, v) in p.edges := by
+      intro p
+      simpa [Sym2.eq_swap] using hb p.reverse
+    have hvc : v in c.support := Walk.fst_mem_support_of_mem_edges c he
+    refine reachable_deleteEdges_iff_exists_cycle.aux hb' (c.rotate v hvc) (hc.isTrail.rotate hvc)
+      ?_ (Walk.start_mem_support _)
+    rwa [(c.rotate_edges v hvc).mem_iff, Sym2.eq_swap]
 
 Depends on / 依赖: G.Walk, Path.cons_isCycle, Sym2.eq_swap, Walk.cons, Walk.edges_toPath_subset_edges, Walk.fst_mem_support_of_mem_edges, adj_of_mem_edges, c.adj_of_mem_edges, c.support, classical, cons_isCycle, edges_toPath_subset_edges, eq_swap, fst_mem_support_of_mem_edges, h.symm, p.edges, p.reverse, p.toPath, reacha, reachable_deleteEdges_iff_exists_walk
 -/
@@ -3604,6 +3660,12 @@ obtain hxy | hxy := em' G.Adj x y
   refine (connected_iff_exists_forall_reachable _).2 ⟨x, fun w => ?_⟩
   obtain ⟨P, hP⟩ := hG.exists_isPath w x
 obtain heP | heP := em' s(x, y) in P.edges
+  · exact ⟨(P.toDeleteEdges {s(x, y)} (by grind)).reverse⟩
+  have hyP := P.snd_mem_support_of_mem_edges heP
+  let P₁ := P.takeUntil y hyP
+  have hxP₁ := Walk.endpoint_notMem_support_takeUntil hP hyP hxy.ne
+have heP₁ : s(x, y) ∉ P₁.edges := fun h => hxP₁ P₁.fst_mem_support_of_mem_edges h
+  exact h.trans (.symm ⟨P₁.toDeleteEdges {s(x, y)} (by grind)⟩)
 
 中文:
 引理 连通.connected_delete_edge_of_not_isBridge
@@ -3616,6 +3678,12 @@ obtain hxy | hxy := em' G.Adj x y
   refine (connected_iff_exists_forall_reachable _).2 ⟨x, fun w => ?_⟩
   obtain ⟨P, hP⟩ := hG.exists_isPath w x
 obtain heP | heP := em' s(x, y) in P.edges
+  · exact ⟨(P.toDeleteEdges {s(x, y)} (by grind)).reverse⟩
+  have hyP := P.snd_mem_support_of_mem_edges heP
+  let P₁ := P.takeUntil y hyP
+  have hxP₁ := Walk.endpoint_notMem_support_takeUntil hP hyP hxy.ne
+have heP₁ : s(x, y) ∉ P₁.edges := fun h => hxP₁ P₁.fst_mem_support_of_mem_edges h
+  exact h.trans (.symm ⟨P₁.toDeleteEdges {s(x, y)} (by grind)⟩)
 
 Depends on / 依赖: Disjoint, Disjoint.sdiff_eq_left, G.Adj, P.edges, P.snd_mem_support_of_mem_edges, P.takeUntil, P.toDeleteEdges, Walk.endpoint_notMem_support_takeUntil, classical, connected_iff_exists_forall_reachable, deleteEdges, endpoint_notMem_support_takeUntil, exists_isPath, hG.exists_isPath, hxy.ne, isBridge_iff, not_not, reverse, sdiff_eq_left, snd_mem_support_of_mem_edges
 -/
@@ -3738,7 +3806,13 @@ theorem IsBridge.sup_edge_of_not_reachable_of_isBridge
   refine (isBridge_iff_forall_cycle_notMem (edgeSet_mono le_sup_left he)).mpr ?_
   refine fun w p hp hpe => (isBridge_iff_forall_cycle_notMem he).mp hb
     (p.transfer G fun e' he' => ?_) (hp.transfer _) (Walk.edges_transfer p _ ▸ hpe)
-.elim .elim id fun h' => h ?_ refine edgeSet_sup .. ▸ Walk.ed
+.elim .elim id fun h' => h ?_ refine edgeSet_sup .. ▸ Walk.edges_subset_edgeSet _ he'
+exact .mono (sdiff_le_iff'.mpr le_rfl)
+.right adj_and_reachable_delete_edges_iff_exists_cycle.mpr ⟨_, p, by simp_all⟩
+
+@[deprecated (since := "2026-03-18")]
+alias IsBridge.sup_fromEdgeSet_of_not_reachable_of_isBridge :=
+  IsBridge.sup_edge_of_not_reachable_of_isBridge
 
 中文:
 定理 IsBridge.sup_edge_of_not_reachable_of_isBridge
@@ -3747,7 +3821,13 @@ theorem IsBridge.sup_edge_of_not_reachable_of_isBridge
   refine (isBridge_iff_forall_cycle_notMem (edgeSet_mono le_sup_left he)).mpr ?_
   refine fun w p hp hpe => (isBridge_iff_forall_cycle_notMem he).mp hb
     (p.transfer G fun e' he' => ?_) (hp.transfer _) (Walk.edges_transfer p _ ▸ hpe)
-.elim .elim id fun h' => h ?_ refine edgeSet_sup .. ▸ Walk.ed
+.elim .elim id fun h' => h ?_ refine edgeSet_sup .. ▸ Walk.edges_subset_edgeSet _ he'
+exact .mono (sdiff_le_iff'.mpr le_rfl)
+.right adj_and_reachable_delete_edges_iff_exists_cycle.mpr ⟨_, p, by simp_all⟩
+
+@[deprecated (since := "2026-03-18")]
+alias IsBridge.sup_fromEdgeSet_of_not_reachable_of_isBridge :=
+  IsBridge.sup_edge_of_not_reachable_of_isBridge
 
 Depends on / 依赖: Walk.edges_subset_edgeSet, Walk.edges_transfer, adj_and_reachable_delete_edges_iff_exists_cycle, adj_and_reachable_delete_edges_iff_exists_cycle.mpr, edgeSet_mono, edgeSet_sup, edges_subset_edgeSet, edges_transfer, hp.transfer, isBridge_iff_forall_cycle_notMem, le_rfl, le_sup_left, p.transfer, sdiff_le_iff, transfer
 -/
@@ -3889,7 +3969,8 @@ lemma IsTrail.not_mem_support_of_subsingleton_neighborSet
   refine hw.not_mem_support_of_not_reachable (x := y) ?_ ?_ hxw <;>
   · rintro ⟨p⟩
     obtain ⟨hx₂, -, hy₂⟩ : G.Adj x p.penultimate ∧ _ ∧ ¬p.penultimate = y := by
-      simpa using p.reverse.adj_snd (not_n
+      simpa using p.reverse.adj_snd (not_nil_of_ne ‹_›)
+exact hy₂ hx hx₂ hxy
 
 中文:
 引理 是Trail.not_mem_support_of_subsingleton_neighborSet
@@ -3900,7 +3981,8 @@ lemma IsTrail.not_mem_support_of_subsingleton_neighborSet
   refine hw.not_mem_support_of_not_reachable (x := y) ?_ ?_ hxw <;>
   · rintro ⟨p⟩
     obtain ⟨hx₂, -, hy₂⟩ : G.Adj x p.penultimate ∧ _ ∧ ¬p.penultimate = y := by
-      simpa using p.reverse.adj_snd (not_n
+      simpa using p.reverse.adj_snd (not_nil_of_ne ‹_›)
+exact hy₂ hx hx₂ hxy
 
 Depends on / 依赖: G.Adj, adj_of_mem_walk_support, adj_snd, hw.not_mem_support_of_not_reachable, not_mem_support_of_not_reachable, not_nil_of_ne, p.penultimate, p.reverse.adj_snd, penultimate, reverse
 -/

@@ -150,7 +150,10 @@ lemma extremalEpi_iff_strongEpi_of_hasPullbacks
   exact
     { l := inv (pullback.snd i b) ≫ pullback.fst _ _
       fac_left := by
-        rw [← cancel_m
+        rw [← cancel_mono i]; rw [sq.w]; rw [Category.assoc]; rw [Category.assoc]
+        congr 1
+        rw [← cancel_epi (pullback.snd i b)]; rw [IsIso.hom_inv_id_assoc]; rw [pullback.condition]
+      fac_right := by simp [pullback.condition] }
 
 中文:
 引理 extremalEpi_iff_strongEpi_of_hasPullbacks
@@ -163,7 +166,10 @@ lemma extremalEpi_iff_strongEpi_of_hasPullbacks
   exact
     { l := inv (pullback.snd i b) ≫ pullback.fst _ _
       fac_left := by
-        rw [← cancel_m
+        rw [← cancel_mono i]; rw [sq.w]; rw [Category.assoc]; rw [Category.assoc]
+        congr 1
+        rw [← cancel_epi (pullback.snd i b)]; rw [IsIso.hom_inv_id_assoc]; rw [pullback.condition]
+      fac_right := by simp [pullback.condition] }
 
 Depends on / 依赖: Category, Category.assoc, ExtremalEpi, ExtremalEpi.isIso, IsIso.hom_inv_id_assoc, cancel_epi, cancel_mono, condition, fac_left, fac_right, hom_inv_id_assoc, pullback, pullback.condition, pullback.fst, pullback.lift, pullback.snd, sq.w
 -/

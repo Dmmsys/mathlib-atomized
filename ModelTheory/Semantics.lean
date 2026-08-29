@@ -496,7 +496,13 @@ theorem realize_constantsToVars
       · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
         -- Porting note: below lemma does not work with simp for some reason
         rw [withConstants_funMap_sumInl]
-      · simp onl
+      · simp only [realize, constantsToVars, Sum.elim_inl, funMap_eq_coe_constants]
+        rfl
+    · obtain - | f := f
+      · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
+        -- Porting note: below lemma does not work with simp for some reason
+        rw [withConstants_funMap_sumInl]
+      · exact isEmptyElim f
 
 中文:
 定理 realize_constantsToVars
@@ -510,7 +516,13 @@ theorem realize_constantsToVars
       · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
         -- Porting note: below lemma does not work with simp for some reason
         rw [withConstants_funMap_sumInl]
-      · simp onl
+      · simp only [realize, constantsToVars, Sum.elim_inl, funMap_eq_coe_constants]
+        rfl
+    · obtain - | f := f
+      · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
+        -- Porting note: below lemma does not work with simp for some reason
+        rw [withConstants_funMap_sumInl]
+      · exact isEmptyElim f
 
 Depends on / 依赖: constantsOn, constantsOnFunc, constantsToVars, realize
 -/
@@ -1296,7 +1308,16 @@ theorem realize_liftAt
   | rel => simp [mapTermRel, Realize, Sum.elim_comp_map]
   | imp _ _ ih1 ih2 => simp only [mapTermRel, Realize, ih1 hmn, ih2 hmn]
   | @all k _ ih3 =>
-    have h : k
+    have h : k + 1 + n' = k + n' + 1 := by rw [add_assoc, add_comm 1 n', ← add_assoc]
+    simp only [mapTermRel, Realize, realize_castLE_of_eq h, ih3 (hmn.trans k.le_succ)]
+    refine forall_congr' fun x => iff_eq_eq.mpr (congr rfl (funext (Fin.lastCases ?_ fun i => ?_)))
+    · simp only [Function.comp_apply, val_last, snoc_last]
+      refine (congr rfl (Fin.ext ?_)).trans (snoc_last _ _)
+      split_ifs <;> dsimp; lia
+    · simp only [Function.comp_apply, Fin.snoc_castSucc]
+      refine (congr rfl (Fin.ext ?_)).trans (snoc_castSucc _ _ _)
+      simp only [val_castSucc, val_cast]
+      split_ifs <;> simp
 
 中文:
 定理 realize_liftAt
@@ -1309,7 +1330,16 @@ theorem realize_liftAt
   | rel => simp [mapTermRel, Realize, Sum.elim_comp_map]
   | imp _ _ ih1 ih2 => simp only [mapTermRel, Realize, ih1 hmn, ih2 hmn]
   | @all k _ ih3 =>
-    have h : k
+    have h : k + 1 + n' = k + n' + 1 := by rw [add_assoc, add_comm 1 n', ← add_assoc]
+    simp only [mapTermRel, Realize, realize_castLE_of_eq h, ih3 (hmn.trans k.le_succ)]
+    refine forall_congr' fun x => iff_eq_eq.mpr (congr rfl (funext (Fin.lastCases ?_ fun i => ?_)))
+    · simp only [Function.comp_apply, val_last, snoc_last]
+      refine (congr rfl (Fin.ext ?_)).trans (snoc_last _ _)
+      split_ifs <;> dsimp; lia
+    · simp only [Function.comp_apply, Fin.snoc_castSucc]
+      refine (congr rfl (Fin.ext ?_)).trans (snoc_castSucc _ _ _)
+      simp only [val_castSucc, val_cast]
+      split_ifs <;> simp
 
 Depends on / 依赖: Realize, Sum.elim_comp_map, add_assoc, add_comm, elim_comp_map, falsum, forall_congr, hmn.trans, iff_eq_eq, iff_eq_eq.mpr, k.le_succ, le_succ, liftAt, mapTermRel, realize_castLE_of_eq
 -/
@@ -1452,7 +1482,15 @@ theorem realize_restrictFreeVar
   | rel =>
     simp only [Realize, restrictFreeVar]
     congr!
-    rw [realize_restrictVarLeft v' (by
+    rw [realize_restrictVarLeft v' (by simp [hv'])]
+    simp
+  | imp _ _ ih1 ih2 =>
+    simp only [Realize, restrictFreeVar]
+    rw [ih1]; rw [ih2] <;> simp [hv']
+  | all _ ih3 =>
+    simp only [restrictFreeVar, Realize]
+    refine forall_congr' (fun _ => ?_)
+    rw [ih3]; simp [hv']
 
 中文:
 定理 realize_restrictFreeVar
@@ -1467,7 +1505,15 @@ theorem realize_restrictFreeVar
   | rel =>
     simp only [Realize, restrictFreeVar]
     congr!
-    rw [realize_restrictVarLeft v' (by
+    rw [realize_restrictVarLeft v' (by simp [hv'])]
+    simp
+  | imp _ _ ih1 ih2 =>
+    simp only [Realize, restrictFreeVar]
+    rw [ih1]; rw [ih2] <;> simp [hv']
+  | all _ ih3 =>
+    simp only [restrictFreeVar, Realize]
+    refine forall_congr' (fun _ => ?_)
+    rw [ih3]; simp [hv']
 
 Depends on / 依赖: Realize, falsum, forall_congr, realize_restrictVarLeft, restrictFreeVar
 -/
@@ -1529,7 +1575,13 @@ theorem realize_constantsVarsEquiv
   refine realize_mapTermRel_id (fun n t xs => realize_constantsVarsEquivLeft) fun n R xs => ?_
   -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
   erw [← (lhomWithConstants L α).map_onRelation
-      (Equiv.sumEmpty (L.Relations n) ((constantsOn α).Re
+      (Equiv.sumEmpty (L.Relations n) ((constantsOn α).Relations n) R) xs]
+  rcongr
+  obtain - | R := R
+  · simp
+  · exact isEmptyElim R
+
+@[simp]
 
 中文:
 定理 realize_constantsVarsEquiv
@@ -1538,7 +1590,13 @@ theorem realize_constantsVarsEquiv
   refine realize_mapTermRel_id (fun n t xs => realize_constantsVarsEquivLeft) fun n R xs => ?_
   -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
   erw [← (lhomWithConstants L α).map_onRelation
-      (Equiv.sumEmpty (L.Relations n) ((constantsOn α).Re
+      (Equiv.sumEmpty (L.Relations n) ((constantsOn α).Relations n) R) xs]
+  rcongr
+  obtain - | R := R
+  · simp
+  · exact isEmptyElim R
+
+@[simp]
 
 Depends on / 依赖: realize_constantsVarsEquivLeft, realize_mapTermRel_id
 -/
@@ -1630,7 +1688,8 @@ theorem realize_onBoundedFormula
     simp only [onBoundedFormula, realize_rel, LHom.map_onRelation,
       Function.comp_apply, realize_onTerm]
     rfl
-  | imp _ _ ih1 ih2 => simp only [onBoundedFormula,
+  | imp _ _ ih1 ih2 => simp only [onBoundedFormula, ih1, ih2, realize_imp]
+  | all _ ih3 => simp only [onBoundedFormula, ih3, realize_all]
 
 中文:
 定理 realize_onBoundedFormula
@@ -1643,7 +1702,8 @@ theorem realize_onBoundedFormula
     simp only [onBoundedFormula, realize_rel, LHom.map_onRelation,
       Function.comp_apply, realize_onTerm]
     rfl
-  | imp _ _ ih1 ih2 => simp only [onBoundedFormula,
+  | imp _ _ ih1 ih2 => simp only [onBoundedFormula, ih1, ih2, realize_imp]
+  | all _ ih3 => simp only [onBoundedFormula, ih3, realize_all]
 
 Depends on / 依赖: Function, Function.comp_apply, LHom.map_onRelation, comp_apply, falsum, map_onRelation, onBoundedFormula, realize_all, realize_bdEqual, realize_imp, realize_onTerm, realize_rel
 -/
@@ -2911,7 +2971,16 @@ theorem _root_.FirstOrder.Language.Formula.realize_iAlls
   simp only [Nat.add_zero, realize_alls, realize_relabel, Function.comp_def,
     castAdd_zero, Sum.elim_map, id_eq]
   refine Equiv.forall_congr ?_ ?_
-  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm
+  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
+      fun _ => by simp [Function.comp_def],
+      fun _ => by simp [Function.comp_def]⟩
+  · intro x
+    rw [Formula.Realize]; rw [iff_iff_eq]
+    congr
+    funext i
+    exact i.elim0
+
+@[simp]
 
 中文:
 定理 _root_.FirstOrder.Language.公式.realize_iAlls
@@ -2921,7 +2990,16 @@ theorem _root_.FirstOrder.Language.Formula.realize_iAlls
   simp only [Nat.add_zero, realize_alls, realize_relabel, Function.comp_def,
     castAdd_zero, Sum.elim_map, id_eq]
   refine Equiv.forall_congr ?_ ?_
-  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm
+  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
+      fun _ => by simp [Function.comp_def],
+      fun _ => by simp [Function.comp_def]⟩
+  · intro x
+    rw [Formula.Realize]; rw [iff_iff_eq]
+    congr
+    funext i
+    exact i.elim0
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.choice, Classical.choose_spec, Equiv.forall_congr, Finite, Finite.exists_equiv_fin, Formula, Formula.Realize, Formula.iAlls, Function, Function.comp_def, Nat.add_zero, Realize, Sum.elim_map, add_zero, castAdd_zero, choice, choose_spec, comp_def, e.symm
 -/
@@ -2982,7 +3060,15 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExs
     castAdd_zero, Sum.elim_map, id_eq]
   refine Equiv.exists_congr ?_ ?_
   · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
+      fun _ => by simp [Function.comp_def],
+      fun _ => by simp [Function.comp_def]⟩
+  · intro x
+    rw [Formula.Realize]; rw [iff_iff_eq]
+    congr
+    funext i
+    exact i.elim0
 
+@[simp]
 
 中文:
 定理 _root_.FirstOrder.Language.公式.realize_iExs
@@ -2993,7 +3079,15 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExs
     castAdd_zero, Sum.elim_map, id_eq]
   refine Equiv.exists_congr ?_ ?_
   · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
+      fun _ => by simp [Function.comp_def],
+      fun _ => by simp [Function.comp_def]⟩
+  · intro x
+    rw [Formula.Realize]; rw [iff_iff_eq]
+    congr
+    funext i
+    exact i.elim0
 
+@[simp]
 
 Depends on / 依赖: Classical, Classical.choice, Classical.choose_spec, Equiv.exists_congr, Finite, Finite.exists_equiv_fin, Formula, Formula.Realize, Formula.iExs, Function, Function.comp_def, Nat.add_zero, Realize, Sum.elim_map, add_zero, castAdd_zero, choice, choose_spec, comp_def, e.symm
 -/
@@ -3055,7 +3149,25 @@ theorem realize_toFormula
   | rel => simp [BoundedFormula.Realize]
   | imp _ _ ih1 ih2 =>
     rw [toFormula]; rw [Formula.Realize]; rw [realize_imp]; rw [← Formula.Realize]; rw [ih1]; rw [← Formula.Realize]; rw [ih2]; rw [realize_imp]
-  | all 
+  | all _ ih3 =>
+    rw [toFormula]; rw [Formula.Realize]; rw [realize_all]; rw [realize_all]
+    refine forall_congr' fun a => ?_
+    have h := ih3 (Sum.elim (v ∘ Sum.inl) (snoc (v ∘ Sum.inr) a))
+    simp only [Sum.elim_comp_inl, Sum.elim_comp_inr] at h
+    rw [← h]; rw [realize_relabel]; rw [Formula.Realize]; rw [iff_iff_eq]
+    simp only [Function.comp_def]
+    congr with x
+    · rcases x with _ | x
+      · simp
+      · refine Fin.lastCases ?_ ?_ x
+        · simp [Fin.snoc]
+        · simp only [castSucc, Sum.elim_inr,
+            finSumFinEquiv_symm_apply_castAdd, Sum.map_inl, Sum.elim_inl]
+          rw [← castSucc]
+          simp
+    · exact Fin.elim0 x
+
+@[simp]
 
 中文:
 定理 realize_toFormula
@@ -3067,7 +3179,25 @@ theorem realize_toFormula
   | rel => simp [BoundedFormula.Realize]
   | imp _ _ ih1 ih2 =>
     rw [toFormula]; rw [Formula.Realize]; rw [realize_imp]; rw [← Formula.Realize]; rw [ih1]; rw [← Formula.Realize]; rw [ih2]; rw [realize_imp]
-  | all 
+  | all _ ih3 =>
+    rw [toFormula]; rw [Formula.Realize]; rw [realize_all]; rw [realize_all]
+    refine forall_congr' fun a => ?_
+    have h := ih3 (Sum.elim (v ∘ Sum.inl) (snoc (v ∘ Sum.inr) a))
+    simp only [Sum.elim_comp_inl, Sum.elim_comp_inr] at h
+    rw [← h]; rw [realize_relabel]; rw [Formula.Realize]; rw [iff_iff_eq]
+    simp only [Function.comp_def]
+    congr with x
+    · rcases x with _ | x
+      · simp
+      · refine Fin.lastCases ?_ ?_ x
+        · simp [Fin.snoc]
+        · simp only [castSucc, Sum.elim_inr,
+            finSumFinEquiv_symm_apply_castAdd, Sum.map_inl, Sum.elim_inl]
+          rw [← castSucc]
+          simp
+    · exact Fin.elim0 x
+
+@[simp]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.Realize, Formula, Formula.Realize, Realize, Sum.elim, Sum.elim_, Sum.elim_comp_inl, Sum.inl, Sum.inr, elim_, elim_comp_inl, falsum, forall_congr, realize_all, realize_imp, toFormula
 -/
@@ -3216,7 +3346,12 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExsUnique
   simp only [Formula.realize_iExs, Formula.realize_inf, Formula.realize_iAlls, Formula.realize_imp,
     Formula.realize_relabel]
   simp only [Formula.Realize, Function.comp_def, Term.equal, Term.relabel, realize_iInf,
-    realize_bdEqual, Term.realize_
+    realize_bdEqual, Term.realize_var, Sum.elim_inl, Sum.elim_inr, funext_iff]
+  refine exists_congr (fun i => and_congr_right' (forall_congr' (fun y => ?_)))
+  rw [iff_iff_eq]; congr with x
+  cases x <;> simp
+
+@[simp]
 
 中文:
 定理 _root_.FirstOrder.Language.公式.realize_iExsUnique
@@ -3226,7 +3361,12 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExsUnique
   simp only [Formula.realize_iExs, Formula.realize_inf, Formula.realize_iAlls, Formula.realize_imp,
     Formula.realize_relabel]
   simp only [Formula.Realize, Function.comp_def, Term.equal, Term.relabel, realize_iInf,
-    realize_bdEqual, Term.realize_
+    realize_bdEqual, Term.realize_var, Sum.elim_inl, Sum.elim_inr, funext_iff]
+  refine exists_congr (fun i => and_congr_right' (forall_congr' (fun y => ?_)))
+  rw [iff_iff_eq]; congr with x
+  cases x <;> simp
+
+@[simp]
 
 Depends on / 依赖: ExistsUnique, Formula, Formula.Realize, Formula.iExsUnique, Formula.realize_iAlls, Formula.realize_iExs, Formula.realize_imp, Formula.realize_inf, Formula.realize_relabel, Function, Function.comp_def, Realize, Sum.elim_inl, Sum.elim_inr, Term.equal, Term.realize_var, Term.relabel, and_congr_right, comp_def, elim_inl
 -/
@@ -3332,7 +3472,15 @@ theorem exists_realize_equivSentence_iff_realize_exClosure
       (BoundedFormula.realize_restrictFreeVar (φ := φ) (f := id) (v := fun a => v a) (v' := v)
         (fun _ => rfl)).2
         (by simpa [Formula.Realize]
-          using (realize_equivSentence_symm M (F
+          using (realize_equivSentence_symm M (Formula.equivSentence φ) v).2 hv)⟩
+  · intro h
+    obtain ⟨v, hv⟩ := (Formula.realize_exClosure φ).1 h
+    let v' := fun a => if hmem : a in φ.freeVarFinset
+      then v ⟨a, hmem⟩ else Classical.choice inferInstance
+    exists v'
+    refine (Formula.realize_equivSentence_symm M (Formula.equivSentence φ) v').mp ?_
+    simpa [Equiv.symm_apply_apply, Formula.Realize] using
+      (BoundedFormula.realize_restrictFreeVar v' (by grind)).1 hv
 
 中文:
 定理 存在_realize_equivSentence_iff_realize_exClosure
@@ -3343,7 +3491,15 @@ theorem exists_realize_equivSentence_iff_realize_exClosure
       (BoundedFormula.realize_restrictFreeVar (φ := φ) (f := id) (v := fun a => v a) (v' := v)
         (fun _ => rfl)).2
         (by simpa [Formula.Realize]
-          using (realize_equivSentence_symm M (F
+          using (realize_equivSentence_symm M (Formula.equivSentence φ) v).2 hv)⟩
+  · intro h
+    obtain ⟨v, hv⟩ := (Formula.realize_exClosure φ).1 h
+    let v' := fun a => if hmem : a in φ.freeVarFinset
+      then v ⟨a, hmem⟩ else Classical.choice inferInstance
+    exists v'
+    refine (Formula.realize_equivSentence_symm M (Formula.equivSentence φ) v').mp ?_
+    simpa [Equiv.symm_apply_apply, Formula.Realize] using
+      (BoundedFormula.realize_restrictFreeVar v' (by grind)).1 hv
 
 Depends on / 依赖: constantsOn, constantsOn.structure, structure
 -/
@@ -3390,7 +3546,20 @@ theorem realize_boundedFormula
   | rel =>
     simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
     exact StrongHomClass.map_rel g _ _
+  | imp _ _ ih1 ih2 => rw [BoundedFormula.Realize, ih1, ih2, BoundedFormula.Realize]
+  | all _ ih3 =>
+    rw [BoundedFormula.Realize]; rw [BoundedFormula.Realize]
+    constructor
+    · intro h a
+      have h' := h (g a)
+      rw [← Fin.comp_snoc]; rw [ih3] at h'
+      exact h'
+    · intro h a
+      have h' := h (EquivLike.inv g a)
+      rw [← ih3]; rw [Fin.comp_snoc]; rw [EquivLike.apply_inv_apply g] at h'
+      exact h'
 
+@[simp]
 
 中文:
 定理 realize_boundedFormula
@@ -3404,7 +3573,20 @@ theorem realize_boundedFormula
   | rel =>
     simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
     exact StrongHomClass.map_rel g _ _
+  | imp _ _ ih1 ih2 => rw [BoundedFormula.Realize, ih1, ih2, BoundedFormula.Realize]
+  | all _ ih3 =>
+    rw [BoundedFormula.Realize]; rw [BoundedFormula.Realize]
+    constructor
+    · intro h a
+      have h' := h (g a)
+      rw [← Fin.comp_snoc]; rw [ih3] at h'
+      exact h'
+    · intro h a
+      have h' := h (EquivLike.inv g a)
+      rw [← ih3]; rw [Fin.comp_snoc]; rw [EquivLike.apply_inv_apply g] at h'
+      exact h'
 
+@[simp]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.Realize, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Fin.comp_snoc, HomClass, HomClass.realize_term, Realize, StrongHomClass, StrongHomClass.map_rel, Sum.comp_elim, apply_eq_iff_eq, comp_elim, comp_snoc, falsum, map_rel, realize_term
 -/
@@ -3707,7 +3889,16 @@ theorem Sentence.realize_cardGe
   rw [← lift_mk_fin]; rw [← lift_le.{0}]; rw [lift_lift]; rw [lift_mk_le]; rw [Sentence.cardGe]; rw [Sentence.Realize]; rw [BoundedFormula.realize_exs]
   simp_rw [BoundedFormula.realize_foldr_inf]
   simp only [Function.comp_apply, List.mem_map, Prod.exists, Ne, List.mem_product,
-    List.mem_finR
+    List.mem_finRange, forall_exists_index, and_imp, List.mem_filter, true_and]
+  refine ⟨?_, fun xs => ⟨xs.some, ?_⟩⟩
+  · rintro ⟨xs, h⟩
+    refine ⟨⟨xs, fun i j ij => ?_⟩⟩
+    contrapose! ij
+    exact h _ i j (by simpa using ij) rfl
+  · rintro _ i j ij rfl
+    simpa using ij
+
+@[simp]
 
 中文:
 定理 Sentence.realize_cardGe
@@ -3717,7 +3908,16 @@ theorem Sentence.realize_cardGe
   rw [← lift_mk_fin]; rw [← lift_le.{0}]; rw [lift_lift]; rw [lift_mk_le]; rw [Sentence.cardGe]; rw [Sentence.Realize]; rw [BoundedFormula.realize_exs]
   simp_rw [BoundedFormula.realize_foldr_inf]
   simp only [Function.comp_apply, List.mem_map, Prod.exists, Ne, List.mem_product,
-    List.mem_finR
+    List.mem_finRange, forall_exists_index, and_imp, List.mem_filter, true_and]
+  refine ⟨?_, fun xs => ⟨xs.some, ?_⟩⟩
+  · rintro ⟨xs, h⟩
+    refine ⟨⟨xs, fun i j ij => ?_⟩⟩
+    contrapose! ij
+    exact h _ i j (by simpa using ij) rfl
+  · rintro _ i j ij rfl
+    simpa using ij
+
+@[simp]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.realize_exs, BoundedFormula.realize_foldr_inf, Function, Function.comp_apply, List.mem_filter, List.mem_finRange, List.mem_map, List.mem_product, Prod.exists, Realize, Sentence, Sentence.Realize, Sentence.cardGe, and_imp, cardGe, comp_apply, contrapose, forall_exists_index, lift_le
 -/
@@ -3832,7 +4032,11 @@ theorem model_distinctConstantsTheory
   · contrapose! ab
     have h' := h _ a b ⟨⟨as, bs⟩, ab⟩ rfl
     simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal,
- 
+      Term.realize_constants] at h'
+    exact h'
+  · rintro h φ a b ⟨⟨as, bs⟩, ab⟩ rfl
+    simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal, Term.realize_constants]
+    exact fun contra => ab (h as bs contra)
 
 中文:
 定理 model_distinctConstantsTheory
@@ -3844,7 +4048,11 @@ theorem model_distinctConstantsTheory
   · contrapose! ab
     have h' := h _ a b ⟨⟨as, bs⟩, ab⟩ rfl
     simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal,
- 
+      Term.realize_constants] at h'
+    exact h'
+  · rintro h φ a b ⟨⟨as, bs⟩, ab⟩ rfl
+    simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal, Term.realize_constants]
+    exact fun contra => ab (h as bs contra)
 
 Depends on / 依赖: Formula, Formula.realize_equal, Formula.realize_not, Prod.exists, Realize, Sentence, Sentence.Realize, Set.mem_image, Term.realize_constants, Theory, Theory.model_iff, and_imp, contra, contrapose, distinctConstantsTheory, forall_exists_index, mem_image, model_iff, realize_constants, realize_equal
 -/

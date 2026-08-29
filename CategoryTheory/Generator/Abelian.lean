@@ -44,7 +44,19 @@ theorem has_injective_coseparator
   have : WellPowered.{v} C := wellPowered_of_isDetector G hG.isDetector
   have : HasProductsOfShape (Subobject (op G)) C := hasProductsOfShape_of_small.{v} _ _
   let T : C := Injective.under (piObj fun P : Subobject (op G) => unop P)
-  refine ⟨T, inferInstance, (Preadditive.isCoseparator_iff _).2
+  refine ⟨T, inferInstance, (Preadditive.isCoseparator_iff _).2 fun X Y f hf => ?_⟩
+  refine (Preadditive.isSeparator_iff _).1 hG _ fun h => ?_
+  suffices hh : factorThruImage (h ≫ f) = 0 by
+    rw [← Limits.image.fac (h ≫ f)]; rw [hh]; rw [zero_comp]
+  let R := Subobject.mk (factorThruImage (h ≫ f)).op
+  let q₁ : image (h ≫ f) ⟶ unop R :=
+    (Subobject.underlyingIso (factorThruImage (h ≫ f)).op).unop.hom
+  let q₂ : unop (R : Cᵒᵖ) ⟶ piObj fun P : Subobject (op G) => unop P :=
+    section_ (Pi.π (fun P : Subobject (op G) => (unop P : C)) R)
+  let q : image (h ≫ f) ⟶ T := q₁ ≫ q₂ ≫ Injective.ι _
+  exact zero_of_comp_mono q
+    (by rw [← Injective.comp_factorThru q (Limits.image.ι (h ≫ f)), Limits.image.fac_assoc,
+      Category.assoc, hf, comp_zero])
 
 中文:
 定理 has_injective_coseparator
@@ -53,7 +65,19 @@ theorem has_injective_coseparator
   have : WellPowered.{v} C := wellPowered_of_isDetector G hG.isDetector
   have : HasProductsOfShape (Subobject (op G)) C := hasProductsOfShape_of_small.{v} _ _
   let T : C := Injective.under (piObj fun P : Subobject (op G) => unop P)
-  refine ⟨T, inferInstance, (Preadditive.isCoseparator_iff _).2
+  refine ⟨T, inferInstance, (Preadditive.isCoseparator_iff _).2 fun X Y f hf => ?_⟩
+  refine (Preadditive.isSeparator_iff _).1 hG _ fun h => ?_
+  suffices hh : factorThruImage (h ≫ f) = 0 by
+    rw [← Limits.image.fac (h ≫ f)]; rw [hh]; rw [zero_comp]
+  let R := Subobject.mk (factorThruImage (h ≫ f)).op
+  let q₁ : image (h ≫ f) ⟶ unop R :=
+    (Subobject.underlyingIso (factorThruImage (h ≫ f)).op).unop.hom
+  let q₂ : unop (R : Cᵒᵖ) ⟶ piObj fun P : Subobject (op G) => unop P :=
+    section_ (Pi.π (fun P : Subobject (op G) => (unop P : C)) R)
+  let q : image (h ≫ f) ⟶ T := q₁ ≫ q₂ ≫ Injective.ι _
+  exact zero_of_comp_mono q
+    (by rw [← Injective.comp_factorThru q (Limits.image.ι (h ≫ f)), Limits.image.fac_assoc,
+      Category.assoc, hf, comp_zero])
 
 Depends on / 依赖: HasProductsOfShape, Injective, Injective.under, Limits, Limits.image.fac, Preadditive, Preadditive.isCoseparator_iff, Preadditive.isSeparator_iff, Subobject, Subobject.mk, WellPowered, factorThruImage, hG.isDetector, hasProductsOfShape_of_small, isCoseparator_iff, isDetector, isSeparator_iff, wellPowered_of_isDetector, zero_comp
 -/

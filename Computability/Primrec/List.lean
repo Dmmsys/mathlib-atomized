@@ -63,7 +63,9 @@ theorem list_casesOn'
       (@decode (Option (β × List β)) _ (encode (f a))).map fun o => Option.casesOn o (g a) (h a) :=
     ((@map_decode_iff _ (Option (β × List β)) _ _ _ _ _).2 <|
 to₂
-        option_casesOn snd (hg.comp fst) (hh.comp₂ (fst.comp₂ Primrec₂.
+        option_casesOn snd (hg.comp fst) (hh.comp₂ (fst.comp₂ Primrec₂.left) Primrec₂.right)).comp
+      .id (encode_iff.2 hf)
+option_some_iff.1 this.of_eq fun a => by rcases f a with - | ⟨b, l⟩ <;> simp [encodek]
 
 中文:
 定理 list_casesOn'
@@ -74,7 +76,9 @@ to₂
       (@decode (Option (β × List β)) _ (encode (f a))).map fun o => Option.casesOn o (g a) (h a) :=
     ((@map_decode_iff _ (Option (β × List β)) _ _ _ _ _).2 <|
 to₂
-        option_casesOn snd (hg.comp fst) (hh.comp₂ (fst.comp₂ Primrec₂.
+        option_casesOn snd (hg.comp fst) (hh.comp₂ (fst.comp₂ Primrec₂.left) Primrec₂.right)).comp
+      .id (encode_iff.2 hf)
+option_some_iff.1 this.of_eq fun a => by rcases f a with - | ⟨b, l⟩ <;> simp [encodek]
 -/
 private theorem list_casesOn' {f : α -> List β} {g : α -> σ} {h : α -> β × List β -> σ}
     (hf : haveI := prim H; Primrec f) (hg : Primrec g) (hh : haveI := prim H; Primrec₂ h) :
@@ -103,7 +107,23 @@ have hG : Primrec₂ G := list_casesOn' H (snd.comp snd) snd
 to₂
     pair (hh.comp (fst.comp fst) <| pair ((fst.comp snd).comp fst) (fst.comp snd))
       (snd.comp snd)
-  let F := fu
+  let F := fun (a : α) (n : Nat) => (G a)^[n] (g a, f a)
+  have hF : Primrec fun a => (F a (encode (f a))).1 :=
+    (fst.comp <|
+nat_iterate (encode_iff.2 hf) (pair hg hf)
+      hG)
+  suffices forall a n, F a n = (((f a).take n).foldl (fun s b => h a (s, b)) (g a), (f a).drop n) by
+    refine hF.of_eq fun a => ?_
+    rw [this]; rw [List.take_of_length_le (length_le_encode _)]
+  introv
+  dsimp only [F]
+  generalize f a = l
+  generalize g a = x
+  induction n generalizing l x with
+  | zero => rfl
+  | succ n IH =>
+    simp only [iterate_succ, comp_apply]
+    rcases l with - | ⟨b, l⟩ <;> simp [G, IH]
 
 中文:
 定理 list_foldl'
@@ -115,7 +135,23 @@ have hG : Primrec₂ G := list_casesOn' H (snd.comp snd) snd
 to₂
     pair (hh.comp (fst.comp fst) <| pair ((fst.comp snd).comp fst) (fst.comp snd))
       (snd.comp snd)
-  let F := fu
+  let F := fun (a : α) (n : Nat) => (G a)^[n] (g a, f a)
+  have hF : Primrec fun a => (F a (encode (f a))).1 :=
+    (fst.comp <|
+nat_iterate (encode_iff.2 hf) (pair hg hf)
+      hG)
+  suffices forall a n, F a n = (((f a).take n).foldl (fun s b => h a (s, b)) (g a), (f a).drop n) by
+    refine hF.of_eq fun a => ?_
+    rw [this]; rw [List.take_of_length_le (length_le_encode _)]
+  introv
+  dsimp only [F]
+  generalize f a = l
+  generalize g a = x
+  induction n generalizing l x with
+  | zero => rfl
+  | succ n IH =>
+    simp only [iterate_succ, comp_apply]
+    rcases l with - | ⟨b, l⟩ <;> simp [G, IH]
 -/
 private theorem list_foldl' {f : α -> List β} {g : α -> σ} {h : α -> σ × β -> σ}
     (hf : haveI := prim H; Primrec f) (hg : Primrec g) (hh : haveI := prim H; Primrec₂ h) :
@@ -176,7 +212,7 @@ theorem list_reverse'
   (list_foldl' H .id (const []) <| to₂ <| ((list_cons' H).comp snd fst).comp snd).of_eq
     (suffices forall l r, List.foldl (fun (s : List β) (b : β) => b :: s) r l = List.reverseAux l r from
       fun l => this l []
-    fun l => by induction
+    fun l => by induction l <;> simp [*, List.reverseAux])
 
 中文:
 定理 list_reverse'
@@ -186,7 +222,7 @@ theorem list_reverse'
   (list_foldl' H .id (const []) <| to₂ <| ((list_cons' H).comp snd fst).comp snd).of_eq
     (suffices forall l r, List.foldl (fun (s : List β) (b : β) => b :: s) r l = List.reverseAux l r from
       fun l => this l []
-    fun l => by induction
+    fun l => by induction l <;> simp [*, List.reverseAux])
 -/
 private theorem list_reverse' :
     haveI := prim H
@@ -221,7 +257,25 @@ option_map snd (list_cons' H).comp ((@Primrec.encode α _).comp (fst.comp fst)) 
     have :
       Primrec fun n =>
         (ofNat (List Nat) n).reverse.foldl
-          
+          (fun o m => (@decode α _ m).bind fun a => o.map (List.cons (encode a))) (some []) :=
+      list_foldl' H ((list_reverse' H).comp (.ofNat (List Nat))) (const (some []))
+        (Primrec.comp₂ (bind_decode_iff.2 <| .swap this) Primrec₂.right)
+nat_iff.1
+      (encode_iff.2 this).of_eq fun n => by
+        rw [List.foldl_reverse]
+        apply Nat.case_strong_induction_on n; · simp
+        intro n IH; simp
+        rcases @decode α _ n.unpair.1 with - | a; · rfl
+        simp only [Option.bind_some, Option.map_some]
+        suffices forall (o : Option (List Nat)) (p), encode o = encode p ->
+            encode (Option.map (List.cons (encode a)) o) = encode (Option.map (List.cons a) p) from
+          this _ _ (IH _ (Nat.unpair_right_le n))
+        intro o p IH
+        cases o <;> cases p
+        · rfl
+        · injection IH
+        · injection IH
+        · exact congr_arg (fun k => (Nat.pair (encode a) k).succ.succ) (Nat.succ.inj IH)⟩
 
 中文:
 实例 list
@@ -232,7 +286,25 @@ option_map snd (list_cons' H).comp ((@Primrec.encode α _).comp (fst.comp fst)) 
     have :
       Primrec fun n =>
         (ofNat (List Nat) n).reverse.foldl
-          
+          (fun o m => (@decode α _ m).bind fun a => o.map (List.cons (encode a))) (some []) :=
+      list_foldl' H ((list_reverse' H).comp (.ofNat (List Nat))) (const (some []))
+        (Primrec.comp₂ (bind_decode_iff.2 <| .swap this) Primrec₂.right)
+nat_iff.1
+      (encode_iff.2 this).of_eq fun n => by
+        rw [List.foldl_reverse]
+        apply Nat.case_strong_induction_on n; · simp
+        intro n IH; simp
+        rcases @decode α _ n.unpair.1 with - | a; · rfl
+        simp only [Option.bind_some, Option.map_some]
+        suffices forall (o : Option (List Nat)) (p), encode o = encode p ->
+            encode (Option.map (List.cons (encode a)) o) = encode (Option.map (List.cons a) p) from
+          this _ _ (IH _ (Nat.unpair_right_le n))
+        intro o p IH
+        cases o <;> cases p
+        · rfl
+        · injection IH
+        · injection IH
+        · exact congr_arg (fun k => (Nat.pair (encode a) k).succ.succ) (Nat.succ.inj IH)⟩
 
 Depends on / 依赖: List.cons, Primcodable, Primcodable.prim, Primrec, Primrec.comp, Primrec.encode, bind_decode_iff, decode, encode, fst.comp, list_cons, list_foldl, list_reverse, nat_i, o.map, option_map, reverse, reverse.foldl
 -/
@@ -439,7 +511,9 @@ theorem list_rec
 list_foldr hf (pair (const []) hg)
 to₂ pair ((list_cons.comp fst (fst.comp snd)).comp snd) hh
   (snd.comp this).of_eq fun a => by
-    suffices F a = (f a, List.recOn (f a) (g a) fun 
+    suffices F a = (f a, List.recOn (f a) (g a) fun b l IH => h a (b, l, IH)) by rw [this]
+    dsimp [F]
+    induction f a <;> simp [*]
 
 中文:
 定理 list_rec
@@ -449,7 +523,9 @@ to₂ pair ((list_cons.comp fst (fst.comp snd)).comp snd) hh
 list_foldr hf (pair (const []) hg)
 to₂ pair ((list_cons.comp fst (fst.comp snd)).comp snd) hh
   (snd.comp this).of_eq fun a => by
-    suffices F a = (f a, List.recOn (f a) (g a) fun 
+    suffices F a = (f a, List.recOn (f a) (g a) fun b l IH => h a (b, l, IH)) by rw [this]
+    dsimp [F]
+    induction f a <;> simp [*]
 
 Depends on / 依赖: List.recOn, Primrec, fst.comp, list_cons, list_cons.comp, list_foldr, of_eq, snd.comp
 -/
@@ -478,7 +554,22 @@ theorem list_getElem?
       (Sum.inl n)
   have hF : Primrec₂ F :=
     (list_foldl fst (sumInl.comp snd)
-      ((sumCasesOn fst (nat_casesOn snd (su
+      ((sumCasesOn fst (nat_casesOn snd (sumInr.comp <| snd.comp fst) (sumInl.comp snd).to₂).to₂
+              (sumInr.comp snd).to₂).comp
+          snd).to₂).to₂
+  have :
+    @Primrec _ (Option α) _ _ fun p : List α × Nat => Sum.casesOn (F p.1 p.2) (fun _ => none) some :=
+    sumCasesOn hF (const none).to₂ (option_some.comp snd).to₂
+  this.to₂.of_eq fun l n => by
+    dsimp; symm
+    induction l generalizing n with
+    | nil => rfl
+    | cons a l IH =>
+      rcases n with - | n
+      · dsimp [F]
+        clear IH
+        induction l <;> simp_all
+      · simpa using! IH ..
 
 中文:
 定理 list_getElem?
@@ -490,7 +581,22 @@ theorem list_getElem?
       (Sum.inl n)
   have hF : Primrec₂ F :=
     (list_foldl fst (sumInl.comp snd)
-      ((sumCasesOn fst (nat_casesOn snd (su
+      ((sumCasesOn fst (nat_casesOn snd (sumInr.comp <| snd.comp fst) (sumInl.comp snd).to₂).to₂
+              (sumInr.comp snd).to₂).comp
+          snd).to₂).to₂
+  have :
+    @Primrec _ (Option α) _ _ fun p : List α × Nat => Sum.casesOn (F p.1 p.2) (fun _ => none) some :=
+    sumCasesOn hF (const none).to₂ (option_some.comp snd).to₂
+  this.to₂.of_eq fun l n => by
+    dsimp; symm
+    induction l generalizing n with
+    | nil => rfl
+    | cons a l IH =>
+      rcases n with - | n
+      · dsimp [F]
+        clear IH
+        induction l <;> simp_all
+      · simpa using! IH ..
 
 Depends on / 依赖: Nat.casesOn, Primrec, Sum.casesOn, Sum.inl, Sum.inr, casesOn, l.foldl, list_foldl, nat_casesOn, snd.comp, sumCasesOn, sumInl, sumInl.comp, sumInr, sumInr.comp
 -/
@@ -848,7 +954,12 @@ Primrec₂.option_some_iff.1
           (to₂ <|
 option_bind (snd.comp snd)
 to₂
-       
+                option_map (hg.comp (fst.comp fst) snd)
+                  (to₂ <| list_concat.comp (snd.comp fst) snd))).of_eq
+      fun a n => by
+      induction n with
+      | zero => rfl
+      | succ n IH => simp [IH, H, List.range_succ]
 
 中文:
 定理 nat_strong_rec
@@ -862,7 +973,12 @@ Primrec₂.option_some_iff.1
           (to₂ <|
 option_bind (snd.comp snd)
 to₂
-       
+                option_map (hg.comp (fst.comp fst) snd)
+                  (to₂ <| list_concat.comp (snd.comp fst) snd))).of_eq
+      fun a n => by
+      induction n with
+      | zero => rfl
+      | succ n IH => simp [IH, H, List.range_succ]
 
 Depends on / 依赖: List.range, List.range_succ, fst.comp, hg.comp, list_concat, list_concat.comp, list_getElem, nat_rec, of_eq, option_bind, option_map, option_some_iff, range_succ, snd.comp, succ.comp, this.comp
 -/
@@ -899,7 +1015,7 @@ to₂
         (snd.comp <| snd.comp snd)).of_eq
   fun a ps => by
   induction ps with simp [List.lookup, *]
-  | cons p ps ih => cases ha : 
+  | cons p ps ih => cases ha : a == p.1 <;> simp
 
 中文:
 定理 listLookup
@@ -912,7 +1028,7 @@ to₂
         (snd.comp <| snd.comp snd)).of_eq
   fun a ps => by
   induction ps with simp [List.lookup, *]
-  | cons p ps ih => cases ha : 
+  | cons p ps ih => cases ha : a == p.1 <;> simp
 
 Depends on / 依赖: List.lookup, Primrec, Primrec.beq.comp, fst.comp, list_rec, lookup, of_eq, option_some, option_some.comp, snd.comp
 -/
@@ -937,7 +1053,57 @@ theorem nat_omega_rec'
   have : DecidableEq β := Encodable.decidableEqOfEncodable β
   let mapGraph (M : List (β × σ)) (bs : List β) : List σ := bs.flatMap (Option.toList <| M.lookup ·)
   let bindList (b : β) : Nat -> List β := fun n => n.rec [b] fun _ bs => bs.flatMap l
-  let graph (b : β) : Nat -> List (β × σ) := fun 
+  let graph (b : β) : Nat -> List (β × σ) := fun i => i.rec [] fun i ih =>
+    (bindList b (m b - i)).filterMap fun b' => (g b' <| mapGraph ih (l b')).map (b', ·)
+  have mapGraph_primrec : Primrec₂ mapGraph :=
+to₂ list_flatMap snd optionToList.comp₂ listLookup.comp₂ .right (fst.comp₂ .left)
+  have bindList_primrec : Primrec₂ (bindList) :=
+    nat_rec' snd
+      (list_cons.comp fst (const []))
+      (to₂ <| list_flatMap (snd.comp snd) (hl.comp₂ .right))
+  have graph_primrec : Primrec₂ (graph) :=
+to₂ nat_rec' snd (const [])
+to₂ listFilterMap
+        (bindList_primrec.comp
+          (fst.comp fst)
+          (nat_sub.comp (hm.comp <| fst.comp fst) (fst.comp snd))) <|
+to₂ option_map
+              (hg.comp snd (mapGraph_primrec.comp (snd.comp <| snd.comp fst) (hl.comp snd)))
+              (Primrec₂.pair.comp₂ (snd.comp₂ .left) .right)
+  have : Primrec (fun b => (graph b (m b + 1))[0]?.map Prod.snd) :=
+    option_map (list_getElem?.comp (graph_primrec.comp Primrec.id (succ.comp hm)) (const 0))
+      (snd.comp₂ Primrec₂.right)
+exact option_some_iff.mp this.of_eq fun b => by
+    have graph_eq_map_bindList (i : Nat) (hi : i <= m b + 1) :
+        graph b i = (bindList b (m b + 1 - i)).map fun x => (x, f x) := by
+      have bindList_eq_nil : bindList b (m b + 1) = [] :=
+        have bindList_m_lt (k : Nat) : forall b' in bindList b k, m b' < m b + 1 - k := by
+          induction k with simp [bindList]
+          | succ k ih =>
+            grind
+        List.eq_nil_iff_forall_not_mem.mpr
+          (by intro b' ha'; by_contra; simpa using bindList_m_lt (m b + 1) b' ha')
+      have mapGraph_graph {bs bs' : List β} (has : bs' subseteq bs) :
+          mapGraph (bs.map <| fun x => (x, f x)) bs' = bs'.map f := by
+        induction bs' with simp [mapGraph]
+        | cons b bs' ih =>
+          have : b in bs ∧ bs' subseteq bs := by simpa using has
+          rcases this with ⟨ha, has'⟩
+          simpa [List.lookup_graph f ha] using ih has'
+      have graph_succ : forall i, graph b (i + 1) =
+        (bindList b (m b - i)).filterMap fun b' =>
+          (g b' <| mapGraph (graph b i) (l b')).map (b', ·) := fun _ => rfl
+      have bindList_succ : forall i, bindList b (i + 1) = (bindList b i).flatMap l := fun _ => rfl
+      induction i with
+      | zero => symm; simpa [graph] using bindList_eq_nil
+      | succ i ih =>
+        simp only [graph_succ, ih (Nat.le_of_lt hi), Nat.succ_sub (Nat.le_of_lt_succ hi),
+          Nat.succ_eq_add_one, bindList_succ, Nat.reduceSubDiff]
+        apply List.filterMap_eq_map_iff_forall_eq_some.mpr
+        intro b' ha'; simp; rw [mapGraph_graph]
+        · exact H b'
+        · exact (List.infix_flatMap_of_mem ha' l).subset
+    simp [graph_eq_map_bindList (m b + 1) (Nat.le_refl _), bindList]
 
 中文:
 定理 nat_omega_rec'
@@ -946,7 +1112,57 @@ theorem nat_omega_rec'
   have : DecidableEq β := Encodable.decidableEqOfEncodable β
   let mapGraph (M : List (β × σ)) (bs : List β) : List σ := bs.flatMap (Option.toList <| M.lookup ·)
   let bindList (b : β) : Nat -> List β := fun n => n.rec [b] fun _ bs => bs.flatMap l
-  let graph (b : β) : Nat -> List (β × σ) := fun 
+  let graph (b : β) : Nat -> List (β × σ) := fun i => i.rec [] fun i ih =>
+    (bindList b (m b - i)).filterMap fun b' => (g b' <| mapGraph ih (l b')).map (b', ·)
+  have mapGraph_primrec : Primrec₂ mapGraph :=
+to₂ list_flatMap snd optionToList.comp₂ listLookup.comp₂ .right (fst.comp₂ .left)
+  have bindList_primrec : Primrec₂ (bindList) :=
+    nat_rec' snd
+      (list_cons.comp fst (const []))
+      (to₂ <| list_flatMap (snd.comp snd) (hl.comp₂ .right))
+  have graph_primrec : Primrec₂ (graph) :=
+to₂ nat_rec' snd (const [])
+to₂ listFilterMap
+        (bindList_primrec.comp
+          (fst.comp fst)
+          (nat_sub.comp (hm.comp <| fst.comp fst) (fst.comp snd))) <|
+to₂ option_map
+              (hg.comp snd (mapGraph_primrec.comp (snd.comp <| snd.comp fst) (hl.comp snd)))
+              (Primrec₂.pair.comp₂ (snd.comp₂ .left) .right)
+  have : Primrec (fun b => (graph b (m b + 1))[0]?.map Prod.snd) :=
+    option_map (list_getElem?.comp (graph_primrec.comp Primrec.id (succ.comp hm)) (const 0))
+      (snd.comp₂ Primrec₂.right)
+exact option_some_iff.mp this.of_eq fun b => by
+    have graph_eq_map_bindList (i : Nat) (hi : i <= m b + 1) :
+        graph b i = (bindList b (m b + 1 - i)).map fun x => (x, f x) := by
+      have bindList_eq_nil : bindList b (m b + 1) = [] :=
+        have bindList_m_lt (k : Nat) : forall b' in bindList b k, m b' < m b + 1 - k := by
+          induction k with simp [bindList]
+          | succ k ih =>
+            grind
+        List.eq_nil_iff_forall_not_mem.mpr
+          (by intro b' ha'; by_contra; simpa using bindList_m_lt (m b + 1) b' ha')
+      have mapGraph_graph {bs bs' : List β} (has : bs' subseteq bs) :
+          mapGraph (bs.map <| fun x => (x, f x)) bs' = bs'.map f := by
+        induction bs' with simp [mapGraph]
+        | cons b bs' ih =>
+          have : b in bs ∧ bs' subseteq bs := by simpa using has
+          rcases this with ⟨ha, has'⟩
+          simpa [List.lookup_graph f ha] using ih has'
+      have graph_succ : forall i, graph b (i + 1) =
+        (bindList b (m b - i)).filterMap fun b' =>
+          (g b' <| mapGraph (graph b i) (l b')).map (b', ·) := fun _ => rfl
+      have bindList_succ : forall i, bindList b (i + 1) = (bindList b i).flatMap l := fun _ => rfl
+      induction i with
+      | zero => symm; simpa [graph] using bindList_eq_nil
+      | succ i ih =>
+        simp only [graph_succ, ih (Nat.le_of_lt hi), Nat.succ_sub (Nat.le_of_lt_succ hi),
+          Nat.succ_eq_add_one, bindList_succ, Nat.reduceSubDiff]
+        apply List.filterMap_eq_map_iff_forall_eq_some.mpr
+        intro b' ha'; simp; rw [mapGraph_graph]
+        · exact H b'
+        · exact (List.infix_flatMap_of_mem ha' l).subset
+    simp [graph_eq_map_bindList (m b + 1) (Nat.le_refl _), bindList]
 
 Depends on / 依赖: DecidableEq, Encodable, Encodable.decidableEqOfEncodable, M.lookup, Option.toList, bindList, bs.flatMap, decidableEqOfEncodable, filterMap, flatMap, i.rec, listLookup, listLookup.co, list_flatMap, lookup, mapGraph, mapGraph_primrec, n.rec, optionToList, optionToList.comp
 -/
@@ -1020,7 +1236,7 @@ theorem nat_omega_rec
       (Primrec₂.uncurry.mpr hm)
       (list_map (hl.comp fst snd) (Primrec₂.pair.comp₂ (fst.comp₂ .left) .right))
       (hg.comp₂ (fst.comp₂ .left) (Primrec₂.pair.comp₂ (snd.comp₂ .left) .right))
-      (by simpa using! Ord) (by simpa [Funct
+      (by simpa using! Ord) (by simpa [Function.comp] using! H)
 
 中文:
 定理 nat_omega_rec
@@ -1030,7 +1246,7 @@ theorem nat_omega_rec
       (Primrec₂.uncurry.mpr hm)
       (list_map (hl.comp fst snd) (Primrec₂.pair.comp₂ (fst.comp₂ .left) .right))
       (hg.comp₂ (fst.comp₂ .left) (Primrec₂.pair.comp₂ (snd.comp₂ .left) .right))
-      (by simpa using! Ord) (by simpa [Funct
+      (by simpa using! Ord) (by simpa [Function.comp] using! H)
 
 Depends on / 依赖: Function, Function.comp, Function.uncurry, fst.comp, hg.comp, hl.comp, list_map, nat_omega_rec, pair.comp, snd.comp, uncurry, uncurry.mp, uncurry.mpr
 -/
@@ -1903,7 +2119,11 @@ theorem to_prim
   | comp _ _ _ hf hg => exact hf.comp (.vector_ofFn fun i => hg i)
   | @prec n f g _ _ hf hg =>
     exact
-      .nat_rec' .vector_head (
+      .nat_rec' .vector_head (hf.comp Primrec.vector_tail)
+        (hg.comp <|
+Primrec.vector_cons.comp (Primrec.fst.comp .snd)
+Primrec.vector_cons.comp (Primrec.snd.comp .snd)
+            (@Primrec.vector_tail _ _ (n + 1)).comp .fst).to₂
 
 中文:
 定理 to_prim
@@ -1917,7 +2137,11 @@ theorem to_prim
   | comp _ _ _ hf hg => exact hf.comp (.vector_ofFn fun i => hg i)
   | @prec n f g _ _ hf hg =>
     exact
-      .nat_rec' .vector_head (
+      .nat_rec' .vector_head (hf.comp Primrec.vector_tail)
+        (hg.comp <|
+Primrec.vector_cons.comp (Primrec.fst.comp .snd)
+Primrec.vector_cons.comp (Primrec.snd.comp .snd)
+            (@Primrec.vector_tail _ _ (n + 1)).comp .fst).to₂
 
 Depends on / 依赖: Primrec, Primrec.fst.comp, Primrec.snd.comp, Primrec.vector_cons.comp, Primrec.vector_get.comp, Primrec.vector_tail, _root_, _root_.Primrec.succ.comp, hf.comp, hg.comp, nat_rec, vector_cons, vector_get, vector_head, vector_ofFn, vector_tail
 -/
@@ -2332,7 +2556,20 @@ theorem sqrt
       @prec' 1 _ _
         (fun v => by
           have x := v.head; have y := v.tail.head
-          exact if x.succ < y.succ * y.succ t
+          exact if x.succ < y.succ * y.succ then y else y.succ)
+        head (const 0) ?_
+    · exact this
+    have x1 : @Primrec' 3 fun v => v.head.succ := succ.comp₁ _ head
+    have y1 : @Primrec' 3 fun v => v.tail.head.succ := succ.comp₁ _ (tail head)
+    exact if_lt x1 (mul.comp₂ _ y1 y1) (tail head) y1
+  introv; symm
+  induction n with
+  | zero => simp
+  | succ n IH =>
+    dsimp; rw [IH]; split_ifs with h
+    · exact le_antisymm (Nat.sqrt_le_sqrt (Nat.le_succ _)) (Nat.lt_succ_iff.1 <| Nat.sqrt_lt.2 h)
+    · exact Nat.eq_sqrt.2
+⟨not_lt.1 h, Nat.sqrt_lt.1 Nat.lt_succ_iff.2 Nat.sqrt_succ_le_succ_sqrt _⟩
 
 中文:
 定理 sqrt
@@ -2345,7 +2582,20 @@ theorem sqrt
       @prec' 1 _ _
         (fun v => by
           have x := v.head; have y := v.tail.head
-          exact if x.succ < y.succ * y.succ t
+          exact if x.succ < y.succ * y.succ then y else y.succ)
+        head (const 0) ?_
+    · exact this
+    have x1 : @Primrec' 3 fun v => v.head.succ := succ.comp₁ _ head
+    have y1 : @Primrec' 3 fun v => v.tail.head.succ := succ.comp₁ _ (tail head)
+    exact if_lt x1 (mul.comp₂ _ y1 y1) (tail head) y1
+  introv; symm
+  induction n with
+  | zero => simp
+  | succ n IH =>
+    dsimp; rw [IH]; split_ifs with h
+    · exact le_antisymm (Nat.sqrt_le_sqrt (Nat.le_succ _)) (Nat.lt_succ_iff.1 <| Nat.sqrt_lt.2 h)
+    · exact Nat.eq_sqrt.2
+⟨not_lt.1 h, Nat.sqrt_lt.1 Nat.lt_succ_iff.2 Nat.sqrt_succ_le_succ_sqrt _⟩
 
 Depends on / 依赖: Primrec, if_lt, introv, mul.comp, n.rec, n.sqrt, succ.comp, succ_eq_add_one, v.head, v.head.succ, v.tail.head, v.tail.head.succ, x.succ, y.succ
 -/
@@ -2447,7 +2697,18 @@ theorem of_prim
             Primrec'.encode).of_eq
       fun i => by simp [encodek]
   fun f hf => by
-  induction hf
+  induction hf with
+  | zero => exact const 0
+  | succ => exact succ
+  | left => exact unpair₁ head
+  | right => exact unpair₂ head
+  | pair _ _ hf hg => exact natPair.comp₂ _ hf hg
+  | comp _ _ hf hg => exact hf.comp₁ _ hg
+  | prec _ _ hf hg =>
+    simpa using
+      prec' (unpair₂ head) (hf.comp₁ _ (unpair₁ head))
+        (hg.comp₁ _ <|
+          natPair.comp₂ _ (unpair₁ <| tail <| tail head) (natPair.comp₂ _ head (tail head)))
 
 中文:
 定理 of_prim
@@ -2459,7 +2720,18 @@ theorem of_prim
             Primrec'.encode).of_eq
       fun i => by simp [encodek]
   fun f hf => by
-  induction hf
+  induction hf with
+  | zero => exact const 0
+  | succ => exact succ
+  | left => exact unpair₁ head
+  | right => exact unpair₂ head
+  | pair _ _ hf hg => exact natPair.comp₂ _ hf hg
+  | comp _ _ hf hg => exact hf.comp₁ _ hg
+  | prec _ _ hf hg =>
+    simpa using
+      prec' (unpair₂ head) (hf.comp₁ _ (unpair₁ head))
+        (hg.comp₁ _ <|
+          natPair.comp₂ _ (unpair₁ <| tail <| tail head) (natPair.comp₂ _ head (tail head)))
 
 Depends on / 依赖: Encodable, Encodable.encode, List.Vector, Nat.Primrec, Primrec, Vector, decode, encode, encodek, hf.comp, natPair, natPair.comp, of_eq, pred.comp, v.head
 -/

@@ -44,7 +44,13 @@ theorem exists_root
   /- Since `f` has no roots, `f⁻¹` is differentiable. And since `f` is a polynomial, it tends to
   infinity at infinity, thus `f⁻¹` tends to zero at infinity. By Liouville's theorem, `f⁻¹ = 0`. -/
   have (z : Complex) : (f.eval z)⁻¹ = 0 :=
-(f.differentiable.inv hf').apply_eq_of_t
+(f.differentiable.inv hf').apply_eq_of_tendsto_cocompact z
+      Metric.cobounded_eq_cocompact (α := Complex) ▸ (Filter.tendsto_inv₀_cobounded.comp <| by
+        simpa only [tendsto_norm_atTop_iff_cobounded]
+          using f.tendsto_norm_atTop hf tendsto_norm_cobounded_atTop)
+  -- Thus `f = 0`, contradicting the fact that `0 < degree f`.
+obtain rfl : f = C 0 := Polynomial.funext fun z => inv_injective by simp [this]
+  simp at hf
 
 中文:
 定理 存在_root
@@ -55,7 +61,13 @@ theorem exists_root
   /- Since `f` has no roots, `f⁻¹` is differentiable. And since `f` is a polynomial, it tends to
   infinity at infinity, thus `f⁻¹` tends to zero at infinity. By Liouville's theorem, `f⁻¹ = 0`. -/
   have (z : Complex) : (f.eval z)⁻¹ = 0 :=
-(f.differentiable.inv hf').apply_eq_of_t
+(f.differentiable.inv hf').apply_eq_of_tendsto_cocompact z
+      Metric.cobounded_eq_cocompact (α := Complex) ▸ (Filter.tendsto_inv₀_cobounded.comp <| by
+        simpa only [tendsto_norm_atTop_iff_cobounded]
+          using f.tendsto_norm_atTop hf tendsto_norm_cobounded_atTop)
+  -- Thus `f = 0`, contradicting the fact that `0 < degree f`.
+obtain rfl : f = C 0 := Polynomial.funext fun z => inv_injective by simp [this]
+  simp at hf
 -/
 theorem exists_root {f : Complex[X]} (hf : 0 < degree f) : exists z : Complex, IsRoot f z := by
   by_contra! hf'
@@ -149,7 +161,49 @@ theorem card_complex_roots_eq_card_real_add_card_not_gal_inv
   · have : IsEmpty (p.rootSet Complex) := by rw [hp, rootSet_zero]; infer_instance
     simp_rw [(galActionHom p Complex _).support.eq_empty_of_isEmpty, hp, rootSet_zero,
       Set.toFinset_empty, Finset.card_empty]
-  have inj : Function.Injective (IsScalarTower.toAlgHom Rat 
+  have inj : Function.Injective (IsScalarTower.toAlgHom Rat Real Complex) := (algebraMap Real Complex).injective
+  rw [← Finset.card_image_of_injective _ Subtype.coe_injective]; rw [←
+    Finset.card_image_of_injective _ inj]
+  let a : Finset Complex := ?_
+  on_goal 1 => let b : Finset Complex := ?_
+  on_goal 1 => let c : Finset Complex := ?_
+  change a.card = b.card + c.card
+  have ha : forall z : Complex, z in a ↔ aeval z p = 0 := by
+    intro z; rw [Set.mem_toFinset, mem_rootSet_of_ne hp]
+  have hb : forall z : Complex, z in b ↔ aeval z p = 0 ∧ z.im = 0 := by
+    intro z
+    simp_rw [b, Finset.mem_image, Set.mem_toFinset, mem_rootSet_of_ne hp]
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      exact ⟨by rw [aeval_algHom_apply, hw, map_zero], rfl⟩
+    · rintro ⟨hz1, hz2⟩
+      have key : IsScalarTower.toAlgHom Rat Real Complex z.re = z := by
+        ext
+        · rfl
+        · rw [hz2]; rfl
+      exact ⟨z.re, inj (by rwa [← aeval_algHom_apply, key, map_zero]), key⟩
+  have hc0 :
+    forall w : p.rootSet Complex, galActionHom p Complex (restrict p Complex (Complex.conjAe.restrictScalars Rat)) w = w ↔
+        w.val.im = 0 := by
+    intro w
+    rw [Subtype.ext_iff]; rw [galActionHom_restrict]
+    exact Complex.conj_eq_iff_im
+  have hc : forall z : Complex, z in c ↔ aeval z p = 0 ∧ z.im != 0 := by
+    intro z
+    simp_rw [c, Finset.mem_image]
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      exact ⟨(mem_rootSet.mp w.2).2, mt (hc0 w).mpr (Equiv.Perm.mem_support.mp hw)⟩
+    · rintro ⟨hz1, hz2⟩
+      exact ⟨⟨z, mem_rootSet.mpr ⟨hp, hz1⟩⟩, Equiv.Perm.mem_support.mpr (mt (hc0 _).mp hz2), rfl⟩
+  rw [← Finset.card_union_of_disjoint]
+  · apply congr_arg Finset.card
+    simp_rw [Finset.ext_iff, Finset.mem_union, ha, hb, hc]
+    tauto
+  · rw [Finset.disjoint_left]
+    intro z
+    rw [hb]; rw [hc]
+    tauto
 
 中文:
 定理 card_complex_roots_eq_card_real_add_card_not_gal_inv
@@ -159,7 +213,49 @@ theorem card_complex_roots_eq_card_real_add_card_not_gal_inv
   · have : IsEmpty (p.rootSet Complex) := by rw [hp, rootSet_zero]; infer_instance
     simp_rw [(galActionHom p Complex _).support.eq_empty_of_isEmpty, hp, rootSet_zero,
       Set.toFinset_empty, Finset.card_empty]
-  have inj : Function.Injective (IsScalarTower.toAlgHom Rat 
+  have inj : Function.Injective (IsScalarTower.toAlgHom Rat Real Complex) := (algebraMap Real Complex).injective
+  rw [← Finset.card_image_of_injective _ Subtype.coe_injective]; rw [←
+    Finset.card_image_of_injective _ inj]
+  let a : Finset Complex := ?_
+  on_goal 1 => let b : Finset Complex := ?_
+  on_goal 1 => let c : Finset Complex := ?_
+  change a.card = b.card + c.card
+  have ha : forall z : Complex, z in a ↔ aeval z p = 0 := by
+    intro z; rw [Set.mem_toFinset, mem_rootSet_of_ne hp]
+  have hb : forall z : Complex, z in b ↔ aeval z p = 0 ∧ z.im = 0 := by
+    intro z
+    simp_rw [b, Finset.mem_image, Set.mem_toFinset, mem_rootSet_of_ne hp]
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      exact ⟨by rw [aeval_algHom_apply, hw, map_zero], rfl⟩
+    · rintro ⟨hz1, hz2⟩
+      have key : IsScalarTower.toAlgHom Rat Real Complex z.re = z := by
+        ext
+        · rfl
+        · rw [hz2]; rfl
+      exact ⟨z.re, inj (by rwa [← aeval_algHom_apply, key, map_zero]), key⟩
+  have hc0 :
+    forall w : p.rootSet Complex, galActionHom p Complex (restrict p Complex (Complex.conjAe.restrictScalars Rat)) w = w ↔
+        w.val.im = 0 := by
+    intro w
+    rw [Subtype.ext_iff]; rw [galActionHom_restrict]
+    exact Complex.conj_eq_iff_im
+  have hc : forall z : Complex, z in c ↔ aeval z p = 0 ∧ z.im != 0 := by
+    intro z
+    simp_rw [c, Finset.mem_image]
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      exact ⟨(mem_rootSet.mp w.2).2, mt (hc0 w).mpr (Equiv.Perm.mem_support.mp hw)⟩
+    · rintro ⟨hz1, hz2⟩
+      exact ⟨⟨z, mem_rootSet.mpr ⟨hp, hz1⟩⟩, Equiv.Perm.mem_support.mpr (mt (hc0 _).mp hz2), rfl⟩
+  rw [← Finset.card_union_of_disjoint]
+  · apply congr_arg Finset.card
+    simp_rw [Finset.ext_iff, Finset.mem_union, ha, hb, hc]
+    tauto
+  · rw [Finset.disjoint_left]
+    intro z
+    rw [hb]; rw [hc]
+    tauto
 
 Depends on / 依赖: Finset, Finset.card_empty, Finset.card_image_of_injective, Function, Function.Injective, Injective, IsEmpty, IsScalarTower, IsScalarTower.toAlgHom, Set.toFinset_empty, Subtype, Subtype.coe_injective, algebraMap, card_empty, card_image_of_injective, coe_injective, eq_empty_of_isEmpty, galActionHom, infer_instance, injective
 -/
@@ -227,7 +323,23 @@ theorem galActionHom_bijective_of_prime_degree
     simp_rw [rootSet_def, Finset.coe_sort_coe, Fintype.card_coe]
     rw [Multiset.toFinset_card_of_nodup]; rw [← Splits.natDegree_eq_card_roots]; rw [natDegree_map]
     · exact IsAlgClosed.splits _
-    · exact nodup_roots ((separabl
+    · exact nodup_roots ((separable_map (algebraMap Rat Complex)).mpr p_irr.separable)
+  let conj' := restrict p Complex (Complex.conjAe.restrictScalars Rat)
+  refine
+    ⟨galActionHom_injective p Complex, fun x =>
+      (congr_arg (x in ·) (show (galActionHom p Complex).range = ⊤ from ?_)).mpr
+        (Subgroup.mem_top x)⟩
+  apply Equiv.Perm.subgroup_eq_top_of_swap_mem
+  · rwa [h1]
+  · rw [h1]
+    simpa only [Fintype.card_eq_nat_card,
+      Nat.card_congr (MonoidHom.ofInjective (galActionHom_injective p Complex)).toEquiv.symm]
+      using prime_degree_dvd_card p_irr p_deg
+  · exact ⟨conj', rfl⟩
+  · rw [← Equiv.Perm.card_support_eq_two]
+    apply Nat.add_left_cancel
+    rw [← p_roots]; rw [← Set.toFinset_card (rootSet p Real)]; rw [← Set.toFinset_card (rootSet p Complex)]
+    exact (card_complex_roots_eq_card_real_add_card_not_gal_inv p).symm
 
 中文:
 定理 galActionHom_bijective_of_prime_degree
@@ -237,7 +349,23 @@ theorem galActionHom_bijective_of_prime_degree
     simp_rw [rootSet_def, Finset.coe_sort_coe, Fintype.card_coe]
     rw [Multiset.toFinset_card_of_nodup]; rw [← Splits.natDegree_eq_card_roots]; rw [natDegree_map]
     · exact IsAlgClosed.splits _
-    · exact nodup_roots ((separabl
+    · exact nodup_roots ((separable_map (algebraMap Rat Complex)).mpr p_irr.separable)
+  let conj' := restrict p Complex (Complex.conjAe.restrictScalars Rat)
+  refine
+    ⟨galActionHom_injective p Complex, fun x =>
+      (congr_arg (x in ·) (show (galActionHom p Complex).range = ⊤ from ?_)).mpr
+        (Subgroup.mem_top x)⟩
+  apply Equiv.Perm.subgroup_eq_top_of_swap_mem
+  · rwa [h1]
+  · rw [h1]
+    simpa only [Fintype.card_eq_nat_card,
+      Nat.card_congr (MonoidHom.ofInjective (galActionHom_injective p Complex)).toEquiv.symm]
+      using prime_degree_dvd_card p_irr p_deg
+  · exact ⟨conj', rfl⟩
+  · rw [← Equiv.Perm.card_support_eq_two]
+    apply Nat.add_left_cancel
+    rw [← p_roots]; rw [← Set.toFinset_card (rootSet p Real)]; rw [← Set.toFinset_card (rootSet p Complex)]
+    exact (card_complex_roots_eq_card_real_add_card_not_gal_inv p).symm
 
 Depends on / 依赖: Complex.conjAe.restrictScalars, Finset, Finset.coe_sort_coe, Fintype, Fintype.card, Fintype.card_coe, IsAlgClosed, IsAlgClosed.splits, Multiset, Multiset.toFinset_card_of_nodup, Splits, Splits.natDegree_eq_card_roots, algebraMap, card_coe, coe_sort_coe, congr_arg, conjAe, galActionHom, galActionHom_injective, natDegree
 -/
@@ -279,7 +407,11 @@ theorem galActionHom_bijective_of_prime_degree'
   have hn : 2 ∣ n :=
     Equiv.Perm.two_dvd_card_support
       (by
-         rw [← map_pow]; rw [← map_pow]; rw [show AlgEquiv.restr
+         rw [← map_pow]; rw [← map_pow]; rw [show AlgEquiv.restrictScalars Rat Complex.conjAe ^ 2 = 1 from
+            AlgEquiv.ext Complex.conj_conj]; rw [map_one]; rw [map_one])
+  have key := card_complex_roots_eq_card_real_add_card_not_gal_inv p
+  simp_rw [Set.toFinset_card] at key
+  lia
 
 中文:
 定理 galActionHom_bijective_of_prime_degree'
@@ -290,7 +422,11 @@ theorem galActionHom_bijective_of_prime_degree'
   have hn : 2 ∣ n :=
     Equiv.Perm.two_dvd_card_support
       (by
-         rw [← map_pow]; rw [← map_pow]; rw [show AlgEquiv.restr
+         rw [← map_pow]; rw [← map_pow]; rw [show AlgEquiv.restrictScalars Rat Complex.conjAe ^ 2 = 1 from
+            AlgEquiv.ext Complex.conj_conj]; rw [map_one]; rw [map_one])
+  have key := card_complex_roots_eq_card_real_add_card_not_gal_inv p
+  simp_rw [Set.toFinset_card] at key
+  lia
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ext, AlgEquiv.restrictScalars, Complex.conjAe, Complex.conjAe.restrictScalars, Complex.conj_conj, Equiv.Perm.two_dvd_card_support, Set.toFinset_card, card_complex_roots_eq_card_real_add_card_not_gal_inv, conjAe, conj_conj, galActionHom, galActionHom_bijective_of_prime_degree, map_one, map_pow, p_deg, p_irr, restrict, restrictScalars, simp_rw
 -/
@@ -356,7 +492,9 @@ lemma Polynomial.quadratic_dvd_of_aeval_eq_zero_im_ne_zero
   calc
     map (algebraMap Real Complex) (X ^ 2 - C (2 * z.re) * X + C (‖z‖ ^ 2))
     _ = X ^ 2 - C (↑(2 * z.re) : Complex) * X + C (‖z‖ ^ 2 : Complex) := by simp
-    _ = (X - C (conj z)) *
+    _ = (X - C (conj z)) * (X - C z) := by
+      rw [← add_conj]; rw [map_add]; rw [← mul_conj']; rw [map_mul]
+      ring
 
 中文:
 引理 多项式.quadratic_dvd_of_aeval_eq_zero_im_ne_zero
@@ -367,7 +505,9 @@ lemma Polynomial.quadratic_dvd_of_aeval_eq_zero_im_ne_zero
   calc
     map (algebraMap Real Complex) (X ^ 2 - C (2 * z.re) * X + C (‖z‖ ^ 2))
     _ = X ^ 2 - C (↑(2 * z.re) : Complex) * X + C (‖z‖ ^ 2 : Complex) := by simp
-    _ = (X - C (conj z)) *
+    _ = (X - C (conj z)) * (X - C z) := by
+      rw [← add_conj]; rw [map_add]; rw [← mul_conj']; rw [map_mul]
+      ring
 
 Depends on / 依赖: add_conj, algebraMap, convert, map_add, map_dvd_map, map_mul, mul_conj, mul_star_dvd_of_aeval_eq_zero_im_ne_zero, p.mul_star_dvd_of_aeval_eq_zero_im_ne_zero, z.re
 -/
@@ -394,7 +534,7 @@ lemma Irreducible.natDegree_le_two
     IsAlgClosed.exists_aeval_eq_zero _ p (degree_pos_of_irreducible hp).ne'
   rw [← finrank_real_complex]
   suffices p.natDegree = (minpoly Real z).natDegree from this ▸ minpoly.natDegree_le (A := Real) z
-  rw [← minpoly.eq_of_irreducible hp
+  rw [← minpoly.eq_of_irreducible hp hz]; rw [natDegree_mul hp.ne_zero (by simpa using hp.ne_zero)]; rw [natDegree_C]; rw [add_zero]
 
 中文:
 引理 不可约.natDegree_le_two
@@ -405,7 +545,7 @@ lemma Irreducible.natDegree_le_two
     IsAlgClosed.exists_aeval_eq_zero _ p (degree_pos_of_irreducible hp).ne'
   rw [← finrank_real_complex]
   suffices p.natDegree = (minpoly Real z).natDegree from this ▸ minpoly.natDegree_le (A := Real) z
-  rw [← minpoly.eq_of_irreducible hp
+  rw [← minpoly.eq_of_irreducible hp hz]; rw [natDegree_mul hp.ne_zero (by simpa using hp.ne_zero)]; rw [natDegree_C]; rw [add_zero]
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.exists_aeval_eq_zero, add_zero, degree_pos_of_irreducible, eq_of_irreducible, exists_aeval_eq_zero, finrank_real_complex, hp.ne_zero, minpoly, minpoly.eq_of_irreducible, minpoly.natDegree_le, natDegree, natDegree_C, natDegree_le, natDegree_mul, ne_zero, p.natDegree
 -/

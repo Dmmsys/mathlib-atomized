@@ -257,7 +257,12 @@ instance :
     dsimp [homologyMap]
     simp only [ShiftSequence.shiftIso_hom_app, comp_id,
       shiftShortComplexFunctorIso_zero_add_hom_app]
-  shift
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext K
+    dsimp [homologyMap]
+    simp only [ShiftSequence.shiftIso_hom_app, id_comp,
+      ← ShortComplex.homologyMap_comp, shiftFunctorAdd'_eq_shiftFunctorAdd,
+      shiftShortComplexFunctorIso_add'_hom_app n m _ rfl a a' a'' ha' ha'' K]
 
 中文:
 实例 :
@@ -269,7 +274,12 @@ instance :
     dsimp [homologyMap]
     simp only [ShiftSequence.shiftIso_hom_app, comp_id,
       shiftShortComplexFunctorIso_zero_add_hom_app]
-  shift
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext K
+    dsimp [homologyMap]
+    simp only [ShiftSequence.shiftIso_hom_app, id_comp,
+      ← ShortComplex.homologyMap_comp, shiftFunctorAdd'_eq_shiftFunctorAdd,
+      shiftShortComplexFunctorIso_add'_hom_app n m _ rfl a a' a'' ha' ha'' K]
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, homologyFunctor
 -/
@@ -410,7 +420,8 @@ lemma liftCycles_shift_homologyπ
     shiftFunctorObjXIso, Functor.shiftIso, Functor.ShiftSequence.shiftIso,
     ShiftSequence.shiftIso_inv_app, ShortComplex.homologyπ_naturality,
     ShortComplex.liftCycles_comp_cyclesMap_assoc, shiftShortComplexFunctorIso_inv_app_τ₂,
-    assoc, Iso.hom_inv_id
+    assoc, Iso.hom_inv_id, comp_id]
+  rfl
 
 中文:
 引理 liftCycles_shift_homologyπ
@@ -419,7 +430,8 @@ lemma liftCycles_shift_homologyπ
     shiftFunctorObjXIso, Functor.shiftIso, Functor.ShiftSequence.shiftIso,
     ShiftSequence.shiftIso_inv_app, ShortComplex.homologyπ_naturality,
     ShortComplex.liftCycles_comp_cyclesMap_assoc, shiftShortComplexFunctorIso_inv_app_τ₂,
-    assoc, Iso.hom_inv_id
+    assoc, Iso.hom_inv_id, comp_id]
+  rfl
 
 Depends on / 依赖: Functor, Functor.ShiftSequence.shiftIso, Functor.shiftIso, HomologicalComplex, HomologicalComplex.homologyFunctor, Int.units_mul_self, K.homology, Linear, Linear.comp_units_smul, ShiftSequence, ShiftSequence.shiftIso_inv_app, ShortComplex, ShortComplex.homology, comp_id, comp_units_smul, homologyFunctor, inv.app, liftCycles, mul_smul, n.negOnePow
 -/

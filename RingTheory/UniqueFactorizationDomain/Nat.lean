@@ -39,7 +39,10 @@ instance instWfDvdMonoid
       simp [DvdNotUnit]
     cases b
     · simp
-    obtain ⟨h1, h2⟩ := dvd_and_not_dvd_iff.2 
+    obtain ⟨h1, h2⟩ := dvd_and_not_dvd_iff.2 h
+    simp only [succ_ne_zero, cast_lt, if_false]
+    refine lt_of_le_of_ne (Nat.le_of_dvd (Nat.succ_pos _) h1) fun con => h2 ?_
+    rw [con]
 
 中文:
 实例 instWfDvdMonoid
@@ -54,7 +57,10 @@ instance instWfDvdMonoid
       simp [DvdNotUnit]
     cases b
     · simp
-    obtain ⟨h1, h2⟩ := dvd_and_not_dvd_iff.2 
+    obtain ⟨h1, h2⟩ := dvd_and_not_dvd_iff.2 h
+    simp only [succ_ne_zero, cast_lt, if_false]
+    refine lt_of_le_of_ne (Nat.le_of_dvd (Nat.succ_pos _) h1) fun con => h2 ?_
+    rw [con]
 
 Depends on / 依赖: DvdNotUnit, Nat.le_of_dvd, Nat.succ_pos, RelHomClass, RelHomClass.wellFounded, cast_lt, dvd_and_not_dvd_iff, if_false, le_of_dvd, lt_of_le_of_ne, revert, succ_ne_zero, succ_pos, wellFounded, wellFounded_lt
 -/

@@ -368,7 +368,7 @@ lemma full_L_of_isSplitEpi_unit_app
     suffices L.map (section_ (h.unit.app Y)) = h.counit.app (L.obj Y) by simp [this]
     rw [← comp_id (L.map (section_ (h.unit.app Y)))]
     simp only [Functor.id_obj, ← h.left_triangle_components Y,
-      ← assoc, ← Functor.map_comp
+      ← assoc, ← Functor.map_comp, IsSplitEpi.id, Functor.map_id, id_comp]
 
 中文:
 引理 full_L_of_isSplitEpi_unit_app
@@ -379,7 +379,7 @@ lemma full_L_of_isSplitEpi_unit_app
     suffices L.map (section_ (h.unit.app Y)) = h.counit.app (L.obj Y) by simp [this]
     rw [← comp_id (L.map (section_ (h.unit.app Y)))]
     simp only [Functor.id_obj, ← h.left_triangle_components Y,
-      ← assoc, ← Functor.map_comp
+      ← assoc, ← Functor.map_comp, IsSplitEpi.id, Functor.map_id, id_comp]
 
 Depends on / 依赖: Functor, Functor.id_obj, Functor.map_comp, Functor.map_id, IsSplitEpi, IsSplitEpi.id, L.map, L.obj, comp_id, counit, h.counit.app, h.homEquiv, h.left_triangle_components, h.unit.app, homEquiv, id_comp, id_obj, left_triangle_components, map_comp, map_id
 -/
@@ -451,7 +451,7 @@ lemma full_R_of_isSplitMono_counit_app
     suffices R.map (retraction (h.counit.app X)) = h.unit.app (R.obj X) by simp [this]
     rw [← id_comp (R.map (retraction (h.counit.app X)))]
     simp only [Functor.id_obj, ← h.right_triangle_components X,
-      assoc, ← Fu
+      assoc, ← Functor.map_comp, IsSplitMono.id, Functor.map_id, comp_id]
 
 中文:
 引理 full_R_of_isSplitMono_counit_app
@@ -462,7 +462,7 @@ lemma full_R_of_isSplitMono_counit_app
     suffices R.map (retraction (h.counit.app X)) = h.unit.app (R.obj X) by simp [this]
     rw [← id_comp (R.map (retraction (h.counit.app X)))]
     simp only [Functor.id_obj, ← h.right_triangle_components X,
-      assoc, ← Fu
+      assoc, ← Functor.map_comp, IsSplitMono.id, Functor.map_id, comp_id]
 
 Depends on / 依赖: Functor, Functor.id_obj, Functor.map_comp, Functor.map_id, IsSplitMono, IsSplitMono.id, R.map, R.obj, comp_id, counit, h.counit.app, h.homEquiv, h.right_triangle_components, h.unit.app, homEquiv, id_comp, id_obj, map_comp, map_id, retraction
 -/
@@ -983,7 +983,8 @@ theorem isIso_map_unit_of_isLeftAdjoint_comp
 FF.homEquiv.symm.trans
           (h.homEquiv X (S.obj Y)).trans (adj2.homEquiv X Y).symm).bijective using 1
   ext x
-  have := adj2.counit_natu
+  have := adj2.counit_naturality x
+  simp_all [Adjunction.homEquiv]
 
 中文:
 定理 isIso_map_unit_of_isLeftAdjoint_comp
@@ -997,7 +998,8 @@ FF.homEquiv.symm.trans
 FF.homEquiv.symm.trans
           (h.homEquiv X (S.obj Y)).trans (adj2.homEquiv X Y).symm).bijective using 1
   ext x
-  have := adj2.counit_natu
+  have := adj2.counit_naturality x
+  simp_all [Adjunction.homEquiv]
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv, FF.homEquiv.symm.trans, FullyFaithful, FullyFaithful.ofFullyFaithful, L.obj, R.obj, S.obj, adj2.counit_naturality, adj2.homEquiv, bijective, convert, counit_naturality, h.homEquiv, homEquiv, isIso_of_coyoneda_map_bijective, ofFullyFaithful
 -/

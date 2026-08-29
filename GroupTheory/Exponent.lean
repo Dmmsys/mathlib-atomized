@@ -354,7 +354,8 @@ theorem exponent_eq_sInf
     rw [Monoid.exponent]; rw [dif_pos h]; rw [Nat.sInf_def h']
     congr
   · have : {d | 0 < d ∧ forall (x : G), x ^ d = 1} = ∅ :=
-      Set.eq_empty_of_forall_notMem fun n hn => h ⟨n, h
+      Set.eq_empty_of_forall_notMem fun n hn => h ⟨n, hn⟩
+    rw [Monoid.exponent_eq_zero_iff.mpr h]; rw [this]; rw [Nat.sInf_empty]
 
 中文:
 定理 exponent_eq_sInf
@@ -364,7 +365,8 @@ theorem exponent_eq_sInf
     rw [Monoid.exponent]; rw [dif_pos h]; rw [Nat.sInf_def h']
     congr
   · have : {d | 0 < d ∧ forall (x : G), x ^ d = 1} = ∅ :=
-      Set.eq_empty_of_forall_notMem fun n hn => h ⟨n, h
+      Set.eq_empty_of_forall_notMem fun n hn => h ⟨n, hn⟩
+    rw [Monoid.exponent_eq_zero_iff.mpr h]; rw [this]; rw [Nat.sInf_empty]
 
 Depends on / 依赖: ExponentExists, Monoid, Monoid.ExponentExists, Monoid.exponent, Monoid.exponent_eq_zero_iff.mpr, Nat.sInf_def, Nat.sInf_empty, Nonempty, Set.eq_empty_of_forall_notMem, dif_pos, eq_empty_of_forall_notMem, exponent, exponent_eq_zero_iff, sInf_def, sInf_empty
 -/
@@ -590,7 +592,10 @@ theorem exp_eq_one_iff
   · apply exponent_min' _ Nat.one_pos
     simp [eq_iff_true_of_subsingleton]
   · apply Nat.succ_le_of_lt
-    apply expone
+    apply exponent_pos_of_exists 1 Nat.one_pos
+    simp [eq_iff_true_of_subsingleton]
+
+@[to_additive (attr := simp) AddMonoid.exp_eq_one_of_subsingleton]
 
 中文:
 定理 exp_eq_one_iff
@@ -601,7 +606,10 @@ theorem exp_eq_one_iff
   · apply exponent_min' _ Nat.one_pos
     simp [eq_iff_true_of_subsingleton]
   · apply Nat.succ_le_of_lt
-    apply expone
+    apply exponent_pos_of_exists 1 Nat.one_pos
+    simp [eq_iff_true_of_subsingleton]
+
+@[to_additive (attr := simp) AddMonoid.exp_eq_one_of_subsingleton]
 
 Depends on / 依赖: Monoid, Monoid.pow_exponent_eq_one, Nat.one_pos, Nat.succ_le_of_lt, a_eq_b, eq_iff_true_of_subsingleton, eq_one, exponent_min, exponent_pos_of_exists, le_antisymm, one_pos, pow_exponent_eq_one, pow_one, succ_le_of_lt
 -/
@@ -707,7 +715,17 @@ theorem exponent_dvd_iff_forall_pow_eq_one
   · intro hG
     by_contra h
     rw [Nat.dvd_iff_mod_eq_zero]; rw [← Ne]; rw [← pos_iff_ne_zero] at h
-    have h₂ : n % expone
+    have h₂ : n % exponent G < exponent G := Nat.mod_lt _ (exponent_pos_of_exists n hpos hG)
+    have h₃ : exponent G <= n % exponent G := by
+      apply exponent_min' _ h
+      simp_rw [← pow_eq_mod_exponent]
+      exact hG
+    exact h₂.not_ge h₃
+
+@[to_additive]
+alias ⟨_, exponent_dvd_of_forall_pow_eq_one⟩ := exponent_dvd_iff_forall_pow_eq_one
+
+@[to_additive]
 
 中文:
 定理 exponent_dvd_iff_对任意_pow_eq_one
@@ -723,7 +741,17 @@ theorem exponent_dvd_iff_forall_pow_eq_one
   · intro hG
     by_contra h
     rw [Nat.dvd_iff_mod_eq_zero]; rw [← Ne]; rw [← pos_iff_ne_zero] at h
-    have h₂ : n % expone
+    have h₂ : n % exponent G < exponent G := Nat.mod_lt _ (exponent_pos_of_exists n hpos hG)
+    have h₃ : exponent G <= n % exponent G := by
+      apply exponent_min' _ h
+      simp_rw [← pow_eq_mod_exponent]
+      exact hG
+    exact h₂.not_ge h₃
+
+@[to_additive]
+alias ⟨_, exponent_dvd_of_forall_pow_eq_one⟩ := exponent_dvd_iff_forall_pow_eq_one
+
+@[to_additive]
 
 Depends on / 依赖: Nat.dvd_iff_mod_eq_zero, Nat.mod_lt, dvd_iff_mod_eq_zero, eq_zero_or_pos, exponent, exponent_min, exponent_pos_of_exists, mod_lt, n.eq_zero_or_pos, not_ge, pos_iff_ne_zero, pow_eq_mod_exponent, pow_zero, simp_rw
 -/
@@ -819,7 +847,23 @@ theorem _root_.Nat.Prime.exists_orderOf_eq_pow_factorization_exponent
     Ne.bot_lt fun ht => by
       rw [ht] at h
       apply h
-      rw [bot_eq_zero]; rw [Nat.factorization_zero]; rw [Finsupp.zero_app
+      rw [bot_eq_zero]; rw [Nat.factorization_zero]; rw [Finsupp.zero_apply]
+  rw [← Finsupp.mem_support_iff] at h
+  obtain ⟨g, hg⟩ : exists g : G, g ^ (exponent G / p) != 1 := by
+    suffices key : ¬exponent G ∣ exponent G / p by
+      rwa [exponent_dvd_iff_forall_pow_eq_one, not_forall] at key
+    exact fun hd =>
+      hp.one_lt.not_ge
+        ((mul_le_iff_le_one_left he).mp <|
+Nat.le_of_dvd he Nat.mul_dvd_of_dvd_div (Nat.dvd_of_mem_primeFactors h) hd)
+  obtain ⟨k, hk : exponent G = p ^ _ * k⟩ := Nat.ordProj_dvd _ _
+  obtain ⟨t, ht⟩ := Nat.exists_eq_succ_of_ne_zero (Finsupp.mem_support_iff.mp h)
+  refine ⟨g ^ k, ?_⟩
+  rw [ht]
+  apply orderOf_eq_prime_pow
+  · rwa [hk, mul_comm, ht, pow_succ, ← mul_assoc, Nat.mul_div_cancel _ hp.pos, pow_mul] at hg
+  · rw [← Nat.succ_eq_add_one, ← ht, ← pow_mul, mul_comm, ← hk]
+    exact pow_exponent_eq_one g
 
 中文:
 定理 _root_.自然数.素.存在_orderOf_eq_pow_factorization_exponent
@@ -832,7 +876,23 @@ theorem _root_.Nat.Prime.exists_orderOf_eq_pow_factorization_exponent
     Ne.bot_lt fun ht => by
       rw [ht] at h
       apply h
-      rw [bot_eq_zero]; rw [Nat.factorization_zero]; rw [Finsupp.zero_app
+      rw [bot_eq_zero]; rw [Nat.factorization_zero]; rw [Finsupp.zero_apply]
+  rw [← Finsupp.mem_support_iff] at h
+  obtain ⟨g, hg⟩ : exists g : G, g ^ (exponent G / p) != 1 := by
+    suffices key : ¬exponent G ∣ exponent G / p by
+      rwa [exponent_dvd_iff_forall_pow_eq_one, not_forall] at key
+    exact fun hd =>
+      hp.one_lt.not_ge
+        ((mul_le_iff_le_one_left he).mp <|
+Nat.le_of_dvd he Nat.mul_dvd_of_dvd_div (Nat.dvd_of_mem_primeFactors h) hd)
+  obtain ⟨k, hk : exponent G = p ^ _ * k⟩ := Nat.ordProj_dvd _ _
+  obtain ⟨t, ht⟩ := Nat.exists_eq_succ_of_ne_zero (Finsupp.mem_support_iff.mp h)
+  refine ⟨g ^ k, ?_⟩
+  rw [ht]
+  apply orderOf_eq_prime_pow
+  · rwa [hk, mul_comm, ht, pow_succ, ← mul_assoc, Nat.mul_div_cancel _ hp.pos, pow_mul] at hg
+  · rw [← Nat.succ_eq_add_one, ← ht, ← pow_mul, mul_comm, ← hk]
+    exact pow_exponent_eq_one g
 
 Depends on / 依赖: Fact.mk, Finsupp, Finsupp.mem_support_iff, Finsupp.zero_apply, Nat.factorization_zero, Ne.bot_lt, bot_eq_zero, bot_lt, eq_or_ne, exponent, exponent_dvd_iff_forall_pow_eq_one, factorization, factorization_zero, hp.o, mem_support_iff, not_forall, orderOf_one, pow_zero, zero_apply
 -/
@@ -883,7 +943,7 @@ lemma _root_.Commute.orderOf_mul_pow_eq_lcm
   rw [(h.pow_pow _ _).orderOf_mul_eq_mul_orderOf_of_coprime]
   all_goals iterate 2 rw [orderOf_pow_orderOf_div]; try rw [Coprime]
   all_goals simp [factorizationLCMLeft_mul_factorizationLCMRight, factorizationLCMLeft_dvd_left,
-    factorizationLCMRight_dvd_right, coprime_factorizationLCMLeft_fact
+    factorizationLCMRight_dvd_right, coprime_factorizationLCMLeft_factorizationLCMRight, hx, hy]
 
 中文:
 引理 _root_.Commute.orderOf_mul_pow_eq_lcm
@@ -892,7 +952,7 @@ lemma _root_.Commute.orderOf_mul_pow_eq_lcm
   rw [(h.pow_pow _ _).orderOf_mul_eq_mul_orderOf_of_coprime]
   all_goals iterate 2 rw [orderOf_pow_orderOf_div]; try rw [Coprime]
   all_goals simp [factorizationLCMLeft_mul_factorizationLCMRight, factorizationLCMLeft_dvd_left,
-    factorizationLCMRight_dvd_right, coprime_factorizationLCMLeft_fact
+    factorizationLCMRight_dvd_right, coprime_factorizationLCMLeft_factorizationLCMRight, hx, hy]
 
 Depends on / 依赖: Coprime, all_goals, coprime_factorizationLCMLeft_factorizationLCMRight, factorizationLCMLeft_dvd_left, factorizationLCMLeft_mul_factorizationLCMRight, factorizationLCMRight_dvd_right, h.pow_pow, iterate, orderOf_mul_eq_mul_orderOf_of_coprime, orderOf_pow_orderOf_div, pow_pow
 -/
@@ -923,7 +983,8 @@ theorem _root_.Commute.exists_orderOf_eq_lcm
   · exact ⟨x, subset_closure (by simp), by simp [hx]⟩
   · exact ⟨x, subset_closure (by simp), by simp [hx]⟩
   · exact ⟨y, subset_closure (by simp), by simp [hy]⟩
-  · exact ⟨_, mul_mem (pow_mem (subset_closure (by simp)) _) (pow_mem (su
+  · exact ⟨_, mul_mem (pow_mem (subset_closure (by simp)) _) (pow_mem (subset_closure (by simp)) _),
+      h.orderOf_mul_pow_eq_lcm hx hy⟩
 
 中文:
 定理 _root_.Commute.存在_orderOf_eq_lcm
@@ -933,7 +994,8 @@ theorem _root_.Commute.exists_orderOf_eq_lcm
   · exact ⟨x, subset_closure (by simp), by simp [hx]⟩
   · exact ⟨x, subset_closure (by simp), by simp [hx]⟩
   · exact ⟨y, subset_closure (by simp), by simp [hy]⟩
-  · exact ⟨_, mul_mem (pow_mem (subset_closure (by simp)) _) (pow_mem (su
+  · exact ⟨_, mul_mem (pow_mem (subset_closure (by simp)) _) (pow_mem (subset_closure (by simp)) _),
+      h.orderOf_mul_pow_eq_lcm hx hy⟩
 
 Depends on / 依赖: h.orderOf_mul_pow_eq_lcm, mul_mem, orderOf, orderOf_mul_pow_eq_lcm, pow_mem, subset_closure
 -/
@@ -964,7 +1026,8 @@ exact Eq.symm (hp.dvd_iff_eq hg).mp hG ▸ Monoid.order_dvd_exponent g
     by_cases hg : g = 1
     · simp [hg]
     · rw [h g hg]
-  · obtain ⟨g, hg⟩ := exists_ne (1 : G
+  · obtain ⟨g, hg⟩ := exists_ne (1 : G)
+    simpa [h g hg] using Monoid.order_dvd_exponent g
 
 中文:
 引理 exponent_eq_prime_iff
@@ -978,7 +1041,8 @@ exact Eq.symm (hp.dvd_iff_eq hg).mp hG ▸ Monoid.order_dvd_exponent g
     by_cases hg : g = 1
     · simp [hg]
     · rw [h g hg]
-  · obtain ⟨g, hg⟩ := exists_ne (1 : G
+  · obtain ⟨g, hg⟩ := exists_ne (1 : G)
+    simpa [h g hg] using Monoid.order_dvd_exponent g
 
 Depends on / 依赖: Eq.symm, Monoid, Monoid.order_dvd_exponent, dvd_antisymm, dvd_iff_eq, exists_ne, exponent_dvd, hp.dvd_iff_eq, orderOf_eq_one_iff, order_dvd_exponent
 -/
@@ -1010,7 +1074,22 @@ theorem exponent_ne_zero_iff_range_orderOf_finite
     obtain ⟨m, ⟨t, rfl⟩, het⟩ := Set.Infinite.exists_gt h (exponent G)
     exact pow_ne_one_of_lt_orderOf he het (pow_exponent_eq_one t)
   · lift Set.range (orderOf (G := G)) to Finset Nat using he with t ht
-    have htpos : 0 < t.prod id := b
+    have htpos : 0 < t.prod id := by
+      refine Finset.prod_pos fun a ha => ?_
+      rw [← Finset.mem_coe]; rw [ht] at ha
+      obtain ⟨k, rfl⟩ := ha
+      exact h k
+    suffices exponent G ∣ t.prod id by
+      intro h
+      rw [h]; rw [zero_dvd_iff] at this
+      exact htpos.ne' this
+    rw [exponent_dvd]
+    intro g
+    apply Finset.dvd_prod_of_mem id (?_ : orderOf g in _)
+    rw [← Finset.mem_coe]; rw [ht]
+    exact Set.mem_range_self g
+
+@[to_additive]
 
 中文:
 定理 exponent_ne_zero_iff_range_orderOf_finite
@@ -1021,7 +1100,22 @@ theorem exponent_ne_zero_iff_range_orderOf_finite
     obtain ⟨m, ⟨t, rfl⟩, het⟩ := Set.Infinite.exists_gt h (exponent G)
     exact pow_ne_one_of_lt_orderOf he het (pow_exponent_eq_one t)
   · lift Set.range (orderOf (G := G)) to Finset Nat using he with t ht
-    have htpos : 0 < t.prod id := b
+    have htpos : 0 < t.prod id := by
+      refine Finset.prod_pos fun a ha => ?_
+      rw [← Finset.mem_coe]; rw [ht] at ha
+      obtain ⟨k, rfl⟩ := ha
+      exact h k
+    suffices exponent G ∣ t.prod id by
+      intro h
+      rw [h]; rw [zero_dvd_iff] at this
+      exact htpos.ne' this
+    rw [exponent_dvd]
+    intro g
+    apply Finset.dvd_prod_of_mem id (?_ : orderOf g in _)
+    rw [← Finset.mem_coe]; rw [ht]
+    exact Set.mem_range_self g
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finset.prod_pos, Infinite, Set.Infinite.exists_gt, Set.range, exists_gt, exponen, exponent, htpos.ne, mem_coe, orderOf, pow_exponent_eq_one, pow_ne_one_of_lt_orderOf, prod_pos, t.prod, zero_dvd_iff
 -/
@@ -1261,7 +1355,9 @@ theorem ExponentExists.of_finite
   refine ⟨(Finset.univ : Finset G).lcm orderOf, ?_, fun g => ?_⟩
   · simpa [pos_iff_ne_zero, Finset.lcm_eq_zero_iff] using fun x => (_root_.orderOf_pos x).ne'
   · rw [← orderOf_dvd_iff_pow_eq_one, lcm_orderOf_eq_exponent]
-    e
+    exact order_dvd_exponent g
+
+@[to_additive]
 
 中文:
 定理 ExponentExists.of_finite
@@ -1272,7 +1368,9 @@ theorem ExponentExists.of_finite
   refine ⟨(Finset.univ : Finset G).lcm orderOf, ?_, fun g => ?_⟩
   · simpa [pos_iff_ne_zero, Finset.lcm_eq_zero_iff] using fun x => (_root_.orderOf_pos x).ne'
   · rw [← orderOf_dvd_iff_pow_eq_one, lcm_orderOf_eq_exponent]
-    e
+    exact order_dvd_exponent g
+
+@[to_additive]
 
 Depends on / 依赖: ExponentExists, Finset, Finset.lcm_eq_zero_iff, Finset.univ, Fintype, Fintype.ofFinite, Monoid, Monoid.ExponentExists, _inst, _root_, _root_.orderOf_pos, lcm_eq_zero_iff, lcm_orderOf_eq_exponent, ofFinite, orderOf, orderOf_dvd_iff_pow_eq_one, orderOf_pos, order_dvd_exponent, pos_iff_ne_zero
 -/
@@ -1377,7 +1475,36 @@ theorem exists_orderOf_eq_exponent
     rwa [← exponent_ne_zero_iff_range_orderOf_finite hG.orderOf_pos]
   obtain ⟨t, ht⟩ := hne.csSup_mem hfin
   use t
-  apply Na
+  apply Nat.dvd_antisymm (order_dvd_exponent _)
+  refine Nat.dvd_of_primeFactorsList_subperm he ?_
+  rw [List.subperm_ext_iff]
+  by_contra! ⟨p, hp, hpe⟩
+  replace hp := Nat.prime_of_mem_primeFactorsList hp
+  simp only [Nat.primeFactorsList_count_eq] at hpe
+  set k := (orderOf t).factorization p with hk
+  obtain ⟨g, hg⟩ := hp.exists_orderOf_eq_pow_factorization_exponent G
+  suffices orderOf t < orderOf (t ^ p ^ k * g) by
+    rw [ht] at this
+    exact this.not_ge (le_csSup hfin.bddAbove <| Set.mem_range_self _)
+  have hpk : p ^ k ∣ orderOf t := Nat.ordProj_dvd _ _
+  have hpk' : orderOf (t ^ p ^ k) = orderOf t / p ^ k := by
+    rw [orderOf_pow' t (pow_ne_zero k hp.ne_zero)]; rw [Nat.gcd_eq_right hpk]
+  obtain ⟨a, ha⟩ := Nat.exists_eq_add_of_lt hpe
+  have hcoprime : (orderOf (t ^ p ^ k)).Coprime (orderOf g) := by
+    rw [hg]; rw [Nat.coprime_pow_right_iff (pos_of_gt hpe)]; rw [Nat.coprime_comm]
+    apply Or.resolve_right (Nat.coprime_or_dvd_of_prime hp _)
+    nth_rw 1 [← pow_one p]
+    have : 1 = (Nat.factorization (orderOf (t ^ p ^ k))) p + 1 := by
+      rw [hpk']; rw [Nat.factorization_div hpk]
+      simp [k, hp]
+    rw [this]
+    -- Porting note: convert made to_additive complain
+    exact Nat.pow_succ_factorization_not_dvd (hG.orderOf_pos <| t ^ p ^ k).ne' hp
+  rw [(Commute.all _ g).orderOf_mul_eq_mul_orderOf_of_coprime hcoprime]; rw [hpk']; rw [hg]; rw [ha]; rw [hk]; rw [pow_add]; rw [pow_add]; rw [pow_one]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Nat.div_mul_cancel]; rw [mul_assoc]; rw [lt_mul_iff_one_lt_right hG.orderOf_pos t]; rw [← pow_succ]
+  · exact one_lt_pow₀ hp.one_lt a.succ_ne_zero
+  · exact hpk
+
+@[to_additive]
 
 中文:
 定理 存在_orderOf_eq_exponent
@@ -1390,7 +1517,36 @@ theorem exists_orderOf_eq_exponent
     rwa [← exponent_ne_zero_iff_range_orderOf_finite hG.orderOf_pos]
   obtain ⟨t, ht⟩ := hne.csSup_mem hfin
   use t
-  apply Na
+  apply Nat.dvd_antisymm (order_dvd_exponent _)
+  refine Nat.dvd_of_primeFactorsList_subperm he ?_
+  rw [List.subperm_ext_iff]
+  by_contra! ⟨p, hp, hpe⟩
+  replace hp := Nat.prime_of_mem_primeFactorsList hp
+  simp only [Nat.primeFactorsList_count_eq] at hpe
+  set k := (orderOf t).factorization p with hk
+  obtain ⟨g, hg⟩ := hp.exists_orderOf_eq_pow_factorization_exponent G
+  suffices orderOf t < orderOf (t ^ p ^ k * g) by
+    rw [ht] at this
+    exact this.not_ge (le_csSup hfin.bddAbove <| Set.mem_range_self _)
+  have hpk : p ^ k ∣ orderOf t := Nat.ordProj_dvd _ _
+  have hpk' : orderOf (t ^ p ^ k) = orderOf t / p ^ k := by
+    rw [orderOf_pow' t (pow_ne_zero k hp.ne_zero)]; rw [Nat.gcd_eq_right hpk]
+  obtain ⟨a, ha⟩ := Nat.exists_eq_add_of_lt hpe
+  have hcoprime : (orderOf (t ^ p ^ k)).Coprime (orderOf g) := by
+    rw [hg]; rw [Nat.coprime_pow_right_iff (pos_of_gt hpe)]; rw [Nat.coprime_comm]
+    apply Or.resolve_right (Nat.coprime_or_dvd_of_prime hp _)
+    nth_rw 1 [← pow_one p]
+    have : 1 = (Nat.factorization (orderOf (t ^ p ^ k))) p + 1 := by
+      rw [hpk']; rw [Nat.factorization_div hpk]
+      simp [k, hp]
+    rw [this]
+    -- Porting note: convert made to_additive complain
+    exact Nat.pow_succ_factorization_not_dvd (hG.orderOf_pos <| t ^ p ^ k).ne' hp
+  rw [(Commute.all _ g).orderOf_mul_eq_mul_orderOf_of_coprime hcoprime]; rw [hpk']; rw [hg]; rw [ha]; rw [hk]; rw [pow_add]; rw [pow_add]; rw [pow_one]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Nat.div_mul_cancel]; rw [mul_assoc]; rw [lt_mul_iff_one_lt_right hG.orderOf_pos t]; rw [← pow_succ]
+  · exact one_lt_pow₀ hp.one_lt a.succ_ne_zero
+  · exact hpk
+
+@[to_additive]
 
 Depends on / 依赖: Finite, List.subperm_ext_iff, Nat.dvd_antisymm, Nat.dvd_of_primeFactorsList_subperm, Nat.primeFactorsL, Nat.prime_of_mem_primeFactorsList, Nonempty, Set.range, csSup_mem, dvd_antisymm, dvd_of_primeFactorsList_subperm, exponent_ne_zero, exponent_ne_zero_iff_range_orderOf_finite, hG.exponent_ne_zero, hG.orderOf_pos, hne.csSup_mem, orderOf, orderOf_one, orderOf_pos, order_dvd_exponent
 -/
@@ -1445,7 +1601,13 @@ theorem exponent_eq_iSup_orderOf
     rw [he]; rw [Set.Infinite.Nat.sSup_eq_zero <| (exponent_eq_zero_iff_range_orderOf_infinite h).1 he]
   case pos he =>
     rw [csSup_eq_of_forall_le_of_forall_lt_exists_gt (Set.range_nonempty _)]
-    
+    · simp_rw [Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff]
+      exact orderOf_le_exponent he
+    intro x hx
+    obtain ⟨g, hg⟩ := exists_orderOf_eq_exponent he
+    rw [← hg] at hx
+    simp_rw [Set.mem_range, exists_exists_eq_and]
+    exact ⟨g, hx⟩
 
 中文:
 定理 exponent_eq_iSup_orderOf
@@ -1458,7 +1620,13 @@ theorem exponent_eq_iSup_orderOf
     rw [he]; rw [Set.Infinite.Nat.sSup_eq_zero <| (exponent_eq_zero_iff_range_orderOf_infinite h).1 he]
   case pos he =>
     rw [csSup_eq_of_forall_le_of_forall_lt_exists_gt (Set.range_nonempty _)]
-    
+    · simp_rw [Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff]
+      exact orderOf_le_exponent he
+    intro x hx
+    obtain ⟨g, hg⟩ := exists_orderOf_eq_exponent he
+    rw [← hg] at hx
+    simp_rw [Set.mem_range, exists_exists_eq_and]
+    exact ⟨g, hx⟩
 
 Depends on / 依赖: ExponentExists, Infinite, Set.Infinite.Nat.sSup_eq_zero, Set.mem_range, Set.range_nonempty, csSup_eq_of_forall_le_of_forall_lt_exists_gt, exists_exists_eq_and, exists_orderOf_eq_exponent, exponent_eq_zero_iff, exponent_eq_zero_iff_range_orderOf_infinite, forall_apply_eq_imp_iff, forall_exists_index, mem_range, orderOf_le_exponent, range_nonempty, sSup_eq_zero, simp_rw
 -/
@@ -1807,7 +1975,8 @@ theorem Monoid.exponent_pi
     rw [Pi.pow_apply]; rw [Pi.one_apply]; rw [← orderOf_dvd_iff_pow_eq_one]
     apply dvd_trans (Monoid.order_dvd_exponent (m i))
     exact Finset.dvd_lcm (mem_univ i)
-  · apply Finset.lcm_dvd fun i _ =
+  · apply Finset.lcm_dvd fun i _ => ?_
+    exact MonoidHom.exponent_dvd (f := Pi.evalMonoidHom (M ·) i) (Function.surjective_eval i)
 
 中文:
 定理 幺半群.exponent_pi
@@ -1819,7 +1988,8 @@ theorem Monoid.exponent_pi
     rw [Pi.pow_apply]; rw [Pi.one_apply]; rw [← orderOf_dvd_iff_pow_eq_one]
     apply dvd_trans (Monoid.order_dvd_exponent (m i))
     exact Finset.dvd_lcm (mem_univ i)
-  · apply Finset.lcm_dvd fun i _ =
+  · apply Finset.lcm_dvd fun i _ => ?_
+    exact MonoidHom.exponent_dvd (f := Pi.evalMonoidHom (M ·) i) (Function.surjective_eval i)
 
 Depends on / 依赖: Finset, Finset.dvd_lcm, Finset.lcm_dvd, Function, Function.surjective_eval, Monoid, Monoid.order_dvd_exponent, MonoidHom, MonoidHom.exponent_dvd, Pi.evalMonoidHom, Pi.one_apply, Pi.pow_apply, dvd_antisymm, dvd_lcm, dvd_trans, evalMonoidHom, exponent_dvd, exponent_dvd_of_forall_pow_eq_one, lcm_dvd, mem_univ
 -/
@@ -1850,7 +2020,10 @@ theorem Monoid.exponent_prod
     ext1
     · rw [Prod.pow_fst, Prod.fst_one, ← orderOf_dvd_iff_pow_eq_one]
 exact dvd_trans (Monoid.order_dvd_exponent (g.1)) dvd_lcm_left _ _
-    · rw [Prod.pow_snd, Prod.snd_one, ← orderOf_dvd_iff
+    · rw [Prod.pow_snd, Prod.snd_one, ← orderOf_dvd_iff_pow_eq_one]
+exact dvd_trans (Monoid.order_dvd_exponent (g.2)) dvd_lcm_right _ _
+  · exact MonoidHom.exponent_dvd (f := MonoidHom.fst M₁ M₂) Prod.fst_surjective
+  · exact MonoidHom.exponent_dvd (f := MonoidHom.snd M₁ M₂) Prod.snd_surjective
 
 中文:
 定理 幺半群.exponent_prod
@@ -1861,7 +2034,10 @@ exact dvd_trans (Monoid.order_dvd_exponent (g.1)) dvd_lcm_left _ _
     ext1
     · rw [Prod.pow_fst, Prod.fst_one, ← orderOf_dvd_iff_pow_eq_one]
 exact dvd_trans (Monoid.order_dvd_exponent (g.1)) dvd_lcm_left _ _
-    · rw [Prod.pow_snd, Prod.snd_one, ← orderOf_dvd_iff
+    · rw [Prod.pow_snd, Prod.snd_one, ← orderOf_dvd_iff_pow_eq_one]
+exact dvd_trans (Monoid.order_dvd_exponent (g.2)) dvd_lcm_right _ _
+  · exact MonoidHom.exponent_dvd (f := MonoidHom.fst M₁ M₂) Prod.fst_surjective
+  · exact MonoidHom.exponent_dvd (f := MonoidHom.snd M₁ M₂) Prod.snd_surjective
 
 Depends on / 依赖: Monoid, Monoid.order_dvd_exponent, MonoidHom, MonoidHom.exponent_dvd, MonoidHom.fst, MonoidHom.snd, Prod.fst_one, Prod.fst_surjective, Prod.pow_fst, Prod.pow_snd, Prod.snd_one, dvd_antisymm, dvd_lcm_left, dvd_lcm_right, dvd_trans, exponent_dvd, exponent_dvd_of_forall_pow_eq_one, fst_one, fst_surjective, lcm_dvd
 -/
@@ -1924,7 +2100,10 @@ theorem Commute.of_orderOf_dvd_two
   -- We avoid `group` here to minimize imports while low in the hierarchy;
   -- typically it would be better to invoke the tactic.
   calc
-    a * (a * b) * b = a ^ 2 * b ^ 2 := by simp
+    a * (a * b) * b = a ^ 2 * b ^ 2 := by simp [pow_two, mul_assoc]
+    _ = 1 := by rw [h, h, mul_one]
+    _ = (a * b) ^ 2 := by rw [h]
+    _ = a * (b * a) * b := by simp [pow_two, mul_assoc]
 
 中文:
 定理 Commute.of_orderOf_dvd_two
@@ -1935,7 +2114,10 @@ theorem Commute.of_orderOf_dvd_two
   -- We avoid `group` here to minimize imports while low in the hierarchy;
   -- typically it would be better to invoke the tactic.
   calc
-    a * (a * b) * b = a ^ 2 * b ^ 2 := by simp
+    a * (a * b) * b = a ^ 2 * b ^ 2 := by simp [pow_two, mul_assoc]
+    _ = 1 := by rw [h, h, mul_one]
+    _ = (a * b) ^ 2 := by rw [h]
+    _ = a * (b * a) * b := by simp [pow_two, mul_assoc]
 
 Depends on / 依赖: commute_iff_eq, mul_left_inj, mul_right_inj, orderOf_dvd_iff_pow_eq_one, simp_rw
 -/

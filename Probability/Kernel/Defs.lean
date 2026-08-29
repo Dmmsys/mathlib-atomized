@@ -263,7 +263,9 @@ instance :
 @[deprecated (since := "2026-06-30")] alias coe_add := FunLike.coe_add
 @[deprecated (since := "2026-06-30")] alias coe_nsmul := FunLike.coe_smul
 
-@[deprecated (since := "2026-06-30")] protected alias zero_apply := zero_app
+@[deprecated (since := "2026-06-30")] protected alias zero_apply := zero_apply
+@[deprecated (since := "2026-06-30")] protected alias add_apply := add_apply
+@[deprecated (since := "2026-06-30")] protected alias nsmul_apply := smul_apply
 
 中文:
 实例 :
@@ -274,7 +276,9 @@ instance :
 @[deprecated (since := "2026-06-30")] alias coe_add := FunLike.coe_add
 @[deprecated (since := "2026-06-30")] alias coe_nsmul := FunLike.coe_smul
 
-@[deprecated (since := "2026-06-30")] protected alias zero_apply := zero_app
+@[deprecated (since := "2026-06-30")] protected alias zero_apply := zero_apply
+@[deprecated (since := "2026-06-30")] protected alias add_apply := add_apply
+@[deprecated (since := "2026-06-30")] protected alias nsmul_apply := smul_apply
 -/
 instance : IsSMulApply Nat (Kernel α β) α (Measure β) where
   smul_apply _ _ _ := rfl
@@ -340,7 +344,13 @@ instance instOrderBot
 
 @[deprecated (since := "2026-06-30")] alias coeAddHom_apply := FunLike.coeAddMonoidHom_apply
 
-@[deprecated (since := "2026-06-30")] alias coe_finsetSum 
+@[deprecated (since := "2026-06-30")] alias coe_finsetSum := FunLike.coe_sum
+
+@[deprecated (since := "2026-04-08")] alias coe_finset_sum := FunLike.coe_sum
+
+@[deprecated (since := "2026-06-30")] alias finsetSum_apply := sum_apply
+
+@[deprecated (since := "2026-04-08")] alias finset_sum_apply := sum_apply
 
 中文:
 实例 instOrderBot
@@ -352,7 +362,13 @@ instance instOrderBot
 
 @[deprecated (since := "2026-06-30")] alias coeAddHom_apply := FunLike.coeAddMonoidHom_apply
 
-@[deprecated (since := "2026-06-30")] alias coe_finsetSum 
+@[deprecated (since := "2026-06-30")] alias coe_finsetSum := FunLike.coe_sum
+
+@[deprecated (since := "2026-04-08")] alias coe_finset_sum := FunLike.coe_sum
+
+@[deprecated (since := "2026-06-30")] alias finsetSum_apply := sum_apply
+
+@[deprecated (since := "2026-04-08")] alias finset_sum_apply := sum_apply
 -/
 instance instOrderBot {α β : Type*} [MeasurableSpace α] [MeasurableSpace β] :
     OrderBot (Kernel α β) where
@@ -1429,7 +1445,10 @@ theorem IsSFiniteKernel.finsetSum
     rw [Finset.sum_insert hi_notMem_I]
     have : IsSFiniteKernel (κs i) := h i (Finset.mem_insert_self _ _)
     have : IsSFiniteKernel (∑ x in I, κs x) :=
+      h_ind fun i hiI => h i (Finset.mem_insert_of_mem hiI)
+    exact IsSFiniteKernel.add _ _
 
+@[deprecated (since := "2026-04-08")] alias IsSFiniteKernel.finset_sum := IsSFiniteKernel.finsetSum
 
 中文:
 定理 是SFiniteKernel.finsetSum
@@ -1442,7 +1461,10 @@ theorem IsSFiniteKernel.finsetSum
     rw [Finset.sum_insert hi_notMem_I]
     have : IsSFiniteKernel (κs i) := h i (Finset.mem_insert_self _ _)
     have : IsSFiniteKernel (∑ x in I, κs x) :=
+      h_ind fun i hiI => h i (Finset.mem_insert_of_mem hiI)
+    exact IsSFiniteKernel.add _ _
 
+@[deprecated (since := "2026-04-08")] alias IsSFiniteKernel.finset_sum := IsSFiniteKernel.finsetSum
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_empty, Finset.sum_insert, IsSFiniteKernel, IsSFiniteKernel.add, classical, h_ind, hi_notMem_I, infer_instance, insert, mem_insert_of_mem, mem_insert_self, sum_empty, sum_insert
 -/
@@ -1473,7 +1495,9 @@ theorem isSFiniteKernel_sum_of_denumerable
     simp_rw [kernel_sum_seq]
   ext a s hs
   rw [hκ_eq]
-  simp_rw [Kernel.sum_apply' _ _ hs
+  simp_rw [Kernel.sum_apply' _ _ hs]
+  change (∑' i, ∑' m, seq (κs i) m a s) = ∑' n, (fun im : ι × Nat => seq (κs im.fst) im.snd a s) (e n)
+  rw [e.tsum_eq (fun im : ι × Nat => seq (κs im.fst) im.snd a s)]; rw [ENNReal.summable.tsum_prod' fun _ => ENNReal.summable]
 
 中文:
 定理 isSFiniteKernel_sum_of_denumerable
@@ -1485,7 +1509,9 @@ theorem isSFiniteKernel_sum_of_denumerable
     simp_rw [kernel_sum_seq]
   ext a s hs
   rw [hκ_eq]
-  simp_rw [Kernel.sum_apply' _ _ hs
+  simp_rw [Kernel.sum_apply' _ _ hs]
+  change (∑' i, ∑' m, seq (κs i) m a s) = ∑' n, (fun im : ι × Nat => seq (κs im.fst) im.snd a s) (e n)
+  rw [e.tsum_eq (fun im : ι × Nat => seq (κs im.fst) im.snd a s)]; rw [ENNReal.summable.tsum_prod' fun _ => ENNReal.summable]
 
 Depends on / 依赖: Denumerable, Denumerable.eqv, ENNReal, ENNReal.summable.tsum_prod, Kernel, Kernel.sum, Kernel.sum_apply, e.tsum_eq, im.fst, im.snd, kernel_sum_seq, simp_rw, sum_apply, summable, tsum_eq, tsum_prod
 -/

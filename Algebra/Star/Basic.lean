@@ -1686,7 +1686,7 @@ inv_val := (star_mul _ _).symm.trans (congr_arg star u.val_inv).trans star_one _
   star_involutive _ := Units.ext (star_involutive _)
   star_mul _ _ := Units.ext (star_mul _ _)
 
-
+@[simp]
 
 中文:
 实例 :
@@ -1698,7 +1698,7 @@ inv_val := (star_mul _ _).symm.trans (congr_arg star u.val_inv).trans star_one _
   star_involutive _ := Units.ext (star_involutive _)
   star_mul _ _ := Units.ext (star_mul _ _)
 
-
+@[simp]
 
 Depends on / 依赖: Units.ext, congr_arg, inv_val, star_involutive, star_mul, star_one, symm.trans, u.inv_val, u.val_inv, val_inv
 -/

@@ -51,7 +51,27 @@ theorem FinitePlace.prod_eq_inv_abs_norm_int
   refine (inv_eq_of_mul_eq_one_left ?_).symm
   norm_cast
   have h_span_nezero : span {x} != 0 := by simp [h_x_nezero]
-  rw [Int.abs_eq_natAbs]; rw [← absNorm_span_singleton]; rw [← finprod_heightOneS
+  rw [Int.abs_eq_natAbs]; rw [← absNorm_span_singleton]; rw [← finprod_heightOneSpectrum_factorization h_span_nezero]; rw [Int.cast_natCast]
+  let t₀ := {v : HeightOneSpectrum (𝓞 K) | x in v.asIdeal}
+  have h_fin₀ : t₀.Finite := by simp only [← dvd_span_singleton, finite_factors h_span_nezero, t₀]
+  let t₁ := (fun v : HeightOneSpectrum (𝓞 K) => ‖embedding v (x : K)‖).mulSupport
+  let t₂ :=
+    (fun v : HeightOneSpectrum (𝓞 K) => (absNorm (v.maxPowDividing (span {x})) : Real)).mulSupport
+have h_fin₁ : t₁.Finite := h_fin₀.subset by simp [norm_eq_one_iff_notMem, t₁, t₀]
+  have h_fin₂ : t₂.Finite := by
+    refine h_fin₀.subset ?_
+    simp only [mulSupport_subset_iff, Set.mem_ofPred_eq, t₂, t₀,
+      maxPowDividing, ← dvd_span_singleton]
+    intro v hv
+    simp only [map_pow, Nat.cast_pow, ← pow_zero (absNorm v.asIdeal : Real)] at hv
+refine (Associates.count_ne_zero_iff_dvd h_span_nezero (irreducible v)).1 fun h => hv ?_
+    congr
+  have h_prod : (absNorm (∏ᶠ (v : HeightOneSpectrum (𝓞 K)), v.maxPowDividing (span {x})) : Real) =
+      ∏ᶠ (v : HeightOneSpectrum (𝓞 K)), (absNorm (v.maxPowDividing (span {x})) : Real) :=
+    ((Nat.castRingHom Real).toMonoidHom.comp absNorm.toMonoidHom).map_finprod_of_preimage_one
+      (by simp) _
+  rw [h_prod]; rw [← finprod_mul_distrib h_fin₁ h_fin₂]
+  exact finprod_eq_one_of_forall_eq_one fun v => embedding_mul_absNorm _ v h_x_nezero
 
 中文:
 定理 FinitePlace.prod_eq_inv_abs_norm_int
@@ -61,7 +81,27 @@ theorem FinitePlace.prod_eq_inv_abs_norm_int
   refine (inv_eq_of_mul_eq_one_left ?_).symm
   norm_cast
   have h_span_nezero : span {x} != 0 := by simp [h_x_nezero]
-  rw [Int.abs_eq_natAbs]; rw [← absNorm_span_singleton]; rw [← finprod_heightOneS
+  rw [Int.abs_eq_natAbs]; rw [← absNorm_span_singleton]; rw [← finprod_heightOneSpectrum_factorization h_span_nezero]; rw [Int.cast_natCast]
+  let t₀ := {v : HeightOneSpectrum (𝓞 K) | x in v.asIdeal}
+  have h_fin₀ : t₀.Finite := by simp only [← dvd_span_singleton, finite_factors h_span_nezero, t₀]
+  let t₁ := (fun v : HeightOneSpectrum (𝓞 K) => ‖embedding v (x : K)‖).mulSupport
+  let t₂ :=
+    (fun v : HeightOneSpectrum (𝓞 K) => (absNorm (v.maxPowDividing (span {x})) : Real)).mulSupport
+have h_fin₁ : t₁.Finite := h_fin₀.subset by simp [norm_eq_one_iff_notMem, t₁, t₀]
+  have h_fin₂ : t₂.Finite := by
+    refine h_fin₀.subset ?_
+    simp only [mulSupport_subset_iff, Set.mem_ofPred_eq, t₂, t₀,
+      maxPowDividing, ← dvd_span_singleton]
+    intro v hv
+    simp only [map_pow, Nat.cast_pow, ← pow_zero (absNorm v.asIdeal : Real)] at hv
+refine (Associates.count_ne_zero_iff_dvd h_span_nezero (irreducible v)).1 fun h => hv ?_
+    congr
+  have h_prod : (absNorm (∏ᶠ (v : HeightOneSpectrum (𝓞 K)), v.maxPowDividing (span {x})) : Real) =
+      ∏ᶠ (v : HeightOneSpectrum (𝓞 K)), (absNorm (v.maxPowDividing (span {x})) : Real) :=
+    ((Nat.castRingHom Real).toMonoidHom.comp absNorm.toMonoidHom).map_finprod_of_preimage_one
+      (by simp) _
+  rw [h_prod]; rw [← finprod_mul_distrib h_fin₁ h_fin₂]
+  exact finprod_eq_one_of_forall_eq_one fun v => embedding_mul_absNorm _ v h_x_nezero
 
 Depends on / 依赖: Finite, HeightOneSpectrum, Int.abs_eq_natAbs, Int.cast_natCast, absNorm_span_singleton, abs_eq_natAbs, asIdeal, cast_natCast, dvd_span_singleton, equivHeightOneSpectrum, equivHeightOneSpectrum.symm, equivHeightOneSpectrum_symm_apply, finite_factors, finprod_comp_equiv, finprod_heightOneSpectrum_factorization, h_span_nezero, h_x_nezero, inv_eq_of_mul_eq_one_left, v.asIdeal
 -/
@@ -107,7 +147,14 @@ theorem FinitePlace.prod_eq_inv_abs_norm
     rintro rfl
     simp at h_x_nezero
   simp_rw [map_div₀, Rat.cast_inv, Rat.cast_abs,
-    finprod_div_distrib (hasFiniteMulSupport_int ha) (hasFini
+    finprod_div_distrib (hasFiniteMulSupport_int ha) (hasFiniteMulSupport_int hb),
+    prod_eq_inv_abs_norm_int ha, prod_eq_inv_abs_norm_int hb]
+  rw [← inv_eq_iff_eq_inv]; rw [inv_inv_div_inv]; rw [← abs_div]
+  congr
+  have hb₀ : ((Algebra.norm Int) b : Real) != 0 := by simp [hb]
+  refine (eq_div_of_mul_eq hb₀ ?_).symm
+  norm_cast
+  rw [coe_norm_int a]; rw [coe_norm_int b]; rw [← map_mul]; rw [div_mul_cancel₀ _ (RingOfIntegers.coe_ne_zero_iff.mpr hb)]
 
 中文:
 定理 FinitePlace.prod_eq_inv_abs_norm
@@ -120,7 +167,14 @@ theorem FinitePlace.prod_eq_inv_abs_norm
     rintro rfl
     simp at h_x_nezero
   simp_rw [map_div₀, Rat.cast_inv, Rat.cast_abs,
-    finprod_div_distrib (hasFiniteMulSupport_int ha) (hasFini
+    finprod_div_distrib (hasFiniteMulSupport_int ha) (hasFiniteMulSupport_int hb),
+    prod_eq_inv_abs_norm_int ha, prod_eq_inv_abs_norm_int hb]
+  rw [← inv_eq_iff_eq_inv]; rw [inv_inv_div_inv]; rw [← abs_div]
+  congr
+  have hb₀ : ((Algebra.norm Int) b : Real) != 0 := by simp [hb]
+  refine (eq_div_of_mul_eq hb₀ ?_).symm
+  norm_cast
+  rw [coe_norm_int a]; rw [coe_norm_int b]; rw [← map_mul]; rw [div_mul_cancel₀ _ (RingOfIntegers.coe_ne_zero_iff.mpr hb)]
 -/
 theorem FinitePlace.prod_eq_inv_abs_norm {x : K} (h_x_nezero : x != 0) :
     ∏ᶠ w : FinitePlace K, w x = |(Algebra.norm Rat) x|⁻¹ := by

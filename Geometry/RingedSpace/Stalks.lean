@@ -89,7 +89,7 @@ definition restrictStalkIso
   Final.colimitIso (h.functorNhds x).op ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
   -- As a left adjoint, the functor `h.functorNhds x` is initial.
   -- Typeclass resolution knows that the opposite of an initial functor is final. The result
-  --
+  -- follows from the general fact that postcomposing with a final functor doesn't change colimits.
 
 中文:
 定义 restrictStalkIso
@@ -98,7 +98,7 @@ definition restrictStalkIso
   Final.colimitIso (h.functorNhds x).op ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
   -- As a left adjoint, the functor `h.functorNhds x` is initial.
   -- Typeclass resolution knows that the opposite of an initial functor is final. The result
-  --
+  -- follows from the general fact that postcomposing with a final functor doesn't change colimits.
 
 Depends on / 依赖: Final.colimitIso, OpenNhds, OpenNhds.inclusion, X.presheaf, adjunctionNhds, colimitIso, functorNhds, h.adjunctionNhds, h.functorNhds, inclusion, initial_of_adjunction, presheaf
 -/
@@ -178,7 +178,12 @@ theorem restrictStalkIso_inv_eq_ofRestrict
   induction V with | op V => ?_
   let i : (h.functorNhds x).obj ((OpenNhds.map f x).obj V) ⟶ V :=
     homOfLE (Set.image_preimage_subset f _)
-  erw [Iso.comp_inv_eq, colimit.ι_map_asso
+  erw [Iso.comp_inv_eq, colimit.ι_map_assoc, colimit.ι_map_assoc, colimit.ι_pre]
+  simp_rw [Category.assoc]
+  erw [colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
+      (h.functorNhds x).op]
+  erw [← X.presheaf.map_comp_assoc]
+  exact (colimit.w ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) i.op).symm
 
 中文:
 定理 restrictStalkIso_inv_eq_ofRestrict
@@ -189,7 +194,12 @@ theorem restrictStalkIso_inv_eq_ofRestrict
   induction V with | op V => ?_
   let i : (h.functorNhds x).obj ((OpenNhds.map f x).obj V) ⟶ V :=
     homOfLE (Set.image_preimage_subset f _)
-  erw [Iso.comp_inv_eq, colimit.ι_map_asso
+  erw [Iso.comp_inv_eq, colimit.ι_map_assoc, colimit.ι_map_assoc, colimit.ι_pre]
+  simp_rw [Category.assoc]
+  erw [colimit.ι_pre ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf)
+      (h.functorNhds x).op]
+  erw [← X.presheaf.map_comp_assoc]
+  exact (colimit.w ((OpenNhds.inclusion (f x)).op ⋙ X.presheaf) i.op).symm
 -/
 theorem restrictStalkIso_inv_eq_ofRestrict {U : TopCat.{v}} (X : PresheafedSpace.{_, _, v} C)
     {f : U ⟶ (X : TopCat.{v})} (h : IsOpenEmbedding f) (x : U) :
@@ -386,7 +396,20 @@ instance isIso
     let β : Y ⟶ X := CategoryTheory.inv α
     have h_eq : (α ≫ β).base x = x := by rw [IsIso.hom_inv_id α, id_base, TopCat.id_app]
     -- Intuitively, the inverse of the stalk map of `α` at `x` should just be the stalk map of `β`
-    -- at `α x`. Unfortunately, we have a problem with dependent ty
+    -- at `α x`. Unfortunately, we have a problem with dependent type theory here: Because `x`
+    -- is not *definitionally* equal to `β (α x)`, the map `stalk_map β (α x)` has not the correct
+    -- type for an inverse.
+    -- To get a proper inverse, we need to compose with the `eqToHom` arrow
+    -- `X.stalk x ⟶ X.stalk ((α ≫ β).base x)`.
+    refine
+      ⟨eqToHom (show X.presheaf.stalk x = X.presheaf.stalk ((α ≫ β).base x) by rw [h_eq]) ≫
+          (β.stalkMap (α.base x) :),
+        ?_, ?_⟩
+    · rw [← Category.assoc, congr_point α x ((α ≫ β).base x) h_eq.symm, Category.assoc]
+      erw [← stalkMap.comp β α (α.base x)]
+      rw [congr_hom _ _ (IsIso.inv_hom_id α)]; rw [stalkMap.id]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]
+    · rw [Category.assoc, ← stalkMap.comp, congr_hom _ _ (IsIso.hom_inv_id α), stalkMap.id,
+        eqToHom_trans_assoc, eqToHom_refl, Category.id_comp]
 
 中文:
 实例 isIso
@@ -395,7 +418,20 @@ instance isIso
     let β : Y ⟶ X := CategoryTheory.inv α
     have h_eq : (α ≫ β).base x = x := by rw [IsIso.hom_inv_id α, id_base, TopCat.id_app]
     -- Intuitively, the inverse of the stalk map of `α` at `x` should just be the stalk map of `β`
-    -- at `α x`. Unfortunately, we have a problem with dependent ty
+    -- at `α x`. Unfortunately, we have a problem with dependent type theory here: Because `x`
+    -- is not *definitionally* equal to `β (α x)`, the map `stalk_map β (α x)` has not the correct
+    -- type for an inverse.
+    -- To get a proper inverse, we need to compose with the `eqToHom` arrow
+    -- `X.stalk x ⟶ X.stalk ((α ≫ β).base x)`.
+    refine
+      ⟨eqToHom (show X.presheaf.stalk x = X.presheaf.stalk ((α ≫ β).base x) by rw [h_eq]) ≫
+          (β.stalkMap (α.base x) :),
+        ?_, ?_⟩
+    · rw [← Category.assoc, congr_point α x ((α ≫ β).base x) h_eq.symm, Category.assoc]
+      erw [← stalkMap.comp β α (α.base x)]
+      rw [congr_hom _ _ (IsIso.inv_hom_id α)]; rw [stalkMap.id]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]
+    · rw [Category.assoc, ← stalkMap.comp, congr_hom _ _ (IsIso.hom_inv_id α), stalkMap.id,
+        eqToHom_trans_assoc, eqToHom_refl, Category.id_comp]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.inv, IsIso.hom_inv_id, TopCat, TopCat.id_app, h_eq, hom_inv_id, id_app, id_base
 -/
@@ -453,7 +489,14 @@ theorem stalkSpecializes_stalkMap
   -- I had to uglify this
   dsimp [stalkSpecializes, Hom.stalkMap, stalkFunctor, stalkPushforward]
   -- We can't use `ext` here due to https://github.com/leanprover/std4/pull/159
-  refine colimit.hom_ext f
+  refine colimit.hom_ext fun j => ?_
+  induction j with | op j => ?_
+  dsimp
+  simp only [colimit.ι_desc_assoc, ι_colimMap_assoc, whiskerLeft_app,
+    whiskerRight_app, NatTrans.id_app, colimit.ι_pre, assoc,
+    colimit.pre_desc, colimit.map_desc, colimit.ι_desc, Cocone.precompose_obj_ι,
+    Cocone.whisker_ι, NatTrans.comp_app]
+  tauto
 
 中文:
 定理 stalkSpecializes_stalkMap
@@ -463,7 +506,14 @@ theorem stalkSpecializes_stalkMap
   -- I had to uglify this
   dsimp [stalkSpecializes, Hom.stalkMap, stalkFunctor, stalkPushforward]
   -- We can't use `ext` here due to https://github.com/leanprover/std4/pull/159
-  refine colimit.hom_ext f
+  refine colimit.hom_ext fun j => ?_
+  induction j with | op j => ?_
+  dsimp
+  simp only [colimit.ι_desc_assoc, ι_colimMap_assoc, whiskerLeft_app,
+    whiskerRight_app, NatTrans.id_app, colimit.ι_pre, assoc,
+    colimit.pre_desc, colimit.map_desc, colimit.ι_desc, Cocone.precompose_obj_ι,
+    Cocone.whisker_ι, NatTrans.comp_app]
+  tauto
 -/
 theorem stalkSpecializes_stalkMap {X Y : PresheafedSpace.{_, _, v} C}
     (f : X ⟶ Y) {x y : X} (h : x ⤳ y) :

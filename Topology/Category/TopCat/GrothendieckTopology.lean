@@ -255,7 +255,35 @@ instance subcanonical_grothendieckTopology
   intro Y 𝒰
   rw [Presieve.isSheafFor_arrows_iff]
   have heq (i y) : 𝒰.f i y = (Subtype.val : Set.range (𝒰.f i) -> Y) ⟨𝒰.f i y, by simp⟩ := rfl
-  refine fun x hx => ⟨?_,
+  refine fun x hx => ⟨?_, fun i => ?_, fun f hf => ?_⟩
+· refine ofHom ContinuousMap.liftCover (fun i => Set.range (𝒰.f i)) ?_ ?_ ?_
+    · intro i
+      exact ⟨(x i).hom ∘ (isOpenEmbedding_f_zeroHypercover 𝒰 i).toHomeomorph.symm, by fun_prop⟩
+    · intro i j y
+      simp only [Set.mem_range, ContinuousMap.coe_mk, Function.comp_apply, forall_exists_index]
+      intro xi hi xj hj
+      conv_lhs => simp only [← hi]
+      conv_rhs => simp only [← hj]
+      have := hx i j _ (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).fst
+        (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).snd (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).condition
+      dsimp at this
+      simpa using! congr($(this) ⟨(xi, xj), hi ▸ hj.symm⟩)
+    · intro x
+      obtain ⟨i, hi⟩ := exists_mem_zeroHypercover_range 𝒰 x
+      exact ⟨i, (isOpenEmbedding_f_zeroHypercover 𝒰 i).isOpen_range.mem_nhds hi⟩
+  · apply ConcreteCategory.hom_ext
+    intro
+    simp only [yoneda_obj_map, Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+      hom_comp, ContinuousMap.comp_apply]
+    rw [heq]; rw [ContinuousMap.liftCover_coe]
+    simp
+  · dsimp
+    ext x
+    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range 𝒰 x
+    have := congr($(hf i).hom y)
+    dsimp at this ⊢
+    rw [this]; rw [heq]; rw [ContinuousMap.liftCover_coe]
+    simp
 
 中文:
 实例 subcanonical_grothendieckTopology
@@ -266,7 +294,35 @@ instance subcanonical_grothendieckTopology
   intro Y 𝒰
   rw [Presieve.isSheafFor_arrows_iff]
   have heq (i y) : 𝒰.f i y = (Subtype.val : Set.range (𝒰.f i) -> Y) ⟨𝒰.f i y, by simp⟩ := rfl
-  refine fun x hx => ⟨?_,
+  refine fun x hx => ⟨?_, fun i => ?_, fun f hf => ?_⟩
+· refine ofHom ContinuousMap.liftCover (fun i => Set.range (𝒰.f i)) ?_ ?_ ?_
+    · intro i
+      exact ⟨(x i).hom ∘ (isOpenEmbedding_f_zeroHypercover 𝒰 i).toHomeomorph.symm, by fun_prop⟩
+    · intro i j y
+      simp only [Set.mem_range, ContinuousMap.coe_mk, Function.comp_apply, forall_exists_index]
+      intro xi hi xj hj
+      conv_lhs => simp only [← hi]
+      conv_rhs => simp only [← hj]
+      have := hx i j _ (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).fst
+        (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).snd (TopCat.pullbackCone (𝒰.f i) (𝒰.f j)).condition
+      dsimp at this
+      simpa using! congr($(this) ⟨(xi, xj), hi ▸ hj.symm⟩)
+    · intro x
+      obtain ⟨i, hi⟩ := exists_mem_zeroHypercover_range 𝒰 x
+      exact ⟨i, (isOpenEmbedding_f_zeroHypercover 𝒰 i).isOpen_range.mem_nhds hi⟩
+  · apply ConcreteCategory.hom_ext
+    intro
+    simp only [yoneda_obj_map, Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+      hom_comp, ContinuousMap.comp_apply]
+    rw [heq]; rw [ContinuousMap.liftCover_coe]
+    simp
+  · dsimp
+    ext x
+    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range 𝒰 x
+    have := congr($(hf i).hom y)
+    dsimp at this ⊢
+    rw [this]; rw [heq]; rw [ContinuousMap.liftCover_coe]
+    simp
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.liftCover, Precoverage, Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small, Presieve, Presieve.isSheafFor_arrows_iff, Set.range, Subtype, Subtype.val, fun_prop, isOpenEmbedding_f_zeroHypercover, isSheafFor_arrows_iff, isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small, liftCover, of_isSheaf_yoneda_obj, toHomeomorph, toHomeomorph.symm
 -/
@@ -318,7 +374,13 @@ lemma precoverage_le_comap_uliftFunctor
       Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, ConcreteCategory.hom_ofHom,
       Set.mem_range, TypeCat.Fun.coe_mk]
     intro ⟨x⟩
-    obtain ⟨i, y
+    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range E x
+    use i, ⟨y⟩
+    rfl
+  · simp only [Presieve.map_ofArrows, MorphismProperty.ofArrows_mem_precoverage,
+      isOpenEmbedding_iff]
+    intro i
+    exact (isOpenEmbedding_f_zeroHypercover _ _).uliftMap
 
 中文:
 引理 precoverage_le_comap_uliftFunctor
@@ -329,7 +391,13 @@ lemma precoverage_le_comap_uliftFunctor
       Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, ConcreteCategory.hom_ofHom,
       Set.mem_range, TypeCat.Fun.coe_mk]
     intro ⟨x⟩
-    obtain ⟨i, y
+    obtain ⟨i, y, rfl⟩ := exists_mem_zeroHypercover_range E x
+    use i, ⟨y⟩
+    rfl
+  · simp only [Presieve.map_ofArrows, MorphismProperty.ofArrows_mem_precoverage,
+      isOpenEmbedding_iff]
+    intro i
+    exact (isOpenEmbedding_f_zeroHypercover _ _).uliftMap
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, MorphismProperty, MorphismProperty.ofArrows_mem_precoverage, Precoverage, Precoverage.le_of_zeroHypercover, Precoverage.mem_comap_iff, Presieve, Presieve.map_ofArrows, Set.mem_range, TypeCat, TypeCat.Fun.coe_mk, Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, coe_mk, exists_mem_zeroHypercover_range, hom_ofHom, isOpenEmbedding_f_zeroHypercover, isOpenEmbedding_iff, le_of_zeroHypercover, map_ofArrows
 -/

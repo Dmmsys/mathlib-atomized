@@ -133,7 +133,9 @@ theorem map_equiv_removeNone
     · cases h : σ (some _)
       · simp [removeNone_none _ h]
       · have hn : σ (some x) != none := by simp [h]
-        have hσn : σ (some x) != σ none := σ.injective.ne (by simp
+        have hσn : σ (some x) != σ none := σ.injective.ne (by simp)
+        simp [removeNone_some _ ⟨_, h⟩, ← h, swap_apply_of_ne_of_ne hn hσn]
+  simpa using this
 
 中文:
 定理 map_equiv_removeNone
@@ -146,7 +148,9 @@ theorem map_equiv_removeNone
     · cases h : σ (some _)
       · simp [removeNone_none _ h]
       · have hn : σ (some x) != none := by simp [h]
-        have hσn : σ (some x) != σ none := σ.injective.ne (by simp
+        have hσn : σ (some x) != σ none := σ.injective.ne (by simp)
+        simp [removeNone_some _ ⟨_, h⟩, ← h, swap_apply_of_ne_of_ne hn hσn]
+  simpa using this
 
 Depends on / 依赖: Option.map, injective, injective.ne, removeNone, removeNone_none, removeNone_some, swap_apply_of_ne_of_ne
 -/

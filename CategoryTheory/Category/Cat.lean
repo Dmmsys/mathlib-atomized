@@ -354,7 +354,9 @@ instance instCategory
   id_comp η := congrArg (NatTrans.toCatHom₂) (Category.id_comp η.toNatTrans)
   comp_id η := congrArg (NatTrans.toCatHom₂) (Category.comp_id η.toNatTrans)
   assoc η₁ η₂ η₃ :=
-    congrArg (NatTrans.t
+    congrArg (NatTrans.toCatHom₂) (Category.assoc η₁.toNatTrans η₂.toNatTrans η₃.toNatTrans)
+
+@[simp, push_cast]
 
 中文:
 实例 instCategory
@@ -364,7 +366,9 @@ instance instCategory
   id_comp η := congrArg (NatTrans.toCatHom₂) (Category.id_comp η.toNatTrans)
   comp_id η := congrArg (NatTrans.toCatHom₂) (Category.comp_id η.toNatTrans)
   assoc η₁ η₂ η₃ :=
-    congrArg (NatTrans.t
+    congrArg (NatTrans.toCatHom₂) (Category.assoc η₁.toNatTrans η₂.toNatTrans η₃.toNatTrans)
+
+@[simp, push_cast]
 
 Depends on / 依赖: F.toFunctor, NatTrans, NatTrans.toCatHom, toFunctor
 -/
@@ -697,7 +701,10 @@ instance bicategory
   homCategory := fun _ _ => Hom.instCategory
   whiskerLeft F _ _ η := (Functor.whiskerLeft F.toFunctor η.toNatTrans).toCatHom₂
   whiskerRight η H := (Functor.whiskerRight η.toNatTrans H.toFunctor).toCatHom₂
-  associator F G H := Hom.i
+  associator F G H := Hom.isoMk
+    (Functor.associator F.toFunctor G.toFunctor H.toFunctor)
+  leftUnitor F := Hom.isoMk (Functor.leftUnitor F.toFunctor)
+  rightUnitor F := Hom.isoMk (Functor.rightUnitor F.toFunctor)
 
 中文:
 实例 bicategory
@@ -707,7 +714,10 @@ instance bicategory
   homCategory := fun _ _ => Hom.instCategory
   whiskerLeft F _ _ η := (Functor.whiskerLeft F.toFunctor η.toNatTrans).toCatHom₂
   whiskerRight η H := (Functor.whiskerRight η.toNatTrans H.toFunctor).toCatHom₂
-  associator F G H := Hom.i
+  associator F G H := Hom.isoMk
+    (Functor.associator F.toFunctor G.toFunctor H.toFunctor)
+  leftUnitor F := Hom.isoMk (Functor.leftUnitor F.toFunctor)
+  rightUnitor F := Hom.isoMk (Functor.rightUnitor F.toFunctor)
 
 Depends on / 依赖: toCatHom
 -/
@@ -1546,7 +1556,10 @@ definition typeToCat
       apply ULift.ext
       cat_disch
   map_comp f g := by
-    ex
+    ext
+    simp only [Cat.of_α, toCatHom_toFunctor, Cat.Hom.comp_toFunctor]
+    apply Functor.ext
+    cat_disch
 
 中文:
 定义 typeToCat
@@ -1563,7 +1576,10 @@ definition typeToCat
       apply ULift.ext
       cat_disch
   map_comp f g := by
-    ex
+    ext
+    simp only [Cat.of_α, toCatHom_toFunctor, Cat.Hom.comp_toFunctor]
+    apply Functor.ext
+    cat_disch
 
 Depends on / 依赖: Cat.of, Discrete
 -/

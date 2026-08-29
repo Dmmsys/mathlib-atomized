@@ -172,7 +172,14 @@ definition ofMulActionLimitCone
           comm := fun g => by
             ext x
             funext j
-            exact Conc
+            exact ConcreteCategory.congr_hom ((s.π.app ⟨j⟩).comm g) x }
+      fac := fun _ _ => rfl
+      uniq := fun s f h => by
+        ext x
+        funext j
+        dsimp at *
+        rw [← h ⟨j⟩]
+        rfl }
 
 中文:
 定义 ofMulActionLimitCone
@@ -185,7 +192,14 @@ definition ofMulActionLimitCone
           comm := fun g => by
             ext x
             funext j
-            exact Conc
+            exact ConcreteCategory.congr_hom ((s.π.app ⟨j⟩).comm g) x }
+      fac := fun _ _ => rfl
+      uniq := fun s f h => by
+        ext x
+        funext j
+        dsimp at *
+        rw [← h ⟨j⟩]
+        rfl }
 
 Depends on / 依赖: Action, Action.ofMulAction, ConcreteCategory, ConcreteCategory.congr_hom, ContinuousSMul, Discrete, Discrete.natTrans, ObjectProperty, ObjectProperty.isoMk, X.obj.V, congr_hom, exists_lift_of_continuous, i.as, isLimit, natTrans, ofMulAction
 -/
@@ -335,7 +349,25 @@ definition toEndHom
       apply (QuotientGroup.leftRel_apply).mpr
       -- We avoid `group` here to minimize imports while low in the hierarchy;
       -- typically it would be better to invoke the tactic.
-      simpa [mul
+      simpa [mul_assoc] using Subgroup.Normal.conj_mem ‹_› _ (QuotientGroup.leftRel_apply.mp h) _)
+    comm := fun (g : G) => by
+      ext (x : G ⧸ N)
+      induction x using Quotient.inductionOn with | h x
+      dsimp
+      apply (Quotient.lift_mk _ _ _).trans
+      simp only [QuotientGroup.mk_mul, mul_assoc]
+      rfl }
+  map_one' := by
+    apply Action.hom_ext
+    ext (x : G ⧸ N)
+    induction x using Quotient.inductionOn
+    simp
+  map_mul' σ τ := by
+    apply Action.hom_ext
+    ext (x : G ⧸ N)
+    induction x using Quotient.inductionOn with | _ x
+    change ⟦x * (σ * τ)⁻¹⟧ = ⟦x * τ⁻¹ * σ⁻¹⟧
+    rw [mul_inv_rev]; rw [mul_assoc]
 
 中文:
 定义 toEndHom
@@ -344,7 +376,25 @@ definition toEndHom
       apply (QuotientGroup.leftRel_apply).mpr
       -- We avoid `group` here to minimize imports while low in the hierarchy;
       -- typically it would be better to invoke the tactic.
-      simpa [mul
+      simpa [mul_assoc] using Subgroup.Normal.conj_mem ‹_› _ (QuotientGroup.leftRel_apply.mp h) _)
+    comm := fun (g : G) => by
+      ext (x : G ⧸ N)
+      induction x using Quotient.inductionOn with | h x
+      dsimp
+      apply (Quotient.lift_mk _ _ _).trans
+      simp only [QuotientGroup.mk_mul, mul_assoc]
+      rfl }
+  map_one' := by
+    apply Action.hom_ext
+    ext (x : G ⧸ N)
+    induction x using Quotient.inductionOn
+    simp
+  map_mul' σ τ := by
+    apply Action.hom_ext
+    ext (x : G ⧸ N)
+    induction x using Quotient.inductionOn with | _ x
+    change ⟦x * (σ * τ)⁻¹⟧ = ⟦x * τ⁻¹ * σ⁻¹⟧
+    rw [mul_inv_rev]; rw [mul_assoc]
 
 Depends on / 依赖: FintypeCat, FintypeCat.homMk, Quotient, Quotient.lift, Quotient.sound, QuotientGroup, QuotientGroup.leftRel_apply, leftRel_apply
 -/

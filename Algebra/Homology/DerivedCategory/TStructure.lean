@@ -41,7 +41,46 @@ definition TStructure.t
   le_isClosedUnderIsomorphisms n :=
     { of_iso := by
         rintro X Y e ⟨K, e', _⟩
-        exact ⟨K, e.symm ≪≫ e
+        exact ⟨K, e.symm ≪≫ e', inferInstance⟩ }
+  ge_isClosedUnderIsomorphisms n :=
+    { of_iso := by
+        rintro X Y e ⟨K, e', _⟩
+        exact ⟨K, e.symm ≪≫ e', inferInstance⟩ }
+  le_shift := by
+    rintro n a n' h X ⟨K, e, _⟩
+    exact ⟨(shiftFunctor (CochainComplex C Int) a).obj K,
+      (shiftFunctor (DerivedCategory C) a).mapIso e ≪≫ (Q.commShiftIso a).symm.app K,
+      K.isStrictlyLE_shift n a n' h⟩
+  ge_shift := by
+    rintro n a n' h X ⟨K, e, _⟩
+    exact ⟨(shiftFunctor (CochainComplex C Int) a).obj K,
+      (shiftFunctor (DerivedCategory C) a).mapIso e ≪≫ (Q.commShiftIso a).symm.app K,
+      K.isStrictlyGE_shift n a n' h⟩
+  zero' X Y f := by
+    rintro ⟨K, e₁, _⟩ ⟨L, e₂, _⟩
+    rw [← cancel_epi e₁.inv]; rw [← cancel_mono e₂.hom]; rw [comp_zero]; rw [zero_comp]
+    apply (subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE K L 0 1 (by simp)).elim
+  le_zero_le := by
+    rintro X ⟨K, e, _⟩
+    exact ⟨K, e, K.isStrictlyLE_of_le 0 1 (by lia)⟩
+  ge_one_le := by
+    rintro X ⟨K, e, _⟩
+    exact ⟨K, e, K.isStrictlyGE_of_ge 0 1 (by lia)⟩
+  exists_triangle_zero_one X := by
+    obtain ⟨K, ⟨e₂⟩⟩ : exists K, Nonempty (Q.obj K ≅ X) := ⟨_, ⟨Q.objObjPreimageIso X⟩⟩
+    have h := K.shortComplexTruncLE_shortExact 0
+    refine ⟨Q.obj (K.truncLE 0), Q.obj (K.truncGE 1),
+      ⟨_, Iso.refl _, inferInstance⟩, ⟨_, Iso.refl _, inferInstance⟩,
+      Q.map (K.ιTruncLE 0) ≫ e₂.hom, e₂.inv ≫ Q.map (K.πTruncGE 1),
+      inv (Q.map (K.shortComplexTruncLEX₃ToTruncGE 0 1 (by lia))) ≫ (triangleOfSES h).mor₃,
+      isomorphic_distinguished _ (triangleOfSES_distinguished h) _ (Iso.symm ?_)⟩
+    refine Triangle.isoMk _ _ (Iso.refl _) e₂
+      (asIso (Q.map (K.shortComplexTruncLEX₃ToTruncGE 0 1 (by lia)))) ?_ ?_ (by simp)
+    · dsimp
+      rw [id_comp]
+      rfl
+    · dsimp
+      rw [← Q.map_comp]; rw [CochainComplex.g_shortComplexTruncLEX₃ToTruncGE ..]; rw [Iso.hom_inv_id_assoc]
 
 中文:
 定义 TStructure.t
@@ -51,7 +90,46 @@ definition TStructure.t
   le_isClosedUnderIsomorphisms n :=
     { of_iso := by
         rintro X Y e ⟨K, e', _⟩
-        exact ⟨K, e.symm ≪≫ e
+        exact ⟨K, e.symm ≪≫ e', inferInstance⟩ }
+  ge_isClosedUnderIsomorphisms n :=
+    { of_iso := by
+        rintro X Y e ⟨K, e', _⟩
+        exact ⟨K, e.symm ≪≫ e', inferInstance⟩ }
+  le_shift := by
+    rintro n a n' h X ⟨K, e, _⟩
+    exact ⟨(shiftFunctor (CochainComplex C Int) a).obj K,
+      (shiftFunctor (DerivedCategory C) a).mapIso e ≪≫ (Q.commShiftIso a).symm.app K,
+      K.isStrictlyLE_shift n a n' h⟩
+  ge_shift := by
+    rintro n a n' h X ⟨K, e, _⟩
+    exact ⟨(shiftFunctor (CochainComplex C Int) a).obj K,
+      (shiftFunctor (DerivedCategory C) a).mapIso e ≪≫ (Q.commShiftIso a).symm.app K,
+      K.isStrictlyGE_shift n a n' h⟩
+  zero' X Y f := by
+    rintro ⟨K, e₁, _⟩ ⟨L, e₂, _⟩
+    rw [← cancel_epi e₁.inv]; rw [← cancel_mono e₂.hom]; rw [comp_zero]; rw [zero_comp]
+    apply (subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE K L 0 1 (by simp)).elim
+  le_zero_le := by
+    rintro X ⟨K, e, _⟩
+    exact ⟨K, e, K.isStrictlyLE_of_le 0 1 (by lia)⟩
+  ge_one_le := by
+    rintro X ⟨K, e, _⟩
+    exact ⟨K, e, K.isStrictlyGE_of_ge 0 1 (by lia)⟩
+  exists_triangle_zero_one X := by
+    obtain ⟨K, ⟨e₂⟩⟩ : exists K, Nonempty (Q.obj K ≅ X) := ⟨_, ⟨Q.objObjPreimageIso X⟩⟩
+    have h := K.shortComplexTruncLE_shortExact 0
+    refine ⟨Q.obj (K.truncLE 0), Q.obj (K.truncGE 1),
+      ⟨_, Iso.refl _, inferInstance⟩, ⟨_, Iso.refl _, inferInstance⟩,
+      Q.map (K.ιTruncLE 0) ≫ e₂.hom, e₂.inv ≫ Q.map (K.πTruncGE 1),
+      inv (Q.map (K.shortComplexTruncLEX₃ToTruncGE 0 1 (by lia))) ≫ (triangleOfSES h).mor₃,
+      isomorphic_distinguished _ (triangleOfSES_distinguished h) _ (Iso.symm ?_)⟩
+    refine Triangle.isoMk _ _ (Iso.refl _) e₂
+      (asIso (Q.map (K.shortComplexTruncLEX₃ToTruncGE 0 1 (by lia)))) ?_ ?_ (by simp)
+    · dsimp
+      rw [id_comp]
+      rfl
+    · dsimp
+      rw [← Q.map_comp]; rw [CochainComplex.g_shortComplexTruncLEX₃ToTruncGE ..]; rw [Iso.hom_inv_id_assoc]
 -/
 noncomputable def TStructure.t : TStructure (DerivedCategory C) where
   le n X := exists (K : CochainComplex C Int) (_ : X ≅ DerivedCategory.Q.obj K), K.IsStrictlyLE n
@@ -149,7 +227,12 @@ lemma isGE_iff
     have : (Q.objPreimage X).IsGE n := by
       rw [CochainComplex.isGE_iff]
       intro i hi
-      rw 
+      rw [HomologicalComplex.exactAt_iff_isZero_homology]
+      apply (hX i hi).of_iso
+      exact (homologyFunctorFactors C i).symm.app _ ≪≫
+        (homologyFunctor C i).mapIso (Q.objObjPreimageIso X)
+    exact ⟨(Q.objPreimage X).truncGE n, (Q.objObjPreimageIso X).symm ≪≫
+      asIso (Q.map ((Q.objPreimage X).πTruncGE n)), inferInstance⟩
 
 中文:
 引理 isGE_iff
@@ -163,7 +246,12 @@ lemma isGE_iff
     have : (Q.objPreimage X).IsGE n := by
       rw [CochainComplex.isGE_iff]
       intro i hi
-      rw 
+      rw [HomologicalComplex.exactAt_iff_isZero_homology]
+      apply (hX i hi).of_iso
+      exact (homologyFunctorFactors C i).symm.app _ ≪≫
+        (homologyFunctor C i).mapIso (Q.objObjPreimageIso X)
+    exact ⟨(Q.objPreimage X).truncGE n, (Q.objObjPreimageIso X).symm ≪≫
+      asIso (Q.map ((Q.objPreimage X).πTruncGE n)), inferInstance⟩
 
 Depends on / 依赖: CochainComplex, CochainComplex.isGE_iff, HomologicalComplex, HomologicalComplex.exactAt_iff_isZero_homology, K.exactAt_of_isGE, Q.objObjPreimageIso, Q.objPreimage, exactAt_iff_isZero_homology, exactAt_of_isGE, homologyFunctor, homologyFunctorFactors, isGE_iff, isZero_homology, mapIso, objObjPreimageIso, objPreimage, of_iso, symm.app, truncGE
 -/
@@ -199,7 +287,12 @@ lemma isLE_iff
     have : (Q.objPreimage X).IsLE n := by
       rw [CochainComplex.isLE_iff]
       intro i hi
-      rw 
+      rw [HomologicalComplex.exactAt_iff_isZero_homology]
+      apply (hX i hi).of_iso
+      exact (homologyFunctorFactors C i).symm.app _ ≪≫
+        (homologyFunctor C i).mapIso (Q.objObjPreimageIso X)
+    exact ⟨(Q.objPreimage X).truncLE n, (Q.objObjPreimageIso X).symm ≪≫
+      (asIso (Q.map ((Q.objPreimage X).ιTruncLE n))).symm, inferInstance⟩
 
 中文:
 引理 isLE_iff
@@ -213,7 +306,12 @@ lemma isLE_iff
     have : (Q.objPreimage X).IsLE n := by
       rw [CochainComplex.isLE_iff]
       intro i hi
-      rw 
+      rw [HomologicalComplex.exactAt_iff_isZero_homology]
+      apply (hX i hi).of_iso
+      exact (homologyFunctorFactors C i).symm.app _ ≪≫
+        (homologyFunctor C i).mapIso (Q.objObjPreimageIso X)
+    exact ⟨(Q.objPreimage X).truncLE n, (Q.objObjPreimageIso X).symm ≪≫
+      (asIso (Q.map ((Q.objPreimage X).ιTruncLE n))).symm, inferInstance⟩
 
 Depends on / 依赖: CochainComplex, CochainComplex.isLE_iff, HomologicalComplex, HomologicalComplex.exactAt_iff_isZero_homology, K.exactAt_of_isLE, Q.objObjPreimageIso, Q.objPreimage, exactAt_iff_isZero_homology, exactAt_of_isLE, homologyFunctor, homologyFunctorFactors, isLE_iff, isZero_homology, mapIso, objObjPreimageIso, objPreimage, of_iso, symm.app, truncLE
 -/

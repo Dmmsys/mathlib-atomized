@@ -503,7 +503,18 @@ definition noncomputable
     dsimp
     rw [← map_smul]
     apply hf.equiv_symm_apply
-  haveI : IsScalarTower R S (M₁ otim
+  haveI : IsScalarTower R S (M₁ otimes[R] M₂) := hf.equiv.isScalarTower S
+  letI e₀ : M₂ otimes[R] M₁ ≃ₗ[S] M₁ otimes[R] M₂ :=
+    { __ := TensorProduct.comm R M₂ M₁
+      map_smul' s x := by induction x <;> simp_all [TensorProduct.smul_tmul'] }
+LinearEquiv.symm
+    TensorProduct.congr (.refl _ _) (hg.equiv.symm.restrictScalars R) ≪≫ₗ
+    TensorProduct.comm _ _ _ ≪≫ₗ
+    (AlgebraTensorModule.congr (TensorProduct.comm _ _ _) (.refl _ _)).restrictScalars R ≪≫ₗ
+    (AlgebraTensorModule.assoc R S S M₃ M₂ M₁).restrictScalars R ≪≫ₗ
+    (TensorProduct.comm _ _ _).restrictScalars R ≪≫ₗ
+    (TensorProduct.congr e₀ (.refl _ _)).restrictScalars R ≪≫ₗ
+    (TensorProduct.congr (hf.equiv.linearEquiv S) (.refl _ _)).restrictScalars R
 
 中文:
 定义 noncomputable
@@ -515,7 +526,18 @@ definition noncomputable
     dsimp
     rw [← map_smul]
     apply hf.equiv_symm_apply
-  haveI : IsScalarTower R S (M₁ otim
+  haveI : IsScalarTower R S (M₁ otimes[R] M₂) := hf.equiv.isScalarTower S
+  letI e₀ : M₂ otimes[R] M₁ ≃ₗ[S] M₁ otimes[R] M₂ :=
+    { __ := TensorProduct.comm R M₂ M₁
+      map_smul' s x := by induction x <;> simp_all [TensorProduct.smul_tmul'] }
+LinearEquiv.symm
+    TensorProduct.congr (.refl _ _) (hg.equiv.symm.restrictScalars R) ≪≫ₗ
+    TensorProduct.comm _ _ _ ≪≫ₗ
+    (AlgebraTensorModule.congr (TensorProduct.comm _ _ _) (.refl _ _)).restrictScalars R ≪≫ₗ
+    (AlgebraTensorModule.assoc R S S M₃ M₂ M₁).restrictScalars R ≪≫ₗ
+    (TensorProduct.comm _ _ _).restrictScalars R ≪≫ₗ
+    (TensorProduct.congr e₀ (.refl _ _)).restrictScalars R ≪≫ₗ
+    (TensorProduct.congr (hf.equiv.linearEquiv S) (.refl _ _)).restrictScalars R
 -/
 private noncomputable def assocAux
     (f : M₁ ->ₗ[R] M₂ ->ₗ[S] M₁₂) (hf : IsTensorProduct (f.restrictScalars₁₂ R R))
@@ -612,7 +634,10 @@ definition assoc
     induction x with
     | zero => simp
     | add x y _ _ => simp_all [add_tmul]
-    |
+    | tmul x z =>
+      have : t • (f x) z = f (t • x) z := by simp
+      dsimp
+      rw [smul_tmul']; rw [this]; rw [← f.restrictScalars₁₂_apply_apply R S]; rw [← f.restrictScalars₁₂_apply_apply R S]; rw [IsTensorProduct.assocAux_tmul]; rw [IsTensorProduct.assocAux_tmul]; rw [TensorProduct.smul_tmul']
 
 中文:
 定义 assoc
@@ -627,7 +652,10 @@ definition assoc
     induction x with
     | zero => simp
     | add x y _ _ => simp_all [add_tmul]
-    |
+    | tmul x z =>
+      have : t • (f x) z = f (t • x) z := by simp
+      dsimp
+      rw [smul_tmul']; rw [this]; rw [← f.restrictScalars₁₂_apply_apply R S]; rw [← f.restrictScalars₁₂_apply_apply R S]; rw [IsTensorProduct.assocAux_tmul]; rw [IsTensorProduct.assocAux_tmul]; rw [TensorProduct.smul_tmul']
 
 Depends on / 依赖: IsTensorProduct, IsTensorProduct.assocAux, assocAux, f.restrictScalars
 -/
@@ -1190,7 +1218,9 @@ lemma IsBaseChange.iff_of_equiv_comm
     ext s m'
     obtain ⟨m, rfl⟩ := eM.surjective m'
     simp [this]
-  · c
+  · convert! (ist.compl₂_linearEquiv eM).compr₂_linearEquiv (eN.symm.restrictScalars R)
+    ext s m
+    simp [this]
 
 中文:
 引理 IsBaseChange.iff_of_equiv_comm
@@ -1203,7 +1233,9 @@ lemma IsBaseChange.iff_of_equiv_comm
     ext s m'
     obtain ⟨m, rfl⟩ := eM.surjective m'
     simp [this]
-  · c
+  · convert! (ist.compl₂_linearEquiv eM).compr₂_linearEquiv (eN.symm.restrictScalars R)
+    ext s m
+    simp [this]
 
 Depends on / 依赖: IsBaseChange, LinearMap, LinearMap.congr_fun, congr_fun, convert, eM.surjective, eM.symm, eN.restrictScalars, eN.symm.restrictScalars, ist.compl, restrictScalars, surjective
 -/
@@ -1259,7 +1291,8 @@ lemma isBaseChange_tensorProduct_map
   refine IsBaseChange.of_equiv e (fun x => ?_)
   induction x with
   | zero => simp
-  | tmul => simp [e, IsBaseChange.equi
+  | tmul => simp [e, IsBaseChange.equiv_tmul]
+  | add _ _ h1 h2 => simp [tmul_add, h1, h2]
 
 中文:
 引理 isBaseChange_tensorProduct_map
@@ -1270,7 +1303,8 @@ lemma isBaseChange_tensorProduct_map
   refine IsBaseChange.of_equiv e (fun x => ?_)
   induction x with
   | zero => simp
-  | tmul => simp [e, IsBaseChange.equi
+  | tmul => simp [e, IsBaseChange.equiv_tmul]
+  | add _ _ h1 h2 => simp [tmul_add, h1, h2]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.assoc, AlgebraTensorModule.congr, IsBaseChange, IsBaseChange.equiv_tmul, IsBaseChange.of_equiv, LinearEquiv, LinearEquiv.refl, equiv_tmul, hf.equiv, of_equiv, otimes, symm.trans, tmul_add
 -/
@@ -1298,7 +1332,28 @@ theorem IsBaseChange.of_lift_unique
       (ULift.moduleEquiv.symm.toLinearMap.comp <| TensorProduct.mk R S M 1)
   let f' : S otimes[R] M ->ₗ[R] N :=
     TensorProduct.lift (((LinearMap.flip (AlgHom.toLinearMap (Algebra.ofId S
-      (Module.End S (M ->ₗ[R] N))))) f).restrict
+      (Module.End S (M ->ₗ[R] N))))) f).restrictScalars R)
+  change Function.Bijective f'
+  let f'' : S otimes[R] M ->ₗ[S] N := by
+    refine
+      { f' with
+        map_smul' := fun s x =>
+          TensorProduct.induction_on x ?_ (fun s' y => smul_assoc s s' _) fun x y hx hy => ?_ }
+    · dsimp; rw [map_zero, smul_zero, map_zero, smul_zero]
+    · dsimp at *; rw [smul_add, map_add, map_add, smul_add, hx, hy]
+  simp_rw [DFunLike.ext_iff, LinearMap.comp_apply, LinearMap.restrictScalars_apply] at hg
+  let fe : S otimes[R] M ≃ₗ[S] N :=
+    LinearEquiv.ofLinearMap f'' (ULift.moduleEquiv.toLinearMap.comp g) ?_ ?_
+  · exact fe.bijective
+  · rw [← LinearMap.cancel_left (ULift.moduleEquiv : ULift.{max v₁ v₃} N ≃ₗ[S] N).symm.injective]
+    refine (h (ULift.{max v₁ v₃} N) <| ULift.moduleEquiv.symm.toLinearMap.comp f).unique ?_ rfl
+    ext x
+    simp only [LinearMap.comp_apply, LinearMap.restrictScalars_apply, hg]
+    apply one_smul
+  · ext x
+    change (g <| (1 : S) • f x).down = _
+    rw [one_smul]; rw [hg]
+    rfl
 
 中文:
 定理 IsBaseChange.of_lift_unique
@@ -1308,7 +1363,28 @@ theorem IsBaseChange.of_lift_unique
       (ULift.moduleEquiv.symm.toLinearMap.comp <| TensorProduct.mk R S M 1)
   let f' : S otimes[R] M ->ₗ[R] N :=
     TensorProduct.lift (((LinearMap.flip (AlgHom.toLinearMap (Algebra.ofId S
-      (Module.End S (M ->ₗ[R] N))))) f).restrict
+      (Module.End S (M ->ₗ[R] N))))) f).restrictScalars R)
+  change Function.Bijective f'
+  let f'' : S otimes[R] M ->ₗ[S] N := by
+    refine
+      { f' with
+        map_smul' := fun s x =>
+          TensorProduct.induction_on x ?_ (fun s' y => smul_assoc s s' _) fun x y hx hy => ?_ }
+    · dsimp; rw [map_zero, smul_zero, map_zero, smul_zero]
+    · dsimp at *; rw [smul_add, map_add, map_add, smul_add, hx, hy]
+  simp_rw [DFunLike.ext_iff, LinearMap.comp_apply, LinearMap.restrictScalars_apply] at hg
+  let fe : S otimes[R] M ≃ₗ[S] N :=
+    LinearEquiv.ofLinearMap f'' (ULift.moduleEquiv.toLinearMap.comp g) ?_ ?_
+  · exact fe.bijective
+  · rw [← LinearMap.cancel_left (ULift.moduleEquiv : ULift.{max v₁ v₃} N ≃ₗ[S] N).symm.injective]
+    refine (h (ULift.{max v₁ v₃} N) <| ULift.moduleEquiv.symm.toLinearMap.comp f).unique ?_ rfl
+    ext x
+    simp only [LinearMap.comp_apply, LinearMap.restrictScalars_apply, hg]
+    apply one_smul
+  · ext x
+    change (g <| (1 : S) • f x).down = _
+    rw [one_smul]; rw [hg]
+    rfl
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap, Algebra, Algebra.ofId, Bijective, Function, Function.Bijective, LinearMap, LinearMap.flip, Module, Module.End, TensorProduct, TensorProduct.induction_on, TensorProduct.lift, TensorProduct.mk, ULift.moduleEquiv.symm.toLinearMap.comp, induction_on, map_smul, map_z, moduleEquiv
 -/
@@ -1391,7 +1467,14 @@ theorem IsBaseChange.ofEquiv
     change (by let _ := I₂; exact r • q) = (by let _ := I₃; exact r • q)
     dsimp
     rw [← one_smul R q]; rw [smul_smul]; rw [← @smul_assoc _ _ _ (id _) (id _) (id _) I₄]; rw [smul_eq_mul]
-  cases thi
+  cases this
+  refine
+    ⟨g.comp e.symm.toLinearMap, by
+      ext
+      simp, ?_⟩
+  rintro y (rfl : _ = _)
+  ext
+  simp
 
 中文:
 定理 IsBaseChange.ofEquiv
@@ -1405,7 +1488,14 @@ theorem IsBaseChange.ofEquiv
     change (by let _ := I₂; exact r • q) = (by let _ := I₃; exact r • q)
     dsimp
     rw [← one_smul R q]; rw [smul_smul]; rw [← @smul_assoc _ _ _ (id _) (id _) (id _) I₄]; rw [smul_eq_mul]
-  cases thi
+  cases this
+  refine
+    ⟨g.comp e.symm.toLinearMap, by
+      ext
+      simp, ?_⟩
+  rintro y (rfl : _ = _)
+  ext
+  simp
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.of_lift_unique, e.symm.toLinearMap, g.comp, of_lift_unique, one_smul, smul_assoc, smul_eq_mul, smul_smul, toLinearMap
 -/
@@ -1446,7 +1536,14 @@ theorem IsBaseChange.comp
       rfl⟩
   have : IsScalarTower R S Q := IsScalarTower.to₁₂₄ _ _ T _
   refine
-    ⟨hg.lift (hf.lift 
+    ⟨hg.lift (hf.lift i), by
+      ext
+      simp [IsBaseChange.lift_eq], ?_⟩
+  rintro g' (e : _ = _)
+  refine hg.algHom_ext' _ _ (hf.algHom_ext' _ _ ?_)
+  rw [IsBaseChange.lift_comp]; rw [IsBaseChange.lift_comp]; rw [← e]
+  ext
+  rfl
 
 中文:
 定理 IsBaseChange.comp
@@ -1461,7 +1558,14 @@ theorem IsBaseChange.comp
       rfl⟩
   have : IsScalarTower R S Q := IsScalarTower.to₁₂₄ _ _ T _
   refine
-    ⟨hg.lift (hf.lift 
+    ⟨hg.lift (hf.lift i), by
+      ext
+      simp [IsBaseChange.lift_eq], ?_⟩
+  rintro g' (e : _ = _)
+  refine hg.algHom_ext' _ _ (hf.algHom_ext' _ _ ?_)
+  rw [IsBaseChange.lift_comp]; rw [IsBaseChange.lift_comp]; rw [← e]
+  ext
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsBaseChange, IsBaseChange.lift_comp, IsBaseChange.lift_eq, IsBaseChange.of_lift_unique, IsScalarTower, IsScalarTower.to, Module, Module.compHom, algHom_ext, algebraMap, compHom, hf.algHom_ext, hf.lift, hg.algHom_ext, hg.lift, lift_comp, lift_eq, mul_smul
 -/
@@ -1498,7 +1602,16 @@ lemma IsBaseChange.of_comp
   have : IsScalarTower R S Q := .restrictScalars R S Q
   have : IsScalarTower R T Q := IsScalarTower.of_algebraMap_smul fun r x => by
     simp [IsScalarTower.algebraMap_apply R S T]
-  let r' : M -
+  let r' : M ->ₗ[R] Q := r ∘ₗ f
+  let q : O ->ₗ[T] Q := hc.lift r'
+  refine ⟨q, ?_, ?_⟩
+  · apply hf.algHom_ext'
+    simp [r', q, LinearMap.comp_assoc, hc.lift_comp]
+  · intro q' hq'
+    apply hc.algHom_ext'
+    apply_fun LinearMap.restrictScalars R at hq'
+    rw [← LinearMap.comp_assoc]
+    rw [show q'.restrictScalars R ∘ₗ h.restrictScalars R = _ from hq']; rw [hc.lift_comp]
 
 中文:
 引理 IsBaseChange.of_comp
@@ -1510,7 +1623,16 @@ lemma IsBaseChange.of_comp
   have : IsScalarTower R S Q := .restrictScalars R S Q
   have : IsScalarTower R T Q := IsScalarTower.of_algebraMap_smul fun r x => by
     simp [IsScalarTower.algebraMap_apply R S T]
-  let r' : M -
+  let r' : M ->ₗ[R] Q := r ∘ₗ f
+  let q : O ->ₗ[T] Q := hc.lift r'
+  refine ⟨q, ?_, ?_⟩
+  · apply hf.algHom_ext'
+    simp [r', q, LinearMap.comp_assoc, hc.lift_comp]
+  · intro q' hq'
+    apply hc.algHom_ext'
+    apply_fun LinearMap.restrictScalars R at hq'
+    rw [← LinearMap.comp_assoc]
+    rw [show q'.restrictScalars R ∘ₗ h.restrictScalars R = _ from hq']; rw [hc.lift_comp]
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.of_lift_unique, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.of_algebraMap_smul, LinearMap, LinearMap.comp_assoc, LinearMap.restrictScalars, Module, algHom_ext, algebraMap_apply, apply_fun, comp_assoc, hc.algHom_ext, hc.lift, hc.lift_comp, hf.algHom_ext, lift_comp, of_algebraMap_smul, of_lift_unique
 -/
@@ -1657,7 +1779,8 @@ definition Algebra.IsPushout.equiv
       induction y with
       | zero => simp
       | add x y _ _ => simp [*, mul_add]
-      | tmul x y => simp [IsBaseChange.equiv_tmul, Algebra.smul_def, mul_mu
+      | tmul x y => simp [IsBaseChange.equiv_tmul, Algebra.smul_def, mul_mul_mul_comm]
+  commutes' := by simp [IsBaseChange.equiv_tmul, Algebra.smul_def]
 
 中文:
 定义 代数.是推出.equiv
@@ -1672,7 +1795,8 @@ definition Algebra.IsPushout.equiv
       induction y with
       | zero => simp
       | add x y _ _ => simp [*, mul_add]
-      | tmul x y => simp [IsBaseChange.equiv_tmul, Algebra.smul_def, mul_mu
+      | tmul x y => simp [IsBaseChange.equiv_tmul, Algebra.smul_def, mul_mul_mul_comm]
+  commutes' := by simp [IsBaseChange.equiv_tmul, Algebra.smul_def]
 
 Depends on / 依赖: h.out.equiv
 -/
@@ -2050,7 +2174,7 @@ theorem Algebra.IsPushout.algHom_ext
     congr 1
     exact (AlgHom.congr_fun h₂ s :)
   · intro s₁ s₂ e₁ e₂
-    rw [map_add]; rw [map_add]; rw [e₁]; rw 
+    rw [map_add]; rw [map_add]; rw [e₁]; rw [e₂]
 
 中文:
 定理 代数.是推出.algHom_ext
@@ -2065,7 +2189,7 @@ theorem Algebra.IsPushout.algHom_ext
     congr 1
     exact (AlgHom.congr_fun h₂ s :)
   · intro s₁ s₂ e₁ e₂
-    rw [map_add]; rw [map_add]; rw [e₁]; rw 
+    rw [map_add]; rw [map_add]; rw [e₁]; rw [e₂]
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, Algebra, Algebra.smul_def, congr_fun, inductionOn, map_add, map_mul, map_zero, smul_def
 -/
@@ -2094,7 +2218,12 @@ lemma Algebra.IsPushout.comp_iff
   let f : R' ->ₗ[R] S' := (IsScalarTower.toAlgHom R R' S').toLinearMap
   have : IsScalarTower R S T' := .of_algebraMap_eq fun x => by
     rw [algebraMap_apply R S' T']; rw [algebraMap_apply R S S']; rw [← algebraMap_apply S S' T']
-  have heq : (toAlgHom S S' T').toLinearMap.restrictScalars R ∘ₗ f
+  have heq : (toAlgHom S S' T').toLinearMap.restrictScalars R ∘ₗ f =
+      (toAlgHom R R' T').toLinearMap := by
+    ext x
+    simp [f, ← IsScalarTower.algebraMap_apply]
+  rw [isPushout_iff]; rw [isPushout_iff]; rw [← heq]; rw [IsBaseChange.comp_iff]
+  exact Algebra.IsPushout.out
 
 中文:
 引理 代数.是推出.comp_iff
@@ -2103,7 +2232,12 @@ lemma Algebra.IsPushout.comp_iff
   let f : R' ->ₗ[R] S' := (IsScalarTower.toAlgHom R R' S').toLinearMap
   have : IsScalarTower R S T' := .of_algebraMap_eq fun x => by
     rw [algebraMap_apply R S' T']; rw [algebraMap_apply R S S']; rw [← algebraMap_apply S S' T']
-  have heq : (toAlgHom S S' T').toLinearMap.restrictScalars R ∘ₗ f
+  have heq : (toAlgHom S S' T').toLinearMap.restrictScalars R ∘ₗ f =
+      (toAlgHom R R' T').toLinearMap := by
+    ext x
+    simp [f, ← IsScalarTower.algebraMap_apply]
+  rw [isPushout_iff]; rw [isPushout_iff]; rw [← heq]; rw [IsBaseChange.comp_iff]
+  exact Algebra.IsPushout.out
 
 Depends on / 依赖: Algebra, Algebra.IsPushout.out, IsBaseChange, IsBaseChange.comp_iff, IsPushout, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.toAlgHom, Subsingleton, Subsingleton.uniqueTopologicalSpace, algebraMap_apply, comp_iff, isPushout_iff, of_algebraMap_eq, restrictScalars, toAlgHom, toLinearMap, toLinearMap.restrictScalars, uniqueTopologicalSpace
 -/
@@ -2174,7 +2308,10 @@ definition IsPushout.cancelBaseChangeAux
   (AlgebraTensorModule.congr ((IsPushout.equiv R A S B).toLinearEquiv).symm
       (LinearEquiv.refl _ _)).restrictScalars R ≪≫ₗ
     (_root_.TensorProduct.comm _ _ _).restrictScalars R ≪≫ₗ
-    (AlgebraTensorModule.cancelBaseChange _ _ A _ _).re
+    (AlgebraTensorModule.cancelBaseChange _ _ A _ _).restrictScalars R ≪≫ₗ
+    (_root_.TensorProduct.comm _ _ _).restrictScalars R
+
+@[simp]
 
 中文:
 定义 是推出.cancelBaseChangeAux
@@ -2183,7 +2320,10 @@ definition IsPushout.cancelBaseChangeAux
   (AlgebraTensorModule.congr ((IsPushout.equiv R A S B).toLinearEquiv).symm
       (LinearEquiv.refl _ _)).restrictScalars R ≪≫ₗ
     (_root_.TensorProduct.comm _ _ _).restrictScalars R ≪≫ₗ
-    (AlgebraTensorModule.cancelBaseChange _ _ A _ _).re
+    (AlgebraTensorModule.cancelBaseChange _ _ A _ _).restrictScalars R ≪≫ₗ
+    (_root_.TensorProduct.comm _ _ _).restrictScalars R
+
+@[simp]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange, AlgebraTensorModule.congr, IsPushout, IsPushout.equiv, IsPushout.symm, LinearEquiv, LinearEquiv.refl, TensorProduct, _root_, _root_.TensorProduct.comm, cancelBaseChange, restrictScalars, toLinearEquiv
 -/

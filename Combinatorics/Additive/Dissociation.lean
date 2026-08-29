@@ -180,7 +180,7 @@ lemma not_mulDissociated_iff_exists_disjoint
     ⟨?_, fun ⟨t, u, ht, hu, _, htune, htusum⟩ => ⟨t, ht, u, hu, htune, htusum⟩⟩
   rintro ⟨t, ht, u, hu, htu, h⟩
   refine ⟨t \ u, u \ t, ?_, ?_, disjoint_sdiff_sdiff, sdiff_ne_sdiff_iff.2 htu,
-    Finset.prod_sdiff_eq_prod_sdiff_iff.2 h⟩ <;> push_cast 
+    Finset.prod_sdiff_eq_prod_sdiff_iff.2 h⟩ <;> push_cast <;> exact sdiff_subset.trans ‹_›
 
 中文:
 引理 not_mulDissociated_iff_存在_disjoint
@@ -190,7 +190,7 @@ lemma not_mulDissociated_iff_exists_disjoint
     ⟨?_, fun ⟨t, u, ht, hu, _, htune, htusum⟩ => ⟨t, ht, u, hu, htune, htusum⟩⟩
   rintro ⟨t, ht, u, hu, htu, h⟩
   refine ⟨t \ u, u \ t, ?_, ?_, disjoint_sdiff_sdiff, sdiff_ne_sdiff_iff.2 htu,
-    Finset.prod_sdiff_eq_prod_sdiff_iff.2 h⟩ <;> push_cast 
+    Finset.prod_sdiff_eq_prod_sdiff_iff.2 h⟩ <;> push_cast <;> exact sdiff_subset.trans ‹_›
 
 Depends on / 依赖: Finset, Finset.prod_sdiff_eq_prod_sdiff_iff, classical, disjoint_sdiff_sdiff, htusum, not_mulDissociated, not_mulDissociated.trans, prod_sdiff_eq_prod_sdiff_iff, sdiff_ne_sdiff_iff, sdiff_subset, sdiff_subset.trans
 -/
@@ -383,7 +383,24 @@ lemma exists_subset_mulSpan_card_le_of_forall_mulDissociated
       ⟨∅, mem_filter.2 ⟨empty_mem_powerset _, by simp⟩⟩
   simp only [mem_filter, mem_powerset] at hs'
   refine ⟨s', hs'.1.1, hs _ hs'.1.1 hs'.1.2, fun a ha => ?_⟩
-  by_cases h
+  by_cases ha' : a in s'
+  · exact subset_mulSpan ha'
+  obtain ⟨t, u, ht, hu, htu⟩ := not_mulDissociated_iff_exists_disjoint.1 fun h =>
+hs'.not_gt ⟨insert_subset_iff.2 ⟨ha, hs'.1.1⟩, h⟩ ssubset_insert ha'
+  by_cases hat : a in t
+  · have : a = (∏ b in u, b) / ∏ b in t.erase a, b := by
+      rw [prod_erase_eq_div hat]; rw [htu.2.2]; rw [div_div_self']
+    rw [this]
+    exact prod_div_prod_mem_mulSpan
+      ((subset_insert_iff_of_notMem <| disjoint_left.1 htu.1 hat).1 hu) (subset_insert_iff.1 ht)
+  rw [coe_subset]; rw [subset_insert_iff_of_notMem hat] at ht
+  by_cases hau : a in u
+  · have : a = (∏ b in t, b) / ∏ b in u.erase a, b := by
+      rw [prod_erase_eq_div hau]; rw [htu.2.2]; rw [div_div_self']
+    rw [this]
+    exact prod_div_prod_mem_mulSpan ht (subset_insert_iff.1 hu)
+  · rw [coe_subset, subset_insert_iff_of_notMem hau] at hu
+    cases not_mulDissociated_iff_exists_disjoint.2 ⟨t, u, ht, hu, htu⟩ hs'.1.2
 
 中文:
 引理 存在_subset_mulSpan_card_le_of_对任意_mulDissociated
@@ -394,7 +411,24 @@ lemma exists_subset_mulSpan_card_le_of_forall_mulDissociated
       ⟨∅, mem_filter.2 ⟨empty_mem_powerset _, by simp⟩⟩
   simp only [mem_filter, mem_powerset] at hs'
   refine ⟨s', hs'.1.1, hs _ hs'.1.1 hs'.1.2, fun a ha => ?_⟩
-  by_cases h
+  by_cases ha' : a in s'
+  · exact subset_mulSpan ha'
+  obtain ⟨t, u, ht, hu, htu⟩ := not_mulDissociated_iff_exists_disjoint.1 fun h =>
+hs'.not_gt ⟨insert_subset_iff.2 ⟨ha, hs'.1.1⟩, h⟩ ssubset_insert ha'
+  by_cases hat : a in t
+  · have : a = (∏ b in u, b) / ∏ b in t.erase a, b := by
+      rw [prod_erase_eq_div hat]; rw [htu.2.2]; rw [div_div_self']
+    rw [this]
+    exact prod_div_prod_mem_mulSpan
+      ((subset_insert_iff_of_notMem <| disjoint_left.1 htu.1 hat).1 hu) (subset_insert_iff.1 ht)
+  rw [coe_subset]; rw [subset_insert_iff_of_notMem hat] at ht
+  by_cases hau : a in u
+  · have : a = (∏ b in t, b) / ∏ b in u.erase a, b := by
+      rw [prod_erase_eq_div hau]; rw [htu.2.2]; rw [div_div_self']
+    rw [this]
+    exact prod_div_prod_mem_mulSpan ht (subset_insert_iff.1 hu)
+  · rw [coe_subset, subset_insert_iff_of_notMem hau] at hu
+    cases not_mulDissociated_iff_exists_disjoint.2 ⟨t, u, ht, hu, htu⟩ hs'.1.2
 
 Depends on / 依赖: Finset, MulDissociated, classical, empty_mem_powerset, exists_maximal, filter, insert_subset_iff, mem_filter, mem_powerset, not_gt, not_mulDissociated_iff_exists_disjoint, powerset, s.powerset.filter, ssubset_insert, subset_mulSpan
 -/

@@ -239,7 +239,15 @@ theorem inner_.conj_symm
   by_cases hI : (I : 𝕜) = 0
   · simp only [hI, neg_zero, zero_mul]
   have hI' := I_mul_I_of_nonzero hI
-  have I_smul (v : E) : ‖(I : 𝕜) • v‖ = ‖v‖ := by rw [norm_smul, 
+  have I_smul (v : E) : ‖(I : 𝕜) • v‖ = ‖v‖ := by rw [norm_smul, norm_I_of_ne_zero hI, one_mul]
+  have h₁ : ‖(I : 𝕜) • y - x‖ = ‖(I : 𝕜) • x + y‖ := by
+    convert I_smul ((I : 𝕜) • x + y)
+    linear_combination (norm := module) -hI' • x
+  have h₂ : ‖(I : 𝕜) • y + x‖ = ‖(I : 𝕜) • x - y‖ := by
+    convert (I_smul ((I : 𝕜) • y + x)).symm
+    linear_combination (norm := module) -hI' • y
+  rw [h₁]; rw [h₂]
+  ring
 
 中文:
 定理 inner_.conj_symm
@@ -251,7 +259,15 @@ theorem inner_.conj_symm
   by_cases hI : (I : 𝕜) = 0
   · simp only [hI, neg_zero, zero_mul]
   have hI' := I_mul_I_of_nonzero hI
-  have I_smul (v : E) : ‖(I : 𝕜) • v‖ = ‖v‖ := by rw [norm_smul, 
+  have I_smul (v : E) : ‖(I : 𝕜) • v‖ = ‖v‖ := by rw [norm_smul, norm_I_of_ne_zero hI, one_mul]
+  have h₁ : ‖(I : 𝕜) • y - x‖ = ‖(I : 𝕜) • x + y‖ := by
+    convert I_smul ((I : 𝕜) • x + y)
+    linear_combination (norm := module) -hI' • x
+  have h₂ : ‖(I : 𝕜) • y + x‖ = ‖(I : 𝕜) • x - y‖ := by
+    convert (I_smul ((I : 𝕜) • y + x)).symm
+    linear_combination (norm := module) -hI' • y
+  rw [h₁]; rw [h₂]
+  ring
 
 Depends on / 依赖: I_mul_I_of_nonzero, I_smul, add_comm, conj_I, conj_ofReal, convert, inner_, linear_combination, map_add, map_mul, map_ofNat, map_sub, module, neg_zero, norm_I_of_ne_zero, norm_smul, norm_sub_rev, one_mul, zero_mul
 -/
@@ -289,6 +305,13 @@ theorem add_left
   have h3 := parallelogram_identity (y + z) z
   have h4 := parallelogram_identity (y - z) z
   have h5 := parallelogram_identity ((I : 𝕜) • (x + y) + z) ((I : 𝕜) • x - z)
+  have h6 := parallelogram_identity ((I : 𝕜) • (x + y) - z) ((I : 𝕜) • x + z)
+  have h7 := parallelogram_identity ((I : 𝕜) • y + z) z
+  have h8 := parallelogram_identity ((I : 𝕜) • y - z) z
+  apply_fun 𝓚 at h1 h2 h3 h4 h5 h6 h7 h8
+  simp only [map_add, map_mul, map_ofNat, smul_add] at *
+  abel_nf at * -- TODO this should be `module_nf` (then the `smul_add` above can go)
+  linear_combination (- h1 + h2 + h3 - h4 + I * (- h5 + h6 + h7 - h8)) / 8
 
 中文:
 定理 add_left
@@ -301,6 +324,13 @@ theorem add_left
   have h3 := parallelogram_identity (y + z) z
   have h4 := parallelogram_identity (y - z) z
   have h5 := parallelogram_identity ((I : 𝕜) • (x + y) + z) ((I : 𝕜) • x - z)
+  have h6 := parallelogram_identity ((I : 𝕜) • (x + y) - z) ((I : 𝕜) • x + z)
+  have h7 := parallelogram_identity ((I : 𝕜) • y + z) z
+  have h8 := parallelogram_identity ((I : 𝕜) • y - z) z
+  apply_fun 𝓚 at h1 h2 h3 h4 h5 h6 h7 h8
+  simp only [map_add, map_mul, map_ofNat, smul_add] at *
+  abel_nf at * -- TODO this should be `module_nf` (then the `smul_add` above can go)
+  linear_combination (- h1 + h2 + h3 - h4 + I * (- h5 + h6 + h7 - h8)) / 8
 
 Depends on / 依赖: apply_fun, inner_, parallelogram_identity
 -/
@@ -365,7 +395,7 @@ theorem real_prop
   refine Rat.isDenseEmbedding_coe_real.dense.equalizer ?_ ?_ (funext fun X => ?_)
   · exact (continuous_ofReal.smul continuous_const).inner_ continuous_const
   · exact (continuous_conj.comp continuous_ofReal).mul continuous_const
-  · simp only [Function.
+  · simp only [Function.comp_apply, RCLike.ofReal_ratCast, rat_prop _ _]
 
 中文:
 定理 real_prop
@@ -378,7 +408,7 @@ theorem real_prop
   refine Rat.isDenseEmbedding_coe_real.dense.equalizer ?_ ?_ (funext fun X => ?_)
   · exact (continuous_ofReal.smul continuous_const).inner_ continuous_const
   · exact (continuous_conj.comp continuous_ofReal).mul continuous_const
-  · simp only [Function.
+  · simp only [Function.comp_apply, RCLike.ofReal_ratCast, rat_prop _ _]
 -/
 private theorem real_prop (r : Real) : innerProp' E (r : 𝕜) := by
   intro x y
@@ -403,7 +433,9 @@ theorem I_prop
   have hI' := I_mul_I_of_nonzero hI
   rw [conj_I]; rw [inner_]; rw [inner_]; rw [mul_left_comm]; rw [smul_smul]; rw [hI']; rw [neg_one_smul]
   have h₁ : ‖-x - y‖ = ‖x + y‖ := by rw [← neg_add', norm_neg]
-  ha
+  have h₂ : ‖-x + y‖ = ‖x - y‖ := by rw [← neg_sub, norm_neg, sub_eq_neg_add]
+  rw [h₁]; rw [h₂]
+  linear_combination (- 𝓚 ‖(I : 𝕜) • x - y‖ ^ 2 + 𝓚 ‖(I : 𝕜) • x + y‖ ^ 2) * hI' / 4
 
 中文:
 定理 I_prop
@@ -416,7 +448,9 @@ theorem I_prop
   have hI' := I_mul_I_of_nonzero hI
   rw [conj_I]; rw [inner_]; rw [inner_]; rw [mul_left_comm]; rw [smul_smul]; rw [hI']; rw [neg_one_smul]
   have h₁ : ‖-x - y‖ = ‖x + y‖ := by rw [← neg_add', norm_neg]
-  ha
+  have h₂ : ‖-x + y‖ = ‖x - y‖ := by rw [← neg_sub, norm_neg, sub_eq_neg_add]
+  rw [h₁]; rw [h₂]
+  linear_combination (- 𝓚 ‖(I : 𝕜) • x - y‖ ^ 2 + 𝓚 ‖(I : 𝕜) • x + y‖ ^ 2) * hI' / 4
 -/
 private theorem I_prop : innerProp' E (I : 𝕜) := by
   by_cases hI : (I : 𝕜) = 0

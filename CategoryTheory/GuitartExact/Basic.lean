@@ -288,7 +288,9 @@ definition functor
   map {f₁ f₂} φ :=
     CostructuredArrow.homMk (StructuredArrow.homMk φ.right.left
       (by dsimp; rw [← StructuredArrow.w φ]; rfl))
-      (by ext; exact Co
+      (by ext; exact CostructuredArrow.w φ.right)
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 中文:
 定义 functor
@@ -298,7 +300,9 @@ definition functor
   map {f₁ f₂} φ :=
     CostructuredArrow.homMk (StructuredArrow.homMk φ.right.left
       (by dsimp; rw [← StructuredArrow.w φ]; rfl))
-      (by ext; exact Co
+      (by ext; exact CostructuredArrow.w φ.right)
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, StructuredArrow, StructuredArrow.mk, f.hom.left
 -/
@@ -327,7 +331,9 @@ definition inverse
   map {f₁ f₂} φ :=
     StructuredArrow.homMk (CostructuredArrow.homMk φ.left.right
       (by dsimp; rw [← CostructuredArrow.w φ]; rfl))
-      (by ext; exact 
+      (by ext; exact StructuredArrow.w φ.left)
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 中文:
 定义 inverse
@@ -337,7 +343,9 @@ definition inverse
   map {f₁ f₂} φ :=
     StructuredArrow.homMk (CostructuredArrow.homMk φ.left.right
       (by dsimp; rw [← CostructuredArrow.w φ]; rfl))
-      (by ext; exact 
+      (by ext; exact StructuredArrow.w φ.left)
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, StructuredArrow, StructuredArrow.mk, f.hom.right
 -/
@@ -422,7 +430,10 @@ definition costructuredArrowDownwardsPrecomp
       rw [assoc]; rw [StructuredArrow.w])) (by
     ext
     dsimp
-  
+    rw [← CostructuredArrow.w φ]; rw [structuredArrowDownwards_map]
+    rfl)
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 中文:
 定义 costructuredArrowDownwardsPrecomp
@@ -433,7 +444,10 @@ definition costructuredArrowDownwardsPrecomp
       rw [assoc]; rw [StructuredArrow.w])) (by
     ext
     dsimp
-  
+    rw [← CostructuredArrow.w φ]; rw [structuredArrowDownwards_map]
+    rfl)
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 Depends on / 依赖: A.hom.right, A.left.hom, A.left.right, CostructuredArrowDownwards, CostructuredArrowDownwards.mk
 -/
@@ -736,7 +750,13 @@ instance guitartExact_id
   intro X₂ X₃ (g : F.obj X₂ ⟶ X₃)
   let Z := StructuredArrowRightwards (TwoSquare.mk (𝟭 C₁) F F (𝟭 C₂) (𝟙 F)) g
   let X₀ : Z := StructuredArrow.mk (Y := CostructuredArrow.mk g) (CostructuredArrow.homMk (𝟙 _))
-  have φ : forall (X : Z), X₀ ⟶ X := fun 
+  have φ : forall (X : Z), X₀ ⟶ X := fun X =>
+    StructuredArrow.homMk (CostructuredArrow.homMk X.hom.left
+      (by simpa using! CostructuredArrow.w X.hom))
+  have : Nonempty Z := ⟨X₀⟩
+  apply zigzag_isConnected
+  intro X Y
+  exact Zigzag.of_inv_hom (φ X) (φ Y)
 
 中文:
 实例 guitartExact_id
@@ -746,7 +766,13 @@ instance guitartExact_id
   intro X₂ X₃ (g : F.obj X₂ ⟶ X₃)
   let Z := StructuredArrowRightwards (TwoSquare.mk (𝟭 C₁) F F (𝟭 C₂) (𝟙 F)) g
   let X₀ : Z := StructuredArrow.mk (Y := CostructuredArrow.mk g) (CostructuredArrow.homMk (𝟙 _))
-  have φ : forall (X : Z), X₀ ⟶ X := fun 
+  have φ : forall (X : Z), X₀ ⟶ X := fun X =>
+    StructuredArrow.homMk (CostructuredArrow.homMk X.hom.left
+      (by simpa using! CostructuredArrow.w X.hom))
+  have : Nonempty Z := ⟨X₀⟩
+  apply zigzag_isConnected
+  intro X Y
+  exact Zigzag.of_inv_hom (φ X) (φ Y)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, CostructuredArrow.w, F.obj, Nonempty, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, StructuredArrowRightwards, TwoSquare, TwoSquare.mk, X.hom, X.hom.left, Zigzag, Zigzag.of_inv_hom, guitartExact_iff_isConnected_rightwards, of_inv_hom, zigzag_isConnected
 -/

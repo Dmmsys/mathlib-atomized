@@ -273,7 +273,8 @@ lemma ConnectedComponent.even_ncard_supp_sdiff_rep
   · simpa [hrep.ncard_sdiff_of_notMem
       (by simpa [Set.ncard_image_of_injective, ← Nat.not_odd_iff_even] using h)] using h
   · have : K.supp.ncard != 0 := Nat.ne_of_odd_add (Nat.not_even_iff_odd.mp h)
-    rw [hrep.ncard_sdiff_of_mem (Nat.not_even_iff_odd.mp h)
+    rw [hrep.ncard_sdiff_of_mem (Nat.not_even_iff_odd.mp h)]; rw [Nat.even_sub (by lia)]
+    simpa [Nat.even_sub] using Nat.not_even_iff_odd.mp h
 
 中文:
 引理 ConnectedComponent.even_ncard_supp_sdiff_rep
@@ -283,7 +284,8 @@ lemma ConnectedComponent.even_ncard_supp_sdiff_rep
   · simpa [hrep.ncard_sdiff_of_notMem
       (by simpa [Set.ncard_image_of_injective, ← Nat.not_odd_iff_even] using h)] using h
   · have : K.supp.ncard != 0 := Nat.ne_of_odd_add (Nat.not_even_iff_odd.mp h)
-    rw [hrep.ncard_sdiff_of_mem (Nat.not_even_iff_odd.mp h)
+    rw [hrep.ncard_sdiff_of_mem (Nat.not_even_iff_odd.mp h)]; rw [Nat.even_sub (by lia)]
+    simpa [Nat.even_sub] using Nat.not_even_iff_odd.mp h
 
 Depends on / 依赖: K.supp.ncard, Nat.even_sub, Nat.ne_of_odd_add, Nat.not_even_iff_odd.mp, Nat.not_odd_iff_even, Set.ncard_image_of_injective, even_sub, hrep.ncard_sdiff_of_mem, hrep.ncard_sdiff_of_notMem, ncard_image_of_injective, ncard_sdiff_of_mem, ncard_sdiff_of_notMem, ne_of_odd_add, not_even_iff_odd, not_odd_iff_even
 -/

@@ -233,7 +233,11 @@ definition pointedToPartialFun
       PFun.mem_toSubtype_iff (b := b).trans (Subtype.coe_inj.trans Part.mem_some_iff.symm)
   map_comp {X Y Z} f g := by
     refine PFun.ext fun ⟨a, ha⟩ ⟨c, hc⟩ =>
-      (PF
+      (PFun.mem_toSubtype_iff.trans ?_).trans Part.mem_bind_iff.symm
+    suffices c = g.toFun (f.toFun a) -> ¬Y.point = f.toFun a ∧ ¬Z.point = g.toFun (f.toFun a) from
+      ⟨by aesop, by simp; grind⟩
+    rintro rfl
+refine ⟨fun h => hc.symm g.map_point ▸ congr_arg g.toFun h, hc.symm⟩
 
 中文:
 定义 pointedToPartialFun
@@ -245,7 +249,11 @@ definition pointedToPartialFun
       PFun.mem_toSubtype_iff (b := b).trans (Subtype.coe_inj.trans Part.mem_some_iff.symm)
   map_comp {X Y Z} f g := by
     refine PFun.ext fun ⟨a, ha⟩ ⟨c, hc⟩ =>
-      (PF
+      (PFun.mem_toSubtype_iff.trans ?_).trans Part.mem_bind_iff.symm
+    suffices c = g.toFun (f.toFun a) -> ¬Y.point = f.toFun a ∧ ¬Z.point = g.toFun (f.toFun a) from
+      ⟨by aesop, by simp; grind⟩
+    rintro rfl
+refine ⟨fun h => hc.symm g.map_point ▸ congr_arg g.toFun h, hc.symm⟩
 
 Depends on / 依赖: PartialFun, PartialFun.of, X.point
 -/
@@ -283,7 +291,9 @@ definition partialFunToPointed
 map_id := fun X => Pointed.Hom.ext funext fun o => Option.recOn o rfl fun a => (by
         dsimp [CategoryStruct.id]
         convert! Part.some_toOption a)
-map_comp 
+map_comp := fun f g => Pointed.Hom.ext funext fun o => Option.recOn o rfl fun a => by
+        dsimp [CategoryStruct.comp]
+        rw [Part.bind_toOption g (f a)]; rw [Option.elim'_eq_elim] }
 
 中文:
 定义 partialFunToPointed
@@ -296,7 +306,9 @@ map_comp
 map_id := fun X => Pointed.Hom.ext funext fun o => Option.recOn o rfl fun a => (by
         dsimp [CategoryStruct.id]
         convert! Part.some_toOption a)
-map_comp 
+map_comp := fun f g => Pointed.Hom.ext funext fun o => Option.recOn o rfl fun a => by
+        dsimp [CategoryStruct.comp]
+        rw [Part.bind_toOption g (f a)]; rw [Option.elim'_eq_elim] }
 
 Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, Option.elim, Option.recOn, Part.bind_toOption, Part.some_toOption, Pointed, Pointed.Hom.ext, _eq_elim, bind_toOption, classical, convert, map_comp, map_id, some_toOption, toOption
 -/
@@ -328,7 +340,35 @@ definition partialFunEquivPointed
       { toFun := fun a => ⟨some a, some_ne_none a⟩
         invFun := fun a => Option.get _ (Option.ne_none_iff_isSome.1 a.2)
         left_inv := fun _ => Option.get_some _ _
-        righ
+        right_inv := fun a => by simp only [some_get, Subtype.coe_eta] })
+      fun f =>
+        PFun.ext fun a b => by
+          dsimp [PartialFun.Iso.mk, CategoryStruct.comp, pointedToPartialFun]
+          rw [Part.bind_some]
+          refine (Part.mem_bind_iff.trans ?_).trans PFun.mem_toSubtype_iff.symm
+          obtain ⟨b | b, hb⟩ := b
+          · exact (hb rfl).elim
+          · simp only [ne_eq, Part.mem_some_iff]
+            classical
+            refine ⟨fun ⟨w, hw, h⟩ => ?_, fun h => ⟨b, Part.mem_toOption.mp h.symm, rfl⟩⟩
+            rw [Subtype.ext_iff] at h
+            dsimp at h
+            rw [h]
+            rw [← Part.mem_toOption]; rw [mem_def] at hw
+            exact hw.symm
+  counitIso :=
+    NatIso.ofComponents
+      (fun X => Pointed.Iso.mk (by classical exact Equiv.optionSubtypeNe X.point) rfl)
+fun {X Y} f => Pointed.Hom.ext funext fun a => by
+        obtain _ | ⟨a, ha⟩ := a
+        · exact f.map_point.symm
+        simp_all [Equiv.optionSubtypeNe, Equiv.optionSubtype,
+          Option.casesOn'_eq_elim, Part.elim_toOption]
+  functor_unitIso_comp X := by
+    ext (_ | x)
+    · rfl
+    · simp
+      rfl
 
 中文:
 定义 partialFunEquivPointed
@@ -339,7 +379,35 @@ definition partialFunEquivPointed
       { toFun := fun a => ⟨some a, some_ne_none a⟩
         invFun := fun a => Option.get _ (Option.ne_none_iff_isSome.1 a.2)
         left_inv := fun _ => Option.get_some _ _
-        righ
+        right_inv := fun a => by simp only [some_get, Subtype.coe_eta] })
+      fun f =>
+        PFun.ext fun a b => by
+          dsimp [PartialFun.Iso.mk, CategoryStruct.comp, pointedToPartialFun]
+          rw [Part.bind_some]
+          refine (Part.mem_bind_iff.trans ?_).trans PFun.mem_toSubtype_iff.symm
+          obtain ⟨b | b, hb⟩ := b
+          · exact (hb rfl).elim
+          · simp only [ne_eq, Part.mem_some_iff]
+            classical
+            refine ⟨fun ⟨w, hw, h⟩ => ?_, fun h => ⟨b, Part.mem_toOption.mp h.symm, rfl⟩⟩
+            rw [Subtype.ext_iff] at h
+            dsimp at h
+            rw [h]
+            rw [← Part.mem_toOption]; rw [mem_def] at hw
+            exact hw.symm
+  counitIso :=
+    NatIso.ofComponents
+      (fun X => Pointed.Iso.mk (by classical exact Equiv.optionSubtypeNe X.point) rfl)
+fun {X Y} f => Pointed.Hom.ext funext fun a => by
+        obtain _ | ⟨a, ha⟩ := a
+        · exact f.map_point.symm
+        simp_all [Equiv.optionSubtypeNe, Equiv.optionSubtype,
+          Option.casesOn'_eq_elim, Part.elim_toOption]
+  functor_unitIso_comp X := by
+    ext (_ | x)
+    · rfl
+    · simp
+      rfl
 
 Depends on / 依赖: partialFunToPointed
 -/
@@ -401,7 +469,7 @@ definition typeToPartialFunIsoPartialFunToPointed
 Pointed.Hom.ext
       funext fun a => Option.recOn a rfl fun a => by
         convert! Part.some_toOption _
-        simpa using! (Part.get_eq_iff_mem
+        simpa using! (Part.get_eq_iff_mem (by trivial)).mp rfl
 
 中文:
 定义 typeToPartialFunIsoPartialFunToPointed
@@ -416,7 +484,7 @@ Pointed.Hom.ext
 Pointed.Hom.ext
       funext fun a => Option.recOn a rfl fun a => by
         convert! Part.some_toOption _
-        simpa using! (Part.get_eq_iff_mem
+        simpa using! (Part.get_eq_iff_mem (by trivial)).mp rfl
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, Option.recOn, Part.get_eq_iff_mem, Part.some_toOption, Pointed, Pointed.Hom.ext, convert, get_eq_iff_mem, hom_inv_id, inv_hom_id, ofComponents, some_toOption
 -/

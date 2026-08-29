@@ -73,7 +73,20 @@ theorem ContDiffWithinAt.restrictScalars_iteratedFDerivWithin_eventuallyEq
     have t₀ := h.of_le (Nat.cast_le.mpr (n.le_add_right 1))
     have t₁ : forallᶠ (y : E) in 𝓝[s] x, ContDiffWithinAt 𝕜' (↑(n + 1)) f s y := by
       nth_rw 2 [← s.insert_eq_of_mem hx]
-      apply h.event
+      apply h.eventually (by simp)
+    filter_upwards [eventually_eventually_nhdsWithin.2 (hn t₀), t₁,
+      eventually_mem_nhdsWithin (a := x) (s := s)] with a h₁a h₃a h₄a
+    rw [← Filter.EventuallyEq] at h₁a
+    ext m
+    simp only [Function.comp_apply, coe_restrictScalars, iteratedFDerivWithin_succ_apply_left]
+    rw [← (h₁a.fderivWithin' (by tauto)).eq_of_nhdsWithin h₄a]; rw [fderivWithin_restrictScalars_comp]
+    · simp
+    · apply h₃a.differentiableWithinAt_iteratedFDerivWithin
+      · rw [Nat.cast_lt]
+        simp
+      · have : UniqueDiffOn 𝕜' s := hs.mono_field
+        simpa [s.insert_eq_of_mem h₄a]
+    apply hs a h₄a
 
 中文:
 定理 ContDiffWithinAt.restrictScalars_iteratedFDerivWithin_eventuallyEq
@@ -87,7 +100,20 @@ theorem ContDiffWithinAt.restrictScalars_iteratedFDerivWithin_eventuallyEq
     have t₀ := h.of_le (Nat.cast_le.mpr (n.le_add_right 1))
     have t₁ : forallᶠ (y : E) in 𝓝[s] x, ContDiffWithinAt 𝕜' (↑(n + 1)) f s y := by
       nth_rw 2 [← s.insert_eq_of_mem hx]
-      apply h.event
+      apply h.eventually (by simp)
+    filter_upwards [eventually_eventually_nhdsWithin.2 (hn t₀), t₁,
+      eventually_mem_nhdsWithin (a := x) (s := s)] with a h₁a h₃a h₄a
+    rw [← Filter.EventuallyEq] at h₁a
+    ext m
+    simp only [Function.comp_apply, coe_restrictScalars, iteratedFDerivWithin_succ_apply_left]
+    rw [← (h₁a.fderivWithin' (by tauto)).eq_of_nhdsWithin h₄a]; rw [fderivWithin_restrictScalars_comp]
+    · simp
+    · apply h₃a.differentiableWithinAt_iteratedFDerivWithin
+      · rw [Nat.cast_lt]
+        simp
+      · have : UniqueDiffOn 𝕜' s := hs.mono_field
+        simpa [s.insert_eq_of_mem h₄a]
+    apply hs a h₄a
 
 Depends on / 依赖: ContDiffWithinAt, EventuallyEq, Filter, Filter.EventuallyEq, Function, Function.comp_apply, Nat.cast_le.mpr, cast_le, coe_restrictScalars, comp_apply, eventually, eventually_eventually_nhdsWithin, eventually_mem_nhdsWithin, filter_upwards, h.eventually, h.of_le, insert_eq_of_mem, le_add_right, n.le_add_right, nth_rw
 -/

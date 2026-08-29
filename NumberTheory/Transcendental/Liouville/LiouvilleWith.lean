@@ -73,7 +73,10 @@ theorem liouvilleWith_one
     rw [lt_div_iff₀ hn']; rw [Int.cast_add]; rw [Int.cast_one]
     exact Int.lt_floor_add_one _
   refine ⟨⌊x * n⌋ + 1, this.ne, ?_⟩
-  rw [abs_s
+  rw [abs_sub_comm]; rw [abs_of_pos (sub_pos.2 this)]; rw [rpow_one]; rw [sub_lt_iff_lt_add']; rw [add_div_eq_mul_add_div _ _ hn'.ne']
+  gcongr
+  calc _ <= x * n + 1 := by push_cast; gcongr; apply Int.floor_le
+    _ < x * n + 2 := by linarith
 
 中文:
 定理 liouvilleWith_one
@@ -87,7 +90,10 @@ theorem liouvilleWith_one
     rw [lt_div_iff₀ hn']; rw [Int.cast_add]; rw [Int.cast_one]
     exact Int.lt_floor_add_one _
   refine ⟨⌊x * n⌋ + 1, this.ne, ?_⟩
-  rw [abs_s
+  rw [abs_sub_comm]; rw [abs_of_pos (sub_pos.2 this)]; rw [rpow_one]; rw [sub_lt_iff_lt_add']; rw [add_div_eq_mul_add_div _ _ hn'.ne']
+  gcongr
+  calc _ <= x * n + 1 := by push_cast; gcongr; apply Int.floor_le
+    _ < x * n + 2 := by linarith
 
 Depends on / 依赖: Int.cast_add, Int.cast_one, Int.floor_le, Int.lt_floor_add_one, abs_of_pos, abs_sub_comm, add_div_eq_mul_add_div, cast_add, cast_one, eventually_gt_atTop, floor_le, frequently, lt_floor_add_one, rpow_one, sub_lt_iff_lt_add, sub_pos, this.ne
 -/
@@ -194,7 +200,11 @@ theorem frequently_lt_rpow_neg
     simpa only [(· ∘ ·), neg_sub, one_div] using
       ((tendsto_rpow_atTop (sub_pos.2 hlt)).comp tendsto_natCast_atTop_atTop).eventually
         (eventually_gt_atTop C)
-  refine (this.and_frequently
+  refine (this.and_frequently hC).mono ?_
+  rintro n ⟨hnC, hn, m, hne, hlt⟩
+  replace hn : (0 : Real) < n := Nat.cast_pos.2 hn
+refine ⟨m, hne, hlt.trans (div_lt_iff₀ <| rpow_pos_of_pos hn _).2 ?_⟩
+  rwa [mul_comm, ← rpow_add hn, ← sub_eq_add_neg]
 
 中文:
 定理 frequently_lt_rpow_neg
@@ -205,7 +215,11 @@ theorem frequently_lt_rpow_neg
     simpa only [(· ∘ ·), neg_sub, one_div] using
       ((tendsto_rpow_atTop (sub_pos.2 hlt)).comp tendsto_natCast_atTop_atTop).eventually
         (eventually_gt_atTop C)
-  refine (this.and_frequently
+  refine (this.and_frequently hC).mono ?_
+  rintro n ⟨hnC, hn, m, hne, hlt⟩
+  replace hn : (0 : Real) < n := Nat.cast_pos.2 hn
+refine ⟨m, hne, hlt.trans (div_lt_iff₀ <| rpow_pos_of_pos hn _).2 ?_⟩
+  rwa [mul_comm, ← rpow_add hn, ← sub_eq_add_neg]
 
 Depends on / 依赖: Nat.cast_pos, and_frequently, cast_pos, eventually, eventually_gt_atTop, exists_pos, h.exists_pos, hlt.trans, mul_comm, neg_sub, one_div, replace, rpow_add, rpow_pos_of_pos, sub_eq_add_neg, sub_pos, tendsto_natCast_atTop_atTop, tendsto_rpow_atTop, this.and_frequently
 -/
@@ -235,7 +249,15 @@ theorem mul_rat
   rintro n ⟨_hn, m, hne, hlt⟩
   have A : (↑(r.num * m) : Real) / ↑(r.den • id n) = m / n * r := by
     simp [← div_mul_div_comm, ← r.cast_def, mul_comm]
-  refine ⟨r.nu
+  refine ⟨r.num * m, ?_, ?_⟩
+  · rw [A]; simp [hne, hr]
+  · rw [A, ← sub_mul, abs_mul]
+    simp only [smul_eq_mul, id, Nat.cast_mul]
+    calc _ < C / ↑n ^ p * |↑r| := by gcongr
+      _ = ↑r.den ^ p * (↑|r| * C) / (↑r.den * ↑n) ^ p := ?_
+    rw [mul_rpow]; rw [mul_div_mul_left]; rw [mul_comm]; rw [mul_div_assoc]
+    · simp only [Rat.cast_abs]
+    all_goals positivity
 
 中文:
 定理 mul_rat
@@ -247,7 +269,15 @@ theorem mul_rat
   rintro n ⟨_hn, m, hne, hlt⟩
   have A : (↑(r.num * m) : Real) / ↑(r.den • id n) = m / n * r := by
     simp [← div_mul_div_comm, ← r.cast_def, mul_comm]
-  refine ⟨r.nu
+  refine ⟨r.num * m, ?_, ?_⟩
+  · rw [A]; simp [hne, hr]
+  · rw [A, ← sub_mul, abs_mul]
+    simp only [smul_eq_mul, id, Nat.cast_mul]
+    calc _ < C / ↑n ^ p * |↑r| := by gcongr
+      _ = ↑r.den ^ p * (↑|r| * C) / (↑r.den * ↑n) ^ p := ?_
+    rw [mul_rpow]; rw [mul_div_mul_left]; rw [mul_comm]; rw [mul_div_assoc]
+    · simp only [Rat.cast_abs]
+    all_goals positivity
 
 Depends on / 依赖: Nat.cast_mul, abs_mul, cast_def, cast_mul, div_mul_div_comm, exists_pos, frequently, h.exists_pos, hC.mono, mul_comm, mul_r, nsmul_atTop, r.cast_def, r.den, r.num, r.pos, smul_eq_mul, sub_mul, tendsto_id, tendsto_id.nsmul_atTop
 -/
@@ -521,7 +551,15 @@ theorem add_rat
   rintro n ⟨hn, m, hne, hlt⟩
   have : (↑(r.den * m + r.num * n : Int) / ↑(r.den • id n) : Real) = m / n + r := by
     rw [smul_eq_mul]; rw [id]
-    nth_rewrite 4 [← Rat.num_di
+    nth_rewrite 4 [← Rat.num_div_den r]
+    push_cast
+    rw [add_div]; rw [mul_div_mul_left _ _ (by positivity)]; rw [mul_div_mul_right _ _ (by positivity)]
+  refine ⟨r.den * m + r.num * n, ?_⟩; rw [this, add_sub_add_right_eq_sub]
+  refine ⟨by simpa, hlt.trans_le (le_of_eq ?_)⟩
+  have : (r.den ^ p : Real) != 0 := by positivity
+  simp [mul_rpow, mul_div_mul_left, this]
+
+@[simp]
 
 中文:
 定理 add_rat
@@ -533,7 +571,15 @@ theorem add_rat
   rintro n ⟨hn, m, hne, hlt⟩
   have : (↑(r.den * m + r.num * n : Int) / ↑(r.den • id n) : Real) = m / n + r := by
     rw [smul_eq_mul]; rw [id]
-    nth_rewrite 4 [← Rat.num_di
+    nth_rewrite 4 [← Rat.num_div_den r]
+    push_cast
+    rw [add_div]; rw [mul_div_mul_left _ _ (by positivity)]; rw [mul_div_mul_right _ _ (by positivity)]
+  refine ⟨r.den * m + r.num * n, ?_⟩; rw [this, add_sub_add_right_eq_sub]
+  refine ⟨by simpa, hlt.trans_le (le_of_eq ?_)⟩
+  have : (r.den ^ p : Real) != 0 := by positivity
+  simp [mul_rpow, mul_div_mul_left, this]
+
+@[simp]
 
 Depends on / 依赖: Rat.num_div_den, add_div, add_sub_add_right_eq_sub, exists_pos, frequently, h.exists_pos, hC.mono, hlt.tra, mul_div_mul_left, mul_div_mul_right, nsmul_atTop, nth_rewrite, num_div_den, r.den, r.num, r.pos, smul_eq_mul, tendsto_id, tendsto_id.nsmul_atTop
 -/
@@ -1121,7 +1167,12 @@ theorem ne_cast_int
     ⟨n : Nat, hn : 0 < n, m : Int, hne : (M : Real) != m / n, hlt : |(M - m / n : Real)| < n ^ (-1 : Real)⟩
   refine hlt.not_ge ?_
   have hn' : (0 : Real) < n := by simpa
-  rw 
+  rw [rpow_neg_one]; rw [← one_div]; rw [sub_div' hn'.ne']; rw [abs_div]; rw [Nat.abs_cast]
+  gcongr
+  norm_cast
+  rw [← zero_add (1 : Int)]; rw [Int.add_one_le_iff]; rw [abs_pos]; rw [sub_ne_zero]
+  rw [Ne]; rw [eq_div_iff hn'.ne'] at hne
+  exact mod_cast hne
 
 中文:
 定理 ne_cast_int
@@ -1133,7 +1184,12 @@ theorem ne_cast_int
     ⟨n : Nat, hn : 0 < n, m : Int, hne : (M : Real) != m / n, hlt : |(M - m / n : Real)| < n ^ (-1 : Real)⟩
   refine hlt.not_ge ?_
   have hn' : (0 : Real) < n := by simpa
-  rw 
+  rw [rpow_neg_one]; rw [← one_div]; rw [sub_div' hn'.ne']; rw [abs_div]; rw [Nat.abs_cast]
+  gcongr
+  norm_cast
+  rw [← zero_add (1 : Int)]; rw [Int.add_one_le_iff]; rw [abs_pos]; rw [sub_ne_zero]
+  rw [Ne]; rw [eq_div_iff hn'.ne'] at hne
+  exact mod_cast hne
 
 Depends on / 依赖: Int.add_one_le_iff, Nat.abs_cast, abs_cast, abs_div, abs_pos, add_one_le_iff, and_frequently, eq_div_iff, eventually_gt_atTop, frequently_lt_rpow_neg, h.frequently_lt_rpow_neg, hlt.not_ge, not_ge, one_div, rpow_neg_one, sub_div, sub_ne_zero, zero_add
 -/
@@ -1204,7 +1260,21 @@ theorem frequently_exists_num
   have : forall b > (1 : Nat), forallᶠ m : Nat in atTop, forall a : Int, 1 / (b : Real) ^ m <= |x - a / b| := by
     intro b hb
     replace hb : (1 : Real) < b := Nat.one_lt_cast.2 hb
-    have H : Tendsto (fun m => 1 / (b 
+    have H : Tendsto (fun m => 1 / (b : Real) ^ m : Nat -> Real) atTop (𝓝 0) := by
+      simp only [one_div]
+      exact tendsto_inv_atTop_zero.comp (tendsto_pow_atTop_atTop_of_one_lt hb)
+    refine (H.eventually (hx.irrational.eventually_forall_le_dist_cast_div b)).mono ?_
+    exact fun m hm a => hm a
+  have : forallᶠ m : Nat in atTop, forall b < N, 1 < b -> forall a : Int, 1 / (b : Real) ^ m <= |x - a / b| :=
+    (finite_lt_nat N).eventually_all.2 fun b _hb => eventually_imp_distrib_left.2 (this b)
+  rcases (this.and (eventually_ge_atTop n)).exists with ⟨m, hm, hnm⟩
+  rcases hx m with ⟨a, b, hb, hne, hlt⟩
+  lift b to Nat using zero_le_one.trans hb.le; norm_cast at hb; push_cast at hne hlt
+  rcases le_or_gt N b with h | h
+  · refine (hN b h a hne).not_gt (hlt.trans_le ?_)
+    gcongr
+    exact_mod_cast hb.le
+  · exact (hm b h hb _).not_gt hlt
 
 中文:
 定理 frequently_存在_num
@@ -1216,7 +1286,21 @@ theorem frequently_exists_num
   have : forall b > (1 : Nat), forallᶠ m : Nat in atTop, forall a : Int, 1 / (b : Real) ^ m <= |x - a / b| := by
     intro b hb
     replace hb : (1 : Real) < b := Nat.one_lt_cast.2 hb
-    have H : Tendsto (fun m => 1 / (b 
+    have H : Tendsto (fun m => 1 / (b : Real) ^ m : Nat -> Real) atTop (𝓝 0) := by
+      simp only [one_div]
+      exact tendsto_inv_atTop_zero.comp (tendsto_pow_atTop_atTop_of_one_lt hb)
+    refine (H.eventually (hx.irrational.eventually_forall_le_dist_cast_div b)).mono ?_
+    exact fun m hm a => hm a
+  have : forallᶠ m : Nat in atTop, forall b < N, 1 < b -> forall a : Int, 1 / (b : Real) ^ m <= |x - a / b| :=
+    (finite_lt_nat N).eventually_all.2 fun b _hb => eventually_imp_distrib_left.2 (this b)
+  rcases (this.and (eventually_ge_atTop n)).exists with ⟨m, hm, hnm⟩
+  rcases hx m with ⟨a, b, hb, hne, hlt⟩
+  lift b to Nat using zero_le_one.trans hb.le; norm_cast at hb; push_cast at hne hlt
+  rcases le_or_gt N b with h | h
+  · refine (hN b h a hne).not_gt (hlt.trans_le ?_)
+    gcongr
+    exact_mod_cast hb.le
+  · exact (hm b h hb _).not_gt hlt
 
 Depends on / 依赖: H.eventually, Nat.one_lt_cast, Tendsto, eventually, eventually_atTop, eventually_forall_le_dist_cast_div, hx.irrational.eventually_forall_le_dist_cast_div, irrational, one_div, one_lt_cast, replace, tendsto_inv_atTop_zero, tendsto_inv_atTop_zero.comp, tendsto_pow_atTop_atTop_of_one_lt
 -/

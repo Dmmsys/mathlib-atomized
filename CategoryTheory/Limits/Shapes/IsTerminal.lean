@@ -145,7 +145,10 @@ definition isTerminalEquivUnique
   invFun u :=
     { lift := fun s => (u s.pt).default
       uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro x; simp only [eq_iff_
+  left_inv := by dsimp [Function.LeftInverse]; intro x; simp only [eq_iff_true_of_subsingleton]
+  right_inv := by
+    dsimp [Function.RightInverse, Function.LeftInverse]
+    subsingleton
 
 中文:
 定义 isTerminalEquivUnique
@@ -156,7 +159,10 @@ definition isTerminalEquivUnique
   invFun u :=
     { lift := fun s => (u s.pt).default
       uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro x; simp only [eq_iff_
+  left_inv := by dsimp [Function.LeftInverse]; intro x; simp only [eq_iff_true_of_subsingleton]
+  right_inv := by
+    dsimp [Function.RightInverse, Function.LeftInverse]
+    subsingleton
 
 Depends on / 依赖: Function, Function.LeftInverse, Function.RightInverse, LeftInverse, RightInverse, cat_disch, eq_iff_true_of_subsingleton, invFun, left_inv, right_inv, s.pt, subsingleton, t.lift, t.uniq
 -/
@@ -298,7 +304,8 @@ definition isInitialEquivUnique
   invFun u :=
     { desc := fun s => (u s.pt).default
       uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_su
+  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
+  right_inv := by grind
 
 中文:
 定义 isInitialEquivUnique
@@ -308,7 +315,8 @@ definition isInitialEquivUnique
   invFun u :=
     { desc := fun s => (u s.pt).default
       uniq := fun s _ _ => (u s.pt).2 _ }
-  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_su
+  left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
+  right_inv := by grind
 
 Depends on / 依赖: Function, Function.LeftInverse, LeftInverse, cat_disch, eq_iff_true_of_subsingleton, invFun, left_inv, right_inv, s.pt, t.desc, t.uniq
 -/
@@ -790,7 +798,7 @@ definition isLimitEmptyConeEquiv
   left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
   right_inv := by
     dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_subsingle
+    simp only [eq_iff_true_of_subsingleton]
 
 中文:
 定义 isLimitEmptyConeEquiv
@@ -800,7 +808,7 @@ definition isLimitEmptyConeEquiv
   left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
   right_inv := by
     dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_subsingle
+    simp only [eq_iff_true_of_subsingleton]
 
 Depends on / 依赖: isLimitChangeEmptyCone
 -/
@@ -882,7 +890,7 @@ definition isColimitEmptyCoconeEquiv
   left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
   right_inv := by
     dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_s
+    simp only [eq_iff_true_of_subsingleton]
 
 中文:
 定义 isColimitEmptyCoconeEquiv
@@ -892,7 +900,7 @@ definition isColimitEmptyCoconeEquiv
   left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
   right_inv := by
     dsimp [Function.LeftInverse, Function.RightInverse]; intro
-    simp only [eq_iff_true_of_s
+    simp only [eq_iff_true_of_subsingleton]
 
 Depends on / 依赖: isColimitChangeEmptyCocone
 -/

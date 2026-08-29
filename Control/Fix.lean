@@ -125,7 +125,30 @@ theorem fix_def
   rw [hk] at this
   revert hk
   dsimp [Part.fix]; rw [assert_pos h']; revert this
-  generalize Upto.zero = z; i
+  generalize Upto.zero = z; intro _this hk
+  suffices forall x' hwf,
+    WellFounded.fix hwf (fixAux f) z x' = Fix.approx f (succ k) x'
+    from this _ _
+  induction k generalizing z with
+  | zero =>
+    intro x' _
+    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
+    congr
+    ext x : 1
+    rw [assert_neg]
+    · rfl
+    · rw [Nat.zero_add] at _this
+      simpa only [not_not, Coe]
+  | succ n n_ih =>
+    intro x' _
+    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
+    congr
+    ext : 1
+    have hh : ¬(Fix.approx f z.val x).Dom := by
+      apply Nat.find_min h'
+      lia
+    rw [succ_add_eq_add_succ] at _this hk
+    rw [assert_pos hh]; rw [n_ih (Upto.succ z hh) _this hk]
 
 中文:
 定理 fix_def
@@ -138,7 +161,30 @@ theorem fix_def
   rw [hk] at this
   revert hk
   dsimp [Part.fix]; rw [assert_pos h']; revert this
-  generalize Upto.zero = z; i
+  generalize Upto.zero = z; intro _this hk
+  suffices forall x' hwf,
+    WellFounded.fix hwf (fixAux f) z x' = Fix.approx f (succ k) x'
+    from this _ _
+  induction k generalizing z with
+  | zero =>
+    intro x' _
+    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
+    congr
+    ext x : 1
+    rw [assert_neg]
+    · rfl
+    · rw [Nat.zero_add] at _this
+      simpa only [not_not, Coe]
+  | succ n n_ih =>
+    intro x' _
+    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
+    congr
+    ext : 1
+    have hh : ¬(Fix.approx f z.val x).Dom := by
+      apply Nat.find_min h'
+      lia
+    rw [succ_add_eq_add_succ] at _this hk
+    rw [assert_pos hh]; rw [n_ih (Upto.succ z hh) _this hk]
 -/
 protected theorem fix_def {x : α} (h' : exists i, (Fix.approx f i x).Dom) :
     Part.fix f x = Fix.approx f (Nat.succ (Nat.find h')) x := by

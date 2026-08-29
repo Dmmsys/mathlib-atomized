@@ -59,7 +59,8 @@ theorem iInf_sum
     simp only [Finset.sum_cons, ← ih]
     refine (iInf_add_iInf fun i j => ?_).symm
     refine (h (Finset.cons a s ha) i j).imp fun k hk => ?_
-    rw [Finset.forall_mem_c
+    rw [Finset.forall_mem_cons] at hk
+    exact add_le_add hk.1.1 (Finset.sum_le_sum fun a ha => (hk.2 a ha).2)
 
 中文:
 定理 iInf_sum
@@ -71,7 +72,8 @@ theorem iInf_sum
     simp only [Finset.sum_cons, ← ih]
     refine (iInf_add_iInf fun i j => ?_).symm
     refine (h (Finset.cons a s ha) i j).imp fun k hk => ?_
-    rw [Finset.forall_mem_c
+    rw [Finset.forall_mem_cons] at hk
+    exact add_le_add hk.1.1 (Finset.sum_le_sum fun a ha => (hk.2 a ha).2)
 
 Depends on / 依赖: Finset, Finset.cons, Finset.cons_induction_on, Finset.forall_mem_cons, Finset.sum_cons, Finset.sum_empty, Finset.sum_le_sum, List.isRotatedDecidable, add_le_add, ciInf_const, cons_induction_on, forall_mem_cons, iInf_add_iInf, isRotatedDecidable, sum_cons, sum_empty, sum_le_sum
 -/

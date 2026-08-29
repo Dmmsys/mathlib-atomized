@@ -40,7 +40,40 @@ theorem Submodule.natAbs_det_equiv
   have h : Module.finrank Int N = Module.finrank Int M :=
     (AddEquiv.toIntLinearEquiv e : M ≃ₗ[Int] N).symm.finrank_eq
   -- Use the Smith normal form to choose a nice basis for `N`.
-  let a :=
+  let a := smithNormalFormCoeffs b h
+  let b' := smithNormalFormTopBasis b h
+  let ab := smithNormalFormBotBasis b h
+  have ab_eq := smithNormalFormBotBasis_def b h
+  let e' : M ≃ₗ[Int] N := b'.equiv ab (Equiv.refl _)
+  let f : M ->ₗ[Int] M := N.subtype.comp (e' : M ->ₗ[Int] N)
+  let f_apply : forall x, f x = b'.equiv ab (Equiv.refl _) x := fun x => rfl
+  suffices (LinearMap.det f).natAbs = Nat.card (M ⧸ N) by
+    calc
+      _ = (LinearMap.det (N.subtype ∘ₗ
+            (AddEquiv.toIntLinearEquiv e : M ≃ₗ[Int] N))).natAbs := rfl
+      _ = (LinearMap.det (N.subtype ∘ₗ _)).natAbs :=
+            Int.natAbs_eq_iff_associated.mpr (LinearMap.associated_det_comp_equiv _ _ _)
+      _ = Nat.card (M ⧸ N) := this
+  have ha : forall i, f (b' i) = a i • b' i := by
+    intro i
+    rw [f_apply]; rw [b'.equiv_apply]; rw [Equiv.refl_apply]
+    exact ab_eq i
+  calc
+    Int.natAbs (LinearMap.det f) = Int.natAbs (LinearMap.toMatrix b' b' f).det := by
+      rw [LinearMap.det_toMatrix]
+    _ = Int.natAbs (Matrix.diagonal a).det := ?_
+    _ = Int.natAbs (∏ i, a i) := by rw [Matrix.det_diagonal]
+    _ = ∏ i, Int.natAbs (a i) := map_prod Int.natAbsHom a Finset.univ
+    _ = Nat.card (M ⧸ N) := ?_
+  -- since `LinearMap.toMatrix b' b' f` is the diagonal matrix with `a` along the diagonal.
+  · congr 2; ext i j
+    rw [LinearMap.toMatrix_apply]; rw [ha]; rw [map_smul]; rw [Basis.repr_self]; rw [Finsupp.smul_single]; rw [smul_eq_mul]; rw [mul_one]
+    by_cases h : i = j
+    · rw [h, Matrix.diagonal_apply_eq, Finsupp.single_eq_same]
+    · rw [Matrix.diagonal_apply_ne _ h, Finsupp.single_eq_of_ne h]
+  -- Now we map everything through the linear equiv `M ≃ₗ (ι → ℤ)`,
+  -- which maps `(M ⧸ N)` to `Π i, ZMod (a i).nat_abs`.
+  simp_rw [Nat.card_congr (quotientEquivPiZMod N b h).toEquiv, Nat.card_pi, Nat.card_zmod, a]
 
 中文:
 定理 子模.natAbs_det_equiv
@@ -51,7 +84,40 @@ theorem Submodule.natAbs_det_equiv
   have h : Module.finrank Int N = Module.finrank Int M :=
     (AddEquiv.toIntLinearEquiv e : M ≃ₗ[Int] N).symm.finrank_eq
   -- Use the Smith normal form to choose a nice basis for `N`.
-  let a :=
+  let a := smithNormalFormCoeffs b h
+  let b' := smithNormalFormTopBasis b h
+  let ab := smithNormalFormBotBasis b h
+  have ab_eq := smithNormalFormBotBasis_def b h
+  let e' : M ≃ₗ[Int] N := b'.equiv ab (Equiv.refl _)
+  let f : M ->ₗ[Int] M := N.subtype.comp (e' : M ->ₗ[Int] N)
+  let f_apply : forall x, f x = b'.equiv ab (Equiv.refl _) x := fun x => rfl
+  suffices (LinearMap.det f).natAbs = Nat.card (M ⧸ N) by
+    calc
+      _ = (LinearMap.det (N.subtype ∘ₗ
+            (AddEquiv.toIntLinearEquiv e : M ≃ₗ[Int] N))).natAbs := rfl
+      _ = (LinearMap.det (N.subtype ∘ₗ _)).natAbs :=
+            Int.natAbs_eq_iff_associated.mpr (LinearMap.associated_det_comp_equiv _ _ _)
+      _ = Nat.card (M ⧸ N) := this
+  have ha : forall i, f (b' i) = a i • b' i := by
+    intro i
+    rw [f_apply]; rw [b'.equiv_apply]; rw [Equiv.refl_apply]
+    exact ab_eq i
+  calc
+    Int.natAbs (LinearMap.det f) = Int.natAbs (LinearMap.toMatrix b' b' f).det := by
+      rw [LinearMap.det_toMatrix]
+    _ = Int.natAbs (Matrix.diagonal a).det := ?_
+    _ = Int.natAbs (∏ i, a i) := by rw [Matrix.det_diagonal]
+    _ = ∏ i, Int.natAbs (a i) := map_prod Int.natAbsHom a Finset.univ
+    _ = Nat.card (M ⧸ N) := ?_
+  -- since `LinearMap.toMatrix b' b' f` is the diagonal matrix with `a` along the diagonal.
+  · congr 2; ext i j
+    rw [LinearMap.toMatrix_apply]; rw [ha]; rw [map_smul]; rw [Basis.repr_self]; rw [Finsupp.smul_single]; rw [smul_eq_mul]; rw [mul_one]
+    by_cases h : i = j
+    · rw [h, Matrix.diagonal_apply_eq, Finsupp.single_eq_same]
+    · rw [Matrix.diagonal_apply_ne _ h, Finsupp.single_eq_of_ne h]
+  -- Now we map everything through the linear equiv `M ≃ₗ (ι → ℤ)`,
+  -- which maps `(M ⧸ N)` to `Π i, ZMod (a i).nat_abs`.
+  simp_rw [Nat.card_congr (quotientEquivPiZMod N b h).toEquiv, Nat.card_pi, Nat.card_zmod, a]
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis
 -/
@@ -205,7 +271,7 @@ theorem AddSubgroup.relIndex_eq_abs_det
   change |algebraMap Int Rat _| = _
   rw [Basis.det_apply]; rw [Basis.det_apply]; rw [RingHom.map_det]
   congr; ext
-  simp [Basis.toMatrix
+  simp [Basis.toMatrix_apply]
 
 中文:
 定理 加法子群.relIndex_eq_abs_det
@@ -216,7 +282,7 @@ theorem AddSubgroup.relIndex_eq_abs_det
   change |algebraMap Int Rat _| = _
   rw [Basis.det_apply]; rw [Basis.det_apply]; rw [RingHom.map_det]
   congr; ext
-  simp [Basis.toMatrix
+  simp [Basis.toMatrix_apply]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.relIndex_eq_natAbs_det, Basis.det_apply, Basis.toMatrix_apply, Int.cast_abs, Nat.cast_natAbs, RingHom, RingHom.map_det, addSubgroupOfClosure, algebraMap, cast_abs, cast_natAbs, det_apply, map_det, relIndex_eq_natAbs_det, toMatrix_apply
 -/

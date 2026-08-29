@@ -188,7 +188,26 @@ have : r =Q Nat.rawCast lit := ⟨⟩
       (q(isNat_eq_rawCast $p))⟩
   | .isNegNat rA lit p => do
     let some crR := cR.rα | none
-    let some c
+    let some crA := cA.rα | none
+    let ⟨r, vr⟩ := Ring.ExProd.mkNegNat q($sR) q(inferInstance) lit.natLit!
+have : r =Q Int.rawCast (Int.negOfNat $lit) := ⟨⟩
+    assumeInstancesCommute
+    pure ⟨_, (Common.ExProd.const ⟨_, vr.toSum⟩).toSum, (q(isInt_negOfNat_eq $p))⟩
+  | .isNNRat rA q n d p => do
+    let some dsR := cR.dsα | none
+    let some dsA := cA.dsα | none
+    assumeInstancesCommute
+    let ⟨r, vr⟩ := Ring.ExProd.mkNNRat q($sR) q(inferInstance) q n d q(IsNNRat.den_nz (α := $A) $p)
+have : r =Q (NNRat.rawCast $n $d : $R) := ⟨⟩
+    pure ⟨_, (Common.ExProd.const ⟨_, vr.toSum⟩).toSum, q(isNNRat_eq_rawCast (a := $a) $p)⟩
+  | .isNegNNRat dA q n d p => do
+    let some fR := cR.field | none
+    let some fA := cA.field | none
+    assumeInstancesCommute
+    let ⟨r, vr⟩ := Ring.ExProd.mkNegNNRat q($sR) q(inferInstance) q n d q(IsRat.den_nz $p)
+have : r =Q (Rat.rawCast (.negOfNat $n) $d : $R) := ⟨⟩
+    pure ⟨_, (Common.ExProd.const ⟨_, vr.toSum⟩).toSum, (q(isRat_eq_rawCast (a := $a) $p))⟩
+  | _ => none
 
 中文:
 定义 evalCast
@@ -200,7 +219,26 @@ have : r =Q Nat.rawCast lit := ⟨⟩
       (q(isNat_eq_rawCast $p))⟩
   | .isNegNat rA lit p => do
     let some crR := cR.rα | none
-    let some c
+    let some crA := cA.rα | none
+    let ⟨r, vr⟩ := Ring.ExProd.mkNegNat q($sR) q(inferInstance) lit.natLit!
+have : r =Q Int.rawCast (Int.negOfNat $lit) := ⟨⟩
+    assumeInstancesCommute
+    pure ⟨_, (Common.ExProd.const ⟨_, vr.toSum⟩).toSum, (q(isInt_negOfNat_eq $p))⟩
+  | .isNNRat rA q n d p => do
+    let some dsR := cR.dsα | none
+    let some dsA := cA.dsα | none
+    assumeInstancesCommute
+    let ⟨r, vr⟩ := Ring.ExProd.mkNNRat q($sR) q(inferInstance) q n d q(IsNNRat.den_nz (α := $A) $p)
+have : r =Q (NNRat.rawCast $n $d : $R) := ⟨⟩
+    pure ⟨_, (Common.ExProd.const ⟨_, vr.toSum⟩).toSum, q(isNNRat_eq_rawCast (a := $a) $p)⟩
+  | .isNegNNRat dA q n d p => do
+    let some fR := cR.field | none
+    let some fA := cA.field | none
+    assumeInstancesCommute
+    let ⟨r, vr⟩ := Ring.ExProd.mkNegNNRat q($sR) q(inferInstance) q n d q(IsRat.den_nz $p)
+have : r =Q (Rat.rawCast (.negOfNat $n) $d : $R) := ⟨⟩
+    pure ⟨_, (Common.ExProd.const ⟨_, vr.toSum⟩).toSum, (q(isRat_eq_rawCast (a := $a) $p))⟩
+  | _ => none
 
 Depends on / 依赖: ExProd, Ring.ExProd.mkNat, lit.natLit, natLit
 -/
@@ -251,7 +289,11 @@ definition pushCast
   let simps : Array Name := #[``eq_natCast, ``eq_intCast, ``eq_ratCast]
   for thm in simps do
     let ⟨levelParams, _, proof⟩ ← abstractMVars (mkConst thm)
-    thms ← thms.add (.stx (← m
+    thms ← thms.add (.stx (← mkFreshId) Syntax.missing) levelParams proof
+  -- now run `simp` with these lemmas, and (importantly) *no* simprocs
+  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
+  let (r, _) ← simp e ctx (simprocs := #[])
+  return r
 
 中文:
 定义 pushCast
@@ -262,7 +304,11 @@ definition pushCast
   let simps : Array Name := #[``eq_natCast, ``eq_intCast, ``eq_ratCast]
   for thm in simps do
     let ⟨levelParams, _, proof⟩ ← abstractMVars (mkConst thm)
-    thms ← thms.add (.stx (← m
+    thms ← thms.add (.stx (← mkFreshId) Syntax.missing) levelParams proof
+  -- now run `simp` with these lemmas, and (importantly) *no* simprocs
+  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
+  let (r, _) ← simp e ctx (simprocs := #[])
+  return r
 
 Depends on / 依赖: PseudoMetrizableSpace, PseudoMetrizableSpace.of_regularSpace_secondCountableTopology, of_regularSpace_secondCountableTopology
 -/
@@ -294,7 +340,13 @@ have : R =Q R' := ⟨⟩
   let _sR' ← synthInstanceQ q(CommSemiring $R')
   let _algR'R ← synthInstanceQ q(Algebra $R' $R)
   let _mod ← synthInstanceQ q(Module $R' $A)
-  let _ist ← synt
+  let _ist ← synthInstanceQ q(IsScalarTower $R' $R $A)
+  assumeInstancesCommute
+  let r_cast : Q($R) := q(algebraMap $R' $R $r')
+  let res ← pushCast r_cast
+  have r₀ : Q($R) := res.expr
+  let pf : Q($r_cast = $r₀) ← res.getProof
+  return ⟨r₀, q(fun a => $pf ▸ algebraMap_smul $R $r' a)⟩
 
 中文:
 定义 evalSMulCast
@@ -308,7 +360,13 @@ have : R =Q R' := ⟨⟩
   let _sR' ← synthInstanceQ q(CommSemiring $R')
   let _algR'R ← synthInstanceQ q(Algebra $R' $R)
   let _mod ← synthInstanceQ q(Module $R' $A)
-  let _ist ← synt
+  let _ist ← synthInstanceQ q(IsScalarTower $R' $R $A)
+  assumeInstancesCommute
+  let r_cast : Q($R) := q(algebraMap $R' $R $r')
+  let res ← pushCast r_cast
+  have r₀ : Q($R) := res.expr
+  let pf : Q($r_cast = $r₀) ← res.getProof
+  return ⟨r₀, q(fun a => $pf ▸ algebraMap_smul $R $r' a)⟩
 -/
 def evalSMulCast {u u' v : Lean.Level} {R : Q(Type u)} {R' : Q(Type u')} {A : Q(Type v)}
     {sR : Q(CommSemiring $R)} {sA : Q(CommSemiring $A)} (sAlg : Q(Algebra $R $A))
@@ -346,7 +404,7 @@ definition add
 have : t =Q 0 := ⟨⟩
       return ⟨⟨_, .mk _ vt, q(add_algebraMap $pt)⟩, some q(add_algebraMap_isNat_zero $pt)⟩
     | vt =>
-      
+      return ⟨⟨_, .mk _ vt, q(add_algebraMap $pt)⟩, none⟩
 
 中文:
 定义 add
@@ -359,7 +417,7 @@ have : t =Q 0 := ⟨⟩
 have : t =Q 0 := ⟨⟩
       return ⟨⟨_, .mk _ vt, q(add_algebraMap $pt)⟩, some q(add_algebraMap_isNat_zero $pt)⟩
     | vt =>
-      
+      return ⟨⟨_, .mk _ vt, q(add_algebraMap $pt)⟩, none⟩
 
 Depends on / 依赖: Common, Common.evalAdd, MetrizableSpace, Ring.ringCompute, add_algebraMap, add_algebraMap_isNat_zero, dependent, evalAdd, metrizableSpace_of_t3_secondCountable, return, ringCompute
 -/
@@ -421,7 +479,10 @@ definition cast
   | .zero .. =>
     assumeInstancesCommute
     return ⟨_, .zero, q(cast_zero_smul_eq_zero_mul $pr $pf_smul)⟩
-  | 
+  | vr =>
+    assumeInstancesCommute
+    return ⟨_, Common.ExSum.add (Common.ExProd.const (.mk _ vr)) .zero,
+      q(cast_smul_eq_mul $pr $pf_smul)⟩
 
 中文:
 定义 cast
@@ -434,7 +495,10 @@ definition cast
   | .zero .. =>
     assumeInstancesCommute
     return ⟨_, .zero, q(cast_zero_smul_eq_zero_mul $pr $pf_smul)⟩
-  | 
+  | vr =>
+    assumeInstancesCommute
+    return ⟨_, Common.ExSum.add (Common.ExProd.const (.mk _ vr)) .zero,
+      q(cast_smul_eq_mul $pr $pf_smul)⟩
 -/
 def cast (cR : Algebra.Cache sR) (u' : Level) (R' : Q(Type u'))
     (_ : Q(CommSemiring $R')) (_smul : Q(SMul $R' $A)) (r' : Q($R')) :
@@ -674,7 +738,8 @@ definition ringCompute
   one :=
     let ⟨r, vr⟩ := Ring.ExProd.mkNat sR 1
 have hr : r =Q (nat_lit 1).rawCast := ⟨⟩
-  
+    ⟨_, ⟨_, vr.toSum⟩, q(by simp +zetaDelta)⟩
+  toRingCompare := ringCompare sAlg
 
 中文:
 定义 ringCompute
@@ -690,7 +755,8 @@ have hr : r =Q (nat_lit 1).rawCast := ⟨⟩
   one :=
     let ⟨r, vr⟩ := Ring.ExProd.mkNat sR 1
 have hr : r =Q (nat_lit 1).rawCast := ⟨⟩
-  
+    ⟨_, ⟨_, vr.toSum⟩, q(by simp +zetaDelta)⟩
+  toRingCompare := ringCompare sAlg
 
 Depends on / 依赖: cR.toCache, toCache
 -/
@@ -759,7 +825,7 @@ definition preprocess
   let thms ← [``Nat.cast_eq_algebraMap, ``Int.cast_eq_algebraMap,
     ``Algebra.algebraMap_eq_smul_one].foldlM (·.addConst ·) thms
   let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
-  retu
+  return (← Simp.main e ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 
 中文:
 定义 preprocess
@@ -770,7 +836,7 @@ definition preprocess
   let thms ← [``Nat.cast_eq_algebraMap, ``Int.cast_eq_algebraMap,
     ``Algebra.algebraMap_eq_smul_one].foldlM (·.addConst ·) thms
   let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
-  retu
+  return (← Simp.main e ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 -/
 def preprocess (e : Expr) : MetaM Simp.Result := do
   -- collect the available `push_cast` lemmas
@@ -797,7 +863,18 @@ definition collectScalarRingsAux
         modify fun l => R :: l
       | _ => return
   | HSMul.hSMul R _ _ _ _ a =>
-    modify fun l =>
+    modify fun l => R :: l
+    collectScalarRingsAux a
+  | Eq _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HAdd.hAdd _ _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | Add.add _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HMul.hMul _ _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | Mul.mul _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HSub.hSub _ _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | Sub.sub _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HPow.hPow _ _ _ _ a _ => collectScalarRingsAux a
+  | Neg.neg _ _ a => collectScalarRingsAux a
+  | _ => return
 
 中文:
 定义 collectScalarRingsAux
@@ -813,7 +890,18 @@ definition collectScalarRingsAux
         modify fun l => R :: l
       | _ => return
   | HSMul.hSMul R _ _ _ _ a =>
-    modify fun l =>
+    modify fun l => R :: l
+    collectScalarRingsAux a
+  | Eq _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HAdd.hAdd _ _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | Add.add _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HMul.hMul _ _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | Mul.mul _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HSub.hSub _ _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | Sub.sub _ _ _ a b => collectScalarRingsAux a; collectScalarRingsAux b
+  | HPow.hPow _ _ _ _ a _ => collectScalarRingsAux a
+  | Neg.neg _ _ a => collectScalarRingsAux a
+  | _ => return
 -/
 partial def collectScalarRingsAux (e : Expr) : StateT (List Expr) MetaM Unit := do
   match_expr e with
@@ -877,7 +965,12 @@ if ← withReducible isDefEq R1 R2 then
     let _i3 ← synthInstanceQ q(Algebra $R1 $R2)
     return r2
   catch _ => try
-    let _i1 ← synthInsta
+    let _i1 ← synthInstanceQ q(CommSemiring $R2)
+    let _i2 ← synthInstanceQ q(Semiring $R1)
+    let _i3 ← synthInstanceQ q(Algebra $R2 $R1)
+    return r1
+  catch _ =>
+    return r1
 
 中文:
 定义 pickLargerRing
@@ -893,7 +986,12 @@ if ← withReducible isDefEq R1 R2 then
     let _i3 ← synthInstanceQ q(Algebra $R1 $R2)
     return r2
   catch _ => try
-    let _i1 ← synthInsta
+    let _i1 ← synthInstanceQ q(CommSemiring $R2)
+    let _i2 ← synthInstanceQ q(Semiring $R1)
+    let _i3 ← synthInstanceQ q(Algebra $R2 $R1)
+    return r1
+  catch _ =>
+    return r1
 -/
 def pickLargerRing (r1 r2 : Σ u : Lean.Level, Q(Type u)) :
     MetaM (Σ u : Lean.Level, Q(Type u)) := do
@@ -935,7 +1033,9 @@ definition inferBase
       -- A is a CommRing
       return ⟨0, q(Int)⟩
     | _, _, _ =>
- 
+      return ⟨0, q(Nat)⟩
+  | r :: rs => rs.foldlM pickLargerRing r
+  return res
 
 中文:
 定义 inferBase
@@ -952,7 +1052,9 @@ definition inferBase
       -- A is a CommRing
       return ⟨0, q(Int)⟩
     | _, _, _ =>
- 
+      return ⟨0, q(Nat)⟩
+  | r :: rs => rs.foldlM pickLargerRing r
+  return res
 -/
 def inferBase (ca : Cache q($sA)) (e : Expr) : MetaM Σ u : Lean.Level, Q(Type u) := do
   let rings ← (← collectScalarRings e).mapM getLevelQ'
@@ -985,7 +1087,14 @@ definition proveEq
   let ⟨u, R⟩ ←
     match base with
       | .some p => do pure p
-    
+      | none => do
+        pure (← inferBase cA (← g.getType))
+  let sR ← synthInstanceQ q(CommSemiring $R)
+  let sAlg ← synthInstanceQ q(Algebra $R $A)
+  let cR ← Algebra.mkCache sR
+  have e₁ : Q($A) := e₁; have e₂ : Q($A) := e₂
+  let eq ← algCore q($sAlg) cR cA e₁ e₂
+  g.assign eq
 
 中文:
 定义 proveEq
@@ -999,7 +1108,14 @@ definition proveEq
   let ⟨u, R⟩ ←
     match base with
       | .some p => do pure p
-    
+      | none => do
+        pure (← inferBase cA (← g.getType))
+  let sR ← synthInstanceQ q(CommSemiring $R)
+  let sAlg ← synthInstanceQ q(Algebra $R $A)
+  let cR ← Algebra.mkCache sR
+  have e₁ : Q($A) := e₁; have e₂ : Q($A) := e₂
+  let eq ← algCore q($sAlg) cR cA e₁ e₂
+  g.assign eq
 -/
 def proveEq (base : Option (Σ u : Lean.Level, Q(Type u))) (g : MVarId) : AtomM Unit := do
   let some (α, e₁, e₂) := (← whnfR <|← instantiateMVars <|← g.getType).eq?

@@ -40,7 +40,11 @@ instance [IsLocalRing
     (Algebra.TensorProduct.comm _ _ _).trans
       ((TensorProduct.quotIdealMapEquivTensorQuot S (maximalIdeal R)).symm.restrictScalars _)
   have : Nontrivial (IsLocalRing.ResidueField R otimes[R] S) := by
-    rw
+    rw [eSp.nontrivial_congr]; rw [Ideal.Quotient.nontrivial_iff]
+    exact ((((local_hom_TFAE (algebraMap R S)).out 0 2 rfl rfl).mp inferInstance).trans_lt
+      (inferInstance : (maximalIdeal S).IsMaximal).lt_top).ne
+  .of_surjective' TensorProduct.includeRight.toRingHom
+    (TensorProduct.mk_surjective _ _ _ residue_surjective)
 
 中文:
 实例 [是局部环
@@ -49,7 +53,11 @@ instance [IsLocalRing
     (Algebra.TensorProduct.comm _ _ _).trans
       ((TensorProduct.quotIdealMapEquivTensorQuot S (maximalIdeal R)).symm.restrictScalars _)
   have : Nontrivial (IsLocalRing.ResidueField R otimes[R] S) := by
-    rw
+    rw [eSp.nontrivial_congr]; rw [Ideal.Quotient.nontrivial_iff]
+    exact ((((local_hom_TFAE (algebraMap R S)).out 0 2 rfl rfl).mp inferInstance).trans_lt
+      (inferInstance : (maximalIdeal S).IsMaximal).lt_top).ne
+  .of_surjective' TensorProduct.includeRight.toRingHom
+    (TensorProduct.mk_surjective _ _ _ residue_surjective)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.comm, Ideal.Quotient.nontrivial_iff, IsLocalRing, IsLocalRing.ResidueField, IsMaximal, Nontrivial, Quotient, ResidueField, TensorProduct, TensorProduct.quotIdealMapEquivTensorQuot, algebraMap, eSp.nontrivial_congr, local_hom_TFAE, lt_top, maximalIdeal, nontrivial_congr, nontrivial_iff, of_surjectiv, otimes
 -/
@@ -77,7 +85,13 @@ lemma ResidueField.exists_smul_eq_tmul_one
     p.surjectiveOnStalks_residueField x ⊥ isPrime_bot
   obtain ⟨t, rfl⟩ := IsLocalRing.residue_surjective t
   obtain ⟨⟨y, t⟩, rfl⟩ := IsLocalization.mk'_surjective p.primeCompl t
-  simp only [smul_def, Submodule.mem_bot, 
+  simp only [smul_def, Submodule.mem_bot, mul_eq_zero, algebraMap_residueField_eq_zero,
+    IsLocalRing.residue_eq_zero_iff, not_or, IsLocalization.AtPrime.mk'_mem_maximal_iff] at hrt
+  refine ⟨r * y, p.primeCompl.mul_mem hrt.1 hrt.2, y • a, ?_⟩
+  rw [Algebra.smul_def]; rw [← Algebra.TensorProduct.includeRight.commutes]; rw [smul_tmul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [Algebra.TensorProduct.includeRight_apply]
+  simpa [← tmul_smul, Submonoid.smul_def, ← smul_mul_assoc, smul_comm _ r,
+    ← IsLocalRing.ResidueField.algebraMap_eq, ← algebraMap.coe_smul,
+← IsScalarTower.algebraMap_apply] using congr(t • e)
 
 中文:
 引理 ResidueField.存在_smul_eq_tmul_one
@@ -86,7 +100,13 @@ lemma ResidueField.exists_smul_eq_tmul_one
     p.surjectiveOnStalks_residueField x ⊥ isPrime_bot
   obtain ⟨t, rfl⟩ := IsLocalRing.residue_surjective t
   obtain ⟨⟨y, t⟩, rfl⟩ := IsLocalization.mk'_surjective p.primeCompl t
-  simp only [smul_def, Submodule.mem_bot, 
+  simp only [smul_def, Submodule.mem_bot, mul_eq_zero, algebraMap_residueField_eq_zero,
+    IsLocalRing.residue_eq_zero_iff, not_or, IsLocalization.AtPrime.mk'_mem_maximal_iff] at hrt
+  refine ⟨r * y, p.primeCompl.mul_mem hrt.1 hrt.2, y • a, ?_⟩
+  rw [Algebra.smul_def]; rw [← Algebra.TensorProduct.includeRight.commutes]; rw [smul_tmul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [Algebra.TensorProduct.includeRight_apply]
+  simpa [← tmul_smul, Submonoid.smul_def, ← smul_mul_assoc, smul_comm _ r,
+    ← IsLocalRing.ResidueField.algebraMap_eq, ← algebraMap.coe_smul,
+← IsScalarTower.algebraMap_apply] using congr(t • e)
 
 Depends on / 依赖: Algebra, Algebra.sm, AtPrime, IsLocalRing, IsLocalRing.residue_eq_zero_iff, IsLocalRing.residue_surjective, IsLocalization, IsLocalization.AtPrime.mk, IsLocalization.mk, RingHom, RingHom.SurjectiveOnStalks.exists_mul_eq_tmul, Submodule, Submodule.mem_bot, SurjectiveOnStalks, _mem_maximal_iff, _surjective, algebraMap_residueField_eq_zero, exists_mul_eq_tmul, isPrime_bot, mem_bot
 -/
@@ -172,7 +192,12 @@ definition Fiber.algEquivQuotient
     letI pSp := pRp.map (algebraMap Rp Sp)
     p.Fiber S ≃ₐ[S] Sp ⧸ pSp :=
 (commRight R S p.ResidueField).symm.trans (tensorQuotientEquiv S _ S _).trans
-    
+    { __ := Ideal.quotientEquiv _ _ (Localization.tensorLeftAlgEquiv p.primeCompl S) (by
+        rw [← Ideal.map_coe includeRight]; rw [Ideal.map_map]
+        congr
+        ext
+        simp [Localization.tensorLeftAlgEquiv_apply_one_tmul p.primeCompl])
+      commutes' := by simp }
 
 中文:
 定义 Fiber.algEquivQuotient
@@ -183,7 +208,12 @@ definition Fiber.algEquivQuotient
     letI pSp := pRp.map (algebraMap Rp Sp)
     p.Fiber S ≃ₐ[S] Sp ⧸ pSp :=
 (commRight R S p.ResidueField).symm.trans (tensorQuotientEquiv S _ S _).trans
-    
+    { __ := Ideal.quotientEquiv _ _ (Localization.tensorLeftAlgEquiv p.primeCompl S) (by
+        rw [← Ideal.map_coe includeRight]; rw [Ideal.map_map]
+        congr
+        ext
+        simp [Localization.tensorLeftAlgEquiv_apply_one_tmul p.primeCompl])
+      commutes' := by simp }
 
 Depends on / 依赖: Localization, p.primeCompl, primeCompl
 -/
@@ -213,7 +243,7 @@ definition Fiber.algEquivAux₁
     p.Fiber S ≃ₐ[S] Sp ⧸ pS.map (algebraMap S Sp) :=
   letI : Algebra S (p.Fiber S) := rightAlgebra
 (Fiber.algEquivQuotient p).trans quotientEquivAlgOfEq S by
-    
+    rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R S]; rw [← map_map]
 
 中文:
 定义 Fiber.algEquivAux₁
@@ -224,7 +254,7 @@ definition Fiber.algEquivAux₁
     p.Fiber S ≃ₐ[S] Sp ⧸ pS.map (algebraMap S Sp) :=
   letI : Algebra S (p.Fiber S) := rightAlgebra
 (Fiber.algEquivQuotient p).trans quotientEquivAlgOfEq S by
-    
+    rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R S]; rw [← map_map]
 
 Depends on / 依赖: Localization, algebraMapSubmonoid, p.primeCompl, primeCompl
 -/
@@ -249,7 +279,23 @@ definition Fiber.algEquivAux₂
     Localization.AtPrime q ≃ₐ[R] Sr ⧸ pS.map (algebraMap S Sr) :=
   letI : Algebra S (p.Fiber S) := rightAlgebra
   letI Sp := Localization (algebraMapSubmonoid S p.primeCompl)
-  letI pS := p.map (algebra
+  letI pS := p.map (algebraMap R S)
+  letI SpS := S ⧸ pS
+  letI r := q.comap includeRight
+  letI Sr := Localization.AtPrime r
+  letI e₁ : p.Fiber S ≃ₐ[S] Sp ⧸ pS.map (algebraMap S Sp) := algEquivAux₁ p
+  letI q' : Ideal (Sp ⧸ pS.map (algebraMap S Sp)) := q.comap e₁.symm
+  haveI : (q'.under SpS).LiesOver r := under_liesOver_of_liesOver SpS q' (q.under S)
+  haveI : algebraMapSubmonoid SpS r.primeCompl = (q'.under SpS).primeCompl :=
+    algebraMapSubmonoid_primeCompl_of_liesOver_surjective (q'.under SpS) r Quotient.mk_surjective
+  haveI : IsLocalization (algebraMapSubmonoid SpS r.primeCompl) (Localization.AtPrime q') := by
+    convert IsLocalization.isLocalization_isLocalization_atPrime_isLocalization
+      (algebraMapSubmonoid SpS (algebraMapSubmonoid S p.primeCompl)) (Localization.AtPrime q') q'
+  haveI := IsScalarTower.to₁₃₄ R S SpS (Localization.AtPrime q')
+  haveI := IsScalarTower.to₁₃₄ R S SpS (Sr ⧸ pS.map (algebraMap S Sr))
+  ((Localization.localAlgEquiv q' q e₁.symm rfl).symm.restrictScalars R).trans
+    ((IsLocalization.algEquiv (algebraMapSubmonoid SpS r.primeCompl) (Localization.AtPrime q')
+      (Sr ⧸ pS.map (algebraMap S Sr))).restrictScalars R)
 
 中文:
 定义 Fiber.algEquivAux₂
@@ -260,7 +306,23 @@ definition Fiber.algEquivAux₂
     Localization.AtPrime q ≃ₐ[R] Sr ⧸ pS.map (algebraMap S Sr) :=
   letI : Algebra S (p.Fiber S) := rightAlgebra
   letI Sp := Localization (algebraMapSubmonoid S p.primeCompl)
-  letI pS := p.map (algebra
+  letI pS := p.map (algebraMap R S)
+  letI SpS := S ⧸ pS
+  letI r := q.comap includeRight
+  letI Sr := Localization.AtPrime r
+  letI e₁ : p.Fiber S ≃ₐ[S] Sp ⧸ pS.map (algebraMap S Sp) := algEquivAux₁ p
+  letI q' : Ideal (Sp ⧸ pS.map (algebraMap S Sp)) := q.comap e₁.symm
+  haveI : (q'.under SpS).LiesOver r := under_liesOver_of_liesOver SpS q' (q.under S)
+  haveI : algebraMapSubmonoid SpS r.primeCompl = (q'.under SpS).primeCompl :=
+    algebraMapSubmonoid_primeCompl_of_liesOver_surjective (q'.under SpS) r Quotient.mk_surjective
+  haveI : IsLocalization (algebraMapSubmonoid SpS r.primeCompl) (Localization.AtPrime q') := by
+    convert IsLocalization.isLocalization_isLocalization_atPrime_isLocalization
+      (algebraMapSubmonoid SpS (algebraMapSubmonoid S p.primeCompl)) (Localization.AtPrime q') q'
+  haveI := IsScalarTower.to₁₃₄ R S SpS (Localization.AtPrime q')
+  haveI := IsScalarTower.to₁₃₄ R S SpS (Sr ⧸ pS.map (algebraMap S Sr))
+  ((Localization.localAlgEquiv q' q e₁.symm rfl).symm.restrictScalars R).trans
+    ((IsLocalization.algEquiv (algebraMapSubmonoid SpS r.primeCompl) (Localization.AtPrime q')
+      (Sr ⧸ pS.map (algebraMap S Sr))).restrictScalars R)
 
 Depends on / 依赖: includeRight, q.comap
 -/
@@ -299,7 +361,7 @@ definition Fiber.localizationAlgEquivQuotient
     letI Sr := Localization.AtPrime r
     Localization.AtPrime q ≃ₐ[Localization.AtPrime p] Sr ⧸ p.map (algebraMap R Sr) :=
   ((algEquivAux₂ p q).extendScalarsOfIsLocalization (Localization.AtPrime p) p.primeCompl).trans
-    (quotientEquivAlgOfEq (Localization.AtPrime p) (map_ma
+    (quotientEquivAlgOfEq (Localization.AtPrime p) (map_map _ _))
 
 中文:
 定义 Fiber.localizationAlgEquivQuotient
@@ -308,7 +370,7 @@ definition Fiber.localizationAlgEquivQuotient
     letI Sr := Localization.AtPrime r
     Localization.AtPrime q ≃ₐ[Localization.AtPrime p] Sr ⧸ p.map (algebraMap R Sr) :=
   ((algEquivAux₂ p q).extendScalarsOfIsLocalization (Localization.AtPrime p) p.primeCompl).trans
-    (quotientEquivAlgOfEq (Localization.AtPrime p) (map_ma
+    (quotientEquivAlgOfEq (Localization.AtPrime p) (map_map _ _))
 
 Depends on / 依赖: includeRight, q.comap
 -/
@@ -339,7 +401,22 @@ definition PrimeSpectrum.preimageEquivFiber
   body: ⟨RingHom.ker (Algebra.TensorProduct.lift
     (Ideal.ResidueField.mapₐ p.asIdeal q.1.asIdeal (Algebra.ofId _ _) congr($(q.2.symm).asIdeal))
       (IsScalarTower.toAlgHom _ _ _) fun _ _ => .all _ _).toRingHom, RingHom.ker_isPrime _⟩
-  invFun q := ⟨q.comap Algebra.TensorProduct.includeRight.toRingHom, 
+  invFun q := ⟨q.comap Algebra.TensorProduct.includeRight.toRingHom, by
+    simp only [AlgHom.toRingHom_eq_coe, Set.mem_preimage, ← comap_comp_apply,
+      AlgHom.comp_algebraMap_of_tower]
+    exact (residueField_comap _).le ⟨q.comap (algebraMap _ _), rfl⟩⟩
+  left_inv q := by ext x; simp
+  right_inv q := by
+    ext x
+    obtain ⟨r, hr, s, e⟩ := Ideal.Fiber.exists_smul_eq_one_tmul _ x
+    have := @PrimeSpectrum.isPrime -- times out if removed
+    rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r)]; rw [iff_comm]; rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r)]; rw [← Algebra.smul_def]; rw [e]
+    · simp
+    · rw [← Ideal.mem_comap, ← PrimeSpectrum.comap_asIdeal]
+      convert! hr
+      exact (residueField_comap _).le ⟨q.comap (algebraMap _ _), rfl⟩
+    · simpa [-Algebra.algebraMap_self, -AlgHom.commutes, -AlgHom.map_algebraMap,
+        -Ideal.ResidueField.map_algebraMap]
 
 中文:
 定义 素谱.preimageEquivFiber
@@ -347,7 +424,22 @@ definition PrimeSpectrum.preimageEquivFiber
   定义体: ⟨RingHom.ker (Algebra.TensorProduct.lift
     (Ideal.ResidueField.mapₐ p.asIdeal q.1.asIdeal (Algebra.ofId _ _) congr($(q.2.symm).asIdeal))
       (IsScalarTower.toAlgHom _ _ _) fun _ _ => .all _ _).toRingHom, RingHom.ker_isPrime _⟩
-  invFun q := ⟨q.comap Algebra.TensorProduct.includeRight.toRingHom, 
+  invFun q := ⟨q.comap Algebra.TensorProduct.includeRight.toRingHom, by
+    simp only [AlgHom.toRingHom_eq_coe, Set.mem_preimage, ← comap_comp_apply,
+      AlgHom.comp_algebraMap_of_tower]
+    exact (residueField_comap _).le ⟨q.comap (algebraMap _ _), rfl⟩⟩
+  left_inv q := by ext x; simp
+  right_inv q := by
+    ext x
+    obtain ⟨r, hr, s, e⟩ := Ideal.Fiber.exists_smul_eq_one_tmul _ x
+    have := @PrimeSpectrum.isPrime -- times out if removed
+    rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r)]; rw [iff_comm]; rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r)]; rw [← Algebra.smul_def]; rw [e]
+    · simp
+    · rw [← Ideal.mem_comap, ← PrimeSpectrum.comap_asIdeal]
+      convert! hr
+      exact (residueField_comap _).le ⟨q.comap (algebraMap _ _), rfl⟩
+    · simpa [-Algebra.algebraMap_self, -AlgHom.commutes, -AlgHom.map_algebraMap,
+        -Ideal.ResidueField.map_algebraMap]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lift, RingHom, RingHom.ker, TensorProduct
 -/
@@ -390,7 +482,12 @@ definition PrimeSpectrum.preimageOrderIsoFiber
       obtain ⟨q₂, rfl⟩ := (preimageEquivFiber R S p).symm.surjective q₂
       simpa using! Ideal.comap_mono
     · intro H x hx
-      obtain ⟨r, hr, s, e⟩ := I
+      obtain ⟨r, hr, s, e⟩ := Ideal.Fiber.exists_smul_eq_one_tmul _ x
+      rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r)]; rw [← Algebra.smul_def]; rw [e] at hx ⊢
+      · replace hx : s in q₁.1.asIdeal := by simpa using! hx
+        simpa using! H hx
+      · rw [← q₂.2] at hr; simpa [IsScalarTower.algebraMap_apply R S q₂.1.asIdeal.ResidueField]
+      · rw [← q₁.2] at hr; simpa [IsScalarTower.algebraMap_apply R S q₁.1.asIdeal.ResidueField]
 
 中文:
 定义 素谱.preimageOrderIsoFiber
@@ -402,7 +499,12 @@ definition PrimeSpectrum.preimageOrderIsoFiber
       obtain ⟨q₂, rfl⟩ := (preimageEquivFiber R S p).symm.surjective q₂
       simpa using! Ideal.comap_mono
     · intro H x hx
-      obtain ⟨r, hr, s, e⟩ := I
+      obtain ⟨r, hr, s, e⟩ := Ideal.Fiber.exists_smul_eq_one_tmul _ x
+      rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ r)]; rw [← Algebra.smul_def]; rw [e] at hx ⊢
+      · replace hx : s in q₁.1.asIdeal := by simpa using! hx
+        simpa using! H hx
+      · rw [← q₂.2] at hr; simpa [IsScalarTower.algebraMap_apply R S q₂.1.asIdeal.ResidueField]
+      · rw [← q₁.2] at hr; simpa [IsScalarTower.algebraMap_apply R S q₁.1.asIdeal.ResidueField]
 
 Depends on / 依赖: preimageEquivFiber
 -/
@@ -466,7 +568,21 @@ definition PrimeSpectrum.preimageHomeomorphFiber
     refine (Topology.IsEmbedding.of_comp_iff .subtypeVal).mp ?_
     have := PrimeSpectrum.isEmbedding_tensorProductTo_of_surjectiveOnStalks _ S _
       (Ideal.surjectiveOnStalks_residueField p.asIdeal)
-    exact ((Homeomorph
+    exact ((Homeomorph.prodUnique _ _).isEmbedding.comp this).comp
+      (homeomorphOfRingEquiv (Algebra.TensorProduct.comm _ _ _).toRingEquiv).isEmbedding
+  exact
+  { __ := preimageOrderIsoFiber R S p
+    continuous_toFun := by
+      convert!
+        (H.toHomeomorphOfSurjective (preimageOrderIsoFiber R S p).symm.surjective).symm.continuous
+      ext1 x
+      obtain ⟨x, rfl⟩ := (H.toHomeomorphOfSurjective
+        (preimageOrderIsoFiber R S p).symm.surjective).surjective x
+      simp only [Equiv.toFun_as_coe, RelIso.coe_fn_toEquiv, Homeomorph.symm_apply_apply]
+      simp
+    continuous_invFun := H.continuous }
+
+@[simp]
 
 中文:
 定义 素谱.preimageHomeomorphFiber
@@ -476,7 +592,21 @@ definition PrimeSpectrum.preimageHomeomorphFiber
     refine (Topology.IsEmbedding.of_comp_iff .subtypeVal).mp ?_
     have := PrimeSpectrum.isEmbedding_tensorProductTo_of_surjectiveOnStalks _ S _
       (Ideal.surjectiveOnStalks_residueField p.asIdeal)
-    exact ((Homeomorph
+    exact ((Homeomorph.prodUnique _ _).isEmbedding.comp this).comp
+      (homeomorphOfRingEquiv (Algebra.TensorProduct.comm _ _ _).toRingEquiv).isEmbedding
+  exact
+  { __ := preimageOrderIsoFiber R S p
+    continuous_toFun := by
+      convert!
+        (H.toHomeomorphOfSurjective (preimageOrderIsoFiber R S p).symm.surjective).symm.continuous
+      ext1 x
+      obtain ⟨x, rfl⟩ := (H.toHomeomorphOfSurjective
+        (preimageOrderIsoFiber R S p).symm.surjective).surjective x
+      simp only [Equiv.toFun_as_coe, RelIso.coe_fn_toEquiv, Homeomorph.symm_apply_apply]
+      simp
+    continuous_invFun := H.continuous }
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.comm, Continuous, Continuous.star, H.toHomeomorphOfS, Homeomorph, Homeomorph.prodUnique, Ideal.surjectiveOnStalks_residueField, IsEmbedding, PrimeSpectrum, PrimeSpectrum.isEmbedding_tensorProductTo_of_surjectiveOnStalks, TensorProduct, Topology, Topology.IsEmbedding, Topology.IsEmbedding.of_comp_iff, asIdeal, continuous_apply, continuous_pi, continuous_toFun, convert
 -/

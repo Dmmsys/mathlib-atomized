@@ -227,14 +227,20 @@ lemma InjectiveResolution.isoRightDerivedObj_hom_naturality
   proof: by
   dsimp [isoRightDerivedObj, Functor.rightDerived]
   rw [assoc]; rw [← Functor.map_comp_assoc]; rw [InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_hom_naturality f I J φ comm F]; rw [Functor.map_comp]; rw [assoc]
-  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n)
+  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n).hom.naturality]
+  rfl
+
+@[reassoc]
 
 中文:
 引理 单射消解.isoRightDerivedObj_hom_naturality
   证明: by
   dsimp [isoRightDerivedObj, Functor.rightDerived]
   rw [assoc]; rw [← Functor.map_comp_assoc]; rw [InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_hom_naturality f I J φ comm F]; rw [Functor.map_comp]; rw [assoc]
-  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n)
+  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n).hom.naturality]
+  rfl
+
+@[reassoc]
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, Functor, Functor.map_comp, Functor.map_comp_assoc, Functor.rightDerived, HomotopyCategory, HomotopyCategory.homologyFunctorFactors, InjectiveResolution, InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_hom_naturality, hom.naturality, homologyFunctorFactors, isoRightDerivedObj, isoRightDerivedToHomotopyCategoryObj_hom_naturality, map_comp, map_comp_assoc, naturality, rightDerived
 -/
@@ -310,14 +316,14 @@ theorem Functor.rightDerived_map_eq
   statement: (F : C ⥤ D) [F.Additive] (n : Nat) {X Y : C} (f : X ⟶ Y)
   proof: by
   rw [← cancel_mono (Q.isoRightDerivedObj F n).hom]; rw [InjectiveResolution.isoRightDerivedObj_hom_naturality f P Q g _ F n]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-  rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [CochainComplex.single₀_map_f_zer
+  rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [CochainComplex.single₀_map_f_zero]
 
 中文:
 定理 函子.rightDerived_map_eq
   结论: (F : C ⥤ D) [F.加性] (n : 自然数) {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← cancel_mono (Q.isoRightDerivedObj F n).hom]; rw [InjectiveResolution.isoRightDerivedObj_hom_naturality f P Q g _ F n]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
-  rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [CochainComplex.single₀_map_f_zer
+  rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [CochainComplex.single₀_map_f_zero]
 
 Depends on / 依赖: CochainComplex, CochainComplex.single, HomologicalComplex, HomologicalComplex.comp_f, InjectiveResolution, InjectiveResolution.isoRightDerivedObj_hom_naturality, Iso.inv_hom_id, Q.isoRightDerivedObj, cancel_mono, comp_f, comp_id, inv_hom_id, isoRightDerivedObj, isoRightDerivedObj_hom_naturality
 -/
@@ -362,7 +368,13 @@ lemma InjectiveResolution.rightDerivedToHomotopyCategory_app_eq
     NatTrans.rightDerivedToHomotopyCategory]
   rw [assoc]
   erw [id_comp, comp_id]
-  ob
+  obtain ⟨β, hβ⟩ := (HomotopyCategory.quotient _ _).map_surjective (iso P).hom
+  rw [← hβ]
+  dsimp
+  simp only [← Functor.map_comp, NatTrans.mapHomologicalComplex_naturality]
+  rfl
+
+@[simp]
 
 中文:
 引理 单射消解.rightDerivedToHomotopyCategory_app_eq
@@ -372,7 +384,13 @@ lemma InjectiveResolution.rightDerivedToHomotopyCategory_app_eq
     NatTrans.rightDerivedToHomotopyCategory]
   rw [assoc]
   erw [id_comp, comp_id]
-  ob
+  obtain ⟨β, hβ⟩ := (HomotopyCategory.quotient _ _).map_surjective (iso P).hom
+  rw [← hβ]
+  dsimp
+  simp only [← Functor.map_comp, NatTrans.mapHomologicalComplex_naturality]
+  rfl
+
+@[simp]
 
 Depends on / 依赖: Functor, Functor.mapHomotopyCategoryFactors, Functor.map_comp, HomotopyCategory, HomotopyCategory.quotient, Iso.inv_hom_id, NatTrans, NatTrans.mapHomologicalComplex_naturality, NatTrans.rightDerivedToHomotopyCategory, P.isoRightDerivedToHomotopyCategoryObj, cancel_mono, comp_id, id_comp, inv_hom_id, isoRightDerivedToHomotopyCategoryObj, mapHomologicalComplex_naturality, mapHomotopyCategoryFactors, map_comp, map_surjective, quotient
 -/
@@ -522,7 +540,8 @@ lemma rightDerived_app_eq
   dsimp [NatTrans.rightDerived, isoRightDerivedObj]
   rw [InjectiveResolution.rightDerivedToHomotopyCategory_app_eq α P]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]
   erw [← (HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n).hom.naturality_assoc
-    ((NatTrans.mapHo
+    ((NatTrans.mapHomologicalComplex α (ComplexShape.up Nat)).app P.cocomplex)]
+  simp only [Functor.comp_map, Iso.hom_inv_id_app_assoc]
 
 中文:
 引理 rightDerived_app_eq
@@ -530,7 +549,8 @@ lemma rightDerived_app_eq
   dsimp [NatTrans.rightDerived, isoRightDerivedObj]
   rw [InjectiveResolution.rightDerivedToHomotopyCategory_app_eq α P]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]
   erw [← (HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n).hom.naturality_assoc
-    ((NatTrans.mapHo
+    ((NatTrans.mapHomologicalComplex α (ComplexShape.up Nat)).app P.cocomplex)]
+  simp only [Functor.comp_map, Iso.hom_inv_id_app_assoc]
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, Functor, Functor.comp_map, Functor.map_comp, HomotopyCategory, HomotopyCategory.homologyFunctorFactors, InjectiveResolution, InjectiveResolution.rightDerivedToHomotopyCategory_app_eq, Iso.hom_inv_id_app_assoc, NatTrans, NatTrans.mapHomologicalComplex, NatTrans.rightDerived, P.cocomplex, cocomplex, comp_map, hom.naturality_assoc, hom_inv_id_app_assoc, homologyFunctorFactors, isoRightDerivedObj
 -/
@@ -663,7 +683,11 @@ definition Functor.toRightDerivedZero
       (HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) 0).inv.app _
   naturality {X Y} f := by
     dsimp [rightDerived]
-    rw [assoc]; rw [assoc]; rw [InjectiveResolution.toRightDerivedZero'_n
+    rw [assoc]; rw [assoc]; rw [InjectiveResolution.toRightDerivedZero'_naturality_assoc f
+      (injectiveResolution X) (injectiveResolution Y)
+      (InjectiveResolution.desc f _ _) (by simp)]; rw [← HomologicalComplex.homologyπ_naturality_assoc]
+    erw [← NatTrans.naturality]
+    rfl
 
 中文:
 定义 函子.toRightDerivedZero
@@ -673,7 +697,11 @@ definition Functor.toRightDerivedZero
       (HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) 0).inv.app _
   naturality {X Y} f := by
     dsimp [rightDerived]
-    rw [assoc]; rw [assoc]; rw [InjectiveResolution.toRightDerivedZero'_n
+    rw [assoc]; rw [assoc]; rw [InjectiveResolution.toRightDerivedZero'_naturality_assoc f
+      (injectiveResolution X) (injectiveResolution Y)
+      (InjectiveResolution.desc f _ _) (by simp)]; rw [← HomologicalComplex.homologyπ_naturality_assoc]
+    erw [← NatTrans.naturality]
+    rfl
 
 Depends on / 依赖: injectiveResolution, toRightDerivedZero
 -/
@@ -703,7 +731,12 @@ lemma InjectiveResolution.toRightDerivedZero_eq
     (𝟙 X) (injectiveResolution X) I (desc (𝟙 X) _ _) (by simp) F
   simp only [Functor.map_id, id_comp] at h₁
   have h₂ : (I.isoRightDerivedToHomotopyCategoryObj F).hom =
-    (F
+    (F.mapHomologicalComplex _ ⋙ HomotopyCategory.quotient _ _).map (desc (𝟙 X) _ _) :=
+    comp_id _
+  rw [← cancel_mono ((HomotopyCategory.homologyFunctor _ _ 0).map
+      (I.isoRightDerivedToHomotopyCategoryObj F).hom)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [comp_id]; rw [reassoc_of% h₁]; rw [h₂]; rw [← HomologicalComplex.homologyπ_naturality_assoc]
+  erw [← NatTrans.naturality]
+  rfl
 
 中文:
 引理 单射消解.toRightDerivedZero_eq
@@ -713,7 +746,12 @@ lemma InjectiveResolution.toRightDerivedZero_eq
     (𝟙 X) (injectiveResolution X) I (desc (𝟙 X) _ _) (by simp) F
   simp only [Functor.map_id, id_comp] at h₁
   have h₂ : (I.isoRightDerivedToHomotopyCategoryObj F).hom =
-    (F
+    (F.mapHomologicalComplex _ ⋙ HomotopyCategory.quotient _ _).map (desc (𝟙 X) _ _) :=
+    comp_id _
+  rw [← cancel_mono ((HomotopyCategory.homologyFunctor _ _ 0).map
+      (I.isoRightDerivedToHomotopyCategoryObj F).hom)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [comp_id]; rw [reassoc_of% h₁]; rw [h₂]; rw [← HomologicalComplex.homologyπ_naturality_assoc]
+  erw [← NatTrans.naturality]
+  rfl
 
 Depends on / 依赖: F.mapHomologicalComplex, Functor, Functor.map_id, Functor.toRightDerivedZero, HomotopyCategory, HomotopyCategory.homologyFunctor, HomotopyCategory.quotient, I.isoRightDerivedToHomotopyCategoryObj, InjectiveResolution, InjectiveResolution.toRightDerivedZero, _naturality, cancel_mono, comp_id, homologyFunctor, id_comp, injectiveResolution, isoRightDerivedObj, isoRightDerivedToHomotopyCategoryObj, mapHomologicalComplex, map_id
 -/

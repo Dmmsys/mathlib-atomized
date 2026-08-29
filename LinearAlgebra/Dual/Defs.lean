@@ -954,7 +954,8 @@ lemma equiv
       ext m f
       exact DFunLike.congr_arg f (e.apply_symm_apply m).symm
     simp only [this,
-      coe_comp, LinearEquiv.coe_
+      coe_comp, LinearEquiv.coe_coe, EquivLike.comp_bijective]
+    exact Bijective.comp (bijective_dual_eval R M) (LinearEquiv.bijective _)
 
 中文:
 引理 equiv
@@ -966,7 +967,8 @@ lemma equiv
       ext m f
       exact DFunLike.congr_arg f (e.apply_symm_apply m).symm
     simp only [this,
-      coe_comp, LinearEquiv.coe_
+      coe_comp, LinearEquiv.coe_coe, EquivLike.comp_bijective]
+    exact Bijective.comp (bijective_dual_eval R M) (LinearEquiv.bijective _)
 
 Depends on / 依赖: Bijective, Bijective.comp, DFunLike, DFunLike.congr_arg, Dual.eval, EquivLike, EquivLike.comp_bijective, LinearEquiv, LinearEquiv.bijective, LinearEquiv.coe_coe, apply_symm_apply, bijective, bijective_dual_eval, coe_coe, coe_comp, comp_bijective, congr_arg, dualMap, e.apply_symm_apply, e.symm.dualMap.dualMap
 -/

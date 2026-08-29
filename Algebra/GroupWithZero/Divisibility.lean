@@ -319,7 +319,10 @@ theorem dvd_and_not_dvd_iff
     ⟨⟨d, hdx⟩, fun ⟨e, he⟩ =>
       hdu
         (isUnit_of_dvd_one
-⟨e, mul_left_cancel₀ hx0 by conv
+⟨e, mul_left_cancel₀ hx0 by conv =>
+            lhs
+            rw [he]; rw [hdx]
+            simp [mul_assoc]⟩)⟩⟩
 
 中文:
 定理 dvd_and_not_dvd_iff
@@ -332,7 +335,10 @@ theorem dvd_and_not_dvd_iff
     ⟨⟨d, hdx⟩, fun ⟨e, he⟩ =>
       hdu
         (isUnit_of_dvd_one
-⟨e, mul_left_cancel₀ hx0 by conv
+⟨e, mul_left_cancel₀ hx0 by conv =>
+            lhs
+            rw [he]; rw [hdx]
+            simp [mul_assoc]⟩)⟩⟩
 
 Depends on / 依赖: isUnit_iff_dvd_one, isUnit_of_dvd_one, mul_assoc, mul_one
 -/
@@ -410,7 +416,7 @@ theorem IsPrimal.mul
   obtain ⟨a₁, a₂, ⟨b, rfl⟩, ⟨c, rfl⟩, rfl⟩ := hm (dvd_of_mul_right_dvd h)
   rw [mul_mul_mul_comm]; rw [mul_dvd_mul_iff_left h0] at h
   obtain ⟨a₁', a₂', h₁, h₂, rfl⟩ := hn h
-  exact ⟨a₁ * a₁', a₂ * a₂', mul_dvd_mul_left _ h₁, mul_d
+  exact ⟨a₁ * a₁', a₂ * a₂', mul_dvd_mul_left _ h₁, mul_dvd_mul_left _ h₂, mul_mul_mul_comm _ _ _ _⟩
 
 中文:
 定理 IsPrimal.mul
@@ -421,7 +427,7 @@ theorem IsPrimal.mul
   obtain ⟨a₁, a₂, ⟨b, rfl⟩, ⟨c, rfl⟩, rfl⟩ := hm (dvd_of_mul_right_dvd h)
   rw [mul_mul_mul_comm]; rw [mul_dvd_mul_iff_left h0] at h
   obtain ⟨a₁', a₂', h₁, h₂, rfl⟩ := hn h
-  exact ⟨a₁ * a₁', a₂ * a₂', mul_dvd_mul_left _ h₁, mul_d
+  exact ⟨a₁ * a₁', a₂ * a₂', mul_dvd_mul_left _ h₁, mul_dvd_mul_left _ h₂, mul_mul_mul_comm _ _ _ _⟩
 
 Depends on / 依赖: dvd_of_mul_right_dvd, eq_or_ne, mul_dvd_mul_iff_left, mul_dvd_mul_left, mul_mul_mul_comm, zero_mul
 -/
@@ -559,7 +565,7 @@ lemma pow_dvd_pow_iff
       exact (pow_dvd_pow _ (Nat.succ_le_of_lt hmn)).trans h
     rwa [mul_dvd_mul_iff_left, ← isUnit_iff_dvd_one] at this
     apply pow_ne_zero m ha₀
-  
+  · apply pow_dvd_pow
 
 中文:
 引理 pow_dvd_pow_iff
@@ -576,7 +582,7 @@ lemma pow_dvd_pow_iff
       exact (pow_dvd_pow _ (Nat.succ_le_of_lt hmn)).trans h
     rwa [mul_dvd_mul_iff_left, ← isUnit_iff_dvd_one] at this
     apply pow_ne_zero m ha₀
-  
+  · apply pow_dvd_pow
 
 Depends on / 依赖: Nat.succ_le_of_lt, isUnit_iff_dvd_one, mul_dvd_mul_iff_left, mul_one, not_lt, pow_dvd_pow, pow_ne_zero, pow_succ, succ_le_of_lt
 -/

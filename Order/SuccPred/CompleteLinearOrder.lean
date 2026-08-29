@@ -37,7 +37,9 @@ lemma csSup_mem_of_not_isSuccLimit
     rwa [← hmin.eq_of_le <| le_csSup hbdd has]
   · have ⟨y, hy⟩ := not_forall_not.mp hlim
     have ⟨i, his, hi⟩ := exists_lt_of_lt_csSup hne hy.lt
-    exact eq_of_le_of_not_lt (
+    exact eq_of_le_of_not_lt (le_csSup hbdd his) (hy.2 hi) ▸ his
+
+@[to_dual]
 
 中文:
 引理 csSup_mem_of_not_isSuccLimit
@@ -49,7 +51,9 @@ lemma csSup_mem_of_not_isSuccLimit
     rwa [← hmin.eq_of_le <| le_csSup hbdd has]
   · have ⟨y, hy⟩ := not_forall_not.mp hlim
     have ⟨i, his, hi⟩ := exists_lt_of_lt_csSup hne hy.lt
-    exact eq_of_le_of_not_lt (
+    exact eq_of_le_of_not_lt (le_csSup hbdd his) (hy.2 hi) ▸ his
+
+@[to_dual]
 
 Depends on / 依赖: eq_of_le, eq_of_le_of_not_lt, exists_lt_of_lt_csSup, hmin.eq_of_le, hy.lt, isSuccLimit_iff, le_csSup, not_and_or, not_forall_not, not_forall_not.mp, not_not
 -/
@@ -308,7 +312,8 @@ lemma csSup_mem_of_not_isSuccPrelimit
     rw [csSup_of_not_bddAbove hlim]; rw [csSup_empty]
     exact isSuccPrelimit_bot
 
-@[deprecated (since := "2026-04-2
+@[deprecated (since := "2026-04-24")]
+alias csSup_mem_of_not_isSuccPrelimit' := csSup_mem_of_not_isSuccPrelimit
 
 中文:
 引理 csSup_mem_of_not_isSuccPrelimit
@@ -322,7 +327,8 @@ lemma csSup_mem_of_not_isSuccPrelimit
     rw [csSup_of_not_bddAbove hlim]; rw [csSup_empty]
     exact isSuccPrelimit_bot
 
-@[deprecated (since := "2026-04-2
+@[deprecated (since := "2026-04-24")]
+alias csSup_mem_of_not_isSuccPrelimit' := csSup_mem_of_not_isSuccPrelimit
 
 Depends on / 依赖: IsSuccLimit, IsSuccLimit.isSuccPrelimit, contrapose, csSup_empty, csSup_mem_of_not_isSuccLimit, csSup_of_not_bddAbove, eq_empty_or_nonempty, isSuccPrelimit, isSuccPrelimit_bot, s.eq_empty_or_nonempty
 -/
@@ -518,7 +524,7 @@ theorem iSup_succ
   · rw [ciSup_le_iff' H]
     exact fun a => succ_le_of_lt a.2
   · rw [lt_ciSup_iff' H]
-    exact ⟨⟨y, hy⟩, lt_suc
+    exact ⟨⟨y, hy⟩, lt_succ_of_not_isMax hy.not_isMax⟩
 
 中文:
 定理 iSup_succ
@@ -531,7 +537,7 @@ theorem iSup_succ
   · rw [ciSup_le_iff' H]
     exact fun a => succ_le_of_lt a.2
   · rw [lt_ciSup_iff' H]
-    exact ⟨⟨y, hy⟩, lt_suc
+    exact ⟨⟨y, hy⟩, lt_succ_of_not_isMax hy.not_isMax⟩
 
 Depends on / 依赖: BddAbove, ciSup_le_iff, contextual, hy.not_isMax, le_antisymm, le_of_forall_lt, le_of_lt, lt_ciSup_iff, lt_succ_of_not_isMax, not_isMax, succ_le_of_lt, succ_le_succ, upperBounds
 -/

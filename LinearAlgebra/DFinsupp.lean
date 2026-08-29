@@ -409,7 +409,23 @@ definition lsum
         apply DFinsupp.induction f
         · rw [smul_zero, map_zero, smul_zero]
         · intro a b f _ _ hf
-        
+          rw [smul_add]; rw [map_add]; rw [map_add]; rw [smul_add]; rw [hf]; rw [← single_smul]; rw [sumAddHom_single]; rw [sumAddHom_single]; rw [LinearMap.toAddMonoidHom_coe]; rw [map_smul] }
+  invFun F i := F.comp (lsingle i)
+  left_inv F := by
+    ext
+    simp
+  right_inv F := by
+    refine DFinsupp.lhom_ext' (fun i => ?_)
+    ext
+    simp
+  map_add' F G := by
+    refine DFinsupp.lhom_ext' (fun i => ?_)
+    ext
+    simp
+  map_smul' c F := by
+    refine DFinsupp.lhom_ext' (fun i => ?_)
+    ext
+    simp
 
 中文:
 定义 lsum
@@ -421,7 +437,23 @@ definition lsum
         apply DFinsupp.induction f
         · rw [smul_zero, map_zero, smul_zero]
         · intro a b f _ _ hf
-        
+          rw [smul_add]; rw [map_add]; rw [map_add]; rw [smul_add]; rw [hf]; rw [← single_smul]; rw [sumAddHom_single]; rw [sumAddHom_single]; rw [LinearMap.toAddMonoidHom_coe]; rw [map_smul] }
+  invFun F i := F.comp (lsingle i)
+  left_inv F := by
+    ext
+    simp
+  right_inv F := by
+    refine DFinsupp.lhom_ext' (fun i => ?_)
+    ext
+    simp
+  map_add' F G := by
+    refine DFinsupp.lhom_ext' (fun i => ?_)
+    ext
+    simp
+  map_smul' c F := by
+    refine DFinsupp.lhom_ext' (fun i => ?_)
+    ext
+    simp
 
 Depends on / 依赖: DFinsupp, DFinsupp.induction, DFinsupp.liftAddHom, F.comp, LinearMap, LinearMap.toAddMonoidHom_coe, invFun, left_inv, liftAddHom, lsingle, map_add, map_smul, map_zero, right_inv, single_smul, smul_add, smul_zero, sumAddHom, sumAddHom_single, toAddMonoidHom
 -/
@@ -566,7 +598,10 @@ lemma mrange_mapRangeAddMonoidHom
   · choose g hg using fun i => h i (Set.mem_univ _)
     use DFinsupp.mk x.support (g ·)
     ext i
-    simp only [Finset.coe_sort_coe, mapRange.addMonoid
+    simp only [Finset.coe_sort_coe, mapRange.addMonoidHom_apply, mapRange_apply]
+    by_cases mem : i in x.support
+    · rw [mk_of_mem mem, hg]
+    · rw [DFinsupp.notMem_support_iff.mp mem, mk_of_notMem mem, map_zero]
 
 中文:
 引理 mrange_mapRangeAddMonoidHom
@@ -580,7 +615,10 @@ lemma mrange_mapRangeAddMonoidHom
   · choose g hg using fun i => h i (Set.mem_univ _)
     use DFinsupp.mk x.support (g ·)
     ext i
-    simp only [Finset.coe_sort_coe, mapRange.addMonoid
+    simp only [Finset.coe_sort_coe, mapRange.addMonoidHom_apply, mapRange_apply]
+    by_cases mem : i in x.support
+    · rw [mk_of_mem mem, hg]
+    · rw [DFinsupp.notMem_support_iff.mp mem, mk_of_notMem mem, map_zero]
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_comap, DFinsupp, DFinsupp.mk, DFinsupp.notMem_support_iff.mp, Finset, Finset.coe_sort_coe, Set.mem_univ, addMonoidHom_apply, classical, coeFnAddMonoidHom_apply, coe_sort_coe, mapRange, mapRange.addMonoidHom_apply, mapRange_apply, map_zero, mem_comap, mem_univ, mk_of_mem, mk_of_notMem
 -/
@@ -1071,7 +1109,11 @@ theorem biSup_eq_range_dfinsupp_lsum
     rw [LinearMap.comp_apply]; rw [filterLinearMap_apply]; rw [filter_single_pos _ _ hi]
     simp only [lsum_apply_apply, sumAddHom_single, LinearMap.toAddMonoidHom_coe, coe_subtype]
   · rintro x ⟨v, rfl⟩
-   
+    refine dfinsuppSumAddHom_mem _ _ _ fun i _ => ?_
+    refine mem_iSup_of_mem i ?_
+    by_cases hp : p i
+    · simp [hp]
+    · simp [hp]
 
 中文:
 定理 biSup_eq_range_dfinsupp_lsum
@@ -1082,7 +1124,11 @@ theorem biSup_eq_range_dfinsupp_lsum
     rw [LinearMap.comp_apply]; rw [filterLinearMap_apply]; rw [filter_single_pos _ _ hi]
     simp only [lsum_apply_apply, sumAddHom_single, LinearMap.toAddMonoidHom_coe, coe_subtype]
   · rintro x ⟨v, rfl⟩
-   
+    refine dfinsuppSumAddHom_mem _ _ _ fun i _ => ?_
+    refine mem_iSup_of_mem i ?_
+    by_cases hp : p i
+    · simp [hp]
+    · simp [hp]
 
 Depends on / 依赖: DFinsupp, DFinsupp.single, LinearMap, LinearMap.comp_apply, LinearMap.toAddMonoidHom_coe, coe_subtype, comp_apply, dfinsuppSumAddHom_mem, filterLinearMap_apply, filter_single_pos, le_antisymm, lsum_apply_apply, mem_iSup_of_mem, single, sumAddHom_single, toAddMonoidHom_coe
 -/
@@ -1187,7 +1233,7 @@ lemma mem_iSup_iff_exists_finsupp
   rintro ⟨f, hf, rfl⟩
   refine ⟨DFinsupp.mk f.support fun i => ⟨f i, hf i⟩, Finset.sum_congr ?_ fun i hi => ?_⟩
   · ext; simp [mk_eq_zero]
-  · simp [Finsupp.mem_s
+  · simp [Finsupp.mem_support_iff.mp hi]
 
 中文:
 引理 mem_iSup_iff_存在_finsupp
@@ -1199,7 +1245,7 @@ lemma mem_iSup_iff_exists_finsupp
   rintro ⟨f, hf, rfl⟩
   refine ⟨DFinsupp.mk f.support fun i => ⟨f i, hf i⟩, Finset.sum_congr ?_ fun i hi => ?_⟩
   · ext; simp [mk_eq_zero]
-  · simp [Finsupp.mem_s
+  · simp [Finsupp.mem_support_iff.mp hi]
 
 Depends on / 依赖: DFinsupp, DFinsupp.mk, Finset, Finset.sum_congr, Finsupp, Finsupp.mem_support_iff.mp, classical, f.support, mem_iSup_iff_exists_dfinsupp, mem_support_iff, mk_eq_zero, sum_congr, support
 -/
@@ -1230,7 +1276,28 @@ theorem mem_iSup_finset_iff_exists_sum
       · intro x
         contrapose
         intro hx
-        rw [mem_suppor
+        rw [mem_support_iff]; rw [not_ne_iff]
+        ext
+        rw [coe_zero]; rw [← mem_bot R]
+        suffices ⊥ = ⨆ (_ : x in s), p x from this.symm ▸ coe_mem (μ x)
+        exact (iSup_neg hx).symm
+      · intro x _ hx
+        rw [mem_support_iff]; rw [not_ne_iff] at hx
+        rw [hx]
+        rfl
+    · refine ⟨DFinsupp.mk s ?_, ?_⟩
+      · rintro ⟨i, hi⟩
+        refine ⟨μ i, ?_⟩
+        rw [iSup_pos]
+        · exact coe_mem _
+        · exact hi
+      simp only [DFinsupp.sum]
+      rw [Finset.sum_subset support_mk_subset]; rw [← hμ]
+      · exact Finset.sum_congr rfl fun x hx => by rw [mk_of_mem hx]
+      · intro x _ hx
+        rw [mem_support_iff]; rw [not_ne_iff] at hx
+        rw [hx]
+        rfl
 
 中文:
 定理 mem_iSup_finset_iff_存在_sum
@@ -1246,7 +1313,28 @@ theorem mem_iSup_finset_iff_exists_sum
       · intro x
         contrapose
         intro hx
-        rw [mem_suppor
+        rw [mem_support_iff]; rw [not_ne_iff]
+        ext
+        rw [coe_zero]; rw [← mem_bot R]
+        suffices ⊥ = ⨆ (_ : x in s), p x from this.symm ▸ coe_mem (μ x)
+        exact (iSup_neg hx).symm
+      · intro x _ hx
+        rw [mem_support_iff]; rw [not_ne_iff] at hx
+        rw [hx]
+        rfl
+    · refine ⟨DFinsupp.mk s ?_, ?_⟩
+      · rintro ⟨i, hi⟩
+        refine ⟨μ i, ?_⟩
+        rw [iSup_pos]
+        · exact coe_mem _
+        · exact hi
+      simp only [DFinsupp.sum]
+      rw [Finset.sum_subset support_mk_subset]; rw [← hμ]
+      · exact Finset.sum_congr rfl fun x hx => by rw [mk_of_mem hx]
+      · intro x _ hx
+        rw [mem_support_iff]; rw [not_ne_iff] at hx
+        rw [hx]
+        rfl
 
 Depends on / 依赖: DFinsupp, DFinsupp.mk, Finset, Finset.sum_subset, Submodule, Submodule.mem_iSup_iff_exists_dfinsupp, classical, coe_mem, coe_zero, contrapose, iSup_const_le, iSup_neg, mem_bot, mem_iSup_iff_exists_dfinsupp, mem_support_iff, not_ne_iff, sum_subset, this.symm
 -/
@@ -1458,7 +1546,16 @@ theorem iSupIndep.dfinsupp_lsum_injective
   suffices LinearMap.ker (lsum Nat fun i => (p i).subtype) = ⊥ by
     -- Lean can't find this without our help
     let thisI : AddCommGroup (Π₀ i, p i) := inferInstance
-    rw [LinearMap.ker_
+    rw [LinearMap.ker_eq_bot] at this
+    exact this
+  rw [LinearMap.ker_eq_bot']
+  intro m hm
+  ext i : 1
+  -- split `m` into the piece at `i` and the pieces elsewhere, to match `h`
+  rw [DFinsupp.zero_apply]; rw [← neg_eq_zero]
+  refine h i (-m i) m ?_
+  rwa [← erase_add_single i m, map_add, lsum_single, Submodule.subtype_apply,
+    add_eq_zero_iff_eq_neg, ← Submodule.coe_neg] at hm
 
 中文:
 定理 iSupIndep.dfinsupp_lsum_injective
@@ -1469,7 +1566,16 @@ theorem iSupIndep.dfinsupp_lsum_injective
   suffices LinearMap.ker (lsum Nat fun i => (p i).subtype) = ⊥ by
     -- Lean can't find this without our help
     let thisI : AddCommGroup (Π₀ i, p i) := inferInstance
-    rw [LinearMap.ker_
+    rw [LinearMap.ker_eq_bot] at this
+    exact this
+  rw [LinearMap.ker_eq_bot']
+  intro m hm
+  ext i : 1
+  -- split `m` into the piece at `i` and the pieces elsewhere, to match `h`
+  rw [DFinsupp.zero_apply]; rw [← neg_eq_zero]
+  refine h i (-m i) m ?_
+  rwa [← erase_add_single i m, map_add, lsum_single, Submodule.subtype_apply,
+    add_eq_zero_iff_eq_neg, ← Submodule.coe_neg] at hm
 -/
 theorem iSupIndep.dfinsupp_lsum_injective {p : ι -> Submodule R N} (h : iSupIndep p) :
     Function.Injective (lsum Nat fun i => (p i).subtype) := by
@@ -1551,7 +1657,24 @@ theorem iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero
     apply h _ _ (hv i hi)
     rw [← s.add_sum_erase _ hi]; rw [add_eq_zero_iff_neg_eq] at hv0
     rw [← Submodule.neg_mem_iff]; rw [hv0]
-    exact SetLike.le_def.mp (biSup_mono <| by grind) (Su
+    exact SetLike.le_def.mp (biSup_mono <| by grind) (Submodule.sum_mem_biSup <| by grind)
+  · intro h i x hx hsup
+    obtain ⟨f, hf, rfl⟩ := (Submodule.mem_iSup_iff_exists_finsupp ..).mp hsup
+    contrapose! h
+    use insert i f.support, fun j => if j = i then -f.sum fun _ x => x else f j
+    refine ⟨fun j hj => ?_, ?_, by grind⟩
+    · beta_reduce
+      split_ifs with h
+      · exact (p j).neg_mem (h ▸ hx)
+      · simpa [h] using hf j
+    · specialize hf i
+      simp at hf
+      grind [Finsupp.sum, Finset.sum_congr]
+
+@[deprecated (since := "2026-04-08")]
+alias iSupIndep_iff_finset_sum_eq_zero_imp_eq_zero := iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero
+
+omit [DecidableEq ι] in
 
 中文:
 定理 iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero
@@ -1564,7 +1687,24 @@ theorem iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero
     apply h _ _ (hv i hi)
     rw [← s.add_sum_erase _ hi]; rw [add_eq_zero_iff_neg_eq] at hv0
     rw [← Submodule.neg_mem_iff]; rw [hv0]
-    exact SetLike.le_def.mp (biSup_mono <| by grind) (Su
+    exact SetLike.le_def.mp (biSup_mono <| by grind) (Submodule.sum_mem_biSup <| by grind)
+  · intro h i x hx hsup
+    obtain ⟨f, hf, rfl⟩ := (Submodule.mem_iSup_iff_exists_finsupp ..).mp hsup
+    contrapose! h
+    use insert i f.support, fun j => if j = i then -f.sum fun _ x => x else f j
+    refine ⟨fun j hj => ?_, ?_, by grind⟩
+    · beta_reduce
+      split_ifs with h
+      · exact (p j).neg_mem (h ▸ hx)
+      · simpa [h] using hf j
+    · specialize hf i
+      simp at hf
+      grind [Finsupp.sum, Finset.sum_congr]
+
+@[deprecated (since := "2026-04-08")]
+alias iSupIndep_iff_finset_sum_eq_zero_imp_eq_zero := iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero
+
+omit [DecidableEq ι] in
 
 Depends on / 依赖: SetLike, SetLike.le_def.mp, Submodule, Submodule.disjoint_def, Submodule.mem_iSup_iff_exists_finsupp, Submodule.neg_mem_iff, Submodule.sum_mem_biSup, add_eq_zero_iff_neg_eq, add_sum_erase, biSup_mono, classical, contrapose, disjoint_def, f.sum, f.support, iSupIndep_def, insert, le_def, mem_iSup_iff_exists_finsupp, neg_mem_iff
 -/
@@ -1612,7 +1752,7 @@ theorem iSupIndep_iff_finsetSum_eq_imp_eq
     simp_all
 
 @[deprecated (since := "2026-04-08")]
-alias iSupIndep_if
+alias iSupIndep_iff_finset_sum_eq_imp_eq := iSupIndep_iff_finsetSum_eq_imp_eq
 
 中文:
 定理 iSupIndep_iff_finsetSum_eq_imp_eq
@@ -1627,7 +1767,7 @@ alias iSupIndep_if
     simp_all
 
 @[deprecated (since := "2026-04-08")]
-alias iSupIndep_if
+alias iSupIndep_iff_finset_sum_eq_imp_eq := iSupIndep_iff_finsetSum_eq_imp_eq
 
 Depends on / 依赖: iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero, specialize, sub_eq_zero, sub_mem
 -/
@@ -1723,7 +1863,11 @@ theorem iSupIndep.linearIndependent
   have ha : a = 0 := by
     apply hp.dfinsupp_lsum_injective
     rwa [← lsum_comp_mapRange_toSpanSingleton _ hv] at hl
-  ext
+  ext i
+  apply smul_left_injective R (hv' i)
+  have : l i • v i = a i := rfl
+  simp only [coe_zero, Pi.zero_apply, ZeroMemClass.coe_zero, smul_eq_zero, ha] at this
+  simpa
 
 中文:
 定理 iSupIndep.linearIndependent
@@ -1738,7 +1882,11 @@ theorem iSupIndep.linearIndependent
   have ha : a = 0 := by
     apply hp.dfinsupp_lsum_injective
     rwa [← lsum_comp_mapRange_toSpanSingleton _ hv] at hl
-  ext
+  ext i
+  apply smul_left_injective R (hv' i)
+  have : l i • v i = a i := rfl
+  simp only [coe_zero, Pi.zero_apply, ZeroMemClass.coe_zero, smul_eq_zero, ha] at this
+  simpa
 
 Depends on / 依赖: DFinsupp, DFinsupp.mapRange.linearMap, LinearMap, LinearMap.toSpanSingleton, Pi.zero_apply, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_zero, dfinsupp_lsum_injective, hp.dfinsupp_lsum_injective, l.toDFinsupp, linearIndependent_iff, linearMap, lsum_comp_mapRange_toSpanSingleton, mapRange, smul_eq_zero, smul_left_injective, toDFinsupp, toSpanSingleton
 -/

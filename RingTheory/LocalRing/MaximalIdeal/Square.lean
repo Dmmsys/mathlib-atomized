@@ -30,7 +30,8 @@ lemma IsLocalRing.maximalIdeal_sq_lt_maximalIdeal
   · simp [lt_iff_le_and_ne, Ideal.pow_le_self]
   · rw [IsLocalRing.isField_iff_maximalIdeal_eq, pow_two]
     refine Iff.not ⟨fun h => ?_, fun h => by simp [h]⟩
-    exact Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator (IsNoetherian.noethe
+    exact Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator (IsNoetherian.noetherian _)
+      h.symm (maximalIdeal_le_jacobson _)
 
 中文:
 引理 是局部环.maximalIdeal_sq_lt_maximalIdeal
@@ -39,7 +40,8 @@ lemma IsLocalRing.maximalIdeal_sq_lt_maximalIdeal
   · simp [lt_iff_le_and_ne, Ideal.pow_le_self]
   · rw [IsLocalRing.isField_iff_maximalIdeal_eq, pow_two]
     refine Iff.not ⟨fun h => ?_, fun h => by simp [h]⟩
-    exact Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator (IsNoetherian.noethe
+    exact Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator (IsNoetherian.noetherian _)
+      h.symm (maximalIdeal_le_jacobson _)
 
 Depends on / 依赖: Ideal.pow_le_self, Iff.not, IsLocalRing, IsLocalRing.isField_iff_maximalIdeal_eq, IsNoetherian, IsNoetherian.noetherian, Submodule, Submodule.eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator, eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator, h.symm, isField_iff_maximalIdeal_eq, lt_iff_le_and_ne, maximalIdeal, maximalIdeal_le_jacobson, noetherian, pow_le_self, pow_two
 -/

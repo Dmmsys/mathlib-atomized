@@ -252,7 +252,7 @@ theorem IsLocalization.mk'
       (eqToIso (Localization.Construction.uniq _ _ (by
         simp only [← Functor.assoc, Localization.Construction.fac, h₂.fac, Functor.comp_id])))
       (eqToIso (h₁.uniq _ _ (by
-        simp only [← Functor.
+        simp only [← Functor.assoc, h₂.fac, Localization.Construction.fac, Functor.comp_id]))) }
 
 中文:
 定理 是Localization.mk'
@@ -262,7 +262,7 @@ theorem IsLocalization.mk'
       (eqToIso (Localization.Construction.uniq _ _ (by
         simp only [← Functor.assoc, Localization.Construction.fac, h₂.fac, Functor.comp_id])))
       (eqToIso (h₁.uniq _ _ (by
-        simp only [← Functor.
+        simp only [← Functor.assoc, h₂.fac, Localization.Construction.fac, Functor.comp_id]))) }
 -/
 theorem IsLocalization.mk' (h₁ : Localization.StrictUniversalPropertyFixedTarget L W D)
     (h₂ : Localization.StrictUniversalPropertyFixedTarget L W W.Localization) :
@@ -541,7 +541,8 @@ definition compEquivalenceFromModelInverseIso
       isoWhiskerRight (qCompEquivalenceFromModelFunctorIso L W).symm _
     _ ≅ W.Q ⋙ (equivalenceFromModel L W).functor ⋙ (equivalenceFromModel L W).inverse :=
       (associator _ _ _)
-    _ ≅ W.Q ⋙ 𝟭 _ := isoWhiskerLeft _ (equivalenceFromModel 
+    _ ≅ W.Q ⋙ 𝟭 _ := isoWhiskerLeft _ (equivalenceFromModel L W).unitIso.symm
+    _ ≅ W.Q := rightUnitor _
 
 中文:
 定义 compEquivalenceFromModelInverseIso
@@ -551,7 +552,8 @@ definition compEquivalenceFromModelInverseIso
       isoWhiskerRight (qCompEquivalenceFromModelFunctorIso L W).symm _
     _ ≅ W.Q ⋙ (equivalenceFromModel L W).functor ⋙ (equivalenceFromModel L W).inverse :=
       (associator _ _ _)
-    _ ≅ W.Q ⋙ 𝟭 _ := isoWhiskerLeft _ (equivalenceFromModel 
+    _ ≅ W.Q ⋙ 𝟭 _ := isoWhiskerLeft _ (equivalenceFromModel L W).unitIso.symm
+    _ ≅ W.Q := rightUnitor _
 
 Depends on / 依赖: associator, equivalenceFromModel, functor, inverse, isoWhiskerLeft, isoWhiskerRight, qCompEquivalenceFromModelFunctorIso, rightUnitor, unitIso, unitIso.symm
 -/
@@ -631,7 +633,15 @@ instance :
       (Construction.whiskeringLeftEquivalence W E).functor ≅ whiskeringLeftFunctor L W E :=
     NatIso.ofComponents (fun F => eqToIso (by
       ext
-      change (W.Q ⋙ Localization.Cons
+      change (W.Q ⋙ Localization.Construction.lift L (inverts L W)) ⋙ F = L ⋙ F
+      rw [Construction.fac])) (fun τ => by
+        ext
+        dsimp [Construction.whiskeringLeftEquivalence, equivalenceFromModel, whiskerLeft]
+        rw [ObjectProperty.eqToHom_hom]; rw [ObjectProperty.eqToHom_hom]; rw [eqToHom_app]; rw [eqToHom_app]; rw [eqToHom_refl]; rw [eqToHom_refl]
+        dsimp
+        rw [comp_id]; rw [id_comp]
+        rfl)
+  exact Functor.isEquivalence_of_iso iso
 
 中文:
 实例 :
@@ -642,7 +652,15 @@ instance :
       (Construction.whiskeringLeftEquivalence W E).functor ≅ whiskeringLeftFunctor L W E :=
     NatIso.ofComponents (fun F => eqToIso (by
       ext
-      change (W.Q ⋙ Localization.Cons
+      change (W.Q ⋙ Localization.Construction.lift L (inverts L W)) ⋙ F = L ⋙ F
+      rw [Construction.fac])) (fun τ => by
+        ext
+        dsimp [Construction.whiskeringLeftEquivalence, equivalenceFromModel, whiskerLeft]
+        rw [ObjectProperty.eqToHom_hom]; rw [ObjectProperty.eqToHom_hom]; rw [eqToHom_app]; rw [eqToHom_app]; rw [eqToHom_refl]; rw [eqToHom_refl]
+        dsimp
+        rw [comp_id]; rw [id_comp]
+        rfl)
+  exact Functor.isEquivalence_of_iso iso
 
 Depends on / 依赖: Construction, Construction.fac, Construction.whiskeringLeftEquivalence, Localization, Localization.Construction.lift, MorphismProperty, MorphismProperty.Localization, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.eqToHom_ho, ObjectProperty.eqToHom_hom, eqToHom_ho, eqToHom_hom, eqToIso, equivalenceFromModel, functor, inverts, ofComponents, whiskerLeft
 -/
@@ -1235,7 +1253,7 @@ theorem of_iso
   let F₂ := Localization.Construction.lift L₂ h
   exact
     { inverts := h
-      isEquivalence := Functor.isEquivalence_of_iso (
+      isEquivalence := Functor.isEquivalence_of_iso (liftNatIso W.Q W L₁ L₂ F₁ F₂ e) }
 
 中文:
 定理 of_iso
@@ -1248,7 +1266,7 @@ theorem of_iso
   let F₂ := Localization.Construction.lift L₂ h
   exact
     { inverts := h
-      isEquivalence := Functor.isEquivalence_of_iso (
+      isEquivalence := Functor.isEquivalence_of_iso (liftNatIso W.Q W L₁ L₂ F₁ F₂ e) }
 
 Depends on / 依赖: Construction, Functor, Functor.isEquivalence_of_iso, IsInvertedBy, Localization, Localization.Construction.lift, Localization.inverts, MorphismProperty, MorphismProperty.IsInvertedBy.iff_of_iso, iff_of_iso, inverts, isEquivalence, isEquivalence_of_iso, liftNatIso
 -/
@@ -1272,7 +1290,11 @@ theorem of_equivalence_target
     rw [← MorphismProperty.IsInvertedBy.iff_of_iso W e]
     exact MorphismProperty.IsInvertedBy.of_comp W L (Localization.inverts L W) eq.functor
   let F₁ := Localization.Construction.lift L (Localization.inverts L W)
-  let F₂ := Localization.Construction.lift L
+  let F₂ := Localization.Construction.lift L' h
+  let e' : F₁ ⋙ eq.functor ≅ F₂ := liftNatIso W.Q W (L ⋙ eq.functor) L' _ _ e
+  exact
+    { inverts := h
+      isEquivalence := Functor.isEquivalence_of_iso e' }
 
 中文:
 定理 of_equivalence_target
@@ -1282,7 +1304,11 @@ theorem of_equivalence_target
     rw [← MorphismProperty.IsInvertedBy.iff_of_iso W e]
     exact MorphismProperty.IsInvertedBy.of_comp W L (Localization.inverts L W) eq.functor
   let F₁ := Localization.Construction.lift L (Localization.inverts L W)
-  let F₂ := Localization.Construction.lift L
+  let F₂ := Localization.Construction.lift L' h
+  let e' : F₁ ⋙ eq.functor ≅ F₂ := liftNatIso W.Q W (L ⋙ eq.functor) L' _ _ e
+  exact
+    { inverts := h
+      isEquivalence := Functor.isEquivalence_of_iso e' }
 
 Depends on / 依赖: Construction, Functor, Functor.isEquivalence_of_iso, IsInvertedBy, Localization, Localization.Construction.lift, Localization.inverts, MorphismProperty, MorphismProperty.IsInvertedBy.iff_of_iso, MorphismProperty.IsInvertedBy.of_comp, W.IsInvertedBy, eq.functor, functor, iff_of_iso, inverts, isEquivalence, isEquivalence_of_iso, liftNatIso, of_comp
 -/
@@ -1389,7 +1415,7 @@ definition compUniqFunctor
       (equivalenceFromModel L₂ W').functor := (associator _ _ _).symm
     _ ≅ W'.Q ⋙ (equivalenceFromModel L₂ W').functor :=
       isoWhiskerRight (compEquivalenceFromModelInverseIso L₁ W') _
-    _ ≅ L₂ := qCompEqu
+    _ ≅ L₂ := qCompEquivalenceFromModelFunctorIso L₂ W'
 
 中文:
 定义 compUniqFunctor
@@ -1399,7 +1425,7 @@ definition compUniqFunctor
       (equivalenceFromModel L₂ W').functor := (associator _ _ _).symm
     _ ≅ W'.Q ⋙ (equivalenceFromModel L₂ W').functor :=
       isoWhiskerRight (compEquivalenceFromModelInverseIso L₁ W') _
-    _ ≅ L₂ := qCompEqu
+    _ ≅ L₂ := qCompEquivalenceFromModelFunctorIso L₂ W'
 
 Depends on / 依赖: associator, compEquivalenceFromModelInverseIso, equivalenceFromModel, functor, inverse, isoWhiskerRight, qCompEquivalenceFromModelFunctorIso
 -/
@@ -1497,7 +1523,10 @@ lemma morphismProperty_eq_top
       (fun _ _ f => (P.arrow_mk_iso_iff
         (((Functor.mapArrowFunctor _ _).mapIso e).app (Arrow.mk f))).2 (h₁ f))
       (fun X Y f hf => by
-        refine (P
+        refine (P.arrow_mk_iso_iff (Arrow.isoMk (e.app _) (e.app _) ?_)).2 (h₂ f hf)
+        dsimp
+        rw [Construction.wInv_eq_isoOfHom_inv]; rw [← cancel_mono (isoOfHom L W f hf).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [isoOfHom_hom]; rw [← NatTrans.naturality]; rw [Functor.comp_map]; rw [← Functor.map_comp_assoc]; rw [isoOfHom_inv_hom_id]; rw [map_id]; rw [id_comp])
+  rw [← P.map_inverseImage_eq_of_isEquivalence (uniq W.Q L W).functor]; rw [hP]; rw [MorphismProperty.map_top_eq_top_of_essSurj_of_full]
 
 中文:
 引理 morphismProperty_eq_top
@@ -1509,7 +1538,10 @@ lemma morphismProperty_eq_top
       (fun _ _ f => (P.arrow_mk_iso_iff
         (((Functor.mapArrowFunctor _ _).mapIso e).app (Arrow.mk f))).2 (h₁ f))
       (fun X Y f hf => by
-        refine (P
+        refine (P.arrow_mk_iso_iff (Arrow.isoMk (e.app _) (e.app _) ?_)).2 (h₂ f hf)
+        dsimp
+        rw [Construction.wInv_eq_isoOfHom_inv]; rw [← cancel_mono (isoOfHom L W f hf).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [isoOfHom_hom]; rw [← NatTrans.naturality]; rw [Functor.comp_map]; rw [← Functor.map_comp_assoc]; rw [isoOfHom_inv_hom_id]; rw [map_id]; rw [id_comp])
+  rw [← P.map_inverseImage_eq_of_isEquivalence (uniq W.Q L W).functor]; rw [hP]; rw [MorphismProperty.map_top_eq_top_of_essSurj_of_full]
 
 Depends on / 依赖: Arrow.isoMk, Arrow.mk, Construction, Construction.morphismProperty_eq_top, Construction.wInv_eq_isoOfHom_inv, Functor, Functor.mapArrowFunctor, Iso.inv_hom_id, P.arrow_mk_iso_iff, P.inverseImage, arrow_mk_iso_iff, cancel_mono, compUniqFunctor, comp_id, e.app, functor, inv_hom_id, inverseImage, isoOfHom, isoOfHom_hom
 -/
@@ -1635,7 +1667,9 @@ lemma areEqualizedByLocalization_iff
     rw [h]
   · intro h
     let e := Localization.compUniqFunctor L W.Q W
-    rw [← NatIso.naturality_1 e f]
+    rw [← NatIso.naturality_1 e f]; rw [← NatIso.naturality_1 e g]
+    dsimp
+    rw [h]
 
 中文:
 引理 areEqualizedByLocalization_iff
@@ -1650,7 +1684,9 @@ lemma areEqualizedByLocalization_iff
     rw [h]
   · intro h
     let e := Localization.compUniqFunctor L W.Q W
-    rw [← NatIso.naturality_1 e f]
+    rw [← NatIso.naturality_1 e f]; rw [← NatIso.naturality_1 e g]
+    dsimp
+    rw [h]
 
 Depends on / 依赖: AreEqualizedByLocalization, Localization, Localization.compUniqFunctor, NatIso, NatIso.naturality_1, compUniqFunctor, naturality_1
 -/

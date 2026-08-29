@@ -139,7 +139,20 @@ definition truncRecEmptyOption
   intro n
   induction n with
   | zero =>
-    have : card PEmpty = card (ULi
+    have : card PEmpty = card (ULift (Fin 0)) := by
+      simp only [card_fin, card_pempty, card_ulift]
+    apply Trunc.bind (truncEquivOfCardEq this)
+    intro e
+    apply Trunc.mk
+    exact of_equiv e h_empty
+  | succ n ih =>
+    have : card (Option (ULift (Fin n))) = card (ULift (Fin n.succ)) := by
+      simp only [card_fin, card_option, card_ulift]
+    apply Trunc.bind (truncEquivOfCardEq this)
+    intro e
+    apply Trunc.map _ ih
+    intro ih
+    exact of_equiv e (h_option ih)
 
 中文:
 定义 truncRecEmptyOption
@@ -154,7 +167,20 @@ definition truncRecEmptyOption
   intro n
   induction n with
   | zero =>
-    have : card PEmpty = card (ULi
+    have : card PEmpty = card (ULift (Fin 0)) := by
+      simp only [card_fin, card_pempty, card_ulift]
+    apply Trunc.bind (truncEquivOfCardEq this)
+    intro e
+    apply Trunc.mk
+    exact of_equiv e h_empty
+  | succ n ih =>
+    have : card (Option (ULift (Fin n))) = card (ULift (Fin n.succ)) := by
+      simp only [card_fin, card_option, card_ulift]
+    apply Trunc.bind (truncEquivOfCardEq this)
+    intro e
+    apply Trunc.map _ ih
+    intro ih
+    exact of_equiv e (h_option ih)
 
 Depends on / 依赖: Equiv.ulift.trans, Fintype, Fintype.card, Fintype.truncEquivFin, PEmpty, Trunc.bind, Trunc.map, Trunc.mk, card_fin, card_pempty, card_ulift, e.symm, h_empty, n.succ, of_equiv, truncEquivFin, truncEquivOfCardEq
 -/
@@ -201,7 +227,10 @@ theorem induction_empty_option
           (forall (h : Fintype α), P α) -> forall (h : Fintype (Option α)), P (Option α) := by
       rintro α hα - Pα hα'
       convert! h_option α (Pα _)
-    @trunc
+    @truncRecEmptyOption (fun α => forall h, @P α h) (@fun α β e hα hβ => @of_equiv α β hβ e (hα _))
+      f_empty h_option α _ (Classical.decEq α)
+  exact p _
+  -- ·
 
 中文:
 定理 induction_empty_option
@@ -213,7 +242,10 @@ theorem induction_empty_option
           (forall (h : Fintype α), P α) -> forall (h : Fintype (Option α)), P (Option α) := by
       rintro α hα - Pα hα'
       convert! h_option α (Pα _)
-    @trunc
+    @truncRecEmptyOption (fun α => forall h, @P α h) (@fun α β e hα hβ => @of_equiv α β hβ e (hα _))
+      f_empty h_option α _ (Classical.decEq α)
+  exact p _
+  -- ·
 
 Depends on / 依赖: Classical, Classical.decEq, DecidableEq, Fintype, convert, f_empty, h_empty, h_option, implicitDefEqProofs, length, of_equiv, truncRecEmptyOption
 -/

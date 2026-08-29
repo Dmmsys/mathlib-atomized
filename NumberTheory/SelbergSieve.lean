@@ -264,7 +264,7 @@ theorem nu_pos_of_dvd_prodPrimes
       have hp_prime : p.Prime := prime_of_mem_primeFactors hpd
       have hp_dvd : p ∣ s.prodPrimes := (dvd_of_mem_primeFactors hpd).trans hd
       exact s.nu_pos_of_prime p hp_prime hp_dvd
-    _ = s.nu d :=
+    _ = s.nu d := prod_primeFactors_nu hd
 
 中文:
 定理 nu_pos_of_dvd_prodPrimes
@@ -278,7 +278,7 @@ theorem nu_pos_of_dvd_prodPrimes
       have hp_prime : p.Prime := prime_of_mem_primeFactors hpd
       have hp_dvd : p ∣ s.prodPrimes := (dvd_of_mem_primeFactors hpd).trans hd
       exact s.nu_pos_of_prime p hp_prime hp_dvd
-    _ = s.nu d :=
+    _ = s.nu d := prod_primeFactors_nu hd
 
 Depends on / 依赖: d.primeFactors, dvd_of_mem_primeFactors, hp_dvd, hp_prime, nu_pos_of_prime, p.Prime, primeFactors, prime_of_mem_primeFactors, prodPrimes, prod_pos, prod_primeFactors_nu, s.nu, s.nu_pos_of_prime, s.prodPrimes
 -/
@@ -331,7 +331,13 @@ theorem nu_lt_one_of_dvd_prodPrimes
     _ < ∏ p in d.primeFactors, 1 := by
       apply prod_lt_prod_of_nonempty
       · intro p hp
-     
+        simp only [mem_primeFactors] at hp
+        apply s.nu_pos_of_prime p hp.1 (hp.2.1.trans hdP)
+      · intro p hpd; rw [mem_primeFactors_of_ne_zero hd_sq.ne_zero] at hpd
+        apply s.nu_lt_one_of_prime p hpd.left (hpd.2.trans hdP)
+      · simp only [nonempty_primeFactors, show 1 < d by lia]
+    _ = 1 := by
+      simp
 
 中文:
 定理 nu_lt_one_of_dvd_prodPrimes
@@ -344,7 +350,13 @@ theorem nu_lt_one_of_dvd_prodPrimes
     _ < ∏ p in d.primeFactors, 1 := by
       apply prod_lt_prod_of_nonempty
       · intro p hp
-     
+        simp only [mem_primeFactors] at hp
+        apply s.nu_pos_of_prime p hp.1 (hp.2.1.trans hdP)
+      · intro p hpd; rw [mem_primeFactors_of_ne_zero hd_sq.ne_zero] at hpd
+        apply s.nu_lt_one_of_prime p hpd.left (hpd.2.trans hdP)
+      · simp only [nonempty_primeFactors, show 1 < d by lia]
+    _ = 1 := by
+      simp
 
 Depends on / 依赖: Squarefree, Squarefree.squarefree_of_dvd, d.primeFactors, hd_sq, hd_sq.ne_zero, hpd.left, mem_primeFactors, mem_primeFactors_of_ne_zero, ne_zero, nonempty, nu_lt_one_of_prime, nu_pos_of_prime, primeFactors, prodPrimes_squarefree, prod_lt_prod_of_nonempty, prod_primeFactors_nu, s.nu, s.nu_lt_one_of_prime, s.nu_pos_of_prime, s.prodPrimes_squarefree
 -/
@@ -535,7 +547,21 @@ theorem siftedSum_le_sum_of_upperMoebius
   calc siftedSum <=
     ∑ n in s.support, s.weights n * ∑ d in (Nat.gcd s.prodPrimes n).divisors, muPlus d := ?caseA
     _ = ∑ n in s.support, ∑ d in divisors s.prodPrimes,
-        if d ∣ n then s.weights n * muPlu
+        if d ∣ n then s.weights n * muPlus d else 0 := ?caseB
+    _ = ∑ d in divisors s.prodPrimes, muPlus d * multSum d := ?caseC
+  case caseA =>
+    rw [siftedSum_eq_sum_support_mul_ite]
+    gcongr with n
+    exact hμ (Nat.gcd s.prodPrimes n)
+  case caseB =>
+    simp_rw [mul_sum, ← sum_filter]
+    congr with n
+    congr
+    · rw [← divisors_filter_dvd_of_dvd prodPrimes_ne_zero (Nat.gcd_dvd_left _ _)]
+      ext x; simp +contextual [dvd_gcd_iff]
+  case caseC =>
+    rw [sum_comm]
+    simp_rw [multSum, ← sum_filter, mul_sum, mul_comm]
 
 中文:
 定理 siftedSum_le_sum_of_upperMoebius
@@ -545,7 +571,21 @@ theorem siftedSum_le_sum_of_upperMoebius
   calc siftedSum <=
     ∑ n in s.support, s.weights n * ∑ d in (Nat.gcd s.prodPrimes n).divisors, muPlus d := ?caseA
     _ = ∑ n in s.support, ∑ d in divisors s.prodPrimes,
-        if d ∣ n then s.weights n * muPlu
+        if d ∣ n then s.weights n * muPlus d else 0 := ?caseB
+    _ = ∑ d in divisors s.prodPrimes, muPlus d * multSum d := ?caseC
+  case caseA =>
+    rw [siftedSum_eq_sum_support_mul_ite]
+    gcongr with n
+    exact hμ (Nat.gcd s.prodPrimes n)
+  case caseB =>
+    simp_rw [mul_sum, ← sum_filter]
+    congr with n
+    congr
+    · rw [← divisors_filter_dvd_of_dvd prodPrimes_ne_zero (Nat.gcd_dvd_left _ _)]
+      ext x; simp +contextual [dvd_gcd_iff]
+  case caseC =>
+    rw [sum_comm]
+    simp_rw [multSum, ← sum_filter, mul_sum, mul_comm]
 
 Depends on / 依赖: Nat.gcd, divisors, muPlus, mul_sum, multSum, n.divisors, prodPrimes, s.prodPrimes, s.support, s.weights, siftedSum, siftedSum_eq_sum_support_mul_ite, simp_rw, support, weights
 -/
@@ -584,7 +624,12 @@ theorem siftedSum_le_mainSum_errSum_of_upperMoebius
     rw [mainSum]; rw [mul_sum]; rw [← sum_add_distrib]
     congr with d
     rw [rem]
-    ri
+    ring
+  _ <= s.totalMass * mainSum muPlus + errSum muPlus := by
+    rw [errSum]
+    gcongr _ + ∑ d in _, ?_ with d
+    rw [← abs_mul]
+    exact le_abs_self (muPlus d * s.rem d)
 
 中文:
 定理 siftedSum_le_mainSum_errSum_of_upperMoebius
@@ -596,7 +641,12 @@ theorem siftedSum_le_mainSum_errSum_of_upperMoebius
     rw [mainSum]; rw [mul_sum]; rw [← sum_add_distrib]
     congr with d
     rw [rem]
-    ri
+    ring
+  _ <= s.totalMass * mainSum muPlus + errSum muPlus := by
+    rw [errSum]
+    gcongr _ + ∑ d in _, ?_ with d
+    rw [← abs_mul]
+    exact le_abs_self (muPlus d * s.rem d)
 -/
 theorem siftedSum_le_mainSum_errSum_of_upperMoebius (muPlus : Nat -> Real) (h : IsUpperMoebius muPlus) :
     s.siftedSum <= s.totalMass * s.mainSum muPlus + s.errSum muPlus := calc
@@ -684,7 +734,10 @@ theorem upperMoebius_lambdaSquared
   congr! 1 with d1 hd1
   rw [sum_comm]
   congr! 1 with d2 hd2
-  rw [s
+  rw [sum_ite_eq_of_mem']; rw [mul_comm]
+  -- Deal with the side goal from `sum_ite_eq_of_mem'`
+  rw [mem_divisors]; rw [Nat.lcm_dvd_iff]
+  exact ⟨⟨dvd_of_mem_divisors hd1, dvd_of_mem_divisors hd2⟩, (mem_divisors.mp hd1).2⟩
 
 中文:
 定理 upperMoebius_lambdaSquared
@@ -700,7 +753,10 @@ theorem upperMoebius_lambdaSquared
   congr! 1 with d1 hd1
   rw [sum_comm]
   congr! 1 with d2 hd2
-  rw [s
+  rw [sum_ite_eq_of_mem']; rw [mul_comm]
+  -- Deal with the side goal from `sum_ite_eq_of_mem'`
+  rw [mem_divisors]; rw [Nat.lcm_dvd_iff]
+  exact ⟨⟨dvd_of_mem_divisors hd1, dvd_of_mem_divisors hd2⟩, (mem_divisors.mp hd1).2⟩
 
 Depends on / 依赖: IsUpperMoebius, divisors, lambdaSquared, le_of_eq, mul_comm, mul_sum, n.divisors, simp_rw, split_ifs, sq_nonneg, sum_comm, sum_divisors_lambda_sq_larger_sum, sum_ite_eq_of_mem, sum_mul, weights
 -/
@@ -789,7 +845,7 @@ refine mul_pos (nu_pos_of_dvd_prodPrimes hl) prod_pos fun p hp => ?_
   rw [inv_pos]
   have hp_prime : p.Prime := prime_of_mem_primeFactors hp
   have hp_dvd : p ∣ s.prodPrimes := (Nat.dvd_of_mem_primeFactors hp).trans hl
-  linarith only [s.nu_lt_one_of_prime p hp_prime hp
+  linarith only [s.nu_lt_one_of_prime p hp_prime hp_dvd]
 
 中文:
 定理 selbergTerms_pos
@@ -801,7 +857,7 @@ refine mul_pos (nu_pos_of_dvd_prodPrimes hl) prod_pos fun p hp => ?_
   rw [inv_pos]
   have hp_prime : p.Prime := prime_of_mem_primeFactors hp
   have hp_dvd : p ∣ s.prodPrimes := (Nat.dvd_of_mem_primeFactors hp).trans hl
-  linarith only [s.nu_lt_one_of_prime p hp_prime hp
+  linarith only [s.nu_lt_one_of_prime p hp_prime hp_dvd]
 
 Depends on / 依赖: Nat.dvd_of_mem_primeFactors, dvd_of_mem_primeFactors, hp_dvd, hp_prime, inv_pos, mul_pos, nu_lt_one_of_prime, nu_pos_of_dvd_prodPrimes, p.Prime, prime_of_mem_primeFactors, prodPrimes, prod_pos, s.nu_lt_one_of_prime, s.prodPrimes, selbergTerms_apply
 -/
@@ -847,7 +903,10 @@ theorem inv_selbergTerms_eq_sum_divisors_moebius_nu
     Finset.prod_inv_distrib, s.nu_mult.prodPrimeFactors_one_sub_of_squarefree _ hl, mul_sum]
   rw [← Nat.sum_divisorsAntidiagonal fun i _ : Nat => (s.nu l)⁻¹ * (↑(μ i) * s.nu i)]
   congr! 1 with ⟨d, e⟩ hd
-  obtain ⟨rfl, -⟩ : d * e = l ∧ _ := by s
+  obtain ⟨rfl, -⟩ : d * e = l ∧ _ := by simpa using hd
+  obtain ⟨hde, -⟩ : d.Coprime e ∧ _ := by simpa only [squarefree_mul_iff] using hl
+  obtain ⟨hd0, he0⟩ : ¬s.nu d = 0 ∧ ¬s.nu e = 0 := by simp_all [s.nu_mult.map_mul_of_coprime hde]
+  simp [field, s.nu_mult.map_mul_of_coprime hde, mul_assoc]
 
 中文:
 定理 inv_selbergTerms_eq_sum_divisors_moebius_nu
@@ -857,7 +916,10 @@ theorem inv_selbergTerms_eq_sum_divisors_moebius_nu
     Finset.prod_inv_distrib, s.nu_mult.prodPrimeFactors_one_sub_of_squarefree _ hl, mul_sum]
   rw [← Nat.sum_divisorsAntidiagonal fun i _ : Nat => (s.nu l)⁻¹ * (↑(μ i) * s.nu i)]
   congr! 1 with ⟨d, e⟩ hd
-  obtain ⟨rfl, -⟩ : d * e = l ∧ _ := by s
+  obtain ⟨rfl, -⟩ : d * e = l ∧ _ := by simpa using hd
+  obtain ⟨hde, -⟩ : d.Coprime e ∧ _ := by simpa only [squarefree_mul_iff] using hl
+  obtain ⟨hd0, he0⟩ : ¬s.nu d = 0 ∧ ¬s.nu e = 0 := by simp_all [s.nu_mult.map_mul_of_coprime hde]
+  simp [field, s.nu_mult.map_mul_of_coprime hde, mul_assoc]
 
 Depends on / 依赖: Coprime, Finset, Finset.prod_inv_distrib, Nat.sum_divisorsAntidiagonal, d.Coprime, inv_inv, map_mul_of_coprime, mul_inv, mul_sum, nu_mul, nu_mult, prodPrimeFactors_one_sub_of_squarefree, prod_inv_distrib, s.nu, s.nu_mul, s.nu_mult.map_mul_of_coprime, s.nu_mult.prodPrimeFactors_one_sub_of_squarefree, selbergTerms_apply, squarefree_mul_iff, sum_divisorsAntidiagonal
 -/
@@ -883,7 +945,11 @@ theorem nu_inv_eq_sum_divisors_inv_selbergTerms
   rw [eq_comm]; rw [← sum_filter]; rw [Nat.divisors_filter_dvd_of_dvd prodPrimes_ne_zero hdP]
 have hd_pos : 0 < d := Nat.pos_of_ne_zero ne_zero_of_dvd_ne_zero prodPrimes_ne_zero hdP
   revert hdP; revert d
-  apply (ArithmeticFunction.sum_eq_iff_sum_mul_moebius_eq_on _ (fun _ _ => Nat.dvd_trans)).m
+  apply (ArithmeticFunction.sum_eq_iff_sum_mul_moebius_eq_on _ (fun _ _ => Nat.dvd_trans)).mpr
+  intro l _ hlP
+  exact inv_selbergTerms_eq_sum_divisors_moebius_nu
+    (Squarefree.squarefree_of_dvd hlP s.prodPrimes_squarefree)
+.symm (ne_of_gt <| nu_pos_of_dvd_prodPrimes hlP)
 
 中文:
 定理 nu_inv_eq_sum_divisors_inv_selbergTerms
@@ -892,7 +958,11 @@ have hd_pos : 0 < d := Nat.pos_of_ne_zero ne_zero_of_dvd_ne_zero prodPrimes_ne_z
   rw [eq_comm]; rw [← sum_filter]; rw [Nat.divisors_filter_dvd_of_dvd prodPrimes_ne_zero hdP]
 have hd_pos : 0 < d := Nat.pos_of_ne_zero ne_zero_of_dvd_ne_zero prodPrimes_ne_zero hdP
   revert hdP; revert d
-  apply (ArithmeticFunction.sum_eq_iff_sum_mul_moebius_eq_on _ (fun _ _ => Nat.dvd_trans)).m
+  apply (ArithmeticFunction.sum_eq_iff_sum_mul_moebius_eq_on _ (fun _ _ => Nat.dvd_trans)).mpr
+  intro l _ hlP
+  exact inv_selbergTerms_eq_sum_divisors_moebius_nu
+    (Squarefree.squarefree_of_dvd hlP s.prodPrimes_squarefree)
+.symm (ne_of_gt <| nu_pos_of_dvd_prodPrimes hlP)
 
 Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.sum_eq_iff_sum_mul_moebius_eq_on, Nat.divisors_filter_dvd_of_dvd, Nat.dvd_trans, Nat.pos_of_ne_zero, Squarefree, Squarefree.squarefree_of_dvd, divisors_filter_dvd_of_dvd, dvd_trans, eq_comm, hd_pos, inv_selbergTerms_eq_sum_divisors_moebius_nu, ne_of_gt, ne_zero_of_dvd_ne_zero, nu_pos_of_dvd_prodPrimes, pos_of_ne_zero, prodPrimes_ne_zero, prodPrimes_squarefree, revert, s.prodPrimes_squarefree
 -/
@@ -919,7 +989,17 @@ theorem sum_divisors_selbergTerms_eq_selbergTerms_mul_nu_inv
         ∑ l in divisors s.prodPrimes, if l ∣ d then s.selbergTerms (d / l) else 0 := by
       simp_rw [← sum_filter, Nat.divisors_filter_dvd_of_dvd prodPrimes_ne_zero hd,
         sum_div_divisors d s.selbergTerms]
-
+    _ = s.selbergTerms d *
+          ∑ l in divisors s.prodPrimes, if l ∣ d then (s.selbergTerms l)⁻¹ else 0 := by
+      simp_rw [← sum_filter, mul_sum]
+      congr! 1 with l hl
+      simp only [mem_filter, mem_divisors, ne_eq] at hl
+      rw [selbergTerms_isMultiplicative.map_div_of_coprime hl.2]
+      · ring
+· apply coprime_of_squarefree_mul
+          (Nat.div_mul_cancel hl.2).symm ▸ (squarefree_of_dvd_prodPrimes hd)
+      · exact (selbergTerms_pos hl.1.1).ne'
+    _ = s.selbergTerms d * (s.nu d)⁻¹ := by rw [← nu_inv_eq_sum_divisors_inv_selbergTerms hd]
 
 中文:
 定理 sum_divisors_selbergTerms_eq_selbergTerms_mul_nu_inv
@@ -930,7 +1010,17 @@ theorem sum_divisors_selbergTerms_eq_selbergTerms_mul_nu_inv
         ∑ l in divisors s.prodPrimes, if l ∣ d then s.selbergTerms (d / l) else 0 := by
       simp_rw [← sum_filter, Nat.divisors_filter_dvd_of_dvd prodPrimes_ne_zero hd,
         sum_div_divisors d s.selbergTerms]
-
+    _ = s.selbergTerms d *
+          ∑ l in divisors s.prodPrimes, if l ∣ d then (s.selbergTerms l)⁻¹ else 0 := by
+      simp_rw [← sum_filter, mul_sum]
+      congr! 1 with l hl
+      simp only [mem_filter, mem_divisors, ne_eq] at hl
+      rw [selbergTerms_isMultiplicative.map_div_of_coprime hl.2]
+      · ring
+· apply coprime_of_squarefree_mul
+          (Nat.div_mul_cancel hl.2).symm ▸ (squarefree_of_dvd_prodPrimes hd)
+      · exact (selbergTerms_pos hl.1.1).ne'
+    _ = s.selbergTerms d * (s.nu d)⁻¹ := by rw [← nu_inv_eq_sum_divisors_inv_selbergTerms hd]
 
 Depends on / 依赖: Nat.divisors_filter_dvd_of_dvd, divisors, divisors_filter_dvd_of_dvd, mem_divisors, mem_filter, mul_sum, ne_eq, prodPrimes, prodPrimes_ne_zero, s.prodPrimes, s.selbergTerms, selbergTerms, selbergTerms_isMultipl, simp_rw, sum_div_divisors, sum_filter
 -/
@@ -969,7 +1059,21 @@ theorem mainSum_lambdaSquared_eq_sum_sum_mul
       = ∑ d in divisors s.prodPrimes, ∑ d1 in divisors d, ∑ d2 in divisors d,
           if d = d1.lcm d2 then w d1 * w d2 * s.nu d else 0 := ?caseA
     _ = ∑ d in divisors s.prodPrimes, ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes,
-          if d =
+          if d = d1.lcm d2 then w d1 * w d2 * s.nu d else 0 := sum_divisors_lambda_sq_larger_sum _ _
+    _ = ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes,
+          s.nu d1 * w d1 * s.nu d2 * w d2 * (s.nu (d1.gcd d2))⁻¹ := ?caseB
+  case caseA =>
+    simp [mainSum, lambdaSquared, sum_mul]
+  case caseB =>
+    rw [sum_comm]; rw [sum_congr rfl]; intro d1 hd1
+    rw [sum_comm]; rw [sum_congr rfl]; intro d2 hd2
+    have h : d1.lcm d2 ∣ s.prodPrimes :=
+      Nat.lcm_dvd_iff.mpr ⟨dvd_of_mem_divisors hd1, dvd_of_mem_divisors hd2⟩
+    rw [sum_ite_eq_of_mem' (divisors s.prodPrimes) (d1.lcm d2) _
+      (mem_divisors.mpr ⟨h]; rw [prodPrimes_ne_zero⟩)]; rw [s.nu_mult.map_lcm]
+    · ring
+    refine (nu_pos_of_dvd_prodPrimes ?_).ne'
+    exact (Nat.gcd_dvd_left d1 d2).trans (dvd_of_mem_divisors hd1)
 
 中文:
 定理 mainSum_lambdaSquared_eq_sum_sum_mul
@@ -979,7 +1083,21 @@ theorem mainSum_lambdaSquared_eq_sum_sum_mul
       = ∑ d in divisors s.prodPrimes, ∑ d1 in divisors d, ∑ d2 in divisors d,
           if d = d1.lcm d2 then w d1 * w d2 * s.nu d else 0 := ?caseA
     _ = ∑ d in divisors s.prodPrimes, ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes,
-          if d =
+          if d = d1.lcm d2 then w d1 * w d2 * s.nu d else 0 := sum_divisors_lambda_sq_larger_sum _ _
+    _ = ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes,
+          s.nu d1 * w d1 * s.nu d2 * w d2 * (s.nu (d1.gcd d2))⁻¹ := ?caseB
+  case caseA =>
+    simp [mainSum, lambdaSquared, sum_mul]
+  case caseB =>
+    rw [sum_comm]; rw [sum_congr rfl]; intro d1 hd1
+    rw [sum_comm]; rw [sum_congr rfl]; intro d2 hd2
+    have h : d1.lcm d2 ∣ s.prodPrimes :=
+      Nat.lcm_dvd_iff.mpr ⟨dvd_of_mem_divisors hd1, dvd_of_mem_divisors hd2⟩
+    rw [sum_ite_eq_of_mem' (divisors s.prodPrimes) (d1.lcm d2) _
+      (mem_divisors.mpr ⟨h]; rw [prodPrimes_ne_zero⟩)]; rw [s.nu_mult.map_lcm]
+    · ring
+    refine (nu_pos_of_dvd_prodPrimes ?_).ne'
+    exact (Nat.gcd_dvd_left d1 d2).trans (dvd_of_mem_divisors hd1)
 
 Depends on / 依赖: d1.gcd, d1.lcm, divisors, lambdaSquared, mainSum, prodPrimes, s.nu, s.prodPrimes, sum_divisors_lambda_sq_larger_sum
 -/
@@ -1018,7 +1136,25 @@ theorem mainSum_lambdaSquared_eq_sum_mul_sum_sq
     ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes, (∑ l in divisors s.prodPrimes,
       if l ∣ d1.gcd d2 then (s.selbergTerms l)⁻¹ * (s.nu d1 * w d1) * (s.nu d2 * w d2) else 0)
         := ?caseA
-    _ = ∑ l in divisors s.prodPrimes, ∑ d1 in diviso
+    _ = ∑ l in divisors s.prodPrimes, ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes,
+      if l ∣ Nat.gcd d1 d2 then (s.selbergTerms l)⁻¹ * (s.nu d1 * w d1) * (s.nu d2 * w d2) else 0
+        := ?caseB
+    _ = ∑ l in divisors s.prodPrimes,
+      (s.selbergTerms l)⁻¹ * (∑ d in divisors s.prodPrimes, if l ∣ d then s.nu d * w d else 0) ^ 2
+        := ?caseC
+  case caseA =>
+    rw [mainSum_lambdaSquared_eq_sum_sum_mul w]
+    congr! 2 with d1 hd1 d2 hd2
+    have hgcd_dvd : d1.gcd d2 ∣ s.prodPrimes :=
+      (Nat.gcd_dvd_left d1 d2).trans (dvd_of_mem_divisors hd1)
+    simp_rw [nu_inv_eq_sum_divisors_inv_selbergTerms hgcd_dvd, ← sum_filter, mul_sum]
+    congr with l
+    ring
+  case caseB =>
+    rw [eq_comm]; rw [sum_comm]; rw [sum_congr rfl fun _ _ => sum_comm]
+  case caseC =>
+    simp_rw [← sum_filter, sq, sum_mul, mul_sum, sum_filter, ite_sum_zero,
+      ← ite_and, dvd_gcd_iff, mul_assoc]
 
 中文:
 定理 mainSum_lambdaSquared_eq_sum_mul_sum_sq
@@ -1028,7 +1164,25 @@ theorem mainSum_lambdaSquared_eq_sum_mul_sum_sq
     ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes, (∑ l in divisors s.prodPrimes,
       if l ∣ d1.gcd d2 then (s.selbergTerms l)⁻¹ * (s.nu d1 * w d1) * (s.nu d2 * w d2) else 0)
         := ?caseA
-    _ = ∑ l in divisors s.prodPrimes, ∑ d1 in diviso
+    _ = ∑ l in divisors s.prodPrimes, ∑ d1 in divisors s.prodPrimes, ∑ d2 in divisors s.prodPrimes,
+      if l ∣ Nat.gcd d1 d2 then (s.selbergTerms l)⁻¹ * (s.nu d1 * w d1) * (s.nu d2 * w d2) else 0
+        := ?caseB
+    _ = ∑ l in divisors s.prodPrimes,
+      (s.selbergTerms l)⁻¹ * (∑ d in divisors s.prodPrimes, if l ∣ d then s.nu d * w d else 0) ^ 2
+        := ?caseC
+  case caseA =>
+    rw [mainSum_lambdaSquared_eq_sum_sum_mul w]
+    congr! 2 with d1 hd1 d2 hd2
+    have hgcd_dvd : d1.gcd d2 ∣ s.prodPrimes :=
+      (Nat.gcd_dvd_left d1 d2).trans (dvd_of_mem_divisors hd1)
+    simp_rw [nu_inv_eq_sum_divisors_inv_selbergTerms hgcd_dvd, ← sum_filter, mul_sum]
+    congr with l
+    ring
+  case caseB =>
+    rw [eq_comm]; rw [sum_comm]; rw [sum_congr rfl fun _ _ => sum_comm]
+  case caseC =>
+    simp_rw [← sum_filter, sq, sum_mul, mul_sum, sum_filter, ite_sum_zero,
+      ← ite_and, dvd_gcd_iff, mul_assoc]
 
 Depends on / 依赖: Nat.gcd, d1.gcd, divisors, lambdaSquared, mainSum, prodPrimes, s.nu, s.prodPrimes, s.selbergTerms, selbergTerms
 -/

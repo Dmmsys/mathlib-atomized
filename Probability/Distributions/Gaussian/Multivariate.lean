@@ -147,7 +147,13 @@ lemma variance_dual_stdGaussian
   proof: by
   rw [stdGaussian]; rw [variance_map L.continuous.aemeasurable (Measurable.aemeasurable (by fun_prop))]
   have : L ∘ (fun x : Fin (Module.finrank Real E) -> Real => ∑ i, x i • stdOrthonormalBasis Real E i) =
-      ∑ i, (fun x : Fin (Module.finrank Real E) -> Real => L (stdOrthonormalBasis Real E 
+      ∑ i, (fun x : Fin (Module.finrank Real E) -> Real => L (stdOrthonormalBasis Real E i) * x i) := by
+    ext x; simp [mul_comm]
+  rw [this]; rw [variance_sum_pi]
+  · change ∑ i, Var[fun x => _ * (id x); gaussianReal 0 1] = _
+    simp_rw [variance_const_mul, variance_id_gaussianReal, (stdOrthonormalBasis Real E).norm_dual]
+    simp
+  · exact fun i => IsGaussian.memLp_two_id.const_mul _
 
 中文:
 引理 variance_dual_stdGaussian
@@ -155,7 +161,13 @@ lemma variance_dual_stdGaussian
   证明: by
   rw [stdGaussian]; rw [variance_map L.continuous.aemeasurable (Measurable.aemeasurable (by fun_prop))]
   have : L ∘ (fun x : Fin (Module.finrank Real E) -> Real => ∑ i, x i • stdOrthonormalBasis Real E i) =
-      ∑ i, (fun x : Fin (Module.finrank Real E) -> Real => L (stdOrthonormalBasis Real E 
+      ∑ i, (fun x : Fin (Module.finrank Real E) -> Real => L (stdOrthonormalBasis Real E i) * x i) := by
+    ext x; simp [mul_comm]
+  rw [this]; rw [variance_sum_pi]
+  · change ∑ i, Var[fun x => _ * (id x); gaussianReal 0 1] = _
+    simp_rw [variance_const_mul, variance_id_gaussianReal, (stdOrthonormalBasis Real E).norm_dual]
+    simp
+  · exact fun i => IsGaussian.memLp_two_id.const_mul _
 
 Depends on / 依赖: L.continuous.aemeasurable, Measurable, Measurable.aemeasurable, Module, Module.finrank, aemeasurable, continuous, finrank, fun_prop, gaussianReal, mul_comm, simp_rw, stdGaussian, stdOrthonormalBasis, variance_const_mul, variance_id_gaussianReal, variance_map, variance_sum_pi
 -/
@@ -181,7 +193,13 @@ lemma charFun_stdGaussian
   rw [charFun_apply]; rw [stdGaussian]; rw [integral_map (Measurable.aemeasurable (by fun_prop))
     (Measurable.aestronglyMeasurable (by fun_prop))]
   simp_rw [sum_inner, ofReal_sum, Finset.sum_mul, exp_sum,
-    integral_fintype_prod_eq_prod (f := fun i x => exp (⟪x • stdOrthonormalBasis Real E 
+    integral_fintype_prod_eq_prod (f := fun i x => exp (⟪x • stdOrthonormalBasis Real E i, t⟫ * I)),
+    real_inner_smul_left, mul_comm _ (⟪_, _⟫), ofReal_mul, ← charFun_apply_real,
+    charFun_gaussianReal]
+  simp only [ofReal_zero, mul_zero, zero_mul, NNReal.coe_one, ofReal_one, one_mul,
+    zero_sub]
+  simp_rw [← exp_sum, Finset.sum_neg_distrib, ← Finset.sum_div, ← ofReal_pow,
+    ← ofReal_sum, (stdOrthonormalBasis Real E).sum_sq_inner_right, neg_div]
 
 中文:
 引理 charFun_stdGaussian
@@ -190,7 +208,13 @@ lemma charFun_stdGaussian
   rw [charFun_apply]; rw [stdGaussian]; rw [integral_map (Measurable.aemeasurable (by fun_prop))
     (Measurable.aestronglyMeasurable (by fun_prop))]
   simp_rw [sum_inner, ofReal_sum, Finset.sum_mul, exp_sum,
-    integral_fintype_prod_eq_prod (f := fun i x => exp (⟪x • stdOrthonormalBasis Real E 
+    integral_fintype_prod_eq_prod (f := fun i x => exp (⟪x • stdOrthonormalBasis Real E i, t⟫ * I)),
+    real_inner_smul_left, mul_comm _ (⟪_, _⟫), ofReal_mul, ← charFun_apply_real,
+    charFun_gaussianReal]
+  simp only [ofReal_zero, mul_zero, zero_mul, NNReal.coe_one, ofReal_one, one_mul,
+    zero_sub]
+  simp_rw [← exp_sum, Finset.sum_neg_distrib, ← Finset.sum_div, ← ofReal_pow,
+    ← ofReal_sum, (stdOrthonormalBasis Real E).sum_sq_inner_right, neg_div]
 
 Depends on / 依赖: Finset, Finset.sum_mul, Measurable, Measurable.aemeasurable, Measurable.aestronglyMeasurable, NNReal, NNReal.coe_one, aemeasurable, aestronglyMeasurable, charFun_apply, charFun_apply_real, charFun_gaussianReal, coe_one, exp_sum, fun_prop, integral_fintype_prod_eq_prod, integral_map, mul_comm, mul_zero, ofReal_mul
 -/
@@ -586,7 +610,9 @@ lemma covarianceBilin_multivariateGaussian
   have h : (fun x => μ + x) ∘ ((toEuclideanCLM (𝕜 := Real) (CFC.sqrt S))) =
     (fun x => μ + (toEuclideanCLM (𝕜 := Real) (CFC.sqrt S)) x) := rfl
   simp only [multivariateGaussian]
-  rw [← h]; rw [← Measure.map_map (measurable_const_add μ) (by fun_prop)]; rw [covarianceBilin_map_const_add]; rw [c
+  rw [← h]; rw [← Measure.map_map (measurable_const_add μ) (by fun_prop)]; rw [covarianceBilin_map_const_add]; rw [covarianceBilin_map]; rw [covarianceBilin_stdGaussian]; rw [innerSL_apply_apply]; rw [ContinuousLinearMap.adjoint_inner_left]; rw [IsSelfAdjoint.adjoint_eq]; rw [← ContinuousLinearMap.comp_apply]; rw [← ContinuousLinearMap.mul_def]; rw [← map_mul]; rw [CFC.sqrt_mul_sqrt_self _ hS.nonneg]; rw [inner_toEuclideanCLM]
+  · exact (CFC.sqrt_nonneg S).isSelfAdjoint.map _
+  · exact IsGaussian.memLp_two_id
 
 中文:
 引理 covarianceBilin_multivariateGaussian
@@ -595,7 +621,9 @@ lemma covarianceBilin_multivariateGaussian
   have h : (fun x => μ + x) ∘ ((toEuclideanCLM (𝕜 := Real) (CFC.sqrt S))) =
     (fun x => μ + (toEuclideanCLM (𝕜 := Real) (CFC.sqrt S)) x) := rfl
   simp only [multivariateGaussian]
-  rw [← h]; rw [← Measure.map_map (measurable_const_add μ) (by fun_prop)]; rw [covarianceBilin_map_const_add]; rw [c
+  rw [← h]; rw [← Measure.map_map (measurable_const_add μ) (by fun_prop)]; rw [covarianceBilin_map_const_add]; rw [covarianceBilin_map]; rw [covarianceBilin_stdGaussian]; rw [innerSL_apply_apply]; rw [ContinuousLinearMap.adjoint_inner_left]; rw [IsSelfAdjoint.adjoint_eq]; rw [← ContinuousLinearMap.comp_apply]; rw [← ContinuousLinearMap.mul_def]; rw [← map_mul]; rw [CFC.sqrt_mul_sqrt_self _ hS.nonneg]; rw [inner_toEuclideanCLM]
+  · exact (CFC.sqrt_nonneg S).isSelfAdjoint.map _
+  · exact IsGaussian.memLp_two_id
 
 Depends on / 依赖: CFC.sqrt, Continuo, ContinuousLinearMap, ContinuousLinearMap.adjoint_inner_left, ContinuousLinearMap.comp_apply, IsSelfAdjoint, IsSelfAdjoint.adjoint_eq, Measure, Measure.map_map, adjoint_eq, adjoint_inner_left, comp_apply, covarianceBilin_map, covarianceBilin_map_const_add, covarianceBilin_stdGaussian, fun_prop, innerSL_apply_apply, map_map, measurable_const_add, multivariateGaussian
 -/
@@ -732,7 +760,16 @@ lemma measurePreserving_restrict₂_multivariateGaussian
       rw [ContinuousLinearMap.integral_id_map]; rw [integral_id_multivariateGaussian]
       exact IsGaussian.integrable_id
     rw [← ContinuousLinearMap.toBilinForm_inj]
-    refine LinearMap
+    refine LinearMap.BilinForm.ext_basis (EuclideanSpace.basisFun J Real).toBasis fun i j => ?_
+    rw [ContinuousLinearMap.toBilinForm_apply]; rw [ContinuousLinearMap.toBilinForm_apply]; rw [covarianceBilin_apply_eq_cov]; rw [covariance_map]
+    · have (i : J) : (fun u => ⟪(EuclideanSpace.basisFun J Real).toBasis i, u⟫) ∘
+          EuclideanSpace.restrict₂ hJI = fun u => u ⟨i.1, hJI i.2⟩ := by ext; simp [PiLp.inner_apply]
+      simp_rw [this, covariance_eval_multivariateGaussian hS,
+        covarianceBilin_multivariateGaussian (hS.submatrix _)]
+      simp
+    any_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+    · fun_prop
+    · exact IsGaussian.memLp_two_id
 
 中文:
 引理 measurePreserving_restrict₂_multivariateGaussian
@@ -744,7 +781,16 @@ lemma measurePreserving_restrict₂_multivariateGaussian
       rw [ContinuousLinearMap.integral_id_map]; rw [integral_id_multivariateGaussian]
       exact IsGaussian.integrable_id
     rw [← ContinuousLinearMap.toBilinForm_inj]
-    refine LinearMap
+    refine LinearMap.BilinForm.ext_basis (EuclideanSpace.basisFun J Real).toBasis fun i j => ?_
+    rw [ContinuousLinearMap.toBilinForm_apply]; rw [ContinuousLinearMap.toBilinForm_apply]; rw [covarianceBilin_apply_eq_cov]; rw [covariance_map]
+    · have (i : J) : (fun u => ⟪(EuclideanSpace.basisFun J Real).toBasis i, u⟫) ∘
+          EuclideanSpace.restrict₂ hJI = fun u => u ⟨i.1, hJI i.2⟩ := by ext; simp [PiLp.inner_apply]
+      simp_rw [this, covariance_eval_multivariateGaussian hS,
+        covarianceBilin_multivariateGaussian (hS.submatrix _)]
+      simp
+    any_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+    · fun_prop
+    · exact IsGaussian.memLp_two_id
 
 Depends on / 依赖: BilinForm, ContinuousLinearMap, ContinuousLinearMap.integral_id_map, ContinuousLinearMap.toBilinForm_apply, ContinuousLinearMap.toBilinForm_inj, EuclideanSpace, EuclideanSpace.basisFun, IsGaussian, IsGaussian.ext, IsGaussian.integrable_id, LinearMap, LinearMap.BilinForm.ext_basis, basisFun, covarianceBilin_apply_eq_cov, covariance_map, ext_basis, fun_prop, id_eq, integrable_id, integral_id_map
 -/

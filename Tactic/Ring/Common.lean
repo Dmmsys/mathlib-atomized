@@ -926,7 +926,14 @@ definition evalAddOverlap
     | .none =>
       assumeInstancesCommute
 pure .nonzero ⟨_, .const zc, q($pf)⟩
-  
+  | .mul (x := a₁) (e := a₂) va₁ va₂ va₃, .mul (x := b₁) (e := b₂) vb₁ vb₂ vb₃ => do
+    guard (va₁.eq rcNat rc vb₁ && va₂.toExProd.2.eq rcNat rcNat vb₂.toExProd.2)
+have : a₁ =Q b₁ := ⟨⟩; have : a₂ =Q b₂ := ⟨⟩
+    match ← evalAddOverlap va₃ vb₃ with
+| .zero p => pure .zero q(add_overlap_pf_zero $a₁ $a₂ $p)
+    | .nonzero ⟨_, vc, p⟩ =>
+pure .nonzero ⟨_, .mul va₁ va₂ vc, q(add_overlap_pf $a₁ $a₂ $p)⟩
+  | _, _ => OptionT.fail
 
 中文:
 定义 evalAddOverlap
@@ -941,7 +948,14 @@ pure .nonzero ⟨_, .const zc, q($pf)⟩
     | .none =>
       assumeInstancesCommute
 pure .nonzero ⟨_, .const zc, q($pf)⟩
-  
+  | .mul (x := a₁) (e := a₂) va₁ va₂ va₃, .mul (x := b₁) (e := b₂) vb₁ vb₂ vb₃ => do
+    guard (va₁.eq rcNat rc vb₁ && va₂.toExProd.2.eq rcNat rcNat vb₂.toExProd.2)
+have : a₁ =Q b₁ := ⟨⟩; have : a₂ =Q b₂ := ⟨⟩
+    match ← evalAddOverlap va₃ vb₃ with
+| .zero p => pure .zero q(add_overlap_pf_zero $a₁ $a₂ $p)
+    | .nonzero ⟨_, vc, p⟩ =>
+pure .nonzero ⟨_, .mul va₁ va₂ vc, q(add_overlap_pf $a₁ $a₂ $p)⟩
+  | _, _ => OptionT.fail
 -/
 def evalAddOverlap {a b : Q($α)} (va : ExProd bt sα a) (vb : ExProd bt sα b) :
     OptionT MetaM (Overlap bt sα q($a + $b)) := do
@@ -1087,7 +1101,21 @@ definition evalAdd
   | .zero, vb => do return ⟨b, vb, q(add_pf_zero_add $b)⟩
   | va, .zero => do return ⟨a, va, q(add_pf_add_zero $a)⟩
   | .add (a := a₁) (b := _a₂) va₁ va₂, .add (a := b₁) (b := _b₂) vb₁ vb₂ => do
-    have va := .add va₁ va₂; have vb := 
+    have va := .add va₁ va₂; have vb := .add vb₁ vb₂ -- FIXME: why does `va@(...)` fail?
+    match ← (evalAddOverlap rc rcNat va₁ vb₁).run with
+    | some (.nonzero ⟨_, vc₁, pc₁⟩) =>
+      let ⟨_, vc₂, pc₂⟩ ← evalAdd va₂ vb₂
+      return ⟨_, .add vc₁ vc₂, q(add_pf_add_overlap $pc₁ $pc₂)⟩
+    | some (.zero pc₁) =>
+      let ⟨c₂, vc₂, pc₂⟩ ← evalAdd va₂ vb₂
+      return ⟨c₂, vc₂, q(add_pf_add_overlap_zero $pc₁ $pc₂)⟩
+    | none =>
+      if let .lt := va₁.cmp rcNat rc vb₁ then
+        let ⟨_c, vc, pc⟩ ← evalAdd va₂ vb
+        return ⟨_, .add va₁ vc, q(add_pf_add_lt $a₁ $pc)⟩
+      else
+        let ⟨_c, vc, pc⟩ ← evalAdd va vb₂
+        return ⟨_, .add vb₁ vc, q(add_pf_add_gt $b₁ $pc)⟩
 
 中文:
 定义 evalAdd
@@ -1097,7 +1125,21 @@ definition evalAdd
   | .zero, vb => do return ⟨b, vb, q(add_pf_zero_add $b)⟩
   | va, .zero => do return ⟨a, va, q(add_pf_add_zero $a)⟩
   | .add (a := a₁) (b := _a₂) va₁ va₂, .add (a := b₁) (b := _b₂) vb₁ vb₂ => do
-    have va := .add va₁ va₂; have vb := 
+    have va := .add va₁ va₂; have vb := .add vb₁ vb₂ -- FIXME: why does `va@(...)` fail?
+    match ← (evalAddOverlap rc rcNat va₁ vb₁).run with
+    | some (.nonzero ⟨_, vc₁, pc₁⟩) =>
+      let ⟨_, vc₂, pc₂⟩ ← evalAdd va₂ vb₂
+      return ⟨_, .add vc₁ vc₂, q(add_pf_add_overlap $pc₁ $pc₂)⟩
+    | some (.zero pc₁) =>
+      let ⟨c₂, vc₂, pc₂⟩ ← evalAdd va₂ vb₂
+      return ⟨c₂, vc₂, q(add_pf_add_overlap_zero $pc₁ $pc₂)⟩
+    | none =>
+      if let .lt := va₁.cmp rcNat rc vb₁ then
+        let ⟨_c, vc, pc⟩ ← evalAdd va₂ vb
+        return ⟨_, .add va₁ vc, q(add_pf_add_lt $a₁ $pc)⟩
+      else
+        let ⟨_c, vc, pc⟩ ← evalAdd va vb₂
+        return ⟨_, .add vb₁ vc, q(add_pf_add_gt $b₁ $pc)⟩
 -/
 partial def evalAdd {a b : Q($α)} (va : ExSum bt sα a) (vb : ExSum bt sα b) :
 MetaM Result (ExSum bt sα) q($a + $b) :=
@@ -1234,7 +1276,29 @@ definition evalMulProd
     return ⟨_, .const zc, q($pf)⟩
   | .mul (x := a₁) (e := a₂) va₁ va₂ va₃, vb@(.const _) => do
     let ⟨_, vc, pc⟩ ← evalMulProd va₃ vb
-    r
+    return ⟨_, .mul va₁ va₂ vc, q(mul_pf_left $a₁ $a₂ $pc)⟩
+  | va@(.const _), .mul (x := b₁) (e := b₂) vb₁ vb₂ vb₃ => do
+    let ⟨_, vc, pc⟩ ← evalMulProd va vb₃
+    return ⟨_, .mul vb₁ vb₂ vc, q(mul_pf_right $b₁ $b₂ $pc)⟩
+  | .mul (x := xa) (e := ea) vxa vea va₂, .mul (x := xb) (e := eb) vxb veb vb₂ => do
+    have va := .mul vxa vea va₂; have vb := .mul vxb veb vb₂ -- FIXME: why does `va@(...)` fail?
+    let ⟨ea', vea'⟩ := vea.toExProd
+    let ⟨eb', veb'⟩ := veb.toExProd
+    if vxa.eq rcNat rc vxb then
+have : xa =Q xb := ⟨⟩
+      if let some (.nonzero ⟨ec', vec', pec'⟩) ← (evalAddOverlap rcNat rcNat vea' veb').run then
+        let ⟨_, vc, pc⟩ ← evalMulProd va₂ vb₂
+        let ⟨ec, vec⟩ := vec'.toExProdNat
+have : ea =Q ea' := ⟨⟩
+have : eb =Q eb' := ⟨⟩
+have : ec =Q ec' := ⟨⟩
+        return ⟨_, .mul vxa vec vc, q(mul_pp_pf_overlap $xa $pec' $pc)⟩
+    if let .lt := (vxa.cmp rcNat rc vxb).then (vea'.cmp rcNat rcNat veb') then
+      let ⟨_, vc, pc⟩ ← evalMulProd va₂ vb
+      return ⟨_, .mul vxa vea vc, q(mul_pf_left $xa $ea $pc)⟩
+    else
+      let ⟨_, vc, pc⟩ ← evalMulProd va vb₂
+      return ⟨_, .mul vxb veb vc, q(mul_pf_right $xb $eb $pc)⟩
 
 中文:
 定义 evalMulProd
@@ -1247,7 +1311,29 @@ definition evalMulProd
     return ⟨_, .const zc, q($pf)⟩
   | .mul (x := a₁) (e := a₂) va₁ va₂ va₃, vb@(.const _) => do
     let ⟨_, vc, pc⟩ ← evalMulProd va₃ vb
-    r
+    return ⟨_, .mul va₁ va₂ vc, q(mul_pf_left $a₁ $a₂ $pc)⟩
+  | va@(.const _), .mul (x := b₁) (e := b₂) vb₁ vb₂ vb₃ => do
+    let ⟨_, vc, pc⟩ ← evalMulProd va vb₃
+    return ⟨_, .mul vb₁ vb₂ vc, q(mul_pf_right $b₁ $b₂ $pc)⟩
+  | .mul (x := xa) (e := ea) vxa vea va₂, .mul (x := xb) (e := eb) vxb veb vb₂ => do
+    have va := .mul vxa vea va₂; have vb := .mul vxb veb vb₂ -- FIXME: why does `va@(...)` fail?
+    let ⟨ea', vea'⟩ := vea.toExProd
+    let ⟨eb', veb'⟩ := veb.toExProd
+    if vxa.eq rcNat rc vxb then
+have : xa =Q xb := ⟨⟩
+      if let some (.nonzero ⟨ec', vec', pec'⟩) ← (evalAddOverlap rcNat rcNat vea' veb').run then
+        let ⟨_, vc, pc⟩ ← evalMulProd va₂ vb₂
+        let ⟨ec, vec⟩ := vec'.toExProdNat
+have : ea =Q ea' := ⟨⟩
+have : eb =Q eb' := ⟨⟩
+have : ec =Q ec' := ⟨⟩
+        return ⟨_, .mul vxa vec vc, q(mul_pp_pf_overlap $xa $pec' $pc)⟩
+    if let .lt := (vxa.cmp rcNat rc vxb).then (vea'.cmp rcNat rcNat veb') then
+      let ⟨_, vc, pc⟩ ← evalMulProd va₂ vb
+      return ⟨_, .mul vxa vea vc, q(mul_pf_left $xa $ea $pc)⟩
+    else
+      let ⟨_, vc, pc⟩ ← evalMulProd va vb₂
+      return ⟨_, .mul vxb veb vc, q(mul_pf_right $xb $eb $pc)⟩
 -/
 partial def evalMulProd {a b : Q($α)} (va : ExProd bt sα a) (vb : ExProd bt sα b) :
 MetaM Result (ExProd bt sα) q($a * $b) :=
@@ -1477,7 +1563,7 @@ definition evalNegProd
   | .mul (x := a₁) (e := a₂) va₁ va₂ va₃ => do
     let ⟨_, vb, pb⟩ ← evalNegProd rα va₃
     assumeInstancesCommute
-    return ⟨_, .mul va₁ va₂ vb,
+    return ⟨_, .mul va₁ va₂ vb, q(neg_mul $a₁ $a₂ $pb)⟩
 
 中文:
 定义 evalNegProd
@@ -1490,7 +1576,7 @@ definition evalNegProd
   | .mul (x := a₁) (e := a₂) va₁ va₂ va₃ => do
     let ⟨_, vb, pb⟩ ← evalNegProd rα va₃
     assumeInstancesCommute
-    return ⟨_, .mul va₁ va₂ vb,
+    return ⟨_, .mul va₁ va₂ vb, q(neg_mul $a₁ $a₂ $pb)⟩
 
 Depends on / 依赖: Lean.Core.checkSystem, assumeInstancesCommute, checkSystem, decl_name, evalNegProd, neg_mul, rc.neg, return, toString
 -/
@@ -1840,7 +1926,8 @@ haveI p : Nat.ble 1 lit =Q true := ⟨⟩
     some q(const_pos $lit $p)
   | .mul (e := ea₁) vxa₁ _ va₂ => do
     let pa₁ ← vxa₁.evalPos
-    l
+    let pa₂ ← va₂.evalPos
+    some q(mul_exp_pos $ea₁ $pa₁ $pa₂)
 
 中文:
 定义 ExProd自然数.evalPos
@@ -1854,7 +1941,8 @@ haveI p : Nat.ble 1 lit =Q true := ⟨⟩
     some q(const_pos $lit $p)
   | .mul (e := ea₁) vxa₁ _ va₂ => do
     let pa₁ ← vxa₁.evalPos
-    l
+    let pa₂ ← va₂.evalPos
+    some q(mul_exp_pos $ea₁ $pa₁ $pa₂)
 -/
 partial def ExProdNat.evalPos {a : Q(Nat)} (va : ExProdNat a) : Option Q(0 < $a) :=
   match va with
@@ -1979,7 +2067,13 @@ have : n =Q 1 := ⟨⟩
 have : n =Q 2 * m := ⟨⟩
       let ⟨_, vb, pb⟩ ← evalPowNat va m
       let ⟨_, vc, pc⟩ ← evalMul rc rcNat vb vb
-
+      return ⟨_, vc, q(pow_bit0 $pb $pc)⟩
+    else
+have : n =Q 2 * m + 1 := ⟨⟩
+      let ⟨_, vb, pb⟩ ← evalPowNat va m
+      let ⟨_, vc, pc⟩ ← evalMul rc rcNat vb vb
+      let ⟨_, vd, pd⟩ ← evalMul rc rcNat vc va
+      return ⟨_, vd, q(pow_bit1 $pb $pc $pd)⟩
 
 中文:
 定义 evalPow自然数
@@ -1996,7 +2090,13 @@ have : n =Q 1 := ⟨⟩
 have : n =Q 2 * m := ⟨⟩
       let ⟨_, vb, pb⟩ ← evalPowNat va m
       let ⟨_, vc, pc⟩ ← evalMul rc rcNat vb vb
-
+      return ⟨_, vc, q(pow_bit0 $pb $pc)⟩
+    else
+have : n =Q 2 * m + 1 := ⟨⟩
+      let ⟨_, vb, pb⟩ ← evalPowNat va m
+      let ⟨_, vc, pc⟩ ← evalMul rc rcNat vb vb
+      let ⟨_, vd, pd⟩ ← evalMul rc rcNat vc va
+      return ⟨_, vd, q(pow_bit1 $pb $pc $pd)⟩
 -/
 partial def evalPowNat {a : Q($α)} (va : ExSum bt sα a) (n : Q(Nat)) :
 MetaM Result (ExSum bt sα) q($a ^ $n) := do
@@ -2103,7 +2203,22 @@ definition evalPowProd
       | .some pf =>
         return ⟨_, va, q(one_pow $b $pf)⟩
       | .none =>
-        -- NOTE: rc.pow may fail, e.
+        -- NOTE: rc.pow may fail, e.g. for `ring` when `vb` is not a constant.
+        let ⟨_, zc, pc⟩ ← rc.pow za vb
+        return ⟨_, .const zc, q($pc)⟩
+    | .mul vxa₁ (e := ea₁) vea₁ va₂ => do
+      let ⟨ea₁', vea₁'⟩ := vea₁.toExProd
+      let ⟨b', vb'⟩ := vb.toExProd
+      let ⟨c₁, vc₁, pc₁⟩ ← evalMulProd rcNat rcNat vea₁' vb'
+      let ⟨c₁', vc₁'⟩ := vc₁.toExProdNat
+      let ⟨_, vc₂, pc₂⟩ ← evalPowProd va₂ vb
+      let ⟨_, vc₃, pc₃⟩ := vxa₁.toProd rc vc₁'
+      let ⟨_, vd, pd⟩ ← evalMulProd rc rcNat vc₃ vc₂
+have : c₁ =Q c₁' := ⟨⟩
+have : b =Q b' := ⟨⟩
+have : ea₁ =Q ea₁' := ⟨⟩
+      return ⟨_, vd, q(mul_pow_mul $pc₁ $pc₂ $pc₃ $pd)⟩
+  return (← res.run).getD (evalPowProdAtom rc va vb)
 
 中文:
 定义 evalPowProd
@@ -2117,7 +2232,22 @@ definition evalPowProd
       | .some pf =>
         return ⟨_, va, q(one_pow $b $pf)⟩
       | .none =>
-        -- NOTE: rc.pow may fail, e.
+        -- NOTE: rc.pow may fail, e.g. for `ring` when `vb` is not a constant.
+        let ⟨_, zc, pc⟩ ← rc.pow za vb
+        return ⟨_, .const zc, q($pc)⟩
+    | .mul vxa₁ (e := ea₁) vea₁ va₂ => do
+      let ⟨ea₁', vea₁'⟩ := vea₁.toExProd
+      let ⟨b', vb'⟩ := vb.toExProd
+      let ⟨c₁, vc₁, pc₁⟩ ← evalMulProd rcNat rcNat vea₁' vb'
+      let ⟨c₁', vc₁'⟩ := vc₁.toExProdNat
+      let ⟨_, vc₂, pc₂⟩ ← evalPowProd va₂ vb
+      let ⟨_, vc₃, pc₃⟩ := vxa₁.toProd rc vc₁'
+      let ⟨_, vd, pd⟩ ← evalMulProd rc rcNat vc₃ vc₂
+have : c₁ =Q c₁' := ⟨⟩
+have : b =Q b' := ⟨⟩
+have : ea₁ =Q ea₁' := ⟨⟩
+      return ⟨_, vd, q(mul_pow_mul $pc₁ $pc₂ $pc₃ $pd)⟩
+  return (← res.run).getD (evalPowProdAtom rc va vb)
 -/
 def evalPowProd {a : Q($α)} {b : Q(Nat)} (va : ExProd bt sα a) (vb : ExProdNat b) :
 MetaM Result (ExProd bt sα) q($a ^ $b) := do
@@ -2228,7 +2358,9 @@ have : a =Q Nat.rawCast k := ⟨⟩
     let ⟨_, one, pf⟩ := rcNat.one
     return ⟨k, _, .const (one), q(coeff_one $k $pf)⟩
   | .mul (x := a₁) (e := a₂) va₁ va₂ va₃ =>
-    let ⟨k, _, vc, pc⟩ := extractCoef
+    let ⟨k, _, vc, pc⟩ := extractCoeff va₃
+    ⟨k, _, .mul va₁ va₂ vc, q(coeff_mul $a₁ $a₂ $pc)⟩
+termination_by structural a
 
 中文:
 定义 extractCoeff
@@ -2241,7 +2373,9 @@ have : a =Q Nat.rawCast k := ⟨⟩
     let ⟨_, one, pf⟩ := rcNat.one
     return ⟨k, _, .const (one), q(coeff_one $k $pf)⟩
   | .mul (x := a₁) (e := a₂) va₁ va₂ va₃ =>
-    let ⟨k, _, vc, pc⟩ := extractCoef
+    let ⟨k, _, vc, pc⟩ := extractCoeff va₃
+    ⟨k, _, .mul va₁ va₂ vc, q(coeff_mul $a₁ $a₂ $pc)⟩
+termination_by structural a
 
 Depends on / 依赖: Id.run, Nat.rawCast, a.appArg, appArg, assumeInstancesCommute, coeff_mul, coeff_one, extractCoeff, rawCast, rcNat.one, return, structural, termination_by
 -/
@@ -2365,7 +2499,27 @@ let notPowOne : MetaM Result (ExSum bt sα) q($a ^ $b) :=
     | .zero => do match vb.evalPos with
       | some p => return ⟨_, .zero, q(zero_pow (R := $α) $p)⟩
       | none => return evalPowAtom rc (.sum .zero) vb
-    | ExSum.add va .zero => do -- TODO: using `.add` here takes a 
+    | ExSum.add va .zero => do -- TODO: using `.add` here takes a while to compile?
+      let ⟨_, vc, pc⟩ ← evalPowProd rc rcNat va vb
+      return ⟨_, vc.toSum, q(single_pow $pc)⟩
+    | va => do
+      -- FIXME: condition used to be k.coeff > 1. Should go back to something like this.
+      let ⟨k, _, vc, pc⟩ := extractCoeff rcNat vb
+      if k.natLit! > 1 then
+        let ⟨_, vd, pd⟩ ← evalPow₁ va vc
+        let ⟨_, ve, pe⟩ ← evalPowNat rc rcNat vd k
+        return ⟨_, ve, q(pow_nat $pc $pd $pe)⟩
+      else
+        return evalPowAtom rc (.sum va) vb
+  match vb with
+  | .const zb => do
+    match rcNat.isOne zb with
+    | .some pf =>
+      assumeInstancesCommute
+      return ⟨_, va, q(pow_one_cast_of_isNat $a _ $pf)⟩
+    | .none => notPowOne
+  | _ =>
+    notPowOne
 
 中文:
 定义 evalPow₁
@@ -2376,7 +2530,27 @@ let notPowOne : MetaM Result (ExSum bt sα) q($a ^ $b) :=
     | .zero => do match vb.evalPos with
       | some p => return ⟨_, .zero, q(zero_pow (R := $α) $p)⟩
       | none => return evalPowAtom rc (.sum .zero) vb
-    | ExSum.add va .zero => do -- TODO: using `.add` here takes a 
+    | ExSum.add va .zero => do -- TODO: using `.add` here takes a while to compile?
+      let ⟨_, vc, pc⟩ ← evalPowProd rc rcNat va vb
+      return ⟨_, vc.toSum, q(single_pow $pc)⟩
+    | va => do
+      -- FIXME: condition used to be k.coeff > 1. Should go back to something like this.
+      let ⟨k, _, vc, pc⟩ := extractCoeff rcNat vb
+      if k.natLit! > 1 then
+        let ⟨_, vd, pd⟩ ← evalPow₁ va vc
+        let ⟨_, ve, pe⟩ ← evalPowNat rc rcNat vd k
+        return ⟨_, ve, q(pow_nat $pc $pd $pe)⟩
+      else
+        return evalPowAtom rc (.sum va) vb
+  match vb with
+  | .const zb => do
+    match rcNat.isOne zb with
+    | .some pf =>
+      assumeInstancesCommute
+      return ⟨_, va, q(pow_one_cast_of_isNat $a _ $pf)⟩
+    | .none => notPowOne
+  | _ =>
+    notPowOne
 -/
 partial def evalPow₁ {a : Q($α)} {b : Q(Nat)} (va : ExSum bt sα a) (vb : ExProdNat b) :
 MetaM Result (ExSum bt sα) q($a ^ $b) := do
@@ -2458,7 +2632,8 @@ definition evalPow
   | .add vb₁ vb₂ => do
     let ⟨_, vc₁, pc₁⟩ ← evalPow₁ rc rcNat va vb₁
     let ⟨_, vc₂, pc₂⟩ ← evalPow va vb₂
-    let ⟨_, vd, pd⟩ ← evalMul rc rcNat
+    let ⟨_, vd, pd⟩ ← evalMul rc rcNat vc₁ vc₂
+    return ⟨_, vd, q(pow_add $pc₁ $pc₂ $pd)⟩
 
 中文:
 定义 evalPow
@@ -2471,7 +2646,8 @@ definition evalPow
   | .add vb₁ vb₂ => do
     let ⟨_, vc₁, pc₁⟩ ← evalPow₁ rc rcNat va vb₁
     let ⟨_, vc₂, pc₂⟩ ← evalPow va vb₂
-    let ⟨_, vd, pd⟩ ← evalMul rc rcNat
+    let ⟨_, vd, pd⟩ ← evalMul rc rcNat vc₁ vc₂
+    return ⟨_, vd, q(pow_add $pc₁ $pc₂ $pd)⟩
 
 Depends on / 依赖: ExProd, ExProd.const, assumeInstancesCommute, evalMul, evalPow, pow_add, pow_zero, rc.one, return
 -/
@@ -2609,7 +2785,12 @@ definition evalAtom
   let one := ExProdNat.const (one)
   let ⟨_, vb, pb⟩ : Result (ExProd bt sα) _ := (ExBase.atom i (e := a')).toProd rc one
   let vc := vb.toSum
-  pure ⟨_, vc, match r.proo
+  pure ⟨_, vc, match r.proof? with
+  | none =>
+have : e =Q e' := ⟨⟩
+    q(atom_pf $e $pf_one $pb)
+  | some (p : Q($e = $a')) =>
+    q(atom_pf' $p $pf_one $pb)⟩
 
 中文:
 定义 evalAtom
@@ -2622,7 +2803,12 @@ definition evalAtom
   let one := ExProdNat.const (one)
   let ⟨_, vb, pb⟩ : Result (ExProd bt sα) _ := (ExBase.atom i (e := a')).toProd rc one
   let vc := vb.toSum
-  pure ⟨_, vc, match r.proo
+  pure ⟨_, vc, match r.proof? with
+  | none =>
+have : e =Q e' := ⟨⟩
+    q(atom_pf $e $pf_one $pb)
+  | some (p : Q($e = $a')) =>
+    q(atom_pf' $p $pf_one $pb)⟩
 -/
 def evalAtom (e : Q($α)) : AtomM (Result (ExSum bt sα) e) := do
   let r ← (← read).evalAtom e
@@ -2736,7 +2922,15 @@ definition ExProd.evalInv
     | none =>
       let ⟨_, vc, pc⟩ ← evalInvAtom dsα a
       let ⟨_, one, pf⟩ := rcNat.one
-      let ⟨_, vc', pc'⟩ := vc.toProd
+      let ⟨_, vc', pc'⟩ := vc.toProd rc (ExProdNat.const (one))
+      pure ⟨_, vc', q($pc' ▸ toProd_pf $pc $pf)⟩
+  | .mul (x := a₁) (e := _a₂) _va₁ va₂ va₃ => do
+    let ⟨_b₁, vb₁, pb₁⟩ ← evalInvAtom dsα a₁
+    let ⟨_b₃, vb₃, pb₃⟩ ← va₃.evalInv czα
+    let ⟨_b₁', vb₁', pb₁'⟩ := (vb₁.toProd rc va₂)
+    let ⟨c, vc, pc⟩ ← evalMulProd rc rcNat vb₃ vb₁'
+    assumeInstancesCommute
+    pure ⟨c, vc, q(inv_mul $pb₁ $pb₃ ($pb₁' ▸ $pc))⟩
 
 中文:
 定义 ExProd.evalInv
@@ -2749,7 +2943,15 @@ definition ExProd.evalInv
     | none =>
       let ⟨_, vc, pc⟩ ← evalInvAtom dsα a
       let ⟨_, one, pf⟩ := rcNat.one
-      let ⟨_, vc', pc'⟩ := vc.toProd
+      let ⟨_, vc', pc'⟩ := vc.toProd rc (ExProdNat.const (one))
+      pure ⟨_, vc', q($pc' ▸ toProd_pf $pc $pf)⟩
+  | .mul (x := a₁) (e := _a₂) _va₁ va₂ va₃ => do
+    let ⟨_b₁, vb₁, pb₁⟩ ← evalInvAtom dsα a₁
+    let ⟨_b₃, vb₃, pb₃⟩ ← va₃.evalInv czα
+    let ⟨_b₁', vb₁', pb₁'⟩ := (vb₁.toProd rc va₂)
+    let ⟨c, vc, pc⟩ ← evalMulProd rc rcNat vb₃ vb₁'
+    assumeInstancesCommute
+    pure ⟨c, vc, q(inv_mul $pb₁ $pb₃ ($pb₁' ▸ $pc))⟩
 
 Depends on / 依赖: ExProdNat, ExProdNat.const, Lean.Core.checkSystem, checkSystem, decl_name, evalInv, evalInvAtom, rc.inv, rcNat.one, toProd, toProd_pf, toString, vc.toProd
 -/
@@ -2786,7 +2988,10 @@ definition ExSum.evalInv
     pure ⟨_, vb.toSum, (q(inv_single $pb) : Expr)⟩
   | va => do
     let ⟨_, vb, pb⟩ ← evalInvAtom dsα a
-    let ⟨_, one, pf⟩ := rcNat.on
+    let ⟨_, one, pf⟩ := rcNat.one
+    let ⟨_', vb', pb'⟩ := vb.toProd rc (ExProdNat.const (one))
+    assumeInstancesCommute
+    pure ⟨_, vb'.toSum, q(atom_pf' $pb $pf $pb')⟩
 
 中文:
 定义 ExSum.evalInv
@@ -2798,7 +3003,10 @@ definition ExSum.evalInv
     pure ⟨_, vb.toSum, (q(inv_single $pb) : Expr)⟩
   | va => do
     let ⟨_, vb, pb⟩ ← evalInvAtom dsα a
-    let ⟨_, one, pf⟩ := rcNat.on
+    let ⟨_, one, pf⟩ := rcNat.one
+    let ⟨_', vb', pb'⟩ := vb.toProd rc (ExProdNat.const (one))
+    assumeInstancesCommute
+    pure ⟨_, vb'.toSum, q(atom_pf' $pb $pf $pb')⟩
 
 Depends on / 依赖: ExProdNat, ExProdNat.const, ExSum.add, ExSum.zero, assumeInstancesCommute, atom_pf, evalInv, evalInvAtom, inv_single, inv_zero, rcNat.one, toProd, va.evalInv, vb.toProd, vb.toSum
 -/
@@ -3080,7 +3288,12 @@ pure some some (← rc.derive e)
   | ``HAdd.hAdd, _, _ | ``Add.add, _, _
   | ``HMul.hMul, _, _ | ``Mul.mul, _, _
   | ``HSMul.hSMul, _, _
-  | ``HPow.hPow, _, _ 
+  | ``HPow.hPow, _, _ | ``Pow.pow, _, _
+  | ``Neg.neg, some _, _
+  | ``HSub.hSub, some _, _ | ``Sub.sub, some _, _
+  | ``Inv.inv, _, some _
+  | ``HDiv.hDiv, _, some _ | ``Div.div, _, some _ => pure none
+  | _, _, _ => els
 
 中文:
 定义 isAtomOrDerivable
@@ -3093,7 +3306,12 @@ pure some some (← rc.derive e)
   | ``HAdd.hAdd, _, _ | ``Add.add, _, _
   | ``HMul.hMul, _, _ | ``Mul.mul, _, _
   | ``HSMul.hSMul, _, _
-  | ``HPow.hPow, _, _ 
+  | ``HPow.hPow, _, _ | ``Pow.pow, _, _
+  | ``Neg.neg, some _, _
+  | ``HSub.hSub, some _, _ | ``Sub.sub, some _, _
+  | ``Inv.inv, _, some _
+  | ``HDiv.hDiv, _, some _ | ``Div.div, _, some _ => pure none
+  | _, _, _ => els
 -/
 def isAtomOrDerivable
     (c : Cache sα) (e : Q($α)) : AtomM (Option (Option (Result (ExSum bt sα) e))) := do
@@ -3138,7 +3356,63 @@ definition eval
   | ``HAdd.hAdd, _, _ | ``Add.add, _, _ => match e with
     | ~q($a + $b) =>
       let ⟨_, va, pa⟩ ← eval rc c a
- 
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalAdd rc rcNat va vb
+      pure ⟨c, vc, q(add_congr $pa $pb $p)⟩
+    | _ => els
+  | ``HMul.hMul, _, _ | ``Mul.mul, _, _ => match e with
+    | ~q($a * $b) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalMul rc rcNat va vb
+      pure ⟨c, vc, q(mul_congr $pa $pb $p)⟩
+    | _ => els
+  | ``HSMul.hSMul, _, _ | ``SMul.smul, _, _ => match e with
+    | ~q(@HSMul.hSMul $R _ _ (@instHSMul _ _ $inst) $r $a) =>
+      try
+        let sR : Q(CommSemiring $R) ← synthInstanceQ q(CommSemiring $R)
+        let ⟨_, vb, pb⟩ ← eval rc c a
+        let ⟨_, vt, pt⟩ ← rc.cast _ _ q($sR) q(inferInstance) _
+        let ⟨_, vc, pc⟩ ← evalMul rc rcNat vt vb
+        return ⟨_, vc, q(smul_congr $pb $pt $pc)⟩
+      catch _ => els
+    | _ => els
+  | ``HPow.hPow, _, _ | ``Pow.pow, _, _ => match e with
+    | ~q($a ^ $b) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨b, vb, pb⟩ ← eval rcNat .nat b
+      let ⟨b', vb'⟩ := vb.toExSumNat
+have : b =Q b' := ⟨⟩
+      let ⟨c, vc, p⟩ ← evalPow rc rcNat va vb'
+      pure ⟨c, vc, q(pow_congr $pa $pb $p)⟩
+    | _ => els
+  | ``Neg.neg, some rα, _ => match e with
+    | ~q(-$a) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨b, vb, p⟩ ← evalNeg rc rα va
+      pure ⟨b, vb, q(neg_congr $pa $p)⟩
+    | _ => els
+  | ``HSub.hSub, some rα, _ | ``Sub.sub, some rα, _ => match e with
+    | ~q($a - $b) => do
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalSub rc rcNat rα va vb
+      pure ⟨c, vc, q(sub_congr $pa $pb $p)⟩
+    | _ => els
+  | ``Inv.inv, _, some dsα => match e with
+    | ~q($a⁻¹) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨b, vb, p⟩ ← va.evalInv rc rcNat dsα c.czα
+      pure ⟨b, vb, q(inv_congr $pa $p)⟩
+    | _ => els
+  | ``HDiv.hDiv, _, some dsα | ``Div.div, _, some dsα => match e with
+    | ~q($a / $b) => do
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalDiv rc rcNat dsα c.czα va vb
+      pure ⟨c, vc, q(div_congr $pa $pb $p)⟩
+    | _ => els
+  | _, _, _ => els
 
 中文:
 定义 eval
@@ -3152,7 +3426,63 @@ definition eval
   | ``HAdd.hAdd, _, _ | ``Add.add, _, _ => match e with
     | ~q($a + $b) =>
       let ⟨_, va, pa⟩ ← eval rc c a
- 
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalAdd rc rcNat va vb
+      pure ⟨c, vc, q(add_congr $pa $pb $p)⟩
+    | _ => els
+  | ``HMul.hMul, _, _ | ``Mul.mul, _, _ => match e with
+    | ~q($a * $b) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalMul rc rcNat va vb
+      pure ⟨c, vc, q(mul_congr $pa $pb $p)⟩
+    | _ => els
+  | ``HSMul.hSMul, _, _ | ``SMul.smul, _, _ => match e with
+    | ~q(@HSMul.hSMul $R _ _ (@instHSMul _ _ $inst) $r $a) =>
+      try
+        let sR : Q(CommSemiring $R) ← synthInstanceQ q(CommSemiring $R)
+        let ⟨_, vb, pb⟩ ← eval rc c a
+        let ⟨_, vt, pt⟩ ← rc.cast _ _ q($sR) q(inferInstance) _
+        let ⟨_, vc, pc⟩ ← evalMul rc rcNat vt vb
+        return ⟨_, vc, q(smul_congr $pb $pt $pc)⟩
+      catch _ => els
+    | _ => els
+  | ``HPow.hPow, _, _ | ``Pow.pow, _, _ => match e with
+    | ~q($a ^ $b) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨b, vb, pb⟩ ← eval rcNat .nat b
+      let ⟨b', vb'⟩ := vb.toExSumNat
+have : b =Q b' := ⟨⟩
+      let ⟨c, vc, p⟩ ← evalPow rc rcNat va vb'
+      pure ⟨c, vc, q(pow_congr $pa $pb $p)⟩
+    | _ => els
+  | ``Neg.neg, some rα, _ => match e with
+    | ~q(-$a) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨b, vb, p⟩ ← evalNeg rc rα va
+      pure ⟨b, vb, q(neg_congr $pa $p)⟩
+    | _ => els
+  | ``HSub.hSub, some rα, _ | ``Sub.sub, some rα, _ => match e with
+    | ~q($a - $b) => do
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalSub rc rcNat rα va vb
+      pure ⟨c, vc, q(sub_congr $pa $pb $p)⟩
+    | _ => els
+  | ``Inv.inv, _, some dsα => match e with
+    | ~q($a⁻¹) =>
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨b, vb, p⟩ ← va.evalInv rc rcNat dsα c.czα
+      pure ⟨b, vb, q(inv_congr $pa $p)⟩
+    | _ => els
+  | ``HDiv.hDiv, _, some dsα | ``Div.div, _, some dsα => match e with
+    | ~q($a / $b) => do
+      let ⟨_, va, pa⟩ ← eval rc c a
+      let ⟨_, vb, pb⟩ ← eval rc c b
+      let ⟨c, vc, p⟩ ← evalDiv rc rcNat dsα c.czα va vb
+      pure ⟨c, vc, q(div_congr $pa $pb $p)⟩
+    | _ => els
+  | _, _, _ => els
 -/
 partial def eval {u : Lean.Level}
     {α : Q(Type u)} {bt : Q($α) -> Type} {sα : Q(CommSemiring $α)} (rc : RingCompute bt sα)

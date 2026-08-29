@@ -261,7 +261,14 @@ theorem Finset.ciSup_eq_max'_image
   · simp only [ciSup_eq_ite, dite_eq_ite, Set.mem_range, Set.mem_image, mem_coe,
       exists_exists_and_eq_and, forall_exists_index, forall_apply_eq_imp_iff]
     intro i
-    split_i
+    split_ifs
+    · exact ⟨_, by assumption, le_rfl⟩
+    · assumption
+  · simp only [Set.mem_image, mem_coe, ciSup_eq_ite, dite_eq_ite, Set.mem_range,
+      exists_exists_eq_and, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+    intro i hi
+    refine ⟨i, ?_⟩
+    simp [hi]
 
 中文:
 定理 有限集.ciSup_eq_max'_image
@@ -273,7 +280,14 @@ theorem Finset.ciSup_eq_max'_image
   · simp only [ciSup_eq_ite, dite_eq_ite, Set.mem_range, Set.mem_image, mem_coe,
       exists_exists_and_eq_and, forall_exists_index, forall_apply_eq_imp_iff]
     intro i
-    split_i
+    split_ifs
+    · exact ⟨_, by assumption, le_rfl⟩
+    · assumption
+  · simp only [Set.mem_image, mem_coe, ciSup_eq_ite, dite_eq_ite, Set.mem_range,
+      exists_exists_eq_and, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+    intro i hi
+    refine ⟨i, ?_⟩
+    simp [hi]
 
 Depends on / 依赖: And.left, Set.mem_image, Set.mem_ran, Set.mem_range, ciSup_eq_ite, classical, coe_image, csSup_eq_csSup_of_forall_exists_le, csSup_eq_max, dite_eq_ite, exists_exists_and_eq_and, forall_apply_eq_imp_iff, forall_exists_index, h.imp, image_nonempty, image_nonempty.mpr, le_rfl, mem_coe, mem_image, mem_ran
 -/
@@ -445,7 +459,13 @@ theorem Set.Finite.ciSup_lt_iff
       refine (((hs.image f).union (finite_singleton (sSup ∅))).subset ?_).bddAbove
       intro
       simp only [ciSup_eq_ite, dite_eq_ite, mem_range, union_singleton, mem_insert_iff, mem_image,
-        forall_e
+        forall_exists_index]
+      grind
+    · simp only [mem_range]
+      refine ⟨x, ?_⟩
+      simp [hx]
+  · have := hs.ciSup_mem_image _ h
+    grind
 
 中文:
 定理 集合.有限.ciSup_lt_iff
@@ -458,7 +478,13 @@ theorem Set.Finite.ciSup_lt_iff
       refine (((hs.image f).union (finite_singleton (sSup ∅))).subset ?_).bddAbove
       intro
       simp only [ciSup_eq_ite, dite_eq_ite, mem_range, union_singleton, mem_insert_iff, mem_image,
-        forall_e
+        forall_exists_index]
+      grind
+    · simp only [mem_range]
+      refine ⟨x, ?_⟩
+      simp [hx]
+  · have := hs.ciSup_mem_image _ h
+    grind
 
 Depends on / 依赖: bddAbove, ciSup_eq_ite, ciSup_mem_image, classical, dite_eq_ite, finite_singleton, forall_exists_index, h.trans_le, hs.ciSup_mem_image, hs.image, le_csSup, mem_image, mem_insert_iff, mem_range, subset, trans_le, union_singleton
 -/
@@ -494,7 +520,17 @@ theorem Set.Finite.lt_ciInf_iff
       refine (((hs.image f).union (finite_singleton (sInf ∅))).subset ?_).bddBelow
       intro
       simp only [ciInf_eq_ite, dite_eq_ite, mem_range, union_singleton, mem_insert_iff, mem_image,
-        forall_ex
+        forall_exists_index]
+      grind
+    · simp only [mem_range]
+      refine ⟨x, ?_⟩
+      simp [hx]
+  · intro H
+    have := hs.ciInf_mem_image _ h
+    simp only [mem_image] at this
+    obtain ⟨_, hmem, hx⟩ := this
+    rw [← hx]
+    exact H _ hmem
 
 中文:
 定理 集合.有限.lt_ciInf_iff
@@ -507,7 +543,17 @@ theorem Set.Finite.lt_ciInf_iff
       refine (((hs.image f).union (finite_singleton (sInf ∅))).subset ?_).bddBelow
       intro
       simp only [ciInf_eq_ite, dite_eq_ite, mem_range, union_singleton, mem_insert_iff, mem_image,
-        forall_ex
+        forall_exists_index]
+      grind
+    · simp only [mem_range]
+      refine ⟨x, ?_⟩
+      simp [hx]
+  · intro H
+    have := hs.ciInf_mem_image _ h
+    simp only [mem_image] at this
+    obtain ⟨_, hmem, hx⟩ := this
+    rw [← hx]
+    exact H _ hmem
 
 Depends on / 依赖: bddBelow, ciInf_eq_ite, ciInf_mem_image, classical, csInf_le, dite_eq_ite, finite_singleton, forall_exists_index, h.trans_le, hs.ciInf_mem_image, hs.image, mem_image, mem_insert_iff, mem_range, subset, trans_le, union_singleton
 -/

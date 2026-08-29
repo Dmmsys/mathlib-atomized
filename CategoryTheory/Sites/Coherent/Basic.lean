@@ -86,7 +86,9 @@ definition coherentCoverage
   pullback := by
     rintro B₁ B₂ f S ⟨α, _, X₁, π₁, rfl, hS⟩
     obtain ⟨β, _, X₂, π₂, h, i, ι, hh⟩ := Precoherent.pullback f α X₁ π₁ hS
-    refine ⟨Presieve.ofAr
+    refine ⟨Presieve.ofArrows X₂ π₂, ⟨β, inferInstance, X₂, π₂, rfl, h⟩, ?_⟩
+    rintro _ _ ⟨b⟩
+    exact ⟨(X₁ (i b)), ι _, π₁ _, ⟨_⟩, hh _⟩
 
 中文:
 定义 coherentCoverage
@@ -96,7 +98,9 @@ definition coherentCoverage
   pullback := by
     rintro B₁ B₂ f S ⟨α, _, X₁, π₁, rfl, hS⟩
     obtain ⟨β, _, X₂, π₂, h, i, ι, hh⟩ := Precoherent.pullback f α X₁ π₁ hS
-    refine ⟨Presieve.ofAr
+    refine ⟨Presieve.ofArrows X₂ π₂, ⟨β, inferInstance, X₂, π₂, rfl, h⟩, ?_⟩
+    rintro _ _ ⟨b⟩
+    exact ⟨(X₁ (i b)), ι _, π₁ _, ⟨_⟩, hh _⟩
 
 Depends on / 依赖: Finite
 -/
@@ -172,7 +176,13 @@ definition regularCoverage
     have := Preregular.exists_fac f π
     obtain ⟨W, h, _, i, this⟩ := this
     refine ⟨Presieve.singleton h, ⟨?_, ?_⟩⟩
-    
+    · exact ⟨W, h, by {rw [Presieve.ofArrows_pUnit h]}, inferInstance⟩
+    · intro W g hg
+      cases hg
+      refine ⟨Z, i, π, ⟨?_, this⟩⟩
+      cases hπ
+      rw [Presieve.ofArrows_pUnit]
+      exact Presieve.singleton.mk
 
 中文:
 定义 regularCoverage
@@ -184,7 +194,13 @@ definition regularCoverage
     have := Preregular.exists_fac f π
     obtain ⟨W, h, _, i, this⟩ := this
     refine ⟨Presieve.singleton h, ⟨?_, ?_⟩⟩
-    
+    · exact ⟨W, h, by {rw [Presieve.ofArrows_pUnit h]}, inferInstance⟩
+    · intro W g hg
+      cases hg
+      refine ⟨Z, i, π, ⟨?_, this⟩⟩
+      cases hπ
+      rw [Presieve.ofArrows_pUnit]
+      exact Presieve.singleton.mk
 
 Depends on / 依赖: Presieve, Presieve.ofArrows, ofArrows
 -/
@@ -233,7 +249,16 @@ definition extensiveCoverage
   pullback := by
     intro X Y f S ⟨α, hα, Z, π, hS, h_iso⟩
     let Z' : α -> C := fun a => pullback f (π a)
-    let π' : (a : α) -> Z' a ⟶ Y := fun a => pullback.fs
+    let π' : (a : α) -> Z' a ⟶ Y := fun a => pullback.fst _ _
+    refine ⟨@Presieve.ofArrows C _ _ α Z' π', ⟨?_, ?_⟩⟩
+    · constructor
+      exact ⟨hα, Z', π', ⟨by simp only,
+        FinitaryPreExtensive.isIso_sigmaDesc_fst (fun x => π x) f h_iso⟩⟩
+    · intro W g hg
+      rcases hg with ⟨a⟩
+      refine ⟨Z a, pullback.snd _ _, π a, ?_, by rw [CategoryTheory.Limits.pullback.condition]⟩
+      rw [hS]
+      exact Presieve.ofArrows.mk a
 
 中文:
 定义 extensiveCoverage
@@ -243,7 +268,16 @@ definition extensiveCoverage
   pullback := by
     intro X Y f S ⟨α, hα, Z, π, hS, h_iso⟩
     let Z' : α -> C := fun a => pullback f (π a)
-    let π' : (a : α) -> Z' a ⟶ Y := fun a => pullback.fs
+    let π' : (a : α) -> Z' a ⟶ Y := fun a => pullback.fst _ _
+    refine ⟨@Presieve.ofArrows C _ _ α Z' π', ⟨?_, ?_⟩⟩
+    · constructor
+      exact ⟨hα, Z', π', ⟨by simp only,
+        FinitaryPreExtensive.isIso_sigmaDesc_fst (fun x => π x) f h_iso⟩⟩
+    · intro W g hg
+      rcases hg with ⟨a⟩
+      refine ⟨Z a, pullback.snd _ _, π a, ?_, by rw [CategoryTheory.Limits.pullback.condition]⟩
+      rw [hS]
+      exact Presieve.ofArrows.mk a
 
 Depends on / 依赖: Finite
 -/

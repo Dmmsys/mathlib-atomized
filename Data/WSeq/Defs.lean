@@ -126,7 +126,8 @@ definition updateNth
       | some (none, s'), n => some (none, n, s')
       | some (some a', s'), 0 => some (some a', 0, s')
       | some (some _, s'), 1 => some (some a, 0, s')
-      | some (some a', s'), 
+      | some (some a', s'), n + 2 => some (some a', n + 1, s'))
+    (n + 1, s)
 
 中文:
 定义 updateNth
@@ -138,7 +139,8 @@ definition updateNth
       | some (none, s'), n => some (none, n, s')
       | some (some a', s'), 0 => some (some a', 0, s')
       | some (some _, s'), 1 => some (some a, 0, s')
-      | some (some a', s'), 
+      | some (some a', s'), n + 2 => some (some a', n + 1, s'))
+    (n + 1, s)
 
 Depends on / 依赖: Seq.corec, Seq.destruct, destruct
 -/
@@ -166,7 +168,8 @@ definition removeNth
       | some (none, s'), n => some (none, n, s')
       | some (some a', s'), 0 => some (some a', 0, s')
       | some (some _, s'), 1 => some (none, 0, s')
-      | some (some a', s'), n 
+      | some (some a', s'), n + 2 => some (some a', n + 1, s'))
+    (n + 1, s)
 
 中文:
 定义 removeNth
@@ -178,7 +181,8 @@ definition removeNth
       | some (none, s'), n => some (none, n, s')
       | some (some a', s'), 0 => some (some a', 0, s')
       | some (some _, s'), 1 => some (none, 0, s')
-      | some (some a', s'), n 
+      | some (some a', s'), n + 2 => some (some a', n + 1, s'))
+    (n + 1, s)
 
 Depends on / 依赖: Seq.corec, Seq.destruct, destruct
 -/
@@ -271,7 +275,10 @@ definition zipWith
       match Seq.destruct s1, Seq.destruct s2 with
       | some (none, s1'), some (none, s2') => some (none, s1', s2')
       | some (some _, _), some (none, s2') => some (none, s1, s2')
-      | some (none, s1'), some (some _, _) => some (no
+      | some (none, s1'), some (some _, _) => some (none, s1', s2)
+      | some (some a1, s1'), some (some a2, s2') => some (some (f a1 a2), s1', s2')
+      | _, _ => none)
+    (s1, s2)
 
 中文:
 定义 zipWith
@@ -281,7 +288,10 @@ definition zipWith
       match Seq.destruct s1, Seq.destruct s2 with
       | some (none, s1'), some (none, s2') => some (none, s1', s2')
       | some (some _, _), some (none, s2') => some (none, s1, s2')
-      | some (none, s1'), some (some _, _) => some (no
+      | some (none, s1'), some (some _, _) => some (none, s1', s2)
+      | some (some a1, s1'), some (some a2, s2') => some (some (f a1 a2), s1', s2')
+      | _, _ => none)
+    (s1, s2)
 
 Depends on / 依赖: Seq.corec, Seq.destruct, destruct
 -/
@@ -398,7 +408,11 @@ definition union
       | none, none => none
       | some (a1, s1'), none => some (a1, s1', nil)
       | none, some (a2, s2') => some (a2, nil, s2')
-      | some (none, s1'), some (none, s2') => some (none, 
+      | some (none, s1'), some (none, s2') => some (none, s1', s2')
+      | some (some a1, s1'), some (none, s2') => some (some a1, s1', s2')
+      | some (none, s1'), some (some a2, s2') => some (some a2, s1', s2')
+      | some (some a1, s1'), some (some a2, s2') => some (some a1, cons a2 s1', s2'))
+    (s1, s2)
 
 中文:
 定义 union
@@ -409,7 +423,11 @@ definition union
       | none, none => none
       | some (a1, s1'), none => some (a1, s1', nil)
       | none, some (a2, s2') => some (a2, nil, s2')
-      | some (none, s1'), some (none, s2') => some (none, 
+      | some (none, s1'), some (none, s2') => some (none, s1', s2')
+      | some (some a1, s1'), some (none, s2') => some (some a1, s1', s2')
+      | some (none, s1'), some (some a2, s2') => some (some a2, s1', s2')
+      | some (some a1, s1'), some (some a2, s2') => some (some a1, cons a2 s1', s2'))
+    (s1, s2)
 
 Depends on / 依赖: Seq.corec, Seq.destruct, destruct
 -/
@@ -519,7 +537,8 @@ definition splitAt
       | 0, _ => Sum.inl (l.reverse, s)
       | _ + 1, none => Sum.inl (l.reverse, s)
       | _ + 1, some (none, s') => Sum.inr (n, l, s')
-      | m + 1, some (some a, s') => Sum.inr 
+      | m + 1, some (some a, s') => Sum.inr (m, a::l, s'))
+    (n, [], s)
 
 中文:
 定义 splitAt
@@ -530,7 +549,8 @@ definition splitAt
       | 0, _ => Sum.inl (l.reverse, s)
       | _ + 1, none => Sum.inl (l.reverse, s)
       | _ + 1, some (none, s') => Sum.inr (n, l, s')
-      | m + 1, some (some a, s') => Sum.inr 
+      | m + 1, some (some a, s') => Sum.inr (m, a::l, s'))
+    (n, [], s)
 
 Depends on / 依赖: Computation, Computation.corec, Seq.destruct, Sum.inl, Sum.inr, destruct, l.reverse, reverse
 -/
@@ -676,7 +696,7 @@ definition inits
         | some (some a, s') =>
           let l' := l.push a
           some (some l'.toList, l', s'))
-   
+      (Batteries.DList.empty, s)
 
 中文:
 定义 inits
@@ -690,7 +710,7 @@ definition inits
         | some (some a, s') =>
           let l' := l.push a
           some (some l'.toList, l', s'))
-   
+      (Batteries.DList.empty, s)
 
 Depends on / 依赖: Batteries, Batteries.DList, Batteries.DList.empty, Seq.corec, Seq.destruct, destruct, l.push, toList
 -/
@@ -740,7 +760,18 @@ theorem length_eq_map
             match Seq.destruct s with
             | none => Sum.inl n
             | some (none, s') => Sum.inr (n, s')
-            | some (some _, s')
+            | some (some _, s') => Sum.inr (n + 1, s')) (l.length, s) ∧
+            c2 = Computation.map List.length (Computation.corec (fun ⟨l, s⟩ =>
+              match Seq.destruct s with
+              | none => Sum.inl l.reverse
+              | some (none, s') => Sum.inr (l, s')
+              | some (some a, s') => Sum.inr (a::l, s')) (l, s)))
+      ?_ ⟨[], s, rfl, rfl⟩
+  intro s1 s2 h; rcases h with ⟨l, s, h⟩; rw [h.left, h.right]
+  induction s using WSeq.recOn with
+  | nil => simp [nil]
+  | cons a s => simpa using ⟨a::l, s, by simp, by simp⟩
+  | think s => simpa using ⟨l, s, by simp, by simp⟩
 
 中文:
 定理 length_eq_map
@@ -755,7 +786,18 @@ theorem length_eq_map
             match Seq.destruct s with
             | none => Sum.inl n
             | some (none, s') => Sum.inr (n, s')
-            | some (some _, s')
+            | some (some _, s') => Sum.inr (n + 1, s')) (l.length, s) ∧
+            c2 = Computation.map List.length (Computation.corec (fun ⟨l, s⟩ =>
+              match Seq.destruct s with
+              | none => Sum.inl l.reverse
+              | some (none, s') => Sum.inr (l, s')
+              | some (some a, s') => Sum.inr (a::l, s')) (l, s)))
+      ?_ ⟨[], s, rfl, rfl⟩
+  intro s1 s2 h; rcases h with ⟨l, s, h⟩; rw [h.left, h.right]
+  induction s using WSeq.recOn with
+  | nil => simp [nil]
+  | cons a s => simpa using ⟨a::l, s, by simp, by simp⟩
+  | think s => simpa using ⟨l, s, by simp, by simp⟩
 
 Depends on / 依赖: Computation, Computation.corec, Computation.eq_of_bisim, Computation.map, List.length, Seq.destruct, Sum.inl, Sum.inr, destruct, eq_of_bisim, l.length, l.reverse, length, reverse
 -/

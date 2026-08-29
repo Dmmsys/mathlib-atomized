@@ -1576,7 +1576,11 @@ instance instAdd
         rw [of_eq_of]
         exact
           ⟨disjoin_manyOneReducible (hl₁.trans OneOneReducible.disjoin_left.to_many_one)
-              (hl₂.trans OneOneReducible.disjoin_right.to_m
+              (hl₂.trans OneOneReducible.disjoin_right.to_many_one),
+            disjoin_manyOneReducible (hr₁.trans OneOneReducible.disjoin_left.to_many_one)
+              (hr₂.trans OneOneReducible.disjoin_right.to_many_one)⟩)⟩
+
+@[simp]
 
 中文:
 实例 instAdd
@@ -1588,7 +1592,11 @@ instance instAdd
         rw [of_eq_of]
         exact
           ⟨disjoin_manyOneReducible (hl₁.trans OneOneReducible.disjoin_left.to_many_one)
-              (hl₂.trans OneOneReducible.disjoin_right.to_m
+              (hl₂.trans OneOneReducible.disjoin_right.to_many_one),
+            disjoin_manyOneReducible (hr₁.trans OneOneReducible.disjoin_left.to_many_one)
+              (hr₂.trans OneOneReducible.disjoin_right.to_many_one)⟩)⟩
+
+@[simp]
 
 Depends on / 依赖: OneOneReducible, OneOneReducible.disjoin_left.to_many_one, OneOneReducible.disjoin_right.to_many_one, disjoin_left, disjoin_manyOneReducible, disjoin_right, of_eq_of, to_many_one
 -/
@@ -1617,7 +1625,8 @@ theorem add_of
         (manyOneReducible_toNat.trans OneOneReducible.disjoin_left.to_many_one)
         (manyOneReducible_toNat.trans OneOneReducible.disjoin_right.to_many_one),
       disjoin_manyOneReducible
-        (toNat_manyOneReducible.trans OneOneReducible.disjoin_le
+        (toNat_manyOneReducible.trans OneOneReducible.disjoin_left.to_many_one)
+        (toNat_manyOneReducible.trans OneOneReducible.disjoin_right.to_many_one)⟩
 
 中文:
 定理 add_of
@@ -1628,7 +1637,8 @@ theorem add_of
         (manyOneReducible_toNat.trans OneOneReducible.disjoin_left.to_many_one)
         (manyOneReducible_toNat.trans OneOneReducible.disjoin_right.to_many_one),
       disjoin_manyOneReducible
-        (toNat_manyOneReducible.trans OneOneReducible.disjoin_le
+        (toNat_manyOneReducible.trans OneOneReducible.disjoin_left.to_many_one)
+        (toNat_manyOneReducible.trans OneOneReducible.disjoin_right.to_many_one)⟩
 
 Depends on / 依赖: OneOneReducible, OneOneReducible.disjoin_left.to_many_one, OneOneReducible.disjoin_right.to_many_one, disjoin_left, disjoin_manyOneReducible, disjoin_right, manyOneReducible_toNat, manyOneReducible_toNat.trans, of_eq_of, of_eq_of.mpr, toNat_manyOneReducible, toNat_manyOneReducible.trans, to_many_one
 -/

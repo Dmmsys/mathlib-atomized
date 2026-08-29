@@ -66,7 +66,9 @@ lemma threeAPFree_frontier
   have :=
     hs₁.eq (hs₀.frontier_subset ha) (hs₀.frontier_subset hc) one_half_pos one_half_pos
       (add_halves _) hb.2
- 
+  simp [this, ← add_smul]
+  ring_nf
+  simp
 
 中文:
 引理 threeAPFree_frontier
@@ -78,7 +80,9 @@ lemma threeAPFree_frontier
   have :=
     hs₁.eq (hs₀.frontier_subset ha) (hs₀.frontier_subset hc) one_half_pos one_half_pos
       (add_halves _) hb.2
- 
+  simp [this, ← add_smul]
+  ring_nf
+  simp
 
 Depends on / 依赖: add_halves, add_smul, frontier_subset, one_div, one_half_pos, ring_nf, smul_add, two_smul
 -/
@@ -478,7 +482,7 @@ theorem map_eq_iff
   have : x₁ 0 = x₂ 0 := by
     rw [← mod_eq_of_lt (hx₁ _)]; rw [← map_mod]; rw [← mod_eq_of_lt (hx₂ _)]; rw [← map_mod]; rw [h]
   rw [map_succ]; rw [map_succ]; rw [this]; rw [add_right_inj]; rw [mul_eq_mul_right_iff] at h
-  e
+  exact ⟨this, h.resolve_right (pos_of_gt (hx₁ 0)).ne'⟩
 
 中文:
 定理 map_eq_iff
@@ -488,7 +492,7 @@ theorem map_eq_iff
   have : x₁ 0 = x₂ 0 := by
     rw [← mod_eq_of_lt (hx₁ _)]; rw [← map_mod]; rw [← mod_eq_of_lt (hx₂ _)]; rw [← map_mod]; rw [h]
   rw [map_succ]; rw [map_succ]; rw [this]; rw [add_right_inj]; rw [mul_eq_mul_right_iff] at h
-  e
+  exact ⟨this, h.resolve_right (pos_of_gt (hx₁ 0)).ne'⟩
 
 Depends on / 依赖: add_right_inj, h.resolve_right, map_mod, map_succ, mod_eq_of_lt, mul_eq_mul_right_iff, pos_of_gt, resolve_right
 -/
@@ -549,7 +553,13 @@ theorem map_le_of_mem_box
 nonrec theorem threeAPFree_sphere : ThreeAPFree (sphere n d k : Set (Fin n -> Nat)) := by
   set f : (Fin n -> Nat) ->+ EuclideanSpace Real (Fin n) :=
     { toFun := fun f => toLp 2 (((↑) : Nat -> Real) ∘ f)
-      map_zero' := PiL
+      map_zero' := PiLp.ext fun _ => cast_zero
+      map_add' := fun _ _ => PiLp.ext fun _ => cast_add _ _ }
+  refine ThreeAPFree.of_image (AddHomClass.isAddFreimanHom f (Set.mapsTo_image _ _))
+    ((toLp_injective 2).comp_injOn cast_injective.comp_left.injOn) (Set.subset_univ _) ?_
+  refine (threeAPFree_sphere 0 (√↑k)).mono (Set.image_subset_iff.2 fun x => ?_)
+  rw [Set.mem_preimage]; rw [mem_sphere_zero_iff_norm]
+  exact norm_of_mem_sphere
 
 中文:
 定理 map_le_of_mem_box
@@ -559,7 +569,13 @@ nonrec theorem threeAPFree_sphere : ThreeAPFree (sphere n d k : Set (Fin n -> Na
 nonrec theorem threeAPFree_sphere : ThreeAPFree (sphere n d k : Set (Fin n -> Nat)) := by
   set f : (Fin n -> Nat) ->+ EuclideanSpace Real (Fin n) :=
     { toFun := fun f => toLp 2 (((↑) : Nat -> Real) ∘ f)
-      map_zero' := PiL
+      map_zero' := PiLp.ext fun _ => cast_zero
+      map_add' := fun _ _ => PiLp.ext fun _ => cast_add _ _ }
+  refine ThreeAPFree.of_image (AddHomClass.isAddFreimanHom f (Set.mapsTo_image _ _))
+    ((toLp_injective 2).comp_injOn cast_injective.comp_left.injOn) (Set.subset_univ _) ?_
+  refine (threeAPFree_sphere 0 (√↑k)).mono (Set.image_subset_iff.2 fun x => ?_)
+  rw [Set.mem_preimage]; rw [mem_sphere_zero_iff_norm]
+  exact norm_of_mem_sphere
 
 Depends on / 依赖: Nat.le_sub_one_of_lt, le_sub_one_of_lt, map_monotone, mem_box
 -/
@@ -590,7 +606,9 @@ theorem threeAPFree_image_sphere
   rw [Set.add_subset_iff]
   rintro a ha b hb i
   have hai := mem_box.1 (sphere_subset_box ha) i
-  have hbi := mem_box.1 (sphere_subset_box hb)
+  have hbi := mem_box.1 (sphere_subset_box hb) i
+  rw [lt_tsub_iff_right]; rw [← succ_le_iff]; rw [two_mul]
+  exact (add_add_add_comm _ _ 1 1).trans_le (_root_.add_le_add hai hbi)
 
 中文:
 定理 threeAPFree_image_sphere
@@ -601,7 +619,9 @@ theorem threeAPFree_image_sphere
   rw [Set.add_subset_iff]
   rintro a ha b hb i
   have hai := mem_box.1 (sphere_subset_box ha) i
-  have hbi := mem_box.1 (sphere_subset_box hb)
+  have hbi := mem_box.1 (sphere_subset_box hb) i
+  rw [lt_tsub_iff_right]; rw [← succ_le_iff]; rw [two_mul]
+  exact (add_add_add_comm _ _ 1 1).trans_le (_root_.add_le_add hai hbi)
 
 Depends on / 依赖: Set.add_subset_iff, ThreeAPFree, ThreeAPFree.image, _root_, _root_.add_le_add, add_add_add_comm, add_le_add, add_subset_iff, coe_image, lt_tsub_iff_right, map_injOn, map_injOn.mono, mem_box, sphere, sphere_subset_box, succ_le_iff, threeAPFree_sphere, trans_le, two_mul
 -/
@@ -707,7 +727,10 @@ theorem card_sphere_le_rothNumberNat
   · simp only [mem_image, and_imp, forall_exists_index,
       sphere, mem_filter]
     rintro _ x hx _ rfl
-    exact (map_le_of_mem_box hx)
+    exact (map_le_of_mem_box hx).trans_lt sum_lt
+  apply map_injOn.mono fun x => ?_
+  simp only [mem_coe, sphere, mem_filter, mem_box, and_imp, two_mul]
+  exact fun h _ i => (h i).trans_le le_self_add
 
 中文:
 定理 card_sphere_le_rothNumber自然数
@@ -721,7 +744,10 @@ theorem card_sphere_le_rothNumberNat
   · simp only [mem_image, and_imp, forall_exists_index,
       sphere, mem_filter]
     rintro _ x hx _ rfl
-    exact (map_le_of_mem_box hx)
+    exact (map_le_of_mem_box hx).trans_lt sum_lt
+  apply map_injOn.mono fun x => ?_
+  simp only [mem_coe, sphere, mem_filter, mem_box, and_imp, two_mul]
+  exact fun h _ i => (h i).trans_le le_self_add
 
 Depends on / 依赖: and_imp, card_image_of_injOn, card_le_univ, forall_exists_index, le_rothNumberNat, le_self_add, map_injOn, map_injOn.mono, map_le_of_mem_box, mem_box, mem_coe, mem_filter, mem_image, sphere, sum_lt, threeAPFree_image_sphere, threeAPFree_image_sphere.le_rothNumberNat, trans_eq, trans_le, trans_lt
 -/
@@ -754,7 +780,7 @@ theorem exists_large_sphere_aux
   · rw [mem_range, Nat.lt_succ_iff]
     exact sum_sq_le_of_mem_box hx
   · rw [card_range, nsmul_eq_mul, mul_div_assoc', cast_add_one, mul_div_cancel_left₀, card_box]
-    exact (cast_add_one_pos _)
+    exact (cast_add_one_pos _).ne'
 
 中文:
 定理 存在_large_sphere_aux
@@ -765,7 +791,7 @@ theorem exists_large_sphere_aux
   · rw [mem_range, Nat.lt_succ_iff]
     exact sum_sq_le_of_mem_box hx
   · rw [card_range, nsmul_eq_mul, mul_div_assoc', cast_add_one, mul_div_cancel_left₀, card_box]
-    exact (cast_add_one_pos _)
+    exact (cast_add_one_pos _).ne'
 
 Depends on / 依赖: Nat.lt_succ_iff, card_box, card_range, cast_add_one, cast_add_one_pos, exists_le_card_fiber_of_nsmul_le_card_of_maps_to, lt_succ_iff, mem_range, mul_div_assoc, nonempty_range_add_one, nsmul_eq_mul, sum_sq_le_of_mem_box
 -/
@@ -791,7 +817,13 @@ theorem exists_large_sphere
   obtain rfl | hd := d.eq_zero_or_pos
   · simp
   refine (div_le_div_of_nonneg_left (by positivity) (by positivity) ?_).trans hk
-  simp only [← le_sub_iff_add_le', cast_mul, ← mul_sub
+  simp only [← le_sub_iff_add_le', cast_mul, ← mul_sub, cast_pow, cast_sub hd, sub_sq, one_pow,
+    cast_one, mul_one, sub_add, sub_sub_self]
+  apply one_le_mul_of_one_le_of_one_le
+  · rwa [one_le_cast]
+  rw [_root_.le_sub_iff_add_le]
+  norm_num
+  exact one_le_cast.2 hd
 
 中文:
 定理 存在_large_sphere
@@ -804,7 +836,13 @@ theorem exists_large_sphere
   obtain rfl | hd := d.eq_zero_or_pos
   · simp
   refine (div_le_div_of_nonneg_left (by positivity) (by positivity) ?_).trans hk
-  simp only [← le_sub_iff_add_le', cast_mul, ← mul_sub
+  simp only [← le_sub_iff_add_le', cast_mul, ← mul_sub, cast_pow, cast_sub hd, sub_sq, one_pow,
+    cast_one, mul_one, sub_add, sub_sub_self]
+  apply one_le_mul_of_one_le_of_one_le
+  · rwa [one_le_cast]
+  rw [_root_.le_sub_iff_add_le]
+  norm_num
+  exact one_le_cast.2 hd
 
 Depends on / 依赖: _root_, _root_.le_sub_iff_add_le, cast_mul, cast_one, cast_pow, cast_sub, d.eq_zero_or_pos, div_le_div_of_nonneg_left, eq_zero_or_pos, exists_large_sphere_aux, le_sub_iff_add_le, mul_one, mul_sub, n.eq_zero_or_pos, one_le_cast, one_le_mul_of_one_le_of_one_le, one_pow, sub_add, sub_sq, sub_sub_self
 -/
@@ -956,7 +994,11 @@ theorem le_sqrt_log
         exact two_div_one_sub_two_div_e_le_eight
     _ <= √(log (2 ^ 12)) := by
       simp only [Real.log_pow, Nat.cast_ofNat]
-      apply le_sqrt_of
+      apply le_sqrt_of_sq_le
+      nlinarith [log_two_lt_d9, log_two_gt_d9]
+    _ <= √(log ↑N) := by
+      gcongr
+      exact mod_cast hN
 
 中文:
 定理 le_sqrt_log
@@ -972,7 +1014,11 @@ theorem le_sqrt_log
         exact two_div_one_sub_two_div_e_le_eight
     _ <= √(log (2 ^ 12)) := by
       simp only [Real.log_pow, Nat.cast_ofNat]
-      apply le_sqrt_of
+      apply le_sqrt_of_sq_le
+      nlinarith [log_two_lt_d9, log_two_gt_d9]
+    _ <= √(log ↑N) := by
+      gcongr
+      exact mod_cast hN
 
 Depends on / 依赖: Nat.cast_ofNat, Real.log_pow, cast_ofNat, exp_one_gt_two, le_sqrt_of_sq_le, log_pow, log_two_gt_d9, log_two_lt_d9, mod_cast, norm_num1, two_div_one_sub_two_div_e_le_eight
 -/
@@ -1006,7 +1052,8 @@ theorem exp_neg_two_mul_le
     _ <= exp (1 - x) / (x + 1) := ?_
     _ <= exp (2 - ⌈x⌉₊) / (x + 1) := by gcongr
     _ < _ := by gcongr
-  rw [le_div_iff₀ (add_pos hx zero_lt_one)]; rw [← le_div_iff₀' (exp_pos _)]; rw [← exp_sub]; rw [neg_m
+  rw [le_div_iff₀ (add_pos hx zero_lt_one)]; rw [← le_div_iff₀' (exp_pos _)]; rw [← exp_sub]; rw [neg_mul]; rw [sub_neg_eq_add]; rw [two_mul]; rw [sub_add_add_cancel]; rw [add_comm _ x]
+  exact le_trans (le_add_of_nonneg_right zero_le_one) (add_one_le_exp _)
 
 中文:
 定理 exp_neg_two_mul_le
@@ -1019,7 +1066,8 @@ theorem exp_neg_two_mul_le
     _ <= exp (1 - x) / (x + 1) := ?_
     _ <= exp (2 - ⌈x⌉₊) / (x + 1) := by gcongr
     _ < _ := by gcongr
-  rw [le_div_iff₀ (add_pos hx zero_lt_one)]; rw [← le_div_iff₀' (exp_pos _)]; rw [← exp_sub]; rw [neg_m
+  rw [le_div_iff₀ (add_pos hx zero_lt_one)]; rw [← le_div_iff₀' (exp_pos _)]; rw [← exp_sub]; rw [neg_mul]; rw [sub_neg_eq_add]; rw [two_mul]; rw [sub_add_add_cancel]; rw [add_comm _ x]
+  exact le_trans (le_add_of_nonneg_right zero_le_one) (add_one_le_exp _)
 
 Depends on / 依赖: add_comm, add_one_le_exp, add_pos, ceil_lt_add_one, exp_pos, exp_sub, hx.le, le_add_of_nonneg_right, le_trans, neg_mul, sub_add_add_cancel, sub_neg_eq_add, two_mul, zero_le_one, zero_lt_one
 -/
@@ -1046,7 +1094,9 @@ theorem div_lt_floor
     rw [sub_pos]; rw [div_lt_one (exp_pos _)]
     exact exp_one_gt_two
   rwa [le_sub_comm, div_eq_mul_one_div x, div_eq_mul_one_div x, ← mul_sub, div_sub', ←
-    div_eq_mul_one_div, mul_div_assoc', one_le_div, ← div_le
+    div_eq_mul_one_div, mul_div_assoc', one_le_div, ← div_le_iff₀ this]
+  · exact zero_lt_two
+  · exact two_ne_zero
 
 中文:
 定理 div_lt_floor
@@ -1058,7 +1108,9 @@ theorem div_lt_floor
     rw [sub_pos]; rw [div_lt_one (exp_pos _)]
     exact exp_one_gt_two
   rwa [le_sub_comm, div_eq_mul_one_div x, div_eq_mul_one_div x, ← mul_sub, div_sub', ←
-    div_eq_mul_one_div, mul_div_assoc', one_le_div, ← div_le
+    div_eq_mul_one_div, mul_div_assoc', one_le_div, ← div_le_iff₀ this]
+  · exact zero_lt_two
+  · exact two_ne_zero
 
 Depends on / 依赖: div_eq_mul_one_div, div_lt_one, div_sub, exp_one_gt_two, exp_pos, le_sub_comm, lt_of_le_of_lt, mul_div_assoc, mul_sub, one_le_div, sub_one_lt_floor, sub_pos, two_ne_zero, zero_lt_two
 -/
@@ -1178,7 +1230,9 @@ theorem three_le_nValue
     rw [rpow_natCast]
     exact (cast_le.2 hN).trans' (by norm_num1)
   apply lt_of_lt_of_le _ (log_le_log (rpow_pos_of_pos zero_lt_two _) this)
-  rw [l
+  rw [log_rpow zero_lt_two]; rw [← div_lt_iff₀']
+  · exact log_two_gt_d9.trans_le' (by norm_num1)
+  · norm_num1
 
 中文:
 定理 three_le_nValue
@@ -1191,7 +1245,9 @@ theorem three_le_nValue
     rw [rpow_natCast]
     exact (cast_le.2 hN).trans' (by norm_num1)
   apply lt_of_lt_of_le _ (log_le_log (rpow_pos_of_pos zero_lt_two _) this)
-  rw [l
+  rw [log_rpow zero_lt_two]; rw [← div_lt_iff₀']
+  · exact log_two_gt_d9.trans_le' (by norm_num1)
+  · norm_num1
 
 Depends on / 依赖: cast_le, cast_two, log_le_log, log_rpow, log_two_gt_d9, log_two_gt_d9.trans_le, lt_ceil, lt_iff_add_one_le, lt_of_lt_of_le, lt_sqrt_of_sq_lt, nValue, norm_num1, rpow_natCast, rpow_pos_of_pos, trans_le, zero_lt_two
 -/
@@ -1216,7 +1272,21 @@ theorem dValue_pos
   proof: by
   have hN₀ : 0 < (N : Real) := cast_pos.2 (succ_pos'.trans_le hN₃)
   rw [dValue]; rw [floor_pos]; rw [← log_le_log_iff zero_lt_one]; rw [log_one]; rw [log_div _ two_ne_zero]; rw [log_rpow hN₀]; rw [inv_mul_eq_div]; rw [sub_nonneg]; rw [le_div_iff₀]
-  · have : (nValue N : Real) <= 2 * √(log N) := 
+  · have : (nValue N : Real) <= 2 * √(log N) := by
+      apply (ceil_lt_add_one <| sqrt_nonneg _).le.trans
+      rw [two_mul]; rw [add_le_add_iff_left]
+      apply le_sqrt_of_sq_le
+      rw [one_pow]; rw [le_log_iff_exp_le hN₀]
+      exact (exp_one_lt_d9.le.trans <| by norm_num).trans (cast_le.2 hN₃)
+    apply (mul_le_mul_of_nonneg_left this <| log_nonneg one_le_two).trans _
+    rw [← mul_assoc]; rw [← le_div_iff₀ (Real.sqrt_pos.2 <| log_pos <| one_lt_cast.2 _)]; rw [div_sqrt]
+    · apply log_two_mul_two_le_sqrt_log_eight.trans
+      apply Real.sqrt_le_sqrt
+      exact log_le_log (by simp) (mod_cast hN₃)
+    exact hN₃.trans_lt' (by simp)
+  · exact cast_pos.2 (nValue_pos <| hN₃.trans' <| by simp)
+  · exact (rpow_pos_of_pos hN₀ _).ne'
+  · exact div_pos (rpow_pos_of_pos hN₀ _) zero_lt_two
 
 中文:
 定理 dValue_pos
@@ -1225,7 +1295,21 @@ theorem dValue_pos
   证明: by
   have hN₀ : 0 < (N : Real) := cast_pos.2 (succ_pos'.trans_le hN₃)
   rw [dValue]; rw [floor_pos]; rw [← log_le_log_iff zero_lt_one]; rw [log_one]; rw [log_div _ two_ne_zero]; rw [log_rpow hN₀]; rw [inv_mul_eq_div]; rw [sub_nonneg]; rw [le_div_iff₀]
-  · have : (nValue N : Real) <= 2 * √(log N) := 
+  · have : (nValue N : Real) <= 2 * √(log N) := by
+      apply (ceil_lt_add_one <| sqrt_nonneg _).le.trans
+      rw [two_mul]; rw [add_le_add_iff_left]
+      apply le_sqrt_of_sq_le
+      rw [one_pow]; rw [le_log_iff_exp_le hN₀]
+      exact (exp_one_lt_d9.le.trans <| by norm_num).trans (cast_le.2 hN₃)
+    apply (mul_le_mul_of_nonneg_left this <| log_nonneg one_le_two).trans _
+    rw [← mul_assoc]; rw [← le_div_iff₀ (Real.sqrt_pos.2 <| log_pos <| one_lt_cast.2 _)]; rw [div_sqrt]
+    · apply log_two_mul_two_le_sqrt_log_eight.trans
+      apply Real.sqrt_le_sqrt
+      exact log_le_log (by simp) (mod_cast hN₃)
+    exact hN₃.trans_lt' (by simp)
+  · exact cast_pos.2 (nValue_pos <| hN₃.trans' <| by simp)
+  · exact (rpow_pos_of_pos hN₀ _).ne'
+  · exact div_pos (rpow_pos_of_pos hN₀ _) zero_lt_two
 
 Depends on / 依赖: add_le_add_iff_left, cast_pos, ceil_lt_add_one, dValue, exp_one_lt_d9, exp_one_lt_d9.le.trans, floor_pos, inv_mul_eq_div, le.trans, le_log_iff_exp_le, le_sqrt_of_sq_le, log_div, log_le_log_iff, log_one, log_rpow, nValue, one_pow, sqrt_nonneg, sub_nonneg, succ_pos
 -/
@@ -1261,7 +1345,14 @@ theorem le_N
   apply this.trans
   suffices ((2 * dValue N) ^ nValue N : Real) <= N from mod_cast this
   suffices i : (2 * dValue N : Real) <= (N : Real) ^ (nValue N : Real)⁻¹ by
-    rw [← rpow_nat
+    rw [← rpow_natCast]
+    apply (rpow_le_rpow (mul_nonneg zero_le_two (cast_nonneg _)) i (cast_nonneg _)).trans
+    rw [← rpow_mul (cast_nonneg _)]; rw [inv_mul_cancel₀]; rw [rpow_one]
+    rw [cast_ne_zero]
+    apply (nValue_pos hN).ne'
+  rw [← le_div_iff₀']
+  · exact floor_le (by positivity)
+  apply zero_lt_two
 
 中文:
 定理 le_N
@@ -1273,7 +1364,14 @@ theorem le_N
   apply this.trans
   suffices ((2 * dValue N) ^ nValue N : Real) <= N from mod_cast this
   suffices i : (2 * dValue N : Real) <= (N : Real) ^ (nValue N : Real)⁻¹ by
-    rw [← rpow_nat
+    rw [← rpow_natCast]
+    apply (rpow_le_rpow (mul_nonneg zero_le_two (cast_nonneg _)) i (cast_nonneg _)).trans
+    rw [← rpow_mul (cast_nonneg _)]; rw [inv_mul_cancel₀]; rw [rpow_one]
+    rw [cast_ne_zero]
+    apply (nValue_pos hN).ne'
+  rw [← le_div_iff₀']
+  · exact floor_le (by positivity)
+  apply zero_lt_two
 
 Depends on / 依赖: Nat.pow_le_pow_left, Nat.sub_le, cast_ne_zero, cast_nonneg, dValue, le_di, mod_cast, mul_nonneg, nValue, nValue_pos, pow_le_pow_left, rpow_le_rpow, rpow_mul, rpow_natCast, rpow_one, sub_le, this.trans, zero_le_two
 -/
@@ -1307,7 +1405,23 @@ theorem bound
       · norm_num [le_sqrt_log hN]
       · norm_num1
     · rw [cast_pos, lt_ceil, cast_zero, Real.sqrt_pos]
- 
+      refine log_pos ?_
+      rw [one_lt_cast]
+      exact hN.trans_lt' (by norm_num1)
+    apply le_sqrt_of_sq_le
+    have : (12 : Nat) * log 2 <= log N := by
+      rw [← log_rpow zero_lt_two]; rw [rpow_natCast]
+      exact log_le_log (by positivity) (mod_cast hN)
+    refine le_trans ?_ this
+    rw [← div_le_iff₀']
+    · exact log_two_gt_d9.le.trans' (by norm_num1)
+    · norm_num1
+  · rw [cast_pos]
+    exact hN.trans_lt' (by norm_num1)
+  · refine div_pos zero_lt_two ?_
+    rw [sub_pos]; rw [div_lt_one (exp_pos _)]
+    exact exp_one_gt_two
+  positivity
 
 中文:
 定理 bound
@@ -1321,7 +1435,23 @@ theorem bound
       · norm_num [le_sqrt_log hN]
       · norm_num1
     · rw [cast_pos, lt_ceil, cast_zero, Real.sqrt_pos]
- 
+      refine log_pos ?_
+      rw [one_lt_cast]
+      exact hN.trans_lt' (by norm_num1)
+    apply le_sqrt_of_sq_le
+    have : (12 : Nat) * log 2 <= log N := by
+      rw [← log_rpow zero_lt_two]; rw [rpow_natCast]
+      exact log_le_log (by positivity) (mod_cast hN)
+    refine le_trans ?_ this
+    rw [← div_le_iff₀']
+    · exact log_two_gt_d9.le.trans' (by norm_num1)
+    · norm_num1
+  · rw [cast_pos]
+    exact hN.trans_lt' (by norm_num1)
+  · refine div_pos zero_lt_two ?_
+    rw [sub_pos]; rw [div_lt_one (exp_pos _)]
+    exact exp_one_gt_two
+  positivity
 
 Depends on / 依赖: Real.sqrt_pos, cast_pos, cast_zero, ceil_lt_mul, div_div, div_eq_mul_inv, div_lt_floor, div_sqrt, hN.trans_lt, le_sqrt_log, le_sqrt_of_sq_le, log_le_log, log_le_log_iff, log_pos, log_rpow, lt_ceil, mod_cast, mul_comm, nValue, norm_num1
 -/
@@ -1362,7 +1492,31 @@ theorem roth_lower_bound_explicit
   have hn : 0 < (n : Real) := cast_pos.2 (nValue_pos <| hN.trans' <| by norm_num1)
   have hd : 0 < dValue N := dValue_pos (hN.trans' <| by norm_num1)
   have hN₀ : 0 < (N : Real) := cast_pos.2 (hN.trans' <| by norm_num1)
-have hn₂ : 2 < n := three_le_nValue hN.trans' by norm_num
+have hn₂ : 2 < n := three_le_nValue hN.trans' by norm_num1
+  have : (2 * dValue N - 1) ^ n <= N := le_N (hN.trans' <| by norm_num1)
+  calc
+    _ <= (N ^ (nValue N : Real)⁻¹ / rexp 1 : Real) ^ (n - 2) / n := ?_
+    _ < _ := by gcongr; exacts [(tsub_pos_of_lt hn₂).ne', bound hN]
+    _ <= rothNumberNat ((2 * dValue N - 1) ^ n) := bound_aux hd.ne' hn₂.le
+    _ <= rothNumberNat N := mod_cast rothNumberNat.mono this
+  rw [← rpow_natCast]; rw [div_rpow (rpow_nonneg hN₀.le _) (exp_pos _).le]; rw [← rpow_mul hN₀.le]; rw [inv_mul_eq_div]; rw [cast_sub hn₂.le]; rw [cast_two]; rw [same_sub_div hn.ne']; rw [exp_one_rpow]; rw [div_div]; rw [rpow_sub hN₀]; rw [rpow_one]; rw [div_div]; rw [div_eq_mul_inv]
+  gcongr _ * ?_
+  rw [mul_inv]; rw [mul_inv]; rw [← exp_neg]; rw [← rpow_neg (cast_nonneg _)]; rw [neg_sub]; rw [← div_eq_mul_inv]
+  have : exp (-4 * √(log N)) = exp (-2 * √(log N)) * exp (-2 * √(log N)) := by
+    rw [← exp_add]; rw [← add_mul]
+    norm_num
+  rw [this]
+  gcongr
+  · rw [← le_log_iff_exp_le (rpow_pos_of_pos hN₀ _), log_rpow hN₀, ← le_div_iff₀, mul_div_assoc,
+      div_sqrt, neg_mul, neg_le_neg_iff, div_mul_eq_mul_div, div_le_iff₀ hn]
+    · gcongr
+      apply le_ceil
+    refine Real.sqrt_pos.2 (log_pos ?_)
+    rw [one_lt_cast]
+    exact hN.trans_lt' (by norm_num1)
+  · refine (exp_neg_two_mul_le <| Real.sqrt_pos.2 <| log_pos ?_).le
+    rw [one_lt_cast]
+    exact hN.trans_lt' (by norm_num1)
 
 中文:
 定理 roth_lower_bound_explicit
@@ -1372,7 +1526,31 @@ have hn₂ : 2 < n := three_le_nValue hN.trans' by norm_num
   have hn : 0 < (n : Real) := cast_pos.2 (nValue_pos <| hN.trans' <| by norm_num1)
   have hd : 0 < dValue N := dValue_pos (hN.trans' <| by norm_num1)
   have hN₀ : 0 < (N : Real) := cast_pos.2 (hN.trans' <| by norm_num1)
-have hn₂ : 2 < n := three_le_nValue hN.trans' by norm_num
+have hn₂ : 2 < n := three_le_nValue hN.trans' by norm_num1
+  have : (2 * dValue N - 1) ^ n <= N := le_N (hN.trans' <| by norm_num1)
+  calc
+    _ <= (N ^ (nValue N : Real)⁻¹ / rexp 1 : Real) ^ (n - 2) / n := ?_
+    _ < _ := by gcongr; exacts [(tsub_pos_of_lt hn₂).ne', bound hN]
+    _ <= rothNumberNat ((2 * dValue N - 1) ^ n) := bound_aux hd.ne' hn₂.le
+    _ <= rothNumberNat N := mod_cast rothNumberNat.mono this
+  rw [← rpow_natCast]; rw [div_rpow (rpow_nonneg hN₀.le _) (exp_pos _).le]; rw [← rpow_mul hN₀.le]; rw [inv_mul_eq_div]; rw [cast_sub hn₂.le]; rw [cast_two]; rw [same_sub_div hn.ne']; rw [exp_one_rpow]; rw [div_div]; rw [rpow_sub hN₀]; rw [rpow_one]; rw [div_div]; rw [div_eq_mul_inv]
+  gcongr _ * ?_
+  rw [mul_inv]; rw [mul_inv]; rw [← exp_neg]; rw [← rpow_neg (cast_nonneg _)]; rw [neg_sub]; rw [← div_eq_mul_inv]
+  have : exp (-4 * √(log N)) = exp (-2 * √(log N)) * exp (-2 * √(log N)) := by
+    rw [← exp_add]; rw [← add_mul]
+    norm_num
+  rw [this]
+  gcongr
+  · rw [← le_log_iff_exp_le (rpow_pos_of_pos hN₀ _), log_rpow hN₀, ← le_div_iff₀, mul_div_assoc,
+      div_sqrt, neg_mul, neg_le_neg_iff, div_mul_eq_mul_div, div_le_iff₀ hn]
+    · gcongr
+      apply le_ceil
+    refine Real.sqrt_pos.2 (log_pos ?_)
+    rw [one_lt_cast]
+    exact hN.trans_lt' (by norm_num1)
+  · refine (exp_neg_two_mul_le <| Real.sqrt_pos.2 <| log_pos ?_).le
+    rw [one_lt_cast]
+    exact hN.trans_lt' (by norm_num1)
 
 Depends on / 依赖: cast_pos, dValue, dValue_pos, exacts, hN.trans, le_N, nValue, nValue_pos, norm_num1, three_le_nValue, tsub_pos_of_lt
 -/
@@ -1469,7 +1647,10 @@ theorem lower_bound_le_one'
   proof: by
   rw [← log_le_log_iff (mul_pos (cast_pos.2 (zero_lt_two.trans_le hN)) (exp_pos _)) zero_lt_one]; rw [log_one]; rw [log_mul (cast_pos.2 (zero_lt_two.trans_le hN)).ne' (exp_pos _).ne']; rw [log_exp]; rw [neg_mul]; rw [←
     sub_eq_add_neg]; rw [sub_nonpos]; rw [←
-    div_le_iff₀ (Real.sqrt_pos.2 <
+    div_le_iff₀ (Real.sqrt_pos.2 <| log_pos <| one_lt_cast.2 <| one_lt_two.trans_le hN)]; rw [div_sqrt]; rw [sqrt_le_left zero_le_four]; rw [log_le_iff_le_exp (cast_pos.2 (zero_lt_two.trans_le hN))]
+  norm_num1
+  apply le_trans _ four_zero_nine_six_lt_exp_sixteen.le
+  exact mod_cast hN'
 
 中文:
 定理 lower_bound_le_one'
@@ -1477,7 +1658,10 @@ theorem lower_bound_le_one'
   证明: by
   rw [← log_le_log_iff (mul_pos (cast_pos.2 (zero_lt_two.trans_le hN)) (exp_pos _)) zero_lt_one]; rw [log_one]; rw [log_mul (cast_pos.2 (zero_lt_two.trans_le hN)).ne' (exp_pos _).ne']; rw [log_exp]; rw [neg_mul]; rw [←
     sub_eq_add_neg]; rw [sub_nonpos]; rw [←
-    div_le_iff₀ (Real.sqrt_pos.2 <
+    div_le_iff₀ (Real.sqrt_pos.2 <| log_pos <| one_lt_cast.2 <| one_lt_two.trans_le hN)]; rw [div_sqrt]; rw [sqrt_le_left zero_le_four]; rw [log_le_iff_le_exp (cast_pos.2 (zero_lt_two.trans_le hN))]
+  norm_num1
+  apply le_trans _ four_zero_nine_six_lt_exp_sixteen.le
+  exact mod_cast hN'
 
 Depends on / 依赖: Real.sqrt_pos, cast_pos, div_sqrt, exp_pos, four_zero_nine_six, le_trans, log_exp, log_le_iff_le_exp, log_le_log_iff, log_mul, log_one, log_pos, mul_pos, neg_mul, norm_num1, one_lt_cast, one_lt_two, one_lt_two.trans_le, sqrt_le_left, sqrt_pos
 -/

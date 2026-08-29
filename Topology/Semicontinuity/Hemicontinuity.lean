@@ -44,7 +44,8 @@ case mono => exact fun t₁ t₂ ht h => h.mp .of_forall fun x' => by gcongr
   apply forall₂_congr
   simp +contextual [← subset_interior_iff_mem_nhdsSet, IsOpen.interior_eq]
 
-alias ⟨UpperHemicont
+alias ⟨UpperHemicontinuousWithinAt.forall_isOpen, UpperHemicontinuousWithinAt.of_forall_isOpen⟩ :=
+  upperHemicontinuousWithinAt_iff_forall_isOpen
 
 中文:
 引理 upperHemicontinuousWithinAt_iff_对任意_isOpen
@@ -55,7 +56,8 @@ case mono => exact fun t₁ t₂ ht h => h.mp .of_forall fun x' => by gcongr
   apply forall₂_congr
   simp +contextual [← subset_interior_iff_mem_nhdsSet, IsOpen.interior_eq]
 
-alias ⟨UpperHemicont
+alias ⟨UpperHemicontinuousWithinAt.forall_isOpen, UpperHemicontinuousWithinAt.of_forall_isOpen⟩ :=
+  upperHemicontinuousWithinAt_iff_forall_isOpen
 
 Depends on / 依赖: IsOpen, IsOpen.interior_eq, and_imp, contextual, forall_iff, h.mp, hasBasis_nhdsSet, interior_eq, of_forall, subset_interior_iff_mem_nhdsSet, upperHemicontinuousWithinAt_iff
 -/
@@ -173,7 +175,7 @@ lemma upperHemicontinuousWithinAt_iff_preimage_Iic
     intro s t hst
     gcongr
   refine forall₂_congr fun u ⟨hu, hfu⟩ => ?_
-  simp [hu.mem_nhdsSet, event
+  simp [hu.mem_nhdsSet, eventually_iff, Iic]
 
 中文:
 引理 upperHemicontinuousWithinAt_iff_preimage_Iic
@@ -187,7 +189,7 @@ lemma upperHemicontinuousWithinAt_iff_preimage_Iic
     intro s t hst
     gcongr
   refine forall₂_congr fun u ⟨hu, hfu⟩ => ?_
-  simp [hu.mem_nhdsSet, event
+  simp [hu.mem_nhdsSet, eventually_iff, Iic]
 
 Depends on / 依赖: eventually_iff, forall_iff, hasBasis_nhdsSet, hu.mem_nhdsSet, mem_nhdsSet, simp_rw, upperHemicontinuousWithinAt_iff
 -/
@@ -496,7 +498,12 @@ lemma upperHemicontinuousWithinAt_singleton_iff
     tendsto_iff_forall_eventually_mem]
   intro h t ht
   filter_upwards [h t ht] with x
-  exa
+  exact mem_of_mem_nhds
+
+alias ⟨_, ContinuousWithinAt.upperHemicontinuousWithinAt⟩ :=
+  upperHemicontinuousWithinAt_singleton_iff
+
+@[simp]
 
 中文:
 引理 upperHemicontinuousWithinAt_singleton_iff
@@ -507,7 +514,12 @@ lemma upperHemicontinuousWithinAt_singleton_iff
     tendsto_iff_forall_eventually_mem]
   intro h t ht
   filter_upwards [h t ht] with x
-  exa
+  exact mem_of_mem_nhds
+
+alias ⟨_, ContinuousWithinAt.upperHemicontinuousWithinAt⟩ :=
+  upperHemicontinuousWithinAt_singleton_iff
+
+@[simp]
 
 Depends on / 依赖: ContinuousWithinAt, filter_upwards, mapsTo_image, mem_of_mem_nhds, nhdsSet_singleton, tendsto_iff_forall_eventually_mem, upperHemicontinuousWithinAt, upperHemicontinuousWithinAt_iff, upperHemicontinuous_singleton_id, upperHemicontinuous_singleton_id.upperHemicontinuousWithinAt
 -/
@@ -650,7 +662,13 @@ lemma lowerHemicontinuousWithinAt_singleton_iff
   simp only [lowerHemicontinuousWithinAt_iff, Set.singleton_inter_nonempty,
     ContinuousWithinAt, tendsto_iff_forall_eventually_mem]
   intro h t ht
-  obtain ⟨u, hut, huo, h
+  obtain ⟨u, hut, huo, hux⟩ := mem_nhds_iff.mp ht
+  exact (h u huo hux).mono fun _ hx' => hut hx'
+
+alias ⟨_, ContinuousWithinAt.lowerHemicontinuousWithinAt⟩ :=
+  lowerHemicontinuousWithinAt_singleton_iff
+
+@[simp]
 
 中文:
 引理 lowerHemicontinuousWithinAt_singleton_iff
@@ -660,7 +678,13 @@ lemma lowerHemicontinuousWithinAt_singleton_iff
   simp only [lowerHemicontinuousWithinAt_iff, Set.singleton_inter_nonempty,
     ContinuousWithinAt, tendsto_iff_forall_eventually_mem]
   intro h t ht
-  obtain ⟨u, hut, huo, h
+  obtain ⟨u, hut, huo, hux⟩ := mem_nhds_iff.mp ht
+  exact (h u huo hux).mono fun _ hx' => hut hx'
+
+alias ⟨_, ContinuousWithinAt.lowerHemicontinuousWithinAt⟩ :=
+  lowerHemicontinuousWithinAt_singleton_iff
+
+@[simp]
 
 Depends on / 依赖: ContinuousWithinAt, Set.singleton_inter_nonempty, lowerHemicontinuousWithinAt, lowerHemicontinuousWithinAt_iff, lowerHemicontinuous_singleton_id, lowerHemicontinuous_singleton_id.lowerHemicontinuousWithinAt, mapsTo_image, mem_nhds_iff, mem_nhds_iff.mp, singleton_inter_nonempty, tendsto_iff_forall_eventually_mem
 -/
@@ -1133,7 +1157,8 @@ obtain ⟨y₀, hy₀, φ, hφ, hyφ⟩ := hK.subseq_of_frequently_in (x := y) b
     refine Eventually.frequently ?_
     filter_upwards [hx hf] with n hn
     exact hn (hy n).1
-  s
+  specialize h (x ∘ φ) (hx.comp hφ.tendsto_atTop) (y ∘ φ) (fun n => (hy _).1) _ hyφ
+exact ⟨y₀, h, ht.closure_eq ▸ mem_closure_of_tendsto hyφ .of_forall fun n => (hy _).2⟩
 
 中文:
 引理 UpperHemicontinuousAt.of_sequences
@@ -1146,7 +1171,8 @@ obtain ⟨y₀, hy₀, φ, hφ, hyφ⟩ := hK.subseq_of_frequently_in (x := y) b
     refine Eventually.frequently ?_
     filter_upwards [hx hf] with n hn
     exact hn (hy n).1
-  s
+  specialize h (x ∘ φ) (hx.comp hφ.tendsto_atTop) (y ∘ φ) (fun n => (hy _).1) _ hyφ
+exact ⟨y₀, h, ht.closure_eq ▸ mem_closure_of_tendsto hyφ .of_forall fun n => (hy _).2⟩
 
 Depends on / 依赖: Eventually, Eventually.frequently, closure_eq, exists_seq_forall_of_frequently, filter_upwards, frequently, hK.subseq_of_frequently_in, ht.closure_eq, hx.comp, mem_closure_of_tendsto, of_forall, of_frequently, specialize, subseq_of_frequently_in, tendsto_atTop
 -/
@@ -1180,7 +1206,8 @@ obtain ⟨s, hs, t, ht, hst⟩ := Filter.disjoint_iff.mp RegularSpace.regular hf
     exact hst.notMem_of_mem_left hyn hn
   apply hy.mp
   filter_upwards [hx (hf s hs)] with n hn hyn
-
+  simp only [← subset_interior_iff_mem_nhdsSet, preimage_ofPred_eq, mem_ofPred_eq] at hn
+exact interior_subset hn hyn
 
 中文:
 引理 UpperHemicontinuousAt.mem_of_tendsto
@@ -1194,7 +1221,8 @@ obtain ⟨s, hs, t, ht, hst⟩ := Filter.disjoint_iff.mp RegularSpace.regular hf
     exact hst.notMem_of_mem_left hyn hn
   apply hy.mp
   filter_upwards [hx (hf s hs)] with n hn hyn
-
+  simp only [← subset_interior_iff_mem_nhdsSet, preimage_ofPred_eq, mem_ofPred_eq] at hn
+exact interior_subset hn hyn
 
 Depends on / 依赖: Filter, Filter.disjoint_iff.mp, RegularSpace, RegularSpace.regular, disjoint_iff, filter_upwards, hf_closed, hst.notMem_of_mem_left, hy.mp, interior_subset, mem_ofPred_eq, notMem_of_mem_left, preimage_ofPred_eq, regular, subset_interior_iff_mem_nhdsSet
 -/
@@ -1228,7 +1256,7 @@ lemma LowerHemicontinuousAt.of_sequences
   obtain ⟨x, hx, hxU⟩ := exists_seq_forall_of_frequently hc
   obtain ⟨y, hy_mem, hy_lim⟩ := h x hx y₀ hy₀f
   obtain ⟨n, hn⟩ := (hy_lim.eventually (hU.mem_nhds hy₀U)).exists
-  exact hxU
+  exact hxU n ⟨y n, hy_mem n, hn⟩
 
 中文:
 引理 LowerHemicontinuousAt.of_sequences
@@ -1241,7 +1269,7 @@ lemma LowerHemicontinuousAt.of_sequences
   obtain ⟨x, hx, hxU⟩ := exists_seq_forall_of_frequently hc
   obtain ⟨y, hy_mem, hy_lim⟩ := h x hx y₀ hy₀f
   obtain ⟨n, hn⟩ := (hy_lim.eventually (hU.mem_nhds hy₀U)).exists
-  exact hxU
+  exact hxU n ⟨y n, hy_mem n, hn⟩
 
 Depends on / 依赖: Filter, Filter.not_eventually, eventually, exists_seq_forall_of_frequently, hU.mem_nhds, hy_lim, hy_lim.eventually, hy_mem, lowerHemicontinuousAt_iff, mem_nhds, not_eventually
 -/
@@ -1269,7 +1297,20 @@ lemma LowerHemicontinuousAt.exists_seq_tendsto
   obtain ⟨U, hU, hUbasis⟩ := (nhds_basis_opens y₀).exists_antitone_subbasis
   have hev (k) : forallᶠ n in atTop, (f (x n) inter U k).Nonempty :=
 hx.eventually (lowerHemicontinuousAt_iff.mp hf) (U k) (hU k).2 ⟨y₀, hy₀, (hU k).1⟩
-  -- For each `n`, find the largest `k ≤ n` where `U k` i
+  -- For each `n`, find the largest `k ≤ n` where `U k` intersects `f (x n)`.
+  let g : Nat -> Nat := fun n => Nat.findGreatest (fun k => (f (x n) inter U k).Nonempty) n
+  have key (n k) (hkn : k <= n) (hk : (f (x n) inter U k).Nonempty) : (f (x n) inter U (g n)).Nonempty :=
+    Nat.findGreatest_spec (P := fun k => (f (x n) inter U k).Nonempty) hkn hk
+  -- Define `y n` to be some element of `f (x n) ∩ U (g n)` (or be arbitrary)
+  let y : Nat -> β := fun n => if h : (f (x n) inter U (g n)).Nonempty then h.some else y₀
+  have hy (n) (h : (f (x n) inter U (g n)).Nonempty) : y n in f (x n) inter U (g n) := by
+    simpa only [y, dif_pos h] using h.some_mem
+  refine ⟨y, (hev 0).mono (by grind), ?_⟩
+  -- Have to show for all `k`, eventually, all `y n ∈ U k`.
+  rw [hUbasis.tendsto_right_iff]
+  intro k _
+  filter_upwards [hev k, eventually_ge_atTop k] with n hk hkn
+  exact hUbasis.antitone (Nat.le_findGreatest hkn hk) (hy n (key n k hkn hk)).2
 
 中文:
 引理 LowerHemicontinuousAt.存在_seq_tendsto
@@ -1279,7 +1320,20 @@ hx.eventually (lowerHemicontinuousAt_iff.mp hf) (U k) (hU k).2 ⟨y₀, hy₀, (
   obtain ⟨U, hU, hUbasis⟩ := (nhds_basis_opens y₀).exists_antitone_subbasis
   have hev (k) : forallᶠ n in atTop, (f (x n) inter U k).Nonempty :=
 hx.eventually (lowerHemicontinuousAt_iff.mp hf) (U k) (hU k).2 ⟨y₀, hy₀, (hU k).1⟩
-  -- For each `n`, find the largest `k ≤ n` where `U k` i
+  -- For each `n`, find the largest `k ≤ n` where `U k` intersects `f (x n)`.
+  let g : Nat -> Nat := fun n => Nat.findGreatest (fun k => (f (x n) inter U k).Nonempty) n
+  have key (n k) (hkn : k <= n) (hk : (f (x n) inter U k).Nonempty) : (f (x n) inter U (g n)).Nonempty :=
+    Nat.findGreatest_spec (P := fun k => (f (x n) inter U k).Nonempty) hkn hk
+  -- Define `y n` to be some element of `f (x n) ∩ U (g n)` (or be arbitrary)
+  let y : Nat -> β := fun n => if h : (f (x n) inter U (g n)).Nonempty then h.some else y₀
+  have hy (n) (h : (f (x n) inter U (g n)).Nonempty) : y n in f (x n) inter U (g n) := by
+    simpa only [y, dif_pos h] using h.some_mem
+  refine ⟨y, (hev 0).mono (by grind), ?_⟩
+  -- Have to show for all `k`, eventually, all `y n ∈ U k`.
+  rw [hUbasis.tendsto_right_iff]
+  intro k _
+  filter_upwards [hev k, eventually_ge_atTop k] with n hk hkn
+  exact hUbasis.antitone (Nat.le_findGreatest hkn hk) (hy n (key n k hkn hk)).2
 
 Depends on / 依赖: Nonempty, classical, eventually, exists_antitone_subbasis, hUbasis, hx.eventually, lowerHemicontinuousAt_iff, lowerHemicontinuousAt_iff.mp, nhds_basis_opens
 -/
@@ -1403,7 +1457,10 @@ lemma LowerHemicontinuous.inter_hasOpenCGraph
   rw [isOpen_iff_forall_mem_open]
   intro x ⟨y, ⟨hyf, hyg⟩, hyt⟩
   obtain ⟨U, V, hU, hV, hxU, hyV, hUV⟩ := (isOpen_prod_iff.mp hg) x y hyg
-  refine ⟨U inter {x' | (f x' inter (t inter V)).Nonempty}, ?_, hU.inter (hf _ 
+  refine ⟨U inter {x' | (f x' inter (t inter V)).Nonempty}, ?_, hU.inter (hf _ (ht.inter hV)),
+      ⟨hxU, y, hyf, hyt, hyV⟩⟩
+  intro x' ⟨hx'U, z, hzf, hzt, hzV⟩
+  exact ⟨z, ⟨hzf, hUV (Set.mk_mem_prod hx'U hzV)⟩, hzt⟩
 
 中文:
 引理 LowerHemicontinuous.inter_hasOpenCGraph
@@ -1414,7 +1471,10 @@ lemma LowerHemicontinuous.inter_hasOpenCGraph
   rw [isOpen_iff_forall_mem_open]
   intro x ⟨y, ⟨hyf, hyg⟩, hyt⟩
   obtain ⟨U, V, hU, hV, hxU, hyV, hUV⟩ := (isOpen_prod_iff.mp hg) x y hyg
-  refine ⟨U inter {x' | (f x' inter (t inter V)).Nonempty}, ?_, hU.inter (hf _ 
+  refine ⟨U inter {x' | (f x' inter (t inter V)).Nonempty}, ?_, hU.inter (hf _ (ht.inter hV)),
+      ⟨hxU, y, hyf, hyt, hyV⟩⟩
+  intro x' ⟨hx'U, z, hzf, hzt, hzV⟩
+  exact ⟨z, ⟨hzf, hUV (Set.mk_mem_prod hx'U hzV)⟩, hzt⟩
 
 Depends on / 依赖: Nonempty, Set.mk_mem_prod, hU.inter, ht.inter, isOpen_iff_forall_mem_open, isOpen_prod_iff, isOpen_prod_iff.mp, lowerHemicontinuous_iff_isOpen_inter_nonempty, mk_mem_prod, simp_rw
 -/
@@ -1458,7 +1518,25 @@ theorem TendstoUniformlyOn.lowerHemicontinuousOn
   intro V hV ⟨y₀, hy₀f, hy₀V⟩
   -- Obtain entourages W, U ∈ 𝓤 β with U ○ U ○ U ⊆ W
   obtain ⟨W, hW, hWsub⟩ := UniformSpace.mem_nhds_iff.mp (hV.mem_nhds hy₀V)
-  obtain ⟨U₁, hU₁, hU₁sym, hU₁comp⟩ := comp_symm_me
+  obtain ⟨U₁, hU₁, hU₁sym, hU₁comp⟩ := comp_symm_mem_uniformity_sets hW
+  obtain ⟨U, hU, hUsym, hUcomp⟩ := comp_symm_mem_uniformity_sets hU₁
+  have hU_le_U₁ : U subseteq U₁ := fun _p hp => hUcomp ⟨_, refl_mem_uniformity hU, hp⟩
+  -- Eventually, ⟨f x, F N x⟩ ∈ hausdorffEntourage U for all x ∈ s
+  have hHU : hausdorffEntourage U in @uniformity (Set β) (UniformSpace.hausdorff (α := β)) :=
+    (mem_lift'_sets monotone_hausdorffEntourage).mpr ⟨U, hU, le_refl _⟩
+  obtain ⟨N, hN⟩ := (htendsto (hausdorffEntourage U) hHU).exists
+  -- In which case, ⟨y₀, z₀⟩ ∈ U for some z₀ ∈ F N x₀
+  obtain ⟨z₀, hz₀FN, hz₀y₀⟩ :=
+    ((mem_hausdorffEntourage U (f x₀) (F N x₀)).mp (hN x₀ hx₀s)).1 hy₀f
+  -- By lower hemicontinuity, a ball around z₀ intersects all x in a neighborhood of x₀
+  obtain ⟨U', ⟨hU'mem, hU'open⟩, hU'sub⟩ := uniformity_hasBasis_open.mem_iff.mp hU
+  have hmeet₀ : (F N x₀ inter ball z₀ U').Nonempty := ⟨z₀, hz₀FN, mem_ball_self z₀ hU'mem⟩
+  have hSmeet : forallᶠ x in 𝓝[s] x₀, (F N x inter ball z₀ U').Nonempty :=
+    lowerHemicontinuousWithinAt_iff.mp (hF _ _ hx₀s) _ (isOpen_ball _ hU'open) hmeet₀
+  filter_upwards [hSmeet, self_mem_nhdsWithin] with x ⟨w, hwFN, hwball⟩ hx_s
+  obtain ⟨v, hvf, hvw⟩ := ((mem_hausdorffEntourage U (f x) (F N x)).mp (hN x hx_s)).2 hwFN
+exact ⟨v, hvf, hWsub hU₁comp
+    ⟨w, hUcomp ⟨z₀, hz₀y₀, hU'sub hwball⟩, hU_le_U₁ (hUsym.symm _ _ hvw)⟩⟩
 
 中文:
 定理 TendstoUniformlyOn.lowerHemicontinuousOn
@@ -1470,7 +1548,25 @@ theorem TendstoUniformlyOn.lowerHemicontinuousOn
   intro V hV ⟨y₀, hy₀f, hy₀V⟩
   -- Obtain entourages W, U ∈ 𝓤 β with U ○ U ○ U ⊆ W
   obtain ⟨W, hW, hWsub⟩ := UniformSpace.mem_nhds_iff.mp (hV.mem_nhds hy₀V)
-  obtain ⟨U₁, hU₁, hU₁sym, hU₁comp⟩ := comp_symm_me
+  obtain ⟨U₁, hU₁, hU₁sym, hU₁comp⟩ := comp_symm_mem_uniformity_sets hW
+  obtain ⟨U, hU, hUsym, hUcomp⟩ := comp_symm_mem_uniformity_sets hU₁
+  have hU_le_U₁ : U subseteq U₁ := fun _p hp => hUcomp ⟨_, refl_mem_uniformity hU, hp⟩
+  -- Eventually, ⟨f x, F N x⟩ ∈ hausdorffEntourage U for all x ∈ s
+  have hHU : hausdorffEntourage U in @uniformity (Set β) (UniformSpace.hausdorff (α := β)) :=
+    (mem_lift'_sets monotone_hausdorffEntourage).mpr ⟨U, hU, le_refl _⟩
+  obtain ⟨N, hN⟩ := (htendsto (hausdorffEntourage U) hHU).exists
+  -- In which case, ⟨y₀, z₀⟩ ∈ U for some z₀ ∈ F N x₀
+  obtain ⟨z₀, hz₀FN, hz₀y₀⟩ :=
+    ((mem_hausdorffEntourage U (f x₀) (F N x₀)).mp (hN x₀ hx₀s)).1 hy₀f
+  -- By lower hemicontinuity, a ball around z₀ intersects all x in a neighborhood of x₀
+  obtain ⟨U', ⟨hU'mem, hU'open⟩, hU'sub⟩ := uniformity_hasBasis_open.mem_iff.mp hU
+  have hmeet₀ : (F N x₀ inter ball z₀ U').Nonempty := ⟨z₀, hz₀FN, mem_ball_self z₀ hU'mem⟩
+  have hSmeet : forallᶠ x in 𝓝[s] x₀, (F N x inter ball z₀ U').Nonempty :=
+    lowerHemicontinuousWithinAt_iff.mp (hF _ _ hx₀s) _ (isOpen_ball _ hU'open) hmeet₀
+  filter_upwards [hSmeet, self_mem_nhdsWithin] with x ⟨w, hwFN, hwball⟩ hx_s
+  obtain ⟨v, hvf, hvw⟩ := ((mem_hausdorffEntourage U (f x) (F N x)).mp (hN x hx_s)).2 hwFN
+exact ⟨v, hvf, hWsub hU₁comp
+    ⟨w, hUcomp ⟨z₀, hz₀y₀, hU'sub hwball⟩, hU_le_U₁ (hUsym.symm _ _ hvw)⟩⟩
 
 Depends on / 依赖: lowerHemicontinuousOn_iff, lowerHemicontinuousWithinAt_iff
 -/
@@ -1514,7 +1610,27 @@ theorem TendstoUniformlyOn.upperHemicontinuousOn
   rw [upperHemicontinuousOn_iff_forall_isOpen]
   intro x₀ hx₀s u hu hx₀u
   -- Find an open entourage `U` such that `U ○ U.symm ⊆ u`
-  obtain ⟨W, hW, _, hWu⟩ := lebesg
+  obtain ⟨W, hW, _, hWu⟩ := lebesgue_number_of_compact_open (hf_compact x₀ hx₀s) hu hx₀u
+  obtain ⟨V, hV, hVsym, hVcomp⟩ := comp_symm_mem_uniformity_sets hW
+  obtain ⟨U, ⟨hUmem, hUopen⟩, hUsub⟩ := uniformity_hasBasis_open.mem_iff.mp hV
+  -- Then choose a sufficiently large `N` such that `⟨f x, F N x⟩ ∈ hausdorffEntourage U`
+  -- for all `x ∈ s`
+  have hHU : hausdorffEntourage U in @uniformity _ (UniformSpace.hausdorff (α := β)) :=
+    (mem_lift'_sets monotone_hausdorffEntourage).mpr ⟨U, hUmem, le_refl _⟩
+  obtain ⟨N, hN⟩ := (htendsto (hausdorffEntourage U) hHU).exists
+  have hFN_image : F N x₀ subseteq U.image (f x₀) := ((mem_hausdorffEntourage ..).mp (hN x₀ hx₀s)).2
+  -- Upper hemicontinuity implies `F N x ⊆ U.image (f x₀)` for `x` near `x₀`
+  simp_rw [upperHemicontinuousOn_iff] at hF
+  have hFN_uhc : forallᶠ x in 𝓝[s] x₀, F N x subseteq U.image (f x₀) :=
+    (hF N x₀ hx₀s).forall_isOpen _ hUopen.relImage hFN_image
+  -- For such a nearby `x`, show `f x ⊆ u` by taking `y ∈ f x`,
+  filter_upwards [hFN_uhc, self_mem_nhdsWithin] with x hFNx hx_s
+  intro y hy
+  -- finding a `z ∈ F N x` such that `(y, z) ∈ U` and then some `y₀ ∈ f x₀` such that `⟨y₀, z⟩ ∈ U`
+  obtain ⟨z, hzFN, hyz⟩ := ((mem_hausdorffEntourage U (f x) (F N x)).mp (hN x hx_s)).1 hy
+  obtain ⟨y₀, hy₀f, hy₀z⟩ := hFNx hzFN
+  -- then use that `U ○ U.symm ⊆ u` to conclude
+  exact hWu y₀ hy₀f (hVcomp ⟨z, hUsub hy₀z, hVsym.symm _ _ (hUsub hyz)⟩)
 
 中文:
 定理 TendstoUniformlyOn.upperHemicontinuousOn
@@ -1525,7 +1641,27 @@ theorem TendstoUniformlyOn.upperHemicontinuousOn
   rw [upperHemicontinuousOn_iff_forall_isOpen]
   intro x₀ hx₀s u hu hx₀u
   -- Find an open entourage `U` such that `U ○ U.symm ⊆ u`
-  obtain ⟨W, hW, _, hWu⟩ := lebesg
+  obtain ⟨W, hW, _, hWu⟩ := lebesgue_number_of_compact_open (hf_compact x₀ hx₀s) hu hx₀u
+  obtain ⟨V, hV, hVsym, hVcomp⟩ := comp_symm_mem_uniformity_sets hW
+  obtain ⟨U, ⟨hUmem, hUopen⟩, hUsub⟩ := uniformity_hasBasis_open.mem_iff.mp hV
+  -- Then choose a sufficiently large `N` such that `⟨f x, F N x⟩ ∈ hausdorffEntourage U`
+  -- for all `x ∈ s`
+  have hHU : hausdorffEntourage U in @uniformity _ (UniformSpace.hausdorff (α := β)) :=
+    (mem_lift'_sets monotone_hausdorffEntourage).mpr ⟨U, hUmem, le_refl _⟩
+  obtain ⟨N, hN⟩ := (htendsto (hausdorffEntourage U) hHU).exists
+  have hFN_image : F N x₀ subseteq U.image (f x₀) := ((mem_hausdorffEntourage ..).mp (hN x₀ hx₀s)).2
+  -- Upper hemicontinuity implies `F N x ⊆ U.image (f x₀)` for `x` near `x₀`
+  simp_rw [upperHemicontinuousOn_iff] at hF
+  have hFN_uhc : forallᶠ x in 𝓝[s] x₀, F N x subseteq U.image (f x₀) :=
+    (hF N x₀ hx₀s).forall_isOpen _ hUopen.relImage hFN_image
+  -- For such a nearby `x`, show `f x ⊆ u` by taking `y ∈ f x`,
+  filter_upwards [hFN_uhc, self_mem_nhdsWithin] with x hFNx hx_s
+  intro y hy
+  -- finding a `z ∈ F N x` such that `(y, z) ∈ U` and then some `y₀ ∈ f x₀` such that `⟨y₀, z⟩ ∈ U`
+  obtain ⟨z, hzFN, hyz⟩ := ((mem_hausdorffEntourage U (f x) (F N x)).mp (hN x hx_s)).1 hy
+  obtain ⟨y₀, hy₀f, hy₀z⟩ := hFNx hzFN
+  -- then use that `U ○ U.symm ⊆ u` to conclude
+  exact hWu y₀ hy₀f (hVcomp ⟨z, hUsub hy₀z, hVsym.symm _ _ (hUsub hyz)⟩)
 -/
 theorem TendstoUniformlyOn.upperHemicontinuousOn (htendsto : TendstoUniformlyOn F f l s)
       (hF : forall n, UpperHemicontinuousOn (F n) s) (hf_compact : forall x in s, IsCompact (f x)) :

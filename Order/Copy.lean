@@ -113,7 +113,12 @@ definition Lattice.copy
   le_refl := by intros; simp [eq_le]
   le_trans := by intro _ _ _ hab hbc; rw [eq_le] at hab hbc ⊢; exact le_trans hab hbc
   le_antisymm := by intro _ _ hab hba; simp_rw [eq_le] at hab hba; exact le_antisymm hab hba
-  le_sup_left := b
+  le_sup_left := by intros; simp [eq_le, eq_sup]
+  le_sup_right := by intros; simp [eq_le, eq_sup]
+  sup_le := by intro _ _ _ hac hbc; simp_rw [eq_le] at hac hbc ⊢; simp [eq_sup, hac, hbc]
+  inf_le_left := by intros; simp [eq_le, eq_inf]
+  inf_le_right := by intros; simp [eq_le, eq_inf]
+  le_inf := by intro _ _ _ hac hbc; simp_rw [eq_le] at hac hbc ⊢; simp [eq_inf, hac, hbc]
 
 中文:
 定义 格.copy
@@ -125,7 +130,12 @@ definition Lattice.copy
   le_refl := by intros; simp [eq_le]
   le_trans := by intro _ _ _ hab hbc; rw [eq_le] at hab hbc ⊢; exact le_trans hab hbc
   le_antisymm := by intro _ _ hab hba; simp_rw [eq_le] at hab hba; exact le_antisymm hab hba
-  le_sup_left := b
+  le_sup_left := by intros; simp [eq_le, eq_sup]
+  le_sup_right := by intros; simp [eq_le, eq_sup]
+  sup_le := by intro _ _ _ hac hbc; simp_rw [eq_le] at hac hbc ⊢; simp [eq_sup, hac, hbc]
+  inf_le_left := by intros; simp [eq_le, eq_inf]
+  inf_le_right := by intros; simp [eq_le, eq_inf]
+  le_inf := by intro _ _ _ hac hbc; simp_rw [eq_le] at hac hbc ⊢; simp [eq_inf, hac, hbc]
 -/
 def Lattice.copy (c : Lattice α)
     (le : α -> α -> Prop) (eq_le : le = (by infer_instance : LE α).le)
@@ -265,7 +275,7 @@ definition HeytingAlgebra.copy
   __ := OrderBot.copy (@HeytingAlgebra.toOrderBot α c) bot eq_bot
     (by rw [← eq_le]; exact fun _ _ => .rfl)
   compl := compl
-  himp_bot := by simp +insta
+  himp_bot := by simp +instances [eq_le, eq_himp, eq_bot, eq_compl]
 
 中文:
 定义 Heyting代数.copy
@@ -276,7 +286,7 @@ definition HeytingAlgebra.copy
   __ := OrderBot.copy (@HeytingAlgebra.toOrderBot α c) bot eq_bot
     (by rw [← eq_le]; exact fun _ _ => .rfl)
   compl := compl
-  himp_bot := by simp +insta
+  himp_bot := by simp +instances [eq_le, eq_himp, eq_bot, eq_compl]
 
 Depends on / 依赖: GeneralizedHeytingAlgebra, GeneralizedHeytingAlgebra.copy
 -/
@@ -312,7 +322,7 @@ definition CoheytingAlgebra.copy
   __ := OrderTop.copy (@CoheytingAlgebra.toOrderTop α c) top eq_top
     (by rw [← eq_le]; exact fun _ _ => .rfl)
   hnot := hnot
-  top_sdiff := by 
+  top_sdiff := by simp +instances [eq_le, eq_sdiff, eq_top, eq_hnot]
 
 中文:
 定义 余heyting代数.copy
@@ -323,7 +333,7 @@ definition CoheytingAlgebra.copy
   __ := OrderTop.copy (@CoheytingAlgebra.toOrderTop α c) top eq_top
     (by rw [← eq_le]; exact fun _ _ => .rfl)
   hnot := hnot
-  top_sdiff := by 
+  top_sdiff := by simp +instances [eq_le, eq_sdiff, eq_top, eq_hnot]
 
 Depends on / 依赖: GeneralizedCoheytingAlgebra, GeneralizedCoheytingAlgebra.copy
 -/
@@ -356,7 +366,7 @@ definition BiheytingAlgebra.copy
   body: HeytingAlgebra.copy (@BiheytingAlgebra.toHeytingAlgebra α c) le eq_le top
     eq_top bot eq_bot sup eq_sup inf eq_inf himp eq_himp compl eq_compl
   __ := CoheytingAlgebra.copy (@BiheytingAlgebra.toCoheytingAlgebra α c) le eq_le top eq_top bot
-    eq_bot sup eq_sup inf eq_inf sdiff eq_sdiff hnot eq_h
+    eq_bot sup eq_sup inf eq_inf sdiff eq_sdiff hnot eq_hnot
 
 中文:
 定义 Biheyting代数.copy
@@ -364,7 +374,7 @@ definition BiheytingAlgebra.copy
   定义体: HeytingAlgebra.copy (@BiheytingAlgebra.toHeytingAlgebra α c) le eq_le top
     eq_top bot eq_bot sup eq_sup inf eq_inf himp eq_himp compl eq_compl
   __ := CoheytingAlgebra.copy (@BiheytingAlgebra.toCoheytingAlgebra α c) le eq_le top eq_top bot
-    eq_bot sup eq_sup inf eq_inf sdiff eq_sdiff hnot eq_h
+    eq_bot sup eq_sup inf eq_inf sdiff eq_sdiff hnot eq_hnot
 
 Depends on / 依赖: BiheytingAlgebra, BiheytingAlgebra.toHeytingAlgebra, HeytingAlgebra, HeytingAlgebra.copy, eq_le, toHeytingAlgebra
 -/
@@ -400,7 +410,8 @@ definition CompleteLattice.copy
   sInf := sInf
   isLUB_sSup _ := by simp +instances only [eq_le, eq_sSup, isLUB_sSup]
   isGLB_sInf _ := by simp +instances only [eq_le, eq_sInf, isGLB_sInf]
-  le_top := by intros; si
+  le_top := by intros; simp +instances [eq_le, eq_top]
+  bot_le := by intros; simp +instances [eq_le, eq_bot]
 
 中文:
 定义 完备格.copy
@@ -412,7 +423,8 @@ definition CompleteLattice.copy
   sInf := sInf
   isLUB_sSup _ := by simp +instances only [eq_le, eq_sSup, isLUB_sSup]
   isGLB_sInf _ := by simp +instances only [eq_le, eq_sInf, isGLB_sInf]
-  le_top := by intros; si
+  le_top := by intros; simp +instances [eq_le, eq_top]
+  bot_le := by intros; simp +instances [eq_le, eq_bot]
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.toLattice, Lattice, Lattice.copy, eq_inf, eq_le, eq_sup, toLattice
 -/
@@ -523,7 +535,7 @@ definition CompleteDistribLattice.copy
   body: Frame.copy (@CompleteDistribLattice.toFrame α c) le eq_le top eq_top bot eq_bot sup
     eq_sup inf eq_inf himp eq_himp compl eq_compl sSup eq_sSup sInf eq_sInf
   __ := Coframe.copy (@CompleteDistribLattice.toCoframe α c) le eq_le top eq_top bot eq_bot sup
-    eq_sup inf eq_inf sdiff eq_sdiff hnot eq
+    eq_sup inf eq_inf sdiff eq_sdiff hnot eq_hnot sSup eq_sSup sInf eq_sInf
 
 中文:
 定义 完备分配格.copy
@@ -531,7 +543,7 @@ definition CompleteDistribLattice.copy
   定义体: Frame.copy (@CompleteDistribLattice.toFrame α c) le eq_le top eq_top bot eq_bot sup
     eq_sup inf eq_inf himp eq_himp compl eq_compl sSup eq_sSup sInf eq_sInf
   __ := Coframe.copy (@CompleteDistribLattice.toCoframe α c) le eq_le top eq_top bot eq_bot sup
-    eq_sup inf eq_inf sdiff eq_sdiff hnot eq
+    eq_sup inf eq_inf sdiff eq_sdiff hnot eq_hnot sSup eq_sSup sInf eq_sInf
 
 Depends on / 依赖: CompleteDistribLattice, CompleteDistribLattice.toFrame, Frame.copy, eq_bot, eq_le, eq_top, toFrame
 -/

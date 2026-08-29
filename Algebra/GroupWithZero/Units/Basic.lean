@@ -646,7 +646,9 @@ theorem Ring.inverse_mul
   · have : ¬ IsUnit (a * b) := by simpa [ha.mul_left_iff]
     simp [Ring.inverse_non_unit, hb, this]
   · have : ¬ IsUnit (a * b) := by simpa [hb.mul_right_iff]
- 
+    simp [Ring.inverse_non_unit, ha, this]
+  · simp [Ring.inverse_of_isUnit, ha, hb, ha.mul hb, ← Units.val_mul, ← mul_inv_rev]
+    simp
 
 中文:
 定理 环.inverse_mul
@@ -658,7 +660,9 @@ theorem Ring.inverse_mul
   · have : ¬ IsUnit (a * b) := by simpa [ha.mul_left_iff]
     simp [Ring.inverse_non_unit, hb, this]
   · have : ¬ IsUnit (a * b) := by simpa [hb.mul_right_iff]
- 
+    simp [Ring.inverse_non_unit, ha, this]
+  · simp [Ring.inverse_of_isUnit, ha, hb, ha.mul hb, ← Units.val_mul, ← mul_inv_rev]
+    simp
 
 Depends on / 依赖: IsUnit, Ring.inverse_non_unit, Ring.inverse_of_isUnit, Units.val_mul, ha.mul, ha.mul_left_iff, hb.mul_right_iff, inverse_non_unit, inverse_of_isUnit, mul_inv_rev, mul_left_iff, mul_right_iff, val_mul
 -/
@@ -2602,7 +2606,7 @@ definition groupWithZeroOfIsUnitOrEqZero
     inv_zero := dif_pos rfl,
     mul_inv_cancel := fun a h0 => by
       change (a * if h0 : a = 0 then 0 else ↑((h a).resolve_right h0).unit⁻¹) = 1
-      rw [dif_neg h0]; rw [Units.mul_inv_eq_iff_eq_mul]; rw [o
+      rw [dif_neg h0]; rw [Units.mul_inv_eq_iff_eq_mul]; rw [one_mul]; rw [IsUnit.unit_spec] }
 
 中文:
 定义 groupWithZeroOfIsUnitOrEqZero
@@ -2612,7 +2616,7 @@ definition groupWithZeroOfIsUnitOrEqZero
     inv_zero := dif_pos rfl,
     mul_inv_cancel := fun a h0 => by
       change (a * if h0 : a = 0 then 0 else ↑((h a).resolve_right h0).unit⁻¹) = 1
-      rw [dif_neg h0]; rw [Units.mul_inv_eq_iff_eq_mul]; rw [o
+      rw [dif_neg h0]; rw [Units.mul_inv_eq_iff_eq_mul]; rw [one_mul]; rw [IsUnit.unit_spec] }
 
 Depends on / 依赖: IsUnit, IsUnit.unit_spec, Units.mul_inv_eq_iff_eq_mul, dif_neg, dif_pos, inv_zero, mul_inv_cancel, mul_inv_eq_iff_eq_mul, one_mul, resolve_right, unit_spec
 -/

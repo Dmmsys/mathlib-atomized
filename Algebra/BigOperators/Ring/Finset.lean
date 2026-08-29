@@ -368,7 +368,26 @@ lemma prod_sum
     have h₁ : forall x in t a, forall y in t a, x != y ->
       Disjoint (image (Pi.cons s a x) (pi s t)) (image (Pi.cons s a y) (pi s t)) := by
       intro x _ y _ h
-      simp only [disjoint_iff_ne, 
+      simp only [disjoint_iff_ne, mem_image]
+      rintro _ ⟨p₂, _, eq₂⟩ _ ⟨p₃, _, eq₃⟩ eq
+      have : Pi.cons s a x p₂ a (mem_insert_self _ _)
+              = Pi.cons s a y p₃ a (mem_insert_self _ _) := by rw [eq₂, eq₃, eq]
+      rw [Pi.cons_same]; rw [Pi.cons_same] at this
+      exact h this
+    rw [prod_insert ha]; rw [pi_insert ha]; rw [ih]; rw [sum_mul]; rw [sum_biUnion h₁]
+    refine sum_congr rfl fun b _ => ?_
+    have h₂ : forall p₁ in pi s t, forall p₂ in pi s t, Pi.cons s a b p₁ = Pi.cons s a b p₂ -> p₁ = p₂ :=
+      fun p₁ _ p₂ _ eq => Pi.cons_injective ha eq
+    rw [sum_image h₂]; rw [mul_sum]
+    refine sum_congr rfl fun g _ => ?_
+    rw [attach_insert]; rw [prod_insert]; rw [prod_image]
+    · simp only [Pi.cons_same]
+      congr with ⟨v, hv⟩
+      congr
+      exact (Pi.cons_ne (by rintro rfl; exact ha hv)).symm
+    · exact fun _ _ _ _ => Subtype.ext ∘ Subtype.mk.inj
+    · simpa only [mem_image, mem_attach, Subtype.mk.injEq, true_and,
+        Subtype.exists, exists_prop, exists_eq_right] using ha
 
 中文:
 引理 prod_sum
@@ -381,7 +400,26 @@ lemma prod_sum
     have h₁ : forall x in t a, forall y in t a, x != y ->
       Disjoint (image (Pi.cons s a x) (pi s t)) (image (Pi.cons s a y) (pi s t)) := by
       intro x _ y _ h
-      simp only [disjoint_iff_ne, 
+      simp only [disjoint_iff_ne, mem_image]
+      rintro _ ⟨p₂, _, eq₂⟩ _ ⟨p₃, _, eq₃⟩ eq
+      have : Pi.cons s a x p₂ a (mem_insert_self _ _)
+              = Pi.cons s a y p₃ a (mem_insert_self _ _) := by rw [eq₂, eq₃, eq]
+      rw [Pi.cons_same]; rw [Pi.cons_same] at this
+      exact h this
+    rw [prod_insert ha]; rw [pi_insert ha]; rw [ih]; rw [sum_mul]; rw [sum_biUnion h₁]
+    refine sum_congr rfl fun b _ => ?_
+    have h₂ : forall p₁ in pi s t, forall p₂ in pi s t, Pi.cons s a b p₁ = Pi.cons s a b p₂ -> p₁ = p₂ :=
+      fun p₁ _ p₂ _ eq => Pi.cons_injective ha eq
+    rw [sum_image h₂]; rw [mul_sum]
+    refine sum_congr rfl fun g _ => ?_
+    rw [attach_insert]; rw [prod_insert]; rw [prod_image]
+    · simp only [Pi.cons_same]
+      congr with ⟨v, hv⟩
+      congr
+      exact (Pi.cons_ne (by rintro rfl; exact ha hv)).symm
+    · exact fun _ _ _ _ => Subtype.ext ∘ Subtype.mk.inj
+    · simpa only [mem_image, mem_attach, Subtype.mk.injEq, true_and,
+        Subtype.exists, exists_prop, exists_eq_right] using ha
 
 Depends on / 依赖: Disjoint, Finset, Finset.induction, Pi.cons, Pi.cons_same, classical, cons_same, disjoint_iff_ne, insert, mem_image, mem_insert_self
 -/
@@ -491,7 +529,20 @@ theorem prod_add
         ∏ i in s, ∑ p in ({True, False} : Finset Prop), if p then f i else g i := by simp
     _ = ∑ p in (s.pi fun _ => {True, False} : Finset (forall a in s, Prop)),
           ∏ a in s.attach, if p a.1 a.2 then f a.1 else g a.1 := prod_sum _ _ _
-   
+    _ = ∑ t in s.powerset, (∏ a in t, f a) * ∏ a in s \ t, g a :=
+      sum_bij'
+        (fun f _ => {a in s | exists h : a in s, f a h})
+        (fun t _ a _ => a in t)
+        (by simp)
+        (by simp [Classical.em])
+        (by simp_rw [mem_filter, funext_iff, eq_iff_iff, mem_pi, mem_insert]; tauto)
+        (by simp_rw [Finset.ext_iff, mem_filter, mem_powerset]; tauto)
+        (fun a _ => by
+          simp only [prod_ite, filter_attach', prod_map, Function.Embedding.coeFn_mk,
+            Subtype.map_coe, id_eq, prod_attach]
+          congr 2 with x
+          simp only [mem_filter, mem_sdiff, not_and, not_exists, and_congr_right_iff]
+          tauto)
 
 中文:
 定理 prod_add
@@ -503,7 +554,20 @@ theorem prod_add
         ∏ i in s, ∑ p in ({True, False} : Finset Prop), if p then f i else g i := by simp
     _ = ∑ p in (s.pi fun _ => {True, False} : Finset (forall a in s, Prop)),
           ∏ a in s.attach, if p a.1 a.2 then f a.1 else g a.1 := prod_sum _ _ _
-   
+    _ = ∑ t in s.powerset, (∏ a in t, f a) * ∏ a in s \ t, g a :=
+      sum_bij'
+        (fun f _ => {a in s | exists h : a in s, f a h})
+        (fun t _ a _ => a in t)
+        (by simp)
+        (by simp [Classical.em])
+        (by simp_rw [mem_filter, funext_iff, eq_iff_iff, mem_pi, mem_insert]; tauto)
+        (by simp_rw [Finset.ext_iff, mem_filter, mem_powerset]; tauto)
+        (fun a _ => by
+          simp only [prod_ite, filter_attach', prod_map, Function.Embedding.coeFn_mk,
+            Subtype.map_coe, id_eq, prod_attach]
+          congr 2 with x
+          simp only [mem_filter, mem_sdiff, not_and, not_exists, and_congr_right_iff]
+          tauto)
 
 Depends on / 依赖: Classical, Classical.em, Finset, attach, classical, eq_iff_iff, funext_iff, mem_filter, mem_p, powerset, prod_sum, s.attach, s.pi, s.powerset, simp_rw, sum_bij
 -/
@@ -585,7 +649,16 @@ theorem prod_add_ordered
   clear s
   intro a s ha ihs
   have ha' : a ∉ s := fun ha' => lt_irrefl a (ha a ha')
-  rw [prod_insert ha']; rw [prod_insert ha']; rw [sum_insert ha']; rw [filter_insert]; rw [if_neg (lt_irrefl a)]; rw [filter_true_of_mem ha]; rw [ihs]; rw [add_mul]
+  rw [prod_insert ha']; rw [prod_insert ha']; rw [sum_insert ha']; rw [filter_insert]; rw [if_neg (lt_irrefl a)]; rw [filter_true_of_mem ha]; rw [ihs]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [add_assoc]
+  congr 1
+  rw [add_comm]
+  congr 1
+  · rw [filter_false_of_mem, prod_empty, mul_one]
+    exact (forall_mem_insert _ _ _).2 ⟨lt_irrefl a, fun i hi => (ha i hi).not_gt⟩
+  · rw [mul_sum]
+    refine sum_congr rfl fun i hi => ?_
+    rw [filter_insert]; rw [if_neg (ha i hi).not_gt]; rw [filter_insert]; rw [if_pos (ha i hi)]; rw [prod_insert]; rw [mul_left_comm]
+    exact mt (fun ha => (mem_filter.1 ha).1) ha'
 
 中文:
 定理 prod_add_ordered
@@ -595,7 +668,16 @@ theorem prod_add_ordered
   clear s
   intro a s ha ihs
   have ha' : a ∉ s := fun ha' => lt_irrefl a (ha a ha')
-  rw [prod_insert ha']; rw [prod_insert ha']; rw [sum_insert ha']; rw [filter_insert]; rw [if_neg (lt_irrefl a)]; rw [filter_true_of_mem ha]; rw [ihs]; rw [add_mul]
+  rw [prod_insert ha']; rw [prod_insert ha']; rw [sum_insert ha']; rw [filter_insert]; rw [if_neg (lt_irrefl a)]; rw [filter_true_of_mem ha]; rw [ihs]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [add_assoc]
+  congr 1
+  rw [add_comm]
+  congr 1
+  · rw [filter_false_of_mem, prod_empty, mul_one]
+    exact (forall_mem_insert _ _ _).2 ⟨lt_irrefl a, fun i hi => (ha i hi).not_gt⟩
+  · rw [mul_sum]
+    refine sum_congr rfl fun i hi => ?_
+    rw [filter_insert]; rw [if_neg (ha i hi).not_gt]; rw [filter_insert]; rw [if_pos (ha i hi)]; rw [prod_insert]; rw [mul_left_comm]
+    exact mt (fun ha => (mem_filter.1 ha).1) ha'
 
 Depends on / 依赖: Finset, Finset.induction_on_max, add_assoc, add_comm, add_mul, filter_false_of_mem, filter_insert, filter_true_of_mem, forall_mem_insert, if_neg, induction_on_max, lt_irrefl, mul_add, mul_one, not_gt, prod_empty, prod_insert, sum_insert
 -/

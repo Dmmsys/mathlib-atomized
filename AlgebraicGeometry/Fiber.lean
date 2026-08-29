@@ -194,7 +194,10 @@ definition Spec.fiberToSpecResidueFieldIso
     (pullbackSymmetry _ _ ≪≫ ?_ ≪≫ pullbackSpecIso R p.asIdeal.ResidueField S) ?_ ?_
   · refine pullback.congrHom
       (Scheme.Spec.map_residueFieldIso_inv_eq_fromSpecResidueField (.of R) p).symm rfl ≪≫ ?_
-refine asIso pullback.map _ _ _ _ (Spec.map <| (Scheme.Spec.resi
+refine asIso pullback.map _ _ _ _ (Spec.map <| (Scheme.Spec.residueFieldIso (.of R) _).inv)
+      (𝟙 _) (𝟙 _) (by simp) (by simp)
+  · exact Scheme.Spec.mapIso (Scheme.Spec.residueFieldIso (.of R) _).symm.op
+  · cat_disch
 
 中文:
 定义 Spec.fiberToSpecResidueFieldIso
@@ -204,7 +207,10 @@ refine asIso pullback.map _ _ _ _ (Spec.map <| (Scheme.Spec.resi
     (pullbackSymmetry _ _ ≪≫ ?_ ≪≫ pullbackSpecIso R p.asIdeal.ResidueField S) ?_ ?_
   · refine pullback.congrHom
       (Scheme.Spec.map_residueFieldIso_inv_eq_fromSpecResidueField (.of R) p).symm rfl ≪≫ ?_
-refine asIso pullback.map _ _ _ _ (Spec.map <| (Scheme.Spec.resi
+refine asIso pullback.map _ _ _ _ (Spec.map <| (Scheme.Spec.residueFieldIso (.of R) _).inv)
+      (𝟙 _) (𝟙 _) (by simp) (by simp)
+  · exact Scheme.Spec.mapIso (Scheme.Spec.residueFieldIso (.of R) _).symm.op
+  · cat_disch
 
 Depends on / 依赖: Arrow.isoMk, ResidueField, Scheme, Scheme.Spec.mapIso, Scheme.Spec.map_residueFieldIso_inv_eq_fromSpecResidueField, Scheme.Spec.residueFieldIso, Spec.map, asIdeal, cat_disch, congrHom, mapIso, map_residueFieldIso_inv_eq_fromSpecResidueField, p.asIdeal.ResidueField, pullback, pullback.congrHom, pullback.map, pullbackSpecIso, pullbackSymmetry, residueFieldIso, symm.op
 -/

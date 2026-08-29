@@ -112,7 +112,8 @@ theorem Algebra.rank_adjoin_le
   · rw [rank_subsingleton]; exact one_le_aleph0.trans (le_max_right _ _)
   rw [← lift_le.{max u v}]
   refine (lift_rank_range_le (FreeAlgebra.lift R ((↑) : s -> S)).toLinearMap).trans ?_
-  rw [FreeAlgebra.rank_eq]; rw [l
+  rw [FreeAlgebra.rank_eq]; rw [lift_id'.{v]; rw [u}]; rw [lift_umax.{v]; rw [u}]; rw [lift_le]; rw [max_comm]
+  exact mk_list_le_max _
 
 中文:
 定理 代数.rank_adjoin_le
@@ -123,7 +124,8 @@ theorem Algebra.rank_adjoin_le
   · rw [rank_subsingleton]; exact one_le_aleph0.trans (le_max_right _ _)
   rw [← lift_le.{max u v}]
   refine (lift_rank_range_le (FreeAlgebra.lift R ((↑) : s -> S)).toLinearMap).trans ?_
-  rw [FreeAlgebra.rank_eq]; rw [l
+  rw [FreeAlgebra.rank_eq]; rw [lift_id'.{v]; rw [u}]; rw [lift_umax.{v]; rw [u}]; rw [lift_le]; rw [max_comm]
+  exact mk_list_le_max _
 
 Depends on / 依赖: FreeAlgebra, FreeAlgebra.lift, FreeAlgebra.rank_eq, adjoin_eq_range_freeAlgebra_lift, le_max_right, lift_id, lift_le, lift_rank_range_le, lift_umax, max_comm, mk_list_le_max, one_le_aleph0, one_le_aleph0.trans, rank_eq, rank_subsingleton, subsingleton_or_nontrivial, toLinearMap
 -/

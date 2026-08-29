@@ -104,7 +104,12 @@ lemma map_eq_iff_forall_finset_map_restrict_eq
   refine ⟨fun h I => ?_, fun h => ?_⟩
   · have hX' : P.map (fun ω => I.restrict (X · ω)) = (P.map (fun ω => (X · ω))).map I.restrict := by
       rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]; rw [Function.comp_def]
-    have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω =>
+    have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω => (Y · ω))).map I.restrict := by
+      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hY]; rw [Function.comp_def]
+    rw [hX']; rw [hY']; rw [h]
+  · have hX' := isProjectiveLimit_map hX
+    simp_rw [h] at hX'
+    exact hX'.unique (isProjectiveLimit_map hY)
 
 中文:
 引理 map_eq_iff_对任意_finset_map_restrict_eq
@@ -113,7 +118,12 @@ lemma map_eq_iff_forall_finset_map_restrict_eq
   refine ⟨fun h I => ?_, fun h => ?_⟩
   · have hX' : P.map (fun ω => I.restrict (X · ω)) = (P.map (fun ω => (X · ω))).map I.restrict := by
       rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]; rw [Function.comp_def]
-    have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω =>
+    have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω => (Y · ω))).map I.restrict := by
+      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hY]; rw [Function.comp_def]
+    rw [hX']; rw [hY']; rw [h]
+  · have hX' := isProjectiveLimit_map hX
+    simp_rw [h] at hX'
+    exact hX'.unique (isProjectiveLimit_map hY)
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, DistribMulAction, Function, Function.comp_def, I.restrict, Monoid, P.map, comp_def, fun_prop, isProjectiveLimit_map, map_map_of_aemeasurable, restrict, sMulCommClass_right, simp_rw
 -/
@@ -142,7 +152,7 @@ lemma identDistrib_iff_forall_finset_identDistrib
   · exact (Finset.measurable_restrict _).comp_aemeasurable hX
   · exact (Finset.measurable_restrict _).comp_aemeasurable hY
   · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mp h.map_eq I
-  · exact (map_eq_iff_forall_finset_map_re
+  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mpr (fun I => (h I).map_eq)
 
 中文:
 引理 identDistrib_iff_对任意_finset_identDistrib
@@ -152,7 +162,7 @@ lemma identDistrib_iff_forall_finset_identDistrib
   · exact (Finset.measurable_restrict _).comp_aemeasurable hX
   · exact (Finset.measurable_restrict _).comp_aemeasurable hY
   · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mp h.map_eq I
-  · exact (map_eq_iff_forall_finset_map_re
+  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mpr (fun I => (h I).map_eq)
 
 Depends on / 依赖: Finset, Finset.measurable_restrict, comp_aemeasurable, h.map_eq, map_eq, map_eq_iff_forall_finset_map_restrict_eq, measurable_restrict
 -/

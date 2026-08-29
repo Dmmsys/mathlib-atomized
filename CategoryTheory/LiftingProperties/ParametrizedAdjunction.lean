@@ -58,7 +58,41 @@ definition arrowHomEquiv
           (by simp [← adj₂.homEquiv_naturality_one,
               ← adj₂.homEquiv_naturality_three])) (by
             apply sq₁₃.isPullback.hom_ext
-        
+            · simp [← adj₂.homEquiv_naturality_two,
+                ← adj₂.homEquiv_naturality_one,
+                sq₁₂.isPushout.w_assoc]
+            · simp [← adj₂.homEquiv_naturality_two,
+                ← adj₂.homEquiv_naturality_three])
+  invFun β :=
+    Arrow.homMk
+      (sq₁₂.isPushout.desc
+        (adj₂.homEquiv.symm β.left)
+        (adj₂.homEquiv.symm (β.right ≫ sq₁₃.fst)) (by
+          have := Arrow.w β =≫ sq₁₃.fst
+          dsimp at this
+          simp only [Category.assoc, sq₁₃.π_fst] at this
+          simp only [← adj₂.homEquiv_symm_naturality_one,
+            ← adj₂.homEquiv_symm_naturality_two,
+            Arrow.mk_left, Arrow.mk_right, this]))
+      (adj₂.homEquiv.symm (β.right ≫ sq₁₃.snd)) (by
+        apply sq₁₂.isPushout.hom_ext
+        · have := Arrow.w β =≫ sq₁₃.snd
+          dsimp at this
+          simp only [Category.assoc, sq₁₃.π_snd] at this
+          simp [← adj₂.homEquiv_symm_naturality_two,
+            ← adj₂.homEquiv_symm_naturality_three, this]
+        · simp [← adj₂.homEquiv_symm_naturality_one,
+            ← adj₂.homEquiv_symm_naturality_three, sq₁₃.isPullback.w])
+  left_inv α := by
+    ext
+    · apply sq₁₂.isPushout.hom_ext <;> simp
+    · simp
+  right_inv β := by
+    ext
+    · simp
+    · apply sq₁₃.isPullback.hom_ext <;> simp
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 arrowHomEquiv
@@ -69,7 +103,41 @@ definition arrowHomEquiv
           (by simp [← adj₂.homEquiv_naturality_one,
               ← adj₂.homEquiv_naturality_three])) (by
             apply sq₁₃.isPullback.hom_ext
-        
+            · simp [← adj₂.homEquiv_naturality_two,
+                ← adj₂.homEquiv_naturality_one,
+                sq₁₂.isPushout.w_assoc]
+            · simp [← adj₂.homEquiv_naturality_two,
+                ← adj₂.homEquiv_naturality_three])
+  invFun β :=
+    Arrow.homMk
+      (sq₁₂.isPushout.desc
+        (adj₂.homEquiv.symm β.left)
+        (adj₂.homEquiv.symm (β.right ≫ sq₁₃.fst)) (by
+          have := Arrow.w β =≫ sq₁₃.fst
+          dsimp at this
+          simp only [Category.assoc, sq₁₃.π_fst] at this
+          simp only [← adj₂.homEquiv_symm_naturality_one,
+            ← adj₂.homEquiv_symm_naturality_two,
+            Arrow.mk_left, Arrow.mk_right, this]))
+      (adj₂.homEquiv.symm (β.right ≫ sq₁₃.snd)) (by
+        apply sq₁₂.isPushout.hom_ext
+        · have := Arrow.w β =≫ sq₁₃.snd
+          dsimp at this
+          simp only [Category.assoc, sq₁₃.π_snd] at this
+          simp [← adj₂.homEquiv_symm_naturality_two,
+            ← adj₂.homEquiv_symm_naturality_three, this]
+        · simp [← adj₂.homEquiv_symm_naturality_one,
+            ← adj₂.homEquiv_symm_naturality_three, sq₁₃.isPullback.w])
+  left_inv α := by
+    ext
+    · apply sq₁₂.isPushout.hom_ext <;> simp
+    · simp
+  right_inv β := by
+    ext
+    · simp
+    · apply sq₁₃.isPullback.hom_ext <;> simp
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Arrow.homMk, homEquiv, homEquiv.symm, homEquiv_naturality_one, homEquiv_naturality_three, homEquiv_naturality_two, hom_ext, invFun, isPullback, isPullback.hom_ext, isPullback.lift, isPushout, isPushout.desc, isPushout.w_assoc, w_assoc
 -/
@@ -228,7 +296,35 @@ definition liftStructEquiv
         apply sq₁₃.isPullback.hom_ext
         · have := l.fac_left
           dsimp at this ⊢
- 
+          simp only [Category.assoc, sq₁₃.π_fst, ← adj₂.homEquiv_naturality_one,
+            arrowHomEquiv_apply_right_fst, Arrow.mk_left, ← this, sq₁₂.inr_ι_assoc]
+        · have := l.fac_right
+          dsimp at this ⊢
+          simp only [Category.assoc, sq₁₃.π_snd, ← this, adj₂.homEquiv_naturality_three,
+            arrowHomEquiv_apply_right_snd, Arrow.mk_right] }
+  invFun l :=
+    { l := adj₂.homEquiv.symm l.l
+      fac_left := by
+        apply sq₁₂.isPushout.hom_ext
+        · have := l.fac_left
+          dsimp at this ⊢
+          simp only [sq₁₂.inl_ι_assoc, ← adj₂.homEquiv_symm_naturality_two,
+            this, Equiv.symm_apply_apply]
+        · have := l.fac_right =≫ sq₁₃.fst
+          dsimp at this ⊢
+          simp only [Category.assoc, sq₁₃.π_fst] at this
+          simp only [sq₁₂.inr_ι_assoc, ← adj₂.homEquiv_symm_naturality_one,
+            this, Equiv.symm_apply_apply, arrowHomEquiv_apply_right_fst, Arrow.mk_left]
+      fac_right := by
+        have := l.fac_right =≫ sq₁₃.snd
+        dsimp at this ⊢
+        simp only [Category.assoc, sq₁₃.π_snd, arrowHomEquiv_apply_right_snd,
+          Arrow.mk_right] at this
+        rw [← adj₂.homEquiv_symm_naturality_three]; rw [this]; rw [Equiv.symm_apply_apply] }
+  left_inv _ := by aesop
+  right_inv _ := by aesop
+
+include adj₂ in
 
 中文:
 定义 liftStructEquiv
@@ -243,7 +339,35 @@ definition liftStructEquiv
         apply sq₁₃.isPullback.hom_ext
         · have := l.fac_left
           dsimp at this ⊢
- 
+          simp only [Category.assoc, sq₁₃.π_fst, ← adj₂.homEquiv_naturality_one,
+            arrowHomEquiv_apply_right_fst, Arrow.mk_left, ← this, sq₁₂.inr_ι_assoc]
+        · have := l.fac_right
+          dsimp at this ⊢
+          simp only [Category.assoc, sq₁₃.π_snd, ← this, adj₂.homEquiv_naturality_three,
+            arrowHomEquiv_apply_right_snd, Arrow.mk_right] }
+  invFun l :=
+    { l := adj₂.homEquiv.symm l.l
+      fac_left := by
+        apply sq₁₂.isPushout.hom_ext
+        · have := l.fac_left
+          dsimp at this ⊢
+          simp only [sq₁₂.inl_ι_assoc, ← adj₂.homEquiv_symm_naturality_two,
+            this, Equiv.symm_apply_apply]
+        · have := l.fac_right =≫ sq₁₃.fst
+          dsimp at this ⊢
+          simp only [Category.assoc, sq₁₃.π_fst] at this
+          simp only [sq₁₂.inr_ι_assoc, ← adj₂.homEquiv_symm_naturality_one,
+            this, Equiv.symm_apply_apply, arrowHomEquiv_apply_right_fst, Arrow.mk_left]
+      fac_right := by
+        have := l.fac_right =≫ sq₁₃.snd
+        dsimp at this ⊢
+        simp only [Category.assoc, sq₁₃.π_snd, arrowHomEquiv_apply_right_snd,
+          Arrow.mk_right] at this
+        rw [← adj₂.homEquiv_symm_naturality_three]; rw [this]; rw [Equiv.symm_apply_apply] }
+  left_inv _ := by aesop
+  right_inv _ := by aesop
+
+include adj₂ in
 
 Depends on / 依赖: Arrow.mk_left, Category, Category.assoc, arrowHomEquiv, arrowHomEquiv_apply_right_fst, equalizer_ext, fac_left, fac_right, homEquiv, homEquiv_naturality_one, homEquiv_naturality_three, homEquiv_naturality_two, hom_ext, ht.hom_ext, isPullback, isPullback.hom_ext, l.fac_left, l.fac_right, mk_left
 -/

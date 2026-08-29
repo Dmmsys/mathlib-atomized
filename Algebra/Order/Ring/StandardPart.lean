@@ -519,7 +519,7 @@ instance ordConnected_preimage_mk'
   rintro x rfl y hy z ⟨hxz, hzy⟩
   have := hxz.trans hzy
   rw [Set.mem_preimage]; rw [Set.mem_singleton_iff]; rw [Quotient.eq]; rw [Submodule.quotientRel_def]; rw [IsLocalRing.mem_maximalIdeal]; rw [mem_nonunits_iff]; rw [FiniteElement.not_isUnit_iff_mk_pos] at hy ⊢
-  apply
+  apply hy.trans_le (mk_antitoneOn _ _ _) <;> simpa
 
 中文:
 实例 ordConnected_preimage_mk'
@@ -529,7 +529,7 @@ instance ordConnected_preimage_mk'
   rintro x rfl y hy z ⟨hxz, hzy⟩
   have := hxz.trans hzy
   rw [Set.mem_preimage]; rw [Set.mem_singleton_iff]; rw [Quotient.eq]; rw [Submodule.quotientRel_def]; rw [IsLocalRing.mem_maximalIdeal]; rw [mem_nonunits_iff]; rw [FiniteElement.not_isUnit_iff_mk_pos] at hy ⊢
-  apply
+  apply hy.trans_le (mk_antitoneOn _ _ _) <;> simpa
 
 Depends on / 依赖: FiniteElement, FiniteElement.not_isUnit_iff_mk_pos, IsLocalRing, IsLocalRing.mem_maximalIdeal, Quotient, Quotient.eq, Set.mem_preimage, Set.mem_singleton_iff, Submodule, Submodule.quotientRel_def, hxz.trans, hy.trans_le, mem_maximalIdeal, mem_nonunits_iff, mem_preimage, mem_singleton_iff, mk_antitoneOn, not_isUnit_iff_mk_pos, quotientRel_def, trans_le
 -/
@@ -839,7 +839,10 @@ instance :
     obtain h | h := mk_le_mk.1 h
 · exact mk.monotone' add_le_add_left h _
     · rw [h]
-  mul_le_mul_of_nonneg_left _ hx _ _ h := mul_le_mul_of_nonneg_left' h h
+  mul_le_mul_of_nonneg_left _ hx _ _ h := mul_le_mul_of_nonneg_left' h hx
+  mul_le_mul_of_nonneg_right x hx y z h := by
+    simp_rw [mul_comm _ x]
+    exact mul_le_mul_of_nonneg_left' h hx
 
 中文:
 实例 :
@@ -852,7 +855,10 @@ instance :
     obtain h | h := mk_le_mk.1 h
 · exact mk.monotone' add_le_add_left h _
     · rw [h]
-  mul_le_mul_of_nonneg_left _ hx _ _ h := mul_le_mul_of_nonneg_left' h h
+  mul_le_mul_of_nonneg_left _ hx _ _ h := mul_le_mul_of_nonneg_left' h hx
+  mul_le_mul_of_nonneg_right x hx y z h := by
+    simp_rw [mul_comm _ x]
+    exact mul_le_mul_of_nonneg_left' h hx
 
 Depends on / 依赖: mk.monotone, monotone, zero_le_one
 -/
@@ -887,7 +893,8 @@ instance :
       refine ⟨n, mk.monotone' ?_⟩
       change x.1 <= n • y.1
       convert! ← hn
-
+· exact abs_of_pos lt_of_mk_lt_mk hx
+· exact abs_of_pos lt_of_mk_lt_mk hy
 
 中文:
 实例 :
@@ -902,7 +909,8 @@ instance :
       refine ⟨n, mk.monotone' ?_⟩
       change x.1 <= n • y.1
       convert! ← hn
-
+· exact abs_of_pos lt_of_mk_lt_mk hx
+· exact abs_of_pos lt_of_mk_lt_mk hy
 
 Depends on / 依赖: abs_of_pos, convert, hx.ne, hy.ne, le_or_gt, lt_of_mk_lt_mk, mk.monotone, mk_ne_zero, monotone, zero_nsmul
 -/
@@ -969,7 +977,9 @@ definition ofArchimedean
       (.mk _ (mk_map_nonneg_of_archimedean f x)) (.mk _ (mk_map_nonneg_of_archimedean f y))
   map_mul' x y := by
     simp_rw [map_mul]
-    exact mk
+    exact mk.map_mul
+      (.mk _ (mk_map_nonneg_of_archimedean f x)) (.mk _ (mk_map_nonneg_of_archimedean f y))
+monotone' x y h := mk.monotone' f.monotone' h
 
 中文:
 定义 ofArchimedean
@@ -983,7 +993,9 @@ definition ofArchimedean
       (.mk _ (mk_map_nonneg_of_archimedean f x)) (.mk _ (mk_map_nonneg_of_archimedean f y))
   map_mul' x y := by
     simp_rw [map_mul]
-    exact mk
+    exact mk.map_mul
+      (.mk _ (mk_map_nonneg_of_archimedean f x)) (.mk _ (mk_map_nonneg_of_archimedean f y))
+monotone' x y h := mk.monotone' f.monotone' h
 
 Depends on / 依赖: mk_map_nonneg_of_archimedean
 -/
@@ -1149,7 +1161,9 @@ theorem stdPart_eq_zero
   mp := by
     contrapose!
     intro h
-    rwa [stdPart_of_mk_nonneg Classical.ofNonempty h.ge, map_ne_zero, FiniteResidueFiel
+    rwa [stdPart_of_mk_nonneg Classical.ofNonempty h.ge, map_ne_zero, FiniteResidueField.mk_ne_zero]
+
+alias ⟨_, stdPart_of_mk_ne_zero⟩ := stdPart_eq_zero
 
 中文:
 定理 stdPart_eq_zero
@@ -1163,7 +1177,9 @@ theorem stdPart_eq_zero
   mp := by
     contrapose!
     intro h
-    rwa [stdPart_of_mk_nonneg Classical.ofNonempty h.ge, map_ne_zero, FiniteResidueFiel
+    rwa [stdPart_of_mk_nonneg Classical.ofNonempty h.ge, map_ne_zero, FiniteResidueField.mk_ne_zero]
+
+alias ⟨_, stdPart_of_mk_ne_zero⟩ := stdPart_eq_zero
 
 Depends on / 依赖: Classical, Classical.ofNonempty, FiniteResidueField, FiniteResidueField.mk_eq_zero, FiniteResidueField.mk_ne_zero, OrderRingHom, OrderRingHom.comp_apply, comp_apply, contrapose, dif_neg, dif_pos, h.ge, h.le, h.lt_or_gt, h.not_ge, lt_or_gt, map_ne_zero, map_zero, mk_eq_zero, mk_ne_zero
 -/
@@ -1319,7 +1335,10 @@ theorem stdPart_inv
       suffices FiniteElement.mk x⁻¹ hx' * .mk x hx.ge = 1 by
         rw [← map_mul]; rw [this]; rw [map_one]
       ext
-
+      apply inv_mul_cancel₀
+      aesop
+  · rw [stdPart_of_mk_ne_zero hx, stdPart_of_mk_ne_zero, inv_zero]
+    rwa [mk_inv, neg_ne_zero]
 
 中文:
 定理 stdPart_inv
@@ -1334,7 +1353,10 @@ theorem stdPart_inv
       suffices FiniteElement.mk x⁻¹ hx' * .mk x hx.ge = 1 by
         rw [← map_mul]; rw [this]; rw [map_one]
       ext
-
+      apply inv_mul_cancel₀
+      aesop
+  · rw [stdPart_of_mk_ne_zero hx, stdPart_of_mk_ne_zero, inv_zero]
+    rwa [mk_inv, neg_ne_zero]
 
 Depends on / 依赖: FiniteElement, FiniteElement.mk, dif_pos, eq_inv_of_mul_eq_one_left, eq_or_ne, hx.ge, inv_zero, map_mul, map_one, mk_inv, neg_ne_zero, stdPart, stdPart_of_mk_ne_zero
 -/
@@ -1948,7 +1970,8 @@ theorem stdPart_eq
   · obtain ⟨s, hs, hs'⟩ := exists_between h
     cases (le_stdPart_of_le f hx (hl _ hs')).not_gt hs
   · rfl
-  · obtain ⟨s, hs, hs'
+  · obtain ⟨s, hs, hs'⟩ := exists_between h
+    cases (stdPart_le_of_le f hx (hr _ hs)).not_gt hs'
 
 中文:
 定理 stdPart_eq
@@ -1960,7 +1983,8 @@ theorem stdPart_eq
   · obtain ⟨s, hs, hs'⟩ := exists_between h
     cases (le_stdPart_of_le f hx (hl _ hs')).not_gt hs
   · rfl
-  · obtain ⟨s, hs, hs'
+  · obtain ⟨s, hs, hs'⟩ := exists_between h
+    cases (stdPart_le_of_le f hx (hr _ hs)).not_gt hs'
 
 Depends on / 依赖: exists_between, le_stdPart_of_le, lt_trichotomy, mk_nonneg_of_le_of_le_of_archimedean, not_gt, stdPart, stdPart_le_of_le
 -/
@@ -1989,7 +2013,21 @@ theorem stdPart_eq_sInf
     have hn : {r | x < f r}.Nonempty := ⟨b, by simpa using hb⟩
     have hb : BddBelow {r | x < f r} := by
       refine ⟨a, fun r hr => ?_⟩
-      by_contra!
+      by_contra! hra
+      exact (f.monotone' hra.le).not_gt (by simpa using ha.trans hr)
+    apply stdPart_eq f <;> intro r hr
+    · simpa using notMem_of_lt_csInf hr hb
+    · obtain ⟨s, hs, hs'⟩ := (csInf_lt_iff hb hn).1 hr
+      exact hs.le.trans (f.monotone' hs'.le)
+  · rw [stdPart_of_mk_ne_zero hx.ne]
+    have hr {r} := hx.trans_le (mk_map_nonneg_of_archimedean f r)
+    obtain h | h := le_or_gt 0 x
+    · convert! Real.sInf_empty.symm
+      rw [Set.eq_empty_iff_forall_notMem]
+      exact fun r => (lt_of_mk_lt_mk_of_nonneg hr h).not_gt
+    · convert! Real.sInf_univ.symm
+      rw [Set.eq_univ_iff_forall]
+      exact fun r => lt_of_mk_lt_mk_of_nonpos hr h.le
 
 中文:
 定理 stdPart_eq_sInf
@@ -2002,7 +2040,21 @@ theorem stdPart_eq_sInf
     have hn : {r | x < f r}.Nonempty := ⟨b, by simpa using hb⟩
     have hb : BddBelow {r | x < f r} := by
       refine ⟨a, fun r hr => ?_⟩
-      by_contra!
+      by_contra! hra
+      exact (f.monotone' hra.le).not_gt (by simpa using ha.trans hr)
+    apply stdPart_eq f <;> intro r hr
+    · simpa using notMem_of_lt_csInf hr hb
+    · obtain ⟨s, hs, hs'⟩ := (csInf_lt_iff hb hn).1 hr
+      exact hs.le.trans (f.monotone' hs'.le)
+  · rw [stdPart_of_mk_ne_zero hx.ne]
+    have hr {r} := hx.trans_le (mk_map_nonneg_of_archimedean f r)
+    obtain h | h := le_or_gt 0 x
+    · convert! Real.sInf_empty.symm
+      rw [Set.eq_empty_iff_forall_notMem]
+      exact fun r => (lt_of_mk_lt_mk_of_nonneg hr h).not_gt
+    · convert! Real.sInf_univ.symm
+      rw [Set.eq_univ_iff_forall]
+      exact fun r => lt_of_mk_lt_mk_of_nonpos hr h.le
 
 Depends on / 依赖: BddBelow, Nonempty, csInf_lt_iff, exists_int_gt_of_mk_nonneg, exists_int_lt_of_mk_nonneg, f.monotone, ha.trans, hra.le, hs.le.trans, le_or_gt, monotone, notMem_of_lt_csInf, not_gt, stdPart_eq
 -/

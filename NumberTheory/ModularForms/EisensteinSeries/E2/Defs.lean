@@ -114,7 +114,8 @@ lemma e2Summand_even
   apply tsum_congr (fun b => ?_)
   simp only [eisSummand, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
     Matrix.cons_val_fin_one, Int.reduceNeg, zpow_neg, Int.cast_neg, neg_mul, inv_inj]
-  rw_mod_ca
+  rw_mod_cast [Int.cast_neg]
+  ring
 
 中文:
 引理 e2Summand_even
@@ -126,7 +127,8 @@ lemma e2Summand_even
   apply tsum_congr (fun b => ?_)
   simp only [eisSummand, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
     Matrix.cons_val_fin_one, Int.reduceNeg, zpow_neg, Int.cast_neg, neg_mul, inv_inj]
-  rw_mod_ca
+  rw_mod_cast [Int.cast_neg]
+  ring
 
 Depends on / 依赖: Fin.isValue, Int.cast_neg, Int.reduceNeg, Matrix, Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val_zero, cast_neg, cons_val_fin_one, cons_val_one, cons_val_zero, e2Summand, eisSummand, inv_inj, isValue, neg_mul, reduceNeg, rw_mod_cast, tsum_comp_neg, tsum_congr
 -/
@@ -261,7 +263,16 @@ lemma D2_mul
   simp only [D2, mul_assoc, coe_mul, map_mul, ← mul_div, SL_slash_def,
     ModularGroup.sl_moeb, Int.reduceNeg, zpow_neg, Pi.add_apply, ← mul_add, mul_eq_mul_left_iff,
     I_ne_zero, or_false, ofReal_eq_zero, pi_ne_zero, OfNat.ofNat_ne_zero]
-  have hd : (A.1 * B.1) 1 0 * denom (φ B) z - B
+  have hd : (A.1 * B.1) 1 0 * denom (φ B) z - B 1 0 * denom (φ A * φ B) z = A 1 0 := by
+    simpa [sub_eq_iff_eq_add] using denom_aux A B z
+  have : denom A (num B z / denom B z) = denom A ↑(B • z) := by
+    simp [specialLinearGroup_apply, denom, num]
+  rw [(by intros; field_simp : forall {a b c d f e : Complex} (he : e != 0)]; rw [a / b =
+    c / d * (e ^ (2 : Int))⁻¹ + f / e ↔ a * e ^ 2 / b = c / d + e * f) (denom_ne_zero B z)]
+  simp only [pow_two, ← mul_assoc, denom_cocycle A B z.im_ne_zero, this,
+    ModularGroup.sl_moeb, ← hd]
+  field_simp [denom_ne_zero A (toGL (φ B) • z)]
+  ring
 
 中文:
 引理 D2_mul
@@ -272,7 +283,16 @@ lemma D2_mul
   simp only [D2, mul_assoc, coe_mul, map_mul, ← mul_div, SL_slash_def,
     ModularGroup.sl_moeb, Int.reduceNeg, zpow_neg, Pi.add_apply, ← mul_add, mul_eq_mul_left_iff,
     I_ne_zero, or_false, ofReal_eq_zero, pi_ne_zero, OfNat.ofNat_ne_zero]
-  have hd : (A.1 * B.1) 1 0 * denom (φ B) z - B
+  have hd : (A.1 * B.1) 1 0 * denom (φ B) z - B 1 0 * denom (φ A * φ B) z = A 1 0 := by
+    simpa [sub_eq_iff_eq_add] using denom_aux A B z
+  have : denom A (num B z / denom B z) = denom A ↑(B • z) := by
+    simp [specialLinearGroup_apply, denom, num]
+  rw [(by intros; field_simp : forall {a b c d f e : Complex} (he : e != 0)]; rw [a / b =
+    c / d * (e ^ (2 : Int))⁻¹ + f / e ↔ a * e ^ 2 / b = c / d + e * f) (denom_ne_zero B z)]
+  simp only [pow_two, ← mul_assoc, denom_cocycle A B z.im_ne_zero, this,
+    ModularGroup.sl_moeb, ← hd]
+  field_simp [denom_ne_zero A (toGL (φ B) • z)]
+  ring
 
 Depends on / 依赖: I_ne_zero, Int.reduceNeg, ModularGroup, ModularGroup.sl_moeb, OfNat.ofNat_ne_zero, Pi.add_apply, SL_slash_def, add_apply, coe_mul, denom_aux, intros, map_mul, mul_add, mul_assoc, mul_div, mul_eq_mul_left_iff, ofNat_ne_zero, ofReal_eq_zero, or_false, pi_ne_zero
 -/

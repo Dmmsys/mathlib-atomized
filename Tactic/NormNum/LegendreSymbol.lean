@@ -257,7 +257,8 @@ theorem jacobiSymNat.even_even
       fun hf => ?_⟩
   have h : 2 ∣ a.gcd b := Nat.dvd_gcd (Nat.dvd_of_mod_eq_zero ha) (Nat.dvd_of_mod_eq_zero hb₁)
   change 2 ∣ (a : Int).gcd b at h
-  rw [hf]; rw [
+  rw [hf]; rw [← even_iff_two_dvd] at h
+  exact Nat.not_even_one h
 
 中文:
 定理 jacobiSym自然数.even_even
@@ -268,7 +269,8 @@ theorem jacobiSymNat.even_even
       fun hf => ?_⟩
   have h : 2 ∣ a.gcd b := Nat.dvd_gcd (Nat.dvd_of_mod_eq_zero ha) (Nat.dvd_of_mod_eq_zero hb₁)
   change 2 ∣ (a : Int).gcd b at h
-  rw [hf]; rw [
+  rw [hf]; rw [← even_iff_two_dvd] at h
+  exact Nat.not_even_one h
 
 Depends on / 依赖: Nat.div_le_self, Nat.dvd_gcd, Nat.dvd_of_mod_eq_zero, Nat.ne_of_beq_eq_false, Nat.not_even_one, Nat.pos_of_ne_zero, a.gcd, div_le_self, dvd_gcd, dvd_of_mod_eq_zero, eq_zero_iff, even_iff_two_dvd, jacobiSym, jacobiSym.eq_zero_iff.mpr, ne_of_beq_eq_false, ne_of_gt, not_even_one, pos_of_ne_zero, trans_le
 -/
@@ -296,7 +298,8 @@ theorem jacobiSymNat.odd_even
   · rw [← hr, Nat.eq_zero_of_dvd_of_div_eq_zero (Nat.dvd_of_mod_eq_zero hb) hc]
   · have : NeZero c := ⟨hc'⟩
     -- for `jacobiSym.mul_right`
-    r
+    rwa [← Nat.mod_add_div b 2, hb, hc, Nat.zero_add, jacobiSymNat, jacobiSym.mul_right,
+      ← jacobiSym.legendreSym.to_jacobiSym, ha', one_mul]
 
 中文:
 定理 jacobiSym自然数.odd_even
@@ -309,7 +312,8 @@ theorem jacobiSymNat.odd_even
   · rw [← hr, Nat.eq_zero_of_dvd_of_div_eq_zero (Nat.dvd_of_mod_eq_zero hb) hc]
   · have : NeZero c := ⟨hc'⟩
     -- for `jacobiSym.mul_right`
-    r
+    rwa [← Nat.mod_add_div b 2, hb, hc, Nat.zero_add, jacobiSymNat, jacobiSym.mul_right,
+      ← jacobiSym.legendreSym.to_jacobiSym, ha', one_mul]
 
 Depends on / 依赖: Int.ofNat_mod_ofNat, Nat.dvd_of_mod_eq_zero, Nat.eq_zero_of_dvd_of_div_eq_zero, NeZero, dvd_of_mod_eq_zero, eq_or_ne, eq_zero_of_dvd_of_div_eq_zero, legendreSym, legendreSym.mod, ofNat_mod_ofNat
 -/
@@ -661,7 +665,64 @@ haveI : eb =Q 1 := ⟨⟩
     | 0 =>
 haveI : ea =Q 0 := ⟨⟩
       have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-      ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb
+      ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
+    | 1 =>
+haveI : ea =Q 1 := ⟨⟩
+      ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
+    | a =>
+      match a % 2 with
+      | 0 =>
+        match a % 4 with
+        | 0 =>
+          have ha : Q(Nat.mod $ea 4 = 0) := (q(Eq.refl 0) : Expr)
+          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
+          have ec : Q(Nat) := mkRawNatLit (a / 4)
+          have hc : Q(Nat.div $ea 4 = $ec) := (q(Eq.refl $ec) : Expr)
+          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
+          ⟨er, q(jacobiSymNat.double_even $ea $eb $ec $er $ha $hb $hc $p)⟩
+        | _ =>
+          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
+          have ec : Q(Nat) := mkRawNatLit (a / 2)
+          have hc : Q(Nat.div $ea 2 = $ec) := (q(Eq.refl $ec) : Expr)
+          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
+          match b % 8 with
+          | 1 =>
+            have hb : Q(Nat.mod $eb 8 = 1) := (q(Eq.refl 1) : Expr)
+            ⟨er, q(jacobiSymNat.even_odd₁ $ea $eb $ec $er $ha $hb $hc $p)⟩
+          | 3 =>
+            have er' := mkRawIntLit (-er.intLit!)
+            have hb : Q(Nat.mod $eb 8 = 3) := (q(Eq.refl 3) : Expr)
+            show (_ : Q(Int)) × Q(jacobiSymNat $ea $eb = -$er) from
+              ⟨er', q(jacobiSymNat.even_odd₃ $ea $eb $ec $er $ha $hb $hc $p)⟩
+          | 5 =>
+            have er' := mkRawIntLit (-er.intLit!)
+haveI : er' =Q - er := ⟨⟩
+            have hb : Q(Nat.mod $eb 8 = 5) := (q(Eq.refl 5) : Expr)
+            ⟨er', q(jacobiSymNat.even_odd₅ $ea $eb $ec $er $ha $hb $hc $p)⟩
+          | _ =>
+            have hb : Q(Nat.mod $eb 8 = 7) := (q(Eq.refl 7) : Expr)
+            ⟨er, q(jacobiSymNat.even_odd₇ $ea $eb $ec $er $ha $hb $hc $p)⟩
+      | _ =>
+        have eab : Q(Nat) := mkRawNatLit (b % a)
+        have hab : Q(Nat.mod $eb $ea = $eab) := (q(Eq.refl $eab) : Expr)
+        have ⟨er, p⟩ := proveJacobiSymOdd eab ea
+        match a % 4 with
+        | 1 =>
+          have ha : Q(Nat.mod $ea 4 = 1) := (q(Eq.refl 1) : Expr)
+          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
+          ⟨er, q(jacobiSymNat.qr₁_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
+        | _ =>
+          match b % 4 with
+          | 1 =>
+            have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
+            have hb : Q(Nat.mod $eb 4 = 1) := (q(Eq.refl 1) : Expr)
+            ⟨er, q(jacobiSymNat.qr₁'_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
+          | _ =>
+            have er' := mkRawIntLit (-er.intLit!)
+haveI : er' =Q - er := ⟨⟩
+            have ha : Q(Nat.mod $ea 4 = 3) := (q(Eq.refl 3) : Expr)
+            have hb : Q(Nat.mod $eb 4 = 3) := (q(Eq.refl 3) : Expr)
+            ⟨er', q(jacobiSymNat.qr₃_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
 
 中文:
 定义 proveJacobiSymOdd
@@ -675,7 +736,64 @@ haveI : eb =Q 1 := ⟨⟩
     | 0 =>
 haveI : ea =Q 0 := ⟨⟩
       have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
-      ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb
+      ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
+    | 1 =>
+haveI : ea =Q 1 := ⟨⟩
+      ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
+    | a =>
+      match a % 2 with
+      | 0 =>
+        match a % 4 with
+        | 0 =>
+          have ha : Q(Nat.mod $ea 4 = 0) := (q(Eq.refl 0) : Expr)
+          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
+          have ec : Q(Nat) := mkRawNatLit (a / 4)
+          have hc : Q(Nat.div $ea 4 = $ec) := (q(Eq.refl $ec) : Expr)
+          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
+          ⟨er, q(jacobiSymNat.double_even $ea $eb $ec $er $ha $hb $hc $p)⟩
+        | _ =>
+          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
+          have ec : Q(Nat) := mkRawNatLit (a / 2)
+          have hc : Q(Nat.div $ea 2 = $ec) := (q(Eq.refl $ec) : Expr)
+          have ⟨er, p⟩ := proveJacobiSymOdd ec eb
+          match b % 8 with
+          | 1 =>
+            have hb : Q(Nat.mod $eb 8 = 1) := (q(Eq.refl 1) : Expr)
+            ⟨er, q(jacobiSymNat.even_odd₁ $ea $eb $ec $er $ha $hb $hc $p)⟩
+          | 3 =>
+            have er' := mkRawIntLit (-er.intLit!)
+            have hb : Q(Nat.mod $eb 8 = 3) := (q(Eq.refl 3) : Expr)
+            show (_ : Q(Int)) × Q(jacobiSymNat $ea $eb = -$er) from
+              ⟨er', q(jacobiSymNat.even_odd₃ $ea $eb $ec $er $ha $hb $hc $p)⟩
+          | 5 =>
+            have er' := mkRawIntLit (-er.intLit!)
+haveI : er' =Q - er := ⟨⟩
+            have hb : Q(Nat.mod $eb 8 = 5) := (q(Eq.refl 5) : Expr)
+            ⟨er', q(jacobiSymNat.even_odd₅ $ea $eb $ec $er $ha $hb $hc $p)⟩
+          | _ =>
+            have hb : Q(Nat.mod $eb 8 = 7) := (q(Eq.refl 7) : Expr)
+            ⟨er, q(jacobiSymNat.even_odd₇ $ea $eb $ec $er $ha $hb $hc $p)⟩
+      | _ =>
+        have eab : Q(Nat) := mkRawNatLit (b % a)
+        have hab : Q(Nat.mod $eb $ea = $eab) := (q(Eq.refl $eab) : Expr)
+        have ⟨er, p⟩ := proveJacobiSymOdd eab ea
+        match a % 4 with
+        | 1 =>
+          have ha : Q(Nat.mod $ea 4 = 1) := (q(Eq.refl 1) : Expr)
+          have hb : Q(Nat.mod $eb 2 = 1) := (q(Eq.refl 1) : Expr)
+          ⟨er, q(jacobiSymNat.qr₁_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
+        | _ =>
+          match b % 4 with
+          | 1 =>
+            have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
+            have hb : Q(Nat.mod $eb 4 = 1) := (q(Eq.refl 1) : Expr)
+            ⟨er, q(jacobiSymNat.qr₁'_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
+          | _ =>
+            have er' := mkRawIntLit (-er.intLit!)
+haveI : er' =Q - er := ⟨⟩
+            have ha : Q(Nat.mod $ea 4 = 3) := (q(Eq.refl 3) : Expr)
+            have hb : Q(Nat.mod $eb 4 = 3) := (q(Eq.refl 3) : Expr)
+            ⟨er', q(jacobiSymNat.qr₃_mod $ea $eb $eab $er $ha $hb $hab $p)⟩
 
 Depends on / 依赖: TotallyDisconnectedSpace, TotallySeparatedSpace
 -/
@@ -766,7 +884,35 @@ haveI : eb =Q 1 := ⟨⟩
     | 0 =>
       match ea.natLit! with
       | 0 =>
-        have hb : Q(Nat.beq (
+        have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
+        show (er : Q(Int)) × Q(jacobiSymNat 0 $eb = $er) from
+          ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
+      | 1 =>
+        show (er : Q(Int)) × Q(jacobiSymNat 1 $eb = $er) from
+          ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
+      | a =>
+        match a % 2 with
+        | 0 =>
+          have hb₀ : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
+          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
+          have hb₁ : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
+          ⟨mkRawIntLit' 0, q(jacobiSymNat.even_even $ea $eb $hb₀ $ha $hb₁)⟩
+        | _ =>
+          have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
+          have hb : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
+          have ec : Q(Nat) := mkRawNatLit (b / 2)
+          have hc : Q(Nat.div $eb 2 = $ec) := (q(Eq.refl $ec) : Expr)
+          have ⟨er, p⟩ := proveJacobiSymOdd ea ec
+          ⟨er, q(jacobiSymNat.odd_even $ea $eb $ec $er $ha $hb $hc $p)⟩
+    | _ =>
+      have a := ea.natLit!
+      if b <= a then
+        have eab : Q(Nat) := mkRawNatLit (a % b)
+        have hab : Q(Nat.mod $ea $eb = $eab) := (q(Eq.refl $eab) : Expr)
+        have ⟨er, p⟩ := proveJacobiSymOdd eab eb
+        ⟨er, q(jacobiSymNat.mod_left $ea $eb $eab $er $hab $p)⟩
+      else
+        proveJacobiSymOdd ea eb
 
 中文:
 定义 proveJacobiSym自然数
@@ -783,7 +929,35 @@ haveI : eb =Q 1 := ⟨⟩
     | 0 =>
       match ea.natLit! with
       | 0 =>
-        have hb : Q(Nat.beq (
+        have hb : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
+        show (er : Q(Int)) × Q(jacobiSymNat 0 $eb = $er) from
+          ⟨mkRawIntLit' 0, q(jacobiSymNat.zero_left $eb $hb)⟩
+      | 1 =>
+        show (er : Q(Int)) × Q(jacobiSymNat 1 $eb = $er) from
+          ⟨mkRawIntLit' 1, q(jacobiSymNat.one_left $eb)⟩
+      | a =>
+        match a % 2 with
+        | 0 =>
+          have hb₀ : Q(Nat.beq ($eb / 2) 0 = false) := (q(Eq.refl false) : Expr)
+          have ha : Q(Nat.mod $ea 2 = 0) := (q(Eq.refl 0) : Expr)
+          have hb₁ : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
+          ⟨mkRawIntLit' 0, q(jacobiSymNat.even_even $ea $eb $hb₀ $ha $hb₁)⟩
+        | _ =>
+          have ha : Q(Nat.mod $ea 2 = 1) := (q(Eq.refl 1) : Expr)
+          have hb : Q(Nat.mod $eb 2 = 0) := (q(Eq.refl 0) : Expr)
+          have ec : Q(Nat) := mkRawNatLit (b / 2)
+          have hc : Q(Nat.div $eb 2 = $ec) := (q(Eq.refl $ec) : Expr)
+          have ⟨er, p⟩ := proveJacobiSymOdd ea ec
+          ⟨er, q(jacobiSymNat.odd_even $ea $eb $ec $er $ha $hb $hc $p)⟩
+    | _ =>
+      have a := ea.natLit!
+      if b <= a then
+        have eab : Q(Nat) := mkRawNatLit (a % b)
+        have hab : Q(Nat.mod $ea $eb = $eab) := (q(Eq.refl $eab) : Expr)
+        have ⟨er, p⟩ := proveJacobiSymOdd eab eb
+        ⟨er, q(jacobiSymNat.mod_left $ea $eb $eab $er $hab $p)⟩
+      else
+        proveJacobiSymOdd ea eb
 -/
 partial def proveJacobiSymNat (ea eb : Q(Nat)) : (er : Q(Int)) × Q(jacobiSymNat $ea $eb = $er) :=
   match eb.natLit! with
@@ -844,7 +1018,13 @@ haveI : eb =Q 1 := ⟨⟩
   | b =>
     have eb' := mkRawIntLit b
     have hb' : Q(($eb : Int) = $eb') := (q(Eq.refl $eb') : Expr)
-    have ab :
+    have ab := ea.intLit! % b
+    have eab := mkRawIntLit ab
+    have hab : Q(Int.emod $ea $eb' = $eab) := (q(Eq.refl $eab) : Expr)
+    have eab' : Q(Nat) := mkRawNatLit ab.toNat
+    have hab' : Q(($eab' : Int) = $eab) := (q(Eq.refl $eab) : Expr)
+    have ⟨er, p⟩ := proveJacobiSymNat eab' eb
+    ⟨er, q(JacobiSym.mod_left $ea $eb $eab' $eab $er $eb' $hb' $hab $hab' $p)⟩
 
 中文:
 定义 proveJacobiSym
@@ -859,7 +1039,13 @@ haveI : eb =Q 1 := ⟨⟩
   | b =>
     have eb' := mkRawIntLit b
     have hb' : Q(($eb : Int) = $eb') := (q(Eq.refl $eb') : Expr)
-    have ab :
+    have ab := ea.intLit! % b
+    have eab := mkRawIntLit ab
+    have hab : Q(Int.emod $ea $eb' = $eab) := (q(Eq.refl $eab) : Expr)
+    have eab' : Q(Nat) := mkRawNatLit ab.toNat
+    have hab' : Q(($eab' : Int) = $eab) := (q(Eq.refl $eab) : Expr)
+    have ⟨er, p⟩ := proveJacobiSymNat eab' eb
+    ⟨er, q(JacobiSym.mod_left $ea $eb $eab' $eab $er $eb' $hb' $hab $hab' $p)⟩
 -/
 partial def proveJacobiSym (ea : Q(Int)) (eb : Q(Nat)) : (er : Q(Int)) × Q(jacobiSym $ea $eb = $er) :=
   match eb.natLit! with
@@ -912,7 +1098,7 @@ definition evalJacobiSym
 haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSym ea eb
 haveI' : e =Q jacobiSym a b := ⟨⟩
-    return .isInt _ er er.intLit! q
+    return .isInt _ er er.intLit! q(isInt_jacobiSym $pa $pb $pr)
 
 中文:
 定义 evalJacobiSym
@@ -924,7 +1110,7 @@ haveI' : e =Q jacobiSym a b := ⟨⟩
 haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSym ea eb
 haveI' : e =Q jacobiSym a b := ⟨⟩
-    return .isInt _ er er.intLit! q
+    return .isInt _ er er.intLit! q(isInt_jacobiSym $pa $pb $pr)
 -/
 def evalJacobiSym : NormNumExt where eval {u α} e := do
     let .app (.app _ (a : Q(Int))) (b : Q(Nat)) ← Meta.whnfR e | failure
@@ -950,7 +1136,7 @@ definition evalJacobiSymNat
 haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSymNat ea eb
 haveI' : e =Q jacobiSymNat a b := ⟨⟩
-    return .isInt _ er er.int
+    return .isInt _ er er.intLit! q(isInt_jacobiSymNat $pa $pb $pr)
 
 中文:
 定义 evalJacobiSym自然数
@@ -962,7 +1148,7 @@ haveI' : e =Q jacobiSymNat a b := ⟨⟩
 haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSymNat ea eb
 haveI' : e =Q jacobiSymNat a b := ⟨⟩
-    return .isInt _ er er.int
+    return .isInt _ er er.intLit! q(isInt_jacobiSymNat $pa $pb $pr)
 -/
 def evalJacobiSymNat : NormNumExt where eval {u α} e := do
     let .app (.app _ (a : Q(Nat))) (b : Q(Nat)) ← Meta.whnfR e | failure
@@ -988,7 +1174,9 @@ definition evalLegendreSym
     let ⟨ep, pp⟩ ← deriveNat p _
 haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSym ea ep
-haveI' : e =Q legendreSym 
+haveI' : e =Q legendreSym p a := ⟨⟩
+    return .isInt _ er er.intLit!
+      q(LegendreSym.to_jacobiSym $p $fp $a $er (isInt_jacobiSym $pa $pp $pr))
 
 中文:
 定义 evalLegendreSym
@@ -1000,7 +1188,9 @@ haveI' : e =Q legendreSym
     let ⟨ep, pp⟩ ← deriveNat p _
 haveI' : u =QL 0 := ⟨⟩ haveI' : α =Q Int := ⟨⟩
     have ⟨er, pr⟩ := proveJacobiSym ea ep
-haveI' : e =Q legendreSym 
+haveI' : e =Q legendreSym p a := ⟨⟩
+    return .isInt _ er er.intLit!
+      q(LegendreSym.to_jacobiSym $p $fp $a $er (isInt_jacobiSym $pa $pp $pr))
 
 Depends on / 依赖: Iff.mpr, regularSpace_TFAE
 -/

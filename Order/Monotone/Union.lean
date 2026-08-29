@@ -38,7 +38,23 @@ theorem StrictMonoOn.union
     rcases eq_or_lt_of_le hxc with (rfl | h'x)
     · exact hs.1
     exact (lt_irrefl _ (h'x.trans_le (ht.2 (by assumption)))).elim
-  have B : forall x, x in s union t -> c <= x -> x in t
+  have B : forall x, x in s union t -> c <= x -> x in t := by
+    intro x hx hxc
+    match hx with
+    | Or.inr hx => exact hx
+    | Or.inl hx =>
+      rcases eq_or_lt_of_le hxc with (rfl | h'x)
+      · exact ht.1
+      exact (lt_irrefl _ (h'x.trans_le (hs.2 hx))).elim
+  intro x hx y hy hxy
+  rcases lt_or_ge x c with (hxc | hcx)
+  · have xs : x in s := A _ hx hxc.le
+    rcases lt_or_ge y c with (hyc | hcy)
+    · exact h₁ xs (A _ hy hyc.le) hxy
+    · exact (h₁ xs hs.1 hxc).trans_le (h₂.monotoneOn ht.1 (B _ hy hcy) hcy)
+  · have xt : x in t := B _ hx hcx
+    have yt : y in t := B _ hy (hcx.trans hxy.le)
+    exact h₂ xt yt hxy
 
 中文:
 定理 StrictMonoOn.union
@@ -51,7 +67,23 @@ theorem StrictMonoOn.union
     rcases eq_or_lt_of_le hxc with (rfl | h'x)
     · exact hs.1
     exact (lt_irrefl _ (h'x.trans_le (ht.2 (by assumption)))).elim
-  have B : forall x, x in s union t -> c <= x -> x in t
+  have B : forall x, x in s union t -> c <= x -> x in t := by
+    intro x hx hxc
+    match hx with
+    | Or.inr hx => exact hx
+    | Or.inl hx =>
+      rcases eq_or_lt_of_le hxc with (rfl | h'x)
+      · exact ht.1
+      exact (lt_irrefl _ (h'x.trans_le (hs.2 hx))).elim
+  intro x hx y hy hxy
+  rcases lt_or_ge x c with (hxc | hcx)
+  · have xs : x in s := A _ hx hxc.le
+    rcases lt_or_ge y c with (hyc | hcy)
+    · exact h₁ xs (A _ hy hyc.le) hxy
+    · exact (h₁ xs hs.1 hxc).trans_le (h₂.monotoneOn ht.1 (B _ hy hcy) hcy)
+  · have xt : x in t := B _ hx hcx
+    have yt : y in t := B _ hy (hcx.trans hxy.le)
+    exact h₂ xt yt hxy
 -/
 protected theorem StrictMonoOn.union {s t : Set α} {c : α} (h₁ : StrictMonoOn f s)
     (h₂ : StrictMonoOn f t) (hs : IsGreatest s c) (ht : IsLeast t c) : StrictMonoOn f (s union t) := by
@@ -150,7 +182,23 @@ theorem MonotoneOn.union_right
     rcases eq_or_lt_of_le hxc with (rfl | h'x)
     · exact hs.1
     exact (lt_irrefl _ (h'x.trans_le (ht.2 (by assumption)))).elim
-  have B : forall x, x in s union t -> c <= x -> x in t
+  have B : forall x, x in s union t -> c <= x -> x in t := by
+    intro x hx hxc
+    match hx with
+    | Or.inr hx => exact hx
+    | Or.inl hx =>
+      rcases eq_or_lt_of_le hxc with (rfl | h'x)
+      · exact ht.1
+      exact (lt_irrefl _ (h'x.trans_le (hs.2 hx))).elim
+  intro x hx y hy hxy
+  rcases lt_or_ge x c with (hxc | hcx)
+  · have xs : x in s := A _ hx hxc.le
+    rcases lt_or_ge y c with (hyc | hcy)
+    · exact h₁ xs (A _ hy hyc.le) hxy
+    · exact (h₁ xs hs.1 hxc.le).trans (h₂ ht.1 (B _ hy hcy) hcy)
+  · have xt : x in t := B _ hx hcx
+    have yt : y in t := B _ hy (hcx.trans hxy)
+    exact h₂ xt yt hxy
 
 中文:
 定理 MonotoneOn.union_right
@@ -163,7 +211,23 @@ theorem MonotoneOn.union_right
     rcases eq_or_lt_of_le hxc with (rfl | h'x)
     · exact hs.1
     exact (lt_irrefl _ (h'x.trans_le (ht.2 (by assumption)))).elim
-  have B : forall x, x in s union t -> c <= x -> x in t
+  have B : forall x, x in s union t -> c <= x -> x in t := by
+    intro x hx hxc
+    match hx with
+    | Or.inr hx => exact hx
+    | Or.inl hx =>
+      rcases eq_or_lt_of_le hxc with (rfl | h'x)
+      · exact ht.1
+      exact (lt_irrefl _ (h'x.trans_le (hs.2 hx))).elim
+  intro x hx y hy hxy
+  rcases lt_or_ge x c with (hxc | hcx)
+  · have xs : x in s := A _ hx hxc.le
+    rcases lt_or_ge y c with (hyc | hcy)
+    · exact h₁ xs (A _ hy hyc.le) hxy
+    · exact (h₁ xs hs.1 hxc.le).trans (h₂ ht.1 (B _ hy hcy) hcy)
+  · have xt : x in t := B _ hx hcx
+    have yt : y in t := B _ hy (hcx.trans hxy)
+    exact h₂ xt yt hxy
 -/
 protected theorem MonotoneOn.union_right {s t : Set α} {c : α} (h₁ : MonotoneOn f s)
     (h₂ : MonotoneOn f t) (hs : IsGreatest s c) (ht : IsLeast t c) : MonotoneOn f (s union t) := by

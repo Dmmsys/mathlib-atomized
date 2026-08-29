@@ -146,7 +146,10 @@ definition tensorProductFanIso
     intro c
     induction c
     · simp only [map_zero, Under.comp_right]
-    · simp only [AlgHom.toUnder_right, Algebra.T
+    · simp only [AlgHom.toUnder_right, Algebra.TensorProduct.map_tmul, AlgHom.coe_id, id_eq,
+        Pi.evalAlgHom_apply, Under.comp_right, comp_apply, AlgEquiv.toUnder_hom_right_apply,
+        Algebra.TensorProduct.piRight_tmul]
+    · simp_all
 
 中文:
 定义 tensorProductFanIso
@@ -157,7 +160,10 @@ definition tensorProductFanIso
     intro c
     induction c
     · simp only [map_zero, Under.comp_right]
-    · simp only [AlgHom.toUnder_right, Algebra.T
+    · simp only [AlgHom.toUnder_right, Algebra.TensorProduct.map_tmul, AlgHom.coe_id, id_eq,
+        Pi.evalAlgHom_apply, Under.comp_right, comp_apply, AlgEquiv.toUnder_hom_right_apply,
+        Algebra.TensorProduct.piRight_tmul]
+    · simp_all
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.toUnder_hom_right_apply, AlgHom, AlgHom.coe_id, AlgHom.toUnder_right, Algebra, Algebra.TensorProduct.map_tmul, Algebra.TensorProduct.piRight, Algebra.TensorProduct.piRight_tmul, CommRingCat, CommRingCat.mkUnder_ext, Fan.ext, Fan.mk_pt, Pi.evalAlgHom_apply, TensorProduct, Under.comp_right, coe_id, comp_apply, comp_right, evalAlgHom_apply
 -/

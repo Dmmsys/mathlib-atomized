@@ -126,7 +126,7 @@ theorem to_Module_monoidAlgebra_map_aux
     exact LinearMap.congr_fun (w g) x
   · intro g h gw hw; simp only [map_add, LinearMap.add_apply, hw, gw]
   · intro r g w
-    simp only [map_smul, w, LinearMap.smul_apply
+    simp only [map_smul, w, LinearMap.smul_apply]
 
 中文:
 定理 to_Module_monoidAlgebra_map_aux
@@ -138,7 +138,7 @@ theorem to_Module_monoidAlgebra_map_aux
     exact LinearMap.congr_fun (w g) x
   · intro g h gw hw; simp only [map_add, LinearMap.add_apply, hw, gw]
   · intro r g w
-    simp only [map_smul, w, LinearMap.smul_apply
+    simp only [map_smul, w, LinearMap.smul_apply]
 
 Depends on / 依赖: LinearMap, LinearMap.add_apply, LinearMap.congr_fun, LinearMap.smul_apply, MonoidAlgebra, MonoidAlgebra.induction_on, MonoidAlgebra.lift_single, MonoidAlgebra.of_apply, add_apply, congr_fun, induction_on, lift_single, map_add, map_smul, of_apply, one_smul, smul_apply
 -/

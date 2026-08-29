@@ -44,7 +44,7 @@ lemma IsIntegralCurveOn.comp_add
   intros t ht
   rw [comp_apply]; rw [hasDerivWithinAt_iff_hasFDerivWithinAt]; rw [Function.comp_def]; rw [hasFDerivWithinAt_comp_add_right]; rw [← hasDerivWithinAt_iff_hasFDerivWithinAt]; rw [vadd_neg_vadd]
   apply hγ (t + dt)
-  rwa [mem_vadd_set_iff_neg_vadd_mem, neg_neg, vadd_eq_add, add_comm] 
+  rwa [mem_vadd_set_iff_neg_vadd_mem, neg_neg, vadd_eq_add, add_comm] at ht
 
 中文:
 引理 Is整数egralCurveOn.comp_add
@@ -53,7 +53,7 @@ lemma IsIntegralCurveOn.comp_add
   intros t ht
   rw [comp_apply]; rw [hasDerivWithinAt_iff_hasFDerivWithinAt]; rw [Function.comp_def]; rw [hasFDerivWithinAt_comp_add_right]; rw [← hasDerivWithinAt_iff_hasFDerivWithinAt]; rw [vadd_neg_vadd]
   apply hγ (t + dt)
-  rwa [mem_vadd_set_iff_neg_vadd_mem, neg_neg, vadd_eq_add, add_comm] 
+  rwa [mem_vadd_set_iff_neg_vadd_mem, neg_neg, vadd_eq_add, add_comm] at ht
 
 Depends on / 依赖: Function, Function.comp_def, add_comm, comp_apply, comp_def, hasDerivWithinAt_iff_hasFDerivWithinAt, hasFDerivWithinAt_comp_add_right, intros, mem_vadd_set_iff_neg_vadd_mem, neg_neg, vadd_eq_add, vadd_neg_vadd
 -/
@@ -370,7 +370,12 @@ lemma isIntegralCurveOn_comp_mul_ne_zero
   refine ⟨fun hγ => ?_, heq ▸ fun hγ => hγ.comp_mul a⟩
   convert! hγ.comp_mul a⁻¹
   · ext t
-    simp only [comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_o
+    simp only [comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
+  · ext t
+    simp only [comp_apply, Pi.smul_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one,
+      smul_smul, one_smul]
+  · simp only [mul_comm _ a⁻¹, ← smul_eq_mul, mem_inv_smul_set_iff₀ ha, smul_inv_smul₀ ha,
+      ofPred_mem_eq]
 
 中文:
 引理 is整数egralCurveOn_comp_mul_ne_zero
@@ -383,7 +388,12 @@ lemma isIntegralCurveOn_comp_mul_ne_zero
   refine ⟨fun hγ => ?_, heq ▸ fun hγ => hγ.comp_mul a⟩
   convert! hγ.comp_mul a⁻¹
   · ext t
-    simp only [comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_o
+    simp only [comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
+  · ext t
+    simp only [comp_apply, Pi.smul_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one,
+      smul_smul, one_smul]
+  · simp only [mul_comm _ a⁻¹, ← smul_eq_mul, mem_inv_smul_set_iff₀ ha, smul_inv_smul₀ ha,
+      ofPred_mem_eq]
 
 Depends on / 依赖: Pi.smul_apply, comp_apply, comp_mul, convert, div_self, inv_mul_eq_div, mul_assoc, mul_comm, mul_one, ofPred_mem_eq, one_smul, smul_apply, smul_eq_mul, smul_smul
 -/
@@ -415,7 +425,7 @@ lemma IsIntegralCurveAt.comp_mul_ne_zero
   refine ⟨ε / |a|, by positivity, ?_⟩
   convert! h.comp_mul a
   ext t
-  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; r
+  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; rw [sub_mul]; rw [div_mul_cancel₀ _ ha]
 
 中文:
 引理 Is整数egralCurveAt.comp_mul_ne_zero
@@ -426,7 +436,7 @@ lemma IsIntegralCurveAt.comp_mul_ne_zero
   refine ⟨ε / |a|, by positivity, ?_⟩
   convert! h.comp_mul a
   ext t
-  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; r
+  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; rw [sub_mul]; rw [div_mul_cancel₀ _ ha]
 
 Depends on / 依赖: Metric, Metric.mem_ball, Real.dist_eq, abs_mul, abs_pos, abs_pos.mpr, comp_mul, convert, dist_eq, h.comp_mul, isIntegralCurveAt_iff_exists_pos, mem_ball, mem_ofPred_eq, sub_mul
 -/
@@ -452,7 +462,8 @@ lemma isIntegralCurveAt_comp_mul_ne_zero
     simp only [comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
   · ext t
     simp only [comp_apply, Pi.smul_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one,
-    
+      smul_smul, one_smul]
+  · simp only [div_inv_eq_mul, div_mul_cancel₀ _ ha]
 
 中文:
 引理 is整数egralCurveAt_comp_mul_ne_zero
@@ -464,7 +475,8 @@ lemma isIntegralCurveAt_comp_mul_ne_zero
     simp only [comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
   · ext t
     simp only [comp_apply, Pi.smul_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one,
-    
+      smul_smul, one_smul]
+  · simp only [div_inv_eq_mul, div_mul_cancel₀ _ ha]
 
 Depends on / 依赖: Pi.smul_apply, comp_apply, comp_mul_ne_zero, convert, div_inv_eq_mul, div_self, inv_mul_eq_div, inv_ne_zero, mul_assoc, mul_one, one_smul, smul_apply, smul_smul
 -/

@@ -38,7 +38,8 @@ lemma addSubmonoid_closure_range_pow
     exact nsmul_mem (subset_closure <| mem_range_self _) _
   rw [nsmul_eq_mul]
   push_cast
-  rw [mul_assoc]; rw [pow_sub₀]; rw [pow_one]; rw [mul_right_comm]; rw [← mul_pow]; 
+  rw [mul_assoc]; rw [pow_sub₀]; rw [pow_one]; rw [mul_right_comm]; rw [← mul_pow]; rw [mul_inv_cancel₀]; rw [one_pow]; rw [one_mul]; rw [← div_eq_mul_inv]; rw [num_div_den]
+  all_goals simp [x.den_pos.ne', Nat.one_le_iff_ne_zero, *]
 
 中文:
 引理 addSubmonoid_closure_range_pow
@@ -50,7 +51,8 @@ lemma addSubmonoid_closure_range_pow
     exact nsmul_mem (subset_closure <| mem_range_self _) _
   rw [nsmul_eq_mul]
   push_cast
-  rw [mul_assoc]; rw [pow_sub₀]; rw [pow_one]; rw [mul_right_comm]; rw [← mul_pow]; 
+  rw [mul_assoc]; rw [pow_sub₀]; rw [pow_one]; rw [mul_right_comm]; rw [← mul_pow]; rw [mul_inv_cancel₀]; rw [one_pow]; rw [one_mul]; rw [← div_eq_mul_inv]; rw [num_div_den]
+  all_goals simp [x.den_pos.ne', Nat.one_le_iff_ne_zero, *]
 -/
 @[simp] lemma addSubmonoid_closure_range_pow {n : Nat} (hn₀ : n != 0) :
     closure (range fun x : Rat>=0 => x ^ n) = ⊤ := by
@@ -114,7 +116,9 @@ lemma addSubmonoid_closure_range_pow
   · have (x : Rat) : exists y : Rat>=0, y ^ n = x ^ n := ⟨x.nnabs, by simp [hn.pow_abs]⟩
     simp [subset_antisymm_iff, range_subset_iff, this]
   · ext
-    simp [NNRat.addSubmonoid_closure_range_pow hn₀, NNRat.exists
+    simp [NNRat.addSubmonoid_closure_range_pow hn₀, NNRat.exists]
+
+@[simp]
 
 中文:
 引理 addSubmonoid_closure_range_pow
@@ -124,7 +128,9 @@ lemma addSubmonoid_closure_range_pow
   · have (x : Rat) : exists y : Rat>=0, y ^ n = x ^ n := ⟨x.nnabs, by simp [hn.pow_abs]⟩
     simp [subset_antisymm_iff, range_subset_iff, this]
   · ext
-    simp [NNRat.addSubmonoid_closure_range_pow hn₀, NNRat.exists
+    simp [NNRat.addSubmonoid_closure_range_pow hn₀, NNRat.exists]
+
+@[simp]
 -/
 @[simp] lemma addSubmonoid_closure_range_pow {n : Nat} (hn₀ : n != 0) (hn : Even n) :
     closure (range fun x : Rat => x ^ n) = nonneg _ := by

@@ -147,7 +147,16 @@ lemma logDeriv_eta_comp_eq_logDeriv_csqrt_eta
   rw [logDeriv_eta_comp_div_eq z]; rw [Pi.mul_def]; rw [logDeriv_mul _ (by simp [sqrt]; rw [ne_zero z]) (eta_ne_zero z.2)
       (differentiableAt_sqrt (mem_slitPlane z))
       (differentiableAt_eta_of_mem_upperHalfPlaneSet z.2), logDeriv_apply sqrt]
-  have hE2 := congrFun (E2_slash_action Modular
+  have hE2 := congrFun (E2_slash_action ModularGroup.S) z
+  simp only [one_div, SL_slash_def, modular_S_smul, ModularGroup.denom_S,
+    Int.reduceNeg, zpow_neg, riemannZeta_two, mul_inv_rev, inv_div, Pi.sub_apply, Pi.smul_apply,
+    D2, ModularGroup.denom_S, smul_eq_mul] at hE2
+  rw [deriv_sqrt (mem_slitPlane z)]; rw [div_eq_mul_inv]; rw [logDeriv_eta_eq_E2 z]; rw [logDeriv_eta_eq_E2 (.mk _ z.im_inv_neg_coe_pos)]; rw [← mul_assoc]; rw [mul_comm]; rw [← mul_assoc]; rw [hE2]; rw [sqrt]; rw [show ModularGroup.S 1 0 = 1 by simp [ModularGroup.S]]
+  transitivity 1 / z / 2 + π * I / 12 * E2 z
+  · field_simp
+    grind [I_sq]
+  · rw [div_mul_eq_mul_div₀ _ _ (2 : Complex), neg_div, cpow_neg, ← mul_inv, ← cpow_add _ _ z.ne_zero]
+    norm_num
 
 中文:
 引理 logDeriv_eta_comp_eq_logDeriv_csqrt_eta
@@ -156,7 +165,16 @@ lemma logDeriv_eta_comp_eq_logDeriv_csqrt_eta
   rw [logDeriv_eta_comp_div_eq z]; rw [Pi.mul_def]; rw [logDeriv_mul _ (by simp [sqrt]; rw [ne_zero z]) (eta_ne_zero z.2)
       (differentiableAt_sqrt (mem_slitPlane z))
       (differentiableAt_eta_of_mem_upperHalfPlaneSet z.2), logDeriv_apply sqrt]
-  have hE2 := congrFun (E2_slash_action Modular
+  have hE2 := congrFun (E2_slash_action ModularGroup.S) z
+  simp only [one_div, SL_slash_def, modular_S_smul, ModularGroup.denom_S,
+    Int.reduceNeg, zpow_neg, riemannZeta_two, mul_inv_rev, inv_div, Pi.sub_apply, Pi.smul_apply,
+    D2, ModularGroup.denom_S, smul_eq_mul] at hE2
+  rw [deriv_sqrt (mem_slitPlane z)]; rw [div_eq_mul_inv]; rw [logDeriv_eta_eq_E2 z]; rw [logDeriv_eta_eq_E2 (.mk _ z.im_inv_neg_coe_pos)]; rw [← mul_assoc]; rw [mul_comm]; rw [← mul_assoc]; rw [hE2]; rw [sqrt]; rw [show ModularGroup.S 1 0 = 1 by simp [ModularGroup.S]]
+  transitivity 1 / z / 2 + π * I / 12 * E2 z
+  · field_simp
+    grind [I_sq]
+  · rw [div_mul_eq_mul_div₀ _ _ (2 : Complex), neg_div, cpow_neg, ← mul_inv, ← cpow_add _ _ z.ne_zero]
+    norm_num
 
 Depends on / 依赖: E2_slash_action, Int.reduceNeg, ModularGroup, ModularGroup.S, ModularGroup.denom_S, Pi.mul_def, Pi.smul_apply, Pi.sub_apply, SL_slash_def, denom_S, differentiableAt_eta_of_mem_upperHalfPlaneSet, differentiableAt_sqrt, eta_ne_zero, inv_div, logDeriv_apply, logDeriv_eta_comp_div_eq, logDeriv_mul, mem_slitPlane, modular_S_smul, mul_def
 -/
@@ -186,7 +204,15 @@ lemma eta_comp_eqOn_const_mul_csqrt_eta
   · exact fun z hz => logDeriv_eta_comp_eq_logDeriv_csqrt_eta ⟨z, hz⟩
   · apply DifferentiableOn.comp (t := upperHalfPlaneSet)
     · exact fun x hx => (differentiableAt_eta_of_mem_upperHalfPlaneSet hx).differentiableWithinAt
-    · exact DifferentiableOn.div (by fun_prop
+    · exact DifferentiableOn.div (by fun_prop) (by fun_prop)
+        (fun x hx => ne_zero (⟨x, hx⟩ : ℍ))
+    · exact fun y hy => by grind [im_pnat_div_pos 1 (⟨y, hy⟩ : ℍ)]
+  · exact fun x hx => ((differentiableAt_sqrt (mem_slitPlane ⟨x, hx⟩)).mul
+     (differentiableAt_eta_of_mem_upperHalfPlaneSet hx)).differentiableWithinAt
+  · exact isOpen_upperHalfPlaneSet
+  · exact Convex.isPreconnected (convex_halfSpace_im_gt 0)
+  · exact fun x hx => mul_ne_zero (by simp [sqrt, ne_zero ⟨x, hx⟩]) (eta_ne_zero hx)
+  · exact fun x hx => eta_ne_zero (by grind [im_pnat_div_pos 1 ⟨x, hx⟩])
 
 中文:
 引理 eta_comp_eqOn_const_mul_csqrt_eta
@@ -195,7 +221,15 @@ lemma eta_comp_eqOn_const_mul_csqrt_eta
   · exact fun z hz => logDeriv_eta_comp_eq_logDeriv_csqrt_eta ⟨z, hz⟩
   · apply DifferentiableOn.comp (t := upperHalfPlaneSet)
     · exact fun x hx => (differentiableAt_eta_of_mem_upperHalfPlaneSet hx).differentiableWithinAt
-    · exact DifferentiableOn.div (by fun_prop
+    · exact DifferentiableOn.div (by fun_prop) (by fun_prop)
+        (fun x hx => ne_zero (⟨x, hx⟩ : ℍ))
+    · exact fun y hy => by grind [im_pnat_div_pos 1 (⟨y, hy⟩ : ℍ)]
+  · exact fun x hx => ((differentiableAt_sqrt (mem_slitPlane ⟨x, hx⟩)).mul
+     (differentiableAt_eta_of_mem_upperHalfPlaneSet hx)).differentiableWithinAt
+  · exact isOpen_upperHalfPlaneSet
+  · exact Convex.isPreconnected (convex_halfSpace_im_gt 0)
+  · exact fun x hx => mul_ne_zero (by simp [sqrt, ne_zero ⟨x, hx⟩]) (eta_ne_zero hx)
+  · exact fun x hx => eta_ne_zero (by grind [im_pnat_div_pos 1 ⟨x, hx⟩])
 
 Depends on / 依赖: DifferentiableOn, DifferentiableOn.comp, DifferentiableOn.div, differentiableAt_eta_of_m, differentiableAt_eta_of_mem_upperHalfPlaneSet, differentiableAt_sqrt, differentiableWithinAt, fun_prop, im_pnat_div_pos, logDeriv_eqOn_iff, logDeriv_eta_comp_eq_logDeriv_csqrt_eta, mem_slitPlane, ne_zero, upperHalfPlaneSet
 -/
@@ -346,7 +380,8 @@ lemma discriminant_S_invariant
     simpa [denom, ModularGroup.S]
   have he : η (-(↑z)⁻¹) = (sqrt I)⁻¹ * (sqrt z * η z) := by
     simpa [neg_div] using eta_comp_eq_csqrt_I_inv z.2
-  simp only [h
+  simp only [he, mul_pow, mul_pow, inv_pow, csqrt_I_pow_24, csqrt_pow_24_eq (ne_zero z)]
+  field_simp [z.ne_zero]
 
 中文:
 引理 discriminant_S_invariant
@@ -358,7 +393,8 @@ lemma discriminant_S_invariant
     simpa [denom, ModularGroup.S]
   have he : η (-(↑z)⁻¹) = (sqrt I)⁻¹ * (sqrt z * η z) := by
     simpa [neg_div] using eta_comp_eq_csqrt_I_inv z.2
-  simp only [h
+  simp only [he, mul_pow, mul_pow, inv_pow, csqrt_I_pow_24, csqrt_pow_24_eq (ne_zero z)]
+  field_simp [z.ne_zero]
 
 Depends on / 依赖: ModularGroup, ModularGroup.S, SL_slash_apply, UpperHalfPlane, UpperHalfPlane.modular_S_smul, csqrt_I_pow_24, csqrt_pow_24_eq, eta_comp_eq_csqrt_I_inv, inv_pow, modular_S_smul, mul_pow, ne_zero, neg_div, z.ne_zero
 -/
@@ -381,7 +417,22 @@ lemma tendsto_atImInfty_tprod_one_sub_eta_q_pow
   have htprod : Tendsto (fun q : Complex => ∏' (n : Nat), (1 - q ^ (n + 1))) (𝓝 0) (𝓝 1) := by
     have := tendsto_tprod_one_add_of_dominated_convergence (𝓕 := 𝓝 0) (g := 0)
       (f := fun (q : Complex) (n : Nat) => -q ^ (n + 1)) (bound := fun n => (1 / 2 : Real) ^ (n + 1))
-    simp only [Pi.zer
+    simp only [Pi.zero_apply, norm_neg, norm_pow, add_zero, tprod_one] at this
+    simp_rw [sub_eq_add_neg]
+    refine this
+      (by simpa only [pow_succ'] using (summable_geometric_of_abs_lt_one (by norm_num)).mul_left _)
+      (fun k => by simpa using ((continuous_pow (M := Complex) (k + 1)).tendsto 0).neg) ?_
+    filter_upwards [Metric.ball_mem_nhds (0 : Complex) (by norm_num : (0 : Real) < 1 / 2)] with q hq k
+    exact pow_le_pow_left₀ (norm_nonneg _) (mem_ball_zero_iff.mp hq).le _
+  have := (htprod.comp (UpperHalfPlane.qParam_tendsto_atImInfty zero_lt_one)).pow 24
+  simp only [Periodic.qParam, ofReal_one, div_one, comp_apply, one_pow, eta_q] at *
+  convert! this using 2 with τ
+  rw [Multipliable.tprod_pow]
+  apply (multipliableLocallyUniformlyOn_eta.multipliable τ.2).congr
+  simp [eta_q, Periodic.qParam, ← exp_nat_mul]
+
+@[deprecated (since := "2026-04-30")]
+alias discriminant_bounded_factor := tendsto_atImInfty_tprod_one_sub_eta_q_pow
 
 中文:
 引理 tendsto_atImInfty_tprod_one_sub_eta_q_pow
@@ -389,7 +440,22 @@ lemma tendsto_atImInfty_tprod_one_sub_eta_q_pow
   have htprod : Tendsto (fun q : Complex => ∏' (n : Nat), (1 - q ^ (n + 1))) (𝓝 0) (𝓝 1) := by
     have := tendsto_tprod_one_add_of_dominated_convergence (𝓕 := 𝓝 0) (g := 0)
       (f := fun (q : Complex) (n : Nat) => -q ^ (n + 1)) (bound := fun n => (1 / 2 : Real) ^ (n + 1))
-    simp only [Pi.zer
+    simp only [Pi.zero_apply, norm_neg, norm_pow, add_zero, tprod_one] at this
+    simp_rw [sub_eq_add_neg]
+    refine this
+      (by simpa only [pow_succ'] using (summable_geometric_of_abs_lt_one (by norm_num)).mul_left _)
+      (fun k => by simpa using ((continuous_pow (M := Complex) (k + 1)).tendsto 0).neg) ?_
+    filter_upwards [Metric.ball_mem_nhds (0 : Complex) (by norm_num : (0 : Real) < 1 / 2)] with q hq k
+    exact pow_le_pow_left₀ (norm_nonneg _) (mem_ball_zero_iff.mp hq).le _
+  have := (htprod.comp (UpperHalfPlane.qParam_tendsto_atImInfty zero_lt_one)).pow 24
+  simp only [Periodic.qParam, ofReal_one, div_one, comp_apply, one_pow, eta_q] at *
+  convert! this using 2 with τ
+  rw [Multipliable.tprod_pow]
+  apply (multipliableLocallyUniformlyOn_eta.multipliable τ.2).congr
+  simp [eta_q, Periodic.qParam, ← exp_nat_mul]
+
+@[deprecated (since := "2026-04-30")]
+alias discriminant_bounded_factor := tendsto_atImInfty_tprod_one_sub_eta_q_pow
 
 Depends on / 依赖: Pi.zero_apply, Tendsto, add_zero, htprod, mul_left, norm_neg, norm_pow, pow_succ, simp_rw, sub_eq_add_neg, summable_geometric_of_abs_lt_one, tendsto_tprod_one_add_of_dominated_convergence, tprod_one, zero_apply
 -/
@@ -456,7 +522,13 @@ lemma exp_isBigO_discriminant
     (Metric.ball_mem_nhds 1 (by norm_num : (0 : Real) < 1/2))
   filter_upwards [hprod] with τ hτ
   rw [discriminant_eq_q_prod]; rw [norm_mul]; rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-  have hq_norm :
+  have hq_norm : ‖𝕢 1 τ‖ = Real.exp (-2 * π * τ.im) := by simp [Periodic.qParam, Complex.norm_exp]
+  rw [← hq_norm]
+  have hprod_bound : 1 / 2 <= ‖∏' n, (1 - eta_q n τ) ^ 24‖ := by
+    have hsub : ‖∏' n, (1 - eta_q n τ) ^ 24 - 1‖ < 1 / 2 := by rwa [Complex.dist_eq] at hτ
+    have h1 := norm_sub_norm_le 1 (∏' n, (1 - eta_q n τ) ^ 24)
+    grind [norm_one, norm_sub_rev]
+  linarith [norm_nonneg (𝕢 1 τ), mul_le_mul_of_nonneg_left hprod_bound (norm_nonneg (𝕢 1 τ))]
 
 中文:
 引理 exp_isBigO_discriminant
@@ -467,7 +539,13 @@ lemma exp_isBigO_discriminant
     (Metric.ball_mem_nhds 1 (by norm_num : (0 : Real) < 1/2))
   filter_upwards [hprod] with τ hτ
   rw [discriminant_eq_q_prod]; rw [norm_mul]; rw [Real.norm_of_nonneg (Real.exp_pos _).le]
-  have hq_norm :
+  have hq_norm : ‖𝕢 1 τ‖ = Real.exp (-2 * π * τ.im) := by simp [Periodic.qParam, Complex.norm_exp]
+  rw [← hq_norm]
+  have hprod_bound : 1 / 2 <= ‖∏' n, (1 - eta_q n τ) ^ 24‖ := by
+    have hsub : ‖∏' n, (1 - eta_q n τ) ^ 24 - 1‖ < 1 / 2 := by rwa [Complex.dist_eq] at hτ
+    have h1 := norm_sub_norm_le 1 (∏' n, (1 - eta_q n τ) ^ 24)
+    grind [norm_one, norm_sub_rev]
+  linarith [norm_nonneg (𝕢 1 τ), mul_le_mul_of_nonneg_left hprod_bound (norm_nonneg (𝕢 1 τ))]
 
 Depends on / 依赖: Complex.norm_exp, Metric, Metric.ball_mem_nhds, Periodic, Periodic.qParam, Real.exp, Real.exp_pos, Real.norm_of_nonneg, ball_mem_nhds, discriminant_eq_q_prod, eta_q, eventually, exp_pos, filter_upwards, hprod_bound, hq_norm, norm_exp, norm_mul, norm_of_nonneg, of_bound
 -/
@@ -498,7 +576,9 @@ lemma discriminant_cuspFunction_eqOn
       discriminant_isZeroAtImInfty.zero_at_infty_comp_ofComplex
   · have him := Periodic.im_invQParam_pos_of_norm_lt_one one_pos
       (by simpa [dist_zero_right] using hq) hq0
-    simp [c
+    simp [cuspFunction, Periodic.cuspFunction_eq_of_nonzero 1 _ hq0,
+      ofComplex_apply_of_im_pos him, discriminant_eq_q_prod ⟨_, him⟩,
+      Periodic.qParam_right_inv one_ne_zero hq0, eta_q]
 
 中文:
 引理 discriminant_cuspFunction_eqOn
@@ -510,7 +590,9 @@ lemma discriminant_cuspFunction_eqOn
       discriminant_isZeroAtImInfty.zero_at_infty_comp_ofComplex
   · have him := Periodic.im_invQParam_pos_of_norm_lt_one one_pos
       (by simpa [dist_zero_right] using hq) hq0
-    simp [c
+    simp [cuspFunction, Periodic.cuspFunction_eq_of_nonzero 1 _ hq0,
+      ofComplex_apply_of_im_pos him, discriminant_eq_q_prod ⟨_, him⟩,
+      Periodic.qParam_right_inv one_ne_zero hq0, eta_q]
 
 Depends on / 依赖: Periodic, Periodic.cuspFunction_eq_of_nonzero, Periodic.cuspFunction_zero_of_zero_at_inf, Periodic.im_invQParam_pos_of_norm_lt_one, Periodic.qParam_right_inv, cuspFunction, cuspFunction_eq_of_nonzero, cuspFunction_zero_of_zero_at_inf, discriminant_eq_q_prod, discriminant_isZeroAtImInfty, discriminant_isZeroAtImInfty.zero_at_infty_comp_ofComplex, dist_zero_right, eta_q, im_invQParam_pos_of_norm_lt_one, ofComplex_apply_of_im_pos, one_ne_zero, one_pos, qParam_right_inv, zero_at_infty_comp_ofComplex
 -/
@@ -537,7 +619,12 @@ lemma discriminant_qExpansion_coeff_one
   calc (qExpansion 1 Δ).coeff 1
       = derivWithin (cuspFunction 1 Δ) (Metric.ball 0 1) 0 := by
         simp [qExpansion_coeff, ← derivWithin_of_isOpen Metric.isOpen_ball hmem]
-    _ = derivWithin (fun q =
+    _ = derivWithin (fun q => q * ∏' i, (1 - q ^ (i + 1)) ^ 24) (Metric.ball 0 1) 0 :=
+        derivWithin_congr discriminant_cuspFunction_eqOn (discriminant_cuspFunction_eqOn hmem)
+    _ = 1 := by
+        simp [derivWithin_fun_mul differentiableWithinAt_fun_id
+          (differentiableOn_tprod_one_sub_pow_pow 24 _ hmem),
+          derivWithin_id' _ _ (Metric.isOpen_ball.uniqueDiffWithinAt hmem)]
 
 中文:
 引理 discriminant_qExpansion_coeff_one
@@ -547,7 +634,12 @@ lemma discriminant_qExpansion_coeff_one
   calc (qExpansion 1 Δ).coeff 1
       = derivWithin (cuspFunction 1 Δ) (Metric.ball 0 1) 0 := by
         simp [qExpansion_coeff, ← derivWithin_of_isOpen Metric.isOpen_ball hmem]
-    _ = derivWithin (fun q =
+    _ = derivWithin (fun q => q * ∏' i, (1 - q ^ (i + 1)) ^ 24) (Metric.ball 0 1) 0 :=
+        derivWithin_congr discriminant_cuspFunction_eqOn (discriminant_cuspFunction_eqOn hmem)
+    _ = 1 := by
+        simp [derivWithin_fun_mul differentiableWithinAt_fun_id
+          (differentiableOn_tprod_one_sub_pow_pow 24 _ hmem),
+          derivWithin_id' _ _ (Metric.isOpen_ball.uniqueDiffWithinAt hmem)]
 
 Depends on / 依赖: Metric, Metric.ball, Metric.isOpen_ball, Metric.mem_ball_self, cuspFunction, derivWithin, derivWithin_congr, derivWithin_fun_mul, derivWithin_of_isOpen, differe, differentiableWithinAt_fun_id, discriminant_cuspFunction_eqOn, isOpen_ball, mem_ball_self, one_pos, qExpansion, qExpansion_coeff
 -/
@@ -588,7 +680,16 @@ definition discriminant
   holo' := by
     rw [UpperHalfPlane.mdifferentiable_iff]
     refine .congr (fun z hz => (differentiableAt_eta_of_mem_upperHalfPlaneSet hz).pow
-.differ
+.differentiableWithinAt) fun z hz => ?_ 24
+    simp [ModularForm.discriminant, ofComplex_apply_of_im_pos hz]
+  zero_at_cusps' hc := by
+    rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
+    rw [OnePoint.isZeroAt_iff_forall_SL2Z hc]
+    intro γ _
+    rw [slash_action_generators_SL2Z discriminant_S_invariant discriminant_T_invariant]
+    exact discriminant_isZeroAtImInfty
+
+@[simp]
 
 中文:
 定义 discriminant
@@ -600,7 +701,16 @@ definition discriminant
   holo' := by
     rw [UpperHalfPlane.mdifferentiable_iff]
     refine .congr (fun z hz => (differentiableAt_eta_of_mem_upperHalfPlaneSet hz).pow
-.differ
+.differentiableWithinAt) fun z hz => ?_ 24
+    simp [ModularForm.discriminant, ofComplex_apply_of_im_pos hz]
+  zero_at_cusps' hc := by
+    rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
+    rw [OnePoint.isZeroAt_iff_forall_SL2Z hc]
+    intro γ _
+    rw [slash_action_generators_SL2Z discriminant_S_invariant discriminant_T_invariant]
+    exact discriminant_isZeroAtImInfty
+
+@[simp]
 -/
 @[expose] def discriminant : CuspForm 𝒮ℒ 12 where
   toFun := Δ

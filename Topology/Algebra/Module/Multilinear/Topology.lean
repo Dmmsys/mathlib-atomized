@@ -362,7 +362,19 @@ theorem completeSpace
       SeparationQuotient.isUniformInducing_mk).completeSpace_congr]
     · exact this inferInstance
     · intro f
-      use (SeparationQuotient.outCLM _ _).compContinuousMultilinearM
+      use (SeparationQuotient.outCLM _ _).compContinuousMultilinearMap f
+      simp [DFunLike.ext_iff]
+  have H : forall {m : Π i, E i},
+      Continuous fun f : (Π i, E i) ->ᵤ[{s | IsVonNBounded 𝕜 s}] F => toFun _ f m :=
+    (uniformContinuous_eval (sUnion_isVonNBounded_eq_univ) _).continuous
+  rw [completeSpace_iff_isComplete_range isUniformInducing_toUniformOnFun]; rw [range_toUniformOnFun]
+  simp only [ofPred_and, ofPred_forall]
+  apply_rules [IsClosed.isComplete, IsClosed.inter]
+  · exact UniformOnFun.isClosed_setOfPred_continuous h
+  · exact isClosed_iInter fun m => isClosed_iInter fun i =>
+      isClosed_iInter fun x => isClosed_iInter fun y => isClosed_eq H (H.add H)
+  · exact isClosed_iInter fun m => isClosed_iInter fun i =>
+      isClosed_iInter fun c => isClosed_iInter fun x => isClosed_eq H (H.const_smul _)
 
 中文:
 定理 completeSpace
@@ -374,7 +386,19 @@ theorem completeSpace
       SeparationQuotient.isUniformInducing_mk).completeSpace_congr]
     · exact this inferInstance
     · intro f
-      use (SeparationQuotient.outCLM _ _).compContinuousMultilinearM
+      use (SeparationQuotient.outCLM _ _).compContinuousMultilinearMap f
+      simp [DFunLike.ext_iff]
+  have H : forall {m : Π i, E i},
+      Continuous fun f : (Π i, E i) ->ᵤ[{s | IsVonNBounded 𝕜 s}] F => toFun _ f m :=
+    (uniformContinuous_eval (sUnion_isVonNBounded_eq_univ) _).continuous
+  rw [completeSpace_iff_isComplete_range isUniformInducing_toUniformOnFun]; rw [range_toUniformOnFun]
+  simp only [ofPred_and, ofPred_forall]
+  apply_rules [IsClosed.isComplete, IsClosed.inter]
+  · exact UniformOnFun.isClosed_setOfPred_continuous h
+  · exact isClosed_iInter fun m => isClosed_iInter fun i =>
+      isClosed_iInter fun x => isClosed_iInter fun y => isClosed_eq H (H.add H)
+  · exact isClosed_iInter fun m => isClosed_iInter fun i =>
+      isClosed_iInter fun c => isClosed_iInter fun x => isClosed_eq H (H.const_smul _)
 
 Depends on / 依赖: Continuous, DFunLike, DFunLike.ext_iff, IsVonNBounded, SeparationQuotient, SeparationQuotient.isUniformInducing_mk, SeparationQuotient.mkCLM, SeparationQuotient.outCLM, T2Space, classical, compContinuousMultilinearMap, completeSpace, completeSpace_congr, continuous, ext_iff, generalizing, isUniformInducing_mk, isUniformInducing_postcomp, outCLM, sUnion_isVonNBounded_eq_univ
 -/
@@ -439,7 +463,9 @@ theorem isUniformEmbedding_restrictScalars
     ⟨let ⟨x, hx⟩ := @NontriviallyNormedField.non_trivial 𝕜' _; ⟨algebraMap 𝕜' 𝕜 x, by simpa⟩⟩
   rw [← isUniformEmbedding_toUniformOnFun.of_comp_iff]
   convert! isUniformEmbedding_toUniformOnFun using 4 with s
-  exact ⟨fun h => h.extend_scalars _, fun h => h.re
+  exact ⟨fun h => h.extend_scalars _, fun h => h.restrict_scalars _⟩
+
+@[fun_prop]
 
 中文:
 定理 isUniformEmbedding_restrictScalars
@@ -448,7 +474,9 @@ theorem isUniformEmbedding_restrictScalars
     ⟨let ⟨x, hx⟩ := @NontriviallyNormedField.non_trivial 𝕜' _; ⟨algebraMap 𝕜' 𝕜 x, by simpa⟩⟩
   rw [← isUniformEmbedding_toUniformOnFun.of_comp_iff]
   convert! isUniformEmbedding_toUniformOnFun using 4 with s
-  exact ⟨fun h => h.extend_scalars _, fun h => h.re
+  exact ⟨fun h => h.extend_scalars _, fun h => h.restrict_scalars _⟩
+
+@[fun_prop]
 
 Depends on / 依赖: NontriviallyNormedField, NontriviallyNormedField.non_trivial, algebraMap, convert, extend_scalars, h.extend_scalars, h.restrict_scalars, isUniformEmbedding_toUniformOnFun, isUniformEmbedding_toUniformOnFun.of_comp_iff, non_trivial, of_comp_iff, restrict_scalars
 -/
@@ -546,7 +574,8 @@ instance instContinuousSMul
   haveI := isUniformAddGroup_of_addCommGroup (G := F)
   let φ : ContinuousMultilinearMap 𝕜 E F ->ₗ[𝕜] (Π i, E i) -> F :=
     { toFun := (↑), map_add' := fun _ _ => rfl, map_smul' := fun _ _ => rfl }
-  UniformOnFun.continuousSMul_induced_of_image_boun
+  UniformOnFun.continuousSMul_induced_of_image_bounded _ _ _ _ φ
+    isEmbedding_toUniformOnFun.isInducing fun _ _ hu => hu.image_multilinear _
 
 中文:
 实例 instContinuousSMul
@@ -555,7 +584,8 @@ instance instContinuousSMul
   haveI := isUniformAddGroup_of_addCommGroup (G := F)
   let φ : ContinuousMultilinearMap 𝕜 E F ->ₗ[𝕜] (Π i, E i) -> F :=
     { toFun := (↑), map_add' := fun _ _ => rfl, map_smul' := fun _ _ => rfl }
-  UniformOnFun.continuousSMul_induced_of_image_boun
+  UniformOnFun.continuousSMul_induced_of_image_bounded _ _ _ _ φ
+    isEmbedding_toUniformOnFun.isInducing fun _ _ hu => hu.image_multilinear _
 
 Depends on / 依赖: ContinuousMultilinearMap, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, UniformOnFun, UniformOnFun.continuousSMul_induced_of_image_bounded, continuousSMul_induced_of_image_bounded, hu.image_multilinear, image_multilinear, isEmbedding_toUniformOnFun, isEmbedding_toUniformOnFun.isInducing, isInducing, isUniformAddGroup_of_addCommGroup, map_add, map_smul, rightUniformSpace
 -/
@@ -580,7 +610,7 @@ theorem hasBasis_nhds_zero_of_basis
   rw [nhds_induced]
   refine (UniformOnFun.hasBasis_nhds_zero_of_basis _ ?_ ?_ h).comap DFunLike.coe
   · exact ⟨∅, isVonNBounded_empty _ _⟩
-  · exact directedOn_of
+  · exact directedOn_of_sup_mem fun _ _ => Bornology.IsVonNBounded.union
 
 中文:
 定理 hasBasis_nhds_zero_of_basis
@@ -591,7 +621,7 @@ theorem hasBasis_nhds_zero_of_basis
   rw [nhds_induced]
   refine (UniformOnFun.hasBasis_nhds_zero_of_basis _ ?_ ?_ h).comap DFunLike.coe
   · exact ⟨∅, isVonNBounded_empty _ _⟩
-  · exact directedOn_of
+  · exact directedOn_of_sup_mem fun _ _ => Bornology.IsVonNBounded.union
 
 Depends on / 依赖: Bornology, Bornology.IsVonNBounded.union, DFunLike, DFunLike.coe, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, IsVonNBounded, UniformOnFun, UniformOnFun.hasBasis_nhds_zero_of_basis, UniformSpace, directedOn_of_sup_mem, hasBasis_nhds_zero_of_basis, isUniformAddGroup_of_addCommGroup, isVonNBounded_empty, nhds_induced, rightUniformSpace
 -/
@@ -712,7 +742,12 @@ definition compContinuousLinearMapL
   { toLinearMap := aux
     cont := by
       apply continuous_of_tendsto_nhds_zero aux
-      rw [ha
+      rw [hasBasis_nhds_zero.tendsto_iff hasBasis_nhds_zero]
+      rintro ⟨U, V⟩ ⟨hU, hV⟩
+      set φ : (forall i, E i) ->L[𝕜] (forall i, E₁ i) := .piMap f
+      exact ⟨(φ '' U, V), ⟨hU.image φ, hV⟩, fun g hg => hg.comp (mapsTo_image _ _)⟩ }
+
+@[fun_prop]
 
 中文:
 定义 compContinuousLinearMapL
@@ -724,7 +759,12 @@ definition compContinuousLinearMapL
   { toLinearMap := aux
     cont := by
       apply continuous_of_tendsto_nhds_zero aux
-      rw [ha
+      rw [hasBasis_nhds_zero.tendsto_iff hasBasis_nhds_zero]
+      rintro ⟨U, V⟩ ⟨hU, hV⟩
+      set φ : (forall i, E i) ->L[𝕜] (forall i, E₁ i) := .piMap f
+      exact ⟨(φ '' U, V), ⟨hU.image φ, hV⟩, fun g hg => hg.comp (mapsTo_image _ _)⟩ }
+
+@[fun_prop]
 
 Depends on / 依赖: ContinuousMultilinearMap, compContinuousLinearMap, continuous_of_tendsto_nhds_zero, g.compContinuousLinearMap, hU.image, hasBasis_nhds_zero, hasBasis_nhds_zero.tendsto_iff, hg.comp, map_add, map_smul, mapsTo_image, tendsto_iff, toLinearMap
 -/
@@ -1012,7 +1052,32 @@ definition compContinuousMultilinearMapL
     { toFun g :=
         letI aux₁ : ContinuousMultilinearMap 𝕜 E F ->ₗ[𝕜] ContinuousMultilinearMap 𝕜 E G :=
           { toFun := g.compContinuousMultilinearMap
-            map_add' _ _ := by
+            map_add' _ _ := by ext; simp
+            map_smul' _ _ := by ext; simp }
+        { toLinearMap := aux₁
+          cont := by
+            apply continuous_of_tendsto_nhds_zero aux₁
+            rw [ContinuousMultilinearMap.hasBasis_nhds_zero.tendsto_iff
+              ContinuousMultilinearMap.hasBasis_nhds_zero]
+            rintro ⟨U, V⟩ ⟨hU, hV⟩
+            refine ⟨(U, g ⁻¹' V), ⟨hU, ?_⟩, ?_⟩
+· exact (map_continuous g).tendsto 0 by simpa
+            · exact fun f hf => hf
+        }
+      map_add' _ _ := by ext; simp
+      map_smul' _ _ := by ext; simp }
+  { toLinearMap := aux
+    cont := by
+      apply continuous_of_tendsto_nhds_zero aux
+      rw [ContinuousLinearMap.hasBasis_nhds_zero.tendsto_iff <|
+ContinuousLinearMap.hasBasis_nhds_zero_of_basis
+        ContinuousMultilinearMap.hasBasis_nhds_zero]
+      rintro ⟨U, V, W⟩ ⟨hU, hV, hW⟩
+      refine ⟨(.image2 (fun f v => f v) U V, W), ⟨?_, hW⟩, ?_⟩
+      · exact ContinuousMultilinearMap.isVonNBounded_image2_apply hU hV
+· exact fun g hg f hf m hm => hg _ mem_image2_of_mem hf hm }
+
+@[simp]
 
 中文:
 定义 compContinuousMultilinearMapL
@@ -1022,7 +1087,32 @@ definition compContinuousMultilinearMapL
     { toFun g :=
         letI aux₁ : ContinuousMultilinearMap 𝕜 E F ->ₗ[𝕜] ContinuousMultilinearMap 𝕜 E G :=
           { toFun := g.compContinuousMultilinearMap
-            map_add' _ _ := by
+            map_add' _ _ := by ext; simp
+            map_smul' _ _ := by ext; simp }
+        { toLinearMap := aux₁
+          cont := by
+            apply continuous_of_tendsto_nhds_zero aux₁
+            rw [ContinuousMultilinearMap.hasBasis_nhds_zero.tendsto_iff
+              ContinuousMultilinearMap.hasBasis_nhds_zero]
+            rintro ⟨U, V⟩ ⟨hU, hV⟩
+            refine ⟨(U, g ⁻¹' V), ⟨hU, ?_⟩, ?_⟩
+· exact (map_continuous g).tendsto 0 by simpa
+            · exact fun f hf => hf
+        }
+      map_add' _ _ := by ext; simp
+      map_smul' _ _ := by ext; simp }
+  { toLinearMap := aux
+    cont := by
+      apply continuous_of_tendsto_nhds_zero aux
+      rw [ContinuousLinearMap.hasBasis_nhds_zero.tendsto_iff <|
+ContinuousLinearMap.hasBasis_nhds_zero_of_basis
+        ContinuousMultilinearMap.hasBasis_nhds_zero]
+      rintro ⟨U, V, W⟩ ⟨hU, hV, hW⟩
+      refine ⟨(.image2 (fun f v => f v) U V, W), ⟨?_, hW⟩, ?_⟩
+      · exact ContinuousMultilinearMap.isVonNBounded_image2_apply hU hV
+· exact fun g hg f hf m hm => hg _ mem_image2_of_mem hf hm }
+
+@[simp]
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.hasBasis_nhds_zero, ContinuousMultilinearMap.hasBasis_nhds_zero.tendsto_iff, compContinuousMultilinearMap, continuous_of_tendsto_nhds_zero, g.compContinuousMultilinearMap, hasBasis_nhds_zero, map_add, map_smul, tendsto_iff, toLinearMap
 -/

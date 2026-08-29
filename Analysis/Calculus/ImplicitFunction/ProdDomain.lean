@@ -54,7 +54,18 @@ definition implicitFunctionDataOfProdDomain
   hasStrictFDerivAt_rightFun := hasStrictFDerivAt_fst
   range_leftDeriv := by
     have : (f'u ∘L .inr 𝕜 E₁ E₂).range <= f'u.range := LinearMap.range_comp_le_range ..
-    rwa [LinearM
+    rwa [LinearMap.range_eq_top.mpr if₂u.surjective, top_le_iff] at this
+  range_rightDeriv := Submodule.range_fst
+  isCompl_ker := by
+    constructor
+    · rw [LinearMap.disjoint_ker]
+      intro (_, y) h rfl
+      simpa using (injective_iff_map_eq_zero _).mp if₂u.injective y h
+    · rw [Submodule.codisjoint_iff_exists_add_eq]
+      intro v
+      have ⟨y, hy⟩ := if₂u.surjective (f'u v)
+      use v - (0, y), (0, y)
+      aesop
 
 中文:
 定义 implicitFunctionDataOfProdDomain
@@ -67,7 +78,18 @@ definition implicitFunctionDataOfProdDomain
   hasStrictFDerivAt_rightFun := hasStrictFDerivAt_fst
   range_leftDeriv := by
     have : (f'u ∘L .inr 𝕜 E₁ E₂).range <= f'u.range := LinearMap.range_comp_le_range ..
-    rwa [LinearM
+    rwa [LinearMap.range_eq_top.mpr if₂u.surjective, top_le_iff] at this
+  range_rightDeriv := Submodule.range_fst
+  isCompl_ker := by
+    constructor
+    · rw [LinearMap.disjoint_ker]
+      intro (_, y) h rfl
+      simpa using (injective_iff_map_eq_zero _).mp if₂u.injective y h
+    · rw [Submodule.codisjoint_iff_exists_add_eq]
+      intro v
+      have ⟨y, hy⟩ := if₂u.surjective (f'u v)
+      use v - (0, y), (0, y)
+      aesop
 -/
 def implicitFunctionDataOfProdDomain
     (dfu : HasStrictFDerivAt f f'u u) (if₂u : (f'u ∘L .inr 𝕜 E₁ E₂).IsInvertible) :
@@ -222,7 +244,7 @@ theorem hasStrictFDerivAt_implicitFunctionOfProdDomain
       (ContinuousLinearMap.fst_comp_prod _ _) this).snd
   ext
   rw [f'u.comp_apply]; rw [← f'u.comp_inl_add_comp_inr]
- 
+  simp [-ContinuousLinearMap.comp_apply, ContinuousLinearMap.coe_comp, map_neg, if₂u]
 
 中文:
 定理 hasStrictFDerivAt_implicitFunctionOfProdDomain
@@ -232,7 +254,7 @@ theorem hasStrictFDerivAt_implicitFunctionOfProdDomain
       (ContinuousLinearMap.fst_comp_prod _ _) this).snd
   ext
   rw [f'u.comp_apply]; rw [← f'u.comp_inl_add_comp_inr]
- 
+  simp [-ContinuousLinearMap.comp_apply, ContinuousLinearMap.coe_comp, map_neg, if₂u]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_comp, ContinuousLinearMap.comp_apply, ContinuousLinearMap.fst_comp_prod, coe_comp, comp_apply, comp_inl_add_comp_inr, dfu.implicitFunctionDataOfProdDomain, fst_comp_prod, hasStrictFDerivAt_implicitFunction, implicitFunctionDataOfProdDomain, inverse, map_neg, u.comp_apply, u.comp_inl_add_comp_inr
 -/
@@ -281,7 +303,7 @@ theorem eventually_apply_implicitFunctionOfProdDomain
   suffices forallᶠ x in 𝓝 u.1, f (x, ψ x) = f u ↔ ψ x = ψ x by simpa using this
   apply Eventually.image_of_prod (r := fun x y => f (x, y) = f u ↔ ψ x = y) hψ
   rw [← nhds_prod_eq]
-  exact 
+  exact dfu.eventually_apply_eq_iff_implicitFunctionOfProdDomain if₂u
 
 中文:
 定理 eventually_apply_implicitFunctionOfProdDomain
@@ -291,7 +313,7 @@ theorem eventually_apply_implicitFunctionOfProdDomain
   suffices forallᶠ x in 𝓝 u.1, f (x, ψ x) = f u ↔ ψ x = ψ x by simpa using this
   apply Eventually.image_of_prod (r := fun x y => f (x, y) = f u ↔ ψ x = y) hψ
   rw [← nhds_prod_eq]
-  exact 
+  exact dfu.eventually_apply_eq_iff_implicitFunctionOfProdDomain if₂u
 
 Depends on / 依赖: Eventually, Eventually.image_of_prod, dfu.eventually_apply_eq_iff_implicitFunctionOfProdDomain, dfu.implicitFunctionOfProdDomain, dfu.tendsto_implicitFunctionOfProdDomain, eventually_apply_eq_iff_implicitFunctionOfProdDomain, image_of_prod, implicitFunctionOfProdDomain, nhds_prod_eq, tendsto_implicitFunctionOfProdDomain
 -/

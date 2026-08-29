@@ -296,7 +296,9 @@ theorem singularValues_antitone
   by_cases! hj : finrank 𝕜 E <= j
   · simpa [T.singularValues_of_finrank_le hj] using T.singularValues_nonneg i
   have : (T.singularValues j : Real) ^ 2 <= (T.singularValues i : Real) ^ 2 := by
-    rw [T.sq_singularValues_fin rfl ⟨j]; rw [hj⟩]; rw [T.sq_singularValues_fin rfl ⟨i];
+    rw [T.sq_singularValues_fin rfl ⟨j]; rw [hj⟩]; rw [T.sq_singularValues_fin rfl ⟨i]; rw [hij.trans_lt hj⟩]
+    exact T.isSymmetric_adjoint_comp_self.eigenvalues_antitone rfl hij
+  exact le_of_sq_le_sq this (T.singularValues_nonneg i)
 
 中文:
 定理 singularValues_antitone
@@ -306,7 +308,9 @@ theorem singularValues_antitone
   by_cases! hj : finrank 𝕜 E <= j
   · simpa [T.singularValues_of_finrank_le hj] using T.singularValues_nonneg i
   have : (T.singularValues j : Real) ^ 2 <= (T.singularValues i : Real) ^ 2 := by
-    rw [T.sq_singularValues_fin rfl ⟨j]; rw [hj⟩]; rw [T.sq_singularValues_fin rfl ⟨i];
+    rw [T.sq_singularValues_fin rfl ⟨j]; rw [hj⟩]; rw [T.sq_singularValues_fin rfl ⟨i]; rw [hij.trans_lt hj⟩]
+    exact T.isSymmetric_adjoint_comp_self.eigenvalues_antitone rfl hij
+  exact le_of_sq_le_sq this (T.singularValues_nonneg i)
 
 Depends on / 依赖: T.isSymmetric_adjoint_comp_self.eigenvalues_antitone, T.singularValues, T.singularValues_nonneg, T.singularValues_of_finrank_le, T.sq_singularValues_fin, eigenvalues_antitone, finrank, hij.trans_lt, isSymmetric_adjoint_comp_self, le_of_sq_le_sq, singularValues, singularValues_nonneg, singularValues_of_finrank_le, sq_singularValues_fin, trans_lt
 -/
@@ -330,7 +334,13 @@ theorem injective_iff_forall_lt_finrank_singularValues_pos
   push Not
   constructor
   · intro h
-    obtain ⟨i, hi⟩ := T.isSymmetric_adjoint_comp_self.exists_eigenvalues_eq rfl 
+    obtain ⟨i, hi⟩ := T.isSymmetric_adjoint_comp_self.exists_eigenvalues_eq rfl h
+    use i, i.isLt
+    simp [RCLike.ofReal_eq_zero.mp hi, T.singularValues_fin rfl]
+  · intro ⟨i, h, hz⟩
+    convert! T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨i, h⟩
+    rw [← sq_singularValues_of_lt]; rw [le_antisymm hz (T.singularValues_nonneg i)]
+    simp
 
 中文:
 定理 injective_iff_对任意_lt_finrank_singularValues_pos
@@ -340,7 +350,13 @@ theorem injective_iff_forall_lt_finrank_singularValues_pos
   push Not
   constructor
   · intro h
-    obtain ⟨i, hi⟩ := T.isSymmetric_adjoint_comp_self.exists_eigenvalues_eq rfl 
+    obtain ⟨i, hi⟩ := T.isSymmetric_adjoint_comp_self.exists_eigenvalues_eq rfl h
+    use i, i.isLt
+    simp [RCLike.ofReal_eq_zero.mp hi, T.singularValues_fin rfl]
+  · intro ⟨i, h, hz⟩
+    convert! T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues rfl ⟨i, h⟩
+    rw [← sq_singularValues_of_lt]; rw [le_antisymm hz (T.singularValues_nonneg i)]
+    simp
 
 Depends on / 依赖: RCLike, RCLike.ofReal_eq_zero.mp, T.isSymmetric_adjoint_comp_self.exists_eigenvalues_eq, T.isSymmetric_adjoint_comp_self.hasEigenvalue_eigenvalues, T.singularValues_fin, adjoint, adjoint_comp_self_injective_iff, coe_comp, convert, exists_eigenvalues_eq, hasEigenvalue_eigenvalues, i.isLt, isSymmetric_adjoint_comp_self, ker_eq_bot, le_a, not_hasEigenvalue_zero_tfae, not_hasEigenvalue_zero_tfae.out, not_iff_not, not_left, ofReal_eq_zero
 -/
@@ -370,7 +386,8 @@ theorem card_support_singularValues
     grind [singularValues_of_finrank_le]
   have hT := T.isSymmetric_adjoint_comp_self
   have : T.singularValues.support.attachFin hS = ({i | hT.eigenvalues rfl i = (0 : 𝕜)} : Finset _)ᶜ
-    := by ext i; simp [T.singularValues
+    := by ext i; simp [T.singularValues_fin, T.isPositive_adjoint_comp_self.nonneg_eigenvalues]
+  rw [← T.singularValues.support.card_attachFin hS]; rw [this]; rw [Finset.card_compl]; rw [Fintype.card_fin]; rw [hT.card_filter_eigenvalues_eq rfl 0]; rw [Module.End.eigenspace_zero]; rw [← (T.adjoint ∘ₗ T).finrank_range_add_finrank_ker]; rw [add_tsub_cancel_right]; rw [T.range_adjoint_comp_self]; rw [finrank_range_adjoint]
 
 中文:
 定理 card_support_singularValues
@@ -380,7 +397,8 @@ theorem card_support_singularValues
     grind [singularValues_of_finrank_le]
   have hT := T.isSymmetric_adjoint_comp_self
   have : T.singularValues.support.attachFin hS = ({i | hT.eigenvalues rfl i = (0 : 𝕜)} : Finset _)ᶜ
-    := by ext i; simp [T.singularValues
+    := by ext i; simp [T.singularValues_fin, T.isPositive_adjoint_comp_self.nonneg_eigenvalues]
+  rw [← T.singularValues.support.card_attachFin hS]; rw [this]; rw [Finset.card_compl]; rw [Fintype.card_fin]; rw [hT.card_filter_eigenvalues_eq rfl 0]; rw [Module.End.eigenspace_zero]; rw [← (T.adjoint ∘ₗ T).finrank_range_add_finrank_ker]; rw [add_tsub_cancel_right]; rw [T.range_adjoint_comp_self]; rw [finrank_range_adjoint]
 
 Depends on / 依赖: Finset, Finset.card_compl, Fintype, Fintype.card_fin, T.isPositive_adjoint_comp_self.nonneg_eigenvalues, T.isSymmetric_adjoint_comp_self, T.singularValues.support, T.singularValues.support.attachFin, T.singularValues.support.card_attachFin, T.singularValues_fin, attachFin, card_attachFin, card_compl, card_filter_eigenvalues_eq, card_fin, eigenvalues, finrank, hT.card_filter_eigenvalues_eq, hT.eigenvalues, isPositive_adjoint_comp_self
 -/

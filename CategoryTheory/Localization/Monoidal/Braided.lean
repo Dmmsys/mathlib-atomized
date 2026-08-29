@@ -213,7 +213,10 @@ lemma map_hexagon_forward
   slice_rhs 0 4 =>
     simp only [Functor.flip_obj_obj, Functor.CoreMonoidal.toMonoidal_toLaxMonoidal,
       Functor.CoreMonoidal.toMonoidal_toOplaxMonoidal, comp_whiskerRight, assoc,
-      Functor.Monoidal.whiskerRight_δ_μ_assoc, 
+      Functor.Monoidal.whiskerRight_δ_μ_assoc, Functor.LaxMonoidal.μ_natural_left]
+  slice_lhs 6 7 =>
+    rw [braidingNatIso_hom_app_naturality_μ_left]; rw [braidingNatIso_hom_app]
+  simp
 
 中文:
 引理 map_hexagon_forward
@@ -223,7 +226,10 @@ lemma map_hexagon_forward
   slice_rhs 0 4 =>
     simp only [Functor.flip_obj_obj, Functor.CoreMonoidal.toMonoidal_toLaxMonoidal,
       Functor.CoreMonoidal.toMonoidal_toOplaxMonoidal, comp_whiskerRight, assoc,
-      Functor.Monoidal.whiskerRight_δ_μ_assoc, 
+      Functor.Monoidal.whiskerRight_δ_μ_assoc, Functor.LaxMonoidal.μ_natural_left]
+  slice_lhs 6 7 =>
+    rw [braidingNatIso_hom_app_naturality_μ_left]; rw [braidingNatIso_hom_app]
+  simp
 
 Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal_toLaxMonoidal, Functor.CoreMonoidal.toMonoidal_toOplaxMonoidal, Functor.LaxMonoidal, Functor.Monoidal.whiskerRight_, Functor.flip_obj_obj, Iso.app_hom, LaxMonoidal, Monoidal, app_hom, associator_hom, braidingNatIso_hom_app, comp_whiskerRight, flip_obj_obj, linear_of_localization, slice_lhs, slice_rhs, toMonoidal_toLaxMonoidal, toMonoidal_toOplaxMonoidal
 -/
@@ -256,7 +262,10 @@ lemma map_hexagon_reverse
   slice_rhs 0 4 =>
     simp only [Functor.flip_obj_obj, Functor.CoreMonoidal.toMonoidal_toLaxMonoidal,
       Functor.CoreMonoidal.toMonoidal_toOplaxMonoidal, MonoidalCategory.whiskerLeft_comp, assoc,
-      Functor.Monoidal.whiskerL
+      Functor.Monoidal.whiskerLeft_δ_μ, comp_id]
+  slice_lhs 6 7 =>
+    rw [braidingNatIso_hom_app_naturality_μ_right]; rw [braidingNatIso_hom_app]
+  simp
 
 中文:
 引理 map_hexagon_reverse
@@ -266,7 +275,10 @@ lemma map_hexagon_reverse
   slice_rhs 0 4 =>
     simp only [Functor.flip_obj_obj, Functor.CoreMonoidal.toMonoidal_toLaxMonoidal,
       Functor.CoreMonoidal.toMonoidal_toOplaxMonoidal, MonoidalCategory.whiskerLeft_comp, assoc,
-      Functor.Monoidal.whiskerL
+      Functor.Monoidal.whiskerLeft_δ_μ, comp_id]
+  slice_lhs 6 7 =>
+    rw [braidingNatIso_hom_app_naturality_μ_right]; rw [braidingNatIso_hom_app]
+  simp
 
 Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal_toLaxMonoidal, Functor.CoreMonoidal.toMonoidal_toOplaxMonoidal, Functor.Monoidal.whiskerLeft_, Functor.flip_obj_obj, Iso.app_hom, Monoidal, MonoidalCategory, MonoidalCategory.whiskerLeft_comp, app_hom, associator_inv, braidingNatIso_hom_app, comp_id, flip_obj_obj, slice_lhs, slice_rhs, toMonoidal_toLaxMonoidal, toMonoidal_toOplaxMonoidal, whiskerLeft_comp
 -/

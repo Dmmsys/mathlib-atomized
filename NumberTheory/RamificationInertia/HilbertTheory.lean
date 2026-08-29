@@ -189,7 +189,9 @@ refine (isDecompositionField_iff K L P D).mpr .of_mulEquiv (hG := h) ?_ fun _ x 
   · refine (stabilizerEquiv _ (IsGaloisGroup.mulEquivAlgEquiv G K L) fun _ _ => ?_).symm
     apply FaithfulSMul.algebraMap_injective B L
     simp [algebraMap.smul']
-  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.di
+  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.div_surjective B x
+    simp_rw [smul_div₀', subgroup_smul_def, ← algebraMap.smul', ← subgroup_smul_def,
+      stabilizerEquiv_symm_apply_smul]
 
 中文:
 定理 是DecompositionField.of_isGaloisGroup
@@ -199,7 +201,9 @@ refine (isDecompositionField_iff K L P D).mpr .of_mulEquiv (hG := h) ?_ fun _ x 
   · refine (stabilizerEquiv _ (IsGaloisGroup.mulEquivAlgEquiv G K L) fun _ _ => ?_).symm
     apply FaithfulSMul.algebraMap_injective B L
     simp [algebraMap.smul']
-  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.di
+  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.div_surjective B x
+    simp_rw [smul_div₀', subgroup_smul_def, ← algebraMap.smul', ← subgroup_smul_def,
+      stabilizerEquiv_symm_apply_smul]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsFractionRing, IsFractionRing.div_surjective, IsGaloisGroup, IsGaloisGroup.mulEquivAlgEquiv, algebraMap, algebraMap.smul, algebraMap_injective, div_surjective, isDecompositionField_iff, mulEquivAlgEquiv, of_mulEquiv, simp_rw, stabilizerEquiv, stabilizerEquiv_symm_apply_smul, subgroup_smul_def
 -/
@@ -224,7 +228,9 @@ refine (isInertiaField_iff K L P E).mpr .of_mulEquiv (hG := h) ?_ fun _ x => ?_
   · refine (inertiaEquiv _ (IsGaloisGroup.mulEquivAlgEquiv G K L) fun _ _ => ?_).symm
     apply FaithfulSMul.algebraMap_injective B L
     simp [algebraMap.smul']
-  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.div_surject
+  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.div_surjective B x
+    simp_rw [smul_div₀', subgroup_smul_def, ← algebraMap.smul', ← subgroup_smul_def,
+      inertiaEquiv_symm_apply_smul]
 
 中文:
 定理 是InertiaField.of_isGaloisGroup
@@ -234,7 +240,9 @@ refine (isInertiaField_iff K L P E).mpr .of_mulEquiv (hG := h) ?_ fun _ x => ?_
   · refine (inertiaEquiv _ (IsGaloisGroup.mulEquivAlgEquiv G K L) fun _ _ => ?_).symm
     apply FaithfulSMul.algebraMap_injective B L
     simp [algebraMap.smul']
-  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.div_surject
+  · obtain ⟨y, z, _, rfl⟩ := IsFractionRing.div_surjective B x
+    simp_rw [smul_div₀', subgroup_smul_def, ← algebraMap.smul', ← subgroup_smul_def,
+      inertiaEquiv_symm_apply_smul]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsFractionRing, IsFractionRing.div_surjective, IsGaloisGroup, IsGaloisGroup.mulEquivAlgEquiv, algebraMap, algebraMap.smul, algebraMap_injective, div_surjective, inertiaEquiv, inertiaEquiv_symm_apply_smul, isInertiaField_iff, mulEquivAlgEquiv, of_mulEquiv, simp_rw, subgroup_smul_def
 -/
@@ -451,7 +459,7 @@ theorem IsDecompositionField.rank_right
   have : FiniteDimensional D L := FiniteDimensional.right K D L
   refine mul_left_injective₀ (b := Module.finrank D L) Module.finrank_pos.ne' ?_
   dsimp only
-  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P D hp]; rw [ncard_
+  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P D hp]; rw [ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p B Gal(L/K)]; rw [IsGaloisGroup.card_eq_finrank Gal(L/K) K L]
 
 中文:
 定理 是DecompositionField.rank_right
@@ -461,7 +469,7 @@ theorem IsDecompositionField.rank_right
   have : FiniteDimensional D L := FiniteDimensional.right K D L
   refine mul_left_injective₀ (b := Module.finrank D L) Module.finrank_pos.ne' ?_
   dsimp only
-  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P D hp]; rw [ncard_
+  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P D hp]; rw [ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p B Gal(L/K)]; rw [IsGaloisGroup.card_eq_finrank Gal(L/K) K L]
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.right, Ideal.IsMaximal.under, IndepFun, IsGaloisGroup, IsGaloisGroup.card_eq_finrank, IsMaximal, Kernel, Kernel.IndepFun.indepFun_process, Module, Module.finrank, Module.finrank_mul_finrank, Module.finrank_pos.ne, card_eq_finrank, finrank, finrank_mul_finrank, finrank_pos, ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn, over_def, p.IsMaximal
 -/
@@ -514,7 +522,7 @@ theorem IsInertiaField.rank_right
   have : FiniteDimensional E L := FiniteDimensional.right K E L
   refine mul_left_injective₀ (b := Module.finrank E L) Module.finrank_pos.ne' ?_
   dsimp only
-  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P E hp]; rw [mul_as
+  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P E hp]; rw [mul_assoc]; rw [mul_comm (p.inertiaDegIn B)]; rw [ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p B Gal(L/K)]; rw [IsGaloisGroup.card_eq_finrank Gal(L/K) K L]
 
 中文:
 定理 是InertiaField.rank_right
@@ -524,7 +532,7 @@ theorem IsInertiaField.rank_right
   have : FiniteDimensional E L := FiniteDimensional.right K E L
   refine mul_left_injective₀ (b := Module.finrank E L) Module.finrank_pos.ne' ?_
   dsimp only
-  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P E hp]; rw [mul_as
+  rw [Module.finrank_mul_finrank]; rw [rank_left A K L P E hp]; rw [mul_assoc]; rw [mul_comm (p.inertiaDegIn B)]; rw [ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p B Gal(L/K)]; rw [IsGaloisGroup.card_eq_finrank Gal(L/K) K L]
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.right, Ideal.IsMaximal.under, IndepFun, IsGaloisGroup, IsGaloisGroup.card_eq_finrank, IsMaximal, Kernel, Kernel.IndepFun.process_indepFun_process, Module, Module.finrank, Module.finrank_mul_finrank, Module.finrank_pos.ne, card_eq_finrank, finrank, finrank_mul_finrank, finrank_pos, inertiaDegIn, mul_assoc, mul_comm
 -/
@@ -636,7 +644,10 @@ lemma instances
   have inst₂ : Module.IsTorsionFree 𝓞D B := by
     rw [Module.isTorsionFree_iff_faithfulSMul]
     apply Algebra.IsAlgebraic.faithfulSMul_tower_top A
-  have inst₃ : Module.IsTorsionFree A 𝓞D := Module.IsTorsionFree.of_faithfulSMul _ _
+  have inst₃ : Module.IsTorsionFree A 𝓞D := Module.IsTorsionFree.of_faithfulSMul _ _ B
+  have inst₄ : IsGaloisGroup Gal(L/K) A B := .of_isFractionRing _ _ _ K L
+  have inst₅ : IsGaloisGroup (stabilizer Gal(L/K) P) 𝓞D B := .of_isFractionRing _ _ _ D L
+  exact ⟨inst₁, inst₂, inst₃, inst₄, inst₅, Ideal.ne_bot_of_liesOver_of_ne_bot hp 𝓟D⟩
 
 中文:
 引理 instances
@@ -646,7 +657,10 @@ lemma instances
   have inst₂ : Module.IsTorsionFree 𝓞D B := by
     rw [Module.isTorsionFree_iff_faithfulSMul]
     apply Algebra.IsAlgebraic.faithfulSMul_tower_top A
-  have inst₃ : Module.IsTorsionFree A 𝓞D := Module.IsTorsionFree.of_faithfulSMul _ _
+  have inst₃ : Module.IsTorsionFree A 𝓞D := Module.IsTorsionFree.of_faithfulSMul _ _ B
+  have inst₄ : IsGaloisGroup Gal(L/K) A B := .of_isFractionRing _ _ _ K L
+  have inst₅ : IsGaloisGroup (stabilizer Gal(L/K) P) 𝓞D B := .of_isFractionRing _ _ _ D L
+  exact ⟨inst₁, inst₂, inst₃, inst₄, inst₅, Ideal.ne_bot_of_liesOver_of_ne_bot hp 𝓟D⟩
 
 Depends on / 依赖: Kernel, Kernel.iIndepFun.iIndepFun_process, iIndepFun
 -/
@@ -676,7 +690,17 @@ lemma ramificationIdxIn_eq_and_inertiaDegIn_eq
   refine eq_and_eq_of_pos_of_le_of_mul_le_mul ?_ ?_ ?_ ?_ ?_
 · exact Nat.pos_of_ne_zero ramificationIdxIn_ne_zero (stabilizer Gal(L/K) P)
 · exact Nat.pos_of_ne_zero inertiaDegIn_ne_zero (stabilizer Gal(L/K) P)
-  · rw [ramificationIdxIn_
+  · rw [ramificationIdxIn_eq_ramificationIdx p P Gal(L/K),
+      ramificationIdxIn_eq_ramificationIdx _ P (stabilizer Gal(L/K) P)]
+    exact 𝓟D.ramificationIdx_above_le P
+  · rw [inertiaDegIn_eq_inertiaDeg p P Gal(L/K),
+      inertiaDegIn_eq_inertiaDeg _ P (stabilizer Gal(L/K) P)]
+    exact inertiaDeg_above_le 𝓟D P
+  · have := ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝓟D B (stabilizer Gal(L/K) P)
+    rw [primesOver_eq_singleton K L P D 𝓞D]; rw [Set.ncard_singleton]; rw [one_mul] at this
+    rw [this]; rw [IsGaloisGroup.card_eq_finrank (stabilizer Gal(L/K) P) D L]; rw [IsDecompositionField.rank_left A K L P D hp]
+
+include K L D P in
 
 中文:
 引理 ramificationIdxIn_eq_and_inertiaDegIn_eq
@@ -686,7 +710,17 @@ lemma ramificationIdxIn_eq_and_inertiaDegIn_eq
   refine eq_and_eq_of_pos_of_le_of_mul_le_mul ?_ ?_ ?_ ?_ ?_
 · exact Nat.pos_of_ne_zero ramificationIdxIn_ne_zero (stabilizer Gal(L/K) P)
 · exact Nat.pos_of_ne_zero inertiaDegIn_ne_zero (stabilizer Gal(L/K) P)
-  · rw [ramificationIdxIn_
+  · rw [ramificationIdxIn_eq_ramificationIdx p P Gal(L/K),
+      ramificationIdxIn_eq_ramificationIdx _ P (stabilizer Gal(L/K) P)]
+    exact 𝓟D.ramificationIdx_above_le P
+  · rw [inertiaDegIn_eq_inertiaDeg p P Gal(L/K),
+      inertiaDegIn_eq_inertiaDeg _ P (stabilizer Gal(L/K) P)]
+    exact inertiaDeg_above_le 𝓟D P
+  · have := ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝓟D B (stabilizer Gal(L/K) P)
+    rw [primesOver_eq_singleton K L P D 𝓞D]; rw [Set.ncard_singleton]; rw [one_mul] at this
+    rw [this]; rw [IsGaloisGroup.card_eq_finrank (stabilizer Gal(L/K) P) D L]; rw [IsDecompositionField.rank_left A K L P D hp]
+
+include K L D P in
 -/
 private lemma ramificationIdxIn_eq_and_inertiaDegIn_eq (hp : p != ⊥) :
     ramificationIdxIn 𝓟D B = p.ramificationIdxIn B ∧ inertiaDegIn 𝓟D B = p.inertiaDegIn B := by
@@ -764,7 +798,9 @@ theorem ramificationIdx_eq
   have := ramificationIdx_tower (R := A) 𝓟D P
   rwa [← ramificationIdxIn_eq_ramificationIdx 𝓟D P (stabilizer Gal(L/K) P),
     ramificationIdxIn_eq A K L P D 𝓞D 𝓟D hp, ramificationIdxIn_eq_ramificationIdx p P Gal(L/K),
-right_eq_mul₀ (ram
+right_eq_mul₀ (ramificationIdx_pos P A).ne'] at this
+
+include K L D P in
 
 中文:
 定理 ramificationIdx_eq
@@ -774,7 +810,9 @@ right_eq_mul₀ (ram
   have := ramificationIdx_tower (R := A) 𝓟D P
   rwa [← ramificationIdxIn_eq_ramificationIdx 𝓟D P (stabilizer Gal(L/K) P),
     ramificationIdxIn_eq A K L P D 𝓞D 𝓟D hp, ramificationIdxIn_eq_ramificationIdx p P Gal(L/K),
-right_eq_mul₀ (ram
+right_eq_mul₀ (ramificationIdx_pos P A).ne'] at this
+
+include K L D P in
 
 Depends on / 依赖: instances, ramificationIdxIn_eq, ramificationIdxIn_eq_ramificationIdx, ramificationIdx_pos, ramificationIdx_tower, stabilizer
 -/
@@ -798,7 +836,7 @@ theorem inertiaDeg_eq
   have := inertiaDeg_tower (R := A) 𝓟D P
   rwa [← inertiaDegIn_eq_inertiaDeg p P Gal(L/K), ← inertiaDegIn_eq A K L P D 𝓞D 𝓟D hp,
     ← inertiaDegIn_eq_inertiaDeg 𝓟D P (stabilizer Gal(L/K) P),
-right_eq_mul₀ inertiaDegIn_ne_zero (stabilize
+right_eq_mul₀ inertiaDegIn_ne_zero (stabilizer Gal(L/K) P)] at this
 
 中文:
 定理 inertiaDeg_eq
@@ -808,7 +846,7 @@ right_eq_mul₀ inertiaDegIn_ne_zero (stabilize
   have := inertiaDeg_tower (R := A) 𝓟D P
   rwa [← inertiaDegIn_eq_inertiaDeg p P Gal(L/K), ← inertiaDegIn_eq A K L P D 𝓞D 𝓟D hp,
     ← inertiaDegIn_eq_inertiaDeg 𝓟D P (stabilizer Gal(L/K) P),
-right_eq_mul₀ inertiaDegIn_ne_zero (stabilize
+right_eq_mul₀ inertiaDegIn_ne_zero (stabilizer Gal(L/K) P)] at this
 
 Depends on / 依赖: inertiaDegIn_eq, inertiaDegIn_eq_inertiaDeg, inertiaDegIn_ne_zero, inertiaDeg_tower, instances, stabilizer
 -/

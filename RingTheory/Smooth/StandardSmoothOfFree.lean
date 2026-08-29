@@ -57,7 +57,26 @@ theorem IsStandardSmooth.of_basis_kaehlerDifferential
   choose f' hf' using hb
   let P := P.extend fun i => f' ⟨i, rfl⟩
   have hb (i : I) : b i = D R S (P.val (Sum.inr i)) := by simp [P, hf']
-  have : Function.Bijective (P.cotangentRestrict _
+  have : Function.Bijective (P.cotangentRestrict _) :=
+    P.cotangentRestrict_bijective_of_basis_kaehlerDifferential Sum.inl_injective
+      Set.isCompl_range_inl_range_inr.symm b hb
+  let bcot' : Module.Basis (Fin n) S P.toExtension.Cotangent :=
+    .ofRepr (.ofBijective (P.cotangentRestrict _) this)
+  have : Finite I := Module.Finite.finite_basis b
+  obtain ⟨Q, bcot, hcomp, hbcot⟩ := P.exists_presentation_of_basis_cotangent bcot'
+  let P' : PreSubmersivePresentation R S (Unit oplus Fin n oplus I) (Unit oplus Fin n) :=
+    { __ := Q
+      map := Sum.map _root_.id Sum.inl
+      map_inj := Sum.map_injective.mpr ⟨fun _ _ h => h, Sum.inl_injective⟩ }
+  have hcompl : IsCompl (Set.range (Sum.inr ∘ Sum.inr)) (Set.range P'.map) := by
+    simp [P', ← eq_compl_iff_isCompl, Set.ext_iff, Set.mem_compl_iff]
+  have hbij : Function.Bijective (P'.cotangentRestrict P'.map_inj) := by
+    apply P'.cotangentRestrict_bijective_of_basis_kaehlerDifferential P'.map_inj hcompl b
+    intro k
+    simp only [hb, ← hcomp, P', Function.comp_def]
+  let P'' : SubmersivePresentation R S _ _ :=
+    ⟨P', P'.isUnit_jacobian_of_cotangentRestrict_bijective bcot hbcot hbij⟩
+  exact P''.isStandardSmooth
 
 中文:
 定理 是StandardSmooth.of_basis_kaehlerDifferential
@@ -68,7 +87,26 @@ theorem IsStandardSmooth.of_basis_kaehlerDifferential
   choose f' hf' using hb
   let P := P.extend fun i => f' ⟨i, rfl⟩
   have hb (i : I) : b i = D R S (P.val (Sum.inr i)) := by simp [P, hf']
-  have : Function.Bijective (P.cotangentRestrict _
+  have : Function.Bijective (P.cotangentRestrict _) :=
+    P.cotangentRestrict_bijective_of_basis_kaehlerDifferential Sum.inl_injective
+      Set.isCompl_range_inl_range_inr.symm b hb
+  let bcot' : Module.Basis (Fin n) S P.toExtension.Cotangent :=
+    .ofRepr (.ofBijective (P.cotangentRestrict _) this)
+  have : Finite I := Module.Finite.finite_basis b
+  obtain ⟨Q, bcot, hcomp, hbcot⟩ := P.exists_presentation_of_basis_cotangent bcot'
+  let P' : PreSubmersivePresentation R S (Unit oplus Fin n oplus I) (Unit oplus Fin n) :=
+    { __ := Q
+      map := Sum.map _root_.id Sum.inl
+      map_inj := Sum.map_injective.mpr ⟨fun _ _ h => h, Sum.inl_injective⟩ }
+  have hcompl : IsCompl (Set.range (Sum.inr ∘ Sum.inr)) (Set.range P'.map) := by
+    simp [P', ← eq_compl_iff_isCompl, Set.ext_iff, Set.mem_compl_iff]
+  have hbij : Function.Bijective (P'.cotangentRestrict P'.map_inj) := by
+    apply P'.cotangentRestrict_bijective_of_basis_kaehlerDifferential P'.map_inj hcompl b
+    intro k
+    simp only [hb, ← hcomp, P', Function.comp_def]
+  let P'' : SubmersivePresentation R S _ _ :=
+    ⟨P', P'.isUnit_jacobian_of_cotangentRestrict_bijective bcot hbcot hbij⟩
+  exact P''.isStandardSmooth
 
 Depends on / 依赖: Bijective, Cotangent, FiniteType, FiniteType.iff_exists_generators, Function, Function.Bijective, Module, Module.Basis, P.cotangentRestrict, P.cotangentRestrict_bijective_of_basis_kaehlerDifferential, P.extend, P.toExtension.Cotangent, P.val, Set.isCompl_range_inl_range_inr.symm, Sum.inl_injective, Sum.inr, cotangentRestrict, cotangentRestrict_bijective_of_basis_kaehlerDifferential, extend, iff_exists_generators
 -/
@@ -141,7 +179,8 @@ theorem Etale.iff_isStandardSmoothOfRelativeDimension_zero
   suffices h : IsStandardSmooth R S by
     simp [IsStandardSmoothOfRelativeDimension.iff_of_isStandardSmooth]
   rw [IsStandardSmooth.iff_exists_basis_kaehlerDifferential]
-  refine ⟨inferInstance, ⟨Empty, Module.Basis.empty Ω[S⁄R], ?
+  refine ⟨inferInstance, ⟨Empty, Module.Basis.empty Ω[S⁄R], ?_⟩⟩
+  simp [Set.range_subset_iff]
 
 中文:
 定理 平展.iff_isStandardSmoothOfRelativeDimension_zero
@@ -151,7 +190,8 @@ theorem Etale.iff_isStandardSmoothOfRelativeDimension_zero
   suffices h : IsStandardSmooth R S by
     simp [IsStandardSmoothOfRelativeDimension.iff_of_isStandardSmooth]
   rw [IsStandardSmooth.iff_exists_basis_kaehlerDifferential]
-  refine ⟨inferInstance, ⟨Empty, Module.Basis.empty Ω[S⁄R], ?
+  refine ⟨inferInstance, ⟨Empty, Module.Basis.empty Ω[S⁄R], ?_⟩⟩
+  simp [Set.range_subset_iff]
 
 Depends on / 依赖: IsStandardSmooth, IsStandardSmooth.iff_exists_basis_kaehlerDifferential, IsStandardSmoothOfRelativeDimension, IsStandardSmoothOfRelativeDimension.iff_of_isStandardSmooth, Module, Module.Basis.empty, Set.range_subset_iff, iff_exists_basis_kaehlerDifferential, iff_of_isStandardSmooth, nontriviality, range_subset_iff
 -/
@@ -178,7 +218,46 @@ theorem IsSmoothAt.exists_notMem_isStandardSmooth
   wlog h : Smooth R S
   · obtain ⟨g, hg, hsm⟩ := IsSmoothAt.exists_notMem_smooth R p
     have _ : (Ideal.map (algebraMap S (Localization.Away g)) p).IsPrime := by
-      apply IsLocalization.isPrime_of_isPrime_disjoint (.
+      apply IsLocalization.isPrime_of_isPrime_disjoint (.powers g) _ _ ‹_›
+      rwa [Ideal.disjoint_powers_iff_notMem_of_isPrime]
+    obtain ⟨g', hg', hstd⟩ := this (R := R) (p.map (algebraMap S (Localization.Away g))) hsm
+    have : IsLocalization.Away (g * (IsLocalization.Away.sec g g').1) (Localization.Away g') :=
+.mul_of_associated _ _ g' IsLocalization.Away.associated_sec_fst g g'
+    let e : Localization.Away (g * (IsLocalization.Away.sec g g').1) ≃ₐ[S] Localization.Away g' :=
+      Localization.algEquiv _ _
+    refine ⟨g * (IsLocalization.Away.sec g g').1, ?_, .of_algEquiv (e.restrictScalars R).symm⟩
+    refine Ideal.IsPrime.mul_notMem ‹_› hg fun hmem => hg' ?_
+    rw [Ideal.mem_iff_of_associated (IsLocalization.Away.associated_sec_fst g g').symm]
+    exact Ideal.mem_map_of_mem (algebraMap S (Localization.Away g)) hmem
+  -- `Ω[Sₚ⁄R]` is projective, so free over the local ring `Sₚ` and
+  -- a basis extends to a neighbourhood `D(g)`.
+  obtain ⟨κ, a, b, hb⟩ := Module.exists_basis_of_span_of_flat _
+    (span_range_map_derivation_of_isLocalization R _ (Localization.AtPrime p) p.primeCompl)
+  let e : (κ ->₀ S) ->ₗ[S] Ω[S⁄R] :=
+    Finsupp.linearCombination S fun i : κ => D R S (a i)
+  let l₁ : (κ ->₀ S) ->ₗ[S] (κ ->₀ Localization.AtPrime p) :=
+    Finsupp.mapRange.linearMap (Algebra.linearMap S (Localization.AtPrime p))
+  let l₂ : Ω[S⁄R] ->ₗ[S] Ω[Localization.AtPrime p⁄R] := map R R S (Localization.AtPrime p)
+  let eₚ : (κ ->₀ Localization.AtPrime p) ->ₗ[Localization.AtPrime p] Ω[Localization.AtPrime p⁄R] :=
+    IsLocalizedModule.mapExtendScalars p.primeCompl l₁ l₂ (Localization.AtPrime p) e
+  have : eₚ = b.repr.symm := by
+    ext i
+trans IsLocalizedModule.map p.primeCompl l₁ l₂ e l₁ Finsupp.single i 1
+    · simp [eₚ, -IsLocalizedModule.map_apply, l₁]
+    · simp [l₂, e, hb]
+  have heₚ : Function.Bijective eₚ := this ▸ b.repr.symm.bijective
+  have : Finite κ := Module.Finite.finite_basis b
+  obtain ⟨g, hg, h⟩ := Module.FinitePresentation.exists_notMem_bijective e p l₁ l₂ heₚ
+  let l₁ₜ : (κ ->₀ S) ->ₗ[S] (κ ->₀ Localization.Away g) :=
+    Finsupp.mapRange.linearMap (Algebra.linearMap S _)
+  let l₂ₜ : Ω[S⁄R] ->ₗ[S] Ω[Localization.Away g⁄R] :=
+    map R R S (Localization.Away g)
+  rw [← IsLocalizedModule.map_bijective_iff_localizedModuleMap_bijective l₁ₜ l₂ₜ] at h
+  let eₜ' : (κ ->₀ Localization.Away g) ->ₗ[Localization.Away g] Ω[Localization.Away g⁄R] :=
+    IsLocalizedModule.mapExtendScalars (Submonoid.powers g) l₁ₜ l₂ₜ (Localization.Away g) e
+  refine ⟨g, hg, .of_basis_kaehlerDifferential (.ofRepr (LinearEquiv.ofBijective eₜ' h).symm) ?_⟩
+  rintro - ⟨i, rfl⟩
+  exact ⟨algebraMap S _ (a i), by simp +zetaDelta [IsLocalizedModule.map_linearCombination]⟩
 
 中文:
 定理 IsSmoothAt.存在_notMem_isStandardSmooth
@@ -188,7 +267,46 @@ theorem IsSmoothAt.exists_notMem_isStandardSmooth
   wlog h : Smooth R S
   · obtain ⟨g, hg, hsm⟩ := IsSmoothAt.exists_notMem_smooth R p
     have _ : (Ideal.map (algebraMap S (Localization.Away g)) p).IsPrime := by
-      apply IsLocalization.isPrime_of_isPrime_disjoint (.
+      apply IsLocalization.isPrime_of_isPrime_disjoint (.powers g) _ _ ‹_›
+      rwa [Ideal.disjoint_powers_iff_notMem_of_isPrime]
+    obtain ⟨g', hg', hstd⟩ := this (R := R) (p.map (algebraMap S (Localization.Away g))) hsm
+    have : IsLocalization.Away (g * (IsLocalization.Away.sec g g').1) (Localization.Away g') :=
+.mul_of_associated _ _ g' IsLocalization.Away.associated_sec_fst g g'
+    let e : Localization.Away (g * (IsLocalization.Away.sec g g').1) ≃ₐ[S] Localization.Away g' :=
+      Localization.algEquiv _ _
+    refine ⟨g * (IsLocalization.Away.sec g g').1, ?_, .of_algEquiv (e.restrictScalars R).symm⟩
+    refine Ideal.IsPrime.mul_notMem ‹_› hg fun hmem => hg' ?_
+    rw [Ideal.mem_iff_of_associated (IsLocalization.Away.associated_sec_fst g g').symm]
+    exact Ideal.mem_map_of_mem (algebraMap S (Localization.Away g)) hmem
+  -- `Ω[Sₚ⁄R]` is projective, so free over the local ring `Sₚ` and
+  -- a basis extends to a neighbourhood `D(g)`.
+  obtain ⟨κ, a, b, hb⟩ := Module.exists_basis_of_span_of_flat _
+    (span_range_map_derivation_of_isLocalization R _ (Localization.AtPrime p) p.primeCompl)
+  let e : (κ ->₀ S) ->ₗ[S] Ω[S⁄R] :=
+    Finsupp.linearCombination S fun i : κ => D R S (a i)
+  let l₁ : (κ ->₀ S) ->ₗ[S] (κ ->₀ Localization.AtPrime p) :=
+    Finsupp.mapRange.linearMap (Algebra.linearMap S (Localization.AtPrime p))
+  let l₂ : Ω[S⁄R] ->ₗ[S] Ω[Localization.AtPrime p⁄R] := map R R S (Localization.AtPrime p)
+  let eₚ : (κ ->₀ Localization.AtPrime p) ->ₗ[Localization.AtPrime p] Ω[Localization.AtPrime p⁄R] :=
+    IsLocalizedModule.mapExtendScalars p.primeCompl l₁ l₂ (Localization.AtPrime p) e
+  have : eₚ = b.repr.symm := by
+    ext i
+trans IsLocalizedModule.map p.primeCompl l₁ l₂ e l₁ Finsupp.single i 1
+    · simp [eₚ, -IsLocalizedModule.map_apply, l₁]
+    · simp [l₂, e, hb]
+  have heₚ : Function.Bijective eₚ := this ▸ b.repr.symm.bijective
+  have : Finite κ := Module.Finite.finite_basis b
+  obtain ⟨g, hg, h⟩ := Module.FinitePresentation.exists_notMem_bijective e p l₁ l₂ heₚ
+  let l₁ₜ : (κ ->₀ S) ->ₗ[S] (κ ->₀ Localization.Away g) :=
+    Finsupp.mapRange.linearMap (Algebra.linearMap S _)
+  let l₂ₜ : Ω[S⁄R] ->ₗ[S] Ω[Localization.Away g⁄R] :=
+    map R R S (Localization.Away g)
+  rw [← IsLocalizedModule.map_bijective_iff_localizedModuleMap_bijective l₁ₜ l₂ₜ] at h
+  let eₜ' : (κ ->₀ Localization.Away g) ->ₗ[Localization.Away g] Ω[Localization.Away g⁄R] :=
+    IsLocalizedModule.mapExtendScalars (Submonoid.powers g) l₁ₜ l₂ₜ (Localization.Away g) e
+  refine ⟨g, hg, .of_basis_kaehlerDifferential (.ofRepr (LinearEquiv.ofBijective eₜ' h).symm) ?_⟩
+  rintro - ⟨i, rfl⟩
+  exact ⟨algebraMap S _ (a i), by simp +zetaDelta [IsLocalizedModule.map_linearCombination]⟩
 -/
 theorem IsSmoothAt.exists_notMem_isStandardSmooth [FinitePresentation R S] (p : Ideal S) [p.IsPrime]
     [IsSmoothAt R p] :
@@ -249,7 +367,13 @@ theorem Smooth.exists_span_eq_top_isStandardSmooth
   choose f hf₁ hf₂ using IsSmoothAt.exists_notMem_isStandardSmooth R (S := S)
   /- #adaptation_note Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), the original proof was:
-  `refine ⟨Set.range (fun p : PrimeSpectrum S ↦ f 
+  `refine ⟨Set.range (fun p : PrimeSpectrum S ↦ f p.asIdeal), ?_, by grind⟩`
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. -/
+  refine ⟨Set.range (fun p : PrimeSpectrum S => f p.asIdeal), ?_, by
+    simp only [Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff]; intro; apply hf₂⟩
+  simp [← PrimeSpectrum.iSup_basicOpen_eq_top_iff, TopologicalSpace.Opens.ext_iff, Set.ext_iff]
+  grind
 
 中文:
 定理 光滑.存在_span_eq_top_isStandardSmooth
@@ -258,7 +382,13 @@ theorem Smooth.exists_span_eq_top_isStandardSmooth
   choose f hf₁ hf₂ using IsSmoothAt.exists_notMem_isStandardSmooth R (S := S)
   /- #adaptation_note Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), the original proof was:
-  `refine ⟨Set.range (fun p : PrimeSpectrum S ↦ f 
+  `refine ⟨Set.range (fun p : PrimeSpectrum S ↦ f p.asIdeal), ?_, by grind⟩`
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. -/
+  refine ⟨Set.range (fun p : PrimeSpectrum S => f p.asIdeal), ?_, by
+    simp only [Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff]; intro; apply hf₂⟩
+  simp [← PrimeSpectrum.iSup_basicOpen_eq_top_iff, TopologicalSpace.Opens.ext_iff, Set.ext_iff]
+  grind
 
 Depends on / 依赖: IsSmoothAt, IsSmoothAt.exists_notMem_isStandardSmooth, exists_notMem_isStandardSmooth
 -/

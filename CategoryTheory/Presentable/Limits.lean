@@ -64,7 +64,53 @@ lemma surjective
   obtain ⟨y, hy⟩ := (Types.isLimitEquivSections (hc cX.pt)).symm.surjective x
   obtain ⟨j₀, z, hz⟩ : exists (j₀ : J) (z : (k : K) -> (F.obj k).obj (X.obj j₀)),
       forall (k : K), y.1 k = (F.obj k).map (cX.ι.app j₀) (z k) := by
-    have H (k : K) :
+    have H (k : K) := Types.jointly_surjective_of_isColimit (hF k) (y.1 k)
+    let j (k : K) : J := (H k).choose
+    let z (k : K) : (F.obj k).obj (X.obj (j k)) := (H k).choose_spec.choose
+    have hz (k : K) : (F.obj k).map (cX.ι.app (j k)) (z k) = y.1 k :=
+      (H k).choose_spec.choose_spec
+    exact ⟨IsCardinalFiltered.max j (hasCardinalLT_of_hasCardinalLT_arrow hK),
+      fun k => (F.obj k).map (X.map (IsCardinalFiltered.toMax j _ k)) (z k),
+        fun k => by rw [← hz, ← comp_apply, ← Functor.map_comp, cX.w]; rfl⟩
+  obtain ⟨j₁, α, hα⟩ : exists (j₁ : J) (α : j₀ ⟶ j₁), forall ⦃k k' : K⦄ (φ : k ⟶ k'),
+      (F.obj k').map (X.map α) ((F.map φ).app _ (z k)) =
+        (F.obj k').map (X.map α) (z k') := by
+    have H {k k' : K} (φ : k ⟶ k') :=
+      (Types.FilteredColimit.isColimit_eq_iff' (ht := hF k')
+        (x := (F.map φ).app _ (z k)) (y := z k')).1 (by
+          dsimp at hz ⊢
+          simpa only [← NatTrans.naturality_apply, ← hz] using! y.2 φ)
+    let j {k k' : K} (φ : k ⟶ k') : J := (H φ).choose
+    let g {k k' : K} (φ : k ⟶ k') : j₀ ⟶ j φ := (H φ).choose_spec.choose
+    have hg {k k' : K} (φ : k ⟶ k') :
+        (F.obj k').map (X.map (g φ)) ((F.map φ).app _ (z k)) =
+          (F.obj k').map (X.map (g φ)) (z k') := (H φ).choose_spec.choose_spec
+    obtain ⟨j₁, α, β, hα⟩ : exists (j₁ : J) (α : j₀ ⟶ j₁)
+        (β : forall ⦃k k' : K⦄ (φ : k ⟶ k'), j φ ⟶ j₁),
+        forall ⦃k k' : K⦄ (φ : k ⟶ k'), α = g φ ≫ β φ := by
+      let j'' (f : Arrow K) : J := j f.hom
+      let ψ (f : Arrow K) : j₀ ⟶ IsCardinalFiltered.max j'' hK :=
+        g f.hom ≫ IsCardinalFiltered.toMax j'' hK f
+      refine ⟨IsCardinalFiltered.coeq ψ hK, IsCardinalFiltered.toCoeq ψ hK,
+        fun k k' φ => IsCardinalFiltered.toMax j'' hK φ ≫ IsCardinalFiltered.coeqHom ψ hK,
+        fun k k' φ => ?_⟩
+      simpa [ψ] using! (IsCardinalFiltered.coeq_condition ψ hK (Arrow.mk φ)).symm
+    exact ⟨j₁, α, fun k k' φ => by simp [hα φ, hg]⟩
+  let s : (F ⋙ (evaluation C (Type w')).obj (X.obj j₁)).sections :=
+    { val k := (F.obj k).map (X.map α) (z k)
+      property {k k'} φ := by
+        dsimp
+        rw [NatTrans.naturality_apply]; rw [← hα φ] }
+  refine ⟨j₁, (Types.isLimitEquivSections (hc (X.obj j₁))).symm s, ?_⟩
+  apply (Types.isLimitEquivSections (hc cX.pt)).injective
+  rw [← hy]; rw [Equiv.apply_symm_apply]
+  ext k
+  have h₁ := Types.isLimitEquivSections_apply (hc cX.pt) k
+    (c.pt.map (cX.ι.app j₁) ((Types.isLimitEquivSections (hc (X.obj j₁))).symm s))
+  have h₂ := Types.isLimitEquivSections_symm_apply (hc (X.obj j₁)) s k
+  dsimp at h₁ h₂ ⊢
+  rw [h₁]; rw [hz]; rw [NatTrans.naturality_apply]; rw [h₂]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [cX.w]
+  rfl
 
 中文:
 引理 surjective
@@ -74,7 +120,53 @@ lemma surjective
   obtain ⟨y, hy⟩ := (Types.isLimitEquivSections (hc cX.pt)).symm.surjective x
   obtain ⟨j₀, z, hz⟩ : exists (j₀ : J) (z : (k : K) -> (F.obj k).obj (X.obj j₀)),
       forall (k : K), y.1 k = (F.obj k).map (cX.ι.app j₀) (z k) := by
-    have H (k : K) :
+    have H (k : K) := Types.jointly_surjective_of_isColimit (hF k) (y.1 k)
+    let j (k : K) : J := (H k).choose
+    let z (k : K) : (F.obj k).obj (X.obj (j k)) := (H k).choose_spec.choose
+    have hz (k : K) : (F.obj k).map (cX.ι.app (j k)) (z k) = y.1 k :=
+      (H k).choose_spec.choose_spec
+    exact ⟨IsCardinalFiltered.max j (hasCardinalLT_of_hasCardinalLT_arrow hK),
+      fun k => (F.obj k).map (X.map (IsCardinalFiltered.toMax j _ k)) (z k),
+        fun k => by rw [← hz, ← comp_apply, ← Functor.map_comp, cX.w]; rfl⟩
+  obtain ⟨j₁, α, hα⟩ : exists (j₁ : J) (α : j₀ ⟶ j₁), forall ⦃k k' : K⦄ (φ : k ⟶ k'),
+      (F.obj k').map (X.map α) ((F.map φ).app _ (z k)) =
+        (F.obj k').map (X.map α) (z k') := by
+    have H {k k' : K} (φ : k ⟶ k') :=
+      (Types.FilteredColimit.isColimit_eq_iff' (ht := hF k')
+        (x := (F.map φ).app _ (z k)) (y := z k')).1 (by
+          dsimp at hz ⊢
+          simpa only [← NatTrans.naturality_apply, ← hz] using! y.2 φ)
+    let j {k k' : K} (φ : k ⟶ k') : J := (H φ).choose
+    let g {k k' : K} (φ : k ⟶ k') : j₀ ⟶ j φ := (H φ).choose_spec.choose
+    have hg {k k' : K} (φ : k ⟶ k') :
+        (F.obj k').map (X.map (g φ)) ((F.map φ).app _ (z k)) =
+          (F.obj k').map (X.map (g φ)) (z k') := (H φ).choose_spec.choose_spec
+    obtain ⟨j₁, α, β, hα⟩ : exists (j₁ : J) (α : j₀ ⟶ j₁)
+        (β : forall ⦃k k' : K⦄ (φ : k ⟶ k'), j φ ⟶ j₁),
+        forall ⦃k k' : K⦄ (φ : k ⟶ k'), α = g φ ≫ β φ := by
+      let j'' (f : Arrow K) : J := j f.hom
+      let ψ (f : Arrow K) : j₀ ⟶ IsCardinalFiltered.max j'' hK :=
+        g f.hom ≫ IsCardinalFiltered.toMax j'' hK f
+      refine ⟨IsCardinalFiltered.coeq ψ hK, IsCardinalFiltered.toCoeq ψ hK,
+        fun k k' φ => IsCardinalFiltered.toMax j'' hK φ ≫ IsCardinalFiltered.coeqHom ψ hK,
+        fun k k' φ => ?_⟩
+      simpa [ψ] using! (IsCardinalFiltered.coeq_condition ψ hK (Arrow.mk φ)).symm
+    exact ⟨j₁, α, fun k k' φ => by simp [hα φ, hg]⟩
+  let s : (F ⋙ (evaluation C (Type w')).obj (X.obj j₁)).sections :=
+    { val k := (F.obj k).map (X.map α) (z k)
+      property {k k'} φ := by
+        dsimp
+        rw [NatTrans.naturality_apply]; rw [← hα φ] }
+  refine ⟨j₁, (Types.isLimitEquivSections (hc (X.obj j₁))).symm s, ?_⟩
+  apply (Types.isLimitEquivSections (hc cX.pt)).injective
+  rw [← hy]; rw [Equiv.apply_symm_apply]
+  ext k
+  have h₁ := Types.isLimitEquivSections_apply (hc cX.pt) k
+    (c.pt.map (cX.ι.app j₁) ((Types.isLimitEquivSections (hc (X.obj j₁))).symm s))
+  have h₂ := Types.isLimitEquivSections_symm_apply (hc (X.obj j₁)) s k
+  dsimp at h₁ h₂ ⊢
+  rw [h₁]; rw [hz]; rw [NatTrans.naturality_apply]; rw [h₂]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [cX.w]
+  rfl
 
 Depends on / 依赖: F.obj, Types.isLimitEquivSections, Types.jointly_surjective_of_isColimit, X.obj, cX.pt, choose_spec, choose_spec.choose, isFiltered_of_isCardinalFiltered, isLimitEquivSections, jointly_surjective_of_isColimit, surjective, symm.surjective
 -/
@@ -145,7 +237,28 @@ lemma injective
   let y₁ := Types.isLimitEquivSections (hc (X.obj j)) x₁
   let y₂ := Types.isLimitEquivSections (hc (X.obj j)) x₂
   have hy₁ : (Types.isLimitEquivSections (hc (X.obj j))).symm y₁ = x₁ := by simp [y₁]
-  have hy₂ : (Types.isLimitEquivSections (hc (X.ob
+  have hy₂ : (Types.isLimitEquivSections (hc (X.obj j))).symm y₂ = x₂ := by simp [y₂]
+  have H (k : K) := (Types.FilteredColimit.isColimit_eq_iff' (ht := hF k)
+    (x := y₁.1 k) (y := y₂.1 k)).1 (by
+      simp only [y₁, y₂, Types.isLimitEquivSections_apply]
+      dsimp at h ⊢
+      simp only [← NatTrans.naturality_apply, h])
+  let j₁ (k : K) : J := (H k).choose
+  let f (k : K) : j ⟶ j₁ k := (H k).choose_spec.choose
+  have hf (k : K) : (F.obj k).map (X.map (f k)) (y₁.1 k) =
+      (F.obj k).map (X.map (f k)) (y₂.1 k) :=
+    (H k).choose_spec.choose_spec
+  have hK' := hasCardinalLT_of_hasCardinalLT_arrow hK
+  let ψ (k : K) : j ⟶ IsCardinalFiltered.max j₁ hK' :=
+    f k ≫ IsCardinalFiltered.toMax j₁ hK' k
+  refine ⟨IsCardinalFiltered.coeq ψ hK', IsCardinalFiltered.toCoeq ψ hK', ?_⟩
+  apply (Types.isLimitEquivSections (hc _)).injective
+  ext k
+  simp only [Types.isLimitEquivSections_apply, ← hy₁, ← hy₂]
+  have h₁ := Types.isLimitEquivSections_symm_apply (hc (X.obj j)) y₁ k
+  have h₂ := Types.isLimitEquivSections_symm_apply (hc (X.obj j)) y₂ k
+  dsimp at h₁ h₂ ⊢
+  simp [h₁, h₂, ← IsCardinalFiltered.coeq_condition ψ hK' k, ψ, hf]
 
 中文:
 引理 injective
@@ -155,7 +268,28 @@ lemma injective
   let y₁ := Types.isLimitEquivSections (hc (X.obj j)) x₁
   let y₂ := Types.isLimitEquivSections (hc (X.obj j)) x₂
   have hy₁ : (Types.isLimitEquivSections (hc (X.obj j))).symm y₁ = x₁ := by simp [y₁]
-  have hy₂ : (Types.isLimitEquivSections (hc (X.ob
+  have hy₂ : (Types.isLimitEquivSections (hc (X.obj j))).symm y₂ = x₂ := by simp [y₂]
+  have H (k : K) := (Types.FilteredColimit.isColimit_eq_iff' (ht := hF k)
+    (x := y₁.1 k) (y := y₂.1 k)).1 (by
+      simp only [y₁, y₂, Types.isLimitEquivSections_apply]
+      dsimp at h ⊢
+      simp only [← NatTrans.naturality_apply, h])
+  let j₁ (k : K) : J := (H k).choose
+  let f (k : K) : j ⟶ j₁ k := (H k).choose_spec.choose
+  have hf (k : K) : (F.obj k).map (X.map (f k)) (y₁.1 k) =
+      (F.obj k).map (X.map (f k)) (y₂.1 k) :=
+    (H k).choose_spec.choose_spec
+  have hK' := hasCardinalLT_of_hasCardinalLT_arrow hK
+  let ψ (k : K) : j ⟶ IsCardinalFiltered.max j₁ hK' :=
+    f k ≫ IsCardinalFiltered.toMax j₁ hK' k
+  refine ⟨IsCardinalFiltered.coeq ψ hK', IsCardinalFiltered.toCoeq ψ hK', ?_⟩
+  apply (Types.isLimitEquivSections (hc _)).injective
+  ext k
+  simp only [Types.isLimitEquivSections_apply, ← hy₁, ← hy₂]
+  have h₁ := Types.isLimitEquivSections_symm_apply (hc (X.obj j)) y₁ k
+  have h₂ := Types.isLimitEquivSections_symm_apply (hc (X.obj j)) y₂ k
+  dsimp at h₁ h₂ ⊢
+  simp [h₁, h₂, ← IsCardinalFiltered.coeq_condition ψ hK' k, ψ, hf]
 
 Depends on / 依赖: FilteredColimit, Types.FilteredColimit.isColimit_eq_iff, Types.isLimitEquivSections, Types.isLimitEquivSections_apply, X.obj, isColimit_eq_iff, isFiltered_of_isCardinalFiltered, isLimitEquivSections, isLimitEquivSections_apply
 -/

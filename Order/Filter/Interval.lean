@@ -820,7 +820,10 @@ refine ⟨fun s hs => mem_map.2 mem_prod_self_iff.2 ?_⟩
     mem_prod_self_iff.1 (mem_map.1 (tendsto_fst.Icc tendsto_snd hs))
   refine ⟨t, htl, fun p hp => ?_⟩
   rcases le_total p.1 p.2 with h | h
-  ·
+  · rw [mem_preimage, uIcc_of_le h]
+    exact hts p hp
+  · rw [mem_preimage, uIcc_of_ge h]
+    exact hts ⟨p.2, p.1⟩ ⟨hp.2, hp.1⟩
 
 中文:
 实例 tendsto_uIcc_of_Icc
@@ -831,7 +834,10 @@ refine ⟨fun s hs => mem_map.2 mem_prod_self_iff.2 ?_⟩
     mem_prod_self_iff.1 (mem_map.1 (tendsto_fst.Icc tendsto_snd hs))
   refine ⟨t, htl, fun p hp => ?_⟩
   rcases le_total p.1 p.2 with h | h
-  ·
+  · rw [mem_preimage, uIcc_of_le h]
+    exact hts p hp
+  · rw [mem_preimage, uIcc_of_ge h]
+    exact hts ⟨p.2, p.1⟩ ⟨hp.2, hp.1⟩
 
 Depends on / 依赖: le_total, mem_map, mem_preimage, mem_prod_self_iff, tendsto_fst, tendsto_fst.Icc, tendsto_snd, uIcc_of_ge, uIcc_of_le
 -/

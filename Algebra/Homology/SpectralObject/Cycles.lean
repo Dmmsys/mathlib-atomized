@@ -508,7 +508,9 @@ definition cyclesMap
       (naturality' α 1 2))) (by
       rw [Category.assoc]; rw [X.δ_naturality f g f' g'
         (homMk₁ (α.app 0) (α.app 1) (naturality' α 0 1))
-          (homMk₁ (α.app 1) (α.app 2) (naturality' α 1 2)) n (n + 1
+          (homMk₁ (α.app 1) (α.app 2) (naturality' α 1 2)) n (n + 1)]; rw [iCycles_δ_assoc _ _ _ _ _]; rw [zero_comp])
+
+@[reassoc]
 
 中文:
 定义 cyclesMap
@@ -518,7 +520,9 @@ definition cyclesMap
       (naturality' α 1 2))) (by
       rw [Category.assoc]; rw [X.δ_naturality f g f' g'
         (homMk₁ (α.app 0) (α.app 1) (naturality' α 0 1))
-          (homMk₁ (α.app 1) (α.app 2) (naturality' α 1 2)) n (n + 1
+          (homMk₁ (α.app 1) (α.app 2) (naturality' α 1 2)) n (n + 1)]; rw [iCycles_δ_assoc _ _ _ _ _]; rw [zero_comp])
+
+@[reassoc]
 
 Depends on / 依赖: Category, Category.assoc, X.iCycles, X.liftCycles, iCycles, liftCycles, naturality, zero_comp
 -/
@@ -629,7 +633,9 @@ definition opcyclesMap
       (naturality' α 0 1)) ≫ X.pOpcycles f' g' n) (by
       rw [← X.δ_naturality_assoc f g f' g'
         (homMk₁ (α.app 0) (α.app 1) (naturality' α 0 1))
-        (homMk₁ (α.app 1) (α.app 2) (naturali
+        (homMk₁ (α.app 1) (α.app 2) (naturality' α 1 2)) _ _]; rw [δ_pOpcycles _ _ _ _ _]; rw [comp_zero])
+
+@[reassoc]
 
 中文:
 定义 opcyclesMap
@@ -639,7 +645,9 @@ definition opcyclesMap
       (naturality' α 0 1)) ≫ X.pOpcycles f' g' n) (by
       rw [← X.δ_naturality_assoc f g f' g'
         (homMk₁ (α.app 0) (α.app 1) (naturality' α 0 1))
-        (homMk₁ (α.app 1) (α.app 2) (naturali
+        (homMk₁ (α.app 1) (α.app 2) (naturality' α 1 2)) _ _]; rw [δ_pOpcycles _ _ _ _ _]; rw [comp_zero])
+
+@[reassoc]
 
 Depends on / 依赖: X.descOpcycles, X.pOpcycles, comp_zero, descOpcycles, naturality, pOpcycles
 -/
@@ -880,7 +888,10 @@ lemma toCycles_cyclesMap
   congr 1
   ext
   · dsimp
-    rw [hβ₀
+    rw [hβ₀]
+    exact naturality' α 0 1
+  · dsimp
+    rw [hβ₁]; rw [Category.comp_id]; rw [Category.id_comp]
 
 中文:
 引理 toCycles_cyclesMap
@@ -890,7 +901,10 @@ lemma toCycles_cyclesMap
   congr 1
   ext
   · dsimp
-    rw [hβ₀
+    rw [hβ₀]
+    exact naturality' α 0 1
+  · dsimp
+    rw [hβ₁]; rw [Category.comp_id]; rw [Category.id_comp]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, X.cyclesMap, X.cyclesMap_i, X.iCycles, X.toCycles, cancel_mono, cat_disch, cyclesMap, cyclesMap_i, iCycles, map_comp, naturality, toCycles, toCycles_i, toCycles_i_assoc
 -/
@@ -967,7 +981,9 @@ lemma opcyclesMap_fromOpcycles
   · cat_disch
   · dsimp
     rw [hβ₁]
-    e
+    exact (naturality' α 1 2).symm
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 opcyclesMap_fromOpcycles
@@ -980,7 +996,9 @@ lemma opcyclesMap_fromOpcycles
   · cat_disch
   · dsimp
     rw [hβ₁]
-    e
+    exact (naturality' α 1 2).symm
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Functor, Functor.map_comp, X.fromOpcycles, X.opcyclesMap, X.pOpcycles, X.p_opcyclesMap_assoc, cancel_epi, cat_disch, fromOpcycles, map_comp, naturality, opcyclesMap, pOpcycles, p_fromOpcycles, p_fromOpcycles_assoc, p_opcyclesMap_assoc
 -/

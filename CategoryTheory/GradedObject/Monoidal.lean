@@ -614,13 +614,17 @@ English:
 lemma ιTensorObj₃_tensorHom
   statement: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃)
   proof: by
-  rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← id_tensorHom]; rw [← id_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [i
+  rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← id_tensorHom]; rw [← id_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [id_comp]; rw [comp_id]
+
+@[ext (iff := false)]
 
 中文:
 引理 ιTensorObj₃_tensorHom
   结论: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃)
   证明: by
-  rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← id_tensorHom]; rw [← id_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [i
+  rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← id_tensorHom]; rw [← id_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [id_comp]; rw [comp_id]
+
+@[ext (iff := false)]
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.tensorHom_comp_tensorHom_assoc, comp_id, id_comp, id_tensorHom, tensorHom_comp_tensorHom_assoc
 -/
@@ -727,13 +731,17 @@ English:
 lemma ιTensorObj₃'_tensorHom
   statement: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃)
   proof: by
-  rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← tensorHom_id]; rw [← tensorHom_id]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [id_comp]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorH
+  rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← tensorHom_id]; rw [← tensorHom_id]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [id_comp]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [comp_id]
+
+@[ext (iff := false)]
 
 中文:
 引理 ιTensorObj₃'_tensorHom
   结论: (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃)
   证明: by
-  rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← tensorHom_id]; rw [← tensorHom_id]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [id_comp]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorH
+  rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [ιTensorObj₃'_eq _ _ _ i₁ i₂ i₃ j h _ rfl]; rw [assoc]; rw [ι_tensorHom]; rw [← tensorHom_id]; rw [← tensorHom_id]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [id_comp]; rw [ι_tensorHom]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [comp_id]
+
+@[ext (iff := false)]
 -/
 lemma ιTensorObj₃'_tensorHom (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂) (f₃ : X₃ ⟶ Y₃)
     (i₁ i₂ i₃ j : I) (h : i₁ + i₂ + i₃ = j) :
@@ -1100,7 +1108,23 @@ lemma pentagon_inv
   conv_lhs =>
     rw [ιTensorObj₄_eq X₁ X₂ X₃ X₄ i₁ i₂ i₃ i₄ j h _ rfl]; rw [assoc]; rw [ι_tensorHom_assoc]
     dsimp only [categoryOfGradedObjects_id, id_eq, eq_mpr_eq_cast, cast_eq]
-    rw [id_tensorHom]; rw [← MonoidalCategory.w
+    rw [id_tensorHom]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [ιTensorObj₃_associator_inv]; rw [ιTensorObj₃'_eq X₂ X₃ X₄ i₂ i₃ i₄ _ rfl _ rfl]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← ιTensorObj₃_eq_assoc X₁ (tensorObj X₂ X₃) X₄ i₁ (i₂ + i₃) i₄ j
+        (by simp only [← add_assoc]; rw [h]) _ rfl, ιTensorObj₃_associator_inv_assoc,
+      ιTensorObj₃'_eq_assoc X₁ (tensorObj X₂ X₃) X₄ i₁ (i₂ + i₃) i₄ j
+        (by simp only [← add_assoc, h]) (i₁ + i₂ + i₃) (by rw [add_assoc]), ι_tensorHom]
+    dsimp only [id_eq, eq_mpr_eq_cast, categoryOfGradedObjects_id]
+    rw [tensorHom_id]; rw [whisker_assoc_symm_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← MonoidalCategory.comp_whiskerRight_assoc]; rw [← MonoidalCategory.comp_whiskerRight_assoc]; rw [← ιTensorObj₃_eq X₁ X₂ X₃ i₁ i₂ i₃ _ rfl _ rfl]; rw [ιTensorObj₃_associator_inv]; rw [MonoidalCategory.comp_whiskerRight_assoc]; rw [MonoidalCategory.pentagon_inv_assoc]
+  conv_rhs =>
+    rw [ιTensorObj₄_eq X₁ X₂ X₃ X₄ i₁ i₂ i₃ i₄ _ _ _ rfl]; rw [ιTensorObj₃_eq X₂ X₃ X₄ i₂ i₃ i₄ _ rfl _ rfl]; rw [assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← ιTensorObj₃_eq_assoc X₁ X₂ (tensorObj X₃ X₄) i₁ i₂ (i₃ + i₄) j
+        (by rw [← add_assoc]; rw [h]) (i₂ + i₃ + i₄) (by rw [add_assoc]),
+      ιTensorObj₃_associator_inv_assoc, associator_inv_naturality_right_assoc,
+      ιTensorObj₃'_eq_assoc X₁ X₂ (tensorObj X₃ X₄) i₁ i₂ (i₃ + i₄) j
+        (by rw [← add_assoc, h]) _ rfl, whisker_exchange_assoc,
+      ← ιTensorObj₃_eq_assoc (tensorObj X₁ X₂) X₃ X₄ (i₁ + i₂) i₃ i₄ j h _ rfl,
+      ιTensorObj₃_associator_inv, whiskerRight_tensor_assoc, Iso.hom_inv_id_assoc,
+      ιTensorObj₃'_eq (tensorObj X₁ X₂) X₃ X₄ (i₁ + i₂) i₃ i₄ j h _ rfl,
+      ← MonoidalCategory.comp_whiskerRight_assoc,
+      ← ιTensorObj₃'_eq X₁ X₂ X₃ i₁ i₂ i₃ _ rfl _ rfl]
 
 中文:
 引理 pentagon_inv
@@ -1110,7 +1134,23 @@ lemma pentagon_inv
   conv_lhs =>
     rw [ιTensorObj₄_eq X₁ X₂ X₃ X₄ i₁ i₂ i₃ i₄ j h _ rfl]; rw [assoc]; rw [ι_tensorHom_assoc]
     dsimp only [categoryOfGradedObjects_id, id_eq, eq_mpr_eq_cast, cast_eq]
-    rw [id_tensorHom]; rw [← MonoidalCategory.w
+    rw [id_tensorHom]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [ιTensorObj₃_associator_inv]; rw [ιTensorObj₃'_eq X₂ X₃ X₄ i₂ i₃ i₄ _ rfl _ rfl]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← ιTensorObj₃_eq_assoc X₁ (tensorObj X₂ X₃) X₄ i₁ (i₂ + i₃) i₄ j
+        (by simp only [← add_assoc]; rw [h]) _ rfl, ιTensorObj₃_associator_inv_assoc,
+      ιTensorObj₃'_eq_assoc X₁ (tensorObj X₂ X₃) X₄ i₁ (i₂ + i₃) i₄ j
+        (by simp only [← add_assoc, h]) (i₁ + i₂ + i₃) (by rw [add_assoc]), ι_tensorHom]
+    dsimp only [id_eq, eq_mpr_eq_cast, categoryOfGradedObjects_id]
+    rw [tensorHom_id]; rw [whisker_assoc_symm_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← MonoidalCategory.comp_whiskerRight_assoc]; rw [← MonoidalCategory.comp_whiskerRight_assoc]; rw [← ιTensorObj₃_eq X₁ X₂ X₃ i₁ i₂ i₃ _ rfl _ rfl]; rw [ιTensorObj₃_associator_inv]; rw [MonoidalCategory.comp_whiskerRight_assoc]; rw [MonoidalCategory.pentagon_inv_assoc]
+  conv_rhs =>
+    rw [ιTensorObj₄_eq X₁ X₂ X₃ X₄ i₁ i₂ i₃ i₄ _ _ _ rfl]; rw [ιTensorObj₃_eq X₂ X₃ X₄ i₂ i₃ i₄ _ rfl _ rfl]; rw [assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← ιTensorObj₃_eq_assoc X₁ X₂ (tensorObj X₃ X₄) i₁ i₂ (i₃ + i₄) j
+        (by rw [← add_assoc]; rw [h]) (i₂ + i₃ + i₄) (by rw [add_assoc]),
+      ιTensorObj₃_associator_inv_assoc, associator_inv_naturality_right_assoc,
+      ιTensorObj₃'_eq_assoc X₁ X₂ (tensorObj X₃ X₄) i₁ i₂ (i₃ + i₄) j
+        (by rw [← add_assoc, h]) _ rfl, whisker_exchange_assoc,
+      ← ιTensorObj₃_eq_assoc (tensorObj X₁ X₂) X₃ X₄ (i₁ + i₂) i₃ i₄ j h _ rfl,
+      ιTensorObj₃_associator_inv, whiskerRight_tensor_assoc, Iso.hom_inv_id_assoc,
+      ιTensorObj₃'_eq (tensorObj X₁ X₂) X₃ X₄ (i₁ + i₂) i₃ i₄ j h _ rfl,
+      ← MonoidalCategory.comp_whiskerRight_assoc,
+      ← ιTensorObj₃'_eq X₁ X₂ X₃ i₁ i₂ i₃ _ rfl _ rfl]
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, cast_eq, categoryOfGradedObjects_comp, categoryOfGradedObjects_id, conv_lhs, eq_mpr_eq_cast, id_eq, id_tensorHom, whiskerLeft_comp_assoc
 -/
@@ -1512,7 +1552,15 @@ instance monoidalCategory
   whiskerLeft X _ _ φ := Monoidal.whiskerLeft X φ
   whiskerRight {_ _ φ Y} := Monoidal.whiskerRight φ Y
   tensorUnit := Monoidal.tensorUnit
-  associator X₁ X₂ X₃ := Monoidal.associator 
+  associator X₁ X₂ X₃ := Monoidal.associator X₁ X₂ X₃
+  associator_naturality f₁ f₂ f₃ := Monoidal.associator_naturality f₁ f₂ f₃
+  leftUnitor X := Monoidal.leftUnitor X
+  leftUnitor_naturality := Monoidal.leftUnitor_naturality
+  rightUnitor X := Monoidal.rightUnitor X
+  rightUnitor_naturality := Monoidal.rightUnitor_naturality
+  tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := Monoidal.tensorHom_comp_tensorHom f₁ g₁ f₂ g₂
+  pentagon X₁ X₂ X₃ X₄ := Monoidal.pentagon X₁ X₂ X₃ X₄
+  triangle X₁ X₂ := Monoidal.triangle X₁ X₂
 
 中文:
 实例 monoidalCategory
@@ -1523,7 +1571,15 @@ instance monoidalCategory
   whiskerLeft X _ _ φ := Monoidal.whiskerLeft X φ
   whiskerRight {_ _ φ Y} := Monoidal.whiskerRight φ Y
   tensorUnit := Monoidal.tensorUnit
-  associator X₁ X₂ X₃ := Monoidal.associator 
+  associator X₁ X₂ X₃ := Monoidal.associator X₁ X₂ X₃
+  associator_naturality f₁ f₂ f₃ := Monoidal.associator_naturality f₁ f₂ f₃
+  leftUnitor X := Monoidal.leftUnitor X
+  leftUnitor_naturality := Monoidal.leftUnitor_naturality
+  rightUnitor X := Monoidal.rightUnitor X
+  rightUnitor_naturality := Monoidal.rightUnitor_naturality
+  tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := Monoidal.tensorHom_comp_tensorHom f₁ g₁ f₂ g₂
+  pentagon X₁ X₂ X₃ X₄ := Monoidal.pentagon X₁ X₂ X₃ X₄
+  triangle X₁ X₂ := Monoidal.triangle X₁ X₂
 
 Depends on / 依赖: Monoidal, Monoidal.tensorObj, tensorObj
 -/

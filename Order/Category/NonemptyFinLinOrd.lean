@@ -450,7 +450,11 @@ theorem mono_iff_injective
   let g₁ : X ⟶ A := ofHom ⟨fun _ => a₁, fun _ _ _ => by rfl⟩
   let g₂ : X ⟶ A := ofHom ⟨fun _ => a₂, fun _ _ _ => by rfl⟩
   change g₁ (ULift.up (0 : Fin 1)) = g₂ (ULift.up (0 : Fin 1))
-  have eq : 
+  have eq : g₁ ≫ f = g₂ ≫ f := by
+    ext
+    exact h
+  rw [cancel_mono] at eq
+  rw [eq]
 
 中文:
 定理 mono_iff_injective
@@ -462,7 +466,11 @@ theorem mono_iff_injective
   let g₁ : X ⟶ A := ofHom ⟨fun _ => a₁, fun _ _ _ => by rfl⟩
   let g₂ : X ⟶ A := ofHom ⟨fun _ => a₂, fun _ _ _ => by rfl⟩
   change g₁ (ULift.up (0 : Fin 1)) = g₂ (ULift.up (0 : Fin 1))
-  have eq : 
+  have eq : g₁ ≫ f = g₂ ≫ f := by
+    ext
+    exact h
+  rw [cancel_mono] at eq
+  rw [eq]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, ULift.up, cancel_mono, mono_of_injective
 -/
@@ -497,7 +505,33 @@ theorem epi_iff_surjective
       ⟨fun b => if b < m then ULift.up 0 else ULift.up 1, fun x₁ x₂ h => by
         simp only
         split_ifs with h₁ h₂ h₂
-        any_goals apply Fin
+        any_goals apply Fin.zero_le
+        · exfalso
+          exact h₁ (lt_of_le_of_lt h h₂)
+        · rfl⟩
+    let p₂ : B ⟶ Y := ofHom
+      ⟨fun b => if b <= m then ULift.up 0 else ULift.up 1, fun x₁ x₂ h => by
+        simp only
+        split_ifs with h₁ h₂ h₂
+        any_goals apply Fin.zero_le
+        · exfalso
+          exact h₁ (h.trans h₂)
+        · rfl⟩
+    have h : p₁ m = p₂ m := by
+      congr
+      rw [← cancel_epi f]
+      ext a : 3
+      simp only [p₁, p₂, hom_hom_comp, OrderHom.comp_coe, Function.comp_apply]
+      change ite _ _ _ = ite _ _ _
+      split_ifs with h₁ h₂ h₂
+      any_goals rfl
+      · exfalso
+        exact h₂ (le_of_lt h₁)
+      · exfalso
+        exact hm a (eq_of_le_of_not_lt h₂ h₁)
+    simp [Y, p₁, p₂, ConcreteCategory.hom_ofHom] at h
+  · intro h
+    exact ConcreteCategory.epi_of_surjective f h
 
 中文:
 定理 epi_iff_surjective
@@ -512,7 +546,33 @@ theorem epi_iff_surjective
       ⟨fun b => if b < m then ULift.up 0 else ULift.up 1, fun x₁ x₂ h => by
         simp only
         split_ifs with h₁ h₂ h₂
-        any_goals apply Fin
+        any_goals apply Fin.zero_le
+        · exfalso
+          exact h₁ (lt_of_le_of_lt h h₂)
+        · rfl⟩
+    let p₂ : B ⟶ Y := ofHom
+      ⟨fun b => if b <= m then ULift.up 0 else ULift.up 1, fun x₁ x₂ h => by
+        simp only
+        split_ifs with h₁ h₂ h₂
+        any_goals apply Fin.zero_le
+        · exfalso
+          exact h₁ (h.trans h₂)
+        · rfl⟩
+    have h : p₁ m = p₂ m := by
+      congr
+      rw [← cancel_epi f]
+      ext a : 3
+      simp only [p₁, p₂, hom_hom_comp, OrderHom.comp_coe, Function.comp_apply]
+      change ite _ _ _ = ite _ _ _
+      split_ifs with h₁ h₂ h₂
+      any_goals rfl
+      · exfalso
+        exact h₂ (le_of_lt h₁)
+      · exfalso
+        exact hm a (eq_of_le_of_not_lt h₂ h₁)
+    simp [Y, p₁, p₂, ConcreteCategory.hom_ofHom] at h
+  · intro h
+    exact ConcreteCategory.epi_of_surjective f h
 
 Depends on / 依赖: Fin.zero_le, Function, Function.Surjective, Surjective, ULift.up, any_goals, h.trans, lt_of_le_of_lt, split_ifs, zero_le
 -/
@@ -568,7 +628,21 @@ instance :
       exact Nonempty.intro ⟨(hf y).choose, (hf y).choose_spec⟩
     let φ : Y -> X := fun y => (H y).some.1
     have hφ : forall y : Y, f (φ y) = y := fun y => (H y).some.2
-  
+    refine IsSplitEpi.mk' ⟨ofHom ⟨φ, ?_⟩, ?_⟩
+    swap
+    · ext b
+      apply hφ
+    · intro a b
+      contrapose
+      intro h
+      simp only [not_le] at h ⊢
+      suffices b <= a by
+        apply lt_of_le_of_ne this
+        rintro rfl
+        exfalso
+        simp at h
+      have H : f (φ b) <= f (φ a) := f.hom.hom.monotone (le_of_lt h)
+      simpa only [hφ] using H⟩
 
 中文:
 实例 :
@@ -580,7 +654,21 @@ instance :
       exact Nonempty.intro ⟨(hf y).choose, (hf y).choose_spec⟩
     let φ : Y -> X := fun y => (H y).some.1
     have hφ : forall y : Y, f (φ y) = y := fun y => (H y).some.2
-  
+    refine IsSplitEpi.mk' ⟨ofHom ⟨φ, ?_⟩, ?_⟩
+    swap
+    · ext b
+      apply hφ
+    · intro a b
+      contrapose
+      intro h
+      simp only [not_le] at h ⊢
+      suffices b <= a by
+        apply lt_of_le_of_ne this
+        rintro rfl
+        exfalso
+        simp at h
+      have H : f (φ b) <= f (φ a) := f.hom.hom.monotone (le_of_lt h)
+      simpa only [hφ] using H⟩
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, Nonempty, Nonempty.intro, choose_spec, contrapose, epi_iff_surjective, f.hom, lt_of_le_of_ne, not_le
 -/
@@ -622,6 +710,9 @@ instance :
       rw [epi_iff_surjective]
       rintro ⟨_, y, h, rfl⟩
       exact ⟨y, rfl⟩
+    have : StrongEpi e := strongEpi_of_epi e
+    have : Mono m := ConcreteCategory.mono_of_injective _ (fun x y h => Subtype.ext h)
+    exact ⟨⟨I, m, e, rfl⟩⟩⟩
 
 中文:
 实例 :
@@ -634,6 +725,9 @@ instance :
       rw [epi_iff_surjective]
       rintro ⟨_, y, h, rfl⟩
       exact ⟨y, rfl⟩
+    have : StrongEpi e := strongEpi_of_epi e
+    have : Mono m := ConcreteCategory.mono_of_injective _ (fun x y h => Subtype.ext h)
+    exact ⟨⟨I, m, e, rfl⟩⟩⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, Set.image, StrongEpi, Subtype, Subtype.ext, epi_iff_surjective, f.hom.hom.monotone, mono_of_injective, monotone, strongEpi_of_epi
 -/

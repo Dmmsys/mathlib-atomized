@@ -43,7 +43,29 @@ lemma isColimit_iff_bijective_desc
   change Function.Bijective (Quot.desc F c).toIntLinearMap
   rw [← CharacterModule.dual_bijective_iff_bijective]
   refine ⟨fun χ ψ eq => ?_, fun χ => ?_⟩
-  · apply AddEquiv.ulift.symm.addMonoidHomCongrRightEqui
+  · apply AddEquiv.ulift.symm.addMonoidHomCongrRightEquiv.injective
+    apply ofHom_injective
+    refine hc.hom_ext (fun j => ?_)
+    ext x
+    erw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, ← Quot.ι_desc _ c j x]
+    exact DFunLike.congr_fun eq (Quot.ι F j x)
+  · set c' : Cocone F :=
+      { pt := AddCommGrpCat.of (ULift (AddCircle (1 : Rat)))
+        ι :=
+          { app j := AddCommGrpCat.ofHom (((@AddEquiv.ulift _ _).symm.toAddMonoidHom.comp χ).comp
+                       (Quot.ι F j))
+            naturality {j j'} u := by
+              ext
+              dsimp
+              rw [Quot.map_ι F (f := u)] } }
+    use AddEquiv.ulift.toAddMonoidHom.comp (hc.desc c').hom
+    refine Quot.addMonoidHom_ext _ (fun j x => ?_)
+    dsimp
+    rw [Quot.ι_desc]
+    change AddEquiv.ulift ((c.ι.app j ≫ hc.desc c') x) = _
+    rw [hc.fac]
+    dsimp [c']
+    rw [AddEquiv.apply_symm_apply]
 
 中文:
 引理 isColimit_iff_bijective_desc
@@ -53,7 +75,29 @@ lemma isColimit_iff_bijective_desc
   change Function.Bijective (Quot.desc F c).toIntLinearMap
   rw [← CharacterModule.dual_bijective_iff_bijective]
   refine ⟨fun χ ψ eq => ?_, fun χ => ?_⟩
-  · apply AddEquiv.ulift.symm.addMonoidHomCongrRightEqui
+  · apply AddEquiv.ulift.symm.addMonoidHomCongrRightEquiv.injective
+    apply ofHom_injective
+    refine hc.hom_ext (fun j => ?_)
+    ext x
+    erw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply, ← Quot.ι_desc _ c j x]
+    exact DFunLike.congr_fun eq (Quot.ι F j x)
+  · set c' : Cocone F :=
+      { pt := AddCommGrpCat.of (ULift (AddCircle (1 : Rat)))
+        ι :=
+          { app j := AddCommGrpCat.ofHom (((@AddEquiv.ulift _ _).symm.toAddMonoidHom.comp χ).comp
+                       (Quot.ι F j))
+            naturality {j j'} u := by
+              ext
+              dsimp
+              rw [Quot.map_ι F (f := u)] } }
+    use AddEquiv.ulift.toAddMonoidHom.comp (hc.desc c').hom
+    refine Quot.addMonoidHom_ext _ (fun j x => ?_)
+    dsimp
+    rw [Quot.ι_desc]
+    change AddEquiv.ulift ((c.ι.app j ≫ hc.desc c') x) = _
+    rw [hc.fac]
+    dsimp [c']
+    rw [AddEquiv.apply_symm_apply]
 
 Depends on / 依赖: AddEquiv, AddEquiv.ulift.symm.addMonoidHomCongrRightEquiv.injective, Bijective, CharacterModule, CharacterModule.dual_bijective_iff_bijective, ConcreteCategory, ConcreteCategory.comp_apply, DFunLike, DFunLike.congr_fun, Function, Function.Bijective, Nonempty, Nonempty.intro, Quot.desc, addMonoidHomCongrRightEquiv, comp_apply, congr_fun, dual_bijective_iff_bijective, hc.hom_ext, hom_ext
 -/

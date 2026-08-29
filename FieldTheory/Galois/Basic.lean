@@ -254,7 +254,15 @@ theorem card_aut_eq_finrank
       map_mul' := fun _ _ => rfl
       map_add' := fun _ _ => rfl
       commutes' := fun _ => rfl }
-  have H :
+  have H : IsIntegral F α := IsGalois.integral F α
+  have h_sep : IsSeparable F α := IsGalois.separable F α
+  have h_splits : ((minpoly F α).map (algebraMap F E)).Splits := IsGalois.splits F α
+  replace h_splits : ((minpoly F α).map (algebraMap F F⟮α⟯)).Splits := by
+    simpa [Polynomial.map_map] using! h_splits.map iso.symm.toRingHom
+  rw [← LinearEquiv.finrank_eq iso.toLinearEquiv]
+  rw [← IntermediateField.AdjoinSimple.card_aut_eq_finrank F E H h_sep h_splits]
+  apply Nat.card_congr
+  exact Equiv.mk (fun ϕ => iso.trans (ϕ.trans iso.symm)) fun ϕ => iso.symm.trans (ϕ.trans iso)
 
 中文:
 定理 card_aut_eq_finrank
@@ -267,7 +275,15 @@ theorem card_aut_eq_finrank
       map_mul' := fun _ _ => rfl
       map_add' := fun _ _ => rfl
       commutes' := fun _ => rfl }
-  have H :
+  have H : IsIntegral F α := IsGalois.integral F α
+  have h_sep : IsSeparable F α := IsGalois.separable F α
+  have h_splits : ((minpoly F α).map (algebraMap F E)).Splits := IsGalois.splits F α
+  replace h_splits : ((minpoly F α).map (algebraMap F F⟮α⟯)).Splits := by
+    simpa [Polynomial.map_map] using! h_splits.map iso.symm.toRingHom
+  rw [← LinearEquiv.finrank_eq iso.toLinearEquiv]
+  rw [← IntermediateField.AdjoinSimple.card_aut_eq_finrank F E H h_sep h_splits]
+  apply Nat.card_congr
+  exact Equiv.mk (fun ϕ => iso.trans (ϕ.trans iso.symm)) fun ϕ => iso.symm.trans (ϕ.trans iso)
 
 Depends on / 依赖: Field.exists_primitive_element, IntermediateField, IntermediateField.mem_top, IsGalois, IsGalois.integral, IsGalois.separable, IsGalois.splits, IsIntegral, IsSeparable, Splits, algebraMap, commutes, e.val, exists_primitive_element, h_sep, h_splits, integral, invFun, map_add, map_mul
 -/
@@ -304,7 +320,8 @@ lemma finiteDimensional_of_finite
   have : IsGalois F K' := ⟨⟩
   have := Nat.card_le_card_of_surjective _
     (AlgEquiv.restrictNormalHom_surjective (F := F) (K₁ := K') (E := E))
-  rw [IsGalois.car
+  rw [IsGalois.card_aut_eq_finrank] at this
+  exact (this.trans_lt h₂).not_ge (finrank_le_of_le_right K.le_normalClosure)
 
 中文:
 引理 finiteDimensional_of_finite
@@ -317,7 +334,8 @@ lemma finiteDimensional_of_finite
   have : IsGalois F K' := ⟨⟩
   have := Nat.card_le_card_of_surjective _
     (AlgEquiv.restrictNormalHom_surjective (F := F) (K₁ := K') (E := E))
-  rw [IsGalois.car
+  rw [IsGalois.card_aut_eq_finrank] at this
+  exact (this.trans_lt h₂).not_ge (finrank_le_of_le_right K.le_normalClosure)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormalHom_surjective, IsGalois, IsGalois.card_aut_eq_finrank, K.le_normalClosure, Nat.card, Nat.card_le_card_of_surjective, card_aut_eq_finrank, card_le_card_of_surjective, exists_lt_finrank_of_infinite_dimensional, finrank_le_of_le_right, le_normalClosure, normalClosure, not_ge, restrictNormalHom_surjective, this.trans_lt, trans_lt
 -/
@@ -854,7 +872,11 @@ theorem fixingSubgroup_fixedField
   suffices Nat.card H = Nat.card (fixingSubgroup (fixedField H)) by
     exact SetLike.coe_injective (Set.eq_of_inclusion_surjective
       ((Nat.bijective_iff_injective_and_card (Set.inclusion H_le)).mpr
-        ⟨Set.inc
+        ⟨Set.inclusion_injective H_le, this⟩).2).symm
+  apply Nat.card_congr
+  refine (FixedPoints.toAlgHomEquiv H E).trans ?_
+  refine (algEquivEquivAlgHom (fixedField H) E).toEquiv.symm.trans ?_
+  exact (fixingSubgroupEquiv (fixedField H)).toEquiv.symm
 
 中文:
 定理 fixingSubgroup_fixedField
@@ -865,7 +887,11 @@ theorem fixingSubgroup_fixedField
   suffices Nat.card H = Nat.card (fixingSubgroup (fixedField H)) by
     exact SetLike.coe_injective (Set.eq_of_inclusion_surjective
       ((Nat.bijective_iff_injective_and_card (Set.inclusion H_le)).mpr
-        ⟨Set.inc
+        ⟨Set.inclusion_injective H_le, this⟩).2).symm
+  apply Nat.card_congr
+  refine (FixedPoints.toAlgHomEquiv H E).trans ?_
+  refine (algEquivEquivAlgHom (fixedField H) E).toEquiv.symm.trans ?_
+  exact (fixingSubgroupEquiv (fixedField H)).toEquiv.symm
 
 Depends on / 依赖: FixedPoints, FixedPoints.toAlgHomEquiv, H_le, Nat.bijective_iff_injective_and_card, Nat.card, Nat.card_congr, Set.eq_of_inclusion_surjective, Set.inclusion, Set.inclusion_injective, SetLike, SetLike.coe_injective, algEquivEquivAlgHom, bijective_iff_injective_and_card, card_congr, coe_injective, eq_of_inclusion_surjective, fixedField, fixingSubgroup, fixingSubgroupEquiv, inclusion
 -/
@@ -990,7 +1016,9 @@ theorem fixedField_fixingSubgroup
     (IntermediateField.le_iff_le _ _).mpr le_rfl
   suffices
     finrank K E = finrank (IntermediateField.fixedField (IntermediateField.fixingSubgroup K)) E by
-    exact (IntermediateField.eq_of_le_of_finrank_e
+    exact (IntermediateField.eq_of_le_of_finrank_eq' K_le this).symm
+  rw [IntermediateField.finrank_fixedField_eq_card]; rw [Nat.card_congr (IntermediateField.fixingSubgroupEquiv K).toEquiv]
+  exact (card_aut_eq_finrank K E).symm
 
 中文:
 定理 fixedField_fixingSubgroup
@@ -1000,7 +1028,9 @@ theorem fixedField_fixingSubgroup
     (IntermediateField.le_iff_le _ _).mpr le_rfl
   suffices
     finrank K E = finrank (IntermediateField.fixedField (IntermediateField.fixingSubgroup K)) E by
-    exact (IntermediateField.eq_of_le_of_finrank_e
+    exact (IntermediateField.eq_of_le_of_finrank_eq' K_le this).symm
+  rw [IntermediateField.finrank_fixedField_eq_card]; rw [Nat.card_congr (IntermediateField.fixingSubgroupEquiv K).toEquiv]
+  exact (card_aut_eq_finrank K E).symm
 
 Depends on / 依赖: IntermediateField, IntermediateField.eq_of_le_of_finrank_eq, IntermediateField.finrank_fixedField_eq_card, IntermediateField.fixedField, IntermediateField.fixingSubgroup, IntermediateField.fixingSubgroupEquiv, IntermediateField.le_iff_le, K_le, Nat.card_congr, card_aut_eq_finrank, card_congr, eq_of_le_of_finrank_eq, finrank, finrank_fixedField_eq_card, fixedField, fixingSubgroup, fixingSubgroupEquiv, le_iff_le, le_rfl, toEquiv
 -/
@@ -1110,7 +1140,8 @@ definition intermediateFieldEquivSubgroup
   left_inv K := fixedField_fixingSubgroup K
   right_inv H := IntermediateField.fixingSubgroup_fixedField H
   map_rel_iff' {K L} := by
-    rw [← fixedField_fixingSubgroup L]; rw [Intermedia
+    rw [← fixedField_fixingSubgroup L]; rw [IntermediateField.le_iff_le]; rw [fixedField_fixingSubgroup L]
+    rfl
 
 中文:
 定义 intermediateFieldEquivSubgroup
@@ -1120,7 +1151,8 @@ definition intermediateFieldEquivSubgroup
   left_inv K := fixedField_fixingSubgroup K
   right_inv H := IntermediateField.fixingSubgroup_fixedField H
   map_rel_iff' {K L} := by
-    rw [← fixedField_fixingSubgroup L]; rw [Intermedia
+    rw [← fixedField_fixingSubgroup L]; rw [IntermediateField.le_iff_le]; rw [fixedField_fixingSubgroup L]
+    rfl
 
 Depends on / 依赖: IntermediateField, IntermediateField.fixingSubgroup, OrderDual, OrderDual.toDual, fixingSubgroup, toDual
 -/
@@ -1391,7 +1423,7 @@ theorem map_fixingSubgroup
     forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
     Subgroup.mem_pointwise_smul_iff_inv_smul_mem, ← symm_apply_eq,
     IntermediateField.fixingSubgroup, mem_fixingSubgroup_iff]
-  rf
+  rfl
 
 中文:
 定理 map_fixingSubgroup
@@ -1402,7 +1434,7 @@ theorem map_fixingSubgroup
     forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
     Subgroup.mem_pointwise_smul_iff_inv_smul_mem, ← symm_apply_eq,
     IntermediateField.fixingSubgroup, mem_fixingSubgroup_iff]
-  rf
+  rfl
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgEquiv.smul_def, IntermediateField, IntermediateField.fixingSubgroup, Set.mem_image, SetLike, SetLike.mem_coe, Subgroup, Subgroup.mem_pointwise_smul_iff_inv_smul_mem, and_imp, coe_map, coe_toAlgHom, fixingSubgroup, forall_exists_index, mem_coe, mem_fixingSubgroup_iff, mem_image, mem_pointwise_smul_iff_inv_smul_mem, smul_def
 -/
@@ -1462,7 +1494,9 @@ theorem is_separable_splitting_field
   use minpoly F α, separable F α, IsGalois.splits F α
   rw [eq_top_iff]; rw [← IntermediateField.top_toSubalgebra]; rw [← h1]
   rw [IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (integral F α).isAlgebraic]
-  apply Algebra.adjoin
+  apply Algebra.adjoin_mono
+  rw [Set.singleton_subset_iff]; rw [Polynomial.mem_rootSet]
+  exact ⟨minpoly.ne_zero (integral F α), minpoly.aeval _ _⟩
 
 中文:
 定理 is_separable_splitting_field
@@ -1472,7 +1506,9 @@ theorem is_separable_splitting_field
   use minpoly F α, separable F α, IsGalois.splits F α
   rw [eq_top_iff]; rw [← IntermediateField.top_toSubalgebra]; rw [← h1]
   rw [IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (integral F α).isAlgebraic]
-  apply Algebra.adjoin
+  apply Algebra.adjoin_mono
+  rw [Set.singleton_subset_iff]; rw [Polynomial.mem_rootSet]
+  exact ⟨minpoly.ne_zero (integral F α), minpoly.aeval _ _⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin_mono, Field.exists_primitive_element, IntermediateField, IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic, IntermediateField.top_toSubalgebra, IsGalois, IsGalois.splits, Polynomial, Polynomial.mem_rootSet, Set.singleton_subset_iff, adjoin_mono, adjoin_simple_toSubalgebra_of_isAlgebraic, eq_top_iff, exists_primitive_element, integral, isAlgebraic, mem_rootSet, minpoly, minpoly.aeval
 -/
@@ -1522,7 +1558,9 @@ theorem of_card_aut_eq_finrank
   proof: by
   apply of_fixedField_eq_bot
   have p : 0 < finrank (IntermediateField.fixedField (⊤ : Subgroup Gal(E/F))) E := finrank_pos
-  rw [← IntermediateField.finrank_eq_one_iff]; rw [← mul_left_inj' (ne_of_lt p).symm]; rw [finrank_mul_finrank]; rw [← h]; rw [one_mul]; rw [IntermediateField.finrank_fixedF
+  rw [← IntermediateField.finrank_eq_one_iff]; rw [← mul_left_inj' (ne_of_lt p).symm]; rw [finrank_mul_finrank]; rw [← h]; rw [one_mul]; rw [IntermediateField.finrank_fixedField_eq_card]
+  apply Nat.card_congr
+  exact { toFun := fun g => ⟨g, Subgroup.mem_top g⟩, invFun := (↑) }
 
 中文:
 定理 of_card_aut_eq_finrank
@@ -1530,7 +1568,9 @@ theorem of_card_aut_eq_finrank
   证明: by
   apply of_fixedField_eq_bot
   have p : 0 < finrank (IntermediateField.fixedField (⊤ : Subgroup Gal(E/F))) E := finrank_pos
-  rw [← IntermediateField.finrank_eq_one_iff]; rw [← mul_left_inj' (ne_of_lt p).symm]; rw [finrank_mul_finrank]; rw [← h]; rw [one_mul]; rw [IntermediateField.finrank_fixedF
+  rw [← IntermediateField.finrank_eq_one_iff]; rw [← mul_left_inj' (ne_of_lt p).symm]; rw [finrank_mul_finrank]; rw [← h]; rw [one_mul]; rw [IntermediateField.finrank_fixedField_eq_card]
+  apply Nat.card_congr
+  exact { toFun := fun g => ⟨g, Subgroup.mem_top g⟩, invFun := (↑) }
 
 Depends on / 依赖: IntermediateField, IntermediateField.finrank_eq_one_iff, IntermediateField.finrank_fixedField_eq_card, IntermediateField.fixedField, Nat.card_congr, Subgroup, Subgroup.mem_top, card_congr, finrank, finrank_eq_one_iff, finrank_fixedField_eq_card, finrank_mul_finrank, finrank_pos, fixedField, invFun, mem_top, mul_left_inj, ne_of_lt, of_fixedField_eq_bot, one_mul
 -/
@@ -1560,7 +1600,24 @@ theorem of_separable_splitting_field_aux
     exact Multiset.notMem_zero x hx
   have h2 : minpoly K x ∣ p.map (algebraMap F K) := by
     apply minpoly.dvd
-    rw
+    rw [Polynomial.aeval_def]; rw [Polynomial.eval₂_map]; rw [← Polynomial.eval_map]; rw [←
+      IsScalarTower.algebraMap_eq]
+    exact (Polynomial.mem_roots (Polynomial.map_ne_zero h1)).mp hx
+  let key_equiv : (K⟮x⟯.restrictScalars F ->ₐ[F] E) ≃
+      Σ f : K ->ₐ[F] E, @AlgHom K K⟮x⟯ E _ _ _ _ (RingHom.toAlgebra f) := by
+    change (K⟮x⟯ ->ₐ[F] E) ≃ Σ f : K ->ₐ[F] E, _
+    exact algHomEquivSigma
+  have : forall f : K ->ₐ[F] E, Finite (@AlgHom K K⟮x⟯ E _ _ _ _ (RingHom.toAlgebra f)) := fun f => by
+    have := Finite.of_equiv _ key_equiv
+    apply Finite.of_injective (Sigma.mk f) fun _ _ H => eq_of_heq (Sigma.ext_iff.mp H).2
+  have : FiniteDimensional F K := FiniteDimensional.left F K E
+  rw [Nat.card_congr key_equiv]; rw [Nat.card_sigma]; rw [IntermediateField.adjoin.finrank h]; rw [Nat.card_eq_fintype_card]
+  apply Finset.sum_const_nat
+  intro f _
+  rw [← @IntermediateField.card_algHom_adjoin_integral K _ E _ _ x E _ (RingHom.toAlgebra f) h]
+  · exact Polynomial.Separable.of_dvd ((Polynomial.separable_map (algebraMap F K)).mpr hp) h2
+  · apply sp.splits.of_dvd (Polynomial.map_ne_zero h1)
+    rwa [← f.comp_algebraMap, ← p.map_map, RingHom.algebraMap_toAlgebra, Polynomial.map_dvd_map']
 
 中文:
 定理 of_separable_splitting_field_aux
@@ -1572,7 +1629,24 @@ theorem of_separable_splitting_field_aux
     exact Multiset.notMem_zero x hx
   have h2 : minpoly K x ∣ p.map (algebraMap F K) := by
     apply minpoly.dvd
-    rw
+    rw [Polynomial.aeval_def]; rw [Polynomial.eval₂_map]; rw [← Polynomial.eval_map]; rw [←
+      IsScalarTower.algebraMap_eq]
+    exact (Polynomial.mem_roots (Polynomial.map_ne_zero h1)).mp hx
+  let key_equiv : (K⟮x⟯.restrictScalars F ->ₐ[F] E) ≃
+      Σ f : K ->ₐ[F] E, @AlgHom K K⟮x⟯ E _ _ _ _ (RingHom.toAlgebra f) := by
+    change (K⟮x⟯ ->ₐ[F] E) ≃ Σ f : K ->ₐ[F] E, _
+    exact algHomEquivSigma
+  have : forall f : K ->ₐ[F] E, Finite (@AlgHom K K⟮x⟯ E _ _ _ _ (RingHom.toAlgebra f)) := fun f => by
+    have := Finite.of_equiv _ key_equiv
+    apply Finite.of_injective (Sigma.mk f) fun _ _ H => eq_of_heq (Sigma.ext_iff.mp H).2
+  have : FiniteDimensional F K := FiniteDimensional.left F K E
+  rw [Nat.card_congr key_equiv]; rw [Nat.card_sigma]; rw [IntermediateField.adjoin.finrank h]; rw [Nat.card_eq_fintype_card]
+  apply Finset.sum_const_nat
+  intro f _
+  rw [← @IntermediateField.card_algHom_adjoin_integral K _ E _ _ x E _ (RingHom.toAlgebra f) h]
+  · exact Polynomial.Separable.of_dvd ((Polynomial.separable_map (algebraMap F K)).mpr hp) h2
+  · apply sp.splits.of_dvd (Polynomial.map_ne_zero h1)
+    rwa [← f.comp_algebraMap, ← p.map_map, RingHom.algebraMap_toAlgebra, Polynomial.map_dvd_map']
 
 Depends on / 依赖: IsIntegral, IsNoetherian, IsNoetherian.iff_fg, IsScalarTower, IsScalarTower.algebraMap_eq, Multiset, Multiset.notMem_zero, Polynomial, Polynomial.aeval_def, Polynomial.aroots_zero, Polynomial.eval, Polynomial.eval_map, Polynomial.map_ne_zero, Polynomial.mem_roots, aeval_def, algebraMap, algebraMap_eq, aroots_zero, eval_map, iff_fg
 -/
@@ -1639,7 +1713,9 @@ theorem tfae
   tfae_have 1 -> 3 := fun _ => card_aut_eq_finrank F E
   tfae_have 1 -> 4 := fun _ => is_separable_splitting_field F E
   tfae_have 2 -> 1 := of_fixedField_eq_bot F E
-  tfae_have 3 -> 1 := of_card_
+  tfae_have 3 -> 1 := of_card_aut_eq_finrank F E
+  tfae_have 4 -> 1 := fun ⟨h, hp1, _⟩ => of_separable_splitting_field hp1
+  tfae_finish
 
 中文:
 定理 tfae
@@ -1650,7 +1726,9 @@ theorem tfae
   tfae_have 1 -> 3 := fun _ => card_aut_eq_finrank F E
   tfae_have 1 -> 4 := fun _ => is_separable_splitting_field F E
   tfae_have 2 -> 1 := of_fixedField_eq_bot F E
-  tfae_have 3 -> 1 := of_card_
+  tfae_have 3 -> 1 := of_card_aut_eq_finrank F E
+  tfae_have 4 -> 1 := fun ⟨h, hp1, _⟩ => of_separable_splitting_field hp1
+  tfae_finish
 
 Depends on / 依赖: OrderIso, OrderIso.map_bot, card_aut_eq_finrank, intermediateFieldEquivSubgroup, is_separable_splitting_field, map_bot, of_card_aut_eq_finrank, of_fixedField_eq_bot, of_separable_splitting_field, tfae_finish, tfae_have
 -/
@@ -1679,7 +1757,11 @@ theorem sup_right
   suffices T'.IsSplittingField L E from IsGalois.of_separable_splitting_field (p := T') hT₁.map
   rw [isSplittingField_iff_intermediateField] at hT₂ ⊢
   constructor
-  · rw [Polynomial.map_map, ←
+  · rw [Polynomial.map_map, ← IsScalarTower.algebraMap_eq]
+    exact Polynomial.Splits.of_algHom hT₂.1 (IsScalarTower.toAlgHom _ _ _)
+  · have h' : T'.rootSet E = T.rootSet E := by simp [Set.ext_iff, Polynomial.mem_rootSet', T']
+    rw [← lift_inj]; rw [lift_adjoin]; rw [← coe_val]; rw [hT₂.1.image_rootSet] at hT₂
+    rw [← restrictScalars_eq_top_iff (K := F)]; rw [restrictScalars_adjoin]; rw [adjoin_union]; rw [adjoin_self]; rw [h']; rw [hT₂.2]; rw [lift_top]; rw [sup_comm]; rw [h]
 
 中文:
 定理 sup_right
@@ -1690,7 +1772,11 @@ theorem sup_right
   suffices T'.IsSplittingField L E from IsGalois.of_separable_splitting_field (p := T') hT₁.map
   rw [isSplittingField_iff_intermediateField] at hT₂ ⊢
   constructor
-  · rw [Polynomial.map_map, ←
+  · rw [Polynomial.map_map, ← IsScalarTower.algebraMap_eq]
+    exact Polynomial.Splits.of_algHom hT₂.1 (IsScalarTower.toAlgHom _ _ _)
+  · have h' : T'.rootSet E = T.rootSet E := by simp [Set.ext_iff, Polynomial.mem_rootSet', T']
+    rw [← lift_inj]; rw [lift_adjoin]; rw [← coe_val]; rw [hT₂.1.image_rootSet] at hT₂
+    rw [← restrictScalars_eq_top_iff (K := F)]; rw [restrictScalars_adjoin]; rw [adjoin_union]; rw [adjoin_self]; rw [h']; rw [hT₂.2]; rw [lift_top]; rw [sup_comm]; rw [h]
 
 Depends on / 依赖: IsGalois, IsGalois.is_separable_splitting_field, IsGalois.of_separable_splitting_field, IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.toAlgHom, IsSplittingField, Polynomial, Polynomial.Splits.of_algHom, Polynomial.map_map, Polynomial.mem_rootSet, Set.ext_iff, Splits, T.map, T.rootSet, algebraMap, algebraMap_eq, ext_iff, isSplittingField_iff_intermediateField, is_separable_splitting_field
 -/
@@ -1808,7 +1894,7 @@ theorem restrictRestrictAlgEquivMapHom_injective
   refine (injective_iff_map_eq_one _).mpr fun φ hφ => ?_
   suffices h : MulSemiringAction.toAlgAut Gal(E/L) F E φ = 1 by rwa [AlgEquiv.ext_iff] at h ⊢
   rw [← Subgroup.mem_bot]; rw [← fixingSubgroup_top]; rw [← h]; rw [fixingSubgroup_sup]
-  exact ⟨fun x => (hφ ▸ restrictRestrictAlgEquivMapHom_app
+  exact ⟨fun x => (hφ ▸ restrictRestrictAlgEquivMapHom_apply K L φ x).symm, φ.commutes⟩
 
 中文:
 定理 restrictRestrictAlgEquivMapHom_injective
@@ -1817,7 +1903,7 @@ theorem restrictRestrictAlgEquivMapHom_injective
   refine (injective_iff_map_eq_one _).mpr fun φ hφ => ?_
   suffices h : MulSemiringAction.toAlgAut Gal(E/L) F E φ = 1 by rwa [AlgEquiv.ext_iff] at h ⊢
   rw [← Subgroup.mem_bot]; rw [← fixingSubgroup_top]; rw [← h]; rw [fixingSubgroup_sup]
-  exact ⟨fun x => (hφ ▸ restrictRestrictAlgEquivMapHom_app
+  exact ⟨fun x => (hφ ▸ restrictRestrictAlgEquivMapHom_apply K L φ x).symm, φ.commutes⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ext_iff, MulSemiringAction, MulSemiringAction.toAlgAut, Subgroup, Subgroup.mem_bot, commutes, ext_iff, fixingSubgroup_sup, fixingSubgroup_top, injective_iff_map_eq_one, mem_bot, restrictRestrictAlgEquivMapHom_apply, toAlgAut
 -/
@@ -1840,7 +1926,13 @@ MonoidHom.range_eq_top.mp
       fixingSubgroup_fixedField (restrictRestrictAlgEquivMapHom F K L E).range ▸
         this ▸ fixingSubgroup_bot
   refine eq_bot_iff.mpr fun ⟨x, hx₁⟩ hx₂ => ?_
-  obtain ⟨⟨y, hy⟩, rfl⟩ : x in 
+  obtain ⟨⟨y, hy⟩, rfl⟩ : x in Set.range (algebraMap L E) := by
+refine mem_bot.mp (IsGalois.mem_bot_iff_fixed _).mpr fun φ => ?_
+    rw [← restrictRestrictAlgEquivMapHom_apply K L φ ⟨x]; rw [hx₁⟩]
+    rw [mem_fixedField_iff] at hx₂
+exact congr_arg ((↑) : K -> E) hx₂ (restrictRestrictAlgEquivMapHom F K L E φ) ⟨φ, rfl⟩
+  obtain ⟨z, rfl⟩ : y in (⊥ : IntermediateField F E) := h ▸ mem_inf.mpr ⟨hx₁, hy⟩
+  exact mem_bot.mp ⟨z, rfl⟩
 
 中文:
 定理 restrictRestrictAlgEquivMapHom_surjective
@@ -1851,7 +1943,13 @@ MonoidHom.range_eq_top.mp
       fixingSubgroup_fixedField (restrictRestrictAlgEquivMapHom F K L E).range ▸
         this ▸ fixingSubgroup_bot
   refine eq_bot_iff.mpr fun ⟨x, hx₁⟩ hx₂ => ?_
-  obtain ⟨⟨y, hy⟩, rfl⟩ : x in 
+  obtain ⟨⟨y, hy⟩, rfl⟩ : x in Set.range (algebraMap L E) := by
+refine mem_bot.mp (IsGalois.mem_bot_iff_fixed _).mpr fun φ => ?_
+    rw [← restrictRestrictAlgEquivMapHom_apply K L φ ⟨x]; rw [hx₁⟩]
+    rw [mem_fixedField_iff] at hx₂
+exact congr_arg ((↑) : K -> E) hx₂ (restrictRestrictAlgEquivMapHom F K L E φ) ⟨φ, rfl⟩
+  obtain ⟨z, rfl⟩ : y in (⊥ : IntermediateField F E) := h ▸ mem_inf.mpr ⟨hx₁, hy⟩
+  exact mem_bot.mp ⟨z, rfl⟩
 
 Depends on / 依赖: IsGalois, IsGalois.mem_bot_iff_fixed, MonoidHom, MonoidHom.range_eq_top.mp, Set.range, algebraMap, congr_arg, eq_bot_iff, eq_bot_iff.mpr, fixedField, fixingSubgroup_bot, fixingSubgroup_fixedField, mem_bot, mem_bot.mp, mem_bot_iff_fixed, mem_fixedField_iff, range_eq_top, restrictRestrictAlgEquivMapHom, restrictRestrictAlgEquivMapHom_apply
 -/
@@ -1887,7 +1985,8 @@ theorem map_fixingSubgroup
     rw [AlgEquiv.restrictNormal_commutes]
     exact h _ ⟨x, hx, rfl⟩
   · rintro h _ ⟨x, hx, rfl⟩
-    replace h := 
+    replace h := congr(algebraMap E E' $(show f.restrictNormal E x = x from h x hx))
+    rwa [AlgEquiv.restrictNormal_commutes] at h
 
 中文:
 定理 map_fixingSubgroup
@@ -1902,7 +2001,8 @@ theorem map_fixingSubgroup
     rw [AlgEquiv.restrictNormal_commutes]
     exact h _ ⟨x, hx, rfl⟩
   · rintro h _ ⟨x, hx, rfl⟩
-    replace h := 
+    replace h := congr(algebraMap E E' $(show f.restrictNormal E x = x from h x hx))
+    rwa [AlgEquiv.restrictNormal_commutes] at h
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormal_commutes, Subgroup, Subgroup.mem_comap, algebraMap, apply_fun, f.restrictNormal, injective, mem_comap, mem_fixingSubgroup_iff, replace, restrictNormal, restrictNormal_commutes
 -/
@@ -1959,7 +2059,21 @@ theorem finrank_eq_fixingSubgroup_index
     replace h : L.fixingSubgroup.FiniteIndex := ⟨h.symm⟩
     obtain ⟨L', hfd, hL'⟩ :=
       exists_lt_finrank_of_infinite_dimensional hnfd L.fixingSubgroup.index
-    let i := (
+    let i := (liftAlgEquiv L').toLinearEquiv
+    replace hfd := i.finiteDimensional
+    rw [i.finrank_eq]; rw [this _ hfd] at hL'
+    exact (Subgroup.index_antitone <| fixingSubgroup_le <|
+      IntermediateField.lift_le L').not_gt hL'
+  let E := normalClosure F L E'
+  have hle : L <= E := by simpa only [fieldRange_val] using L.val.fieldRange_le_normalClosure
+  let L' := restrict hle
+  have h := Module.finrank_mul_finrank F ↥L' ↥E
+  classical
+  rw [← IsGalois.card_fixingSubgroup_eq_finrank L']; rw [← IsGalois.card_aut_eq_finrank F E] at h
+  rw [← L'.fixingSubgroup.index_mul_card]; rw [Nat.mul_left_inj Finite.card_pos.ne'] at h
+  rw [(restrictAlgEquiv hle).toLinearEquiv.finrank_eq]; rw [h]; rw [← L'.map_fixingSubgroup_index E']
+  congr 2
+  exact lift_restrict hle
 
 中文:
 定理 finrank_eq_fixingSubgroup_index
@@ -1971,7 +2085,21 @@ theorem finrank_eq_fixingSubgroup_index
     replace h : L.fixingSubgroup.FiniteIndex := ⟨h.symm⟩
     obtain ⟨L', hfd, hL'⟩ :=
       exists_lt_finrank_of_infinite_dimensional hnfd L.fixingSubgroup.index
-    let i := (
+    let i := (liftAlgEquiv L').toLinearEquiv
+    replace hfd := i.finiteDimensional
+    rw [i.finrank_eq]; rw [this _ hfd] at hL'
+    exact (Subgroup.index_antitone <| fixingSubgroup_le <|
+      IntermediateField.lift_le L').not_gt hL'
+  let E := normalClosure F L E'
+  have hle : L <= E := by simpa only [fieldRange_val] using L.val.fieldRange_le_normalClosure
+  let L' := restrict hle
+  have h := Module.finrank_mul_finrank F ↥L' ↥E
+  classical
+  rw [← IsGalois.card_fixingSubgroup_eq_finrank L']; rw [← IsGalois.card_aut_eq_finrank F E] at h
+  rw [← L'.fixingSubgroup.index_mul_card]; rw [Nat.mul_left_inj Finite.card_pos.ne'] at h
+  rw [(restrictAlgEquiv hle).toLinearEquiv.finrank_eq]; rw [h]; rw [← L'.map_fixingSubgroup_index E']
+  congr 2
+  exact lift_restrict hle
 
 Depends on / 依赖: FiniteDimensional, FiniteIndex, IntermediateField, IntermediateField.lift_le, L.fixingSubgroup.FiniteIndex, L.fixingSubgroup.index, Module, Module.finrank_of_infinite_dimensional, Subgroup, Subgroup.index_antitone, exists_lt_finrank_of_infinite_dimensional, finiteDimensional, finrank_eq, finrank_of_infinite_dimensional, fixingSubgroup, fixingSubgroup_le, generalizing, h.symm, i.finiteDimensional, i.finrank_eq
 -/
@@ -2034,7 +2162,7 @@ instance IsQuadraticExtension.isCyclic
   · exact @isCyclic_of_subsingleton _ _ (Finite.card_le_one_iff_subsingleton.mp h.le)
   · exact isCyclic_of_prime_card h
 
-@[deprecated inferInstance (since
+@[deprecated inferInstance (since := "2026-04-09")]
 
 中文:
 实例 是QuadraticExtension.isCyclic
@@ -2047,7 +2175,7 @@ instance IsQuadraticExtension.isCyclic
   · exact @isCyclic_of_subsingleton _ _ (Finite.card_le_one_iff_subsingleton.mp h.le)
   · exact isCyclic_of_prime_card h
 
-@[deprecated inferInstance (since
+@[deprecated inferInstance (since := "2026-04-09")]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.card_le, Finite, Finite.card_le_one_iff_subsingleton.mp, Nat.card, Nat.card_eq_fintype_card, card_eq_fintype_card, card_le, card_le_one_iff_subsingleton, finrank_eq_two, h.le, interval_cases, isCyclic_of_prime_card, isCyclic_of_subsingleton
 -/

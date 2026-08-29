@@ -931,7 +931,10 @@ definition mkOfOplax
   map₂_whisker_left := fun f g h η => by
     rw [F'.mapCompIso_hom f g]; rw [← F.mapComp_naturality_right_assoc]; rw [← F'.mapCompIso_hom f h]; rw [hom_inv_id]; rw [comp_id]
   map₂_whisker_right := fun η h => by
-    rw [F'.mapCompIs
+    rw [F'.mapCompIso_hom _ h]; rw [← F.mapComp_naturality_left_assoc]; rw [← F'.mapCompIso_hom _ h]; rw [hom_inv_id]; rw [comp_id]
+  map₂_associator := fun f g h => by
+    rw [F'.mapCompIso_hom (f ≫ g) h]; rw [F'.mapCompIso_hom f g]; rw [← F.map₂_associator_assoc]; rw [←
+      F'.mapCompIso_hom f (g ≫ h)]; rw [← F'.mapCompIso_hom g h]; rw [whiskerLeft_hom_inv_assoc]; rw [hom_inv_id]; rw [comp_id]
 
 中文:
 定义 mkOfOplax
@@ -942,7 +945,10 @@ definition mkOfOplax
   map₂_whisker_left := fun f g h η => by
     rw [F'.mapCompIso_hom f g]; rw [← F.mapComp_naturality_right_assoc]; rw [← F'.mapCompIso_hom f h]; rw [hom_inv_id]; rw [comp_id]
   map₂_whisker_right := fun η h => by
-    rw [F'.mapCompIs
+    rw [F'.mapCompIso_hom _ h]; rw [← F.mapComp_naturality_left_assoc]; rw [← F'.mapCompIso_hom _ h]; rw [hom_inv_id]; rw [comp_id]
+  map₂_associator := fun f g h => by
+    rw [F'.mapCompIso_hom (f ≫ g) h]; rw [F'.mapCompIso_hom f g]; rw [← F.map₂_associator_assoc]; rw [←
+      F'.mapCompIso_hom f (g ≫ h)]; rw [← F'.mapCompIso_hom g h]; rw [whiskerLeft_hom_inv_assoc]; rw [hom_inv_id]; rw [comp_id]
 
 Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
 -/
@@ -974,7 +980,12 @@ definition mkOfOplax'
     rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_right]
   map₂_whisker_right := fun η h => by
     dsimp
-    rw [← assoc]; rw [IsI
+    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_left]
+  map₂_associator := fun f g h => by
+    dsimp
+    simp only [← assoc]
+    rw [IsIso.eq_comp_inv]; rw [← Bicategory.inv_whiskerLeft]; rw [IsIso.eq_comp_inv]
+    simp only [assoc, F.map₂_associator]
 
 中文:
 定义 mkOfOplax'
@@ -987,7 +998,12 @@ definition mkOfOplax'
     rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_right]
   map₂_whisker_right := fun η h => by
     dsimp
-    rw [← assoc]; rw [IsI
+    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_left]
+  map₂_associator := fun f g h => by
+    dsimp
+    simp only [← assoc]
+    rw [IsIso.eq_comp_inv]; rw [← Bicategory.inv_whiskerLeft]; rw [IsIso.eq_comp_inv]
+    simp only [assoc, F.map₂_associator]
 
 Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
 -/
@@ -1022,7 +1038,12 @@ definition mkOfLax
   map₂_whisker_left f g h η := by
     rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_right]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
   map₂_whisker_right η h := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.ma
+    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_left]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
+  map₂_associator {a b c d} f g h := by
+    rw [F'.mapCompIso_inv]; rw [F'.mapCompIso_inv]; rw [← inv_comp_eq]; rw [← IsIso.inv_comp_eq]
+    simp
+  map₂_left_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
+  map₂_right_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
 
 中文:
 定义 mkOfLax
@@ -1033,7 +1054,12 @@ definition mkOfLax
   map₂_whisker_left f g h η := by
     rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_right]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
   map₂_whisker_right η h := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.ma
+    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_left]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
+  map₂_associator {a b c d} f g h := by
+    rw [F'.mapCompIso_inv]; rw [F'.mapCompIso_inv]; rw [← inv_comp_eq]; rw [← IsIso.inv_comp_eq]
+    simp
+  map₂_left_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
+  map₂_right_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
 
 Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
 -/

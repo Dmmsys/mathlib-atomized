@@ -74,7 +74,13 @@ lemma toBiprod_apply
   · rw [Iso.addCommGroupIsoToAddEquiv_apply,
       Iso.addCommGroupIsoToAddEquiv_apply,
       ← AddCommGrpCat.biprodIsoProd_inv_comp_fst_apply,
-      Iso.hom_inv_id_apply, ← ConcreteCategory.com
+      Iso.hom_inv_id_apply, ← ConcreteCategory.comp_apply,
+      biprod.lift_fst, Iso.inv_hom_id_apply]
+  · rw [Iso.addCommGroupIsoToAddEquiv_apply,
+      Iso.addCommGroupIsoToAddEquiv_apply,
+      ← AddCommGrpCat.biprodIsoProd_inv_comp_snd_apply,
+      Iso.hom_inv_id_apply, ← ConcreteCategory.comp_apply,
+      biprod.lift_snd, Iso.inv_hom_id_apply]
 
 中文:
 引理 toBiprod_apply
@@ -86,7 +92,13 @@ lemma toBiprod_apply
   · rw [Iso.addCommGroupIsoToAddEquiv_apply,
       Iso.addCommGroupIsoToAddEquiv_apply,
       ← AddCommGrpCat.biprodIsoProd_inv_comp_fst_apply,
-      Iso.hom_inv_id_apply, ← ConcreteCategory.com
+      Iso.hom_inv_id_apply, ← ConcreteCategory.comp_apply,
+      biprod.lift_fst, Iso.inv_hom_id_apply]
+  · rw [Iso.addCommGroupIsoToAddEquiv_apply,
+      Iso.addCommGroupIsoToAddEquiv_apply,
+      ← AddCommGrpCat.biprodIsoProd_inv_comp_snd_apply,
+      Iso.hom_inv_id_apply, ← ConcreteCategory.comp_apply,
+      biprod.lift_snd, Iso.inv_hom_id_apply]
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.biprodIsoProd, AddCommGrpCat.biprodIsoProd_inv_comp_fst_apply, AddCommGrpCat.biprodIsoProd_inv_comp_snd_apply, ConcreteCategory, ConcreteCategory.comp_ap, ConcreteCategory.comp_apply, Iso.addCommGroupIsoToAddEquiv_apply, Iso.hom_inv_id_apply, Iso.inv_hom_id_apply, addCommGroupIsoToAddEquiv, addCommGroupIsoToAddEquiv.injective, addCommGroupIsoToAddEquiv_apply, biprod, biprod.lift_fst, biprodIsoProd, biprodIsoProd_inv_comp_fst_apply, biprodIsoProd_inv_comp_snd_apply, comp_ap, comp_apply
 -/
@@ -303,7 +315,11 @@ definition sequenceIso
     (Iso.refl _) (Iso.refl _)
     ((AddCommGrpCat.biprodIsoProd _ _).trans (Ext.biprodAddEquiv.symm).toAddCommGrpIso)
     (Iso.refl _)
-    (by ext; apply biprodAddEquiv_symm_biprodIsoProd_hom_
+    (by ext; apply biprodAddEquiv_symm_biprodIsoProd_hom_toBiprod_apply)
+    (by ext; symm; apply mk₀_f_comp_biprodAddEquiv_symm_biprodIsoProd_hom)
+    (by dsimp; rw [comp_id, id_comp]; rfl)
+    (by ext; apply biprodAddEquiv_symm_biprodIsoProd_hom_toBiprod_apply)
+    (by ext; symm; apply mk₀_f_comp_biprodAddEquiv_symm_biprodIsoProd_hom)
 
 中文:
 定义 sequenceIso
@@ -313,7 +329,11 @@ definition sequenceIso
     (Iso.refl _) (Iso.refl _)
     ((AddCommGrpCat.biprodIsoProd _ _).trans (Ext.biprodAddEquiv.symm).toAddCommGrpIso)
     (Iso.refl _)
-    (by ext; apply biprodAddEquiv_symm_biprodIsoProd_hom_
+    (by ext; apply biprodAddEquiv_symm_biprodIsoProd_hom_toBiprod_apply)
+    (by ext; symm; apply mk₀_f_comp_biprodAddEquiv_symm_biprodIsoProd_hom)
+    (by dsimp; rw [comp_id, id_comp]; rfl)
+    (by ext; apply biprodAddEquiv_symm_biprodIsoProd_hom_toBiprod_apply)
+    (by ext; symm; apply mk₀_f_comp_biprodAddEquiv_symm_biprodIsoProd_hom)
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.biprodIsoProd, Ext.biprodAddEquiv.symm, Iso.refl, biprodAddEquiv, biprodAddEquiv_symm_biprodIsoProd_hom_toBiprod_apply, biprodIsoProd, comp_id, id_comp, toAddCommGrpIso
 -/

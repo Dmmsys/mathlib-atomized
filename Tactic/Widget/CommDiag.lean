@@ -31,7 +31,10 @@ definition _root_.Lean.Expr.app7?
       e.appFn!.appFn!.appFn!.appArg!,
       e.appFn!.appFn!.appArg!,
       e.appFn!.appArg!,
-      e.a
+      e.appArg!
+    )
+  else
+    none
 
 中文:
 定义 _root_.Lean.Expr.app7?
@@ -44,7 +47,10 @@ definition _root_.Lean.Expr.app7?
       e.appFn!.appFn!.appFn!.appArg!,
       e.appFn!.appFn!.appArg!,
       e.appFn!.appArg!,
-      e.a
+      e.appArg!
+    )
+  else
+    none
 -/
 @[inline] def _root_.Lean.Expr.app7? (e : Expr) (fName : Name) :
     Option (Expr × Expr × Expr × Expr × Expr × Expr × Expr) :=
@@ -139,7 +145,8 @@ definition mkCommDiag
     <PenroseDiagram
       embeds={embeds}
       dsl={include_str ".."/".."/".."/"widget"/"src"/"penrose"/"commutative.dsl"}
-      sty={include_str ".."/".."/".."/"widget"/"src"/
+      sty={include_str ".."/".."/".."/"widget"/"src"/"penrose"/"commutative.sty"}
+      sub={sub} />)
 
 中文:
 定义 mkCommDiag
@@ -151,7 +158,8 @@ definition mkCommDiag
     <PenroseDiagram
       embeds={embeds}
       dsl={include_str ".."/".."/".."/"widget"/"src"/"penrose"/"commutative.dsl"}
-      sty={include_str ".."/".."/".."/"widget"/"src"/
+      sty={include_str ".."/".."/".."/"widget"/"src"/"penrose"/"commutative.sty"}
+      sub={sub} />)
 -/
 def mkCommDiag (sub : String) (embeds : ExprEmbeds) : MetaM Html := do
   let embeds ← embeds.mapM fun (s, h) =>
@@ -193,7 +201,14 @@ definition commTriangleM?
     let some (A, C) := homType? (← inferType rhs) | return none
     let some (_, B) := homType? (← inferType f) | return none
 return some ← mkCommDiag subTriangle
-      #[("A", A
+      #[("A", A), ("B", B), ("C", C),
+        ("f", f), ("g", g), ("h", rhs)]
+  let some (f, g) := homComp? rhs | return none
+  let some (A, C) := homType? (← inferType lhs) | return none
+  let some (_, B) := homType? (← inferType f) | return none
+return some ← mkCommDiag subTriangle
+    #[("A", A), ("B", B), ("C", C),
+      ("f", f), ("g", g), ("h", lhs)]
 
 中文:
 定义 commTriangleM?
@@ -205,7 +220,14 @@ return some ← mkCommDiag subTriangle
     let some (A, C) := homType? (← inferType rhs) | return none
     let some (_, B) := homType? (← inferType f) | return none
 return some ← mkCommDiag subTriangle
-      #[("A", A
+      #[("A", A), ("B", B), ("C", C),
+        ("f", f), ("g", g), ("h", rhs)]
+  let some (f, g) := homComp? rhs | return none
+  let some (A, C) := homType? (← inferType lhs) | return none
+  let some (_, B) := homType? (← inferType f) | return none
+return some ← mkCommDiag subTriangle
+    #[("A", A), ("B", B), ("C", C),
+      ("f", f), ("g", g), ("h", lhs)]
 -/
 def commTriangleM? (e : Expr) : MetaM (Option Html) := do
   let e ← instantiateMVars e
@@ -288,7 +310,9 @@ definition commSquareM?
   let some (i, h) := homComp? rhs | return none
   let some (A, B) := homType? (← inferType f) | return none
   let some (D, C) := homType? (← inferType h) | return none
-some
+some < > mkCommDiag subSquare
+    #[("A", A), ("B", B), ("C", C), ("D", D),
+      ("f", f), ("g", g), ("h", h), ("i", i)]
 
 中文:
 定义 commSquareM?
@@ -300,7 +324,9 @@ some
   let some (i, h) := homComp? rhs | return none
   let some (A, B) := homType? (← inferType f) | return none
   let some (D, C) := homType? (← inferType h) | return none
-some
+some < > mkCommDiag subSquare
+    #[("A", A), ("B", B), ("C", C), ("D", D),
+      ("f", f), ("g", g), ("h", h), ("i", i)]
 -/
 def commSquareM? (e : Expr) : MetaM (Option Html) := do
   let e ← instantiateMVars e

@@ -222,7 +222,9 @@ theorem map_isLUB
     · have ha' := hs.isSuccLimit_of_notMem hs' ha
       rw [le_iff_forall_le hf ha']
       intro c hc
-      obtain ⟨d, hd, hcd, hda⟩ := hs.exists
+      obtain ⟨d, hd, hcd, hda⟩ := hs.exists_between hc
+      simp_rw [mem_upperBounds, forall_mem_image] at hb
+      exact (hf.strictMono hcd).le.trans (hb hd)
 
 中文:
 定理 map_isLUB
@@ -235,7 +237,9 @@ theorem map_isLUB
     · have ha' := hs.isSuccLimit_of_notMem hs' ha
       rw [le_iff_forall_le hf ha']
       intro c hc
-      obtain ⟨d, hd, hcd, hda⟩ := hs.exists
+      obtain ⟨d, hd, hcd, hda⟩ := hs.exists_between hc
+      simp_rw [mem_upperBounds, forall_mem_image] at hb
+      exact (hf.strictMono hcd).le.trans (hb hd)
 
 Depends on / 依赖: exists_between, forall_mem_image, hf.strictMono, hf.strictMono.le_iff_le, hs.exists_between, hs.isSuccLimit_of_notMem, isSuccLimit_of_notMem, le.trans, le_iff_forall_le, le_iff_le, mem_upperBounds, simp_rw, strictMono
 -/
@@ -506,7 +510,9 @@ theorem preimage_Iic
     obtain ⟨z, hz, hyz⟩ := hy
     exact (hf.strictMono hyz).le.trans hz
   · rw [mem_preimage, hf.map_sSup h₁ h₂]
-    apply (csSup_le_csSup bddAbove_Iic _ (image_preimage
+    apply (csSup_le_csSup bddAbove_Iic _ (image_preimage_subset ..)).trans
+    · rw [csSup_Iic]
+    · simpa
 
 中文:
 定理 preimage_Iic
@@ -518,7 +524,9 @@ theorem preimage_Iic
     obtain ⟨z, hz, hyz⟩ := hy
     exact (hf.strictMono hyz).le.trans hz
   · rw [mem_preimage, hf.map_sSup h₁ h₂]
-    apply (csSup_le_csSup bddAbove_Iic _ (image_preimage
+    apply (csSup_le_csSup bddAbove_Iic _ (image_preimage_subset ..)).trans
+    · rw [csSup_Iic]
+    · simpa
 
 Depends on / 依赖: bddAbove_Iic, csSup_Iic, csSup_le_csSup, hf.map_sSup, hf.strictMono, hy.lt_or_eq, image_preimage_subset, le.trans, le_antisymm, le_csSup, lt_csSup_iff, lt_or_eq, map_sSup, mem_preimage, strictMono
 -/
@@ -634,7 +642,11 @@ theorem of_succ_lt
     obtain rfl | h := (lt_succ_iff_eq_or_lt_of_not_isMax hb).1 hab
     · exact hs a
     · exact (IH h).trans (hs b)
-  | isSuccLimit 
+  | isSuccLimit b hb IH =>
+    intro hab
+    have hab' := hb.succ_lt hab
+    exact (IH _ hab' (lt_succ_of_not_isMax hab.not_isMax)).trans_le
+      ((hl hb).1 (mem_image_of_mem _ hab'))
 
 中文:
 定理 of_succ_lt
@@ -647,7 +659,11 @@ theorem of_succ_lt
     obtain rfl | h := (lt_succ_iff_eq_or_lt_of_not_isMax hb).1 hab
     · exact hs a
     · exact (IH h).trans (hs b)
-  | isSuccLimit 
+  | isSuccLimit b hb IH =>
+    intro hab
+    have hab' := hb.succ_lt hab
+    exact (IH _ hab' (lt_succ_of_not_isMax hab.not_isMax)).trans_le
+      ((hl hb).1 (mem_image_of_mem _ hab'))
 
 Depends on / 依赖: SuccOrder, SuccOrder.limitRecOn, hab.not_isMax, hb.not_lt.elim, hb.succ_lt, isSuccLimit, limitRecOn, lt_succ_iff_eq_or_lt_of_not_isMax, lt_succ_of_not_isMax, mem_image_of_mem, not_isMax, not_lt, succ_lt, trans_le
 -/
@@ -684,7 +700,10 @@ theorem ext_iff
   | succ a ha IH => exact H₂ a IH
   | isSuccLimit a ha IH =>
     apply (hf.isLUB_image_Iio_of_isSuccLimit ha).unique
-    convert! hg.isLUB_image_Iio_of_isSuccLim
+    convert! hg.isLUB_image_Iio_of_isSuccLimit ha using 1
+    aesop
+
+@[deprecated (since := "2026-03-22")] protected alias ext := IsNormal.ext_iff
 
 中文:
 定理 ext_iff
@@ -699,7 +718,10 @@ theorem ext_iff
   | succ a ha IH => exact H₂ a IH
   | isSuccLimit a ha IH =>
     apply (hf.isLUB_image_Iio_of_isSuccLimit ha).unique
-    convert! hg.isLUB_image_Iio_of_isSuccLim
+    convert! hg.isLUB_image_Iio_of_isSuccLimit ha using 1
+    aesop
+
+@[deprecated (since := "2026-03-22")] protected alias ext := IsNormal.ext_iff
 
 Depends on / 依赖: SuccOrder, SuccOrder.limitRecOn, convert, eq_bot, ha.eq_bot, hf.isLUB_image_Iio_of_isSuccLimit, hg.isLUB_image_Iio_of_isSuccLimit, isLUB_image_Iio_of_isSuccLimit, isSuccLimit, limitRecOn, unique
 -/
@@ -732,7 +754,10 @@ theorem exists_map_le_lt_map_succ_of_exists_ge
   let := WellFoundedLT.conditionallyCompleteLinearOrderBot β
   have H : BddAbove (f ⁻¹' Iic x) :=
     have ⟨y, hy⟩ := hf'
-⟨y, fun z hz => hf.strictMono.le_iff_le.1 hz.trans 
+⟨y, fun z hz => hf.strictMono.le_iff_le.1 hz.trans hy⟩
+  refine ⟨sSup (f ⁻¹' Set.Iic x), ?_, ?_⟩
+  · rw [hf.le_iff_le_sSup ⟨⊥, hx⟩ H]
+  · rw [← not_le, hf.le_iff_le_sSup ⟨⊥, hx⟩ H, not_le, lt_succ_iff]
 
 中文:
 定理 存在_map_le_lt_map_succ_of_存在_ge
@@ -744,7 +769,10 @@ theorem exists_map_le_lt_map_succ_of_exists_ge
   let := WellFoundedLT.conditionallyCompleteLinearOrderBot β
   have H : BddAbove (f ⁻¹' Iic x) :=
     have ⟨y, hy⟩ := hf'
-⟨y, fun z hz => hf.strictMono.le_iff_le.1 hz.trans 
+⟨y, fun z hz => hf.strictMono.le_iff_le.1 hz.trans hy⟩
+  refine ⟨sSup (f ⁻¹' Set.Iic x), ?_, ?_⟩
+  · rw [hf.le_iff_le_sSup ⟨⊥, hx⟩ H]
+  · rw [← not_le, hf.le_iff_le_sSup ⟨⊥, hx⟩ H, not_le, lt_succ_iff]
 
 Depends on / 依赖: BddAbove, Nonempty, Set.Iic, WellFoundedLT, WellFoundedLT.conditionallyCompleteLinearOrderBot, WellFoundedLT.toOrderBot, conditionallyCompleteLinearOrderBot, hf.le_iff_le_sSup, hf.strictMono.le_iff_le, hz.trans, le_iff_le, le_iff_le_sSup, lt_succ_iff, not_le, strictMono, toOrderBot
 -/
@@ -802,7 +830,12 @@ theorem dirSupClosed_range
   have : Nonempty α := ⟨a⟩
   let := WellFoundedLT.toOrderBot α
   let := WellFoundedLT.conditionallyCompleteLinearOrderBot α
-  have hfl : IsLUB (f ⁻¹' s) (sSup (f 
+  have hfl : IsLUB (f ⁻¹' s) (sSup (f ⁻¹' s)) :=
+    isLUB_csSup hf' ⟨a, fun b hb => hf.strictMono.le_apply.trans (ha.1 hb)⟩
+  have ha' := hf.map_isLUB hfl hf'
+  rw [image_preimage_eq_of_subset hs] at ha'
+  obtain rfl := ha.unique ha'
+  exact mem_range_self _
 
 中文:
 定理 dirSupClosed_range
@@ -817,7 +850,12 @@ theorem dirSupClosed_range
   have : Nonempty α := ⟨a⟩
   let := WellFoundedLT.toOrderBot α
   let := WellFoundedLT.conditionallyCompleteLinearOrderBot α
-  have hfl : IsLUB (f ⁻¹' s) (sSup (f 
+  have hfl : IsLUB (f ⁻¹' s) (sSup (f ⁻¹' s)) :=
+    isLUB_csSup hf' ⟨a, fun b hb => hf.strictMono.le_apply.trans (ha.1 hb)⟩
+  have ha' := hf.map_isLUB hfl hf'
+  rw [image_preimage_eq_of_subset hs] at ha'
+  obtain rfl := ha.unique ha'
+  exact mem_range_self _
 
 Depends on / 依赖: Nonempty, WellFoundedLT, WellFoundedLT.conditionallyCompleteLinearOrderBot, WellFoundedLT.toOrderBot, conditionallyCompleteLinearOrderBot, ha.unique, hf.map_isLUB, hf.strictMono.le_apply.trans, image_preimage_eq_of_subset, isLUB_csSup, le_apply, map_isLUB, mem_range_self, strictMono, toOrderBot, unique
 -/

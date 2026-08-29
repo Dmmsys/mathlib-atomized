@@ -120,7 +120,25 @@ definition discriminantEquiv
       holo' := f.holo'.div CuspForm.discriminant.holo' discriminant_ne_zero
       bdd_at_cusps' {c} hc := by
         rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
-        rw [isBoundedAt_i
+        rw [isBoundedAt_iff_forall_SL2Z hc]
+        intro γ _
+        rw [divByDiscriminant_slash_eq f γ]; rw [IsBoundedAtImInfty]; rw [BoundedAtFilter]
+        exact (div_isBoundedUnder_of_isBigO (exp_decay_isBigO_discriminant f)).isBigO_one Real }
+  map_add' a b := by
+    ext z
+    change (a z + b z) / Δ z = a z / Δ z + b z / Δ z
+    rw [add_div]
+  map_smul' c a := by
+    ext z
+    change (c * a z) / Δ z = c * (a z / Δ z)
+    rw [mul_div_assoc]
+  invFun := ofMulDiscriminant
+  left_inv f := by
+    ext z
+    exact mul_div_cancel₀ (f z) (discriminant_ne_zero z)
+  right_inv f := by
+    ext z
+    exact mul_div_cancel_left₀ (f z) (discriminant_ne_zero z)
 
 中文:
 定义 discriminantEquiv
@@ -130,7 +148,25 @@ definition discriminantEquiv
       holo' := f.holo'.div CuspForm.discriminant.holo' discriminant_ne_zero
       bdd_at_cusps' {c} hc := by
         rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
-        rw [isBoundedAt_i
+        rw [isBoundedAt_iff_forall_SL2Z hc]
+        intro γ _
+        rw [divByDiscriminant_slash_eq f γ]; rw [IsBoundedAtImInfty]; rw [BoundedAtFilter]
+        exact (div_isBoundedUnder_of_isBigO (exp_decay_isBigO_discriminant f)).isBigO_one Real }
+  map_add' a b := by
+    ext z
+    change (a z + b z) / Δ z = a z / Δ z + b z / Δ z
+    rw [add_div]
+  map_smul' c a := by
+    ext z
+    change (c * a z) / Δ z = c * (a z / Δ z)
+    rw [mul_div_assoc]
+  invFun := ofMulDiscriminant
+  left_inv f := by
+    ext z
+    exact mul_div_cancel₀ (f z) (discriminant_ne_zero z)
+  right_inv f := by
+    ext z
+    exact mul_div_cancel_left₀ (f z) (discriminant_ne_zero z)
 
 Depends on / 依赖: BoundedAtFilter, CuspForm, CuspForm.discriminant.holo, IsArithmetic, IsBoundedAtImInfty, Subgroup, Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z, bdd_at_cusps, discriminant, discriminant_ne_zero, divByDiscriminant_slash_eq, div_isBoundedUnder_of_isBigO, exp_decay_isBigO_discriminant, f.holo, isBigO_one, isBoundedAt_iff_forall_SL2Z, isCusp_iff_isCusp_SL2Z, map_add, slash_action_eq
 -/
@@ -449,7 +485,12 @@ lemma ModularForm.rank_eq_one_add_rank_cuspForm
     rw [(CuspForm.equivCuspFormSubmodule 𝒮ℒ k).rank_eq]; rw [← Submodule.rank_quotient_add_rank (cuspFormSubmodule 𝒮ℒ k)]; rw [this]
   apply rank_eq_one (Submodule.Quotient.mk (E hk))
   · intro h
-    have hE := E_qE
+    have hE := E_qExpansion_coeff_zero hk hk2
+    rw [Submodule.Quotient.mk_eq_zero] at h
+exact one_ne_zero hE.symm.trans (isCuspForm_iff_coeffZero_eq_zero _).mp h
+  · refine (Submodule.Quotient.forall _).mpr fun f => ⟨(qExpansion 1 f).coeff 0, ?_⟩
+    rw [← Submodule.Quotient.mk_smul]; rw [Submodule.Quotient.eq]; rw [mem_cuspFormSubmodule_iff]; rw [isCuspForm_iff_coeffZero_eq_zero]; rw [FunLike.coe_sub]; rw [ModularForm.qExpansion_sub]; rw [FunLike.coe_smul]; rw [ModularForm.qExpansion_smul]; rw [map_sub]; rw [PowerSeries.coeff_smul]; rw [E_qExpansion_coeff_zero hk hk2]; rw [smul_eq_mul]; rw [mul_one]; rw [sub_self]
+    all_goals simp
 
 中文:
 引理 模形式.rank_eq_one_add_rank_cuspForm
@@ -459,7 +500,12 @@ lemma ModularForm.rank_eq_one_add_rank_cuspForm
     rw [(CuspForm.equivCuspFormSubmodule 𝒮ℒ k).rank_eq]; rw [← Submodule.rank_quotient_add_rank (cuspFormSubmodule 𝒮ℒ k)]; rw [this]
   apply rank_eq_one (Submodule.Quotient.mk (E hk))
   · intro h
-    have hE := E_qE
+    have hE := E_qExpansion_coeff_zero hk hk2
+    rw [Submodule.Quotient.mk_eq_zero] at h
+exact one_ne_zero hE.symm.trans (isCuspForm_iff_coeffZero_eq_zero _).mp h
+  · refine (Submodule.Quotient.forall _).mpr fun f => ⟨(qExpansion 1 f).coeff 0, ?_⟩
+    rw [← Submodule.Quotient.mk_smul]; rw [Submodule.Quotient.eq]; rw [mem_cuspFormSubmodule_iff]; rw [isCuspForm_iff_coeffZero_eq_zero]; rw [FunLike.coe_sub]; rw [ModularForm.qExpansion_sub]; rw [FunLike.coe_smul]; rw [ModularForm.qExpansion_smul]; rw [map_sub]; rw [PowerSeries.coeff_smul]; rw [E_qExpansion_coeff_zero hk hk2]; rw [smul_eq_mul]; rw [mul_one]; rw [sub_self]
+    all_goals simp
 
 Depends on / 依赖: CuspForm, CuspForm.equivCuspFormSubmodule, E_qExpansion_coeff_zero, ModularForm, Module, Module.rank, Quotient, Submodule, Submodule.Quotient.forall, Submodule.Quotient.mk, Submodule.Quotient.mk_eq_zero, Submodule.rank_quotient_add_rank, cuspFormSubmodule, equivCuspFormSubmodule, hE.symm.trans, isCuspForm_iff_coeffZero_eq_zero, mk_eq_zero, one_ne_zero, qExpansion, rank_eq
 -/
@@ -581,7 +627,9 @@ lemma eq_zero_of_pow_eq_smul
   let D := (c4 • p4) ^ 3 - (c6 • p6) ^ 2
   have hD0 : D.coeff 0 = c4 ^ 3 - c6 ^ 2 := by simp [D, hp4_0, hp6_0]
   have hD1 : D.coeff 1 = 720 * c4 ^ 3 + 1008 * c6 ^ 2 := by
-    simp [D, pow_succ, PowerSeries.coeff_mul, Finset.Nat.antidiagona
+    simp [D, pow_succ, PowerSeries.coeff_mul, Finset.Nat.antidiagonal_succ]
+    grind
+  grind [pow_eq_zero_iff, zero_smul]
 
 中文:
 引理 eq_zero_of_pow_eq_smul
@@ -591,7 +639,9 @@ lemma eq_zero_of_pow_eq_smul
   let D := (c4 • p4) ^ 3 - (c6 • p6) ^ 2
   have hD0 : D.coeff 0 = c4 ^ 3 - c6 ^ 2 := by simp [D, hp4_0, hp6_0]
   have hD1 : D.coeff 1 = 720 * c4 ^ 3 + 1008 * c6 ^ 2 := by
-    simp [D, pow_succ, PowerSeries.coeff_mul, Finset.Nat.antidiagona
+    simp [D, pow_succ, PowerSeries.coeff_mul, Finset.Nat.antidiagonal_succ]
+    grind
+  grind [pow_eq_zero_iff, zero_smul]
 -/
 private lemma eq_zero_of_pow_eq_smul {p p4 p6 : PowerSeries Complex} {c4 c6 : Complex}
     (hp4_0 : p4.coeff 0 = 1) (hp6_0 : p6.coeff 0 = 1) (hp4_1 : p4.coeff 1 = 240)
@@ -617,7 +667,14 @@ lemma weight_two_qExpansion_eq_zero
     (finrank_eq_one_iff_of_nonzero' E₄ (E_ne_zero _ ⟨2, rfl⟩)).mp
       (Module.rank_eq_one_iff_finrank_eq_one.mp levelOne_weight_four_rank_one) _
   obtain ⟨c6, hc6⟩ : exists c6, c6 • E₆ = (f.mul f).mul f :=
-    (finrank_eq_one_iff_of_nonzero' 
+    (finrank_eq_one_iff_of_nonzero' E₆ (E_ne_zero _ ⟨3, rfl⟩)).mp
+      (Module.rank_eq_one_iff_finrank_eq_one.mp levelOne_weight_six_rank_one) _
+  have hqc4 : c4 • qExpansion 1 (E₄ : ℍ -> Complex) = qExpansion 1 (f : ℍ -> Complex) ^ 2 := by
+    rw [pow_two]; rw [← ModularForm.qExpansion_mul one_pos one_mem_strictPeriods_SL f f]; rw [← ModularForm.qExpansion_smul one_pos one_mem_strictPeriods_SL c4 E₄]; rw [show (c4 • E₄ : ℍ -> Complex) = (f.mul f) from congrArg DFunLike.coe hc4]
+  have hqc6 : c6 • qExpansion 1 E₆ = qExpansion 1 (f : ℍ -> Complex) ^ 3 := by
+    rw [pow_succ]; rw [pow_two]; rw [← ModularForm.qExpansion_mul one_pos one_mem_strictPeriods_SL f f]; rw [← ModularForm.qExpansion_mul one_pos one_mem_strictPeriods_SL (f.mul f) f]; rw [← ModularForm.qExpansion_smul one_pos one_mem_strictPeriods_SL c6 E₆]; rw [show (c6 • E₆ : ℍ -> Complex) = (f.mul f).mul f from congrArg DFunLike.coe hc6]
+  exact eq_zero_of_pow_eq_smul (E_qExpansion_coeff_zero _ ⟨2, rfl⟩)
+    (E_qExpansion_coeff_zero _ ⟨3, rfl⟩) E₄_qExpansion_coeff_one E₆_qExpansion_coeff_one hqc4 hqc6
 
 中文:
 引理 weight_two_qExpansion_eq_zero
@@ -628,7 +685,14 @@ lemma weight_two_qExpansion_eq_zero
     (finrank_eq_one_iff_of_nonzero' E₄ (E_ne_zero _ ⟨2, rfl⟩)).mp
       (Module.rank_eq_one_iff_finrank_eq_one.mp levelOne_weight_four_rank_one) _
   obtain ⟨c6, hc6⟩ : exists c6, c6 • E₆ = (f.mul f).mul f :=
-    (finrank_eq_one_iff_of_nonzero' 
+    (finrank_eq_one_iff_of_nonzero' E₆ (E_ne_zero _ ⟨3, rfl⟩)).mp
+      (Module.rank_eq_one_iff_finrank_eq_one.mp levelOne_weight_six_rank_one) _
+  have hqc4 : c4 • qExpansion 1 (E₄ : ℍ -> Complex) = qExpansion 1 (f : ℍ -> Complex) ^ 2 := by
+    rw [pow_two]; rw [← ModularForm.qExpansion_mul one_pos one_mem_strictPeriods_SL f f]; rw [← ModularForm.qExpansion_smul one_pos one_mem_strictPeriods_SL c4 E₄]; rw [show (c4 • E₄ : ℍ -> Complex) = (f.mul f) from congrArg DFunLike.coe hc4]
+  have hqc6 : c6 • qExpansion 1 E₆ = qExpansion 1 (f : ℍ -> Complex) ^ 3 := by
+    rw [pow_succ]; rw [pow_two]; rw [← ModularForm.qExpansion_mul one_pos one_mem_strictPeriods_SL f f]; rw [← ModularForm.qExpansion_mul one_pos one_mem_strictPeriods_SL (f.mul f) f]; rw [← ModularForm.qExpansion_smul one_pos one_mem_strictPeriods_SL c6 E₆]; rw [show (c6 • E₆ : ℍ -> Complex) = (f.mul f).mul f from congrArg DFunLike.coe hc6]
+  exact eq_zero_of_pow_eq_smul (E_qExpansion_coeff_zero _ ⟨2, rfl⟩)
+    (E_qExpansion_coeff_zero _ ⟨3, rfl⟩) E₄_qExpansion_coeff_one E₆_qExpansion_coeff_one hqc4 hqc6
 -/
 private lemma weight_two_qExpansion_eq_zero (f : ModularForm 𝒮ℒ 2) : qExpansion 1 f = 0 := by
   obtain ⟨c4, hc4⟩ : exists c4, c4 • E₄ = f.mul f :=
@@ -681,7 +745,16 @@ theorem dimension_level_one
     interval_cases k
     · simpa using! levelOne_weight_zero_rank_one
     · grind
-    · simpa [Nat.ModEq
+    · simpa [Nat.ModEq] using levelOne_weight_two_rank_zero
+  · -- `3 ≤ k < 12`: rank decomposition + the weight `k - 12` space is zero
+    rw [rank_eq_one_add_rank_cuspForm hk.1 hk2]; rw [CuspForm.discriminantEquiv.rank_eq]; rw [levelOne_neg_weight_rank_zero (by lia)]
+    have : k in (Finset.Icc 3 11).filter Even := by grind
+    fin_cases this <;> simp [Nat.ModEq]
+  · -- `12 ≤ k`: rank decomposition + induction hypothesis at weight `k - 12`
+    rw [rank_eq_one_add_rank_cuspForm (by lia) hk2]; rw [CuspForm.discriminantEquiv.rank_eq]; rw [show ((k : Int) - 12 : Int) = ((k - 12 : Nat) : Int) by lia]; rw [ihn (k - 12) (by lia) (by grind)]
+    simp only [Nat.ModEq, show k / 12 = (k - 12) / 12 + 1 by lia,
+      show (k - 12) % 12 = k % 12 by lia]
+    split_ifs <;> grind
 
 中文:
 定理 dimension_level_one
@@ -694,7 +767,16 @@ theorem dimension_level_one
     interval_cases k
     · simpa using! levelOne_weight_zero_rank_one
     · grind
-    · simpa [Nat.ModEq
+    · simpa [Nat.ModEq] using levelOne_weight_two_rank_zero
+  · -- `3 ≤ k < 12`: rank decomposition + the weight `k - 12` space is zero
+    rw [rank_eq_one_add_rank_cuspForm hk.1 hk2]; rw [CuspForm.discriminantEquiv.rank_eq]; rw [levelOne_neg_weight_rank_zero (by lia)]
+    have : k in (Finset.Icc 3 11).filter Even := by grind
+    fin_cases this <;> simp [Nat.ModEq]
+  · -- `12 ≤ k`: rank decomposition + induction hypothesis at weight `k - 12`
+    rw [rank_eq_one_add_rank_cuspForm (by lia) hk2]; rw [CuspForm.discriminantEquiv.rank_eq]; rw [show ((k : Int) - 12 : Int) = ((k - 12 : Nat) : Int) by lia]; rw [ihn (k - 12) (by lia) (by grind)]
+    simp only [Nat.ModEq, show k / 12 = (k - 12) / 12 + 1 by lia,
+      show (k - 12) % 12 = k % 12 by lia]
+    split_ifs <;> grind
 
 Depends on / 依赖: CuspForm, CuspForm.discriminantEquiv.rank_eq, Nat.ModEq, Nat.strong_induction_on, decomposition, direct, discriminantEquiv, interval_cases, levelOne_neg_weight_ra, levelOne_weight_two_rank_zero, levelOne_weight_zero_rank_one, rank_eq, rank_eq_one_add_rank_cuspForm, strong_induction_on, weight
 -/
@@ -742,7 +824,14 @@ theorem sturm_bound_levelOne_nat
   have h0 : (qExpansion 1 f).coeff 0 = 0 :=
     PowerSeries.coeff_of_lt_order _ ((Nat.cast_nonneg _).trans_lt h)
   suffices CuspForm.discriminantEquiv (toCuspForm f h0) = 0 by
-    simpa [CuspForm.discriminantEquiv.map_eq_zero_iff, DFunL
+    simpa [CuspForm.discriminantEquiv.map_eq_zero_iff, DFunLike.ext_iff]
+  rcases lt_or_ge k 12 with hk12 | hk12
+  · apply rank_zero_iff_forall_zero.mp (levelOne_neg_weight_rank_zero (by lia))
+  · rw [← mcast_eq_zero_iff (b := ↑(k - 12)) (by lia) rfl]
+    refine ih (k - 12) (by lia) ?_
+    have hsucc : k / 12 = (k - 12) / 12 + 1 := by lia
+    rw [qExpansion_eq_qExpansion_discriminant_mul f h0]; rw [PowerSeries.order_mul]; rw [discriminant_qExpansion_order]; rw [add_comm]; rw [hsucc]; rw [Nat.cast_add]; rw [Nat.cast_one] at h
+    exact (ENat.add_lt_add_iff_right (ENat.natCast_ne_top 1)).mp h
 
 中文:
 定理 sturm_bound_levelOne_nat
@@ -752,7 +841,14 @@ theorem sturm_bound_levelOne_nat
   have h0 : (qExpansion 1 f).coeff 0 = 0 :=
     PowerSeries.coeff_of_lt_order _ ((Nat.cast_nonneg _).trans_lt h)
   suffices CuspForm.discriminantEquiv (toCuspForm f h0) = 0 by
-    simpa [CuspForm.discriminantEquiv.map_eq_zero_iff, DFunL
+    simpa [CuspForm.discriminantEquiv.map_eq_zero_iff, DFunLike.ext_iff]
+  rcases lt_or_ge k 12 with hk12 | hk12
+  · apply rank_zero_iff_forall_zero.mp (levelOne_neg_weight_rank_zero (by lia))
+  · rw [← mcast_eq_zero_iff (b := ↑(k - 12)) (by lia) rfl]
+    refine ih (k - 12) (by lia) ?_
+    have hsucc : k / 12 = (k - 12) / 12 + 1 := by lia
+    rw [qExpansion_eq_qExpansion_discriminant_mul f h0]; rw [PowerSeries.order_mul]; rw [discriminant_qExpansion_order]; rw [add_comm]; rw [hsucc]; rw [Nat.cast_add]; rw [Nat.cast_one] at h
+    exact (ENat.add_lt_add_iff_right (ENat.natCast_ne_top 1)).mp h
 
 Depends on / 依赖: CuspForm, CuspForm.discriminantEquiv, CuspForm.discriminantEquiv.map_eq_zero_iff, DFunLike, DFunLike.ext_iff, Nat.cast_nonneg, Nat.strong_induction_on, PowerSeries, PowerSeries.coeff_of_lt_order, cast_nonneg, coeff_of_lt_order, discriminantEquiv, ext_iff, levelOne_neg_weight_rank_zero, lt_or_ge, map_eq_zero_iff, mcast_eq_zero_iff, qExpansion, rank_zero_iff_forall_zero, rank_zero_iff_forall_zero.mp
 -/

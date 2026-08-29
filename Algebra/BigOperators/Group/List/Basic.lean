@@ -585,7 +585,9 @@ lemma prod_erase_of_comm
   | cons b l ih =>
     obtain rfl | ⟨ne, h⟩ := List.eq_or_ne_mem_of_mem ha
     · simp only [erase_cons_head, prod_cons]
-    rw [List.erase]; rw [beq_false_of_ne ne.symm]; rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]; rw [co
+    rw [List.erase]; rw [beq_false_of_ne ne.symm]; rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]; rw [comm a ha b mem_cons_self]; rw [mul_assoc]; rw [ih h fun x hx y hy => comm _ (List.mem_cons_of_mem b hx) _ (List.mem_cons_of_mem b hy)]
+
+@[to_additive]
 
 中文:
 引理 prod_erase_of_comm
@@ -596,7 +598,9 @@ lemma prod_erase_of_comm
   | cons b l ih =>
     obtain rfl | ⟨ne, h⟩ := List.eq_or_ne_mem_of_mem ha
     · simp only [erase_cons_head, prod_cons]
-    rw [List.erase]; rw [beq_false_of_ne ne.symm]; rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]; rw [co
+    rw [List.erase]; rw [beq_false_of_ne ne.symm]; rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]; rw [comm a ha b mem_cons_self]; rw [mul_assoc]; rw [ih h fun x hx y hy => comm _ (List.mem_cons_of_mem b hx) _ (List.mem_cons_of_mem b hy)]
+
+@[to_additive]
 
 Depends on / 依赖: List.eq_or_ne_mem_of_mem, List.erase, List.mem_cons_of_mem, List.prod_cons, beq_false_of_ne, eq_or_ne_mem_of_mem, erase_cons_head, mem_cons_of_mem, mem_cons_self, mul_assoc, ne.symm, not_mem_nil, prod_cons
 -/
@@ -623,7 +627,11 @@ lemma prod_map_eq_pow_single
     specialize h a fun a' ha' hfa' => hf a' ha' (mem_cons_of_mem _ hfa')
     rw [List.map_cons]; rw [List.prod_cons]; rw [count_cons]; rw [h]
     simp only [beq_iff_eq]
-    split_if
+    split_ifs with ha'
+    · rw [ha', _root_.pow_succ']
+    · rw [hf a' ha' mem_cons_self, one_mul, add_zero]
+
+@[to_additive]
 
 中文:
 引理 prod_map_eq_pow_single
@@ -635,7 +643,11 @@ lemma prod_map_eq_pow_single
     specialize h a fun a' ha' hfa' => hf a' ha' (mem_cons_of_mem _ hfa')
     rw [List.map_cons]; rw [List.prod_cons]; rw [count_cons]; rw [h]
     simp only [beq_iff_eq]
-    split_if
+    split_ifs with ha'
+    · rw [ha', _root_.pow_succ']
+    · rw [hf a' ha' mem_cons_self, one_mul, add_zero]
+
+@[to_additive]
 
 Depends on / 依赖: List.map_cons, List.prod_cons, _root_, _root_.pow_succ, _root_.pow_zero, add_zero, beq_iff_eq, count_cons, count_nil, generalizing, map_cons, map_nil, mem_cons_of_mem, mem_cons_self, one_mul, pow_succ, pow_zero, prod_cons, prod_nil, specialize
 -/
@@ -689,7 +701,9 @@ theorem prod_insertIdx
     obtain ⟨hd, tl, rfl⟩ := exists_cons_of_length_pos (Nat.zero_lt_of_lt hlen)
     simp only [insertIdx_succ_cons, prod_cons,
       ih (Nat.le_of_lt_succ hlen) (fun a' a'_mem => hcomm a' (mem_of_mem_tail a'_mem))]
-    exact Commu
+    exact Commute.left_comm (hcomm hd (mem_of_mem_head? rfl)).symm tl.prod
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 prod_insertIdx
@@ -701,7 +715,9 @@ theorem prod_insertIdx
     obtain ⟨hd, tl, rfl⟩ := exists_cons_of_length_pos (Nat.zero_lt_of_lt hlen)
     simp only [insertIdx_succ_cons, prod_cons,
       ih (Nat.le_of_lt_succ hlen) (fun a' a'_mem => hcomm a' (mem_of_mem_tail a'_mem))]
-    exact Commu
+    exact Commute.left_comm (hcomm hd (mem_of_mem_head? rfl)).symm tl.prod
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Commute, Commute.left_comm, Nat.le_of_lt_succ, Nat.zero_lt_of_lt, _mem, exists_cons_of_length_pos, generalizing, insertIdx_succ_cons, le_of_lt_succ, left_comm, mem_of_mem_head, mem_of_mem_tail, prod_cons, tl.prod, zero_lt_of_lt
 -/
@@ -966,7 +982,11 @@ lemma prod_map_ite
     clear ih
     by_cases hx : p x
     · simp only [hx, ↓reduceIte, decide_not, decide_true, map_cons, prod_cons, not_true_eq_false,
-        decide_false, Bool.false_eq_true
+        decide_false, Bool.false_eq_true, mul_assoc]
+    · simp only [hx, ↓reduceIte, decide_not, decide_false, Bool.false_eq_true, not_false_eq_true,
+      decide_true, map_cons, prod_cons, mul_left_comm]
+
+@[to_additive]
 
 中文:
 引理 prod_map_ite
@@ -980,7 +1000,11 @@ lemma prod_map_ite
     clear ih
     by_cases hx : p x
     · simp only [hx, ↓reduceIte, decide_not, decide_true, map_cons, prod_cons, not_true_eq_false,
-        decide_false, Bool.false_eq_true
+        decide_false, Bool.false_eq_true, mul_assoc]
+    · simp only [hx, ↓reduceIte, decide_not, decide_false, Bool.false_eq_true, not_false_eq_true,
+      decide_true, map_cons, prod_cons, mul_left_comm]
+
+@[to_additive]
 
 Depends on / 依赖: Bool.false_eq_true, decide_false, decide_not, decide_true, false_eq_true, filter_cons, map_cons, mul_assoc, mul_left_comm, not_false_eq_true, not_true_eq_false, prod_cons, reduceIte
 -/
@@ -1213,7 +1237,7 @@ theorem prod_set'
       mul_assoc (take n L).prod, prod_take_mul_prod_drop, mul_comm a, mul_assoc]
   · simp (disch := grind) [take_of_length_le, drop_eq_nil_of_le]
 
-@[to_ad
+@[to_additive]
 
 中文:
 定理 prod_set'
@@ -1225,7 +1249,7 @@ theorem prod_set'
       mul_assoc (take n L).prod, prod_take_mul_prod_drop, mul_comm a, mul_assoc]
   · simp (disch := grind) [take_of_length_le, drop_eq_nil_of_le]
 
-@[to_ad
+@[to_additive]
 
 Depends on / 依赖: drop_eq_nil_of_le, mul_assoc, mul_comm, prod_drop_succ, prod_set, prod_take_mul_prod_drop, split_ifs, take_of_length_le
 -/
@@ -1253,7 +1277,8 @@ lemma prod_map_ite_eq
     clear ih
     by_cases hx : x = a
     · simp only [hx, ite_true, pow_add, pow_one, div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm,
-      mul_inv_cancel_left, beq_self_
+      mul_inv_cancel_left, beq_self_eq_true]
+    · simp only [hx, ite_false, add_zero, mul_assoc, mul_comm (g x) _, beq_iff_eq]
 
 中文:
 引理 prod_map_ite_eq
@@ -1267,7 +1292,8 @@ lemma prod_map_ite_eq
     clear ih
     by_cases hx : x = a
     · simp only [hx, ite_true, pow_add, pow_one, div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm,
-      mul_inv_cancel_left, beq_self_
+      mul_inv_cancel_left, beq_self_eq_true]
+    · simp only [hx, ite_false, add_zero, mul_assoc, mul_comm (g x) _, beq_iff_eq]
 
 Depends on / 依赖: add_zero, beq_iff_eq, beq_self_eq_true, count_cons, div_eq_mul_inv, ite_false, ite_true, map_cons, mul_assoc, mul_comm, mul_inv_cancel_left, mul_left_comm, pow_add, pow_one, prod_cons
 -/

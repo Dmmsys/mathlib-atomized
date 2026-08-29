@@ -59,7 +59,10 @@ definition Grp.limitAux
   grp := GrpObj.ofInvertible (limit (F ⋙ forget₂Mon C)).X fun X f =>
 letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
       preservesLimitIso (shrinkYonedaMon ⋙ (evaluation _ _).obj (.op X))
-      (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCa
+      (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCat)
+        (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).symm
+    letI := (limit (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).str
+    ((invertibleOfGroup (e f)).map e.symm).copy f (e.symm_apply_apply f).symm
 
 中文:
 定义 群.limitAux
@@ -68,7 +71,10 @@ letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
   grp := GrpObj.ofInvertible (limit (F ⋙ forget₂Mon C)).X fun X f =>
 letI e := Shrink.mulEquiv.symm.trans Iso.monCatIsoToMulEquiv
       preservesLimitIso (shrinkYonedaMon ⋙ (evaluation _ _).obj (.op X))
-      (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCa
+      (F ⋙ forget₂Mon C) ≪≫ (preservesLimitIso (forget₂ GrpCat MonCat)
+        (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).symm
+    letI := (limit (F ⋙ shrinkYonedaGrp.{max w v} ⋙ (evaluation _ _).obj (.op X))).str
+    ((invertibleOfGroup (e f)).map e.symm).copy f (e.symm_apply_apply f).symm
 -/
 noncomputable def Grp.limitAux (F : J ⥤ Grp C) : Grp C where
   X := (limit (F ⋙ forget₂Mon C)).X

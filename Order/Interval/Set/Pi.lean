@@ -218,7 +218,8 @@ theorem pi_univ_Ioc_update_left
   have : Ioc m (y i₀) = Ioi m inter Ioc (x i₀) (y i₀) := by
     rw [← Ioi_inter_Iic]; rw [← Ioi_inter_Iic]; rw [← inter_assoc]; rw [inter_eq_self_of_subset_left (Ioi_subset_Ioi hm)]
   simp_rw [univ_pi_update i₀ _ _ fun i z => Ioc z (y i), ← pi_inter_compl ({i₀} : Set ι),
-    singleton_pi', ← inte
+    singleton_pi', ← inter_assoc, this]
+  rfl
 
 中文:
 定理 pi_univ_Ioc_update_left
@@ -227,7 +228,8 @@ theorem pi_univ_Ioc_update_left
   have : Ioc m (y i₀) = Ioi m inter Ioc (x i₀) (y i₀) := by
     rw [← Ioi_inter_Iic]; rw [← Ioi_inter_Iic]; rw [← inter_assoc]; rw [inter_eq_self_of_subset_left (Ioi_subset_Ioi hm)]
   simp_rw [univ_pi_update i₀ _ _ fun i z => Ioc z (y i), ← pi_inter_compl ({i₀} : Set ι),
-    singleton_pi', ← inte
+    singleton_pi', ← inter_assoc, this]
+  rfl
 
 Depends on / 依赖: Ioi_inter_Iic, Ioi_subset_Ioi, inter_assoc, inter_eq_self_of_subset_left, pi_inter_compl, simp_rw, singleton_pi, univ_pi_update
 -/
@@ -250,7 +252,8 @@ theorem pi_univ_Ioc_update_right
   have : Ioc (x i₀) m = Iic m inter Ioc (x i₀) (y i₀) := by
     rw [← Ioi_inter_Iic]; rw [← Ioi_inter_Iic]; rw [inter_left_comm]; rw [inter_eq_self_of_subset_left (Iic_subset_Iic.2 hm)]
   simp_rw [univ_pi_update i₀ y m fun i z => Ioc (x i) z, ← pi_inter_compl ({i₀} : Set ι),
-    singleton_pi', ← 
+    singleton_pi', ← inter_assoc, this]
+  rfl
 
 中文:
 定理 pi_univ_Ioc_update_right
@@ -259,7 +262,8 @@ theorem pi_univ_Ioc_update_right
   have : Ioc (x i₀) m = Iic m inter Ioc (x i₀) (y i₀) := by
     rw [← Ioi_inter_Iic]; rw [← Ioi_inter_Iic]; rw [inter_left_comm]; rw [inter_eq_self_of_subset_left (Iic_subset_Iic.2 hm)]
   simp_rw [univ_pi_update i₀ y m fun i z => Ioc (x i) z, ← pi_inter_compl ({i₀} : Set ι),
-    singleton_pi', ← 
+    singleton_pi', ← inter_assoc, this]
+  rfl
 
 Depends on / 依赖: Iic_subset_Iic, Ioi_inter_Iic, inter_assoc, inter_eq_self_of_subset_left, inter_left_comm, pi_inter_compl, simp_rw, singleton_pi, univ_pi_update
 -/
@@ -326,7 +330,7 @@ theorem image_update_Icc
   · ext j
     obtain rfl | hij := eq_or_ne i j
     · exact Function.update_self ..
-    · simpa only [Functi
+    · simpa only [Function.update_of_ne hij.symm, le_antisymm_iff] using! h j (mem_univ j)
 
 中文:
 定理 image_update_Icc
@@ -341,7 +345,7 @@ theorem image_update_Icc
   · ext j
     obtain rfl | hij := eq_or_ne i j
     · exact Function.update_self ..
-    · simpa only [Functi
+    · simpa only [Function.update_of_ne hij.symm, le_antisymm_iff] using! h j (mem_univ j)
 
 Depends on / 依赖: Function, Function.update_of_ne, Function.update_self, Set.pi_univ_Icc, eq_or_ne, hij.symm, le_antisymm_iff, mem_univ, pi_univ_Icc, update_le_update_iff, update_of_ne, update_self
 -/
@@ -1056,7 +1060,10 @@ theorem Icc_sdiff_pi_univ_Ioo_subset
     hxa, hay _, hxa _, hay, ← exists_or]
   rcases ha' with ⟨w, hw⟩
   apply Exists.intro w
-  cases lt_or_ge (x' w) (a w) 
+  cases lt_or_ge (x' w) (a w) <;> simp_all
+
+@[deprecated (since := "2026-06-03")]
+alias Icc_diff_pi_univ_Ioo_subset := Icc_sdiff_pi_univ_Ioo_subset
 
 中文:
 定理 Icc_sdiff_pi_univ_Ioo_subset
@@ -1068,7 +1075,10 @@ theorem Icc_sdiff_pi_univ_Ioo_subset
     hxa, hay _, hxa _, hay, ← exists_or]
   rcases ha' with ⟨w, hw⟩
   apply Exists.intro w
-  cases lt_or_ge (x' w) (a w) 
+  cases lt_or_ge (x' w) (a w) <;> simp_all
+
+@[deprecated (since := "2026-06-03")]
+alias Icc_diff_pi_univ_Ioo_subset := Icc_sdiff_pi_univ_Ioo_subset
 
 Depends on / 依赖: Exists, Exists.intro, exists_or, le_update_iff, lt_or_ge, mem_Icc, mem_Ioo, mem_iUnion, mem_pi, mem_union, mem_univ, not_forall, true_implies, update_le_iff
 -/

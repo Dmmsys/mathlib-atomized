@@ -164,7 +164,12 @@ lemma isMIntegralCurveAt_iff
     exact ⟨s, hs, fun t ht => (h t ht).hasMFDerivWithinAt⟩
   · rintro ⟨s, hs, h⟩
     rw [IsMIntegralCurveAt]; rw [Filter.eventually_iff_exists_mem]
-    obtain ⟨s', h1, h2, 
+    obtain ⟨s', h1, h2, h3⟩ := mem_nhds_iff.mp hs
+    refine ⟨s', h2.mem_nhds h3, ?_⟩
+    intro t ht
+    apply (h t (h1 ht)).hasMFDerivAt
+    rw [mem_nhds_iff]
+    exact ⟨s', h1, h2, ht⟩
 
 中文:
 引理 isM整数egralCurveAt_iff
@@ -176,7 +181,12 @@ lemma isMIntegralCurveAt_iff
     exact ⟨s, hs, fun t ht => (h t ht).hasMFDerivWithinAt⟩
   · rintro ⟨s, hs, h⟩
     rw [IsMIntegralCurveAt]; rw [Filter.eventually_iff_exists_mem]
-    obtain ⟨s', h1, h2, 
+    obtain ⟨s', h1, h2, h3⟩ := mem_nhds_iff.mp hs
+    refine ⟨s', h2.mem_nhds h3, ?_⟩
+    intro t ht
+    apply (h t (h1 ht)).hasMFDerivAt
+    rw [mem_nhds_iff]
+    exact ⟨s', h1, h2, ht⟩
 
 Depends on / 依赖: Filter, Filter.eventually_iff_exists_mem, IsMIntegralCurveAt, eventually_iff_exists_mem, h2.mem_nhds, hasMFDerivAt, hasMFDerivWithinAt, mem_nhds, mem_nhds_iff, mem_nhds_iff.mp
 -/
@@ -472,7 +482,14 @@ lemma IsMIntegralCurveOn.hasDerivWithinAt
   -- turn `HasDerivWithinAt` into comp of `HasMFDerivWithinAt`
   replace hsrc := extChartAt_source I (γ t₀) ▸ hsrc
   rw [hasDerivWithinAt_iff_hasFDerivWithinAt]; rw [← hasMFDerivWithinAt_iff_hasFDerivWithinAt]
-  apply (HasMFDerivWithinAt.comp t (hasMFDerivWithinAt_extChartAt (I := I) hsrc) (hγ _ 
+  apply (HasMFDerivWithinAt.comp t (hasMFDerivWithinAt_extChartAt (I := I) hsrc) (hγ _ ht)
+    (Set.subset_preimage_image _ _)).congr_mfderiv
+  rw [ContinuousLinearMap.ext_iff]
+  intro a
+  rw [ContinuousLinearMap.comp_apply]; rw [ContinuousLinearMap.smulRight_apply]; rw [map_smul]; rw [← one_apply_eq_self (F := TangentSpace 𝓘(Real]; rw [Real) t ->L[Real] TangentSpace 𝓘(Real, Real) t) a,
+    ← ContinuousLinearMap.smulRight_apply,
+    mfderiv_chartAt_eq_tangentCoordChange hsrc]
+  rfl
 
 中文:
 引理 IsM整数egralCurveOn.hasDerivWithinAt
@@ -481,7 +498,14 @@ lemma IsMIntegralCurveOn.hasDerivWithinAt
   -- turn `HasDerivWithinAt` into comp of `HasMFDerivWithinAt`
   replace hsrc := extChartAt_source I (γ t₀) ▸ hsrc
   rw [hasDerivWithinAt_iff_hasFDerivWithinAt]; rw [← hasMFDerivWithinAt_iff_hasFDerivWithinAt]
-  apply (HasMFDerivWithinAt.comp t (hasMFDerivWithinAt_extChartAt (I := I) hsrc) (hγ _ 
+  apply (HasMFDerivWithinAt.comp t (hasMFDerivWithinAt_extChartAt (I := I) hsrc) (hγ _ ht)
+    (Set.subset_preimage_image _ _)).congr_mfderiv
+  rw [ContinuousLinearMap.ext_iff]
+  intro a
+  rw [ContinuousLinearMap.comp_apply]; rw [ContinuousLinearMap.smulRight_apply]; rw [map_smul]; rw [← one_apply_eq_self (F := TangentSpace 𝓘(Real]; rw [Real) t ->L[Real] TangentSpace 𝓘(Real, Real) t) a,
+    ← ContinuousLinearMap.smulRight_apply,
+    mfderiv_chartAt_eq_tangentCoordChange hsrc]
+  rfl
 -/
 lemma IsMIntegralCurveOn.hasDerivWithinAt (hγ : IsMIntegralCurveOn γ v s) {t : Real} (ht : t in s)
     (hsrc : γ t in (extChartAt I (γ t₀)).source) :
@@ -512,7 +536,14 @@ lemma IsMIntegralCurveAt.eventually_hasDerivAt
   rintro t ⟨ht1, ht2⟩
   have hsrc := mem_of_mem_nhds ht1
   rw [mem_preimage]; rw [extChartAt_source I (γ t₀)] at hsrc
-  rw [hasDerivAt_iff_hasFDerivAt]; rw [← hasMFDerivAt
+  rw [hasDerivAt_iff_hasFDerivAt]; rw [← hasMFDerivAt_iff_hasFDerivAt]
+  apply (HasMFDerivAt.comp t (hasMFDerivAt_extChartAt (I := I) hsrc) ht2).congr_mfderiv
+  rw [ContinuousLinearMap.ext_iff]
+  intro a
+  rw [ContinuousLinearMap.comp_apply]; rw [ContinuousLinearMap.smulRight_apply]; rw [map_smul]; rw [← one_apply_eq_self (F := TangentSpace 𝓘(Real]; rw [Real) t ->L[Real] TangentSpace 𝓘(Real, Real) t) a,
+    ← ContinuousLinearMap.smulRight_apply,
+    mfderiv_chartAt_eq_tangentCoordChange hsrc]
+  rfl
 
 中文:
 引理 IsM整数egralCurveAt.eventually_hasDerivAt
@@ -523,7 +554,14 @@ lemma IsMIntegralCurveAt.eventually_hasDerivAt
   rintro t ⟨ht1, ht2⟩
   have hsrc := mem_of_mem_nhds ht1
   rw [mem_preimage]; rw [extChartAt_source I (γ t₀)] at hsrc
-  rw [hasDerivAt_iff_hasFDerivAt]; rw [← hasMFDerivAt
+  rw [hasDerivAt_iff_hasFDerivAt]; rw [← hasMFDerivAt_iff_hasFDerivAt]
+  apply (HasMFDerivAt.comp t (hasMFDerivAt_extChartAt (I := I) hsrc) ht2).congr_mfderiv
+  rw [ContinuousLinearMap.ext_iff]
+  intro a
+  rw [ContinuousLinearMap.comp_apply]; rw [ContinuousLinearMap.smulRight_apply]; rw [map_smul]; rw [← one_apply_eq_self (F := TangentSpace 𝓘(Real]; rw [Real) t ->L[Real] TangentSpace 𝓘(Real, Real) t) a,
+    ← ContinuousLinearMap.smulRight_apply,
+    mfderiv_chartAt_eq_tangentCoordChange hsrc]
+  rfl
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_apply, ContinuousLinearMap.ext_iff, ContinuousLinearMap.smul, HasMFDerivAt, HasMFDerivAt.comp, comp_apply, congr_mfderiv, continuousAt, continuousAt.preimage_mem_nhds, eventually_mem_nhds_iff, eventually_mem_nhds_iff.mpr, extChartAt_source, extChartAt_source_mem_nhds, ext_iff, hasDerivAt_iff_hasFDerivAt, hasMFDerivAt_extChartAt, hasMFDerivAt_iff_hasFDerivAt, mem_of_mem_nhds, mem_preimage
 -/

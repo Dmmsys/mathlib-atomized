@@ -88,7 +88,9 @@ definition toModuleCatObj
         dsimp
         have : Commute (diagonal fun x : ι => r) (single i i 1) := by
           ext; simp [Matrix.single]
-        rw [← smul_assoc r]; rw [smul_eq_diagonal_mu
+        rw [← smul_assoc r]; rw [smul_eq_diagonal_mul]; rw [this.eq]; rw [mul_smul]; rw [← smul_one_eq_diagonal]
+        nth_rw 1 [← one_smul (Matrix ι ι R) x]
+        rw [smul_assoc] }
 
 中文:
 定义 toModuleCatObj
@@ -99,7 +101,9 @@ definition toModuleCatObj
         dsimp
         have : Commute (diagonal fun x : ι => r) (single i i 1) := by
           ext; simp [Matrix.single]
-        rw [← smul_assoc r]; rw [smul_eq_diagonal_mu
+        rw [← smul_assoc r]; rw [smul_eq_diagonal_mul]; rw [this.eq]; rw [mul_smul]; rw [← smul_one_eq_diagonal]
+        nth_rw 1 [← one_smul (Matrix ι ι R) x]
+        rw [smul_assoc] }
 
 Depends on / 依赖: Commute, DistribSMul, DistribSMul.toAddMonoidHom, LinearMap, LinearMap.range, Matrix, Matrix.single, diagonal, map_smul, mul_smul, nth_rw, one_smul, single, smul_assoc, smul_eq_diagonal_mul, smul_one_eq_diagonal, this.eq, toAddMonoidHom
 -/
@@ -275,7 +279,7 @@ definition fromModuleCatToModuleCatLinearEquiv
 .1 hx obtain ⟨y, hy⟩ := mem_toModuleCatObj i
     rw [single_smul] at hy
     simp [← hy]
- 
+  right_inv x := by simp
 
 中文:
 定义 fromModuleCatToModuleCatLinearEquiv
@@ -288,7 +292,7 @@ definition fromModuleCatToModuleCatLinearEquiv
 .1 hx obtain ⟨y, hy⟩ := mem_toModuleCatObj i
     rw [single_smul] at hy
     simp [← hy]
- 
+  right_inv x := by simp
 -/
 def fromModuleCatToModuleCatLinearEquiv (M : Type*) [AddCommGroup M] [Module R M] (i : ι) :
     MatrixModCat.toModuleCatObj R (ι -> M) i ≃ₗ[R] M where
@@ -346,7 +350,27 @@ definition toModuleCatFromModuleCatLinearEquiv
   toFun m i := ⟨single j i (1 : R) • m, single j i (1 : R) • m, by
     simp [← mul_smul]⟩
   map_add' _ _ := by ext; simp
-map_smul' x m
+map_smul' x m := funext fun i => Subtype.ext by
+    let := Module.compHom M (Matrix.scalar (α := R) ι)
+    have := MatrixModCat.isScalarTower_toModuleCat R M
+    simp only [← mul_smul, RingHom.id_apply, Module.smul_apply,
+      AddSubmonoidClass.coe_finsetSum, SetLike.val_smul, ← smul_assoc, ← Finset.sum_smul]
+    congr
+    ext i1 j1
+    simp only [mul_apply, smul_single, smul_eq_mul, mul_one, sum_apply]
+    rw [Finset.sum_eq_single_of_mem (a := i) (by simp) (fun b _ hb => by simp [single]; rw [Ne.symm hb])]
+    simp only [single_apply, and_true, ite_mul, one_mul, zero_mul]
+    split_ifs with h <;> simp [h]
+  invFun m := ∑ i, single i j (1 : R) • m i
+  left_inv m := by simp [← mul_smul, ← Finset.sum_smul, sum_single_one]
+  right_inv v := by
+    dsimp
+    ext i
+    simp only [Finset.smul_sum]
+    rw [Finset.sum_eq_single i (fun b _ hb => by
+      simp [← mul_smul]; rw [single_mul_single_of_ne _ _ _ _ hb.symm]) (by simp)]
+    obtain ⟨y, hy⟩ := by simpa [-SetLike.coe_mem] using (v i).2
+    simp [← mul_smul, ← hy]
 
 中文:
 定义 toModuleCatFromModuleCatLinearEquiv
@@ -357,7 +381,27 @@ map_smul' x m
   toFun m i := ⟨single j i (1 : R) • m, single j i (1 : R) • m, by
     simp [← mul_smul]⟩
   map_add' _ _ := by ext; simp
-map_smul' x m
+map_smul' x m := funext fun i => Subtype.ext by
+    let := Module.compHom M (Matrix.scalar (α := R) ι)
+    have := MatrixModCat.isScalarTower_toModuleCat R M
+    simp only [← mul_smul, RingHom.id_apply, Module.smul_apply,
+      AddSubmonoidClass.coe_finsetSum, SetLike.val_smul, ← smul_assoc, ← Finset.sum_smul]
+    congr
+    ext i1 j1
+    simp only [mul_apply, smul_single, smul_eq_mul, mul_one, sum_apply]
+    rw [Finset.sum_eq_single_of_mem (a := i) (by simp) (fun b _ hb => by simp [single]; rw [Ne.symm hb])]
+    simp only [single_apply, and_true, ite_mul, one_mul, zero_mul]
+    split_ifs with h <;> simp [h]
+  invFun m := ∑ i, single i j (1 : R) • m i
+  left_inv m := by simp [← mul_smul, ← Finset.sum_smul, sum_single_one]
+  right_inv v := by
+    dsimp
+    ext i
+    simp only [Finset.smul_sum]
+    rw [Finset.sum_eq_single i (fun b _ hb => by
+      simp [← mul_smul]; rw [single_mul_single_of_ne _ _ _ _ hb.symm]) (by simp)]
+    obtain ⟨y, hy⟩ := by simpa [-SetLike.coe_mem] using (v i).2
+    simp [← mul_smul, ← hy]
 
 Depends on / 依赖: IsScalarTower, Matrix, Matrix.scalar, Module, Module.compHom, compHom, scalar
 -/
@@ -437,7 +481,11 @@ definition ModuleCat.matrixEquivalence
   functor_unitIso_comp X := by
     ext1
     suffices (toModuleCatFromModuleCatLinearEquiv R ((ModuleCat.toMatrixModCat R ι).obj X)
-      i).symm.
+      i).symm.toLinearMap ∘ₗ LinearMap.mapMatrixModule ι (ModuleCat.Hom.hom
+      ((unitIso R i).inv.app X)) = LinearMap.id by simpa using! this
+    ext x
+    simp [unitIso, toModuleCatFromModuleCatLinearEquiv, fromModuleCatToModuleCatLinearEquiv,
+      fromModuleCatToModuleCatLinearEquivtoModuleCatObj, Finset.univ_sum_single]
 
 中文:
 定义 模范畴.matrixEquivalence
@@ -449,7 +497,11 @@ definition ModuleCat.matrixEquivalence
   functor_unitIso_comp X := by
     ext1
     suffices (toModuleCatFromModuleCatLinearEquiv R ((ModuleCat.toMatrixModCat R ι).obj X)
-      i).symm.
+      i).symm.toLinearMap ∘ₗ LinearMap.mapMatrixModule ι (ModuleCat.Hom.hom
+      ((unitIso R i).inv.app X)) = LinearMap.id by simpa using! this
+    ext x
+    simp [unitIso, toModuleCatFromModuleCatLinearEquiv, fromModuleCatToModuleCatLinearEquiv,
+      fromModuleCatToModuleCatLinearEquivtoModuleCatObj, Finset.univ_sum_single]
 
 Depends on / 依赖: ModuleCat, ModuleCat.toMatrixModCat, SMulCommClass, toMatrixModCat
 -/
@@ -483,7 +535,10 @@ definition moritaEquivalenceMatrix
     simp only [ModuleCat.matrixEquivalence_functor, ModuleCat.toMatrixModCat_obj_carrier,
       ModuleCat.toMatrixModCat_map, ModuleCat.hom_smul, ModuleCat.hom_ofHom, LinearMap.smul_apply]
     ext i
-    simp only 
+    simp only [LinearMap.mapMatrixModule_apply, LinearMap.compLeft_apply, Function.comp_apply,
+      LinearMap.smul_apply]
+    change _ = ((algebraMap R₀ (Matrix ι ι R) r) • ((ModuleCat.Hom.hom f).mapMatrixModule ι v)) i
+    simp [Matrix.algebraMap_matrix_apply]
 
 中文:
 定义 moritaEquivalenceMatrix
@@ -494,7 +549,10 @@ definition moritaEquivalenceMatrix
     simp only [ModuleCat.matrixEquivalence_functor, ModuleCat.toMatrixModCat_obj_carrier,
       ModuleCat.toMatrixModCat_map, ModuleCat.hom_smul, ModuleCat.hom_ofHom, LinearMap.smul_apply]
     ext i
-    simp only 
+    simp only [LinearMap.mapMatrixModule_apply, LinearMap.compLeft_apply, Function.comp_apply,
+      LinearMap.smul_apply]
+    change _ = ((algebraMap R₀ (Matrix ι ι R) r) • ((ModuleCat.Hom.hom f).mapMatrixModule ι v)) i
+    simp [Matrix.algebraMap_matrix_apply]
 
 Depends on / 依赖: ModuleCat, ModuleCat.matrixEquivalence, SMulCommClass, matrixEquivalence
 -/

@@ -149,7 +149,13 @@ theorem isUnit_res_of_isUnit_germ
   let W := U ⊓ V
   have hxW : x in W := ⟨hx, hxV⟩
   replace heq : (X.presheaf.germ _ x hxW) ((X.presheaf.map (U.infLELeft V).op) f *
-      (X.presheaf.map (U.infLERight V).op) g) = (X.presheaf.germ 
+      (X.presheaf.map (U.infLERight V).op) g) = (X.presheaf.germ _ x hxW) 1 := by
+    rwa [map_mul, map_one, X.presheaf.germ_res_apply (Opens.infLELeft U V) x hxW f,
+      X.presheaf.germ_res_apply (Opens.infLERight U V) x hxW g]
+  obtain ⟨W', hxW', i₁, i₂, heq'⟩ := X.presheaf.germ_eq x hxW hxW _ _ heq
+  use W', i₁ ≫ Opens.infLELeft U V, hxW'
+  simp only [map_mul, map_one] at heq'
+  simpa using .of_mul_eq_one _ heq'
 
 中文:
 定理 isUnit_res_of_isUnit_germ
@@ -160,7 +166,13 @@ theorem isUnit_res_of_isUnit_germ
   let W := U ⊓ V
   have hxW : x in W := ⟨hx, hxV⟩
   replace heq : (X.presheaf.germ _ x hxW) ((X.presheaf.map (U.infLELeft V).op) f *
-      (X.presheaf.map (U.infLERight V).op) g) = (X.presheaf.germ 
+      (X.presheaf.map (U.infLERight V).op) g) = (X.presheaf.germ _ x hxW) 1 := by
+    rwa [map_mul, map_one, X.presheaf.germ_res_apply (Opens.infLELeft U V) x hxW f,
+      X.presheaf.germ_res_apply (Opens.infLERight U V) x hxW g]
+  obtain ⟨W', hxW', i₁, i₂, heq'⟩ := X.presheaf.germ_eq x hxW hxW _ _ heq
+  use W', i₁ ≫ Opens.infLELeft U V, hxW'
+  simp only [map_mul, map_one] at heq'
+  simpa using .of_mul_eq_one _ heq'
 
 Depends on / 依赖: Opens.infLELeft, Opens.infLERight, U.infLELeft, U.infLERight, X.presheaf.exists_germ_eq, X.presheaf.germ, X.presheaf.germ_eq, X.presheaf.germ_res_apply, X.presheaf.map, exists_germ_eq, exists_right_inv, germ_eq, germ_res_apply, h.exists_right_inv, infLELeft, infLERight, map_mul, map_one, presheaf, replace
 -/
@@ -194,7 +206,29 @@ theorem isUnit_of_isUnit_germ
     intro x hxU
     simp only [Opens.mem_iSup]
     tauto
-  -- Let `g x` denote the 
+  -- Let `g x` denote the inverse of `f` in `U x`.
+  choose g hg using fun x : U => IsUnit.exists_right_inv (h_unit x)
+  have ic : IsCompatible (sheaf X).obj V g := by
+    intro x y
+    apply section_ext X.sheaf (V x ⊓ V y)
+    rintro z ⟨hzVx, hzVy⟩
+    rw [germ_res_apply]; rw [germ_res_apply]
+    apply (h z ((iVU x).le hzVx)).mul_right_inj.mp
+    rw [← germ_res_apply X.presheaf (iVU x) z hzVx f]
+    -- Porting note: change was not necessary in Lean3
+    change X.presheaf.germ _ z hzVx _ * (X.presheaf.germ _ z hzVx _) =
+      X.presheaf.germ _ z hzVx _ * X.presheaf.germ _ z hzVy (g y)
+    rw [← map_mul]; rw [hg x]; rw [germ_res_apply X.presheaf _ _ _ f]; rw [← germ_res_apply X.presheaf (iVU y) z hzVy f]; rw [← map_mul]; rw [(hg y)]; rw [map_one]; rw [map_one]
+  -- We claim that these local inverses glue together to a global inverse of `f`.
+  obtain ⟨gl, gl_spec, -⟩ :
+    -- We need to rephrase the result from `ConcreteCategory` to `CommRingCat`.
+    exists gl : X.presheaf.obj (op U), (forall i, ((sheaf X).obj.map (iVU i).op) gl = g i) ∧ _ :=
+    X.sheaf.existsUnique_gluing' V U iVU hcover g ic
+refine .of_mul_eq_one gl X.sheaf.eq_of_locally_eq' V U iVU hcover _ _ fun i => ?_
+  -- We need to rephrase the goal from `ConcreteCategory` to `CommRingCat`.
+  change ((sheaf X).obj.map (iVU i).op).hom (f * gl) = ((sheaf X).obj.map (iVU i).op) 1
+  rw [map_one]; rw [map_mul]; rw [gl_spec]
+  exact hg i
 
 中文:
 定理 isUnit_of_isUnit_germ
@@ -206,7 +240,29 @@ theorem isUnit_of_isUnit_germ
     intro x hxU
     simp only [Opens.mem_iSup]
     tauto
-  -- Let `g x` denote the 
+  -- Let `g x` denote the inverse of `f` in `U x`.
+  choose g hg using fun x : U => IsUnit.exists_right_inv (h_unit x)
+  have ic : IsCompatible (sheaf X).obj V g := by
+    intro x y
+    apply section_ext X.sheaf (V x ⊓ V y)
+    rintro z ⟨hzVx, hzVy⟩
+    rw [germ_res_apply]; rw [germ_res_apply]
+    apply (h z ((iVU x).le hzVx)).mul_right_inj.mp
+    rw [← germ_res_apply X.presheaf (iVU x) z hzVx f]
+    -- Porting note: change was not necessary in Lean3
+    change X.presheaf.germ _ z hzVx _ * (X.presheaf.germ _ z hzVx _) =
+      X.presheaf.germ _ z hzVx _ * X.presheaf.germ _ z hzVy (g y)
+    rw [← map_mul]; rw [hg x]; rw [germ_res_apply X.presheaf _ _ _ f]; rw [← germ_res_apply X.presheaf (iVU y) z hzVy f]; rw [← map_mul]; rw [(hg y)]; rw [map_one]; rw [map_one]
+  -- We claim that these local inverses glue together to a global inverse of `f`.
+  obtain ⟨gl, gl_spec, -⟩ :
+    -- We need to rephrase the result from `ConcreteCategory` to `CommRingCat`.
+    exists gl : X.presheaf.obj (op U), (forall i, ((sheaf X).obj.map (iVU i).op) gl = g i) ∧ _ :=
+    X.sheaf.existsUnique_gluing' V U iVU hcover g ic
+refine .of_mul_eq_one gl X.sheaf.eq_of_locally_eq' V U iVU hcover _ _ fun i => ?_
+  -- We need to rephrase the goal from `ConcreteCategory` to `CommRingCat`.
+  change ((sheaf X).obj.map (iVU i).op).hom (f * gl) = ((sheaf X).obj.map (iVU i).op) 1
+  rw [map_one]; rw [map_mul]; rw [gl_spec]
+  exact hg i
 -/
 theorem isUnit_of_isUnit_germ (U : Opens X) (f : X.presheaf.obj (op U))
     (h : forall (x) (hx : x in U), IsUnit (X.presheaf.germ U x hx f)) : IsUnit f := by
@@ -255,7 +311,8 @@ definition basicOpen
     refine ⟨?_, V.2, hxV⟩
     intro y hy
     use i.le hy
-    convert! Rin
+    convert! RingHom.isUnit_map (X.presheaf.germ _ y hy).hom hf
+    exact (X.presheaf.germ_res_apply i y hy f).symm
 
 中文:
 定义 basicOpen
@@ -269,7 +326,8 @@ definition basicOpen
     refine ⟨?_, V.2, hxV⟩
     intro y hy
     use i.le hy
-    convert! Rin
+    convert! RingHom.isUnit_map (X.presheaf.germ _ y hy).hom hf
+    exact (X.presheaf.germ_res_apply i y hy f).symm
 
 Depends on / 依赖: IsUnit, X.presheaf.germ, presheaf
 -/
@@ -461,7 +519,9 @@ theorem basicOpen_res_eq
   · have := X.basicOpen_res (inv i) (X.presheaf.map i f)
     rw [← CommRingCat.comp_apply]; rw [← X.presheaf.map_comp]; rw [IsIso.hom_inv_id]; rw [X.presheaf.map_id]; rw [CommRingCat.id_apply] at this
     rw [this]
-    exact inf
+    exact inf_le_right
+
+@[simp]
 
 中文:
 定理 basicOpen_res_eq
@@ -472,7 +532,9 @@ theorem basicOpen_res_eq
   · have := X.basicOpen_res (inv i) (X.presheaf.map i f)
     rw [← CommRingCat.comp_apply]; rw [← X.presheaf.map_comp]; rw [IsIso.hom_inv_id]; rw [X.presheaf.map_id]; rw [CommRingCat.id_apply] at this
     rw [this]
-    exact inf
+    exact inf_le_right
+
+@[simp]
 
 Depends on / 依赖: CommRingCat, CommRingCat.comp_apply, CommRingCat.id_apply, IsIso.hom_inv_id, X.basicOpen_res, X.presheaf.map, X.presheaf.map_comp, X.presheaf.map_id, basicOpen_res, comp_apply, hom_inv_id, id_apply, inf_le_right, le_antisymm, map_comp, map_id, presheaf
 -/

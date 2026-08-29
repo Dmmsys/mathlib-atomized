@@ -97,7 +97,8 @@ theorem MeromorphicOn.codiscreteWithin_setOfPred_ne_zero
   simp_all [← h₁x.analyticOrderAt_eq_zero, h₁x.meromorphicOrderAt_eq]
 
 @[deprecated (since := "2026-07-09")]
-alias MeromorphicOn.co
+alias MeromorphicOn.codiscreteWithin_setOf_ne_zero :=
+  MeromorphicOn.codiscreteWithin_setOfPred_ne_zero
 
 中文:
 定理 MeromorphicOn.codiscreteWithin_setOfPred_ne_zero
@@ -109,7 +110,8 @@ alias MeromorphicOn.co
   simp_all [← h₁x.analyticOrderAt_eq_zero, h₁x.meromorphicOrderAt_eq]
 
 @[deprecated (since := "2026-07-09")]
-alias MeromorphicOn.co
+alias MeromorphicOn.codiscreteWithin_setOf_ne_zero :=
+  MeromorphicOn.codiscreteWithin_setOfPred_ne_zero
 
 Depends on / 依赖: analyticAt_mem_codiscreteWithin, analyticOrderAt_eq_zero, codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zero_or_top, f.analyticAt_mem_codiscreteWithin, f.codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zero_or_top, filter_upwards, meromorphicOrderAt_eq, x.analyticOrderAt_eq_zero, x.meromorphicOrderAt_eq
 -/
@@ -212,7 +214,7 @@ theorem eventually_nhdsSet_eventuallyEq_codiscreteWithin
   · apply isOpen_setOfPred_eventually_nhdsWithin
   · intro x hx
     rw [Set.mem_ofPred]
-    exact eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (
+    exact eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (hf x hx) (hg x hx) hx (hU x hx) h
 
 中文:
 定理 eventually_nhdsSet_eventuallyEq_codiscreteWithin
@@ -225,7 +227,7 @@ theorem eventually_nhdsSet_eventuallyEq_codiscreteWithin
   · apply isOpen_setOfPred_eventually_nhdsWithin
   · intro x hx
     rw [Set.mem_ofPred]
-    exact eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (
+    exact eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (hf x hx) (hg x hx) hx (hU x hx) h
 
 Depends on / 依赖: Set.mem_ofPred, Set.mem_ofPred_eq, and_true, eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin, eventually_nhdsSet_iff_exists, imp_self, implies_true, isOpen_setOfPred_eventually_nhdsWithin, mem_ofPred, mem_ofPred_eq
 -/
@@ -255,7 +257,9 @@ theorem MeromorphicOn.deriv_eventuallyEq_codiscreteWithin
   by_cases hacc : AccPt x (𝓟 U)
   · have h : f =ᶠ[𝓝[!=] x] g :=
       (hf x hx).eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (hg x hx) hx hacc h
-    filter_upwards [h.nhdsNE_deriv] us
+    filter_upwards [h.nhdsNE_deriv] using by simp +contextual
+  · rw [accPt_iff_frequently_nhdsNE, not_frequently] at hacc
+    filter_upwards [hacc] using by grind
 
 中文:
 定理 MeromorphicOn.deriv_eventuallyEq_codiscreteWithin
@@ -266,7 +270,9 @@ theorem MeromorphicOn.deriv_eventuallyEq_codiscreteWithin
   by_cases hacc : AccPt x (𝓟 U)
   · have h : f =ᶠ[𝓝[!=] x] g :=
       (hf x hx).eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (hg x hx) hx hacc h
-    filter_upwards [h.nhdsNE_deriv] us
+    filter_upwards [h.nhdsNE_deriv] using by simp +contextual
+  · rw [accPt_iff_frequently_nhdsNE, not_frequently] at hacc
+    filter_upwards [hacc] using by grind
 
 Depends on / 依赖: Eventually, EventuallyEq, Filter, Filter.Eventually, accPt_iff_frequently_nhdsNE, contextual, eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin, filter_upwards, h.nhdsNE_deriv, mem_codiscreteWithin_iff_forall_mem_nhdsNE, nhdsNE_deriv, not_frequently
 -/

@@ -49,7 +49,9 @@ theorem hasFDerivWithinAt_congr_set_nhdsNE
       hasFDerivWithinAt_sdiff_singleton_self.symm
     _ ↔ HasFDerivWithinAt f f' (t \ {x}) x := by
       suffices 𝓝[s \ {x}] x = 𝓝[t \ {x}] x by simp only [HasFDerivWithinAt, this]
-      simpa only [set_eventuallyEq_iff_inf_
+      simpa only [set_eventuallyEq_iff_inf_principal, ← nhdsWithin_inter', sdiff_eq, inter_comm]
+        using h
+    _ ↔ HasFDerivWithinAt f f' t x := hasFDerivWithinAt_sdiff_singleton_self
 
 中文:
 定理 hasFDerivWithinAt_congr_set_nhdsNE
@@ -59,7 +61,9 @@ theorem hasFDerivWithinAt_congr_set_nhdsNE
       hasFDerivWithinAt_sdiff_singleton_self.symm
     _ ↔ HasFDerivWithinAt f f' (t \ {x}) x := by
       suffices 𝓝[s \ {x}] x = 𝓝[t \ {x}] x by simp only [HasFDerivWithinAt, this]
-      simpa only [set_eventuallyEq_iff_inf_
+      simpa only [set_eventuallyEq_iff_inf_principal, ← nhdsWithin_inter', sdiff_eq, inter_comm]
+        using h
+    _ ↔ HasFDerivWithinAt f f' t x := hasFDerivWithinAt_sdiff_singleton_self
 
 Depends on / 依赖: HasFDerivWithinAt, hasFDerivWithinAt_sdiff_singleton_self, hasFDerivWithinAt_sdiff_singleton_self.symm, inter_comm, nhdsWithin_inter, sdiff_eq, set_eventuallyEq_iff_inf_principal
 -/

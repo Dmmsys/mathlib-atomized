@@ -103,7 +103,9 @@ theorem cosh_half_dist
   rw [← sq_eq_sq₀]; rw [cosh_sq']; rw [sinh_half_dist]; rw [div_pow]; rw [div_pow]; rw [one_add_div]; rw [mul_pow]; rw [sq_sqrt]
   · congr 1
     simp only [Complex.dist_eq, Complex.sq_norm, Complex.normSq_sub, Complex.normSq_conj,
-      Complex.conj_conj, Complex.mul_re, Complex.conj_re, Complex.
+      Complex.conj_conj, Complex.mul_re, Complex.conj_re, Complex.conj_im, coe_im]
+    ring
+  all_goals positivity
 
 中文:
 定理 cosh_half_dist
@@ -112,7 +114,9 @@ theorem cosh_half_dist
   rw [← sq_eq_sq₀]; rw [cosh_sq']; rw [sinh_half_dist]; rw [div_pow]; rw [div_pow]; rw [one_add_div]; rw [mul_pow]; rw [sq_sqrt]
   · congr 1
     simp only [Complex.dist_eq, Complex.sq_norm, Complex.normSq_sub, Complex.normSq_conj,
-      Complex.conj_conj, Complex.mul_re, Complex.conj_re, Complex.
+      Complex.conj_conj, Complex.mul_re, Complex.conj_re, Complex.conj_im, coe_im]
+    ring
+  all_goals positivity
 
 Depends on / 依赖: Complex.conj_conj, Complex.conj_im, Complex.conj_re, Complex.dist_eq, Complex.mul_re, Complex.normSq_conj, Complex.normSq_sub, Complex.sq_norm, all_goals, coe_im, conj_conj, conj_im, conj_re, cosh_sq, dist_eq, div_pow, mul_pow, mul_re, normSq_conj, normSq_sub
 -/
@@ -201,7 +205,9 @@ theorem sinh_half_dist_add_dist
   statement: sinh ((dist a b + dist b c) / 2) =
   proof: by
   simp only [add_div _ _ (2 : Real), sinh_add, sinh_half_dist, cosh_half_dist, div_mul_div_comm]
-  rw [← add_div]; rw [Complex.dist_self_conj]; rw [coe_im]; rw [abs_of_pos b.im_pos]; rw [mul_comm (dist (b : Complex) _)]; rw [dist_comm (b : Complex)]; rw [Complex.dist_conj_comm]; rw [mul_mul_mul_c
+  rw [← add_div]; rw [Complex.dist_self_conj]; rw [coe_im]; rw [abs_of_pos b.im_pos]; rw [mul_comm (dist (b : Complex) _)]; rw [dist_comm (b : Complex)]; rw [Complex.dist_conj_comm]; rw [mul_mul_mul_comm]; rw [mul_mul_mul_comm _ _ _ b.im]
+  congr 2
+  rw [sqrt_mul]; rw [sqrt_mul]; rw [sqrt_mul]; rw [mul_comm (√a.im)]; rw [mul_mul_mul_comm]; rw [mul_self_sqrt]; rw [mul_comm] <;> exact (im_pos _).le
 
 中文:
 定理 sinh_half_dist_add_dist
@@ -209,7 +215,9 @@ theorem sinh_half_dist_add_dist
   结论: sinh ((dist a b + dist b c) / 2) =
   证明: by
   simp only [add_div _ _ (2 : Real), sinh_add, sinh_half_dist, cosh_half_dist, div_mul_div_comm]
-  rw [← add_div]; rw [Complex.dist_self_conj]; rw [coe_im]; rw [abs_of_pos b.im_pos]; rw [mul_comm (dist (b : Complex) _)]; rw [dist_comm (b : Complex)]; rw [Complex.dist_conj_comm]; rw [mul_mul_mul_c
+  rw [← add_div]; rw [Complex.dist_self_conj]; rw [coe_im]; rw [abs_of_pos b.im_pos]; rw [mul_comm (dist (b : Complex) _)]; rw [dist_comm (b : Complex)]; rw [Complex.dist_conj_comm]; rw [mul_mul_mul_comm]; rw [mul_mul_mul_comm _ _ _ b.im]
+  congr 2
+  rw [sqrt_mul]; rw [sqrt_mul]; rw [sqrt_mul]; rw [mul_comm (√a.im)]; rw [mul_mul_mul_comm]; rw [mul_self_sqrt]; rw [mul_comm] <;> exact (im_pos _).le
 
 Depends on / 依赖: Complex.dist_conj_comm, Complex.dist_self_conj, a.im, abs_of_pos, add_div, b.im, b.im_pos, coe_im, cosh_half_dist, dist_comm, dist_conj_comm, dist_self_conj, div_mul_div_comm, im_pos, mul_comm, mul_mul_mul_comm, mul_self_sqrt, sinh_add, sinh_half_dist, sqrt_mul
 -/
@@ -317,7 +325,8 @@ theorem dist_triangle
   rw [dist_le_iff_le_sinh]; rw [sinh_half_dist_add_dist]; rw [div_mul_eq_div_div _ _ (dist _ _)]; rw [le_div_iff₀]; rw [div_mul_eq_mul_div]
   · gcongr
     exact EuclideanGeometry.mul_dist_le_mul_dist_add_mul_dist (a : Complex) b c (conj (b : Complex))
-  · rw [dist_comm, dist_pos, Ne, Complex.conj
+  · rw [dist_comm, dist_pos, Ne, Complex.conj_eq_iff_im]
+    exact b.im_ne_zero
 
 中文:
 定理 dist_triangle
@@ -327,7 +336,8 @@ theorem dist_triangle
   rw [dist_le_iff_le_sinh]; rw [sinh_half_dist_add_dist]; rw [div_mul_eq_div_div _ _ (dist _ _)]; rw [le_div_iff₀]; rw [div_mul_eq_mul_div]
   · gcongr
     exact EuclideanGeometry.mul_dist_le_mul_dist_add_mul_dist (a : Complex) b c (conj (b : Complex))
-  · rw [dist_comm, dist_pos, Ne, Complex.conj
+  · rw [dist_comm, dist_pos, Ne, Complex.conj_eq_iff_im]
+    exact b.im_ne_zero
 -/
 protected theorem dist_triangle (a b c : ℍ) : dist a c <= dist a b + dist b c := by
   rw [dist_le_iff_le_sinh]; rw [sinh_half_dist_add_dist]; rw [div_mul_eq_div_div _ _ (dist _ _)]; rw [le_div_iff₀]; rw [div_mul_eq_mul_div]
@@ -375,7 +385,7 @@ definition metricSpaceAux
   dist_comm := UpperHalfPlane.dist_comm
   dist_triangle := UpperHalfPlane.dist_triangle
   eq_of_dist_eq_zero {z w} h := by
-    simpa [dist_eq, Real.sqrt_eq_zero', (mul_pos z.im_pos w.im_pos).not_ge, Set.ext_iff] using 
+    simpa [dist_eq, Real.sqrt_eq_zero', (mul_pos z.im_pos w.im_pos).not_ge, Set.ext_iff] using h
 
 中文:
 定义 metricSpaceAux
@@ -385,7 +395,7 @@ definition metricSpaceAux
   dist_comm := UpperHalfPlane.dist_comm
   dist_triangle := UpperHalfPlane.dist_triangle
   eq_of_dist_eq_zero {z w} h := by
-    simpa [dist_eq, Real.sqrt_eq_zero', (mul_pos z.im_pos w.im_pos).not_ge, Set.ext_iff] using 
+    simpa [dist_eq, Real.sqrt_eq_zero', (mul_pos z.im_pos w.im_pos).not_ge, Set.ext_iff] using h
 -/
 def metricSpaceAux : MetricSpace ℍ where
   dist := dist
@@ -583,7 +593,11 @@ theorem cmp_dist_eq_cmp_dist_coe_center
     exacts [(hr₀.trans_le dist_nonneg).cmp_eq_gt,
       ((mul_neg_of_pos_of_neg w.im_pos (sinh_neg_iff.2 hr₀)).trans_le dist_nonneg).cmp_eq_gt.symm]
   have hr₀' : 0 <= w.im * Real.sinh r := by positivity
-  have hzw
+  have hzw₀ : 0 < 2 * z.im * w.im := by positivity
+  simp only [← cosh_strictMonoOn.cmp_map_eq dist_nonneg hr₀,
+    ← (pow_left_strictMonoOn₀ (M₀ := Real) two_ne_zero).cmp_map_eq dist_nonneg hr₀',
+    dist_coe_center_sq]
+  rw [← cmp_mul_pos_left hzw₀]; rw [← cmp_sub_zero]; rw [← mul_sub]; rw [← cmp_add_right]; rw [zero_add]
 
 中文:
 定理 cmp_dist_eq_cmp_dist_coe_center
@@ -595,7 +609,11 @@ theorem cmp_dist_eq_cmp_dist_coe_center
     exacts [(hr₀.trans_le dist_nonneg).cmp_eq_gt,
       ((mul_neg_of_pos_of_neg w.im_pos (sinh_neg_iff.2 hr₀)).trans_le dist_nonneg).cmp_eq_gt.symm]
   have hr₀' : 0 <= w.im * Real.sinh r := by positivity
-  have hzw
+  have hzw₀ : 0 < 2 * z.im * w.im := by positivity
+  simp only [← cosh_strictMonoOn.cmp_map_eq dist_nonneg hr₀,
+    ← (pow_left_strictMonoOn₀ (M₀ := Real) two_ne_zero).cmp_map_eq dist_nonneg hr₀',
+    dist_coe_center_sq]
+  rw [← cmp_mul_pos_left hzw₀]; rw [← cmp_sub_zero]; rw [← mul_sub]; rw [← cmp_add_right]; rw [zero_add]
 
 Depends on / 依赖: Ordering, Ordering.gt, Real.sinh, cmp_eq_gt, cmp_eq_gt.symm, cmp_map_eq, cmp_mul_pos_l, cosh_strictMonoOn, cosh_strictMonoOn.cmp_map_eq, dist_coe_center_sq, dist_nonneg, exacts, im_pos, lt_or_ge, metricSpaceAux, mul_neg_of_pos_of_neg, sinh_neg_iff, trans_le, two_ne_zero, w.im
 -/
@@ -859,7 +877,7 @@ theorem dist_coe_le
     dist (z : Complex) w <= dist (z : Complex) (w.center (dist z w)) + dist (w : Complex) (w.center (dist z w)) :=
       dist_triangle_right _ _ _
     _ = w.im * (Real.exp (dist z w) - 1) := by
-      rw [dist_center_dist]; rw [dist_self_center]; rw [← mul_add]; rw [← add_sub_assoc]; rw [Real.si
+      rw [dist_center_dist]; rw [dist_self_center]; rw [← mul_add]; rw [← add_sub_assoc]; rw [Real.sinh_add_cosh]
 
 中文:
 定理 dist_coe_le
@@ -869,7 +887,7 @@ theorem dist_coe_le
     dist (z : Complex) w <= dist (z : Complex) (w.center (dist z w)) + dist (w : Complex) (w.center (dist z w)) :=
       dist_triangle_right _ _ _
     _ = w.im * (Real.exp (dist z w) - 1) := by
-      rw [dist_center_dist]; rw [dist_self_center]; rw [← mul_add]; rw [← add_sub_assoc]; rw [Real.si
+      rw [dist_center_dist]; rw [dist_self_center]; rw [← mul_add]; rw [← add_sub_assoc]; rw [Real.sinh_add_cosh]
 
 Depends on / 依赖: Real.exp, Real.sinh_add_cosh, add_sub_assoc, center, dist_center_dist, dist_self_center, dist_triangle_right, mul_add, sinh_add_cosh, w.center, w.im
 -/
@@ -922,7 +940,19 @@ instance :
     refine le_antisymm (continuous_id_iff_le.1 ?_) ?_
     · refine (@continuous_iff_continuous_dist ℍ ℍ metricSpaceAux.toPseudoMetricSpace _ _).2 ?_
       have : forall x : ℍ × ℍ, 2 * √(x.1.im * x.2.im) != 0 := fun x => by positivity
-      -- `continuity` fails to a
+      -- `continuity` fails to apply `Continuous.div`
+      apply_rules [Continuous.div, Continuous.mul, continuous_const, Continuous.arsinh,
+        Continuous.dist, continuous_coe.comp, continuous_fst, continuous_snd,
+        Real.continuous_sqrt.comp, continuous_im.comp]
+    · let : MetricSpace ℍ := metricSpaceAux
+      refine le_of_nhds_le_nhds fun z => ?_
+      rw [nhds_induced]
+      refine (nhds_basis_ball.le_basis_iff (nhds_basis_ball.comap _)).2 fun R hR => ?_
+      have h₁ : 1 < R / im z + 1 := lt_add_of_pos_left _ (div_pos hR z.im_pos)
+      have h₀ : 0 < R / im z + 1 := one_pos.trans h₁
+      refine ⟨log (R / im z + 1), Real.log_pos h₁, ?_⟩
+      refine fun w hw => (dist_coe_le w z).trans_lt ?_
+      rwa [← lt_div_iff₀' z.im_pos, sub_lt_iff_lt_add, ← Real.lt_log_iff_exp_lt h₀]
 
 中文:
 实例 :
@@ -931,7 +961,19 @@ instance :
     refine le_antisymm (continuous_id_iff_le.1 ?_) ?_
     · refine (@continuous_iff_continuous_dist ℍ ℍ metricSpaceAux.toPseudoMetricSpace _ _).2 ?_
       have : forall x : ℍ × ℍ, 2 * √(x.1.im * x.2.im) != 0 := fun x => by positivity
-      -- `continuity` fails to a
+      -- `continuity` fails to apply `Continuous.div`
+      apply_rules [Continuous.div, Continuous.mul, continuous_const, Continuous.arsinh,
+        Continuous.dist, continuous_coe.comp, continuous_fst, continuous_snd,
+        Real.continuous_sqrt.comp, continuous_im.comp]
+    · let : MetricSpace ℍ := metricSpaceAux
+      refine le_of_nhds_le_nhds fun z => ?_
+      rw [nhds_induced]
+      refine (nhds_basis_ball.le_basis_iff (nhds_basis_ball.comap _)).2 fun R hR => ?_
+      have h₁ : 1 < R / im z + 1 := lt_add_of_pos_left _ (div_pos hR z.im_pos)
+      have h₀ : 0 < R / im z + 1 := one_pos.trans h₁
+      refine ⟨log (R / im z + 1), Real.log_pos h₁, ?_⟩
+      refine fun w hw => (dist_coe_le w z).trans_lt ?_
+      rwa [← lt_div_iff₀' z.im_pos, sub_lt_iff_lt_add, ← Real.lt_log_iff_exp_lt h₀]
 
 Depends on / 依赖: continuous_id_iff_le, continuous_iff_continuous_dist, le_antisymm, metricSpaceAux, metricSpaceAux.replaceTopology, metricSpaceAux.toPseudoMetricSpace, replaceTopology, toPseudoMetricSpace
 -/
@@ -965,7 +1007,7 @@ theorem im_pos_of_dist_center_le
     _ = (z.center r).im - z.im * Real.sinh r := mul_sub _ _ _
     _ <= (z.center r).im - dist (z.center r : Complex) w := sub_le_sub_left (by rwa [dist_comm]) _
 _ <= w.im := sub_le_comm.1
-      (le_abs_
+      (le_abs_self _).trans ((abs_im_le_norm <| z.center r - w).trans_eq (dist_eq_norm _ _).symm)
 
 中文:
 定理 im_pos_of_dist_center_le
@@ -975,7 +1017,7 @@ _ <= w.im := sub_le_comm.1
     _ = (z.center r).im - z.im * Real.sinh r := mul_sub _ _ _
     _ <= (z.center r).im - dist (z.center r : Complex) w := sub_le_sub_left (by rwa [dist_comm]) _
 _ <= w.im := sub_le_comm.1
-      (le_abs_
+      (le_abs_self _).trans ((abs_im_le_norm <| z.center r - w).trans_eq (dist_eq_norm _ _).symm)
 
 Depends on / 依赖: Real.cosh, Real.sinh, abs_im_le_norm, center, dist_comm, dist_eq_norm, im_pos, le_abs_self, mul_pos, mul_sub, sinh_lt_cosh, sub_le_comm, sub_le_sub_left, sub_pos, trans_eq, w.im, z.center, z.im, z.im_pos
 -/
@@ -1181,7 +1223,7 @@ theorem isometry_pos_mul
   refine Isometry.of_dist_eq fun y₁ y₂ => ?_
   simp only [dist_eq, coe_pos_real_smul, pos_real_im]; congr 2
   rw [dist_smul₀]; rw [mul_mul_mul_comm]; rw [Real.sqrt_mul (mul_self_nonneg _)]; rw [Real.sqrt_mul_self_eq_abs]; rw [Real.norm_eq_abs]; rw [mul_left_comm]
-  exact mul_div_mul_left _ _ (mt 
+  exact mul_div_mul_left _ _ (mt _root_.abs_eq_zero.1 a.2.ne')
 
 中文:
 定理 isometry_pos_mul
@@ -1191,7 +1233,7 @@ theorem isometry_pos_mul
   refine Isometry.of_dist_eq fun y₁ y₂ => ?_
   simp only [dist_eq, coe_pos_real_smul, pos_real_im]; congr 2
   rw [dist_smul₀]; rw [mul_mul_mul_comm]; rw [Real.sqrt_mul (mul_self_nonneg _)]; rw [Real.sqrt_mul_self_eq_abs]; rw [Real.norm_eq_abs]; rw [mul_left_comm]
-  exact mul_div_mul_left _ _ (mt 
+  exact mul_div_mul_left _ _ (mt _root_.abs_eq_zero.1 a.2.ne')
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, Real.norm_eq_abs, Real.sqrt_mul, Real.sqrt_mul_self_eq_abs, _root_, _root_.abs_eq_zero, abs_eq_zero, coe_pos_real_smul, dist_eq, mul_div_mul_left, mul_left_comm, mul_mul_mul_comm, mul_self_nonneg, norm_eq_abs, of_dist_eq, pos_real_im, sqrt_mul, sqrt_mul_self_eq_abs
 -/
@@ -1212,7 +1254,18 @@ instance :
       Isometry.of_dist_eq fun y₁ y₂ => by
         have h₁ : 0 <= im y₁ * im y₂ := by positivity
         have h₂ : ‖(y₁ * y₂ : Complex)‖ != 0 := by simp [y₁.ne_zero, y₂.ne_zero]
-        simp_rw [modular_S_smul, inv_neg, dis
+        simp_rw [modular_S_smul, inv_neg, dist_eq, dist_neg_neg,
+          dist_inv_inv₀ y₁.ne_zero y₂.ne_zero, mk_im, neg_im, inv_im, coe_im, neg_div, neg_neg,
+          div_mul_div_comm, ← normSq_mul, Real.sqrt_div h₁, ← norm_def, mul_div (2 : Real)]
+        rw [div_div_div_comm]; rw [← norm_mul]; rw [div_self h₂]; rw [div_one]
+    by_cases hc : g 1 0 = 0
+    · obtain ⟨u, v, h⟩ := exists_SL2_smul_eq_of_apply_zero_one_eq_zero g hc
+      rw [h]
+      exact (isometry_real_vadd v).comp (isometry_pos_mul u)
+    · obtain ⟨u, v, w, h⟩ := exists_SL2_smul_eq_of_apply_zero_one_ne_zero g hc
+      rw [h]
+      exact
+        (isometry_real_vadd w).comp (h₀.comp <| (isometry_real_vadd v).comp <| isometry_pos_mul u)⟩
 
 中文:
 实例 :
@@ -1222,7 +1275,18 @@ instance :
       Isometry.of_dist_eq fun y₁ y₂ => by
         have h₁ : 0 <= im y₁ * im y₂ := by positivity
         have h₂ : ‖(y₁ * y₂ : Complex)‖ != 0 := by simp [y₁.ne_zero, y₂.ne_zero]
-        simp_rw [modular_S_smul, inv_neg, dis
+        simp_rw [modular_S_smul, inv_neg, dist_eq, dist_neg_neg,
+          dist_inv_inv₀ y₁.ne_zero y₂.ne_zero, mk_im, neg_im, inv_im, coe_im, neg_div, neg_neg,
+          div_mul_div_comm, ← normSq_mul, Real.sqrt_div h₁, ← norm_def, mul_div (2 : Real)]
+        rw [div_div_div_comm]; rw [← norm_mul]; rw [div_self h₂]; rw [div_one]
+    by_cases hc : g 1 0 = 0
+    · obtain ⟨u, v, h⟩ := exists_SL2_smul_eq_of_apply_zero_one_eq_zero g hc
+      rw [h]
+      exact (isometry_real_vadd v).comp (isometry_pos_mul u)
+    · obtain ⟨u, v, w, h⟩ := exists_SL2_smul_eq_of_apply_zero_one_ne_zero g hc
+      rw [h]
+      exact
+        (isometry_real_vadd w).comp (h₀.comp <| (isometry_real_vadd v).comp <| isometry_pos_mul u)⟩
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, ModularGroup, ModularGroup.S, Real.sqrt_div, coe_im, dist_eq, dist_neg_neg, div_div_div_comm, div_mul_div_comm, inv_im, inv_neg, mk_im, modular_S_smul, mul_div, ne_zero, neg_div, neg_im, neg_neg, normSq_mul
 -/

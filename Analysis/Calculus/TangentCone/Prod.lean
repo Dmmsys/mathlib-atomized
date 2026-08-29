@@ -38,7 +38,8 @@ theorem subset_tangentConeAt_prod_left
   rintro _ ⟨z, hz, rfl⟩
   rcases exists_fun_of_mem_tangentConeAt hz with ⟨ι, l, hl, c, d, hd₀, hds, hcd⟩
   refine mem_tangentConeAt_of_seq l c (fun n => (d n, 0)) (hd₀.prodMk_nhds tendsto_const_nhds)
-    (hds.mono fun n hn => by s
+    (hds.mono fun n hn => by simp [ht, subset_closure hn]) ?_
+  simpa using hcd.prodMk_nhds tendsto_const_nhds
 
 中文:
 定理 subset_tangentConeAt_prod_left
@@ -48,7 +49,8 @@ theorem subset_tangentConeAt_prod_left
   rintro _ ⟨z, hz, rfl⟩
   rcases exists_fun_of_mem_tangentConeAt hz with ⟨ι, l, hl, c, d, hd₀, hds, hcd⟩
   refine mem_tangentConeAt_of_seq l c (fun n => (d n, 0)) (hd₀.prodMk_nhds tendsto_const_nhds)
-    (hds.mono fun n hn => by s
+    (hds.mono fun n hn => by simp [ht, subset_closure hn]) ?_
+  simpa using hcd.prodMk_nhds tendsto_const_nhds
 
 Depends on / 依赖: closure_prod_eq, exists_fun_of_mem_tangentConeAt, hcd.prodMk_nhds, hds.mono, mem_tangentConeAt_of_seq, prodMk_nhds, subset_closure, tangentConeAt_closure, tendsto_const_nhds
 -/
@@ -72,7 +74,8 @@ theorem subset_tangentConeAt_prod_right
   rintro _ ⟨z, hz, rfl⟩
   rcases exists_fun_of_mem_tangentConeAt hz with ⟨ι, l, hl, c, d, hd₀, hds, hcd⟩
   refine mem_tangentConeAt_of_seq l c (fun n => (0, d n)) (tendsto_const_nhds.prodMk_nhds hd₀)
-    (hds.mono fun n hn => by s
+    (hds.mono fun n hn => by simp [hs, subset_closure hn]) ?_
+  simpa using tendsto_const_nhds.prodMk_nhds hcd
 
 中文:
 定理 subset_tangentConeAt_prod_right
@@ -82,7 +85,8 @@ theorem subset_tangentConeAt_prod_right
   rintro _ ⟨z, hz, rfl⟩
   rcases exists_fun_of_mem_tangentConeAt hz with ⟨ι, l, hl, c, d, hd₀, hds, hcd⟩
   refine mem_tangentConeAt_of_seq l c (fun n => (0, d n)) (tendsto_const_nhds.prodMk_nhds hd₀)
-    (hds.mono fun n hn => by s
+    (hds.mono fun n hn => by simp [hs, subset_closure hn]) ?_
+  simpa using tendsto_const_nhds.prodMk_nhds hcd
 
 Depends on / 依赖: closure_prod_eq, exists_fun_of_mem_tangentConeAt, hds.mono, mem_tangentConeAt_of_seq, prodMk_nhds, subset_closure, tangentConeAt_closure, tendsto_const_nhds, tendsto_const_nhds.prodMk_nhds
 -/
@@ -107,7 +111,8 @@ theorem UniqueDiffWithinAt.prod
   refine ⟨?_, hs.2, ht.2⟩
   have : _ <= Submodule.span 𝕜 (tangentConeAt 𝕜 (s ×ˢ t) (x, y)) := Submodule.span_mono
     (union_subset (subset_tangentConeAt_prod_left ht.2) (subset_tangentConeAt_prod_right hs.2))
-  rw [LinearMap.span_in
+  rw [LinearMap.span_inl_union_inr]; rw [SetLike.le_def] at this
+  exact (hs.1.prod ht.1).mono this
 
 中文:
 定理 UniqueDiffWithinAt.乘积
@@ -118,7 +123,8 @@ theorem UniqueDiffWithinAt.prod
   refine ⟨?_, hs.2, ht.2⟩
   have : _ <= Submodule.span 𝕜 (tangentConeAt 𝕜 (s ×ˢ t) (x, y)) := Submodule.span_mono
     (union_subset (subset_tangentConeAt_prod_left ht.2) (subset_tangentConeAt_prod_right hs.2))
-  rw [LinearMap.span_in
+  rw [LinearMap.span_inl_union_inr]; rw [SetLike.le_def] at this
+  exact (hs.1.prod ht.1).mono this
 
 Depends on / 依赖: LinearMap, LinearMap.span_inl_union_inr, SetLike, SetLike.le_def, Submodule, Submodule.span, Submodule.span_mono, closure_prod_eq, le_def, span_inl_union_inr, span_mono, subset_tangentConeAt_prod_left, subset_tangentConeAt_prod_right, tangentConeAt, union_subset, uniqueDiffWithinAt_iff
 -/

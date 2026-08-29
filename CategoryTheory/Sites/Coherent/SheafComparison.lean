@@ -58,7 +58,11 @@ instance :
   refine ⟨Unit, inferInstance, fun _ => F.effectiveEpiOverObj B,
     fun _ => F.effectiveEpiOver B, ?_, ?_⟩
   · funext; ext -- Do we want `Presieve.ext`?
-    refine ⟨f
+    refine ⟨fun ⟨⟩ => ⟨()⟩, ?_⟩
+    rintro ⟨⟩
+    simp
+  · rw [← effectiveEpi_iff_effectiveEpiFamily]
+    infer_instance
 
 中文:
 实例 :
@@ -69,7 +73,11 @@ instance :
   refine ⟨Unit, inferInstance, fun _ => F.effectiveEpiOverObj B,
     fun _ => F.effectiveEpiOver B, ?_, ?_⟩
   · funext; ext -- Do we want `Presieve.ext`?
-    refine ⟨f
+    refine ⟨fun ⟨⟩ => ⟨()⟩, ?_⟩
+    rintro ⟨⟩
+    simp
+  · rw [← effectiveEpi_iff_effectiveEpiFamily]
+    infer_instance
 
 Depends on / 依赖: Coverage, Coverage.Saturate.of, F.effectiveEpiOver, F.effectiveEpiOverObj, F.isCoverDense_of_generate_singleton_functor_, Presieve, Presieve.ext, Saturate, effectiveEpiOver, effectiveEpiOverObj, effectiveEpi_iff_effectiveEpiFamily, infer_instance
 -/
@@ -98,7 +106,21 @@ theorem exists_effectiveEpiFamily_iff_mem_induced
     apply (mem_sieves_iff_hasEffectiveEpiFamily (Sieve.functorPushforward _ S)).mpr
     refine ⟨α, inferInstance, fun i => F.obj (Y i),
       fun i => F.map (π i), ⟨?_,
-      fun a => Sieve.
+      fun a => Sieve.image_mem_functorPushforward F S (H₂ a)⟩⟩
+    exact F.map_finite_effectiveEpiFamily _ _
+  · rw [mem_inducedTopology_iff_of_isCoverDense] at hS
+    obtain ⟨α, _, Y, π, ⟨H₁, H₂⟩⟩ := (mem_sieves_iff_hasEffectiveEpiFamily _).mp hS
+    refine ⟨α, inferInstance, ?_⟩
+    let Z : α -> C := fun a => (Functor.EffectivelyEnough.presentation (F := F) (Y a)).some.p
+    let g₀ : (a : α) -> F.obj (Z a) ⟶ Y a := fun a => F.effectiveEpiOver (Y a)
+    have : EffectiveEpiFamily _ (fun a => g₀ a ≫ π a) := inferInstance
+    refine ⟨Z, fun a => F.preimage (g₀ a ≫ π a), ?_, fun a => (?_ : S.arrows (F.preimage _))⟩
+    · refine F.finite_effectiveEpiFamily_of_map _ _ ?_
+      simpa using this
+    · obtain ⟨W, g₁, g₂, h₁, h₂⟩ := H₂ a
+      rw [h₂]
+      convert! S.downward_closed h₁ (F.preimage (g₀ a ≫ g₂))
+      exact F.map_injective (by simp)
 
 中文:
 定理 存在_effectiveEpiFamily_iff_mem_induced
@@ -109,7 +131,21 @@ theorem exists_effectiveEpiFamily_iff_mem_induced
     apply (mem_sieves_iff_hasEffectiveEpiFamily (Sieve.functorPushforward _ S)).mpr
     refine ⟨α, inferInstance, fun i => F.obj (Y i),
       fun i => F.map (π i), ⟨?_,
-      fun a => Sieve.
+      fun a => Sieve.image_mem_functorPushforward F S (H₂ a)⟩⟩
+    exact F.map_finite_effectiveEpiFamily _ _
+  · rw [mem_inducedTopology_iff_of_isCoverDense] at hS
+    obtain ⟨α, _, Y, π, ⟨H₁, H₂⟩⟩ := (mem_sieves_iff_hasEffectiveEpiFamily _).mp hS
+    refine ⟨α, inferInstance, ?_⟩
+    let Z : α -> C := fun a => (Functor.EffectivelyEnough.presentation (F := F) (Y a)).some.p
+    let g₀ : (a : α) -> F.obj (Z a) ⟶ Y a := fun a => F.effectiveEpiOver (Y a)
+    have : EffectiveEpiFamily _ (fun a => g₀ a ≫ π a) := inferInstance
+    refine ⟨Z, fun a => F.preimage (g₀ a ≫ π a), ?_, fun a => (?_ : S.arrows (F.preimage _))⟩
+    · refine F.finite_effectiveEpiFamily_of_map _ _ ?_
+      simpa using this
+    · obtain ⟨W, g₁, g₂, h₁, h₂⟩ := H₂ a
+      rw [h₂]
+      convert! S.downward_closed h₁ (F.preimage (g₀ a ≫ g₂))
+      exact F.map_injective (by simp)
 
 Depends on / 依赖: F.map, F.map_finite_effectiveEpiFamily, F.obj, Sieve.functorPushforward, Sieve.image_mem_functorPushforward, functorPushforward, image_mem_functorPushforward, map_finite_effectiveEpiFamily, mem_inducedTopology_iff_of_isCoverDense, mem_sieves_iff_hasEffectiveEpiFamily
 -/
@@ -323,7 +359,7 @@ instance :
   funext; ext -- Do we want `Presieve.ext`?
   refine ⟨fun ⟨⟩ => ⟨()⟩, ?_⟩
   rintro ⟨⟩
-  sim
+  simp
 
 中文:
 实例 :
@@ -335,7 +371,7 @@ instance :
   funext; ext -- Do we want `Presieve.ext`?
   refine ⟨fun ⟨⟩ => ⟨()⟩, ?_⟩
   rintro ⟨⟩
-  sim
+  simp
 
 Depends on / 依赖: Coverage, Coverage.Saturate.of, F.effectiveEpiOver, F.effectiveEpiOverObj, F.isCoverDense_of_generate_singleton_functor_, Presieve, Presieve.ext, Saturate, effectiveEpiOver, effectiveEpiOverObj
 -/
@@ -361,7 +397,17 @@ theorem exists_effectiveEpi_iff_mem_induced
     apply (mem_sieves_iff_hasEffectiveEpi (Sieve.functorPushforward _ S)).mpr
     refine ⟨F.obj Y, F.map π, ⟨?_, Sieve.image_mem_functorPushforward F S H₂⟩⟩
     exact F.map_effectiveEpi _
-  · rw [
+  · rw [mem_inducedTopology_iff_of_isCoverDense] at hS
+    obtain ⟨Y, π, ⟨H₁, H₂⟩⟩ := (mem_sieves_iff_hasEffectiveEpi _).mp hS
+    let g₀ := F.effectiveEpiOver Y
+    refine ⟨_, F.preimage (g₀ ≫ π), ?_, (?_ : S.arrows (F.preimage _))⟩
+    · refine F.effectiveEpi_of_map _ ?_
+      simp only [map_preimage]
+      infer_instance
+    · obtain ⟨W, g₁, g₂, h₁, h₂⟩ := H₂
+      rw [h₂]
+      convert! S.downward_closed h₁ (F.preimage (g₀ ≫ g₂))
+      exact F.map_injective (by simp)
 
 中文:
 定理 存在_effectiveEpi_iff_mem_induced
@@ -372,7 +418,17 @@ theorem exists_effectiveEpi_iff_mem_induced
     apply (mem_sieves_iff_hasEffectiveEpi (Sieve.functorPushforward _ S)).mpr
     refine ⟨F.obj Y, F.map π, ⟨?_, Sieve.image_mem_functorPushforward F S H₂⟩⟩
     exact F.map_effectiveEpi _
-  · rw [
+  · rw [mem_inducedTopology_iff_of_isCoverDense] at hS
+    obtain ⟨Y, π, ⟨H₁, H₂⟩⟩ := (mem_sieves_iff_hasEffectiveEpi _).mp hS
+    let g₀ := F.effectiveEpiOver Y
+    refine ⟨_, F.preimage (g₀ ≫ π), ?_, (?_ : S.arrows (F.preimage _))⟩
+    · refine F.effectiveEpi_of_map _ ?_
+      simp only [map_preimage]
+      infer_instance
+    · obtain ⟨W, g₁, g₂, h₁, h₂⟩ := H₂
+      rw [h₂]
+      convert! S.downward_closed h₁ (F.preimage (g₀ ≫ g₂))
+      exact F.map_injective (by simp)
 
 Depends on / 依赖: F.effectiveEpiOver, F.map, F.map_effectiveEpi, F.obj, F.preimage, S.arrows, Sieve.functorPushforward, Sieve.image_mem_functorPushforward, arrows, effectiveEpiOver, functorPushforward, image_mem_functorPushforward, map_effectiveEpi, mem_inducedTopology_iff_of_isCoverDense, mem_sieves_iff_hasEffectiveEpi, preimage
 -/
@@ -662,7 +718,7 @@ definition coherentExtensiveEquivalence
     ObjectProperty.lift _ (sheafToPresheaf _ _) (fun F =>
       (isSheaf_iff_extensiveSheaf_of_projective F.obj).mpr F.property)
   unitIso := Iso.refl _
-  counitIs
+  counitIso := Iso.refl _
 
 中文:
 定义 coherentExtensiveEquivalence
@@ -673,7 +729,7 @@ definition coherentExtensiveEquivalence
     ObjectProperty.lift _ (sheafToPresheaf _ _) (fun F =>
       (isSheaf_iff_extensiveSheaf_of_projective F.obj).mpr F.property)
   unitIso := Iso.refl _
-  counitIs
+  counitIso := Iso.refl _
 
 Depends on / 依赖: F.obj, F.property, Iso.refl, ObjectProperty, ObjectProperty.lift, counitIso, inverse, isSheaf_iff_extensiveSheaf_of_projective, property, sheafToPresheaf, unitIso
 -/
@@ -733,7 +789,7 @@ lemma isSheaf_coherent_of_hasPullbacks_of_comp
   obtain ⟨_, hF₂⟩ := hF
   refine ⟨⟨fun n => ⟨fun {K} => ⟨fun {c} hc => ?_⟩⟩⟩, fun _ _ π _ c hc => ⟨?_⟩⟩
   · exact ⟨isLimitOfReflects s (isLimitOfPreserves (F ⋙ s) hc)⟩
-  · exact isLimitOfIsLimitForkMap s _ (hF₂ π c
+  · exact isLimitOfIsLimitForkMap s _ (hF₂ π c hc).some
 
 中文:
 引理 isSheaf_coherent_of_hasPullbacks_of_comp
@@ -743,7 +799,7 @@ lemma isSheaf_coherent_of_hasPullbacks_of_comp
   obtain ⟨_, hF₂⟩ := hF
   refine ⟨⟨fun n => ⟨fun {K} => ⟨fun {c} hc => ?_⟩⟩⟩, fun _ _ π _ c hc => ⟨?_⟩⟩
   · exact ⟨isLimitOfReflects s (isLimitOfPreserves (F ⋙ s) hc)⟩
-  · exact isLimitOfIsLimitForkMap s _ (hF₂ π c
+  · exact isLimitOfIsLimitForkMap s _ (hF₂ π c hc).some
 
 Depends on / 依赖: isLimitOfIsLimitForkMap, isLimitOfPreserves, isLimitOfReflects, isSheaf_iff_preservesFiniteProducts_and_equalizerCondition
 -/

@@ -102,7 +102,12 @@ theorem IsCompact.uniformContinuousAt_of_continuousAt
   choose U hU T hT hb using fun a ha =>
     exists_mem_nhds_ball_subset_of_mem_nhds ((hf a ha).preimage_mem_nhds <| mem_nhds_left _ ht)
   obtain ⟨fs, hsU⟩ := hs.elim_nhds_subcover' U hU
-  apply mem_of_superset ((biInter_finset_mem 
+  apply mem_of_superset ((biInter_finset_mem fs).2 fun a _ => hT a a.2)
+  rintro ⟨a₁, a₂⟩ h h₁
+  obtain ⟨a, ha, haU⟩ := Set.mem_iUnion₂.1 (hsU h₁)
+  apply htr
+refine ⟨f a, SetRel.symm t hb _ _ _ haU ?_, hb _ _ _ haU ?_⟩
+  exacts [mem_ball_self _ (hT a a.2), mem_iInter₂.1 h a ha]
 
 中文:
 定理 是紧集.uniformContinuousAt_of_continuousAt
@@ -112,7 +117,12 @@ theorem IsCompact.uniformContinuousAt_of_continuousAt
   choose U hU T hT hb using fun a ha =>
     exists_mem_nhds_ball_subset_of_mem_nhds ((hf a ha).preimage_mem_nhds <| mem_nhds_left _ ht)
   obtain ⟨fs, hsU⟩ := hs.elim_nhds_subcover' U hU
-  apply mem_of_superset ((biInter_finset_mem 
+  apply mem_of_superset ((biInter_finset_mem fs).2 fun a _ => hT a a.2)
+  rintro ⟨a₁, a₂⟩ h h₁
+  obtain ⟨a, ha, haU⟩ := Set.mem_iUnion₂.1 (hsU h₁)
+  apply htr
+refine ⟨f a, SetRel.symm t hb _ _ _ haU ?_, hb _ _ _ haU ?_⟩
+  exacts [mem_ball_self _ (hT a a.2), mem_iInter₂.1 h a ha]
 
 Depends on / 依赖: Set.mem_iUnion, SetRel, SetRel.symm, biInter_finset_mem, comp_symm_mem_uniformity_sets, elim_nhds_subcover, exacts, exists_mem_nhds_ball_subset_of_mem_nhds, hs.elim_nhds_subcover, htsymm, mem_ball_self, mem_iIn, mem_nhds_left, mem_of_superset, preimage_mem_nhds
 -/
@@ -142,7 +152,15 @@ theorem Continuous.uniformContinuous_of_tendsto_cocompact
     apply
       mem_of_superset
         (symmetrize_mem_uniformity <|
-(hs.uniformContinuousAt_of_continuousAt f fun _ _ => 
+(hs.uniformContinuousAt_of_continuousAt f fun _ _ => h_cont.continuousAt)
+            symmetrize_mem_uniformity hr)
+    rintro ⟨b₁, b₂⟩ h
+    by_cases h₁ : b₁ in s; · exact (h.1 h₁).1
+    by_cases h₂ : b₂ in s; · exact (h.2 h₂).2
+    apply htr
+exact ⟨x, SetRel.symm t hst h₁, hst h₂⟩
+
+@[to_additive]
 
 中文:
 定理 连续.uniformContinuous_of_tendsto_cocompact
@@ -153,7 +171,15 @@ theorem Continuous.uniformContinuous_of_tendsto_cocompact
     apply
       mem_of_superset
         (symmetrize_mem_uniformity <|
-(hs.uniformContinuousAt_of_continuousAt f fun _ _ => 
+(hs.uniformContinuousAt_of_continuousAt f fun _ _ => h_cont.continuousAt)
+            symmetrize_mem_uniformity hr)
+    rintro ⟨b₁, b₂⟩ h
+    by_cases h₁ : b₁ in s; · exact (h.1 h₁).1
+    by_cases h₂ : b₂ in s; · exact (h.2 h₂).2
+    apply htr
+exact ⟨x, SetRel.symm t hst h₁, hst h₂⟩
+
+@[to_additive]
 
 Depends on / 依赖: SetRel, SetRel.symm, comp_symm_mem_uniformity_sets, continuousAt, h_cont, h_cont.continuousAt, hs.uniformContinuousAt_of_continuousAt, htsymm, mem_cocompact, mem_nhds_left, mem_of_superset, symmetrize_mem_uniformity, uniformContinuousAt_of_continuousAt, uniformContinuous_def
 -/
@@ -266,7 +292,19 @@ lemma IsCompact.mem_uniformity_of_prod
   · intro t' t ht't ⟨v, v_mem, hv⟩
     exact ⟨v, v_mem, fun p hp x hx => hv p hp x (ht't hx)⟩
   · intro t t' ⟨v, v_mem, hv⟩ ⟨v', v'_mem, hv'⟩
-    refin
+    refine ⟨v inter v', inter_mem v_mem v'_mem, fun p hp x hx => ?_⟩
+    rcases hx with h'x | h'x
+    · exact hv p hp.1 x h'x
+    · exact hv' p hp.2 x h'x
+  · rcases comp_symm_of_uniformity hu with ⟨u', u'_mem, u'_symm, hu'⟩
+    intro x hx
+    obtain ⟨v, hv, w, hw, hvw⟩ :
+      exists v in 𝓝[s] q, exists w in 𝓝[k] x, v ×ˢ w subseteq f.uncurry ⁻¹' {z | (f q x, z) in u'} :=
+        mem_nhdsWithin_prod_iff.1 (hf (q, x) ⟨hq, hx⟩ (mem_nhds_left (f q x) u'_mem))
+    refine ⟨w, hw, v, hv, fun p hp y hy => ?_⟩
+    have A : (f q x, f p y) in u' := hvw (⟨hp, hy⟩ : (p, y) in v ×ˢ w)
+    have B : (f q x, f q y) in u' := hvw (⟨mem_of_mem_nhdsWithin hq hv, hy⟩ : (q, y) in v ×ˢ w)
+exact hu' SetRel.prodMk_mem_comp (u'_symm A) B
 
 中文:
 引理 是紧集.mem_uniformity_of_prod
@@ -276,7 +314,19 @@ lemma IsCompact.mem_uniformity_of_prod
   · intro t' t ht't ⟨v, v_mem, hv⟩
     exact ⟨v, v_mem, fun p hp x hx => hv p hp x (ht't hx)⟩
   · intro t t' ⟨v, v_mem, hv⟩ ⟨v', v'_mem, hv'⟩
-    refin
+    refine ⟨v inter v', inter_mem v_mem v'_mem, fun p hp x hx => ?_⟩
+    rcases hx with h'x | h'x
+    · exact hv p hp.1 x h'x
+    · exact hv' p hp.2 x h'x
+  · rcases comp_symm_of_uniformity hu with ⟨u', u'_mem, u'_symm, hu'⟩
+    intro x hx
+    obtain ⟨v, hv, w, hw, hvw⟩ :
+      exists v in 𝓝[s] q, exists w in 𝓝[k] x, v ×ˢ w subseteq f.uncurry ⁻¹' {z | (f q x, z) in u'} :=
+        mem_nhdsWithin_prod_iff.1 (hf (q, x) ⟨hq, hx⟩ (mem_nhds_left (f q x) u'_mem))
+    refine ⟨w, hw, v, hv, fun p hp y hy => ?_⟩
+    have A : (f q x, f p y) in u' := hvw (⟨hp, hy⟩ : (p, y) in v ×ˢ w)
+    have B : (f q x, f q y) in u' := hvw (⟨mem_of_mem_nhdsWithin hq hv, hy⟩ : (q, y) in v ×ˢ w)
+exact hu' SetRel.prodMk_mem_comp (u'_symm A) B
 
 Depends on / 依赖: _mem, _symm, comp_symm_of_uniformity, hk.induction_on, induction_on, inter_mem, univ_mem, v_mem
 -/

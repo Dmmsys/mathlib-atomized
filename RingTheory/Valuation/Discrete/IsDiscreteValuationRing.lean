@@ -74,6 +74,14 @@ instance isRankOneDiscrete
 .choose let π := valuation_exists_uniformizer K (maximalIdeal A)
     have hπ : v π = ↑(ofAdd (-1 : Int)) :=
 .choose_spec valuation_exists_uniformizer K (maximalIdeal A)
+    rw [Subgroup.nontrivial_iff_exists_ne_one]
+    use Units.mk0 (v π) (by simp [hπ])
+    constructor
+    · apply mem_valueGroup
+      use π
+      simp [v]
+    · simpa [hπ] using not_eq_of_beq_eq_false rfl
+  infer_instance
 
 中文:
 实例 isRankOneDiscrete
@@ -85,6 +93,14 @@ instance isRankOneDiscrete
 .choose let π := valuation_exists_uniformizer K (maximalIdeal A)
     have hπ : v π = ↑(ofAdd (-1 : Int)) :=
 .choose_spec valuation_exists_uniformizer K (maximalIdeal A)
+    rw [Subgroup.nontrivial_iff_exists_ne_one]
+    use Units.mk0 (v π) (by simp [hπ])
+    constructor
+    · apply mem_valueGroup
+      use π
+      simp [v]
+    · simpa [hπ] using not_eq_of_beq_eq_false rfl
+  infer_instance
 
 Depends on / 依赖: Nontrivial, Subgroup, Subgroup.nontrivial_iff_exists_ne_one, Units.mk0, choose_spec, infer_instance, maximalIdeal, mem_valueGroup, nontrivial_iff_exists_ne_one, not_eq_of_beq_eq_false, ofClass, valuation, valuation_exists_uniformizer, valueGroup
 -/
@@ -124,7 +140,28 @@ theorem exists_lift_of_le_one
     rw [ha]; rw [map_zero]; rw [zero_div]
   · rw [← h_frac] at H
     obtain ⟨n, u, rfl⟩ := eq_unit_mul_pow_irreducible ha hπ
-    obtain ⟨m, w
+    obtain ⟨m, w, rfl⟩ := eq_unit_mul_pow_irreducible (nonZeroDivisors.ne_zero hb) hπ
+    replace hb := (mul_mem_nonZeroDivisors.mp hb).2
+    rw [mul_comm (w : A) _]; rw [map_mul _ (u : A) _]; rw [map_mul _ _ (w : A)]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [Valuation.map_mul]; rw [Integers.one_of_isUnit' u.isUnit (valuation_le_one _)]; rw [one_mul]; rw [mul_inv]; rw [← mul_assoc]; rw [Valuation.map_mul]; rw [map_mul]; rw [map_inv₀]; rw [map_inv₀]; rw [Integers.one_of_isUnit' w.isUnit (valuation_le_one _)]; rw [inv_one]; rw [mul_one]; rw [← div_eq_mul_inv]; rw [← map_div₀]; rw [← IsFractionRing.mk'_mk_eq_div hb]; rw [valuation_of_mk']; rw [map_pow]; rw [map_pow] at H
+    have h_mn : m <= n := by
+      have v_π_lt_one := (intValuation_lt_one_iff_dvd (maximalIdeal A) π).mpr
+          (dvd_of_eq ((irreducible_iff_uniformizer _).mp hπ))
+      have v_π_ne_zero : (maximalIdeal A).intValuation π != 0 := intValuation_ne_zero _ _ hπ.ne_zero
+      zify
+      rw [← WithZero.coe_one]; rw [div_eq_mul_inv]; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← ofAdd_zero]; rw [← zpow_neg]; rw [← zpow_add₀ v_π_ne_zero]; rw [← sub_eq_add_neg] at H
+      rwa [← sub_nonneg, ← zpow_le_one_iff_right_of_lt_one₀ (zero_lt_iff.mpr v_π_ne_zero)
+        v_π_lt_one]
+    use u * π ^ (n - m) * w.2
+    simp only [← h_frac, Units.inv_eq_val_inv, _root_.map_mul, _root_.map_pow, map_units_inv,
+      mul_assoc, mul_div_assoc ((algebraMap A _) ↑u) _ _]
+    congr 1
+    rw [div_eq_mul_inv]; rw [mul_inv]; rw [mul_comm ((algebraMap A _) ↑w)⁻¹ _]; rw [←
+      mul_assoc _ _ ((algebraMap A _) ↑w)⁻¹]
+    congr
+    rw [pow_sub₀ _ _ h_mn]
+    apply IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors
+    rw [mem_nonZeroDivisors_iff_ne_zero]
+    exact hπ.ne_zero
 
 中文:
 定理 存在_lift_of_le_one
@@ -138,7 +175,28 @@ theorem exists_lift_of_le_one
     rw [ha]; rw [map_zero]; rw [zero_div]
   · rw [← h_frac] at H
     obtain ⟨n, u, rfl⟩ := eq_unit_mul_pow_irreducible ha hπ
-    obtain ⟨m, w
+    obtain ⟨m, w, rfl⟩ := eq_unit_mul_pow_irreducible (nonZeroDivisors.ne_zero hb) hπ
+    replace hb := (mul_mem_nonZeroDivisors.mp hb).2
+    rw [mul_comm (w : A) _]; rw [map_mul _ (u : A) _]; rw [map_mul _ _ (w : A)]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [Valuation.map_mul]; rw [Integers.one_of_isUnit' u.isUnit (valuation_le_one _)]; rw [one_mul]; rw [mul_inv]; rw [← mul_assoc]; rw [Valuation.map_mul]; rw [map_mul]; rw [map_inv₀]; rw [map_inv₀]; rw [Integers.one_of_isUnit' w.isUnit (valuation_le_one _)]; rw [inv_one]; rw [mul_one]; rw [← div_eq_mul_inv]; rw [← map_div₀]; rw [← IsFractionRing.mk'_mk_eq_div hb]; rw [valuation_of_mk']; rw [map_pow]; rw [map_pow] at H
+    have h_mn : m <= n := by
+      have v_π_lt_one := (intValuation_lt_one_iff_dvd (maximalIdeal A) π).mpr
+          (dvd_of_eq ((irreducible_iff_uniformizer _).mp hπ))
+      have v_π_ne_zero : (maximalIdeal A).intValuation π != 0 := intValuation_ne_zero _ _ hπ.ne_zero
+      zify
+      rw [← WithZero.coe_one]; rw [div_eq_mul_inv]; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← ofAdd_zero]; rw [← zpow_neg]; rw [← zpow_add₀ v_π_ne_zero]; rw [← sub_eq_add_neg] at H
+      rwa [← sub_nonneg, ← zpow_le_one_iff_right_of_lt_one₀ (zero_lt_iff.mpr v_π_ne_zero)
+        v_π_lt_one]
+    use u * π ^ (n - m) * w.2
+    simp only [← h_frac, Units.inv_eq_val_inv, _root_.map_mul, _root_.map_pow, map_units_inv,
+      mul_assoc, mul_div_assoc ((algebraMap A _) ↑u) _ _]
+    congr 1
+    rw [div_eq_mul_inv]; rw [mul_inv]; rw [mul_comm ((algebraMap A _) ↑w)⁻¹ _]; rw [←
+      mul_assoc _ _ ((algebraMap A _) ↑w)⁻¹]
+    congr
+    rw [pow_sub₀ _ _ h_mn]
+    apply IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors
+    rw [mem_nonZeroDivisors_iff_ne_zero]
+    exact hπ.ne_zero
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.div_surjective, div_eq_mul_inv, div_surjective, eq_unit_mul_pow_irreducible, exists_irreducible, h_frac, map_mul, map_zero, mul_as, mul_comm, mul_mem_nonZeroDivisors, mul_mem_nonZeroDivisors.mp, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, replace, zero_div
 -/
@@ -186,7 +244,11 @@ lemma mker_valuation_eq_isUnitSubmonoid
   refine ⟨fun h => ?_, fun h => ?_⟩
   · obtain ⟨b, rfl⟩ := IsDiscreteValuationRing.exists_lift_of_le_one h.le
     rw [valuation_eq_one_iff_notMem] at h
-    simp only [IsDiscreteValuationRing.maximalIdeal, IsLocalRing.mem_maximalIdeal, me
+    simp only [IsDiscreteValuationRing.maximalIdeal, IsLocalRing.mem_maximalIdeal, mem_nonunits_iff,
+      not_not] at h
+    use b, h
+  · obtain ⟨x, h, rfl⟩ := h
+    simpa [IsDiscreteValuationRing.maximalIdeal] using! h
 
 中文:
 引理 mker_valuation_eq_isUnitSubmonoid
@@ -196,7 +258,11 @@ lemma mker_valuation_eq_isUnitSubmonoid
   refine ⟨fun h => ?_, fun h => ?_⟩
   · obtain ⟨b, rfl⟩ := IsDiscreteValuationRing.exists_lift_of_le_one h.le
     rw [valuation_eq_one_iff_notMem] at h
-    simp only [IsDiscreteValuationRing.maximalIdeal, IsLocalRing.mem_maximalIdeal, me
+    simp only [IsDiscreteValuationRing.maximalIdeal, IsLocalRing.mem_maximalIdeal, mem_nonunits_iff,
+      not_not] at h
+    use b, h
+  · obtain ⟨x, h, rfl⟩ := h
+    simpa [IsDiscreteValuationRing.maximalIdeal] using! h
 
 Depends on / 依赖: IsDiscreteValuationRing, IsDiscreteValuationRing.exists_lift_of_le_one, IsDiscreteValuationRing.maximalIdeal, IsLocalRing, IsLocalRing.mem_maximalIdeal, MonoidHom, MonoidHom.mem_mker, Submonoid, Submonoid.mem_map, exists_lift_of_le_one, h.le, maximalIdeal, mem_map, mem_maximalIdeal, mem_mker, mem_nonunits_iff, not_not, valuation_eq_one_iff_notMem
 -/
@@ -231,7 +297,8 @@ theorem associated_of_valuation_eq
   rw [mker_valuation_eq_isUnitSubmonoid] at this
   obtain ⟨u, h⟩ := this
   use IsUnit.unit h.1
-  simp only [Units.smul_def
+  simp only [Units.smul_def, Algebra.smul_def, IsUnit.unit_spec, h.2]
+  field_simp
 
 中文:
 定理 associated_of_valuation_eq
@@ -246,7 +313,8 @@ theorem associated_of_valuation_eq
   rw [mker_valuation_eq_isUnitSubmonoid] at this
   obtain ⟨u, h⟩ := this
   use IsUnit.unit h.1
-  simp only [Units.smul_def
+  simp only [Units.smul_def, Algebra.smul_def, IsUnit.unit_spec, h.2]
+  field_simp
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsUnit, IsUnit.unit, IsUnit.unit_spec, MonoidHom, MonoidHom.mker, Units.smul_def, eq_comm, maximalIdeal, mker_valuation_eq_isUnitSubmonoid, smul_def, unit_spec, valuation
 -/
@@ -342,7 +410,7 @@ lemma intValuation_maximalIdeal
   obtain ⟨n, u, rfl⟩ := eq_unit_mul_pow_irreducible hx hϖ
   have : (maximalIdeal A).intValuation ↑u = 1 := by simp [maximalIdeal]
   simp [(maximalIdeal A).intValuation_singleton hϖ.ne_zero
-    hϖ.maximalIdeal_eq, hϖ, thi
+    hϖ.maximalIdeal_eq, hϖ, this, WithZero.exp_eq_coe_ofAdd (n : Int)]
 
 中文:
 引理 intValuation_maximalIdeal
@@ -354,7 +422,7 @@ lemma intValuation_maximalIdeal
   obtain ⟨n, u, rfl⟩ := eq_unit_mul_pow_irreducible hx hϖ
   have : (maximalIdeal A).intValuation ↑u = 1 := by simp [maximalIdeal]
   simp [(maximalIdeal A).intValuation_singleton hϖ.ne_zero
-    hϖ.maximalIdeal_eq, hϖ, thi
+    hϖ.maximalIdeal_eq, hϖ, this, WithZero.exp_eq_coe_ofAdd (n : Int)]
 
 Depends on / 依赖: WithZero, WithZero.exp_eq_coe_ofAdd, eq_unit_mul_pow_irreducible, exists_irreducible, exp_eq_coe_ofAdd, intValuation, intValuation_singleton, maximalIdeal, maximalIdeal_eq, ne_zero
 -/

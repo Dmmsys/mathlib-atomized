@@ -152,7 +152,8 @@ definition left
   closed_C := c.closed_C
   P_C_U := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.2.2.2.1
   open_U := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.1
-  subset := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.
+  subset := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.2.1
+  hP := c.hP
 
 中文:
 定义 left
@@ -162,7 +163,8 @@ definition left
   closed_C := c.closed_C
   P_C_U := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.2.2.2.1
   open_U := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.1
-  subset := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.
+  subset := (c.hP c.closed_C c.P_C_U c.open_U c.subset).choose_spec.2.1
+  hP := c.hP
 -/
 def left (c : CU P) : CU P where
   C := c.C
@@ -415,7 +417,7 @@ theorem approx_le_one
     simp only [approx, midpoint_eq_smul_add, invOf_eq_inv, smul_eq_mul, ← div_eq_inv_mul]
     have := add_le_add (ihn (left c)) (ihn (right c))
     norm_num at this
-   
+    exact Iff.mpr (div_le_one zero_lt_two) this
 
 中文:
 定理 approx_le_one
@@ -428,7 +430,7 @@ theorem approx_le_one
     simp only [approx, midpoint_eq_smul_add, invOf_eq_inv, smul_eq_mul, ← div_eq_inv_mul]
     have := add_le_add (ihn (left c)) (ihn (right c))
     norm_num at this
-   
+    exact Iff.mpr (div_le_one zero_lt_two) this
 
 Depends on / 依赖: Iff.mpr, add_le_add, approx, div_eq_inv_mul, div_le_one, generalizing, indicator_apply_le, invOf_eq_inv, le_rfl, midpoint_eq_smul_add, smul_eq_mul, zero_le_one, zero_lt_two
 -/
@@ -515,7 +517,9 @@ theorem approx_mem_Icc_right_left
     rw [Pi.one_apply]; positivity -- TODO: `positivity` doesn't prove that `1 x` is nonnegative
   | succ n ihn =>
     simp only [approx, mem_Icc]
-    refine ⟨midpoint_le_midpoint ?
+    refine ⟨midpoint_le_midpoint ?_ (ihn _).1, midpoint_le_midpoint (ihn _).2 ?_⟩ <;>
+      apply approx_le_approx_of_U_sub_C
+    exacts [subset_closure, subset_closure]
 
 中文:
 定理 approx_mem_Icc_right_left
@@ -529,7 +533,9 @@ theorem approx_mem_Icc_right_left
     rw [Pi.one_apply]; positivity -- TODO: `positivity` doesn't prove that `1 x` is nonnegative
   | succ n ihn =>
     simp only [approx, mem_Icc]
-    refine ⟨midpoint_le_midpoint ?
+    refine ⟨midpoint_le_midpoint ?_ (ihn _).1, midpoint_le_midpoint (ihn _).2 ?_⟩ <;>
+      apply approx_le_approx_of_U_sub_C
+    exacts [subset_closure, subset_closure]
 
 Depends on / 依赖: Pi.one_apply, approx, approx_le_approx_of_U_sub_C, exacts, generalizing, le_rfl, left_U_subset, mem_Icc, midpoint_le_midpoint, nonnegative, one_apply, subset_closure
 -/
@@ -826,7 +832,32 @@ theorem continuous_lim
     continuous_iff_continuousAt.2 fun x =>
       (Metric.nhds_basis_closedBall_pow (h0.trans h1234) h1).tendsto_right_iff.2 fun n _ => ?_
   simp only [Metric.mem_closedBall]
-  induction
+  induction n generalizing c with
+  | zero =>
+    filter_upwards with y
+    rw [pow_zero]
+    exact Real.dist_le_of_mem_Icc_01 (c.lim_mem_Icc _) (c.lim_mem_Icc _)
+  | succ n ihn =>
+    by_cases hxl : x in c.left.U
+    · filter_upwards [IsOpen.mem_nhds c.left.open_U hxl, ihn c.left] with _ hyl hyd
+      rw [pow_succ']; rw [c.lim_eq_midpoint]; rw [c.lim_eq_midpoint]; rw [c.right.lim_of_mem_C _ (c.left_U_subset_right_C hyl)]; rw [c.right.lim_of_mem_C _ (c.left_U_subset_right_C hxl)]
+      refine (dist_midpoint_midpoint_le _ _ _ _).trans ?_
+      rw [dist_self]; rw [add_zero]; rw [div_eq_inv_mul]
+      gcongr
+    · replace hxl : x in c.left.right.Cᶜ :=
+        compl_subset_compl.2 c.left.right.subset hxl
+      filter_upwards [IsOpen.mem_nhds (isOpen_compl_iff.2 c.left.right.closed_C) hxl,
+        ihn c.left.right, ihn c.right] with y hyl hydl hydr
+      replace hxl : x ∉ c.left.left.U :=
+        compl_subset_compl.2 c.left.left_U_subset_right_C hxl
+      replace hyl : y ∉ c.left.left.U :=
+        compl_subset_compl.2 c.left.left_U_subset_right_C hyl
+      simp only [pow_succ, c.lim_eq_midpoint, c.left.lim_eq_midpoint,
+        c.left.left.lim_of_notMem_U _ hxl, c.left.left.lim_of_notMem_U _ hyl]
+      grw [dist_midpoint_midpoint_le, dist_midpoint_midpoint_le, dist_self, zero_add]
+      set r := (3 / 4 : Real) ^ n
+      calc _ <= (r / 2 + r) / 2 := by gcongr
+        _ = _ := by ring
 
 中文:
 定理 continuous_lim
@@ -838,7 +869,32 @@ theorem continuous_lim
     continuous_iff_continuousAt.2 fun x =>
       (Metric.nhds_basis_closedBall_pow (h0.trans h1234) h1).tendsto_right_iff.2 fun n _ => ?_
   simp only [Metric.mem_closedBall]
-  induction
+  induction n generalizing c with
+  | zero =>
+    filter_upwards with y
+    rw [pow_zero]
+    exact Real.dist_le_of_mem_Icc_01 (c.lim_mem_Icc _) (c.lim_mem_Icc _)
+  | succ n ihn =>
+    by_cases hxl : x in c.left.U
+    · filter_upwards [IsOpen.mem_nhds c.left.open_U hxl, ihn c.left] with _ hyl hyd
+      rw [pow_succ']; rw [c.lim_eq_midpoint]; rw [c.lim_eq_midpoint]; rw [c.right.lim_of_mem_C _ (c.left_U_subset_right_C hyl)]; rw [c.right.lim_of_mem_C _ (c.left_U_subset_right_C hxl)]
+      refine (dist_midpoint_midpoint_le _ _ _ _).trans ?_
+      rw [dist_self]; rw [add_zero]; rw [div_eq_inv_mul]
+      gcongr
+    · replace hxl : x in c.left.right.Cᶜ :=
+        compl_subset_compl.2 c.left.right.subset hxl
+      filter_upwards [IsOpen.mem_nhds (isOpen_compl_iff.2 c.left.right.closed_C) hxl,
+        ihn c.left.right, ihn c.right] with y hyl hydl hydr
+      replace hxl : x ∉ c.left.left.U :=
+        compl_subset_compl.2 c.left.left_U_subset_right_C hxl
+      replace hyl : y ∉ c.left.left.U :=
+        compl_subset_compl.2 c.left.left_U_subset_right_C hyl
+      simp only [pow_succ, c.lim_eq_midpoint, c.left.lim_eq_midpoint,
+        c.left.left.lim_of_notMem_U _ hxl, c.left.left.lim_of_notMem_U _ hyl]
+      grw [dist_midpoint_midpoint_le, dist_midpoint_midpoint_le, dist_self, zero_add]
+      set r := (3 / 4 : Real) ^ n
+      calc _ <= (r / 2 + r) / 2 := by gcongr
+        _ = _ := by ring
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, Metric, Metric.mem_closedBall, Metric.nhds_basis_closedBall_pow, Real.dist_le_of_mem_Icc_01, c.left.U, c.lim_mem_Icc, continuous_iff_continuousAt, dist_le_of_mem_Icc_01, filter_upwards, generalizing, h0.trans, lim_mem_Icc, mem_closedBall, mem_nhds, nhds_basis_closedBall_pow, pow_zero, tendsto_right_iff
 -/
@@ -903,6 +959,12 @@ theorem exists_continuous_zero_one_of_isClosed
     closed_C := hs
     open_U := ht.isOpen_compl
     subset := disjoint_left.1 hd
+    hP := by
+      rintro c u c_closed - u_open cu
+      rcases normal_exists_closure_subset c_closed u_open cu with ⟨v, v_open, cv, hv⟩
+      exact ⟨v, v_open, cv, hv, trivial, trivial⟩ }
+  exact ⟨⟨c.lim, c.continuous_lim⟩, c.lim_of_mem_C, fun x hx => c.lim_of_notMem_U _ fun h => h hx,
+    c.lim_mem_Icc⟩
 
 中文:
 定理 存在_continuous_zero_one_of_isClosed
@@ -917,6 +979,12 @@ theorem exists_continuous_zero_one_of_isClosed
     closed_C := hs
     open_U := ht.isOpen_compl
     subset := disjoint_left.1 hd
+    hP := by
+      rintro c u c_closed - u_open cu
+      rcases normal_exists_closure_subset c_closed u_open cu with ⟨v, v_open, cv, hv⟩
+      exact ⟨v, v_open, cv, hv, trivial, trivial⟩ }
+  exact ⟨⟨c.lim, c.continuous_lim⟩, c.lim_of_mem_C, fun x hx => c.lim_of_notMem_U _ fun h => h hx,
+    c.lim_mem_Icc⟩
 -/
 theorem exists_continuous_zero_one_of_isClosed [NormalSpace X]
     {s t : Set X} (hs : IsClosed s) (ht : IsClosed t)
@@ -949,7 +1017,20 @@ theorem exists_continuous_zero_one_of_isCompact
   let P : Set X -> Set X -> Prop := fun C _ => IsCompact C
   set c : Urysohns.CU P :=
   { C := k
-  
+    U := tᶜ
+    P_C_U := k_comp
+    closed_C := k_closed
+    open_U := ht.isOpen_compl
+    subset := kt
+    hP := by
+      rintro c u - c_comp u_open cu
+      rcases exists_compact_closed_between c_comp u_open cu with ⟨k, k_comp, k_closed, ck, ku⟩
+      have A : closure (interior k) subseteq k :=
+        (IsClosed.closure_subset_iff k_closed).2 interior_subset
+      refine ⟨interior k, isOpen_interior, ck, A.trans ku, c_comp,
+        k_comp.of_isClosed_subset isClosed_closure A⟩ }
+  exact ⟨⟨c.lim, c.continuous_lim⟩, fun x hx => c.lim_of_mem_C _ (sk.trans interior_subset hx),
+    fun x hx => c.lim_of_notMem_U _ fun h => h hx, c.lim_mem_Icc⟩
 
 中文:
 定理 存在_continuous_zero_one_of_isCompact
@@ -960,7 +1041,20 @@ theorem exists_continuous_zero_one_of_isCompact
   let P : Set X -> Set X -> Prop := fun C _ => IsCompact C
   set c : Urysohns.CU P :=
   { C := k
-  
+    U := tᶜ
+    P_C_U := k_comp
+    closed_C := k_closed
+    open_U := ht.isOpen_compl
+    subset := kt
+    hP := by
+      rintro c u - c_comp u_open cu
+      rcases exists_compact_closed_between c_comp u_open cu with ⟨k, k_comp, k_closed, ck, ku⟩
+      have A : closure (interior k) subseteq k :=
+        (IsClosed.closure_subset_iff k_closed).2 interior_subset
+      refine ⟨interior k, isOpen_interior, ck, A.trans ku, c_comp,
+        k_comp.of_isClosed_subset isClosed_closure A⟩ }
+  exact ⟨⟨c.lim, c.continuous_lim⟩, fun x hx => c.lim_of_mem_C _ (sk.trans interior_subset hx),
+    fun x hx => c.lim_of_notMem_U _ fun h => h hx, c.lim_mem_Icc⟩
 
 Depends on / 依赖: IsClosed, IsCompact, P_C_U, Urysohns, Urysohns.CU, c_comp, closed_C, exists_compact_closed_between, hd.symm.subset_compl_left, ht.isOpen_compl, interior, isOpen_compl, k_closed, k_comp, open_U, subset, subset_compl_left, subseteq, u_open
 -/
@@ -1001,7 +1095,11 @@ theorem exists_continuous_zero_one_of_isCompact'
   · intro x hx
     simp only [ContinuousMap.sub_apply, ContinuousMap.one_apply, Pi.zero_apply]
     exact sub_eq_zero_of_eq (hgt.symm hx)
-  · int
+  · intro x hx
+    simp only [ContinuousMap.sub_apply, ContinuousMap.one_apply, Pi.one_apply, sub_eq_self]
+    exact hgs hx
+  · intro x
+    simpa [and_comm] using hicc x
 
 中文:
 定理 存在_continuous_zero_one_of_isCompact'
@@ -1014,7 +1112,11 @@ theorem exists_continuous_zero_one_of_isCompact'
   · intro x hx
     simp only [ContinuousMap.sub_apply, ContinuousMap.one_apply, Pi.zero_apply]
     exact sub_eq_zero_of_eq (hgt.symm hx)
-  · int
+  · intro x hx
+    simp only [ContinuousMap.sub_apply, ContinuousMap.one_apply, Pi.one_apply, sub_eq_self]
+    exact hgs hx
+  · intro x
+    simpa [and_comm] using hicc x
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.one_apply, ContinuousMap.sub_apply, Pi.one_apply, Pi.zero_apply, and_comm, exists_continuous_zero_one_of_isCompact, hgt.symm, one_apply, sub_apply, sub_eq_self, sub_eq_zero_of_eq, zero_apply
 -/
@@ -1044,7 +1146,18 @@ theorem exists_continuous_one_zero_of_isCompact
   obtain ⟨k, k_comp, k_closed, sk, kt⟩ : exists k, IsCompact k ∧ IsClosed k ∧ s subseteq interior k ∧ k subseteq tᶜ :=
     exists_compact_closed_between hs ht.isOpen_compl hd.symm.subset_compl_left
   rcases exists_continuous_zero_one_of_isCompact hs isOpen_interior.isClosed_compl
-    (disjoint_co
+    (disjoint_compl_right_iff_subset.mpr sk) with ⟨⟨f, hf⟩, hfs, hft, h'f⟩
+  have A : t subseteq (interior k)ᶜ := subset_compl_comm.mpr (interior_subset.trans kt)
+  refine ⟨⟨fun x => 1 - f x, by fun_prop⟩, fun x hx => by simpa using hfs hx,
+    fun x hx => by simpa [sub_eq_zero] using (hft (A hx)).symm, ?_, fun x => ?_⟩
+  · apply HasCompactSupport.intro' k_comp k_closed (fun x hx => ?_)
+    simp only [ContinuousMap.coe_mk, sub_eq_zero]
+    apply (hft _).symm
+    contrapose hx
+    simp only [mem_compl_iff, not_not] at hx
+    exact interior_subset hx
+  · have : 0 <= f x ∧ f x <= 1 := by simpa using h'f x
+    simp [this]
 
 中文:
 定理 存在_continuous_one_zero_of_isCompact
@@ -1053,7 +1166,18 @@ theorem exists_continuous_one_zero_of_isCompact
   obtain ⟨k, k_comp, k_closed, sk, kt⟩ : exists k, IsCompact k ∧ IsClosed k ∧ s subseteq interior k ∧ k subseteq tᶜ :=
     exists_compact_closed_between hs ht.isOpen_compl hd.symm.subset_compl_left
   rcases exists_continuous_zero_one_of_isCompact hs isOpen_interior.isClosed_compl
-    (disjoint_co
+    (disjoint_compl_right_iff_subset.mpr sk) with ⟨⟨f, hf⟩, hfs, hft, h'f⟩
+  have A : t subseteq (interior k)ᶜ := subset_compl_comm.mpr (interior_subset.trans kt)
+  refine ⟨⟨fun x => 1 - f x, by fun_prop⟩, fun x hx => by simpa using hfs hx,
+    fun x hx => by simpa [sub_eq_zero] using (hft (A hx)).symm, ?_, fun x => ?_⟩
+  · apply HasCompactSupport.intro' k_comp k_closed (fun x hx => ?_)
+    simp only [ContinuousMap.coe_mk, sub_eq_zero]
+    apply (hft _).symm
+    contrapose hx
+    simp only [mem_compl_iff, not_not] at hx
+    exact interior_subset hx
+  · have : 0 <= f x ∧ f x <= 1 := by simpa using h'f x
+    simp [this]
 
 Depends on / 依赖: IsClosed, IsCompact, disjoint_compl_right_iff_subset, disjoint_compl_right_iff_subset.mpr, exists_compact_closed_between, exists_continuous_zero_one_of_isCompact, fun_prop, hd.symm.subset_compl_left, ht.isOpen_compl, interior, interior_subset, interior_subset.trans, isClosed_compl, isOpen_compl, isOpen_interior, isOpen_interior.isClosed_compl, k_closed, k_comp, subset_compl_comm, subset_compl_comm.mpr
 -/
@@ -1086,7 +1210,43 @@ theorem exists_continuous_one_zero_of_isCompact_of_isGδ
   rcases h's.eq_iInter_nat with ⟨U, U_open, hU⟩
   obtain ⟨m, m_comp, -, sm, mt⟩ : exists m, IsCompact m ∧ IsClosed m ∧ s subseteq interior m ∧ m subseteq tᶜ :=
     exists_compact_closed_between hs ht.isOpen_compl hd.symm.subset_compl_left
-  have A n : exists f : C(X, Real), EqOn f 1 s ∧ EqOn f 0 
+  have A n : exists f : C(X, Real), EqOn f 1 s ∧ EqOn f 0 (U n inter interior m)ᶜ ∧ HasCompactSupport f
+      ∧ forall x, f x in Icc (0 : Real) 1 := by
+    apply exists_continuous_one_zero_of_isCompact hs
+      ((U_open n).inter isOpen_interior).isClosed_compl
+    rw [disjoint_compl_right_iff_subset]
+    exact subset_inter ((hU.subset.trans (iInter_subset U n))) sm
+  choose f fs fm _hf f_range using A
+  obtain ⟨u, u_pos, u_sum, hu⟩ : exists (u : Nat -> Real), (forall i, 0 < u i) ∧ Summable u ∧ ∑' i, u i = 1 :=
+    ⟨fun n => 1/2/2^n, fun n => by positivity, summable_geometric_two' 1, tsum_geometric_two' 1⟩
+  let g : X -> Real := fun x => ∑' n, u n * f n x
+  have hgmc : EqOn g 0 mᶜ := by
+    intro x hx
+    have B n : f n x = 0 := by
+      have : mᶜ subseteq (U n inter interior m)ᶜ := by
+        simpa using inter_subset_right.trans interior_subset
+      exact fm n (this hx)
+    simp [g, B]
+  have I n x : u n * f n x <= u n := mul_le_of_le_one_right (u_pos n).le (f_range n x).2
+  have S x : Summable (fun n => u n * f n x) := Summable.of_nonneg_of_le
+      (fun n => mul_nonneg (u_pos n).le (f_range n x).1) (fun n => I n x) u_sum
+  refine ⟨⟨g, ?_⟩, ?_, hgmc.mono (subset_compl_comm.mp mt), ?_, fun x => ⟨?_, ?_⟩⟩
+  · apply continuous_tsum (fun n => by fun_prop) u_sum (fun n x => ?_)
+    simpa [abs_of_nonneg, (u_pos n).le, (f_range n x).1] using I n x
+  · apply Subset.antisymm (fun x hx => by simp [g, fs _ hx, hu]) ?_
+    apply compl_subset_compl.1
+    intro x hx
+    obtain ⟨n, hn⟩ : exists n, x ∉ U n := by simpa [hU] using hx
+    have fnx : f n x = 0 := fm _ (by simp [hn])
+    have : g x < 1 := by
+      apply lt_of_lt_of_le ?_ hu.le
+      exact (S x).tsum_lt_tsum (i := n) (fun i => I i x) (by simp [fnx, u_pos n]) u_sum
+    simpa using this.ne
+  · exact HasCompactSupport.of_support_subset_isCompact m_comp
+      (Function.support_subset_iff'.mpr hgmc)
+  · exact tsum_nonneg (fun n => mul_nonneg (u_pos n).le (f_range n x).1)
+  · apply le_trans _ hu.le
+    exact (S x).tsum_le_tsum (fun n => I n x) u_sum
 
 中文:
 定理 存在_continuous_one_zero_of_isCompact_of_isGδ
@@ -1095,7 +1255,43 @@ theorem exists_continuous_one_zero_of_isCompact_of_isGδ
   rcases h's.eq_iInter_nat with ⟨U, U_open, hU⟩
   obtain ⟨m, m_comp, -, sm, mt⟩ : exists m, IsCompact m ∧ IsClosed m ∧ s subseteq interior m ∧ m subseteq tᶜ :=
     exists_compact_closed_between hs ht.isOpen_compl hd.symm.subset_compl_left
-  have A n : exists f : C(X, Real), EqOn f 1 s ∧ EqOn f 0 
+  have A n : exists f : C(X, Real), EqOn f 1 s ∧ EqOn f 0 (U n inter interior m)ᶜ ∧ HasCompactSupport f
+      ∧ forall x, f x in Icc (0 : Real) 1 := by
+    apply exists_continuous_one_zero_of_isCompact hs
+      ((U_open n).inter isOpen_interior).isClosed_compl
+    rw [disjoint_compl_right_iff_subset]
+    exact subset_inter ((hU.subset.trans (iInter_subset U n))) sm
+  choose f fs fm _hf f_range using A
+  obtain ⟨u, u_pos, u_sum, hu⟩ : exists (u : Nat -> Real), (forall i, 0 < u i) ∧ Summable u ∧ ∑' i, u i = 1 :=
+    ⟨fun n => 1/2/2^n, fun n => by positivity, summable_geometric_two' 1, tsum_geometric_two' 1⟩
+  let g : X -> Real := fun x => ∑' n, u n * f n x
+  have hgmc : EqOn g 0 mᶜ := by
+    intro x hx
+    have B n : f n x = 0 := by
+      have : mᶜ subseteq (U n inter interior m)ᶜ := by
+        simpa using inter_subset_right.trans interior_subset
+      exact fm n (this hx)
+    simp [g, B]
+  have I n x : u n * f n x <= u n := mul_le_of_le_one_right (u_pos n).le (f_range n x).2
+  have S x : Summable (fun n => u n * f n x) := Summable.of_nonneg_of_le
+      (fun n => mul_nonneg (u_pos n).le (f_range n x).1) (fun n => I n x) u_sum
+  refine ⟨⟨g, ?_⟩, ?_, hgmc.mono (subset_compl_comm.mp mt), ?_, fun x => ⟨?_, ?_⟩⟩
+  · apply continuous_tsum (fun n => by fun_prop) u_sum (fun n x => ?_)
+    simpa [abs_of_nonneg, (u_pos n).le, (f_range n x).1] using I n x
+  · apply Subset.antisymm (fun x hx => by simp [g, fs _ hx, hu]) ?_
+    apply compl_subset_compl.1
+    intro x hx
+    obtain ⟨n, hn⟩ : exists n, x ∉ U n := by simpa [hU] using hx
+    have fnx : f n x = 0 := fm _ (by simp [hn])
+    have : g x < 1 := by
+      apply lt_of_lt_of_le ?_ hu.le
+      exact (S x).tsum_lt_tsum (i := n) (fun i => I i x) (by simp [fnx, u_pos n]) u_sum
+    simpa using this.ne
+  · exact HasCompactSupport.of_support_subset_isCompact m_comp
+      (Function.support_subset_iff'.mpr hgmc)
+  · exact tsum_nonneg (fun n => mul_nonneg (u_pos n).le (f_range n x).1)
+  · apply le_trans _ hu.le
+    exact (S x).tsum_le_tsum (fun n => I n x) u_sum
 
 Depends on / 依赖: HasCompactSupport, IsClosed, IsCompact, U_open, disjoint_compl_righ, eq_iInter_nat, exists_compact_closed_between, exists_continuous_one_zero_of_isCompact, hd.symm.subset_compl_left, ht.isOpen_compl, interior, isClosed_compl, isOpen_compl, isOpen_interior, m_comp, s.eq_iInter_nat, subset_compl_left, subseteq
 -/
@@ -1213,7 +1409,8 @@ lemma exists_continuousMap_one_of_isCompact_subset_isOpen
   obtain ⟨f, hf1, hf2, hf3⟩ := exists_tsupport_one_of_isOpen_isClosed hU1 hU4
     isClosed_closure (hK.closure_subset_of_isOpen hU1 hU2)
   have hfU : tsupport f subseteq closure U := hf1.trans subset_closure
- 
+  exact ⟨f, hf2.mono subset_closure,
+    .of_isClosed_subset hU4 isClosed_closure hfU, hfU.trans hU3, hf3⟩
 
 中文:
 引理 存在_continuousMap_one_of_isCompact_subset_isOpen
@@ -1223,7 +1420,8 @@ lemma exists_continuousMap_one_of_isCompact_subset_isOpen
   obtain ⟨f, hf1, hf2, hf3⟩ := exists_tsupport_one_of_isOpen_isClosed hU1 hU4
     isClosed_closure (hK.closure_subset_of_isOpen hU1 hU2)
   have hfU : tsupport f subseteq closure U := hf1.trans subset_closure
- 
+  exact ⟨f, hf2.mono subset_closure,
+    .of_isClosed_subset hU4 isClosed_closure hfU, hfU.trans hU3, hf3⟩
 
 Depends on / 依赖: closure, closure_subset_of_isOpen, exists_open_between_and_isCompact_closure, exists_tsupport_one_of_isOpen_isClosed, hK.closure_subset_of_isOpen, hf1.trans, hf2.mono, hfU.trans, isClosed_closure, of_isClosed_subset, subset_closure, subseteq, tsupport
 -/
@@ -1251,7 +1449,7 @@ theorem exists_continuous_nonneg_pos
   refine ⟨f, f_comp, fun x => (hf x).1, ?_⟩
   have := fk (mem_of_mem_nhds k_mem)
   simp only [Pi.one_apply] at this
-  simp [
+  simp [this]
 
 中文:
 定理 存在_continuous_nonneg_pos
@@ -1263,7 +1461,7 @@ theorem exists_continuous_nonneg_pos
   refine ⟨f, f_comp, fun x => (hf x).1, ?_⟩
   have := fk (mem_of_mem_nhds k_mem)
   simp only [Pi.one_apply] at this
-  simp [
+  simp [this]
 
 Depends on / 依赖: Pi.one_apply, disjoint_empty, exists_compact_mem_nhds, exists_continuous_one_zero_of_isCompact, f_comp, isClosed_empty, k_mem, mem_of_mem_nhds, one_apply
 -/

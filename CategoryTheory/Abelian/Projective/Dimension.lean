@@ -411,7 +411,8 @@ lemma projective_iff_subsingleton_ext_one
   obtain ⟨φ, hφ⟩ :=
     Ext.covariant_sequence_exact₃ _ { exact := ShortComplex.exact_kernel g }
       (Ext.mk₀ f) (zero_add 1) (by subsingleton)
-  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surjec
+  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surjective φ
+  exact ⟨φ, Ext.homEquiv₀.symm.injective (by simpa using hφ)⟩
 
 中文:
 引理 projective_iff_subsingleton_ext_one
@@ -422,7 +423,8 @@ lemma projective_iff_subsingleton_ext_one
   obtain ⟨φ, hφ⟩ :=
     Ext.covariant_sequence_exact₃ _ { exact := ShortComplex.exact_kernel g }
       (Ext.mk₀ f) (zero_add 1) (by subsingleton)
-  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surjec
+  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surjective φ
+  exact ⟨φ, Ext.homEquiv₀.symm.injective (by simpa using hφ)⟩
 
 Depends on / 依赖: Ext.covariant_sequence_exact, Ext.homEquiv, Ext.mk, HasProjectiveDimensionLT, HasProjectiveDimensionLT.subsingleton, ShortComplex, ShortComplex.exact_kernel, exact_kernel, injective, subsingleton, surjective, symm.injective, symm.surjective, zero_add
 -/
@@ -597,7 +599,7 @@ lemma hasProjectiveDimensionLT_X₃
   · simp at hi
   · obtain ⟨x₁, rfl⟩ := Ext.contravariant_sequence_exact₃ hS _ x₃
       (Ext.eq_zero_of_hasProjectiveDimensionLT _ (n + 1) hi) (add_comm _ _)
-    rw [x₁.eq_zero_of_hasProjectiveDimensionLT n (by
+    rw [x₁.eq_zero_of_hasProjectiveDimensionLT n (by lia)]; rw [Ext.comp_zero]
 
 中文:
 引理 hasProjectiveDimensionLT_X₃
@@ -609,7 +611,7 @@ lemma hasProjectiveDimensionLT_X₃
   · simp at hi
   · obtain ⟨x₁, rfl⟩ := Ext.contravariant_sequence_exact₃ hS _ x₃
       (Ext.eq_zero_of_hasProjectiveDimensionLT _ (n + 1) hi) (add_comm _ _)
-    rw [x₁.eq_zero_of_hasProjectiveDimensionLT n (by
+    rw [x₁.eq_zero_of_hasProjectiveDimensionLT n (by lia)]; rw [Ext.comp_zero]
 
 Depends on / 依赖: Ext.comp_zero, Ext.contravariant_sequence_exact, Ext.eq_zero_of_hasProjectiveDimensionLT, HasExt, HasExt.standard, add_comm, comp_zero, eq_zero_of_hasProjectiveDimensionLT, hasProjectiveDimensionLT_iff, standard
 -/
@@ -636,7 +638,7 @@ lemma hasProjectiveDimensionLT_X₁
   intro i hi Y x₁
   obtain ⟨x₂, rfl⟩ := Ext.contravariant_sequence_exact₁ hS _ x₁ (add_comm _ _)
     (Ext.eq_zero_of_hasProjectiveDimensionLT _ (n + 1) (by lia))
-  rw [x₂.eq_zero_of_hasProjectiveDimensionLT n (by lia)]; rw [Ext.comp_z
+  rw [x₂.eq_zero_of_hasProjectiveDimensionLT n (by lia)]; rw [Ext.comp_zero]
 
 中文:
 引理 hasProjectiveDimensionLT_X₁
@@ -647,7 +649,7 @@ lemma hasProjectiveDimensionLT_X₁
   intro i hi Y x₁
   obtain ⟨x₂, rfl⟩ := Ext.contravariant_sequence_exact₁ hS _ x₁ (add_comm _ _)
     (Ext.eq_zero_of_hasProjectiveDimensionLT _ (n + 1) (by lia))
-  rw [x₂.eq_zero_of_hasProjectiveDimensionLT n (by lia)]; rw [Ext.comp_z
+  rw [x₂.eq_zero_of_hasProjectiveDimensionLT n (by lia)]; rw [Ext.comp_zero]
 
 Depends on / 依赖: Ext.comp_zero, Ext.contravariant_sequence_exact, Ext.eq_zero_of_hasProjectiveDimensionLT, HasExt, HasExt.standard, add_comm, comp_zero, eq_zero_of_hasProjectiveDimensionLT, hasProjectiveDimensionLT_iff, standard
 -/
@@ -705,7 +707,16 @@ lemma hasProjectiveDimensionLT_of_enoughInjectives
   intro d Y e k hd
   induction k generalizing d Y with
   | zero =>
-    obtain rf
+    obtain rfl : d = n := by simpa using hd
+    subsingleton
+  | succ k hk =>
+    let ⟨p⟩ := EnoughInjectives.presentation Y
+    have h : (ShortComplex.mk _ _ (cokernel.condition p.f)).ShortExact :=
+      { exact := ShortComplex.exact_cokernel p.f }
+    have hd : n + k + 1 = d := by lia
+    obtain ⟨x, rfl⟩ := Ext.covariant_sequence_exact₁ X h e
+      (by subst hd; apply Ext.eq_zero_of_injective) hd
+    simp [hk x rfl]
 
 中文:
 引理 hasProjectiveDimensionLT_of_enoughInjectives
@@ -718,7 +729,16 @@ lemma hasProjectiveDimensionLT_of_enoughInjectives
   intro d Y e k hd
   induction k generalizing d Y with
   | zero =>
-    obtain rf
+    obtain rfl : d = n := by simpa using hd
+    subsingleton
+  | succ k hk =>
+    let ⟨p⟩ := EnoughInjectives.presentation Y
+    have h : (ShortComplex.mk _ _ (cokernel.condition p.f)).ShortExact :=
+      { exact := ShortComplex.exact_cokernel p.f }
+    have hd : n + k + 1 = d := by lia
+    obtain ⟨x, rfl⟩ := Ext.covariant_sequence_exact₁ X h e
+      (by subst hd; apply Ext.eq_zero_of_injective) hd
+    simp [hk x rfl]
 
 Depends on / 依赖: EnoughInjectives, EnoughInjectives.presentation, HasProjectiveDimensionLT, HasProjectiveDimensionLT.mk, Nat.exists_eq_add_of_le, ShortComplex, ShortComplex.exact_cokernel, ShortComplex.mk, ShortExact, cokernel, cokernel.condition, condition, exact_cokernel, exists_eq_add_of_le, generalizing, presentation, subsingleton
 -/
@@ -846,7 +866,8 @@ lemma projectiveDimension_lt_iff
     exact this _ h
   · obtain _ | n := n
     · exact ⟨⊥, fun _ _ => hasProjectiveDimensionLT_of_ge _ 0 _ (by simp), by decide⟩
-    · exact ⟨n
+    · exact ⟨n, fun i hi => hasProjectiveDimensionLT_of_ge _ (n + 1) _ (by simpa using hi),
+        by simp [ENat.WithBot.lt_add_one_iff]⟩
 
 中文:
 引理 projectiveDimension_lt_iff
@@ -858,7 +879,8 @@ lemma projectiveDimension_lt_iff
     exact this _ h
   · obtain _ | n := n
     · exact ⟨⊥, fun _ _ => hasProjectiveDimensionLT_of_ge _ 0 _ (by simp), by decide⟩
-    · exact ⟨n
+    · exact ⟨n, fun i hi => hasProjectiveDimensionLT_of_ge _ (n + 1) _ (by simpa using hi),
+        by simp [ENat.WithBot.lt_add_one_iff]⟩
 
 Depends on / 依赖: ENat.WithBot.lt_add_one_iff, Set.mem_ofPred_eq, WithBot, csInf_mem, hasProjectiveDimensionLT_of_ge, lt_add_one_iff, mem_ofPred_eq, projectiveDimension, sInf_lt_iff
 -/
@@ -952,7 +974,13 @@ lemma projectiveDimension_ne_top_iff
     induction d with
     | top =>
       by_contra!
-      simp only [WithBot.coe_top, ne_e
+      simp only [WithBot.coe_top, ne_eq, not_true_eq_false, false_and, true_and, false_or] at this
+      obtain ⟨n, hn⟩ := this
+      rw [← projectiveDimension_le_iff]; rw [hd]; rw [WithBot.coe_top]; rw [top_le_iff] at hn
+      exact ENat.natCast_ne_top _ ((WithBot.coe_eq_coe).1 hn)
+    | coe d =>
+      simp only [ne_eq, WithBot.coe_eq_top, ENat.natCast_ne_top, not_false_eq_true, true_iff]
+      exact ⟨d, by simpa only [← projectiveDimension_le_iff] using! hd.le⟩
 
 中文:
 引理 projectiveDimension_ne_top_iff
@@ -967,7 +995,13 @@ lemma projectiveDimension_ne_top_iff
     induction d with
     | top =>
       by_contra!
-      simp only [WithBot.coe_top, ne_e
+      simp only [WithBot.coe_top, ne_eq, not_true_eq_false, false_and, true_and, false_or] at this
+      obtain ⟨n, hn⟩ := this
+      rw [← projectiveDimension_le_iff]; rw [hd]; rw [WithBot.coe_top]; rw [top_le_iff] at hn
+      exact ENat.natCast_ne_top _ ((WithBot.coe_eq_coe).1 hn)
+    | coe d =>
+      simp only [ne_eq, WithBot.coe_eq_top, ENat.natCast_ne_top, not_false_eq_true, true_iff]
+      exact ⟨d, by simpa only [← projectiveDimension_le_iff] using! hd.le⟩
 
 Depends on / 依赖: ENat.natCast_ne_top, WithBot, WithBot.coe_eq_coe, WithBot.coe_top, bot_ne_top, coe_eq_coe, coe_top, false_and, false_or, generalize, natCast_ne_top, ne_eq, not_false_eq_true, not_true_eq_false, projectiveDimension, projectiveDimension_le_iff, top_le_iff, true_and, true_iff
 -/

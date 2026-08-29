@@ -418,7 +418,9 @@ theorem eq_iff_eqOn_range_order
   rw [← Subtype.mk.injEq u hu v hv]; rw [← E.basis.repr.injective.eq_iff]
   constructor
   · exact fun h n hn => congr($h ⟨n, Finset.mem_range.mp hn⟩)
-· exact
+· exact fun h => Finsupp.ext fun n => h Finset.mem_range.mpr n.prop
+
+@[deprecated (since := "2026-04-16")] alias sol_eq_of_eq_init := eq_iff_eqOn_range_order
 
 中文:
 定理 eq_iff_eqOn_range_order
@@ -429,7 +431,9 @@ theorem eq_iff_eqOn_range_order
   rw [← Subtype.mk.injEq u hu v hv]; rw [← E.basis.repr.injective.eq_iff]
   constructor
   · exact fun h n hn => congr($h ⟨n, Finset.mem_range.mp hn⟩)
-· exact
+· exact fun h => Finsupp.ext fun n => h Finset.mem_range.mpr n.prop
+
+@[deprecated (since := "2026-04-16")] alias sol_eq_of_eq_init := eq_iff_eqOn_range_order
 
 Depends on / 依赖: E.basis.repr.injective.eq_iff, E.solSpace, Finset, Finset.mem_range.mp, Finset.mem_range.mpr, Finsupp, Finsupp.ext, Subtype, Subtype.mk.injEq, eq_iff, injective, is_sol_iff_mem_solSpace, mem_range, n.prop, replace, solSpace
 -/
@@ -461,7 +465,8 @@ definition tupleSucc
   map_smul' x y := by
     ext i
     split_ifs with h <;>
-      simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply, h, ↓reduceDIt
+      simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply, h, ↓reduceDIte, mul_sum]
+    exact sum_congr rfl fun x _ => by ac_rfl
 
 中文:
 定义 tupleSucc
@@ -473,7 +478,8 @@ definition tupleSucc
   map_smul' x y := by
     ext i
     split_ifs with h <;>
-      simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply, h, ↓reduceDIt
+      simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply, h, ↓reduceDIte, mul_sum]
+    exact sum_congr rfl fun x _ => by ac_rfl
 
 Depends on / 依赖: E.coeffs, E.order, coeffs
 -/
@@ -560,7 +566,10 @@ theorem charPoly_degree_eq_order
 
 .Monic := by theorem charPoly_monic : charPoly E
   nontriviality R
-  rw [Monic]; rw [leadingCoeff]; rw [natDegree_eq_of_
+  rw [Monic]; rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some <| charPoly_degree_eq_order _]; rw [charPoly]; rw [coeff_sub]; rw [coeff_monomial_same]; rw [finsetSum_coeff]; rw [sub_eq_self]
+  refine sum_eq_zero fun _ _ => coeff_eq_zero_of_degree_lt ?_
+  grw [degree_monomial_le]
+  simp
 
 中文:
 定理 charPoly_degree_eq_order
@@ -574,7 +583,10 @@ theorem charPoly_degree_eq_order
 
 .Monic := by theorem charPoly_monic : charPoly E
   nontriviality R
-  rw [Monic]; rw [leadingCoeff]; rw [natDegree_eq_of_
+  rw [Monic]; rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some <| charPoly_degree_eq_order _]; rw [charPoly]; rw [coeff_sub]; rw [coeff_monomial_same]; rw [finsetSum_coeff]; rw [sub_eq_self]
+  refine sum_eq_zero fun _ _ => coeff_eq_zero_of_degree_lt ?_
+  grw [degree_monomial_le]
+  simp
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, E.coeffs, E.order, charPoly, coeffs, degree_monomial, degree_sub_eq_left_of_degree_lt, degree_sum_fin_lt, one_ne_zero, simp_rw
 -/
@@ -605,7 +617,8 @@ theorem geom_sol_iff_root_charPoly
   · intro h
     simpa [sub_eq_zero] using h 0
   · intro h n
-    simp only [pow_add, sub_eq_zero.
+    simp only [pow_add, sub_eq_zero.mp h, mul_sum]
+    exact sum_congr rfl fun _ _ => by ring
 
 中文:
 定理 geom_sol_iff_root_charPoly
@@ -618,7 +631,8 @@ theorem geom_sol_iff_root_charPoly
   · intro h
     simpa [sub_eq_zero] using h 0
   · intro h n
-    simp only [pow_add, sub_eq_zero.
+    simp only [pow_add, sub_eq_zero.mp h, mul_sum]
+    exact sum_congr rfl fun _ _ => by ring
 
 Depends on / 依赖: IsRoot, Polynomial, Polynomial.IsRoot.def, Polynomial.eval, RingHom, RingHom.id_apply, charPoly, id_apply, mul_sum, one_mul, pow_add, sub_eq_zero, sub_eq_zero.mp, sum_congr
 -/

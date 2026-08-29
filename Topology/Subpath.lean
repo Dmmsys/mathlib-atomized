@@ -116,7 +116,10 @@ lemma range_subpathAux
       (one_minus_nonneg s) (nonneg s) (sub_add_cancel _ _)
   · intro t (ht : (t : Real) in uIcc (t₀ : Real) (t₁ : Real))
     rw [← segment_eq_uIcc]; rw [segment_eq_image] at ht
-    obta
+    obtain ⟨s, hs, hst⟩ := ht
+    use ⟨s, hs⟩
+    ext
+    exact hst
 
 中文:
 引理 range_subpathAux
@@ -130,7 +133,10 @@ lemma range_subpathAux
       (one_minus_nonneg s) (nonneg s) (sub_add_cancel _ _)
   · intro t (ht : (t : Real) in uIcc (t₀ : Real) (t₁ : Real))
     rw [← segment_eq_uIcc]; rw [segment_eq_image] at ht
-    obta
+    obtain ⟨s, hs, hst⟩ := ht
+    use ⟨s, hs⟩
+    ext
+    exact hst
 
 Depends on / 依赖: convex_uIcc, left_mem_uIcc, nonneg, one_minus_nonneg, range_eq_iff, right_mem_uIcc, segment_eq_image, segment_eq_uIcc, sub_add_cancel
 -/
@@ -297,7 +303,13 @@ definition subpathTransSubpathRefl
     let γ₁ (t : I) := γ.subpath t₀ (Icc.convexComb t₁ t₂ t)
     let γ₂ (t : I) := γ.subpath (Icc.convexComb t₁ t₂ t) t₂
     refine Path.trans_continuous_family γ₁ ?_ γ₂ ?_ <;>
-    refine γ.subpath_continu
+    refine γ.subpath_continuous_family.comp (.prodMk ?_ <| .prodMk ?_ ?_) <;>
+    fun_prop
+  map_zero_left _ := by rw [Icc.convexComb_zero, coe_toContinuousMap]
+  map_one_left _ := by rw [Icc.convexComb_one, subpath_self, coe_toContinuousMap]
+  prop' _ _ hx := by
+    rcases hx with rfl | rfl <;>
+    simp
 
 中文:
 定义 subpathTransSubpathRefl
@@ -307,7 +319,13 @@ definition subpathTransSubpathRefl
     let γ₁ (t : I) := γ.subpath t₀ (Icc.convexComb t₁ t₂ t)
     let γ₂ (t : I) := γ.subpath (Icc.convexComb t₁ t₂ t) t₂
     refine Path.trans_continuous_family γ₁ ?_ γ₂ ?_ <;>
-    refine γ.subpath_continu
+    refine γ.subpath_continuous_family.comp (.prodMk ?_ <| .prodMk ?_ ?_) <;>
+    fun_prop
+  map_zero_left _ := by rw [Icc.convexComb_zero, coe_toContinuousMap]
+  map_one_left _ := by rw [Icc.convexComb_one, subpath_self, coe_toContinuousMap]
+  prop' _ _ hx := by
+    rcases hx with rfl | rfl <;>
+    simp
 
 Depends on / 依赖: Icc.convexComb, convexComb, subpath
 -/

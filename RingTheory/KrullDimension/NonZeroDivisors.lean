@@ -63,7 +63,17 @@ lemma ringKrullDim_quotient_succ_le_of_nonZeroDivisor
   have : Nonempty (PrimeSpectrum.zeroLocus (R := R) (Ideal.span {r})) := by
     rwa [Set.nonempty_coe_sort, Set.nonempty_iff_ne_empty, ne_eq,
       PrimeSpectrum.zeroLocus_empty_iff_eq_top]
-  have := Id
+  have := Ideal.Quotient.nontrivial_iff.mpr hr'
+  have := (Ideal.Quotient.mk (Ideal.span {r})).domain_nontrivial
+  rw [ringKrullDim_quotient]; rw [Order.krullDim_eq_iSup_length]; rw [ringKrullDim]; rw [Order.krullDim_eq_iSup_length]; rw [← WithBot.coe_one]; rw [← WithBot.coe_add]; rw [ENat.iSup_add]; rw [WithBot.coe_le_coe]; rw [iSup_le_iff]
+  intro l
+  obtain ⟨p, hp, hp'⟩ := Ideal.exists_minimalPrimes_le (J := l.head.1.asIdeal) bot_le
+  let p' : PrimeSpectrum R := ⟨p, hp.1.1⟩
+  have hp' : p' < l.head := lt_of_le_of_ne hp' fun h => Set.disjoint_iff.mp
+    (Ideal.disjoint_nonZeroDivisors_of_mem_minimalPrimes hp)
+    ⟨show r in p by simpa [← h] using l.head.2, hr⟩
+  refine le_trans ?_ (le_iSup _ ((l.map Subtype.val (fun _ _ => id)).cons p' hp'))
+  simp
 
 中文:
 引理 ringKrullDim_quotient_succ_le_of_nonZeroDivisor
@@ -74,7 +84,17 @@ lemma ringKrullDim_quotient_succ_le_of_nonZeroDivisor
   have : Nonempty (PrimeSpectrum.zeroLocus (R := R) (Ideal.span {r})) := by
     rwa [Set.nonempty_coe_sort, Set.nonempty_iff_ne_empty, ne_eq,
       PrimeSpectrum.zeroLocus_empty_iff_eq_top]
-  have := Id
+  have := Ideal.Quotient.nontrivial_iff.mpr hr'
+  have := (Ideal.Quotient.mk (Ideal.span {r})).domain_nontrivial
+  rw [ringKrullDim_quotient]; rw [Order.krullDim_eq_iSup_length]; rw [ringKrullDim]; rw [Order.krullDim_eq_iSup_length]; rw [← WithBot.coe_one]; rw [← WithBot.coe_add]; rw [ENat.iSup_add]; rw [WithBot.coe_le_coe]; rw [iSup_le_iff]
+  intro l
+  obtain ⟨p, hp, hp'⟩ := Ideal.exists_minimalPrimes_le (J := l.head.1.asIdeal) bot_le
+  let p' : PrimeSpectrum R := ⟨p, hp.1.1⟩
+  have hp' : p' < l.head := lt_of_le_of_ne hp' fun h => Set.disjoint_iff.mp
+    (Ideal.disjoint_nonZeroDivisors_of_mem_minimalPrimes hp)
+    ⟨show r in p by simpa [← h] using l.head.2, hr⟩
+  refine le_trans ?_ (le_iSup _ ((l.map Subtype.val (fun _ _ => id)).cons p' hp'))
+  simp
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.nontrivial_iff.mpr, Ideal.span, Nonempty, Order.krullDim_eq_iSup_length, PrimeSpectrum, PrimeSpectrum.zeroLocus, PrimeSpectrum.zeroLocus_empty_iff_eq_top, Quotient, Set.nonempty_coe_sort, Set.nonempty_iff_ne_empty, domain_nontrivial, krullDim_eq_iSup_length, ne_eq, nonempty_coe_sort, nonempty_iff_ne_empty, nontrivial_iff, ringKrullDim, ringKrullDim_eq_bot_of_subsingleton, ringKrullDim_quotient
 -/
@@ -186,7 +206,10 @@ lemma ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial
     · exact ringKrullDim_eq_of_ringEquiv (renameEquiv _ e).toRingEquiv
   | h_empty => simp
   | h_option IH =>
-    simp only [Nat.card_eq_fintype_card, Fintype.card_optio
+    simp only [Nat.card_eq_fintype_card, Fintype.card_option, Nat.cast_add, Nat.cast_one,
+      ← add_assoc] at IH ⊢
+    grw [IH, ringKrullDim_succ_le_ringKrullDim_polynomial]
+    exact (ringKrullDim_eq_of_ringEquiv (MvPolynomial.optionEquivLeft _ _).toRingEquiv).ge
 
 中文:
 引理 ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial
@@ -199,7 +222,10 @@ lemma ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial
     · exact ringKrullDim_eq_of_ringEquiv (renameEquiv _ e).toRingEquiv
   | h_empty => simp
   | h_option IH =>
-    simp only [Nat.card_eq_fintype_card, Fintype.card_optio
+    simp only [Nat.card_eq_fintype_card, Fintype.card_option, Nat.cast_add, Nat.cast_one,
+      ← add_assoc] at IH ⊢
+    grw [IH, ringKrullDim_succ_le_ringKrullDim_polynomial]
+    exact (ringKrullDim_eq_of_ringEquiv (MvPolynomial.optionEquivLeft _ _).toRingEquiv).ge
 
 Depends on / 依赖: Finite, Finite.induction_empty_option, Fintype, Fintype.card_option, MvPolynomial, MvPolynomial.optionEquivLeft, Nat.card_congr, Nat.card_eq_fintype_card, Nat.cast_add, Nat.cast_one, add_assoc, card_congr, card_eq_fintype_card, card_option, cast_add, cast_one, convert, h_empty, h_option, induction_empty_option
 -/
@@ -232,7 +258,18 @@ lemma ringKrullDim_add_enatCard_le_ringKrullDim_mvPolynomial
     exact ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial _
   · simp only [ENat.card_eq_top_of_infinite, WithBot.coe_top]
     suffices ringKrullDim (MvPolynomial σ R) = ⊤ by simp_all
-    rw [ENat.
+    rw [ENat.WithBot.eq_top_iff_forall_ge]
+    intro n
+    let ι := Infinite.natEmbedding σ ∘ Fin.val (n := n + 1)
+    have := Function.invFun_surjective (f := ι) ((Infinite.natEmbedding σ).2.comp Fin.val_injective)
+    refine le_trans ?_ (ringKrullDim_le_of_surjective
+      (rename (R := R) _).toRingHom (rename_surjective _ this))
+    refine le_trans ?_ (ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial _)
+    simp only [Nat.card_eq_fintype_card, Fintype.card_fin, Nat.cast_add, Nat.cast_one]
+    trans n + 1
+    · norm_cast
+      simp
+    · exact WithBot.le_add_self Order.bot_lt_krullDim.ne' _
 
 中文:
 引理 ringKrullDim_add_enatCard_le_ringKrullDim_mvPolynomial
@@ -245,7 +282,18 @@ lemma ringKrullDim_add_enatCard_le_ringKrullDim_mvPolynomial
     exact ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial _
   · simp only [ENat.card_eq_top_of_infinite, WithBot.coe_top]
     suffices ringKrullDim (MvPolynomial σ R) = ⊤ by simp_all
-    rw [ENat.
+    rw [ENat.WithBot.eq_top_iff_forall_ge]
+    intro n
+    let ι := Infinite.natEmbedding σ ∘ Fin.val (n := n + 1)
+    have := Function.invFun_surjective (f := ι) ((Infinite.natEmbedding σ).2.comp Fin.val_injective)
+    refine le_trans ?_ (ringKrullDim_le_of_surjective
+      (rename (R := R) _).toRingHom (rename_surjective _ this))
+    refine le_trans ?_ (ringKrullDim_add_natCard_le_ringKrullDim_mvPolynomial _)
+    simp only [Nat.card_eq_fintype_card, Fintype.card_fin, Nat.cast_add, Nat.cast_one]
+    trans n + 1
+    · norm_cast
+      simp
+    · exact WithBot.le_add_self Order.bot_lt_krullDim.ne' _
 
 Depends on / 依赖: ENat.WithBot.eq_top_iff_forall_ge, ENat.card_eq_coe_natCard, ENat.card_eq_top_of_infinite, Fin.val, Fin.val_injective, Function, Function.invFun_surjective, Infinite, Infinite.natEmbedding, MvPolynomial, WithBot, WithBot.coe_top, card_eq_coe_natCard, card_eq_top_of_infinite, coe_top, eq_top_iff_forall_ge, finite_or_infinite, invFun_surjective, le_trans, natEmbedding
 -/

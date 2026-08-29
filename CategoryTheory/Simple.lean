@@ -127,7 +127,12 @@ theorem Simple.of_iso
         simp at j
       · intro h
         have j : IsIso (f ≫ i.hom) := by
-          apply isIso_of_mo
+          apply isIso_of_mono_of_nonzero
+          intro w
+          apply h
+          simpa using (cancel_mono i.inv).2 w
+        rw [← Category.comp_id f]; rw [← i.hom_inv_id]; rw [← Category.assoc]
+        infer_instance }
 
 中文:
 定理 单.of_iso
@@ -142,7 +147,12 @@ theorem Simple.of_iso
         simp at j
       · intro h
         have j : IsIso (f ≫ i.hom) := by
-          apply isIso_of_mo
+          apply isIso_of_mono_of_nonzero
+          intro w
+          apply h
+          simpa using (cancel_mono i.inv).2 w
+        rw [← Category.comp_id f]; rw [← i.hom_inv_id]; rw [← Category.assoc]
+        infer_instance }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Simple, Simple.mono_isIso_iff_nonzero, cancel_mono, comp_id, hom_inv_id, i.hom, i.hom_inv_id, i.inv, infer_instance, isIso_of_mono_of_nonzero, mono_isIso_iff_nonzero
 -/
@@ -414,7 +424,7 @@ theorem simple_of_cosimple
       suffices Epi f by exact isIso_of_mono_of_epi _
       apply Preadditive.epi_of_cokernel_zero
       by_contra h'
-      exact 
+      exact cokernel_not_iso_of_nonzero hf ((h _).mpr h')⟩
 
 中文:
 定理 simple_of_cosimple
@@ -430,7 +440,7 @@ theorem simple_of_cosimple
       suffices Epi f by exact isIso_of_mono_of_epi _
       apply Preadditive.epi_of_cokernel_zero
       by_contra h'
-      exact 
+      exact cokernel_not_iso_of_nonzero hf ((h _).mpr h')⟩
 
 Depends on / 依赖: Preadditive, Preadditive.epi_of_cokernel_zero, cokernel, cokernel_not_iso_of_nonzero, epi_of_cokernel_zero, fconstructor, intros, isIso_of_mono_of_epi
 -/
@@ -549,7 +559,8 @@ theorem Biprod.isIso_inl_iff_isZero
     replace h := h =≫ biprod.snd
     simpa [← IsZero.iff_isSplitEpi_eq_zero (biprod.snd : X ⊞ Y ⟶ Y)] using h
   · intro h
-    rw [IsZero.iff_isSplitEpi_eq_zero (biprod.snd : X ⊞ Y ⟶ Y)]
+    rw [IsZero.iff_isSplitEpi_eq_zero (biprod.snd : X ⊞ Y ⟶ Y)] at h
+    rw [h]; rw [zero_comp]
 
 中文:
 定理 Biprod.isIso_inl_iff_isZero
@@ -562,7 +573,8 @@ theorem Biprod.isIso_inl_iff_isZero
     replace h := h =≫ biprod.snd
     simpa [← IsZero.iff_isSplitEpi_eq_zero (biprod.snd : X ⊞ Y ⟶ Y)] using h
   · intro h
-    rw [IsZero.iff_isSplitEpi_eq_zero (biprod.snd : X ⊞ Y ⟶ Y)]
+    rw [IsZero.iff_isSplitEpi_eq_zero (biprod.snd : X ⊞ Y ⟶ Y)] at h
+    rw [h]; rw [zero_comp]
 
 Depends on / 依赖: IsZero, IsZero.iff_isSplitEpi_eq_zero, add_eq_left, biprod, biprod.isIso_inl_iff_id_eq_fst_comp_inl, biprod.snd, biprod.total, iff_isSplitEpi_eq_zero, isIso_inl_iff_id_eq_fst_comp_inl, replace, zero_comp
 -/
@@ -589,7 +601,7 @@ theorem indecomposable_of_simple
     change biprod.inl != 0 at h
     have : Simple (Y ⊞ Z) := Simple.of_iso i.symm
     rw [← Simple.mono_isIso_iff_nonzero biprod.inl] at h
-    rw
+    rwa [Biprod.isIso_inl_iff_isZero] at h⟩
 
 中文:
 定理 indecomposable_of_simple
@@ -601,7 +613,7 @@ theorem indecomposable_of_simple
     change biprod.inl != 0 at h
     have : Simple (Y ⊞ Z) := Simple.of_iso i.symm
     rw [← Simple.mono_isIso_iff_nonzero biprod.inl] at h
-    rw
+    rwa [Biprod.isIso_inl_iff_isZero] at h⟩
 
 Depends on / 依赖: Biprod, Biprod.isIso_inl_iff_isZero, IsZero, IsZero.iff_isSplitMono_eq_zero, Simple, Simple.mono_isIso_iff_nonzero, Simple.not_isZero, Simple.of_iso, biprod, biprod.inl, i.symm, iff_isSplitMono_eq_zero, isIso_inl_iff_isZero, mono_isIso_iff_nonzero, not_isZero, of_iso, or_iff_not_imp_left, or_iff_not_imp_left.mpr
 -/
@@ -650,7 +662,9 @@ theorem simple_of_isSimpleOrder_subobject
     exact IsSimpleOrder.bot_ne_top (w.symm.trans i)
   · intro i
     rcases IsSimpleOrder.eq_bot_or_eq_top (Subobject.mk f) with (h | h)
-    · r
+    · rw [Subobject.mk_eq_bot_iff_zero] at h
+      exact False.elim (i h)
+    · exact (Subobject.isIso_iff_mk_eq_top _).mpr h
 
 中文:
 定理 simple_of_isSimpleOrder_subobject
@@ -665,7 +679,9 @@ theorem simple_of_isSimpleOrder_subobject
     exact IsSimpleOrder.bot_ne_top (w.symm.trans i)
   · intro i
     rcases IsSimpleOrder.eq_bot_or_eq_top (Subobject.mk f) with (h | h)
-    · r
+    · rw [Subobject.mk_eq_bot_iff_zero] at h
+      exact False.elim (i h)
+    · exact (Subobject.isIso_iff_mk_eq_top _).mpr h
 
 Depends on / 依赖: False.elim, IsSimpleOrder, IsSimpleOrder.bot_ne_top, IsSimpleOrder.eq_bot_or_eq_top, Subobject, Subobject.isIso_iff_mk_eq_top, Subobject.mk, Subobject.mk_eq_bot_iff_zero, bot_ne_top, eq_bot_or_eq_top, isIso_iff_mk_eq_top, mk_eq_bot_iff_zero, w.symm.trans
 -/

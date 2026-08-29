@@ -156,7 +156,31 @@ lemma GeometricallyReduced.isReduced_of_flat_of_finite_irreducibleComponents
   have hpt (Z : _) : IsField (pt Z) :=
     isField_stalk_of_closure_mem_irreducibleComponents _ _ (by
       rw [Z.property.1.closure_genericPoint (isClosed_of_mem_irreducibleComponents _ Z.property)]
-      exact 
+      exact Z.property)
+  let (Z : _) := (hpt Z).toField
+  let Z := ∐ fun Z => Spec (pt Z)
+  let g : Z ⟶ Y := Sigma.desc fun Z => Y.fromSpecStalk _
+  have : Finite Z := (sigmaMk _).finite_iff.mp inferInstance
+  have : QuasiCompact g := ⟨fun _ _ _ => (Set.toFinite _).isCompact⟩
+  have H : IsSchemeTheoreticallyDominant g := by
+    rw [isSchemeTheoreticallyDominant_iff_isDominant]; rw [isDominant_iff]; rw [denseRange_iff_closure_range]; rw [Set.eq_univ_iff_forall]
+    intro y
+    let z : Z := Sigma.ι (fun Z => Spec (pt Z)) ⟨_, irreducibleComponent_mem_irreducibleComponents y⟩
+      (IsLocalRing.closedPoint _)
+    have hz : g z ⤳ y := by
+      simp only [g, z, Z, ← Scheme.Hom.comp_apply, Sigma.ι_desc, pt,
+        Scheme.fromSpecStalk_closedPoint]
+      exact (IsIrreducible.isGenericPoint_genericPoint _
+        isClosed_irreducibleComponent).specializes mem_irreducibleComponent
+    exact hz.mem_closed isClosed_closure (subset_closure ⟨_, rfl⟩)
+  suffices IsReduced (pullback f g) from IsSchemeTheoreticallyDominant.isReduced (pullback.fst f g)
+  have H := IsUniversalColimit.isPullback_of_isColimit_left
+    (X := fun Z => Spec (pt Z))
+    (FinitaryPreExtensive.isUniversal_finiteCoproducts (coproductIsCoproduct _))
+    (fun Z => Y.fromSpecStalk _) g f _ _ (fun _ => .of_hasPullback _ _) (coproductIsCoproduct _)
+  apply +allowSynthFailures @isReduced_of_isOpenImmersion (f := H.isoPullback.inv)
+  apply +allowSynthFailures @IsReduced.of_openCover (𝒰 := sigmaOpenCover _)
+  exact fun i => GeometricallyReduced.geometrically_isReduced _ _ _ (.of_hasPullback _ _)
 
 中文:
 引理 几何既约.isReduced_of_flat_of_finite_irreducibleComponents
@@ -165,7 +189,31 @@ lemma GeometricallyReduced.isReduced_of_flat_of_finite_irreducibleComponents
   have hpt (Z : _) : IsField (pt Z) :=
     isField_stalk_of_closure_mem_irreducibleComponents _ _ (by
       rw [Z.property.1.closure_genericPoint (isClosed_of_mem_irreducibleComponents _ Z.property)]
-      exact 
+      exact Z.property)
+  let (Z : _) := (hpt Z).toField
+  let Z := ∐ fun Z => Spec (pt Z)
+  let g : Z ⟶ Y := Sigma.desc fun Z => Y.fromSpecStalk _
+  have : Finite Z := (sigmaMk _).finite_iff.mp inferInstance
+  have : QuasiCompact g := ⟨fun _ _ _ => (Set.toFinite _).isCompact⟩
+  have H : IsSchemeTheoreticallyDominant g := by
+    rw [isSchemeTheoreticallyDominant_iff_isDominant]; rw [isDominant_iff]; rw [denseRange_iff_closure_range]; rw [Set.eq_univ_iff_forall]
+    intro y
+    let z : Z := Sigma.ι (fun Z => Spec (pt Z)) ⟨_, irreducibleComponent_mem_irreducibleComponents y⟩
+      (IsLocalRing.closedPoint _)
+    have hz : g z ⤳ y := by
+      simp only [g, z, Z, ← Scheme.Hom.comp_apply, Sigma.ι_desc, pt,
+        Scheme.fromSpecStalk_closedPoint]
+      exact (IsIrreducible.isGenericPoint_genericPoint _
+        isClosed_irreducibleComponent).specializes mem_irreducibleComponent
+    exact hz.mem_closed isClosed_closure (subset_closure ⟨_, rfl⟩)
+  suffices IsReduced (pullback f g) from IsSchemeTheoreticallyDominant.isReduced (pullback.fst f g)
+  have H := IsUniversalColimit.isPullback_of_isColimit_left
+    (X := fun Z => Spec (pt Z))
+    (FinitaryPreExtensive.isUniversal_finiteCoproducts (coproductIsCoproduct _))
+    (fun Z => Y.fromSpecStalk _) g f _ _ (fun _ => .of_hasPullback _ _) (coproductIsCoproduct _)
+  apply +allowSynthFailures @isReduced_of_isOpenImmersion (f := H.isoPullback.inv)
+  apply +allowSynthFailures @IsReduced.of_openCover (𝒰 := sigmaOpenCover _)
+  exact fun i => GeometricallyReduced.geometrically_isReduced _ _ _ (.of_hasPullback _ _)
 
 Depends on / 依赖: Finite, IsField, QuasiCompact, Sigma.desc, Y.fromSpecStalk, Y.presheaf.stalk, Z.property, closure_genericPoint, finite_iff, finite_iff.mp, fromSpecStalk, genericPoint, irreducibleComponents, isClosed_of_mem_irreducibleComponents, isField_stalk_of_closure_mem_irreducibleComponents, presheaf, property, sigmaMk, toField
 -/
@@ -213,7 +261,9 @@ lemma GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian
   intro i
   have : IsReduced (Y.affineCover.X i) := isReduced_of_isOpenImmersion (Y.affineCover.f i)
   have : Finite ↑(irreducibleComponents ↥(Y.affineCover.X i)) := by
-    let : IsNoetherian (Y.affineCover.X i) 
+    let : IsNoetherian (Y.affineCover.X i) := {}
+    exact TopologicalSpace.NoetherianSpace.finite_irreducibleComponents
+  exact isReduced_of_flat_of_finite_irreducibleComponents (pullback.snd _ _)
 
 中文:
 引理 几何既约.isReduced_of_flat_of_isLocallyNoetherian
@@ -222,7 +272,9 @@ lemma GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian
   intro i
   have : IsReduced (Y.affineCover.X i) := isReduced_of_isOpenImmersion (Y.affineCover.f i)
   have : Finite ↑(irreducibleComponents ↥(Y.affineCover.X i)) := by
-    let : IsNoetherian (Y.affineCover.X i) 
+    let : IsNoetherian (Y.affineCover.X i) := {}
+    exact TopologicalSpace.NoetherianSpace.finite_irreducibleComponents
+  exact isReduced_of_flat_of_finite_irreducibleComponents (pullback.snd _ _)
 
 Depends on / 依赖: Finite, IsNoetherian, IsReduced, IsReduced.of_openCover, NoetherianSpace, TopologicalSpace, TopologicalSpace.NoetherianSpace.finite_irreducibleComponents, Y.affineCover.X, Y.affineCover.f, Y.affineCover.pullback, affineCover, allowSynthFailures, finite_irreducibleComponents, irreducibleComponents, isReduced_of_flat_of_finite_irreducibleComponents, isReduced_of_isOpenImmersion, of_openCover, pullback, pullback.snd
 -/

@@ -209,7 +209,8 @@ have ha : 0 <= ⅟(da : α) := invOf_nonneg.mpr Nat.cast_nonneg da
 have hb : 0 <= ⅟(db : α) := invOf_nonneg.mpr Nat.cast_nonneg db
 have h := (mul_le_mul_of_nonneg_left · hb) mul_le_mul_of_nonneg_right h ha
     rw [← mul_assoc]; rw [Nat.commute_cast] at h
- 
+    simp only [Nat.mul_eq, Nat.cast_mul, mul_invOf_cancel_right'] at h
+    rwa [Nat.commute_cast] at h
 
 中文:
 定理 isNNRat_le_true
@@ -219,7 +220,8 @@ have ha : 0 <= ⅟(da : α) := invOf_nonneg.mpr Nat.cast_nonneg da
 have hb : 0 <= ⅟(db : α) := invOf_nonneg.mpr Nat.cast_nonneg db
 have h := (mul_le_mul_of_nonneg_left · hb) mul_le_mul_of_nonneg_right h ha
     rw [← mul_assoc]; rw [Nat.commute_cast] at h
- 
+    simp only [Nat.mul_eq, Nat.cast_mul, mul_invOf_cancel_right'] at h
+    rwa [Nat.commute_cast] at h
 
 Depends on / 依赖: Nat.cast_le, cast_le, of_decide_eq_true
 -/
@@ -247,7 +249,8 @@ theorem isNNRat_lt_true
     have hb : 0 < ⅟(db : α) := pos_invOf_of_invertible_cast db
 have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
     rw [← mul_assoc]; rw [Nat.commute_cast] at h
-    simp?
+    simp? at h says simp only [Nat.cast_mul, mul_invOf_cancel_right'] at h
+    rwa [Nat.commute_cast] at h
 
 中文:
 定理 isNNRat_lt_true
@@ -257,7 +260,8 @@ have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
     have hb : 0 < ⅟(db : α) := pos_invOf_of_invertible_cast db
 have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
     rw [← mul_assoc]; rw [Nat.commute_cast] at h
-    simp?
+    simp? at h says simp only [Nat.cast_mul, mul_invOf_cancel_right'] at h
+    rwa [Nat.commute_cast] at h
 
 Depends on / 依赖: Nat.cast_lt, R1Space, T0Space, T2Space, cast_lt, of_decide_eq_true
 -/
@@ -324,7 +328,9 @@ have ha : 0 <= ⅟(da : α) := invOf_nonneg.mpr Nat.cast_nonneg da
 have hb : 0 <= ⅟(db : α) := invOf_nonneg.mpr Nat.cast_nonneg db
 have h := (mul_le_mul_of_nonneg_left · hb) mul_le_mul_of_nonneg_right h ha
     rw [← mul_assoc]; rw [Int.commute_cast] at h
-    s
+    simp only [Int.ofNat_eq_natCast, Int.mul_def, Int.cast_mul, Int.cast_natCast,
+      mul_invOf_cancel_right'] at h
+    rwa [Int.commute_cast] at h
 
 中文:
 定理 isRat_le_true
@@ -334,7 +340,9 @@ have ha : 0 <= ⅟(da : α) := invOf_nonneg.mpr Nat.cast_nonneg da
 have hb : 0 <= ⅟(db : α) := invOf_nonneg.mpr Nat.cast_nonneg db
 have h := (mul_le_mul_of_nonneg_left · hb) mul_le_mul_of_nonneg_right h ha
     rw [← mul_assoc]; rw [Int.commute_cast] at h
-    s
+    simp only [Int.ofNat_eq_natCast, Int.mul_def, Int.cast_mul, Int.cast_natCast,
+      mul_invOf_cancel_right'] at h
+    rwa [Int.commute_cast] at h
 
 Depends on / 依赖: Int.cast_mono, cast_mono, of_decide_eq_true
 -/
@@ -363,7 +371,8 @@ theorem isRat_lt_true
     have hb : 0 < ⅟(db : α) := pos_invOf_of_invertible_cast db
 have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
     rw [← mul_assoc]; rw [Int.commute_cast] at h
-    sim
+    simp? at h says simp only [Int.cast_mul, Int.cast_natCast, mul_invOf_cancel_right'] at h
+    rwa [Int.commute_cast] at h
 
 中文:
 定理 isRat_lt_true
@@ -373,7 +382,8 @@ have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
     have hb : 0 < ⅟(db : α) := pos_invOf_of_invertible_cast db
 have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
     rw [← mul_assoc]; rw [Int.commute_cast] at h
-    sim
+    simp? at h says simp only [Int.cast_mul, Int.cast_natCast, mul_invOf_cancel_right'] at h
+    rwa [Int.commute_cast] at h
 
 Depends on / 依赖: Int.cast_strictMono, cast_strictMono, of_decide_eq_true
 -/

@@ -70,7 +70,13 @@ lemma isTotallyUnimodular_iff
       rw [SignType.coe_zero]; rw [eq_comm]
       simp_rw [not_and_or, Function.not_injective_iff] at hfg
       obtain ⟨i, j, hfij, hij⟩ | ⟨i, j, hgij, hij⟩ := hfg
- 
+      · rw [← det_transpose, transpose_submatrix]
+        apply det_zero_of_column_eq hij.symm
+        simp [hfij]
+      · apply det_zero_of_column_eq hij
+        simp [hgij]
+  · intro _ _ _ _ _
+    apply hA
 
 中文:
 引理 isTotallyUnimodular_iff
@@ -85,7 +91,13 @@ lemma isTotallyUnimodular_iff
       rw [SignType.coe_zero]; rw [eq_comm]
       simp_rw [not_and_or, Function.not_injective_iff] at hfg
       obtain ⟨i, j, hfij, hij⟩ | ⟨i, j, hgij, hij⟩ := hfg
- 
+      · rw [← det_transpose, transpose_submatrix]
+        apply det_zero_of_column_eq hij.symm
+        simp [hfij]
+      · apply det_zero_of_column_eq hij
+        simp [hgij]
+  · intro _ _ _ _ _
+    apply hA
 
 Depends on / 依赖: Function, Function.not_injective_iff, Injective, SignType, SignType.coe_zero, coe_zero, det_transpose, det_zero_of_column_eq, eq_comm, f.Injective, g.Injective, hij.symm, not_and_or, not_injective_iff, simp_rw, transpose_submatrix
 -/
@@ -122,7 +134,8 @@ lemma isTotallyUnimodular_iff_fintype.{w}
     specialize hA (Fintype.card ι) (f ∘ (Fintype.equivFin ι).symm) (g ∘ (Fintype.equivFin ι).symm)
     rwa [← submatrix_submatrix, det_submatrix_equiv_self] at hA
   · intro hA k f g
-    specialize hA (ULift (Fin k)) (f ∘ Equiv.ul
+    specialize hA (ULift (Fin k)) (f ∘ Equiv.ulift) (g ∘ Equiv.ulift)
+    rwa [← submatrix_submatrix, det_submatrix_equiv_self] at hA
 
 中文:
 引理 isTotallyUnimodular_iff_fintype.{w}
@@ -135,7 +148,8 @@ lemma isTotallyUnimodular_iff_fintype.{w}
     specialize hA (Fintype.card ι) (f ∘ (Fintype.equivFin ι).symm) (g ∘ (Fintype.equivFin ι).symm)
     rwa [← submatrix_submatrix, det_submatrix_equiv_self] at hA
   · intro hA k f g
-    specialize hA (ULift (Fin k)) (f ∘ Equiv.ul
+    specialize hA (ULift (Fin k)) (f ∘ Equiv.ulift) (g ∘ Equiv.ulift)
+    rwa [← submatrix_submatrix, det_submatrix_equiv_self] at hA
 
 Depends on / 依赖: Equiv.ulift, Fintype, Fintype.card, Fintype.equivFin, det_submatrix_equiv_self, equivFin, isTotallyUnimodular_iff, specialize, submatrix_submatrix
 -/
@@ -362,7 +376,32 @@ lemma IsTotallyUnimodular.fromRows_unitlike
     specialize hB ⟨g 0⟩
     -- Either `f` is `inr` somewhere or `inl` everywhere
     obtain ⟨i, j, hfi⟩ | ⟨f', rfl⟩ : (exists i j, f i = .inr j) ∨ (exists f', f = .inl ∘ f') := by
-      simp_rw [← Sum.isRight_iff, or_
+      simp_rw [← Sum.isRight_iff, or_iff_not_imp_left, not_exists, Bool.not_eq_true,
+        Sum.isRight_eq_false, Sum.isLeft_iff]
+      intro hfr
+      choose f' hf' using hfr
+      exact ⟨f', funext hf'⟩
+    · have hAB := det_succ_row ((fromRows A B).submatrix f g) i
+      simp only [submatrix_apply, hfi, fromRows_apply_inr] at hAB
+      obtain ⟨j', s, hj'⟩ := hB j
+      · simp only [hj'] at hAB
+        by_cases hj'' : exists x, g x = j'
+        · obtain ⟨x, rfl⟩ := hj''
+          rw [Fintype.sum_eq_single x fun y hxy => ?_]; rw [Pi.single_eq_same] at hAB
+          · rw [hAB]
+            change _ in MonoidHom.mrange SignType.castHom.toMonoidHom
+            refine mul_mem (mul_mem ?_ (Set.mem_range_self s)) ?_
+            · apply pow_mem
+              exact ⟨-1, by simp⟩
+            · exact ih _ _
+                (hf.comp Fin.succAbove_right_injective)
+                (hg.comp Fin.succAbove_right_injective)
+          · simp [Pi.single_eq_of_ne, hg.ne_iff.mpr hxy]
+        · rw [not_exists] at hj''
+          use 0
+          simpa [hj''] using hAB.symm
+    · rw [isTotallyUnimodular_iff] at hA
+      apply hA
 
 中文:
 引理 IsTotallyUnimodular.fromRows_unitlike
@@ -375,7 +414,32 @@ lemma IsTotallyUnimodular.fromRows_unitlike
     specialize hB ⟨g 0⟩
     -- Either `f` is `inr` somewhere or `inl` everywhere
     obtain ⟨i, j, hfi⟩ | ⟨f', rfl⟩ : (exists i j, f i = .inr j) ∨ (exists f', f = .inl ∘ f') := by
-      simp_rw [← Sum.isRight_iff, or_
+      simp_rw [← Sum.isRight_iff, or_iff_not_imp_left, not_exists, Bool.not_eq_true,
+        Sum.isRight_eq_false, Sum.isLeft_iff]
+      intro hfr
+      choose f' hf' using hfr
+      exact ⟨f', funext hf'⟩
+    · have hAB := det_succ_row ((fromRows A B).submatrix f g) i
+      simp only [submatrix_apply, hfi, fromRows_apply_inr] at hAB
+      obtain ⟨j', s, hj'⟩ := hB j
+      · simp only [hj'] at hAB
+        by_cases hj'' : exists x, g x = j'
+        · obtain ⟨x, rfl⟩ := hj''
+          rw [Fintype.sum_eq_single x fun y hxy => ?_]; rw [Pi.single_eq_same] at hAB
+          · rw [hAB]
+            change _ in MonoidHom.mrange SignType.castHom.toMonoidHom
+            refine mul_mem (mul_mem ?_ (Set.mem_range_self s)) ?_
+            · apply pow_mem
+              exact ⟨-1, by simp⟩
+            · exact ih _ _
+                (hf.comp Fin.succAbove_right_injective)
+                (hg.comp Fin.succAbove_right_injective)
+          · simp [Pi.single_eq_of_ne, hg.ne_iff.mpr hxy]
+        · rw [not_exists] at hj''
+          use 0
+          simpa [hj''] using hAB.symm
+    · rw [isTotallyUnimodular_iff] at hA
+      apply hA
 
 Depends on / 依赖: specialize
 -/
@@ -523,7 +587,9 @@ lemma one_fromCols_isTotallyUnimodular_iff
   rw [← transpose_isTotallyUnimodular_iff]; rw [transpose_fromCols]; rw [transpose_one]; rw [one_fromRows_isTotallyUnimodular_iff]; rw [transpose_isTotallyUnimodular_iff]
 
 alias ⟨_, IsTotallyUnimodular.fromRows_one⟩ := fromRows_one_isTotallyUnimodular_iff
-alias ⟨_, IsTotallyUnimodular.one_fromRow
+alias ⟨_, IsTotallyUnimodular.one_fromRows⟩ := one_fromRows_isTotallyUnimodular_iff
+alias ⟨_, IsTotallyUnimodular.fromCols_one⟩ := fromCols_one_isTotallyUnimodular_iff
+alias ⟨_, IsTotallyUnimodular.one_fromCols⟩ := one_fromCols_isTotallyUnimodular_iff
 
 中文:
 引理 one_fromCols_isTotallyUnimodular_iff
@@ -532,7 +598,9 @@ alias ⟨_, IsTotallyUnimodular.one_fromRow
   rw [← transpose_isTotallyUnimodular_iff]; rw [transpose_fromCols]; rw [transpose_one]; rw [one_fromRows_isTotallyUnimodular_iff]; rw [transpose_isTotallyUnimodular_iff]
 
 alias ⟨_, IsTotallyUnimodular.fromRows_one⟩ := fromRows_one_isTotallyUnimodular_iff
-alias ⟨_, IsTotallyUnimodular.one_fromRow
+alias ⟨_, IsTotallyUnimodular.one_fromRows⟩ := one_fromRows_isTotallyUnimodular_iff
+alias ⟨_, IsTotallyUnimodular.fromCols_one⟩ := fromCols_one_isTotallyUnimodular_iff
+alias ⟨_, IsTotallyUnimodular.one_fromCols⟩ := one_fromCols_isTotallyUnimodular_iff
 
 Depends on / 依赖: one_fromRows_isTotallyUnimodular_iff, transpose_fromCols, transpose_isTotallyUnimodular_iff, transpose_one
 -/

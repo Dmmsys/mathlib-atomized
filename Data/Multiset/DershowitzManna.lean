@@ -81,7 +81,18 @@ lemma IsDershowitzMannaLT.trans
   rw [add_comm X₁]; rw [add_comm X₂] at hXZXY
   refine ⟨X₁ inter X₂, Y₁ + (Y₂ - Z₁), Z₂ + (Z₁ - Y₂), ?_, ?_, ?_, ?_⟩
   · simpa [-not_and, not_and_or] using .inl hZ₂
-  · rwa [← add_assoc, add_right_comm, inter
+  · rwa [← add_assoc, add_right_comm, inter_add_sub_of_add_eq_add]
+  · rw [← add_assoc, add_right_comm, add_left_inj, inter_comm, inter_add_sub_of_add_eq_add]
+    rwa [eq_comm]
+  simp only [mem_add, or_imp, forall_and]
+  refine ⟨fun y hy => ?_, fun y hy => ?_⟩
+  · obtain ⟨z, hz, hyz⟩ := hYZ₁ y hy
+    by_cases z_in : z in Y₂
+    · obtain ⟨w, hw, hzw⟩ := hYZ₂ z z_in
+      exact ⟨w, .inl hw, hyz.trans hzw⟩
+· exact ⟨z, .inr by rwa [mem_sub, count_eq_zero_of_notMem z_in, count_pos], hyz⟩
+· obtain ⟨z, hz, hyz⟩ := hYZ₂ y mem_of_le (Multiset.sub_le_self ..) hy
+    exact ⟨z, .inl hz, hyz⟩
 
 中文:
 引理 IsDershowitzMannaLT.trans
@@ -91,7 +102,18 @@ lemma IsDershowitzMannaLT.trans
   rw [add_comm X₁]; rw [add_comm X₂] at hXZXY
   refine ⟨X₁ inter X₂, Y₁ + (Y₂ - Z₁), Z₂ + (Z₁ - Y₂), ?_, ?_, ?_, ?_⟩
   · simpa [-not_and, not_and_or] using .inl hZ₂
-  · rwa [← add_assoc, add_right_comm, inter
+  · rwa [← add_assoc, add_right_comm, inter_add_sub_of_add_eq_add]
+  · rw [← add_assoc, add_right_comm, add_left_inj, inter_comm, inter_add_sub_of_add_eq_add]
+    rwa [eq_comm]
+  simp only [mem_add, or_imp, forall_and]
+  refine ⟨fun y hy => ?_, fun y hy => ?_⟩
+  · obtain ⟨z, hz, hyz⟩ := hYZ₁ y hy
+    by_cases z_in : z in Y₂
+    · obtain ⟨w, hw, hzw⟩ := hYZ₂ z z_in
+      exact ⟨w, .inl hw, hyz.trans hzw⟩
+· exact ⟨z, .inr by rwa [mem_sub, count_eq_zero_of_notMem z_in, count_pos], hyz⟩
+· obtain ⟨z, hz, hyz⟩ := hYZ₂ y mem_of_le (Multiset.sub_le_self ..) hy
+    exact ⟨z, .inl hz, hyz⟩
 
 Depends on / 依赖: add_assoc, add_comm, add_left_inj, add_right_comm, classical, eq_comm, forall_and, inter_add_sub_of_add_eq_add, inter_comm, mem_add, not_and, not_and_or, or_imp
 -/
@@ -178,7 +200,12 @@ lemma isDershowitzMannaLT_singleton_insert
     simpa [add_comm _ {a}, singleton_add, eq_comm] using h0
   refine ⟨Y + (M - {b}), .inl ⟨?_, M - {b}, Y, b, add_comm .., ?_, h2⟩⟩
   · rw [← singleton_add, add_comm] at h0
-    rw [ts
+    rw [tsub_eq_tsub_of_add_eq_add h0]; rw [add_comm Y]; rw [← singleton_add]; rw [← add_assoc]; rw [add_tsub_cancel_of_le]
+    have : a in X + {b} := by simp [← h0]
+    simpa [hab] using this
+  · rw [tsub_add_cancel_of_le]
+    have : b in a ::ₘ M := by simp [h0]
+    simpa [hab.symm] using this
 
 中文:
 引理 isDershowitzMannaLT_singleton_insert
@@ -191,7 +218,12 @@ lemma isDershowitzMannaLT_singleton_insert
     simpa [add_comm _ {a}, singleton_add, eq_comm] using h0
   refine ⟨Y + (M - {b}), .inl ⟨?_, M - {b}, Y, b, add_comm .., ?_, h2⟩⟩
   · rw [← singleton_add, add_comm] at h0
-    rw [ts
+    rw [tsub_eq_tsub_of_add_eq_add h0]; rw [add_comm Y]; rw [← singleton_add]; rw [← add_assoc]; rw [add_tsub_cancel_of_le]
+    have : a in X + {b} := by simp [← h0]
+    simpa [hab] using this
+  · rw [tsub_add_cancel_of_le]
+    have : b in a ::ₘ M := by simp [h0]
+    simpa [hab.symm] using this
 -/
 private lemma isDershowitzMannaLT_singleton_insert (h : OneStep N (a ::ₘ M)) :
     exists M', N = a ::ₘ M' ∧ OneStep M' M ∨ N = M + M' ∧ forall x in M', x < a := by
@@ -225,7 +257,11 @@ lemma acc_oneStep_cons_of_acc_lt
   clear hNM
   induction N using Multiset.induction with
   | empty =>
-    simpa usi
+    simpa using .intro _ hM
+  | @cons b N ihN =>
+    simp only [mem_cons, forall_eq_or_imp, add_cons] at hN ⊢
+    obtain ⟨hba, hN⟩ := hN
+exact ha _ hba ihN hN
 
 中文:
 引理 acc_oneStep_cons_of_acc_lt
@@ -240,7 +276,11 @@ lemma acc_oneStep_cons_of_acc_lt
   clear hNM
   induction N using Multiset.induction with
   | empty =>
-    simpa usi
+    simpa using .intro _ hM
+  | @cons b N ihN =>
+    simp only [mem_cons, forall_eq_or_imp, add_cons] at hN ⊢
+    obtain ⟨hba, hN⟩ := hN
+exact ha _ hba ihN hN
 -/
 private lemma acc_oneStep_cons_of_acc_lt (ha : Acc LT.lt a) :
     forall {M}, Acc OneStep M -> Acc OneStep (a ::ₘ M) := by
@@ -328,7 +368,11 @@ lemma transGen_oneStep_of_isDershowitzMannaLT
   obtain rfl | hZ := eq_or_ne Z 0
   · exact .single ⟨X, Y, z, hM, hN, by simpa using hYZ⟩
   let Y' : Multiset α := Y.filter (· < z)
-ref
+refine .tail (b := X + Y' + Z) (ih (X + Y') (Y - Y') hZ ?_ rfl fun y hy => ?_)
+    ⟨X + Z, Y', z, add_right_comm .., by simp [hN, add_comm (_ + _)], by simp [Y']⟩
+  · rw [add_add_tsub_cancel (filter_le ..), hM]
+  · simp only [sub_filter_eq_filter_not, mem_filter, Y'] at hy
+    simpa [hy.2] using hYZ y (by simp_all)
 
 中文:
 引理 transGen_oneStep_of_isDershowitzMannaLT
@@ -341,7 +385,11 @@ ref
   obtain rfl | hZ := eq_or_ne Z 0
   · exact .single ⟨X, Y, z, hM, hN, by simpa using hYZ⟩
   let Y' : Multiset α := Y.filter (· < z)
-ref
+refine .tail (b := X + Y' + Z) (ih (X + Y') (Y - Y') hZ ?_ rfl fun y hy => ?_)
+    ⟨X + Z, Y', z, add_right_comm .., by simp [hN, add_comm (_ + _)], by simp [Y']⟩
+  · rw [add_add_tsub_cancel (filter_le ..), hM]
+  · simp only [sub_filter_eq_filter_not, mem_filter, Y'] at hy
+    simpa [hy.2] using hYZ y (by simp_all)
 -/
 private lemma transGen_oneStep_of_isDershowitzMannaLT :
     IsDershowitzMannaLT M N -> TransGen OneStep M N := by

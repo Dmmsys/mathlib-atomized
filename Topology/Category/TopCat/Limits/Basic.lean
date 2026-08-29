@@ -47,7 +47,10 @@ definition limitCone
     { app := fun j => ofHom
         { toFun := fun u => u.val j
           -- Porting note: `continuity` from the original mathlib3 proof failed here.
-          continuous_toFun := Continuous.comp (cont
+          continuous_toFun := Continuous.comp (continuous_apply _) (continuous_subtype_val) }
+      naturality := fun X Y f => by
+        ext a
+        exact (a.2 f).symm }
 
 中文:
 定义 limitCone
@@ -57,7 +60,10 @@ definition limitCone
     { app := fun j => ofHom
         { toFun := fun u => u.val j
           -- Porting note: `continuity` from the original mathlib3 proof failed here.
-          continuous_toFun := Continuous.comp (cont
+          continuous_toFun := Continuous.comp (continuous_apply _) (continuous_subtype_val) }
+      naturality := fun X Y f => by
+        ext a
+        exact (a.2 f).symm }
 
 Depends on / 依赖: F.map, F.obj, TopCat, TopCat.of
 -/
@@ -89,7 +95,10 @@ definition limitConeIsLimit
           dsimp
           rw [← S.w f]
           rfl }
- 
+  uniq S m h := by
+    ext a
+    simp [← h]
+    rfl
 
 中文:
 定义 limitConeIsLimit
@@ -105,7 +114,10 @@ definition limitConeIsLimit
           dsimp
           rw [← S.w f]
           rfl }
- 
+  uniq S m h := by
+    ext a
+    simp [← h]
+    rfl
 -/
 def limitConeIsLimit (F : J ⥤ TopCat.{max v u}) : IsLimit (limitCone.{v, u} F) where
   lift S := ofHom
@@ -222,7 +234,10 @@ definition isLimitConeOfForget
   dsimp [topologicalSpaceConePtOfConeForget]
   rw [le_iInf_iff]
   intro j
-  rw [coinduced_le_iff_le_induced]; rw [induced_compo
+  rw [coinduced_le_iff_le_induced]; rw [induced_compose]
+  convert! continuous_iff_le_induced.1 (s.π.app j).hom.continuous
+  ext x
+  exact ConcreteCategory.hom_ext_iff.mp (hc.fac ((forget).mapCone s) j) x
 
 中文:
 定义 isLimitConeOfForget
@@ -234,7 +249,10 @@ definition isLimitConeOfForget
   dsimp [topologicalSpaceConePtOfConeForget]
   rw [le_iInf_iff]
   intro j
-  rw [coinduced_le_iff_le_induced]; rw [induced_compo
+  rw [coinduced_le_iff_le_induced]; rw [induced_compose]
+  convert! continuous_iff_le_induced.1 (s.π.app j).hom.continuous
+  ext x
+  exact ConcreteCategory.hom_ext_iff.mp (hc.fac ((forget).mapCone s) j) x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext_iff.mp, ContinuousMap, ContinuousMap.mk, IsLimit, IsLimit.ofFaithful, coinduced_le_iff_le_induced, continuous, continuous_iff_coinduced_le, continuous_iff_le_induced, convert, forget, hc.fac, hc.lift, hom.continuous, hom_ext_iff, induced_compose, le_iInf_iff, mapCone, ofFaithful
 -/
@@ -272,7 +290,10 @@ theorem induced_of_isLimit
   let e := IsLimit.conePointUniqueUpToIso hc' hc
   have he (j : J) : e.inv ≫ c'.π.app j = c.π.app j :=
     IsLimit.conePointUniqueUpToIso_inv_comp hc' hc j
-  apply (hom
+  apply (homeoOfIso e.symm).induced_eq.symm.trans
+  dsimp [coneOfConeForget_pt, c', topologicalSpaceConePtOfConeForget]
+  conv_rhs => simp only [← he]
+  simp [← induced_compose, homeoOfIso, c']
 
 中文:
 定理 induced_of_isLimit
@@ -282,7 +303,10 @@ theorem induced_of_isLimit
   let e := IsLimit.conePointUniqueUpToIso hc' hc
   have he (j : J) : e.inv ≫ c'.π.app j = c.π.app j :=
     IsLimit.conePointUniqueUpToIso_inv_comp hc' hc j
-  apply (hom
+  apply (homeoOfIso e.symm).induced_eq.symm.trans
+  dsimp [coneOfConeForget_pt, c', topologicalSpaceConePtOfConeForget]
+  conv_rhs => simp only [← he]
+  simp [← induced_compose, homeoOfIso, c']
 
 Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.conePointUniqueUpToIso_inv_comp, coneOfConeForget, coneOfConeForget_pt, conePointUniqueUpToIso, conePointUniqueUpToIso_inv_comp, conv_rhs, e.inv, e.symm, forget, homeoOfIso, induced_compose, induced_eq, induced_eq.symm.trans, isLimitConeOfForget, isLimitOfPreserves, mapCone, topologicalSpaceConePtOfConeForget
 -/
@@ -539,7 +563,7 @@ definition coconeOfCoconeForget
         exact le_iSup (fun j => (F.obj j).str.coinduced _) j))
       naturality j j' φ := by
         ext
-       
+        apply ConcreteCategory.congr_hom (c.ι.naturality φ) }
 
 中文:
 定义 coconeOfCoconeForget
@@ -552,7 +576,7 @@ definition coconeOfCoconeForget
         exact le_iSup (fun j => (F.obj j).str.coinduced _) j))
       naturality j j' φ := by
         ext
-       
+        apply ConcreteCategory.congr_hom (c.ι.naturality φ) }
 
 Depends on / 依赖: coconePtOfCoconeForget
 -/
@@ -581,7 +605,10 @@ definition isColimitCoconeOfForget
   dsimp [topologicalSpaceCoconePtOfCoconeForget]
   rw [iSup_le_iff]
   intro j
-  rw [coinduced_le_iff_le_induced]; rw [induced
+  rw [coinduced_le_iff_le_induced]; rw [induced_compose]
+  convert! continuous_iff_le_induced.1 (s.ι.app j).hom.continuous
+  ext x
+  exact ConcreteCategory.hom_ext_iff.mp (hc.fac ((forget).mapCocone s) j) x
 
 中文:
 定义 isColimitCoconeOfForget
@@ -593,7 +620,10 @@ definition isColimitCoconeOfForget
   dsimp [topologicalSpaceCoconePtOfCoconeForget]
   rw [iSup_le_iff]
   intro j
-  rw [coinduced_le_iff_le_induced]; rw [induced
+  rw [coinduced_le_iff_le_induced]; rw [induced_compose]
+  convert! continuous_iff_le_induced.1 (s.ι.app j).hom.continuous
+  ext x
+  exact ConcreteCategory.hom_ext_iff.mp (hc.fac ((forget).mapCocone s) j) x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext_iff.mp, ContinuousMap, ContinuousMap.mk, IsColimit, IsColimit.ofFaithful, coinduced_le_iff_le_induced, continuous, continuous_iff_le_induced, convert, forget, hc.desc, hc.fac, hom.continuous, hom_ext_iff, iSup_le_iff, induced_compose, mapCocone, ofFaithful, topologicalSpaceCoconePtOfCoconeForget
 -/
@@ -630,7 +660,12 @@ theorem coinduced_of_isColimit
   let hc' : IsColimit c' := isColimitCoconeOfForget _ (isColimitOfPreserves forget hc)
   let e := IsColimit.coconePointUniqueUpToIso hc' hc
   have he (j : J) : c'.ι.app j ≫ e.hom = c.ι.app j :=
-    IsColimit.comp_coconePointUniqueUpToIso_hom
+    IsColimit.comp_coconePointUniqueUpToIso_hom hc' hc j
+  apply (homeoOfIso e).coinduced_eq.symm.trans
+  dsimp [coconeOfCoconeForget_pt, c', topologicalSpaceCoconePtOfCoconeForget]
+  simp only [coinduced_iSup]
+  conv_rhs => simp only [← he]
+  rfl
 
 中文:
 定理 coinduced_of_isColimit
@@ -639,7 +674,12 @@ theorem coinduced_of_isColimit
   let hc' : IsColimit c' := isColimitCoconeOfForget _ (isColimitOfPreserves forget hc)
   let e := IsColimit.coconePointUniqueUpToIso hc' hc
   have he (j : J) : c'.ι.app j ≫ e.hom = c.ι.app j :=
-    IsColimit.comp_coconePointUniqueUpToIso_hom
+    IsColimit.comp_coconePointUniqueUpToIso_hom hc' hc j
+  apply (homeoOfIso e).coinduced_eq.symm.trans
+  dsimp [coconeOfCoconeForget_pt, c', topologicalSpaceCoconePtOfCoconeForget]
+  simp only [coinduced_iSup]
+  conv_rhs => simp only [← he]
+  rfl
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, coconeOfCoconeForget, coconeOfCoconeForget_pt, coconePointUniqueUpToIso, coinduced_eq, coinduced_eq.symm.trans, coinduced_iSup, comp_coconePointUniqueUpToIso_hom, conv_rhs, e.hom, forget, homeoOfIso, isColimitCoconeOfForget, isColimitOfPreserves, mapCocone, topologicalSpaceCoconePtOfCoconeForget
 -/
@@ -751,7 +791,7 @@ lemma nonempty_isColimit_iff_eq_coinduced
       { toEquiv := .refl _,
         continuous_toFun := h ▸ by fun_prop,
         continuous_invFun := h ▸ by fun_prop }
-  · intro
+  · intro; rfl
 
 中文:
 引理 nonempty_isColimit_iff_eq_coinduced
@@ -763,7 +803,7 @@ lemma nonempty_isColimit_iff_eq_coinduced
       { toEquiv := .refl _,
         continuous_toFun := h ▸ by fun_prop,
         continuous_invFun := h ▸ by fun_prop }
-  · intro
+  · intro; rfl
 
 Depends on / 依赖: Cocone, Cocone.ext, TopCat, TopCat.isoOfHomeo, coinduced_of_isColimit, continuous_invFun, continuous_toFun, fun_prop, isColimitCoconeOfForget, isoOfHomeo, ofIsoColimit, toEquiv
 -/

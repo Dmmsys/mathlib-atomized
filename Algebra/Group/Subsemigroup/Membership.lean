@@ -60,7 +60,10 @@ lemma mem_iSup_of_directed
   refine fun hx => closure_induction (fun _ => ?_) ?_ hx
   · simp
   rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩
+  obtain ⟨k, hik, hjk⟩ := hS i j
+  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
+
+@[to_additive]
 
 中文:
 引理 mem_iSup_of_directed
@@ -72,7 +75,10 @@ lemma mem_iSup_of_directed
   refine fun hx => closure_induction (fun _ => ?_) ?_ hx
   · simp
   rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩
+  obtain ⟨k, hik, hjk⟩ := hS i j
+  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
+
+@[to_additive]
 
 Depends on / 依赖: closure, closure_eq, closure_iUnion, closure_induction, le_iSup, mul_mem
 -/

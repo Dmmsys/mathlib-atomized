@@ -1004,7 +1004,13 @@ instance completeAtomicBooleanAlgebra
     rintro rfl
     exact x.irrefl h.1
 inf_compl_le_bot _ _ _ h := False.elim h.2.2 h.1
-  top_le_sup_compl G v w hvw :=
+  top_le_sup_compl G v w hvw := by
+    by_cases h : G.Adj v w
+    · exact Or.inl h
+    · exact Or.inr ⟨hvw, h⟩
+  isLUB_sSup _ := ⟨fun G hG _ _ hab => ⟨G, hG, hab⟩, fun _ hG _ _ ⟨_, hH, hab⟩ => hG hH hab⟩
+  isGLB_sInf _ := ⟨fun _ hG _ _ hab => hab.1 hG, fun _ hG _ _ hab => ⟨fun _ hH => hG hH hab, hab.ne⟩⟩
+  iInf_iSup_eq f := by ext; simp [Classical.skolem]
 
 中文:
 实例 completeAtomic布尔eanAlgebra
@@ -1019,7 +1025,13 @@ inf_compl_le_bot _ _ _ h := False.elim h.2.2 h.1
     rintro rfl
     exact x.irrefl h.1
 inf_compl_le_bot _ _ _ h := False.elim h.2.2 h.1
-  top_le_sup_compl G v w hvw :=
+  top_le_sup_compl G v w hvw := by
+    by_cases h : G.Adj v w
+    · exact Or.inl h
+    · exact Or.inr ⟨hvw, h⟩
+  isLUB_sSup _ := ⟨fun G hG _ _ hab => ⟨G, hG, hab⟩, fun _ hG _ _ ⟨_, hH, hab⟩ => hG hH hab⟩
+  isGLB_sInf _ := ⟨fun _ hG _ _ hab => hab.1 hG, fun _ hG _ _ hab => ⟨fun _ hH => hG hH hab, hab.ne⟩⟩
+  iInf_iSup_eq f := by ext; simp [Classical.skolem]
 -/
 instance completeAtomicBooleanAlgebra : CompleteAtomicBooleanAlgebra (SimpleGraph V) where
   top.Adj := Ne

@@ -401,7 +401,14 @@ definition toMatrixEquiv
     rfl
   invFun m j := ∑ i, m i j • e i
   left_inv := by
-   
+    intro v
+    ext j
+    exact e.sum_toMatrix_smul_self v j
+  right_inv := by
+    intro m
+    ext k l
+    simp only [e.toMatrix_apply, ← e.equivFun_apply, ← e.equivFun_symm_apply,
+      LinearEquiv.apply_symm_apply]
 
 中文:
 定义 toMatrixEquiv
@@ -418,7 +425,14 @@ definition toMatrixEquiv
     rfl
   invFun m j := ∑ i, m i j • e i
   left_inv := by
-   
+    intro v
+    ext j
+    exact e.sum_toMatrix_smul_self v j
+  right_inv := by
+    intro m
+    ext k l
+    simp only [e.toMatrix_apply, ← e.equivFun_apply, ← e.equivFun_symm_apply,
+      LinearEquiv.apply_symm_apply]
 
 Depends on / 依赖: e.toMatrix, toMatrix
 -/

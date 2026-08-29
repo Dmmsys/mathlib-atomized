@@ -155,7 +155,8 @@ definition ProdTree.pack
     unless ts.length == fstSize + sndSize do throwError "Failed due to size mismatch."
 .toArray.toList let tsfst := ts.toArray[:fstSize]
 .toArray.toList let tssnd := ts.toArray[fstSize:]
-    let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getT
+    let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getType]
+    return .app (.app mk (← fst.pack tsfst)) (← snd.pack tssnd)
 
 中文:
 定义 ProdTree.pack
@@ -165,7 +166,8 @@ definition ProdTree.pack
     unless ts.length == fstSize + sndSize do throwError "Failed due to size mismatch."
 .toArray.toList let tsfst := ts.toArray[:fstSize]
 .toArray.toList let tssnd := ts.toArray[fstSize:]
-    let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getT
+    let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getType]
+    return .app (.app mk (← fst.pack tsfst)) (← snd.pack tssnd)
 
 Depends on / 依赖: fst.size
 -/
@@ -215,7 +217,9 @@ definition mkProdFun
     throwError "The number of components in{indentD a}\nand{indentD b}\nmust match."
   for (x,y) in pa.components.zip pb.components do
     unless ← isDefEq x y do
-      throwError "Component{i
+      throwError "Component{indentD x}\nis not definitionally equal to component{indentD y}."
+  withLocalDeclD `t a fun fvar => do
+    mkLambdaFVars #[fvar] (← pa.convertTo pb fvar)
 
 中文:
 定义 mkProdFun
@@ -227,7 +231,9 @@ definition mkProdFun
     throwError "The number of components in{indentD a}\nand{indentD b}\nmust match."
   for (x,y) in pa.components.zip pb.components do
     unless ← isDefEq x y do
-      throwError "Component{i
+      throwError "Component{indentD x}\nis not definitionally equal to component{indentD y}."
+  withLocalDeclD `t a fun fvar => do
+    mkLambdaFVars #[fvar] (← pa.convertTo pb fvar)
 -/
 def mkProdFun (a b : Expr) : MetaM Expr := do
   let pa ← a.mkProdTree
@@ -251,7 +257,8 @@ definition mkProdEquiv
   let some v := (← whnfD <| ← inferType b).type? | throwError "Not a type{indentExpr b}"
   return mkAppN (.const ``Equiv.mk [.succ u,.succ v])
     #[a, b, ← mkProdFun a b, ← mkProdFun b a,
-      .app (.const 
+      .app (.const ``rfl [.succ u]) a,
+      .app (.const ``rfl [.succ v]) b]
 
 中文:
 定义 mkProdEquiv
@@ -261,7 +268,8 @@ definition mkProdEquiv
   let some v := (← whnfD <| ← inferType b).type? | throwError "Not a type{indentExpr b}"
   return mkAppN (.const ``Equiv.mk [.succ u,.succ v])
     #[a, b, ← mkProdFun a b, ← mkProdFun b a,
-      .app (.const 
+      .app (.const ``rfl [.succ u]) a,
+      .app (.const ``rfl [.succ v]) b]
 -/
 def mkProdEquiv (a b : Expr) : MetaM Expr := do
   let some u := (← whnfD <| ← inferType a).type? | throwError "Not a type{indentExpr a}"
@@ -293,7 +301,9 @@ definition elabProdAssoc
     let some expectedType ← tryPostponeIfHasMVars? expectedType?
           | throwError "expected type must be known"
     let .app (.app (.const ``Equiv _) a) b := expectedType
-          | throwError "Expected type{indent
+          | throwError "Expected type{indentD expectedType}\nis not of the form `α ≃ β`."
+    mkProdEquiv a b
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 elabProdAssoc
@@ -304,7 +314,9 @@ definition elabProdAssoc
     let some expectedType ← tryPostponeIfHasMVars? expectedType?
           | throwError "expected type must be known"
     let .app (.app (.const ``Equiv _) a) b := expectedType
-          | throwError "Expected type{indent
+          | throwError "Expected type{indentD expectedType}\nis not of the form `α ≃ β`."
+    mkProdEquiv a b
+  | _ => throwUnsupportedSyntax
 
 Depends on / 依赖: expectedType
 -/

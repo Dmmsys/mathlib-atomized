@@ -308,7 +308,8 @@ definition lift
     simpa using (s.1 ⟨⊥, h⟩).w₁
   w₂ := (F.isColimitOfIsWellOrderContinuous j hj).hom_ext (fun ⟨i, hij⟩ => by
     have := (s.1 ⟨i, hij⟩).w₂
-    dsimp 
+    dsimp at this ⊢
+    rw [liftHom_fac_assoc _ _ _ hij]; rw [this]; rw [Cocone.w_assoc])
 
 中文:
 定义 lift
@@ -322,7 +323,8 @@ definition lift
     simpa using (s.1 ⟨⊥, h⟩).w₁
   w₂ := (F.isColimitOfIsWellOrderContinuous j hj).hom_ext (fun ⟨i, hij⟩ => by
     have := (s.1 ⟨i, hij⟩).w₂
-    dsimp 
+    dsimp at this ⊢
+    rw [liftHom_fac_assoc _ _ _ hij]; rw [this]; rw [Cocone.w_assoc])
 
 Depends on / 依赖: liftHom
 -/
@@ -392,7 +394,9 @@ definition wellOrderInductionData
         rfl }
   map_succ j hj sq' := by cat_disch
   lift j hj s := lift hj s
-  map_lift j hj s i hij := map_lift
+  map_lift j hj s i hij := map_lift hj s hij
+
+include hF hc
 
 中文:
 定义 wellOrderInductionData
@@ -407,7 +411,9 @@ definition wellOrderInductionData
         rfl }
   map_succ j hj sq' := by cat_disch
   lift j hj s := lift hj s
-  map_lift j hj s i hij := map_lift
+  map_lift j hj s i hij := map_lift hj s hij
+
+include hF hc
 
 Depends on / 依赖: F.map_comp_assoc, cat_disch, conv_rhs, fac_left, map_comp_assoc, map_lift, map_succ, sq.fac_left, sq.lift
 -/
@@ -445,7 +451,12 @@ lemma hasLift
   let t : Cocone F := Cocone.mk X
     { app j := (s.1 ⟨j⟩).f'
       naturality j j' g := by simpa using congr_arg SqStruct.f' (s.2 g.op) }
-  let l := hc.desc 
+  let l := hc.desc t
+  have hl (j : J) : c.ι.app j ≫ l = (s.1 ⟨j⟩).f' := hc.fac t j
+  exact ⟨⟨{
+    l := l
+    fac_left := by rw [hl, hs]
+    fac_right := hc.hom_ext (fun j => by rw [reassoc_of% (hl j), SqStruct.w₂])}⟩⟩
 
 中文:
 引理 hasLift
@@ -457,7 +468,12 @@ lemma hasLift
   let t : Cocone F := Cocone.mk X
     { app j := (s.1 ⟨j⟩).f'
       naturality j j' g := by simpa using congr_arg SqStruct.f' (s.2 g.op) }
-  let l := hc.desc 
+  let l := hc.desc t
+  have hl (j : J) : c.ι.app j ≫ l = (s.1 ⟨j⟩).f' := hc.fac t j
+  exact ⟨⟨{
+    l := l
+    fac_left := by rw [hl, hs]
+    fac_right := hc.hom_ext (fun j => by rw [reassoc_of% (hl j), SqStruct.w₂])}⟩⟩
 
 Depends on / 依赖: Cocone, Cocone.mk, SqStruct, SqStruct.f, SqStruct.w, congr_arg, fac_left, fac_right, g.op, hc.desc, hc.fac, hc.hom_ext, hom_ext, naturality, reassoc_of, replace, sq.w, surjective, wellOrderInductionData
 -/
@@ -539,7 +555,8 @@ instance isStableUnderTransfiniteCompositionOfShape_llp
   have : W.llp (h.incl.app ⊥) := fun _ _ p hp =>
     HasLiftingProperty.transfiniteComposition.hasLiftingProperty_ι_app_bot
       (hc := h.isColimit) (fun j hj => h.map_mem j hj _ hp)
-  exact (MorphismProperty.arrow_mk_iso_i
+  exact (MorphismProperty.arrow_mk_iso_iff _
+    (Arrow.isoMk h.isoBot.symm (Iso.refl _))).2 this
 
 中文:
 实例 isStableUnderTransfiniteCompositionOfShape_llp
@@ -550,7 +567,8 @@ instance isStableUnderTransfiniteCompositionOfShape_llp
   have : W.llp (h.incl.app ⊥) := fun _ _ p hp =>
     HasLiftingProperty.transfiniteComposition.hasLiftingProperty_ι_app_bot
       (hc := h.isColimit) (fun j hj => h.map_mem j hj _ hp)
-  exact (MorphismProperty.arrow_mk_iso_i
+  exact (MorphismProperty.arrow_mk_iso_iff _
+    (Arrow.isoMk h.isoBot.symm (Iso.refl _))).2 this
 
 Depends on / 依赖: Arrow.isoMk, HasLiftingProperty, HasLiftingProperty.transfiniteComposition.hasLiftingProperty_, Iso.refl, MorphismProperty, MorphismProperty.arrow_mk_iso_iff, W.llp, arrow_mk_iso_iff, h.incl.app, h.isColimit, h.isoBot.symm, h.map_mem, isColimit, isStableUnderTransfiniteCompositionOfShape_iff, isoBot, map_mem, transfiniteComposition
 -/

@@ -220,7 +220,7 @@ lemma LocallyOfFiniteType.stalkMap
     (fun f hf _ _ => RingHom.EssFiniteType.holdsForLocalization.localRingHom
       RingHom.EssFiniteType.stableUnderComposition
       RingHom.EssFiniteType.isStableUnderBaseChange.localizationPreserves _
-      (RingHom.Fini
+      (RingHom.FiniteType.essFiniteType hf)) ‹_› x
 
 中文:
 引理 局部有限型.stalkMap
@@ -229,7 +229,7 @@ lemma LocallyOfFiniteType.stalkMap
     (fun f hf _ _ => RingHom.EssFiniteType.holdsForLocalization.localRingHom
       RingHom.EssFiniteType.stableUnderComposition
       RingHom.EssFiniteType.isStableUnderBaseChange.localizationPreserves _
-      (RingHom.Fini
+      (RingHom.FiniteType.essFiniteType hf)) ‹_› x
 
 Depends on / 依赖: EssFiniteType, FiniteType, HasRingHomProperty, HasRingHomProperty.stalkMap_of_respectsIso, RingHom, RingHom.EssFiniteType.holdsForLocalization.localRingHom, RingHom.EssFiniteType.isStableUnderBaseChange.localizationPreserves, RingHom.EssFiniteType.respectsIso, RingHom.EssFiniteType.stableUnderComposition, RingHom.FiniteType.essFiniteType, essFiniteType, holdsForLocalization, isStableUnderBaseChange, localRingHom, localizationPreserves, respectsIso, stableUnderComposition, stalkMap_of_respectsIso
 -/
@@ -288,7 +288,34 @@ lemma essentiallySmall_costructuredArrow_Spec
   refine .of_functor F ?_ ?_
   · let Q' : ObjectProperty CommRingCat.{u} := fun S =>
       exists R, (R in Set.range fun U => Γ(X, U)) ∧ exists (f : R ⟶ S), f.hom.FiniteType
-    have : Q'.Essential
+    have : Q'.EssentiallySmall := CommRingCat.essentiallySmall_of_finiteType fun S => id
+    suffices ObjectProperty.EssentiallySmall.{u} (· in Set.range (Opposite.unop ∘ F.obj)) by
+      rw [← ObjectProperty.essentiallySmall_unop_iff]
+      refine .of_le (Q := .isoClosure (· in Set.range (Opposite.unop ∘ F.obj))) ?_
+      exact fun R ⟨S, e⟩ => ⟨_, ⟨S, rfl⟩, ⟨e.some.unop⟩⟩
+    refine CommRingCat.essentiallySmall_of_localizationAway (Q := Q'.isoClosure) ?_
+    rintro _ ⟨S, rfl⟩
+    have (q : Spec (F.obj S).unop) : exists f, q in PrimeSpectrum.basicOpen f ∧
+        Q' Γ(Spec (F.obj S).unop, PrimeSpectrum.basicOpen f) := by
+      obtain ⟨_, ⟨U, hU, rfl⟩, hqU, -⟩ :=
+        X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ <| S.hom q) isOpen_univ
+      obtain ⟨_, ⟨_, ⟨f, rfl⟩, rfl⟩, hqf, hfU⟩ :=
+        PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hqU (S.hom ⁻¹ᵁ U).isOpen
+      have : LocallyOfFiniteType S.hom := hP _ S.prop
+      exact ⟨f, hqf, _, ⟨U, rfl⟩, S.hom.appLE _ _ hfU,
+        (S.hom.finiteType_appLE hU (.Spec_basicOpen _)) _⟩
+    choose f hqf hf using this
+    refine ⟨Set.range f, PrimeSpectrum.iSup_basicOpen_eq_top_iff.mp ?_, Set.forall_mem_range.mpr ?_⟩
+    · exact top_le_iff.mp fun x _ => TopologicalSpace.Opens.mem_iSup.mpr ⟨x, hqf _⟩
+    · dsimp
+      exact fun q => ⟨_, hf q, ⟨(IsLocalization.algEquiv (.powers (f q)) _
+        ((Spec.structureSheaf _).obj.obj (op _))).toRingEquiv.toCommRingCatIso⟩⟩
+  · intro R
+    refine ⟨.ofObj fun f : { f : Spec R.unop ⟶ X // P f } => .mk _ f.1 f.2, inferInstance, ?_⟩
+    refine fun S ⟨e⟩ => ⟨_, .mk ⟨Spec.map e.inv.unop ≫ S.hom, ?_⟩,
+      ⟨MorphismProperty.CostructuredArrow.isoMk e trivial trivial ?_⟩⟩
+    · simp [← Spec.map_comp_assoc, F]
+    · exact (P.cancel_left_of_respectsIso _ _).mpr S.prop
 
 中文:
 引理 essentiallySmall_costructuredArrow_Spec
@@ -297,7 +324,34 @@ lemma essentiallySmall_costructuredArrow_Spec
   refine .of_functor F ?_ ?_
   · let Q' : ObjectProperty CommRingCat.{u} := fun S =>
       exists R, (R in Set.range fun U => Γ(X, U)) ∧ exists (f : R ⟶ S), f.hom.FiniteType
-    have : Q'.Essential
+    have : Q'.EssentiallySmall := CommRingCat.essentiallySmall_of_finiteType fun S => id
+    suffices ObjectProperty.EssentiallySmall.{u} (· in Set.range (Opposite.unop ∘ F.obj)) by
+      rw [← ObjectProperty.essentiallySmall_unop_iff]
+      refine .of_le (Q := .isoClosure (· in Set.range (Opposite.unop ∘ F.obj))) ?_
+      exact fun R ⟨S, e⟩ => ⟨_, ⟨S, rfl⟩, ⟨e.some.unop⟩⟩
+    refine CommRingCat.essentiallySmall_of_localizationAway (Q := Q'.isoClosure) ?_
+    rintro _ ⟨S, rfl⟩
+    have (q : Spec (F.obj S).unop) : exists f, q in PrimeSpectrum.basicOpen f ∧
+        Q' Γ(Spec (F.obj S).unop, PrimeSpectrum.basicOpen f) := by
+      obtain ⟨_, ⟨U, hU, rfl⟩, hqU, -⟩ :=
+        X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ <| S.hom q) isOpen_univ
+      obtain ⟨_, ⟨_, ⟨f, rfl⟩, rfl⟩, hqf, hfU⟩ :=
+        PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hqU (S.hom ⁻¹ᵁ U).isOpen
+      have : LocallyOfFiniteType S.hom := hP _ S.prop
+      exact ⟨f, hqf, _, ⟨U, rfl⟩, S.hom.appLE _ _ hfU,
+        (S.hom.finiteType_appLE hU (.Spec_basicOpen _)) _⟩
+    choose f hqf hf using this
+    refine ⟨Set.range f, PrimeSpectrum.iSup_basicOpen_eq_top_iff.mp ?_, Set.forall_mem_range.mpr ?_⟩
+    · exact top_le_iff.mp fun x _ => TopologicalSpace.Opens.mem_iSup.mpr ⟨x, hqf _⟩
+    · dsimp
+      exact fun q => ⟨_, hf q, ⟨(IsLocalization.algEquiv (.powers (f q)) _
+        ((Spec.structureSheaf _).obj.obj (op _))).toRingEquiv.toCommRingCatIso⟩⟩
+  · intro R
+    refine ⟨.ofObj fun f : { f : Spec R.unop ⟶ X // P f } => .mk _ f.1 f.2, inferInstance, ?_⟩
+    refine fun S ⟨e⟩ => ⟨_, .mk ⟨Spec.map e.inv.unop ≫ S.hom, ?_⟩,
+      ⟨MorphismProperty.CostructuredArrow.isoMk e trivial trivial ?_⟩⟩
+    · simp [← Spec.map_comp_assoc, F]
+    · exact (P.cancel_left_of_respectsIso _ _).mpr S.prop
 
 Depends on / 依赖: CommRingCat, CommRingCat.essentiallySmall_of_finiteType, CostructuredArrow, CostructuredArrow.proj, EssentiallySmall, F.obj, FiniteType, MorphismProperty, MorphismProperty.CostructuredArrow.forget, ObjectProperty, ObjectProperty.EssentiallySmall, ObjectProperty.essentiallySmall_unop_iff, Opposite, Opposite.unop, Scheme, Scheme.Spec, Set.range, essentiallySmall_of_finiteType, essentiallySmall_unop_iff, f.hom.FiniteType
 -/

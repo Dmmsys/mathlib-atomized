@@ -233,7 +233,7 @@ definition B
   diagonal := by simp
   off_diagonal := by aesop
 
-@[deprecated (since
+@[deprecated (since := "2026-03-25")] alias Bₙ := CoxeterMatrix.B
 
 中文:
 定义 B
@@ -246,7 +246,7 @@ definition B
   diagonal := by simp
   off_diagonal := by aesop
 
-@[deprecated (since
+@[deprecated (since := "2026-03-25")] alias Bₙ := CoxeterMatrix.B
 -/
 protected def B : CoxeterMatrix (Fin n) where
   M := Matrix.of fun i j : Fin n =>
@@ -273,7 +273,7 @@ definition D
   diagonal := by simp
   off_diagonal := by aesop
 
-@[deprecated (since
+@[deprecated (since := "2026-03-25")] alias Dₙ := CoxeterMatrix.D
 
 中文:
 定义 D
@@ -286,7 +286,7 @@ definition D
   diagonal := by simp
   off_diagonal := by aesop
 
-@[deprecated (since
+@[deprecated (since := "2026-03-25")] alias Dₙ := CoxeterMatrix.D
 -/
 protected def D : CoxeterMatrix (Fin n) where
   M := Matrix.of fun i j : Fin n =>

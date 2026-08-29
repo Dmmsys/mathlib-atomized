@@ -88,7 +88,10 @@ lemma MDifferentiable.slashJ
   simp only [mdifferentiable_iff, slash_J, Function.comp_def] at hf ⊢
   have : {z | 0 < z.im}.EqOn (fun x => conj (f <| ofComplex <| -conj ↑(ofComplex x)))
       (fun x => conj (f <| ofComplex <| -conj x)) := fun z h => by simp [ofComplex_apply_of_im_pos h]
-  refine .congr (fun z hz => Differenti
+  refine .congr (fun z hz => DifferentiableAt.differentiableWithinAt ?_) this
+  have : 0 < (-conj z).im := by simpa using! hz
+  have := hf.differentiableAt (isOpen_upperHalfPlaneSet.mem_nhds this)
+  simpa using! (this.comp _ differentiable_neg.differentiableAt).star_star.neg
 
 中文:
 引理 MDifferentiable.slashJ
@@ -97,7 +100,10 @@ lemma MDifferentiable.slashJ
   simp only [mdifferentiable_iff, slash_J, Function.comp_def] at hf ⊢
   have : {z | 0 < z.im}.EqOn (fun x => conj (f <| ofComplex <| -conj ↑(ofComplex x)))
       (fun x => conj (f <| ofComplex <| -conj x)) := fun z h => by simp [ofComplex_apply_of_im_pos h]
-  refine .congr (fun z hz => Differenti
+  refine .congr (fun z hz => DifferentiableAt.differentiableWithinAt ?_) this
+  have : 0 < (-conj z).im := by simpa using! hz
+  have := hf.differentiableAt (isOpen_upperHalfPlaneSet.mem_nhds this)
+  simpa using! (this.comp _ differentiable_neg.differentiableAt).star_star.neg
 -/
 private lemma MDifferentiable.slashJ {f : ℍ -> Complex} (hf : MDiff f) (k : Int) :
     MDiff (f ∣[k] J) := by
@@ -686,7 +692,8 @@ instance instSMulReal
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     bdd_at_cusps' hc g hg := by
       simpa only [IsBoundedAtImInfty, Filter.BoundedAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Comp
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f, smul_slash]
+        using (f.bdd_at_cusps' hc g hg).const_smul_left _ }
 
 中文:
 实例 instSMul实数
@@ -695,7 +702,8 @@ instance instSMulReal
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     bdd_at_cusps' hc g hg := by
       simpa only [IsBoundedAtImInfty, Filter.BoundedAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Comp
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f, smul_slash]
+        using (f.bdd_at_cusps' hc g hg).const_smul_left _ }
 
 Depends on / 依赖: BoundedAtFilter, Filter, Filter.BoundedAtFilter, FunLike, FunLike.coe_smul, IsBoundedAtImInfty, SlashInvariantForm, SlashInvariantForm.toFun_eq_coe, bdd_at_cusps, coe_smul, const_smul, const_smul_left, f.bdd_at_cusps, f.holo, smul_one_smul, smul_slash, toFun_eq_coe, toSlashInvariantForm, toSlashInvariantForm_coe
 -/
@@ -752,7 +760,8 @@ instance instSMulComplex
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     bdd_at_cusps' hc g hg := by
       simp_rw [IsBoundedAtImInfty, Filter.BoundedAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f, smul_slash]
+      exact (f.bdd_at_cusps' hc g hg).const_smul_left (σ g (c • (1 : Complex))) }
 
 中文:
 实例 instSMulComplex
@@ -761,7 +770,8 @@ instance instSMulComplex
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     bdd_at_cusps' hc g hg := by
       simp_rw [IsBoundedAtImInfty, Filter.BoundedAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f, smul_slash]
+      exact (f.bdd_at_cusps' hc g hg).const_smul_left (σ g (c • (1 : Complex))) }
 
 Depends on / 依赖: BoundedAtFilter, Filter, Filter.BoundedAtFilter, FunLike, FunLike.coe_smul, IsBoundedAtImInfty, SlashInvariantForm, SlashInvariantForm.toFun_eq_coe, bdd_at_cusps, coe_smul, const_smul, const_smul_left, f.bdd_at_cusps, f.holo, simp_rw, smul_one_smul, smul_slash, toFun_eq_coe, toSlashInvariantForm, toSlashInvariantForm_coe
 -/
@@ -1383,7 +1393,8 @@ instance instSMul
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     zero_at_cusps' hc g hg := by
       simp_rw [IsZeroAtImInfty, Filter.ZeroAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f, smul_slash]
+      exact (f.zero_at_cusps' hc g hg).smul _ }
 
 中文:
 实例 instSMul
@@ -1392,7 +1403,8 @@ instance instSMul
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     zero_at_cusps' hc g hg := by
       simp_rw [IsZeroAtImInfty, Filter.ZeroAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f, smul_slash]
+      exact (f.zero_at_cusps' hc g hg).smul _ }
 
 Depends on / 依赖: Filter, Filter.ZeroAtFilter, FunLike, FunLike.coe_smul, IsZeroAtImInfty, SlashInvariantForm, SlashInvariantForm.toFun_eq_coe, ZeroAtFilter, coe_smul, const_smul, f.holo, f.zero_at_cusps, simp_rw, smul_one_smul, smul_slash, toFun_eq_coe, toSlashInvariantForm, toSlashInvariantForm_coe, zero_at_cusps
 -/
@@ -1449,7 +1461,9 @@ instance IsGLPos.instSMul
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     zero_at_cusps' hc g hg := by
       simp_rw [IsZeroAtImInfty, Filter.ZeroAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f,
+        smul_slash]
+      exact (f.zero_at_cusps' hc g hg).smul _ }
 
 中文:
 实例 IsGLPos.instSMul
@@ -1458,7 +1472,9 @@ instance IsGLPos.instSMul
     holo' := by simpa using f.holo'.const_smul (c • (1 : Complex))
     zero_at_cusps' hc g hg := by
       simp_rw [IsZeroAtImInfty, Filter.ZeroAtFilter, SlashInvariantForm.toFun_eq_coe,
-        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f
+        FunLike.coe_smul, toSlashInvariantForm_coe, ← smul_one_smul Complex c ⇑f,
+        smul_slash]
+      exact (f.zero_at_cusps' hc g hg).smul _ }
 
 Depends on / 依赖: Filter, Filter.ZeroAtFilter, FunLike, FunLike.coe_smul, IsZeroAtImInfty, SlashInvariantForm, SlashInvariantForm.toFun_eq_coe, ZeroAtFilter, coe_smul, const_smul, f.holo, f.zero_at_cusps, simp_rw, smul_one_smul, smul_slash, toFun_eq_coe, toSlashInvariantForm, toSlashInvariantForm_coe, zero_at_cusps
 -/
@@ -1924,7 +1940,16 @@ instance instGCommRing
   mul_one _ := gradedMonoid_eq_of_cast (add_zero _) (ext fun _ => mul_one _)
   mul_assoc _ _ _ := gradedMonoid_eq_of_cast (add_assoc _ _ _) (ext fun _ => mul_assoc _ _ _)
   mul_zero {_ _} _ := ext fun _ => mul_zero _
-  zero_mul {_ _} _ :=
+  zero_mul {_ _} _ := ext fun _ => zero_mul _
+  mul_add {_ _} _ _ _ := ext fun _ => mul_add _ _ _
+  add_mul {_ _} _ _ _ := ext fun _ => add_mul _ _ _
+  mul_comm _ _ := gradedMonoid_eq_of_cast (add_comm _ _) (ext fun _ => mul_comm _ _)
+  natCast := Nat.cast
+  natCast_zero := ext fun _ => Nat.cast_zero
+  natCast_succ _ := ext fun _ => Nat.cast_succ _
+  intCast := Int.cast
+  intCast_ofNat _ := ext fun _ => AddGroupWithOne.intCast_ofNat _
+  intCast_negSucc_ofNat _ := ext fun _ => AddGroupWithOne.intCast_negSucc _
 
 中文:
 实例 instGCommRing
@@ -1933,7 +1958,16 @@ instance instGCommRing
   mul_one _ := gradedMonoid_eq_of_cast (add_zero _) (ext fun _ => mul_one _)
   mul_assoc _ _ _ := gradedMonoid_eq_of_cast (add_assoc _ _ _) (ext fun _ => mul_assoc _ _ _)
   mul_zero {_ _} _ := ext fun _ => mul_zero _
-  zero_mul {_ _} _ :=
+  zero_mul {_ _} _ := ext fun _ => zero_mul _
+  mul_add {_ _} _ _ _ := ext fun _ => mul_add _ _ _
+  add_mul {_ _} _ _ _ := ext fun _ => add_mul _ _ _
+  mul_comm _ _ := gradedMonoid_eq_of_cast (add_comm _ _) (ext fun _ => mul_comm _ _)
+  natCast := Nat.cast
+  natCast_zero := ext fun _ => Nat.cast_zero
+  natCast_succ _ := ext fun _ => Nat.cast_succ _
+  intCast := Int.cast
+  intCast_ofNat _ := ext fun _ => AddGroupWithOne.intCast_ofNat _
+  intCast_negSucc_ofNat _ := ext fun _ => AddGroupWithOne.intCast_negSucc _
 
 Depends on / 依赖: gradedMonoid_eq_of_cast, one_mul, zero_add
 -/
@@ -2002,7 +2036,9 @@ theorem gnpow_eq_pow
     exact gradedMonoid_eq_of_cast (zero_mul k).symm (ModularForm.ext fun _ => rfl)
   | succ n ih =>
     refine (GradedMonoid.GMonoid.gnpow_succ' n ⟨k, f⟩).trans ?_
-    refine (congrArg (fun x : GradedMono
+    refine (congrArg (fun x : GradedMonoid (ModularForm Γ) => x * ⟨k, f⟩) ih).trans ?_
+    exact gradedMonoid_eq_of_cast (show ((n : Int) * k + k = (n + 1) * k) by ring)
+      (ModularForm.ext fun _ => rfl)
 
 中文:
 定理 gnpow_eq_pow
@@ -2014,7 +2050,9 @@ theorem gnpow_eq_pow
     exact gradedMonoid_eq_of_cast (zero_mul k).symm (ModularForm.ext fun _ => rfl)
   | succ n ih =>
     refine (GradedMonoid.GMonoid.gnpow_succ' n ⟨k, f⟩).trans ?_
-    refine (congrArg (fun x : GradedMono
+    refine (congrArg (fun x : GradedMonoid (ModularForm Γ) => x * ⟨k, f⟩) ih).trans ?_
+    exact gradedMonoid_eq_of_cast (show ((n : Int) * k + k = (n + 1) * k) by ring)
+      (ModularForm.ext fun _ => rfl)
 
 Depends on / 依赖: GMonoid, GradedMonoid, GradedMonoid.GMonoid.gnpow_succ, GradedMonoid.GMonoid.gnpow_zero, ModularForm, ModularForm.ext, gnpow_succ, gnpow_zero, gradedMonoid_eq_of_cast, zero_mul
 -/
@@ -2070,7 +2108,10 @@ definition prod
       (by intro (i : ι) hi; simpa using! (F i).holo')
   bdd_at_cusps' hc γ hγ := by
     simp only [SlashInvariantForm.toFun_eq_coe, coe_prod, SlashInvariantForm.coe_mk, hm,
-      prod
+      prod_slash_sum_weights, IsBoundedAtImInfty]
+    refine BoundedAtFilter.smul _ (BoundedAtFilter.prod (s := s) ?_)
+    intro i hi
+    simpa using! (F i).bdd_at_cusps' hc γ hγ
 
 中文:
 定义 乘积
@@ -2080,7 +2121,10 @@ definition prod
       (by intro (i : ι) hi; simpa using! (F i).holo')
   bdd_at_cusps' hc γ hγ := by
     simp only [SlashInvariantForm.toFun_eq_coe, coe_prod, SlashInvariantForm.coe_mk, hm,
-      prod
+      prod_slash_sum_weights, IsBoundedAtImInfty]
+    refine BoundedAtFilter.smul _ (BoundedAtFilter.prod (s := s) ?_)
+    intro i hi
+    simpa using! (F i).bdd_at_cusps' hc γ hγ
 
 Depends on / 依赖: SlashInvariantForm, SlashInvariantForm.prod
 -/
@@ -2141,7 +2185,10 @@ definition ModularForm.translate
   bdd_at_cusps' {c} hc γ hγ := by
     rw [SlashInvariantForm.toFun_eq_coe]; rw [SlashInvariantForm.coe_translate]; rw [← SlashAction.slash_mul]; rw [← isBoundedAt_infty_iff]; rw [← OnePoint.IsBoundedAt.smul_iff]
     apply ModularFormClass.bdd_at_cusps f
-    simpa [mu
+    simpa [mul_smul, hγ] using hc.smul g
+  holo' := (ModularFormClass.holo f).slash k g
+
+@[simp]
 
 中文:
 定义 模形式.translate
@@ -2150,7 +2197,10 @@ definition ModularForm.translate
   bdd_at_cusps' {c} hc γ hγ := by
     rw [SlashInvariantForm.toFun_eq_coe]; rw [SlashInvariantForm.coe_translate]; rw [← SlashAction.slash_mul]; rw [← isBoundedAt_infty_iff]; rw [← OnePoint.IsBoundedAt.smul_iff]
     apply ModularFormClass.bdd_at_cusps f
-    simpa [mu
+    simpa [mul_smul, hγ] using hc.smul g
+  holo' := (ModularFormClass.holo f).slash k g
+
+@[simp]
 
 Depends on / 依赖: SlashInvariantForm, SlashInvariantForm.translate, translate
 -/
@@ -2191,7 +2241,10 @@ definition CuspForm.translate
   body: ModularForm.translate f g
   zero_at_cusps' {c} hc γ hγ := by
     rw [SlashInvariantForm.toFun_eq_coe]; rw [ModularForm.toSlashInvariantForm_coe]; rw [ModularForm.coe_translate]; rw [← SlashAction.slash_mul]; rw [← isZeroAt_infty_iff]; rw [← OnePoint.IsZeroAt.smul_iff]
-    apply CuspFormClass.zero_at
+    apply CuspFormClass.zero_at_cusps f
+    simpa [mul_smul, hγ] using hc.smul g
+
+@[simp]
 
 中文:
 定义 尖点形式.translate
@@ -2199,7 +2252,10 @@ definition CuspForm.translate
   定义体: ModularForm.translate f g
   zero_at_cusps' {c} hc γ hγ := by
     rw [SlashInvariantForm.toFun_eq_coe]; rw [ModularForm.toSlashInvariantForm_coe]; rw [ModularForm.coe_translate]; rw [← SlashAction.slash_mul]; rw [← isZeroAt_infty_iff]; rw [← OnePoint.IsZeroAt.smul_iff]
-    apply CuspFormClass.zero_at
+    apply CuspFormClass.zero_at_cusps f
+    simpa [mul_smul, hγ] using hc.smul g
+
+@[simp]
 
 Depends on / 依赖: ModularForm, ModularForm.translate, translate
 -/

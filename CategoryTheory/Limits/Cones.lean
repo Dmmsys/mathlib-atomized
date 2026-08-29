@@ -1131,7 +1131,7 @@ definition whiskeringEquivalence
         ext (Iso.refl _)
           (by
             intro k
-            simpa [e.counit_app_fun
+            simpa [e.counit_app_functor] using s.w (e.unitInv.app k))
 
 中文:
 定义 whiskeringEquivalence
@@ -1145,7 +1145,7 @@ definition whiskeringEquivalence
         ext (Iso.refl _)
           (by
             intro k
-            simpa [e.counit_app_fun
+            simpa [e.counit_app_functor] using s.w (e.unitInv.app k))
 
 Depends on / 依赖: e.functor, functor, whiskering
 -/
@@ -1345,7 +1345,8 @@ definition functorialityEquivalence
     Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ e.unitIso.symm ≪≫ Functor.rightUnitor _
   { functor := functoriality F e.functor
     inverse := functoriality (F ⋙ e.functor) e.inverse ⋙ (postcomposeEquivalence f).functor
-    unitIso := NatIso.ofComponents 
+    unitIso := NatIso.ofComponents fun c => ext (e.unitIso.app _)
+    counitIso := NatIso.ofComponents fun c => ext (e.counitIso.app _) }
 
 中文:
 定义 functorialityEquivalence
@@ -1354,7 +1355,8 @@ definition functorialityEquivalence
     Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ e.unitIso.symm ≪≫ Functor.rightUnitor _
   { functor := functoriality F e.functor
     inverse := functoriality (F ⋙ e.functor) e.inverse ⋙ (postcomposeEquivalence f).functor
-    unitIso := NatIso.ofComponents 
+    unitIso := NatIso.ofComponents fun c => ext (e.unitIso.app _)
+    counitIso := NatIso.ofComponents fun c => ext (e.counitIso.app _) }
 
 Depends on / 依赖: Functor, Functor.associator, Functor.rightUnitor, NatIso, NatIso.ofComponents, associator, counitIso, e.counitIso.app, e.functor, e.inverse, e.unitIso.app, e.unitIso.symm, functor, functoriality, inverse, isoWhiskerLeft, ofComponents, postcomposeEquivalence, rightUnitor, unitIso
 -/
@@ -1842,7 +1844,14 @@ definition coconeEquivalenceOpConeOp
               apply CoconeMorphism.w } }
   inverse :=
     { obj := fun c => Cone.unop (unop c)
- 
+      map := fun {X} {Y} f =>
+        { hom := f.unop.hom.unop
+          w := fun j => by
+            apply Quiver.Hom.op_inj
+            dsimp
+            apply ConeMorphism.w } }
+  unitIso := Iso.refl _
+  counitIso := Iso.refl _
 
 中文:
 定义 coconeEquivalenceOpConeOp
@@ -1857,7 +1866,14 @@ definition coconeEquivalenceOpConeOp
               apply CoconeMorphism.w } }
   inverse :=
     { obj := fun c => Cone.unop (unop c)
- 
+      map := fun {X} {Y} f =>
+        { hom := f.unop.hom.unop
+          w := fun j => by
+            apply Quiver.Hom.op_inj
+            dsimp
+            apply ConeMorphism.w } }
+  unitIso := Iso.refl _
+  counitIso := Iso.refl _
 
 Depends on / 依赖: Cocone, Cocone.op, CoconeMorphism, CoconeMorphism.w, Cone.unop, ConeMorphism, ConeMorphism.w, Iso.refl, Quiver, Quiver.Hom.op, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, counitIso, f.hom.op, f.unop.hom.unop, inverse, op_inj, unitIso, unop_inj
 -/

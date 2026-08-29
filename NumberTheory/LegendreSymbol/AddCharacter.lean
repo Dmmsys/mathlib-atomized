@@ -246,7 +246,10 @@ lemma exists_divisor_of_not_isPrimitive
   -- We have `AddChar.mulShift e b = 1`, but `b ≠ 0`.
   obtain ⟨d, hd, u, hu, rfl⟩ := b.eq_unit_mul_divisor
   refine ⟨d, hd, lt_of_le_of_ne (Nat.le_of_dvd (NeZero.pos _) hd) ?_, ?_⟩
-  · exact fun h => by simp on
+  · exact fun h => by simp only [h, ZMod.natCast_self, mul_zero, ne_eq, not_true_eq_false] at hb_ne
+  · rw [← mulShift_unit_eq_one_iff _ hu, ← hb, mul_comm]
+    ext1 y
+    rw [mulShift_apply]; rw [mulShift_apply]; rw [mulShift_apply]; rw [mul_assoc]
 
 中文:
 引理 存在_divisor_of_not_isPrimitive
@@ -257,7 +260,10 @@ lemma exists_divisor_of_not_isPrimitive
   -- We have `AddChar.mulShift e b = 1`, but `b ≠ 0`.
   obtain ⟨d, hd, u, hu, rfl⟩ := b.eq_unit_mul_divisor
   refine ⟨d, hd, lt_of_le_of_ne (Nat.le_of_dvd (NeZero.pos _) hd) ?_, ?_⟩
-  · exact fun h => by simp on
+  · exact fun h => by simp only [h, ZMod.natCast_self, mul_zero, ne_eq, not_true_eq_false] at hb_ne
+  · rw [← mulShift_unit_eq_one_iff _ hu, ← hb, mul_comm]
+    ext1 y
+    rw [mulShift_apply]; rw [mulShift_apply]; rw [mulShift_apply]; rw [mul_assoc]
 
 Depends on / 依赖: IsPrimitive, hb_ne, not_forall, not_ne_iff, simp_rw
 -/
@@ -520,7 +526,17 @@ definition FiniteField.primitiveChar
   have hp₂ : ¬ringChar F' ∣ p := by
     rcases CharP.char_is_prime_or_zero F' (ringChar F') with hq | hq
     · exact mt (Nat.Prime.dvd_iff_eq hp.1 (Nat.Prime.ne_one hq)).mp h.symm
-    · rw [
+    · rw [hq]
+      exact fun hf => Nat.Prime.ne_zero hp.1 (zero_dvd_iff.mp hf)
+  let ψ := primitiveZModChar pp F' (neZero_iff.mp (NeZero.of_not_dvd F' hp₂))
+  letI : Algebra (ZMod p) F := ZMod.algebra _ _
+  let ψ' := ψ.char.compAddMonoidHom (Algebra.trace (ZMod p) F).toAddMonoidHom
+  have hψ' : ψ' != 1 := by
+    obtain ⟨a, ha⟩ := FiniteField.trace_to_zmod_nondegenerate F one_ne_zero
+    rw [one_mul] at ha
+    exact ne_one_iff.2
+⟨a, fun hf => ha (ψ.prim.zmod_char_eq_one_iff pp <| Algebra.trace (ZMod p) F a).mp hf⟩
+  exact ⟨ψ.n, ψ', IsPrimitive.of_ne_one hψ'⟩
 
 中文:
 定义 FiniteField.primitiveChar
@@ -532,7 +548,17 @@ definition FiniteField.primitiveChar
   have hp₂ : ¬ringChar F' ∣ p := by
     rcases CharP.char_is_prime_or_zero F' (ringChar F') with hq | hq
     · exact mt (Nat.Prime.dvd_iff_eq hp.1 (Nat.Prime.ne_one hq)).mp h.symm
-    · rw [
+    · rw [hq]
+      exact fun hf => Nat.Prime.ne_zero hp.1 (zero_dvd_iff.mp hf)
+  let ψ := primitiveZModChar pp F' (neZero_iff.mp (NeZero.of_not_dvd F' hp₂))
+  letI : Algebra (ZMod p) F := ZMod.algebra _ _
+  let ψ' := ψ.char.compAddMonoidHom (Algebra.trace (ZMod p) F).toAddMonoidHom
+  have hψ' : ψ' != 1 := by
+    obtain ⟨a, ha⟩ := FiniteField.trace_to_zmod_nondegenerate F one_ne_zero
+    rw [one_mul] at ha
+    exact ne_one_iff.2
+⟨a, fun hf => ha (ψ.prim.zmod_char_eq_one_iff pp <| Algebra.trace (ZMod p) F a).mp hf⟩
+  exact ⟨ψ.n, ψ', IsPrimitive.of_ne_one hψ'⟩
 
 Depends on / 依赖: Algebra, CharP.char_is_prime, CharP.char_is_prime_or_zero, Nat.Prime.dvd_iff_eq, Nat.Prime.ne_one, Nat.Prime.ne_zero, NeZero, NeZero.of_not_dvd, ZMod.algebra, algebra, char.compAddMonoidHom, char_is_prime, char_is_prime_or_zero, compAddMonoidHom, dvd_iff_eq, h.symm, neZero_iff, neZero_iff.mp, ne_one, ne_zero
 -/
@@ -577,7 +603,7 @@ theorem sum_eq_zero_of_ne_one
   simp_rw [map_add_eq_mul] at h₁
   have h₂ : ∑ a : R, ψ a = Finset.univ.sum ↑ψ := rfl
   rw [← Finset.mul_sum]; rw [h₂] at h₁
-  exact e
+  exact eq_zero_of_mul_eq_self_left hb h₁
 
 中文:
 定理 sum_eq_zero_of_ne_one
@@ -590,7 +616,7 @@ theorem sum_eq_zero_of_ne_one
   simp_rw [map_add_eq_mul] at h₁
   have h₂ : ∑ a : R, ψ a = Finset.univ.sum ↑ψ := rfl
   rw [← Finset.mul_sum]; rw [h₂] at h₁
-  exact e
+  exact eq_zero_of_mul_eq_self_left hb h₁
 
 Depends on / 依赖: AddGroup, AddGroup.addLeft_bijective, Finset, Finset.mul_sum, Finset.univ.sum, Fintype, Fintype.sum_bijective, addLeft_bijective, eq_zero_of_mul_eq_self_left, map_add_eq_mul, mul_sum, ne_one_iff, simp_rw, sum_bijective
 -/

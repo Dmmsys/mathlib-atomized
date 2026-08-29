@@ -835,7 +835,25 @@ theorem Prime.mul_eq_prime_sq_iff
   refine ⟨fun h => ?_, fun ⟨h₁, h₂⟩ => h₁.symm ▸ h₂.symm ▸ (sq _).symm⟩
   have pdvdxy : p ∣ x * y := by rw [h]; simp [sq]
   -- Could be `wlog := hp.dvd_mul.1 pdvdxy using x y`, but that imports more than we want.
-  suffices forall x' y' : Nat, x' != 1 -> y' != 1 -> x' * y' = p ^ 2 -> p ∣ x' -> x'
+  suffices forall x' y' : Nat, x' != 1 -> y' != 1 -> x' * y' = p ^ 2 -> p ∣ x' -> x' = p ∧ y' = p by
+    obtain hx | hy := hp.dvd_mul.1 pdvdxy <;>
+      [skip; rw [And.comm]] <;>
+      [skip; rw [mul_comm] at h pdvdxy] <;>
+      apply this <;>
+      assumption
+  rintro x y hx hy h ⟨a, ha⟩
+  have : a ∣ p := ⟨y, by rwa [ha, sq, mul_assoc, mul_right_inj' hp.ne_zero, eq_comm] at h⟩
+  obtain rfl | hap := (Nat.dvd_prime hp).mp ‹a ∣ p›
+  · rw [mul_one] at ha
+    subst ha
+    simp only [sq, mul_right_inj' hp.ne_zero] at h
+    subst h
+    exact ⟨rfl, rfl⟩
+  · refine (hy ?_).elim
+    subst hap
+    subst ha
+    rw [sq]; rw [Nat.mul_eq_left (Nat.mul_ne_zero hp.ne_zero hp.ne_zero)] at h
+    exact h
 
 中文:
 定理 素.mul_eq_prime_sq_iff
@@ -844,7 +862,25 @@ theorem Prime.mul_eq_prime_sq_iff
   refine ⟨fun h => ?_, fun ⟨h₁, h₂⟩ => h₁.symm ▸ h₂.symm ▸ (sq _).symm⟩
   have pdvdxy : p ∣ x * y := by rw [h]; simp [sq]
   -- Could be `wlog := hp.dvd_mul.1 pdvdxy using x y`, but that imports more than we want.
-  suffices forall x' y' : Nat, x' != 1 -> y' != 1 -> x' * y' = p ^ 2 -> p ∣ x' -> x'
+  suffices forall x' y' : Nat, x' != 1 -> y' != 1 -> x' * y' = p ^ 2 -> p ∣ x' -> x' = p ∧ y' = p by
+    obtain hx | hy := hp.dvd_mul.1 pdvdxy <;>
+      [skip; rw [And.comm]] <;>
+      [skip; rw [mul_comm] at h pdvdxy] <;>
+      apply this <;>
+      assumption
+  rintro x y hx hy h ⟨a, ha⟩
+  have : a ∣ p := ⟨y, by rwa [ha, sq, mul_assoc, mul_right_inj' hp.ne_zero, eq_comm] at h⟩
+  obtain rfl | hap := (Nat.dvd_prime hp).mp ‹a ∣ p›
+  · rw [mul_one] at ha
+    subst ha
+    simp only [sq, mul_right_inj' hp.ne_zero] at h
+    subst h
+    exact ⟨rfl, rfl⟩
+  · refine (hy ?_).elim
+    subst hap
+    subst ha
+    rw [sq]; rw [Nat.mul_eq_left (Nat.mul_ne_zero hp.ne_zero hp.ne_zero)] at h
+    exact h
 
 Depends on / 依赖: pdvdxy
 -/
@@ -1146,7 +1182,12 @@ theorem succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
       rwa [pow_succ'] at hpmn'
   have hpd2 : p ∣ m * n / p ^ (k + l) := dvd_div_of_mul_dvd hpd
   have hpd3 : p ∣ m * n / (p ^ k * p ^ l) := by simpa [pow_add] using hpd2
-  have hpd4 : p ∣ m / p ^ k * (
+  have hpd4 : p ∣ m / p ^ k * (n / p ^ l) := by simpa [Nat.div_mul_div_comm hpm hpn] using hpd3
+  have hpd5 : p ∣ m / p ^ k ∨ p ∣ n / p ^ l :=
+    (Prime.dvd_mul p_prime).1 hpd4
+  suffices p ^ k * p ∣ m ∨ p ^ l * p ∣ n by rwa [_root_.pow_succ, _root_.pow_succ]
+  exact hpd5.elim (fun h : p ∣ m / p ^ k => Or.inl <| mul_dvd_of_dvd_div hpm h)
+fun h : p ∣ n / p ^ l => Or.inr mul_dvd_of_dvd_div hpn h
 
 中文:
 定理 succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
@@ -1157,7 +1198,12 @@ theorem succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
       rwa [pow_succ'] at hpmn'
   have hpd2 : p ∣ m * n / p ^ (k + l) := dvd_div_of_mul_dvd hpd
   have hpd3 : p ∣ m * n / (p ^ k * p ^ l) := by simpa [pow_add] using hpd2
-  have hpd4 : p ∣ m / p ^ k * (
+  have hpd4 : p ∣ m / p ^ k * (n / p ^ l) := by simpa [Nat.div_mul_div_comm hpm hpn] using hpd3
+  have hpd5 : p ∣ m / p ^ k ∨ p ∣ n / p ^ l :=
+    (Prime.dvd_mul p_prime).1 hpd4
+  suffices p ^ k * p ∣ m ∨ p ^ l * p ∣ n by rwa [_root_.pow_succ, _root_.pow_succ]
+  exact hpd5.elim (fun h : p ∣ m / p ^ k => Or.inl <| mul_dvd_of_dvd_div hpm h)
+fun h : p ∣ n / p ^ l => Or.inr mul_dvd_of_dvd_div hpn h
 
 Depends on / 依赖: Nat.div_mul_div_comm, Prime.dvd_mul, _root_, _root_.pow_succ, div_mul_div_comm, dvd_div_of_mul_dvd, dvd_mul, p_prime, pow_add, pow_succ
 -/

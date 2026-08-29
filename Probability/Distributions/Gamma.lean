@@ -303,7 +303,16 @@ lemma lintegral_gammaPDF_eq_one
     rw [setLIntegral_congr_fun measurableSet_Iio
       (fun x (hx : x < 0) => gammaPDF_of_neg hx)]; rw [lintegral_zero]
   have rightSide : ∫⁻ x in Ici 0, gammaPDF a r x =
-      ∫⁻ x in Ici 0, ENNReal.ofReal (r ^ a / Gamma a * x ^ (a - 1) *
+      ∫⁻ x in Ici 0, ENNReal.ofReal (r ^ a / Gamma a * x ^ (a - 1) * exp (-(r * x))) :=
+    setLIntegral_congr_fun measurableSet_Ici (fun _ => gammaPDF_of_nonneg)
+  rw [← ENNReal.toReal_eq_one_iff]; rw [← lintegral_add_compl _ measurableSet_Ici]; rw [compl_Ici]; rw [leftSide]; rw [rightSide]; rw [add_zero]; rw [← integral_eq_lintegral_of_nonneg_ae]
+  · simp_rw [integral_Ici_eq_integral_Ioi, mul_assoc]
+    rw [integral_const_mul]; rw [integral_rpow_mul_exp_neg_mul_Ioi ha hr]; rw [div_mul_eq_mul_div]; rw [← mul_assoc]; rw [mul_div_assoc]; rw [div_self (Gamma_pos_of_pos ha).ne']; rw [mul_one]; rw [div_rpow zero_le_one hr.le]; rw [one_rpow]; rw [mul_one_div]; rw [div_self (rpow_pos_of_pos hr _).ne']
+  · rw [EventuallyLE, ae_restrict_iff' measurableSet_Ici]
+    exact ae_of_all _ (fun x (hx : 0 <= x) => by positivity)
+  · apply (measurable_gammaPDFReal a r).aestronglyMeasurable.congr
+refine (ae_restrict_iff' measurableSet_Ici).mpr ae_of_all _ fun x (hx : 0 <= x) => ?_
+    simp_rw [gammaPDFReal, eq_true_intro hx, ite_true]
 
 中文:
 引理 lintegral_gammaPDF_eq_one
@@ -313,7 +322,16 @@ lemma lintegral_gammaPDF_eq_one
     rw [setLIntegral_congr_fun measurableSet_Iio
       (fun x (hx : x < 0) => gammaPDF_of_neg hx)]; rw [lintegral_zero]
   have rightSide : ∫⁻ x in Ici 0, gammaPDF a r x =
-      ∫⁻ x in Ici 0, ENNReal.ofReal (r ^ a / Gamma a * x ^ (a - 1) *
+      ∫⁻ x in Ici 0, ENNReal.ofReal (r ^ a / Gamma a * x ^ (a - 1) * exp (-(r * x))) :=
+    setLIntegral_congr_fun measurableSet_Ici (fun _ => gammaPDF_of_nonneg)
+  rw [← ENNReal.toReal_eq_one_iff]; rw [← lintegral_add_compl _ measurableSet_Ici]; rw [compl_Ici]; rw [leftSide]; rw [rightSide]; rw [add_zero]; rw [← integral_eq_lintegral_of_nonneg_ae]
+  · simp_rw [integral_Ici_eq_integral_Ioi, mul_assoc]
+    rw [integral_const_mul]; rw [integral_rpow_mul_exp_neg_mul_Ioi ha hr]; rw [div_mul_eq_mul_div]; rw [← mul_assoc]; rw [mul_div_assoc]; rw [div_self (Gamma_pos_of_pos ha).ne']; rw [mul_one]; rw [div_rpow zero_le_one hr.le]; rw [one_rpow]; rw [mul_one_div]; rw [div_self (rpow_pos_of_pos hr _).ne']
+  · rw [EventuallyLE, ae_restrict_iff' measurableSet_Ici]
+    exact ae_of_all _ (fun x (hx : 0 <= x) => by positivity)
+  · apply (measurable_gammaPDFReal a r).aestronglyMeasurable.congr
+refine (ae_restrict_iff' measurableSet_Ici).mpr ae_of_all _ fun x (hx : 0 <= x) => ?_
+    simp_rw [gammaPDFReal, eq_true_intro hx, ite_true]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal_eq_one_iff, compl_Ici, gammaPDF, gammaPDF_of_neg, gammaPDF_of_nonneg, leftSide, lintegral_add_compl, lintegral_zero, measurableSet_Ici, measurableSet_Iio, ofReal, rightSide, setLIntegral_congr_fun, toReal_eq_one_iff
 -/
@@ -389,7 +407,8 @@ lemma cdf_gammaMeasure_eq_integral
   have : IsProbabilityMeasure (gammaMeasure a r) := isProbabilityMeasure_gammaMeasure ha hr
   rw [cdf_eq_real]; rw [gammaMeasure]; rw [measureReal_def]; rw [withDensity_apply _ measurableSet_Iic]
   refine (integral_eq_lintegral_of_nonneg_ae ?_ ?_).symm
-  · exact ae_of_all _ fun b => by simp [gamm
+  · exact ae_of_all _ fun b => by simp [gammaPDFReal_nonneg ha hr]
+  · fun_prop
 
 中文:
 引理 cdf_gammaMeasure_eq_integral
@@ -398,7 +417,8 @@ lemma cdf_gammaMeasure_eq_integral
   have : IsProbabilityMeasure (gammaMeasure a r) := isProbabilityMeasure_gammaMeasure ha hr
   rw [cdf_eq_real]; rw [gammaMeasure]; rw [measureReal_def]; rw [withDensity_apply _ measurableSet_Iic]
   refine (integral_eq_lintegral_of_nonneg_ae ?_ ?_).symm
-  · exact ae_of_all _ fun b => by simp [gamm
+  · exact ae_of_all _ fun b => by simp [gammaPDFReal_nonneg ha hr]
+  · fun_prop
 
 Depends on / 依赖: IsProbabilityMeasure, ae_of_all, cdf_eq_real, fun_prop, gammaMeasure, gammaPDFReal_nonneg, integral_eq_lintegral_of_nonneg_ae, isProbabilityMeasure_gammaMeasure, measurableSet_Iic, measureReal_def, withDensity_apply
 -/

@@ -1597,6 +1597,10 @@ definition ofRowLens
     calc
       j1 <= j2 := hj
       _ < w[i2] := h2
+      _ <= w[i1] := by
+        obtain rfl | h := eq_or_lt_of_le hi
+        · rfl
+        · exact hw.getElem_ge_getElem_of_le h.le
 
 中文:
 定义 ofRowLens
@@ -1610,6 +1614,10 @@ definition ofRowLens
     calc
       j1 <= j2 := hj
       _ < w[i2] := h2
+      _ <= w[i1] := by
+        obtain rfl | h := eq_or_lt_of_le hi
+        · rfl
+        · exact hw.getElem_ge_getElem_of_le h.le
 
 Depends on / 依赖: YoungDiagram, YoungDiagram.cellsOfRowLens, cellsOfRowLens
 -/

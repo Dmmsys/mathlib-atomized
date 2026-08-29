@@ -745,7 +745,7 @@ theorem pullbackLift_fst_snd
   simpa using IsPullback.of_hasPullback (g ≫ v₂₂) f
 
 @[deprecated (since := "2026-03-20")]
-alias baseChange_map' := pul
+alias baseChange_map' := pullbackLift_fst_snd
 
 中文:
 定理 pullbackLift_fst_snd
@@ -758,7 +758,7 @@ alias baseChange_map' := pul
   simpa using IsPullback.of_hasPullback (g ≫ v₂₂) f
 
 @[deprecated (since := "2026-03-20")]
-alias baseChange_map' := pul
+alias baseChange_map' := pullbackLift_fst_snd
 
 Depends on / 依赖: pullback, pullback.fst
 -/
@@ -816,7 +816,17 @@ theorem pullbackMap
   have : pullback.map f g f' g' i₁ i₂ (𝟙 _) ((Category.comp_id _).trans e₁)
         ((Category.comp_id _).trans e₂) =
       ((pullbackSymmetry _ _).hom ≫
-          ((Over.pullback _).map (Over.homMk _ e₂.symm : Over.mk g ⟶ Over.mk g')).le
+          ((Over.pullback _).map (Over.homMk _ e₂.symm : Over.mk g ⟶ Over.mk g')).left) ≫
+        (pullbackSymmetry _ _).hom ≫
+          ((Over.pullback g').map (Over.homMk _ e₁.symm : Over.mk f ⟶ Over.mk f')).left := by
+    ext <;> simp
+  rw [this]
+  apply P.comp_mem <;> rw [P.cancel_left_of_respectsIso]
+  exacts [overPullbackMap _ (Over.homMk _ e₂.symm : Over.mk g ⟶ Over.mk g') h₂,
+    overPullbackMap _ (Over.homMk _ e₁.symm : Over.mk f ⟶ Over.mk f') h₁]
+
+@[deprecated (since := "2026-03-20")]
+alias pullback_map := pullbackMap
 
 中文:
 定理 pullbackMap
@@ -825,7 +835,17 @@ theorem pullbackMap
   have : pullback.map f g f' g' i₁ i₂ (𝟙 _) ((Category.comp_id _).trans e₁)
         ((Category.comp_id _).trans e₂) =
       ((pullbackSymmetry _ _).hom ≫
-          ((Over.pullback _).map (Over.homMk _ e₂.symm : Over.mk g ⟶ Over.mk g')).le
+          ((Over.pullback _).map (Over.homMk _ e₂.symm : Over.mk g ⟶ Over.mk g')).left) ≫
+        (pullbackSymmetry _ _).hom ≫
+          ((Over.pullback g').map (Over.homMk _ e₁.symm : Over.mk f ⟶ Over.mk f')).left := by
+    ext <;> simp
+  rw [this]
+  apply P.comp_mem <;> rw [P.cancel_left_of_respectsIso]
+  exacts [overPullbackMap _ (Over.homMk _ e₂.symm : Over.mk g ⟶ Over.mk g') h₂,
+    overPullbackMap _ (Over.homMk _ e₁.symm : Over.mk f ⟶ Over.mk f') h₁]
+
+@[deprecated (since := "2026-03-20")]
+alias pullback_map := pullbackMap
 
 Depends on / 依赖: Category, Category.comp_id, HasPullbacksAlong, Over.homMk, Over.mk, Over.pullback, P.cancel_left_of_respectsIso, P.comp_mem, cancel_left_of_respectsIso, cat_disch, comp_id, comp_mem, exacts, overPullbackMap, pullback, pullback.map, pullbackSymmetry
 -/
@@ -1212,6 +1232,11 @@ theorem pushoutMap
       ((pushoutSymmetry _ _).hom ≫
         ((Under.pushout f).map (Under.homMk _ e₂.symm : Under.mk g ⟶ Under.mk g')).right) ≫
         (pushoutSymmetry _ _).hom ≫
+        ((Under.pushout g').map (Under.homMk _ e₁.symm : Under.mk f ⟶ Under.mk f')).right := by
+    ext <;> simp
+  rw [this]
+  apply P.comp_mem <;> rw [P.cancel_left_of_respectsIso]
+  exacts [underPushoutMap _ _ h₂, underPushoutMap _ _ h₁]
 
 中文:
 定理 pushoutMap
@@ -1221,6 +1246,11 @@ theorem pushoutMap
       ((pushoutSymmetry _ _).hom ≫
         ((Under.pushout f).map (Under.homMk _ e₂.symm : Under.mk g ⟶ Under.mk g')).right) ≫
         (pushoutSymmetry _ _).hom ≫
+        ((Under.pushout g').map (Under.homMk _ e₁.symm : Under.mk f ⟶ Under.mk f')).right := by
+    ext <;> simp
+  rw [this]
+  apply P.comp_mem <;> rw [P.cancel_left_of_respectsIso]
+  exacts [underPushoutMap _ _ h₂, underPushoutMap _ _ h₁]
 
 Depends on / 依赖: HasPushoutsAlong, P.cancel_left_of_respectsIso, P.comp_mem, Under.homMk, Under.mk, Under.pushout, cancel_left_of_respectsIso, cat_disch, comp_mem, exacts, pushout, pushout.map, pushoutSymmetry, underPushoutMap
 -/
@@ -1507,7 +1537,16 @@ instance :
     let e₂ := Arrow.rightFunc.mapIso e
     have fac : g ≫ e₂.inv = e₁.inv ≫ h₂.lift (Cone.mk _ (c₁.π ≫ f)) :=
       e.inv.w.symm
-    let c₁' : Cone X₁ := {
+    let c₁' : Cone X₁ := { pt := Y₁, π := (Functor.const _).map e₁.inv ≫ c₁.π }
+    let c₂' : Cone X₂ := { pt := Y₂, π := (Functor.const _).map e₂.inv ≫ c₂.π }
+    have h₁' : IsLimit c₁' := IsLimit.ofIsoLimit h₁ (Cone.ext e₁)
+    have h₂' : IsLimit c₂' := IsLimit.ofIsoLimit h₂ (Cone.ext e₂)
+    obtain hg : h₂'.lift (Cone.mk _ (c₁'.π ≫ f)) = g :=
+      h₂'.hom_ext (fun j => by
+        rw [h₂'.fac]
+        simp [reassoc_of% fac, c₁', c₂'])
+    rw [← hg]
+    exact ⟨_, _, _, _, h₁', _, _, hf⟩)
 
 中文:
 实例 :
@@ -1518,7 +1557,16 @@ instance :
     let e₂ := Arrow.rightFunc.mapIso e
     have fac : g ≫ e₂.inv = e₁.inv ≫ h₂.lift (Cone.mk _ (c₁.π ≫ f)) :=
       e.inv.w.symm
-    let c₁' : Cone X₁ := {
+    let c₁' : Cone X₁ := { pt := Y₁, π := (Functor.const _).map e₁.inv ≫ c₁.π }
+    let c₂' : Cone X₂ := { pt := Y₂, π := (Functor.const _).map e₂.inv ≫ c₂.π }
+    have h₁' : IsLimit c₁' := IsLimit.ofIsoLimit h₁ (Cone.ext e₁)
+    have h₂' : IsLimit c₂' := IsLimit.ofIsoLimit h₂ (Cone.ext e₂)
+    obtain hg : h₂'.lift (Cone.mk _ (c₁'.π ≫ f)) = g :=
+      h₂'.hom_ext (fun j => by
+        rw [h₂'.fac]
+        simp [reassoc_of% fac, c₁', c₂'])
+    rw [← hg]
+    exact ⟨_, _, _, _, h₁', _, _, hf⟩)
 
 Depends on / 依赖: Arrow.leftFunc.mapIso, Arrow.rightFunc.mapIso, Cone.ext, Cone.mk, Functor, Functor.const, IsLimit, IsLimit.ofIsoLimit, RespectsIso, RespectsIso.of_respects_arrow_iso, e.inv.w.symm, leftFunc, mapIso, ofIsoLimit, of_respects_arrow_iso, rightFunc
 -/
@@ -1752,7 +1800,13 @@ lemma colimitsOfShape_le_of_final
   have h₁' : IsColimit (c₁.whisker F) := (Functor.Final.isColimitWhiskerEquiv F c₁).symm h₁
   have h₂' : IsColimit (c₂.whisker F) := (Functor.Final.isColimitWhiskerEquiv F c₂).symm h₂
   have : h₁.desc (Cocone.mk c₂.pt (f ≫ c₂.ι)) =
-      h₁'.desc (Coc
+      h₁'.desc (Cocone.mk c₂.pt (Functor.whiskerLeft _ f ≫ (c₂.whisker F).ι)) :=
+    h₁'.hom_ext (fun j => by
+      have := h₁'.fac (Cocone.mk c₂.pt (Functor.whiskerLeft F f ≫ Functor.whiskerLeft F c₂.ι)) j
+      dsimp at this ⊢
+      simp [this])
+  rw [this]
+  exact ⟨_, _, _, _, h₁', h₂', _, fun _ => hf _⟩
 
 中文:
 引理 colimitsOfShape_le_of_final
@@ -1762,7 +1816,13 @@ lemma colimitsOfShape_le_of_final
   have h₁' : IsColimit (c₁.whisker F) := (Functor.Final.isColimitWhiskerEquiv F c₁).symm h₁
   have h₂' : IsColimit (c₂.whisker F) := (Functor.Final.isColimitWhiskerEquiv F c₂).symm h₂
   have : h₁.desc (Cocone.mk c₂.pt (f ≫ c₂.ι)) =
-      h₁'.desc (Coc
+      h₁'.desc (Cocone.mk c₂.pt (Functor.whiskerLeft _ f ≫ (c₂.whisker F).ι)) :=
+    h₁'.hom_ext (fun j => by
+      have := h₁'.fac (Cocone.mk c₂.pt (Functor.whiskerLeft F f ≫ Functor.whiskerLeft F c₂.ι)) j
+      dsimp at this ⊢
+      simp [this])
+  rw [this]
+  exact ⟨_, _, _, _, h₁', h₂', _, fun _ => hf _⟩
 
 Depends on / 依赖: Cocone, Cocone.mk, Functor, Functor.Final.isColimitWhiskerEquiv, Functor.whiskerLeft, IsColimit, hom_ext, isColimitWhiskerEquiv, whisker, whiskerLeft
 -/
@@ -1815,7 +1875,16 @@ instance :
     let e₁ := Arrow.leftFunc.mapIso e
     let e₂ := Arrow.rightFunc.mapIso e
     have fac : e₁.hom ≫ g = h₁.desc (Cocone.mk _ (f ≫ c₂.ι)) ≫ e₂.hom := e.hom.w
-    let c₁' : Cocone X₁ := { pt := 
+    let c₁' : Cocone X₁ := { pt := Y₁, ι := c₁.ι ≫ (Functor.const _).map e₁.hom }
+    let c₂' : Cocone X₂ := { pt := Y₂, ι := c₂.ι ≫ (Functor.const _).map e₂.hom }
+    have h₁' : IsColimit c₁' := IsColimit.ofIsoColimit h₁ (Cocone.ext e₁)
+    have h₂' : IsColimit c₂' := IsColimit.ofIsoColimit h₂ (Cocone.ext e₂)
+    obtain hg : h₁'.desc (Cocone.mk _ (f ≫ c₂'.ι)) = g :=
+      h₁'.hom_ext (fun j => by
+        rw [h₁'.fac]
+        simp [fac, c₁', c₂'])
+    rw [← hg]
+    exact ⟨_, _, _, _, _, h₂', _, hf⟩)
 
 中文:
 实例 :
@@ -1825,7 +1894,16 @@ instance :
     let e₁ := Arrow.leftFunc.mapIso e
     let e₂ := Arrow.rightFunc.mapIso e
     have fac : e₁.hom ≫ g = h₁.desc (Cocone.mk _ (f ≫ c₂.ι)) ≫ e₂.hom := e.hom.w
-    let c₁' : Cocone X₁ := { pt := 
+    let c₁' : Cocone X₁ := { pt := Y₁, ι := c₁.ι ≫ (Functor.const _).map e₁.hom }
+    let c₂' : Cocone X₂ := { pt := Y₂, ι := c₂.ι ≫ (Functor.const _).map e₂.hom }
+    have h₁' : IsColimit c₁' := IsColimit.ofIsoColimit h₁ (Cocone.ext e₁)
+    have h₂' : IsColimit c₂' := IsColimit.ofIsoColimit h₂ (Cocone.ext e₂)
+    obtain hg : h₁'.desc (Cocone.mk _ (f ≫ c₂'.ι)) = g :=
+      h₁'.hom_ext (fun j => by
+        rw [h₁'.fac]
+        simp [fac, c₁', c₂'])
+    rw [← hg]
+    exact ⟨_, _, _, _, _, h₂', _, hf⟩)
 
 Depends on / 依赖: Arrow.leftFunc.mapIso, Arrow.rightFunc.mapIso, Cocone, Cocone.ext, Cocone.mk, Functor, Functor.const, IsColimit, IsColimit.ofIsoColimit, RespectsIso, RespectsIso.of_respects_arrow_iso, e.hom.w, leftFunc, mapIso, ofIsoColimit, of_respects_arrow_iso, rightFunc
 -/
@@ -2184,7 +2262,14 @@ lemma le_colimitsOfShape_punit
   let c₁ := coconeOfDiagramInitial (F := Discrete.functor (fun _ => X₁)) h
   let c₂ := coconeOfDiagramInitial (F := Discrete.functor (fun _ => X₂)) h
   have hc₁ : IsColimit c₁ := colimitOfDiagramInitial h _
-  have hc₂
+  have hc₂ : IsColimit c₂ := colimitOfDiagramInitial h _
+  have : hc₁.desc (Cocone.mk _ (Discrete.natTrans (fun _ => by exact f) ≫ c₂.ι)) = f :=
+    hc₁.hom_ext (fun x => by
+      obtain rfl : x = ⊥_ _ := by ext
+      rw [IsColimit.fac]
+      simp [c₁, c₂])
+  rw [← this]
+  exact ⟨_, _, _, _, _, hc₂, _, fun _ => hf⟩
 
 中文:
 引理 le_colimitsOfShape_punit
@@ -2195,7 +2280,14 @@ lemma le_colimitsOfShape_punit
   let c₁ := coconeOfDiagramInitial (F := Discrete.functor (fun _ => X₁)) h
   let c₂ := coconeOfDiagramInitial (F := Discrete.functor (fun _ => X₂)) h
   have hc₁ : IsColimit c₁ := colimitOfDiagramInitial h _
-  have hc₂
+  have hc₂ : IsColimit c₂ := colimitOfDiagramInitial h _
+  have : hc₁.desc (Cocone.mk _ (Discrete.natTrans (fun _ => by exact f) ≫ c₂.ι)) = f :=
+    hc₁.hom_ext (fun x => by
+      obtain rfl : x = ⊥_ _ := by ext
+      rw [IsColimit.fac]
+      simp [c₁, c₂])
+  rw [← this]
+  exact ⟨_, _, _, _, _, hc₂, _, fun _ => hf⟩
 
 Depends on / 依赖: Cocone, Cocone.mk, Discrete, Discrete.functor, Discrete.natTrans, IsColimit, IsColimit.fac, coconeOfDiagramInitial, colimitOfDiagramInitial, functor, hom_ext, initialIsInitial, natTrans
 -/
@@ -2320,7 +2412,16 @@ lemma IsStableUnderProductsOfShape.mk
     have : HasLimit X₂ := ⟨c₂, hc₂⟩
     have : HasProduct fun j => X₁.obj (Discrete.mk j) :=
       hasLimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₁.obj j)))
-    have : HasProduct fun j => X₂.obj (Discrete.mk j)
+    have : HasProduct fun j => X₂.obj (Discrete.mk j) :=
+      hasLimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₂.obj j)))
+    have hf' := hW _ _ φ (fun j => hf (Discrete.mk j))
+    refine (W.arrow_mk_iso_iff ?_).2 hf'
+    refine Arrow.isoMk
+      (IsLimit.conePointUniqueUpToIso hc₁ (limit.isLimit X₁) ≪≫ (Pi.isoLimit X₁).symm)
+      (IsLimit.conePointUniqueUpToIso hc₂ (limit.isLimit X₂) ≪≫ (Pi.isoLimit _).symm) ?_
+    apply limit.hom_ext
+    rintro ⟨j⟩
+    simp [φ, hα]
 
 中文:
 引理 IsStableUnderProductsOfShape.mk
@@ -2331,7 +2432,16 @@ lemma IsStableUnderProductsOfShape.mk
     have : HasLimit X₂ := ⟨c₂, hc₂⟩
     have : HasProduct fun j => X₁.obj (Discrete.mk j) :=
       hasLimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₁.obj j)))
-    have : HasProduct fun j => X₂.obj (Discrete.mk j)
+    have : HasProduct fun j => X₂.obj (Discrete.mk j) :=
+      hasLimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₂.obj j)))
+    have hf' := hW _ _ φ (fun j => hf (Discrete.mk j))
+    refine (W.arrow_mk_iso_iff ?_).2 hf'
+    refine Arrow.isoMk
+      (IsLimit.conePointUniqueUpToIso hc₁ (limit.isLimit X₁) ≪≫ (Pi.isoLimit X₁).symm)
+      (IsLimit.conePointUniqueUpToIso hc₂ (limit.isLimit X₂) ≪≫ (Pi.isoLimit _).symm) ?_
+    apply limit.hom_ext
+    rintro ⟨j⟩
+    simp [φ, hα]
 
 Depends on / 依赖: Arrow.isoMk, Discrete, Discrete.mk, Discrete.natIso, HasLimit, HasProduct, IsLimit, IsLimit.conePointUniqueUpToIso, Iso.refl, W.arrow_mk_iso_iff, arrow_mk_iso_iff, conePointUniqueUpToIso, f.app, hasLimit_of_iso, isLimit, limit.isLimit, natIso
 -/
@@ -2369,7 +2479,16 @@ lemma IsStableUnderCoproductsOfShape.mk
     have : HasColimit X₂ := ⟨c₂, hc₂⟩
     have : HasCoproduct fun j => X₁.obj (Discrete.mk j) :=
       hasColimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₁.obj j)))
-    have : HasCoproduct fun j => X₂.obj (Disc
+    have : HasCoproduct fun j => X₂.obj (Discrete.mk j) :=
+      hasColimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₂.obj j)))
+    have hf' := hW _ _ φ (fun j => hf (Discrete.mk j))
+    refine (W.arrow_mk_iso_iff ?_).1 hf'
+    refine Arrow.isoMk
+      ((Sigma.isoColimit _) ≪≫ IsColimit.coconePointUniqueUpToIso (colimit.isColimit X₁) hc₁)
+      ((Sigma.isoColimit _) ≪≫ IsColimit.coconePointUniqueUpToIso (colimit.isColimit X₂) hc₂) ?_
+    apply colimit.hom_ext
+    rintro ⟨j⟩
+    simp [φ, hα]
 
 中文:
 引理 IsStableUnderCoproductsOfShape.mk
@@ -2380,7 +2499,16 @@ lemma IsStableUnderCoproductsOfShape.mk
     have : HasColimit X₂ := ⟨c₂, hc₂⟩
     have : HasCoproduct fun j => X₁.obj (Discrete.mk j) :=
       hasColimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₁.obj j)))
-    have : HasCoproduct fun j => X₂.obj (Disc
+    have : HasCoproduct fun j => X₂.obj (Discrete.mk j) :=
+      hasColimit_of_iso (Discrete.natIso (fun j => Iso.refl (X₂.obj j)))
+    have hf' := hW _ _ φ (fun j => hf (Discrete.mk j))
+    refine (W.arrow_mk_iso_iff ?_).1 hf'
+    refine Arrow.isoMk
+      ((Sigma.isoColimit _) ≪≫ IsColimit.coconePointUniqueUpToIso (colimit.isColimit X₁) hc₁)
+      ((Sigma.isoColimit _) ≪≫ IsColimit.coconePointUniqueUpToIso (colimit.isColimit X₂) hc₂) ?_
+    apply colimit.hom_ext
+    rintro ⟨j⟩
+    simp [φ, hα]
 
 Depends on / 依赖: Arrow.isoMk, Discrete, Discrete.mk, Discrete.natIso, HasColimit, HasCoproduct, IsColimit, IsColimit.coc, Iso.refl, Sigma.isoColimit, W.arrow_mk_iso_iff, arrow_mk_iso_iff, f.app, hasColimit_of_iso, isoColimit, natIso
 -/
@@ -2620,7 +2748,10 @@ instance RespectsIso.diagonal
     rwa [diagonal_iff, pullback.diagonal_comp, P.cancel_left_of_respectsIso,
       P.cancel_left_of_respectsIso, ← P.cancel_right_of_respectsIso _
         (pullback.map (e.hom ≫ f) (e.hom ≫ f) f f e.hom e.hom (𝟙 Z) (by simp) (by simp)),
-      ← pullback.conditi
+      ← pullback.condition, P.cancel_left_of_respectsIso]
+  · introv H
+    delta diagonal
+    rwa [pullback.diagonal_comp, P.cancel_right_of_respectsIso]
 
 中文:
 实例 RespectsIso.diagonal
@@ -2631,7 +2762,10 @@ instance RespectsIso.diagonal
     rwa [diagonal_iff, pullback.diagonal_comp, P.cancel_left_of_respectsIso,
       P.cancel_left_of_respectsIso, ← P.cancel_right_of_respectsIso _
         (pullback.map (e.hom ≫ f) (e.hom ≫ f) f f e.hom e.hom (𝟙 Z) (by simp) (by simp)),
-      ← pullback.conditi
+      ← pullback.condition, P.cancel_left_of_respectsIso]
+  · introv H
+    delta diagonal
+    rwa [pullback.diagonal_comp, P.cancel_right_of_respectsIso]
 
 Depends on / 依赖: P.cancel_left_of_respectsIso, P.cancel_right_of_respectsIso, RespectsIso, RespectsIso.mk, cancel_left_of_respectsIso, cancel_right_of_respectsIso, condition, diagonal, diagonal_comp, diagonal_iff, e.hom, introv, pullback, pullback.condition, pullback.diagonal_comp, pullback.map
 -/
@@ -2768,7 +2902,9 @@ lemma hasOfPostcompProperty_iff_le_diagonal
   · set gr : Y ⟶ pullback (g ≫ f) f := pullback.lift (𝟙 Y) g (by simp)
     have : g = gr ≫ pullback.snd _ _ := by simp [gr]
     rw [this]
- 
+    apply P.comp_mem
+    · exact P.of_isPullback (pullback_lift_diagonal_isPullback g f) (hP _ hf)
+    · exact P.pullback_snd _ _ hcomp
 
 中文:
 引理 hasOfPostcompProperty_iff_le_diagonal
@@ -2779,7 +2915,9 @@ lemma hasOfPostcompProperty_iff_le_diagonal
   · set gr : Y ⟶ pullback (g ≫ f) f := pullback.lift (𝟙 Y) g (by simp)
     have : g = gr ≫ pullback.snd _ _ := by simp [gr]
     rw [this]
- 
+    apply P.comp_mem
+    · exact P.of_isPullback (pullback_lift_diagonal_isPullback g f) (hP _ hf)
+    · exact P.pullback_snd _ _ hcomp
 
 Depends on / 依赖: P.comp_mem, P.id_mem, P.of_isPullback, P.pullback_snd, Q.pullback_fst, comp_mem, hP.of_postcomp, id_mem, of_isPullback, of_postcomp, pullback, pullback.lift, pullback.snd, pullback_fst, pullback_lift_diagonal_isPullback, pullback_snd
 -/
@@ -2830,7 +2968,12 @@ instance universally_respectsIso
       IsPullback.of_horiz_isIso
         ⟨by rw [Category.id_comp, Category.assoc, e.hom_inv_id, Category.comp_id]⟩
     exact hf _ _ _
-      (by simpa only [Iso.inv_hom_id_assoc, Cat
+      (by simpa only [Iso.inv_hom_id_assoc, Category.id_comp] using this.paste_horiz H)
+  · intro X Y Z e f hf X' Z' i₁ i₂ f' H
+    have : IsPullback (𝟙 _) i₂ (i₂ ≫ e.inv) e.inv :=
+      IsPullback.of_horiz_isIso ⟨Category.id_comp _⟩
+    exact hf _ _ _ (by simpa only [Category.assoc, Iso.hom_inv_id,
+      Category.comp_id, Category.comp_id] using H.paste_horiz this)
 
 中文:
 实例 universally_respectsIso
@@ -2842,7 +2985,12 @@ instance universally_respectsIso
       IsPullback.of_horiz_isIso
         ⟨by rw [Category.id_comp, Category.assoc, e.hom_inv_id, Category.comp_id]⟩
     exact hf _ _ _
-      (by simpa only [Iso.inv_hom_id_assoc, Cat
+      (by simpa only [Iso.inv_hom_id_assoc, Category.id_comp] using this.paste_horiz H)
+  · intro X Y Z e f hf X' Z' i₁ i₂ f' H
+    have : IsPullback (𝟙 _) i₂ (i₂ ≫ e.inv) e.inv :=
+      IsPullback.of_horiz_isIso ⟨Category.id_comp _⟩
+    exact hf _ _ _ (by simpa only [Category.assoc, Iso.hom_inv_id,
+      Category.comp_id, Category.comp_id] using H.paste_horiz this)
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, IsPullback, IsPullback.of_horiz_isIso, Iso.hom_in, Iso.inv_hom_id_assoc, RespectsIso, RespectsIso.mk, comp_id, e.hom, e.hom_inv_id, e.inv, hom_in, hom_inv_id, id_comp, inv_hom_id_assoc, of_horiz_isIso, paste_horiz
 -/

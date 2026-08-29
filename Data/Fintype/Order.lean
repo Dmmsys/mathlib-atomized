@@ -182,7 +182,8 @@ abbreviation toCompleteDistribLatticeMinimalAxioms
   inf_sSup_le_iSup_inf := fun a s => by
     convert! (Finset.sup_inf_distrib_left s.toFinset id a).le using 1
     rw [Finset.sup_eq_iSup]
-    simp_rw
+    simp_rw [Set.mem_toFinset]
+    rfl
 
 中文:
 缩写 toCompleteDistribLatticeMinimalAxioms
@@ -195,7 +196,8 @@ abbreviation toCompleteDistribLatticeMinimalAxioms
   inf_sSup_le_iSup_inf := fun a s => by
     convert! (Finset.sup_inf_distrib_left s.toFinset id a).le using 1
     rw [Finset.sup_eq_iSup]
-    simp_rw
+    simp_rw [Set.mem_toFinset]
+    rfl
 
 Depends on / 依赖: Finset, Finset.inf_eq_iInf, Finset.inf_sup_distrib_left, Finset.sup_eq_iSup, Finset.sup_inf_distrib_left, Set.mem_toFinset, convert, inf_eq_iInf, inf_sSup_le_iSup_inf, inf_sup_distrib_left, mem_toFinset, s.toFinset, simp_rw, sup_eq_iSup, sup_inf_distrib_left, toFinset
 -/

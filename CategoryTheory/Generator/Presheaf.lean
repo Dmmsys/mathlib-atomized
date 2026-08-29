@@ -68,7 +68,8 @@ definition freeYonedaHomEquiv
   left_inv f := by
     ext Y
     refine Sigma.hom_ext _ _ (fun φ => ?_)
-    simpa using (Sigma.ι _ (𝟙 _) ≫= f.n
+    simpa using (Sigma.ι _ (𝟙 _) ≫= f.naturality φ.op).symm
+  right_inv g := by simp
 
 中文:
 定义 freeYonedaHomEquiv
@@ -80,7 +81,8 @@ definition freeYonedaHomEquiv
   left_inv f := by
     ext Y
     refine Sigma.hom_ext _ _ (fun φ => ?_)
-    simpa using (Sigma.ι _ (𝟙 _) ≫= f.n
+    simpa using (Sigma.ι _ (𝟙 _) ≫= f.naturality φ.op).symm
+  right_inv g := by simp
 
 Depends on / 依赖: f.app, yoneda, yoneda.obj
 -/

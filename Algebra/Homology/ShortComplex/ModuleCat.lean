@@ -314,7 +314,10 @@ definition moduleCatLeftHomologyData
   π := ModuleCat.ofHom (LinearMap.range S.moduleCatToCycles).mkQ
   wi := by aesop
   hi := ModuleCat.kernelIsLimit _
-  wπ :
+  wπ := by aesop
+  hπ := ModuleCat.cokernelIsColimit (ModuleCat.ofHom S.moduleCatToCycles)
+
+@[simp]
 
 中文:
 定义 moduleCatLeftHomologyData
@@ -325,7 +328,10 @@ definition moduleCatLeftHomologyData
   π := ModuleCat.ofHom (LinearMap.range S.moduleCatToCycles).mkQ
   wi := by aesop
   hi := ModuleCat.kernelIsLimit _
-  wπ :
+  wπ := by aesop
+  hπ := ModuleCat.cokernelIsColimit (ModuleCat.ofHom S.moduleCatToCycles)
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, ModuleCat, ModuleCat.of, S.g.hom
 -/

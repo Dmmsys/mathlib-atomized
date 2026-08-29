@@ -44,7 +44,7 @@ theorem projective_iff_preservesEpimorphisms_preadditiveCoyoneda_obj
   · exact Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveCoyoneda.obj (op P))
         (forget _)
   · intro
-
+    exact (inferInstance : (preadditiveCoyoneda.obj (op P) ⋙ forget _).PreservesEpimorphisms)
 
 中文:
 定理 projective_iff_preservesEpimorphisms_preadditiveCoyoneda_obj
@@ -56,7 +56,7 @@ theorem projective_iff_preservesEpimorphisms_preadditiveCoyoneda_obj
   · exact Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveCoyoneda.obj (op P))
         (forget _)
   · intro
-
+    exact (inferInstance : (preadditiveCoyoneda.obj (op P) ⋙ forget _).PreservesEpimorphisms)
 
 Depends on / 依赖: AddCommGrpCat, Functor, Functor.preservesEpimorphisms_of_preserves_of_reflects, PreservesEpimorphisms, forget, preadditiveCoyoneda, preadditiveCoyoneda.obj, preservesEpimorphisms_of_preserves_of_reflects, projective_iff_preservesEpimorphisms_coyoneda_obj
 -/
@@ -82,7 +82,7 @@ theorem projective_iff_preservesEpimorphisms_preadditiveCoyonedaObj
   · exact Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveCoyonedaObj P)
         (forget _)
   · intro
-    exact (inferInstance : (pr
+    exact (inferInstance : (preadditiveCoyonedaObj P ⋙ forget _).PreservesEpimorphisms)
 
 中文:
 定理 projective_iff_preservesEpimorphisms_preadditiveCoyonedaObj
@@ -93,7 +93,7 @@ theorem projective_iff_preservesEpimorphisms_preadditiveCoyonedaObj
   · exact Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveCoyonedaObj P)
         (forget _)
   · intro
-    exact (inferInstance : (pr
+    exact (inferInstance : (preadditiveCoyonedaObj P ⋙ forget _).PreservesEpimorphisms)
 
 Depends on / 依赖: Functor, Functor.preservesEpimorphisms_of_preserves_of_reflects, PreservesEpimorphisms, forget, preadditiveCoyonedaObj, preservesEpimorphisms_of_preserves_of_reflects, projective_iff_preservesEpimorphisms_coyoneda_obj
 -/

@@ -405,7 +405,12 @@ theorem Gamma1_to_Gamma0_mem
     rw [Matrix.det_fin_two] at adet
     simp only [Gamma1_mem', Gamma0Map, MonoidHom.coe_mk, OneHom.coe_mk, Int.cast_sub,
       Int.cast_mul] at *
-    simpa only [Gamma1_mem', Gamma0Ma
+    simpa only [Gamma1_mem', Gamma0Map, MonoidHom.coe_mk, OneHom.coe_mk, Int.cast_sub,
+      Int.cast_mul, ha, Gamma0_mem.mp A.property, and_self_iff, and_true, mul_one, mul_zero,
+      sub_zero] using adet
+  · intro ha
+    simp only [Gamma1_mem', Gamma0Map, MonoidHom.coe_mk]
+    exact ha.2.1
 
 中文:
 定理 Gamma1_to_Gamma0_mem
@@ -417,7 +422,12 @@ theorem Gamma1_to_Gamma0_mem
     rw [Matrix.det_fin_two] at adet
     simp only [Gamma1_mem', Gamma0Map, MonoidHom.coe_mk, OneHom.coe_mk, Int.cast_sub,
       Int.cast_mul] at *
-    simpa only [Gamma1_mem', Gamma0Ma
+    simpa only [Gamma1_mem', Gamma0Map, MonoidHom.coe_mk, OneHom.coe_mk, Int.cast_sub,
+      Int.cast_mul, ha, Gamma0_mem.mp A.property, and_self_iff, and_true, mul_one, mul_zero,
+      sub_zero] using adet
+  · intro ha
+    simp only [Gamma1_mem', Gamma0Map, MonoidHom.coe_mk]
+    exact ha.2.1
 
 Depends on / 依赖: A.property, Gamma0Map, Gamma0_mem, Gamma0_mem.mp, Gamma1_mem, Int.cast_mul, Int.cast_one, Int.cast_sub, Matrix, Matrix.det_fin_two, MonoidHom, MonoidHom.coe_mk, OneHom, OneHom.coe_mk, and_self_iff, and_true, cast_mul, cast_one, cast_sub, coe_mk
 -/
@@ -479,7 +489,12 @@ theorem Gamma1_mem
     convert! hx
   · intro ha
     simp_rw [Gamma1, Subgroup.mem_map]
-    have hA : A in Gamma
+    have hA : A in Gamma0 N := by simp [ha.right.right, Gamma0_mem]
+    have HA : (⟨A, hA⟩ : Gamma0 N) in Gamma1' N := by
+      simp only [Gamma1_to_Gamma0_mem]
+      exact ha
+    refine ⟨(⟨(⟨A, hA⟩ : Gamma0 N), HA⟩ : (Gamma1' N : Subgroup (Gamma0 N))), ?_⟩
+    simp
 
 中文:
 定理 Gamma1_mem
@@ -496,7 +511,12 @@ theorem Gamma1_mem
     convert! hx
   · intro ha
     simp_rw [Gamma1, Subgroup.mem_map]
-    have hA : A in Gamma
+    have hA : A in Gamma0 N := by simp [ha.right.right, Gamma0_mem]
+    have HA : (⟨A, hA⟩ : Gamma0 N) in Gamma1' N := by
+      simp only [Gamma1_to_Gamma0_mem]
+      exact ha
+    refine ⟨(⟨(⟨A, hA⟩ : Gamma0 N), HA⟩ : (Gamma1' N : Subgroup (Gamma0 N))), ?_⟩
+    simp
 
 Depends on / 依赖: Gamma0, Gamma0_mem, Gamma1, Gamma1_to_Gamma0_mem, Subgroup, Subgroup.mem_map, Subgroup.mem_top, convert, ha.right.right, mem_map, mem_top, simp_rw, true_and
 -/
@@ -858,7 +878,42 @@ theorem exists_Gamma_le_conj
     mul_inv_cancel, Matrix.GeneralLinearGroup.coe_one, A₁, A₂]
   let a₁ := A₁.den
   let a₂ := A₂.den
-  -- we take
+  -- we take `N = a₁ * a₂`
+  refine ⟨a₁ * a₂ * M, mul_ne_zero (mul_ne_zero A₁.den_ne_zero A₂.den_ne_zero) (NeZero.ne _),
+    fun ⟨y, hy⟩ hy' => ?_⟩
+  -- Show that `y` is of the form `1 + (a₁ * a₂) • k` for some integer matrix `k`.
+  obtain ⟨k, hk⟩ : exists k, y = 1 + (a₁ * a₂ * M) • k := by
+    replace hy' : y.map (Int.cast : Int -> ZMod (a₁ * a₂ * M)) = 1 := by
+      rw [CongruenceSubgroup.Gamma_mem']; rw [Subtype.ext_iff] at hy'
+      simpa using! hy'
+    use Matrix.of fun i j => (y - 1) i j / (a₁ * a₂ * M)
+    rw [← sub_eq_iff_eq_add']
+    ext i j
+    simp_rw [Matrix.smul_apply, Matrix.of_apply, nsmul_eq_mul, Nat.cast_mul]
+    refine (Int.mul_ediv_cancel_of_dvd ?_).symm
+    rw [← Matrix.map_one Int.cast (by simp) (by simp)]; rw [← sub_eq_zero]; rw [← Matrix.map_sub _ (by simp)] at hy'
+    simpa only [Matrix.zero_apply, Matrix.map_apply, ZMod.intCast_zmod_eq_zero_iff_dvd,
+      Nat.cast_mul] using! congr_fun₂ hy' i j
+  -- use this `k` to cook up a new integer matrix, which we will show comes from `SL(2, ℤ)`
+  let z := 1 + M • (A₁.num * k * A₂.num)
+  have hz_coe : z.map Int.cast = A₁ * (y.map Int.cast) * A₂ := by
+    simp only [Matrix.map_add _ Int.cast_add, Matrix.map_one _ Int.cast_zero Int.cast_one, hk,
+      mul_add, mul_one, add_mul, hA₁₂, add_right_inj, z]
+    conv_rhs => rw [← A₁.inv_denom_smul_num, ← A₂.inv_denom_smul_num, Matrix.map_smul _ _ (by simp)]
+    simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.map_smul (Int.cast : Int -> Rat) M (by simp),
+      Matrix.map_mul_intCast]
+    rw [← Nat.cast_smul_eq_nsmul Rat (_ * M)]; rw [← mul_smul]; rw [← mul_smul]; rw [mul_comm a₁ a₂]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [mul_assoc _ _ (M : Rat)]; rw [mul_comm _ (M : Rat)]; rw [inv_mul_cancel_left₀ (mod_cast A₂.den_ne_zero)]; rw [mul_inv_cancel_right₀ (mod_cast A₁.den_ne_zero)]; rw [Nat.cast_smul_eq_nsmul]
+  have hz_det : z.det = 1 := by
+    have := congr_arg Matrix.det hz_coe
+    simp_rw [Matrix.det_mul, ← Int.cast_det] at this
+    rwa [mul_right_comm, ← Matrix.det_mul, hA₁₂, Matrix.det_one, one_mul, hy, Int.cast_inj] at this
+  refine ⟨⟨z, hz_det⟩, ?_, by simpa only [Subtype.ext_iff, Subgroup.coe_mul, Units.ext_iff,
+    Units.val_mul] using! hz_coe⟩
+  rw [SetLike.mem_coe]; rw [CongruenceSubgroup.Gamma_mem']; rw [Subtype.ext_iff]
+  ext i j
+  simp_rw [map_apply_coe, z, map_add, map_one, RingHom.mapMatrix_apply, Int.coe_castRingHom,
+    Matrix.add_apply, map_apply, coe_one, add_eq_left, Matrix.smul_apply, nsmul_eq_mul,
+    Int.cast_mul, Int.cast_natCast, ZMod.natCast_self M, zero_mul]
 
 中文:
 定理 存在_Gamma_le_conj
@@ -871,7 +926,42 @@ theorem exists_Gamma_le_conj
     mul_inv_cancel, Matrix.GeneralLinearGroup.coe_one, A₁, A₂]
   let a₁ := A₁.den
   let a₂ := A₂.den
-  -- we take
+  -- we take `N = a₁ * a₂`
+  refine ⟨a₁ * a₂ * M, mul_ne_zero (mul_ne_zero A₁.den_ne_zero A₂.den_ne_zero) (NeZero.ne _),
+    fun ⟨y, hy⟩ hy' => ?_⟩
+  -- Show that `y` is of the form `1 + (a₁ * a₂) • k` for some integer matrix `k`.
+  obtain ⟨k, hk⟩ : exists k, y = 1 + (a₁ * a₂ * M) • k := by
+    replace hy' : y.map (Int.cast : Int -> ZMod (a₁ * a₂ * M)) = 1 := by
+      rw [CongruenceSubgroup.Gamma_mem']; rw [Subtype.ext_iff] at hy'
+      simpa using! hy'
+    use Matrix.of fun i j => (y - 1) i j / (a₁ * a₂ * M)
+    rw [← sub_eq_iff_eq_add']
+    ext i j
+    simp_rw [Matrix.smul_apply, Matrix.of_apply, nsmul_eq_mul, Nat.cast_mul]
+    refine (Int.mul_ediv_cancel_of_dvd ?_).symm
+    rw [← Matrix.map_one Int.cast (by simp) (by simp)]; rw [← sub_eq_zero]; rw [← Matrix.map_sub _ (by simp)] at hy'
+    simpa only [Matrix.zero_apply, Matrix.map_apply, ZMod.intCast_zmod_eq_zero_iff_dvd,
+      Nat.cast_mul] using! congr_fun₂ hy' i j
+  -- use this `k` to cook up a new integer matrix, which we will show comes from `SL(2, ℤ)`
+  let z := 1 + M • (A₁.num * k * A₂.num)
+  have hz_coe : z.map Int.cast = A₁ * (y.map Int.cast) * A₂ := by
+    simp only [Matrix.map_add _ Int.cast_add, Matrix.map_one _ Int.cast_zero Int.cast_one, hk,
+      mul_add, mul_one, add_mul, hA₁₂, add_right_inj, z]
+    conv_rhs => rw [← A₁.inv_denom_smul_num, ← A₂.inv_denom_smul_num, Matrix.map_smul _ _ (by simp)]
+    simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.map_smul (Int.cast : Int -> Rat) M (by simp),
+      Matrix.map_mul_intCast]
+    rw [← Nat.cast_smul_eq_nsmul Rat (_ * M)]; rw [← mul_smul]; rw [← mul_smul]; rw [mul_comm a₁ a₂]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [mul_assoc _ _ (M : Rat)]; rw [mul_comm _ (M : Rat)]; rw [inv_mul_cancel_left₀ (mod_cast A₂.den_ne_zero)]; rw [mul_inv_cancel_right₀ (mod_cast A₁.den_ne_zero)]; rw [Nat.cast_smul_eq_nsmul]
+  have hz_det : z.det = 1 := by
+    have := congr_arg Matrix.det hz_coe
+    simp_rw [Matrix.det_mul, ← Int.cast_det] at this
+    rwa [mul_right_comm, ← Matrix.det_mul, hA₁₂, Matrix.det_one, one_mul, hy, Int.cast_inj] at this
+  refine ⟨⟨z, hz_det⟩, ?_, by simpa only [Subtype.ext_iff, Subgroup.coe_mul, Units.ext_iff,
+    Units.val_mul] using! hz_coe⟩
+  rw [SetLike.mem_coe]; rw [CongruenceSubgroup.Gamma_mem']; rw [Subtype.ext_iff]
+  ext i j
+  simp_rw [map_apply_coe, z, map_add, map_one, RingHom.mapMatrix_apply, Int.coe_castRingHom,
+    Matrix.add_apply, map_apply, coe_one, add_eq_left, Matrix.smul_apply, nsmul_eq_mul,
+    Int.cast_mul, Int.cast_natCast, ZMod.natCast_self M, zero_mul]
 -/
 theorem exists_Gamma_le_conj (g : GL (Fin 2) Rat) (M : Nat) [NeZero M] :
     exists N != 0, forall x in Gamma N, g * (mapGL Rat x) * g⁻¹ in (Gamma M).map (mapGL Rat) := by
@@ -933,7 +1023,8 @@ theorem exists_Gamma_le_conj'
   obtain ⟨x, hx, rfl⟩ := hy
   obtain ⟨z, hz, hz'⟩ := h x hx
   use z, hz
-  simpa only [Subtype.ext_iff, Units.ext_i
+  simpa only [Subtype.ext_iff, Units.ext_iff, map_mul] using!
+    congr_arg (GeneralLinearGroup.map (Rat.castHom Real)) hz'
 
 中文:
 定理 存在_Gamma_le_conj'
@@ -946,7 +1037,8 @@ theorem exists_Gamma_le_conj'
   obtain ⟨x, hx, rfl⟩ := hy
   obtain ⟨z, hz, hz'⟩ := h x hx
   use z, hz
-  simpa only [Subtype.ext_iff, Units.ext_i
+  simpa only [Subtype.ext_iff, Units.ext_iff, map_mul] using!
+    congr_arg (GeneralLinearGroup.map (Rat.castHom Real)) hz'
 
 Depends on / 依赖: GeneralLinearGroup, GeneralLinearGroup.map, Rat.castHom, Subgroup, Subgroup.mem_map, Subgroup.mem_pointwise_smul_iff_inv_smul_mem, Subtype, Subtype.ext_iff, Units.ext_iff, castHom, congr_arg, eq_inv_smul_iff, exists_Gamma_le_conj, ext_iff, map_mul, mem_map, mem_pointwise_smul_iff_inv_smul_mem, simp_rw
 -/
@@ -977,7 +1069,13 @@ lemma finiteIndex_conjGL
   suffices (t • 𝒮ℒ ⊓ 𝒮ℒ).relIndex 𝒮ℒ != 0 by
     rwa [conjGL, index_comap, ← inf_relIndex_right, ← MonoidHom.range_eq_map]
   obtain ⟨N, hN, hN'⟩ := exists_Gamma_le_conj' g 1
-  rw [Gamma_one_top]; rw [← MonoidHom.range_eq_map] at 
+  rw [Gamma_one_top]; rw [← MonoidHom.range_eq_map] at hN'
+  suffices Γ(N) <= (t • 𝒮ℒ ⊓ 𝒮ℒ).comap (mapGL Real) by
+    have _ : NeZero N := ⟨hN⟩
+    simpa only [index_comap] using! (finiteIndex_of_le this).index_ne_zero
+  intro k hk
+  simpa [mem_pointwise_smul_iff_inv_smul_mem] using!
+hN' smul_mem_pointwise_smul _ _ _ ⟨k, hk, rfl⟩
 
 中文:
 引理 finiteIndex_conjGL
@@ -989,7 +1087,13 @@ lemma finiteIndex_conjGL
   suffices (t • 𝒮ℒ ⊓ 𝒮ℒ).relIndex 𝒮ℒ != 0 by
     rwa [conjGL, index_comap, ← inf_relIndex_right, ← MonoidHom.range_eq_map]
   obtain ⟨N, hN, hN'⟩ := exists_Gamma_le_conj' g 1
-  rw [Gamma_one_top]; rw [← MonoidHom.range_eq_map] at 
+  rw [Gamma_one_top]; rw [← MonoidHom.range_eq_map] at hN'
+  suffices Γ(N) <= (t • 𝒮ℒ ⊓ 𝒮ℒ).comap (mapGL Real) by
+    have _ : NeZero N := ⟨hN⟩
+    simpa only [index_comap] using! (finiteIndex_of_le this).index_ne_zero
+  intro k hk
+  simpa [mem_pointwise_smul_iff_inv_smul_mem] using!
+hN' smul_mem_pointwise_smul _ _ _ ⟨k, hk, rfl⟩
 
 Depends on / 依赖: Gamma_one_top, MonoidHom, MonoidHom.range_eq_map, NeZero, Rat.castHom, castHom, conjGL, exists_Gamma_le_conj, finiteIndex_of_le, g.map, index_comap, index_ne_zero, inf_relIndex_right, mem_pointwise_smul_iff_inv_smul_mem, range_eq_map, relIndex, toConjAct
 -/
@@ -1020,7 +1124,8 @@ lemma isArithmetic_conj_SL2Z
   · rw [← Subgroup.relIndex_comap, Subgroup.relIndex_top_right]
     exact (finiteIndex_conjGL g⁻¹).index_ne_zero
   · rw [← Subgroup.relIndex_pointwise_smul (toConjAct (g.map (Rat.castHom Real)))⁻¹,
-      inv_smul_smul, ← Subgroup.relIndex_
+      inv_smul_smul, ← Subgroup.relIndex_comap, Subgroup.relIndex_top_right]
+    exact (finiteIndex_conjGL g).index_ne_zero
 
 中文:
 引理 isArithmetic_conj_SL2Z
@@ -1032,7 +1137,8 @@ lemma isArithmetic_conj_SL2Z
   · rw [← Subgroup.relIndex_comap, Subgroup.relIndex_top_right]
     exact (finiteIndex_conjGL g⁻¹).index_ne_zero
   · rw [← Subgroup.relIndex_pointwise_smul (toConjAct (g.map (Rat.castHom Real)))⁻¹,
-      inv_smul_smul, ← Subgroup.relIndex_
+      inv_smul_smul, ← Subgroup.relIndex_comap, Subgroup.relIndex_top_right]
+    exact (finiteIndex_conjGL g).index_ne_zero
 
 Depends on / 依赖: MonoidHom, MonoidHom.range_eq_map, Rat.castHom, Subgroup, Subgroup.relIndex_comap, Subgroup.relIndex_pointwise_smul, Subgroup.relIndex_top_right, castHom, finiteIndex_conjGL, g.map, index_ne_zero, inv_smul_smul, range_eq_map, relIndex_comap, relIndex_pointwise_smul, relIndex_top_right, toConjAct
 -/
@@ -1083,7 +1189,7 @@ lemma IsCongruenceSubgroup.conjGL
   rw [Subgroup.pointwise_smul_subset_iff] at hN'
   refine ⟨N, ‹_›, fun x hx => ?_⟩
 obtain ⟨y, hy, hy'⟩ := Subgroup.mem_inv_pointwise_smul_iff.mp hN' ⟨x, hx, rfl⟩
-  exact mem_conjGL.mpr ⟨y, h
+  exact mem_conjGL.mpr ⟨y, hΓM hy, hy'⟩
 
 中文:
 引理 IsCongruenceSubgroup.conjGL
@@ -1095,7 +1201,7 @@ obtain ⟨y, hy, hy'⟩ := Subgroup.mem_inv_pointwise_smul_iff.mp hN' ⟨x, hx, 
   rw [Subgroup.pointwise_smul_subset_iff] at hN'
   refine ⟨N, ‹_›, fun x hx => ?_⟩
 obtain ⟨y, hy, hy'⟩ := Subgroup.mem_inv_pointwise_smul_iff.mp hN' ⟨x, hx, rfl⟩
-  exact mem_conjGL.mpr ⟨y, h
+  exact mem_conjGL.mpr ⟨y, hΓM hy, hy'⟩
 
 Depends on / 依赖: NeZero, Subgroup, Subgroup.mem_inv_pointwise_smul_iff.mp, Subgroup.pointwise_smul_subset_iff, exists_Gamma_le_conj, mem_conjGL, mem_conjGL.mpr, mem_inv_pointwise_smul_iff, pointwise_smul_subset_iff
 -/

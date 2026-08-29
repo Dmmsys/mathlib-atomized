@@ -103,7 +103,8 @@ theorem hasCokernels
       have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
         simpa using NatIso.naturality_1 i f
       rw [← this]
-      have : HasCokernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasCok
+      have : HasCokernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasCokernel_comp_iso _ _
+      apply Limits.hasCokernel_epi_comp }
 
 中文:
 定理 hasCokernels
@@ -114,7 +115,8 @@ theorem hasCokernels
       have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
         simpa using NatIso.naturality_1 i f
       rw [← this]
-      have : HasCokernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasCok
+      have : HasCokernel (G.map (F.map f) ≫ i.hom.app _) := Limits.hasCokernel_comp_iso _ _
+      apply Limits.hasCokernel_epi_comp }
 
 Depends on / 依赖: F.map, G.map, HasCokernel, Limits, Limits.hasCokernel_comp_iso, Limits.hasCokernel_epi_comp, NatIso, NatIso.naturality_1, PreservesColimits, adj.leftAdjoint_preservesColimits, hasCokernel_comp_iso, hasCokernel_epi_comp, has_colimit, i.hom.app, i.inv.app, isPretransitive_of_isGalois, leftAdjoint_preservesColimits, naturality_1
 -/
@@ -150,7 +152,14 @@ definition abelianOfAdjunction
     intro X Y f
     let arrowIso : Arrow.mk (G.map (F.map f)) ≅ Arrow.mk f :=
       ((Functor.mapArrowFunctor _ _).mapIso i).app (Arrow.mk f)
-    hav
+    have : PreservesColimits G := adj.leftAdjoint_preservesColimits
+    let iso : Arrow.mk (G.map (Abelian.coimageImageComparison (F.map f))) ≅
+        Arrow.mk (Abelian.coimageImageComparison f) :=
+      Abelian.PreservesCoimageImageComparison.iso G (F.map f) ≪≫
+        Abelian.coimageImageComparisonFunctor.mapIso arrowIso
+    rw [Arrow.isIso_iff_isIso_of_isIso iso.inv]
+    infer_instance
+  apply Abelian.ofCoimageImageComparisonIsIso
 
 中文:
 定义 abelianOfAdjunction
@@ -162,7 +171,14 @@ definition abelianOfAdjunction
     intro X Y f
     let arrowIso : Arrow.mk (G.map (F.map f)) ≅ Arrow.mk f :=
       ((Functor.mapArrowFunctor _ _).mapIso i).app (Arrow.mk f)
-    hav
+    have : PreservesColimits G := adj.leftAdjoint_preservesColimits
+    let iso : Arrow.mk (G.map (Abelian.coimageImageComparison (F.map f))) ≅
+        Arrow.mk (Abelian.coimageImageComparison f) :=
+      Abelian.PreservesCoimageImageComparison.iso G (F.map f) ≪≫
+        Abelian.coimageImageComparisonFunctor.mapIso arrowIso
+    rw [Arrow.isIso_iff_isIso_of_isIso iso.inv]
+    infer_instance
+  apply Abelian.ofCoimageImageComparisonIsIso
 
 Depends on / 依赖: Abelian, Abelian.PreservesCoimageImageComparison.iso, Abelian.coimageImageComparison, Arrow.mk, F.map, Functor, Functor.mapArrowFunctor, G.map, PreservesCoimageImageComparison, PreservesColimits, adj.leftAdjoint_preservesColimits, arrowIso, coimageImageComparison, hasCokernels, hasKernels, leftAdjoint_preservesColimits, mapArrowFunctor, mapIso
 -/

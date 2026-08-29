@@ -43,7 +43,7 @@ definition sigma
     obtain ⟨i, y, rfl⟩ := 𝒰.exists_eq s
     refine ⟨default, Sigma.ι 𝒰.X i y, by simp [← Scheme.Hom.comp_apply]⟩
 
-@[
+@[simp]
 
 中文:
 定义 sigma
@@ -57,7 +57,7 @@ definition sigma
     obtain ⟨i, y, rfl⟩ := 𝒰.exists_eq s
     refine ⟨default, Sigma.ι 𝒰.X i y, by simp [← Scheme.Hom.comp_apply]⟩
 
-@[
+@[simp]
 -/
 noncomputable def sigma (𝒰 : Cover.{v} (precoverage P) S) : S.Cover (precoverage P) where
   I₀ := PUnit.{v + 1}
@@ -186,7 +186,7 @@ map_id 𝒰 := PreZeroHypercover.Hom.ext rfl by
 map_comp f g := PreZeroHypercover.Hom.ext rfl by
     simp only [sigma_I₀, sigma_X, heq_eq_eq]
     ext j : 1
-    ex
+    exact Sigma.hom_ext _ _ (by simp)
 
 中文:
 定义 sigmaFunctor
@@ -200,7 +200,7 @@ map_id 𝒰 := PreZeroHypercover.Hom.ext rfl by
 map_comp f g := PreZeroHypercover.Hom.ext rfl by
     simp only [sigma_I₀, sigma_X, heq_eq_eq]
     ext j : 1
-    ex
+    exact Sigma.hom_ext _ _ (by simp)
 -/
 noncomputable def sigmaFunctor : S.Cover (precoverage P) ⥤ S.Cover (precoverage P) where
   obj 𝒰 := 𝒰.sigma

@@ -795,7 +795,12 @@ lemma injective_fromQuotient_iff_ker_π_eq_span
   · intro h
     rw [← LinearMap.ker_eq_bot]; rw [eq_bot_iff]
     intro x hx
-    obtain ⟨x, rfl⟩ := relations.surjective_toQuot
+    obtain ⟨x, rfl⟩ := relations.surjective_toQuotient x
+    replace hx : x in LinearMap.ker solution.π := by
+      simpa only [LinearMap.mem_ker, fromQuotient_toQuotient] using hx
+    rw [h]; rw [← range_map] at hx
+    obtain ⟨x, rfl⟩ := hx
+    simp only [toQuotient_map_apply, Submodule.zero_mem]
 
 中文:
 引理 injective_fromQuotient_iff_ker_π_eq_span
@@ -806,7 +811,12 @@ lemma injective_fromQuotient_iff_ker_π_eq_span
   · intro h
     rw [← LinearMap.ker_eq_bot]; rw [eq_bot_iff]
     intro x hx
-    obtain ⟨x, rfl⟩ := relations.surjective_toQuot
+    obtain ⟨x, rfl⟩ := relations.surjective_toQuotient x
+    replace hx : x in LinearMap.ker solution.π := by
+      simpa only [LinearMap.mem_ker, fromQuotient_toQuotient] using hx
+    rw [h]; rw [← range_map] at hx
+    obtain ⟨x, rfl⟩ := hx
+    simp only [toQuotient_map_apply, Submodule.zero_mem]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_comp, LinearMap.ker_eq_bot, LinearMap.mem_ker, Submodule, Submodule.comap_bot, Submodule.zero_, comap_bot, eq_bot_iff, fromQuotient_comp_toQuotient, fromQuotient_toQuotient, ker_comp, ker_eq_bot, ker_toQuotient, mem_ker, range_map, relations, relations.surjective_toQuotient, replace
 -/
@@ -1518,7 +1528,11 @@ definition down
     simpa using! congr_postcomp
       (h.postcomp_desc (s.postcomp ULift.moduleEquiv.symm.toLinearMap))
         ULift.moduleEquiv.toLinearMap
-  postcomp_injective {N _ _ f f'} h' :
+  postcomp_injective {N _ _ f f'} h' := by
+    ext x
+    have := congr_postcomp h' ULift.moduleEquiv.{_, _, w'}.symm.toLinearMap
+    simp only [← postcomp_comp] at this
+    simpa using! DFunLike.congr_fun (h.postcomp_injective this) x
 
 中文:
 定义 down
@@ -1529,7 +1543,11 @@ definition down
     simpa using! congr_postcomp
       (h.postcomp_desc (s.postcomp ULift.moduleEquiv.symm.toLinearMap))
         ULift.moduleEquiv.toLinearMap
-  postcomp_injective {N _ _ f f'} h' :
+  postcomp_injective {N _ _ f f'} h' := by
+    ext x
+    have := congr_postcomp h' ULift.moduleEquiv.{_, _, w'}.symm.toLinearMap
+    simp only [← postcomp_comp] at this
+    simpa using! DFunLike.congr_fun (h.postcomp_injective this) x
 
 Depends on / 依赖: ULift.moduleEquiv.toLinearMap.comp, moduleEquiv, toLinearMap
 -/

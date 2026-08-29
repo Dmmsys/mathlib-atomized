@@ -546,7 +546,8 @@ definition ofCountableUnion
     rcases hs with ⟨t, ht, rfl⟩
     apply hSp ht
   · rw [mem_ofPred_eq]
-    rw [← compl_sub
+    rw [← compl_subset_compl] at hsub
+    exact hmono sᶜ ht tᶜ hsub
 
 中文:
 定义 ofCountableUnion
@@ -560,7 +561,8 @@ definition ofCountableUnion
     rcases hs with ⟨t, ht, rfl⟩
     apply hSp ht
   · rw [mem_ofPred_eq]
-    rw [← compl_sub
+    rw [← compl_subset_compl] at hsub
+    exact hmono sᶜ ht tᶜ hsub
 
 Depends on / 依赖: compl_sInter, compl_subset_compl, hSc.image, hUnion, mem_image, mem_ofPred_eq, ofCountableInter
 -/
@@ -712,7 +714,8 @@ instance countableInterFilter_inf
   replace hs : (⋂ i in S, s i ‹_›) in l₁ := (countable_bInter_mem hSc).2 hs
   replace ht : (⋂ i in S, t i ‹_›) in l₂ := (countable_bInter_mem hSc).2 ht
   refine mem_of_superset (inter_mem_inf hs ht) (subset_sInter fun i hi => ?_)
-  rw 
+  rw [hst i hi]
+  apply inter_subset_inter <;> exact iInter_subset_of_subset i (iInter_subset _ _)
 
 中文:
 实例 countable整数erFilter_inf
@@ -723,7 +726,8 @@ instance countableInterFilter_inf
   replace hs : (⋂ i in S, s i ‹_›) in l₁ := (countable_bInter_mem hSc).2 hs
   replace ht : (⋂ i in S, t i ‹_›) in l₂ := (countable_bInter_mem hSc).2 ht
   refine mem_of_superset (inter_mem_inf hs ht) (subset_sInter fun i hi => ?_)
-  rw 
+  rw [hst i hi]
+  apply inter_subset_inter <;> exact iInter_subset_of_subset i (iInter_subset _ _)
 
 Depends on / 依赖: countable_bInter_mem, iInter_subset, iInter_subset_of_subset, inter_mem_inf, inter_subset_inter, mem_of_superset, replace, subset_sInter
 -/
@@ -861,7 +865,14 @@ theorem mem_countableGenerate_iff
     | superset _ _ ih => refine Exists.imp (fun S => ?_) ih; tauto
     | @sInter S Sct _ ih =>
       choose T Tg Tct hT using ih
-      refine ⟨⋃ (s) (H : s in S), T s H, 
+      refine ⟨⋃ (s) (H : s in S), T s H, by simpa, Sct.biUnion Tct, ?_⟩
+      apply subset_sInter
+      intro s H
+      exact subset_trans (sInter_subset_sInter (subset_iUnion₂ s H)) (hT s H)
+  rcases h with ⟨S, Sg, Sct, hS⟩
+  refine mem_of_superset ((countable_sInter_mem Sct).mpr ?_) hS
+  intro s H
+  exact CountableGenerateSets.basic (Sg H)
 
 中文:
 定理 mem_countableGenerate_iff
@@ -874,7 +885,14 @@ theorem mem_countableGenerate_iff
     | superset _ _ ih => refine Exists.imp (fun S => ?_) ih; tauto
     | @sInter S Sct _ ih =>
       choose T Tg Tct hT using ih
-      refine ⟨⋃ (s) (H : s in S), T s H, 
+      refine ⟨⋃ (s) (H : s in S), T s H, by simpa, Sct.biUnion Tct, ?_⟩
+      apply subset_sInter
+      intro s H
+      exact subset_trans (sInter_subset_sInter (subset_iUnion₂ s H)) (hT s H)
+  rcases h with ⟨S, Sg, Sct, hS⟩
+  refine mem_of_superset ((countable_sInter_mem Sct).mpr ?_) hS
+  intro s H
+  exact CountableGenerateSets.basic (Sg H)
 
 Depends on / 依赖: Exists, Exists.imp, Sct.biUnion, biUnion, countable_sInter_mem, mem_of_superset, sInter, sInter_subset_sInter, subset_sInter, subset_trans, superset
 -/

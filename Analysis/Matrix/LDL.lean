@@ -233,7 +233,9 @@ theorem LDL.diag_eq_lowerInv_conj
       diagonal_apply_eq, Matrix.mul_assoc, dotProduct_comm]
     rfl
   · simp only [LDL.diag, hij, diagonal_apply_ne, Ne, not_false_iff, mul_mul_apply]
-    rw [conjTranspose]; rw [tra
+    rw [conjTranspose]; rw [transpose_map]; rw [transpose_transpose]; rw [dotProduct_mulVec]; rw [(LDL.lowerInv_orthogonal hS fun h : j = i => hij h.symm).symm]; rw [← inner_conj_symm]; rw [mulVec_transpose]; rw [EuclideanSpace.inner_toLp_toLp]; rw [← RCLike.star_def]; rw [←
+      star_dotProduct_star]; rw [star_star]
+    rfl
 
 中文:
 定理 LDL.diag_eq_lowerInv_conj
@@ -245,7 +247,9 @@ theorem LDL.diag_eq_lowerInv_conj
       diagonal_apply_eq, Matrix.mul_assoc, dotProduct_comm]
     rfl
   · simp only [LDL.diag, hij, diagonal_apply_ne, Ne, not_false_iff, mul_mul_apply]
-    rw [conjTranspose]; rw [tra
+    rw [conjTranspose]; rw [transpose_map]; rw [transpose_transpose]; rw [dotProduct_mulVec]; rw [(LDL.lowerInv_orthogonal hS fun h : j = i => hij h.symm).symm]; rw [← inner_conj_symm]; rw [mulVec_transpose]; rw [EuclideanSpace.inner_toLp_toLp]; rw [← RCLike.star_def]; rw [←
+      star_dotProduct_star]; rw [star_star]
+    rfl
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.inner_toLp_toLp, LDL.diag, LDL.lowerInv_orthogonal, Matrix, Matrix.mul_assoc, conjTranspose, diagEntries, diagonal_apply_eq, diagonal_apply_ne, dotProduct_comm, dotProduct_mulVec, h.symm, inner_conj_symm, inner_toLp_toLp, lowerInv_orthogonal, mulVec_transpose, mul_assoc, mul_mul_apply, not_false_iff
 -/

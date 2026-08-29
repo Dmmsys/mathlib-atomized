@@ -124,7 +124,10 @@ instance :
     intro S h
     have := ((forget C X ⋙ stalkFunctor C p₀).preservesFiniteColimits_tfae.out 3 0).mp
       (inferInstance : (PreservesFiniteColimits _))
-    refine Shor
+    refine ShortComplex.ShortExact.mk' (this S h).left ?_ (this S h).right
+    have := h.2
+    exact Functor.map_mono (forget C X ⋙ stalkFunctor C p₀) _
+  (forget C X ⋙ stalkFunctor C p₀).preservesFiniteLimits_of_preservesHomology
 
 中文:
 实例 :
@@ -134,7 +137,10 @@ instance :
     intro S h
     have := ((forget C X ⋙ stalkFunctor C p₀).preservesFiniteColimits_tfae.out 3 0).mp
       (inferInstance : (PreservesFiniteColimits _))
-    refine Shor
+    refine ShortComplex.ShortExact.mk' (this S h).left ?_ (this S h).right
+    have := h.2
+    exact Functor.map_mono (forget C X ⋙ stalkFunctor C p₀) _
+  (forget C X ⋙ stalkFunctor C p₀).preservesFiniteLimits_of_preservesHomology
 
 Depends on / 依赖: Functor, Functor.map_mono, PreservesFiniteColimits, PreservesHomology, ShortComplex, ShortComplex.ShortExact.mk, ShortExact, exact_tfae, exact_tfae.out, forget, map_mono, preservesFiniteColimits_tfae, preservesFiniteColimits_tfae.out, preservesFiniteLimits_of_preservesHomology, stalkFunctor
 -/
@@ -165,7 +171,10 @@ lemma isZero_iff_stalkFunctor_obj_isZero
   have : IsIso f := by
     rw [Presheaf.isIso_iff_stalkFunctor_map_iso]
     exact fun x => isIso_of_source_target_iso_zero _ (h x).isoZero
-      ((forget C X ⋙ stalkFunctor C x).map_isZ
+      ((forget C X ⋙ stalkFunctor C x).map_isZero (isZero_zero _)).isoZero
+  exact (isZero_zero _).of_iso (asIso f)
+
+include instCC in
 
 中文:
 引理 isZero_iff_stalkFunctor_obj_isZero
@@ -177,7 +186,10 @@ lemma isZero_iff_stalkFunctor_obj_isZero
   have : IsIso f := by
     rw [Presheaf.isIso_iff_stalkFunctor_map_iso]
     exact fun x => isIso_of_source_target_iso_zero _ (h x).isoZero
-      ((forget C X ⋙ stalkFunctor C x).map_isZ
+      ((forget C X ⋙ stalkFunctor C x).map_isZero (isZero_zero _)).isoZero
+  exact (isZero_zero _).of_iso (asIso f)
+
+include instCC in
 
 Depends on / 依赖: Functor, Functor.map_isZero, Presheaf, Presheaf.isIso_iff_stalkFunctor_map_iso, forget, from_, isIso_iff_stalkFunctor_map_iso, isIso_of_source_target_iso_zero, isZero_zero, isoZero, map_isZero, of_iso, stalkFunctor
 -/
@@ -207,7 +219,8 @@ theorem exact_iff_stalkFunctor_map_exact
   intro h
   simp_rw [ShortComplex.exact_iff_isZero_homology] at h
   rw [ShortComplex.exact_iff_isZero_homology]; rw [isZero_iff_stalkFunctor_obj_isZero S.homology]
-  exac
+  exact fun x => (h x).of_iso
+    (ShortComplex.mapHomologyIso S (forget C X ⋙ stalkFunctor C x)).symm
 
 中文:
 定理 exact_iff_stalkFunctor_map_exact
@@ -220,7 +233,8 @@ theorem exact_iff_stalkFunctor_map_exact
   intro h
   simp_rw [ShortComplex.exact_iff_isZero_homology] at h
   rw [ShortComplex.exact_iff_isZero_homology]; rw [isZero_iff_stalkFunctor_obj_isZero S.homology]
-  exac
+  exact fun x => (h x).of_iso
+    (ShortComplex.mapHomologyIso S (forget C X ⋙ stalkFunctor C x)).symm
 
 Depends on / 依赖: S.homology, ShortComplex, ShortComplex.exact_iff_isZero_homology, ShortComplex.mapHomologyIso, exact_iff_isZero_homology, exact_tfae, exact_tfae.out, forget, homology, isZero_iff_stalkFunctor_obj_isZero, mapHomologyIso, of_iso, simp_rw, stalkFunctor, this.mp
 -/

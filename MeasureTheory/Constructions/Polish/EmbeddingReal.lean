@@ -57,7 +57,7 @@ theorem measurableEquiv_range_coe_nat_of_infinite_of_countable
     Nat.isClosedEmbedding_coe_real.isClosedMap.isClosed_range.polishSpace
   refine ⟨PolishSpace.Equiv.measurableEquiv ?_⟩
   refine (nonempty_equiv_of_countable.some : α ≃ Nat).trans ?_
-  exact Equiv.ofInjective ((↑) : Nat -> Real) Nat.cast_injec
+  exact Equiv.ofInjective ((↑) : Nat -> Real) Nat.cast_injective
 
 中文:
 定理 measurableEquiv_range_coe_nat_of_infinite_of_countable
@@ -67,7 +67,7 @@ theorem measurableEquiv_range_coe_nat_of_infinite_of_countable
     Nat.isClosedEmbedding_coe_real.isClosedMap.isClosed_range.polishSpace
   refine ⟨PolishSpace.Equiv.measurableEquiv ?_⟩
   refine (nonempty_equiv_of_countable.some : α ≃ Nat).trans ?_
-  exact Equiv.ofInjective ((↑) : Nat -> Real) Nat.cast_injec
+  exact Equiv.ofInjective ((↑) : Nat -> Real) Nat.cast_injective
 
 Depends on / 依赖: Equiv.ofInjective, Nat.cast_injective, Nat.isClosedEmbedding_coe_real.isClosedMap.isClosed_range.polishSpace, PolishSpace, PolishSpace.Equiv.measurableEquiv, cast_injective, isClosedEmbedding_coe_real, isClosedMap, isClosed_range, measurableEquiv, nonempty_equiv_of_countable, nonempty_equiv_of_countable.some, ofInjective, polishSpace
 -/
@@ -91,7 +91,13 @@ theorem exists_subset_real_measurableEquiv
     · obtain ⟨n, h_nonempty_equiv⟩ := exists_nat_measurableEquiv_range_coe_fin_of_finite α
       refine ⟨_, ?_, h_nonempty_equiv⟩
       exact (Set.finite_range ((↑) : Fin n -> Real)).measurableSet
-    · refine ⟨_, ?_, measurableEquiv_rang
+    · refine ⟨_, ?_, measurableEquiv_range_coe_nat_of_infinite_of_countable α⟩
+      exact Nat.isClosedEmbedding_coe_real.isClosed_range.measurableSet
+  · refine
+      ⟨univ, MeasurableSet.univ,
+        ⟨(PolishSpace.measurableEquivOfNotCountable hα ?_ : α ≃ᵐ (univ : Set Real))⟩⟩
+    rw [countable_coe_iff]
+    exact Cardinal.not_countable_real
 
 中文:
 定理 存在_subset_real_measurableEquiv
@@ -102,7 +108,13 @@ theorem exists_subset_real_measurableEquiv
     · obtain ⟨n, h_nonempty_equiv⟩ := exists_nat_measurableEquiv_range_coe_fin_of_finite α
       refine ⟨_, ?_, h_nonempty_equiv⟩
       exact (Set.finite_range ((↑) : Fin n -> Real)).measurableSet
-    · refine ⟨_, ?_, measurableEquiv_rang
+    · refine ⟨_, ?_, measurableEquiv_range_coe_nat_of_infinite_of_countable α⟩
+      exact Nat.isClosedEmbedding_coe_real.isClosed_range.measurableSet
+  · refine
+      ⟨univ, MeasurableSet.univ,
+        ⟨(PolishSpace.measurableEquivOfNotCountable hα ?_ : α ≃ᵐ (univ : Set Real))⟩⟩
+    rw [countable_coe_iff]
+    exact Cardinal.not_countable_real
 
 Depends on / 依赖: Countable, MeasurableSet, MeasurableSet.univ, Nat.isClosedEmbedding_coe_real.isClosed_range.measurableSet, PolishSpace, PolishSpace.measurableEquivOfNotCountable, Set.finite_range, exists_nat_measurableEquiv_range_coe_fin_of_finite, finite_or_infinite, finite_range, h_nonempty_equiv, isClosedEmbedding_coe_real, isClosed_range, measurableEquivOfNotCountable, measurableEquiv_range_coe_nat_of_infinite_of_countable, measurableSet
 -/

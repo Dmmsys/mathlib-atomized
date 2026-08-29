@@ -847,7 +847,7 @@ theorem similar_of_dist_mul_eq_dist_mul_eq
   fin_cases i <;> fin_cases j <;> try {rw [dist_self, dist_self, mul_zero]}
   all_goals simp; grind [dist_comm]
 
-al
+alias similar_of_side_side := similar_of_dist_mul_eq_dist_mul_eq
 
 中文:
 定理 similar_of_dist_mul_eq_dist_mul_eq
@@ -862,7 +862,7 @@ al
   fin_cases i <;> fin_cases j <;> try {rw [dist_self, dist_self, mul_zero]}
   all_goals simp; grind [dist_comm]
 
-al
+alias similar_of_side_side := similar_of_dist_mul_eq_dist_mul_eq
 
 Depends on / 依赖: Similar, Similar.of_exists_pos_pairwise_dist_eq, all_goals, dist_comm, dist_self, fin_cases, hr_pos, mul_zero, of_exists_pos_pairwise_dist_eq
 -/

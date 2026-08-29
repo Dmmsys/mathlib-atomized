@@ -314,7 +314,8 @@ theorem isCompact_closure_of_isBounded
   rw [(isEmbedding_inclusionInDoubleDualWeak 𝕜 X).closure_eq_preimage_closure_image]
   apply (isEmbedding_inclusionInDoubleDualWeak 𝕜 X).isCompact_preimage' _ hrange
   exact WeakDual.isCompact_of_bounded_of_closed
-    (WeakDual.isBounded_closure ((inclusionInDoubleDual 𝕜 X).lipschitz.isBounded_im
+    (WeakDual.isBounded_closure ((inclusionInDoubleDual 𝕜 X).lipschitz.isBounded_image hb))
+    isClosed_closure
 
 中文:
 定理 isCompact_closure_of_isBounded
@@ -323,7 +324,8 @@ theorem isCompact_closure_of_isBounded
   rw [(isEmbedding_inclusionInDoubleDualWeak 𝕜 X).closure_eq_preimage_closure_image]
   apply (isEmbedding_inclusionInDoubleDualWeak 𝕜 X).isCompact_preimage' _ hrange
   exact WeakDual.isCompact_of_bounded_of_closed
-    (WeakDual.isBounded_closure ((inclusionInDoubleDual 𝕜 X).lipschitz.isBounded_im
+    (WeakDual.isBounded_closure ((inclusionInDoubleDual 𝕜 X).lipschitz.isBounded_image hb))
+    isClosed_closure
 
 Depends on / 依赖: WeakDual, WeakDual.isBounded_closure, WeakDual.isCompact_of_bounded_of_closed, closure_eq_preimage_closure_image, hrange, inclusionInDoubleDual, isBounded_closure, isBounded_image, isClosed_closure, isCompact_of_bounded_of_closed, isCompact_preimage, isEmbedding_inclusionInDoubleDualWeak, lipschitz, lipschitz.isBounded_image
 -/

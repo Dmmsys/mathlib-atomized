@@ -1349,12 +1349,16 @@ lemma Φ_four
   rw [show 4 = ((3 : Nat) + 1 : Int) by rfl]; rw [Φ_ofNat]; rw [preΨ'_four]; rw [if_neg <| by decide]; rw [show 3 + 2 = 2 * 2 + 1 by rfl]; rw [preΨ'_odd]; rw [preΨ'_four]; rw [preΨ'_two]; rw [if_pos Even.zero]; rw [preΨ'_one]; rw [preΨ'_three]; rw [if_pos Even.zero]; rw [if_neg by decide]
   ring1
 
+@[simp]
+
 中文:
 引理 Φ_four
   结论: W.Φ 4 = X * W.preΨ₄ ^ 2 * W.Ψ₂Sq - W.Ψ₃ * (W.preΨ₄ * W.Ψ₂Sq ^ 2 - W.Ψ₃ ^ 3)
   证明: by
   rw [show 4 = ((3 : Nat) + 1 : Int) by rfl]; rw [Φ_ofNat]; rw [preΨ'_four]; rw [if_neg <| by decide]; rw [show 3 + 2 = 2 * 2 + 1 by rfl]; rw [preΨ'_odd]; rw [preΨ'_four]; rw [preΨ'_two]; rw [if_pos Even.zero]; rw [preΨ'_one]; rw [preΨ'_three]; rw [if_pos Even.zero]; rw [if_neg by decide]
   ring1
+
+@[simp]
 
 Depends on / 依赖: Even.zero, _four, _odd, _one, _three, _two, if_neg, if_pos
 -/

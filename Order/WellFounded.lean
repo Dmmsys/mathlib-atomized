@@ -83,7 +83,7 @@ theorem not_acc_iff_exists_descending_chain
       Nat.rec ⟨x, hx⟩ fun _ a => ⟨_, (exists_not_acc_lt_of_not_acc a.2).choose_spec.1⟩
     ⟨(f · |>.1), rfl, fun n => (exists_not_acc_lt_of_not_acc (f n).2).choose_spec.2⟩
   mpr h acc := acc.rec
-    (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1),
+    (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1), rfl, fun _ => hf.2 _⟩) h
 
 中文:
 定理 not_acc_iff_存在_descending_chain
@@ -92,7 +92,7 @@ theorem not_acc_iff_exists_descending_chain
       Nat.rec ⟨x, hx⟩ fun _ a => ⟨_, (exists_not_acc_lt_of_not_acc a.2).choose_spec.1⟩
     ⟨(f · |>.1), rfl, fun n => (exists_not_acc_lt_of_not_acc (f n).2).choose_spec.2⟩
   mpr h acc := acc.rec
-    (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1),
+    (fun _x _ ih ⟨f, hf⟩ => ih (f 1) (hf.1 ▸ hf.2 0) ⟨(f <| · + 1), rfl, fun _ => hf.2 _⟩) h
 -/
 theorem not_acc_iff_exists_descending_chain {α} {r : α -> α -> Prop} {x : α} :
     ¬Acc r x ↔ exists f : Nat -> α, f 0 = x ∧ forall n, r (f (n + 1)) (f n) where
@@ -765,7 +765,10 @@ theorem Set.range_injOn_strictMono
     cases (hf.injective hb).not_lt h
   · rw [hb]
   · obtain ⟨c, hc⟩ := hfg.symm ▸ mem_range_self a
-    have := 
+    have := hg h
+    rw [hb]; rw [← hc]; rw [hf.lt_iff_lt] at this
+    rw [IH c this] at hc
+    cases (hg.injective hc).not_lt this
 
 中文:
 定理 集合.range_injOn_strictMono
@@ -781,7 +784,10 @@ theorem Set.range_injOn_strictMono
     cases (hf.injective hb).not_lt h
   · rw [hb]
   · obtain ⟨c, hc⟩ := hfg.symm ▸ mem_range_self a
-    have := 
+    have := hg h
+    rw [hb]; rw [← hc]; rw [hf.lt_iff_lt] at this
+    rw [IH c this] at hc
+    cases (hg.injective hc).not_lt this
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction, hf.injective, hf.lt_iff_lt, hfg.symm, hg.injective, injective, lt_iff_lt, lt_trichotomy, mem_range_self, not_lt
 -/

@@ -1693,7 +1693,8 @@ theorem npowBinRec.go_spec
   | one => simp [npowRec']
   | bit b k' k'0 ih =>
     rw [Nat.binaryRec_eq _ _ (Or.inl rfl)]; rw [ih _ _ k'0]
-    cases b <;> simp only 
+    cases b <;> simp only [Nat.bit, cond_false, cond_true, npowRec'_two_mul]
+    rw [npowRec'_succ (by lia)]; rw [npowRec'_two_mul]; rw [← npowRec'_two_mul]; rw [← npowRec'_mul_comm (by lia)]; rw [mul_assoc]
 
 中文:
 定理 npowBinRec.go_spec
@@ -1707,7 +1708,8 @@ theorem npowBinRec.go_spec
   | one => simp [npowRec']
   | bit b k' k'0 ih =>
     rw [Nat.binaryRec_eq _ _ (Or.inl rfl)]; rw [ih _ _ k'0]
-    cases b <;> simp only 
+    cases b <;> simp only [Nat.bit, cond_false, cond_true, npowRec'_two_mul]
+    rw [npowRec'_succ (by lia)]; rw [npowRec'_two_mul]; rw [← npowRec'_two_mul]; rw [← npowRec'_mul_comm (by lia)]; rw [mul_assoc]
 
 Depends on / 依赖: Nat.binaryRecFromOne, Nat.binaryRec_eq, Nat.bit, Or.inl, _mul_comm, _succ, _two_mul, binaryRecFromOne, binaryRec_eq, cond_false, cond_true, generalize, generalizing, mul_assoc, npowRec, replace
 -/

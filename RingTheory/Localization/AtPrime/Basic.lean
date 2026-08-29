@@ -121,7 +121,24 @@ theorem AtPrime.isLocalRing
     (by
       intro x y hx hy hu
       obtain ⟨z, hxyz⟩ := isUnit_iff_exists_inv.1 hu
-      have : forall {r : R} {s : P.primeCompl}, mk' S r s in nonunits S -> r in P := fun {r
+      have : forall {r : R} {s : P.primeCompl}, mk' S r s in nonunits S -> r in P := fun {r s} =>
+        not_imp_comm.1 fun nr => isUnit_iff_exists_inv.2 ⟨mk' S ↑s (⟨r, nr⟩ : P.primeCompl),
+mk'_mul_mk'_eq_one' _ _ show r in P.primeCompl from nr⟩
+      rcases exists_mk'_eq P.primeCompl x with ⟨rx, sx, hrx⟩
+      rcases exists_mk'_eq P.primeCompl y with ⟨ry, sy, hry⟩
+      rcases exists_mk'_eq P.primeCompl z with ⟨rz, sz, hrz⟩
+      rw [← hrx]; rw [← hry]; rw [← hrz]; rw [← mk'_add]; rw [← mk'_mul]; rw [← mk'_self S P.primeCompl.one_mem] at hxyz
+      rw [← hrx] at hx
+      rw [← hry] at hy
+      obtain ⟨t, ht⟩ := IsLocalization.eq.1 hxyz
+      simp only [mul_one, one_mul, Submonoid.coe_mul] at ht
+      suffices (t : R) * (sx * sy * sz) in P from
+        not_or_intro (mt hp.mem_or_mem <| not_or_intro sx.2 sy.2) sz.2
+          (hp.mem_or_mem <| (hp.mem_or_mem this).resolve_left t.2)
+      rw [← ht]
+      exact
+P.mul_mem_left _ P.mul_mem_right _
+P.add_mem (P.mul_mem_right _ <| this hx) P.mul_mem_right _ this hy)
 
 中文:
 定理 AtPrime.isLocalRing
@@ -132,7 +149,24 @@ theorem AtPrime.isLocalRing
     (by
       intro x y hx hy hu
       obtain ⟨z, hxyz⟩ := isUnit_iff_exists_inv.1 hu
-      have : forall {r : R} {s : P.primeCompl}, mk' S r s in nonunits S -> r in P := fun {r
+      have : forall {r : R} {s : P.primeCompl}, mk' S r s in nonunits S -> r in P := fun {r s} =>
+        not_imp_comm.1 fun nr => isUnit_iff_exists_inv.2 ⟨mk' S ↑s (⟨r, nr⟩ : P.primeCompl),
+mk'_mul_mk'_eq_one' _ _ show r in P.primeCompl from nr⟩
+      rcases exists_mk'_eq P.primeCompl x with ⟨rx, sx, hrx⟩
+      rcases exists_mk'_eq P.primeCompl y with ⟨ry, sy, hry⟩
+      rcases exists_mk'_eq P.primeCompl z with ⟨rz, sz, hrz⟩
+      rw [← hrx]; rw [← hry]; rw [← hrz]; rw [← mk'_add]; rw [← mk'_mul]; rw [← mk'_self S P.primeCompl.one_mem] at hxyz
+      rw [← hrx] at hx
+      rw [← hry] at hy
+      obtain ⟨t, ht⟩ := IsLocalization.eq.1 hxyz
+      simp only [mul_one, one_mul, Submonoid.coe_mul] at ht
+      suffices (t : R) * (sx * sy * sz) in P from
+        not_or_intro (mt hp.mem_or_mem <| not_or_intro sx.2 sy.2) sz.2
+          (hp.mem_or_mem <| (hp.mem_or_mem this).resolve_left t.2)
+      rw [← ht]
+      exact
+P.mul_mem_left _ P.mul_mem_right _
+P.add_mem (P.mul_mem_right _ <| this hx) P.mul_mem_right _ this hy)
 
 Depends on / 依赖: AtPrime, AtPrime.nontrivial, IsLocalRing, IsLocalRing.of_nonunits_add, P.primeCompl, _eq_one, _mul_mk, because, exists_mk, figure, instance, isUnit_iff_exists_inv, nontrivial, nonunits, not_imp_comm, of_nonunits_add, primeCompl
 -/
@@ -530,7 +564,7 @@ lemma AtPrime.eq_maximalIdeal_iff_under_eq
   mpr h := h.symm ▸ AtPrime.under_maximalIdeal
 
 @[deprecated (since := "2026-04-09")] alias AtPrime.eq_maximalIdeal_iff_comap_eq :=
-  AtPri
+  AtPrime.eq_maximalIdeal_iff_under_eq
 
 中文:
 引理 AtPrime.eq_maximalIdeal_iff_under_eq
@@ -540,7 +574,7 @@ lemma AtPrime.eq_maximalIdeal_iff_under_eq
   mpr h := h.symm ▸ AtPrime.under_maximalIdeal
 
 @[deprecated (since := "2026-04-09")] alias AtPrime.eq_maximalIdeal_iff_comap_eq :=
-  AtPri
+  AtPrime.eq_maximalIdeal_iff_under_eq
 
 Depends on / 依赖: AtPrime, AtPrime.map_eq_maximalIdeal, AtPrime.under_maximalIdeal, Ideal.map_comap_le, IsLocalRing, IsLocalRing.le_maximalIdeal, h.symm, hI.ne_top, le_antisymm, le_maximalIdeal, map_comap_le, map_eq_maximalIdeal, ne_top, under_maximalIdeal
 -/
@@ -902,7 +936,22 @@ lemma localRingHom_bijective_of_saturated_inf_eq_top
   constructor
   · suffices forall a in s, forall b in s, b ∉ P -> forall c in s, forall d in s, d ∉ P -> forall x ∉ P,
         x * (a * d) = x * (c * b) -> exists a_6 ∉ P, a_6 in s ∧ a_6 * (a * d) = a_6 * (c * b) by
-      simpa [Function.Injective, (IsLocalization.mk'_surjective p.primeCompl).for
+      simpa [Function.Injective, (IsLocalization.mk'_surjective p.primeCompl).forall, P.over_def p,
+        Localization.localRingHom_mk', IsLocalization.mk'_eq_iff_eq', Subtype.ext_iff, -map_mul,
+        IsLocalization.eq_iff_exists P.primeCompl, IsLocalization.eq_iff_exists p.primeCompl]
+    intro a _ b _ _ c _ d _ _ x hxP e
+    obtain ⟨t, ⟨htP, -⟩, ht⟩ := H.ge (Set.mem_univ x)
+    exact ⟨_, ‹P.IsPrime›.mul_notMem htP hxP, ht, by simp [mul_assoc, e]⟩
+  · suffices forall y, forall z ∉ P, exists y' in s, exists z' ∉ P, z' in s ∧ exists t ∉ P, t * (z * y') = t * (z' * y) by
+      simpa [(IsLocalization.mk'_surjective p.primeCompl).exists,
+        (IsLocalization.mk'_surjective P.primeCompl).forall, P.over_def p,
+        Localization.localRingHom_mk', IsLocalization.mk'_eq_iff_eq, -map_mul,
+        IsLocalization.eq_iff_exists P.primeCompl, Function.Surjective] using this
+    intro y z hzP
+    obtain ⟨a, ⟨haP, has⟩, ha⟩ := H.ge (Set.mem_univ y)
+    obtain ⟨b, ⟨hbP, hbs⟩, hb⟩ := H.ge (Set.mem_univ z)
+    exact ⟨_, mul_mem ha hbs, _, P.primeCompl.mul_mem (mul_mem hbP hzP) haP, mul_mem hb has, 1,
+      P.primeCompl.one_mem, by ring⟩
 
 中文:
 引理 localRingHom_bijective_of_saturated_inf_eq_top
@@ -910,7 +959,22 @@ lemma localRingHom_bijective_of_saturated_inf_eq_top
   constructor
   · suffices forall a in s, forall b in s, b ∉ P -> forall c in s, forall d in s, d ∉ P -> forall x ∉ P,
         x * (a * d) = x * (c * b) -> exists a_6 ∉ P, a_6 in s ∧ a_6 * (a * d) = a_6 * (c * b) by
-      simpa [Function.Injective, (IsLocalization.mk'_surjective p.primeCompl).for
+      simpa [Function.Injective, (IsLocalization.mk'_surjective p.primeCompl).forall, P.over_def p,
+        Localization.localRingHom_mk', IsLocalization.mk'_eq_iff_eq', Subtype.ext_iff, -map_mul,
+        IsLocalization.eq_iff_exists P.primeCompl, IsLocalization.eq_iff_exists p.primeCompl]
+    intro a _ b _ _ c _ d _ _ x hxP e
+    obtain ⟨t, ⟨htP, -⟩, ht⟩ := H.ge (Set.mem_univ x)
+    exact ⟨_, ‹P.IsPrime›.mul_notMem htP hxP, ht, by simp [mul_assoc, e]⟩
+  · suffices forall y, forall z ∉ P, exists y' in s, exists z' ∉ P, z' in s ∧ exists t ∉ P, t * (z * y') = t * (z' * y) by
+      simpa [(IsLocalization.mk'_surjective p.primeCompl).exists,
+        (IsLocalization.mk'_surjective P.primeCompl).forall, P.over_def p,
+        Localization.localRingHom_mk', IsLocalization.mk'_eq_iff_eq, -map_mul,
+        IsLocalization.eq_iff_exists P.primeCompl, Function.Surjective] using this
+    intro y z hzP
+    obtain ⟨a, ⟨haP, has⟩, ha⟩ := H.ge (Set.mem_univ y)
+    obtain ⟨b, ⟨hbP, hbs⟩, hb⟩ := H.ge (Set.mem_univ z)
+    exact ⟨_, mul_mem ha hbs, _, P.primeCompl.mul_mem (mul_mem hbP hzP) haP, mul_mem hb has, 1,
+      P.primeCompl.one_mem, by ring⟩
 
 Depends on / 依赖: Function, Function.Injective, Injective, IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.mk, Localization, Localization.localRingHom_mk, P.over_def, P.primeCompl, Subtype, Subtype.ext_iff, _eq_iff_eq, _surjective, eq_iff_exists, ext_iff, localRingHom_mk, map_mul, over_def, p.primeCompl
 -/
@@ -1262,7 +1326,7 @@ lemma IsLocalization.liesOver_of_isPrime_of_disjoint
   proof: by
   suffices h : Ideal.map (algebraMap R R') (under R (under R' (P.map (algebraMap S S')))) =
       Ideal.map (algebraMap R R') p from ⟨by rw [← h, IsLocalization.map_under (M := M)]⟩
-  rw [under_under]; rw [← under_under (B := S)]; rw [under_map_of_isPrime_disjoint _ _ ‹_› disj]; rw [LiesOver.over
+  rw [under_under]; rw [← under_under (B := S)]; rw [under_map_of_isPrime_disjoint _ _ ‹_› disj]; rw [LiesOver.over (P := P) (p := p)]
 
 中文:
 引理 是Localization.liesOver_of_isPrime_of_disjoint
@@ -1270,7 +1334,7 @@ lemma IsLocalization.liesOver_of_isPrime_of_disjoint
   证明: by
   suffices h : Ideal.map (algebraMap R R') (under R (under R' (P.map (algebraMap S S')))) =
       Ideal.map (algebraMap R R') p from ⟨by rw [← h, IsLocalization.map_under (M := M)]⟩
-  rw [under_under]; rw [← under_under (B := S)]; rw [under_map_of_isPrime_disjoint _ _ ‹_› disj]; rw [LiesOver.over
+  rw [under_under]; rw [← under_under (B := S)]; rw [under_map_of_isPrime_disjoint _ _ ‹_› disj]; rw [LiesOver.over (P := P) (p := p)]
 
 Depends on / 依赖: Ideal.map, IsLocalization, IsLocalization.map_under, LiesOver, LiesOver.over, P.map, algebraMap, map_under, under_map_of_isPrime_disjoint, under_under
 -/
@@ -1436,7 +1500,7 @@ lemma under_maximalIdeal_pow
   refine ⟨fun ⟨m, hm, h⟩ => ?_, fun h => ⟨1, by simp, by simp [h]⟩⟩
   exact (IsMaximal.mul_mem_pow _ h).resolve_left (mem_primeCompl_iff.mp hm)
 
-@[deprecated (sinc
+@[deprecated (since := "2026-04-09")] alias comap_maximalIdeal_pow := under_maximalIdeal_pow
 
 中文:
 引理 under_maximalIdeal_pow
@@ -1447,7 +1511,7 @@ lemma under_maximalIdeal_pow
   refine ⟨fun ⟨m, hm, h⟩ => ?_, fun h => ⟨1, by simp, by simp [h]⟩⟩
   exact (IsMaximal.mul_mem_pow _ h).resolve_left (mem_primeCompl_iff.mp hm)
 
-@[deprecated (sinc
+@[deprecated (since := "2026-04-09")] alias comap_maximalIdeal_pow := under_maximalIdeal_pow
 
 Depends on / 依赖: Ideal.map_pow, IsEmbedding, IsMaximal, IsMaximal.mul_mem_pow, Topology, Topology.IsEmbedding.subtypeVal.continuous_iff, algebraMap_mem_map_algebraMap_iff, continuous_iff, continuous_vsub, fun_prop, map_eq_maximalIdeal, map_pow, mem_comap, mem_primeCompl_iff, mem_primeCompl_iff.mp, mul_mem_pow, p.primeCompl, primeCompl, resolve_left, subtypeVal
 -/
@@ -1482,7 +1546,24 @@ definition equivQuotMaximalIdeal
   refine (Ideal.quotEquivOfEq ?_).trans
     (RingHom.quotientKerEquivOfSurjective (f := algebraMap R (Rₚ ⧸ maximalIdeal Rₚ)) ?_)
   · rw [IsScalarTower.algebraMap_eq R Rₚ, ← RingHom.comap_ker, ← under_def,
-      Ideal.Quotient.algebraMap_eq, Ideal.mk_ker, IsLocalization.AtPrime.under_maximalIdeal 
+      Ideal.Quotient.algebraMap_eq, Ideal.mk_ker, IsLocalization.AtPrime.under_maximalIdeal Rₚ p]
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq p.primeCompl x
+    obtain ⟨s', hs⟩ := Ideal.Quotient.mk_surjective (I := p) (Ideal.Quotient.mk p s)⁻¹
+    simp only [IsScalarTower.algebraMap_eq R Rₚ (Rₚ ⧸ _),
+      Ideal.Quotient.algebraMap_eq, RingHom.comp_apply]
+    use x * s'
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]
+    have : algebraMap R Rₚ s ∉ maximalIdeal Rₚ := by
+      rw [← Ideal.mem_under]; rw [IsLocalization.AtPrime.under_maximalIdeal Rₚ p]
+      exact s.prop
+    refine ((inferInstance : (maximalIdeal Rₚ).IsPrime).mem_or_mem ?_).resolve_left this
+    rw [mul_sub]; rw [IsLocalization.mul_mk'_eq_mk'_of_mul]; rw [IsLocalization.mk'_mul_cancel_left]; rw [← map_mul]; rw [← map_sub]; rw [← Ideal.mem_under]; rw [under_maximalIdeal Rₚ p]; rw [mul_left_comm]; rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [map_mul]; rw [map_mul]; rw [hs]; rw [mul_inv_cancel₀]; rw [mul_one]; rw [sub_self]
+    rw [Ne]; rw [Ideal.Quotient.eq_zero_iff_mem]
+    exact s.prop
+
+@[simp]
 
 中文:
 定义 equivQuotMaximalIdeal
@@ -1491,7 +1572,24 @@ definition equivQuotMaximalIdeal
   refine (Ideal.quotEquivOfEq ?_).trans
     (RingHom.quotientKerEquivOfSurjective (f := algebraMap R (Rₚ ⧸ maximalIdeal Rₚ)) ?_)
   · rw [IsScalarTower.algebraMap_eq R Rₚ, ← RingHom.comap_ker, ← under_def,
-      Ideal.Quotient.algebraMap_eq, Ideal.mk_ker, IsLocalization.AtPrime.under_maximalIdeal 
+      Ideal.Quotient.algebraMap_eq, Ideal.mk_ker, IsLocalization.AtPrime.under_maximalIdeal Rₚ p]
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq p.primeCompl x
+    obtain ⟨s', hs⟩ := Ideal.Quotient.mk_surjective (I := p) (Ideal.Quotient.mk p s)⁻¹
+    simp only [IsScalarTower.algebraMap_eq R Rₚ (Rₚ ⧸ _),
+      Ideal.Quotient.algebraMap_eq, RingHom.comp_apply]
+    use x * s'
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]
+    have : algebraMap R Rₚ s ∉ maximalIdeal Rₚ := by
+      rw [← Ideal.mem_under]; rw [IsLocalization.AtPrime.under_maximalIdeal Rₚ p]
+      exact s.prop
+    refine ((inferInstance : (maximalIdeal Rₚ).IsPrime).mem_or_mem ?_).resolve_left this
+    rw [mul_sub]; rw [IsLocalization.mul_mk'_eq_mk'_of_mul]; rw [IsLocalization.mk'_mul_cancel_left]; rw [← map_mul]; rw [← map_sub]; rw [← Ideal.mem_under]; rw [under_maximalIdeal Rₚ p]; rw [mul_left_comm]; rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [map_mul]; rw [map_mul]; rw [hs]; rw [mul_inv_cancel₀]; rw [mul_one]; rw [sub_self]
+    rw [Ne]; rw [Ideal.Quotient.eq_zero_iff_mem]
+    exact s.prop
+
+@[simp]
 
 Depends on / 依赖: AtPrime, Ideal.Quotient.algebraMap_eq, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.mk_ker, Ideal.quotEquivOfEq, IsLocalization, IsLocalization.AtPrime.under_maximalIdeal, IsLocalization.exists_mk, IsScalarTower, IsScalarTower.algebraMap_eq, Quotient, RingHom, RingHom.comap_ker, RingHom.quotientKerEquivOfSurjective, algebraMap, algebraMap_eq, comap_ker, exists_mk, maximalIdeal
 -/
@@ -1550,7 +1648,7 @@ theorem equivQuotMaximalIdeal_symm_apply_mk
     simpa [ne_eq, Ideal.Quotient.eq_zero_iff_mem] using Ideal.mem_primeCompl_iff.mp s.prop
   have h₂ : equivQuotMaximalIdeal p Rₚ (Ideal.Quotient.mk p ↑s) != 0 := by
     rwa [RingEquiv.map_ne_zero_iff]
-  rw [RingEquiv.symm_apply_eq]; rw [← mul_left_in
+  rw [RingEquiv.symm_apply_eq]; rw [← mul_left_inj' h₂]; rw [map_mul]; rw [mul_assoc]; rw [← map_mul]; rw [inv_mul_cancel₀ h₁]; rw [map_one]; rw [mul_one]; rw [equivQuotMaximalIdeal_apply_mk]; rw [← map_mul]; rw [mk'_spec]; rw [Ideal.Quotient.mk_algebraMap]; rw [equivQuotMaximalIdeal_apply_mk]; rw [Ideal.Quotient.mk_algebraMap]
 
 中文:
 定理 equivQuotMaximalIdeal_symm_apply_mk
@@ -1560,7 +1658,7 @@ theorem equivQuotMaximalIdeal_symm_apply_mk
     simpa [ne_eq, Ideal.Quotient.eq_zero_iff_mem] using Ideal.mem_primeCompl_iff.mp s.prop
   have h₂ : equivQuotMaximalIdeal p Rₚ (Ideal.Quotient.mk p ↑s) != 0 := by
     rwa [RingEquiv.map_ne_zero_iff]
-  rw [RingEquiv.symm_apply_eq]; rw [← mul_left_in
+  rw [RingEquiv.symm_apply_eq]; rw [← mul_left_inj' h₂]; rw [map_mul]; rw [mul_assoc]; rw [← map_mul]; rw [inv_mul_cancel₀ h₁]; rw [map_one]; rw [mul_one]; rw [equivQuotMaximalIdeal_apply_mk]; rw [← map_mul]; rw [mk'_spec]; rw [Ideal.Quotient.mk_algebraMap]; rw [equivQuotMaximalIdeal_apply_mk]; rw [Ideal.Quotient.mk_algebraMap]
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk, Ideal.Quotient.mk_algebraMap, Ideal.mem_primeCompl_iff.mp, Quotient, RingEquiv, RingEquiv.map_ne_zero_iff, RingEquiv.symm_apply_eq, _spec, eq_zero_iff_mem, equivQuotMaximalIdeal, equivQuotMaximalIdeal_apply_mk, map_mul, map_ne_zero_iff, map_one, mem_primeCompl_iff, mk_algebraMap, mul_assoc, mul_left_inj, mul_one
 -/
@@ -1587,7 +1685,18 @@ definition equivQuotMaximalIdealPow
   refine AlgEquiv.ofAlgHom (Ideal.Quotient.liftₐ _ (Algebra.ofId _ _) ?_) ?_ ?_ ?_
   · simp_rw [ofId_apply, ← RingHom.mem_ker, ← SetLike.le_def]
     rw [← Quotient.mk_comp_algebraMap]; rw [← RingHom.comap_ker]; rw [mk_ker]; rw [← under_def]; rw [under_maximalIdeal_pow p]
-  · refine Ideal.Quotient
+  · refine Ideal.Quotient.liftₐ _
+      (IsLocalization.liftAlgHom (f := Ideal.Quotient.mkₐ R (p ^ n)) fun (u : p.primeCompl) =>
+Ideal.Quotient.isUnit_mk_pow_of_notMem _ mem_primeCompl_iff.mp u.prop) fun x hx => ?_
+    obtain ⟨a, b, rfl⟩ := IsLocalization.exists_mk'_eq p.primeCompl x
+    rw [IsLocalization.mk'_mem_iff]; rw [← Ideal.mem_under]; rw [under_maximalIdeal_pow p] at hx
+    simpa [lift_mk', Quotient.eq_zero_iff_mem] using hx
+  · rw [← AlgHom.cancel_right (Ideal.Quotient.mkₐ_surjective _ _)]
+    exact IsLocalization.algHom_ext (W := p.primeCompl) (A := R) (by ext)
+  · rw [← AlgHom.cancel_right (Ideal.Quotient.mkₐ_surjective _ _)]
+    ext
+
+@[simp]
 
 中文:
 定义 equivQuotMaximalIdealPow
@@ -1596,7 +1705,18 @@ definition equivQuotMaximalIdealPow
   refine AlgEquiv.ofAlgHom (Ideal.Quotient.liftₐ _ (Algebra.ofId _ _) ?_) ?_ ?_ ?_
   · simp_rw [ofId_apply, ← RingHom.mem_ker, ← SetLike.le_def]
     rw [← Quotient.mk_comp_algebraMap]; rw [← RingHom.comap_ker]; rw [mk_ker]; rw [← under_def]; rw [under_maximalIdeal_pow p]
-  · refine Ideal.Quotient
+  · refine Ideal.Quotient.liftₐ _
+      (IsLocalization.liftAlgHom (f := Ideal.Quotient.mkₐ R (p ^ n)) fun (u : p.primeCompl) =>
+Ideal.Quotient.isUnit_mk_pow_of_notMem _ mem_primeCompl_iff.mp u.prop) fun x hx => ?_
+    obtain ⟨a, b, rfl⟩ := IsLocalization.exists_mk'_eq p.primeCompl x
+    rw [IsLocalization.mk'_mem_iff]; rw [← Ideal.mem_under]; rw [under_maximalIdeal_pow p] at hx
+    simpa [lift_mk', Quotient.eq_zero_iff_mem] using hx
+  · rw [← AlgHom.cancel_right (Ideal.Quotient.mkₐ_surjective _ _)]
+    exact IsLocalization.algHom_ext (W := p.primeCompl) (A := R) (by ext)
+  · rw [← AlgHom.cancel_right (Ideal.Quotient.mkₐ_surjective _ _)]
+    ext
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, Algebra, Algebra.ofId, Ideal.Quotient.isUnit_mk_pow_of_notMem, Ideal.Quotient.lift, Ideal.Quotient.mk, IsLocalization, IsLocalization.liftAlgHom, Quotient, Quotient.mk_comp_algebraMap, RingHom, RingHom.comap_ker, RingHom.mem_ker, SetLike, SetLike.le_def, comap_ker, isUnit_mk_pow_of_notMem, le_def, liftAlgHom
 -/
@@ -1677,7 +1797,28 @@ lemma under_map_eq_map
   intro x hx
   obtain ⟨α, hα, hαx⟩ : exists α ∉ p, α • x in pS := by
     have ⟨⟨y, s⟩, hy⟩ := (IsLocalization.mem_map_algebraMap_iff
-      (Algebra.algebraMapSubmonoid S p.primeCompl)
+      (Algebra.algebraMapSubmonoid S p.primeCompl) Sₚ).mp hx
+    rw [← map_mul]; rw [IsLocalization.eq_iff_exists (Algebra.algebraMapSubmonoid S p.primeCompl)] at hy
+    obtain ⟨c, hc⟩ := hy
+    obtain ⟨α, hα, e⟩ := (c * s).prop
+    refine ⟨α, hα, ?_⟩
+    rw [Algebra.smul_def]; rw [e]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [mul_comm _ x]; rw [hc]
+    exact Ideal.mul_mem_left _ _ y.prop
+  obtain ⟨β, γ, hγ, hβ⟩ : exists β γ, γ in p ∧ β * α = 1 + γ := by
+    obtain ⟨β, hβ⟩ := Ideal.Quotient.mk_surjective (I := p) (Ideal.Quotient.mk p α)⁻¹
+    refine ⟨β, β * α - 1, ?_, ?_⟩
+    · rw [← Ideal.Quotient.eq_zero_iff_mem, map_sub, map_one,
+        map_mul, hβ, inv_mul_cancel₀, sub_self]
+      rwa [Ne, Ideal.Quotient.eq_zero_iff_mem]
+    · rw [add_sub_cancel]
+  have := Ideal.mul_mem_left _ (algebraMap _ _ β) hαx
+  rw [← Algebra.smul_def]; rw [smul_smul]; rw [hβ]; rw [add_smul]; rw [one_smul] at this
+  refine (Submodule.add_mem_iff_left pS ?_).mp this
+  rw [Algebra.smul_def]
+  apply Ideal.mul_mem_right
+  exact Ideal.mem_map_of_mem _ hγ
+
+@[deprecated (since := "2026-04-09")] alias comap_map_eq_map := under_map_eq_map
 
 中文:
 引理 under_map_eq_map
@@ -1688,7 +1829,28 @@ lemma under_map_eq_map
   intro x hx
   obtain ⟨α, hα, hαx⟩ : exists α ∉ p, α • x in pS := by
     have ⟨⟨y, s⟩, hy⟩ := (IsLocalization.mem_map_algebraMap_iff
-      (Algebra.algebraMapSubmonoid S p.primeCompl)
+      (Algebra.algebraMapSubmonoid S p.primeCompl) Sₚ).mp hx
+    rw [← map_mul]; rw [IsLocalization.eq_iff_exists (Algebra.algebraMapSubmonoid S p.primeCompl)] at hy
+    obtain ⟨c, hc⟩ := hy
+    obtain ⟨α, hα, e⟩ := (c * s).prop
+    refine ⟨α, hα, ?_⟩
+    rw [Algebra.smul_def]; rw [e]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [mul_comm _ x]; rw [hc]
+    exact Ideal.mul_mem_left _ _ y.prop
+  obtain ⟨β, γ, hγ, hβ⟩ : exists β γ, γ in p ∧ β * α = 1 + γ := by
+    obtain ⟨β, hβ⟩ := Ideal.Quotient.mk_surjective (I := p) (Ideal.Quotient.mk p α)⁻¹
+    refine ⟨β, β * α - 1, ?_, ?_⟩
+    · rw [← Ideal.Quotient.eq_zero_iff_mem, map_sub, map_one,
+        map_mul, hβ, inv_mul_cancel₀, sub_self]
+      rwa [Ne, Ideal.Quotient.eq_zero_iff_mem]
+    · rw [add_sub_cancel]
+  have := Ideal.mul_mem_left _ (algebraMap _ _ β) hαx
+  rw [← Algebra.smul_def]; rw [smul_smul]; rw [hβ]; rw [add_smul]; rw [one_smul] at this
+  refine (Submodule.add_mem_iff_left pS ?_).mp this
+  rw [Algebra.smul_def]
+  apply Ideal.mul_mem_right
+  exact Ideal.mem_map_of_mem _ hγ
+
+@[deprecated (since := "2026-04-09")] alias comap_map_eq_map := under_map_eq_map
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, Algebra.smul_def, Ideal.le_comap_map.antisymm, Ideal.map_map, IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.mem_map_algebraMap_iff, IsScalarTower, IsScalarTower.algebraMap_eq, algebraMapSubmonoid, algebraMap_eq, antisymm, eq_comm, eq_iff_exists, le_comap_map, map_map, map_mul, mem_map_algebraMap_iff, p.primeCompl
 -/
@@ -1734,7 +1896,31 @@ definition equivQuotientMapMaximalIdeal
   haveI h : pSₚ = Ideal.map (algebraMap S Sₚ) pS := by
     rw [← map_eq_maximalIdeal p]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]
   refine (Ideal.quotEquivOfEq ?_).trans
-    (RingHom.quotientKerEquivOfSurjective (f := algebraMa
+    (RingHom.quotientKerEquivOfSurjective (f := algebraMap S (Sₚ ⧸ pSₚ)) ?_)
+  · rw [IsScalarTower.algebraMap_eq S Sₚ, Ideal.Quotient.algebraMap_eq, ← RingHom.comap_ker,
+      Ideal.mk_ker, h, Ideal.map_map, ← IsScalarTower.algebraMap_eq, ← under_def, under_map_eq_map]
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq
+      (Algebra.algebraMapSubmonoid S p.primeCompl) x
+    obtain ⟨α, hα : α ∉ p, e⟩ := s.prop
+    obtain ⟨β, γ, hγ, hβ⟩ : exists β γ, γ in p ∧ α * β = 1 + γ := by
+      obtain ⟨β, hβ⟩ := Ideal.Quotient.mk_surjective (I := p) (Ideal.Quotient.mk p α)⁻¹
+      refine ⟨β, α * β - 1, ?_, ?_⟩
+      · rw [← Ideal.Quotient.eq_zero_iff_mem, map_sub, map_one,
+          map_mul, hβ, mul_inv_cancel₀, sub_self]
+        rwa [Ne, Ideal.Quotient.eq_zero_iff_mem]
+      · rw [add_sub_cancel]
+    use β • x
+    rw [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ pSₚ)]; rw [Ideal.Quotient.algebraMap_eq]; rw [RingHom.comp_apply]; rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]
+    rw [h]; rw [IsLocalization.mem_map_algebraMap_iff
+      (Algebra.algebraMapSubmonoid S p.primeCompl) Sₚ]
+    refine ⟨⟨⟨γ • x, ?_⟩, s⟩, ?_⟩
+    · rw [Algebra.smul_def]
+      apply Ideal.mul_mem_right
+      exact Ideal.mem_map_of_mem _ hγ
+    simp only
+    rw [mul_comm]; rw [mul_sub]; rw [IsLocalization.mul_mk'_eq_mk'_of_mul]; rw [IsLocalization.mk'_mul_cancel_left]; rw [← map_mul]; rw [← e]; rw [← Algebra.smul_def]; rw [smul_smul]; rw [hβ]; rw [← map_sub]; rw [add_smul]; rw [one_smul]; rw [add_comm x]; rw [add_sub_cancel_right]
 
 中文:
 定义 equivQuotientMapMaximalIdeal
@@ -1743,7 +1929,31 @@ definition equivQuotientMapMaximalIdeal
   haveI h : pSₚ = Ideal.map (algebraMap S Sₚ) pS := by
     rw [← map_eq_maximalIdeal p]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]
   refine (Ideal.quotEquivOfEq ?_).trans
-    (RingHom.quotientKerEquivOfSurjective (f := algebraMa
+    (RingHom.quotientKerEquivOfSurjective (f := algebraMap S (Sₚ ⧸ pSₚ)) ?_)
+  · rw [IsScalarTower.algebraMap_eq S Sₚ, Ideal.Quotient.algebraMap_eq, ← RingHom.comap_ker,
+      Ideal.mk_ker, h, Ideal.map_map, ← IsScalarTower.algebraMap_eq, ← under_def, under_map_eq_map]
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq
+      (Algebra.algebraMapSubmonoid S p.primeCompl) x
+    obtain ⟨α, hα : α ∉ p, e⟩ := s.prop
+    obtain ⟨β, γ, hγ, hβ⟩ : exists β γ, γ in p ∧ α * β = 1 + γ := by
+      obtain ⟨β, hβ⟩ := Ideal.Quotient.mk_surjective (I := p) (Ideal.Quotient.mk p α)⁻¹
+      refine ⟨β, α * β - 1, ?_, ?_⟩
+      · rw [← Ideal.Quotient.eq_zero_iff_mem, map_sub, map_one,
+          map_mul, hβ, mul_inv_cancel₀, sub_self]
+        rwa [Ne, Ideal.Quotient.eq_zero_iff_mem]
+      · rw [add_sub_cancel]
+    use β • x
+    rw [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ pSₚ)]; rw [Ideal.Quotient.algebraMap_eq]; rw [RingHom.comp_apply]; rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]
+    rw [h]; rw [IsLocalization.mem_map_algebraMap_iff
+      (Algebra.algebraMapSubmonoid S p.primeCompl) Sₚ]
+    refine ⟨⟨⟨γ • x, ?_⟩, s⟩, ?_⟩
+    · rw [Algebra.smul_def]
+      apply Ideal.mul_mem_right
+      exact Ideal.mem_map_of_mem _ hγ
+    simp only
+    rw [mul_comm]; rw [mul_sub]; rw [IsLocalization.mul_mk'_eq_mk'_of_mul]; rw [IsLocalization.mk'_mul_cancel_left]; rw [← map_mul]; rw [← e]; rw [← Algebra.smul_def]; rw [smul_smul]; rw [hβ]; rw [← map_sub]; rw [add_smul]; rw [one_smul]; rw [add_comm x]; rw [add_sub_cancel_right]
 
 Depends on / 依赖: Ideal.Quotient.algebraMap_eq, Ideal.map, Ideal.map_map, Ideal.mk_ker, Ideal.quotEquivOfEq, IsScalarTower, IsScalarTower.algebraMap_eq, Quotient, RingHom, RingHom.comap_ker, RingHom.quotientKerEquivOfSurjective, algebraMap, algebraMap_eq, comap_ker, map_eq_maximalIdeal, map_map, mk_ker, quotEquivOfEq, quotientKerEquivOfSurjective, under_def
 -/

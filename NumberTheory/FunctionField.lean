@@ -82,7 +82,14 @@ theorem functionField_iff
     rw [Algebra.smul_def]; rw [Algebra.smul_def]
     congr
     refine congr_fun (f := fun c => algebraMap Ft K (e c)) ?_ c
-    refine IsLocalization.ext (nonZeroDivisors F[X]) _ _ ?_ 
+    refine IsLocalization.ext (nonZeroDivisors F[X]) _ _ ?_ ?_ ?_ ?_ ?_ <;> intros <;>
+      simp only [map_one, map_mul, AlgEquiv.commutes, ← IsScalarTower.algebraMap_apply]
+  constructor <;> intro h
+  · let b := Module.finBasis F⟮X⟯ K
+    exact (b.mapCoeffs e this).finiteDimensional_of_finite
+  · let b := Module.finBasis Ft K
+    refine (b.mapCoeffs e.symm ?_).finiteDimensional_of_finite
+    intro c x; convert! (this (e.symm c) x).symm; simp only [e.apply_symm_apply]
 
 中文:
 定理 functionField_iff
@@ -94,7 +101,14 @@ theorem functionField_iff
     rw [Algebra.smul_def]; rw [Algebra.smul_def]
     congr
     refine congr_fun (f := fun c => algebraMap Ft K (e c)) ?_ c
-    refine IsLocalization.ext (nonZeroDivisors F[X]) _ _ ?_ 
+    refine IsLocalization.ext (nonZeroDivisors F[X]) _ _ ?_ ?_ ?_ ?_ ?_ <;> intros <;>
+      simp only [map_one, map_mul, AlgEquiv.commutes, ← IsScalarTower.algebraMap_apply]
+  constructor <;> intro h
+  · let b := Module.finBasis F⟮X⟯ K
+    exact (b.mapCoeffs e this).finiteDimensional_of_finite
+  · let b := Module.finBasis Ft K
+    refine (b.mapCoeffs e.symm ?_).finiteDimensional_of_finite
+    intro c x; convert! (this (e.symm c) x).symm; simp only [e.apply_symm_apply]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, Algebra, Algebra.smul_def, IsLocalization, IsLocalization.algEquiv, IsLocalization.ext, IsScalarTower, IsScalarTower.algebraMap_apply, Module, Module.finBasis, algEquiv, algebraMap, algebraMap_apply, b.mapCoeffs, commutes, congr_fun, finBasis, finiteDimensional_of_finite, intros
 -/
@@ -215,7 +229,9 @@ theorem algebraMap_injective
     exact (algebraMap F⟮X⟯ K).injective.comp (IsFractionRing.injective F[X] F⟮X⟯)
   rw [injective_iff_map_eq_zero (algebraMap F[X] (↥(ringOfIntegers F K)))]
   intro p hp
-  rw [← Subtype.coe
+  rw [← Subtype.coe_inj]; rw [Subalgebra.coe_zero] at hp
+  rw [injective_iff_map_eq_zero (algebraMap F[X] K)] at hinj
+  exact hinj p hp
 
 中文:
 定理 algebraMap_injective
@@ -226,7 +242,9 @@ theorem algebraMap_injective
     exact (algebraMap F⟮X⟯ K).injective.comp (IsFractionRing.injective F[X] F⟮X⟯)
   rw [injective_iff_map_eq_zero (algebraMap F[X] (↥(ringOfIntegers F K)))]
   intro p hp
-  rw [← Subtype.coe
+  rw [← Subtype.coe_inj]; rw [Subalgebra.coe_zero] at hp
+  rw [injective_iff_map_eq_zero (algebraMap F[X] K)] at hinj
+  exact hinj p hp
 
 Depends on / 依赖: Function, Function.Injective, Injective, IsFractionRing, IsFractionRing.injective, IsScalarTower, IsScalarTower.algebraMap_eq, Subalgebra, Subalgebra.coe_zero, Subtype, Subtype.coe_inj, algebraMap, algebraMap_eq, coe_inj, coe_zero, injective, injective.comp, injective_iff_map_eq_zero, ringOfIntegers
 -/
@@ -527,7 +545,21 @@ lemma finiteDimensional_of_adjoin_transcendental
   -- Recalling instance to speed up search
   let : Algebra F⟮y⟯ Fyx := F⟮y⟯⟮x⟯.algebra
   let : Module F⟮y⟯ Fyx := Algebra.toModule
-  let : SMul F⟮y⟯
+  let : SMul F⟮y⟯ Fyx := Algebra.toSMul
+  let : Algebra F⟮x⟯ Fxy := F⟮x⟯⟮y⟯.algebra
+  let : Module F⟮x⟯ Fxy := Algebra.toModule
+  let : SMul F⟮x⟯ Fxy := Algebra.toSMul
+  have : FiniteDimensional F⟮y⟯ Fyx :=
+    adjoin.finiteDimensional
+      (isAlgebraic_iff_isIntegral.mp (isAlgebraic_X_over_adjoin_transcendental hy))
+  have : FiniteDimensional Fyx K := by
+    have := FiniteDimensional.adjoin_algebraMap_X (F := F) (K := K)
+    unfold Fyx
+    rw [adjoin_simple_comm]
+    have : IsScalarTower F⟮x⟯ Fxy K := isScalarTower_mid' F⟮x⟯⟮y⟯
+    exact .right F⟮x⟯ Fxy K
+  have : IsScalarTower F⟮y⟯ Fyx K := isScalarTower_mid' F⟮y⟯⟮x⟯
+  .trans F⟮y⟯ Fyx K
 
 中文:
 引理 finiteDimensional_of_adjoin_transcendental
@@ -539,7 +571,21 @@ lemma finiteDimensional_of_adjoin_transcendental
   -- Recalling instance to speed up search
   let : Algebra F⟮y⟯ Fyx := F⟮y⟯⟮x⟯.algebra
   let : Module F⟮y⟯ Fyx := Algebra.toModule
-  let : SMul F⟮y⟯
+  let : SMul F⟮y⟯ Fyx := Algebra.toSMul
+  let : Algebra F⟮x⟯ Fxy := F⟮x⟯⟮y⟯.algebra
+  let : Module F⟮x⟯ Fxy := Algebra.toModule
+  let : SMul F⟮x⟯ Fxy := Algebra.toSMul
+  have : FiniteDimensional F⟮y⟯ Fyx :=
+    adjoin.finiteDimensional
+      (isAlgebraic_iff_isIntegral.mp (isAlgebraic_X_over_adjoin_transcendental hy))
+  have : FiniteDimensional Fyx K := by
+    have := FiniteDimensional.adjoin_algebraMap_X (F := F) (K := K)
+    unfold Fyx
+    rw [adjoin_simple_comm]
+    have : IsScalarTower F⟮x⟯ Fxy K := isScalarTower_mid' F⟮x⟯⟮y⟯
+    exact .right F⟮x⟯ Fxy K
+  have : IsScalarTower F⟮y⟯ Fyx K := isScalarTower_mid' F⟮y⟯⟮x⟯
+  .trans F⟮y⟯ Fyx K
 -/
 lemma finiteDimensional_of_adjoin_transcendental (hy : Transcendental F y) :
     FiniteDimensional F⟮y⟯ K :=

@@ -481,7 +481,12 @@ theorem filter_fst_eq_antidiagonal
   suffices a = m -> (a + b = n ↔ m <= n ∧ b = n - m) by
     rw [mem_filter]; rw [mem_antidiagonal]; rw [apply_ite (fun n => (a]; rw [b) in n)]; rw [mem_singleton]; rw [Prod.mk_inj]; rw [ite_prop_iff_or]
     simpa [← and_assoc, @and_right_comm _ (a = _), and_congr_left_iff]
-  rintro r
+  rintro rfl
+  constructor
+  · rintro rfl
+    exact ⟨le_add_right le_rfl, (add_tsub_cancel_left _ _).symm⟩
+  · rintro ⟨h, rfl⟩
+    exact add_tsub_cancel_of_le h
 
 中文:
 定理 filter_fst_eq_antidiagonal
@@ -491,7 +496,12 @@ theorem filter_fst_eq_antidiagonal
   suffices a = m -> (a + b = n ↔ m <= n ∧ b = n - m) by
     rw [mem_filter]; rw [mem_antidiagonal]; rw [apply_ite (fun n => (a]; rw [b) in n)]; rw [mem_singleton]; rw [Prod.mk_inj]; rw [ite_prop_iff_or]
     simpa [← and_assoc, @and_right_comm _ (a = _), and_congr_left_iff]
-  rintro r
+  rintro rfl
+  constructor
+  · rintro rfl
+    exact ⟨le_add_right le_rfl, (add_tsub_cancel_left _ _).symm⟩
+  · rintro ⟨h, rfl⟩
+    exact add_tsub_cancel_of_le h
 
 Depends on / 依赖: Prod.mk_inj, add_tsub_cancel_left, add_tsub_cancel_of_le, and_assoc, and_congr_left_iff, and_right_comm, apply_ite, ite_prop_iff_or, le_add_right, le_rfl, mem_antidiagonal, mem_filter, mem_singleton, mk_inj
 -/

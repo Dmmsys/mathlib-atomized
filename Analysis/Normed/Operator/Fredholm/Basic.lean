@@ -380,7 +380,9 @@ lemma FredholmPackage.isQuasiInverse
     isQuasiInverse_subtype_projectionOnto _
   have hcodom : IsQuasiInverse pkg.decCodom.X₁.subtype pkg.decCodom.proj :=
     have := pkg.decCodom.finite_X₀
-    isQuasiIn
+    isQuasiInverse_subtype_projectionOnto _
+  -- For some reason `exact` and `refine` are slow here!
+  apply hdom.comp (pkg.equiv.isQuasiInverse.comp hcodom.symm)
 
 中文:
 引理 FredholmPackage.isQuasiInverse
@@ -392,7 +394,9 @@ lemma FredholmPackage.isQuasiInverse
     isQuasiInverse_subtype_projectionOnto _
   have hcodom : IsQuasiInverse pkg.decCodom.X₁.subtype pkg.decCodom.proj :=
     have := pkg.decCodom.finite_X₀
-    isQuasiIn
+    isQuasiInverse_subtype_projectionOnto _
+  -- For some reason `exact` and `refine` are slow here!
+  apply hdom.comp (pkg.equiv.isQuasiInverse.comp hcodom.symm)
 
 Depends on / 依赖: IsQuasiInverse, decCodom, decDom, eq_equiv, hcodom, isQuasiInverse_subtype_projectionOnto, nth_rw, pkg.decCodom.X, pkg.decCodom.finite_X, pkg.decCodom.proj, pkg.decDom.X, pkg.decDom.finite_X, pkg.decDom.proj, pkg.eq_equiv, subtype
 -/
@@ -422,7 +426,15 @@ theorem exists_restrict_isInvertible_of_isQuasiInverse
   rw [IsRightQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at huv
   rw [IsLeftQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at hvu
   set E₁ := (ContinuousLinearMap.id 𝕜 E).eqLocus (v ∘L u)
-  set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u
+  set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u ∘L v)
+  have u_mapsto : MapsTo u E₁ F₁ := fun x hx => congr(u $hx)
+  have v_mapsto : MapsTo v F₁ E₁ := fun x hx => congr(v $hx)
+  refine ⟨E₁, F₁, isClosed_eqLocus _ _, isClosed_eqLocus _ _, hvu, huv, u_mapsto, ?_⟩
+  refine .of_inverse (g := v.restrict v_mapsto) ?_ ?_
+  · ext ⟨x, hx : x = u (v x)⟩
+    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
+  · ext ⟨x, hx : x = v (u x)⟩
+    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
 
 中文:
 定理 存在_restrict_isInvertible_of_isQuasiInverse
@@ -432,7 +444,15 @@ theorem exists_restrict_isInvertible_of_isQuasiInverse
   rw [IsRightQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at huv
   rw [IsLeftQuasiInverse]; rw [Setoid.comm]; rw [equiv_iff_eqLocus_coFG] at hvu
   set E₁ := (ContinuousLinearMap.id 𝕜 E).eqLocus (v ∘L u)
-  set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u
+  set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u ∘L v)
+  have u_mapsto : MapsTo u E₁ F₁ := fun x hx => congr(u $hx)
+  have v_mapsto : MapsTo v F₁ E₁ := fun x hx => congr(v $hx)
+  refine ⟨E₁, F₁, isClosed_eqLocus _ _, isClosed_eqLocus _ _, hvu, huv, u_mapsto, ?_⟩
+  refine .of_inverse (g := v.restrict v_mapsto) ?_ ?_
+  · ext ⟨x, hx : x = u (v x)⟩
+    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
+  · ext ⟨x, hx : x = v (u x)⟩
+    simp [coe_restrict_apply u_mapsto, coe_restrict_apply v_mapsto, ← hx]
 -/
 private theorem exists_restrict_isInvertible_of_isQuasiInverse {u : E ->L[𝕜] F}
     {v : F ->L[𝕜] E} (hvu : v.IsQuasiInverse u) :
@@ -469,7 +489,18 @@ theorem IsFredholm.of_isInvertible_restrict
   have eqL : u.domRestrict E₁ = F₁.subtypeL ∘L e := congr(F₁.subtypeL ∘L $he).symm
   have eqₗ : u.toLinearMap.domRestrict E₁ = F₁.subtype ∘ₗ e := congr(($eqL).toLinearMap)
   have h : Topology.IsStrictMap u ∧ IsClosed (u.range : Set F) := by
-    rw [u.isStrictMap_isClosed
+    rw [u.isStrictMap_isClosed_range_iff_restrict E₁ E₁_closed]; rw [eqL]
+.isStrictMap, by simpa⟩ exact ⟨F₁.isEmbedding_subtype.comp e.isHomeomorph.isEmbedding
+  have disj : Disjoint E₁ u.ker := by
+    rw [disjoint_iff_comap_eq_bot]; rw [← LinearMap.ker_domRestrict]; rw [eqₗ]; rw [LinearMap.ker_comp]; rw [ker_subtype]; rw [comap_bot]; rw [LinearEquiv.ker]
+  refine ⟨h.1, h.2, ?_, ?_, ?_⟩
+  · rw [← Submodule.fg_iff_finiteDimensional]
+    exact E₁_coFG.fg_of_disjoint disj.symm
+  · refine F₁_coFG.of_le (le_trans ?_ (u.range_domRestrict_le_range E₁))
+    rw [eqₗ]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [range_subtype]
+  · exact .of_disjoint_of_finiteDimensional_quotient E₁_closed disj.symm
+
+omit [ContinuousSMul 𝕜 E] in
 
 中文:
 定理 是Fredholm.of_isInvertible_restrict
@@ -479,7 +510,18 @@ theorem IsFredholm.of_isInvertible_restrict
   have eqL : u.domRestrict E₁ = F₁.subtypeL ∘L e := congr(F₁.subtypeL ∘L $he).symm
   have eqₗ : u.toLinearMap.domRestrict E₁ = F₁.subtype ∘ₗ e := congr(($eqL).toLinearMap)
   have h : Topology.IsStrictMap u ∧ IsClosed (u.range : Set F) := by
-    rw [u.isStrictMap_isClosed
+    rw [u.isStrictMap_isClosed_range_iff_restrict E₁ E₁_closed]; rw [eqL]
+.isStrictMap, by simpa⟩ exact ⟨F₁.isEmbedding_subtype.comp e.isHomeomorph.isEmbedding
+  have disj : Disjoint E₁ u.ker := by
+    rw [disjoint_iff_comap_eq_bot]; rw [← LinearMap.ker_domRestrict]; rw [eqₗ]; rw [LinearMap.ker_comp]; rw [ker_subtype]; rw [comap_bot]; rw [LinearEquiv.ker]
+  refine ⟨h.1, h.2, ?_, ?_, ?_⟩
+  · rw [← Submodule.fg_iff_finiteDimensional]
+    exact E₁_coFG.fg_of_disjoint disj.symm
+  · refine F₁_coFG.of_le (le_trans ?_ (u.range_domRestrict_le_range E₁))
+    rw [eqₗ]; rw [LinearMap.range_comp]; rw [LinearEquiv.range]; rw [Submodule.map_top]; rw [range_subtype]
+  · exact .of_disjoint_of_finiteDimensional_quotient E₁_closed disj.symm
+
+omit [ContinuousSMul 𝕜 E] in
 
 Depends on / 依赖: Disjoint, IsClosed, IsStrictMap, LinearMa, Topology, Topology.IsStrictMap, disjoint_iff_comap_eq_bot, domRestrict, e.isHomeomorph.isEmbedding, h_inv, isEmbedding, isEmbedding_subtype, isEmbedding_subtype.comp, isHomeomorph, isStrictMap, isStrictMap_isClosed_range_iff_restrict, subtype, subtypeL, toLinearMap, u.domRestrict
 -/
@@ -520,7 +562,17 @@ definition IsFredholm.fredholmPackage
       isTopCompl := h_codom
 finite_X₀ := .of_fg u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
   equiv :=
-.symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker
+.symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker := u.ker.quotientEquivOfIsTopCompl dom₁ h_dom
+    letI Ψ : (E ⧸ u.ker) ≃L[𝕜] u.range := .quotKerEquivRange u_fred.isStrictMap
+    Φ.trans Ψ
+  eq_equiv := by
+    refine LinearMap.ext_on_codisjoint h_dom.isCompl.codisjoint ?_ ?_
+    · intro x (hx : u x = 0)
+      simp [hx, projection_apply_of_mem_right]
+    · intro x (hx : x in dom₁)
+      simp [hx, projection_apply_of_mem_left, ContinuousLinearEquiv.quotKerEquivRange]
+
+omit [ContinuousSMul 𝕜 E] in
 
 中文:
 定义 是Fredholm.fredholmPackage
@@ -535,7 +587,17 @@ finite_X₀ := .of_fg u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
       isTopCompl := h_codom
 finite_X₀ := .of_fg u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
   equiv :=
-.symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker
+.symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker := u.ker.quotientEquivOfIsTopCompl dom₁ h_dom
+    letI Ψ : (E ⧸ u.ker) ≃L[𝕜] u.range := .quotKerEquivRange u_fred.isStrictMap
+    Φ.trans Ψ
+  eq_equiv := by
+    refine LinearMap.ext_on_codisjoint h_dom.isCompl.codisjoint ?_ ?_
+    · intro x (hx : u x = 0)
+      simp [hx, projection_apply_of_mem_right]
+    · intro x (hx : x in dom₁)
+      simp [hx, projection_apply_of_mem_left, ContinuousLinearEquiv.quotKerEquivRange]
+
+omit [ContinuousSMul 𝕜 E] in
 
 Depends on / 依赖: LinearMap, LinearMap.ext_on_codisjoint, codisjoint, decCodom, eq_equiv, ext_on_codisjoint, fg_of_isCompl, finite_coker, finite_ker, h_codom, h_codom.isCompl, h_dom, h_dom.isCompl.codisjoint, h_dom.symm, isCompl, isStrictMap, isTopCompl, of_fg, quotKerEquivRange, quotientEquivOfIsTopCompl
 -/
@@ -609,7 +671,9 @@ theorem isFredholm_tfae
     rintro ⟨v, huv⟩
     exact exists_restrict_isInvertible_of_isQuasiInverse huv
   tfae_have 3 -> 1 := by
-    rintro ⟨E₁, F
+    rintro ⟨E₁, F₁, E₁_closed, F₁_closed, E₁_coFG, F₁_coFG, u_mapsto, u_invertible⟩
+    exact .of_isInvertible_restrict E₁_closed F₁_closed u_mapsto u_invertible
+  tfae_finish
 
 中文:
 定理 isFredholm_tfae
@@ -623,7 +687,9 @@ theorem isFredholm_tfae
     rintro ⟨v, huv⟩
     exact exists_restrict_isInvertible_of_isQuasiInverse huv
   tfae_have 3 -> 1 := by
-    rintro ⟨E₁, F
+    rintro ⟨E₁, F₁, E₁_closed, F₁_closed, E₁_coFG, F₁_coFG, u_mapsto, u_invertible⟩
+    exact .of_isInvertible_restrict E₁_closed F₁_closed u_mapsto u_invertible
+  tfae_finish
 
 Depends on / 依赖: IsFredholm, IsFredholm.nonempty_fredholmPackage, dec.isQuasiInverse, dec.quasiInverse, exists_restrict_isInvertible_of_isQuasiInverse, isQuasiInverse, nonempty_fredholmPackage, of_isInvertible_restrict, quasiInverse, tfae_finish, tfae_have, u_invertible, u_mapsto
 -/

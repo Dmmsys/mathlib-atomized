@@ -79,7 +79,14 @@ definition glueData
     have := (hf j).property _ _ _ ((hf i).1.isPullback' (f j)).flip
     IsOpenImmersion.mono _
   f_id i := IsOpenImmersion.isIso_fst'_self IsOpenImmersion.le_monomorphisms (hf i)
-  t i j := (hf
+  t i j := (hf i).rep.symmetry (hf j).rep
+  t_id i := by apply (hf i).rep.hom_ext' <;>
+    simp [IsOpenImmersion.fst'_self_eq_snd IsOpenImmersion.le_monomorphisms (hf i)]
+  t' i j k := lift₃ _ _ _ (pullback₃.p₂ _ _ _) (pullback₃.p₃ _ _ _) (pullback₃.p₁ _ _ _)
+    (by simp) (by simp)
+  t_fac i j k := (hf j).rep.hom_ext' (by simp) (by simp)
+  cocycle i j k := pullback₃.hom_ext (by simp) (by simp) (by simp)
+  f_open i j := (hf j).property _ _ _ ((hf i).1.isPullback' (f j)).flip
 
 中文:
 定义 glueData
@@ -92,7 +99,14 @@ definition glueData
     have := (hf j).property _ _ _ ((hf i).1.isPullback' (f j)).flip
     IsOpenImmersion.mono _
   f_id i := IsOpenImmersion.isIso_fst'_self IsOpenImmersion.le_monomorphisms (hf i)
-  t i j := (hf
+  t i j := (hf i).rep.symmetry (hf j).rep
+  t_id i := by apply (hf i).rep.hom_ext' <;>
+    simp [IsOpenImmersion.fst'_self_eq_snd IsOpenImmersion.le_monomorphisms (hf i)]
+  t' i j k := lift₃ _ _ _ (pullback₃.p₂ _ _ _) (pullback₃.p₃ _ _ _) (pullback₃.p₁ _ _ _)
+    (by simp) (by simp)
+  t_fac i j k := (hf j).rep.hom_ext' (by simp) (by simp)
+  cocycle i j k := pullback₃.hom_ext (by simp) (by simp) (by simp)
+  f_open i j := (hf j).property _ _ _ ((hf i).1.isPullback' (f j)).flip
 -/
 noncomputable def glueData : GlueData where
   J := ι
@@ -162,7 +176,10 @@ definition yonedaGluedToSheaf
     ((glueData hf).sheafValGluedMk (fun i => yonedaEquiv (f i)) (by
       intro i j
       apply yonedaEquiv.symm.injective
-      dsimp only [glueData_V, glueData_J, glueData_U, glueData_f
+      dsimp only [glueData_V, glueData_J, glueData_U, glueData_f, glueData_t]
+      rw [yonedaEquiv_naturality]; rw [Equiv.symm_apply_apply]; rw [Functor.map_comp_apply]; rw [yonedaEquiv_naturality]; rw [yonedaEquiv_naturality]; rw [Equiv.symm_apply_apply]; rw [← Functor.map_comp_assoc]; rw [Functor.relativelyRepresentable.symmetry_fst]; rw [((hf i).rep.isPullback' (f j)).w]))
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 yonedaGluedToSheaf
@@ -172,7 +189,10 @@ definition yonedaGluedToSheaf
     ((glueData hf).sheafValGluedMk (fun i => yonedaEquiv (f i)) (by
       intro i j
       apply yonedaEquiv.symm.injective
-      dsimp only [glueData_V, glueData_J, glueData_U, glueData_f
+      dsimp only [glueData_V, glueData_J, glueData_U, glueData_f, glueData_t]
+      rw [yonedaEquiv_naturality]; rw [Equiv.symm_apply_apply]; rw [Functor.map_comp_apply]; rw [yonedaEquiv_naturality]; rw [yonedaEquiv_naturality]; rw [Equiv.symm_apply_apply]; rw [← Functor.map_comp_assoc]; rw [Functor.relativelyRepresentable.symmetry_fst]; rw [((hf i).rep.isPullback' (f j)).w]))
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: yonedaEquiv, yonedaEquiv.symm
 -/
@@ -353,7 +373,15 @@ instance :
     replace h : (yonedaGluedToSheaf hf).hom.app _ α = (yonedaGluedToSheaf hf).hom.app _ β := h
     have mem := (glueData hf).openCover.mem_grothendieckTopology
     refine GrothendieckTopology.superset_covering _ ?_
-      (zariskiTopology.intersection_covering (zaris
+      (zariskiTopology.intersection_covering (zariskiTopology.pullback_stable α mem)
+        (zariskiTopology.pullback_stable β mem))
+    rintro V (γ : _ ⟶ U) ⟨⟨W₁, a, _, ⟨i⟩, fac₁⟩, ⟨W₂, b, _, ⟨j⟩, fac₂⟩⟩
+    change γ ≫ α = γ ≫ β
+    replace h : (yonedaGluedToSheaf hf).hom.app _ (γ ≫ α) =
+        (yonedaGluedToSheaf hf).hom.app _ (γ ≫ β) := by dsimp at h; simp [h]
+    rw [← fac₁]; rw [← fac₂] at h ⊢
+    apply comp_toGlued_eq
+    simpa [Scheme.GlueData.openCover_X, yonedaEquiv_naturality] using h
 
 中文:
 实例 :
@@ -363,7 +391,15 @@ instance :
     replace h : (yonedaGluedToSheaf hf).hom.app _ α = (yonedaGluedToSheaf hf).hom.app _ β := h
     have mem := (glueData hf).openCover.mem_grothendieckTopology
     refine GrothendieckTopology.superset_covering _ ?_
-      (zariskiTopology.intersection_covering (zaris
+      (zariskiTopology.intersection_covering (zariskiTopology.pullback_stable α mem)
+        (zariskiTopology.pullback_stable β mem))
+    rintro V (γ : _ ⟶ U) ⟨⟨W₁, a, _, ⟨i⟩, fac₁⟩, ⟨W₂, b, _, ⟨j⟩, fac₂⟩⟩
+    change γ ≫ α = γ ≫ β
+    replace h : (yonedaGluedToSheaf hf).hom.app _ (γ ≫ α) =
+        (yonedaGluedToSheaf hf).hom.app _ (γ ≫ β) := by dsimp at h; simp [h]
+    rw [← fac₁]; rw [← fac₂] at h ⊢
+    apply comp_toGlued_eq
+    simpa [Scheme.GlueData.openCover_X, yonedaEquiv_naturality] using h
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.superset_covering, glueData, hom.app, intersection_covering, mem_grothendieckTopology, openCover, openCover.mem_grothendieckTopology, pullback_stable, replace, superset_covering, yonedaGluedToSheaf, zariskiTopology, zariskiTopology.intersection_covering, zariskiTopology.pullback_stable
 -/

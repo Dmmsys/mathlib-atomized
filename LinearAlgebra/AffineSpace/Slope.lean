@@ -423,7 +423,9 @@ theorem sub_div_sub_smul_slope_add_sub_div_sub_smul_slope
   · subst hbc
     simp [sub_ne_zero.2 (Ne.symm hab)]
   rw [add_comm]
- 
+  simp_rw [slope, div_eq_inv_mul, mul_smul, ← smul_add,
+    smul_inv_smul₀ (sub_ne_zero.2 <| Ne.symm hab), smul_inv_smul₀ (sub_ne_zero.2 <| Ne.symm hbc),
+    vsub_add_vsub_cancel]
 
 中文:
 定理 sub_div_sub_smul_slope_add_sub_div_sub_smul_slope
@@ -439,7 +441,9 @@ theorem sub_div_sub_smul_slope_add_sub_div_sub_smul_slope
   · subst hbc
     simp [sub_ne_zero.2 (Ne.symm hab)]
   rw [add_comm]
- 
+  simp_rw [slope, div_eq_inv_mul, mul_smul, ← smul_add,
+    smul_inv_smul₀ (sub_ne_zero.2 <| Ne.symm hab), smul_inv_smul₀ (sub_ne_zero.2 <| Ne.symm hbc),
+    vsub_add_vsub_cancel]
 
 Depends on / 依赖: Ne.symm, add_comm, div_eq_inv_mul, div_self, mul_smul, one_smul, simp_rw, smul_add, sub_ne_zero, sub_self, vsub_add_vsub_cancel, zero_add, zero_div, zero_smul
 -/
@@ -501,7 +505,7 @@ theorem lineMap_slope_lineMap_slope_lineMap
   obtain rfl | hab : a = b ∨ a != b := Classical.em _; · simp
   rw [slope_comm _ a]; rw [slope_comm _ a]; rw [slope_comm _ _ b]
   convert! lineMap_slope_slope_sub_div_sub f b (lineMap a b r) a hab.symm using 2
-  rw [lineMap_apply_ring]; rw [eq_div_iff (sub_ne_zero.2 hab)]; rw [sub_mul]; rw [one_m
+  rw [lineMap_apply_ring]; rw [eq_div_iff (sub_ne_zero.2 hab)]; rw [sub_mul]; rw [one_mul]; rw [mul_sub]; rw [← sub_sub]; rw [sub_sub_cancel]
 
 中文:
 定理 lineMap_slope_lineMap_slope_lineMap
@@ -510,7 +514,7 @@ theorem lineMap_slope_lineMap_slope_lineMap
   obtain rfl | hab : a = b ∨ a != b := Classical.em _; · simp
   rw [slope_comm _ a]; rw [slope_comm _ a]; rw [slope_comm _ _ b]
   convert! lineMap_slope_slope_sub_div_sub f b (lineMap a b r) a hab.symm using 2
-  rw [lineMap_apply_ring]; rw [eq_div_iff (sub_ne_zero.2 hab)]; rw [sub_mul]; rw [one_m
+  rw [lineMap_apply_ring]; rw [eq_div_iff (sub_ne_zero.2 hab)]; rw [sub_mul]; rw [one_mul]; rw [mul_sub]; rw [← sub_sub]; rw [sub_sub_cancel]
 
 Depends on / 依赖: Classical, Classical.em, convert, eq_div_iff, hab.symm, lineMap, lineMap_apply_ring, lineMap_slope_slope_sub_div_sub, mul_sub, one_mul, slope_comm, sub_mul, sub_ne_zero, sub_sub, sub_sub_cancel
 -/
@@ -540,6 +544,7 @@ lemma slope_nonneg_iff_of_le
   · have := smul_nonneg (sub_nonneg.2 hxy) h
     rwa [slope, ← mul_smul, mul_inv_cancel₀ (mt sub_eq_zero.1 (Ne.symm hxeqy)), one_smul,
       vsub_eq_sub, sub_nonneg] at this
+  · rwa [vsub_eq_sub, sub_nonneg]
 
 中文:
 引理 slope_nonneg_iff_of_le
@@ -552,6 +557,7 @@ lemma slope_nonneg_iff_of_le
   · have := smul_nonneg (sub_nonneg.2 hxy) h
     rwa [slope, ← mul_smul, mul_inv_cancel₀ (mt sub_eq_zero.1 (Ne.symm hxeqy)), one_smul,
       vsub_eq_sub, sub_nonneg] at this
+  · rwa [vsub_eq_sub, sub_nonneg]
 
 Depends on / 依赖: Ne.symm, inv_nonneg, mul_smul, one_smul, smul_nonneg, sub_eq_zero, sub_nonneg, vsub_eq_sub
 -/

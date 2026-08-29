@@ -817,7 +817,8 @@ lemma HasFPowerSeriesWithinAt.congr
   refine ⟨r', ?_⟩
   have := hr.of_le (r' := r') (by simp [r', εpos, hr.r_pos]) (min_le_left _ _)
   apply this.congr _ h''
-  i
+  intro z hz
+  exact hε ⟨Metric.eball_subset_eball (min_le_right _ _) hz.2, hz.1⟩
 
 中文:
 引理 HasFPowerSeriesWithinAt.congr
@@ -830,7 +831,8 @@ lemma HasFPowerSeriesWithinAt.congr
   refine ⟨r', ?_⟩
   have := hr.of_le (r' := r') (by simp [r', εpos, hr.r_pos]) (min_le_left _ _)
   apply this.congr _ h''
-  i
+  intro z hz
+  exact hε ⟨Metric.eball_subset_eball (min_le_right _ _) hz.2, hz.1⟩
 
 Depends on / 依赖: EMetric, EMetric.mem_nhdsWithin_iff, Metric, Metric.eball, Metric.eball_subset_eball, eball_subset_eball, hr.of_le, hr.r_pos, mem_nhdsWithin_iff, min_le_left, min_le_right, of_le, r_pos, subseteq, this.congr
 -/
@@ -1274,7 +1276,13 @@ theorem HasFPowerSeriesWithinAt.mono_of_mem_nhdsWithin
   have Z := hr.of_le (by simp [r'_pos, hr.r_pos]) (min_le_left r r')
   refine ⟨Z.r_le, Z.r_pos, fun {y} hy h'y => ?_⟩
   apply Z.hasSum ?_ h'y
-  simp only [mem_insert_iff, add_eq_left] 
+  simp only [mem_insert_iff, add_eq_left] at hy
+  rcases hy with rfl | hy
+  · simp
+  apply mem_insert_of_mem _ (hr' ?_)
+  simp only [Metric.mem_eball, edist_eq_enorm_sub, sub_zero, lt_min_iff, mem_inter_iff,
+    add_sub_cancel_left, hy, and_true] at h'y ⊢
+  exact h'y.2
 
 中文:
 定理 HasFPowerSeriesWithinAt.mono_of_mem_nhdsWithin
@@ -1285,7 +1293,13 @@ theorem HasFPowerSeriesWithinAt.mono_of_mem_nhdsWithin
   have Z := hr.of_le (by simp [r'_pos, hr.r_pos]) (min_le_left r r')
   refine ⟨Z.r_le, Z.r_pos, fun {y} hy h'y => ?_⟩
   apply Z.hasSum ?_ h'y
-  simp only [mem_insert_iff, add_eq_left] 
+  simp only [mem_insert_iff, add_eq_left] at hy
+  rcases hy with rfl | hy
+  · simp
+  apply mem_insert_of_mem _ (hr' ?_)
+  simp only [Metric.mem_eball, edist_eq_enorm_sub, sub_zero, lt_min_iff, mem_inter_iff,
+    add_sub_cancel_left, hy, and_true] at h'y ⊢
+  exact h'y.2
 
 Depends on / 依赖: EMetric, EMetric.mem_nhdsWithin_iff, Metric, Metric.mem_eball, Z.hasSum, Z.r_le, Z.r_pos, _pos, add_eq_left, add_sub_cancel_left, and_true, edist_eq_enorm_sub, hasSum, hr.of_le, hr.r_pos, lt_min_iff, mem_eball, mem_insert_iff, mem_insert_of_mem, mem_inter_iff
 -/
@@ -1400,7 +1414,9 @@ theorem HasFPowerSeriesWithinOnBall.coeff_zero
   have : forall i, i != 0 -> (pf i fun _ => 0) = 0 := by
     intro i hi
     have : 0 < i := pos_iff_ne_zero.2 hi
-    exact ContinuousMultilinearMap.map_coord_zero _ (⟨0,
+    exact ContinuousMultilinearMap.map_coord_zero _ (⟨0, this⟩ : Fin i) rfl
+  have A := (hf.hasSum (by simp) zero_mem).unique (hasSum_single _ this)
+  simpa [v_eq] using A.symm
 
 中文:
 定理 有FPowerSeriesWithinOnBall.coeff_zero
@@ -1411,7 +1427,9 @@ theorem HasFPowerSeriesWithinOnBall.coeff_zero
   have : forall i, i != 0 -> (pf i fun _ => 0) = 0 := by
     intro i hi
     have : 0 < i := pos_iff_ne_zero.2 hi
-    exact ContinuousMultilinearMap.map_coord_zero _ (⟨0,
+    exact ContinuousMultilinearMap.map_coord_zero _ (⟨0, this⟩ : Fin i) rfl
+  have A := (hf.hasSum (by simp) zero_mem).unique (hasSum_single _ this)
+  simpa [v_eq] using A.symm
 
 Depends on / 依赖: A.symm, ContinuousMultilinearMap, ContinuousMultilinearMap.map_coord_zero, Metric, Metric.eball, Subsingleton, Subsingleton.elim, hasSum, hasSum_single, hf.hasSum, hf.r_pos, map_coord_zero, pos_iff_ne_zero, r_pos, unique, v_eq, zero_mem
 -/
@@ -2178,7 +2196,61 @@ theorem HasFPowerSeriesWithinOnBall.tendsto_partialSum_prod
     apply (hf.tendsto_partialSum hy h'y).comp tendsto_fst
   suffices Tendsto (fun (z : Nat × E) => p.partialSum z.1 z.2 - p.partialSum z.1 y)
     (atTop ×ˢ 𝓝 y) (𝓝 0) by simpa using A.add this
-  appl
+  apply Metric.tendsto_nhds.2 (fun ε εpos => ?_)
+  obtain ⟨r', yr', r'r⟩ : exists (r' : Real>=0), ‖y‖₊ < r' ∧ r' < r := by
+    simp at hy
+    simpa using ENNReal.lt_iff_exists_nnreal_btwn.1 hy
+  have yr'_2 : ‖y‖ < r' := by simpa [← coe_nnnorm] using yr'
+  have S : Summable fun n => ‖p n‖ * ↑r' ^ n := p.summable_norm_mul_pow (r'r.trans_le hf.r_le)
+  obtain ⟨k, hk⟩ : exists k, ∑' (n : Nat), ‖p (n + k)‖ * ↑r' ^ (n + k) < ε / 4 := by
+    have : Tendsto (fun k => ∑' n, ‖p (n + k)‖ * ↑r' ^ (n + k)) atTop (𝓝 0) := by
+      apply _root_.tendsto_sum_nat_add (f := fun n => ‖p n‖ * ↑r' ^ n)
+    exact ((tendsto_order.1 this).2 _ (by linarith)).exists
+  have A : forallᶠ (z : Nat × E) in atTop ×ˢ 𝓝 y,
+      dist (p.partialSum k z.2) (p.partialSum k y) < ε / 4 := by
+    have : ContinuousAt (fun z => p.partialSum k z) y := (p.partialSum_continuous k).continuousAt
+    exact tendsto_snd (Metric.tendsto_nhds.1 this.tendsto (ε / 4) (by linarith))
+  have B : forallᶠ (z : Nat × E) in atTop ×ˢ 𝓝 y, ‖z.2‖₊ < r' := by
+    suffices forallᶠ (z : E) in 𝓝 y, ‖z‖₊ < r' from tendsto_snd this
+    have : Metric.ball 0 r' in 𝓝 y := Metric.isOpen_ball.mem_nhds (by simpa using yr'_2)
+    filter_upwards [this] with a ha using by simpa [← coe_nnnorm] using ha
+  have C : forallᶠ (z : Nat × E) in atTop ×ˢ 𝓝 y, k <= z.1 := tendsto_fst (Ici_mem_atTop _)
+  filter_upwards [A, B, C]
+  rintro ⟨n, z⟩ hz h'z hkn
+  simp only [dist_eq_norm, sub_zero] at hz ⊢
+  have I (w : E) (hw : ‖w‖₊ < r') : ‖∑ i in Ico k n, p i (fun _ => w)‖ <= ε / 4 := calc
+    ‖∑ i in Ico k n, p i (fun _ => w)‖
+    _ = ‖∑ i in range (n - k), p (i + k) (fun _ => w)‖ := by
+        rw [sum_Ico_eq_sum_range]
+        congr with i
+        rw [add_comm k]
+    _ <= ∑ i in range (n - k), ‖p (i + k) (fun _ => w)‖ := norm_sum_le _ _
+    _ <= ∑ i in range (n - k), ‖p (i + k)‖ * ‖w‖ ^ (i + k) := by
+        gcongr with i _hi; exact ((p (i + k)).le_opNorm _).trans_eq (by simp)
+    _ <= ∑ i in range (n - k), ‖p (i + k)‖ * ↑r' ^ (i + k) := by
+        gcongr with i _hi; simpa [← coe_nnnorm] using hw.le
+    _ <= ∑' i, ‖p (i + k)‖ * ↑r' ^ (i + k) := by
+        apply Summable.sum_le_tsum _ (fun i _hi => by positivity)
+        apply ((_root_.summable_nat_add_iff k).2 S)
+    _ <= ε / 4 := hk.le
+  calc
+  ‖p.partialSum n z - p.partialSum n y‖
+  _ = ‖∑ i in range n, p i (fun _ => z) - ∑ i in range n, p i (fun _ => y)‖ := rfl
+  _ = ‖(∑ i in range k, p i (fun _ => z) + ∑ i in Ico k n, p i (fun _ => z))
+        - (∑ i in range k, p i (fun _ => y) + ∑ i in Ico k n, p i (fun _ => y))‖ := by
+    simp [sum_range_add_sum_Ico _ hkn]
+  _ = ‖(p.partialSum k z - p.partialSum k y) + (∑ i in Ico k n, p i (fun _ => z))
+        + (- ∑ i in Ico k n, p i (fun _ => y))‖ := by
+    congr 1
+    simp only [FormalMultilinearSeries.partialSum]
+    abel
+  _ <= ‖p.partialSum k z - p.partialSum k y‖ + ‖∑ i in Ico k n, p i (fun _ => z)‖
+      + ‖- ∑ i in Ico k n, p i (fun _ => y)‖ := norm_add₃_le
+  _ <= ε / 4 + ε / 4 + ε / 4 := by
+    gcongr
+    · exact I _ h'z
+    · simp only [norm_neg]; exact I _ yr'
+  _ < ε := by linarith
 
 中文:
 定理 有FPowerSeriesWithinOnBall.tendsto_partialSum_prod
@@ -2188,7 +2260,61 @@ theorem HasFPowerSeriesWithinOnBall.tendsto_partialSum_prod
     apply (hf.tendsto_partialSum hy h'y).comp tendsto_fst
   suffices Tendsto (fun (z : Nat × E) => p.partialSum z.1 z.2 - p.partialSum z.1 y)
     (atTop ×ˢ 𝓝 y) (𝓝 0) by simpa using A.add this
-  appl
+  apply Metric.tendsto_nhds.2 (fun ε εpos => ?_)
+  obtain ⟨r', yr', r'r⟩ : exists (r' : Real>=0), ‖y‖₊ < r' ∧ r' < r := by
+    simp at hy
+    simpa using ENNReal.lt_iff_exists_nnreal_btwn.1 hy
+  have yr'_2 : ‖y‖ < r' := by simpa [← coe_nnnorm] using yr'
+  have S : Summable fun n => ‖p n‖ * ↑r' ^ n := p.summable_norm_mul_pow (r'r.trans_le hf.r_le)
+  obtain ⟨k, hk⟩ : exists k, ∑' (n : Nat), ‖p (n + k)‖ * ↑r' ^ (n + k) < ε / 4 := by
+    have : Tendsto (fun k => ∑' n, ‖p (n + k)‖ * ↑r' ^ (n + k)) atTop (𝓝 0) := by
+      apply _root_.tendsto_sum_nat_add (f := fun n => ‖p n‖ * ↑r' ^ n)
+    exact ((tendsto_order.1 this).2 _ (by linarith)).exists
+  have A : forallᶠ (z : Nat × E) in atTop ×ˢ 𝓝 y,
+      dist (p.partialSum k z.2) (p.partialSum k y) < ε / 4 := by
+    have : ContinuousAt (fun z => p.partialSum k z) y := (p.partialSum_continuous k).continuousAt
+    exact tendsto_snd (Metric.tendsto_nhds.1 this.tendsto (ε / 4) (by linarith))
+  have B : forallᶠ (z : Nat × E) in atTop ×ˢ 𝓝 y, ‖z.2‖₊ < r' := by
+    suffices forallᶠ (z : E) in 𝓝 y, ‖z‖₊ < r' from tendsto_snd this
+    have : Metric.ball 0 r' in 𝓝 y := Metric.isOpen_ball.mem_nhds (by simpa using yr'_2)
+    filter_upwards [this] with a ha using by simpa [← coe_nnnorm] using ha
+  have C : forallᶠ (z : Nat × E) in atTop ×ˢ 𝓝 y, k <= z.1 := tendsto_fst (Ici_mem_atTop _)
+  filter_upwards [A, B, C]
+  rintro ⟨n, z⟩ hz h'z hkn
+  simp only [dist_eq_norm, sub_zero] at hz ⊢
+  have I (w : E) (hw : ‖w‖₊ < r') : ‖∑ i in Ico k n, p i (fun _ => w)‖ <= ε / 4 := calc
+    ‖∑ i in Ico k n, p i (fun _ => w)‖
+    _ = ‖∑ i in range (n - k), p (i + k) (fun _ => w)‖ := by
+        rw [sum_Ico_eq_sum_range]
+        congr with i
+        rw [add_comm k]
+    _ <= ∑ i in range (n - k), ‖p (i + k) (fun _ => w)‖ := norm_sum_le _ _
+    _ <= ∑ i in range (n - k), ‖p (i + k)‖ * ‖w‖ ^ (i + k) := by
+        gcongr with i _hi; exact ((p (i + k)).le_opNorm _).trans_eq (by simp)
+    _ <= ∑ i in range (n - k), ‖p (i + k)‖ * ↑r' ^ (i + k) := by
+        gcongr with i _hi; simpa [← coe_nnnorm] using hw.le
+    _ <= ∑' i, ‖p (i + k)‖ * ↑r' ^ (i + k) := by
+        apply Summable.sum_le_tsum _ (fun i _hi => by positivity)
+        apply ((_root_.summable_nat_add_iff k).2 S)
+    _ <= ε / 4 := hk.le
+  calc
+  ‖p.partialSum n z - p.partialSum n y‖
+  _ = ‖∑ i in range n, p i (fun _ => z) - ∑ i in range n, p i (fun _ => y)‖ := rfl
+  _ = ‖(∑ i in range k, p i (fun _ => z) + ∑ i in Ico k n, p i (fun _ => z))
+        - (∑ i in range k, p i (fun _ => y) + ∑ i in Ico k n, p i (fun _ => y))‖ := by
+    simp [sum_range_add_sum_Ico _ hkn]
+  _ = ‖(p.partialSum k z - p.partialSum k y) + (∑ i in Ico k n, p i (fun _ => z))
+        + (- ∑ i in Ico k n, p i (fun _ => y))‖ := by
+    congr 1
+    simp only [FormalMultilinearSeries.partialSum]
+    abel
+  _ <= ‖p.partialSum k z - p.partialSum k y‖ + ‖∑ i in Ico k n, p i (fun _ => z)‖
+      + ‖- ∑ i in Ico k n, p i (fun _ => y)‖ := norm_add₃_le
+  _ <= ε / 4 + ε / 4 + ε / 4 := by
+    gcongr
+    · exact I _ h'z
+    · simp only [norm_neg]; exact I _ yr'
+  _ < ε := by linarith
 
 Depends on / 依赖: A.add, ENNReal, ENNReal.lt_iff_exists_nnreal_btwn, Metric, Metric.tendsto_nhds, Tendsto, hf.tendsto_partialSum, lt_iff_exists_nnreal_btwn, p.partialSum, partialSum, tendsto_fst, tendsto_nhds, tendsto_partialSum
 -/
@@ -2287,7 +2413,28 @@ theorem HasFPowerSeriesWithinOnBall.uniform_geometric_approx'
     p.norm_mul_pow_le_mul_pow_of_lt_radius (h.trans_le hf.r_le)
   refine ⟨a, ha, C / (1 - a), div_pos hC (sub_pos.2 ha.2), fun y hy n ys => ?_⟩
   have yr' : ‖y‖ < r' := by
- 
+    rw [ball_zero_eq] at hy
+    exact hy
+  have hr'0 : 0 < (r' : Real) := (norm_nonneg _).trans_lt yr'
+  have : y in Metric.eball (0 : E) r := by
+    refine mem_eball_zero_iff.2 (lt_trans ?_ h)
+    simpa [enorm] using! yr'
+  rw [norm_sub_rev]; rw [← mul_div_right_comm]
+  have ya : a * (‖y‖ / ↑r') <= a :=
+    mul_le_of_le_one_right ha.1.le (div_le_one_of_le₀ yr'.le r'.coe_nonneg)
+  suffices ‖p.partialSum n y - f (x + y)‖ <= C * (a * (‖y‖ / r')) ^ n / (1 - a * (‖y‖ / r')) by
+    refine this.trans ?_
+    have : 0 < a := ha.1
+    gcongr
+    apply_rules [sub_pos.2, ha.2]
+  apply norm_sub_le_of_geometric_bound_of_hasSum (ya.trans_lt ha.2) _ (hf.hasSum ys this)
+  intro n
+  calc
+    ‖(p n) fun _ : Fin n => y‖
+    _ <= ‖p n‖ * ∏ _i : Fin n, ‖y‖ := ContinuousMultilinearMap.le_opNorm _ _
+    _ = ‖p n‖ * (r' : Real) ^ n * (‖y‖ / r') ^ n := by simp [field, div_pow]
+    _ <= C * a ^ n * (‖y‖ / r') ^ n := by gcongr ?_ * _; apply hp
+    _ <= C * (a * (‖y‖ / r')) ^ n := by rw [mul_pow, mul_assoc]
 
 中文:
 定理 有FPowerSeriesWithinOnBall.uniform_geometric_approx'
@@ -2297,7 +2444,28 @@ theorem HasFPowerSeriesWithinOnBall.uniform_geometric_approx'
     p.norm_mul_pow_le_mul_pow_of_lt_radius (h.trans_le hf.r_le)
   refine ⟨a, ha, C / (1 - a), div_pos hC (sub_pos.2 ha.2), fun y hy n ys => ?_⟩
   have yr' : ‖y‖ < r' := by
- 
+    rw [ball_zero_eq] at hy
+    exact hy
+  have hr'0 : 0 < (r' : Real) := (norm_nonneg _).trans_lt yr'
+  have : y in Metric.eball (0 : E) r := by
+    refine mem_eball_zero_iff.2 (lt_trans ?_ h)
+    simpa [enorm] using! yr'
+  rw [norm_sub_rev]; rw [← mul_div_right_comm]
+  have ya : a * (‖y‖ / ↑r') <= a :=
+    mul_le_of_le_one_right ha.1.le (div_le_one_of_le₀ yr'.le r'.coe_nonneg)
+  suffices ‖p.partialSum n y - f (x + y)‖ <= C * (a * (‖y‖ / r')) ^ n / (1 - a * (‖y‖ / r')) by
+    refine this.trans ?_
+    have : 0 < a := ha.1
+    gcongr
+    apply_rules [sub_pos.2, ha.2]
+  apply norm_sub_le_of_geometric_bound_of_hasSum (ya.trans_lt ha.2) _ (hf.hasSum ys this)
+  intro n
+  calc
+    ‖(p n) fun _ : Fin n => y‖
+    _ <= ‖p n‖ * ∏ _i : Fin n, ‖y‖ := ContinuousMultilinearMap.le_opNorm _ _
+    _ = ‖p n‖ * (r' : Real) ^ n * (‖y‖ / r') ^ n := by simp [field, div_pow]
+    _ <= C * a ^ n * (‖y‖ / r') ^ n := by gcongr ?_ * _; apply hp
+    _ <= C * (a * (‖y‖ / r')) ^ n := by rw [mul_pow, mul_assoc]
 
 Depends on / 依赖: Metric, Metric.eball, ball_zero_eq, div_pos, h.trans_le, hf.r_le, lt_trans, mem_eball_zero_iff, norm_mul_pow_le_mul_pow_of_lt_radius, norm_nonneg, p.norm_mul_pow_le_mul_pow_of_lt_radius, r_le, sub_pos, trans_le, trans_lt
 -/
@@ -2368,7 +2536,11 @@ theorem HasFPowerSeriesWithinOnBall.uniform_geometric_approx
   obtain ⟨a, ha, C, hC, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
       x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * (a * (‖y‖ / r')) ^ n :=
     hf.uniform_geometric_approx' h
-  refine ⟨a, ha, C, hC, fun y hy n ys => (hp y hy n
+  refine ⟨a, ha, C, hC, fun y hy n ys => (hp y hy n ys).trans ?_⟩
+  have yr' : ‖y‖ < r' := by rwa [ball_zero_eq] at hy
+  have := ha.1.le -- needed to discharge a side goal on the next line
+  gcongr
+  exact mul_le_of_le_one_right ha.1.le (div_le_one_of_le₀ yr'.le r'.coe_nonneg)
 
 中文:
 定理 有FPowerSeriesWithinOnBall.uniform_geometric_approx
@@ -2377,7 +2549,11 @@ theorem HasFPowerSeriesWithinOnBall.uniform_geometric_approx
   obtain ⟨a, ha, C, hC, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
       x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * (a * (‖y‖ / r')) ^ n :=
     hf.uniform_geometric_approx' h
-  refine ⟨a, ha, C, hC, fun y hy n ys => (hp y hy n
+  refine ⟨a, ha, C, hC, fun y hy n ys => (hp y hy n ys).trans ?_⟩
+  have yr' : ‖y‖ < r' := by rwa [ball_zero_eq] at hy
+  have := ha.1.le -- needed to discharge a side goal on the next line
+  gcongr
+  exact mul_le_of_le_one_right ha.1.le (div_le_one_of_le₀ yr'.le r'.coe_nonneg)
 
 Depends on / 依赖: Metric, Metric.ball, ball_zero_eq, coe_non, discharge, hf.uniform_geometric_approx, insert, mul_le_of_le_one_right, needed, p.partialSum, partialSum, uniform_geometric_approx
 -/
@@ -2431,7 +2607,13 @@ theorem HasFPowerSeriesWithinAt.isBigO_sub_partialSum_pow
   rcases hf with ⟨r, hf⟩
   rcases ENNReal.lt_iff_exists_nnreal_btwn.1 hf.r_pos with ⟨r', r'0, h⟩
   obtain ⟨a, -, C, -, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
-      x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * (a * (‖y‖ / r')
+      x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * (a * (‖y‖ / r')) ^ n :=
+    hf.uniform_geometric_approx' h
+  refine isBigO_iff.2 ⟨C * (a / r') ^ n, ?_⟩
+  replace r'0 : 0 < (r' : Real) := mod_cast r'0
+  filter_upwards [inter_mem_nhdsWithin _ (Metric.ball_mem_nhds (0 : E) r'0)] with y hy
+  simpa [mul_pow, mul_div_assoc, mul_assoc, div_mul_eq_mul_div, div_pow]
+    using hp y hy.2 n (by simpa using hy.1)
 
 中文:
 定理 HasFPowerSeriesWithinAt.isBigO_sub_partialSum_pow
@@ -2439,7 +2621,13 @@ theorem HasFPowerSeriesWithinAt.isBigO_sub_partialSum_pow
   rcases hf with ⟨r, hf⟩
   rcases ENNReal.lt_iff_exists_nnreal_btwn.1 hf.r_pos with ⟨r', r'0, h⟩
   obtain ⟨a, -, C, -, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
-      x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * (a * (‖y‖ / r')
+      x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * (a * (‖y‖ / r')) ^ n :=
+    hf.uniform_geometric_approx' h
+  refine isBigO_iff.2 ⟨C * (a / r') ^ n, ?_⟩
+  replace r'0 : 0 < (r' : Real) := mod_cast r'0
+  filter_upwards [inter_mem_nhdsWithin _ (Metric.ball_mem_nhds (0 : E) r'0)] with y hy
+  simpa [mul_pow, mul_div_assoc, mul_assoc, div_mul_eq_mul_div, div_pow]
+    using hp y hy.2 n (by simpa using hy.1)
 
 Depends on / 依赖: ENNReal, ENNReal.lt_iff_exists_nnreal_btwn, Metric, Metric.ball, Metric.ball_mem_nhds, ball_mem_nhds, filter_upwards, hf.r_pos, hf.uniform_geometric_approx, insert, inter_mem_nhdsWithin, isBigO_iff, lt_iff_exists_nnreal_btwn, mod_cast, p.partialSum, partialSum, r_pos, replace, uniform_geometric_approx
 -/
@@ -2491,7 +2679,55 @@ theorem HasFPowerSeriesWithinOnBall.isBigO_image_sub_image_sub_deriv_principal
   rcases eq_zero_or_pos r' with (rfl | hr'0)
   · simp only [ENNReal.coe_zero, Metric.eball_zero, empty_inter, principal_empty, isBigO_bot]
   obtain ⟨a, ha, C, hC : 0 < C, hp⟩ :
-      exists a in Ioo (0 : Real) 1, exists C > 0, forall n : Nat, ‖p n‖ * (r'
+      exists a in Ioo (0 : Real) 1, exists C > 0, forall n : Nat, ‖p n‖ * (r' : Real) ^ n <= C * a ^ n :=
+    p.norm_mul_pow_le_mul_pow_of_lt_radius (hr.trans_le hf.r_le)
+  simp only [← le_div_iff₀ (pow_pos (NNReal.coe_pos.2 hr'0) _)] at hp
+  set L : E × E -> Real := fun y =>
+    C * (a / r') ^ 2 * (‖y - (x, x)‖ * ‖y.1 - y.2‖) * (a / (1 - a) ^ 2 + 2 / (1 - a))
+  have hL : forall y in Metric.eball (x, x) r' inter ((insert x s) ×ˢ (insert x s)),
+      ‖f y.1 - f y.2 - p 1 fun _ => y.1 - y.2‖ <= L y := by
+    intro y ⟨hy', ys⟩
+    have hy : y in Metric.eball x r ×ˢ Metric.eball x r := by
+      rw [Metric.eball_prod_same]
+      exact Metric.eball_subset_eball hr.le hy'
+    set A : Nat -> F := fun n => (p n fun _ => y.1 - x) - p n fun _ => y.2 - x
+    have hA : HasSum (fun n => A (n + 2)) (f y.1 - f y.2 - p 1 fun _ => y.1 - y.2) := by
+      convert
+        (hasSum_nat_add_iff' 2).2
+          ((hf.hasSum_sub ⟨ys.1, hy.1⟩).sub (hf.hasSum_sub ⟨ys.2, hy.2⟩))
+      rw [Finset.sum_range_succ]; rw [Finset.sum_range_one]; rw [hf.coeff_zero]; rw [hf.coeff_zero]; rw [sub_self]; rw [zero_add]; rw [← Subsingleton.pi_single_eq (0 : Fin 1) (y.1 - x)]; rw [Pi.single]; rw [← Subsingleton.pi_single_eq (0 : Fin 1) (y.2 - x)]; rw [Pi.single]; rw [← (p 1).map_update_sub]; rw [← Pi.single]; rw [Subsingleton.pi_single_eq]; rw [sub_sub_sub_cancel_right]
+    rw [Metric.mem_eball]; rw [edist_eq_enorm_sub]; rw [enorm_lt_coe] at hy'
+    set B : Nat -> Real := fun n => C * (a / r') ^ 2 * (‖y - (x, x)‖ * ‖y.1 - y.2‖) * ((n + 2) * a ^ n)
+    have hAB : forall n, ‖A (n + 2)‖ <= B n := fun n =>
+      calc
+        ‖A (n + 2)‖ <= ‖p (n + 2)‖ * ↑(n + 2) * ‖y - (x, x)‖ ^ (n + 1) * ‖y.1 - y.2‖ := by
+          simpa only [Fintype.card_fin, pi_norm_const, Prod.norm_def, Pi.sub_def,
+            Prod.fst_sub, Prod.snd_sub, sub_sub_sub_cancel_right] using!
+            (p <| n + 2).norm_image_sub_le (fun _ => y.1 - x) fun _ => y.2 - x
+        _ = ‖p (n + 2)‖ * ‖y - (x, x)‖ ^ n * (↑(n + 2) * ‖y - (x, x)‖ * ‖y.1 - y.2‖) := by
+          rw [pow_succ ‖y - (x]; rw [x)‖]
+          ring
+        _ <= C * a ^ (n + 2) / r' ^ (n + 2)
+            * r' ^ n * (↑(n + 2) * ‖y - (x, x)‖ * ‖y.1 - y.2‖) := by
+          have : 0 < a := ha.1
+          gcongr
+          · apply hp
+          · apply hy'.le
+        _ = B n := by
+          simp [field, B, pow_succ]
+    have hBL : HasSum B (L y) := by
+      apply HasSum.mul_left
+      simp only [add_mul]
+      have : ‖a‖ < 1 := by simp only [Real.norm_eq_abs, abs_of_pos ha.1, ha.2]
+      rw [div_eq_mul_inv]; rw [div_eq_mul_inv]
+      exact (hasSum_coe_mul_geometric_of_norm_lt_one this).add
+          ((hasSum_geometric_of_norm_lt_one this).mul_left 2)
+    exact hA.norm_le_of_bounded hBL hAB
+  suffices L =O[𝓟 (Metric.eball (x, x) r' inter ((insert x s) ×ˢ (insert x s)))]
+      fun y => ‖y - (x, x)‖ * ‖y.1 - y.2‖ from
+    .trans (.of_norm_eventuallyLE (eventually_principal.2 hL)) this
+  simp_rw [L, mul_right_comm _ (_ * _)]
+  exact (isBigO_refl _ _).const_mul_left _
 
 中文:
 定理 有FPowerSeriesWithinOnBall.isBigO_image_sub_image_sub_deriv_principal
@@ -2500,7 +2736,55 @@ theorem HasFPowerSeriesWithinOnBall.isBigO_image_sub_image_sub_deriv_principal
   rcases eq_zero_or_pos r' with (rfl | hr'0)
   · simp only [ENNReal.coe_zero, Metric.eball_zero, empty_inter, principal_empty, isBigO_bot]
   obtain ⟨a, ha, C, hC : 0 < C, hp⟩ :
-      exists a in Ioo (0 : Real) 1, exists C > 0, forall n : Nat, ‖p n‖ * (r'
+      exists a in Ioo (0 : Real) 1, exists C > 0, forall n : Nat, ‖p n‖ * (r' : Real) ^ n <= C * a ^ n :=
+    p.norm_mul_pow_le_mul_pow_of_lt_radius (hr.trans_le hf.r_le)
+  simp only [← le_div_iff₀ (pow_pos (NNReal.coe_pos.2 hr'0) _)] at hp
+  set L : E × E -> Real := fun y =>
+    C * (a / r') ^ 2 * (‖y - (x, x)‖ * ‖y.1 - y.2‖) * (a / (1 - a) ^ 2 + 2 / (1 - a))
+  have hL : forall y in Metric.eball (x, x) r' inter ((insert x s) ×ˢ (insert x s)),
+      ‖f y.1 - f y.2 - p 1 fun _ => y.1 - y.2‖ <= L y := by
+    intro y ⟨hy', ys⟩
+    have hy : y in Metric.eball x r ×ˢ Metric.eball x r := by
+      rw [Metric.eball_prod_same]
+      exact Metric.eball_subset_eball hr.le hy'
+    set A : Nat -> F := fun n => (p n fun _ => y.1 - x) - p n fun _ => y.2 - x
+    have hA : HasSum (fun n => A (n + 2)) (f y.1 - f y.2 - p 1 fun _ => y.1 - y.2) := by
+      convert
+        (hasSum_nat_add_iff' 2).2
+          ((hf.hasSum_sub ⟨ys.1, hy.1⟩).sub (hf.hasSum_sub ⟨ys.2, hy.2⟩))
+      rw [Finset.sum_range_succ]; rw [Finset.sum_range_one]; rw [hf.coeff_zero]; rw [hf.coeff_zero]; rw [sub_self]; rw [zero_add]; rw [← Subsingleton.pi_single_eq (0 : Fin 1) (y.1 - x)]; rw [Pi.single]; rw [← Subsingleton.pi_single_eq (0 : Fin 1) (y.2 - x)]; rw [Pi.single]; rw [← (p 1).map_update_sub]; rw [← Pi.single]; rw [Subsingleton.pi_single_eq]; rw [sub_sub_sub_cancel_right]
+    rw [Metric.mem_eball]; rw [edist_eq_enorm_sub]; rw [enorm_lt_coe] at hy'
+    set B : Nat -> Real := fun n => C * (a / r') ^ 2 * (‖y - (x, x)‖ * ‖y.1 - y.2‖) * ((n + 2) * a ^ n)
+    have hAB : forall n, ‖A (n + 2)‖ <= B n := fun n =>
+      calc
+        ‖A (n + 2)‖ <= ‖p (n + 2)‖ * ↑(n + 2) * ‖y - (x, x)‖ ^ (n + 1) * ‖y.1 - y.2‖ := by
+          simpa only [Fintype.card_fin, pi_norm_const, Prod.norm_def, Pi.sub_def,
+            Prod.fst_sub, Prod.snd_sub, sub_sub_sub_cancel_right] using!
+            (p <| n + 2).norm_image_sub_le (fun _ => y.1 - x) fun _ => y.2 - x
+        _ = ‖p (n + 2)‖ * ‖y - (x, x)‖ ^ n * (↑(n + 2) * ‖y - (x, x)‖ * ‖y.1 - y.2‖) := by
+          rw [pow_succ ‖y - (x]; rw [x)‖]
+          ring
+        _ <= C * a ^ (n + 2) / r' ^ (n + 2)
+            * r' ^ n * (↑(n + 2) * ‖y - (x, x)‖ * ‖y.1 - y.2‖) := by
+          have : 0 < a := ha.1
+          gcongr
+          · apply hp
+          · apply hy'.le
+        _ = B n := by
+          simp [field, B, pow_succ]
+    have hBL : HasSum B (L y) := by
+      apply HasSum.mul_left
+      simp only [add_mul]
+      have : ‖a‖ < 1 := by simp only [Real.norm_eq_abs, abs_of_pos ha.1, ha.2]
+      rw [div_eq_mul_inv]; rw [div_eq_mul_inv]
+      exact (hasSum_coe_mul_geometric_of_norm_lt_one this).add
+          ((hasSum_geometric_of_norm_lt_one this).mul_left 2)
+    exact hA.norm_le_of_bounded hBL hAB
+  suffices L =O[𝓟 (Metric.eball (x, x) r' inter ((insert x s) ×ˢ (insert x s)))]
+      fun y => ‖y - (x, x)‖ * ‖y.1 - y.2‖ from
+    .trans (.of_norm_eventuallyLE (eventually_principal.2 hL)) this
+  simp_rw [L, mul_right_comm _ (_ * _)]
+  exact (isBigO_refl _ _).const_mul_left _
 
 Depends on / 依赖: ENNReal, ENNReal.coe_zero, Metric, Metric.eball_zero, NNReal, NNReal.coe_pos, coe_pos, coe_zero, eball_zero, empty_inter, eq_zero_or_pos, hf.r_le, hr.trans_le, isBigO_bot, ne_top_of_lt, norm_mul_pow_le_mul_pow_of_lt_radius, p.norm_mul_pow_le_mul_pow_of_lt_radius, pow_pos, principal_empty, r_le
 -/
@@ -2597,7 +2881,7 @@ theorem HasFPowerSeriesWithinOnBall.image_sub_sub_deriv_le
   simp only [isBigO_principal, mem_inter_iff, Metric.mem_eball, Prod.edist_eq, max_lt_iff, mem_prod,
     norm_mul, Real.norm_eq_abs, abs_norm, and_imp, Prod.forall, mul_assoc] at this ⊢
   rcases this with ⟨C, hC⟩
-  exact ⟨C, fun y ys hy z
+  exact ⟨C, fun y ys hy z zs hz => hC y z hy hz ys zs⟩
 
 中文:
 定理 有FPowerSeriesWithinOnBall.image_sub_sub_deriv_le
@@ -2606,7 +2890,7 @@ theorem HasFPowerSeriesWithinOnBall.image_sub_sub_deriv_le
   simp only [isBigO_principal, mem_inter_iff, Metric.mem_eball, Prod.edist_eq, max_lt_iff, mem_prod,
     norm_mul, Real.norm_eq_abs, abs_norm, and_imp, Prod.forall, mul_assoc] at this ⊢
   rcases this with ⟨C, hC⟩
-  exact ⟨C, fun y ys hy z
+  exact ⟨C, fun y ys hy z zs hz => hC y z hy hz ys zs⟩
 
 Depends on / 依赖: Metric, Metric.mem_eball, Prod.edist_eq, Prod.forall, Real.norm_eq_abs, abs_norm, and_imp, edist_eq, hf.isBigO_image_sub_image_sub_deriv_principal, isBigO_image_sub_image_sub_deriv_principal, isBigO_principal, max_lt_iff, mem_eball, mem_inter_iff, mem_prod, mul_assoc, norm_eq_abs, norm_mul
 -/
@@ -2712,7 +2996,12 @@ theorem HasFPowerSeriesWithinOnBall.tendstoUniformlyOn
   obtain ⟨a, ha, C, -, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
     x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * a ^ n := hf.uniform_geometric_approx h
   refine Metric.tendstoUniformlyOn_iff.2 fun ε εpos => ?_
-  have L : Tends
+  have L : Tendsto (fun n => (C : Real) * a ^ n) atTop (𝓝 ((C : Real) * 0)) :=
+    tendsto_const_nhds.mul (tendsto_pow_atTop_nhds_zero_of_lt_one ha.1.le ha.2)
+  rw [mul_zero] at L
+  refine (L.eventually (gt_mem_nhds εpos)).mono fun n hn y hy => ?_
+  rw [dist_eq_norm]
+  exact (hp y hy.2 n hy.1).trans_lt hn
 
 中文:
 定理 有FPowerSeriesWithinOnBall.tendstoUniformlyOn
@@ -2721,7 +3010,12 @@ theorem HasFPowerSeriesWithinOnBall.tendstoUniformlyOn
   obtain ⟨a, ha, C, -, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
     x + y in insert x s -> ‖f (x + y) - p.partialSum n y‖ <= C * a ^ n := hf.uniform_geometric_approx h
   refine Metric.tendstoUniformlyOn_iff.2 fun ε εpos => ?_
-  have L : Tends
+  have L : Tendsto (fun n => (C : Real) * a ^ n) atTop (𝓝 ((C : Real) * 0)) :=
+    tendsto_const_nhds.mul (tendsto_pow_atTop_nhds_zero_of_lt_one ha.1.le ha.2)
+  rw [mul_zero] at L
+  refine (L.eventually (gt_mem_nhds εpos)).mono fun n hn y hy => ?_
+  rw [dist_eq_norm]
+  exact (hp y hy.2 n hy.1).trans_lt hn
 
 Depends on / 依赖: L.eventually, Metric, Metric.ball, Metric.tendstoUniformlyOn_iff, Tendsto, eventually, gt_mem_nhds, hf.uniform_geometric_approx, insert, mul_zero, p.partialSum, partialSum, tendstoUniformlyOn_iff, tendsto_const_nhds, tendsto_const_nhds.mul, tendsto_pow_atTop_nhds_zero_of_lt_one, uniform_geometric_approx
 -/
@@ -2776,7 +3070,10 @@ theorem HasFPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn
   have : Metric.eball (0 : E) r' in 𝓝 y := IsOpen.mem_nhds Metric.isOpen_eball yr'
   refine ⟨(x + ·)⁻¹' (insert x s) inter Metric.eball (0 : E) r', ?_, ?_⟩
   · rw [nhdsWithin_inter_of_mem']
-    · exact inter_m
+    · exact inter_mem_nhdsWithin _ this
+    · apply mem_nhdsWithin_of_mem_nhds
+      apply Filter.mem_of_superset this (Metric.eball_subset_eball hr'.le)
+  · simpa [Metric.eball_coe] using hf.tendstoUniformlyOn hr' u hu
 
 中文:
 定理 有FPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn
@@ -2786,7 +3083,10 @@ theorem HasFPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn
   have : Metric.eball (0 : E) r' in 𝓝 y := IsOpen.mem_nhds Metric.isOpen_eball yr'
   refine ⟨(x + ·)⁻¹' (insert x s) inter Metric.eball (0 : E) r', ?_, ?_⟩
   · rw [nhdsWithin_inter_of_mem']
-    · exact inter_m
+    · exact inter_mem_nhdsWithin _ this
+    · apply mem_nhdsWithin_of_mem_nhds
+      apply Filter.mem_of_superset this (Metric.eball_subset_eball hr'.le)
+  · simpa [Metric.eball_coe] using hf.tendstoUniformlyOn hr' u hu
 
 Depends on / 依赖: ENNReal, ENNReal.lt_iff_exists_nnreal_btwn, Filter, Filter.mem_of_superset, IsOpen, IsOpen.mem_nhds, Metric, Metric.eball, Metric.eball_coe, Metric.eball_subset_eball, Metric.isOpen_eball, eball_coe, eball_subset_eball, hf.tendstoUniformlyOn, insert, inter_mem_nhdsWithin, isOpen_eball, lt_iff_exists_nnreal_btwn, mem_nhds, mem_nhdsWithin_of_mem_nhds
 -/
@@ -3347,7 +3647,20 @@ theorem hasFPowerSeriesAt_iff
   simp only [Metric.eventually_nhds_iff]
   rintro ⟨r, r_pos, h⟩
   refine ⟨p.radius ⊓ r.toNNReal, by simp, ?_, ?_⟩
-  · simp only [r_pos.lt, lt_inf_iff, ENNReal.coe_pos, Real.toNNR
+  · simp only [r_pos.lt, lt_inf_iff, ENNReal.coe_pos, Real.toNNReal_pos, and_true]
+    obtain ⟨z, z_pos, le_z⟩ := NormedField.exists_norm_lt 𝕜 r_pos.lt
+    have : (‖z‖₊ : ENNReal) <= p.radius := by
+      simp only [dist_zero_right] at h
+      apply FormalMultilinearSeries.le_radius_of_tendsto
+      convert! tendsto_norm.comp (h le_z).summable.tendsto_atTop_zero
+      simp [norm_smul, mul_comm]
+    refine lt_of_lt_of_le ?_ this
+    simp only [ENNReal.coe_pos]
+    exact zero_lt_iff.mpr (nnnorm_ne_zero_iff.mpr (norm_pos_iff.mp z_pos))
+  · simp only [Metric.mem_eball, lt_inf_iff, edist_lt_coe, apply_eq_pow_smul_coeff, and_imp,
+      dist_zero_right] at h ⊢
+    refine fun {y} _ hyr => h ?_
+    simpa [nndist_eq_nnnorm, Real.lt_toNNReal_iff_coe_lt] using hyr
 
 中文:
 定理 hasFPowerSeriesAt_iff
@@ -3357,7 +3670,20 @@ theorem hasFPowerSeriesAt_iff
   simp only [Metric.eventually_nhds_iff]
   rintro ⟨r, r_pos, h⟩
   refine ⟨p.radius ⊓ r.toNNReal, by simp, ?_, ?_⟩
-  · simp only [r_pos.lt, lt_inf_iff, ENNReal.coe_pos, Real.toNNR
+  · simp only [r_pos.lt, lt_inf_iff, ENNReal.coe_pos, Real.toNNReal_pos, and_true]
+    obtain ⟨z, z_pos, le_z⟩ := NormedField.exists_norm_lt 𝕜 r_pos.lt
+    have : (‖z‖₊ : ENNReal) <= p.radius := by
+      simp only [dist_zero_right] at h
+      apply FormalMultilinearSeries.le_radius_of_tendsto
+      convert! tendsto_norm.comp (h le_z).summable.tendsto_atTop_zero
+      simp [norm_smul, mul_comm]
+    refine lt_of_lt_of_le ?_ this
+    simp only [ENNReal.coe_pos]
+    exact zero_lt_iff.mpr (nnnorm_ne_zero_iff.mpr (norm_pos_iff.mp z_pos))
+  · simp only [Metric.mem_eball, lt_inf_iff, edist_lt_coe, apply_eq_pow_smul_coeff, and_imp,
+      dist_zero_right] at h ⊢
+    refine fun {y} _ hyr => h ?_
+    simpa [nndist_eq_nnnorm, Real.lt_toNNReal_iff_coe_lt] using hyr
 
 Depends on / 依赖: ENNReal, ENNReal.coe_pos, FormalMultilinearSeries, FormalMultilinearSeries.le_radius_of_tendsto, Metric, Metric.eball_mem_nhds, Metric.eventually_nhds_iff, NormedField, NormedField.exists_norm_lt, Real.toNNReal_pos, and_true, coe_pos, dist_zero_right, eball_mem_nhds, eventually_nhds_iff, eventually_of_mem, exists_norm_lt, le_radius_of_tendsto, le_z, lt_inf_iff
 -/

@@ -251,7 +251,15 @@ lemma mono_ιK
   apply (ι ⋙ shiftFunctor C (1 : Int)).map_injective
   simp only [Functor.comp_map, Functor.map_comp,
     shift_ι_map_ιK, Functor.map_zero, ← assoc] at hk ⊢
-  obtain ⟨l, hl⟩ := Triangle.coyoneda
+  obtain ⟨l, hl⟩ := Triangle.coyoneda_exact₃ _ hT _ hk
+  rw [eq_zero_of_hom_shift_pos hι l (by lia)]; rw [zero_comp] at hl
+  obtain ⟨m, hm⟩ := Triangle.coyoneda_exact₁ _ hT' ((ι.map k)⟦(1 : Int)⟧'⟦(1 : Int)⟧')
+    (by simp [← Functor.map_comp, hl])
+  obtain rfl : m = 0 := by
+    rw [← cancel_epi ((shiftFunctorAdd' C (1 : Int) 1 2 (by lia)).hom.app _)]; rw [comp_zero]
+    exact eq_zero_of_hom_shift_pos hι _ (by lia)
+  rw [zero_comp] at hm
+  exact (shiftFunctor C (1 : Int)).map_injective (by rw [hm, Functor.map_zero])
 
 中文:
 引理 mono_ιK
@@ -263,7 +271,15 @@ lemma mono_ιK
   apply (ι ⋙ shiftFunctor C (1 : Int)).map_injective
   simp only [Functor.comp_map, Functor.map_comp,
     shift_ι_map_ιK, Functor.map_zero, ← assoc] at hk ⊢
-  obtain ⟨l, hl⟩ := Triangle.coyoneda
+  obtain ⟨l, hl⟩ := Triangle.coyoneda_exact₃ _ hT _ hk
+  rw [eq_zero_of_hom_shift_pos hι l (by lia)]; rw [zero_comp] at hl
+  obtain ⟨m, hm⟩ := Triangle.coyoneda_exact₁ _ hT' ((ι.map k)⟦(1 : Int)⟧'⟦(1 : Int)⟧')
+    (by simp [← Functor.map_comp, hl])
+  obtain rfl : m = 0 := by
+    rw [← cancel_epi ((shiftFunctorAdd' C (1 : Int) 1 2 (by lia)).hom.app _)]; rw [comp_zero]
+    exact eq_zero_of_hom_shift_pos hι _ (by lia)
+  rw [zero_comp] at hm
+  exact (shiftFunctor C (1 : Int)).map_injective (by rw [hm, Functor.map_zero])
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.map_comp, Functor.map_zero, Triangle, Triangle.coyoneda_exact, comp_map, congr_map, eq_zero_of_hom_shift_pos, map_comp, map_injective, map_zero, mono_iff_cancel_zero, replace, shiftFunctor, zero_comp
 -/
@@ -298,7 +314,11 @@ lemma epi_πQ
   simp only [Functor.map_comp, ι_map_πQ, assoc, Functor.map_zero] at hk
   obtain ⟨l, hl⟩ := Triangle.yoneda_exact₃ _ hT _ hk
   rw [eq_zero_of_hom_shift_pos hι l (by lia)]; rw [comp_zero] at hl
-  obtain ⟨m, hm⟩ := Triangle.yo
+  obtain ⟨m, hm⟩ := Triangle.yoneda_exact₃ _ hT' (ι.map k) hl
+  obtain rfl : m = 0 := by
+    rw [← cancel_epi ((shiftFunctorAdd' C (1 : Int) 1 2 (by lia)).hom.app _)]; rw [comp_zero]
+    exact eq_zero_of_hom_shift_pos hι _ (by lia)
+  exact ι.map_injective (by rw [hm, comp_zero, ι.map_zero])
 
 中文:
 引理 epi_πQ
@@ -310,7 +330,11 @@ lemma epi_πQ
   simp only [Functor.map_comp, ι_map_πQ, assoc, Functor.map_zero] at hk
   obtain ⟨l, hl⟩ := Triangle.yoneda_exact₃ _ hT _ hk
   rw [eq_zero_of_hom_shift_pos hι l (by lia)]; rw [comp_zero] at hl
-  obtain ⟨m, hm⟩ := Triangle.yo
+  obtain ⟨m, hm⟩ := Triangle.yoneda_exact₃ _ hT' (ι.map k) hl
+  obtain rfl : m = 0 := by
+    rw [← cancel_epi ((shiftFunctorAdd' C (1 : Int) 1 2 (by lia)).hom.app _)]; rw [comp_zero]
+    exact eq_zero_of_hom_shift_pos hι _ (by lia)
+  exact ι.map_injective (by rw [hm, comp_zero, ι.map_zero])
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_zero, Triangle, Triangle.yoneda_exact, cancel_epi, comp_zero, congr_map, epi_iff_cancel_zero, eq_zero_of_hom_shift_pos, hom.app, map_comp, map_injective, map_zero, replace, shiftFunctorAdd
 -/
@@ -340,7 +364,12 @@ lemma exists_lift_ιK
     obtain ⟨k', hk'⟩ := this
     refine ⟨(ι ⋙ shiftFunctor C (1 : Int)).preimage k',
       (ι ⋙ shiftFunctor C (1 : Int)).map_injective ?_⟩
-    rw [Functor.map_comp]; rw [Functor.ma
+    rw [Functor.map_comp]; rw [Functor.map_preimage]; rw [Functor.comp_map]; rw [shift_ι_map_ιK]; rw [Functor.comp_map]; rw [hk']
+  obtain ⟨x₃, hx₃⟩ := Triangle.coyoneda_exact₁ _ hT ((ι.map x₁)⟦(1 : Int)⟧')
+    (by simp [← Functor.map_comp, hx₁])
+  obtain ⟨k', hk'⟩ := Triangle.coyoneda_exact₂ _ hT' x₃
+    (eq_zero_of_hom_shift_pos hι _ (by lia))
+  exact ⟨k', by cat_disch⟩
 
 中文:
 引理 存在_lift_ιK
@@ -351,7 +380,12 @@ lemma exists_lift_ιK
     obtain ⟨k', hk'⟩ := this
     refine ⟨(ι ⋙ shiftFunctor C (1 : Int)).preimage k',
       (ι ⋙ shiftFunctor C (1 : Int)).map_injective ?_⟩
-    rw [Functor.map_comp]; rw [Functor.ma
+    rw [Functor.map_comp]; rw [Functor.map_preimage]; rw [Functor.comp_map]; rw [shift_ι_map_ιK]; rw [Functor.comp_map]; rw [hk']
+  obtain ⟨x₃, hx₃⟩ := Triangle.coyoneda_exact₁ _ hT ((ι.map x₁)⟦(1 : Int)⟧')
+    (by simp [← Functor.map_comp, hx₁])
+  obtain ⟨k', hk'⟩ := Triangle.coyoneda_exact₂ _ hT' x₃
+    (eq_zero_of_hom_shift_pos hι _ (by lia))
+  exact ⟨k', by cat_disch⟩
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.map_comp, Functor.map_preimage, Triang, Triangle, Triangle.coyoneda_exact, comp_map, map_comp, map_injective, map_preimage, preimage, shiftFunctor
 -/
@@ -507,7 +541,7 @@ definition admissibleMorphism
     forall ⦃X₃ : C⦄ (f₂ : ι.obj X₂ ⟶ X₃) (f₃ : X₃ ⟶ (ι.obj X₁)⟦(1 : Int)⟧)
       (_ : Triangle.mk (ι.map f₁) f₂ f₃ in distTriang C),
     exists (K Q : A) (α : (ι.obj K)⟦(1 : Int)⟧ ⟶ X₃) (β : X₃ ⟶ ι.obj Q)
-      (γ : ι.obj Q ⟶ (ι.obj K)⟦(1 : Int)⟧⟦(1 : Int)⟧), Triangle.mk α β γ in dis
+      (γ : ι.obj Q ⟶ (ι.obj K)⟦(1 : Int)⟧⟦(1 : Int)⟧), Triangle.mk α β γ in distTriang C
 
 中文:
 定义 admissibleMorphism
@@ -516,7 +550,7 @@ definition admissibleMorphism
     forall ⦃X₃ : C⦄ (f₂ : ι.obj X₂ ⟶ X₃) (f₃ : X₃ ⟶ (ι.obj X₁)⟦(1 : Int)⟧)
       (_ : Triangle.mk (ι.map f₁) f₂ f₃ in distTriang C),
     exists (K Q : A) (α : (ι.obj K)⟦(1 : Int)⟧ ⟶ X₃) (β : X₃ ⟶ ι.obj Q)
-      (γ : ι.obj Q ⟶ (ι.obj K)⟦(1 : Int)⟧⟦(1 : Int)⟧), Triangle.mk α β γ in dis
+      (γ : ι.obj Q ⟶ (ι.obj K)⟦(1 : Int)⟧⟦(1 : Int)⟧), Triangle.mk α β γ in distTriang C
 
 Depends on / 依赖: Triangle, Triangle.mk, distTriang
 -/
@@ -611,6 +645,11 @@ definition isLimitKernelForkOfDistTriang
       (((ι ⋙ shiftFunctor C (1 : Int)).obj X₁))) _ ?_
     exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (IsZero.iso (by
       dsimp
+      rw [IsZero.iff_id_eq_zero]; rw [← ι.map_id]; rw [id_zero]; rw [ι.map_zero]) (isZero_zero C))
+  refine IsLimit.ofIsoLimit (AbelianSubcategory.isLimitKernelFork hι
+    (rot_of_distTriang _ hT) hT') ?_
+  exact Fork.ext (-(Iso.refl _)) ((ι ⋙ shiftFunctor C (1 : Int)).map_injective
+    (by simp))
 
 中文:
 定义 isLimitKernelForkOfDistTriang
@@ -621,6 +660,11 @@ definition isLimitKernelForkOfDistTriang
       (((ι ⋙ shiftFunctor C (1 : Int)).obj X₁))) _ ?_
     exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (IsZero.iso (by
       dsimp
+      rw [IsZero.iff_id_eq_zero]; rw [← ι.map_id]; rw [id_zero]; rw [ι.map_zero]) (isZero_zero C))
+  refine IsLimit.ofIsoLimit (AbelianSubcategory.isLimitKernelFork hι
+    (rot_of_distTriang _ hT) hT') ?_
+  exact Fork.ext (-(Iso.refl _)) ((ι ⋙ shiftFunctor C (1 : Int)).map_injective
+    (by simp))
 -/
 noncomputable def isLimitKernelForkOfDistTriang {X₁ X₂ X₃ : A}
     (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃) (f₃ : ι.obj X₃ ⟶ (ι.obj X₁)⟦(1 : Int)⟧)
@@ -653,7 +697,14 @@ definition isColimitCokernelCoforkOfDistTriang
       distTriang C := by
     refine isomorphic_distinguished _ (inv_rot_of_distTriang _
       (contractible_distinguished (ι.obj X₃))) _ ?_
-    refine Triangle.isoMk _ _ (IsZero.iso ?_ ?_) (Iso.refl _) (
+    refine Triangle.isoMk _ _ (IsZero.iso ?_ ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
+    · dsimp
+      rw [IsZero.iff_id_eq_zero]; rw [← Functor.map_id]; rw [← Functor.map_id]; rw [id_zero]; rw [Functor.map_zero]; rw [Functor.map_zero]
+    · dsimp
+      rw [IsZero.iff_id_eq_zero]; rw [← Functor.map_id]; rw [id_zero]; rw [Functor.map_zero]
+    all_goals simp
+  refine IsColimit.ofIsoColimit (AbelianSubcategory.isColimitCokernelCofork hι hT hT') ?_
+  exact Cofork.ext (Iso.refl _) (ι.map_injective (by simp))
 
 中文:
 定义 isColimitCokernelCoforkOfDistTriang
@@ -663,7 +714,14 @@ definition isColimitCokernelCoforkOfDistTriang
       distTriang C := by
     refine isomorphic_distinguished _ (inv_rot_of_distTriang _
       (contractible_distinguished (ι.obj X₃))) _ ?_
-    refine Triangle.isoMk _ _ (IsZero.iso ?_ ?_) (Iso.refl _) (
+    refine Triangle.isoMk _ _ (IsZero.iso ?_ ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
+    · dsimp
+      rw [IsZero.iff_id_eq_zero]; rw [← Functor.map_id]; rw [← Functor.map_id]; rw [id_zero]; rw [Functor.map_zero]; rw [Functor.map_zero]
+    · dsimp
+      rw [IsZero.iff_id_eq_zero]; rw [← Functor.map_id]; rw [id_zero]; rw [Functor.map_zero]
+    all_goals simp
+  refine IsColimit.ofIsoColimit (AbelianSubcategory.isColimitCokernelCofork hι hT hT') ?_
+  exact Cofork.ext (Iso.refl _) (ι.map_injective (by simp))
 -/
 noncomputable def isColimitCokernelCoforkOfDistTriang {X₁ X₂ X₃ : A}
     (f₁ : X₁ ⟶ X₂) (f₂ : X₂ ⟶ X₃) (f₃ : ι.obj X₃ ⟶ (ι.obj X₁)⟦(1 : Int)⟧)
@@ -704,7 +762,14 @@ lemma exists_distinguished_triangle_of_epi
   have hQ : 𝟙 Q = 0 :=
     Cofork.IsColimit.hom_ext (isColimitCokernelCofork hι hT hT') (by
       dsimp
-      rw [comp_id]; rw [comp_
+      rw [comp_id]; rw [comp_zero]; rw [← cancel_epi π]; rw [comp_zero]; rw [mor₁_πQ hT β])
+  have : IsIso α := (Triangle.isZero₃_iff_isIso₁ _ hT').1 (by
+    dsimp
+    rw [IsZero.iff_id_eq_zero]; rw [← ι.map_id]; rw [hQ]; rw [ι.map_zero])
+  refine ⟨K, -ιK f₃ α, f₂ ≫ inv α, ?_⟩
+  rw [rotate_distinguished_triangle]
+  refine isomorphic_distinguished _ hT _ ?_
+  exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (asIso α)
 
 中文:
 引理 存在_distinguished_triangle_of_epi
@@ -716,7 +781,14 @@ lemma exists_distinguished_triangle_of_epi
   have hQ : 𝟙 Q = 0 :=
     Cofork.IsColimit.hom_ext (isColimitCokernelCofork hι hT hT') (by
       dsimp
-      rw [comp_id]; rw [comp_
+      rw [comp_id]; rw [comp_zero]; rw [← cancel_epi π]; rw [comp_zero]; rw [mor₁_πQ hT β])
+  have : IsIso α := (Triangle.isZero₃_iff_isIso₁ _ hT').1 (by
+    dsimp
+    rw [IsZero.iff_id_eq_zero]; rw [← ι.map_id]; rw [hQ]; rw [ι.map_zero])
+  refine ⟨K, -ιK f₃ α, f₂ ≫ inv α, ?_⟩
+  rw [rotate_distinguished_triangle]
+  refine isomorphic_distinguished _ hT _ ?_
+  exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (asIso α)
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, IsColimit, IsZero, IsZero.iff_id_eq_zero, Triangle, Triangle.isZero, admissibleMorphism, cancel_epi, comp_id, comp_zero, distinguished_cocone_triangle, hom_ext, iff_id_eq_zero, isColimitCokernelCofork, map_id, map_zero
 -/
@@ -762,7 +834,32 @@ definition abelian
     have : admissibleMorphism ι f₁ := by simp [hA]
     obtain ⟨K, Q, α, β, γ, hT'⟩ := this f₂ f₃ hT
     have := epi_πQ hι hT hT'
-    obtain ⟨I, i, δ, hI⟩ := exists_distinguished_triangle_of_epi hι
+    obtain ⟨I, i, δ, hI⟩ := exists_distinguished_triangle_of_epi hι hA (πQ f₂ β)
+    have H := someOctahedron (show f₂ ≫ β = ι.map (πQ f₂ β) by simp)
+      (rot_of_distTriang _ hT) (rot_of_distTriang _ hT')
+      (rot_of_distTriang _ hI)
+    obtain ⟨m₁, hm₁⟩ : exists (m₁ : X₁ ⟶ I), (shiftFunctor C (1 : Int)).map (ι.map m₁) = H.m₁ :=
+      ⟨(ι ⋙ shiftFunctor C (1 : Int)).preimage H.m₁, Functor.map_preimage (ι ⋙ _) _⟩
+    obtain ⟨m₃ : ι.obj I ⟶ (ι.obj K)⟦(1 : Int)⟧, hm₃⟩ :
+        exists m₃, (shiftFunctor C (1 : Int)).map m₃ = H.m₃ :=
+      ⟨(shiftFunctor C (1 : Int)).preimage H.m₃, Functor.map_preimage _ _⟩
+    have Hmem : Triangle.mk (ι.map (ιK f₃ α)) (ι.map m₁) (-m₃) in distTriang C := by
+      rw [rotate_distinguished_triangle]; rw [← Triangle.shift_distinguished_iff _ 1]
+      refine isomorphic_distinguished _ H.mem _ ?_
+      exact Triangle.isoMk _ _ (-(Iso.refl _)) (Iso.refl _) (Iso.refl _)
+    exact ⟨{
+      kernelFork := _
+      isLimitKernelFork := isLimitKernelFork hι hT hT'
+      cokernelCofork := _
+      isColimitCokernelCofork := isColimitCokernelCofork hι hT hT'
+      image := _
+      imageι := _
+      imageπ := _
+      ι_imageπ := _
+      imageι_π := _
+      imageIsCokernel := isColimitCokernelCoforkOfDistTriang hι _ _ _ Hmem
+      imageIsKernel := isLimitKernelForkOfDistTriang hι _ _ _ hI
+      fac := (ι ⋙ shiftFunctor C (1 : Int)).map_injective (by simpa [hm₁] using H.comm₂) }⟩)
 
 中文:
 定义 abelian
@@ -772,7 +869,32 @@ definition abelian
     have : admissibleMorphism ι f₁ := by simp [hA]
     obtain ⟨K, Q, α, β, γ, hT'⟩ := this f₂ f₃ hT
     have := epi_πQ hι hT hT'
-    obtain ⟨I, i, δ, hI⟩ := exists_distinguished_triangle_of_epi hι
+    obtain ⟨I, i, δ, hI⟩ := exists_distinguished_triangle_of_epi hι hA (πQ f₂ β)
+    have H := someOctahedron (show f₂ ≫ β = ι.map (πQ f₂ β) by simp)
+      (rot_of_distTriang _ hT) (rot_of_distTriang _ hT')
+      (rot_of_distTriang _ hI)
+    obtain ⟨m₁, hm₁⟩ : exists (m₁ : X₁ ⟶ I), (shiftFunctor C (1 : Int)).map (ι.map m₁) = H.m₁ :=
+      ⟨(ι ⋙ shiftFunctor C (1 : Int)).preimage H.m₁, Functor.map_preimage (ι ⋙ _) _⟩
+    obtain ⟨m₃ : ι.obj I ⟶ (ι.obj K)⟦(1 : Int)⟧, hm₃⟩ :
+        exists m₃, (shiftFunctor C (1 : Int)).map m₃ = H.m₃ :=
+      ⟨(shiftFunctor C (1 : Int)).preimage H.m₃, Functor.map_preimage _ _⟩
+    have Hmem : Triangle.mk (ι.map (ιK f₃ α)) (ι.map m₁) (-m₃) in distTriang C := by
+      rw [rotate_distinguished_triangle]; rw [← Triangle.shift_distinguished_iff _ 1]
+      refine isomorphic_distinguished _ H.mem _ ?_
+      exact Triangle.isoMk _ _ (-(Iso.refl _)) (Iso.refl _) (Iso.refl _)
+    exact ⟨{
+      kernelFork := _
+      isLimitKernelFork := isLimitKernelFork hι hT hT'
+      cokernelCofork := _
+      isColimitCokernelCofork := isColimitCokernelCofork hι hT hT'
+      image := _
+      imageι := _
+      imageπ := _
+      ι_imageπ := _
+      imageι_π := _
+      imageIsCokernel := isColimitCokernelCoforkOfDistTriang hι _ _ _ Hmem
+      imageIsKernel := isLimitKernelForkOfDistTriang hι _ _ _ hI
+      fac := (ι ⋙ shiftFunctor C (1 : Int)).map_injective (by simpa [hm₁] using H.comm₂) }⟩)
 
 Depends on / 依赖: Abelian, Abelian.mk, admissibleMorphism, distinguished_cocone_triangle, exists_distinguished_triangle_of_epi, rot_of_distTriang, shiftFunctor, someOctahedron
 -/

@@ -198,7 +198,8 @@ definition Mor₂Iso.isStructural
   | .whiskerRight _ _ _ η _ => η.isStructural
   | .horizontalComp _ _ _ _ _ η θ => η.isStructural && θ.isStructural
   | .inv _ _ _ η => η.isStructural
-  |
+  | .coherenceComp _ _ _ _ _ _ η θ => η.isStructural && θ.isStructural
+  | .of _ => false
 
 中文:
 定义 Mor₂Iso.isStructural
@@ -210,7 +211,8 @@ definition Mor₂Iso.isStructural
   | .whiskerRight _ _ _ η _ => η.isStructural
   | .horizontalComp _ _ _ _ _ η θ => η.isStructural && θ.isStructural
   | .inv _ _ _ η => η.isStructural
-  |
+  | .coherenceComp _ _ _ _ _ _ η θ => η.isStructural && θ.isStructural
+  | .of _ => false
 
 Depends on / 依赖: coherenceComp, horizontalComp, isStructural, structuralAtom, whiskerLeft, whiskerRight
 -/
@@ -1190,7 +1192,64 @@ definition eval
 | .structuralAtom α => return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
       | .of η =>
         let η ← MonadMor₂.atomHomM η
-        let
+        let result ← mkEvalOf η
+        traceProof nm result
+        return ⟨← NormalExpr.ofAtomM η, result⟩
+      | _ => throwError "not implemented. try dsimp first."
+    | .isoInv _ _ α => withTraceNode nm (fun _ => return m!"Iso.inv") do match α with
+| .structuralAtom α => return ⟨← nilM (← symmM (.structuralAtom α)), ← mkEqRefl e.e⟩
+      | .of η =>
+        let η ← MonadMor₂.atomInvM η
+        let result ← mkEvalOf η
+        traceProof nm result
+        return ⟨← NormalExpr.ofAtomM η, result⟩
+      | _ => throwError "not implemented. try dsimp first."
+    | .id _ _ f =>
+      let α ← MonadMor₂Iso.id₂M f
+return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
+    | .comp _ _ _ _ _ η θ => withTraceNode nm (fun _ => return m!"comp") do
+      let ⟨η', e_η⟩ ← eval nm η
+      let ⟨θ', e_θ⟩ ← eval nm θ
+      let ⟨ηθ, pf⟩ ← evalComp η' θ'
+      let result ← mkEvalComp η θ η' θ' ηθ e_η e_θ pf
+      traceProof nm result
+      return ⟨ηθ, result⟩
+    | .whiskerLeft _ _ f _ _ η => withTraceNode nm (fun _ => return m!"whiskerLeft") do
+      let ⟨η', e_η⟩ ← eval nm η
+      let ⟨θ, e_θ⟩ ← evalWhiskerLeft f η'
+      let result ← mkEvalWhiskerLeft f η η' θ e_η e_θ
+      traceProof nm result
+      return ⟨θ, result⟩
+    | .whiskerRight _ _ _ _ η h =>
+      withTraceNode nm (fun _ => return m!"whiskerRight") do
+        let ⟨η', e_η⟩ ← eval nm η
+        let ⟨θ, e_θ⟩ ← evalWhiskerRight η' h
+        let result ← mkEvalWhiskerRight η h η' θ e_η e_θ
+        traceProof nm result
+        return ⟨θ, result⟩
+    | .coherenceComp _ _ _ _ _ _ α₀ η θ =>
+      withTraceNode nm (fun _ => return m!"monoidalComp") do
+        let ⟨η', e_η⟩ ← eval nm η
+let α₀ := .structuralAtom .coherenceHom α₀
+        let α ← nilM α₀
+        let ⟨θ', e_θ⟩ ← eval nm θ
+        let ⟨αθ, e_αθ⟩ ← evalComp α θ'
+        let ⟨ηαθ, e_ηαθ⟩ ← evalComp η' αθ
+        let result ← mkEvalMonoidalComp η θ α₀ η' θ' αθ ηαθ e_η e_θ e_αθ e_ηαθ
+        traceProof nm result
+        return ⟨ηαθ, result⟩
+    | .horizontalComp _ _ _ _ _ _ η θ =>
+      withTraceNode nm (fun _ => return m!"horizontalComp") do
+        let ⟨η', e_η⟩ ← eval nm η
+        let ⟨θ', e_θ⟩ ← eval nm θ
+        let ⟨ηθ, e_ηθ⟩ ← evalHorizontalComp η' θ'
+        let result ← mkEvalHorizontalComp η θ η' θ' ηθ e_η e_θ e_ηθ
+        traceProof nm result
+        return ⟨ηθ, result⟩
+    | .of η =>
+      let result ← mkEvalOf η
+      traceProof nm result
+      return ⟨← NormalExpr.ofAtomM η, result⟩
 
 中文:
 定义 eval
@@ -1202,7 +1261,64 @@ definition eval
 | .structuralAtom α => return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
       | .of η =>
         let η ← MonadMor₂.atomHomM η
-        let
+        let result ← mkEvalOf η
+        traceProof nm result
+        return ⟨← NormalExpr.ofAtomM η, result⟩
+      | _ => throwError "not implemented. try dsimp first."
+    | .isoInv _ _ α => withTraceNode nm (fun _ => return m!"Iso.inv") do match α with
+| .structuralAtom α => return ⟨← nilM (← symmM (.structuralAtom α)), ← mkEqRefl e.e⟩
+      | .of η =>
+        let η ← MonadMor₂.atomInvM η
+        let result ← mkEvalOf η
+        traceProof nm result
+        return ⟨← NormalExpr.ofAtomM η, result⟩
+      | _ => throwError "not implemented. try dsimp first."
+    | .id _ _ f =>
+      let α ← MonadMor₂Iso.id₂M f
+return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
+    | .comp _ _ _ _ _ η θ => withTraceNode nm (fun _ => return m!"comp") do
+      let ⟨η', e_η⟩ ← eval nm η
+      let ⟨θ', e_θ⟩ ← eval nm θ
+      let ⟨ηθ, pf⟩ ← evalComp η' θ'
+      let result ← mkEvalComp η θ η' θ' ηθ e_η e_θ pf
+      traceProof nm result
+      return ⟨ηθ, result⟩
+    | .whiskerLeft _ _ f _ _ η => withTraceNode nm (fun _ => return m!"whiskerLeft") do
+      let ⟨η', e_η⟩ ← eval nm η
+      let ⟨θ, e_θ⟩ ← evalWhiskerLeft f η'
+      let result ← mkEvalWhiskerLeft f η η' θ e_η e_θ
+      traceProof nm result
+      return ⟨θ, result⟩
+    | .whiskerRight _ _ _ _ η h =>
+      withTraceNode nm (fun _ => return m!"whiskerRight") do
+        let ⟨η', e_η⟩ ← eval nm η
+        let ⟨θ, e_θ⟩ ← evalWhiskerRight η' h
+        let result ← mkEvalWhiskerRight η h η' θ e_η e_θ
+        traceProof nm result
+        return ⟨θ, result⟩
+    | .coherenceComp _ _ _ _ _ _ α₀ η θ =>
+      withTraceNode nm (fun _ => return m!"monoidalComp") do
+        let ⟨η', e_η⟩ ← eval nm η
+let α₀ := .structuralAtom .coherenceHom α₀
+        let α ← nilM α₀
+        let ⟨θ', e_θ⟩ ← eval nm θ
+        let ⟨αθ, e_αθ⟩ ← evalComp α θ'
+        let ⟨ηαθ, e_ηαθ⟩ ← evalComp η' αθ
+        let result ← mkEvalMonoidalComp η θ α₀ η' θ' αθ ηαθ e_η e_θ e_αθ e_ηαθ
+        traceProof nm result
+        return ⟨ηαθ, result⟩
+    | .horizontalComp _ _ _ _ _ _ η θ =>
+      withTraceNode nm (fun _ => return m!"horizontalComp") do
+        let ⟨η', e_η⟩ ← eval nm η
+        let ⟨θ', e_θ⟩ ← eval nm θ
+        let ⟨ηθ, e_ηθ⟩ ← evalHorizontalComp η' θ'
+        let result ← mkEvalHorizontalComp η θ η' θ' ηθ e_η e_θ e_ηθ
+        traceProof nm result
+        return ⟨ηθ, result⟩
+    | .of η =>
+      let result ← mkEvalOf η
+      traceProof nm result
+      return ⟨← NormalExpr.ofAtomM η, result⟩
 -/
 def eval (nm : Name) (e : Mor₂) : CoherenceM ρ Eval.Result := do
   withTraceNode nm (fun _ => return m!"eval: {e.e}") do

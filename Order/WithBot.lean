@@ -3528,7 +3528,7 @@ lemma denselyOrdered_iff
     | coe c => exact ⟨c, by simpa using hc⟩
   · simpa [WithBot.exists, WithBot.forall, exists_lt] using DenselyOrdered.dense
 
-
+@[to_dual existing]
 
 中文:
 引理 denselyOrdered_iff
@@ -3542,7 +3542,7 @@ lemma denselyOrdered_iff
     | coe c => exact ⟨c, by simpa using hc⟩
   · simpa [WithBot.exists, WithBot.forall, exists_lt] using DenselyOrdered.dense
 
-
+@[to_dual existing]
 
 Depends on / 依赖: DenselyOrdered, DenselyOrdered.dense, WithBot, WithBot.coe_lt_coe.mpr, WithBot.exists, WithBot.forall, coe_lt_coe, exists_between, exists_lt
 -/
@@ -3572,7 +3572,7 @@ lemma _root_.WithTop.denselyOrdered_iff
     | coe c => exact ⟨c, by simpa using hc⟩
   · simpa [WithTop.exists, WithTop.forall, exists_gt] using DenselyOrdered.dense
 
-
+@[to_dual]
 
 中文:
 引理 _root_.WithTop.denselyOrdered_iff
@@ -3586,7 +3586,7 @@ lemma _root_.WithTop.denselyOrdered_iff
     | coe c => exact ⟨c, by simpa using hc⟩
   · simpa [WithTop.exists, WithTop.forall, exists_gt] using DenselyOrdered.dense
 
-
+@[to_dual]
 
 Depends on / 依赖: DenselyOrdered, DenselyOrdered.dense, WithTop, WithTop.coe_lt_coe.mpr, WithTop.exists, WithTop.forall, coe_lt_coe, exists_between, exists_gt
 -/

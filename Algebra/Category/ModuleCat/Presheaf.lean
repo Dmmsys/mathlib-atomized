@@ -584,7 +584,12 @@ definition ofPresheaf
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   map {X Y} f := ModuleCat.ofHom
-      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of _ 
+      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of _ (M.obj Y)))
+    { toFun := fun x => M.map f x
+      map_add' := by simp
+      map_smul' := fun r m => map_smul f r m }
+
+@[simp]
 
 中文:
 定义 ofPresheaf
@@ -593,7 +598,12 @@ definition ofPresheaf
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   map {X Y} f := ModuleCat.ofHom
-      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of _ 
+      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of _ (M.obj Y)))
+    { toFun := fun x => M.map f x
+      map_add' := by simp
+      map_smul' := fun r m => map_smul f r m }
+
+@[simp]
 
 Depends on / 依赖: M.obj, ModuleCat, ModuleCat.of
 -/
@@ -845,7 +855,10 @@ instance :
   zero_add := by intros; ext1; simp only [add_app, zero_app, zero_add]
   neg_add_cancel := by intros; ext1; simp only [add_app, neg_app, neg_add_cancel, zero_app]
   add_zero := by intros; ext1; simp only [add_app, zero_app, add_zero]
-  add_comm := by i
+  add_comm := by intros; ext1; simp only [add_app]; apply add_comm
+  sub_eq_add_neg := by intros; ext1; simp only [add_app, sub_app, neg_app, sub_eq_add_neg]
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 中文:
 实例 :
@@ -854,7 +867,10 @@ instance :
   zero_add := by intros; ext1; simp only [add_app, zero_app, zero_add]
   neg_add_cancel := by intros; ext1; simp only [add_app, neg_app, neg_add_cancel, zero_app]
   add_zero := by intros; ext1; simp only [add_app, zero_app, add_zero]
-  add_comm := by i
+  add_comm := by intros; ext1; simp only [add_app]; apply add_comm
+  sub_eq_add_neg := by intros; ext1; simp only [add_app, sub_app, neg_app, sub_eq_add_neg]
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 Depends on / 依赖: add_app, add_assoc, add_comm, add_zero, intros, neg_add_cancel, neg_app, nsmulRec, sub_app, sub_eq_add_neg, zero_add, zero_app, zsmulRec
 -/
@@ -987,7 +1003,10 @@ definition unit
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   map {X Y} f := ModuleCat.ofHom
-      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of (R
+      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of (R.obj Y) (R.obj Y)))
+    { toFun := fun x => R.map f x
+      map_add' := by simp
+      map_smul' := by cat_disch }
 
 中文:
 定义 unit
@@ -996,7 +1015,10 @@ definition unit
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   map {X Y} f := ModuleCat.ofHom
-      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of (R
+      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj (ModuleCat.of (R.obj Y) (R.obj Y)))
+    { toFun := fun x => R.map f x
+      map_add' := by simp
+      map_smul' := by cat_disch }
 
 Depends on / 依赖: ModuleCat, ModuleCat.of, R.obj
 -/
@@ -1215,7 +1237,14 @@ definition unitHomEquiv
       naturality := fun {X Y} f => by
         ext
         dsimp
-  
+        change R.map f 1 • s.eval Y = M.map f (1 • s.eval X)
+        simp }
+  left_inv f := by
+    ext X : 2
+    exact (LinearMap.ringLmapEquivSelf (R.obj X) Int (M.obj X)).symm_apply_apply (f.app X).hom
+  right_inv s := by
+    ext X
+    exact (LinearMap.ringLmapEquivSelf (R.obj X) Int (M.obj X)).apply_symm_apply (s.val X)
 
 中文:
 定义 unitHomEquiv
@@ -1228,7 +1257,14 @@ definition unitHomEquiv
       naturality := fun {X Y} f => by
         ext
         dsimp
-  
+        change R.map f 1 • s.eval Y = M.map f (1 • s.eval X)
+        simp }
+  left_inv f := by
+    ext X : 2
+    exact (LinearMap.ringLmapEquivSelf (R.obj X) Int (M.obj X)).symm_apply_apply (f.app X).hom
+  right_inv s := by
+    ext X
+    exact (LinearMap.ringLmapEquivSelf (R.obj X) Int (M.obj X)).apply_symm_apply (s.val X)
 
 Depends on / 依赖: Hom.app, R.obj, sectionsMk
 -/
@@ -1315,6 +1351,11 @@ definition forgetToPresheafModuleCatObjMap
     map_add' := by simp
     map_smul' := fun r x => by
       simp only [ModuleCat.restrictScalars.smul_def (R := R.obj X), RingHom.id_apply, M.map_smul]
+      rw [← RingCat.comp_apply]; rw [← R.map_comp]
+      congr
+      apply hX.hom_ext }
+
+@[simp]
 
 中文:
 定义 forgetToPresheafModuleCatObjMap
@@ -1325,6 +1366,11 @@ definition forgetToPresheafModuleCatObjMap
     map_add' := by simp
     map_smul' := fun r x => by
       simp only [ModuleCat.restrictScalars.smul_def (R := R.obj X), RingHom.id_apply, M.map_smul]
+      rw [← RingCat.comp_apply]; rw [← R.map_comp]
+      congr
+      apply hX.hom_ext }
+
+@[simp]
 
 Depends on / 依赖: M.map, M.map_smul, ModuleCat, ModuleCat.ofHom, ModuleCat.restrictScalars.smul_def, R.map_comp, R.obj, RingCat, RingCat.comp_apply, RingHom, RingHom.id_apply, comp_apply, forgetToPresheafModuleCatObjObj, hX.hom_ext, hom_ext, id_apply, map_add, map_comp, map_smul, restrictScalars
 -/
@@ -1405,7 +1451,7 @@ definition forgetToPresheafModuleCatMap
       map_smul' := fun r => (f.app Y).hom.map_smul (R.map (hX.to Y) _) }
   naturality Y Z g := by
     ext x
-    exact nat
+    exact naturality_apply f g x
 
 中文:
 定义 forgetToPresheafModuleCatMap
@@ -1417,7 +1463,7 @@ definition forgetToPresheafModuleCatMap
       map_smul' := fun r => (f.app Y).hom.map_smul (R.map (hX.to Y) _) }
   naturality Y Z g := by
     ext x
-    exact nat
+    exact naturality_apply f g x
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom
 -/

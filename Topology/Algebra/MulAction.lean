@@ -850,7 +850,11 @@ theorem continuousSMul_iff_stabilizer_isOpen
   let U := {m' : M | m' • y = x}
   have hU : IsOpen U := by
     by_cases hU' : U != ∅
-    · obtain ⟨m, (hm : m • y = x)⟩ := Set.nonempty_iff_empty_
+    · obtain ⟨m, (hm : m • y = x)⟩ := Set.nonempty_iff_empty_ne.mpr hU'.symm
+      convert! (h x).preimage (by fun_prop : Continuous fun m' : M => m' * m⁻¹)
+      ext; simp [← smul_smul, U, eq_inv_smul_iff.mpr hm]
+    simp_all
+  simpa using! hU
 
 中文:
 定理 continuousSMul_iff_stabilizer_isOpen
@@ -864,7 +868,11 @@ theorem continuousSMul_iff_stabilizer_isOpen
   let U := {m' : M | m' • y = x}
   have hU : IsOpen U := by
     by_cases hU' : U != ∅
-    · obtain ⟨m, (hm : m • y = x)⟩ := Set.nonempty_iff_empty_
+    · obtain ⟨m, (hm : m • y = x)⟩ := Set.nonempty_iff_empty_ne.mpr hU'.symm
+      convert! (h x).preimage (by fun_prop : Continuous fun m' : M => m' * m⁻¹)
+      ext; simp [← smul_smul, U, eq_inv_smul_iff.mpr hm]
+    simp_all
+  simpa using! hU
 
 Depends on / 依赖: Continuous, IsOpen, Set.nonempty_iff_empty_ne.mpr, continuous_discrete_rng, continuous_prod_of_discrete_right, convert, eq_inv_smul_iff, eq_inv_smul_iff.mpr, fun_prop, nonempty_iff_empty_ne, preimage, smul_smul, stabilizer_isOpen
 -/
@@ -904,7 +912,11 @@ theorem Set.univ_smul_nhds_zero
     zero_smul G₀ x ▸ tendsto_id.smul tendsto_const_nhds
   rcases Filter.nonempty_of_mem (inter_mem_nhdsWithin {0}ᶜ <| mem_map.1 <| this hs)
     with ⟨c, hc₀, hc⟩
-  simp only [mem_compl_iff, mem_singleton_iff
+  simp only [mem_compl_iff, mem_singleton_iff] at hc₀
+  simp only [mem_smul, mem_univ, true_and]
+  exact ⟨c⁻¹, c • x, hc, inv_smul_smul₀ hc₀ _⟩
+
+@[simp]
 
 中文:
 定理 集合.univ_smul_nhds_zero
@@ -916,7 +928,11 @@ theorem Set.univ_smul_nhds_zero
     zero_smul G₀ x ▸ tendsto_id.smul tendsto_const_nhds
   rcases Filter.nonempty_of_mem (inter_mem_nhdsWithin {0}ᶜ <| mem_map.1 <| this hs)
     with ⟨c, hc₀, hc⟩
-  simp only [mem_compl_iff, mem_singleton_iff
+  simp only [mem_compl_iff, mem_singleton_iff] at hc₀
+  simp only [mem_smul, mem_univ, true_and]
+  exact ⟨c⁻¹, c • x, hc, inv_smul_smul₀ hc₀ _⟩
+
+@[simp]
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, Set.eq_univ_of_forall, Tendsto, eq_univ_of_forall, inter_mem_nhdsWithin, mem_compl_iff, mem_map, mem_singleton_iff, mem_smul, mem_univ, nonempty_of_mem, tendsto_const_nhds, tendsto_id, tendsto_id.smul, true_and, zero_smul
 -/
@@ -1020,7 +1036,9 @@ theorem continuousSMul_sInf
       exact
         continuous_sInf_rng.2 fun t ht =>
           continuous_sInf_dom₂ (Eq.refl _) ht
-            (@ContinuousSMul.continuous_smul _ _ _ _ t (h t h
+            (@ContinuousSMul.continuous_smul _ _ _ _ t (h t ht)) }
+
+@[to_additive]
 
 中文:
 定理 continuousSMul_sInf
@@ -1032,7 +1050,9 @@ theorem continuousSMul_sInf
       exact
         continuous_sInf_rng.2 fun t ht =>
           continuous_sInf_dom₂ (Eq.refl _) ht
-            (@ContinuousSMul.continuous_smul _ _ _ _ t (h t h
+            (@ContinuousSMul.continuous_smul _ _ _ _ t (h t ht)) }
+
+@[to_additive]
 
 Depends on / 依赖: continuous_smul
 -/

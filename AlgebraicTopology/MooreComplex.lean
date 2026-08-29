@@ -154,7 +154,13 @@ theorem d_squared
   rcases n with _ | n <;> dsimp [objD]
   · rw [Subobject.factorThru_arrow_assoc, Category.assoc, ← Fin.castSucc_zero,
       ← X.δ_comp_δ_assoc (Fin.zero_le (0 : Fin 2)),
-      ← factorThru_
+      ← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ (0 : Fin 2) (by simp)),
+      Category.assoc, kernelSubobject_arrow_comp_assoc, zero_comp, comp_zero]
+  · rw [factorThru_right, factorThru_eq_zero, factorThru_arrow_assoc, Category.assoc,
+      ← Fin.castSucc_zero,
+      ← X.δ_comp_δ (Fin.zero_le (0 : Fin (n + 3))),
+      ← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ (0 : Fin (n + 3)) (by simp)),
+      Category.assoc, kernelSubobject_arrow_comp_assoc, zero_comp, comp_zero]
 
 中文:
 定理 d_squared
@@ -166,7 +172,13 @@ theorem d_squared
   rcases n with _ | n <;> dsimp [objD]
   · rw [Subobject.factorThru_arrow_assoc, Category.assoc, ← Fin.castSucc_zero,
       ← X.δ_comp_δ_assoc (Fin.zero_le (0 : Fin 2)),
-      ← factorThru_
+      ← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ (0 : Fin 2) (by simp)),
+      Category.assoc, kernelSubobject_arrow_comp_assoc, zero_comp, comp_zero]
+  · rw [factorThru_right, factorThru_eq_zero, factorThru_arrow_assoc, Category.assoc,
+      ← Fin.castSucc_zero,
+      ← X.δ_comp_δ (Fin.zero_le (0 : Fin (n + 3))),
+      ← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ (0 : Fin (n + 3)) (by simp)),
+      Category.assoc, kernelSubobject_arrow_comp_assoc, zero_comp, comp_zero]
 -/
 theorem d_squared (n : Nat) : objD X (n + 1) ≫ objD X n = 0 := by
   -- It's a pity we need to do a case split here;
@@ -227,7 +239,9 @@ definition map
       cases n <;> dsimp
       · apply top_factors
       · refine (finset_inf_factors _).mpr fun i _ => kernelSubobject_factors _ _ ?_
-        rw [Category.assoc]; rw [SimplicialObject.δ]; rw [← f.naturality]; rw [← factorTh
+        rw [Category.assoc]; rw [SimplicialObject.δ]; rw [← f.naturality]; rw [← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ i (by simp))]; rw [Category.assoc]
+        rw [← SimplicialObject.δ_def]; rw [kernelSubobject_arrow_comp_assoc]; rw [zero_comp]; rw [comp_zero]))
+    fun n => by cases n <;> dsimp [objD, objX, ChainComplex.of.d] <;> cat_disch
 
 中文:
 定义 map
@@ -237,7 +251,9 @@ definition map
       cases n <;> dsimp
       · apply top_factors
       · refine (finset_inf_factors _).mpr fun i _ => kernelSubobject_factors _ _ ?_
-        rw [Category.assoc]; rw [SimplicialObject.δ]; rw [← f.naturality]; rw [← factorTh
+        rw [Category.assoc]; rw [SimplicialObject.δ]; rw [← f.naturality]; rw [← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ i (by simp))]; rw [Category.assoc]
+        rw [← SimplicialObject.δ_def]; rw [kernelSubobject_arrow_comp_assoc]; rw [zero_comp]; rw [comp_zero]))
+    fun n => by cases n <;> dsimp [objD, objX, ChainComplex.of.d] <;> cat_disch
 
 Depends on / 依赖: Category, Category.assoc, ChainComplex, ChainComplex.ofHom, Finset, Finset.univ, SimplicialObject, comp_zero, f.app, f.naturality, factorThru, factorThru_arrow, finset_inf_arrow_factors, finset_inf_factors, kernelSubobject_arrow_comp_assoc, kernelSubobject_factors, naturality, top_factors, zero_comp
 -/

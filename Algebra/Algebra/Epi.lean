@@ -55,7 +55,16 @@ refine ⟨fun h a => IsEpi.injective_lift_mul by simp, fun h => ⟨fun x y hxy =
     | zero => exact ⟨0, by simp⟩
     | tmul u v =>
       use u * v
-      calc u otimesₜ[R] v
+      calc u otimesₜ[R] v = u otimesₜ[R] 1 * 1 otimesₜ[R] v := by simp
+                   _ = u otimesₜ[R] 1 * v otimesₜ[R] 1 := by rw [h]
+                   _ = (u * v) otimesₜ[R] 1 := by simp
+    | add u v hu hv =>
+      obtain ⟨u, rfl⟩ := hu
+      obtain ⟨v, rfl⟩ := hv
+      exact ⟨u + v, by simp [add_tmul]⟩
+  obtain ⟨a, rfl⟩ := h' x
+  obtain ⟨b, rfl⟩ := h' y
+  aesop
 
 中文:
 引理 isEpi_iff_对任意_one_tmul_eq
@@ -66,7 +75,16 @@ refine ⟨fun h a => IsEpi.injective_lift_mul by simp, fun h => ⟨fun x y hxy =
     | zero => exact ⟨0, by simp⟩
     | tmul u v =>
       use u * v
-      calc u otimesₜ[R] v
+      calc u otimesₜ[R] v = u otimesₜ[R] 1 * 1 otimesₜ[R] v := by simp
+                   _ = u otimesₜ[R] 1 * v otimesₜ[R] 1 := by rw [h]
+                   _ = (u * v) otimesₜ[R] 1 := by simp
+    | add u v hu hv =>
+      obtain ⟨u, rfl⟩ := hu
+      obtain ⟨v, rfl⟩ := hv
+      exact ⟨u + v, by simp [add_tmul]⟩
+  obtain ⟨a, rfl⟩ := h' x
+  obtain ⟨b, rfl⟩ := h' y
+  aesop
 
 Depends on / 依赖: IsEpi.injective_lift_mul, TensorProduct, TensorProduct.induction_on, add_tmul, induction_on, injective_lift_mul, otimes
 -/
@@ -148,7 +166,25 @@ lemma isEpi_iff_surjective_algebraMap_of_finite
   rcases subsingleton_or_nontrivial (A ⧸ R') with h | _
   · rwa [Submodule.Quotient.subsingleton_iff, LinearMap.range_eq_top] at h
   have : Subsingleton ((A ⧸ R') otimes[R] (A ⧸ R')) := by
-    ref
+    refine subsingleton_of_forall_eq 0 fun y => ?_
+    induction y with
+    | zero => rfl
+    | add a b e₁ e₂ => rwa [e₁, zero_add]
+    | tmul x y =>
+      obtain ⟨x, rfl⟩ := R'.mkQ_surjective x
+      obtain ⟨y, rfl⟩ := R'.mkQ_surjective y
+      obtain ⟨s, hs⟩ : exists s, 1 otimesₜ[R] s = x otimesₜ[R] y := by
+        use x * y
+        trans x otimesₜ 1 * 1 otimesₜ y
+        · simp [(isEpi_iff_forall_one_tmul_eq R A).mp]
+        · simp
+      have : R'.mkQ 1 = 0 := (Submodule.Quotient.mk_eq_zero R').mpr ⟨1, map_one (algebraMap R A)⟩
+      rw [← map_tmul R'.mkQ R'.mkQ]; rw [← hs]; rw [map_tmul]; rw [this]; rw [zero_tmul]
+  cases false_of_nontrivial_of_subsingleton ((A ⧸ R') otimes[R] (A ⧸ R'))
+
+@[deprecated (since := "2026-01-13")]
+alias _root_.RingHom.surjective_of_tmul_eq_tmul_of_finite :=
+  isEpi_iff_surjective_algebraMap_of_finite
 
 中文:
 引理 isEpi_iff_surjective_algebraMap_of_finite
@@ -159,7 +195,25 @@ lemma isEpi_iff_surjective_algebraMap_of_finite
   rcases subsingleton_or_nontrivial (A ⧸ R') with h | _
   · rwa [Submodule.Quotient.subsingleton_iff, LinearMap.range_eq_top] at h
   have : Subsingleton ((A ⧸ R') otimes[R] (A ⧸ R')) := by
-    ref
+    refine subsingleton_of_forall_eq 0 fun y => ?_
+    induction y with
+    | zero => rfl
+    | add a b e₁ e₂ => rwa [e₁, zero_add]
+    | tmul x y =>
+      obtain ⟨x, rfl⟩ := R'.mkQ_surjective x
+      obtain ⟨y, rfl⟩ := R'.mkQ_surjective y
+      obtain ⟨s, hs⟩ : exists s, 1 otimesₜ[R] s = x otimesₜ[R] y := by
+        use x * y
+        trans x otimesₜ 1 * 1 otimesₜ y
+        · simp [(isEpi_iff_forall_one_tmul_eq R A).mp]
+        · simp
+      have : R'.mkQ 1 = 0 := (Submodule.Quotient.mk_eq_zero R').mpr ⟨1, map_one (algebraMap R A)⟩
+      rw [← map_tmul R'.mkQ R'.mkQ]; rw [← hs]; rw [map_tmul]; rw [this]; rw [zero_tmul]
+  cases false_of_nontrivial_of_subsingleton ((A ⧸ R') otimes[R] (A ⧸ R'))
+
+@[deprecated (since := "2026-01-13")]
+alias _root_.RingHom.surjective_of_tmul_eq_tmul_of_finite :=
+  isEpi_iff_surjective_algebraMap_of_finite
 
 Depends on / 依赖: Algebra, Algebra.linearMap, LinearMap, LinearMap.range_eq_top, Quotient, Submodule, Submodule.Quotient.subsingleton_iff, Subsingleton, isEpi_of_surjective_algebraMap, linearMap, mkQ_surjective, otimes, range_eq_top, subsingleton_iff, subsingleton_of_forall_eq, subsingleton_or_nontrivial, zero_add
 -/
@@ -208,7 +262,7 @@ lemma tmul_comm
       = a • (1 otimesₜ[R] b) := by rw [tmul_eq_smul_one_tmul]
     _ = a • (b otimesₜ[R] 1) := by rw [(isEpi_iff_forall_one_tmul_eq R A).mp inferInstance b]
     _ = a • (b • (1 otimesₜ[R] 1)) := by rw [tmul_eq_smul_one_tmul]
-  rw [this a b]; rw [this b a]; r
+  rw [this a b]; rw [this b a]; rw [smul_comm]
 
 中文:
 引理 tmul_comm
@@ -218,7 +272,7 @@ lemma tmul_comm
       = a • (1 otimesₜ[R] b) := by rw [tmul_eq_smul_one_tmul]
     _ = a • (b otimesₜ[R] 1) := by rw [(isEpi_iff_forall_one_tmul_eq R A).mp inferInstance b]
     _ = a • (b • (1 otimesₜ[R] 1)) := by rw [tmul_eq_smul_one_tmul]
-  rw [this a b]; rw [this b a]; r
+  rw [this a b]; rw [this b a]; rw [smul_comm]
 
 Depends on / 依赖: isEpi_iff_forall_one_tmul_eq, smul_comm, tmul_eq_smul_one_tmul
 -/
@@ -249,7 +303,26 @@ lemma injective_lift_lsmul
            ≃ A ⊗[A] M
            ≃ M
   ```
-  However the second equivalence above requires a ver
+  However the second equivalence above requires a version of heterogeneous tensor product
+  associativity which is problematic in Mathlib because `TensorProduct.leftModule` prioritises the
+  left factor in any tensor product. We therefore formalise a slightly lower level proof below. -/
+  suffices forall (a : A) (m : M), 1 otimesₜ[R] (a • m) = a otimesₜ[R] m by
+    let f : M ->ₗ[R] A otimes[R] M :=
+      { toFun m := 1 otimesₜ m
+        map_add' m n := tmul_add _ _ _
+        map_smul' r m := tmul_smul _ _ _ }
+    have aux : f ∘ₗ (lift <| LinearMap.restrictScalars₁₂ R R (LinearMap.lsmul A M)) = .id := by
+      ext a m; simpa using! this a m
+    exact HasLeftInverse.injective ⟨f, fun x => congr($aux x)⟩
+  intro a m
+  let f : A otimes[R] A ->ₗ[R] A otimes[R] M := lift
+    { toFun x :=
+      { toFun y := x otimesₜ (y • m)
+        map_add' := by simp [add_smul, tmul_add]
+        map_smul' := by simp }
+      map_add' := by intros; ext; simp [add_tmul]
+      map_smul' := by intros; ext; simp [smul_tmul'] }
+  simpa [f] using! congr_arg f (tmul_comm R 1 a)
 
 中文:
 引理 injective_lift_lsmul
@@ -262,7 +335,26 @@ lemma injective_lift_lsmul
            ≃ A ⊗[A] M
            ≃ M
   ```
-  However the second equivalence above requires a ver
+  However the second equivalence above requires a version of heterogeneous tensor product
+  associativity which is problematic in Mathlib because `TensorProduct.leftModule` prioritises the
+  left factor in any tensor product. We therefore formalise a slightly lower level proof below. -/
+  suffices forall (a : A) (m : M), 1 otimesₜ[R] (a • m) = a otimesₜ[R] m by
+    let f : M ->ₗ[R] A otimes[R] M :=
+      { toFun m := 1 otimesₜ m
+        map_add' m n := tmul_add _ _ _
+        map_smul' r m := tmul_smul _ _ _ }
+    have aux : f ∘ₗ (lift <| LinearMap.restrictScalars₁₂ R R (LinearMap.lsmul A M)) = .id := by
+      ext a m; simpa using! this a m
+    exact HasLeftInverse.injective ⟨f, fun x => congr($aux x)⟩
+  intro a m
+  let f : A otimes[R] A ->ₗ[R] A otimes[R] M := lift
+    { toFun x :=
+      { toFun y := x otimesₜ (y • m)
+        map_add' := by simp [add_smul, tmul_add]
+        map_smul' := by simp }
+      map_add' := by intros; ext; simp [add_tmul]
+      map_smul' := by intros; ext; simp [smul_tmul'] }
+  simpa [f] using! congr_arg f (tmul_comm R 1 a)
 -/
 lemma injective_lift_lsmul :
     Injective (lift <| LinearMap.restrictScalars₁₂ R R (LinearMap.lsmul A M)) := by

@@ -57,7 +57,8 @@ theorem eq_zero_of_degree_lt_of_eval_finset_eq_zero
   rw [← degreeLTEquiv_eq_zero_iff_eq_zero degree_f_lt]
   exact
     Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero
-      (Injective.comp (Embedding.subtype _).inj' (equivFinOfCardEq (card_coe _)).s
+      (Injective.comp (Embedding.subtype _).inj' (equivFinOfCardEq (card_coe _)).symm.injective)
+      fun _ => eval_f _ (Finset.coe_mem _)
 
 中文:
 定理 eq_zero_of_degree_lt_of_eval_finset_eq_zero
@@ -68,7 +69,8 @@ theorem eq_zero_of_degree_lt_of_eval_finset_eq_zero
   rw [← degreeLTEquiv_eq_zero_iff_eq_zero degree_f_lt]
   exact
     Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero
-      (Injective.comp (Embedding.subtype _).inj' (equivFinOfCardEq (card_coe _)).s
+      (Injective.comp (Embedding.subtype _).inj' (equivFinOfCardEq (card_coe _)).symm.injective)
+      fun _ => eval_f _ (Finset.coe_mem _)
 
 Depends on / 依赖: Embedding, Embedding.subtype, Finset, Finset.coe_mem, Injective, Injective.comp, Matrix, Matrix.eq_zero_of_forall_index_sum_mul_pow_eq_zero, card_coe, coe_mem, degreeLTEquiv_eq_zero_iff_eq_zero, degree_f_lt, eq_zero_of_forall_index_sum_mul_pow_eq_zero, equivFinOfCardEq, eval_eq_sum_degreeLTEquiv, eval_f, injective, mem_degreeLT, simp_rw, subtype
 -/
@@ -821,7 +823,9 @@ theorem natDegree_basis
     exact fun j ⟨hij₁, hj⟩ hij₂ => hij₁ (hvs hj hi hij₂.symm)
   rw [← card_erase_of_mem hi]; rw [card_eq_sum_ones]
   convert! natDegree_prod _ _ H using 1
-  refine sum_
+  refine sum_congr rfl fun j hj => (natDegree_basisDivisor_of_ne ?_).symm
+  rw [Ne]; rw [← basisDivisor_eq_zero_iff]
+  exact H _ hj
 
 中文:
 定理 natDegree_basis
@@ -832,7 +836,9 @@ theorem natDegree_basis
     exact fun j ⟨hij₁, hj⟩ hij₂ => hij₁ (hvs hj hi hij₂.symm)
   rw [← card_erase_of_mem hi]; rw [card_eq_sum_ones]
   convert! natDegree_prod _ _ H using 1
-  refine sum_
+  refine sum_congr rfl fun j hj => (natDegree_basisDivisor_of_ne ?_).symm
+  rw [Ne]; rw [← basisDivisor_eq_zero_iff]
+  exact H _ hj
 
 Depends on / 依赖: basisDivisor, basisDivisor_eq_zero_iff, card_eq_sum_ones, card_erase_of_mem, convert, mem_erase, natDegree_basisDivisor_of_ne, natDegree_prod, s.erase, simp_rw, sum_congr
 -/
@@ -879,7 +885,14 @@ theorem sum_basis
   · rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #s)]
     intro i hi
     rw [degree_basis hvs hi]; rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.pred_lt (card_ne_zero_of_me
+    exact Nat.pred_lt (card_ne_zero_of_mem hi)
+  · rw [degree_one, ← WithBot.coe_zero, Nat.cast_withBot, WithBot.coe_lt_coe]
+    exact Nonempty.card_pos hs
+  · intro i hi
+    rw [eval_finsetSum]; rw [eval_one]; rw [← add_sum_erase _ _ hi]; rw [eval_basis_self hvs hi]; rw [add_eq_left]
+    refine sum_eq_zero fun j hj => ?_
+    rcases mem_erase.mp hj with ⟨hij, _⟩
+    rw [eval_basis_of_ne hij hi]
 
 中文:
 定理 sum_basis
@@ -889,7 +902,14 @@ theorem sum_basis
   · rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #s)]
     intro i hi
     rw [degree_basis hvs hi]; rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.pred_lt (card_ne_zero_of_me
+    exact Nat.pred_lt (card_ne_zero_of_mem hi)
+  · rw [degree_one, ← WithBot.coe_zero, Nat.cast_withBot, WithBot.coe_lt_coe]
+    exact Nonempty.card_pos hs
+  · intro i hi
+    rw [eval_finsetSum]; rw [eval_one]; rw [← add_sum_erase _ _ hi]; rw [eval_basis_self hvs hi]; rw [add_eq_left]
+    refine sum_eq_zero fun j hj => ?_
+    rcases mem_erase.mp hj with ⟨hij, _⟩
+    rw [eval_basis_of_ne hij hi]
 
 Depends on / 依赖: Finset, Finset.sup_lt_iff, Nat.cast_withBot, Nat.pred_lt, Nonempty, Nonempty.card_pos, WithBot, WithBot.bot_lt_coe, WithBot.coe_lt_coe, WithBot.coe_zero, add_sum_erase, bot_lt_coe, card_ne_zero_of_mem, card_pos, cast_withBot, coe_lt_coe, coe_zero, degree_basis, degree_one, degree_sum_le
 -/
@@ -987,7 +1007,9 @@ definition interpolate
     have h : (fun x => C (f x) * Lagrange.basis s v x + C (g x) * Lagrange.basis s v x) =
     (fun x => C ((f + g) x) * Lagrange.basis s v x) := by
       simp_rw [← add_mul, ← C_add, Pi.add_apply]
-  
+    rw [h]
+  map_smul' c f := by
+    simp_rw [Finset.smul_sum, C_mul', smul_smul, Pi.smul_apply, RingHom.id_apply, smul_eq_mul]
 
 中文:
 定义 interpolate
@@ -998,7 +1020,9 @@ definition interpolate
     have h : (fun x => C (f x) * Lagrange.basis s v x + C (g x) * Lagrange.basis s v x) =
     (fun x => C ((f + g) x) * Lagrange.basis s v x) := by
       simp_rw [← add_mul, ← C_add, Pi.add_apply]
-  
+    rw [h]
+  map_smul' c f := by
+    simp_rw [Finset.smul_sum, C_mul', smul_smul, Pi.smul_apply, RingHom.id_apply, smul_eq_mul]
 
 Depends on / 依赖: Lagrange, Lagrange.basis
 -/
@@ -1158,7 +1182,7 @@ theorem degree_interpolate_lt
     exact WithBot.bot_lt_coe _
   · refine lt_of_le_of_lt (degree_interpolate_le _ hvs) ?_
     rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.sub_lt (Nonempty.ca
+    exact Nat.sub_lt (Nonempty.card_pos h) zero_lt_one
 
 中文:
 定理 degree_interpolate_lt
@@ -1171,7 +1195,7 @@ theorem degree_interpolate_lt
     exact WithBot.bot_lt_coe _
   · refine lt_of_le_of_lt (degree_interpolate_le _ hvs) ?_
     rw [Nat.cast_withBot]; rw [WithBot.coe_lt_coe]
-    exact Nat.sub_lt (Nonempty.ca
+    exact Nat.sub_lt (Nonempty.card_pos h) zero_lt_one
 
 Depends on / 依赖: Nat.cast_withBot, Nat.sub_lt, Nonempty, Nonempty.card_pos, WithBot, WithBot.bot_lt_coe, WithBot.coe_lt_coe, bot_lt_coe, card_empty, card_pos, cast_withBot, coe_lt_coe, degree_interpolate_le, degree_zero, eq_empty_or_nonempty, interpolate_empty, lt_of_le_of_lt, sub_lt, zero_lt_one
 -/
@@ -1358,7 +1382,14 @@ mem_degreeLT.2 degree_interpolate_lt _ hvs⟩
   left_inv := by
     rintro ⟨f, hf⟩
     simp only [Subtype.mk_eq_mk, dite_eq_ite]
-  
+    rw [mem_degreeLT] at hf
+    conv => rhs; rw [eq_interpolate hvs hf]
+    exact interpolate_eq_of_values_eq_on _ _ fun _ hi => if_pos hi
+  right_inv := by
+    intro f
+    ext ⟨i, hi⟩
+    simp only [eval_interpolate_at_node _ hvs hi]
+    exact dif_pos hi
 
 中文:
 定义 funEquivDegreeLT
@@ -1372,7 +1403,14 @@ mem_degreeLT.2 degree_interpolate_lt _ hvs⟩
   left_inv := by
     rintro ⟨f, hf⟩
     simp only [Subtype.mk_eq_mk, dite_eq_ite]
-  
+    rw [mem_degreeLT] at hf
+    conv => rhs; rw [eq_interpolate hvs hf]
+    exact interpolate_eq_of_values_eq_on _ _ fun _ hi => if_pos hi
+  right_inv := by
+    intro f
+    ext ⟨i, hi⟩
+    simp only [eval_interpolate_at_node _ hvs hi]
+    exact dif_pos hi
 -/
 def funEquivDegreeLT (hvs : Set.InjOn v s) : degreeLT F #s ≃ₗ[F] s -> F where
   toFun f i := f.1.eval (v i)
@@ -1405,7 +1443,32 @@ theorem interpolate_eq_sum_interpolate_insert_sdiff
   · simp_rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #t), degree_mul]
     intro i hi
     have hs : 1 <= #s := Nonempty.card_pos ⟨_, hi⟩
-    have hst' : #s <= #t := card_le_card h
+    have hst' : #s <= #t := card_le_card hst
+    have H : #t = 1 + (#t - #s) + (#s - 1) := by
+      rw [add_assoc]; rw [tsub_add_tsub_cancel hst' hs]; rw [← add_tsub_assoc_of_le (hs.trans hst')]; rw [Nat.succ_add_sub_one]; rw [zero_add]
+    rw [degree_basis (Set.InjOn.mono hst hvt) hi]; rw [H]; rw [WithBot.coe_add]; rw [Nat.cast_withBot]; rw [WithBot.add_lt_add_iff_right (@WithBot.coe_ne_bot _ (#s - 1))]
+    convert!
+      degree_interpolate_lt _
+        (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hst hi, sdiff_subset⟩)))
+    rw [card_insert_of_notMem (notMem_sdiff_of_mem_right hi)]; rw [card_sdiff_of_subset hst]; rw [add_comm]
+  · simp_rw [eval_finsetSum, eval_mul]
+    by_cases hi' : i in s
+    · rw [← add_sum_erase _ _ hi', eval_basis_self (hvt.mono hst) hi',
+        eval_interpolate_at_node _
+          (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hi, sdiff_subset⟩)))
+          (mem_insert_self _ _),
+        mul_one, add_eq_left]
+      refine sum_eq_zero fun j hj => ?_
+      rcases mem_erase.mp hj with ⟨hij, _⟩
+      rw [eval_basis_of_ne hij hi']; rw [mul_zero]
+    · have H : (∑ j in s, eval (v i) (Lagrange.basis s v j)) = 1 := by
+        rw [← eval_finsetSum]; rw [sum_basis (hvt.mono hst) hs]; rw [eval_one]
+      rw [← mul_one (r i)]; rw [← H]; rw [mul_sum]
+      refine sum_congr rfl fun j hj => ?_
+      congr
+      exact
+        eval_interpolate_at_node _ (hvt.mono (insert_subset_iff.mpr ⟨hst hj, sdiff_subset⟩))
+          (mem_insert.mpr (Or.inr (mem_sdiff.mpr ⟨hi, hi'⟩)))
 
 中文:
 定理 interpolate_eq_sum_interpolate_insert_sdiff
@@ -1416,7 +1479,32 @@ theorem interpolate_eq_sum_interpolate_insert_sdiff
   · simp_rw [Nat.cast_withBot, Finset.sup_lt_iff (WithBot.bot_lt_coe #t), degree_mul]
     intro i hi
     have hs : 1 <= #s := Nonempty.card_pos ⟨_, hi⟩
-    have hst' : #s <= #t := card_le_card h
+    have hst' : #s <= #t := card_le_card hst
+    have H : #t = 1 + (#t - #s) + (#s - 1) := by
+      rw [add_assoc]; rw [tsub_add_tsub_cancel hst' hs]; rw [← add_tsub_assoc_of_le (hs.trans hst')]; rw [Nat.succ_add_sub_one]; rw [zero_add]
+    rw [degree_basis (Set.InjOn.mono hst hvt) hi]; rw [H]; rw [WithBot.coe_add]; rw [Nat.cast_withBot]; rw [WithBot.add_lt_add_iff_right (@WithBot.coe_ne_bot _ (#s - 1))]
+    convert!
+      degree_interpolate_lt _
+        (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hst hi, sdiff_subset⟩)))
+    rw [card_insert_of_notMem (notMem_sdiff_of_mem_right hi)]; rw [card_sdiff_of_subset hst]; rw [add_comm]
+  · simp_rw [eval_finsetSum, eval_mul]
+    by_cases hi' : i in s
+    · rw [← add_sum_erase _ _ hi', eval_basis_self (hvt.mono hst) hi',
+        eval_interpolate_at_node _
+          (hvt.mono (coe_subset.mpr (insert_subset_iff.mpr ⟨hi, sdiff_subset⟩)))
+          (mem_insert_self _ _),
+        mul_one, add_eq_left]
+      refine sum_eq_zero fun j hj => ?_
+      rcases mem_erase.mp hj with ⟨hij, _⟩
+      rw [eval_basis_of_ne hij hi']; rw [mul_zero]
+    · have H : (∑ j in s, eval (v i) (Lagrange.basis s v j)) = 1 := by
+        rw [← eval_finsetSum]; rw [sum_basis (hvt.mono hst) hs]; rw [eval_one]
+      rw [← mul_one (r i)]; rw [← H]; rw [mul_sum]
+      refine sum_congr rfl fun j hj => ?_
+      congr
+      exact
+        eval_interpolate_at_node _ (hvt.mono (insert_subset_iff.mpr ⟨hst hj, sdiff_subset⟩))
+          (mem_insert.mpr (Or.inr (mem_sdiff.mpr ⟨hi, hi'⟩)))
 
 Depends on / 依赖: Finset, Finset.sup_lt_iff, Nat.cast_withBot, Nat.succ_add_sub_one, Nonempty, Nonempty.card_pos, Set.InjOn.mono, WithBot, WithBot.bot_lt_coe, add_assoc, add_tsub_assoc_of_le, bot_lt_coe, card_le_card, card_pos, cast_withBot, degree_basis, degree_mul, degree_sum_le, eq_interpolate_of_eval_eq, hs.trans
 -/
@@ -1462,13 +1550,15 @@ English:
 theorem interpolate_eq_add_interpolate_erase
   statement: (hvs : Set.InjOn v s) (hi : i in s) (hj : j in s)
   proof: by
-  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singl
+  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singleton_eq_erase]; rw [pair_comm]; rw [sdiff_insert_insert_of_mem_of_notMem hj (notMem_singleton.mpr hij.symm)]; rw [sdiff_singleton_eq_erase]
+  exact insert_subset_iff.mpr ⟨hi, singleton_subset_iff.mpr hj⟩
 
 中文:
 定理 interpolate_eq_add_interpolate_erase
   结论: (hvs : 集合.单射限制 v s) (hi : i in s) (hj : j in s)
   证明: by
-  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singl
+  rw [interpolate_eq_sum_interpolate_insert_sdiff _ hvs ⟨i]; rw [mem_insert_self i {j}⟩ _]; rw [sum_insert (notMem_singleton.mpr hij)]; rw [sum_singleton]; rw [basis_pair_left hij]; rw [basis_pair_right hij]; rw [sdiff_insert_insert_of_mem_of_notMem hi (notMem_singleton.mpr hij)]; rw [sdiff_singleton_eq_erase]; rw [pair_comm]; rw [sdiff_insert_insert_of_mem_of_notMem hj (notMem_singleton.mpr hij.symm)]; rw [sdiff_singleton_eq_erase]
+  exact insert_subset_iff.mpr ⟨hi, singleton_subset_iff.mpr hj⟩
 
 Depends on / 依赖: basis_pair_left, basis_pair_right, hij.symm, insert_subset_iff, insert_subset_iff.mpr, interpolate_eq_sum_interpolate_insert_sdiff, mem_insert_self, notMem_singleton, notMem_singleton.mpr, pair_comm, sdiff_insert_insert_of_mem_of_notMem, sdiff_singleton_eq_erase, singleton_subset_iff, singleton_subset_iff.mpr, sum_insert, sum_singleton
 -/
@@ -1517,7 +1607,19 @@ theorem iterate_derivative_interpolate
   congr! 2 with i hi
   have hvs' := hvs.mono (coe_subset.mpr (erase_subset i s))
   calc
-    derivative^[k] (∏ j in s.erase i, (X - C (
+    derivative^[k] (∏ j in s.erase i, (X - C (v j))) =
+    derivative^[k] (∏ vj in (s.erase i).image v, (X - C vj)) := by rw [Finset.prod_image hvs']
+    _ = k.factorial * ∑ t in ((s.erase i).image v).powersetCard (#s - (k + 1)),
+          ∏ va in t, (X - C va) := by
+        grind [iterate_derivative_prod_X_sub_C]
+    _ = k.factorial * ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (X - C (v a)) := by
+        rw [powersetCard_eq_filter]; rw [powerset_image]; rw [eq_comm]
+        congrm k.factorial * ?_
+        refine sum_nbij (·.image v) (fun a ha => ?hi) ?i_inj (fun t ht => ?i_surj) fun a ha => ?h
+        case hi => grind [card_image_of_injOn, hvs'.mono]
+        case i_inj => exact (image_injOn_powerset_of_injOn hvs').mono (by grind)
+        case i_surj => grind [card_image_of_injOn, hvs'.mono]
+case h => exact eq_comm.mp prod_image by grind [hvs'.mono]
 
 中文:
 定理 iterate_derivative_interpolate
@@ -1529,7 +1631,19 @@ theorem iterate_derivative_interpolate
   congr! 2 with i hi
   have hvs' := hvs.mono (coe_subset.mpr (erase_subset i s))
   calc
-    derivative^[k] (∏ j in s.erase i, (X - C (
+    derivative^[k] (∏ j in s.erase i, (X - C (v j))) =
+    derivative^[k] (∏ vj in (s.erase i).image v, (X - C vj)) := by rw [Finset.prod_image hvs']
+    _ = k.factorial * ∑ t in ((s.erase i).image v).powersetCard (#s - (k + 1)),
+          ∏ va in t, (X - C va) := by
+        grind [iterate_derivative_prod_X_sub_C]
+    _ = k.factorial * ∑ t in (s.erase i).powersetCard (#s - (k + 1)), ∏ a in t, (X - C (v a)) := by
+        rw [powersetCard_eq_filter]; rw [powerset_image]; rw [eq_comm]
+        congrm k.factorial * ?_
+        refine sum_nbij (·.image v) (fun a ha => ?hi) ?i_inj (fun t ht => ?i_surj) fun a ha => ?h
+        case hi => grind [card_image_of_injOn, hvs'.mono]
+        case i_inj => exact (image_injOn_powerset_of_injOn hvs').mono (by grind)
+        case i_surj => grind [card_image_of_injOn, hvs'.mono]
+case h => exact eq_comm.mp prod_image by grind [hvs'.mono]
 
 Depends on / 依赖: Finset, Finset.prod_image, classical, coe_subset, coe_subset.mpr, derivative, erase_subset, factorial, hvs.mono, interpolate_eq_sum, iterate, iterate_derivative_C_mul, iterate_derivative_sum, k.factorial, mul_assoc, mul_comm, mul_sum, powersetCard, prod_image, s.erase
 -/
@@ -1645,7 +1759,8 @@ theorem leadingCoeff_eq_sum
   rw [← WithBot.coe_one]; rw [← WithBot.coe_add] at hP
   replace hP : #s = deg + 1 := WithBot.coe_eq_coe.mp hP
   have hdegree : P.degree = ↑(#s - 1) := hdeg.symm.trans (WithBot.coe_eq_coe.mpr (by grind))
-  rw [leadingCoeff]
+  rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some hdegree]
+  exact coeff_eq_sum hvs (by rw [hdegree]; norm_cast; lia)
 
 中文:
 定理 leadingCoeff_eq_sum
@@ -1654,7 +1769,8 @@ theorem leadingCoeff_eq_sum
   rw [← WithBot.coe_one]; rw [← WithBot.coe_add] at hP
   replace hP : #s = deg + 1 := WithBot.coe_eq_coe.mp hP
   have hdegree : P.degree = ↑(#s - 1) := hdeg.symm.trans (WithBot.coe_eq_coe.mpr (by grind))
-  rw [leadingCoeff]
+  rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some hdegree]
+  exact coeff_eq_sum hvs (by rw [hdegree]; norm_cast; lia)
 
 Depends on / 依赖: P.degree, WithBot, WithBot.coe_add, WithBot.coe_eq_coe.mp, WithBot.coe_eq_coe.mpr, WithBot.coe_one, coe_add, coe_eq_coe, coe_one, coeff_eq_sum, contrapose, degree, hdeg.symm.trans, hdegree, leadingCoeff, natDegree_eq_of_degree_eq_some, replace
 -/
@@ -1679,7 +1795,13 @@ lemma _root_.Polynomial.exists_eval_eq_iff
   classical
   have : Fintype ι := Fintype.ofFinite ι
   have hinj : Set.InjOn (fun d : F => d) (Finset.univ.image x) := Function.injective_id.injOn
-  set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 
+  set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 with v_def
+  refine ⟨Lagrange.interpolate (Finset.univ.image x) (fun d : F => d) v, fun i => ?_⟩
+  rw [Lagrange.eval_interpolate_at_node _ hinj (by simp)]; rw [v_def]
+  simp only
+  split_ifs with h
+  · exact hwd _ _ h.choose_spec
+  · aesop
 
 中文:
 引理 _root_.多项式.存在_eval_eq_iff
@@ -1689,7 +1811,13 @@ lemma _root_.Polynomial.exists_eval_eq_iff
   classical
   have : Fintype ι := Fintype.ofFinite ι
   have hinj : Set.InjOn (fun d : F => d) (Finset.univ.image x) := Function.injective_id.injOn
-  set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 
+  set v : F -> F := fun z => if h : exists i, x i = z then y h.choose else 0 with v_def
+  refine ⟨Lagrange.interpolate (Finset.univ.image x) (fun d : F => d) v, fun i => ?_⟩
+  rw [Lagrange.eval_interpolate_at_node _ hinj (by simp)]; rw [v_def]
+  simp only
+  split_ifs with h
+  · exact hwd _ _ h.choose_spec
+  · aesop
 
 Depends on / 依赖: Finset, Finset.univ.image, Fintype, Fintype.ofFinite, Function, Function.injective_id.injOn, Lagrange, Lagrange.eval_interpolate_at_node, Lagrange.interpolate, Set.InjOn, classical, eval_interpolate_at_node, h.ch, h.choose, injective_id, interpolate, ofFinite, split_ifs, v_def
 -/
@@ -2028,7 +2156,8 @@ theorem derivative_nodal
   · rw [nodal_empty, derivative_one, sum_empty]
   · rw [nodal_insert_eq_nodal hit, derivative_mul, IH, derivative_sub, derivative_X, derivative_C,
       sub_zero, one_mul, sum_insert hit, mul_sum, erase_insert hit, add_right_inj]
-    refine sum_cong
+    refine sum_congr rfl fun j hjt => ?_
+    rw [t.erase_insert_of_ne (ne_of_mem_of_not_mem hjt hit).symm]; rw [nodal_insert_eq_nodal (mem_of_mem_erase.mt hit)]
 
 中文:
 定理 derivative_nodal
@@ -2038,7 +2167,8 @@ theorem derivative_nodal
   · rw [nodal_empty, derivative_one, sum_empty]
   · rw [nodal_insert_eq_nodal hit, derivative_mul, IH, derivative_sub, derivative_X, derivative_C,
       sub_zero, one_mul, sum_insert hit, mul_sum, erase_insert hit, add_right_inj]
-    refine sum_cong
+    refine sum_congr rfl fun j hjt => ?_
+    rw [t.erase_insert_of_ne (ne_of_mem_of_not_mem hjt hit).symm]; rw [nodal_insert_eq_nodal (mem_of_mem_erase.mt hit)]
 
 Depends on / 依赖: add_right_inj, derivative_C, derivative_X, derivative_mul, derivative_one, derivative_sub, erase_insert, erase_insert_of_ne, induction_on, mem_of_mem_erase, mem_of_mem_erase.mt, mul_sum, ne_of_mem_of_not_mem, nodal_empty, nodal_insert_eq_nodal, one_mul, s.induction_on, sub_zero, sum_congr, sum_empty
 -/
@@ -2086,7 +2216,15 @@ theorem nodal_subgroup_eq_X_pow_card_sub_one
   apply eq_of_degree_le_of_eval_index_eq (v := ((↑) : Rˣ -> R)) (G : Set Rˣ).toFinset
   · exact Units.val_injective.injOn
   · simp
-  · rw [degree_sub_eq_left_of_degree_lt h, degree_nodal, Set.toFinse
+  · rw [degree_sub_eq_left_of_degree_lt h, degree_nodal, Set.toFinset_card, degree_pow, degree_X,
+      nsmul_eq_mul, mul_one, Nat.cast_inj]
+    exact rfl
+  · rw [nodal_monic, leadingCoeff_sub_of_degree_lt h, monic_X_pow]
+  · intro i hi
+    rw [eval_nodal_at_node hi]
+    replace hi : i in G := by simpa using hi
+    obtain ⟨g, rfl⟩ : exists g : G, g.val = i := ⟨⟨i, hi⟩, rfl⟩
+    simp [← Units.val_pow_eq_pow_val, ← Subgroup.coe_pow G]
 
 中文:
 定理 nodal_subgroup_eq_X_pow_card_sub_one
@@ -2096,7 +2234,15 @@ theorem nodal_subgroup_eq_X_pow_card_sub_one
   apply eq_of_degree_le_of_eval_index_eq (v := ((↑) : Rˣ -> R)) (G : Set Rˣ).toFinset
   · exact Units.val_injective.injOn
   · simp
-  · rw [degree_sub_eq_left_of_degree_lt h, degree_nodal, Set.toFinse
+  · rw [degree_sub_eq_left_of_degree_lt h, degree_nodal, Set.toFinset_card, degree_pow, degree_X,
+      nsmul_eq_mul, mul_one, Nat.cast_inj]
+    exact rfl
+  · rw [nodal_monic, leadingCoeff_sub_of_degree_lt h, monic_X_pow]
+  · intro i hi
+    rw [eval_nodal_at_node hi]
+    replace hi : i in G := by simpa using hi
+    obtain ⟨g, rfl⟩ : exists g : G, g.val = i := ⟨⟨i, hi⟩, rfl⟩
+    simp [← Units.val_pow_eq_pow_val, ← Subgroup.coe_pow G]
 -/
 @[simp] theorem nodal_subgroup_eq_X_pow_card_sub_one [IsDomain R]
     (G : Subgroup Rˣ) [Fintype G] :
@@ -2279,7 +2425,7 @@ theorem eval_basis_not_at_node
   proof: by
   rw [mul_comm]; rw [basis_eq_prod_sub_inv_mul_nodal_div hi]; rw [eval_mul]; rw [eval_C]; rw [←
     nodal_erase_eq_nodal_div hi]; rw [eval_nodal]; rw [eval_nodal]; rw [mul_assoc]; rw [← mul_prod_erase _ _ hi]; rw [←
-    mul_assoc (x - v i)⁻¹]; rw [inv_mul_cancel₀ (sub_ne_zero_of_ne hxi)]; rw [one
+    mul_assoc (x - v i)⁻¹]; rw [inv_mul_cancel₀ (sub_ne_zero_of_ne hxi)]; rw [one_mul]
 
 中文:
 定理 eval_basis_not_at_node
@@ -2287,7 +2433,7 @@ theorem eval_basis_not_at_node
   证明: by
   rw [mul_comm]; rw [basis_eq_prod_sub_inv_mul_nodal_div hi]; rw [eval_mul]; rw [eval_C]; rw [←
     nodal_erase_eq_nodal_div hi]; rw [eval_nodal]; rw [eval_nodal]; rw [mul_assoc]; rw [← mul_prod_erase _ _ hi]; rw [←
-    mul_assoc (x - v i)⁻¹]; rw [inv_mul_cancel₀ (sub_ne_zero_of_ne hxi)]; rw [one
+    mul_assoc (x - v i)⁻¹]; rw [inv_mul_cancel₀ (sub_ne_zero_of_ne hxi)]; rw [one_mul]
 
 Depends on / 依赖: basis_eq_prod_sub_inv_mul_nodal_div, eval_C, eval_mul, eval_nodal, mul_assoc, mul_comm, mul_prod_erase, nodal_erase_eq_nodal_div, one_mul, sub_ne_zero_of_ne
 -/

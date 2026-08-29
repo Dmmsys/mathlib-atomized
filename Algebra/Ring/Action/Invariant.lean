@@ -59,7 +59,7 @@ mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ (s : R)
 smul_add m s₁ s₂ := Subtype.ext smul_add m (s₁ : R) (s₂ : R)
 smul_zero m := Subtype.ext smul_zero m
 smul_one m := Subtype.ext smul_one m
-smul_mul m s₁ s₂ :=
+smul_mul m s₁ s₂ := Subtype.ext smul_mul' m (s₁ : R) (s₂ : R)
 
 中文:
 实例 是不变子环.toMulSemiringAction
@@ -70,7 +70,7 @@ mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ (s : R)
 smul_add m s₁ s₂ := Subtype.ext smul_add m (s₁ : R) (s₂ : R)
 smul_zero m := Subtype.ext smul_zero m
 smul_one m := Subtype.ext smul_one m
-smul_mul m s₁ s₂ :=
+smul_mul m s₁ s₂ := Subtype.ext smul_mul' m (s₁ : R) (s₂ : R)
 
 Depends on / 依赖: IsInvariantSubring, IsInvariantSubring.smul_mem, smul_mem
 -/

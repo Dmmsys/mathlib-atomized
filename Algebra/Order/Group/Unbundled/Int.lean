@@ -462,7 +462,10 @@ theorem abs_ediv_le_abs
   fun a n => by
   rw [abs_eq_natAbs]; rw [abs_eq_natAbs];
   exact ofNat_le_ofNat_of_le
-
+    (match a, n with
+      | (m : Nat), n => Nat.div_le_self _ _
+      | -[m+1], 0 => Nat.zero_le _
+      | -[m+1], n + 1 => Nat.succ_le_succ (Nat.div_le_self _ _))
 
 中文:
 定理 abs_ediv_le_abs
@@ -474,7 +477,10 @@ theorem abs_ediv_le_abs
   fun a n => by
   rw [abs_eq_natAbs]; rw [abs_eq_natAbs];
   exact ofNat_le_ofNat_of_le
-
+    (match a, n with
+      | (m : Nat), n => Nat.div_le_self _ _
+      | -[m+1], 0 => Nat.zero_le _
+      | -[m+1], n + 1 => Nat.succ_le_succ (Nat.div_le_self _ _))
 
 Depends on / 依赖: Int.ediv_neg, Int.eq_nat_or_neg, Nat.div_le_self, Nat.succ_le_succ, Nat.zero_le, Or.inl, Or.inr, abs_eq_natAbs, abs_neg, div_le_self, ediv_neg, eq_nat_or_neg, ofNat_le_ofNat_of_le, succ_le_succ, zero_le
 -/

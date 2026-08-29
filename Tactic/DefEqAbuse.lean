@@ -168,7 +168,15 @@ definition withPPOptions
   | .compose a b => .compose (withPPOptions a modify) (withPPOptions b modify)
   | .nest n m => .nest n (withPPOptions m modify)
   | .group m => .group (withPPOptions m modify)
-  |
+  | .tagged t m => .tagged t (withPPOptions m modify)
+  | .ofOriginatingSyntax stx m => .ofOriginatingSyntax stx (withPPOptions m modify)
+  | .withNamingContext nc m => .withNamingContext nc (withPPOptions m modify)
+  | .trace td header children =>
+    .trace td (withPPOptions header modify) (children.map (withPPOptions · modify))
+  | .ofWidget w m => .ofWidget w (withPPOptions m modify)
+  | other@(.ofLazy _ _)
+  | other@(.ofFormatWithInfos _)
+  | other@(.ofGoal _) => other
 
 中文:
 定义 withPPOptions
@@ -179,7 +187,15 @@ definition withPPOptions
   | .compose a b => .compose (withPPOptions a modify) (withPPOptions b modify)
   | .nest n m => .nest n (withPPOptions m modify)
   | .group m => .group (withPPOptions m modify)
-  |
+  | .tagged t m => .tagged t (withPPOptions m modify)
+  | .ofOriginatingSyntax stx m => .ofOriginatingSyntax stx (withPPOptions m modify)
+  | .withNamingContext nc m => .withNamingContext nc (withPPOptions m modify)
+  | .trace td header children =>
+    .trace td (withPPOptions header modify) (children.map (withPPOptions · modify))
+  | .ofWidget w m => .ofWidget w (withPPOptions m modify)
+  | other@(.ofLazy _ _)
+  | other@(.ofFormatWithInfos _)
+  | other@(.ofGoal _) => other
 -/
 partial def withPPOptions (msg : MessageData) (modify : Options -> Options) : MessageData :=
   match msg with
@@ -240,7 +256,7 @@ definition findLeafFailures
       return .ascend
     let childFailures ← visitWithM children findLeafFailures
     -- Leaf failure: deepest `❌️` node with no deeper `❌️` children
-return .ascend if childFailures.isEm
+return .ascend if childFailures.isEmpty then #[header] else childFailures
 
 中文:
 定义 findLeafFailures
@@ -250,7 +266,7 @@ return .ascend if childFailures.isEm
       return .ascend
     let childFailures ← visitWithM children findLeafFailures
     -- Leaf failure: deepest `❌️` node with no deeper `❌️` children
-return .ascend if childFailures.isEm
+return .ascend if childFailures.isEmpty then #[header] else childFailures
 -/
 partial def findLeafFailures (msg : MessageData) : BaseIO (Array MessageData) :=
 msg.visitTraceNodesM onlyOnDefEqNodes fun td header children => do
@@ -302,7 +318,18 @@ definition findTransitionFailures
 else msg.visitTraceNodesM onlyOnDefEqNodes fun td header children => do
     unless td.result? matches some .failure do return .descend
     let headerStr ← header.toString
-    if permSuccesses.contains headerStr && !permFailures.contains headerStr th
+    if permSuccesses.contains headerStr && !permFailures.contains headerStr then
+      -- Transition point: fails strict, succeeds permissive, doesn't also fail permissive.
+      -- Look for deeper transition points among children.
+let childTransitions ← visitWithM children
+        findTransitionFailures permSuccesses permFailures
+return .ascend
+        -- Deepest transition point: no deeper transition-point children.
+        if childTransitions.isEmpty then return #[header] else return childTransitions
+    else
+      -- Not a transition point (fails in both modes, strict-only, or ambiguous).
+      -- Still recurse: children may contain transition points.
+      return .descend
 
 中文:
 定义 findTransitionFailures
@@ -311,7 +338,18 @@ else msg.visitTraceNodesM onlyOnDefEqNodes fun td header children => do
 else msg.visitTraceNodesM onlyOnDefEqNodes fun td header children => do
     unless td.result? matches some .failure do return .descend
     let headerStr ← header.toString
-    if permSuccesses.contains headerStr && !permFailures.contains headerStr th
+    if permSuccesses.contains headerStr && !permFailures.contains headerStr then
+      -- Transition point: fails strict, succeeds permissive, doesn't also fail permissive.
+      -- Look for deeper transition points among children.
+let childTransitions ← visitWithM children
+        findTransitionFailures permSuccesses permFailures
+return .ascend
+        -- Deepest transition point: no deeper transition-point children.
+        if childTransitions.isEmpty then return #[header] else return childTransitions
+    else
+      -- Not a transition point (fails in both modes, strict-only, or ambiguous).
+      -- Still recurse: children may contain transition points.
+      return .descend
 -/
 partial def findTransitionFailures (permSuccesses : Std.HashSet String)
     (permFailures : Std.HashSet String)
@@ -344,7 +382,11 @@ definition findSynthAppFailures
     if td.cls == `Meta.synthInstance then
       let headerStr ← header.toString
       if td.result? matches some .failure && headerStr.contains "apply " then
-let failures ← visitWithM child
+let failures ← visitWithM children
+          findTransitionFailures permSuccesses permFailures
+        if !failures.isEmpty then
+          return .ascend #[(header, failures)]
+    return .descend
 
 中文:
 定义 findSynthAppFailures
@@ -354,7 +396,11 @@ let failures ← visitWithM child
     if td.cls == `Meta.synthInstance then
       let headerStr ← header.toString
       if td.result? matches some .failure && headerStr.contains "apply " then
-let failures ← visitWithM child
+let failures ← visitWithM children
+          findTransitionFailures permSuccesses permFailures
+        if !failures.isEmpty then
+          return .ascend #[(header, failures)]
+    return .descend
 -/
 partial def findSynthAppFailures (permSuccesses permFailures : Std.HashSet String)
     (msg : MessageData) : BaseIO (Array (MessageData × Array MessageData)) :=
@@ -380,7 +426,11 @@ definition findSynthFailures
     if td.cls == `Meta.synthInstance then
       if td.result? matches some .failure then
 visitWithAndAscendM children findSynthAppFailures permSuccesses permFailures
-      else return .asce
+      else return .ascend
+    -- Skip isDefEq/synthInstance subtrees that aren't top-level synthesis
+    else if !(`Meta.isDefEq).isPrefixOf td.cls && !(`Meta.synthInstance).isPrefixOf td.cls then
+      return .descend
+    else return .ascend
 
 中文:
 定义 findSynthFailures
@@ -390,7 +440,11 @@ visitWithAndAscendM children findSynthAppFailures permSuccesses permFailures
     if td.cls == `Meta.synthInstance then
       if td.result? matches some .failure then
 visitWithAndAscendM children findSynthAppFailures permSuccesses permFailures
-      else return .asce
+      else return .ascend
+    -- Skip isDefEq/synthInstance subtrees that aren't top-level synthesis
+    else if !(`Meta.isDefEq).isPrefixOf td.cls && !(`Meta.synthInstance).isPrefixOf td.cls then
+      return .descend
+    else return .ascend
 -/
 partial def findSynthFailures (permSuccesses permFailures : Std.HashSet String)
     (msg : MessageData) : BaseIO (Array (MessageData × Array MessageData)) :=
@@ -448,7 +502,30 @@ definition analyzeTraces
   let mut permFailures : Std.HashSet String := {}
   for msg in permMsgs do
     permSuccesses := permSuccesses.union (← collectIsDefEqChecks (· == .success) msg)
-
+    permFailures := permFailures.union (← collectIsDefEqChecks (· == .failure) msg)
+  -- Find flat transition failures in strict traces.
+  let mut transitionFailures : Array MessageData := #[]
+  for msg in strictMsgs do
+    transitionFailures := transitionFailures ++
+      (← findTransitionFailures permSuccesses permFailures msg)
+  let uniqueFailures ← dedupByString transitionFailures
+  -- Optionally find synthesis-grouped failures.
+  if !includeSynth then
+    return (uniqueFailures, #[])
+  let mut permissiveSuccessApps : Std.HashSet String := {}
+  for msg in permMsgs do
+    permissiveSuccessApps := permissiveSuccessApps.union (← findSynthSuccessApps msg)
+  let mut synthResults : Array (MessageData × Array MessageData) := #[]
+  for msg in strictMsgs do
+    synthResults := synthResults.append
+      (← findSynthFailures permSuccesses permFailures msg)
+  -- Filter to only applications that succeed with permissive transparency.
+  let filteredResults ← synthResults.filterM fun (app, _) => do
+    return permissiveSuccessApps.contains (extractInstName (← app.toString))
+  -- Dedup failures within each synth result.
+  let dedupedResults ← filteredResults.mapM fun (app, failures) => do
+    return (app, ← dedupByString failures)
+  return (uniqueFailures, dedupedResults)
 
 中文:
 定义 analyzeTraces
@@ -459,7 +536,30 @@ definition analyzeTraces
   let mut permFailures : Std.HashSet String := {}
   for msg in permMsgs do
     permSuccesses := permSuccesses.union (← collectIsDefEqChecks (· == .success) msg)
-
+    permFailures := permFailures.union (← collectIsDefEqChecks (· == .failure) msg)
+  -- Find flat transition failures in strict traces.
+  let mut transitionFailures : Array MessageData := #[]
+  for msg in strictMsgs do
+    transitionFailures := transitionFailures ++
+      (← findTransitionFailures permSuccesses permFailures msg)
+  let uniqueFailures ← dedupByString transitionFailures
+  -- Optionally find synthesis-grouped failures.
+  if !includeSynth then
+    return (uniqueFailures, #[])
+  let mut permissiveSuccessApps : Std.HashSet String := {}
+  for msg in permMsgs do
+    permissiveSuccessApps := permissiveSuccessApps.union (← findSynthSuccessApps msg)
+  let mut synthResults : Array (MessageData × Array MessageData) := #[]
+  for msg in strictMsgs do
+    synthResults := synthResults.append
+      (← findSynthFailures permSuccesses permFailures msg)
+  -- Filter to only applications that succeed with permissive transparency.
+  let filteredResults ← synthResults.filterM fun (app, _) => do
+    return permissiveSuccessApps.contains (extractInstName (← app.toString))
+  -- Dedup failures within each synth result.
+  let dedupedResults ← filteredResults.mapM fun (app, failures) => do
+    return (app, ← dedupByString failures)
+  return (uniqueFailures, dedupedResults)
 -/
 def analyzeTraces (strictMsgs permMsgs : Array MessageData) (includeSynth : Bool := false) :
     BaseIO (Array MessageData × Array (MessageData × Array MessageData)) := do
@@ -596,7 +696,25 @@ definition reportDefEqAbuse
     let mut entries : Array MessageData := #[]
     for (app, failures) in synthResults do
       let failureList := joinSep
-        (failures.toList.map fu
+        (failures.toList.map fun f => m!" {failureEmoji} {f}") "\n"
+      entries := entries.push m!" {failureEmoji} {app}\n{failureList}"
+    let report := joinSep entries.toList "\n"
+    logWarning
+      m!"#defeq_abuse: {kind} fails with \
+        `backward.isDefEq.respectTransparency true` but succeeds with `false`.\n\
+        The following synthesis applications fail due to transparency:\n{report}"
+  else if uniqueFailures.isEmpty then
+    logWarning
+      m!"#defeq_abuse: {kind} fails with \
+        `backward.isDefEq.respectTransparency true` but succeeds with `false`.\n\
+        Could not identify specific failing isDefEq checks from traces."
+  else
+    let failureList := joinSep
+      (uniqueFailures.toList.map fun f => m!" {failureEmoji} {f}") "\n"
+    logWarning
+      m!"#defeq_abuse: {kind} fails with \
+        `backward.isDefEq.respectTransparency true` but succeeds with `false`.\n\
+        The following isDefEq checks are the root causes of the failure:\n{failureList}"
 
 中文:
 定义 reportDefEqAbuse
@@ -608,7 +726,25 @@ definition reportDefEqAbuse
     let mut entries : Array MessageData := #[]
     for (app, failures) in synthResults do
       let failureList := joinSep
-        (failures.toList.map fu
+        (failures.toList.map fun f => m!" {failureEmoji} {f}") "\n"
+      entries := entries.push m!" {failureEmoji} {app}\n{failureList}"
+    let report := joinSep entries.toList "\n"
+    logWarning
+      m!"#defeq_abuse: {kind} fails with \
+        `backward.isDefEq.respectTransparency true` but succeeds with `false`.\n\
+        The following synthesis applications fail due to transparency:\n{report}"
+  else if uniqueFailures.isEmpty then
+    logWarning
+      m!"#defeq_abuse: {kind} fails with \
+        `backward.isDefEq.respectTransparency true` but succeeds with `false`.\n\
+        Could not identify specific failing isDefEq checks from traces."
+  else
+    let failureList := joinSep
+      (uniqueFailures.toList.map fun f => m!" {failureEmoji} {f}") "\n"
+    logWarning
+      m!"#defeq_abuse: {kind} fails with \
+        `backward.isDefEq.respectTransparency true` but succeeds with `false`.\n\
+        The following isDefEq checks are the root causes of the failure:\n{failureList}"
 -/
 def reportDefEqAbuse {m : Type -> Type} [Monad m] [MonadLog m] [AddMessageContext m]
     [MonadOptions m] (kind : String) (uniqueFailures : Array MessageData)

@@ -158,7 +158,9 @@ definition pointwiseMulAction
   mul_smul _ _ S :=
     (congr_arg (fun f : AddMonoid.End A => S.map f) (map_mul _ _ _)).trans (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Ad
+scoped[Pointwise] attribute [instance] AddSubmonoid.pointwiseMulAction
+
+@[simp, norm_cast]
 
 中文:
 定义 pointwiseMulAction
@@ -169,7 +171,9 @@ scoped[Pointwise] attribute [instance] Ad
   mul_smul _ _ S :=
     (congr_arg (fun f : AddMonoid.End A => S.map f) (map_mul _ _ _)).trans (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Ad
+scoped[Pointwise] attribute [instance] AddSubmonoid.pointwiseMulAction
+
+@[simp, norm_cast]
 -/
 protected def pointwiseMulAction : MulAction M (AddSubmonoid A) where
   smul a S := S.map (DistribMulAction.toAddMonoidEnd _ A a)

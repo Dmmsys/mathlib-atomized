@@ -261,7 +261,13 @@ refine le_antisymm ?_ (RingCon.gi N).gc.le_u_l _
   | symm _ h => exact this.symm h
   | trans _ _ h₁ h₂ => exact this.trans h₁ h₂
   | add _ _ h₁ h₂ =>
- 
+    rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
+    rcases h₂ with ⟨p, q, h2, rfl, rfl⟩
+    exact ⟨a + p, b + q, c.add h1 h2, map_add f _ _, map_add f _ _⟩
+  | mul _ _ h₁ h₂ =>
+    rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
+    rcases h₂ with ⟨p, q, h2, rfl, rfl⟩
+    exact ⟨a * p, b * q, c.mul h1 h2, map_mul f _ _, map_mul f _ _⟩
 
 中文:
 定理 mapGen_eq_map_of_surjective
@@ -275,7 +281,13 @@ refine le_antisymm ?_ (RingCon.gi N).gc.le_u_l _
   | symm _ h => exact this.symm h
   | trans _ _ h₁ h₂ => exact this.trans h₁ h₂
   | add _ _ h₁ h₂ =>
- 
+    rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
+    rcases h₂ with ⟨p, q, h2, rfl, rfl⟩
+    exact ⟨a + p, b + q, c.add h1 h2, map_add f _ _, map_add f _ _⟩
+  | mul _ _ h₁ h₂ =>
+    rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
+    rcases h₂ with ⟨p, q, h2, rfl, rfl⟩
+    exact ⟨a * p, b * q, c.mul h1 h2, map_mul f _ _, map_mul f _ _⟩
 
 Depends on / 依赖: Relation, Relation.map_equivalence, RingCon, RingCon.gi, c.add, c.toSetoid, gc.le_u_l, le_antisymm, le_u_l, map_add, map_equivalence, this.refl, this.symm, this.trans, toSetoid
 -/
@@ -340,7 +352,14 @@ invFun d := ⟨d.comap (mk' c), c.ker_mk'_eq.symm.trans_le comap_bot c.mk' ▸ c
     rw [mapGen_apply_apply_of_surjective c.mk' (c.ker_mk'_eq.trans_le d.2) c.mk'_surjective]
   right_inv d := by
     ext x y
-    simp on
+    simp only
+    obtain ⟨x, rfl⟩ := c.mk'_surjective x
+    obtain ⟨y, rfl⟩ := c.mk'_surjective y
+    rw [mapGen_apply_apply_of_surjective _ (comap_bot c.mk' ▸ comap_mono bot_le) c.mk'_surjective]; rw [comap_rel]
+  map_rel_iff' {s t} := by
+    simp only [Equiv.coe_fn_mk, le_def, c.mk'_surjective.forall, ← Subtype.coe_le_coe]
+    simp_rw [mapGen_apply_apply_of_surjective c.mk' (c.ker_mk'_eq.trans_le s.2) c.mk'_surjective,
+      mapGen_apply_apply_of_surjective c.mk' (c.ker_mk'_eq.trans_le t.2) c.mk'_surjective]
 
 中文:
 定义 correspondence
@@ -353,7 +372,14 @@ invFun d := ⟨d.comap (mk' c), c.ker_mk'_eq.symm.trans_le comap_bot c.mk' ▸ c
     rw [mapGen_apply_apply_of_surjective c.mk' (c.ker_mk'_eq.trans_le d.2) c.mk'_surjective]
   right_inv d := by
     ext x y
-    simp on
+    simp only
+    obtain ⟨x, rfl⟩ := c.mk'_surjective x
+    obtain ⟨y, rfl⟩ := c.mk'_surjective y
+    rw [mapGen_apply_apply_of_surjective _ (comap_bot c.mk' ▸ comap_mono bot_le) c.mk'_surjective]; rw [comap_rel]
+  map_rel_iff' {s t} := by
+    simp only [Equiv.coe_fn_mk, le_def, c.mk'_surjective.forall, ← Subtype.coe_le_coe]
+    simp_rw [mapGen_apply_apply_of_surjective c.mk' (c.ker_mk'_eq.trans_le s.2) c.mk'_surjective,
+      mapGen_apply_apply_of_surjective c.mk' (c.ker_mk'_eq.trans_le t.2) c.mk'_surjective]
 
 Depends on / 依赖: c.mk, mapGen
 -/
@@ -1058,7 +1084,8 @@ definition quotientQuotientEquivQuotient
           show _ = d.mk' a + d.mk' b by rw [← d.mk'.map_add]; rfl
     map_mul' x y :=
       Con.induction_on₂ x y fun w z =>
-       
+        Con.induction_on₂ w z fun a b =>
+          show _ = d.mk' a * d.mk' b by rw [← d.mk'.map_mul]; rfl }
 
 中文:
 定义 quotientQuotientEquivQuotient
@@ -1070,7 +1097,8 @@ definition quotientQuotientEquivQuotient
           show _ = d.mk' a + d.mk' b by rw [← d.mk'.map_add]; rfl
     map_mul' x y :=
       Con.induction_on₂ x y fun w z =>
-       
+        Con.induction_on₂ w z fun a b =>
+          show _ = d.mk' a * d.mk' b by rw [← d.mk'.map_mul]; rfl }
 
 Depends on / 依赖: Con.induction_on, Setoid, Setoid.quotientQuotientEquivQuotient, c.toSetoid, d.mk, d.toSetoid, map_add, map_mul, quotientQuotientEquivQuotient, toSetoid
 -/

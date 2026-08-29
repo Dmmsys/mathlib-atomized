@@ -512,7 +512,8 @@ theorem limsSup_nhds
     fun b (hba : a < b) =>
     show exists c, { n : α | n <= c } in 𝓝 a ∧ c < b from
       match dense_or_discrete a b with
-      | Or.inl 
+      | Or.inl ⟨c, hac, hcb⟩ => ⟨c, ge_mem_nhds hac, hcb⟩
+      | Or.inr ⟨_, h⟩ => ⟨a, (𝓝 a).sets_of_superset (gt_mem_nhds hba) h, hba⟩
 
 中文:
 定理 limsSup_nhds
@@ -523,7 +524,8 @@ theorem limsSup_nhds
     fun b (hba : a < b) =>
     show exists c, { n : α | n <= c } in 𝓝 a ∧ c < b from
       match dense_or_discrete a b with
-      | Or.inl 
+      | Or.inl ⟨c, hac, hcb⟩ => ⟨c, ge_mem_nhds hac, hcb⟩
+      | Or.inr ⟨_, h⟩ => ⟨a, (𝓝 a).sets_of_superset (gt_mem_nhds hba) h, hba⟩
 
 Depends on / 依赖: Or.inl, Or.inr, csInf_eq_of_forall_ge_of_forall_gt_exists_lt, dense_or_discrete, ge_mem_nhds, gt_mem_nhds, isBounded_le_nhds, mem_of_mem_nhds, sets_of_superset
 -/
@@ -568,7 +570,11 @@ theorem limsInf_eq_of_le_nhds
   le_antisymm
     (calc
       f.limsInf <= f.limsSup := limsInf_le_limsSup hb_le hb_ge
-      _ <= (𝓝 a).limsSup := limsSup_le_limsSup_of_le h hb_ge.isCobounded_flip (
+      _ <= (𝓝 a).limsSup := limsSup_le_limsSup_of_le h hb_ge.isCobounded_flip (isBounded_le_nhds a)
+      _ = a := limsSup_nhds a)
+    (calc
+      a = (𝓝 a).limsInf := (limsInf_nhds a).symm
+      _ <= f.limsInf := limsInf_le_limsInf_of_le h (isBounded_ge_nhds a) hb_le.isCobounded_flip)
 
 中文:
 定理 limsInf_eq_of_le_nhds
@@ -579,7 +585,11 @@ theorem limsInf_eq_of_le_nhds
   le_antisymm
     (calc
       f.limsInf <= f.limsSup := limsInf_le_limsSup hb_le hb_ge
-      _ <= (𝓝 a).limsSup := limsSup_le_limsSup_of_le h hb_ge.isCobounded_flip (
+      _ <= (𝓝 a).limsSup := limsSup_le_limsSup_of_le h hb_ge.isCobounded_flip (isBounded_le_nhds a)
+      _ = a := limsSup_nhds a)
+    (calc
+      a = (𝓝 a).limsInf := (limsInf_nhds a).symm
+      _ <= f.limsInf := limsInf_le_limsInf_of_le h (isBounded_ge_nhds a) hb_le.isCobounded_flip)
 
 Depends on / 依赖: IsBounded, f.limsInf, f.limsSup, hb_ge, hb_ge.isCobounded_flip, hb_le, hb_le.isCobounded_flip, isBounded_ge_nhds, isBounded_le_nhds, isCobounded_flip, le_antisymm, limsInf, limsInf_le_limsInf_of_le, limsInf_le_limsSup, limsInf_nhds, limsSup, limsSup_le_limsSup_of_le, limsSup_nhds
 -/
@@ -666,7 +676,12 @@ theorem ClusterPt.limsSup
     · let : OrderTop α := { top := f.limsSup, le_top := htop }
 .mpr fun a => frequently_lt_of_lt_limsSup hc exact nhds_top_basis.clusterPt_iff_frequently
     · by_cases! hbot : forall x, f.limsSup <= x
-      · let : Order
+      · let : OrderBot α := { bot := f.limsSup, bot_le := hbot }
+.mpr fun a h => ?_ refine nhds_bot_basis.clusterPt_iff_frequently
+.frequently exact lt_mem_sets_of_limsSup_lt hb h
+.mpr fun a ⟨hl, hg⟩ => ?_ · refine (nhds_basis_Ioo' hbot htop).clusterPt_iff_frequently
+.and_eventually lt_mem_sets_of_limsSup_lt hb hg exact frequently_lt_of_lt_limsSup hc hl
+  · simp_all [ClusterPt, Filter.eq_top_of_neBot]
 
 中文:
 定理 ClusterPt.limsSup
@@ -677,7 +692,12 @@ theorem ClusterPt.limsSup
     · let : OrderTop α := { top := f.limsSup, le_top := htop }
 .mpr fun a => frequently_lt_of_lt_limsSup hc exact nhds_top_basis.clusterPt_iff_frequently
     · by_cases! hbot : forall x, f.limsSup <= x
-      · let : Order
+      · let : OrderBot α := { bot := f.limsSup, bot_le := hbot }
+.mpr fun a h => ?_ refine nhds_bot_basis.clusterPt_iff_frequently
+.frequently exact lt_mem_sets_of_limsSup_lt hb h
+.mpr fun a ⟨hl, hg⟩ => ?_ · refine (nhds_basis_Ioo' hbot htop).clusterPt_iff_frequently
+.and_eventually lt_mem_sets_of_limsSup_lt hb hg exact frequently_lt_of_lt_limsSup hc hl
+  · simp_all [ClusterPt, Filter.eq_top_of_neBot]
 
 Depends on / 依赖: ClusterPt, IsBounded, Nontrivial, OrderBot, OrderTop, bot_le, clusterPt_iff_frequently, f.IsBounded, f.limsSup, freque, frequently_lt_of_lt_limsSup, isBoundedDefault, le_top, limsSup, nhds_bot_basis, nhds_bot_basis.clusterPt_iff_frequently, nhds_top_basis, nhds_top_basis.clusterPt_iff_frequently
 -/
@@ -999,7 +1019,13 @@ theorem tendsto_of_no_upcrossings
   apply tendsto_of_le_liminf_of_limsup_le _ le_rfl h h'
   by_contra! hlt
   obtain ⟨a, ⟨⟨la, au⟩, as⟩⟩ : exists a, (f.liminf u < a ∧ a < f.limsup u) ∧ a in s :=
-    dense_iff_inter_open.1 hs (Set.Ioo (
+    dense_iff_inter_open.1 hs (Set.Ioo (f.liminf u) (f.limsup u)) isOpen_Ioo
+      (Set.nonempty_Ioo.2 hlt)
+  obtain ⟨b, ⟨⟨ab, bu⟩, bs⟩⟩ : exists b, (a < b ∧ b < f.limsup u) ∧ b in s :=
+    dense_iff_inter_open.1 hs (Set.Ioo a (f.limsup u)) isOpen_Ioo (Set.nonempty_Ioo.2 au)
+  have A : existsᶠ n in f, u n < a := frequently_lt_of_liminf_lt (IsBounded.isCobounded_ge h) la
+  have B : existsᶠ n in f, b < u n := frequently_lt_of_lt_limsup (IsBounded.isCobounded_le h') bu
+  exact H a as b bs ab ⟨A, B⟩
 
 中文:
 定理 tendsto_of_no_upcrossings
@@ -1011,7 +1037,13 @@ theorem tendsto_of_no_upcrossings
   apply tendsto_of_le_liminf_of_limsup_le _ le_rfl h h'
   by_contra! hlt
   obtain ⟨a, ⟨⟨la, au⟩, as⟩⟩ : exists a, (f.liminf u < a ∧ a < f.limsup u) ∧ a in s :=
-    dense_iff_inter_open.1 hs (Set.Ioo (
+    dense_iff_inter_open.1 hs (Set.Ioo (f.liminf u) (f.limsup u)) isOpen_Ioo
+      (Set.nonempty_Ioo.2 hlt)
+  obtain ⟨b, ⟨⟨ab, bu⟩, bs⟩⟩ : exists b, (a < b ∧ b < f.limsup u) ∧ b in s :=
+    dense_iff_inter_open.1 hs (Set.Ioo a (f.limsup u)) isOpen_Ioo (Set.nonempty_Ioo.2 au)
+  have A : existsᶠ n in f, u n < a := frequently_lt_of_liminf_lt (IsBounded.isCobounded_ge h) la
+  have B : existsᶠ n in f, b < u n := frequently_lt_of_lt_limsup (IsBounded.isCobounded_le h') bu
+  exact H a as b bs ab ⟨A, B⟩
 
 Depends on / 依赖: IsBoundedUnder, Set.Ioo, Set.nonempty_Ioo, Tendsto, dense_iff_inter_open, eq_or_neBot, f.IsBoundedUnder, f.eq_or_neBot, f.liminf, f.limsup, isBoundedDefault, isOpen_Ioo, le_rfl, liminf, limsup, nonempty_Ioo, tendsto_bot, tendsto_of_le_liminf_of_limsup_le
 -/
@@ -1244,7 +1276,64 @@ lemma tendsto_iSup_of_tendsto_limsup
   refine tendsto_order.mpr ⟨fun b hb => ?_, fun b hb => ?_⟩
   · filter_upwards with r
     have : c <= u n0 r := (h_anti n0).le_of_tendsto (h_all n0) r
-    exact hb.trans_le (this.trans (le_iSup_iff.mpr fun b a =
+    exact hb.trans_le (this.trans (le_iSup_iff.mpr fun b a => a n0))
+  -- `⊢ ∀ᶠ (b_1 : α) in atTop, ⨆ i, u i b_1 < b` for `b > c`
+  let b' := if h : (Set.Ioo c b).Nonempty then h.some else c
+  have hb'b : b' < b := by
+    simp only [b']
+    split_ifs with h
+    exacts [h.some_mem.2, hb]
+  have : forallᶠ r in atTop, limsup (u · r) cofinite <= b' := by
+    simp only [b']
+    split_ifs with h
+    · filter_upwards [(tendsto_order.1 h_limsup).2 _ h.some_mem.1] with r hr using hr.le
+    · filter_upwards [(tendsto_order.1 h_limsup).2 b hb] with r hr
+      contrapose! h
+      exact ⟨limsup (u · r) cofinite, h, hr⟩
+  obtain ⟨r, hr⟩ : exists r, forall s >= r, limsup (u · s) cofinite <= b' := by simpa using! this
+  obtain ⟨b'', hb''b, hb''⟩ : exists b'' in Set.Ico b' b, forallᶠ n in cofinite, u n r <= b'' := by
+    rcases Set.eq_empty_or_nonempty (Set.Ioo b' b) with h | ⟨b'', hb'b'', hb''b⟩
+    · refine ⟨b', ⟨le_rfl, hb'b⟩, ?_⟩
+      have h_lt := eventually_lt_of_limsup_lt ((hr r le_rfl).trans_lt hb'b)
+      filter_upwards [h_lt] with n hn
+      contrapose! h
+      exact ⟨u n r, h, hn⟩
+    · refine ⟨b'', ⟨hb'b''.le, hb''b⟩ , ?_⟩
+      have h_lt := eventually_lt_of_limsup_lt ((hr r le_rfl).trans_lt hb'b'')
+      filter_upwards [h_lt] with n hn using hn.le
+  have A (n) : exists r, forall s >= r, u n s <= b'' := by
+    suffices forallᶠ r in atTop, u n r <= b' by
+      simp only [eventually_atTop] at this
+      rcases this with ⟨r, hr⟩
+      exact ⟨r, fun s hs => (hr s hs).trans hb''b.1⟩
+    simp only [b']
+    split_ifs with h
+    · filter_upwards [(tendsto_order.1 (h_all n)).2 _ h.some_mem.1] with r hr
+      exact hr.le
+    · filter_upwards [(tendsto_order.1 (h_all n)).2 b hb] with r hr
+      contrapose! h
+      exact ⟨u n r, h, hr⟩
+  choose rs hrs using A
+  simp only [eventually_atTop]
+  refine ⟨r ⊔ ⨆ n : {n | b'' < u n r}, rs n, fun v hv => ?_⟩
+  -- `⊢ ⨆ i, u i v < b`
+  apply lt_of_le_of_lt (iSup_le fun n => ?_) hb''b.2
+  -- `⊢ u n v ≤ b''` for `v` such that `r ⊔ (⨆ n, rs n) ≤ v`
+  by_cases hn : b'' < u n r
+  · refine hrs n v ?_
+    calc rs n
+    _ = rs (⟨n, by simp [hn]⟩ : {n | b'' < u n r}) := rfl
+    _ <= ⨆ n : {n | b'' < u n r}, rs n := by
+      refine le_ciSup (f := fun (x : {n | b'' < u n r}) => rs x) ?_
+        (⟨n, by simp [hn]⟩ : {n | b'' < u n r})
+      have : Finite {n | b'' < u n r} := by simpa using! hb''
+      exact Finite.bddAbove_range _
+    _ <= r ⊔ ⨆ n : {n | b'' < u n r}, rs n := le_sup_right
+    _ <= v := hv
+  · refine (h_anti n ?_).trans (not_lt.mp hn)
+    calc r
+    _ <= r ⊔ ⨆ n : {n | b'' < u n r}, rs n := le_sup_left
+    _ <= v := hv
 
 中文:
 引理 tendsto_iSup_of_tendsto_limsup
@@ -1256,7 +1345,64 @@ lemma tendsto_iSup_of_tendsto_limsup
   refine tendsto_order.mpr ⟨fun b hb => ?_, fun b hb => ?_⟩
   · filter_upwards with r
     have : c <= u n0 r := (h_anti n0).le_of_tendsto (h_all n0) r
-    exact hb.trans_le (this.trans (le_iSup_iff.mpr fun b a =
+    exact hb.trans_le (this.trans (le_iSup_iff.mpr fun b a => a n0))
+  -- `⊢ ∀ᶠ (b_1 : α) in atTop, ⨆ i, u i b_1 < b` for `b > c`
+  let b' := if h : (Set.Ioo c b).Nonempty then h.some else c
+  have hb'b : b' < b := by
+    simp only [b']
+    split_ifs with h
+    exacts [h.some_mem.2, hb]
+  have : forallᶠ r in atTop, limsup (u · r) cofinite <= b' := by
+    simp only [b']
+    split_ifs with h
+    · filter_upwards [(tendsto_order.1 h_limsup).2 _ h.some_mem.1] with r hr using hr.le
+    · filter_upwards [(tendsto_order.1 h_limsup).2 b hb] with r hr
+      contrapose! h
+      exact ⟨limsup (u · r) cofinite, h, hr⟩
+  obtain ⟨r, hr⟩ : exists r, forall s >= r, limsup (u · s) cofinite <= b' := by simpa using! this
+  obtain ⟨b'', hb''b, hb''⟩ : exists b'' in Set.Ico b' b, forallᶠ n in cofinite, u n r <= b'' := by
+    rcases Set.eq_empty_or_nonempty (Set.Ioo b' b) with h | ⟨b'', hb'b'', hb''b⟩
+    · refine ⟨b', ⟨le_rfl, hb'b⟩, ?_⟩
+      have h_lt := eventually_lt_of_limsup_lt ((hr r le_rfl).trans_lt hb'b)
+      filter_upwards [h_lt] with n hn
+      contrapose! h
+      exact ⟨u n r, h, hn⟩
+    · refine ⟨b'', ⟨hb'b''.le, hb''b⟩ , ?_⟩
+      have h_lt := eventually_lt_of_limsup_lt ((hr r le_rfl).trans_lt hb'b'')
+      filter_upwards [h_lt] with n hn using hn.le
+  have A (n) : exists r, forall s >= r, u n s <= b'' := by
+    suffices forallᶠ r in atTop, u n r <= b' by
+      simp only [eventually_atTop] at this
+      rcases this with ⟨r, hr⟩
+      exact ⟨r, fun s hs => (hr s hs).trans hb''b.1⟩
+    simp only [b']
+    split_ifs with h
+    · filter_upwards [(tendsto_order.1 (h_all n)).2 _ h.some_mem.1] with r hr
+      exact hr.le
+    · filter_upwards [(tendsto_order.1 (h_all n)).2 b hb] with r hr
+      contrapose! h
+      exact ⟨u n r, h, hr⟩
+  choose rs hrs using A
+  simp only [eventually_atTop]
+  refine ⟨r ⊔ ⨆ n : {n | b'' < u n r}, rs n, fun v hv => ?_⟩
+  -- `⊢ ⨆ i, u i v < b`
+  apply lt_of_le_of_lt (iSup_le fun n => ?_) hb''b.2
+  -- `⊢ u n v ≤ b''` for `v` such that `r ⊔ (⨆ n, rs n) ≤ v`
+  by_cases hn : b'' < u n r
+  · refine hrs n v ?_
+    calc rs n
+    _ = rs (⟨n, by simp [hn]⟩ : {n | b'' < u n r}) := rfl
+    _ <= ⨆ n : {n | b'' < u n r}, rs n := by
+      refine le_ciSup (f := fun (x : {n | b'' < u n r}) => rs x) ?_
+        (⟨n, by simp [hn]⟩ : {n | b'' < u n r})
+      have : Finite {n | b'' < u n r} := by simpa using! hb''
+      exact Finite.bddAbove_range _
+    _ <= r ⊔ ⨆ n : {n | b'' < u n r}, rs n := le_sup_right
+    _ <= v := hv
+  · refine (h_anti n ?_).trans (not_lt.mp hn)
+    calc r
+    _ <= r ⊔ ⨆ n : {n | b'' < u n r}, rs n := le_sup_left
+    _ <= v := hv
 
 Depends on / 依赖: classical, filter_upwards, h_all, h_anti, h_limsup, hb.trans_le, isEmpty_or_nonempty, le_iSup_iff, le_iSup_iff.mpr, le_of_tendsto, tendsto_order, tendsto_order.mpr, this.trans, trans_le
 -/
@@ -1384,7 +1530,41 @@ theorem Antitone.map_limsSup_of_continuousAt
     intro c hc
     simp only [liminf, limsInf, eventually_map] at hc ⊢
     obtain ⟨d, hd, h'd⟩ :=
-      exists_lt_of_lt_csSup (bdd_above.recOn fun x hx => ⟨f x, Set.mem_image_of
+      exists_lt_of_lt_csSup (bdd_above.recOn fun x hx => ⟨f x, Set.mem_image_of_mem f hx⟩) hc
+    apply lt_csSup_of_lt ?_ ?_ h'd
+    · simpa only [BddAbove, upperBounds]
+        using! Antitone.isCoboundedUnder_ge_of_isCobounded f_decr cobdd
+    · rcases hd with ⟨e, ⟨he, fe_eq_d⟩⟩
+      filter_upwards [he] with x hx using (fe_eq_d.symm ▸ f_decr hx)
+  · by_cases! h' : exists c, c < F.limsSup ∧ Set.Ioo c F.limsSup = ∅
+    · rcases h' with ⟨c, c_lt, hc⟩
+      have B : existsᶠ n in F, F.limsSup <= n := by
+        apply (frequently_lt_of_lt_limsSup cobdd c_lt).mono
+        intro x hx
+        by_contra!
+        have : (Set.Ioo c F.limsSup).Nonempty := ⟨x, ⟨hx, this⟩⟩
+        simp only [hc, Set.not_nonempty_empty] at this
+      apply liminf_le_of_frequently_le _ (bdd_above.isBoundedUnder f_decr)
+      exact B.mono fun x hx => f_decr hx
+    by_contra! H
+    have not_bot : ¬ IsBot F.limsSup := fun maybe_bot =>
+lt_irrefl (F.liminf f) lt_of_le_of_lt
+        (liminf_le_of_frequently_le (Frequently.of_forall (fun r => f_decr (maybe_bot r)))
+          (bdd_above.isBoundedUnder f_decr)) H
+    obtain ⟨l, l_lt, h'l⟩ :
+        exists l < F.limsSup, Set.Ioc l F.limsSup subseteq { x : R | f x < F.liminf f } := by
+      apply exists_Ioc_subset_of_mem_nhds ((tendsto_order.1 f_cont.tendsto).2 _ H)
+      simpa [IsBot] using! not_bot
+    obtain ⟨m, l_m, m_lt⟩ : (Set.Ioo l F.limsSup).Nonempty := by
+      contrapose! h'
+      exact ⟨l, l_lt, h'⟩
+    have B : F.liminf f <= f m := by
+      apply liminf_le_of_frequently_le _ _
+      · apply (frequently_lt_of_lt_limsSup cobdd m_lt).mono
+        exact fun x hx => f_decr hx.le
+      · exact IsBounded.isBoundedUnder f_decr bdd_above
+    have I : f m < F.liminf f := h'l ⟨l_m, m_lt.le⟩
+    exact lt_irrefl _ (B.trans_lt I)
 
 中文:
 定理 递减.map_limsSup_of_continuousAt
@@ -1396,7 +1576,41 @@ theorem Antitone.map_limsSup_of_continuousAt
     intro c hc
     simp only [liminf, limsInf, eventually_map] at hc ⊢
     obtain ⟨d, hd, h'd⟩ :=
-      exists_lt_of_lt_csSup (bdd_above.recOn fun x hx => ⟨f x, Set.mem_image_of
+      exists_lt_of_lt_csSup (bdd_above.recOn fun x hx => ⟨f x, Set.mem_image_of_mem f hx⟩) hc
+    apply lt_csSup_of_lt ?_ ?_ h'd
+    · simpa only [BddAbove, upperBounds]
+        using! Antitone.isCoboundedUnder_ge_of_isCobounded f_decr cobdd
+    · rcases hd with ⟨e, ⟨he, fe_eq_d⟩⟩
+      filter_upwards [he] with x hx using (fe_eq_d.symm ▸ f_decr hx)
+  · by_cases! h' : exists c, c < F.limsSup ∧ Set.Ioo c F.limsSup = ∅
+    · rcases h' with ⟨c, c_lt, hc⟩
+      have B : existsᶠ n in F, F.limsSup <= n := by
+        apply (frequently_lt_of_lt_limsSup cobdd c_lt).mono
+        intro x hx
+        by_contra!
+        have : (Set.Ioo c F.limsSup).Nonempty := ⟨x, ⟨hx, this⟩⟩
+        simp only [hc, Set.not_nonempty_empty] at this
+      apply liminf_le_of_frequently_le _ (bdd_above.isBoundedUnder f_decr)
+      exact B.mono fun x hx => f_decr hx
+    by_contra! H
+    have not_bot : ¬ IsBot F.limsSup := fun maybe_bot =>
+lt_irrefl (F.liminf f) lt_of_le_of_lt
+        (liminf_le_of_frequently_le (Frequently.of_forall (fun r => f_decr (maybe_bot r)))
+          (bdd_above.isBoundedUnder f_decr)) H
+    obtain ⟨l, l_lt, h'l⟩ :
+        exists l < F.limsSup, Set.Ioc l F.limsSup subseteq { x : R | f x < F.liminf f } := by
+      apply exists_Ioc_subset_of_mem_nhds ((tendsto_order.1 f_cont.tendsto).2 _ H)
+      simpa [IsBot] using! not_bot
+    obtain ⟨m, l_m, m_lt⟩ : (Set.Ioo l F.limsSup).Nonempty := by
+      contrapose! h'
+      exact ⟨l, l_lt, h'⟩
+    have B : F.liminf f <= f m := by
+      apply liminf_le_of_frequently_le _ _
+      · apply (frequently_lt_of_lt_limsSup cobdd m_lt).mono
+        exact fun x hx => f_decr hx.le
+      · exact IsBounded.isBoundedUnder f_decr bdd_above
+    have I : f m < F.liminf f := h'l ⟨l_m, m_lt.le⟩
+    exact lt_irrefl _ (B.trans_lt I)
 
 Depends on / 依赖: Antitone, Antitone.isCoboundedUnder_ge_, BddAbove, F.IsCobounded, F.liminf, F.limsSup, IsCobounded, Set.mem_image_of_mem, bdd_above, bdd_above.recOn, eventually_map, exists_lt_of_lt_csSup, f_cont, f_decr, f_decr.map_csInf_of_continuousAt, isBoundedDefault, isCoboundedUnder_ge_, le_antisymm, le_of_forall_lt, liminf
 -/

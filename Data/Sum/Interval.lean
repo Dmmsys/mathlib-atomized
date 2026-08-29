@@ -66,7 +66,9 @@ theorem mem_sumLift₂
     · refine fun h => (notMem_empty _ h).elim
     · refine fun h => (notMem_empty _ h).elim
     · rw [sumLift₂, mem_map]
-      rintr
+      rintro ⟨c, hc, rfl⟩
+      exact Or.inr ⟨a, b, c, rfl, rfl, rfl, hc⟩
+  · rintro (⟨a, b, c, rfl, rfl, rfl, h⟩ | ⟨a, b, c, rfl, rfl, rfl, h⟩) <;> exact mem_map_of_mem _ h
 
 中文:
 定理 mem_sumLift₂
@@ -79,7 +81,9 @@ theorem mem_sumLift₂
     · refine fun h => (notMem_empty _ h).elim
     · refine fun h => (notMem_empty _ h).elim
     · rw [sumLift₂, mem_map]
-      rintr
+      rintro ⟨c, hc, rfl⟩
+      exact Or.inr ⟨a, b, c, rfl, rfl, rfl, hc⟩
+  · rintro (⟨a, b, c, rfl, rfl, rfl, h⟩ | ⟨a, b, c, rfl, rfl, rfl, h⟩) <;> exact mem_map_of_mem _ h
 
 Depends on / 依赖: Or.inl, Or.inr, mem_map, mem_map_of_mem, notMem_empty
 -/
@@ -362,7 +366,19 @@ lemma mem_sumLexLift
       exact Or.inl ⟨a, b, c, rfl, rfl, rfl, hc⟩
     · refine fun h => (mem_disjSum.1 h).elim ?_ ?_
       · rintro ⟨c, hc, rfl⟩
-        exact Or.inr (Or.inl ⟨a, b, c, rfl, rfl, rfl, h
+        exact Or.inr (Or.inl ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+      · rintro ⟨c, hc, rfl⟩
+        exact Or.inr (Or.inr <| Or.inl ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+    · exact fun h => (notMem_empty _ h).elim
+    · rw [sumLexLift, mem_map]
+      rintro ⟨c, hc, rfl⟩
+      exact Or.inr (Or.inr <| Or.inr <| ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+  · rintro (⟨a, b, c, rfl, rfl, rfl, hc⟩ | ⟨a, b, c, rfl, rfl, rfl, hc⟩ |
+      ⟨a, b, c, rfl, rfl, rfl, hc⟩ | ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+    · exact mem_map_of_mem _ hc
+    · exact inl_mem_disjSum.2 hc
+    · exact inr_mem_disjSum.2 hc
+    · exact mem_map_of_mem _ hc
 
 中文:
 引理 mem_sumLexLift
@@ -374,7 +390,19 @@ lemma mem_sumLexLift
       exact Or.inl ⟨a, b, c, rfl, rfl, rfl, hc⟩
     · refine fun h => (mem_disjSum.1 h).elim ?_ ?_
       · rintro ⟨c, hc, rfl⟩
-        exact Or.inr (Or.inl ⟨a, b, c, rfl, rfl, rfl, h
+        exact Or.inr (Or.inl ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+      · rintro ⟨c, hc, rfl⟩
+        exact Or.inr (Or.inr <| Or.inl ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+    · exact fun h => (notMem_empty _ h).elim
+    · rw [sumLexLift, mem_map]
+      rintro ⟨c, hc, rfl⟩
+      exact Or.inr (Or.inr <| Or.inr <| ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+  · rintro (⟨a, b, c, rfl, rfl, rfl, hc⟩ | ⟨a, b, c, rfl, rfl, rfl, hc⟩ |
+      ⟨a, b, c, rfl, rfl, rfl, hc⟩ | ⟨a, b, c, rfl, rfl, rfl, hc⟩)
+    · exact mem_map_of_mem _ hc
+    · exact inl_mem_disjSum.2 hc
+    · exact inr_mem_disjSum.2 hc
+    · exact mem_map_of_mem _ hc
 
 Depends on / 依赖: Or.inl, Or.inr, mem_disjSum, mem_map, notMem_empty, sumLexLift
 -/
@@ -492,7 +520,7 @@ lemma sumLexLift_eq_empty
   · exact map_eq_empty.2 (h.1 _ _ rfl rfl)
   · simp [h.2.1 _ _ rfl rfl]
   · rfl
-  · exact map_eq_empty.2 (h.2.2 _ _ rfl rfl
+  · exact map_eq_empty.2 (h.2.2 _ _ rfl rfl)
 
 中文:
 引理 sumLexLift_eq_empty
@@ -504,7 +532,7 @@ lemma sumLexLift_eq_empty
   · exact map_eq_empty.2 (h.1 _ _ rfl rfl)
   · simp [h.2.1 _ _ rfl rfl]
   · rfl
-  · exact map_eq_empty.2 (h.2.2 _ _ rfl rfl
+  · exact map_eq_empty.2 (h.2.2 _ _ rfl rfl)
 
 Depends on / 依赖: any_goals, disjSum_eq_empty, map_eq_empty
 -/
@@ -1100,7 +1128,13 @@ instance locallyFiniteOrder
   finsetIco a b :=
     (sumLexLift Ico Ico (fun a _ => Ici a) (fun _ => Iio) (ofLex a) (ofLex b)).map toLex.toEmbedding
   finsetIoc a b :=
-    (sumLexLift Ioc Ioc (fun a _ => Ioi a) (fun _ => Iic) (ofLex
+    (sumLexLift Ioc Ioc (fun a _ => Ioi a) (fun _ => Iic) (ofLex a) (ofLex b)).map toLex.toEmbedding
+  finsetIoo a b :=
+    (sumLexLift Ioo Ioo (fun a _ => Ioi a) (fun _ => Iio) (ofLex a) (ofLex b)).map toLex.toEmbedding
+  finset_mem_Icc := by simp
+  finset_mem_Ico := by simp
+  finset_mem_Ioc := by simp
+  finset_mem_Ioo := by simp
 
 中文:
 实例 locallyFiniteOrder
@@ -1109,7 +1143,13 @@ instance locallyFiniteOrder
   finsetIco a b :=
     (sumLexLift Ico Ico (fun a _ => Ici a) (fun _ => Iio) (ofLex a) (ofLex b)).map toLex.toEmbedding
   finsetIoc a b :=
-    (sumLexLift Ioc Ioc (fun a _ => Ioi a) (fun _ => Iic) (ofLex
+    (sumLexLift Ioc Ioc (fun a _ => Ioi a) (fun _ => Iic) (ofLex a) (ofLex b)).map toLex.toEmbedding
+  finsetIoo a b :=
+    (sumLexLift Ioo Ioo (fun a _ => Ioi a) (fun _ => Iio) (ofLex a) (ofLex b)).map toLex.toEmbedding
+  finset_mem_Icc := by simp
+  finset_mem_Ico := by simp
+  finset_mem_Ioc := by simp
+  finset_mem_Ioo := by simp
 
 Depends on / 依赖: finsetIco, finsetIoc, finsetIoo, finset_me, finset_mem_Icc, finset_mem_Ico, sumLexLift, toEmbedding, toLex.toEmbedding
 -/
@@ -1458,7 +1498,8 @@ instance instLocallyFiniteOrderBot
   finsetIio := Sum.elim
     (Iio · |>.map (.trans .inl toLex.toEmbedding))
     (fun x => Finset.univ.disjSum (Iio x) |>.map toLex.toEmbedding) ∘ ofLex
-  finset_mem_
+  finset_mem_Iic := by simp
+  finset_mem_Iio := by simp
 
 中文:
 实例 instLocallyFiniteOrderBot
@@ -1469,7 +1510,8 @@ instance instLocallyFiniteOrderBot
   finsetIio := Sum.elim
     (Iio · |>.map (.trans .inl toLex.toEmbedding))
     (fun x => Finset.univ.disjSum (Iio x) |>.map toLex.toEmbedding) ∘ ofLex
-  finset_mem_
+  finset_mem_Iic := by simp
+  finset_mem_Iio := by simp
 
 Depends on / 依赖: Sum.elim
 -/
@@ -1571,7 +1613,8 @@ instance instLocallyFiniteOrderTop
   finsetIoi := Sum.elim
     (fun x => (Ioi x).disjSum Finset.univ |>.map toLex.toEmbedding)
     (Ioi · |>.map (.trans .inr toLex.toEmbedding)) ∘ ofLex
-  finset_mem_
+  finset_mem_Ici := by simp
+  finset_mem_Ioi := by simp
 
 中文:
 实例 instLocallyFiniteOrderTop
@@ -1582,7 +1625,8 @@ instance instLocallyFiniteOrderTop
   finsetIoi := Sum.elim
     (fun x => (Ioi x).disjSum Finset.univ |>.map toLex.toEmbedding)
     (Ioi · |>.map (.trans .inr toLex.toEmbedding)) ∘ ofLex
-  finset_mem_
+  finset_mem_Ici := by simp
+  finset_mem_Ioi := by simp
 
 Depends on / 依赖: Sum.elim
 -/

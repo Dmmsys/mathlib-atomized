@@ -110,7 +110,21 @@ theorem continuous_hatInv
   rw [mem_compl_singleton_iff] at y_ne
   apply CompleteSpace.complete
   have : (fun (x : K) => (↑x⁻¹ : hat K)) =
-      ((fun (y : K) => (↑y : hat K)) ∘ (fun (x : K) => (x⁻¹ : K)
+      ((fun (y : K) => (↑y : hat K)) ∘ (fun (x : K) => (x⁻¹ : K))) := by
+    simp [Function.comp_def]
+  rw [this]; rw [← Filter.map_map]
+  apply Cauchy.map _ (Completion.uniformContinuous_coe K)
+  apply CompletableTopField.nice
+  · have := isDenseInducing_coe.comap_nhds_neBot y
+    apply cauchy_nhds.comap
+    rw [Completion.comap_coe_eq_uniformity]
+  · have eq_bot : 𝓝 (0 : hat K) ⊓ 𝓝 y = ⊥ := by
+      by_contra h
+      exact y_ne (eq_of_nhds_neBot <| neBot_iff.mpr h).symm
+    rw [isDenseInducing_coe.nhds_eq_comap (0 : K)]; rw [← Filter.comap_inf]
+    norm_cast
+    rw [eq_bot]
+    exact comap_bot
 
 中文:
 定理 continuous_hatInv
@@ -122,7 +136,21 @@ theorem continuous_hatInv
   rw [mem_compl_singleton_iff] at y_ne
   apply CompleteSpace.complete
   have : (fun (x : K) => (↑x⁻¹ : hat K)) =
-      ((fun (y : K) => (↑y : hat K)) ∘ (fun (x : K) => (x⁻¹ : K)
+      ((fun (y : K) => (↑y : hat K)) ∘ (fun (x : K) => (x⁻¹ : K))) := by
+    simp [Function.comp_def]
+  rw [this]; rw [← Filter.map_map]
+  apply Cauchy.map _ (Completion.uniformContinuous_coe K)
+  apply CompletableTopField.nice
+  · have := isDenseInducing_coe.comap_nhds_neBot y
+    apply cauchy_nhds.comap
+    rw [Completion.comap_coe_eq_uniformity]
+  · have eq_bot : 𝓝 (0 : hat K) ⊓ 𝓝 y = ⊥ := by
+      by_contra h
+      exact y_ne (eq_of_nhds_neBot <| neBot_iff.mpr h).symm
+    rw [isDenseInducing_coe.nhds_eq_comap (0 : K)]; rw [← Filter.comap_inf]
+    norm_cast
+    rw [eq_bot]
+    exact comap_bot
 
 Depends on / 依赖: Cauchy, Cauchy.map, CompletableTopField, CompletableTopField.nice, CompleteSpace, CompleteSpace.complete, Completion, Completion.uniformContinuous_coe, Filter, Filter.map_map, Function, Function.comp_def, cauchy_nh, comap_nhds_neBot, comp_def, compl_singleton_mem_nhds, complete, continuousAt_extend, isDenseInducing_coe, isDenseInducing_coe.comap_nhds_neBot
 -/
@@ -257,7 +285,21 @@ theorem mul_hatInv_cancel
   have cont : ContinuousAt f x := by fun_prop
   have clo : x in closure (c '' {0}ᶜ) := by
     have := isDenseInducing_coe.dense x
-    rw [← image_univ]; rw
+    rw [← image_univ]; rw [show (univ : Set K) = {0} union {0}ᶜ from (union_compl_self _).symm]; rw [image_union] at this
+    apply mem_closure_of_mem_closure_union this
+    rw [image_singleton]
+    exact compl_singleton_mem_nhds x_ne
+  have fxclo : f x in closure (f '' c '' {0}ᶜ) := mem_closure_image cont clo
+  have : f '' c '' {0}ᶜ subseteq {1} := by
+    rw [image_image]
+    rintro _ ⟨z, z_ne, rfl⟩
+    rw [mem_singleton_iff]
+    rw [mem_compl_singleton_iff] at z_ne
+    dsimp [f]
+    rw [hatInv_extends z_ne]; rw [← coe_mul]
+    rw [mul_inv_cancel₀ z_ne]; rw [coe_one]
+  replace fxclo := closure_mono this fxclo
+  rwa [closure_singleton, mem_singleton_iff] at fxclo
 
 中文:
 定理 mul_hatInv_cancel
@@ -271,7 +313,21 @@ theorem mul_hatInv_cancel
   have cont : ContinuousAt f x := by fun_prop
   have clo : x in closure (c '' {0}ᶜ) := by
     have := isDenseInducing_coe.dense x
-    rw [← image_univ]; rw
+    rw [← image_univ]; rw [show (univ : Set K) = {0} union {0}ᶜ from (union_compl_self _).symm]; rw [image_union] at this
+    apply mem_closure_of_mem_closure_union this
+    rw [image_singleton]
+    exact compl_singleton_mem_nhds x_ne
+  have fxclo : f x in closure (f '' c '' {0}ᶜ) := mem_closure_image cont clo
+  have : f '' c '' {0}ᶜ subseteq {1} := by
+    rw [image_image]
+    rintro _ ⟨z, z_ne, rfl⟩
+    rw [mem_singleton_iff]
+    rw [mem_compl_singleton_iff] at z_ne
+    dsimp [f]
+    rw [hatInv_extends z_ne]; rw [← coe_mul]
+    rw [mul_inv_cancel₀ z_ne]; rw [coe_one]
+  replace fxclo := closure_mono this fxclo
+  rwa [closure_singleton, mem_singleton_iff] at fxclo
 
 Depends on / 依赖: ContinuousAt, T1Space, T2Space, T2Space.t1Space, closure, compl_singleton_mem_nhds, fun_prop, hatInv, image_singleton, image_union, image_univ, isDenseInducing_coe, isDenseInducing_coe.dense, mem_closure_of_mem_closure_union, t1Space, union_compl_self, x_ne
 -/
@@ -349,7 +405,9 @@ instance :
           intro y y_ne
           rw [mem_compl_singleton_iff] at y_ne
           dsimp [Inv.inv]
-
+          rw [if_neg y_ne]
+        mem_of_superset (compl_singleton_mem_nhds x_ne) this
+      exact ContinuousAt.congr (continuous_hatInv x_ne) this }
 
 中文:
 实例 :
@@ -362,7 +420,9 @@ instance :
           intro y y_ne
           rw [mem_compl_singleton_iff] at y_ne
           dsimp [Inv.inv]
-
+          rw [if_neg y_ne]
+        mem_of_superset (compl_singleton_mem_nhds x_ne) this
+      exact ContinuousAt.congr (continuous_hatInv x_ne) this }
 
 Depends on / 依赖: Completion, Completion.topologicalRing, ContinuousAt, ContinuousAt.congr, Inv.inv, compl_singleton_mem_nhds, continuous_hatInv, hatInv, if_neg, mem_compl_singleton_iff, mem_of_superset, subseteq, topologicalRing, x_ne, y_ne
 -/
@@ -397,7 +457,7 @@ instance Subfield.completableTopField
     rw [← hi.cauchy_map_iff] at F_cau ⊢
     rw [map_comm (show (i ∘ fun x => x⁻¹) = (fun x => x⁻¹) ∘ i by ext; rfl)]
     apply CompletableTopField.nice _ F_cau
-    rw [← Filter.
+    rw [← Filter.push_pull']; rw [← map_zero i]; rw [← hi.isInducing.nhds_eq_comap]; rw [inf_F]; rw [Filter.map_bot]
 
 中文:
 实例 子域.completableTopField
@@ -408,7 +468,7 @@ instance Subfield.completableTopField
     rw [← hi.cauchy_map_iff] at F_cau ⊢
     rw [map_comm (show (i ∘ fun x => x⁻¹) = (fun x => x⁻¹) ∘ i by ext; rfl)]
     apply CompletableTopField.nice _ F_cau
-    rw [← Filter.
+    rw [← Filter.push_pull']; rw [← map_zero i]; rw [← hi.isInducing.nhds_eq_comap]; rw [inf_F]; rw [Filter.map_bot]
 
 Depends on / 依赖: CompletableTopField, CompletableTopField.nice, F_cau, Filter, Filter.map_bot, Filter.push_pull, IsUniformInducing, K.subtype, cauchy_map_iff, hi.cauchy_map_iff, hi.isInducing.nhds_eq_comap, inf_F, isInducing, isUniformEmbedding_subtype_val, isUniformEmbedding_subtype_val.isUniformInducing, isUniformInducing, map_bot, map_comm, map_zero, nhds_eq_comap
 -/
@@ -450,6 +510,7 @@ theorem IsUniformInducing.completableTopField
     ext; simp only [Function.comp_apply, map_inv₀]
   rw [Filter.map_comm h_comm]
   apply CompletableTopField.nice _ F_cau
+  rw [← Filter.push_pull']; rw [← map_zero f]; rw [← hf.isInducing.nhds_eq_comap]; rw [inf_F]; rw [Filter.map_bot]
 
 中文:
 定理 是UniformInducing.completableTopField
@@ -460,6 +521,7 @@ theorem IsUniformInducing.completableTopField
     ext; simp only [Function.comp_apply, map_inv₀]
   rw [Filter.map_comm h_comm]
   apply CompletableTopField.nice _ F_cau
+  rw [← Filter.push_pull']; rw [← map_zero f]; rw [← hf.isInducing.nhds_eq_comap]; rw [inf_F]; rw [Filter.map_bot]
 
 Depends on / 依赖: CompletableTopField, CompletableTopField.mk, CompletableTopField.nice, F_cau, Filter, Filter.map_bot, Filter.map_comm, Filter.push_pull, Function, Function.comp_apply, IsUniformInducing, IsUniformInducing.cauchy_map_iff, cauchy_map_iff, comp_apply, h_comm, hf.isInducing.nhds_eq_comap, inf_F, isInducing, map_bot, map_comm
 -/

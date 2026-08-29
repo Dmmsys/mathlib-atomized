@@ -54,7 +54,11 @@ definition extendedHom
       rintro _ ⟨α, rfl⟩
       refine ⟨Units.mk0 (IsFractionRing.map (j := algebraMap A B)
         (FaithfulSMul.algebraMap_injective _ _) (α : FractionRing A))
-        (by simp [α.ne_zero]), ?_
+        (by simp [α.ne_zero]), ?_⟩
+      simpa [coe_toPrincipalIdeal, Units.coe_map, Units.val_mk0] using!
+        (FractionalIdeal.extendedHom_spanSingleton (FractionRing B) B _).symm)
+
+@[simp]
 
 中文:
 定义 extendedHom
@@ -65,7 +69,11 @@ definition extendedHom
       rintro _ ⟨α, rfl⟩
       refine ⟨Units.mk0 (IsFractionRing.map (j := algebraMap A B)
         (FaithfulSMul.algebraMap_injective _ _) (α : FractionRing A))
-        (by simp [α.ne_zero]), ?_
+        (by simp [α.ne_zero]), ?_⟩
+      simpa [coe_toPrincipalIdeal, Units.coe_map, Units.val_mk0] using!
+        (FractionalIdeal.extendedHom_spanSingleton (FractionRing B) B _).symm)
+
+@[simp]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, FractionalIdeal, FractionalIdeal.extendedHom, FractionalIdeal.extendedHom_spanSingleton, IsFractionRing, IsFractionRing.map, QuotientGroup, QuotientGroup.map, Units.coe_map, Units.map, Units.mk0, Units.val_mk0, algebraMap, algebraMap_injective, coe_map, coe_toPrincipalIdeal, extendedHom, extendedHom_spanSingleton
 -/

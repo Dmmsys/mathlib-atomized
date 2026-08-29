@@ -142,7 +142,8 @@ theorem comap_comp_apply
     exact aeval_unique g
   · simp only [comap, aeval_eq_eval₂Hom, map_eval₂Hom]
     refine eval₂Hom_congr ?_ rfl rfl
- 
+    ext r
+    apply aeval_C
 
 中文:
 定理 comap_comp_apply
@@ -156,7 +157,8 @@ theorem comap_comp_apply
     exact aeval_unique g
   · simp only [comap, aeval_eq_eval₂Hom, map_eval₂Hom]
     refine eval₂Hom_congr ?_ rfl rfl
- 
+    ext r
+    apply aeval_C
 
 Depends on / 依赖: AlgHom, AlgHom.comp_apply, aeval_C, aeval_unique, comp_apply
 -/
@@ -269,7 +271,9 @@ definition comapEquiv
     rw [← comap_comp_apply]
     apply comap_eq_id_of_eq_id
     intro
-    simp only [Alg
+    simp only [AlgHom.id_apply, AlgEquiv.symm_comp]
+
+@[simp]
 
 中文:
 定义 comapEquiv
@@ -287,7 +291,9 @@ definition comapEquiv
     rw [← comap_comp_apply]
     apply comap_eq_id_of_eq_id
     intro
-    simp only [Alg
+    simp only [AlgHom.id_apply, AlgEquiv.symm_comp]
+
+@[simp]
 -/
 noncomputable def comapEquiv (f : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R) : (τ -> R) ≃ (σ -> R) where
   toFun := comap f

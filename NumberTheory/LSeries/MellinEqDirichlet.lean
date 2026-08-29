@@ -33,7 +33,37 @@ lemma hasSum_mellin
     hasSum_integral_of_summable_integral_norm (F := fun i t => t ^ (s - 1) * (a i * rexp (-p i * t)))
       (fun i => ?_) ?_ using
     2 with i
-  
+  · simp_rw [← mul_assoc, mul_comm _ (a _), mul_assoc (a _), mul_div_assoc, integral_const_mul]
+    rcases hp i with hai | hpi
+    · rw [hai, zero_mul, zero_mul]
+    have := integral_cpow_mul_exp_neg_mul_Ioi hs hpi
+    simp_rw [← ofReal_mul, ← ofReal_neg, ← ofReal_exp, ← neg_mul (p i)] at this
+    rw [this]; rw [one_div]; rw [inv_cpow _ _ (arg_ofReal_of_nonneg hpi.le ▸ pi_pos.ne)]; rw [div_eq_inv_mul]
+  · -- integrability of terms
+    rcases hp i with hai | hpi
+    · simp [hai]
+    simp_rw [← mul_assoc, mul_comm _ (a i), mul_assoc]
+    have := Complex.GammaIntegral_convergent hs
+    rw [← mul_zero (p i)]; rw [← integrableOn_Ioi_comp_mul_left_iff _ _ hpi] at this
+    refine (IntegrableOn.congr_fun (this.const_mul (1 / p i ^ (s - 1)))
+      (fun t (ht : 0 < t) => ?_) measurableSet_Ioi).const_mul _
+    simp_rw [mul_comm (↑(rexp _) : Complex), ← mul_assoc, neg_mul, ofReal_mul]
+    rw [mul_cpow_ofReal_nonneg hpi.le ht.le]; rw [← mul_assoc]; rw [one_div]; rw [inv_mul_cancel₀]; rw [one_mul]
+    rw [Ne]; rw [cpow_eq_zero_iff]; rw [not_and_or]
+    exact Or.inl (ofReal_ne_zero.mpr hpi.ne')
+  · -- summability of integrals of norms
+    apply Summable.of_norm
+    convert! h_sum.mul_left (Real.Gamma s.re) using 2 with i
+    simp_rw [← mul_assoc, mul_comm _ (a i), mul_assoc, norm_mul (a i), integral_const_mul]
+    rw [← mul_div_assoc]; rw [mul_comm (Real.Gamma _)]; rw [mul_div_assoc]; rw [norm_mul ‖a i‖]; rw [norm_norm]
+    rcases hp i with hai | hpi
+    · simp [hai]
+    congr 1
+    have := Real.integral_rpow_mul_exp_neg_mul_Ioi hs hpi
+    simp_rw [← neg_mul (p i), one_div, inv_rpow hpi.le, ← div_eq_inv_mul] at this
+    rw [norm_of_nonneg (integral_nonneg (fun _ => norm_nonneg _))]; rw [← this]
+    refine setIntegral_congr_fun measurableSet_Ioi (fun t ht => ?_)
+    rw [norm_mul]; rw [norm_real]; rw [Real.norm_eq_abs]; rw [Real.abs_exp]; rw [norm_cpow_eq_rpow_re_of_pos ht]; rw [sub_re]; rw [one_re]
 
 中文:
 引理 hasSum_mellin
@@ -45,7 +75,37 @@ lemma hasSum_mellin
     hasSum_integral_of_summable_integral_norm (F := fun i t => t ^ (s - 1) * (a i * rexp (-p i * t)))
       (fun i => ?_) ?_ using
     2 with i
-  
+  · simp_rw [← mul_assoc, mul_comm _ (a _), mul_assoc (a _), mul_div_assoc, integral_const_mul]
+    rcases hp i with hai | hpi
+    · rw [hai, zero_mul, zero_mul]
+    have := integral_cpow_mul_exp_neg_mul_Ioi hs hpi
+    simp_rw [← ofReal_mul, ← ofReal_neg, ← ofReal_exp, ← neg_mul (p i)] at this
+    rw [this]; rw [one_div]; rw [inv_cpow _ _ (arg_ofReal_of_nonneg hpi.le ▸ pi_pos.ne)]; rw [div_eq_inv_mul]
+  · -- integrability of terms
+    rcases hp i with hai | hpi
+    · simp [hai]
+    simp_rw [← mul_assoc, mul_comm _ (a i), mul_assoc]
+    have := Complex.GammaIntegral_convergent hs
+    rw [← mul_zero (p i)]; rw [← integrableOn_Ioi_comp_mul_left_iff _ _ hpi] at this
+    refine (IntegrableOn.congr_fun (this.const_mul (1 / p i ^ (s - 1)))
+      (fun t (ht : 0 < t) => ?_) measurableSet_Ioi).const_mul _
+    simp_rw [mul_comm (↑(rexp _) : Complex), ← mul_assoc, neg_mul, ofReal_mul]
+    rw [mul_cpow_ofReal_nonneg hpi.le ht.le]; rw [← mul_assoc]; rw [one_div]; rw [inv_mul_cancel₀]; rw [one_mul]
+    rw [Ne]; rw [cpow_eq_zero_iff]; rw [not_and_or]
+    exact Or.inl (ofReal_ne_zero.mpr hpi.ne')
+  · -- summability of integrals of norms
+    apply Summable.of_norm
+    convert! h_sum.mul_left (Real.Gamma s.re) using 2 with i
+    simp_rw [← mul_assoc, mul_comm _ (a i), mul_assoc, norm_mul (a i), integral_const_mul]
+    rw [← mul_div_assoc]; rw [mul_comm (Real.Gamma _)]; rw [mul_div_assoc]; rw [norm_mul ‖a i‖]; rw [norm_norm]
+    rcases hp i with hai | hpi
+    · simp [hai]
+    congr 1
+    have := Real.integral_rpow_mul_exp_neg_mul_Ioi hs hpi
+    simp_rw [← neg_mul (p i), one_div, inv_rpow hpi.le, ← div_eq_inv_mul] at this
+    rw [norm_of_nonneg (integral_nonneg (fun _ => norm_nonneg _))]; rw [← this]
+    refine setIntegral_congr_fun measurableSet_Ioi (fun t ht => ?_)
+    rw [norm_mul]; rw [norm_real]; rw [Real.norm_eq_abs]; rw [Real.abs_exp]; rw [norm_cpow_eq_rpow_re_of_pos ht]; rw [sub_re]; rw [one_re]
 
 Depends on / 依赖: congr_arg, convert, hasSum_integral_of_summable_integral_norm, integral_const_mul, integral_cpow_mul_exp_neg_mul_Ioi, measurableSet_Ioi, mellin, mul_assoc, mul_comm, mul_div_assoc, ofReal_mul, setIntegral_congr_fun, simp_rw, smul_eq_mul, tsum_eq, tsum_mul_left, zero_mul
 -/
@@ -104,7 +164,15 @@ lemma hasSum_mellin_pi_mul
   · have : a i / ↑(π * q i) ^ s = π ^ (-s) * a i / q i ^ s := by
       rcases hq i with h | h
       · simp [h]
-      · rw [ofReal_mul, mul_cpo
+      · rw [ofReal_mul, mul_cpow_ofReal_nonneg pi_pos.le h.le, ← div_div, cpow_neg,
+          ← div_eq_inv_mul]
+    simp_rw [mul_div_assoc, this]
+    ring_nf
+  · have (i : _) : ‖a i‖ / ↑(π * q i) ^ s.re = π ^ (-s.re) * ‖a i‖ / q i ^ s.re := by
+      rcases hq i with h | h
+      · simp [h]
+      · rw [mul_rpow pi_pos.le h.le, ← div_div, rpow_neg pi_pos.le, ← div_eq_inv_mul]
+    simpa only [this, mul_div_assoc] using h_sum.mul_left _
 
 中文:
 引理 hasSum_mellin_pi_mul
@@ -115,7 +183,15 @@ lemma hasSum_mellin_pi_mul
   · have : a i / ↑(π * q i) ^ s = π ^ (-s) * a i / q i ^ s := by
       rcases hq i with h | h
       · simp [h]
-      · rw [ofReal_mul, mul_cpo
+      · rw [ofReal_mul, mul_cpow_ofReal_nonneg pi_pos.le h.le, ← div_div, cpow_neg,
+          ← div_eq_inv_mul]
+    simp_rw [mul_div_assoc, this]
+    ring_nf
+  · have (i : _) : ‖a i‖ / ↑(π * q i) ^ s.re = π ^ (-s.re) * ‖a i‖ / q i ^ s.re := by
+      rcases hq i with h | h
+      · simp [h]
+      · rw [mul_rpow pi_pos.le h.le, ← div_div, rpow_neg pi_pos.le, ← div_eq_inv_mul]
+    simpa only [this, mul_div_assoc] using h_sum.mul_left _
 
 Depends on / 依赖: convert, cpow_neg, div_div, div_eq_inv_mul, h.le, hasSum_mellin, mul_cpow_ofReal_nonneg, mul_div_assoc, ofReal_mul, pi_pos, pi_pos.le, ring_nf, s.re, simp_rw
 -/
@@ -152,7 +228,20 @@ lemma hasSum_mellin_pi_mul₀
     simp only [a']
     split_ifs with h <;> try tauto
     exact Or.inr (lt_of_le_of_ne (hp i) (Ne.symm h))
-  have (i t : _) : (if p i = 0 then 0 else a i
+  have (i t : _) : (if p i = 0 then 0 else a i * rexp (-π * p i * t)) =
+      a' i * rexp (-π * p i * t) := by
+    simp [a']
+  simp_rw [this] at hF
+  convert! hasSum_mellin_pi_mul hp' hs hF ?_ using 2 with i
+  · rcases eq_or_ne (p i) 0 with h | h <;>
+    simp [a', h, ofReal_zero, zero_cpow hs', div_zero]
+  · refine h_sum.of_norm_bounded (fun i => ?_)
+    simp only [a']
+    split_ifs
+    · simp only [norm_zero, zero_div]
+      positivity
+    · have := hp i
+      rw [norm_of_nonneg (by positivity)]
 
 中文:
 引理 hasSum_mellin_pi_mul₀
@@ -164,7 +253,20 @@ lemma hasSum_mellin_pi_mul₀
     simp only [a']
     split_ifs with h <;> try tauto
     exact Or.inr (lt_of_le_of_ne (hp i) (Ne.symm h))
-  have (i t : _) : (if p i = 0 then 0 else a i
+  have (i t : _) : (if p i = 0 then 0 else a i * rexp (-π * p i * t)) =
+      a' i * rexp (-π * p i * t) := by
+    simp [a']
+  simp_rw [this] at hF
+  convert! hasSum_mellin_pi_mul hp' hs hF ?_ using 2 with i
+  · rcases eq_or_ne (p i) 0 with h | h <;>
+    simp [a', h, ofReal_zero, zero_cpow hs', div_zero]
+  · refine h_sum.of_norm_bounded (fun i => ?_)
+    simp only [a']
+    split_ifs
+    · simp only [norm_zero, zero_div]
+      positivity
+    · have := hp i
+      rw [norm_of_nonneg (by positivity)]
 
 Depends on / 依赖: Ne.symm, Or.inr, convert, eq_or_ne, hasSum_mellin_pi_mul, lt_irrefl, lt_of_le_of_ne, ofReal_zero, simp_rw, split_ifs, zero_, zero_re
 -/
@@ -207,7 +309,9 @@ lemma hasSum_mellin_pi_mul_sq
   · rw [← neg_div, GammaReal_def]
   · rw [← sq_abs, ofReal_pow, ← cpow_nat_mul']
     · ring_nf
-    all
+    all_goals rw [arg_ofReal_of_nonneg (abs_nonneg _)]; linarith [pi_pos]
+  · convert! h_sum using 3 with i
+    rw [← sq_abs]; rw [← rpow_natCast_mul (abs_nonneg _)]; rw [div_ofNat_re]; rw [Nat.cast_ofNat]; rw [mul_div_cancel₀ _ two_pos.ne']
 
 中文:
 引理 hasSum_mellin_pi_mul_sq
@@ -219,7 +323,9 @@ lemma hasSum_mellin_pi_mul_sq
   · rw [← neg_div, GammaReal_def]
   · rw [← sq_abs, ofReal_pow, ← cpow_nat_mul']
     · ring_nf
-    all
+    all_goals rw [arg_ofReal_of_nonneg (abs_nonneg _)]; linarith [pi_pos]
+  · convert! h_sum using 3 with i
+    rw [← sq_abs]; rw [← rpow_natCast_mul (abs_nonneg _)]; rw [div_ofNat_re]; rw [Nat.cast_ofNat]; rw [mul_div_cancel₀ _ two_pos.ne']
 
 Depends on / 依赖: GammaReal_def, Nat.cast_ofNat, abs_nonneg, all_goals, arg_ofReal_of_nonneg, cast_ofNat, convert, cpow_nat_mul, div_ofNat_re, h_sum, neg_div, ofReal_pow, pi_pos, ring_nf, rpow_natCast_mul, simp_rw, sq_abs, sq_eq_zero_iff, sq_nonneg
 -/
@@ -248,7 +354,21 @@ lemma hasSum_mellin_pi_mul_sq'
   have hs₂ : 0 < (s + 1).re := by rw [add_re, one_re]; positivity
   have hs₃ : s + 1 != 0 := fun h => lt_irrefl _ (zero_re ▸ h ▸ hs₂)
   have (i t : _) : (a i * r i * rexp (-π * r i ^ 2 * t)) =
-      if r i = 0 then 0 else (a i * r i *
+      if r i = 0 then 0 else (a i * r i * rexp (-π * r i ^ 2 * t)) := by
+    split_ifs with h <;> simp [h]
+  conv at hF => enter [t, ht, 1, i]; rw [this]
+  convert! hasSum_mellin_pi_mul_sq hs₂ hF ?_ using 2 with i
+  · rcases eq_or_ne (r i) 0 with h | h
+    · rw [h, abs_zero, ofReal_zero, zero_cpow hs₁, zero_cpow hs₃, div_zero, div_zero]
+    · rw [cpow_add _ _ (ofReal_ne_zero.mpr <| abs_ne_zero.mpr h), cpow_one]
+      conv_rhs => enter [1]; rw [← sign_mul_abs (r i), ofReal_mul, ← ofRealHom_eq_coe,
+        SignType.map_cast]
+      field [h]
+  · convert! h_sum using 2 with i
+    rcases eq_or_ne (r i) 0 with h | h
+    · rw [h, abs_zero, ofReal_zero, zero_rpow hs₂.ne', zero_rpow hs.ne', div_zero, div_zero]
+    · rw [add_re, one_re, rpow_add (abs_pos.mpr h), rpow_one, norm_mul, norm_real,
+        Real.norm_eq_abs, ← div_div, div_right_comm, mul_div_cancel_right₀ _ (abs_ne_zero.mpr h)]
 
 中文:
 引理 hasSum_mellin_pi_mul_sq'
@@ -258,7 +378,21 @@ lemma hasSum_mellin_pi_mul_sq'
   have hs₂ : 0 < (s + 1).re := by rw [add_re, one_re]; positivity
   have hs₃ : s + 1 != 0 := fun h => lt_irrefl _ (zero_re ▸ h ▸ hs₂)
   have (i t : _) : (a i * r i * rexp (-π * r i ^ 2 * t)) =
-      if r i = 0 then 0 else (a i * r i *
+      if r i = 0 then 0 else (a i * r i * rexp (-π * r i ^ 2 * t)) := by
+    split_ifs with h <;> simp [h]
+  conv at hF => enter [t, ht, 1, i]; rw [this]
+  convert! hasSum_mellin_pi_mul_sq hs₂ hF ?_ using 2 with i
+  · rcases eq_or_ne (r i) 0 with h | h
+    · rw [h, abs_zero, ofReal_zero, zero_cpow hs₁, zero_cpow hs₃, div_zero, div_zero]
+    · rw [cpow_add _ _ (ofReal_ne_zero.mpr <| abs_ne_zero.mpr h), cpow_one]
+      conv_rhs => enter [1]; rw [← sign_mul_abs (r i), ofReal_mul, ← ofRealHom_eq_coe,
+        SignType.map_cast]
+      field [h]
+  · convert! h_sum using 2 with i
+    rcases eq_or_ne (r i) 0 with h | h
+    · rw [h, abs_zero, ofReal_zero, zero_rpow hs₂.ne', zero_rpow hs.ne', div_zero, div_zero]
+    · rw [add_re, one_re, rpow_add (abs_pos.mpr h), rpow_one, norm_mul, norm_real,
+        Real.norm_eq_abs, ← div_div, div_right_comm, mul_div_cancel_right₀ _ (abs_ne_zero.mpr h)]
 
 Depends on / 依赖: add_re, convert, eq_or_ne, hasSum_mellin_pi_mul_sq, lt_irrefl, one_re, split_ifs, zero_re
 -/

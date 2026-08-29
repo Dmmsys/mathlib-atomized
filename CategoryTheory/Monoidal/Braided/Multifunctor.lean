@@ -565,7 +565,7 @@ definition ofBifunctor
   hexagon_forward X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app hexagon_forward X) Y) Z
   hexagon_reverse X Y Z :=
- 
+    (NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app hexagon_reverse X) Y) Z)
 
 中文:
 定义 ofBifunctor
@@ -576,7 +576,7 @@ definition ofBifunctor
   hexagon_forward X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app hexagon_forward X) Y) Z
   hexagon_reverse X Y Z :=
- 
+    (NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app hexagon_reverse X) Y) Z)
 -/
 def ofBifunctor : BraidedCategory C where
   braiding X Y := (β.app X).app Y

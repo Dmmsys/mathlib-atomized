@@ -555,7 +555,13 @@ theorem mconv_absolutelyContinuous
   conv in s.indicator 1 (_ * _) => change s.indicator 1 ((fun y => x * y) y)
   simp only [← Set.indicator_comp_right, Pi.one_comp]
   conv in ∫⁻ _, _ ∂ν =>
-    rw [linte
+    rw [lintegral_indicator_one (by apply MeasurableSet.preimage hs (by fun_prop))]
+  have h0 (x : M) : ν (HMul.hMul x ⁻¹' s) = 0 := by
+    apply hν
+    rw [← map_apply (by fun_prop) hs]; rw [IsMulLeftInvariant.map_mul_left_eq_self]; rw [h]
+  simp [h0]
+
+@[to_additive]
 
 中文:
 定理 mconv_absolutelyContinuous
@@ -566,7 +572,13 @@ theorem mconv_absolutelyContinuous
   conv in s.indicator 1 (_ * _) => change s.indicator 1 ((fun y => x * y) y)
   simp only [← Set.indicator_comp_right, Pi.one_comp]
   conv in ∫⁻ _, _ ∂ν =>
-    rw [linte
+    rw [lintegral_indicator_one (by apply MeasurableSet.preimage hs (by fun_prop))]
+  have h0 (x : M) : ν (HMul.hMul x ⁻¹' s) = 0 := by
+    apply hν
+    rw [← map_apply (by fun_prop) hs]; rw [IsMulLeftInvariant.map_mul_left_eq_self]; rw [h]
+  simp [h0]
+
+@[to_additive]
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, HMul.hMul, IsMulLeftInvariant, IsMulLeftInvariant.map_mul_left_eq_self, MeasurableSet, MeasurableSet.preimage, Pi.one_comp, Set.indicator_comp_right, fun_prop, indicator, indicator_comp_right, lintegral_indicator_one, lintegral_mconv, map_apply, map_mul_left_eq_self, measurability, one_comp, preimage, s.indicator
 -/

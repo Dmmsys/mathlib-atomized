@@ -316,7 +316,7 @@ instance bicategory
   leftUnitor := leftUnitor
   rightUnitor := rightUnitor
   comp_whiskerRight := comp_whiskerRight
-  whisker_ex
+  whisker_exchange := whisker_exchange
 
 中文:
 实例 bicategory
@@ -330,7 +330,7 @@ instance bicategory
   leftUnitor := leftUnitor
   rightUnitor := rightUnitor
   comp_whiskerRight := comp_whiskerRight
-  whisker_ex
+  whisker_exchange := whisker_exchange
 
 Depends on / 依赖: EnrichedFunctor
 -/

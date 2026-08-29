@@ -644,7 +644,7 @@ lemma PolarizationIn_eq
   simp only [PolarizationIn, LinearMap.coe_sum, LinearMap.coe_comp, Finset.sum_apply, comp_apply,
     LinearMap.toSpanSingleton_apply, Polarization_apply]
   refine Finset.sum_congr rfl fun i hi => ?_
-  rw [algebra_compatible_smul R (P.coroot'In S i x) (P.coroot i)]; rw [algebraMap_coroot'In_apply
+  rw [algebra_compatible_smul R (P.coroot'In S i x) (P.coroot i)]; rw [algebraMap_coroot'In_apply]
 
 中文:
 引理 PolarizationIn_eq
@@ -653,7 +653,7 @@ lemma PolarizationIn_eq
   simp only [PolarizationIn, LinearMap.coe_sum, LinearMap.coe_comp, Finset.sum_apply, comp_apply,
     LinearMap.toSpanSingleton_apply, Polarization_apply]
   refine Finset.sum_congr rfl fun i hi => ?_
-  rw [algebra_compatible_smul R (P.coroot'In S i x) (P.coroot i)]; rw [algebraMap_coroot'In_apply
+  rw [algebra_compatible_smul R (P.coroot'In S i x) (P.coroot i)]; rw [algebraMap_coroot'In_apply]
 
 Depends on / 依赖: Finset, Finset.sum_apply, Finset.sum_congr, In_apply, LinearMap, LinearMap.coe_comp, LinearMap.coe_sum, LinearMap.toSpanSingleton_apply, P.coroot, PolarizationIn, Polarization_apply, algebraMap_coroot, algebra_compatible_smul, coe_comp, coe_sum, comp_apply, coroot, sum_apply, sum_congr, toSpanSingleton_apply
 -/
@@ -890,7 +890,21 @@ lemma rootFormIn_self_smul_coroot
       ∑ j : ι, P.pairingIn S i (P.reflectionPerm i j) • P.coroot (P.reflectionPerm i j) := by
     simp_rw [PolarizationIn_apply, coroot'In_rootSpanMem_eq_pairingIn]
     exact (Fintype.sum_equiv (P.reflectionPerm i)
-          (fun j => P.pairing
+          (fun j => P.pairingIn S i (P.reflectionPerm i j) • P.coroot (P.reflectionPerm i j))
+          (fun j => P.pairingIn S i j • P.coroot j) (congrFun rfl)).symm
+  rw [two_nsmul]
+  nth_rw 2 [hP]
+  rw [PolarizationIn_apply]
+  simp only [coroot'In_rootSpanMem_eq_pairingIn, pairingIn_reflectionPerm,
+    pairingIn_reflectionPerm_self_left, ← reflectionPerm_coroot, neg_smul,
+    smul_sub, sub_neg_eq_add]
+  rw [Finset.sum_add_distrib]; rw [← add_assoc]; rw [← sub_eq_iff_eq_add]; rw [RootFormIn]
+  simp only [LinearMap.coe_sum, LinearMap.coe_smulRight, Finset.sum_apply,
+    coroot'In_rootSpanMem_eq_pairingIn, LinearMap.smul_apply, smul_eq_mul, Finset.sum_smul,
+    root_coroot_eq_pairing, Finset.sum_neg_distrib, add_neg_cancel, sub_eq_zero]
+  refine Finset.sum_congr rfl ?_
+  intro j hj
+  rw [← P.algebraMap_pairingIn S]; rw [IsScalarTower.algebraMap_smul]; rw [← mul_smul]
 
 中文:
 引理 rootFormIn_self_smul_coroot
@@ -900,7 +914,21 @@ lemma rootFormIn_self_smul_coroot
       ∑ j : ι, P.pairingIn S i (P.reflectionPerm i j) • P.coroot (P.reflectionPerm i j) := by
     simp_rw [PolarizationIn_apply, coroot'In_rootSpanMem_eq_pairingIn]
     exact (Fintype.sum_equiv (P.reflectionPerm i)
-          (fun j => P.pairing
+          (fun j => P.pairingIn S i (P.reflectionPerm i j) • P.coroot (P.reflectionPerm i j))
+          (fun j => P.pairingIn S i j • P.coroot j) (congrFun rfl)).symm
+  rw [two_nsmul]
+  nth_rw 2 [hP]
+  rw [PolarizationIn_apply]
+  simp only [coroot'In_rootSpanMem_eq_pairingIn, pairingIn_reflectionPerm,
+    pairingIn_reflectionPerm_self_left, ← reflectionPerm_coroot, neg_smul,
+    smul_sub, sub_neg_eq_add]
+  rw [Finset.sum_add_distrib]; rw [← add_assoc]; rw [← sub_eq_iff_eq_add]; rw [RootFormIn]
+  simp only [LinearMap.coe_sum, LinearMap.coe_smulRight, Finset.sum_apply,
+    coroot'In_rootSpanMem_eq_pairingIn, LinearMap.smul_apply, smul_eq_mul, Finset.sum_smul,
+    root_coroot_eq_pairing, Finset.sum_neg_distrib, add_neg_cancel, sub_eq_zero]
+  refine Finset.sum_congr rfl ?_
+  intro j hj
+  rw [← P.algebraMap_pairingIn S]; rw [IsScalarTower.algebraMap_smul]; rw [← mul_smul]
 
 Depends on / 依赖: Fintype, Fintype.sum_equiv, In_rootSpanMem_eq_pairing, In_rootSpanMem_eq_pairingIn, P.PolarizationIn, P.coroot, P.pairingIn, P.reflectionPerm, P.rootSpanMem, PolarizationIn, PolarizationIn_apply, coroot, nth_rw, pairingIn, reflectionPerm, rootSpanMem, simp_rw, sum_equiv, two_nsmul
 -/
@@ -940,7 +968,7 @@ lemma prod_rootFormIn_smul_coroot_mem_range_PolarizationIn
   rw [hc]; rw [mul_comm]; rw [mul_smul]; rw [rootFormIn_self_smul_coroot]
   refine LinearMap.mem_range.mpr ?_
   use c • 2 • (P.rootSpanMem S i)
-  rw [map_smul];
+  rw [map_smul]; rw [two_smul]; rw [two_smul]; rw [map_add]
 
 中文:
 引理 prod_rootFormIn_smul_coroot_mem_range_PolarizationIn
@@ -952,7 +980,7 @@ lemma prod_rootFormIn_smul_coroot_mem_range_PolarizationIn
   rw [hc]; rw [mul_comm]; rw [mul_smul]; rw [rootFormIn_self_smul_coroot]
   refine LinearMap.mem_range.mpr ?_
   use c • 2 • (P.rootSpanMem S i)
-  rw [map_smul];
+  rw [map_smul]; rw [two_smul]; rw [two_smul]; rw [map_add]
 
 Depends on / 依赖: Finset, Finset.dvd_prod_of_mem, Finset.mem_univ, LinearMap, LinearMap.mem_range.mpr, P.RootFormIn, P.rootSpanMem, RootFormIn, dvd_prod_of_mem, map_add, map_smul, mem_range, mem_univ, mul_comm, mul_smul, rootFormIn_self_smul_coroot, rootSpanMem, two_smul
 -/
@@ -1054,7 +1082,12 @@ lemma four_smul_rootForm_sq_eq_coxeterWeight_smul
   have hij : 4 • (P.RootForm (P.root i)) (P.root j) =
       2 • P.toLinearMap (P.root j) (2 • P.Polarization (P.root i)) := by
     rw [← toLinearMap_apply_apply_Polarization]; rw [LinearMap.map_smul_of_tower]; rw [← smul_assoc]; rw [Nat.nsmul_eq_mul]
-  have hji : 2 • (P.RootForm (P.root i)) (P.ro
+  have hji : 2 • (P.RootForm (P.root i)) (P.root j) =
+      P.toLinearMap (P.root i) (2 • P.Polarization (P.root j)) := by
+    rw [show (P.RootForm (P.root i)) (P.root j) = (P.RootForm (P.root j)) (P.root i) by
+      apply (rootForm_symmetric P).eq]; rw [← toLinearMap_apply_apply_Polarization]; rw [LinearMap.map_smul_of_tower]
+  rw [sq]; rw [nsmul_eq_mul]; rw [← mul_assoc]; rw [← nsmul_eq_mul]; rw [hij]; rw [← rootForm_self_smul_coroot]; rw [smul_mul_assoc 2]; rw [← mul_smul_comm]; rw [hji]; rw [← rootForm_self_smul_coroot]; rw [map_smul]; rw [← pairing]; rw [map_smul]; rw [← pairing]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [coxeterWeight]
+  ring
 
 中文:
 引理 four_smul_rootForm_sq_eq_coxeterWeight_smul
@@ -1063,7 +1096,12 @@ lemma four_smul_rootForm_sq_eq_coxeterWeight_smul
   have hij : 4 • (P.RootForm (P.root i)) (P.root j) =
       2 • P.toLinearMap (P.root j) (2 • P.Polarization (P.root i)) := by
     rw [← toLinearMap_apply_apply_Polarization]; rw [LinearMap.map_smul_of_tower]; rw [← smul_assoc]; rw [Nat.nsmul_eq_mul]
-  have hji : 2 • (P.RootForm (P.root i)) (P.ro
+  have hji : 2 • (P.RootForm (P.root i)) (P.root j) =
+      P.toLinearMap (P.root i) (2 • P.Polarization (P.root j)) := by
+    rw [show (P.RootForm (P.root i)) (P.root j) = (P.RootForm (P.root j)) (P.root i) by
+      apply (rootForm_symmetric P).eq]; rw [← toLinearMap_apply_apply_Polarization]; rw [LinearMap.map_smul_of_tower]
+  rw [sq]; rw [nsmul_eq_mul]; rw [← mul_assoc]; rw [← nsmul_eq_mul]; rw [hij]; rw [← rootForm_self_smul_coroot]; rw [smul_mul_assoc 2]; rw [← mul_smul_comm]; rw [hji]; rw [← rootForm_self_smul_coroot]; rw [map_smul]; rw [← pairing]; rw [map_smul]; rw [← pairing]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [coxeterWeight]
+  ring
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul_of_tower, Nat.nsmul_eq_mul, P.Polarization, P.RootForm, P.root, P.toLinearMap, Polarization, RootForm, map_smul_of_tower, nsmul_eq_mul, rootForm_symmetric, smul_assoc, toLinearMap, toLinearMap_apply_a, toLinearMap_apply_apply_Polarization
 -/
@@ -1136,7 +1174,8 @@ definition posRootForm
   isOrthogonal_reflection := P.rootForm_reflection_reflection_apply
   exists_eq i j := ⟨∑ k, P.pairingIn S i k * P.pairingIn S j k, by simp [rootForm_apply_apply]⟩
   exists_pos_eq i := by
-    refine ⟨∑ k, P.pairingIn S i k ^ 2, ?_, by simp [sq, rootForm_appl
+    refine ⟨∑ k, P.pairingIn S i k ^ 2, ?_, by simp [sq, rootForm_apply_apply]⟩
+    exact Finset.sum_pos' (fun j _ => sq_nonneg _) ⟨i, by simp⟩
 
 中文:
 定义 posRootForm
@@ -1146,7 +1185,8 @@ definition posRootForm
   isOrthogonal_reflection := P.rootForm_reflection_reflection_apply
   exists_eq i j := ⟨∑ k, P.pairingIn S i k * P.pairingIn S j k, by simp [rootForm_apply_apply]⟩
   exists_pos_eq i := by
-    refine ⟨∑ k, P.pairingIn S i k ^ 2, ?_, by simp [sq, rootForm_appl
+    refine ⟨∑ k, P.pairingIn S i k ^ 2, ?_, by simp [sq, rootForm_apply_apply]⟩
+    exact Finset.sum_pos' (fun j _ => sq_nonneg _) ⟨i, by simp⟩
 
 Depends on / 依赖: P.RootForm, RootForm
 -/
@@ -1221,7 +1261,9 @@ theorem exists_ge_zero_eq_rootForm
   choose s hs using P.coroot'_apply_apply_mem_of_mem_span S hx
   suffices (P.posRootForm S).posForm ⟨x, hx⟩ ⟨x, hx⟩ = ∑ i, s i * s i from
     this ▸ IsSumSq.sum_mul_self Finset.univ s
-  apply FaithfulSM
+  apply FaithfulSMul.algebraMap_injective S R
+  simp only [posRootForm, RootPositiveForm.algebraMap_posForm, map_sum, map_mul]
+  simp [hs, rootForm_apply_apply]
 
 中文:
 定理 存在_ge_zero_eq_rootForm
@@ -1231,7 +1273,9 @@ theorem exists_ge_zero_eq_rootForm
   choose s hs using P.coroot'_apply_apply_mem_of_mem_span S hx
   suffices (P.posRootForm S).posForm ⟨x, hx⟩ ⟨x, hx⟩ = ∑ i, s i * s i from
     this ▸ IsSumSq.sum_mul_self Finset.univ s
-  apply FaithfulSM
+  apply FaithfulSMul.algebraMap_injective S R
+  simp only [posRootForm, RootPositiveForm.algebraMap_posForm, map_sum, map_mul]
+  simp [hs, rootForm_apply_apply]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, Finset, Finset.univ, IsSumSq, IsSumSq.nonneg, IsSumSq.sum_mul_self, P.coroot, P.posRootForm, RootPositiveForm, RootPositiveForm.algebraMap_posForm, _apply_apply_mem_of_mem_span, algebraMap_injective, algebraMap_posForm, coroot, map_mul, map_sum, nonneg, posForm, posRootForm
 -/
@@ -1359,7 +1403,8 @@ lemma pairingIn_le_zero_iff
   · rw [hij, hji]
   · rw [hij, P.pairingIn_eq_zero_iff.mp hij]
   · rw [hji, P.pairingIn_eq_zero_iff.mp hji]
-  · rw [le_iff_eq_or_lt, le_iff_eq_or_lt, or_iff_right hij, or_iff_right hj
+  · rw [le_iff_eq_or_lt, le_iff_eq_or_lt, or_iff_right hij, or_iff_right hji]
+    exact P.pairingIn_lt_zero_iff S
 
 中文:
 引理 pairingIn_le_zero_iff
@@ -1370,7 +1415,8 @@ lemma pairingIn_le_zero_iff
   · rw [hij, hji]
   · rw [hij, P.pairingIn_eq_zero_iff.mp hij]
   · rw [hji, P.pairingIn_eq_zero_iff.mp hji]
-  · rw [le_iff_eq_or_lt, le_iff_eq_or_lt, or_iff_right hij, or_iff_right hj
+  · rw [le_iff_eq_or_lt, le_iff_eq_or_lt, or_iff_right hij, or_iff_right hji]
+    exact P.pairingIn_lt_zero_iff S
 
 Depends on / 依赖: P.pairingIn, P.pairingIn_eq_zero_iff.mp, P.pairingIn_lt_zero_iff, eq_or_ne, le_iff_eq_or_lt, or_iff_right, pairingIn, pairingIn_eq_zero_iff, pairingIn_lt_zero_iff
 -/

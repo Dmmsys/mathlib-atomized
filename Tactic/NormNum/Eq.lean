@@ -150,7 +150,71 @@ haveI' : v =QL 0 := ⟨⟩; haveI' : β =Q Prop := ⟨⟩
 haveI' : e =Q ($a = $b) := ⟨⟩
 guard ← withNewMCtxDepth isDefEq f q(Eq (α := $α))
   let ra ← derive a; let rb ← derive b
-  let rec intArm (rα : Q(Ring 
+  let rec intArm (rα : Q(Ring $α)) := do
+    let ⟨za, na, pa⟩ ← ra.toInt rα; let ⟨zb, nb, pb⟩ ← rb.toInt rα
+    if za = zb then
+haveI' : na =Q nb := ⟨⟩
+      return .isTrue q(isInt_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfRing? rα then
+      let r : Q(decide ($na = $nb) = false) := (q(Eq.refl false) : Expr)
+      return .isFalse q(isInt_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
+  let rec nnratArm (dsα : Q(DivisionSemiring $α)) := do
+    let ⟨qa, na, da, pa⟩ ← ra.toNNRat' dsα; let ⟨qb, nb, db, pb⟩ ← rb.toNNRat' dsα
+    if qa = qb then
+haveI' : na =Q nb := ⟨⟩
+haveI' : da =Q db := ⟨⟩
+      return .isTrue q(isNNRat_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfDivisionSemiring? dsα then
+      let r : Q(decide (Nat.mul $na $db = Nat.mul $nb $da) = false) :=
+        (q(Eq.refl false) : Expr)
+      return .isFalse q(isNNRat_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
+  let rec ratArm (dα : Q(DivisionRing $α)) := do
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    if qa = qb then
+haveI' : na =Q nb := ⟨⟩
+haveI' : da =Q db := ⟨⟩
+      return .isTrue q(isRat_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfDivisionRing? dα then
+      let r : Q(decide (Int.mul $na (.ofNat $db) = Int.mul $nb (.ofNat $da)) = false) :=
+        (q(Eq.refl false) : Expr)
+      return .isFalse q(isRat_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
+  match ra, rb with
+  | .isBool b₁ p₁, .isBool b₂ p₂ =>
+    have a : Q(Prop) := a; have b : Q(Prop) := b
+    match b₁, p₁, b₂, p₂ with
+    | true, (p₁ : Q($a)), true, (p₂ : Q($b)) =>
+      return .isTrue q(eq_of_true $p₁ $p₂)
+    | false, (p₁ : Q(¬$a)), false, (p₂ : Q(¬$b)) =>
+      return .isTrue q(eq_of_false $p₁ $p₂)
+    | false, (p₁ : Q(¬$a)), true, (p₂ : Q($b)) =>
+      return .isFalse q(ne_of_false_of_true $p₁ $p₂)
+    | true, (p₁ : Q($a)), false, (p₂ : Q(¬$b)) =>
+      return .isFalse q(ne_of_true_of_false $p₁ $p₂)
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. => ratArm dα
+  -- mixing positive rationals and negative naturals means we need to use the full rat handler
+  | .isNNRat dsα .., .isNegNat rα .. | .isNegNat rα .., .isNNRat dsα .. =>
+    -- could alternatively try to combine `rα` and `dsα` here, but we'd have to do a defeq check
+    -- so would still need to be in `MetaM`.
+    ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNNRat dsα .., _ | _, .isNNRat dsα .. => nnratArm dsα
+  | .isNegNat rα .., _ | _, .isNegNat rα .. => intArm rα
+  | .isNat _ na pa, .isNat mα nb pb =>
+    assumeInstancesCommute
+    if na.natLit! = nb.natLit! then
+haveI' : na =Q nb := ⟨⟩
+      return .isTrue q(isNat_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfAddMonoidWithOne? mα then
+      let r : Q(Nat.beq $na $nb = false) := (q(Eq.refl false) : Expr)
+      return .isFalse q(isNat_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
 
 中文:
 定义 evalEq
@@ -163,7 +227,71 @@ haveI' : v =QL 0 := ⟨⟩; haveI' : β =Q Prop := ⟨⟩
 haveI' : e =Q ($a = $b) := ⟨⟩
 guard ← withNewMCtxDepth isDefEq f q(Eq (α := $α))
   let ra ← derive a; let rb ← derive b
-  let rec intArm (rα : Q(Ring 
+  let rec intArm (rα : Q(Ring $α)) := do
+    let ⟨za, na, pa⟩ ← ra.toInt rα; let ⟨zb, nb, pb⟩ ← rb.toInt rα
+    if za = zb then
+haveI' : na =Q nb := ⟨⟩
+      return .isTrue q(isInt_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfRing? rα then
+      let r : Q(decide ($na = $nb) = false) := (q(Eq.refl false) : Expr)
+      return .isFalse q(isInt_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
+  let rec nnratArm (dsα : Q(DivisionSemiring $α)) := do
+    let ⟨qa, na, da, pa⟩ ← ra.toNNRat' dsα; let ⟨qb, nb, db, pb⟩ ← rb.toNNRat' dsα
+    if qa = qb then
+haveI' : na =Q nb := ⟨⟩
+haveI' : da =Q db := ⟨⟩
+      return .isTrue q(isNNRat_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfDivisionSemiring? dsα then
+      let r : Q(decide (Nat.mul $na $db = Nat.mul $nb $da) = false) :=
+        (q(Eq.refl false) : Expr)
+      return .isFalse q(isNNRat_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
+  let rec ratArm (dα : Q(DivisionRing $α)) := do
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    if qa = qb then
+haveI' : na =Q nb := ⟨⟩
+haveI' : da =Q db := ⟨⟩
+      return .isTrue q(isRat_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfDivisionRing? dα then
+      let r : Q(decide (Int.mul $na (.ofNat $db) = Int.mul $nb (.ofNat $da)) = false) :=
+        (q(Eq.refl false) : Expr)
+      return .isFalse q(isRat_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
+  match ra, rb with
+  | .isBool b₁ p₁, .isBool b₂ p₂ =>
+    have a : Q(Prop) := a; have b : Q(Prop) := b
+    match b₁, p₁, b₂, p₂ with
+    | true, (p₁ : Q($a)), true, (p₂ : Q($b)) =>
+      return .isTrue q(eq_of_true $p₁ $p₂)
+    | false, (p₁ : Q(¬$a)), false, (p₂ : Q(¬$b)) =>
+      return .isTrue q(eq_of_false $p₁ $p₂)
+    | false, (p₁ : Q(¬$a)), true, (p₂ : Q($b)) =>
+      return .isFalse q(ne_of_false_of_true $p₁ $p₂)
+    | true, (p₁ : Q($a)), false, (p₂ : Q(¬$b)) =>
+      return .isFalse q(ne_of_true_of_false $p₁ $p₂)
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. => ratArm dα
+  -- mixing positive rationals and negative naturals means we need to use the full rat handler
+  | .isNNRat dsα .., .isNegNat rα .. | .isNegNat rα .., .isNNRat dsα .. =>
+    -- could alternatively try to combine `rα` and `dsα` here, but we'd have to do a defeq check
+    -- so would still need to be in `MetaM`.
+    ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNNRat dsα .., _ | _, .isNNRat dsα .. => nnratArm dsα
+  | .isNegNat rα .., _ | _, .isNegNat rα .. => intArm rα
+  | .isNat _ na pa, .isNat mα nb pb =>
+    assumeInstancesCommute
+    if na.natLit! = nb.natLit! then
+haveI' : na =Q nb := ⟨⟩
+      return .isTrue q(isNat_eq_true $pa $pb)
+    else if let some _i ← inferCharZeroOfAddMonoidWithOne? mα then
+      let r : Q(Nat.beq $na $nb = false) := (q(Eq.refl false) : Expr)
+      return .isFalse q(isNat_eq_false $pa $pb $r)
+    else
+      failure --TODO: nonzero characteristic ≠
 
 Depends on / 依赖: ConnectedSpace, ConnectedSpace.neBot_nhdsWithin_compl_of_nontrivial_of_t1space, neBot_nhdsWithin_compl_of_nontrivial_of_t1space
 -/

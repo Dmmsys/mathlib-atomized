@@ -116,7 +116,7 @@ theorem Ideal.toCharacterSpace_apply_eq_zero_of_mem
   simp only [CharacterSpace.equivAlgHom_symm_coe, AlgHom.coe_comp, AlgEquiv.coe_toAlgHom,
     Quotient.mkₐ_eq_mk, Function.comp_apply, NormedRing.algEquivComplexOfComplete_symm_apply]
   simp_rw [Quotient.eq_zero_iff_mem.mpr ha, spectrum.zero_eq]
-  exact Set.eq_of_m
+  exact Set.eq_of_mem_singleton (Set.singleton_nonempty (0 : Complex)).some_mem
 
 中文:
 定理 理想.toCharacterSpace_apply_eq_zero_of_mem
@@ -126,7 +126,7 @@ theorem Ideal.toCharacterSpace_apply_eq_zero_of_mem
   simp only [CharacterSpace.equivAlgHom_symm_coe, AlgHom.coe_comp, AlgEquiv.coe_toAlgHom,
     Quotient.mkₐ_eq_mk, Function.comp_apply, NormedRing.algEquivComplexOfComplete_symm_apply]
   simp_rw [Quotient.eq_zero_iff_mem.mpr ha, spectrum.zero_eq]
-  exact Set.eq_of_m
+  exact Set.eq_of_mem_singleton (Set.singleton_nonempty (0 : Complex)).some_mem
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.coe_comp, CharacterSpace, CharacterSpace.equivAlgHom_symm_coe, Function, Function.comp_apply, Ideal.toCharacterSpace, NormedRing, NormedRing.algEquivComplexOfComplete_symm_apply, Quotient, Quotient.eq_zero_iff_mem.mpr, Quotient.mk, Set.eq_of_mem_singleton, Set.singleton_nonempty, algEquivComplexOfComplete_symm_apply, coe_comp, coe_toAlgHom, comp_apply
 -/
@@ -294,7 +294,14 @@ theorem gelfandTransform_isometry
   refine AddMonoidHomClass.isometry_of_norm (gelfandTransform Complex A) fun a => ?_
   /- By `spectrum.gelfandTransform_eq`, the spectra of `star a * a` and its
     `gelfandTransform` coincide. Therefore, so do their spectral radii, and since they are
-    self-adjoint, so also do their norms. App
+    self-adjoint, so also do their norms. Applying the C⋆-property of the norm and taking square
+    roots shows that the norm is preserved. -/
+  have : spectralRadius Complex (gelfandTransform Complex A (star a * a)) = spectralRadius Complex (star a * a) := by
+    unfold spectralRadius; rw [spectrum.gelfandTransform_eq]
+  rw [map_mul]; rw [(IsSelfAdjoint.star_mul_self a).spectralRadius_eq_nnnorm]; rw [gelfandTransform_map_star]; rw [(IsSelfAdjoint.star_mul_self (gelfandTransform Complex A a)).spectralRadius_eq_nnnorm] at this
+  simp only [ENNReal.coe_inj, CStarRing.nnnorm_star_mul_self, ← sq] at this
+  simpa only [Function.comp_apply, NNReal.sqrt_sq] using!
+    congr_arg (((↑) : Real>=0 -> Real) ∘ ⇑NNReal.sqrt) this
 
 中文:
 定理 gelfandTransform_isometry
@@ -303,7 +310,14 @@ theorem gelfandTransform_isometry
   refine AddMonoidHomClass.isometry_of_norm (gelfandTransform Complex A) fun a => ?_
   /- By `spectrum.gelfandTransform_eq`, the spectra of `star a * a` and its
     `gelfandTransform` coincide. Therefore, so do their spectral radii, and since they are
-    self-adjoint, so also do their norms. App
+    self-adjoint, so also do their norms. Applying the C⋆-property of the norm and taking square
+    roots shows that the norm is preserved. -/
+  have : spectralRadius Complex (gelfandTransform Complex A (star a * a)) = spectralRadius Complex (star a * a) := by
+    unfold spectralRadius; rw [spectrum.gelfandTransform_eq]
+  rw [map_mul]; rw [(IsSelfAdjoint.star_mul_self a).spectralRadius_eq_nnnorm]; rw [gelfandTransform_map_star]; rw [(IsSelfAdjoint.star_mul_self (gelfandTransform Complex A a)).spectralRadius_eq_nnnorm] at this
+  simp only [ENNReal.coe_inj, CStarRing.nnnorm_star_mul_self, ← sq] at this
+  simpa only [Function.comp_apply, NNReal.sqrt_sq] using!
+    congr_arg (((↑) : Real>=0 -> Real) ∘ ⇑NNReal.sqrt) this
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_of_norm, gelfandTransform, isometry_of_norm
 -/
@@ -332,7 +346,30 @@ theorem gelfandTransform_bijective
   /- The range of `gelfandTransform ℂ A` is actually a `StarSubalgebra`. The key lemma below may be
     hard to spot; it's `map_star` coming from `WeakDual.Complex.instStarHomClass`, which is a
     nontrivial result. -/
-  let rng : StarSubalg
+  let rng : StarSubalgebra Complex C(characterSpace Complex A, Complex) :=
+    { toSubalgebra := (gelfandTransform Complex A).range
+      star_mem' := by
+        rintro - ⟨a, rfl⟩
+        use star a
+        ext1 φ
+        dsimp
+        simp only [map_star, RCLike.star_def] }
+  suffices rng = ⊤ from
+    fun x => show x in rng from this.symm ▸ StarSubalgebra.mem_top
+  /- Because the `gelfandTransform ℂ A` is an isometry, it has closed range, and so by the
+    Stone-Weierstrass theorem, it suffices to show that the image of the Gelfand transform separates
+    points in `C(characterSpace ℂ A, ℂ)` and is closed under `star`. -/
+  have h : rng.topologicalClosure = rng := le_antisymm
+    (StarSubalgebra.topologicalClosure_minimal le_rfl
+      (gelfandTransform_isometry A).isClosedEmbedding.isClosed_range)
+    (StarSubalgebra.le_topologicalClosure _)
+  refine h ▸ ContinuousMap.starSubalgebra_topologicalClosure_eq_top_of_separatesPoints
+    _ (fun _ _ => ?_)
+  /- Separating points just means that elements of the `characterSpace` which agree at all points
+    of `A` are the same functional, which is just extensionality. -/
+  contrapose!
+  exact fun h => Subtype.ext (ContinuousLinearMap.ext fun a =>
+    h (gelfandTransform Complex A a) ⟨gelfandTransform Complex A a, ⟨a, rfl⟩, rfl⟩)
 
 中文:
 定理 gelfandTransform_bijective
@@ -342,7 +379,30 @@ theorem gelfandTransform_bijective
   /- The range of `gelfandTransform ℂ A` is actually a `StarSubalgebra`. The key lemma below may be
     hard to spot; it's `map_star` coming from `WeakDual.Complex.instStarHomClass`, which is a
     nontrivial result. -/
-  let rng : StarSubalg
+  let rng : StarSubalgebra Complex C(characterSpace Complex A, Complex) :=
+    { toSubalgebra := (gelfandTransform Complex A).range
+      star_mem' := by
+        rintro - ⟨a, rfl⟩
+        use star a
+        ext1 φ
+        dsimp
+        simp only [map_star, RCLike.star_def] }
+  suffices rng = ⊤ from
+    fun x => show x in rng from this.symm ▸ StarSubalgebra.mem_top
+  /- Because the `gelfandTransform ℂ A` is an isometry, it has closed range, and so by the
+    Stone-Weierstrass theorem, it suffices to show that the image of the Gelfand transform separates
+    points in `C(characterSpace ℂ A, ℂ)` and is closed under `star`. -/
+  have h : rng.topologicalClosure = rng := le_antisymm
+    (StarSubalgebra.topologicalClosure_minimal le_rfl
+      (gelfandTransform_isometry A).isClosedEmbedding.isClosed_range)
+    (StarSubalgebra.le_topologicalClosure _)
+  refine h ▸ ContinuousMap.starSubalgebra_topologicalClosure_eq_top_of_separatesPoints
+    _ (fun _ _ => ?_)
+  /- Separating points just means that elements of the `characterSpace` which agree at all points
+    of `A` are the same functional, which is just extensionality. -/
+  contrapose!
+  exact fun h => Subtype.ext (ContinuousLinearMap.ext fun a =>
+    h (gelfandTransform Complex A a) ⟨gelfandTransform Complex A a, ⟨a, rfl⟩, rfl⟩)
 
 Depends on / 依赖: gelfandTransform_isometry, injective
 -/
@@ -564,7 +624,17 @@ lemma norm_add_eq_max
   /- Since `a` and `b` are normal, commute, and commute with the `star` of the other,
   the C⋆-subalgebra generated by `a` and `b` is commutative, and the conclusion follows from the
   corresponding result for commutative C⋆-algebras. -/
-  -- TODO: once #36418 is merged, it should be possible to 
+  -- TODO: once #36418 is merged, it should be possible to remove the `let _`s below entirely.
+  let S : NonUnitalStarSubalgebra Complex A := (adjoin Complex {a, b}).topologicalClosure
+  have hS : IsClosed (S : Set A) := (adjoin Complex {a, b}).isClosed_topologicalClosure
+  have hcomm₁ := ha.commute_star_left hcomm
+  have hcomm₂ := hb.commute_star_right hcomm
+  have : IsMulCommutative (adjoin Complex {a, b}) :=
+    isMulCommutative_adjoin Complex (by grind) (by grind [commute_star_comm])
+  let _ : NonUnitalCommRing S := (adjoin Complex {a, b}).nonUnitalCommRingTopologicalClosure mul_comm
+  let _ : NonUnitalCommCStarAlgebra S := { }
+  refine CommCStarAlgebra.norm_add_eq_max (A := S) (a := ⟨a, ?_⟩) (b := ⟨b, ?_⟩) (by ext; simpa)
+  all_goals apply le_topologicalClosure; aesop
 
 中文:
 引理 norm_add_eq_max
@@ -573,7 +643,17 @@ lemma norm_add_eq_max
   /- Since `a` and `b` are normal, commute, and commute with the `star` of the other,
   the C⋆-subalgebra generated by `a` and `b` is commutative, and the conclusion follows from the
   corresponding result for commutative C⋆-algebras. -/
-  -- TODO: once #36418 is merged, it should be possible to 
+  -- TODO: once #36418 is merged, it should be possible to remove the `let _`s below entirely.
+  let S : NonUnitalStarSubalgebra Complex A := (adjoin Complex {a, b}).topologicalClosure
+  have hS : IsClosed (S : Set A) := (adjoin Complex {a, b}).isClosed_topologicalClosure
+  have hcomm₁ := ha.commute_star_left hcomm
+  have hcomm₂ := hb.commute_star_right hcomm
+  have : IsMulCommutative (adjoin Complex {a, b}) :=
+    isMulCommutative_adjoin Complex (by grind) (by grind [commute_star_comm])
+  let _ : NonUnitalCommRing S := (adjoin Complex {a, b}).nonUnitalCommRingTopologicalClosure mul_comm
+  let _ : NonUnitalCommCStarAlgebra S := { }
+  refine CommCStarAlgebra.norm_add_eq_max (A := S) (a := ⟨a, ?_⟩) (b := ⟨b, ?_⟩) (by ext; simpa)
+  all_goals apply le_topologicalClosure; aesop
 -/
 lemma norm_add_eq_max (ha : IsStarNormal a) (hb : IsStarNormal b)
     (hcomm : Commute a b) (hab : a * b = 0) :

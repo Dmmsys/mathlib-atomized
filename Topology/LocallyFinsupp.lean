@@ -565,7 +565,8 @@ theorem eq_zero_codiscreteWithin
     ext x
     simp only [mem_support, ne_eq, Pi.zero_apply, Set.mem_sdiff, Set.mem_ofPred_eq, iff_and_self]
     exact (support_subset_iff.1 D.supportWithinDomain) x
-  rw [← thi
+  rw [← this]
+  exact D.supportLocallyFiniteWithinDomain
 
 中文:
 定理 eq_zero_codiscreteWithin
@@ -576,7 +577,8 @@ theorem eq_zero_codiscreteWithin
     ext x
     simp only [mem_support, ne_eq, Pi.zero_apply, Set.mem_sdiff, Set.mem_ofPred_eq, iff_and_self]
     exact (support_subset_iff.1 D.supportWithinDomain) x
-  rw [← thi
+  rw [← this]
+  exact D.supportLocallyFiniteWithinDomain
 
 Depends on / 依赖: D.support, D.supportLocallyFiniteWithinDomain, D.supportWithinDomain, Pi.zero_apply, Set.mem_ofPred_eq, Set.mem_sdiff, codiscreteWithin_iff_locallyFiniteComplementWithin, iff_and_self, mem_ofPred_eq, mem_sdiff, mem_support, ne_eq, support, supportLocallyFiniteWithinDomain, supportWithinDomain, support_subset_iff, zero_apply
 -/
@@ -606,7 +608,9 @@ theorem discreteSupport
       tauto
   rw [this]
   apply isDiscrete_of_codiscreteWithin
-  rw [compl_c
+  rw [compl_compl]
+  apply (supportDiscreteWithin_iff_locallyFiniteWithin D.supportWithinDomain).2
+  exact D.supportLocallyFiniteWithinDomain
 
 中文:
 定理 discreteSupport
@@ -621,7 +625,9 @@ theorem discreteSupport
       tauto
   rw [this]
   apply isDiscrete_of_codiscreteWithin
-  rw [compl_c
+  rw [compl_compl]
+  apply (supportDiscreteWithin_iff_locallyFiniteWithin D.supportWithinDomain).2
+  exact D.supportLocallyFiniteWithinDomain
 
 Depends on / 依赖: D.support, D.supportLocallyFiniteWithinDomain, D.supportWithinDomain, compl_compl, isDiscrete_of_codiscreteWithin, mem_compl_iff, mem_inter_iff, mem_ofPred_eq, support, supportDiscreteWithin_iff_locallyFiniteWithin, supportLocallyFiniteWithinDomain, supportWithinDomain
 -/
@@ -728,7 +734,23 @@ definition addSubmonoid
   zero_mem' := by
     simp only [support_subset_iff, ne_eq, mem_ofPred_eq, Pi.zero_apply, not_true_eq_false,
       IsEmpty.forall_iff, implies_true, support_zero, inter_empty, finite_empty, and_true,
-      tr
+      true_and]
+    exact fun _ _ => ⟨⊤, univ_mem⟩
+  add_mem' {f g} hf hg := by
+    constructor
+    · intro x hx
+      contrapose hx
+      simp [notMem_support.1 fun a => hx (hf.1 a), notMem_support.1 fun a => hx (hg.1 a)]
+    · intro z hz
+      obtain ⟨t₁, ht₁⟩ := hf.2 z hz
+      obtain ⟨t₂, ht₂⟩ := hg.2 z hz
+      use t₁ inter t₂, inter_mem ht₁.1 ht₂.1
+      apply Set.Finite.subset (s := (t₁ inter f.support) union (t₂ inter g.support)) (ht₁.2.union ht₂.2)
+      intro a ha
+      simp_all only [support_subset_iff, ne_eq, mem_ofPred_eq,
+        mem_inter_iff, mem_support, Pi.add_apply, mem_union, true_and]
+      by_contra! hCon
+      simp_all
 
 中文:
 定义 addSubmonoid
@@ -737,7 +759,23 @@ definition addSubmonoid
   zero_mem' := by
     simp only [support_subset_iff, ne_eq, mem_ofPred_eq, Pi.zero_apply, not_true_eq_false,
       IsEmpty.forall_iff, implies_true, support_zero, inter_empty, finite_empty, and_true,
-      tr
+      true_and]
+    exact fun _ _ => ⟨⊤, univ_mem⟩
+  add_mem' {f g} hf hg := by
+    constructor
+    · intro x hx
+      contrapose hx
+      simp [notMem_support.1 fun a => hx (hf.1 a), notMem_support.1 fun a => hx (hg.1 a)]
+    · intro z hz
+      obtain ⟨t₁, ht₁⟩ := hf.2 z hz
+      obtain ⟨t₂, ht₂⟩ := hg.2 z hz
+      use t₁ inter t₂, inter_mem ht₁.1 ht₂.1
+      apply Set.Finite.subset (s := (t₁ inter f.support) union (t₂ inter g.support)) (ht₁.2.union ht₂.2)
+      intro a ha
+      simp_all only [support_subset_iff, ne_eq, mem_ofPred_eq,
+        mem_inter_iff, mem_support, Pi.add_apply, mem_union, true_and]
+      by_contra! hCon
+      simp_all
 -/
 protected def addSubmonoid [AddMonoid Y] : AddSubmonoid (X -> Y) where
   carrier := {f | f.support subseteq U ∧ forall z in U, exists t in 𝓝 z, Set.Finite (t inter f.support)}
@@ -1148,7 +1186,8 @@ lemma coe_finsum
   by_cases h : F.support.Finite
   · rw [finsum_eq_sum F h, Function.locallyFinsuppWithin.coe_sum]
     have h₂ : (fun i => (F i : X -> Int)).support.Finite := by simp_all
-    simp_al
+    simp_all [finsum_eq_sum _ h₂]
+  · simp_all [finsum_of_infinite_support]
 
 中文:
 引理 coe_finsum
@@ -1159,7 +1198,8 @@ lemma coe_finsum
   by_cases h : F.support.Finite
   · rw [finsum_eq_sum F h, Function.locallyFinsuppWithin.coe_sum]
     have h₂ : (fun i => (F i : X -> Int)).support.Finite := by simp_all
-    simp_al
+    simp_all [finsum_eq_sum _ h₂]
+  · simp_all [finsum_of_infinite_support]
 -/
 @[simp] lemma coe_finsum {ι : Type*} {F : ι -> locallyFinsuppWithin U Int} :
     (↑(∑ᶠ i, F i) : X -> Int) = ∑ᶠ i, (F i : X -> Int) := by
@@ -1387,7 +1427,17 @@ instance [SemilatticeSup
       simp [notMem_support.1 fun a => hx (D₁.supportWithinDomain a),
         notMem_support.1 fun a => hx (D₂.supportWithinDomain a)]
     supportLocallyFiniteWithinDomain' := by
-      intro z 
+      intro z hz
+      obtain ⟨t₁, ht₁⟩ := D₁.supportLocallyFiniteWithinDomain z hz
+      obtain ⟨t₂, ht₂⟩ := D₂.supportLocallyFiniteWithinDomain z hz
+      use t₁ inter t₂, inter_mem ht₁.1 ht₂.1
+      apply Set.Finite.subset (s := (t₁ inter D₁.support) union (t₂ inter D₂.support)) (ht₁.2.union ht₂.2)
+      intro a ha
+      simp_all only [mem_inter_iff, mem_support, ne_eq, mem_union, true_and]
+      by_contra! hCon
+      simp_all }
+
+@[simp]
 
 中文:
 实例 [SemilatticeSup
@@ -1400,7 +1450,17 @@ instance [SemilatticeSup
       simp [notMem_support.1 fun a => hx (D₁.supportWithinDomain a),
         notMem_support.1 fun a => hx (D₂.supportWithinDomain a)]
     supportLocallyFiniteWithinDomain' := by
-      intro z 
+      intro z hz
+      obtain ⟨t₁, ht₁⟩ := D₁.supportLocallyFiniteWithinDomain z hz
+      obtain ⟨t₂, ht₂⟩ := D₂.supportLocallyFiniteWithinDomain z hz
+      use t₁ inter t₂, inter_mem ht₁.1 ht₂.1
+      apply Set.Finite.subset (s := (t₁ inter D₁.support) union (t₂ inter D₂.support)) (ht₁.2.union ht₂.2)
+      intro a ha
+      simp_all only [mem_inter_iff, mem_support, ne_eq, mem_union, true_and]
+      by_contra! hCon
+      simp_all }
+
+@[simp]
 
 Depends on / 依赖: Finite, Set.Finite.subset, contrapose, inter_mem, notMem_support, subset, support, supportLocallyFiniteWithinDomain, supportWithinDomain
 -/
@@ -1455,7 +1515,17 @@ instance [SemilatticeInf
       simp [notMem_support.1 fun a => hx (D₁.supportWithinDomain a),
         notMem_support.1 fun a => hx (D₂.supportWithinDomain a)]
     supportLocallyFiniteWithinDomain' := by
-      intro z 
+      intro z hz
+      obtain ⟨t₁, ht₁⟩ := D₁.supportLocallyFiniteWithinDomain z hz
+      obtain ⟨t₂, ht₂⟩ := D₂.supportLocallyFiniteWithinDomain z hz
+      use t₁ inter t₂, inter_mem ht₁.1 ht₂.1
+      apply Set.Finite.subset (s := (t₁ inter D₁.support) union (t₂ inter D₂.support)) (ht₁.2.union ht₂.2)
+      intro a ha
+      simp_all only [mem_inter_iff, mem_support, ne_eq, mem_union, true_and]
+      by_contra! hCon
+      simp_all }
+
+@[simp]
 
 中文:
 实例 [SemilatticeInf
@@ -1468,7 +1538,17 @@ instance [SemilatticeInf
       simp [notMem_support.1 fun a => hx (D₁.supportWithinDomain a),
         notMem_support.1 fun a => hx (D₂.supportWithinDomain a)]
     supportLocallyFiniteWithinDomain' := by
-      intro z 
+      intro z hz
+      obtain ⟨t₁, ht₁⟩ := D₁.supportLocallyFiniteWithinDomain z hz
+      obtain ⟨t₂, ht₂⟩ := D₂.supportLocallyFiniteWithinDomain z hz
+      use t₁ inter t₂, inter_mem ht₁.1 ht₂.1
+      apply Set.Finite.subset (s := (t₁ inter D₁.support) union (t₂ inter D₂.support)) (ht₁.2.union ht₂.2)
+      intro a ha
+      simp_all only [mem_inter_iff, mem_support, ne_eq, mem_union, true_and]
+      by_contra! hCon
+      simp_all }
+
+@[simp]
 
 Depends on / 依赖: Finite, Set.Finite.subset, contrapose, inter_mem, notMem_support, subset, support, supportLocallyFiniteWithinDomain, supportWithinDomain
 -/
@@ -1526,7 +1606,11 @@ instance [Zero
   sup := max
   le_sup_left D₁ D₂ := fun x => by simp
   le_sup_right D₁ D₂ := fun x => by simp
-  sup_le D₁ D₂ D₃ h₁₃ h₂₃ := fun x => by simp
+  sup_le D₁ D₂ D₃ h₁₃ h₂₃ := fun x => by simp [h₁₃ x, h₂₃ x]
+  inf := min
+  inf_le_left D₁ D₂ := fun x => by simp
+  inf_le_right D₁ D₂ := fun x => by simp
+  le_inf D₁ D₂ D₃ h₁₃ h₂₃ := fun x => by simp [h₁₃ x, h₂₃ x]
 
 中文:
 实例 [零
@@ -1539,7 +1623,11 @@ instance [Zero
   sup := max
   le_sup_left D₁ D₂ := fun x => by simp
   le_sup_right D₁ D₂ := fun x => by simp
-  sup_le D₁ D₂ D₃ h₁₃ h₂₃ := fun x => by simp
+  sup_le D₁ D₂ D₃ h₁₃ h₂₃ := fun x => by simp [h₁₃ x, h₂₃ x]
+  inf := min
+  inf_le_left D₁ D₂ := fun x => by simp
+  inf_le_right D₁ D₂ := fun x => by simp
+  le_inf D₁ D₂ D₃ h₁₃ h₂₃ := fun x => by simp [h₁₃ x, h₂₃ x]
 
 Depends on / 依赖: inf_le_left, inf_le_right, le_antisymm, le_def, le_inf, le_sup_left, le_sup_right, le_trans, sup_le
 -/
@@ -1668,6 +1756,8 @@ theorem negPart_add
     Function.locallyFinsuppWithin.coe_add, Function.locallyFinsuppWithin.coe_neg, Pi.add_apply,
     Pi.neg_apply, Function.locallyFinsuppWithin.coe_zero, Pi.zero_apply, sup_le_iff]
   constructor
+  · simp [add_comm, add_le_add]
+  · simp [add_nonneg]
 
 中文:
 定理 negPart_add
@@ -1679,6 +1769,8 @@ theorem negPart_add
     Function.locallyFinsuppWithin.coe_add, Function.locallyFinsuppWithin.coe_neg, Pi.add_apply,
     Pi.neg_apply, Function.locallyFinsuppWithin.coe_zero, Pi.zero_apply, sup_le_iff]
   constructor
+  · simp [add_comm, add_le_add]
+  · simp [add_nonneg]
 
 Depends on / 依赖: Function, Function.locallyFinsuppWithin.coe_add, Function.locallyFinsuppWithin.coe_neg, Function.locallyFinsuppWithin.coe_zero, Function.locallyFinsuppWithin.max_apply, Pi.add_apply, Pi.neg_apply, Pi.zero_apply, add_apply, add_comm, add_le_add, add_nonneg, coe_add, coe_neg, coe_zero, locallyFinsuppWithin, max_apply, negPart_def, neg_add_rev, neg_apply
 -/
@@ -1828,7 +1920,11 @@ definition restrict
     exact hx.1
   supportLocallyFiniteWithinDomain' := by
     intro z hz
-    obtain ⟨t, ht⟩ := D.supp
+    obtain ⟨t, ht⟩ := D.supportLocallyFiniteWithinDomain z (h hz)
+    use t, ht.1
+    apply Set.Finite.subset (s := t inter D.support) ht.2
+    intro _ _
+    simp_all
 
 中文:
 定义 restrict
@@ -1842,7 +1938,11 @@ definition restrict
     exact hx.1
   supportLocallyFiniteWithinDomain' := by
     intro z hz
-    obtain ⟨t, ht⟩ := D.supp
+    obtain ⟨t, ht⟩ := D.supportLocallyFiniteWithinDomain z (h hz)
+    use t, ht.1
+    apply Set.Finite.subset (s := t inter D.support) ht.2
+    intro _ _
+    simp_all
 
 Depends on / 依赖: Classical, Classical.not_imp, D.support, D.supportLocallyFiniteWithinDomain, Finite, Set.Finite.subset, classical, dite_eq_ite, ite_eq_right_iff, mem_support, ne_eq, not_imp, simp_rw, subset, support, supportLocallyFiniteWithinDomain, supportWithinDomain
 -/

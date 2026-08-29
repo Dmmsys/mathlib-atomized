@@ -231,7 +231,10 @@ theorem isChain_destutter'
   | cons_cons b c l IH IH2 =>
     simp_rw [destutter'_cons, apply_ite (IsChain R ·), IH, if_true_right] at IH2
     simp_rw [destutter'_cons, apply_ite (IsChain R ·),
-      apply_ite (IsChain
+      apply_ite (IsChain R <| a :: ·), IH, isChain_cons_cons,
+      if_true_right, ite_prop_iff_and, imp_and]
+exact ⟨⟨⟨Function.swap fun _ => id, fun _ => IH2 c b⟩,
+Function.swap fun _ => IH2 b a⟩, fun _ => IH2 c a⟩
 
 中文:
 定理 isChain_destutter'
@@ -244,7 +247,10 @@ theorem isChain_destutter'
   | cons_cons b c l IH IH2 =>
     simp_rw [destutter'_cons, apply_ite (IsChain R ·), IH, if_true_right] at IH2
     simp_rw [destutter'_cons, apply_ite (IsChain R ·),
-      apply_ite (IsChain
+      apply_ite (IsChain R <| a :: ·), IH, isChain_cons_cons,
+      if_true_right, ite_prop_iff_and, imp_and]
+exact ⟨⟨⟨Function.swap fun _ => id, fun _ => IH2 c b⟩,
+Function.swap fun _ => IH2 b a⟩, fun _ => IH2 c a⟩
 
 Depends on / 依赖: Function, Function.swap, IsChain, _cons, apply_ite, cons_cons, destutter, generalizing, if_true_right, imp_and, isChain_cons_cons, ite_prop_iff_and, simp_rw, singleton, twoStepInduction
 -/
@@ -567,7 +573,7 @@ theorem map_destutter
     by_cases hr : R a b <;>
       simp [hr, ← destutter_cons', map_destutter fun c hc d hd => hl _ (cons_subset_cons _
         (subset_cons_self _ _) hc) _ (cons_subset_cons _ (subset_cons_self _ _) hd),
-        map_destu
+        map_destutter fun c hc d hd => hl _ (subset_cons_self _ _ hc) _ (subset_cons_self _ _ hd)]
 
 中文:
 定理 map_destutter
@@ -578,7 +584,7 @@ theorem map_destutter
     by_cases hr : R a b <;>
       simp [hr, ← destutter_cons', map_destutter fun c hc d hd => hl _ (cons_subset_cons _
         (subset_cons_self _ _) hc) _ (cons_subset_cons _ (subset_cons_self _ _) hd),
-        map_destu
+        map_destutter fun c hc d hd => hl _ (subset_cons_self _ _ hc) _ (subset_cons_self _ _ hd)]
 -/
 theorem map_destutter {f : α -> β} : forall {l : List α}, (forall a in l, forall b in l, R a b ↔ R₂ (f a) (f b)) ->
     (l.destutter R).map f = (l.map f).destutter R₂
@@ -624,7 +630,10 @@ theorem length_destutter'_cotrans_ge
       by_cases hac : R a c
       case pos =>
         simp only [if_pos hac, length_cons]
-        exact Nat.le_succ_of_
+        exact Nat.le_succ_of_le (length_destutter'_cotrans_ge hbc)
+      case neg =>
+        simp only [if_neg hac]
+        exact length_destutter'_cotrans_ge hba
 
 中文:
 定理 length_destutter'_cotrans_ge
@@ -636,7 +645,10 @@ theorem length_destutter'_cotrans_ge
       by_cases hac : R a c
       case pos =>
         simp only [if_pos hac, length_cons]
-        exact Nat.le_succ_of_
+        exact Nat.le_succ_of_le (length_destutter'_cotrans_ge hbc)
+      case neg =>
+        simp only [if_neg hac]
+        exact length_destutter'_cotrans_ge hba
 
 Depends on / 依赖: _root_, _root_.trans, not_not
 -/
@@ -688,7 +700,7 @@ theorem le_length_destutter'_cons
       simp [destutter', if_pos hac, if_pos (not_not.1 hbc), if_neg hab]
     · have hbc : ¬R b c := trans (symm hab) hac
       simp only [destutter', if_neg hbc, if_neg hac, if_neg hab]
-      exact (length_destutter'_congr cs hab)
+      exact (length_destutter'_congr cs hab).ge
 
 中文:
 定理 le_length_destutter'_cons
@@ -698,7 +710,7 @@ theorem le_length_destutter'_cons
       simp [destutter', if_pos hac, if_pos (not_not.1 hbc), if_neg hab]
     · have hbc : ¬R b c := trans (symm hab) hac
       simp only [destutter', if_neg hbc, if_neg hac, if_neg hab]
-      exact (length_destutter'_congr cs hab)
+      exact (length_destutter'_congr cs hab).ge
 -/
 theorem le_length_destutter'_cons [IsEquiv α Rᶜ] :
     forall {l : List α}, (l.destutter' R b).length <= ((b :: l).destutter' R a).length
@@ -762,7 +774,16 @@ lemma IsChain.length_le_length_destutter
   | l₁, _, .cons (l₂ := l₂) a hl, hl₁ =>
     (hl₁.length_le_length_destutter hl).trans length_destutter_le_length_destutter_cons
   -- `l₁ := [a]`, `l₂ := a :: l₂`
-  | _, _, .cons_cons (l₁ := []) (l₂ := l₁) a hl, hl₁ => by s
+  | _, _, .cons_cons (l₁ := []) (l₂ := l₁) a hl, hl₁ => by simp [Nat.one_le_iff_ne_zero]
+  -- `l₁ := a :: l₁`, `l₂ := a :: b :: l₂`
+| _, _, .cons_cons a .cons (l₁ := l₁) (l₂ := l₂) b hl, hl₁ => by
+    by_cases hab : R a b
+    · simpa [destutter_cons_cons, hab] using! hl₁.tail.length_le_length_destutter (hl.cons _)
+    · simpa [destutter_cons_cons, hab] using! hl₁.length_le_length_destutter (hl.cons_cons _)
+  -- `l₁ := a :: b :: l₁`, `l₂ := a :: b :: l₂`
+| _, _, .cons_cons a .cons_cons (l₁ := l₁) (l₂ := l₂) b hl, hl₁ => by
+    simpa [destutter_cons_cons, rel_of_isChain_cons_cons hl₁]
+      using! hl₁.tail.length_le_length_destutter (hl.cons_cons _)
 
 中文:
 引理 IsChain.length_le_length_destutter
@@ -773,7 +794,16 @@ lemma IsChain.length_le_length_destutter
   | l₁, _, .cons (l₂ := l₂) a hl, hl₁ =>
     (hl₁.length_le_length_destutter hl).trans length_destutter_le_length_destutter_cons
   -- `l₁ := [a]`, `l₂ := a :: l₂`
-  | _, _, .cons_cons (l₁ := []) (l₂ := l₁) a hl, hl₁ => by s
+  | _, _, .cons_cons (l₁ := []) (l₂ := l₁) a hl, hl₁ => by simp [Nat.one_le_iff_ne_zero]
+  -- `l₁ := a :: l₁`, `l₂ := a :: b :: l₂`
+| _, _, .cons_cons a .cons (l₁ := l₁) (l₂ := l₂) b hl, hl₁ => by
+    by_cases hab : R a b
+    · simpa [destutter_cons_cons, hab] using! hl₁.tail.length_le_length_destutter (hl.cons _)
+    · simpa [destutter_cons_cons, hab] using! hl₁.length_le_length_destutter (hl.cons_cons _)
+  -- `l₁ := a :: b :: l₁`, `l₂ := a :: b :: l₂`
+| _, _, .cons_cons a .cons_cons (l₁ := l₁) (l₂ := l₂) b hl, hl₁ => by
+    simpa [destutter_cons_cons, rel_of_isChain_cons_cons hl₁]
+      using! hl₁.tail.length_le_length_destutter (hl.cons_cons _)
 -/
 lemma IsChain.length_le_length_destutter [IsEquiv α Rᶜ] :
     forall {l₁ l₂ : List α}, l₁ <+ l₂ -> l₁.IsChain R -> l₁.length <= (l₂.destutter R).length

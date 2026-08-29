@@ -66,7 +66,7 @@ lemma comp_map_eq_const
   exact stdSimplex.not_hasDimensionLT n
     ((hasDimensionLT_iff_of_iso (asIso (Subcomplex.range φ).ι) n).mp inferInstance)
 
-@[reassoc (attr := 
+@[reassoc (attr := simp)]
 
 中文:
 引理 comp_map_eq_const
@@ -78,7 +78,7 @@ lemma comp_map_eq_const
   exact stdSimplex.not_hasDimensionLT n
     ((hasDimensionLT_iff_of_iso (asIso (Subcomplex.range φ).ι) n).mp inferInstance)
 
-@[reassoc (attr := 
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Subcomplex, Subcomplex.lift, Subcomplex.range, hasDimensionLT_iff_of_iso, infer_instance, le_boundary_iff, not_hasDimensionLT, s.comm, stdSimplex, stdSimplex.le_boundary_iff, stdSimplex.not_hasDimensionLT
 -/
@@ -128,7 +128,18 @@ definition opEquiv
         · refine boundary.hom_ext (fun i => ?_)
           simp [stdSimplex.δ_comp_yonedaEquiv_symm,
             δ_opObjEquiv, ← stdSimplex.yonedaEquiv_δ_comp,
-            opObjEquiv_yo
+            opObjEquiv_yonedaEquiv_const] }
+  invFun g :=
+    { map := yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv g.map))
+      comm := by
+        obtain _ | n := n
+        · ext
+        · refine boundary.hom_ext (fun i => ?_)
+          simp [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ,
+            ← stdSimplex.yonedaEquiv_δ_comp,
+            opObjEquiv_symm_yonedaEquiv_const] }
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 中文:
 定义 opEquiv
@@ -140,7 +151,18 @@ definition opEquiv
         · refine boundary.hom_ext (fun i => ?_)
           simp [stdSimplex.δ_comp_yonedaEquiv_symm,
             δ_opObjEquiv, ← stdSimplex.yonedaEquiv_δ_comp,
-            opObjEquiv_yo
+            opObjEquiv_yonedaEquiv_const] }
+  invFun g :=
+    { map := yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv g.map))
+      comm := by
+        obtain _ | n := n
+        · ext
+        · refine boundary.hom_ext (fun i => ?_)
+          simp [stdSimplex.δ_comp_yonedaEquiv_symm, op_δ,
+            ← stdSimplex.yonedaEquiv_δ_comp,
+            opObjEquiv_symm_yonedaEquiv_const] }
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 Depends on / 依赖: boundary, boundary.hom_ext, f.map, g.map, hom_ext, invFun, opObjEquiv, opObjEquiv.symm, opObjEquiv_sy, opObjEquiv_yonedaEquiv_const, stdSimplex, stdSimplex.yonedaEquiv_, yonedaEquiv, yonedaEquiv.symm
 -/
@@ -256,7 +278,15 @@ definition refl
   δ_map_of_lt j hj := by
     obtain ⟨i, rfl⟩ := i.eq_succ_of_ne_zero (by aesop)
     obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (by grind)
-    obta
+    obtain _ | n := n
+    · fin_cases i
+    · rw [stdSimplex.δ_comp_σ_of_le_assoc (by grind), δ_map, comp_const]
+  δ_map_of_gt j hj := by
+    obtain ⟨i, rfl⟩ := i.eq_castSucc_of_ne_last (by grind)
+    obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (by aesop)
+    obtain _ | n := n
+    · fin_cases i
+    · rw [stdSimplex.δ_comp_σ_of_gt_assoc (by grind), δ_map, comp_const]
 
 中文:
 定义 refl
@@ -267,7 +297,15 @@ definition refl
   δ_map_of_lt j hj := by
     obtain ⟨i, rfl⟩ := i.eq_succ_of_ne_zero (by aesop)
     obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (by grind)
-    obta
+    obtain _ | n := n
+    · fin_cases i
+    · rw [stdSimplex.δ_comp_σ_of_le_assoc (by grind), δ_map, comp_const]
+  δ_map_of_gt j hj := by
+    obtain ⟨i, rfl⟩ := i.eq_castSucc_of_ne_last (by grind)
+    obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (by aesop)
+    obtain _ | n := n
+    · fin_cases i
+    · rw [stdSimplex.δ_comp_σ_of_gt_assoc (by grind), δ_map, comp_const]
 
 Depends on / 依赖: f.map, stdSimplex
 -/
@@ -398,14 +436,34 @@ definition op
   signature: {f g fg : X.PtSimplex n x} {i : Fin n} (h : MulStruct f g fg i) {j : Fin n}
   body: yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv h.map))
   δ_castSucc_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_castSucc]; rw [← hij]; rw [Fin.rev_rev]
+  δ_succ_castSucc_map := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_castSucc]; rw [Fin.castSucc_succ]; rw [← hij]; rw [Fin.rev_rev]
+  δ_succ_succ_map := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_castSucc_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_succ]; rw [← hij]; rw [Fin.rev_rev]
+  δ_map_of_lt k hk := by
+    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
+      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_gt k.rev (by grind)]
+  δ_map_of_gt k hk := by
+    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
+      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_lt k.rev (by grind)]
 
 中文:
 定义 op
   签名: {f g fg : X.PtSimplex n x} {i : 有限集 n} (h : MulStruct f g fg i) {j : 有限集 n}
   定义体: yonedaEquiv.symm (opObjEquiv.symm (yonedaEquiv h.map))
   δ_castSucc_castSucc_map := by
-    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_succ_map]; rw [Fin.rev_castSucc]; rw [Fin.rev_castSucc]; rw [← hij]; rw [Fin.rev_rev]
+  δ_succ_castSucc_map := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_succ_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_castSucc]; rw [Fin.castSucc_succ]; rw [← hij]; rw [Fin.rev_rev]
+  δ_succ_succ_map := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [op_δ]; rw [Equiv.apply_symm_apply]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [opEquiv_symm_apply_map]; rw [← h.δ_castSucc_castSucc_map]; rw [Fin.rev_succ]; rw [Fin.rev_succ]; rw [← hij]; rw [Fin.rev_rev]
+  δ_map_of_lt k hk := by
+    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
+      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_gt k.rev (by grind)]
+  δ_map_of_gt k hk := by
+    simp [stdSimplex.δ_comp_yonedaEquiv_symm, ← stdSimplex.yonedaEquiv_δ_comp,
+      opObjEquiv_symm_yonedaEquiv_const, h.δ_map_of_lt k.rev (by grind)]
 
 Depends on / 依赖: Equiv.apply_symm_apply, Fin.rev_castSucc, Fin.rev_rev, MulStruct, apply_symm_apply, f.op, fg.op, g.op, h.map, opEquiv_symm_apply_map, opObjEquiv, opObjEquiv.symm, rev_castSucc, rev_rev, stdSimplex, stdSimplex.yonedaEquiv_, yonedaEquiv, yonedaEquiv.symm
 -/
@@ -440,7 +498,16 @@ definition unop
       ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc]
   δ_succ_castSucc_map := by
     simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      
+      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc, Fin.rev_succ]
+  δ_succ_succ_map := by
+    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
+      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_succ]
+  δ_map_of_lt k hk := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_gt _ (by grind)]
+    simp [opObjEquiv_yonedaEquiv_const]
+  δ_map_of_gt k hk := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_lt _ (by grind)]
+    simp [opObjEquiv_yonedaEquiv_const]
 
 中文:
 定义 unop
@@ -451,7 +518,16 @@ definition unop
       ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc]
   δ_succ_castSucc_map := by
     simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
-      
+      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_castSucc, Fin.rev_succ]
+  δ_succ_succ_map := by
+    simp [stdSimplex.δ_comp_yonedaEquiv_symm, δ_opObjEquiv,
+      ← stdSimplex.yonedaEquiv_δ_comp, ← hij, Fin.rev_succ]
+  δ_map_of_lt k hk := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_gt _ (by grind)]
+    simp [opObjEquiv_yonedaEquiv_const]
+  δ_map_of_gt k hk := by
+    rw [stdSimplex.δ_comp_yonedaEquiv_symm]; rw [δ_opObjEquiv]; rw [← stdSimplex.yonedaEquiv_δ_comp]; rw [h.δ_map_of_lt _ (by grind)]
+    simp [opObjEquiv_yonedaEquiv_const]
 
 Depends on / 依赖: Fin.rev_castSucc, Fin.rev_succ, MulStruct, h.map, opObjEquiv, rev_castSucc, rev_succ, stdSimplex, stdSimplex.yonedaEquiv_, yonedaEquiv, yonedaEquiv.symm
 -/
@@ -493,7 +569,7 @@ definition relStructCastSuccEquivMulStruct
       δ_map_of_gt j hj := by
         rw [Fin.succ_castSucc]; rw [Fin.castSucc_lt_iff_succ_le] at hj
         obtain rfl | hj := hj.eq_or_lt
-        exacts [h.δ_succ_succ_map, h.δ_map_of
+        exacts [h.δ_succ_succ_map, h.δ_map_of_gt j hj] }
 
 中文:
 定义 relStructCastSuccEquivMulStruct
@@ -505,7 +581,7 @@ definition relStructCastSuccEquivMulStruct
       δ_map_of_gt j hj := by
         rw [Fin.succ_castSucc]; rw [Fin.castSucc_lt_iff_succ_le] at hj
         obtain rfl | hj := hj.eq_or_lt
-        exacts [h.δ_succ_succ_map, h.δ_map_of
+        exacts [h.δ_succ_succ_map, h.δ_map_of_gt j hj] }
 
 Depends on / 依赖: Fin.castSucc_lt_iff_succ_le, Fin.succ_castSucc, castSucc_lt_iff_succ_le, eq_or_lt, exacts, h.map, hj.eq_or_lt, invFun, lt_trans, succ_castSucc
 -/
@@ -537,7 +613,8 @@ definition relStructSuccEquivMulStruct
     { map := h.map
       δ_map_of_lt j hj := by
         rw [← Fin.succ_castSucc] at hj
-        obtain rfl | hj := (Fin.le_castSu
+        obtain rfl | hj := (Fin.le_castSucc_iff.mpr hj).eq_or_lt
+        exacts [h.δ_castSucc_castSucc_map, h.δ_map_of_lt j hj] }
 
 中文:
 定义 relStructSuccEquivMulStruct
@@ -549,7 +626,8 @@ definition relStructSuccEquivMulStruct
     { map := h.map
       δ_map_of_lt j hj := by
         rw [← Fin.succ_castSucc] at hj
-        obtain rfl | hj := (Fin.le_castSu
+        obtain rfl | hj := (Fin.le_castSucc_iff.mpr hj).eq_or_lt
+        exacts [h.δ_castSucc_castSucc_map, h.δ_map_of_lt j hj] }
 
 Depends on / 依赖: Fin.castSucc_succ, Fin.le_castSucc_iff.mpr, Fin.succ_castSucc, castSucc_succ, eq_or_lt, exacts, h.map, invFun, le_castSucc_iff, lt_trans, succ_castSucc
 -/

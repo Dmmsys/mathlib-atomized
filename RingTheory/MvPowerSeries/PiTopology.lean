@@ -271,7 +271,7 @@ theorem tendsto_trunc_atTop
   intro n hn
   rw [MvPolynomial.coeff_coe]; rw [coeff_trunc]; rw [if_pos]
   apply lt_of_lt_of_le _ hn
-  simpa [Finsupp.lt_def] using 
+  simpa [Finsupp.lt_def] using ⟨s, by simp⟩
 
 中文:
 定理 tendsto_trunc_atTop
@@ -284,7 +284,7 @@ theorem tendsto_trunc_atTop
   intro n hn
   rw [MvPolynomial.coeff_coe]; rw [coeff_trunc]; rw [if_pos]
   apply lt_of_lt_of_le _ hn
-  simpa [Finsupp.lt_def] using 
+  simpa [Finsupp.lt_def] using ⟨s, by simp⟩
 
 Depends on / 依赖: Finsupp, Finsupp.lt_def, Finsupp.single, MvPolynomial, MvPolynomial.coeff_coe, coeff_coe, coeff_trunc, exists_const, if_pos, lt_def, lt_of_lt_of_le, single, tendsto_atTop_of_eventually_const, tendsto_iff_coeff_tendsto
 -/
@@ -446,7 +446,9 @@ theorem variables_tendsto_zero
   by_cases! h : exists i, d = Finsupp.single i 1
   · obtain ⟨i, hi⟩ := h
     filter_upwards [eventually_cofinite_ne i] with j hj
-    simp [hi, Finsupp.single_eq_single_iff, 
+    simp [hi, Finsupp.single_eq_single_iff, hj.symm]
+  · simpa only [ite_eq_right_iff] using
+      Eventually.of_forall fun x h' => (h x h').elim
 
 中文:
 定理 variables_tendsto_zero
@@ -458,7 +460,9 @@ theorem variables_tendsto_zero
   by_cases! h : exists i, d = Finsupp.single i 1
   · obtain ⟨i, hi⟩ := h
     filter_upwards [eventually_cofinite_ne i] with j hj
-    simp [hi, Finsupp.single_eq_single_iff, 
+    simp [hi, Finsupp.single_eq_single_iff, hj.symm]
+  · simpa only [ite_eq_right_iff] using
+      Eventually.of_forall fun x h' => (h x h').elim
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Finsupp, Finsupp.single, Finsupp.single_eq_single_iff, classical, coeff_X, coeff_zero, eventually_cofinite_ne, filter_upwards, hj.symm, ite_eq_right_iff, of_forall, single, single_eq_single_iff, tendsto_iff_coeff_tendsto, tendsto_nhds_of_eventually_eq
 -/
@@ -690,7 +694,11 @@ theorem summable_of_tendsto_weightedOrder_atTop_nhds_top
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, Filter.eventually_atTop] at h
   intro d
   obtain ⟨i, hi⟩ := h (Finsupp.weight w d)
-refine summable_of_hasFiniteSupport (Set.finite_Iic i
+refine summable_of_hasFiniteSupport (Set.finite_Iic i).subset ?_
+  simp_rw [Function.support_subset_iff, Set.mem_Iic]
+  intro k hk
+  contrapose! hk
+exact coeff_eq_zero_of_lt_weightedOrder w hi k hk.le
 
 中文:
 定理 summable_of_tendsto_weightedOrder_atTop_nhds_top
@@ -702,7 +710,11 @@ refine summable_of_hasFiniteSupport (Set.finite_Iic i
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, Filter.eventually_atTop] at h
   intro d
   obtain ⟨i, hi⟩ := h (Finsupp.weight w d)
-refine summable_of_hasFiniteSupport (Set.finite_Iic i
+refine summable_of_hasFiniteSupport (Set.finite_Iic i).subset ?_
+  simp_rw [Function.support_subset_iff, Set.mem_Iic]
+  intro k hk
+  contrapose! hk
+exact coeff_eq_zero_of_lt_weightedOrder w hi k hk.le
 
 Depends on / 依赖: ENat.tendsto_nhds_top_iff_natCast_lt, Filter, Filter.eventually_atTop, Finsupp, Finsupp.weight, Function, Function.support_subset_iff, Set.finite_Iic, Set.mem_Iic, coeff_eq_zero_of_lt_weightedOrder, contrapose, eventually_atTop, finite_Iic, hempty, hk.le, isEmpty_or_nonempty, mem_Iic, simp_rw, subset, summable_empty
 -/
@@ -748,7 +760,7 @@ theorem summable_pow_of_constantCoeff_eq_zero
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, Filter.eventually_atTop]
   refine fun n => ⟨n + 1, fun m hm => lt_of_lt_of_le ?_ (le_order_pow _)⟩
   refine (ENat.natCast_lt_natCast.mpr (Nat.add_one_le_iff.mp hm)).trans_le ?_
-  simpa [nsmul_eq_mul]
+  simpa [nsmul_eq_mul] using ENat.self_le_mul_right m (order_ne_zero_iff_constCoeff_eq_zero.mpr h)
 
 中文:
 定理 summable_pow_of_constantCoeff_eq_zero
@@ -758,7 +770,7 @@ theorem summable_pow_of_constantCoeff_eq_zero
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, Filter.eventually_atTop]
   refine fun n => ⟨n + 1, fun m hm => lt_of_lt_of_le ?_ (le_order_pow _)⟩
   refine (ENat.natCast_lt_natCast.mpr (Nat.add_one_le_iff.mp hm)).trans_le ?_
-  simpa [nsmul_eq_mul]
+  simpa [nsmul_eq_mul] using ENat.self_le_mul_right m (order_ne_zero_iff_constCoeff_eq_zero.mpr h)
 
 Depends on / 依赖: ENat.natCast_lt_natCast.mpr, ENat.self_le_mul_right, ENat.tendsto_nhds_top_iff_natCast_lt, Filter, Filter.eventually_atTop, Nat.add_one_le_iff.mp, add_one_le_iff, eventually_atTop, le_order_pow, lt_of_lt_of_le, natCast_lt_natCast, nsmul_eq_mul, order_ne_zero_iff_constCoeff_eq_zero, order_ne_zero_iff_constCoeff_eq_zero.mpr, self_le_mul_right, simp_rw, summable_of_tendsto_order_atTop_nhds_top, tendsto_nhds_top_iff_natCast_lt, trans_le
 -/
@@ -832,7 +844,14 @@ theorem summable_prod_of_tendsto_weightedOrder_atTop_nhds_top
   refine summable_iff_summable_coeff.mpr fun d => summable_of_hasFiniteSupport ?_
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, eventually_atTop] at h
   obtain ⟨i, hi⟩ := h (Finsupp.weight w d)
-  apply (Finset.Iio
+  apply (Finset.Iio i).powerset.finite_toSet.subset
+  suffices forall s : Finset ι, coeff d (∏ i in s, f i) != 0 -> ↑s subseteq Set.Iio i by simpa
+  intro s hs
+  contrapose hs
+  obtain ⟨x, hxs, hxi⟩ := Set.not_subset.mp hs
+  rw [Set.mem_Iio]; rw [not_lt] at hxi
+refine coeff_eq_zero_of_lt_weightedOrder w (hi x hxi).trans_le ?_
+  apply le_trans (Finset.single_le_sum (by simp) hxs) (le_weightedOrder_prod w _ _)
 
 中文:
 定理 summable_prod_of_tendsto_weightedOrder_atTop_nhds_top
@@ -843,7 +862,14 @@ theorem summable_prod_of_tendsto_weightedOrder_atTop_nhds_top
   refine summable_iff_summable_coeff.mpr fun d => summable_of_hasFiniteSupport ?_
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, eventually_atTop] at h
   obtain ⟨i, hi⟩ := h (Finsupp.weight w d)
-  apply (Finset.Iio
+  apply (Finset.Iio i).powerset.finite_toSet.subset
+  suffices forall s : Finset ι, coeff d (∏ i in s, f i) != 0 -> ↑s subseteq Set.Iio i by simpa
+  intro s hs
+  contrapose hs
+  obtain ⟨x, hxs, hxi⟩ := Set.not_subset.mp hs
+  rw [Set.mem_Iio]; rw [not_lt] at hxi
+refine coeff_eq_zero_of_lt_weightedOrder w (hi x hxi).trans_le ?_
+  apply le_trans (Finset.single_le_sum (by simp) hxs) (le_weightedOrder_prod w _ _)
 
 Depends on / 依赖: ENat.tendsto_nhds_top_iff_natCast_lt, Finset, Finset.Iio, Finsupp, Finsupp.weight, Set.Iio, Set.mem_Iio, Set.not_subset.mp, Summable, Summable.of_finite, contrapose, eventually_atTop, finite_toSet, hempty, isEmpty_or_nonempty, mem_Iio, not_subset, of_finite, powerset, powerset.finite_toSet.subset
 -/

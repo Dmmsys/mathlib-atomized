@@ -187,7 +187,7 @@ instance Prod.totallyDisconnectedSpace
     have H2 : IsPreconnected (Prod.snd '' t) := h2.image Prod.snd continuous_snd.continuousOn
     fun x hx y hy =>
     Prod.ext (H1.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)
-      (H2.subsingle
+      (H2.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)⟩
 
 中文:
 实例 积类型.totallyDisconnectedSpace
@@ -197,7 +197,7 @@ instance Prod.totallyDisconnectedSpace
     have H2 : IsPreconnected (Prod.snd '' t) := h2.image Prod.snd continuous_snd.continuousOn
     fun x hx y hy =>
     Prod.ext (H1.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)
-      (H2.subsingle
+      (H2.subsingleton ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩)⟩
 
 Depends on / 依赖: H1.subsingleton, H2.subsingleton, IsPreconnected, Prod.ext, Prod.fst, Prod.snd, continuousOn, continuous_fst, continuous_fst.continuousOn, continuous_snd, continuous_snd.continuousOn, h2.image, subsingleton
 -/
@@ -711,7 +711,9 @@ theorem isTotallyDisconnected_of_isTotallySeparated
       huv⟩ :=
     H (hts x_in) (hts y_in) h
   refine (ht _ _ hu hv (hts.trans hs) ⟨x, x_in, hxu⟩ ⟨y, y_in, hyv⟩).ne_empty ?_
-  rw [
+  rw [huv.inter_eq]; rw [inter_empty]
+
+alias IsTotallySeparated.isTotallyDisconnected := isTotallyDisconnected_of_isTotallySeparated
 
 中文:
 定理 isTotallyDisconnected_of_isTotallySeparated
@@ -724,7 +726,9 @@ theorem isTotallyDisconnected_of_isTotallySeparated
       huv⟩ :=
     H (hts x_in) (hts y_in) h
   refine (ht _ _ hu hv (hts.trans hs) ⟨x, x_in, hxu⟩ ⟨y, y_in, hyv⟩).ne_empty ?_
-  rw [
+  rw [huv.inter_eq]; rw [inter_empty]
+
+alias IsTotallySeparated.isTotallyDisconnected := isTotallyDisconnected_of_isTotallySeparated
 
 Depends on / 依赖: IsOpen, hts.trans, huv.inter_eq, inter_empty, inter_eq, ne_empty, subseteq, x_in, y_in
 -/
@@ -782,7 +786,8 @@ theorem totallySeparatedSpace_iff_exists_isClopen
   refine forall₃_congr fun x y _ =>
     ⟨fun ⟨U, V, hU, hV, Ux, Vy, f, disj⟩ => ?_, fun ⟨U, hU, Ux, Ucy⟩ => ?_⟩
   · exact ⟨U, isClopen_of_disjoint_cover_open f hU hV disj,
-      Ux, fun Uy => Set.dis
+      Ux, fun Uy => Set.disjoint_iff.mp disj ⟨Uy, Vy⟩⟩
+  · exact ⟨U, Uᶜ, hU.2, hU.compl.2, Ux, Ucy, (Set.union_compl_self U).ge, disjoint_compl_right⟩
 
 中文:
 定理 totallySeparatedSpace_iff_存在_isClopen
@@ -792,7 +797,8 @@ theorem totallySeparatedSpace_iff_exists_isClopen
   refine forall₃_congr fun x y _ =>
     ⟨fun ⟨U, V, hU, hV, Ux, Vy, f, disj⟩ => ?_, fun ⟨U, hU, Ux, Ucy⟩ => ?_⟩
   · exact ⟨U, isClopen_of_disjoint_cover_open f hU hV disj,
-      Ux, fun Uy => Set.dis
+      Ux, fun Uy => Set.disjoint_iff.mp disj ⟨Uy, Vy⟩⟩
+  · exact ⟨U, Uᶜ, hU.2, hU.compl.2, Ux, Ucy, (Set.union_compl_self U).ge, disjoint_compl_right⟩
 
 Depends on / 依赖: IsTotallySeparated, Pairwise, Set.Pairwise, Set.disjoint_iff.mp, Set.union_compl_self, disjoint_compl_right, disjoint_iff, hU.compl, isClopen_of_disjoint_cover_open, mem_univ, totallySeparatedSpace_iff, true_implies, union_compl_self
 -/
@@ -988,7 +994,10 @@ instance ConnectedComponents.totallyDisconnectedSpace
   rw [totallyDisconnectedSpace_iff_connectedComponent_singleton]
   refine ConnectedComponents.surjective_coe.forall.2 fun x => ?_
   rw [← ConnectedComponents.isQuotientMap_coe.image_connectedComponent]; rw [←
-    connectedComponents_preimage_singleton]; rw [image_preimage_eq _ ConnectedComponents
+    connectedComponents_preimage_singleton]; rw [image_preimage_eq _ ConnectedComponents.surjective_coe]
+  refine ConnectedComponents.surjective_coe.forall.2 fun y => ?_
+  rw [connectedComponents_preimage_singleton]
+  exact isConnected_connectedComponent
 
 中文:
 实例 ConnectedComponents.totallyDisconnectedSpace
@@ -997,7 +1006,10 @@ instance ConnectedComponents.totallyDisconnectedSpace
   rw [totallyDisconnectedSpace_iff_connectedComponent_singleton]
   refine ConnectedComponents.surjective_coe.forall.2 fun x => ?_
   rw [← ConnectedComponents.isQuotientMap_coe.image_connectedComponent]; rw [←
-    connectedComponents_preimage_singleton]; rw [image_preimage_eq _ ConnectedComponents
+    connectedComponents_preimage_singleton]; rw [image_preimage_eq _ ConnectedComponents.surjective_coe]
+  refine ConnectedComponents.surjective_coe.forall.2 fun y => ?_
+  rw [connectedComponents_preimage_singleton]
+  exact isConnected_connectedComponent
 
 Depends on / 依赖: ConnectedComponents, ConnectedComponents.isQuotientMap_coe.image_connectedComponent, ConnectedComponents.surjective_coe, ConnectedComponents.surjective_coe.forall, connectedComponents_preimage_singleton, image_connectedComponent, image_preimage_eq, isConnected_connectedComponent, isQuotientMap_coe, surjective_coe, totallyDisconnectedSpace_iff_connectedComponent_singleton
 -/

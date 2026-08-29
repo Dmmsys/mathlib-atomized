@@ -134,14 +134,16 @@ theorem d_eq_zero_of_f_eq_d_apply
   proof: by
   have := hS.mono_f
   apply (Preadditive.mono_iff_injective (S.f.f k)).1 inferInstance
-  rw [← ConcreteCategory.forget₂_comp_apply]; rw [← HomologicalComplex.Hom.comm]; rw [ConcreteCategory.forget₂_comp_apply]; rw [hx₁]; rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.d_comp_d]
+  rw [← ConcreteCategory.forget₂_comp_apply]; rw [← HomologicalComplex.Hom.comm]; rw [ConcreteCategory.forget₂_comp_apply]; rw [hx₁]; rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.d_comp_d]; rw [Functor.map_zero]; rw [map_zero]
+  rfl
 
 中文:
 定理 d_eq_zero_of_f_eq_d_apply
   证明: by
   have := hS.mono_f
   apply (Preadditive.mono_iff_injective (S.f.f k)).1 inferInstance
-  rw [← ConcreteCategory.forget₂_comp_apply]; rw [← HomologicalComplex.Hom.comm]; rw [ConcreteCategory.forget₂_comp_apply]; rw [hx₁]; rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.d_comp_d]
+  rw [← ConcreteCategory.forget₂_comp_apply]; rw [← HomologicalComplex.Hom.comm]; rw [ConcreteCategory.forget₂_comp_apply]; rw [hx₁]; rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.d_comp_d]; rw [Functor.map_zero]; rw [map_zero]
+  rfl
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.forget, Functor, Functor.map_zero, HomologicalComplex, HomologicalComplex.Hom.comm, HomologicalComplex.d_comp_d, Preadditive, Preadditive.mono_iff_injective, S.f.f, d_comp_d, hS.mono_f, map_zero, mono_f, mono_iff_injective
 -/
@@ -164,7 +166,13 @@ lemma δ_apply
   refine hS.δ_apply' i j hij _ ((forget₂ C Ab).map (S.X₂.pOpcycles i) x₂) _ ?_ ?_
   · rw [← ConcreteCategory.forget₂_comp_apply, ← ConcreteCategory.forget₂_comp_apply,
       HomologicalComplex.p_opcyclesMap, Functor.map_comp, ConcreteCategory.comp_apply,
-      HomologicalComplex.homology_π_ι, Con
+      HomologicalComplex.homology_π_ι, ConcreteCategory.forget₂_comp_apply, hx₂,
+      HomologicalComplex.i_cyclesMk]
+  · apply (Preadditive.mono_iff_injective (S.X₂.iCycles j)).1 inferInstance
+    conv_lhs =>
+      rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.cyclesMap_i]; rw [ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.i_cyclesMk]; rw [hx₁]
+    conv_rhs =>
+      rw [← ConcreteCategory.forget₂_comp_apply]; rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.pOpcycles_opcyclesToCycles_assoc]; rw [HomologicalComplex.toCycles_i]
 
 中文:
 引理 δ_apply
@@ -173,7 +181,13 @@ lemma δ_apply
   refine hS.δ_apply' i j hij _ ((forget₂ C Ab).map (S.X₂.pOpcycles i) x₂) _ ?_ ?_
   · rw [← ConcreteCategory.forget₂_comp_apply, ← ConcreteCategory.forget₂_comp_apply,
       HomologicalComplex.p_opcyclesMap, Functor.map_comp, ConcreteCategory.comp_apply,
-      HomologicalComplex.homology_π_ι, Con
+      HomologicalComplex.homology_π_ι, ConcreteCategory.forget₂_comp_apply, hx₂,
+      HomologicalComplex.i_cyclesMk]
+  · apply (Preadditive.mono_iff_injective (S.X₂.iCycles j)).1 inferInstance
+    conv_lhs =>
+      rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.cyclesMap_i]; rw [ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.i_cyclesMk]; rw [hx₁]
+    conv_rhs =>
+      rw [← ConcreteCategory.forget₂_comp_apply]; rw [← ConcreteCategory.forget₂_comp_apply]; rw [HomologicalComplex.pOpcycles_opcyclesToCycles_assoc]; rw [HomologicalComplex.toCycles_i]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.forget, Functor, Functor.map_comp, HomologicalC, HomologicalComplex, HomologicalComplex.homology_, HomologicalComplex.i_cyclesMk, HomologicalComplex.p_opcyclesMap, Preadditive, Preadditive.mono_iff_injective, comp_apply, conv_lhs, iCycles, i_cyclesMk, map_comp, mono_iff_injective, pOpcycles, p_opcyclesMap
 -/

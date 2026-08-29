@@ -470,7 +470,9 @@ lemma pairwiseDisjoint_pair_insert
   rintro i hi j hj
   simp only [Set.Nonempty, Set.mem_inter_iff, Set.mem_insert_iff, Set.mem_singleton_iff,
     exists_eq_or_imp, exists_eq_left, or_imp, imp_self, true_and]
-  refine ⟨?_, ?_, insert_erase_invOn.2.injOn (notMem_mono hi ha
+  refine ⟨?_, ?_, insert_erase_invOn.2.injOn (notMem_mono hi ha) (notMem_mono hj ha)⟩ <;>
+    rintro rfl <;>
+    cases Finset.notMem_mono ‹_› ha (Finset.mem_insert_self _ _)
 
 中文:
 引理 pairwiseDisjoint_pair_insert
@@ -480,7 +482,9 @@ lemma pairwiseDisjoint_pair_insert
   rintro i hi j hj
   simp only [Set.Nonempty, Set.mem_inter_iff, Set.mem_insert_iff, Set.mem_singleton_iff,
     exists_eq_or_imp, exists_eq_left, or_imp, imp_self, true_and]
-  refine ⟨?_, ?_, insert_erase_invOn.2.injOn (notMem_mono hi ha
+  refine ⟨?_, ?_, insert_erase_invOn.2.injOn (notMem_mono hi ha) (notMem_mono hj ha)⟩ <;>
+    rintro rfl <;>
+    cases Finset.notMem_mono ‹_› ha (Finset.mem_insert_self _ _)
 
 Depends on / 依赖: Finset, Finset.mem_insert_self, Finset.notMem_mono, Nonempty, Set.Nonempty, Set.mem_insert_iff, Set.mem_inter_iff, Set.mem_singleton_iff, Set.pairwiseDisjoint_iff, exists_eq_left, exists_eq_or_imp, imp_self, insert_erase_invOn, mem_coe, mem_insert_iff, mem_insert_self, mem_inter_iff, mem_powerset, mem_singleton_iff, notMem_mono
 -/
@@ -840,7 +844,10 @@ theorem filter_powersetCard_subset
   · intro ⟨⟨hxt, hxn⟩, hsx⟩
     exact ⟨x \ s, ⟨fun y hy => mem_sdiff.mpr ⟨hxt (mem_sdiff.mp hy).1, (mem_sdiff.mp hy).2⟩,
            by rw [card_sdiff_of_subset hsx, hxn]⟩, sdiff_union_of_subset hsx⟩
-  · rintro ⟨y, ⟨hyt, h
+  · rintro ⟨y, ⟨hyt, hyn⟩, rfl⟩
+    refine ⟨⟨union_subset (hyt.trans sdiff_subset) hst, ?_⟩, subset_union_right⟩
+    rw [card_union_of_disjoint (disjoint_of_subset_left hyt disjoint_sdiff_self_left)]; rw [hyn]
+    lia
 
 中文:
 定理 filter_powersetCard_subset
@@ -852,7 +859,10 @@ theorem filter_powersetCard_subset
   · intro ⟨⟨hxt, hxn⟩, hsx⟩
     exact ⟨x \ s, ⟨fun y hy => mem_sdiff.mpr ⟨hxt (mem_sdiff.mp hy).1, (mem_sdiff.mp hy).2⟩,
            by rw [card_sdiff_of_subset hsx, hxn]⟩, sdiff_union_of_subset hsx⟩
-  · rintro ⟨y, ⟨hyt, h
+  · rintro ⟨y, ⟨hyt, hyn⟩, rfl⟩
+    refine ⟨⟨union_subset (hyt.trans sdiff_subset) hst, ?_⟩, subset_union_right⟩
+    rw [card_union_of_disjoint (disjoint_of_subset_left hyt disjoint_sdiff_self_left)]; rw [hyn]
+    lia
 
 Depends on / 依赖: card_sdiff_of_subset, card_union_of_disjoint, disjoint_of_subset_left, disjoint_sdiff_self_left, hyt.trans, mem_filter, mem_image, mem_powersetCard, mem_sdiff, mem_sdiff.mp, mem_sdiff.mpr, sdiff_subset, sdiff_union_of_subset, subset_union_right, union_subset
 -/
@@ -882,7 +892,11 @@ lemma card_filter_powersetCard_subset
       (disjoint_of_subset_left (mem_powersetCard.mp ha).1 disjoint_sdiff_self_left)).symm.trans
     ((congrArg (· \ s) hab).trans
       (union_sdiff_cancel_right
-        (dis
+        (disjoint_of_subset_left (mem_powersetCard.mp hb).1 disjoint_sdiff_self_left)))
+  simp only [filter_powersetCard_subset s t n hst hsn, card_image_of_injOn hinj,
+             card_powersetCard, card_sdiff_of_subset hst]
+
+@[simp]
 
 中文:
 引理 card_filter_powersetCard_subset
@@ -893,7 +907,11 @@ lemma card_filter_powersetCard_subset
       (disjoint_of_subset_left (mem_powersetCard.mp ha).1 disjoint_sdiff_self_left)).symm.trans
     ((congrArg (· \ s) hab).trans
       (union_sdiff_cancel_right
-        (dis
+        (disjoint_of_subset_left (mem_powersetCard.mp hb).1 disjoint_sdiff_self_left)))
+  simp only [filter_powersetCard_subset s t n hst hsn, card_image_of_injOn hinj,
+             card_powersetCard, card_sdiff_of_subset hst]
+
+@[simp]
 
 Depends on / 依赖: Set.InjOn, card_image_of_injOn, card_powersetCard, card_sdiff_of_subset, disjoint_of_subset_left, disjoint_sdiff_self_left, filter_powersetCard_subset, mem_powersetCard, mem_powersetCard.mp, powersetCard, symm.trans, union_sdiff_cancel_right
 -/
@@ -1206,7 +1224,7 @@ theorem powerset_card_disjiUnion
       ⟨a.card, mem_range.mpr (Nat.lt_succ_of_le (card_le_card (mem_powerset.mp ha))),
         mem_powersetCard.mpr ⟨mem_powerset.mp ha, rfl⟩⟩
   · rcases mem_disjiUnion.mp ha with ⟨i, _hi, ha⟩
-    exact mem_powers
+    exact mem_powerset.mpr (mem_powersetCard.mp ha).1
 
 中文:
 定理 powerset_card_disjiUnion
@@ -1218,7 +1236,7 @@ theorem powerset_card_disjiUnion
       ⟨a.card, mem_range.mpr (Nat.lt_succ_of_le (card_le_card (mem_powerset.mp ha))),
         mem_powersetCard.mpr ⟨mem_powerset.mp ha, rfl⟩⟩
   · rcases mem_disjiUnion.mp ha with ⟨i, _hi, ha⟩
-    exact mem_powers
+    exact mem_powerset.mpr (mem_powersetCard.mp ha).1
 
 Depends on / 依赖: Nat.lt_succ_of_le, PosNum, PosNum.one, a.card, card_le_card, lt_succ_of_le, mem_disjiUnion, mem_disjiUnion.mp, mem_powerset, mem_powerset.mp, mem_powerset.mpr, mem_powersetCard, mem_powersetCard.mp, mem_powersetCard.mpr, mem_range, mem_range.mpr
 -/
@@ -1271,7 +1289,10 @@ theorem powersetCard_sup
     intro x hx
     simp only [mem_biUnion, id]
     obtain ⟨t, ht⟩ : exists t, t in powersetCard n (u.erase x) := powersetCard_nonempty.2
-      (le_trans (Nat.l
+      (le_trans (Nat.le_sub_one_of_lt hn) pred_card_le_card_erase)
+    refine ⟨insert x t, ?_, mem_insert_self _ _⟩
+    rw [← insert_erase hx]; rw [powersetCard_succ_insert (notMem_erase _ _)]
+    exact mem_union_right _ (mem_image_of_mem _ ht)
 
 中文:
 定理 powersetCard_sup
@@ -1285,7 +1306,10 @@ theorem powersetCard_sup
     intro x hx
     simp only [mem_biUnion, id]
     obtain ⟨t, ht⟩ : exists t, t in powersetCard n (u.erase x) := powersetCard_nonempty.2
-      (le_trans (Nat.l
+      (le_trans (Nat.le_sub_one_of_lt hn) pred_card_le_card_erase)
+    refine ⟨insert x t, ?_, mem_insert_self _ _⟩
+    rw [← insert_erase hx]; rw [powersetCard_succ_insert (notMem_erase _ _)]
+    exact mem_union_right _ (mem_image_of_mem _ ht)
 
 Depends on / 依赖: Finset, Finset.sup_le_iff, Nat.le_sub_one_of_lt, Num.zero, insert, insert_erase, le_antisymm, le_sub_one_of_lt, le_trans, mem_biUnion, mem_image_of_mem, mem_insert_self, mem_powersetCard, mem_union_right, notMem_erase, powersetCard, powersetCard_nonempty, powersetCard_succ_insert, pred_card_le_card_erase, simp_rw
 -/

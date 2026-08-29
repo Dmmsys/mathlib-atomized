@@ -557,7 +557,7 @@ lemma equiv_mk₀
   erw [SmallHom.equiv_mk, Functor.map_comp]
   dsimp [equiv, mk₀, ShiftedHom.mk₀, shiftFunctorZero']
   simp only [comp_id, L.commShiftIso_zero, Functor.CommShift.isoZero_hom_app, assoc,
-    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_i
+    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_id, id_comp]
 
 中文:
 引理 equiv_mk₀
@@ -568,7 +568,7 @@ lemma equiv_mk₀
   erw [SmallHom.equiv_mk, Functor.map_comp]
   dsimp [equiv, mk₀, ShiftedHom.mk₀, shiftFunctorZero']
   simp only [comp_id, L.commShiftIso_zero, Functor.CommShift.isoZero_hom_app, assoc,
-    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_i
+    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_id, id_comp]
 
 Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoZero_hom_app, Functor.id_obj, Functor.map_comp, Functor.map_comp_assoc, Functor.map_id, Iso.inv_hom_id_app, L.commShiftIso_zero, ShiftedHom, ShiftedHom.mk, SmallHom, SmallHom.equiv_mk, commShiftIso_zero, comp_id, equiv_mk, id_comp, id_obj, inv_hom_id_app, isoZero_hom_app
 -/
@@ -596,7 +596,7 @@ lemma equiv_mk₀Inv
     MorphismProperty.RespectsIso.precomp _ _ _ hf
   refine (SmallHom.equiv_mkInv L _ hf' =≫ _).trans ?_
   rw [← cancel_epi (isoOfHom L W _ hf').hom]; rw [Iso.hom_inv_id_assoc]
-  simp [ShiftedHom.mk₀, Functor.commShiftIso_zero' _ _ m₀ 
+  simp [ShiftedHom.mk₀, Functor.commShiftIso_zero' _ _ m₀ hm₀]
 
 中文:
 引理 equiv_mk₀Inv
@@ -606,7 +606,7 @@ lemma equiv_mk₀Inv
     MorphismProperty.RespectsIso.precomp _ _ _ hf
   refine (SmallHom.equiv_mkInv L _ hf' =≫ _).trans ?_
   rw [← cancel_epi (isoOfHom L W _ hf').hom]; rw [Iso.hom_inv_id_assoc]
-  simp [ShiftedHom.mk₀, Functor.commShiftIso_zero' _ _ m₀ 
+  simp [ShiftedHom.mk₀, Functor.commShiftIso_zero' _ _ m₀ hm₀]
 
 Depends on / 依赖: Functor, Functor.commShiftIso_zero, Iso.hom_inv_id_assoc, MorphismProperty, MorphismProperty.RespectsIso.precomp, RespectsIso, ShiftedHom, ShiftedHom.mk, SmallHom, SmallHom.equiv_mkInv, cancel_epi, commShiftIso_zero, equiv_mkInv, hom.app, hom_inv_id_assoc, isoOfHom, precomp, shiftFunctorZero
 -/
@@ -954,7 +954,14 @@ lemma equiv_smallShiftedHomMap
   apply ((L₂.commShiftIso m).app Y₂).homToEquiv.symm.injective
   simp only [Functor.comp_obj, SmallShiftedHom.equiv_apply, Iso.app_hom,
     Iso.homToEquiv_symm_apply, Iso.app_inv, assoc, Iso.hom_inv_id_app, comp_id]
- 
+  refine (Φ.equiv_smallHomMap' L₁ L₂ _ _ G e f).trans ?_
+  simp only [Functor.comp_obj, NatTrans.app_shift,
+    Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, assoc,
+    Iso.trans_hom, Iso.app_hom, Functor.mapIso_hom, Functor.map_comp, ShiftedHom.map,
+    ShiftedHom.comp_mk₀, ShiftedHom.mk₀_comp,
+    Functor.commShiftIso_inv_naturality]
+  nth_rw 2 [← Functor.map_comp_assoc]
+  simp
 
 中文:
 引理 equiv_smallShiftedHomMap
@@ -964,7 +971,14 @@ lemma equiv_smallShiftedHomMap
   apply ((L₂.commShiftIso m).app Y₂).homToEquiv.symm.injective
   simp only [Functor.comp_obj, SmallShiftedHom.equiv_apply, Iso.app_hom,
     Iso.homToEquiv_symm_apply, Iso.app_inv, assoc, Iso.hom_inv_id_app, comp_id]
- 
+  refine (Φ.equiv_smallHomMap' L₁ L₂ _ _ G e f).trans ?_
+  simp only [Functor.comp_obj, NatTrans.app_shift,
+    Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, assoc,
+    Iso.trans_hom, Iso.app_hom, Functor.mapIso_hom, Functor.map_comp, ShiftedHom.map,
+    ShiftedHom.comp_mk₀, ShiftedHom.mk₀_comp,
+    Functor.commShiftIso_inv_naturality]
+  nth_rw 2 [← Functor.map_comp_assoc]
+  simp
 
 Depends on / 依赖: Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, Functor.comp_obj, Iso.app_hom, Iso.app_inv, Iso.homToEquiv_symm_apply, Iso.hom_inv_id_app, Iso.trans_hom, NatTrans, NatTrans.app_shift, SmallShiftedHom, SmallShiftedHom.equiv_apply, app_hom, app_inv, app_shift, commShiftIso, commShiftIso_comp_hom_app, commShiftIso_comp_inv_app, comp_id
 -/
@@ -1003,7 +1017,12 @@ lemma smallShiftedHomMap_mk
   apply (SmallShiftedHom.equiv W₂ W₂.Q).injective
   let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
   simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
-    Functor.comp_obj, ShiftedHom.map, SmallShiftedHom.equiv_mk, Functor.map_comp, a
+    Functor.comp_obj, ShiftedHom.map, SmallShiftedHom.equiv_mk, Functor.map_comp, assoc,
+    ShiftedHom.comp_mk₀, NatTrans.shift_app, Functor.commShiftIso_comp_inv_app,
+    Functor.commShiftIso_comp_hom_app, Iso.hom_inv_id_app_assoc, ShiftedHom.mk₀_comp,
+    Functor.commShiftIso_hom_naturality]
+  nth_rw 2 [← Functor.map_comp_assoc]
+  simp [reassoc_of% (NatIso.naturality_2 e f)]
 
 中文:
 引理 smallShiftedHomMap_mk
@@ -1012,7 +1031,12 @@ lemma smallShiftedHomMap_mk
   apply (SmallShiftedHom.equiv W₂ W₂.Q).injective
   let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
   simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
-    Functor.comp_obj, ShiftedHom.map, SmallShiftedHom.equiv_mk, Functor.map_comp, a
+    Functor.comp_obj, ShiftedHom.map, SmallShiftedHom.equiv_mk, Functor.map_comp, assoc,
+    ShiftedHom.comp_mk₀, NatTrans.shift_app, Functor.commShiftIso_comp_inv_app,
+    Functor.commShiftIso_comp_hom_app, Iso.hom_inv_id_app_assoc, ShiftedHom.mk₀_comp,
+    Functor.commShiftIso_hom_naturality]
+  nth_rw 2 [← Functor.map_comp_assoc]
+  simp [reassoc_of% (NatIso.naturality_2 e f)]
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, Functor.commShiftIso_hom_naturality, Functor.comp_obj, Functor.map_comp, Iso.hom_inv_id_app_assoc, NatTrans, NatTrans.shift_app, ShiftedHom, ShiftedHom.comp_mk, ShiftedHom.map, ShiftedHom.mk, SmallShiftedHom, SmallShiftedHom.equiv, SmallShiftedHom.equiv_mk, commShiftIso_comp_hom_app, commShiftIso_comp_inv_app
 -/
@@ -1063,7 +1087,8 @@ lemma smallShiftedHomMap_comp
   let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
   simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
     SmallShiftedHom.equiv_comp, ShiftedHom.map_comp]
-  rw [ShiftedHom.comp_assoc _ 
+  rw [ShiftedHom.comp_assoc _ _ _ _ (zero_add b) (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ h (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ (add_zero b) (by simpa)]; rw [← ShiftedHom.comp_assoc _ _ _ (add_zero 0) (add_zero b) (by simp)]; rw [ShiftedHom.mk₀_comp_mk₀]
+  simp
 
 中文:
 引理 smallShiftedHomMap_comp
@@ -1072,7 +1097,8 @@ lemma smallShiftedHomMap_comp
   let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
   simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
     SmallShiftedHom.equiv_comp, ShiftedHom.map_comp]
-  rw [ShiftedHom.comp_assoc _ 
+  rw [ShiftedHom.comp_assoc _ _ _ _ (zero_add b) (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ h (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ (add_zero b) (by simpa)]; rw [← ShiftedHom.comp_assoc _ _ _ (add_zero 0) (add_zero b) (by simp)]; rw [ShiftedHom.mk₀_comp_mk₀]
+  simp
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, ShiftedHom, ShiftedHom.comp_assoc, ShiftedHom.map_comp, SmallShiftedHom, SmallShiftedHom.equiv, SmallShiftedHom.equiv_comp, add_zero, comp_assoc, equiv_comp, equiv_smallShiftedHomMap, functor, injective, localizedFunctor, map_comp, zero_add
 -/

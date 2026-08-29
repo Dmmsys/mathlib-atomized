@@ -137,7 +137,8 @@ lemma le_antisymm_aux
   have h1 := h₁.2 (.single i 1 + .single j (A j i))
   have h2 := h₂.2 (.single i 1 + .single j (A j i))
   simp [Finsupp.sum_add_index, mul_add, add_mul,
-      -neg_a
+      -neg_add_rev, hdiag, ← h₁.1.apply j i, -RCLike.star_def] at *
+  simpa using le_antisymm h2 h1
 
 中文:
 引理 le_antisymm_aux
@@ -150,7 +151,8 @@ lemma le_antisymm_aux
   have h1 := h₁.2 (.single i 1 + .single j (A j i))
   have h2 := h₂.2 (.single i 1 + .single j (A j i))
   simp [Finsupp.sum_add_index, mul_add, add_mul,
-      -neg_a
+      -neg_add_rev, hdiag, ← h₁.1.apply j i, -RCLike.star_def] at *
+  simpa using le_antisymm h2 h1
 -/
 private lemma le_antisymm_aux {A : Matrix n n 𝕜} (h₁ : A.PosSemidef) (h₂ : (-A).PosSemidef) :
     A = 0 := by
@@ -233,7 +235,9 @@ lemma instNonnegSpectrumClass
     intro x hx
     obtain ⟨i, rfl⟩ := Set.ext_iff.mp
 .mp hx hA.posSemidef.1.spectrum_real_eq_range_eigenvalues x
-    exact hA.posSemidef.ei
+    exact hA.posSemidef.eigenvalues_nonneg _
+
+scoped[MatrixOrder] attribute [instance] instNonnegSpectrumClass
 
 中文:
 引理 instNonnegSpectrumClass
@@ -245,7 +249,9 @@ lemma instNonnegSpectrumClass
     intro x hx
     obtain ⟨i, rfl⟩ := Set.ext_iff.mp
 .mp hx hA.posSemidef.1.spectrum_real_eq_range_eigenvalues x
-    exact hA.posSemidef.ei
+    exact hA.posSemidef.eigenvalues_nonneg _
+
+scoped[MatrixOrder] attribute [instance] instNonnegSpectrumClass
 
 Depends on / 依赖: Set.ext_iff.mp, Set.mem_insert_iff, Set.union_singleton, classical, eigenvalues_nonneg, ext_iff, forall_eq_or_imp, hA.posSemidef, hA.posSemidef.eigenvalues_nonneg, le_refl, mem_insert_iff, posSemidef, quasispectrum_eq_spectrum_union_zero, spectrum_real_eq_range_eigenvalues, true_and, union_singleton
 -/
@@ -273,7 +279,10 @@ lemma instStarOrderedRing
       obtain ⟨X, hX, -, rfl⟩ :=
         sub_zero A ▸ CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts hA.isHermitian
           (QuasispectrumRestricts.nnreal_of_nonneg hA.nonneg)
-      exact ⟨X, hX.star_eq.symm ▸ r
+      exact ⟨X, hX.star_eq.symm ▸ rfl⟩,
+    fun ⟨A, hA⟩ => hA ▸ (posSemidef_conjTranspose_mul_self A).nonneg⟩
+
+scoped[MatrixOrder] attribute [instance] instStarOrderedRing
 
 中文:
 引理 instStarOrderedRing
@@ -284,7 +293,10 @@ lemma instStarOrderedRing
       obtain ⟨X, hX, -, rfl⟩ :=
         sub_zero A ▸ CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts hA.isHermitian
           (QuasispectrumRestricts.nnreal_of_nonneg hA.nonneg)
-      exact ⟨X, hX.star_eq.symm ▸ r
+      exact ⟨X, hX.star_eq.symm ▸ rfl⟩,
+    fun ⟨A, hA⟩ => hA ▸ (posSemidef_conjTranspose_mul_self A).nonneg⟩
+
+scoped[MatrixOrder] attribute [instance] instStarOrderedRing
 
 Depends on / 依赖: CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts, QuasispectrumRestricts, QuasispectrumRestricts.nnreal_of_nonneg, add_le_add_right, classical, exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts, hA.isHermitian, hA.nonneg, hX.star_eq.symm, isHermitian, nnreal_of_nonneg, nonneg, of_nonneg_iff, posSemidef_conjTranspose_mul_self, star_eq, sub_zero
 -/
@@ -347,7 +359,8 @@ theorem dotProduct_mulVec_zero_iff
   refine ⟨fun h => ?_, fun h => h ▸ dotProduct_zero _⟩
   obtain ⟨B, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hA.nonneg
   simp_rw [← Matrix.mulVec_mulVec, dotProduct_mulVec _ _ (B *ᵥ x), star_eq_conjTranspose,
-    vecMul_conjTranspose, star_star, dotProduct_star_self_eq_zero
+    vecMul_conjTranspose, star_star, dotProduct_star_self_eq_zero] at h ⊢
+  rw [h]; rw [mulVec_zero]
 
 中文:
 定理 dotProduct_mulVec_zero_iff
@@ -357,7 +370,8 @@ theorem dotProduct_mulVec_zero_iff
   refine ⟨fun h => ?_, fun h => h ▸ dotProduct_zero _⟩
   obtain ⟨B, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hA.nonneg
   simp_rw [← Matrix.mulVec_mulVec, dotProduct_mulVec _ _ (B *ᵥ x), star_eq_conjTranspose,
-    vecMul_conjTranspose, star_star, dotProduct_star_self_eq_zero
+    vecMul_conjTranspose, star_star, dotProduct_star_self_eq_zero] at h ⊢
+  rw [h]; rw [mulVec_zero]
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.nonneg_iff_eq_star_mul_self.mp, Matrix, Matrix.mulVec_mulVec, classical, dotProduct_mulVec, dotProduct_star_self_eq_zero, dotProduct_zero, hA.nonneg, mulVec_mulVec, mulVec_zero, nonneg, nonneg_iff_eq_star_mul_self, simp_rw, star_eq_conjTranspose, star_star, vecMul_conjTranspose
 -/
@@ -402,7 +416,8 @@ theorem det_sqrt
   rw [CFC.sqrt_eq_cfc]; rw [cfc_nnreal_eq_real _ A]; rw [hA.1.cfc_eq]; rw [RCLike.sqrt_of_nonneg hA.det_nonneg]
   simp only [IsHermitian.cfc, Real.coe_sqrt, Real.coe_toNNReal', det_map, det_diagonal,
     Function.comp_apply, hA.isHermitian.det_eq_prod_eigenvalues, ← RCLike.ofReal_prod,
-    RCLike
+    RCLike.ofReal_re, Real.sqrt_prod _ fun _ _ => hA.eigenvalues_nonneg _]
+  grind
 
 中文:
 定理 det_sqrt
@@ -411,7 +426,8 @@ theorem det_sqrt
   rw [CFC.sqrt_eq_cfc]; rw [cfc_nnreal_eq_real _ A]; rw [hA.1.cfc_eq]; rw [RCLike.sqrt_of_nonneg hA.det_nonneg]
   simp only [IsHermitian.cfc, Real.coe_sqrt, Real.coe_toNNReal', det_map, det_diagonal,
     Function.comp_apply, hA.isHermitian.det_eq_prod_eigenvalues, ← RCLike.ofReal_prod,
-    RCLike
+    RCLike.ofReal_re, Real.sqrt_prod _ fun _ _ => hA.eigenvalues_nonneg _]
+  grind
 
 Depends on / 依赖: CFC.sqrt_eq_cfc, Function, Function.comp_apply, IsHermitian, IsHermitian.cfc, RCLike, RCLike.ofReal_prod, RCLike.ofReal_re, RCLike.sqrt_of_nonneg, Real.coe_sqrt, Real.coe_toNNReal, Real.sqrt_prod, cfc_eq, cfc_nnreal_eq_real, coe_sqrt, coe_toNNReal, comp_apply, det_diagonal, det_eq_prod_eigenvalues, det_map
 -/
@@ -461,7 +477,9 @@ theorem posSemidef_iff_isHermitian_and_spectrum_nonneg
       exists_exists_eq_and, Set.mem_ofPred_eq, forall_exists_index]
     rintro i rfl
     exact_mod_cast h.eigenvalues_nonneg _
-  · rw [h1.posSem
+  · rw [h1.posSemidef_iff_eigenvalues_nonneg]
+    intro i
+    simpa [h1.spectrum_eq_image_range] using @h2 (h1.eigenvalues i)
 
 中文:
 定理 posSemidef_iff_isHermitian_and_spectrum_nonneg
@@ -472,7 +490,9 @@ theorem posSemidef_iff_isHermitian_and_spectrum_nonneg
       exists_exists_eq_and, Set.mem_ofPred_eq, forall_exists_index]
     rintro i rfl
     exact_mod_cast h.eigenvalues_nonneg _
-  · rw [h1.posSem
+  · rw [h1.posSemidef_iff_eigenvalues_nonneg]
+    intro i
+    simpa [h1.spectrum_eq_image_range] using @h2 (h1.eigenvalues i)
 
 Depends on / 依赖: Set.mem_image, Set.mem_ofPred_eq, Set.mem_range, eigenvalues, eigenvalues_nonneg, exists_exists_eq_and, forall_exists_index, h.eigenvalues_nonneg, h.isHermitian, h.isHermitian.spectrum_eq_image_range, h1.eigenvalues, h1.posSemidef_iff_eigenvalues_nonneg, h1.spectrum_eq_image_range, isHermitian, mem_image, mem_ofPred_eq, mem_range, posSemidef_iff_eigenvalues_nonneg, spectrum_eq_image_range
 -/
@@ -499,7 +519,9 @@ theorem PosSemidef.posDef_iff_isUnit
   refine ⟨fun h => h.isUnit, fun h => .of_dotProduct_mulVec_pos hx.1 fun v hv => ?_⟩
   obtain ⟨y, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hx.nonneg
   simp_rw [dotProduct_mulVec, ← vecMul_vecMul, star_eq_conjTranspose, ← star_mulVec,
-    ← dotProduct_mulVec, dotProduct_star_self_pos_if
+    ← dotProduct_mulVec, dotProduct_star_self_pos_iff]
+  contrapose hv
+  rw [← map_eq_zero_iff (f := (yᴴ * y).mulVecLin) (mulVec_injective_iff_isUnit.mpr h)]; rw [mulVecLin_apply]; rw [← mulVec_mulVec]; rw [hv]; rw [mulVec_zero]
 
 中文:
 定理 PosSemidef.posDef_iff_isUnit
@@ -508,7 +530,9 @@ theorem PosSemidef.posDef_iff_isUnit
   refine ⟨fun h => h.isUnit, fun h => .of_dotProduct_mulVec_pos hx.1 fun v hv => ?_⟩
   obtain ⟨y, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hx.nonneg
   simp_rw [dotProduct_mulVec, ← vecMul_vecMul, star_eq_conjTranspose, ← star_mulVec,
-    ← dotProduct_mulVec, dotProduct_star_self_pos_if
+    ← dotProduct_mulVec, dotProduct_star_self_pos_iff]
+  contrapose hv
+  rw [← map_eq_zero_iff (f := (yᴴ * y).mulVecLin) (mulVec_injective_iff_isUnit.mpr h)]; rw [mulVecLin_apply]; rw [← mulVec_mulVec]; rw [hv]; rw [mulVec_zero]
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.nonneg_iff_eq_star_mul_self.mp, contrapose, dotProduct_mulVec, dotProduct_star_self_pos_iff, h.isUnit, hx.nonneg, isUnit, map_eq_zero_iff, mulVecLin, mulVecLin_apply, mulVec_injective_iff_isUnit, mulVec_injective_iff_isUnit.mpr, mulVec_mulVec, mulVec_zero, nonneg, nonneg_iff_eq_star_mul_self, of_dotProduct_mulVec_pos, simp_rw, star_eq_conjTranspose
 -/
@@ -591,7 +615,8 @@ theorem PosSemidef.kronecker
   have := Fintype.ofFinite n; have := Fintype.ofFinite m
   obtain ⟨a, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hx.nonneg
   obtain ⟨b, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hy.nonneg
-  simpa [mul_kronecker_mul, ← conjTranspose_kronecker, star_eq_conjTranspose] 
+  simpa [mul_kronecker_mul, ← conjTranspose_kronecker, star_eq_conjTranspose] using
+    posSemidef_conjTranspose_mul_self _
 
 中文:
 定理 PosSemidef.kronecker
@@ -601,7 +626,8 @@ theorem PosSemidef.kronecker
   have := Fintype.ofFinite n; have := Fintype.ofFinite m
   obtain ⟨a, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hx.nonneg
   obtain ⟨b, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hy.nonneg
-  simpa [mul_kronecker_mul, ← conjTranspose_kronecker, star_eq_conjTranspose] 
+  simpa [mul_kronecker_mul, ← conjTranspose_kronecker, star_eq_conjTranspose] using
+    posSemidef_conjTranspose_mul_self _
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.nonneg_iff_eq_star_mul_self.mp, Fintype, Fintype.ofFinite, classical, conjTranspose_kronecker, hx.nonneg, hy.nonneg, mul_kronecker_mul, nonneg, nonneg_iff_eq_star_mul_self, ofFinite, posSemidef_conjTranspose_mul_self, star_eq_conjTranspose
 -/
@@ -663,7 +689,12 @@ theorem PosSemidef.hadamard
   have hAB : ((A ⊙ B).submatrix (↑) (↑) : Matrix x.support _ _).PosSemidef := by
     have hAs := hA.submatrix ((↑) : x.support -> ι)
     have hBs := hB.submatrix ((↑) : x.support -> ι)
-    rw [submatrix_hadamard]; rw [posS
+    rw [submatrix_hadamard]; rw [posSemidef_iff_dotProduct_mulVec]
+    refine ⟨hAs.isHermitian.hadamard hBs.isHermitian, fun y => ?_⟩
+    rw [star_dotProduct_hadamard_mulVec_eq_kronecker]
+    exact (hAs.kronecker hBs).dotProduct_mulVec_nonneg _
+  simpa [Finsupp.sum, ← Finset.sum_attach x.support, ← Finset.subtype_mem_eq_attach,
+    ← Finsupp.subtypeDomain_apply, ← Finsupp.support_subtypeDomain] using hAB.2 _
 
 中文:
 定理 PosSemidef.hadamard
@@ -674,7 +705,12 @@ theorem PosSemidef.hadamard
   have hAB : ((A ⊙ B).submatrix (↑) (↑) : Matrix x.support _ _).PosSemidef := by
     have hAs := hA.submatrix ((↑) : x.support -> ι)
     have hBs := hB.submatrix ((↑) : x.support -> ι)
-    rw [submatrix_hadamard]; rw [posS
+    rw [submatrix_hadamard]; rw [posSemidef_iff_dotProduct_mulVec]
+    refine ⟨hAs.isHermitian.hadamard hBs.isHermitian, fun y => ?_⟩
+    rw [star_dotProduct_hadamard_mulVec_eq_kronecker]
+    exact (hAs.kronecker hBs).dotProduct_mulVec_nonneg _
+  simpa [Finsupp.sum, ← Finset.sum_attach x.support, ← Finset.subtype_mem_eq_attach,
+    ← Finsupp.subtypeDomain_apply, ← Finsupp.support_subtypeDomain] using hAB.2 _
 
 Depends on / 依赖: Finsupp, Finsupp.sum, Matrix, PosSemidef, classical, dotProduct_mulVec_nonneg, hA.isHermitian.hadamard, hA.submatrix, hAs.isHermitian.hadamard, hAs.kronecker, hB.isHermitian, hB.submatrix, hBs.isHermitian, hadamard, isHermitian, kronecker, posSemidef_iff_dotProduct_mulVec, star_dotProduct_hadamard_mulVec_eq_kronecker, submatrix, submatrix_hadamard
 -/
@@ -704,7 +740,17 @@ theorem PosDef.hadamard
   have hAB : ((A ⊙ B).submatrix (↑) (↑) : Matrix x.support _ _).PosDef := by
     have hAs : (A.submatrix (↑) (↑) : Matrix x.support _ _).PosDef :=
       hA.submatrix Subtype.coe_injective
-    have hBs : (B.submatrix (↑)
+    have hBs : (B.submatrix (↑) (↑) : Matrix x.support _ _).PosDef :=
+      hB.submatrix Subtype.coe_injective
+    rw [submatrix_hadamard]; rw [posDef_iff_dotProduct_mulVec]
+    refine ⟨hAs.isHermitian.hadamard hBs.isHermitian, fun y hy => ?_⟩
+    rw [star_dotProduct_hadamard_mulVec_eq_kronecker]
+exact (hAs.kronecker hBs).dotProduct_mulVec_pos by simpa
+  simp_rw [RCLike.star_def, hadamard_apply, Finsupp.sum,
+    ← Finset.sum_attach x.support, ← Finset.subtype_mem_eq_attach,
+    ← Finsupp.subtypeDomain_apply, ← Finsupp.support_subtypeDomain]
+  refine hAB.2 ?_
+  simpa [← Finsupp.support_nonempty_iff] using Finsupp.support_nonempty_iff.mpr hx
 
 中文:
 定理 PosDef.hadamard
@@ -715,7 +761,17 @@ theorem PosDef.hadamard
   have hAB : ((A ⊙ B).submatrix (↑) (↑) : Matrix x.support _ _).PosDef := by
     have hAs : (A.submatrix (↑) (↑) : Matrix x.support _ _).PosDef :=
       hA.submatrix Subtype.coe_injective
-    have hBs : (B.submatrix (↑)
+    have hBs : (B.submatrix (↑) (↑) : Matrix x.support _ _).PosDef :=
+      hB.submatrix Subtype.coe_injective
+    rw [submatrix_hadamard]; rw [posDef_iff_dotProduct_mulVec]
+    refine ⟨hAs.isHermitian.hadamard hBs.isHermitian, fun y hy => ?_⟩
+    rw [star_dotProduct_hadamard_mulVec_eq_kronecker]
+exact (hAs.kronecker hBs).dotProduct_mulVec_pos by simpa
+  simp_rw [RCLike.star_def, hadamard_apply, Finsupp.sum,
+    ← Finset.sum_attach x.support, ← Finset.subtype_mem_eq_attach,
+    ← Finsupp.subtypeDomain_apply, ← Finsupp.support_subtypeDomain]
+  refine hAB.2 ?_
+  simpa [← Finsupp.support_nonempty_iff] using Finsupp.support_nonempty_iff.mpr hx
 
 Depends on / 依赖: A.submatrix, B.submatrix, Matrix, PosDef, Subtype, Subtype.coe_injective, classical, coe_injective, hA.isHermitian.hadamard, hA.submatrix, hAs.isHermitian.hadamard, hB.isHermitian, hB.submatrix, hBs.isHermitian, hadamard, isHermitian, posDef_iff_dotProduct_mulVec, star_dotProduct_h, submatrix, submatrix_hadamard
 -/
@@ -806,7 +862,8 @@ abbreviation PosSemidef.matrixPreInnerProductSpace
     simp only [mul_assoc, starRingEnd_apply, ← trace_conjTranspose, conjTranspose_mul,
       conjTranspose_conjTranspose, hM.isHermitian.eq]
 .1 re_inner_nonneg x := RCLike.nonneg_iff.mp (hM.mul_mul_conjTranspose_same x).trace_nonneg
-  add_left := by sim
+  add_left := by simp [mul_add]
+  smul_left := by simp
 
 中文:
 缩写 PosSemidef.matrixPreInnerProductSpace
@@ -816,7 +873,8 @@ abbreviation PosSemidef.matrixPreInnerProductSpace
     simp only [mul_assoc, starRingEnd_apply, ← trace_conjTranspose, conjTranspose_mul,
       conjTranspose_conjTranspose, hM.isHermitian.eq]
 .1 re_inner_nonneg x := RCLike.nonneg_iff.mp (hM.mul_mul_conjTranspose_same x).trace_nonneg
-  add_left := by sim
+  add_left := by simp [mul_add]
+  smul_left := by simp
 -/
 private abbrev PosSemidef.matrixPreInnerProductSpace {M : Matrix n n 𝕜} (hM : M.PosSemidef) :
     PreInnerProductSpace.Core 𝕜 (Matrix n n 𝕜) where
@@ -870,7 +928,10 @@ definition toMatrixNormedAddCommGroup
       obtain ⟨y, hy, rfl⟩ := CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.mp
         hM.isStrictlyPositive
       simp +instances only at hx
-      rw [←
+      rw [← mul_assoc]; rw [← conjTranspose_conjTranspose x]; rw [star_eq_conjTranspose]; rw [← conjTranspose_mul]; rw [conjTranspose_conjTranspose]; rw [mul_assoc]; rw [trace_conjTranspose_mul_self_eq_zero_iff] at hx
+      lift y to (Matrix n n 𝕜)ˣ using hy
+      simpa [← mul_assoc] using congr(y⁻¹ * $hx) }
+  this.toNormedAddCommGroup
 
 中文:
 定义 toMatrixNormedAddCommGroup
@@ -882,7 +943,10 @@ definition toMatrixNormedAddCommGroup
       obtain ⟨y, hy, rfl⟩ := CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.mp
         hM.isStrictlyPositive
       simp +instances only at hx
-      rw [←
+      rw [← mul_assoc]; rw [← conjTranspose_conjTranspose x]; rw [star_eq_conjTranspose]; rw [← conjTranspose_mul]; rw [conjTranspose_conjTranspose]; rw [mul_assoc]; rw [trace_conjTranspose_mul_self_eq_zero_iff] at hx
+      lift y to (Matrix n n 𝕜)ˣ using hy
+      simpa [← mul_assoc] using congr(y⁻¹ * $hx) }
+  this.toNormedAddCommGroup
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.mp, InnerProductSpace, InnerProductSpace.Core, Matrix, classical, conjTranspose_conjTranspose, conjTranspose_mul, definite, hM.isStrictlyPositive, hM.posSemidef.matrixPreInnerProductSpace, instances, isStrictlyPositive, isStrictlyPositive_iff_eq_star_mul_self, matrixPreInnerProductSpace, mul_assoc, posSemidef, star_eq_conjTranspose, trace_conjTranspose_mul_self_eq_zero_iff
 -/
@@ -940,7 +1004,17 @@ instance instIsometricContinuousFunctionalCalculus
     rw [IsHermitian.cfcHom_eq_cfcAux hA]; rw [AddMonoidHomClass.isometry_iff_norm]
     intro f
     simp only [IsHermitian.cfcAux_apply, Unitary.conjStarAlgAut_apply, ← Unitary.coe_star,
-      CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary
+      CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary_mul, l2_opNorm_diagonal]
+    rw [((algebraMap_isometry Real 𝕜).postcomp_pi).norm_map_of_map_zero (by ext; simp)]
+    let : Fintype (spectrum Real A) := .ofFinite _
+    rw [ContinuousMap.norm_eq_norm_coeFn]
+    refine Function.Surjective.pi_norm_comp ?_ _
+    rw [← Function.Surjective.of_comp_iff'
+      (Equiv.setCongr hA.spectrum_real_eq_range_eigenvalues).bijective]
+    exact Set.codRestrict_range_surjective hA.eigenvalues
+
+scoped[Matrix.Norms.L2Operator] attribute [instance]
+  Matrix.instIsometricContinuousFunctionalCalculus
 
 中文:
 实例 instIsometricContinuousFunctionalCalculus
@@ -950,7 +1024,17 @@ instance instIsometricContinuousFunctionalCalculus
     rw [IsHermitian.cfcHom_eq_cfcAux hA]; rw [AddMonoidHomClass.isometry_iff_norm]
     intro f
     simp only [IsHermitian.cfcAux_apply, Unitary.conjStarAlgAut_apply, ← Unitary.coe_star,
-      CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary
+      CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary_mul, l2_opNorm_diagonal]
+    rw [((algebraMap_isometry Real 𝕜).postcomp_pi).norm_map_of_map_zero (by ext; simp)]
+    let : Fintype (spectrum Real A) := .ofFinite _
+    rw [ContinuousMap.norm_eq_norm_coeFn]
+    refine Function.Surjective.pi_norm_comp ?_ _
+    rw [← Function.Surjective.of_comp_iff'
+      (Equiv.setCongr hA.spectrum_real_eq_range_eigenvalues).bijective]
+    exact Set.codRestrict_range_surjective hA.eigenvalues
+
+scoped[Matrix.Norms.L2Operator] attribute [instance]
+  Matrix.instIsometricContinuousFunctionalCalculus
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_iff_norm, CStarRing, CStarRing.norm_coe_unitary_mul, CStarRing.norm_mul_coe_unitary, ContinuousMap, ContinuousMap.norm_eq_norm_coeFn, Fintype, Function, Function.Surjective, IsHermitian, IsHermitian.cfcAux_apply, IsHermitian.cfcHom_eq_cfcAux, Surjective, Unitary, Unitary.coe_star, Unitary.conjStarAlgAut_apply, algebraMap_isometry, cfcAux_apply, cfcHom_eq_cfcAux
 -/

@@ -449,7 +449,9 @@ theorem SuperpolynomialDecay.trans_eventually_abs_le
     tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (hf z)
       (Eventually.of_forall fun x => abs_nonneg _) (hfg.mono fun x hx => ?_)
   calc
-    |k x ^ z * g x| = |k x ^ z| * |g x| := abs_mul (k x ^ z) (g x
+    |k x ^ z * g x| = |k x ^ z| * |g x| := abs_mul (k x ^ z) (g x)
+    _ <= |k x ^ z| * |f x| := by gcongr _ * ?_; exact hx
+    _ = |k x ^ z * f x| := (abs_mul (k x ^ z) (f x)).symm
 
 中文:
 定理 SuperpolynomialDecay.trans_eventually_abs_le
@@ -460,7 +462,9 @@ theorem SuperpolynomialDecay.trans_eventually_abs_le
     tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (hf z)
       (Eventually.of_forall fun x => abs_nonneg _) (hfg.mono fun x hx => ?_)
   calc
-    |k x ^ z * g x| = |k x ^ z| * |g x| := abs_mul (k x ^ z) (g x
+    |k x ^ z * g x| = |k x ^ z| * |g x| := abs_mul (k x ^ z) (g x)
+    _ <= |k x ^ z| * |f x| := by gcongr _ * ?_; exact hx
+    _ = |k x ^ z * f x| := (abs_mul (k x ^ z) (f x)).symm
 
 Depends on / 依赖: Eventually, Eventually.of_forall, abs_mul, abs_nonneg, hfg.mono, of_forall, superpolynomialDecay_iff_abs_tendsto_zero, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le
 -/
@@ -563,7 +567,15 @@ theorem superpolynomialDecay_iff_abs_isBoundedUnder
       (superpolynomialDecay_iff_abs_tendsto_zero l k f).2 fun z => ?_⟩
   obtain ⟨m, hm⟩ := h (z + 1)
   have h1 : Tendsto (fun _ : α => (0 : β)) l (𝓝 0) := tendsto_const_nhds
-  have h2 : Tendsto (fun a : α => |(k a)⁻¹
+  have h2 : Tendsto (fun a : α => |(k a)⁻¹| * m) l (𝓝 0) :=
+    zero_mul m ▸
+      Tendsto.mul_const m ((tendsto_zero_iff_abs_tendsto_zero _).1 hk.inv_tendsto_atTop)
+  refine
+    tendsto_of_tendsto_of_tendsto_of_le_of_le' h1 h2 (Eventually.of_forall fun x => abs_nonneg _)
+      ((eventually_map.1 hm).mp ?_)
+  refine (hk.eventually_ne_atTop 0).mono fun x hk0 hx => ?_
+  refine Eq.trans_le ?_ (mul_le_mul_of_nonneg_left hx <| abs_nonneg (k x)⁻¹)
+  rw [← abs_mul]; rw [← mul_assoc]; rw [pow_succ']; rw [← mul_assoc]; rw [inv_mul_cancel₀ hk0]; rw [one_mul]
 
 中文:
 定理 superpolynomialDecay_iff_abs_isBoundedUnder
@@ -574,7 +586,15 @@ theorem superpolynomialDecay_iff_abs_isBoundedUnder
       (superpolynomialDecay_iff_abs_tendsto_zero l k f).2 fun z => ?_⟩
   obtain ⟨m, hm⟩ := h (z + 1)
   have h1 : Tendsto (fun _ : α => (0 : β)) l (𝓝 0) := tendsto_const_nhds
-  have h2 : Tendsto (fun a : α => |(k a)⁻¹
+  have h2 : Tendsto (fun a : α => |(k a)⁻¹| * m) l (𝓝 0) :=
+    zero_mul m ▸
+      Tendsto.mul_const m ((tendsto_zero_iff_abs_tendsto_zero _).1 hk.inv_tendsto_atTop)
+  refine
+    tendsto_of_tendsto_of_tendsto_of_le_of_le' h1 h2 (Eventually.of_forall fun x => abs_nonneg _)
+      ((eventually_map.1 hm).mp ?_)
+  refine (hk.eventually_ne_atTop 0).mono fun x hk0 hx => ?_
+  refine Eq.trans_le ?_ (mul_le_mul_of_nonneg_left hx <| abs_nonneg (k x)⁻¹)
+  rw [← abs_mul]; rw [← mul_assoc]; rw [pow_succ']; rw [← mul_assoc]; rw [inv_mul_cancel₀ hk0]; rw [one_mul]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Tendsto, Tendsto.abs, Tendsto.isBoundedUnder_le, Tendsto.mul_const, abs_nonneg, hk.inv_tendsto_atTop, inv_tendsto_atTop, isBoundedUnder_le, mul_const, of_forall, superpolynomialDecay_iff_abs_tendsto_zero, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_zero_iff_abs_tendsto_zero, zero_mul
 -/
@@ -610,7 +630,8 @@ theorem superpolynomialDecay_iff_zpow_tendsto_zero
     simpa using! h z
   · have : Tendsto (fun a => k a ^ z) l (𝓝 0) :=
       Tendsto.comp (tendsto_zpow_atTop_zero hz) hk
-    have h : Tendsto 
+    have h : Tendsto f l (𝓝 0) := by simpa using! h 0
+    exact zero_mul (0 : β) ▸ this.mul h
 
 中文:
 定理 superpolynomialDecay_iff_zpow_tendsto_zero
@@ -623,7 +644,8 @@ theorem superpolynomialDecay_iff_zpow_tendsto_zero
     simpa using! h z
   · have : Tendsto (fun a => k a ^ z) l (𝓝 0) :=
       Tendsto.comp (tendsto_zpow_atTop_zero hz) hk
-    have h : Tendsto 
+    have h : Tendsto f l (𝓝 0) := by simpa using! h 0
+    exact zero_mul (0 : β) ▸ this.mul h
 
 Depends on / 依赖: Tendsto, Tendsto.comp, tendsto_zpow_atTop_zero, this.mul, zero_mul, zpow_natCast
 -/
@@ -891,7 +913,14 @@ theorem superpolynomialDecay_iff_isBigO
   have hk0 : forallᶠ x in l, k x != 0 := hk.eventually_ne_atTop 0
   refine ⟨fun h z => ?_, fun h z => ?_⟩
   · refine isBigO_of_div_tendsto_nhds (hk0.mono fun x hx hxz => absurd hxz (zpow_ne_zero _ hx)) 0 ?_
-    have : (fun a : α 
+    have : (fun a : α => k a ^ z)⁻¹ = fun a : α => k a ^ (-z) := funext fun x => by simp
+    rw [div_eq_mul_inv]; rw [mul_comm f]; rw [this]
+    exact h (-z)
+  · suffices (fun a : α => k a ^ z * f a) =O[l] fun a : α => (k a)⁻¹ from
+      IsBigO.trans_tendsto this hk.inv_tendsto_atTop
+    refine ((isBigO_refl (fun a => k a ^ z) l).mul (h (-(z + 1)))).trans ?_
+refine .of_bound' hk0.mono fun a ha0 => ?_
+    simp [← zpow_add₀ ha0]
 
 中文:
 定理 superpolynomialDecay_iff_isBigO
@@ -901,7 +930,14 @@ theorem superpolynomialDecay_iff_isBigO
   have hk0 : forallᶠ x in l, k x != 0 := hk.eventually_ne_atTop 0
   refine ⟨fun h z => ?_, fun h z => ?_⟩
   · refine isBigO_of_div_tendsto_nhds (hk0.mono fun x hx hxz => absurd hxz (zpow_ne_zero _ hx)) 0 ?_
-    have : (fun a : α 
+    have : (fun a : α => k a ^ z)⁻¹ = fun a : α => k a ^ (-z) := funext fun x => by simp
+    rw [div_eq_mul_inv]; rw [mul_comm f]; rw [this]
+    exact h (-z)
+  · suffices (fun a : α => k a ^ z * f a) =O[l] fun a : α => (k a)⁻¹ from
+      IsBigO.trans_tendsto this hk.inv_tendsto_atTop
+    refine ((isBigO_refl (fun a => k a ^ z) l).mul (h (-(z + 1)))).trans ?_
+refine .of_bound' hk0.mono fun a ha0 => ?_
+    simp [← zpow_add₀ ha0]
 
 Depends on / 依赖: IsBigO, IsBigO.trans, absurd, div_eq_mul_inv, eventually_ne_atTop, hk.eventually_ne_atTop, hk0.mono, isBigO_of_div_tendsto_nhds, mul_comm, superpolynomialDecay_iff_zpow_tendsto_zero, zpow_ne_zero
 -/
@@ -931,7 +967,11 @@ theorem superpolynomialDecay_iff_isLittleO
   have hk0 : forallᶠ x in l, k x != 0 := hk.eventually_ne_atTop 0
   have : (fun _ : α => (1 : β)) =o[l] k :=
     isLittleO_of_tendsto' (hk0.mono fun x hkx hkx' => absurd hkx' hkx)
-      (by simpa usi
+      (by simpa using! hk.inv_tendsto_atTop)
+  have : f =o[l] fun x : α => k x * k x ^ (z - 1) := by
+    simpa using! this.mul_isBigO ((superpolynomialDecay_iff_isBigO f hk).1 h <| z - 1)
+refine this.trans_isBigO IsBigO.of_bound' hk0.mono fun x hkx => le_of_eq ?_
+  simp [← zpow_one_add₀ hkx]
 
 中文:
 定理 superpolynomialDecay_iff_isLittleO
@@ -941,7 +981,11 @@ theorem superpolynomialDecay_iff_isLittleO
   have hk0 : forallᶠ x in l, k x != 0 := hk.eventually_ne_atTop 0
   have : (fun _ : α => (1 : β)) =o[l] k :=
     isLittleO_of_tendsto' (hk0.mono fun x hkx hkx' => absurd hkx' hkx)
-      (by simpa usi
+      (by simpa using! hk.inv_tendsto_atTop)
+  have : f =o[l] fun x : α => k x * k x ^ (z - 1) := by
+    simpa using! this.mul_isBigO ((superpolynomialDecay_iff_isBigO f hk).1 h <| z - 1)
+refine this.trans_isBigO IsBigO.of_bound' hk0.mono fun x hkx => le_of_eq ?_
+  simp [← zpow_one_add₀ hkx]
 
 Depends on / 依赖: IsBigO, IsBigO.of_bound, absurd, eventually_ne_atTop, hk.eventually_ne_atTop, hk.inv_tendsto_atTop, hk0.mono, inv_tendsto_atTop, isBigO, isLittleO_of_tendsto, mul_isBigO, of_bound, superpolynomialDecay_iff_isBigO, this.mul_isBigO, this.trans_isBigO, trans_isBigO
 -/

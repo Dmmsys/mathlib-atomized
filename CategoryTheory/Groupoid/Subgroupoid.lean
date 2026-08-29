@@ -811,7 +811,10 @@ instance :
     bot_le := fun _ => empty_subset _
     top := ⊤
     le_top := fun _ => subset_univ _
-    inf 
+    inf := (· ⊓ ·)
+    le_inf := fun _ _ _ RS RT _ pR => ⟨RS pR, RT pR⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 中文:
 实例 :
@@ -823,7 +826,10 @@ instance :
     bot_le := fun _ => empty_subset _
     top := ⊤
     le_top := fun _ => subset_univ _
-    inf 
+    inf := (· ⊓ ·)
+    le_inf := fun _ _ _ RS RT _ pR => ⟨RS pR, RT pR⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 Depends on / 依赖: And.left, And.right, Subgroupoid, bot_le, completeLatticeOfInf, empty_subset, exacts, inf_le_left, inf_le_right, le_inf, le_top, mem_sInf, subset_univ
 -/
@@ -1192,7 +1198,8 @@ theorem IsNormal.conjugation_bij
     ⟨p ≫ δ ≫ Groupoid.inv p, Sn.conj' p δS, ?_⟩⟩
   · simpa only [inv_eq_inv, Category.assoc, IsIso.hom_inv_id, Category.comp_id,
       IsIso.hom_inv_id_assoc] using p ≫= h =≫ inv p
-  · simp only [inv_eq_inv, Category.assoc, Is
+  · simp only [inv_eq_inv, Category.assoc, IsIso.inv_hom_id, Category.comp_id,
+      IsIso.inv_hom_id_assoc]
 
 中文:
 定理 是正规.conjugation_bij
@@ -1202,7 +1209,8 @@ theorem IsNormal.conjugation_bij
     ⟨p ≫ δ ≫ Groupoid.inv p, Sn.conj' p δS, ?_⟩⟩
   · simpa only [inv_eq_inv, Category.assoc, IsIso.hom_inv_id, Category.comp_id,
       IsIso.hom_inv_id_assoc] using p ≫= h =≫ inv p
-  · simp only [inv_eq_inv, Category.assoc, Is
+  · simp only [inv_eq_inv, Category.assoc, IsIso.inv_hom_id, Category.comp_id,
+      IsIso.inv_hom_id_assoc]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Groupoid, Groupoid.inv, IsIso.hom_inv_id, IsIso.hom_inv_id_assoc, IsIso.inv_hom_id, IsIso.inv_hom_id_assoc, Sn.conj, comp_id, hom_inv_id, hom_inv_id_assoc, inv_eq_inv, inv_hom_id, inv_hom_id_assoc
 -/
@@ -1710,7 +1718,8 @@ definition map
   mul := by
     rintro _ _ _ _ ⟨f, hf⟩ q hq
     obtain ⟨c₃, c₄, g, he, rfl, hg, gq⟩ := (Map.arrows_iff φ hφ S q).mp hq
-    cases hφ he
+    cases hφ he; rw [gq, ← eq_conj_eqToHom, ← φ.map_comp]
+    constructor; exact S.mul hf hg
 
 中文:
 定义 map
@@ -1723,7 +1732,8 @@ definition map
   mul := by
     rintro _ _ _ _ ⟨f, hf⟩ q hq
     obtain ⟨c₃, c₄, g, he, rfl, hg, gq⟩ := (Map.arrows_iff φ hφ S q).mp hq
-    cases hφ he
+    cases hφ he; rw [gq, ← eq_conj_eqToHom, ← φ.map_comp]
+    constructor; exact S.mul hf hg
 
 Depends on / 依赖: Arrows, Map.Arrows
 -/
@@ -2033,7 +2043,18 @@ theorem isNormal_map
       constructor; exact Sn.wide c
     conj := fun {d d'} g δ hδ => by
       rw [mem_map_iff] at hδ
-      obtain ⟨c, c', γ, cd, cd', γS, hγ⟩ := hδ; su
+      obtain ⟨c, c', γ, cd, cd', γS, hγ⟩ := hδ; subst_vars; cases hφ cd'
+      have : d' in (im φ hφ).objs := by rw [hφ']; apply mem_top_objs
+      rw [mem_im_objs_iff] at this
+      obtain ⟨c', rfl⟩ := this
+      have : g in (im φ hφ).arrows (φ.obj c) (φ.obj c') := by rw [hφ']; trivial
+      rw [mem_im_iff] at this
+      obtain ⟨b, b', f, hb, hb', _, hf⟩ := this; cases hφ hb; cases hφ hb'
+      change Map.Arrows φ hφ S (φ.obj c') (φ.obj c') _
+      simp only [eqToHom_refl, Category.comp_id, Category.id_comp, inv_eq_inv]
+      suffices Map.Arrows φ hφ S (φ.obj c') (φ.obj c') (φ.map <| Groupoid.inv f ≫ γ ≫ f) by
+        simp only [inv_eq_inv, Functor.map_comp, Functor.map_inv] at this; exact this
+      constructor; apply Sn.conj f γS }
 
 中文:
 定理 isNormal_map
@@ -2044,7 +2065,18 @@ theorem isNormal_map
       constructor; exact Sn.wide c
     conj := fun {d d'} g δ hδ => by
       rw [mem_map_iff] at hδ
-      obtain ⟨c, c', γ, cd, cd', γS, hγ⟩ := hδ; su
+      obtain ⟨c, c', γ, cd, cd', γS, hγ⟩ := hδ; subst_vars; cases hφ cd'
+      have : d' in (im φ hφ).objs := by rw [hφ']; apply mem_top_objs
+      rw [mem_im_objs_iff] at this
+      obtain ⟨c', rfl⟩ := this
+      have : g in (im φ hφ).arrows (φ.obj c) (φ.obj c') := by rw [hφ']; trivial
+      rw [mem_im_iff] at this
+      obtain ⟨b, b', f, hb, hb', _, hf⟩ := this; cases hφ hb; cases hφ hb'
+      change Map.Arrows φ hφ S (φ.obj c') (φ.obj c') _
+      simp only [eqToHom_refl, Category.comp_id, Category.id_comp, inv_eq_inv]
+      suffices Map.Arrows φ hφ S (φ.obj c') (φ.obj c') (φ.map <| Groupoid.inv f ≫ γ ≫ f) by
+        simp only [inv_eq_inv, Functor.map_comp, Functor.map_inv] at this; exact this
+      constructor; apply Sn.conj f γS }
 
 Depends on / 依赖: Arrows, Functor, Functor.map_id, Map.Arrows, Sn.wide, arrows, map_id, mem_im_iff, mem_im_objs_iff, mem_map_iff, mem_top_objs, obj_surjective_of_im_eq_top
 -/

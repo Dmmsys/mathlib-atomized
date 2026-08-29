@@ -70,7 +70,8 @@ lemma isSimpleModule_iff_eq_zero_or_injective
   proof: .elim .1 hM.1.1, fun N _ _ f => hM.1.2 (LinearMap.ker f) ⟨fun hM => ⟨Submodule.nontrivial_iff _
     (fun h => Or.inr <| by rwa [LinearMap.ker_eq_bot] at h) (fun h => Or.inl <|by simp_all)⟩,
 .2 ⟨fun p => (hM2 (M ⧸ p) p.mkQ).elim fun ⟨hM1, hM2⟩ => isSimpleModule_iff R M
-  (fun h => Or.inr <| by simpa 
+  (fun h => Or.inr <| by simpa [Submodule.ext_iff, LinearMap.ext_iff] using h)
+  (fun h => Or.inl <| eq_bot_iff.2 fun x hx => h (by simp [hx]))⟩⟩
 
 中文:
 引理 isSimpleModule_iff_eq_zero_or_injective
@@ -78,7 +79,8 @@ lemma isSimpleModule_iff_eq_zero_or_injective
   证明: .elim .1 hM.1.1, fun N _ _ f => hM.1.2 (LinearMap.ker f) ⟨fun hM => ⟨Submodule.nontrivial_iff _
     (fun h => Or.inr <| by rwa [LinearMap.ker_eq_bot] at h) (fun h => Or.inl <|by simp_all)⟩,
 .2 ⟨fun p => (hM2 (M ⧸ p) p.mkQ).elim fun ⟨hM1, hM2⟩ => isSimpleModule_iff R M
-  (fun h => Or.inr <| by simpa 
+  (fun h => Or.inr <| by simpa [Submodule.ext_iff, LinearMap.ext_iff] using h)
+  (fun h => Or.inl <| eq_bot_iff.2 fun x hx => h (by simp [hx]))⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.ext_iff, LinearMap.ker, LinearMap.ker_eq_bot, Or.inl, Or.inr, Submodule, Submodule.ext_iff, Submodule.nontrivial_iff, eq_bot_iff, ext_iff, isSimpleModule_iff, ker_eq_bot, nontrivial_iff, p.mkQ
 -/

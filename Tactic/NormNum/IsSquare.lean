@@ -344,7 +344,18 @@ definition evalIsSquareNat
     let m := Nat.sqrt n.natLit!
     if m * m = n.natLit! then
       have em : Q(Nat) := mkRawNatLit m
-      have hm : Q($em * $em = $n) := (q(Eq.refl $n) :
+      have hm : Q($em * $em = $n) := (q(Eq.refl $n) : Expr)
+      assertInstancesCommute
+      return .isTrue (x := q(IsSquare $a)) q(isSquare_nat_of_isNat $a $n $pa $em $hm)
+    else
+      have em : Q(Nat) := mkRawNatLit m
+      have ek : Q(Nat) := mkRawNatLit (m * m)
+      have hm : Q($em * $em = $ek) := (q(Eq.refl $ek) : Expr)
+      have hk₁ : Q(Nat.blt $ek $n) := (q(Eq.refl true) : Expr)
+      have hk₂ : Q(Nat.ble $n ($ek + 2 * $em)) := (q(Eq.refl true) : Expr)
+      assertInstancesCommute
+      return .isFalse q(not_isSquare_nat_of_isNat $a $n $pa $em $ek $hm $hk₁ $hk₂)
+  | _ => failure
 
 中文:
 定义 evalIsSquare自然数
@@ -356,7 +367,18 @@ definition evalIsSquareNat
     let m := Nat.sqrt n.natLit!
     if m * m = n.natLit! then
       have em : Q(Nat) := mkRawNatLit m
-      have hm : Q($em * $em = $n) := (q(Eq.refl $n) :
+      have hm : Q($em * $em = $n) := (q(Eq.refl $n) : Expr)
+      assertInstancesCommute
+      return .isTrue (x := q(IsSquare $a)) q(isSquare_nat_of_isNat $a $n $pa $em $hm)
+    else
+      have em : Q(Nat) := mkRawNatLit m
+      have ek : Q(Nat) := mkRawNatLit (m * m)
+      have hm : Q($em * $em = $ek) := (q(Eq.refl $ek) : Expr)
+      have hk₁ : Q(Nat.blt $ek $n) := (q(Eq.refl true) : Expr)
+      have hk₂ : Q(Nat.ble $n ($ek + 2 * $em)) := (q(Eq.refl true) : Expr)
+      assertInstancesCommute
+      return .isFalse q(not_isSquare_nat_of_isNat $a $n $pa $em $ek $hm $hk₁ $hk₂)
+  | _ => failure
 -/
 def evalIsSquareNat : NormNumExt where eval {u αP} e := do
   match u, αP, e with
@@ -395,7 +417,12 @@ definition evalIsSquareInt
       let ⟨b, pb⟩ ← deriveBoolOfIff q(IsSquare $n) q(IsSquare $a)
         q(iff_isSquare_int_of_isNat $a $n $pa)
       return .ofBoolResult pb
-
+    | .isNegNat sa n pa => do
+      assertInstancesCommute
+      let ⟨b, pb⟩ ← deriveBoolOfIff q($n = 0) q(IsSquare $a) q(iff_isSquare_of_isInt_int $a $n $pa)
+      return .ofBoolResult pb
+    | _ => failure
+  | _ => failure
 
 中文:
 定义 evalIsSquare整数
@@ -409,7 +436,12 @@ definition evalIsSquareInt
       let ⟨b, pb⟩ ← deriveBoolOfIff q(IsSquare $n) q(IsSquare $a)
         q(iff_isSquare_int_of_isNat $a $n $pa)
       return .ofBoolResult pb
-
+    | .isNegNat sa n pa => do
+      assertInstancesCommute
+      let ⟨b, pb⟩ ← deriveBoolOfIff q($n = 0) q(IsSquare $a) q(iff_isSquare_of_isInt_int $a $n $pa)
+      return .ofBoolResult pb
+    | _ => failure
+  | _ => failure
 -/
 def evalIsSquareInt : NormNumExt where eval {u αP} e := do
   match u, αP, e with
@@ -444,7 +476,37 @@ definition evalIsSquareRat
       let ⟨b, pb⟩ ← deriveBoolOfIff q(IsSquare $n) q(IsSquare $a)
         q(iff_isSquare_of_isNat_rat $a $n $pa)
       return .ofBoolResult pb
-
+    | .isNegNat sa n pa => do
+      assertInstancesCommute
+      let ⟨b, pb⟩ ← deriveBoolOfIff q($n = 0) q(IsSquare $a) q(iff_isSquare_of_isInt_rat $a $n $pa)
+      return .ofBoolResult pb
+    | .isNNRat sQ q n d pa => do
+      -- We make sure to avoid proving `Nat.Coprime $n $d` unless we need to.
+      -- Also, we do not derive `IsSquare $d` unless `$n` is a square
+      match ← deriveBool q(IsSquare $n) with
+      | .mk true pn =>
+        match ← deriveBool q(IsSquare $d) with
+        | .mk true pd =>
+          assertInstancesCommute
+          return .isTrue q(isSquare_of_isNNRat_rat $a $n $d $pn $pd $pa)
+        | .mk false pd =>
+          let ⟨e, he⟩ := proveNatGCD n d
+have : e =Q 1 := ⟨⟩
+          assertInstancesCommute
+          return .isFalse q(not_isSquare_of_isNNRat_rat_of_den $a $n $d $pd $he $pa)
+      | .mk false pn =>
+        let ⟨e, he⟩ := proveNatGCD n d
+have : e =Q 1 := ⟨⟩
+        assertInstancesCommute
+        return .isFalse q(not_isSquare_of_isNNRat_rat_of_num $a $n $d $pn $he $pa)
+    | .isNegNNRat sQ q n d pa => do
+      match ← deriveBool q($n = 0), ← deriveBool q($d = 0) with
+      | .mk false pn, .mk false pd =>
+        assertInstancesCommute
+        return .isFalse q(not_isSquare_of_isRat_neg $a $n $d $pn $pd $pa)
+      | _, _ => failure
+    | _ => failure
+  | _ => failure
 
 中文:
 定义 evalIsSquareRat
@@ -458,7 +520,37 @@ definition evalIsSquareRat
       let ⟨b, pb⟩ ← deriveBoolOfIff q(IsSquare $n) q(IsSquare $a)
         q(iff_isSquare_of_isNat_rat $a $n $pa)
       return .ofBoolResult pb
-
+    | .isNegNat sa n pa => do
+      assertInstancesCommute
+      let ⟨b, pb⟩ ← deriveBoolOfIff q($n = 0) q(IsSquare $a) q(iff_isSquare_of_isInt_rat $a $n $pa)
+      return .ofBoolResult pb
+    | .isNNRat sQ q n d pa => do
+      -- We make sure to avoid proving `Nat.Coprime $n $d` unless we need to.
+      -- Also, we do not derive `IsSquare $d` unless `$n` is a square
+      match ← deriveBool q(IsSquare $n) with
+      | .mk true pn =>
+        match ← deriveBool q(IsSquare $d) with
+        | .mk true pd =>
+          assertInstancesCommute
+          return .isTrue q(isSquare_of_isNNRat_rat $a $n $d $pn $pd $pa)
+        | .mk false pd =>
+          let ⟨e, he⟩ := proveNatGCD n d
+have : e =Q 1 := ⟨⟩
+          assertInstancesCommute
+          return .isFalse q(not_isSquare_of_isNNRat_rat_of_den $a $n $d $pd $he $pa)
+      | .mk false pn =>
+        let ⟨e, he⟩ := proveNatGCD n d
+have : e =Q 1 := ⟨⟩
+        assertInstancesCommute
+        return .isFalse q(not_isSquare_of_isNNRat_rat_of_num $a $n $d $pn $he $pa)
+    | .isNegNNRat sQ q n d pa => do
+      match ← deriveBool q($n = 0), ← deriveBool q($d = 0) with
+      | .mk false pn, .mk false pd =>
+        assertInstancesCommute
+        return .isFalse q(not_isSquare_of_isRat_neg $a $n $d $pn $pd $pa)
+      | _, _ => failure
+    | _ => failure
+  | _ => failure
 -/
 def evalIsSquareRat : NormNumExt where eval {u αP} e := do
   match u, αP, e with

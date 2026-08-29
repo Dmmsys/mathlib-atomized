@@ -269,7 +269,20 @@ definition correspondence
   left_inv d :=
 Subtype.ext_iff.2
       ext fun x y =>
-        ⟨
+        ⟨fun ⟨a, b, H, hx, hy⟩ =>
+d.1.trans (d.1.symm <| d.2 <| c.eq.1 hx) d.1.trans H d.2 c.eq.1 hy,
+          fun h => ⟨_, _, h, rfl, rfl⟩⟩
+  right_inv d :=
+    Con.ext fun x y => by
+      refine ⟨?_, Con.induction_on₂ x y fun w z h => ⟨w, z, h, rfl, rfl⟩⟩
+      rintro ⟨a, b, H, rfl, rfl⟩
+      exact H
+  map_rel_iff' {s t} := by
+    constructor
+    · intro h x y hs
+      rcases h ⟨x, y, hs, rfl, rfl⟩ with ⟨a, b, ht, hx, hy⟩
+      exact t.1.trans (t.1.symm <| t.2 <| c.eq.1 hx) (t.1.trans ht (t.2 <| c.eq.1 hy))
+    · exact Relation.map_mono
 
 中文:
 定义 correspondence
@@ -282,7 +295,20 @@ Subtype.ext_iff.2
   left_inv d :=
 Subtype.ext_iff.2
       ext fun x y =>
-        ⟨
+        ⟨fun ⟨a, b, H, hx, hy⟩ =>
+d.1.trans (d.1.symm <| d.2 <| c.eq.1 hx) d.1.trans H d.2 c.eq.1 hy,
+          fun h => ⟨_, _, h, rfl, rfl⟩⟩
+  right_inv d :=
+    Con.ext fun x y => by
+      refine ⟨?_, Con.induction_on₂ x y fun w z h => ⟨w, z, h, rfl, rfl⟩⟩
+      rintro ⟨a, b, H, rfl, rfl⟩
+      exact H
+  map_rel_iff' {s t} := by
+    constructor
+    · intro h x y hs
+      rcases h ⟨x, y, hs, rfl, rfl⟩ with ⟨a, b, ht, hx, hy⟩
+      exact t.1.trans (t.1.symm <| t.2 <| c.eq.1 hx) (t.1.trans ht (t.2 <| c.eq.1 hy))
+    · exact Relation.map_mono
 
 Depends on / 依赖: Con.ext, Con.induction_on, Con.ker_mkMulHom_eq, IsStablyFiniteRing, Matrix, Matrix.mul_smul, Quotient, Quotient.mk_surjective, Subtype, Subtype.ext_iff, add_add_add_comm, add_assoc, add_smul, c.Quotient, c.eq, d.refl, detp_mul, detp_neg_one_one, detp_one_one, detp_smul_adjp
 -/

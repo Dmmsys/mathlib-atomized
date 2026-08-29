@@ -49,7 +49,13 @@ lemma preservesColimitsOfShape_iff
   let iso : (K ⋙ G) ⋙ F ≅ K :=
     Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ (asIso adj.counit) ≪≫ K.rightUnitor
   refine preservesColimit_of_preserves_colimit_cocone
-    ((IsColimit.precomposeInvEq
+    ((IsColimit.precomposeInvEquiv iso _).symm
+      (isColimitOfPreserves F (colimit.isColimit (K ⋙ G)))) ?_
+  exact IsColimit.ofIsoColimit
+    ((IsColimit.precomposeInvEquiv
+      ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight iso H) _).symm
+        (isColimitOfPreserves (F ⋙ H) (colimit.isColimit (K ⋙ G))))
+          (Cocone.ext (Iso.refl _))
 
 中文:
 引理 preservesColimitsOfShape_iff
@@ -60,7 +66,13 @@ lemma preservesColimitsOfShape_iff
   let iso : (K ⋙ G) ⋙ F ≅ K :=
     Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ (asIso adj.counit) ≪≫ K.rightUnitor
   refine preservesColimit_of_preserves_colimit_cocone
-    ((IsColimit.precomposeInvEq
+    ((IsColimit.precomposeInvEquiv iso _).symm
+      (isColimitOfPreserves F (colimit.isColimit (K ⋙ G)))) ?_
+  exact IsColimit.ofIsoColimit
+    ((IsColimit.precomposeInvEquiv
+      ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight iso H) _).symm
+        (isColimitOfPreserves (F ⋙ H) (colimit.isColimit (K ⋙ G))))
+          (Cocone.ext (Iso.refl _))
 
 Depends on / 依赖: Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeInvEquiv, K.rightUnitor, adj.counit, adj.isLeftAdjoint, associator, colimit, colimit.isColimit, counit, isColim, isColimit, isColimitOfPreserves, isLeftAdjoint, isoWhiskerLeft, isoWhiskerRight
 -/

@@ -267,7 +267,8 @@ theorem cod_le_cod
   have : ((subtype _).comp f.toEquiv.toEmbedding) m = n := by simp only [m, Embedding.comp_apply,
     Equiv.coe_toEmbedding, Equiv.apply_symm_apply, coe_subtype]
   rw [← this]; rw [← eq_fun]
-  simp only [Embedding.comp_apply, coe_inclusi
+  simp only [Embedding.comp_apply, coe_inclusion, Equiv.coe_toEmbedding, coe_subtype,
+    SetLike.coe_mem]
 
 中文:
 定理 cod_le_cod
@@ -279,7 +280,8 @@ theorem cod_le_cod
   have : ((subtype _).comp f.toEquiv.toEmbedding) m = n := by simp only [m, Embedding.comp_apply,
     Equiv.coe_toEmbedding, Equiv.apply_symm_apply, coe_subtype]
   rw [← this]; rw [← eq_fun]
-  simp only [Embedding.comp_apply, coe_inclusi
+  simp only [Embedding.comp_apply, coe_inclusion, Equiv.coe_toEmbedding, coe_subtype,
+    SetLike.coe_mem]
 -/
 @[gcongr] theorem cod_le_cod {f g : M ≃ₚ[L] N} : f <= g -> f.cod <= g.cod := by
   rintro ⟨_, eq_fun⟩ n hn
@@ -532,7 +534,7 @@ lemma symm_le_symm
   apply g.toEquiv.injective
   change g.toEquiv (inclusion _ (f.toEquiv.symm x)) = g.toEquiv (g.toEquiv.symm _)
   rw [g.toEquiv.apply_symm_apply]; rw [(Equiv.apply_symm_apply f.toEquiv x).symm]; rw [f.toEquiv.symm_apply_apply]
- 
+  exact toEquiv_inclusion_apply hfg _
 
 中文:
 引理 symm_le_symm
@@ -545,7 +547,7 @@ lemma symm_le_symm
   apply g.toEquiv.injective
   change g.toEquiv (inclusion _ (f.toEquiv.symm x)) = g.toEquiv (g.toEquiv.symm _)
   rw [g.toEquiv.apply_symm_apply]; rw [(Equiv.apply_symm_apply f.toEquiv x).symm]; rw [f.toEquiv.symm_apply_apply]
- 
+  exact toEquiv_inclusion_apply hfg _
 -/
 @[gcongr] lemma symm_le_symm {f g : M ≃ₚ[L] N} (hfg : f <= g) : f.symm <= g.symm := by
   rw [le_iff]
@@ -1180,7 +1182,16 @@ definition partialEquivLimit
       toFun := (fun i => (S i).cod)
       monotone' := monotone_cod.comp S.monotone }).comp
       ((DirectLimit.equiv_lift L ι (fun i => (S i).dom)
-        (fun _ _ hij => Substructure.inclusion (dom_le_dom (
+        (fun _ _ hij => Substructure.inclusion (dom_le_dom (S.monotone hij)))
+        (fun i => (S i).cod)
+        (fun _ _ hij => Substructure.inclusion (cod_le_cod (S.monotone hij)))
+        (fun i => (S i).toEquiv)
+        (fun _ _ hij _ => toEquiv_inclusion_apply (S.monotone hij) _)).comp
+        (Equiv_iSup {
+          toFun := (fun i => (S i).dom)
+          monotone' := monotone_dom.comp S.monotone }).symm)
+
+@[simp]
 
 中文:
 定义 partialEquivLimit
@@ -1192,7 +1203,16 @@ definition partialEquivLimit
       toFun := (fun i => (S i).cod)
       monotone' := monotone_cod.comp S.monotone }).comp
       ((DirectLimit.equiv_lift L ι (fun i => (S i).dom)
-        (fun _ _ hij => Substructure.inclusion (dom_le_dom (
+        (fun _ _ hij => Substructure.inclusion (dom_le_dom (S.monotone hij)))
+        (fun i => (S i).cod)
+        (fun _ _ hij => Substructure.inclusion (cod_le_cod (S.monotone hij)))
+        (fun i => (S i).toEquiv)
+        (fun _ _ hij _ => toEquiv_inclusion_apply (S.monotone hij) _)).comp
+        (Equiv_iSup {
+          toFun := (fun i => (S i).dom)
+          monotone' := monotone_dom.comp S.monotone }).symm)
+
+@[simp]
 -/
 noncomputable def partialEquivLimit : M ≃ₚ[L] N where
   dom := iSup (fun i => (S i).dom)
@@ -1290,7 +1310,7 @@ theorem le_partialEquivLimit
     these two `simp` calls cannot be combined. -/
     simp only [partialEquivLimit_comp_inclusion]
     simp only [cod_partialEquivLimit, ← Embedding.comp_assoc,
-      subtype_comp_inclusio
+      subtype_comp_inclusion]⟩
 
 中文:
 定理 le_partialEquivLimit
@@ -1301,7 +1321,7 @@ theorem le_partialEquivLimit
     these two `simp` calls cannot be combined. -/
     simp only [partialEquivLimit_comp_inclusion]
     simp only [cod_partialEquivLimit, ← Embedding.comp_assoc,
-      subtype_comp_inclusio
+      subtype_comp_inclusion]⟩
 
 Depends on / 依赖: Embedding, Embedding.comp_assoc, adaptation_note, cannot, cod_partialEquivLimit, combined, comp_assoc, github, github.com, le_iSup, leanprover, partialEquivLimit_comp_inclusion, subtype_comp_inclusion
 -/
@@ -1369,7 +1389,13 @@ theorem countable_self_fgequiv_of_countable
     intro f f' h
     ext
     let ⟨⟨dom_f, cod_f, equiv_f⟩, f_fin⟩ := f
-    cases congr
+    cases congr_arg (·.1) h
+    apply PartialEquiv.ext (by rfl)
+    simp only [g, Sigma.mk.inj_iff, heq_eq_eq, true_and] at h
+    exact fun x hx => congr_fun (congr_arg (↑) h) ⟨x, hx⟩
+  have : forall U : { S : L.Substructure M // S.FG }, Structure.FG L U.val :=
+    fun U => (U.val.fg_iff_structure_fg.1 U.prop)
+  exact Function.Embedding.countable ⟨g, g_inj⟩
 
 中文:
 定理 countable_self_fgequiv_of_countable
@@ -1382,7 +1408,13 @@ theorem countable_self_fgequiv_of_countable
     intro f f' h
     ext
     let ⟨⟨dom_f, cod_f, equiv_f⟩, f_fin⟩ := f
-    cases congr
+    cases congr_arg (·.1) h
+    apply PartialEquiv.ext (by rfl)
+    simp only [g, Sigma.mk.inj_iff, heq_eq_eq, true_and] at h
+    exact fun x hx => congr_fun (congr_arg (↑) h) ⟨x, hx⟩
+  have : forall U : { S : L.Substructure M // S.FG }, Structure.FG L U.val :=
+    fun U => (U.val.fg_iff_structure_fg.1 U.prop)
+  exact Function.Embedding.countable ⟨g, g_inj⟩
 
 Depends on / 依赖: FGEquiv, Function, Function.Injective, Injective, L.FGEquiv, L.Substructure, PartialEquiv, PartialEquiv.ext, S.FG, Sigma.mk.inj_iff, Structure, Structure.FG, Substructure, U.val, cod_f, congr_arg, congr_fun, dom_f, equiv_f, f.prop
 -/
@@ -1437,7 +1469,7 @@ instance inhabited_FGEquiv_of_IsEmpty_Constants_and_Relations
         cases n
         · exact isEmptyElim r
         · exact isEmptyElim (x 0)
-
+    }⟩, fg_bot⟩⟩
 
 中文:
 实例 inhabited_FGEquiv_of_IsEmpty_Constants_and_Relations
@@ -1452,7 +1484,7 @@ instance inhabited_FGEquiv_of_IsEmpty_Constants_and_Relations
         cases n
         · exact isEmptyElim r
         · exact isEmptyElim (x 0)
-
+    }⟩, fg_bot⟩⟩
 
 Depends on / 依赖: fg_bot, invFun, isEmptyElim, left_inv, map_fun, map_rel, right_inv, subsingleton
 -/
@@ -1530,7 +1562,19 @@ theorem isExtensionPair_iff_exists_embedding_closure_singleton_sup
   · obtain ⟨⟨f', hf'⟩, mf', ff'1, ff'2⟩ := h ⟨⟨S, _, f.equivRange⟩, S_FG⟩ m
     refine ⟨f'.toEmbedding.comp (Substructure.inclusion ?_), ?_⟩
     · simp only [sup_le_iff, ff'1, closure_le, singleton_subset_iff, SetLike.mem_coe, mf',
-      
+        and_self]
+    · ext ⟨x, hx⟩
+      rw [Embedding.subtype_equivRange] at ff'2
+      simp only [← ff'2, Embedding.comp_apply, Substructure.coe_inclusion,
+        Equiv.coe_toEmbedding, coe_subtype, PartialEquiv.toEmbedding_apply]
+  · obtain ⟨f', eq_f'⟩ := h f.dom f_FG f.toEmbedding m
+    refine ⟨⟨⟨closure L {m} ⊔ f.dom, f'.toHom.range, f'.equivRange⟩,
+      (fg_closure_singleton _).sup f_FG⟩,
+      subset_closure.trans (le_sup_left : (closure L) {m} <= _) (mem_singleton m),
+      ⟨le_sup_right, Embedding.ext (fun _ => ?_)⟩⟩
+    rw [PartialEquiv.toEmbedding] at eq_f'
+    simp only [Embedding.comp_apply, Substructure.coe_inclusion, Equiv.coe_toEmbedding, coe_subtype,
+      Embedding.equivRange_apply, eq_f']
 
 中文:
 定理 isExtensionPair_iff_存在_embedding_closure_singleton_sup
@@ -1539,7 +1583,19 @@ theorem isExtensionPair_iff_exists_embedding_closure_singleton_sup
   · obtain ⟨⟨f', hf'⟩, mf', ff'1, ff'2⟩ := h ⟨⟨S, _, f.equivRange⟩, S_FG⟩ m
     refine ⟨f'.toEmbedding.comp (Substructure.inclusion ?_), ?_⟩
     · simp only [sup_le_iff, ff'1, closure_le, singleton_subset_iff, SetLike.mem_coe, mf',
-      
+        and_self]
+    · ext ⟨x, hx⟩
+      rw [Embedding.subtype_equivRange] at ff'2
+      simp only [← ff'2, Embedding.comp_apply, Substructure.coe_inclusion,
+        Equiv.coe_toEmbedding, coe_subtype, PartialEquiv.toEmbedding_apply]
+  · obtain ⟨f', eq_f'⟩ := h f.dom f_FG f.toEmbedding m
+    refine ⟨⟨⟨closure L {m} ⊔ f.dom, f'.toHom.range, f'.equivRange⟩,
+      (fg_closure_singleton _).sup f_FG⟩,
+      subset_closure.trans (le_sup_left : (closure L) {m} <= _) (mem_singleton m),
+      ⟨le_sup_right, Embedding.ext (fun _ => ?_)⟩⟩
+    rw [PartialEquiv.toEmbedding] at eq_f'
+    simp only [Embedding.comp_apply, Substructure.coe_inclusion, Equiv.coe_toEmbedding, coe_subtype,
+      Embedding.equivRange_apply, eq_f']
 
 Depends on / 依赖: Embedding, Embedding.comp_apply, Embedding.subtype_equivRange, Equiv.coe_toEmbedding, PartialEquiv, PartialEquiv.toEmbedding_apply, S_FG, SetLike, SetLike.mem_coe, Substructure, Substructure.coe_inclusion, Substructure.inclusion, and_self, closure_le, coe_inclusion, coe_subtype, coe_toEmbedding, comp_apply, equivRange, f.equivRange
 -/
@@ -1624,7 +1680,17 @@ theorem embedding_from_cg
   have _ : Encodable (↑X : Type _) := Encodable.ofCountable _
   let D : X -> Order.Cofinal (FGEquiv L M N) := fun x => H.definedAtLeft x
   let S : Nat ->o M ≃ₚ[L] N :=
-    ⟨Subtype.val ∘ (Orde
+    ⟨Subtype.val ∘ (Order.sequenceOfCofinals g D),
+      (Subtype.mono_coe _).comp (Order.sequenceOfCofinals.monotone _ _)⟩
+  let F := DirectLimit.partialEquivLimit S
+  have _ : X subseteq F.dom := by
+    intro x hx
+    have := Order.sequenceOfCofinals.encode_mem g D ⟨x, hx⟩
+    exact dom_le_dom
+      (le_partialEquivLimit S (Encodable.encode (⟨x, hx⟩ : X) + 1)) this
+  have isTop : F.dom = ⊤ := by rwa [← top_le_iff, ← X_gen, Substructure.closure_le]
+  exact ⟨toEmbeddingOfEqTop isTop,
+        by convert! (le_partialEquivLimit S 0); apply Embedding.toPartialEquiv_toEmbedding⟩
 
 中文:
 定理 embedding_from_cg
@@ -1635,7 +1701,17 @@ theorem embedding_from_cg
   have _ : Encodable (↑X : Type _) := Encodable.ofCountable _
   let D : X -> Order.Cofinal (FGEquiv L M N) := fun x => H.definedAtLeft x
   let S : Nat ->o M ≃ₚ[L] N :=
-    ⟨Subtype.val ∘ (Orde
+    ⟨Subtype.val ∘ (Order.sequenceOfCofinals g D),
+      (Subtype.mono_coe _).comp (Order.sequenceOfCofinals.monotone _ _)⟩
+  let F := DirectLimit.partialEquivLimit S
+  have _ : X subseteq F.dom := by
+    intro x hx
+    have := Order.sequenceOfCofinals.encode_mem g D ⟨x, hx⟩
+    exact dom_le_dom
+      (le_partialEquivLimit S (Encodable.encode (⟨x, hx⟩ : X) + 1)) this
+  have isTop : F.dom = ⊤ := by rwa [← top_le_iff, ← X_gen, Substructure.closure_le]
+  exact ⟨toEmbeddingOfEqTop isTop,
+        by convert! (le_partialEquivLimit S 0); apply Embedding.toPartialEquiv_toEmbedding⟩
 
 Depends on / 依赖: Cofinal, Countable, DirectLimit, DirectLimit.partialEquivLimit, Encodable, Encodable.ofCountable, F.dom, FGEquiv, H.definedAtLeft, M_cg, Order.Cofinal, Order.sequenceOfCofinals, Order.sequenceOfCofinals.enc, Order.sequenceOfCofinals.monotone, Subtype, Subtype.mono_coe, Subtype.val, X_gen, countable_coe_iff, definedAtLeft
 -/
@@ -1671,7 +1747,29 @@ theorem equiv_between_cg
   have _ : Countable (↑X : Type _) := by simpa only [countable_coe_iff]
   have _ : Encodable (↑X : Type _) := Encodable.ofCountable _
   have _ : Countable (↑Y : Type _) := by simpa only [countable_coe_iff]
-  have _ : En
+  have _ : Encodable (↑Y : Type _) := Encodable.ofCountable _
+  let D : Sum X Y -> Order.Cofinal (FGEquiv L M N) := fun p =>
+    Sum.recOn p (fun x => ext_dom.definedAtLeft x) (fun y => ext_cod.definedAtRight y)
+  let S : Nat ->o M ≃ₚ[L] N :=
+    ⟨Subtype.val ∘ (Order.sequenceOfCofinals g D),
+      (Subtype.mono_coe _).comp (Order.sequenceOfCofinals.monotone _ _)⟩
+  let F := @DirectLimit.partialEquivLimit L M N _ _ Nat _ _ _ S
+  have _ : X subseteq F.dom := by
+    intro x hx
+    have := Order.sequenceOfCofinals.encode_mem g D (Sum.inl ⟨x, hx⟩)
+    exact dom_le_dom
+      (le_partialEquivLimit S (Encodable.encode (Sum.inl (⟨x, hx⟩ : X)) + 1)) this
+  have _ : Y subseteq F.cod := by
+    intro y hy
+    have := Order.sequenceOfCofinals.encode_mem g D (Sum.inr ⟨y, hy⟩)
+    exact cod_le_cod
+      (le_partialEquivLimit S (Encodable.encode (Sum.inr (⟨y, hy⟩ : Y)) + 1)) this
+  have dom_top : F.dom = ⊤ := by rwa [← top_le_iff, ← X_gen, Substructure.closure_le]
+  have cod_top : F.cod = ⊤ := by rwa [← top_le_iff, ← Y_gen, Substructure.closure_le]
+  refine ⟨toEquivOfEqTop dom_top cod_top, ?_⟩
+  convert! le_partialEquivLimit S 0
+  rw [toEquivOfEqTop_toEmbedding]
+  apply Embedding.toPartialEquiv_toEmbedding
 
 中文:
 定理 equiv_between_cg
@@ -1682,7 +1780,29 @@ theorem equiv_between_cg
   have _ : Countable (↑X : Type _) := by simpa only [countable_coe_iff]
   have _ : Encodable (↑X : Type _) := Encodable.ofCountable _
   have _ : Countable (↑Y : Type _) := by simpa only [countable_coe_iff]
-  have _ : En
+  have _ : Encodable (↑Y : Type _) := Encodable.ofCountable _
+  let D : Sum X Y -> Order.Cofinal (FGEquiv L M N) := fun p =>
+    Sum.recOn p (fun x => ext_dom.definedAtLeft x) (fun y => ext_cod.definedAtRight y)
+  let S : Nat ->o M ≃ₚ[L] N :=
+    ⟨Subtype.val ∘ (Order.sequenceOfCofinals g D),
+      (Subtype.mono_coe _).comp (Order.sequenceOfCofinals.monotone _ _)⟩
+  let F := @DirectLimit.partialEquivLimit L M N _ _ Nat _ _ _ S
+  have _ : X subseteq F.dom := by
+    intro x hx
+    have := Order.sequenceOfCofinals.encode_mem g D (Sum.inl ⟨x, hx⟩)
+    exact dom_le_dom
+      (le_partialEquivLimit S (Encodable.encode (Sum.inl (⟨x, hx⟩ : X)) + 1)) this
+  have _ : Y subseteq F.cod := by
+    intro y hy
+    have := Order.sequenceOfCofinals.encode_mem g D (Sum.inr ⟨y, hy⟩)
+    exact cod_le_cod
+      (le_partialEquivLimit S (Encodable.encode (Sum.inr (⟨y, hy⟩ : Y)) + 1)) this
+  have dom_top : F.dom = ⊤ := by rwa [← top_le_iff, ← X_gen, Substructure.closure_le]
+  have cod_top : F.cod = ⊤ := by rwa [← top_le_iff, ← Y_gen, Substructure.closure_le]
+  refine ⟨toEquivOfEqTop dom_top cod_top, ?_⟩
+  convert! le_partialEquivLimit S 0
+  rw [toEquivOfEqTop_toEmbedding]
+  apply Embedding.toPartialEquiv_toEmbedding
 
 Depends on / 依赖: Cofinal, Countable, Encodable, Encodable.ofCountable, FGEquiv, M_cg, N_cg, Order.Cofinal, Sum.recOn, X_count, X_gen, Y_count, Y_gen, countable_coe_iff, definedAtLeft, definedAtRight, ext_cod, ext_cod.definedAtRight, ext_dom, ext_dom.definedAtLeft
 -/

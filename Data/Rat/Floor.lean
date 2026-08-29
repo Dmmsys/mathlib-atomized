@@ -115,7 +115,12 @@ theorem floor_intCast_div_natCast
   set q := (n : Rat) / d with q_eq
   obtain ⟨c, n_eq_c_mul_num, d_eq_c_mul_denom⟩ : exists c, n = c * q.num ∧ (d : Int) = c * q.den := by
     rw [q_eq]
-    exact mod_cast @Rat.exists_eq_mul_div_num_and_eq_mul_div_den n d 
+    exact mod_cast @Rat.exists_eq_mul_div_num_and_eq_mul_div_den n d (mod_cast hd.ne')
+  rw [n_eq_c_mul_num]; rw [d_eq_c_mul_denom]
+  refine (Int.mul_ediv_mul_of_pos _ _ <| pos_of_mul_pos_left ?_ <| Int.natCast_nonneg q.den).symm
+  rwa [← d_eq_c_mul_denom, Int.natCast_pos]
+
+@[norm_cast]
 
 中文:
 定理 floor_intCast_div_natCast
@@ -128,7 +133,12 @@ theorem floor_intCast_div_natCast
   set q := (n : Rat) / d with q_eq
   obtain ⟨c, n_eq_c_mul_num, d_eq_c_mul_denom⟩ : exists c, n = c * q.num ∧ (d : Int) = c * q.den := by
     rw [q_eq]
-    exact mod_cast @Rat.exists_eq_mul_div_num_and_eq_mul_div_den n d 
+    exact mod_cast @Rat.exists_eq_mul_div_num_and_eq_mul_div_den n d (mod_cast hd.ne')
+  rw [n_eq_c_mul_num]; rw [d_eq_c_mul_denom]
+  refine (Int.mul_ediv_mul_of_pos _ _ <| pos_of_mul_pos_left ?_ <| Int.natCast_nonneg q.den).symm
+  rwa [← d_eq_c_mul_denom, Int.natCast_pos]
+
+@[norm_cast]
 
 Depends on / 依赖: Int.mul_ediv_mul_of_pos, Int.natCast_nonneg, Int.natCast_pos, Rat.exists_eq_mul_div_num_and_eq_mul_div_den, Rat.floor_def, d_eq_c_mul_denom, eq_zero_or_pos, exists_eq_mul_div_num_and_eq_mul_div_den, floor_def, hd.ne, mod_cast, mul_ediv_mul_of_pos, n_eq_c_mul_num, natCast_nonneg, natCast_pos, pos_of_mul_pos_left, q.den, q.num, q_eq
 -/
@@ -466,7 +476,7 @@ theorem isInt_intFloor_ofIsRat_neg
   constructor
   simp only [invOf_eq_inv, ← div_eq_mul_inv, Int.cast_id]
   rw [← ceil_intCast_div_natCast n d]; rw [Int.cast_natCast]
-  rw [@negOfNat_eq (toNat _)]; rw [ofNat_eq_natCast]; rw [natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg d.cast_nonneg))]; rw 
+  rw [@negOfNat_eq (toNat _)]; rw [ofNat_eq_natCast]; rw [natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg d.cast_nonneg))]; rw [← Int.cast_natCast n]; rw [ceil_intCast_div_natCast n d]; rw [neg_neg]; rw [← ofNat_eq_natCast]; rw [← negOfNat_eq]; rw [← floor_intCast_div_natCast (.negOfNat n) d]; rw [← floor_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]
 
 中文:
 定理 is整数_intFloor_ofIsRat_neg
@@ -476,7 +486,7 @@ theorem isInt_intFloor_ofIsRat_neg
   constructor
   simp only [invOf_eq_inv, ← div_eq_mul_inv, Int.cast_id]
   rw [← ceil_intCast_div_natCast n d]; rw [Int.cast_natCast]
-  rw [@negOfNat_eq (toNat _)]; rw [ofNat_eq_natCast]; rw [natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg d.cast_nonneg))]; rw 
+  rw [@negOfNat_eq (toNat _)]; rw [ofNat_eq_natCast]; rw [natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg d.cast_nonneg))]; rw [← Int.cast_natCast n]; rw [ceil_intCast_div_natCast n d]; rw [neg_neg]; rw [← ofNat_eq_natCast]; rw [← negOfNat_eq]; rw [← floor_intCast_div_natCast (.negOfNat n) d]; rw [← floor_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]
 
 Depends on / 依赖: Int.cast_id, Int.cast_natCast, Rat.cast_d, cast_d, cast_id, cast_natCast, cast_nonneg, ceil_intCast_div_natCast, ceil_nonneg, d.cast_nonneg, div_eq_mul_inv, div_nonneg, floor_cast, floor_intCast_div_natCast, invOf_eq_inv, n.cast_nonneg, natCast_toNat_eq_self, natCast_toNat_eq_self.mpr, negOfNat, negOfNat_eq
 -/
@@ -564,7 +574,7 @@ theorem isNat_intCeil_ofIsNNRat
   rintro ⟨inv, rfl⟩
   constructor
   simp only [invOf_eq_inv, ← div_eq_mul_inv]
-  rw [← ceil_intCast_div_natCast n d]; rw [← ceil_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]; rw [Int.cast_natCast]; rw [Int.natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg
+  rw [← ceil_intCast_div_natCast n d]; rw [← ceil_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]; rw [Int.cast_natCast]; rw [Int.natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg d.cast_nonneg))]
 
 中文:
 定理 is自然数_intCeil_ofIsNNRat
@@ -573,7 +583,7 @@ theorem isNat_intCeil_ofIsNNRat
   rintro ⟨inv, rfl⟩
   constructor
   simp only [invOf_eq_inv, ← div_eq_mul_inv]
-  rw [← ceil_intCast_div_natCast n d]; rw [← ceil_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]; rw [Int.cast_natCast]; rw [Int.natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg
+  rw [← ceil_intCast_div_natCast n d]; rw [← ceil_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]; rw [Int.cast_natCast]; rw [Int.natCast_toNat_eq_self.mpr (ceil_nonneg (div_nonneg n.cast_nonneg d.cast_nonneg))]
 
 Depends on / 依赖: Int.cast_natCast, Int.natCast_toNat_eq_self.mpr, Rat.cast_div, cast_div, cast_intCast, cast_natCast, cast_nonneg, ceil_cast, ceil_intCast_div_natCast, ceil_nonneg, d.cast_nonneg, div_eq_mul_inv, div_nonneg, invOf_eq_inv, n.cast_nonneg, natCast_toNat_eq_self
 -/
@@ -594,7 +604,7 @@ theorem isInt_intCeil_ofIsRat_neg
   rintro ⟨inv, rfl⟩
   constructor
   simp only [invOf_eq_inv, ← div_eq_mul_inv, Int.cast_id]
-  rw [@negOfNat_eq (n / d)]; rw [ofNat_eq_natCast]; rw [← ofNat_ediv_ofNat]; rw [← floor_natCast_div_natCast n d]; rw [floor_natCast_div_natCast n d]; rw [← neg_neg (n : Int)]; rw [← ofNat_eq_natCast]; rw 
+  rw [@negOfNat_eq (n / d)]; rw [ofNat_eq_natCast]; rw [← ofNat_ediv_ofNat]; rw [← floor_natCast_div_natCast n d]; rw [floor_natCast_div_natCast n d]; rw [← neg_neg (n : Int)]; rw [← ofNat_eq_natCast]; rw [← negOfNat_eq]; rw [← ceil_intCast_div_natCast (.negOfNat n) d]; rw [← ceil_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]
 
 中文:
 定理 is整数_intCeil_ofIsRat_neg
@@ -603,7 +613,7 @@ theorem isInt_intCeil_ofIsRat_neg
   rintro ⟨inv, rfl⟩
   constructor
   simp only [invOf_eq_inv, ← div_eq_mul_inv, Int.cast_id]
-  rw [@negOfNat_eq (n / d)]; rw [ofNat_eq_natCast]; rw [← ofNat_ediv_ofNat]; rw [← floor_natCast_div_natCast n d]; rw [floor_natCast_div_natCast n d]; rw [← neg_neg (n : Int)]; rw [← ofNat_eq_natCast]; rw 
+  rw [@negOfNat_eq (n / d)]; rw [ofNat_eq_natCast]; rw [← ofNat_ediv_ofNat]; rw [← floor_natCast_div_natCast n d]; rw [floor_natCast_div_natCast n d]; rw [← neg_neg (n : Int)]; rw [← ofNat_eq_natCast]; rw [← negOfNat_eq]; rw [← ceil_intCast_div_natCast (.negOfNat n) d]; rw [← ceil_cast (α := α)]; rw [Rat.cast_div]; rw [cast_intCast]; rw [cast_natCast]
 
 Depends on / 依赖: Int.cast_id, Rat.cast_div, cast_div, cast_id, cast_intCast, cast_natCast, ceil_cast, ceil_intCast_div_natCast, div_eq_mul_inv, floor_natCast_div_natCast, invOf_eq_inv, negOfNat, negOfNat_eq, neg_neg, ofNat_ediv_ofNat, ofNat_eq_natCast
 -/
@@ -958,7 +968,20 @@ theorem num_lt_succ_floor_mul_den
 have : (⌊q⌋ : Rat) = q - fract q := eq_sub_of_add_eq floor_add_fract q
     rwa [this]
   suffices (q.num : Rat) < q.num + (1 - fract q) * q.den by
-    have : (q - fract q + 1) * 
+    have : (q - fract q + 1) * q.den = q.num + (1 - fract q) * q.den := by
+      calc
+        (q - fract q + 1) * q.den = (q + (1 - fract q)) * q.den := by ring
+        _ = q * q.den + (1 - fract q) * q.den := by rw [add_mul]
+        _ = q.num + (1 - fract q) * q.den := by simp
+    rwa [this]
+  suffices 0 < (1 - fract q) * q.den by
+    rw [← sub_lt_iff_lt_add']
+    simpa
+  have : 0 < 1 - fract q := by
+    have : fract q < 1 := fract_lt_one q
+    have : 0 + fract q < 1 := by simp [this]
+    rwa [lt_sub_iff_add_lt]
+  exact mul_pos this (by exact mod_cast q.pos)
 
 中文:
 定理 num_lt_succ_floor_mul_den
@@ -970,7 +993,20 @@ have : (⌊q⌋ : Rat) = q - fract q := eq_sub_of_add_eq floor_add_fract q
 have : (⌊q⌋ : Rat) = q - fract q := eq_sub_of_add_eq floor_add_fract q
     rwa [this]
   suffices (q.num : Rat) < q.num + (1 - fract q) * q.den by
-    have : (q - fract q + 1) * 
+    have : (q - fract q + 1) * q.den = q.num + (1 - fract q) * q.den := by
+      calc
+        (q - fract q + 1) * q.den = (q + (1 - fract q)) * q.den := by ring
+        _ = q * q.den + (1 - fract q) * q.den := by rw [add_mul]
+        _ = q.num + (1 - fract q) * q.den := by simp
+    rwa [this]
+  suffices 0 < (1 - fract q) * q.den by
+    rw [← sub_lt_iff_lt_add']
+    simpa
+  have : 0 < 1 - fract q := by
+    have : fract q < 1 := fract_lt_one q
+    have : 0 + fract q < 1 := by simp [this]
+    rwa [lt_sub_iff_add_lt]
+  exact mul_pos this (by exact mod_cast q.pos)
 
 Depends on / 依赖: add_mul, eq_sub_of_add_eq, floor_add_fract, mod_cast, q.den, q.num
 -/
@@ -1007,7 +1043,39 @@ theorem fract_inv_num_lt_num_of_pos
   have q_num_pos : 0 < q.num := Rat.num_pos.mpr q_pos
   -- we will work with the absolute value of the numerator, which is equal to the numerator
   have q_num_abs_eq_q_num : (q.num.natAbs : Int) = q.num := Int.natAbs_of_nonneg q_num_pos.le
-  set q_
+  set q_inv : Rat := q.den / q.num with q_inv_def
+  have q_inv_eq : q⁻¹ = q_inv := by rw [q_inv_def, inv_def, divInt_eq_div, Int.cast_natCast]
+  suffices (q_inv - ⌊q_inv⌋).num < q.num by rwa [q_inv_eq]
+  suffices ((q.den - q.num * ⌊q_inv⌋ : Rat) / q.num).num < q.num by
+    simp only [gt_iff_lt, q_inv]
+    field_simp
+    simp [q_inv, this]
+  suffices (q.den : Int) - q.num * ⌊q_inv⌋ < q.num by
+    -- use that `q.num` and `q.den` are coprime to show that the numerator stays unreduced
+    have : ((q.den - q.num * ⌊q_inv⌋ : Rat) / q.num).num = q.den - q.num * ⌊q_inv⌋ := by
+      suffices ((q.den : Int) - q.num * ⌊q_inv⌋).natAbs.Coprime q.num.natAbs from
+        mod_cast Rat.num_div_eq_of_coprime q_num_pos this
+      have tmp := Nat.coprime_sub_mul_floor_rat_div_of_coprime q.reduced.symm
+      simpa only [Nat.cast_natAbs, abs_of_nonneg q_num_pos.le] using! tmp
+    rwa [this]
+  -- to show the claim, start with the following inequality
+  have q_inv_num_denom_ineq : q⁻¹.num - ⌊q⁻¹⌋ * q⁻¹.den < q⁻¹.den := by
+    have : q⁻¹.num < (⌊q⁻¹⌋ + 1) * q⁻¹.den := Rat.num_lt_succ_floor_mul_den q⁻¹
+    have : q⁻¹.num < ⌊q⁻¹⌋ * q⁻¹.den + q⁻¹.den := by rwa [right_distrib, one_mul] at this
+    rwa [← sub_lt_iff_lt_add'] at this
+  -- use that `q.num` and `q.den` are coprime to show that q_inv is the unreduced reciprocal
+  -- of `q`
+  have : q_inv.num = q.den ∧ q_inv.den = q.num.natAbs := by
+    have coprime_q_denom_q_num : q.den.Coprime q.num.natAbs := q.reduced.symm
+    have : Int.natAbs q.den = q.den := by simp
+    rw [← this] at coprime_q_denom_q_num
+    rw [q_inv_def]
+    constructor
+    · exact mod_cast Rat.num_div_eq_of_coprime q_num_pos coprime_q_denom_q_num
+    · suffices (((q.den : Rat) / q.num).den : Int) = q.num.natAbs by exact mod_cast this
+      rw [q_num_abs_eq_q_num]
+      exact mod_cast Rat.den_div_eq_of_coprime q_num_pos coprime_q_denom_q_num
+  rwa [q_inv_eq, this.left, this.right, q_num_abs_eq_q_num, mul_comm] at q_inv_num_denom_ineq
 
 中文:
 定理 fract_inv_num_lt_num_of_pos
@@ -1018,7 +1086,39 @@ theorem fract_inv_num_lt_num_of_pos
   have q_num_pos : 0 < q.num := Rat.num_pos.mpr q_pos
   -- we will work with the absolute value of the numerator, which is equal to the numerator
   have q_num_abs_eq_q_num : (q.num.natAbs : Int) = q.num := Int.natAbs_of_nonneg q_num_pos.le
-  set q_
+  set q_inv : Rat := q.den / q.num with q_inv_def
+  have q_inv_eq : q⁻¹ = q_inv := by rw [q_inv_def, inv_def, divInt_eq_div, Int.cast_natCast]
+  suffices (q_inv - ⌊q_inv⌋).num < q.num by rwa [q_inv_eq]
+  suffices ((q.den - q.num * ⌊q_inv⌋ : Rat) / q.num).num < q.num by
+    simp only [gt_iff_lt, q_inv]
+    field_simp
+    simp [q_inv, this]
+  suffices (q.den : Int) - q.num * ⌊q_inv⌋ < q.num by
+    -- use that `q.num` and `q.den` are coprime to show that the numerator stays unreduced
+    have : ((q.den - q.num * ⌊q_inv⌋ : Rat) / q.num).num = q.den - q.num * ⌊q_inv⌋ := by
+      suffices ((q.den : Int) - q.num * ⌊q_inv⌋).natAbs.Coprime q.num.natAbs from
+        mod_cast Rat.num_div_eq_of_coprime q_num_pos this
+      have tmp := Nat.coprime_sub_mul_floor_rat_div_of_coprime q.reduced.symm
+      simpa only [Nat.cast_natAbs, abs_of_nonneg q_num_pos.le] using! tmp
+    rwa [this]
+  -- to show the claim, start with the following inequality
+  have q_inv_num_denom_ineq : q⁻¹.num - ⌊q⁻¹⌋ * q⁻¹.den < q⁻¹.den := by
+    have : q⁻¹.num < (⌊q⁻¹⌋ + 1) * q⁻¹.den := Rat.num_lt_succ_floor_mul_den q⁻¹
+    have : q⁻¹.num < ⌊q⁻¹⌋ * q⁻¹.den + q⁻¹.den := by rwa [right_distrib, one_mul] at this
+    rwa [← sub_lt_iff_lt_add'] at this
+  -- use that `q.num` and `q.den` are coprime to show that q_inv is the unreduced reciprocal
+  -- of `q`
+  have : q_inv.num = q.den ∧ q_inv.den = q.num.natAbs := by
+    have coprime_q_denom_q_num : q.den.Coprime q.num.natAbs := q.reduced.symm
+    have : Int.natAbs q.den = q.den := by simp
+    rw [← this] at coprime_q_denom_q_num
+    rw [q_inv_def]
+    constructor
+    · exact mod_cast Rat.num_div_eq_of_coprime q_num_pos coprime_q_denom_q_num
+    · suffices (((q.den : Rat) / q.num).den : Int) = q.num.natAbs by exact mod_cast this
+      rw [q_num_abs_eq_q_num]
+      exact mod_cast Rat.den_div_eq_of_coprime q_num_pos coprime_q_denom_q_num
+  rwa [q_inv_eq, this.left, this.right, q_num_abs_eq_q_num, mul_comm] at q_inv_num_denom_ineq
 -/
 theorem fract_inv_num_lt_num_of_pos {q : Rat} (q_pos : 0 < q) : (fract q⁻¹).num < q.num := by
   -- we know that the numerator must be positive

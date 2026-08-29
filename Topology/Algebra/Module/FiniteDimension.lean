@@ -149,7 +149,46 @@ theorem unique_topology_of_t2
   -- topology on `𝕜`. To show that `𝓣₀ = 𝓣`, it suffices to show that they have the same
   -- neighborhoods of 0.
   refine IsTopologicalAddGroup.ext h₁ inferInstance (le_antisymm ?_ ?_)
-  · -- To show `𝓣 ≤ 𝓣₀`,
+  · -- To show `𝓣 ≤ 𝓣₀`, we have to show that closed balls are `𝓣`-neighborhoods of 0.
+    rw [Metric.nhds_basis_closedBall.ge_iff]
+    -- Let `ε > 0`. Since `𝕜` is nontrivially normed, we have `0 < ‖ξ₀‖ < ε` for some `ξ₀ : 𝕜`.
+    intro ε hε
+    rcases NormedField.exists_norm_lt 𝕜 hε with ⟨ξ₀, hξ₀, hξ₀ε⟩
+    -- Since `ξ₀ ≠ 0` and `𝓣` is T2, we know that `{ξ₀}ᶜ` is a `𝓣`-neighborhood of 0.
+have : {ξ₀}ᶜ in @nhds 𝕜 t 0 := IsOpen.mem_nhds isOpen_compl_singleton
+mem_compl_singleton_iff.mpr Ne.symm norm_ne_zero_iff.mp hξ₀.ne.symm
+    -- Thus, its balanced core `𝓑` is too. Let's show that the closed ball of radius `ε` contains
+    -- `𝓑`, which will imply that the closed ball is indeed a `𝓣`-neighborhood of 0.
+    have : balancedCore 𝕜 {ξ₀}ᶜ in @nhds 𝕜 t 0 := balancedCore_mem_nhds_zero this
+    refine mem_of_superset this fun ξ hξ => ?_
+    -- Let `ξ ∈ 𝓑`. We want to show `‖ξ‖ < ε`. If `ξ = 0`, this is trivial.
+    by_cases hξ0 : ξ = 0
+    · rw [hξ0]
+      exact Metric.mem_closedBall_self hε.le
+    · rw [mem_closedBall_zero_iff]
+      -- Now suppose `ξ ≠ 0`. By contradiction, let's assume `ε < ‖ξ‖`, and show that
+      -- `ξ₀ ∈ 𝓑 ⊆ {ξ₀}ᶜ`, which is a contradiction.
+      by_contra! h
+      suffices (ξ₀ * ξ⁻¹) • ξ in balancedCore 𝕜 {ξ₀}ᶜ by
+        rw [smul_eq_mul]; rw [mul_assoc]; rw [inv_mul_cancel₀ hξ0]; rw [mul_one] at this
+        exact notMem_compl_iff.mpr (mem_singleton ξ₀) ((balancedCore_subset _) this)
+      -- For that, we use that `𝓑` is balanced : since `‖ξ₀‖ < ε < ‖ξ‖`, we have `‖ξ₀ / ξ‖ ≤ 1`,
+      -- hence `ξ₀ = (ξ₀ / ξ) • ξ ∈ 𝓑` because `ξ ∈ 𝓑`.
+      refine (balancedCore_balanced _).smul_mem ?_ hξ
+      rw [norm_mul]; rw [norm_inv]; rw [mul_inv_le_iff₀ (norm_pos_iff.mpr hξ0)]; rw [one_mul]
+      exact (hξ₀ε.trans h).le
+  · -- Finally, to show `𝓣₀ ≤ 𝓣`, we simply argue that `id = (fun x ↦ x • 1)` is continuous from
+    -- `(𝕜, 𝓣₀)` to `(𝕜, 𝓣)` because `(•) : (𝕜, 𝓣₀) × (𝕜, 𝓣) → (𝕜, 𝓣)` is continuous.
+    calc
+      @nhds 𝕜 hnorm.toUniformSpace.toTopologicalSpace 0 =
+          map id (@nhds 𝕜 hnorm.toUniformSpace.toTopologicalSpace 0) :=
+        map_id.symm
+      _ = map (fun x => id x • (1 : 𝕜)) (@nhds 𝕜 hnorm.toUniformSpace.toTopologicalSpace 0) := by
+        simp
+      _ <= @nhds 𝕜 t ((0 : 𝕜) • (1 : 𝕜)) :=
+        (@Tendsto.smul_const _ _ _ hnorm.toUniformSpace.toTopologicalSpace t _ _ _ _ _
+          tendsto_id (1 : 𝕜))
+      _ = @nhds 𝕜 t 0 := by rw [zero_smul]
 
 中文:
 定理 unique_topology_of_t2
@@ -159,7 +198,46 @@ theorem unique_topology_of_t2
   -- topology on `𝕜`. To show that `𝓣₀ = 𝓣`, it suffices to show that they have the same
   -- neighborhoods of 0.
   refine IsTopologicalAddGroup.ext h₁ inferInstance (le_antisymm ?_ ?_)
-  · -- To show `𝓣 ≤ 𝓣₀`,
+  · -- To show `𝓣 ≤ 𝓣₀`, we have to show that closed balls are `𝓣`-neighborhoods of 0.
+    rw [Metric.nhds_basis_closedBall.ge_iff]
+    -- Let `ε > 0`. Since `𝕜` is nontrivially normed, we have `0 < ‖ξ₀‖ < ε` for some `ξ₀ : 𝕜`.
+    intro ε hε
+    rcases NormedField.exists_norm_lt 𝕜 hε with ⟨ξ₀, hξ₀, hξ₀ε⟩
+    -- Since `ξ₀ ≠ 0` and `𝓣` is T2, we know that `{ξ₀}ᶜ` is a `𝓣`-neighborhood of 0.
+have : {ξ₀}ᶜ in @nhds 𝕜 t 0 := IsOpen.mem_nhds isOpen_compl_singleton
+mem_compl_singleton_iff.mpr Ne.symm norm_ne_zero_iff.mp hξ₀.ne.symm
+    -- Thus, its balanced core `𝓑` is too. Let's show that the closed ball of radius `ε` contains
+    -- `𝓑`, which will imply that the closed ball is indeed a `𝓣`-neighborhood of 0.
+    have : balancedCore 𝕜 {ξ₀}ᶜ in @nhds 𝕜 t 0 := balancedCore_mem_nhds_zero this
+    refine mem_of_superset this fun ξ hξ => ?_
+    -- Let `ξ ∈ 𝓑`. We want to show `‖ξ‖ < ε`. If `ξ = 0`, this is trivial.
+    by_cases hξ0 : ξ = 0
+    · rw [hξ0]
+      exact Metric.mem_closedBall_self hε.le
+    · rw [mem_closedBall_zero_iff]
+      -- Now suppose `ξ ≠ 0`. By contradiction, let's assume `ε < ‖ξ‖`, and show that
+      -- `ξ₀ ∈ 𝓑 ⊆ {ξ₀}ᶜ`, which is a contradiction.
+      by_contra! h
+      suffices (ξ₀ * ξ⁻¹) • ξ in balancedCore 𝕜 {ξ₀}ᶜ by
+        rw [smul_eq_mul]; rw [mul_assoc]; rw [inv_mul_cancel₀ hξ0]; rw [mul_one] at this
+        exact notMem_compl_iff.mpr (mem_singleton ξ₀) ((balancedCore_subset _) this)
+      -- For that, we use that `𝓑` is balanced : since `‖ξ₀‖ < ε < ‖ξ‖`, we have `‖ξ₀ / ξ‖ ≤ 1`,
+      -- hence `ξ₀ = (ξ₀ / ξ) • ξ ∈ 𝓑` because `ξ ∈ 𝓑`.
+      refine (balancedCore_balanced _).smul_mem ?_ hξ
+      rw [norm_mul]; rw [norm_inv]; rw [mul_inv_le_iff₀ (norm_pos_iff.mpr hξ0)]; rw [one_mul]
+      exact (hξ₀ε.trans h).le
+  · -- Finally, to show `𝓣₀ ≤ 𝓣`, we simply argue that `id = (fun x ↦ x • 1)` is continuous from
+    -- `(𝕜, 𝓣₀)` to `(𝕜, 𝓣)` because `(•) : (𝕜, 𝓣₀) × (𝕜, 𝓣) → (𝕜, 𝓣)` is continuous.
+    calc
+      @nhds 𝕜 hnorm.toUniformSpace.toTopologicalSpace 0 =
+          map id (@nhds 𝕜 hnorm.toUniformSpace.toTopologicalSpace 0) :=
+        map_id.symm
+      _ = map (fun x => id x • (1 : 𝕜)) (@nhds 𝕜 hnorm.toUniformSpace.toTopologicalSpace 0) := by
+        simp
+      _ <= @nhds 𝕜 t ((0 : 𝕜) • (1 : 𝕜)) :=
+        (@Tendsto.smul_const _ _ _ hnorm.toUniformSpace.toTopologicalSpace t _ _ _ _ _
+          tendsto_id (1 : 𝕜))
+      _ = @nhds 𝕜 t 0 := by rw [zero_smul]
 -/
 theorem unique_topology_of_t2 {t : TopologicalSpace 𝕜} (h₁ : @IsTopologicalAddGroup 𝕜 t _)
     (h₂ : @ContinuousSMul 𝕜 𝕜 _ hnorm.toUniformSpace.toTopologicalSpace t) (h₃ : @T2Space 𝕜 t) :
@@ -221,7 +299,39 @@ theorem LinearMap.continuous_of_isClosed_ker
   · rw [Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at H
     rw [H]
     exact continuous_zero
-  · -- In the case where `l` is surjective, we factor it as `φ
+  · -- In the case where `l` is surjective, we factor it as `φ : (E ⧸ l.ker) ≃ₗ[𝕜] 𝕜`. Note that
+    -- `E ⧸ l.ker` is T2 since `l.ker` is closed.
+    have : finrank 𝕜 (LinearMap.range l) = 1 :=
+      le_antisymm (finrank_self 𝕜 ▸ (LinearMap.range l).finrank_le) (zero_lt_iff.mpr H)
+    have hi : Function.Injective ((LinearMap.ker l).liftQ l (le_refl _)) := by
+      rw [← LinearMap.ker_eq_bot]
+      exact Submodule.ker_liftQ_eq_bot _ _ _ (le_refl _)
+    have hs : Function.Surjective ((LinearMap.ker l).liftQ l (le_refl _)) := by
+      rw [← LinearMap.range_eq_top]; rw [Submodule.range_liftQ]
+      exact Submodule.eq_top_of_finrank_eq ((finrank_self 𝕜).symm ▸ this)
+    let φ : (E ⧸ LinearMap.ker l) ≃ₗ[𝕜] 𝕜 :=
+      LinearEquiv.ofBijective ((LinearMap.ker l).liftQ l (le_refl _)) ⟨hi, hs⟩
+    have hlφ : (l : E -> 𝕜) = φ ∘ (LinearMap.ker l).mkQ := by ext; rfl
+    -- Since the quotient map `E →ₗ[𝕜] (E ⧸ l.ker)` is continuous, the continuity of `l` will follow
+    -- form the continuity of `φ`.
+    suffices Continuous φ.toEquiv by
+      rw [hlφ]
+      exact this.comp continuous_quot_mk
+    -- The pullback by `φ.symm` of the quotient topology is a T2 topology on `𝕜`, because `φ.symm`
+    -- is injective. Since `φ.symm` is linear, it is also a vector space topology.
+    -- Hence, we know that it is equal to the topology induced by the norm.
+    have : induced φ.toEquiv.symm inferInstance = hnorm.toUniformSpace.toTopologicalSpace := by
+      refine unique_topology_of_t2 (topologicalAddGroup_induced φ.symm.toLinearMap)
+        (continuousSMul_induced φ.symm.toMulActionHom) ?_
+      rw [t2Space_iff]
+      exact fun x y hxy =>
+        @separated_by_continuous _ _ (induced _ _) _ _ _ continuous_induced_dom _ _
+          (φ.toEquiv.symm.injective.ne hxy)
+    -- Finally, the pullback by `φ.symm` is exactly the pushforward by `φ`, so we have to prove
+    -- that `φ` is continuous when `𝕜` is endowed with the pushforward by `φ` of the quotient
+    -- topology, which is trivial by definition of the pushforward.
+    simp_rw +instances [this.symm, Equiv.induced_symm]
+    exact continuous_coinduced_rng
 
 中文:
 定理 线性映射.continuous_of_isClosed_ker
@@ -232,7 +342,39 @@ theorem LinearMap.continuous_of_isClosed_ker
   · rw [Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at H
     rw [H]
     exact continuous_zero
-  · -- In the case where `l` is surjective, we factor it as `φ
+  · -- In the case where `l` is surjective, we factor it as `φ : (E ⧸ l.ker) ≃ₗ[𝕜] 𝕜`. Note that
+    -- `E ⧸ l.ker` is T2 since `l.ker` is closed.
+    have : finrank 𝕜 (LinearMap.range l) = 1 :=
+      le_antisymm (finrank_self 𝕜 ▸ (LinearMap.range l).finrank_le) (zero_lt_iff.mpr H)
+    have hi : Function.Injective ((LinearMap.ker l).liftQ l (le_refl _)) := by
+      rw [← LinearMap.ker_eq_bot]
+      exact Submodule.ker_liftQ_eq_bot _ _ _ (le_refl _)
+    have hs : Function.Surjective ((LinearMap.ker l).liftQ l (le_refl _)) := by
+      rw [← LinearMap.range_eq_top]; rw [Submodule.range_liftQ]
+      exact Submodule.eq_top_of_finrank_eq ((finrank_self 𝕜).symm ▸ this)
+    let φ : (E ⧸ LinearMap.ker l) ≃ₗ[𝕜] 𝕜 :=
+      LinearEquiv.ofBijective ((LinearMap.ker l).liftQ l (le_refl _)) ⟨hi, hs⟩
+    have hlφ : (l : E -> 𝕜) = φ ∘ (LinearMap.ker l).mkQ := by ext; rfl
+    -- Since the quotient map `E →ₗ[𝕜] (E ⧸ l.ker)` is continuous, the continuity of `l` will follow
+    -- form the continuity of `φ`.
+    suffices Continuous φ.toEquiv by
+      rw [hlφ]
+      exact this.comp continuous_quot_mk
+    -- The pullback by `φ.symm` of the quotient topology is a T2 topology on `𝕜`, because `φ.symm`
+    -- is injective. Since `φ.symm` is linear, it is also a vector space topology.
+    -- Hence, we know that it is equal to the topology induced by the norm.
+    have : induced φ.toEquiv.symm inferInstance = hnorm.toUniformSpace.toTopologicalSpace := by
+      refine unique_topology_of_t2 (topologicalAddGroup_induced φ.symm.toLinearMap)
+        (continuousSMul_induced φ.symm.toMulActionHom) ?_
+      rw [t2Space_iff]
+      exact fun x y hxy =>
+        @separated_by_continuous _ _ (induced _ _) _ _ _ continuous_induced_dom _ _
+          (φ.toEquiv.symm.injective.ne hxy)
+    -- Finally, the pullback by `φ.symm` is exactly the pushforward by `φ`, so we have to prove
+    -- that `φ` is continuous when `𝕜` is endowed with the pushforward by `φ` of the quotient
+    -- topology, which is trivial by definition of the pushforward.
+    simp_rw +instances [this.symm, Equiv.induced_symm]
+    exact continuous_coinduced_rng
 -/
 theorem LinearMap.continuous_of_isClosed_ker (l : E ->ₗ[𝕜] 𝕜)
     (hl : IsClosed (LinearMap.ker l : Set E)) :
@@ -346,7 +488,47 @@ theorem continuous_equivFun_basis_aux
   suffices forall n, Fintype.card ι = n -> Continuous ξ.equivFun by exact this _ rfl
   intro n hn
   induction n generalizing ι E with
- 
+  | zero =>
+    rw [Fintype.card_eq_zero_iff] at hn
+    exact continuous_of_const fun x y => funext hn.elim
+  | succ n IH =>
+    have : FiniteDimensional 𝕜 E := ξ.finiteDimensional_of_finite
+    -- first step: thanks to the induction hypothesis, any n-dimensional subspace is equivalent
+    -- to a standard space of dimension n, hence it is complete and therefore closed.
+    have H₁ : forall s : Submodule 𝕜 E, finrank 𝕜 s = n -> IsClosed (s : Set E) := by
+      intro s s_dim
+      let : IsUniformAddGroup s := s.toAddSubgroup.isUniformAddGroup
+      let b := Basis.ofVectorSpace 𝕜 s
+      have U : IsUniformEmbedding b.equivFun.symm.toEquiv := by
+        have : Fintype.card (Basis.ofVectorSpaceIndex 𝕜 s) = n := by
+          rw [← s_dim]
+          exact (finrank_eq_card_basis b).symm
+        have : Continuous b.equivFun := IH b inferInstance this
+        exact
+          b.equivFun.symm.isUniformEmbedding b.equivFun.symm.toLinearMap.continuous_on_pi this
+      have : IsComplete (s : Set E) :=
+        completeSpace_coe_iff_isComplete.1 ((completeSpace_congr U).1 inferInstance)
+      exact this.isClosed
+    -- second step: any linear form is continuous, as its kernel is closed by the first step
+    have H₂ : forall f : E ->ₗ[𝕜] 𝕜, Continuous f := by
+      intro f
+      by_cases H : finrank 𝕜 (LinearMap.range f) = 0
+      · rw [Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at H
+        rw [H]
+        exact continuous_zero
+      · have : finrank 𝕜 (LinearMap.ker f) = n := by
+          have Z := f.finrank_range_add_finrank_ker
+          rw [finrank_eq_card_basis ξ]; rw [hn] at Z
+          have : finrank 𝕜 (LinearMap.range f) = 1 :=
+            le_antisymm (finrank_self 𝕜 ▸ (LinearMap.range f).finrank_le) (zero_lt_iff.mpr H)
+          rw [this]; rw [add_comm]; rw [Nat.add_one] at Z
+          exact Nat.succ.inj Z
+        have : IsClosed (LinearMap.ker f : Set E) := H₁ _ this
+        exact LinearMap.continuous_of_isClosed_ker f this
+    rw [continuous_pi_iff]
+    intro i
+    change Continuous (ξ.coord i)
+    exact H₂ (ξ.coord i)
 
 中文:
 定理 continuous_equivFun_basis_aux
@@ -358,7 +540,47 @@ theorem continuous_equivFun_basis_aux
   suffices forall n, Fintype.card ι = n -> Continuous ξ.equivFun by exact this _ rfl
   intro n hn
   induction n generalizing ι E with
- 
+  | zero =>
+    rw [Fintype.card_eq_zero_iff] at hn
+    exact continuous_of_const fun x y => funext hn.elim
+  | succ n IH =>
+    have : FiniteDimensional 𝕜 E := ξ.finiteDimensional_of_finite
+    -- first step: thanks to the induction hypothesis, any n-dimensional subspace is equivalent
+    -- to a standard space of dimension n, hence it is complete and therefore closed.
+    have H₁ : forall s : Submodule 𝕜 E, finrank 𝕜 s = n -> IsClosed (s : Set E) := by
+      intro s s_dim
+      let : IsUniformAddGroup s := s.toAddSubgroup.isUniformAddGroup
+      let b := Basis.ofVectorSpace 𝕜 s
+      have U : IsUniformEmbedding b.equivFun.symm.toEquiv := by
+        have : Fintype.card (Basis.ofVectorSpaceIndex 𝕜 s) = n := by
+          rw [← s_dim]
+          exact (finrank_eq_card_basis b).symm
+        have : Continuous b.equivFun := IH b inferInstance this
+        exact
+          b.equivFun.symm.isUniformEmbedding b.equivFun.symm.toLinearMap.continuous_on_pi this
+      have : IsComplete (s : Set E) :=
+        completeSpace_coe_iff_isComplete.1 ((completeSpace_congr U).1 inferInstance)
+      exact this.isClosed
+    -- second step: any linear form is continuous, as its kernel is closed by the first step
+    have H₂ : forall f : E ->ₗ[𝕜] 𝕜, Continuous f := by
+      intro f
+      by_cases H : finrank 𝕜 (LinearMap.range f) = 0
+      · rw [Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at H
+        rw [H]
+        exact continuous_zero
+      · have : finrank 𝕜 (LinearMap.ker f) = n := by
+          have Z := f.finrank_range_add_finrank_ker
+          rw [finrank_eq_card_basis ξ]; rw [hn] at Z
+          have : finrank 𝕜 (LinearMap.range f) = 1 :=
+            le_antisymm (finrank_self 𝕜 ▸ (LinearMap.range f).finrank_le) (zero_lt_iff.mpr H)
+          rw [this]; rw [add_comm]; rw [Nat.add_one] at Z
+          exact Nat.succ.inj Z
+        have : IsClosed (LinearMap.ker f : Set E) := H₁ _ this
+        exact LinearMap.continuous_of_isClosed_ker f this
+    rw [continuous_pi_iff]
+    intro i
+    change Continuous (ξ.coord i)
+    exact H₂ (ξ.coord i)
 -/
 private theorem continuous_equivFun_basis_aux [T2Space E] {ι : Type v} [Finite ι]
     (ξ : Basis ι 𝕜 E) : Continuous ξ.equivFun := by
@@ -425,7 +647,10 @@ lemma isModuleTopologyOfFiniteDimensional
   let b := Basis.ofVectorSpace 𝕜 E
   have continuousEquiv : E ≃L[𝕜] (Basis.ofVectorSpaceIndex 𝕜 E) -> 𝕜 :=
     { __ := b.equivFun
-      continuous_toFun := continu
+      continuous_toFun := continuous_equivFun_basis_aux b
+      continuous_invFun := IsModuleTopology.continuous_of_linearMap (R := 𝕜)
+        (A := (Basis.ofVectorSpaceIndex 𝕜 E) -> 𝕜) (B := E) b.equivFun.symm }
+  IsModuleTopology.iso continuousEquiv.symm
 
 中文:
 引理 isModuleTopologyOfFiniteDimensional
@@ -435,7 +660,10 @@ lemma isModuleTopologyOfFiniteDimensional
   let b := Basis.ofVectorSpace 𝕜 E
   have continuousEquiv : E ≃L[𝕜] (Basis.ofVectorSpaceIndex 𝕜 E) -> 𝕜 :=
     { __ := b.equivFun
-      continuous_toFun := continu
+      continuous_toFun := continuous_equivFun_basis_aux b
+      continuous_invFun := IsModuleTopology.continuous_of_linearMap (R := 𝕜)
+        (A := (Basis.ofVectorSpaceIndex 𝕜 E) -> 𝕜) (B := E) b.equivFun.symm }
+  IsModuleTopology.iso continuousEquiv.symm
 -/
 lemma isModuleTopologyOfFiniteDimensional [T2Space E] [FiniteDimensional 𝕜 E] :
     IsModuleTopology 𝕜 E :=
@@ -1053,7 +1281,9 @@ definition equivFunL
       v.equivFun.toLinearMap.continuous_of_finiteDimensional
     continuous_invFun := by
       change Continuous v.equivFun.symm.toFun
-      exact v.equivFun.symm.toLinearMap.continuous_of_
+      exact v.equivFun.symm.toLinearMap.continuous_of_finiteDimensional }
+
+@[simp]
 
 中文:
 定义 equivFunL
@@ -1064,7 +1294,9 @@ definition equivFunL
       v.equivFun.toLinearMap.continuous_of_finiteDimensional
     continuous_invFun := by
       change Continuous v.equivFun.symm.toFun
-      exact v.equivFun.symm.toLinearMap.continuous_of_
+      exact v.equivFun.symm.toLinearMap.continuous_of_finiteDimensional }
+
+@[simp]
 
 Depends on / 依赖: Continuous, FiniteDimensional, continuous_invFun, continuous_of_finiteDimensional, continuous_toFun, equivFun, finiteDimensional_of_finite, toLinearMap, v.equivFun, v.equivFun.symm.toFun, v.equivFun.symm.toLinearMap.continuous_of_finiteDimensional, v.equivFun.toLinearMap.continuous_of_finiteDimensional, v.finiteDimensional_of_finite
 -/
@@ -1584,7 +1816,9 @@ theorem LocallyCompactSpace.of_finiteDimensional_of_complete
   suffices LocallyCompactSpace (SeparationQuotient V) from
 SeparationQuotient.isInducing_mk.locallyCompactSpace
       SeparationQuotient.range_mk (X := V) ▸ isClosed_univ.isLocallyClosed
-  let ⟨_, ⟨b⟩⟩ := Basis.exists_basis K (SeparationQuot
+  let ⟨_, ⟨b⟩⟩ := Basis.exists_basis K (SeparationQuotient V)
+  have := FiniteDimensional.fintypeBasisIndex b
+  b.equivFun.toContinuousLinearEquiv.toHomeomorph.isOpenEmbedding.locallyCompactSpace
 
 中文:
 定理 局部紧空间.of_finiteDimensional_of_complete
@@ -1593,7 +1827,9 @@ SeparationQuotient.isInducing_mk.locallyCompactSpace
   suffices LocallyCompactSpace (SeparationQuotient V) from
 SeparationQuotient.isInducing_mk.locallyCompactSpace
       SeparationQuotient.range_mk (X := V) ▸ isClosed_univ.isLocallyClosed
-  let ⟨_, ⟨b⟩⟩ := Basis.exists_basis K (SeparationQuot
+  let ⟨_, ⟨b⟩⟩ := Basis.exists_basis K (SeparationQuotient V)
+  have := FiniteDimensional.fintypeBasisIndex b
+  b.equivFun.toContinuousLinearEquiv.toHomeomorph.isOpenEmbedding.locallyCompactSpace
 -/
 theorem LocallyCompactSpace.of_finiteDimensional_of_complete (K V : Type*)
     [NontriviallyNormedField K] [CompleteSpace K] [LocallyCompactSpace K]
@@ -1627,7 +1863,38 @@ theorem FiniteDimensional.of_totallyBounded_nhds_zero
   obtain ⟨c, hc0, hc1⟩ : exists c : 𝕜, 0 < ‖c‖ ∧ ‖c‖ < 1 := NormedField.exists_norm_lt 𝕜 zero_lt_one
   have hc_ne : c != 0 := norm_pos_iff.mp hc0
   obtain ⟨F, hF_finite, hF_cover⟩ := totallyBounded_iff_subset_finite_iUnion_nhds_zero.mp hU_tb
-    (c • U) ((set_smul_mem_nhds_zero_iff hc_ne).mpr hU_
+    (c • U) ((set_smul_mem_nhds_zero_iff hc_ne).mpr hU_nhds)
+  let M : Submodule 𝕜 Eᵤ := Submodule.span 𝕜 F
+  let : FiniteDimensional 𝕜 M := Finite.span_of_finite 𝕜 hF_finite
+  have h_cover : U subseteq M + c • U := fun x hx => by
+obtain ⟨f, hf, y, hy, rfl⟩ := Set.mem_iUnion₂.mp hF_cover hx
+    exact ⟨f, Submodule.subset_span hf, y, hy, rfl⟩
+  have h_ind (n : Nat) : U subseteq M + c ^ n • U := by
+    induction n with
+    | zero => simpa using! fun x hx => ⟨0, M.zero_mem, x, hx, zero_add x⟩
+    | succ n ih =>
+      calc
+        U subseteq M + c ^ n • U := ih
+        _ subseteq M + c ^ n • (M + c • U) := by gcongr
+        _ subseteq M + c ^ (n + 1) • U := by
+          rw [smul_add]; rw [smul_smul]; rw [pow_succ]; rw [← add_assoc]
+          congr!
+          lift c to 𝕜ˣ using isUnit_iff_ne_zero.mpr hc_ne
+          simp [← Units.val_pow_eq_pow_val, ← Units.smul_def]
+  have h_small : Tendsto (fun n => c ^ n • U) atTop (𝓝 0).smallSets :=
+    (TotallyBounded.isVonNBounded 𝕜 hU_tb).tendsto_smallSets_nhds.comp
+    (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hc1)
+  have hU_sub_M : U subseteq M := by
+    intro x hx
+    choose m hm u hu h_eq using fun n => h_ind n hx
+    have hu_tendsto : Tendsto u atTop (𝓝 0) := by
+      intro W hW
+      exact (tendsto_smallSets_iff.mp h_small W hW).mono fun n hn => hn (hu n)
+    have hm_tendsto : Tendsto m atTop (𝓝 x) := by
+      simpa [show m = fun n => x - u n by grind] using! tendsto_const_nhds.sub hu_tendsto
+    exact M.closed_of_finiteDimensional.mem_of_tendsto hm_tendsto (Eventually.of_forall hm)
+.submodule_eq_top .mono hU_sub_M have hM_top : M = ⊤ := absorbent_nhds_zero (𝕜 := 𝕜) hU_nhds
+  exact FiniteDimensional.of_surjective M.subtype fun x => ⟨⟨x, by simp [hM_top]⟩, rfl⟩
 
 中文:
 定理 有限维.of_totallyBounded_nhds_zero
@@ -1636,7 +1903,38 @@ theorem FiniteDimensional.of_totallyBounded_nhds_zero
   obtain ⟨c, hc0, hc1⟩ : exists c : 𝕜, 0 < ‖c‖ ∧ ‖c‖ < 1 := NormedField.exists_norm_lt 𝕜 zero_lt_one
   have hc_ne : c != 0 := norm_pos_iff.mp hc0
   obtain ⟨F, hF_finite, hF_cover⟩ := totallyBounded_iff_subset_finite_iUnion_nhds_zero.mp hU_tb
-    (c • U) ((set_smul_mem_nhds_zero_iff hc_ne).mpr hU_
+    (c • U) ((set_smul_mem_nhds_zero_iff hc_ne).mpr hU_nhds)
+  let M : Submodule 𝕜 Eᵤ := Submodule.span 𝕜 F
+  let : FiniteDimensional 𝕜 M := Finite.span_of_finite 𝕜 hF_finite
+  have h_cover : U subseteq M + c • U := fun x hx => by
+obtain ⟨f, hf, y, hy, rfl⟩ := Set.mem_iUnion₂.mp hF_cover hx
+    exact ⟨f, Submodule.subset_span hf, y, hy, rfl⟩
+  have h_ind (n : Nat) : U subseteq M + c ^ n • U := by
+    induction n with
+    | zero => simpa using! fun x hx => ⟨0, M.zero_mem, x, hx, zero_add x⟩
+    | succ n ih =>
+      calc
+        U subseteq M + c ^ n • U := ih
+        _ subseteq M + c ^ n • (M + c • U) := by gcongr
+        _ subseteq M + c ^ (n + 1) • U := by
+          rw [smul_add]; rw [smul_smul]; rw [pow_succ]; rw [← add_assoc]
+          congr!
+          lift c to 𝕜ˣ using isUnit_iff_ne_zero.mpr hc_ne
+          simp [← Units.val_pow_eq_pow_val, ← Units.smul_def]
+  have h_small : Tendsto (fun n => c ^ n • U) atTop (𝓝 0).smallSets :=
+    (TotallyBounded.isVonNBounded 𝕜 hU_tb).tendsto_smallSets_nhds.comp
+    (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hc1)
+  have hU_sub_M : U subseteq M := by
+    intro x hx
+    choose m hm u hu h_eq using fun n => h_ind n hx
+    have hu_tendsto : Tendsto u atTop (𝓝 0) := by
+      intro W hW
+      exact (tendsto_smallSets_iff.mp h_small W hW).mono fun n hn => hn (hu n)
+    have hm_tendsto : Tendsto m atTop (𝓝 x) := by
+      simpa [show m = fun n => x - u n by grind] using! tendsto_const_nhds.sub hu_tendsto
+    exact M.closed_of_finiteDimensional.mem_of_tendsto hm_tendsto (Eventually.of_forall hm)
+.submodule_eq_top .mono hU_sub_M have hM_top : M = ⊤ := absorbent_nhds_zero (𝕜 := 𝕜) hU_nhds
+  exact FiniteDimensional.of_surjective M.subtype fun x => ⟨⟨x, by simp [hM_top]⟩, rfl⟩
 
 Depends on / 依赖: Finite, Finite.span_of_finite, FiniteDimensional, NormedField, NormedField.exists_norm_lt, Set.mem_iU, Submodule, Submodule.span, exists_norm_lt, hF_cover, hF_finite, hU_nhds, hU_tb, h_cover, hc_ne, mem_iU, norm_pos_iff, norm_pos_iff.mp, set_smul_mem_nhds_zero_iff, span_of_finite
 -/
@@ -1879,7 +2177,7 @@ theorem Submodule.ClosedComplemented.of_finiteDimensional_quotient
 
 @[deprecated (since := "2026-05-09")]
 alias Submodule.ClosedComplemented.of_quotient_finiteDimensional :=
-  Submodule.ClosedComplemented.of_finiteDimensional_quot
+  Submodule.ClosedComplemented.of_finiteDimensional_quotient
 
 中文:
 定理 子模.ClosedComplemented.of_finiteDimensional_quotient
@@ -1890,7 +2188,7 @@ alias Submodule.ClosedComplemented.of_quotient_finiteDimensional :=
 
 @[deprecated (since := "2026-05-09")]
 alias Submodule.ClosedComplemented.of_quotient_finiteDimensional :=
-  Submodule.ClosedComplemented.of_finiteDimensional_quot
+  Submodule.ClosedComplemented.of_finiteDimensional_quotient
 
 Depends on / 依赖: IsCompl, closedComplemented, exists_isCompl, hq.isTopCompl_of_finiteDimensional_quotient, isTopCompl_of_finiteDimensional_quotient, p.exists_isCompl
 -/
@@ -1912,7 +2210,7 @@ theorem Submodule.ClosedComplemented.of_disjoint_of_finiteDimensional_quotient
   obtain ⟨C, B_le_C, C_compl_A⟩ := hAB.symm.exists_isCompl
   have C_cofg : FiniteDimensional 𝕜 (E ⧸ C) := CoFG.of_le B_le_C B_cofg
   have hC : IsClosed (C : Set E) := isClosed_mono_of_finiteDimensional_quotient hB B_le_C
-.symm.closedComplemented exact C_compl_A.isTopCompl_of_finiteDimensional_quo
+.symm.closedComplemented exact C_compl_A.isTopCompl_of_finiteDimensional_quotient hC
 
 中文:
 定理 子模.ClosedComplemented.of_disjoint_of_finiteDimensional_quotient
@@ -1920,7 +2218,7 @@ theorem Submodule.ClosedComplemented.of_disjoint_of_finiteDimensional_quotient
   obtain ⟨C, B_le_C, C_compl_A⟩ := hAB.symm.exists_isCompl
   have C_cofg : FiniteDimensional 𝕜 (E ⧸ C) := CoFG.of_le B_le_C B_cofg
   have hC : IsClosed (C : Set E) := isClosed_mono_of_finiteDimensional_quotient hB B_le_C
-.symm.closedComplemented exact C_compl_A.isTopCompl_of_finiteDimensional_quo
+.symm.closedComplemented exact C_compl_A.isTopCompl_of_finiteDimensional_quotient hC
 
 Depends on / 依赖: B_cofg, B_le_C, C_cofg, C_compl_A, C_compl_A.isTopCompl_of_finiteDimensional_quotient, CoFG.of_le, FiniteDimensional, IsClosed, closedComplemented, exists_isCompl, hAB.symm.exists_isCompl, isClosed_mono_of_finiteDimensional_quotient, isTopCompl_of_finiteDimensional_quotient, of_le, symm.closedComplemented
 -/

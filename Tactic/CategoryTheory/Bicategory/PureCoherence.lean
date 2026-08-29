@@ -250,7 +250,122 @@ instance :
     have e : Q($ctx.B) := h.tgt.e
     have p : Q($a ⟶ $b) := p.e.e
     have f : Q($b ⟶ $c) := f.e
-    hav
+    have g : Q($c ⟶ $d) := g.e
+    have h : Q($d ⟶ $e) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have pfg : Q($a ⟶ $d) := pfg.e.e
+    have pfgh : Q($a ⟶ $e) := pfgh.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($pf ≫ $g ≅ $pfg) := η_g.e
+    have η_h : Q($pfg ≫ $h ≅ $pfgh) := η_h.e
+    return q(naturality_associator $η_f $η_g $η_h)
+  mkNaturalityLeftUnitor p pf f η_f := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    return q(naturality_leftUnitor $η_f)
+  mkNaturalityRightUnitor p pf f η_f := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    return q(naturality_rightUnitor $η_f)
+  mkNaturalityId p pf f η_f := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    return q(naturality_id $η_f)
+  mkNaturalityComp p pf f g h η θ η_f η_g η_h ih_η ih_θ := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($b ⟶ $c) := g.e
+    have h : Q($b ⟶ $c) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have θ : Q($g ≅ $h) := θ.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($p ≫ $g ≅ $pf) := η_g.e
+    have η_h : Q($p ≫ $h ≅ $pf) := η_h.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    have ih_θ : Q($p ◁ $θ ≪≫ $η_h = $η_g) := ih_θ
+    return q(naturality_comp $η_f $η_g $η_h $ih_η $ih_θ)
+  mkNaturalityWhiskerLeft p pf pfg f g h η η_f η_fg η_fh ih_η := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have d : Q($ctx.B) := g.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($c ⟶ $d) := g.e
+    have h : Q($c ⟶ $d) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have pfg : Q($a ⟶ $d) := pfg.e.e
+    have η : Q($g ≅ $h) := η.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_fg : Q($pf ≫ $g ≅ $pfg) := η_fg.e
+    have η_fh : Q($pf ≫ $h ≅ $pfg) := η_fh.e
+    have ih_η : Q($pf ◁ $η ≪≫ $η_fh = $η_fg) := ih_η
+    return q(naturality_whiskerLeft $η_f $η_fg $η_fh $ih_η)
+  mkNaturalityWhiskerRight p pf pfh f g h η η_f η_g η_fh ih_η := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have d : Q($ctx.B) := h.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($b ⟶ $c) := g.e
+    have h : Q($c ⟶ $d) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have pfh : Q($a ⟶ $d) := pfh.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($p ≫ $g ≅ $pf) := η_g.e
+    have η_fh : Q($pf ≫ $h ≅ $pfh) := η_fh.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    return q(naturality_whiskerRight $η_f $η_g $η_fh $ih_η)
+  mkNaturalityHorizontalComp _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ := do
+    throwError "horizontal composition is not implemented"
+  mkNaturalityInv p pf f g η η_f η_g ih := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($b ⟶ $c) := g.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($p ≫ $g ≅ $pf) := η_g.e
+    have ih : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih
+    return q(naturality_inv $η_f $η_g $ih)
 
 中文:
 实例 :
@@ -265,7 +380,122 @@ instance :
     have e : Q($ctx.B) := h.tgt.e
     have p : Q($a ⟶ $b) := p.e.e
     have f : Q($b ⟶ $c) := f.e
-    hav
+    have g : Q($c ⟶ $d) := g.e
+    have h : Q($d ⟶ $e) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have pfg : Q($a ⟶ $d) := pfg.e.e
+    have pfgh : Q($a ⟶ $e) := pfgh.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($pf ≫ $g ≅ $pfg) := η_g.e
+    have η_h : Q($pfg ≫ $h ≅ $pfgh) := η_h.e
+    return q(naturality_associator $η_f $η_g $η_h)
+  mkNaturalityLeftUnitor p pf f η_f := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    return q(naturality_leftUnitor $η_f)
+  mkNaturalityRightUnitor p pf f η_f := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    return q(naturality_rightUnitor $η_f)
+  mkNaturalityId p pf f η_f := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    return q(naturality_id $η_f)
+  mkNaturalityComp p pf f g h η θ η_f η_g η_h ih_η ih_θ := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($b ⟶ $c) := g.e
+    have h : Q($b ⟶ $c) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have θ : Q($g ≅ $h) := θ.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($p ≫ $g ≅ $pf) := η_g.e
+    have η_h : Q($p ≫ $h ≅ $pf) := η_h.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    have ih_θ : Q($p ◁ $θ ≪≫ $η_h = $η_g) := ih_θ
+    return q(naturality_comp $η_f $η_g $η_h $ih_η $ih_θ)
+  mkNaturalityWhiskerLeft p pf pfg f g h η η_f η_fg η_fh ih_η := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have d : Q($ctx.B) := g.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($c ⟶ $d) := g.e
+    have h : Q($c ⟶ $d) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have pfg : Q($a ⟶ $d) := pfg.e.e
+    have η : Q($g ≅ $h) := η.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_fg : Q($pf ≫ $g ≅ $pfg) := η_fg.e
+    have η_fh : Q($pf ≫ $h ≅ $pfg) := η_fh.e
+    have ih_η : Q($pf ◁ $η ≪≫ $η_fh = $η_fg) := ih_η
+    return q(naturality_whiskerLeft $η_f $η_fg $η_fh $ih_η)
+  mkNaturalityWhiskerRight p pf pfh f g h η η_f η_g η_fh ih_η := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have d : Q($ctx.B) := h.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($b ⟶ $c) := g.e
+    have h : Q($c ⟶ $d) := h.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have pfh : Q($a ⟶ $d) := pfh.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($p ≫ $g ≅ $pf) := η_g.e
+    have η_fh : Q($pf ≫ $h ≅ $pfh) := η_fh.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    return q(naturality_whiskerRight $η_f $η_g $η_fh $ih_η)
+  mkNaturalityHorizontalComp _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ := do
+    throwError "horizontal composition is not implemented"
+  mkNaturalityInv p pf f g η η_f η_g ih := do
+    let ctx ← read
+    let _bicat := ctx.instBicategory
+    have a : Q($ctx.B) := p.src.e
+    have b : Q($ctx.B) := p.tgt.e
+    have c : Q($ctx.B) := f.tgt.e
+    have p : Q($a ⟶ $b) := p.e.e
+    have f : Q($b ⟶ $c) := f.e
+    have g : Q($b ⟶ $c) := g.e
+    have pf : Q($a ⟶ $c) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p ≫ $f ≅ $pf) := η_f.e
+    have η_g : Q($p ≫ $g ≅ $pf) := η_g.e
+    have ih : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih
+    return q(naturality_inv $η_f $η_g $ih)
 -/
 instance : MonadNormalizeNaturality BicategoryM where
   mkNaturalityAssociator p pf pfg pfgh f g h η_f η_g η_h := do
@@ -492,7 +722,18 @@ instance :
     have b : Q($ctx.B) := f.tgt.e
     have f : Q($a ⟶ $b) := f.e
     have g : Q($a ⟶ $b) := g.e
-    hav
+    have f' : Q($a ⟶ $b) := f'.e
+    have η : Q($f ⟶ $g) := η
+    have θ : Q($f ⟶ $g) := θ
+    have η'_e : Q($f ≅ $g) := η'.e
+    have θ'_e : Q($f ≅ $g) := θ'.e
+    have η_f : Q(𝟙 $a ≫ $f ≅ $f') := η_f.e
+    have η_g : Q(𝟙 $a ≫ $g ≅ $f') := η_g.e
+    have η_hom : Q(Iso.hom $η'_e = $η) := ηIso.eq
+    have Θ_hom : Q(Iso.hom $θ'_e = $θ) := θIso.eq
+    have Hη : Q(whiskerLeftIso (𝟙 $a) $η'_e ≪≫ $η_g = $η_f) := Hη
+    have Hθ : Q(whiskerLeftIso (𝟙 $a) $θ'_e ≪≫ $η_g = $η_f) := Hθ
+    return q(mk_eq_of_naturality $η_f $η_g $η_hom $Θ_hom $Hη $Hθ)
 
 中文:
 实例 :
@@ -509,7 +750,18 @@ instance :
     have b : Q($ctx.B) := f.tgt.e
     have f : Q($a ⟶ $b) := f.e
     have g : Q($a ⟶ $b) := g.e
-    hav
+    have f' : Q($a ⟶ $b) := f'.e
+    have η : Q($f ⟶ $g) := η
+    have θ : Q($f ⟶ $g) := θ
+    have η'_e : Q($f ≅ $g) := η'.e
+    have θ'_e : Q($f ≅ $g) := θ'.e
+    have η_f : Q(𝟙 $a ≫ $f ≅ $f') := η_f.e
+    have η_g : Q(𝟙 $a ≫ $g ≅ $f') := η_g.e
+    have η_hom : Q(Iso.hom $η'_e = $η) := ηIso.eq
+    have Θ_hom : Q(Iso.hom $θ'_e = $θ) := θIso.eq
+    have Hη : Q(whiskerLeftIso (𝟙 $a) $η'_e ≪≫ $η_g = $η_f) := Hη
+    have Hθ : Q(whiskerLeftIso (𝟙 $a) $θ'_e ≪≫ $η_g = $η_f) := Hθ
+    return q(mk_eq_of_naturality $η_f $η_g $η_hom $Θ_hom $Hη $Hθ)
 -/
 instance : MkEqOfNaturality BicategoryM where
   mkEqOfNaturality η θ ηIso θIso η_f η_g Hη Hθ := do

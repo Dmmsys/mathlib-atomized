@@ -37,7 +37,9 @@ theorem ZeroAtInftyContinuousMapClass.norm_le
   rcases Metric.closedBall_compl_subset_of_mem_cocompact h 0 with ⟨r, hr⟩
   use r
   intro x hr'
-  suffices x in (fun x => ‖f x‖) ⁻¹' Metric.bal
+  suffices x in (fun x => ‖f x‖) ⁻¹' Metric.ball 0 ε by simp_all
+  apply hr
+  simp_all
 
 中文:
 定理 ZeroAtInftyContinuous映射类.norm_le
@@ -49,7 +51,9 @@ theorem ZeroAtInftyContinuousMapClass.norm_le
   rcases Metric.closedBall_compl_subset_of_mem_cocompact h 0 with ⟨r, hr⟩
   use r
   intro x hr'
-  suffices x in (fun x => ‖f x‖) ⁻¹' Metric.bal
+  suffices x in (fun x => ‖f x‖) ⁻¹' Metric.ball 0 ε by simp_all
+  apply hr
+  simp_all
 
 Depends on / 依赖: Metric, Metric.ball, Metric.ball_mem_nhds, Metric.closedBall_compl_subset_of_mem_cocompact, ball_mem_nhds, closedBall_compl_subset_of_mem_cocompact, specialize, tendsto_def, tendsto_zero_iff_norm_tendsto_zero, zero_at_infty
 -/

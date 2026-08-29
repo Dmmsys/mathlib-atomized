@@ -214,7 +214,10 @@ theorem intValuation.map_mul'
   · by_cases hy : y = 0
     · rw [hy, mul_zero, if_pos rfl, mul_zero]
     · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← exp_add,
-        ← Ideal.span_singleton_mul_span_singleton, ← Associa
+        ← Ideal.span_singleton_mul_span_singleton, ← Associates.mk_mul_mk, ← neg_add,
+        Associates.count_mul (Associates.mk_ne_zero'.mpr hx) (Associates.mk_ne_zero'.mpr hy)
+          v.associates_irreducible,
+        Nat.cast_add]
 
 中文:
 定理 intValuation.map_mul'
@@ -226,7 +229,10 @@ theorem intValuation.map_mul'
   · by_cases hy : y = 0
     · rw [hy, mul_zero, if_pos rfl, mul_zero]
     · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← exp_add,
-        ← Ideal.span_singleton_mul_span_singleton, ← Associa
+        ← Ideal.span_singleton_mul_span_singleton, ← Associates.mk_mul_mk, ← neg_add,
+        Associates.count_mul (Associates.mk_ne_zero'.mpr hx) (Associates.mk_ne_zero'.mpr hy)
+          v.associates_irreducible,
+        Nat.cast_add]
 
 Depends on / 依赖: Associates, Associates.count_mul, Associates.mk_mul_mk, Associates.mk_ne_zero, Ideal.span_singleton_mul_span_singleton, Nat.cast_add, associates_irreducible, cast_add, count_mul, exp_add, if_neg, if_pos, intValuationDef, mk_mul_mk, mk_ne_zero, mul_ne_zero, mul_zero, neg_add, span_singleton_mul_span_singleton, v.associates_irreducible
 -/
@@ -282,7 +288,26 @@ theorem intValuation.map_add_le_max'
       order
     · by_cases hxy : x + y = 0
       · rw [intValuationDef, if_pos hxy]; exact zero_le
-      · rw [v.intValuationDef_if_neg hxy, v.intValuationDef_if_neg hx, v.intValuationDef_if_neg 
+      · rw [v.intValuationDef_if_neg hxy, v.intValuationDef_if_neg hx, v.intValuationDef_if_neg hy,
+          le_max_iff]
+        simp only [exp_le_exp, neg_le_neg_iff, Nat.cast_le, ← min_le_iff]
+        set nmin :=
+          min ((Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {x})).factors)
+            ((Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {y})).factors)
+        have h_dvd_x : x in v.asIdeal ^ nmin := by
+          rw [← Associates.le_singleton_iff x nmin _]; rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hx) _]
+          · exact min_le_left _ _
+          exact v.associates_irreducible
+        have h_dvd_y : y in v.asIdeal ^ nmin := by
+          rw [← Associates.le_singleton_iff y nmin _]; rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hy) _]
+          · exact min_le_right _ _
+          exact v.associates_irreducible
+        have h_dvd_xy : Associates.mk v.asIdeal ^ nmin <= Associates.mk (Ideal.span {x + y}) := by
+          rw [Associates.le_singleton_iff]
+          exact Ideal.add_mem (v.asIdeal ^ nmin) h_dvd_x h_dvd_y
+        rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hxy) _] at h_dvd_xy
+        · exact h_dvd_xy
+        exact v.associates_irreducible
 
 中文:
 定理 intValuation.map_add_le_max'
@@ -296,7 +321,26 @@ theorem intValuation.map_add_le_max'
       order
     · by_cases hxy : x + y = 0
       · rw [intValuationDef, if_pos hxy]; exact zero_le
-      · rw [v.intValuationDef_if_neg hxy, v.intValuationDef_if_neg hx, v.intValuationDef_if_neg 
+      · rw [v.intValuationDef_if_neg hxy, v.intValuationDef_if_neg hx, v.intValuationDef_if_neg hy,
+          le_max_iff]
+        simp only [exp_le_exp, neg_le_neg_iff, Nat.cast_le, ← min_le_iff]
+        set nmin :=
+          min ((Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {x})).factors)
+            ((Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {y})).factors)
+        have h_dvd_x : x in v.asIdeal ^ nmin := by
+          rw [← Associates.le_singleton_iff x nmin _]; rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hx) _]
+          · exact min_le_left _ _
+          exact v.associates_irreducible
+        have h_dvd_y : y in v.asIdeal ^ nmin := by
+          rw [← Associates.le_singleton_iff y nmin _]; rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hy) _]
+          · exact min_le_right _ _
+          exact v.associates_irreducible
+        have h_dvd_xy : Associates.mk v.asIdeal ^ nmin <= Associates.mk (Ideal.span {x + y}) := by
+          rw [Associates.le_singleton_iff]
+          exact Ideal.add_mem (v.asIdeal ^ nmin) h_dvd_x h_dvd_y
+        rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hxy) _] at h_dvd_xy
+        · exact h_dvd_xy
+        exact v.associates_irreducible
 
 Depends on / 依赖: Associates, Associates.mk, Ideal.span, Nat.cast_le, add_zero, asIdeal, cast_le, exp_le_exp, factors, if_pos, intValuationDef, intValuationDef_if_neg, le_max_iff, min_le_iff, neg_le_neg_iff, v.asIdeal, v.intValuationDef_if_neg, zero_add, zero_le
 -/
@@ -426,7 +470,7 @@ theorem intValuation_eq_exp_neg_multiplicity
   have hsr : Ideal.span {r} != 0 := Submodule.span_singleton_eq_bot.mp.mt hr
   have hfm : FiniteMultiplicity v.asIdeal (Ideal.span {r}) :=
     FiniteMultiplicity.of_prime_left v.prime hsr
-  rw [v.intValuation_if_neg hr]; rw [exp_inj]; rw [neg_inj]; rw [Int.natCast_inj]; rw [← ENat.natCast_inj]; r
+  rw [v.intValuation_if_neg hr]; rw [exp_inj]; rw [neg_inj]; rw [Int.natCast_inj]; rw [← ENat.natCast_inj]; rw [← FiniteMultiplicity.emultiplicity_eq_multiplicity hfm]; rw [UniqueFactorizationMonoid.emultiplicity_eq_count_normalizedFactors (irreducible v) hsr]; rw [normalize_eq]; rw [Ideal.count_associates_factors_eq hsr v.isPrime v.ne_bot]
 
 中文:
 定理 intValuation_eq_exp_neg_multiplicity
@@ -435,7 +479,7 @@ theorem intValuation_eq_exp_neg_multiplicity
   have hsr : Ideal.span {r} != 0 := Submodule.span_singleton_eq_bot.mp.mt hr
   have hfm : FiniteMultiplicity v.asIdeal (Ideal.span {r}) :=
     FiniteMultiplicity.of_prime_left v.prime hsr
-  rw [v.intValuation_if_neg hr]; rw [exp_inj]; rw [neg_inj]; rw [Int.natCast_inj]; rw [← ENat.natCast_inj]; r
+  rw [v.intValuation_if_neg hr]; rw [exp_inj]; rw [neg_inj]; rw [Int.natCast_inj]; rw [← ENat.natCast_inj]; rw [← FiniteMultiplicity.emultiplicity_eq_multiplicity hfm]; rw [UniqueFactorizationMonoid.emultiplicity_eq_count_normalizedFactors (irreducible v) hsr]; rw [normalize_eq]; rw [Ideal.count_associates_factors_eq hsr v.isPrime v.ne_bot]
 
 Depends on / 依赖: ENat.natCast_inj, FiniteMultiplicity, FiniteMultiplicity.emultiplicity_eq_multiplicity, FiniteMultiplicity.of_prime_left, Ideal.count_associates_factors_eq, Ideal.span, Int.natCast_inj, Submodule, Submodule.span_singleton_eq_bot.mp.mt, UniqueFactorizationMonoid, UniqueFactorizationMonoid.emultiplicity_eq_count_normalizedFactors, asIdeal, count_associates_factors_eq, emultiplicity_eq_count_normalizedFactors, emultiplicity_eq_multiplicity, exp_inj, intValuation_if_neg, irreducible, natCast_inj, neg_inj
 -/
@@ -561,7 +605,7 @@ theorem intValuation_lt_one_iff_dvd
     have h : (Ideal.span {r} : Ideal R) != 0 := by
       rw [Ne]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]
       exact hr
- 
+    exact Associates.count_ne_zero_iff_dvd h v.irreducible
 
 中文:
 定理 intValuation_lt_one_iff_dvd
@@ -574,7 +618,7 @@ theorem intValuation_lt_one_iff_dvd
     have h : (Ideal.span {r} : Ideal R) != 0 := by
       rw [Ne]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]
       exact hr
- 
+    exact Associates.count_ne_zero_iff_dvd h v.irreducible
 
 Depends on / 依赖: Associates, Associates.count_ne_zero_iff_dvd, Ideal.span, Ideal.span_singleton_eq_bot, Ideal.zero_eq_bot, Int.ofNat_lt, Int.ofNat_zero, count_ne_zero_iff_dvd, exp_lt_exp, exp_zero, intValuation_if_neg, irreducible, neg_lt_zero, ofNat_lt, ofNat_zero, span_singleton_eq_bot, v.intValuation_if_neg, v.irreducible, zero_eq_bot, zero_lt_iff
 -/
@@ -643,7 +687,7 @@ theorem intValuation_le_pow_iff_dvd
   · simp_rw [hr, Valuation.map_zero, Ideal.dvd_span_singleton, zero_le, Submodule.zero_mem]
   · rw [v.intValuation_if_neg hr, exp_le_exp, neg_le_neg_iff, Int.ofNat_le,
       Ideal.dvd_span_singleton, ← Associates.le_singleton_iff,
-      Associates.prime_pow_dvd_iff_le (Assoc
+      Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hr) v.associates_irreducible]
 
 中文:
 定理 intValuation_le_pow_iff_dvd
@@ -653,7 +697,7 @@ theorem intValuation_le_pow_iff_dvd
   · simp_rw [hr, Valuation.map_zero, Ideal.dvd_span_singleton, zero_le, Submodule.zero_mem]
   · rw [v.intValuation_if_neg hr, exp_le_exp, neg_le_neg_iff, Int.ofNat_le,
       Ideal.dvd_span_singleton, ← Associates.le_singleton_iff,
-      Associates.prime_pow_dvd_iff_le (Assoc
+      Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero'.mpr hr) v.associates_irreducible]
 
 Depends on / 依赖: Associates, Associates.le_singleton_iff, Associates.mk_ne_zero, Associates.prime_pow_dvd_iff_le, Ideal.dvd_span_singleton, Int.ofNat_le, Submodule, Submodule.zero_mem, Valuation, Valuation.map_zero, associates_irreducible, dvd_span_singleton, exp_le_exp, intValuation_if_neg, le_singleton_iff, map_zero, mk_ne_zero, neg_le_neg_iff, ofNat_le, prime_pow_dvd_iff_le
 -/
@@ -715,14 +759,18 @@ theorem exp_le_intValuation_iff_emultiplicity_le
   given: {r : R} {n : Nat}
   proof: by
   rw [← ENat.lt_natCast_add_one_iff]; rw [← ENat.natCast_one]; rw [← ENat.natCast_add]; rw [emultiplicity_lt_iff_not_dvd]; rw [← intValuation_le_pow_iff_dvd]; rw [not_le]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [neg_add]; rw [exp_add]; rw [exp_neg 1]; rw [mul_inv_lt_iff₀ (by simp)]
-  by_cases h
+  by_cases hv : v.intValuation r = 0
+  · simp [hv]
+  · rw [lt_mul_exp_iff_le hv]
 
 中文:
 定理 exp_le_intValuation_iff_emultiplicity_le
   条件: {r : R} {n : 自然数}
   证明: by
   rw [← ENat.lt_natCast_add_one_iff]; rw [← ENat.natCast_one]; rw [← ENat.natCast_add]; rw [emultiplicity_lt_iff_not_dvd]; rw [← intValuation_le_pow_iff_dvd]; rw [not_le]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [neg_add]; rw [exp_add]; rw [exp_neg 1]; rw [mul_inv_lt_iff₀ (by simp)]
-  by_cases h
+  by_cases hv : v.intValuation r = 0
+  · simp [hv]
+  · rw [lt_mul_exp_iff_le hv]
 
 Depends on / 依赖: ENat.lt_natCast_add_one_iff, ENat.natCast_add, ENat.natCast_one, Nat.cast_add, Nat.cast_one, cast_add, cast_one, emultiplicity_lt_iff_not_dvd, exp_add, exp_neg, intValuation, intValuation_le_pow_iff_dvd, lt_mul_exp_iff_le, lt_natCast_add_one_iff, natCast_add, natCast_one, neg_add, not_le, v.intValuation
 -/
@@ -743,7 +791,20 @@ theorem intValuation_exists_uniformizer
   have hlt : v.asIdeal ^ 2 < v.asIdeal := by
     rw [← Ideal.dvdNotUnit_iff_lt]
     exact ⟨v.ne_bot, v.asIdeal, Ideal.isUnit_iff.not.mpr v.isPrime.ne_top, sq v.asIdeal⟩
-  obtain ⟨π, mem, notMem⟩ := SetLike.exists_of_lt 
+  obtain ⟨π, mem, notMem⟩ := SetLike.exists_of_lt hlt
+  have hπ : Associates.mk (Ideal.span {π}) != 0 := by
+    rw [Associates.mk_ne_zero']
+    intro h
+    rw [h] at notMem
+    exact notMem (Submodule.zero_mem (v.asIdeal ^ 2))
+  use π
+  rw [intValuation_if_neg _ (Associates.mk_ne_zero'.mp hπ)]; rw [exp_inj]
+  apply congr_arg
+  rw [← Int.ofNat_one]; rw [Int.natCast_inj]
+  rw [← Ideal.dvd_span_singleton]; rw [← Associates.mk_le_mk_iff_dvd] at mem notMem
+  rw [← pow_one (Associates.mk v.asIdeal)]; rw [Associates.prime_pow_dvd_iff_le hπ hv] at mem
+  rw [Associates.mk_pow]; rw [Associates.prime_pow_dvd_iff_le hπ hv]; rw [not_le] at notMem
+  exact Nat.eq_of_le_of_lt_succ mem notMem
 
 中文:
 定理 intValuation_存在_uniformizer
@@ -752,7 +813,20 @@ theorem intValuation_exists_uniformizer
   have hlt : v.asIdeal ^ 2 < v.asIdeal := by
     rw [← Ideal.dvdNotUnit_iff_lt]
     exact ⟨v.ne_bot, v.asIdeal, Ideal.isUnit_iff.not.mpr v.isPrime.ne_top, sq v.asIdeal⟩
-  obtain ⟨π, mem, notMem⟩ := SetLike.exists_of_lt 
+  obtain ⟨π, mem, notMem⟩ := SetLike.exists_of_lt hlt
+  have hπ : Associates.mk (Ideal.span {π}) != 0 := by
+    rw [Associates.mk_ne_zero']
+    intro h
+    rw [h] at notMem
+    exact notMem (Submodule.zero_mem (v.asIdeal ^ 2))
+  use π
+  rw [intValuation_if_neg _ (Associates.mk_ne_zero'.mp hπ)]; rw [exp_inj]
+  apply congr_arg
+  rw [← Int.ofNat_one]; rw [Int.natCast_inj]
+  rw [← Ideal.dvd_span_singleton]; rw [← Associates.mk_le_mk_iff_dvd] at mem notMem
+  rw [← pow_one (Associates.mk v.asIdeal)]; rw [Associates.prime_pow_dvd_iff_le hπ hv] at mem
+  rw [Associates.mk_pow]; rw [Associates.prime_pow_dvd_iff_le hπ hv]; rw [not_le] at notMem
+  exact Nat.eq_of_le_of_lt_succ mem notMem
 
 Depends on / 依赖: Associates, Associates.mk, Associates.mk_ne_zero, Ideal.dvdNotUnit_iff_lt, Ideal.isUnit_iff.not.mpr, Ideal.span, Irreducible, SetLike, SetLike.exists_of_lt, Submodule, Submodule.zero_mem, asIdeal, associates_irreducible, dvdNotUnit_iff_lt, exists_of_lt, intValuation_if_neg, isPrime, isUnit_iff, mk_ne_zero, ne_bot
 -/
@@ -1089,7 +1163,11 @@ theorem valuation_div_le_one_iff
   contrapose! hv
   have ha₀ : a != 0 := fun _ => by simp_all
   have hva : v.valuation K a != 0 := (Valuation.ne_zero_iff _).2 (by simp [ha₀])
-  have hvb : v.valuation K b !=
+  have hvb : v.valuation K b != 0 := (Valuation.ne_zero_iff _).2 (by simp [hb])
+  rw [← WithZero.log_lt_log one_ne_zero ((Valuation.ne_zero_iff _).2 (by simp [ha₀]; rw [hb])),
+    map_div₀, WithZero.log_div hva hvb, WithZero.log_one, Int.sub_pos,
+    WithZero.log_lt_log hvb hva]
+  simpa [valuation_of_algebraMap, intValuation_eq_one_iff.2 <| h hv, intValuation_lt_one_iff_mem]
 
 中文:
 定理 valuation_div_le_one_iff
@@ -1100,7 +1178,11 @@ theorem valuation_div_le_one_iff
   contrapose! hv
   have ha₀ : a != 0 := fun _ => by simp_all
   have hva : v.valuation K a != 0 := (Valuation.ne_zero_iff _).2 (by simp [ha₀])
-  have hvb : v.valuation K b !=
+  have hvb : v.valuation K b != 0 := (Valuation.ne_zero_iff _).2 (by simp [hb])
+  rw [← WithZero.log_lt_log one_ne_zero ((Valuation.ne_zero_iff _).2 (by simp [ha₀]; rw [hb])),
+    map_div₀, WithZero.log_div hva hvb, WithZero.log_one, Int.sub_pos,
+    WithZero.log_lt_log hvb hva]
+  simpa [valuation_of_algebraMap, intValuation_eq_one_iff.2 <| h hv, intValuation_lt_one_iff_mem]
 
 Depends on / 依赖: Int.sub_pos, Valuation, Valuation.ne_zero_iff, WithZero, WithZero.log_div, WithZero.log_lt_log, WithZero.log_one, contrapose, intValuation_eq_one_iff, intValuation_le_one, log_div, log_lt_log, log_one, ne_zero_iff, one_ne_zero, sub_pos, v.valuation, valuation, valuation_of_algebraMap
 -/
@@ -1258,7 +1340,22 @@ theorem mem_integers_of_valuation_le_one
   obtain rfl | hn0 := eq_or_ne n 0
   · simp
   have hd0 := nonZeroDivisors.ne_zero hd
-  suffices Ideal.span {d} ∣ (Ideal.span {n} : Id
+  suffices Ideal.span {d} ∣ (Ideal.span {n} : Ideal R) by
+    obtain ⟨z, rfl⟩ := Ideal.span_singleton_le_span_singleton.1 (Ideal.le_of_dvd this)
+    use z
+    rw [map_mul]; rw [mul_comm]; rw [mul_eq_mul_left_iff] at hx
+    exact (hx.resolve_right fun h => by simp [hd0] at h).symm
+  have ine {r : R} : r != 0 -> Ideal.span {r} != ⊥ := mt Ideal.span_singleton_eq_bot.mp
+  rw [← Associates.mk_le_mk_iff_dvd]; rw [← Associates.factors_le]; rw [Associates.factors_mk _ (ine hn0)]; rw [Associates.factors_mk _ (ine hd0)]; rw [WithTop.coe_le_coe]; rw [Multiset.le_iff_count]
+  rintro ⟨v, hv⟩
+  obtain ⟨v, rfl⟩ := Associates.mk_surjective v
+  have hv' := hv
+  rw [Associates.irreducible_mk]; rw [irreducible_iff_prime] at hv
+  specialize h ⟨v, Ideal.isPrime_of_prime hv, hv.ne_zero⟩
+  simp_rw [valuation_of_mk', intValuation_if_neg _ hn0, intValuation_if_neg _ hd0, ← exp_sub,
+    ← exp_zero, exp_le_exp, Associates.factors_mk _ (ine hn0),
+    Associates.factors_mk _ (ine hd0), Associates.count_some hv'] at h
+  simpa using h
 
 中文:
 定理 mem_integers_of_valuation_le_one
@@ -1269,7 +1366,22 @@ theorem mem_integers_of_valuation_le_one
   obtain rfl | hn0 := eq_or_ne n 0
   · simp
   have hd0 := nonZeroDivisors.ne_zero hd
-  suffices Ideal.span {d} ∣ (Ideal.span {n} : Id
+  suffices Ideal.span {d} ∣ (Ideal.span {n} : Ideal R) by
+    obtain ⟨z, rfl⟩ := Ideal.span_singleton_le_span_singleton.1 (Ideal.le_of_dvd this)
+    use z
+    rw [map_mul]; rw [mul_comm]; rw [mul_eq_mul_left_iff] at hx
+    exact (hx.resolve_right fun h => by simp [hd0] at h).symm
+  have ine {r : R} : r != 0 -> Ideal.span {r} != ⊥ := mt Ideal.span_singleton_eq_bot.mp
+  rw [← Associates.mk_le_mk_iff_dvd]; rw [← Associates.factors_le]; rw [Associates.factors_mk _ (ine hn0)]; rw [Associates.factors_mk _ (ine hd0)]; rw [WithTop.coe_le_coe]; rw [Multiset.le_iff_count]
+  rintro ⟨v, hv⟩
+  obtain ⟨v, rfl⟩ := Associates.mk_surjective v
+  have hv' := hv
+  rw [Associates.irreducible_mk]; rw [irreducible_iff_prime] at hv
+  specialize h ⟨v, Ideal.isPrime_of_prime hv, hv.ne_zero⟩
+  simp_rw [valuation_of_mk', intValuation_if_neg _ hn0, intValuation_if_neg _ hd0, ← exp_sub,
+    ← exp_zero, exp_le_exp, Associates.factors_mk _ (ine hn0),
+    Associates.factors_mk _ (ine hd0), Associates.count_some hv'] at h
+  simpa using h
 
 Depends on / 依赖: Ideal.le_of_dvd, Ideal.span, Ideal.span_singleton_le_span_singleton, IsLocalization, IsLocalization.eq_mk, IsLocalization.mk, IsLocalization.surj, _iff_mul_eq, _iff_mul_eq.mpr, eq_mk, eq_or_ne, hx.resolve_right, le_of_dvd, map_mul, mul_comm, mul_eq_mul_left_iff, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, resolve_right
 -/
@@ -1531,7 +1643,10 @@ lemma exists_primeCompl_mul_eq_or_mul_eq
   -- write `x` or `x⁻¹` as `n / d` with `d ∈ vᶜ`.
   obtain (⟨r, hr⟩ | ⟨r, hr⟩) :=
     ValuationRing.isInteger_or_isInteger (valuationSubringAtPrime K v) x
-  <;> obtain ⟨⟨n, d⟩, hnd⟩ := IsLocalization.su
+  <;> obtain ⟨⟨n, d⟩, hnd⟩ := IsLocalization.surj v.asIdeal.primeCompl r
+  <;> use n, d
+  <;> apply_fun algebraMap _ K at hnd
+  <;> grind [=_ IsScalarTower.algebraMap_apply]
 
 中文:
 引理 存在_primeCompl_mul_eq_or_mul_eq
@@ -1541,7 +1656,10 @@ lemma exists_primeCompl_mul_eq_or_mul_eq
   -- write `x` or `x⁻¹` as `n / d` with `d ∈ vᶜ`.
   obtain (⟨r, hr⟩ | ⟨r, hr⟩) :=
     ValuationRing.isInteger_or_isInteger (valuationSubringAtPrime K v) x
-  <;> obtain ⟨⟨n, d⟩, hnd⟩ := IsLocalization.su
+  <;> obtain ⟨⟨n, d⟩, hnd⟩ := IsLocalization.surj v.asIdeal.primeCompl r
+  <;> use n, d
+  <;> apply_fun algebraMap _ K at hnd
+  <;> grind [=_ IsScalarTower.algebraMap_apply]
 -/
 lemma exists_primeCompl_mul_eq_or_mul_eq (x : K) :
     exists (n : R) (d : v.asIdeal.primeCompl), x * (algebraMap R K d) = (algebraMap R K n) ∨
@@ -1567,7 +1685,7 @@ theorem exists_primeCompl_mul_eq_of_integer
   · refine ⟨d, ⟨n, ?_⟩, hnd⟩
     rw [← v.intValuation_eq_one_iff_mem_primeCompl]
     apply eq_one_of_one_le_mul_right hv (intValuation_le_one v n)
-    rw [← (v.intValuation_eq_one_iff_mem_primeCompl d).mpr d.prop]
+    rw [← (v.intValuation_eq_one_iff_mem_primeCompl d).mpr d.prop]; rw [← valuation_of_algebraMap (K := K)]; rw [← valuation_of_algebraMap (K := K)]; rw [← map_mul]; rw [hnd]
 
 中文:
 定理 存在_primeCompl_mul_eq_of_integer
@@ -1578,7 +1696,7 @@ theorem exists_primeCompl_mul_eq_of_integer
   · refine ⟨d, ⟨n, ?_⟩, hnd⟩
     rw [← v.intValuation_eq_one_iff_mem_primeCompl]
     apply eq_one_of_one_le_mul_right hv (intValuation_le_one v n)
-    rw [← (v.intValuation_eq_one_iff_mem_primeCompl d).mpr d.prop]
+    rw [← (v.intValuation_eq_one_iff_mem_primeCompl d).mpr d.prop]; rw [← valuation_of_algebraMap (K := K)]; rw [← valuation_of_algebraMap (K := K)]; rw [← map_mul]; rw [hnd]
 
 Depends on / 依赖: d.prop, eq_one_of_one_le_mul_right, exists_primeCompl_mul_eq_or_mul_eq, intValuation_eq_one_iff_mem_primeCompl, intValuation_le_one, map_mul, v.intValuation_eq_one_iff_mem_primeCompl, valuation_of_algebraMap
 -/
@@ -1605,7 +1723,21 @@ theorem exists_intValuation_mul_sub_lt
     exact ⟨0, by simp [hv]⟩
   · have hvaz := intValuation_ne_zero v a ha
     have hγz : WithZero.coe γ != 0 := WithZero.coe_ne_zero
-    -- Otherwise, find `n : ℕ` suc
+    -- Otherwise, find `n : ℕ` such that `exp (-n) < γ` and `exp(-n) < v a`.
+    obtain ⟨n, hna, hnγ⟩ := exists_exp_neg_natCast_lt_and_lt hvaz hγz
+    apply Exists.imp (fun _ h => lt_of_le_of_lt h hnγ)
+    -- `v b ≤ v a`, so `b ∈ v.asIdeal ^ -log (v a)`.
+    -- From `irreducible_pow_sup_of_ge` we know that
+    -- `v.asIdeal ^ -log (v a) = v.asIdeal ^ n ⊔ Ideal.span {a}`.
+    -- So, `∃ z ∈ v.asIdeal ^ n, ∃ (y: R), b = z + y * a`. This gives `z` and `y` such that
+    -- `b - y * a = z` and `v z ≤ exp (-n)`, as required.
+    have hvn : emultiplicity v.asIdeal (Ideal.span {a}) <= n := by
+      grw [← exp_le_intValuation_iff_emultiplicity_le, hna]
+    have hb : b in v.asIdeal ^ multiplicity v.asIdeal (Ideal.span {a}) := by
+      rwa [← intValuation_le_pow_iff_mem, ← v.intValuation_eq_exp_neg_multiplicity ha]
+    have hnz : Ideal.span {a} != ⊥ := by rwa [ne_eq, Ideal.span_singleton_eq_bot]
+    simpa [← Ideal.irreducible_pow_sup_of_ge hnz v.irreducible n hvn, Submodule.mem_sup,
+      ← eq_sub_iff_add_eq, ← intValuation_le_pow_iff_mem, Ideal.mem_span_singleton'] using hb
 
 中文:
 定理 存在_intValuation_mul_sub_lt
@@ -1618,7 +1750,21 @@ theorem exists_intValuation_mul_sub_lt
     exact ⟨0, by simp [hv]⟩
   · have hvaz := intValuation_ne_zero v a ha
     have hγz : WithZero.coe γ != 0 := WithZero.coe_ne_zero
-    -- Otherwise, find `n : ℕ` suc
+    -- Otherwise, find `n : ℕ` such that `exp (-n) < γ` and `exp(-n) < v a`.
+    obtain ⟨n, hna, hnγ⟩ := exists_exp_neg_natCast_lt_and_lt hvaz hγz
+    apply Exists.imp (fun _ h => lt_of_le_of_lt h hnγ)
+    -- `v b ≤ v a`, so `b ∈ v.asIdeal ^ -log (v a)`.
+    -- From `irreducible_pow_sup_of_ge` we know that
+    -- `v.asIdeal ^ -log (v a) = v.asIdeal ^ n ⊔ Ideal.span {a}`.
+    -- So, `∃ z ∈ v.asIdeal ^ n, ∃ (y: R), b = z + y * a`. This gives `z` and `y` such that
+    -- `b - y * a = z` and `v z ≤ exp (-n)`, as required.
+    have hvn : emultiplicity v.asIdeal (Ideal.span {a}) <= n := by
+      grw [← exp_le_intValuation_iff_emultiplicity_le, hna]
+    have hb : b in v.asIdeal ^ multiplicity v.asIdeal (Ideal.span {a}) := by
+      rwa [← intValuation_le_pow_iff_mem, ← v.intValuation_eq_exp_neg_multiplicity ha]
+    have hnz : Ideal.span {a} != ⊥ := by rwa [ne_eq, Ideal.span_singleton_eq_bot]
+    simpa [← Ideal.irreducible_pow_sup_of_ge hnz v.irreducible n hvn, Submodule.mem_sup,
+      ← eq_sub_iff_add_eq, ← intValuation_le_pow_iff_mem, Ideal.mem_span_singleton'] using hb
 -/
 theorem exists_intValuation_mul_sub_lt {a b : R} (hv : v.intValuation b <= v.intValuation a)
     (γ : Multiplicative Int) : exists y, v.intValuation (b - y * a) < γ := by
@@ -1656,7 +1802,13 @@ theorem exists_valuation_sub_lt_of_integer
   obtain ⟨n, ⟨d, hd⟩, hnd⟩ := exists_primeCompl_mul_eq_of_integer v x hv
   rw [← intValuation_eq_one_iff_mem_primeCompl] at hd
   have hd' : v.intValuation n <= v.intValuation d := by grw [v.intValuation_le_one n, hd]
-  -- Get `a` such that `v (n - a * d) < 
+  -- Get `a` such that `v (n - a * d) < γ` from the previous theorem.
+  obtain ⟨a, hval⟩ := exists_intValuation_mul_sub_lt v hd' (WithZero.unitsWithZeroEquiv γ)
+  rw [unitsWithZeroEquiv_apply]; rw [coe_unzero] at hval
+  use a
+  -- `v d = 1`, so `v (a - x) = v (x - a) = v (x - a) * v d = v (n - a * d) < γ`.
+  suffices h : v.valuation K (algebraMap R K a - x) = v.intValuation (n - a * d) by rwa [h]
+  rw [← valuation_of_algebraMap (K := K)]; rw [Algebra.cast]; rw [map_sub _ n]; rw [map_mul]; rw [← hnd]; rw [← sub_mul]; rw [map_mul]; rw [valuation_of_algebraMap]; rw [hd]; rw [mul_one]; rw [Valuation.map_sub_swap]
 
 中文:
 定理 存在_valuation_sub_lt_of_integer
@@ -1666,7 +1818,13 @@ theorem exists_valuation_sub_lt_of_integer
   obtain ⟨n, ⟨d, hd⟩, hnd⟩ := exists_primeCompl_mul_eq_of_integer v x hv
   rw [← intValuation_eq_one_iff_mem_primeCompl] at hd
   have hd' : v.intValuation n <= v.intValuation d := by grw [v.intValuation_le_one n, hd]
-  -- Get `a` such that `v (n - a * d) < 
+  -- Get `a` such that `v (n - a * d) < γ` from the previous theorem.
+  obtain ⟨a, hval⟩ := exists_intValuation_mul_sub_lt v hd' (WithZero.unitsWithZeroEquiv γ)
+  rw [unitsWithZeroEquiv_apply]; rw [coe_unzero] at hval
+  use a
+  -- `v d = 1`, so `v (a - x) = v (x - a) = v (x - a) * v d = v (n - a * d) < γ`.
+  suffices h : v.valuation K (algebraMap R K a - x) = v.intValuation (n - a * d) by rwa [h]
+  rw [← valuation_of_algebraMap (K := K)]; rw [Algebra.cast]; rw [map_sub _ n]; rw [map_mul]; rw [← hnd]; rw [← sub_mul]; rw [map_mul]; rw [valuation_of_algebraMap]; rw [hd]; rw [mul_one]; rw [Valuation.map_sub_swap]
 -/
 theorem exists_valuation_sub_lt_of_integer {x : K} (hv : v.valuation K x <= 1)
     (γ : (Intᵐ⁰)ˣ) : existsa, v.valuation K (algebraMap R K a - x) < γ := by
@@ -2112,7 +2270,10 @@ definition valueGroupOrderIso
   map_mul' := by simp
   map_le_map_iff' {a b} := by
     match a, b with
-    | 0, 0 => si
+    | 0, 0 => simp
+    | 0, .coe _ => simp
+    | .coe _, 0 => simp
+    | .coe a, .coe b => simp [← Subtype.coe_le_coe]
 
 中文:
 定义 valueGroupOrderIso
@@ -2124,7 +2285,10 @@ definition valueGroupOrderIso
   map_mul' := by simp
   map_le_map_iff' {a b} := by
     match a, b with
-    | 0, 0 => si
+    | 0, 0 => simp
+    | 0, .coe _ => simp
+    | .coe _, 0 => simp
+    | .coe a, .coe b => simp [← Subtype.coe_le_coe]
 
 Depends on / 依赖: WithZero, WithZero.map, valueGroupEquiv
 -/
@@ -2225,7 +2389,16 @@ instance :
     rw [(isUniformInducing_toCompletion K v).isInducing.nhds_eq_comap 0]; rw [toCompletion_zero]; rw [Filter.mem_comap]
     refine ⟨fun ⟨t, ht, hts⟩ => ?_, fun ⟨γ, hγ⟩ => ?_⟩
     · obtain ⟨δ, hδ⟩ := Valued.mem_nhds_zero.1 ht
-      refine ⟨Units.mapEqu
+      refine ⟨Units.mapEquiv (valueGroupOrderIso K v).symm.toMulEquiv δ, fun x hx => hts (hδ ?_)⟩
+      rw [Set.mem_ofPred_eq] at hx ⊢
+      simpa [← map_lt_map_iff (valueGroupOrderIso K v), valueGroupOrderIso_restrict] using hx
+    · refine ⟨{y | Valued.v.restrict y < ↑(Units.mapEquiv (valueGroupOrderIso K v).toMulEquiv γ)},
+        ?_, fun x hx => hγ ?_⟩
+      · rw [Valued.mem_nhds_zero]
+        exact ⟨Units.mapEquiv (valueGroupOrderIso K v).toMulEquiv γ, subset_rfl⟩
+      · rw [Set.mem_ofPred_eq, ← map_lt_map_iff (valueGroupOrderIso K v),
+          valueGroupOrderIso_restrict]
+        simpa using hx
 
 中文:
 实例 :
@@ -2235,7 +2408,16 @@ instance :
     rw [(isUniformInducing_toCompletion K v).isInducing.nhds_eq_comap 0]; rw [toCompletion_zero]; rw [Filter.mem_comap]
     refine ⟨fun ⟨t, ht, hts⟩ => ?_, fun ⟨γ, hγ⟩ => ?_⟩
     · obtain ⟨δ, hδ⟩ := Valued.mem_nhds_zero.1 ht
-      refine ⟨Units.mapEqu
+      refine ⟨Units.mapEquiv (valueGroupOrderIso K v).symm.toMulEquiv δ, fun x hx => hts (hδ ?_)⟩
+      rw [Set.mem_ofPred_eq] at hx ⊢
+      simpa [← map_lt_map_iff (valueGroupOrderIso K v), valueGroupOrderIso_restrict] using hx
+    · refine ⟨{y | Valued.v.restrict y < ↑(Units.mapEquiv (valueGroupOrderIso K v).toMulEquiv γ)},
+        ?_, fun x hx => hγ ?_⟩
+      · rw [Valued.mem_nhds_zero]
+        exact ⟨Units.mapEquiv (valueGroupOrderIso K v).toMulEquiv γ, subset_rfl⟩
+      · rw [Set.mem_ofPred_eq, ← map_lt_map_iff (valueGroupOrderIso K v),
+          valueGroupOrderIso_restrict]
+        simpa using hx
 
 Depends on / 依赖: valuation
 -/
@@ -2589,7 +2771,8 @@ lemma adicCompletion_valueGroup_eq
   refine ⟨fun ⟨a, ha0, x, hx⟩ => ?_, fun ⟨a, ha0, x, hx⟩ =>
     ⟨↑a, by simpa using ha0, ↑x, by simpa using hx⟩⟩
   obtain ⟨b, hb⟩ := valuation_surjective K v (Valued.v a)
-  obtain ⟨y, hy⟩ := v
+  obtain ⟨y, hy⟩ := valuation_surjective K v (Valued.v x)
+  exact ⟨b, by rw [hb]; exact ha0, y, by rw [hb, hy]; exact hx⟩
 
 中文:
 引理 adicCompletion_valueGroup_eq
@@ -2600,7 +2783,8 @@ lemma adicCompletion_valueGroup_eq
   refine ⟨fun ⟨a, ha0, x, hx⟩ => ?_, fun ⟨a, ha0, x, hx⟩ =>
     ⟨↑a, by simpa using ha0, ↑x, by simpa using hx⟩⟩
   obtain ⟨b, hb⟩ := valuation_surjective K v (Valued.v a)
-  obtain ⟨y, hy⟩ := v
+  obtain ⟨y, hy⟩ := valuation_surjective K v (Valued.v x)
+  exact ⟨b, by rw [hb]; exact ha0, y, by rw [hb, hy]; exact hx⟩
 
 Depends on / 依赖: adicCompletion
 -/
@@ -2744,7 +2928,13 @@ instance instAlgebraCompletion
     | hp =>
       exact isClosed_eq (continuous_const_mul _) (continuous_mul_const _)
     | ih x => rw [mul_comm]
-  smu
+  smul_def' r x := by
+    induction x using Completion.induction_on with
+    | hp =>
+      exact isClosed_eq (continuous_const_smul _) (continuous_const_mul _)
+    | ih x =>
+      simp [Algebra.smul_def, Completion.algebraMap_def, WithVal.algebraMap_right_apply,
+        Completion.coeRingHom]
 
 中文:
 实例 instAlgebraCompletion
@@ -2756,7 +2946,13 @@ instance instAlgebraCompletion
     | hp =>
       exact isClosed_eq (continuous_const_mul _) (continuous_mul_const _)
     | ih x => rw [mul_comm]
-  smu
+  smul_def' r x := by
+    induction x using Completion.induction_on with
+    | hp =>
+      exact isClosed_eq (continuous_const_smul _) (continuous_const_mul _)
+    | ih x =>
+      simp [Algebra.smul_def, Completion.algebraMap_def, WithVal.algebraMap_right_apply,
+        Completion.coeRingHom]
 
 Depends on / 依赖: Completion, Completion.instSMul, instSMul
 -/
@@ -2943,7 +3139,22 @@ instance :
   algebraMap :=
   { toFun r :=
       ⟨(algebraMap R K r : adicCompletion K v), coe_algebraMap_mem _ _ v r⟩
-   
+    map_one' := by ext; simp
+    map_mul' x y := by
+      ext
+      simp [map_mul, UniformSpace.Completion.coe_mul]
+    map_zero' := by ext; simp
+    map_add' x y := by
+      ext
+      simp [map_add, UniformSpace.Completion.coe_add] }
+  commutes' r x := by
+    rw [mul_comm]
+  smul_def' r x := by
+    ext
+    simp +instances only [Algebra.smul_def]
+    rfl
+
+@[simp]
 
 中文:
 实例 :
@@ -2956,7 +3167,22 @@ instance :
   algebraMap :=
   { toFun r :=
       ⟨(algebraMap R K r : adicCompletion K v), coe_algebraMap_mem _ _ v r⟩
-   
+    map_one' := by ext; simp
+    map_mul' x y := by
+      ext
+      simp [map_mul, UniformSpace.Completion.coe_mul]
+    map_zero' := by ext; simp
+    map_add' x y := by
+      ext
+      simp [map_add, UniformSpace.Completion.coe_add] }
+  commutes' r x := by
+    rw [mul_comm]
+  smul_def' r x := by
+    ext
+    simp +instances only [Algebra.smul_def]
+    rfl
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Completion, UniformSpace, UniformSpace.Completion.coe_add, UniformSpace.Completion.coe_mul, ValuationSubring, ValuationSubring.mul_mem, adicCompletion, algebraMap, algebraMap_adicCompletion, coe_add, coe_algebraMap_mem, coe_mul, commutes, map_add, map_mul, map_one, map_zero, mul_comm
 -/
@@ -3189,7 +3415,13 @@ lemma adicCompletion.mul_nonZeroDivisor_mem_adicCompletionIntegers
     -- let ϖ be a uniformiser
     obtain ⟨ϖ, hϖ⟩ := intValuation_exists_uniformizer v
     have : Valued.v (algebraMap R (v.adicCompletion K) ϖ) = (exp (1 : Int))⁻¹ := by
-      simp
+      simp [valuedAdicCompletion_eq_valuation, valuation_of_algebraMap, hϖ, exp]
+    have hϖ0 : ϖ != 0 := by rintro rfl; simp [exp_ne_zero.symm] at hϖ
+    refine ⟨ϖ^(log (Valued.v a)).natAbs, pow_mem (mem_nonZeroDivisors_of_ne_zero hϖ0) _, ?_⟩
+    -- now manually translate the goal (an inequality in ℤᵐ⁰) to an inequality of "log" of ℤ
+    simp only [map_pow, mem_adicCompletionIntegers, map_mul, this, inv_pow, ← exp_nsmul, nsmul_one,
+      Int.natCast_natAbs]
+    exact mul_inv_le_one_of_le₀ (le_exp_log.trans (by simp [le_abs_self])) zero_le
 
 中文:
 引理 adicCompletion.mul_nonZeroDivisor_mem_adicCompletion整数egers
@@ -3202,7 +3434,13 @@ lemma adicCompletion.mul_nonZeroDivisor_mem_adicCompletionIntegers
     -- let ϖ be a uniformiser
     obtain ⟨ϖ, hϖ⟩ := intValuation_exists_uniformizer v
     have : Valued.v (algebraMap R (v.adicCompletion K) ϖ) = (exp (1 : Int))⁻¹ := by
-      simp
+      simp [valuedAdicCompletion_eq_valuation, valuation_of_algebraMap, hϖ, exp]
+    have hϖ0 : ϖ != 0 := by rintro rfl; simp [exp_ne_zero.symm] at hϖ
+    refine ⟨ϖ^(log (Valued.v a)).natAbs, pow_mem (mem_nonZeroDivisors_of_ne_zero hϖ0) _, ?_⟩
+    -- now manually translate the goal (an inequality in ℤᵐ⁰) to an inequality of "log" of ℤ
+    simp only [map_pow, mem_adicCompletionIntegers, map_mul, this, inv_pow, ← exp_nsmul, nsmul_one,
+      Int.natCast_natAbs]
+    exact mul_inv_le_one_of_le₀ (le_exp_log.trans (by simp [le_abs_self])) zero_le
 
 Depends on / 依赖: adicCompletionIntegers, notMem_adicCompletionIntegers, v.adicCompletionIntegers
 -/

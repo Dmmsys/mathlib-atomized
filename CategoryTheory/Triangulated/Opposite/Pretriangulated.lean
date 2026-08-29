@@ -107,7 +107,7 @@ lemma mem_distinguishedTriangles_iff'
   · rintro ⟨T', hT', ⟨e⟩⟩
     refine isomorphic_distinguished _ hT' _ ?_
     exact Iso.unop ((triangleOpEquivalence C).unitIso.app (Opposite.op T') ≪≫
-      (triang
+      (triangleOpEquivalence C).inverse.mapIso e.symm)
 
 中文:
 引理 mem_distinguishedTriangles_iff'
@@ -120,7 +120,7 @@ lemma mem_distinguishedTriangles_iff'
   · rintro ⟨T', hT', ⟨e⟩⟩
     refine isomorphic_distinguished _ hT' _ ?_
     exact Iso.unop ((triangleOpEquivalence C).unitIso.app (Opposite.op T') ≪≫
-      (triang
+      (triangleOpEquivalence C).inverse.mapIso e.symm)
 
 Depends on / 依赖: Iso.unop, Opposite, Opposite.op, counitIso, counitIso.symm.app, e.symm, inverse, inverse.mapIso, isomorphic_distinguished, mapIso, mem_distinguishedTriangles_iff, triangleOpEquivalence, unitIso, unitIso.app
 -/
@@ -303,7 +303,9 @@ lemma distinguished_cocone_triangle
   refine ⟨_, g.op, (opShiftFunctorEquivalence C 1).counitIso.inv.app (Opposite.op Z) ≫
     (shiftFunctor Cᵒᵖ (1 : Int)).map h.op, ?_⟩
   simp only [mem_distinguishedTriangles_iff]
-  refine Pretriangulated.isomorphic_dis
+  refine Pretriangulated.isomorphic_distinguished _ H _ ?_
+  exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp) (by simp)
+    (Quiver.Hom.op_inj (by simp [shift_unop_opShiftFunctorEquivalence_counitIso_inv_app]))
 
 中文:
 引理 distinguished_cocone_triangle
@@ -313,7 +315,9 @@ lemma distinguished_cocone_triangle
   refine ⟨_, g.op, (opShiftFunctorEquivalence C 1).counitIso.inv.app (Opposite.op Z) ≫
     (shiftFunctor Cᵒᵖ (1 : Int)).map h.op, ?_⟩
   simp only [mem_distinguishedTriangles_iff]
-  refine Pretriangulated.isomorphic_dis
+  refine Pretriangulated.isomorphic_distinguished _ H _ ?_
+  exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp) (by simp)
+    (Quiver.Hom.op_inj (by simp [shift_unop_opShiftFunctorEquivalence_counitIso_inv_app]))
 
 Depends on / 依赖: Iso.refl, Opposite, Opposite.op, Pretriangulated, Pretriangulated.distinguished_cocone_triangle, Pretriangulated.isomorphic_distinguished, Quiver, Quiver.Hom.op_inj, Triangle, Triangle.isoMk, counitIso, counitIso.inv.app, f.unop, g.op, h.op, isomorphic_distinguished, mem_distinguishedTriangles_iff, opShiftFunctorEquivalence, op_inj, shiftFunctor
 -/
@@ -342,7 +346,13 @@ lemma complete_distinguished_triangle_morphism
     Pretriangulated.complete_distinguished_triangle_morphism₁ _ _ hT₂ hT₁
       b.unop a.unop (Quiver.Hom.op_inj comm.symm)
   dsimp at c hc₁ hc₂
-  replace hc₂ := ((opShiftFunctorEquivalence C 1).unitIso.hom.app T₂.obj₁).un
+  replace hc₂ := ((opShiftFunctorEquivalence C 1).unitIso.hom.app T₂.obj₁).unop ≫= hc₂
+  dsimp at hc₂
+  simp only [assoc, Iso.unop_hom_inv_id_app_assoc] at hc₂
+  refine ⟨c.op, Quiver.Hom.unop_inj hc₁.symm, Quiver.Hom.unop_inj ?_⟩
+  apply (shiftFunctor C (1 : Int)).map_injective
+  rw [unop_comp]; rw [unop_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Quiver.Hom.unop_op]; rw [hc₂]; rw [← unop_comp_assoc]; rw [← unop_comp_assoc]; rw [← opShiftFunctorEquivalence_unitIso_inv_naturality]
+  simp
 
 中文:
 引理 complete_distinguished_triangle_morphism
@@ -353,7 +363,13 @@ lemma complete_distinguished_triangle_morphism
     Pretriangulated.complete_distinguished_triangle_morphism₁ _ _ hT₂ hT₁
       b.unop a.unop (Quiver.Hom.op_inj comm.symm)
   dsimp at c hc₁ hc₂
-  replace hc₂ := ((opShiftFunctorEquivalence C 1).unitIso.hom.app T₂.obj₁).un
+  replace hc₂ := ((opShiftFunctorEquivalence C 1).unitIso.hom.app T₂.obj₁).unop ≫= hc₂
+  dsimp at hc₂
+  simp only [assoc, Iso.unop_hom_inv_id_app_assoc] at hc₂
+  refine ⟨c.op, Quiver.Hom.unop_inj hc₁.symm, Quiver.Hom.unop_inj ?_⟩
+  apply (shiftFunctor C (1 : Int)).map_injective
+  rw [unop_comp]; rw [unop_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Quiver.Hom.unop_op]; rw [hc₂]; rw [← unop_comp_assoc]; rw [← unop_comp_assoc]; rw [← opShiftFunctorEquivalence_unitIso_inv_naturality]
+  simp
 
 Depends on / 依赖: Iso.unop_hom_inv_id_app_assoc, Pretriangulated, Pretriangulated.complete_distinguished_triangle_morphism, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, a.unop, b.unop, c.op, comm.symm, map_injective, mem_distinguishedTriangles_iff, opShiftFunctorEquivalence, op_inj, replace, shiftFunctor, unitIso, unitIso.hom.app, unop_comp, unop_hom_inv_id_app_assoc
 -/

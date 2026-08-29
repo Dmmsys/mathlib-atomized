@@ -164,7 +164,8 @@ instance :
   }
   assoc f g h := by
     simp only [Category.assoc, Hom.mk.injEq, true_and]
-    rw [← Category.
+    rw [← Category.assoc]; rw [← Category.assoc]; congr 1
+    ext <;> simp
 
 中文:
 实例 :
@@ -182,7 +183,8 @@ instance :
   }
   assoc f g h := by
     simp only [Category.assoc, Hom.mk.injEq, true_and]
-    rw [← Category.
+    rw [← Category.assoc]; rw [← Category.assoc]; congr 1
+    ext <;> simp
 
 Depends on / 依赖: Dial.Hom
 -/

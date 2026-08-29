@@ -889,7 +889,11 @@ instance [LocallyConnectedSpace
         convert! isOpen_connectedComponent (x := x)
         ext y
         simpa only [connectedComponentSetoid, ← connectedComponent_eq_iff_mem] using! eq_comm }
-  bot_le S := fun x y (h : connectedComponent x = conne
+  bot_le S := fun x y (h : connectedComponent x = connectedComponent y) =>
+(S.isClopen_setOfPred_rel x).connectedComponent_subset (S.refl _)
+      h.symm ▸ mem_connectedComponent
+
+@[simp]
 
 中文:
 实例 [局部连通空间
@@ -899,7 +903,11 @@ instance [LocallyConnectedSpace
         convert! isOpen_connectedComponent (x := x)
         ext y
         simpa only [connectedComponentSetoid, ← connectedComponent_eq_iff_mem] using! eq_comm }
-  bot_le S := fun x y (h : connectedComponent x = conne
+  bot_le S := fun x y (h : connectedComponent x = connectedComponent y) =>
+(S.isClopen_setOfPred_rel x).connectedComponent_subset (S.refl _)
+      h.symm ▸ mem_connectedComponent
+
+@[simp]
 
 Depends on / 依赖: S.isClopen_setOfPred_rel, S.refl, bot_le, connectedComponent, connectedComponentSetoid, connectedComponent_eq_iff_mem, connectedComponent_subset, convert, eq_comm, h.symm, isClopen_setOfPred_rel, isOpen_connectedComponent, isOpen_setOfPred_rel, mem_connectedComponent, toSetoid
 -/
@@ -1387,7 +1395,10 @@ theorem exists_of_compat
     exact fiber_subset_ofLE _ _
   obtain ⟨x, hx⟩ : Set.Nonempty (⋂ Q, proj Q ⁻¹' {Qs Q}) :=
     IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
-     
+      (fun Q : DiscreteQuotient X => Q.proj ⁻¹' {Qs _}) (directed_of_isDirected_ge H₁)
+      (fun Q => (singleton_nonempty _).preimage Q.proj_surjective)
+      (fun Q => (Q.isClosed_preimage {Qs _}).isCompact) fun Q => Q.isClosed_preimage _
+  exact ⟨x, mem_iInter.1 hx⟩
 
 中文:
 定理 存在_of_compat
@@ -1398,7 +1409,10 @@ theorem exists_of_compat
     exact fiber_subset_ofLE _ _
   obtain ⟨x, hx⟩ : Set.Nonempty (⋂ Q, proj Q ⁻¹' {Qs Q}) :=
     IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
-     
+      (fun Q : DiscreteQuotient X => Q.proj ⁻¹' {Qs _}) (directed_of_isDirected_ge H₁)
+      (fun Q => (singleton_nonempty _).preimage Q.proj_surjective)
+      (fun Q => (Q.isClosed_preimage {Qs _}).isCompact) fun Q => Q.isClosed_preimage _
+  exact ⟨x, mem_iInter.1 hx⟩
 
 Depends on / 依赖: DiscreteQuotient, IsCompact, IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed, Nonempty, Q.isClosed_preimage, Q.proj, Q.proj_surjective, Set.Nonempty, compat, directed_of_isDirected_ge, fiber_subset_ofLE, isClosed_preimage, isCompact, nonempty_iInter_of_directed_nonempty_isCompact_isClosed, preimage, proj_surjective, singleton_nonempty, subseteq
 -/
@@ -1476,7 +1490,8 @@ lemma comp_finsetClopens
   constructor
   · refine fun ⟨y, h⟩ => ⟨Quotient.out (s := d.toSetoid) y, ?_⟩
     ext
-    simpa [← h] using! Quotient.mk_eq_iff
+    simpa [← h] using! Quotient.mk_eq_iff_out (s := d.toSetoid)
+  · exact fun ⟨y, h⟩ => ⟨d.proj y, by ext; simp [h, proj, Quotient.eq]⟩
 
 中文:
 引理 comp_finsetClopens
@@ -1489,7 +1504,8 @@ lemma comp_finsetClopens
   constructor
   · refine fun ⟨y, h⟩ => ⟨Quotient.out (s := d.toSetoid) y, ?_⟩
     ext
-    simpa [← h] using! Quotient.mk_eq_iff
+    simpa [← h] using! Quotient.mk_eq_iff_out (s := d.toSetoid)
+  · exact fun ⟨y, h⟩ => ⟨d.proj y, by ext; simp [h, proj, Quotient.eq]⟩
 
 Depends on / 依赖: Function, Function.comp_apply, Quotient, Quotient.eq, Quotient.mk_eq_iff_out, Quotient.out, Set.coe_toFinset, Set.mem_image, Set.mem_ofPred_eq, Set.mem_range, Setoid, Setoid.classes, classes, coe_toFinset, comp_apply, d.proj, d.toSetoid, exists_exists_eq_and, finsetClopens, mem_image
 -/

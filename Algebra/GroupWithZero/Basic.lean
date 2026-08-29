@@ -960,7 +960,9 @@ lemma pow_eq_zero_iff'
 
 @[deprecated (since := "2026-01-08")] alias IsReduced.pow_eq_zero := eq_zero_of_pow_eq_zero
 @[deprecated (since := "2026-01-08")] alias IsReduced.pow_eq_zero_iff := pow_eq_zero_iff
-@[deprecated (since := "2026-01-08")] alias IsReduced.pow_ne_zero_if
+@[deprecated (since := "2026-01-08")] alias IsReduced.pow_ne_zero_iff := pow_ne_zero_iff
+@[deprecated (since := "2026-01-08")] alias IsReduced.pow_ne_zero := pow_ne_zero
+@[deprecated (since := "2026-01-08")] alias IsReduced.pow_eq_zero_iff' := pow_eq_zero_iff'
 
 中文:
 引理 pow_eq_zero_iff'
@@ -971,7 +973,9 @@ lemma pow_eq_zero_iff'
 
 @[deprecated (since := "2026-01-08")] alias IsReduced.pow_eq_zero := eq_zero_of_pow_eq_zero
 @[deprecated (since := "2026-01-08")] alias IsReduced.pow_eq_zero_iff := pow_eq_zero_iff
-@[deprecated (since := "2026-01-08")] alias IsReduced.pow_ne_zero_if
+@[deprecated (since := "2026-01-08")] alias IsReduced.pow_ne_zero_iff := pow_ne_zero_iff
+@[deprecated (since := "2026-01-08")] alias IsReduced.pow_ne_zero := pow_ne_zero
+@[deprecated (since := "2026-01-08")] alias IsReduced.pow_eq_zero_iff' := pow_eq_zero_iff'
 -/
 @[simp] lemma pow_eq_zero_iff' [Nontrivial M₀] : a ^ n = 0 ↔ a = 0 ∧ n != 0 := by
   obtain rfl | hn := eq_or_ne n 0 <;> simp [*]

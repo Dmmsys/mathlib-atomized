@@ -55,7 +55,14 @@ definition coconeCompShrinkYonedaHomEquiv
         conv_rhs => rw [shrinkYonedaEquiv_comp]
         rw [shrinkYonedaEquiv_shrinkYoneda_map]
         apply map_shrinkYonedaEquiv }
-  invFun s := hc'.
+  invFun s := hc'.desc (Cocone.mk _
+    { app j := shrinkYonedaEquiv.symm (s.val j.unop)
+      naturality j₁ j₂ f := by
+        rw [← s.property f.unop]
+        dsimp
+        rw [shrinkYonedaEquiv_symm_map]; rw [Category.comp_id] })
+  left_inv f := hc'.hom_ext (by simp)
+  right_inv u := by cat_disch
 
 中文:
 定义 coconeCompShrinkYonedaHomEquiv
@@ -67,7 +74,14 @@ definition coconeCompShrinkYonedaHomEquiv
         conv_rhs => rw [shrinkYonedaEquiv_comp]
         rw [shrinkYonedaEquiv_shrinkYoneda_map]
         apply map_shrinkYonedaEquiv }
-  invFun s := hc'.
+  invFun s := hc'.desc (Cocone.mk _
+    { app j := shrinkYonedaEquiv.symm (s.val j.unop)
+      naturality j₁ j₂ f := by
+        rw [← s.property f.unop]
+        dsimp
+        rw [shrinkYonedaEquiv_symm_map]; rw [Category.comp_id] })
+  left_inv f := hc'.hom_ext (by simp)
+  right_inv u := by cat_disch
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Cocone, Cocone.mk, cat_disch, comp_id, conv_rhs, f.unop, g.op, hom_ext, invFun, j.unop, left_inv, map_shrinkYonedaEquiv, naturality, property, right_inv, s.property, s.val
 -/
@@ -155,6 +169,7 @@ lemma nonempty_isLimit_mapCone_iff
   rw [Types.isLimit_iff_bijective_sectionOfCone]; rw [MorphismProperty.isLocal_single_iff_bijective]; rw [← Function.Bijective.of_comp_iff' (coconeCompShrinkYonedaHomEquiv hc').symm.bijective]; rw [← Function.Bijective.of_comp_iff _ shrinkYonedaEquiv.bijective]
   convert Iff.rfl using 2
   ext : 1
+  simp [← coconePtToShrinkYoneda_comp]
 
 中文:
 引理 nonempty_isLimit_mapCone_iff
@@ -162,6 +177,7 @@ lemma nonempty_isLimit_mapCone_iff
   rw [Types.isLimit_iff_bijective_sectionOfCone]; rw [MorphismProperty.isLocal_single_iff_bijective]; rw [← Function.Bijective.of_comp_iff' (coconeCompShrinkYonedaHomEquiv hc').symm.bijective]; rw [← Function.Bijective.of_comp_iff _ shrinkYonedaEquiv.bijective]
   convert Iff.rfl using 2
   ext : 1
+  simp [← coconePtToShrinkYoneda_comp]
 
 Depends on / 依赖: Bijective, Function, Function.Bijective.of_comp_iff, Iff.rfl, MorphismProperty, MorphismProperty.isLocal_single_iff_bijective, Types.isLimit_iff_bijective_sectionOfCone, bijective, coconeCompShrinkYonedaHomEquiv, coconePtToShrinkYoneda_comp, convert, isLimit_iff_bijective_sectionOfCone, isLocal_single_iff_bijective, of_comp_iff, shrinkYonedaEquiv, shrinkYonedaEquiv.bijective, symm.bijective
 -/

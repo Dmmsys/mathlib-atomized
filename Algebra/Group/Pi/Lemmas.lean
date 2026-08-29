@@ -398,7 +398,9 @@ definition MonoidHom.pi
 @[to_additive (attr := deprecated (since := "2026-05-29"))] alias Pi.monoidHom := MonoidHom.pi
 
 @[to_additive (attr := deprecated (since := "2026-05-29"))]
-alias Pi.monoidHom_apply
+alias Pi.monoidHom_apply := MonoidHom.pi_apply
+
+@[to_additive]
 
 中文:
 定义 幺半群态射.pi
@@ -410,7 +412,9 @@ alias Pi.monoidHom_apply
 @[to_additive (attr := deprecated (since := "2026-05-29"))] alias Pi.monoidHom := MonoidHom.pi
 
 @[to_additive (attr := deprecated (since := "2026-05-29"))]
-alias Pi.monoidHom_apply
+alias Pi.monoidHom_apply := MonoidHom.pi_apply
+
+@[to_additive]
 
 Depends on / 依赖: MulHom, MulHom.pi, map_one, toMulHom
 -/

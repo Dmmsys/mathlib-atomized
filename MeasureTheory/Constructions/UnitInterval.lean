@@ -253,7 +253,7 @@ lemma measurePreserving_symm
 .trans apply symmMeasurableEquiv.map_apply _
     conv_lhs => rw [coe_symmMeasurableEquiv, volume_apply, image_coe_preimage_symm,
       ← map_apply (by fun_prop) (measurableSet_Icc.subtype_image hs),
-.map_eq, ← volume_apply] volume.measurePreserving_sub_lef
+.map_eq, ← volume_apply] volume.measurePreserving_sub_left 1
 
 中文:
 引理 measurePreserving_symm
@@ -264,7 +264,7 @@ lemma measurePreserving_symm
 .trans apply symmMeasurableEquiv.map_apply _
     conv_lhs => rw [coe_symmMeasurableEquiv, volume_apply, image_coe_preimage_symm,
       ← map_apply (by fun_prop) (measurableSet_Icc.subtype_image hs),
-.map_eq, ← volume_apply] volume.measurePreserving_sub_lef
+.map_eq, ← volume_apply] volume.measurePreserving_sub_left 1
 
 Depends on / 依赖: measurable_symm
 -/

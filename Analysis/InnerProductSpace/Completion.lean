@@ -184,7 +184,14 @@ theorem continuous_inner
       map_zero' := by ext x; exact inner_zero_left _
       map_add' := fun x y => by ext z; exact inner_add_left _ _ _ }
   have : Continuous fun p : E × E => inner' p.1 p.2 := continuous_inner
-  rw [Completion.to
+  rw [Completion.toInner]; rw [inner]; rw [uncurry_curry _]
+  change
+    Continuous
+      (((isDenseInducing_toCompl E).prodMap (isDenseInducing_toCompl E)).extend fun p : E × E =>
+        inner' p.1 p.2)
+  exact (isDenseInducing_toCompl E).extend_Z_bilin (isDenseInducing_toCompl E) this
+
+@[fun_prop]
 
 中文:
 定理 continuous_inner
@@ -194,7 +201,14 @@ theorem continuous_inner
       map_zero' := by ext x; exact inner_zero_left _
       map_add' := fun x y => by ext z; exact inner_add_left _ _ _ }
   have : Continuous fun p : E × E => inner' p.1 p.2 := continuous_inner
-  rw [Completion.to
+  rw [Completion.toInner]; rw [inner]; rw [uncurry_curry _]
+  change
+    Continuous
+      (((isDenseInducing_toCompl E).prodMap (isDenseInducing_toCompl E)).extend fun p : E × E =>
+        inner' p.1 p.2)
+  exact (isDenseInducing_toCompl E).extend_Z_bilin (isDenseInducing_toCompl E) this
+
+@[fun_prop]
 -/
 protected theorem continuous_inner :
     Continuous (uncurry (inner 𝕜 (E := Completion E))) := by
@@ -239,7 +253,15 @@ instance innerProductSpace
   conj_inner_symm x y :=
     Completion.induction_on₂ x y
       (isClosed_eq (continuous_conj.comp (by fun_prop)) (by fun_prop))
-      fun a b => by simp only 
+      fun a b => by simp only [inner_coe, inner_conj_symm]
+  add_left x y z :=
+    Completion.induction_on₃ x y z (isClosed_eq (by fun_prop) (by fun_prop))
+      fun a b c => by simp only [← coe_add, inner_coe, inner_add_left]
+  smul_left x y c :=
+    Completion.induction_on₂ x y
+      (isClosed_eq (Continuous.inner (continuous_fst.const_smul c) continuous_snd)
+        ((continuous_const_mul _).comp (by fun_prop)))
+      fun a b => by simp only [← coe_smul c a, inner_coe, inner_smul_left]
 
 中文:
 实例 innerProductSpace
@@ -249,7 +271,15 @@ instance innerProductSpace
   conj_inner_symm x y :=
     Completion.induction_on₂ x y
       (isClosed_eq (continuous_conj.comp (by fun_prop)) (by fun_prop))
-      fun a b => by simp only 
+      fun a b => by simp only [inner_coe, inner_conj_symm]
+  add_left x y z :=
+    Completion.induction_on₃ x y z (isClosed_eq (by fun_prop) (by fun_prop))
+      fun a b c => by simp only [← coe_add, inner_coe, inner_add_left]
+  smul_left x y c :=
+    Completion.induction_on₂ x y
+      (isClosed_eq (Continuous.inner (continuous_fst.const_smul c) continuous_snd)
+        ((continuous_const_mul _).comp (by fun_prop)))
+      fun a b => by simp only [← coe_smul c a, inner_coe, inner_smul_left]
 
 Depends on / 依赖: Completion, Completion.induction, Completion.induction_on, add_left, coe_add, conj_inner_symm, continuous_conj, continuous_conj.comp, fun_prop, induction_on, inner_add_left, inner_coe, inner_conj_symm, inner_self_eq_norm_sq, isClosed_eq, norm_coe, smul_left
 -/

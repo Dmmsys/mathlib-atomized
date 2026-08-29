@@ -116,7 +116,25 @@ lemma isRightDerivabilityStructure_iff
   rw [this]
   let e' := (Φ.catCommSq W₁.Q W₂.Q).iso
   let E₁ := Localization.uniq W₁.Q L₁ W₁
-  let E₂ := Localization.uniq W₂.Q L
+  let E₂ := Localization.uniq W₂.Q L₂ W₂
+  let e₁ : W₁.Q ⋙ E₁.functor ≅ L₁ := compUniqFunctor W₁.Q L₁ W₁
+  let e₂ : W₂.Q ⋙ E₂.functor ≅ L₂ := compUniqFunctor W₂.Q L₂ W₂
+  let e'' : (Φ.functor ⋙ W₂.Q) ⋙ E₂.functor ≅ (W₁.Q ⋙ E₁.functor) ⋙ F :=
+    associator _ _ _ ≪≫ isoWhiskerLeft _ e₂ ≪≫ e ≪≫ isoWhiskerRight e₁.symm F
+  let e''' : Φ.localizedFunctor W₁.Q W₂.Q ⋙ E₂.functor ≅ E₁.functor ⋙ F :=
+    liftNatIso W₁.Q W₁ _ _ _ _ e''
+  have : TwoSquare.vComp' e'.hom e'''.hom e₁ e₂ = e.hom := by
+    ext X₁
+    rw [TwoSquare.vComp'_app]; rw [liftNatIso_hom]; rw [liftNatTrans_app]
+    simp only [Functor.comp_obj, Iso.trans_hom, isoWhiskerLeft_hom, isoWhiskerRight_hom,
+      Iso.symm_hom, NatTrans.comp_app, Functor.associator_hom_app, whiskerLeft_app,
+      whiskerRight_app, id_comp, assoc, e'']
+    dsimp [Lifting.iso]
+    rw [F.map_id]; rw [id_comp]; rw [← F.map_comp]; rw [Iso.inv_hom_id_app]; rw [F.map_id]; rw [comp_id]; rw [← Functor.map_comp_assoc]
+    erw [show (CatCommSq.iso Φ.functor W₁.Q W₂.Q (localizedFunctor Φ W₁.Q W₂.Q)).hom =
+      (Lifting.iso W₁.Q W₁ _ _).inv by rfl, Iso.inv_hom_id_app]
+    simp
+  rw [← TwoSquare.GuitartExact.vComp'_iff_of_equivalences e'.hom E₁ E₂ e''' e₁ e₂]; rw [this]
 
 中文:
 引理 isRightDerivabilityStructure_iff
@@ -128,7 +146,25 @@ lemma isRightDerivabilityStructure_iff
   rw [this]
   let e' := (Φ.catCommSq W₁.Q W₂.Q).iso
   let E₁ := Localization.uniq W₁.Q L₁ W₁
-  let E₂ := Localization.uniq W₂.Q L
+  let E₂ := Localization.uniq W₂.Q L₂ W₂
+  let e₁ : W₁.Q ⋙ E₁.functor ≅ L₁ := compUniqFunctor W₁.Q L₁ W₁
+  let e₂ : W₂.Q ⋙ E₂.functor ≅ L₂ := compUniqFunctor W₂.Q L₂ W₂
+  let e'' : (Φ.functor ⋙ W₂.Q) ⋙ E₂.functor ≅ (W₁.Q ⋙ E₁.functor) ⋙ F :=
+    associator _ _ _ ≪≫ isoWhiskerLeft _ e₂ ≪≫ e ≪≫ isoWhiskerRight e₁.symm F
+  let e''' : Φ.localizedFunctor W₁.Q W₂.Q ⋙ E₂.functor ≅ E₁.functor ⋙ F :=
+    liftNatIso W₁.Q W₁ _ _ _ _ e''
+  have : TwoSquare.vComp' e'.hom e'''.hom e₁ e₂ = e.hom := by
+    ext X₁
+    rw [TwoSquare.vComp'_app]; rw [liftNatIso_hom]; rw [liftNatTrans_app]
+    simp only [Functor.comp_obj, Iso.trans_hom, isoWhiskerLeft_hom, isoWhiskerRight_hom,
+      Iso.symm_hom, NatTrans.comp_app, Functor.associator_hom_app, whiskerLeft_app,
+      whiskerRight_app, id_comp, assoc, e'']
+    dsimp [Lifting.iso]
+    rw [F.map_id]; rw [id_comp]; rw [← F.map_comp]; rw [Iso.inv_hom_id_app]; rw [F.map_id]; rw [comp_id]; rw [← Functor.map_comp_assoc]
+    erw [show (CatCommSq.iso Φ.functor W₁.Q W₂.Q (localizedFunctor Φ W₁.Q W₂.Q)).hom =
+      (Lifting.iso W₁.Q W₁ _ _).inv by rfl, Iso.inv_hom_id_app]
+    simp
+  rw [← TwoSquare.GuitartExact.vComp'_iff_of_equivalences e'.hom E₁ E₂ e''' e₁ e₂]; rw [this]
 
 Depends on / 依赖: GuitartExact, IsRightDerivabilityStructure, Localization, Localization.uniq, TwoSquare, TwoSquare.GuitartExact, associator, catCommSq, compUniqFunctor, functor, guitartExact, h.guitartExact
 -/
@@ -288,7 +324,16 @@ lemma isLeftDerivabilityStructure_iff_op
   let e' : Φ.functor.op ⋙ W₂.Q.op ≅ W₁.Q.op ⋙ F.op := NatIso.op e.symm
   have eq : TwoSquare.GuitartExact e'.hom ↔ TwoSquare.GuitartExact e.inv :=
     TwoSquare.guitartExact_op_iff _
-  con
+  constructor
+  · rintro ⟨_, _⟩
+    rwa [Φ.op.isRightDerivabilityStructure_iff _ _ _ e', eq]
+  · intro
+    have : Φ.HasLeftResolutions := by
+      rw [hasLeftResolutions_iff_op]
+      infer_instance
+    refine ⟨inferInstance, ?_⟩
+    rw [← eq]
+    exact Φ.op.guitartExact_of_isRightDerivabilityStructure' _ _ _ e'
 
 中文:
 引理 isLeftDerivabilityStructure_iff_op
@@ -298,7 +343,16 @@ lemma isLeftDerivabilityStructure_iff_op
   let e' : Φ.functor.op ⋙ W₂.Q.op ≅ W₁.Q.op ⋙ F.op := NatIso.op e.symm
   have eq : TwoSquare.GuitartExact e'.hom ↔ TwoSquare.GuitartExact e.inv :=
     TwoSquare.guitartExact_op_iff _
-  con
+  constructor
+  · rintro ⟨_, _⟩
+    rwa [Φ.op.isRightDerivabilityStructure_iff _ _ _ e', eq]
+  · intro
+    have : Φ.HasLeftResolutions := by
+      rw [hasLeftResolutions_iff_op]
+      infer_instance
+    refine ⟨inferInstance, ?_⟩
+    rw [← eq]
+    exact Φ.op.guitartExact_of_isRightDerivabilityStructure' _ _ _ e'
 
 Depends on / 依赖: F.op, GuitartExact, HasLeftResolutions, NatIso, NatIso.op, Q.op, TwoSquare, TwoSquare.GuitartExact, TwoSquare.guitartExact_op_iff, catCommSq, e.inv, e.symm, functor, functor.op, guitartExact_op_iff, hasLeftResolutions_iff_op, infer_instance, isRightDerivabilityStructure_iff, localizedFunctor, op.isRightDerivabilityStructure_iff
 -/
@@ -444,7 +498,14 @@ lemma isRightDerivabilityStructure_iff_op
   let e' : Φ.functor.op ⋙ W₂.Q.op ≅ W₁.Q.op ⋙ F.op := NatIso.op e.symm
   have eq : TwoSquare.GuitartExact e'.inv ↔ TwoSquare.GuitartExact e.hom :=
     TwoSquare.guitartExact_op_iff _
-  ref
+  refine ⟨fun ⟨_, _⟩ => ?_, fun _ => ?_⟩
+  · simpa only [Φ.op.isLeftDerivabilityStructure_iff _ _ _ e', eq]
+  · have : Φ.HasRightResolutions := by
+      rw [hasRightResolutions_iff_op]
+      infer_instance
+    refine ⟨inferInstance, ?_⟩
+    rw [← eq]
+    exact Φ.op.guitartExact_of_isLeftDerivabilityStructure' _ _ _ e'
 
 中文:
 引理 isRightDerivabilityStructure_iff_op
@@ -454,7 +515,14 @@ lemma isRightDerivabilityStructure_iff_op
   let e' : Φ.functor.op ⋙ W₂.Q.op ≅ W₁.Q.op ⋙ F.op := NatIso.op e.symm
   have eq : TwoSquare.GuitartExact e'.inv ↔ TwoSquare.GuitartExact e.hom :=
     TwoSquare.guitartExact_op_iff _
-  ref
+  refine ⟨fun ⟨_, _⟩ => ?_, fun _ => ?_⟩
+  · simpa only [Φ.op.isLeftDerivabilityStructure_iff _ _ _ e', eq]
+  · have : Φ.HasRightResolutions := by
+      rw [hasRightResolutions_iff_op]
+      infer_instance
+    refine ⟨inferInstance, ?_⟩
+    rw [← eq]
+    exact Φ.op.guitartExact_of_isLeftDerivabilityStructure' _ _ _ e'
 
 Depends on / 依赖: F.op, GuitartExact, HasRightResolutions, NatIso, NatIso.op, Q.op, TwoSquare, TwoSquare.GuitartExact, TwoSquare.guitartExact_op_iff, catCommSq, e.hom, e.symm, functor, functor.op, guitartExact_op_iff, hasRightResolutions_iff_op, infer_instance, isLeftDerivabilityStructure_iff, localizedFunctor, op.isLeftDerivabilityStructure_iff
 -/

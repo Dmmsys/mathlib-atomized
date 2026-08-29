@@ -234,7 +234,13 @@ theorem infinite_of_nonempty_of_isEmpty
           show WType β from Nat.recOn n ⟨b, IsEmpty.elim' he⟩ fun _ ih => ⟨a, fun _ => ih⟩)
         ?_
     intro n m h
-  
+    induction n generalizing m with
+    | zero => rcases m with - | m <;> simp_all
+    | succ n ih =>
+      rcases m with - | m
+      · simp_all
+      · refine congr_arg Nat.succ (ih ?_)
+        simp_all [funext_iff]⟩
 
 中文:
 定理 infinite_of_nonempty_of_isEmpty
@@ -248,7 +254,13 @@ theorem infinite_of_nonempty_of_isEmpty
           show WType β from Nat.recOn n ⟨b, IsEmpty.elim' he⟩ fun _ ih => ⟨a, fun _ => ih⟩)
         ?_
     intro n m h
-  
+    induction n generalizing m with
+    | zero => rcases m with - | m <;> simp_all
+    | succ n ih =>
+      rcases m with - | m
+      · simp_all
+      · refine congr_arg Nat.succ (ih ?_)
+        simp_all [funext_iff]⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.elim, Nat.recOn, Nat.succ, congr_arg, funext_iff, generalizing, ha.elim, not_injective_infinite_finite
 -/
@@ -475,7 +487,7 @@ instance :
   let f : WType β -> Σ n, WType' β n := fun t => ⟨t.depth, ⟨t, le_rfl⟩⟩
   let finv : (Σ n, WType' β n) -> WType β := fun p => p.2.1
   have : forall t, finv (f t) = t := fun t => rfl
-  exact Encodable
+  exact Encodable.ofLeftInverse f finv this
 
 中文:
 实例 :
@@ -485,7 +497,7 @@ instance :
   let f : WType β -> Σ n, WType' β n := fun t => ⟨t.depth, ⟨t, le_rfl⟩⟩
   let finv : (Σ n, WType' β n) -> WType β := fun p => p.2.1
   have : forall t, finv (f t) = t := fun t => rfl
-  exact Encodable
+  exact Encodable.ofLeftInverse f finv this
 
 Depends on / 依赖: Encodable, Encodable.ofLeftInverse, Nat.rec, encodable_succ, encodable_zero, le_rfl, ofLeftInverse, t.depth
 -/

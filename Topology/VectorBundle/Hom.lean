@@ -91,7 +91,12 @@ theorem continuousOn_continuousLinearMapCoordChange
   have h₂ := (ContinuousLinearMap.flip (compSL F₁ F₁ F₂ (RingHom.id 𝕜₁) σ)).continuous
   have h₃ := continuousOn_coordChange 𝕜₁ e₁' e₁
   have h₄ := continuousOn_coordChange 𝕜₂ e₂ e₂'
-  refine ((h₁.comp_continuousOn (h₄.mono ?_)).clm_comp
+  refine ((h₁.comp_continuousOn (h₄.mono ?_)).clm_comp (h₂.comp_continuousOn (h₃.mono ?_))).congr ?_
+  · mfld_set_tac
+  · mfld_set_tac
+  · intro b _
+    ext L v
+    dsimp [continuousLinearMapCoordChange]
 
 中文:
 定理 continuousOn_continuousLinearMapCoordChange
@@ -101,7 +106,12 @@ theorem continuousOn_continuousLinearMapCoordChange
   have h₂ := (ContinuousLinearMap.flip (compSL F₁ F₁ F₂ (RingHom.id 𝕜₁) σ)).continuous
   have h₃ := continuousOn_coordChange 𝕜₁ e₁' e₁
   have h₄ := continuousOn_coordChange 𝕜₂ e₂ e₂'
-  refine ((h₁.comp_continuousOn (h₄.mono ?_)).clm_comp
+  refine ((h₁.comp_continuousOn (h₄.mono ?_)).clm_comp (h₂.comp_continuousOn (h₃.mono ?_))).congr ?_
+  · mfld_set_tac
+  · mfld_set_tac
+  · intro b _
+    ext L v
+    dsimp [continuousLinearMapCoordChange]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.flip, RingHom, RingHom.id, clm_comp, compSL, comp_continuousOn, continuous, continuousLinearMapCoordChange, continuousOn_coordChange, mfld_set_tac
 -/
@@ -135,7 +145,26 @@ definition continuousLinearMap
   invFun p := ⟨p.1, .comp (e₂.symmL 𝕜₂ p.1) (p.2.comp (e₁.continuousLinearMapAt 𝕜₁ p.1))⟩
   source := Bundle.TotalSpace.proj ⁻¹' (e₁.baseSet inter e₂.baseSet)
   target := (e₁.baseSet inter e₂.baseSet) ×ˢ Set.univ
-  map_sourc
+  map_source' := fun ⟨_, _⟩ h => ⟨h, Set.mem_univ _⟩
+  map_target' := fun ⟨_, _⟩ h => h.1
+  left_inv' := fun ⟨x, L⟩ ⟨h₁, h₂⟩ => by
+    simp only [TotalSpace.mk_inj]
+    ext (v : E₁ x)
+    dsimp only [comp_apply]
+    rw [Trivialization.symmL_continuousLinearMapAt]; rw [Trivialization.symmL_continuousLinearMapAt]
+    exacts [h₁, h₂]
+  right_inv' := fun ⟨x, f⟩ ⟨⟨h₁, h₂⟩, _⟩ => by
+    simp only [Prod.mk_right_inj]
+    ext v
+    dsimp only [comp_apply]
+    rw [Trivialization.continuousLinearMapAt_symmL]; rw [Trivialization.continuousLinearMapAt_symmL]
+    exacts [h₁, h₂]
+  open_target := (e₁.open_baseSet.inter e₂.open_baseSet).prod isOpen_univ
+  baseSet := e₁.baseSet inter e₂.baseSet
+  open_baseSet := e₁.open_baseSet.inter e₂.open_baseSet
+  source_eq := rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
 
 中文:
 定义 continuousLinearMap
@@ -144,7 +173,26 @@ definition continuousLinearMap
   invFun p := ⟨p.1, .comp (e₂.symmL 𝕜₂ p.1) (p.2.comp (e₁.continuousLinearMapAt 𝕜₁ p.1))⟩
   source := Bundle.TotalSpace.proj ⁻¹' (e₁.baseSet inter e₂.baseSet)
   target := (e₁.baseSet inter e₂.baseSet) ×ˢ Set.univ
-  map_sourc
+  map_source' := fun ⟨_, _⟩ h => ⟨h, Set.mem_univ _⟩
+  map_target' := fun ⟨_, _⟩ h => h.1
+  left_inv' := fun ⟨x, L⟩ ⟨h₁, h₂⟩ => by
+    simp only [TotalSpace.mk_inj]
+    ext (v : E₁ x)
+    dsimp only [comp_apply]
+    rw [Trivialization.symmL_continuousLinearMapAt]; rw [Trivialization.symmL_continuousLinearMapAt]
+    exacts [h₁, h₂]
+  right_inv' := fun ⟨x, f⟩ ⟨⟨h₁, h₂⟩, _⟩ => by
+    simp only [Prod.mk_right_inj]
+    ext v
+    dsimp only [comp_apply]
+    rw [Trivialization.continuousLinearMapAt_symmL]; rw [Trivialization.continuousLinearMapAt_symmL]
+    exacts [h₁, h₂]
+  open_target := (e₁.open_baseSet.inter e₂.open_baseSet).prod isOpen_univ
+  baseSet := e₁.baseSet inter e₂.baseSet
+  open_baseSet := e₁.open_baseSet.inter e₂.open_baseSet
+  source_eq := rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
 
 Depends on / 依赖: continuousLinearMapAt
 -/
@@ -276,7 +324,9 @@ theorem continuousLinearMapCoordChange_apply
   simp_rw [continuousLinearMapCoordChange, ContinuousLinearEquiv.coe_coe,
     ContinuousLinearEquiv.arrowCongrSL_apply, continuousLinearMap_apply,
     continuousLinearMap_symm_apply' σ e₁ e₂ hb.1, comp_apply, ContinuousLinearEquiv.coe_coe,
-    ContinuousLinearEquiv.symm_symm, Trivializati
+    ContinuousLinearEquiv.symm_symm, Trivialization.continuousLinearMapAt_apply]
+  rw [e₂.symmL_apply hb.1.2]; rw [e₁'.symmL_apply hb.2.1]; rw [e₂.coordChangeL_apply e₂']; rw [e₁'.coordChangeL_apply e₁]; rw [e₁.coe_linearMapAt_of_mem hb.1.1]; rw [e₂'.coe_linearMapAt_of_mem hb.2.2]
+  exacts [⟨hb.2.1, hb.1.1⟩, ⟨hb.1.2, hb.2.2⟩]
 
 中文:
 定理 continuousLinearMapCoordChange_apply
@@ -286,7 +336,9 @@ theorem continuousLinearMapCoordChange_apply
   simp_rw [continuousLinearMapCoordChange, ContinuousLinearEquiv.coe_coe,
     ContinuousLinearEquiv.arrowCongrSL_apply, continuousLinearMap_apply,
     continuousLinearMap_symm_apply' σ e₁ e₂ hb.1, comp_apply, ContinuousLinearEquiv.coe_coe,
-    ContinuousLinearEquiv.symm_symm, Trivializati
+    ContinuousLinearEquiv.symm_symm, Trivialization.continuousLinearMapAt_apply]
+  rw [e₂.symmL_apply hb.1.2]; rw [e₁'.symmL_apply hb.2.1]; rw [e₂.coordChangeL_apply e₂']; rw [e₁'.coordChangeL_apply e₁]; rw [e₁.coe_linearMapAt_of_mem hb.1.1]; rw [e₂'.coe_linearMapAt_of_mem hb.2.2]
+  exacts [⟨hb.2.1, hb.1.1⟩, ⟨hb.1.2, hb.2.2⟩]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.arrowCongrSL_apply, ContinuousLinearEquiv.coe_coe, ContinuousLinearEquiv.symm_symm, Trivialization, Trivialization.continuousLinearMapAt_apply, arrowCongrSL_apply, coe_coe, coe_linearMapAt_, coe_linearMapAt_of_mem, comp_apply, continuousLinearMapAt_apply, continuousLinearMapCoordChange, continuousLinearMap_apply, continuousLinearMap_symm_apply, coordChangeL_apply, simp_rw, symmL_apply, symm_symm
 -/
@@ -324,7 +376,34 @@ definition Bundle.ContinuousLinearMap.vectorPrebundle
         e = Pretrivialization.continuousLinearMap σ e₁ e₂}
   pretrivialization_linear' := by
     rintro _ ⟨e₁, he₁, e₂, he₂, rfl⟩
-    infer_instanc
+    infer_instance
+  pretrivializationAt x :=
+    Pretrivialization.continuousLinearMap σ (trivializationAt F₁ E₁ x) (trivializationAt F₂ E₂ x)
+  mem_base_pretrivializationAt x :=
+    ⟨mem_baseSet_trivializationAt F₁ E₁ x, mem_baseSet_trivializationAt F₂ E₂ x⟩
+  pretrivialization_mem_atlas x :=
+    ⟨trivializationAt F₁ E₁ x, trivializationAt F₂ E₂ x, inferInstance, inferInstance, rfl⟩
+  exists_coordChange := by
+    rintro _ ⟨e₁, e₂, he₁, he₂, rfl⟩ _ ⟨e₁', e₂', he₁', he₂', rfl⟩
+    exact ⟨continuousLinearMapCoordChange σ e₁ e₁' e₂ e₂',
+      continuousOn_continuousLinearMapCoordChange,
+      continuousLinearMapCoordChange_apply σ e₁ e₁' e₂ e₂'⟩
+  totalSpaceMk_isInducing := by
+    intro b
+    let L₁ : E₁ b ≃L[𝕜₁] F₁ :=
+      (trivializationAt F₁ E₁ b).continuousLinearEquivAt 𝕜₁ b
+        (mem_baseSet_trivializationAt _ _ _)
+    let L₂ : E₂ b ≃L[𝕜₂] F₂ :=
+      (trivializationAt F₂ E₂ b).continuousLinearEquivAt 𝕜₂ b
+        (mem_baseSet_trivializationAt _ _ _)
+    let φ : (E₁ b ->SL[σ] E₂ b) ≃L[𝕜₂] F₁ ->SL[σ] F₂ := L₁.arrowCongrSL L₂
+    have : IsInducing fun x => (b, φ x) := isInducing_const_prod.mpr φ.toHomeomorph.isInducing
+    convert! this
+    ext f
+    dsimp [Pretrivialization.continuousLinearMap_apply]
+    simp only [Trivialization.symmL_apply, mem_baseSet_trivializationAt,
+      Trivialization.linearMapAt_def_of_mem]
+    rfl
 
 中文:
 定义 Bundle.连续线性映射.vectorPrebundle
@@ -334,7 +413,34 @@ definition Bundle.ContinuousLinearMap.vectorPrebundle
         e = Pretrivialization.continuousLinearMap σ e₁ e₂}
   pretrivialization_linear' := by
     rintro _ ⟨e₁, he₁, e₂, he₂, rfl⟩
-    infer_instanc
+    infer_instance
+  pretrivializationAt x :=
+    Pretrivialization.continuousLinearMap σ (trivializationAt F₁ E₁ x) (trivializationAt F₂ E₂ x)
+  mem_base_pretrivializationAt x :=
+    ⟨mem_baseSet_trivializationAt F₁ E₁ x, mem_baseSet_trivializationAt F₂ E₂ x⟩
+  pretrivialization_mem_atlas x :=
+    ⟨trivializationAt F₁ E₁ x, trivializationAt F₂ E₂ x, inferInstance, inferInstance, rfl⟩
+  exists_coordChange := by
+    rintro _ ⟨e₁, e₂, he₁, he₂, rfl⟩ _ ⟨e₁', e₂', he₁', he₂', rfl⟩
+    exact ⟨continuousLinearMapCoordChange σ e₁ e₁' e₂ e₂',
+      continuousOn_continuousLinearMapCoordChange,
+      continuousLinearMapCoordChange_apply σ e₁ e₁' e₂ e₂'⟩
+  totalSpaceMk_isInducing := by
+    intro b
+    let L₁ : E₁ b ≃L[𝕜₁] F₁ :=
+      (trivializationAt F₁ E₁ b).continuousLinearEquivAt 𝕜₁ b
+        (mem_baseSet_trivializationAt _ _ _)
+    let L₂ : E₂ b ≃L[𝕜₂] F₂ :=
+      (trivializationAt F₂ E₂ b).continuousLinearEquivAt 𝕜₂ b
+        (mem_baseSet_trivializationAt _ _ _)
+    let φ : (E₁ b ->SL[σ] E₂ b) ≃L[𝕜₂] F₁ ->SL[σ] F₂ := L₁.arrowCongrSL L₂
+    have : IsInducing fun x => (b, φ x) := isInducing_const_prod.mpr φ.toHomeomorph.isInducing
+    convert! this
+    ext f
+    dsimp [Pretrivialization.continuousLinearMap_apply]
+    simp only [Trivialization.symmL_apply, mem_baseSet_trivializationAt,
+      Trivialization.linearMapAt_def_of_mem]
+    rfl
 
 Depends on / 依赖: MemTrivializationAtlas, Pretrivialization, Pretrivialization.continuousLinearMap, Trivialization, continuousLinearMap, infer_instance, mem_baseSet_trivializationAt, mem_base_pretrivializationAt, pretrivializationAt, pretrivialization_linear, trivializationAt
 -/
@@ -690,7 +796,15 @@ lemma ContinuousWithinAt.clm_apply_of_inCoordinates
   rw [FiberBundle.continuousWithinAt_totalSpace] at hv ⊢
   refine ⟨hb₂, ?_⟩
   apply (ContinuousWithinAt.clm_apply hϕ hv.2).congr_of_eventuallyEq_of_mem ?_ (mem_insert m₀ s)
-  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt 
+  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).baseSet := by
+    apply hv.1
+    apply (trivializationAt F₁ E₁ (b₁ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₁ m₀)
+  have A' : forallᶠ m in 𝓝[insert m₀ s] m₀, b₂ m in (trivializationAt F₂ E₂ (b₂ m₀)).baseSet := by
+    apply hb₂
+    apply (trivializationAt F₂ E₂ (b₂ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₂ m₀)
+  filter_upwards [A, A'] with m hm h'm using by simp [inCoordinates_eq hm h'm, hm]
 
 中文:
 引理 ContinuousWithinAt.clm_apply_of_inCoordinates
@@ -699,7 +813,15 @@ lemma ContinuousWithinAt.clm_apply_of_inCoordinates
   rw [FiberBundle.continuousWithinAt_totalSpace] at hv ⊢
   refine ⟨hb₂, ?_⟩
   apply (ContinuousWithinAt.clm_apply hϕ hv.2).congr_of_eventuallyEq_of_mem ?_ (mem_insert m₀ s)
-  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt 
+  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).baseSet := by
+    apply hv.1
+    apply (trivializationAt F₁ E₁ (b₁ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₁ m₀)
+  have A' : forallᶠ m in 𝓝[insert m₀ s] m₀, b₂ m in (trivializationAt F₂ E₂ (b₂ m₀)).baseSet := by
+    apply hb₂
+    apply (trivializationAt F₂ E₂ (b₂ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₂ m₀)
+  filter_upwards [A, A'] with m hm h'm using by simp [inCoordinates_eq hm h'm, hm]
 
 Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.clm_apply, FiberBundle, FiberBundle.continuousWithinAt_totalSpace, FiberBundle.mem_baseSet_trivializationAt, baseSet, clm_apply, congr_of_eventuallyEq_of_mem, continuousWithinAt_insert_self, continuousWithinAt_totalSpace, insert, mem_baseSet_trivializationAt, mem_insert, mem_nhds, open_baseSet, open_baseSet.mem_nhds, trivializationAt
 -/

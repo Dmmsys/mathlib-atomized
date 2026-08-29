@@ -894,7 +894,11 @@ theorem OrdConnected.preimage_monotoneOn
   · rintro x ⟨⟨y, yt, yx, ys⟩, -⟩ x' ⟨-, ⟨z, zt, x'z, zs⟩⟩ a ha
     exact ⟨⟨y, yt, yx.trans ha.1, ys⟩, ⟨z, zt, ha.2.trans x'z, zs⟩⟩
   · rintro x ⟨xt, xs⟩
-    exact ⟨x
+    exact ⟨xt, ⟨x, xt, le_rfl, xs⟩, ⟨x, xt, le_rfl, xs⟩⟩
+  · rintro x ⟨xt, ⟨y, yt, yx, ys⟩, ⟨z, zt, xz, zs⟩⟩
+    refine ⟨xt, ?_⟩
+    apply hs.out ys zs
+    exact ⟨hf yt xt yx, hf xt zt xz⟩
 
 中文:
 定理 序连通.preimage_monotoneOn
@@ -905,7 +909,11 @@ theorem OrdConnected.preimage_monotoneOn
   · rintro x ⟨⟨y, yt, yx, ys⟩, -⟩ x' ⟨-, ⟨z, zt, x'z, zs⟩⟩ a ha
     exact ⟨⟨y, yt, yx.trans ha.1, ys⟩, ⟨z, zt, ha.2.trans x'z, zs⟩⟩
   · rintro x ⟨xt, xs⟩
-    exact ⟨x
+    exact ⟨xt, ⟨x, xt, le_rfl, xs⟩, ⟨x, xt, le_rfl, xs⟩⟩
+  · rintro x ⟨xt, ⟨y, yt, yx, ys⟩, ⟨z, zt, xz, zs⟩⟩
+    refine ⟨xt, ?_⟩
+    apply hs.out ys zs
+    exact ⟨hf yt xt yx, hf xt zt xz⟩
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, hs.out, le_rfl, yx.trans
 -/

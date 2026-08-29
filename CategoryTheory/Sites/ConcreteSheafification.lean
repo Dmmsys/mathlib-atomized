@@ -404,7 +404,10 @@ theorem res_mk_eq_mk_pullback
   dsimp
   simp only [Equiv.apply_symm_apply]
   ext i
-
+  simp only [Meq.equiv_apply, Cover.index_left, ← ConcreteCategory.comp_apply, limit.lift_π,
+    Multifork.ofι_pt, Multifork.ofι_π_app, Meq.pullback_apply, pullback_obj]
+  rw [dsimp% Meq.equiv_symm_eq_apply x i.base]
+  cases i; rfl
 
 中文:
 定理 res_mk_eq_mk_pullback
@@ -417,7 +420,10 @@ theorem res_mk_eq_mk_pullback
   dsimp
   simp only [Equiv.apply_symm_apply]
   ext i
-
+  simp only [Meq.equiv_apply, Cover.index_left, ← ConcreteCategory.comp_apply, limit.lift_π,
+    Multifork.ofι_pt, Multifork.ofι_π_app, Meq.pullback_apply, pullback_obj]
+  rw [dsimp% Meq.equiv_symm_eq_apply x i.base]
+  cases i; rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, ConcreteCategory, ConcreteCategory.comp_apply, Cover.index_left, Equiv.apply_symm_apply, Meq.equiv, Meq.equiv_apply, Meq.equiv_symm_eq_apply, Meq.pullback_apply, Multifork, Multifork.of, apply_symm_apply, colimit, comp_apply, congr_arg, equiv_apply, equiv_symm_eq_apply, i.base, index_left
 -/
@@ -452,7 +458,9 @@ theorem toPlus_mk
   dsimp [diagram]
   apply Concrete.multiequalizer_ext (C := D)
   intro i
-  simp only 
+  simp only [← ConcreteCategory.comp_apply, Category.assoc, Multiequalizer.lift_ι,
+    Meq.equiv_symm_eq_apply]
+  rfl
 
 中文:
 定理 toPlus_mk
@@ -467,7 +475,9 @@ theorem toPlus_mk
   dsimp [diagram]
   apply Concrete.multiequalizer_ext (C := D)
   intro i
-  simp only 
+  simp only [← ConcreteCategory.comp_apply, Category.assoc, Multiequalizer.lift_ι,
+    Meq.equiv_symm_eq_apply]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, Concrete, Concrete.multiequalizer_ext, ConcreteCategory, ConcreteCategory.comp_apply, Cover.toMultiequalizer, Meq.equiv_symm_eq_apply, Multiequalizer, Multiequalizer.lift_, OrderTop, OrderTop.le_top, colimit, colimit.w, comp_apply, congr_arg, diagram, e.op, equiv_symm_eq_apply, homOfLE
 -/
@@ -500,7 +510,15 @@ theorem toPlus_apply
   dsimp [mk]
   rw [← ConcreteCategory.comp_apply]; rw [ι_colimMap_assoc]; rw [colimit.ι_pre]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]
   dsimp only [Functor.op]
-  let e : (J.pullback I.f).obj (unop (op S)) ⟶ ⊤
+  let e : (J.pullback I.f).obj (unop (op S)) ⟶ ⊤ := homOfLE (OrderTop.le_top _)
+  rw [← colimit.w _ e.op]; rw [ConcreteCategory.comp_apply]
+  apply congr_arg
+  apply Concrete.multiequalizer_ext (C := D)
+  intro i
+  dsimp
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]; rw [Multiequalizer.lift_ι]; rw [Multiequalizer.lift_ι]
+  rw [dsimp% Meq.equiv_symm_eq_apply x i.base]
+  simpa using! (x.condition (Cover.Relation.mk' (I.precompRelation i.f))).symm
 
 中文:
 定理 toPlus_apply
@@ -511,7 +529,15 @@ theorem toPlus_apply
   dsimp [mk]
   rw [← ConcreteCategory.comp_apply]; rw [ι_colimMap_assoc]; rw [colimit.ι_pre]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]
   dsimp only [Functor.op]
-  let e : (J.pullback I.f).obj (unop (op S)) ⟶ ⊤
+  let e : (J.pullback I.f).obj (unop (op S)) ⟶ ⊤ := homOfLE (OrderTop.le_top _)
+  rw [← colimit.w _ e.op]; rw [ConcreteCategory.comp_apply]
+  apply congr_arg
+  apply Concrete.multiequalizer_ext (C := D)
+  intro i
+  dsimp
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]; rw [Multiequalizer.lift_ι]; rw [Multiequalizer.lift_ι]
+  rw [dsimp% Meq.equiv_symm_eq_apply x i.base]
+  simpa using! (x.condition (Cover.Relation.mk' (I.precompRelation i.f))).symm
 
 Depends on / 依赖: Concret, Concrete, Concrete.multiequalizer_ext, ConcreteCategory, ConcreteCategory.comp_apply, Cover.toMultiequalizer, Functor, Functor.op, J.pullback, OrderTop, OrderTop.le_top, colimit, colimit.w, comp_apply, congr_arg, e.op, homOfLE, le_top, multiequalizer_ext, plusObj
 -/
@@ -603,7 +629,21 @@ theorem eq_mk_iff_exists
     convert! hh
     all_goals
       dsimp [diagram]
-      rw [← ConcreteCategory.comp_apply
+      rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]
+      erw [Meq.equiv_symm_eq_apply]
+      cases I; rfl
+  · rintro ⟨S, h1, h2, e⟩
+    apply Concrete.colimit_rep_eq_of_exists (C := D)
+    use op S, h1.op, h2.op
+    apply Concrete.multiequalizer_ext
+    intro i
+    apply_fun fun ee => ee i at e
+    convert! e using 1
+    all_goals
+      dsimp [diagram]
+      rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]
+      erw [Meq.equiv_symm_eq_apply]
+      cases i; rfl
 
 中文:
 定理 eq_mk_iff_存在
@@ -618,7 +658,21 @@ theorem eq_mk_iff_exists
     convert! hh
     all_goals
       dsimp [diagram]
-      rw [← ConcreteCategory.comp_apply
+      rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]
+      erw [Meq.equiv_symm_eq_apply]
+      cases I; rfl
+  · rintro ⟨S, h1, h2, e⟩
+    apply Concrete.colimit_rep_eq_of_exists (C := D)
+    use op S, h1.op, h2.op
+    apply Concrete.multiequalizer_ext
+    intro i
+    apply_fun fun ee => ee i at e
+    convert! e using 1
+    all_goals
+      dsimp [diagram]
+      rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]
+      erw [Meq.equiv_symm_eq_apply]
+      cases i; rfl
 
 Depends on / 依赖: Concrete, Concrete.colimit_exists_of_rep_eq, Concrete.colimit_rep_eq_of_exists, Concrete.multiequalizer_ext, ConcreteCategory, ConcreteCategory.comp_apply, Meq.equiv_symm_eq_apply, Multiequalizer, Multiequalizer.lift_, W.unop, W.unop.index, all_goals, apply_fun, colimit_exists_of_rep_eq, colimit_rep_eq_of_exists, comp_apply, convert, diagram, equiv_symm_eq_apply, h1.op
 -/
@@ -663,7 +717,42 @@ theorem sep
   simp only [res_mk_eq_mk_pullback] at h
   -- Next, using our assumption,
   -- choose covers over which the pullbacks of these representatives become equal.
-  choose W h1
+  choose W h1 h2 hh using fun I : S.Arrow => (eq_mk_iff_exists _ _).mp (h I)
+  -- To prove equality, it suffices to prove that there exists a cover over which
+  -- the representatives become equal.
+  rw [eq_mk_iff_exists]
+  -- Construct the cover over which the representatives become equal by combining the various
+  -- covers chosen above.
+  let B : J.Cover X := S.bind W
+  use B
+  -- Prove that this cover refines the two covers over which our representatives are defined
+  -- and use these proofs.
+  let ex : B ⟶ Sx :=
+    homOfLE
+      (by
+        rintro Y f ⟨Z, e1, e2, he2, he1, hee⟩
+        rw [← hee]
+        apply leOfHom (h1 ⟨_, _, he2⟩)
+        exact he1)
+  let ey : B ⟶ Sy :=
+    homOfLE
+      (by
+        rintro Y f ⟨Z, e1, e2, he2, he1, hee⟩
+        rw [← hee]
+        apply leOfHom (h2 ⟨_, _, he2⟩)
+        exact he1)
+  use ex, ey
+  -- Now prove that indeed the representatives become equal over `B`.
+  -- This will follow by using the fact that our representatives become
+  -- equal over the chosen covers.
+  ext1 I
+  let IS : S.Arrow := I.fromMiddle
+  specialize hh IS
+  let IW : (W IS).Arrow := I.toMiddle
+  apply_fun fun e => e IW at hh
+  convert! hh using 1
+  · exact x.congr_apply I.middle_spec.symm _
+  · exact y.congr_apply I.middle_spec.symm _
 
 中文:
 定理 sep
@@ -675,7 +764,42 @@ theorem sep
   simp only [res_mk_eq_mk_pullback] at h
   -- Next, using our assumption,
   -- choose covers over which the pullbacks of these representatives become equal.
-  choose W h1
+  choose W h1 h2 hh using fun I : S.Arrow => (eq_mk_iff_exists _ _).mp (h I)
+  -- To prove equality, it suffices to prove that there exists a cover over which
+  -- the representatives become equal.
+  rw [eq_mk_iff_exists]
+  -- Construct the cover over which the representatives become equal by combining the various
+  -- covers chosen above.
+  let B : J.Cover X := S.bind W
+  use B
+  -- Prove that this cover refines the two covers over which our representatives are defined
+  -- and use these proofs.
+  let ex : B ⟶ Sx :=
+    homOfLE
+      (by
+        rintro Y f ⟨Z, e1, e2, he2, he1, hee⟩
+        rw [← hee]
+        apply leOfHom (h1 ⟨_, _, he2⟩)
+        exact he1)
+  let ey : B ⟶ Sy :=
+    homOfLE
+      (by
+        rintro Y f ⟨Z, e1, e2, he2, he1, hee⟩
+        rw [← hee]
+        apply leOfHom (h2 ⟨_, _, he2⟩)
+        exact he1)
+  use ex, ey
+  -- Now prove that indeed the representatives become equal over `B`.
+  -- This will follow by using the fact that our representatives become
+  -- equal over the chosen covers.
+  ext1 I
+  let IS : S.Arrow := I.fromMiddle
+  specialize hh IS
+  let IW : (W IS).Arrow := I.toMiddle
+  apply_fun fun e => e IW at hh
+  convert! hh using 1
+  · exact x.congr_apply I.middle_spec.symm _
+  · exact y.congr_apply I.middle_spec.symm _
 -/
 theorem sep {X : C} (P : Cᵒᵖ ⥤ D) (S : J.Cover X) (x y : ToType ((J.plusObj P).obj (op X)))
     (h : forall I : S.Arrow, (J.plusObj P).map I.f.op x = (J.plusObj P).map I.f.op y) : x = y := by
@@ -780,7 +904,18 @@ definition meqOfSep
     intro II
     apply inj_of_sep P hsep
     rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [(J.toPlus P).naturality]; rw [(J.toPlus P).naturality]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]
-    erw [toPl
+    erw [toPlus_apply (T II.fst.fromMiddle) (t II.fst.fromMiddle) II.fst.toMiddle,
+      toPlus_apply (T II.snd.fromMiddle) (t II.snd.fromMiddle) II.snd.toMiddle]
+    rw [← ht]; rw [← ht]
+    erw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply];
+    rw [← (J.plusObj P).map_comp]; rw [← (J.plusObj P).map_comp]; rw [← op_comp]; rw [← op_comp]
+    exact s.condition
+      { fst.hf := II.fst.from_middle_condition
+        snd.hf := II.snd.from_middle_condition
+        r.g₁ := II.r.g₁ ≫ II.fst.toMiddleHom
+        r.g₂ := II.r.g₂ ≫ II.snd.toMiddleHom
+        r.w := by simpa only [Category.assoc, Cover.Arrow.middle_spec] using II.r.w
+        .. }
 
 中文:
 定义 meqOfSep
@@ -790,7 +925,18 @@ definition meqOfSep
     intro II
     apply inj_of_sep P hsep
     rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [(J.toPlus P).naturality]; rw [(J.toPlus P).naturality]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]
-    erw [toPl
+    erw [toPlus_apply (T II.fst.fromMiddle) (t II.fst.fromMiddle) II.fst.toMiddle,
+      toPlus_apply (T II.snd.fromMiddle) (t II.snd.fromMiddle) II.snd.toMiddle]
+    rw [← ht]; rw [← ht]
+    erw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply];
+    rw [← (J.plusObj P).map_comp]; rw [← (J.plusObj P).map_comp]; rw [← op_comp]; rw [← op_comp]
+    exact s.condition
+      { fst.hf := II.fst.from_middle_condition
+        snd.hf := II.snd.from_middle_condition
+        r.g₁ := II.r.g₁ ≫ II.fst.toMiddleHom
+        r.g₂ := II.r.g₂ ≫ II.snd.toMiddleHom
+        r.w := by simpa only [Category.assoc, Cover.Arrow.middle_spec] using II.r.w
+        .. }
 
 Depends on / 依赖: I.fromMiddle, I.toMiddle, fromMiddle, toMiddle
 -/
@@ -829,7 +975,48 @@ theorem exists_of_sep
   -- Choose representatives for the given local sections.
   choose T t ht using fun I => exists_rep (s I)
   -- Construct a large cover over which we will define a representative that will
-  -- provide the
+  -- provide the gluing of the given local sections.
+  let B : J.Cover X := S.bind T
+  choose Z e1 e2 he2 _ _ using fun I : B.Arrow => I.hf
+  -- Construct a compatible system of local sections over this large cover, using the chosen
+  -- representatives of our local sections.
+  -- The compatibility here follows from the separatedness assumption.
+  let w : Meq P B := meqOfSep P hsep X S s T t ht
+  -- The associated gluing will be the candidate section.
+  use mk w
+  ext I
+  dsimp [Meq.mk]
+  rw [ht]; rw [res_mk_eq_mk_pullback]
+  -- Use the separatedness of `P⁺` to prove that this is indeed a gluing of our
+  -- original local sections.
+  apply sep P (T I)
+  intro II
+  simp only [res_mk_eq_mk_pullback, eq_mk_iff_exists]
+  -- It suffices to prove equality for representatives over a
+  -- convenient sufficiently large cover...
+  use (J.pullback II.f).obj (T I)
+  let e0 : (J.pullback II.f).obj (T I) ⟶ (J.pullback II.f).obj ((J.pullback I.f).obj B) :=
+    homOfLE
+      (by
+        intro Y f hf
+        apply Sieve.le_pullback_bind _ _ _ I.hf
+        · cases I
+          exact hf)
+  use e0, 𝟙 _
+  ext IV
+  let IA : B.Arrow := ⟨_, (IV.f ≫ II.f) ≫ I.f,
+    ⟨I.Y, _, _, I.hf, Sieve.downward_closed _ II.hf _, rfl⟩⟩
+  let IB : S.Arrow := IA.fromMiddle
+  let IC : (T IB).Arrow := IA.toMiddle
+  let ID : (T I).Arrow := ⟨IV.Y, IV.f ≫ II.f, Sieve.downward_closed (T I).1 II.hf IV.f⟩
+  change t IB IC = t I ID
+  apply inj IV.Y
+  rw [toPlus_apply (T I) (t I) ID]
+  erw [toPlus_apply (T IB) (t IB) IC]
+  rw [← ht]; rw [← ht]
+  -- Conclude by constructing the relation showing equality...
+  let IR : S.Relation := { fst.hf := IB.hf, snd.hf := I.hf, r.w := IA.middle_spec, .. }
+  exact s.condition IR
 
 中文:
 定理 存在_of_sep
@@ -839,7 +1026,48 @@ theorem exists_of_sep
   -- Choose representatives for the given local sections.
   choose T t ht using fun I => exists_rep (s I)
   -- Construct a large cover over which we will define a representative that will
-  -- provide the
+  -- provide the gluing of the given local sections.
+  let B : J.Cover X := S.bind T
+  choose Z e1 e2 he2 _ _ using fun I : B.Arrow => I.hf
+  -- Construct a compatible system of local sections over this large cover, using the chosen
+  -- representatives of our local sections.
+  -- The compatibility here follows from the separatedness assumption.
+  let w : Meq P B := meqOfSep P hsep X S s T t ht
+  -- The associated gluing will be the candidate section.
+  use mk w
+  ext I
+  dsimp [Meq.mk]
+  rw [ht]; rw [res_mk_eq_mk_pullback]
+  -- Use the separatedness of `P⁺` to prove that this is indeed a gluing of our
+  -- original local sections.
+  apply sep P (T I)
+  intro II
+  simp only [res_mk_eq_mk_pullback, eq_mk_iff_exists]
+  -- It suffices to prove equality for representatives over a
+  -- convenient sufficiently large cover...
+  use (J.pullback II.f).obj (T I)
+  let e0 : (J.pullback II.f).obj (T I) ⟶ (J.pullback II.f).obj ((J.pullback I.f).obj B) :=
+    homOfLE
+      (by
+        intro Y f hf
+        apply Sieve.le_pullback_bind _ _ _ I.hf
+        · cases I
+          exact hf)
+  use e0, 𝟙 _
+  ext IV
+  let IA : B.Arrow := ⟨_, (IV.f ≫ II.f) ≫ I.f,
+    ⟨I.Y, _, _, I.hf, Sieve.downward_closed _ II.hf _, rfl⟩⟩
+  let IB : S.Arrow := IA.fromMiddle
+  let IC : (T IB).Arrow := IA.toMiddle
+  let ID : (T I).Arrow := ⟨IV.Y, IV.f ≫ II.f, Sieve.downward_closed (T I).1 II.hf IV.f⟩
+  change t IB IC = t I ID
+  apply inj IV.Y
+  rw [toPlus_apply (T I) (t I) ID]
+  erw [toPlus_apply (T IB) (t IB) IC]
+  rw [← ht]; rw [← ht]
+  -- Conclude by constructing the relation showing equality...
+  let IR : S.Relation := { fst.hf := IB.hf, snd.hf := I.hf, r.w := IA.middle_spec, .. }
+  exact s.condition IR
 
 Depends on / 依赖: Function, Function.Injective, Injective, J.toPlus, inj_of_sep, toPlus
 -/
@@ -916,7 +1144,17 @@ theorem isSheaf_of_sep
     intro I
     apply_fun Meq.equiv (J.plusObj P) S at h
     apply_fun fun e => e I at h
-    dsimp only 
+    dsimp only [ConcreteCategory.forget_map_eq_ofHom] at h
+    simpa [Meq.equiv_apply, ← comp_apply] using! h
+  · rintro (x : ToType (multiequalizer (S.index _)))
+    obtain ⟨t, ht⟩ := exists_of_sep P hsep X S (Meq.equiv _ _ x)
+    use t
+    apply (Meq.equiv (D := D) _ _).injective
+    rw [← ht]
+    ext i
+    dsimp
+    rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]
+    rfl
 
 中文:
 定理 isSheaf_of_sep
@@ -932,7 +1170,17 @@ theorem isSheaf_of_sep
     intro I
     apply_fun Meq.equiv (J.plusObj P) S at h
     apply_fun fun e => e I at h
-    dsimp only 
+    dsimp only [ConcreteCategory.forget_map_eq_ofHom] at h
+    simpa [Meq.equiv_apply, ← comp_apply] using! h
+  · rintro (x : ToType (multiequalizer (S.index _)))
+    obtain ⟨t, ht⟩ := exists_of_sep P hsep X S (Meq.equiv _ _ x)
+    use t
+    apply (Meq.equiv (D := D) _ _).injective
+    rw [← ht]
+    ext i
+    dsimp
+    rw [← ConcreteCategory.comp_apply]; rw [Multiequalizer.lift_ι]
+    rfl
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.forget_map_eq_ofHom, J.plusObj, Meq.equiv, Meq.equiv_apply, Presheaf, Presheaf.isSheaf_iff_multiequalizer, S.index, ToType, apply_fun, comp_apply, equiv_apply, exists_of_sep, forget, forget_map_eq_ofHom, isIso_iff_bijective, isIso_of_reflects_iso, isSheaf_iff_multiequalizer, multiequalizer, plusObj
 -/
@@ -1600,7 +1848,12 @@ definition plusPlusAdjunction
           invFun := fun e => ⟨J.sheafifyLift e Q.2⟩
 left_inv := fun _ => Sheaf.hom_ext (J.sheafifyLift_unique _ _ _ rfl).symm
           right_inv := fun _ => J.toSheafify_sheafifyLift _ _ }
-      
+      homEquiv_naturality_left_symm := by
+        intro P Q R η γ; ext1; dsimp; symm
+        apply J.sheafifyMap_sheafifyLift
+      homEquiv_naturality_right := fun η γ => by
+        dsimp
+        rw [Category.assoc] }
 
 中文:
 定义 plusPlusAdjunction
@@ -1611,7 +1864,12 @@ left_inv := fun _ => Sheaf.hom_ext (J.sheafifyLift_unique _ _ _ rfl).symm
           invFun := fun e => ⟨J.sheafifyLift e Q.2⟩
 left_inv := fun _ => Sheaf.hom_ext (J.sheafifyLift_unique _ _ _ rfl).symm
           right_inv := fun _ => J.toSheafify_sheafifyLift _ _ }
-      
+      homEquiv_naturality_left_symm := by
+        intro P Q R η γ; ext1; dsimp; symm
+        apply J.sheafifyMap_sheafifyLift
+      homEquiv_naturality_right := fun η γ => by
+        dsimp
+        rw [Category.assoc] }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Category, Category.assoc, J.sheafifyLift, J.sheafifyLift_unique, J.sheafifyMap_sheafifyLift, J.toSheafify, J.toSheafify_sheafifyLift, Sheaf.hom_ext, e.hom, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, hom_ext, invFun, left_inv, mkOfHomEquiv, right_inv, sheafifyLift
 -/

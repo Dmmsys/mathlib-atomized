@@ -42,7 +42,10 @@ lemma exists_maximalFor
     by_cases hji : f j <= f i
     · refine ⟨i, mem_cons_self .., ?_⟩
       simp only [mem_cons, forall_eq_or_imp, imp_self, true_and]
-      exact fun k
+      exact fun k hk hik => _root_.trans (hj.2 hk <| _root_.trans hji hik) hji
+    · exact ⟨j, mem_cons_of_mem hj.1, by simpa [hji] using hj.2⟩
+
+@[to_dual]
 
 中文:
 引理 存在_maximalFor
@@ -55,7 +58,10 @@ lemma exists_maximalFor
     by_cases hji : f j <= f i
     · refine ⟨i, mem_cons_self .., ?_⟩
       simp only [mem_cons, forall_eq_or_imp, imp_self, true_and]
-      exact fun k
+      exact fun k hk hik => _root_.trans (hj.2 hk <| _root_.trans hji hik) hji
+    · exact ⟨j, mem_cons_of_mem hj.1, by simpa [hji] using hj.2⟩
+
+@[to_dual]
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Nonempty, _root_, _root_.trans, cons_induction, forall_eq_or_imp, imp_self, mem_cons, mem_cons_of_mem, mem_cons_self, singleton, true_and
 -/
@@ -254,7 +260,7 @@ lemma infinite_of_forall_exists_gt
   exact infinite_of_injective_forall_mem
     (strictMono_nat_of_lt_succ fun n => (h _).choose_spec.2).injective hf
 
-@[to_du
+@[to_dual existing infinite_of_forall_exists_gt]
 
 中文:
 引理 infinite_of_对任意_存在_gt
@@ -267,7 +273,7 @@ lemma infinite_of_forall_exists_gt
   exact infinite_of_injective_forall_mem
     (strictMono_nat_of_lt_succ fun n => (h _).choose_spec.2).injective hf
 
-@[to_du
+@[to_dual existing infinite_of_forall_exists_gt]
 
 Depends on / 依赖: Nat.recOn, choose_spec, infinite_of_injective_forall_mem, inhabit, injective, strictMono_nat_of_lt_succ
 -/
@@ -476,7 +482,11 @@ lemma OrderEmbedding.range_eq_iff
   let i : f '' .univ ≃o g '' .univ :=
     { __ := Equiv.setCongr (by simpa using! h)
       map_rel_iff' := by rfl }
-  have : (ef.trans i).trans 
+  have : (ef.trans i).trans eg.symm = .refl _ := by
+    exact Subsingleton.elim _ _
+  ext x
+  simpa only [OrderIso.trans_apply, OrderIso.apply_symm_apply, OrderIso.refl_apply, Subtype.ext_iff]
+    using! congr(eg ($this ⟨x, Set.mem_univ x⟩))
 
 中文:
 引理 OrderEmbedding.range_eq_iff
@@ -487,7 +497,11 @@ lemma OrderEmbedding.range_eq_iff
   let i : f '' .univ ≃o g '' .univ :=
     { __ := Equiv.setCongr (by simpa using! h)
       map_rel_iff' := by rfl }
-  have : (ef.trans i).trans 
+  have : (ef.trans i).trans eg.symm = .refl _ := by
+    exact Subsingleton.elim _ _
+  ext x
+  simpa only [OrderIso.trans_apply, OrderIso.apply_symm_apply, OrderIso.refl_apply, Subtype.ext_iff]
+    using! congr(eg ($this ⟨x, Set.mem_univ x⟩))
 
 Depends on / 依赖: Equiv.setCongr, OrderIso, OrderIso.apply_symm_apply, OrderIso.refl_apply, OrderIso.trans_apply, Set.mem_univ, Subsingleton, Subsingleton.elim, Subtype, Subtype.ext_iff, apply_symm_apply, ef.trans, eg.symm, ext_iff, f.strictMono.strictMonoOn, g.strictMono.strictMonoOn, map_rel_iff, mem_univ, orderIso, refl_apply
 -/

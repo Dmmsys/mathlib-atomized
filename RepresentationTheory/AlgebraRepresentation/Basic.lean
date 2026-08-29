@@ -64,7 +64,11 @@ theorem IsSimpleModule.finrank_eq_one_of_isMulCommutative
     smul_mem' a w hw := by
       have ⟨t, ht⟩ := (IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed k).2
         (Module.toModuleEnd A V a)
-  
+      simpa only [← show _ = a • w from congr($ht w)] using! (k ∙ v).smul_mem t hw }
+  obtain hU | hU := eq_bot_or_eq_top U
+  · exact (v_nz <| hU.le <| Submodule.mem_span_singleton_self v).elim
+  · rw [finrank_eq_one_iff_of_nonzero v v_nz]
+    rwa [← top_le_iff] at hU ⊢
 
 中文:
 定理 是单模.finrank_eq_one_of_isMulCommutative
@@ -76,7 +80,11 @@ theorem IsSimpleModule.finrank_eq_one_of_isMulCommutative
     smul_mem' a w hw := by
       have ⟨t, ht⟩ := (IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed k).2
         (Module.toModuleEnd A V a)
-  
+      simpa only [← show _ = a • w from congr($ht w)] using! (k ∙ v).smul_mem t hw }
+  obtain hU | hU := eq_bot_or_eq_top U
+  · exact (v_nz <| hU.le <| Submodule.mem_span_singleton_self v).elim
+  · rw [finrank_eq_one_iff_of_nonzero v v_nz]
+    rwa [← top_le_iff] at hU ⊢
 
 Depends on / 依赖: IsSimpleModule, IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed, IsSimpleModule.nontrivial, Module, Module.toModuleEnd, Nontrivial, Submodule, Submodule.mem_span_singleton_self, Submodule.span, algebraMap_end_bijective_of_isAlgClosed, eq_bot_or_eq_top, exists_ne, finrank_eq_one_iff_of_nonzero, hU.le, mem_span_singleton_self, nontrivial, smul_mem, toModuleEnd, v_nz
 -/

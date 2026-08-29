@@ -999,7 +999,7 @@ theorem map_roots_comp_C_mul_X_add_C
   rw [Multiset.ext]
   intro x
   obtain ⟨x, rfl⟩ := hf.surjective x
-  rw [count_roots]; rw [count_map_eq_count' f _ hf.injective]; rw [
+  rw [count_roots]; rw [count_map_eq_count' f _ hf.injective]; rw [count_roots]; rw [rootMultiplicity_comp_C_mul_X_add_C p a b x ha]
 
 中文:
 定理 map_roots_comp_C_mul_X_add_C
@@ -1012,7 +1012,7 @@ theorem map_roots_comp_C_mul_X_add_C
   rw [Multiset.ext]
   intro x
   obtain ⟨x, rfl⟩ := hf.surjective x
-  rw [count_roots]; rw [count_map_eq_count' f _ hf.injective]; rw [
+  rw [count_roots]; rw [count_map_eq_count' f _ hf.injective]; rw [count_roots]; rw [rootMultiplicity_comp_C_mul_X_add_C p a b x ha]
 
 Depends on / 依赖: AddGroup, AddGroup.addRight_bijective, Bijective, Function, Function.Bijective, IsUnit, IsUnit.isUnit_iff_mulLeft_bijective.mp, Multiset, Multiset.ext, addRight_bijective, classical, count_map_eq_count, count_roots, hf.injective, hf.surjective, injective, isUnit_iff_mulLeft_bijective, rootMultiplicity_comp_C_mul_X_add_C, surjective
 -/
@@ -1667,7 +1667,13 @@ theorem card_nthRoots
         (le_trans (card_roots h)
           (by
             rw [hn]; rw [pow_zero]; rw [← C_1]; rw [← map_sub]
+            exact degree_C_le))
+  else by
+    rw [← Nat.cast_le (α := WithBot Nat)]
+    rw [← degree_X_pow_sub_C (Nat.pos_of_ne_zero hn) a]
+    exact card_roots (X_pow_sub_C_ne_zero (Nat.pos_of_ne_zero hn) a))
 
+@[simp]
 
 中文:
 定理 card_nthRoots
@@ -1683,7 +1689,13 @@ theorem card_nthRoots
         (le_trans (card_roots h)
           (by
             rw [hn]; rw [pow_zero]; rw [← C_1]; rw [← map_sub]
+            exact degree_C_le))
+  else by
+    rw [← Nat.cast_le (α := WithBot Nat)]
+    rw [← degree_X_pow_sub_C (Nat.pos_of_ne_zero hn) a]
+    exact card_roots (X_pow_sub_C_ne_zero (Nat.pos_of_ne_zero hn) a))
 
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.card_zero, Nat.cast_le, Nat.pos_of_ne_zero, WithBot, WithBot.coe_le_coe, X_pow_sub_C_ne_zero, card_roots, card_zero, cast_le, classical, coe_le_coe, degree_C_le, degree_X_pow_sub_C, empty_eq_zero, le_trans, map_sub, nthRoots, pos_of_ne_zero, pow_zero
 -/
@@ -2725,7 +2737,11 @@ theorem bUnion_roots_finite
       -- We prove that the set of polynomials under consideration is finite because its
       -- image by the injective map `π` is finite
       let π : R[X] -> Fin (d + 1) -> R := fun f i => f.coeff i
-      refine ((Set.Finite.pi fun _ => h).subset <| ?_).of_finite_image (
+      refine ((Set.Finite.pi fun _ => h).subset <| ?_).of_finite_image (?_ : Set.InjOn π _)
+      · exact Set.image_subset_iff.2 fun f hf i _ => hf.2 i
+      · refine fun x hx y hy hxy => (ext_iff_natDegree_le hx.1 hy.1).2 fun i hi => ?_
+        exact id congr_fun hxy ⟨i, Nat.lt_succ_of_le hi⟩)
+    fun _ _ => Finset.finite_toSet _
 
 中文:
 定理 bUnion_roots_finite
@@ -2735,7 +2751,11 @@ theorem bUnion_roots_finite
       -- We prove that the set of polynomials under consideration is finite because its
       -- image by the injective map `π` is finite
       let π : R[X] -> Fin (d + 1) -> R := fun f i => f.coeff i
-      refine ((Set.Finite.pi fun _ => h).subset <| ?_).of_finite_image (
+      refine ((Set.Finite.pi fun _ => h).subset <| ?_).of_finite_image (?_ : Set.InjOn π _)
+      · exact Set.image_subset_iff.2 fun f hf i _ => hf.2 i
+      · refine fun x hx y hy hxy => (ext_iff_natDegree_le hx.1 hy.1).2 fun i hi => ?_
+        exact id congr_fun hxy ⟨i, Nat.lt_succ_of_le hi⟩)
+    fun _ _ => Finset.finite_toSet _
 
 Depends on / 依赖: Finite, Set.Finite.biUnion, biUnion
 -/
@@ -3186,7 +3206,14 @@ lemma eq_zero_of_natDegree_lt_card_of_eval_eq_zero
     #p.roots.toFinset <= Multiset.card p.roots := Multiset.toFinset_card_le _
     _ <= natDegree p := Polynomial.card_roots' p
     _ < Fintype.card ι := hcard
-    _ = Fintype.card (Set.range f) := (Set.card_range_of_injecti
+    _ = Fintype.card (Set.range f) := (Set.card_range_of_injective hf).symm
+    _ = #(Finset.univ.image f) := by rw [← Set.toFinset_card, Set.toFinset_range]
+    _ <= #p.roots.toFinset := Finset.card_mono ?_
+  intro _
+  simp only [Finset.mem_image, Finset.mem_univ, true_and, Multiset.mem_toFinset, mem_roots', ne_eq,
+    IsRoot.def, forall_exists_index, hp, not_false_eq_true]
+  rintro x rfl
+  exact heval _
 
 中文:
 引理 eq_zero_of_natDegree_lt_card_of_eval_eq_zero
@@ -3199,7 +3226,14 @@ lemma eq_zero_of_natDegree_lt_card_of_eval_eq_zero
     #p.roots.toFinset <= Multiset.card p.roots := Multiset.toFinset_card_le _
     _ <= natDegree p := Polynomial.card_roots' p
     _ < Fintype.card ι := hcard
-    _ = Fintype.card (Set.range f) := (Set.card_range_of_injecti
+    _ = Fintype.card (Set.range f) := (Set.card_range_of_injective hf).symm
+    _ = #(Finset.univ.image f) := by rw [← Set.toFinset_card, Set.toFinset_range]
+    _ <= #p.roots.toFinset := Finset.card_mono ?_
+  intro _
+  simp only [Finset.mem_image, Finset.mem_univ, true_and, Multiset.mem_toFinset, mem_roots', ne_eq,
+    IsRoot.def, forall_exists_index, hp, not_false_eq_true]
+  rintro x rfl
+  exact heval _
 
 Depends on / 依赖: Finset, Finset.card_mono, Finset.mem_image, Finset.mem_univ, Finset.univ.image, Fintype, Fintype.card, Multiset, Multiset.card, Multiset.mem_toFinset, Multiset.toFinset_card_le, Polynomial, Polynomial.card_roots, Set.card_range_of_injective, Set.range, Set.toFinset_card, Set.toFinset_range, card_mono, card_range_of_injective, card_roots
 -/
@@ -3457,7 +3491,9 @@ theorem prod_multiset_X_sub_C_dvd
     (monic_multisetProd_X_sub_C p.roots)]
   rw [prod_multiset_root_eq_finset_root]; rw [Polynomial.map_prod]
   refine Finset.prod_dvd_of_coprime (fun a _ b _ h => ?_) fun a _ => ?_
-  · simp_rw [Polynomial.map_pow, Po
+  · simp_rw [Polynomial.map_pow, Polynomial.map_sub, map_C, map_X]
+    exact (pairwise_coprime_X_sub_C (IsFractionRing.injective R <| FractionRing R) h).pow
+  · exact Polynomial.map_dvd _ (pow_rootMultiplicity_dvd p a)
 
 中文:
 定理 prod_multiset_X_sub_C_dvd
@@ -3469,7 +3505,9 @@ theorem prod_multiset_X_sub_C_dvd
     (monic_multisetProd_X_sub_C p.roots)]
   rw [prod_multiset_root_eq_finset_root]; rw [Polynomial.map_prod]
   refine Finset.prod_dvd_of_coprime (fun a _ b _ h => ?_) fun a _ => ?_
-  · simp_rw [Polynomial.map_pow, Po
+  · simp_rw [Polynomial.map_pow, Polynomial.map_sub, map_C, map_X]
+    exact (pairwise_coprime_X_sub_C (IsFractionRing.injective R <| FractionRing R) h).pow
+  · exact Polynomial.map_dvd _ (pow_rootMultiplicity_dvd p a)
 
 Depends on / 依赖: Finset, Finset.prod_dvd_of_coprime, FractionRing, IsFractionRing, IsFractionRing.injective, Polynomial, Polynomial.map_dvd, Polynomial.map_pow, Polynomial.map_prod, Polynomial.map_sub, classical, injective, map_C, map_X, map_dvd, map_dvd_map, map_pow, map_prod, map_sub, monic_multisetProd_X_sub_C
 -/
@@ -3495,7 +3533,9 @@ theorem _root_.Multiset.prod_X_sub_C_dvd_iff_le_roots
     Multiset.le_iff_count.2 fun r => by
       rw [count_roots]; rw [le_rootMultiplicity_iff hp]; rw [← Multiset.prod_replicate]; rw [←
         Multiset.map_replicate fun a => X - C a]; rw [← Multiset.filter_eq]
-      exact (Multiset.prod_dvd_prod_of_le <| Multiset.ma
+      exact (Multiset.prod_dvd_prod_of_le <| Multiset.map_le_map <| s.filter_le _).trans h,
+    fun h =>
+    (Multiset.prod_dvd_prod_of_le <| Multiset.map_le_map h).trans p.prod_multiset_X_sub_C_dvd⟩
 
 中文:
 定理 _root_.Multiset.prod_X_sub_C_dvd_iff_le_roots
@@ -3506,7 +3546,9 @@ theorem _root_.Multiset.prod_X_sub_C_dvd_iff_le_roots
     Multiset.le_iff_count.2 fun r => by
       rw [count_roots]; rw [le_rootMultiplicity_iff hp]; rw [← Multiset.prod_replicate]; rw [←
         Multiset.map_replicate fun a => X - C a]; rw [← Multiset.filter_eq]
-      exact (Multiset.prod_dvd_prod_of_le <| Multiset.ma
+      exact (Multiset.prod_dvd_prod_of_le <| Multiset.map_le_map <| s.filter_le _).trans h,
+    fun h =>
+    (Multiset.prod_dvd_prod_of_le <| Multiset.map_le_map h).trans p.prod_multiset_X_sub_C_dvd⟩
 
 Depends on / 依赖: Multiset, Multiset.filter_eq, Multiset.le_iff_count, Multiset.map_le_map, Multiset.map_replicate, Multiset.prod_dvd_prod_of_le, Multiset.prod_replicate, classical, count_roots, filter_eq, filter_le, le_iff_count, le_rootMultiplicity_iff, map_le_map, map_replicate, p.prod_multiset_X_sub_C_dvd, prod_dvd_prod_of_le, prod_multiset_X_sub_C_dvd, prod_replicate, s.filter_le
 -/
@@ -3537,7 +3579,9 @@ theorem exists_prod_multiset_X_sub_C_mul
   constructor
   · conv_rhs => rw [he]
     rw [(monic_multisetProd_X_sub_C p.roots).natDegree_mul' hq]; rw [natDegree_multiset_prod_X_sub_C_eq_card]
-  · 
+  · replace he := congr_arg roots he.symm
+    rw [roots_mul]; rw [roots_multiset_prod_X_sub_C] at he
+    exacts [add_eq_left.1 he, mul_ne_zero (monic_multisetProd_X_sub_C p.roots).ne_zero hq]
 
 中文:
 定理 存在_prod_multiset_X_sub_C_mul
@@ -3552,7 +3596,9 @@ theorem exists_prod_multiset_X_sub_C_mul
   constructor
   · conv_rhs => rw [he]
     rw [(monic_multisetProd_X_sub_C p.roots).natDegree_mul' hq]; rw [natDegree_multiset_prod_X_sub_C_eq_card]
-  · 
+  · replace he := congr_arg roots he.symm
+    rw [roots_mul]; rw [roots_multiset_prod_X_sub_C] at he
+    exacts [add_eq_left.1 he, mul_ne_zero (monic_multisetProd_X_sub_C p.roots).ne_zero hq]
 
 Depends on / 依赖: add_eq_left, congr_arg, conv_rhs, eq_or_ne, exacts, he.symm, monic_multisetProd_X_sub_C, mul_ne_zero, mul_zero, natDegree_mul, natDegree_multiset_prod_X_sub_C_eq_card, ne_zero, p.prod_multiset_X_sub_C_dvd, p.roots, prod_multiset_X_sub_C_dvd, replace, roots_mul, roots_multiset_prod_X_sub_C
 -/
@@ -3718,7 +3764,13 @@ theorem Monic.irreducible_iff_degree_lt
   · rintro h q deg_le dvd
     by_contra q_unit
     have := degree_pos_of_not_isUnit_of_dvd_monic p_monic q_unit dvd
-    have hu := p_monic
+    have hu := p_monic.isUnit_leadingCoeff_of_dvd dvd
+    refine (h _ (monic_of_isUnit_leadingCoeff_inv_smul hu) ?_ ?_ (dvd_trans ?_ dvd)).elim
+    · rwa [degree_smul_of_smul_regular _ (isSMulRegular_of_group _)]
+    · rwa [degree_smul_of_smul_regular _ (isSMulRegular_of_group _)]
+    · rw [Units.smul_def, Polynomial.smul_eq_C_mul, (isUnit_C.mpr (Units.isUnit _)).mul_left_dvd]
+  · rintro h q _ deg_pos deg_le dvd
+exact deg_pos.ne' degree_eq_zero_of_isUnit (h q deg_le dvd)
 
 中文:
 定理 Monic.irreducible_iff_degree_lt
@@ -3730,7 +3782,13 @@ theorem Monic.irreducible_iff_degree_lt
   · rintro h q deg_le dvd
     by_contra q_unit
     have := degree_pos_of_not_isUnit_of_dvd_monic p_monic q_unit dvd
-    have hu := p_monic
+    have hu := p_monic.isUnit_leadingCoeff_of_dvd dvd
+    refine (h _ (monic_of_isUnit_leadingCoeff_inv_smul hu) ?_ ?_ (dvd_trans ?_ dvd)).elim
+    · rwa [degree_smul_of_smul_regular _ (isSMulRegular_of_group _)]
+    · rwa [degree_smul_of_smul_regular _ (isSMulRegular_of_group _)]
+    · rw [Units.smul_def, Polynomial.smul_eq_C_mul, (isUnit_C.mpr (Units.isUnit _)).mul_left_dvd]
+  · rintro h q _ deg_pos deg_le dvd
+exact deg_pos.ne' degree_eq_zero_of_isUnit (h q deg_le dvd)
 
 Depends on / 依赖: Finset, Finset.mem_Ioc, and_imp, deg_le, degree_pos_of_not_isUnit_of_dvd_monic, degree_smul_of_smul_regular, dvd_trans, irreducible_iff_lt_natDegree_lt, isSMulRegular_of_group, isUnit_leadingCoeff_of_dvd, mem_Ioc, monic_of_isUnit_leadingCoeff_inv_smul, natDegree_le_iff_degree_le, natDegree_pos_iff_degree_pos, p_monic, p_monic.irreducible_iff_lt_natDegree_lt, p_monic.isUnit_leadingCoeff_of_dvd, q_unit
 -/
@@ -3792,7 +3850,8 @@ theorem eq_rootMultiplicity_map
   proof: by
   by_cases hp0 : p = 0; · simp only [hp0, rootMultiplicity_zero, Polynomial.map_zero]
   apply le_antisymm (le_rootMultiplicity_map ((Polynomial.map_ne_zero_iff hf).mpr hp0) a)
-  rw [le_rootMultiplicity_iff hp0]; rw [← map_dvd_map f hf ((monic_X_sub_C a).pow _)]; rw [Polynomial.map_pow]; rw [Polyn
+  rw [le_rootMultiplicity_iff hp0]; rw [← map_dvd_map f hf ((monic_X_sub_C a).pow _)]; rw [Polynomial.map_pow]; rw [Polynomial.map_sub]; rw [map_X]; rw [map_C]
+  apply pow_rootMultiplicity_dvd
 
 中文:
 定理 eq_rootMultiplicity_map
@@ -3800,7 +3859,8 @@ theorem eq_rootMultiplicity_map
   证明: by
   by_cases hp0 : p = 0; · simp only [hp0, rootMultiplicity_zero, Polynomial.map_zero]
   apply le_antisymm (le_rootMultiplicity_map ((Polynomial.map_ne_zero_iff hf).mpr hp0) a)
-  rw [le_rootMultiplicity_iff hp0]; rw [← map_dvd_map f hf ((monic_X_sub_C a).pow _)]; rw [Polynomial.map_pow]; rw [Polyn
+  rw [le_rootMultiplicity_iff hp0]; rw [← map_dvd_map f hf ((monic_X_sub_C a).pow _)]; rw [Polynomial.map_pow]; rw [Polynomial.map_sub]; rw [map_X]; rw [map_C]
+  apply pow_rootMultiplicity_dvd
 
 Depends on / 依赖: Polynomial, Polynomial.map_ne_zero_iff, Polynomial.map_pow, Polynomial.map_sub, Polynomial.map_zero, le_antisymm, le_rootMultiplicity_iff, le_rootMultiplicity_map, map_C, map_X, map_dvd_map, map_ne_zero_iff, map_pow, map_sub, map_zero, monic_X_sub_C, pow_rootMultiplicity_dvd, rootMultiplicity_zero
 -/
@@ -3823,7 +3883,9 @@ theorem count_map_roots
   rw [← Multiset.filter_eq]
   refine
     (Multiset.prod_dvd_prod_of_le <| Multiset.map_le_map <| Multiset.filter_le (Eq b) _).trans ?_
-  convert! Polynomial.map_dvd f p.prod_mul
+  convert! Polynomial.map_dvd f p.prod_multiset_X_sub_C_dvd
+  simp only [Polynomial.map_multiset_prod, Multiset.map_map, Function.comp_apply,
+    Polynomial.map_sub, map_X, map_C]
 
 中文:
 定理 count_map_roots
@@ -3834,7 +3896,9 @@ theorem count_map_roots
   rw [← Multiset.filter_eq]
   refine
     (Multiset.prod_dvd_prod_of_le <| Multiset.map_le_map <| Multiset.filter_le (Eq b) _).trans ?_
-  convert! Polynomial.map_dvd f p.prod_mul
+  convert! Polynomial.map_dvd f p.prod_multiset_X_sub_C_dvd
+  simp only [Polynomial.map_multiset_prod, Multiset.map_map, Function.comp_apply,
+    Polynomial.map_sub, map_X, map_C]
 
 Depends on / 依赖: Function, Function.comp_apply, Multiset, Multiset.filter_eq, Multiset.filter_le, Multiset.map_le_map, Multiset.map_map, Multiset.map_replicate, Multiset.prod_dvd_prod_of_le, Multiset.prod_replicate, Polynomial, Polynomial.map_dvd, Polynomial.map_multiset_prod, Polynomial.map_sub, comp_apply, convert, filter_eq, filter_le, le_rootMultiplicity_iff, map_C
 -/

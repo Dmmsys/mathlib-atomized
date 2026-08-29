@@ -383,7 +383,7 @@ theorem _root_.Subalgebra.topologicalClosure_star_comm
   suffices forall t : Subalgebra R A, (star t).topologicalClosure <= star t.topologicalClosure from
     le_antisymm (this s) (by simpa only [star_star] using Subalgebra.star_mono (this (star s)))
   exact fun t => (star t).topologicalClosure_minimal (Subalgebra.star_mono subset_closure)
-    (isClo
+    (isClosed_closure.preimage continuous_star)
 
 中文:
 定理 _root_.子代数.topologicalClosure_star_comm
@@ -392,7 +392,7 @@ theorem _root_.Subalgebra.topologicalClosure_star_comm
   suffices forall t : Subalgebra R A, (star t).topologicalClosure <= star t.topologicalClosure from
     le_antisymm (this s) (by simpa only [star_star] using Subalgebra.star_mono (this (star s)))
   exact fun t => (star t).topologicalClosure_minimal (Subalgebra.star_mono subset_closure)
-    (isClo
+    (isClosed_closure.preimage continuous_star)
 
 Depends on / 依赖: Subalgebra, Subalgebra.star_mono, continuous_star, isClosed_closure, isClosed_closure.preimage, le_antisymm, preimage, star_mono, star_star, subset_closure, t.topologicalClosure, topologicalClosure, topologicalClosure_minimal
 -/
@@ -490,7 +490,8 @@ theorem _root_.StarAlgHomClass.ext_topologicalClosure
   have : (φ : S.topologicalClosure ->⋆ₐ[R] B) = (ψ : S.topologicalClosure ->⋆ₐ[R] B) := by
     refine StarAlgHom.ext_topologicalClosure (R := R) (A := A) (B := B) hφ hψ (StarAlgHom.ext ?_)
     simpa only [StarAlgHom.coe_comp, StarAlgHom.coe_coe] using! h
-  rw [DFunLike.ext'_iff]; rw [← StarAlgHom
+  rw [DFunLike.ext'_iff]; rw [← StarAlgHom.coe_coe]
+  apply congrArg _ this
 
 中文:
 定理 _root_.StarAlgHomClass.ext_topologicalClosure
@@ -499,7 +500,8 @@ theorem _root_.StarAlgHomClass.ext_topologicalClosure
   have : (φ : S.topologicalClosure ->⋆ₐ[R] B) = (ψ : S.topologicalClosure ->⋆ₐ[R] B) := by
     refine StarAlgHom.ext_topologicalClosure (R := R) (A := A) (B := B) hφ hψ (StarAlgHom.ext ?_)
     simpa only [StarAlgHom.coe_comp, StarAlgHom.coe_coe] using! h
-  rw [DFunLike.ext'_iff]; rw [← StarAlgHom
+  rw [DFunLike.ext'_iff]; rw [← StarAlgHom.coe_coe]
+  apply congrArg _ this
 
 Depends on / 依赖: DFunLike, DFunLike.ext, S.topologicalClosure, StarAlgHom, StarAlgHom.coe_coe, StarAlgHom.coe_comp, StarAlgHom.ext, StarAlgHom.ext_topologicalClosure, _iff, coe_coe, coe_comp, ext_topologicalClosure, topologicalClosure
 -/
@@ -745,7 +747,14 @@ theorem induction_on
   induction hy using Algebra.adjoin_induction with
   | mem u hu =>
     obtain ((rfl : u = x) | (hu : star u = x)) := by simpa using hu
-    · 
+    · exact self
+    · simp_rw [← hu, star_star] at star_self
+      exact star_self
+  | algebraMap r => exact algebraMap r
+  | add u v hu_mem hv_mem hu hv =>
+    exact add u (subset_closure hu_mem) v (subset_closure hv_mem) (hu hu_mem) (hv hv_mem)
+  | mul u v hu_mem hv_mem hu hv =>
+    exact mul u (subset_closure hu_mem) v (subset_closure hv_mem) (hu hu_mem) (hv hv_mem)
 
 中文:
 定理 induction_on
@@ -756,7 +765,14 @@ theorem induction_on
   induction hy using Algebra.adjoin_induction with
   | mem u hu =>
     obtain ((rfl : u = x) | (hu : star u = x)) := by simpa using hu
-    · 
+    · exact self
+    · simp_rw [← hu, star_star] at star_self
+      exact star_self
+  | algebraMap r => exact algebraMap r
+  | add u v hu_mem hv_mem hu hv =>
+    exact add u (subset_closure hu_mem) v (subset_closure hv_mem) (hu hu_mem) (hv hv_mem)
+  | mul u v hu_mem hv_mem hu hv =>
+    exact mul u (subset_closure hu_mem) v (subset_closure hv_mem) (hu hu_mem) (hv hv_mem)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_induction, SetLike, SetLike.mem_coe, adjoin, adjoin_induction, adjoin_toSubalgebra, algebraMap, closure, hu_mem, hv_mem, mem_coe, mem_toSubalgebra, simp_rw, star_self, star_star, subset_closure
 -/
@@ -795,7 +811,7 @@ theorem starAlgHomClass_ext
   refine adjoin_induction_subtype x ?_ ?_ ?_ ?_ ?_
   exacts [fun y hy => by simpa only [Set.mem_singleton_iff.mp hy] using! h, fun r => by
     simp only [AlgHomClass.commutes], fun x y hx hy => by simp only [map_add, hx, hy],
-    f
+    fun x y hx hy => by simp only [map_mul, hx, hy], fun x hx => by simp only [map_star, hx]]
 
 中文:
 定理 starAlgHomClass_ext
@@ -805,7 +821,7 @@ theorem starAlgHomClass_ext
   refine adjoin_induction_subtype x ?_ ?_ ?_ ?_ ?_
   exacts [fun y hy => by simpa only [Set.mem_singleton_iff.mp hy] using! h, fun r => by
     simp only [AlgHomClass.commutes], fun x y hx hy => by simp only [map_add, hx, hy],
-    f
+    fun x y hx hy => by simp only [map_mul, hx, hy], fun x hx => by simp only [map_star, hx]]
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, Set.mem_singleton_iff.mp, StarAlgHomClass, StarAlgHomClass.ext_topologicalClosure, adjoin_induction_subtype, commutes, exacts, ext_topologicalClosure, map_add, map_mul, map_star, mem_singleton_iff
 -/

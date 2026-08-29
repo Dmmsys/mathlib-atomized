@@ -384,7 +384,8 @@ lemma colimitCoyonedaHomIsoLimit_π_apply
   simp only [colimitCoyonedaHomIsoLimit, Iso.trans_hom, Category.assoc,
     HasLimit.isoOfNatIso_hom_π]
   rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
-  simp only [coyonedaLemma
+  simp only [coyonedaLemma, comp_apply]
+  rfl
 
 中文:
 引理 colimitCoyonedaHomIsoLimit_π_apply
@@ -394,7 +395,8 @@ lemma colimitCoyonedaHomIsoLimit_π_apply
   simp only [colimitCoyonedaHomIsoLimit, Iso.trans_hom, Category.assoc,
     HasLimit.isoOfNatIso_hom_π]
   rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
-  simp only [coyonedaLemma
+  simp only [coyonedaLemma, comp_apply]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, HasLimit, HasLimit.isoOfNatIso_hom_, Iso.trans_hom, colimitCoyonedaHomIsoLimit, comp_apply, coyonedaLemma, trans_hom, uliftFunctor
 -/

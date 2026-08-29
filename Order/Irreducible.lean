@@ -416,7 +416,7 @@ theorem exists_supIrred_decomposition
   · exact ⟨∅, by simp [ha.eq_bot]⟩
   obtain ⟨s, rfl, hs⟩ := ih _ hb
   obtain ⟨t, rfl, ht⟩ := ih _ hc
- 
+  exact ⟨s union t, sup_union, forall_mem_union.2 ⟨hs, ht⟩⟩
 
 中文:
 定理 存在_supIrred_decomposition
@@ -433,7 +433,7 @@ theorem exists_supIrred_decomposition
   · exact ⟨∅, by simp [ha.eq_bot]⟩
   obtain ⟨s, rfl, hs⟩ := ih _ hb
   obtain ⟨t, rfl, ht⟩ := ih _ hc
- 
+  exact ⟨s union t, sup_union, forall_mem_union.2 ⟨hs, ht⟩⟩
 
 Depends on / 依赖: SupIrred, WellFoundedLT, WellFoundedLT.induction, classical, eq_bot, forall_mem_union, ha.eq_bot, not_supIrred, sup_union
 -/

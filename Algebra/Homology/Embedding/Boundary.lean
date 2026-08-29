@@ -184,7 +184,11 @@ lemma prev_f_of_not_boundaryGE
       simpa only [c.prev_eq_self j (by simpa only [hij] using hij')] using hij
     apply c'.prev_eq_self
     intro hj'
-    simp only [BoundaryGE, not_and, not_forall, not_not] at 
+    simp only [BoundaryGE, not_and, not_forall, not_not] at hj
+    obtain ⟨i, hi⟩ := hj hj'
+    rw [e.rel_iff] at hi
+    rw [c.prev_eq' hi] at hij
+    exact hij' (by simpa only [hij] using hi)
 
 中文:
 引理 prev_f_of_not_boundaryGE
@@ -196,7 +200,11 @@ lemma prev_f_of_not_boundaryGE
       simpa only [c.prev_eq_self j (by simpa only [hij] using hij')] using hij
     apply c'.prev_eq_self
     intro hj'
-    simp only [BoundaryGE, not_and, not_forall, not_not] at 
+    simp only [BoundaryGE, not_and, not_forall, not_not] at hj
+    obtain ⟨i, hi⟩ := hj hj'
+    rw [e.rel_iff] at hi
+    rw [c.prev_eq' hi] at hij
+    exact hij' (by simpa only [hij] using hi)
 
 Depends on / 依赖: BoundaryGE, c.Rel, c.prev_eq, c.prev_eq_self, e.rel_iff, not_and, not_forall, not_not, prev_eq, prev_eq_self, rel_iff
 -/
@@ -383,7 +391,11 @@ lemma next_f_of_not_boundaryLE
       simpa only [c.next_eq_self j (by simpa only [hjk] using hjk')] using hjk
     apply c'.next_eq_self
     intro hj'
-    simp only [BoundaryLE, not_and, not_forall, not_not] at 
+    simp only [BoundaryLE, not_and, not_forall, not_not] at hj
+    obtain ⟨k, hk⟩ := hj hj'
+    rw [e.rel_iff] at hk
+    rw [c.next_eq' hk] at hjk
+    exact hjk' (by simpa only [hjk] using hk)
 
 中文:
 引理 next_f_of_not_boundaryLE
@@ -395,7 +407,11 @@ lemma next_f_of_not_boundaryLE
       simpa only [c.next_eq_self j (by simpa only [hjk] using hjk')] using hjk
     apply c'.next_eq_self
     intro hj'
-    simp only [BoundaryLE, not_and, not_forall, not_not] at 
+    simp only [BoundaryLE, not_and, not_forall, not_not] at hj
+    obtain ⟨k, hk⟩ := hj hj'
+    rw [e.rel_iff] at hk
+    rw [c.next_eq' hk] at hjk
+    exact hjk' (by simpa only [hjk] using hk)
 
 Depends on / 依赖: BoundaryLE, c.Rel, c.next_eq, c.next_eq_self, e.rel_iff, next_eq, next_eq_self, not_and, not_forall, not_not, rel_iff
 -/
@@ -430,7 +446,7 @@ lemma next_f
     intro hj'
     apply hj
     rw [← e.rel_iff] at hj'
-    simpa only [
+    simpa only [c'.next_eq' hj'] using hj'
 
 中文:
 引理 next_f
@@ -445,7 +461,7 @@ lemma next_f
     intro hj'
     apply hj
     rw [← e.rel_iff] at hj'
-    simpa only [
+    simpa only [c'.next_eq' hj'] using hj'
 
 Depends on / 依赖: c.next_eq, c.next_eq_self, e.mem_next, e.rel_iff, mem_next, next_eq, next_eq_self, rel_iff
 -/

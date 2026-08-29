@@ -56,7 +56,8 @@ lemma Ideal.Quotient.factor_ker
     rw [← hr] at h ⊢
     simp only [factor, RingHom.mem_ker, lift_mk, eq_zero_iff_mem] at h
     exact Ideal.mem_map_of_mem _ h
-  · rcases mem_image_of_mem_map_of_surjective _ Ideal.Quotient.mk_surje
+  · rcases mem_image_of_mem_map_of_surjective _ Ideal.Quotient.mk_surjective h with ⟨r, hr, eq⟩
+    simpa [← eq, Ideal.Quotient.eq_zero_iff_mem] using hr
 
 中文:
 引理 理想.商.factor_ker
@@ -68,7 +69,8 @@ lemma Ideal.Quotient.factor_ker
     rw [← hr] at h ⊢
     simp only [factor, RingHom.mem_ker, lift_mk, eq_zero_iff_mem] at h
     exact Ideal.mem_map_of_mem _ h
-  · rcases mem_image_of_mem_map_of_surjective _ Ideal.Quotient.mk_surje
+  · rcases mem_image_of_mem_map_of_surjective _ Ideal.Quotient.mk_surjective h with ⟨r, hr, eq⟩
+    simpa [← eq, Ideal.Quotient.eq_zero_iff_mem] using hr
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk_surjective, Ideal.mem_map_of_mem, Quotient, RingHom, RingHom.mem_ker, eq_zero_iff_mem, factor, lift_mk, mem_image_of_mem_map_of_surjective, mem_ker, mem_map_of_mem, mk_surjective
 -/
@@ -101,7 +103,8 @@ lemma Submodule.eq_factor_of_eq_factor_succ
     rw [hmn]; rw [← add_assoc] at this
     subst this
     rw [ih (m.le_add_right k) (by simp)]; rw [h]
-
+    · simp
+    · lia
 
 中文:
 引理 子模.eq_factor_of_eq_factor_succ
@@ -117,7 +120,8 @@ lemma Submodule.eq_factor_of_eq_factor_succ
     rw [hmn]; rw [← add_assoc] at this
     subst this
     rw [ih (m.le_add_right k) (by simp)]; rw [h]
-
+    · simp
+    · lia
 
 Depends on / 依赖: Nat.add_sub_of_le, Nat.add_zero, add_assoc, add_sub_of_le, add_zero, generalizing, le_add_right, m.le_add_right
 -/
@@ -169,7 +173,11 @@ lemma Ideal.map_mk_comap_factor
   · rcases mem_image_of_mem_map_of_surjective (mk J) Quotient.mk_surjective h with ⟨r, hr, eq⟩
     have : x - ((mk K) r) in J.map (mk K) := by
       simp [← factor_ker hJK, ← eq]
-    rcases mem_image_of_mem_map_of_surjective (mk K) Quotient.mk_surjectiv
+    rcases mem_image_of_mem_map_of_surjective (mk K) Quotient.mk_surjective this with ⟨s, hs, eq'⟩
+    rw [← add_sub_cancel ((mk K) r) x]; rw [← eq']; rw [← map_add]
+    exact mem_map_of_mem (mk K) (Submodule.add_mem _ hr (hIJ hs))
+  · rcases mem_image_of_mem_map_of_surjective (mk K) Quotient.mk_surjective h with ⟨r, hr, eq⟩
+    simpa only [← eq] using! mem_map_of_mem (mk J) hr
 
 中文:
 引理 理想.map_mk_comap_factor
@@ -180,7 +188,11 @@ lemma Ideal.map_mk_comap_factor
   · rcases mem_image_of_mem_map_of_surjective (mk J) Quotient.mk_surjective h with ⟨r, hr, eq⟩
     have : x - ((mk K) r) in J.map (mk K) := by
       simp [← factor_ker hJK, ← eq]
-    rcases mem_image_of_mem_map_of_surjective (mk K) Quotient.mk_surjectiv
+    rcases mem_image_of_mem_map_of_surjective (mk K) Quotient.mk_surjective this with ⟨s, hs, eq'⟩
+    rw [← add_sub_cancel ((mk K) r) x]; rw [← eq']; rw [← map_add]
+    exact mem_map_of_mem (mk K) (Submodule.add_mem _ hr (hIJ hs))
+  · rcases mem_image_of_mem_map_of_surjective (mk K) Quotient.mk_surjective h with ⟨r, hr, eq⟩
+    simpa only [← eq] using! mem_map_of_mem (mk J) hr
 
 Depends on / 依赖: J.map, Quotient, Quotient.mk_surject, Quotient.mk_surjective, Submodule, Submodule.add_mem, add_mem, add_sub_cancel, factor_ker, map_add, mem_image_of_mem_map_of_surjective, mem_map_of_mem, mk_surject, mk_surjective
 -/
@@ -390,7 +402,17 @@ lemma factorPowSucc.isUnit_of_isUnit_image
   rcases factor_surjective (pow_le_pow_right n.le_succ) b with ⟨b', hb'⟩
   rw [← hb']; rw [← map_one (factorPow I n.le_succ)]; rw [← map_mul] at hb
   apply (RingHom.sub_mem_ker_iff (factorPow I n.le_succ)).mpr at hb
-  rw [factor_ker (pow_le_pow_righ
+  rw [factor_ker (pow_le_pow_right n.le_succ)] at hb
+  rcases Ideal.mem_image_of_mem_map_of_surjective (Ideal.Quotient.mk (I ^ (n + 1)))
+    Ideal.Quotient.mk_surjective hb with ⟨c, hc, eq⟩
+  refine .of_mul_eq_one (b' * (1 - Ideal.Quotient.mk (I ^ (n + 1)) c)) ?_
+  calc
+    _ = (a * b' - 1) * (1 - Ideal.Quotient.mk (I ^ (n + 1)) c) +
+        (1 - Ideal.Quotient.mk (I ^ (n + 1)) c) := by ring
+    _ = 1 := by
+      rw [← eq]; rw [mul_sub]; rw [mul_one]; rw [sub_add_sub_cancel']; rw [sub_eq_self]; rw [← map_mul]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [pow_add]
+      apply Ideal.mul_mem_mul hc (Ideal.mul_le_right (I := I ^ (n - 1)) _)
+      simpa only [← pow_add, Nat.sub_add_cancel npos] using! hc
 
 中文:
 引理 factorPowSucc.isUnit_of_isUnit_image
@@ -400,7 +422,17 @@ lemma factorPowSucc.isUnit_of_isUnit_image
   rcases factor_surjective (pow_le_pow_right n.le_succ) b with ⟨b', hb'⟩
   rw [← hb']; rw [← map_one (factorPow I n.le_succ)]; rw [← map_mul] at hb
   apply (RingHom.sub_mem_ker_iff (factorPow I n.le_succ)).mpr at hb
-  rw [factor_ker (pow_le_pow_righ
+  rw [factor_ker (pow_le_pow_right n.le_succ)] at hb
+  rcases Ideal.mem_image_of_mem_map_of_surjective (Ideal.Quotient.mk (I ^ (n + 1)))
+    Ideal.Quotient.mk_surjective hb with ⟨c, hc, eq⟩
+  refine .of_mul_eq_one (b' * (1 - Ideal.Quotient.mk (I ^ (n + 1)) c)) ?_
+  calc
+    _ = (a * b' - 1) * (1 - Ideal.Quotient.mk (I ^ (n + 1)) c) +
+        (1 - Ideal.Quotient.mk (I ^ (n + 1)) c) := by ring
+    _ = 1 := by
+      rw [← eq]; rw [mul_sub]; rw [mul_one]; rw [sub_add_sub_cancel']; rw [sub_eq_self]; rw [← map_mul]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [pow_add]
+      apply Ideal.mul_mem_mul hc (Ideal.mul_le_right (I := I ^ (n - 1)) _)
+      simpa only [← pow_add, Nat.sub_add_cancel npos] using! hc
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.mem_image_of_mem_map_of_surjective, Quotient, RingHom, RingHom.sub_mem_ker_iff, factorPow, factor_ker, factor_surjective, isUnit_iff_exists, isUnit_iff_exists.mp, le_succ, map_mul, map_one, mem_image_of_mem_map_of_surjective, mk_surjective, n.le_succ, of_mul_eq_one, pow_le_pow_right, sub_mem_ker_iff
 -/

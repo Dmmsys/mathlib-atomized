@@ -91,7 +91,32 @@ lemma isCompact_closedBall
   let := IsTopologicalAddGroup.rightUniformSpace K
   let := isUniformAddGroup_of_addCommGroup (G := K)
   obtain ⟨s, hs, -, hs'⟩ := LocallyCompactSpace.local_compact_nhds (0 : K) .univ Filter.univ_mem
-  ob
+  obtain ⟨r, hr, hr1, H⟩ :
+      exists r', r' != 0 ∧ valuation K r' < 1 ∧ { x | valuation K x <= valuation K r' } subseteq s := by
+    obtain ⟨r, hr, hrs⟩ := (IsValuativeTopology.hasBasis_nhds_zero' K).mem_iff.mp hs
+    obtain ⟨r', hr', hr⟩ := Valuation.IsNontrivial.exists_lt_one (v := valuation K)
+    simp only [ne_eq] at hr'
+    obtain hr1 | hr1 := lt_or_ge r 1
+    · obtain ⟨r, rfl⟩ := ValuativeRel.valuation_surjective r
+      simp only [ne_eq, map_eq_zero] at hr
+      refine ⟨r ^ 2, by simpa using hr, by simpa [pow_two], fun x hx => hrs ?_⟩
+      simp only [map_pow, Set.mem_ofPred_eq] at hx ⊢
+      exact hx.trans_lt (by simpa [pow_two, hr])
+    · refine ⟨r', hr', hr, .trans ?_ hrs⟩
+      intro x hx
+      dsimp at hx ⊢
+      exact hx.trans_lt (hr.trans_le hr1)
+  simp_rw [← (valuation K).restrict_le_iff] at H ⊢
+  convert!
+    (hs'.of_isClosed_subset (Valued.isClosed_closedBall K _) H).image
+      (Homeomorph.mulLeft₀ (γ / r) (by simp [hr, div_eq_zero_iff, hγ])).continuous using 1
+  refine .trans ?_ (Equiv.image_eq_preimage_symm _ _).symm
+  ext x
+  simp only [Set.mem_ofPred_eq, Homeomorph.coe_symm_toEquiv, Homeomorph.mulLeft₀_symm_apply,
+    inv_div, Set.preimage_ofPred_eq, map_mul, map_div₀, Valuation.restrict_le_iff]
+  rw [div_mul_eq_mul_div]; rw [div_le_iff₀ (by simp [hγ])]
+  simp only [IsValuativeTopology.v_eq_valuation, ← map_mul, Valuation.restrict_le_iff]
+  simp [hr]
 
 中文:
 引理 isCompact_closedBall
@@ -104,7 +129,32 @@ lemma isCompact_closedBall
   let := IsTopologicalAddGroup.rightUniformSpace K
   let := isUniformAddGroup_of_addCommGroup (G := K)
   obtain ⟨s, hs, -, hs'⟩ := LocallyCompactSpace.local_compact_nhds (0 : K) .univ Filter.univ_mem
-  ob
+  obtain ⟨r, hr, hr1, H⟩ :
+      exists r', r' != 0 ∧ valuation K r' < 1 ∧ { x | valuation K x <= valuation K r' } subseteq s := by
+    obtain ⟨r, hr, hrs⟩ := (IsValuativeTopology.hasBasis_nhds_zero' K).mem_iff.mp hs
+    obtain ⟨r', hr', hr⟩ := Valuation.IsNontrivial.exists_lt_one (v := valuation K)
+    simp only [ne_eq] at hr'
+    obtain hr1 | hr1 := lt_or_ge r 1
+    · obtain ⟨r, rfl⟩ := ValuativeRel.valuation_surjective r
+      simp only [ne_eq, map_eq_zero] at hr
+      refine ⟨r ^ 2, by simpa using hr, by simpa [pow_two], fun x hx => hrs ?_⟩
+      simp only [map_pow, Set.mem_ofPred_eq] at hx ⊢
+      exact hx.trans_lt (by simpa [pow_two, hr])
+    · refine ⟨r', hr', hr, .trans ?_ hrs⟩
+      intro x hx
+      dsimp at hx ⊢
+      exact hx.trans_lt (hr.trans_le hr1)
+  simp_rw [← (valuation K).restrict_le_iff] at H ⊢
+  convert!
+    (hs'.of_isClosed_subset (Valued.isClosed_closedBall K _) H).image
+      (Homeomorph.mulLeft₀ (γ / r) (by simp [hr, div_eq_zero_iff, hγ])).continuous using 1
+  refine .trans ?_ (Equiv.image_eq_preimage_symm _ _).symm
+  ext x
+  simp only [Set.mem_ofPred_eq, Homeomorph.coe_symm_toEquiv, Homeomorph.mulLeft₀_symm_apply,
+    inv_div, Set.preimage_ofPred_eq, map_mul, map_div₀, Valuation.restrict_le_iff]
+  rw [div_mul_eq_mul_div]; rw [div_le_iff₀ (by simp [hγ])]
+  simp only [IsValuativeTopology.v_eq_valuation, ← map_mul, Valuation.restrict_le_iff]
+  simp [hr]
 
 Depends on / 依赖: Filter, Filter.univ_mem, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsValuativeTopology, IsValuativeTopology.hasBasis_nhds_zero, LocallyCompactSpace, LocallyCompactSpace.local_compact_nhds, ValuativeRel, ValuativeRel.valuation_surjective, hasBasis_nhds_zero, isUniformAddGroup_of_addCommGroup, local_compact_nhds, mem_iff, mem_iff.mp, rightUniformSpace, subseteq, univ_mem, valuation, valuation_surjective
 -/
@@ -204,7 +254,13 @@ definition valueGroupWithZeroIsoInt
   have := isUniformAddGroup_of_addCommGroup (G := K)
   obtain ⟨_⟩ := Valued.integer.locallyFiniteOrder_units_mrange_of_isCompact_integer
     (isCompact_iff_compactSpace.mpr (inferInstance : CompactSpace 𝒪[K]))
-  let e : (Mon
+  let e : (MonoidHom.mrange (valuation K)) ≃*o ValueGroupWithZero K :=
+    ⟨.ofBijective (MonoidHom.mrange (valuation K)).subtype ⟨Subtype.val_injective, fun x =>
+      ⟨⟨x, ValuativeRel.valuation_surjective x⟩, rfl⟩⟩, .rfl⟩
+  have : Nontrivial (ValueGroupWithZero K)ˣ := isNontrivial_iff_nontrivial_units.mp inferInstance
+  have : Nontrivial (↥(MonoidHom.mrange (valuation K)))ˣ :=
+    (Units.map_injective (f := e.symm.toMonoidHom) e.symm.injective).nontrivial
+  exact ⟨e.symm.trans (LocallyFiniteOrder.orderMonoidWithZeroEquiv _)⟩
 
 中文:
 定义 valueGroupWithZeroIso整数
@@ -215,7 +271,13 @@ definition valueGroupWithZeroIsoInt
   have := isUniformAddGroup_of_addCommGroup (G := K)
   obtain ⟨_⟩ := Valued.integer.locallyFiniteOrder_units_mrange_of_isCompact_integer
     (isCompact_iff_compactSpace.mpr (inferInstance : CompactSpace 𝒪[K]))
-  let e : (Mon
+  let e : (MonoidHom.mrange (valuation K)) ≃*o ValueGroupWithZero K :=
+    ⟨.ofBijective (MonoidHom.mrange (valuation K)).subtype ⟨Subtype.val_injective, fun x =>
+      ⟨⟨x, ValuativeRel.valuation_surjective x⟩, rfl⟩⟩, .rfl⟩
+  have : Nontrivial (ValueGroupWithZero K)ˣ := isNontrivial_iff_nontrivial_units.mp inferInstance
+  have : Nontrivial (↥(MonoidHom.mrange (valuation K)))ˣ :=
+    (Units.map_injective (f := e.symm.toMonoidHom) e.symm.injective).nontrivial
+  exact ⟨e.symm.trans (LocallyFiniteOrder.orderMonoidWithZeroEquiv _)⟩
 
 Depends on / 依赖: CompactSpace, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, MonoidHom, MonoidHom.mrange, Nonempty, Nonempty.some, Nontri, Subtype, Subtype.val_injective, ValuativeRel, ValuativeRel.valuation_surjective, ValueGroupWithZero, Valued, Valued.integer.locallyFiniteOrder_units_mrange_of_isCompact_integer, integer, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mpr, isUniformAddGroup_of_addCommGroup, locallyFiniteOrder_units_mrange_of_isCompact_integer
 -/
@@ -301,6 +363,9 @@ instance :
   letI : (Valued.v (R := K)).RankOne :=
   { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
+        MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
+  (compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField.mp
+    (inferInstanceAs (CompactSpace 𝒪[K]))).2.2
 
 中文:
 实例 :
@@ -310,6 +375,9 @@ instance :
   letI : (Valued.v (R := K)).RankOne :=
   { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
+        MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
+  (compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField.mp
+    (inferInstanceAs (CompactSpace 𝒪[K]))).2.2
 
 Depends on / 依赖: CompactSpace, IsRankLeOne, IsRankLeOne.nonempty.some.emb, IsRankLeOne.nonempty.some.strictMono.comp, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, MonoidWithZeroHom, MonoidWithZeroHom.ValueGroup, RankOne, Valued, Valued.v, compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField, compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField.mp, embedding, embedding_strictMono, isUniformAddGroup_of_addCommGroup, nonempty, rightUniformSpace, strictMono
 -/
@@ -341,7 +409,9 @@ instance :
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
   open scoped Valued in
-  have : ProperSpace
+  have : ProperSpace K := .of_nontriviallyNormedField_of_weaklyLocallyCompactSpace K
+  (properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField.mp
+    inferInstance).1
 
 中文:
 实例 :
@@ -351,7 +421,9 @@ instance :
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
   open scoped Valued in
-  have : ProperSpace
+  have : ProperSpace K := .of_nontriviallyNormedField_of_weaklyLocallyCompactSpace K
+  (properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField.mp
+    inferInstance).1
 
 Depends on / 依赖: IsRankLeOne, IsRankLeOne.nonempty.some.emb, IsRankLeOne.nonempty.some.strictMono.comp, MonoidWithZeroHom, MonoidWithZeroHom.ValueGroup, ProperSpace, RankOne, Valued, Valued.v, embedding, embedding_strictMono, nonempty, of_nontriviallyNormedField_of_weaklyLocallyCompactSpace, properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField, properSpace_iff_completeSpace_and_isDiscreteValuationRing_integer_and_finite_residueField.mp, scoped, strictMono
 -/
@@ -375,7 +447,8 @@ instance :
   { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  (compactSpace_iff_completeSpace_and_isDisc
+  (compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField.mp
+    (inferInstanceAs (CompactSpace 𝒪[K]))).1
 
 中文:
 实例 :
@@ -384,7 +457,8 @@ instance :
   { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
     strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  (compactSpace_iff_completeSpace_and_isDisc
+  (compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField.mp
+    (inferInstanceAs (CompactSpace 𝒪[K]))).1
 
 Depends on / 依赖: CompactSpace, IsRankLeOne, IsRankLeOne.nonempty.some.emb, IsRankLeOne.nonempty.some.strictMono.comp, MonoidWithZeroHom, MonoidWithZeroHom.ValueGroup, RankOne, Valued, Valued.v, compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField, compactSpace_iff_completeSpace_and_isDiscreteValuationRing_and_finite_residueField.mp, embedding, embedding_strictMono, nonempty, strictMono
 -/
@@ -408,7 +482,12 @@ instance :
     have hS n : S (n + 1) subseteq S n := by
       apply (Set.vadd_set_subset_vadd_set_iff.mpr (Ideal.pow_le_pow_right n.le_succ)).trans
       simpa [S] using (hf n.le_succ).symm
-    have h n : IsClosed (S n) := (IsNoetherianRi
+    have h n : IsClosed (S n) := (IsNoetherianRing.isClosed_ideal (𝓂[K] ^ n)).vadd (f n)
+    obtain ⟨L, hL⟩ := (h 0).isCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed S hS
+      (by simp [S]) h
+    refine ⟨L, fun n => ?_⟩
+    obtain ⟨y, hy, rfl⟩ := Set.mem_iInter.mp hL n
+    simpa [SModEq.sub_mem] using hy
 
 中文:
 实例 :
@@ -418,7 +497,12 @@ instance :
     have hS n : S (n + 1) subseteq S n := by
       apply (Set.vadd_set_subset_vadd_set_iff.mpr (Ideal.pow_le_pow_right n.le_succ)).trans
       simpa [S] using (hf n.le_succ).symm
-    have h n : IsClosed (S n) := (IsNoetherianRi
+    have h n : IsClosed (S n) := (IsNoetherianRing.isClosed_ideal (𝓂[K] ^ n)).vadd (f n)
+    obtain ⟨L, hL⟩ := (h 0).isCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed S hS
+      (by simp [S]) h
+    refine ⟨L, fun n => ?_⟩
+    obtain ⟨y, hy, rfl⟩ := Set.mem_iInter.mp hL n
+    simpa [SModEq.sub_mem] using hy
 
 Depends on / 依赖: Ideal.pow_le_pow_right, IsClosed, IsNoetherianRing, IsNoetherianRing.isClosed_ideal, Set.mem_iInter.mp, Set.vadd_set_subset_vadd_set_iff.mpr, isClosed_ideal, isCompact, isCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, le_succ, mem_iInter, n.le_succ, nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, pow_le_pow_right, subseteq, vadd_set_subset_vadd_set_iff
 -/

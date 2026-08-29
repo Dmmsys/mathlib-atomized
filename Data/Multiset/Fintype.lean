@@ -208,7 +208,10 @@ instance :
       fun x hx y hy hxy => by simp [Function.onFun, Finset.disjoint_right, hxy])
     (by
       rintro ⟨x, i⟩
-      simp_rw [Finset.mem_disjiUnion, Multiset.mem_toFinset, Finset.
+      simp_rw [Finset.mem_disjiUnion, Multiset.mem_toFinset, Finset.mem_map, Finset.mem_range,
+        Function.Embedding.coeFn_mk, Prod.mk_inj, Set.mem_ofPred_eq]
+      simp only [← and_assoc, exists_eq_right, and_iff_right_iff_imp]
+      exact fun h => Multiset.count_pos.mp (by lia))
 
 中文:
 实例 :
@@ -219,7 +222,10 @@ instance :
       fun x hx y hy hxy => by simp [Function.onFun, Finset.disjoint_right, hxy])
     (by
       rintro ⟨x, i⟩
-      simp_rw [Finset.mem_disjiUnion, Multiset.mem_toFinset, Finset.
+      simp_rw [Finset.mem_disjiUnion, Multiset.mem_toFinset, Finset.mem_map, Finset.mem_range,
+        Function.Embedding.coeFn_mk, Prod.mk_inj, Set.mem_ofPred_eq]
+      simp only [← and_assoc, exists_eq_right, and_iff_right_iff_imp]
+      exact fun h => Multiset.count_pos.mp (by lia))
 
 Depends on / 依赖: Embedding, Finset, Finset.disjoint_right, Finset.mem_disjiUnion, Finset.mem_map, Finset.mem_range, Finset.range, Fintype, Fintype.ofFinset, Function, Function.Embedding.coeFn_mk, Function.onFun, Multiset, Multiset.count_pos.mp, Multiset.mem_toFinset, Prod.mk_inj, Prod.mk_right_injective, Set.mem_ofPred_eq, and_assoc, and_iff_right_iff_imp
 -/
@@ -366,7 +372,15 @@ lemma map_fst_le_of_subset_toEnumFinset
     exact Nat.zero_le _
   obtain ⟨n, han, hn⟩ : exists n >= card (s.1.filter fun x => a = x.1) - 1, (a, n) in s := by
     by_contra! h
-    replace h : {x in s | x.1 = a
+    replace h : {x in s | x.1 = a} subseteq {a} ×ˢ .range (card (s.1.filter fun x => a = x.1) - 1) := by
+      simpa +contextual [forall_comm (β := _ = a), Finset.subset_iff,
+        imp_not_comm, not_le, Nat.lt_sub_iff_add_lt] using h
+    have : card (s.1.filter fun x => a = x.1) <= card (s.1.filter fun x => a = x.1) - 1 := by
+      simpa [Finset.card, eq_comm] using Finset.card_mono h
+    lia
+  exact Nat.le_of_pred_lt (han.trans_lt <| by simpa using hsm hn)
+
+@[gcongr, mono]
 
 中文:
 引理 map_fst_le_of_subset_toEnumFinset
@@ -379,7 +393,15 @@ lemma map_fst_le_of_subset_toEnumFinset
     exact Nat.zero_le _
   obtain ⟨n, han, hn⟩ : exists n >= card (s.1.filter fun x => a = x.1) - 1, (a, n) in s := by
     by_contra! h
-    replace h : {x in s | x.1 = a
+    replace h : {x in s | x.1 = a} subseteq {a} ×ˢ .range (card (s.1.filter fun x => a = x.1) - 1) := by
+      simpa +contextual [forall_comm (β := _ = a), Finset.subset_iff,
+        imp_not_comm, not_le, Nat.lt_sub_iff_add_lt] using h
+    have : card (s.1.filter fun x => a = x.1) <= card (s.1.filter fun x => a = x.1) - 1 := by
+      simpa [Finset.card, eq_comm] using Finset.card_mono h
+    lia
+  exact Nat.le_of_pred_lt (han.trans_lt <| by simpa using hsm hn)
+
+@[gcongr, mono]
 -/
 @[simp] lemma map_fst_le_of_subset_toEnumFinset {s : Finset (α × Nat)} (hsm : s subseteq m.toEnumFinset) :
     s.1.map Prod.fst <= m := by
@@ -898,7 +920,26 @@ definition consEquiv
       convert! x.2.2 using 1
       simp [hv]
     · convert! x.2.2 using 1
-      exact (count_cons_of_ne hv _).
+      exact (count_cons_of_ne hv _).symm
+    ⟩⟩
+  invFun x := x.elim ⟨v, ⟨m.count v, by simp⟩⟩ (fun x => ⟨x.1, x.2.castLE (count_le_count_cons ..)⟩)
+  left_inv := by
+    rintro ⟨x, hx⟩
+    dsimp only
+    split
+    · rename_i h
+      obtain ⟨rfl, h2⟩ := h
+      simp [← h2]
+    · simp
+  right_inv := by
+    rintro (_ | x)
+    · simp
+    · simp only [Option.elim_some, Fin.val_castLE, Fin.eta, Sigma.eta, dite_eq_ite,
+        ite_eq_right_iff, reduceCtorEq, imp_false, not_and]
+      rintro rfl
+      exact x.2.2.ne
+
+@[simp]
 
 中文:
 定义 consEquiv
@@ -910,7 +951,26 @@ definition consEquiv
       convert! x.2.2 using 1
       simp [hv]
     · convert! x.2.2 using 1
-      exact (count_cons_of_ne hv _).
+      exact (count_cons_of_ne hv _).symm
+    ⟩⟩
+  invFun x := x.elim ⟨v, ⟨m.count v, by simp⟩⟩ (fun x => ⟨x.1, x.2.castLE (count_le_count_cons ..)⟩)
+  left_inv := by
+    rintro ⟨x, hx⟩
+    dsimp only
+    split
+    · rename_i h
+      obtain ⟨rfl, h2⟩ := h
+      simp [← h2]
+    · simp
+  right_inv := by
+    rintro (_ | x)
+    · simp
+    · simp only [Option.elim_some, Fin.val_castLE, Fin.eta, Sigma.eta, dite_eq_ite,
+        ite_eq_right_iff, reduceCtorEq, imp_false, not_and]
+      rintro rfl
+      exact x.2.2.ne
+
+@[simp]
 
 Depends on / 依赖: Nat.le_of_lt_add_one, castLE, convert, count_cons_of_ne, count_le_count_cons, invFun, le_of_lt_add_one, left_inv, lt_of_le_of_ne, m.count, rename_i, right_inv, true_and, x.elim
 -/
@@ -1054,7 +1114,12 @@ definition mapEquivAux
     List.recOn l
       ⟨@Equiv.equivOfIsEmpty _ _ (by dsimp; infer_instance) (by dsimp; infer_instance), by simp⟩
 .trans fun a s ⟨v, hv⟩ => ⟨Multiset.consEquiv.trans v.optionCongr
-.trans (Multiset.cast (map_cons f a s)).symm, fun x => by Multiset.consEquiv.s
+.trans (Multiset.cast (map_cons f a s)).symm, fun x => by Multiset.consEquiv.symm
+        simp only [consEquiv, Equiv.trans_apply, Equiv.coe_fn_mk, Equiv.optionCongr_apply,
+            Equiv.coe_fn_symm_mk]
+        split <;> simp_all⟩
+
+@[deprecated (since := "2026-06-06")] alias mapEquiv_aux := mapEquivAux
 
 中文:
 定义 mapEquivAux
@@ -1063,7 +1128,12 @@ definition mapEquivAux
     List.recOn l
       ⟨@Equiv.equivOfIsEmpty _ _ (by dsimp; infer_instance) (by dsimp; infer_instance), by simp⟩
 .trans fun a s ⟨v, hv⟩ => ⟨Multiset.consEquiv.trans v.optionCongr
-.trans (Multiset.cast (map_cons f a s)).symm, fun x => by Multiset.consEquiv.s
+.trans (Multiset.cast (map_cons f a s)).symm, fun x => by Multiset.consEquiv.symm
+        simp only [consEquiv, Equiv.trans_apply, Equiv.coe_fn_mk, Equiv.optionCongr_apply,
+            Equiv.coe_fn_symm_mk]
+        split <;> simp_all⟩
+
+@[deprecated (since := "2026-06-06")] alias mapEquiv_aux := mapEquivAux
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Equiv.equivOfIsEmpty, Equiv.optionCongr_apply, Equiv.trans_apply, List.recOn, Multiset, Multiset.cast, Multiset.consEquiv.symm, Multiset.consEquiv.trans, Quotient, Quotient.recOnSubsingleton, coe_fn_mk, coe_fn_symm_mk, consEquiv, equivOfIsEmpty, infer_instance, map_cons, optionCongr, optionCongr_apply
 -/

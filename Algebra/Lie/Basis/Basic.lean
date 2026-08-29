@@ -126,7 +126,7 @@ lemma A_diag_eq_two
   have : NoZeroSMulDivisors Int L := IsAddTorsionFree.to_noZeroSMulDivisors_int
   have aux : (b.A i i - 2) • b.e i = 0 := by
     rw [sub_smul]; rw [ofNat_smul_eq_nsmul]; rw [← (b.sl2 i).lie_h_e_nsmul]; rw [b.lie_h_e i i]; abel
-  rwa [IsAddTorsionFree.zsmul_eq_zero_iff_left (b.sl2 i).e_ne_zero, su
+  rwa [IsAddTorsionFree.zsmul_eq_zero_iff_left (b.sl2 i).e_ne_zero, sub_eq_zero] at aux
 
 中文:
 引理 A_diag_eq_two
@@ -136,7 +136,7 @@ lemma A_diag_eq_two
   have : NoZeroSMulDivisors Int L := IsAddTorsionFree.to_noZeroSMulDivisors_int
   have aux : (b.A i i - 2) • b.e i = 0 := by
     rw [sub_smul]; rw [ofNat_smul_eq_nsmul]; rw [← (b.sl2 i).lie_h_e_nsmul]; rw [b.lie_h_e i i]; abel
-  rwa [IsAddTorsionFree.zsmul_eq_zero_iff_left (b.sl2 i).e_ne_zero, su
+  rwa [IsAddTorsionFree.zsmul_eq_zero_iff_left (b.sl2 i).e_ne_zero, sub_eq_zero] at aux
 -/
 @[simp] lemma A_diag_eq_two [IsAddTorsionFree L] (i : ι) : b.A i i = 2 := by
   have : NoZeroSMulDivisors Int L := IsAddTorsionFree.to_noZeroSMulDivisors_int
@@ -219,7 +219,11 @@ definition symm
   nondegen := b.nondegen
   linInd := b.linInd.neg
   sl2 i := (b.sl2 i).symm
-  lie_h_h i j := by rw [Pi.neg_apply, Pi.neg_apply, neg_lie, lie_neg, b.lie_h_h i j, neg_n
+  lie_h_h i j := by rw [Pi.neg_apply, Pi.neg_apply, neg_lie, lie_neg, b.lie_h_h i j, neg_neg]
+  lie_h_e i j := by rw [Pi.neg_apply, neg_lie, b.lie_h_f i j, neg_smul, neg_neg]
+  lie_h_f i j := by rw [Pi.neg_apply, neg_lie, b.lie_h_e, neg_smul]
+  lie_e_f_ne i j h := by rw [← lie_skew, neg_eq_zero, b.lie_e_f_ne j i h.symm]
+  span_ef := by rw [union_comm, b.span_ef]
 
 中文:
 定义 symm
@@ -234,7 +238,11 @@ definition symm
   nondegen := b.nondegen
   linInd := b.linInd.neg
   sl2 i := (b.sl2 i).symm
-  lie_h_h i j := by rw [Pi.neg_apply, Pi.neg_apply, neg_lie, lie_neg, b.lie_h_h i j, neg_n
+  lie_h_h i j := by rw [Pi.neg_apply, Pi.neg_apply, neg_lie, lie_neg, b.lie_h_h i j, neg_neg]
+  lie_h_e i j := by rw [Pi.neg_apply, neg_lie, b.lie_h_f i j, neg_smul, neg_neg]
+  lie_h_f i j := by rw [Pi.neg_apply, neg_lie, b.lie_h_e, neg_smul]
+  lie_e_f_ne i j h := by rw [← lie_skew, neg_eq_zero, b.lie_e_f_ne j i h.symm]
+  span_ef := by rw [union_comm, b.span_ef]
 -/
 @[simps -fullyApplied] def symm : Basis ι H where
   A := b.A
@@ -317,7 +325,16 @@ lemma cartan_lie_mem_lieSpan_e
     | mem v hv =>
       obtain ⟨j, rfl⟩ := hv
       rw [b.lie_h_e]
-apply zsmul_mem subset_lieSpan 
+apply zsmul_mem subset_lieSpan mem_range_self i
+    | zero => simp
+    | add v w _ _ hv hw => simpa using add_mem hv hw
+    | smul t v _ hv => simpa using LieSubalgebra.smul_mem _ t hv
+  | zero => simp
+  | add u v _ _ hu hv => simpa using add_mem hu hv
+  | smul t u _ hu => simpa using LieSubalgebra.smul_mem _ t hu
+  | lie u v hu hv hu' hv' =>
+    rw [leibniz_lie]; rw [← lie_skew _ v]; rw [neg_add_eq_sub]
+    exact sub_mem (LieSubalgebra.lie_mem _ hu hv') (LieSubalgebra.lie_mem _ hv hu')
 
 中文:
 引理 cartan_lie_mem_lieSpan_e
@@ -331,7 +348,16 @@ apply zsmul_mem subset_lieSpan
     | mem v hv =>
       obtain ⟨j, rfl⟩ := hv
       rw [b.lie_h_e]
-apply zsmul_mem subset_lieSpan 
+apply zsmul_mem subset_lieSpan mem_range_self i
+    | zero => simp
+    | add v w _ _ hv hw => simpa using add_mem hv hw
+    | smul t v _ hv => simpa using LieSubalgebra.smul_mem _ t hv
+  | zero => simp
+  | add u v _ _ hu hv => simpa using add_mem hu hv
+  | smul t u _ hu => simpa using LieSubalgebra.smul_mem _ t hu
+  | lie u v hu hv hu' hv' =>
+    rw [leibniz_lie]; rw [← lie_skew _ v]; rw [neg_add_eq_sub]
+    exact sub_mem (LieSubalgebra.lie_mem _ hu hv') (LieSubalgebra.lie_mem _ hv hu')
 -/
 private lemma cartan_lie_mem_lieSpan_e {x y : L}
     (hx : x in H) (hy : y in lieSpan R L (range b.e)) :
@@ -416,7 +442,56 @@ lemma iSup_cartan_borelLower_borelUpper_eq_top_aux
       obtain ⟨j, rfl⟩ := hu
       rcases eq_or_ne i j with rfl | hij
       · rw [(b.sl2 i).lie_e_f]
-
+        apply LieSubmodule.mem_sup_left
+        nth_rw 1 [mem_toLieSubmodule, b.cartan_eq_lieSpan]
+exact LieSubalgebra.subset_lieSpan mem_range_self i
+      · simp [b.lie_e_f_ne _ _ hij]
+    | zero => simp
+    | add u v _ _ hu hv => rw [lie_add]; exact add_mem hu hv
+    | smul t u _ hu => rw [lie_smul]; exact SMulMemClass.smul_mem t hu
+    | lie u v hu hv hu' hv' =>
+      obtain ⟨w₁, hw₁, w₂, hw₂, hwu⟩ : exists y in H, exists z in b.borelLower, y + z = ⁅b.e i, u⁆ := by
+        simpa only [LieSubmodule.mem_sup] using! hu'
+      obtain ⟨w₃, hw₃, w₄, hw₄, hwv⟩ : exists y in H, exists z in b.borelLower, y + z = ⁅b.e i, v⁆ := by
+        simpa only [LieSubmodule.mem_sup] using! hv'
+      rw [leibniz_lie]; rw [← hwu]; rw [← hwv]; rw [lie_add]; rw [add_lie]; rw [← add_assoc]
+      repeat apply add_mem
+· exact LieSubmodule.mem_sup_right b.borelLower.lie_mem (x := ⟨w₁, hw₁⟩) hv
+· exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hw₂ hv
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelLower.lie_mem (x := ⟨w₃, hw₃⟩) hu
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hw₄ hu
+  induction hy using lieSpan_induction generalizing z with
+  | mem u hu =>
+    obtain ⟨i, rfl⟩ := hu
+exact LieSubmodule.mem_sup_left this i z hz
+  | zero => simp
+  | add u v _ _ hu hv => rw [add_lie]; exact add_mem (hu hz) (hv hz)
+  | smul t u _ hu => rw [smul_lie]; exact SMulMemClass.smul_mem t (hu hz)
+  | lie u v hu hv hu' hv' =>
+    rw [lie_lie]
+    apply sub_mem
+    · obtain ⟨yc, hyc, yl, hyl, yu, hyu, aux⟩ :
+        existsᵉ (yc in H) (yl in lieSpan R L (range b.f)) (yu in lieSpan R L (range b.e)),
+        yc + yl + yu = ⁅v, z⁆ := by simpa [LieSubmodule.mem_sup] using! hv' hz
+      simp only [← aux, lie_add]
+      repeat apply add_mem
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨yc, hyc⟩) hu
+      · exact hu' hyl
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hyu hu
+    · obtain ⟨yc, hyc, yl, hyl, yu, hyu, aux⟩ :
+        existsᵉ (yc in H) (yl in lieSpan R L (range b.f)) (yu in lieSpan R L (range b.e)),
+        yc + yl + yu = ⁅u, z⁆ := by simpa [LieSubmodule.mem_sup] using! hu' hz
+      simp only [← aux, lie_add]
+      repeat apply add_mem
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨yc, hyc⟩) hv
+      · exact hv' hyl
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hyu hv
 
 中文:
 引理 iSup_cartan_borelLower_borelUpper_eq_top_aux
@@ -428,7 +503,56 @@ lemma iSup_cartan_borelLower_borelUpper_eq_top_aux
       obtain ⟨j, rfl⟩ := hu
       rcases eq_or_ne i j with rfl | hij
       · rw [(b.sl2 i).lie_e_f]
-
+        apply LieSubmodule.mem_sup_left
+        nth_rw 1 [mem_toLieSubmodule, b.cartan_eq_lieSpan]
+exact LieSubalgebra.subset_lieSpan mem_range_self i
+      · simp [b.lie_e_f_ne _ _ hij]
+    | zero => simp
+    | add u v _ _ hu hv => rw [lie_add]; exact add_mem hu hv
+    | smul t u _ hu => rw [lie_smul]; exact SMulMemClass.smul_mem t hu
+    | lie u v hu hv hu' hv' =>
+      obtain ⟨w₁, hw₁, w₂, hw₂, hwu⟩ : exists y in H, exists z in b.borelLower, y + z = ⁅b.e i, u⁆ := by
+        simpa only [LieSubmodule.mem_sup] using! hu'
+      obtain ⟨w₃, hw₃, w₄, hw₄, hwv⟩ : exists y in H, exists z in b.borelLower, y + z = ⁅b.e i, v⁆ := by
+        simpa only [LieSubmodule.mem_sup] using! hv'
+      rw [leibniz_lie]; rw [← hwu]; rw [← hwv]; rw [lie_add]; rw [add_lie]; rw [← add_assoc]
+      repeat apply add_mem
+· exact LieSubmodule.mem_sup_right b.borelLower.lie_mem (x := ⟨w₁, hw₁⟩) hv
+· exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hw₂ hv
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelLower.lie_mem (x := ⟨w₃, hw₃⟩) hu
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hw₄ hu
+  induction hy using lieSpan_induction generalizing z with
+  | mem u hu =>
+    obtain ⟨i, rfl⟩ := hu
+exact LieSubmodule.mem_sup_left this i z hz
+  | zero => simp
+  | add u v _ _ hu hv => rw [add_lie]; exact add_mem (hu hz) (hv hz)
+  | smul t u _ hu => rw [smul_lie]; exact SMulMemClass.smul_mem t (hu hz)
+  | lie u v hu hv hu' hv' =>
+    rw [lie_lie]
+    apply sub_mem
+    · obtain ⟨yc, hyc, yl, hyl, yu, hyu, aux⟩ :
+        existsᵉ (yc in H) (yl in lieSpan R L (range b.f)) (yu in lieSpan R L (range b.e)),
+        yc + yl + yu = ⁅v, z⁆ := by simpa [LieSubmodule.mem_sup] using! hv' hz
+      simp only [← aux, lie_add]
+      repeat apply add_mem
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨yc, hyc⟩) hu
+      · exact hu' hyl
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hyu hu
+    · obtain ⟨yc, hyc, yl, hyl, yu, hyu, aux⟩ :
+        existsᵉ (yc in H) (yl in lieSpan R L (range b.f)) (yu in lieSpan R L (range b.e)),
+        yc + yl + yu = ⁅u, z⁆ := by simpa [LieSubmodule.mem_sup] using! hu' hz
+      simp only [← aux, lie_add]
+      repeat apply add_mem
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨yc, hyc⟩) hv
+      · exact hv' hyl
+      · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right LieSubalgebra.lie_mem _ hyu hv
 -/
 private lemma iSup_cartan_borelLower_borelUpper_eq_top_aux
     {y z : L} (hy : y in lieSpan R L (range b.e)) (hz : z in lieSpan R L (range b.f)) :
@@ -502,7 +626,35 @@ lemma iSup_cartan_borelLower_borelUpper_eq_top
   replace hx : x in lieSpan R L (range b.e union range b.f) := by simp [b.span_ef]
   induction hx using lieSpan_induction with
   | mem u hu =>
-    rcases (mem_union _ _ _).mpr hu with hu 
+    rcases (mem_union _ _ _).mpr hu with hu | hu
+· exact LieSubmodule.mem_sup_right subset_lieSpan hu
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right subset_lieSpan hu
+  | zero => simp
+  | add u v _ _ hu hv => exact add_mem hu hv
+  | smul t u _ hu => exact SMulMemClass.smul_mem t hu
+  | lie u v _ _ hu hv =>
+    obtain ⟨yc, hyc, yl, hyl, yu, hyu, rfl⟩ :
+        existsᵉ (yc in H) (yl in lieSpan R L (range b.f)) (yu in lieSpan R L (range b.e)),
+          yc + yl + yu = u := by simpa [LieSubmodule.mem_sup] using! hu
+    obtain ⟨zc, hzc, zl, hzl, zu, hzu, rfl⟩ :
+        existsᵉ (zc in H) (zl in lieSpan R L (range b.f)) (zu in lieSpan R L (range b.e)),
+          zc + zl + zu = v := by simpa [LieSubmodule.mem_sup] using! hv
+    simp only [lie_add, add_lie, ← add_assoc]
+    repeat apply add_mem
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_left lie_mem _ hyc hzc
+    · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right
+        b.borelLower.lie_mem (x := ⟨zc, hzc⟩) hyl
+    · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨zc, hzc⟩) hyu
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right
+        b.borelLower.lie_mem (x := ⟨yc, hyc⟩) hzl
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right lie_mem _ hyl hzl
+    · exact b.iSup_cartan_borelLower_borelUpper_eq_top_aux hyu hzl
+· exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨yc, hyc⟩) hzu
+    · rw [← lie_skew, neg_mem_iff]
+      exact b.iSup_cartan_borelLower_borelUpper_eq_top_aux hzu hyl
+· exact LieSubmodule.mem_sup_right lie_mem _ hyu hzu
 
 中文:
 引理 iSup_cartan_borelLower_borelUpper_eq_top
@@ -512,7 +664,35 @@ lemma iSup_cartan_borelLower_borelUpper_eq_top
   replace hx : x in lieSpan R L (range b.e union range b.f) := by simp [b.span_ef]
   induction hx using lieSpan_induction with
   | mem u hu =>
-    rcases (mem_union _ _ _).mpr hu with hu 
+    rcases (mem_union _ _ _).mpr hu with hu | hu
+· exact LieSubmodule.mem_sup_right subset_lieSpan hu
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right subset_lieSpan hu
+  | zero => simp
+  | add u v _ _ hu hv => exact add_mem hu hv
+  | smul t u _ hu => exact SMulMemClass.smul_mem t hu
+  | lie u v _ _ hu hv =>
+    obtain ⟨yc, hyc, yl, hyl, yu, hyu, rfl⟩ :
+        existsᵉ (yc in H) (yl in lieSpan R L (range b.f)) (yu in lieSpan R L (range b.e)),
+          yc + yl + yu = u := by simpa [LieSubmodule.mem_sup] using! hu
+    obtain ⟨zc, hzc, zl, hzl, zu, hzu, rfl⟩ :
+        existsᵉ (zc in H) (zl in lieSpan R L (range b.f)) (zu in lieSpan R L (range b.e)),
+          zc + zl + zu = v := by simpa [LieSubmodule.mem_sup] using! hv
+    simp only [lie_add, add_lie, ← add_assoc]
+    repeat apply add_mem
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_left lie_mem _ hyc hzc
+    · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right
+        b.borelLower.lie_mem (x := ⟨zc, hzc⟩) hyl
+    · rw [← lie_skew, neg_mem_iff]
+exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨zc, hzc⟩) hyu
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right
+        b.borelLower.lie_mem (x := ⟨yc, hyc⟩) hzl
+· exact LieSubmodule.mem_sup_left LieSubmodule.mem_sup_right lie_mem _ hyl hzl
+    · exact b.iSup_cartan_borelLower_borelUpper_eq_top_aux hyu hzl
+· exact LieSubmodule.mem_sup_right b.borelUpper.lie_mem (x := ⟨yc, hyc⟩) hzu
+    · rw [← lie_skew, neg_mem_iff]
+      exact b.iSup_cartan_borelLower_borelUpper_eq_top_aux hzu hyl
+· exact LieSubmodule.mem_sup_right lie_mem _ hyu hzu
 
 Depends on / 依赖: H.toLieSubmodule, LieSubmodule, LieSubmodule.mem_sup_left, LieSubmodule.mem_sup_right, add_mem, b.borelLower, b.borelUpper, b.span_ef, borelLower, borelUpper, eq_top_iff, eq_top_iff.mpr, lieSpan, lieSpan_induction, mem_sup_left, mem_sup_right, mem_union, replace, span_ef, subset_lieSpan
 -/
@@ -589,7 +769,10 @@ lemma baseSupp_apply_h'
   let f (k : ι) : R := b.A i k • (Basis.span b.linInd).repr (e <| b.h' j) k
   change ∑ k, f k = _
   have : f = fun k => if j = k then (b.A i k : R) else 0 := by
-    have : 
+    have : (Basis.span b.linInd).repr (e <| b.h' j) = .single j 1 := Basis.span_repr_eq_single _ _
+    ext k
+    simp [f, this, Finsupp.single_apply]
+  simp [this]
 
 中文:
 引理 baseSupp_apply_h'
@@ -601,7 +784,10 @@ lemma baseSupp_apply_h'
   let f (k : ι) : R := b.A i k • (Basis.span b.linInd).repr (e <| b.h' j) k
   change ∑ k, f k = _
   have : f = fun k => if j = k then (b.A i k : R) else 0 := by
-    have : 
+    have : (Basis.span b.linInd).repr (e <| b.h' j) = .single j 1 := Basis.span_repr_eq_single _ _
+    ext k
+    simp [f, this, Finsupp.single_apply]
+  simp [this]
 -/
 @[simp] lemma baseSupp_apply_h' (i j : ι) :
     b.baseSupp i (b.h' j) = b.A i j := by
@@ -629,7 +815,10 @@ lemma symm_baseSupp
     (Basis.span b.linInd.neg).map (LinearEquiv.ofEq _ _ b.symm.coe_cartan_eq_span).symm
   suffices b₁.coord = -b₂.coord by
     ext1 i
-    change ∑ j, b.
+    change ∑ j, b.A i j • b₂.coord j = - ∑ j, b.A i j • b₁.coord j
+    simp [this]
+  simp only [b₁, b₂, Basis.span_neg b.linInd]
+  aesop
 
 中文:
 引理 symm_baseSupp
@@ -640,7 +829,10 @@ lemma symm_baseSupp
     (Basis.span b.linInd.neg).map (LinearEquiv.ofEq _ _ b.symm.coe_cartan_eq_span).symm
   suffices b₁.coord = -b₂.coord by
     ext1 i
-    change ∑ j, b.
+    change ∑ j, b.A i j • b₂.coord j = - ∑ j, b.A i j • b₁.coord j
+    simp [this]
+  simp only [b₁, b₂, Basis.span_neg b.linInd]
+  aesop
 -/
 @[simp] lemma symm_baseSupp :
     b.symm.baseSupp = -b.baseSupp := by
@@ -667,7 +859,9 @@ lemma linearIndependent_baseSupp
     rw [Matrix.nondegenerate_iff_det_ne_zero]; rw [← RingHom.map_det]
     simpa using! b.nondegen.det_ne_zero
   let v : ι -> Dual R H :=
-    ((Basis.span b.linInd).map (LinearEquiv.ofEq _ _ b.coe_cartan_eq_span).symm).co
+    ((Basis.span b.linInd).map (LinearEquiv.ofEq _ _ b.coe_cartan_eq_span).symm).coord
+  have hv : LinearIndependent R v := Basis.linearIndependent_coord _
+  simpa [Int.cast_smul_eq_zsmul] using! hv.sum_smul_of_nondegenerate this
 
 中文:
 引理 linearIndependent_baseSupp
@@ -678,7 +872,9 @@ lemma linearIndependent_baseSupp
     rw [Matrix.nondegenerate_iff_det_ne_zero]; rw [← RingHom.map_det]
     simpa using! b.nondegen.det_ne_zero
   let v : ι -> Dual R H :=
-    ((Basis.span b.linInd).map (LinearEquiv.ofEq _ _ b.coe_cartan_eq_span).symm).co
+    ((Basis.span b.linInd).map (LinearEquiv.ofEq _ _ b.coe_cartan_eq_span).symm).coord
+  have hv : LinearIndependent R v := Basis.linearIndependent_coord _
+  simpa [Int.cast_smul_eq_zsmul] using! hv.sum_smul_of_nondegenerate this
 
 Depends on / 依赖: Basis.linearIndependent_coord, Basis.span, Int.castRingHom, Int.cast_smul_eq_zsmul, LinearEquiv, LinearEquiv.ofEq, LinearIndependent, Matrix, Matrix.nondegenerate_iff_det_ne_zero, Nondegenerate, RingHom, RingHom.map_det, b.coe_cartan_eq_span, b.linInd, b.nondegen.det_ne_zero, castRingHom, cast_smul_eq_zsmul, classical, coe_cartan_eq_span, det_ne_zero
 -/
@@ -707,7 +903,17 @@ lemma baseSupp_apply_smul_e
   induction hx' using Submodule.span_induction with
   | mem u hu =>
     obtain ⟨j, rfl⟩ := hu
-    change b.baseSupp 
+    change b.baseSupp i (b.h' j) • _ = _
+    simp [b.lie_h_e, Int.cast_smul_eq_zsmul]
+  | zero => change b.baseSupp i 0 • _ = _; simp
+  | add u v hu hv hu' hv' =>
+    rw [← coe_cartan_eq_span]; rw [LieSubalgebra.mem_toSubmodule] at hu hv
+    rw [← AddMemClass.mk_add_mk _ u v hu hv]
+    simp only [map_add, add_smul, add_lie] at hu' hv' ⊢
+    rw [hu']; rw [hv']
+  | smul t u hu hv' =>
+    rw [← coe_cartan_eq_span]; rw [LieSubalgebra.mem_toSubmodule] at hu
+    rw [← SetLike.mk_smul_mk _ t u hu]; rw [map_smul]; rw [smul_assoc]; rw [hv']; rw [smul_lie]
 
 中文:
 引理 baseSupp_apply_smul_e
@@ -720,7 +926,17 @@ lemma baseSupp_apply_smul_e
   induction hx' using Submodule.span_induction with
   | mem u hu =>
     obtain ⟨j, rfl⟩ := hu
-    change b.baseSupp 
+    change b.baseSupp i (b.h' j) • _ = _
+    simp [b.lie_h_e, Int.cast_smul_eq_zsmul]
+  | zero => change b.baseSupp i 0 • _ = _; simp
+  | add u v hu hv hu' hv' =>
+    rw [← coe_cartan_eq_span]; rw [LieSubalgebra.mem_toSubmodule] at hu hv
+    rw [← AddMemClass.mk_add_mk _ u v hu hv]
+    simp only [map_add, add_smul, add_lie] at hu' hv' ⊢
+    rw [hu']; rw [hv']
+  | smul t u hu hv' =>
+    rw [← coe_cartan_eq_span]; rw [LieSubalgebra.mem_toSubmodule] at hu
+    rw [← SetLike.mk_smul_mk _ t u hu]; rw [map_smul]; rw [smul_assoc]; rw [hv']; rw [smul_lie]
 -/
 @[simp] lemma baseSupp_apply_smul_e (i : ι) (x : H) :
     b.baseSupp i x • b.e i = ⁅x, b.e i⁆ := by
@@ -786,7 +1002,40 @@ lemma borelUpper_le_biSup
   intro x hx
   replace hx : x in lieSpan R L (range b.e) := by simpa [borelUpper] using hx
   induction hx using lieSpan_induction with
-  | m
+  | mem u hu =>
+    obtain ⟨i, rfl⟩ := hu
+    apply LieSubmodule.mem_iSup_of_mem (Pi.single i 1)
+    simp only [ne_eq, Pi.single_eq_zero_iff, one_ne_zero, not_false_eq_true, nsmul_eq_mul, iSup_pos,
+      LieModule.mem_genWeightSpace, Finset.sum_apply, Pi.mul_apply, Pi.natCast_apply,
+      Subtype.forall, toEnd_mk]
+    exact fun y hy => ⟨1, by simp [Pi.single_apply]⟩
+  | zero => simp
+  | add _ _ _ _ hu hv => exact add_mem hu hv
+  | smul t _ _ hu => exact SMulMemClass.smul_mem t hu
+  | lie u v _ _ hu hv =>
+    let s : Set (H -> R) := {χ | exists n : ι -> Nat, n != 0 ∧ χ = ∑ i, n i • b.baseSupp i}
+    have hs : forall χ₁ in s, forall χ₂ in s, χ₁ + χ₂ in s := by
+      rintro - ⟨n₁, hn₁, rfl⟩ - ⟨n₂, hn₂, rfl⟩
+      refine ⟨n₁ + n₂, by simp [hn₁], ?_⟩
+      ext; simp [add_smul, Finset.sum_add_distrib]
+    let e : {n : ι -> Nat | n != 0} ≃ s :=
+.ofBijective (fun n => ⟨∑ i, n.val i • b.baseSupp i, n.val, n.property, by ext; simp⟩) by
+      refine ⟨fun n₁ n₂ h => ?_, fun χ => ?_⟩
+      · ext i
+        have := b.linearIndependent_baseSupp.restrict_scalars' Nat
+        refine Fintype.linearIndependent_iffₛ.mp this n₁ n₂ ?_ i
+        ext v
+        rw [Subtype.mk.injEq] at h
+        simpa using congr_fun h v
+      · use ⟨χ.property.choose, χ.property.choose_spec.1⟩
+        ext i
+        simpa using congr_fun χ.property.choose_spec.2.symm i
+    replace hu : u in ⨆ χ, ⨆ (_ : χ in s), rootSpace H χ := by
+      convert! hu; rw [iSup_subtype', iSup_subtype', ← e.iSup_comp]; rfl
+    replace hv : v in ⨆ χ, ⨆ (_ : χ in s), rootSpace H χ := by
+      convert! hv; rw [iSup_subtype', iSup_subtype', ← e.iSup_comp]; rfl
+    convert! mem_biSup_genWeightSpace_of hs hu hv
+    rw [iSup_subtype']; rw [iSup_subtype']; rw [← e.iSup_comp]; rfl
 
 中文:
 引理 borelUpper_le_biSup
@@ -797,7 +1046,40 @@ lemma borelUpper_le_biSup
   intro x hx
   replace hx : x in lieSpan R L (range b.e) := by simpa [borelUpper] using hx
   induction hx using lieSpan_induction with
-  | m
+  | mem u hu =>
+    obtain ⟨i, rfl⟩ := hu
+    apply LieSubmodule.mem_iSup_of_mem (Pi.single i 1)
+    simp only [ne_eq, Pi.single_eq_zero_iff, one_ne_zero, not_false_eq_true, nsmul_eq_mul, iSup_pos,
+      LieModule.mem_genWeightSpace, Finset.sum_apply, Pi.mul_apply, Pi.natCast_apply,
+      Subtype.forall, toEnd_mk]
+    exact fun y hy => ⟨1, by simp [Pi.single_apply]⟩
+  | zero => simp
+  | add _ _ _ _ hu hv => exact add_mem hu hv
+  | smul t _ _ hu => exact SMulMemClass.smul_mem t hu
+  | lie u v _ _ hu hv =>
+    let s : Set (H -> R) := {χ | exists n : ι -> Nat, n != 0 ∧ χ = ∑ i, n i • b.baseSupp i}
+    have hs : forall χ₁ in s, forall χ₂ in s, χ₁ + χ₂ in s := by
+      rintro - ⟨n₁, hn₁, rfl⟩ - ⟨n₂, hn₂, rfl⟩
+      refine ⟨n₁ + n₂, by simp [hn₁], ?_⟩
+      ext; simp [add_smul, Finset.sum_add_distrib]
+    let e : {n : ι -> Nat | n != 0} ≃ s :=
+.ofBijective (fun n => ⟨∑ i, n.val i • b.baseSupp i, n.val, n.property, by ext; simp⟩) by
+      refine ⟨fun n₁ n₂ h => ?_, fun χ => ?_⟩
+      · ext i
+        have := b.linearIndependent_baseSupp.restrict_scalars' Nat
+        refine Fintype.linearIndependent_iffₛ.mp this n₁ n₂ ?_ i
+        ext v
+        rw [Subtype.mk.injEq] at h
+        simpa using congr_fun h v
+      · use ⟨χ.property.choose, χ.property.choose_spec.1⟩
+        ext i
+        simpa using congr_fun χ.property.choose_spec.2.symm i
+    replace hu : u in ⨆ χ, ⨆ (_ : χ in s), rootSpace H χ := by
+      convert! hu; rw [iSup_subtype', iSup_subtype', ← e.iSup_comp]; rfl
+    replace hv : v in ⨆ χ, ⨆ (_ : χ in s), rootSpace H χ := by
+      convert! hv; rw [iSup_subtype', iSup_subtype', ← e.iSup_comp]; rfl
+    convert! mem_biSup_genWeightSpace_of hs hu hv
+    rw [iSup_subtype']; rw [iSup_subtype']; rw [← e.iSup_comp]; rfl
 
 Depends on / 依赖: b.isLieAbelian_cartan, isLieAbelian_cartan
 -/
@@ -875,7 +1157,12 @@ lemma cartan_borelLower_borelUpper_le
     letI U := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • (-b.baseSupp) i)
     letI V := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • b.baseSupp i)
     ![H.toLieSubmodule, b.borelLower, b.borelUpper] <= ![rootSpace H 0, U, V] := by
-  let := b.isLieAbelian_c
+  let := b.isLieAbelian_cartan
+  intro i
+  fin_cases i
+  · exact toLieSubmodule_le_rootSpace_zero R L H
+  · exact b.borelLower_le_biSup
+  · exact b.borelUpper_le_biSup
 
 中文:
 引理 cartan_borelLower_borelUpper_le
@@ -883,7 +1170,12 @@ lemma cartan_borelLower_borelUpper_le
     letI U := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • (-b.baseSupp) i)
     letI V := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • b.baseSupp i)
     ![H.toLieSubmodule, b.borelLower, b.borelUpper] <= ![rootSpace H 0, U, V] := by
-  let := b.isLieAbelian_c
+  let := b.isLieAbelian_cartan
+  intro i
+  fin_cases i
+  · exact toLieSubmodule_le_rootSpace_zero R L H
+  · exact b.borelLower_le_biSup
+  · exact b.borelUpper_le_biSup
 -/
 private lemma cartan_borelLower_borelUpper_le :
     letI := b.isLieAbelian_cartan
@@ -910,7 +1202,71 @@ lemma iSupIndep_rootSpace
     letI V := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • b.baseSupp i)
     iSupIndep ![rootSpace H 0, U, V] := by
   let := b.isLieAbelian_cartan
-  set U := ⨆ (n : ι -> Nat) (_ : n 
+  set U := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • (-b.baseSupp) i) with hU
+  set V := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • b.baseSupp i) with hV
+  set s0 : Set (H -> R) := {0} with hs0
+  set sU : Set (H -> R) := {f | exists n : ι -> Nat, n != 0 ∧ f = ∑ i, n i • (-b.baseSupp) i} with hsU
+  set sV : Set (H -> R) := {f | exists n : ι -> Nat, n != 0 ∧ f = ∑ i, n i • b.baseSupp i} with hsV
+  have hs0' : rootSpace H 0 = ⨆ i in s0, LieModule.genWeightSpace L i := by simp [hs0]
+  have hsU' : U = ⨆ i in sU, LieModule.genWeightSpace L i := by
+    simp only [hU, hsU, mem_ofPred_eq, iSup_exists, iSup_and, iSup_comm (ι := H -> R),
+      iSup_iSup_eq_left, LinearMap.coe_sum, LinearMap.coe_smul]
+  have hsV' : V = ⨆ i in sV, LieModule.genWeightSpace L i := by
+    simp only [hV, hsV, mem_ofPred_eq, iSup_exists, iSup_and, iSup_comm (ι := H -> R),
+      iSup_iSup_eq_left, LinearMap.coe_sum, LinearMap.coe_smul]
+  have hU0 : Disjoint s0 sU := by
+    suffices forall g in sU, g != 0 by
+      refine Set.disjoint_iff_forall_ne.mpr fun f hf g hg => ?_
+      obtain ⟨rfl⟩ : f = 0 := by simpa [hs0] using hf
+      exact (this _ hg).symm
+    intro g hg contra
+    obtain ⟨n, hn, rfl⟩ : exists n : ι -> Nat, n != 0 ∧ g = -∑ i, n i • b.baseSupp i := by
+      simpa [hsU] using hg
+    rw [neg_eq_zero]; rw [LinearMap.coe_zero_iff] at contra
+    have := Fintype.linearIndependent_iff.mp b.linearIndependent_baseSupp ((↑) ∘ n)
+      (by simpa [Nat.cast_smul_eq_nsmul])
+exact hn funext fun i => by simpa using this i
+  have hV0 : Disjoint s0 sV := by
+    suffices forall g in sV, g != 0 by
+      refine Set.disjoint_iff_forall_ne.mpr fun f hf g hg => ?_
+      obtain ⟨rfl⟩ : f = 0 := by simpa [hs0] using hf
+      exact (this _ hg).symm
+    intro g hg contra
+    obtain ⟨n, hn, rfl⟩ : exists n : ι -> Nat, n != 0 ∧ g = ∑ i, n i • b.baseSupp i := by
+      simpa [hsV] using hg
+    rw [LinearMap.coe_zero_iff] at contra
+    have := Fintype.linearIndependent_iff.mp b.linearIndependent_baseSupp ((↑) ∘ n)
+      (by simpa [Nat.cast_smul_eq_nsmul])
+exact hn funext fun i => by simpa using this i
+  have hUV : Disjoint sU sV := by
+    refine Set.disjoint_iff_forall_ne.mpr fun f hf g hg => ?_
+    rintro rfl
+    obtain ⟨n, hn, hn'⟩ : exists n : ι -> Nat, n != 0 ∧ f = -∑ i, n i • b.baseSupp i := by
+      simpa [hsU] using hf
+    obtain ⟨m, hm, rfl⟩ : exists m : ι -> Nat, m != 0 ∧ f = ∑ i, m i • b.baseSupp i := by
+      simpa [hsV] using hg
+    replace hn' : ∑ i, (((↑) : Nat -> R) ∘ (m + n)) i • b.baseSupp i = 0 := by
+      rw [eq_neg_iff_add_eq_zero] at hn'
+      change ⇑(∑ i, m i • b.baseSupp i + ∑ i, n i • b.baseSupp i) = 0 at hn'
+      simp_rw [LinearMap.coe_zero_iff, ← Finset.sum_add_distrib, ← add_smul, ← Pi.add_apply,
+        ← Nat.cast_smul_eq_nsmul R] at hn'
+      exact hn'
+    have := Fintype.linearIndependent_iff.mp b.linearIndependent_baseSupp ((↑) ∘ (m + n)) hn'
+refine hn funext fun i => ?_
+    specialize this i
+    rw [comp_apply]; rw [Nat.cast_eq_zero]; rw [Pi.add_apply]; rw [Nat.add_eq_zero_iff] at this
+    simpa using this.2
+  have key := LieModule.iSupIndep_genWeightSpace R H L
+  have h₀ : Disjoint (rootSpace H 0) (U ⊔ V) := by
+    convert! key.disjoint_biSup_biSup (hU0.union_right hV0)
+    rw [iSup_union]; rw [hsU']; rw [hsV']
+  have h₁ : Disjoint U (V ⊔ rootSpace H 0) := by
+    convert! key.disjoint_biSup_biSup (hUV.union_right hU0.symm)
+    rw [iSup_union]; rw [hs0']; rw [hsV']
+  have h₂ : Disjoint V (rootSpace H 0 ⊔ U) := by
+    convert! key.disjoint_biSup_biSup (Disjoint.union_left hV0 hUV).symm
+    rw [iSup_union]; rw [hs0']; rw [hsU']
+  simp [iSupIndep_fin_three, h₀, h₁, h₂]
 
 中文:
 引理 iSupIndep_rootSpace
@@ -919,7 +1275,71 @@ lemma iSupIndep_rootSpace
     letI V := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • b.baseSupp i)
     iSupIndep ![rootSpace H 0, U, V] := by
   let := b.isLieAbelian_cartan
-  set U := ⨆ (n : ι -> Nat) (_ : n 
+  set U := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • (-b.baseSupp) i) with hU
+  set V := ⨆ (n : ι -> Nat) (_ : n != 0), rootSpace H (∑ i, n i • b.baseSupp i) with hV
+  set s0 : Set (H -> R) := {0} with hs0
+  set sU : Set (H -> R) := {f | exists n : ι -> Nat, n != 0 ∧ f = ∑ i, n i • (-b.baseSupp) i} with hsU
+  set sV : Set (H -> R) := {f | exists n : ι -> Nat, n != 0 ∧ f = ∑ i, n i • b.baseSupp i} with hsV
+  have hs0' : rootSpace H 0 = ⨆ i in s0, LieModule.genWeightSpace L i := by simp [hs0]
+  have hsU' : U = ⨆ i in sU, LieModule.genWeightSpace L i := by
+    simp only [hU, hsU, mem_ofPred_eq, iSup_exists, iSup_and, iSup_comm (ι := H -> R),
+      iSup_iSup_eq_left, LinearMap.coe_sum, LinearMap.coe_smul]
+  have hsV' : V = ⨆ i in sV, LieModule.genWeightSpace L i := by
+    simp only [hV, hsV, mem_ofPred_eq, iSup_exists, iSup_and, iSup_comm (ι := H -> R),
+      iSup_iSup_eq_left, LinearMap.coe_sum, LinearMap.coe_smul]
+  have hU0 : Disjoint s0 sU := by
+    suffices forall g in sU, g != 0 by
+      refine Set.disjoint_iff_forall_ne.mpr fun f hf g hg => ?_
+      obtain ⟨rfl⟩ : f = 0 := by simpa [hs0] using hf
+      exact (this _ hg).symm
+    intro g hg contra
+    obtain ⟨n, hn, rfl⟩ : exists n : ι -> Nat, n != 0 ∧ g = -∑ i, n i • b.baseSupp i := by
+      simpa [hsU] using hg
+    rw [neg_eq_zero]; rw [LinearMap.coe_zero_iff] at contra
+    have := Fintype.linearIndependent_iff.mp b.linearIndependent_baseSupp ((↑) ∘ n)
+      (by simpa [Nat.cast_smul_eq_nsmul])
+exact hn funext fun i => by simpa using this i
+  have hV0 : Disjoint s0 sV := by
+    suffices forall g in sV, g != 0 by
+      refine Set.disjoint_iff_forall_ne.mpr fun f hf g hg => ?_
+      obtain ⟨rfl⟩ : f = 0 := by simpa [hs0] using hf
+      exact (this _ hg).symm
+    intro g hg contra
+    obtain ⟨n, hn, rfl⟩ : exists n : ι -> Nat, n != 0 ∧ g = ∑ i, n i • b.baseSupp i := by
+      simpa [hsV] using hg
+    rw [LinearMap.coe_zero_iff] at contra
+    have := Fintype.linearIndependent_iff.mp b.linearIndependent_baseSupp ((↑) ∘ n)
+      (by simpa [Nat.cast_smul_eq_nsmul])
+exact hn funext fun i => by simpa using this i
+  have hUV : Disjoint sU sV := by
+    refine Set.disjoint_iff_forall_ne.mpr fun f hf g hg => ?_
+    rintro rfl
+    obtain ⟨n, hn, hn'⟩ : exists n : ι -> Nat, n != 0 ∧ f = -∑ i, n i • b.baseSupp i := by
+      simpa [hsU] using hf
+    obtain ⟨m, hm, rfl⟩ : exists m : ι -> Nat, m != 0 ∧ f = ∑ i, m i • b.baseSupp i := by
+      simpa [hsV] using hg
+    replace hn' : ∑ i, (((↑) : Nat -> R) ∘ (m + n)) i • b.baseSupp i = 0 := by
+      rw [eq_neg_iff_add_eq_zero] at hn'
+      change ⇑(∑ i, m i • b.baseSupp i + ∑ i, n i • b.baseSupp i) = 0 at hn'
+      simp_rw [LinearMap.coe_zero_iff, ← Finset.sum_add_distrib, ← add_smul, ← Pi.add_apply,
+        ← Nat.cast_smul_eq_nsmul R] at hn'
+      exact hn'
+    have := Fintype.linearIndependent_iff.mp b.linearIndependent_baseSupp ((↑) ∘ (m + n)) hn'
+refine hn funext fun i => ?_
+    specialize this i
+    rw [comp_apply]; rw [Nat.cast_eq_zero]; rw [Pi.add_apply]; rw [Nat.add_eq_zero_iff] at this
+    simpa using this.2
+  have key := LieModule.iSupIndep_genWeightSpace R H L
+  have h₀ : Disjoint (rootSpace H 0) (U ⊔ V) := by
+    convert! key.disjoint_biSup_biSup (hU0.union_right hV0)
+    rw [iSup_union]; rw [hsU']; rw [hsV']
+  have h₁ : Disjoint U (V ⊔ rootSpace H 0) := by
+    convert! key.disjoint_biSup_biSup (hUV.union_right hU0.symm)
+    rw [iSup_union]; rw [hs0']; rw [hsV']
+  have h₂ : Disjoint V (rootSpace H 0 ⊔ U) := by
+    convert! key.disjoint_biSup_biSup (Disjoint.union_left hV0 hUV).symm
+    rw [iSup_union]; rw [hs0']; rw [hsU']
+  simp [iSupIndep_fin_three, h₀, h₁, h₂]
 
 Depends on / 依赖: b.isLieAbelian_cartan, isLieAbelian_cartan
 -/

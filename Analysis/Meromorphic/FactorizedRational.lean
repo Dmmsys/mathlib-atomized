@@ -217,7 +217,13 @@ lemma extractFactor
       simp [mulSupport]
     rw [finprod_eq_prod_of_mulSupport_subset _ this]
     have : u₀ in hd.toFinset := by simp_all
-    rw [← Finset.mul_pro
+    rw [← Finset.mul_prod_erase hd.toFinset _ this]
+    congr 1
+    have : (fun u => (· - u) ^ (update d u₀ 0 u)).mulSupport subseteq hd.toFinset.erase u₀ := by
+      rw [mulSupport]
+      intro x hx
+      by_cases h₁x : x = u₀ <;> simp_all
+    simp_all [finprod_eq_prod_of_mulSupport_subset _ this, Finset.prod_congr rfl]
 
 中文:
 引理 extractFactor
@@ -229,7 +235,13 @@ lemma extractFactor
       simp [mulSupport]
     rw [finprod_eq_prod_of_mulSupport_subset _ this]
     have : u₀ in hd.toFinset := by simp_all
-    rw [← Finset.mul_pro
+    rw [← Finset.mul_prod_erase hd.toFinset _ this]
+    congr 1
+    have : (fun u => (· - u) ^ (update d u₀ 0 u)).mulSupport subseteq hd.toFinset.erase u₀ := by
+      rw [mulSupport]
+      intro x hx
+      by_cases h₁x : x = u₀ <;> simp_all
+    simp_all [finprod_eq_prod_of_mulSupport_subset _ this, Finset.prod_congr rfl]
 
 Depends on / 依赖: Finset, Finset.mul_prod_erase, eq_update_self_iff, finprod_eq_prod_of_mulS, finprod_eq_prod_of_mulSupport_subset, hd.toFinset, hd.toFinset.erase, mulSupport, mul_prod_erase, subseteq, toFinset, update
 -/
@@ -265,7 +277,7 @@ theorem meromorphicNFOn_univ
     simp [analyticAt, ne_zero]
   · rw [← mulSupport d] at hd
     rw [finprod_of_infinite_mulSupport hd]
-    exact AnalyticOnNhd.meromorphicNFOn analyticO
+    exact AnalyticOnNhd.meromorphicNFOn analyticOnNhd_const
 
 中文:
 定理 meromorphicNFOn_univ
@@ -280,7 +292,7 @@ theorem meromorphicNFOn_univ
     simp [analyticAt, ne_zero]
   · rw [← mulSupport d] at hd
     rw [finprod_of_infinite_mulSupport hd]
-    exact AnalyticOnNhd.meromorphicNFOn analyticO
+    exact AnalyticOnNhd.meromorphicNFOn analyticOnNhd_const
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.meromorphicNFOn, Finite, analyticAt, analyticOnNhd_const, classical, d.support.Finite, extractFactor, finprod_of_infinite_mulSupport, meromorphicNFOn, mulSupport, ne_zero, support, update
 -/
@@ -472,7 +484,14 @@ theorem meromorphicTrailingCoeffAt_factorizedRational
   have : (fun u => (· - u) ^ d u).mulSupport subseteq h.toFinset := by
     simp [Function.FactorizedRational.mulSupport]
   rw [finprod_eq_prod_of_mulSupport_subset _ this]; rw [meromorphicTrailingCoeffAt_prod
-      (fun _ => by fun_prop)]; rw [finprod_eq_prod_of_mulSupport_subset _ (mulSupport_up
+      (fun _ => by fun_prop)]; rw [finprod_eq_prod_of_mulSupport_subset _ (mulSupport_update h)]
+  apply Finset.prod_congr rfl
+  intro y hy
+  rw [MeromorphicAt.meromorphicTrailingCoeffAt_zpow (by fun_prop)]
+  by_cases hxy : x = y
+  · rw [hxy, meromorphicTrailingCoeffAt_id_sub_const]
+    simp_all
+  · grind [meromorphicTrailingCoeffAt_id_sub_const]
 
 中文:
 定理 meromorphicTrailingCoeffAt_factorizedRational
@@ -481,7 +500,14 @@ theorem meromorphicTrailingCoeffAt_factorizedRational
   have : (fun u => (· - u) ^ d u).mulSupport subseteq h.toFinset := by
     simp [Function.FactorizedRational.mulSupport]
   rw [finprod_eq_prod_of_mulSupport_subset _ this]; rw [meromorphicTrailingCoeffAt_prod
-      (fun _ => by fun_prop)]; rw [finprod_eq_prod_of_mulSupport_subset _ (mulSupport_up
+      (fun _ => by fun_prop)]; rw [finprod_eq_prod_of_mulSupport_subset _ (mulSupport_update h)]
+  apply Finset.prod_congr rfl
+  intro y hy
+  rw [MeromorphicAt.meromorphicTrailingCoeffAt_zpow (by fun_prop)]
+  by_cases hxy : x = y
+  · rw [hxy, meromorphicTrailingCoeffAt_id_sub_const]
+    simp_all
+  · grind [meromorphicTrailingCoeffAt_id_sub_const]
 
 Depends on / 依赖: FactorizedRational, Finset, Finset.prod_congr, Function, Function.FactorizedRational.mulSupport, MeromorphicAt, MeromorphicAt.meromorphicTrailingCoeffAt_zpow, finprod_eq_prod_of_mulSupport_subset, fun_prop, h.toFinset, meromorphi, meromorphicTrailingCoeffAt_id_sub_const, meromorphicTrailingCoeffAt_prod, meromorphicTrailingCoeffAt_zpow, mulSupport, mulSupport_update, prod_congr, subseteq, toFinset
 -/
@@ -513,7 +539,12 @@ theorem meromorphicTrailingCoeffAt_factorizedRational_off_support
     intro u
     contrapose
     simp_all
-  rw [finprod_eq_prod_of_mulSupport_subset _ this
+  rw [finprod_eq_prod_of_mulSupport_subset _ this]; rw [Finset.prod_congr rfl]
+  intro y hy
+  congr
+  apply Function.update_of_ne
+  by_contra hCon
+  simp_all
 
 中文:
 定理 meromorphicTrailingCoeffAt_factorizedRational_off_support
@@ -525,7 +556,12 @@ theorem meromorphicTrailingCoeffAt_factorizedRational_off_support
     intro u
     contrapose
     simp_all
-  rw [finprod_eq_prod_of_mulSupport_subset _ this
+  rw [finprod_eq_prod_of_mulSupport_subset _ this]; rw [Finset.prod_congr rfl]
+  intro y hy
+  congr
+  apply Function.update_of_ne
+  by_contra hCon
+  simp_all
 
 Depends on / 依赖: Finset, Finset.prod_congr, Function, Function.update_of_ne, classical, contrapose, finprod_eq_prod_of_mulSupport_subset, meromorphicTrailingCoeffAt_factorizedRational, mulSupport, mulSupport_update, prod_congr, subseteq, toFinset, update_of_ne
 -/
@@ -560,7 +596,19 @@ theorem log_norm_meromorphicTrailingCoeffAt
     by_cases h : x = y
     · rw [h]
       simp_all
-    · simp_all [zpow_ne_zer
+    · simp_all [zpow_ne_zero, sub_ne_zero]
+  rw [norm_prod]; rw [log_prod this]
+  have : (fun u => (d u) * log ‖x - u‖).support subseteq h.toFinset := by
+    intro u
+    contrapose
+    simp_all
+  rw [finsum_eq_sum_of_support_subset _ this]
+  apply Finset.sum_congr rfl
+  intro y hy
+  rw [norm_zpow]; rw [Real.log_zpow]
+  by_cases h : x = y
+  · simp [h]
+  · rw [Function.update_of_ne (by tauto)]
 
 中文:
 定理 log_norm_meromorphicTrailingCoeffAt
@@ -573,7 +621,19 @@ theorem log_norm_meromorphicTrailingCoeffAt
     by_cases h : x = y
     · rw [h]
       simp_all
-    · simp_all [zpow_ne_zer
+    · simp_all [zpow_ne_zero, sub_ne_zero]
+  rw [norm_prod]; rw [log_prod this]
+  have : (fun u => (d u) * log ‖x - u‖).support subseteq h.toFinset := by
+    intro u
+    contrapose
+    simp_all
+  rw [finsum_eq_sum_of_support_subset _ this]
+  apply Finset.sum_congr rfl
+  intro y hy
+  rw [norm_zpow]; rw [Real.log_zpow]
+  by_cases h : x = y
+  · simp [h]
+  · rw [Function.update_of_ne (by tauto)]
 
 Depends on / 依赖: Finset, Finset.sum_congr, classical, contrapose, finprod_eq_prod_of_mulSupport_subset, finsum_eq_sum_of_support_subset, h.toFinset, log_prod, meromorphicTrailingCoeffAt_factorizedRational, mulSupport_update, norm_prod, sub_ne_zero, subseteq, sum_congr, support, toFinset, update, zpow_ne_zero
 -/
@@ -629,7 +689,31 @@ theorem MeromorphicOn.extract_zeros_poles
   -- function in normal form. Then check all the properties.
   let φ := ∏ᶠ u, (· - u) ^ (divisor f U u)
   have hφ : MeromorphicOn φ U := (meromorphicNFOn (divisor f U) U).meromorphicOn
-  let g := toMe
+  let g := toMeromorphicNFOn (φ⁻¹ • f) U
+  have hg : MeromorphicNFOn g U := by apply meromorphicNFOn_toMeromorphicNFOn
+  refine ⟨g, ?_, ?_, ?_⟩
+  · -- AnalyticOnNhd 𝕜 g U
+    rw [← hg.divisor_nonneg_iff_analyticOnNhd]; rw [divisor_of_toMeromorphicNFOn (hφ.inv.smul h₁f)]; rw [divisor_smul hφ.inv h₁f _ (fun z hz => h₂f ⟨z]; rw [hz⟩)]; rw [divisor_inv]; rw [Function.FactorizedRational.divisor h₃f]; rw [neg_add_cancel]
+    intro z hz
+    simpa [meromorphicOrderAt_inv] using meromorphicOrderAt_ne_top (divisor f U)
+  · -- ∀ (u : ↑U), g ↑u ≠ 0
+    intro ⟨u, hu⟩
+    rw [← (hg hu).meromorphicOrderAt_eq_zero_iff]; rw [← meromorphicOrderAt_congr
+        (toMeromorphicNFOn_eq_self_on_nhdsNE (hφ.inv.smul h₁f) hu).symm]; rw [meromorphicOrderAt_smul (hφ u hu).inv (h₁f u hu)]; rw [meromorphicOrderAt_inv]; rw [meromorphicOrderAt_eq _ h₃f]
+    simp only [h₁f, hu, divisor_apply]
+    lift meromorphicOrderAt f u to Int using (h₂f ⟨u, hu⟩) with n hn
+    rw [WithTop.untop₀_coe]; rw [← WithTop.LinearOrderedAddCommGroup.coe_neg]; rw [← WithTop.coe_add]
+    simp
+  · -- f =ᶠ[codiscreteWithin U] (∏ᶠ (u : 𝕜), fun z ↦ (z - u) ^ (divisor f U) u) * g
+    filter_upwards [(divisor f U).eq_zero_codiscreteWithin,
+      (hφ.inv.smul h₁f).meromorphicNFAt_mem_codiscreteWithin,
+      self_mem_codiscreteWithin U] with a h₂a h₃a h₄a
+    unfold g
+    simp only [Pi.smul_apply', toMeromorphicNFOn_eq_toMeromorphicNFAt (hφ.inv.smul h₁f) h₄a,
+      toMeromorphicNFAt_eq_self.2 h₃a, Pi.inv_apply]
+    rw [← smul_assoc]; rw [smul_eq_mul]; rw [mul_inv_cancel₀ _]; rw [one_smul]
+    rwa [← ((meromorphicNFOn_univ (divisor f U)) trivial).meromorphicOrderAt_eq_zero_iff,
+      meromorphicOrderAt_eq, h₂a, Pi.zero_apply, WithTop.coe_zero]
 
 中文:
 定理 MeromorphicOn.extract_zeros_poles
@@ -639,7 +723,31 @@ theorem MeromorphicOn.extract_zeros_poles
   -- function in normal form. Then check all the properties.
   let φ := ∏ᶠ u, (· - u) ^ (divisor f U u)
   have hφ : MeromorphicOn φ U := (meromorphicNFOn (divisor f U) U).meromorphicOn
-  let g := toMe
+  let g := toMeromorphicNFOn (φ⁻¹ • f) U
+  have hg : MeromorphicNFOn g U := by apply meromorphicNFOn_toMeromorphicNFOn
+  refine ⟨g, ?_, ?_, ?_⟩
+  · -- AnalyticOnNhd 𝕜 g U
+    rw [← hg.divisor_nonneg_iff_analyticOnNhd]; rw [divisor_of_toMeromorphicNFOn (hφ.inv.smul h₁f)]; rw [divisor_smul hφ.inv h₁f _ (fun z hz => h₂f ⟨z]; rw [hz⟩)]; rw [divisor_inv]; rw [Function.FactorizedRational.divisor h₃f]; rw [neg_add_cancel]
+    intro z hz
+    simpa [meromorphicOrderAt_inv] using meromorphicOrderAt_ne_top (divisor f U)
+  · -- ∀ (u : ↑U), g ↑u ≠ 0
+    intro ⟨u, hu⟩
+    rw [← (hg hu).meromorphicOrderAt_eq_zero_iff]; rw [← meromorphicOrderAt_congr
+        (toMeromorphicNFOn_eq_self_on_nhdsNE (hφ.inv.smul h₁f) hu).symm]; rw [meromorphicOrderAt_smul (hφ u hu).inv (h₁f u hu)]; rw [meromorphicOrderAt_inv]; rw [meromorphicOrderAt_eq _ h₃f]
+    simp only [h₁f, hu, divisor_apply]
+    lift meromorphicOrderAt f u to Int using (h₂f ⟨u, hu⟩) with n hn
+    rw [WithTop.untop₀_coe]; rw [← WithTop.LinearOrderedAddCommGroup.coe_neg]; rw [← WithTop.coe_add]
+    simp
+  · -- f =ᶠ[codiscreteWithin U] (∏ᶠ (u : 𝕜), fun z ↦ (z - u) ^ (divisor f U) u) * g
+    filter_upwards [(divisor f U).eq_zero_codiscreteWithin,
+      (hφ.inv.smul h₁f).meromorphicNFAt_mem_codiscreteWithin,
+      self_mem_codiscreteWithin U] with a h₂a h₃a h₄a
+    unfold g
+    simp only [Pi.smul_apply', toMeromorphicNFOn_eq_toMeromorphicNFAt (hφ.inv.smul h₁f) h₄a,
+      toMeromorphicNFAt_eq_self.2 h₃a, Pi.inv_apply]
+    rw [← smul_assoc]; rw [smul_eq_mul]; rw [mul_inv_cancel₀ _]; rw [one_smul]
+    rwa [← ((meromorphicNFOn_univ (divisor f U)) trivial).meromorphicOrderAt_eq_zero_iff,
+      meromorphicOrderAt_eq, h₂a, Pi.zero_apply, WithTop.coe_zero]
 -/
 theorem MeromorphicOn.extract_zeros_poles {f : 𝕜 -> E} (h₁f : MeromorphicOn f U)
     (h₂f : forall u : U, meromorphicOrderAt f u != ⊤) (h₃f : (divisor f U).support.Finite) :
@@ -689,7 +797,39 @@ theorem MeromorphicOn.extract_zeros_poles_log
     simp only [ne_eq, not_not, Function.mem_support]
     constructor <;> intro hx
     · obtain ⟨y, hy⟩ := NormedField.exists_one_lt_norm 𝕜
-      have 
+      have := congrFun hx (y + u)
+      simp only [add_sub_cancel_right, Pi.zero_apply, mul_eq_zero, Int.cast_eq_zero, log_eq_zero,
+        norm_eq_zero] at this
+      rcases this with h | h | h | h
+      · assumption
+      · simp only [h, norm_zero] at hy
+        linarith
+      · simp only [h, lt_self_iff_false] at hy
+      · simp only [h, lt_neg_self_iff] at hy
+        linarith
+    · simp_all [Pi.zero_def]
+  -- Trivial case: the support of D is infinite
+  by_cases h₃f : D.support.Finite
+  case neg =>
+    rw [finsum_of_infinite_support (by simpa [t₁] using h₃f)]
+    rw [finprod_of_infinite_mulSupport (by simpa [FactorizedRational.mulSupport] using h₃f)] at h
+    filter_upwards [h] with x hx
+    simp [hx]
+  -- General case
+  filter_upwards [h, D.eq_zero_codiscreteWithin, self_mem_codiscreteWithin U] with z hz h₂z h₃z
+  rw [Pi.zero_apply] at h₂z
+  rw [hz]; rw [finprod_eq_prod_of_mulSupport_subset (s := h₃f.toFinset) _
+      (by simp_all [FactorizedRational.mulSupport]),
+    finsum_eq_sum_of_support_subset (s := h₃f.toFinset) _ (by simp_all)]
+  have : forall x in h₃f.toFinset, ‖z - x‖ ^ D x != 0 := by
+    intro x hx
+    rw [Finite.mem_toFinset]; rw [Function.mem_support] at hx
+    rw [ne_eq]; rw [zpow_eq_zero_iff hx]; rw [norm_eq_zero]; rw [sub_eq_zero]; rw [eq_comm]
+    apply ne_of_apply_ne D
+    rwa [h₂z]
+  simp only [Pi.smul_apply', Finset.prod_apply, Pi.pow_apply, norm_smul, norm_prod, norm_zpow]
+  rw [log_mul (Finset.prod_ne_zero_iff.2 this) (by simp [hg ⟨z]; rw [h₃z⟩]), log_prod this]
+  simp [log_zpow]
 
 中文:
 定理 MeromorphicOn.extract_zeros_poles_log
@@ -702,7 +842,39 @@ theorem MeromorphicOn.extract_zeros_poles_log
     simp only [ne_eq, not_not, Function.mem_support]
     constructor <;> intro hx
     · obtain ⟨y, hy⟩ := NormedField.exists_one_lt_norm 𝕜
-      have 
+      have := congrFun hx (y + u)
+      simp only [add_sub_cancel_right, Pi.zero_apply, mul_eq_zero, Int.cast_eq_zero, log_eq_zero,
+        norm_eq_zero] at this
+      rcases this with h | h | h | h
+      · assumption
+      · simp only [h, norm_zero] at hy
+        linarith
+      · simp only [h, lt_self_iff_false] at hy
+      · simp only [h, lt_neg_self_iff] at hy
+        linarith
+    · simp_all [Pi.zero_def]
+  -- Trivial case: the support of D is infinite
+  by_cases h₃f : D.support.Finite
+  case neg =>
+    rw [finsum_of_infinite_support (by simpa [t₁] using h₃f)]
+    rw [finprod_of_infinite_mulSupport (by simpa [FactorizedRational.mulSupport] using h₃f)] at h
+    filter_upwards [h] with x hx
+    simp [hx]
+  -- General case
+  filter_upwards [h, D.eq_zero_codiscreteWithin, self_mem_codiscreteWithin U] with z hz h₂z h₃z
+  rw [Pi.zero_apply] at h₂z
+  rw [hz]; rw [finprod_eq_prod_of_mulSupport_subset (s := h₃f.toFinset) _
+      (by simp_all [FactorizedRational.mulSupport]),
+    finsum_eq_sum_of_support_subset (s := h₃f.toFinset) _ (by simp_all)]
+  have : forall x in h₃f.toFinset, ‖z - x‖ ^ D x != 0 := by
+    intro x hx
+    rw [Finite.mem_toFinset]; rw [Function.mem_support] at hx
+    rw [ne_eq]; rw [zpow_eq_zero_iff hx]; rw [norm_eq_zero]; rw [sub_eq_zero]; rw [eq_comm]
+    apply ne_of_apply_ne D
+    rwa [h₂z]
+  simp only [Pi.smul_apply', Finset.prod_apply, Pi.pow_apply, norm_smul, norm_prod, norm_zpow]
+  rw [log_mul (Finset.prod_ne_zero_iff.2 this) (by simp [hg ⟨z]; rw [h₃z⟩]), log_prod this]
+  simp [log_zpow]
 -/
 theorem MeromorphicOn.extract_zeros_poles_log {f g : 𝕜 -> E} {D : Function.locallyFinsuppWithin U Int}
     (hg : forall u : U, g u != 0) (h : f =ᶠ[codiscreteWithin U] (∏ᶠ u, (· - u) ^ D u) • g) :
@@ -758,7 +930,8 @@ theorem MeromorphicOn.meromorphicTrailingCoeffAt_extract_zeros_poles
   have t₀ : MeromorphicAt (∏ᶠ u, (· - u) ^ D u) x :=
     (FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x
   rw [meromorphicTrailingCoeffAt_congr_nhdsNE
-      (hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (by fun_prop) h₁x h₂x h)]; rw [t₀.meromorphicTrailingCoeffAt_smul h₁g.
+      (hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (by fun_prop) h₁x h₂x h)]; rw [t₀.meromorphicTrailingCoeffAt_smul h₁g.meromorphicAt]; rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero h₂g]
+  simp [meromorphicTrailingCoeffAt_factorizedRational hD]
 
 中文:
 定理 MeromorphicOn.meromorphicTrailingCoeffAt_extract_zeros_poles
@@ -766,7 +939,8 @@ theorem MeromorphicOn.meromorphicTrailingCoeffAt_extract_zeros_poles
   have t₀ : MeromorphicAt (∏ᶠ u, (· - u) ^ D u) x :=
     (FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x
   rw [meromorphicTrailingCoeffAt_congr_nhdsNE
-      (hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (by fun_prop) h₁x h₂x h)]; rw [t₀.meromorphicTrailingCoeffAt_smul h₁g.
+      (hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin (by fun_prop) h₁x h₂x h)]; rw [t₀.meromorphicTrailingCoeffAt_smul h₁g.meromorphicAt]; rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero h₂g]
+  simp [meromorphicTrailingCoeffAt_factorizedRational hD]
 
 Depends on / 依赖: FactorizedRational, FactorizedRational.meromorphicNFOn, MeromorphicAt, eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin, fun_prop, g.meromorphicAt, g.meromorphicTrailingCoeffAt_of_ne_zero, hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin, meromorphicAt, meromorphicNFOn, meromorphicOn, meromorphicTrailingCoeffAt_congr_nhdsNE, meromorphicTrailingCoeffAt_factorizedRational, meromorphicTrailingCoeffAt_of_ne_zero, meromorphicTrailingCoeffAt_smul
 -/
@@ -790,7 +964,13 @@ theorem MeromorphicOn.log_norm_meromorphicTrailingCoeffAt_extract_zeros_poles
   rw [meromorphicTrailingCoeffAt_congr_nhdsNE
       (hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin
         (((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x).smul h₁g.meromorphicAt)
-          h₁x h₂x h)]; rw [((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x).me
+          h₁x h₂x h)]; rw [((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x).meromorphicTrailingCoeffAt_smul
+      h₁g.meromorphicAt]; rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero h₂g]; rw [norm_smul]; rw [log_mul]; rw [log_norm_meromorphicTrailingCoeffAt hD]
+  · simp only [ne_eq, norm_eq_zero]
+    apply MeromorphicAt.meromorphicTrailingCoeffAt_ne_zero
+      ((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x)
+    apply FactorizedRational.meromorphicOrderAt_ne_top
+  · simp_all
 
 中文:
 定理 MeromorphicOn.log_norm_meromorphicTrailingCoeffAt_extract_zeros_poles
@@ -798,7 +978,13 @@ theorem MeromorphicOn.log_norm_meromorphicTrailingCoeffAt_extract_zeros_poles
   rw [meromorphicTrailingCoeffAt_congr_nhdsNE
       (hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin
         (((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x).smul h₁g.meromorphicAt)
-          h₁x h₂x h)]; rw [((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x).me
+          h₁x h₂x h)]; rw [((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x).meromorphicTrailingCoeffAt_smul
+      h₁g.meromorphicAt]; rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero h₂g]; rw [norm_smul]; rw [log_mul]; rw [log_norm_meromorphicTrailingCoeffAt hD]
+  · simp only [ne_eq, norm_eq_zero]
+    apply MeromorphicAt.meromorphicTrailingCoeffAt_ne_zero
+      ((FactorizedRational.meromorphicNFOn D U).meromorphicOn x h₁x)
+    apply FactorizedRational.meromorphicOrderAt_ne_top
+  · simp_all
 
 Depends on / 依赖: FactorizedRational, FactorizedRational.meromorphicNFOn, Meromorphi, eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin, g.meromorphicAt, g.meromorphicTrailingCoeffAt_of_ne_zero, hf.eventuallyEq_nhdsNE_of_eventuallyEq_codiscreteWithin, log_mul, log_norm_meromorphicTrailingCoeffAt, meromorphicAt, meromorphicNFOn, meromorphicOn, meromorphicTrailingCoeffAt_congr_nhdsNE, meromorphicTrailingCoeffAt_of_ne_zero, meromorphicTrailingCoeffAt_smul, ne_eq, norm_eq_zero, norm_smul
 -/

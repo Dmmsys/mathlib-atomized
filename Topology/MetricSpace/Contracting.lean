@@ -147,7 +147,9 @@ theorem edist_inequality
     rwa [ENNReal.le_div_iff_mul_le (Or.inl hf.one_sub_K_ne_zero) (Or.inl one_sub_K_ne_top),
       mul_comm, ENNReal.sub_mul fun _ _ => h, one_mul, tsub_le_iff_right]
   calc
-    edist x y <= edist x (f x) + edist (f x) (f y) + edi
+    edist x y <= edist x (f x) + edist (f x) (f y) + edist (f y) y := edist_triangle4 _ _ _ _
+    _ = edist x (f x) + edist y (f y) + edist (f x) (f y) := by rw [edist_comm y, add_right_comm]
+    _ <= edist x (f x) + edist y (f y) + K * edist x y := add_le_add le_rfl (hf.2 _ _)
 
 中文:
 定理 edist_inequality
@@ -156,7 +158,9 @@ theorem edist_inequality
     rwa [ENNReal.le_div_iff_mul_le (Or.inl hf.one_sub_K_ne_zero) (Or.inl one_sub_K_ne_top),
       mul_comm, ENNReal.sub_mul fun _ _ => h, one_mul, tsub_le_iff_right]
   calc
-    edist x y <= edist x (f x) + edist (f x) (f y) + edi
+    edist x y <= edist x (f x) + edist (f x) (f y) + edist (f y) y := edist_triangle4 _ _ _ _
+    _ = edist x (f x) + edist y (f y) + edist (f x) (f y) := by rw [edist_comm y, add_right_comm]
+    _ <= edist x (f x) + edist y (f y) + K * edist x y := add_le_add le_rfl (hf.2 _ _)
 
 Depends on / 依赖: ENNReal, ENNReal.le_div_iff_mul_le, ENNReal.sub_mul, Or.inl, add_le_add, add_right_comm, edist_comm, edist_triangle4, hf.one_sub_K_ne_zero, le_div_iff_mul_le, le_rfl, mul_comm, one_mul, one_sub_K_ne_top, one_sub_K_ne_zero, sub_mul, tsub_le_iff_right
 -/
@@ -252,7 +256,9 @@ theorem exists_fixedPoint
     cauchySeq_of_edist_le_geometric K (edist x (f x)) (ENNReal.coe_lt_one_iff.2 hf.1) hx
       (hf.toLipschitzWith.edist_iterate_succ_le_geometric x)
   let ⟨y, hy⟩ := cauchySeq_tendsto_of_complete this
-  ⟨y, isFixedPt_of_tendsto_iterate hy hf.2.continuous.continu
+  ⟨y, isFixedPt_of_tendsto_iterate hy hf.2.continuous.continuousAt, hy,
+    edist_le_of_edist_le_geometric_of_tendsto K (edist x (f x))
+      (hf.toLipschitzWith.edist_iterate_succ_le_geometric x) hy⟩
 
 中文:
 定理 存在_fixedPoint
@@ -261,7 +267,9 @@ theorem exists_fixedPoint
     cauchySeq_of_edist_le_geometric K (edist x (f x)) (ENNReal.coe_lt_one_iff.2 hf.1) hx
       (hf.toLipschitzWith.edist_iterate_succ_le_geometric x)
   let ⟨y, hy⟩ := cauchySeq_tendsto_of_complete this
-  ⟨y, isFixedPt_of_tendsto_iterate hy hf.2.continuous.continu
+  ⟨y, isFixedPt_of_tendsto_iterate hy hf.2.continuous.continuousAt, hy,
+    edist_le_of_edist_le_geometric_of_tendsto K (edist x (f x))
+      (hf.toLipschitzWith.edist_iterate_succ_le_geometric x) hy⟩
 
 Depends on / 依赖: CauchySeq, ENNReal, ENNReal.coe_lt_one_iff, cauchySeq_of_edist_le_geometric, cauchySeq_tendsto_of_complete, coe_lt_one_iff, continuous, continuous.continuousAt, continuousAt, edist_iterate_succ_le_geometric, edist_le_of_edist_le_geometric_of_tendsto, hf.toLipschitzWith.edist_iterate_succ_le_geometric, isFixedPt_of_tendsto_iterate, toLipschitzWith
 -/
@@ -414,7 +422,7 @@ theorem efixedPoint_eq_of_edist_lt_top
   · apply Setoid.symm'
     exact hf.edist_efixedPoint_lt_top hx
   trans y
-  exacts [lt_top_iff_ne_top.2 h, hf.
+  exacts [lt_top_iff_ne_top.2 h, hf.edist_efixedPoint_lt_top hy]
 
 中文:
 定理 efixedPoint_eq_of_edist_lt_top
@@ -427,7 +435,7 @@ theorem efixedPoint_eq_of_edist_lt_top
   · apply Setoid.symm'
     exact hf.edist_efixedPoint_lt_top hx
   trans y
-  exacts [lt_top_iff_ne_top.2 h, hf.
+  exacts [lt_top_iff_ne_top.2 h, hf.edist_efixedPoint_lt_top hy]
 
 Depends on / 依赖: False.elim, Metric, Metric.edistLtTopSetoid, Setoid, Setoid.symm, edistLtTopSetoid, edist_efixedPoint_lt_top, efixedPoint_isFixedPt, eq_or_edist_eq_top_of_fixedPoints, exacts, hf.edist_efixedPoint_lt_top, hf.eq_or_edist_eq_top_of_fixedPoints, lt_top_iff_ne_top, ne_of_lt
 -/
@@ -456,7 +464,10 @@ theorem exists_fixedPoint'
   rcases hf.exists_fixedPoint ⟨x, hxs⟩ hx with ⟨y, hfy, h_tendsto, hle⟩
   refine ⟨y, y.2, Subtype.ext_iff.1 hfy, ?_, fun n => ?_⟩
   · convert! (continuous_subtype_val.tendsto _).comp h_tendsto
-    simp only [(· ∘ ·), MapsTo.iterate_restrict, MapsTo.val_restrict_app
+    simp only [(· ∘ ·), MapsTo.iterate_restrict, MapsTo.val_restrict_apply]
+  · convert! hle n
+    rw [MapsTo.iterate_restrict]
+    rfl
 
 中文:
 定理 存在_fixedPoint'
@@ -466,7 +477,10 @@ theorem exists_fixedPoint'
   rcases hf.exists_fixedPoint ⟨x, hxs⟩ hx with ⟨y, hfy, h_tendsto, hle⟩
   refine ⟨y, y.2, Subtype.ext_iff.1 hfy, ?_, fun n => ?_⟩
   · convert! (continuous_subtype_val.tendsto _).comp h_tendsto
-    simp only [(· ∘ ·), MapsTo.iterate_restrict, MapsTo.val_restrict_app
+    simp only [(· ∘ ·), MapsTo.iterate_restrict, MapsTo.val_restrict_apply]
+  · convert! hle n
+    rw [MapsTo.iterate_restrict]
+    rfl
 
 Depends on / 依赖: MapsTo, MapsTo.iterate_restrict, MapsTo.val_restrict_apply, Subtype, Subtype.ext_iff, completeSpace_coe, continuous_subtype_val, continuous_subtype_val.tendsto, convert, exists_fixedPoint, ext_iff, h_tendsto, hf.exists_fixedPoint, hsc.completeSpace_coe, iterate_restrict, tendsto, val_restrict_apply
 -/
@@ -650,7 +664,7 @@ theorem efixedPoint_eq_of_edist_lt_top'
     apply edist_efixedPoint_lt_top'
   trans y
   · exact lt_top_iff_ne_top.2 hxy
-  · ap
+  · apply edist_efixedPoint_lt_top'
 
 中文:
 定理 efixedPoint_eq_of_edist_lt_top'
@@ -664,7 +678,7 @@ theorem efixedPoint_eq_of_edist_lt_top'
     apply edist_efixedPoint_lt_top'
   trans y
   · exact lt_top_iff_ne_top.2 hxy
-  · ap
+  · apply edist_efixedPoint_lt_top'
 
 Depends on / 依赖: False.elim, Metric, Metric.edistLtTopSetoid, Setoid, Setoid.symm, edistLtTopSetoid, edist_efixedPoint_lt_top, efixedPoint_isFixedPt, eq_or_edist_eq_top_of_fixedPoints, hf.eq_or_edist_eq_top_of_fixedPoints, lt_top_iff_ne_top, ne_of_lt
 -/
@@ -745,7 +759,7 @@ theorem dist_inequality
     rwa [le_div_iff₀ hf.one_sub_K_pos, mul_comm, _root_.sub_mul, one_mul, sub_le_iff_le_add]
   calc
     dist x y <= dist x (f x) + dist y (f y) + dist (f x) (f y) := dist_triangle4_right _ _ _ _
-    _ <= dist x (f x) + dist y (f y) +
+    _ <= dist x (f x) + dist y (f y) + K * dist x y := by grw [hf.dist_le_mul]
 
 中文:
 定理 dist_inequality
@@ -755,7 +769,7 @@ theorem dist_inequality
     rwa [le_div_iff₀ hf.one_sub_K_pos, mul_comm, _root_.sub_mul, one_mul, sub_le_iff_le_add]
   calc
     dist x y <= dist x (f x) + dist y (f y) + dist (f x) (f y) := dist_triangle4_right _ _ _ _
-    _ <= dist x (f x) + dist y (f y) +
+    _ <= dist x (f x) + dist y (f y) + K * dist x y := by grw [hf.dist_le_mul]
 
 Depends on / 依赖: _root_, _root_.sub_mul, dist_le_mul, dist_triangle4_right, hf.dist_le_mul, hf.one_sub_K_pos, mul_comm, one_mul, one_sub_K_pos, sub_le_iff_le_add, sub_mul
 -/
@@ -1032,7 +1046,7 @@ theorem isFixedPt_fixedPoint_iterate
   have := hf.toLipschitzWith.dist_le_mul x (f x)
   rw [← iterate_succ_apply]; rw [iterate_succ_apply']; rw [hx] at this
   contrapose! this
-simpa using mul_lt_mul_of_pos_right (NNReal.coe_lt_one.2 hf.left) dist_pos.2
+simpa using mul_lt_mul_of_pos_right (NNReal.coe_lt_one.2 hf.left) dist_pos.2 (Ne.symm this)
 
 中文:
 定理 isFixedPt_fixedPoint_iterate
@@ -1043,7 +1057,7 @@ simpa using mul_lt_mul_of_pos_right (NNReal.coe_lt_one.2 hf.left) dist_pos.2
   have := hf.toLipschitzWith.dist_le_mul x (f x)
   rw [← iterate_succ_apply]; rw [iterate_succ_apply']; rw [hx] at this
   contrapose! this
-simpa using mul_lt_mul_of_pos_right (NNReal.coe_lt_one.2 hf.left) dist_pos.2
+simpa using mul_lt_mul_of_pos_right (NNReal.coe_lt_one.2 hf.left) dist_pos.2 (Ne.symm this)
 
 Depends on / 依赖: NNReal, NNReal.coe_lt_one, Ne.symm, coe_lt_one, contrapose, dist_le_mul, dist_pos, fixedPoint, fixedPoint_isFixedPt, hf.fixedPoint, hf.fixedPoint_isFixedPt, hf.left, hf.toLipschitzWith.dist_le_mul, iterate_succ_apply, mul_lt_mul_of_pos_right, toLipschitzWith
 -/

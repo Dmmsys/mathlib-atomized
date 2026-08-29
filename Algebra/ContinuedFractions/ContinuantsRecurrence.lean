@@ -103,7 +103,7 @@ theorem nums_recurrence
   obtain ⟨predConts, succ_nth_conts_eq, ⟨rfl⟩⟩ :
       exists conts, g.conts (n + 1) = conts ∧ conts.a = predA :=
     exists_conts_a_of_num succ_nth_num_eq
-  rw 
+  rw [num_eq_conts_a]; rw [conts_recurrence succ_nth_s_eq nth_conts_eq succ_nth_conts_eq]
 
 中文:
 定理 nums_recurrence
@@ -114,7 +114,7 @@ theorem nums_recurrence
   obtain ⟨predConts, succ_nth_conts_eq, ⟨rfl⟩⟩ :
       exists conts, g.conts (n + 1) = conts ∧ conts.a = predA :=
     exists_conts_a_of_num succ_nth_num_eq
-  rw 
+  rw [num_eq_conts_a]; rw [conts_recurrence succ_nth_s_eq nth_conts_eq succ_nth_conts_eq]
 
 Depends on / 依赖: conts.a, conts_recurrence, exists_conts_a_of_num, g.conts, nth_conts_eq, nth_num_eq, num_eq_conts_a, ppredA, ppredConts, predConts, succ_nth_conts_eq, succ_nth_num_eq, succ_nth_s_eq
 -/
@@ -141,7 +141,7 @@ theorem dens_recurrence
   obtain ⟨predConts, succ_nth_conts_eq, ⟨rfl⟩⟩ :
       exists conts, g.conts (n + 1) = conts ∧ conts.b = predB :=
     exists_conts_b_of_den succ_nth_den_eq
-  rw 
+  rw [den_eq_conts_b]; rw [conts_recurrence succ_nth_s_eq nth_conts_eq succ_nth_conts_eq]
 
 中文:
 定理 dens_recurrence
@@ -152,7 +152,7 @@ theorem dens_recurrence
   obtain ⟨predConts, succ_nth_conts_eq, ⟨rfl⟩⟩ :
       exists conts, g.conts (n + 1) = conts ∧ conts.b = predB :=
     exists_conts_b_of_den succ_nth_den_eq
-  rw 
+  rw [den_eq_conts_b]; rw [conts_recurrence succ_nth_s_eq nth_conts_eq succ_nth_conts_eq]
 
 Depends on / 依赖: conts.b, conts_recurrence, den_eq_conts_b, exists_conts_b_of_den, g.conts, nth_conts_eq, nth_den_eq, ppredB, ppredConts, predConts, succ_nth_conts_eq, succ_nth_den_eq, succ_nth_s_eq
 -/

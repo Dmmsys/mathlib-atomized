@@ -57,7 +57,10 @@ definition linearMapRightBaseChangeHom
     map_smul' r s := by simp }).toAddHom
   map_smul' s x := by
     simp only [AddHom.toFun_eq_coe, coe_toAddHom, RingHom.id_apply]
-    induction x using TensorProduct.induction_on 
+    induction x using TensorProduct.induction_on with
+    | zero => simp
+    | add x y hx hy => simp [smul_add, hx, hy]
+    | tmul t f => simp [TensorProduct.smul_tmul', mul_smul]
 
 中文:
 定义 linearMapRightBaseChangeHom
@@ -68,7 +71,10 @@ definition linearMapRightBaseChangeHom
     map_smul' r s := by simp }).toAddHom
   map_smul' s x := by
     simp only [AddHom.toFun_eq_coe, coe_toAddHom, RingHom.id_apply]
-    induction x using TensorProduct.induction_on 
+    induction x using TensorProduct.induction_on with
+    | zero => simp
+    | add x y hx hy => simp [smul_add, hx, hy]
+    | tmul t f => simp [TensorProduct.smul_tmul', mul_smul]
 
 Depends on / 依赖: TensorProduct, TensorProduct.lift
 -/
@@ -100,7 +106,22 @@ definition linearMapRightBaseChangeEquiv
   set ι := Free.ChooseBasisIndex R M
   have := Free.ChooseBasisIndex.fintype R M
   let e := (b.repr.congrLeft N R).trans (Finsupp.llift N R R ι).symm
-  let f := (b.repr.congrLeft P S).trans (Finsup
+  let f := (b.repr.congrLeft P S).trans (Finsupp.llift P R S ι).symm
+  let h := linearMapRightBaseChangeHom S M ε
+  let e' : S otimes[R] (M ->ₗ[R] N) ≃ₗ[S] S otimes[R] (ι -> N) :=
+    LinearEquiv.baseChange R S (M ->ₗ[R] N) (ι -> N) e
+  let h' := (f.toLinearMap.comp (linearMapRightBaseChangeHom S M ε)).comp e'.symm.toLinearMap
+  suffices Function.Bijective h' by simpa [h'] using this
+  suffices h' = (finitePow ι ibc).equiv by
+    simp only [this]
+    apply LinearEquiv.bijective
+  suffices f.toLinearMap.comp (linearMapRightBaseChangeHom S M ε) =
+      (finitePow ι ibc).equiv.toLinearMap.comp e'.toLinearMap by
+    simp [h', this, ← LinearEquiv.trans_assoc e'.symm e']
+  ext φ i
+  simp
+  simp [f, e', linearMapRightBaseChangeHom, LinearEquiv.baseChange, equiv_tmul,
+    LinearEquiv.congrLeft, e]
 
 中文:
 定义 linearMapRightBaseChangeEquiv
@@ -110,7 +131,22 @@ definition linearMapRightBaseChangeEquiv
   set ι := Free.ChooseBasisIndex R M
   have := Free.ChooseBasisIndex.fintype R M
   let e := (b.repr.congrLeft N R).trans (Finsupp.llift N R R ι).symm
-  let f := (b.repr.congrLeft P S).trans (Finsup
+  let f := (b.repr.congrLeft P S).trans (Finsupp.llift P R S ι).symm
+  let h := linearMapRightBaseChangeHom S M ε
+  let e' : S otimes[R] (M ->ₗ[R] N) ≃ₗ[S] S otimes[R] (ι -> N) :=
+    LinearEquiv.baseChange R S (M ->ₗ[R] N) (ι -> N) e
+  let h' := (f.toLinearMap.comp (linearMapRightBaseChangeHom S M ε)).comp e'.symm.toLinearMap
+  suffices Function.Bijective h' by simpa [h'] using this
+  suffices h' = (finitePow ι ibc).equiv by
+    simp only [this]
+    apply LinearEquiv.bijective
+  suffices f.toLinearMap.comp (linearMapRightBaseChangeHom S M ε) =
+      (finitePow ι ibc).equiv.toLinearMap.comp e'.toLinearMap by
+    simp [h', this, ← LinearEquiv.trans_assoc e'.symm e']
+  ext φ i
+  simp
+  simp [f, e', linearMapRightBaseChangeHom, LinearEquiv.baseChange, equiv_tmul,
+    LinearEquiv.congrLeft, e]
 
 Depends on / 依赖: ChooseBasisIndex, Finsupp, Finsupp.llift, Free.ChooseBasisIndex, Free.ChooseBasisIndex.fintype, Free.chooseBasis, LinearEquiv, LinearEquiv.baseChange, LinearEquiv.ofBijective, b.repr.congrLeft, baseChange, chooseBasis, congrLeft, f.toLinearMap.comp, fintype, linearMapRightBaseChangeHom, ofBijective, otimes, toLinearMap
 -/
@@ -550,7 +586,7 @@ theorem det_endHom
       exact Subsingleton.eq_one f
     simp [this, endHom_one]
   let b := Module.finBasis R M
-  rw [← f.det_toMatrix b]; rw [← (j.endHom f).det_toMatrix (j.basis b)]; rw
+  rw [← f.det_toMatrix b]; rw [← (j.endHom f).det_toMatrix (j.basis b)]; rw [endHom_toMatrix]; rw [← RingHom.mapMatrix_apply]; rw [← RingHom.map_det]
 
 中文:
 定理 det_endHom
@@ -562,7 +598,7 @@ theorem det_endHom
       exact Subsingleton.eq_one f
     simp [this, endHom_one]
   let b := Module.finBasis R M
-  rw [← f.det_toMatrix b]; rw [← (j.endHom f).det_toMatrix (j.basis b)]; rw
+  rw [← f.det_toMatrix b]; rw [← (j.endHom f).det_toMatrix (j.basis b)]; rw [endHom_toMatrix]; rw [← RingHom.mapMatrix_apply]; rw [← RingHom.map_det]
 
 Depends on / 依赖: Module, Module.finBasis, Module.subsingleton, RingHom, RingHom.mapMatrix_apply, RingHom.map_det, Subsingleton, Subsingleton.eq_one, det_toMatrix, endHom, endHom_one, endHom_toMatrix, eq_one, f.det_toMatrix, finBasis, j.basis, j.endHom, mapMatrix_apply, map_det, subsingleton
 -/

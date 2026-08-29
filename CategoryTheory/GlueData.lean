@@ -117,7 +117,10 @@ theorem t'_iij
   have eq₂ := (IsIso.eq_comp_inv (D.f i i)).mpr (@pullback.condition _ _ _ _ _ _ (D.f i j) _)
   rw [D.t_id]; rw [Category.comp_id]; rw [eq₂] at eq₁
   have eq₃ := (IsIso.eq_comp_inv (D.f i i)).mp eq₁
-  rw [Category.assoc]; rw [← pullback.condition]; rw [← Category.assoc
+  rw [Category.assoc]; rw [← pullback.condition]; rw [← Category.assoc] at eq₃
+  exact
+    Mono.right_cancellation _ _
+      ((Mono.right_cancellation _ _ eq₃).trans (pullbackSymmetry_hom_comp_fst _ _).symm)
 
 中文:
 定理 t'_iij
@@ -128,7 +131,10 @@ theorem t'_iij
   have eq₂ := (IsIso.eq_comp_inv (D.f i i)).mpr (@pullback.condition _ _ _ _ _ _ (D.f i j) _)
   rw [D.t_id]; rw [Category.comp_id]; rw [eq₂] at eq₁
   have eq₃ := (IsIso.eq_comp_inv (D.f i i)).mp eq₁
-  rw [Category.assoc]; rw [← pullback.condition]; rw [← Category.assoc
+  rw [Category.assoc]; rw [← pullback.condition]; rw [← Category.assoc] at eq₃
+  exact
+    Mono.right_cancellation _ _
+      ((Mono.right_cancellation _ _ eq₃).trans (pullbackSymmetry_hom_comp_fst _ _).symm)
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, D.t_fac, D.t_id, IsIso.eq_comp_inv, Mono.right_cancellation, comp_id, condition, eq_comp_inv, pullback, pullback.condition, pullbackSymmetry_hom_comp_fst, right_cancellation, t_fac, t_id
 -/
@@ -206,7 +212,8 @@ theorem t_inv
   have := D.cocycle i j i
   rw [D.t'_iij]; rw [D.t'_jii]; rw [D.t'_iji]; rw [fst_eq_snd_of_mono_eq]; rw [eq] at this
   simp only [Category.assoc, IsIso.inv_hom_id_assoc] at this
-  r
+  rw [← IsIso.eq_inv_comp]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq] at this
+  simpa using this
 
 中文:
 定理 t_inv
@@ -218,7 +225,8 @@ theorem t_inv
   have := D.cocycle i j i
   rw [D.t'_iij]; rw [D.t'_jii]; rw [D.t'_iji]; rw [fst_eq_snd_of_mono_eq]; rw [eq] at this
   simp only [Category.assoc, IsIso.inv_hom_id_assoc] at this
-  r
+  rw [← IsIso.eq_inv_comp]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq] at this
+  simpa using this
 
 Depends on / 依赖: Category, Category.assoc, D.cocycle, IsIso.comp_inv_eq, IsIso.eq_inv_comp, IsIso.inv_hom_id_assoc, _iij, _iji, _jii, cocycle, comp_inv_eq, eq_inv_comp, fst_eq_snd_of_mono_eq, inv_hom_id_assoc, pullback, pullback.fst, pullback.snd, pullbackSymmetry
 -/
@@ -609,7 +617,10 @@ theorem types_ι_jointly_surjective
   rcases D.types_π_surjective x with ⟨x', rfl⟩
   rw [← dsimp% ConcreteCategory.congr_hom
     (colimit.isoColimitCocone (Types.coproductColimitCocone _)).hom_inv_id x']
-  rcases (colimit.isoColimitCocone (Types.cop
+  rcases (colimit.isoColimitCocone (Types.coproductColimitCocone _)).hom x' with ⟨i, y⟩
+  refine ⟨i, y, ?_⟩
+  simp
+  rfl
 
 中文:
 定理 types_ι_jointly_surjective
@@ -620,7 +631,10 @@ theorem types_ι_jointly_surjective
   rcases D.types_π_surjective x with ⟨x', rfl⟩
   rw [← dsimp% ConcreteCategory.congr_hom
     (colimit.isoColimitCocone (Types.coproductColimitCocone _)).hom_inv_id x']
-  rcases (colimit.isoColimitCocone (Types.cop
+  rcases (colimit.isoColimitCocone (Types.coproductColimitCocone _)).hom x' with ⟨i, y⟩
+  refine ⟨i, y, ?_⟩
+  simp
+  rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.GlueData, ConcreteCategory, ConcreteCategory.congr_hom, D.diagram, D.types_, GlueData, Multicoequalizer, Types.coproductColimitCocone, colimit, colimit.isoColimitCocone, congr_hom, coproductColimitCocone, diagram, hom_inv_id, isoColimitCocone, simp_rw
 -/
@@ -663,7 +677,11 @@ definition mapGlueData
     simp
   t' i j k :=
     (PreservesPullback.iso F (D.f i j) (D.f i k)).inv ≫
-      F.map (D.t' i j k
+      F.map (D.t' i j k) ≫ (PreservesPullback.iso F (D.f j k) (D.f j i)).hom
+  t_fac i j k := by simpa [Iso.inv_comp_eq] using congr_arg (fun f => F.map f) (D.t_fac i j k)
+  cocycle i j k := by
+    simp only [Category.assoc, Iso.hom_inv_id_assoc, ← Functor.map_comp_assoc, D.cocycle,
+      Iso.inv_hom_id, CategoryTheory.Functor.map_id, Category.id_comp]
 
 中文:
 定义 mapGlueData
@@ -679,7 +697,11 @@ definition mapGlueData
     simp
   t' i j k :=
     (PreservesPullback.iso F (D.f i j) (D.f i k)).inv ≫
-      F.map (D.t' i j k
+      F.map (D.t' i j k) ≫ (PreservesPullback.iso F (D.f j k) (D.f j i)).hom
+  t_fac i j k := by simpa [Iso.inv_comp_eq] using congr_arg (fun f => F.map f) (D.t_fac i j k)
+  cocycle i j k := by
+    simp only [Category.assoc, Iso.hom_inv_id_assoc, ← Functor.map_comp_assoc, D.cocycle,
+      Iso.inv_hom_id, CategoryTheory.Functor.map_id, Category.id_comp]
 -/
 def mapGlueData : GlueData C' where
   J := D.J
@@ -1002,6 +1024,12 @@ definition vPullbackConeIsLimitOfMap
       (fun x => by
         cases x
         exacts [D.gluedIso F, Iso.refl _])
+      (by rintro (_ | _) (_ | _) (_ | _ | _) <;> simp)
+  apply IsLimit.postcomposeHomEquiv e _ _
+  apply hc.ofIsoLimit
+  refine Cone.ext (Iso.refl _) ?_
+  rintro (_ | _ | _)
+  all_goals simp [e]; rfl
 
 中文:
 定义 vPullbackConeIsLimitOfMap
@@ -1015,6 +1043,12 @@ definition vPullbackConeIsLimitOfMap
       (fun x => by
         cases x
         exacts [D.gluedIso F, Iso.refl _])
+      (by rintro (_ | _) (_ | _) (_ | _ | _) <;> simp)
+  apply IsLimit.postcomposeHomEquiv e _ _
+  apply hc.ofIsoLimit
+  refine Cone.ext (Iso.refl _) ?_
+  rintro (_ | _ | _)
+  all_goals simp [e]; rfl
 
 Depends on / 依赖: Cone.ext, D.gluedIso, D.mapGlueData, F.map, IsLimit, IsLimit.postcomposeHomEquiv, Iso.refl, NatIso, NatIso.ofComponents, all_goals, cospan, exacts, gluedIso, hc.ofIsoLimit, isLimitMapConePullbackConeEquiv, isLimitOfReflects, mapGlueData, ofComponents, ofIsoLimit, postcomposeHomEquiv
 -/
@@ -1194,7 +1228,22 @@ definition GlueData'.t''
   else if hik : i = k then
     have : IsIso (pullback.snd (D.f' j k) (D.f' j i)) := by
       subst hik; infer_instance
-    pull
+    pullback.fst _ _ ≫ eqToHom (dif_neg hij) ≫ D.t _ _ _ ≫
+      eqToHom (dif_neg (Ne.symm hij)).symm ≫ inv (pullback.snd _ _)
+  else if hjk : j = k then
+    have : IsIso (pullback.snd (D.f' j k) (D.f' j i)) := by
+      apply +allowSynthFailures pullback_snd_iso_of_left_iso
+      simp only [hjk, GlueData'.f', ↓reduceDIte]
+      infer_instance
+    pullback.fst _ _ ≫ eqToHom (dif_neg hij) ≫ D.t _ _ _ ≫
+      eqToHom (dif_neg (Ne.symm hij)).symm ≫ inv (pullback.snd _ _)
+  else
+    haveI := Ne.symm hij
+    pullback.map _ _ _ _ (eqToHom (by aesop)) (eqToHom (by rw [dif_neg hik]))
+        (eqToHom (by simp)) (by delta f'; aesop) (by delta f'; aesop) ≫
+      D.t' i j k hij hik hjk ≫
+      pullback.map _ _ _ _ (eqToHom (by aesop)) (eqToHom (by aesop)) (eqToHom (by simp))
+        (by delta f'; aesop) (by delta f'; aesop)
 
 中文:
 定义 粘合数据'.t''
@@ -1206,7 +1255,22 @@ definition GlueData'.t''
   else if hik : i = k then
     have : IsIso (pullback.snd (D.f' j k) (D.f' j i)) := by
       subst hik; infer_instance
-    pull
+    pullback.fst _ _ ≫ eqToHom (dif_neg hij) ≫ D.t _ _ _ ≫
+      eqToHom (dif_neg (Ne.symm hij)).symm ≫ inv (pullback.snd _ _)
+  else if hjk : j = k then
+    have : IsIso (pullback.snd (D.f' j k) (D.f' j i)) := by
+      apply +allowSynthFailures pullback_snd_iso_of_left_iso
+      simp only [hjk, GlueData'.f', ↓reduceDIte]
+      infer_instance
+    pullback.fst _ _ ≫ eqToHom (dif_neg hij) ≫ D.t _ _ _ ≫
+      eqToHom (dif_neg (Ne.symm hij)).symm ≫ inv (pullback.snd _ _)
+  else
+    haveI := Ne.symm hij
+    pullback.map _ _ _ _ (eqToHom (by aesop)) (eqToHom (by rw [dif_neg hik]))
+        (eqToHom (by simp)) (by delta f'; aesop) (by delta f'; aesop) ≫
+      D.t' i j k hij hik hjk ≫
+      pullback.map _ _ _ _ (eqToHom (by aesop)) (eqToHom (by aesop)) (eqToHom (by simp))
+        (by delta f'; aesop) (by delta f'; aesop)
 -/
 def GlueData'.t'' (D : GlueData' C) (i j k : D.J) :
     pullback (D.f' i j) (D.f' i k) ⟶ pullback (D.f' j k) (D.f' j i) :=
@@ -1249,7 +1313,35 @@ definition GlueData.ofGlueData'
   f_id i := by simp only [↓reduceDIte, GlueData'.f']; infer_instance
   t i j := if h : i = j then eqToHom (by simp [h]) else
     eqToHom (dif_neg h) ≫ D.t i j h ≫ eqToHom (dif_neg (Ne.symm h)).symm
-  t
+  t_id i := by simp
+  t' := D.t''
+  t_fac i j k := by
+    delta GlueData'.t''
+    obtain rfl | _ := eq_or_ne i j
+    · simp
+    obtain rfl | _ := eq_or_ne i k
+    · simp [*]
+    obtain rfl | _ := eq_or_ne j k
+    · simp [*]
+    · simp [*, reassoc_of% D.t_fac]
+  cocycle i j k := by
+    delta GlueData'.t''
+    if hij : i = j then
+      subst hij
+      if hik : i = k then
+        subst hik
+        ext <;> simp
+      else
+        simp [hik, Ne.symm hik, fst_eq_snd_of_mono_eq]
+    else if hik : i = k then
+      subst hik
+      ext <;> simp [hij, Ne.symm hij, fst_eq_snd_of_mono_eq, pullback.condition_assoc]
+    else if hjk : j = k then
+      subst hjk
+      ext <;> simp [hij, Ne.symm hij, fst_eq_snd_of_mono_eq]
+    else
+      ext <;> simp [hij, Ne.symm hij, hik, Ne.symm hik, hjk, Ne.symm hjk,
+        pullback.map_comp_assoc]
 
 中文:
 定义 粘合数据.ofGlueData'
@@ -1261,7 +1353,35 @@ definition GlueData.ofGlueData'
   f_id i := by simp only [↓reduceDIte, GlueData'.f']; infer_instance
   t i j := if h : i = j then eqToHom (by simp [h]) else
     eqToHom (dif_neg h) ≫ D.t i j h ≫ eqToHom (dif_neg (Ne.symm h)).symm
-  t
+  t_id i := by simp
+  t' := D.t''
+  t_fac i j k := by
+    delta GlueData'.t''
+    obtain rfl | _ := eq_or_ne i j
+    · simp
+    obtain rfl | _ := eq_or_ne i k
+    · simp [*]
+    obtain rfl | _ := eq_or_ne j k
+    · simp [*]
+    · simp [*, reassoc_of% D.t_fac]
+  cocycle i j k := by
+    delta GlueData'.t''
+    if hij : i = j then
+      subst hij
+      if hik : i = k then
+        subst hik
+        ext <;> simp
+      else
+        simp [hik, Ne.symm hik, fst_eq_snd_of_mono_eq]
+    else if hik : i = k then
+      subst hik
+      ext <;> simp [hij, Ne.symm hij, fst_eq_snd_of_mono_eq, pullback.condition_assoc]
+    else if hjk : j = k then
+      subst hjk
+      ext <;> simp [hij, Ne.symm hij, fst_eq_snd_of_mono_eq]
+    else
+      ext <;> simp [hij, Ne.symm hij, hik, Ne.symm hik, hjk, Ne.symm hjk,
+        pullback.map_comp_assoc]
 -/
 def GlueData.ofGlueData' (D : GlueData' C) : GlueData C where
   J := D.J

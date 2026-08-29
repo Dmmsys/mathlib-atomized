@@ -243,7 +243,8 @@ lemma opObjEquiv_mem_degenerate_iff
   · obtain ⟨x, rfl⟩ := opObjEquiv.symm.surjective x
     rintro ⟨f, _, y, rfl⟩
     exact ⟨SimplexCategory.rev.map f, inferInstance, opObjEquiv.symm y, by simp [op_map]⟩
-  · rintro ⟨f, _, y, r
+  · rintro ⟨f, _, y, rfl⟩
+    exact ⟨SimplexCategory.rev.map f, inferInstance, opObjEquiv y, by simp [op_map]⟩
 
 中文:
 引理 opObjEquiv_mem_degenerate_iff
@@ -255,7 +256,8 @@ lemma opObjEquiv_mem_degenerate_iff
   · obtain ⟨x, rfl⟩ := opObjEquiv.symm.surjective x
     rintro ⟨f, _, y, rfl⟩
     exact ⟨SimplexCategory.rev.map f, inferInstance, opObjEquiv.symm y, by simp [op_map]⟩
-  · rintro ⟨f, _, y, r
+  · rintro ⟨f, _, y, rfl⟩
+    exact ⟨SimplexCategory.rev.map f, inferInstance, opObjEquiv y, by simp [op_map]⟩
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.rev.map, exists_congr, mem_degenerate_iff, opObjEquiv, opObjEquiv.symm, opObjEquiv.symm.surjective, op_map, surjective
 -/
@@ -308,7 +310,12 @@ lemma degenerate_eq_iUnion_range_σ
     obtain ⟨i, θ, rfl⟩ := SimplexCategory.eq_σ_comp_of_not_injective f (fun hf => by
       rw [← SimplexCategory.mono_iff_injective] at hf
       have := SimplexCategory.le_of_mono f
-      
+      lia)
+    aesop
+  · intro hx
+    simp only [Set.mem_iUnion, Set.mem_range] at hx
+    obtain ⟨i, y, rfl⟩ := hx
+    apply σ_mem_degenerate
 
 中文:
 引理 degenerate_eq_iUnion_range_σ
@@ -321,7 +328,12 @@ lemma degenerate_eq_iUnion_range_σ
     obtain ⟨i, θ, rfl⟩ := SimplexCategory.eq_σ_comp_of_not_injective f (fun hf => by
       rw [← SimplexCategory.mono_iff_injective] at hf
       have := SimplexCategory.le_of_mono f
-      
+      lia)
+    aesop
+  · intro hx
+    simp only [Set.mem_iUnion, Set.mem_range] at hx
+    obtain ⟨i, y, rfl⟩ := hx
+    apply σ_mem_degenerate
 
 Depends on / 依赖: Set.mem_iUnion, Set.mem_range, SimplexCategory, SimplexCategory.eq_, SimplexCategory.le_of_mono, SimplexCategory.mono_iff_injective, le_of_mono, mem_degenerate_iff, mem_iUnion, mem_range, mono_iff_injective
 -/
@@ -356,7 +368,10 @@ lemma exists_nonDegenerate
       by_cases hx : x in X.nonDegenerate (n + 1)
       · exact ⟨n + 1, 𝟙 _, inferInstance, ⟨x, hx⟩, by simp⟩
       · simp only [← mem_degenerate_iff_notMem_nonDegenerate,
-          degenerat
+          degenerate_eq_iUnion_range_σ, Set.mem_iUnion, Set.mem_range] at hx
+        obtain ⟨i, y, rfl⟩ := hx
+        obtain ⟨m, f, hf, z, rfl⟩ := hn y
+        exact ⟨_, SimplexCategory.σ i ≫ f, inferInstance, z, by simp; rfl⟩
 
 中文:
 引理 存在_nonDegenerate
@@ -369,7 +384,10 @@ lemma exists_nonDegenerate
       by_cases hx : x in X.nonDegenerate (n + 1)
       · exact ⟨n + 1, 𝟙 _, inferInstance, ⟨x, hx⟩, by simp⟩
       · simp only [← mem_degenerate_iff_notMem_nonDegenerate,
-          degenerat
+          degenerate_eq_iUnion_range_σ, Set.mem_iUnion, Set.mem_range] at hx
+        obtain ⟨i, y, rfl⟩ := hx
+        obtain ⟨m, f, hf, z, rfl⟩ := hn y
+        exact ⟨_, SimplexCategory.σ i ≫ f, inferInstance, z, by simp; rfl⟩
 
 Depends on / 依赖: Set.mem_iUnion, Set.mem_range, SimplexCategory, X.nonDegenerate, mem_degenerate_iff_notMem_nonDegenerate, mem_iUnion, mem_range, nonDegenerate
 -/
@@ -691,7 +709,21 @@ lemma unique_nonDegenerate_map
     dsimp at hf₁'
     simpa [g, hf₁'] using (SimplexCategory.congr_toOrderHom_apply (g_eq_id hy₁ hy₂ hf₁)
       (f₁.toOrderHom x)).symm
-  obtain ⟨⟨hf⟩⟩ := isSplitEpi_
+  obtain ⟨⟨hf⟩⟩ := isSplitEpi_of_epi f₁
+  let α (y : Fin (m + 1)) : Fin (n + 1) :=
+    if y = f₁.toOrderHom x then x else hf.section_.toOrderHom y
+  have hα₁ (y : Fin (m + 1)) : f₁.toOrderHom (α y) = y := by
+    dsimp [α]
+    split_ifs with hy
+    · rw [hy]
+    · apply SimplexCategory.congr_toOrderHom_apply hf.id
+  have hα₂ : Monotone α := by
+    rintro y₁ y₂ h
+    by_contra! h'
+    suffices y₂ <= y₁ by simp [show y₁ = y₂ by lia] at h'
+    simpa only [hα₁] using f₁.toOrderHom.monotone h'.le
+  exact ⟨{ section_ := SimplexCategory.Hom.mk ⟨α, hα₂⟩, id := by ext : 3; apply hα₁ },
+    by simp [α]⟩
 
 中文:
 引理 unique_nonDegenerate_map
@@ -703,7 +735,21 @@ lemma unique_nonDegenerate_map
     dsimp at hf₁'
     simpa [g, hf₁'] using (SimplexCategory.congr_toOrderHom_apply (g_eq_id hy₁ hy₂ hf₁)
       (f₁.toOrderHom x)).symm
-  obtain ⟨⟨hf⟩⟩ := isSplitEpi_
+  obtain ⟨⟨hf⟩⟩ := isSplitEpi_of_epi f₁
+  let α (y : Fin (m + 1)) : Fin (n + 1) :=
+    if y = f₁.toOrderHom x then x else hf.section_.toOrderHom y
+  have hα₁ (y : Fin (m + 1)) : f₁.toOrderHom (α y) = y := by
+    dsimp [α]
+    split_ifs with hy
+    · rw [hy]
+    · apply SimplexCategory.congr_toOrderHom_apply hf.id
+  have hα₂ : Monotone α := by
+    rintro y₁ y₂ h
+    by_contra! h'
+    suffices y₂ <= y₁ by simp [show y₁ = y₂ by lia] at h'
+    simpa only [hα₁] using f₁.toOrderHom.monotone h'.le
+  exact ⟨{ section_ := SimplexCategory.Hom.mk ⟨α, hα₂⟩, id := by ext : 3; apply hα₁ },
+    by simp [α]⟩
 
 Depends on / 依赖: SimplexC, SimplexCategory, SimplexCategory.congr_toOrderHom_apply, SplitEpi, congr_toOrderHom_apply, g_eq_id, hf.section_.toOrderHom, isSplitEpi_of_epi, section_, section_.toOrderHom, split_ifs, toOrderHom
 -/
@@ -756,6 +802,8 @@ lemma mem_degenerate_iff
     rintro ⟨m, hm, f, _, ⟨y, rfl⟩⟩
     refine ⟨m, hm, f, inferInstance, ⟨y, ?_⟩, rfl⟩
     have := isSplitEpi_of_epi f
+    simpa [Set.mem_preimage, ← op_comp, ← comp_apply, ← Functor.map_comp] using
+      A.map (section_ f).op hx
 
 中文:
 引理 mem_degenerate_iff
@@ -769,6 +817,8 @@ lemma mem_degenerate_iff
     rintro ⟨m, hm, f, _, ⟨y, rfl⟩⟩
     refine ⟨m, hm, f, inferInstance, ⟨y, ?_⟩, rfl⟩
     have := isSplitEpi_of_epi f
+    simpa [Set.mem_preimage, ← op_comp, ← comp_apply, ← Functor.map_comp] using
+      A.map (section_ f).op hx
 
 Depends on / 依赖: A.map, Functor, Functor.map_comp, SSet.mem_degenerate_iff, Set.mem_preimage, comp_apply, isSplitEpi_of_epi, map_comp, mem_degenerate_iff, mem_preimage, op_comp, section_, y.val
 -/
@@ -825,7 +875,8 @@ lemma le_iff_contains_nonDegenerate
     simp only [Subfunctor.toFunctor_obj, Subtype.ext_iff,
       Subfunctor.toFunctor_map] at ha'
     subst ha'
-    rw [mem_non
+    rw [mem_nonDegenerate_iff] at ha
+    exact B.map f.op (h _ ⟨_, ha⟩ a.prop)
 
 中文:
 引理 le_iff_contains_nonDegenerate
@@ -839,7 +890,8 @@ lemma le_iff_contains_nonDegenerate
     simp only [Subfunctor.toFunctor_obj, Subtype.ext_iff,
       Subfunctor.toFunctor_map] at ha'
     subst ha'
-    rw [mem_non
+    rw [mem_nonDegenerate_iff] at ha
+    exact B.map f.op (h _ ⟨_, ha⟩ a.prop)
 
 Depends on / 依赖: B.map, SimplexCategory, SimplexCategory.rec, Subfunctor, Subfunctor.toFunctor_map, Subfunctor.toFunctor_obj, Subtype, Subtype.ext_iff, a.prop, exists_nonDegenerate, ext_iff, f.op, mem_nonDegenerate_iff, toFunctor_map, toFunctor_obj
 -/
@@ -892,7 +944,7 @@ lemma degenerate_eq_top_iff
   · intro h
     simp only [Set.inf_eq_inter, Set.inter_eq_right] at h
     ext x
-    simpa [A.mem_
+    simpa [A.mem_degenerate_iff] using h x.prop
 
 中文:
 引理 degenerate_eq_top_iff
@@ -907,7 +959,7 @@ lemma degenerate_eq_top_iff
   · intro h
     simp only [Set.inf_eq_inter, Set.inter_eq_right] at h
     ext x
-    simpa [A.mem_
+    simpa [A.mem_degenerate_iff] using h x.prop
 
 Depends on / 依赖: A.mem_degenerate_iff, Set.inf_eq_inter, Set.inter_eq_right, Set.mem_inter_iff, Set.mem_univ, Set.top_eq_univ, and_iff_right_iff_imp, inf_eq_inter, inter_eq_right, mem_degenerate_iff, mem_inter_iff, mem_univ, top_eq_univ, x.prop
 -/

@@ -145,7 +145,18 @@ instance :
       (fun x : R × R => x.1 * x.2) ∘ (fun x : Rˣ × Rˣ => (x.1, x.2)) := by ext; simp
     rw [this]
     have : ContMDiff (𝓘(𝕜, R).prod 𝓘(𝕜, R)) 𝓘(𝕜, R × R) n
-      (f
+      (fun x : Rˣ × Rˣ => ((x.1 : R), (x.2 : R))) :=
+      (contMDiff_val.comp contMDiff_fst).prodMk_space (contMDiff_val.comp contMDiff_snd)
+    refine ContMDiff.comp ?_ this
+    rw [contMDiff_iff_contDiff]
+    exact contDiff_mul
+  contMDiff_inv := by
+    apply ContMDiff.of_comp_isOpenEmbedding Units.isOpenEmbedding_val
+    have : (val : Rˣ -> R) ∘ (fun x : Rˣ => x⁻¹) = Ring.inverse ∘ val := by ext; simp
+    rw [this]; rw [ContMDiff]
+    refine fun x => ContMDiffAt.comp x ?_ (contMDiff_val x)
+    rw [contMDiffAt_iff_contDiffAt]
+    exact contDiffAt_ringInverse _ _
 
 中文:
 实例 :
@@ -156,7 +167,18 @@ instance :
       (fun x : R × R => x.1 * x.2) ∘ (fun x : Rˣ × Rˣ => (x.1, x.2)) := by ext; simp
     rw [this]
     have : ContMDiff (𝓘(𝕜, R).prod 𝓘(𝕜, R)) 𝓘(𝕜, R × R) n
-      (f
+      (fun x : Rˣ × Rˣ => ((x.1 : R), (x.2 : R))) :=
+      (contMDiff_val.comp contMDiff_fst).prodMk_space (contMDiff_val.comp contMDiff_snd)
+    refine ContMDiff.comp ?_ this
+    rw [contMDiff_iff_contDiff]
+    exact contDiff_mul
+  contMDiff_inv := by
+    apply ContMDiff.of_comp_isOpenEmbedding Units.isOpenEmbedding_val
+    have : (val : Rˣ -> R) ∘ (fun x : Rˣ => x⁻¹) = Ring.inverse ∘ val := by ext; simp
+    rw [this]; rw [ContMDiff]
+    refine fun x => ContMDiffAt.comp x ?_ (contMDiff_val x)
+    rw [contMDiffAt_iff_contDiffAt]
+    exact contDiffAt_ringInverse _ _
 
 Depends on / 依赖: ContMDiff, ContMDiff.comp, ContMDiff.of_comp_isOpenEmbedding, Units.isOpenEmbedding_val, contDiff_mul, contMDiff_fst, contMDiff_iff_contDiff, contMDiff_inv, contMDiff_snd, contMDiff_val, contMDiff_val.comp, finsuppTensorFinsuppLid_apply_apply, isOpenEmbedding_val, of_comp_isOpenEmbedding, prodMk_space
 -/

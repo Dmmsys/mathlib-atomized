@@ -27,7 +27,11 @@ theorem Algebra.leftMulMatrix_complex
   rw [Algebra.leftMulMatrix_eq_repr_mul]; rw [Complex.coe_basisOneI_repr]; rw [Complex.coe_basisOneI]; rw [mul_re]; rw [mul_im]; rw [Matrix.of_apply]
   fin_cases j <;> dsimp only [Fin.zero_eta, Fin.mk_one, Matrix.cons_val]
   · simp only [one_re, mul_one, one_im, mul_zero,
-      sub_zero
+      sub_zero, zero_add]
+    fin_cases i <;> rfl
+  · simp only [I_re, mul_zero, I_im,
+      mul_one, zero_sub, add_zero]
+    fin_cases i <;> rfl
 
 中文:
 定理 代数.leftMulMatrix_complex
@@ -37,7 +41,11 @@ theorem Algebra.leftMulMatrix_complex
   rw [Algebra.leftMulMatrix_eq_repr_mul]; rw [Complex.coe_basisOneI_repr]; rw [Complex.coe_basisOneI]; rw [mul_re]; rw [mul_im]; rw [Matrix.of_apply]
   fin_cases j <;> dsimp only [Fin.zero_eta, Fin.mk_one, Matrix.cons_val]
   · simp only [one_re, mul_one, one_im, mul_zero,
-      sub_zero
+      sub_zero, zero_add]
+    fin_cases i <;> rfl
+  · simp only [I_re, mul_zero, I_im,
+      mul_one, zero_sub, add_zero]
+    fin_cases i <;> rfl
 
 Depends on / 依赖: Algebra, Algebra.leftMulMatrix_eq_repr_mul, Complex.coe_basisOneI, Complex.coe_basisOneI_repr, Fin.mk_one, Fin.zero_eta, I_im, I_re, Matrix, Matrix.cons_val, Matrix.of_apply, add_zero, coe_basisOneI, coe_basisOneI_repr, cons_val, fin_cases, leftMulMatrix_eq_repr_mul, mk_one, mul_im, mul_one
 -/

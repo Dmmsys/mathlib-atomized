@@ -194,7 +194,16 @@ theorem normal_iff_normal_monoidHom
   · intro hnormal
     have (X : C) (g : X ⟶ G) (h : X ⟶ H) : exists (h' : X ⟶ H), h' ≫ φ = g * h ≫ φ * g⁻¹ :=
       (hnormal X).conj_mem (h ≫ φ) (by simp) g
+    choose h' hh' using this
+    refine ⟨Yoneda.fullyFaithful.preimage ?_, ?_⟩
+    · refine ⟨fun X => ↾fun x => h' _ (x ≫ fst _ _) (x ≫ snd _ _), fun X Y f => ?_⟩
+      ext
+      simp [← cancel_mono φ, hh', comp_mul, comp_inv]
+    · refine yoneda.map_injective ?_
+      ext
+      simp [hh', conj, comp_mul, comp_inv]
 
+@[to_additive]
 
 中文:
 定理 normal_iff_normal_monoidHom
@@ -209,7 +218,16 @@ theorem normal_iff_normal_monoidHom
   · intro hnormal
     have (X : C) (g : X ⟶ G) (h : X ⟶ H) : exists (h' : X ⟶ H), h' ≫ φ = g * h ≫ φ * g⁻¹ :=
       (hnormal X).conj_mem (h ≫ φ) (by simp) g
+    choose h' hh' using this
+    refine ⟨Yoneda.fullyFaithful.preimage ?_, ?_⟩
+    · refine ⟨fun X => ↾fun x => h' _ (x ≫ fst _ _) (x ≫ snd _ _), fun X Y f => ?_⟩
+      ext
+      simp [← cancel_mono φ, hh', comp_mul, comp_inv]
+    · refine yoneda.map_injective ?_
+      ext
+      simp [hh', conj, comp_mul, comp_inv]
 
+@[to_additive]
 
 Depends on / 依赖: Yoneda, Yoneda.fullyFaithful.preimage, cancel_mono, comp_inv, comp_mul, conj_mem, fullyFaithful, hnormal, isNormalHom_iff, map_injecti, preimage, yoneda, yoneda.map_injecti
 -/

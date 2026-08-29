@@ -286,7 +286,7 @@ definition Lift.getInst
   let p ← mkFreshExprMVar (some <| .forallE `a old_tp (.sort .zero) .default)
   let inst_type ← mkAppM ``CanLift #[old_tp, new_tp, coe, p]
   let inst ← synthInstance inst_type -- TODO: catch error
-  return (← instantiateMVar
+  return (← instantiateMVars p, ← instantiateMVars coe, ← instantiateMVars inst)
 
 中文:
 定义 Lift.getInst
@@ -296,7 +296,7 @@ definition Lift.getInst
   let p ← mkFreshExprMVar (some <| .forallE `a old_tp (.sort .zero) .default)
   let inst_type ← mkAppM ``CanLift #[old_tp, new_tp, coe, p]
   let inst ← synthInstance inst_type -- TODO: catch error
-  return (← instantiateMVar
+  return (← instantiateMVars p, ← instantiateMVars coe, ← instantiateMVars inst)
 -/
 def Lift.getInst (old_tp new_tp : Expr) : MetaM (Expr × Expr × Expr) := do
   let coe ← mkFreshExprMVar (some <| .forallE `a new_tp old_tp .default)
@@ -317,7 +317,55 @@ definition Lift.main
   -- Name of the new hypothesis containing the equality of the lifted variable with the old one
   -- rfl if none is given
   let newEqName := (newEqName.map Syntax.getId).getD `rfl
-  -- Was a 
+  -- Was a new hypothesis given?
+  let isNewEq := newEqName != `rfl
+  let e ← elabTerm e none
+  let goal ← getMainGoal
+  if !(← inferType (← instantiateMVars (← goal.getType))).isProp then throwError
+    "lift tactic failed. Tactic is only applicable when the target is a proposition."
+  if newVarName == none ∧ !e.isFVar then throwError
+    "lift tactic failed. When lifting an expression, a new variable name must be given"
+  let (p, coe, inst) ← Lift.getInst (← inferType e) (← Term.elabType t)
+  let prf ← match hUsing with
+    | some h => elabTermEnsuringType h (p.betaRev #[e])
+    | none => mkFreshExprMVar (some (p.betaRev #[e]))
+  let newVarName ← match newVarName with
+                 | some v => pure v.getId
+                 | none => e.fvarId!.getUserName
+  let prfEx ← mkAppOptM ``CanLift.prf #[none, none, coe, p, inst, e, prf]
+  let prfEx ← instantiateMVars prfEx
+  let prfSyn ← prfEx.toSyntax
+  -- if we have a new variable, but no hypothesis name was provided, we temporarily use a dummy
+  -- hypothesis name
+let newEqName ← if isNewVar && !isNewEq then withMainContext getUnusedUserName `tmpVar
+               else pure newEqName
+  let newEqIdent := mkIdent newEqName
+  -- Run rcases on the proof of the lift condition
+  replaceMainGoal (← Lean.Elab.Tactic.RCases.rcases #[(none, prfSyn)]
+    (.tuple Syntax.missing <| [newVarName, newEqName].map (.one Syntax.missing)) goal)
+  -- if we use a new variable, then substitute it everywhere
+  if isNewVar then
+    for decl in ← getLCtx do
+      if decl.userName != newEqName then
+        let declIdent := mkIdent decl.userName
+        evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent] at $declIdent:ident))
+    evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent]))
+  -- Clear the temporary hypothesis used for the new variable name if applicable
+  if isNewVar && !isNewEq then
+    evalTactic (← `(tactic| clear $newEqIdent))
+  -- Clear the "using" hypothesis if it's a variable in the context
+  if prf.isFVar && !keepUsing then
+    let some hUsingStx := hUsing | throwError "lift tactic failed: unreachable code was reached"
+    evalTactic (← `(tactic| try clear $hUsingStx))
+if hUsing.isNone then withMainContext setGoals (prf.mvarId! :: (← getGoals))
+
+elab_rules : tactic
+| `(tactic| lift $e to $t $[using $h]? $[with $newVarName $[$newEqName]? $[$newPrfName]?]?) =>
+withMainContext
+    let keepUsing := match h, newPrfName.join with
+      | some h, some newPrfName => h.raw == newPrfName
+      | _, _ => false
+    Lift.main e t h newVarName newEqName.join keepUsing
 
 中文:
 定义 Lift.main
@@ -328,7 +376,55 @@ definition Lift.main
   -- Name of the new hypothesis containing the equality of the lifted variable with the old one
   -- rfl if none is given
   let newEqName := (newEqName.map Syntax.getId).getD `rfl
-  -- Was a 
+  -- Was a new hypothesis given?
+  let isNewEq := newEqName != `rfl
+  let e ← elabTerm e none
+  let goal ← getMainGoal
+  if !(← inferType (← instantiateMVars (← goal.getType))).isProp then throwError
+    "lift tactic failed. Tactic is only applicable when the target is a proposition."
+  if newVarName == none ∧ !e.isFVar then throwError
+    "lift tactic failed. When lifting an expression, a new variable name must be given"
+  let (p, coe, inst) ← Lift.getInst (← inferType e) (← Term.elabType t)
+  let prf ← match hUsing with
+    | some h => elabTermEnsuringType h (p.betaRev #[e])
+    | none => mkFreshExprMVar (some (p.betaRev #[e]))
+  let newVarName ← match newVarName with
+                 | some v => pure v.getId
+                 | none => e.fvarId!.getUserName
+  let prfEx ← mkAppOptM ``CanLift.prf #[none, none, coe, p, inst, e, prf]
+  let prfEx ← instantiateMVars prfEx
+  let prfSyn ← prfEx.toSyntax
+  -- if we have a new variable, but no hypothesis name was provided, we temporarily use a dummy
+  -- hypothesis name
+let newEqName ← if isNewVar && !isNewEq then withMainContext getUnusedUserName `tmpVar
+               else pure newEqName
+  let newEqIdent := mkIdent newEqName
+  -- Run rcases on the proof of the lift condition
+  replaceMainGoal (← Lean.Elab.Tactic.RCases.rcases #[(none, prfSyn)]
+    (.tuple Syntax.missing <| [newVarName, newEqName].map (.one Syntax.missing)) goal)
+  -- if we use a new variable, then substitute it everywhere
+  if isNewVar then
+    for decl in ← getLCtx do
+      if decl.userName != newEqName then
+        let declIdent := mkIdent decl.userName
+        evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent] at $declIdent:ident))
+    evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent]))
+  -- Clear the temporary hypothesis used for the new variable name if applicable
+  if isNewVar && !isNewEq then
+    evalTactic (← `(tactic| clear $newEqIdent))
+  -- Clear the "using" hypothesis if it's a variable in the context
+  if prf.isFVar && !keepUsing then
+    let some hUsingStx := hUsing | throwError "lift tactic failed: unreachable code was reached"
+    evalTactic (← `(tactic| try clear $hUsingStx))
+if hUsing.isNone then withMainContext setGoals (prf.mvarId! :: (← getGoals))
+
+elab_rules : tactic
+| `(tactic| lift $e to $t $[using $h]? $[with $newVarName $[$newEqName]? $[$newPrfName]?]?) =>
+withMainContext
+    let keepUsing := match h, newPrfName.join with
+      | some h, some newPrfName => h.raw == newPrfName
+      | _, _ => false
+    Lift.main e t h newVarName newEqName.join keepUsing
 
 Depends on / 依赖: withMainContext
 -/

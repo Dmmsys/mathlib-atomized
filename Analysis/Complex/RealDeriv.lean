@@ -40,7 +40,8 @@ theorem HasStrictDerivAt.real_of_complex
     HasStrictFDerivAt e ((ContinuousLinearMap.smulRight 1 e' : Complex ->L[Complex] Complex).restrictScalars Real)
       (ofRealCLM z) :=
     h.hasStrictFDerivAt.restrictScalars Real
-  have 
+  have C : HasStrictFDerivAt re reCLM (e (ofRealCLM z)) := reCLM.hasStrictFDerivAt
+  simpa using (C.comp z (B.comp z A)).hasStrictDerivAt
 
 中文:
 定理 HasStrictDerivAt.real_of_complex
@@ -51,7 +52,8 @@ theorem HasStrictDerivAt.real_of_complex
     HasStrictFDerivAt e ((ContinuousLinearMap.smulRight 1 e' : Complex ->L[Complex] Complex).restrictScalars Real)
       (ofRealCLM z) :=
     h.hasStrictFDerivAt.restrictScalars Real
-  have 
+  have C : HasStrictFDerivAt re reCLM (e (ofRealCLM z)) := reCLM.hasStrictFDerivAt
+  simpa using (C.comp z (B.comp z A)).hasStrictDerivAt
 
 Depends on / 依赖: B.comp, C.comp, ContinuousLinearMap, ContinuousLinearMap.smulRight, HasStrictFDerivAt, h.hasStrictFDerivAt.restrictScalars, hasStrictDerivAt, hasStrictFDerivAt, ofRealCLM, ofRealCLM.hasStrictFDerivAt, reCLM.hasStrictFDerivAt, restrictScalars, smulRight
 -/
@@ -77,7 +79,8 @@ theorem HasDerivAt.real_of_complex
     HasFDerivAt e ((ContinuousLinearMap.smulRight 1 e' : Complex ->L[Complex] Complex).restrictScalars Real)
       (ofRealCLM z) :=
     h.hasFDerivAt.restrictScalars Real
-  have C : HasFDerivAt re reCLM
+  have C : HasFDerivAt re reCLM (e (ofRealCLM z)) := reCLM.hasFDerivAt
+  simpa using! (C.comp z (B.comp z A)).hasDerivAt
 
 中文:
 定理 在点处可导.real_of_complex
@@ -88,7 +91,8 @@ theorem HasDerivAt.real_of_complex
     HasFDerivAt e ((ContinuousLinearMap.smulRight 1 e' : Complex ->L[Complex] Complex).restrictScalars Real)
       (ofRealCLM z) :=
     h.hasFDerivAt.restrictScalars Real
-  have C : HasFDerivAt re reCLM
+  have C : HasFDerivAt re reCLM (e (ofRealCLM z)) := reCLM.hasFDerivAt
+  simpa using! (C.comp z (B.comp z A)).hasDerivAt
 
 Depends on / 依赖: B.comp, C.comp, ContinuousLinearMap, ContinuousLinearMap.smulRight, HasFDerivAt, h.hasFDerivAt.restrictScalars, hasDerivAt, hasFDerivAt, ofRealCLM, ofRealCLM.hasFDerivAt, reCLM.hasFDerivAt, restrictScalars, smulRight
 -/

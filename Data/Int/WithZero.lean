@@ -53,7 +53,13 @@ definition toNNReal
     by_cases hxy : x * y = 0
     · rcases mul_eq_zero.mp hxy with hx | hy
       -- either x = 0 or y = 0
-    
+      · rw [dif_pos hxy, dif_pos hx, zero_mul]
+      · rw [dif_pos hxy, dif_pos hy, mul_zero]
+    · obtain ⟨hx, hy⟩ := mul_ne_zero_iff.mp hxy
+      -- x ≠ 0 and y ≠ 0
+      rw [dif_neg hxy]; rw [dif_neg hx]; rw [dif_neg hy]; rw [← zpow_add' (Or.inl he)]; rw [← toAdd_mul]
+      congr
+      rw [← WithZero.coe_inj]; rw [WithZero.coe_mul]; rw [coe_unzero hx]; rw [coe_unzero hy]; rw [coe_unzero hxy]
 
 中文:
 定义 toNN实数
@@ -65,7 +71,13 @@ definition toNNReal
     by_cases hxy : x * y = 0
     · rcases mul_eq_zero.mp hxy with hx | hy
       -- either x = 0 or y = 0
-    
+      · rw [dif_pos hxy, dif_pos hx, zero_mul]
+      · rw [dif_pos hxy, dif_pos hy, mul_zero]
+    · obtain ⟨hx, hy⟩ := mul_ne_zero_iff.mp hxy
+      -- x ≠ 0 and y ≠ 0
+      rw [dif_neg hxy]; rw [dif_neg hx]; rw [dif_neg hy]; rw [← zpow_add' (Or.inl he)]; rw [← toAdd_mul]
+      congr
+      rw [← WithZero.coe_inj]; rw [WithZero.coe_mul]; rw [coe_unzero hx]; rw [coe_unzero hy]; rw [coe_unzero hxy]
 
 Depends on / 依赖: WithZero, WithZero.unzero, unzero
 -/

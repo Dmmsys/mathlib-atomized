@@ -285,7 +285,12 @@ instance braidedAlgSpec
     (Over.homMk <| 𝟙 <| Spec R)
     (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).inv <| by
       simpa using Over.w (prodComparison (algSpec R) X Y))
-    (O
+    (Over.OverMorphism.ext (by simp))
+    (funext fun X => funext fun Y => Over.OverMorphism.ext (by simp))
+    (Over.OverMorphism.ext (by
+      rw [Functor.OplaxMonoidal.η_of_cartesianMonoidalCategory]; rw [← preservesTerminalIso_hom]; rw [preservesTerminalIso_algSpec]; rfl))
+    (funext fun X => funext fun Y => Over.OverMorphism.ext (by
+      rw [Functor.OplaxMonoidal.δ_of_cartesianMonoidalCategory]; rw [prodComparison_algSpec_left]; rfl))
 
 中文:
 实例 braidedAlgSpec
@@ -296,7 +301,12 @@ instance braidedAlgSpec
     (Over.homMk <| 𝟙 <| Spec R)
     (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).inv <| by
       simpa using Over.w (prodComparison (algSpec R) X Y))
-    (O
+    (Over.OverMorphism.ext (by simp))
+    (funext fun X => funext fun Y => Over.OverMorphism.ext (by simp))
+    (Over.OverMorphism.ext (by
+      rw [Functor.OplaxMonoidal.η_of_cartesianMonoidalCategory]; rw [← preservesTerminalIso_hom]; rw [preservesTerminalIso_algSpec]; rfl))
+    (funext fun X => funext fun Y => Over.OverMorphism.ext (by
+      rw [Functor.OplaxMonoidal.δ_of_cartesianMonoidalCategory]; rw [prodComparison_algSpec_left]; rfl))
 
 Depends on / 依赖: Functor, Functor.OplaxMonoidal, OplaxMonoidal, Over.OverMorphism.ext, Over.homMk, Over.w, OverMorphism, X.unop, Y.unop, algSpec, ofChosenFiniteProducts, preservesTerminalIso_hom, prodComparison, pullbackSpecIso
 -/
@@ -716,7 +726,22 @@ instance isCommMonObj_spec_asOver_spec
     have := congr((pullbackSpecIso R A A).hom ≫ ((bialgSpec R).map <| .op <| CommBialgCat.ofHom <|
  (Bialgebra.comm_comp_comulBialgHom (R := R) (A := A))).hom.left)
     dsimp [commBialgCatEquivComonCommAlgCat] at this ⊢
-    have h₁ : (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes
+    have h₁ : (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) =
+      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
+        Algebra.TensorProduct.includeLeftRingHom := rfl
+    have h₂ : (Algebra.TensorProduct.includeLeftRingHom) =
+      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
+       (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) := rfl
+    convert! this using 1
+    simp only [mul_spec_asOver_spec_left, ← Category.assoc, algSpec, Equivalence.op_functor,
+      comp_obj, op_obj, commAlgCatEquivUnder_functor_obj, Over.opEquivOpUnder_inverse_obj,
+      CommRingCat.mkUnder_hom, Over.post_obj, Spec_obj, Over.mk_left, Over.mk_hom, Spec_map,
+      Quiver.Hom.unop_op, Spec.map_comp]
+    congr 1
+    rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [← Iso.inv_comp_eq]
+    ext
+    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₁]; rfl
+    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₂]; rfl
 
 中文:
 实例 isCommMonObj_spec_asOver_spec
@@ -726,7 +751,22 @@ instance isCommMonObj_spec_asOver_spec
     have := congr((pullbackSpecIso R A A).hom ≫ ((bialgSpec R).map <| .op <| CommBialgCat.ofHom <|
  (Bialgebra.comm_comp_comulBialgHom (R := R) (A := A))).hom.left)
     dsimp [commBialgCatEquivComonCommAlgCat] at this ⊢
-    have h₁ : (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes
+    have h₁ : (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) =
+      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
+        Algebra.TensorProduct.includeLeftRingHom := rfl
+    have h₂ : (Algebra.TensorProduct.includeLeftRingHom) =
+      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
+       (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) := rfl
+    convert! this using 1
+    simp only [mul_spec_asOver_spec_left, ← Category.assoc, algSpec, Equivalence.op_functor,
+      comp_obj, op_obj, commAlgCatEquivUnder_functor_obj, Over.opEquivOpUnder_inverse_obj,
+      CommRingCat.mkUnder_hom, Over.post_obj, Spec_obj, Over.mk_left, Over.mk_hom, Spec_map,
+      Quiver.Hom.unop_op, Spec.map_comp]
+    congr 1
+    rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [← Iso.inv_comp_eq]
+    ext
+    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₁]; rfl
+    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₂]; rfl
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeLeftRingHom, Algebra.TensorProduct.includeRight, Bialgebra, Bialgebra.Ten, Bialgebra.TensorProduct.comm, Bialgebra.comm_comp_comulBialgHom, CommBialgCat, CommBialgCat.ofHom, RingHomClass, RingHomClass.toRingHom, TensorProduct, bialgSpec, commBialgCatEquivComonCommAlgCat, comm_comp_comulBialgHom, hom.left, includeLeftRingHom, includeRight, otimes, pullbackSpecIso
 -/
@@ -806,7 +846,25 @@ definition Spec.mapMulEquiv
     suffices CommRingCat.ofHom (algebraMap R S) ≫ Spec.preimage f.left =
       CommRingCat.ofHom (algebraMap R T) from fun r => congr($this r)
     apply Spec.map_injective
-    simpa [-comp_over] 
+    simpa [-comp_over] using! f.w⟩
+  left_inv f := by
+    apply WithConv.ofConv_injective
+    apply AlgHom.coe_ringHom_injective
+    simp
+  right_inv f := by ext1; simp
+  map_mul' f g := by
+    ext1
+    dsimp [AlgHom.convMul_def, AlgHom.comp_toRingHom, Hom.mul_def]
+    simp only [← Category.assoc, Spec.map_comp, mul_spec_asOver_spec_left]
+    congr 1
+    rw [← Iso.comp_inv_eq]
+    ext
+    all_goals
+    · simp only [specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
+      ← AlgHom.comp_toRingHom, Category.assoc, pullbackSpecIso_inv_fst, pullbackSpecIso_inv_snd,
+      limit.lift_π, PullbackCone.mk_pt, PullbackCone.mk_π_app]
+      congr 3
+      ext; simp
 
 中文:
 定义 Spec.mapMulEquiv
@@ -816,7 +874,25 @@ definition Spec.mapMulEquiv
     suffices CommRingCat.ofHom (algebraMap R S) ≫ Spec.preimage f.left =
       CommRingCat.ofHom (algebraMap R T) from fun r => congr($this r)
     apply Spec.map_injective
-    simpa [-comp_over] 
+    simpa [-comp_over] using! f.w⟩
+  left_inv f := by
+    apply WithConv.ofConv_injective
+    apply AlgHom.coe_ringHom_injective
+    simp
+  right_inv f := by ext1; simp
+  map_mul' f g := by
+    ext1
+    dsimp [AlgHom.convMul_def, AlgHom.comp_toRingHom, Hom.mul_def]
+    simp only [← Category.assoc, Spec.map_comp, mul_spec_asOver_spec_left]
+    congr 1
+    rw [← Iso.comp_inv_eq]
+    ext
+    all_goals
+    · simp only [specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
+      ← AlgHom.comp_toRingHom, Category.assoc, pullbackSpecIso_inv_fst, pullbackSpecIso_inv_snd,
+      limit.lift_π, PullbackCone.mk_pt, PullbackCone.mk_π_app]
+      congr 3
+      ext; simp
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Spec.map, asOver, f.ofConv.toRingHom, ofConv, toRingHom
 -/
@@ -1054,7 +1130,15 @@ lemma pullbackSpecIso'_symmetry
   · have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
       Algebra.TensorProduct.includeLeftRingHom =
       RingHomClass.toRingHom Algebra.TensorProduct.includeRight := rfl
-    rw [Categor
+    rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_fst]
+    simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_snd, Category.assoc,
+      pullbackSpecIso_inv_fst, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
+  have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
+      (RingHomClass.toRingHom Algebra.TensorProduct.includeRight) =
+      Algebra.TensorProduct.includeLeftRingHom := rfl
+  rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_snd]
+  simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_fst, Category.assoc,
+    pullbackSpecIso_inv_snd, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
 
 中文:
 引理 pullbackSpecIso'_symmetry
@@ -1065,7 +1149,15 @@ lemma pullbackSpecIso'_symmetry
   · have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
       Algebra.TensorProduct.includeLeftRingHom =
       RingHomClass.toRingHom Algebra.TensorProduct.includeRight := rfl
-    rw [Categor
+    rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_fst]
+    simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_snd, Category.assoc,
+      pullbackSpecIso_inv_fst, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
+  have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
+      (RingHomClass.toRingHom Algebra.TensorProduct.includeRight) =
+      Algebra.TensorProduct.includeLeftRingHom := rfl
+  rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_snd]
+  simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_fst, Category.assoc,
+    pullbackSpecIso_inv_snd, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
 -/
 lemma pullbackSpecIso'_symmetry [Algebra R T] :
     (pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom =
@@ -1134,7 +1226,12 @@ lemma μ_pullback_left_fst
     erw [Over.tensorHom_left_fst_assoc]
     simp [pullbackSpecIso']
     rfl
-  · simp only [← Spec.map_comp, ← CommRingCat.of
+  · simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp,
+      Algebra.TensorProduct.mapRingHom_comp_includeRight]
+    simp [specOverSpec_over]
+    erw [Over.tensorHom_left_snd_assoc]
+    simp [pullbackSpecIso']
+    rfl
 
 中文:
 引理 μ_pullback_left_fst
@@ -1148,7 +1245,12 @@ lemma μ_pullback_left_fst
     erw [Over.tensorHom_left_fst_assoc]
     simp [pullbackSpecIso']
     rfl
-  · simp only [← Spec.map_comp, ← CommRingCat.of
+  · simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp,
+      Algebra.TensorProduct.mapRingHom_comp_includeRight]
+    simp [specOverSpec_over]
+    erw [Over.tensorHom_left_snd_assoc]
+    simp [pullbackSpecIso']
+    rfl
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.mapRingHom_comp_includeLeftRingHom, Algebra.TensorProduct.mapRingHom_comp_includeRight, CommRingCat, CommRingCat.ofHom_comp, Over.tensorHom_left_fst_assoc, Over.tensorHom_left_snd_assoc, Spec.map_comp, TensorProduct, mapRingHom_comp_includeLeftRingHom, mapRingHom_comp_includeRight, map_comp, ofHom_comp, pullbackSpecIso, specOverSpec_over, tensorHom_left_fst_assoc, tensorHom_left_snd_assoc
 -/
@@ -1194,7 +1296,30 @@ instance [Bialgebra
     ext
     · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
         pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-        AlgHom.toUnder, Under.homMk_right, Bialgebra.Tensor
+        AlgHom.toUnder, Under.homMk_right, Bialgebra.TensorProduct.counitAlgHom_def,
+        AlgHom.comp_toRingHom, RingHom.comp_assoc]
+    · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
+        pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
+        AlgHom.toUnder, Under.homMk_right,
+        ← AlgHom.coe_restrictScalars R (Bialgebra.counitAlgHom S _), -AlgHom.coe_restrictScalars,
+        ← AlgHom.comp_toRingHom, Bialgebra.counitAlgHom_comp_includeRight]
+      simp [AlgHom.comp_toRingHom, Algebra.toRingHom_ofId]
+  mul_hom := by
+    ext
+    rw [← cancel_mono (pullbackSpecIso' ..).inv]
+    ext
+    · have : includeLeftRingHom = algebraMap S (S otimes[R] T) := rfl
+      simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over, ← Spec.map_comp,
+        ← CommRingCat.ofHom_comp, OverClass.asOver, mul_spec_asOver_spec_left, this, Hom.asOver,
+        OverClass.asOverHom, pullback.condition]
+      rfl
+    · convert! congr($(μ_pullback_left_fst R S T) ≫ (pullbackSpecIso R T T).hom ≫
+        Spec.map (CommRingCat.ofHom (Bialgebra.comulAlgHom R T).toRingHom)) using 1
+      · simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over,
+          OverClass.asOver, Hom.asOver, OverClass.asOverHom, mul_spec_asOver_spec_left]
+      · simp [pullbackSpecIso', specOverSpec_over, OverClass.asOver, Hom.asOver, ← Spec.map_comp,
+          OverClass.asOverHom, mul_spec_asOver_spec_left, ← CommRingCat.ofHom_comp,
+          ← Bialgebra.comul_includeRight]
 
 中文:
 实例 [双代数
@@ -1205,7 +1330,30 @@ instance [Bialgebra
     ext
     · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
         pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-        AlgHom.toUnder, Under.homMk_right, Bialgebra.Tensor
+        AlgHom.toUnder, Under.homMk_right, Bialgebra.TensorProduct.counitAlgHom_def,
+        AlgHom.comp_toRingHom, RingHom.comp_assoc]
+    · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
+        pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
+        AlgHom.toUnder, Under.homMk_right,
+        ← AlgHom.coe_restrictScalars R (Bialgebra.counitAlgHom S _), -AlgHom.coe_restrictScalars,
+        ← AlgHom.comp_toRingHom, Bialgebra.counitAlgHom_comp_includeRight]
+      simp [AlgHom.comp_toRingHom, Algebra.toRingHom_ofId]
+  mul_hom := by
+    ext
+    rw [← cancel_mono (pullbackSpecIso' ..).inv]
+    ext
+    · have : includeLeftRingHom = algebraMap S (S otimes[R] T) := rfl
+      simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over, ← Spec.map_comp,
+        ← CommRingCat.ofHom_comp, OverClass.asOver, mul_spec_asOver_spec_left, this, Hom.asOver,
+        OverClass.asOverHom, pullback.condition]
+      rfl
+    · convert! congr($(μ_pullback_left_fst R S T) ≫ (pullbackSpecIso R T T).hom ≫
+        Spec.map (CommRingCat.ofHom (Bialgebra.comulAlgHom R T).toRingHom)) using 1
+      · simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over,
+          OverClass.asOver, Hom.asOver, OverClass.asOverHom, mul_spec_asOver_spec_left]
+      · simp [pullbackSpecIso', specOverSpec_over, OverClass.asOver, Hom.asOver, ← Spec.map_comp,
+          OverClass.asOverHom, mul_spec_asOver_spec_left, ← CommRingCat.ofHom_comp,
+          ← Bialgebra.comul_includeRight]
 
 Depends on / 依赖: AlgHom, AlgHom.comp_toRingHom, AlgHom.toUnder, Bialgebra, Bialgebra.TensorProduct.counitAlgHom_def, CommRingCat, CommRingCat.of, CommRingCat.ofHom_comp, RingHom, RingHom.comp_assoc, Scheme, Scheme.monObjAsOverPullback_one, Spec.map_comp, TensorProduct, Under.homMk_right, cancel_mono, comp_assoc, comp_toRingHom, counitAlgHom_def, homMk_right
 -/

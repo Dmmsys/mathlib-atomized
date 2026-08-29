@@ -838,7 +838,21 @@ definition coordChangeL
     continuous_toFun := by
       by_cases hb : b in e.baseSet inter e'.baseSet
       · rw [dif_pos hb]
-        refine (e'.contin
+        refine (e'.continuousOn.comp_continuous ?_ ?_).snd
+        · exact e.continuousOn_symm.comp_continuous (Continuous.prodMk_right b) fun y =>
+            mk_mem_prod hb.1 (mem_univ y)
+        · exact fun y => e'.mem_source.mpr hb.2
+      · rw [dif_neg hb]
+        exact continuous_id
+    continuous_invFun := by
+      by_cases hb : b in e.baseSet inter e'.baseSet
+      · rw [dif_pos hb]
+        refine (e.continuousOn.comp_continuous ?_ ?_).snd
+        · exact e'.continuousOn_symm.comp_continuous (Continuous.prodMk_right b) fun y =>
+            mk_mem_prod hb.2 (mem_univ y)
+        exact fun y => e.mem_source.mpr hb.1
+      · rw [dif_neg hb]
+        exact continuous_id }
 
 中文:
 定义 coordChangeL
@@ -849,7 +863,21 @@ definition coordChangeL
     continuous_toFun := by
       by_cases hb : b in e.baseSet inter e'.baseSet
       · rw [dif_pos hb]
-        refine (e'.contin
+        refine (e'.continuousOn.comp_continuous ?_ ?_).snd
+        · exact e.continuousOn_symm.comp_continuous (Continuous.prodMk_right b) fun y =>
+            mk_mem_prod hb.1 (mem_univ y)
+        · exact fun y => e'.mem_source.mpr hb.2
+      · rw [dif_neg hb]
+        exact continuous_id
+    continuous_invFun := by
+      by_cases hb : b in e.baseSet inter e'.baseSet
+      · rw [dif_pos hb]
+        refine (e.continuousOn.comp_continuous ?_ ?_).snd
+        · exact e'.continuousOn_symm.comp_continuous (Continuous.prodMk_right b) fun y =>
+            mk_mem_prod hb.2 (mem_univ y)
+        exact fun y => e.mem_source.mpr hb.1
+      · rw [dif_neg hb]
+        exact continuous_id }
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, LinearEquiv, LinearEquiv.refl, baseSet, comp_continuous, continuousOn, continuousOn.comp_continuous, continuousOn_symm, continuous_id, continuous_in, continuous_toFun, dif_neg, dif_pos, e.baseSet, e.continuousOn_symm.comp_continuous, e.linearEquivAt, linearEquivAt, mem_source, mem_source.mpr
 -/
@@ -1206,7 +1234,8 @@ definition continuousLinearMapAt
       rw [e.coe_linearMapAt b]
       classical
       refine continuous_if_const _ (fun hb => ?_) fun _ => continuous_zero
-      exact (e.continuousOn.comp_continuous (FiberBundle.totalSpaceMk_i
+      exact (e.continuousOn.comp_continuous (FiberBundle.totalSpaceMk_isInducing F E b).continuous
+        fun x => e.mem_source.mpr hb).snd }
 
 中文:
 定义 continuousLinearMapAt
@@ -1217,7 +1246,8 @@ definition continuousLinearMapAt
       rw [e.coe_linearMapAt b]
       classical
       refine continuous_if_const _ (fun hb => ?_) fun _ => continuous_zero
-      exact (e.continuousOn.comp_continuous (FiberBundle.totalSpaceMk_i
+      exact (e.continuousOn.comp_continuous (FiberBundle.totalSpaceMk_isInducing F E b).continuous
+        fun x => e.mem_source.mpr hb).snd }
 
 Depends on / 依赖: FiberBundle, FiberBundle.totalSpaceMk_isInducing, classical, coe_linearMapAt, comp_continuous, continuous, continuousOn, continuous_if_const, continuous_zero, e.coe_linearMapAt, e.continuousOn.comp_continuous, e.linearMapAt, e.mem_source.mpr, explicitly, linearMapAt, mem_source, totalSpaceMk_isInducing
 -/
@@ -1265,7 +1295,8 @@ definition symmL
       · rw [(FiberBundle.totalSpaceMk_isInducing F E b).continuous_iff]
         refine .congr (f := TotalSpace.mk b ∘ e.symm b) ?_ (by simp [hb])
         exact e.continuousOn_symm.comp_continuous (.prodMk_right _) fun x =>
-        
+          mk_mem_prod hb (mem_univ x)
+      · exact continuous_zero.congr fun x => (e.symmₗ_apply_of_notMem hb x).symm }
 
 中文:
 定义 symmL
@@ -1276,7 +1307,8 @@ definition symmL
       · rw [(FiberBundle.totalSpaceMk_isInducing F E b).continuous_iff]
         refine .congr (f := TotalSpace.mk b ∘ e.symm b) ?_ (by simp [hb])
         exact e.continuousOn_symm.comp_continuous (.prodMk_right _) fun x =>
-        
+          mk_mem_prod hb (mem_univ x)
+      · exact continuous_zero.congr fun x => (e.symmₗ_apply_of_notMem hb x).symm }
 
 Depends on / 依赖: FiberBundle, FiberBundle.totalSpaceMk_isInducing, TotalSpace, TotalSpace.mk, baseSet, comp_continuous, continuousOn_symm, continuous_iff, continuous_zero, continuous_zero.congr, e.baseSet, e.continuousOn_symm.comp_continuous, e.symm, mem_univ, mk_mem_prod, prodMk_right, totalSpaceMk_isInducing
 -/
@@ -1388,7 +1420,8 @@ definition continuousLinearEquivAt
     toFun := fun y => (e ⟨b, y⟩).2 -- given explicitly to help `simps`
     invFun := e.symm b -- given explicitly to help `simps`
     continuous_toFun := (e.continuousOn.comp_continuous
-      (FiberBundle.totalSpaceMk_isInducing F E b).continuous fun
+      (FiberBundle.totalSpaceMk_isInducing F E b).continuous fun _ => e.mem_source.mpr hb).snd
+    continuous_invFun := by convert (e.symmL R b).continuous; ext; simp [hb] }
 
 中文:
 定义 continuousLinearEquivAt
@@ -1397,7 +1430,8 @@ definition continuousLinearEquivAt
     toFun := fun y => (e ⟨b, y⟩).2 -- given explicitly to help `simps`
     invFun := e.symm b -- given explicitly to help `simps`
     continuous_toFun := (e.continuousOn.comp_continuous
-      (FiberBundle.totalSpaceMk_isInducing F E b).continuous fun
+      (FiberBundle.totalSpaceMk_isInducing F E b).continuous fun _ => e.mem_source.mpr hb).snd
+    continuous_invFun := by convert (e.symmL R b).continuous; ext; simp [hb] }
 
 Depends on / 依赖: FiberBundle, FiberBundle.totalSpaceMk_isInducing, comp_continuous, continuous, continuousOn, continuous_invFun, continuous_toFun, convert, e.continuousOn.comp_continuous, e.mem_source.mpr, e.symm, e.symmL, e.toPretrivialization.linearEquivAt, explicitly, invFun, linearEquivAt, mem_source, toPretrivialization, totalSpaceMk_isInducing
 -/
@@ -1578,7 +1612,7 @@ theorem continuous_zeroSection
   apply (continuousAt_const (y := 0)).congr_of_eventuallyEq
   filter_upwards [(trivializationAt F E x).open_baseSet.mem_nhds
     (mem_baseSet_trivializationAt F E x)] with y hy
-using co
+using congr_arg Prod.snd (trivializationAt F E x).zeroSection R hy
 
 中文:
 定理 continuous_zeroSection
@@ -1590,7 +1624,7 @@ using co
   apply (continuousAt_const (y := 0)).congr_of_eventuallyEq
   filter_upwards [(trivializationAt F E x).open_baseSet.mem_nhds
     (mem_baseSet_trivializationAt F E x)] with y hy
-using co
+using congr_arg Prod.snd (trivializationAt F E x).zeroSection R hy
 
 Depends on / 依赖: FiberBundle, FiberBundle.continuousAt_section, Prod.snd, congr_arg, congr_of_eventuallyEq, continuousAt_const, continuousAt_section, continuous_iff_continuousAt, filter_upwards, mem_baseSet_trivializationAt, mem_nhds, open_baseSet, open_baseSet.mem_nhds, trivializationAt, zeroSection
 -/
@@ -2857,7 +2891,12 @@ definition toFiberPrebundle
       have : ContinuousOn (fun x : B × F => a.coordChange he' he x.1 x.2)
           ((e'.baseSet inter e.baseSet) ×ˢ univ) :=
         isBoundedBilinearMap_apply.continuous.comp_continuousOn
-          ((a.continuousOn_coordChange he' he).pro
+          ((a.continuousOn_coordChange he' he).prodMap continuousOn_id)
+      rw [e.target_inter_preimage_symm_source_eq e']; rw [inter_comm]
+      refine (continuousOn_fst.prodMk this).congr ?_
+      rintro ⟨b, f⟩ ⟨hb, -⟩
+      dsimp only [Function.comp_def, Prod.map]
+      rw [a.mk_coordChange _ _ hb]; rw [e'.mk_symm hb.1] }
 
 中文:
 定义 toFiberPrebundle
@@ -2867,7 +2906,12 @@ definition toFiberPrebundle
       have : ContinuousOn (fun x : B × F => a.coordChange he' he x.1 x.2)
           ((e'.baseSet inter e.baseSet) ×ˢ univ) :=
         isBoundedBilinearMap_apply.continuous.comp_continuousOn
-          ((a.continuousOn_coordChange he' he).pro
+          ((a.continuousOn_coordChange he' he).prodMap continuousOn_id)
+      rw [e.target_inter_preimage_symm_source_eq e']; rw [inter_comm]
+      refine (continuousOn_fst.prodMk this).congr ?_
+      rintro ⟨b, f⟩ ⟨hb, -⟩
+      dsimp only [Function.comp_def, Prod.map]
+      rw [a.mk_coordChange _ _ hb]; rw [e'.mk_symm hb.1] }
 
 Depends on / 依赖: ContinuousOn, Function, Function.comp_def, Prod.map, a.continuousOn_coordChange, a.coordChange, a.mk_coordChange, baseSet, comp_continuousOn, comp_def, continuous, continuousOn_coordChange, continuousOn_fst, continuousOn_fst.prodMk, continuousOn_id, continuous_trivChange, coordChange, e.baseSet, e.target_inter_preimage_symm_source_eq, inter_comm
 -/
@@ -3055,7 +3099,13 @@ theorem toVectorBundle
       apply linear_trivializationOfMemPretrivializationAtlas
     continuousOn_coordChange' := by
       rintro _ _ ⟨e, he, rfl⟩ ⟨e', he', rfl⟩
-      refine (a.continuousOn_coordChange he
+      refine (a.continuousOn_coordChange he he').congr fun b hb => ?_
+      ext v
+      have h₁ := a.linear_trivializationOfMemPretrivializationAtlas he
+      have h₂ := a.linear_trivializationOfMemPretrivializationAtlas he'
+      rw [trivializationOfMemPretrivializationAtlas] at h₁ h₂
+      rw [a.coordChange_apply he he' hb v]; rw [ContinuousLinearEquiv.coe_coe]; rw [Trivialization.coordChangeL_apply]
+      exacts [rfl, hb] }
 
 中文:
 定理 toVectorBundle
@@ -3066,7 +3116,13 @@ theorem toVectorBundle
       apply linear_trivializationOfMemPretrivializationAtlas
     continuousOn_coordChange' := by
       rintro _ _ ⟨e, he, rfl⟩ ⟨e', he', rfl⟩
-      refine (a.continuousOn_coordChange he
+      refine (a.continuousOn_coordChange he he').congr fun b hb => ?_
+      ext v
+      have h₁ := a.linear_trivializationOfMemPretrivializationAtlas he
+      have h₂ := a.linear_trivializationOfMemPretrivializationAtlas he'
+      rw [trivializationOfMemPretrivializationAtlas] at h₁ h₂
+      rw [a.coordChange_apply he he' hb v]; rw [ContinuousLinearEquiv.coe_coe]; rw [Trivialization.coordChangeL_apply]
+      exacts [rfl, hb] }
 
 Depends on / 依赖: a.continuousOn_coordChange, a.coor, a.linear_trivializationOfMemPretrivializationAtlas, a.toFiberBundle, a.totalSpaceTopology, continuousOn_coordChange, linear_trivializationOfMemPretrivializationAtlas, toFiberBundle, totalSpaceTopology, trivializationOfMemPretrivializationAtlas, trivialization_linear
 -/

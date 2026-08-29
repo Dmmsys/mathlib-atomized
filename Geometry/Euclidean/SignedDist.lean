@@ -52,6 +52,8 @@ definition signedDist
     map_add' x y := by ext; simp [inner_add_right]
     map_smul' r x := by ext; simp [inner_smul_right] }
   map_vadd' p v' := by
+    ext q
+    simp [vsub_vadd_eq_vsub_sub, inner_sub_right, ← sub_eq_neg_add]
 
 中文:
 定义 signedDist
@@ -63,6 +65,8 @@ definition signedDist
     map_add' x y := by ext; simp [inner_add_right]
     map_smul' r x := by ext; simp [inner_smul_right] }
   map_vadd' p v' := by
+    ext q
+    simp [vsub_vadd_eq_vsub_sub, inner_sub_right, ← sub_eq_neg_add]
 
 Depends on / 依赖: innerSL, normalize, toContinuousAffineMap, toContinuousAffineMap.comp
 -/
@@ -677,7 +681,9 @@ lemma abs_signedDist_eq_dist_iff_vsub_mem_span
   rw [signedDist_apply_apply]; rw [dist_eq_norm_vsub']; rw [NormedSpace.normalize]; rw [real_inner_smul_left]; rw [abs_mul]; rw [abs_inv]; rw [abs_norm]
   by_cases h : v = 0
   · simp [h, eq_comm (a := (0 : Real)), eq_comm (a := (0 : V))]
-  rw [inv_mul_eq_iff_eq
+  rw [inv_mul_eq_iff_eq_mul₀ (by positivity)]
+  rw [← Real.norm_eq_abs]; rw [((norm_inner_eq_norm_tfae Real v (q -ᵥ p)).out 0 2 :)]
+  simp [h, eq_comm]
 
 中文:
 引理 abs_signedDist_eq_dist_iff_vsub_mem_span
@@ -686,7 +692,9 @@ lemma abs_signedDist_eq_dist_iff_vsub_mem_span
   rw [signedDist_apply_apply]; rw [dist_eq_norm_vsub']; rw [NormedSpace.normalize]; rw [real_inner_smul_left]; rw [abs_mul]; rw [abs_inv]; rw [abs_norm]
   by_cases h : v = 0
   · simp [h, eq_comm (a := (0 : Real)), eq_comm (a := (0 : V))]
-  rw [inv_mul_eq_iff_eq
+  rw [inv_mul_eq_iff_eq_mul₀ (by positivity)]
+  rw [← Real.norm_eq_abs]; rw [((norm_inner_eq_norm_tfae Real v (q -ᵥ p)).out 0 2 :)]
+  simp [h, eq_comm]
 
 Depends on / 依赖: NormedSpace, NormedSpace.normalize, Real.norm_eq_abs, Submodule, Submodule.mem_span_singleton, abs_inv, abs_mul, abs_norm, dist_eq_norm_vsub, eq_comm, mem_span_singleton, norm_eq_abs, norm_inner_eq_norm_tfae, normalize, real_inner_smul_left, signedDist_apply_apply
 -/
@@ -713,7 +721,16 @@ lemma signedDist_eq_dist_iff_vsub_mem_span
   by_cases h : v = 0
   · simp [h, eq_comm (a := (0 : Real)), eq_comm (a := (0 : V))]
   rw [inv_mul_eq_iff_eq_mul₀ (by positivity)]
-  rw [inner_eq_norm_
+  rw [inner_eq_norm_mul_iff_real]
+  simp only [smul_def]
+  refine ⟨fun h => ?_, fun ⟨c, h⟩ => ?_⟩
+  · simp only [NNReal.exists, coe_mk, exists_prop]
+    use ‖v‖⁻¹ * ‖q -ᵥ p‖
+    constructor
+    · positivity
+    · rw [← smul_smul, h, smul_smul, inv_mul_cancel₀ (by positivity), one_smul]
+  · rw [← h, norm_smul, smul_smul, mul_comm]
+    simp
 
 中文:
 引理 signedDist_eq_dist_iff_vsub_mem_span
@@ -724,7 +741,16 @@ lemma signedDist_eq_dist_iff_vsub_mem_span
   by_cases h : v = 0
   · simp [h, eq_comm (a := (0 : Real)), eq_comm (a := (0 : V))]
   rw [inv_mul_eq_iff_eq_mul₀ (by positivity)]
-  rw [inner_eq_norm_
+  rw [inner_eq_norm_mul_iff_real]
+  simp only [smul_def]
+  refine ⟨fun h => ?_, fun ⟨c, h⟩ => ?_⟩
+  · simp only [NNReal.exists, coe_mk, exists_prop]
+    use ‖v‖⁻¹ * ‖q -ᵥ p‖
+    constructor
+    · positivity
+    · rw [← smul_smul, h, smul_smul, inv_mul_cancel₀ (by positivity), one_smul]
+  · rw [← h, norm_smul, smul_smul, mul_comm]
+    simp
 
 Depends on / 依赖: NNReal, NNReal.exists, NormedSpace, NormedSpace.normalize, Submodule, Submodule.mem_span_singleton, coe_mk, dist_eq_norm_vsub, eq_comm, exists_prop, inner_eq_norm_mul_iff_real, inv_mul_ca, mem_span_singleton, normalize, real_inner_smul_left, signedDist_apply_apply, smul_def, smul_smul
 -/
@@ -1208,7 +1234,12 @@ lemma signedInfDist_affineCombination
       ((s.signedInfDist i).toAffineMap ∘ s.points) 0
       ‖s.points i -ᵥ (s.faceOpposite i).orthogonalProjectionSpan (s.points i)‖
       {i} h]
-  · si
+  · simp [AffineMap.lineMap_apply]
+  · simp [signedInfDist_apply_self]
+  · simp only [Finset.mem_sdiff, Finset.mem_univ, Finset.mem_singleton, true_and,
+      Function.comp_apply]
+    intro j hj
+    exact s.signedInfDist_apply_of_ne hj
 
 中文:
 引理 signedInfDist_affineCombination
@@ -1218,7 +1249,12 @@ lemma signedInfDist_affineCombination
       ((s.signedInfDist i).toAffineMap ∘ s.points) 0
       ‖s.points i -ᵥ (s.faceOpposite i).orthogonalProjectionSpan (s.points i)‖
       {i} h]
-  · si
+  · simp [AffineMap.lineMap_apply]
+  · simp [signedInfDist_apply_self]
+  · simp only [Finset.mem_sdiff, Finset.mem_univ, Finset.mem_singleton, true_and,
+      Function.comp_apply]
+    intro j hj
+    exact s.signedInfDist_apply_of_ne hj
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, ContinuousAffineMap, ContinuousAffineMap.coe_toAffineMap, Finset, Finset.map_affineCombination, Finset.mem_sdiff, Finset.mem_singleton, Finset.mem_univ, Finset.univ.affineCombination_apply_eq_lineMap_sum, Function, Function.comp_apply, affineCombination_apply_eq_lineMap_sum, coe_toAffineMap, comp_apply, faceOpposite, lineMap_apply, map_affineCombination, mem_sdiff, mem_singleton
 -/

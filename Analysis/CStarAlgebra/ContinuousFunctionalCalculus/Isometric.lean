@@ -159,7 +159,10 @@ lemma IsGreatest.norm_cfc
   convert! hx
   rw [cfc_apply f a]; rw [norm_cfcHom a _]
   apply le_antisymm
-.mp
+.mpr · apply ContinuousMap.norm_le _ (norm_nonneg _)
+    rintro ⟨y, hy⟩
+    exact hx.2 ⟨y, hy, rfl⟩
+· exact le_trans (by simp) ContinuousMap.norm_coe_le_norm _ (⟨x, hx'⟩ : σ 𝕜 a)
 
 中文:
 引理 IsGreatest.norm_cfc
@@ -172,7 +175,10 @@ lemma IsGreatest.norm_cfc
   convert! hx
   rw [cfc_apply f a]; rw [norm_cfcHom a _]
   apply le_antisymm
-.mp
+.mpr · apply ContinuousMap.norm_le _ (norm_nonneg _)
+    rintro ⟨y, hy⟩
+    exact hx.2 ⟨y, hy, rfl⟩
+· exact le_trans (by simp) ContinuousMap.norm_coe_le_norm _ (⟨x, hx'⟩ : σ 𝕜 a)
 
 Depends on / 依赖: ContinuousFunctionalCalculus, ContinuousFunctionalCalculus.isCompact_spectrum, ContinuousFunctionalCalculus.spectrum_nonempty, ContinuousMap, ContinuousMap.norm_le, IsGreatest, cfc_apply, cfc_cont_tac, cfc_tac, convert, exists_isGreatest, hf.norm, image_of_continuousOn, isCompact_spectrum, le_antisymm, le_trans, norm_cfcHom, norm_le, norm_nonneg, spectrum
 -/
@@ -578,7 +584,16 @@ theorem isometric_cfc
     have := SpectrumRestricts.cfc f halg.isClosedEmbedding h0 h
     rw [cfcHom_eq_restrict f ha ha' haf]
     refine .of_dist_eq fun g₁ g₂ => ?_
-    simp only [starAlgHom_apply, isometry_cfcHom 
+    simp only [starAlgHom_apply, isometry_cfcHom a ha' |>.dist_eq]
+    refine le_antisymm ?_ ?_
+.mpr fun x => ?_ all_goals refine ContinuousMap.dist_le dist_nonneg
+    · simpa [halg.dist_eq] using ContinuousMap.dist_apply_le_dist _
+    · let x' : σ S a := Subtype.map (algebraMap R S) (fun _ => spectrum.algebraMap_mem S) x
+apply le_of_eq_of_le ?_ ContinuousMap.dist_apply_le_dist x'
+      simp only [ContinuousMap.comp_apply, ContinuousMap.coe_mk, StarAlgHom.ofId_apply,
+        halg.dist_eq, x']
+      congr!
+.symm all_goals ext; exact haf.left_inv _
 
 中文:
 定理 isometric_cfc
@@ -589,7 +604,16 @@ theorem isometric_cfc
     have := SpectrumRestricts.cfc f halg.isClosedEmbedding h0 h
     rw [cfcHom_eq_restrict f ha ha' haf]
     refine .of_dist_eq fun g₁ g₂ => ?_
-    simp only [starAlgHom_apply, isometry_cfcHom 
+    simp only [starAlgHom_apply, isometry_cfcHom a ha' |>.dist_eq]
+    refine le_antisymm ?_ ?_
+.mpr fun x => ?_ all_goals refine ContinuousMap.dist_le dist_nonneg
+    · simpa [halg.dist_eq] using ContinuousMap.dist_apply_le_dist _
+    · let x' : σ S a := Subtype.map (algebraMap R S) (fun _ => spectrum.algebraMap_mem S) x
+apply le_of_eq_of_le ?_ ContinuousMap.dist_apply_le_dist x'
+      simp only [ContinuousMap.comp_apply, ContinuousMap.coe_mk, StarAlgHom.ofId_apply,
+        halg.dist_eq, x']
+      congr!
+.symm all_goals ext; exact haf.left_inv _
 -/
 protected theorem isometric_cfc (f : C(S, R)) (halg : Isometry (algebraMap R S)) (h0 : p 0)
     (h : forall a, p a ↔ q a ∧ SpectrumRestricts a f) :
@@ -759,7 +783,10 @@ lemma IsGreatest.norm_cfcₙ
   convert! hx
   rw [cfcₙ_apply f a]; rw [norm_cfcₙHom a _]
   apply le_antisymm
-.mpr · app
+.mpr · apply ContinuousMap.norm_le _ (norm_nonneg _)
+    rintro ⟨y, hy⟩
+    exact hx.2 ⟨y, hy, rfl⟩
+· exact le_trans (by simp) ContinuousMap.norm_coe_le_norm _ (⟨x, hx'⟩ : σₙ 𝕜 a)
 
 中文:
 引理 IsGreatest.norm_cfcₙ
@@ -772,7 +799,10 @@ lemma IsGreatest.norm_cfcₙ
   convert! hx
   rw [cfcₙ_apply f a]; rw [norm_cfcₙHom a _]
   apply le_antisymm
-.mpr · app
+.mpr · apply ContinuousMap.norm_le _ (norm_nonneg _)
+    rintro ⟨y, hy⟩
+    exact hx.2 ⟨y, hy, rfl⟩
+· exact le_trans (by simp) ContinuousMap.norm_coe_le_norm _ (⟨x, hx'⟩ : σₙ 𝕜 a)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.norm_le, IsGreatest, NonUnitalContinuousFunctionalCalculus, NonUnitalContinuousFunctionalCalculus.isCompact_quasispectrum, cfc_cont_tac, cfc_tac, cfc_zero_tac, convert, exists_isGreatest, hf.norm, image_of_continuousOn, isCompact_quasispectrum, le_antisymm, nonempty, norm_le, norm_nonneg, quasispectrum, quasispectrum.nonempty
 -/
@@ -1165,7 +1195,16 @@ theorem isometric_cfc
     have := QuasispectrumRestricts.cfc f halg.isClosedEmbedding h0 h
     rw [cfcₙHom_eq_restrict f ha ha' haf]
     refine .of_dist_eq fun g₁ g₂ => ?_
-    simp only [nonUnitalStarAlgHom
+    simp only [nonUnitalStarAlgHom_apply, isometry_cfcₙHom a ha' |>.dist_eq]
+    refine le_antisymm ?_ ?_
+.mpr fun x => ?_ all_goals refine ContinuousMap.dist_le dist_nonneg
+    · simpa [halg.dist_eq] using! ContinuousMap.dist_apply_le_dist _
+    · let x' : σₙ S a := Subtype.map (algebraMap R S) (fun _ => quasispectrum.algebraMap_mem S) x
+apply le_of_eq_of_le ?_ ContinuousMap.dist_apply_le_dist x'
+      simp only [ContinuousMapZero.comp_apply, ContinuousMapZero.coe_mk,
+        ContinuousMap.coe_mk, StarAlgHom.ofId_apply, halg.dist_eq, x']
+      congr! 2
+.symm all_goals ext; exact haf.left_inv _
 
 中文:
 定理 isometric_cfc
@@ -1177,7 +1216,16 @@ theorem isometric_cfc
     have := QuasispectrumRestricts.cfc f halg.isClosedEmbedding h0 h
     rw [cfcₙHom_eq_restrict f ha ha' haf]
     refine .of_dist_eq fun g₁ g₂ => ?_
-    simp only [nonUnitalStarAlgHom
+    simp only [nonUnitalStarAlgHom_apply, isometry_cfcₙHom a ha' |>.dist_eq]
+    refine le_antisymm ?_ ?_
+.mpr fun x => ?_ all_goals refine ContinuousMap.dist_le dist_nonneg
+    · simpa [halg.dist_eq] using! ContinuousMap.dist_apply_le_dist _
+    · let x' : σₙ S a := Subtype.map (algebraMap R S) (fun _ => quasispectrum.algebraMap_mem S) x
+apply le_of_eq_of_le ?_ ContinuousMap.dist_apply_le_dist x'
+      simp only [ContinuousMapZero.comp_apply, ContinuousMapZero.coe_mk,
+        ContinuousMap.coe_mk, StarAlgHom.ofId_apply, halg.dist_eq, x']
+      congr! 2
+.symm all_goals ext; exact haf.left_inv _
 -/
 protected theorem isometric_cfc (f : C(S, R)) (halg : Isometry (algebraMap R S)) (h0 : p 0)
     (h : forall a, p a ↔ q a ∧ QuasispectrumRestricts a f) :
@@ -1303,7 +1351,8 @@ lemma IsGreatest.nnnorm_cfc_nnreal
   rw [← SpectrumRestricts] at ha'
   convert! IsGreatest.nnnorm_cfc (fun x : Real => (f x.toNNReal : Real)) a ?hf_cont
 case hf_cont => exact continuous_subtype_val.comp_continuousOn
-Continuo
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
+  simp [Set.image_image, ← ha'.image]
 
 中文:
 引理 IsGreatest.nnnorm_cfc_nnreal
@@ -1314,7 +1363,8 @@ Continuo
   rw [← SpectrumRestricts] at ha'
   convert! IsGreatest.nnnorm_cfc (fun x : Real => (f x.toNNReal : Real)) a ?hf_cont
 case hf_cont => exact continuous_subtype_val.comp_continuousOn
-Continuo
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
+  simp [Set.image_image, ← ha'.image]
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.comp, IsGreatest, IsGreatest.nnnorm_cfc, Set.image_image, Set.mapsTo_image, SpectrumRestricts, cfc_cont_tac, cfc_nnreal_eq_real, cfc_tac, comp_continuousOn, continuousOn, continuous_real_toNNReal, continuous_real_toNNReal.continuousOn, continuous_subtype_val, continuous_subtype_val.comp_continuousOn, convert, hf_cont, image_image, mapsTo_image
 -/
@@ -1372,7 +1422,7 @@ lemma nnnorm_cfc_nnreal_le
   · refine cfc_cases (‖·‖₊ <= c) a f (by simp) fun hf ha => ?_
     simp only [← cfc_apply f a, isLUB_le_iff (IsGreatest.nnnorm_cfc_nnreal f a hf ha |>.isLUB)]
     rintro - ⟨x, hx, rfl⟩
-    exact h x h
+    exact h x hx
 
 中文:
 引理 nnnorm_cfc_nnreal_le
@@ -1384,7 +1434,7 @@ lemma nnnorm_cfc_nnreal_le
   · refine cfc_cases (‖·‖₊ <= c) a f (by simp) fun hf ha => ?_
     simp only [← cfc_apply f a, isLUB_le_iff (IsGreatest.nnnorm_cfc_nnreal f a hf ha |>.isLUB)]
     rintro - ⟨x, hx, rfl⟩
-    exact h x h
+    exact h x hx
 
 Depends on / 依赖: IsGreatest, IsGreatest.nnnorm_cfc_nnreal, Subsingleton, Subsingleton.elim, cfc_apply, cfc_cases, isLUB_le_iff, nnnorm_cfc_nnreal, subsingleton_or_nontrivial
 -/
@@ -1566,7 +1616,8 @@ lemma IsGreatest.nnnorm_cfcₙ_nnreal
   obtain ⟨-, ha'⟩ := nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts.mp ha
   convert! IsGreatest.nnnorm_cfcₙ (fun x : Real => (f x.toNNReal : Real)) a ?hf_cont (by simpa)
 case hf_cont => exact continuous_subtype_val.comp_continuousOn
-ContinuousOn.comp ‹_› continu
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
+  simp [Set.image_image, ← ha'.image]
 
 中文:
 引理 IsGreatest.nnnorm_cfcₙ_nnreal
@@ -1576,7 +1627,8 @@ ContinuousOn.comp ‹_› continu
   obtain ⟨-, ha'⟩ := nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts.mp ha
   convert! IsGreatest.nnnorm_cfcₙ (fun x : Real => (f x.toNNReal : Real)) a ?hf_cont (by simpa)
 case hf_cont => exact continuous_subtype_val.comp_continuousOn
-ContinuousOn.comp ‹_› continu
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
+  simp [Set.image_image, ← ha'.image]
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.comp, IsGreatest, IsGreatest.nnnorm_cfc, Set.image, Set.mapsTo_image, cfc_cont_tac, cfc_tac, cfc_zero_tac, comp_continuousOn, continuousOn, continuous_real_toNNReal, continuous_real_toNNReal.continuousOn, continuous_subtype_val, continuous_subtype_val.comp_continuousOn, convert, hf_cont, mapsTo_image, nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts, nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts.mp
 -/
@@ -1814,7 +1866,22 @@ instance toNonUnital
       have h_cpct : CompactSpace (spectrum 𝕜 a) := inferInstance
       simp only [← isCompact_iff_compactSpace, quasispectrum_eq_spectrum_union_zero] at h_cpct ⊢
 .union isCompact_singleton exact h_cpct
-    rw [cfcₙHom_eq_cfcₙHom_of_cfcHom]; rw [cfcₙHom_of_cf
+    rw [cfcₙHom_eq_cfcₙHom_of_cfcHom]; rw [cfcₙHom_of_cfcHom]
+.comp ?_ refine isometry_cfcHom a
+    simp only [MulHom.coe_coe, NonUnitalStarAlgHom.coe_toNonUnitalAlgHom]
+    refine AddMonoidHomClass.isometry_of_norm _ fun f => ?_
+let ι : C(σ 𝕜 a, σₙ 𝕜 a) := ⟨_, continuous_inclusion spectrum_subset_quasispectrum 𝕜 a⟩
+    change ‖(f : C(σₙ 𝕜 a, 𝕜)).comp ι‖ = ‖(f : C(σₙ 𝕜 a, 𝕜))‖
+    apply le_antisymm (ContinuousMap.norm_le _ (by positivity) |>.mpr ?_)
+      (ContinuousMap.norm_le _ (by positivity) |>.mpr ?_)
+    · rintro ⟨x, hx⟩
+      exact (f : C(σₙ 𝕜 a, 𝕜)).norm_coe_le_norm ⟨x, spectrum_subset_quasispectrum 𝕜 a hx⟩
+    · rintro ⟨x, hx⟩
+      obtain (rfl | hx') : x = 0 ∨ x in σ 𝕜 a := by
+        simpa [quasispectrum_eq_spectrum_union_zero] using hx
+      · change ‖f 0‖ <= _
+        simp
+.norm_coe_le_norm ⟨x, hx'⟩ · exact (f : C(σₙ 𝕜 a, 𝕜)).comp ι
 
 中文:
 实例 toNonUnital
@@ -1824,7 +1891,22 @@ instance toNonUnital
       have h_cpct : CompactSpace (spectrum 𝕜 a) := inferInstance
       simp only [← isCompact_iff_compactSpace, quasispectrum_eq_spectrum_union_zero] at h_cpct ⊢
 .union isCompact_singleton exact h_cpct
-    rw [cfcₙHom_eq_cfcₙHom_of_cfcHom]; rw [cfcₙHom_of_cf
+    rw [cfcₙHom_eq_cfcₙHom_of_cfcHom]; rw [cfcₙHom_of_cfcHom]
+.comp ?_ refine isometry_cfcHom a
+    simp only [MulHom.coe_coe, NonUnitalStarAlgHom.coe_toNonUnitalAlgHom]
+    refine AddMonoidHomClass.isometry_of_norm _ fun f => ?_
+let ι : C(σ 𝕜 a, σₙ 𝕜 a) := ⟨_, continuous_inclusion spectrum_subset_quasispectrum 𝕜 a⟩
+    change ‖(f : C(σₙ 𝕜 a, 𝕜)).comp ι‖ = ‖(f : C(σₙ 𝕜 a, 𝕜))‖
+    apply le_antisymm (ContinuousMap.norm_le _ (by positivity) |>.mpr ?_)
+      (ContinuousMap.norm_le _ (by positivity) |>.mpr ?_)
+    · rintro ⟨x, hx⟩
+      exact (f : C(σₙ 𝕜 a, 𝕜)).norm_coe_le_norm ⟨x, spectrum_subset_quasispectrum 𝕜 a hx⟩
+    · rintro ⟨x, hx⟩
+      obtain (rfl | hx') : x = 0 ∨ x in σ 𝕜 a := by
+        simpa [quasispectrum_eq_spectrum_union_zero] using hx
+      · change ‖f 0‖ <= _
+        simp
+.norm_coe_le_norm ⟨x, hx'⟩ · exact (f : C(σₙ 𝕜 a, 𝕜)).comp ι
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_of_norm, CompactSpace, MulHom, MulHom.coe_coe, NonUnitalStarAlgHom, NonUnitalStarAlgHom.coe_toNonUnitalAlgHom, coe_coe, coe_toNonUnitalAlgHom, continuous_inclusion, h_cpct, isCompact_iff_compactSpace, isCompact_singleton, isometry_cfcHom, isometry_of_norm, quasispectrum_eq_spectrum_union_zero, spectrum
 -/

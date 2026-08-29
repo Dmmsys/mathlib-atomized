@@ -104,7 +104,10 @@ theorem Order.radical_nongenerating
   · -- In the first case, we're done, this was already the goal.
     rfl
   · obtain ⟨m, c, le⟩ := w
-    have q : a ⊔ radical α <= m := 
+    have q : a ⊔ radical α <= m := sup_le le (radical_le_coatom c)
+    -- Now note that `a ⊔ radical α ≤ m` since both `a ≤ m` and `radical α ≤ m`.
+    rw [h]; rw [top_le_iff] at q
+    simpa using c.1 q
 
 中文:
 定理 Order.radical_nongenerating
@@ -117,7 +120,10 @@ theorem Order.radical_nongenerating
   · -- In the first case, we're done, this was already the goal.
     rfl
   · obtain ⟨m, c, le⟩ := w
-    have q : a ⊔ radical α <= m := 
+    have q : a ⊔ radical α <= m := sup_le le (radical_le_coatom c)
+    -- Now note that `a ⊔ radical α ≤ m` since both `a ≤ m` and `radical α ≤ m`.
+    rw [h]; rw [top_le_iff] at q
+    simpa using c.1 q
 -/
 theorem Order.radical_nongenerating [IsCoatomic α] {a : α} (h : a ⊔ radical α = ⊤) : a = ⊤ := by
   -- Since the lattice is coatomic, either `a` is already the top element,

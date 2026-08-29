@@ -560,7 +560,11 @@ theorem isIso_toColon_hom_left_app_iff
       (zero_of_epi_comp ((toColon Φ Ψ).hom.left.app X) (by simp))
   · obtain ⟨inv, hinv⟩ :=
       KernelFork.IsLimit.lift' (Φ.isLimitKernelForkObj X) ((colon Φ Ψ).ι.app X) (by
-        rw [colon_ι_app_π_app]; rw [h.eq_z
+        rw [colon_ι_app_π_app]; rw [h.eq_zero_of_tgt ((colonπ Φ Ψ).app X)]; rw [zero_comp])
+    dsimp at hinv
+    refine ⟨inv, ?_, ?_⟩
+    · simp [← cancel_mono (Φ.ι.app X), hinv]
+    · simp [← cancel_mono ((Φ.colon Ψ).ι.app X), hinv]
 
 中文:
 定理 isIso_toColon_hom_left_app_iff
@@ -571,7 +575,11 @@ theorem isIso_toColon_hom_left_app_iff
       (zero_of_epi_comp ((toColon Φ Ψ).hom.left.app X) (by simp))
   · obtain ⟨inv, hinv⟩ :=
       KernelFork.IsLimit.lift' (Φ.isLimitKernelForkObj X) ((colon Φ Ψ).ι.app X) (by
-        rw [colon_ι_app_π_app]; rw [h.eq_z
+        rw [colon_ι_app_π_app]; rw [h.eq_zero_of_tgt ((colonπ Φ Ψ).app X)]; rw [zero_comp])
+    dsimp at hinv
+    refine ⟨inv, ?_, ?_⟩
+    · simp [← cancel_mono (Φ.ι.app X), hinv]
+    · simp [← cancel_mono ((Φ.colon Ψ).ι.app X), hinv]
 
 Depends on / 依赖: IsLimit, IsZero, IsZero.of_epi_eq_zero, KernelFork, KernelFork.IsLimit.lift, cancel_mono, eq_zero_of_tgt, h.eq_zero_of_tgt, hom.left.app, isLimitKernelForkObj, of_epi_eq_zero, toColon, zero_comp, zero_of_epi_comp
 -/

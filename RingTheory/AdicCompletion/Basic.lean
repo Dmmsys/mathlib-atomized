@@ -202,7 +202,14 @@ theorem IsHausdorff.of_map
       (U := (I ^ n • ⊤ : Submodule R M)) (V := (J ^ n • ⊤ : Submodule S M))
   · rw [← AddSubgroup.toAddSubmonoid_le]
     simp only [Submodule.smul_toAddSubmonoid, Submodule.top_toAddSubmonoid]
-    rw [AddS
+    rw [AddSubmonoid.smul_le]
+    intro r hr m hm
+    rw [← algebraMap_smul S r m]
+    apply AddSubmonoid.smul_mem_smul ?_ hm
+    have := Ideal.mem_map_of_mem (algebraMap R S) hr
+    simp only [Ideal.map_pow] at this
+    exact Ideal.pow_right_mono hIJ n this
+  · exact h n
 
 中文:
 定理 是豪斯多夫.of_map
@@ -213,7 +220,14 @@ theorem IsHausdorff.of_map
       (U := (I ^ n • ⊤ : Submodule R M)) (V := (J ^ n • ⊤ : Submodule S M))
   · rw [← AddSubgroup.toAddSubmonoid_le]
     simp only [Submodule.smul_toAddSubmonoid, Submodule.top_toAddSubmonoid]
-    rw [AddS
+    rw [AddSubmonoid.smul_le]
+    intro r hr m hm
+    rw [← algebraMap_smul S r m]
+    apply AddSubmonoid.smul_mem_smul ?_ hm
+    have := Ideal.mem_map_of_mem (algebraMap R S) hr
+    simp only [Ideal.map_pow] at this
+    exact Ideal.pow_right_mono hIJ n this
+  · exact h n
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.toAddSubmonoid_le, AddSubmonoid, AddSubmonoid.smul_le, AddSubmonoid.smul_mem_smul, Ideal.map_pow, Ideal.mem_map_of_mem, Ideal.pow_right_mono, IsHausdorff, IsHausdorff.haus, SModEq, SModEq.of_toAddSubgroup_le, Submodule, Submodule.smul_toAddSubmonoid, Submodule.top_toAddSubmonoid, algebraMap, algebraMap_smul, map_pow, mem_map_of_mem, of_toAddSubgroup_le
 -/
@@ -614,7 +628,8 @@ instance :
 (Quotient.mk_eq_zero _).2 (mem_iInf _).2 fun n => by
       have := comap_map_mkQ (⨅ n : Nat, I ^ n • ⊤ : Submodule R M) (I ^ n • ⊤)
       simp only [sup_of_le_right (iInf_le (fun n => (I ^ n • ⊤ : Submodule R M)) n)] at this
-      rw [← this]; rw [map_sm
+      rw [← this]; rw [map_smul'']; rw [Submodule.mem_comap]; rw [Submodule.map_top]; rw [range_mkQ]; rw [← SModEq.zero]
+      exact hx n⟩
 
 中文:
 实例 :
@@ -623,7 +638,8 @@ instance :
 (Quotient.mk_eq_zero _).2 (mem_iInf _).2 fun n => by
       have := comap_map_mkQ (⨅ n : Nat, I ^ n • ⊤ : Submodule R M) (I ^ n • ⊤)
       simp only [sup_of_le_right (iInf_le (fun n => (I ^ n • ⊤ : Submodule R M)) n)] at this
-      rw [← this]; rw [map_sm
+      rw [← this]; rw [map_smul'']; rw [Submodule.mem_comap]; rw [Submodule.map_top]; rw [range_mkQ]; rw [← SModEq.zero]
+      exact hx n⟩
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.mk_eq_zero, SModEq, SModEq.zero, Submodule, Submodule.map_top, Submodule.mem_comap, comap_map_mkQ, iInf_le, inductionOn, map_smul, map_top, mem_comap, mem_iInf, mk_eq_zero, range_mkQ, sup_of_le_right
 -/
@@ -804,7 +820,7 @@ definition submodule
   zero_mem' hmn := by rw [Pi.zero_apply, Pi.zero_apply, map_zero]
   add_mem' hf hg m n hmn := by
     rw [Pi.add_apply]; rw [Pi.add_apply]; rw [map_add]; rw [hf hmn]; rw [hg hmn]
-  smul_mem' c f hf m n hmn := by rw 
+  smul_mem' c f hf m n hmn := by rw [Pi.smul_apply, Pi.smul_apply, map_smul, hf hmn]
 
 中文:
 定义 submodule
@@ -813,7 +829,7 @@ definition submodule
   zero_mem' hmn := by rw [Pi.zero_apply, Pi.zero_apply, map_zero]
   add_mem' hf hg m n hmn := by
     rw [Pi.add_apply]; rw [Pi.add_apply]; rw [map_add]; rw [hf hmn]; rw [hg hmn]
-  smul_mem' c f hf m n hmn := by rw 
+  smul_mem' c f hf m n hmn := by rw [Pi.smul_apply, Pi.smul_apply, map_smul, hf hmn]
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.transitionMap, transitionMap
 -/
@@ -1492,7 +1508,9 @@ instance :
     · simp only [val_smul_apply, val_zero]
       induction x.val n using Quotient.inductionOn' with | _ a
 exact SModEq.zero.2 smul_mem_smul hr mem_top
-    · simp only [val_add_apply, hx, va
+    · simp only [val_add_apply, hx, val_zero_apply, hy, add_zero]
+
+@[simp]
 
 中文:
 实例 :
@@ -1502,7 +1520,9 @@ exact SModEq.zero.2 smul_mem_smul hr mem_top
     · simp only [val_smul_apply, val_zero]
       induction x.val n using Quotient.inductionOn' with | _ a
 exact SModEq.zero.2 smul_mem_smul hr mem_top
-    · simp only [val_add_apply, hx, va
+    · simp only [val_add_apply, hx, val_zero_apply, hy, add_zero]
+
+@[simp]
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, SModEq, SModEq.zero, add_zero, inductionOn, mem_top, smul_induction_on, smul_mem_smul, val_add_apply, val_smul_apply, val_zero, val_zero_apply, x.val
 -/
@@ -2123,7 +2143,9 @@ theorem mk_surjective
   choose a ha using fun n => Submodule.Quotient.mk_surjective _ (x.val n)
   refine ⟨⟨a, ?_⟩, ?_⟩
   · intro m n hmn
-    rw [SModEq.def]; rw [ha m]; rw [← mkQ_apply]; rw [← factor_mk (Submodule.smul_mono_left (Ideal.pow_le_pow_right hmn)) (a n)]; rw [mkQ_apply]; rw [ha n]; rw [x.property 
+    rw [SModEq.def]; rw [ha m]; rw [← mkQ_apply]; rw [← factor_mk (Submodule.smul_mono_left (Ideal.pow_le_pow_right hmn)) (a n)]; rw [mkQ_apply]; rw [ha n]; rw [x.property hmn]
+  · ext n
+    simp [ha n]
 
 中文:
 定理 mk_surjective
@@ -2133,7 +2155,9 @@ theorem mk_surjective
   choose a ha using fun n => Submodule.Quotient.mk_surjective _ (x.val n)
   refine ⟨⟨a, ?_⟩, ?_⟩
   · intro m n hmn
-    rw [SModEq.def]; rw [ha m]; rw [← mkQ_apply]; rw [← factor_mk (Submodule.smul_mono_left (Ideal.pow_le_pow_right hmn)) (a n)]; rw [mkQ_apply]; rw [ha n]; rw [x.property 
+    rw [SModEq.def]; rw [ha m]; rw [← mkQ_apply]; rw [← factor_mk (Submodule.smul_mono_left (Ideal.pow_le_pow_right hmn)) (a n)]; rw [mkQ_apply]; rw [ha n]; rw [x.property hmn]
+  · ext n
+    simp [ha n]
 
 Depends on / 依赖: Ideal.pow_le_pow_right, Quotient, SModEq, SModEq.def, Submodule, Submodule.Quotient.mk_surjective, Submodule.smul_mono_left, factor_mk, mkQ_apply, mk_surjective, pow_le_pow_right, property, smul_mono_left, x.property, x.val
 -/
@@ -2277,7 +2301,8 @@ theorem of_injective_iff
     ext x
     simp only [LinearMap.mem_ker, Submodule.mem_bot]
     refine ⟨fun hx => h.haus x fun n => ?_, fun hx => by simp [hx]⟩
-    rw [Subtype.ext_
+    rw [Subtype.ext_iff] at hx
+    simpa [SModEq.zero] using congrFun hx n
 
 中文:
 定理 of_injective_iff
@@ -2292,7 +2317,8 @@ theorem of_injective_iff
     ext x
     simp only [LinearMap.mem_ker, Submodule.mem_bot]
     refine ⟨fun hx => h.haus x fun n => ?_, fun hx => by simp [hx]⟩
-    rw [Subtype.ext_
+    rw [Subtype.ext_iff] at hx
+    simpa [SModEq.zero] using congrFun hx n
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot, LinearMap.mem_ker, SModEq, SModEq.zero, Submodule, Submodule.mem_bot, Subtype, Subtype.ext_iff, ext_iff, h.haus, ker_eq_bot, mem_bot, mem_ker
 -/
@@ -2371,7 +2397,12 @@ theorem of_surjective_iff
     simp only [SModEq]
     rw [← mkQ_apply _ x]; rw [← eval_of]; rw [hx]
     simp [u]
-  · intro
+  · intro h u
+    choose x hx using (fun n => Submodule.Quotient.mk_surjective (I ^ n • ⊤ : Submodule R M) (u.1 n))
+    obtain ⟨a, ha⟩ := h.prec (f := x) (fun hmn => by rw [SModEq, hx, ← u.2 hmn, ← hx]; simp)
+    use a
+    ext n
+    simpa [SModEq, ← eval_of, ha, ← hx] using (ha n).symm
 
 中文:
 定理 of_surjective_iff
@@ -2385,7 +2416,12 @@ theorem of_surjective_iff
     simp only [SModEq]
     rw [← mkQ_apply _ x]; rw [← eval_of]; rw [hx]
     simp [u]
-  · intro
+  · intro h u
+    choose x hx using (fun n => Submodule.Quotient.mk_surjective (I ^ n • ⊤ : Submodule R M) (u.1 n))
+    obtain ⟨a, ha⟩ := h.prec (f := x) (fun hmn => by rw [SModEq, hx, ← u.2 hmn, ← hx]; simp)
+    use a
+    ext n
+    simpa [SModEq, ← eval_of, ha, ← hx] using (ha n).symm
 
 Depends on / 依赖: AdicCompletion, Quotient, SModEq, Submodule, Submodule.Quotient.mk, Submodule.Quotient.mk_surjective, eval_of, h.prec, mkQ_apply, mk_surjective
 -/
@@ -3132,7 +3168,29 @@ theorem le_jacobson_bot
   let f : Nat -> R := fun n => ∑ i in range n, (x * y) ^ i
   have hf : forall m n, m <= n -> f m ≡ f n [SMOD I ^ m • (⊤ : Submodule R R)] := by
     intro m n h
-    simp only [f, smul_eq_mul, Ideal.mul_t
+    simp only [f, smul_eq_mul, Ideal.mul_top, SModEq.sub_mem]
+    rw [← add_tsub_cancel_of_le h]; rw [Finset.sum_range_add]; rw [← sub_sub]; rw [sub_self]; rw [zero_sub]; rw [@neg_mem_iff]
+    apply Submodule.sum_mem
+    intro n _
+    rw [mul_pow]; rw [pow_add]; rw [mul_assoc]
+    exact Ideal.mul_mem_right _ (I ^ m) (Ideal.pow_mem_pow hx m)
+  obtain ⟨L, hL⟩ := IsPrecomplete.prec toIsPrecomplete @hf
+  rw [isUnit_iff_exists_inv]
+  use L
+  rw [← sub_eq_zero]; rw [neg_mul]
+  apply IsHausdorff.haus (toIsHausdorff : IsHausdorff I R)
+  intro n
+  specialize hL n
+  rw [SModEq.sub_mem]; rw [smul_eq_mul]; rw [Ideal.mul_top] at hL ⊢
+  rw [sub_zero]
+  suffices (1 - x * y) * f n - 1 in I ^ n by
+    convert! Ideal.sub_mem _ this (Ideal.mul_mem_left _ (1 + -(x * y)) hL) using 1
+    ring
+  cases n
+  · simp only [Ideal.one_eq_top, pow_zero, mem_top]
+  · rw [← neg_sub _ (1 : R), neg_mul, mul_geom_sum, neg_sub, sub_sub, add_comm (_ ^ _), ← sub_sub,
+      sub_self, zero_sub, @neg_mem_iff, mul_pow]
+    exact Ideal.mul_mem_right _ (I ^ _) (Ideal.pow_mem_pow hx _)
 
 中文:
 定理 le_jacobson_bot
@@ -3146,7 +3204,29 @@ theorem le_jacobson_bot
   let f : Nat -> R := fun n => ∑ i in range n, (x * y) ^ i
   have hf : forall m n, m <= n -> f m ≡ f n [SMOD I ^ m • (⊤ : Submodule R R)] := by
     intro m n h
-    simp only [f, smul_eq_mul, Ideal.mul_t
+    simp only [f, smul_eq_mul, Ideal.mul_top, SModEq.sub_mem]
+    rw [← add_tsub_cancel_of_le h]; rw [Finset.sum_range_add]; rw [← sub_sub]; rw [sub_self]; rw [zero_sub]; rw [@neg_mem_iff]
+    apply Submodule.sum_mem
+    intro n _
+    rw [mul_pow]; rw [pow_add]; rw [mul_assoc]
+    exact Ideal.mul_mem_right _ (I ^ m) (Ideal.pow_mem_pow hx m)
+  obtain ⟨L, hL⟩ := IsPrecomplete.prec toIsPrecomplete @hf
+  rw [isUnit_iff_exists_inv]
+  use L
+  rw [← sub_eq_zero]; rw [neg_mul]
+  apply IsHausdorff.haus (toIsHausdorff : IsHausdorff I R)
+  intro n
+  specialize hL n
+  rw [SModEq.sub_mem]; rw [smul_eq_mul]; rw [Ideal.mul_top] at hL ⊢
+  rw [sub_zero]
+  suffices (1 - x * y) * f n - 1 in I ^ n by
+    convert! Ideal.sub_mem _ this (Ideal.mul_mem_left _ (1 + -(x * y)) hL) using 1
+    ring
+  cases n
+  · simp only [Ideal.one_eq_top, pow_zero, mem_top]
+  · rw [← neg_sub _ (1 : R), neg_mul, mul_geom_sum, neg_sub, sub_sub, add_comm (_ ^ _), ← sub_sub,
+      sub_self, zero_sub, @neg_mem_iff, mul_pow]
+    exact Ideal.mul_mem_right _ (I ^ _) (Ideal.pow_mem_pow hx _)
 
 Depends on / 依赖: Finset, Finset.sum_range_add, Ideal.mem_jacobson_bot, Ideal.mul_top, Ideal.neg_mem_iff, SModEq, SModEq.sub_mem, Submodule, Submodule.sum_mem, add_comm, add_tsub_cancel_of_le, mem_jacobson_bot, mul_assoc, mul_pow, mul_top, neg_mem_iff, pow_add, smul_eq_mul, sub_mem, sub_self
 -/

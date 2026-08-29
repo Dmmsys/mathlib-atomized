@@ -642,7 +642,26 @@ lemma inner_mul_inner_swap_le
   · have h₁ : forall (a : A),
         (0 : A) <= ‖x‖ ^ 2 • (a * star a) - ‖x‖ ^ 2 • (a * ⟪y, x⟫)
                   - ‖x‖ ^ 2 • (⟪x, y⟫ * star a) + ‖x‖ ^ 2 • (‖x‖ ^ 2 • ⟪y, y⟫) := fun a => by
-      calc (0 : A) <= ⟪a •
+      calc (0 : A) <= ⟪a • x - ‖x‖ ^ 2 • y, a • x - ‖x‖ ^ 2 • y⟫_A := by
+                      exact inner_self_nonneg
+            _ = a * ⟪x, x⟫ * star a - ‖x‖ ^ 2 • (a * ⟪y, x⟫)
+                  - ‖x‖ ^ 2 • (⟪x, y⟫ * star a) + ‖x‖ ^ 2 • (‖x‖ ^ 2 • ⟪y, y⟫) := by
+                      simp only [inner_sub_right, inner_op_smul_right, inner_sub_left,
+                        inner_op_smul_left, inner_smul_left_real, mul_sub, mul_smul_comm,
+                        inner_smul_right_real, smul_sub, mul_assoc]
+                      abel
+            _ <= ‖x‖ ^ 2 • (a * star a) - ‖x‖ ^ 2 • (a * ⟪y, x⟫)
+                  - ‖x‖ ^ 2 • (⟪x, y⟫ * star a) + ‖x‖ ^ 2 • (‖x‖ ^ 2 • ⟪y, y⟫) := by
+                      gcongr
+                      calc _ <= ‖⟪x, x⟫_A‖ • (a * star a) :=
+                          CStarAlgebra.star_right_conjugate_le_norm_smul
+                        _ = (√‖⟪x, x⟫_A‖) ^ 2 • (a * star a) := by
+                          rw [Real.sq_sqrt]
+                          positivity
+                        _ = ‖x‖ ^ 2 • (a * star a) := by rw [← norm_eq_sqrt_norm_inner_self]
+    specialize h₁ ⟪x, y⟫
+    simp only [star_inner, sub_self, zero_sub, le_neg_add_iff_add_le, add_zero] at h₁
+    rwa [smul_le_smul_iff_of_pos_left (pow_pos (CStarModule.norm_pos A h) _)] at h₁
 
 中文:
 引理 inner_mul_inner_swap_le
@@ -654,7 +673,26 @@ lemma inner_mul_inner_swap_le
   · have h₁ : forall (a : A),
         (0 : A) <= ‖x‖ ^ 2 • (a * star a) - ‖x‖ ^ 2 • (a * ⟪y, x⟫)
                   - ‖x‖ ^ 2 • (⟪x, y⟫ * star a) + ‖x‖ ^ 2 • (‖x‖ ^ 2 • ⟪y, y⟫) := fun a => by
-      calc (0 : A) <= ⟪a •
+      calc (0 : A) <= ⟪a • x - ‖x‖ ^ 2 • y, a • x - ‖x‖ ^ 2 • y⟫_A := by
+                      exact inner_self_nonneg
+            _ = a * ⟪x, x⟫ * star a - ‖x‖ ^ 2 • (a * ⟪y, x⟫)
+                  - ‖x‖ ^ 2 • (⟪x, y⟫ * star a) + ‖x‖ ^ 2 • (‖x‖ ^ 2 • ⟪y, y⟫) := by
+                      simp only [inner_sub_right, inner_op_smul_right, inner_sub_left,
+                        inner_op_smul_left, inner_smul_left_real, mul_sub, mul_smul_comm,
+                        inner_smul_right_real, smul_sub, mul_assoc]
+                      abel
+            _ <= ‖x‖ ^ 2 • (a * star a) - ‖x‖ ^ 2 • (a * ⟪y, x⟫)
+                  - ‖x‖ ^ 2 • (⟪x, y⟫ * star a) + ‖x‖ ^ 2 • (‖x‖ ^ 2 • ⟪y, y⟫) := by
+                      gcongr
+                      calc _ <= ‖⟪x, x⟫_A‖ • (a * star a) :=
+                          CStarAlgebra.star_right_conjugate_le_norm_smul
+                        _ = (√‖⟪x, x⟫_A‖) ^ 2 • (a * star a) := by
+                          rw [Real.sq_sqrt]
+                          positivity
+                        _ = ‖x‖ ^ 2 • (a * star a) := by rw [← norm_eq_sqrt_norm_inner_self]
+    specialize h₁ ⟪x, y⟫
+    simp only [star_inner, sub_self, zero_sub, le_neg_add_iff_add_le, add_zero] at h₁
+    rwa [smul_le_smul_iff_of_pos_left (pow_pos (CStarModule.norm_pos A h) _)] at h₁
 
 Depends on / 依赖: CStarModule, CStarModule.norm_zero, eq_or_ne, inner_op_smul_right, inner_self_nonneg, inner_sub_right, norm_zero
 -/
@@ -699,7 +737,16 @@ lemma norm_inner_le
                 rw [← star_inner x]; rw [CStarRing.norm_self_mul_star]; rw [pow_two]
     _ <= ‖‖x‖ ^ 2 • ⟪y, y⟫‖ := by
                 refine CStarAlgebra.norm_le_norm_of_nonneg_of_le ?_ inner_mul_inner_swap_le
-                rw [← star_inner
+                rw [← star_inner x]
+                exact mul_star_self_nonneg ⟪x, y⟫_A
+    _ = ‖x‖ ^ 2 * ‖⟪y, y⟫‖ := by simp [norm_smul]
+    _ = ‖x‖ ^ 2 * ‖y‖ ^ 2 := by
+                simp only [norm_eq_sqrt_norm_inner_self (A := A), norm_nonneg, Real.sq_sqrt]
+    _ = (‖x‖ * ‖y‖) ^ 2 := by simp only [mul_pow]
+  refine (pow_le_pow_iff_left₀ (norm_nonneg ⟪x, y⟫_A) ?_ (by simp)).mp this
+  exact mul_nonneg (CStarModule.norm_nonneg A) (CStarModule.norm_nonneg A)
+
+include A in
 
 中文:
 引理 norm_inner_le
@@ -710,7 +757,16 @@ lemma norm_inner_le
                 rw [← star_inner x]; rw [CStarRing.norm_self_mul_star]; rw [pow_two]
     _ <= ‖‖x‖ ^ 2 • ⟪y, y⟫‖ := by
                 refine CStarAlgebra.norm_le_norm_of_nonneg_of_le ?_ inner_mul_inner_swap_le
-                rw [← star_inner
+                rw [← star_inner x]
+                exact mul_star_self_nonneg ⟪x, y⟫_A
+    _ = ‖x‖ ^ 2 * ‖⟪y, y⟫‖ := by simp [norm_smul]
+    _ = ‖x‖ ^ 2 * ‖y‖ ^ 2 := by
+                simp only [norm_eq_sqrt_norm_inner_self (A := A), norm_nonneg, Real.sq_sqrt]
+    _ = (‖x‖ * ‖y‖) ^ 2 := by simp only [mul_pow]
+  refine (pow_le_pow_iff_left₀ (norm_nonneg ⟪x, y⟫_A) ?_ (by simp)).mp this
+  exact mul_nonneg (CStarModule.norm_nonneg A) (CStarModule.norm_nonneg A)
+
+include A in
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.norm_le_norm_of_nonneg_of_le, CStarRing, CStarRing.norm_self_mul_star, Real.sq_sqrt, inner_mul_inner_swap_le, mul_pow, mul_star_self_nonneg, norm_eq_sqrt_norm_inner_self, norm_le_norm_of_nonneg_of_le, norm_nonneg, norm_self_mul_star, norm_smul, pow_le_po, pow_two, sq_sqrt, star_inner
 -/
@@ -743,7 +799,15 @@ lemma norm_triangle
           simp only [norm_eq_sqrt_norm_inner_self (A := A), inner_add_right, inner_add_left,
             ← add_assoc, norm_nonneg, Real.sq_sqrt]
           exact norm_add₃_le
-      _ <= ‖⟪x,
+      _ <= ‖⟪x, x⟫‖ + ‖⟪y, x⟫‖ + ‖⟪x, y⟫‖ + ‖⟪y, y⟫‖ := by gcongr; exact norm_add_le _ _
+      _ <= ‖⟪x, x⟫‖ + ‖y‖ * ‖x‖ + ‖x‖ * ‖y‖ + ‖⟪y, y⟫‖ := by gcongr <;> exact norm_inner_le E
+      _ = ‖x‖ ^ 2 + ‖y‖ * ‖x‖ + ‖x‖ * ‖y‖ + ‖y‖ ^ 2 := by
+          simp [norm_eq_sqrt_norm_inner_self (A := A)]
+      _ = (‖x‖ + ‖y‖) ^ 2 := by simp only [add_pow_two, add_left_inj]; ring
+  refine (pow_le_pow_iff_left₀ (CStarModule.norm_nonneg A) ?_ (by simp)).mp h
+  exact add_nonneg (CStarModule.norm_nonneg A) (CStarModule.norm_nonneg A)
+
+include A in
 
 中文:
 引理 norm_triangle
@@ -755,7 +819,15 @@ lemma norm_triangle
           simp only [norm_eq_sqrt_norm_inner_self (A := A), inner_add_right, inner_add_left,
             ← add_assoc, norm_nonneg, Real.sq_sqrt]
           exact norm_add₃_le
-      _ <= ‖⟪x,
+      _ <= ‖⟪x, x⟫‖ + ‖⟪y, x⟫‖ + ‖⟪x, y⟫‖ + ‖⟪y, y⟫‖ := by gcongr; exact norm_add_le _ _
+      _ <= ‖⟪x, x⟫‖ + ‖y‖ * ‖x‖ + ‖x‖ * ‖y‖ + ‖⟪y, y⟫‖ := by gcongr <;> exact norm_inner_le E
+      _ = ‖x‖ ^ 2 + ‖y‖ * ‖x‖ + ‖x‖ * ‖y‖ + ‖y‖ ^ 2 := by
+          simp [norm_eq_sqrt_norm_inner_self (A := A)]
+      _ = (‖x‖ + ‖y‖) ^ 2 := by simp only [add_pow_two, add_left_inj]; ring
+  refine (pow_le_pow_iff_left₀ (CStarModule.norm_nonneg A) ?_ (by simp)).mp h
+  exact add_nonneg (CStarModule.norm_nonneg A) (CStarModule.norm_nonneg A)
+
+include A in
 -/
 protected lemma norm_triangle (x y : E) : ‖x + y‖ <= ‖x‖ + ‖y‖ := by
   have h : ‖x + y‖ ^ 2 <= (‖x‖ + ‖y‖) ^ 2 := by
@@ -830,7 +902,12 @@ lemma norm_eq_csSup
   let instNACG : NormedAddCommGroup E := NormedAddCommGroup.ofCore (normedSpaceCore A)
   let instNS : NormedSpace Complex E := .ofCore (normedSpaceCore A)
 refine Eq.symm IsGreatest.csSup_eq ⟨⟨‖v‖⁻¹ • v, ?_, ?_⟩, ?_⟩
-  · simpa only [norm_smul, norm_inv, norm_norm] using inv_mul_le_one_of_le₀ le_rf
+  · simpa only [norm_smul, norm_inv, norm_norm] using inv_mul_le_one_of_le₀ le_rfl (by positivity)
+  · simp [norm_smul, ← norm_sq_eq, pow_two, ← mul_assoc]
+  · rintro - ⟨w, hw, rfl⟩
+    calc _ <= ‖w‖ * ‖v‖ := norm_inner_le E
+      _ <= 1 * ‖v‖ := by gcongr
+      _ = ‖v‖ := by simp
 
 中文:
 引理 norm_eq_csSup
@@ -839,7 +916,12 @@ refine Eq.symm IsGreatest.csSup_eq ⟨⟨‖v‖⁻¹ • v, ?_, ?_⟩, ?_⟩
   let instNACG : NormedAddCommGroup E := NormedAddCommGroup.ofCore (normedSpaceCore A)
   let instNS : NormedSpace Complex E := .ofCore (normedSpaceCore A)
 refine Eq.symm IsGreatest.csSup_eq ⟨⟨‖v‖⁻¹ • v, ?_, ?_⟩, ?_⟩
-  · simpa only [norm_smul, norm_inv, norm_norm] using inv_mul_le_one_of_le₀ le_rf
+  · simpa only [norm_smul, norm_inv, norm_norm] using inv_mul_le_one_of_le₀ le_rfl (by positivity)
+  · simp [norm_smul, ← norm_sq_eq, pow_two, ← mul_assoc]
+  · rintro - ⟨w, hw, rfl⟩
+    calc _ <= ‖w‖ * ‖v‖ := norm_inner_le E
+      _ <= 1 * ‖v‖ := by gcongr
+      _ = ‖v‖ := by simp
 
 Depends on / 依赖: Eq.symm, IsGreatest, IsGreatest.csSup_eq, NormedAddCommGroup, NormedAddCommGroup.ofCore, NormedSpace, csSup_eq, instNACG, instNS, le_rfl, mul_assoc, norm_inner_le, norm_inv, norm_norm, norm_smul, norm_sq_eq, normedSpaceCore, ofCore, pow_two
 -/

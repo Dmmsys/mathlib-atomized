@@ -1018,7 +1018,9 @@ theorem exp_add_of_commute_of_mem_ball
     congr
     ext
     rw [hxy.add_pow' _]; rw [Finset.smul_sum]
-  refine tsum_congr fun n => 
+  refine tsum_congr fun n => Finset.sum_congr rfl fun kl hkl => ?_
+  rw [← Nat.cast_smul_eq_nsmul 𝕂]; rw [smul_smul]; rw [smul_mul_smul_comm]; rw [← Finset.mem_antidiagonal.mp hkl]; rw [Nat.cast_add_choose]; rw [Finset.mem_antidiagonal.mp hkl]
+  field_simp [n.factorial_ne_zero]
 
 中文:
 定理 exp_add_of_commute_of_mem_ball
@@ -1031,7 +1033,9 @@ theorem exp_add_of_commute_of_mem_ball
     congr
     ext
     rw [hxy.add_pow' _]; rw [Finset.smul_sum]
-  refine tsum_congr fun n => 
+  refine tsum_congr fun n => Finset.sum_congr rfl fun kl hkl => ?_
+  rw [← Nat.cast_smul_eq_nsmul 𝕂]; rw [smul_smul]; rw [smul_mul_smul_comm]; rw [← Finset.mem_antidiagonal.mp hkl]; rw [Nat.cast_add_choose]; rw [Finset.mem_antidiagonal.mp hkl]
+  field_simp [n.factorial_ne_zero]
 
 Depends on / 依赖: Finset, Finset.mem_antidiagonal.mp, Finset.smul_sum, Finset.sum_congr, Nat.cast_add_choose, Nat.cast_smul_eq_nsmul, add_pow, cast_add_choose, cast_smul_eq_nsmul, conv_lhs, exp_eq_tsum, hxy.add_pow, mem_antidiagonal, norm_expSeries_summable_of_mem_ball, smul_mul_smul_comm, smul_smul, smul_sum, sum_congr, tsum_congr, tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
 -/
@@ -1062,7 +1066,12 @@ definition invertibleExpOfMemBall
     have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
       rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
       exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx]; rw [neg_add_cancel]; rw [exp_z
+    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx]; rw [neg_add_cancel]; rw [exp_zero]
+  mul_invOf_self := by
+    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
+      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
+      exact hx
+    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_right <| Commute.refl x) hx hnx]; rw [add_neg_cancel]; rw [exp_zero]
 
 中文:
 定义 invertibleExpOfMemBall
@@ -1072,7 +1081,12 @@ definition invertibleExpOfMemBall
     have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
       rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
       exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx]; rw [neg_add_cancel]; rw [exp_z
+    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx]; rw [neg_add_cancel]; rw [exp_zero]
+  mul_invOf_self := by
+    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
+      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
+      exact hx
+    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_right <| Commute.refl x) hx hnx]; rw [add_neg_cancel]; rw [exp_zero]
 -/
 noncomputable def invertibleExpOfMemBall [CharZero 𝕂] {x : 𝔸}
     (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Invertible (exp x)
@@ -1328,7 +1342,12 @@ theorem expSeries_radius_eq_top
   have {n : Nat} : (Nat.factorial n : 𝕂) != 0 := Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero n)
   apply expSeries_eq_ofScalars 𝕂 𝔸 ▸
     ofScalars_radius_eq_top_of_tendsto 𝔸 _ (Eventually.of_forall fun n => ?_)
-  · simp_rw [← norm_div, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev, mul_div_right_
+  · simp_rw [← norm_div, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev, mul_div_right_comm,
+      inv_div_inv, norm_mul, div_self this, norm_one, one_mul]
+    apply norm_zero (E := 𝕂) ▸ Filter.Tendsto.norm
+    apply (Filter.tendsto_add_atTop_iff_nat (f := fun n => (n : 𝕂)⁻¹) 1).mpr
+    exact tendsto_inv_atTop_nhds_zero_nat
+  · simp [this]
 
 中文:
 定理 expSeries_radius_eq_top
@@ -1337,7 +1356,12 @@ theorem expSeries_radius_eq_top
   have {n : Nat} : (Nat.factorial n : 𝕂) != 0 := Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero n)
   apply expSeries_eq_ofScalars 𝕂 𝔸 ▸
     ofScalars_radius_eq_top_of_tendsto 𝔸 _ (Eventually.of_forall fun n => ?_)
-  · simp_rw [← norm_div, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev, mul_div_right_
+  · simp_rw [← norm_div, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev, mul_div_right_comm,
+      inv_div_inv, norm_mul, div_self this, norm_one, one_mul]
+    apply norm_zero (E := 𝕂) ▸ Filter.Tendsto.norm
+    apply (Filter.tendsto_add_atTop_iff_nat (f := fun n => (n : 𝕂)⁻¹) 1).mpr
+    exact tendsto_inv_atTop_nhds_zero_nat
+  · simp [this]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Filter, Filter.Tendsto.norm, Filter.tendsto_add_atTop_iff_nat, Nat.cast_mul, Nat.cast_ne_zero.mpr, Nat.factorial, Nat.factorial_ne_zero, Nat.factorial_succ, Tendsto, cast_mul, cast_ne_zero, div_self, expSeries_eq_ofScalars, factorial, factorial_ne_zero, factorial_succ, inv_div_inv, mul_div_right_comm
 -/
@@ -1822,7 +1846,8 @@ theorem exp_sum_of_commute
   | empty => simp
   | insert a s ha ih =>
     rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha]; rw [Finset.sum_insert ha]; rw [exp_add_of_commute]; rw [ih (h.mono <| Finset.subset_insert _ _)]
-    refine Commute.sum_right _ _ _ fun i hi 
+    refine Commute.sum_right _ _ _ fun i hi => ?_
+    exact h.of_refl (Finset.mem_insert_self _ _) (Finset.mem_insert_of_mem hi)
 
 中文:
 定理 exp_sum_of_commute
@@ -1833,7 +1858,8 @@ theorem exp_sum_of_commute
   | empty => simp
   | insert a s ha ih =>
     rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha]; rw [Finset.sum_insert ha]; rw [exp_add_of_commute]; rw [ih (h.mono <| Finset.subset_insert _ _)]
-    refine Commute.sum_right _ _ _ fun i hi 
+    refine Commute.sum_right _ _ _ fun i hi => ?_
+    exact h.of_refl (Finset.mem_insert_self _ _) (Finset.mem_insert_of_mem hi)
 
 Depends on / 依赖: Commute, Commute.sum_right, Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.noncommProd_insert_of_notMem, Finset.subset_insert, Finset.sum_insert, classical, exp_add_of_commute, h.mono, h.of_refl, induction_on, insert, mem_insert_of_mem, mem_insert_self, noncommProd_insert_of_notMem, of_refl, subset_insert
 -/

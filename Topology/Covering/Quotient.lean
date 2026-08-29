@@ -86,7 +86,7 @@ lemma IsAddQuotientCoveringMap.toMultiplicative
   apply_eq_iff_mem_orbit {e₁ e₂} := by simp [hf.apply_eq_iff_mem_orbit]
   disjoint e := by
     obtain ⟨U, hU, hU'⟩ := hf.disjoint e
-    exact ⟨U, hU, fun g => by simpa using hU' (Mul
+    exact ⟨U, hU, fun g => by simpa using hU' (Multiplicative.ofAdd.symm g)⟩
 
 中文:
 引理 是加法QuotientCovering映射.toMultiplicative
@@ -96,7 +96,7 @@ lemma IsAddQuotientCoveringMap.toMultiplicative
   apply_eq_iff_mem_orbit {e₁ e₂} := by simp [hf.apply_eq_iff_mem_orbit]
   disjoint e := by
     obtain ⟨U, hU, hU'⟩ := hf.disjoint e
-    exact ⟨U, hU, fun g => by simpa using hU' (Mul
+    exact ⟨U, hU, fun g => by simpa using hU' (Multiplicative.ofAdd.symm g)⟩
 
 Depends on / 依赖: hf.toIsQuotientMap, toIsQuotientMap
 -/
@@ -121,7 +121,7 @@ lemma IsQuotientCoveringMap.toAdditive
   apply_eq_iff_mem_orbit {e₁ e₂} := by simp [hf.apply_eq_iff_mem_orbit]
   disjoint e := by
     obtain ⟨U, hU, hU'⟩ := hf.disjoint e
-    exact ⟨U, hU, fun g => by simpa using hU' (Additive.
+    exact ⟨U, hU, fun g => by simpa using hU' (Additive.ofMul.symm g)⟩
 
 中文:
 引理 是QuotientCovering映射.toAdditive
@@ -131,7 +131,7 @@ lemma IsQuotientCoveringMap.toAdditive
   apply_eq_iff_mem_orbit {e₁ e₂} := by simp [hf.apply_eq_iff_mem_orbit]
   disjoint e := by
     obtain ⟨U, hU, hU'⟩ := hf.disjoint e
-    exact ⟨U, hU, fun g => by simpa using hU' (Additive.
+    exact ⟨U, hU, fun g => by simpa using hU' (Additive.ofMul.symm g)⟩
 
 Depends on / 依赖: hf.toIsQuotientMap, toIsQuotientMap
 -/
@@ -550,7 +550,28 @@ definition trivializationOfSMulDisjoint
     ext e; refine ⟨fun ⟨e', heU, he⟩ => ?_, ?_⟩
     · obtain ⟨g, rfl⟩ := hfG.mp he; exact ⟨_, ⟨g, rfl⟩, heU⟩
     · intro ⟨_, ⟨g, rfl⟩, hg⟩; exact ⟨_, hg, pGE g e⟩
-  have : None
+  have : Nonempty (X -> E) := ⟨Function.surjInv hf.surjective⟩
+  refine IsOpen.trivializationDiscrete (fun g => (g • ·) ⁻¹' U) (f '' U)
+    ?_ (fun g W hWU => ⟨fun hoW => (hoW.preimage hf.continuous).inter (open_U.preimage <|
+      continuous_const_smul g), fun isOpen => hf.isOpen_preimage.mp ?_⟩) (fun g e₁ h₁ e₂ h₂ he => ?_)
+    ?_ (fun {g₁ g₂} hne => disjoint_iff_inf_le.mpr fun e ⟨h₁, h₂⟩ => hne <|
+      mul_inv_eq_one.mp (disjoint _ ⟨_, ⟨_, h₂, ?_⟩, h₁⟩)) preim_im.subset
+  · rw [← hf.isOpen_preimage, preim_im]
+    exact isOpen_iUnion fun g => open_U.preimage (continuous_const_smul g)
+  · convert! isOpen_iUnion fun g : G => isOpen.preimage (continuous_const_smul g)
+    ext e; refine ⟨fun hW => ?_, ?_⟩
+    · have ⟨e', he', hfe⟩ := hWU hW
+      obtain ⟨g', rfl⟩ := hfG.mp hfe
+      refine ⟨_, ⟨g⁻¹ * g', rfl⟩, ?_, ?_⟩
+      · apply Set.mem_of_eq_of_mem (pGE _ e) hW
+      · apply Set.mem_of_eq_of_mem _ he'; simp_rw [mul_smul, smul_inv_smul]
+    · rintro ⟨_, ⟨g, rfl⟩, hW, -⟩; apply Set.mem_of_eq_of_mem (pGE _ e).symm hW
+  · rw [← pGE g, ← pGE g e₂] at he
+    have ⟨g', he⟩ := hfG.mp he
+    rw [← smul_left_cancel_iff g]; rw [← he]; rw [disjoint g' ⟨_]; rw [⟨_]; rw [h₂]; rw [he⟩]; rw [h₁⟩]
+    apply one_smul
+  · rintro g x ⟨e, hU, rfl⟩; exact ⟨g⁻¹ • e, by apply (smul_inv_smul g e).symm ▸ hU, pGE _ e⟩
+  · simp_rw [mul_smul, inv_smul_smul]
 
 中文:
 定义 trivializationOfSMulDisjoint
@@ -561,7 +582,28 @@ definition trivializationOfSMulDisjoint
     ext e; refine ⟨fun ⟨e', heU, he⟩ => ?_, ?_⟩
     · obtain ⟨g, rfl⟩ := hfG.mp he; exact ⟨_, ⟨g, rfl⟩, heU⟩
     · intro ⟨_, ⟨g, rfl⟩, hg⟩; exact ⟨_, hg, pGE g e⟩
-  have : None
+  have : Nonempty (X -> E) := ⟨Function.surjInv hf.surjective⟩
+  refine IsOpen.trivializationDiscrete (fun g => (g • ·) ⁻¹' U) (f '' U)
+    ?_ (fun g W hWU => ⟨fun hoW => (hoW.preimage hf.continuous).inter (open_U.preimage <|
+      continuous_const_smul g), fun isOpen => hf.isOpen_preimage.mp ?_⟩) (fun g e₁ h₁ e₂ h₂ he => ?_)
+    ?_ (fun {g₁ g₂} hne => disjoint_iff_inf_le.mpr fun e ⟨h₁, h₂⟩ => hne <|
+      mul_inv_eq_one.mp (disjoint _ ⟨_, ⟨_, h₂, ?_⟩, h₁⟩)) preim_im.subset
+  · rw [← hf.isOpen_preimage, preim_im]
+    exact isOpen_iUnion fun g => open_U.preimage (continuous_const_smul g)
+  · convert! isOpen_iUnion fun g : G => isOpen.preimage (continuous_const_smul g)
+    ext e; refine ⟨fun hW => ?_, ?_⟩
+    · have ⟨e', he', hfe⟩ := hWU hW
+      obtain ⟨g', rfl⟩ := hfG.mp hfe
+      refine ⟨_, ⟨g⁻¹ * g', rfl⟩, ?_, ?_⟩
+      · apply Set.mem_of_eq_of_mem (pGE _ e) hW
+      · apply Set.mem_of_eq_of_mem _ he'; simp_rw [mul_smul, smul_inv_smul]
+    · rintro ⟨_, ⟨g, rfl⟩, hW, -⟩; apply Set.mem_of_eq_of_mem (pGE _ e).symm hW
+  · rw [← pGE g, ← pGE g e₂] at he
+    have ⟨g', he⟩ := hfG.mp he
+    rw [← smul_left_cancel_iff g]; rw [← he]; rw [disjoint g' ⟨_]; rw [⟨_]; rw [h₂]; rw [he⟩]; rw [h₁⟩]
+    apply one_smul
+  · rintro g x ⟨e, hU, rfl⟩; exact ⟨g⁻¹ • e, by apply (smul_inv_smul g e).symm ▸ hU, pGE _ e⟩
+  · simp_rw [mul_smul, inv_smul_smul]
 
 Depends on / 依赖: Function, Function.surjInv, IsOpen, IsOpen.trivializationDiscrete, Nonempty, continuous, continuous_, hf.continuous, hf.surjective, hfG.mp, hfG.mpr, hoW.preimage, open_U, open_U.preimage, preim_im, preimage, surjInv, surjective, trivializationDiscrete
 -/
@@ -606,7 +648,11 @@ lemma isCoveringMapOn_of_smul_disjoint
   suffices forall x in f '' {e | MulAction.stabilizer G e = ⊥}, exists t : Trivialization G f, x in t.baseSet by
     choose t ht using this; exact IsCoveringMapOn.mk _ _ _ _ fun x => ht x x.2
   rintro x ⟨e, he, rfl⟩
-  have ⟨U, he
+  have ⟨U, heU, hU⟩ := disjoint e
+  refine ⟨hf.trivializationOfSMulDisjoint hfG (interior U) isOpen_interior
+    fun g hg => ?_, e, mem_interior_iff_mem_nhds.mpr heU, rfl⟩
+  rw [← Subgroup.mem_bot]; rw [← he]
+  exact hU _ (hg.mono (by grw [interior_subset]))
 
 中文:
 引理 isCoveringMapOn_of_smul_disjoint
@@ -615,7 +661,11 @@ lemma isCoveringMapOn_of_smul_disjoint
   suffices forall x in f '' {e | MulAction.stabilizer G e = ⊥}, exists t : Trivialization G f, x in t.baseSet by
     choose t ht using this; exact IsCoveringMapOn.mk _ _ _ _ fun x => ht x x.2
   rintro x ⟨e, he, rfl⟩
-  have ⟨U, he
+  have ⟨U, heU, hU⟩ := disjoint e
+  refine ⟨hf.trivializationOfSMulDisjoint hfG (interior U) isOpen_interior
+    fun g hg => ?_, e, mem_interior_iff_mem_nhds.mpr heU, rfl⟩
+  rw [← Subgroup.mem_bot]; rw [← he]
+  exact hU _ (hg.mono (by grw [interior_subset]))
 -/
 @[to_additive] lemma isCoveringMapOn_of_smul_disjoint
     (disjoint : forall e : E, exists U in 𝓝 e, forall g : G, ((g • ·) '' U inter U).Nonempty -> g • e = e) :
@@ -732,7 +782,8 @@ lemma isQuotientCoveringMap_of_subgroup
   apply_eq_iff_mem_orbit := hfG.trans QuotientGroup.rightRel_apply.symm
   disjoint e := have ⟨U, hU, _, disj⟩ := hG.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
 ⟨_, mul_singleton_mem_nhds_of_nhds_one e hU, fun s hs => Subtype.ext disj _ s.2 by
-      obtain ⟨_, ⟨_, ⟨x, hx, _, rfl, rfl⟩, rfl⟩
+      obtain ⟨_, ⟨_, ⟨x, hx, _, rfl, rfl⟩, rfl⟩, y, hy, g, rfl, he⟩ := hs
+      exact ⟨y, ⟨x, hx, mul_right_cancel ((mul_assoc ..).trans he.symm)⟩, hy⟩⟩
 
 中文:
 引理 isQuotientCoveringMap_of_subgroup
@@ -741,7 +792,8 @@ lemma isQuotientCoveringMap_of_subgroup
   apply_eq_iff_mem_orbit := hfG.trans QuotientGroup.rightRel_apply.symm
   disjoint e := have ⟨U, hU, _, disj⟩ := hG.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
 ⟨_, mul_singleton_mem_nhds_of_nhds_one e hU, fun s hs => Subtype.ext disj _ s.2 by
-      obtain ⟨_, ⟨_, ⟨x, hx, _, rfl, rfl⟩, rfl⟩
+      obtain ⟨_, ⟨_, ⟨x, hx, _, rfl, rfl⟩, rfl⟩, y, hy, g, rfl, he⟩ := hs
+      exact ⟨y, ⟨x, hx, mul_right_cancel ((mul_assoc ..).trans he.symm)⟩, hy⟩⟩
 -/
 @[to_additive] lemma isQuotientCoveringMap_of_subgroup [Group E] [IsTopologicalGroup E]
     (G : Subgroup E) (hG : IsDiscrete (G : Set E)) (hfG : forall {e₁ e₂}, f e₁ = f e₂ ↔ e₂ * e₁⁻¹ in G) :
@@ -764,7 +816,10 @@ lemma isQuotientCoveringMap_of_subgroupOp
   disjoint e := have ⟨U, hU, _, disj⟩ := hG.exists_nhds_eq_one_of_image_mulRight_inter_nonempty
 ⟨_, singleton_mul_mem_nhds_of_nhds_one e hU, fun ⟨⟨s⟩, hS⟩ hs => Subtype.ext
 MulOpposite.unop_injective disj _ hS by
-      obtain 
+      obtain ⟨_, ⟨_, ⟨_, rfl, x, hx, rfl⟩, rfl⟩, g, rfl, y, hy, he⟩ := hs
+      exact ⟨y, ⟨x, hx, mul_left_cancel (he.trans <| mul_assoc ..).symm⟩, hy⟩⟩
+
+omit hf in
 
 中文:
 引理 isQuotientCoveringMap_of_subgroupOp
@@ -774,7 +829,10 @@ MulOpposite.unop_injective disj _ hS by
   disjoint e := have ⟨U, hU, _, disj⟩ := hG.exists_nhds_eq_one_of_image_mulRight_inter_nonempty
 ⟨_, singleton_mul_mem_nhds_of_nhds_one e hU, fun ⟨⟨s⟩, hS⟩ hs => Subtype.ext
 MulOpposite.unop_injective disj _ hS by
-      obtain 
+      obtain ⟨_, ⟨_, ⟨_, rfl, x, hx, rfl⟩, rfl⟩, g, rfl, y, hy, he⟩ := hs
+      exact ⟨y, ⟨x, hx, mul_left_cancel (he.trans <| mul_assoc ..).symm⟩, hy⟩⟩
+
+omit hf in
 -/
 @[to_additive] lemma isQuotientCoveringMap_of_subgroupOp [Group E] [IsTopologicalGroup E]
     (G : Subgroup E) (hG : IsDiscrete (G : Set E)) (hfG : forall {e₁ e₂}, f e₁ = f e₂ ↔ e₁⁻¹ * e₂ in G) :
@@ -868,7 +926,10 @@ lemma isCoveringMap
     · refine Set.eq_univ_of_forall fun x => ?_
       obtain ⟨e, rfl⟩ := h.surjective x
       have ⟨U, hU, hGU⟩ := h.disjoint e
-    
+      replace hU := mem_of_mem_nhds hU
+      exact ⟨e, (Subgroup.eq_bot_iff_forall _).mpr fun g hg => hGU g (⟨e, ⟨e, hU, hg⟩, hU⟩), rfl⟩
+    · have ⟨U, hU, hGU⟩ := h.disjoint e
+      exact ⟨U, hU, fun g hg => by rw [hGU g hg, one_smul]⟩
 
 中文:
 引理 isCoveringMap
@@ -879,7 +940,10 @@ lemma isCoveringMap
     · refine Set.eq_univ_of_forall fun x => ?_
       obtain ⟨e, rfl⟩ := h.surjective x
       have ⟨U, hU, hGU⟩ := h.disjoint e
-    
+      replace hU := mem_of_mem_nhds hU
+      exact ⟨e, (Subgroup.eq_bot_iff_forall _).mpr fun g hg => hGU g (⟨e, ⟨e, hU, hg⟩, hU⟩), rfl⟩
+    · have ⟨U, hU, hGU⟩ := h.disjoint e
+      exact ⟨U, hU, fun g hg => by rw [hGU g hg, one_smul]⟩
 -/
 @[to_additive] lemma isCoveringMap (h : IsQuotientCoveringMap f G) :
     IsCoveringMap f :=
@@ -928,7 +992,15 @@ theorem isQuotientCoveringMap_iff_isCoveringMap_and
     ⟨h.isCoveringMap, h.surjective, this, h.isCancelSMul, h.apply_eq_iff_mem_orbit⟩
   mpr h := (isQuotientCoveringMap_iff ..).mpr ⟨h.1.isQuotientMap h.2.1, h.2.2.1, h.2.2.2.2, fun e =>
     have ⟨_, U, heU, hU, hfU, H, hH⟩ := h.1 (f e)
-    ⟨Subtype.val '' Prod.snd ∘ H 
+    ⟨Subtype.val '' Prod.snd ∘ H ⁻¹' {(H ⟨e, heU⟩).2}, (hfU.isOpenMap_subtype_val _ <|
+(isOpen_discrete _).preimage by fun_prop).mem_nhds ⟨⟨e, heU⟩, rfl, rfl⟩, fun g => by
+      rintro ⟨_, ⟨_, ⟨x, hx, rfl⟩, rfl⟩, y, hy, eq⟩
+      have := h.2.2.2.1
+      apply IsCancelSMul.right_cancel _ _ x.1
+      simp_rw [← eq, one_smul]
+      refine congr($(H.injective <| Prod.ext (Subtype.ext ?_) <| hy.trans hx.symm))
+      simp_rw [hH]
+      exact h.2.2.2.2.mpr ⟨_, eq.symm⟩⟩⟩
 
 中文:
 定理 isQuotientCoveringMap_iff_isCoveringMap_and
@@ -936,7 +1008,15 @@ theorem isQuotientCoveringMap_iff_isCoveringMap_and
     ⟨h.isCoveringMap, h.surjective, this, h.isCancelSMul, h.apply_eq_iff_mem_orbit⟩
   mpr h := (isQuotientCoveringMap_iff ..).mpr ⟨h.1.isQuotientMap h.2.1, h.2.2.1, h.2.2.2.2, fun e =>
     have ⟨_, U, heU, hU, hfU, H, hH⟩ := h.1 (f e)
-    ⟨Subtype.val '' Prod.snd ∘ H 
+    ⟨Subtype.val '' Prod.snd ∘ H ⁻¹' {(H ⟨e, heU⟩).2}, (hfU.isOpenMap_subtype_val _ <|
+(isOpen_discrete _).preimage by fun_prop).mem_nhds ⟨⟨e, heU⟩, rfl, rfl⟩, fun g => by
+      rintro ⟨_, ⟨_, ⟨x, hx, rfl⟩, rfl⟩, y, hy, eq⟩
+      have := h.2.2.2.1
+      apply IsCancelSMul.right_cancel _ _ x.1
+      simp_rw [← eq, one_smul]
+      refine congr($(H.injective <| Prod.ext (Subtype.ext ?_) <| hy.trans hx.symm))
+      simp_rw [hH]
+      exact h.2.2.2.2.mpr ⟨_, eq.symm⟩⟩⟩
 -/
 @[to_additive] theorem isQuotientCoveringMap_iff_isCoveringMap_and :
     IsQuotientCoveringMap f G ↔ IsCoveringMap f ∧ f.Surjective ∧ ContinuousConstSMul G E ∧

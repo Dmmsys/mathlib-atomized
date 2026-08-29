@@ -158,7 +158,25 @@ lemma ofArrows_mem_smallEtaleTopology_iff
   · obtain ⟨U, _, _, hU⟩ := (mem_smallGrothendieckTopology _ _).1 hf
     ext y
     simp only [Set.mem_iUnion, Set.mem_range, Set.mem_univ, iff_true]
-    obtain ⟨i, ⟨u, rfl⟩⟩ := ((ofArrows_mem_precoverage_iff _).1 U.mem₀).
+    obtain ⟨i, ⟨u, rfl⟩⟩ := ((ofArrows_mem_precoverage_iff _).1 U.mem₀).1 y
+    obtain ⟨_, b, _, ⟨j⟩, fac⟩ := hU _ _ ⟨i⟩
+    replace fac : b.left ≫ (f j).left = U.f i :=
+      (Etale.forget _ ⋙ CategoryTheory.Over.forget _).congr_map fac
+    exact ⟨j, b.left u, by simp [← fac]⟩
+  · have (w : W.left) : exists (i : ι), w in Set.range (f i).left := by
+      have := Set.mem_univ w
+      simpa [← hf]
+    choose i z hz using this
+    let V : Cover (precoverage @Etale) W.left :=
+      Cover.mkOfCovers W.left (fun w => (Z (i w)).left)
+        (fun w => (f (i w)).left) (fun w => ⟨_, _, hz w⟩) inferInstance
+    let : Cover.Over X V :=
+      { over w := ⟨(Z (i w)).hom⟩
+        isOver_map w := by cat_disch }
+    have (w : W.left) : Etale (V.X w ↘ X) := (Z (i w)).prop
+    refine ⟨V, inferInstance, inferInstance, ?_⟩
+    rintro _ _ ⟨w⟩
+    refine ⟨_, 𝟙 _, _, ⟨i w⟩, by cat_disch⟩
 
 中文:
 引理 ofArrows_mem_smallEtaleTopology_iff
@@ -167,7 +185,25 @@ lemma ofArrows_mem_smallEtaleTopology_iff
   · obtain ⟨U, _, _, hU⟩ := (mem_smallGrothendieckTopology _ _).1 hf
     ext y
     simp only [Set.mem_iUnion, Set.mem_range, Set.mem_univ, iff_true]
-    obtain ⟨i, ⟨u, rfl⟩⟩ := ((ofArrows_mem_precoverage_iff _).1 U.mem₀).
+    obtain ⟨i, ⟨u, rfl⟩⟩ := ((ofArrows_mem_precoverage_iff _).1 U.mem₀).1 y
+    obtain ⟨_, b, _, ⟨j⟩, fac⟩ := hU _ _ ⟨i⟩
+    replace fac : b.left ≫ (f j).left = U.f i :=
+      (Etale.forget _ ⋙ CategoryTheory.Over.forget _).congr_map fac
+    exact ⟨j, b.left u, by simp [← fac]⟩
+  · have (w : W.left) : exists (i : ι), w in Set.range (f i).left := by
+      have := Set.mem_univ w
+      simpa [← hf]
+    choose i z hz using this
+    let V : Cover (precoverage @Etale) W.left :=
+      Cover.mkOfCovers W.left (fun w => (Z (i w)).left)
+        (fun w => (f (i w)).left) (fun w => ⟨_, _, hz w⟩) inferInstance
+    let : Cover.Over X V :=
+      { over w := ⟨(Z (i w)).hom⟩
+        isOver_map w := by cat_disch }
+    have (w : W.left) : Etale (V.X w ↘ X) := (Z (i w)).prop
+    refine ⟨V, inferInstance, inferInstance, ?_⟩
+    rintro _ _ ⟨w⟩
+    refine ⟨_, 𝟙 _, _, ⟨i w⟩, by cat_disch⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Over.forget, Etale.forget, Set.mem_iUnion, Set.mem_range, Set.mem_univ, U.mem, W.left, b.left, congr_map, forget, iff_true, mem_iUnion, mem_range, mem_smallGrothendieckTopology, mem_univ, ofArrows_mem_precoverage_iff, replace
 -/
@@ -219,7 +255,17 @@ definition geometricFiber
     rw [mem_grothendieckTopology_iff] at hR
     obtain ⟨𝒰, hle⟩ := hR
     obtain ⟨i, y, rfl⟩ := 𝒰.exists_eq x
-    refine ⟨𝒰.X i, 𝒰.f i,
+    refine ⟨𝒰.X i, 𝒰.f i, hle _ _ ⟨i⟩, ?_⟩
+    let k := (𝒰.X i).residueField y
+    let m : S.residueField (𝒰.f i y) ⟶ (𝒰.X i).residueField y :=
+      (𝒰.f i).residueFieldMap y
+    algebraize [((𝒰.f i).residueFieldMap y).hom, a.hom]
+    let b : (𝒰.X i).residueField y ->ₐ[S.residueField (𝒰.f i y)] Ω :=
+      IsSepClosed.lift
+    have hfac : (𝒰.f i).residueFieldMap y ≫ CommRingCat.ofHom b.toRingHom = a := by
+      ext1; exact b.comp_algebraMap
+    use Spec.map (CommRingCat.ofHom b.toRingHom) ≫ (𝒰.X i).fromSpecResidueField y
+    simp [SpecToEquivOfField, ← hfac]
 
 中文:
 定义 geometricFiber
@@ -230,7 +276,17 @@ definition geometricFiber
     rw [mem_grothendieckTopology_iff] at hR
     obtain ⟨𝒰, hle⟩ := hR
     obtain ⟨i, y, rfl⟩ := 𝒰.exists_eq x
-    refine ⟨𝒰.X i, 𝒰.f i,
+    refine ⟨𝒰.X i, 𝒰.f i, hle _ _ ⟨i⟩, ?_⟩
+    let k := (𝒰.X i).residueField y
+    let m : S.residueField (𝒰.f i y) ⟶ (𝒰.X i).residueField y :=
+      (𝒰.f i).residueFieldMap y
+    algebraize [((𝒰.f i).residueFieldMap y).hom, a.hom]
+    let b : (𝒰.X i).residueField y ->ₐ[S.residueField (𝒰.f i y)] Ω :=
+      IsSepClosed.lift
+    have hfac : (𝒰.f i).residueFieldMap y ≫ CommRingCat.ofHom b.toRingHom = a := by
+      ext1; exact b.comp_algebraMap
+    use Spec.map (CommRingCat.ofHom b.toRingHom) ≫ (𝒰.X i).fromSpecResidueField y
+    simp [SpecToEquivOfField, ← hfac]
 
 Depends on / 依赖: coyoneda, coyoneda.obj
 -/

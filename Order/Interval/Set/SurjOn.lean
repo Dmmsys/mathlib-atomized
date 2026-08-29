@@ -71,7 +71,8 @@ theorem surjOn_Ico_of_monotone_surjective
     · exact mem_image_of_mem f (left_mem_Ico.mpr hab)
 · exact image_mono Ioo_subset_Ico_self
         surjOn_Ioo_of_monotone_surjective h_mono h_surj a b hp'
-  · rw [Ico_eq_empty (h_mono 
+  · rw [Ico_eq_empty (h_mono hab).not_gt]
+    exact surjOn_empty f _
 
 中文:
 定理 surjOn_Ico_of_monotone_surjective
@@ -83,7 +84,8 @@ theorem surjOn_Ico_of_monotone_surjective
     · exact mem_image_of_mem f (left_mem_Ico.mpr hab)
 · exact image_mono Ioo_subset_Ico_self
         surjOn_Ioo_of_monotone_surjective h_mono h_surj a b hp'
-  · rw [Ico_eq_empty (h_mono 
+  · rw [Ico_eq_empty (h_mono hab).not_gt]
+    exact surjOn_empty f _
 
 Depends on / 依赖: Ico_eq_empty, Ioo_subset_Ico_self, eq_left_or_mem_Ioo_of_mem_Ico, h_mono, h_surj, image_mono, left_mem_Ico, left_mem_Ico.mpr, lt_or_ge, mem_image_of_mem, not_gt, surjOn_Ioo_of_monotone_surjective, surjOn_empty
 -/

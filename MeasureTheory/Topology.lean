@@ -28,7 +28,7 @@ theorem ae_restrict_le_codiscreteWithin
   have : DiscreteTopology ↑(sᶜ inter U) := isDiscrete_iff_discreteTopology.mp
  isDiscrete_of_codiscreteWithin ((compl_compl s).symm ▸ hs)
   rw [mem_ae_iff]; rw [Measure.restrict_apply' hU]
-  apply Set.Countable.measure_zero (TopologicalSpace.separableSpace_iff_countable.1 inferInstan
+  apply Set.Countable.measure_zero (TopologicalSpace.separableSpace_iff_countable.1 inferInstance)
 
 中文:
 定理 ae_restrict_le_codiscreteWithin
@@ -37,7 +37,7 @@ theorem ae_restrict_le_codiscreteWithin
   have : DiscreteTopology ↑(sᶜ inter U) := isDiscrete_iff_discreteTopology.mp
  isDiscrete_of_codiscreteWithin ((compl_compl s).symm ▸ hs)
   rw [mem_ae_iff]; rw [Measure.restrict_apply' hU]
-  apply Set.Countable.measure_zero (TopologicalSpace.separableSpace_iff_countable.1 inferInstan
+  apply Set.Countable.measure_zero (TopologicalSpace.separableSpace_iff_countable.1 inferInstance)
 
 Depends on / 依赖: Countable, DiscreteTopology, Measure, Measure.restrict_apply, Set.Countable.measure_zero, TopologicalSpace, TopologicalSpace.separableSpace_iff_countable, compl_compl, isDiscrete_iff_discreteTopology, isDiscrete_iff_discreteTopology.mp, isDiscrete_of_codiscreteWithin, measure_zero, mem_ae_iff, restrict_apply, separableSpace_iff_countable
 -/

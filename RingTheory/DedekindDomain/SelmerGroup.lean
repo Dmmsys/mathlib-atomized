@@ -127,7 +127,8 @@ theorem valuationOfNeZeroToFun_eq
   change _ = ite _ _ _ * (ite _ _ _)⁻¹
   simp_rw [IsLocalization.toLocalizationMap_sec, SubmonoidClass.coe_subtype,
 if_neg IsLocalization.sec_fst_ne_zero x.ne_zero,
-    if_neg (nonZeroDiviso
+    if_neg (nonZeroDivisors.coe_ne_zero _),
+    ← exp_neg, ← exp_add, valuationOfNeZeroToFun, ← sub_eq_add_neg, exp]
 
 中文:
 定理 valuationOfNeZeroToFun_eq
@@ -139,7 +140,8 @@ if_neg IsLocalization.sec_fst_ne_zero x.ne_zero,
   change _ = ite _ _ _ * (ite _ _ _)⁻¹
   simp_rw [IsLocalization.toLocalizationMap_sec, SubmonoidClass.coe_subtype,
 if_neg IsLocalization.sec_fst_ne_zero x.ne_zero,
-    if_neg (nonZeroDiviso
+    if_neg (nonZeroDivisors.coe_ne_zero _),
+    ← exp_neg, ← exp_add, valuationOfNeZeroToFun, ← sub_eq_add_neg, exp]
 
 Depends on / 依赖: IsLocalization, IsLocalization.sec_fst_ne_zero, IsLocalization.toLocalizationMap_sec, SubmonoidClass, SubmonoidClass.coe_subtype, Units.val_inv_eq_inv_val, classical, coe_ne_zero, coe_subtype, exp_add, exp_neg, if_neg, ne_zero, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, sec_fst_ne_zero, simp_rw, sub_eq_add_neg, toLocalizationMap_sec, v.valuation
 -/
@@ -228,7 +230,9 @@ theorem valuation_of_unit_eq
     change ¬v.valuation K (algebraMap R K x) < 1
     apply_fun v.intValuation at hx
     rw [map_one]; rw [map_mul] at hx
-    r
+    rw [not_lt]; rw [← hx]; rw [← mul_one <| v.valuation _ _]; rw [valuation_of_algebraMap]
+    gcongr
+    exact v.intValuation_le_one _
 
 中文:
 定理 valuation_of_unit_eq
@@ -241,7 +245,9 @@ theorem valuation_of_unit_eq
     change ¬v.valuation K (algebraMap R K x) < 1
     apply_fun v.intValuation at hx
     rw [map_one]; rw [map_mul] at hx
-    r
+    rw [not_lt]; rw [← hx]; rw [← mul_one <| v.valuation _ _]; rw [valuation_of_algebraMap]
+    gcongr
+    exact v.intValuation_le_one _
 
 Depends on / 依赖: Units.coe_map, WithZero, WithZero.coe_inj, algebraMap, apply_fun, coe_inj, coe_map, eq_iff_le_not_lt, intValuation, intValuation_le_one, map_mul, map_one, mul_one, not_lt, v.intValuation, v.intValuation_le_one, v.valuation, v.valuation_le_one, valuation, valuationOfNeZero_eq
 -/
@@ -268,7 +274,14 @@ definition valuationOfNeZeroMod
   -- so we need `erw` below.
 (Int.quotientZMultiplesNatEquivZMod n).toMultiplicative.toMonoidHom.comp
     QuotientGroup.map (powMonoidHom n : Kˣ ->* Kˣ).range
-      (AddSubgroup.toSubgroup (AddSubgroup.zmulti
+      (AddSubgroup.toSubgroup (AddSubgroup.zmultiples (n : Int)))
+      v.valuationOfNeZero
+      (by
+        rintro _ ⟨x, rfl⟩
+        exact
+          ⟨v.valuationOfNeZero x, by simp only [powMonoidHom_apply, map_pow, Int.toAdd_pow]; rfl⟩)
+
+@[simp]
 
 中文:
 定义 valuationOfNeZeroMod
@@ -277,7 +290,14 @@ definition valuationOfNeZeroMod
   -- so we need `erw` below.
 (Int.quotientZMultiplesNatEquivZMod n).toMultiplicative.toMonoidHom.comp
     QuotientGroup.map (powMonoidHom n : Kˣ ->* Kˣ).range
-      (AddSubgroup.toSubgroup (AddSubgroup.zmulti
+      (AddSubgroup.toSubgroup (AddSubgroup.zmultiples (n : Int)))
+      v.valuationOfNeZero
+      (by
+        rintro _ ⟨x, rfl⟩
+        exact
+          ⟨v.valuationOfNeZero x, by simp only [powMonoidHom_apply, map_pow, Int.toAdd_pow]; rfl⟩)
+
+@[simp]
 -/
 def valuationOfNeZeroMod (n : Nat) : (K / n) ->* Multiplicative (ZMod n) :=
   -- TODO: this definition does a lot of defeq abuse between `Multiplicative` and `Additive`,
@@ -302,7 +322,7 @@ theorem valuation_of_unit_mod_eq
   -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
   erw [valuationOfNeZeroMod, MonoidHom.comp_apply, ← QuotientGroup.coe_mk',
     QuotientGroup.map_mk' (G := Kˣ) (N := MonoidHom.range (powMonoidHom n)),
-    valuation_of_unit_eq, QuotientGroup.mk_one,
+    valuation_of_unit_eq, QuotientGroup.mk_one, map_one]
 
 中文:
 定理 valuation_of_unit_mod_eq
@@ -311,7 +331,7 @@ theorem valuation_of_unit_mod_eq
   -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
   erw [valuationOfNeZeroMod, MonoidHom.comp_apply, ← QuotientGroup.coe_mk',
     QuotientGroup.map_mk' (G := Kˣ) (N := MonoidHom.range (powMonoidHom n)),
-    valuation_of_unit_eq, QuotientGroup.mk_one,
+    valuation_of_unit_eq, QuotientGroup.mk_one, map_one]
 -/
 theorem valuation_of_unit_mod_eq (n : Nat) (x : Rˣ) :
     v.valuationOfNeZeroMod n (Units.map (algebraMap R K : R ->* K) x : K / n) = 1 := by
@@ -447,7 +467,7 @@ definition fromUnit
       v.valuation_of_unit_mod_eq n x⟩
   map_one' := by simp only [map_one, QuotientGroup.mk_one, Subgroup.mk_eq_one]
   map_mul' _ _ := by simp only [RingHom.toMonoidHom_eq_coe, map_mul, QuotientGroup.mk_mul,
-    MulMemClass.mk_mu
+    MulMemClass.mk_mul_mk]
 
 中文:
 定义 fromUnit
@@ -456,7 +476,7 @@ definition fromUnit
       v.valuation_of_unit_mod_eq n x⟩
   map_one' := by simp only [map_one, QuotientGroup.mk_one, Subgroup.mk_eq_one]
   map_mul' _ _ := by simp only [RingHom.toMonoidHom_eq_coe, map_mul, QuotientGroup.mk_mul,
-    MulMemClass.mk_mu
+    MulMemClass.mk_mul_mk]
 
 Depends on / 依赖: MulMemClass, MulMemClass.mk_mul_mk, QuotientGroup, QuotientGroup.mk, QuotientGroup.mk_mul, QuotientGroup.mk_one, RingHom, RingHom.toMonoidHom_eq_coe, Subgroup, Subgroup.mk_eq_one, Units.map, algebraMap, map_mul, map_one, mk_eq_one, mk_mul, mk_mul_mk, mk_one, toMonoidHom, toMonoidHom_eq_coe
 -/
@@ -481,7 +501,24 @@ theorem fromUnit_ker
     rcases (QuotientGroup.eq_one_iff _).mp (Subtype.mk.inj hx) with ⟨⟨v, i, vi, iv⟩, hx⟩
     have hv : ↑(_ ^ n : Kˣ) = algebraMap R K _ := congr_arg Units.val hx
     have hi : ↑(_ ^ n : Kˣ)⁻¹ = algebraMap R K _ := congr_arg Units.inv hx
-    rw [Units.
+    rw [Units.val_pow_eq_pow_val] at hv
+    rw [← inv_pow]; rw [Units.inv_mk]; rw [Units.val_pow_eq_pow_val] at hi
+    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := v) hn.out
+        (hv.symm ▸ isIntegral_algebraMap) with
+      ⟨v', rfl⟩
+    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := i) hn.out
+        (hi.symm ▸ isIntegral_algebraMap) with
+      ⟨i', rfl⟩
+    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at vi
+    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at iv
+    rw [Units.val_mk]; rw [← map_pow] at hv
+    exact ⟨⟨v', i', vi, iv⟩, by
+      simpa only [Units.ext_iff, powMonoidHom_apply, Units.val_pow_eq_pow_val] using
+         FaithfulSMul.algebraMap_injective R K hv⟩
+  · rintro ⟨x, hx⟩
+    rw [← hx]
+exact Subtype.mk_eq_mk.mpr (QuotientGroup.eq_one_iff _).mpr ⟨Units.map (algebraMap R K) x,
+      by simp only [powMonoidHom_apply, RingHom.toMonoidHom_eq_coe, map_pow]⟩
 
 中文:
 定理 fromUnit_ker
@@ -493,7 +530,24 @@ theorem fromUnit_ker
     rcases (QuotientGroup.eq_one_iff _).mp (Subtype.mk.inj hx) with ⟨⟨v, i, vi, iv⟩, hx⟩
     have hv : ↑(_ ^ n : Kˣ) = algebraMap R K _ := congr_arg Units.val hx
     have hi : ↑(_ ^ n : Kˣ)⁻¹ = algebraMap R K _ := congr_arg Units.inv hx
-    rw [Units.
+    rw [Units.val_pow_eq_pow_val] at hv
+    rw [← inv_pow]; rw [Units.inv_mk]; rw [Units.val_pow_eq_pow_val] at hi
+    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := v) hn.out
+        (hv.symm ▸ isIntegral_algebraMap) with
+      ⟨v', rfl⟩
+    rcases IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow (R := R) (x := i) hn.out
+        (hi.symm ▸ isIntegral_algebraMap) with
+      ⟨i', rfl⟩
+    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at vi
+    rw [← map_mul]; rw [map_eq_one_iff _ <| FaithfulSMul.algebraMap_injective R K] at iv
+    rw [Units.val_mk]; rw [← map_pow] at hv
+    exact ⟨⟨v', i', vi, iv⟩, by
+      simpa only [Units.ext_iff, powMonoidHom_apply, Units.val_pow_eq_pow_val] using
+         FaithfulSMul.algebraMap_injective R K hv⟩
+  · rintro ⟨x, hx⟩
+    rw [← hx]
+exact Subtype.mk_eq_mk.mpr (QuotientGroup.eq_one_iff _).mpr ⟨Units.map (algebraMap R K) x,
+      by simp only [powMonoidHom_apply, RingHom.toMonoidHom_eq_coe, map_pow]⟩
 
 Depends on / 依赖: IsIntegrallyClosed, IsIntegrallyClosed.exists_algebraMap_eq_of_isIntegral_pow, QuotientGroup, QuotientGroup.eq_one_iff, Subtype, Subtype.mk.inj, Units.inv, Units.inv_mk, Units.val, Units.val_pow_eq_pow_val, algebraMap, congr_arg, eq_one_iff, exists_algebraMap_eq_of_isIntegral_pow, hn.out, hv.symm, inv_mk, inv_pow, isIntegral_algebraMap, val_pow_eq_pow_val
 -/

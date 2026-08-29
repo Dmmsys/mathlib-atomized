@@ -175,7 +175,9 @@ theorem map_subperm_map_iff
     constructor
     · rw [mapₓ] at perm
       exact (map_perm_map_iff hf).mp perm
-    · 
+    · exact sublistₓ
+
+alias ⟨_, Subperm.map⟩ := map_subperm_map_iff
 
 中文:
 定理 map_subperm_map_iff
@@ -190,7 +192,9 @@ theorem map_subperm_map_iff
     constructor
     · rw [mapₓ] at perm
       exact (map_perm_map_iff hf).mp perm
-    · 
+    · exact sublistₓ
+
+alias ⟨_, Subperm.map⟩ := map_subperm_map_iff
 
 Depends on / 依赖: hl_perm, hl_perm.map, hl_sub, hl_sub.map, l.map, map_perm_map_iff, sublist, sublist_map_iff, sublist_map_iff.mp
 -/

@@ -70,7 +70,16 @@ theorem IsIntegralClosure.isLocalization
   have : IsTorsionFree A L := .trans_faithfulSMul A K L
   have : IsTorsionFree A C := IsIntegralClosure.isTorsionFree A L
   refine ⟨?_, fun z => ?_, fun {x y} h => ⟨1, ?_⟩⟩
- 
+  · rintro ⟨_, x, hx, rfl⟩
+    rw [isUnit_iff_ne_zero]; rw [map_ne_zero_iff _ (IsIntegralClosure.algebraMap_injective C A L)]; rw [Subtype.coe_mk]; rw [map_ne_zero_iff _ (FaithfulSMul.algebraMap_injective A C)]
+    exact mem_nonZeroDivisors_iff_ne_zero.mp hx
+  · obtain ⟨m, hm⟩ :=
+      IsIntegral.exists_multiple_integral_of_isLocalization A⁰ z
+        (Algebra.IsIntegral.isIntegral (R := K) z)
+    obtain ⟨x, hx⟩ : exists x, algebraMap C L x = m • z := IsIntegralClosure.isIntegral_iff.mp hm
+    refine ⟨⟨x, algebraMap A C m, m, SetLike.coe_mem m, rfl⟩, ?_⟩
+    rw [Subtype.coe_mk]; rw [← IsScalarTower.algebraMap_apply]; rw [hx]; rw [mul_comm]; rw [Submonoid.smul_def]; rw [smul_def]
+  · simp only [IsIntegralClosure.algebraMap_injective C A L h]
 
 中文:
 定理 是整闭包.isLocalization
@@ -81,7 +90,16 @@ theorem IsIntegralClosure.isLocalization
   have : IsTorsionFree A L := .trans_faithfulSMul A K L
   have : IsTorsionFree A C := IsIntegralClosure.isTorsionFree A L
   refine ⟨?_, fun z => ?_, fun {x y} h => ⟨1, ?_⟩⟩
- 
+  · rintro ⟨_, x, hx, rfl⟩
+    rw [isUnit_iff_ne_zero]; rw [map_ne_zero_iff _ (IsIntegralClosure.algebraMap_injective C A L)]; rw [Subtype.coe_mk]; rw [map_ne_zero_iff _ (FaithfulSMul.algebraMap_injective A C)]
+    exact mem_nonZeroDivisors_iff_ne_zero.mp hx
+  · obtain ⟨m, hm⟩ :=
+      IsIntegral.exists_multiple_integral_of_isLocalization A⁰ z
+        (Algebra.IsIntegral.isIntegral (R := K) z)
+    obtain ⟨x, hx⟩ : exists x, algebraMap C L x = m • z := IsIntegralClosure.isIntegral_iff.mp hm
+    refine ⟨⟨x, algebraMap A C m, m, SetLike.coe_mem m, rfl⟩, ?_⟩
+    rw [Subtype.coe_mk]; rw [← IsScalarTower.algebraMap_apply]; rw [hx]; rw [mul_comm]; rw [Submonoid.smul_def]; rw [smul_def]
+  · simp only [IsIntegralClosure.algebraMap_injective C A L h]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsDomain, IsIntegralClosure, IsIntegralClosure.algebraMap_injective, IsIntegralClosure.equiv, IsIntegralClosure.isTorsionFree, IsTorsionFree, Subtype, Subtype.coe_mk, algebraMap_injective, coe_mk, integralClosure, isDomain, isTorsionFree, isUnit_iff_ne_zero, map_ne_zero_iff, toMulEquiv, toMulEquiv.isDomain, trans_faithfulSMul
 -/
@@ -136,7 +154,8 @@ theorem IsIntegralClosure.range_le_span_dualBasis
   rintro _ ⟨i, rfl⟩ _ ⟨y, rfl⟩
   simp only [LinearMap.coe_restrictScalars, linearMap_apply, LinearMap.BilinForm.flip_apply,
     traceForm_apply]
-refine Submodule.mem_
+refine Submodule.mem_one.mpr IsIntegrallyClosed.isIntegral_iff.mp ?_
+  exact isIntegral_trace ((IsIntegralClosure.isIntegral A L y).algebraMap.mul (hb_int i))
 
 中文:
 定理 是整闭包.range_le_span_dualBasis
@@ -146,7 +165,8 @@ refine Submodule.mem_
   rintro _ ⟨i, rfl⟩ _ ⟨y, rfl⟩
   simp only [LinearMap.coe_restrictScalars, linearMap_apply, LinearMap.BilinForm.flip_apply,
     traceForm_apply]
-refine Submodule.mem_
+refine Submodule.mem_one.mpr IsIntegrallyClosed.isIntegral_iff.mp ?_
+  exact isIntegral_trace ((IsIntegralClosure.isIntegral A L y).algebraMap.mul (hb_int i))
 
 Depends on / 依赖: BilinForm, IsIntegralClosure, IsIntegralClosure.isIntegral, IsIntegrallyClosed, IsIntegrallyClosed.isIntegral_iff.mp, LinearMap, LinearMap.BilinForm.dualSubmodule_span_of_basis, LinearMap.BilinForm.flip_apply, LinearMap.BilinForm.le_flip_dualSubmodule, LinearMap.coe_restrictScalars, Submodule, Submodule.mem_one.mpr, Submodule.span_le, algebraMap, algebraMap.mul, coe_restrictScalars, dualSubmodule_span_of_basis, flip_apply, hb_int, isIntegral
 -/
@@ -231,7 +251,20 @@ theorem FiniteDimensional.exists_is_basis_integral
   let bs' := IsNoetherian.finsetBasis K L
   obtain ⟨y, hy, his'⟩ := exists_integral_multiples A K (Finset.univ.image bs')
   have hy' : algebraMap A L y != 0 := by
-    refine mt ((injective_iff_map_eq_zero (algebraMap A L)).m
+    refine mt ((injective_iff_map_eq_zero (algebraMap A L)).mp ?_ _) hy
+    rw [IsScalarTower.algebraMap_eq A K L]
+    exact (algebraMap K L).injective.comp (IsFractionRing.injective A K)
+  refine ⟨s', bs'.map {Algebra.lmul _ _ (algebraMap A L y) with
+    toFun := fun x => algebraMap A L y * x
+    invFun := fun x => (algebraMap A L y)⁻¹ * x
+    left_inv := ?_
+    right_inv := ?_}, ?_⟩
+  · intro x; simp only [inv_mul_cancel_left₀ hy']
+  · intro x; simp only [mul_inv_cancel_left₀ hy']
+  · rintro ⟨x', hx'⟩
+    simp only [Algebra.smul_def, Finset.mem_image, Finset.mem_univ,
+      true_and] at his'
+    exact his' _ ⟨_, rfl⟩
 
 中文:
 定理 有限维.存在_is_basis_integral
@@ -241,7 +274,20 @@ theorem FiniteDimensional.exists_is_basis_integral
   let bs' := IsNoetherian.finsetBasis K L
   obtain ⟨y, hy, his'⟩ := exists_integral_multiples A K (Finset.univ.image bs')
   have hy' : algebraMap A L y != 0 := by
-    refine mt ((injective_iff_map_eq_zero (algebraMap A L)).m
+    refine mt ((injective_iff_map_eq_zero (algebraMap A L)).mp ?_ _) hy
+    rw [IsScalarTower.algebraMap_eq A K L]
+    exact (algebraMap K L).injective.comp (IsFractionRing.injective A K)
+  refine ⟨s', bs'.map {Algebra.lmul _ _ (algebraMap A L y) with
+    toFun := fun x => algebraMap A L y * x
+    invFun := fun x => (algebraMap A L y)⁻¹ * x
+    left_inv := ?_
+    right_inv := ?_}, ?_⟩
+  · intro x; simp only [inv_mul_cancel_left₀ hy']
+  · intro x; simp only [mul_inv_cancel_left₀ hy']
+  · rintro ⟨x', hx'⟩
+    simp only [Algebra.smul_def, Finset.mem_image, Finset.mem_univ,
+      true_and] at his'
+    exact his' _ ⟨_, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.lmul, Classical, Classical.decEq, Finset, Finset.univ.image, IsFractionRing, IsFractionRing.injective, IsNoetherian, IsNoetherian.finsetBasis, IsNoetherian.finsetBasisIndex, IsScalarTower, IsScalarTower.algebraMap_eq, algebraMap, algebraMap_eq, exists_integral_multiples, finsetBasis, finsetBasisIndex, injective, injective.comp
 -/
@@ -281,7 +327,11 @@ theorem IsIntegralClosure.isNoetherian
   let b' := (traceForm K L).dualBasis (traceForm_nondegenerate K L) b
   let := isNoetherian_span_of_finite A (Set.finite_range b')
   let f : C ->ₗ[A] Submodule.span A (Set.range b') :=
-    (Sub
+    (Submodule.inclusion (IsIntegralClosure.range_le_span_dualBasis C b hb_int)).comp
+      ((Algebra.linearMap C L).restrictScalars A).rangeRestrict
+  refine isNoetherian_of_ker_bot f ?_
+  rw [LinearMap.ker_comp]; rw [Submodule.ker_inclusion]; rw [Submodule.comap_bot]; rw [LinearMap.ker_codRestrict]
+  exact LinearMap.ker_eq_bot_of_injective (IsIntegralClosure.algebraMap_injective C A L)
 
 中文:
 定理 是整闭包.isNoetherian
@@ -292,7 +342,11 @@ theorem IsIntegralClosure.isNoetherian
   let b' := (traceForm K L).dualBasis (traceForm_nondegenerate K L) b
   let := isNoetherian_span_of_finite A (Set.finite_range b')
   let f : C ->ₗ[A] Submodule.span A (Set.range b') :=
-    (Sub
+    (Submodule.inclusion (IsIntegralClosure.range_le_span_dualBasis C b hb_int)).comp
+      ((Algebra.linearMap C L).restrictScalars A).rangeRestrict
+  refine isNoetherian_of_ker_bot f ?_
+  rw [LinearMap.ker_comp]; rw [Submodule.ker_inclusion]; rw [Submodule.comap_bot]; rw [LinearMap.ker_codRestrict]
+  exact LinearMap.ker_eq_bot_of_injective (IsIntegralClosure.algebraMap_injective C A L)
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Classical, Classical.decEq, FiniteDimensional, FiniteDimensional.exists_is_basis_integral, IsIntegralClosure, IsIntegralClosure.range_le_span_dualBasis, LinearMap, LinearMap.ker_comp, Set.finite_range, Set.range, Submodule, Submodule.inclusion, Submodule.ker, Submodule.span, dualBasis, exists_is_basis_integral, finite_range, hb_int
 -/
@@ -388,7 +442,8 @@ theorem IsIntegralClosure.rank
   have : IsNoetherian A C := IsIntegralClosure.isNoetherian A K L C
   have : IsLocalization (Algebra.algebraMapSubmonoid C A⁰) L :=
     IsIntegralClosure.isLocalization A K L C
-  let b := Basis.localizationLocalization K A⁰ L (Modu
+  let b := Basis.localizationLocalization K A⁰ L (Module.Free.chooseBasis A C)
+  rw [Module.finrank_eq_card_chooseBasisIndex]; rw [Module.finrank_eq_card_basis b]
 
 中文:
 定理 是整闭包.rank
@@ -398,7 +453,8 @@ theorem IsIntegralClosure.rank
   have : IsNoetherian A C := IsIntegralClosure.isNoetherian A K L C
   have : IsLocalization (Algebra.algebraMapSubmonoid C A⁰) L :=
     IsIntegralClosure.isLocalization A K L C
-  let b := Basis.localizationLocalization K A⁰ L (Modu
+  let b := Basis.localizationLocalization K A⁰ L (Module.Free.chooseBasis A C)
+  rw [Module.finrank_eq_card_chooseBasisIndex]; rw [Module.finrank_eq_card_basis b]
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, Basis.localizationLocalization, IsIntegralClosure, IsIntegralClosure.isLocalization, IsIntegralClosure.isNoetherian, IsIntegralClosure.module_free, IsLocalization, IsNoetherian, Module, Module.Free, Module.Free.chooseBasis, Module.finrank_eq_card_basis, Module.finrank_eq_card_chooseBasisIndex, algebraMapSubmonoid, chooseBasis, finrank_eq_card_basis, finrank_eq_card_chooseBasisIndex, isLocalization, isNoetherian
 -/
@@ -447,7 +503,9 @@ theorem IsIntegralClosure.isDedekindDomain
   have : Algebra.IsIntegral A C := IsIntegralClosure.isIntegral_algebra A L
   { IsIntegralClosure.isNoetherianRing A K L C,
     Ring.DimensionLEOne.of_isIntegral A C,
-    (isIntegrallyClosed_iff L).mpr fun {x} 
+    (isIntegrallyClosed_iff L).mpr fun {x} hx =>
+      ⟨IsIntegralClosure.mk' C x (isIntegral_trans (R := A) _ hx),
+        IsIntegralClosure.algebraMap_mk' _ _ _⟩ with : IsDedekindDomain C }
 
 中文:
 定理 是整闭包.isDedekindDomain
@@ -457,7 +515,9 @@ theorem IsIntegralClosure.isDedekindDomain
   have : Algebra.IsIntegral A C := IsIntegralClosure.isIntegral_algebra A L
   { IsIntegralClosure.isNoetherianRing A K L C,
     Ring.DimensionLEOne.of_isIntegral A C,
-    (isIntegrallyClosed_iff L).mpr fun {x} 
+    (isIntegrallyClosed_iff L).mpr fun {x} hx =>
+      ⟨IsIntegralClosure.mk' C x (isIntegral_trans (R := A) _ hx),
+        IsIntegralClosure.algebraMap_mk' _ _ _⟩ with : IsDedekindDomain C }
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, DimensionLEOne, IsDedekindDomain, IsFractionRing, IsIntegral, IsIntegralClosure, IsIntegralClosure.algebraMap_mk, IsIntegralClosure.isFractionRing_of_finite_extension, IsIntegralClosure.isIntegral_algebra, IsIntegralClosure.isNoetherianRing, IsIntegralClosure.mk, Ring.DimensionLEOne.of_isIntegral, algebraMap_mk, isFractionRing_of_finite_extension, isIntegral_algebra, isIntegral_trans, isIntegrallyClosed_iff, isNoetherianRing, of_isIntegral
 -/

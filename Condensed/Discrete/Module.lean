@@ -82,7 +82,8 @@ definition functor
   ObjectProperty.lift _ (functorToPresheaves.{w, u} R) (fun X => by
     have := CompHausLike.preregular hs
     apply Presheaf.isSheaf_coherent_of_hasPullbacks_of_comp
-      (s := CategoryTheor
+      (s := CategoryTheory.forget (ModuleCat R))
+    exact ((CompHausLike.LocallyConstant.functor P hs).obj _).property)
 
 中文:
 定义 functor
@@ -92,7 +93,8 @@ definition functor
   ObjectProperty.lift _ (functorToPresheaves.{w, u} R) (fun X => by
     have := CompHausLike.preregular hs
     apply Presheaf.isSheaf_coherent_of_hasPullbacks_of_comp
-      (s := CategoryTheor
+      (s := CategoryTheory.forget (ModuleCat R))
+    exact ((CompHausLike.LocallyConstant.functor P hs).obj _).property)
 
 Depends on / 依赖: CompHausLike, CompHausLike.preregular, preregular
 -/
@@ -220,7 +222,7 @@ definition functorIsoDiscreteComponents
     inferInstanceAs (sheafCompose _ _).ReflectsIsomorphisms
   have : IsIso ((discreteUnderlyingAdj (ModuleCat R)).counit.app ((functor R).obj M)) :=
     isIso_of_reflects_iso _ (Condensed.forget R)
-  functorIsoDiscreteAux₂ R M ≪≫ asIso ((discreteUn
+  functorIsoDiscreteAux₂ R M ≪≫ asIso ((discreteUnderlyingAdj _).counit.app ((functor R).obj M))
 
 中文:
 定义 functorIsoDiscreteComponents
@@ -229,7 +231,7 @@ definition functorIsoDiscreteComponents
     inferInstanceAs (sheafCompose _ _).ReflectsIsomorphisms
   have : IsIso ((discreteUnderlyingAdj (ModuleCat R)).counit.app ((functor R).obj M)) :=
     isIso_of_reflects_iso _ (Condensed.forget R)
-  functorIsoDiscreteAux₂ R M ≪≫ asIso ((discreteUn
+  functorIsoDiscreteAux₂ R M ≪≫ asIso ((discreteUnderlyingAdj _).counit.app ((functor R).obj M))
 
 Depends on / 依赖: Condensed, Condensed.forget, ModuleCat, ReflectsIsomorphisms, counit, counit.app, discreteUnderlyingAdj, forget, functor, isIso_of_reflects_iso, sheafCompose
 -/
@@ -253,7 +255,13 @@ definition functorIsoDiscrete
     dsimp
     rw [Iso.eq_inv_comp]; rw [← Category.assoc]; rw [Iso.comp_inv_eq]
     dsimp [functorIsoDiscreteComponents]
-    rw [assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).counit_natur
+    rw [assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).counit_naturality]
+    simp only [← assoc]
+    congr 1
+    rw [← Iso.comp_inv_eq]
+    apply Sheaf.hom_ext
+    simp [functorIsoDiscreteAux₂, ← Functor.map_comp]
+    rfl
 
 中文:
 定义 functorIsoDiscrete
@@ -262,7 +270,13 @@ definition functorIsoDiscrete
     dsimp
     rw [Iso.eq_inv_comp]; rw [← Category.assoc]; rw [Iso.comp_inv_eq]
     dsimp [functorIsoDiscreteComponents]
-    rw [assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).counit_natur
+    rw [assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).counit_naturality]
+    simp only [← assoc]
+    congr 1
+    rw [← Iso.comp_inv_eq]
+    apply Sheaf.hom_ext
+    simp [functorIsoDiscreteAux₂, ← Functor.map_comp]
+    rfl
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, Iso.comp_inv_eq, Iso.eq_inv_comp, ModuleCat, NatIso, NatIso.ofComponents, Sheaf.hom_ext, comp_inv_eq, counit_naturality, discreteUnderlyingAdj, eq_inv_comp, functorIsoDiscreteComponents, hom_ext, map_comp, ofComponents
 -/
@@ -595,7 +609,7 @@ definition functorIsoDiscreteComponents
     inferInstanceAs (sheafCompose _ _).ReflectsIsomorphisms
   have : IsIso ((discreteUnderlyingAdj (ModuleCat R)).counit.app ((functor R).obj M)) :=
     isIso_of_reflects_iso _ (LightCondensed.forget R)
-  functorIsoDiscreteAux₂ R M ≪≫ asIso ((
+  functorIsoDiscreteAux₂ R M ≪≫ asIso ((discreteUnderlyingAdj _).counit.app ((functor R).obj M))
 
 中文:
 定义 functorIsoDiscreteComponents
@@ -604,7 +618,7 @@ definition functorIsoDiscreteComponents
     inferInstanceAs (sheafCompose _ _).ReflectsIsomorphisms
   have : IsIso ((discreteUnderlyingAdj (ModuleCat R)).counit.app ((functor R).obj M)) :=
     isIso_of_reflects_iso _ (LightCondensed.forget R)
-  functorIsoDiscreteAux₂ R M ≪≫ asIso ((
+  functorIsoDiscreteAux₂ R M ≪≫ asIso ((discreteUnderlyingAdj _).counit.app ((functor R).obj M))
 
 Depends on / 依赖: LightCondensed, LightCondensed.forget, ModuleCat, ReflectsIsomorphisms, counit, counit.app, discreteUnderlyingAdj, forget, functor, isIso_of_reflects_iso, sheafCompose
 -/
@@ -628,7 +642,13 @@ definition functorIsoDiscrete
     dsimp
     rw [Iso.eq_inv_comp]; rw [← Category.assoc]; rw [Iso.comp_inv_eq]
     dsimp [functorIsoDiscreteComponents]
-    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).cou
+    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).counit_naturality]
+    simp only [← assoc]
+    congr 1
+    rw [← Iso.comp_inv_eq]
+    apply Sheaf.hom_ext
+    simp [functorIsoDiscreteAux₂, ← Functor.map_comp]
+    rfl
 
 中文:
 定义 functorIsoDiscrete
@@ -637,7 +657,13 @@ definition functorIsoDiscrete
     dsimp
     rw [Iso.eq_inv_comp]; rw [← Category.assoc]; rw [Iso.comp_inv_eq]
     dsimp [functorIsoDiscreteComponents]
-    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).cou
+    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← (discreteUnderlyingAdj (ModuleCat R)).counit_naturality]
+    simp only [← assoc]
+    congr 1
+    rw [← Iso.comp_inv_eq]
+    apply Sheaf.hom_ext
+    simp [functorIsoDiscreteAux₂, ← Functor.map_comp]
+    rfl
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, Iso.comp_inv_eq, Iso.eq_inv_comp, ModuleCat, NatIso, NatIso.ofComponents, Sheaf.hom_ext, comp_inv_eq, counit_naturality, discreteUnderlyingAdj, eq_inv_comp, functorIsoDiscreteComponents, hom_ext, map_comp, ofComponents
 -/

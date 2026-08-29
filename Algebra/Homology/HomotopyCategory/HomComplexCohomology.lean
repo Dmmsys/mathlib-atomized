@@ -54,7 +54,8 @@ definition coboundaries
     obtain rfl : m = m' := by lia
     exact ⟨m, hm, β₁ + β₂, by aesop⟩
   neg_mem' := by
-    rintr
+    rintro α ⟨m, hm, β, hβ⟩
+    exact ⟨m, hm, -β, by aesop⟩
 
 中文:
 定义 coboundaries
@@ -66,7 +67,8 @@ definition coboundaries
     obtain rfl : m = m' := by lia
     exact ⟨m, hm, β₁ + β₂, by aesop⟩
   neg_mem' := by
-    rintr
+    rintro α ⟨m, hm, β, hβ⟩
+    exact ⟨m, hm, -β, by aesop⟩
 
 Depends on / 依赖: Cochain, Set.ofPred, ofPred
 -/
@@ -363,6 +365,9 @@ definition toHom
     rintro ⟨x, _⟩ ⟨m, hm, β, rfl⟩
     simp only [AddMonoidHom.mem_ker, AddMonoidHom.coe_comp, AddMonoidHom.coe_coe,
       AddEquiv.toAddMonoidHom_eq_coe, Function.comp_apply, Cocycle.equivHomShift_symm_apply,
+      Functor.mapAddHom_apply, HomotopyCategory.quotient_map_eq_zero_iff]
+    exact ⟨(Cochain.equivHomotopy _ _).symm ⟨n.negOnePow • β.rightShift _ _ (by lia),
+      by simp [Cochain.δ_rightShift _ _ _ _ _ _ (zero_add n), smul_smul]⟩⟩)
 
 中文:
 定义 toHom
@@ -371,6 +376,9 @@ definition toHom
     rintro ⟨x, _⟩ ⟨m, hm, β, rfl⟩
     simp only [AddMonoidHom.mem_ker, AddMonoidHom.coe_comp, AddMonoidHom.coe_coe,
       AddEquiv.toAddMonoidHom_eq_coe, Function.comp_apply, Cocycle.equivHomShift_symm_apply,
+      Functor.mapAddHom_apply, HomotopyCategory.quotient_map_eq_zero_iff]
+    exact ⟨(Cochain.equivHomotopy _ _).symm ⟨n.negOnePow • β.rightShift _ _ (by lia),
+      by simp [Cochain.δ_rightShift _ _ _ _ _ _ (zero_add n), smul_smul]⟩⟩)
 
 Depends on / 依赖: AddEquiv, AddEquiv.toAddMonoidHom_eq_coe, AddMonoidHom, AddMonoidHom.coe_coe, AddMonoidHom.coe_comp, AddMonoidHom.mem_ker, Cochain, Cochain.equivHomotopy, Cocycle, Cocycle.equivHomShift.symm.toAddMonoidHom, Cocycle.equivHomShift_symm_apply, Function, Function.comp_apply, Functor, Functor.mapAddHom, Functor.mapAddHom_apply, HomotopyCategory, HomotopyCategory.quotient_map_eq_zero_iff, coe_coe, coe_comp
 -/
@@ -414,7 +422,12 @@ lemma toHom_mk_eq_zero_iff
       AddSubsemigroup.mem_mk, Set.mem_ofPred_eq]
     rw [toHom_mk]; rw [HomotopyCategory.quotient_map_eq_zero_iff] at h
     obtain ⟨γ, h⟩ := Cochain.equivHomotopy _ _ h.some
-    
+    simp only [Cochain.ofHom_zero, add_zero, Cocycle.equivHomShift_symm_apply,
+      Cocycle.cochain_ofHom_homOf_eq_coe, Cocycle.rightShift_coe] at h
+    exact ⟨n - 1, by simp, n.negOnePow • γ.rightUnshift _ (by lia),
+      by simp [Cochain.δ_rightUnshift _ _ _ _ _ (zero_add n), smul_smul, ← h]⟩
+  · rw [← mk_eq_zero_iff] at h
+    rw [h]; rw [map_zero]
 
 中文:
 引理 toHom_mk_eq_zero_iff
@@ -425,7 +438,12 @@ lemma toHom_mk_eq_zero_iff
       AddSubsemigroup.mem_mk, Set.mem_ofPred_eq]
     rw [toHom_mk]; rw [HomotopyCategory.quotient_map_eq_zero_iff] at h
     obtain ⟨γ, h⟩ := Cochain.equivHomotopy _ _ h.some
-    
+    simp only [Cochain.ofHom_zero, add_zero, Cocycle.equivHomShift_symm_apply,
+      Cocycle.cochain_ofHom_homOf_eq_coe, Cocycle.rightShift_coe] at h
+    exact ⟨n - 1, by simp, n.negOnePow • γ.rightUnshift _ (by lia),
+      by simp [Cochain.δ_rightUnshift _ _ _ _ _ (zero_add n), smul_smul, ← h]⟩
+  · rw [← mk_eq_zero_iff] at h
+    rw [h]; rw [map_zero]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mem_mk, AddSubmonoid, AddSubmonoid.mem_mk, AddSubsemigroup, AddSubsemigroup.mem_mk, Cochain, Cochain.equivHomotopy, Cochain.ofHom_zero, Cocycle, Cocycle.cochain_ofHom_homOf_eq_coe, Cocycle.equivHomShift_symm_apply, Cocycle.rightShift_coe, HomotopyCategory, HomotopyCategory.quotient_map_eq_zero_iff, Set.mem_ofPred_eq, add_zero, coboundaries, cochain_ofHom_homOf_eq_coe, equivHomShift_symm_apply
 -/
@@ -455,7 +473,8 @@ lemma toHom_bijective
   · obtain ⟨x, rfl⟩ := x.mk_surjective
     obtain ⟨y, rfl⟩ := y.mk_surjective
     rw [← sub_eq_zero]; rw [← mk_sub]; rw [mk_eq_zero_iff]; rw [← toHom_mk_eq_zero_iff]; rw [mk_sub]; rw [map_sub]; rw [h]; rw [sub_self]
-  · obtain ⟨f, rfl⟩ := Functor.map_surjec
+  · obtain ⟨f, rfl⟩ := Functor.map_surjective _ f
+    exact ⟨mk (Cocycle.equivHomShift f), by simp [toHom_mk]⟩
 
 中文:
 引理 toHom_bijective
@@ -465,7 +484,8 @@ lemma toHom_bijective
   · obtain ⟨x, rfl⟩ := x.mk_surjective
     obtain ⟨y, rfl⟩ := y.mk_surjective
     rw [← sub_eq_zero]; rw [← mk_sub]; rw [mk_eq_zero_iff]; rw [← toHom_mk_eq_zero_iff]; rw [mk_sub]; rw [map_sub]; rw [h]; rw [sub_self]
-  · obtain ⟨f, rfl⟩ := Functor.map_surjec
+  · obtain ⟨f, rfl⟩ := Functor.map_surjective _ f
+    exact ⟨mk (Cocycle.equivHomShift f), by simp [toHom_mk]⟩
 
 Depends on / 依赖: Cocycle, Cocycle.equivHomShift, Functor, Functor.map_surjective, equivHomShift, map_sub, map_surjective, mk_eq_zero_iff, mk_sub, mk_surjective, sub_eq_zero, sub_self, toHom_mk, toHom_mk_eq_zero_iff, x.mk_surjective, y.mk_surjective
 -/
@@ -521,7 +541,20 @@ definition leftHomologyData'
   wπ := by
     ext x
     dsimp
-    rw [CohomologyClass.mk
+    rw [CohomologyClass.mk_eq_zero_iff]
+    exact ⟨n, hm, x, rfl⟩
+  hπ :=
+    Cofork.IsColimit.mk _
+      (fun s => AddCommGrpCat.ofHom (CohomologyClass.descAddMonoidHom s.π.hom
+        (by
+          rintro ⟨_, _⟩ ⟨q, hq, y, rfl⟩
+          obtain rfl : n = q := by lia
+          simpa only [zero_comp] using! ConcreteCategory.congr_hom s.condition y)))
+      (fun s => rfl)
+      (fun s l hl => by
+        ext x
+        obtain ⟨y, rfl⟩ := x.mk_surjective
+        simpa using! ConcreteCategory.congr_hom hl y)
 
 中文:
 定义 leftHomologyData'
@@ -535,7 +568,20 @@ definition leftHomologyData'
   wπ := by
     ext x
     dsimp
-    rw [CohomologyClass.mk
+    rw [CohomologyClass.mk_eq_zero_iff]
+    exact ⟨n, hm, x, rfl⟩
+  hπ :=
+    Cofork.IsColimit.mk _
+      (fun s => AddCommGrpCat.ofHom (CohomologyClass.descAddMonoidHom s.π.hom
+        (by
+          rintro ⟨_, _⟩ ⟨q, hq, y, rfl⟩
+          obtain rfl : n = q := by lia
+          simpa only [zero_comp] using! ConcreteCategory.congr_hom s.condition y)))
+      (fun s => rfl)
+      (fun s l hl => by
+        ext x
+        obtain ⟨y, rfl⟩ := x.mk_surjective
+        simpa using! ConcreteCategory.congr_hom hl y)
 
 Depends on / 依赖: Cocycle
 -/

@@ -66,7 +66,9 @@ theorem Multiset.le_prod_of_submultiplicative_on_pred_of_nonneg
   · simp [hs0]
   · have hps : forall x, x in s -> p x := fun x hx => hpsa x (mem_cons_of_mem hx)
     have hp_prod : p s.prod := prod_induction_nonempty p hp_mul hs0 hps
-    rw [prod_cons]; rw [m
+    rw [prod_cons]; rw [map_cons]; rw [prod_cons]
+    exact (h_mul a s.prod (hpsa a (mem_cons_self a s)) hp_prod).trans
+      (by gcongr; exacts [h0 _, hs hps])
 
 中文:
 定理 Multiset.le_prod_of_submultiplicative_on_pred_of_nonneg
@@ -79,7 +81,9 @@ theorem Multiset.le_prod_of_submultiplicative_on_pred_of_nonneg
   · simp [hs0]
   · have hps : forall x, x in s -> p x := fun x hx => hpsa x (mem_cons_of_mem hx)
     have hp_prod : p s.prod := prod_induction_nonempty p hp_mul hs0 hps
-    rw [prod_cons]; rw [m
+    rw [prod_cons]; rw [map_cons]; rw [prod_cons]
+    exact (h_mul a s.prod (hpsa a (mem_cons_self a s)) hp_prod).trans
+      (by gcongr; exacts [h0 _, hs hps])
 
 Depends on / 依赖: Multiset, Multiset.induction, exacts, h_mul, h_one, hp_mul, hp_prod, map_cons, mem_cons_of_mem, mem_cons_self, prod_cons, prod_induction_nonempty, revert, s.prod
 -/

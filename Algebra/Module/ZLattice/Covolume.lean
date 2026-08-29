@@ -176,7 +176,9 @@ theorem covolume_comap
   proof: by
   rw [covolume_eq_measure_fundamentalDomain _ _ (isAddFundamentalDomain (Free.chooseBasis Int L) μ)]; rw [covolume_eq_measure_fundamentalDomain _ _ ((isAddFundamentalDomain
     ((Free.chooseBasis Int L).ofZLatticeComap Real L e.toLinearEquiv) ν))]; rw [← he.measureReal_preimage
-    (fundamentalDo
+    (fundamentalDomain_measurableSet _).nullMeasurableSet]; rw [← e.image_symm_eq_preimage]; rw [← e.symm.coe_toLinearEquiv]; rw [map_fundamentalDomain]
+  congr!
+  ext; simp
 
 中文:
 定理 covolume_comap
@@ -184,7 +186,9 @@ theorem covolume_comap
   证明: by
   rw [covolume_eq_measure_fundamentalDomain _ _ (isAddFundamentalDomain (Free.chooseBasis Int L) μ)]; rw [covolume_eq_measure_fundamentalDomain _ _ ((isAddFundamentalDomain
     ((Free.chooseBasis Int L).ofZLatticeComap Real L e.toLinearEquiv) ν))]; rw [← he.measureReal_preimage
-    (fundamentalDo
+    (fundamentalDomain_measurableSet _).nullMeasurableSet]; rw [← e.image_symm_eq_preimage]; rw [← e.symm.coe_toLinearEquiv]; rw [map_fundamentalDomain]
+  congr!
+  ext; simp
 
 Depends on / 依赖: Free.chooseBasis, IdemSemiring, IdemSemiring.toMulLeftMono, IsAddHaarMeasure, Measure, Measure.IsAddHaarMeasure, MeasurePreserving, MulLeftMono, ZLattice, ZLattice.comap, chooseBasis, covolume, covolume_eq_measure_fundamentalDomain, e.toLinearEquiv, e.toLinearMap, fundamentalDomain_measurableSet, he.measureReal_preimage, isAddFundamentalDomain, measureReal_preimage, nullMeasurableSet
 -/
@@ -305,7 +309,14 @@ theorem covolume_div_covolume_eq_relIndex
   let b₂ := IsZLattice.basis L₂
   rw [AddSubgroup.relIndex_eq_natAbs_det L₁.toAddSubgroup L₂.toAddSubgroup h b₁ b₂]; rw [Nat.cast_natAbs]; rw [Int.cast_abs]
   trans |(b₂.ofZLatticeBasis Real).det (b₁.ofZLatticeBasis Real)|
-  · rw [← Basis.det_mul_det _ 
+  · rw [← Basis.det_mul_det _ (Pi.basisFun Real ι) _, abs_mul, Pi.basisFun_det_apply,
+      ← Basis.det_inv, Units.val_inv_eq_inv_val, IsUnit.unit_spec, Pi.basisFun_det_apply,
+      covolume_eq_det _ b₁, covolume_eq_det _ b₂, mul_comm, abs_inv]
+    congr 3 <;> ext <;> simp
+  · rw [Basis.det_apply, Basis.det_apply, Int.cast_det]
+    congr; ext i j
+    rw [Matrix.map_apply]; rw [Basis.toMatrix_apply]; rw [Basis.toMatrix_apply]; rw [Basis.ofZLatticeBasis_apply]
+    exact (b₂.ofZLatticeBasis_repr_apply Real L₂ ⟨b₁ j, h (coe_mem _)⟩ i)
 
 中文:
 定理 covolume_div_covolume_eq_relIndex
@@ -316,7 +327,14 @@ theorem covolume_div_covolume_eq_relIndex
   let b₂ := IsZLattice.basis L₂
   rw [AddSubgroup.relIndex_eq_natAbs_det L₁.toAddSubgroup L₂.toAddSubgroup h b₁ b₂]; rw [Nat.cast_natAbs]; rw [Int.cast_abs]
   trans |(b₂.ofZLatticeBasis Real).det (b₁.ofZLatticeBasis Real)|
-  · rw [← Basis.det_mul_det _ 
+  · rw [← Basis.det_mul_det _ (Pi.basisFun Real ι) _, abs_mul, Pi.basisFun_det_apply,
+      ← Basis.det_inv, Units.val_inv_eq_inv_val, IsUnit.unit_spec, Pi.basisFun_det_apply,
+      covolume_eq_det _ b₁, covolume_eq_det _ b₂, mul_comm, abs_inv]
+    congr 3 <;> ext <;> simp
+  · rw [Basis.det_apply, Basis.det_apply, Int.cast_det]
+    congr; ext i j
+    rw [Matrix.map_apply]; rw [Basis.toMatrix_apply]; rw [Basis.toMatrix_apply]; rw [Basis.ofZLatticeBasis_apply]
+    exact (b₂.ofZLatticeBasis_repr_apply Real L₂ ⟨b₁ j, h (coe_mem _)⟩ i)
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.relIndex_eq_natAbs_det, Basis.det_inv, Basis.det_mul_det, Int.cast_abs, IsUnit, IsUnit.unit_spec, IsZLattice, IsZLattice.basis, Nat.cast_natAbs, Pi.basisFun, Pi.basisFun_det_apply, Units.val_inv_eq_inv_val, abs_inv, abs_mul, basisFun, basisFun_det_apply, cast_abs, cast_natAbs, classical
 -/
@@ -348,7 +366,7 @@ theorem covolume_div_covolume_eq_relIndex'
     (stdOrthonormalBasis Real E).repr.toContinuousLinearEquiv.symm
   have hf : MeasurePreserving f := (stdOrthonormalBasis Real E).measurePreserving_repr_symm.comp
     (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp _).symm
-  rw [← c
+  rw [← covolume_comap L₁ volume volume hf]; rw [← covolume_comap L₂ volume volume hf]; rw [covolume_div_covolume_eq_relIndex _ _ (fun _ h' => h h')]; rw [ZLattice.comap_toAddSubgroup]; rw [ZLattice.comap_toAddSubgroup]; rw [Nat.cast_inj]; rw [LinearEquiv.toAddMonoidHom_commutes]; rw [AddSubgroup.comap_equiv_eq_map_symm']; rw [AddSubgroup.comap_equiv_eq_map_symm']; rw [AddSubgroup.relIndex_map_map_of_injective _ _ f.symm.injective]
 
 中文:
 定理 covolume_div_covolume_eq_relIndex'
@@ -358,7 +376,7 @@ theorem covolume_div_covolume_eq_relIndex'
     (stdOrthonormalBasis Real E).repr.toContinuousLinearEquiv.symm
   have hf : MeasurePreserving f := (stdOrthonormalBasis Real E).measurePreserving_repr_symm.comp
     (EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp _).symm
-  rw [← c
+  rw [← covolume_comap L₁ volume volume hf]; rw [← covolume_comap L₂ volume volume hf]; rw [covolume_div_covolume_eq_relIndex _ _ (fun _ h' => h h')]; rw [ZLattice.comap_toAddSubgroup]; rw [ZLattice.comap_toAddSubgroup]; rw [Nat.cast_inj]; rw [LinearEquiv.toAddMonoidHom_commutes]; rw [AddSubgroup.comap_equiv_eq_map_symm']; rw [AddSubgroup.comap_equiv_eq_map_symm']; rw [AddSubgroup.relIndex_map_map_of_injective _ _ f.symm.injective]
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.equiv, EuclideanSpace.volume_preserving_symm_measurableEquiv_toLp, MeasurePreserving, ZLattice, ZLattice.comap_toAddSubgroup, comap_toAddSubgroup, covolume_comap, covolume_div_covolume_eq_relIndex, measurePreserving_repr_symm, measurePreserving_repr_symm.comp, repr.toContinuousLinearEquiv.symm, stdOrthonormalBasis, symm.trans, toContinuousLinearEquiv, volume, volume_preserving_symm_measurableEquiv_toLp
 -/
@@ -407,7 +425,12 @@ theorem volume_image_eq_volume_div_covolume'
     Fintype.equivOfCardEq (by rw [Fintype.card_fin, finrank_eq_card_basis (b.ofZLatticeBasis Real)])
   let f := (EuclideanSpace.equiv ι Real).symm.trans
     ((stdOrthonormalBasis Real E).reindex e).repr.toContinuousLinearEquiv.symm
-  have hf : MeasurePreservi
+  have hf : MeasurePreserving f :=
+    ((stdOrthonormalBasis Real E).reindex e).measurePreserving_repr_symm.comp
+      (PiLp.volume_preserving_toLp ι)
+  rw [← hf.measure_preimage hs]; rw [← (covolume_comap L volume volume hf)]; rw [← volume_image_eq_volume_div_covolume (ZLattice.comap Real L f.toLinearMap)
+    (b.ofZLatticeComap Real L f.toLinearEquiv)]; rw [Basis.ofZLatticeBasis_comap]; rw [← f.image_symm_eq_preimage]; rw [← Set.image_comp]
+  simp
 
 中文:
 定理 volume_image_eq_volume_div_covolume'
@@ -417,7 +440,12 @@ theorem volume_image_eq_volume_div_covolume'
     Fintype.equivOfCardEq (by rw [Fintype.card_fin, finrank_eq_card_basis (b.ofZLatticeBasis Real)])
   let f := (EuclideanSpace.equiv ι Real).symm.trans
     ((stdOrthonormalBasis Real E).reindex e).repr.toContinuousLinearEquiv.symm
-  have hf : MeasurePreservi
+  have hf : MeasurePreserving f :=
+    ((stdOrthonormalBasis Real E).reindex e).measurePreserving_repr_symm.comp
+      (PiLp.volume_preserving_toLp ι)
+  rw [← hf.measure_preimage hs]; rw [← (covolume_comap L volume volume hf)]; rw [← volume_image_eq_volume_div_covolume (ZLattice.comap Real L f.toLinearMap)
+    (b.ofZLatticeComap Real L f.toLinearEquiv)]; rw [Basis.ofZLatticeBasis_comap]; rw [← f.image_symm_eq_preimage]; rw [← Set.image_comp]
+  simp
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.equiv, Fintype, Fintype.card_fin, Fintype.equivOfCardEq, MeasurePreserving, PiLp.volume_preserving_toLp, b.ofZLatticeBasis, card_fin, covolume_comap, equivOfCardEq, finrank, finrank_eq_card_basis, hf.measure_preimage, measurePreserving_repr_symm, measurePreserving_repr_symm.comp, measure_preimage, ofZLatticeBasis, reindex, repr.toContinuousLinearEquiv.symm
 -/
@@ -462,7 +490,14 @@ theorem tendsto_card_div_pow''
   · filter_upwards [eventually_gt_atTop 0] with n hn
     congr
 refine Nat.card_congr ((b.ofZLatticeBasis Real).equivFun.toEquiv.subtypeEquiv fun x => ?_).symm
-    simp_rw [Set.mem
+    simp_rw [Set.mem_inter_iff, ← b.ofZLatticeBasis_span Real, LinearEquiv.coe_toEquiv,
+      Basis.equivFun_apply, Set.mem_image, DFunLike.coe_fn_eq, EmbeddingLike.apply_eq_iff_eq,
+      exists_eq_right, and_congr_right_iff, Set.mem_inv_smul_set_iff₀
+      (mod_cast hn.ne' : (n : Real) != 0), ← Finsupp.coe_smul, ← map_smul, SetLike.mem_coe,
+      Basis.mem_span_iff_repr_mem, Pi.basisFun_repr, implies_true]
+  · rw [← NormedSpace.isVonNBounded_iff Real] at hs₁ ⊢
+    exact Bornology.IsVonNBounded.image hs₁ ((b.ofZLatticeBasis Real).equivFunL : E ->L[Real] ι -> Real)
+  · exact (b.ofZLatticeBasis Real).equivFunL.toHomeomorph.toMeasurableEquiv.measurableSet_image.mpr hs₂
 
 中文:
 定理 tendsto_card_div_pow''
@@ -473,7 +508,14 @@ refine Nat.card_congr ((b.ofZLatticeBasis Real).equivFun.toEquiv.subtypeEquiv fu
   · filter_upwards [eventually_gt_atTop 0] with n hn
     congr
 refine Nat.card_congr ((b.ofZLatticeBasis Real).equivFun.toEquiv.subtypeEquiv fun x => ?_).symm
-    simp_rw [Set.mem
+    simp_rw [Set.mem_inter_iff, ← b.ofZLatticeBasis_span Real, LinearEquiv.coe_toEquiv,
+      Basis.equivFun_apply, Set.mem_image, DFunLike.coe_fn_eq, EmbeddingLike.apply_eq_iff_eq,
+      exists_eq_right, and_congr_right_iff, Set.mem_inv_smul_set_iff₀
+      (mod_cast hn.ne' : (n : Real) != 0), ← Finsupp.coe_smul, ← map_smul, SetLike.mem_coe,
+      Basis.mem_span_iff_repr_mem, Pi.basisFun_repr, implies_true]
+  · rw [← NormedSpace.isVonNBounded_iff Real] at hs₁ ⊢
+    exact Bornology.IsVonNBounded.image hs₁ ((b.ofZLatticeBasis Real).equivFunL : E ->L[Real] ι -> Real)
+  · exact (b.ofZLatticeBasis Real).equivFunL.toHomeomorph.toMeasurableEquiv.measurableSet_image.mpr hs₂
 
 Depends on / 依赖: Basis.equivFun_apply, DFunLike, DFunLike.coe_fn_eq, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, LinearEquiv, LinearEquiv.coe_toEquiv, Nat.card_congr, Set.mem_image, Set.mem_inter_iff, Set.mem_inv_smul_set_i, Tendsto, Tendsto.congr, and_congr_right_iff, apply_eq_iff_eq, b.ofZLatticeBasis, b.ofZLatticeBasis_span, card_congr, coe_fn_eq, coe_toEquiv
 -/
@@ -535,6 +577,27 @@ refine Tendsto.congr' ?_ (tendsto_card_div_pow_atTop_volume'
       ((b.ofZLatticeBasis Real).equivFun '' {x in X | F x <= 1}) ?_ ?_ h₄ fun x y hx hy => ?_).comp
         (tendsto_rpow_atTop <| inv_pos.mpr
           (Nat.cast_pos.mpr card_pos) : Tendsto (fun x => x ^ (card ι : Real)⁻¹) atTop atTop)
+  · filter_upwards [eventually_gt_atTop 0] with c hc
+    have aux₁ : (card ι : Real) != 0 := Nat.cast_ne_zero.mpr card_ne_zero
+    have aux₂ : 0 < c ^ (card ι : Real)⁻¹ := Real.rpow_pos_of_pos hc _
+    have aux₃ : (c ^ (card ι : Real)⁻¹)⁻¹ != 0 := inv_ne_zero aux₂.ne'
+    have aux₄ : c ^ (-(card ι : Real)⁻¹) != 0 := (Real.rpow_pos_of_pos hc _).ne'
+    obtain ⟨hc₁, hc₂⟩ := lt_iff_le_and_ne.mp hc
+    rw [Function.comp_apply]; rw [← Real.rpow_natCast]; rw [Real.rpow_inv_rpow hc₁ aux₁]; rw [eq_comm]
+    congr
+refine Nat.card_congr Equiv.subtypeEquiv ((b.ofZLatticeBasis Real).equivFun.toEquiv.trans
+          (Equiv.smulRight aux₄)) fun _ => ?_
+    rw [Set.mem_inter_iff]; rw [Set.mem_inter_iff]; rw [Equiv.trans_apply]; rw [LinearEquiv.coe_toEquiv]; rw [Equiv.smulRight_apply]; rw [Real.rpow_neg hc₁]; rw [Set.smul_mem_smul_set_iff₀ aux₃]; rw [← Set.mem_smul_set_iff_inv_smul_mem₀ aux₂.ne']; rw [← image_smul_set]; rw [tendsto_card_le_div''_aux hX h₁ aux₂]; rw [← Real.rpow_natCast]; rw [← Real.rpow_mul hc₁]; rw [inv_mul_cancel₀ aux₁]; rw [Real.rpow_one]
+    simp_rw [SetLike.mem_coe, Set.mem_image, EmbeddingLike.apply_eq_iff_eq, exists_eq_right,
+      and_congr_right_iff, ← b.ofZLatticeBasis_span Real, Basis.mem_span_iff_repr_mem,
+      Pi.basisFun_repr, Basis.equivFun_apply, implies_true]
+  · rw [← NormedSpace.isVonNBounded_iff Real] at h₂ ⊢
+    exact Bornology.IsVonNBounded.image h₂ ((b.ofZLatticeBasis Real).equivFunL : E ->L[Real] ι -> Real)
+  · exact (b.ofZLatticeBasis Real).equivFunL.toHomeomorph.toMeasurableEquiv.measurableSet_image.mpr h₃
+  · simp_rw [← image_smul_set]
+    apply Set.image_mono
+    rw [tendsto_card_le_div''_aux hX h₁ hx]; rw [tendsto_card_le_div''_aux hX h₁ (lt_of_lt_of_le hx hy)]
+exact fun a ⟨ha₁, ha₂⟩ => ⟨ha₁, le_trans ha₂ pow_le_pow_left₀ (le_of_lt hx) hy _⟩
 
 中文:
 定理 tendsto_card_le_div''
@@ -544,6 +607,27 @@ refine Tendsto.congr' ?_ (tendsto_card_div_pow_atTop_volume'
       ((b.ofZLatticeBasis Real).equivFun '' {x in X | F x <= 1}) ?_ ?_ h₄ fun x y hx hy => ?_).comp
         (tendsto_rpow_atTop <| inv_pos.mpr
           (Nat.cast_pos.mpr card_pos) : Tendsto (fun x => x ^ (card ι : Real)⁻¹) atTop atTop)
+  · filter_upwards [eventually_gt_atTop 0] with c hc
+    have aux₁ : (card ι : Real) != 0 := Nat.cast_ne_zero.mpr card_ne_zero
+    have aux₂ : 0 < c ^ (card ι : Real)⁻¹ := Real.rpow_pos_of_pos hc _
+    have aux₃ : (c ^ (card ι : Real)⁻¹)⁻¹ != 0 := inv_ne_zero aux₂.ne'
+    have aux₄ : c ^ (-(card ι : Real)⁻¹) != 0 := (Real.rpow_pos_of_pos hc _).ne'
+    obtain ⟨hc₁, hc₂⟩ := lt_iff_le_and_ne.mp hc
+    rw [Function.comp_apply]; rw [← Real.rpow_natCast]; rw [Real.rpow_inv_rpow hc₁ aux₁]; rw [eq_comm]
+    congr
+refine Nat.card_congr Equiv.subtypeEquiv ((b.ofZLatticeBasis Real).equivFun.toEquiv.trans
+          (Equiv.smulRight aux₄)) fun _ => ?_
+    rw [Set.mem_inter_iff]; rw [Set.mem_inter_iff]; rw [Equiv.trans_apply]; rw [LinearEquiv.coe_toEquiv]; rw [Equiv.smulRight_apply]; rw [Real.rpow_neg hc₁]; rw [Set.smul_mem_smul_set_iff₀ aux₃]; rw [← Set.mem_smul_set_iff_inv_smul_mem₀ aux₂.ne']; rw [← image_smul_set]; rw [tendsto_card_le_div''_aux hX h₁ aux₂]; rw [← Real.rpow_natCast]; rw [← Real.rpow_mul hc₁]; rw [inv_mul_cancel₀ aux₁]; rw [Real.rpow_one]
+    simp_rw [SetLike.mem_coe, Set.mem_image, EmbeddingLike.apply_eq_iff_eq, exists_eq_right,
+      and_congr_right_iff, ← b.ofZLatticeBasis_span Real, Basis.mem_span_iff_repr_mem,
+      Pi.basisFun_repr, Basis.equivFun_apply, implies_true]
+  · rw [← NormedSpace.isVonNBounded_iff Real] at h₂ ⊢
+    exact Bornology.IsVonNBounded.image h₂ ((b.ofZLatticeBasis Real).equivFunL : E ->L[Real] ι -> Real)
+  · exact (b.ofZLatticeBasis Real).equivFunL.toHomeomorph.toMeasurableEquiv.measurableSet_image.mpr h₃
+  · simp_rw [← image_smul_set]
+    apply Set.image_mono
+    rw [tendsto_card_le_div''_aux hX h₁ hx]; rw [tendsto_card_le_div''_aux hX h₁ (lt_of_lt_of_le hx hy)]
+exact fun a ⟨ha₁, ha₂⟩ => ⟨ha₁, le_trans ha₂ pow_le_pow_left₀ (le_of_lt hx) hy _⟩
 
 Depends on / 依赖: Nat.cast_ne_zero.mpr, Nat.cast_pos.mpr, Real.rpow_pos_of_pos, Tendsto, Tendsto.congr, b.ofZLatticeBasis, card_ne_zero, card_pos, cast_ne_zero, cast_pos, equivFun, eventually_gt_atTop, filter_upwards, inv_pos, inv_pos.mpr, ofZLatticeBasis, rpow_pos_of_pos, tendsto_card_div_pow_atTop_volume, tendsto_rpow_atTop
 -/
@@ -658,7 +742,9 @@ theorem tendsto_card_le_div
     rw [← finrank_eq_card_chooseBasisIndex]; rw [ZLattice.rank Real]; rw [finrank_fintype_fun_eq_card]
   let b := (Module.Free.chooseBasis Int L).reindex e
   convert! tendsto_card_le_div'' b hX h₁ h₂ h₃ ?_
-  · si
+  · simp only [measureReal_def]
+    rw [volume_image_eq_volume_div_covolume L b]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_ofReal (covolume_pos L volume).le]
+  · rw [frontier_equivFun, volume_image_eq_volume_div_covolume, h₄, ENNReal.zero_div]
 
 中文:
 定理 tendsto_card_le_div
@@ -669,7 +755,9 @@ theorem tendsto_card_le_div
     rw [← finrank_eq_card_chooseBasisIndex]; rw [ZLattice.rank Real]; rw [finrank_fintype_fun_eq_card]
   let b := (Module.Free.chooseBasis Int L).reindex e
   convert! tendsto_card_le_div'' b hX h₁ h₂ h₃ ?_
-  · si
+  · simp only [measureReal_def]
+    rw [volume_image_eq_volume_div_covolume L b]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_ofReal (covolume_pos L volume).le]
+  · rw [frontier_equivFun, volume_image_eq_volume_div_covolume, h₄, ENNReal.zero_div]
 
 Depends on / 依赖: ChooseBasisIndex, ENNReal, ENNReal.toReal_div, ENNReal.toReal_ofReal, Fintype, Fintype.equivOfCardEq, Free.ChooseBasisIndex, Module, Module.Free.chooseBasis, ZLattice, ZLattice.rank, chooseBasis, convert, covolume_pos, equivOfCardEq, finrank_eq_card_chooseBasisIndex, finrank_fintype_fun_eq_card, frontier_equivFun, measureReal_def, reindex
 -/
@@ -710,7 +798,9 @@ theorem tendsto_card_div_pow'
   convert! tendsto_card_div_pow'' b hs₁ hs₂ ?_
   · rw [← finrank_eq_card_chooseBasisIndex, ZLattice.rank Real L]
   · simp only [measureReal_def]
-    rw [volume_image_eq_volume_div_covolume' L b hs₂.nullMeasurableSet]; rw [ENNReal.toReal_div]; rw [ENNReal.t
+    rw [volume_image_eq_volume_div_covolume' L b hs₂.nullMeasurableSet]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_ofReal (covolume_pos L volume).le]
+  · rw [frontier_equivFun, volume_image_eq_volume_div_covolume', hs₃, ENNReal.zero_div]
+    exact NullMeasurableSet.of_null hs₃
 
 中文:
 定理 tendsto_card_div_pow'
@@ -720,7 +810,9 @@ theorem tendsto_card_div_pow'
   convert! tendsto_card_div_pow'' b hs₁ hs₂ ?_
   · rw [← finrank_eq_card_chooseBasisIndex, ZLattice.rank Real L]
   · simp only [measureReal_def]
-    rw [volume_image_eq_volume_div_covolume' L b hs₂.nullMeasurableSet]; rw [ENNReal.toReal_div]; rw [ENNReal.t
+    rw [volume_image_eq_volume_div_covolume' L b hs₂.nullMeasurableSet]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_ofReal (covolume_pos L volume).le]
+  · rw [frontier_equivFun, volume_image_eq_volume_div_covolume', hs₃, ENNReal.zero_div]
+    exact NullMeasurableSet.of_null hs₃
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_div, ENNReal.toReal_ofReal, ENNReal.zero_div, Module, Module.Free.chooseBasis, NullMeasurableSet, NullMeasurableSet.of_null, ZLattice, ZLattice.rank, chooseBasis, convert, covolume_pos, finrank_eq_card_chooseBasisIndex, frontier_equivFun, measureReal_def, nullMeasurableSet, of_null, tendsto_card_div_pow, toReal_div
 -/
@@ -747,7 +839,11 @@ theorem tendsto_card_le_div'
   convert! tendsto_card_le_div'' b hX ?_ h₂ h₃ ?_
   · simp only [measureReal_def]
     rw [volume_image_eq_volume_div_covolume' L b h₃.nullMeasurableSet]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_ofReal (covolume_pos L volume).le]
-· have : Nontrivial L :
+· have : Nontrivial L := nontrivial_of_finrank_pos (ZLattice.rank Real L).symm ▸ finrank_pos
+    infer_instance
+  · rwa [← finrank_eq_card_chooseBasisIndex, ZLattice.rank Real L]
+  · rw [frontier_equivFun, volume_image_eq_volume_div_covolume', h₄, ENNReal.zero_div]
+    exact NullMeasurableSet.of_null h₄
 
 中文:
 定理 tendsto_card_le_div'
@@ -757,7 +853,11 @@ theorem tendsto_card_le_div'
   convert! tendsto_card_le_div'' b hX ?_ h₂ h₃ ?_
   · simp only [measureReal_def]
     rw [volume_image_eq_volume_div_covolume' L b h₃.nullMeasurableSet]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_ofReal (covolume_pos L volume).le]
-· have : Nontrivial L :
+· have : Nontrivial L := nontrivial_of_finrank_pos (ZLattice.rank Real L).symm ▸ finrank_pos
+    infer_instance
+  · rwa [← finrank_eq_card_chooseBasisIndex, ZLattice.rank Real L]
+  · rw [frontier_equivFun, volume_image_eq_volume_div_covolume', h₄, ENNReal.zero_div]
+    exact NullMeasurableSet.of_null h₄
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_div, ENNReal.toReal_ofReal, Module, Module.Free.chooseBasis, Nontrivial, ZLattice, ZLattice.rank, chooseBasis, convert, covolume_pos, finrank_eq_card_chooseBasisIndex, finrank_pos, frontier_equivFun, infer_instance, measureReal_def, nontrivial_of_finrank_pos, nullMeasurableSet, tendsto_card_le_div, toReal_div
 -/

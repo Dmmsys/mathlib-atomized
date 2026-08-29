@@ -43,7 +43,12 @@ theorem integral_deriv_of_contDiffOn_Icc
     apply DifferentiableAt.hasDerivAt
     apply ((h x ⟨hx.1.le, hx.2.le⟩).differentiableWithinAt one_ne_zero).differentiableAt
     exact Icc_mem_nhds hx.1 hx.2
-  · have := 
+  · have := (h.derivWithin (m := 0) (uniqueDiffOn_Icc h'ab) (by simp)).continuousOn
+    apply (this.intervalIntegrable_of_Icc (μ := volume) hab).congr_ae
+    simp only [hab, uIoc_of_le]
+    rw [← restrict_Ioo_eq_restrict_Ioc]
+    filter_upwards [self_mem_ae_restrict measurableSet_Ioo] with x hx
+    exact derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 hx.2)
 
 中文:
 定理 integral_deriv_of_contDiffOn_Icc
@@ -56,7 +61,12 @@ theorem integral_deriv_of_contDiffOn_Icc
     apply DifferentiableAt.hasDerivAt
     apply ((h x ⟨hx.1.le, hx.2.le⟩).differentiableWithinAt one_ne_zero).differentiableAt
     exact Icc_mem_nhds hx.1 hx.2
-  · have := 
+  · have := (h.derivWithin (m := 0) (uniqueDiffOn_Icc h'ab) (by simp)).continuousOn
+    apply (this.intervalIntegrable_of_Icc (μ := volume) hab).congr_ae
+    simp only [hab, uIoc_of_le]
+    rw [← restrict_Ioo_eq_restrict_Ioc]
+    filter_upwards [self_mem_ae_restrict measurableSet_Ioo] with x hx
+    exact derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 hx.2)
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.hasDerivAt, Icc_mem_nhds, congr_ae, continuousOn, derivWithin, differentiableAt, differentiableWithinAt, eq_or_lt, filter_upwards, h.continuousOn, h.derivWithin, hab.eq_or_lt, hasDerivAt, integral_eq_sub_of_hasDerivAt_of_le, intervalIntegrable_of_Icc, one_ne_zero, restrict_Ioo_eq_restrict_Ioc, this.intervalIntegrable_of_Icc, uIoc_of_le
 -/
@@ -88,7 +98,7 @@ theorem integral_derivWithin_Icc_of_contDiffOn_Icc
   apply MeasureTheory.integral_congr_ae
   rw [← restrict_Ioo_eq_restrict_Ioc]
   filter_upwards [self_mem_ae_restrict measurableSet_Ioo] with x hx
-  exact derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 h
+  exact derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 hx.2)
 
 中文:
 定理 integral_derivWithin_Icc_of_contDiffOn_Icc
@@ -99,7 +109,7 @@ theorem integral_derivWithin_Icc_of_contDiffOn_Icc
   apply MeasureTheory.integral_congr_ae
   rw [← restrict_Ioo_eq_restrict_Ioc]
   filter_upwards [self_mem_ae_restrict measurableSet_Ioo] with x hx
-  exact derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 h
+  exact derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 hx.2)
 
 Depends on / 依赖: Icc_mem_nhds, MeasureTheory, MeasureTheory.integral_congr_ae, derivWithin_of_mem_nhds, filter_upwards, integral_congr_ae, integral_deriv_of_contDiffOn_Icc, integral_of_le, measurableSet_Ioo, restrict_Ioo_eq_restrict_Ioc, self_mem_ae_restrict
 -/
@@ -198,7 +208,20 @@ theorem enorm_sub_le_lintegral_deriv_of_contDiffOn_Icc
   /- We want to write `f b - f a = ∫ x in Icc a b, deriv f x` and use the inequality between
   norm of integral and integral of norm. There is a small difficulty that this formula is not
   true when `E` is not complete, so we need to go first to the completion, and argue there. -/
-  let g := Unif
+  let g := UniformSpace.Completion.toComplₗᵢ (𝕜 := Real) (E := E)
+  have : ‖(g ∘ f) b - (g ∘ f) a‖ₑ = ‖f b - f a‖ₑ := by
+    rw [← edist_eq_enorm_sub]; rw [Function.comp_def]; rw [g.isometry.edist_eq]; rw [edist_eq_enorm_sub]
+  rw [← this]; rw [← integral_deriv_of_contDiffOn_Icc (g.contDiff.comp_contDiffOn h) hab]; rw [integral_of_le hab]; rw [restrict_Ioc_eq_restrict_Icc]
+  apply (enorm_integral_le_lintegral_enorm _).trans
+  apply lintegral_mono_ae
+  rw [← restrict_Ioo_eq_restrict_Icc]
+  filter_upwards [self_mem_ae_restrict measurableSet_Ioo] with x hx
+  rw [fderiv_comp_deriv]; rotate_left
+  · exact (g.contDiff.differentiable one_ne_zero).differentiableAt
+  · exact (h x ⟨hx.1.le, hx.2.le⟩).contDiffAt (Icc_mem_nhds hx.1 hx.2)
+.differentiableAt one_ne_zero
+  have : fderiv Real g (f x) = g.toContinuousLinearMap := g.toContinuousLinearMap.fderiv
+  simp [this]
 
 中文:
 定理 enorm_sub_le_lintegral_deriv_of_contDiffOn_Icc
@@ -207,7 +230,20 @@ theorem enorm_sub_le_lintegral_deriv_of_contDiffOn_Icc
   /- We want to write `f b - f a = ∫ x in Icc a b, deriv f x` and use the inequality between
   norm of integral and integral of norm. There is a small difficulty that this formula is not
   true when `E` is not complete, so we need to go first to the completion, and argue there. -/
-  let g := Unif
+  let g := UniformSpace.Completion.toComplₗᵢ (𝕜 := Real) (E := E)
+  have : ‖(g ∘ f) b - (g ∘ f) a‖ₑ = ‖f b - f a‖ₑ := by
+    rw [← edist_eq_enorm_sub]; rw [Function.comp_def]; rw [g.isometry.edist_eq]; rw [edist_eq_enorm_sub]
+  rw [← this]; rw [← integral_deriv_of_contDiffOn_Icc (g.contDiff.comp_contDiffOn h) hab]; rw [integral_of_le hab]; rw [restrict_Ioc_eq_restrict_Icc]
+  apply (enorm_integral_le_lintegral_enorm _).trans
+  apply lintegral_mono_ae
+  rw [← restrict_Ioo_eq_restrict_Icc]
+  filter_upwards [self_mem_ae_restrict measurableSet_Ioo] with x hx
+  rw [fderiv_comp_deriv]; rotate_left
+  · exact (g.contDiff.differentiable one_ne_zero).differentiableAt
+  · exact (h x ⟨hx.1.le, hx.2.le⟩).contDiffAt (Icc_mem_nhds hx.1 hx.2)
+.differentiableAt one_ne_zero
+  have : fderiv Real g (f x) = g.toContinuousLinearMap := g.toContinuousLinearMap.fderiv
+  simp [this]
 -/
 theorem enorm_sub_le_lintegral_deriv_of_contDiffOn_Icc (h : ContDiffOn Real 1 f (Icc a b))
     (hab : a <= b) :

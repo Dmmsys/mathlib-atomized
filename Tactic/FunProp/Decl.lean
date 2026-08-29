@@ -112,7 +112,26 @@ definition addFunPropDecl
 
   let lvls := info.levelParams.map (fun l => Level.param l)
   let e := mkAppN (.const declName lvls) xs
-  le
+  let path ← DiscrTree.mkPath e
+
+  -- find the argument position of the function `f` in `P f`
+  let mut some funArgId ← (xs.zip bi).findIdxM? fun (x,bi) => do
+    if (← inferType x).isForall && bi.isExplicit then
+      return true
+    else
+      return false
+    | throwError "invalid fun_prop declaration, can't find argument of type `α -> β`"
+
+  let decl : FunPropDecl := {
+    funPropName := declName
+    path := path
+    funArgId := funArgId
+  }
+
+  modifyEnv fun env => funPropDeclsExt.addEntry env decl
+
+  trace[Meta.Tactic.fun_prop.attr]
+    "added new function property `{declName}`\nlook up pattern is `{path}`"
 
 中文:
 定义 addFunPropDecl
@@ -128,7 +147,26 @@ definition addFunPropDecl
 
   let lvls := info.levelParams.map (fun l => Level.param l)
   let e := mkAppN (.const declName lvls) xs
-  le
+  let path ← DiscrTree.mkPath e
+
+  -- find the argument position of the function `f` in `P f`
+  let mut some funArgId ← (xs.zip bi).findIdxM? fun (x,bi) => do
+    if (← inferType x).isForall && bi.isExplicit then
+      return true
+    else
+      return false
+    | throwError "invalid fun_prop declaration, can't find argument of type `α -> β`"
+
+  let decl : FunPropDecl := {
+    funPropName := declName
+    path := path
+    funArgId := funArgId
+  }
+
+  modifyEnv fun env => funPropDeclsExt.addEntry env decl
+
+  trace[Meta.Tactic.fun_prop.attr]
+    "added new function property `{declName}`\nlook up pattern is `{path}`"
 -/
 def addFunPropDecl (declName : Name) : MetaM Unit := do
 
@@ -179,7 +217,13 @@ definition getFunProp?
   else
     if decls.size > 1 then
       throwError "fun_prop bug: expression {← ppExpr e} matches multiple function properties\n\
-        {decls.map (fun d =
+        {decls.map (fun d => d.funPropName)}"
+
+    let decl := decls[0]
+    unless decl.funArgId < e.getAppNumArgs do return none
+    let f := e.getArg! decl.funArgId
+
+    return (decl,f)
 
 中文:
 定义 getFunProp?
@@ -194,7 +238,13 @@ definition getFunProp?
   else
     if decls.size > 1 then
       throwError "fun_prop bug: expression {← ppExpr e} matches multiple function properties\n\
-        {decls.map (fun d =
+        {decls.map (fun d => d.funPropName)}"
+
+    let decl := decls[0]
+    unless decl.funArgId < e.getAppNumArgs do return none
+    let f := e.getArg! decl.funArgId
+
+    return (decl,f)
 -/
 def getFunProp? (e : Expr) : MetaM (Option (FunPropDecl × Expr)) := do
   let ext := funPropDeclsExt.getState (← getEnv)
@@ -318,7 +368,19 @@ definition tacticToDischarge
         instantiateMVarDeclMVars mvar.mvarId!
 
         let _ ←
-          w
+          withSynthesize (postpone := .no) do
+            Tactic.run mvar.mvarId! (Tactic.evalTactic tacticCode *> Tactic.pruneSolvedGoals)
+
+        let result ← instantiateMVars mvar
+        if result.hasExprMVar then
+          return none
+        else
+          return some result
+      catch _ =>
+        return none
+    let (result?, _) ← runTac?.run {} {}
+
+    return result?
 
 中文:
 定义 tacticToDischarge
@@ -332,7 +394,19 @@ definition tacticToDischarge
         instantiateMVarDeclMVars mvar.mvarId!
 
         let _ ←
-          w
+          withSynthesize (postpone := .no) do
+            Tactic.run mvar.mvarId! (Tactic.evalTactic tacticCode *> Tactic.pruneSolvedGoals)
+
+        let result ← instantiateMVars mvar
+        if result.hasExprMVar then
+          return none
+        else
+          return some result
+      catch _ =>
+        return none
+    let (result?, _) ← runTac?.run {} {}
+
+    return result?
 -/
 def tacticToDischarge (tacticCode : TSyntax `tactic) : Expr -> MetaM (Option Expr) := fun e =>
   withTraceNode `Meta.Tactic.fun_prop

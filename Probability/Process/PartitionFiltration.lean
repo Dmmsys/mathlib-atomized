@@ -127,7 +127,7 @@ lemma measurable_memPartitionSet_subtype
     ext x
     simp
   simp_rw [memPartitionSet_eq_iff _ hs]
-  e
+  exact measurableSet_partitionFiltration_of_mem _ _ hs
 
 中文:
 引理 measurable_memPartitionSet_subtype
@@ -141,7 +141,7 @@ lemma measurable_memPartitionSet_subtype
     ext x
     simp
   simp_rw [memPartitionSet_eq_iff _ hs]
-  e
+  exact measurableSet_partitionFiltration_of_mem _ _ hs
 
 Depends on / 依赖: MeasurableSet, convert, measurableSet_partitionFiltration_of_mem, measurable_to_countable, memPartition, memPartitionSet, memPartitionSet_eq_iff, partitionFiltration, simp_rw
 -/

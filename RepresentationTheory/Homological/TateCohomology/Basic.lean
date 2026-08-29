@@ -530,7 +530,8 @@ lemma map_tateComplexFunctor_shortExact
   rintro (_ | _)
   · exact ShortComplex.shortExact_of_iso (ShortComplex.mapNatIso _ (tateComplex.evalNonneg _).symm)
  map_cochainsFunctor_eval_shortExact hS _
-  · exact ShortComplex.shortExact_of_iso (
+  · exact ShortComplex.shortExact_of_iso (ShortComplex.mapNatIso _ (tateComplex.evalNeg _).symm)
+ map_chainsFunctor_eval_shortExact hS _
 
 中文:
 引理 map_tateComplexFunctor_shortExact
@@ -540,7 +541,8 @@ lemma map_tateComplexFunctor_shortExact
   rintro (_ | _)
   · exact ShortComplex.shortExact_of_iso (ShortComplex.mapNatIso _ (tateComplex.evalNonneg _).symm)
  map_cochainsFunctor_eval_shortExact hS _
-  · exact ShortComplex.shortExact_of_iso (
+  · exact ShortComplex.shortExact_of_iso (ShortComplex.mapNatIso _ (tateComplex.evalNeg _).symm)
+ map_chainsFunctor_eval_shortExact hS _
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.shortExact_iff_degreewise_shortExact, ShortComplex, ShortComplex.mapNatIso, ShortComplex.map_comp, ShortComplex.shortExact_of_iso, evalNeg, evalNonneg, mapNatIso, map_chainsFunctor_eval_shortExact, map_cochainsFunctor_eval_shortExact, map_comp, shortExact_iff_degreewise_shortExact, shortExact_of_iso, tateComplex, tateComplex.evalNeg, tateComplex.evalNonneg
 -/

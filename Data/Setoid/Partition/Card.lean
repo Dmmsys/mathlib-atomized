@@ -33,7 +33,40 @@ theorem Setoid.IsPartition.ncard_eq_finsum
     Nat.card_eq_card_finite_toFinset (hst t)
   suffices hs' : _ by
     rw [finsum_def]; rw [dif_pos hs']
-    simp only [← Nat.card_coe_set_eq, N
+    simp only [← Nat.card_coe_set_eq, Nat.card_eq_card_finite_toFinset hs]
+    rw [Finset.sum_congr rfl (fun t ht => by exact hst' ↑t)]
+    rw [← Finset.card_sigma]; rw [eq_comm]
+    apply Finset.card_nbij' (fun ⟨t, x⟩ => x)
+      (fun x => ⟨⟨(hP.2 x).exists.choose, (hP.2 x).exists.choose_spec.1⟩, x⟩)
+    · rintro ⟨t, x⟩
+      simp +contextual
+    · intro x
+      simp only [Set.Finite.mem_toFinset, Finset.mem_sigma, Function.mem_support, Set.mem_inter_iff,
+        Finset.mem_coe]
+      intro hx
+      refine ⟨Nat.card_ne_zero.mpr ⟨?_, hst (hP.right x).exists.choose⟩,
+        hx, (hP.2 x).exists.choose_spec.2⟩
+      simp only [nonempty_subtype, Set.mem_inter_iff]
+      use x, hx, (hP.2 x).exists.choose_spec.2
+    · rintro ⟨t, x⟩
+      simp only [Finset.mem_sigma, Set.Finite.mem_toFinset, Function.mem_support, Nat.card_ne_zero,
+        Set.mem_inter_iff, Sigma.mk.inj_iff, heq_eq_eq, and_true, and_imp, Finset.mem_coe]
+      simp only [nonempty_subtype, Set.mem_inter_iff, forall_exists_index, and_imp]
+      intro y hy hyt _ hxs hxt
+      rw [← Subtype.coe_inj]
+      exact (hP.2 x).unique (hP.2 x).exists.choose_spec ⟨t.prop, hxt⟩
+    · intro t
+      simp only [implies_true]
+  let f : Function.support (fun (t : P) => (s inter (t : Set α)).ncard) -> s := fun ⟨t, ht⟩ =>
+    ⟨(Set.nonempty_of_ncard_ne_zero ht).choose, (Set.nonempty_of_ncard_ne_zero ht).choose_spec.1⟩
+  have hf (t : Function.support (fun (t : P) => (s inter (t : Set α)).ncard)) :
+      ↑↑t in P ∧ (f t : α) in (t : Set α) :=
+    ⟨(↑t : P).prop, (Set.nonempty_of_ncard_ne_zero t.prop).choose_spec.2⟩
+  have : Finite ↑s := hs
+  apply Finite.of_injective f
+  intro t t' h
+  simp only [← Subtype.coe_inj]
+  exact (hP.2 (f t)).unique (hf t) (h ▸ hf t')
 
 中文:
 定理 集合等价关系.IsPartition.ncard_eq_finsum
@@ -45,7 +78,40 @@ theorem Setoid.IsPartition.ncard_eq_finsum
     Nat.card_eq_card_finite_toFinset (hst t)
   suffices hs' : _ by
     rw [finsum_def]; rw [dif_pos hs']
-    simp only [← Nat.card_coe_set_eq, N
+    simp only [← Nat.card_coe_set_eq, Nat.card_eq_card_finite_toFinset hs]
+    rw [Finset.sum_congr rfl (fun t ht => by exact hst' ↑t)]
+    rw [← Finset.card_sigma]; rw [eq_comm]
+    apply Finset.card_nbij' (fun ⟨t, x⟩ => x)
+      (fun x => ⟨⟨(hP.2 x).exists.choose, (hP.2 x).exists.choose_spec.1⟩, x⟩)
+    · rintro ⟨t, x⟩
+      simp +contextual
+    · intro x
+      simp only [Set.Finite.mem_toFinset, Finset.mem_sigma, Function.mem_support, Set.mem_inter_iff,
+        Finset.mem_coe]
+      intro hx
+      refine ⟨Nat.card_ne_zero.mpr ⟨?_, hst (hP.right x).exists.choose⟩,
+        hx, (hP.2 x).exists.choose_spec.2⟩
+      simp only [nonempty_subtype, Set.mem_inter_iff]
+      use x, hx, (hP.2 x).exists.choose_spec.2
+    · rintro ⟨t, x⟩
+      simp only [Finset.mem_sigma, Set.Finite.mem_toFinset, Function.mem_support, Nat.card_ne_zero,
+        Set.mem_inter_iff, Sigma.mk.inj_iff, heq_eq_eq, and_true, and_imp, Finset.mem_coe]
+      simp only [nonempty_subtype, Set.mem_inter_iff, forall_exists_index, and_imp]
+      intro y hy hyt _ hxs hxt
+      rw [← Subtype.coe_inj]
+      exact (hP.2 x).unique (hP.2 x).exists.choose_spec ⟨t.prop, hxt⟩
+    · intro t
+      simp only [implies_true]
+  let f : Function.support (fun (t : P) => (s inter (t : Set α)).ncard) -> s := fun ⟨t, ht⟩ =>
+    ⟨(Set.nonempty_of_ncard_ne_zero ht).choose, (Set.nonempty_of_ncard_ne_zero ht).choose_spec.1⟩
+  have hf (t : Function.support (fun (t : P) => (s inter (t : Set α)).ncard)) :
+      ↑↑t in P ∧ (f t : α) in (t : Set α) :=
+    ⟨(↑t : P).prop, (Set.nonempty_of_ncard_ne_zero t.prop).choose_spec.2⟩
+  have : Finite ↑s := hs
+  apply Finite.of_injective f
+  intro t t' h
+  simp only [← Subtype.coe_inj]
+  exact (hP.2 (f t)).unique (hf t) (h ▸ hf t')
 
 Depends on / 依赖: Finite, Finset, Finset.card_, Finset.card_sigma, Finset.sum_congr, Nat.card, Nat.card_coe_set_eq, Nat.card_eq_card_finite_toFinset, card_, card_coe_set_eq, card_eq_card_finite_toFinset, card_sigma, classical, dif_pos, eq_comm, finsum, finsum_def, hs.inter_of_left, inter_of_left, s.ncard
 -/

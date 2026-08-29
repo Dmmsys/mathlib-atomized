@@ -380,7 +380,9 @@ definition equivalenceOfEquiv
   body: wideCospan none (fun j => some (h j)) fun j => Hom.term (h j)
   inverse := wideCospan none (fun j => some (h.invFun j)) fun j => Hom.term (h.invFun j)
   unitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
-  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact 
+  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
+
+@[simp]
 
 中文:
 定义 equivalenceOfEquiv
@@ -388,7 +390,9 @@ definition equivalenceOfEquiv
   定义体: wideCospan none (fun j => some (h j)) fun j => Hom.term (h j)
   inverse := wideCospan none (fun j => some (h.invFun j)) fun j => Hom.term (h.invFun j)
   unitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
-  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact 
+  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
+
+@[simp]
 
 Depends on / 依赖: Hom.term, wideCospan
 -/
@@ -807,7 +811,7 @@ definition equivalenceOfEquiv
   body: wideSpan none (fun j => some (h j)) fun j => Hom.init (h j)
   inverse := wideSpan none (fun j => some (h.invFun j)) fun j => Hom.init (h.invFun j)
   unitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
-  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqTo
+  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
 
 中文:
 定义 equivalenceOfEquiv
@@ -815,7 +819,7 @@ definition equivalenceOfEquiv
   定义体: wideSpan none (fun j => some (h j)) fun j => Hom.init (h j)
   inverse := wideSpan none (fun j => some (h.invFun j)) fun j => Hom.init (h.invFun j)
   unitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
-  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqTo
+  counitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
 
 Depends on / 依赖: Hom.init, wideSpan
 -/
@@ -1588,7 +1592,10 @@ definition reindexIsLimitEquiv
     IsLimit.equivOfNatIsoOfIso
       (WidePullbackShape.functorExt (Iso.refl X) (fun i => eqToIso (by simp))
         fun i => by simp [← eqToHom_naturality]) _ _
-      (WidePullbackCone.ext (Iso.refl _) (by simp
+      (WidePullbackCone.ext (Iso.refl _) (by simp [base, reindex, mk])
+        (fun i => by
+          simp [π, reindex, mk,
+            eqToHom_naturality (fun i => (Cone.π s).app (some i)) (e.apply_symm_apply i)]))
 
 中文:
 定义 reindexIsLimitEquiv
@@ -1597,7 +1604,10 @@ definition reindexIsLimitEquiv
     IsLimit.equivOfNatIsoOfIso
       (WidePullbackShape.functorExt (Iso.refl X) (fun i => eqToIso (by simp))
         fun i => by simp [← eqToHom_naturality]) _ _
-      (WidePullbackCone.ext (Iso.refl _) (by simp
+      (WidePullbackCone.ext (Iso.refl _) (by simp [base, reindex, mk])
+        (fun i => by
+          simp [π, reindex, mk,
+            eqToHom_naturality (fun i => (Cone.π s).app (some i)) (e.apply_symm_apply i)]))
 
 Depends on / 依赖: IsLimit, IsLimit.equivOfNatIsoOfIso, IsLimit.whiskerEquivalenceEquiv, Iso.refl, WidePullbackCone, WidePullbackCone.ext, WidePullbackShape, WidePullbackShape.equivalenceOfEquiv, WidePullbackShape.functorExt, apply_symm_apply, e.apply_symm_apply, e.symm, eqToHom_naturality, eqToIso, equivOfNatIsoOfIso, equivalenceOfEquiv, functorExt, reindex, whiskerEquivalenceEquiv
 -/

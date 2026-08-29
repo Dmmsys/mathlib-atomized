@@ -148,7 +148,8 @@ lemma mFourier_norm
     simp only [mFourier, fourier_apply, ContinuousMap.coe_mk, norm_prod, Circle.norm_coe,
       Finset.prod_const_one, le_rfl]
   · refine (le_of_eq ?_).trans ((mFourier n).norm_coe_le_norm fun _ => 0)
-    simp on
+    simp only [mFourier, ContinuousMap.coe_mk, fourier_eval_zero, Finset.prod_const_one,
+      CStarRing.norm_one]
 
 中文:
 引理 mFourier_norm
@@ -159,7 +160,8 @@ lemma mFourier_norm
     simp only [mFourier, fourier_apply, ContinuousMap.coe_mk, norm_prod, Circle.norm_coe,
       Finset.prod_const_one, le_rfl]
   · refine (le_of_eq ?_).trans ((mFourier n).norm_coe_le_norm fun _ => 0)
-    simp on
+    simp only [mFourier, ContinuousMap.coe_mk, fourier_eval_zero, Finset.prod_const_one,
+      CStarRing.norm_one]
 
 Depends on / 依赖: CStarRing, CStarRing.norm_one, Circle, Circle.norm_coe, ContinuousMap, ContinuousMap.coe_mk, ContinuousMap.norm_le, Finset, Finset.prod_const_one, coe_mk, fourier_apply, fourier_eval_zero, le_antisymm, le_of_eq, le_rfl, mFourier, norm_coe, norm_coe_le_norm, norm_le, norm_one
 -/
@@ -183,7 +185,8 @@ lemma mFourier_single
   have := Finset.prod_mul_prod_compl {i} (fun j => fourier ((Pi.single i (1 : Int) : d -> Int) j) (z j))
   rw [Finset.prod_singleton]; rw [Finset.prod_congr rfl (fun j hj => ?_)] at this
   · rw [← this, Finset.prod_const_one, mul_one, Pi.single_eq_same]
-
+  · rw [Finset.mem_compl, Finset.mem_singleton] at hj
+    simp only [Pi.single_eq_of_ne hj, fourier_zero]
 
 中文:
 引理 mFourier_single
@@ -193,7 +196,8 @@ lemma mFourier_single
   have := Finset.prod_mul_prod_compl {i} (fun j => fourier ((Pi.single i (1 : Int) : d -> Int) j) (z j))
   rw [Finset.prod_singleton]; rw [Finset.prod_congr rfl (fun j hj => ?_)] at this
   · rw [← this, Finset.prod_const_one, mul_one, Pi.single_eq_same]
-
+  · rw [Finset.mem_compl, Finset.mem_singleton] at hj
+    simp only [Pi.single_eq_of_ne hj, fourier_zero]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, Finset, Finset.mem_compl, Finset.mem_singleton, Finset.prod_congr, Finset.prod_const_one, Finset.prod_mul_prod_compl, Finset.prod_singleton, Pi.single, Pi.single_eq_of_ne, Pi.single_eq_same, coe_mk, fourier, fourier_zero, mFourier, mem_compl, mem_singleton, mul_one, prod_congr
 -/
@@ -223,7 +227,7 @@ definition mFourierSubalgebra
     rintro _ ⟨n, rfl⟩
     refine subset_adjoin ⟨-n, ?_⟩
     ext1 x
-    simp only [mFourier_neg, starRingEnd_apply, Co
+    simp only [mFourier_neg, starRingEnd_apply, ContinuousMap.star_apply]
 
 中文:
 定义 mFourierSubalgebra
@@ -235,7 +239,7 @@ definition mFourierSubalgebra
     rintro _ ⟨n, rfl⟩
     refine subset_adjoin ⟨-n, ?_⟩
     ext1 x
-    simp only [mFourier_neg, starRingEnd_apply, Co
+    simp only [mFourier_neg, starRingEnd_apply, ContinuousMap.star_apply]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, adjoin, mFourier
 -/
@@ -260,7 +264,11 @@ theorem mFourierSubalgebra_coe
   · ext z
     simp only [mFourier, Pi.zero_apply, fourier_zero, Finset.prod_const, one_pow,
       ContinuousMap.coe_mk, ContinuousMap.one_apply]
-  · rintro _ _ _ _ ⟨m, rfl⟩
+  · rintro _ _ _ _ ⟨m, rfl⟩ ⟨n, rfl⟩
+    refine ⟨m + n, ?_⟩
+    ext z
+    simp only [mFourier, Pi.add_apply, fourier_apply, fourier_add', Finset.prod_mul_distrib,
+      ContinuousMap.coe_mk, ContinuousMap.mul_apply]
 
 中文:
 定理 mFourierSubalgebra_coe
@@ -270,7 +278,11 @@ theorem mFourierSubalgebra_coe
   · ext z
     simp only [mFourier, Pi.zero_apply, fourier_zero, Finset.prod_const, one_pow,
       ContinuousMap.coe_mk, ContinuousMap.one_apply]
-  · rintro _ _ _ _ ⟨m, rfl⟩
+  · rintro _ _ _ _ ⟨m, rfl⟩ ⟨n, rfl⟩
+    refine ⟨m + n, ?_⟩
+    ext z
+    simp only [mFourier, Pi.add_apply, fourier_apply, fourier_add', Finset.prod_mul_distrib,
+      ContinuousMap.coe_mk, ContinuousMap.mul_apply]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, ContinuousMap.mul_apply, ContinuousMap.one_apply, Finset, Finset.prod_const, Finset.prod_mul_distrib, Pi.add_apply, Pi.zero_apply, Submonoid, Submonoid.closure_induction, add_apply, adjoin_eq_span_of_subset, closure_induction, coe_mk, fourier_add, fourier_apply, fourier_zero, mFourier, mul_apply
 -/
@@ -301,7 +313,9 @@ theorem mFourierSubalgebra_separatesPoints
   obtain ⟨i, hi⟩ := hxy
   refine ⟨_, ⟨mFourier (Pi.single i 1), subset_adjoin ⟨Pi.single i 1, rfl⟩, rfl⟩, ?_⟩
   dsimp only
-  rw [mFourier_single]; rw [mFourier_single]; rw [fourier_one]; rw [fourier_one]; rw [Ne]; rw [
+  rw [mFourier_single]; rw [mFourier_single]; rw [fourier_one]; rw [fourier_one]; rw [Ne]; rw [Subtype.coe_inj]
+  contrapose hi
+  exact AddCircle.injective_toCircle one_ne_zero hi
 
 中文:
 定理 mFourierSubalgebra_separatesPoints
@@ -313,7 +327,9 @@ theorem mFourierSubalgebra_separatesPoints
   obtain ⟨i, hi⟩ := hxy
   refine ⟨_, ⟨mFourier (Pi.single i 1), subset_adjoin ⟨Pi.single i 1, rfl⟩, rfl⟩, ?_⟩
   dsimp only
-  rw [mFourier_single]; rw [mFourier_single]; rw [fourier_one]; rw [fourier_one]; rw [Ne]; rw [
+  rw [mFourier_single]; rw [mFourier_single]; rw [fourier_one]; rw [fourier_one]; rw [Ne]; rw [Subtype.coe_inj]
+  contrapose hi
+  exact AddCircle.injective_toCircle one_ne_zero hi
 
 Depends on / 依赖: AddCircle, AddCircle.injective_toCircle, Pi.single, Subtype, Subtype.coe_inj, classical, coe_inj, contrapose, fourier_one, funext_iff, injective_toCircle, mFourier, mFourier_single, not_forall, one_ne_zero, single, subset_adjoin
 -/
@@ -484,7 +500,16 @@ lemma measurePreserving_equivPiIoc
     MeasurePreserving (measurableEquivPiIoc a).symm _ _).symm
   have := Measure.map_map (μ := volume.comap Subtype.val) (measurable_pi_lambda
     (fun (x : d -> Real) => (fun i => x i : UnitAddTorus d))
-    (fun i => AddCircle.measur
+    (fun i => AddCircle.measurable_mk'.comp (measurable_pi_apply i)))
+    measurable_subtype_coe (α := {x : d -> Real // forall i, x i in Ioc (a i) (a i + 1)})
+  simp only [Function.comp_def] at this
+  simp_rw [coe_symm_measurableEquivPiIoc, ← this]
+  convert! (measurePreserving_pi _ _ (fun i => AddCircle.measurePreserving_mk 1 (a i))).map_eq.symm
+  · simp [volume, AddCircle.haarAddCircle]
+  · convert!
+    (map_comap_subtype_coe (MeasurableSet.univ_pi' (fun i => measurableSet_Ioc (a := a i))) volume)
+    convert! (Measure.restrict_pi_pi (fun i => volume) (fun i => Ioc (a i) (a i + 1))).symm
+    grind
 
 中文:
 引理 measurePreserving_equivPiIoc
@@ -493,7 +518,16 @@ lemma measurePreserving_equivPiIoc
     MeasurePreserving (measurableEquivPiIoc a).symm _ _).symm
   have := Measure.map_map (μ := volume.comap Subtype.val) (measurable_pi_lambda
     (fun (x : d -> Real) => (fun i => x i : UnitAddTorus d))
-    (fun i => AddCircle.measur
+    (fun i => AddCircle.measurable_mk'.comp (measurable_pi_apply i)))
+    measurable_subtype_coe (α := {x : d -> Real // forall i, x i in Ioc (a i) (a i + 1)})
+  simp only [Function.comp_def] at this
+  simp_rw [coe_symm_measurableEquivPiIoc, ← this]
+  convert! (measurePreserving_pi _ _ (fun i => AddCircle.measurePreserving_mk 1 (a i))).map_eq.symm
+  · simp [volume, AddCircle.haarAddCircle]
+  · convert!
+    (map_comap_subtype_coe (MeasurableSet.univ_pi' (fun i => measurableSet_Ioc (a := a i))) volume)
+    convert! (Measure.restrict_pi_pi (fun i => volume) (fun i => Ioc (a i) (a i + 1))).symm
+    grind
 
 Depends on / 依赖: AddCircle, AddCircle.measurable_mk, Function, Function.comp_def, Measure, Measure.map_map, MeasurePreserving, Subtype, Subtype.val, UnitAddTorus, coe_symm_measurableEquivPiIoc, comp_def, map_map, measurable, measurableEquivPiIoc, measurable_mk, measurable_pi_apply, measurable_pi_lambda, measurable_subtype_coe, simp_rw
 -/
@@ -659,7 +693,11 @@ theorem orthonormal_mFourier
   split_ifs with h
   · simpa only [h, add_neg_cancel, mFourier_zero, probReal_univ, one_smul] using!
       integral_const (α := UnitAddTorus d) (μ := volume) (1 : Complex)
-  rw [mFourier]
+  rw [mFourier]; rw [ContinuousMap.coe_mk]; rw [MeasureTheory.integral_fintype_prod_volume_eq_prod]
+  obtain ⟨i, hi⟩ := Function.ne_iff.mp h
+  apply Finset.prod_eq_zero (Finset.mem_univ i)
+  simpa only [eq_false_intro hi, if_false, ContinuousMap.inner_toLp, ← fourier_neg,
+← fourier_add] using! (orthonormal_iff_ite.mp orthonormal_fourier) (m i) (n i)
 
 中文:
 定理 orthonormal_mFourier
@@ -671,7 +709,11 @@ theorem orthonormal_mFourier
   split_ifs with h
   · simpa only [h, add_neg_cancel, mFourier_zero, probReal_univ, one_smul] using!
       integral_const (α := UnitAddTorus d) (μ := volume) (1 : Complex)
-  rw [mFourier]
+  rw [mFourier]; rw [ContinuousMap.coe_mk]; rw [MeasureTheory.integral_fintype_prod_volume_eq_prod]
+  obtain ⟨i, hi⟩ := Function.ne_iff.mp h
+  apply Finset.prod_eq_zero (Finset.mem_univ i)
+  simpa only [eq_false_intro hi, if_false, ContinuousMap.inner_toLp, ← fourier_neg,
+← fourier_add] using! (orthonormal_iff_ite.mp orthonormal_fourier) (m i) (n i)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, ContinuousMap.inner_toLp, Finset, Finset.mem_univ, Finset.prod_eq_zero, Function, Function.ne_iff.mp, MeasureTheory, MeasureTheory.integral_fintype_prod_volume_eq_prod, UnitAddTorus, add_neg_cancel, coe_mk, eq_false_intro, if_false, inner_toLp, integral_const, integral_fintype_prod_volume_eq_prod, mFourier, mFourier_add
 -/
@@ -788,7 +830,7 @@ theorem mFourierBasis_repr
     simp only [RCLike.inner_apply, mul_comm]
   · apply integral_congr_ae
     filter_upwards [coeFn_mFourierLp 2 i] with _ ht
-    rw [ht]; rw [← mFourier_neg]; rw [
+    rw [ht]; rw [← mFourier_neg]; rw [smul_eq_mul]
 
 中文:
 定理 mFourierBasis_repr
@@ -799,7 +841,7 @@ theorem mFourierBasis_repr
     simp only [RCLike.inner_apply, mul_comm]
   · apply integral_congr_ae
     filter_upwards [coeFn_mFourierLp 2 i] with _ ht
-    rw [ht]; rw [← mFourier_neg]; rw [
+    rw [ht]; rw [← mFourier_neg]; rw [smul_eq_mul]
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.L2.inner_def, RCLike, RCLike.inner_apply, coeFn_mFourierLp, coe_mFourierBasis, filter_upwards, inner_apply, inner_def, integral_congr_ae, mFourierBasis, mFourierBasis.repr_apply_apply, mFourierLp, mFourier_neg, mul_comm, repr_apply_apply, smul_eq_mul
 -/

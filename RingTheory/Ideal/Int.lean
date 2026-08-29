@@ -189,7 +189,16 @@ theorem absNorm_under_eq_sInf
       refine Set.eq_empty_of_forall_notMem ?_
       intro x ⟨hx₁, hx₂⟩
       rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [h]; rw [natCast_dvd_natCast]; rw [Nat.zero_dvd] at hx₂
-      rw [Nat.pos_iff_ne_
+      rw [Nat.pos_iff_ne_zero] at hx₁
+      exact hx₁ hx₂
+    rw [h]; rw [this]; rw [Nat.sInf_empty]
+  · have h₁ : absNorm (under Int I) in {d : Nat | 0 < d ∧ ↑d in I} :=
+      ⟨Nat.pos_of_ne_zero h, absNorm_under_mem I⟩
+    refine le_antisymm ?_ (Nat.sInf_le h₁)
+    by_contra! h₀
+    have h₂ := (Nat.sInf_mem (Set.nonempty_of_mem h₁)).2
+    rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast] at h₂
+exact lt_iff_not_ge.mp h₀ Nat.le_of_dvd (Nat.sInf_mem (Set.nonempty_of_mem h₁)).1 h₂
 
 中文:
 定理 absNorm_under_eq_sInf
@@ -199,7 +208,16 @@ theorem absNorm_under_eq_sInf
       refine Set.eq_empty_of_forall_notMem ?_
       intro x ⟨hx₁, hx₂⟩
       rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [h]; rw [natCast_dvd_natCast]; rw [Nat.zero_dvd] at hx₂
-      rw [Nat.pos_iff_ne_
+      rw [Nat.pos_iff_ne_zero] at hx₁
+      exact hx₁ hx₂
+    rw [h]; rw [this]; rw [Nat.sInf_empty]
+  · have h₁ : absNorm (under Int I) in {d : Nat | 0 < d ∧ ↑d in I} :=
+      ⟨Nat.pos_of_ne_zero h, absNorm_under_mem I⟩
+    refine le_antisymm ?_ (Nat.sInf_le h₁)
+    by_contra! h₀
+    have h₂ := (Nat.sInf_mem (Set.nonempty_of_mem h₁)).2
+    rw [← cast_natCast]; rw [cast_mem_ideal_iff]; rw [natCast_dvd_natCast] at h₂
+exact lt_iff_not_ge.mp h₀ Nat.le_of_dvd (Nat.sInf_mem (Set.nonempty_of_mem h₁)).1 h₂
 
 Depends on / 依赖: Nat.pos_iff_ne_zero, Nat.pos_of_ne_zero, Nat.sInf_empty, Nat.sInf_le, Nat.zero_dvd, Set.eq_empty_of_forall_notMem, absNorm, absNorm_under_mem, cast_mem_ideal_iff, cast_natCast, eq_empty_of_forall_notMem, le_antisymm, natCast_dvd_natCast, pos_iff_ne_zero, pos_of_ne_zero, sInf_empty, sInf_le, zero_dvd
 -/
@@ -232,7 +250,12 @@ theorem absNorm_under_dvd_absNorm
   · have : Fintype (S ⧸ I) := Fintype.ofFinite (S ⧸ I)
     have h_main {d : Nat} : (d : S) in I ↔ forall (x : S ⧸ I), d • x = 0 := by
       simp_rw [nsmul_eq_mul, ← map_natCast (Ideal.Quotient.mk I), ← Quotient.eq_zero_iff_mem]
-      exact ⟨fun h _ => by simp [h
+      exact ⟨fun h _ => by simp [h], fun h => by simpa using h 1⟩
+    rw [Ideal.absNorm_apply I]; rw [Submodule.cardQuot_apply]; rw [Nat.card_eq_fintype_card]
+    simp_rw [absNorm_under_eq_sInf, h_main, ← AddMonoid.exponent_eq_sInf]
+    exact AddGroup.exponent_dvd_card (G := S ⧸ I)
+  · rw [absNorm_apply I, Submodule.cardQuot_apply, Nat.card_eq_zero_of_infinite]
+    exact Nat.dvd_zero _
 
 中文:
 定理 absNorm_under_dvd_absNorm
@@ -242,7 +265,12 @@ theorem absNorm_under_dvd_absNorm
   · have : Fintype (S ⧸ I) := Fintype.ofFinite (S ⧸ I)
     have h_main {d : Nat} : (d : S) in I ↔ forall (x : S ⧸ I), d • x = 0 := by
       simp_rw [nsmul_eq_mul, ← map_natCast (Ideal.Quotient.mk I), ← Quotient.eq_zero_iff_mem]
-      exact ⟨fun h _ => by simp [h
+      exact ⟨fun h _ => by simp [h], fun h => by simpa using h 1⟩
+    rw [Ideal.absNorm_apply I]; rw [Submodule.cardQuot_apply]; rw [Nat.card_eq_fintype_card]
+    simp_rw [absNorm_under_eq_sInf, h_main, ← AddMonoid.exponent_eq_sInf]
+    exact AddGroup.exponent_dvd_card (G := S ⧸ I)
+  · rw [absNorm_apply I, Submodule.cardQuot_apply, Nat.card_eq_zero_of_infinite]
+    exact Nat.dvd_zero _
 
 Depends on / 依赖: AddGroup, AddGroup.exponent_dvd_c, AddMonoid, AddMonoid.exponent_eq_sInf, Fintype, Fintype.ofFinite, Ideal.Quotient.mk, Ideal.absNorm_apply, Nat.card_eq_fintype_card, Quotient, Quotient.eq_zero_iff_mem, Submodule, Submodule.cardQuot_apply, absNorm_apply, absNorm_under_eq_sInf, cardQuot_apply, card_eq_fintype_card, eq_zero_iff_mem, exponent_dvd_c, exponent_eq_sInf
 -/

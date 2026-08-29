@@ -402,7 +402,8 @@ theorem iterate_apply_lie
     rw [sum_antidiagonal_choose_succ_nsmul (M := L) (fun i j => ⁅D^[i] a, D^[j] b⁆) n]
     simp only [Function.iterate_succ_apply', ih, map_sum, map_nsmul, apply_lie_eq_add, smul_add,
       sum_add_distrib, add_right_inj]
-    refine sum_congr r
+    refine sum_congr rfl fun ⟨i, j⟩ hij => ?_
+    rw [n.choose_symm_of_eq_add (mem_antidiagonal.1 hij).symm]
 
 中文:
 定理 iterate_apply_lie
@@ -414,7 +415,8 @@ theorem iterate_apply_lie
     rw [sum_antidiagonal_choose_succ_nsmul (M := L) (fun i j => ⁅D^[i] a, D^[j] b⁆) n]
     simp only [Function.iterate_succ_apply', ih, map_sum, map_nsmul, apply_lie_eq_add, smul_add,
       sum_add_distrib, add_right_inj]
-    refine sum_congr r
+    refine sum_congr rfl fun ⟨i, j⟩ hij => ?_
+    rw [n.choose_symm_of_eq_add (mem_antidiagonal.1 hij).symm]
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, add_right_inj, apply_lie_eq_add, choose_symm_of_eq_add, iterate_succ_apply, map_nsmul, map_sum, mem_antidiagonal, n.choose_symm_of_eq_add, smul_add, sum_add_distrib, sum_antidiagonal_choose_succ_nsmul, sum_congr
 -/
@@ -1235,7 +1237,7 @@ instance :
   lie_self d := by
     ext a; simp only [commutator_apply, zero_apply]; abel
   leibniz_lie d e f := by
-    ext a; simp only [commutator_apply, 
+    ext a; simp only [commutator_apply, add_apply, map_sub]; abel
 
 中文:
 实例 :
@@ -1247,7 +1249,7 @@ instance :
   lie_self d := by
     ext a; simp only [commutator_apply, zero_apply]; abel
   leibniz_lie d e f := by
-    ext a; simp only [commutator_apply, 
+    ext a; simp only [commutator_apply, add_apply, map_sub]; abel
 
 Depends on / 依赖: add_apply, commutator_apply, leibniz_lie, lie_add, lie_self, map_add, map_sub, zero_apply
 -/
@@ -1531,7 +1533,14 @@ definition exp
       let _i := LieRing.toNonUnitalNonAssocRing L
       have : SMulCommClass R L L := LieAlgebra.smulCommClass R L
       have : IsScalarTower R L L := LieAlgebra.isScalarTower R L
-      exact Module.End.exp_mul_of_derivation R L D.toL
+      exact Module.End.exp_mul_of_derivation R L D.toLinearMap D.apply_lie_eq_add h
+    invFun x := IsNilpotent.exp (- D.toLinearMap) x
+    left_inv x := by
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
+        ← Module.End.mul_eq_comp, h.exp_neg_mul_exp_self, Module.End.one_apply]
+    right_inv x := by
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
+        ← Module.End.mul_eq_comp, h.exp_mul_exp_neg_self, Module.End.one_apply] }
 
 中文:
 定义 exp
@@ -1541,7 +1550,14 @@ definition exp
       let _i := LieRing.toNonUnitalNonAssocRing L
       have : SMulCommClass R L L := LieAlgebra.smulCommClass R L
       have : IsScalarTower R L L := LieAlgebra.isScalarTower R L
-      exact Module.End.exp_mul_of_derivation R L D.toL
+      exact Module.End.exp_mul_of_derivation R L D.toLinearMap D.apply_lie_eq_add h
+    invFun x := IsNilpotent.exp (- D.toLinearMap) x
+    left_inv x := by
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
+        ← Module.End.mul_eq_comp, h.exp_neg_mul_exp_self, Module.End.one_apply]
+    right_inv x := by
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
+        ← Module.End.mul_eq_comp, h.exp_mul_exp_neg_self, Module.End.one_apply] }
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, D.apply_lie_eq_add, D.toLinearMap, IsNilpotent, IsNilpotent.exp, IsScalarTower, LieAlgebra, LieAlgebra.isScalarTower, LieAlgebra.smulCommClass, LieRing, LieRing.toNonUnitalNonAssocRing, LinearMap, LinearMap.coe_toAddHom, LinearMap.comp_apply, Module, Module.End.exp_mul_of_derivation, Module.End.mul_eq_comp, SMulCommClass, apply_lie_eq_add
 -/

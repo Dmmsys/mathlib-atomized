@@ -137,7 +137,81 @@ lemma comm_succ
     letI β : X _⦋n + 1⦌ ⟶ Y _⦋n + 1⦌ := hom H (n + 1) (n + 2) ≫
       ((alternatingFaceMapComplex C).obj Y).d (n + 2) (n + 1)
     f.app (op ⦋n + 1⦌) = α + β + g.app (op ⦋n + 1⦌) := by
-  rw [← H.h_zero_comp_δ_zero]; r
+  rw [← H.h_zero_comp_δ_zero]; rw [← H.h_last_comp_δ_last]
+  dsimp
+  simp only [alternatingFaceMapComplex_obj_d, AlternatingFaceMapComplex.objD, hom_eq,
+    Preadditive.comp_neg, Preadditive.neg_comp, Preadditive.comp_sum,
+    Preadditive.sum_comp, Preadditive.comp_zsmul, Preadditive.zsmul_comp,
+    smul_neg, Finset.sum_neg_distrib, ← Finset.sum_zsmul, smul_smul, ← pow_add]
+  let α (x : Fin (n + 1) × Fin (n + 2)) := (-1) ^ ((x.1 + x.2 : Nat)) • X.δ x.2 ≫ H.h x.1
+  let β (x : Fin (n + 3) × Fin (n + 2)) := (-1) ^ ((x.1 + x.2 : Nat)) • H.h x.2 ≫ Y.δ x.1
+  have h₂ (x : Fin (n + 1) × Fin (n + 2)) (hx : x.1.castSucc < x.2) :
+      α x = -β ⟨x.2.succ, x.1.castSucc⟩ := by
+    dsimp [α, β]
+    simp only [← H.h_castSucc_comp_δ_succ_of_lt x.2 x.1 hx,
+      pow_add, pow_one, mul_neg, mul_one, neg_mul, neg_smul, neg_neg]
+    rw [mul_comm]
+  rw [← Finset.sum_product .univ .univ α]; rw [← Finset.sum_product .univ .univ β]; rw [Finset.univ_product_univ]; rw [Finset.univ_product_univ]
+  let S : Finset (Fin (n + 1) × Fin (n + 2)) := { x | x.1.castSucc < x.2 }
+  let γ₁ (x : Fin (n + 1) × Fin (n + 2)) := (x.2.castSucc, x.1.succ)
+  let γ₂ (x : Fin (n + 1) × Fin (n + 2)) := (x.2.succ, x.1.castSucc)
+  let γ₃ (i : Fin (n + 1)) := (i.castSucc.succ, i.succ)
+  let γ₄ (i : Fin (n + 1)) := (i.castSucc.succ, i.castSucc)
+  have hγ₁ : Function.Injective γ₁ := fun _ _ => by aesop
+  have hγ₂ : Function.Injective γ₂ := fun _ _ => by aesop
+  have hγ₃ : Function.Injective γ₃ := fun _ _ => by aesop
+  have hγ₄ : Function.Injective γ₄ := fun _ _ => by aesop
+  have eq₁ : H.h 0 ≫ Y.δ 0 = β ⟨0, 0⟩ := by simp [β]
+  have eq₂ : H.h (Fin.last _) ≫ Y.δ (Fin.last _) = - β ⟨Fin.last _, Fin.last _⟩ := by
+    dsimp [β]
+    simp only [pow_add, even_two, Even.neg_pow, one_pow, mul_one,
+      pow_one, mul_neg, neg_smul, neg_neg]
+    rw [← pow_add]; rw [(Even.add_self n).neg_one_pow]; rw [one_smul]
+  have eq₃ : ∑ x in Sᶜ, α x = - ∑ y in Finset.image γ₁ Sᶜ, β y := by
+    rw [← Finset.sum_neg_distrib]; rw [Finset.sum_image hγ₁.injOn]
+    refine Finset.sum_congr rfl (fun x hx => ?_)
+    dsimp [α, β, γ₁]
+    simp only [← H.h_succ_comp_δ_castSucc_of_lt x.2 x.1 (by simpa [S] using hx),
+      pow_add, pow_one, mul_neg, mul_one, neg_smul, neg_neg]
+    rw [mul_comm]
+  have eq₄ : ∑ x in S, α x = - ∑ y in Finset.image γ₂ S, β y := by
+    rw [← Finset.sum_neg_distrib]; rw [Finset.sum_image hγ₂.injOn]
+    refine Finset.sum_congr rfl (fun x hx => ?_)
+    dsimp [α, β, γ₂]
+    simp only [← H.h_castSucc_comp_δ_succ_of_lt x.2 x.1 (by simpa [S] using hx),
+      pow_add, pow_one, mul_neg, mul_one, neg_mul, neg_smul, neg_neg]
+    rw [mul_comm]
+  have eq₅ : ∑ x, β (γ₄ x) = - ∑ x, β (γ₃ x) := by
+    rw [← Finset.sum_neg_distrib]
+    exact Finset.sum_congr rfl (fun x hx => by simp [h_succ_comp_δ_castSucc_succ, β, γ₃, γ₄])
+  have h₁ : Disjoint (Finset.image γ₁ Sᶜ) (Finset.image γ₂ S) := by
+    rw [Finset.disjoint_iff_ne]
+    grind [Finset.mem_compl]
+  have h₂ : Disjoint (Finset.image γ₃ .univ) (Finset.image γ₄ .univ) := by
+    rw [Finset.disjoint_iff_ne]
+    grind
+  have h₃ : Disjoint (Finset.disjUnion _ _ h₂) {(0, 0), (Fin.last _, Fin.last _)} := by
+    rw [Finset.disjoint_iff_ne]
+    simp only [Finset.mem_insert, forall_eq_or_imp, Prod.forall]
+    rintro ⟨a, _⟩ ⟨b, _⟩
+    simp
+    grind
+  have h₄ : Disjoint (Finset.disjUnion _ _ h₁) (Finset.disjUnion _ _ h₃) := by
+    rw [Finset.disjoint_iff_ne]
+    simp only [Finset.compl_filter, not_lt, Finset.disjUnion_eq_union, Finset.mem_union,
+      Finset.mem_image, Finset.mem_filter, Finset.mem_univ, true_and, Prod.exists, ne_eq,
+      Finset.mem_insert, Finset.mem_singleton, Prod.forall, Prod.mk.injEq, not_and,
+      S, γ₁, γ₂, γ₃, γ₄]
+    rintro ⟨a, _⟩ ⟨b, _⟩ (⟨⟨j, _⟩, ⟨k, _⟩, h₁, h₂, h₃⟩ | ⟨⟨j, _⟩, ⟨k, _⟩, h₁, h₂, h₃⟩) _ _
+      ((⟨⟨i, _⟩, h₄, h₅⟩ | ⟨⟨i, _⟩, h₄, h₅⟩) | (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)) <;>
+        simp [Fin.ext_iff] at h₁ h₂ h₃ ⊢ <;> grind
+  have H : (Finset.disjUnion _ _ h₁)ᶜ = Finset.disjUnion _ _ h₃ :=
+    Finset.compl_eq_of_disjoint_of_card_add_eq h₄ (by
+      rw [Finset.card_disjUnion]; rw [Finset.card_disjUnion]; rw [Finset.card_disjUnion]; rw [Finset.card_image_of_injective _ hγ₁]; rw [Finset.card_image_of_injective _ hγ₂]; rw [Finset.card_image_of_injective _ hγ₃]; rw [Finset.card_image_of_injective _ hγ₄]
+      simp
+      lia)
+  rw [eq₁]; rw [eq₂]; rw [← S.sum_add_sum_compl]; rw [eq₃]; rw [eq₄]; rw [neg_add_rev]; rw [neg_neg]; rw [neg_neg]; rw [← Finset.sum_disjUnion h₁]; rw [← (Finset.disjUnion _ _ h₁).sum_add_sum_compl]; rw [neg_add]; rw [← add_assoc]; rw [add_neg_cancel]; rw [zero_add]; rw [H]; rw [Finset.sum_disjUnion]; rw [Finset.sum_disjUnion]; rw [Finset.sum_image hγ₃.injOn]; rw [Finset.sum_image hγ₄.injOn]; rw [Finset.sum_insert (by simp)]; rw [Finset.sum_singleton]; rw [neg_add_rev]; rw [neg_add_rev]; rw [neg_add_rev]; rw [eq₅]
+  simp
 
 中文:
 引理 comm_succ
@@ -146,7 +220,81 @@ lemma comm_succ
     letI β : X _⦋n + 1⦌ ⟶ Y _⦋n + 1⦌ := hom H (n + 1) (n + 2) ≫
       ((alternatingFaceMapComplex C).obj Y).d (n + 2) (n + 1)
     f.app (op ⦋n + 1⦌) = α + β + g.app (op ⦋n + 1⦌) := by
-  rw [← H.h_zero_comp_δ_zero]; r
+  rw [← H.h_zero_comp_δ_zero]; rw [← H.h_last_comp_δ_last]
+  dsimp
+  simp only [alternatingFaceMapComplex_obj_d, AlternatingFaceMapComplex.objD, hom_eq,
+    Preadditive.comp_neg, Preadditive.neg_comp, Preadditive.comp_sum,
+    Preadditive.sum_comp, Preadditive.comp_zsmul, Preadditive.zsmul_comp,
+    smul_neg, Finset.sum_neg_distrib, ← Finset.sum_zsmul, smul_smul, ← pow_add]
+  let α (x : Fin (n + 1) × Fin (n + 2)) := (-1) ^ ((x.1 + x.2 : Nat)) • X.δ x.2 ≫ H.h x.1
+  let β (x : Fin (n + 3) × Fin (n + 2)) := (-1) ^ ((x.1 + x.2 : Nat)) • H.h x.2 ≫ Y.δ x.1
+  have h₂ (x : Fin (n + 1) × Fin (n + 2)) (hx : x.1.castSucc < x.2) :
+      α x = -β ⟨x.2.succ, x.1.castSucc⟩ := by
+    dsimp [α, β]
+    simp only [← H.h_castSucc_comp_δ_succ_of_lt x.2 x.1 hx,
+      pow_add, pow_one, mul_neg, mul_one, neg_mul, neg_smul, neg_neg]
+    rw [mul_comm]
+  rw [← Finset.sum_product .univ .univ α]; rw [← Finset.sum_product .univ .univ β]; rw [Finset.univ_product_univ]; rw [Finset.univ_product_univ]
+  let S : Finset (Fin (n + 1) × Fin (n + 2)) := { x | x.1.castSucc < x.2 }
+  let γ₁ (x : Fin (n + 1) × Fin (n + 2)) := (x.2.castSucc, x.1.succ)
+  let γ₂ (x : Fin (n + 1) × Fin (n + 2)) := (x.2.succ, x.1.castSucc)
+  let γ₃ (i : Fin (n + 1)) := (i.castSucc.succ, i.succ)
+  let γ₄ (i : Fin (n + 1)) := (i.castSucc.succ, i.castSucc)
+  have hγ₁ : Function.Injective γ₁ := fun _ _ => by aesop
+  have hγ₂ : Function.Injective γ₂ := fun _ _ => by aesop
+  have hγ₃ : Function.Injective γ₃ := fun _ _ => by aesop
+  have hγ₄ : Function.Injective γ₄ := fun _ _ => by aesop
+  have eq₁ : H.h 0 ≫ Y.δ 0 = β ⟨0, 0⟩ := by simp [β]
+  have eq₂ : H.h (Fin.last _) ≫ Y.δ (Fin.last _) = - β ⟨Fin.last _, Fin.last _⟩ := by
+    dsimp [β]
+    simp only [pow_add, even_two, Even.neg_pow, one_pow, mul_one,
+      pow_one, mul_neg, neg_smul, neg_neg]
+    rw [← pow_add]; rw [(Even.add_self n).neg_one_pow]; rw [one_smul]
+  have eq₃ : ∑ x in Sᶜ, α x = - ∑ y in Finset.image γ₁ Sᶜ, β y := by
+    rw [← Finset.sum_neg_distrib]; rw [Finset.sum_image hγ₁.injOn]
+    refine Finset.sum_congr rfl (fun x hx => ?_)
+    dsimp [α, β, γ₁]
+    simp only [← H.h_succ_comp_δ_castSucc_of_lt x.2 x.1 (by simpa [S] using hx),
+      pow_add, pow_one, mul_neg, mul_one, neg_smul, neg_neg]
+    rw [mul_comm]
+  have eq₄ : ∑ x in S, α x = - ∑ y in Finset.image γ₂ S, β y := by
+    rw [← Finset.sum_neg_distrib]; rw [Finset.sum_image hγ₂.injOn]
+    refine Finset.sum_congr rfl (fun x hx => ?_)
+    dsimp [α, β, γ₂]
+    simp only [← H.h_castSucc_comp_δ_succ_of_lt x.2 x.1 (by simpa [S] using hx),
+      pow_add, pow_one, mul_neg, mul_one, neg_mul, neg_smul, neg_neg]
+    rw [mul_comm]
+  have eq₅ : ∑ x, β (γ₄ x) = - ∑ x, β (γ₃ x) := by
+    rw [← Finset.sum_neg_distrib]
+    exact Finset.sum_congr rfl (fun x hx => by simp [h_succ_comp_δ_castSucc_succ, β, γ₃, γ₄])
+  have h₁ : Disjoint (Finset.image γ₁ Sᶜ) (Finset.image γ₂ S) := by
+    rw [Finset.disjoint_iff_ne]
+    grind [Finset.mem_compl]
+  have h₂ : Disjoint (Finset.image γ₃ .univ) (Finset.image γ₄ .univ) := by
+    rw [Finset.disjoint_iff_ne]
+    grind
+  have h₃ : Disjoint (Finset.disjUnion _ _ h₂) {(0, 0), (Fin.last _, Fin.last _)} := by
+    rw [Finset.disjoint_iff_ne]
+    simp only [Finset.mem_insert, forall_eq_or_imp, Prod.forall]
+    rintro ⟨a, _⟩ ⟨b, _⟩
+    simp
+    grind
+  have h₄ : Disjoint (Finset.disjUnion _ _ h₁) (Finset.disjUnion _ _ h₃) := by
+    rw [Finset.disjoint_iff_ne]
+    simp only [Finset.compl_filter, not_lt, Finset.disjUnion_eq_union, Finset.mem_union,
+      Finset.mem_image, Finset.mem_filter, Finset.mem_univ, true_and, Prod.exists, ne_eq,
+      Finset.mem_insert, Finset.mem_singleton, Prod.forall, Prod.mk.injEq, not_and,
+      S, γ₁, γ₂, γ₃, γ₄]
+    rintro ⟨a, _⟩ ⟨b, _⟩ (⟨⟨j, _⟩, ⟨k, _⟩, h₁, h₂, h₃⟩ | ⟨⟨j, _⟩, ⟨k, _⟩, h₁, h₂, h₃⟩) _ _
+      ((⟨⟨i, _⟩, h₄, h₅⟩ | ⟨⟨i, _⟩, h₄, h₅⟩) | (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)) <;>
+        simp [Fin.ext_iff] at h₁ h₂ h₃ ⊢ <;> grind
+  have H : (Finset.disjUnion _ _ h₁)ᶜ = Finset.disjUnion _ _ h₃ :=
+    Finset.compl_eq_of_disjoint_of_card_add_eq h₄ (by
+      rw [Finset.card_disjUnion]; rw [Finset.card_disjUnion]; rw [Finset.card_disjUnion]; rw [Finset.card_image_of_injective _ hγ₁]; rw [Finset.card_image_of_injective _ hγ₂]; rw [Finset.card_image_of_injective _ hγ₃]; rw [Finset.card_image_of_injective _ hγ₄]
+      simp
+      lia)
+  rw [eq₁]; rw [eq₂]; rw [← S.sum_add_sum_compl]; rw [eq₃]; rw [eq₄]; rw [neg_add_rev]; rw [neg_neg]; rw [neg_neg]; rw [← Finset.sum_disjUnion h₁]; rw [← (Finset.disjUnion _ _ h₁).sum_add_sum_compl]; rw [neg_add]; rw [← add_assoc]; rw [add_neg_cancel]; rw [zero_add]; rw [H]; rw [Finset.sum_disjUnion]; rw [Finset.sum_disjUnion]; rw [Finset.sum_image hγ₃.injOn]; rw [Finset.sum_image hγ₄.injOn]; rw [Finset.sum_insert (by simp)]; rw [Finset.sum_singleton]; rw [neg_add_rev]; rw [neg_add_rev]; rw [neg_add_rev]; rw [eq₅]
+  simp
 -/
 private lemma comm_succ (n : Nat) :
     letI α : X _⦋n + 1⦌ ⟶ Y _⦋n + 1⦌ :=
@@ -247,7 +395,8 @@ definition toChainHomotopy
       rw [prevD_eq (j' := 1) (w := by simp)]; rw [dNext_eq_zero _ _ (by simp)]; rw [zero_add]
       simp [ToChainHomotopy.comm_zero H]
     | succ n =>
-      rw [dNext_eq (i' :=
+      rw [dNext_eq (i' := n) (w := by simp)]; rw [prevD_eq (j' := n + 2) (w := by simp)]
+      simp [ToChainHomotopy.comm_succ H]
 
 中文:
 定义 toChainHomotopy
@@ -260,7 +409,8 @@ definition toChainHomotopy
       rw [prevD_eq (j' := 1) (w := by simp)]; rw [dNext_eq_zero _ _ (by simp)]; rw [zero_add]
       simp [ToChainHomotopy.comm_zero H]
     | succ n =>
-      rw [dNext_eq (i' :=
+      rw [dNext_eq (i' := n) (w := by simp)]; rw [prevD_eq (j' := n + 2) (w := by simp)]
+      simp [ToChainHomotopy.comm_succ H]
 
 Depends on / 依赖: ToChainHomotopy, ToChainHomotopy.hom
 -/

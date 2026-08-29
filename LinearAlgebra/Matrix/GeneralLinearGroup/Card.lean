@@ -47,7 +47,17 @@ theorem card_linearIndependent
       have : Unique { s : Fin 0 -> V // (⊤ : Submodule K (Fin 0 ->₀ K)) = ⊥ } :=
         uniqueOfSubsingleton ⟨0, Subsingleton.elim ..⟩
       simp_rw [linearIndependent_iff_ker, Finsupp.linearCombination_fin_zero, ker_zero,
-        Fi
+        Finset.univ_eq_empty, Finset.prod_empty, card_unique]
+  | succ k ih =>
+      have (s : { s : Fin k -> V // LinearIndependent K s }) :
+          card ((Submodule.span K (Set.range (s : Fin k -> V)))ᶜ : Set (V)) =
+          (q) ^ n - (q) ^ k := by
+            rw [card_compl_set]; rw [Module.card_eq_pow_finrank (K := K)
+            (V := ((Submodule.span K (Set.range (s : Fin k -> V))) : Set (V)))]
+            simp only [SetLike.coe_sort_coe, finrank_span_eq_card s.2, card_fin]
+            rw [Module.card_eq_pow_finrank (K := K)]
+      simp [card_congr (equiv_linearIndependent k), sum_congr _ _ this, ih (Nat.le_of_succ_le hk),
+        mul_comm, Fin.prod_univ_succAbove _ (Fin.last k), -Set.fintypeCard_eq_ncard]
 
 中文:
 定理 card_linearIndependent
@@ -59,7 +69,17 @@ theorem card_linearIndependent
       have : Unique { s : Fin 0 -> V // (⊤ : Submodule K (Fin 0 ->₀ K)) = ⊥ } :=
         uniqueOfSubsingleton ⟨0, Subsingleton.elim ..⟩
       simp_rw [linearIndependent_iff_ker, Finsupp.linearCombination_fin_zero, ker_zero,
-        Fi
+        Finset.univ_eq_empty, Finset.prod_empty, card_unique]
+  | succ k ih =>
+      have (s : { s : Fin k -> V // LinearIndependent K s }) :
+          card ((Submodule.span K (Set.range (s : Fin k -> V)))ᶜ : Set (V)) =
+          (q) ^ n - (q) ^ k := by
+            rw [card_compl_set]; rw [Module.card_eq_pow_finrank (K := K)
+            (V := ((Submodule.span K (Set.range (s : Fin k -> V))) : Set (V)))]
+            simp only [SetLike.coe_sort_coe, finrank_span_eq_card s.2, card_fin]
+            rw [Module.card_eq_pow_finrank (K := K)]
+      simp [card_congr (equiv_linearIndependent k), sum_congr _ _ this, ih (Nat.le_of_succ_le hk),
+        mul_comm, Fin.prod_univ_succAbove _ (Fin.last k), -Set.fintypeCard_eq_ncard]
 
 Depends on / 依赖: Finset, Finset.prod_empty, Finset.univ_eq_empty, Finsupp, Finsupp.linearCombination_fin_zero, LinearIndependent, Nat.card_eq_fintype_card, Set.range, Submodule, Submodule.span, Subsingleton, Subsingleton.elim, Unique, card_compl_set, card_eq_fintype_card, card_unique, ker_zero, linearCombination_fin_zero, linearIndependent_iff_ker, prod_empty
 -/
@@ -108,7 +128,10 @@ definition equiv_GL_linearindependent
 invFun M := GeneralLinearGroup.mk'' (transpose (M.1)) by
     classical
     let b := basisOfPiSpaceOfLinearIndependent M.2
-    have := (Pi.basisFun 𝔽 (Fin n)).in
+    have := (Pi.basisFun 𝔽 (Fin n)).invertibleToMatrix b
+    rw [← Basis.coePiBasisFun.toMatrix_eq_transpose]; rw [← coe_basisOfPiSpaceOfLinearIndependent M.2]
+    exact isUnit_det_of_invertible _
+  right_inv := by exact congrFun rfl
 
 中文:
 定义 equiv_GL_linearindependent
@@ -119,7 +142,10 @@ invFun M := GeneralLinearGroup.mk'' (transpose (M.1)) by
 invFun M := GeneralLinearGroup.mk'' (transpose (M.1)) by
     classical
     let b := basisOfPiSpaceOfLinearIndependent M.2
-    have := (Pi.basisFun 𝔽 (Fin n)).in
+    have := (Pi.basisFun 𝔽 (Fin n)).invertibleToMatrix b
+    rw [← Basis.coePiBasisFun.toMatrix_eq_transpose]; rw [← coe_basisOfPiSpaceOfLinearIndependent M.2]
+    exact isUnit_det_of_invertible _
+  right_inv := by exact congrFun rfl
 
 Depends on / 依赖: Basis.coePiBasisFun.toMatrix_eq_transpose, GeneralLinearGroup, GeneralLinearGroup.mk, Pi.basisFun, Set.finrank, basisFun, basisOfPiSpaceOfLinearIndependent, classical, coePiBasisFun, coe_basisOfPiSpaceOfLinearIndependent, finrank, invFun, invertibleToMatrix, isUnit_det_of_invertible, linearIndependent_iff_card_eq_finrank_span, rank_eq_finrank_span_cols, rank_unit, right_inv, toMatrix_eq_transpose, transpose
 -/

@@ -40,7 +40,10 @@ theorem Polynomial.ringKrullDim_le
   apply Order.krullDim_le_of_krullDim_preimage_le' (PrimeSpectrum.comap C) ?_ (fun p => ?_)
   · exact fun {a b} h => Ideal.comap_mono h
   · rw [show C = (algebraMap R (Polynomial R)) from rfl, Order.krullDim_eq_of_orderIso
-      (PrimeSpectrum.preimageOrderI
+      (PrimeSpectrum.preimageOrderIsoFiber R (Polynomial R) p), ← ringKrullDim,
+      ← ringKrullDim_eq_of_ringEquiv (polyEquivTensor R (p.asIdeal.ResidueField)).toRingEquiv,
+      ← Ring.krullDimLE_iff]
+    infer_instance
 
 中文:
 定理 多项式.ringKrullDim_le
@@ -50,7 +53,10 @@ theorem Polynomial.ringKrullDim_le
   apply Order.krullDim_le_of_krullDim_preimage_le' (PrimeSpectrum.comap C) ?_ (fun p => ?_)
   · exact fun {a b} h => Ideal.comap_mono h
   · rw [show C = (algebraMap R (Polynomial R)) from rfl, Order.krullDim_eq_of_orderIso
-      (PrimeSpectrum.preimageOrderI
+      (PrimeSpectrum.preimageOrderIsoFiber R (Polynomial R) p), ← ringKrullDim,
+      ← ringKrullDim_eq_of_ringEquiv (polyEquivTensor R (p.asIdeal.ResidueField)).toRingEquiv,
+      ← Ring.krullDimLE_iff]
+    infer_instance
 
 Depends on / 依赖: Ideal.comap_mono, Order.krullDim_eq_of_orderIso, Order.krullDim_le_of_krullDim_preimage_le, Polynomial, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.preimageOrderIsoFiber, ResidueField, Ring.krullDimLE_iff, algebraMap, asIdeal, comap_mono, infer_instance, krullDimLE_iff, krullDim_eq_of_orderIso, krullDim_le_of_krullDim_preimage_le, p.asIdeal.ResidueField, polyEquivTensor, preimageOrderIsoFiber, ringKrullDim
 -/
@@ -82,7 +88,16 @@ lemma height_eq_height_add_one_of_isMaximal
   suffices h : (P.map (Ideal.Quotient.mk (Ideal.map (algebraMap R R[X]) p))).height = 1 by
     rw [height_eq_height_add_of_liesOver_of_hasGoingDown p]; rw [h]
   let e : (R[X] ⧸ (p.map (algebraMap R R[X]))) ≃+* (R ⧸ p)[X] :=
-    (polynomialQuotientEquivQ
+    (polynomialQuotientEquivQuotientPolynomial p).symm
+let P' : Ideal (R ⧸ p)[X] := Ideal.map e P.map (Ideal.Quotient.mk <| p.map (algebraMap R R[X]))
+  have : (P.map (Ideal.Quotient.mk <| p.map (algebraMap R R[X]))).IsMaximal := by
+    refine .map_of_surjective_of_ker_le Quotient.mk_surjective ?_
+    rw [mk_ker]; rw [LiesOver.over (P := P) (p := p)]
+    exact map_comap_le
+  have : P'.IsMaximal := map_isMaximal_of_equiv e
+  have : P'.height = 1 :=
+    IsPrincipalIdealRing.height_eq_one_of_isMaximal P' (Polynomial.not_isField (R ⧸ p))
+  rwa [← e.height_map <| P.map (Ideal.Quotient.mk <| p.map (algebraMap R R[X]))]
 
 中文:
 引理 height_eq_height_add_one_of_isMaximal
@@ -92,7 +107,16 @@ lemma height_eq_height_add_one_of_isMaximal
   suffices h : (P.map (Ideal.Quotient.mk (Ideal.map (algebraMap R R[X]) p))).height = 1 by
     rw [height_eq_height_add_of_liesOver_of_hasGoingDown p]; rw [h]
   let e : (R[X] ⧸ (p.map (algebraMap R R[X]))) ≃+* (R ⧸ p)[X] :=
-    (polynomialQuotientEquivQ
+    (polynomialQuotientEquivQuotientPolynomial p).symm
+let P' : Ideal (R ⧸ p)[X] := Ideal.map e P.map (Ideal.Quotient.mk <| p.map (algebraMap R R[X]))
+  have : (P.map (Ideal.Quotient.mk <| p.map (algebraMap R R[X]))).IsMaximal := by
+    refine .map_of_surjective_of_ker_le Quotient.mk_surjective ?_
+    rw [mk_ker]; rw [LiesOver.over (P := P) (p := p)]
+    exact map_comap_le
+  have : P'.IsMaximal := map_isMaximal_of_equiv e
+  have : P'.height = 1 :=
+    IsPrincipalIdealRing.height_eq_one_of_isMaximal P' (Polynomial.not_isField (R ⧸ p))
+  rwa [← e.height_map <| P.map (Ideal.Quotient.mk <| p.map (algebraMap R R[X]))]
 -/
 private lemma height_eq_height_add_one_of_isMaximal (p : Ideal R) [p.IsMaximal] (P : Ideal R[X])
     [P.IsMaximal] [P.LiesOver p] : P.height = p.height + 1 := by
@@ -150,7 +174,21 @@ lemma height_eq_height_add_one
   have : p'.IsMaximal := by
     rw [p'_def]; rw [Localization.AtPrime.map_eq_maximalIdeal]
     exact IsLocalRing.maximalIdeal.isMaximal Rₚ
-  let
+  let P' : Ideal Rₚ[X] := P.map (algebraMap R[X] Rₚ[X])
+  have disj : Disjoint (p.primeCompl.map C : Set R[X]) P := by
+    refine Set.disjoint_left.mpr fun a ⟨b, hb⟩ ha => hb.1 ?_
+    rwa [SetLike.mem_coe, LiesOver.over (P := P) (p := p), mem_comap, algebraMap_eq, hb.2]
+  have eq := under_map_of_isPrime_disjoint _ Rₚ[X] ‹P.IsMaximal›.isPrime disj
+  have : (P'.under R[X]).IsMaximal := eq.symm ▸ ‹P.IsMaximal›
+  have : P'.IsMaximal := .of_isLocalization_of_disjoint (p.primeCompl.map C)
+  have : P'.LiesOver p' := liesOver_of_isPrime_of_disjoint p.primeCompl _ _ disj
+  have eq1 : p.height = p'.height := by
+    rw [height_map_of_disjoint p.primeCompl]
+exact Disjoint.symm Set.disjoint_left.mpr fun _ a b => b a
+  have eq2 : P.height = P'.height := by
+    rw [height_map_of_disjoint (Submonoid.map C <| p.primeCompl) _ disj]
+  rw [eq1]; rw [eq2]
+  apply height_eq_height_add_one_of_isMaximal p' P'
 
 中文:
 引理 height_eq_height_add_one
@@ -162,7 +200,21 @@ lemma height_eq_height_add_one
   have : p'.IsMaximal := by
     rw [p'_def]; rw [Localization.AtPrime.map_eq_maximalIdeal]
     exact IsLocalRing.maximalIdeal.isMaximal Rₚ
-  let
+  let P' : Ideal Rₚ[X] := P.map (algebraMap R[X] Rₚ[X])
+  have disj : Disjoint (p.primeCompl.map C : Set R[X]) P := by
+    refine Set.disjoint_left.mpr fun a ⟨b, hb⟩ ha => hb.1 ?_
+    rwa [SetLike.mem_coe, LiesOver.over (P := P) (p := p), mem_comap, algebraMap_eq, hb.2]
+  have eq := under_map_of_isPrime_disjoint _ Rₚ[X] ‹P.IsMaximal›.isPrime disj
+  have : (P'.under R[X]).IsMaximal := eq.symm ▸ ‹P.IsMaximal›
+  have : P'.IsMaximal := .of_isLocalization_of_disjoint (p.primeCompl.map C)
+  have : P'.LiesOver p' := liesOver_of_isPrime_of_disjoint p.primeCompl _ _ disj
+  have eq1 : p.height = p'.height := by
+    rw [height_map_of_disjoint p.primeCompl]
+exact Disjoint.symm Set.disjoint_left.mpr fun _ a b => b a
+  have eq2 : P.height = P'.height := by
+    rw [height_map_of_disjoint (Submonoid.map C <| p.primeCompl) _ disj]
+  rw [eq1]; rw [eq2]
+  apply height_eq_height_add_one_of_isMaximal p' P'
 
 Depends on / 依赖: AtPrime, Disjoint, IsLocalRing, IsLocalRing.maximalIdeal.isMaximal, IsMaximal, IsPrime, LiesOver, LiesOver.over, Localization, Localization.AtPrime, Localization.AtPrime.map_eq_maximalIdeal, P.map, P.over_def, Set.disjoint_left.mpr, SetLike, SetLike.mem_coe, _def, algebraMap, disjoint_left, infer_instance
 -/
@@ -205,7 +257,8 @@ lemma ringKrullDim_of_isNoetherianRing
     refine (ringKrullDim_le_iff_isMaximal_height_le (ringKrullDim R + 1)).mpr fun M hM => ?_
     rw [height_eq_height_add_one (M.under R) M]; rw [WithBot.coe_add]; rw [WithBot.coe_one]
     gcongr
-    exact Ideal.height_le_ringKrullDim_of_ne_top Id
+    exact Ideal.height_le_ringKrullDim_of_ne_top Ideal.IsPrime.ne_top'
+  · exact ringKrullDim_succ_le_ringKrullDim_polynomial
 
 中文:
 引理 ringKrullDim_of_isNoetherianRing
@@ -216,7 +269,8 @@ lemma ringKrullDim_of_isNoetherianRing
     refine (ringKrullDim_le_iff_isMaximal_height_le (ringKrullDim R + 1)).mpr fun M hM => ?_
     rw [height_eq_height_add_one (M.under R) M]; rw [WithBot.coe_add]; rw [WithBot.coe_one]
     gcongr
-    exact Ideal.height_le_ringKrullDim_of_ne_top Id
+    exact Ideal.height_le_ringKrullDim_of_ne_top Ideal.IsPrime.ne_top'
+  · exact ringKrullDim_succ_le_ringKrullDim_polynomial
 
 Depends on / 依赖: Ideal.IsPrime.ne_top, Ideal.height_le_ringKrullDim_of_ne_top, IsPrime, M.under, WithBot, WithBot.coe_add, WithBot.coe_one, coe_add, coe_one, height_eq_height_add_one, height_le_ringKrullDim_of_ne_top, le_antisymm, ne_top, nontriviality, ringKrullDim, ringKrullDim_le_iff_isMaximal_height_le, ringKrullDim_succ_le_ringKrullDim_polynomial
 -/
@@ -247,7 +301,9 @@ lemma MvPolynomial.ringKrullDim_of_isNoetherianRing
     · rw [Nat.card_congr e]
   | h_empty => simp
   | h_option IH =>
-    simp only [Nat.card_eq_fintype_card, Fintype.card_optio
+    simp only [Nat.card_eq_fintype_card, Fintype.card_option, Nat.cast_add, Nat.cast_one,
+      ← add_assoc] at IH ⊢
+    rw [ringKrullDim_eq_of_ringEquiv (MvPolynomial.optionEquivLeft _ _).toRingEquiv]; rw [Polynomial.ringKrullDim_of_isNoetherianRing]; rw [IH]
 
 中文:
 引理 多元多项式.ringKrullDim_of_isNoetherianRing
@@ -260,7 +316,9 @@ lemma MvPolynomial.ringKrullDim_of_isNoetherianRing
     · rw [Nat.card_congr e]
   | h_empty => simp
   | h_option IH =>
-    simp only [Nat.card_eq_fintype_card, Fintype.card_optio
+    simp only [Nat.card_eq_fintype_card, Fintype.card_option, Nat.cast_add, Nat.cast_one,
+      ← add_assoc] at IH ⊢
+    rw [ringKrullDim_eq_of_ringEquiv (MvPolynomial.optionEquivLeft _ _).toRingEquiv]; rw [Polynomial.ringKrullDim_of_isNoetherianRing]; rw [IH]
 
 Depends on / 依赖: Finite, Finite.induction_empty_option, Fintype, Fintype.card_option, MvPolynomial, MvPolynomial.optionEquivLeft, Nat.card_congr, Nat.card_eq_fintype_card, Nat.cast_add, Nat.cast_one, Polynomial, Polynomial.ringKrullDim_of_isNoetherianRing, add_assoc, card_congr, card_eq_fintype_card, card_option, cast_add, cast_one, convert, h_empty
 -/

@@ -843,7 +843,12 @@ theorem normSq_div_sub_div_lt_one
       ((x / y : Complex).re - ((x / y : Int[i]) : Complex).re + ((x / y : Complex).im - ((x / y : Int[i]) : Complex).im) *
         I : Complex) :=
 congr_arg _ by apply Complex.ext <;> simp
-    _ <= Comp
+    _ <= Complex.normSq (1 / 2 + 1 / 2 * I) := by
+      have : |(2⁻¹ : Real)| = 2⁻¹ := abs_of_nonneg (by simp)
+      exact normSq_le_normSq_of_re_le_of_im_le
+        (by rw [toComplex_re_div]; simp [normSq, this]; simpa using abs_sub_round (x / y : Complex).re)
+        (by rw [toComplex_im_div]; simp [normSq, this]; simpa using abs_sub_round (x / y : Complex).im)
+    _ < 1 := by simp [normSq]; norm_num
 
 中文:
 定理 normSq_div_sub_div_lt_one
@@ -854,7 +859,12 @@ congr_arg _ by apply Complex.ext <;> simp
       ((x / y : Complex).re - ((x / y : Int[i]) : Complex).re + ((x / y : Complex).im - ((x / y : Int[i]) : Complex).im) *
         I : Complex) :=
 congr_arg _ by apply Complex.ext <;> simp
-    _ <= Comp
+    _ <= Complex.normSq (1 / 2 + 1 / 2 * I) := by
+      have : |(2⁻¹ : Real)| = 2⁻¹ := abs_of_nonneg (by simp)
+      exact normSq_le_normSq_of_re_le_of_im_le
+        (by rw [toComplex_re_div]; simp [normSq, this]; simpa using abs_sub_round (x / y : Complex).re)
+        (by rw [toComplex_im_div]; simp [normSq, this]; simpa using abs_sub_round (x / y : Complex).im)
+    _ < 1 := by simp [normSq]; norm_num
 
 Depends on / 依赖: Complex.ext, Complex.normSq, abs_of_nonneg, abs_sub_round, congr_arg, normSq, normSq_le_normSq_of_re_le_of_im_le, toComplex_re_div
 -/
@@ -918,7 +928,11 @@ theorem norm_mod_lt
 (@Int.cast_lt Real _ _ _ _).1
     calc
       ↑(Zsqrtd.norm (x % y)) = Complex.normSq (x - y * (x / y : Int[i]) : Complex) := by simp [mod_def]
-      _ = Complex.normSq (y : Complex) * Complex.normSq (x / y - (x / y : Int[i]) :
+      _ = Complex.normSq (y : Complex) * Complex.normSq (x / y - (x / y : Int[i]) : Complex) := by
+        rw [← normSq_mul]; rw [mul_sub]; rw [mul_div_cancel₀ _ this]
+      _ < Complex.normSq (y : Complex) * 1 :=
+        (mul_lt_mul_of_pos_left (normSq_div_sub_div_lt_one _ _) (normSq_pos.2 this))
+      _ = Zsqrtd.norm y := by simp
 
 中文:
 定理 norm_mod_lt
@@ -928,7 +942,11 @@ theorem norm_mod_lt
 (@Int.cast_lt Real _ _ _ _).1
     calc
       ↑(Zsqrtd.norm (x % y)) = Complex.normSq (x - y * (x / y : Int[i]) : Complex) := by simp [mod_def]
-      _ = Complex.normSq (y : Complex) * Complex.normSq (x / y - (x / y : Int[i]) :
+      _ = Complex.normSq (y : Complex) * Complex.normSq (x / y - (x / y : Int[i]) : Complex) := by
+        rw [← normSq_mul]; rw [mul_sub]; rw [mul_div_cancel₀ _ this]
+      _ < Complex.normSq (y : Complex) * 1 :=
+        (mul_lt_mul_of_pos_left (normSq_div_sub_div_lt_one _ _) (normSq_pos.2 this))
+      _ = Zsqrtd.norm y := by simp
 
 Depends on / 依赖: Complex.normSq, Int.cast_lt, Zsqrtd, Zsqrtd.norm, cast_lt, mod_def, mul_lt_mul_of_pos_left, mul_sub, normSq, normSq_div_sub_div_lt_one, normSq_mul, normSq_pos, toComplex_inj, toComplex_zero
 -/
@@ -1022,7 +1040,8 @@ instance :
     quotient_mul_add_remainder_eq := fun _ _ => by simp [mod_def]
     r := _
     r_wellFounded := (measure (Int.natAbs ∘ norm)).wf
-    remainde
+    remainder_lt := natAbs_norm_mod_lt
+mul_left_not_lt := fun a _ hb0 => not_lt_of_ge norm_le_norm_mul_left a hb0 }
 
 中文:
 实例 :
@@ -1035,7 +1054,8 @@ instance :
     quotient_mul_add_remainder_eq := fun _ _ => by simp [mod_def]
     r := _
     r_wellFounded := (measure (Int.natAbs ∘ norm)).wf
-    remainde
+    remainder_lt := natAbs_norm_mod_lt
+mul_left_not_lt := fun a _ hb0 => not_lt_of_ge norm_le_norm_mul_left a hb0 }
 
 Depends on / 依赖: GaussianInt, GaussianInt.instCommRing, GaussianInt.instNontrivial, Int.natAbs, div_def, instCommRing, instNontrivial, measure, mod_def, mul_left_not_lt, natAbs, natAbs_norm_mod_lt, norm_le_norm_mul_left, not_lt_of_ge, quotient, quotient_mul_add_remainder_eq, quotient_zero, r_wellFounded, remainder, remainder_lt
 -/
@@ -1064,7 +1084,12 @@ mt norm_eq_one_iff.2 by
       rw [norm_natCast]; rw [Int.natAbs_mul]; rw [mul_eq_one]
       exact fun h => (ne_of_lt hp.1.one_lt).symm h.1
   have hab : exists a b, (p : Int[i]) = a * b ∧ ¬IsUnit a ∧ ¬IsUnit b := by
-    simpa [irreducible_iff, hpu, not_forall, not_o
+    simpa [irreducible_iff, hpu, not_forall, not_or] using hpi
+  let ⟨a, b, hpab, hau, hbu⟩ := hab
+  have hnap : (norm a).natAbs = p :=
+    ((hp.1.mul_eq_prime_sq_iff (mt norm_eq_one_iff.1 hau) (mt norm_eq_one_iff.1 hbu)).1 <| by
+        rw [← Int.natCast_inj]; rw [Int.natCast_pow]; rw [sq]; rw [← @norm_natCast (-1)]; rw [hpab]; simp).1
+  ⟨a.re.natAbs, a.im.natAbs, by simpa [natAbs_norm_eq, sq] using hnap⟩
 
 中文:
 定理 sq_add_sq_of_nat_prime_of_not_irreducible
@@ -1074,7 +1099,12 @@ mt norm_eq_one_iff.2 by
       rw [norm_natCast]; rw [Int.natAbs_mul]; rw [mul_eq_one]
       exact fun h => (ne_of_lt hp.1.one_lt).symm h.1
   have hab : exists a b, (p : Int[i]) = a * b ∧ ¬IsUnit a ∧ ¬IsUnit b := by
-    simpa [irreducible_iff, hpu, not_forall, not_o
+    simpa [irreducible_iff, hpu, not_forall, not_or] using hpi
+  let ⟨a, b, hpab, hau, hbu⟩ := hab
+  have hnap : (norm a).natAbs = p :=
+    ((hp.1.mul_eq_prime_sq_iff (mt norm_eq_one_iff.1 hau) (mt norm_eq_one_iff.1 hbu)).1 <| by
+        rw [← Int.natCast_inj]; rw [Int.natCast_pow]; rw [sq]; rw [← @norm_natCast (-1)]; rw [hpab]; simp).1
+  ⟨a.re.natAbs, a.im.natAbs, by simpa [natAbs_norm_eq, sq] using hnap⟩
 
 Depends on / 依赖: Int.natAbs_mul, Int.natCast_inj, Int.natCast_pow, IsUnit, irreducible_iff, mul_eq_one, mul_eq_prime_sq_iff, natAbs, natAbs_mul, natCast_inj, natCast_pow, ne_of_lt, norm_eq_one_iff, norm_natCast, not_forall, not_or, one_lt
 -/

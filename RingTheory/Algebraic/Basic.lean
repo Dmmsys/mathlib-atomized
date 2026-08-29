@@ -138,7 +138,7 @@ have : (p.comp f).coeff (p.natDegree * f.natDegree) != 0 := fun h => h1 by
     rwa [coeff_comp_degree_mul_degree hf,
       mul_right_mem_nonZeroDivisors_eq_zero_iff (pow_mem hf' _),
       leadingCoeff_eq_zero] at h
-  exact ⟨p.comp f, fun h => this (by simp [h]), by rwa [
+  exact ⟨p.comp f, fun h => this (by simp [h]), by rwa [aeval_comp]⟩
 
 中文:
 定理 是代数.of_aeval
@@ -149,7 +149,7 @@ have : (p.comp f).coeff (p.natDegree * f.natDegree) != 0 := fun h => h1 by
     rwa [coeff_comp_degree_mul_degree hf,
       mul_right_mem_nonZeroDivisors_eq_zero_iff (pow_mem hf' _),
       leadingCoeff_eq_zero] at h
-  exact ⟨p.comp f, fun h => this (by simp [h]), by rwa [
+  exact ⟨p.comp f, fun h => this (by simp [h]), by rwa [aeval_comp]⟩
 
 Depends on / 依赖: aeval_comp, coeff_comp_degree_mul_degree, f.natDegree, leadingCoeff_eq_zero, mul_right_mem_nonZeroDivisors_eq_zero_iff, natDegree, p.comp, p.natDegree, pow_mem
 -/
@@ -527,7 +527,7 @@ theorem isAlgebraic_ratCast
 
 @[deprecated (since := "2026-07-14")] alias isAlgebraic_nat := isAlgebraic_natCast
 @[deprecated (since := "2026-07-14")] alias isAlgebraic_int := isAlgebraic_intCast
-@[deprecated (since := "2026-07-14")] alias isAl
+@[deprecated (since := "2026-07-14")] alias isAlgebraic_rat := isAlgebraic_ratCast
 
 中文:
 定理 isAlgebraic_ratCast
@@ -538,7 +538,7 @@ theorem isAlgebraic_ratCast
 
 @[deprecated (since := "2026-07-14")] alias isAlgebraic_nat := isAlgebraic_natCast
 @[deprecated (since := "2026-07-14")] alias isAlgebraic_int := isAlgebraic_intCast
-@[deprecated (since := "2026-07-14")] alias isAl
+@[deprecated (since := "2026-07-14")] alias isAlgebraic_rat := isAlgebraic_ratCast
 
 Depends on / 依赖: Rat.cast, algebraMap, isAlgebraic_algebraMap, map_ratCast
 -/
@@ -1622,7 +1622,9 @@ theorem algHom_bijective
   obtain ⟨p, hp, he⟩ := Algebra.IsAlgebraic.isAlgebraic (R := K) b
   let f' : p.rootSet L -> p.rootSet L := (rootSet_maps_to' (fun x => x) f).restrict f _ _
   have : f'.Surjective := Finite.injective_iff_surjective.1
-fun _ _ h => Subtype.ext f.injective Subtype
+fun _ _ h => Subtype.ext f.injective Subtype.ext_iff.1 h
+  obtain ⟨a, ha⟩ := this ⟨b, mem_rootSet.2 ⟨hp, he⟩⟩
+  exact ⟨a, Subtype.ext_iff.1 ha⟩
 
 中文:
 定理 algHom_bijective
@@ -1632,7 +1634,9 @@ fun _ _ h => Subtype.ext f.injective Subtype
   obtain ⟨p, hp, he⟩ := Algebra.IsAlgebraic.isAlgebraic (R := K) b
   let f' : p.rootSet L -> p.rootSet L := (rootSet_maps_to' (fun x => x) f).restrict f _ _
   have : f'.Surjective := Finite.injective_iff_surjective.1
-fun _ _ h => Subtype.ext f.injective Subtype
+fun _ _ h => Subtype.ext f.injective Subtype.ext_iff.1 h
+  obtain ⟨a, ha⟩ := this ⟨b, mem_rootSet.2 ⟨hp, he⟩⟩
+  exact ⟨a, Subtype.ext_iff.1 ha⟩
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, Finite, Finite.injective_iff_surjective, IsAlgebraic, Subtype, Subtype.ext, Subtype.ext_iff, Surjective, ext_iff, f.injective, injective, injective_iff_surjective, isAlgebraic, mem_rootSet, p.rootSet, restrict, rootSet, rootSet_maps_to
 -/
@@ -1903,7 +1907,10 @@ definition algEquivOfTranscendental
     · rwa [Subalgebra.transcendental_iff_transcendental_val]
     rw [← AlgHom.range_eq_top]; rw [_root_.eq_top_iff]
     rintro ⟨t, ht⟩ _
-    obtain ⟨r, rfl⟩ := adjoin_mem_exists_aev
+    obtain ⟨r, rfl⟩ := adjoin_mem_exists_aeval _ _ ht
+    exact ⟨r, by ext; simp⟩
+
+@[simp]
 
 中文:
 定义 algEquivOfTranscendental
@@ -1913,7 +1920,10 @@ definition algEquivOfTranscendental
     · rwa [Subalgebra.transcendental_iff_transcendental_val]
     rw [← AlgHom.range_eq_top]; rw [_root_.eq_top_iff]
     rintro ⟨t, ht⟩ _
-    obtain ⟨r, rfl⟩ := adjoin_mem_exists_aev
+    obtain ⟨r, rfl⟩ := adjoin_mem_exists_aeval _ _ ht
+    exact ⟨r, by ext; simp⟩
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, AlgHom, AlgHom.range_eq_top, Subalgebra, Subalgebra.transcendental_iff_transcendental_val, _root_, _root_.eq_top_iff, adjoin_mem_exists_aeval, eq_top_iff, ofBijective, range_eq_top, self_mem_adjoin_singleton, transcendental_iff_injective, transcendental_iff_injective.mp, transcendental_iff_transcendental_val
 -/
@@ -2083,7 +2093,7 @@ theorem injective_tower_top
   refine (injective_iff_map_eq_zero _).mpr fun s eq => of_not_not fun ne => ?_
   have ⟨r, ne, dvd⟩ := (alg.1 s).exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero ne)
   refine ne (inj <| map_zero (algebraMap R A) ▸ zero_dvd_iff.mp ?_)
-  simp_rw [← eq, IsScalarTower.algebraMap_apply R S A, map_dvd
+  simp_rw [← eq, IsScalarTower.algebraMap_apply R S A, map_dvd (algebraMap S A) dvd]
 
 中文:
 定理 injective_tower_top
@@ -2093,7 +2103,7 @@ theorem injective_tower_top
   refine (injective_iff_map_eq_zero _).mpr fun s eq => of_not_not fun ne => ?_
   have ⟨r, ne, dvd⟩ := (alg.1 s).exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero ne)
   refine ne (inj <| map_zero (algebraMap R A) ▸ zero_dvd_iff.mp ?_)
-  simp_rw [← eq, IsScalarTower.algebraMap_apply R S A, map_dvd
+  simp_rw [← eq, IsScalarTower.algebraMap_apply R S A, map_dvd (algebraMap S A) dvd]
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap, algebraMap_apply, exists_nonzero_dvd, injective_iff_map_eq_zero, map_dvd, map_zero, mem_nonZeroDivisors_of_ne_zero, of_not_not, simp_rw, zero_dvd_iff, zero_dvd_iff.mp
 -/
@@ -2182,7 +2192,7 @@ theorem inv_eq_of_root_of_coeff_zero_ne_zero
   rw [RingHom.map_zero]
   convert! aeval_eq
   conv_rhs => rw [← divX_mul_X_add p]
-  rw [map_add]; rw [map_mul]; rw [h]; rw [
+  rw [map_add]; rw [map_mul]; rw [h]; rw [zero_mul]; rw [zero_add]; rw [aeval_C]
 
 中文:
 定理 inv_eq_of_root_of_coeff_zero_ne_zero
@@ -2195,7 +2205,7 @@ theorem inv_eq_of_root_of_coeff_zero_ne_zero
   rw [RingHom.map_zero]
   convert! aeval_eq
   conv_rhs => rw [← divX_mul_X_add p]
-  rw [map_add]; rw [map_mul]; rw [h]; rw [
+  rw [map_add]; rw [map_mul]; rw [h]; rw [zero_mul]; rw [zero_add]; rw [aeval_C]
 
 Depends on / 依赖: RingHom, RingHom.map_zero, aeval_C, aeval_eq, algebraMap, coeff_zero_ne, conv_rhs, convert, divX_mul_X_add, div_neg, injective, inv_eq_of_aeval_divX_ne_zero, map_add, map_mul, map_zero, zero_add, zero_mul, zero_sub
 -/
@@ -2221,7 +2231,7 @@ theorem Subalgebra.inv_mem_of_root_of_coeff_zero_ne_zero
     rw [this]
     exact A.smul_mem (aeval x _).2 _
   have : aeval (x : L) p = 0 := by rw [Subalgebra.aeval_coe, aeval_eq, Subalgebra.coe_zero]
-  rw [inv_eq_of_root_of_coeff_zero_ne_zero this coeff_zero_ne]; rw [div_eq_inv_mul]; rw [Algeb
+  rw [inv_eq_of_root_of_coeff_zero_ne_zero this coeff_zero_ne]; rw [div_eq_inv_mul]; rw [Algebra.smul_def]; rw [aeval_coe]; rw [map_inv₀]; rw [map_neg]; rw [inv_neg]; rw [neg_mul]
 
 中文:
 定理 子代数.inv_mem_of_root_of_coeff_zero_ne_zero
@@ -2231,7 +2241,7 @@ theorem Subalgebra.inv_mem_of_root_of_coeff_zero_ne_zero
     rw [this]
     exact A.smul_mem (aeval x _).2 _
   have : aeval (x : L) p = 0 := by rw [Subalgebra.aeval_coe, aeval_eq, Subalgebra.coe_zero]
-  rw [inv_eq_of_root_of_coeff_zero_ne_zero this coeff_zero_ne]; rw [div_eq_inv_mul]; rw [Algeb
+  rw [inv_eq_of_root_of_coeff_zero_ne_zero this coeff_zero_ne]; rw [div_eq_inv_mul]; rw [Algebra.smul_def]; rw [aeval_coe]; rw [map_inv₀]; rw [map_neg]; rw [inv_neg]; rw [neg_mul]
 
 Depends on / 依赖: A.smul_mem, Algebra, Algebra.smul_def, Subalgebra, Subalgebra.aeval_coe, Subalgebra.coe_zero, aeval_coe, aeval_eq, coe_zero, coeff_zero_ne, div_eq_inv_mul, inv_eq_of_root_of_coeff_zero_ne_zero, inv_neg, map_neg, neg_mul, p.coeff, smul_def, smul_mem
 -/
@@ -2257,7 +2267,14 @@ theorem Subalgebra.inv_mem_of_algebraic
   · intro h
     contradiction
   · intro p a hp ha _ih _ne_zero aeval_eq
-    refine A.inv_mem_of_root_of_coeff_zero_ne_zero aeval_eq 
+    refine A.inv_mem_of_root_of_coeff_zero_ne_zero aeval_eq ?_
+    rwa [coeff_add, hp, zero_add, coeff_C, if_pos rfl]
+  · intro p hp ih _ne_zero aeval_eq
+    rw [map_mul]; rw [aeval_X]; rw [mul_eq_zero] at aeval_eq
+    rcases aeval_eq with aeval_eq | x_eq
+    · exact ih hp aeval_eq
+    · rw [x_eq, Subalgebra.coe_zero, inv_zero]
+      exact A.zero_mem
 
 中文:
 定理 子代数.inv_mem_of_algebraic
@@ -2270,7 +2287,14 @@ theorem Subalgebra.inv_mem_of_algebraic
   · intro h
     contradiction
   · intro p a hp ha _ih _ne_zero aeval_eq
-    refine A.inv_mem_of_root_of_coeff_zero_ne_zero aeval_eq 
+    refine A.inv_mem_of_root_of_coeff_zero_ne_zero aeval_eq ?_
+    rwa [coeff_add, hp, zero_add, coeff_C, if_pos rfl]
+  · intro p hp ih _ne_zero aeval_eq
+    rw [map_mul]; rw [aeval_X]; rw [mul_eq_zero] at aeval_eq
+    rcases aeval_eq with aeval_eq | x_eq
+    · exact ih hp aeval_eq
+    · rw [x_eq, Subalgebra.coe_zero, inv_zero]
+      exact A.zero_mem
 
 Depends on / 依赖: A.inv_mem_of_root_of_coeff_zero_ne_zero, Subalgebra, Subalgebra.aeval_coe, Subalgebra.coe_eq_zero, _ne_zero, aeval_X, aeval_coe, aeval_eq, coe_eq_zero, coeff_C, coeff_add, if_pos, inv_mem_of_root_of_coeff_zero_ne_zero, map_mul, mul_eq_zero, ne_zero, p.recOnHorner, recOnHorner, revert, x_eq
 -/

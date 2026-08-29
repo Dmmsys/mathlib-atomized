@@ -296,7 +296,10 @@ lemma pullback_equalizer
   refine skeletal _ ⟨iso_of_both_ways (homOfFactors ?_) (homOfFactors ?_)⟩
   · apply equalizerSubobject_factors
     have := (Subobject.isPullback h (equalizerSubobject f g)).w
-    rw [← reassoc_of% (Subobject.isPullback h (equalizerSubobject f g)).w]; rw [← reassoc_of% (Subobject.isPullback h (eq
+    rw [← reassoc_of% (Subobject.isPullback h (equalizerSubobject f g)).w]; rw [← reassoc_of% (Subobject.isPullback h (equalizerSubobject f g)).w]; rw [equalizerSubobject_arrow_comp]
+  · apply pullback_factors
+    apply equalizerSubobject_factors
+    rw [assoc]; rw [assoc]; rw [equalizerSubobject_arrow_comp]
 
 中文:
 引理 pullback_equalizer
@@ -305,7 +308,10 @@ lemma pullback_equalizer
   refine skeletal _ ⟨iso_of_both_ways (homOfFactors ?_) (homOfFactors ?_)⟩
   · apply equalizerSubobject_factors
     have := (Subobject.isPullback h (equalizerSubobject f g)).w
-    rw [← reassoc_of% (Subobject.isPullback h (equalizerSubobject f g)).w]; rw [← reassoc_of% (Subobject.isPullback h (eq
+    rw [← reassoc_of% (Subobject.isPullback h (equalizerSubobject f g)).w]; rw [← reassoc_of% (Subobject.isPullback h (equalizerSubobject f g)).w]; rw [equalizerSubobject_arrow_comp]
+  · apply pullback_factors
+    apply equalizerSubobject_factors
+    rw [assoc]; rw [assoc]; rw [equalizerSubobject_arrow_comp]
 
 Depends on / 依赖: Subobject, Subobject.isPullback, equalizerSubobject, equalizerSubobject_arrow_comp, equalizerSubobject_factors, homOfFactors, isPullback, iso_of_both_ways, pullback_factors, reassoc_of, skeletal
 -/
@@ -916,7 +922,17 @@ definition cokernelOrderHom
         rintro A B f g hf hg i rfl
         refine Subobject.mk_eq_mk_of_comm _ _ (Iso.op ?_) (Quiver.Hom.unop_inj ?_)
         · exact (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
-            (isCokernelEpiComp (colim
+            (isCokernelEpiComp (colimit.isColimit _) i.hom rfl)).symm
+        · simp only [Iso.comp_inv_eq, Iso.op_hom, Iso.symm_hom, unop_comp, Quiver.Hom.unop_op,
+            colimit.comp_coconePointUniqueUpToIso_hom, Cofork.ofπ_ι_app,
+            coequalizer.cofork_π])
+  monotone' :=
+Subobject.ind₂ _ by
+      intro A B f g hf hg h
+      dsimp only [Subobject.lift_mk]
+      refine Subobject.mk_le_mk_of_comm (cokernel.desc f (cokernel.π g) ?_).op ?_
+      · rw [← Subobject.ofMkLEMk_comp h, Category.assoc, cokernel.condition, comp_zero]
+      · exact Quiver.Hom.unop_inj (cokernel.π_desc _ _ _)
 
 中文:
 定义 cokernelOrderHom
@@ -926,7 +942,17 @@ definition cokernelOrderHom
         rintro A B f g hf hg i rfl
         refine Subobject.mk_eq_mk_of_comm _ _ (Iso.op ?_) (Quiver.Hom.unop_inj ?_)
         · exact (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
-            (isCokernelEpiComp (colim
+            (isCokernelEpiComp (colimit.isColimit _) i.hom rfl)).symm
+        · simp only [Iso.comp_inv_eq, Iso.op_hom, Iso.symm_hom, unop_comp, Quiver.Hom.unop_op,
+            colimit.comp_coconePointUniqueUpToIso_hom, Cofork.ofπ_ι_app,
+            coequalizer.cofork_π])
+  monotone' :=
+Subobject.ind₂ _ by
+      intro A B f g hf hg h
+      dsimp only [Subobject.lift_mk]
+      refine Subobject.mk_le_mk_of_comm (cokernel.desc f (cokernel.π g) ?_).op ?_
+      · rw [← Subobject.ofMkLEMk_comp h, Category.assoc, cokernel.condition, comp_zero]
+      · exact Quiver.Hom.unop_inj (cokernel.π_desc _ _ _)
 
 Depends on / 依赖: Cofork, Cofork.of, IsColimit, IsColimit.coconePointUniqueUpToIso, Iso.comp_inv_eq, Iso.op, Iso.op_hom, Iso.symm_hom, Quiver, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, Subobject, Subobject.ind, Subobject.lift, Subobject.mk, Subobject.mk_eq_mk_of_comm, coconePointUniqueUpToIso, coequalizer, coequalizer.cofork_, cokernel
 -/
@@ -966,7 +992,17 @@ definition kernelOrderHom
         refine Subobject.mk_eq_mk_of_comm _ _ ?_ ?_
         · exact
             IsLimit.conePointUniqueUpToIso (limit.isLimit _)
-              (isKernelCompMono (limit.isLimit (parallelPair g.un
+              (isKernelCompMono (limit.isLimit (parallelPair g.unop 0)) i.unop.hom rfl)
+        · dsimp
+          simp only [← Iso.eq_inv_comp, limit.conePointUniqueUpToIso_inv_comp,
+            Fork.ofι_π_app])
+  monotone' :=
+Subobject.ind₂ _ by
+      intro A B f g hf hg h
+      dsimp only [Subobject.lift_mk]
+      refine Subobject.mk_le_mk_of_comm (kernel.lift g.unop (kernel.ι f.unop) ?_) ?_
+      · rw [← Subobject.ofMkLEMk_comp h, unop_comp, kernel.condition_assoc, zero_comp]
+      · exact Quiver.Hom.op_inj (by simp)
 
 中文:
 定义 kernelOrderHom
@@ -977,7 +1013,17 @@ definition kernelOrderHom
         refine Subobject.mk_eq_mk_of_comm _ _ ?_ ?_
         · exact
             IsLimit.conePointUniqueUpToIso (limit.isLimit _)
-              (isKernelCompMono (limit.isLimit (parallelPair g.un
+              (isKernelCompMono (limit.isLimit (parallelPair g.unop 0)) i.unop.hom rfl)
+        · dsimp
+          simp only [← Iso.eq_inv_comp, limit.conePointUniqueUpToIso_inv_comp,
+            Fork.ofι_π_app])
+  monotone' :=
+Subobject.ind₂ _ by
+      intro A B f g hf hg h
+      dsimp only [Subobject.lift_mk]
+      refine Subobject.mk_le_mk_of_comm (kernel.lift g.unop (kernel.ι f.unop) ?_) ?_
+      · rw [← Subobject.ofMkLEMk_comp h, unop_comp, kernel.condition_assoc, zero_comp]
+      · exact Quiver.Hom.op_inj (by simp)
 
 Depends on / 依赖: Fork.of, IsLimit, IsLimit.conePointUniqueUpToIso, Iso.eq_inv_comp, Subobject, Subobject.ind, Subobject.lift, Subobject.lift_mk, Subobject.mk, Subobject.mk_eq_mk_of_comm, Subobject.mk_le_mk_of_comm, conePointUniqueUpToIso, conePointUniqueUpToIso_inv_comp, eq_inv_comp, f.unop, g.unop, i.unop.hom, isKernelCompMono, isLimit, kernel
 -/

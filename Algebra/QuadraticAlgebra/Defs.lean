@@ -1764,7 +1764,7 @@ instance [CommSemiring
   algebraMap.map_zero' := by ext <;> simp
   algebraMap.map_add' x y := by ext <;> simp
   commutes' s z := by ext <;> simp [Algebra.commutes]
-  smul_def' s x := by ext <;> simp [Algebra.smul_de
+  smul_def' s x := by ext <;> simp [Algebra.smul_def]
 
 中文:
 实例 [交换半环
@@ -1775,7 +1775,7 @@ instance [CommSemiring
   algebraMap.map_zero' := by ext <;> simp
   algebraMap.map_add' x y := by ext <;> simp
   commutes' s z := by ext <;> simp [Algebra.commutes]
-  smul_def' s x := by ext <;> simp [Algebra.smul_de
+  smul_def' s x := by ext <;> simp [Algebra.smul_def]
 
 Depends on / 依赖: algebraMap
 -/

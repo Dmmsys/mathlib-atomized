@@ -830,7 +830,8 @@ theorem minpoly.map_eq_prod
   simp_rw [← rootSet_minpoly_eq_carrier, Finset.prod_eq_multiset_prod, rootSet_def,
     Finset.toFinset_coe, Multiset.toFinset_val]
   rw [Multiset.dedup_eq_self.mpr (nodup_roots c.separable_minpoly.map)]; rw [prod_multiset_X_sub_C_of_monic_of_roots_card_eq (c.monic_minpoly.map _)]
-  r
+  rw [← splits_iff_card_roots]
+  exact c.splits_minpoly
 
 中文:
 定理 minpoly.map_eq_prod
@@ -840,7 +841,8 @@ theorem minpoly.map_eq_prod
   simp_rw [← rootSet_minpoly_eq_carrier, Finset.prod_eq_multiset_prod, rootSet_def,
     Finset.toFinset_coe, Multiset.toFinset_val]
   rw [Multiset.dedup_eq_self.mpr (nodup_roots c.separable_minpoly.map)]; rw [prod_multiset_X_sub_C_of_monic_of_roots_card_eq (c.monic_minpoly.map _)]
-  r
+  rw [← splits_iff_card_roots]
+  exact c.splits_minpoly
 
 Depends on / 依赖: Finset, Finset.prod_eq_multiset_prod, Finset.toFinset_coe, Multiset, Multiset.dedup_eq_self.mpr, Multiset.toFinset_val, c.monic_minpoly.map, c.separable_minpoly.map, c.splits_minpoly, classical, dedup_eq_self, monic_minpoly, nodup_roots, prod_eq_multiset_prod, prod_multiset_X_sub_C_of_monic_of_roots_card_eq, rootSet_def, rootSet_minpoly_eq_carrier, separable_minpoly, simp_rw, splits_iff_card_roots
 -/

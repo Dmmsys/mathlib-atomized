@@ -1062,7 +1062,8 @@ theorem getVert_reverse
     next hi =>
       obtain rfl | hi' := eq_or_gt_of_not_lt hi
       · simp
-      · rw [Nat.eq_add_of_sub_eq (N
+      · rw [Nat.eq_add_of_sub_eq (Nat.sub_pos_of_lt hi') rfl, Nat.sub_eq_zero_of_le hi']
+        simp
 
 中文:
 定理 getVert_reverse
@@ -1077,7 +1078,8 @@ theorem getVert_reverse
     next hi =>
       obtain rfl | hi' := eq_or_gt_of_not_lt hi
       · simp
-      · rw [Nat.eq_add_of_sub_eq (N
+      · rw [Nat.eq_add_of_sub_eq (Nat.sub_pos_of_lt hi') rfl, Nat.sub_eq_zero_of_le hi']
+        simp
 
 Depends on / 依赖: Nat.eq_add_of_sub_eq, Nat.sub_eq_zero_of_le, Nat.sub_pos_of_lt, Nat.succ_sub, eq_add_of_sub_eq, eq_or_gt_of_not_lt, getVert_append, hi.le, length_cons, length_reverse, reverse_cons, split_ifs, sub_eq_zero_of_le, sub_pos_of_lt, succ_sub
 -/
@@ -1242,7 +1244,15 @@ theorem concat_inj
   | cons _ _ ih =>
     rw [concat_cons] at he
     cases p'
-    · simp only [conca
+    · simp only [concat_nil, cons.injEq] at he
+      obtain ⟨rfl, he⟩ := he
+      exact (concat_ne_nil _ _ (heq_iff_eq.mp he)).elim
+    · rw [concat_cons, cons.injEq] at he
+      obtain ⟨rfl, he⟩ := he
+      obtain ⟨rfl, rfl⟩ := ih (heq_iff_eq.mp he)
+      exact ⟨rfl, rfl⟩
+
+@[simp]
 
 中文:
 定理 concat_inj
@@ -1258,7 +1268,15 @@ theorem concat_inj
   | cons _ _ ih =>
     rw [concat_cons] at he
     cases p'
-    · simp only [conca
+    · simp only [concat_nil, cons.injEq] at he
+      obtain ⟨rfl, he⟩ := he
+      exact (concat_ne_nil _ _ (heq_iff_eq.mp he)).elim
+    · rw [concat_cons, cons.injEq] at he
+      obtain ⟨rfl, he⟩ := he
+      obtain ⟨rfl, rfl⟩ := ih (heq_iff_eq.mp he)
+      exact ⟨rfl, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: concat_cons, concat_ne_nil, concat_nil, cons.injEq, heq_iff_eq, heq_iff_eq.mp
 -/
@@ -4010,7 +4028,11 @@ exact ext_support List.ext_getElem?_iff.mpr this
   | inl hk =>
     rw [← getVert_eq_support_getElem? p hk]; rw [← getVert_eq_support_getElem? q (hl ▸ hk)]
     exact congrArg some (h k hk)
-  | in
+  | inr hk =>
+    replace hk : p.length + 1 <= k := hk
+    have ht : q.length + 1 <= k := hl ▸ hk
+    rw [← length_support]; rw [← List.getElem?_eq_none_iff] at hk ht
+    rw [hk]; rw [ht]
 
 中文:
 引理 ext_getVert_le_length
@@ -4023,7 +4045,11 @@ exact ext_support List.ext_getElem?_iff.mpr this
   | inl hk =>
     rw [← getVert_eq_support_getElem? p hk]; rw [← getVert_eq_support_getElem? q (hl ▸ hk)]
     exact congrArg some (h k hk)
-  | in
+  | inr hk =>
+    replace hk : p.length + 1 <= k := hk
+    have ht : q.length + 1 <= k := hl ▸ hk
+    rw [← length_support]; rw [← List.getElem?_eq_none_iff] at hk ht
+    rw [hk]; rw [ht]
 
 Depends on / 依赖: List.ext_getElem, List.getElem, _eq_none_iff, _iff, _iff.mpr, ext_getElem, ext_support, getElem, getVert_eq_support_getElem, le_or_gt, length, length_support, p.length, p.support, q.length, q.support, replace, support
 -/

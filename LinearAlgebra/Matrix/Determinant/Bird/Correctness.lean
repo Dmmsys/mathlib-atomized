@@ -82,7 +82,8 @@ theorem sumFrom_fin_tail
   _ = ∑ k in Finset.Ico (i.val + 1) n, f k := by rw [sumFrom_eq_sum_Ico]
   _ = ∑ k in (Finset.range n).filter (i.val < ·), f k := by congr; ext; aesop
   _ = ∑ k in Finset.range n, if i.val < k then f k else 0 := by rw [Finset.sum_filter]
-  _ = ∑ k : Fin n, if i.val < k.val then f k.val else 0 :
+  _ = ∑ k : Fin n, if i.val < k.val then f k.val else 0 := by rw [← Fin.sum_univ_eq_sum_range]
+  _ = ∑ k in Finset.Ioi i, f k.val := by simp [← Finset.sum_filter, Finset.filter_lt_eq_Ioi]
 
 中文:
 定理 sumFrom_fin_tail
@@ -91,7 +92,8 @@ theorem sumFrom_fin_tail
   _ = ∑ k in Finset.Ico (i.val + 1) n, f k := by rw [sumFrom_eq_sum_Ico]
   _ = ∑ k in (Finset.range n).filter (i.val < ·), f k := by congr; ext; aesop
   _ = ∑ k in Finset.range n, if i.val < k then f k else 0 := by rw [Finset.sum_filter]
-  _ = ∑ k : Fin n, if i.val < k.val then f k.val else 0 :
+  _ = ∑ k : Fin n, if i.val < k.val then f k.val else 0 := by rw [← Fin.sum_univ_eq_sum_range]
+  _ = ∑ k in Finset.Ioi i, f k.val := by simp [← Finset.sum_filter, Finset.filter_lt_eq_Ioi]
 -/
 theorem sumFrom_fin_tail (i : Fin n) (f : Nat -> R) :
     BirdDet.sumFrom n (i.val + 1) f = ∑ k in Finset.Ioi i, f k.val := calc
@@ -215,7 +217,7 @@ lemma det_submatrix_removeNth_eq_sign_mul_bminor
       simp [← mul_assoc, ← pow_add]
     _ = (-1 : R) ^ s.val * bminor A i (α s) (s.removeNth α) := by
       congrm _ * Matrix.det ?_
-      sim
+      simp [Fin.cons_removeNth_eq_comp_cycleRange_symm]
 
 中文:
 引理 det_submatrix_removeNth_eq_sign_mul_bminor
@@ -226,7 +228,7 @@ lemma det_submatrix_removeNth_eq_sign_mul_bminor
       simp [← mul_assoc, ← pow_add]
     _ = (-1 : R) ^ s.val * bminor A i (α s) (s.removeNth α) := by
       congrm _ * Matrix.det ?_
-      sim
+      simp [Fin.cons_removeNth_eq_comp_cycleRange_symm]
 
 Depends on / 依赖: A.submatrix, Fin.cons, Fin.cons_removeNth_eq_comp_cycleRange_symm, Fin.cycleRange, Matrix, Matrix.det, Matrix.det_permute, bminor, congrm, cons_removeNth_eq_comp_cycleRange_symm, cycleRange, det_permute, mul_assoc, pow_add, removeNth, s.removeNth, s.val, submatrix
 -/
@@ -256,7 +258,15 @@ theorem det_bordered_expand
       rw [bminor]; rw [Matrix.det_succ_column_zero]; rw [Fin.sum_univ_succ]; simp
   _ = pminor A α * A i j +
         ∑ s : Fin (p + 1),
-   
+          ((-1 : R) ^ (s.val + 1) *
+            (A.submatrix (Fin.cons i (s.removeNth α)) α).det) * A (α s) j := by
+    simp only [mul_comm (A i j), mul_right_comm]
+  _ = pminor A α * A i j +
+      ∑ s : Fin (p + 1), -(bminor A i (α s) (s.removeNth α) * A (α s) j) := by
+    simp only [det_submatrix_removeNth_eq_sign_mul_bminor, ← mul_assoc, ← pow_add]; aesop
+  _ = pminor A α * A i j -
+      ∑ s : Fin (p + 1), bminor A i (α s) (s.removeNth α) * A (α s) j := by
+    simp only [Finset.sum_neg_distrib, sub_eq_add_neg]
 
 中文:
 定理 det_bordered_expand
@@ -268,7 +278,15 @@ theorem det_bordered_expand
       rw [bminor]; rw [Matrix.det_succ_column_zero]; rw [Fin.sum_univ_succ]; simp
   _ = pminor A α * A i j +
         ∑ s : Fin (p + 1),
-   
+          ((-1 : R) ^ (s.val + 1) *
+            (A.submatrix (Fin.cons i (s.removeNth α)) α).det) * A (α s) j := by
+    simp only [mul_comm (A i j), mul_right_comm]
+  _ = pminor A α * A i j +
+      ∑ s : Fin (p + 1), -(bminor A i (α s) (s.removeNth α) * A (α s) j) := by
+    simp only [det_submatrix_removeNth_eq_sign_mul_bminor, ← mul_assoc, ← pow_add]; aesop
+  _ = pminor A α * A i j -
+      ∑ s : Fin (p + 1), bminor A i (α s) (s.removeNth α) * A (α s) j := by
+    simp only [Finset.sum_neg_distrib, sub_eq_add_neg]
 -/
 theorem det_bordered_expand (α : Fin (p + 1) -> Fin n) (i j : Fin n) :
     bminor A i j α =
@@ -407,7 +425,7 @@ theorem S_succ_eq_biUnion
   · simp only [Fin.cons_self_tail]
     exact hα.comp Fin.strictMono_succ
   · rintro ⟨k, hk, u, hu, rfl⟩
-    e
+    exact StrictMono.vecCons hu hk
 
 中文:
 定理 S_succ_eq_biUnion
@@ -419,7 +437,7 @@ theorem S_succ_eq_biUnion
   · simp only [Fin.cons_self_tail]
     exact hα.comp Fin.strictMono_succ
   · rintro ⟨k, hk, u, hu, rfl⟩
-    e
+    exact StrictMono.vecCons hu hk
 
 Depends on / 依赖: Fin.cons_self_tail, Fin.strictMono_cons.mp, Fin.strictMono_succ, Fin.tail, Finset, Finset.mem_Ioi, Finset.mem_biUnion, Finset.mem_image, StrictMono, StrictMono.vecCons, cons_self_tail, mem_Ioi, mem_S_iff, mem_biUnion, mem_image, strictMono_cons, strictMono_succ, vecCons
 -/
@@ -445,7 +463,16 @@ lemma exists_insertNth_mem_S
   simp only [mem_S_iff, Fin.strictMono_cons] at ⊢ hα
   refine ⟨fun j => Fin.succAboveCases t ?_ ?_ j, ?_⟩
   · simp only [t_eq, Set.mem_ofPred_eq, Fin.strictMono_insertNth_iff, hα.2, lt_iInf_iff,
-      le_iInf_iff, forall_exists_index, 
+      le_iInf_iff, forall_exists_index, and_imp, iInf_le_iff_forall_lt, iInf_lt_iff,
+      exists_prop, true_and]
+    refine ⟨fun j x hjx h => ?_, fun j h => ?_⟩
+    · contrapose! h
+      have k_ne (j : Fin p) : k != α j := fun hj => hk ⟨j, hj.symm⟩
+      exact ⟨j, h.lt_of_ne (k_ne _), hjx⟩
+    · obtain ⟨q, hkq, hqj⟩ := h j.succ j.castSucc_lt_succ
+exact hkq.trans_le hα.2.monotone Fin.castSucc_lt_succ_iff.mp hqj
+  · simpa
+  · simpa using hα.1
 
 中文:
 引理 存在_insertNth_mem_S
@@ -456,7 +483,16 @@ lemma exists_insertNth_mem_S
   simp only [mem_S_iff, Fin.strictMono_cons] at ⊢ hα
   refine ⟨fun j => Fin.succAboveCases t ?_ ?_ j, ?_⟩
   · simp only [t_eq, Set.mem_ofPred_eq, Fin.strictMono_insertNth_iff, hα.2, lt_iInf_iff,
-      le_iInf_iff, forall_exists_index, 
+      le_iInf_iff, forall_exists_index, and_imp, iInf_le_iff_forall_lt, iInf_lt_iff,
+      exists_prop, true_and]
+    refine ⟨fun j x hjx h => ?_, fun j h => ?_⟩
+    · contrapose! h
+      have k_ne (j : Fin p) : k != α j := fun hj => hk ⟨j, hj.symm⟩
+      exact ⟨j, h.lt_of_ne (k_ne _), hjx⟩
+    · obtain ⟨q, hkq, hqj⟩ := h j.succ j.castSucc_lt_succ
+exact hkq.trans_le hα.2.monotone Fin.castSucc_lt_succ_iff.mp hqj
+  · simpa
+  · simpa using hα.1
 
 Depends on / 依赖: Fin.strictMono_cons, Fin.strictMono_insertNth_iff, Fin.succAboveCases, Set.mem_ofPred_eq, and_imp, castSucc, contrapose, exists_prop, forall_exists_index, h.lt_of_ne, hj.symm, iInf_le_iff_forall_lt, iInf_lt_iff, j.castSucc, k_ne, le_iInf_iff, lt_iInf_iff, lt_of_ne, mem_S_iff, mem_ofPred_eq
 -/
@@ -513,7 +549,11 @@ theorem paper_eq2
       simp only [hEq1, Matrix.of_apply, ← Finset.mul_sum]
       ring
     _ = (-1) ^ (p + 1) * ∑ α in S (p + 1) i, pminor A α := by
-      rw [S_succ_eq
+      rw [S_succ_eq_biUnion]; rw [Finset.sum_biUnion]
+      · congrm (((-1) ^ (p + 1) * ∑ k in Finset.Ioi i, ?_))
+        symm
+        exact Finset.sum_image fun _ _ _ _ hαβ => (Fin.cons_inj.mp hαβ).2
+      · grind [Set.PairwiseDisjoint, Set.Pairwise, Finset.disjoint_left, Fin.cons_inj]
 
 中文:
 定理 paper_eq2
@@ -525,7 +565,11 @@ theorem paper_eq2
       simp only [hEq1, Matrix.of_apply, ← Finset.mul_sum]
       ring
     _ = (-1) ^ (p + 1) * ∑ α in S (p + 1) i, pminor A α := by
-      rw [S_succ_eq
+      rw [S_succ_eq_biUnion]; rw [Finset.sum_biUnion]
+      · congrm (((-1) ^ (p + 1) * ∑ k in Finset.Ioi i, ?_))
+        symm
+        exact Finset.sum_image fun _ _ _ _ hαβ => (Fin.cons_inj.mp hαβ).2
+      · grind [Set.PairwiseDisjoint, Set.Pairwise, Finset.disjoint_left, Fin.cons_inj]
 
 Depends on / 依赖: Fin.cons_, Fin.cons_inj.mp, Finset, Finset.Ioi, Finset.disjoint_left, Finset.mul_sum, Finset.sum_biUnion, Finset.sum_image, Matrix, Matrix.of_apply, Pairwise, PairwiseDisjoint, S_succ_eq_biUnion, Set.Pairwise, Set.PairwiseDisjoint, Spec.stepEntry, bminor, congrm, cons_, cons_inj
 -/
@@ -586,7 +630,8 @@ theorem paper_eq5
         ∑ t : Fin (p + 1), bminor A i (α t) (t.removeNth α) * A (α t) j) := by
 exact Finset.sum_congr rfl by simp [det_bordered_expand]
   _ = ∑ α in S (p + 1) i, pminor A α * A i j -
-        ∑ α in S (p + 1) i, ∑ t : Fin (p + 1), bminor A i (α t) 
+        ∑ α in S (p + 1) i, ∑ t : Fin (p + 1), bminor A i (α t) (t.removeNth α) * A (α t) j := by
+    rw [Finset.sum_sub_distrib]
 
 中文:
 定理 paper_eq5
@@ -596,7 +641,8 @@ exact Finset.sum_congr rfl by simp [det_bordered_expand]
         ∑ t : Fin (p + 1), bminor A i (α t) (t.removeNth α) * A (α t) j) := by
 exact Finset.sum_congr rfl by simp [det_bordered_expand]
   _ = ∑ α in S (p + 1) i, pminor A α * A i j -
-        ∑ α in S (p + 1) i, ∑ t : Fin (p + 1), bminor A i (α t) 
+        ∑ α in S (p + 1) i, ∑ t : Fin (p + 1), bminor A i (α t) (t.removeNth α) * A (α t) j := by
+    rw [Finset.sum_sub_distrib]
 -/
 theorem paper_eq5 (i j : Fin n) :
     ∑ α in S (p + 1) i, bminor A i j α =
@@ -624,7 +670,39 @@ theorem paper_eq3_eq5_off_diag
   -- d (α, t) := (t.removeNth α, α t).
   --
   -- This map is injective, and every left-hand summand outside its image is zero,
-  
+  -- so `sum_of_injOn` applies.
+  symm
+  refine Finset.sum_of_injOn (fun ⟨α, k⟩ => ⟨k.removeNth α, α k⟩) ?_ ?_ ?_ ?_
+  · simp only [Set.InjOn, Finset.coe_product, Finset.coe_univ, Set.mem_prod, Set.mem_univ,
+      and_true, Finset.mem_coe, Prod.mk.injEq, and_imp, Prod.forall, mem_S_iff, Fin.strictMono_cons]
+    intros α k hi hiα α' k' hj hiα' hremove hvalue
+    suffices hrange : Set.range α = Set.range α' by
+      rw [hiα.range_inj hiα'] at hrange
+      subst α'
+      exact ⟨rfl, hiα.injective hvalue⟩
+    calc
+      _ = Set.insert (α k) (Set.range (k.removeNth α)) := by
+        rw [← Fin.range_insertNth]; rw [Fin.insertNth_self_removeNth]
+      _ = Set.insert (α' k') (Set.range (k'.removeNth α')) := by
+        rw [hvalue]; rw [hremove]
+      _ = Set.range α' := by
+        rw [← Fin.range_insertNth]; rw [Fin.insertNth_self_removeNth]
+  · rintro ⟨α, t⟩ hα
+    simp only [Finset.coe_product, Finset.coe_univ, Set.mem_prod, Set.mem_univ, and_true,
+      Finset.mem_coe, Finset.coe_Ioi, Set.mem_Ioi, mem_S_iff, Fin.strictMono_cons] at hα ⊢
+    obtain ⟨hbound, hmono⟩ := hα
+    exact ⟨⟨fun q => hbound (t.succAbove q), hmono.removeNth t⟩, hbound t⟩
+  · rintro ⟨α, k⟩ htarget hnotmem
+    simp only [Finset.mem_product, Finset.mem_Ioi] at htarget
+    obtain ⟨hα, hk⟩ := htarget
+    by_cases hoccurs : k in Set.range α
+    · -- The border column `k` is repeated among the columns indexed by `α` and
+      -- so the bordered minor is 0.
+      rw [bminor_eq_zero_of_mem_range A α i hoccurs]; rw [zero_mul]
+    · contrapose hnotmem
+      obtain ⟨t, ht⟩ := exists_insertNth_mem_S hα hk hoccurs
+      exact ⟨(t.insertNth k α, t), by simpa, by simp⟩
+  · simp
 
 中文:
 定理 paper_eq3_eq5_off_diag
@@ -636,7 +714,39 @@ theorem paper_eq3_eq5_off_diag
   -- d (α, t) := (t.removeNth α, α t).
   --
   -- This map is injective, and every left-hand summand outside its image is zero,
-  
+  -- so `sum_of_injOn` applies.
+  symm
+  refine Finset.sum_of_injOn (fun ⟨α, k⟩ => ⟨k.removeNth α, α k⟩) ?_ ?_ ?_ ?_
+  · simp only [Set.InjOn, Finset.coe_product, Finset.coe_univ, Set.mem_prod, Set.mem_univ,
+      and_true, Finset.mem_coe, Prod.mk.injEq, and_imp, Prod.forall, mem_S_iff, Fin.strictMono_cons]
+    intros α k hi hiα α' k' hj hiα' hremove hvalue
+    suffices hrange : Set.range α = Set.range α' by
+      rw [hiα.range_inj hiα'] at hrange
+      subst α'
+      exact ⟨rfl, hiα.injective hvalue⟩
+    calc
+      _ = Set.insert (α k) (Set.range (k.removeNth α)) := by
+        rw [← Fin.range_insertNth]; rw [Fin.insertNth_self_removeNth]
+      _ = Set.insert (α' k') (Set.range (k'.removeNth α')) := by
+        rw [hvalue]; rw [hremove]
+      _ = Set.range α' := by
+        rw [← Fin.range_insertNth]; rw [Fin.insertNth_self_removeNth]
+  · rintro ⟨α, t⟩ hα
+    simp only [Finset.coe_product, Finset.coe_univ, Set.mem_prod, Set.mem_univ, and_true,
+      Finset.mem_coe, Finset.coe_Ioi, Set.mem_Ioi, mem_S_iff, Fin.strictMono_cons] at hα ⊢
+    obtain ⟨hbound, hmono⟩ := hα
+    exact ⟨⟨fun q => hbound (t.succAbove q), hmono.removeNth t⟩, hbound t⟩
+  · rintro ⟨α, k⟩ htarget hnotmem
+    simp only [Finset.mem_product, Finset.mem_Ioi] at htarget
+    obtain ⟨hα, hk⟩ := htarget
+    by_cases hoccurs : k in Set.range α
+    · -- The border column `k` is repeated among the columns indexed by `α` and
+      -- so the bordered minor is 0.
+      rw [bminor_eq_zero_of_mem_range A α i hoccurs]; rw [zero_mul]
+    · contrapose hnotmem
+      obtain ⟨t, ht⟩ := exists_insertNth_mem_S hα hk hoccurs
+      exact ⟨(t.insertNth k α, t), by simpa, by simp⟩
+  · simp
 
 Depends on / 依赖: Finset, Finset.sum_comm, Finset.sum_product, sum_comm, sum_product
 -/

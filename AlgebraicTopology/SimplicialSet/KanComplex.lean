@@ -169,7 +169,10 @@ lemma KanComplex.iff
   obtain ⟨n, ⟨i⟩⟩ := hf
   refine ⟨fun {t _} _ => ?_⟩
   obtain ⟨φ, hφ⟩ := h _ (horn.IsCompatible.of_hom t)
-  exact
+  exact ⟨⟨{
+    l := φ
+    fac_left := horn.hom_ext' (by simpa using hφ)
+    fac_right := by subsingleton }⟩⟩
 
 中文:
 引理 KanComplex.iff
@@ -183,7 +186,10 @@ lemma KanComplex.iff
   obtain ⟨n, ⟨i⟩⟩ := hf
   refine ⟨fun {t _} _ => ?_⟩
   obtain ⟨φ, hφ⟩ := h _ (horn.IsCompatible.of_hom t)
-  exact
+  exact ⟨⟨{
+    l := φ
+    fac_left := horn.hom_ext' (by simpa using hφ)
+    fac_right := by subsingleton }⟩⟩
 
 Depends on / 依赖: IsCompatible, MorphismProperty, MorphismProperty.iSup_iff, exists_lift_of_kanComplex, fac_left, fac_right, fibrations_eq, hf.exists_lift_of_kanComplex, hom_ext, horn.IsCompatible.of_hom, horn.hom_ext, iSup_iff, isFibrant_iff, of_hom, subsingleton
 -/

@@ -113,7 +113,7 @@ theorem functor_initial
   rw [initial_iff_comp_equivalence _ (StructuredArrow.post _ _ lightToProfinite)]
   have : forall i, Epi ((lightToProfinite.mapCone c).π.app i) :=
     fun i => inferInstanceAs (Epi (lightToProfinite.map (c.π.app i)))
-  exact Profinite.Extend.functor_initial _ (isLimitOfPreserves lightToProfinite 
+  exact Profinite.Extend.functor_initial _ (isLimitOfPreserves lightToProfinite hc)
 
 中文:
 定理 functor_initial
@@ -123,7 +123,7 @@ theorem functor_initial
   rw [initial_iff_comp_equivalence _ (StructuredArrow.post _ _ lightToProfinite)]
   have : forall i, Epi ((lightToProfinite.mapCone c).π.app i) :=
     fun i => inferInstanceAs (Epi (lightToProfinite.map (c.π.app i)))
-  exact Profinite.Extend.functor_initial _ (isLimitOfPreserves lightToProfinite 
+  exact Profinite.Extend.functor_initial _ (isLimitOfPreserves lightToProfinite hc)
 
 Depends on / 依赖: Extend, Profinite, Profinite.Extend.functor_initial, StructuredArrow, StructuredArrow.post, functor_initial, initial_iff_comp_equivalence, isLimitOfPreserves, lightToProfinite, lightToProfinite.map, lightToProfinite.mapCone, mapCone
 -/
@@ -145,7 +145,8 @@ theorem functorOp_final
   have : ((StructuredArrow.toCostructuredArrow toLightProfinite c.pt)).IsEquivalence :=
     (inferInstance : (structuredArrowOpEquivalence _ _).functor.IsEquivalence)
   have : (functor c).rightOp.Final :=
-    inferInstanceAs ((opOpEquivalence Nat).inverse ⋙ (functor
+    inferInstanceAs ((opOpEquivalence Nat).inverse ⋙ (functor c).op).Final
+  exact Functor.final_comp (functor c).rightOp _
 
 中文:
 定理 functorOp_final
@@ -156,7 +157,8 @@ theorem functorOp_final
   have : ((StructuredArrow.toCostructuredArrow toLightProfinite c.pt)).IsEquivalence :=
     (inferInstance : (structuredArrowOpEquivalence _ _).functor.IsEquivalence)
   have : (functor c).rightOp.Final :=
-    inferInstanceAs ((opOpEquivalence Nat).inverse ⋙ (functor
+    inferInstanceAs ((opOpEquivalence Nat).inverse ⋙ (functor c).op).Final
+  exact Functor.final_comp (functor c).rightOp _
 
 Depends on / 依赖: Functor, Functor.final_comp, IsEquivalence, StructuredArrow, StructuredArrow.toCostructuredArrow, c.pt, final_comp, functor, functor.IsEquivalence, functor_initial, inverse, opOpEquivalence, rightOp, rightOp.Final, structuredArrowOpEquivalence, toCostructuredArrow, toLightProfinite
 -/
@@ -259,7 +261,11 @@ definition cocone
       have := f.w
       simp only [op_obj, const_obj_obj, op_map, CostructuredArrow.right_eq_id, const_obj_map,
         Category.comp_id] at this
-      simp only [comp_obj, CostructuredArrow.proj_obj, op_obj, const
+      simp only [comp_obj, CostructuredArrow.proj_obj, op_obj, const_obj_obj, Functor.comp_map,
+        CostructuredArrow.proj_map, op_map, ← map_comp, this, const_obj_map, Category.comp_id]) }
+
+example : G.mapCocone c.op = (cocone G c.pt).whisker
+    ((opOpEquivalence Nat).functor ⋙ functorOp c) := rfl
 
 中文:
 定义 cocone
@@ -271,7 +277,11 @@ definition cocone
       have := f.w
       simp only [op_obj, const_obj_obj, op_map, CostructuredArrow.right_eq_id, const_obj_map,
         Category.comp_id] at this
-      simp only [comp_obj, CostructuredArrow.proj_obj, op_obj, const
+      simp only [comp_obj, CostructuredArrow.proj_obj, op_obj, const_obj_obj, Functor.comp_map,
+        CostructuredArrow.proj_map, op_map, ← map_comp, this, const_obj_map, Category.comp_id]) }
+
+example : G.mapCocone c.op = (cocone G c.pt).whisker
+    ((opOpEquivalence Nat).functor ⋙ functorOp c) := rfl
 
 Depends on / 依赖: G.obj
 -/

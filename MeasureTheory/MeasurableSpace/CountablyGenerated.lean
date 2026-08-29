@@ -439,7 +439,8 @@ lemma disjoint_countablyGeneratedAtom
   obtain ⟨n, hn⟩ : exists n, p n != q n := by grind
   specialize hsp hxs
   specialize hsq hxs
-  simp only [countablyGeneratedAtom, mem_iInter] at hs
+  simp only [countablyGeneratedAtom, mem_iInter] at hsp hsq
+  grind
 
 中文:
 引理 disjoint_countablyGeneratedAtom
@@ -452,7 +453,8 @@ lemma disjoint_countablyGeneratedAtom
   obtain ⟨n, hn⟩ : exists n, p n != q n := by grind
   specialize hsp hxs
   specialize hsq hxs
-  simp only [countablyGeneratedAtom, mem_iInter] at hs
+  simp only [countablyGeneratedAtom, mem_iInter] at hsp hsq
+  grind
 
 Depends on / 依赖: bot_eq_empty, countablyGeneratedAtom, iff_false, mem_empty_iff_false, mem_iInter, specialize, subset_empty_iff
 -/
@@ -529,7 +531,37 @@ lemma exists_eq_iUnion_countablyGeneratedAtom
   · simp only [mem_range, forall_exists_index, forall_apply_eq_imp_iff]
     refine fun n _ => ⟨fun p => p n, ?_⟩
     ext x
-    simp only [mem_iUnion, mem_ite_em
+    simp only [mem_iUnion, mem_ite_empty_right]
+    refine ⟨fun hx => ?_, ?_⟩
+    · exact ⟨(x in natGeneratingSequence α ·), by simp [countablyGeneratedAtom]; grind⟩
+    · rintro ⟨p, hpn, hpx⟩
+      simp only [countablyGeneratedAtom, mem_iInter] at hpx
+      specialize hpx n
+      simpa [hpn] using hpx
+  · exact ⟨fun _ => False, by simp⟩
+  · simp only [forall_exists_index]
+    intro t ht q htq
+    refine ⟨fun p => ¬ q p, ?_⟩
+    ext x
+    simp only [htq, compl_iUnion, mem_iInter, mem_compl_iff, mem_ite_empty_right, not_and,
+      mem_iUnion]
+    refine ⟨fun h => ?_, ?_⟩
+    · refine ⟨fun n => x in natGeneratingSequence α n, ?_,
+        mem_countablyGeneratedAtom_natGeneratingSequence x⟩
+      contrapose! h
+      refine ⟨fun n => x in natGeneratingSequence α n, h,
+        mem_countablyGeneratedAtom_natGeneratingSequence x⟩
+    · rintro ⟨p, hpq, hpx⟩ p' hqp' hx_mem
+      have hpp' : p != p' := by grind
+      have h_disj : Disjoint (countablyGeneratedAtom α p) (countablyGeneratedAtom α p') :=
+        disjoint_countablyGeneratedAtom hpp'
+      grind
+  · intro t ht h
+    choose q hq using h
+    refine ⟨fun p => ⨆ n, q n p, ?_⟩
+    ext
+    simp [hq]
+    grind
 
 中文:
 引理 存在_eq_iUnion_countablyGeneratedAtom
@@ -540,7 +572,37 @@ lemma exists_eq_iUnion_countablyGeneratedAtom
   · simp only [mem_range, forall_exists_index, forall_apply_eq_imp_iff]
     refine fun n _ => ⟨fun p => p n, ?_⟩
     ext x
-    simp only [mem_iUnion, mem_ite_em
+    simp only [mem_iUnion, mem_ite_empty_right]
+    refine ⟨fun hx => ?_, ?_⟩
+    · exact ⟨(x in natGeneratingSequence α ·), by simp [countablyGeneratedAtom]; grind⟩
+    · rintro ⟨p, hpn, hpx⟩
+      simp only [countablyGeneratedAtom, mem_iInter] at hpx
+      specialize hpx n
+      simpa [hpn] using hpx
+  · exact ⟨fun _ => False, by simp⟩
+  · simp only [forall_exists_index]
+    intro t ht q htq
+    refine ⟨fun p => ¬ q p, ?_⟩
+    ext x
+    simp only [htq, compl_iUnion, mem_iInter, mem_compl_iff, mem_ite_empty_right, not_and,
+      mem_iUnion]
+    refine ⟨fun h => ?_, ?_⟩
+    · refine ⟨fun n => x in natGeneratingSequence α n, ?_,
+        mem_countablyGeneratedAtom_natGeneratingSequence x⟩
+      contrapose! h
+      refine ⟨fun n => x in natGeneratingSequence α n, h,
+        mem_countablyGeneratedAtom_natGeneratingSequence x⟩
+    · rintro ⟨p, hpq, hpx⟩ p' hqp' hx_mem
+      have hpp' : p != p' := by grind
+      have h_disj : Disjoint (countablyGeneratedAtom α p) (countablyGeneratedAtom α p') :=
+        disjoint_countablyGeneratedAtom hpp'
+      grind
+  · intro t ht h
+    choose q hq using h
+    refine ⟨fun p => ⨆ n, q n p, ?_⟩
+    ext
+    simp [hq]
+    grind
 
 Depends on / 依赖: countablyGeneratedAtom, forall_apply_eq_imp_iff, forall_exists_index, generateFrom_induction, generateFrom_natGeneratingSequence, mem_iInter, mem_iUnion, mem_ite_empty_right, mem_range, natGeneratingSequence, specialize
 -/
@@ -594,7 +656,29 @@ lemma measurableAtom_eq_countablyGeneratedAtom_natGeneratingSequence
   have hA : forall n, MeasurableSet (A n) := measurableSet_natGeneratingSequence
   have hA_gen : generateFrom (range A) = mα := generateFrom_natGeneratingSequence α
   change measurableAtom x = countablyGeneratedAtom α (x in A ·)
-  refine subset_antisymm (measura
+  refine subset_antisymm (measurableAtom_subset ?_ ?_) ?_
+  · exact measurableSet_countablyGeneratedAtom _
+  · exact mem_countablyGeneratedAtom_natGeneratingSequence x
+  classical
+  unfold measurableAtom
+  simp only [subset_iInter_iff]
+  intro s hxs hs
+  obtain ⟨q, hq⟩ : exists (q : (Nat -> Prop) -> Prop), s =
+      ⋃ p, if q p then countablyGeneratedAtom α p else ∅ :=
+    exists_eq_iUnion_countablyGeneratedAtom hs
+  suffices q (x in A ·) by
+    rw [hq]
+    refine subset_trans (le_of_eq ?_) (subset_iUnion _ (x in A ·))
+    simp [this]
+  simp only [hq, mem_iUnion, mem_ite_empty_right] at hxs
+  obtain ⟨p, hpq, hpx⟩ := hxs
+  suffices p = (x in A ·) by rwa [← this]
+  by_contra! hp
+  have h_disj : Disjoint (countablyGeneratedAtom α p) (countablyGeneratedAtom α (x in A ·)) :=
+    disjoint_countablyGeneratedAtom hp
+  have hx_mem : x in countablyGeneratedAtom α (x in A ·) :=
+    mem_countablyGeneratedAtom_natGeneratingSequence x
+  grind
 
 中文:
 引理 measurableAtom_eq_countablyGeneratedAtom_natGeneratingSequence
@@ -604,7 +688,29 @@ lemma measurableAtom_eq_countablyGeneratedAtom_natGeneratingSequence
   have hA : forall n, MeasurableSet (A n) := measurableSet_natGeneratingSequence
   have hA_gen : generateFrom (range A) = mα := generateFrom_natGeneratingSequence α
   change measurableAtom x = countablyGeneratedAtom α (x in A ·)
-  refine subset_antisymm (measura
+  refine subset_antisymm (measurableAtom_subset ?_ ?_) ?_
+  · exact measurableSet_countablyGeneratedAtom _
+  · exact mem_countablyGeneratedAtom_natGeneratingSequence x
+  classical
+  unfold measurableAtom
+  simp only [subset_iInter_iff]
+  intro s hxs hs
+  obtain ⟨q, hq⟩ : exists (q : (Nat -> Prop) -> Prop), s =
+      ⋃ p, if q p then countablyGeneratedAtom α p else ∅ :=
+    exists_eq_iUnion_countablyGeneratedAtom hs
+  suffices q (x in A ·) by
+    rw [hq]
+    refine subset_trans (le_of_eq ?_) (subset_iUnion _ (x in A ·))
+    simp [this]
+  simp only [hq, mem_iUnion, mem_ite_empty_right] at hxs
+  obtain ⟨p, hpq, hpx⟩ := hxs
+  suffices p = (x in A ·) by rwa [← this]
+  by_contra! hp
+  have h_disj : Disjoint (countablyGeneratedAtom α p) (countablyGeneratedAtom α (x in A ·)) :=
+    disjoint_countablyGeneratedAtom hp
+  have hx_mem : x in countablyGeneratedAtom α (x in A ·) :=
+    mem_countablyGeneratedAtom_natGeneratingSequence x
+  grind
 
 Depends on / 依赖: MeasurableSet, classical, countablyGeneratedAtom, generateFrom, generateFrom_natGeneratingSequence, hA_gen, measurableAtom, measurableAtom_subset, measurableSet_countablyGeneratedAtom, measurableSet_natGeneratingSequence, mem_countablyGeneratedAtom_natGeneratingSequence, natGeneratingSequence, subset_antisymm, subset_iInter_iff
 -/
@@ -821,7 +927,9 @@ theorem _root_.eq_const_of_measurable_bot
       simp [← mem_preimage, h']
     · absurd hy
       simp [← mem_preimage, h']
-  obtai
+  obtain h' | h' := isEmpty_or_nonempty α
+  · use (Classical.ofNonempty : β), funext (by simp)
+  · use f (Classical.ofNonempty : α), funext (fun x => h _ _)
 
 中文:
 定理 _root_.eq_const_of_measurable_bot
@@ -835,7 +943,9 @@ theorem _root_.eq_const_of_measurable_bot
       simp [← mem_preimage, h']
     · absurd hy
       simp [← mem_preimage, h']
-  obtai
+  obtain h' | h' := isEmpty_or_nonempty α
+  · use (Classical.ofNonempty : β), funext (by simp)
+  · use f (Classical.ofNonempty : α), funext (fun x => h _ _)
 
 Depends on / 依赖: Classical, Classical.ofNonempty, MeasurableSpace, MeasurableSpace.measurableSet_bot_iff.mp, absurd, exists_measurableSet_of_ne, isEmpty_or_nonempty, measurableSet_bot_iff, mem_preimage, ofNonempty
 -/
@@ -1214,7 +1324,9 @@ Measurable.subtype_mk measurable_mapNatBool _
   apply measurable_generateFrom
   rintro _ ⟨n, rfl⟩
   rw [← Equiv.image_eq_preimage_symm _ _]
-  refine ⟨{y | y n}, 
+  refine ⟨{y | y n}, by measurability, ?_⟩
+  rw [← Equiv.preimage_eq_iff_eq_image]
+  simp [mapNatBool]
 
 中文:
 定理 measurableEquiv_nat_bool_of_countablyGenerated
@@ -1227,7 +1339,9 @@ Measurable.subtype_mk measurable_mapNatBool _
   apply measurable_generateFrom
   rintro _ ⟨n, rfl⟩
   rw [← Equiv.image_eq_preimage_symm _ _]
-  refine ⟨{y | y n}, 
+  refine ⟨{y | y n}, by measurability, ?_⟩
+  rw [← Equiv.preimage_eq_iff_eq_image]
+  simp [mapNatBool]
 
 Depends on / 依赖: Equiv.image_eq_preimage_symm, Equiv.ofInjective, Equiv.preimage_eq_iff_eq_image, Measurable, Measurable.subtype_mk, generateFrom_natGeneratingSequence, image_eq_preimage_symm, injective_mapNatBool, instances, mapNatBool, measurability, measurable_generateFrom, measurable_mapNatBool, ofInjective, preimage_eq_iff_eq_image, simp_rw, subtype_mk
 -/
@@ -1374,7 +1488,32 @@ lemma measurableSet_generateFrom_memPartition_iff
     | empty => exact ⟨∅, by simp, by simp⟩
     | compl u _ hu =>
       obtain ⟨S, hS_subset, rfl⟩ := hu
-      refine ⟨(memPartition t 
+      refine ⟨(memPartition t n).toFinset \ S, ?_, ?_⟩
+      · simp only [Finset.coe_sdiff, coe_toFinset]
+        exact sdiff_subset
+      · simp only [Finset.coe_sdiff, coe_toFinset]
+        refine (IsCompl.eq_compl ⟨?_, ?_⟩).symm
+        · refine Set.disjoint_sUnion_right.mpr fun u huS => ?_
+          refine Set.disjoint_sUnion_left.mpr fun v huV => ?_
+          refine disjoint_memPartition t n (mem_of_mem_sdiff huV) (hS_subset huS) ?_
+.symm exact ne_of_mem_of_not_mem huS (notMem_of_mem_sdiff huV)
+        · rw [codisjoint_iff]
+          simp only [sup_eq_union, top_eq_univ]
+          rw [← sUnion_memPartition t n]; rw [union_comm]; rw [← sUnion_union]; rw [union_sdiff_cancel hS_subset]
+    | iUnion f _ h =>
+      choose S hS_subset hS_eq using h
+      have : Fintype (⋃ n, (S n : Set (Set α))) := by
+        refine (Finite.subset (finite_memPartition t n) ?_).fintype
+        simp only [iUnion_subset_iff]
+        exact hS_subset
+      refine ⟨(⋃ n, (S n : Set (Set α))).toFinset, ?_, ?_⟩
+      · simp only [coe_toFinset, iUnion_subset_iff]
+        exact hS_subset
+      · simp only [coe_toFinset, sUnion_iUnion, hS_eq]
+  · rw [hS_eq, sUnion_eq_biUnion]
+    refine MeasurableSet.biUnion ?_ (fun t ht => ?_)
+    · exact S.countable_toSet
+    · exact measurableSet_generateFrom (hS_subset ht)
 
 中文:
 引理 measurableSet_generateFrom_memPartition_iff
@@ -1386,7 +1525,32 @@ lemma measurableSet_generateFrom_memPartition_iff
     | empty => exact ⟨∅, by simp, by simp⟩
     | compl u _ hu =>
       obtain ⟨S, hS_subset, rfl⟩ := hu
-      refine ⟨(memPartition t 
+      refine ⟨(memPartition t n).toFinset \ S, ?_, ?_⟩
+      · simp only [Finset.coe_sdiff, coe_toFinset]
+        exact sdiff_subset
+      · simp only [Finset.coe_sdiff, coe_toFinset]
+        refine (IsCompl.eq_compl ⟨?_, ?_⟩).symm
+        · refine Set.disjoint_sUnion_right.mpr fun u huS => ?_
+          refine Set.disjoint_sUnion_left.mpr fun v huV => ?_
+          refine disjoint_memPartition t n (mem_of_mem_sdiff huV) (hS_subset huS) ?_
+.symm exact ne_of_mem_of_not_mem huS (notMem_of_mem_sdiff huV)
+        · rw [codisjoint_iff]
+          simp only [sup_eq_union, top_eq_univ]
+          rw [← sUnion_memPartition t n]; rw [union_comm]; rw [← sUnion_union]; rw [union_sdiff_cancel hS_subset]
+    | iUnion f _ h =>
+      choose S hS_subset hS_eq using h
+      have : Fintype (⋃ n, (S n : Set (Set α))) := by
+        refine (Finite.subset (finite_memPartition t n) ?_).fintype
+        simp only [iUnion_subset_iff]
+        exact hS_subset
+      refine ⟨(⋃ n, (S n : Set (Set α))).toFinset, ?_, ?_⟩
+      · simp only [coe_toFinset, iUnion_subset_iff]
+        exact hS_subset
+      · simp only [coe_toFinset, sUnion_iUnion, hS_eq]
+  · rw [hS_eq, sUnion_eq_biUnion]
+    refine MeasurableSet.biUnion ?_ (fun t ht => ?_)
+    · exact S.countable_toSet
+    · exact measurableSet_generateFrom (hS_subset ht)
 
 Depends on / 依赖: Finset, Finset.coe_sdiff, IsCompl, IsCompl.eq_compl, Set.disjoint_sUnion_right.mpr, coe_sdiff, coe_toFinset, disjoint_sUnion_right, eq_compl, generateFrom_induction, hS_eq, hS_subset, memPartition, sdiff_subset, toFinset
 -/
@@ -1438,7 +1602,8 @@ lemma measurableSet_generateFrom_memPartition
   rw [this]
   refine MeasurableSet.biUnion (finite_memPartition _ _).countable (fun v hv => ?_)
   refine measurableSet_generateFrom ?_
-  rw [memPartition_su
+  rw [memPartition_succ]
+  exact ⟨v, hv, Or.inl rfl⟩
 
 中文:
 引理 measurableSet_generateFrom_memPartition
@@ -1449,7 +1614,8 @@ lemma measurableSet_generateFrom_memPartition
   rw [this]
   refine MeasurableSet.biUnion (finite_memPartition _ _).countable (fun v hv => ?_)
   refine measurableSet_generateFrom ?_
-  rw [memPartition_su
+  rw [memPartition_succ]
+  exact ⟨v, hv, Or.inl rfl⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.biUnion, Or.inl, biUnion, countable, finite_memPartition, iUnion_inter, measurableSet_generateFrom, memPartition, memPartition_succ, sUnion_eq_biUnion, sUnion_memPartition, simp_rw, univ_inter
 -/
@@ -1477,7 +1643,16 @@ lemma generateFrom_iUnion_memPartition
     | zero =>
       simp only [memPartition_zero, mem_singleton_iff] at hun
       rw [hun]
-      exact MeasurableSe
+      exact MeasurableSet.univ
+    | succ n ih =>
+      simp only [memPartition_succ, mem_ofPred_eq] at hun
+      obtain ⟨v, hv, huv⟩ := hun
+      rcases huv with rfl | rfl
+      · exact (ih v hv).inter (measurableSet_generateFrom ⟨n, rfl⟩)
+      · exact (ih v hv).diff (measurableSet_generateFrom ⟨n, rfl⟩)
+  · simp only [mem_range] at hu
+    obtain ⟨n, rfl⟩ := hu
+    exact generateFrom_mono (subset_iUnion _ _) _ (measurableSet_generateFrom_memPartition t n)
 
 中文:
 引理 generateFrom_iUnion_memPartition
@@ -1490,7 +1665,16 @@ lemma generateFrom_iUnion_memPartition
     | zero =>
       simp only [memPartition_zero, mem_singleton_iff] at hun
       rw [hun]
-      exact MeasurableSe
+      exact MeasurableSet.univ
+    | succ n ih =>
+      simp only [memPartition_succ, mem_ofPred_eq] at hun
+      obtain ⟨v, hv, huv⟩ := hun
+      rcases huv with rfl | rfl
+      · exact (ih v hv).inter (measurableSet_generateFrom ⟨n, rfl⟩)
+      · exact (ih v hv).diff (measurableSet_generateFrom ⟨n, rfl⟩)
+  · simp only [mem_range] at hu
+    obtain ⟨n, rfl⟩ := hu
+    exact generateFrom_mono (subset_iUnion _ _) _ (measurableSet_generateFrom_memPartition t n)
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, generalizing, generateFrom_le, le_antisymm, measurableSet_generat, measurableSet_generateFrom, memPartition_succ, memPartition_zero, mem_iUnion, mem_ofPred_eq, mem_singleton_iff
 -/

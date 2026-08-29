@@ -250,7 +250,12 @@ theorem Convex.locallyPathConnectedSpace
   let ⟨t, ht⟩ := (mem_nhds_subtype S x s).mp hs
   let ⟨t', ht'⟩ := (LocallyConvexSpace.convex_basis (𝕜 := Real) x.1).mem_iff.mp ht.1
   refine ⟨(↑) ⁻¹' t', ⟨?_, ?_⟩, (preimage_mono ht'.2).trans ht.2⟩
-  · exac
+  · exact continuousAt_subtype_val.preimage_mem_nhds ht'.1.1
+  · refine Subtype.preimage_coe_self_inter _ _ ▸ IsPathConnected.preimage_coe ?_ inter_subset_left
+    exact (hS.inter ht'.1.2).isPathConnected ⟨x, x.2, mem_of_mem_nhds ht'.1.1⟩
+
+@[deprecated (since := "2026-06-21")]
+alias Convex.locPathConnectedSpace := Convex.locallyPathConnectedSpace
 
 中文:
 定理 凸.locallyPathConnectedSpace
@@ -260,7 +265,12 @@ theorem Convex.locallyPathConnectedSpace
   let ⟨t, ht⟩ := (mem_nhds_subtype S x s).mp hs
   let ⟨t', ht'⟩ := (LocallyConvexSpace.convex_basis (𝕜 := Real) x.1).mem_iff.mp ht.1
   refine ⟨(↑) ⁻¹' t', ⟨?_, ?_⟩, (preimage_mono ht'.2).trans ht.2⟩
-  · exac
+  · exact continuousAt_subtype_val.preimage_mem_nhds ht'.1.1
+  · refine Subtype.preimage_coe_self_inter _ _ ▸ IsPathConnected.preimage_coe ?_ inter_subset_left
+    exact (hS.inter ht'.1.2).isPathConnected ⟨x, x.2, mem_of_mem_nhds ht'.1.1⟩
+
+@[deprecated (since := "2026-06-21")]
+alias Convex.locPathConnectedSpace := Convex.locallyPathConnectedSpace
 
 Depends on / 依赖: IsPathConnected, IsPathConnected.preimage_coe, LocallyConvexSpace, LocallyConvexSpace.convex_basis, Subtype, Subtype.preimage_coe_self_inter, continuousAt_subtype_val, continuousAt_subtype_val.preimage_mem_nhds, convex_basis, hS.inter, inter_subset_left, isPathConnected, mem_iff, mem_iff.mp, mem_nhds_subtype, mem_of_mem, mem_of_superset, preimage_coe, preimage_coe_self_inter, preimage_mem_nhds
 -/
@@ -329,7 +339,12 @@ theorem Disjoint.exists_open_convexes
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   have := (LocallyConvexSpace.convex_open_basis_zero 𝕜 E).comap fun x : E × E => x.2 - x.1
   rw [← uniformity_eq_comap_nhds_zero] at this
-  rcases disj.exists_unif
+  rcases disj.exists_uniform_thickening_of_basis this hs₂ ht₂ with ⟨V, ⟨hV0, hVopen, hVconvex⟩, hV⟩
+  refine ⟨s + V, t + V, hVopen.add_left, hVopen.add_left, hs₁.add hVconvex, ht₁.add hVconvex,
+    subset_add_left _ hV0, subset_add_left _ hV0, ?_⟩
+  simp_rw [← iUnion_add_left_image, image_add_left]
+  simp_rw [UniformSpace.ball, ← preimage_comp, sub_eq_neg_add] at hV
+  exact hV
 
 中文:
 定理 Disjoint.存在_open_convexes
@@ -339,7 +354,12 @@ theorem Disjoint.exists_open_convexes
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   have := (LocallyConvexSpace.convex_open_basis_zero 𝕜 E).comap fun x : E × E => x.2 - x.1
   rw [← uniformity_eq_comap_nhds_zero] at this
-  rcases disj.exists_unif
+  rcases disj.exists_uniform_thickening_of_basis this hs₂ ht₂ with ⟨V, ⟨hV0, hVopen, hVconvex⟩, hV⟩
+  refine ⟨s + V, t + V, hVopen.add_left, hVopen.add_left, hs₁.add hVconvex, ht₁.add hVconvex,
+    subset_add_left _ hV0, subset_add_left _ hV0, ?_⟩
+  simp_rw [← iUnion_add_left_image, image_add_left]
+  simp_rw [UniformSpace.ball, ← preimage_comp, sub_eq_neg_add] at hV
+  exact hV
 
 Depends on / 依赖: IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, LocallyConvexSpace, LocallyConvexSpace.convex_open_basis_zero, UniformSpace, add_left, convex_open_basis_zero, disj.exists_uniform_thickening_of_basis, exists_uniform_thickening_of_basis, hVconvex, hVopen, hVopen.add_left, isUniformAddGroup_of_addCommGroup, rightUniformSpace, subset_add_left, uniformity_eq_comap_nhds_zero
 -/
@@ -398,7 +418,9 @@ theorem LocallyConvexSpace.sInf
   refine .ofBases 𝕜 E (fun _ => fun If : Set ts × (ts -> Set E) => ⋂ i in If.1, If.2 i)
       (fun x => fun If : Set ts × (ts -> Set E) =>
         If.1.Finite ∧ forall i in If.1, If.2 i in @nhds _ (↑i) x ∧ Convex 𝕜 (If.2 i))
-      (fun x => ?_) fun x If hif =
+      (fun x => ?_) fun x If hif => convex_iInter fun i => convex_iInter fun hi => (hif.2 i hi).2
+  rw [nhds_sInf]; rw [← iInf_subtype'']
+  exact .iInf' fun i : ts => (@locallyConvexSpace_iff 𝕜 E _ _ _ _ ↑i).mp (h (↑i) i.2) x
 
 中文:
 定理 LocallyConvex空间.sInf
@@ -408,7 +430,9 @@ theorem LocallyConvexSpace.sInf
   refine .ofBases 𝕜 E (fun _ => fun If : Set ts × (ts -> Set E) => ⋂ i in If.1, If.2 i)
       (fun x => fun If : Set ts × (ts -> Set E) =>
         If.1.Finite ∧ forall i in If.1, If.2 i in @nhds _ (↑i) x ∧ Convex 𝕜 (If.2 i))
-      (fun x => ?_) fun x If hif =
+      (fun x => ?_) fun x If hif => convex_iInter fun i => convex_iInter fun hi => (hif.2 i hi).2
+  rw [nhds_sInf]; rw [← iInf_subtype'']
+  exact .iInf' fun i : ts => (@locallyConvexSpace_iff 𝕜 E _ _ _ _ ↑i).mp (h (↑i) i.2) x
 -/
 protected theorem LocallyConvexSpace.sInf {ts : Set (TopologicalSpace E)}
     (h : forall t in ts, @LocallyConvexSpace 𝕜 E _ _ _ _ t) :
@@ -602,7 +626,17 @@ instance LinearOrderedSemiring.toLocallyConvexSpace
         simp_all [Iio_mem_nhds, convex_Iio]
       · simp +contextual
     obtain hu | hu := isTop_or_exists_gt x
-    · 
+    · refine hu.rec ?_ _
+      intro
+      refine nhds_top_basis.to_hasBasis' ?_ ?_
+      · intros
+        refine ⟨Set.Ioi _, ?_, subset_rfl⟩
+        simp_all
+      · simp +contextual
+    refine (nhds_basis_Ioo' hl hu).to_hasBasis' ?_ ?_
+    · simp only [id_eq, and_imp, Prod.forall]
+      exact fun _ _ h₁ h₂ => ⟨_, by simp [h₁, h₂, Ioo_mem_nhds, convex_Ioo], subset_rfl⟩
+    · simp +contextual
 
 中文:
 实例 LinearOrderedSemiring.toLocallyConvexSpace
@@ -617,7 +651,17 @@ instance LinearOrderedSemiring.toLocallyConvexSpace
         simp_all [Iio_mem_nhds, convex_Iio]
       · simp +contextual
     obtain hu | hu := isTop_or_exists_gt x
-    · 
+    · refine hu.rec ?_ _
+      intro
+      refine nhds_top_basis.to_hasBasis' ?_ ?_
+      · intros
+        refine ⟨Set.Ioi _, ?_, subset_rfl⟩
+        simp_all
+      · simp +contextual
+    refine (nhds_basis_Ioo' hl hu).to_hasBasis' ?_ ?_
+    · simp only [id_eq, and_imp, Prod.forall]
+      exact fun _ _ h₁ h₂ => ⟨_, by simp [h₁, h₂, Ioo_mem_nhds, convex_Ioo], subset_rfl⟩
+    · simp +contextual
 
 Depends on / 依赖: Iio_mem_nhds, Prod.forall, Set.Iio, Set.Ioi, and_imp, contextual, convex_Iio, hl.rec, hu.rec, id_eq, intros, isBot_or_exists_lt, isTop_or_exists_gt, nhds_basis_Ioo, nhds_bot_basis, nhds_bot_basis.to_hasBasis, nhds_top_basis, nhds_top_basis.to_hasBasis, subset_rfl, to_hasBasis
 -/
@@ -659,7 +703,8 @@ lemma Convex.eventually_nhdsWithin_segment
     at h ⊢
   obtain ⟨u, ⟨hu_nhds, hu_convex⟩, h⟩ := h
   refine ⟨u, ⟨hu_nhds, hu_convex⟩, fun x hxu hxs y hy => h ?_ (hs.segment_subset hx₀s hxs hy)⟩
-  suffices segment 𝕜 x₀ x subseteq u from this h
+  suffices segment 𝕜 x₀ x subseteq u from this hy
+  exact hu_convex.segment_subset (mem_of_mem_nhds hu_nhds) hxu
 
 中文:
 引理 凸.eventually_nhdsWithin_segment
@@ -669,7 +714,8 @@ lemma Convex.eventually_nhdsWithin_segment
     at h ⊢
   obtain ⟨u, ⟨hu_nhds, hu_convex⟩, h⟩ := h
   refine ⟨u, ⟨hu_nhds, hu_convex⟩, fun x hxu hxs y hy => h ?_ (hs.segment_subset hx₀s hxs hy)⟩
-  suffices segment 𝕜 x₀ x subseteq u from this h
+  suffices segment 𝕜 x₀ x subseteq u from this hy
+  exact hu_convex.segment_subset (mem_of_mem_nhds hu_nhds) hxu
 
 Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.convex_basis, convex_basis, eventually_iff, eventually_nhdsWithin_iff, hs.segment_subset, hu_convex, hu_convex.segment_subset, hu_nhds, mem_of_mem_nhds, segment, segment_subset, subseteq
 -/

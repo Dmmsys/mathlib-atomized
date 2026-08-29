@@ -413,7 +413,10 @@ theorem Ideal.mul_homogeneous_element_mem_of_mem
   obtain ⟨i, hi⟩ := hx₁
   have mem₁ : (DirectSum.decompose 𝒜 r k : A) * x in 𝒜 (k + i) :=
     GradedMul.mul_mem (SetLike.coe_mem _) hi
-  rw [GradedRing.proj_apply]; rw [Di
+  rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem 𝒜 mem₁]; rw [coe_of_apply]
+  split_ifs
+  · exact I.mul_mem_left _ hx₂
+  · exact I.zero_mem
 
 中文:
 定理 理想.mul_homogeneous_element_mem_of_mem
@@ -425,7 +428,10 @@ theorem Ideal.mul_homogeneous_element_mem_of_mem
   obtain ⟨i, hi⟩ := hx₁
   have mem₁ : (DirectSum.decompose 𝒜 r k : A) * x in 𝒜 (k + i) :=
     GradedMul.mul_mem (SetLike.coe_mem _) hi
-  rw [GradedRing.proj_apply]; rw [Di
+  rw [GradedRing.proj_apply]; rw [DirectSum.decompose_of_mem 𝒜 mem₁]; rw [coe_of_apply]
+  split_ifs
+  · exact I.mul_mem_left _ hx₂
+  · exact I.zero_mem
 
 Depends on / 依赖: DirectSum, DirectSum.decompose, DirectSum.decompose_of_mem, DirectSum.sum_support_decompose, Finset, Finset.sum_mul, GradedMul, GradedMul.mul_mem, GradedRing, GradedRing.proj_apply, I.mul_mem_left, I.zero_mem, Ideal.sum_mem, SetLike, SetLike.coe_mem, classical, coe_mem, coe_of_apply, decompose, decompose_of_mem
 -/
@@ -457,7 +463,13 @@ theorem Ideal.homogeneous_span
   rw [LinearMap.mem_range] at hr
   obtain ⟨s, rfl⟩ := hr
   rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [decompose_sum]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
-  refine
+  refine Ideal.sum_mem _ ?_
+  rintro z hz1
+  rw [smul_eq_mul]
+  refine Ideal.mul_homogeneous_element_mem_of_mem 𝒜 (s z) z ?_ ?_ i
+  · rcases z with ⟨z, hz2⟩
+    apply h _ hz2
+  · exact Ideal.subset_span z.2
 
 中文:
 定理 理想.homogeneous_span
@@ -468,7 +480,13 @@ theorem Ideal.homogeneous_span
   rw [LinearMap.mem_range] at hr
   obtain ⟨s, rfl⟩ := hr
   rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [decompose_sum]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
-  refine
+  refine Ideal.sum_mem _ ?_
+  rintro z hz1
+  rw [smul_eq_mul]
+  refine Ideal.mul_homogeneous_element_mem_of_mem 𝒜 (s z) z ?_ ?_ i
+  · rcases z with ⟨z, hz2⟩
+    apply h _ hz2
+  · exact Ideal.subset_span z.2
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, DFinsupp, DFinsupp.finsetSum_apply, Finsupp, Finsupp.linearCombination_apply, Finsupp.span_eq_range_linearCombination, Finsupp.sum, Ideal.mul_homogeneous_element_mem_of_mem, Ideal.span, Ideal.subset_span, Ideal.sum_mem, LinearMap, LinearMap.mem_range, coe_finsetSum, decompose_sum, finsetSum_apply, linearCombination_apply, mem_range, mul_homogeneous_element_mem_of_mem
 -/
@@ -1666,7 +1684,9 @@ theorem Ideal.homogeneousCore'_eq_sSup
   convert! coe_mono.map_isGreatest (Ideal.homogeneousCore.gc 𝒜).isGreatest_u using 1
   ext x
   rw [mem_image]; rw [mem_ofPred_eq]
-  refine ⟨fun hI => ⟨⟨x
+  refine ⟨fun hI => ⟨⟨x, hI.1⟩, ⟨hI.2, rfl⟩⟩, ?_⟩
+  rintro ⟨x, ⟨hx, rfl⟩⟩
+  exact ⟨x.isHomogeneous, hx⟩
 
 中文:
 定理 理想.homogeneousCore'_eq_sSup
@@ -1677,7 +1697,9 @@ theorem Ideal.homogeneousCore'_eq_sSup
   convert! coe_mono.map_isGreatest (Ideal.homogeneousCore.gc 𝒜).isGreatest_u using 1
   ext x
   rw [mem_image]; rw [mem_ofPred_eq]
-  refine ⟨fun hI => ⟨⟨x
+  refine ⟨fun hI => ⟨⟨x, hI.1⟩, ⟨hI.2, rfl⟩⟩, ?_⟩
+  rintro ⟨x, ⟨hx, rfl⟩⟩
+  exact ⟨x.isHomogeneous, hx⟩
 -/
 theorem Ideal.homogeneousCore'_eq_sSup :
     I.homogeneousCore' 𝒜 = sSup { J : Ideal A | J.IsHomogeneous 𝒜 ∧ J <= I } := by
@@ -2013,7 +2035,9 @@ definition irrelevant
     · rw [h, hr, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
     · rw [decompose_of_mem_ne 𝒜 (SetLike.coe_mem _) h]⟩
 
-@[i
+@[inherit_doc] scoped notation 𝒜 "₊" => irrelevant 𝒜
+
+@[simp]
 
 中文:
 定义 irrelevant
@@ -2024,7 +2048,9 @@ definition irrelevant
     · rw [h, hr, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
     · rw [decompose_of_mem_ne 𝒜 (SetLike.coe_mem _) h]⟩
 
-@[i
+@[inherit_doc] scoped notation 𝒜 "₊" => irrelevant 𝒜
+
+@[simp]
 
 Depends on / 依赖: GradedRing, GradedRing.projZeroRingHom, RingHom, RingHom.ker, SetLike, SetLike.coe_mem, ZeroMemClass, ZeroMemClass.coe_zero, coe_mem, coe_zero, decompose, decompose_of_mem_ne, decompose_zero, projZeroRingHom, zero_apply
 -/
@@ -2112,7 +2138,8 @@ refine le_antisymm (fun x hx => ?_) iSup₂_le fun i hi x hx => mem_irrelevant_o
   refine sum_mem fun j hj => ?_
   by_cases hj₀ : j = 0
   · classical exact (DFinsupp.mem_support_iff.mp hj <| hj₀ ▸ (by simpa using hx)).elim
-· exact 
+· exact AddSubmonoid.mem_iSup_of_mem j AddSubmonoid.mem_iSup_of_mem (pos_of_ne_zero hj₀)
+      Subtype.prop _
 
 中文:
 引理 irrelevant_eq_iSup
@@ -2123,7 +2150,8 @@ refine le_antisymm (fun x hx => ?_) iSup₂_le fun i hi x hx => mem_irrelevant_o
   refine sum_mem fun j hj => ?_
   by_cases hj₀ : j = 0
   · classical exact (DFinsupp.mem_support_iff.mp hj <| hj₀ ▸ (by simpa using hx)).elim
-· exact 
+· exact AddSubmonoid.mem_iSup_of_mem j AddSubmonoid.mem_iSup_of_mem (pos_of_ne_zero hj₀)
+      Subtype.prop _
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_iSup_of_mem, DFinsupp, DFinsupp.mem_support_iff.mp, DirectSum, DirectSum.sum_support_decompose, Subtype, Subtype.prop, classical, le_antisymm, mem_iSup_of_mem, mem_irrelevant_of_mem, mem_support_iff, pos_of_ne_zero, sum_mem, sum_support_decompose
 -/

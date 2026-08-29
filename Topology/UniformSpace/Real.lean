@@ -38,7 +38,7 @@ instance Real.instCompleteSpace
   rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
   have := c.equiv_lim ε ε0
   simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn => hε (
+  exact this.imp fun N hN n hn => hε (hN n hn)
 
 中文:
 实例 实数.instCompleteSpace
@@ -51,7 +51,7 @@ instance Real.instCompleteSpace
   rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
   have := c.equiv_lim ε ε0
   simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn => hε (
+  exact this.imp fun N hN n hn => hε (hN n hn)
 
 Depends on / 依赖: CauSeq, Metric, Metric.cauchySeq_iff, Metric.mem_nhds_iff, c.equiv_lim, c.lim, cauchySeq_iff, complete_of_cauchySeq_tendsto, equiv_lim, mem_atTop_sets, mem_map, mem_nhds_iff, this.imp
 -/

@@ -101,7 +101,13 @@ theorem isLittleO_principal
     have : Tendsto (fun c : Real => c * ‖g' x‖) (𝓝[>] 0) (𝓝 0) :=
       ((continuous_id.mul continuous_const).tendsto' _ _ (zero_mul _)).mono_left
         inf_le_left
-    apply le_of_tendsto_of_tendsto 
+    apply le_of_tendsto_of_tendsto tendsto_const_nhds this
+    apply eventually_nhdsWithin_iff.2 (Eventually.of_forall (fun c hc => ?_))
+    exact eventually_principal.1 (h hc) x hx
+  · apply (isLittleO_zero g' _).congr' ?_ EventuallyEq.rfl
+    exact fun x hx => (h x hx).symm
+
+@[simp]
 
 中文:
 定理 isLittleO_principal
@@ -113,7 +119,13 @@ theorem isLittleO_principal
     have : Tendsto (fun c : Real => c * ‖g' x‖) (𝓝[>] 0) (𝓝 0) :=
       ((continuous_id.mul continuous_const).tendsto' _ _ (zero_mul _)).mono_left
         inf_le_left
-    apply le_of_tendsto_of_tendsto 
+    apply le_of_tendsto_of_tendsto tendsto_const_nhds this
+    apply eventually_nhdsWithin_iff.2 (Eventually.of_forall (fun c hc => ?_))
+    exact eventually_principal.1 (h hc) x hx
+  · apply (isLittleO_zero g' _).congr' ?_ EventuallyEq.rfl
+    exact fun x hx => (h x hx).symm
+
+@[simp]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, EventuallyEq, EventuallyEq.rfl, Tendsto, continuous_const, continuous_id, continuous_id.mul, eventually_nhdsWithin_iff, eventually_principal, inf_le_left, isLittleO_iff, isLittleO_zero, le_of_tendsto_of_tendsto, mono_left, norm_le_zero_iff, of_forall, tendsto, tendsto_const_nhds, zero_mul
 -/
@@ -342,7 +354,9 @@ theorem isLittleO_one_left_iff
     (fun _x => 1 : α -> F) =o[l] f ↔ forall n : Nat, forallᶠ x in l, ↑n * ‖(1 : F)‖ <= ‖f x‖ :=
 isLittleO_iff_nat_mul_le_aux Or.inl fun _x => by simp only [norm_one, zero_le_one]
     _ ↔ forall n : Nat, True -> forallᶠ x in l, ‖f x‖ in Ici (n : Real) := by
-      simp only [norm_one, mul_one, tr
+      simp only [norm_one, mul_one, true_imp_iff, mem_Ici]
+    _ ↔ Tendsto (fun x => ‖f x‖) l atTop :=
+      atTop_hasCountableBasis_of_archimedean.1.tendsto_right_iff.symm
 
 中文:
 定理 isLittleO_one_left_iff
@@ -351,7 +365,9 @@ isLittleO_iff_nat_mul_le_aux Or.inl fun _x => by simp only [norm_one, zero_le_on
     (fun _x => 1 : α -> F) =o[l] f ↔ forall n : Nat, forallᶠ x in l, ↑n * ‖(1 : F)‖ <= ‖f x‖ :=
 isLittleO_iff_nat_mul_le_aux Or.inl fun _x => by simp only [norm_one, zero_le_one]
     _ ↔ forall n : Nat, True -> forallᶠ x in l, ‖f x‖ in Ici (n : Real) := by
-      simp only [norm_one, mul_one, tr
+      simp only [norm_one, mul_one, true_imp_iff, mem_Ici]
+    _ ↔ Tendsto (fun x => ‖f x‖) l atTop :=
+      atTop_hasCountableBasis_of_archimedean.1.tendsto_right_iff.symm
 
 Depends on / 依赖: Or.inl, Tendsto, atTop_hasCountableBasis_of_archimedean, isLittleO_iff_nat_mul_le_aux, mem_Ici, mul_one, norm_one, tendsto_right_iff, tendsto_right_iff.symm, true_imp_iff, zero_le_one
 -/
@@ -415,7 +431,8 @@ lemma isBigO_one_nhds_ne_iff
   use max c ‖f a‖
   filter_upwards [eventually_nhdsWithin_iff.mp hc] with b hb
   rcases eq_or_ne b a with rfl | hb'
-  · apply le_max_righ
+  · apply le_max_right
+  · exact (hb hb').trans (le_max_left ..)
 
 中文:
 引理 isBigO_one_nhds_ne_iff
@@ -427,7 +444,8 @@ lemma isBigO_one_nhds_ne_iff
   use max c ‖f a‖
   filter_upwards [eventually_nhdsWithin_iff.mp hc] with b hb
   rcases eq_or_ne b a with rfl | hb'
-  · apply le_max_righ
+  · apply le_max_right
+  · exact (hb hb').trans (le_max_left ..)
 
 Depends on / 依赖: IsBounded, IsBoundedUnder, eq_or_ne, eventually_map, eventually_nhdsWithin_iff, eventually_nhdsWithin_iff.mp, filter_upwards, h.mono, isBigO_one_iff, le_max_left, le_max_right, nhdsWithin_le_nhds
 -/
@@ -638,7 +656,8 @@ theorem isBigO_const_left_iff_pos_le_norm
     exact hC.bound.mono fun x => (div_le_iff₀' hC₀).2
   · rintro ⟨b, hb₀, hb⟩
     refine IsBigO.of_bound (‖c‖ / b) (hb.mono fun x hx => ?_)
-    rw [div_mul_eq_mul_div]; rw
+    rw [div_mul_eq_mul_div]; rw [mul_div_assoc]
+    exact le_mul_of_one_le_right (norm_nonneg _) ((one_le_div hb₀).2 hx)
 
 中文:
 定理 isBigO_const_left_iff_pos_le_norm
@@ -651,7 +670,8 @@ theorem isBigO_const_left_iff_pos_le_norm
     exact hC.bound.mono fun x => (div_le_iff₀' hC₀).2
   · rintro ⟨b, hb₀, hb⟩
     refine IsBigO.of_bound (‖c‖ / b) (hb.mono fun x hx => ?_)
-    rw [div_mul_eq_mul_div]; rw
+    rw [div_mul_eq_mul_div]; rw [mul_div_assoc]
+    exact le_mul_of_one_le_right (norm_nonneg _) ((one_le_div hb₀).2 hx)
 
 Depends on / 依赖: IsBigO, IsBigO.of_bound, div_mul_eq_mul_div, div_pos, exists_pos, h.exists_pos, hC.bound.mono, hb.mono, le_mul_of_one_le_right, mul_div_assoc, norm_nonneg, norm_pos_iff, of_bound, one_le_div
 -/
@@ -1889,7 +1909,7 @@ theorem isBigO_iff_exists_eq_mul
   · rintro ⟨φ, ⟨c, hφ⟩, huvφ⟩
     exact isBigO_iff_isBigOWith.2 ⟨c, isBigOWith_of_eq_mul φ hφ huvφ⟩
 
-alias ⟨IsBigO.exists_eq_mul, _⟩ := isBigO_
+alias ⟨IsBigO.exists_eq_mul, _⟩ := isBigO_iff_exists_eq_mul
 
 中文:
 定理 isBigO_iff_存在_eq_mul
@@ -1902,7 +1922,7 @@ alias ⟨IsBigO.exists_eq_mul, _⟩ := isBigO_
   · rintro ⟨φ, ⟨c, hφ⟩, huvφ⟩
     exact isBigO_iff_isBigOWith.2 ⟨c, isBigOWith_of_eq_mul φ hφ huvφ⟩
 
-alias ⟨IsBigO.exists_eq_mul, _⟩ := isBigO_
+alias ⟨IsBigO.exists_eq_mul, _⟩ := isBigO_iff_exists_eq_mul
 
 Depends on / 依赖: exists_eq_mul, exists_nonneg, h.exists_nonneg, hc.exists_eq_mul, isBigOWith_of_eq_mul, isBigO_iff_isBigOWith
 -/
@@ -1931,6 +1951,8 @@ theorem isLittleO_iff_exists_eq_mul
     rw [NormedAddGroup.tendsto_nhds_zero] at hφ
     exact isBigOWith_of_eq_mul _ ((hφ c hpos).mono fun x => le_of_lt) huvφ
 
+alias ⟨IsLittleO.exists_eq_mul, _⟩ := isLittleO_iff_exists_eq_mul
+
 中文:
 定理 isLittleO_iff_存在_eq_mul
   证明: by
@@ -1940,6 +1962,8 @@ theorem isLittleO_iff_exists_eq_mul
     rintro ⟨φ, hφ, huvφ⟩ c hpos
     rw [NormedAddGroup.tendsto_nhds_zero] at hφ
     exact isBigOWith_of_eq_mul _ ((hφ c hpos).mono fun x => le_of_lt) huvφ
+
+alias ⟨IsLittleO.exists_eq_mul, _⟩ := isLittleO_iff_exists_eq_mul
 
 Depends on / 依赖: IsLittleO_def, NormedAddGroup, NormedAddGroup.tendsto_nhds_zero, eventually_mul_div_cancel, h.eventually_mul_div_cancel.symm, h.tendsto_div_nhds_zero, isBigOWith_of_eq_mul, le_of_lt, tendsto_div_nhds_zero, tendsto_nhds_zero
 -/
@@ -2351,7 +2375,7 @@ theorem IsBigOWith.right_le_sub_of_lt_one
       simp only [mem_ofPred_eq] at hx ⊢
       rw [mul_comm]; rw [one_div]; rw [← div_eq_mul_inv]; rw [le_div_iff₀]; rw [mul_sub]; rw [mul_one]; rw [mul_comm]
       · exact le_trans (sub_le_sub_left hx _) (norm_sub_norm_le _ _)
-      · ex
+      · exact sub_pos.2 hc
 
 中文:
 定理 IsBigOWith.right_le_sub_of_lt_one
@@ -2361,7 +2385,7 @@ theorem IsBigOWith.right_le_sub_of_lt_one
       simp only [mem_ofPred_eq] at hx ⊢
       rw [mul_comm]; rw [one_div]; rw [← div_eq_mul_inv]; rw [le_div_iff₀]; rw [mul_sub]; rw [mul_one]; rw [mul_comm]
       · exact le_trans (sub_le_sub_left hx _) (norm_sub_norm_le _ _)
-      · ex
+      · exact sub_pos.2 hc
 
 Depends on / 依赖: IsBigOWith, IsBigOWith.of_bound, div_eq_mul_inv, h.bound, le_trans, mem_ofPred_eq, mem_of_superset, mul_comm, mul_one, mul_sub, norm_sub_norm_le, of_bound, one_div, sub_le_sub_left, sub_pos
 -/
@@ -2464,7 +2488,9 @@ theorem bound_of_isBigO_cofinite
   rw [IsBigOWith_def]; rw [eventually_cofinite] at hC
   rcases (hC.toFinset.image fun x => ‖f x‖ / ‖g'' x‖).exists_le with ⟨C', hC'⟩
   have : forall x, C * ‖g'' x‖ < ‖f x‖ -> ‖f x‖ / ‖g'' x‖ <= C' := by simpa using hC'
-  refine ⟨max C C', lt_max_iff.2 (Or.in
+  refine ⟨max C C', lt_max_iff.2 (Or.inl C₀), fun x h₀ => ?_⟩
+  rw [max_mul_of_nonneg _ _ (norm_nonneg _)]; rw [le_max_iff]; rw [or_iff_not_imp_left]; rw [not_le]
+  exact fun hx => (div_le_iff₀ (norm_pos_iff.2 h₀)).1 (this _ hx)
 
 中文:
 定理 bound_of_isBigO_cofinite
@@ -2474,7 +2500,9 @@ theorem bound_of_isBigO_cofinite
   rw [IsBigOWith_def]; rw [eventually_cofinite] at hC
   rcases (hC.toFinset.image fun x => ‖f x‖ / ‖g'' x‖).exists_le with ⟨C', hC'⟩
   have : forall x, C * ‖g'' x‖ < ‖f x‖ -> ‖f x‖ / ‖g'' x‖ <= C' := by simpa using hC'
-  refine ⟨max C C', lt_max_iff.2 (Or.in
+  refine ⟨max C C', lt_max_iff.2 (Or.inl C₀), fun x h₀ => ?_⟩
+  rw [max_mul_of_nonneg _ _ (norm_nonneg _)]; rw [le_max_iff]; rw [or_iff_not_imp_left]; rw [not_le]
+  exact fun hx => (div_le_iff₀ (norm_pos_iff.2 h₀)).1 (this _ hx)
 
 Depends on / 依赖: IsBigOWith_def, Or.inl, eventually_cofinite, exists_le, exists_pos, h.exists_pos, hC.toFinset.image, le_max_iff, lt_max_iff, max_mul_of_nonneg, norm_nonneg, norm_pos_iff, not_le, or_iff_not_imp_left, toFinset
 -/
@@ -2878,7 +2906,25 @@ lemma isBigO_nat_atTop_induction
   rw [isBigO_iff]
   rw [← eventually_forall_ge_atTop] at hrec
 .exists obtain ⟨n₁, H₁, H₂⟩ := (eventually_ge_atTop n₀).and hrec
-  let ubounds := {C | forall m in Finset.Icc n₀ n₁, ‖f m‖ 
+  let ubounds := {C | forall m in Finset.Icc n₀ n₁, ‖f m‖ <= C * ‖g m‖}
+  let C₁ := (Finset.Icc n₀ n₁).sup' (Finset.nonempty_Icc.mpr H₁) fun n => ‖f n‖ / ‖g n‖
+  have C₁_mem : C₁ in ubounds := by
+    rw [Set.mem_ofPred]
+    intro m hm
+    calc ‖f m‖ = (‖f m‖ / ‖g m‖) * ‖g m‖ := by by_cases hm' : g m = 0 <;> grind [norm_eq_zero]
+      _ <= C₁ * ‖g m‖ := by
+        gcongr
+        exact Finset.le_sup' (fun x => ‖f x‖ / ‖g x‖) (Finset.mem_def.mpr hm)
+  refine ⟨max C₀ C₁, ?_⟩
+  filter_upwards [eventually_ge_atTop n₁] with n hn
+  induction n using Nat.strongRecOn with
+  | ind n h_ind =>
+    refine H₂ _ (by grind) _ (by grind) fun m hm => ?_
+    by_cases hbase : m < n₁
+    · have hC₁ : C₁ <= max C₀ C₁ := by grind
+      grw [← hC₁]
+      grind
+    · grind
 
 中文:
 引理 isBigO_nat_atTop_induction
@@ -2890,7 +2936,25 @@ lemma isBigO_nat_atTop_induction
   rw [isBigO_iff]
   rw [← eventually_forall_ge_atTop] at hrec
 .exists obtain ⟨n₁, H₁, H₂⟩ := (eventually_ge_atTop n₀).and hrec
-  let ubounds := {C | forall m in Finset.Icc n₀ n₁, ‖f m‖ 
+  let ubounds := {C | forall m in Finset.Icc n₀ n₁, ‖f m‖ <= C * ‖g m‖}
+  let C₁ := (Finset.Icc n₀ n₁).sup' (Finset.nonempty_Icc.mpr H₁) fun n => ‖f n‖ / ‖g n‖
+  have C₁_mem : C₁ in ubounds := by
+    rw [Set.mem_ofPred]
+    intro m hm
+    calc ‖f m‖ = (‖f m‖ / ‖g m‖) * ‖g m‖ := by by_cases hm' : g m = 0 <;> grind [norm_eq_zero]
+      _ <= C₁ * ‖g m‖ := by
+        gcongr
+        exact Finset.le_sup' (fun x => ‖f x‖ / ‖g x‖) (Finset.mem_def.mpr hm)
+  refine ⟨max C₀ C₁, ?_⟩
+  filter_upwards [eventually_ge_atTop n₁] with n hn
+  induction n using Nat.strongRecOn with
+  | ind n h_ind =>
+    refine H₂ _ (by grind) _ (by grind) fun m hm => ?_
+    by_cases hbase : m < n₁
+    · have hC₁ : C₁ <= max C₀ C₁ := by grind
+      grw [← hC₁]
+      grind
+    · grind
 
 Depends on / 依赖: Finset, Finset.Icc, Finset.nonempty_Icc.mpr, Set.mem_ofPred, eventually_forall_ge_atTop, eventually_ge_atTop, h.and, isBigO_iff, mem_ofPred, nonempty_Icc, ubounds
 -/
@@ -2939,7 +3003,8 @@ lemma isBigO_nat_atTop_induction_of_eventually_pos
       with n₀ hn₀ hn₀' hnrec
     obtain ⟨C₀, hnrec⟩ := hnrec
     refine ⟨C₀, ?_⟩
-    filte
+    filter_upwards [hnrec, eventually_ge_atTop n₀]
+    grind [Real.norm_eq_abs]
 
 中文:
 引理 isBigO_nat_atTop_induction_of_eventually_pos
@@ -2952,7 +3017,8 @@ lemma isBigO_nat_atTop_induction_of_eventually_pos
       with n₀ hn₀ hn₀' hnrec
     obtain ⟨C₀, hnrec⟩ := hnrec
     refine ⟨C₀, ?_⟩
-    filte
+    filter_upwards [hnrec, eventually_ge_atTop n₀]
+    grind [Real.norm_eq_abs]
 
 Depends on / 依赖: Real.norm_eq_abs, eventually_forall_ge_atTop, eventually_forall_ge_atTop.mpr, eventually_ge_atTop, filter_upwards, isBigO_nat_atTop_induction, norm_eq_abs
 -/
@@ -3082,7 +3148,7 @@ h.comp_tendsto by
     fun h =>
     (h.comp_tendsto (e.continuousAt_symm hb)).congr' rfl
       ((e.eventually_right_inverse hb).mono fun _ hx => congr_arg f hx)
-      ((e.eventually_right_inver
+      ((e.eventually_right_inverse hb).mono fun _ hx => congr_arg g hx)⟩
 
 中文:
 定理 isBigOWith_congr
@@ -3094,7 +3160,7 @@ h.comp_tendsto by
     fun h =>
     (h.comp_tendsto (e.continuousAt_symm hb)).congr' rfl
       ((e.eventually_right_inverse hb).mono fun _ hx => congr_arg f hx)
-      ((e.eventually_right_inver
+      ((e.eventually_right_inverse hb).mono fun _ hx => congr_arg g hx)⟩
 
 Depends on / 依赖: ContinuousAt, comp_tendsto, congr_arg, continuousAt, continuousAt_symm, e.continuousAt, e.continuousAt_symm, e.eventually_right_inverse, e.map_target, e.rightInvOn, eventually_right_inverse, h.comp_tendsto, map_target, rightInvOn
 -/
@@ -3304,7 +3370,10 @@ theorem isBigOWith_rev_principal
 .image continuous_norm replace hs := hs.image_of_continuousOn hf
 have h_sInf := hs.isGLB_sInf Set.image_nonempty.mpr Set.image_nonempty.mpr ⟨x, hx⟩
 refine le_mul_of_one_le_right (norm_nonneg c) (one_le_div ?_).mpr
-h_sInf.1 Set.m
+h_sInf.1 Set.mem_image_of_mem _ Set.mem_image_of_mem _ hx
+  obtain ⟨_, ⟨x, hx, hCx⟩, hnormCx⟩ := hs.sInf_mem h_sInf.nonempty
+  rw [← hnormCx]; rw [← hCx]
+  exact (norm_ne_zero_iff.mpr (hC x hx)).symm.lt_of_le (norm_nonneg _)
 
 中文:
 定理 isBigOWith_rev_principal
@@ -3314,7 +3383,10 @@ h_sInf.1 Set.m
 .image continuous_norm replace hs := hs.image_of_continuousOn hf
 have h_sInf := hs.isGLB_sInf Set.image_nonempty.mpr Set.image_nonempty.mpr ⟨x, hx⟩
 refine le_mul_of_one_le_right (norm_nonneg c) (one_le_div ?_).mpr
-h_sInf.1 Set.m
+h_sInf.1 Set.mem_image_of_mem _ Set.mem_image_of_mem _ hx
+  obtain ⟨_, ⟨x, hx, hCx⟩, hnormCx⟩ := hs.sInf_mem h_sInf.nonempty
+  rw [← hnormCx]; rw [← hCx]
+  exact (norm_ne_zero_iff.mpr (hC x hx)).symm.lt_of_le (norm_nonneg _)
 -/
 protected theorem isBigOWith_rev_principal
     (hf : ContinuousOn f s) (hs : IsCompact s) (hC : forall i in s, f i != 0) (c : F) :

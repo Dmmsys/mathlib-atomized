@@ -377,7 +377,13 @@ definition pseudofunctorRight
   map₂ f := (mapWhiskerLeft (𝟭 C) f.toNatTrans).toCatHom₂
   mapId D := Cat.Hom.isoMk mapPairId
 mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
-  map₂_whisker_left := by intros; exact congr($(mapWhiskerLeft_whiskerLeft
+  map₂_whisker_left := by intros; exact congr($(mapWhiskerLeft_whiskerLeft C _ _).toCatHom₂)
+  map₂_whisker_right := by intros; exact congr($(mapWhiskerLeft_whiskerRight C _ _).toCatHom₂)
+  map₂_associator := by intros; exact congr($(mapWhiskerLeft_associator_hom C _ _ _).toCatHom₂)
+  map₂_left_unitor := by intros; exact congr($(mapWhiskerLeft_leftUnitor_hom C _).toCatHom₂)
+  map₂_right_unitor := by intros; exact congr($(mapWhiskerLeft_rightUnitor_hom C _).toCatHom₂)
+
+#adaptation_note
 
 中文:
 定义 pseudofunctorRight
@@ -387,7 +393,13 @@ mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
   map₂ f := (mapWhiskerLeft (𝟭 C) f.toNatTrans).toCatHom₂
   mapId D := Cat.Hom.isoMk mapPairId
 mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
-  map₂_whisker_left := by intros; exact congr($(mapWhiskerLeft_whiskerLeft
+  map₂_whisker_left := by intros; exact congr($(mapWhiskerLeft_whiskerLeft C _ _).toCatHom₂)
+  map₂_whisker_right := by intros; exact congr($(mapWhiskerLeft_whiskerRight C _ _).toCatHom₂)
+  map₂_associator := by intros; exact congr($(mapWhiskerLeft_associator_hom C _ _ _).toCatHom₂)
+  map₂_left_unitor := by intros; exact congr($(mapWhiskerLeft_leftUnitor_hom C _).toCatHom₂)
+  map₂_right_unitor := by intros; exact congr($(mapWhiskerLeft_rightUnitor_hom C _).toCatHom₂)
+
+#adaptation_note
 
 Depends on / 依赖: Cat.of
 -/
@@ -421,7 +433,10 @@ definition pseudofunctorLeft
 mapId D := Cat.Hom.isoMk mapPairId
 mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
   map₂_whisker_left := by intros; exact congr($(mapWhiskerRight_whiskerLeft D _ _).toCatHom₂)
-  map
+  map₂_whisker_right := by intros; exact congr($(mapWhiskerRight_whiskerRight D _ _).toCatHom₂)
+  map₂_associator := by intros; exact congr($(mapWhiskerRight_associator_hom D _ _ _).toCatHom₂)
+  map₂_left_unitor := by intros; exact congr($(mapWhiskerRight_leftUnitor_hom D _).toCatHom₂)
+  map₂_right_unitor := by intros; exact congr($(mapWhiskerRight_rightUnitor_hom D _).toCatHom₂)
 
 中文:
 定义 pseudofunctorLeft
@@ -432,7 +447,10 @@ mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
 mapId D := Cat.Hom.isoMk mapPairId
 mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
   map₂_whisker_left := by intros; exact congr($(mapWhiskerRight_whiskerLeft D _ _).toCatHom₂)
-  map
+  map₂_whisker_right := by intros; exact congr($(mapWhiskerRight_whiskerRight D _ _).toCatHom₂)
+  map₂_associator := by intros; exact congr($(mapWhiskerRight_associator_hom D _ _ _).toCatHom₂)
+  map₂_left_unitor := by intros; exact congr($(mapWhiskerRight_leftUnitor_hom D _).toCatHom₂)
+  map₂_right_unitor := by intros; exact congr($(mapWhiskerRight_rightUnitor_hom D _).toCatHom₂)
 
 Depends on / 依赖: Cat.of
 -/

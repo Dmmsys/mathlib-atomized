@@ -101,7 +101,8 @@ definition braiding
     simp [-tensor_obj]
   inv_hom_id := by
     apply Functor.hom_ext_of_isLeftKanExtension (G ⊛ F) (unit G F)
- 
+    ext
+    simp [-tensor_obj]
 
 中文:
 定义 braiding
@@ -114,7 +115,8 @@ definition braiding
     simp [-tensor_obj]
   inv_hom_id := by
     apply Functor.hom_ext_of_isLeftKanExtension (G ⊛ F) (unit G F)
- 
+    ext
+    simp [-tensor_obj]
 
 Depends on / 依赖: corepresentableBy
 -/
@@ -284,7 +286,27 @@ lemma hexagon_forward
   ext ⟨⟨x, y⟩, z⟩
   dsimp
   simp only [whiskerLeft_id, Category.comp_id, associator_hom_unit_unit_assoc,
-
+    externalProductBifunctor_obj_obj, tensor_obj, NatTrans.naturality_assoc,
+    NatTrans.naturality, unit_app_braiding_hom_app_assoc,
+    BraidedCategory.braiding_tensor_left_hom, Functor.map_comp, Category.assoc,
+    Iso.map_hom_inv_id, BraidedCategory.braiding_naturality_right_assoc,
+    BraidedCategory.braiding_tensor_right_hom, Iso.map_inv_hom_id_assoc,
+    Iso.inv_hom_id_assoc, Iso.hom_inv_id_assoc, unit_app_map_app_assoc,
+    NatTrans.id_app, tensorHom_id]
+  simp only [← comp_whiskerRight_assoc, ← whiskerLeft_comp_assoc,
+    unit_app_braiding_hom_app]
+  simp only [whiskerLeft_comp, ← Functor.map_comp, Category.assoc,
+    Functor.comp_obj, tensor_obj, comp_whiskerRight,
+    whiskerRight_comp_unit_app_assoc, NatTrans.naturality_assoc,
+    NatTrans.naturality, associator_hom_unit_unit_assoc,
+    externalProductBifunctor_obj_obj, unit_app_map_app_assoc, NatTrans.id_app,
+    id_tensorHom]
+  rw [← BraidedCategory.hexagon_reverse]; rw [← whiskerLeft_comp_assoc]
+  have := unit_app_braiding_hom_app F H x z =≫ (H ⊛ F).map (β_ z x).inv
+  dsimp at this
+  simp only [Category.assoc, Iso.map_hom_inv_id, Category.comp_id] at this
+  rw [← this]; rw [whiskerLeft_comp_assoc]
+  simp [← Functor.map_comp]
 
 中文:
 引理 hexagon_forward
@@ -296,7 +318,27 @@ lemma hexagon_forward
   ext ⟨⟨x, y⟩, z⟩
   dsimp
   simp only [whiskerLeft_id, Category.comp_id, associator_hom_unit_unit_assoc,
-
+    externalProductBifunctor_obj_obj, tensor_obj, NatTrans.naturality_assoc,
+    NatTrans.naturality, unit_app_braiding_hom_app_assoc,
+    BraidedCategory.braiding_tensor_left_hom, Functor.map_comp, Category.assoc,
+    Iso.map_hom_inv_id, BraidedCategory.braiding_naturality_right_assoc,
+    BraidedCategory.braiding_tensor_right_hom, Iso.map_inv_hom_id_assoc,
+    Iso.inv_hom_id_assoc, Iso.hom_inv_id_assoc, unit_app_map_app_assoc,
+    NatTrans.id_app, tensorHom_id]
+  simp only [← comp_whiskerRight_assoc, ← whiskerLeft_comp_assoc,
+    unit_app_braiding_hom_app]
+  simp only [whiskerLeft_comp, ← Functor.map_comp, Category.assoc,
+    Functor.comp_obj, tensor_obj, comp_whiskerRight,
+    whiskerRight_comp_unit_app_assoc, NatTrans.naturality_assoc,
+    NatTrans.naturality, associator_hom_unit_unit_assoc,
+    externalProductBifunctor_obj_obj, unit_app_map_app_assoc, NatTrans.id_app,
+    id_tensorHom]
+  rw [← BraidedCategory.hexagon_reverse]; rw [← whiskerLeft_comp_assoc]
+  have := unit_app_braiding_hom_app F H x z =≫ (H ⊛ F).map (β_ z x).inv
+  dsimp at this
+  simp only [Category.assoc, Iso.map_hom_inv_id, Category.comp_id] at this
+  rw [← this]; rw [whiskerLeft_comp_assoc]
+  simp [← Functor.map_comp]
 
 Depends on / 依赖: BraidedCategory, BraidedCategory.braiding_tensor_left_hom, Category, Category.assoc, Category.comp_id, ExternalProduct, ExternalProduct.extensionUnitLeft, Functor, Functor.hom_ext_of_isLeftKanExtension, Functor.map_comp, Iso.map_hom, NatTrans, NatTrans.naturality, NatTrans.naturality_assoc, associator_hom_unit_unit_assoc, braiding_tensor_left_hom, comp_id, extensionUnitLeft, externalProductBifunctor_obj_obj, hom_ext_of_isLeftKanExtension
 -/
@@ -352,7 +394,28 @@ lemma hexagon_reverse
   ext ⟨x, y, z⟩
   dsimp
   simp only [whiskerRight_tensor, id_whiskerRight, Category.id_comp,
-    Iso.inv_h
+    Iso.inv_hom_id, associator_inv_unit_unit_assoc,
+    externalProductBifunctor_obj_obj, tensor_obj, NatTrans.naturality_assoc,
+    NatTrans.naturality, unit_app_braiding_hom_app_assoc,
+    BraidedCategory.braiding_tensor_right_hom, Functor.map_comp, Category.assoc,
+    Iso.map_inv_hom_id, Category.comp_id,
+    BraidedCategory.braiding_naturality_left_assoc,
+    BraidedCategory.braiding_tensor_left_hom, Iso.map_hom_inv_id_assoc,
+    Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc, unit_app_map_app_assoc,
+    NatTrans.id_app, id_tensorHom]
+  simp only [← comp_whiskerRight_assoc, ← whiskerLeft_comp_assoc,
+    unit_app_braiding_hom_app]
+  simp only [comp_whiskerRight, ← Functor.map_comp, Category.assoc, Functor.comp_obj, tensor_obj,
+    whiskerLeft_comp, whiskerLeft_comp_unit_app_assoc, NatTrans.naturality_assoc,
+    NatTrans.naturality, associator_inv_unit_unit_assoc, externalProductBifunctor_obj_obj,
+    unit_app_map_app_assoc, NatTrans.id_app, tensorHom_id]
+  congr 2
+  rw [← BraidedCategory.hexagon_forward]; rw [← comp_whiskerRight_assoc]
+  have := unit_app_braiding_hom_app F H x z =≫ (H ⊛ F).map (β_ z x).inv
+  dsimp at this
+  simp only [Category.assoc, Iso.map_hom_inv_id, Category.comp_id] at this
+  rw [← this]; rw [comp_whiskerRight_assoc]
+  simp [← Functor.map_comp]
 
 中文:
 引理 hexagon_reverse
@@ -364,7 +427,28 @@ lemma hexagon_reverse
   ext ⟨x, y, z⟩
   dsimp
   simp only [whiskerRight_tensor, id_whiskerRight, Category.id_comp,
-    Iso.inv_h
+    Iso.inv_hom_id, associator_inv_unit_unit_assoc,
+    externalProductBifunctor_obj_obj, tensor_obj, NatTrans.naturality_assoc,
+    NatTrans.naturality, unit_app_braiding_hom_app_assoc,
+    BraidedCategory.braiding_tensor_right_hom, Functor.map_comp, Category.assoc,
+    Iso.map_inv_hom_id, Category.comp_id,
+    BraidedCategory.braiding_naturality_left_assoc,
+    BraidedCategory.braiding_tensor_left_hom, Iso.map_hom_inv_id_assoc,
+    Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc, unit_app_map_app_assoc,
+    NatTrans.id_app, id_tensorHom]
+  simp only [← comp_whiskerRight_assoc, ← whiskerLeft_comp_assoc,
+    unit_app_braiding_hom_app]
+  simp only [comp_whiskerRight, ← Functor.map_comp, Category.assoc, Functor.comp_obj, tensor_obj,
+    whiskerLeft_comp, whiskerLeft_comp_unit_app_assoc, NatTrans.naturality_assoc,
+    NatTrans.naturality, associator_inv_unit_unit_assoc, externalProductBifunctor_obj_obj,
+    unit_app_map_app_assoc, NatTrans.id_app, tensorHom_id]
+  congr 2
+  rw [← BraidedCategory.hexagon_forward]; rw [← comp_whiskerRight_assoc]
+  have := unit_app_braiding_hom_app F H x z =≫ (H ⊛ F).map (β_ z x).inv
+  dsimp at this
+  simp only [Category.assoc, Iso.map_hom_inv_id, Category.comp_id] at this
+  rw [← this]; rw [comp_whiskerRight_assoc]
+  simp [← Functor.map_comp]
 
 Depends on / 依赖: BraidedCategory, BraidedCategory.braiding_tensor_right_hom, Category, Category.id_comp, ExternalProduct, ExternalProduct.extensionUnitRight, Functor, Functor.hom_ext_of_isLeftKanExtension, Functor.m, Iso.inv_hom_id, NatTrans, NatTrans.naturality, NatTrans.naturality_assoc, associator_inv_unit_unit_assoc, braiding_tensor_right_hom, extensionUnitRight, externalProductBifunctor_obj_obj, hom_ext_of_isLeftKanExtension, id_comp, id_whiskerRight
 -/

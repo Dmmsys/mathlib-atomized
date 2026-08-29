@@ -47,7 +47,10 @@ definition dualNumberEquiv
     · rfl
     · dsimp
       congr 1 <;> simp <;> ring
-  
+  map_add' := by
+    intros
+    rfl
+  commutes' _ := rfl
 
 中文:
 定义 dualNumberEquiv
@@ -61,7 +64,10 @@ definition dualNumberEquiv
     · rfl
     · dsimp
       congr 1 <;> simp <;> ring
-  
+  map_add' := by
+    intros
+    rfl
+  commutes' _ := rfl
 
 Depends on / 依赖: commutes, d.fst.imI, d.fst.imJ, d.fst.imK, d.fst.re, d.snd.imI, d.snd.imJ, d.snd.imK, d.snd.re, intros, invFun, map_add, map_mul, q.imI.fst, q.imI.snd, q.imJ.fst, q.imJ.snd, q.imK.fst, q.imK.snd, q.re.fst
 -/

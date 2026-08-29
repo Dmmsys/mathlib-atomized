@@ -329,7 +329,15 @@ theorem IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints
       rw [Set.subsingleton_iff_singleton (mem_orbit_self a)] at H
       simp only [mem_fixedPoints]
       intro g
-      rw [← Set.mem_singleton_if
+      rw [← Set.mem_singleton_iff]; rw [← H]
+      exact mem_orbit a g
+    · intro x; rw [← MulAction.mem_orbit_iff, H]; exact Set.mem_univ x
+  { isTrivialBlock_of_isBlock {B} hB := by
+      obtain rfl | ⟨b, hb⟩ := B.eq_empty_or_nonempty
+      · simp [IsTrivialBlock]
+      · obtain ⟨g, hg⟩ := exists_smul_eq G b a
+        rw [← IsTrivialBlock.smul_iff g]
+        exact H ⟨b, hb, hg⟩ (hB.translate g) }
 
 中文:
 定理 是Preprimitive.of_isTrivialBlock_of_notMem_fixedPoints
@@ -341,7 +349,15 @@ theorem IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints
       rw [Set.subsingleton_iff_singleton (mem_orbit_self a)] at H
       simp only [mem_fixedPoints]
       intro g
-      rw [← Set.mem_singleton_if
+      rw [← Set.mem_singleton_iff]; rw [← H]
+      exact mem_orbit a g
+    · intro x; rw [← MulAction.mem_orbit_iff, H]; exact Set.mem_univ x
+  { isTrivialBlock_of_isBlock {B} hB := by
+      obtain rfl | ⟨b, hb⟩ := B.eq_empty_or_nonempty
+      · simp [IsTrivialBlock]
+      · obtain ⟨g, hg⟩ := exists_smul_eq G b a
+        rw [← IsTrivialBlock.smul_iff g]
+        exact H ⟨b, hb, hg⟩ (hB.translate g) }
 
 Depends on / 依赖: B.eq_empty_or_nonempty, IsBlock, IsBlock.orbit, IsPretransitive, IsTrivialBlock, MulAction, MulAction.mem_orbit_iff, Set.mem_singleton_iff, Set.mem_univ, Set.subsingleton_iff_singleton, eq_empty_or_nonempty, isPretransitive_iff_base, isTrivialBlock_of_isBlock, mem_fixedPoints, mem_orbit, mem_orbit_iff, mem_orbit_self, mem_singleton_iff, mem_univ, subsingleton_iff_singleton
 -/
@@ -456,7 +472,8 @@ theorem isPreprimitive_congr
     exact {
       isTrivialBlock_of_isBlock {B} hB := by
         rw [← Set.preimage_image_eq B hf.injective]
-        exact IsTrivialBlock.prei
+        exact IsTrivialBlock.preimage hf.injective
+          (isTrivialBlock_of_isBlock (hB.image f hφ hf.injective)) }
 
 中文:
 定理 isPreprimitive_congr
@@ -470,7 +487,8 @@ theorem isPreprimitive_congr
     exact {
       isTrivialBlock_of_isBlock {B} hB := by
         rw [← Set.preimage_image_eq B hf.injective]
-        exact IsTrivialBlock.prei
+        exact IsTrivialBlock.preimage hf.injective
+          (isTrivialBlock_of_isBlock (hB.image f hφ hf.injective)) }
 
 Depends on / 依赖: IsPreprimitive, IsPreprimitive.of_surjective, IsTrivialBlock, IsTrivialBlock.preimage, Set.preimage_image_eq, hB.image, hf.injective, hf.surjective, injective, isPretransitive_congr, isTrivialBlock_of_isBlock, of_surjective, preimage, preimage_image_eq, surjective, toIsPretransitive
 -/
@@ -514,7 +532,15 @@ theorem isSimpleOrder_blockMem_iff_isPreprimitive
     rcases h_bot_or_top ⟨B, haB, hB⟩ with hB' | hB' <;>
       simp only [← Subtype.coe_inj] at hB'
     · left; rw [hB']; exact Set.subsingleton_singleton
-    · ri
+    · right; rw [hB']; rfl
+  · intro hGX'; apply IsSimpleOrder.mk
+    rintro ⟨B, haB, hB⟩
+    simp only [← Subtype.coe_inj]
+    cases hGX'.isTrivialBlock_of_isBlock hB with
+    | inl h =>
+      simp [BlockMem.coe_bot, h.eq_singleton_of_mem haB]
+    | inr h =>
+      simp [BlockMem.coe_top, h]
 
 中文:
 定理 isSimpleOrder_blockMem_iff_isPreprimitive
@@ -527,7 +553,15 @@ theorem isSimpleOrder_blockMem_iff_isPreprimitive
     rcases h_bot_or_top ⟨B, haB, hB⟩ with hB' | hB' <;>
       simp only [← Subtype.coe_inj] at hB'
     · left; rw [hB']; exact Set.subsingleton_singleton
-    · ri
+    · right; rw [hB']; rfl
+  · intro hGX'; apply IsSimpleOrder.mk
+    rintro ⟨B, haB, hB⟩
+    simp only [← Subtype.coe_inj]
+    cases hGX'.isTrivialBlock_of_isBlock hB with
+    | inl h =>
+      simp [BlockMem.coe_bot, h.eq_singleton_of_mem haB]
+    | inr h =>
+      simp [BlockMem.coe_top, h]
 
 Depends on / 依赖: BlockMem, BlockMem.coe_bot, IsPreprimitive, IsPreprimitive.of_isTrivialBlock_base, IsSimpleOrder, IsSimpleOrder.mk, Set.subsingleton_singleton, Subtype, Subtype.coe_inj, coe_bot, coe_inj, eq_bot_or_eq_top, eq_singleton_of_mem, h.eq_bot_or_eq_top, h.eq_singleton_of_mem, h_bot_or_top, isTrivialBlock_of_isBlock, of_isTrivialBlock_base, subsingleton_singleton
 -/
@@ -689,7 +723,33 @@ theorem of_card_lt
   intro hB_ne_top
   -- we need Set.Subsingleton B ↔ Set.ncard B ≤ 1
   suffices Set.ncard B < 2 by simpa [Nat.lt_succ_iff] using this
-  -- We re
+  -- We reduce to proving that (Set.range f).ncard ≤ (orbit N B).ncard
+  apply lt_of_mul_lt_mul_right' (hf'.trans_le' _)
+  simp only [← hB.ncard_block_mul_ncard_orbit_eq hB']
+  apply Nat.mul_le_mul_left
+  -- We reduce to proving that (Set.range f ∩ g • B).ncard ≤ 1 for every g
+  have hfin := Fintype.ofFinite (Set.range fun g : H => g • B)
+  rw [(hB.isBlockSystem hB').left.ncard_eq_finsum]; rw [finsum_eq_sum_of_fintype]
+  apply le_trans (Finset.sum_le_card_nsmul _ _ 1 _)
+  · rw [nsmul_one, Finset.card_univ, ← Set.toFinset_card, ← Set.ncard_eq_toFinset_card',
+      orbit, Nat.cast_id]
+  · rintro ⟨x, ⟨g, rfl⟩⟩ -
+    suffices Set.Subsingleton (Set.range f inter g • B) by simpa
+    -- It suffices to prove that the preimage is subsingleton
+    rw [← Set.image_preimage_eq_range_inter]
+    apply Set.Subsingleton.image
+    -- Since the action of M on α is primitive, it suffices to prove that
+    -- the preimage is a block which is not ⊤
+    apply Or.resolve_right (isTrivialBlock_of_isBlock ((hB.translate g).preimage f))
+    intro h
+    simp only [Set.preimage_eq_univ_iff] at h
+    -- We will prove that B is large, which will contradict the assumption that it is not ⊤
+    apply hB_ne_top
+    apply hB.eq_univ_of_card_lt
+    -- It remains to show that Nat.card β < Set.ncard B * 2
+    apply lt_of_lt_of_le hf'
+    rw [mul_comm]; rw [mul_le_mul_iff_left₀ Nat.succ_pos']
+    apply le_trans (Set.ncard_le_ncard h) (Set.ncard_image_le B.toFinite)
 
 中文:
 定理 of_card_lt
@@ -701,7 +761,33 @@ theorem of_card_lt
   intro hB_ne_top
   -- we need Set.Subsingleton B ↔ Set.ncard B ≤ 1
   suffices Set.ncard B < 2 by simpa [Nat.lt_succ_iff] using this
-  -- We re
+  -- We reduce to proving that (Set.range f).ncard ≤ (orbit N B).ncard
+  apply lt_of_mul_lt_mul_right' (hf'.trans_le' _)
+  simp only [← hB.ncard_block_mul_ncard_orbit_eq hB']
+  apply Nat.mul_le_mul_left
+  -- We reduce to proving that (Set.range f ∩ g • B).ncard ≤ 1 for every g
+  have hfin := Fintype.ofFinite (Set.range fun g : H => g • B)
+  rw [(hB.isBlockSystem hB').left.ncard_eq_finsum]; rw [finsum_eq_sum_of_fintype]
+  apply le_trans (Finset.sum_le_card_nsmul _ _ 1 _)
+  · rw [nsmul_one, Finset.card_univ, ← Set.toFinset_card, ← Set.ncard_eq_toFinset_card',
+      orbit, Nat.cast_id]
+  · rintro ⟨x, ⟨g, rfl⟩⟩ -
+    suffices Set.Subsingleton (Set.range f inter g • B) by simpa
+    -- It suffices to prove that the preimage is subsingleton
+    rw [← Set.image_preimage_eq_range_inter]
+    apply Set.Subsingleton.image
+    -- Since the action of M on α is primitive, it suffices to prove that
+    -- the preimage is a block which is not ⊤
+    apply Or.resolve_right (isTrivialBlock_of_isBlock ((hB.translate g).preimage f))
+    intro h
+    simp only [Set.preimage_eq_univ_iff] at h
+    -- We will prove that B is large, which will contradict the assumption that it is not ⊤
+    apply hB_ne_top
+    apply hB.eq_univ_of_card_lt
+    -- It remains to show that Nat.card β < Set.ncard B * 2
+    apply lt_of_lt_of_le hf'
+    rw [mul_comm]; rw [mul_le_mul_iff_left₀ Nat.succ_pos']
+    apply le_trans (Set.ncard_le_ncard h) (Set.ncard_image_le B.toFinite)
 
 Depends on / 依赖: B.eq_empty_or_nonempty, IsTrivialBlock, eq_empty_or_nonempty, hB_ne_top, or_iff_not_imp_right
 -/
@@ -766,7 +852,22 @@ theorem exists_mem_smul_and_notMem_smul
     simpa only [Set.mem_iInter, not_forall, exists_prop] using this
   suffices B = {a} by rw [this]; rw [Set.mem_singleton_iff]; exact Ne.symm h
   -- B is a block hence is a trivial block
-  rcases isT
+  rcases isTrivialBlock_of_isBlock (G := G) (IsBlock.of_subset a hfA) with hyp | hyp
+  · -- B.subsingleton
+    apply Set.Subsingleton.eq_singleton_of_mem hyp
+    rw [Set.mem_iInter]; intro g; simp only [Set.mem_iInter, imp_self]
+  · -- B = Set.univ: contradiction
+    change B = Set.univ at hyp
+    exfalso; apply hA'
+    suffices exists g : G, a in g • A by
+      obtain ⟨g, hg⟩ := this
+      have : B subseteq g • A := Set.biInter_subset_of_mem hg
+      rw [hyp]; rw [Set.univ_subset_iff]; rw [← eq_inv_smul_iff] at this
+      rw [this]; rw [Set.smul_set_univ]
+    -- ∃ (g : M), a ∈ g • A
+    obtain ⟨x, hx⟩ := hA
+    obtain ⟨g, hg⟩ := MulAction.exists_smul_eq G x a
+    use g, x
 
 中文:
 定理 存在_mem_smul_and_notMem_smul
@@ -778,7 +879,22 @@ theorem exists_mem_smul_and_notMem_smul
     simpa only [Set.mem_iInter, not_forall, exists_prop] using this
   suffices B = {a} by rw [this]; rw [Set.mem_singleton_iff]; exact Ne.symm h
   -- B is a block hence is a trivial block
-  rcases isT
+  rcases isTrivialBlock_of_isBlock (G := G) (IsBlock.of_subset a hfA) with hyp | hyp
+  · -- B.subsingleton
+    apply Set.Subsingleton.eq_singleton_of_mem hyp
+    rw [Set.mem_iInter]; intro g; simp only [Set.mem_iInter, imp_self]
+  · -- B = Set.univ: contradiction
+    change B = Set.univ at hyp
+    exfalso; apply hA'
+    suffices exists g : G, a in g • A by
+      obtain ⟨g, hg⟩ := this
+      have : B subseteq g • A := Set.biInter_subset_of_mem hg
+      rw [hyp]; rw [Set.univ_subset_iff]; rw [← eq_inv_smul_iff] at this
+      rw [this]; rw [Set.smul_set_univ]
+    -- ∃ (g : M), a ∈ g • A
+    obtain ⟨x, hx⟩ := hA
+    obtain ⟨g, hg⟩ := MulAction.exists_smul_eq G x a
+    use g, x
 
 Depends on / 依赖: Ne.symm, Set.mem_iInter, Set.mem_singleton_iff, exists_prop, mem_iInter, mem_singleton_iff, not_forall
 -/

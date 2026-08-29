@@ -211,7 +211,8 @@ definition WalkingParallelFamily.arrowEquiv
     | none => Arrow.mk (𝟙 zero)
     | some none => Arrow.mk (𝟙 one)
     | some (some t) => Arrow.mk (.line t)
-  left_inv := by rintro ⟨
+  left_inv := by rintro ⟨(_ | _), _, (_ | _)⟩ <;> rfl
+  right_inv := by rintro (_ | (_ | _)) <;> rfl
 
 中文:
 定义 WalkingParallelFamily.arrowEquiv
@@ -224,7 +225,8 @@ definition WalkingParallelFamily.arrowEquiv
     | none => Arrow.mk (𝟙 zero)
     | some none => Arrow.mk (𝟙 one)
     | some (some t) => Arrow.mk (.line t)
-  left_inv := by rintro ⟨
+  left_inv := by rintro ⟨(_ | _), _, (_ | _)⟩ <;> rfl
+  right_inv := by rintro (_ | (_ | _)) <;> rfl
 
 Depends on / 依赖: f.hom, f.left, f.right
 -/
@@ -388,7 +390,9 @@ definition walkingParallelFamilyEquivWalkingParallelPair
   inverse := parallelPair (line (ULift.up true)) (line (ULift.up false))
   unitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
     rintro _ _ (_ | ⟨_ | _⟩) <;> cat_disch)
-  counitIso :
+  counitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
+    rintro _ _ (_ | _ | _) <;> cat_disch)
+  functor_unitIso_comp := by rintro (_ | _) <;> cat_disch
 
 中文:
 定义 walkingParallelFamilyEquivWalkingParallelPair
@@ -397,7 +401,9 @@ definition walkingParallelFamilyEquivWalkingParallelPair
   inverse := parallelPair (line (ULift.up true)) (line (ULift.up false))
   unitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
     rintro _ _ (_ | ⟨_ | _⟩) <;> cat_disch)
-  counitIso :
+  counitIso := NatIso.ofComponents (fun X => eqToIso (by cases X <;> rfl)) (by
+    rintro _ _ (_ | _ | _) <;> cat_disch)
+  functor_unitIso_comp := by rintro (_ | _) <;> cat_disch
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, ULift.up, WalkingParallelPairHom, WalkingParallelPairHom.left, WalkingParallelPairHom.right, cat_disch, counitIso, eqToIso, functor_unitIso_comp, inverse, ofComponents, p.down, parallelFamily, parallelPair, unitIso
 -/

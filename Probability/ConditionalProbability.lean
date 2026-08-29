@@ -241,7 +241,7 @@ instance :
   · simp [h]
   rcases eq_or_ne (μ s) ∞ with h' | h'
   · simp [h']
-  simp [ENNReal.div_self h h'
+  simp [ENNReal.div_self h h']
 
 中文:
 实例 :
@@ -254,7 +254,7 @@ instance :
   · simp [h]
   rcases eq_or_ne (μ s) ∞ with h' | h'
   · simp [h']
-  simp [ENNReal.div_self h h'
+  simp [ENNReal.div_self h h']
 
 Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, ENNReal.div_self, MeasurableSet, MeasurableSet.univ, Measure, Measure.coe_smul, Measure.restrict_apply, Pi.smul_apply, coe_smul, div_eq_inv_mul, div_self, eq_or_ne, restrict_apply, smul_apply, smul_eq_mul, univ_inter
 -/
@@ -622,7 +622,8 @@ lemma cond_cond_eq_cond_inter'
   · have : μ (s inter t inter u) = 0 := measure_mono_null Set.inter_subset_left hst
     simp [cond_apply, *, ← Set.inter_assoc]
   · have hs : μ s != 0 := (measure_pos_of_superset Set.inter_subset_left hst).ne'
-    simp [*, hms.inter hmt, co
+    simp [*, hms.inter hmt, cond_apply, ← Set.inter_assoc, ENNReal.mul_inv, ← mul_assoc,
+      mul_comm _ (μ s)⁻¹, ENNReal.inv_mul_cancel]
 
 中文:
 引理 cond_cond_eq_cond_inter'
@@ -633,7 +634,8 @@ lemma cond_cond_eq_cond_inter'
   · have : μ (s inter t inter u) = 0 := measure_mono_null Set.inter_subset_left hst
     simp [cond_apply, *, ← Set.inter_assoc]
   · have hs : μ s != 0 := (measure_pos_of_superset Set.inter_subset_left hst).ne'
-    simp [*, hms.inter hmt, co
+    simp [*, hms.inter hmt, cond_apply, ← Set.inter_assoc, ENNReal.mul_inv, ← mul_assoc,
+      mul_comm _ (μ s)⁻¹, ENNReal.inv_mul_cancel]
 
 Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, ENNReal.mul_inv, Set.inter_assoc, Set.inter_subset_left, cond_apply, eq_or_ne, hms.inter, inter_assoc, inter_subset_left, inv_mul_cancel, measure_mono_null, measure_pos_of_superset, mul_assoc, mul_comm, mul_inv
 -/
@@ -769,7 +771,12 @@ lemma comap_cond
   change μ (range i)ᶜ = 0 at hi'
   rw [cond_apply]; rw [comap_apply]; rw [cond_apply]; rw [comap_apply]; rw [comap_apply]; rw [image_inter]; rw [image_preimage_eq_inter_range]; rw [inter_right_comm]; rw [measure_inter_conull hi']; rw [measure_inter_conull hi']
   all_goals first
-  | exa
+  | exact hi.injective
+  | exact hi.measurableSet_image'
+  | exact hs
+  | exact ht
+  | exact hi.measurable hs
+  | exact (hi.measurable hs).inter ht
 
 中文:
 引理 comap_cond
@@ -779,7 +786,12 @@ lemma comap_cond
   change μ (range i)ᶜ = 0 at hi'
   rw [cond_apply]; rw [comap_apply]; rw [cond_apply]; rw [comap_apply]; rw [comap_apply]; rw [image_inter]; rw [image_preimage_eq_inter_range]; rw [inter_right_comm]; rw [measure_inter_conull hi']; rw [measure_inter_conull hi']
   all_goals first
-  | exa
+  | exact hi.injective
+  | exact hi.measurableSet_image'
+  | exact hs
+  | exact ht
+  | exact hi.measurable hs
+  | exact (hi.measurable hs).inter ht
 
 Depends on / 依赖: NonUnitalSubsemiringClass, NonUnitalSubsemiringClass.toNonUnitalNonAssocSemiring, Subsemigroup, Subsemigroup.center.commSemigroup, all_goals, center, comap_apply, commSemigroup, cond_apply, hi.injective, hi.measurable, hi.measurableSet_image, image_inter, image_preimage_eq_inter_range, injective, inter_right_comm, measurable, measurableSet_image, measure_inter_conull, toNonUnitalNonAssocSemiring
 -/
@@ -812,7 +824,9 @@ lemma sum_meas_smul_cond_fiber
         Pi.smul_apply, smul_eq_mul]
       simp_rw [mul_comm (μ _), cond_mul_eq_inter (hX (.singleton _))]
     _ = _ := by
-      have : ⋃ x in Finset.univ, X ⁻¹' {
+      have : ⋃ x in Finset.univ, X ⁻¹' {x} inter E = E := by ext; simp
+      rw [← measure_biUnion_finset _ fun _ _ => (hX (.singleton _)).inter hE]; rw [this]
+      aesop (add simp [PairwiseDisjoint, Set.Pairwise, Function.onFun, disjoint_left])
 
 中文:
 引理 sum_meas_smul_cond_fiber
@@ -825,7 +839,9 @@ lemma sum_meas_smul_cond_fiber
         Pi.smul_apply, smul_eq_mul]
       simp_rw [mul_comm (μ _), cond_mul_eq_inter (hX (.singleton _))]
     _ = _ := by
-      have : ⋃ x in Finset.univ, X ⁻¹' {
+      have : ⋃ x in Finset.univ, X ⁻¹' {x} inter E = E := by ext; simp
+      rw [← measure_biUnion_finset _ fun _ _ => (hX (.singleton _)).inter hE]; rw [this]
+      aesop (add simp [PairwiseDisjoint, Set.Pairwise, Function.onFun, disjoint_left])
 
 Depends on / 依赖: Finset, Finset.sum_apply, Finset.univ, Function, Function.onFun, Measure, Measure.coe_finsetSum, Measure.coe_smul, Pairwise, PairwiseDisjoint, Pi.smul_apply, Set.Pairwise, coe_finsetSum, coe_smul, cond_mul_eq_inter, disjoint_left, measure_biUnion_finset, mul_comm, simp_rw, singleton
 -/

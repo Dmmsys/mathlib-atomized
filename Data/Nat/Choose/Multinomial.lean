@@ -140,13 +140,15 @@ English:
 lemma multinomial_cons
   given: (ha : a ∉ s) (f : α -> Nat)
   proof: by
-  rw [multinomial]; rw [Nat.div_eq_iff_eq_mul_left _ (prod_factorial_dvd_factorial_sum _ _)]; rw [prod_cons]; rw [multinomial]; rw [mul_assoc]; rw [mul_left_comm _ (f a)!]; rw [Nat.div_mul_cancel (prod_factorial_dvd_factorial_sum _ _)]; rw [← mul_assoc]; rw [Nat.choose_symm_add]; rw [Nat.add_choo
+  rw [multinomial]; rw [Nat.div_eq_iff_eq_mul_left _ (prod_factorial_dvd_factorial_sum _ _)]; rw [prod_cons]; rw [multinomial]; rw [mul_assoc]; rw [mul_left_comm _ (f a)!]; rw [Nat.div_mul_cancel (prod_factorial_dvd_factorial_sum _ _)]; rw [← mul_assoc]; rw [Nat.choose_symm_add]; rw [Nat.add_choose_mul_factorial_mul_factorial]; rw [Finset.sum_cons]
+  positivity
 
 中文:
 引理 multinomial_cons
   条件: (ha : a ∉ s) (f : α -> 自然数)
   证明: by
-  rw [multinomial]; rw [Nat.div_eq_iff_eq_mul_left _ (prod_factorial_dvd_factorial_sum _ _)]; rw [prod_cons]; rw [multinomial]; rw [mul_assoc]; rw [mul_left_comm _ (f a)!]; rw [Nat.div_mul_cancel (prod_factorial_dvd_factorial_sum _ _)]; rw [← mul_assoc]; rw [Nat.choose_symm_add]; rw [Nat.add_choo
+  rw [multinomial]; rw [Nat.div_eq_iff_eq_mul_left _ (prod_factorial_dvd_factorial_sum _ _)]; rw [prod_cons]; rw [multinomial]; rw [mul_assoc]; rw [mul_left_comm _ (f a)!]; rw [Nat.div_mul_cancel (prod_factorial_dvd_factorial_sum _ _)]; rw [← mul_assoc]; rw [Nat.choose_symm_add]; rw [Nat.add_choose_mul_factorial_mul_factorial]; rw [Finset.sum_cons]
+  positivity
 
 Depends on / 依赖: Finset, Finset.sum_cons, Nat.add_choose_mul_factorial_mul_factorial, Nat.choose_symm_add, Nat.div_eq_iff_eq_mul_left, Nat.div_mul_cancel, add_choose_mul_factorial_mul_factorial, choose_symm_add, div_eq_iff_eq_mul_left, div_mul_cancel, mul_assoc, mul_left_comm, multinomial, prod_cons, prod_factorial_dvd_factorial_sum, sum_cons
 -/
@@ -268,7 +270,7 @@ theorem multinomial_congr_of_eq_on_inter
   rw [← Nat.mul_right_inj (prod_ne_zero_iff.mpr (fun x _ => factorial_ne_zero (g x)))]; rw [multinomial_spec]; rw [prod_congr_of_eq_on_inter (g := fun a => (f a)!) (s₂ := s) (by aesop)
     (by aesop) (by aesop)]; rw [multinomial_spec s f]
   congr 1
-  exact sum_congr_of_eq_on_inter (by grind) (by 
+  exact sum_congr_of_eq_on_inter (by grind) (by grind) (by grind)
 
 中文:
 定理 multinomial_congr_of_eq_on_inter
@@ -277,7 +279,7 @@ theorem multinomial_congr_of_eq_on_inter
   rw [← Nat.mul_right_inj (prod_ne_zero_iff.mpr (fun x _ => factorial_ne_zero (g x)))]; rw [multinomial_spec]; rw [prod_congr_of_eq_on_inter (g := fun a => (f a)!) (s₂ := s) (by aesop)
     (by aesop) (by aesop)]; rw [multinomial_spec s f]
   congr 1
-  exact sum_congr_of_eq_on_inter (by grind) (by 
+  exact sum_congr_of_eq_on_inter (by grind) (by grind) (by grind)
 
 Depends on / 依赖: Nat.mul_right_inj, factorial_ne_zero, mul_right_inj, multinomial_spec, prod_congr_of_eq_on_inter, prod_ne_zero_iff, prod_ne_zero_iff.mpr, sum_congr_of_eq_on_inter
 -/
@@ -321,7 +323,9 @@ theorem multinomial_single
   split_ifs with ha
   · rw [Finset.prod_eq_single a (by simp_all) (by simp_all), Pi.single_eq_same]
   · rw [eq_comm, factorial_zero]
-    apply Finset.prod_e
+    apply Finset.prod_eq_one
+    intro _ hb
+    rw [Pi.single_apply]; rw [if_neg (ne_of_mem_of_not_mem hb ha)]; rw [factorial_zero]
 
 中文:
 定理 multinomial_single
@@ -331,7 +335,9 @@ theorem multinomial_single
   split_ifs with ha
   · rw [Finset.prod_eq_single a (by simp_all) (by simp_all), Pi.single_eq_same]
   · rw [eq_comm, factorial_zero]
-    apply Finset.prod_e
+    apply Finset.prod_eq_one
+    intro _ hb
+    rw [Pi.single_apply]; rw [if_neg (ne_of_mem_of_not_mem hb ha)]; rw [factorial_zero]
 
 Depends on / 依赖: Finset, Finset.prod_eq_one, Finset.prod_eq_single, Nat.mul_right_inj, Pi.single_apply, Pi.single_eq_same, eq_comm, factorial_ne_zero, factorial_zero, if_neg, mul_one, mul_right_inj, multinomial_spec, ne_of_mem_of_not_mem, prod_eq_one, prod_eq_single, prod_ne_zero_iff, prod_ne_zero_iff.mpr, single_apply, single_eq_same
 -/
@@ -628,7 +634,9 @@ theorem multinomial_update
     · rw [← Finset.insert_erase h, Nat.multinomial_insert (Finset.notMem_erase a _),
         Finset.add_sum_erase _ f h, support_update_zero]
       congr 1
-      exact Nat.multinomial_congr fun _ h => (Function.update_of_ne 
+      exact Nat.multinomial_congr fun _ h => (Function.update_of_ne (mem_erase.1 h).1 0 f).symm
+    rw [notMem_support_iff] at h
+    rw [h]; rw [Nat.choose_zero_right]; rw [one_mul]; rw [← h]; rw [update_self]
 
 中文:
 定理 multinomial_update
@@ -640,7 +648,9 @@ theorem multinomial_update
     · rw [← Finset.insert_erase h, Nat.multinomial_insert (Finset.notMem_erase a _),
         Finset.add_sum_erase _ f h, support_update_zero]
       congr 1
-      exact Nat.multinomial_congr fun _ h => (Function.update_of_ne 
+      exact Nat.multinomial_congr fun _ h => (Function.update_of_ne (mem_erase.1 h).1 0 f).symm
+    rw [notMem_support_iff] at h
+    rw [h]; rw [Nat.choose_zero_right]; rw [one_mul]; rw [← h]; rw [update_self]
 
 Depends on / 依赖: Finset, Finset.add_sum_erase, Finset.insert_erase, Finset.notMem_erase, Function, Function.update_of_ne, Nat.choose_zero_right, Nat.multinomial_congr, Nat.multinomial_insert, add_sum_erase, choose_zero_right, classical, f.support, insert_erase, mem_erase, multinomial_congr, multinomial_eq, multinomial_insert, notMem_erase, notMem_support_iff
 -/
@@ -694,7 +704,9 @@ theorem countPerms_filter_ne
     rw [toFinsupp_apply]; rw [count_filter]; rw [Finsupp.coe_update]
     split_ifs with h
     · rw [Function.update_of_ne h.symm, toFinsupp_apply]
-    · rw [no
+    · rw [not_ne_iff.1 h, Function.update_self]
+
+@[simp]
 
 中文:
 定理 countPerms_filter_ne
@@ -707,7 +719,9 @@ theorem countPerms_filter_ne
     rw [toFinsupp_apply]; rw [count_filter]; rw [Finsupp.coe_update]
     split_ifs with h
     · rw [Function.update_of_ne h.symm, toFinsupp_apply]
-    · rw [no
+    · rw [not_ne_iff.1 h, Function.update_self]
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.card_toMultiset, Finsupp.coe_update, Finsupp.multinomial_update, Function, Function.update_of_ne, Function.update_self, card_toMultiset, coe_update, convert, countPerms, count_filter, h.symm, m.toFinsupp_toMultiset, multinomial_update, not_ne_iff, split_ifs, toFinsupp_apply, toFinsupp_toMultiset, update_of_ne
 -/
@@ -774,7 +788,34 @@ lemma sum_pow_eq_sum_piAntidiag_of_commute
   rw [Finset.sum_cons]; rw [piAntidiag_cons]; rw [sum_disjiUnion]
   simp only [sum_map, Pi.add_apply, multinomial_cons,
     Pi.add_apply, if_true, Nat.cast_mul, noncommProd_cons,
-
+    if_true, sum_add_distrib, sum_ite_eq', has, if_false, add_zero,
+    addRightEmbedding_apply]
+  suffices forall p : Nat × Nat, p in antidiagonal n ->
+    ∑ g in piAntidiag s p.2, ((g a + p.1 + s.sum g).choose (g a + p.1) : R) *
+      multinomial s (g + fun i => ite (i = a) p.1 0) *
+        (f a ^ (g a + p.1) * s.noncommProd (fun i => f i ^ (g i + ite (i = a) p.1 0))
+          ((hc.mono (by simp)).mono' fun i j h => h.pow_pow ..)) =
+      ∑ g in piAntidiag s p.2, n.choose p.1 * multinomial s g * (f a ^ p.1 *
+        s.noncommProd (fun i => f i ^ g i) ((hc.mono (by simp)).mono' fun i j h => h.pow_pow ..)) by
+    rw [sum_congr rfl this]
+    simp only [Nat.antidiagonal_eq_map, sum_map, Function.Embedding.coeFn_mk]
+    rw [(Commute.sum_right _ _ _ fun i hi => hc (by simp) (by simp [hi])
+      (by simpa [eq_comm] using ne_of_mem_of_not_mem hi has)).add_pow]
+    simp only [ih (hc.mono (by simp)), sum_mul, mul_sum]
+    refine sum_congr rfl fun i _ => sum_congr rfl fun g _ => ?_
+    rw [← Nat.cast_comm]; rw [(Nat.commute_cast (f a ^ i) _).left_comm]; rw [mul_assoc]
+  refine fun p hp => sum_congr rfl fun f hf => ?_
+  rw [mem_piAntidiag] at hf
+  rw [not_imp_comm.1 (hf.2 _) has]; rw [zero_add]; rw [hf.1]
+  congr 2
+  · rw [mem_antidiagonal.1 hp]
+  · rw [multinomial_congr]
+    intro t ht
+    rw [Pi.add_apply]; rw [if_neg]; rw [add_zero]
+    exact ne_of_mem_of_not_mem ht has
+  refine noncommProd_congr rfl (fun t ht => ?_) _
+  rw [if_neg]; rw [add_zero]
+  exact ne_of_mem_of_not_mem ht has
 
 中文:
 引理 sum_pow_eq_sum_piAntidiag_of_commute
@@ -786,7 +827,34 @@ lemma sum_pow_eq_sum_piAntidiag_of_commute
   rw [Finset.sum_cons]; rw [piAntidiag_cons]; rw [sum_disjiUnion]
   simp only [sum_map, Pi.add_apply, multinomial_cons,
     Pi.add_apply, if_true, Nat.cast_mul, noncommProd_cons,
-
+    if_true, sum_add_distrib, sum_ite_eq', has, if_false, add_zero,
+    addRightEmbedding_apply]
+  suffices forall p : Nat × Nat, p in antidiagonal n ->
+    ∑ g in piAntidiag s p.2, ((g a + p.1 + s.sum g).choose (g a + p.1) : R) *
+      multinomial s (g + fun i => ite (i = a) p.1 0) *
+        (f a ^ (g a + p.1) * s.noncommProd (fun i => f i ^ (g i + ite (i = a) p.1 0))
+          ((hc.mono (by simp)).mono' fun i j h => h.pow_pow ..)) =
+      ∑ g in piAntidiag s p.2, n.choose p.1 * multinomial s g * (f a ^ p.1 *
+        s.noncommProd (fun i => f i ^ g i) ((hc.mono (by simp)).mono' fun i j h => h.pow_pow ..)) by
+    rw [sum_congr rfl this]
+    simp only [Nat.antidiagonal_eq_map, sum_map, Function.Embedding.coeFn_mk]
+    rw [(Commute.sum_right _ _ _ fun i hi => hc (by simp) (by simp [hi])
+      (by simpa [eq_comm] using ne_of_mem_of_not_mem hi has)).add_pow]
+    simp only [ih (hc.mono (by simp)), sum_mul, mul_sum]
+    refine sum_congr rfl fun i _ => sum_congr rfl fun g _ => ?_
+    rw [← Nat.cast_comm]; rw [(Nat.commute_cast (f a ^ i) _).left_comm]; rw [mul_assoc]
+  refine fun p hp => sum_congr rfl fun f hf => ?_
+  rw [mem_piAntidiag] at hf
+  rw [not_imp_comm.1 (hf.2 _) has]; rw [zero_add]; rw [hf.1]
+  congr 2
+  · rw [mem_antidiagonal.1 hp]
+  · rw [multinomial_congr]
+    intro t ht
+    rw [Pi.add_apply]; rw [if_neg]; rw [add_zero]
+    exact ne_of_mem_of_not_mem ht has
+  refine noncommProd_congr rfl (fun t ht => ?_) _
+  rw [if_neg]; rw [add_zero]
+  exact ne_of_mem_of_not_mem ht has
 
 Depends on / 依赖: Finset, Finset.cons_induction, Finset.sum_cons, Nat.cast_mul, Pi.add_apply, addRightEmbedding_apply, add_apply, add_zero, antidiagonal, cast_mul, cons_induction, generalizing, if_false, if_true, multinomial_cons, noncommProd_cons, piAntidiag, piAntidiag_cons, s.sum, sum_add_distrib
 -/
@@ -846,7 +914,22 @@ theorem sum_pow_of_commute
       convert! (@one_mul R _ _).symm
       convert! @Nat.cast_one R _
       simp
-  
+    · rw [_root_.pow_succ, mul_zero]
+      have : IsEmpty (Finset.sym (∅ : Finset α) n.succ) := Finset.instIsEmpty
+      apply (Fintype.sum_empty _).symm
+  | insert a s ha ih => ?_
+  intro n; specialize ih (hc.mono <| s.subset_insert a)
+  rw [sum_insert ha]; rw [(Commute.sum_right s _ _ _).add_pow]; rw [sum_range]; swap
+  · exact fun _ hb => hc (mem_insert_self a s) (mem_insert_of_mem hb)
+      (ne_of_mem_of_not_mem hb ha).symm
+  · simp_rw [ih, mul_sum, sum_mul, sum_sigma', univ_sigma_univ]
+    refine (Fintype.sum_equiv (symInsertEquiv ha) _ _ fun m => ?_).symm
+    rw [m.1.1.countPerms_filter_ne a]
+    conv in m.1.1.map _ => rw [← m.1.1.filter_add_not (a = ·), Multiset.map_add]
+    simp_rw [Multiset.noncommProd_add, m.1.1.filter_eq, Multiset.map_replicate, m.1.2]
+    rw [Multiset.noncommProd_eq_pow_card _ _ _ fun _ => Multiset.eq_of_mem_replicate]
+    rw [Multiset.card_replicate]; rw [Nat.cast_mul]; rw [mul_assoc]; rw [Nat.cast_comm]
+    congr 1; simp_rw [← mul_assoc, Nat.cast_comm]; rfl
 
 中文:
 定理 sum_pow_of_commute
@@ -862,7 +945,22 @@ theorem sum_pow_of_commute
       convert! (@one_mul R _ _).symm
       convert! @Nat.cast_one R _
       simp
-  
+    · rw [_root_.pow_succ, mul_zero]
+      have : IsEmpty (Finset.sym (∅ : Finset α) n.succ) := Finset.instIsEmpty
+      apply (Fintype.sum_empty _).symm
+  | insert a s ha ih => ?_
+  intro n; specialize ih (hc.mono <| s.subset_insert a)
+  rw [sum_insert ha]; rw [(Commute.sum_right s _ _ _).add_pow]; rw [sum_range]; swap
+  · exact fun _ hb => hc (mem_insert_self a s) (mem_insert_of_mem hb)
+      (ne_of_mem_of_not_mem hb ha).symm
+  · simp_rw [ih, mul_sum, sum_mul, sum_sigma', univ_sigma_univ]
+    refine (Fintype.sum_equiv (symInsertEquiv ha) _ _ fun m => ?_).symm
+    rw [m.1.1.countPerms_filter_ne a]
+    conv in m.1.1.map _ => rw [← m.1.1.filter_add_not (a = ·), Multiset.map_add]
+    simp_rw [Multiset.noncommProd_add, m.1.1.filter_eq, Multiset.map_replicate, m.1.2]
+    rw [Multiset.noncommProd_eq_pow_card _ _ _ fun _ => Multiset.eq_of_mem_replicate]
+    rw [Multiset.card_replicate]; rw [Nat.cast_mul]; rw [mul_assoc]; rw [Nat.cast_comm]
+    congr 1; simp_rw [← mul_assoc, Nat.cast_comm]; rfl
 
 Depends on / 依赖: Commut, Finset, Finset.induction, Finset.instIsEmpty, Finset.sym, Fintype, Fintype.sum_empty, Fintype.sum_subsingleton, IsEmpty, Nat.cast_one, _root_, _root_.pow_succ, _root_.pow_zero, cast_one, convert, eq_iff_true_of_subsingleton, hc.mono, insert, instIsEmpty, mul_zero
 -/
@@ -973,7 +1071,15 @@ lemma multinomial_two_mul_le_mul_multinomial
   refine Nat.div_le_div_of_mul_le_mul (by positivity)
     ((prod_factorial_dvd_factorial_sum ..).trans (Nat.dvd_mul_left ..)) ?_
   calc
-    (2 * ∑ i in s, f i)! * ∏ i in s, (f i)
+    (2 * ∑ i in s, f i)! * ∏ i in s, (f i)!
+      <= ((2 * ∑ i in s, f i) ^ (∑ i in s, f i) * (∑ i in s, f i)!) * ∏ i in s, (f i)! := by
+      gcongr; exact Nat.factorial_two_mul_le _
+    _ = ((∑ i in s, f i) ^ ∑ i in s, f i) * (∑ i in s, f i)! * ∏ i in s, 2 ^ f i * (f i)! := by
+      rw [mul_pow]; rw [← prod_pow_eq_pow_sum]; rw [prod_mul_distrib]; ring
+    _ <= ((∑ i in s, f i) ^ ∑ i in s, f i) * (∑ i in s, f i)! * ∏ i in s, (2 * f i)! := by
+      gcongr
+      rw [← doubleFactorial_two_mul]
+      exact doubleFactorial_le_factorial _
 
 中文:
 引理 multinomial_two_mul_le_mul_multinomial
@@ -982,7 +1088,15 @@ lemma multinomial_two_mul_le_mul_multinomial
   refine Nat.div_le_div_of_mul_le_mul (by positivity)
     ((prod_factorial_dvd_factorial_sum ..).trans (Nat.dvd_mul_left ..)) ?_
   calc
-    (2 * ∑ i in s, f i)! * ∏ i in s, (f i)
+    (2 * ∑ i in s, f i)! * ∏ i in s, (f i)!
+      <= ((2 * ∑ i in s, f i) ^ (∑ i in s, f i) * (∑ i in s, f i)!) * ∏ i in s, (f i)! := by
+      gcongr; exact Nat.factorial_two_mul_le _
+    _ = ((∑ i in s, f i) ^ ∑ i in s, f i) * (∑ i in s, f i)! * ∏ i in s, 2 ^ f i * (f i)! := by
+      rw [mul_pow]; rw [← prod_pow_eq_pow_sum]; rw [prod_mul_distrib]; ring
+    _ <= ((∑ i in s, f i) ^ ∑ i in s, f i) * (∑ i in s, f i)! * ∏ i in s, (2 * f i)! := by
+      gcongr
+      rw [← doubleFactorial_two_mul]
+      exact doubleFactorial_le_factorial _
 
 Depends on / 依赖: Nat.div_le_div_of_mul_le_mul, Nat.dvd_mul_left, Nat.factorial_two_mul_le, Nat.mul_div_assoc, div_le_div_of_mul_le_mul, dvd_mul_left, factorial_two_mul_le, mul_div_assoc, mul_sum, multinomial, prod_factorial_dvd_factorial_sum
 -/
@@ -1023,7 +1137,9 @@ theorem countPerms_coe_fill_of_notMem
     rw [coe_fill]; rw [coe_replicate]; rw [Multiset.filter_add]
     rw [Multiset.filter_eq_self.mpr]
     · rw [add_eq_left]
-      r
+      rw [Multiset.filter_eq_nil]
+      exact fun j hj => by simp [Multiset.mem_replicate.mp hj]
+· exact fun j hj h => hx by simpa [h] using hj
 
 中文:
 定理 countPerms_coe_fill_of_notMem
@@ -1037,7 +1153,9 @@ theorem countPerms_coe_fill_of_notMem
     rw [coe_fill]; rw [coe_replicate]; rw [Multiset.filter_add]
     rw [Multiset.filter_eq_self.mpr]
     · rw [add_eq_left]
-      r
+      rw [Multiset.filter_eq_nil]
+      exact fun j hj => by simp [Multiset.mem_replicate.mp hj]
+· exact fun j hj h => hx by simpa [h] using hj
 
 Depends on / 依赖: Multiset, Multiset.countPerms_filter_ne, Multiset.filter_add, Multiset.filter_eq_nil, Multiset.filter_eq_self.mpr, Multiset.mem_replicate.mp, add_eq_left, card_coe, coe_fill, coe_replicate, countPerms_filter_ne, count_coe_fill_self_of_notMem, filter_add, filter_eq_nil, filter_eq_self, mem_coe, mem_replicate
 -/
@@ -1151,7 +1269,16 @@ theorem multinomial_cons
     exact List.toFinsupp_sum (x :: l)
   let succEmb : Nat ↪ Nat := addRightEmbedding 1
   have : (Finsupp.single 0 x + l.toFinsupp.embDomain succEmb).update 0 0 =
-    (l.toFinsupp.embDomain succEmb
+    (l.toFinsupp.embDomain succEmb).update 0 0 := by
+    ext i
+    by_cases hi : i = 0
+    · simp [hi]
+    · simp [Finsupp.update_apply, if_neg hi, Finsupp.single_eq_of_ne hi]
+  have h (x) : (l.toFinsupp.embDomain succEmb) (x + 1) = l[x]?.getD 0 := by
+    rw [Finsupp.embDomain_apply]; rw [dif_pos ⟨x]; rw [by simp [succEmb]⟩]
+    simp [succEmb]
+  simp [toFinsupp_cons_eq_single_add_embDomain, Finsupp.multinomial_eq,
+    succEmb, this, Nat.multinomial, h]
 
 中文:
 定理 multinomial_cons
@@ -1164,7 +1291,16 @@ theorem multinomial_cons
     exact List.toFinsupp_sum (x :: l)
   let succEmb : Nat ↪ Nat := addRightEmbedding 1
   have : (Finsupp.single 0 x + l.toFinsupp.embDomain succEmb).update 0 0 =
-    (l.toFinsupp.embDomain succEmb
+    (l.toFinsupp.embDomain succEmb).update 0 0 := by
+    ext i
+    by_cases hi : i = 0
+    · simp [hi]
+    · simp [Finsupp.update_apply, if_neg hi, Finsupp.single_eq_of_ne hi]
+  have h (x) : (l.toFinsupp.embDomain succEmb) (x + 1) = l[x]?.getD 0 := by
+    rw [Finsupp.embDomain_apply]; rw [dif_pos ⟨x]; rw [by simp [succEmb]⟩]
+    simp [succEmb]
+  simp [toFinsupp_cons_eq_single_add_embDomain, Finsupp.multinomial_eq,
+    succEmb, this, Nat.multinomial, h]
 
 Depends on / 依赖: Finsupp, Finsupp.embDomai, Finsupp.multinomial_update, Finsupp.single, Finsupp.single_eq_of_ne, Finsupp.update_apply, List.toFinsupp_sum, addRightEmbedding, embDomai, embDomain, if_neg, l.toFinsupp.embDomain, multinomial, multinomial_update, single, single_eq_of_ne, succEmb, toFinsupp, toFinsupp_sum, update
 -/
@@ -1204,7 +1340,10 @@ definition multinomial
   | @cons x l l' hl hl' => simp [List.multinomial_cons, hl', hl.sum_nat]
   | @swap x y l =>
     simp only [List.multinomial_cons, ← mul_assoc, List.sum_cons]
-    rw [← Nat.choose_symm (Nat.le_add_right y _)]; rw [add_
+    rw [← Nat.choose_symm (Nat.le_add_right y _)]; rw [add_tsub_cancel_left]
+    rw [add_left_comm]; rw [Nat.choose_mul (Nat.le_add_right _ _)]; rw [add_tsub_cancel_left]
+    simp [← Nat.choose_symm (Nat.le_add_right _ _), add_tsub_cancel_left]
+  | @trans l l' l'' h h' ih ih' => rw [ih, ih']
 
 中文:
 定义 multinomial
@@ -1215,7 +1354,10 @@ definition multinomial
   | @cons x l l' hl hl' => simp [List.multinomial_cons, hl', hl.sum_nat]
   | @swap x y l =>
     simp only [List.multinomial_cons, ← mul_assoc, List.sum_cons]
-    rw [← Nat.choose_symm (Nat.le_add_right y _)]; rw [add_
+    rw [← Nat.choose_symm (Nat.le_add_right y _)]; rw [add_tsub_cancel_left]
+    rw [add_left_comm]; rw [Nat.choose_mul (Nat.le_add_right _ _)]; rw [add_tsub_cancel_left]
+    simp [← Nat.choose_symm (Nat.le_add_right _ _), add_tsub_cancel_left]
+  | @trans l l' l'' h h' ih ih' => rw [ih, ih']
 
 Depends on / 依赖: List.multinomial, List.multinomial_cons, List.sum_cons, Nat.choose_mul, Nat.choose_symm, Nat.le_add_right, Quot.liftOn, add_left_comm, add_tsub_cancel_left, choose_mul, choose_symm, hl.sum_nat, le_add_right, liftOn, mul_assoc, multinomial, multinomial_cons, sum_cons, sum_nat
 -/
@@ -1312,7 +1454,8 @@ theorem multinomial_add
   | cons x m hind =>
     simp only [cons_add, sum_cons, sum_add, multinomial_cons, hind, ← mul_assoc]
     congr 2
-    rw [← Nat.choose_symm (Nat.le_add_right _ _)]; rw [add_tsub_cancel_left]; rw [eq_comm]; rw [Nat.choose_mul (Nat.le
+    rw [← Nat.choose_symm (Nat.le_add_right _ _)]; rw [add_tsub_cancel_left]; rw [eq_comm]; rw [Nat.choose_mul (Nat.le_add_right _ _)]; rw [← Nat.choose_symm (Nat.le_add_right x _)]
+    simp [add_tsub_cancel_left]
 
 中文:
 定理 multinomial_add
@@ -1323,7 +1466,8 @@ theorem multinomial_add
   | cons x m hind =>
     simp only [cons_add, sum_cons, sum_add, multinomial_cons, hind, ← mul_assoc]
     congr 2
-    rw [← Nat.choose_symm (Nat.le_add_right _ _)]; rw [add_tsub_cancel_left]; rw [eq_comm]; rw [Nat.choose_mul (Nat.le
+    rw [← Nat.choose_symm (Nat.le_add_right _ _)]; rw [add_tsub_cancel_left]; rw [eq_comm]; rw [Nat.choose_mul (Nat.le_add_right _ _)]; rw [← Nat.choose_symm (Nat.le_add_right x _)]
+    simp [add_tsub_cancel_left]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Nat.choose_mul, Nat.choose_symm, Nat.le_add_right, add_tsub_cancel_left, choose_mul, choose_symm, cons_add, eq_comm, induction_on, le_add_right, mul_assoc, multinomial_cons, sum_add, sum_cons
 -/

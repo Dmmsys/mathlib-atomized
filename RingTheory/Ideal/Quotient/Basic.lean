@@ -297,7 +297,7 @@ theorem isDomain_iff_prime
     exact zero_ne_one
   · simp only [← eq_zero_iff_mem, (mk I).map_mul] at h ⊢
     have := @IsDomain.to_noZeroDivisors (R ⧸ I) _ H
-    exact eq_zero_or_eq_zero_of_mul_eq_
+    exact eq_zero_or_eq_zero_of_mul_eq_zero h
 
 中文:
 定理 isDomain_iff_prime
@@ -308,7 +308,7 @@ theorem isDomain_iff_prime
     exact zero_ne_one
   · simp only [← eq_zero_iff_mem, (mk I).map_mul] at h ⊢
     have := @IsDomain.to_noZeroDivisors (R ⧸ I) _ H
-    exact eq_zero_or_eq_zero_of_mul_eq_
+    exact eq_zero_or_eq_zero_of_mul_eq_zero h
 
 Depends on / 依赖: IsDomain, IsDomain.to_noZeroDivisors, Nontrivial, eq_zero_iff_mem, eq_zero_or_eq_zero_of_mul_eq_zero, map_mul, to_noZeroDivisors, zero_ne_one, zero_ne_one_iff
 -/
@@ -373,7 +373,7 @@ abbreviation noncomputable
     mul_inv_cancel := fun a (ha : a != 0) =>
       show a * dite _ _ _ = _ by rw [dif_neg ha]; exact Classical.choose_spec (exists_inv ha)
     inv_zero := dif_pos rfl
-    __ := Quotient.nontrivial_iff.mpr h
+    __ := Quotient.nontrivial_iff.mpr hI.out.1 }
 
 中文:
 缩写 noncomputable
@@ -383,7 +383,7 @@ abbreviation noncomputable
     mul_inv_cancel := fun a (ha : a != 0) =>
       show a * dite _ _ _ = _ by rw [dif_neg ha]; exact Classical.choose_spec (exists_inv ha)
     inv_zero := dif_pos rfl
-    __ := Quotient.nontrivial_iff.mpr h
+    __ := Quotient.nontrivial_iff.mpr hI.out.1 }
 -/
 protected noncomputable abbrev groupWithZero [hI : I.IsMaximal] :
     GroupWithZero (R ⧸ I) := fast_instance%
@@ -462,7 +462,8 @@ theorem maximal_of_isField
     exact hxy (Ideal.Quotient.eq.2 (mul_one (x - y) ▸ I.mul_mem_left _ h))
   · intro J x hIJ hxnI hxJ
     rcases hqf.mul_inv_cancel (mt Ideal.Quotient.eq_zero_iff_mem.1 hxnI) with ⟨⟨y⟩, hy⟩
-
+    rw [← zero_add (1 : R)]; rw [← sub_self (x * y)]; rw [sub_add]
+    exact J.sub_mem (J.mul_mem_right _ hxJ) (hIJ (Ideal.Quotient.eq.1 hy))
 
 中文:
 定理 maximal_of_isField
@@ -475,7 +476,8 @@ theorem maximal_of_isField
     exact hxy (Ideal.Quotient.eq.2 (mul_one (x - y) ▸ I.mul_mem_left _ h))
   · intro J x hIJ hxnI hxJ
     rcases hqf.mul_inv_cancel (mt Ideal.Quotient.eq_zero_iff_mem.1 hxnI) with ⟨⟨y⟩, hy⟩
-
+    rw [← zero_add (1 : R)]; rw [← sub_self (x * y)]; rw [sub_add]
+    exact J.sub_mem (J.mul_mem_right _ hxJ) (hIJ (Ideal.Quotient.eq.1 hy))
 
 Depends on / 依赖: I.mul_mem_left, Ideal.Quotient.eq, Ideal.Quotient.eq_zero_iff_mem, Ideal.isMaximal_iff, J.mul_mem_right, J.sub_mem, Quotient, eq_zero_iff_mem, exists_pair_ne, hqf.exists_pair_ne, hqf.mul_inv_cancel, isMaximal_iff, mul_inv_cancel, mul_mem_left, mul_mem_right, mul_one, sub_add, sub_mem, sub_self, zero_add
 -/
@@ -536,7 +538,11 @@ instance modulePi
       intro i
       exact I.mul_sub_mul_mem hc (hm i)
   one_smul := by rintro ⟨a⟩; exact congr_arg _ (one_smul _ _)
-  mul_s
+  mul_smul := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact congr_arg _ (mul_smul _ _ _)
+  smul_add := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact congr_arg _ (smul_add _ _ _)
+  smul_zero := by rintro ⟨a⟩; exact congr_arg _ (smul_zero _)
+  add_smul := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact congr_arg _ (add_smul _ _ _)
+  zero_smul := by rintro ⟨a⟩; exact congr_arg _ (zero_smul _ _)
 
 中文:
 实例 modulePi
@@ -548,7 +554,11 @@ instance modulePi
       intro i
       exact I.mul_sub_mul_mem hc (hm i)
   one_smul := by rintro ⟨a⟩; exact congr_arg _ (one_smul _ _)
-  mul_s
+  mul_smul := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact congr_arg _ (mul_smul _ _ _)
+  smul_add := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact congr_arg _ (smul_add _ _ _)
+  smul_zero := by rintro ⟨a⟩; exact congr_arg _ (smul_zero _)
+  add_smul := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact congr_arg _ (add_smul _ _ _)
+  zero_smul := by rintro ⟨a⟩; exact congr_arg _ (zero_smul _ _)
 
 Depends on / 依赖: I.mul_sub_mul_mem, Ideal.Quotient.eq, Quotient, Quotient.liftOn, Submodule, Submodule.Quotient.mk, Submodule.quotientRel_def, add_smul, congr_arg, mul_smul, mul_sub_mul_mem, one_smul, quotientRel_def, smul_add, smul_zero
 -/
@@ -579,7 +589,10 @@ definition piQuotEquiv
   map_add' := by rintro ⟨_⟩ ⟨_⟩; rfl
   map_smul' := by rintro ⟨_⟩ ⟨_⟩; rfl
   invFun x := Ideal.Quotient.mk _ (Quotient.out <| x ·)
-  lef
+  left_inv := by
+    rintro ⟨x⟩
+    exact Ideal.Quotient.eq.2 fun i => Ideal.Quotient.eq.1 (Quotient.out_eq' _)
+  right_inv x := funext fun i => Quotient.out_eq' (x i)
 
 中文:
 定义 piQuotEquiv
@@ -589,7 +602,10 @@ definition piQuotEquiv
   map_add' := by rintro ⟨_⟩ ⟨_⟩; rfl
   map_smul' := by rintro ⟨_⟩ ⟨_⟩; rfl
   invFun x := Ideal.Quotient.mk _ (Quotient.out <| x ·)
-  lef
+  left_inv := by
+    rintro ⟨x⟩
+    exact Ideal.Quotient.eq.2 fun i => Ideal.Quotient.eq.1 (Quotient.out_eq' _)
+  right_inv x := funext fun i => Quotient.out_eq' (x i)
 
 Depends on / 依赖: Ideal.Quotient.mk, Quotient, Quotient.liftOn, liftOn
 -/

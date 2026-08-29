@@ -172,7 +172,30 @@ theorem span_exact
   obtain ⟨cm, hm⟩ := hgm
   let m' : S.X₂ := Finsupp.sum cm fun j a => a • (u (Sum.inr j))
   have hsub : m - m' in LinearMap.range S.f.hom := by
-    rw [hS.mod
+    rw [hS.moduleCat_range_eq_ker]
+    simp only [LinearMap.mem_ker, map_sub, sub_eq_zero]
+    rw [← hm]; rw [map_finsuppSum]
+    simp only [Function.comp_apply, map_smul]
+  obtain ⟨n, hnm⟩ := hsub
+  have hn : n in span R (range v) := hv mem_top
+  rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn
+  obtain ⟨cn, hn⟩ := hn
+  rw [← hn]; rw [map_finsuppSum] at hnm
+  rw [← sub_add_cancel m m']; rw [← hnm]
+  simp only [map_smul]
+  have hn' : (Finsupp.sum cn fun a b => b • S.f (v a)) =
+      (Finsupp.sum cn fun a b => b • u (Sum.inl a)) := by
+    congr; ext a b; rw [← Function.comp_apply (f := S.f), ← huv, Function.comp_apply]
+  rw [hn']
+  apply add_mem
+  · rw [Finsupp.mem_span_range_iff_exists_finsupp]
+    use cn.mapDomain (Sum.inl)
+    rw [Finsupp.sum_mapDomain_index_inj Sum.inl_injective]
+  · rw [Finsupp.mem_span_range_iff_exists_finsupp]
+    use cm.mapDomain (Sum.inr)
+    rw [Finsupp.sum_mapDomain_index_inj Sum.inr_injective]
+
+include hS in
 
 中文:
 定理 span_exact
@@ -184,7 +207,30 @@ theorem span_exact
   obtain ⟨cm, hm⟩ := hgm
   let m' : S.X₂ := Finsupp.sum cm fun j a => a • (u (Sum.inr j))
   have hsub : m - m' in LinearMap.range S.f.hom := by
-    rw [hS.mod
+    rw [hS.moduleCat_range_eq_ker]
+    simp only [LinearMap.mem_ker, map_sub, sub_eq_zero]
+    rw [← hm]; rw [map_finsuppSum]
+    simp only [Function.comp_apply, map_smul]
+  obtain ⟨n, hnm⟩ := hsub
+  have hn : n in span R (range v) := hv mem_top
+  rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn
+  obtain ⟨cn, hn⟩ := hn
+  rw [← hn]; rw [map_finsuppSum] at hnm
+  rw [← sub_add_cancel m m']; rw [← hnm]
+  simp only [map_smul]
+  have hn' : (Finsupp.sum cn fun a b => b • S.f (v a)) =
+      (Finsupp.sum cn fun a b => b • u (Sum.inl a)) := by
+    congr; ext a b; rw [← Function.comp_apply (f := S.f), ← huv, Function.comp_apply]
+  rw [hn']
+  apply add_mem
+  · rw [Finsupp.mem_span_range_iff_exists_finsupp]
+    use cn.mapDomain (Sum.inl)
+    rw [Finsupp.sum_mapDomain_index_inj Sum.inl_injective]
+  · rw [Finsupp.mem_span_range_iff_exists_finsupp]
+    use cm.mapDomain (Sum.inr)
+    rw [Finsupp.sum_mapDomain_index_inj Sum.inr_injective]
+
+include hS in
 
 Depends on / 依赖: Finsupp, Finsupp.mem_span_range_iff_exists_finsupp, Finsupp.sum, Function, Function.comp_apply, LinearMap, LinearMap.mem_ker, LinearMap.range, S.f.hom, Sum.inr, comp_apply, hS.moduleCat_range_eq_ker, map_finsuppSum, map_smul, map_sub, mem_ker, mem_span_range_iff_exists_finsupp, mem_top, moduleCat_range_eq_ker, sub_eq_zero
 -/
@@ -234,7 +280,7 @@ theorem span_rightExact
   · convert! hw
     simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, Sum.elim_comp_inr]
     rw [ModuleCat.epi_iff_surjective] at hE
-    rw [← Function.comp_assoc]; rw [Function.Ri
+    rw [← Function.comp_assoc]; rw [Function.RightInverse.comp_eq_id (Function.rightInverse_invFun hE)]; rw [Function.id_comp]
 
 中文:
 定理 span_rightExact
@@ -245,7 +291,7 @@ theorem span_rightExact
   · convert! hw
     simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, Sum.elim_comp_inr]
     rw [ModuleCat.epi_iff_surjective] at hE
-    rw [← Function.comp_assoc]; rw [Function.Ri
+    rw [← Function.comp_assoc]; rw [Function.RightInverse.comp_eq_id (Function.rightInverse_invFun hE)]; rw [Function.id_comp]
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, Function, Function.RightInverse.comp_eq_id, Function.comp_assoc, Function.id_comp, Function.rightInverse_invFun, LinearMap, LinearMap.coe_toAddHom, ModuleCat, ModuleCat.epi_iff_surjective, RightInverse, Sum.elim_comp_inl, Sum.elim_comp_inr, coe_toAddHom, comp_assoc, comp_eq_id, convert, elim_comp_inl, elim_comp_inr
 -/
@@ -321,7 +367,8 @@ theorem free_shortExact_rank_add
   proof: by
   have := free_shortExact hS'
   rw [Module.Free.rank_eq_card_chooseBasisIndex]; rw [Module.Free.rank_eq_card_chooseBasisIndex R S.X₁]; rw [Module.Free.rank_eq_card_chooseBasisIndex R S.X₃]; rw [Cardinal.add_def]; rw [Cardinal.eq]
-  exact ⟨Basis.indexEquiv (Module.Free.chooseBasis R S.X₂) (Basis.o
+  exact ⟨Basis.indexEquiv (Module.Free.chooseBasis R S.X₂) (Basis.ofShortExact hS'
+    (Module.Free.chooseBasis R S.X₁) (Module.Free.chooseBasis R S.X₃))⟩
 
 中文:
 定理 free_shortExact_rank_add
@@ -329,7 +376,8 @@ theorem free_shortExact_rank_add
   证明: by
   have := free_shortExact hS'
   rw [Module.Free.rank_eq_card_chooseBasisIndex]; rw [Module.Free.rank_eq_card_chooseBasisIndex R S.X₁]; rw [Module.Free.rank_eq_card_chooseBasisIndex R S.X₃]; rw [Cardinal.add_def]; rw [Cardinal.eq]
-  exact ⟨Basis.indexEquiv (Module.Free.chooseBasis R S.X₂) (Basis.o
+  exact ⟨Basis.indexEquiv (Module.Free.chooseBasis R S.X₂) (Basis.ofShortExact hS'
+    (Module.Free.chooseBasis R S.X₁) (Module.Free.chooseBasis R S.X₃))⟩
 
 Depends on / 依赖: Basis.indexEquiv, Basis.ofShortExact, Cardinal, Cardinal.add_def, Cardinal.eq, Module, Module.Free.chooseBasis, Module.Free.rank_eq_card_chooseBasisIndex, add_def, chooseBasis, free_shortExact, indexEquiv, ofShortExact, rank_eq_card_chooseBasisIndex
 -/

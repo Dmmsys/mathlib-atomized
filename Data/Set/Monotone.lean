@@ -479,7 +479,9 @@ alias ⟨_root_.StrictMono.of_domRestrict, _root_.StrictMonoOn.domRestrict⟩ :=
 
 @[deprecated (since := "2026-07-19")] alias strictMono_restrict := strictMono_domRestrict
 @[deprecated (since := "2026-07-19")]
-alias _root_.Str
+alias _root_.StrictMono.of_restrict := _root_.StrictMono.of_domRestrict
+@[deprecated (since := "2026-07-19")]
+alias _root_.StrictMonoOn.restrict := _root_.StrictMonoOn.domRestrict
 
 中文:
 定理 strictMono_domRestrict
@@ -491,7 +493,9 @@ alias ⟨_root_.StrictMono.of_domRestrict, _root_.StrictMonoOn.domRestrict⟩ :=
 
 @[deprecated (since := "2026-07-19")] alias strictMono_restrict := strictMono_domRestrict
 @[deprecated (since := "2026-07-19")]
-alias _root_.Str
+alias _root_.StrictMono.of_restrict := _root_.StrictMono.of_domRestrict
+@[deprecated (since := "2026-07-19")]
+alias _root_.StrictMonoOn.restrict := _root_.StrictMonoOn.domRestrict
 
 Depends on / 依赖: Set.domRestrict, StrictMono, StrictMonoOn, domRestrict
 -/

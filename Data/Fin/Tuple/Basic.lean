@@ -1201,7 +1201,7 @@ theorem append_assoc
     · rw [append_right]
       simp [castAdd_natAdd]
   · rw [append_right]
-    sim
+    simp [← natAdd_natAdd]
 
 中文:
 定理 append_assoc
@@ -1217,7 +1217,7 @@ theorem append_assoc
     · rw [append_right]
       simp [castAdd_natAdd]
   · rw [append_right]
-    sim
+    simp [← natAdd_natAdd]
 
 Depends on / 依赖: Fin.addCases, Function, Function.comp_apply, addCases, append_left, append_right, castAdd_castAdd, castAdd_natAdd, comp_apply, natAdd_natAdd
 -/
@@ -1248,7 +1248,8 @@ theorem append_left_eq_cons
     rw [Subsingleton.elim i 0]; rw [Fin.append_left]; rw [Function.comp_apply]; rw [eq_comm]
     exact Fin.cons_zero _ _
   · intro i
-    rw [Fin.append_right]; rw [Function.comp_apply]; rw [Fin.cast_natAdd]; rw [eq_comm]; rw [Fin.addNa
+    rw [Fin.append_right]; rw [Function.comp_apply]; rw [Fin.cast_natAdd]; rw [eq_comm]; rw [Fin.addNat_one]
+    exact Fin.cons_succ _ _ _
 
 中文:
 定理 append_left_eq_cons
@@ -1260,7 +1261,8 @@ theorem append_left_eq_cons
     rw [Subsingleton.elim i 0]; rw [Fin.append_left]; rw [Function.comp_apply]; rw [eq_comm]
     exact Fin.cons_zero _ _
   · intro i
-    rw [Fin.append_right]; rw [Function.comp_apply]; rw [Fin.cast_natAdd]; rw [eq_comm]; rw [Fin.addNa
+    rw [Fin.append_right]; rw [Function.comp_apply]; rw [Fin.cast_natAdd]; rw [eq_comm]; rw [Fin.addNat_one]
+    exact Fin.cons_succ _ _ _
 
 Depends on / 依赖: Fin.addCases, Fin.addNat_one, Fin.append_left, Fin.append_right, Fin.cast_natAdd, Fin.cons_succ, Fin.cons_zero, Function, Function.comp_apply, Subsingleton, Subsingleton.elim, addCases, addNat_one, append_left, append_right, cast_natAdd, comp_apply, cons_succ, cons_zero, eq_comm
 -/
@@ -1464,7 +1466,10 @@ theorem append_injective_iff
   -- We inline it because it's still shorter than proving from scratch.
   let finSumFinEquiv : Fin m oplus Fin n ≃ Fin (m + n) :=
   { toFun := Sum.elim (Fin.castAdd n) (Fin.natAdd m)
-    invFun i := @Fin.addCases m n (fun _ => Fin m oplus 
+    invFun i := @Fin.addCases m n (fun _ => Fin m oplus Fin n) Sum.inl Sum.inr i
+    left_inv x := by rcases x with y | y <;> simp
+    right_inv x := by refine Fin.addCases (fun i => ?_) (fun i => ?_) x <;> simp }
+  rw [← Sum.elim_injective]; rw [← append_comp_sumElim]; rw [← finSumFinEquiv.injective_comp]; rw [Equiv.coe_fn_mk]
 
 中文:
 定理 append_injective_iff
@@ -1474,7 +1479,10 @@ theorem append_injective_iff
   -- We inline it because it's still shorter than proving from scratch.
   let finSumFinEquiv : Fin m oplus Fin n ≃ Fin (m + n) :=
   { toFun := Sum.elim (Fin.castAdd n) (Fin.natAdd m)
-    invFun i := @Fin.addCases m n (fun _ => Fin m oplus 
+    invFun i := @Fin.addCases m n (fun _ => Fin m oplus Fin n) Sum.inl Sum.inr i
+    left_inv x := by rcases x with y | y <;> simp
+    right_inv x := by refine Fin.addCases (fun i => ?_) (fun i => ?_) x <;> simp }
+  rw [← Sum.elim_injective]; rw [← append_comp_sumElim]; rw [← finSumFinEquiv.injective_comp]; rw [Equiv.coe_fn_mk]
 -/
 theorem append_injective_iff {xs : Fin m -> α} {ys : Fin n -> α} :
     Function.Injective (Fin.append xs ys) ↔
@@ -2478,7 +2486,7 @@ theorem append_cons
     · have : i < n := Nat.lt_of_succ_lt_succ h
       simp [addCases, this]
 · have : ¬i < n := Nat.not_le_of_gt Nat.le_of_lt_succ Nat.gt_of_not_le h
-      
+      simp [addCases, this]
 
 中文:
 定理 append_cons
@@ -2493,7 +2501,7 @@ theorem append_cons
     · have : i < n := Nat.lt_of_succ_lt_succ h
       simp [addCases, this]
 · have : ¬i < n := Nat.not_le_of_gt Nat.le_of_lt_succ Nat.gt_of_not_le h
-      
+      simp [addCases, this]
 
 Depends on / 依赖: Nat.gt_of_not_le, Nat.le_of_lt_succ, Nat.lt_of_succ_lt_succ, Nat.not_le_of_gt, addCases, append, castLT, comp_apply, gt_of_not_le, le_of_lt_succ, lt_of_succ_lt_succ, not_le_of_gt, split_ifs
 -/
@@ -2526,7 +2534,10 @@ theorem append_snoc
   split_ifs with lt_n lt_add sub_lt nlt_add lt_add <;> (try rfl)
   · have := Nat.lt_add_right m lt_n
     contradiction
-  · obtain rfl := Nat
+  · obtain rfl := Nat.eq_of_le_of_lt_succ (Nat.not_lt.mp nlt_add) isLt
+    simp [Nat.add_comm n m] at sub_lt
+  · have := Nat.sub_lt_left_of_lt_add (Nat.not_lt.mp lt_n) lt_add
+    contradiction
 
 中文:
 定理 append_snoc
@@ -2539,7 +2550,10 @@ theorem append_snoc
   split_ifs with lt_n lt_add sub_lt nlt_add lt_add <;> (try rfl)
   · have := Nat.lt_add_right m lt_n
     contradiction
-  · obtain rfl := Nat
+  · obtain rfl := Nat.eq_of_le_of_lt_succ (Nat.not_lt.mp nlt_add) isLt
+    simp [Nat.add_comm n m] at sub_lt
+  · have := Nat.sub_lt_left_of_lt_add (Nat.not_lt.mp lt_n) lt_add
+    contradiction
 
 Depends on / 依赖: Nat.add_comm, Nat.add_eq, Nat.eq_of_le_of_lt_succ, Nat.lt_add_right, Nat.not_lt.mp, Nat.sub_lt_left_of_lt_add, addCases, add_comm, add_eq, append, castLT, cast_mk, eq_1, eq_of_le_of_lt_succ, eq_rec_constant, lt_add, lt_add_right, lt_n, natAdd_mk, nlt_add
 -/
@@ -2689,7 +2703,14 @@ theorem snoc_injective_of_injective
     | last =>
       simp only [snoc_castSucc, snoc_last] at h
       rw [← h] at hx₀
-      apply hx₀.elim
+      apply hx₀.elim (Set.mem_range_self i)
+  | last =>
+    induction j using lastCases with
+    | cast j =>
+      simp only [snoc_castSucc, snoc_last] at h
+      rw [h] at hx₀
+      apply hx₀.elim (Set.mem_range_self j)
+    | last => simp
 
 中文:
 定理 snoc_injective_of_injective
@@ -2703,7 +2724,14 @@ theorem snoc_injective_of_injective
     | last =>
       simp only [snoc_castSucc, snoc_last] at h
       rw [← h] at hx₀
-      apply hx₀.elim
+      apply hx₀.elim (Set.mem_range_self i)
+  | last =>
+    induction j using lastCases with
+    | cast j =>
+      simp only [snoc_castSucc, snoc_last] at h
+      rw [h] at hx₀
+      apply hx₀.elim (Set.mem_range_self j)
+    | last => simp
 
 Depends on / 依赖: Injective, Injective.eq_iff, Set.mem_range_self, castSucc_inj, eq_iff, lastCases, mem_range_self, snoc_castSucc, snoc_last
 -/
@@ -2738,7 +2766,7 @@ theorem snoc_injective_iff
   · simpa [Function.comp] using h.comp (Fin.castSucc_injective _)
   · rintro ⟨i, hi⟩
     rw [← @snoc_last n (fun i => α) x₀ x]; rw [← @snoc_castSucc n (fun i => α) x₀ x i]; rw [h.eq_iff] at hi
-    exact ne_last_of_lt i.cas
+    exact ne_last_of_lt i.castSucc_lt_last hi
 
 中文:
 定理 snoc_injective_iff
@@ -2748,7 +2776,7 @@ theorem snoc_injective_iff
   · simpa [Function.comp] using h.comp (Fin.castSucc_injective _)
   · rintro ⟨i, hi⟩
     rw [← @snoc_last n (fun i => α) x₀ x]; rw [← @snoc_castSucc n (fun i => α) x₀ x i]; rw [h.eq_iff] at hi
-    exact ne_last_of_lt i.cas
+    exact ne_last_of_lt i.castSucc_lt_last hi
 
 Depends on / 依赖: Fin.castSucc_injective, Function, Function.comp, castSucc_injective, castSucc_lt_last, eq_iff, h.comp, h.eq_iff, i.castSucc_lt_last, ne_last_of_lt, snoc_castSucc, snoc_injective_of_injective, snoc_last
 -/
@@ -3056,7 +3084,12 @@ theorem insertNth_apply_succAbove
     generalize hk : castPred ((succAbove i) j) H₁ = k
     rw [castPred_succAbove _ _ hlt] at hk; cases hk
     intro; rfl
-  · generalize_pro
+  · generalize_proofs H₀ H₁ H₂; revert H₂
+    generalize hk : pred (succAbove i j) H₁ = k
+    rw [pred_succAbove _ _ (Fin.not_lt.1 hlt)] at hk; cases hk
+    intro; rfl
+
+@[simp]
 
 中文:
 定理 insertNth_apply_succAbove
@@ -3068,7 +3101,12 @@ theorem insertNth_apply_succAbove
     generalize hk : castPred ((succAbove i) j) H₁ = k
     rw [castPred_succAbove _ _ hlt] at hk; cases hk
     intro; rfl
-  · generalize_pro
+  · generalize_proofs H₀ H₁ H₂; revert H₂
+    generalize hk : pred (succAbove i j) H₁ = k
+    rw [pred_succAbove _ _ (Fin.not_lt.1 hlt)] at hk; cases hk
+    intro; rfl
+
+@[simp]
 
 Depends on / 依赖: Fin.not_lt, castPred, castPred_succAbove, dif_neg, generalize, generalize_proofs, insertNth, not_lt, pred_succAbove, revert, split_ifs, succAbove, succAboveCases, succAbove_lt_iff_castSucc_lt, succAbove_ne
 -/
@@ -4518,7 +4556,9 @@ lemma find_of_find_le
     ⟨(Fin.cast (Nat.add_comm _ _) (Fin.find p hᵢ)).subNat _ hm, by simp [Fin.find_spec]⟩
   refine (find_eq_iff _).2 ⟨Fin.find_spec hⱼ, fun i hi => ?_⟩
   cases i using addCases with | left i => _ | right i => _
-  · exact Fin.find_min hᵢ (Fin.lt_def.m
+  · exact Fin.find_min hᵢ (Fin.lt_def.mpr <| (Fin.castAdd_lt _ _).trans_le hm)
+  · rw [Fin.natAdd_lt_natAdd_iff] at hi
+    exact Fin.find_min hⱼ hi
 
 中文:
 引理 find_of_find_le
@@ -4528,7 +4568,9 @@ lemma find_of_find_le
     ⟨(Fin.cast (Nat.add_comm _ _) (Fin.find p hᵢ)).subNat _ hm, by simp [Fin.find_spec]⟩
   refine (find_eq_iff _).2 ⟨Fin.find_spec hⱼ, fun i hi => ?_⟩
   cases i using addCases with | left i => _ | right i => _
-  · exact Fin.find_min hᵢ (Fin.lt_def.m
+  · exact Fin.find_min hᵢ (Fin.lt_def.mpr <| (Fin.castAdd_lt _ _).trans_le hm)
+  · rw [Fin.natAdd_lt_natAdd_iff] at hi
+    exact Fin.find_min hⱼ hi
 
 Depends on / 依赖: Fin.cast, Fin.castAdd_lt, Fin.find, Fin.find_min, Fin.find_spec, Fin.lt_def.mpr, Fin.natAdd_lt_natAdd_iff, Nat.add_comm, addCases, add_comm, castAdd_lt, find_eq_iff, find_min, find_spec, j.natAdd, lt_def, natAdd, natAdd_lt_natAdd_iff, subNat, trans_le
 -/

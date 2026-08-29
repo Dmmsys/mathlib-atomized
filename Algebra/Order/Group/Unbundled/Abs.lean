@@ -563,7 +563,16 @@ lemma mabs_div_sup_mul_mabs_div_inf
     |(a ⊔ c) / (b ⊔ c)|ₘ * |(a ⊓ c) / (b ⊓ c)|ₘ =
         (b ⊔ c ⊔ (a ⊔ c)) / ((b ⊔ c) ⊓ (a ⊔ c)) * |(a ⊓ c) / (b ⊓ c)|ₘ := by
         rw [sup_div_inf_eq_mabs_div]
-    _ = (b ⊔ c ⊔ (a ⊔ c)) / ((b ⊔ c) ⊓ (a ⊔ c)) * ((b ⊓ c ⊔ a ⊓ c) / 
+    _ = (b ⊔ c ⊔ (a ⊔ c)) / ((b ⊔ c) ⊓ (a ⊔ c)) * ((b ⊓ c ⊔ a ⊓ c) / (b ⊓ c ⊓ (a ⊓ c))) := by
+        rw [sup_div_inf_eq_mabs_div (b ⊓ c) (a ⊓ c)]
+    _ = (b ⊔ a ⊔ c) / (b ⊓ a ⊔ c) * (((b ⊔ a) ⊓ c) / (b ⊓ a ⊓ c)) := by
+        rw [← sup_inf_right]; rw [← inf_sup_right]; rw [sup_assoc]; rw [sup_comm c (a ⊔ c)]; rw [sup_right_idem]; rw [sup_assoc]; rw [inf_assoc]; rw [inf_comm c (a ⊓ c)]; rw [inf_right_idem]; rw [inf_assoc]
+    _ = (b ⊔ a ⊔ c) * ((b ⊔ a) ⊓ c) / ((b ⊓ a ⊔ c) * (b ⊓ a ⊓ c)) := by rw [div_mul_div_comm]
+    _ = (b ⊔ a) * c / ((b ⊓ a) * c) := by
+        rw [mul_comm]; rw [inf_mul_sup]; rw [mul_comm (b ⊓ a ⊔ c)]; rw [inf_mul_sup]
+    _ = (b ⊔ a) / (b ⊓ a) := by
+        rw [div_eq_mul_inv]; rw [mul_inv_rev]; rw [mul_assoc]; rw [mul_inv_cancel_left]; rw [← div_eq_mul_inv]
+    _ = |a / b|ₘ := by rw [sup_div_inf_eq_mabs_div]
 
 中文:
 引理 mabs_div_sup_mul_mabs_div_inf
@@ -574,7 +583,16 @@ lemma mabs_div_sup_mul_mabs_div_inf
     |(a ⊔ c) / (b ⊔ c)|ₘ * |(a ⊓ c) / (b ⊓ c)|ₘ =
         (b ⊔ c ⊔ (a ⊔ c)) / ((b ⊔ c) ⊓ (a ⊔ c)) * |(a ⊓ c) / (b ⊓ c)|ₘ := by
         rw [sup_div_inf_eq_mabs_div]
-    _ = (b ⊔ c ⊔ (a ⊔ c)) / ((b ⊔ c) ⊓ (a ⊔ c)) * ((b ⊓ c ⊔ a ⊓ c) / 
+    _ = (b ⊔ c ⊔ (a ⊔ c)) / ((b ⊔ c) ⊓ (a ⊔ c)) * ((b ⊓ c ⊔ a ⊓ c) / (b ⊓ c ⊓ (a ⊓ c))) := by
+        rw [sup_div_inf_eq_mabs_div (b ⊓ c) (a ⊓ c)]
+    _ = (b ⊔ a ⊔ c) / (b ⊓ a ⊔ c) * (((b ⊔ a) ⊓ c) / (b ⊓ a ⊓ c)) := by
+        rw [← sup_inf_right]; rw [← inf_sup_right]; rw [sup_assoc]; rw [sup_comm c (a ⊔ c)]; rw [sup_right_idem]; rw [sup_assoc]; rw [inf_assoc]; rw [inf_comm c (a ⊓ c)]; rw [inf_right_idem]; rw [inf_assoc]
+    _ = (b ⊔ a ⊔ c) * ((b ⊔ a) ⊓ c) / ((b ⊓ a ⊔ c) * (b ⊓ a ⊓ c)) := by rw [div_mul_div_comm]
+    _ = (b ⊔ a) * c / ((b ⊓ a) * c) := by
+        rw [mul_comm]; rw [inf_mul_sup]; rw [mul_comm (b ⊓ a ⊔ c)]; rw [inf_mul_sup]
+    _ = (b ⊔ a) / (b ⊓ a) := by
+        rw [div_eq_mul_inv]; rw [mul_inv_rev]; rw [mul_assoc]; rw [mul_inv_cancel_left]; rw [← div_eq_mul_inv]
+    _ = |a / b|ₘ := by rw [sup_div_inf_eq_mabs_div]
 
 Depends on / 依赖: CommGroup, CommGroup.toDistribLattice, DistribLattice, inf_sup_right, sup_assoc, sup_comm, sup_div_inf_eq_mabs_div, sup_inf_right, toDistribLattice
 -/

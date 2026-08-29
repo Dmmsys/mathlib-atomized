@@ -206,7 +206,7 @@ theorem induction_on
   have h1 : C 1 := neg_neg (1 : FreeRing α) ▸ hn _ hn1
   FreeAbelianGroup.induction_on z (neg_add_cancel (1 : FreeRing α) ▸ ha _ _ hn1 h1)
     (fun m => List.recOn m h1 fun a _ ih => hm _ _ (hb a) ih)
-    (fun _ ih => hn 
+    (fun _ ih => hn _ ih) ha
 
 中文:
 定理 induction_on
@@ -215,7 +215,7 @@ theorem induction_on
   have h1 : C 1 := neg_neg (1 : FreeRing α) ▸ hn _ hn1
   FreeAbelianGroup.induction_on z (neg_add_cancel (1 : FreeRing α) ▸ ha _ _ hn1 h1)
     (fun m => List.recOn m h1 fun a _ ih => hm _ _ (hb a) ih)
-    (fun _ ih => hn 
+    (fun _ ih => hn _ ih) ha
 -/
 protected theorem induction_on {C : FreeRing α -> Prop} (z : FreeRing α) (hn1 : C (-1))
     (hb : forall b, C (of b)) (ha : forall x y, C x -> C y -> C (x + y)) (hm : forall x y, C x -> C y -> C (x * y)) :

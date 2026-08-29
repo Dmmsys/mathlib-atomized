@@ -75,7 +75,7 @@ theorem modEq_iff_natModEq
   · rw [Nat.ModEq]
     intro h
     rw [← Nat.div_add_mod' a n]; rw [← Nat.div_add_mod' b n]; rw [← Nat.nsmul_eq_mul]; rw [← Nat.nsmul_eq_mul]; rw [h]
-.trans (nsmul_add_modEq _).symm exact nsmul_ad
+.trans (nsmul_add_modEq _).symm exact nsmul_add_modEq _
 
 中文:
 定理 modEq_iff_natModEq
@@ -89,7 +89,7 @@ theorem modEq_iff_natModEq
   · rw [Nat.ModEq]
     intro h
     rw [← Nat.div_add_mod' a n]; rw [← Nat.div_add_mod' b n]; rw [← Nat.nsmul_eq_mul]; rw [← Nat.nsmul_eq_mul]; rw [h]
-.trans (nsmul_add_modEq _).symm exact nsmul_ad
+.trans (nsmul_add_modEq _).symm exact nsmul_add_modEq _
 
 Depends on / 依赖: Nat.ModEq, Nat.div_add_mod, Nat.nsmul_eq_mul, div_add_mod, modEq_iff_nsmul, nsmul_add_modEq, nsmul_eq_mul
 -/
@@ -1857,7 +1857,13 @@ lemma cancel_left_div_gcd
   rw [modEq_iff_dvd]
   refine @Int.dvd_of_dvd_mul_right_of_gcd_one (m / d) (c / d) (b - a) ?_ ?_
   · show (m / d : Int) ∣ c / d * (b - a)
-    rw [mul_comm]; rw [← Int.mul_ediv_assoc (b - a) (Int.natCast_dvd_natCast.
+    rw [mul_comm]; rw [← Int.mul_ediv_assoc (b - a) (Int.natCast_dvd_natCast.mpr hcd)]; rw [mul_comm]
+    apply Int.ediv_dvd_ediv (Int.natCast_dvd_natCast.mpr hmd)
+    rw [Int.mul_sub]
+    exact modEq_iff_dvd.mp h
+  · show Int.gcd (m / d) (c / d) = 1
+    simp only [d, ← Int.natCast_div, Int.gcd_natCast_natCast (m / d) (c / d),
+      gcd_div hmd hcd, Nat.div_self (gcd_pos_of_pos_left c hm)]
 
 中文:
 引理 cancel_left_div_gcd
@@ -1870,7 +1876,13 @@ lemma cancel_left_div_gcd
   rw [modEq_iff_dvd]
   refine @Int.dvd_of_dvd_mul_right_of_gcd_one (m / d) (c / d) (b - a) ?_ ?_
   · show (m / d : Int) ∣ c / d * (b - a)
-    rw [mul_comm]; rw [← Int.mul_ediv_assoc (b - a) (Int.natCast_dvd_natCast.
+    rw [mul_comm]; rw [← Int.mul_ediv_assoc (b - a) (Int.natCast_dvd_natCast.mpr hcd)]; rw [mul_comm]
+    apply Int.ediv_dvd_ediv (Int.natCast_dvd_natCast.mpr hmd)
+    rw [Int.mul_sub]
+    exact modEq_iff_dvd.mp h
+  · show Int.gcd (m / d) (c / d) = 1
+    simp only [d, ← Int.natCast_div, Int.gcd_natCast_natCast (m / d) (c / d),
+      gcd_div hmd hcd, Nat.div_self (gcd_pos_of_pos_left c hm)]
 
 Depends on / 依赖: Int.dvd_of_dvd_mul_right_of_gcd_one, Int.ediv_dvd_ediv, Int.gcd, Int.gcd_natCast_natCast, Int.mul_ediv_assoc, Int.mul_sub, Int.natCast_div, Int.natCast_dvd_natCast.mpr, dvd_of_dvd_mul_right_of_gcd_one, ediv_dvd_ediv, gcd_dvd_left, gcd_dvd_right, gcd_natCast_natCast, modEq_iff_dvd, modEq_iff_dvd.mp, mul_comm, mul_ediv_assoc, mul_sub, natCast_div, natCast_dvd_natCast
 -/
@@ -2027,7 +2039,30 @@ definition chineseRemainder'
       · exact h.symm
       · rfl⟩
     else
-      ⟨let (c, d) := xgcd n m; Int.toNat ((n * c * b + m * d * a) 
+      ⟨let (c, d) := xgcd n m; Int.toNat ((n * c * b + m * d * a) / gcd n m % lcm n m), by
+        rw [xgcd_val]
+        dsimp
+        rw [modEq_iff_dvd]; rw [modEq_iff_dvd]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ (Int.natCast_ne_zero.2 (lcm_ne_zero hn hm)))]
+        have hnonzero : (gcd n m : Int) != 0 := by
+          norm_cast
+          rw [Nat.gcd_eq_zero_iff]; rw [not_and]
+          exact fun _ => hm
+        have hcoedvd : forall t, (gcd n m : Int) ∣ t * (b - a) := fun t => h.dvd.mul_left _
+        have := gcd_eq_gcd_ab n m
+        constructor <;> rw [Int.emod_def, ← sub_add] <;>
+            refine Int.dvd_add ?_ (dvd_mul_of_dvd_left ?_ _) <;>
+          try norm_cast
+        · rw [← sub_eq_iff_eq_add'] at this
+          rw [← this]; rw [Int.sub_mul]; rw [← add_sub_assoc]; rw [add_comm]; rw [add_sub_assoc]; rw [← Int.mul_sub]; rw [Int.add_ediv_of_dvd_left]; rw [Int.mul_ediv_cancel_left _ hnonzero]; rw [Int.mul_ediv_assoc _ h.dvd]; rw [← sub_sub]; rw [sub_self]; rw [zero_sub]; rw [Int.dvd_neg]; rw [mul_assoc]
+          · exact dvd_mul_right _ _
+          norm_cast
+          exact dvd_mul_right _ _
+        · exact dvd_lcm_left n m
+        · rw [← sub_eq_iff_eq_add] at this
+          rw [← this]; rw [Int.sub_mul]; rw [sub_add]; rw [← Int.mul_sub]; rw [Int.sub_ediv_of_dvd]; rw [Int.mul_ediv_cancel_left _ hnonzero]; rw [Int.mul_ediv_assoc _ h.dvd]; rw [← sub_add]; rw [sub_self]; rw [zero_add]; rw [mul_assoc]
+          · exact dvd_mul_right _ _
+          · exact hcoedvd _
+        · exact dvd_lcm_right n m⟩
 
 中文:
 定义 chineseRemainder'
@@ -2042,7 +2077,30 @@ definition chineseRemainder'
       · exact h.symm
       · rfl⟩
     else
-      ⟨let (c, d) := xgcd n m; Int.toNat ((n * c * b + m * d * a) 
+      ⟨let (c, d) := xgcd n m; Int.toNat ((n * c * b + m * d * a) / gcd n m % lcm n m), by
+        rw [xgcd_val]
+        dsimp
+        rw [modEq_iff_dvd]; rw [modEq_iff_dvd]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ (Int.natCast_ne_zero.2 (lcm_ne_zero hn hm)))]
+        have hnonzero : (gcd n m : Int) != 0 := by
+          norm_cast
+          rw [Nat.gcd_eq_zero_iff]; rw [not_and]
+          exact fun _ => hm
+        have hcoedvd : forall t, (gcd n m : Int) ∣ t * (b - a) := fun t => h.dvd.mul_left _
+        have := gcd_eq_gcd_ab n m
+        constructor <;> rw [Int.emod_def, ← sub_add] <;>
+            refine Int.dvd_add ?_ (dvd_mul_of_dvd_left ?_ _) <;>
+          try norm_cast
+        · rw [← sub_eq_iff_eq_add'] at this
+          rw [← this]; rw [Int.sub_mul]; rw [← add_sub_assoc]; rw [add_comm]; rw [add_sub_assoc]; rw [← Int.mul_sub]; rw [Int.add_ediv_of_dvd_left]; rw [Int.mul_ediv_cancel_left _ hnonzero]; rw [Int.mul_ediv_assoc _ h.dvd]; rw [← sub_sub]; rw [sub_self]; rw [zero_sub]; rw [Int.dvd_neg]; rw [mul_assoc]
+          · exact dvd_mul_right _ _
+          norm_cast
+          exact dvd_mul_right _ _
+        · exact dvd_lcm_left n m
+        · rw [← sub_eq_iff_eq_add] at this
+          rw [← this]; rw [Int.sub_mul]; rw [sub_add]; rw [← Int.mul_sub]; rw [Int.sub_ediv_of_dvd]; rw [Int.mul_ediv_cancel_left _ hnonzero]; rw [Int.mul_ediv_assoc _ h.dvd]; rw [← sub_add]; rw [sub_self]; rw [zero_add]; rw [mul_assoc]
+          · exact dvd_mul_right _ _
+          · exact hcoedvd _
+        · exact dvd_lcm_right n m⟩
 
 Depends on / 依赖: Int.emod_nonneg, Int.natCast_ne_zero, Int.toNat, Int.toNat_of_nonneg, Nat.gcd_eq_zero, emod_nonneg, gcd_eq_zero, gcd_zero_left, gcd_zero_right, h.symm, hnonzero, lcm_ne_zero, modEq_iff_dvd, natCast_ne_zero, toNat_of_nonneg, xgcd_val
 -/
@@ -2204,7 +2262,7 @@ theorem modEq_and_modEq_iff_modEq_mul
     rw [Nat.modEq_iff_dvd]; rw [Nat.modEq_iff_dvd]; rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast] at h
     rw [Nat.modEq_iff_dvd]; rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]
     exact hmn.mul_dvd_of_dvd_of_dvd h.1 h.2,
-
+   fun h => ⟨h.of_mul_right _, h.of_mul_left _⟩⟩
 
 中文:
 定理 modEq_and_modEq_iff_modEq_mul
@@ -2213,7 +2271,7 @@ theorem modEq_and_modEq_iff_modEq_mul
     rw [Nat.modEq_iff_dvd]; rw [Nat.modEq_iff_dvd]; rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast] at h
     rw [Nat.modEq_iff_dvd]; rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]
     exact hmn.mul_dvd_of_dvd_of_dvd h.1 h.2,
-
+   fun h => ⟨h.of_mul_right _, h.of_mul_left _⟩⟩
 
 Depends on / 依赖: Int.dvd_natAbs, Int.natCast_dvd_natCast, Nat.modEq_iff_dvd, Subfield, Subsingleton, Subsingleton.elim, Subtype, Subtype.prop, ZMod.castHom, castHom, dvd_natAbs, dvd_rfl, h.of_mul_left, h.of_mul_right, hmn.mul_dvd_of_dvd_of_dvd, modEq_iff_dvd, mul_dvd_of_dvd_of_dvd, natCast_dvd_natCast, of_mul_left, of_mul_right
 -/
@@ -2238,7 +2296,7 @@ theorem coprime_of_mul_modEq_one
   calc
     1 ≡ a * b [MOD a.gcd n] := (hh ▸ h).symm.of_mul_right g
     _ ≡ 0 * b [MOD a.gcd n] := (Nat.modEq_zero_iff_dvd.mpr (Nat.gcd_dvd_left _ _)).mul_right b
-    _ = 
+    _ = 0 := by rw [zero_mul]
 
 中文:
 定理 coprime_of_mul_modEq_one
@@ -2250,7 +2308,7 @@ theorem coprime_of_mul_modEq_one
   calc
     1 ≡ a * b [MOD a.gcd n] := (hh ▸ h).symm.of_mul_right g
     _ ≡ 0 * b [MOD a.gcd n] := (Nat.modEq_zero_iff_dvd.mpr (Nat.gcd_dvd_left _ _)).mul_right b
-    _ = 
+    _ = 0 := by rw [zero_mul]
 
 Depends on / 依赖: Nat.coprime_iff_gcd_eq_one, Nat.dvd_one, Nat.gcd_dvd_left, Nat.gcd_dvd_right, Nat.modEq_zero_iff_dvd, Nat.modEq_zero_iff_dvd.mpr, a.gcd, coprime_iff_gcd_eq_one, dvd_one, gcd_dvd_left, gcd_dvd_right, modEq_zero_iff_dvd, mul_right, of_mul_right, symm.of_mul_right, zero_mul
 -/
@@ -2277,7 +2335,12 @@ theorem add_mod_add_ite
         Nat.div_lt_of_lt_mul
           (by
             rw [mul_two]
-      
+            exact
+              add_lt_add (Nat.mod_lt _ (Nat.pos_of_ne_zero hc0))
+                (Nat.mod_lt _ (Nat.pos_of_ne_zero hc0)))
+      have h0 : 0 < (a % c + b % c) / c := Nat.div_pos h (Nat.pos_of_ne_zero hc0)
+      rw [← @add_right_cancel_iff _ _ _ (c * ((a % c + b % c) / c))]; rw [add_comm _ c]; rw [add_assoc]; rw [mod_add_div]; rw [le_antisymm (le_of_lt_succ h2) h0]; rw [mul_one]; rw [add_comm]
+    · rw [Nat.mod_eq_of_lt (lt_of_not_ge h), add_zero]
 
 中文:
 定理 add_mod_add_ite
@@ -2291,7 +2354,12 @@ theorem add_mod_add_ite
         Nat.div_lt_of_lt_mul
           (by
             rw [mul_two]
-      
+            exact
+              add_lt_add (Nat.mod_lt _ (Nat.pos_of_ne_zero hc0))
+                (Nat.mod_lt _ (Nat.pos_of_ne_zero hc0)))
+      have h0 : 0 < (a % c + b % c) / c := Nat.div_pos h (Nat.pos_of_ne_zero hc0)
+      rw [← @add_right_cancel_iff _ _ _ (c * ((a % c + b % c) / c))]; rw [add_comm _ c]; rw [add_assoc]; rw [mod_add_div]; rw [le_antisymm (le_of_lt_succ h2) h0]; rw [mul_one]; rw [add_comm]
+    · rw [Nat.mod_eq_of_lt (lt_of_not_ge h), add_zero]
 
 Depends on / 依赖: Nat.div_lt_of_lt_mul, Nat.div_pos, Nat.mod_lt, Nat.mod_zero, Nat.pos_of_ne_zero, add_comm, add_lt_add, add_right_cancel_iff, div_lt_of_lt_mul, div_pos, mod_lt, mod_modEq, mod_zero, mul_two, pos_of_ne_zero, split_ifs
 -/
@@ -2583,7 +2651,7 @@ theorem odd_mul_odd_div_two
 mul_right_injective₀ two_ne_zero by
     dsimp
     rw [mul_add]; rw [two_mul_odd_div_two hm1]; rw [mul_left_comm]; rw [two_mul_odd_div_two hn1]; rw [two_mul_odd_div_two (Nat.odd_mul_odd hm1 hn1)]; rw [Nat.mul_sub]; rw [mul_one]; rw [←
-      
+      Nat.add_sub_assoc (by lia)]; rw [Nat.sub_add_cancel (Nat.le_mul_of_pos_right m hn0)]
 
 中文:
 定理 odd_mul_odd_div_two
@@ -2592,7 +2660,7 @@ mul_right_injective₀ two_ne_zero by
 mul_right_injective₀ two_ne_zero by
     dsimp
     rw [mul_add]; rw [two_mul_odd_div_two hm1]; rw [mul_left_comm]; rw [two_mul_odd_div_two hn1]; rw [two_mul_odd_div_two (Nat.odd_mul_odd hm1 hn1)]; rw [Nat.mul_sub]; rw [mul_one]; rw [←
-      
+      Nat.add_sub_assoc (by lia)]; rw [Nat.sub_add_cancel (Nat.le_mul_of_pos_right m hn0)]
 
 Depends on / 依赖: Nat.add_sub_assoc, Nat.le_mul_of_pos_right, Nat.mul_sub, Nat.odd_mul_odd, Nat.pos_of_ne_zero, Nat.sub_add_cancel, add_sub_assoc, le_mul_of_pos_right, mul_add, mul_left_comm, mul_one, mul_sub, odd_mul_odd, pos_of_ne_zero, sub_add_cancel, two_mul_odd_div_two, two_ne_zero
 -/

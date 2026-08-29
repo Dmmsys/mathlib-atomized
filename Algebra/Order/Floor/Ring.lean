@@ -908,7 +908,7 @@ theorem abs_sub_lt_one_of_floor_eq_floor
     _ = a - b := abs_of_nonneg (sub_nonneg_of_le h0)
     _ < ⌊a⌋ + 1 - b := sub_lt_sub_right (lt_floor_add_one a) _
     _ <= ⌊a⌋ + 1 - ⌊b⌋ := sub_le_sub_left (floor_le b) _
-    _ = 1 :
+    _ = 1 := by rw [h, add_sub_cancel_left]
 
 中文:
 定理 abs_sub_lt_one_of_floor_eq_floor
@@ -922,7 +922,7 @@ theorem abs_sub_lt_one_of_floor_eq_floor
     _ = a - b := abs_of_nonneg (sub_nonneg_of_le h0)
     _ < ⌊a⌋ + 1 - b := sub_lt_sub_right (lt_floor_add_one a) _
     _ <= ⌊a⌋ + 1 - ⌊b⌋ := sub_le_sub_left (floor_le b) _
-    _ = 1 :
+    _ = 1 := by rw [h, add_sub_cancel_left]
 
 Depends on / 依赖: abs_of_nonneg, abs_sub_comm, add_sub_cancel_left, floor_le, generalizing, h.symm, le_of_not_ge, lt_floor_add_one, sub_le_sub_left, sub_lt_sub_right, sub_nonneg_of_le
 -/
@@ -1940,7 +1940,8 @@ theorem fract_eq_iff
     rintro ⟨h₀, h₁, z, hz⟩
     rw [← self_sub_floor]; rw [eq_comm]; rw [eq_sub_iff_add_eq]; rw [add_comm]; rw [← eq_sub_iff_add_eq]; rw [hz]
     refine congrArg Int.cast ?_
-    rw [floor_eq_iff]; r
+    rw [floor_eq_iff]; rw [← hz]
+    constructor <;> simpa [sub_eq_add_neg, add_assoc] ⟩
 
 中文:
 定理 fract_eq_iff
@@ -1953,7 +1954,8 @@ theorem fract_eq_iff
     rintro ⟨h₀, h₁, z, hz⟩
     rw [← self_sub_floor]; rw [eq_comm]; rw [eq_sub_iff_add_eq]; rw [add_comm]; rw [← eq_sub_iff_add_eq]; rw [hz]
     refine congrArg Int.cast ?_
-    rw [floor_eq_iff]; r
+    rw [floor_eq_iff]; rw [← hz]
+    constructor <;> simpa [sub_eq_add_neg, add_assoc] ⟩
 
 Depends on / 依赖: Int.cast, add_assoc, add_comm, eq_comm, eq_sub_iff_add_eq, floor_eq_iff, fract_lt_one, fract_nonneg, self_sub_floor, sub_eq_add_neg, sub_sub_cancel
 -/
@@ -2110,7 +2112,9 @@ theorem fract_neg
   refine ⟨sub_lt_self _ (lt_of_le_of_ne' (fract_nonneg x) hx), -⌊x⌋ - 1, ?_⟩
   simp only [sub_sub_eq_add_sub, cast_sub, cast_neg, cast_one, sub_left_inj]
   conv in -x => rw [← floor_add_fract x]
- 
+  simp [-floor_add_fract]
+
+@[simp]
 
 中文:
 定理 fract_neg
@@ -2124,7 +2128,9 @@ theorem fract_neg
   refine ⟨sub_lt_self _ (lt_of_le_of_ne' (fract_nonneg x) hx), -⌊x⌋ - 1, ?_⟩
   simp only [sub_sub_eq_add_sub, cast_sub, cast_neg, cast_one, sub_left_inj]
   conv in -x => rw [← floor_add_fract x]
- 
+  simp [-floor_add_fract]
+
+@[simp]
 
 Depends on / 依赖: cast_neg, cast_one, cast_sub, floor_add_fract, fract_eq_iff, fract_lt_one, fract_nonneg, le_sub_iff_add_le, lt_of_le_of_ne, sub_left_inj, sub_lt_self, sub_sub_eq_add_sub, zero_add
 -/
@@ -2260,7 +2266,7 @@ theorem image_fract
     exact ⟨⌊y⌋, ⟨y, hy, rfl⟩, fract_nonneg y, fract_lt_one y⟩
   · rintro ⟨m, ⟨y, hys, rfl⟩, h0, h1⟩
     obtain rfl : ⌊y⌋ = m := floor_eq_iff.2 ⟨sub_nonneg.1 h0, sub_lt_iff_lt_add'.1 h1⟩
-    exact ⟨y, h
+    exact ⟨y, hys, rfl⟩
 
 中文:
 定理 image_fract
@@ -2273,7 +2279,7 @@ theorem image_fract
     exact ⟨⌊y⌋, ⟨y, hy, rfl⟩, fract_nonneg y, fract_lt_one y⟩
   · rintro ⟨m, ⟨y, hys, rfl⟩, h0, h1⟩
     obtain rfl : ⌊y⌋ = m := floor_eq_iff.2 ⟨sub_nonneg.1 h0, sub_lt_iff_lt_add'.1 h1⟩
-    exact ⟨y, h
+    exact ⟨y, hys, rfl⟩
 
 Depends on / 依赖: floor_eq_iff, fract_lt_one, fract_nonneg, mem_iUnion, mem_image, mem_inter_iff, sub_lt_iff_lt_add, sub_nonneg
 -/
@@ -2400,7 +2406,10 @@ theorem fract_div_natCast_eq_div_natCast_mod
   refine fract_eq_iff.mpr ⟨?_, ?_, m / n, ?_⟩
   · positivity
   · simpa only [div_lt_one hn', Nat.cast_lt] using m.mod_lt hn
-  · rw [sub_eq_iff_eq_add', ← mul_right_inj' hn'.ne', mul_div_cancel₀ _ hn'.n
+  · rw [sub_eq_iff_eq_add', ← mul_right_inj' hn'.ne', mul_div_cancel₀ _ hn'.ne', mul_add,
+      mul_div_cancel₀ _ hn'.ne']
+    norm_cast
+    rw [← Nat.cast_add]; rw [Nat.mod_add_div m n]
 
 中文:
 定理 fract_div_natCast_eq_div_natCast_mod
@@ -2414,7 +2423,10 @@ theorem fract_div_natCast_eq_div_natCast_mod
   refine fract_eq_iff.mpr ⟨?_, ?_, m / n, ?_⟩
   · positivity
   · simpa only [div_lt_one hn', Nat.cast_lt] using m.mod_lt hn
-  · rw [sub_eq_iff_eq_add', ← mul_right_inj' hn'.ne', mul_div_cancel₀ _ hn'.n
+  · rw [sub_eq_iff_eq_add', ← mul_right_inj' hn'.ne', mul_div_cancel₀ _ hn'.ne', mul_add,
+      mul_div_cancel₀ _ hn'.ne']
+    norm_cast
+    rw [← Nat.cast_add]; rw [Nat.mod_add_div m n]
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_lt, Nat.mod_add_div, cast_add, cast_lt, div_lt_one, eq_zero_or_pos, fract_eq_iff, fract_eq_iff.mpr, m.mod_lt, mod_add_div, mod_lt, mul_add, mul_right_inj, n.eq_zero_or_pos, sub_eq_iff_eq_add
 -/
@@ -2444,7 +2456,26 @@ theorem fract_div_intCast_eq_div_intCast_mod
   have : forall {l : Int}, 0 <= l -> fract ((l : k) / n) = ↑(l % n) / n := by
     intro l hl
     obtain ⟨l₀, rfl | rfl⟩ := l.eq_nat_or_neg
-    · rw [cast_natCast, ← natCast_mod, cast_natCast, fract_div_n
+    · rw [cast_natCast, ← natCast_mod, cast_natCast, fract_div_natCast_eq_div_natCast_mod]
+    · rw [Right.nonneg_neg_iff, natCast_nonpos_iff] at hl
+      simp [hl]
+  obtain ⟨m₀, rfl | rfl⟩ := m.eq_nat_or_neg
+  · exact this (natCast_nonneg m₀)
+  let q := ⌈↑m₀ / (n : k)⌉
+  let m₁ := q * ↑n - (↑m₀ : Int)
+  have hm₁ : 0 <= m₁ := by
+    simpa [m₁, ← @cast_le k, ← div_le_iff₀ hn] using FloorRing.gc_ceil_coe.le_u_l _
+  calc
+    fract ((Int.cast (-(m₀ : Int)) : k) / (n : k))
+      = fract (-(m₀ : k) / n) := by simp
+    _ = fract ((m₁ : k) / n) := ?_
+    _ = Int.cast (m₁ % (n : Int)) / Nat.cast n := this hm₁
+    _ = Int.cast (-(↑m₀ : Int) % ↑n) / Nat.cast n := ?_
+  · rw [← fract_intCast_add q, ← mul_div_cancel_right₀ (q : k) hn.ne', ← add_div, ← sub_eq_add_neg]
+    simp [m₁]
+  · congr 2
+    simp only [m₁]
+    rw [sub_eq_add_neg]; rw [add_comm (q * ↑n)]; rw [add_mul_emod_self_right]
 
 中文:
 定理 fract_div_intCast_eq_div_intCast_mod
@@ -2456,7 +2487,26 @@ theorem fract_div_intCast_eq_div_intCast_mod
   have : forall {l : Int}, 0 <= l -> fract ((l : k) / n) = ↑(l % n) / n := by
     intro l hl
     obtain ⟨l₀, rfl | rfl⟩ := l.eq_nat_or_neg
-    · rw [cast_natCast, ← natCast_mod, cast_natCast, fract_div_n
+    · rw [cast_natCast, ← natCast_mod, cast_natCast, fract_div_natCast_eq_div_natCast_mod]
+    · rw [Right.nonneg_neg_iff, natCast_nonpos_iff] at hl
+      simp [hl]
+  obtain ⟨m₀, rfl | rfl⟩ := m.eq_nat_or_neg
+  · exact this (natCast_nonneg m₀)
+  let q := ⌈↑m₀ / (n : k)⌉
+  let m₁ := q * ↑n - (↑m₀ : Int)
+  have hm₁ : 0 <= m₁ := by
+    simpa [m₁, ← @cast_le k, ← div_le_iff₀ hn] using FloorRing.gc_ceil_coe.le_u_l _
+  calc
+    fract ((Int.cast (-(m₀ : Int)) : k) / (n : k))
+      = fract (-(m₀ : k) / n) := by simp
+    _ = fract ((m₁ : k) / n) := ?_
+    _ = Int.cast (m₁ % (n : Int)) / Nat.cast n := this hm₁
+    _ = Int.cast (-(↑m₀ : Int) % ↑n) / Nat.cast n := ?_
+  · rw [← fract_intCast_add q, ← mul_div_cancel_right₀ (q : k) hn.ne', ← add_div, ← sub_eq_add_neg]
+    simp [m₁]
+  · congr 2
+    simp only [m₁]
+    rw [sub_eq_add_neg]; rw [add_comm (q * ↑n)]; rw [add_mul_emod_self_right]
 
 Depends on / 依赖: Right.nonneg_neg_iff, cast_natCast, eq_nat_or_neg, eq_zero_or_pos, fract_div_natCast_eq_div_natCast_mod, l.eq_nat_or_neg, m.eq_nat_or_neg, n.eq_zero_or_pos, natCast_mod, natCast_nonneg, natCast_nonpos_iff, nonneg_neg_iff, replace
 -/
@@ -3364,7 +3414,8 @@ lemma ceil_eq_floor_add_one_iff_notMem
     rw [h]; rw [cast_add]; rw [cast_one]; rw [left_eq_add] at h0
     exact one_ne_zero h0
   · apply le_antisymm (Int.ceil_le_floor_add_one _)
-    rw [add_one_le_if
+    rw [add_one_le_iff]; rw [lt_ceil]
+    exact lt_of_le_of_ne (Int.floor_le a) ((iff_false_right h).mp (floor_eq_self_iff_mem a))
 
 中文:
 引理 ceil_eq_floor_add_one_iff_notMem
@@ -3376,7 +3427,8 @@ lemma ceil_eq_floor_add_one_iff_notMem
     rw [h]; rw [cast_add]; rw [cast_one]; rw [left_eq_add] at h0
     exact one_ne_zero h0
   · apply le_antisymm (Int.ceil_le_floor_add_one _)
-    rw [add_one_le_if
+    rw [add_one_le_iff]; rw [lt_ceil]
+    exact lt_of_le_of_ne (Int.floor_le a) ((iff_false_right h).mp (floor_eq_self_iff_mem a))
 
 Depends on / 依赖: Int.ceil_le_floor_add_one, Int.floor_le, add_one_le_iff, cast_add, cast_one, ceil_eq_self_iff_mem, ceil_le_floor_add_one, floor_eq_self_iff_mem, floor_le, iff_false_right, le_antisymm, left_eq_add, lt_ceil, lt_of_le_of_ne, one_ne_zero
 -/
@@ -3405,7 +3457,8 @@ theorem fract_eq_zero_or_add_one_sub_ceil
     abel
   rw [← Int.cast_one]; rw [← Int.cast_add]
   refine congrArg Int.cast (ceil_eq_iff.mpr ⟨?_, _root_.le_of_lt <| by simp⟩)
-  rw [cast_add]; rw [cast
+  rw [cast_add]; rw [cast_one]; rw [add_tsub_cancel_right]; rw [← self_sub_fract a]; rw [sub_lt_self_iff]
+  exact ha.symm.lt_of_le (fract_nonneg a)
 
 中文:
 定理 fract_eq_zero_or_add_one_sub_ceil
@@ -3420,7 +3473,8 @@ theorem fract_eq_zero_or_add_one_sub_ceil
     abel
   rw [← Int.cast_one]; rw [← Int.cast_add]
   refine congrArg Int.cast (ceil_eq_iff.mpr ⟨?_, _root_.le_of_lt <| by simp⟩)
-  rw [cast_add]; rw [cast
+  rw [cast_add]; rw [cast_one]; rw [add_tsub_cancel_right]; rw [← self_sub_fract a]; rw [sub_lt_self_iff]
+  exact ha.symm.lt_of_le (fract_nonneg a)
 
 Depends on / 依赖: Int.cast, Int.cast_add, Int.cast_one, Or.inl, _root_, _root_.le_of_lt, add_tsub_cancel_right, cast_add, cast_one, ceil_eq_iff, ceil_eq_iff.mpr, eq_or_ne, fract_nonneg, ha.symm.lt_of_le, le_of_lt, lt_of_le, self_sub_fract, sub_lt_self_iff
 -/
@@ -3538,7 +3592,8 @@ lemma ceil_div_ceil_inv_sub_one
   have : 0 < a - 1 := by linarith
 refine le_antisymm (ceil_le.2 <| div_le_self (by positivity) ha.le) ?_
   rw [le_ceil_iff]; rw [sub_lt_comm]; rw [div_eq_mul_inv]; rw [← mul_one_sub]; rw [← lt_div_iff₀ (sub_pos.2 <| inv_lt_one_of_one_lt₀ ha)]
-  convert ce
+  convert ceil_lt_add_one (R := k) _
+  field
 
 中文:
 引理 ceil_div_ceil_inv_sub_one
@@ -3550,7 +3605,8 @@ refine le_antisymm (ceil_le.2 <| div_le_self (by positivity) ha.le) ?_
   have : 0 < a - 1 := by linarith
 refine le_antisymm (ceil_le.2 <| div_le_self (by positivity) ha.le) ?_
   rw [le_ceil_iff]; rw [sub_lt_comm]; rw [div_eq_mul_inv]; rw [← mul_one_sub]; rw [← lt_div_iff₀ (sub_pos.2 <| inv_lt_one_of_one_lt₀ ha)]
-  convert ce
+  convert ceil_lt_add_one (R := k) _
+  field
 
 Depends on / 依赖: ceil_le, ceil_lt_add_one, convert, div_eq_mul_inv, div_le_self, eq_or_lt, ha.eq_or_lt, ha.le, le_antisymm, le_ceil_iff, mul_one_sub, sub_lt_comm, sub_pos
 -/
@@ -3579,7 +3635,8 @@ lemma ceil_lt_mul
     calc
       ⌈a⌉ < a + 1 := ceil_lt_add_one _
       _ = a + (b - 1) * (b - 1)⁻¹ := by rw [mul_inv_cancel₀]; positivity
-
+      _ <= a + (b - 1) * a := by gcongr
+      _ = b * a := by rw [sub_one_mul, add_sub_cancel]
 
 中文:
 引理 ceil_lt_mul
@@ -3594,7 +3651,8 @@ lemma ceil_lt_mul
     calc
       ⌈a⌉ < a + 1 := ceil_lt_add_one _
       _ = a + (b - 1) * (b - 1)⁻¹ := by rw [mul_inv_cancel₀]; positivity
-
+      _ <= a + (b - 1) * a := by gcongr
+      _ = b * a := by rw [sub_one_mul, add_sub_cancel]
 
 Depends on / 依赖: add_sub_cancel, ceil_lt_add_one, le_total, sub_one_mul, sub_pos
 -/

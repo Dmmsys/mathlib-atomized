@@ -267,7 +267,12 @@ theorem completeSpace
     · exact this inferInstance
     · intro f
       use (SeparationQuotient.outCLM _ _).compContinuousAlternatingMap f
-      e
+      ext
+      simp
+  have := ContinuousMultilinearMap.completeSpace (F := F) h
+  rw [completeSpace_iff_isComplete_range
+    isUniformEmbedding_toContinuousMultilinearMap.isUniformInducing]
+  apply isClosed_range_toContinuousMultilinearMap.isComplete
 
 中文:
 定理 completeSpace
@@ -279,7 +284,12 @@ theorem completeSpace
     · exact this inferInstance
     · intro f
       use (SeparationQuotient.outCLM _ _).compContinuousAlternatingMap f
-      e
+      ext
+      simp
+  have := ContinuousMultilinearMap.completeSpace (F := F) h
+  rw [completeSpace_iff_isComplete_range
+    isUniformEmbedding_toContinuousMultilinearMap.isUniformInducing]
+  apply isClosed_range_toContinuousMultilinearMap.isComplete
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.completeSpace, SeparationQuotient, SeparationQuotient.isUniformInducing_mk, SeparationQuotient.mkCLM, SeparationQuotient.outCLM, T2Space, compContinuousAlternatingMap, completeSpace, completeSpace_congr, completeSpace_iff_isComplete_range, generalizing, isClosed_range_toContinuousMultilinearMap, isClosed_range_toContinuousMultilinearMap.isComplete, isComplete, isUniformEmbedding_toContinuousMultilinearMap, isUniformEmbedding_toContinuousMultilinearMap.isUniformInducing, isUniformInducing, isUniformInducing_mk, isUniformInducing_postcomp
 -/
@@ -910,7 +920,17 @@ definition compContinuousAlternatingMapCLM
       cont := by
         rw [ContinuousAlternatingMap.isEmbedding_toContinuousMultilinearMap.continuous_iff]
         exact (map_continuous <| compContinuousMultilinearMapL 𝕜 (fun _ : ι => E) F G g).comp
-          ContinuousAlternatingMap.conti
+          ContinuousAlternatingMap.continuous_toContinuousMultilinearMap }
+  map_add' _ _ := by ext; simp
+  map_smul' _ _ := by ext; simp
+  cont := by
+    rw [ContinuousLinearMap.isEmbedding_postcomp
+      (ContinuousAlternatingMap.toContinuousMultilinearMapCLM 𝕜)
+.continuous_iff] ContinuousAlternatingMap.isEmbedding_toContinuousMultilinearMap
+exact map_continuous
+      (precomp (ContinuousMultilinearMap 𝕜 (fun _ : ι => E) G)
+        ((ContinuousAlternatingMap.toContinuousMultilinearMapCLM 𝕜 : (E [⋀^ι]->L[𝕜] F) ->L[𝕜] _))) ∘L
+        (compContinuousMultilinearMapL 𝕜 (fun _ : ι => E) F G)
 
 中文:
 定义 compContinuousAlternatingMapCLM
@@ -919,7 +939,17 @@ definition compContinuousAlternatingMapCLM
       cont := by
         rw [ContinuousAlternatingMap.isEmbedding_toContinuousMultilinearMap.continuous_iff]
         exact (map_continuous <| compContinuousMultilinearMapL 𝕜 (fun _ : ι => E) F G g).comp
-          ContinuousAlternatingMap.conti
+          ContinuousAlternatingMap.continuous_toContinuousMultilinearMap }
+  map_add' _ _ := by ext; simp
+  map_smul' _ _ := by ext; simp
+  cont := by
+    rw [ContinuousLinearMap.isEmbedding_postcomp
+      (ContinuousAlternatingMap.toContinuousMultilinearMapCLM 𝕜)
+.continuous_iff] ContinuousAlternatingMap.isEmbedding_toContinuousMultilinearMap
+exact map_continuous
+      (precomp (ContinuousMultilinearMap 𝕜 (fun _ : ι => E) G)
+        ((ContinuousAlternatingMap.toContinuousMultilinearMapCLM 𝕜 : (E [⋀^ι]->L[𝕜] F) ->L[𝕜] _))) ∘L
+        (compContinuousMultilinearMapL 𝕜 (fun _ : ι => E) F G)
 
 Depends on / 依赖: Contin, ContinuousAlternatingMap, ContinuousAlternatingMap.continuous_toContinuousMultilinearMap, ContinuousAlternatingMap.isEmbedding_toContinuousMultilinearMap.continuous_iff, ContinuousAlternatingMap.toContinuousMultilinearMapCLM, ContinuousLinearMap, ContinuousLinearMap.isEmbedding_postcomp, compContinuousMultilinearMapL, continuous_iff, continuous_toContinuousMultilinearMap, isEmbedding_postcomp, isEmbedding_toContinuousMultilinearMap, map_add, map_continuous, map_smul, toContinuousMultilinearMapCLM, toLinearMap
 -/
@@ -972,7 +1002,9 @@ definition continuousAlternatingMapCongrRight
 continuous_toFun := map_continuous
     ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 E F G ι g.toContinuousLinearMap
 continuous_invFun := map_continuous
-   
+    ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 E G F ι g.symm.toContinuousLinearMap
+
+@[simp]
 
 中文:
 定义 continuousAlternatingMapCongrRight
@@ -982,7 +1014,9 @@ continuous_invFun := map_continuous
 continuous_toFun := map_continuous
     ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 E F G ι g.toContinuousLinearMap
 continuous_invFun := map_continuous
-   
+    ContinuousLinearMap.compContinuousAlternatingMapCLM 𝕜 E G F ι g.symm.toContinuousLinearMap
+
+@[simp]
 
 Depends on / 依赖: continuousAlternatingMapCongrRightEquiv, g.continuousAlternatingMapCongrRightEquiv
 -/
@@ -1031,7 +1065,8 @@ definition continuousAlternatingMapCongrLeft
   toFun g := g.compContinuousLinearMap (f.symm : E' ->L[𝕜] E)
   continuous_invFun :=
     (ContinuousAlternatingMap.compContinuousLinearMapCLM (f : E ->L[𝕜] E')).cont
-  continuo
+  continuous_toFun :=
+    (ContinuousAlternatingMap.compContinuousLinearMapCLM (f.symm : E' ->L[𝕜] E)).cont
 
 中文:
 定义 continuousAlternatingMapCongrLeft
@@ -1041,7 +1076,8 @@ definition continuousAlternatingMapCongrLeft
   toFun g := g.compContinuousLinearMap (f.symm : E' ->L[𝕜] E)
   continuous_invFun :=
     (ContinuousAlternatingMap.compContinuousLinearMapCLM (f : E ->L[𝕜] E')).cont
-  continuo
+  continuous_toFun :=
+    (ContinuousAlternatingMap.compContinuousLinearMapCLM (f.symm : E' ->L[𝕜] E)).cont
 
 Depends on / 依赖: continuousAlternatingMapCongrLeftEquiv, f.continuousAlternatingMapCongrLeftEquiv
 -/

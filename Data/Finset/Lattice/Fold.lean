@@ -768,7 +768,7 @@ theorem apply_sup_eq_sup_comp
 alias comp_sup_eq_sup_comp := apply_sup_eq_sup_comp
 
 @[deprecated (since := "2026-05-29")]
-alias comp_inf_eq_inf_comp := apply_inf
+alias comp_inf_eq_inf_comp := apply_inf_eq_inf_comp
 
 中文:
 定理 apply_sup_eq_sup_comp
@@ -780,7 +780,7 @@ alias comp_inf_eq_inf_comp := apply_inf
 alias comp_sup_eq_sup_comp := apply_sup_eq_sup_comp
 
 @[deprecated (since := "2026-05-29")]
-alias comp_inf_eq_inf_comp := apply_inf
+alias comp_inf_eq_inf_comp := apply_inf_eq_inf_comp
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, Function, Function.comp_apply, comp_apply, cons_induction_on, g_sup, sup_cons
 -/
@@ -962,7 +962,18 @@ theorem sup_le_of_le_directed
         sup_empty, forall_true_iff, notMem_empty]
     | insert a r _ ih =>
       intro h
-      have incs : (r : Set α) subseteq ↑
+      have incs : (r : Set α) subseteq ↑(insert a r) := by
+        rw [Finset.coe_subset]
+        apply Finset.subset_insert
+      -- x ∈ s is above the sup of r
+obtain ⟨x, ⟨hxs, hsx_sup⟩⟩ := ih fun x hx => h x incs hx
+      -- y ∈ s is above a
+      obtain ⟨y, hys, hay⟩ := h a (Finset.mem_insert_self a r)
+      -- z ∈ s is above x and y
+      obtain ⟨z, hzs, ⟨hxz, hyz⟩⟩ := hdir x hxs y hys
+      use z, hzs
+      rw [sup_insert]; rw [id]; rw [sup_le_iff]
+      exact ⟨le_trans hay hyz, le_trans hsx_sup hxz⟩
 
 中文:
 定理 sup_le_of_le_directed
@@ -975,7 +986,18 @@ theorem sup_le_of_le_directed
         sup_empty, forall_true_iff, notMem_empty]
     | insert a r _ ih =>
       intro h
-      have incs : (r : Set α) subseteq ↑
+      have incs : (r : Set α) subseteq ↑(insert a r) := by
+        rw [Finset.coe_subset]
+        apply Finset.subset_insert
+      -- x ∈ s is above the sup of r
+obtain ⟨x, ⟨hxs, hsx_sup⟩⟩ := ih fun x hx => h x incs hx
+      -- y ∈ s is above a
+      obtain ⟨y, hys, hay⟩ := h a (Finset.mem_insert_self a r)
+      -- z ∈ s is above x and y
+      obtain ⟨z, hzs, ⟨hxz, hyz⟩⟩ := hdir x hxs y hys
+      use z, hzs
+      rw [sup_insert]; rw [id]; rw [sup_le_iff]
+      exact ⟨le_trans hay hyz, le_trans hsx_sup hxz⟩
 
 Depends on / 依赖: Finset, Finset.coe_subset, Finset.induction_on, Finset.subset_insert, and_true, bot_le, classical, coe_subset, forall_prop_of_false, forall_prop_of_true, forall_true_iff, induction_on, insert, notMem_empty, not_false_iff, subset_insert, subseteq, sup_empty
 -/
@@ -1799,7 +1821,7 @@ alias comp_sup_eq_sup_comp_of_is_total := apply_sup_eq_sup_comp_of_linearOrder
 @[deprecated (since := "2026-05-29")]
 alias comp_inf_eq_inf_comp_of_is_total := apply_inf_eq_inf_comp_of_linearOrder
 
-@[to_dual (attr := s
+@[to_dual (attr := simp) inf_le_iff]
 
 中文:
 定理 apply_sup_eq_sup_comp_of_linearOrder
@@ -1812,7 +1834,7 @@ alias comp_sup_eq_sup_comp_of_is_total := apply_sup_eq_sup_comp_of_linearOrder
 @[deprecated (since := "2026-05-29")]
 alias comp_inf_eq_inf_comp_of_is_total := apply_inf_eq_inf_comp_of_linearOrder
 
-@[to_dual (attr := s
+@[to_dual (attr := simp) inf_le_iff]
 
 Depends on / 依赖: apply_sup_eq_sup_comp, map_sup, mono_g, mono_g.map_sup
 -/
@@ -1842,7 +1864,10 @@ theorem le_sup_iff
       rw [sup_cons]; rw [le_sup_iff]
       exact fun
       | Or.inl h => ⟨c, mem_cons.2 (Or.inl rfl), h⟩
-      | Or.inr h => let ⟨b, hb, hle⟩ := ih h; ⟨b, mem_cons
+      | Or.inr h => let ⟨b, hb, hle⟩ := ih h; ⟨b, mem_cons.2 (Or.inr hb), hle⟩
+  · exact fun ⟨b, hb, hle⟩ => le_trans hle (le_sup hb)
+
+@[to_dual]
 
 中文:
 定理 le_sup_iff
@@ -1856,7 +1881,10 @@ theorem le_sup_iff
       rw [sup_cons]; rw [le_sup_iff]
       exact fun
       | Or.inl h => ⟨c, mem_cons.2 (Or.inl rfl), h⟩
-      | Or.inr h => let ⟨b, hb, hle⟩ := ih h; ⟨b, mem_cons
+      | Or.inr h => let ⟨b, hb, hle⟩ := ih h; ⟨b, mem_cons.2 (Or.inr hb), hle⟩
+  · exact fun ⟨b, hb, hle⟩ => le_trans hle (le_sup hb)
+
+@[to_dual]
 -/
 protected theorem le_sup_iff (ha : ⊥ < a) : a <= s.sup f ↔ exists b in s, a <= f b := by
   apply Iff.intro
@@ -1941,7 +1969,10 @@ theorem lt_sup_iff
       rw [sup_cons]; rw [lt_sup_iff]
       exact fun
       | Or.inl h => ⟨c, mem_cons.2 (Or.inl rfl), h⟩
-      | Or.inr h => let ⟨b, hb, hlt⟩ := ih h; ⟨b, mem_cons.2 (Or.
+      | Or.inr h => let ⟨b, hb, hlt⟩ := ih h; ⟨b, mem_cons.2 (Or.inr hb), hlt⟩
+  · exact fun ⟨b, hb, hlt⟩ => lt_of_lt_of_le hlt (le_sup hb)
+
+@[to_dual (attr := simp) lt_inf_iff]
 
 中文:
 定理 lt_sup_iff
@@ -1954,7 +1985,10 @@ theorem lt_sup_iff
       rw [sup_cons]; rw [lt_sup_iff]
       exact fun
       | Or.inl h => ⟨c, mem_cons.2 (Or.inl rfl), h⟩
-      | Or.inr h => let ⟨b, hb, hlt⟩ := ih h; ⟨b, mem_cons.2 (Or.
+      | Or.inr h => let ⟨b, hb, hlt⟩ := ih h; ⟨b, mem_cons.2 (Or.inr hb), hlt⟩
+  · exact fun ⟨b, hb, hlt⟩ => lt_of_lt_of_le hlt (le_sup hb)
+
+@[to_dual (attr := simp) lt_inf_iff]
 -/
 protected theorem lt_sup_iff : a < s.sup f ↔ exists b in s, a < f b := by
   apply Iff.intro
@@ -2013,7 +2047,12 @@ theorem sup_mem_of_nonempty
     cases s.eq_empty_or_nonempty with
     | inl hs => simp [hs]
     | inr hs =>
-      simp only [Finset.coe_in
+      simp only [Finset.coe_insert]
+      rcases le_total (f a) (s.sup f) with (ha | ha)
+      · rw [sup_eq_right.mpr ha]
+        exact Set.image_mono (Set.subset_insert a s) (h hs)
+      · rw [sup_eq_left.mpr ha]
+        apply Set.mem_image_of_mem _ (Set.mem_insert a ↑s)
 
 中文:
 定理 sup_mem_of_nonempty
@@ -2028,7 +2067,12 @@ theorem sup_mem_of_nonempty
     cases s.eq_empty_or_nonempty with
     | inl hs => simp [hs]
     | inr hs =>
-      simp only [Finset.coe_in
+      simp only [Finset.coe_insert]
+      rcases le_total (f a) (s.sup f) with (ha | ha)
+      · rw [sup_eq_right.mpr ha]
+        exact Set.image_mono (Set.subset_insert a s) (h hs)
+      · rw [sup_eq_left.mpr ha]
+        apply Set.mem_image_of_mem _ (Set.mem_insert a ↑s)
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.induction, Finset.not_nonempty_empty, Finset.sup_insert, Set.image_mono, Set.mem_image_of_mem, Set.mem_insert, Set.subset_insert, classical, coe_insert, eq_empty_or_nonempty, image_mono, insert, le_total, mem_image_of_mem, mem_insert, not_nonempty_empty, s.eq_empty_or_nonempty, s.sup
 -/
@@ -3050,7 +3094,10 @@ theorem exists_mem_eq_sup'
     rcases ih with ⟨b, hb, h'⟩
     rw [sup'_cons hs]; rw [h']
     cases le_total (f b) (f c) with
-    | inl h => exact ⟨c, mem_cons.2 (Or.inl rfl), sup_eq_left
+    | inl h => exact ⟨c, mem_cons.2 (Or.inl rfl), sup_eq_left.2 h⟩
+    | inr h => exact ⟨b, mem_cons.2 (Or.inr hb), sup_eq_right.2 h⟩
+
+@[to_dual]
 
 中文:
 定理 存在_mem_eq_sup'
@@ -3063,7 +3110,10 @@ theorem exists_mem_eq_sup'
     rcases ih with ⟨b, hb, h'⟩
     rw [sup'_cons hs]; rw [h']
     cases le_total (f b) (f c) with
-    | inl h => exact ⟨c, mem_cons.2 (Or.inl rfl), sup_eq_left
+    | inl h => exact ⟨c, mem_cons.2 (Or.inl rfl), sup_eq_left.2 h⟩
+    | inr h => exact ⟨b, mem_cons.2 (Or.inr hb), sup_eq_right.2 h⟩
+
+@[to_dual]
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Nonempty, Or.inl, Or.inr, _cons, cons_induction, le_total, mem_cons, mem_singleton_self, singleton, sup_eq_left, sup_eq_right
 -/

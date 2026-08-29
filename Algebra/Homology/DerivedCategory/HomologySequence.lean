@@ -219,7 +219,14 @@ lemma isIso_iff
     (Qh.mapArrow.objObjPreimageIso (Arrow.mk f))).1 ?_
   let g := Qh.mapArrow.objPreimage (Arrow.mk f)
   change IsIso (Qh.map g.hom)
-  rw [isIso_Qh_map_iff]; rw [Homotopy
+  rw [isIso_Qh_map_iff]; rw [HomotopyCategory.mem_quasiIso_iff]
+  intro n
+  have e : Arrow.mk ((homologyFunctor C n).map f) ≅
+      Arrow.mk ((HomotopyCategory.homologyFunctor _ _ n).map g.hom) :=
+    ((homologyFunctor C n).mapArrow.mapIso
+      ((Qh.mapArrow.objObjPreimageIso (Arrow.mk f)).symm)) ≪≫
+      ((Functor.mapArrowFunctor _ _).mapIso (homologyFunctorFactorsh C n)).app (Arrow.mk g.hom)
+  exact ((MorphismProperty.isomorphisms C).arrow_iso_iff e).1 (hf n)
 
 中文:
 引理 isIso_iff
@@ -230,7 +237,14 @@ lemma isIso_iff
     (Qh.mapArrow.objObjPreimageIso (Arrow.mk f))).1 ?_
   let g := Qh.mapArrow.objPreimage (Arrow.mk f)
   change IsIso (Qh.map g.hom)
-  rw [isIso_Qh_map_iff]; rw [Homotopy
+  rw [isIso_Qh_map_iff]; rw [HomotopyCategory.mem_quasiIso_iff]
+  intro n
+  have e : Arrow.mk ((homologyFunctor C n).map f) ≅
+      Arrow.mk ((HomotopyCategory.homologyFunctor _ _ n).map g.hom) :=
+    ((homologyFunctor C n).mapArrow.mapIso
+      ((Qh.mapArrow.objObjPreimageIso (Arrow.mk f)).symm)) ≪≫
+      ((Functor.mapArrowFunctor _ _).mapIso (homologyFunctorFactorsh C n)).app (Arrow.mk g.hom)
+  exact ((MorphismProperty.isomorphisms C).arrow_iso_iff e).1 (hf n)
 
 Depends on / 依赖: Arrow.mk, DerivedCategory, HomotopyCategory, HomotopyCategory.homologyFunctor, HomotopyCategory.mem_quasiIso_iff, MorphismProperty, MorphismProperty.isomorphisms, Qh.map, Qh.mapArrow.objObjPreim, Qh.mapArrow.objObjPreimageIso, Qh.mapArrow.objPreimage, arrow_iso_iff, g.hom, homologyFunctor, isIso_Qh_map_iff, isomorphisms, mapArrow, mapArrow.mapIso, mapIso, mem_quasiIso_iff
 -/
@@ -327,12 +341,14 @@ lemma `shiftMap_homologyFunctor_map_Q` / 引理 `shiftMap_homologyFunctor_map_Q`
 English:
 lemma shiftMap_homologyFunctor_map_Q
   proof: by
-  rw [← ShiftedHom.map_naturality_1 f (quotientCompQhIso C)]; rw [ShiftedHom.mk₀_comp]; rw [ShiftedHom.comp_mk₀]; rw [Functor.shiftMap_comp']; rw [Functor.shiftMap_comp]; rw [ShiftedHom.comp_map]; rw [shiftMap_homologyFunctor_map_Qh ..]; rw [homologyFunctorFactorsh_hom_app_quotient_obj]; rw [homo
+  rw [← ShiftedHom.map_naturality_1 f (quotientCompQhIso C)]; rw [ShiftedHom.mk₀_comp]; rw [ShiftedHom.comp_mk₀]; rw [Functor.shiftMap_comp']; rw [Functor.shiftMap_comp]; rw [ShiftedHom.comp_map]; rw [shiftMap_homologyFunctor_map_Qh ..]; rw [homologyFunctorFactorsh_hom_app_quotient_obj]; rw [homologyFunctorFactorsh_inv_app_quotient_obj]; rw [HomotopyCategory.homologyFunctor_shiftMap]
+  simp [shift_homologyFunctor, ← Functor.map_comp, ← Functor.map_comp_assoc]
 
 中文:
 引理 shiftMap_homologyFunctor_map_Q
   证明: by
-  rw [← ShiftedHom.map_naturality_1 f (quotientCompQhIso C)]; rw [ShiftedHom.mk₀_comp]; rw [ShiftedHom.comp_mk₀]; rw [Functor.shiftMap_comp']; rw [Functor.shiftMap_comp]; rw [ShiftedHom.comp_map]; rw [shiftMap_homologyFunctor_map_Qh ..]; rw [homologyFunctorFactorsh_hom_app_quotient_obj]; rw [homo
+  rw [← ShiftedHom.map_naturality_1 f (quotientCompQhIso C)]; rw [ShiftedHom.mk₀_comp]; rw [ShiftedHom.comp_mk₀]; rw [Functor.shiftMap_comp']; rw [Functor.shiftMap_comp]; rw [ShiftedHom.comp_map]; rw [shiftMap_homologyFunctor_map_Qh ..]; rw [homologyFunctorFactorsh_hom_app_quotient_obj]; rw [homologyFunctorFactorsh_inv_app_quotient_obj]; rw [HomotopyCategory.homologyFunctor_shiftMap]
+  simp [shift_homologyFunctor, ← Functor.map_comp, ← Functor.map_comp_assoc]
 
 Depends on / 依赖: Functor, Functor.shiftMap_comp, HomologicalComplex, HomologicalComplex.homologyFunctor, ShiftedHom, ShiftedHom.comp_map, ShiftedHom.comp_mk, ShiftedHom.map, ShiftedHom.map_naturality_1, ShiftedHom.mk, comp_map, hom.app, homologyFunctor, homologyFunctorFactors, homologyFunctorFactorsh_hom_app, inv.app, map_naturality_1, quotientCompQhIso, shiftMap, shiftMap_comp
 -/
@@ -627,13 +643,13 @@ English:
 lemma homologyMap_comp_eq_zero_of_distTriang
   given: (n : Int)
   proof: by
-  rw [← cancel_epi ((DerivedCategory.homologyFunctorFactors _ _).hom.app _)]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality_assoc]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [dsimp% comp_distTriang_mor_zero₁₂ _ hT]; rw [Functor.m
+  rw [← cancel_epi ((DerivedCategory.homologyFunctorFactors _ _).hom.app _)]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality_assoc]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [dsimp% comp_distTriang_mor_zero₁₂ _ hT]; rw [Functor.map_zero]; rw [Limits.zero_comp]; rw [Limits.comp_zero]
 
 中文:
 引理 homologyMap_comp_eq_zero_of_distTriang
   条件: (n : 整数)
   证明: by
-  rw [← cancel_epi ((DerivedCategory.homologyFunctorFactors _ _).hom.app _)]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality_assoc]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [dsimp% comp_distTriang_mor_zero₁₂ _ hT]; rw [Functor.m
+  rw [← cancel_epi ((DerivedCategory.homologyFunctorFactors _ _).hom.app _)]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality_assoc]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [dsimp% comp_distTriang_mor_zero₁₂ _ hT]; rw [Functor.map_zero]; rw [Limits.zero_comp]; rw [Limits.comp_zero]
 
 Depends on / 依赖: DerivedCategory, DerivedCategory.homologyFunctorFactors, DerivedCategory.homologyFunctorFactors_hom_naturality, DerivedCategory.homologyFunctorFactors_hom_naturality_assoc, Functor, Functor.map_comp_assoc, Functor.map_zero, Limits, Limits.comp_zero, Limits.zero_comp, cancel_epi, comp_zero, hom.app, homologyFunctorFactors, homologyFunctorFactors_hom_naturality, homologyFunctorFactors_hom_naturality_assoc, map_comp_assoc, map_zero, zero_comp
 -/
@@ -654,7 +670,7 @@ lemma homologyδOfTriangle_homologyMap
   rw [← cancel_epi ((DerivedCategory.homologyFunctorFactors _ _).hom.app _)]; rw [homologyFunctorFactors_hom_app_homologyδOfTriangle_assoc ..]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality]
   dsimp
   rw [reassoc_of% dsimp% DerivedCategory.HomologySequence.δ_comp _ hT n₀ n₁ h]
-  sim
+  simp
 
 中文:
 引理 homologyδOfTriangle_homologyMap
@@ -663,7 +679,7 @@ lemma homologyδOfTriangle_homologyMap
   rw [← cancel_epi ((DerivedCategory.homologyFunctorFactors _ _).hom.app _)]; rw [homologyFunctorFactors_hom_app_homologyδOfTriangle_assoc ..]; rw [← DerivedCategory.homologyFunctorFactors_hom_naturality]
   dsimp
   rw [reassoc_of% dsimp% DerivedCategory.HomologySequence.δ_comp _ hT n₀ n₁ h]
-  sim
+  simp
 
 Depends on / 依赖: DerivedCategory, DerivedCategory.HomologySequence, DerivedCategory.homologyFunctorFactors, DerivedCategory.homologyFunctorFactors_hom_naturality, HomologySequence, T.mor, cancel_epi, hom.app, homologyFunctorFactors, homologyFunctorFactors_hom_naturality, homologyMap, reassoc_of
 -/

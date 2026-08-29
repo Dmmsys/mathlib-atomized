@@ -70,7 +70,16 @@ lemma Finset.univ_of_card_le_three
       refine Fintype.one_lt_card_iff_nontrivial.1 ?_
       rw [h]
       simp
-    
+    rw [card_univ]; rw [h]; rw [card_insert_of_notMem]; rw [card_insert_of_notMem]; rw [card_singleton]
+    · rw [mem_singleton]
+      intro H
+      rw [← add_eq_zero_iff_eq_neg]; rw [one_add_one_eq_two] at H
+      apply_fun (ringEquivOfPrime R Nat.prime_three h).symm at H
+      simp only [map_ofNat, map_zero] at H
+      replace H : ((2 : Nat) : ZMod 3) = 0 := H
+      rw [natCast_eq_zero_iff] at H
+      norm_num at H
+    · simp
 
 中文:
 引理 有限集.univ_of_card_le_three
@@ -85,7 +94,16 @@ lemma Finset.univ_of_card_le_three
       refine Fintype.one_lt_card_iff_nontrivial.1 ?_
       rw [h]
       simp
-    
+    rw [card_univ]; rw [h]; rw [card_insert_of_notMem]; rw [card_insert_of_notMem]; rw [card_singleton]
+    · rw [mem_singleton]
+      intro H
+      rw [← add_eq_zero_iff_eq_neg]; rw [one_add_one_eq_two] at H
+      apply_fun (ringEquivOfPrime R Nat.prime_three h).symm at H
+      simp only [map_ofNat, map_zero] at H
+      replace H : ((2 : Nat) : ZMod 3) = 0 := H
+      rw [natCast_eq_zero_iff] at H
+      norm_num at H
+    · simp
 
 Depends on / 依赖: Finset, Finset.univ_of_card_le_two, Fintype, Fintype.one_lt_card_iff_nontrivial, Nat.lt_succ_iff, Nat.prime_three, Nontrivial, add_eq_zero_iff_eq_neg, apply_fun, card_insert_of_notMem, card_le_card, card_singleton, card_univ, eq_of_subset_of_card_le, lt_or_eq_of_le, lt_succ_iff, mem_singleton, one_add_one_eq_two, one_lt_card_iff_nontrivial, prime_three
 -/

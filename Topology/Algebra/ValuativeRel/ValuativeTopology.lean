@@ -220,7 +220,8 @@ theorem of_mem_nhds_zero_iff_vle
   rw [← vadd_mem_nhds_vadd_iff (g := -x)]
   simp only [vadd_eq_add, neg_add_cancel, H, subset_vadd_set_iff, neg_neg]
   suffices forall (γ : (ValueGroup₀ (.ofClass v))ˣ), (x +ᵥ {z | v.restrict z < ↑γ}) =
-    {a | v.restrict (-x + a) < ↑γ} by simp_all
+    {a | v.restrict (-x + a) < ↑γ} by simp_all [neg_add_eq_sub]
+  simp [Set.ext_iff, mem_vadd_set_iff_neg_vadd_mem]
 
 中文:
 定理 of_mem_nhds_zero_iff_vle
@@ -230,7 +231,8 @@ theorem of_mem_nhds_zero_iff_vle
   rw [← vadd_mem_nhds_vadd_iff (g := -x)]
   simp only [vadd_eq_add, neg_add_cancel, H, subset_vadd_set_iff, neg_neg]
   suffices forall (γ : (ValueGroup₀ (.ofClass v))ˣ), (x +ᵥ {z | v.restrict z < ↑γ}) =
-    {a | v.restrict (-x + a) < ↑γ} by simp_all
+    {a | v.restrict (-x + a) < ↑γ} by simp_all [neg_add_eq_sub]
+  simp [Set.ext_iff, mem_vadd_set_iff_neg_vadd_mem]
 
 Depends on / 依赖: Set.ext_iff, ext_iff, mem_vadd_set_iff_neg_vadd_mem, neg_add_cancel, neg_add_eq_sub, neg_neg, ofClass, of_mem_nhds_iff_vle, restrict, subset_vadd_set_iff, v.restrict, vadd_eq_add, vadd_mem_nhds_vadd_iff
 -/
@@ -620,7 +622,9 @@ theorem cauchy_iff
   · intro h γ
     simp_rw [restrict_lt_iff_lt_embedding]
     exact h _ (v.subgroups_basis.mem_addGroupFilterBasis γ)
-  · rintro h - ⟨γ,
+  · rintro h - ⟨γ, rfl⟩
+    simp_rw [restrict_lt_iff_lt_embedding] at h
+    exact h γ
 
 中文:
 定理 cauchy_iff
@@ -634,7 +638,9 @@ theorem cauchy_iff
   · intro h γ
     simp_rw [restrict_lt_iff_lt_embedding]
     exact h _ (v.subgroups_basis.mem_addGroupFilterBasis γ)
-  · rintro h - ⟨γ,
+  · rintro h - ⟨γ, rfl⟩
+    simp_rw [restrict_lt_iff_lt_embedding] at h
+    exact h γ
 
 Depends on / 依赖: AddGroupFilterBasis, AddGroupFilterBasis.cauchy_iff, Iff.rfl, and_congr, cauchy_iff, mem_addGroupFilterBasis, mem_addGroupFilterBasis_iff, restrict_lt_iff_lt_embedding, simp_rw, subgroups_basis, toUniformSpace_eq, v.subgroups_basis.mem_addGroupFilterBasis, v.subgroups_basis.mem_addGroupFilterBasis_iff, v.toUniformSpace_eq
 -/
@@ -703,7 +709,7 @@ lemma discreteTopology_of_forall_map_eq_one
   contrapose! h
   obtain ⟨x, hx, hx'⟩ := h
   rw [restrict_lt_iff_lt_embedding]; rw [Units.val_one]; rw [map_one] at hx
-
+  exact ⟨x, hx', hx.ne⟩
 
 中文:
 引理 discreteTopology_of_对任意_map_eq_one
@@ -715,7 +721,7 @@ lemma discreteTopology_of_forall_map_eq_one
   contrapose! h
   obtain ⟨x, hx, hx'⟩ := h
   rw [restrict_lt_iff_lt_embedding]; rw [Units.val_one]; rw [map_one] at hx
-
+  exact ⟨x, hx', hx.ne⟩
 
 Depends on / 依赖: Units.val_one, contrapose, discreteTopology_iff_isOpen_singleton_zero, forall_eq, hx.ne, isOpen_iff_mem_nhds, map_one, mem_nhds_zero_iff, mem_ofPred_eq, mem_singleton_iff, restrict_lt_iff_lt_embedding, subset_singleton_iff, v.mem_nhds_zero_iff, val_one
 -/
@@ -892,7 +898,7 @@ theorem isClosed_closedBall
   rw [v.mem_nhds_iff]
   have hx' : v.restrict x != 0 := hx.ne_zero
 exact ⟨Units.mk0 _ hx', fun y hy hy' => ne_of_lt hy map_sub_swap v.restrict x y ▸
-      (Valuation.map_sub_e
+      (Valuation.map_sub_eq_of_lt_left _ <| lt_of_le_of_lt hy' hx)⟩
 
 中文:
 定理 isClosed_closedBall
@@ -904,7 +910,7 @@ exact ⟨Units.mk0 _ hx', fun y hy hy' => ne_of_lt hy map_sub_swap v.restrict x 
   rw [v.mem_nhds_iff]
   have hx' : v.restrict x != 0 := hx.ne_zero
 exact ⟨Units.mk0 _ hx', fun y hy hy' => ne_of_lt hy map_sub_swap v.restrict x y ▸
-      (Valuation.map_sub_e
+      (Valuation.map_sub_eq_of_lt_left _ <| lt_of_le_of_lt hy' hx)⟩
 
 Depends on / 依赖: Units.mk0, Valuation, Valuation.map_sub_eq_of_lt_left, hx.ne_zero, isOpen_compl_iff, isOpen_iff_mem_nhds, lt_of_le_of_lt, map_sub_eq_of_lt_left, map_sub_swap, mem_compl_iff, mem_nhds_iff, mem_ofPred_eq, ne_of_lt, ne_zero, not_le, restrict, v.mem_nhds_iff, v.restrict
 -/

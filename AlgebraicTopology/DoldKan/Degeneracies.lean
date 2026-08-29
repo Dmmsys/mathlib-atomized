@@ -50,7 +50,10 @@ theorem HigherFacesVanish.comp_σ
   rw [assoc]; rw [SimplicialObject.δ_comp_σ_of_gt']; rw [Fin.pred_succ]; rw [v.comp_δ_eq_zero_assoc _ _ hj]; rw [zero_comp]
   · intro hj'
     simp only [hnbq, add_comm b, add_assoc, hj', Fin.val_zero, zero_add, add_le_iff_nonpos_right,
-      nonpos_iff_eq_zero, add_eq_zero, false_and,
+      nonpos_iff_eq_zero, add_eq_zero, false_and, reduceCtorEq] at hj
+  · dsimp
+    rw [Fin.lt_def]; rw [Fin.val_succ]
+    linarith
 
 中文:
 定理 HigherFacesVanish.comp_σ
@@ -59,7 +62,10 @@ theorem HigherFacesVanish.comp_σ
   rw [assoc]; rw [SimplicialObject.δ_comp_σ_of_gt']; rw [Fin.pred_succ]; rw [v.comp_δ_eq_zero_assoc _ _ hj]; rw [zero_comp]
   · intro hj'
     simp only [hnbq, add_comm b, add_assoc, hj', Fin.val_zero, zero_add, add_le_iff_nonpos_right,
-      nonpos_iff_eq_zero, add_eq_zero, false_and,
+      nonpos_iff_eq_zero, add_eq_zero, false_and, reduceCtorEq] at hj
+  · dsimp
+    rw [Fin.lt_def]; rw [Fin.val_succ]
+    linarith
 
 Depends on / 依赖: Fin.lt_def, Fin.pred_succ, Fin.val_succ, Fin.val_zero, SimplicialObject, add_assoc, add_comm, add_eq_zero, add_le_iff_nonpos_right, false_and, lt_def, nonpos_iff_eq_zero, pred_succ, reduceCtorEq, v.comp_, val_succ, val_zero, zero_add, zero_comp
 -/
@@ -95,7 +101,45 @@ theorem σ_comp_P_eq_zero
       rcases n with _ | n
       · fin_cases i
         dsimp at h hi
-        rw
+        rw [show q = 0 by lia]
+        change X.σ 0 ≫ (P 1).f 1 = 0
+        simp only [P_succ, HomologicalComplex.add_f_apply, comp_add,
+          AlternatingFaceMapComplex.obj_d_eq, Hσ,
+          HomologicalComplex.comp_f, Homotopy.nullHomotopicMap'_f (c_mk 2 1 rfl) (c_mk 1 0 rfl),
+          comp_id]
+        rw [hσ'_eq' (zero_add 0).symm]; rw [hσ'_eq' (add_zero 1).symm]
+        dsimp [P_zero]
+        rw [comp_id]; rw [Fin.sum_univ_two]; rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_two]
+        simp only [Fin.val_zero, pow_zero, pow_one, pow_add, one_smul, neg_smul, Fin.val_succ,
+          Fin.val_one, mul_neg, one_mul, neg_mul, neg_neg, id_comp, add_comp, comp_add, neg_comp,
+          comp_neg, Fin.succ_zero_eq_one]
+        rw [← Fin.castSucc_one]; rw [SimplicialObject.δ_comp_σ_self]; rw [← Fin.castSucc_zero (n := 1)]; rw [SimplicialObject.δ_comp_σ_self_assoc]; rw [SimplicialObject.δ_comp_σ_succ]; rw [comp_id]; rw [← Fin.castSucc_zero (n := 2)]; rw [← Fin.succ_zero_eq_one]; rw [SimplicialObject.δ_comp_σ_of_le X
+            (show (0 : Fin 2) <= Fin.castSucc 0 by rw [Fin.castSucc_zero]),
+          ← Fin.castSucc_zero (n := 1), SimplicialObject.δ_comp_σ_self_assoc,
+          SimplicialObject.δ_comp_σ_succ_assoc]
+        simp only [add_neg_cancel, add_zero, zero_add]
+      · rw [← id_comp (X.σ i), ← (P_add_Q_f q n.succ : _ = 𝟙 (X.obj _)), add_comp, add_comp,
+          P_succ]
+        have v : HigherFacesVanish q ((P q).f n.succ ≫ X.σ i) :=
+          (HigherFacesVanish.of_P q n).comp_σ hi
+        dsimp only [AlternatingFaceMapComplex.obj_X, Nat.succ_eq_add_one, HomologicalComplex.comp_f,
+          HomologicalComplex.add_f_apply, HomologicalComplex.id_f]
+        rw [← assoc]; rw [v.comp_P_eq_self]; rw [Preadditive.comp_add]; rw [comp_id]; rw [v.comp_Hσ_eq hi]; rw [assoc]; rw [← Fin.succ_mk _ _ i.2]; rw [SimplicialObject.δ_comp_σ_succ_assoc]; rw [Fin.eta]; rw [decomposition_Q n q]; rw [sum_comp]; rw [sum_comp]; rw [Finset.sum_eq_zero]; rw [add_zero]; rw [add_neg_eq_zero]
+        intro j hj
+        simp only [Finset.mem_univ, Finset.mem_filter] at hj
+        obtain ⟨k, hk⟩ := Nat.le.dest (Nat.lt_succ_iff.mp (Fin.is_lt j))
+        rw [add_comm] at hk
+        have hi' : i = Fin.castSucc ⟨i, by lia⟩ := by
+          ext
+          simp only [Fin.castSucc_mk, Fin.eta]
+        have eq := hq j.rev.succ (by
+          simp only [← hk, Fin.rev_eq j hk.symm, Fin.succ_mk, Fin.val_mk]
+          lia)
+        rw [assoc]; rw [assoc]; rw [assoc]; rw [hi']; rw [SimplicialObject.σ_comp_σ_assoc]; rw [reassoc_of% eq]; rw [zero_comp]; rw [comp_zero]; rw [comp_zero]; rw [comp_zero]
+        simp only [Fin.rev_eq j hk.symm, Fin.le_iff_val_le_val]
+        lia
+
+@[reassoc (attr := simp)]
 
 中文:
 定理 σ_comp_P_eq_zero
@@ -110,7 +154,45 @@ theorem σ_comp_P_eq_zero
       rcases n with _ | n
       · fin_cases i
         dsimp at h hi
-        rw
+        rw [show q = 0 by lia]
+        change X.σ 0 ≫ (P 1).f 1 = 0
+        simp only [P_succ, HomologicalComplex.add_f_apply, comp_add,
+          AlternatingFaceMapComplex.obj_d_eq, Hσ,
+          HomologicalComplex.comp_f, Homotopy.nullHomotopicMap'_f (c_mk 2 1 rfl) (c_mk 1 0 rfl),
+          comp_id]
+        rw [hσ'_eq' (zero_add 0).symm]; rw [hσ'_eq' (add_zero 1).symm]
+        dsimp [P_zero]
+        rw [comp_id]; rw [Fin.sum_univ_two]; rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_two]
+        simp only [Fin.val_zero, pow_zero, pow_one, pow_add, one_smul, neg_smul, Fin.val_succ,
+          Fin.val_one, mul_neg, one_mul, neg_mul, neg_neg, id_comp, add_comp, comp_add, neg_comp,
+          comp_neg, Fin.succ_zero_eq_one]
+        rw [← Fin.castSucc_one]; rw [SimplicialObject.δ_comp_σ_self]; rw [← Fin.castSucc_zero (n := 1)]; rw [SimplicialObject.δ_comp_σ_self_assoc]; rw [SimplicialObject.δ_comp_σ_succ]; rw [comp_id]; rw [← Fin.castSucc_zero (n := 2)]; rw [← Fin.succ_zero_eq_one]; rw [SimplicialObject.δ_comp_σ_of_le X
+            (show (0 : Fin 2) <= Fin.castSucc 0 by rw [Fin.castSucc_zero]),
+          ← Fin.castSucc_zero (n := 1), SimplicialObject.δ_comp_σ_self_assoc,
+          SimplicialObject.δ_comp_σ_succ_assoc]
+        simp only [add_neg_cancel, add_zero, zero_add]
+      · rw [← id_comp (X.σ i), ← (P_add_Q_f q n.succ : _ = 𝟙 (X.obj _)), add_comp, add_comp,
+          P_succ]
+        have v : HigherFacesVanish q ((P q).f n.succ ≫ X.σ i) :=
+          (HigherFacesVanish.of_P q n).comp_σ hi
+        dsimp only [AlternatingFaceMapComplex.obj_X, Nat.succ_eq_add_one, HomologicalComplex.comp_f,
+          HomologicalComplex.add_f_apply, HomologicalComplex.id_f]
+        rw [← assoc]; rw [v.comp_P_eq_self]; rw [Preadditive.comp_add]; rw [comp_id]; rw [v.comp_Hσ_eq hi]; rw [assoc]; rw [← Fin.succ_mk _ _ i.2]; rw [SimplicialObject.δ_comp_σ_succ_assoc]; rw [Fin.eta]; rw [decomposition_Q n q]; rw [sum_comp]; rw [sum_comp]; rw [Finset.sum_eq_zero]; rw [add_zero]; rw [add_neg_eq_zero]
+        intro j hj
+        simp only [Finset.mem_univ, Finset.mem_filter] at hj
+        obtain ⟨k, hk⟩ := Nat.le.dest (Nat.lt_succ_iff.mp (Fin.is_lt j))
+        rw [add_comm] at hk
+        have hi' : i = Fin.castSucc ⟨i, by lia⟩ := by
+          ext
+          simp only [Fin.castSucc_mk, Fin.eta]
+        have eq := hq j.rev.succ (by
+          simp only [← hk, Fin.rev_eq j hk.symm, Fin.succ_mk, Fin.val_mk]
+          lia)
+        rw [assoc]; rw [assoc]; rw [assoc]; rw [hi']; rw [SimplicialObject.σ_comp_σ_assoc]; rw [reassoc_of% eq]; rw [zero_comp]; rw [comp_zero]; rw [comp_zero]; rw [comp_zero]
+        simp only [Fin.rev_eq j hk.symm, Fin.le_iff_val_le_val]
+        lia
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: AlternatingFaceMapComplex, AlternatingFaceMapComplex.obj_d_eq, HomologicalComplex, HomologicalComplex.add_f_apply, HomologicalComplex.comp_f, Homotopy, Homotopy.nullHomotopicMap, P_succ, add_f_apply, c_mk, comp_add, comp_f, comp_id, fin_cases, generalizing, nullHomotopicMap, obj_d_eq, replace, zero_comp
 -/
@@ -206,7 +288,7 @@ theorem degeneracy_comp_PInfty
     fin_cases y
     rfl
   · obtain ⟨i, α, h⟩ := SimplexCategory.eq_σ_comp_of_not_injective θ hθ
-    rw [h]; rw [op_comp]; rw [X.map_comp]; rw [assoc]; rw [← SimplicialObject.σ_def]; 
+    rw [h]; rw [op_comp]; rw [X.map_comp]; rw [assoc]; rw [← SimplicialObject.σ_def]; rw [σ_comp_PInfty]; rw [comp_zero]
 
 中文:
 定理 degeneracy_comp_PInfty
@@ -221,7 +303,7 @@ theorem degeneracy_comp_PInfty
     fin_cases y
     rfl
   · obtain ⟨i, α, h⟩ := SimplexCategory.eq_σ_comp_of_not_injective θ hθ
-    rw [h]; rw [op_comp]; rw [X.map_comp]; rw [assoc]; rw [← SimplicialObject.σ_def]; 
+    rw [h]; rw [op_comp]; rw [X.map_comp]; rw [assoc]; rw [← SimplicialObject.σ_def]; rw [σ_comp_PInfty]; rw [comp_zero]
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.eq_, SimplexCategory.mono_iff_injective, SimplicialObject, X.map_comp, comp_zero, fin_cases, map_comp, mono_iff_injective, op_comp
 -/

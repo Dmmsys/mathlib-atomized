@@ -50,7 +50,19 @@ definition single
     split_ifs with h
     · subst h
       simp
-    · #a
+    · #adaptation_note /-- nightly-2024-03-07
+      previously was `rw [if_neg h]; simp`, but that fails with "motive not type correct"
+      This is because dsimp does not simplify numerals;
+      this note should be removable once https://github.com/leanprover/lean4/pull/8433 lands. -/
+      convert! (id_zero (C := V)).symm
+      all_goals simp [if_neg h]
+  map_comp f g := by
+    ext
+    dsimp
+    split_ifs with h
+    · subst h
+      simp
+    · simp
 
 中文:
 定义 single
@@ -66,7 +78,19 @@ definition single
     split_ifs with h
     · subst h
       simp
-    · #a
+    · #adaptation_note /-- nightly-2024-03-07
+      previously was `rw [if_neg h]; simp`, but that fails with "motive not type correct"
+      This is because dsimp does not simplify numerals;
+      this note should be removable once https://github.com/leanprover/lean4/pull/8433 lands. -/
+      convert! (id_zero (C := V)).symm
+      all_goals simp [if_neg h]
+  map_comp f g := by
+    ext
+    dsimp
+    split_ifs with h
+    · subst h
+      simp
+    · simp
 
 Depends on / 依赖: adaptation_note, because, correct, eqToHom, github, github.com, if_neg, if_pos, leanprover, map_id, motive, nightly, numerals, previously, removable, should, simplify, split_ifs
 -/
@@ -378,7 +402,7 @@ definition mkHomToSingle
     split_ifs with hk
     · subst hk
       simp only [XIsoOfEq_rfl, Iso.refl_hom, id_comp, reassoc_of% hφ i hik, zero_comp]
-    · apply (isZero_single
+    · apply (isZero_single_obj_X c j A k hk).eq_of_tgt
 
 中文:
 定义 mkHomToSingle
@@ -392,7 +416,7 @@ definition mkHomToSingle
     split_ifs with hk
     · subst hk
       simp only [XIsoOfEq_rfl, Iso.refl_hom, id_comp, reassoc_of% hφ i hik, zero_comp]
-    · apply (isZero_single
+    · apply (isZero_single_obj_X c j A k hk).eq_of_tgt
 
 Depends on / 依赖: Iso.refl_hom, K.XIsoOfEq, XIsoOfEq, XIsoOfEq_rfl, comp_zero, eq_of_tgt, id_comp, isZero_single_obj_X, reassoc_of, refl_hom, singleObjXIsoOfEq, split_ifs, zero_comp
 -/
@@ -456,7 +480,7 @@ definition mkHomFromSingle
     split_ifs with hi
     · subst hi
       simp only [XIsoOfEq_rfl, Iso.refl_inv, comp_id, assoc, hφ k hik, comp_zero]
-    · apply (isZero_single_obj_
+    · apply (isZero_single_obj_X c j A i hi).eq_of_src
 
 中文:
 定义 mkHomFromSingle
@@ -470,7 +494,7 @@ definition mkHomFromSingle
     split_ifs with hi
     · subst hi
       simp only [XIsoOfEq_rfl, Iso.refl_inv, comp_id, assoc, hφ k hik, comp_zero]
-    · apply (isZero_single_obj_
+    · apply (isZero_single_obj_X c j A i hi).eq_of_src
 
 Depends on / 依赖: Iso.refl_inv, K.XIsoOfEq, XIsoOfEq, XIsoOfEq_rfl, comp_id, comp_zero, eq_of_src, isZero_single_obj_X, refl_inv, singleObjXIsoOfEq, split_ifs, zero_comp
 -/

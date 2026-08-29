@@ -408,7 +408,9 @@ theorem truncFinset_truncFinset_pow
   | succ n hmn ih =>
     ext x; by_cases hx : x in s
     · rw [coeff_truncFinset_of_mem _ hx, coeff_truncFinset_of_mem _ hx, pow_succ,
-        ← coeff_truncFinset_mul_truncFinset_eq_coeff_mul hs _ _ hx, ih, t
+        ← coeff_truncFinset_mul_truncFinset_eq_coeff_mul hs _ _ hx, ih, truncFinset_truncFinset
+        (by rfl), pow_succ, coeff_truncFinset_mul_truncFinset_eq_coeff_mul hs _ _ hx]
+    simp [coeff_truncFinset_eq_zero _ hx]
 
 中文:
 定理 truncFinset_truncFinset_pow
@@ -419,7 +421,9 @@ theorem truncFinset_truncFinset_pow
   | succ n hmn ih =>
     ext x; by_cases hx : x in s
     · rw [coeff_truncFinset_of_mem _ hx, coeff_truncFinset_of_mem _ hx, pow_succ,
-        ← coeff_truncFinset_mul_truncFinset_eq_coeff_mul hs _ _ hx, ih, t
+        ← coeff_truncFinset_mul_truncFinset_eq_coeff_mul hs _ _ hx, ih, truncFinset_truncFinset
+        (by rfl), pow_succ, coeff_truncFinset_mul_truncFinset_eq_coeff_mul hs _ _ hx]
+    simp [coeff_truncFinset_eq_zero _ hx]
 
 Depends on / 依赖: Nat.le_induction, coeff_truncFinset_eq_zero, coeff_truncFinset_mul_truncFinset_eq_coeff_mul, coeff_truncFinset_of_mem, le_induction, pow_succ, truncFinset_truncFinset
 -/
@@ -1204,7 +1208,8 @@ lemma coeff_truncTotal_pow
   | ind k ih =>
     simp_rw [Nat.succ_eq_add_one, pow_add, pow_one, MvPolynomial.coeff_mul, coeff_mul]
     congr! 2 with _ _
-    · exact ih _ k.le_refl (by grind [mem_anti
+    · exact ih _ k.le_refl (by grind [mem_antidiagonal])
+    · exact coeff_truncTotal _ (by grind [mem_antidiagonal])
 
 中文:
 引理 coeff_truncTotal_pow
@@ -1216,7 +1221,8 @@ lemma coeff_truncTotal_pow
   | ind k ih =>
     simp_rw [Nat.succ_eq_add_one, pow_add, pow_one, MvPolynomial.coeff_mul, coeff_mul]
     congr! 2 with _ _
-    · exact ih _ k.le_refl (by grind [mem_anti
+    · exact ih _ k.le_refl (by grind [mem_antidiagonal])
+    · exact coeff_truncTotal _ (by grind [mem_antidiagonal])
 
 Depends on / 依赖: IsTopologicalGroup, IsUniformGroup, IsUniformGroup.to_topologicalGroup, MvPolynomial, MvPolynomial.coeff_mul, MvPolynomial.coeff_one, Nat.caseStrongRecOn, Nat.succ_eq_add_one, caseStrongRecOn, classical, coeff_mul, coeff_one, coeff_truncTotal, generalizing, k.le_refl, le_refl, mem_antidiagonal, pow_add, pow_one, simp_rw
 -/

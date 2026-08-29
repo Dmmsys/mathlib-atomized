@@ -135,7 +135,7 @@ definition ι
     map_lie' := fun {x y} => by
       suffices mkAlgHom R L (ιₜ ⁅x, y⁆ + ιₜ y * ιₜ x) = mkAlgHom R L (ιₜ x * ιₜ y) by
         rw [map_mul] at this; simp [LieRing.of_associative_ring_bracket, ← this]
-exact Quotient.sound RingCon.le_ringConGen _ _ (Rel.lie_com
+exact Quotient.sound RingCon.le_ringConGen _ _ (Rel.lie_compat x y) }
 
 中文:
 定义 ι
@@ -144,7 +144,7 @@ exact Quotient.sound RingCon.le_ringConGen _ _ (Rel.lie_com
     map_lie' := fun {x y} => by
       suffices mkAlgHom R L (ιₜ ⁅x, y⁆ + ιₜ y * ιₜ x) = mkAlgHom R L (ιₜ x * ιₜ y) by
         rw [map_mul] at this; simp [LieRing.of_associative_ring_bracket, ← this]
-exact Quotient.sound RingCon.le_ringConGen _ _ (Rel.lie_com
+exact Quotient.sound RingCon.le_ringConGen _ _ (Rel.lie_compat x y) }
 
 Depends on / 依赖: LieRing, LieRing.of_associative_ring_bracket, Quotient, Quotient.sound, Rel.lie_compat, RingCon, RingCon.le_ringConGen, le_ringConGen, lie_compat, map_lie, map_mul, mkAlgHom, of_associative_ring_bracket, toLinearMap, toLinearMap.comp
 -/
@@ -172,7 +172,26 @@ definition lift
   invFun F := (F : UniversalEnvelopingAlgebra R L ->ₗ⁅R⁆ A).comp (ι R)
   left_inv f := by
     ext
-    -- Porting
+    -- Porting note: was
+    -- simp only [ι, mkAlgHom, TensorAlgebra.lift_ι_apply, LieHom.coe_toLinearMap,
+    -- LinearMap.toFun_eq_coe, LinearMap.coe_comp, LieHom.coe_comp, AlgHom.coe_toLieHom,
+    -- LieHom.coe_mk, Function.comp_apply, AlgHom.toLinearMap_apply,
+    -- RingQuot.liftAlgHom_mkAlgHom_apply]
+    simp only [LieHom.coe_comp, Function.comp_apply, AlgHom.coe_toLieHom,
+      UniversalEnvelopingAlgebra.ι_apply, mkAlgHom]
+    simp [UniversalEnvelopingAlgebra]
+  right_inv F := by
+    apply RingCon.Quotient.hom_extₐ
+    ext
+    -- Porting note: was
+    -- simp only [ι, mkAlgHom, TensorAlgebra.lift_ι_apply, LieHom.coe_toLinearMap,
+    -- LinearMap.toFun_eq_coe, LinearMap.coe_comp, LieHom.toLinearMap_comp,
+    -- AlgHom.comp_toLinearMap, Function.comp_apply, AlgHom.toLinearMap_apply,
+    -- RingQuot.liftAlgHom_mkAlgHom_apply, AlgHom.coe_toLieHom, LieHom.coe_mk]
+    -- extra `rfl` after https://github.com/leanprover/lean4/pull/2644
+    simp [mkAlgHom]; rfl
+
+@[simp]
 
 中文:
 定义 lift
@@ -185,7 +204,26 @@ definition lift
   invFun F := (F : UniversalEnvelopingAlgebra R L ->ₗ⁅R⁆ A).comp (ι R)
   left_inv f := by
     ext
-    -- Porting
+    -- Porting note: was
+    -- simp only [ι, mkAlgHom, TensorAlgebra.lift_ι_apply, LieHom.coe_toLinearMap,
+    -- LinearMap.toFun_eq_coe, LinearMap.coe_comp, LieHom.coe_comp, AlgHom.coe_toLieHom,
+    -- LieHom.coe_mk, Function.comp_apply, AlgHom.toLinearMap_apply,
+    -- RingQuot.liftAlgHom_mkAlgHom_apply]
+    simp only [LieHom.coe_comp, Function.comp_apply, AlgHom.coe_toLieHom,
+      UniversalEnvelopingAlgebra.ι_apply, mkAlgHom]
+    simp [UniversalEnvelopingAlgebra]
+  right_inv F := by
+    apply RingCon.Quotient.hom_extₐ
+    ext
+    -- Porting note: was
+    -- simp only [ι, mkAlgHom, TensorAlgebra.lift_ι_apply, LieHom.coe_toLinearMap,
+    -- LinearMap.toFun_eq_coe, LinearMap.coe_comp, LieHom.toLinearMap_comp,
+    -- AlgHom.comp_toLinearMap, Function.comp_apply, AlgHom.toLinearMap_apply,
+    -- RingQuot.liftAlgHom_mkAlgHom_apply, AlgHom.coe_toLieHom, LieHom.coe_mk]
+    -- extra `rfl` after https://github.com/leanprover/lean4/pull/2644
+    simp [mkAlgHom]; rfl
+
+@[simp]
 
 Depends on / 依赖: LieRing, LieRing.of_associative_ring_bracket, RingCon, RingCon.lift, RingCon.ringConGen_le, TensorAlgebra, TensorAlgebra.lift, UniversalEnvelopingAlgebra, invFun, left_inv, of_associative_ring_bracket, ringCon, ringConGen_le
 -/

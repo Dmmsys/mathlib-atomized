@@ -50,7 +50,11 @@ theorem _root_.isBoundedBilinearMap_inner
       simp only [← algebraMap_smul 𝕜 r x, algebraMap_eq_ofReal, inner_smul_real_left]
     add_right := inner_add_right
     smul_right := fun r x y => by
-      simp only [← algebraMap_smul 𝕜 r y, algebraMap_eq_ofReal, inner_smul_real_right
+      simp only [← algebraMap_smul 𝕜 r y, algebraMap_eq_ofReal, inner_smul_real_right]
+    bound :=
+      ⟨1, zero_lt_one, fun x y => by
+        rw [one_mul]
+        exact norm_inner_le_norm x y⟩ }
 
 中文:
 定理 _root_.isBoundedBilinearMap_inner
@@ -60,7 +64,11 @@ theorem _root_.isBoundedBilinearMap_inner
       simp only [← algebraMap_smul 𝕜 r x, algebraMap_eq_ofReal, inner_smul_real_left]
     add_right := inner_add_right
     smul_right := fun r x y => by
-      simp only [← algebraMap_smul 𝕜 r y, algebraMap_eq_ofReal, inner_smul_real_right
+      simp only [← algebraMap_smul 𝕜 r y, algebraMap_eq_ofReal, inner_smul_real_right]
+    bound :=
+      ⟨1, zero_lt_one, fun x y => by
+        rw [one_mul]
+        exact norm_inner_le_norm x y⟩ }
 
 Depends on / 依赖: add_left, add_right, algebraMap_eq_ofReal, algebraMap_smul, inner_add_left, inner_add_right, inner_smul_real_left, inner_smul_real_right, norm_inner_le_norm, one_mul, smul_left, smul_right, zero_lt_one
 -/
@@ -237,7 +245,8 @@ theorem Dense.eq_zero_of_inner_left
   have hK : Dense (K : Set E) := hS.mono subset_span
   have : (⟪x, ·⟫) = 0 := (continuous_const.inner continuous_id).ext_on
     hK continuous_const fun v => Submodule.span_induction h (by simp)
-      (by simp +contextual [inner_add_right]) (by simp +contextual [inner_smul_righ
+      (by simp +contextual [inner_add_right]) (by simp +contextual [inner_smul_right])
+  simpa using congr_fun this x
 
 中文:
 定理 稠密.eq_zero_of_inner_left
@@ -248,7 +257,8 @@ theorem Dense.eq_zero_of_inner_left
   have hK : Dense (K : Set E) := hS.mono subset_span
   have : (⟪x, ·⟫) = 0 := (continuous_const.inner continuous_id).ext_on
     hK continuous_const fun v => Submodule.span_induction h (by simp)
-      (by simp +contextual [inner_add_right]) (by simp +contextual [inner_smul_righ
+      (by simp +contextual [inner_add_right]) (by simp +contextual [inner_smul_right])
+  simpa using congr_fun this x
 
 Depends on / 依赖: Submodule, Submodule.span_induction, congr_fun, contextual, continuous_const, continuous_const.inner, continuous_id, ext_on, hS.mono, inner_add_right, inner_smul_right, span_induction, subset_span
 -/
@@ -315,7 +325,14 @@ theorem Dense.eq_of_inner_right
 nonrec theorem DenseRange.eq_of_inner_left (hf : DenseRange f) (h : forall i, ⟪x, f i⟫ = ⟪y, f i⟫) :
     x = y := hf.eq_of_inner_left 𝕜 (by simpa)
 
-nonrec theorem DenseRange.eq_of_inner_right (hf : 
+nonrec theorem DenseRange.eq_of_inner_right (hf : DenseRange f) (h : forall i, ⟪f i, x⟫ = ⟪f i, y⟫) :
+    x = y := hf.eq_of_inner_right 𝕜 (by simpa)
+
+nonrec theorem DenseRange.eq_zero_of_inner_left (hf : DenseRange f) (h : forall i, ⟪x, f i⟫ = 0) :
+    x = 0 := hf.eq_zero_of_inner_left 𝕜 (by simpa)
+
+nonrec theorem DenseRange.eq_zero_of_inner_right (hf : DenseRange f) (h : forall i, ⟪f i, x⟫ = 0) :
+    x = 0 := hf.eq_zero_of_inner_right 𝕜 (by simpa)
 
 中文:
 定理 稠密.eq_of_inner_right
@@ -327,7 +344,14 @@ nonrec theorem DenseRange.eq_of_inner_right (hf :
 nonrec theorem DenseRange.eq_of_inner_left (hf : DenseRange f) (h : forall i, ⟪x, f i⟫ = ⟪y, f i⟫) :
     x = y := hf.eq_of_inner_left 𝕜 (by simpa)
 
-nonrec theorem DenseRange.eq_of_inner_right (hf : 
+nonrec theorem DenseRange.eq_of_inner_right (hf : DenseRange f) (h : forall i, ⟪f i, x⟫ = ⟪f i, y⟫) :
+    x = y := hf.eq_of_inner_right 𝕜 (by simpa)
+
+nonrec theorem DenseRange.eq_zero_of_inner_left (hf : DenseRange f) (h : forall i, ⟪x, f i⟫ = 0) :
+    x = 0 := hf.eq_zero_of_inner_left 𝕜 (by simpa)
+
+nonrec theorem DenseRange.eq_zero_of_inner_right (hf : DenseRange f) (h : forall i, ⟪f i, x⟫ = 0) :
+    x = 0 := hf.eq_zero_of_inner_right 𝕜 (by simpa)
 
 Depends on / 依赖: eq_zero_of_inner_right, hS.eq_zero_of_inner_right, inner_sub_right, sub_eq_zero
 -/

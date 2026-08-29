@@ -47,7 +47,7 @@ obtain ⟨C₁, hC₁⟩ := logHeight_eval_le' isHomogeneous_addSubMap W
   obtain ⟨C₂, h⟩ := logHeight_eval_ge' (N := 2)
     fun ij => (isHomogeneous_addSubMapCoeff W ij).C_mul ↑W.Δ'⁻¹
 have hC₂ := fun x => h _ addSubMapCoeff_condition W x
-  refine ⟨max C₁ (-C₂), fun x => abs_sub_le_iff.mpr ⟨?_, ?_⟩⟩ <;> 
+  refine ⟨max C₁ (-C₂), fun x => abs_sub_le_iff.mpr ⟨?_, ?_⟩⟩ <;> grind
 
 中文:
 定理 abs_logHeight_addSubMap_sub_two_mul_logHeight_le
@@ -56,7 +56,7 @@ obtain ⟨C₁, hC₁⟩ := logHeight_eval_le' isHomogeneous_addSubMap W
   obtain ⟨C₂, h⟩ := logHeight_eval_ge' (N := 2)
     fun ij => (isHomogeneous_addSubMapCoeff W ij).C_mul ↑W.Δ'⁻¹
 have hC₂ := fun x => h _ addSubMapCoeff_condition W x
-  refine ⟨max C₁ (-C₂), fun x => abs_sub_le_iff.mpr ⟨?_, ?_⟩⟩ <;> 
+  refine ⟨max C₁ (-C₂), fun x => abs_sub_le_iff.mpr ⟨?_, ?_⟩⟩ <;> grind
 
 Depends on / 依赖: C_mul, abs_sub_le_iff, abs_sub_le_iff.mpr, addSubMapCoeff_condition, isHomogeneous_addSubMap, isHomogeneous_addSubMapCoeff, logHeight_eval_ge, logHeight_eval_le
 -/

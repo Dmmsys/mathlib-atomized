@@ -69,7 +69,8 @@ lemma exists_quasiIso_injective
   let L' : CochainComplex (InjectiveObject C) Int :=
     HomologicalComplex.liftObjectProperty _ L inferInstance
   have hL' : L'.IsStrictlyGE n := by
-    rwa [← isStrictlyGE_mapHomologicalComplex_obj_iff _ (Injecti
+    rwa [← isStrictlyGE_mapHomologicalComplex_obj_iff _ (InjectiveObject.ι _)]
+  exact ⟨⟨L', n, hL'⟩, hL', ObjectProperty.homMk i, by assumption⟩
 
 中文:
 引理 存在_quasiIso_injective
@@ -79,7 +80,8 @@ lemma exists_quasiIso_injective
   let L' : CochainComplex (InjectiveObject C) Int :=
     HomologicalComplex.liftObjectProperty _ L inferInstance
   have hL' : L'.IsStrictlyGE n := by
-    rwa [← isStrictlyGE_mapHomologicalComplex_obj_iff _ (Injecti
+    rwa [← isStrictlyGE_mapHomologicalComplex_obj_iff _ (InjectiveObject.ι _)]
+  exact ⟨⟨L', n, hL'⟩, hL', ObjectProperty.homMk i, by assumption⟩
 
 Depends on / 依赖: CochainComplex, HomologicalComplex, HomologicalComplex.liftObjectProperty, InjectiveObject, IsStrictlyGE, K.obj, ObjectProperty, ObjectProperty.homMk, exists_quasiIso_injective, isStrictlyGE_mapHomologicalComplex_obj_iff, liftObjectProperty, modelCategoryQuillen, modelCategoryQuillen.exists_quasiIso_injective
 -/
@@ -113,7 +115,8 @@ lemma exists_injective_nonempty_iso
   obtain ⟨M, _, i, hi⟩ :=
     CochainComplex.Plus.exists_quasiIso_injective ⟨L, ⟨n, inferInstance⟩⟩ n
   have : QuasiIso i.hom := by assumption
-  exact ⟨M, infer
+  exact ⟨M, inferInstance,
+    ⟨DerivedCategory.Plus.ι.preimageIso ((asIso (DerivedCategory.Q.map i.hom)).symm ≪≫ e.symm)⟩⟩
 
 中文:
 引理 存在_injective_nonempty_iso
@@ -124,7 +127,8 @@ lemma exists_injective_nonempty_iso
   obtain ⟨M, _, i, hi⟩ :=
     CochainComplex.Plus.exists_quasiIso_injective ⟨L, ⟨n, inferInstance⟩⟩ n
   have : QuasiIso i.hom := by assumption
-  exact ⟨M, infer
+  exact ⟨M, inferInstance,
+    ⟨DerivedCategory.Plus.ι.preimageIso ((asIso (DerivedCategory.Q.map i.hom)).symm ≪≫ e.symm)⟩⟩
 
 Depends on / 依赖: CochainComplex, CochainComplex.Plus.exists_quasiIso_injective, DerivedCategory, DerivedCategory.Plus, DerivedCategory.Q.map, DerivedCategory.exists_iso_Q_obj_of_isGE, K.isGE_, K.obj, K.obj.IsGE, QuasiIso, e.symm, exists_iso_Q_obj_of_isGE, exists_quasiIso_injective, i.hom, preimageIso
 -/
@@ -219,7 +223,13 @@ definition fibrantObjectEquivalence
     dsimp
     infer_instance)
   inverse := ObjectProperty.lift _
-    (HomologicalComplex.liftFunctorObjectProperty _ (FibrantObject.ι ⋙ Pl
+    (HomologicalComplex.liftFunctorObjectProperty _ (FibrantObject.ι ⋙ Plus.ι C)
+      (fun K n => by dsimp; infer_instance)) (by
+        rintro ⟨⟨_, n, _⟩, _⟩
+        refine ⟨n, ?_⟩
+        rwa [← isStrictlyGE_mapHomologicalComplex_obj_iff _ (InjectiveObject.ι _)])
+  unitIso := Iso.refl _
+  counitIso := Iso.refl _
 
 中文:
 定义 fibrantObjectEquivalence
@@ -231,7 +241,13 @@ definition fibrantObjectEquivalence
     dsimp
     infer_instance)
   inverse := ObjectProperty.lift _
-    (HomologicalComplex.liftFunctorObjectProperty _ (FibrantObject.ι ⋙ Pl
+    (HomologicalComplex.liftFunctorObjectProperty _ (FibrantObject.ι ⋙ Plus.ι C)
+      (fun K n => by dsimp; infer_instance)) (by
+        rintro ⟨⟨_, n, _⟩, _⟩
+        refine ⟨n, ?_⟩
+        rwa [← isStrictlyGE_mapHomologicalComplex_obj_iff _ (InjectiveObject.ι _)])
+  unitIso := Iso.refl _
+  counitIso := Iso.refl _
 
 Depends on / 依赖: FibrantObject, HomologicalComplex, HomologicalComplex.liftFunctorObjectProperty, InjectiveObject, Iso.refl, ObjectProperty, ObjectProperty.lift, counitIso, fibrantObjects, infer_instance, inverse, isFibrant_iff, isStrictlyGE_mapHomologicalComplex_obj_iff, liftFunctorObjectProperty, mapCochainComplexPlus, modelCategoryQuillen, modelCategoryQuillen.isFibrant_iff, unitIso
 -/
@@ -402,14 +418,16 @@ lemma isIso_quotient_map_iff
   proof: by
   rw [← isIso_iff_of_reflects_iso _ (HomotopyCategory.Plus.ι (InjectiveObject C))]; rw [← isIso_iff_of_reflects_iso _ (Functor.mapHomotopyCategory (InjectiveObject.ι C) (.up Int))]
   dsimp
-  rw [HomologicalComplex.isIso_quotient_map_iff_homotopyEquivalences]; rw [← CochainComplex.IsKInjective.qua
+  rw [HomologicalComplex.isIso_quotient_map_iff_homotopyEquivalences]; rw [← CochainComplex.IsKInjective.quasiIso_iff]
+  rfl
 
 中文:
 引理 isIso_quotient_map_iff
   证明: by
   rw [← isIso_iff_of_reflects_iso _ (HomotopyCategory.Plus.ι (InjectiveObject C))]; rw [← isIso_iff_of_reflects_iso _ (Functor.mapHomotopyCategory (InjectiveObject.ι C) (.up Int))]
   dsimp
-  rw [HomologicalComplex.isIso_quotient_map_iff_homotopyEquivalences]; rw [← CochainComplex.IsKInjective.qua
+  rw [HomologicalComplex.isIso_quotient_map_iff_homotopyEquivalences]; rw [← CochainComplex.IsKInjective.quasiIso_iff]
+  rfl
 
 Depends on / 依赖: CochainComplex, CochainComplex.IsKInjective.quasiIso_iff, Functor, Functor.mapHomotopyCategory, HomologicalComplex, HomologicalComplex.isIso_quotient_map_iff_homotopyEquivalences, HomotopyCategory, HomotopyCategory.Plus, InjectiveObject, IsKInjective, isIso_iff_of_reflects_iso, isIso_quotient_map_iff_homotopyEquivalences, mapHomotopyCategory, quasiIso_iff
 -/
@@ -613,7 +631,7 @@ instance :
         ((CochainComplex.Plus.quasiIso C).inverseImage
           (InjectiveObject.ι C).mapCochainComplexPlus) :=
     inferInstanceAs ((HomotopyCategory.Plus.quotient (InjectiveObject C)).IsLocalization _)
-  exact Localiz
+  exact LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_of_isLocalization (L C) (𝟭 _)
 
 中文:
 实例 :
@@ -624,7 +642,7 @@ instance :
         ((CochainComplex.Plus.quasiIso C).inverseImage
           (InjectiveObject.ι C).mapCochainComplexPlus) :=
     inferInstanceAs ((HomotopyCategory.Plus.quotient (InjectiveObject C)).IsLocalization _)
-  exact Localiz
+  exact LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_of_isLocalization (L C) (𝟭 _)
 -/
 private instance : (L C).IsLocalizedEquivalence := by
   have :
@@ -685,7 +703,19 @@ instance :
     obtain ⟨f₀, rfl⟩ := ObjectProperty.homMk_surjective f₀
     obtain ⟨f₁, rfl⟩ := ObjectProperty.homMk_surjective f₁
     dsimp [Functor.mapCochainComplexPlus] at f₀ f₁
-    refi
+    refine ⟨Plus.prepathObject _, ?_, ⟨?_⟩⟩
+    · ext : 1
+      exact eq_of_homotopy _ _ (pathObject.homotopy₀₁ _ (fun n => ⟨n + 1, by simp⟩))
+    · refine PrepathObject.RightHomotopy.fullSubcategoryEquiv.symm
+        { h := pathObject.lift f₀ f₁ (homotopyOfEq _ _
+          ((HomotopyCategory.Plus.ι C).congr_map hf)) ≫
+          (pathObject.mapHomologicalComplexObjIso K₂ (InjectiveObject.ι C)
+            (fun n => ⟨n + 1, by simp⟩)).inv
+          h₀ := ?_
+          h₁ := ?_ }
+      all_goals
+        dsimp [Functor.mapCochainComplexPlus]
+        cat_disch)
 
 中文:
 实例 :
@@ -695,7 +725,19 @@ instance :
     obtain ⟨f₀, rfl⟩ := ObjectProperty.homMk_surjective f₀
     obtain ⟨f₁, rfl⟩ := ObjectProperty.homMk_surjective f₁
     dsimp [Functor.mapCochainComplexPlus] at f₀ f₁
-    refi
+    refine ⟨Plus.prepathObject _, ?_, ⟨?_⟩⟩
+    · ext : 1
+      exact eq_of_homotopy _ _ (pathObject.homotopy₀₁ _ (fun n => ⟨n + 1, by simp⟩))
+    · refine PrepathObject.RightHomotopy.fullSubcategoryEquiv.symm
+        { h := pathObject.lift f₀ f₁ (homotopyOfEq _ _
+          ((HomotopyCategory.Plus.ι C).congr_map hf)) ≫
+          (pathObject.mapHomologicalComplexObjIso K₂ (InjectiveObject.ι C)
+            (fun n => ⟨n + 1, by simp⟩)).inv
+          h₀ := ?_
+          h₁ := ?_ }
+      all_goals
+        dsimp [Functor.mapCochainComplexPlus]
+        cat_disch)
 -/
 private instance : TwoSquare.GuitartExact (iso C).hom :=
   TwoSquare.GuitartExact.quotient_of_nonempty_rightHomotopy (iso C).symm (by
@@ -774,7 +816,7 @@ instance [HasDerivedCategory
         (DerivedCategory.Plus.Qh.objPreimage K) := Classical.arbitrary _
     have := Localization.inverts DerivedCategory.Plus.Qh _ _ r.hw
     exact ⟨r.X₁, ⟨(asIso (DerivedCategory.Plus.Qh.map r.w)).symm ≪≫
-      DerivedCateg
+      DerivedCategory.Plus.Qh.objObjPreimageIso K⟩⟩
 
 中文:
 实例 [HasDerivedCategory
@@ -784,7 +826,7 @@ instance [HasDerivedCategory
         (DerivedCategory.Plus.Qh.objPreimage K) := Classical.arbitrary _
     have := Localization.inverts DerivedCategory.Plus.Qh _ _ r.hw
     exact ⟨r.X₁, ⟨(asIso (DerivedCategory.Plus.Qh.map r.w)).symm ≪≫
-      DerivedCateg
+      DerivedCategory.Plus.Qh.objObjPreimageIso K⟩⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, DerivedCategory, DerivedCategory.Plus.Qh, DerivedCategory.Plus.Qh.map, DerivedCategory.Plus.Qh.objObjPreimageIso, DerivedCategory.Plus.Qh.objPreimage, HomotopyCategory, HomotopyCategory.Plus.localizerMorphism, Localization, Localization.inverts, RightResolution, arbitrary, inverts, localizerMorphism, objObjPreimageIso, objPreimage, r.hw
 -/

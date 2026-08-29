@@ -125,7 +125,7 @@ inductionOn x fun _f hx y z => inductionOn₂ y z fun _g _h hfg => hx.mp hfg.mon
       fun _a => mul_le_mul_of_nonneg_left
   mul_le_mul_of_nonneg_right x :=
 inductionOn x fun _f hx y z => inductionOn₂ y z fun _g _h hfg => hx.mp hfg.mono
-      fun 
+      fun _a => mul_le_mul_of_nonneg_right
 
 中文:
 实例 instIsOrderedRing
@@ -136,7 +136,7 @@ inductionOn x fun _f hx y z => inductionOn₂ y z fun _g _h hfg => hx.mp hfg.mon
       fun _a => mul_le_mul_of_nonneg_left
   mul_le_mul_of_nonneg_right x :=
 inductionOn x fun _f hx y z => inductionOn₂ y z fun _g _h hfg => hx.mp hfg.mono
-      fun 
+      fun _a => mul_le_mul_of_nonneg_right
 
 Depends on / 依赖: const_le, zero_le_one
 -/

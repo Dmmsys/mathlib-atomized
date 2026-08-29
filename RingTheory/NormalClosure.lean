@@ -199,7 +199,8 @@ local instance : IsScalarTower R S E := IsScalarTower.to₁₂₄ R S L E
 
 local instance : IsScalarTower R T E := IsScalarTower.to₁₃₄ R S T E
 
-local instance : FaithfulSMul S E := (faithfulSMul_iff_a
+local instance : FaithfulSMul S E := (faithfulSMul_iff_algebraMap_injective S E).mpr
+      (FaithfulSMul.algebraMap_injective L E).comp (FaithfulSMul.algebraMap_injective S L)
 
 中文:
 实例 :
@@ -212,7 +213,8 @@ local instance : IsScalarTower R S E := IsScalarTower.to₁₂₄ R S L E
 
 local instance : IsScalarTower R T E := IsScalarTower.to₁₃₄ R S T E
 
-local instance : FaithfulSMul S E := (faithfulSMul_iff_a
+local instance : FaithfulSMul S E := (faithfulSMul_iff_algebraMap_injective S E).mpr
+      (FaithfulSMul.algebraMap_injective L E).comp (FaithfulSMul.algebraMap_injective S L)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
 -/

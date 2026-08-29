@@ -700,7 +700,13 @@ theorem monomial_dvd_monomial
     simp_rw [coeff_monomial_mul'] at hi hj
     split_ifs at hj with hi
     · exact ⟨Or.inr hi, _, hj⟩
-    · exact ⟨Or.inl hj, hj
+    · exact ⟨Or.inl hj, hj.symm ▸ dvd_zero _⟩
+  · rintro ⟨h | hij, d, rfl⟩
+    · simp_rw [h, monomial_zero, dvd_zero]
+    · refine ⟨monomial (j - i) d, ?_⟩
+      rw [monomial_mul]; rw [add_tsub_cancel_of_le hij]
+
+@[simp]
 
 中文:
 定理 monomial_dvd_monomial
@@ -716,7 +722,13 @@ theorem monomial_dvd_monomial
     simp_rw [coeff_monomial_mul'] at hi hj
     split_ifs at hj with hi
     · exact ⟨Or.inr hi, _, hj⟩
-    · exact ⟨Or.inl hj, hj
+    · exact ⟨Or.inl hj, hj.symm ▸ dvd_zero _⟩
+  · rintro ⟨h | hij, d, rfl⟩
+    · simp_rw [h, monomial_zero, dvd_zero]
+    · refine ⟨monomial (j - i) d, ?_⟩
+      rw [monomial_mul]; rw [add_tsub_cancel_of_le hij]
+
+@[simp]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.ext_iff, Or.inl, Or.inr, add_tsub_cancel_of_le, classical, coeff_monomial, coeff_monomial_mul, dvd_zero, ext_iff, hj.symm, if_pos, monomial, monomial_mul, monomial_zero, simp_rw, split_ifs
 -/
@@ -982,7 +994,32 @@ theorem X_dvd_mul_iff
           (p * q).modMonomial (Finsupp.single i 1) by
       simp only [X_dvd_iff_modMonomial_eq_zero] at h ⊢
       rwa [h, mul_eq_zero] at this
-    have hp := p.m
+    have hp := p.modMonomial_add_divMonomial_single i
+    have hq := q.modMonomial_add_divMonomial_single i
+    rw [eq_modMonomial_single_iff]
+    · intro n
+      contrapose
+      intro hn
+      classical
+      rw [notMem_support_iff]; rw [coeff_mul]
+      apply Finset.sum_eq_zero
+      intro x hx
+      simp only [Finset.mem_antidiagonal] at hx
+      simp only [← hx, Finsupp.coe_add, Pi.add_apply, Nat.add_eq_zero_iff, not_and_or] at hn
+      rcases hn with hn | hn
+      · rw [coeff_modMonomial_of_le, zero_mul]
+        simpa [← Nat.one_le_iff_ne_zero] using hn
+      · rw [mul_comm, coeff_modMonomial_of_le, zero_mul]
+        simpa [← Nat.one_le_iff_ne_zero] using hn
+    · nth_rewrite 1 [← hp]
+      nth_rewrite 1 [← hq]
+      simp only [add_mul, mul_add, add_assoc, add_sub_cancel_left]
+      simp only [← mul_assoc, mul_comm _ (X i)]
+      simp only [mul_assoc, ← mul_add (X i)]
+      apply dvd_mul_right
+  · rintro (h | h)
+    · exact dvd_mul_of_dvd_left h q
+    · exact dvd_mul_of_dvd_right h p
 
 中文:
 定理 X_dvd_mul_iff
@@ -995,7 +1032,32 @@ theorem X_dvd_mul_iff
           (p * q).modMonomial (Finsupp.single i 1) by
       simp only [X_dvd_iff_modMonomial_eq_zero] at h ⊢
       rwa [h, mul_eq_zero] at this
-    have hp := p.m
+    have hp := p.modMonomial_add_divMonomial_single i
+    have hq := q.modMonomial_add_divMonomial_single i
+    rw [eq_modMonomial_single_iff]
+    · intro n
+      contrapose
+      intro hn
+      classical
+      rw [notMem_support_iff]; rw [coeff_mul]
+      apply Finset.sum_eq_zero
+      intro x hx
+      simp only [Finset.mem_antidiagonal] at hx
+      simp only [← hx, Finsupp.coe_add, Pi.add_apply, Nat.add_eq_zero_iff, not_and_or] at hn
+      rcases hn with hn | hn
+      · rw [coeff_modMonomial_of_le, zero_mul]
+        simpa [← Nat.one_le_iff_ne_zero] using hn
+      · rw [mul_comm, coeff_modMonomial_of_le, zero_mul]
+        simpa [← Nat.one_le_iff_ne_zero] using hn
+    · nth_rewrite 1 [← hp]
+      nth_rewrite 1 [← hq]
+      simp only [add_mul, mul_add, add_assoc, add_sub_cancel_left]
+      simp only [← mul_assoc, mul_comm _ (X i)]
+      simp only [mul_assoc, ← mul_add (X i)]
+      apply dvd_mul_right
+  · rintro (h | h)
+    · exact dvd_mul_of_dvd_left h q
+    · exact dvd_mul_of_dvd_right h p
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Finsupp, Finsupp.single, X_dvd_iff_modMonomial_eq_zero, classical, coeff_mul, contrapose, eq_modMonomial_single_iff, modMonomial, modMonomial_add_divMonomial_single, mul_eq_zero, nontriviality, notMem_support_iff, p.modMonomial, p.modMonomial_add_divMonomial_single, q.modMonomial, q.modMonomial_add_divMonomial_single, single, sum_eq_zero
 -/
@@ -1087,7 +1149,18 @@ theorem dvd_X_mul_iff
       obtain rfl : q = p * r := by rw [← X_mul_cancel_left_iff (i := i), hp, mul_left_comm]
       exact dvd_mul_right p r
     · intro hip
-      refine ⟨hi
+      refine ⟨hip, ?_⟩
+      rw [X_dvd_iff_modMonomial_eq_zero] at hip
+      rw [← p.modMonomial_add_divMonomial_single i]; rw [hip]; rw [zero_add]; rw [mul_assoc]; rw [X_mul_cancel_left_iff] at hp
+      use r
+  · rintro (hp | ⟨hi, hq⟩)
+    · exact dvd_mul_of_dvd_right hp (X i)
+    · suffices p = X i * p.divMonomial (Finsupp.single i 1) by
+        rw [this]
+        exact mul_dvd_mul_left (X i) hq
+      conv_lhs => rw [← p.modMonomial_add_divMonomial (Finsupp.single i 1)]
+      simpa only [← C_mul_X_eq_monomial, C_1, one_mul, add_eq_right,
+        ← X_dvd_iff_modMonomial_eq_zero]
 
 中文:
 定理 dvd_X_mul_iff
@@ -1101,7 +1174,18 @@ theorem dvd_X_mul_iff
       obtain rfl : q = p * r := by rw [← X_mul_cancel_left_iff (i := i), hp, mul_left_comm]
       exact dvd_mul_right p r
     · intro hip
-      refine ⟨hi
+      refine ⟨hip, ?_⟩
+      rw [X_dvd_iff_modMonomial_eq_zero] at hip
+      rw [← p.modMonomial_add_divMonomial_single i]; rw [hip]; rw [zero_add]; rw [mul_assoc]; rw [X_mul_cancel_left_iff] at hp
+      use r
+  · rintro (hp | ⟨hi, hq⟩)
+    · exact dvd_mul_of_dvd_right hp (X i)
+    · suffices p = X i * p.divMonomial (Finsupp.single i 1) by
+        rw [this]
+        exact mul_dvd_mul_left (X i) hq
+      conv_lhs => rw [← p.modMonomial_add_divMonomial (Finsupp.single i 1)]
+      simpa only [← C_mul_X_eq_monomial, C_1, one_mul, add_eq_right,
+        ← X_dvd_iff_modMonomial_eq_zero]
 
 Depends on / 依赖: X_dvd_iff_modMonomial_eq_zero, X_dvd_mul_iff, X_mul_cancel_left_iff, dvd_mul_of_dvd_right, dvd_mul_right, modMonomial_add_divMonomial_single, mul_assoc, mul_left_comm, p.modMonomial_add_divMonomial_single, this.symm.imp, zero_add
 -/
@@ -1139,7 +1223,41 @@ theorem dvd_monomial_mul_iff_exists
   · simp only [Subsingleton.elim _ p, dvd_refl, and_self, and_true, exists_const, true_iff]
     refine ⟨n, le_refl n⟩
   suffices forall (d) (n : σ ->₀ Nat) (hd : n.degree = d) (p q : MvPolynomial σ R),
-    p ∣ monomial n 1 * q ↔ exists m r, m <= 
+    p ∣ monomial n 1 * q ↔ exists m r, m <= n ∧ r ∣ q ∧ p = monomial m 1 * r from this n.degree n rfl p q
+  intro d
+  induction d with
+  | zero =>
+    intro n hn p
+    rw [Finsupp.degree_eq_zero_iff] at hn
+    simp only [hn, monomial_zero', C_1, one_mul, nonpos_iff_eq_zero, exists_and_left,
+      exists_eq_left, exists_eq_right', implies_true]
+  | succ d hd =>
+    intro n hn p q
+    refine ⟨fun hp => ?_, fun ⟨m, r, hmn, hrq, hp⟩ => ?_⟩
+    · obtain ⟨i, hi⟩ : n.support.Nonempty := by
+        rw [Finsupp.support_nonempty_iff]
+        intro hn'
+        simp [hn'] at hn
+      let n' := n - Finsupp.single i 1
+      have hn' : n' + Finsupp.single i 1 = n := by
+        apply Finsupp.sub_add_single_one_cancel
+        rwa [← Finsupp.mem_support_iff]
+      have hnn' : n' <= n := by simp [← hn']
+      have hd' : n'.degree = d := by
+        rw [← add_left_inj]; rw [← hn]; rw [← hn']
+        simp
+      rw [← hn']; rw [monomial_add_single]; rw [pow_one]; rw [mul_comm _ (X i)]; rw [mul_assoc]; rw [dvd_X_mul_iff] at hp
+      rcases hp with hp | hp
+      · obtain ⟨m, r, hm, hr, hp⟩ := (hd n' hd' p q).mp hp
+        exact ⟨m, r, le_trans hm hnn', hr, hp⟩
+      · obtain ⟨p', rfl⟩ := hp.1
+        obtain ⟨m, r, hm, hr, hp⟩ := (hd n' hd' _ _).mp hp.2
+        use m + Finsupp.single i 1, r, ?_, hr
+        · simp [monomial_add_single, pow_one, mul_comm _ (X i), mul_assoc, ← hp]
+        · simpa [← hn'] using hm
+    · rw [hp, ← add_tsub_cancel_of_le hmn, ← mul_one 1, ← monomial_mul, mul_one, mul_assoc]
+      apply mul_dvd_mul dvd_rfl
+      apply dvd_mul_of_dvd_right hrq
 
 中文:
 定理 dvd_monomial_mul_iff_存在
@@ -1149,7 +1267,41 @@ theorem dvd_monomial_mul_iff_exists
   · simp only [Subsingleton.elim _ p, dvd_refl, and_self, and_true, exists_const, true_iff]
     refine ⟨n, le_refl n⟩
   suffices forall (d) (n : σ ->₀ Nat) (hd : n.degree = d) (p q : MvPolynomial σ R),
-    p ∣ monomial n 1 * q ↔ exists m r, m <= 
+    p ∣ monomial n 1 * q ↔ exists m r, m <= n ∧ r ∣ q ∧ p = monomial m 1 * r from this n.degree n rfl p q
+  intro d
+  induction d with
+  | zero =>
+    intro n hn p
+    rw [Finsupp.degree_eq_zero_iff] at hn
+    simp only [hn, monomial_zero', C_1, one_mul, nonpos_iff_eq_zero, exists_and_left,
+      exists_eq_left, exists_eq_right', implies_true]
+  | succ d hd =>
+    intro n hn p q
+    refine ⟨fun hp => ?_, fun ⟨m, r, hmn, hrq, hp⟩ => ?_⟩
+    · obtain ⟨i, hi⟩ : n.support.Nonempty := by
+        rw [Finsupp.support_nonempty_iff]
+        intro hn'
+        simp [hn'] at hn
+      let n' := n - Finsupp.single i 1
+      have hn' : n' + Finsupp.single i 1 = n := by
+        apply Finsupp.sub_add_single_one_cancel
+        rwa [← Finsupp.mem_support_iff]
+      have hnn' : n' <= n := by simp [← hn']
+      have hd' : n'.degree = d := by
+        rw [← add_left_inj]; rw [← hn]; rw [← hn']
+        simp
+      rw [← hn']; rw [monomial_add_single]; rw [pow_one]; rw [mul_comm _ (X i)]; rw [mul_assoc]; rw [dvd_X_mul_iff] at hp
+      rcases hp with hp | hp
+      · obtain ⟨m, r, hm, hr, hp⟩ := (hd n' hd' p q).mp hp
+        exact ⟨m, r, le_trans hm hnn', hr, hp⟩
+      · obtain ⟨p', rfl⟩ := hp.1
+        obtain ⟨m, r, hm, hr, hp⟩ := (hd n' hd' _ _).mp hp.2
+        use m + Finsupp.single i 1, r, ?_, hr
+        · simp [monomial_add_single, pow_one, mul_comm _ (X i), mul_assoc, ← hp]
+        · simpa [← hn'] using hm
+    · rw [hp, ← add_tsub_cancel_of_le hmn, ← mul_one 1, ← monomial_mul, mul_one, mul_assoc]
+      apply mul_dvd_mul dvd_rfl
+      apply dvd_mul_of_dvd_right hrq
 
 Depends on / 依赖: Finsupp, Finsupp.degree_eq_zero_iff, MvPolynomial, Subsingleton, Subsingleton.elim, and_self, and_true, degree, degree_eq_zero_iff, dvd_refl, exists_const, le_refl, monomial, monomial_zero, n.degree, nonpos_iff_eq_zero, one_mul, subsingleton_or_nontrivial, true_iff
 -/

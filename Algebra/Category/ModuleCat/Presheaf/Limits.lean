@@ -46,7 +46,19 @@ definition evaluationJointlyReflectsLimits
         apply (isLimitOfPreserves (ModuleCat.restrictScalars (R.map f).hom) (hc Y)).hom_ext
         intro j
         have h₁ := (c.π.app j).naturality f
-        have h₂ := (hc X).fac ((evaluation R X).map
+        have h₂ := (hc X).fac ((evaluation R X).mapCone s) j
+        rw [Functor.mapCone_π_app]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [IsLimit.fac]
+        dsimp at h₁ h₂ ⊢
+        rw [h₁]; rw [reassoc_of% h₂]; rw [Hom.naturality] }
+  fac s j := by
+    ext1 X
+    exact (hc X).fac ((evaluation R X).mapCone s) j
+  uniq s m hm := by
+    ext1 X
+    apply (hc X).uniq ((evaluation R X).mapCone s)
+    intro j
+    dsimp
+    rw [← hm]; rw [comp_app]
 
 中文:
 定义 evaluationJointlyReflectsLimits
@@ -56,7 +68,19 @@ definition evaluationJointlyReflectsLimits
         apply (isLimitOfPreserves (ModuleCat.restrictScalars (R.map f).hom) (hc Y)).hom_ext
         intro j
         have h₁ := (c.π.app j).naturality f
-        have h₂ := (hc X).fac ((evaluation R X).map
+        have h₂ := (hc X).fac ((evaluation R X).mapCone s) j
+        rw [Functor.mapCone_π_app]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [IsLimit.fac]
+        dsimp at h₁ h₂ ⊢
+        rw [h₁]; rw [reassoc_of% h₂]; rw [Hom.naturality] }
+  fac s j := by
+    ext1 X
+    exact (hc X).fac ((evaluation R X).mapCone s) j
+  uniq s m hm := by
+    ext1 X
+    apply (hc X).uniq ((evaluation R X).mapCone s)
+    intro j
+    dsimp
+    rw [← hm]; rw [comp_app]
 
 Depends on / 依赖: Functor, Functor.mapCone_, Functor.map_comp, Hom.naturality, IsLimit, IsLimit.fac, ModuleCat, ModuleCat.restrictScalars, R.map, evaluation, hom_ext, isLimitOfPreserves, mapCone, map_comp, naturality, reassoc_of, restrictScalars
 -/
@@ -103,7 +127,19 @@ definition limitPresheafOfModules
     (preservesLimitIso (ModuleCat.restrictScalars (R.map f).hom) (F ⋙ evaluation R Y)).inv
   map_id X := by
     dsimp
-    rw [← cancel_mono (preservesLimitIso _ _).hom]; rw [assoc]; rw [Iso.inv_hom_id]; rw
+    rw [← cancel_mono (preservesLimitIso _ _).hom]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
+    apply limit.hom_ext
+    simp [← Functor.assoc, ← ModuleCat.restrictScalarsId'App_inv_naturality,
+      ModuleCat.restrictScalarsId'_inv_app]
+  map_comp {X Y Z} f g := by
+    dsimp
+    rw [← cancel_mono (preservesLimitIso _ _).hom]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
+    apply limit.hom_ext
+    intro j
+    simp only [Functor.map_comp, assoc, ← Functor.assoc, preservesLimitIso_hom_π,
+      ← ModuleCat.restrictScalarsComp'App_inv_naturality]
+    rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [assoc]; rw [preservesLimitIso_inv_π]
+    simp
 
 中文:
 定义 limitPresheafOfModules
@@ -113,7 +149,19 @@ definition limitPresheafOfModules
     (preservesLimitIso (ModuleCat.restrictScalars (R.map f).hom) (F ⋙ evaluation R Y)).inv
   map_id X := by
     dsimp
-    rw [← cancel_mono (preservesLimitIso _ _).hom]; rw [assoc]; rw [Iso.inv_hom_id]; rw
+    rw [← cancel_mono (preservesLimitIso _ _).hom]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
+    apply limit.hom_ext
+    simp [← Functor.assoc, ← ModuleCat.restrictScalarsId'App_inv_naturality,
+      ModuleCat.restrictScalarsId'_inv_app]
+  map_comp {X Y Z} f g := by
+    dsimp
+    rw [← cancel_mono (preservesLimitIso _ _).hom]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
+    apply limit.hom_ext
+    intro j
+    simp only [Functor.map_comp, assoc, ← Functor.assoc, preservesLimitIso_hom_π,
+      ← ModuleCat.restrictScalarsComp'App_inv_naturality]
+    rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [assoc]; rw [preservesLimitIso_inv_π]
+    simp
 
 Depends on / 依赖: evaluation
 -/
@@ -157,7 +205,8 @@ definition limitCone
             simp only [assoc, preservesLimitIso_inv_π]
             apply limMap_π }
       naturality := fun {j j'} f => by
-      
+        ext1 X
+        simpa using (limit.w (F ⋙ evaluation R X) f).symm }
 
 中文:
 定义 limitCone
@@ -171,7 +220,8 @@ definition limitCone
             simp only [assoc, preservesLimitIso_inv_π]
             apply limMap_π }
       naturality := fun {j j'} f => by
-      
+        ext1 X
+        simpa using (limit.w (F ⋙ evaluation R X) f).symm }
 
 Depends on / 依赖: limitPresheafOfModules
 -/

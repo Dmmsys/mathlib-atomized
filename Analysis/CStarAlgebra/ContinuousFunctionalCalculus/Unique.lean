@@ -309,7 +309,25 @@ definition realContinuousMapOfNNReal
     rw [← sub_eq_zero] at this ⊢
     convert! this using 1
     abel
-  map_
+  map_add' f g := by
+    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
+    simp only [map_add] at this ⊢
+    rw [← sub_eq_zero] at this ⊢
+    convert! this using 1
+    abel
+  commutes' r := by
+    obtain (hr | hr) := le_total 0 r
+    · lift r to Real>=0 using hr
+      simpa only [ContinuousMap.toNNReal_algebraMap, ContinuousMap.toNNReal_neg_algebraMap,
+        map_zero, sub_zero] using! AlgHomClass.commutes φ r
+    · rw [← neg_neg r, ← map_neg, neg_neg (-r)]
+      rw [← neg_nonneg] at hr
+      lift -r to Real>=0 using hr with r
+      simpa only [map_neg, ContinuousMap.toNNReal_neg_algebraMap, map_zero,
+        ContinuousMap.toNNReal_algebraMap, zero_sub, neg_inj] using! AlgHomClass.commutes φ r
+  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
+
+@[fun_prop]
 
 中文:
 定义 realContinuousMapOfNN实数
@@ -323,7 +341,25 @@ definition realContinuousMapOfNNReal
     rw [← sub_eq_zero] at this ⊢
     convert! this using 1
     abel
-  map_
+  map_add' f g := by
+    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
+    simp only [map_add] at this ⊢
+    rw [← sub_eq_zero] at this ⊢
+    convert! this using 1
+    abel
+  commutes' r := by
+    obtain (hr | hr) := le_total 0 r
+    · lift r to Real>=0 using hr
+      simpa only [ContinuousMap.toNNReal_algebraMap, ContinuousMap.toNNReal_neg_algebraMap,
+        map_zero, sub_zero] using! AlgHomClass.commutes φ r
+    · rw [← neg_neg r, ← map_neg, neg_neg (-r)]
+      rw [← neg_nonneg] at hr
+      lift -r to Real>=0 using hr with r
+      simpa only [map_neg, ContinuousMap.toNNReal_neg_algebraMap, map_zero,
+        ContinuousMap.toNNReal_algebraMap, zero_sub, neg_inj] using! AlgHomClass.commutes φ r
+  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
+
+@[fun_prop]
 
 Depends on / 依赖: f.toNNReal, toNNReal
 -/
@@ -464,7 +500,22 @@ instance NNReal.instContinuousMap.UniqueHom
     let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
     have (ξ : C(s, Real>=0) ->⋆ₐ[Real>=0] A) (hξ : Continuous ξ) :
         (let ξ' := ξ.realContinuousMapOfNNReal.comp <| ContinuousMap.compStarAlgHom' Real Real e
-        Continuous ξ' ∧ ξ' (.restri
+        Continuous ξ' ∧ ξ' (.restrict s' <| .id Real) = ξ (.restrict s <| .id Real>=0)) := by
+      intro ξ'
+.comp refine ⟨ξ.continuous_realContinuousMapOfNNReal hξ
+        ContinuousMap.continuous_precomp _, ?_⟩
+      exact ξ.realContinuousMapOfNNReal_apply_comp_toReal (.restrict s <| .id Real>=0)
+    obtain ⟨hφ', hφ_id⟩ := this φ hφ
+    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
+    have hs' : CompactSpace s' := e.compactSpace
+    have h' := ContinuousMap.UniqueHom.eq_of_continuous_of_map_id s' _ _ hφ' hψ'
+      (hφ_id ▸ hψ_id ▸ h)
+    have h'' := congr($(h').comp <| ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s)))
+    have : (ContinuousMap.compStarAlgHom' Real Real (e : C(s, s'))).comp
+        (ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s))) = StarAlgHom.id _ _ := by
+      ext1; simp
+    simp only [StarAlgHom.comp_assoc, this, StarAlgHom.comp_id] at h''
+    exact StarAlgHom.realContinuousMapOfNNReal_injective h''
 
 中文:
 实例 非负实数.instContinuousMap.唯一态射
@@ -474,7 +525,22 @@ instance NNReal.instContinuousMap.UniqueHom
     let e : s ≃ₜ s' := NNReal.isEmbedding_coe.homeomorphImage s
     have (ξ : C(s, Real>=0) ->⋆ₐ[Real>=0] A) (hξ : Continuous ξ) :
         (let ξ' := ξ.realContinuousMapOfNNReal.comp <| ContinuousMap.compStarAlgHom' Real Real e
-        Continuous ξ' ∧ ξ' (.restri
+        Continuous ξ' ∧ ξ' (.restrict s' <| .id Real) = ξ (.restrict s <| .id Real>=0)) := by
+      intro ξ'
+.comp refine ⟨ξ.continuous_realContinuousMapOfNNReal hξ
+        ContinuousMap.continuous_precomp _, ?_⟩
+      exact ξ.realContinuousMapOfNNReal_apply_comp_toReal (.restrict s <| .id Real>=0)
+    obtain ⟨hφ', hφ_id⟩ := this φ hφ
+    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
+    have hs' : CompactSpace s' := e.compactSpace
+    have h' := ContinuousMap.UniqueHom.eq_of_continuous_of_map_id s' _ _ hφ' hψ'
+      (hφ_id ▸ hψ_id ▸ h)
+    have h'' := congr($(h').comp <| ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s)))
+    have : (ContinuousMap.compStarAlgHom' Real Real (e : C(s, s'))).comp
+        (ContinuousMap.compStarAlgHom' Real Real (e.symm : C(s', s))) = StarAlgHom.id _ _ := by
+      ext1; simp
+    simp only [StarAlgHom.comp_assoc, this, StarAlgHom.comp_id] at h''
+    exact StarAlgHom.realContinuousMapOfNNReal_injective h''
 
 Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.compStarAlgHom, ContinuousMap.continuous_precomp, NNReal, NNReal.isEmbedding_coe.homeomorphImage, compStarAlgHom, continuous_precomp, continuous_realContinuousMapOfNNReal, homeomorphImage, isEmbedding_coe, realContinuousMapOfNNReal, realContinuousMapOfNNReal.comp, realContinuousMapOfNNReal_apply_comp_toReal, restrict
 -/
@@ -785,7 +851,25 @@ definition realContinuousMapZeroOfNNReal
     rw [← this]
     abel
   map_add' f g := by
-    have := congr
+    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
+    simp only [map_add] at this ⊢
+    rw [← sub_eq_zero] at this ⊢
+    rw [← this]
+    abel
+  map_smul' r f := by
+    simp only [MonoidHom.id_apply]
+    by_cases! hr : 0 <= r
+    · lift r to Real>=0 using hr
+      simp only [← smul_def, toNNReal_smul, map_smul, toNNReal_neg_smul, smul_sub]
+    · rw [← neg_pos] at hr
+      rw [← neg_smul]
+      nth_rw 1 [← neg_neg r]
+      nth_rw 3 [← neg_neg r]
+      lift -r to Real>=0 using hr.le with r
+      simp only [neg_smul, ← smul_def, toNNReal_neg_smul, map_smul, toNNReal_smul, smul_sub,
+        sub_neg_eq_add]
+      rw [sub_eq_add_neg]; rw [add_comm]
+  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
 
 中文:
 定义 realContinuousMapZeroOfNN实数
@@ -799,7 +883,25 @@ definition realContinuousMapZeroOfNNReal
     rw [← this]
     abel
   map_add' f g := by
-    have := congr
+    have := congr(φ $(f.toNNReal_add_add_neg_add_neg_eq g))
+    simp only [map_add] at this ⊢
+    rw [← sub_eq_zero] at this ⊢
+    rw [← this]
+    abel
+  map_smul' r f := by
+    simp only [MonoidHom.id_apply]
+    by_cases! hr : 0 <= r
+    · lift r to Real>=0 using hr
+      simp only [← smul_def, toNNReal_smul, map_smul, toNNReal_neg_smul, smul_sub]
+    · rw [← neg_pos] at hr
+      rw [← neg_smul]
+      nth_rw 1 [← neg_neg r]
+      nth_rw 3 [← neg_neg r]
+      lift -r to Real>=0 using hr.le with r
+      simp only [neg_smul, ← smul_def, toNNReal_neg_smul, map_smul, toNNReal_smul, smul_sub,
+        sub_neg_eq_add]
+      rw [sub_eq_add_neg]; rw [add_comm]
+  map_star' f := by simp only [star_trivial, star_sub, ← map_star]
 
 Depends on / 依赖: f.toNNReal, toNNReal
 -/
@@ -946,7 +1048,29 @@ instance NNReal.instContinuousMapZero.UniqueHom
     have : Fact (0 in s') := ⟨0, Fact.out, coe_zero⟩
     have e0 : e 0 = 0 := rfl
     have e0' : e.symm 0 = 0 := e.symm_apply_eq.mpr e0
-    have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous
+    have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous ξ) :
+        (let ξ' := ξ.realContinuousMapZeroOfNNReal.comp <|
+          ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨e, e0⟩;
+          Continuous ξ' ∧ ξ' (.id s') = ξ (.id s)) := by
+      intro ξ'
+.comp ?_, ?_⟩ refine ⟨ξ.continuous_realContinuousMapZeroOfNNReal hξ
+      · rw [continuous_induced_rng]
+.comp continuous_induced_dom exact ContinuousMap.continuous_precomp _
+      · exact ξ.realContinuousMapZeroOfNNReal_apply_comp_toReal (.id _)
+    obtain ⟨hφ', hφ_id⟩ := this φ hφ
+    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
+    have hs' : CompactSpace s' := e.compactSpace
+    have : ContinuousMapZero.UniqueHom Real A := inferInstance
+    have h' := ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id
+      s' _ _ hφ' hψ' (hφ_id ▸ hψ_id ▸ h)
+    have h'' := congr($(h').comp <|
+      ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩)
+    have : (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e : C(s, s')), e0⟩).comp
+        (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩) =
+        NonUnitalStarAlgHom.id _ _ := by
+      ext; simp
+    simp only [NonUnitalStarAlgHom.comp_assoc, this, NonUnitalStarAlgHom.comp_id] at h''
+    exact NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_injective h''
 
 中文:
 实例 非负实数.instContinuousMapZero.唯一态射
@@ -956,7 +1080,29 @@ instance NNReal.instContinuousMapZero.UniqueHom
     have : Fact (0 in s') := ⟨0, Fact.out, coe_zero⟩
     have e0 : e 0 = 0 := rfl
     have e0' : e.symm 0 = 0 := e.symm_apply_eq.mpr e0
-    have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous
+    have (ξ : C(s, Real>=0)₀ ->⋆ₙₐ[Real>=0] A) (hξ : Continuous ξ) :
+        (let ξ' := ξ.realContinuousMapZeroOfNNReal.comp <|
+          ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨e, e0⟩;
+          Continuous ξ' ∧ ξ' (.id s') = ξ (.id s)) := by
+      intro ξ'
+.comp ?_, ?_⟩ refine ⟨ξ.continuous_realContinuousMapZeroOfNNReal hξ
+      · rw [continuous_induced_rng]
+.comp continuous_induced_dom exact ContinuousMap.continuous_precomp _
+      · exact ξ.realContinuousMapZeroOfNNReal_apply_comp_toReal (.id _)
+    obtain ⟨hφ', hφ_id⟩ := this φ hφ
+    obtain ⟨hψ', hψ_id⟩ := this ψ hψ
+    have hs' : CompactSpace s' := e.compactSpace
+    have : ContinuousMapZero.UniqueHom Real A := inferInstance
+    have h' := ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id
+      s' _ _ hφ' hψ' (hφ_id ▸ hψ_id ▸ h)
+    have h'' := congr($(h').comp <|
+      ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩)
+    have : (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e : C(s, s')), e0⟩).comp
+        (ContinuousMapZero.nonUnitalStarAlgHom_precomp Real ⟨(e.symm : C(s', s)), e0'⟩) =
+        NonUnitalStarAlgHom.id _ _ := by
+      ext; simp
+    simp only [NonUnitalStarAlgHom.comp_assoc, this, NonUnitalStarAlgHom.comp_id] at h''
+    exact NonUnitalStarAlgHom.realContinuousMapZeroOfNNReal_injective h''
 
 Depends on / 依赖: Continuous, ContinuousMapZero, ContinuousMapZero.nonUnitalStarAlgHom_precomp, Fact.out, NNReal, NNReal.isEmbedding_coe.homeomorphImage, coe_zero, continuous_realContinuousMa, e.symm, e.symm_apply_eq.mpr, homeomorphImage, isEmbedding_coe, nonUnitalStarAlgHom_precomp, realContinuousMapZeroOfNNReal, realContinuousMapZeroOfNNReal.comp, symm_apply_eq
 -/
@@ -1028,7 +1174,20 @@ lemma NonUnitalStarAlgHomClass.map_cfcₙ
   have h_spec := NonUnitalAlgHom.quasispectrum_apply_subset' (R := R) S φ a
   have hψa : q (ψ a) := hφa
   let ι : C(quasispectrum R (ψ a), quasispectrum R a)₀ :=
-    ⟨⟨Set.inclusion h_spec, continuous_id.su
+    ⟨⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩, rfl⟩
+  suffices ψ.comp (cfcₙHom ha) =
+      (cfcₙHom hψa).comp (ContinuousMapZero.nonUnitalStarAlgHom_precomp R ι) by
+    have hf' : ContinuousOn f (quasispectrum R (ψ a)) := hf.mono h_spec
+    rw [cfcₙ_apply ..]; rw [cfcₙ_apply ..]
+    exact DFunLike.congr_fun this _
+  refine ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
+  case apply_id =>
+    trans cfcₙHom hψa (.id (quasispectrum R (ψ a)))
+    · simp [cfcₙHom_id]
+    · congr
+  all_goals
+    dsimp [ContinuousMapZero.nonUnitalStarAlgHom_precomp]
+    fun_prop
 
 中文:
 引理 NonUnitalStarAlgHomClass.map_cfcₙ
@@ -1039,7 +1198,20 @@ lemma NonUnitalStarAlgHomClass.map_cfcₙ
   have h_spec := NonUnitalAlgHom.quasispectrum_apply_subset' (R := R) S φ a
   have hψa : q (ψ a) := hφa
   let ι : C(quasispectrum R (ψ a), quasispectrum R a)₀ :=
-    ⟨⟨Set.inclusion h_spec, continuous_id.su
+    ⟨⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩, rfl⟩
+  suffices ψ.comp (cfcₙHom ha) =
+      (cfcₙHom hψa).comp (ContinuousMapZero.nonUnitalStarAlgHom_precomp R ι) by
+    have hf' : ContinuousOn f (quasispectrum R (ψ a)) := hf.mono h_spec
+    rw [cfcₙ_apply ..]; rw [cfcₙ_apply ..]
+    exact DFunLike.congr_fun this _
+  refine ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
+  case apply_id =>
+    trans cfcₙHom hψa (.id (quasispectrum R (ψ a)))
+    · simp [cfcₙHom_id]
+    · congr
+  all_goals
+    dsimp [ContinuousMapZero.nonUnitalStarAlgHom_precomp]
+    fun_prop
 
 Depends on / 依赖: Continuous, NonUnitalAlgHom, NonUnitalAlgHom.quasispectrum_apply_subset, Set.inclusion, cfc_cont_tac, cfc_tac, cfc_zero_tac, continuous_id, continuous_id.subtype_map, fun_prop, h_spec, inclusion, quasispectrum, quasispectrum_apply_subset, restrictScalars, subtype_map
 -/
@@ -1118,7 +1290,18 @@ lemma StarAlgHomClass.map_cfc
   have hψa : q (ψ a) := hφa
   let ι : C(spectrum R (ψ a), spectrum R a) :=
     ⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩
-  suffices ψ.comp (cfc
+  suffices ψ.comp (cfcHom ha) = (cfcHom hψa).comp (ContinuousMap.compStarAlgHom' R R ι) by
+    have hf' : ContinuousOn f (spectrum R (ψ a)) := hf.mono h_spec
+    rw [cfc_apply ..]; rw [cfc_apply ..]
+    congrm($(this) ⟨_, hf.domRestrict⟩)
+  refine ContinuousMap.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
+  case apply_id =>
+    trans cfcHom hψa (.restrict (spectrum R (ψ a)) (.id R))
+    · simp [cfcHom_id]
+    · congr
+  all_goals
+    dsimp [ContinuousMap.compStarAlgHom']
+    fun_prop
 
 中文:
 引理 StarAlgHomClass.map_cfc
@@ -1130,7 +1313,18 @@ lemma StarAlgHomClass.map_cfc
   have hψa : q (ψ a) := hφa
   let ι : C(spectrum R (ψ a), spectrum R a) :=
     ⟨Set.inclusion h_spec, continuous_id.subtype_map h_spec⟩
-  suffices ψ.comp (cfc
+  suffices ψ.comp (cfcHom ha) = (cfcHom hψa).comp (ContinuousMap.compStarAlgHom' R R ι) by
+    have hf' : ContinuousOn f (spectrum R (ψ a)) := hf.mono h_spec
+    rw [cfc_apply ..]; rw [cfc_apply ..]
+    congrm($(this) ⟨_, hf.domRestrict⟩)
+  refine ContinuousMap.UniqueHom.eq_of_continuous_of_map_id _ _ _ ?_ ?_ ?apply_id
+  case apply_id =>
+    trans cfcHom hψa (.restrict (spectrum R (ψ a)) (.id R))
+    · simp [cfcHom_id]
+    · congr
+  all_goals
+    dsimp [ContinuousMap.compStarAlgHom']
+    fun_prop
 
 Depends on / 依赖: AlgHom, AlgHom.spectrum_apply_subset, Continuous, ContinuousMap, ContinuousMap.compStarAlgHom, Set.inclusion, cfcHom, cfc_cont_tac, cfc_tac, compStarAlgHom, continuous_id, continuous_id.subtype_map, fun_prop, h_spec, inclusion, restrictScalars, spectrum, spectrum_apply_subset, subtype_map
 -/

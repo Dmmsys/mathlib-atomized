@@ -43,6 +43,13 @@ theorem Path.Homotopic.map_trans_evalAt
   Then our homotopy is the image under `G` of a homotopy
   between the two paths from `(0, 0)` to `(1, 1)` along the sides of the square. -/
   set G : C(I × I, Y) := F.toContinuousMap.comp (.prodMap (.id _) p)
+  set p₁ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans (.refl _) .id) (.trans .id (.refl _))
+  set p₂ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans .id (.refl _)) (.trans (.refl _) .id)
+  set Fsq : p₁.Homotopy p₂ :=
+    Path.Homotopic.prodHomotopy (.trans (.reflTrans _) (.symm <| .transRefl _))
+      (.trans (.transRefl _) (.symm <| .reflTrans _))
+  refine ⟨((Fsq.map G).pathCast ?H0 ?H1).cast ?hp ?hq⟩
+  all_goals aesop (add simp Path.trans_apply)
 
 中文:
 定理 道路.同伦.map_trans_evalAt
@@ -52,6 +59,13 @@ theorem Path.Homotopic.map_trans_evalAt
   Then our homotopy is the image under `G` of a homotopy
   between the two paths from `(0, 0)` to `(1, 1)` along the sides of the square. -/
   set G : C(I × I, Y) := F.toContinuousMap.comp (.prodMap (.id _) p)
+  set p₁ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans (.refl _) .id) (.trans .id (.refl _))
+  set p₂ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans .id (.refl _)) (.trans (.refl _) .id)
+  set Fsq : p₁.Homotopy p₂ :=
+    Path.Homotopic.prodHomotopy (.trans (.reflTrans _) (.symm <| .transRefl _))
+      (.trans (.transRefl _) (.symm <| .reflTrans _))
+  refine ⟨((Fsq.map G).pathCast ?H0 ?H1).cast ?hp ?hq⟩
+  all_goals aesop (add simp Path.trans_apply)
 -/
 theorem Path.Homotopic.map_trans_evalAt {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     {f g : C(X, Y)} (F : f.Homotopy g) {x₁ x₂ : X} (p : Path x₁ x₂) :
@@ -91,7 +105,8 @@ definition homotopicMapsNatIso
     rcases Path.Homotopic.Quotient.mk_surjective p with ⟨p, rfl⟩
     simp only [map_map, Path.Homotopic.Quotient.mk''_eq_mk, comp_eq,
       ← Path.Homotopic.Quotient.mk_map, ← Path.Homotopic.Quotient.mk_trans]
-    rw [Path.Homotopic.Quotient.eq
+    rw [Path.Homotopic.Quotient.eq]
+    exact .map_trans_evalAt _ _
 
 中文:
 定义 homotopicMaps自然数Iso
@@ -102,7 +117,8 @@ definition homotopicMapsNatIso
     rcases Path.Homotopic.Quotient.mk_surjective p with ⟨p, rfl⟩
     simp only [map_map, Path.Homotopic.Quotient.mk''_eq_mk, comp_eq,
       ← Path.Homotopic.Quotient.mk_map, ← Path.Homotopic.Quotient.mk_trans]
-    rw [Path.Homotopic.Quotient.eq
+    rw [Path.Homotopic.Quotient.eq]
+    exact .map_trans_evalAt _ _
 
 Depends on / 依赖: H.evalAt, evalAt, x.as
 -/
@@ -132,7 +148,7 @@ definition equivOfHomotopyEquiv
   · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
       using (asIso (homotopicMapsNatIso hequiv.left_inv.some)).symm
   · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
-    
+      using asIso (homotopicMapsNatIso hequiv.right_inv.some)
 
 中文:
 定义 equivOfHomotopyEquiv
@@ -142,7 +158,7 @@ definition equivOfHomotopyEquiv
   · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
       using (asIso (homotopicMapsNatIso hequiv.left_inv.some)).symm
   · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
-    
+      using asIso (homotopicMapsNatIso hequiv.right_inv.some)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Equivalence.mk, Equivalence, FundamentalGroupoid, FundamentalGroupoid.map_comp, FundamentalGroupoid.map_id, hequiv, hequiv.invFun, hequiv.left_inv.some, hequiv.right_inv.some, hequiv.toFun, homotopicMapsNatIso, invFun, left_inv, map_comp, map_id, right_inv
 -/
@@ -621,7 +637,10 @@ theorem eq_diag_path
   constructor
   · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
     slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
-    r
+    rfl
+  · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
+    slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
+    rfl
 
 中文:
 定理 eq_diag_path
@@ -633,7 +652,10 @@ theorem eq_diag_path
   constructor
   · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
     slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
-    r
+    rfl
+  · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
+    slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
+    rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_comp, Functor, H.apply_one_path, H.apply_zero_path, H.evalAt_eq, Porting, apply_one_path, apply_zero_path, eqToHom_refl, eqToHom_trans, evalAt_eq, map_comp, prodToProdTopI, slice_lhs
 -/

@@ -325,7 +325,7 @@ definition ofFilter
       inf := fun ⟨_, h₁⟩ ⟨_, h₂⟩ => ⟨_, inter_mem h₁ h₂⟩
       inf_le_left := fun ⟨_, _⟩ ⟨_, _⟩ => inter_subset_left
       inf_le_right := fun ⟨_, _⟩ ⟨_, _⟩ => inter_subset_right },
-filter_eq Set.ext fun _ => by simp [exists_mem_subset_iff
+filter_eq Set.ext fun _ => by simp [exists_mem_subset_iff]⟩
 
 中文:
 定义 ofFilter
@@ -336,7 +336,7 @@ filter_eq Set.ext fun _ => by simp [exists_mem_subset_iff
       inf := fun ⟨_, h₁⟩ ⟨_, h₂⟩ => ⟨_, inter_mem h₁ h₂⟩
       inf_le_left := fun ⟨_, _⟩ ⟨_, _⟩ => inter_subset_left
       inf_le_right := fun ⟨_, _⟩ ⟨_, _⟩ => inter_subset_right },
-filter_eq Set.ext fun _ => by simp [exists_mem_subset_iff
+filter_eq Set.ext fun _ => by simp [exists_mem_subset_iff]⟩
 
 Depends on / 依赖: Set.ext, Subtype, Subtype.val, exists_mem_subset_iff, f.sets, filter_eq, inf_le_left, inf_le_right, inter_mem, inter_subset_left, inter_subset_right, univ_mem
 -/
@@ -638,7 +638,10 @@ definition map
       inf_le_left := fun _ _ => image_mono (F.F.inf_le_left _ _)
       inf_le_right := fun _ _ => image_mono (F.F.inf_le_right _ _) },
 filter_eq Set.ext fun _ => by
-      simp only [CFilter.toFilter, image_subset_iff, 
+      simp only [CFilter.toFilter, image_subset_iff, mem_ofPred_eq, Filter.mem_sets, mem_map]
+      rw [F.mem_sets]⟩
+
+@[simp]
 
 中文:
 定义 map
@@ -650,7 +653,10 @@ filter_eq Set.ext fun _ => by
       inf_le_left := fun _ _ => image_mono (F.F.inf_le_left _ _)
       inf_le_right := fun _ _ => image_mono (F.F.inf_le_right _ _) },
 filter_eq Set.ext fun _ => by
-      simp only [CFilter.toFilter, image_subset_iff, 
+      simp only [CFilter.toFilter, image_subset_iff, mem_ofPred_eq, Filter.mem_sets, mem_map]
+      rw [F.mem_sets]⟩
+
+@[simp]
 -/
 protected def map (m : α -> β) {f : Filter α} (F : f.Realizer) : (map m f).Realizer :=
   ⟨F.σ,
@@ -719,7 +725,8 @@ definition comap
       inf_le_right := fun _ _ => preimage_mono (F.F.inf_le_right _ _) },
 filter_eq Set.ext fun _ => by
       cases F; subst f
-      exact ⟨fun ⟨s, 
+      exact ⟨fun ⟨s, h⟩ => ⟨_, ⟨s, Subset.refl _⟩, h⟩,
+        fun ⟨_, ⟨s, h⟩, h₂⟩ => ⟨s, Subset.trans (preimage_mono h) h₂⟩⟩⟩
 
 中文:
 定义 comap
@@ -732,7 +739,8 @@ filter_eq Set.ext fun _ => by
       inf_le_right := fun _ _ => preimage_mono (F.F.inf_le_right _ _) },
 filter_eq Set.ext fun _ => by
       cases F; subst f
-      exact ⟨fun ⟨s, 
+      exact ⟨fun ⟨s, h⟩ => ⟨_, ⟨s, Subset.refl _⟩, h⟩,
+        fun ⟨_, ⟨s, h⟩, h₂⟩ => ⟨s, Subset.trans (preimage_mono h) h₂⟩⟩⟩
 
 Depends on / 依赖: ext_getElem
 -/
@@ -760,7 +768,8 @@ definition sup
       pt := (F.F.pt, G.F.pt)
       inf := fun ⟨a, a'⟩ ⟨b, b'⟩ => (F.F.inf a b, G.F.inf a' b')
       inf_le_left := fun _ _ => union_subset_union (F.F.inf_le_left _ _) (G.F.inf_le_left _ _)
-      inf_le_right := fun _ _ => union_subset_union (F.F
+      inf_le_right := fun _ _ => union_subset_union (F.F.inf_le_right _ _) (G.F.inf_le_right _ _) },
+filter_eq Set.ext fun _ => by cases F; cases G; subst f g; simp [CFilter.toFilter]⟩
 
 中文:
 定义 上确界
@@ -770,7 +779,8 @@ definition sup
       pt := (F.F.pt, G.F.pt)
       inf := fun ⟨a, a'⟩ ⟨b, b'⟩ => (F.F.inf a b, G.F.inf a' b')
       inf_le_left := fun _ _ => union_subset_union (F.F.inf_le_left _ _) (G.F.inf_le_left _ _)
-      inf_le_right := fun _ _ => union_subset_union (F.F
+      inf_le_right := fun _ _ => union_subset_union (F.F.inf_le_right _ _) (G.F.inf_le_right _ _) },
+filter_eq Set.ext fun _ => by cases F; cases G; subst f g; simp [CFilter.toFilter]⟩
 
 Depends on / 依赖: _pos, ext_getElem, getElem
 -/
@@ -794,7 +804,16 @@ definition inf
       pt := (F.F.pt, G.F.pt)
       inf := fun ⟨a, a'⟩ ⟨b, b'⟩ => (F.F.inf a b, G.F.inf a' b')
       inf_le_left := fun _ _ => inter_subset_inter (F.F.inf_le_left _ _) (G.F.inf_le_left _ _)
-      inf_le_right := fun _ _ => inter_subset_inter (F.F
+      inf_le_right := fun _ _ => inter_subset_inter (F.F.inf_le_right _ _) (G.F.inf_le_right _ _) },
+    by
+      cases F; cases G; subst f g; simp only [CFilter.toFilter, Prod.exists]; ext
+      constructor
+      · rintro ⟨s, t, h⟩
+        apply mem_inf_of_inter _ _ h
+        · use s
+        · use t
+      · rintro ⟨_, ⟨a, ha⟩, _, ⟨b, hb⟩, rfl⟩
+        exact ⟨a, b, inter_subset_inter ha hb⟩⟩
 
 中文:
 定义 下确界
@@ -804,7 +823,16 @@ definition inf
       pt := (F.F.pt, G.F.pt)
       inf := fun ⟨a, a'⟩ ⟨b, b'⟩ => (F.F.inf a b, G.F.inf a' b')
       inf_le_left := fun _ _ => inter_subset_inter (F.F.inf_le_left _ _) (G.F.inf_le_left _ _)
-      inf_le_right := fun _ _ => inter_subset_inter (F.F
+      inf_le_right := fun _ _ => inter_subset_inter (F.F.inf_le_right _ _) (G.F.inf_le_right _ _) },
+    by
+      cases F; cases G; subst f g; simp only [CFilter.toFilter, Prod.exists]; ext
+      constructor
+      · rintro ⟨s, t, h⟩
+        apply mem_inf_of_inter _ _ h
+        · use s
+        · use t
+      · rintro ⟨_, ⟨a, ha⟩, _, ⟨b, hb⟩, rfl⟩
+        exact ⟨a, b, inter_subset_inter ha hb⟩⟩
 -/
 protected def inf {f g : Filter α} (F : f.Realizer) (G : g.Realizer) : (f ⊓ g).Realizer :=
   ⟨F.σ × G.σ,
@@ -838,7 +866,8 @@ definition cofinite
       inf_le_right := fun _ _ _ => mt (Finset.mem_union_right _) },
 filter_eq
       Set.ext fun _ =>
-        ⟨fun ⟨s, h⟩ => s.finite_toSet.subset (compl_
+        ⟨fun ⟨s, h⟩ => s.finite_toSet.subset (compl_subset_comm.1 h), fun h =>
+          ⟨h.toFinset, by simp⟩⟩⟩
 
 中文:
 定义 cofinite
@@ -851,7 +880,8 @@ filter_eq
       inf_le_right := fun _ _ _ => mt (Finset.mem_union_right _) },
 filter_eq
       Set.ext fun _ =>
-        ⟨fun ⟨s, h⟩ => s.finite_toSet.subset (compl_
+        ⟨fun ⟨s, h⟩ => s.finite_toSet.subset (compl_subset_comm.1 h), fun h =>
+          ⟨h.toFinset, by simp⟩⟩⟩
 
 Depends on / 依赖: _eq_getElem, getElem, getElem_idxOf, idxOf_lt_length_iff
 -/
@@ -878,7 +908,22 @@ definition bind
       pt := ⟨F.F.pt, fun i _ => (G i).F.pt⟩
       inf := fun ⟨a, f⟩ ⟨b, f'⟩ =>
         ⟨F.F.inf a b, fun i h =>
-          (G i).F.inf (f i (F.F.inf_le_left _ _ h)) (f' i (F.F.inf_le_right _ _
+          (G i).F.inf (f i (F.F.inf_le_left _ _ h)) (f' i (F.F.inf_le_right _ _ h))⟩
+      inf_le_left := fun _ _ _ => by
+        simp only [mem_iUnion, forall_exists_index]
+        exact fun i h₁ h₂ => ⟨i, F.F.inf_le_left _ _ h₁, (G i).F.inf_le_left _ _ h₂⟩
+      inf_le_right := fun _ _ _ => by
+        simp only [mem_iUnion, forall_exists_index]
+        exact fun i h₁ h₂ => ⟨i, F.F.inf_le_right _ _ h₁, (G i).F.inf_le_right _ _ h₂⟩ },
+filter_eq Set.ext fun _ => by
+      obtain ⟨_, F, _⟩ := F; subst f
+      simp only [CFilter.toFilter, iUnion_subset_iff, Sigma.exists, Filter.mem_sets, mem_bind]
+      exact
+        ⟨fun ⟨s, f, h⟩ =>
+          ⟨F s, ⟨s, Subset.refl _⟩, fun i H => (G i).mem_sets.2 ⟨f i H, fun _ h' => h i H h'⟩⟩,
+          fun ⟨_, ⟨s, h⟩, f⟩ =>
+          let ⟨f', h'⟩ := Classical.axiom_of_choice fun i : F s => (G i).mem_sets.1 (f i (h i.2))
+          ⟨s, fun i h => f' ⟨i, h⟩, fun _ H _ m => h' ⟨_, H⟩ m⟩⟩⟩
 
 中文:
 定义 bind
@@ -888,7 +933,22 @@ definition bind
       pt := ⟨F.F.pt, fun i _ => (G i).F.pt⟩
       inf := fun ⟨a, f⟩ ⟨b, f'⟩ =>
         ⟨F.F.inf a b, fun i h =>
-          (G i).F.inf (f i (F.F.inf_le_left _ _ h)) (f' i (F.F.inf_le_right _ _
+          (G i).F.inf (f i (F.F.inf_le_left _ _ h)) (f' i (F.F.inf_le_right _ _ h))⟩
+      inf_le_left := fun _ _ _ => by
+        simp only [mem_iUnion, forall_exists_index]
+        exact fun i h₁ h₂ => ⟨i, F.F.inf_le_left _ _ h₁, (G i).F.inf_le_left _ _ h₂⟩
+      inf_le_right := fun _ _ _ => by
+        simp only [mem_iUnion, forall_exists_index]
+        exact fun i h₁ h₂ => ⟨i, F.F.inf_le_right _ _ h₁, (G i).F.inf_le_right _ _ h₂⟩ },
+filter_eq Set.ext fun _ => by
+      obtain ⟨_, F, _⟩ := F; subst f
+      simp only [CFilter.toFilter, iUnion_subset_iff, Sigma.exists, Filter.mem_sets, mem_bind]
+      exact
+        ⟨fun ⟨s, f, h⟩ =>
+          ⟨F s, ⟨s, Subset.refl _⟩, fun i H => (G i).mem_sets.2 ⟨f i H, fun _ h' => h i H h'⟩⟩,
+          fun ⟨_, ⟨s, h⟩, f⟩ =>
+          let ⟨f', h'⟩ := Classical.axiom_of_choice fun i : F s => (G i).mem_sets.1 (f i (h i.2))
+          ⟨s, fun i h => f' ⟨i, h⟩, fun _ H _ m => h' ⟨_, H⟩ m⟩⟩⟩
 -/
 protected def bind {f : Filter α} {m : α -> Filter β} (F : f.Realizer) (G : forall i, (m i).Realizer) :
     (f.bind m).Realizer :=

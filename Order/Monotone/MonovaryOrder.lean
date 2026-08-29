@@ -53,7 +53,8 @@ instance :
     · simp only [Prod.ext_iff, ← and_assoc, imp_and, iff_and_self]
       exact ⟨congr_arg _, congr_arg _⟩
     · infer_instance
-  irrefl i := by rw [Monova
+  irrefl i := by rw [MonovaryOrder]; exact irrefl _
+  trans i j k := by rw [MonovaryOrder]; exact _root_.trans
 
 中文:
 实例 :
@@ -63,7 +64,8 @@ instance :
     · simp only [Prod.ext_iff, ← and_assoc, imp_and, iff_and_self]
       exact ⟨congr_arg _, congr_arg _⟩
     · infer_instance
-  irrefl i := by rw [Monova
+  irrefl i := by rw [MonovaryOrder]; exact irrefl _
+  trans i j k := by rw [MonovaryOrder]; exact _root_.trans
 
 Depends on / 依赖: MonovaryOrder, Prod.Lex, Prod.ext_iff, Std.trichotomous_of_rel_or_eq_or_rel_swap, WellOrderingRel, _root_, _root_.trans, and_assoc, congr_arg, convert, ext_iff, iff_and_self, imp_and, infer_instance, irrefl, trichotomous_of, trichotomous_of_rel_or_eq_or_rel_swap
 -/
@@ -89,7 +91,11 @@ lemma monovaryOn_iff_exists_monotoneOn
   refine ⟨fun hfg => ⟨‹_›, monotoneOn_iff_forall_lt.2 fun i hi j hj hij => ?_,
     monotoneOn_iff_forall_lt.2 fun i hi j hj hij => ?_⟩, ?_⟩
   · obtain h | ⟨h, -⟩ := Prod.lex_iff.1 hij <;> exact h.le
-  · obtain h | ⟨-, h⟩ := Prod.lex_iff.1 
+  · obtain h | ⟨-, h⟩ := Prod.lex_iff.1 hij
+    · exact hfg.symm hi hj h
+    obtain h | ⟨h, -⟩ := Prod.lex_iff.1 h <;> exact h.le
+  · rintro ⟨_, hf, hg⟩
+    exact hf.monovaryOn hg
 
 中文:
 引理 monovaryOn_iff_存在_monotoneOn
@@ -99,7 +105,11 @@ lemma monovaryOn_iff_exists_monotoneOn
   refine ⟨fun hfg => ⟨‹_›, monotoneOn_iff_forall_lt.2 fun i hi j hj hij => ?_,
     monotoneOn_iff_forall_lt.2 fun i hi j hj hij => ?_⟩, ?_⟩
   · obtain h | ⟨h, -⟩ := Prod.lex_iff.1 hij <;> exact h.le
-  · obtain h | ⟨-, h⟩ := Prod.lex_iff.1 
+  · obtain h | ⟨-, h⟩ := Prod.lex_iff.1 hij
+    · exact hfg.symm hi hj h
+    obtain h | ⟨h, -⟩ := Prod.lex_iff.1 h <;> exact h.le
+  · rintro ⟨_, hf, hg⟩
+    exact hf.monovaryOn hg
 
 Depends on / 依赖: MonovaryOrder, Prod.lex_iff, classical, h.le, hf.monovaryOn, hfg.symm, lex_iff, linearOrderOfSTO, monotoneOn_iff_forall_lt, monovaryOn
 -/
@@ -243,7 +253,12 @@ lemma antivary_iff_exists_antitone_monotone
 
 alias ⟨MonovaryOn.exists_monotoneOn, _⟩ := monovaryOn_iff_exists_monotoneOn
 alias ⟨MonovaryOn.exists_antitoneOn, _⟩ := monovaryOn_iff_exists_antitoneOn
-alias ⟨AntivaryOn.exists_monotoneOn_antitoneOn, _⟩ := antivaryOn_iff_exi
+alias ⟨AntivaryOn.exists_monotoneOn_antitoneOn, _⟩ := antivaryOn_iff_exists_monotoneOn_antitoneOn
+alias ⟨AntivaryOn.exists_antitoneOn_monotoneOn, _⟩ := antivaryOn_iff_exists_antitoneOn_monotoneOn
+alias ⟨Monovary.exists_monotone, _⟩ := monovary_iff_exists_monotone
+alias ⟨Monovary.exists_antitone, _⟩ := monovary_iff_exists_antitone
+alias ⟨Antivary.exists_monotone_antitone, _⟩ := antivary_iff_exists_monotone_antitone
+alias ⟨Antivary.exists_antitone_monotone, _⟩ := antivary_iff_exists_antitone_monotone
 
 中文:
 引理 antivary_iff_存在_antitone_monotone
@@ -252,7 +267,12 @@ alias ⟨AntivaryOn.exists_monotoneOn_antitoneOn, _⟩ := antivaryOn_iff_exi
 
 alias ⟨MonovaryOn.exists_monotoneOn, _⟩ := monovaryOn_iff_exists_monotoneOn
 alias ⟨MonovaryOn.exists_antitoneOn, _⟩ := monovaryOn_iff_exists_antitoneOn
-alias ⟨AntivaryOn.exists_monotoneOn_antitoneOn, _⟩ := antivaryOn_iff_exi
+alias ⟨AntivaryOn.exists_monotoneOn_antitoneOn, _⟩ := antivaryOn_iff_exists_monotoneOn_antitoneOn
+alias ⟨AntivaryOn.exists_antitoneOn_monotoneOn, _⟩ := antivaryOn_iff_exists_antitoneOn_monotoneOn
+alias ⟨Monovary.exists_monotone, _⟩ := monovary_iff_exists_monotone
+alias ⟨Monovary.exists_antitone, _⟩ := monovary_iff_exists_antitone
+alias ⟨Antivary.exists_monotone_antitone, _⟩ := antivary_iff_exists_monotone_antitone
+alias ⟨Antivary.exists_antitone_monotone, _⟩ := antivary_iff_exists_antitone_monotone
 
 Depends on / 依赖: antivaryOn_iff_exists_antitoneOn_monotoneOn, antivaryOn_univ
 -/

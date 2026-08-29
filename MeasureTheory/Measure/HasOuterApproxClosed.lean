@@ -58,7 +58,8 @@ theorem tendsto_lintegral_nn_filter_of_le_const
   refine tendsto_lintegral_filter_of_dominated_convergence (fun _ => c)
     (Eventually.of_forall fun i => (ENNReal.continuous_coe.comp (fs i).continuous).measurable) ?_
     (@lintegral_const_lt_top _ _ μ _ _ (@ENNReal.coe_ne_top c)).ne ?_
-  · simpa only [Function.comp_apply, ENNReal.coe_le_coe] 
+  · simpa only [Function.comp_apply, ENNReal.coe_le_coe] using fs_le_const
+  · simpa only [Function.comp_apply, ENNReal.tendsto_coe] using fs_lim
 
 中文:
 定理 tendsto_lintegral_nn_filter_of_le_const
@@ -67,7 +68,8 @@ theorem tendsto_lintegral_nn_filter_of_le_const
   refine tendsto_lintegral_filter_of_dominated_convergence (fun _ => c)
     (Eventually.of_forall fun i => (ENNReal.continuous_coe.comp (fs i).continuous).measurable) ?_
     (@lintegral_const_lt_top _ _ μ _ _ (@ENNReal.coe_ne_top c)).ne ?_
-  · simpa only [Function.comp_apply, ENNReal.coe_le_coe] 
+  · simpa only [Function.comp_apply, ENNReal.coe_le_coe] using fs_le_const
+  · simpa only [Function.comp_apply, ENNReal.tendsto_coe] using fs_lim
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_ne_top, ENNReal.continuous_coe.comp, ENNReal.tendsto_coe, Eventually, Eventually.of_forall, Function, Function.comp_apply, coe_le_coe, coe_ne_top, comp_apply, continuous, continuous_coe, fs_le_const, fs_lim, lintegral_const_lt_top, measurable, of_forall, tendsto_coe
 -/
@@ -93,7 +95,7 @@ theorem measure_of_cont_bdd_of_tendsto_filter_indicator
   have aux : forall ω, indicator E (fun _ => (1 : Real>=0∞)) ω = ↑(indicator E (fun _ => (1 : Real>=0)) ω) :=
     fun ω => by simp only [ENNReal.coe_indicator, ENNReal.coe_one]
   simp_rw [← aux, lintegral_indicator E_mble]
-  simp 
+  simp only [lintegral_one, Measure.restrict_apply, MeasurableSet.univ, univ_inter]
 
 中文:
 定理 measure_of_cont_bdd_of_tendsto_filter_indicator
@@ -103,7 +105,7 @@ theorem measure_of_cont_bdd_of_tendsto_filter_indicator
   have aux : forall ω, indicator E (fun _ => (1 : Real>=0∞)) ω = ↑(indicator E (fun _ => (1 : Real>=0)) ω) :=
     fun ω => by simp only [ENNReal.coe_indicator, ENNReal.coe_one]
   simp_rw [← aux, lintegral_indicator E_mble]
-  simp 
+  simp only [lintegral_one, Measure.restrict_apply, MeasurableSet.univ, univ_inter]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_indicator, ENNReal.coe_one, E_mble, MeasurableSet, MeasurableSet.univ, Measure, Measure.restrict_apply, coe_indicator, coe_one, convert, fs_bdd, fs_lim, indicator, lintegral_indicator, lintegral_one, restrict_apply, simp_rw, tendsto_lintegral_nn_filter_of_le_const, univ_inter
 -/
@@ -130,7 +132,7 @@ theorem measure_of_cont_bdd_of_tendsto_indicator
     rw [tendsto_pi_nhds] at fs_lim
     exact fun ω => fs_lim ω
   apply measure_of_cont_bdd_of_tendsto_filter_indicator μ E_mble fs
-    (Eventually.of_forall fun n =>
+    (Eventually.of_forall fun n => Eventually.of_forall (fs_bdd n)) (Eventually.of_forall fs_lim')
 
 中文:
 定理 measure_of_cont_bdd_of_tendsto_indicator
@@ -140,7 +142,7 @@ theorem measure_of_cont_bdd_of_tendsto_indicator
     rw [tendsto_pi_nhds] at fs_lim
     exact fun ω => fs_lim ω
   apply measure_of_cont_bdd_of_tendsto_filter_indicator μ E_mble fs
-    (Eventually.of_forall fun n =>
+    (Eventually.of_forall fun n => Eventually.of_forall (fs_bdd n)) (Eventually.of_forall fs_lim')
 
 Depends on / 依赖: E_mble, Eventually, Eventually.of_forall, Tendsto, fs_bdd, fs_lim, indicator, measure_of_cont_bdd_of_tendsto_filter_indicator, of_forall, tendsto_pi_nhds
 -/
@@ -226,7 +228,17 @@ lemma tendsto_integral_thickenedIndicator_of_isClosed
   -- we switch to the `lintegral` formulation and apply the corresponding lemma there
   let fs : Nat -> Ω -> Real := fun n ω => thickenedIndicator (δs_pos n) F ω
   have h := tendsto_lintegral_thickenedIndicator_of_isClosed μ F_closed δs_pos δs_lim
-  have h_eq (n : Nat) : ∫⁻ ω, thickenedIndicator 
+  have h_eq (n : Nat) : ∫⁻ ω, thickenedIndicator (δs_pos n) F ω ∂μ
+      = ENNReal.ofReal (∫ ω, fs n ω ∂μ) := by
+    rw [lintegral_coe_eq_integral]
+    exact integrable_thickenedIndicator F (δs_pos _)
+  simp_rw [h_eq] at h
+  rw [Measure.real_def]
+  have h_eq' : (fun n => ∫ ω, fs n ω ∂μ) = fun n => (ENNReal.ofReal (∫ ω, fs n ω ∂μ)).toReal := by
+    ext n
+    rw [ENNReal.toReal_ofReal]
+    exact integral_nonneg fun x => by simp [fs]
+  rwa [h_eq', ENNReal.tendsto_toReal_iff (by simp) (by finiteness)]
 
 中文:
 引理 tendsto_integral_thickenedIndicator_of_isClosed
@@ -235,7 +247,17 @@ lemma tendsto_integral_thickenedIndicator_of_isClosed
   -- we switch to the `lintegral` formulation and apply the corresponding lemma there
   let fs : Nat -> Ω -> Real := fun n ω => thickenedIndicator (δs_pos n) F ω
   have h := tendsto_lintegral_thickenedIndicator_of_isClosed μ F_closed δs_pos δs_lim
-  have h_eq (n : Nat) : ∫⁻ ω, thickenedIndicator 
+  have h_eq (n : Nat) : ∫⁻ ω, thickenedIndicator (δs_pos n) F ω ∂μ
+      = ENNReal.ofReal (∫ ω, fs n ω ∂μ) := by
+    rw [lintegral_coe_eq_integral]
+    exact integrable_thickenedIndicator F (δs_pos _)
+  simp_rw [h_eq] at h
+  rw [Measure.real_def]
+  have h_eq' : (fun n => ∫ ω, fs n ω ∂μ) = fun n => (ENNReal.ofReal (∫ ω, fs n ω ∂μ)).toReal := by
+    ext n
+    rw [ENNReal.toReal_ofReal]
+    exact integral_nonneg fun x => by simp [fs]
+  rwa [h_eq', ENNReal.tendsto_toReal_iff (by simp) (by finiteness)]
 -/
 lemma tendsto_integral_thickenedIndicator_of_isClosed {Ω : Type*} {mΩ : MeasurableSpace Ω}
     [PseudoEMetricSpace Ω] [OpensMeasurableSpace Ω] (μ : Measure Ω) [IsFiniteMeasure μ] {F : Set Ω}
@@ -407,7 +429,8 @@ theorem measure_le_lintegral
   · apply lintegral_mono
     intro x
     by_cases hxF : x in F
-    · simp 
+    · simp only [hxF, indicator_of_mem, apprSeq_apply_eq_one hF n hxF, ENNReal.coe_one, le_refl]
+    · simp only [hxF, not_false_eq_true, indicator_of_notMem, zero_le]
 
 中文:
 定理 measure_le_lintegral
@@ -419,7 +442,8 @@ theorem measure_le_lintegral
   · apply lintegral_mono
     intro x
     by_cases hxF : x in F
-    · simp 
+    · simp only [hxF, indicator_of_mem, apprSeq_apply_eq_one hF n hxF, ENNReal.coe_one, le_refl]
+    · simp only [hxF, not_false_eq_true, indicator_of_notMem, zero_le]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_one, F.indicator, MeasurableSet, MeasurableSet.univ, Measure, Measure.restrict_apply, apprSeq, apprSeq_apply_eq_one, coe_one, convert_to, hF.apprSeq, hF.measurableSet, indicator, indicator_of_mem, indicator_of_notMem, le_refl, lintegral_indicator, lintegral_mono, lintegral_one
 -/
@@ -491,7 +515,9 @@ theorem measure_isClosed_eq_of_forall_lintegral_eq_of_isFiniteMeasure
       one_mul] at whole
     simp [← whole]
   have obs_μ := HasOuterApproxClosed.tendsto_lintegral_apprSeq F_closed μ
-  
+  have obs_ν := HasOuterApproxClosed.tendsto_lintegral_apprSeq F_closed ν
+  simp_rw [h] at obs_μ
+  exact tendsto_nhds_unique obs_μ obs_ν
 
 中文:
 定理 measure_isClosed_eq_of_对任意_lintegral_eq_of_isFiniteMeasure
@@ -504,7 +530,9 @@ theorem measure_isClosed_eq_of_forall_lintegral_eq_of_isFiniteMeasure
       one_mul] at whole
     simp [← whole]
   have obs_μ := HasOuterApproxClosed.tendsto_lintegral_apprSeq F_closed μ
-  
+  have obs_ν := HasOuterApproxClosed.tendsto_lintegral_apprSeq F_closed ν
+  simp_rw [h] at obs_μ
+  exact tendsto_nhds_unique obs_μ obs_ν
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.coe_one, ENNReal, ENNReal.coe_one, F_closed, HasOuterApproxClosed, HasOuterApproxClosed.tendsto_lintegral_apprSeq, IsFiniteMeasure, Pi.one_apply, coe_one, lintegral_const, one_apply, one_mul, simp_rw, tendsto_lintegral_apprSeq, tendsto_nhds_unique
 -/
@@ -572,7 +600,8 @@ theorem ext_of_forall_integral_eq_of_IsFiniteMeasure
   apply (ENNReal.toReal_eq_toReal_iff' (lintegral_lt_top_of_nnreal μ f).ne
       (lintegral_lt_top_of_nnreal ν f).ne).mp
   rw [toReal_lintegral_coe_eq_integral f μ]; rw [toReal_lintegral_coe_eq_integral f ν]
-  exact h ⟨⟨fun x => (f x
+  exact h ⟨⟨fun x => (f x).toReal, Continuous.comp' NNReal.continuous_coe f.continuous⟩,
+      f.map_bounded'⟩
 
 中文:
 定理 ext_of_对任意_integral_eq_of_IsFiniteMeasure
@@ -583,7 +612,8 @@ theorem ext_of_forall_integral_eq_of_IsFiniteMeasure
   apply (ENNReal.toReal_eq_toReal_iff' (lintegral_lt_top_of_nnreal μ f).ne
       (lintegral_lt_top_of_nnreal ν f).ne).mp
   rw [toReal_lintegral_coe_eq_integral f μ]; rw [toReal_lintegral_coe_eq_integral f ν]
-  exact h ⟨⟨fun x => (f x
+  exact h ⟨⟨fun x => (f x).toReal, Continuous.comp' NNReal.continuous_coe f.continuous⟩,
+      f.map_bounded'⟩
 
 Depends on / 依赖: Continuous, Continuous.comp, ENNReal, ENNReal.toReal_eq_toReal_iff, NNReal, NNReal.continuous_coe, continuous, continuous_coe, ext_of_forall_lintegral_eq_of_IsFiniteMeasure, f.continuous, f.map_bounded, lintegral_lt_top_of_nnreal, map_bounded, toReal, toReal_eq_toReal_iff, toReal_lintegral_coe_eq_integral
 -/

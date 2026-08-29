@@ -54,7 +54,8 @@ theorem LinearMap.BilinForm.isSkewAdjoint_bracket
   rw [mem_skewAdjointSubmodule] at *
   have hfg : IsAdjointPair B B (f * g) (g * f) := by rw [← neg_mul_neg g f]; exact hg.comp hf
   have hgf : IsAdjointPair B B (g * f) (f * g) := by rw [← neg_mul_neg f g]; exact hf.comp hg
-  change IsAdjointPair B B (f * g - g * f) (-(f * g - g * f)); rw [neg_s
+  change IsAdjointPair B B (f * g - g * f) (-(f * g - g * f)); rw [neg_sub]
+  exact hfg.sub hgf
 
 中文:
 定理 线性映射.BilinForm.isSkewAdjoint_bracket
@@ -63,7 +64,8 @@ theorem LinearMap.BilinForm.isSkewAdjoint_bracket
   rw [mem_skewAdjointSubmodule] at *
   have hfg : IsAdjointPair B B (f * g) (g * f) := by rw [← neg_mul_neg g f]; exact hg.comp hf
   have hgf : IsAdjointPair B B (g * f) (f * g) := by rw [← neg_mul_neg f g]; exact hf.comp hg
-  change IsAdjointPair B B (f * g - g * f) (-(f * g - g * f)); rw [neg_s
+  change IsAdjointPair B B (f * g - g * f) (-(f * g - g * f)); rw [neg_sub]
+  exact hfg.sub hgf
 
 Depends on / 依赖: IsAdjointPair, hf.comp, hfg.sub, hg.comp, mem_skewAdjointSubmodule, neg_mul_neg, neg_sub
 -/
@@ -220,7 +222,8 @@ theorem Matrix.isSkewAdjoint_bracket
   change ⁅A, B⁆ᵀ * J = J * (-⁅A, B⁆)
   change Aᵀ * J = J * (-A) at hA
   change Bᵀ * J = J * (-B) at hB
-  rw [Matrix.lie_transpose]; rw [LieRing.of_associative_ring_bracket]; rw [LieRing.of_associative_ring_bracket]; rw [sub_mul]; rw [mul_assoc];
+  rw [Matrix.lie_transpose]; rw [LieRing.of_associative_ring_bracket]; rw [LieRing.of_associative_ring_bracket]; rw [sub_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [hA]; rw [hB]; rw [← mul_assoc]; rw [← mul_assoc]; rw [hA]; rw [hB]
+  noncomm_ring
 
 中文:
 定理 矩阵.isSkewAdjoint_bracket
@@ -230,7 +233,8 @@ theorem Matrix.isSkewAdjoint_bracket
   change ⁅A, B⁆ᵀ * J = J * (-⁅A, B⁆)
   change Aᵀ * J = J * (-A) at hA
   change Bᵀ * J = J * (-B) at hB
-  rw [Matrix.lie_transpose]; rw [LieRing.of_associative_ring_bracket]; rw [LieRing.of_associative_ring_bracket]; rw [sub_mul]; rw [mul_assoc];
+  rw [Matrix.lie_transpose]; rw [LieRing.of_associative_ring_bracket]; rw [LieRing.of_associative_ring_bracket]; rw [sub_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [hA]; rw [hB]; rw [← mul_assoc]; rw [← mul_assoc]; rw [hA]; rw [hB]
+  noncomm_ring
 
 Depends on / 依赖: LieRing, LieRing.of_associative_ring_bracket, Matrix, Matrix.lie_transpose, lie_transpose, mem_skewAdjointMatricesSubmodule, mul_assoc, noncomm_ring, of_associative_ring_bracket, sub_mul
 -/
@@ -302,7 +306,7 @@ definition skewAdjointMatricesLieSubalgebraEquiv
         A in skewAdjointMatricesSubmodule (Pᵀ * J * P) by
       simp only [Submodule.mem_map_equiv, LieSubalgebra.mem_map_submodule]
       exact this
-    simp [Matrix.IsSkewAdjoi
+    simp [Matrix.IsSkewAdjoint, J.isAdjointPair_equiv _ _ P (isUnit_of_invertible P)]
 
 中文:
 定义 skewAdjointMatricesLieSubalgebraEquiv
@@ -313,7 +317,7 @@ definition skewAdjointMatricesLieSubalgebraEquiv
         A in skewAdjointMatricesSubmodule (Pᵀ * J * P) by
       simp only [Submodule.mem_map_equiv, LieSubalgebra.mem_map_submodule]
       exact this
-    simp [Matrix.IsSkewAdjoi
+    simp [Matrix.IsSkewAdjoint, J.isAdjointPair_equiv _ _ P (isUnit_of_invertible P)]
 
 Depends on / 依赖: IsSkewAdjoint, J.isAdjointPair_equiv, LieEquiv, LieEquiv.ofSubalgebras, LieSubalgebra, LieSubalgebra.mem_map_submodule, Matrix, Matrix.IsSkewAdjoint, P.lieConj, Submodule, Submodule.mem_map_equiv, isAdjointPair_equiv, isUnit_of_invertible, lieConj, mem_map_equiv, mem_map_submodule, ofSubalgebras, skewAdjointMatricesSubmodule
 -/
@@ -360,7 +364,9 @@ definition skewAdjointMatricesLieSubalgebraEquivTranspose
     suffices J.IsSkewAdjoint (e.symm A) ↔ (e J).IsSkewAdjoint A by
       simpa [-LieSubalgebra.mem_map, LieSubalgebra.mem_map_submodule]
     simp only [Matrix.IsSkewAdjoint, Matrix.IsAdjointPair, ← h,
-      ← Function.Injective.eq_iff e.injective,
+      ← Function.Injective.eq_iff e.injective, map_mul, AlgEquiv.apply_symm_apply, map_neg]
+
+@[simp]
 
 中文:
 定义 skewAdjointMatricesLieSubalgebraEquivTranspose
@@ -370,7 +376,9 @@ definition skewAdjointMatricesLieSubalgebraEquivTranspose
     suffices J.IsSkewAdjoint (e.symm A) ↔ (e J).IsSkewAdjoint A by
       simpa [-LieSubalgebra.mem_map, LieSubalgebra.mem_map_submodule]
     simp only [Matrix.IsSkewAdjoint, Matrix.IsAdjointPair, ← h,
-      ← Function.Injective.eq_iff e.injective,
+      ← Function.Injective.eq_iff e.injective, map_mul, AlgEquiv.apply_symm_apply, map_neg]
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, Function, Function.Injective.eq_iff, Injective, IsAdjointPair, IsSkewAdjoint, J.IsSkewAdjoint, LieEquiv, LieEquiv.ofSubalgebras, LieSubalgebra, LieSubalgebra.mem_map, LieSubalgebra.mem_map_submodule, Matrix, Matrix.IsAdjointPair, Matrix.IsSkewAdjoint, apply_symm_apply, e.injective, e.symm, e.toLieEquiv
 -/

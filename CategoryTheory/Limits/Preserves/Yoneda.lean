@@ -54,6 +54,11 @@ definition yonedaYonedaColimit
   _ ≅ F.flip ⋙ colim ⋙ uliftFunctor.{u₁} :=
         isoWhiskerRight (colimitIsoFlipCompColim F) uliftFunctor.{u₁}
   _ ≅ F.flip ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} ⋙ colim :=
+        isoWhiskerLeft F.flip (preservesColimitNatIso uliftFunctor.{u₁})
+  _ ≅ (yoneda.op ⋙ coyoneda ⋙ (whiskeringLeft _ _ _).obj F) ⋙ colim := isoWhiskerRight
+        (isoWhiskerRight largeCurriedYonedaLemma.symm ((whiskeringLeft _ _ _).obj F)) colim
+  _ ≅ yoneda.op ⋙ colimit (F ⋙ yoneda) :=
+        isoWhiskerLeft yoneda.op (colimitIsoFlipCompColim (F ⋙ yoneda)).symm
 
 中文:
 定义 yonedaYonedaColimit
@@ -64,6 +69,11 @@ definition yonedaYonedaColimit
   _ ≅ F.flip ⋙ colim ⋙ uliftFunctor.{u₁} :=
         isoWhiskerRight (colimitIsoFlipCompColim F) uliftFunctor.{u₁}
   _ ≅ F.flip ⋙ (whiskeringRight _ _ _).obj uliftFunctor.{u₁} ⋙ colim :=
+        isoWhiskerLeft F.flip (preservesColimitNatIso uliftFunctor.{u₁})
+  _ ≅ (yoneda.op ⋙ coyoneda ⋙ (whiskeringLeft _ _ _).obj F) ⋙ colim := isoWhiskerRight
+        (isoWhiskerRight largeCurriedYonedaLemma.symm ((whiskeringLeft _ _ _).obj F)) colim
+  _ ≅ yoneda.op ⋙ colimit (F ⋙ yoneda) :=
+        isoWhiskerLeft yoneda.op (colimitIsoFlipCompColim (F ⋙ yoneda)).symm
 -/
 noncomputable def yonedaYonedaColimit :
     yoneda.op ⋙ yoneda.obj (colimit F) ≅ yoneda.op ⋙ colimit (F ⋙ yoneda) := calc
@@ -95,7 +105,14 @@ theorem yonedaYonedaColimit_app_inv
   rw [colimit.ι_post]; rw [ι_colimMap_assoc]
   simp only [← CategoryTheory.Functor.assoc, comp_evaluation]
   rw [ι_preservesColimitIso_inv_assoc]
-  simp only [← comp_evaluation, comp_obj, evaluat
+  simp only [← comp_evaluation, comp_obj, evaluation_obj_obj, yoneda_obj_obj, uliftFunctor_obj,
+    whiskerLeft_app, uliftFunctor_map, Functor.comp_map, evaluation_obj_map, yoneda_map_app]
+  ext η Y f
+  dsimp [largeCurriedYonedaLemma, yonedaOpCompYonedaObj, yonedaEquiv]
+  simp only [← comp_apply, Category.assoc, colimitObjIsoColimitCompEvaluation_ι_inv,
+    ← NatTrans.naturality, ← NatTrans.naturality_assoc, yoneda_obj_obj, yoneda_obj_map,
+    Quiver.Hom.unop_op]
+  simp
 
 中文:
 定理 yonedaYonedaColimit_app_inv
@@ -109,7 +126,14 @@ theorem yonedaYonedaColimit_app_inv
   rw [colimit.ι_post]; rw [ι_colimMap_assoc]
   simp only [← CategoryTheory.Functor.assoc, comp_evaluation]
   rw [ι_preservesColimitIso_inv_assoc]
-  simp only [← comp_evaluation, comp_obj, evaluat
+  simp only [← comp_evaluation, comp_obj, evaluation_obj_obj, yoneda_obj_obj, uliftFunctor_obj,
+    whiskerLeft_app, uliftFunctor_map, Functor.comp_map, evaluation_obj_map, yoneda_map_app]
+  ext η Y f
+  dsimp [largeCurriedYonedaLemma, yonedaOpCompYonedaObj, yonedaEquiv]
+  simp only [← comp_apply, Category.assoc, colimitObjIsoColimitCompEvaluation_ι_inv,
+    ← NatTrans.naturality, ← NatTrans.naturality_assoc, yoneda_obj_obj, yoneda_obj_map,
+    Quiver.Hom.unop_op]
+  simp
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.assoc, Functor, Functor.comp_map, Iso.cancel_iso_hom_left, cancel_iso_hom_left, colimit, colimit.hom_ext, comp_evaluation, comp_map, comp_obj, evaluation_obj_map, evaluation_obj_obj, hom_ext, largeCurriedYonedaLemma, uliftFunctor_map, uliftFunctor_obj, whiskerLeft_app, yonedaEquiv, yonedaOpCompYonedaObj
 -/

@@ -116,7 +116,7 @@ lemma map_ne_zero_of_eq_mul
       h.map (Ideal.Quotient.mk I) := by
     simp [← map_eq_X_pow distinguish, eq]
   apply_fun PowerSeries.coeff g.natDegree at H
-  simp [mapf, PowerSeries.coeff_X_pow_mul', eq_zero_iff_mem, notMem] at
+  simp [mapf, PowerSeries.coeff_X_pow_mul', eq_zero_iff_mem, notMem] at H
 
 中文:
 引理 map_ne_zero_of_eq_mul
@@ -126,7 +126,7 @@ lemma map_ne_zero_of_eq_mul
       h.map (Ideal.Quotient.mk I) := by
     simp [← map_eq_X_pow distinguish, eq]
   apply_fun PowerSeries.coeff g.natDegree at H
-  simp [mapf, PowerSeries.coeff_X_pow_mul', eq_zero_iff_mem, notMem] at
+  simp [mapf, PowerSeries.coeff_X_pow_mul', eq_zero_iff_mem, notMem] at H
 
 Depends on / 依赖: Ideal.Quotient.mk, Polynomial, Polynomial.X, PowerSeries, PowerSeries.coeff, PowerSeries.coeff_X_pow_mul, Quotient, apply_fun, coeff_X_pow_mul, distinguish, eq_zero_iff_mem, f.map, g.natDegree, h.map, map_eq_X_pow, natDegree, notMem
 -/
@@ -148,7 +148,14 @@ lemma degree_eq_coe_lift_order_map
   proof: by
   have : Nontrivial R := _root_.nontrivial_iff.mpr
     ⟨0, PowerSeries.constantCoeff h, ne_of_mem_of_not_mem I.zero_mem notMem⟩
-  rw [Polynomial.degree_eq_natDegree distinguish.monic.ne_zero]; rw [Nat.cast_inj]; rw [← ENat.natCast_inj]; rw [ENat.natCast_lift]; rw [Eq.comm]; rw [PowerSeries.order_
+  rw [Polynomial.degree_eq_natDegree distinguish.monic.ne_zero]; rw [Nat.cast_inj]; rw [← ENat.natCast_inj]; rw [ENat.natCast_lift]; rw [Eq.comm]; rw [PowerSeries.order_eq_nat]
+  have mapf : f.map (Ideal.Quotient.mk I) = (Polynomial.X ^ g.natDegree : (R ⧸ I)[X]) *
+      h.map (Ideal.Quotient.mk I) := by
+    simp [← map_eq_X_pow distinguish, eq]
+  constructor
+  · simp [mapf, PowerSeries.coeff_X_pow_mul', eq_zero_iff_mem, notMem]
+  · intro i hi
+    simp [mapf, PowerSeries.coeff_X_pow_mul', hi]
 
 中文:
 引理 degree_eq_coe_lift_order_map
@@ -156,7 +163,14 @@ lemma degree_eq_coe_lift_order_map
   证明: by
   have : Nontrivial R := _root_.nontrivial_iff.mpr
     ⟨0, PowerSeries.constantCoeff h, ne_of_mem_of_not_mem I.zero_mem notMem⟩
-  rw [Polynomial.degree_eq_natDegree distinguish.monic.ne_zero]; rw [Nat.cast_inj]; rw [← ENat.natCast_inj]; rw [ENat.natCast_lift]; rw [Eq.comm]; rw [PowerSeries.order_
+  rw [Polynomial.degree_eq_natDegree distinguish.monic.ne_zero]; rw [Nat.cast_inj]; rw [← ENat.natCast_inj]; rw [ENat.natCast_lift]; rw [Eq.comm]; rw [PowerSeries.order_eq_nat]
+  have mapf : f.map (Ideal.Quotient.mk I) = (Polynomial.X ^ g.natDegree : (R ⧸ I)[X]) *
+      h.map (Ideal.Quotient.mk I) := by
+    simp [← map_eq_X_pow distinguish, eq]
+  constructor
+  · simp [mapf, PowerSeries.coeff_X_pow_mul', eq_zero_iff_mem, notMem]
+  · intro i hi
+    simp [mapf, PowerSeries.coeff_X_pow_mul', hi]
 
 Depends on / 依赖: ENat.natCast_inj, ENat.natCast_lift, Eq.comm, I.zero_mem, Ideal.Quotient.mk, Nat.cast_inj, Nontrivial, Polynomial, Polynomial.X, Polynomial.degree_eq_natDegree, PowerSeries, PowerSeries.coef, PowerSeries.constantCoeff, PowerSeries.order_eq_nat, Quotient, _root_, _root_.nontrivial_iff.mpr, cast_inj, constantCoeff, degree_eq_natDegree
 -/

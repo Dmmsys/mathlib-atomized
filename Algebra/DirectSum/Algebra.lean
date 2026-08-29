@@ -144,7 +144,22 @@ instance :
     map_mul' a b := by
       simp only [AddMonoidHom.comp_apply]
       rw [of_mul_of]
-      apply DFinsupp.single_eq_of_sigma
+      apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.map_mul a b) }
+  commutes' r x := by
+    change AddMonoidHom.mul (DirectSum.of _ _ _) x = AddMonoidHom.mul.flip (DirectSum.of _ _ _) x
+    apply DFunLike.congr_fun _ x
+    ext i xi : 2
+    dsimp only [AddMonoidHom.comp_apply, AddMonoidHom.mul_apply, AddMonoidHom.flip_apply]
+    rw [of_mul_of]; rw [of_mul_of]
+    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.commutes r ⟨i, xi⟩)
+  smul_def' r x := by
+    change DistribSMul.toAddMonoidHom _ r x = AddMonoidHom.mul (DirectSum.of _ _ _) x
+    apply DFunLike.congr_fun _ x
+    ext i xi : 2
+    dsimp only [AddMonoidHom.comp_apply, DistribSMul.toAddMonoidHom_apply,
+      AddMonoidHom.mul_apply]
+    rw [DirectSum.of_mul_of]; rw [← of_smul]
+    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.smul_def r ⟨i, xi⟩)
 
 中文:
 实例 :
@@ -156,7 +171,22 @@ instance :
     map_mul' a b := by
       simp only [AddMonoidHom.comp_apply]
       rw [of_mul_of]
-      apply DFinsupp.single_eq_of_sigma
+      apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.map_mul a b) }
+  commutes' r x := by
+    change AddMonoidHom.mul (DirectSum.of _ _ _) x = AddMonoidHom.mul.flip (DirectSum.of _ _ _) x
+    apply DFunLike.congr_fun _ x
+    ext i xi : 2
+    dsimp only [AddMonoidHom.comp_apply, AddMonoidHom.mul_apply, AddMonoidHom.flip_apply]
+    rw [of_mul_of]; rw [of_mul_of]
+    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.commutes r ⟨i, xi⟩)
+  smul_def' r x := by
+    change DistribSMul.toAddMonoidHom _ r x = AddMonoidHom.mul (DirectSum.of _ _ _) x
+    apply DFunLike.congr_fun _ x
+    ext i xi : 2
+    dsimp only [AddMonoidHom.comp_apply, DistribSMul.toAddMonoidHom_apply,
+      AddMonoidHom.mul_apply]
+    rw [DirectSum.of_mul_of]; rw [← of_smul]
+    apply DFinsupp.single_eq_of_sigma_eq (GAlgebra.smul_def r ⟨i, xi⟩)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.comp_apply, AddMonoidHom.mul, AddMonoidHom.mul.flip, DFinsupp, DFinsupp.single_eq_of_sigma_eq, DFunLike, DFunLike.congr_arg, DFunLike.congr_fun, DirectSum, DirectSum.of, GAlgebra, GAlgebra.map_mul, GAlgebra.map_one, GAlgebra.toFun, commutes, comp_apply, congr_arg, congr_fun, map_add
 -/
@@ -236,7 +266,7 @@ definition toAlgebra
     toFun := toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul
     commutes' := fun r => by
       change toModule R _ _ f (algebraMap R _ r) = _
-      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_sm
+      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [one_def]; rw [← lof_eq_of R]; rw [toModule_lof]; rw [hone] }
 
 中文:
 定义 toAlgebra
@@ -245,7 +275,7 @@ definition toAlgebra
     toFun := toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul
     commutes' := fun r => by
       change toModule R _ _ f (algebraMap R _ r) = _
-      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_sm
+      rw [Algebra.algebraMap_eq_smul_one]; rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [one_def]; rw [← lof_eq_of R]; rw [toModule_lof]; rw [hone] }
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, algebraMap, algebraMap_eq_smul_one, commutes, lof_eq_of, map_smul, one_def, toAddMonoidHom, toModule, toModule_lof, toSemiring
 -/
@@ -318,7 +348,8 @@ definition gMulLHom
         injection (smul_comm r (GradedMonoid.mk _ a) (GradedMonoid.mk _ x)).symm
       map_add' := GNonUnitalNonAssocSemiring.mul_add _ }
   map_smul' r x := LinearMap.ext fun y => by
-    injection smul_assoc r (GradedMono
+    injection smul_assoc r (GradedMonoid.mk _ x) (GradedMonoid.mk _ y)
+  map_add' _ _ := LinearMap.ext fun _ => GNonUnitalNonAssocSemiring.add_mul _ _ _
 
 中文:
 定义 gMulLHom
@@ -328,7 +359,8 @@ definition gMulLHom
         injection (smul_comm r (GradedMonoid.mk _ a) (GradedMonoid.mk _ x)).symm
       map_add' := GNonUnitalNonAssocSemiring.mul_add _ }
   map_smul' r x := LinearMap.ext fun y => by
-    injection smul_assoc r (GradedMono
+    injection smul_assoc r (GradedMonoid.mk _ x) (GradedMonoid.mk _ y)
+  map_add' _ _ := LinearMap.ext fun _ => GNonUnitalNonAssocSemiring.add_mul _ _ _
 
 Depends on / 依赖: GNonUnitalNonAssocSemiring, GNonUnitalNonAssocSemiring.add_mul, GNonUnitalNonAssocSemiring.mul_add, GradedMonoid, GradedMonoid.GMul.mul, GradedMonoid.mk, LinearMap, LinearMap.ext, add_mul, injection, map_add, map_smul, mul_add, smul_assoc, smul_comm
 -/
@@ -360,7 +392,7 @@ instance Algebra.directSumGAlgebra
   map_mul a b := Sigma.ext (zero_add _).symm (heq_of_eq <| (algebraMap R A).map_mul a b)
   commutes := fun _ ⟨_, _⟩ =>
     Sigma.ext ((zero_add _).trans (add_zero _).symm) (heq_of_eq <| Algebra.commutes _ _)
-  smul_def := fun _ ⟨_
+  smul_def := fun _ ⟨_, _⟩ => Sigma.ext (zero_add _).symm (heq_of_eq <| Algebra.smul_def _ _)
 
 中文:
 实例 代数.directSumGAlgebra
@@ -370,7 +402,7 @@ instance Algebra.directSumGAlgebra
   map_mul a b := Sigma.ext (zero_add _).symm (heq_of_eq <| (algebraMap R A).map_mul a b)
   commutes := fun _ ⟨_, _⟩ =>
     Sigma.ext ((zero_add _).trans (add_zero _).symm) (heq_of_eq <| Algebra.commutes _ _)
-  smul_def := fun _ ⟨_
+  smul_def := fun _ ⟨_, _⟩ => Sigma.ext (zero_add _).symm (heq_of_eq <| Algebra.smul_def _ _)
 
 Depends on / 依赖: algebraMap, toAddMonoidHom
 -/

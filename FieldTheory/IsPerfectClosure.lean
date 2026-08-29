@@ -214,7 +214,13 @@ theorem mem_pNilradical
     refine ⟨fun ⟨n, h⟩ => ⟨n, ?_⟩, fun ⟨n, h⟩ => ⟨p ^ n, h⟩⟩
     rw [← Nat.sub_add_cancel ((n.lt_pow_self hp).le)]; rw [pow_add]; rw [h]; rw [mul_zero]
   rw [pNilradical_eq_bot hp]; rw [Ideal.mem_bot]
-  refine ⟨fun h => ⟨0, by rw [pow_ze
+  refine ⟨fun h => ⟨0, by rw [pow_zero, pow_one, h]⟩, fun ⟨n, h⟩ => ?_⟩
+  rcases Nat.le_one_iff_eq_zero_or_eq_one.1 (not_lt.1 hp) with hp | hp
+  · by_cases hn : n = 0
+    · rwa [hn, pow_zero, pow_one] at h
+    rw [hp]; rw [zero_pow hn]; rw [pow_zero] at h
+    subsingleton [subsingleton_of_zero_eq_one h.symm]
+  rwa [hp, one_pow, pow_one] at h
 
 中文:
 定理 mem_pNilradical
@@ -225,7 +231,13 @@ theorem mem_pNilradical
     refine ⟨fun ⟨n, h⟩ => ⟨n, ?_⟩, fun ⟨n, h⟩ => ⟨p ^ n, h⟩⟩
     rw [← Nat.sub_add_cancel ((n.lt_pow_self hp).le)]; rw [pow_add]; rw [h]; rw [mul_zero]
   rw [pNilradical_eq_bot hp]; rw [Ideal.mem_bot]
-  refine ⟨fun h => ⟨0, by rw [pow_ze
+  refine ⟨fun h => ⟨0, by rw [pow_zero, pow_one, h]⟩, fun ⟨n, h⟩ => ?_⟩
+  rcases Nat.le_one_iff_eq_zero_or_eq_one.1 (not_lt.1 hp) with hp | hp
+  · by_cases hn : n = 0
+    · rwa [hn, pow_zero, pow_one] at h
+    rw [hp]; rw [zero_pow hn]; rw [pow_zero] at h
+    subsingleton [subsingleton_of_zero_eq_one h.symm]
+  rwa [hp, one_pow, pow_one] at h
 
 Depends on / 依赖: Ideal.mem_bot, Nat.le_one_iff_eq_zero_or_eq_one, Nat.sub_add_cancel, le_one_iff_eq_zero_or_eq_one, lt_pow_self, mem_bot, mul_zero, n.lt_pow_self, not_lt, pNilradical_eq_bot, pNilradical_eq_nilradical, pow_add, pow_one, pow_zero, sub_add_cancel, subsingl, zero_pow
 -/
@@ -412,7 +424,9 @@ theorem IsPRadical.comap_pNilradical
 · obtain ⟨n, h⟩ := mem_pNilradical.1 Ideal.mem_comap.1 h
 obtain ⟨m, h⟩ := mem_pNilradical.1 ker_le i p ((map_pow i x _).symm ▸ h)
     exact ⟨n + m, by rwa [pow_add, pow_mul]⟩
-  simp only [Ideal.mem_comap, mem_pNilradical] at h
+  simp only [Ideal.mem_comap, mem_pNilradical] at h ⊢
+  obtain ⟨n, h⟩ := h
+  exact ⟨n, by simpa only [map_pow, map_zero] using congr(i $h)⟩
 
 中文:
 定理 是PRadical.comap_pNilradical
@@ -422,7 +436,9 @@ obtain ⟨m, h⟩ := mem_pNilradical.1 ker_le i p ((map_pow i x _).symm ▸ h)
 · obtain ⟨n, h⟩ := mem_pNilradical.1 Ideal.mem_comap.1 h
 obtain ⟨m, h⟩ := mem_pNilradical.1 ker_le i p ((map_pow i x _).symm ▸ h)
     exact ⟨n + m, by rwa [pow_add, pow_mul]⟩
-  simp only [Ideal.mem_comap, mem_pNilradical] at h
+  simp only [Ideal.mem_comap, mem_pNilradical] at h ⊢
+  obtain ⟨n, h⟩ := h
+  exact ⟨n, by simpa only [map_pow, map_zero] using congr(i $h)⟩
 
 Depends on / 依赖: Ideal.mem_comap, ker_le, le_antisymm, map_pow, map_zero, mem_comap, mem_pNilradical, pow_add, pow_mul
 -/
@@ -470,7 +486,7 @@ theorem IsPRadical.trans
     exact ⟨n + m, z, by rw [RingHom.comp_apply, hz, map_pow, hy, pow_add, pow_mul]⟩
   ker_le' x h := by
     rw [RingHom.mem_ker]; rw [RingHom.comp_apply]; rw [← RingHom.mem_ker] at h
-    simpa only [← Ideal.mem_comap, c
+    simpa only [← Ideal.mem_comap, comap_pNilradical] using ker_le f p h
 
 中文:
 定理 是PRadical.trans
@@ -481,7 +497,7 @@ theorem IsPRadical.trans
     exact ⟨n + m, z, by rw [RingHom.comp_apply, hz, map_pow, hy, pow_add, pow_mul]⟩
   ker_le' x h := by
     rw [RingHom.mem_ker]; rw [RingHom.comp_apply]; rw [← RingHom.mem_ker] at h
-    simpa only [← Ideal.mem_comap, c
+    simpa only [← Ideal.mem_comap, comap_pNilradical] using ker_le f p h
 
 Depends on / 依赖: Ideal.mem_comap, RingHom, RingHom.comp_apply, RingHom.mem_ker, comap_pNilradical, comp_apply, ker_le, map_pow, mem_comap, mem_ker, pow_add, pow_mem, pow_mul
 -/
@@ -830,7 +846,11 @@ theorem liftAux_apply
   have h' := Classical.choose_spec (lift_aux i p x)
   set n' := (Classical.choose (lift_aux i p x)).1
   replace h := congr($(h.symm) ^ p ^ n')
-  rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [← h']; rw [← map_pow]; rw [← map_pow]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom
+  rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [← h']; rw [← map_pow]; rw [← map_pow]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker] at h
+  obtain ⟨m, h⟩ := mem_pNilradical.1 (IsPRadical.ker_le i p h)
+  refine (iterateFrobeniusEquiv M p (m + n + n')).injective ?_
+  conv_lhs => rw [iterateFrobeniusEquiv_add_apply, RingEquiv.apply_symm_apply]
+  rw [add_assoc]; rw [add_comm n n']; rw [← add_assoc]; rw [iterateFrobeniusEquiv_add_apply (m := m + n')]; rw [RingEquiv.apply_symm_apply]; rw [iterateFrobeniusEquiv_def]; rw [iterateFrobeniusEquiv_def]; rw [← sub_eq_zero]; rw [← map_pow]; rw [← map_pow]; rw [← map_sub]; rw [add_comm m]; rw [add_comm m]; rw [pow_add]; rw [pow_mul]; rw [pow_add]; rw [pow_mul]; rw [← sub_pow_expChar_pow]; rw [h]; rw [map_zero]
 
 中文:
 定理 liftAux_apply
@@ -840,7 +860,11 @@ theorem liftAux_apply
   have h' := Classical.choose_spec (lift_aux i p x)
   set n' := (Classical.choose (lift_aux i p x)).1
   replace h := congr($(h.symm) ^ p ^ n')
-  rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [← h']; rw [← map_pow]; rw [← map_pow]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom
+  rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [← h']; rw [← map_pow]; rw [← map_pow]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker] at h
+  obtain ⟨m, h⟩ := mem_pNilradical.1 (IsPRadical.ker_le i p h)
+  refine (iterateFrobeniusEquiv M p (m + n + n')).injective ?_
+  conv_lhs => rw [iterateFrobeniusEquiv_add_apply, RingEquiv.apply_symm_apply]
+  rw [add_assoc]; rw [add_comm n n']; rw [← add_assoc]; rw [iterateFrobeniusEquiv_add_apply (m := m + n')]; rw [RingEquiv.apply_symm_apply]; rw [iterateFrobeniusEquiv_def]; rw [iterateFrobeniusEquiv_def]; rw [← sub_eq_zero]; rw [← map_pow]; rw [← map_pow]; rw [← map_sub]; rw [add_comm m]; rw [add_comm m]; rw [pow_add]; rw [pow_mul]; rw [pow_add]; rw [pow_mul]; rw [← sub_pow_expChar_pow]; rw [h]; rw [map_zero]
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, IsPRadical, IsPRadical.ker_le, RingEquiv, RingEquiv.apply_symm_app, RingHom, RingHom.mem_ker, apply_symm_app, choose_spec, conv_lhs, h.symm, injective, iterateFrobeniusEquiv, iterateFrobeniusEquiv_add_apply, ker_le, liftAux, lift_aux, map_pow
 -/
@@ -869,7 +893,18 @@ definition lift
   map_mul' x1 x2 := by
     obtain ⟨n1, y1, h1⟩ := IsPRadical.pow_mem i p x1
     obtain ⟨n2, y2, h2⟩ := IsPRadical.pow_mem i p x2
-    rw [liftAux_apply i j p _ _ _ h1]; rw [liftAux_apply i j p _ _ _ h2]; rw [li
+    rw [liftAux_apply i j p _ _ _ h1]; rw [liftAux_apply i j p _ _ _ h2]; rw [liftAux_apply i j p (x1 * x2) (n1 + n2) (y1 ^ p ^ n2 * y2 ^ p ^ n1) (by rw [map_mul]; rw [map_pow]; rw [map_pow]; rw [h1]; rw [h2]; rw [← pow_mul]; rw [← pow_add]; rw [← pow_mul]; rw [← pow_add]; rw [add_comm n2]; rw [mul_pow]),
+      map_mul, map_pow, map_pow, map_mul, ← iterateFrobeniusEquiv_def]
+    nth_rw 1 [iterateFrobeniusEquiv_symm_add_apply]
+    rw [RingEquiv.symm_apply_apply]; rw [add_comm n1]; rw [iterateFrobeniusEquiv_symm_add_apply]; rw [← iterateFrobeniusEquiv_def]; rw [RingEquiv.symm_apply_apply]
+  map_zero' := by simp [liftAux_apply i j p 0 0 0 (by rw [pow_zero, pow_one, map_zero])]
+  map_add' x1 x2 := by
+    obtain ⟨n1, y1, h1⟩ := IsPRadical.pow_mem i p x1
+    obtain ⟨n2, y2, h2⟩ := IsPRadical.pow_mem i p x2
+    rw [liftAux_apply i j p _ _ _ h1]; rw [liftAux_apply i j p _ _ _ h2]; rw [liftAux_apply i j p (x1 + x2) (n1 + n2) (y1 ^ p ^ n2 + y2 ^ p ^ n1) (by rw [map_add]; rw [map_pow]; rw [map_pow]; rw [h1]; rw [h2]; rw [← pow_mul]; rw [← pow_add]; rw [← pow_mul]; rw [← pow_add]; rw [add_comm n2]; rw [add_pow_expChar_pow]),
+      map_add, map_pow, map_pow, map_add, ← iterateFrobeniusEquiv_def]
+    nth_rw 1 [iterateFrobeniusEquiv_symm_add_apply]
+    rw [RingEquiv.symm_apply_apply]; rw [add_comm n1]; rw [iterateFrobeniusEquiv_symm_add_apply]; rw [← iterateFrobeniusEquiv_def]; rw [RingEquiv.symm_apply_apply]
 
 中文:
 定义 lift
@@ -879,7 +914,18 @@ definition lift
   map_mul' x1 x2 := by
     obtain ⟨n1, y1, h1⟩ := IsPRadical.pow_mem i p x1
     obtain ⟨n2, y2, h2⟩ := IsPRadical.pow_mem i p x2
-    rw [liftAux_apply i j p _ _ _ h1]; rw [liftAux_apply i j p _ _ _ h2]; rw [li
+    rw [liftAux_apply i j p _ _ _ h1]; rw [liftAux_apply i j p _ _ _ h2]; rw [liftAux_apply i j p (x1 * x2) (n1 + n2) (y1 ^ p ^ n2 * y2 ^ p ^ n1) (by rw [map_mul]; rw [map_pow]; rw [map_pow]; rw [h1]; rw [h2]; rw [← pow_mul]; rw [← pow_add]; rw [← pow_mul]; rw [← pow_add]; rw [add_comm n2]; rw [mul_pow]),
+      map_mul, map_pow, map_pow, map_mul, ← iterateFrobeniusEquiv_def]
+    nth_rw 1 [iterateFrobeniusEquiv_symm_add_apply]
+    rw [RingEquiv.symm_apply_apply]; rw [add_comm n1]; rw [iterateFrobeniusEquiv_symm_add_apply]; rw [← iterateFrobeniusEquiv_def]; rw [RingEquiv.symm_apply_apply]
+  map_zero' := by simp [liftAux_apply i j p 0 0 0 (by rw [pow_zero, pow_one, map_zero])]
+  map_add' x1 x2 := by
+    obtain ⟨n1, y1, h1⟩ := IsPRadical.pow_mem i p x1
+    obtain ⟨n2, y2, h2⟩ := IsPRadical.pow_mem i p x2
+    rw [liftAux_apply i j p _ _ _ h1]; rw [liftAux_apply i j p _ _ _ h2]; rw [liftAux_apply i j p (x1 + x2) (n1 + n2) (y1 ^ p ^ n2 + y2 ^ p ^ n1) (by rw [map_add]; rw [map_pow]; rw [map_pow]; rw [h1]; rw [h2]; rw [← pow_mul]; rw [← pow_add]; rw [← pow_mul]; rw [← pow_add]; rw [add_comm n2]; rw [add_pow_expChar_pow]),
+      map_add, map_pow, map_pow, map_add, ← iterateFrobeniusEquiv_def]
+    nth_rw 1 [iterateFrobeniusEquiv_symm_add_apply]
+    rw [RingEquiv.symm_apply_apply]; rw [add_comm n1]; rw [iterateFrobeniusEquiv_symm_add_apply]; rw [← iterateFrobeniusEquiv_def]; rw [RingEquiv.symm_apply_apply]
 
 Depends on / 依赖: liftAux
 -/
@@ -1700,7 +1746,8 @@ instance isPRadical
   ker_le' x h := by
     rw [RingHom.mem_ker]; rw [of_apply]; rw [zero_def]; rw [mk_eq_iff] at h
     obtain ⟨n, h⟩ := h
-    simp_rw [zero_add, ← coe_iterateFrobenius, map_zero] at
+    simp_rw [zero_add, ← coe_iterateFrobenius, map_zero] at h
+    exact mem_pNilradical.2 ⟨n, h⟩
 
 中文:
 实例 isPRadical
@@ -1710,7 +1757,8 @@ instance isPRadical
   ker_le' x h := by
     rw [RingHom.mem_ker]; rw [of_apply]; rw [zero_def]; rw [mk_eq_iff] at h
     obtain ⟨n, h⟩ := h
-    simp_rw [zero_add, ← coe_iterateFrobenius, map_zero] at
+    simp_rw [zero_add, ← coe_iterateFrobenius, map_zero] at h
+    exact mem_pNilradical.2 ⟨n, h⟩
 
 Depends on / 依赖: PerfectClosure, PerfectClosure.induction_on, RingHom, RingHom.mem_ker, coe_iterateFrobenius, induction_on, iterate_frobenius, iterate_frobenius_mk, ker_le, map_zero, mem_ker, mem_pNilradical, mk_eq_iff, of_apply, simp_rw, zero_add, zero_def
 -/

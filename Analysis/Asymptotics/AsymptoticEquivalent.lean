@@ -338,7 +338,7 @@ theorem isEquivalent_const_iff_tendsto
     simp only [Pi.sub_apply, sub_neg_eq_add, sub_add_cancel, zero_add] at this
     exact this
   · have := h.sub (tendsto_const_nhds (x := c))
-    r
+    rwa [sub_self] at this
 
 中文:
 定理 isEquivalent_const_iff_tendsto
@@ -350,7 +350,7 @@ theorem isEquivalent_const_iff_tendsto
     simp only [Pi.sub_apply, sub_neg_eq_add, sub_add_cancel, zero_add] at this
     exact this
   · have := h.sub (tendsto_const_nhds (x := c))
-    r
+    rwa [sub_self] at this
 
 Depends on / 依赖: IsEquivalent, Pi.sub_apply, h.sub, isLittleO_const_iff, sub_add_cancel, sub_apply, sub_neg_eq_add, sub_self, tendsto_const_nhds, unfoldPartialApp, zero_add
 -/
@@ -615,7 +615,9 @@ theorem isEquivalent_iff_exists_eq_mul
   · conv in 𝓝 _ => rw [← zero_add (1 : β)]
     exact hφ.add tendsto_const_nhds
   · convert! h.fun_add (EventuallyEq.refl l v) <;> simp [add_mul]
-  · conv 
+  · conv in 𝓝 _ => rw [← sub_self (1 : β)]
+    exact hφ.sub tendsto_const_nhds
+  · convert! h.fun_sub (EventuallyEq.refl l v); simp [sub_mul]
 
 中文:
 定理 isEquivalent_iff_存在_eq_mul
@@ -625,7 +627,9 @@ theorem isEquivalent_iff_exists_eq_mul
   · conv in 𝓝 _ => rw [← zero_add (1 : β)]
     exact hφ.add tendsto_const_nhds
   · convert! h.fun_add (EventuallyEq.refl l v) <;> simp [add_mul]
-  · conv 
+  · conv in 𝓝 _ => rw [← sub_self (1 : β)]
+    exact hφ.sub tendsto_const_nhds
+  · convert! h.fun_sub (EventuallyEq.refl l v); simp [sub_mul]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.refl, IsEquivalent, add_mul, convert, fun_add, fun_sub, h.fun_add, h.fun_sub, isLittleO_iff_exists_eq_mul, sub_mul, sub_self, tendsto_const_nhds, zero_add
 -/
@@ -671,7 +675,10 @@ theorem isEquivalent_of_tendsto_one
     exact ⟨u / v, huv, this.mono fun x hz' => (div_mul_cancel_of_imp hz').symm⟩
   by_contra! h
   replace h : existsᶠ t in l, (u / v) t = 0 := h.mono fun x ⟨hv, hu⟩ => by simp [hv]
-  simpa using tendsto_nhds_u
+  simpa using tendsto_nhds_unique_of_frequently_eq (b := 0) huv tendsto_const_nhds h
+
+@[deprecated (since := "2026-01-26")] alias isEquivalent_of_tendsto_one' :=
+  isEquivalent_of_tendsto_one
 
 中文:
 定理 isEquivalent_of_tendsto_one
@@ -682,7 +689,10 @@ theorem isEquivalent_of_tendsto_one
     exact ⟨u / v, huv, this.mono fun x hz' => (div_mul_cancel_of_imp hz').symm⟩
   by_contra! h
   replace h : existsᶠ t in l, (u / v) t = 0 := h.mono fun x ⟨hv, hu⟩ => by simp [hv]
-  simpa using tendsto_nhds_u
+  simpa using tendsto_nhds_unique_of_frequently_eq (b := 0) huv tendsto_const_nhds h
+
+@[deprecated (since := "2026-01-26")] alias isEquivalent_of_tendsto_one' :=
+  isEquivalent_of_tendsto_one
 
 Depends on / 依赖: div_mul_cancel_of_imp, h.mono, isEquivalent_iff_exists_eq_mul, replace, tendsto_const_nhds, tendsto_nhds_unique_of_frequently_eq, this.mono
 -/
@@ -711,7 +721,10 @@ theorem isEquivalent_iff_tendsto_one
     simp only [Pi.sub_apply, sub_div] at this
     have key : Tendsto (fun x => v x / v x) l (𝓝 1) :=
       (tendsto_congr' <| hz.mono fun x hnz => @div_self _ _ (v x) hnz).mpr tendsto_const_nhds
-    convert! this.ad
+    convert! this.add key
+    · simp
+    · simp
+  · exact isEquivalent_of_tendsto_one
 
 中文:
 定理 isEquivalent_iff_tendsto_one
@@ -723,7 +736,10 @@ theorem isEquivalent_iff_tendsto_one
     simp only [Pi.sub_apply, sub_div] at this
     have key : Tendsto (fun x => v x / v x) l (𝓝 1) :=
       (tendsto_congr' <| hz.mono fun x hnz => @div_self _ _ (v x) hnz).mpr tendsto_const_nhds
-    convert! this.ad
+    convert! this.add key
+    · simp
+    · simp
+  · exact isEquivalent_of_tendsto_one
 
 Depends on / 依赖: Pi.sub_apply, Tendsto, convert, div_self, hequiv, hequiv.isLittleO.tendsto_div_nhds_zero, hz.mono, isEquivalent_of_tendsto_one, isLittleO, sub_apply, sub_div, tendsto_congr, tendsto_const_nhds, tendsto_div_nhds_zero, this.add
 -/
@@ -757,7 +773,30 @@ theorem IsEquivalent.smul
       (habφ.comp₂ (· • ·) <| EventuallyEq.refl _ u).fun_sub
         (EventuallyEq.refl _ fun x => b x • v x) using 1
     ext
-    rw [Pi.mu
+    rw [Pi.mul_apply]; rw [mul_comm]; rw [mul_smul]; rw [← smul_sub]
+  refine (isLittleO_congr this.symm <| EventuallyEq.rfl).mp ((isBigO_refl b l).smul_isLittleO ?_)
+  rcases huv.isBigO.exists_pos with ⟨C, hC, hCuv⟩
+  rw [IsEquivalent] at *
+  rw [isLittleO_iff] at *
+  rw [IsBigOWith] at hCuv
+  simp only [Metric.tendsto_nhds, dist_eq_norm] at hφ
+  intro c hc
+  specialize hφ (c / 2 / C) (div_pos (div_pos hc zero_lt_two) hC)
+  specialize huv (div_pos hc zero_lt_two)
+  refine hφ.mp (huv.mp <| hCuv.mono fun x hCuvx huvx hφx => ?_)
+  have key :=
+    calc
+      ‖φ x - 1‖ * ‖u x‖ <= c / 2 / C * ‖u x‖ := by gcongr
+      _ <= c / 2 / C * (C * ‖v x‖) := by gcongr
+      _ = c / 2 * ‖v x‖ := by field
+  calc
+    ‖((fun x : α => φ x • u x) - v) x‖ = ‖(φ x - 1) • u x + (u x - v x)‖ := by
+      simp [sub_smul, sub_add]
+    _ <= ‖(φ x - 1) • u x‖ + ‖u x - v x‖ := norm_add_le _ _
+    _ = ‖φ x - 1‖ * ‖u x‖ + ‖u x - v x‖ := by rw [norm_smul]
+    _ <= c / 2 * ‖v x‖ + ‖u x - v x‖ := by gcongr
+    _ <= c / 2 * ‖v x‖ + c / 2 * ‖v x‖ := by gcongr; exact huvx
+    _ = c * ‖v x‖ := by ring
 
 中文:
 定理 IsEquivalent.smul
@@ -769,7 +808,30 @@ theorem IsEquivalent.smul
       (habφ.comp₂ (· • ·) <| EventuallyEq.refl _ u).fun_sub
         (EventuallyEq.refl _ fun x => b x • v x) using 1
     ext
-    rw [Pi.mu
+    rw [Pi.mul_apply]; rw [mul_comm]; rw [mul_smul]; rw [← smul_sub]
+  refine (isLittleO_congr this.symm <| EventuallyEq.rfl).mp ((isBigO_refl b l).smul_isLittleO ?_)
+  rcases huv.isBigO.exists_pos with ⟨C, hC, hCuv⟩
+  rw [IsEquivalent] at *
+  rw [isLittleO_iff] at *
+  rw [IsBigOWith] at hCuv
+  simp only [Metric.tendsto_nhds, dist_eq_norm] at hφ
+  intro c hc
+  specialize hφ (c / 2 / C) (div_pos (div_pos hc zero_lt_two) hC)
+  specialize huv (div_pos hc zero_lt_two)
+  refine hφ.mp (huv.mp <| hCuv.mono fun x hCuvx huvx hφx => ?_)
+  have key :=
+    calc
+      ‖φ x - 1‖ * ‖u x‖ <= c / 2 / C * ‖u x‖ := by gcongr
+      _ <= c / 2 / C * (C * ‖v x‖) := by gcongr
+      _ = c / 2 * ‖v x‖ := by field
+  calc
+    ‖((fun x : α => φ x • u x) - v) x‖ = ‖(φ x - 1) • u x + (u x - v x)‖ := by
+      simp [sub_smul, sub_add]
+    _ <= ‖(φ x - 1) • u x‖ + ‖u x - v x‖ := norm_add_le _ _
+    _ = ‖φ x - 1‖ * ‖u x‖ + ‖u x - v x‖ := by rw [norm_smul]
+    _ <= c / 2 * ‖v x‖ + ‖u x - v x‖ := by gcongr
+    _ <= c / 2 * ‖v x‖ + c / 2 * ‖v x‖ := by gcongr; exact huvx
+    _ = c * ‖v x‖ := by ring
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.refl, EventuallyEq.rfl, IsEquivalent, Pi.mul_apply, convert, exists_eq_mul, exists_pos, fun_sub, hab.exists_eq_mul, huv.isBigO.exists_pos, isBigO, isBigO_refl, isLittleO_congr, mul_apply, mul_comm, mul_smul, smul_isLittleO, smul_sub, this.symm
 -/

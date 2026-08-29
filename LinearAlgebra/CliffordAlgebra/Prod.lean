@@ -158,7 +158,19 @@ definition ofProd
       ((GradedTensorProduct.includeLeft (evenOdd Q₁) (evenOdd Q₂)).toLinearMap
           ∘ₗ (evenOdd Q₁ 1).subtype ∘ₗ (ι Q₁).codRestrict _ (ι_mem_evenOdd_one Q₁))
       ((GradedTensorProduct.includeRight (evenOdd Q₁) (evenOdd Q₂)).toLinearMap
-          ∘ₗ (evenOdd Q₂ 1)
+          ∘ₗ (evenOdd Q₂ 1).subtype ∘ₗ (ι Q₂).codRestrict _ (ι_mem_evenOdd_one Q₂)),
+    fun m => by
+      simp_rw [LinearMap.coprod_apply, LinearMap.coe_comp, Function.comp_apply,
+        AlgHom.toLinearMap_apply, QuadraticMap.prod_apply, Submodule.coe_subtype,
+        GradedTensorProduct.includeLeft_apply, GradedTensorProduct.includeRight_apply, map_add,
+        add_mul, mul_add, GradedTensorProduct.algebraMap_def,
+        GradedTensorProduct.tmul_one_mul_one_tmul, GradedTensorProduct.tmul_one_mul_coe_tmul,
+        GradedTensorProduct.tmul_coe_mul_one_tmul, GradedTensorProduct.tmul_coe_mul_coe_tmul,
+        LinearMap.codRestrict_apply, one_mul, uzpow_one, Units.neg_smul, one_smul, ι_sq_scalar,
+        mul_one, ← GradedTensorProduct.algebraMap_def, ← GradedTensorProduct.algebraMap_def']
+      abel⟩
+
+@[simp]
 
 中文:
 定义 ofProd
@@ -168,7 +180,19 @@ definition ofProd
       ((GradedTensorProduct.includeLeft (evenOdd Q₁) (evenOdd Q₂)).toLinearMap
           ∘ₗ (evenOdd Q₁ 1).subtype ∘ₗ (ι Q₁).codRestrict _ (ι_mem_evenOdd_one Q₁))
       ((GradedTensorProduct.includeRight (evenOdd Q₁) (evenOdd Q₂)).toLinearMap
-          ∘ₗ (evenOdd Q₂ 1)
+          ∘ₗ (evenOdd Q₂ 1).subtype ∘ₗ (ι Q₂).codRestrict _ (ι_mem_evenOdd_one Q₂)),
+    fun m => by
+      simp_rw [LinearMap.coprod_apply, LinearMap.coe_comp, Function.comp_apply,
+        AlgHom.toLinearMap_apply, QuadraticMap.prod_apply, Submodule.coe_subtype,
+        GradedTensorProduct.includeLeft_apply, GradedTensorProduct.includeRight_apply, map_add,
+        add_mul, mul_add, GradedTensorProduct.algebraMap_def,
+        GradedTensorProduct.tmul_one_mul_one_tmul, GradedTensorProduct.tmul_one_mul_coe_tmul,
+        GradedTensorProduct.tmul_coe_mul_one_tmul, GradedTensorProduct.tmul_coe_mul_coe_tmul,
+        LinearMap.codRestrict_apply, one_mul, uzpow_one, Units.neg_smul, one_smul, ι_sq_scalar,
+        mul_one, ← GradedTensorProduct.algebraMap_def, ← GradedTensorProduct.algebraMap_def']
+      abel⟩
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap_apply, Function, Function.comp_apply, GradedTensorProduc, GradedTensorProduct, GradedTensorProduct.includeLeft, GradedTensorProduct.includeRight, LinearMap, LinearMap.coe_comp, LinearMap.coprod, LinearMap.coprod_apply, QuadraticMap, QuadraticMap.prod_apply, Submodule, Submodule.coe_subtype, codRestrict, coe_comp, coe_subtype, comp_apply
 -/

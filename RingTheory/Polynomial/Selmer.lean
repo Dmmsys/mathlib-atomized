@@ -43,7 +43,15 @@ theorem X_pow_sub_X_sub_one_irreducible_aux
     linear_combination (1 - z - z ^ 2 - z ^ n) * h1 + (z ^ n - 2) * h2
   have key : z ^ n = 1 ∨ z ^ n = z ∨ z ^ n = z ^ 2 := by
     rw [← Nat.mod_add_div n 3]; rw [pow_add]; rw [pow_mul]; rw [h3]; rw [one_pow]; rw [mul_one]
-    have : n % 3 < 3 := 
+    have : n % 3 < 3 := Nat.mod_lt n zero_lt_three
+    interval_cases n % 3 <;>
+    simp only [pow_zero, pow_one, or_true, true_or]
+  have z_ne_zero : z != 0 := fun h =>
+    zero_ne_one ((zero_pow three_ne_zero).symm.trans (show (0 : Complex) ^ 3 = 1 from h ▸ h3))
+  rcases key with (key | key | key)
+  · exact z_ne_zero (by rwa [key, right_eq_add] at h1)
+  · exact one_ne_zero (by rwa [key, left_eq_add] at h1)
+  · exact z_ne_zero (eq_zero_of_pow_eq_zero (by rwa [key, add_self_eq_zero] at h2))
 
 中文:
 定理 X_pow_sub_X_sub_one_irreducible_aux
@@ -55,7 +63,15 @@ theorem X_pow_sub_X_sub_one_irreducible_aux
     linear_combination (1 - z - z ^ 2 - z ^ n) * h1 + (z ^ n - 2) * h2
   have key : z ^ n = 1 ∨ z ^ n = z ∨ z ^ n = z ^ 2 := by
     rw [← Nat.mod_add_div n 3]; rw [pow_add]; rw [pow_mul]; rw [h3]; rw [one_pow]; rw [mul_one]
-    have : n % 3 < 3 := 
+    have : n % 3 < 3 := Nat.mod_lt n zero_lt_three
+    interval_cases n % 3 <;>
+    simp only [pow_zero, pow_one, or_true, true_or]
+  have z_ne_zero : z != 0 := fun h =>
+    zero_ne_one ((zero_pow three_ne_zero).symm.trans (show (0 : Complex) ^ 3 = 1 from h ▸ h3))
+  rcases key with (key | key | key)
+  · exact z_ne_zero (by rwa [key, right_eq_add] at h1)
+  · exact one_ne_zero (by rwa [key, left_eq_add] at h1)
+  · exact z_ne_zero (eq_zero_of_pow_eq_zero (by rwa [key, add_self_eq_zero] at h2))
 
 Depends on / 依赖: Nat.mod_add_div, Nat.mod_lt, interval_cases, linear_combination, mod_add_div, mod_lt, mul_one, one_pow, or_true, pow_add, pow_mul, pow_one, pow_zero, replace, symm.trans, three_ne_zero, true_or, z_ne_zero, zero_lt_three, zero_ne_one
 -/
@@ -87,7 +103,20 @@ theorem X_pow_sub_X_sub_one_irreducible
   · rw [hn0, pow_zero, sub_sub, add_comm, ← sub_sub, sub_self, zero_sub]
     exact Associated.irreducible ⟨-1, mul_neg_one X⟩ irreducible_X
   have hn : 1 < n := Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨hn0, hn1⟩
-  have hp : (X ^ n - X - 1 : Int[X]) = trinomial 0 1 n (-1) (-1)
+  have hp : (X ^ n - X - 1 : Int[X]) = trinomial 0 1 n (-1) (-1) 1 := by
+    simp only [trinomial, C_neg, C_1]; ring
+  rw [hp]
+  apply IsUnitTrinomial.irreducible_of_coprime' ⟨0, 1, n, zero_lt_one, hn, -1, -1, 1, rfl⟩
+  rintro z ⟨h1, h2⟩
+  apply X_pow_sub_X_sub_one_irreducible_aux (n := n) z
+  rw [trinomial_mirror zero_lt_one hn (-1 : Intˣ).ne_zero (1 : Intˣ).ne_zero] at h2
+  simp_rw [trinomial, aeval_add, aeval_mul, aeval_X_pow, aeval_C,
+    Units.val_neg, Units.val_one, map_neg, map_one] at h1 h2
+  replace h1 : z ^ n = z + 1 := by linear_combination h1
+  replace h2 := mul_eq_zero_of_left h2 z
+  rw [add_mul]; rw [add_mul]; rw [add_zero]; rw [mul_assoc (-1 : Complex)]; rw [← pow_succ]; rw [Nat.sub_add_cancel hn.le] at h2
+  rw [h1] at h2 ⊢
+  exact ⟨rfl, by linear_combination -h2⟩
 
 中文:
 定理 X_pow_sub_X_sub_one_irreducible
@@ -98,7 +127,20 @@ theorem X_pow_sub_X_sub_one_irreducible
   · rw [hn0, pow_zero, sub_sub, add_comm, ← sub_sub, sub_self, zero_sub]
     exact Associated.irreducible ⟨-1, mul_neg_one X⟩ irreducible_X
   have hn : 1 < n := Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨hn0, hn1⟩
-  have hp : (X ^ n - X - 1 : Int[X]) = trinomial 0 1 n (-1) (-1)
+  have hp : (X ^ n - X - 1 : Int[X]) = trinomial 0 1 n (-1) (-1) 1 := by
+    simp only [trinomial, C_neg, C_1]; ring
+  rw [hp]
+  apply IsUnitTrinomial.irreducible_of_coprime' ⟨0, 1, n, zero_lt_one, hn, -1, -1, 1, rfl⟩
+  rintro z ⟨h1, h2⟩
+  apply X_pow_sub_X_sub_one_irreducible_aux (n := n) z
+  rw [trinomial_mirror zero_lt_one hn (-1 : Intˣ).ne_zero (1 : Intˣ).ne_zero] at h2
+  simp_rw [trinomial, aeval_add, aeval_mul, aeval_X_pow, aeval_C,
+    Units.val_neg, Units.val_one, map_neg, map_one] at h1 h2
+  replace h1 : z ^ n = z + 1 := by linear_combination h1
+  replace h2 := mul_eq_zero_of_left h2 z
+  rw [add_mul]; rw [add_mul]; rw [add_zero]; rw [mul_assoc (-1 : Complex)]; rw [← pow_succ]; rw [Nat.sub_add_cancel hn.le] at h2
+  rw [h1] at h2 ⊢
+  exact ⟨rfl, by linear_combination -h2⟩
 
 Depends on / 依赖: Associated, Associated.irreducible, C_neg, IsUnitTrinomial, IsUnitTrinomial.irreducible_of_coprime, Nat.one_lt_iff_ne_zero_and_ne_one.mpr, X_pow_sub_X_sub_one_irreducible_aux, add_comm, irreducible, irreducible_X, irreducible_of_coprime, mul_neg_one, one_lt_iff_ne_zero_and_ne_one, pow_zero, sub_self, sub_sub, trinomial, zero_lt_one, zero_sub
 -/
@@ -135,7 +177,12 @@ theorem X_pow_sub_X_sub_one_irreducible_rat
     exact Associated.irreducible ⟨-1, mul_neg_one X⟩ irreducible_X
   have hp : (X ^ n - X - 1 : Int[X]) = trinomial 0 1 n (-1) (-1) 1 := by
     simp only [trinomial, C_neg, C_1]; ring
-  have hn : 1 < n
+  have hn : 1 < n := Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨hn0, hn1⟩
+  have h := (IsPrimitive.Int.irreducible_iff_irreducible_map_cast ?_).mp
+    (X_pow_sub_X_sub_one_irreducible hn1)
+  · rwa [Polynomial.map_sub, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_one,
+      Polynomial.map_X] at h
+  · exact hp.symm ▸ (trinomial_monic zero_lt_one hn).isPrimitive
 
 中文:
 定理 X_pow_sub_X_sub_one_irreducible_rat
@@ -147,7 +194,12 @@ theorem X_pow_sub_X_sub_one_irreducible_rat
     exact Associated.irreducible ⟨-1, mul_neg_one X⟩ irreducible_X
   have hp : (X ^ n - X - 1 : Int[X]) = trinomial 0 1 n (-1) (-1) 1 := by
     simp only [trinomial, C_neg, C_1]; ring
-  have hn : 1 < n
+  have hn : 1 < n := Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨hn0, hn1⟩
+  have h := (IsPrimitive.Int.irreducible_iff_irreducible_map_cast ?_).mp
+    (X_pow_sub_X_sub_one_irreducible hn1)
+  · rwa [Polynomial.map_sub, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_one,
+      Polynomial.map_X] at h
+  · exact hp.symm ▸ (trinomial_monic zero_lt_one hn).isPrimitive
 
 Depends on / 依赖: Associated, Associated.irreducible, C_neg, IsPrimitive, IsPrimitive.Int.irreducible_iff_irreducible_map_cast, Nat.one_lt_iff_ne_zero_and_ne_one.mpr, Polynom, Polynomial, Polynomial.map_sub, X_pow_sub_X_sub_one_irreducible, add_comm, irreducible, irreducible_X, irreducible_iff_irreducible_map_cast, map_sub, mul_neg_one, one_lt_iff_ne_zero_and_ne_one, pow_zero, sub_self, sub_sub
 -/

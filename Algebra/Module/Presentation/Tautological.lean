@@ -92,7 +92,9 @@ definition tautologicalRelationsSolutionEquiv
         symm
         rw [← sub_eq_zero]
         simpa using s.linearCombination_var_relation (.smul a m) }
-  i
+  invFun f :=
+    { var := f
+      linearCombination_var_relation := by rintro (_ | _) <;> simp }
 
 中文:
 定义 tautologicalRelationsSolutionEquiv
@@ -106,7 +108,9 @@ definition tautologicalRelationsSolutionEquiv
         symm
         rw [← sub_eq_zero]
         simpa using s.linearCombination_var_relation (.smul a m) }
-  i
+  invFun f :=
+    { var := f
+      linearCombination_var_relation := by rintro (_ | _) <;> simp }
 
 Depends on / 依赖: invFun, linearCombination_var_relation, map_add, map_smul, s.linearCombination_var_relation, s.var, sub_eq_zero
 -/

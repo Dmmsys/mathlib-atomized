@@ -263,7 +263,12 @@ instance [F.IsDense]
             naturality g₁ g₂ φ := by
               simpa [uliftFunctor, uliftYoneda,
                 restrictedULiftYoneda, ← ULift.down_inj] using
-
+                ((f.naturality_apply φ.left.op) (ULift.up g₂.hom)).symm } }
+    refine ⟨(F.denseAt Y).desc c, ?_⟩
+    ext ⟨X⟩ ⟨x⟩
+    have := (F.denseAt Y).fac c (.mk x)
+    dsimp [c] at this
+    simpa using ULift.down_injective this
 
 中文:
 实例 [F.是稠密]
@@ -276,7 +281,12 @@ instance [F.IsDense]
             naturality g₁ g₂ φ := by
               simpa [uliftFunctor, uliftYoneda,
                 restrictedULiftYoneda, ← ULift.down_inj] using
-
+                ((f.naturality_apply φ.left.op) (ULift.up g₂.hom)).symm } }
+    refine ⟨(F.denseAt Y).desc c, ?_⟩
+    ext ⟨X⟩ ⟨x⟩
+    have := (F.denseAt Y).fac c (.mk x)
+    dsimp [c] at this
+    simpa using ULift.down_injective this
 
 Depends on / 依赖: Cocone, CostructuredArrow, CostructuredArrow.proj, F.denseAt, ULift.down_inj, ULift.down_injective, ULift.up, denseAt, down_inj, down_injective, f.app, f.naturality_apply, g.hom, g.left, left.op, naturality, naturality_apply, restrictedULiftYoneda, uliftFunctor, uliftYoneda
 -/
@@ -312,7 +322,23 @@ lemma IsDense.of_fullyFaithful_restrictedULiftYoneda
         naturality := by
           rintro ⟨X₁⟩ ⟨X₂⟩ ⟨f⟩
           ext ⟨x⟩
-          let α 
+          let α : CostructuredArrow.mk (F.map f ≫ x) ⟶ CostructuredArrow.mk x :=
+            CostructuredArrow.homMk f
+          exact ULift.down_injective (s.w α).symm }
+    have hφ (s) (j) : (restrictedULiftYoneda F).map j.hom ≫ φ s =
+        (restrictedULiftYoneda F).map (s.ι.app j) := by
+      ext ⟨X⟩ ⟨x⟩
+      let α : .mk (x ≫ j.hom) ⟶ j := CostructuredArrow.homMk (F.preimage x)
+      have := s.w α
+      dsimp [uliftYoneda, φ, α] at this ⊢
+      apply ULift.down_injective
+      simpa using this.symm
+    exact
+      ⟨{desc s := (h.preimage (φ s))
+        fac s j := h.map_injective (by simp [hφ])
+        uniq s m hm := h.map_injective (by
+          ext ⟨_⟩ ⟨_⟩
+          simp [φ, ← hm]) }⟩
 
 中文:
 引理 是稠密.of_fullyFaithful_restrictedULiftYoneda
@@ -324,7 +350,23 @@ lemma IsDense.of_fullyFaithful_restrictedULiftYoneda
         naturality := by
           rintro ⟨X₁⟩ ⟨X₂⟩ ⟨f⟩
           ext ⟨x⟩
-          let α 
+          let α : CostructuredArrow.mk (F.map f ≫ x) ⟶ CostructuredArrow.mk x :=
+            CostructuredArrow.homMk f
+          exact ULift.down_injective (s.w α).symm }
+    have hφ (s) (j) : (restrictedULiftYoneda F).map j.hom ≫ φ s =
+        (restrictedULiftYoneda F).map (s.ι.app j) := by
+      ext ⟨X⟩ ⟨x⟩
+      let α : .mk (x ≫ j.hom) ⟶ j := CostructuredArrow.homMk (F.preimage x)
+      have := s.w α
+      dsimp [uliftYoneda, φ, α] at this ⊢
+      apply ULift.down_injective
+      simpa using this.symm
+    exact
+      ⟨{desc s := (h.preimage (φ s))
+        fac s j := h.map_injective (by simp [hφ])
+        uniq s m hm := h.map_injective (by
+          ext ⟨_⟩ ⟨_⟩
+          simp [φ, ← hm]) }⟩
 
 Depends on / 依赖: Cocone, CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, CostructuredArrow.proj, F.map, ULift.down_injective, ULift.up, down_injective, j.hom, naturality, restrictedULiftYoneda, s.pt
 -/
@@ -391,7 +433,7 @@ lemma isStrongGenerator_of_isDense
     diag := _
     isColimit := (IsColimit.whiskerEquivalence (F.denseAt Y)
       ((ShrinkHoms.equivalence _).symm.trans ((Shrink.equivalence _)).symm))
-    prop_diag_obj := by simp }⟩
+    prop_diag_obj := by simp }⟩⟩))
 
 中文:
 引理 isStrongGenerator_of_isDense
@@ -402,7 +444,7 @@ lemma isStrongGenerator_of_isDense
     diag := _
     isColimit := (IsColimit.whiskerEquivalence (F.denseAt Y)
       ((ShrinkHoms.equivalence _).symm.trans ((Shrink.equivalence _)).symm))
-    prop_diag_obj := by simp }⟩
+    prop_diag_obj := by simp }⟩⟩))
 
 Depends on / 依赖: F.denseAt, IsColimit, IsColimit.whiskerEquivalence, IsStrongGenerator, IsStrongGenerator.mk_of_exists_colimitsOfShape, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, denseAt, equivalence, isColimit, mk_of_exists_colimitsOfShape, prop_diag_obj, symm.trans, whiskerEquivalence
 -/

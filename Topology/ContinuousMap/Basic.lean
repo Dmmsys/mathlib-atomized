@@ -1278,7 +1278,8 @@ definition liftCover
     Set.iUnion_eq_univ_iff.2 fun x => (hS x).imp fun _ => mem_of_mem_nhds
 mk (Set.liftCover S (fun i => φ i) hφ H) continuous_of_cover_nhds hS fun i => by
     rw [continuousOn_iff_continuous_domRestrict]
-    simpa +unfoldPartialApp only [Set.domRestrict, Set.liftCove
+    simpa +unfoldPartialApp only [Set.domRestrict, Set.liftCover_coe]
+      using map_continuous (φ i)
 
 中文:
 定义 liftCover
@@ -1287,7 +1288,8 @@ mk (Set.liftCover S (fun i => φ i) hφ H) continuous_of_cover_nhds hS fun i => 
     Set.iUnion_eq_univ_iff.2 fun x => (hS x).imp fun _ => mem_of_mem_nhds
 mk (Set.liftCover S (fun i => φ i) hφ H) continuous_of_cover_nhds hS fun i => by
     rw [continuousOn_iff_continuous_domRestrict]
-    simpa +unfoldPartialApp only [Set.domRestrict, Set.liftCove
+    simpa +unfoldPartialApp only [Set.domRestrict, Set.liftCover_coe]
+      using map_continuous (φ i)
 
 Depends on / 依赖: Set.domRestrict, Set.iUnion_eq_univ_iff, Set.liftCover, Set.liftCover_coe, Set.univ, continuousOn_iff_continuous_domRestrict, continuous_of_cover_nhds, domRestrict, iUnion_eq_univ_iff, liftCover, liftCover_coe, map_continuous, mem_of_mem_nhds, unfoldPartialApp
 -/
@@ -1512,7 +1514,8 @@ definition homeomorph
     convert! continuous_quotient_mk'
     ext
     simp only [Equiv.invFun_as_coe, Function.comp_apply,
-      (Setoid.qu
+      (Setoid.quotientKerEquivOfSurjective f hf.surjective).symm_apply_eq]
+    rfl
 
 中文:
 定义 homeomorph
@@ -1524,7 +1527,8 @@ definition homeomorph
     convert! continuous_quotient_mk'
     ext
     simp only [Equiv.invFun_as_coe, Function.comp_apply,
-      (Setoid.qu
+      (Setoid.quotientKerEquivOfSurjective f hf.surjective).symm_apply_eq]
+    rfl
 
 Depends on / 依赖: Setoid, Setoid.quotientKerEquivOfSurjective, hf.surjective, quotientKerEquivOfSurjective, surjective
 -/

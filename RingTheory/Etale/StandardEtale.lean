@@ -237,7 +237,7 @@ lemma aeval_X_g_mul_mk_X
   rw [this]
   dsimp [StandardEtalePair.Ring]
   rw [← map_mul]; rw [← map_one (Ideal.Quotient.mk _)]; rw [← sub_eq_zero]; rw [← map_sub]; rw [mul_comm]
- 
+  exact Ideal.Quotient.eq_zero_iff_mem.mpr (Ideal.subset_span (Set.mem_insert_of_mem _ rfl))
 
 中文:
 引理 aeval_X_g_mul_mk_X
@@ -248,7 +248,7 @@ lemma aeval_X_g_mul_mk_X
   rw [this]
   dsimp [StandardEtalePair.Ring]
   rw [← map_mul]; rw [← map_one (Ideal.Quotient.mk _)]; rw [← sub_eq_zero]; rw [← map_sub]; rw [mul_comm]
- 
+  exact Ideal.Quotient.eq_zero_iff_mem.mpr (Ideal.subset_span (Set.mem_insert_of_mem _ rfl))
 
 Depends on / 依赖: CAlgHom, Ideal.Quotient.eq_zero_iff_mem.mpr, Ideal.Quotient.mk, Ideal.subset_span, Polynomial, Polynomial.CAlgHom, Quotient, Set.mem_insert_of_mem, StandardEtalePair, StandardEtalePair.Ring, StandardEtalePair.X, eq_zero_iff_mem, map_mul, map_one, map_sub, mem_insert_of_mem, mul_comm, sub_eq_zero, subset_span
 -/
@@ -304,7 +304,15 @@ lemma hom_ext
     (g.comp (Ideal.Quotient.mkₐ R _)).comp CAlgHom := Polynomial.algHom_ext (by simpa)
   have H' : aeval (R := R) P.X = (Ideal.Quotient.mkₐ _ _).comp Polynomial.CAlgHom := by
     ext; simp [StandardEtalePair.Ring, StandardEtalePair.X]
-  
+  refine Ideal.Quotient.algHom_ext _ (Polynomial.algHom_ext' H ?_)
+  change f.toMonoidHom (Ideal.Quotient.mk _ .X) = g.toMonoidHom (Ideal.Quotient.mk _ .X)
+  rw [← show (↑P.hasMap_X.2.unit⁻¹ : P.Ring) = Ideal.Quotient.mk _ .X from
+    Units.mul_eq_one_iff_inv_eq.mp P.aeval_X_g_mul_mk_X]; rw [← Units.coe_map_inv]; rw [← Units.coe_map_inv]
+  congr 2
+  ext
+  simpa [H'] using! congr($H _)
+
+@[simp]
 
 中文:
 引理 hom_ext
@@ -315,7 +323,15 @@ lemma hom_ext
     (g.comp (Ideal.Quotient.mkₐ R _)).comp CAlgHom := Polynomial.algHom_ext (by simpa)
   have H' : aeval (R := R) P.X = (Ideal.Quotient.mkₐ _ _).comp Polynomial.CAlgHom := by
     ext; simp [StandardEtalePair.Ring, StandardEtalePair.X]
-  
+  refine Ideal.Quotient.algHom_ext _ (Polynomial.algHom_ext' H ?_)
+  change f.toMonoidHom (Ideal.Quotient.mk _ .X) = g.toMonoidHom (Ideal.Quotient.mk _ .X)
+  rw [← show (↑P.hasMap_X.2.unit⁻¹ : P.Ring) = Ideal.Quotient.mk _ .X from
+    Units.mul_eq_one_iff_inv_eq.mp P.aeval_X_g_mul_mk_X]; rw [← Units.coe_map_inv]; rw [← Units.coe_map_inv]
+  congr 2
+  ext
+  simpa [H'] using! congr($H _)
+
+@[simp]
 
 Depends on / 依赖: CAlgHom, Ideal.Quotient.algHom_ext, Ideal.Quotient.mk, P.Ring, P.hasMap_X, Polynomial, Polynomial.CAlgHom, Polynomial.algHom_ext, Quotient, StandardEtalePair, StandardEtalePair.Ring, StandardEtalePair.X, algHom_ext, f.comp, f.toMonoidHom, g.comp, g.toMonoidHom, hasMap_X, toMonoidHom
 -/
@@ -409,7 +425,27 @@ lemma existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot
   obtain ⟨⟨_, a, ha, -⟩, rfl⟩ := hx.2
   obtain ⟨a, rfl⟩ := Ideal.Quotient.mk_surjective a
   simp_rw [← Ideal.Quotient.mkₐ_eq_mk R, aeval_algHom_apply, ← map_mul, ← map_one
-    (I
+    (Ideal.Quotient.mkₐ R I), Ideal.Quotient.mkₐ_eq_mk, Ideal.Quotient.mk_eq_mk_iff_sub_mem] at ha
+  obtain ⟨p₁, p₂, n, e⟩ := P.cond
+  apply_fun aeval x at e
+  simp only [map_add, map_mul, map_pow] at e
+  obtain ⟨ε, hεI, b, hb⟩ : exists ε in I, exists b, aeval x (derivative P.f) * b = 1 + ε := by
+    refine ⟨_, ?_, (a ^ n * aeval x p₁), sub_eq_iff_eq_add'.mp rfl⟩
+    convert_to (aeval x P.g * a) ^ n - 1 - aeval x P.f * (a ^ n * aeval x p₂) in I
+    · linear_combination a ^ n * e
+    · exact sub_mem (Ideal.mem_of_dvd _ (sub_one_dvd_pow_sub_one _ _) ha) (I.mul_mem_right _ hf)
+  have : aeval x P.f ^ 2 = 0 := hI.le (Ideal.pow_mem_pow hf 2)
+  have : aeval x P.f * ε = 0 := ((pow_two _).symm.trans hI).le (Ideal.mul_mem_mul hf hεI)
+  refine ⟨aeval x P.f * -b, ⟨I.mul_mem_right _ hf, ?_, ?_⟩, ?_⟩
+  · rw [Polynomial.aeval_add_of_sq_eq_zero _ _ _ (by grind)]; grind
+  · rw [← IsNilpotent.isUnit_quotient_mk_iff (I := I) ⟨2, hI⟩, ← Ideal.Quotient.mkₐ_eq_mk R,
+      ← aeval_algHom_apply, Ideal.Quotient.mkₐ_eq_mk, map_add,
+      Ideal.Quotient.eq_zero_iff_mem.mpr (I.mul_mem_right _ hf), add_zero]
+    exact hx.2
+  · rintro ε' ⟨hε'I, hε', hε''⟩
+    rw [Polynomial.aeval_add_of_sq_eq_zero _ _ _ (hI.le (Ideal.pow_mem_pow hε'I 2))] at hε'
+    have : ε * ε' = 0 := ((pow_two _).symm.trans hI).le (Ideal.mul_mem_mul hεI hε'I)
+    grind
 
 中文:
 引理 存在Unique_hasMap_of_hasMap_quotient_of_sq_eq_bot
@@ -419,7 +455,27 @@ lemma existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot
   obtain ⟨⟨_, a, ha, -⟩, rfl⟩ := hx.2
   obtain ⟨a, rfl⟩ := Ideal.Quotient.mk_surjective a
   simp_rw [← Ideal.Quotient.mkₐ_eq_mk R, aeval_algHom_apply, ← map_mul, ← map_one
-    (I
+    (Ideal.Quotient.mkₐ R I), Ideal.Quotient.mkₐ_eq_mk, Ideal.Quotient.mk_eq_mk_iff_sub_mem] at ha
+  obtain ⟨p₁, p₂, n, e⟩ := P.cond
+  apply_fun aeval x at e
+  simp only [map_add, map_mul, map_pow] at e
+  obtain ⟨ε, hεI, b, hb⟩ : exists ε in I, exists b, aeval x (derivative P.f) * b = 1 + ε := by
+    refine ⟨_, ?_, (a ^ n * aeval x p₁), sub_eq_iff_eq_add'.mp rfl⟩
+    convert_to (aeval x P.g * a) ^ n - 1 - aeval x P.f * (a ^ n * aeval x p₂) in I
+    · linear_combination a ^ n * e
+    · exact sub_mem (Ideal.mem_of_dvd _ (sub_one_dvd_pow_sub_one _ _) ha) (I.mul_mem_right _ hf)
+  have : aeval x P.f ^ 2 = 0 := hI.le (Ideal.pow_mem_pow hf 2)
+  have : aeval x P.f * ε = 0 := ((pow_two _).symm.trans hI).le (Ideal.mul_mem_mul hf hεI)
+  refine ⟨aeval x P.f * -b, ⟨I.mul_mem_right _ hf, ?_, ?_⟩, ?_⟩
+  · rw [Polynomial.aeval_add_of_sq_eq_zero _ _ _ (by grind)]; grind
+  · rw [← IsNilpotent.isUnit_quotient_mk_iff (I := I) ⟨2, hI⟩, ← Ideal.Quotient.mkₐ_eq_mk R,
+      ← aeval_algHom_apply, Ideal.Quotient.mkₐ_eq_mk, map_add,
+      Ideal.Quotient.eq_zero_iff_mem.mpr (I.mul_mem_right _ hf), add_zero]
+    exact hx.2
+  · rintro ε' ⟨hε'I, hε', hε''⟩
+    rw [Polynomial.aeval_add_of_sq_eq_zero _ _ _ (hI.le (Ideal.pow_mem_pow hε'I 2))] at hε'
+    have : ε * ε' = 0 := ((pow_two _).symm.trans hI).le (Ideal.mul_mem_mul hεI hε'I)
+    grind
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem.mp, Ideal.Quotient.mk, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.Quotient.mk_surjective, P.cond, Quotient, aeval_algHom_apply, apply_fun, eq_zero_iff_mem, map_add, map_mul, map_one, map_pow, mk_eq_mk_iff_sub_mem, mk_surjective, simp_rw, symm.trans
 -/
@@ -464,7 +520,12 @@ instance :
   refine Algebra.FormallyEtale.iff_comp_bijective.mpr fun S _ _ I hI => ?_
   rw [← P.homEquiv.symm.bijective.of_comp_iff]; rw [← P.homEquiv.bijective.of_comp_iff']
   suffices forall x, P.HasMap (Ideal.Quotient.mk I x) -> exists! a : { x : S // P.HasMap x }, a - x in I by
-    simpa [Function.bijec
+    simpa [Function.bijective_iff_existsUnique, Ideal.Quotient.mk_surjective.forall,
+      Subtype.ext_iff, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+  intro x hx
+  obtain ⟨ε, ⟨hεI, hε⟩, H⟩ := P.existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot I hI _ hx
+  exact ⟨⟨x + ε, hε⟩, by simpa, fun y hy =>
+    Subtype.ext (sub_eq_iff_eq_add'.mp (H _ ⟨hy, by simpa using y.2⟩))⟩
 
 中文:
 实例 :
@@ -473,7 +534,12 @@ instance :
   refine Algebra.FormallyEtale.iff_comp_bijective.mpr fun S _ _ I hI => ?_
   rw [← P.homEquiv.symm.bijective.of_comp_iff]; rw [← P.homEquiv.bijective.of_comp_iff']
   suffices forall x, P.HasMap (Ideal.Quotient.mk I x) -> exists! a : { x : S // P.HasMap x }, a - x in I by
-    simpa [Function.bijec
+    simpa [Function.bijective_iff_existsUnique, Ideal.Quotient.mk_surjective.forall,
+      Subtype.ext_iff, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+  intro x hx
+  obtain ⟨ε, ⟨hεI, hε⟩, H⟩ := P.existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot I hI _ hx
+  exact ⟨⟨x + ε, hε⟩, by simpa, fun y hy =>
+    Subtype.ext (sub_eq_iff_eq_add'.mp (H _ ⟨hy, by simpa using y.2⟩))⟩
 
 Depends on / 依赖: Algebra, Algebra.FormallyEtale.iff_comp_bijective.mpr, FormallyEtale, Function, Function.bijective_iff_existsUnique, HasMap, Ideal.Quotient.mk, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.Quotient.mk_surjective.forall, P.HasMap, P.existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot, P.homEquiv.bijective.of_comp_iff, P.homEquiv.symm.bijective.of_comp_iff, Quotient, Subtype, Subtype.ext_iff, bijective, bijective_iff_existsUnique, existsUnique_hasMap_of_hasMap_quotient_of_sq_eq_bot, ext_iff
 -/
@@ -533,7 +599,11 @@ definition equivAwayAdjoinRoot
   refine .ofAlgHom (P.lift (algebraMap (AdjoinRoot P.f) _ (.root P.f)) ⟨?_, ?_⟩)
     (IsLocalization.Away.liftAlgHom (AdjoinRoot.mk P.f P.g)
       (f := AdjoinRoot.liftAlgHom _ _ P.X P.hasMap_X.1) P.hasMap_X.2) ?_ ?_
-  · rw [aeval_algebraMap_apply, AdjoinRoot.aeval_eq, AdjoinRoot.mk_self, map_zer
+  · rw [aeval_algebraMap_apply, AdjoinRoot.aeval_eq, AdjoinRoot.mk_self, map_zero]
+  · rw [aeval_algebraMap_apply, AdjoinRoot.aeval_eq]
+    exact IsLocalization.Away.algebraMap_isUnit ..
+  · ext; simp [Algebra.algHom]
+  · ext; simp
 
 中文:
 定义 equivAwayAdjoinRoot
@@ -542,7 +612,11 @@ definition equivAwayAdjoinRoot
   refine .ofAlgHom (P.lift (algebraMap (AdjoinRoot P.f) _ (.root P.f)) ⟨?_, ?_⟩)
     (IsLocalization.Away.liftAlgHom (AdjoinRoot.mk P.f P.g)
       (f := AdjoinRoot.liftAlgHom _ _ P.X P.hasMap_X.1) P.hasMap_X.2) ?_ ?_
-  · rw [aeval_algebraMap_apply, AdjoinRoot.aeval_eq, AdjoinRoot.mk_self, map_zer
+  · rw [aeval_algebraMap_apply, AdjoinRoot.aeval_eq, AdjoinRoot.mk_self, map_zero]
+  · rw [aeval_algebraMap_apply, AdjoinRoot.aeval_eq]
+    exact IsLocalization.Away.algebraMap_isUnit ..
+  · ext; simp [Algebra.algHom]
+  · ext; simp
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.aeval_eq, AdjoinRoot.liftAlgHom, AdjoinRoot.mk, AdjoinRoot.mk_self, Algebra, Algebra.algHom, IsLocalization, IsLocalization.Away.algebraMap_isUnit, IsLocalization.Away.liftAlgHom, P.hasMap_X, P.lift, aeval_algebraMap_apply, aeval_eq, algHom, algebraMap, algebraMap_isUnit, hasMap_X, liftAlgHom, map_zero
 -/
@@ -568,7 +642,18 @@ definition equivAwayQuotient
   refine .ofAlgHom (P.lift (algebraMap R[X] _ .X) ⟨?_, ?_⟩)
     (Ideal.Quotient.liftₐ _ (IsLocalization.Away.liftAlgHom (P.g) P.hasMap_X.2) ?_) ?_ ?_
   · rw [aeval_algebraMap_apply, IsScalarTower.algebraMap_apply _ (Localization.Away P.g) (_ ⧸ _),
-      Ideal.Quotient.algebraMap_eq, aeval_X_left_
+      Ideal.Quotient.algebraMap_eq, aeval_X_left_apply, Ideal.Quotient.mk_singleton_self]
+  · rw [aeval_algebraMap_apply, IsScalarTower.algebraMap_apply _ (Localization.Away P.g) (_ ⧸ _),
+      aeval_X_left_apply]
+    exact (IsLocalization.Away.algebraMap_isUnit ..).map _
+  · change Ideal.span _ <= RingHom.ker _
+    simpa [Ideal.span_le] using P.hasMap_X.1
+  · apply Ideal.Quotient.algHom_ext
+    ext
+    simp [Algebra.algHom, IsScalarTower.algebraMap_apply R[X] (Localization.Away P.g) (_ ⧸ _),
+      -Ideal.Quotient.mk_algebraMap]
+  · ext; simp [IsScalarTower.algebraMap_apply R[X] (Localization.Away P.g) (_ ⧸ _),
+      -Ideal.Quotient.mk_algebraMap]
 
 中文:
 定义 equivAwayQuotient
@@ -577,7 +662,18 @@ definition equivAwayQuotient
   refine .ofAlgHom (P.lift (algebraMap R[X] _ .X) ⟨?_, ?_⟩)
     (Ideal.Quotient.liftₐ _ (IsLocalization.Away.liftAlgHom (P.g) P.hasMap_X.2) ?_) ?_ ?_
   · rw [aeval_algebraMap_apply, IsScalarTower.algebraMap_apply _ (Localization.Away P.g) (_ ⧸ _),
-      Ideal.Quotient.algebraMap_eq, aeval_X_left_
+      Ideal.Quotient.algebraMap_eq, aeval_X_left_apply, Ideal.Quotient.mk_singleton_self]
+  · rw [aeval_algebraMap_apply, IsScalarTower.algebraMap_apply _ (Localization.Away P.g) (_ ⧸ _),
+      aeval_X_left_apply]
+    exact (IsLocalization.Away.algebraMap_isUnit ..).map _
+  · change Ideal.span _ <= RingHom.ker _
+    simpa [Ideal.span_le] using P.hasMap_X.1
+  · apply Ideal.Quotient.algHom_ext
+    ext
+    simp [Algebra.algHom, IsScalarTower.algebraMap_apply R[X] (Localization.Away P.g) (_ ⧸ _),
+      -Ideal.Quotient.mk_algebraMap]
+  · ext; simp [IsScalarTower.algebraMap_apply R[X] (Localization.Away P.g) (_ ⧸ _),
+      -Ideal.Quotient.mk_algebraMap]
 
 Depends on / 依赖: Ideal.Quotient.algebraMap_eq, Ideal.Quotient.lift, Ideal.Quotient.mk_singleton_self, IsLocalization, IsLocalization.Away.algebraMap_isUnit, IsLocalization.Away.liftAlgHom, IsScalarTower, IsScalarTower.algebraMap_apply, Localization, Localization.Away, P.hasMap_X, P.lift, Quotient, aeval_X_left_apply, aeval_algebraMap_apply, algebraMap, algebraMap_apply, algebraMap_eq, algebraMap_isUnit, hasMap_X
 -/
@@ -805,7 +901,11 @@ definition StandardEtalePresentation.toPresentation
       (P.equivMvPolynomialQuotient.symm.toAlgHom.comp (Ideal.Quotient.mkₐ _ _)))
     (P.lift_bijective.surjective.comp
       (P.equivMvPolynomialQuotient.symm.surjective.comp Ideal.Quotient.mk_surjective))
-  relation := ![Bivariate.equivMvPolynom
+  relation := ![Bivariate.equivMvPolynomial R (C P.f),
+    Bivariate.equivMvPolynomial R (.X * C P.g - 1)]
+  span_range_relation_eq_ker := by
+    rw [Algebra.Generators.ker_ofAlgHom]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.comp_toRingHom]; rw [AlgHom.comp_toRingHom]; rw [RingHom.ker_comp_of_injective _ (by exact P.lift_bijective.injective)]; rw [RingHom.ker_comp_of_injective _ (by exact P.equivMvPolynomialQuotient.symm.injective)]
+    simp [Set.pair_comm]
 
 中文:
 定义 StandardEtalePresentation.toPresentation
@@ -814,7 +914,11 @@ definition StandardEtalePresentation.toPresentation
       (P.equivMvPolynomialQuotient.symm.toAlgHom.comp (Ideal.Quotient.mkₐ _ _)))
     (P.lift_bijective.surjective.comp
       (P.equivMvPolynomialQuotient.symm.surjective.comp Ideal.Quotient.mk_surjective))
-  relation := ![Bivariate.equivMvPolynom
+  relation := ![Bivariate.equivMvPolynomial R (C P.f),
+    Bivariate.equivMvPolynomial R (.X * C P.g - 1)]
+  span_range_relation_eq_ker := by
+    rw [Algebra.Generators.ker_ofAlgHom]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.comp_toRingHom]; rw [AlgHom.comp_toRingHom]; rw [RingHom.ker_comp_of_injective _ (by exact P.lift_bijective.injective)]; rw [RingHom.ker_comp_of_injective _ (by exact P.equivMvPolynomialQuotient.symm.injective)]
+    simp [Set.pair_comm]
 
 Depends on / 依赖: Algebra, Algebra.Generators.ofAlgHom, Generators, P.hasMap, P.lift, hasMap, ofAlgHom
 -/
@@ -927,7 +1031,8 @@ lemma StandardEtalePresentation.exists_mul_aeval_x_g_pow_eq_aeval_x
   obtain ⟨⟨p, ⟨_, n, rfl⟩⟩, e⟩ := IsLocalization.surj (.powers (AdjoinRoot.mk P.f P.g)) x
   obtain ⟨p, rfl⟩ := AdjoinRoot.mk_surjective p
   refine ⟨p, n, P.equivRing.injective ?_⟩
-  simpa [← aeval_algHom_apply, Sta
+  simpa [← aeval_algHom_apply, StandardEtalePair.equivAwayAdjoinRoot, ← aeval_def] using
+    congr(P.equivAwayAdjoinRoot.symm $e)
 
 中文:
 引理 StandardEtalePresentation.存在_mul_aeval_x_g_pow_eq_aeval_x
@@ -937,7 +1042,8 @@ lemma StandardEtalePresentation.exists_mul_aeval_x_g_pow_eq_aeval_x
   obtain ⟨⟨p, ⟨_, n, rfl⟩⟩, e⟩ := IsLocalization.surj (.powers (AdjoinRoot.mk P.f P.g)) x
   obtain ⟨p, rfl⟩ := AdjoinRoot.mk_surjective p
   refine ⟨p, n, P.equivRing.injective ?_⟩
-  simpa [← aeval_algHom_apply, Sta
+  simpa [← aeval_algHom_apply, StandardEtalePair.equivAwayAdjoinRoot, ← aeval_def] using
+    congr(P.equivAwayAdjoinRoot.symm $e)
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk, AdjoinRoot.mk_surjective, IsLocalization, IsLocalization.surj, P.P.equivAwayAdjoinRoot, P.equivAwayAdjoinRoot.symm, P.equivRing.injective, P.equivRing.trans, StandardEtalePair, StandardEtalePair.equivAwayAdjoinRoot, aeval_algHom_apply, aeval_def, equivAwayAdjoinRoot, equivRing, injective, mk_surjective, powers, surjective, symm.surjective
 -/
@@ -1029,7 +1135,16 @@ definition StandardEtalePresentation.baseChange
   hasMap := (P.hasMap.map (Algebra.TensorProduct.includeRight (R := R) (A := T))).map_algebraMap
   lift_bijective := by
     algebraize [(algebraMap T (P.map (algebraMap R T)).Ring).comp (algebraMap R T)]
-    have H : P.HasMap (P.map (algebraMap R T)).X := 
+    have H : P.HasMap (P.map (algebraMap R T)).X := by
+      simpa [StandardEtalePair.HasMap] using (P.map (algebraMap R T)).hasMap_X
+    let f : T otimes[R] S ->ₐ[T] (P.map (algebraMap R T)).Ring :=
+      Algebra.TensorProduct.lift (Algebra.ofId _ _) ((P.lift (P.map _).X H).comp P.equivRing)
+        fun _ _ => .all _ _
+    let α : T otimes[R] S ≃ₐ[T] (P.map (algebraMap R T)).Ring :=
+      .ofAlgHom f ((P.map (algebraMap R T)).lift (1 otimesₜ[R] P.x)
+        (P.hasMap.map (Algebra.TensorProduct.includeRight (R := R) (A := T))).map_algebraMap) (by
+        ext; simp [f]) (by ext1; apply P.hom_ext; simp [f])
+    exact α.symm.bijective
 
 中文:
 定义 StandardEtalePresentation.baseChange
@@ -1039,7 +1154,16 @@ definition StandardEtalePresentation.baseChange
   hasMap := (P.hasMap.map (Algebra.TensorProduct.includeRight (R := R) (A := T))).map_algebraMap
   lift_bijective := by
     algebraize [(algebraMap T (P.map (algebraMap R T)).Ring).comp (algebraMap R T)]
-    have H : P.HasMap (P.map (algebraMap R T)).X := 
+    have H : P.HasMap (P.map (algebraMap R T)).X := by
+      simpa [StandardEtalePair.HasMap] using (P.map (algebraMap R T)).hasMap_X
+    let f : T otimes[R] S ->ₐ[T] (P.map (algebraMap R T)).Ring :=
+      Algebra.TensorProduct.lift (Algebra.ofId _ _) ((P.lift (P.map _).X H).comp P.equivRing)
+        fun _ _ => .all _ _
+    let α : T otimes[R] S ≃ₐ[T] (P.map (algebraMap R T)).Ring :=
+      .ofAlgHom f ((P.map (algebraMap R T)).lift (1 otimesₜ[R] P.x)
+        (P.hasMap.map (Algebra.TensorProduct.includeRight (R := R) (A := T))).map_algebraMap) (by
+        ext; simp [f]) (by ext1; apply P.hom_ext; simp [f])
+    exact α.symm.bijective
 
 Depends on / 依赖: P.map, algebraMap
 -/
@@ -1118,7 +1242,9 @@ instance :
   body: ⟨⟨⟨⟨.X, by simp, 1, 1, 0, 0, by simp⟩, 0, ⟨by simp, by simp⟩, by
     set P : StandardEtalePair R := ⟨.X, by simp, 1, 1, 0, 0, by simp⟩
     have : P.X = 0 := Ideal.Quotient.eq_zero_iff_mem.mpr (Ideal.subset_span (Set.mem_insert _ _))
-    let e := AlgEquiv.ofAlgHom (P.lift (0 : R) ⟨by simp [P], by sim
+    let e := AlgEquiv.ofAlgHom (P.lift (0 : R) ⟨by simp [P], by simp [P]⟩) (Algebra.ofId _ _)
+      (by ext) (by ext; simp [this])
+    exact e.bijective⟩⟩⟩
 
 中文:
 实例 :
@@ -1126,7 +1252,9 @@ instance :
   定义体: ⟨⟨⟨⟨.X, by simp, 1, 1, 0, 0, by simp⟩, 0, ⟨by simp, by simp⟩, by
     set P : StandardEtalePair R := ⟨.X, by simp, 1, 1, 0, 0, by simp⟩
     have : P.X = 0 := Ideal.Quotient.eq_zero_iff_mem.mpr (Ideal.subset_span (Set.mem_insert _ _))
-    let e := AlgEquiv.ofAlgHom (P.lift (0 : R) ⟨by simp [P], by sim
+    let e := AlgEquiv.ofAlgHom (P.lift (0 : R) ⟨by simp [P], by simp [P]⟩) (Algebra.ofId _ _)
+      (by ext) (by ext; simp [this])
+    exact e.bijective⟩⟩⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, Algebra, Algebra.ofId, Ideal.Quotient.eq_zero_iff_mem.mpr, Ideal.subset_span, P.lift, Quotient, Set.mem_insert, StandardEtalePair, bijective, e.bijective, eq_zero_iff_mem, mem_insert, ofAlgHom, subset_span
 -/
@@ -1149,7 +1277,30 @@ lemma IsStandardEtale.of_isLocalizationAway
   have P : StandardEtalePresentation R S := IsStandardEtale.nonempty_standardEtalePresentation.some
   obtain ⟨p, n, hp⟩ := P.exists_mul_aeval_x_g_pow_eq_aeval_x s
   let P' : StandardEtalePair R := ⟨P.f, P.monic_f, p * P.g, have ⟨p₁, p₂, m, e⟩ := P.cond;
-    ⟨p₁ * p ^ m, p₂ * p ^ m, m, by linear_c
+    ⟨p₁ * p ^ m, p₂ * p ^ m, m, by linear_combination e * p ^ m⟩⟩
+  let S' := Localization.Away (AdjoinRoot.mk P.f P.g)
+  let e : S ≃ₐ[R] S' := P.equivRing.trans P.P.equivAwayAdjoinRoot
+  have := IsLocalization.Away.mul S' (Localization.Away (algebraMap _ S' (AdjoinRoot.mk P.f p)))
+    (AdjoinRoot.mk P.f P.g) (.mk _ p)
+  rw [← map_mul] at this
+  have H : Submonoid.map e.symm.toRingEquiv.toMonoidHom (.powers
+      (algebraMap _ S' (AdjoinRoot.mk P.f p))) = .powers (aeval P.x p) := by
+    have : ((e.symm.toAlgHom.comp (IsScalarTower.toAlgHom R _ S')).comp (AdjoinRoot.mkₐ P.f)) =
+      aeval P.x := by ext; simp [e, StandardEtalePair.equivAwayAdjoinRoot]
+    rw [Submonoid.map_powers]
+    exact congr(Submonoid.powers ($this p))
+  have : IsLocalization.Away (aeval P.x p) Sₛ :=
+    IsLocalization.Away.of_associated (r := s) ⟨(P.hasMap.2.pow n).unit, hp⟩
+  let e₁ : P'.Ring ≃ₐ[R]
+      Localization.Away (algebraMap _ S' (AdjoinRoot.mk P.f p)) :=
+    P'.equivAwayAdjoinRoot.trans ((IsLocalization.algEquiv (.powers (AdjoinRoot.mk P.f (p * P.g)))
+      (Localization.Away (AdjoinRoot.mk P.f (p * P.g))) _).restrictScalars R)
+  let e₂ : Localization.Away (algebraMap _ S' (AdjoinRoot.mk P.f p)) ≃ₐ[R] Sₛ :=
+    { __ := IsLocalization.ringEquivOfRingEquiv _ _ _ H,
+      commutes' r := by
+        simp [IsScalarTower.algebraMap_apply R S' (Localization.Away _),
+          - AlgEquiv.symm_toRingEquiv, IsScalarTower.algebraMap_eq R S Sₛ] }
+  exact .of_equiv (e₁.trans e₂)
 
 中文:
 引理 是StandardEtale.of_isLocalizationAway
@@ -1158,7 +1309,30 @@ lemma IsStandardEtale.of_isLocalizationAway
   have P : StandardEtalePresentation R S := IsStandardEtale.nonempty_standardEtalePresentation.some
   obtain ⟨p, n, hp⟩ := P.exists_mul_aeval_x_g_pow_eq_aeval_x s
   let P' : StandardEtalePair R := ⟨P.f, P.monic_f, p * P.g, have ⟨p₁, p₂, m, e⟩ := P.cond;
-    ⟨p₁ * p ^ m, p₂ * p ^ m, m, by linear_c
+    ⟨p₁ * p ^ m, p₂ * p ^ m, m, by linear_combination e * p ^ m⟩⟩
+  let S' := Localization.Away (AdjoinRoot.mk P.f P.g)
+  let e : S ≃ₐ[R] S' := P.equivRing.trans P.P.equivAwayAdjoinRoot
+  have := IsLocalization.Away.mul S' (Localization.Away (algebraMap _ S' (AdjoinRoot.mk P.f p)))
+    (AdjoinRoot.mk P.f P.g) (.mk _ p)
+  rw [← map_mul] at this
+  have H : Submonoid.map e.symm.toRingEquiv.toMonoidHom (.powers
+      (algebraMap _ S' (AdjoinRoot.mk P.f p))) = .powers (aeval P.x p) := by
+    have : ((e.symm.toAlgHom.comp (IsScalarTower.toAlgHom R _ S')).comp (AdjoinRoot.mkₐ P.f)) =
+      aeval P.x := by ext; simp [e, StandardEtalePair.equivAwayAdjoinRoot]
+    rw [Submonoid.map_powers]
+    exact congr(Submonoid.powers ($this p))
+  have : IsLocalization.Away (aeval P.x p) Sₛ :=
+    IsLocalization.Away.of_associated (r := s) ⟨(P.hasMap.2.pow n).unit, hp⟩
+  let e₁ : P'.Ring ≃ₐ[R]
+      Localization.Away (algebraMap _ S' (AdjoinRoot.mk P.f p)) :=
+    P'.equivAwayAdjoinRoot.trans ((IsLocalization.algEquiv (.powers (AdjoinRoot.mk P.f (p * P.g)))
+      (Localization.Away (AdjoinRoot.mk P.f (p * P.g))) _).restrictScalars R)
+  let e₂ : Localization.Away (algebraMap _ S' (AdjoinRoot.mk P.f p)) ≃ₐ[R] Sₛ :=
+    { __ := IsLocalization.ringEquivOfRingEquiv _ _ _ H,
+      commutes' r := by
+        simp [IsScalarTower.algebraMap_apply R S' (Localization.Away _),
+          - AlgEquiv.symm_toRingEquiv, IsScalarTower.algebraMap_eq R S Sₛ] }
+  exact .of_equiv (e₁.trans e₂)
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk, IsLocalization, IsLocalization.Away.mul, IsStandardEtale, IsStandardEtale.nonempty_standardEtalePresentation.some, Localization, Localization.Away, P.P.equivAwayAdjoinRoot, P.cond, P.equivRing.trans, P.exists_mul_aeval_x_g_pow_eq_aeval_x, P.monic_f, StandardEtalePair, StandardEtalePresentation, algebraMap, equivAwayAdjoinRoot, equivRing, exists_mul_aeval_x_g_pow_eq_aeval_x, linear_combination
 -/
@@ -1204,7 +1378,9 @@ lemma IsStandardEtale.of_surjective
   have : IsScalarTower R S T := .of_algebraMap_eq' f.comp_algebraMap.symm
   obtain ⟨e, he, hfe⟩ :=
     (Ideal.isIdempotentElem_iff_of_fg _ (Algebra.FinitePresentation.ker_fG_of_surjective f hf)).mp
-      ((Algebra.FormallyEtale.iff_of_surjective hf).mp (.of_restrictScalars (R
+      ((Algebra.FormallyEtale.iff_of_surjective hf).mp (.of_restrictScalars (R := R)))
+  have := IsLocalization.away_of_isIdempotentElem he.one_sub (hfe.trans (by simp)) hf
+  exact .of_isLocalizationAway (1 - e)
 
 中文:
 引理 是StandardEtale.of_surjective
@@ -1213,7 +1389,9 @@ lemma IsStandardEtale.of_surjective
   have : IsScalarTower R S T := .of_algebraMap_eq' f.comp_algebraMap.symm
   obtain ⟨e, he, hfe⟩ :=
     (Ideal.isIdempotentElem_iff_of_fg _ (Algebra.FinitePresentation.ker_fG_of_surjective f hf)).mp
-      ((Algebra.FormallyEtale.iff_of_surjective hf).mp (.of_restrictScalars (R
+      ((Algebra.FormallyEtale.iff_of_surjective hf).mp (.of_restrictScalars (R := R)))
+  have := IsLocalization.away_of_isIdempotentElem he.one_sub (hfe.trans (by simp)) hf
+  exact .of_isLocalizationAway (1 - e)
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation.ker_fG_of_surjective, Algebra.FormallyEtale.iff_of_surjective, FinitePresentation, FormallyEtale, Ideal.isIdempotentElem_iff_of_fg, IsLocalization, IsLocalization.away_of_isIdempotentElem, IsScalarTower, away_of_isIdempotentElem, comp_algebraMap, f.comp_algebraMap.symm, f.toAlgebra, he.one_sub, hfe.trans, iff_of_surjective, isIdempotentElem_iff_of_fg, ker_fG_of_surjective, of_algebraMap_eq, of_isLocalizationAway
 -/

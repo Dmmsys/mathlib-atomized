@@ -140,6 +140,7 @@ definition IsoCat.trans
     exact e.unit_eq
   counit_eq := by
     rw [Functor.assoc]; rw [← Functor.assoc e.inverse]; rw [e.counit_eq]; rw [Functor.id_comp]
+    exact f.counit_eq
 
 中文:
 定义 同构范畴.trans
@@ -151,6 +152,7 @@ definition IsoCat.trans
     exact e.unit_eq
   counit_eq := by
     rw [Functor.assoc]; rw [← Functor.assoc e.inverse]; rw [e.counit_eq]; rw [Functor.id_comp]
+    exact f.counit_eq
 
 Depends on / 依赖: e.functor, f.functor, functor
 -/

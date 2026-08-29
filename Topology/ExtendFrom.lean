@@ -125,7 +125,18 @@ theorem continuousOn_extendFrom
   suffices forall V' in 𝓝 (φ x), IsClosed V' -> φ ⁻¹' V' in 𝓝[B] x by
     simpa [ContinuousWithinAt, (closed_nhds_basis (φ x)).tendsto_right_iff]
   intro V' V'_in V'_closed
-  obtain ⟨V, V_in, V_op, hV⟩ : exists V in 𝓝 x, IsOpen V ∧ V inter A subseteq f ⁻¹'
+  obtain ⟨V, V_in, V_op, hV⟩ : exists V in 𝓝 x, IsOpen V ∧ V inter A subseteq f ⁻¹' V' := by
+    have := tendsto_extendFrom (hf x x_in)
+    rcases (nhdsWithin_basis_open x A).tendsto_left_iff.mp this V' V'_in with ⟨V, ⟨hxV, V_op⟩, hV⟩
+    exact ⟨V, IsOpen.mem_nhds V_op hxV, V_op, hV⟩
+  suffices forall y in V inter B, φ y in V' from
+    mem_of_superset (inter_mem_inf V_in <| mem_principal_self B) this
+  rintro y ⟨hyV, hyB⟩
+  have := mem_closure_iff_nhdsWithin_neBot.mp (hB hyB)
+  have limy : Tendsto f (𝓝[A] y) (𝓝 <| φ y) := tendsto_extendFrom (hf y hyB)
+  have hVy : V in 𝓝 y := IsOpen.mem_nhds V_op hyV
+  have : V inter A in 𝓝[A] y := by simpa only [inter_comm] using inter_mem_nhdsWithin A hVy
+  exact V'_closed.mem_of_tendsto limy (mem_of_superset this hV)
 
 中文:
 定理 continuousOn_extendFrom
@@ -136,7 +147,18 @@ theorem continuousOn_extendFrom
   suffices forall V' in 𝓝 (φ x), IsClosed V' -> φ ⁻¹' V' in 𝓝[B] x by
     simpa [ContinuousWithinAt, (closed_nhds_basis (φ x)).tendsto_right_iff]
   intro V' V'_in V'_closed
-  obtain ⟨V, V_in, V_op, hV⟩ : exists V in 𝓝 x, IsOpen V ∧ V inter A subseteq f ⁻¹'
+  obtain ⟨V, V_in, V_op, hV⟩ : exists V in 𝓝 x, IsOpen V ∧ V inter A subseteq f ⁻¹' V' := by
+    have := tendsto_extendFrom (hf x x_in)
+    rcases (nhdsWithin_basis_open x A).tendsto_left_iff.mp this V' V'_in with ⟨V, ⟨hxV, V_op⟩, hV⟩
+    exact ⟨V, IsOpen.mem_nhds V_op hxV, V_op, hV⟩
+  suffices forall y in V inter B, φ y in V' from
+    mem_of_superset (inter_mem_inf V_in <| mem_principal_self B) this
+  rintro y ⟨hyV, hyB⟩
+  have := mem_closure_iff_nhdsWithin_neBot.mp (hB hyB)
+  have limy : Tendsto f (𝓝[A] y) (𝓝 <| φ y) := tendsto_extendFrom (hf y hyB)
+  have hVy : V in 𝓝 y := IsOpen.mem_nhds V_op hyV
+  have : V inter A in 𝓝[A] y := by simpa only [inter_comm] using inter_mem_nhdsWithin A hVy
+  exact V'_closed.mem_of_tendsto limy (mem_of_superset this hV)
 
 Depends on / 依赖: ContinuousWithinAt, IsClosed, IsOpen, IsOpen.mem_nhds, V_in, V_op, _closed, closed_nhds_basis, extendFrom, mem_nhds, nhdsWithin_basis_open, subseteq, tendsto_extendFrom, tendsto_left_iff, tendsto_left_iff.mp, tendsto_right_iff, x_in
 -/

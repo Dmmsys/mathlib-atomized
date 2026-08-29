@@ -2688,7 +2688,17 @@ theorem degree_sub_lt_left
   have hq : monomial (natDegree q) (leadingCoeff q) + q.erase (natDegree q) = q :=
     monomial_add_erase _ _
   have hd' : natDegree p = natDegree q := by unfold natDegree; rw [hd]
-  have hq0 
+  have hq0 : q != 0 := mt degree_eq_bot.2 (hd ▸ mt degree_eq_bot.1 hp0)
+  calc
+    degree (p - q) = degree (erase (natDegree q) p + -erase (natDegree q) q) := by
+      conv =>
+        lhs
+        rw [← hp]; rw [← hq]; rw [hlc]; rw [hd']; rw [add_sub_add_left_eq_sub]; rw [sub_eq_add_neg]
+    _ <= max (degree (erase (natDegree q) p)) (degree (erase (natDegree q) q)) :=
+      (degree_neg (erase (natDegree q) q) ▸ degree_add_le _ _)
+    _ < degree p := max_lt_iff.2 ⟨hd' ▸ degree_erase_lt hp0, hd.symm ▸ degree_erase_lt hq0⟩
+
+@[deprecated (since := "2026-06-30")] alias degree_sub_lt := degree_sub_lt_left
 
 中文:
 定理 degree_sub_lt_left
@@ -2698,7 +2708,17 @@ theorem degree_sub_lt_left
   have hq : monomial (natDegree q) (leadingCoeff q) + q.erase (natDegree q) = q :=
     monomial_add_erase _ _
   have hd' : natDegree p = natDegree q := by unfold natDegree; rw [hd]
-  have hq0 
+  have hq0 : q != 0 := mt degree_eq_bot.2 (hd ▸ mt degree_eq_bot.1 hp0)
+  calc
+    degree (p - q) = degree (erase (natDegree q) p + -erase (natDegree q) q) := by
+      conv =>
+        lhs
+        rw [← hp]; rw [← hq]; rw [hlc]; rw [hd']; rw [add_sub_add_left_eq_sub]; rw [sub_eq_add_neg]
+    _ <= max (degree (erase (natDegree q) p)) (degree (erase (natDegree q) q)) :=
+      (degree_neg (erase (natDegree q) q) ▸ degree_add_le _ _)
+    _ < degree p := max_lt_iff.2 ⟨hd' ▸ degree_erase_lt hp0, hd.symm ▸ degree_erase_lt hq0⟩
+
+@[deprecated (since := "2026-06-30")] alias degree_sub_lt := degree_sub_lt_left
 
 Depends on / 依赖: add_sub_add, degree, degree_eq_bot, leadingCoeff, monomial, monomial_add_erase, natDegree, p.erase, q.erase
 -/

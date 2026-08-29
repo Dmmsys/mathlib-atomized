@@ -139,7 +139,7 @@ lemma mk'
   refine ⟨fun hf i => (P.arrow_mk_iso_iff (morphismRestrictOpensRange _ _)).mp (restrict _ _ hf),
     fun h => ?_⟩
   refine of_sSup_eq_top f _ (Scheme.OpenCover.iSup_opensRange <| .ulift 𝒰) ?_
-  exact fun i => (P.arrow_mk_iso_iff (morphism
+  exact fun i => (P.arrow_mk_iso_iff (morphismRestrictOpensRange f _)).mpr (h _)
 
 中文:
 引理 mk'
@@ -149,7 +149,7 @@ lemma mk'
   refine ⟨fun hf i => (P.arrow_mk_iso_iff (morphismRestrictOpensRange _ _)).mp (restrict _ _ hf),
     fun h => ?_⟩
   refine of_sSup_eq_top f _ (Scheme.OpenCover.iSup_opensRange <| .ulift 𝒰) ?_
-  exact fun i => (P.arrow_mk_iso_iff (morphism
+  exact fun i => (P.arrow_mk_iso_iff (morphismRestrictOpensRange f _)).mpr (h _)
 -/
 protected lemma mk' {P : MorphismProperty Scheme} [P.RespectsIso]
     (restrict : forall {X Y : Scheme} (f : X ⟶ Y) (U : Y.Opens), P f -> P (f ∣_ U))
@@ -218,7 +218,8 @@ lemma of_iSup_eq_top
   obtain ⟨_, i, rfl⟩ := i
   refine (P.arrow_mk_iso_iff (morphismRestrictOpensRange f _)).mp ?_
   change P (f ∣_ (U i).ι.opensRange)
-  rw [Scheme.Opens.open
+  rw [Scheme.Opens.opensRange_ι]
+  exact H i
 
 中文:
 引理 of_iSup_eq_top
@@ -229,7 +230,8 @@ lemma of_iSup_eq_top
   obtain ⟨_, i, rfl⟩ := i
   refine (P.arrow_mk_iso_iff (morphismRestrictOpensRange f _)).mp ?_
   change P (f ∣_ (U i).ι.opensRange)
-  rw [Scheme.Opens.open
+  rw [Scheme.Opens.opensRange_ι]
+  exact H i
 
 Depends on / 依赖: P.arrow_mk_iso_iff, P.iff_of_zeroHypercover_target, Scheme, Scheme.Opens.opensRange_, Set.range, Subtype, Subtype.val, Y.openCoverOfIsOpenCover, arrow_mk_iso_iff, iff_of_zeroHypercover_target, morphismRestrictOpensRange, openCoverOfIsOpenCover, opensRange
 -/
@@ -317,7 +319,20 @@ lemma of_range_subset_iSup
   let g : X ⟶ (⨆ i, U i : Y.Opens) := IsOpenImmersion.lift (Scheme.Opens.ι _) f (by simpa using H)
   rw [← IsOpenImmersion.lift_fac (⨆ i]; rw [U i).ι f (by simpa using H)]
   apply MorphismProperty.RespectsRight.postcomp (Q := @IsOpenImmersion) _ inferInstance
-  rw [iff_of_iSup_eq_top (P := P) (U 
+  rw [iff_of_iSup_eq_top (P := P) (U := fun i : ι => (⨆ i]; rw [U i).ι ⁻¹ᵁ U i)]
+  · intro i
+    have heq : g ⁻¹ᵁ (⨆ i, U i).ι ⁻¹ᵁ U i = f ⁻¹ᵁ U i := by
+      change (g ≫ (⨆ i, U i).ι) ⁻¹ᵁ U i = _
+      simp [g]
+    let e : Arrow.mk (g ∣_ (⨆ i, U i).ι ⁻¹ᵁ U i) ≅ Arrow.mk (f ∣_ U i) :=
+Arrow.isoMk (X.isoOfEq heq) (Scheme.Opens.isoOfLE (le_iSup U i)) by
+      simp [← CategoryTheory.cancel_mono (U i).ι, g]
+    rw [P.arrow_mk_iso_iff e]
+    exact hf i
+  apply (⨆ i, U i).ι.image_injective
+  dsimp
+  rw [Scheme.Hom.image_iSup]; rw [Scheme.Hom.image_top_eq_opensRange]; rw [Scheme.Opens.opensRange_ι]
+  simp [Scheme.Hom.image_preimage_eq_opensRange_inf, le_iSup U]
 
 中文:
 引理 of_range_subset_iSup
@@ -326,7 +341,20 @@ lemma of_range_subset_iSup
   let g : X ⟶ (⨆ i, U i : Y.Opens) := IsOpenImmersion.lift (Scheme.Opens.ι _) f (by simpa using H)
   rw [← IsOpenImmersion.lift_fac (⨆ i]; rw [U i).ι f (by simpa using H)]
   apply MorphismProperty.RespectsRight.postcomp (Q := @IsOpenImmersion) _ inferInstance
-  rw [iff_of_iSup_eq_top (P := P) (U 
+  rw [iff_of_iSup_eq_top (P := P) (U := fun i : ι => (⨆ i]; rw [U i).ι ⁻¹ᵁ U i)]
+  · intro i
+    have heq : g ⁻¹ᵁ (⨆ i, U i).ι ⁻¹ᵁ U i = f ⁻¹ᵁ U i := by
+      change (g ≫ (⨆ i, U i).ι) ⁻¹ᵁ U i = _
+      simp [g]
+    let e : Arrow.mk (g ∣_ (⨆ i, U i).ι ⁻¹ᵁ U i) ≅ Arrow.mk (f ∣_ U i) :=
+Arrow.isoMk (X.isoOfEq heq) (Scheme.Opens.isoOfLE (le_iSup U i)) by
+      simp [← CategoryTheory.cancel_mono (U i).ι, g]
+    rw [P.arrow_mk_iso_iff e]
+    exact hf i
+  apply (⨆ i, U i).ι.image_injective
+  dsimp
+  rw [Scheme.Hom.image_iSup]; rw [Scheme.Hom.image_top_eq_opensRange]; rw [Scheme.Opens.opensRange_ι]
+  simp [Scheme.Hom.image_preimage_eq_opensRange_inf, le_iSup U]
 
 Depends on / 依赖: Arrow.mk, IsOpenImmersion, IsOpenImmersion.lift, IsOpenImmersion.lift_fac, MorphismProperty, MorphismProperty.RespectsRight.postcomp, RespectsRight, Scheme, Scheme.Opens, Y.Opens, iff_of_iSup_eq_top, lift_fac, postcomp
 -/
@@ -431,7 +459,10 @@ lemma coprodMap
       (isPullback_inl_inl_coprodMap f g).flip.isoPullback.hom]
     convert! hf
     simp [Scheme.Cover.pullbackHom, coprodOpenCover]
-  · rw [←
+  · rw [← MorphismProperty.cancel_left_of_respectsIso P
+      (isPullback_inr_inr_coprodMap f g).flip.isoPullback.hom]
+    convert! hg
+    simp [Scheme.Cover.pullbackHom, coprodOpenCover]
 
 中文:
 引理 coprodMap
@@ -443,7 +474,10 @@ lemma coprodMap
       (isPullback_inl_inl_coprodMap f g).flip.isoPullback.hom]
     convert! hf
     simp [Scheme.Cover.pullbackHom, coprodOpenCover]
-  · rw [←
+  · rw [← MorphismProperty.cancel_left_of_respectsIso P
+      (isPullback_inr_inr_coprodMap f g).flip.isoPullback.hom]
+    convert! hg
+    simp [Scheme.Cover.pullbackHom, coprodOpenCover]
 
 Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.of_openCover, MorphismProperty, MorphismProperty.cancel_left_of_respectsIso, Scheme, Scheme.Cover.pullbackHom, cancel_left_of_respectsIso, convert, coprodOpenCover, flip.isoPullback.hom, isPullback_inl_inl_coprodMap, isPullback_inr_inr_coprodMap, isoPullback, of_openCover, pullbackHom
 -/
@@ -494,7 +528,12 @@ lemma mk'
   · rw [← IsOpenImmersion.isoOfRangeEq_hom_fac (𝒰.f i) (Scheme.Opens.ι _)
       (congr_arg Opens.carrier (𝒰.f i).opensRange.opensRange_ι.symm), Category.assoc,
       P.cancel_left_of_respectsIso]
-    exact restr
+    exact restrict _ _ hf
+  · refine of_sSup_eq_top f _ (Scheme.OpenCover.iSup_opensRange <| .ulift 𝒰) fun i => ?_
+    dsimp
+    rw [← IsOpenImmersion.isoOfRangeEq_inv_fac (𝒰.f _) (Scheme.Opens.ι _)
+      (congr_arg Opens.carrier (𝒰.f _).opensRange.opensRange_ι.symm)]; rw [Category.assoc]; rw [P.cancel_left_of_respectsIso]
+    exact hf _
 
 中文:
 引理 mk'
@@ -504,7 +543,12 @@ lemma mk'
   · rw [← IsOpenImmersion.isoOfRangeEq_hom_fac (𝒰.f i) (Scheme.Opens.ι _)
       (congr_arg Opens.carrier (𝒰.f i).opensRange.opensRange_ι.symm), Category.assoc,
       P.cancel_left_of_respectsIso]
-    exact restr
+    exact restrict _ _ hf
+  · refine of_sSup_eq_top f _ (Scheme.OpenCover.iSup_opensRange <| .ulift 𝒰) fun i => ?_
+    dsimp
+    rw [← IsOpenImmersion.isoOfRangeEq_inv_fac (𝒰.f _) (Scheme.Opens.ι _)
+      (congr_arg Opens.carrier (𝒰.f _).opensRange.opensRange_ι.symm)]; rw [Category.assoc]; rw [P.cancel_left_of_respectsIso]
+    exact hf _
 -/
 protected lemma mk' {P : MorphismProperty Scheme} [P.RespectsIso]
     (restrict : forall {X Y : Scheme} (f : X ⟶ Y) (U : X.Opens), P f -> P (U.ι ≫ f))
@@ -697,7 +741,7 @@ lemma isZariskiLocalAtTarget
   · rw [P.iff_of_zeroHypercover_source (𝒰.pullback₁ f)]
     intro i
     rw [← Scheme.Cover.pullbackHom_map]
-    exac
+    exact P.comp_mem _ _ (h i) (of_isOpenImmersion _)
 
 中文:
 引理 isZariskiLocalAtTarget
@@ -710,7 +754,7 @@ lemma isZariskiLocalAtTarget
   · rw [P.iff_of_zeroHypercover_source (𝒰.pullback₁ f)]
     intro i
     rw [← Scheme.Cover.pullbackHom_map]
-    exac
+    exact P.comp_mem _ _ (h i) (of_isOpenImmersion _)
 
 Depends on / 依赖: IsZariskiLocalAtSource, IsZariskiLocalAtSource.comp, P.comp_mem, P.iff_of_zeroHypercover_source, Scheme, Scheme.Cover.pullbackHom_map, comp_mem, condition, iff_of_zeroHypercover_source, mk_of_iff_of_zeroHypercover, of_isOpenImmersion, pullback, pullback.condition, pullbackHom_map
 -/
@@ -785,7 +829,11 @@ lemma iff_exists_resLE
   rw [IsZariskiLocalAtSource.iff_of_iSup_eq_top (fun x : X => V x) (P := P)]
   · intro x
     rw [← Scheme.Hom.resLE_comp_ι _ (e x)]
-    exact MorphismProperty.RespectsRight.postcomp (Q := @IsO
+    exact MorphismProperty.RespectsRight.postcomp (Q := @IsOpenImmersion) _ inferInstance _ (hf x)
+  · rw [eq_top_iff]
+    rintro x -
+    simp only [Opens.mem_iSup]
+    use x, hxU x
 
 中文:
 引理 iff_存在_resLE
@@ -796,7 +844,11 @@ lemma iff_exists_resLE
   rw [IsZariskiLocalAtSource.iff_of_iSup_eq_top (fun x : X => V x) (P := P)]
   · intro x
     rw [← Scheme.Hom.resLE_comp_ι _ (e x)]
-    exact MorphismProperty.RespectsRight.postcomp (Q := @IsO
+    exact MorphismProperty.RespectsRight.postcomp (Q := @IsOpenImmersion) _ inferInstance _ (hf x)
+  · rw [eq_top_iff]
+    rintro x -
+    simp only [Opens.mem_iSup]
+    use x, hxU x
 
 Depends on / 依赖: IsOpenImmersion, IsZariskiLocalAtSource, IsZariskiLocalAtSource.iff_of_iSup_eq_top, MorphismProperty, MorphismProperty.RespectsRight.postcomp, Opens.mem_iSup, RespectsRight, Scheme, Scheme.Hom.resLE_comp_, eq_top_iff, iff_of_iSup_eq_top, mem_iSup, postcomp
 -/
@@ -1363,7 +1415,15 @@ theorem of_iSup_eq_top
   | basicOpen U r h =>
     have := AffineTargetMorphismProperty.IsLocal.to_basicOpen (f ∣_ U.1) (U.1.topIso.inv r) h
     exact (Q.arrow_mk_iso_iff
-      (morp
+      (morphismRestrictRestrictBasicOpen f _ r)).mp this
+  | openCover U s hs H =>
+    apply AffineTargetMorphismProperty.IsLocal.of_basicOpenCover _
+      (s.image (Scheme.Opens.topIso _).inv) (by simp [← Ideal.map_span, hs, Ideal.map_top])
+    intro ⟨r, hr⟩
+    obtain ⟨r, hr', rfl⟩ := Finset.mem_image.mp hr
+    exact (Q.arrow_mk_iso_iff
+      (morphismRestrictRestrictBasicOpen f _ r).symm).mp (H ⟨r, hr'⟩)
+  | hU i => exact hU' i
 
 中文:
 定理 of_iSup_eq_top
@@ -1376,7 +1436,15 @@ theorem of_iSup_eq_top
   | basicOpen U r h =>
     have := AffineTargetMorphismProperty.IsLocal.to_basicOpen (f ∣_ U.1) (U.1.topIso.inv r) h
     exact (Q.arrow_mk_iso_iff
-      (morp
+      (morphismRestrictRestrictBasicOpen f _ r)).mp this
+  | openCover U s hs H =>
+    apply AffineTargetMorphismProperty.IsLocal.of_basicOpenCover _
+      (s.image (Scheme.Opens.topIso _).inv) (by simp [← Ideal.map_span, hs, Ideal.map_top])
+    intro ⟨r, hr⟩
+    obtain ⟨r, hr', rfl⟩ := Finset.mem_image.mp hr
+    exact (Q.arrow_mk_iso_iff
+      (morphismRestrictRestrictBasicOpen f _ r).symm).mp (H ⟨r, hr'⟩)
+  | hU i => exact hU' i
 
 Depends on / 依赖: AffineTargetMorphismProperty, AffineTargetMorphismProperty.IsLocal.of_basicOpenCover, AffineTargetMorphismProperty.IsLocal.to_basicOpen, Ideal.map_span, Ideal.map_top, IsLocal, Q.arrow_mk_iso_iff, Scheme, Scheme.Opens.topIso, arrow_mk_iso_iff, basicOpen, classical, eq_targetAffineLocally, isLocal_affineProperty, map_span, map_top, morphismRestrictRestrictBasicOpen, of_affine_open_cover, of_basicOpenCover, openCover
 -/
@@ -1567,7 +1635,10 @@ theorem pullback_fst_of_right
   intro i
   let e := pullbackSymmetry _ _ ≪≫ pullbackRightPullbackFstIso f g (X.affineCover.f i)
   have : e.hom ≫ pullback.fst _ _ = X.affineCover.pullbackHom (pullback.fst _ _) i := by
-    simp [e, Scheme.Cover.pull
+    simp [e, Scheme.Cover.pullbackHom]
+  rw [← this]; rw [Q.cancel_left_of_respectsIso]
+  apply hP' (.of_hasPullback _ _)
+  exact H
 
 中文:
 定理 pullback_fst_of_right
@@ -1578,7 +1649,10 @@ theorem pullback_fst_of_right
   intro i
   let e := pullbackSymmetry _ _ ≪≫ pullbackRightPullbackFstIso f g (X.affineCover.f i)
   have : e.hom ≫ pullback.fst _ _ = X.affineCover.pullbackHom (pullback.fst _ _) i := by
-    simp [e, Scheme.Cover.pull
+    simp [e, Scheme.Cover.pullbackHom]
+  rw [← this]; rw [Q.cancel_left_of_respectsIso]
+  apply hP' (.of_hasPullback _ _)
+  exact H
 -/
 private theorem pullback_fst_of_right (hP' : Q.IsStableUnderBaseChange)
     {X Y S : Scheme} (f : X ⟶ S) (g : Y ⟶ S) [IsAffine S] (H : Q g) :
@@ -1606,7 +1680,19 @@ theorem isStableUnderBaseChange
       intro i
       let e : pullback (pullback.fst f g) ((S.affineCover.pullback₁ f).f i) ≅
           _ := by
-        refine pullbackSymmetry _ _ ≪≫ pullbac
+        refine pullbackSymmetry _ _ ≪≫ pullbackRightPullbackFstIso f g _ ≪≫ ?_ ≪≫
+          (pullbackRightPullbackFstIso (S.affineCover.f i) g
+            (pullback.snd f (S.affineCover.f i))).symm
+        exact asIso
+          (pullback.map _ _ _ _ (𝟙 _) (𝟙 _) (𝟙 _) (by simpa using! pullback.condition) (by simp))
+      have : e.hom ≫ pullback.fst _ _ =
+          pullback.snd (pullback.fst f g) ((S.affineCover.pullback₁ f).f i) := by
+        simp [e]
+      rw [← this]; rw [P.cancel_left_of_respectsIso]
+      apply HasAffineProperty.pullback_fst_of_right hP'
+      let := isLocal_affineProperty P
+      rw [← pullbackSymmetry_hom_comp_snd]; rw [Q.cancel_left_of_respectsIso]
+      apply of_isPullback (.of_hasPullback _ _) H)
 
 中文:
 定理 isStableUnderBaseChange
@@ -1617,7 +1703,19 @@ theorem isStableUnderBaseChange
       intro i
       let e : pullback (pullback.fst f g) ((S.affineCover.pullback₁ f).f i) ≅
           _ := by
-        refine pullbackSymmetry _ _ ≪≫ pullbac
+        refine pullbackSymmetry _ _ ≪≫ pullbackRightPullbackFstIso f g _ ≪≫ ?_ ≪≫
+          (pullbackRightPullbackFstIso (S.affineCover.f i) g
+            (pullback.snd f (S.affineCover.f i))).symm
+        exact asIso
+          (pullback.map _ _ _ _ (𝟙 _) (𝟙 _) (𝟙 _) (by simpa using! pullback.condition) (by simp))
+      have : e.hom ≫ pullback.fst _ _ =
+          pullback.snd (pullback.fst f g) ((S.affineCover.pullback₁ f).f i) := by
+        simp [e]
+      rw [← this]; rw [P.cancel_left_of_respectsIso]
+      apply HasAffineProperty.pullback_fst_of_right hP'
+      let := isLocal_affineProperty P
+      rw [← pullbackSymmetry_hom_comp_snd]; rw [Q.cancel_left_of_respectsIso]
+      apply of_isPullback (.of_hasPullback _ _) H)
 
 Depends on / 依赖: IsStableUnderBaseChange, MorphismProperty, MorphismProperty.IsStableUnderBaseChange.mk, P.iff_of_zeroHypercover_target, S.affineCover.f, S.affineCover.pullback, affineCover, condition, iff_of_zeroHypercover_target, pullback, pullback.condition, pullback.fst, pullback.map, pullback.snd, pullbackRightPullbackFstIso, pullbackSymmetry
 -/
@@ -1653,7 +1751,12 @@ lemma isZariskiLocalAtSource
   simp_rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top _ (iSup_affineOpens_eq_top Y),
       HasAffineProperty.iff_of_isAffine, morphismRestrict_comp] at hf ⊢
   · intro i U
-    let 𝒰' : X.OpenCover := (Scheme.Cover.ulift 𝒰).
+    let 𝒰' : X.OpenCover := (Scheme.Cover.ulift 𝒰).add (𝒰.f i)
+    exact (H (f ∣_ U.1) (𝒰'.restrict _)).mp (hf _) none
+  · intro U
+    rw [H (f ∣_ U.1) (Scheme.OpenCover.restrict 𝒰 _)]
+    intro i
+    exact hf _ _
 
 中文:
 引理 isZariskiLocalAtSource
@@ -1662,7 +1765,12 @@ lemma isZariskiLocalAtSource
   simp_rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top _ (iSup_affineOpens_eq_top Y),
       HasAffineProperty.iff_of_isAffine, morphismRestrict_comp] at hf ⊢
   · intro i U
-    let 𝒰' : X.OpenCover := (Scheme.Cover.ulift 𝒰).
+    let 𝒰' : X.OpenCover := (Scheme.Cover.ulift 𝒰).add (𝒰.f i)
+    exact (H (f ∣_ U.1) (𝒰'.restrict _)).mp (hf _) none
+  · intro U
+    rw [H (f ∣_ U.1) (Scheme.OpenCover.restrict 𝒰 _)]
+    intro i
+    exact hf _ _
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_iSup_eq_top, OpenCover, Scheme, Scheme.Cover.ulift, Scheme.OpenCover.restrict, X.OpenCover, iSup_affineOpens_eq_top, iff_of_iSup_eq_top, iff_of_isAffine, mk_of_small, morphismRestrict_comp, restrict, simp_rw
 -/
@@ -1698,7 +1806,8 @@ lemma hasOfPostcompProperty_isOpenImmersion_of_morphismRestrict
     have : f = X.topIso.inv ≫ (X.isoOfEq this).inv ≫ (f ≫ g) ∣_ g.opensRange ≫
         (IsOpenImmersion.isoOfRangeEq g.opensRange.ι g (by simp)).hom := by
       simp [← cancel_mono g]
-    simp_rw [this, cancel_left_of_respectsIso (P := P), cancel
+    simp_rw [this, cancel_left_of_respectsIso (P := P), cancel_right_of_respectsIso (P := P)]
+    exact H _ _ hfg
 
 中文:
 引理 hasOfPostcompProperty_isOpenImmersion_of_morphismRestrict
@@ -1708,7 +1817,8 @@ lemma hasOfPostcompProperty_isOpenImmersion_of_morphismRestrict
     have : f = X.topIso.inv ≫ (X.isoOfEq this).inv ≫ (f ≫ g) ∣_ g.opensRange ≫
         (IsOpenImmersion.isoOfRangeEq g.opensRange.ι g (by simp)).hom := by
       simp [← cancel_mono g]
-    simp_rw [this, cancel_left_of_respectsIso (P := P), cancel
+    simp_rw [this, cancel_left_of_respectsIso (P := P), cancel_right_of_respectsIso (P := P)]
+    exact H _ _ hfg
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, X.isoOfEq, X.topIso.inv, cancel_left_of_respectsIso, cancel_mono, cancel_right_of_respectsIso, g.opensRange, isoOfEq, isoOfRangeEq, opensRange, simp_rw, topIso
 -/

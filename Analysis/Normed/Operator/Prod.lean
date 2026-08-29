@@ -84,7 +84,12 @@ theorem opNorm_prod
           max_le_max (le_opNorm f x) (le_opNorm g x)) <|
     max_le
       (opNorm_le_bound _ (norm_nonneg _) fun x =>
-        (le_max_left _ _).trans 
+        (le_max_left _ _).trans ((f.prod g).le_opNorm x))
+      (opNorm_le_bound _ (norm_nonneg _) fun x =>
+        (le_max_right _ _).trans ((f.prod g).le_opNorm x))
+
+
+@[simp]
 
 中文:
 定理 opNorm_prod
@@ -96,7 +101,12 @@ theorem opNorm_prod
           max_le_max (le_opNorm f x) (le_opNorm g x)) <|
     max_le
       (opNorm_le_bound _ (norm_nonneg _) fun x =>
-        (le_max_left _ _).trans 
+        (le_max_left _ _).trans ((f.prod g).le_opNorm x))
+      (opNorm_le_bound _ (norm_nonneg _) fun x =>
+        (le_max_right _ _).trans ((f.prod g).le_opNorm x))
+
+
+@[simp]
 
 Depends on / 依赖: Prod.norm_def, f.prod, le_antisymm, le_max_left, le_max_right, le_opNorm, max_le, max_le_max, max_mul_of_nonneg, norm_def, norm_nonneg, opNorm_le_bound, prod_apply
 -/
@@ -177,7 +187,21 @@ definition prodMapL
     (have Φ₁ : (M₁ ->L[𝕜] M₂) ->L[𝕜] M₁ ->L[𝕜] M₂ × M₄ :=
       ContinuousLinearMap.compL 𝕜 M₁ M₂ (M₂ × M₄) (ContinuousLinearMap.inl 𝕜 M₂ M₄)
     have Φ₂ : (M₃ ->L[𝕜] M₄) ->L[𝕜] M₃ ->L[𝕜] M₂ × M₄ :=
-      ContinuousLinearMap.compL 𝕜 M₃ M₄ (M₂ × M₄) (ContinuousLinearMap.inr 𝕜
+      ContinuousLinearMap.compL 𝕜 M₃ M₄ (M₂ × M₄) (ContinuousLinearMap.inr 𝕜 M₂ M₄)
+    have Φ₁' :=
+      (ContinuousLinearMap.compL 𝕜 (M₁ × M₃) M₁ (M₂ × M₄)).flip (ContinuousLinearMap.fst 𝕜 M₁ M₃)
+    have Φ₂' :=
+      (ContinuousLinearMap.compL 𝕜 (M₁ × M₃) M₃ (M₂ × M₄)).flip (ContinuousLinearMap.snd 𝕜 M₁ M₃)
+    have Ψ₁ : (M₁ ->L[𝕜] M₂) × (M₃ ->L[𝕜] M₄) ->L[𝕜] M₁ ->L[𝕜] M₂ :=
+      ContinuousLinearMap.fst 𝕜 (M₁ ->L[𝕜] M₂) (M₃ ->L[𝕜] M₄)
+    have Ψ₂ : (M₁ ->L[𝕜] M₂) × (M₃ ->L[𝕜] M₄) ->L[𝕜] M₃ ->L[𝕜] M₄ :=
+      ContinuousLinearMap.snd 𝕜 (M₁ ->L[𝕜] M₂) (M₃ ->L[𝕜] M₄)
+    Φ₁' ∘L Φ₁ ∘L Ψ₁ + Φ₂' ∘L Φ₂ ∘L Ψ₂)
+    (fun p : (M₁ ->L[𝕜] M₂) × (M₃ ->L[𝕜] M₄) => p.1.prodMap p.2) (by
+      apply funext
+      rintro ⟨φ, ψ⟩
+      refine ContinuousLinearMap.ext fun ⟨x₁, x₂⟩ => ?_
+      simp)
 
 中文:
 定义 prodMapL
@@ -186,7 +210,21 @@ definition prodMapL
     (have Φ₁ : (M₁ ->L[𝕜] M₂) ->L[𝕜] M₁ ->L[𝕜] M₂ × M₄ :=
       ContinuousLinearMap.compL 𝕜 M₁ M₂ (M₂ × M₄) (ContinuousLinearMap.inl 𝕜 M₂ M₄)
     have Φ₂ : (M₃ ->L[𝕜] M₄) ->L[𝕜] M₃ ->L[𝕜] M₂ × M₄ :=
-      ContinuousLinearMap.compL 𝕜 M₃ M₄ (M₂ × M₄) (ContinuousLinearMap.inr 𝕜
+      ContinuousLinearMap.compL 𝕜 M₃ M₄ (M₂ × M₄) (ContinuousLinearMap.inr 𝕜 M₂ M₄)
+    have Φ₁' :=
+      (ContinuousLinearMap.compL 𝕜 (M₁ × M₃) M₁ (M₂ × M₄)).flip (ContinuousLinearMap.fst 𝕜 M₁ M₃)
+    have Φ₂' :=
+      (ContinuousLinearMap.compL 𝕜 (M₁ × M₃) M₃ (M₂ × M₄)).flip (ContinuousLinearMap.snd 𝕜 M₁ M₃)
+    have Ψ₁ : (M₁ ->L[𝕜] M₂) × (M₃ ->L[𝕜] M₄) ->L[𝕜] M₁ ->L[𝕜] M₂ :=
+      ContinuousLinearMap.fst 𝕜 (M₁ ->L[𝕜] M₂) (M₃ ->L[𝕜] M₄)
+    have Ψ₂ : (M₁ ->L[𝕜] M₂) × (M₃ ->L[𝕜] M₄) ->L[𝕜] M₃ ->L[𝕜] M₄ :=
+      ContinuousLinearMap.snd 𝕜 (M₁ ->L[𝕜] M₂) (M₃ ->L[𝕜] M₄)
+    Φ₁' ∘L Φ₁ ∘L Ψ₁ + Φ₂' ∘L Φ₂ ∘L Ψ₂)
+    (fun p : (M₁ ->L[𝕜] M₂) × (M₃ ->L[𝕜] M₄) => p.1.prodMap p.2) (by
+      apply funext
+      rintro ⟨φ, ψ⟩
+      refine ContinuousLinearMap.ext fun ⟨x₁, x₂⟩ => ?_
+      simp)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.compL, ContinuousLinearMap.copy, ContinuousLinearMap.fst, ContinuousLinearMap.inl, ContinuousLinearMap.inr, ContinuousLinearMap.snd
 -/

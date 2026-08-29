@@ -445,7 +445,8 @@ theorem posDef_prod_iff
   · rintro ⟨⟨hle₁, ha₁⟩, ⟨hle₂, ha₂⟩⟩
     refine ⟨⟨hle₁, hle₂⟩, ?_⟩
     rintro ⟨x₁, x₂⟩ (hx : Q₁ x₁ + Q₂ x₂ = 0)
-    rw [
+    rw [add_eq_zero_iff_of_nonneg (hle₁ x₁) (hle₂ x₂)]; rw [ha₁.eq_zero_iff]; rw [ha₂.eq_zero_iff] at hx
+    rwa [Prod.mk_eq_zero]
 
 中文:
 定理 posDef_prod_iff
@@ -459,7 +460,8 @@ theorem posDef_prod_iff
   · rintro ⟨⟨hle₁, ha₁⟩, ⟨hle₂, ha₂⟩⟩
     refine ⟨⟨hle₁, hle₂⟩, ?_⟩
     rintro ⟨x₁, x₂⟩ (hx : Q₁ x₁ + Q₂ x₂ = 0)
-    rw [
+    rw [add_eq_zero_iff_of_nonneg (hle₁ x₁) (hle₂ x₂)]; rw [ha₁.eq_zero_iff]; rw [ha₂.eq_zero_iff] at hx
+    rwa [Prod.mk_eq_zero]
 
 Depends on / 依赖: Prod.mk_eq_zero, add_eq_zero_iff_of_nonneg, anisotropic_of_prod, eq_zero_iff, mk_eq_zero, nonneg_prod_iff, posDef_iff_nonneg, simp_rw
 -/
@@ -918,7 +920,7 @@ theorem anisotropic_of_pi
   intro j _
   by_cases hji : j = i
   · subst hji; rw [Pi.single_eq_same, hx]
-  · rw [Pi.single
+  · rw [Pi.single_eq_of_ne hji, map_zero]
 
 中文:
 定理 anisotropic_of_pi
@@ -934,7 +936,7 @@ theorem anisotropic_of_pi
   intro j _
   by_cases hji : j = i
   · subst hji; rw [Pi.single_eq_same, hx]
-  · rw [Pi.single
+  · rw [Pi.single_eq_of_ne hji, map_zero]
 
 Depends on / 依赖: Anisotropic, Finset, Finset.sum_eq_zero, Pi.single, Pi.single_eq_of_ne, Pi.single_eq_same, Pi.zero_apply, classical, funext_iff, map_zero, pi_apply, simp_rw, single, single_eq_of_ne, single_eq_same, sum_eq_zero, zero_apply
 -/
@@ -965,7 +967,10 @@ theorem nonneg_pi_iff
   · intro h i x
     classical
     convert! h (Pi.single i x) using 1
-    rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hji => 
+    rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hji => ?_]; rw [Pi.single_eq_same]
+    rw [Pi.single_eq_of_ne hji]; rw [map_zero]
+  · rintro h x
+    exact Finset.sum_nonneg fun i _ => h i (x i)
 
 中文:
 定理 nonneg_pi_iff
@@ -977,7 +982,10 @@ theorem nonneg_pi_iff
   · intro h i x
     classical
     convert! h (Pi.single i x) using 1
-    rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hji => 
+    rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hji => ?_]; rw [Pi.single_eq_same]
+    rw [Pi.single_eq_of_ne hji]; rw [map_zero]
+  · rintro h x
+    exact Finset.sum_nonneg fun i _ => h i (x i)
 
 Depends on / 依赖: LinearMap, LinearMap.proj_apply, comp_apply, proj_apply, simp_rw, sum_apply
 -/
@@ -1010,7 +1018,8 @@ theorem posDef_pi_iff
   · intro h
     refine ⟨fun i => (h i).1, fun x hx => funext fun i => (h i).2 _ ?_⟩
     rw [pi_apply]; rw [Finset.sum_eq_zero_iff_of_nonneg fun j _ => ?_] at hx
-  
+    · exact hx _ (Finset.mem_univ _)
+    exact (h j).1 _
 
 中文:
 定理 posDef_pi_iff
@@ -1024,7 +1033,8 @@ theorem posDef_pi_iff
   · intro h
     refine ⟨fun i => (h i).1, fun x hx => funext fun i => (h i).2 _ ?_⟩
     rw [pi_apply]; rw [Finset.sum_eq_zero_iff_of_nonneg fun j _ => ?_] at hx
-  
+    · exact hx _ (Finset.mem_univ _)
+    exact (h j).1 _
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_eq_zero_iff_of_nonneg, anisotropic_of_pi, mem_univ, nonneg_pi_iff, pi_apply, posDef_iff_nonneg, simp_rw, sum_eq_zero_iff_of_nonneg
 -/

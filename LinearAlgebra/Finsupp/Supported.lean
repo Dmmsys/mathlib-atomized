@@ -52,7 +52,10 @@ definition supported
     refine Subset.trans (Subset.trans (Finset.coe_subset.2 support_add) ?_) (union_subset hp hq)
     rw [Finset.coe_union]
   zero_mem' := by
-    simp only [subset_def, Finset.mem_coe, Set.mem_ofPred_eq, mem_support_iff, zero_ap
+    simp only [subset_def, Finset.mem_coe, Set.mem_ofPred_eq, mem_support_iff, zero_apply]
+    intro h ha
+    exact (ha rfl).elim
+  smul_mem' _ _ hp := Subset.trans (Finset.coe_subset.2 support_smul) hp
 
 中文:
 定义 supported
@@ -63,7 +66,10 @@ definition supported
     refine Subset.trans (Subset.trans (Finset.coe_subset.2 support_add) ?_) (union_subset hp hq)
     rw [Finset.coe_union]
   zero_mem' := by
-    simp only [subset_def, Finset.mem_coe, Set.mem_ofPred_eq, mem_support_iff, zero_ap
+    simp only [subset_def, Finset.mem_coe, Set.mem_ofPred_eq, mem_support_iff, zero_apply]
+    intro h ha
+    exact (ha rfl).elim
+  smul_mem' _ _ hp := Subset.trans (Finset.coe_subset.2 support_smul) hp
 
 Depends on / 依赖: p.support, subseteq, support
 -/
@@ -176,7 +182,7 @@ theorem supported_eq_span_single
   · rw [← l.sum_single]
     refine sum_mem fun i il => ?_
     rw [show single i (l i) = l i • single i 1 by simp]
-    exact smul_mem _ (l i) (subset_span (mem_image
+    exact smul_mem _ (l i) (subset_span (mem_image_of_mem _ (hl il)))
 
 中文:
 定理 supported_eq_span_single
@@ -188,7 +194,7 @@ theorem supported_eq_span_single
   · rw [← l.sum_single]
     refine sum_mem fun i il => ?_
     rw [show single i (l i) = l i • single i 1 by simp]
-    exact smul_mem _ (l i) (subset_span (mem_image
+    exact smul_mem _ (l i) (subset_span (mem_image_of_mem _ (hl il)))
 
 Depends on / 依赖: SetLike, SetLike.le_def, l.sum_single, le_def, mem_image_of_mem, single, single_mem_supported, smul_mem, span_eq_of_le, subset_span, sum_mem, sum_single
 -/
@@ -433,7 +439,19 @@ theorem supported_iUnion
   suffices
     LinearMap.range ((Submodule.subtype _).comp (restrictDom M R (⋃ i, s i))) <=
       ⨆ i, supported M R (s i) by
-    rwa [LinearMap.range_comp, range_
+    rwa [LinearMap.range_comp, range_restrictDom, Submodule.map_top, range_subtype] at this
+  rw [range_le_iff_comap]; rw [eq_top_iff]
+  rintro l ⟨⟩
+  induction l using Finsupp.induction with
+  | zero => exact zero_mem _
+  | single_add x a l _ _ ih =>
+    refine add_mem ?_ ih
+    by_cases h : exists i, x in s i
+    · simp only [mem_comap, coe_comp, coe_subtype, Function.comp_apply, restrictDom_apply,
+        mem_iUnion, h, filter_single_of_pos]
+      obtain ⟨i, hi⟩ := h
+      exact le_iSup (fun i => supported M R (s i)) i (single_mem_supported R _ hi)
+    · simp [h]
 
 中文:
 定理 supported_iUnion
@@ -444,7 +462,19 @@ theorem supported_iUnion
   suffices
     LinearMap.range ((Submodule.subtype _).comp (restrictDom M R (⋃ i, s i))) <=
       ⨆ i, supported M R (s i) by
-    rwa [LinearMap.range_comp, range_
+    rwa [LinearMap.range_comp, range_restrictDom, Submodule.map_top, range_subtype] at this
+  rw [range_le_iff_comap]; rw [eq_top_iff]
+  rintro l ⟨⟩
+  induction l using Finsupp.induction with
+  | zero => exact zero_mem _
+  | single_add x a l _ _ ih =>
+    refine add_mem ?_ ih
+    by_cases h : exists i, x in s i
+    · simp only [mem_comap, coe_comp, coe_subtype, Function.comp_apply, restrictDom_apply,
+        mem_iUnion, h, filter_single_of_pos]
+      obtain ⟨i, hi⟩ := h
+      exact le_iSup (fun i => supported M R (s i)) i (single_mem_supported R _ hi)
+    · simp [h]
 
 Depends on / 依赖: Classical, Classical.decPred, Finsupp, Finsupp.induction, LinearMap, LinearMap.range, LinearMap.range_comp, Set.subset_iUnion, Submodule, Submodule.map_top, Submodule.subtype, add_mem, decPred, eq_top_iff, iSup_le, le_antisymm, map_top, range_comp, range_le_iff_comap, range_restrictDom
 -/
@@ -615,6 +645,7 @@ lemma codisjoint_supported_supported_iff
   rw [codisjoint_iff]; rw [← supported_union]; rw [eq_top_iff'] at h
   simpa [Finsupp.mem_supported, Finsupp.support_single _ hx] using h (Finsupp.single a x)
 
+#adaptation_note
 
 中文:
 引理 codisjoint_supported_supported_iff
@@ -625,6 +656,7 @@ lemma codisjoint_supported_supported_iff
   rw [codisjoint_iff]; rw [← supported_union]; rw [eq_top_iff'] at h
   simpa [Finsupp.mem_supported, Finsupp.support_single _ hx] using h (Finsupp.single a x)
 
+#adaptation_note
 
 Depends on / 依赖: Finsupp, Finsupp.mem_supported, Finsupp.single, Finsupp.support_single, codisjoint_iff, codisjoint_iff.mpr, codisjoint_supported_supported, eq_top_iff, eq_top_iff.mpr, exists_ne, mem_supported, single, support_single, supported_union
 -/
@@ -769,7 +801,12 @@ theorem lmapDomain_supported
           (supported_comap_lmapDomain M R _ _))
       ?_
   intro l hl
-  refine ⟨(lmapDomain M R (F
+  refine ⟨(lmapDomain M R (Function.invFunOn f s) : (α' ->₀ M) ->ₗ[R] α ->₀ M) l, fun x hx => ?_, ?_⟩
+  · rcases Finset.mem_image.1 (mapDomain_support hx) with ⟨c, hc, rfl⟩
+    exact Function.invFunOn_mem (by simpa using hl hc)
+  · rw [← LinearMap.comp_apply, ← lmapDomain_comp]
+    refine (mapDomain_congr fun c hc => ?_).trans mapDomain_id
+    exact Function.invFunOn_eq (by simpa using hl hc)
 
 中文:
 定理 lmapDomain_supported
@@ -785,7 +822,12 @@ theorem lmapDomain_supported
           (supported_comap_lmapDomain M R _ _))
       ?_
   intro l hl
-  refine ⟨(lmapDomain M R (F
+  refine ⟨(lmapDomain M R (Function.invFunOn f s) : (α' ->₀ M) ->ₗ[R] α ->₀ M) l, fun x hx => ?_, ?_⟩
+  · rcases Finset.mem_image.1 (mapDomain_support hx) with ⟨c, hc, rfl⟩
+    exact Function.invFunOn_mem (by simpa using hl hc)
+  · rw [← LinearMap.comp_apply, ← lmapDomain_comp]
+    refine (mapDomain_congr fun c hc => ?_).trans mapDomain_id
+    exact Function.invFunOn_eq (by simpa using hl hc)
 
 Depends on / 依赖: Finset, Finset.mem_image, Function, Function.invFunOn, Function.invFunOn_mem, LinearMap, LinearMap.comp_apply, Set.subset_preimage_image, classical, comp_apply, eq_empty_of_isEmpty, invFunOn, invFunOn_mem, isEmpty_or_nonempty, le_antisymm, le_trans, lmapDomain, lmapDomain_comp, mapDomain_support, map_le_iff_le_comap
 -/
@@ -822,6 +864,16 @@ theorem lmapDomain_disjoint_ker
   have := Classical.decPred fun x => x in s
   by_cases xs : x in s
   · have : Finsupp.sum l (fun a => Finsupp.single (f a)) (f x) = 0 := by
+      rw [h₂]
+      rfl
+    rw [Finsupp.sum_apply]; rw [Finsupp.sum_eq_single x]; rw [single_eq_same] at this
+    · simpa
+    · intro y hy xy
+      simp only [SetLike.mem_coe, mem_supported, subset_def, mem_support_iff] at h₁
+      simp [mt (H _ (h₁ _ hy) _ xs) xy]
+    · simp +contextual
+  · by_contra h
+    exact xs (h₁ <| Finsupp.mem_support_iff.2 h)
 
 中文:
 定理 lmapDomain_disjoint_ker
@@ -834,6 +886,16 @@ theorem lmapDomain_disjoint_ker
   have := Classical.decPred fun x => x in s
   by_cases xs : x in s
   · have : Finsupp.sum l (fun a => Finsupp.single (f a)) (f x) = 0 := by
+      rw [h₂]
+      rfl
+    rw [Finsupp.sum_apply]; rw [Finsupp.sum_eq_single x]; rw [single_eq_same] at this
+    · simpa
+    · intro y hy xy
+      simp only [SetLike.mem_coe, mem_supported, subset_def, mem_support_iff] at h₁
+      simp [mt (H _ (h₁ _ hy) _ xs) xy]
+    · simp +contextual
+  · by_contra h
+    exact xs (h₁ <| Finsupp.mem_support_iff.2 h)
 
 Depends on / 依赖: Classical, Classical.decPred, Finsupp, Finsupp.single, Finsupp.sum, Finsupp.sum_apply, Finsupp.sum_eq_single, SetLike, SetLike.mem_coe, decPred, disjoint_iff_inf_le, lmapDomain_apply, mapDomain, mem_bot, mem_coe, mem_ker, mem_support_iff, mem_supported, single, single_eq_same
 -/

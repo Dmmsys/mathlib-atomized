@@ -127,7 +127,20 @@ instance Set.instTietzeExtensionUnitClosedBall
   let g : E -> E := fun x => ‖x‖⁻¹ • x
   classical
   suffices this : Continuous (piecewise (Metric.closedBall 0 1) id g) by
-    ref
+    refine .of_retract ⟨Subtype.val, by fun_prop⟩ ⟨_, this.codRestrict fun x => ?_⟩ ?_
+    · by_cases hx : x in Metric.closedBall 0 1
+      · simpa [piecewise_eq_of_mem (hi := hx)] using hx
+      · simp only [g, piecewise_eq_of_notMem (hi := hx), RCLike.real_smul_eq_coe_smul (K := 𝕜)]
+        by_cases hx' : x = 0 <;> simp [hx']
+    · ext x
+      simp
+  refine continuous_piecewise (fun x hx => ?_) continuousOn_id ?_
+  · replace hx : ‖x‖ = 1 := by simpa [frontier_closedBall (0 : E) one_ne_zero] using hx
+    simp [g, hx]
+.smul continuousOn_id · refine continuousOn_id.norm.inv₀ ?_
+    simp only [closure_compl, interior_closedBall (0 : E) one_ne_zero, mem_compl_iff,
+      Metric.mem_ball, dist_zero_right, not_lt, id_eq, ne_eq, norm_eq_zero]
+exact fun x hx => norm_pos_iff.mp one_pos.trans_le hx
 
 中文:
 实例 集合.instTietzeExtensionUnitClosedBall
@@ -139,7 +152,20 @@ instance Set.instTietzeExtensionUnitClosedBall
   let g : E -> E := fun x => ‖x‖⁻¹ • x
   classical
   suffices this : Continuous (piecewise (Metric.closedBall 0 1) id g) by
-    ref
+    refine .of_retract ⟨Subtype.val, by fun_prop⟩ ⟨_, this.codRestrict fun x => ?_⟩ ?_
+    · by_cases hx : x in Metric.closedBall 0 1
+      · simpa [piecewise_eq_of_mem (hi := hx)] using hx
+      · simp only [g, piecewise_eq_of_notMem (hi := hx), RCLike.real_smul_eq_coe_smul (K := 𝕜)]
+        by_cases hx' : x = 0 <;> simp [hx']
+    · ext x
+      simp
+  refine continuous_piecewise (fun x hx => ?_) continuousOn_id ?_
+  · replace hx : ‖x‖ = 1 := by simpa [frontier_closedBall (0 : E) one_ne_zero] using hx
+    simp [g, hx]
+.smul continuousOn_id · refine continuousOn_id.norm.inv₀ ?_
+    simp only [closure_compl, interior_closedBall (0 : E) one_ne_zero, mem_compl_iff,
+      Metric.mem_ball, dist_zero_right, not_lt, id_eq, ne_eq, norm_eq_zero]
+exact fun x hx => norm_pos_iff.mp one_pos.trans_le hx
 
 Depends on / 依赖: IsScalarTower, NormedSpace, NormedSpace.restrictScalars, Real.isScalarTower, isScalarTower, restrictScalars
 -/
@@ -204,7 +230,9 @@ theorem Metric.instTietzeExtensionClosedBall
     apply (DilationEquiv.smulTorsor y (k := (r : 𝕜)) <| by exact_mod_cast hr.ne').toHomeomorph.sets
     ext x
     simp only [mem_closedBall, dist_zero_right, DilationEquiv.coe_toHomeomorph, Set.mem_preimage,
-      DilationEquiv.smulTorsor_appl
+      DilationEquiv.smulTorsor_apply, vadd_eq_add, dist_add_self_left, norm_smul,
+      RCLike.norm_ofReal, abs_of_nonneg hr.le]
+    exact (mul_le_iff_le_one_right hr).symm
 
 中文:
 定理 Metric.instTietzeExtensionClosedBall
@@ -214,7 +242,9 @@ theorem Metric.instTietzeExtensionClosedBall
     apply (DilationEquiv.smulTorsor y (k := (r : 𝕜)) <| by exact_mod_cast hr.ne').toHomeomorph.sets
     ext x
     simp only [mem_closedBall, dist_zero_right, DilationEquiv.coe_toHomeomorph, Set.mem_preimage,
-      DilationEquiv.smulTorsor_appl
+      DilationEquiv.smulTorsor_apply, vadd_eq_add, dist_add_self_left, norm_smul,
+      RCLike.norm_ofReal, abs_of_nonneg hr.le]
+    exact (mul_le_iff_le_one_right hr).symm
 
 Depends on / 依赖: DilationEquiv, DilationEquiv.coe_toHomeomorph, DilationEquiv.smulTorsor, DilationEquiv.smulTorsor_apply, Metric, Metric.closedBall, RCLike, RCLike.norm_ofReal, Set.mem_preimage, abs_of_nonneg, closedBall, coe_toHomeomorph, dist_add_self_left, dist_zero_right, hr.le, hr.ne, mem_closedBall, mem_preimage, mul_le_iff_le_one_right, norm_ofReal
 -/
@@ -270,7 +300,18 @@ theorem exists_norm_eq_domRestrict_eq
   by_cases hf : ‖f‖ = 0; · exact ⟨0, by aesop⟩
   have := Metric.instTietzeExtensionClosedBall.{u, v} 𝕜 (0 : E) (by simp_all : 0 < ‖f‖)
   have hf' x : f x in Metric.closedBall 0 ‖f‖ := by simpa using! f.norm_coe_le_norm x
-  obtain ⟨g, hg_mem, hg⟩ := (f : C(s, E)).exists_forall_mem_restrict_eq hs h
+  obtain ⟨g, hg_mem, hg⟩ := (f : C(s, E)).exists_forall_mem_restrict_eq hs hf'
+  simp only [Metric.mem_closedBall, dist_zero_right] at hg_mem
+  let g' : X ->ᵇ E := .ofNormedAddCommGroup g (map_continuous g) ‖f‖ hg_mem
+  refine ⟨g', ?_, by ext x; congrm($(hg) x)⟩
+  apply le_antisymm ((g'.norm_le <| by positivity).mpr hg_mem)
+  refine (f.norm_le <| by positivity).mpr fun x => ?_
+  have hx : f x = g' x := by simpa using! congr($(hg) x).symm
+  rw [hx]
+.mp le_rfl x exact g'.norm_le (norm_nonneg g')
+
+@[deprecated (since := "2026-07-19")]
+alias exists_norm_eq_restrict_eq := exists_norm_eq_domRestrict_eq
 
 中文:
 定理 存在_norm_eq_domRestrict_eq
@@ -279,7 +320,18 @@ theorem exists_norm_eq_domRestrict_eq
   by_cases hf : ‖f‖ = 0; · exact ⟨0, by aesop⟩
   have := Metric.instTietzeExtensionClosedBall.{u, v} 𝕜 (0 : E) (by simp_all : 0 < ‖f‖)
   have hf' x : f x in Metric.closedBall 0 ‖f‖ := by simpa using! f.norm_coe_le_norm x
-  obtain ⟨g, hg_mem, hg⟩ := (f : C(s, E)).exists_forall_mem_restrict_eq hs h
+  obtain ⟨g, hg_mem, hg⟩ := (f : C(s, E)).exists_forall_mem_restrict_eq hs hf'
+  simp only [Metric.mem_closedBall, dist_zero_right] at hg_mem
+  let g' : X ->ᵇ E := .ofNormedAddCommGroup g (map_continuous g) ‖f‖ hg_mem
+  refine ⟨g', ?_, by ext x; congrm($(hg) x)⟩
+  apply le_antisymm ((g'.norm_le <| by positivity).mpr hg_mem)
+  refine (f.norm_le <| by positivity).mpr fun x => ?_
+  have hx : f x = g' x := by simpa using! congr($(hg) x).symm
+  rw [hx]
+.mp le_rfl x exact g'.norm_le (norm_nonneg g')
+
+@[deprecated (since := "2026-07-19")]
+alias exists_norm_eq_restrict_eq := exists_norm_eq_domRestrict_eq
 
 Depends on / 依赖: Metric, Metric.closedBall, Metric.instTietzeExtensionClosedBall, Metric.mem_closedBall, closedBall, congrm, dist_zero_right, exists_forall_mem_restrict_eq, f.norm_coe_le_norm, hg_mem, instTietzeExtensionClosedBall, le_antisymm, map_continuous, mem_closedBall, norm_coe_le_norm, ofNormedAddCommGroup
 -/

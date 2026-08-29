@@ -254,7 +254,7 @@ lemma det_surjective
     ?_, ?_⟩, by simp [det]⟩
   <;> simp only [diagonal_mul_diagonal, mul_ite, ite_mul, Units.mul_inv, one_mul, mul_one,
       diagonal_eq_one]
-  <;> funext j <;>
+  <;> funext j <;> split_ifs <;> simp
 
 中文:
 引理 det_surjective
@@ -266,7 +266,7 @@ lemma det_surjective
     ?_, ?_⟩, by simp [det]⟩
   <;> simp only [diagonal_mul_diagonal, mul_ite, ite_mul, Units.mul_inv, one_mul, mul_one,
       diagonal_eq_one]
-  <;> funext j <;>
+  <;> funext j <;> split_ifs <;> simp
 
 Depends on / 依赖: Nonempty, Units.mul_inv, diagonal, diagonal_eq_one, diagonal_mul_diagonal, ite_mul, mul_inv, mul_ite, mul_one, one_mul, split_ifs
 -/

@@ -1273,7 +1273,9 @@ instance :
     top := ⊤
     le_top := fun _s _x _hx => trivial
     inf := (· ⊓ ·)
-    inf_le_left := fu
+    inf_le_left := fun _s _t _x => And.left
+    inf_le_right := fun _s _t _x => And.right
+    le_inf := fun _s _t₁ _t₂ h₁ h₂ _x hx => ⟨h₁ hx, h₂ hx⟩ }
 
 中文:
 实例 :
@@ -1287,7 +1289,9 @@ instance :
     top := ⊤
     le_top := fun _s _x _hx => trivial
     inf := (· ⊓ ·)
-    inf_le_left := fu
+    inf_le_left := fun _s _t _x => And.left
+    inf_le_right := fun _s _t _x => And.right
+    le_inf := fun _s _t₁ _t₂ h₁ h₂ _x hx => ⟨h₁ hx, h₂ hx⟩ }
 
 Depends on / 依赖: And.left, And.right, IsGLB.of_image, SetLike, SetLike.coe_subset_coe, Subring, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, intCast_mem, isGLB_biInf, le_inf, le_top, mem_bot, of_image
 -/
@@ -1514,7 +1518,11 @@ div_eq_mul_inv _ _ := Subtype.ext div_eq_mul_inv _ _
   inv_zero := Subtype.ext inv_zero
   -- TODO: use a nicer defeq
   nnqsmul := _
- 
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
+
+@[simp]
 
 中文:
 实例 instField
@@ -1526,7 +1534,11 @@ div_eq_mul_inv _ _ := Subtype.ext div_eq_mul_inv _ _
   inv_zero := Subtype.ext inv_zero
   -- TODO: use a nicer defeq
   nnqsmul := _
- 
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
+
+@[simp]
 
 Depends on / 依赖: Set.inv_mem_center, a.prop, inv_mem_center
 -/
@@ -1976,7 +1988,8 @@ theorem closure_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       neg_mem' := fun ⟨_, hpx⟩ => ⟨_, neg _ _ hpx⟩
       zero_mem' := ⟨_, zero⟩
-      one_mem' := ⟨_
+      one_mem' := ⟨_, one⟩ }
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 中文:
 定理 closure_induction
@@ -1987,7 +2000,8 @@ theorem closure_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       neg_mem' := fun ⟨_, hpx⟩ => ⟨_, neg _ _ hpx⟩
       zero_mem' := ⟨_, zero⟩
-      one_mem' := ⟨_
+      one_mem' := ⟨_, one⟩ }
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 Depends on / 依赖: Subring, add_mem, carrier, closure_le, mul_mem, neg_mem, one_mem, subset_closure, zero_mem
 -/
@@ -2022,7 +2036,13 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | one => exact one_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => ex
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | neg _ _ h => exact neg_left _ _ _ _ h
+  | zero => exact zero_right x hx
+  | one => exact one_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | neg _ _ h => exact neg_right _ _ _ _ h
 
 中文:
 定理 closure_induction₂
@@ -2034,7 +2054,13 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | one => exact one_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => ex
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | neg _ _ h => exact neg_left _ _ _ _ h
+  | zero => exact zero_right x hx
+  | one => exact one_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | neg _ _ h => exact neg_right _ _ _ _ h
 
 Depends on / 依赖: add_left, add_r, closure_induction, mem_mem, mul_left, mul_right, neg_left, one_left, one_right, zero_left, zero_right
 -/
@@ -2076,7 +2102,27 @@ theorem mem_closure_iff
     | zero => exact zero_mem _
     | one => exact AddSubgroup.subset_closure (one_mem _)
     | add _ _ _ _ hx hy => exact add_mem hx hy
-    | neg _ _ hx => exact
+    | neg _ _ hx => exact neg_mem hx
+    | mul _ _ _hx _hy hx hy =>
+      clear _hx _hy
+      induction hx, hy using AddSubgroup.closure_induction₂ with
+      | mem _ _ hx hy => exact AddSubgroup.subset_closure (mul_mem hx hy)
+      | zero_left => simp
+      | zero_right => simp
+      | add_left _ _ _ _ _ _ h₁ h₂ => simpa [add_mul] using add_mem h₁ h₂
+      | add_right _ _ _ _ _ _ h₁ h₂ => simpa [mul_add] using add_mem h₁ h₂
+      | neg_left _ _ _ _ h => simpa [neg_mul] using neg_mem h
+      | neg_right _ _ _ _ h => simpa [mul_neg] using neg_mem h,
+    fun h => by
+      induction h using AddSubgroup.closure_induction with
+      | mem x hx =>
+        induction hx using Submonoid.closure_induction with
+        | mem _ h => exact subset_closure h
+        | one => exact one_mem _
+        | mul _ _ _ _ h₁ h₂ => exact mul_mem h₁ h₂
+      | zero => exact zero_mem _
+      | add _ _ _ _ h₁ h₂ => exact add_mem h₁ h₂
+      | neg _ _ h => exact neg_mem h⟩
 
 中文:
 定理 mem_closure_iff
@@ -2087,7 +2133,27 @@ theorem mem_closure_iff
     | zero => exact zero_mem _
     | one => exact AddSubgroup.subset_closure (one_mem _)
     | add _ _ _ _ hx hy => exact add_mem hx hy
-    | neg _ _ hx => exact
+    | neg _ _ hx => exact neg_mem hx
+    | mul _ _ _hx _hy hx hy =>
+      clear _hx _hy
+      induction hx, hy using AddSubgroup.closure_induction₂ with
+      | mem _ _ hx hy => exact AddSubgroup.subset_closure (mul_mem hx hy)
+      | zero_left => simp
+      | zero_right => simp
+      | add_left _ _ _ _ _ _ h₁ h₂ => simpa [add_mul] using add_mem h₁ h₂
+      | add_right _ _ _ _ _ _ h₁ h₂ => simpa [mul_add] using add_mem h₁ h₂
+      | neg_left _ _ _ _ h => simpa [neg_mul] using neg_mem h
+      | neg_right _ _ _ _ h => simpa [mul_neg] using neg_mem h,
+    fun h => by
+      induction h using AddSubgroup.closure_induction with
+      | mem x hx =>
+        induction hx using Submonoid.closure_induction with
+        | mem _ h => exact subset_closure h
+        | one => exact one_mem _
+        | mul _ _ _ _ h₁ h₂ => exact mul_mem h₁ h₂
+      | zero => exact zero_mem _
+      | add _ _ _ _ h₁ h₂ => exact add_mem h₁ h₂
+      | neg _ _ h => exact neg_mem h⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.closure_induction, AddSubgroup.subset_closure, Submonoid, Submonoid.subset_closure, add_mem, closure_induction, mul_mem, neg_mem, one_mem, subset_closure, zero_left, zero_mem, zero_right
 -/
@@ -2224,7 +2290,16 @@ theorem exists_list_of_mem_closure
     exact ⟨[l], by simp_all⟩
   | zero => exact ⟨[], List.forall_mem_nil _, rfl⟩
   | add _ _ _ _ hL hM =>
-    obtain ⟨⟨L, HL1, HL2⟩,
+    obtain ⟨⟨L, HL1, HL2⟩, ⟨M, HM1, HM2⟩⟩ := And.intro hL hM
+    exact ⟨L ++ M, List.forall_mem_append.2 ⟨HL1, HM1⟩, by
+      rw [List.map_append]; rw [List.sum_append]; rw [HL2]; rw [HM2]⟩
+  | neg _ _ hL =>
+    obtain ⟨L, hL⟩ := hL
+    exact ⟨L.map (List.cons (-1)),
+      List.forall_mem_map.2 fun j hj => List.forall_mem_cons.2 ⟨Or.inr rfl, hL.1 j hj⟩,
+      hL.2 ▸
+        List.recOn L (by simp)
+          (by simp +contextual [List.map_cons, add_comm])⟩
 
 中文:
 定理 存在_list_of_mem_closure
@@ -2237,7 +2312,16 @@ theorem exists_list_of_mem_closure
     exact ⟨[l], by simp_all⟩
   | zero => exact ⟨[], List.forall_mem_nil _, rfl⟩
   | add _ _ _ _ hL hM =>
-    obtain ⟨⟨L, HL1, HL2⟩,
+    obtain ⟨⟨L, HL1, HL2⟩, ⟨M, HM1, HM2⟩⟩ := And.intro hL hM
+    exact ⟨L ++ M, List.forall_mem_append.2 ⟨HL1, HM1⟩, by
+      rw [List.map_append]; rw [List.sum_append]; rw [HL2]; rw [HM2]⟩
+  | neg _ _ hL =>
+    obtain ⟨L, hL⟩ := hL
+    exact ⟨L.map (List.cons (-1)),
+      List.forall_mem_map.2 fun j hj => List.forall_mem_cons.2 ⟨Or.inr rfl, hL.1 j hj⟩,
+      hL.2 ▸
+        List.recOn L (by simp)
+          (by simp +contextual [List.map_cons, add_comm])⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.closure_induction, And.intro, L.map, List.cons, List.forall_mem_append, List.forall_mem_nil, List.map_append, List.sum_append, Submonoid, Submonoid.exists_list_of_mem_closure, closure_induction, exists_list_of_mem_closure, forall_mem_append, forall_mem_nil, map_append, mem_closure_iff, sum_append
 -/
@@ -3025,7 +3109,7 @@ theorem mem_iSup_of_directed
     Subring.mk' (⋃ i, (S i : Set R)) (⨆ i, (S i).toSubmonoid) (⨆ i, (S i).toAddSubgroup)
       (Submonoid.coe_iSup_of_directed hS) (AddSubgroup.coe_iSup_of_directed hS)
   suffices ⨆ i, S i <= U by simpa [U] using @this x
-  exact 
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 中文:
 定理 mem_iSup_of_directed
@@ -3036,7 +3120,7 @@ theorem mem_iSup_of_directed
     Subring.mk' (⋃ i, (S i : Set R)) (⨆ i, (S i).toSubmonoid) (⨆ i, (S i).toAddSubgroup)
       (Submonoid.coe_iSup_of_directed hS) (AddSubgroup.coe_iSup_of_directed hS)
   suffices ⨆ i, S i <= U by simpa [U] using @this x
-  exact 
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.coe_iSup_of_directed, Set.mem_iUnion, Submonoid, Submonoid.coe_iSup_of_directed, Subring, Subring.mk, coe_iSup_of_directed, iSup_le, le_iSup, mem_iUnion, toAddSubgroup, toSubmonoid
 -/
@@ -3713,7 +3797,7 @@ theorem prod_bot_sup_bot_prod
     Prod.fst_mul_snd p ▸
       mul_mem
         ((le_sup_left : s.prod ⊥ <= s.prod ⊥ ⊔ prod ⊥ t) ⟨hp.1, SetLike.mem_coe.2 <| one_mem ⊥⟩)
-        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <
+        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <| one_mem ⊥, hp.2⟩)
 
 中文:
 定理 prod_bot_sup_bot_prod
@@ -3723,7 +3807,7 @@ theorem prod_bot_sup_bot_prod
     Prod.fst_mul_snd p ▸
       mul_mem
         ((le_sup_left : s.prod ⊥ <= s.prod ⊥ ⊔ prod ⊥ t) ⟨hp.1, SetLike.mem_coe.2 <| one_mem ⊥⟩)
-        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <
+        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <| one_mem ⊥, hp.2⟩)
 
 Depends on / 依赖: Prod.fst_mul_snd, SetLike, SetLike.mem_coe, bot_le, fst_mul_snd, le_antisymm, le_sup_left, le_sup_right, mem_coe, mul_mem, one_mem, prod_mono_left, prod_mono_right, s.prod, sup_le
 -/
@@ -3967,7 +4051,40 @@ theorem InClosure.recOn
   rw [List.forall_mem_cons] at HL
   suffices C (List.prod hd) by
     rw [List.map_cons]; rw [List.sum_cons]
-  
+    exact ha this (ih HL.2)
+  replace HL := HL.1
+  clear ih tl
+  rsuffices ⟨L, HL', HP | HP⟩ :
+    exists L : List R, (forall x in L, x in s) ∧ (List.prod hd = List.prod L ∨ List.prod hd = -List.prod L)
+  · rw [HP]
+    clear HP HL hd
+    induction L with
+    | nil => exact h1
+    | cons hd tl ih =>
+      rw [List.forall_mem_cons] at HL'
+      rw [List.prod_cons]
+      exact hs _ HL'.1 _ (ih HL'.2)
+  · rw [HP]
+    clear HP HL hd
+    induction L with
+    | nil => exact hneg1
+    | cons hd tl ih =>
+      rw [List.prod_cons]; rw [neg_mul_eq_mul_neg]
+      rw [List.forall_mem_cons] at HL'
+      exact hs _ HL'.1 _ (ih HL'.2)
+  induction hd with
+  | nil => exact ⟨[], List.forall_mem_nil _, Or.inl rfl⟩
+  | cons hd tl ih => ?_
+  rw [List.forall_mem_cons] at HL
+  rcases ih HL.2 with ⟨L, HL', HP | HP⟩ <;> rcases HL.1 with hhd | hhd
+  · exact
+      ⟨hd::L, List.forall_mem_cons.2 ⟨hhd, HL'⟩,
+Or.inl by rw [List.prod_cons, List.prod_cons, HP]⟩
+· exact ⟨L, HL', Or.inr by rw [List.prod_cons, hhd, neg_one_mul, HP]⟩
+  · exact
+      ⟨hd::L, List.forall_mem_cons.2 ⟨hhd, HL'⟩,
+Or.inr by rw [List.prod_cons, List.prod_cons, HP, neg_mul_eq_mul_neg]⟩
+· exact ⟨L, HL', Or.inl by rw [List.prod_cons, hhd, HP, neg_one_mul, neg_neg]⟩
 
 中文:
 定理 InClosure.recOn
@@ -3982,7 +4099,40 @@ theorem InClosure.recOn
   rw [List.forall_mem_cons] at HL
   suffices C (List.prod hd) by
     rw [List.map_cons]; rw [List.sum_cons]
-  
+    exact ha this (ih HL.2)
+  replace HL := HL.1
+  clear ih tl
+  rsuffices ⟨L, HL', HP | HP⟩ :
+    exists L : List R, (forall x in L, x in s) ∧ (List.prod hd = List.prod L ∨ List.prod hd = -List.prod L)
+  · rw [HP]
+    clear HP HL hd
+    induction L with
+    | nil => exact h1
+    | cons hd tl ih =>
+      rw [List.forall_mem_cons] at HL'
+      rw [List.prod_cons]
+      exact hs _ HL'.1 _ (ih HL'.2)
+  · rw [HP]
+    clear HP HL hd
+    induction L with
+    | nil => exact hneg1
+    | cons hd tl ih =>
+      rw [List.prod_cons]; rw [neg_mul_eq_mul_neg]
+      rw [List.forall_mem_cons] at HL'
+      exact hs _ HL'.1 _ (ih HL'.2)
+  induction hd with
+  | nil => exact ⟨[], List.forall_mem_nil _, Or.inl rfl⟩
+  | cons hd tl ih => ?_
+  rw [List.forall_mem_cons] at HL
+  rcases ih HL.2 with ⟨L, HL', HP | HP⟩ <;> rcases HL.1 with hhd | hhd
+  · exact
+      ⟨hd::L, List.forall_mem_cons.2 ⟨hhd, HL'⟩,
+Or.inl by rw [List.prod_cons, List.prod_cons, HP]⟩
+· exact ⟨L, HL', Or.inr by rw [List.prod_cons, hhd, neg_one_mul, HP]⟩
+  · exact
+      ⟨hd::L, List.forall_mem_cons.2 ⟨hhd, HL'⟩,
+Or.inr by rw [List.prod_cons, List.prod_cons, HP, neg_mul_eq_mul_neg]⟩
+· exact ⟨L, HL', Or.inl by rw [List.prod_cons, hhd, HP, neg_one_mul, neg_neg]⟩
 -/
 protected theorem InClosure.recOn {R} [Ring R] {s : Set R}
     {C : R -> Prop} {x : R} (hx : x in closure s) (h1 : C 1)
@@ -4261,7 +4411,11 @@ theorem comap_map_eq
     obtain ⟨y, hy, hxy⟩ := hx
     replace hxy : x - y in f ⁻¹' {0} := by simp [hxy]
     rw [← closure_eq s]; rw [← closure_union]; rw [← add_sub_cancel y x]
-    exact Subring.add_mem _ (subset_closure <| Or.inl hy) (subset_
+    exact Subring.add_mem _ (subset_closure <| Or.inl hy) (subset_closure <| Or.inr hxy)
+  · rw [← map_le_iff_le_comap, map_sup, f.map_closure]
+    apply le_of_eq
+    rw [sup_eq_left]; rw [closure_le]
+    exact (Set.image_preimage_subset f {0}).trans (Set.singleton_subset_iff.2 (s.map f).zero_mem)
 
 中文:
 定理 comap_map_eq
@@ -4273,7 +4427,11 @@ theorem comap_map_eq
     obtain ⟨y, hy, hxy⟩ := hx
     replace hxy : x - y in f ⁻¹' {0} := by simp [hxy]
     rw [← closure_eq s]; rw [← closure_union]; rw [← add_sub_cancel y x]
-    exact Subring.add_mem _ (subset_closure <| Or.inl hy) (subset_
+    exact Subring.add_mem _ (subset_closure <| Or.inl hy) (subset_closure <| Or.inr hxy)
+  · rw [← map_le_iff_le_comap, map_sup, f.map_closure]
+    apply le_of_eq
+    rw [sup_eq_left]; rw [closure_le]
+    exact (Set.image_preimage_subset f {0}).trans (Set.singleton_subset_iff.2 (s.map f).zero_mem)
 
 Depends on / 依赖: Or.inl, Or.inr, Set.image_preimage_subset, Set.singleton_subset_iff, Subring, Subring.add_mem, add_mem, add_sub_cancel, closure_eq, closure_le, closure_union, f.map_closure, image_preimage_subset, le_antisymm, le_of_eq, map_closure, map_le_iff_le_comap, map_sup, mem_comap, mem_map
 -/

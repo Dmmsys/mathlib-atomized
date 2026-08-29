@@ -159,7 +159,10 @@ lemma rnDerivAux_le_one
   · refine ENNReal.toReal_le_of_le_ofReal zero_le_one ?_
     simp only [Pi.one_apply, ENNReal.ofReal_one]
     exact hx_le_one
-  · have := hαγ.countableOrCountablyGenerated.resolve_l
+  · have := hαγ.countableOrCountablyGenerated.resolve_left hα
+    exact density_le_one ((fst_map_id_prod _ measurable_const).trans_le hκη) _ _ _
+
+@[fun_prop]
 
 中文:
 引理 rnDerivAux_le_one
@@ -171,7 +174,10 @@ lemma rnDerivAux_le_one
   · refine ENNReal.toReal_le_of_le_ofReal zero_le_one ?_
     simp only [Pi.one_apply, ENNReal.ofReal_one]
     exact hx_le_one
-  · have := hαγ.countableOrCountablyGenerated.resolve_l
+  · have := hαγ.countableOrCountablyGenerated.resolve_left hα
+    exact density_le_one ((fst_map_id_prod _ measurable_const).trans_le hκη) _ _ _
+
+@[fun_prop]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_one, ENNReal.toReal_le_of_le_ofReal, Measure, Measure.rnDeriv_le_one_of_le, Pi.one_apply, countableOrCountablyGenerated, countableOrCountablyGenerated.resolve_left, density_le_one, filter_upwards, fst_map_id_prod, hx_le_one, measurable_const, ofReal_one, one_apply, resolve_left, rnDerivAux, rnDeriv_le_one_of_le, simp_rw, split_ifs
 -/
@@ -200,7 +206,13 @@ lemma measurable_rnDerivAux
       (fun a => Measure.measurable_rnDeriv (κ a) (η a)) fun a a' c ha'_mem_a => ?_
     have h_eq : forall κ : Kernel α γ, κ a' = κ a := fun κ => by
       ext s hs
-      exact mem_of
+      exact mem_of_mem_measurableAtom ha'_mem_a
+        (Kernel.measurable_coe κ hs (measurableSet_singleton (κ a s))) rfl
+    rw [h_eq κ]; rw [h_eq η]
+  · have := hαγ.countableOrCountablyGenerated.resolve_left hα
+    exact measurable_density _ η MeasurableSet.univ
+
+@[fun_prop]
 
 中文:
 引理 measurable_rnDerivAux
@@ -212,7 +224,13 @@ lemma measurable_rnDerivAux
       (fun a => Measure.measurable_rnDeriv (κ a) (η a)) fun a a' c ha'_mem_a => ?_
     have h_eq : forall κ : Kernel α γ, κ a' = κ a := fun κ => by
       ext s hs
-      exact mem_of
+      exact mem_of_mem_measurableAtom ha'_mem_a
+        (Kernel.measurable_coe κ hs (measurableSet_singleton (κ a s))) rfl
+    rw [h_eq κ]; rw [h_eq η]
+  · have := hαγ.countableOrCountablyGenerated.resolve_left hα
+    exact measurable_density _ η MeasurableSet.univ
+
+@[fun_prop]
 
 Depends on / 依赖: Kernel, Kernel.measurable_coe, Measurable, Measurable.ennreal_toReal, MeasurableSet, MeasurableSet.u, Measure, Measure.measurable_rnDeriv, _mem_a, countableOrCountablyGenerated, countableOrCountablyGenerated.resolve_left, ennreal_toReal, h_eq, measurableSet_singleton, measurable_coe, measurable_density, measurable_from_prod_countable_right, measurable_rnDeriv, mem_of_mem_measurableAtom, resolve_left
 -/
@@ -262,7 +280,13 @@ lemma setLIntegral_rnDerivAux
   · have h_ac : κ a ≪ (κ + η) a := Measure.absolutelyContinuous_of_le (h_le a)
     rw [← Measure.setLIntegral_rnDeriv h_ac]
     refine setLIntegral_congr_fun_ae hs ?_
-    filter_upwards [Measure.r
+    filter_upwards [Measure.rnDeriv_lt_top (κ a) ((κ + η) a)] with x hx_lt _
+    rw [ENNReal.ofReal_toReal hx_lt.ne]
+  · have := hαγ.countableOrCountablyGenerated.resolve_left hα
+    rw [setLIntegral_density ((fst_map_id_prod _ measurable_const).trans_le h_le) _
+      MeasurableSet.univ hs]; rw [map_apply' _ (by fun_prop) _ (hs.prod MeasurableSet.univ)]
+    congr 1 with x
+    simp
 
 中文:
 引理 setL整数egral_rnDerivAux
@@ -274,7 +298,13 @@ lemma setLIntegral_rnDerivAux
   · have h_ac : κ a ≪ (κ + η) a := Measure.absolutelyContinuous_of_le (h_le a)
     rw [← Measure.setLIntegral_rnDeriv h_ac]
     refine setLIntegral_congr_fun_ae hs ?_
-    filter_upwards [Measure.r
+    filter_upwards [Measure.rnDeriv_lt_top (κ a) ((κ + η) a)] with x hx_lt _
+    rw [ENNReal.ofReal_toReal hx_lt.ne]
+  · have := hαγ.countableOrCountablyGenerated.resolve_left hα
+    rw [setLIntegral_density ((fst_map_id_prod _ measurable_const).trans_le h_le) _
+      MeasurableSet.univ hs]; rw [map_apply' _ (by fun_prop) _ (hs.prod MeasurableSet.univ)]
+    congr 1 with x
+    simp
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_toReal, Measure, Measure.absolutelyContinuous_of_le, Measure.rnDeriv_lt_top, Measure.setLIntegral_rnDeriv, absolutelyContinuous_of_le, bot_le, countableOrCountablyGenerated, countableOrCountablyGenerated.resolve_left, filter_upwards, fst_map_id_prod, h_ac, h_le, hx_lt, hx_lt.ne, le_add_of_nonneg_right, measurable_const, ofReal_toReal, resolve_left
 -/
@@ -340,7 +370,22 @@ lemma withDensity_one_sub_rnDerivAux
       + withDensity (κ + η) (fun a x => Real.toNNReal (rnDerivAux κ (κ + η) a x))
       = κ + η by
     ext a s
-    have h : (withDensity (κ + η) (fun 
+    have h : (withDensity (κ + η) (fun a x => Real.toNNReal (1 - rnDerivAux κ (κ + η) a x))
+          + withDensity (κ + η) (fun a x => Real.toNNReal (rnDerivAux κ (κ + η) a x))) a s
+        = κ a s + η a s := by
+      rw [this]
+      simp
+    simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add] at h
+    rwa [withDensity_rnDerivAux, add_comm, ENNReal.add_right_inj (measure_ne_top _ _)] at h
+  simp_rw [ofNNReal_toNNReal, ENNReal.ofReal_sub _ (rnDerivAux_nonneg h_le), ENNReal.ofReal_one]
+  rw [withDensity_sub_add_cancel]
+  · rw [withDensity_one']
+  · exact measurable_const
+  · fun_prop
+  · intro a
+    filter_upwards [rnDerivAux_le_one h_le] with x hx
+    simp only [ENNReal.ofReal_le_one]
+    exact hx
 
 中文:
 引理 withDensity_one_sub_rnDerivAux
@@ -351,7 +396,22 @@ lemma withDensity_one_sub_rnDerivAux
       + withDensity (κ + η) (fun a x => Real.toNNReal (rnDerivAux κ (κ + η) a x))
       = κ + η by
     ext a s
-    have h : (withDensity (κ + η) (fun 
+    have h : (withDensity (κ + η) (fun a x => Real.toNNReal (1 - rnDerivAux κ (κ + η) a x))
+          + withDensity (κ + η) (fun a x => Real.toNNReal (rnDerivAux κ (κ + η) a x))) a s
+        = κ a s + η a s := by
+      rw [this]
+      simp
+    simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add] at h
+    rwa [withDensity_rnDerivAux, add_comm, ENNReal.add_right_inj (measure_ne_top _ _)] at h
+  simp_rw [ofNNReal_toNNReal, ENNReal.ofReal_sub _ (rnDerivAux_nonneg h_le), ENNReal.ofReal_one]
+  rw [withDensity_sub_add_cancel]
+  · rw [withDensity_one']
+  · exact measurable_const
+  · fun_prop
+  · intro a
+    filter_upwards [rnDerivAux_le_one h_le] with x hx
+    simp only [ENNReal.ofReal_le_one]
+    exact hx
 
 Depends on / 依赖: FunLike, FunLike.coe_add, Measure, Measure.coe, Pi.add_apply, Real.toNNReal, add_apply, bot_le, coe_add, h_le, le_add_of_nonneg_right, rnDerivAux, toNNReal, withDensity
 -/
@@ -505,7 +565,14 @@ lemma measure_mutuallySingularSetSlice
       (1 - rnDerivAux κ (κ + η) a x)) a {x | 1 <= rnDerivAux κ (κ + η) a x} = 0 by
     rwa [withDensity_one_sub_rnDerivAux κ η] at this
   simp_rw [ofNNReal_toNNReal]
-  rw [Kernel.withDensity_apply']; rw [lintegral_eq_zero_iff]; rw [Eventual
+  rw [Kernel.withDensity_apply']; rw [lintegral_eq_zero_iff]; rw [EventuallyEq]; rw [ae_restrict_iff]
+  rotate_left
+  · exact (measurableSet_singleton 0).preimage (by fun_prop)
+  · fun_prop
+  · fun_prop
+  refine ae_of_all _ (fun x hx => ?_)
+  simp only [mem_ofPred_eq] at hx
+  simp [hx]
 
 中文:
 引理 measure_mutuallySingularSetSlice
@@ -515,7 +582,14 @@ lemma measure_mutuallySingularSetSlice
       (1 - rnDerivAux κ (κ + η) a x)) a {x | 1 <= rnDerivAux κ (κ + η) a x} = 0 by
     rwa [withDensity_one_sub_rnDerivAux κ η] at this
   simp_rw [ofNNReal_toNNReal]
-  rw [Kernel.withDensity_apply']; rw [lintegral_eq_zero_iff]; rw [Eventual
+  rw [Kernel.withDensity_apply']; rw [lintegral_eq_zero_iff]; rw [EventuallyEq]; rw [ae_restrict_iff]
+  rotate_left
+  · exact (measurableSet_singleton 0).preimage (by fun_prop)
+  · fun_prop
+  · fun_prop
+  refine ae_of_all _ (fun x hx => ?_)
+  simp only [mem_ofPred_eq] at hx
+  simp [hx]
 
 Depends on / 依赖: EventuallyEq, Kernel, Kernel.withDensity_apply, Real.toNNReal, ae_of_all, ae_restrict_iff, fun_prop, lintegral_eq_zero_iff, measurableSet_singleton, mem_ofPred_eq, ofNNReal_toNNReal, preimage, rnDerivAux, rotate_left, simp_rw, toNNReal, withDensity, withDensity_apply, withDensity_one_sub_rnDerivAux
 -/
@@ -734,7 +808,15 @@ lemma singularPart_compl_mutuallySingularSetSlice
   rotate_left
   · exact measurableSet_preimage (measurable_singularPart_fun_right κ η a)
       (measurableSet_singleton _)
-  · exact mea
+  · exact measurable_singularPart_fun_right κ η a
+  · exact measurable_singularPart_fun κ η
+  refine ae_of_all _ (fun x hx => ?_)
+  simp only [mem_compl_iff, mutuallySingularSetSlice, mem_ofPred, not_le] at hx
+  simp_rw [rnDeriv]
+  rw [← ENNReal.ofReal_div_of_pos]; rw [div_eq_inv_mul]; rw [← ENNReal.ofReal_mul]; rw [← mul_assoc]; rw [mul_inv_cancel₀]; rw [one_mul]; rw [tsub_self]; rw [Pi.zero_apply]
+  · simp only [ne_eq, sub_eq_zero, hx.ne', not_false_eq_true]
+  · simp only [sub_nonneg, hx.le]
+  · simp only [sub_pos, hx]
 
 中文:
 引理 singularPart_compl_mutuallySingularSetSlice
@@ -745,7 +827,15 @@ lemma singularPart_compl_mutuallySingularSetSlice
   rotate_left
   · exact measurableSet_preimage (measurable_singularPart_fun_right κ η a)
       (measurableSet_singleton _)
-  · exact mea
+  · exact measurable_singularPart_fun_right κ η a
+  · exact measurable_singularPart_fun κ η
+  refine ae_of_all _ (fun x hx => ?_)
+  simp only [mem_compl_iff, mutuallySingularSetSlice, mem_ofPred, not_le] at hx
+  simp_rw [rnDeriv]
+  rw [← ENNReal.ofReal_div_of_pos]; rw [div_eq_inv_mul]; rw [← ENNReal.ofReal_mul]; rw [← mul_assoc]; rw [mul_inv_cancel₀]; rw [one_mul]; rw [tsub_self]; rw [Pi.zero_apply]
+  · simp only [ne_eq, sub_eq_zero, hx.ne', not_false_eq_true]
+  · simp only [sub_nonneg, hx.le]
+  · simp only [sub_pos, hx]
 
 Depends on / 依赖: EventuallyEq, Kernel, Kernel.withDensity_apply, ae_of_all, ae_restrict_iff, all_goals, lintegral_eq_zero_iff, measurableSet_preimage, measurableSet_singleton, measurable_singularPart_fun, measurable_singularPart_fun_right, mem_compl_iff, mem_ofPred, mutuallySingularSetSlice, not_le, ofNNReal_toNNReal, rnDeriv, rotate_left, simp_rw, singularPart
 -/
@@ -799,7 +889,18 @@ lemma singularPart_of_subset_mutuallySingularSetSlice
   swap; · exact measurable_singularPart_fun κ η
   calc
     ∫⁻ x in s, ↑(Real.toNNReal (rnDerivAux κ (κ + η) a x)) -
-      ↑(Real.toNNReal (1 - rnDerivAux κ (κ + η) a 
+      ↑(Real.toNNReal (1 - rnDerivAux κ (κ + η) a x)) * rnDeriv κ η a x
+      ∂(κ + η) a
+    = ∫⁻ _ in s, 1 ∂(κ + η) a := by
+        refine setLIntegral_congr_fun_ae hsm ?_
+        have h_le : κ <= κ + η := le_add_of_nonneg_right bot_le
+        filter_upwards [rnDerivAux_le_one h_le] with x hx hxs
+        have h_eq_one : rnDerivAux κ (κ + η) a x = 1 := le_antisymm hx (hs' x hxs)
+        simp [h_eq_one]
+  _ = (κ + η) a s := by simp
+  _ = κ a s := by
+        suffices η a s = 0 by simp [this]
+        exact measure_mono_null hs (measure_mutuallySingularSetSlice κ η a)
 
 中文:
 引理 singularPart_of_subset_mutuallySingularSetSlice
@@ -810,7 +911,18 @@ lemma singularPart_of_subset_mutuallySingularSetSlice
   swap; · exact measurable_singularPart_fun κ η
   calc
     ∫⁻ x in s, ↑(Real.toNNReal (rnDerivAux κ (κ + η) a x)) -
-      ↑(Real.toNNReal (1 - rnDerivAux κ (κ + η) a 
+      ↑(Real.toNNReal (1 - rnDerivAux κ (κ + η) a x)) * rnDeriv κ η a x
+      ∂(κ + η) a
+    = ∫⁻ _ in s, 1 ∂(κ + η) a := by
+        refine setLIntegral_congr_fun_ae hsm ?_
+        have h_le : κ <= κ + η := le_add_of_nonneg_right bot_le
+        filter_upwards [rnDerivAux_le_one h_le] with x hx hxs
+        have h_eq_one : rnDerivAux κ (κ + η) a x = 1 := le_antisymm hx (hs' x hxs)
+        simp [h_eq_one]
+  _ = (κ + η) a s := by simp
+  _ = κ a s := by
+        suffices η a s = 0 by simp [this]
+        exact measure_mono_null hs (measure_mutuallySingularSetSlice κ η a)
 
 Depends on / 依赖: Kernel, Kernel.withDensity_apply, Real.toNNReal, bot_le, filter_upwards, h_le, le_add_of_nonneg_right, measurable_singularPart_fun, rnDeriv, rnDerivAux, rnDerivAux_le_one, setLIntegral_congr_fun_ae, singularPart, subsingleton_iff, toNNReal, withDensity_apply
 -/
@@ -897,7 +1009,27 @@ lemma withDensity_rnDeriv_of_subset_compl_mutuallySingularSetSlice
     rw [rnDeriv_def']
     congr
     exact (withDensity_one_sub_rnDerivAux κ η).symm
-  rw [this]; rw [← withDensity_mul]; rw [Kernel.
+  rw [this]; rw [← withDensity_mul]; rw [Kernel.withDensity_apply']
+  rotate_left
+  · fun_prop
+  · fun_prop
+  · exact measurable_rnDeriv _ _
+  simp_rw [rnDeriv]
+  have hs' : forall x in s, rnDerivAux κ (κ + η) a x < 1 := by
+    simp_rw [← notMem_mutuallySingularSetSlice]
+    exact fun x hx hx_mem => hs hx hx_mem
+  calc
+    ∫⁻ x in s, ↑(Real.toNNReal (1 - rnDerivAux κ (κ + η) a x)) *
+      (ENNReal.ofReal (rnDerivAux κ (κ + η) a x) /
+        ENNReal.ofReal (1 - rnDerivAux κ (κ + η) a x)) ∂(κ + η) a
+  _ = ∫⁻ x in s, ENNReal.ofReal (rnDerivAux κ (κ + η) a x) ∂(κ + η) a := by
+      refine setLIntegral_congr_fun hsm (fun x hx => ?_)
+      rw [ofNNReal_toNNReal]; rw [← ENNReal.ofReal_div_of_pos]; rw [div_eq_inv_mul]; rw [← ENNReal.ofReal_mul]; rw [← mul_assoc]; rw [mul_inv_cancel₀]; rw [one_mul]
+      · rw [ne_eq, sub_eq_zero]
+        exact (hs' x hx).ne'
+      · simp [(hs' x hx).le]
+      · simp [hs' x hx]
+  _ = κ a s := setLIntegral_rnDerivAux κ η a hsm
 
 中文:
 引理 withDensity_rnDeriv_of_subset_compl_mutuallySingularSetSlice
@@ -908,7 +1040,27 @@ lemma withDensity_rnDeriv_of_subset_compl_mutuallySingularSetSlice
     rw [rnDeriv_def']
     congr
     exact (withDensity_one_sub_rnDerivAux κ η).symm
-  rw [this]; rw [← withDensity_mul]; rw [Kernel.
+  rw [this]; rw [← withDensity_mul]; rw [Kernel.withDensity_apply']
+  rotate_left
+  · fun_prop
+  · fun_prop
+  · exact measurable_rnDeriv _ _
+  simp_rw [rnDeriv]
+  have hs' : forall x in s, rnDerivAux κ (κ + η) a x < 1 := by
+    simp_rw [← notMem_mutuallySingularSetSlice]
+    exact fun x hx hx_mem => hs hx hx_mem
+  calc
+    ∫⁻ x in s, ↑(Real.toNNReal (1 - rnDerivAux κ (κ + η) a x)) *
+      (ENNReal.ofReal (rnDerivAux κ (κ + η) a x) /
+        ENNReal.ofReal (1 - rnDerivAux κ (κ + η) a x)) ∂(κ + η) a
+  _ = ∫⁻ x in s, ENNReal.ofReal (rnDerivAux κ (κ + η) a x) ∂(κ + η) a := by
+      refine setLIntegral_congr_fun hsm (fun x hx => ?_)
+      rw [ofNNReal_toNNReal]; rw [← ENNReal.ofReal_div_of_pos]; rw [div_eq_inv_mul]; rw [← ENNReal.ofReal_mul]; rw [← mul_assoc]; rw [mul_inv_cancel₀]; rw [one_mul]
+      · rw [ne_eq, sub_eq_zero]
+        exact (hs' x hx).ne'
+      · simp [(hs' x hx).le]
+      · simp [hs' x hx]
+  _ = κ a s := setLIntegral_rnDerivAux κ η a hsm
 
 Depends on / 依赖: Kernel, Kernel.withDensity_apply, Real.toNNReal, fun_prop, hx_mem, measurable_rnDeriv, notMem_mutuallySingularSetSlice, rnDeriv, rnDerivAux, rnDeriv_def, rotate_left, simp_rw, toNNReal, withDensity, withDensity_apply, withDensity_mul, withDensity_one_sub_rnDerivAux
 -/
@@ -984,7 +1136,9 @@ lemma rnDeriv_add_singularPart
   simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add]
   have hm := measurableSet_mutuallySingularSetSlice κ η a
   simp only [measure_union (Disjoint.mono inter_subset_right le_rfl disjoint_sdiff_right)
-    (hs.diff 
+    (hs.diff hm)]
+  rw [singularPart_of_subset_mutuallySingularSetSlice (hs.inter hm) inter_subset_right]; rw [singularPart_of_subset_compl_mutuallySingularSetSlice (sdiff_subset_iff.mpr (by simp))]; rw [add_zero]; rw [withDensity_rnDeriv_of_subset_mutuallySingularSetSlice inter_subset_right]; rw [zero_add]; rw [withDensity_rnDeriv_of_subset_compl_mutuallySingularSetSlice (hs.diff hm)
+      (sdiff_subset_iff.mpr (by simp))]; rw [add_comm]
 
 中文:
 引理 rnDeriv_add_singularPart
@@ -995,7 +1149,9 @@ lemma rnDeriv_add_singularPart
   simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add]
   have hm := measurableSet_mutuallySingularSetSlice κ η a
   simp only [measure_union (Disjoint.mono inter_subset_right le_rfl disjoint_sdiff_right)
-    (hs.diff 
+    (hs.diff hm)]
+  rw [singularPart_of_subset_mutuallySingularSetSlice (hs.inter hm) inter_subset_right]; rw [singularPart_of_subset_compl_mutuallySingularSetSlice (sdiff_subset_iff.mpr (by simp))]; rw [add_zero]; rw [withDensity_rnDeriv_of_subset_mutuallySingularSetSlice inter_subset_right]; rw [zero_add]; rw [withDensity_rnDeriv_of_subset_compl_mutuallySingularSetSlice (hs.diff hm)
+      (sdiff_subset_iff.mpr (by simp))]; rw [add_comm]
 
 Depends on / 依赖: Disjoint, Disjoint.mono, FunLike, FunLike.coe_add, Measure, Measure.coe_add, Pi.add_apply, add_apply, add_zero, coe_add, disjoint_sdiff_right, hs.diff, hs.inter, inter_subset_right, inter_union_sdiff, le_rfl, measurableSet_mutuallySingularSetSlice, measure_union, mutuallySingularSetSlice, sdiff_subset_iff
 -/
@@ -1021,7 +1177,7 @@ lemma singularPart_eq_zero_iff_apply_eq_zero
   proof: by
   rw [← Measure.measure_univ_eq_zero]
   have : univ = (mutuallySingularSetSlice κ η a) union (mutuallySingularSetSlice κ η a)ᶜ := by simp
-  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [singularPart_compl_mutuallySingularSetSlice]; rw
+  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [singularPart_compl_mutuallySingularSetSlice]; rw [add_zero]
 
 中文:
 引理 singularPart_eq_zero_iff_apply_eq_zero
@@ -1029,7 +1185,7 @@ lemma singularPart_eq_zero_iff_apply_eq_zero
   证明: by
   rw [← Measure.measure_univ_eq_zero]
   have : univ = (mutuallySingularSetSlice κ η a) union (mutuallySingularSetSlice κ η a)ᶜ := by simp
-  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [singularPart_compl_mutuallySingularSetSlice]; rw
+  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [singularPart_compl_mutuallySingularSetSlice]; rw [add_zero]
 
 Depends on / 依赖: Measure, Measure.measure_univ_eq_zero, add_zero, disjoint_compl_right, measurableSet_mutuallySingularSetSlice, measure_union, measure_univ_eq_zero, mutuallySingularSetSlice, singularPart_compl_mutuallySingularSetSlice
 -/
@@ -1049,7 +1205,7 @@ lemma withDensity_rnDeriv_eq_zero_iff_apply_eq_zero
   proof: by
   rw [← Measure.measure_univ_eq_zero]
   have : univ = (mutuallySingularSetSlice κ η a) union (mutuallySingularSetSlice κ η a)ᶜ := by simp
-  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [withDensity_rnDeriv_mutuallySingularSetSlice]; r
+  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [withDensity_rnDeriv_mutuallySingularSetSlice]; rw [zero_add]
 
 中文:
 引理 withDensity_rnDeriv_eq_zero_iff_apply_eq_zero
@@ -1057,7 +1213,7 @@ lemma withDensity_rnDeriv_eq_zero_iff_apply_eq_zero
   证明: by
   rw [← Measure.measure_univ_eq_zero]
   have : univ = (mutuallySingularSetSlice κ η a) union (mutuallySingularSetSlice κ η a)ᶜ := by simp
-  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [withDensity_rnDeriv_mutuallySingularSetSlice]; r
+  rw [this]; rw [measure_union disjoint_compl_right (measurableSet_mutuallySingularSetSlice κ η a).compl]; rw [withDensity_rnDeriv_mutuallySingularSetSlice]; rw [zero_add]
 
 Depends on / 依赖: Measure, Measure.measure_univ_eq_zero, disjoint_compl_right, measurableSet_mutuallySingularSetSlice, measure_union, measure_univ_eq_zero, mutuallySingularSetSlice, withDensity_rnDeriv_mutuallySingularSetSlice, zero_add
 -/
@@ -1082,7 +1238,7 @@ lemma singularPart_eq_zero_iff_absolutelyContinuous
     exact withDensity_absolutelyContinuous _ _
   rw [Measure.AbsolutelyContinuous.add_left_iff] at h
   exact Measure.eq_zero_of_absolutelyContinuous_of_mutuallySingular h.2
-    (m
+    (mutuallySingular_singularPart _ _ _)
 
 中文:
 引理 singularPart_eq_zero_iff_absolutelyContinuous
@@ -1094,7 +1250,7 @@ lemma singularPart_eq_zero_iff_absolutelyContinuous
     exact withDensity_absolutelyContinuous _ _
   rw [Measure.AbsolutelyContinuous.add_left_iff] at h
   exact Measure.eq_zero_of_absolutelyContinuous_of_mutuallySingular h.2
-    (m
+    (mutuallySingular_singularPart _ _ _)
 
 Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.add_left_iff, Measure.eq_zero_of_absolutelyContinuous_of_mutuallySingular, add_apply, add_left_iff, add_zero, conv_rhs, eq_zero_of_absolutelyContinuous_of_mutuallySingular, mutuallySingular_singularPart, rnDeriv_add_singularPart, withDensity_absolutelyContinuous
 -/
@@ -1122,7 +1278,8 @@ lemma withDensity_rnDeriv_eq_zero_iff_mutuallySingular
     exact mutuallySingular_singularPart _ _ _
   rw [Measure.MutuallySingular.add_left_iff] at h
   rw [← Measure.MutuallySingular.self_iff]
-  exact h.1.mono_ac Measure.AbsolutelyCo
+  exact h.1.mono_ac Measure.AbsolutelyContinuous.rfl
+    (withDensity_absolutelyContinuous (κ := η) (rnDeriv κ η) a)
 
 中文:
 引理 withDensity_rnDeriv_eq_zero_iff_mutuallySingular
@@ -1134,7 +1291,8 @@ lemma withDensity_rnDeriv_eq_zero_iff_mutuallySingular
     exact mutuallySingular_singularPart _ _ _
   rw [Measure.MutuallySingular.add_left_iff] at h
   rw [← Measure.MutuallySingular.self_iff]
-  exact h.1.mono_ac Measure.AbsolutelyCo
+  exact h.1.mono_ac Measure.AbsolutelyContinuous.rfl
+    (withDensity_absolutelyContinuous (κ := η) (rnDeriv κ η) a)
 
 Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.rfl, Measure.MutuallySingular.add_left_iff, Measure.MutuallySingular.self_iff, MutuallySingular, add_apply, add_left_iff, conv_rhs, mono_ac, mutuallySingular_singularPart, rnDeriv, rnDeriv_add_singularPart, self_iff, withDensity_absolutelyContinuous, zero_add
 -/
@@ -1162,7 +1320,9 @@ lemma singularPart_eq_zero_iff_measure_eq_zero
   specialize h_eq_add a (mutuallySingularSetSlice κ η a)
     (measurableSet_mutuallySingularSetSlice κ η a)
   simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add,
-    withDensity_rnDeriv_
+    withDensity_rnDeriv_mutuallySingularSetSlice κ η, zero_add] at h_eq_add
+  rw [← h_eq_add]
+  exact singularPart_eq_zero_iff_apply_eq_zero κ η a
 
 中文:
 引理 singularPart_eq_zero_iff_measure_eq_zero
@@ -1173,7 +1333,9 @@ lemma singularPart_eq_zero_iff_measure_eq_zero
   specialize h_eq_add a (mutuallySingularSetSlice κ η a)
     (measurableSet_mutuallySingularSetSlice κ η a)
   simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add,
-    withDensity_rnDeriv_
+    withDensity_rnDeriv_mutuallySingularSetSlice κ η, zero_add] at h_eq_add
+  rw [← h_eq_add]
+  exact singularPart_eq_zero_iff_apply_eq_zero κ η a
 
 Depends on / 依赖: FunLike, FunLike.coe_add, Kernel, Kernel.ext_iff, Measure, Measure.coe_add, Measure.ext_iff, Pi.add_apply, add_apply, coe_add, ext_iff, h_eq_add, measurableSet_mutuallySingularSetSlice, mutuallySingularSetSlice, rnDeriv_add_singularPart, simp_rw, singularPart_eq_zero_iff_apply_eq_zero, specialize, withDensity_rnDeriv_mutuallySingularSetSlice, zero_add
 -/
@@ -1201,7 +1363,9 @@ lemma withDensity_rnDeriv_eq_zero_iff_measure_eq_zero
   specialize h_eq_add a (mutuallySingularSetSlice κ η a)ᶜ
     (measurableSet_mutuallySingularSetSlice κ η a).compl
   simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add,
-    singularPart_
+    singularPart_compl_mutuallySingularSetSlice κ η, add_zero] at h_eq_add
+  rw [← h_eq_add]
+  exact withDensity_rnDeriv_eq_zero_iff_apply_eq_zero κ η a
 
 中文:
 引理 withDensity_rnDeriv_eq_zero_iff_measure_eq_zero
@@ -1212,7 +1376,9 @@ lemma withDensity_rnDeriv_eq_zero_iff_measure_eq_zero
   specialize h_eq_add a (mutuallySingularSetSlice κ η a)ᶜ
     (measurableSet_mutuallySingularSetSlice κ η a).compl
   simp only [FunLike.coe_add, Pi.add_apply, Measure.coe_add,
-    singularPart_
+    singularPart_compl_mutuallySingularSetSlice κ η, add_zero] at h_eq_add
+  rw [← h_eq_add]
+  exact withDensity_rnDeriv_eq_zero_iff_apply_eq_zero κ η a
 
 Depends on / 依赖: FunLike, FunLike.coe_add, Kernel, Kernel.ext_iff, Measure, Measure.coe_add, Measure.ext_iff, Pi.add_apply, add_apply, add_zero, coe_add, ext_iff, h_eq_add, measurableSet_mutuallySingularSetSlice, mutuallySingularSetSlice, rnDeriv_add_singularPart, simp_rw, singularPart_compl_mutuallySingularSetSlice, specialize, withDensity_rnDeriv_eq_zero_iff_apply_eq_zero
 -/

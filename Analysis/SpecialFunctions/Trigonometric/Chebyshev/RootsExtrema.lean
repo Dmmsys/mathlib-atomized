@@ -72,7 +72,11 @@ theorem abs_eval_T_real_le_one
   #adaptation_note /-- Before nightly-2026-04-07, this was just
   `grind [eval_T_real_mem_Icc]`. `grind`'s e-matching now keeps the
   `Polynomial.eval` produced by the lemma (which uses `instCommSemiring.toSemiring`)
-  and the `Polynomial.eval` propagated by abs unfolding (which uses `Real.semiri
+  and the `Polynomial.eval` propagated by abs unfolding (which uses `Real.semiring`)
+  as distinct atoms, even though they are `rfl`-equal, so the contradiction is
+  never found. -/
+  have h := eval_T_real_mem_Icc n (Set.mem_Icc.mpr (abs_le.mp hx))
+  exact abs_le.mpr (Set.mem_Icc.mp h)
 
 中文:
 定理 abs_eval_T_real_le_one
@@ -81,7 +85,11 @@ theorem abs_eval_T_real_le_one
   #adaptation_note /-- Before nightly-2026-04-07, this was just
   `grind [eval_T_real_mem_Icc]`. `grind`'s e-matching now keeps the
   `Polynomial.eval` produced by the lemma (which uses `instCommSemiring.toSemiring`)
-  and the `Polynomial.eval` propagated by abs unfolding (which uses `Real.semiri
+  and the `Polynomial.eval` propagated by abs unfolding (which uses `Real.semiring`)
+  as distinct atoms, even though they are `rfl`-equal, so the contradiction is
+  never found. -/
+  have h := eval_T_real_mem_Icc n (Set.mem_Icc.mpr (abs_le.mp hx))
+  exact abs_le.mpr (Set.mem_Icc.mp h)
 
 Depends on / 依赖: Before, Polynomial, Polynomial.eval, Real.semiring, Set.mem_Icc.mp, Set.mem_Icc.mpr, abs_le, abs_le.mp, abs_le.mpr, adaptation_note, distinct, eval_T_real_mem_Icc, instCommSemiring, instCommSemiring.toSemiring, matching, mem_Icc, nightly, produced, propagated, semiring
 -/
@@ -293,7 +301,19 @@ theorem abs_eval_T_real_eq_one_iff
     have hx := (abs_eval_T_real_le_one_iff (Nat.cast_ne_zero.mpr hn) x).mpr (le_of_eq hTx)
     rw [← cos_arccos (neg_le_of_abs_le hx) (le_of_max_le_left hx)]; rw [T_real_cos]; rw [Int.cast_natCast]; rw [abs_cos_eq_one_iff] at hTx
     obtain ⟨k, hk⟩ := hTx
-    have hk' 
+    have hk' : k = n * (arccos x / π) := by simpa [field]
+    lift k to Nat using (by rw [← Int.cast_nonneg_iff (R := Real), hk']; positivity [arccos_nonneg x])
+    simp only [Int.cast_natCast] at hk hk'
+    have hkn : (k : Real) <= n := by
+      rw [← mul_one (n : Real)]; rw [hk']
+      gcongr
+      exact div_le_one_of_le₀ (arccos_le_pi x) (by positivity)
+    refine ⟨k, by simpa using hkn, ?_⟩
+    convert! congr(cos ($hk.symm / n))
+    rw [mul_div_cancel_left₀ _ (by simpa)]; rw [cos_arccos (by grind) (by grind)]
+  · rintro ⟨k, hk, rfl⟩
+    rw [T_real_cos]; rw [abs_cos_eq_one_iff]
+    exact ⟨k, by simp [field]⟩
 
 中文:
 定理 abs_eval_T_real_eq_one_iff
@@ -304,7 +324,19 @@ theorem abs_eval_T_real_eq_one_iff
     have hx := (abs_eval_T_real_le_one_iff (Nat.cast_ne_zero.mpr hn) x).mpr (le_of_eq hTx)
     rw [← cos_arccos (neg_le_of_abs_le hx) (le_of_max_le_left hx)]; rw [T_real_cos]; rw [Int.cast_natCast]; rw [abs_cos_eq_one_iff] at hTx
     obtain ⟨k, hk⟩ := hTx
-    have hk' 
+    have hk' : k = n * (arccos x / π) := by simpa [field]
+    lift k to Nat using (by rw [← Int.cast_nonneg_iff (R := Real), hk']; positivity [arccos_nonneg x])
+    simp only [Int.cast_natCast] at hk hk'
+    have hkn : (k : Real) <= n := by
+      rw [← mul_one (n : Real)]; rw [hk']
+      gcongr
+      exact div_le_one_of_le₀ (arccos_le_pi x) (by positivity)
+    refine ⟨k, by simpa using hkn, ?_⟩
+    convert! congr(cos ($hk.symm / n))
+    rw [mul_div_cancel_left₀ _ (by simpa)]; rw [cos_arccos (by grind) (by grind)]
+  · rintro ⟨k, hk, rfl⟩
+    rw [T_real_cos]; rw [abs_cos_eq_one_iff]
+    exact ⟨k, by simp [field]⟩
 
 Depends on / 依赖: Int.cast_natCast, Int.cast_nonneg_iff, Nat.cast_ne_zero.mpr, T_real_cos, abs_cos_eq_one_iff, abs_eval_T_real_le_one_iff, arccos, arccos_nonneg, cast_natCast, cast_ne_zero, cast_nonneg_iff, cos_arccos, le_of_eq, le_of_max_le_left, neg_le_of_abs_le
 -/
@@ -370,7 +402,10 @@ theorem eval_T_real_eq_one_iff
     use k
     refine ⟨hk₁, ?_, hk₂⟩
     rw [hk₂]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.cast_negOnePow_natCast] at hx
-    exact (neg_one_pow_eq_on
+    exact (neg_one_pow_eq_one_iff_even (by grind)).mp hx
+  · rintro ⟨k, hk₁, hk₂, hx⟩
+    rw [hx]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.negOnePow_even k ((Int.even_coe_nat k).mpr hk₂)]
+    norm_cast
 
 中文:
 定理 eval_T_real_eq_one_iff
@@ -383,7 +418,10 @@ theorem eval_T_real_eq_one_iff
     use k
     refine ⟨hk₁, ?_, hk₂⟩
     rw [hk₂]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.cast_negOnePow_natCast] at hx
-    exact (neg_one_pow_eq_on
+    exact (neg_one_pow_eq_one_iff_even (by grind)).mp hx
+  · rintro ⟨k, hk₁, hk₂, hx⟩
+    rw [hx]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.negOnePow_even k ((Int.even_coe_nat k).mpr hk₂)]
+    norm_cast
 
 Depends on / 依赖: Int.cast_negOnePow_natCast, Int.even_coe_nat, Int.negOnePow_even, abs_eq_abs, abs_eq_abs.mpr, abs_eval_T_real_eq_one_iff, abs_one, cast_negOnePow_natCast, eval_T_real_cos_int_mul_pi_div, even_coe_nat, negOnePow_even, neg_one_pow_eq_one_iff_even
 -/
@@ -415,7 +453,10 @@ theorem eval_T_real_eq_neg_one_iff
     use k
     refine ⟨hk₁, ?_, hk₂⟩
     rw [hk₂]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.cast_negOnePow_natCast] at hx
-    exac
+    exact (neg_one_pow_eq_neg_one_iff_odd (by grind)).mp hx
+  · rintro ⟨k, hk₁, hk₂, hx⟩
+    rw [hx]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.negOnePow_odd k ((Int.odd_coe_nat k).mpr hk₂)]
+    norm_cast
 
 中文:
 定理 eval_T_real_eq_neg_one_iff
@@ -428,7 +469,10 @@ theorem eval_T_real_eq_neg_one_iff
     use k
     refine ⟨hk₁, ?_, hk₂⟩
     rw [hk₂]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.cast_negOnePow_natCast] at hx
-    exac
+    exact (neg_one_pow_eq_neg_one_iff_odd (by grind)).mp hx
+  · rintro ⟨k, hk₁, hk₂, hx⟩
+    rw [hx]; rw [eval_T_real_cos_int_mul_pi_div hn]; rw [Int.negOnePow_odd k ((Int.odd_coe_nat k).mpr hk₂)]
+    norm_cast
 
 Depends on / 依赖: Int.cast_negOnePow_natCast, Int.negOnePow_odd, Int.odd_coe_nat, abs_eq_abs, abs_eq_abs.mpr, abs_eval_T_real_eq_one_iff, abs_neg, abs_one, cast_negOnePow_natCast, eval_T_real_cos_int_mul_pi_div, negOnePow_odd, neg_one_pow_eq_neg_one_iff_odd, odd_coe_nat
 -/
@@ -500,7 +544,8 @@ theorem roots_T_real
     use k
     field_simp
     norm_cast
-  · rw [Finset.card_image_of_injOn, Finset.card_range, degree_T, I
+  · rw [Finset.card_image_of_injOn, Finset.card_range, degree_T, Int.natAbs_natCast]
+    exact (Finset.range n).nodup_map_iff_injOn.mp (roots_T_real_nodup n)
 
 中文:
 定理 roots_T_real
@@ -514,7 +559,8 @@ theorem roots_T_real
     use k
     field_simp
     norm_cast
-  · rw [Finset.card_image_of_injOn, Finset.card_range, degree_T, I
+  · rw [Finset.card_image_of_injOn, Finset.card_range, degree_T, Int.natAbs_natCast]
+    exact (Finset.range n).nodup_map_iff_injOn.mp (roots_T_real_nodup n)
 
 Depends on / 依赖: Finset, Finset.card_image_of_injOn, Finset.card_range, Finset.mem_image.mp, Finset.range, Int.natAbs_natCast, T_real_cos, card_image_of_injOn, card_range, cos_eq_zero_iff, degree_T, mem_image, natAbs_natCast, nodup_map_iff_injOn, nodup_map_iff_injOn.mp, roots_T_real_nodup, roots_eq_of_degree_eq_card
 -/
@@ -613,7 +659,17 @@ theorem roots_U_real
   refine roots_eq_of_degree_eq_card (fun x hx => ?_) ?_
   · obtain ⟨k, hk, hx⟩ := Finset.mem_image.mp hx
     suffices (U Real n).eval x * sin ((k + 1) * π / (n + 1)) = 0 by
-      refine (mul_eq_zero_iff_right (ne_of_gt (sin_pos_of_pos_of_lt_pi (by positivity) ?_)
+      refine (mul_eq_zero_iff_right (ne_of_gt (sin_pos_of_pos_of_lt_pi (by positivity) ?_))).mp this
+      field_simp
+      norm_cast
+      grind
+    rw [← hx]; rw [U_real_cos]; rw [sin_eq_zero_iff]
+    use k + 1
+    field_simp
+    norm_cast
+    ring
+  · rw [Finset.card_image_of_injOn, Finset.card_range, degree_U_natCast]
+    exact (Finset.range n).nodup_map_iff_injOn.mp (roots_U_real_nodup n)
 
 中文:
 定理 roots_U_real
@@ -624,7 +680,17 @@ theorem roots_U_real
   refine roots_eq_of_degree_eq_card (fun x hx => ?_) ?_
   · obtain ⟨k, hk, hx⟩ := Finset.mem_image.mp hx
     suffices (U Real n).eval x * sin ((k + 1) * π / (n + 1)) = 0 by
-      refine (mul_eq_zero_iff_right (ne_of_gt (sin_pos_of_pos_of_lt_pi (by positivity) ?_)
+      refine (mul_eq_zero_iff_right (ne_of_gt (sin_pos_of_pos_of_lt_pi (by positivity) ?_))).mp this
+      field_simp
+      norm_cast
+      grind
+    rw [← hx]; rw [U_real_cos]; rw [sin_eq_zero_iff]
+    use k + 1
+    field_simp
+    norm_cast
+    ring
+  · rw [Finset.card_image_of_injOn, Finset.card_range, degree_U_natCast]
+    exact (Finset.range n).nodup_map_iff_injOn.mp (roots_U_real_nodup n)
 
 Depends on / 依赖: Finset, Finset.card_image_of_injOn, Finset.card_range, Finset.mem_image.mp, Finset.range, U_real_cos, card_image_of_injOn, card_range, degree_U_natCast, mem_image, mul_eq_zero_iff_right, ne_of_gt, roots_eq_of_degree_eq_card, sin_eq_zero_iff, sin_pos_of_pos_of_lt_pi
 -/
@@ -686,7 +752,12 @@ theorem isLocalMax_T_real
   refine eventually_nhds_iff.mpr ⟨Set.Ioo (-1) 1, ?_, isOpen_Ioo, ?_, ?_⟩
   · intro x hx
     dsimp
-    rw [(eva
+    rw [(eval_T_real_eq_one_iff hn _).mpr ⟨k]; rw [le_of_lt hk₁]; rw [hk₂]; rw [rfl⟩]
+    exact (abs_le.mp (abs_eval_T_real_le_one n (by grind))).2
+  · rw [← cos_pi]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_of_lt zero_lt) (le_refl π) lt_pi
+  · rw [← cos_zero]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_refl 0) (le_of_lt lt_pi) zero_lt
 
 中文:
 定理 isLocalMax_T_real
@@ -699,7 +770,12 @@ theorem isLocalMax_T_real
   refine eventually_nhds_iff.mpr ⟨Set.Ioo (-1) 1, ?_, isOpen_Ioo, ?_, ?_⟩
   · intro x hx
     dsimp
-    rw [(eva
+    rw [(eval_T_real_eq_one_iff hn _).mpr ⟨k]; rw [le_of_lt hk₁]; rw [hk₂]; rw [rfl⟩]
+    exact (abs_le.mp (abs_eval_T_real_le_one n (by grind))).2
+  · rw [← cos_pi]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_of_lt zero_lt) (le_refl π) lt_pi
+  · rw [← cos_zero]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_refl 0) (le_of_lt lt_pi) zero_lt
 
 Depends on / 依赖: Nat.cast_ne_zero.mpr, Set.Ioo, abs_eval_T_real_le_one, abs_le, abs_le.mp, cast_ne_zero, cos_lt_cos_of_nonneg_of_le_pi, cos_pi, eval_T_real_eq_one_iff, eventually_nhds_iff, eventually_nhds_iff.mpr, isOpen_Ioo, le_of_lt, le_refl, lt_pi, zero_lt
 -/
@@ -732,7 +808,14 @@ theorem isLocalMin_T_real
     k * π / n < n * π / n := by gcongr
     _ = π := mul_div_cancel_left₀ _ (Nat.cast_ne_zero.mpr hn)
   refine eventually_nhds_iff.mpr ⟨Set.Ioo (-1) 1, ?_, isOpen_Ioo, ?_, ?_⟩
-  · i
+  · intro x hx
+    dsimp
+    rw [(eval_T_real_eq_neg_one_iff hn _).mpr ⟨k]; rw [le_of_lt hk₁]; rw [hk₂]; rw [rfl⟩]
+    refine (abs_le.mp (abs_eval_T_real_le_one n (by grind))).1
+  · rw [← cos_pi]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_of_lt zero_lt) (le_refl π) lt_pi
+  · rw [← cos_zero]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_refl 0) (le_of_lt lt_pi) zero_lt
 
 中文:
 定理 isLocalMin_T_real
@@ -744,7 +827,14 @@ theorem isLocalMin_T_real
     k * π / n < n * π / n := by gcongr
     _ = π := mul_div_cancel_left₀ _ (Nat.cast_ne_zero.mpr hn)
   refine eventually_nhds_iff.mpr ⟨Set.Ioo (-1) 1, ?_, isOpen_Ioo, ?_, ?_⟩
-  · i
+  · intro x hx
+    dsimp
+    rw [(eval_T_real_eq_neg_one_iff hn _).mpr ⟨k]; rw [le_of_lt hk₁]; rw [hk₂]; rw [rfl⟩]
+    refine (abs_le.mp (abs_eval_T_real_le_one n (by grind))).1
+  · rw [← cos_pi]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_of_lt zero_lt) (le_refl π) lt_pi
+  · rw [← cos_zero]
+    exact cos_lt_cos_of_nonneg_of_le_pi (le_refl 0) (le_of_lt lt_pi) zero_lt
 
 Depends on / 依赖: Nat.cast_ne_zero.mpr, Set.Ioo, abs_eval_T_real_le_one, abs_le, abs_le.mp, cast_ne_zero, cos_lt_cos_of_nonneg_of_le_pi, cos_pi, eval_T_real_eq_neg_one_iff, eventually_nhds_iff, eventually_nhds_iff.mpr, isOpen_Ioo, k_pos, le_o, le_of_lt, lt_pi, zero_lt
 -/
@@ -804,7 +894,18 @@ theorem isLocalExtr_T_real_iff
     replace hx := hx.deriv_eq_zero
     rw [Polynomial.deriv]; rw [T_derivative_eq_U]; rw [eval_mul]; rw [Int.cast_natCast]; rw [eval_natCast]; rw [mul_eq_zero_iff_left (by aesop)] at hx
     replace hx : x in (U Real (n - 1)).roots :=
-      (mem_roots (degree_ne_bot.mp (
+      (mem_roots (degree_ne_bot.mp (ne_of_eq_of_ne (by grind [degree_U_natCast])
+        (WithBot.natCast_ne_bot (n - 1))))).mpr hx
+    rw [show (n - 1 : Int) = (n - 1 : Nat) by grind]; rw [roots_U_real]; rw [Finset.mem_val] at hx
+    obtain ⟨k, hk₁, hx⟩ := Finset.mem_image.mp hx
+    refine ⟨k + 1, Finset.mem_Ioo.mpr ⟨k.zero_lt_succ, by grind⟩, ?_⟩
+    rw [← hx]
+    congr <;> norm_cast
+    exact Nat.sub_add_cancel (Nat.one_le_of_lt hn)
+  · rintro ⟨k, hk, hx⟩
+    rw [hx]
+    exact isLocalExtr_T_real (Nat.ne_zero_of_lt hn)
+      (Finset.mem_Ioo.mp hk).1 (Finset.mem_Ioo.mp hk).2
 
 中文:
 定理 isLocalExtr_T_real_iff
@@ -815,7 +916,18 @@ theorem isLocalExtr_T_real_iff
     replace hx := hx.deriv_eq_zero
     rw [Polynomial.deriv]; rw [T_derivative_eq_U]; rw [eval_mul]; rw [Int.cast_natCast]; rw [eval_natCast]; rw [mul_eq_zero_iff_left (by aesop)] at hx
     replace hx : x in (U Real (n - 1)).roots :=
-      (mem_roots (degree_ne_bot.mp (
+      (mem_roots (degree_ne_bot.mp (ne_of_eq_of_ne (by grind [degree_U_natCast])
+        (WithBot.natCast_ne_bot (n - 1))))).mpr hx
+    rw [show (n - 1 : Int) = (n - 1 : Nat) by grind]; rw [roots_U_real]; rw [Finset.mem_val] at hx
+    obtain ⟨k, hk₁, hx⟩ := Finset.mem_image.mp hx
+    refine ⟨k + 1, Finset.mem_Ioo.mpr ⟨k.zero_lt_succ, by grind⟩, ?_⟩
+    rw [← hx]
+    congr <;> norm_cast
+    exact Nat.sub_add_cancel (Nat.one_le_of_lt hn)
+  · rintro ⟨k, hk, hx⟩
+    rw [hx]
+    exact isLocalExtr_T_real (Nat.ne_zero_of_lt hn)
+      (Finset.mem_Ioo.mp hk).1 (Finset.mem_Ioo.mp hk).2
 
 Depends on / 依赖: Finset, Finset.mem_image, Finset.mem_val, Int.cast_natCast, Polynomial, Polynomial.deriv, T_derivative_eq_U, WithBot, WithBot.natCast_ne_bot, cast_natCast, degree_U_natCast, degree_ne_bot, degree_ne_bot.mp, deriv_eq_zero, eval_mul, eval_natCast, hx.deriv_eq_zero, mem_image, mem_roots, mem_val
 -/
@@ -926,7 +1038,16 @@ theorem isExtrOn_T_real_iff
     apply eq_of_le_of_ge (abs_eval_T_real_le_one n (by grind))
     refine h.elim (fun h => ?_) (fun h => ?_)
     · refine le_abs.mpr (.inr (le_neg_of_le_neg ?_))
-      have := isMinOn_iff.mp h (cos (1 * π / n)) (by grind [ab
+      have := isMinOn_iff.mp h (cos (1 * π / n)) (by grind [abs_cos_le_one])
+      rw [(eval_T_real_eq_neg_one_iff hn (cos (1 * π / n))).mpr ⟨1]; rw [Nat.one_le_iff_ne_zero.mpr hn]; rw [by simp⟩] at this
+      assumption
+    · refine le_abs.mpr (.inl ?_)
+      have := isMaxOn_iff.mp h (cos (0 * π / n)) (by simp)
+      rw [(eval_T_real_eq_one_iff hn _).mpr ⟨0]; rw [by simp]; rw [by simp⟩] at this
+      assumption
+  · rintro ⟨k, hk, hx⟩
+    rw [hx]
+    exact isExtrOn_T_real hn hk
 
 中文:
 定理 isExtrOn_T_real_iff
@@ -938,7 +1059,16 @@ theorem isExtrOn_T_real_iff
     apply eq_of_le_of_ge (abs_eval_T_real_le_one n (by grind))
     refine h.elim (fun h => ?_) (fun h => ?_)
     · refine le_abs.mpr (.inr (le_neg_of_le_neg ?_))
-      have := isMinOn_iff.mp h (cos (1 * π / n)) (by grind [ab
+      have := isMinOn_iff.mp h (cos (1 * π / n)) (by grind [abs_cos_le_one])
+      rw [(eval_T_real_eq_neg_one_iff hn (cos (1 * π / n))).mpr ⟨1]; rw [Nat.one_le_iff_ne_zero.mpr hn]; rw [by simp⟩] at this
+      assumption
+    · refine le_abs.mpr (.inl ?_)
+      have := isMaxOn_iff.mp h (cos (0 * π / n)) (by simp)
+      rw [(eval_T_real_eq_one_iff hn _).mpr ⟨0]; rw [by simp]; rw [by simp⟩] at this
+      assumption
+  · rintro ⟨k, hk, hx⟩
+    rw [hx]
+    exact isExtrOn_T_real hn hk
 
 Depends on / 依赖: Nat.one_le_iff_ne_zero.mpr, abs_cos_le_one, abs_eval_T_real_eq_one_iff, abs_eval_T_real_le_one, eq_of_le_of_ge, eval_T_real_eq_neg_one_iff, h.elim, isMaxOn_iff, isMaxOn_iff.mp, isMinOn_iff, isMinOn_iff.mp, le_abs, le_abs.mpr, le_neg_of_le_neg, one_le_iff_ne_zero
 -/
@@ -973,7 +1103,16 @@ theorem irrational_of_isRoot_T_real
   obtain ⟨k, hk₁, hk₂⟩ := Finset.mem_image.mp hroot
   have hn : n != 0 := by grind
   suffices Irrational (cos ((Rat.divInt (2 * k + 1) (2 * n)) * π)) by
-    rw [← hk₂]; convert! this using 2; push_cast; field_s
+    rw [← hk₂]; convert! this using 2; push_cast; field_simp
+  apply irrational_cos_rat_mul_pi
+  contrapose! hnz
+  have : (Rat.divInt (2 * k + 1) (2 * n)).den = 2 * (n / n.gcd (2 * k + 1)) := calc
+    _ = 2 * n / (2 * n).gcd (2 * k + 1) := by rw [Rat.den_divInt]; norm_cast; simp [hn]
+    _ = _ := by rw [Nat.Coprime.gcd_mul_left_cancel n (by simp),
+      Nat.mul_div_assoc _ (Nat.gcd_dvd_left ..)]
+  have hn : 2 * k + 1 = n := Nat.eq_of_dvd_of_lt_two_mul (by simp) (Nat.gcd_eq_left_iff_dvd.mp <|
+    Nat.eq_of_dvd_of_div_eq_one (Nat.gcd_dvd_left ..) (by grind [Rat.den_pos])) (by grind)
+  rw_mod_cast [← hk₂, hn]; convert! cos_pi_div_two using 2; push_cast; field_simp
 
 中文:
 定理 irrational_of_isRoot_T_real
@@ -983,7 +1122,16 @@ theorem irrational_of_isRoot_T_real
   obtain ⟨k, hk₁, hk₂⟩ := Finset.mem_image.mp hroot
   have hn : n != 0 := by grind
   suffices Irrational (cos ((Rat.divInt (2 * k + 1) (2 * n)) * π)) by
-    rw [← hk₂]; convert! this using 2; push_cast; field_s
+    rw [← hk₂]; convert! this using 2; push_cast; field_simp
+  apply irrational_cos_rat_mul_pi
+  contrapose! hnz
+  have : (Rat.divInt (2 * k + 1) (2 * n)).den = 2 * (n / n.gcd (2 * k + 1)) := calc
+    _ = 2 * n / (2 * n).gcd (2 * k + 1) := by rw [Rat.den_divInt]; norm_cast; simp [hn]
+    _ = _ := by rw [Nat.Coprime.gcd_mul_left_cancel n (by simp),
+      Nat.mul_div_assoc _ (Nat.gcd_dvd_left ..)]
+  have hn : 2 * k + 1 = n := Nat.eq_of_dvd_of_lt_two_mul (by simp) (Nat.gcd_eq_left_iff_dvd.mp <|
+    Nat.eq_of_dvd_of_div_eq_one (Nat.gcd_dvd_left ..) (by grind [Rat.den_pos])) (by grind)
+  rw_mod_cast [← hk₂, hn]; convert! cos_pi_div_two using 2; push_cast; field_simp
 
 Depends on / 依赖: Finset, Finset.mem_image.mp, Finset.mem_val, Irrational, Rat.den_divInt, Rat.divInt, T_ne_zero, contrapose, convert, den_divInt, divInt, irrational_cos_rat_mul_pi, mem_image, mem_roots, mem_val, n.gcd, roots_T_real
 -/
@@ -1016,7 +1164,17 @@ theorem abs_iterate_derivative_T_real_le
   lift n to Nat using hn
   have := T_iterate_derivative_mem_span_T (R := Real) n k
   obtain ⟨f, hfsupp, hfderiv⟩ := Submodule.mem_span_set.mp this
-  replace hfderiv : ∑ p in f.support, f p • p = derivative^[k] (T Rea
+  replace hfderiv : ∑ p in f.support, f p • p = derivative^[k] (T Real n) := by rw [← hfderiv]; rfl
+  have hf (y : Real) :
+      ∑ p in f.support, f p • p.eval y = (derivative^[k] (T Real n)).eval y := by
+    rw [← hfderiv]; rw [Polynomial.eval_finsetSum]
+    simp_rw [Polynomial.eval_smul]
+  rw [← hf x]; rw [← hf 1]
+  grw [Finset.abs_sum_le_sum_abs]
+  refine Finset.sum_le_sum (fun i hi => ?_)
+  obtain ⟨m, hm, hi⟩ := (Set.mem_image ..).mp (hfsupp hi)
+  grw [abs_nsmul, ← hi, abs_eval_T_real_le_one m hx]
+  simp
 
 中文:
 定理 abs_iterate_derivative_T_real_le
@@ -1027,7 +1185,17 @@ theorem abs_iterate_derivative_T_real_le
   lift n to Nat using hn
   have := T_iterate_derivative_mem_span_T (R := Real) n k
   obtain ⟨f, hfsupp, hfderiv⟩ := Submodule.mem_span_set.mp this
-  replace hfderiv : ∑ p in f.support, f p • p = derivative^[k] (T Rea
+  replace hfderiv : ∑ p in f.support, f p • p = derivative^[k] (T Real n) := by rw [← hfderiv]; rfl
+  have hf (y : Real) :
+      ∑ p in f.support, f p • p.eval y = (derivative^[k] (T Real n)).eval y := by
+    rw [← hfderiv]; rw [Polynomial.eval_finsetSum]
+    simp_rw [Polynomial.eval_smul]
+  rw [← hf x]; rw [← hf 1]
+  grw [Finset.abs_sum_le_sum_abs]
+  refine Finset.sum_le_sum (fun i hi => ?_)
+  obtain ⟨m, hm, hi⟩ := (Set.mem_image ..).mp (hfsupp hi)
+  grw [abs_nsmul, ← hi, abs_eval_T_real_le_one m hx]
+  simp
 
 Depends on / 依赖: Polynomial, Polynomial.eval_finsetSum, Polynomial.eval_smul, Submodule, Submodule.mem_span_set.mp, T_iterate_derivative_mem_span_T, T_neg, convert, derivative, eval_finsetSum, eval_smul, f.support, hfderiv, hfsupp, mem_span_set, p.eval, replace, simp_rw, support
 -/

@@ -598,7 +598,11 @@ theorem append_insert
   change
     insert a (b :: t +-+ v)
       (Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (add i k))) =
-      Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (b :: t +-+ insert a
+      Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (b :: t +-+ insert a v i)
+  rw [← (Eq.recOn e' rfl :
+      fs (Eq.recOn e' (i.add k) : Fin2 ((n + k) + 1)) =
+        Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (i.add k)))]
+  simpa [IH] using Eq.recOn e' rfl
 
 中文:
 定理 append_insert
@@ -610,7 +614,11 @@ theorem append_insert
   change
     insert a (b :: t +-+ v)
       (Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (add i k))) =
-      Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (b :: t +-+ insert a
+      Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (b :: t +-+ insert a v i)
+  rw [← (Eq.recOn e' rfl :
+      fs (Eq.recOn e' (i.add k) : Fin2 ((n + k) + 1)) =
+        Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (i.add k)))]
+  simpa [IH] using Eq.recOn e' rfl
 
 Depends on / 依赖: Eq.recOn, Vector3, Vector3.recOn, congr_arg, i.add, insert
 -/
@@ -844,7 +852,8 @@ theorem vectorAllP_iff_forall
         ⟨fun ⟨pa, h⟩ i => by
           refine i.cases' ?_ ?_
           exacts [pa, h], fun h => ⟨?_, fun i => ?_⟩⟩
-    · 
+    · simpa using h fz
+    · simpa using h (fs i)
 
 中文:
 定理 vectorAllP_iff_对任意
@@ -858,7 +867,8 @@ theorem vectorAllP_iff_forall
         ⟨fun ⟨pa, h⟩ i => by
           refine i.cases' ?_ ?_
           exacts [pa, h], fun h => ⟨?_, fun i => ?_⟩⟩
-    · 
+    · simpa using h fz
+    · simpa using h (fs i)
 
 Depends on / 依赖: Fin2.elim0, and_congr_right, exacts, i.cases, v.recOn, vectorAllP_cons
 -/

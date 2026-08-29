@@ -60,7 +60,11 @@ definition evalOrdinalMul
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) * ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! * bn.natLit!)
+have : ($an * $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalMul $pa $pb (.refl $rn)))
+    | _, _ => throwError "not multiplication on ordinals"
 
 中文:
 定义 evalOrdinalMul
@@ -72,7 +76,11 @@ definition evalOrdinalMul
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) * ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! * bn.natLit!)
+have : ($an * $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalMul $pa $pb (.refl $rn)))
+    | _, _ => throwError "not multiplication on ordinals"
 -/
 def evalOrdinalMul : NormNumExt where
   eval {u α} e := do
@@ -172,7 +180,12 @@ definition evalOrdinalLE
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
       if an.natLit! <= bn.natLit! then
-    
+        have : decide ($an <= $bn) =Q true := ⟨⟩
+        pure (.isTrue q(isNat_ordinalLE_true $pa $pb $this))
+      else
+        have : decide ($an <= $bn) =Q false := ⟨⟩
+        pure (.isFalse q(isNat_ordinalLE_false $pa $pb $this))
+    | _, _ => throwError "not inequality on ordinals"
 
 中文:
 定义 evalOrdinalLE
@@ -185,7 +198,12 @@ definition evalOrdinalLE
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
       if an.natLit! <= bn.natLit! then
-    
+        have : decide ($an <= $bn) =Q true := ⟨⟩
+        pure (.isTrue q(isNat_ordinalLE_true $pa $pb $this))
+      else
+        have : decide ($an <= $bn) =Q false := ⟨⟩
+        pure (.isFalse q(isNat_ordinalLE_false $pa $pb $this))
+    | _, _ => throwError "not inequality on ordinals"
 -/
 def evalOrdinalLE : NormNumExt where
   eval {u α} e := do
@@ -219,7 +237,12 @@ definition evalOrdinalLT
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
       if an.natLit! < bn.natLit! then
-      
+        have : decide ($an < $bn) =Q true := ⟨⟩
+        pure (.isTrue q(isNat_ordinalLT_true $pa $pb $this))
+      else
+        have : decide ($an < $bn) =Q false := ⟨⟩
+        pure (.isFalse q(isNat_ordinalLT_false $pa $pb $this))
+    | _, _ => throwError "not strict inequality on ordinals"
 
 中文:
 定义 evalOrdinalLT
@@ -232,7 +255,12 @@ definition evalOrdinalLT
       let ⟨an, pa⟩ ← deriveNat a i
       let ⟨bn, pb⟩ ← deriveNat b i
       if an.natLit! < bn.natLit! then
-      
+        have : decide ($an < $bn) =Q true := ⟨⟩
+        pure (.isTrue q(isNat_ordinalLT_true $pa $pb $this))
+      else
+        have : decide ($an < $bn) =Q false := ⟨⟩
+        pure (.isFalse q(isNat_ordinalLT_false $pa $pb $this))
+    | _, _ => throwError "not strict inequality on ordinals"
 -/
 def evalOrdinalLT : NormNumExt where
   eval {u α} e := do
@@ -286,7 +314,11 @@ definition evalOrdinalSub
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) - ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! - bn.natLit!)
+have : ($an - $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalSub $pa $pb (.refl $rn)))
+    | _, _ => throwError "not subtration on ordinals"
 
 中文:
 定义 evalOrdinalSub
@@ -298,7 +330,11 @@ definition evalOrdinalSub
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) - ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! - bn.natLit!)
+have : ($an - $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalSub $pa $pb (.refl $rn)))
+    | _, _ => throwError "not subtration on ordinals"
 -/
 def evalOrdinalSub : NormNumExt where
   eval {u α} e := do
@@ -348,7 +384,11 @@ definition evalOrdinalDiv
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) / ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! / bn.natLit!)
+have : ($an / $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalDiv $pa $pb (.refl $rn)))
+    | _, _ => throwError "not division on ordinals"
 
 中文:
 定义 evalOrdinalDiv
@@ -360,7 +400,11 @@ definition evalOrdinalDiv
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) / ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! / bn.natLit!)
+have : ($an / $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalDiv $pa $pb (.refl $rn)))
+    | _, _ => throwError "not division on ordinals"
 
 Depends on / 依赖: CompactSpace, NormalSpace, NormalSpace.of_compactSpace_r1Space, R1Space, of_compactSpace_r1Space
 -/
@@ -414,7 +458,11 @@ definition evalOrdinalMod
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) % ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! % bn.natLit!)
+have : ($an % $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalMod $pa $pb (.refl $rn)))
+    | _, _ => throwError "not modulo on ordinals"
 
 中文:
 定义 evalOrdinalMod
@@ -426,7 +474,11 @@ definition evalOrdinalMod
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) % ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! % bn.natLit!)
+have : ($an % $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalMod $pa $pb (.refl $rn)))
+    | _, _ => throwError "not modulo on ordinals"
 
 Depends on / 依赖: NormalSpace, NormalSpace.of_regularSpace_secondCountableTopology, of_regularSpace_secondCountableTopology
 -/
@@ -476,7 +528,11 @@ definition evalOrdinalOPow
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
+have : ($an ^ $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalOPow $pa $pb (.refl $rn)))
+    | _, _ => throwError "not homogeneous power on ordinals"
 
 中文:
 定义 evalOrdinalOPow
@@ -488,7 +544,11 @@ definition evalOrdinalOPow
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Ordinal)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← d
+      let ⟨bn, pb⟩ ← deriveNat b i
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
+have : ($an ^ $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalOPow $pa $pb (.refl $rn)))
+    | _, _ => throwError "not homogeneous power on ordinals"
 
 Depends on / 依赖: T3Space, T4Space, T4Space.t3Space, t3Space
 -/
@@ -540,7 +600,11 @@ definition evalOrdinalNPow
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Nat)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriv
+      let ⟨bn, pb⟩ ← deriveNat b q(inferInstance)
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
+have : ($an ^ $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalNPow $pa $pb (.refl $rn)))
+    | _, _ => throwError "not natural power on ordinals"
 
 中文:
 定义 evalOrdinalNPow
@@ -552,7 +616,11 @@ definition evalOrdinalNPow
     | ~q(Ordinal.{u'}), ~q(($a : Ordinal) ^ ($b : Nat)) =>
       let i : Q(AddMonoidWithOne Ordinal.{u'}) := q(inferInstance)
       let ⟨an, pa⟩ ← deriveNat a i
-      let ⟨bn, pb⟩ ← deriv
+      let ⟨bn, pb⟩ ← deriveNat b q(inferInstance)
+      have rn : Q(Nat) := mkRawNatLit (an.natLit! ^ bn.natLit!)
+have : ($an ^ $bn) =Q rn := ⟨⟩
+      pure (.isNat i rn q(isNat_ordinalNPow $pa $pb (.refl $rn)))
+    | _, _ => throwError "not natural power on ordinals"
 -/
 def evalOrdinalNPow : NormNumExt where
   eval {u α} e := do

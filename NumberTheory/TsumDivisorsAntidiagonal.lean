@@ -111,7 +111,8 @@ definition sigmaAntidiagonalEquivProd
   left_inv := by
     rintro ⟨n, ⟨k, l⟩, h⟩
     rw [Nat.mem_divisorsAntidiagonal] at h
-    ext <;> simp [divisorsAntidiagonalFactors, ← PNat.coe_injecti
+    ext <;> simp [divisorsAntidiagonalFactors, ← PNat.coe_injective.eq_iff, h.1]
+  right_inv _ := rfl
 
 中文:
 定义 sigmaAntidiagonalEquivProd
@@ -122,7 +123,8 @@ definition sigmaAntidiagonalEquivProd
   left_inv := by
     rintro ⟨n, ⟨k, l⟩, h⟩
     rw [Nat.mem_divisorsAntidiagonal] at h
-    ext <;> simp [divisorsAntidiagonalFactors, ← PNat.coe_injecti
+    ext <;> simp [divisorsAntidiagonalFactors, ← PNat.coe_injective.eq_iff, h.1]
+  right_inv _ := rfl
 
 Depends on / 依赖: divisorsAntidiagonalFactors
 -/
@@ -184,7 +186,7 @@ lemma summable_norm_pow_mul_geometric_div_one_sub
   apply Summable.mul_tendsto_const (c := 1 / (1 - 0))
     (by simpa using! summable_norm_pow_mul_geometric_of_norm_lt_one k hr)
   simpa only [Nat.cofinite_eq_atTop] using!
-   tendsto_const_nhds.div ((tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).const
+   tendsto_const_nhds.div ((tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).const_sub 1) (by simp)
 
 中文:
 引理 summable_norm_pow_mul_geometric_div_one_sub
@@ -194,7 +196,7 @@ lemma summable_norm_pow_mul_geometric_div_one_sub
   apply Summable.mul_tendsto_const (c := 1 / (1 - 0))
     (by simpa using! summable_norm_pow_mul_geometric_of_norm_lt_one k hr)
   simpa only [Nat.cofinite_eq_atTop] using!
-   tendsto_const_nhds.div ((tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).const
+   tendsto_const_nhds.div ((tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).const_sub 1) (by simp)
 
 Depends on / 依赖: Nat.cofinite_eq_atTop, Summable, Summable.mul_tendsto_const, cofinite_eq_atTop, const_sub, div_eq_mul_one_div, mul_tendsto_const, summable_norm_pow_mul_geometric_of_norm_lt_one, tendsto_const_nhds, tendsto_const_nhds.div, tendsto_pow_atTop_nhds_zero_of_norm_lt_one
 -/
@@ -218,7 +220,19 @@ lemma summable_divisorsAntidiagonal_aux
   constructor
   · exact fun n => (hasSum_fintype _).summable
   · simp only [norm_mul, norm_pow, tsum_fintype, Finset.univ_eq_attach]
-    apply Summable.of_nonneg_of_le (f := fun c : Nat+ => ‖(c : 𝕜) ^ (k + 1) * r ^ 
+    apply Summable.of_nonneg_of_le (f := fun c : Nat+ => ‖(c : 𝕜) ^ (k + 1) * r ^ (c : Nat)‖)
+      (fun b => Finset.sum_nonneg (fun _ _ => mul_nonneg (by simp) (by simp))) (fun b => ?_)
+      (by apply (summable_norm_pow_mul_geometric_of_norm_lt_one (k + 1) hr).subtype)
+    transitivity ∑ _ in (b : Nat).divisors, ‖(b : 𝕜)‖ ^ k * ‖r ^ (b : Nat)‖
+    · rw [(b : Nat).divisorsAntidiagonal.sum_attach (fun x => ‖(x.2 : 𝕜)‖ ^ _ * _ ^ (x.1 * x.2)),
+          sum_divisorsAntidiagonal ((fun x y => ‖(y : 𝕜)‖ ^ k * _ ^ (x * y)))]
+      gcongr with i hi
+      · simpa using! le_of_dvd b.2 (div_dvd_of_dvd (dvd_of_mem_divisors hi))
+      · rw [norm_pow, mul_comm, Nat.div_mul_cancel (dvd_of_mem_divisors hi)]
+    · simp only [norm_pow, Finset.sum_const, nsmul_eq_mul, ← mul_assoc, add_comm k 1, pow_add,
+        pow_one, norm_mul]
+      gcongr
+      simpa using! Nat.card_divisors_le_self b
 
 中文:
 引理 summable_divisorsAntidiagonal_aux
@@ -229,7 +243,19 @@ lemma summable_divisorsAntidiagonal_aux
   constructor
   · exact fun n => (hasSum_fintype _).summable
   · simp only [norm_mul, norm_pow, tsum_fintype, Finset.univ_eq_attach]
-    apply Summable.of_nonneg_of_le (f := fun c : Nat+ => ‖(c : 𝕜) ^ (k + 1) * r ^ 
+    apply Summable.of_nonneg_of_le (f := fun c : Nat+ => ‖(c : 𝕜) ^ (k + 1) * r ^ (c : Nat)‖)
+      (fun b => Finset.sum_nonneg (fun _ _ => mul_nonneg (by simp) (by simp))) (fun b => ?_)
+      (by apply (summable_norm_pow_mul_geometric_of_norm_lt_one (k + 1) hr).subtype)
+    transitivity ∑ _ in (b : Nat).divisors, ‖(b : 𝕜)‖ ^ k * ‖r ^ (b : Nat)‖
+    · rw [(b : Nat).divisorsAntidiagonal.sum_attach (fun x => ‖(x.2 : 𝕜)‖ ^ _ * _ ^ (x.1 * x.2)),
+          sum_divisorsAntidiagonal ((fun x y => ‖(y : 𝕜)‖ ^ k * _ ^ (x * y)))]
+      gcongr with i hi
+      · simpa using! le_of_dvd b.2 (div_dvd_of_dvd (dvd_of_mem_divisors hi))
+      · rw [norm_pow, mul_comm, Nat.div_mul_cancel (dvd_of_mem_divisors hi)]
+    · simp only [norm_pow, Finset.sum_const, nsmul_eq_mul, ← mul_assoc, add_comm k 1, pow_add,
+        pow_one, norm_mul]
+      gcongr
+      simpa using! Nat.card_divisors_le_self b
 -/
 private lemma summable_divisorsAntidiagonal_aux (k : Nat) {r : 𝕜} (hr : ‖r‖ < 1) :
     Summable fun c : (n : Nat+) × {x // x in (n : Nat).divisorsAntidiagonal} =>
@@ -287,7 +313,13 @@ theorem tsum_prod_pow_eq_tsum_sigma
   suffices ∑' c : Nat+ × Nat+, c.2 ^ k * r ^ (c.1 * c.2 : Nat) =
     ∑' e : Nat+, σ k e * r ^ (e : Nat) by rwa [← (summable_prod_mul_pow k hr).tsum_prod]
   simp only [← sigmaAntidiagonalEquivProd.tsum_eq, sigmaAntidiagonalEquivProd,
-    divisorsAntidiagonalFactors, PNat.mk_coe, Equiv.coe_fn_mk, s
+    divisorsAntidiagonalFactors, PNat.mk_coe, Equiv.coe_fn_mk, sigma_eq_sum_div, cast_sum,
+    cast_pow, Summable.tsum_sigma (summable_divisorsAntidiagonal_aux k hr :)]
+  refine tsum_congr fun n => ?_
+  simpa [tsum_fintype, Finset.sum_mul,
+    (n : Nat).divisorsAntidiagonal.sum_attach fun x : Nat × Nat => x.2 ^ k * r ^ (x.1 * x.2),
+    sum_divisorsAntidiagonal fun x y => y ^ k * r ^ (x * y)]
+      using Finset.sum_congr rfl fun i hi => by rw [Nat.mul_div_cancel' (dvd_of_mem_divisors hi)]
 
 中文:
 定理 tsum_prod_pow_eq_tsum_sigma
@@ -296,7 +328,13 @@ theorem tsum_prod_pow_eq_tsum_sigma
   suffices ∑' c : Nat+ × Nat+, c.2 ^ k * r ^ (c.1 * c.2 : Nat) =
     ∑' e : Nat+, σ k e * r ^ (e : Nat) by rwa [← (summable_prod_mul_pow k hr).tsum_prod]
   simp only [← sigmaAntidiagonalEquivProd.tsum_eq, sigmaAntidiagonalEquivProd,
-    divisorsAntidiagonalFactors, PNat.mk_coe, Equiv.coe_fn_mk, s
+    divisorsAntidiagonalFactors, PNat.mk_coe, Equiv.coe_fn_mk, sigma_eq_sum_div, cast_sum,
+    cast_pow, Summable.tsum_sigma (summable_divisorsAntidiagonal_aux k hr :)]
+  refine tsum_congr fun n => ?_
+  simpa [tsum_fintype, Finset.sum_mul,
+    (n : Nat).divisorsAntidiagonal.sum_attach fun x : Nat × Nat => x.2 ^ k * r ^ (x.1 * x.2),
+    sum_divisorsAntidiagonal fun x y => y ^ k * r ^ (x * y)]
+      using Finset.sum_congr rfl fun i hi => by rw [Nat.mul_div_cancel' (dvd_of_mem_divisors hi)]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Finset, Finset.sum_mul, PNat.mk_coe, Summable, Summable.tsum_sigma, cast_pow, cast_sum, coe_fn_mk, divisorsAntidiagonal, divisorsAntidiagonal.sum_attach, divisorsAntidiagonalFactors, mk_coe, sigmaAntidiagonalEquivProd, sigmaAntidiagonalEquivProd.tsum_eq, sigma_eq_sum_div, sum_attach, sum_mul, summable_divisorsAntidiagonal_aux, summable_prod_mul_pow
 -/
@@ -323,7 +361,13 @@ lemma tsum_pow_div_one_sub_eq_tsum_sigma
   have (m : Nat) [NeZero m] := tsum_geometric_of_norm_lt_one (ξ := r ^ m)
     (by simpa using pow_lt_one₀ (by simp) hr (NeZero.ne _))
   simp only [div_eq_mul_inv, ← this, ← tsum_mul_left, mul_assoc, ← _root_.pow_succ',
-    ← fun (n : Nat) => tsum_pnat_eq_tsum_succ (f := fun m => n ^ k * (r ^ n) ^
+    ← fun (n : Nat) => tsum_pnat_eq_tsum_succ (f := fun m => n ^ k * (r ^ n) ^ m)]
+  have h00 := tsum_prod_pow_eq_tsum_sigma k hr
+  rw [Summable.tsum_comm (by apply (summable_prod_mul_pow k hr).prod_symm)] at h00
+  rw [← h00]
+exact tsum_congr₂ fun b c => by simp [mul_comm c.val b.val, pow_mul]
+
+omit [CompleteSpace 𝕜] [NormSMulClass Int 𝕜] in
 
 中文:
 引理 tsum_pow_div_one_sub_eq_tsum_sigma
@@ -332,7 +376,13 @@ lemma tsum_pow_div_one_sub_eq_tsum_sigma
   have (m : Nat) [NeZero m] := tsum_geometric_of_norm_lt_one (ξ := r ^ m)
     (by simpa using pow_lt_one₀ (by simp) hr (NeZero.ne _))
   simp only [div_eq_mul_inv, ← this, ← tsum_mul_left, mul_assoc, ← _root_.pow_succ',
-    ← fun (n : Nat) => tsum_pnat_eq_tsum_succ (f := fun m => n ^ k * (r ^ n) ^
+    ← fun (n : Nat) => tsum_pnat_eq_tsum_succ (f := fun m => n ^ k * (r ^ n) ^ m)]
+  have h00 := tsum_prod_pow_eq_tsum_sigma k hr
+  rw [Summable.tsum_comm (by apply (summable_prod_mul_pow k hr).prod_symm)] at h00
+  rw [← h00]
+exact tsum_congr₂ fun b c => by simp [mul_comm c.val b.val, pow_mul]
+
+omit [CompleteSpace 𝕜] [NormSMulClass Int 𝕜] in
 
 Depends on / 依赖: NeZero, NeZero.ne, Summable, Summable.tsum_comm, _root_, _root_.pow_succ, b.val, c.val, div_eq_mul_inv, mul_assoc, mul_comm, pow_mul, pow_succ, prod_symm, summable_prod_mul_pow, tsum_comm, tsum_geometric_of_norm_lt_one, tsum_mul_left, tsum_pnat_eq_tsum_succ, tsum_prod_pow_eq_tsum_sigma
 -/
@@ -359,7 +409,10 @@ lemma tendsto_zero_geometric_tsum_pnat
     rwa [norm_pow, pow_lt_one_iff_of_nonneg (norm_nonneg _) (NeZero.ne _)]
   have h2 (m : Nat+) : ∑' n : Nat+, r ^ (n * m : Nat) = (1 - r ^ (m : Nat))⁻¹ - 1 := by
     have := tsum_geometric_of_norm_lt_one (h1 m)
-    rw [← tsum_zero_pnat_eq_tsum_nat
+    rw [← tsum_zero_pnat_eq_tsum_nat (summable_geometric_of_norm_lt_one (h1 m) :)] at this
+    simp_rw [← this, pow_zero, add_sub_cancel_left, mul_comm, pow_mul]
+  rw [funext h2]; rw [(by simp : 𝓝 (0 : 𝕜) = 𝓝 ((1 - 0)⁻¹ - 1))]; rw [tendsto_sub_const_iff]; rw [tendsto_inv_iff₀ (by simp)]; rw [tendsto_const_sub_iff]
+exact (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).comp tendsto_PNat_val_atTop_atTop
 
 中文:
 引理 tendsto_zero_geometric_tsum_pnat
@@ -369,7 +422,10 @@ lemma tendsto_zero_geometric_tsum_pnat
     rwa [norm_pow, pow_lt_one_iff_of_nonneg (norm_nonneg _) (NeZero.ne _)]
   have h2 (m : Nat+) : ∑' n : Nat+, r ^ (n * m : Nat) = (1 - r ^ (m : Nat))⁻¹ - 1 := by
     have := tsum_geometric_of_norm_lt_one (h1 m)
-    rw [← tsum_zero_pnat_eq_tsum_nat
+    rw [← tsum_zero_pnat_eq_tsum_nat (summable_geometric_of_norm_lt_one (h1 m) :)] at this
+    simp_rw [← this, pow_zero, add_sub_cancel_left, mul_comm, pow_mul]
+  rw [funext h2]; rw [(by simp : 𝓝 (0 : 𝕜) = 𝓝 ((1 - 0)⁻¹ - 1))]; rw [tendsto_sub_const_iff]; rw [tendsto_inv_iff₀ (by simp)]; rw [tendsto_const_sub_iff]
+exact (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).comp tendsto_PNat_val_atTop_atTop
 
 Depends on / 依赖: NeZero, NeZero.ne, add_sub_cancel_left, mul_comm, norm_nonneg, norm_pow, pow_lt_one_iff_of_nonneg, pow_mul, pow_zero, simp_rw, summable_geometric_of_norm_lt_one, tendsto_sub_const_iff, tsum_geometric_of_norm_lt_one, tsum_zero_pnat_eq_tsum_nat
 -/

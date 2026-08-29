@@ -114,7 +114,7 @@ definition point
       (from_terminal_mem_of_mem J (shrinkCoyonedaObjObjEquiv x) hR),
           shrinkCoyonedaObjObjEquiv.symm (𝟙 _), by
         rw [shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm]
-        s
+        simp⟩
 
 中文:
 定义 point
@@ -125,7 +125,7 @@ definition point
       (from_terminal_mem_of_mem J (shrinkCoyonedaObjObjEquiv x) hR),
           shrinkCoyonedaObjObjEquiv.symm (𝟙 _), by
         rw [shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm]
-        s
+        simp⟩
 
 Depends on / 依赖: shrinkCoyoneda, shrinkCoyoneda.obj
 -/

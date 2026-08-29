@@ -52,14 +52,20 @@ definition d
   body: X.descE f₃ f₄ f₅ _ rfl n₀ n₁ n₂ (X.δ (f₁ ≫ f₂) (f₃ ≫ f₄) n₁ n₂ hn₂ ≫
     X.toCycles f₁ f₂ _ rfl n₂ ≫ X.πE f₁ f₂ f₃ n₁ n₂ n₃ hn₂ hn₃) (by
       rw [X.δ_naturality_assoc (f₁ ≫ f₂) f₃ (f₁ ≫ f₂) (f₃ ≫ f₄)
-        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]; rw [δ_toCy
+        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]; rw [δ_toCycles_assoc ..]; rw [δToCycles_πE ..]) hn₁
+          (by rw [δ_δ_assoc .., zero_comp])
+
+@[reassoc]
 
 中文:
 定义 d
   定义体: X.descE f₃ f₄ f₅ _ rfl n₀ n₁ n₂ (X.δ (f₁ ≫ f₂) (f₃ ≫ f₄) n₁ n₂ hn₂ ≫
     X.toCycles f₁ f₂ _ rfl n₂ ≫ X.πE f₁ f₂ f₃ n₁ n₂ n₃ hn₂ hn₃) (by
       rw [X.δ_naturality_assoc (f₁ ≫ f₂) f₃ (f₁ ≫ f₂) (f₃ ≫ f₄)
-        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]; rw [δ_toCy
+        (𝟙 _) (twoδ₂Toδ₁ f₃ f₄ _ rfl) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]; rw [δ_toCycles_assoc ..]; rw [δToCycles_πE ..]) hn₁
+          (by rw [δ_δ_assoc .., zero_comp])
+
+@[reassoc]
 
 Depends on / 依赖: Functor, Functor.map_id, X.descE, X.toCycles, id_comp, map_id, toCycles, zero_comp
 -/
@@ -108,12 +114,16 @@ lemma `d_ιE_fromOpcycles` / 引理 `d_ιE_fromOpcycles`
 English:
 lemma d_ιE_fromOpcycles
   proof: by
-  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁)]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]; rw [fromOpcyles_δ ..]; rw [πE_ιE_assoc ..]; rw [pOpc
+  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁)]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]; rw [fromOpcyles_δ ..]; rw [πE_ιE_assoc ..]; rw [pOpcycles_δFromOpcycles]; rw [toCycles_i_assoc]; rw [← Functor.map_comp]; rw [Eq.comm]
+  apply δ_naturality
+  simp
 
 中文:
 引理 d_ιE_fromOpcycles
   证明: by
-  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁)]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]; rw [fromOpcyles_δ ..]; rw [πE_ιE_assoc ..]; rw [pOpc
+  rw [← cancel_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₃ f₄ f₃₄ h₃₄ n₁)]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE_assoc ..]; rw [p_fromOpcycles]; rw [toCycles_i_assoc]; rw [fromOpcyles_δ ..]; rw [πE_ιE_assoc ..]; rw [pOpcycles_δFromOpcycles]; rw [toCycles_i_assoc]; rw [← Functor.map_comp]; rw [Eq.comm]
+  apply δ_naturality
+  simp
 
 Depends on / 依赖: X.fromOpcycles, X.toCycles, X.toCycles_, cancel_epi, fromOpcycles, p_fromOpcycles, toCycles
 -/
@@ -143,13 +153,13 @@ English:
 lemma d_d
   statement: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
   proof: by
-  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁)]; rw [comp_zero]; rw [comp_zero]; rw [X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄]; rw [δ_δ_asso
+  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁)]; rw [comp_zero]; rw [comp_zero]; rw [X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄]; rw [δ_δ_assoc ..]; rw [zero_comp]
 
 中文:
 引理 d_d
   结论: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
   证明: by
-  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁)]; rw [comp_zero]; rw [comp_zero]; rw [X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄]; rw [δ_δ_asso
+  rw [← cancel_epi (X.πE f₅ f₆ f₇ n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles f₅ f₆ _ rfl n₁)]; rw [comp_zero]; rw [comp_zero]; rw [X.toCycles_πE_d_assoc f₃ f₄ f₅ f₆ f₇ _ rfl _ rfl n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [X.toCycles_πE_d f₁ f₂ f₃ f₄ f₅ _ rfl _ rfl n₁ n₂ n₃ n₄ hn₂ hn₃ hn₄]; rw [δ_δ_assoc ..]; rw [zero_comp]
 
 Depends on / 依赖: X.toCycles, X.toCycles_, cancel_epi, comp_zero, toCycles
 -/
@@ -272,7 +282,9 @@ lemma cyclesMap_Ψ
     X.toCycles_cyclesMap_assoc f₁₂ f₃ f₂ f₃ (f₁ ≫ f₂ ≫ f₃)
     (by rw [reassoc_of% h₁₂]) f₂₃ h₂₃ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂)
     (twoδ₁Toδ₀ f₁ f₂₃ (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃])) n₀ rfl rfl,
-    to
+    toCycles_Ψ .., zero₃_assoc .., zero_comp]
+
+include h₁₂ in
 
 中文:
 引理 cyclesMap_Ψ
@@ -283,7 +295,9 @@ lemma cyclesMap_Ψ
     X.toCycles_cyclesMap_assoc f₁₂ f₃ f₂ f₃ (f₁ ≫ f₂ ≫ f₃)
     (by rw [reassoc_of% h₁₂]) f₂₃ h₂₃ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂)
     (twoδ₁Toδ₀ f₁ f₂₃ (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃])) n₀ rfl rfl,
-    to
+    toCycles_Ψ .., zero₃_assoc .., zero_comp]
+
+include h₁₂ in
 
 Depends on / 依赖: X.cyclesMap, X.toCycles, X.toCycles_cyclesMap_assoc, cancel_epi, comp_zero, cyclesMap, reassoc_of, toCycles, toCycles_cyclesMap_assoc, zero_comp
 -/
@@ -309,7 +323,7 @@ lemma Ψ_opcyclesMap
     zero_comp, assoc, X.opcyclesMap_fromOpcycles f₁ f₂ f₁ f₂₃ f₁₂ h₁₂
     (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃]) (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃)
     (twoδ₂Toδ₁ f₁₂ f₃ (f₁ ≫ f₂ ≫ f₃) (by rw [reassoc_of% h₁₂])) n₁ rfl rfl,
-    Ψ_from
+    Ψ_fromOpcycles_assoc .., zero₁ .., comp_zero]
 
 中文:
 引理 Ψ_opcyclesMap
@@ -319,7 +333,7 @@ lemma Ψ_opcyclesMap
     zero_comp, assoc, X.opcyclesMap_fromOpcycles f₁ f₂ f₁ f₂₃ f₁₂ h₁₂
     (f₁ ≫ f₂ ≫ f₃) (by rw [h₂₃]) (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃)
     (twoδ₂Toδ₁ f₁₂ f₃ (f₁ ≫ f₂ ≫ f₃) (by rw [reassoc_of% h₁₂])) n₁ rfl rfl,
-    Ψ_from
+    Ψ_fromOpcycles_assoc .., zero₁ .., comp_zero]
 
 Depends on / 依赖: X.fromOpcycles, X.opcyclesMap, X.opcyclesMap_fromOpcycles, cancel_mono, comp_zero, fromOpcycles, opcyclesMap, opcyclesMap_fromOpcycles, reassoc_of, zero_comp
 -/
@@ -369,7 +383,9 @@ lemma cyclesMap_Ψ_exact
   refine ⟨A, 𝟙 _, inferInstance,
     X.liftCycles f₁₂ f₃ n₀ n₁ hn₁ (z ≫ X.iCycles f₂ f₃ n₀) ?_, ?_⟩ <;> dsimp
   · rw [assoc, ← X.Ψ_fromOpcycles f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ hn₁, reassoc_of% hz, zero_comp]
-  · rw [← cancel_mono (X.iCyc
+  · rw [← cancel_mono (X.iCycles f₂ f₃ n₀), id_comp, assoc,
+      X.cyclesMap_i _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) (𝟙 _) n₀ (by cat_disch),
+      Functor.map_id, comp_id, liftCycles_i]
 
 中文:
 引理 cyclesMap_Ψ_exact
@@ -380,7 +396,9 @@ lemma cyclesMap_Ψ_exact
   refine ⟨A, 𝟙 _, inferInstance,
     X.liftCycles f₁₂ f₃ n₀ n₁ hn₁ (z ≫ X.iCycles f₂ f₃ n₀) ?_, ?_⟩ <;> dsimp
   · rw [assoc, ← X.Ψ_fromOpcycles f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ hn₁, reassoc_of% hz, zero_comp]
-  · rw [← cancel_mono (X.iCyc
+  · rw [← cancel_mono (X.iCycles f₂ f₃ n₀), id_comp, assoc,
+      X.cyclesMap_i _ _ _ _ (threeδ₁Toδ₀ f₁ f₂ f₃ f₁₂ h₁₂) (𝟙 _) n₀ (by cat_disch),
+      Functor.map_id, comp_id, liftCycles_i]
 
 Depends on / 依赖: Functor, Functor.map_i, ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, ShortComplex.mk, X.cyclesMap_, X.cyclesMap_i, X.iCycles, X.liftCycles, cancel_mono, cat_disch, cyclesMap_i, exact_iff_exact_up_to_refinements, iCycles, id_comp, liftCycles, map_i, reassoc_of, zero_comp
 -/
@@ -410,6 +428,11 @@ lemma Ψ_opcyclesMap_exact
   obtain ⟨A₂, π₂, _, z₂, hz₂⟩ :=
       (X.cokernelSequenceOpcycles_exact f₁ f₂₃ n₀ n₁ hn₁).exact_up_to_refinements z₁ (by
     dsimp
+    have H := X.p_opcyclesMap f₁ f₂ f₁ f₂₃ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) (𝟙 _) n₁ (by cat_disch)
+    rw [Functor.map_id]; rw [id_comp] at H
+    rw [← H]; rw [← reassoc_of% hz₁]; rw [hz₀]; rw [comp_zero])
+  refine ⟨A₂, π₂ ≫ π₁, inferInstance, z₂ ≫ X.toCycles f₂ f₃ f₂₃ h₂₃ n₀, ?_⟩
+  rw [← cancel_mono (X.fromOpcycles f₁ f₂ f₁₂ h₁₂ n₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [← reassoc_of% dsimp% hz₂]; rw [reassoc_of% hz₁]; rw [p_fromOpcycles]
 
 中文:
 引理 Ψ_opcyclesMap_exact
@@ -421,6 +444,11 @@ lemma Ψ_opcyclesMap_exact
   obtain ⟨A₂, π₂, _, z₂, hz₂⟩ :=
       (X.cokernelSequenceOpcycles_exact f₁ f₂₃ n₀ n₁ hn₁).exact_up_to_refinements z₁ (by
     dsimp
+    have H := X.p_opcyclesMap f₁ f₂ f₁ f₂₃ (threeδ₃Toδ₂ f₁ f₂ f₃ f₂₃ h₂₃) (𝟙 _) n₁ (by cat_disch)
+    rw [Functor.map_id]; rw [id_comp] at H
+    rw [← H]; rw [← reassoc_of% hz₁]; rw [hz₀]; rw [comp_zero])
+  refine ⟨A₂, π₂ ≫ π₁, inferInstance, z₂ ≫ X.toCycles f₂ f₃ f₂₃ h₂₃ n₀, ?_⟩
+  rw [← cancel_mono (X.fromOpcycles f₁ f₂ f₁₂ h₁₂ n₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [toCycles_Ψ_assoc ..]; rw [p_fromOpcycles]; rw [← reassoc_of% dsimp% hz₂]; rw [reassoc_of% hz₁]; rw [p_fromOpcycles]
 
 Depends on / 依赖: Functor, Functor.map_id, ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, ShortComplex.mk, X.cokernelSequenceOpcycles_exact, X.pOpcycles, X.p_opcyclesMap, cat_disch, cokernelSequenceOpcycles_exact, exact_iff_exact_up_to_refinements, exact_up_to_refinements, id_c, map_id, pOpcycles, p_opcyclesMap, surjective_up_to_refinements_of_epi
 -/
@@ -470,13 +498,13 @@ English:
 lemma πE_d_ιE
   proof: by
   rw [← cancel_epi (X.toCycles f₃ f₄ _ rfl n₁)]; rw [toCycles_Ψ ..]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE ..]; rw [toCycles_i_assoc]; rw [← X.δ_naturality_assoc (f₁ ≫ f₂) (f₃ ≫ f₄) f₂ (f₃ ≫ f₄)
-      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂]; r
+      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]
 
 中文:
 引理 πE_d_ιE
   证明: by
   rw [← cancel_epi (X.toCycles f₃ f₄ _ rfl n₁)]; rw [toCycles_Ψ ..]; rw [X.toCycles_πE_d_assoc f₁ f₂ f₃ f₄ f₅ _ rfl _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_ιE ..]; rw [toCycles_i_assoc]; rw [← X.δ_naturality_assoc (f₁ ≫ f₂) (f₃ ≫ f₄) f₂ (f₃ ≫ f₄)
-      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂]; r
+      (twoδ₁Toδ₀ f₁ f₂ _ rfl) (𝟙 _) n₁ n₂ rfl hn₂]; rw [Functor.map_id]; rw [id_comp]
 
 Depends on / 依赖: X.toCycles, X.toCycles_, cancel_epi, isNoetherian_submodule, toCycles, toCycles_i_assoc
 -/
@@ -534,13 +562,13 @@ English:
 lemma d_EIsoH_hom
   statement: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
   proof: by
-  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁)]; rw [X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_EIsoH_hom ..]; rw [πE_EIsoH_hom_assoc ..]; rw [cyclesIsoH_inv_hom_id ..]; 
+  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁)]; rw [X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_EIsoH_hom ..]; rw [πE_EIsoH_hom_assoc ..]; rw [cyclesIsoH_inv_hom_id ..]; rw [comp_id]; rw [cyclesIsoH_inv_hom_id_assoc ..]
 
 中文:
 引理 d_EIsoH_hom
   结论: (hn₁ : n₀ + 1 = n₁ := by lia) (hn₂ : n₁ + 1 = n₂ := by lia)
   证明: by
-  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁)]; rw [X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_EIsoH_hom ..]; rw [πE_EIsoH_hom_assoc ..]; rw [cyclesIsoH_inv_hom_id ..]; 
+  rw [← cancel_epi (X.πE (𝟙 i₁) f₂ (𝟙 i₂) n₀ n₁ n₂ hn₁ hn₂)]; rw [← cancel_epi (X.toCycles (𝟙 i₁) f₂ f₂ (by simp) n₁)]; rw [X.toCycles_πE_d_assoc (𝟙 i₀) f₁ (𝟙 i₁) f₂ (𝟙 i₂) f₁ (by simp) _ _ n₀ n₁ n₂ n₃ hn₁ hn₂ hn₃]; rw [πE_EIsoH_hom ..]; rw [πE_EIsoH_hom_assoc ..]; rw [cyclesIsoH_inv_hom_id ..]; rw [comp_id]; rw [cyclesIsoH_inv_hom_id_assoc ..]
 
 Depends on / 依赖: X.EIsoH, X.toCycles, X.toCycles_, cancel_epi, cyclesI, toCycles
 -/

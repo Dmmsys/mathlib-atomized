@@ -417,7 +417,17 @@ theorem iIndepFun_iff_measure_inter_preimage_eq_mul
   classical
   let setsβ : forall i : ι, Set (β i) := fun i =>
     dite (i in S) (fun hi_mem => (h_meas i hi_mem).choose) fun _ => Set.univ
-  have h_measβ : forall i in S, MeasurableSe
+  have h_measβ : forall i in S, MeasurableSet[m i] (setsβ i) := by
+    intro i hi_mem
+    simp_rw [setsβ, dif_pos hi_mem]
+    exact (h_meas i hi_mem).choose_spec.1
+  have h_preim : forall i in S, setsΩ i = f i ⁻¹' setsβ i := by
+    intro i hi_mem
+    simp_rw [setsβ, dif_pos hi_mem]
+    exact (h_meas i hi_mem).choose_spec.2.symm
+  simp_all
+
+alias ⟨iIndepFun.measure_inter_preimage_eq_mul, _⟩ := iIndepFun_iff_measure_inter_preimage_eq_mul
 
 中文:
 定理 iIndepFun_iff_measure_inter_preimage_eq_mul
@@ -428,7 +438,17 @@ theorem iIndepFun_iff_measure_inter_preimage_eq_mul
   classical
   let setsβ : forall i : ι, Set (β i) := fun i =>
     dite (i in S) (fun hi_mem => (h_meas i hi_mem).choose) fun _ => Set.univ
-  have h_measβ : forall i in S, MeasurableSe
+  have h_measβ : forall i in S, MeasurableSet[m i] (setsβ i) := by
+    intro i hi_mem
+    simp_rw [setsβ, dif_pos hi_mem]
+    exact (h_meas i hi_mem).choose_spec.1
+  have h_preim : forall i in S, setsΩ i = f i ⁻¹' setsβ i := by
+    intro i hi_mem
+    simp_rw [setsβ, dif_pos hi_mem]
+    exact (h_meas i hi_mem).choose_spec.2.symm
+  simp_all
+
+alias ⟨iIndepFun.measure_inter_preimage_eq_mul, _⟩ := iIndepFun_iff_measure_inter_preimage_eq_mul
 
 Depends on / 依赖: MeasurableSet, Set.univ, choose_spec, classical, dif_pos, h_meas, h_preim, hi_me, hi_mem, simp_rw
 -/
@@ -466,7 +486,18 @@ theorem iIndepFun.congr'
   have : forallᵐ a ∂μ, forall i in S, f i =ᵐ[κ a] g i :=
     (ae_ball_iff (Finset.countable_toSet S)).2 (fun i hi => h i)
   filter_upwards [this, hf S hmeas] with a ha h'a
-  have A i (hi : i in S) : (κ a) (g i ⁻¹' set
+  have A i (hi : i in S) : (κ a) (g i ⁻¹' sets i) = (κ a) (f i ⁻¹' sets i) := by
+    apply measure_congr
+    filter_upwards [ha i hi] with ω hω
+    change (g i ω in sets i) = (f i ω in sets i)
+    simp [hω]
+  have B : (κ a) (⋂ i in S, g i ⁻¹' sets i) = (κ a) (⋂ i in S, f i ⁻¹' sets i) := by
+    apply measure_congr
+    filter_upwards [(ae_ball_iff (Finset.countable_toSet S)).2 ha] with ω hω
+    change (ω in ⋂ i in S, g i ⁻¹' sets i) = (ω in ⋂ i in S, f i ⁻¹' sets i)
+    simp +contextual [hω]
+  convert! h'a using 2 with i hi
+  exact A i hi
 
 中文:
 定理 iIndepFun.congr'
@@ -477,7 +508,18 @@ theorem iIndepFun.congr'
   have : forallᵐ a ∂μ, forall i in S, f i =ᵐ[κ a] g i :=
     (ae_ball_iff (Finset.countable_toSet S)).2 (fun i hi => h i)
   filter_upwards [this, hf S hmeas] with a ha h'a
-  have A i (hi : i in S) : (κ a) (g i ⁻¹' set
+  have A i (hi : i in S) : (κ a) (g i ⁻¹' sets i) = (κ a) (f i ⁻¹' sets i) := by
+    apply measure_congr
+    filter_upwards [ha i hi] with ω hω
+    change (g i ω in sets i) = (f i ω in sets i)
+    simp [hω]
+  have B : (κ a) (⋂ i in S, g i ⁻¹' sets i) = (κ a) (⋂ i in S, f i ⁻¹' sets i) := by
+    apply measure_congr
+    filter_upwards [(ae_ball_iff (Finset.countable_toSet S)).2 ha] with ω hω
+    change (ω in ⋂ i in S, g i ⁻¹' sets i) = (ω in ⋂ i in S, f i ⁻¹' sets i)
+    simp +contextual [hω]
+  convert! h'a using 2 with i hi
+  exact A i hi
 
 Depends on / 依赖: Finset, Finset.countable_toSet, ae_ball_iff, countable_toSet, filter_upwards, iIndepFun_iff_measure_inter_preimage_eq_mul, measure_congr
 -/
@@ -614,7 +656,8 @@ theorem indepFun_iff_indepSet_preimage
   · rwa [← indepSet_iff_measure_inter_eq_mul (hf hs) (hg ht) κ μ]
 
 @[symm]
-nonrec theorem IndepFun.symm {_ : 
+nonrec theorem IndepFun.symm {_ : MeasurableSpace β} {_ : MeasurableSpace β'}
+    (hfg : IndepFun f g κ μ) : IndepFun g f κ μ := hfg.symm
 
 中文:
 定理 indepFun_iff_indepSet_preimage
@@ -626,7 +669,8 @@ nonrec theorem IndepFun.symm {_ :
   · rwa [← indepSet_iff_measure_inter_eq_mul (hf hs) (hg ht) κ μ]
 
 @[symm]
-nonrec theorem IndepFun.symm {_ : 
+nonrec theorem IndepFun.symm {_ : MeasurableSpace β} {_ : MeasurableSpace β'}
+    (hfg : IndepFun f g κ μ) : IndepFun g f κ μ := hfg.symm
 
 Depends on / 依赖: indepFun_iff_measure_inter_preimage_eq_mul, indepFun_iff_measure_inter_preimage_eq_mul.trans, indepSet_iff_measure_inter_eq_mul, specialize
 -/
@@ -654,7 +698,7 @@ theorem IndepFun.congr'
   filter_upwards [hf, hg, hfg _ _ ⟨_, hA, rfl⟩ ⟨_, hB, rfl⟩] with a hf' hg' hfg'
   have h1 : f ⁻¹' A =ᵐ[κ a] f' ⁻¹' A := hf'.fun_comp (· in A)
   have h2 : g ⁻¹' B =ᵐ[κ a] g' ⁻¹' B := hg'.fun_comp (· in B)
-  rwa [← measure_congr h1, ← measure_congr h2, ← meas
+  rwa [← measure_congr h1, ← measure_congr h2, ← measure_congr (h1.inter h2)]
 
 中文:
 定理 IndepFun.congr'
@@ -664,7 +708,7 @@ theorem IndepFun.congr'
   filter_upwards [hf, hg, hfg _ _ ⟨_, hA, rfl⟩ ⟨_, hB, rfl⟩] with a hf' hg' hfg'
   have h1 : f ⁻¹' A =ᵐ[κ a] f' ⁻¹' A := hf'.fun_comp (· in A)
   have h2 : g ⁻¹' B =ᵐ[κ a] g' ⁻¹' B := hg'.fun_comp (· in B)
-  rwa [← measure_congr h1, ← measure_congr h2, ← meas
+  rwa [← measure_congr h1, ← measure_congr h2, ← measure_congr (h1.inter h2)]
 
 Depends on / 依赖: filter_upwards, fun_comp, h1.inter, measure_congr
 -/
@@ -720,7 +764,12 @@ theorem IndepFun.comp₀
   have hφ_ae := ae_of_ae_map hf hφ.ae_eq_mk
   have hψ_ae := ae_of_ae_map hg hψ.ae_eq_mk
   refine IndepFun.congr' h ?_ ?_
-  · filter_upwards [Measure.ae_ae_of_ae_comp (hφ_ae
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hφ_ae)] with a haφ
+    filter_upwards [haφ] with ω hωφ
+    simp [hωφ]
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hψ_ae)] with a haψ
+    filter_upwards [haψ] with ω hωψ
+    simp [hωψ]
 
 中文:
 定理 IndepFun.comp₀
@@ -731,7 +780,12 @@ theorem IndepFun.comp₀
   have hφ_ae := ae_of_ae_map hf hφ.ae_eq_mk
   have hψ_ae := ae_of_ae_map hg hψ.ae_eq_mk
   refine IndepFun.congr' h ?_ ?_
-  · filter_upwards [Measure.ae_ae_of_ae_comp (hφ_ae
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hφ_ae)] with a haφ
+    filter_upwards [haφ] with ω hωφ
+    simp [hωφ]
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hψ_ae)] with a haψ
+    filter_upwards [haψ] with ω hωψ
+    simp [hωψ]
 -/
 theorem IndepFun.comp₀ {mβ : MeasurableSpace β} {mβ' : MeasurableSpace β'}
     {mγ : MeasurableSpace γ} {mγ' : MeasurableSpace γ'} {φ : β -> γ} {ψ : β' -> γ'}
@@ -843,7 +897,25 @@ theorem indepFun_iff_compProd_map_prod_eq_compProd_prod_map_map
     intro u s t hu hs ht
     rw [Measure.compProd_apply (hu.prod (hs.prod ht))]; rw [Measure.compProd_apply (hu.prod (hs.prod ht))]
     refine lintegral_congr_ae ?_
-   
+    have h_set_eq ω : Prod.mk ω ⁻¹' u ×ˢ s ×ˢ t = if ω in u then s ×ˢ t else ∅ := by ext; simp
+    simp_rw [h_set_eq]
+    filter_upwards [h s t hs ht] with ω hω
+    by_cases hωu : ω in u
+    swap; · simp [hωu]
+    simp only [hωu, ↓reduceIte]
+    rw [map_apply _ (by fun_prop)]; rw [Measure.map_apply (by fun_prop) (hs.prod ht)]; rw [mk_preimage_prod]; rw [hω]; rw [prod_apply_prod]; rw [map_apply' _ (by fun_prop)]; rw [map_apply' _ (by fun_prop)]
+    exacts [ht, hs]
+  · intro s t hs ht
+    rw [Measure.ext_prod₃_iff] at h
+    refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite ?_ ?_ ?_
+    · exact Kernel.measurable_coe _ ((hf hs).inter (hg ht))
+    · exact (Kernel.measurable_coe _ (hf hs)).mul (Kernel.measurable_coe _ (hg ht))
+    intro u hu hμu
+    specialize h hu hs ht
+    rw [Measure.compProd_apply_prod hu (hs.prod ht)]; rw [Measure.compProd_apply_prod hu (hs.prod ht)] at h
+    convert! h with ω ω
+    · rw [map_apply' _ (by fun_prop) _ (hs.prod ht), mk_preimage_prod]
+    · rw [prod_apply_prod, map_apply' _ (by fun_prop) _ hs, map_apply' _ (by fun_prop) _ ht]
 
 中文:
 定理 indepFun_iff_compProd_map_prod_eq_compProd_prod_map_map
@@ -855,7 +927,25 @@ theorem indepFun_iff_compProd_map_prod_eq_compProd_prod_map_map
     intro u s t hu hs ht
     rw [Measure.compProd_apply (hu.prod (hs.prod ht))]; rw [Measure.compProd_apply (hu.prod (hs.prod ht))]
     refine lintegral_congr_ae ?_
-   
+    have h_set_eq ω : Prod.mk ω ⁻¹' u ×ˢ s ×ˢ t = if ω in u then s ×ˢ t else ∅ := by ext; simp
+    simp_rw [h_set_eq]
+    filter_upwards [h s t hs ht] with ω hω
+    by_cases hωu : ω in u
+    swap; · simp [hωu]
+    simp only [hωu, ↓reduceIte]
+    rw [map_apply _ (by fun_prop)]; rw [Measure.map_apply (by fun_prop) (hs.prod ht)]; rw [mk_preimage_prod]; rw [hω]; rw [prod_apply_prod]; rw [map_apply' _ (by fun_prop)]; rw [map_apply' _ (by fun_prop)]
+    exacts [ht, hs]
+  · intro s t hs ht
+    rw [Measure.ext_prod₃_iff] at h
+    refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite ?_ ?_ ?_
+    · exact Kernel.measurable_coe _ ((hf hs).inter (hg ht))
+    · exact (Kernel.measurable_coe _ (hf hs)).mul (Kernel.measurable_coe _ (hg ht))
+    intro u hu hμu
+    specialize h hu hs ht
+    rw [Measure.compProd_apply_prod hu (hs.prod ht)]; rw [Measure.compProd_apply_prod hu (hs.prod ht)] at h
+    convert! h with ω ω
+    · rw [map_apply' _ (by fun_prop) _ (hs.prod ht), mk_preimage_prod]
+    · rw [prod_apply_prod, map_apply' _ (by fun_prop) _ hs, map_apply' _ (by fun_prop) _ ht]
 
 Depends on / 依赖: Measure, Measure.compProd_apply, Measure.ext_prod, Prod.mk, classical, compProd_apply, filter_upwards, h_set_eq, hs.prod, hu.prod, indepFun_iff_measure_inter_preimage_eq_mul, lintegral_congr_ae, reduceIte, simp_rw
 -/
@@ -907,7 +997,81 @@ theorem iIndepFun.indepFun_finset
   obtain ⟨η, η_eq, hη⟩ : exists (η : Kernel α Ω), κ =ᵐ[μ] η ∧ IsMarkovKernel η :=
     exists_ae_eq_isMarkovKernel hf_Indep.ae_isProbabilityMeasure hμ
   apply IndepFun.congr (Filter.EventuallyEq.symm η_eq)
-  -- We introduce π-systems, built from the π-s
+  -- We introduce π-systems, built from the π-system of boxes which generates `MeasurableSpace.pi`.
+  let πSβ := Set.pi (Set.univ : Set S) ''
+    Set.pi (Set.univ : Set S) fun i => { s : Set (β i) | MeasurableSet[m i] s }
+  let πS := { s : Set Ω | exists t in πSβ, (fun a (i : S) => f i a) ⁻¹' t = s }
+  have hπS_pi : IsPiSystem πS := by exact IsPiSystem.comap (@isPiSystem_pi _ _ ?_) _
+  have hπS_gen : (MeasurableSpace.pi.comap fun a (i : S) => f i a) = generateFrom πS := by
+    rw [generateFrom_pi.symm]; rw [comap_generateFrom]
+    congr
+  let πTβ := Set.pi (Set.univ : Set T) ''
+      Set.pi (Set.univ : Set T) fun i => { s : Set (β i) | MeasurableSet[m i] s }
+  let πT := { s : Set Ω | exists t in πTβ, (fun a (i : T) => f i a) ⁻¹' t = s }
+  have hπT_pi : IsPiSystem πT := by exact IsPiSystem.comap (@isPiSystem_pi _ _ ?_) _
+  have hπT_gen : (MeasurableSpace.pi.comap fun a (i : T) => f i a) = generateFrom πT := by
+    rw [generateFrom_pi.symm]; rw [comap_generateFrom]
+    congr
+  -- To prove independence, we prove independence of the generating π-systems.
+  refine IndepSets.indep (Measurable.comap_le (measurable_pi_iff.mpr fun i => hf_meas i))
+    (Measurable.comap_le (measurable_pi_iff.mpr fun i => hf_meas i)) hπS_pi hπT_pi hπS_gen hπT_gen
+    ?_
+  rintro _ _ ⟨s, ⟨sets_s, hs1, hs2⟩, rfl⟩ ⟨t, ⟨sets_t, ht1, ht2⟩, rfl⟩
+  simp only [Set.mem_univ_pi, Set.mem_ofPred_eq] at hs1 ht1
+  rw [← hs2]; rw [← ht2]
+  classical
+  let sets_s' : forall i : ι, Set (β i) := fun i =>
+    dite (i in S) (fun hi => sets_s ⟨i, hi⟩) fun _ => Set.univ
+  have h_sets_s'_eq : forall {i} (hi : i in S), sets_s' i = sets_s ⟨i, hi⟩ := by
+    intro i hi; simp_rw [sets_s', dif_pos hi]
+  have h_sets_s'_univ : forall {i} (_hi : i in T), sets_s' i = Set.univ := by
+    intro i hi; simp_rw [sets_s', dif_neg (Finset.disjoint_right.mp hST hi)]
+  let sets_t' : forall i : ι, Set (β i) := fun i =>
+    dite (i in T) (fun hi => sets_t ⟨i, hi⟩) fun _ => Set.univ
+  have h_sets_t'_univ : forall {i} (_hi : i in S), sets_t' i = Set.univ := by
+    intro i hi; simp_rw [sets_t', dif_neg (Finset.disjoint_left.mp hST hi)]
+  have h_meas_s' : forall i in S, MeasurableSet (sets_s' i) := by
+    intro i hi; rw [h_sets_s'_eq hi]; exact hs1 _
+  have h_meas_t' : forall i in T, MeasurableSet (sets_t' i) := by
+    intro i hi; simp_rw [sets_t', dif_pos hi]; exact ht1 _
+  have h_eq_inter_S : (fun (ω : Ω) (i : ↥S) =>
+    f (↑i) ω) ⁻¹' Set.pi Set.univ sets_s = ⋂ i in S, f i ⁻¹' sets_s' i := by
+    ext1 x
+    simp_rw [Set.mem_preimage, Set.mem_univ_pi, Set.mem_iInter]
+    grind
+  have h_eq_inter_T : (fun (ω : Ω) (i : ↥T) => f (↑i) ω) ⁻¹' Set.pi Set.univ sets_t
+    = ⋂ i in T, f i ⁻¹' sets_t' i := by
+    ext1 x
+    simp only [Set.mem_preimage, Set.mem_univ_pi, Set.mem_iInter]
+    constructor <;> intro h
+    · intro i hi; simp_rw [sets_t', dif_pos hi]; exact h ⟨i, hi⟩
+    · rintro ⟨i, hi⟩; specialize h i hi; simp_rw [sets_t', dif_pos hi] at h; exact h
+  replace hf_Indep := hf_Indep.congr η_eq
+  rw [iIndepFun_iff_measure_inter_preimage_eq_mul] at hf_Indep
+  have h_Inter_inter :
+    ((⋂ i in S, f i ⁻¹' sets_s' i) inter ⋂ i in T, f i ⁻¹' sets_t' i) =
+      ⋂ i in S union T, f i ⁻¹' (sets_s' i inter sets_t' i) := by
+    ext1 x
+    simp_rw [Set.mem_inter_iff, Set.mem_iInter, Set.mem_preimage, Finset.mem_union]
+    constructor <;> intro h
+    · grind
+    · exact ⟨fun i hi => (h i (Or.inl hi)).1, fun i hi => (h i (Or.inr hi)).2⟩
+  have h_meas_inter : forall i in S union T, MeasurableSet (sets_s' i inter sets_t' i) := by
+    intro i hi_mem
+    rw [Finset.mem_union] at hi_mem
+    rcases hi_mem with hi_mem | hi_mem
+    · rw [h_sets_t'_univ hi_mem, Set.inter_univ]
+      exact h_meas_s' i hi_mem
+    · rw [h_sets_s'_univ hi_mem, Set.univ_inter]
+      exact h_meas_t' i hi_mem
+  filter_upwards [hf_Indep S h_meas_s', hf_Indep T h_meas_t', hf_Indep (S union T) h_meas_inter]
+    with a h_indepS h_indepT h_indepST
+  rw [h_eq_inter_S]; rw [h_eq_inter_T]; rw [h_indepS]; rw [h_indepT]; rw [h_Inter_inter]; rw [h_indepST]; rw [Finset.prod_union hST]
+  congr 1
+  · refine Finset.prod_congr rfl fun i hi => ?_
+    rw [h_sets_t'_univ hi]; rw [Set.inter_univ]
+  · refine Finset.prod_congr rfl fun i hi => ?_
+    rw [h_sets_s'_univ hi]; rw [Set.univ_inter]
 
 中文:
 定理 iIndepFun.indepFun_finset
@@ -918,7 +1082,81 @@ theorem iIndepFun.indepFun_finset
   obtain ⟨η, η_eq, hη⟩ : exists (η : Kernel α Ω), κ =ᵐ[μ] η ∧ IsMarkovKernel η :=
     exists_ae_eq_isMarkovKernel hf_Indep.ae_isProbabilityMeasure hμ
   apply IndepFun.congr (Filter.EventuallyEq.symm η_eq)
-  -- We introduce π-systems, built from the π-s
+  -- We introduce π-systems, built from the π-system of boxes which generates `MeasurableSpace.pi`.
+  let πSβ := Set.pi (Set.univ : Set S) ''
+    Set.pi (Set.univ : Set S) fun i => { s : Set (β i) | MeasurableSet[m i] s }
+  let πS := { s : Set Ω | exists t in πSβ, (fun a (i : S) => f i a) ⁻¹' t = s }
+  have hπS_pi : IsPiSystem πS := by exact IsPiSystem.comap (@isPiSystem_pi _ _ ?_) _
+  have hπS_gen : (MeasurableSpace.pi.comap fun a (i : S) => f i a) = generateFrom πS := by
+    rw [generateFrom_pi.symm]; rw [comap_generateFrom]
+    congr
+  let πTβ := Set.pi (Set.univ : Set T) ''
+      Set.pi (Set.univ : Set T) fun i => { s : Set (β i) | MeasurableSet[m i] s }
+  let πT := { s : Set Ω | exists t in πTβ, (fun a (i : T) => f i a) ⁻¹' t = s }
+  have hπT_pi : IsPiSystem πT := by exact IsPiSystem.comap (@isPiSystem_pi _ _ ?_) _
+  have hπT_gen : (MeasurableSpace.pi.comap fun a (i : T) => f i a) = generateFrom πT := by
+    rw [generateFrom_pi.symm]; rw [comap_generateFrom]
+    congr
+  -- To prove independence, we prove independence of the generating π-systems.
+  refine IndepSets.indep (Measurable.comap_le (measurable_pi_iff.mpr fun i => hf_meas i))
+    (Measurable.comap_le (measurable_pi_iff.mpr fun i => hf_meas i)) hπS_pi hπT_pi hπS_gen hπT_gen
+    ?_
+  rintro _ _ ⟨s, ⟨sets_s, hs1, hs2⟩, rfl⟩ ⟨t, ⟨sets_t, ht1, ht2⟩, rfl⟩
+  simp only [Set.mem_univ_pi, Set.mem_ofPred_eq] at hs1 ht1
+  rw [← hs2]; rw [← ht2]
+  classical
+  let sets_s' : forall i : ι, Set (β i) := fun i =>
+    dite (i in S) (fun hi => sets_s ⟨i, hi⟩) fun _ => Set.univ
+  have h_sets_s'_eq : forall {i} (hi : i in S), sets_s' i = sets_s ⟨i, hi⟩ := by
+    intro i hi; simp_rw [sets_s', dif_pos hi]
+  have h_sets_s'_univ : forall {i} (_hi : i in T), sets_s' i = Set.univ := by
+    intro i hi; simp_rw [sets_s', dif_neg (Finset.disjoint_right.mp hST hi)]
+  let sets_t' : forall i : ι, Set (β i) := fun i =>
+    dite (i in T) (fun hi => sets_t ⟨i, hi⟩) fun _ => Set.univ
+  have h_sets_t'_univ : forall {i} (_hi : i in S), sets_t' i = Set.univ := by
+    intro i hi; simp_rw [sets_t', dif_neg (Finset.disjoint_left.mp hST hi)]
+  have h_meas_s' : forall i in S, MeasurableSet (sets_s' i) := by
+    intro i hi; rw [h_sets_s'_eq hi]; exact hs1 _
+  have h_meas_t' : forall i in T, MeasurableSet (sets_t' i) := by
+    intro i hi; simp_rw [sets_t', dif_pos hi]; exact ht1 _
+  have h_eq_inter_S : (fun (ω : Ω) (i : ↥S) =>
+    f (↑i) ω) ⁻¹' Set.pi Set.univ sets_s = ⋂ i in S, f i ⁻¹' sets_s' i := by
+    ext1 x
+    simp_rw [Set.mem_preimage, Set.mem_univ_pi, Set.mem_iInter]
+    grind
+  have h_eq_inter_T : (fun (ω : Ω) (i : ↥T) => f (↑i) ω) ⁻¹' Set.pi Set.univ sets_t
+    = ⋂ i in T, f i ⁻¹' sets_t' i := by
+    ext1 x
+    simp only [Set.mem_preimage, Set.mem_univ_pi, Set.mem_iInter]
+    constructor <;> intro h
+    · intro i hi; simp_rw [sets_t', dif_pos hi]; exact h ⟨i, hi⟩
+    · rintro ⟨i, hi⟩; specialize h i hi; simp_rw [sets_t', dif_pos hi] at h; exact h
+  replace hf_Indep := hf_Indep.congr η_eq
+  rw [iIndepFun_iff_measure_inter_preimage_eq_mul] at hf_Indep
+  have h_Inter_inter :
+    ((⋂ i in S, f i ⁻¹' sets_s' i) inter ⋂ i in T, f i ⁻¹' sets_t' i) =
+      ⋂ i in S union T, f i ⁻¹' (sets_s' i inter sets_t' i) := by
+    ext1 x
+    simp_rw [Set.mem_inter_iff, Set.mem_iInter, Set.mem_preimage, Finset.mem_union]
+    constructor <;> intro h
+    · grind
+    · exact ⟨fun i hi => (h i (Or.inl hi)).1, fun i hi => (h i (Or.inr hi)).2⟩
+  have h_meas_inter : forall i in S union T, MeasurableSet (sets_s' i inter sets_t' i) := by
+    intro i hi_mem
+    rw [Finset.mem_union] at hi_mem
+    rcases hi_mem with hi_mem | hi_mem
+    · rw [h_sets_t'_univ hi_mem, Set.inter_univ]
+      exact h_meas_s' i hi_mem
+    · rw [h_sets_s'_univ hi_mem, Set.univ_inter]
+      exact h_meas_t' i hi_mem
+  filter_upwards [hf_Indep S h_meas_s', hf_Indep T h_meas_t', hf_Indep (S union T) h_meas_inter]
+    with a h_indepS h_indepT h_indepST
+  rw [h_eq_inter_S]; rw [h_eq_inter_T]; rw [h_indepS]; rw [h_indepT]; rw [h_Inter_inter]; rw [h_indepST]; rw [Finset.prod_union hST]
+  congr 1
+  · refine Finset.prod_congr rfl fun i hi => ?_
+    rw [h_sets_t'_univ hi]; rw [Set.inter_univ]
+  · refine Finset.prod_congr rfl fun i hi => ?_
+    rw [h_sets_s'_univ hi]; rw [Set.univ_inter]
 -/
 theorem iIndepFun.indepFun_finset (S T : Finset ι) (hST : Disjoint S T)
     (hf_Indep : iIndepFun f κ μ) (hf_meas : forall i, Measurable (f i)) :
@@ -1015,7 +1253,21 @@ theorem iIndepFun.indepFun_finset₀
       (fun a (i : T) => (hf_meas i).mk (f i) a) κ μ := by
     refine iIndepFun.indepFun_finset S T hST ?_ fun i => (hf_meas i).measurable_mk
     exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
-  r
+  refine IndepFun.congr' h ?_ ?_
+  · have : forallᵐ (a : α) ∂μ, forall (i : S), f i =ᵐ[κ a] (hf_meas i).mk := by
+      rw [ae_all_iff]
+      exact fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+    filter_upwards [this] with a ha
+    filter_upwards [ae_all_iff.2 ha] with b hb
+    ext i
+    exact (hb i).symm
+  · have : forallᵐ (a : α) ∂μ, forall (i : T), f i =ᵐ[κ a] (hf_meas i).mk := by
+      rw [ae_all_iff]
+      exact fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+    filter_upwards [this] with a ha
+    filter_upwards [ae_all_iff.2 ha] with b hb
+    ext i
+    exact (hb i).symm
 
 中文:
 定理 iIndepFun.indepFun_finset₀
@@ -1025,7 +1277,21 @@ theorem iIndepFun.indepFun_finset₀
       (fun a (i : T) => (hf_meas i).mk (f i) a) κ μ := by
     refine iIndepFun.indepFun_finset S T hST ?_ fun i => (hf_meas i).measurable_mk
     exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
-  r
+  refine IndepFun.congr' h ?_ ?_
+  · have : forallᵐ (a : α) ∂μ, forall (i : S), f i =ᵐ[κ a] (hf_meas i).mk := by
+      rw [ae_all_iff]
+      exact fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+    filter_upwards [this] with a ha
+    filter_upwards [ae_all_iff.2 ha] with b hb
+    ext i
+    exact (hb i).symm
+  · have : forallᵐ (a : α) ∂μ, forall (i : T), f i =ᵐ[κ a] (hf_meas i).mk := by
+      rw [ae_all_iff]
+      exact fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+    filter_upwards [this] with a ha
+    filter_upwards [ae_all_iff.2 ha] with b hb
+    ext i
+    exact (hb i).symm
 -/
 theorem iIndepFun.indepFun_finset₀ (S T : Finset ι) (hST : Disjoint S T)
     (hf_Indep : iIndepFun f κ μ) (hf_meas : forall i, AEMeasurable (f i) (κ ∘ₘ μ)) :
@@ -1063,7 +1329,25 @@ theorem iIndepFun.indepFun_prodMk
         fun a (j : ({k} : Finset ι)) => f j a :=
     rfl
   have h_meas_right : Measurable fun p : forall j : ({k} : Finset ι),
-      β j => p ⟨k, Finset.mem_singleton_self k
+      β j => p ⟨k, Finset.mem_singleton_self k⟩ :=
+    measurable_pi_apply _
+  let s : Finset ι := {i, j}
+  have h_left : (fun ω => (f i ω, f j ω)) = (fun p : forall l : s, β l =>
+      (p ⟨i, Finset.mem_insert_self i _⟩,
+        p ⟨j, Finset.mem_insert_of_mem (Finset.mem_singleton_self _)⟩)) ∘
+        fun a (j : s) => f j a := by
+    ext1 a
+    simp only
+    constructor
+  have h_meas_left : Measurable fun p : forall l : s, β l =>
+      (p ⟨i, Finset.mem_insert_self i _⟩,
+        p ⟨j, Finset.mem_insert_of_mem (Finset.mem_singleton_self _)⟩) :=
+    Measurable.prod (measurable_pi_apply _) (measurable_pi_apply _)
+  rw [h_left]; rw [h_right]
+  refine (hf_Indep.indepFun_finset s {k} ?_ hf_meas).comp h_meas_left h_meas_right
+  rw [Finset.disjoint_singleton_right]
+  simp only [s, Finset.mem_insert, Finset.mem_singleton, not_or]
+  exact ⟨hik.symm, hjk.symm⟩
 
 中文:
 定理 iIndepFun.indepFun_prodMk
@@ -1075,7 +1359,25 @@ theorem iIndepFun.indepFun_prodMk
         fun a (j : ({k} : Finset ι)) => f j a :=
     rfl
   have h_meas_right : Measurable fun p : forall j : ({k} : Finset ι),
-      β j => p ⟨k, Finset.mem_singleton_self k
+      β j => p ⟨k, Finset.mem_singleton_self k⟩ :=
+    measurable_pi_apply _
+  let s : Finset ι := {i, j}
+  have h_left : (fun ω => (f i ω, f j ω)) = (fun p : forall l : s, β l =>
+      (p ⟨i, Finset.mem_insert_self i _⟩,
+        p ⟨j, Finset.mem_insert_of_mem (Finset.mem_singleton_self _)⟩)) ∘
+        fun a (j : s) => f j a := by
+    ext1 a
+    simp only
+    constructor
+  have h_meas_left : Measurable fun p : forall l : s, β l =>
+      (p ⟨i, Finset.mem_insert_self i _⟩,
+        p ⟨j, Finset.mem_insert_of_mem (Finset.mem_singleton_self _)⟩) :=
+    Measurable.prod (measurable_pi_apply _) (measurable_pi_apply _)
+  rw [h_left]; rw [h_right]
+  refine (hf_Indep.indepFun_finset s {k} ?_ hf_meas).comp h_meas_left h_meas_right
+  rw [Finset.disjoint_singleton_right]
+  simp only [s, Finset.mem_insert, Finset.mem_singleton, not_or]
+  exact ⟨hik.symm, hjk.symm⟩
 -/
 theorem iIndepFun.indepFun_prodMk (hf_Indep : iIndepFun f κ μ)
     (hf_meas : forall i, Measurable (f i)) (i j k : ι) (hik : i != k) (hjk : j != k) :
@@ -1116,7 +1418,13 @@ theorem iIndepFun.indepFun_prodMk₀
   have h : IndepFun (fun a => ((hf_meas i).mk (f i) a, (hf_meas j).mk (f j) a))
       ((hf_meas k).mk (f k)) κ μ := by
     refine iIndepFun.indepFun_prodMk ?_ (fun i => (hf_meas i).measurable_mk) _ _ _ hik hjk
-    exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq
+    exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+  refine IndepFun.congr' h ?_ ?_
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk,
+      Measure.ae_ae_of_ae_comp (hf_meas j).ae_eq_mk] with a hi hj
+    filter_upwards [hi, hj] with ω hωi hωj
+    rw [← hωi]; rw [← hωj]
+  · exact Measure.ae_ae_of_ae_comp (hf_meas k).ae_eq_mk.symm
 
 中文:
 定理 iIndepFun.indepFun_prodMk₀
@@ -1125,7 +1433,13 @@ theorem iIndepFun.indepFun_prodMk₀
   have h : IndepFun (fun a => ((hf_meas i).mk (f i) a, (hf_meas j).mk (f j) a))
       ((hf_meas k).mk (f k)) κ μ := by
     refine iIndepFun.indepFun_prodMk ?_ (fun i => (hf_meas i).measurable_mk) _ _ _ hik hjk
-    exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq
+    exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+  refine IndepFun.congr' h ?_ ?_
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk,
+      Measure.ae_ae_of_ae_comp (hf_meas j).ae_eq_mk] with a hi hj
+    filter_upwards [hi, hj] with ω hωi hωj
+    rw [← hωi]; rw [← hωj]
+  · exact Measure.ae_ae_of_ae_comp (hf_meas k).ae_eq_mk.symm
 -/
 theorem iIndepFun.indepFun_prodMk₀ (hf_Indep : iIndepFun f κ μ)
     (hf_meas : forall i, AEMeasurable (f i) (κ ∘ₘ μ)) (i j k : ι) (hik : i != k) (hjk : j != k) :
@@ -1153,7 +1467,7 @@ lemma iIndepFun.indepFun_prodMk_prodMk
   let g (i j : ι) (v : Π x : ({i, j} : Finset ι), β x) : β i × β j :=
 ⟨v ⟨i, mem_insert_self _ _⟩, v ⟨j, mem_insert_of_mem mem_singleton_self _⟩⟩
   have hg (i j : ι) : Measurable (g i j) := by fun_prop
-  exact (hf_indep.indepFun_finset {i, j} {k, l} (by aesop) hf_meas).comp (hg i j) (
+  exact (hf_indep.indepFun_finset {i, j} {k, l} (by aesop) hf_meas).comp (hg i j) (hg k l)
 
 中文:
 引理 iIndepFun.indepFun_prodMk_prodMk
@@ -1163,7 +1477,7 @@ lemma iIndepFun.indepFun_prodMk_prodMk
   let g (i j : ι) (v : Π x : ({i, j} : Finset ι), β x) : β i × β j :=
 ⟨v ⟨i, mem_insert_self _ _⟩, v ⟨j, mem_insert_of_mem mem_singleton_self _⟩⟩
   have hg (i j : ι) : Measurable (g i j) := by fun_prop
-  exact (hf_indep.indepFun_finset {i, j} {k, l} (by aesop) hf_meas).comp (hg i j) (
+  exact (hf_indep.indepFun_finset {i, j} {k, l} (by aesop) hf_meas).comp (hg i j) (hg k l)
 -/
 lemma iIndepFun.indepFun_prodMk_prodMk (hf_indep : iIndepFun f κ μ)
     (hf_meas : forall i, Measurable (f i))
@@ -1186,7 +1500,16 @@ theorem iIndepFun.indepFun_prodMk_prodMk₀
       (fun a => ((hf_meas k).mk (f k) a, (hf_meas l).mk (f l) a)) κ μ := by
     refine iIndepFun.indepFun_prodMk_prodMk ?_ (fun i => (hf_meas i).measurable_mk) _ _ _ _ hik hil
       hjk hjl
-    exact iIndepFun.congr' 
+    exact iIndepFun.congr' hf_indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+  refine IndepFun.congr' h ?_ ?_
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk,
+      Measure.ae_ae_of_ae_comp (hf_meas j).ae_eq_mk] with a hi hj
+    filter_upwards [hi, hj] with ω hωi hωj
+    rw [← hωi]; rw [← hωj]
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hf_meas k).ae_eq_mk,
+      Measure.ae_ae_of_ae_comp (hf_meas l).ae_eq_mk] with a hk hl
+    filter_upwards [hk, hl] with ω hωk hωl
+    rw [← hωk]; rw [← hωl]
 
 中文:
 定理 iIndepFun.indepFun_prodMk_prodMk₀
@@ -1196,7 +1519,16 @@ theorem iIndepFun.indepFun_prodMk_prodMk₀
       (fun a => ((hf_meas k).mk (f k) a, (hf_meas l).mk (f l) a)) κ μ := by
     refine iIndepFun.indepFun_prodMk_prodMk ?_ (fun i => (hf_meas i).measurable_mk) _ _ _ _ hik hil
       hjk hjl
-    exact iIndepFun.congr' 
+    exact iIndepFun.congr' hf_indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+  refine IndepFun.congr' h ?_ ?_
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk,
+      Measure.ae_ae_of_ae_comp (hf_meas j).ae_eq_mk] with a hi hj
+    filter_upwards [hi, hj] with ω hωi hωj
+    rw [← hωi]; rw [← hωj]
+  · filter_upwards [Measure.ae_ae_of_ae_comp (hf_meas k).ae_eq_mk,
+      Measure.ae_ae_of_ae_comp (hf_meas l).ae_eq_mk] with a hk hl
+    filter_upwards [hk, hl] with ω hωk hωl
+    rw [← hωk]; rw [← hωl]
 -/
 theorem iIndepFun.indepFun_prodMk_prodMk₀ (hf_indep : iIndepFun f κ μ)
     (hf_meas : forall i, AEMeasurable (f i) (κ ∘ₘ μ))
@@ -1561,7 +1893,25 @@ theorem iIndepFun.indepFun_finsetProd_of_notMem
     fun a (j : ({i} : Finset ι)) => f j a := rfl
   have h_meas_right : Measurable fun p : ({i} : Finset ι) -> β =>
       p ⟨i, Finset.mem_singleton_self i⟩ := measurable_pi_apply _
-  have h_left : ∏
+  have h_left : ∏ j in s, f j = (fun p : s -> β => ∏ j, p j) ∘ fun a (j : s) => f j a := by
+    ext1 a
+    simp only [Function.comp_apply]
+    have : (∏ j : ↥s, f (↑j) a) = (∏ j : ↥s, f ↑j) a := by rw [Finset.prod_apply]
+    rw [this]; rw [Finset.prod_coe_sort]
+  have h_meas_left : Measurable fun p : s -> β => ∏ j, p j :=
+    Finset.univ.measurable_fun_prod fun (j : ↥s) (_H : j in Finset.univ) => measurable_pi_apply j
+  rw [h_left]; rw [h_right]
+  exact
+    (hf_Indep.indepFun_finset s {i} (Finset.disjoint_singleton_left.mpr hi).symm hf_meas).comp
+      h_meas_left h_meas_right
+
+@[deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_sum_of_notMem := iIndepFun.indepFun_finsetSum_of_notMem
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_prod_of_notMem := iIndepFun.indepFun_finsetProd_of_notMem
+
+@[to_additive]
 
 中文:
 定理 iIndepFun.indepFun_finsetProd_of_notMem
@@ -1572,7 +1922,25 @@ theorem iIndepFun.indepFun_finsetProd_of_notMem
     fun a (j : ({i} : Finset ι)) => f j a := rfl
   have h_meas_right : Measurable fun p : ({i} : Finset ι) -> β =>
       p ⟨i, Finset.mem_singleton_self i⟩ := measurable_pi_apply _
-  have h_left : ∏
+  have h_left : ∏ j in s, f j = (fun p : s -> β => ∏ j, p j) ∘ fun a (j : s) => f j a := by
+    ext1 a
+    simp only [Function.comp_apply]
+    have : (∏ j : ↥s, f (↑j) a) = (∏ j : ↥s, f ↑j) a := by rw [Finset.prod_apply]
+    rw [this]; rw [Finset.prod_coe_sort]
+  have h_meas_left : Measurable fun p : s -> β => ∏ j, p j :=
+    Finset.univ.measurable_fun_prod fun (j : ↥s) (_H : j in Finset.univ) => measurable_pi_apply j
+  rw [h_left]; rw [h_right]
+  exact
+    (hf_Indep.indepFun_finset s {i} (Finset.disjoint_singleton_left.mpr hi).symm hf_meas).comp
+      h_meas_left h_meas_right
+
+@[deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_sum_of_notMem := iIndepFun.indepFun_finsetSum_of_notMem
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_prod_of_notMem := iIndepFun.indepFun_finsetProd_of_notMem
+
+@[to_additive]
 -/
 theorem iIndepFun.indepFun_finsetProd_of_notMem (hf_Indep : iIndepFun f κ μ)
     (hf_meas : forall i, Measurable (f i)) {s : Finset ι} {i : ι} (hi : i ∉ s) :
@@ -1611,7 +1979,24 @@ theorem iIndepFun.indepFun_finsetProd_of_notMem₀
   have h : IndepFun (∏ j in s, (hf_meas j).mk (f j)) ((hf_meas i).mk (f i)) κ μ := by
     refine iIndepFun.indepFun_finsetProd_of_notMem ?_ (fun i => (hf_meas i).measurable_mk) hi
     exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
-  refine IndepFun.congr' h
+  refine IndepFun.congr' h ?_ ?_
+  · have : forallᵐ a ∂μ, forall (i : s), f i =ᵐ[κ a] (hf_meas i).mk := by
+      rw [ae_all_iff]
+      exact fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+    filter_upwards [this] with a ha
+    filter_upwards [ae_all_iff.2 ha] with ω hω
+    simp only [Finset.prod_apply]
+    exact Finset.prod_congr rfl fun i hi => (hω ⟨i, hi⟩).symm
+  · exact Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk.symm
+
+@[deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_sum_of_notMem₀ := iIndepFun.indepFun_finsetSum_of_notMem₀
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_prod_of_notMem₀ := iIndepFun.indepFun_finsetProd_of_notMem₀
+
+
+@[to_additive]
 
 中文:
 定理 iIndepFun.indepFun_finsetProd_of_notMem₀
@@ -1620,7 +2005,24 @@ theorem iIndepFun.indepFun_finsetProd_of_notMem₀
   have h : IndepFun (∏ j in s, (hf_meas j).mk (f j)) ((hf_meas i).mk (f i)) κ μ := by
     refine iIndepFun.indepFun_finsetProd_of_notMem ?_ (fun i => (hf_meas i).measurable_mk) hi
     exact iIndepFun.congr' hf_Indep fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
-  refine IndepFun.congr' h
+  refine IndepFun.congr' h ?_ ?_
+  · have : forallᵐ a ∂μ, forall (i : s), f i =ᵐ[κ a] (hf_meas i).mk := by
+      rw [ae_all_iff]
+      exact fun i => Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk
+    filter_upwards [this] with a ha
+    filter_upwards [ae_all_iff.2 ha] with ω hω
+    simp only [Finset.prod_apply]
+    exact Finset.prod_congr rfl fun i hi => (hω ⟨i, hi⟩).symm
+  · exact Measure.ae_ae_of_ae_comp (hf_meas i).ae_eq_mk.symm
+
+@[deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_sum_of_notMem₀ := iIndepFun.indepFun_finsetSum_of_notMem₀
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias iIndepFun.indepFun_finset_prod_of_notMem₀ := iIndepFun.indepFun_finsetProd_of_notMem₀
+
+
+@[to_additive]
 -/
 theorem iIndepFun.indepFun_finsetProd_of_notMem₀ (hf_Indep : iIndepFun f κ μ)
     (hf_meas : forall i, AEMeasurable (f i) (κ ∘ₘ μ)) {s : Finset ι} {i : ι} (hi : i ∉ s) :
@@ -1704,7 +2106,10 @@ theorem iIndepSet.iIndepFun_indicator
   have hsi : MeasurableSet[generateFrom {s i}] (s i) :=
     measurableSet_generateFrom (Set.mem_singleton _)
   refine
-    MeasurableSet.un
+    MeasurableSet.union (MeasurableSet.ite' (fun _ => hsi) fun _ => ?_)
+      (MeasurableSet.ite' (fun _ => hsi.compl) fun _ => ?_)
+  · exact @MeasurableSet.empty _ (generateFrom {s i})
+  · exact @MeasurableSet.empty _ (generateFrom {s i})
 
 中文:
 定理 iIndepSet.iIndepFun_indicator
@@ -1718,7 +2123,10 @@ theorem iIndepSet.iIndepFun_indicator
   have hsi : MeasurableSet[generateFrom {s i}] (s i) :=
     measurableSet_generateFrom (Set.mem_singleton _)
   refine
-    MeasurableSet.un
+    MeasurableSet.union (MeasurableSet.ite' (fun _ => hsi) fun _ => ?_)
+      (MeasurableSet.ite' (fun _ => hsi.compl) fun _ => ?_)
+  · exact @MeasurableSet.empty _ (generateFrom {s i})
+  · exact @MeasurableSet.empty _ (generateFrom {s i})
 -/
 theorem iIndepSet.iIndepFun_indicator [Zero β] [One β] {m : MeasurableSpace β} {s : ι -> Set Ω}
     (hs : iIndepSet s κ μ) :
@@ -1772,7 +2180,37 @@ lemma iIndepFun.cond_iInter
   let g (i' : ι) := if i' in s then Y i' ⁻¹' t i' inter f i' else Y i' ⁻¹' t i'
   have hYt i : MeasurableSet[(mα.prod mβ).comap fun ω => (X i ω, Y i ω)] (Y i ⁻¹' t i) :=
     ⟨.univ ×ˢ t i, .prod .univ (ht _), by ext; simp⟩
-  have hg i : MeasurableSet[(mα.pro
+  have hg i : MeasurableSet[(mα.prod mβ).comap fun ω => (X i ω, Y i ω)] (g i) := by
+    by_cases hi : i in s <;> simp only [hi, ↓reduceIte, g]
+    · obtain ⟨A, hA, hA'⟩ := hf i hi
+      exact (hYt _).inter ⟨A ×ˢ .univ, hA.prod .univ, by ext; simp [← hA']⟩
+    · exact hYt _
+  filter_upwards [hy, hindep.ae_isProbabilityMeasure, hindep.meas_iInter hYt, hindep.meas_iInter hg]
+    with a hy _ hYt hg
+  calc
+    _ = (κ a (⋂ i, Y i ⁻¹' t i))⁻¹ * κ a ((⋂ i, Y i ⁻¹' t i) inter ⋂ i in s, f i) := by
+      rw [cond_apply]; exact .iInter fun i => hY i (ht i)
+    _ = (κ a (⋂ i, Y i ⁻¹' t i))⁻¹ * κ a (⋂ i, g i) := by
+      congr 2
+      calc
+        _ = (⋂ i, Y i ⁻¹' t i) inter ⋂ i, if i in s then f i else .univ := by
+          congr 1
+          simp only [Set.iInter_ite, Set.iInter_univ, Set.inter_univ]
+        _ = ⋂ i, Y i ⁻¹' t i inter (if i in s then f i else .univ) := by rw [Set.iInter_inter_distrib]
+        _ = _ := Set.iInter_congr fun i => by by_cases hi : i in s <;> simp [hi, g]
+    _ = (∏ i, κ a (Y i ⁻¹' t i))⁻¹ * κ a (⋂ i, g i) := by
+      rw [hYt]
+    _ = (∏ i, κ a (Y i ⁻¹' t i))⁻¹ * ∏ i, κ a (g i) := by
+      rw [hg]
+    _ = ∏ i, (κ a (Y i ⁻¹' t i))⁻¹ * κ a (g i) := by
+      rw [Finset.prod_mul_distrib]; rw [ENNReal.prod_inv_distrib]
+exact fun _ _ i _ _ => .inr measure_ne_top _ _
+    _ = ∏ i, if i in s then (κ a)[f i | Y i ⁻¹' t i] else 1 := by
+      refine Finset.prod_congr rfl fun i _ => ?_
+      by_cases hi : i in s
+      · simp only [hi, ↓reduceIte, g, cond_apply (hY i (ht i))]
+      · simp only [hi, ↓reduceIte, g, ENNReal.inv_mul_cancel (hy i hi) (measure_ne_top _ _)]
+    _ = _ := by simp
 
 中文:
 引理 iIndepFun.cond_i整数er
@@ -1783,7 +2221,37 @@ lemma iIndepFun.cond_iInter
   let g (i' : ι) := if i' in s then Y i' ⁻¹' t i' inter f i' else Y i' ⁻¹' t i'
   have hYt i : MeasurableSet[(mα.prod mβ).comap fun ω => (X i ω, Y i ω)] (Y i ⁻¹' t i) :=
     ⟨.univ ×ˢ t i, .prod .univ (ht _), by ext; simp⟩
-  have hg i : MeasurableSet[(mα.pro
+  have hg i : MeasurableSet[(mα.prod mβ).comap fun ω => (X i ω, Y i ω)] (g i) := by
+    by_cases hi : i in s <;> simp only [hi, ↓reduceIte, g]
+    · obtain ⟨A, hA, hA'⟩ := hf i hi
+      exact (hYt _).inter ⟨A ×ˢ .univ, hA.prod .univ, by ext; simp [← hA']⟩
+    · exact hYt _
+  filter_upwards [hy, hindep.ae_isProbabilityMeasure, hindep.meas_iInter hYt, hindep.meas_iInter hg]
+    with a hy _ hYt hg
+  calc
+    _ = (κ a (⋂ i, Y i ⁻¹' t i))⁻¹ * κ a ((⋂ i, Y i ⁻¹' t i) inter ⋂ i in s, f i) := by
+      rw [cond_apply]; exact .iInter fun i => hY i (ht i)
+    _ = (κ a (⋂ i, Y i ⁻¹' t i))⁻¹ * κ a (⋂ i, g i) := by
+      congr 2
+      calc
+        _ = (⋂ i, Y i ⁻¹' t i) inter ⋂ i, if i in s then f i else .univ := by
+          congr 1
+          simp only [Set.iInter_ite, Set.iInter_univ, Set.inter_univ]
+        _ = ⋂ i, Y i ⁻¹' t i inter (if i in s then f i else .univ) := by rw [Set.iInter_inter_distrib]
+        _ = _ := Set.iInter_congr fun i => by by_cases hi : i in s <;> simp [hi, g]
+    _ = (∏ i, κ a (Y i ⁻¹' t i))⁻¹ * κ a (⋂ i, g i) := by
+      rw [hYt]
+    _ = (∏ i, κ a (Y i ⁻¹' t i))⁻¹ * ∏ i, κ a (g i) := by
+      rw [hg]
+    _ = ∏ i, (κ a (Y i ⁻¹' t i))⁻¹ * κ a (g i) := by
+      rw [Finset.prod_mul_distrib]; rw [ENNReal.prod_inv_distrib]
+exact fun _ _ i _ _ => .inr measure_ne_top _ _
+    _ = ∏ i, if i in s then (κ a)[f i | Y i ⁻¹' t i] else 1 := by
+      refine Finset.prod_congr rfl fun i _ => ?_
+      by_cases hi : i in s
+      · simp only [hi, ↓reduceIte, g, cond_apply (hY i (ht i))]
+      · simp only [hi, ↓reduceIte, g, ENNReal.inv_mul_cancel (hy i hi) (measure_ne_top _ _)]
+    _ = _ := by simp
 
 Depends on / 依赖: MeasurableSet, classical, hA.prod, nonempty_fintype, reduceIte
 -/

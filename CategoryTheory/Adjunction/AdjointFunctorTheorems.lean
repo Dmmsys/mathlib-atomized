@@ -129,7 +129,10 @@ lemma isRightAdjoint_of_preservesLimits_of_solutionSetCondition
   let B' : ι -> StructuredArrow A G := fun i => StructuredArrow.mk (f i)
   have hB' : forall A' : StructuredArrow A G, exists i, Nonempty (B' i ⟶ A') := by
     intro A'
-    obtain 
+    obtain ⟨i, _, t⟩ := g _ A'.hom
+    exact ⟨i, ⟨StructuredArrow.homMk _ t⟩⟩
+  obtain ⟨T, hT⟩ := has_weakly_initial_of_weakly_initial_set_and_hasProducts hB'
+  apply hasInitial_of_weakly_initial_and_hasWideEqualizers hT
 
 中文:
 引理 isRightAdjoint_of_preservesLimits_of_solutionSetCondition
@@ -142,7 +145,10 @@ lemma isRightAdjoint_of_preservesLimits_of_solutionSetCondition
   let B' : ι -> StructuredArrow A G := fun i => StructuredArrow.mk (f i)
   have hB' : forall A' : StructuredArrow A G, exists i, Nonempty (B' i ⟶ A') := by
     intro A'
-    obtain 
+    obtain ⟨i, _, t⟩ := g _ A'.hom
+    exact ⟨i, ⟨StructuredArrow.homMk _ t⟩⟩
+  obtain ⟨T, hT⟩ := has_weakly_initial_of_weakly_initial_set_and_hasProducts hB'
+  apply hasInitial_of_weakly_initial_and_hasWideEqualizers hT
 
 Depends on / 依赖: Nonempty, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, hasInitial_of_weakly_initial_and_hasWideEqualizers, has_weakly_initial_of_weakly_initial_set_and_hasProducts, isRightAdjointOfStructuredArrowInitials, specialize
 -/

@@ -162,7 +162,8 @@ theorem subset_vonNeumann
     exact (subset_vonNeumann.1 hz).trans_lt ha
   · rw [mem_vonNeumann']
     have := hx hy
-    exact ⟨_, this, subset_vonNeumann.2 le_r
+    exact ⟨_, this, subset_vonNeumann.2 le_rfl⟩
+termination_by o
 
 中文:
 定理 subset_vonNeumann
@@ -177,7 +178,8 @@ theorem subset_vonNeumann
     exact (subset_vonNeumann.1 hz).trans_lt ha
   · rw [mem_vonNeumann']
     have := hx hy
-    exact ⟨_, this, subset_vonNeumann.2 le_r
+    exact ⟨_, this, subset_vonNeumann.2 le_rfl⟩
+termination_by o
 
 Depends on / 依赖: le_rfl, mem_vonNeumann, rank_le_iff, rank_lt_of_mem, simp_rw, subset_vonNeumann, termination_by, trans_le, trans_lt
 -/
@@ -615,7 +617,18 @@ theorem card_vonNeumann
     simp_rw [preBeth_limit ho.isSuccPrelimit, ← fun i : Set.Iio o => ih i i.2,
       vonNeumann_of_isSuccPrelimit ho.isSuccPrelimit]
     apply iSup_card_le_card_iUnion.antisymm'
-    rw 
+    rw [← lift_le.{u + 1}]
+    apply lift_card_iUnion_le_sum_card.trans
+    refine (sum_eq_lift_iSup_of_lift_mk_le_lift_iSup ?_ ?_).le
+    · rw [mk_Iio_ordinal, ← lift_aleph0.{u + 1, u}, lift_le, Ordinal.aleph0_le_card]
+      exact Ordinal.omega0_le_of_isSuccLimit ho
+    · rw [mk_Iio_ordinal, lift_lift, lift_le]
+      by_contra! h
+refine (⨆ i : Set.Iio o, (V_ ↑i).card).card_ord.not_lt
+(Ordinal.card_le_card_vonNeumann _).trans_lt (cantor _).trans_le ?_
+      rw [← card_powerset]; rw [← vonNeumann_add_one]
+      refine le_ciSup bddAbove_of_small (⟨_, ho.succ_lt ?_⟩ : Set.Iio o)
+      exact (ord_card_le _).trans_lt' (ord_strictMono h)
 
 中文:
 定理 card_vonNeumann
@@ -629,7 +642,18 @@ theorem card_vonNeumann
     simp_rw [preBeth_limit ho.isSuccPrelimit, ← fun i : Set.Iio o => ih i i.2,
       vonNeumann_of_isSuccPrelimit ho.isSuccPrelimit]
     apply iSup_card_le_card_iUnion.antisymm'
-    rw 
+    rw [← lift_le.{u + 1}]
+    apply lift_card_iUnion_le_sum_card.trans
+    refine (sum_eq_lift_iSup_of_lift_mk_le_lift_iSup ?_ ?_).le
+    · rw [mk_Iio_ordinal, ← lift_aleph0.{u + 1, u}, lift_le, Ordinal.aleph0_le_card]
+      exact Ordinal.omega0_le_of_isSuccLimit ho
+    · rw [mk_Iio_ordinal, lift_lift, lift_le]
+      by_contra! h
+refine (⨆ i : Set.Iio o, (V_ ↑i).card).card_ord.not_lt
+(Ordinal.card_le_card_vonNeumann _).trans_lt (cantor _).trans_le ?_
+      rw [← card_powerset]; rw [← vonNeumann_add_one]
+      refine le_ciSup bddAbove_of_small (⟨_, ho.succ_lt ?_⟩ : Set.Iio o)
+      exact (ord_card_le _).trans_lt' (ord_strictMono h)
 
 Depends on / 依赖: Ordinal, Ordinal.aleph0_le_card, Ordinal.limitRecOn, Ordinal.omega0_le_o, Set.Iio, add_one, aleph0_le_card, antisymm, ho.isSuccPrelimit, iSup_card_le_card_iUnion, iSup_card_le_card_iUnion.antisymm, isSuccPrelimit, lift_aleph0, lift_card_iUnion_le_sum_card, lift_card_iUnion_le_sum_card.trans, lift_le, limitRecOn, mk_Iio_ordinal, omega0_le_o, preBeth_limit
 -/

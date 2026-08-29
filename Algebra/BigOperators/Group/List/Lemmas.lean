@@ -136,13 +136,13 @@ English:
 lemma prod_rotate_eq_one_of_prod_eq_one
   proof: le_of_lt (Nat.mod_lt _ (by simp))
     rw [← List.take_append_drop (n % List.length (a :: l)) (a :: l)] at hl
-    rw [← rotate_mod]; rw [rotate_eq_drop_append_take this]; rw [List.prod_append]; rw [mul_eq_one_iff_inv_eq]; rw [← one_mul (List.prod _)⁻¹]; rw [← hl]; rw [List.prod_append]; rw [mul_assoc
+    rw [← rotate_mod]; rw [rotate_eq_drop_append_take this]; rw [List.prod_append]; rw [mul_eq_one_iff_inv_eq]; rw [← one_mul (List.prod _)⁻¹]; rw [← hl]; rw [List.prod_append]; rw [mul_assoc]; rw [mul_inv_cancel]; rw [mul_one]
 
 中文:
 引理 prod_rotate_eq_one_of_prod_eq_one
   证明: le_of_lt (Nat.mod_lt _ (by simp))
     rw [← List.take_append_drop (n % List.length (a :: l)) (a :: l)] at hl
-    rw [← rotate_mod]; rw [rotate_eq_drop_append_take this]; rw [List.prod_append]; rw [mul_eq_one_iff_inv_eq]; rw [← one_mul (List.prod _)⁻¹]; rw [← hl]; rw [List.prod_append]; rw [mul_assoc
+    rw [← rotate_mod]; rw [rotate_eq_drop_append_take this]; rw [List.prod_append]; rw [mul_eq_one_iff_inv_eq]; rw [← one_mul (List.prod _)⁻¹]; rw [← hl]; rw [List.prod_append]; rw [mul_assoc]; rw [mul_inv_cancel]; rw [mul_one]
 
 Depends on / 依赖: Nat.mod_lt, le_of_lt, mod_lt
 -/
@@ -174,7 +174,14 @@ theorem sum_map_count_dedup_filter_eq_countP
       by_cases ha : a in as
       · simp [dedup_cons_of_mem ha]
       · simp only [dedup_cons_of_notMem ha, List.filter]
-        match
+        match p a with
+        | true => simp only [List.map_cons, List.sum_cons, List.count_eq_zero.2 ha, zero_add]
+        | false => simp only
+    · simp only [beq_iff_eq]
+      by_cases hp : p a
+      · refine _root_.trans (sum_map_eq_nsmul_single a _ fun _ h _ => by simp [h.symm]) ?_
+        simp [hp, count_dedup]
+      · exact _root_.trans (List.sum_eq_zero fun n hn => by grind) (by simp [hp])
 
 中文:
 定理 sum_map_count_dedup_filter_eq_countP
@@ -189,7 +196,14 @@ theorem sum_map_count_dedup_filter_eq_countP
       by_cases ha : a in as
       · simp [dedup_cons_of_mem ha]
       · simp only [dedup_cons_of_notMem ha, List.filter]
-        match
+        match p a with
+        | true => simp only [List.map_cons, List.sum_cons, List.count_eq_zero.2 ha, zero_add]
+        | false => simp only
+    · simp only [beq_iff_eq]
+      by_cases hp : p a
+      · refine _root_.trans (sum_map_eq_nsmul_single a _ fun _ h _ => by simp [h.symm]) ?_
+        simp [hp, count_dedup]
+      · exact _root_.trans (List.sum_eq_zero fun n hn => by grind) (by simp [hp])
 
 Depends on / 依赖: List.countP_cons, List.count_cons, List.count_eq_zero, List.filter, List.map_cons, List.sum_cons, List.sum_map_add, _root_, _root_.trans, beq_iff_eq, countP_cons, count_cons, count_eq_zero, dedup_cons_of_mem, dedup_cons_of_notMem, filter, h.symm, map_cons, simp_rw, sum_cons
 -/

@@ -466,7 +466,7 @@ theorem comap_uniformity_le
   refine fun x hx => (hf x.1 x.2).trans_lt ?_
   rw [mul_comm]; rw [← div_eq_mul_inv] at hx
   rw [mul_comm]
-
+  exact ENNReal.mul_lt_of_lt_div hx
 
 中文:
 定理 comap_uniformity_le
@@ -478,7 +478,7 @@ theorem comap_uniformity_le
   refine fun x hx => (hf x.1 x.2).trans_lt ?_
   rw [mul_comm]; rw [← div_eq_mul_inv] at hx
   rw [mul_comm]
-
+  exact ENNReal.mul_lt_of_lt_div hx
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, ENNReal.inv_ne_zero, ENNReal.mul_lt_of_lt_div, ENNReal.mul_pos, coe_ne_top, div_eq_mul_inv, inv_ne_zero, le_basis_iff, mul_comm, mul_lt_of_lt_div, mul_pos, trans_lt, uniformity_basis_edist, uniformity_basis_edist.comap
 -/
@@ -807,7 +807,7 @@ theorem properSpace
   have B : IsBounded K := hK.isBounded_preimage isBounded_closedBall
   have : IsCompact K := isCompact_iff_isClosed_bounded.2 ⟨A, B⟩
   convert! this.image f_cont
-  exact (hf.ima
+  exact (hf.image_preimage _).symm
 
 中文:
 定理 properSpace
@@ -819,7 +819,7 @@ theorem properSpace
   have B : IsBounded K := hK.isBounded_preimage isBounded_closedBall
   have : IsCompact K := isCompact_iff_isClosed_bounded.2 ⟨A, B⟩
   convert! this.image f_cont
-  exact (hf.ima
+  exact (hf.image_preimage _).symm
 -/
 protected theorem properSpace {α : Type*} [MetricSpace α] {K : Real>=0} {f : α -> β} [ProperSpace α]
     (hK : AntilipschitzWith K f) (f_cont : Continuous f) (hf : Function.Surjective f) :
@@ -847,7 +847,7 @@ theorem isBounded_of_image2_left
     rw [Set.image2_singleton_right] at h
     replace h := (hf b).isBounded_preimage h
     exact h.subset (subset_preimage_image _ _)
-  exac
+  exact mt (IsBounded.subset · (image2_subset subset_rfl (singleton_subset_iff.mpr hb))) this
 
 中文:
 定理 isBounded_of_image2_left
@@ -861,7 +861,7 @@ theorem isBounded_of_image2_left
     rw [Set.image2_singleton_right] at h
     replace h := (hf b).isBounded_preimage h
     exact h.subset (subset_preimage_image _ _)
-  exac
+  exact mt (IsBounded.subset · (image2_subset subset_rfl (singleton_subset_iff.mpr hb))) this
 
 Depends on / 依赖: IsBounded, IsBounded.subset, Nonempty, Set.image2, Set.image2_singleton_right, contrapose, h.subset, image2, image2_singleton_right, image2_subset, isBounded_preimage, nonempty_of_not_isBounded, replace, singleton_subset_iff, singleton_subset_iff.mpr, subset, subset_preimage_image, subset_rfl, t.Nonempty
 -/

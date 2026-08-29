@@ -107,7 +107,8 @@ definition adj
 invFun := fun f => ofHom homEquiv.symm f
           left_inv := fun f => congrArg ofHom (homEquiv.left_inv f.hom)
           right_inv := by cat_disch }
-      homEquiv_naturality_left_symm := fun {_ _ Y}
+      homEquiv_naturality_left_symm := fun {_ _ Y} f g =>
+hom_ext RingHom.ext fun x => eval₂_cast_comp f (Int.castRingHom Y) g x }
 
 中文:
 定义 adj
@@ -118,7 +119,8 @@ invFun := fun f => ofHom homEquiv.symm f
 invFun := fun f => ofHom homEquiv.symm f
           left_inv := fun f => congrArg ofHom (homEquiv.left_inv f.hom)
           right_inv := by cat_disch }
-      homEquiv_naturality_left_symm := fun {_ _ Y}
+      homEquiv_naturality_left_symm := fun {_ _ Y} f g =>
+hom_ext RingHom.ext fun x => eval₂_cast_comp f (Int.castRingHom Y) g x }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Int.castRingHom, RingHom, RingHom.ext, castRingHom, cat_disch, f.hom, homEquiv, homEquiv.left_inv, homEquiv.symm, homEquiv_naturality_left_symm, hom_ext, invFun, left_inv, mkOfHomEquiv, right_inv
 -/
@@ -266,7 +268,12 @@ definition monoidAlgebraAdj
       (.id _) fun _ _ => .all _ _)) (by ext; simp [MonoidAlgebra.liftNCRingHom]),
     naturality S T f := by
       ext : 2
-      apply MonoidAlgebra.rin
+      apply MonoidAlgebra.ringHom_ext <;>
+        intro <;> simp [MonoidAlgebra.liftNCRingHom, ← Under.w f, -Under.w] }
+  left_triangle_components G := by
+    ext : 2
+    apply MonoidAlgebra.ringHom_ext <;> intro <;> simp [MonoidAlgebra.liftNCRingHom]
+  right_triangle_components S := by dsimp; ext; simp [MonoidAlgebra.liftNCRingHom]
 
 中文:
 定义 monoidAlgebraAdj
@@ -277,7 +284,12 @@ definition monoidAlgebraAdj
       (.id _) fun _ _ => .all _ _)) (by ext; simp [MonoidAlgebra.liftNCRingHom]),
     naturality S T f := by
       ext : 2
-      apply MonoidAlgebra.rin
+      apply MonoidAlgebra.ringHom_ext <;>
+        intro <;> simp [MonoidAlgebra.liftNCRingHom, ← Under.w f, -Under.w] }
+  left_triangle_components G := by
+    ext : 2
+    apply MonoidAlgebra.ringHom_ext <;> intro <;> simp [MonoidAlgebra.liftNCRingHom]
+  right_triangle_components S := by dsimp; ext; simp [MonoidAlgebra.liftNCRingHom]
 
 Depends on / 依赖: CommMonCat, CommMonCat.ofHom, MonoidAlgebra, MonoidAlgebra.of
 -/

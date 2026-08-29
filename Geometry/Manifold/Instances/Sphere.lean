@@ -222,7 +222,12 @@ theorem stereoInvFunAux_mem
   suffices ‖(4 : Real) • w + (‖w‖ ^ 2 - 4) • v‖ = ‖w‖ ^ 2 + 4 by
     simp only [mem_sphere_zero_iff_norm, norm_smul, Real.norm_eq_abs, abs_inv, this,
       abs_of_pos h₁, stereoInvFunAux_apply, inv_mul_cancel₀ h₁.ne']
-  suffices ‖(4 : Real) • 
+  suffices ‖(4 : Real) • w + (‖w‖ ^ 2 - 4) • v‖ ^ 2 = (‖w‖ ^ 2 + 4) ^ 2 by
+    simpa only [sq_eq_sq_iff_abs_eq_abs, abs_norm, abs_of_pos h₁] using this
+  rw [Submodule.mem_orthogonal_singleton_iff_inner_left] at hw
+  simp [norm_add_sq_real, norm_smul, inner_smul_left, inner_smul_right, hw, mul_pow,
+    Real.norm_eq_abs, hv]
+  ring
 
 中文:
 定理 stereoInvFunAux_mem
@@ -232,7 +237,12 @@ theorem stereoInvFunAux_mem
   suffices ‖(4 : Real) • w + (‖w‖ ^ 2 - 4) • v‖ = ‖w‖ ^ 2 + 4 by
     simp only [mem_sphere_zero_iff_norm, norm_smul, Real.norm_eq_abs, abs_inv, this,
       abs_of_pos h₁, stereoInvFunAux_apply, inv_mul_cancel₀ h₁.ne']
-  suffices ‖(4 : Real) • 
+  suffices ‖(4 : Real) • w + (‖w‖ ^ 2 - 4) • v‖ ^ 2 = (‖w‖ ^ 2 + 4) ^ 2 by
+    simpa only [sq_eq_sq_iff_abs_eq_abs, abs_norm, abs_of_pos h₁] using this
+  rw [Submodule.mem_orthogonal_singleton_iff_inner_left] at hw
+  simp [norm_add_sq_real, norm_smul, inner_smul_left, inner_smul_right, hw, mul_pow,
+    Real.norm_eq_abs, hv]
+  ring
 
 Depends on / 依赖: Real.norm_eq_abs, Submodule, Submodule.mem_orthogonal_singleton_iff_inner_left, abs_inv, abs_norm, abs_of_pos, mem_orthogonal_singleton_iff_inner_left, mem_sphere_zero_iff_norm, norm_add_sq_real, norm_eq_abs, norm_smu, norm_smul, sq_eq_sq_iff_abs_eq_abs, stereoInvFunAux_apply
 -/
@@ -260,7 +270,17 @@ theorem hasFDerivAt_stereoInvFunAux
     convert! (hasStrictFDerivAt_norm_sq (0 : E)).hasFDerivAt
     simp only [map_zero, smul_zero]
   have h₁ : HasFDerivAt (fun w : E => (‖w‖ ^ 2 + 4)⁻¹) (0 : StrongDual Real E) 0 := by
-    convert! (hasFDerivAt_inv _).c
+    convert! (hasFDerivAt_inv _).comp _ (h₀.add (hasFDerivAt_const 4 0)) <;> simp
+  have h₂ : HasFDerivAt (fun w => (4 : Real) • w + (‖w‖ ^ 2 - 4) • v)
+      ((4 : Real) • ContinuousLinearMap.id Real E) 0 := by
+    convert!
+      ((hasFDerivAt_const (4 : Real) 0).smul (hasFDerivAt_id 0)).add
+        ((h₀.sub (hasFDerivAt_const (4 : Real) 0)).smul (hasFDerivAt_const v 0)) using 1
+    ext w
+    simp
+  convert! h₁.smul h₂ using 1
+  ext w
+  simp
 
 中文:
 定理 hasFDerivAt_stereoInvFunAux
@@ -270,7 +290,17 @@ theorem hasFDerivAt_stereoInvFunAux
     convert! (hasStrictFDerivAt_norm_sq (0 : E)).hasFDerivAt
     simp only [map_zero, smul_zero]
   have h₁ : HasFDerivAt (fun w : E => (‖w‖ ^ 2 + 4)⁻¹) (0 : StrongDual Real E) 0 := by
-    convert! (hasFDerivAt_inv _).c
+    convert! (hasFDerivAt_inv _).comp _ (h₀.add (hasFDerivAt_const 4 0)) <;> simp
+  have h₂ : HasFDerivAt (fun w => (4 : Real) • w + (‖w‖ ^ 2 - 4) • v)
+      ((4 : Real) • ContinuousLinearMap.id Real E) 0 := by
+    convert!
+      ((hasFDerivAt_const (4 : Real) 0).smul (hasFDerivAt_id 0)).add
+        ((h₀.sub (hasFDerivAt_const (4 : Real) 0)).smul (hasFDerivAt_const v 0)) using 1
+    ext w
+    simp
+  convert! h₁.smul h₂ using 1
+  ext w
+  simp
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, HasFDerivAt, StrongDual, convert, hasFDerivAt, hasFDerivAt_const, hasFDerivAt_inv, hasStrictFDerivAt_norm_sq, map_zero, smul_zero
 -/
@@ -333,7 +363,9 @@ theorem contDiff_stereoInvFunAux
     intro x
     nlinarith
   have h₂ : ContDiff Real ω fun w => (4 : Real) • w + (‖w‖ ^ 2 - 4) • v := by
-    refine (co
+    refine (contDiff_const.smul contDiff_id).add ?_
+    exact (h₀.sub contDiff_const).smul contDiff_const
+  exact (h₁.smul h₂).of_le le_top
 
 中文:
 定理 contDiff_stereoInvFunAux
@@ -346,7 +378,9 @@ theorem contDiff_stereoInvFunAux
     intro x
     nlinarith
   have h₂ : ContDiff Real ω fun w => (4 : Real) • w + (‖w‖ ^ 2 - 4) • v := by
-    refine (co
+    refine (contDiff_const.smul contDiff_id).add ?_
+    exact (h₀.sub contDiff_const).smul contDiff_const
+  exact (h₁.smul h₂).of_le le_top
 
 Depends on / 依赖: ContDiff, contDiff_const, contDiff_const.smul, contDiff_id, contDiff_norm_sq, le_top, of_le
 -/
@@ -415,7 +449,10 @@ theorem stereoInvFun_ne_north_pole
     have hw' : (‖(w : E)‖ ^ 2 + 4)⁻¹ * (‖(w : E)‖ ^ 2 - 4) < 1 := by
       rw [inv_mul_lt_iff₀']
       · linarith
-      po
+      positivity
+    simpa [real_inner_comm, inner_add_right, inner_smul_right, real_inner_self_eq_norm_mul_norm, hw,
+      hv] using hw'
+  · simpa using stereoInvFunAux_mem hv w.2
 
 中文:
 定理 stereoInvFun_ne_north_pole
@@ -427,7 +464,10 @@ theorem stereoInvFun_ne_north_pole
     have hw' : (‖(w : E)‖ ^ 2 + 4)⁻¹ * (‖(w : E)‖ ^ 2 - 4) < 1 := by
       rw [inv_mul_lt_iff₀']
       · linarith
-      po
+      positivity
+    simpa [real_inner_comm, inner_add_right, inner_smul_right, real_inner_self_eq_norm_mul_norm, hw,
+      hv] using hw'
+  · simpa using stereoInvFunAux_mem hv w.2
 
 Depends on / 依赖: Submodule, Submodule.mem_orthogonal_singleton_iff_inner_right.mp, Subtype, Subtype.coe_ne_coe, _Real, coe_ne_coe, inner_add_right, inner_lt_one_iff_real_of_norm_eq_one, inner_smul_right, mem_orthogonal_singleton_iff_inner_right, real_inner_comm, real_inner_self_eq_norm_mul_norm, stereoInvFunAux_mem
 -/
@@ -482,7 +522,26 @@ theorem stereo_left_inv
   set a : Real := innerSL _ v x
   set y := (Real ∙ v)ᗮ.orthogonalProjectionOnto x
   have split : ↑x = a • v + ↑y := by
-    rw [← ((Real ∙ v).star
+    rw [← ((Real ∙ v).starProjection_add_starProjection_orthogonal x)]; rw [Submodule.starProjection_unit_singleton Real hv x]
+    rfl
+  have hvy : ⟪v, y⟫_Real = 0 := Submodule.mem_orthogonal_singleton_iff_inner_right.mp y.2
+  have pythag : 1 = a ^ 2 + ‖y‖ ^ 2 := by
+    have hvy' : ⟪a • v, y⟫_Real = 0 := by simp only [inner_smul_left, hvy, mul_zero]
+    convert! norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ hvy' using 2
+    · simp [← split]
+    · simp [norm_smul, hv, ← sq, sq_abs]
+    · exact sq _
+  -- a fact which will be helpful for clearing denominators in the main calculation
+  have ha : 0 < 1 - a := by
+    have : a < 1 := (inner_lt_one_iff_real_of_norm_eq_one hv (by simp)).mpr hx.symm
+    linarith
+  rw [split]; rw [Submodule.coe_smul_of_tower]
+  simp only [norm_smul, norm_div, Real.norm_eq_abs, abs_of_nonneg ha.le]
+  match_scalars
+  · field_simp
+    linear_combination 4 * pythag
+  · field_simp
+    linear_combination 4 * (a - 1) * pythag
 
 中文:
 定理 stereo_left_inv
@@ -494,7 +553,26 @@ theorem stereo_left_inv
   set a : Real := innerSL _ v x
   set y := (Real ∙ v)ᗮ.orthogonalProjectionOnto x
   have split : ↑x = a • v + ↑y := by
-    rw [← ((Real ∙ v).star
+    rw [← ((Real ∙ v).starProjection_add_starProjection_orthogonal x)]; rw [Submodule.starProjection_unit_singleton Real hv x]
+    rfl
+  have hvy : ⟪v, y⟫_Real = 0 := Submodule.mem_orthogonal_singleton_iff_inner_right.mp y.2
+  have pythag : 1 = a ^ 2 + ‖y‖ ^ 2 := by
+    have hvy' : ⟪a • v, y⟫_Real = 0 := by simp only [inner_smul_left, hvy, mul_zero]
+    convert! norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ hvy' using 2
+    · simp [← split]
+    · simp [norm_smul, hv, ← sq, sq_abs]
+    · exact sq _
+  -- a fact which will be helpful for clearing denominators in the main calculation
+  have ha : 0 < 1 - a := by
+    have : a < 1 := (inner_lt_one_iff_real_of_norm_eq_one hv (by simp)).mpr hx.symm
+    linarith
+  rw [split]; rw [Submodule.coe_smul_of_tower]
+  simp only [norm_smul, norm_div, Real.norm_eq_abs, abs_of_nonneg ha.le]
+  match_scalars
+  · field_simp
+    linear_combination 4 * pythag
+  · field_simp
+    linear_combination 4 * (a - 1) * pythag
 
 Depends on / 依赖: smul_add, stereoInvFun_apply, stereoToFun_apply
 -/
@@ -538,7 +616,13 @@ theorem stereo_right_inv
   simp only [stereoToFun, stereoInvFun, stereoInvFunAux, smul_add, map_add, map_smul,
     innerSL_apply_apply, Submodule.orthogonalProjectionOnto_mem_subspace_eq_self]
   have h₁ : (Real ∙ v)ᗮ.orthogonalProjectionOnto v = 0 :=
-    Submodule.orthogonalProjectionOnto_orthogonalComplement_singleton_e
+    Submodule.orthogonalProjectionOnto_orthogonalComplement_singleton_eq_zero v
+  have h₂ : ⟪v, w⟫ = 0 := Submodule.mem_orthogonal_singleton_iff_inner_right.mp w.2
+  have h₃ : ⟪v, v⟫ = 1 := by simp [hv]
+  rw [h₁]; rw [h₂]; rw [h₃]
+  match_scalars
+  simp [field]
+  ring
 
 中文:
 定理 stereo_right_inv
@@ -548,7 +632,13 @@ theorem stereo_right_inv
   simp only [stereoToFun, stereoInvFun, stereoInvFunAux, smul_add, map_add, map_smul,
     innerSL_apply_apply, Submodule.orthogonalProjectionOnto_mem_subspace_eq_self]
   have h₁ : (Real ∙ v)ᗮ.orthogonalProjectionOnto v = 0 :=
-    Submodule.orthogonalProjectionOnto_orthogonalComplement_singleton_e
+    Submodule.orthogonalProjectionOnto_orthogonalComplement_singleton_eq_zero v
+  have h₂ : ⟪v, w⟫ = 0 := Submodule.mem_orthogonal_singleton_iff_inner_right.mp w.2
+  have h₃ : ⟪v, v⟫ = 1 := by simp [hv]
+  rw [h₁]; rw [h₂]; rw [h₃]
+  match_scalars
+  simp [field]
+  ring
 
 Depends on / 依赖: Submodule, Submodule.mem_orthogonal_singleton_iff_inner_right.mp, Submodule.orthogonalProjectionOnto_mem_subspace_eq_self, Submodule.orthogonalProjectionOnto_orthogonalComplement_singleton_eq_zero, innerSL_apply_apply, map_add, map_smul, match_scalars, mem_orthogonal_singleton_iff_inner_right, orthogonalProjectionOnto, orthogonalProjectionOnto_mem_subspace_eq_self, orthogonalProjectionOnto_orthogonalComplement_singleton_eq_zero, smul_add, stereoInvFun, stereoInvFunAux, stereoToFun
 -/
@@ -578,7 +668,18 @@ definition stereographic
   map_target' {w} _ := fun h => (stereoInvFun_ne_north_pole hv w) (Set.eq_of_mem_singleton h)
   left_inv' x hx := stereo_left_inv hv fun h => hx (by
     rw [← h] at hv
-    a
+    apply Subtype.ext
+    dsimp
+    exact h)
+  right_inv' w _ := stereo_right_inv hv w
+  open_source := isOpen_compl_singleton
+  open_target := isOpen_univ
+  continuousOn_toFun :=
+    continuousOn_stereoToFun.comp continuous_subtype_val.continuousOn fun w h => by
+      dsimp
+      exact
+        h ∘ Subtype.ext ∘ Eq.symm ∘ (inner_eq_one_iff_of_norm_eq_one hv (by simp)).mp
+  continuousOn_invFun := (continuous_stereoInvFun hv).continuousOn
 
 中文:
 定义 stereographic
@@ -591,7 +692,18 @@ definition stereographic
   map_target' {w} _ := fun h => (stereoInvFun_ne_north_pole hv w) (Set.eq_of_mem_singleton h)
   left_inv' x hx := stereo_left_inv hv fun h => hx (by
     rw [← h] at hv
-    a
+    apply Subtype.ext
+    dsimp
+    exact h)
+  right_inv' w _ := stereo_right_inv hv w
+  open_source := isOpen_compl_singleton
+  open_target := isOpen_univ
+  continuousOn_toFun :=
+    continuousOn_stereoToFun.comp continuous_subtype_val.continuousOn fun w h => by
+      dsimp
+      exact
+        h ∘ Subtype.ext ∘ Eq.symm ∘ (inner_eq_one_iff_of_norm_eq_one hv (by simp)).mp
+  continuousOn_invFun := (continuous_stereoInvFun hv).continuousOn
 
 Depends on / 依赖: stereoToFun
 -/
@@ -1002,7 +1114,28 @@ instance EuclideanSpace.instIsManifoldSphere
       let U :=
         (-- Removed type ascription, and this helped for some reason with timeout issues?
             OrthonormalBasis.fromOrthogonalSpanSingleton (𝕜 := Real)
-            n (ne_zero_of_mem_
+            n (ne_zero_of_mem_unit_sphere v)).repr
+      let U' :=
+        (-- Removed type ascription, and this helped for some reason with timeout issues?
+            OrthonormalBasis.fromOrthogonalSpanSingleton (𝕜 := Real)
+            n (ne_zero_of_mem_unit_sphere v')).repr
+      have H₁ := U'.contDiff.comp_contDiffOn (contDiffOn_stereoToFun (n := ω))
+      -- Porting note: need to help with implicit variables again
+      have H₂ := (contDiff_stereoInvFunAux (m := ω) (v := v.val) |>.comp
+        (Real ∙ (v : E))ᗮ.subtypeL.contDiff).comp U.symm.contDiff
+      convert! H₁.comp_inter (H₂.contDiffOn : ContDiffOn Real ω _ Set.univ) using 1
+        -- -- squeezed from `ext, simp [sphere_ext_iff, stereographic'_symm_apply, real_inner_comm]`
+
+      -- -- squeezed from `ext, simp [sphere_ext_iff, stereographic'_symm_apply, real_inner_comm]`
+      simp only [OpenPartialHomeomorph.trans_toPartialEquiv,
+        OpenPartialHomeomorph.symm_toPartialEquiv, PartialEquiv.trans_source,
+        PartialEquiv.symm_source, stereographic'_target, stereographic'_source]
+      simp only [modelWithCornersSelf_coe, modelWithCornersSelf_coe_symm,
+        Set.range_id, Set.inter_univ, Set.univ_inter, Set.compl_singleton_eq,
+        Set.preimage_ofPred_eq]
+      simp only [id, comp_apply, OpenPartialHomeomorph.coe_toPartialEquiv_symm,
+        innerSL_apply_apply, Ne, sphere_ext_iff, real_inner_comm (v' : E)]
+      rfl)
 
 中文:
 实例 EuclideanSpace.instIsManifoldSphere
@@ -1012,7 +1145,28 @@ instance EuclideanSpace.instIsManifoldSphere
       let U :=
         (-- Removed type ascription, and this helped for some reason with timeout issues?
             OrthonormalBasis.fromOrthogonalSpanSingleton (𝕜 := Real)
-            n (ne_zero_of_mem_
+            n (ne_zero_of_mem_unit_sphere v)).repr
+      let U' :=
+        (-- Removed type ascription, and this helped for some reason with timeout issues?
+            OrthonormalBasis.fromOrthogonalSpanSingleton (𝕜 := Real)
+            n (ne_zero_of_mem_unit_sphere v')).repr
+      have H₁ := U'.contDiff.comp_contDiffOn (contDiffOn_stereoToFun (n := ω))
+      -- Porting note: need to help with implicit variables again
+      have H₂ := (contDiff_stereoInvFunAux (m := ω) (v := v.val) |>.comp
+        (Real ∙ (v : E))ᗮ.subtypeL.contDiff).comp U.symm.contDiff
+      convert! H₁.comp_inter (H₂.contDiffOn : ContDiffOn Real ω _ Set.univ) using 1
+        -- -- squeezed from `ext, simp [sphere_ext_iff, stereographic'_symm_apply, real_inner_comm]`
+
+      -- -- squeezed from `ext, simp [sphere_ext_iff, stereographic'_symm_apply, real_inner_comm]`
+      simp only [OpenPartialHomeomorph.trans_toPartialEquiv,
+        OpenPartialHomeomorph.symm_toPartialEquiv, PartialEquiv.trans_source,
+        PartialEquiv.symm_source, stereographic'_target, stereographic'_source]
+      simp only [modelWithCornersSelf_coe, modelWithCornersSelf_coe_symm,
+        Set.range_id, Set.inter_univ, Set.univ_inter, Set.compl_singleton_eq,
+        Set.preimage_ofPred_eq]
+      simp only [id, comp_apply, OpenPartialHomeomorph.coe_toPartialEquiv_symm,
+        innerSL_apply_apply, Ne, sphere_ext_iff, real_inner_comm (v' : E)]
+      rfl)
 
 Depends on / 依赖: OrthonormalBasis, OrthonormalBasis.fromOrthogonalSpanSingleton, Removed, ascription, comp_contDiffOn, contDiff, contDiff.comp_contDiffOn, fromOrthogonalSpanSingleton, helped, isManifold_of_contDiffOn, issues, ne_zero_of_mem_unit_sphere, reason, sphere, timeout
 -/
@@ -1068,7 +1222,8 @@ theorem contMDiff_coe_sphere
           OrthonormalBasis.fromOrthogonalSpanSingleton
           n (ne_zero_of_mem_unit_sphere (-v))).repr
     exact
-      ((contDi
+      ((contDiff_stereoInvFunAux.comp (Real ∙ (-v : E))ᗮ.subtypeL.contDiff).comp
+          U.symm.contDiff).contDiffOn
 
 中文:
 定理 contMDiff_coe_sphere
@@ -1083,7 +1238,8 @@ theorem contMDiff_coe_sphere
           OrthonormalBasis.fromOrthogonalSpanSingleton
           n (ne_zero_of_mem_unit_sphere (-v))).repr
     exact
-      ((contDi
+      ((contDiff_stereoInvFunAux.comp (Real ∙ (-v : E))ᗮ.subtypeL.contDiff).comp
+          U.symm.contDiff).contDiffOn
 
 Depends on / 依赖: OrthonormalBasis, OrthonormalBasis.fromOrthogonalSpanSingleton, U.symm.contDiff, ascription, contDiff, contDiffOn, contDiff_stereoInvFunAux, contDiff_stereoInvFunAux.comp, contMDiff_iff, continuous_subtype_val, fromOrthogonalSpanSingleton, ne_zero_of_mem_unit_sphere, partially, removing, subtypeL, subtypeL.contDiff
 -/
@@ -1119,6 +1275,16 @@ theorem ContMDiff.codRestrict_sphere
     (-- Again, partially removing type ascription... Weird that this helps!
         OrthonormalBasis.fromOrthogonalSpanSingleton
         n (ne_zero_of_mem_unit_sphere (-v))).repr
+  have h : ContDiffOn Real ω _ Set.univ := U.contDiff.contDiffOn
+  have H₁ := (h.comp_inter contDiffOn_stereoToFun).contMDiffOn
+  have H₂ : CMDiff[Set.univ] m f := hf.contMDiffOn
+  convert! (H₁.of_le le_top).comp' H₂ using 1
+  ext x
+  have hfxv : f x = -↑v ↔ ⟪f x, -↑v⟫_Real = 1 := by
+    have hfx : ‖f x‖ = 1 := by simpa using hf' x
+    rw [inner_eq_one_iff_of_norm_eq_one hfx]
+    exact norm_eq_of_mem_sphere (-v)
+  simp [chartAt, ChartedSpace.chartAt, Subtype.ext_iff, hfxv, real_inner_comm]
 
 中文:
 定理 ContMDiff.codRestrict_sphere
@@ -1131,6 +1297,16 @@ theorem ContMDiff.codRestrict_sphere
     (-- Again, partially removing type ascription... Weird that this helps!
         OrthonormalBasis.fromOrthogonalSpanSingleton
         n (ne_zero_of_mem_unit_sphere (-v))).repr
+  have h : ContDiffOn Real ω _ Set.univ := U.contDiff.contDiffOn
+  have H₁ := (h.comp_inter contDiffOn_stereoToFun).contMDiffOn
+  have H₂ : CMDiff[Set.univ] m f := hf.contMDiffOn
+  convert! (H₁.of_le le_top).comp' H₂ using 1
+  ext x
+  have hfxv : f x = -↑v ↔ ⟪f x, -↑v⟫_Real = 1 := by
+    have hfx : ‖f x‖ = 1 := by simpa using hf' x
+    rw [inner_eq_one_iff_of_norm_eq_one hfx]
+    exact norm_eq_of_mem_sphere (-v)
+  simp [chartAt, ChartedSpace.chartAt, Subtype.ext_iff, hfxv, real_inner_comm]
 
 Depends on / 依赖: CMDiff, ContDiffOn, OrthonormalBasis, OrthonormalBasis.fromOrthogonalSpanSingleton, Set.univ, U.contDiff.contDiffOn, ascription, comp_inter, contDiff, contDiffOn, contDiffOn_stereoToFun, contMDiffOn, contMDiff_iff_target, continuous, continuous_induced_rng, convert, fromOrthogonalSpanSingleton, h.comp_inter, hf.contMDiffOn, hf.continuous
 -/
@@ -1226,7 +1402,32 @@ theorem range_mvfderiv_subtypeVal
   let U := (OrthonormalBasis.fromOrthogonalSpanSingleton (𝕜 := Real) n
     (ne_zero_of_mem_unit_sphere (-v))).repr
   suffices
-      (fderiv Real ((stereoInvFunAux
+      (fderiv Real ((stereoInvFunAux (-v : E) ∘ (↑)) ∘ U.symm) 0).range = (Real ∙ (v : E))ᗮ by
+    rw [← this]
+    congr 3
+    apply stereographic'_neg
+  have :
+    HasFDerivAt (stereoInvFunAux (-v : E) ∘ (Subtype.val : (Real ∙ (↑(-v) : E))ᗮ -> E))
+      (Real ∙ (↑(-v) : E))ᗮ.subtypeL (U.symm 0) := by
+    convert! hasFDerivAt_stereoInvFunAux_comp_coe (-v : E)
+    simp
+  convert! congr($((this.comp 0 U.symm.toContinuousLinearEquiv.hasFDerivAt).fderiv).range)
+  symm
+  convert!
+    (U.symm : EuclideanSpace Real (Fin n) ≃ₗᵢ[Real] (Real ∙ (↑(-v) : E))ᗮ).range_comp
+      (Real ∙ (↑(-v) : E))ᗮ.subtype using 1
+  simp only [Submodule.range_subtype, coe_neg_sphere]
+  congr 1
+  -- we must show `Submodule.span ℝ {v} = Submodule.span ℝ {-v}`
+  apply Submodule.span_eq_span
+  · simp only [Set.singleton_subset_iff, SetLike.mem_coe]
+    rw [← Submodule.neg_mem_iff]
+    exact Submodule.mem_span_singleton_self (-v : E)
+  · simp only [Set.singleton_subset_iff, SetLike.mem_coe]
+    rw [Submodule.neg_mem_iff]
+    exact Submodule.mem_span_singleton_self (v : E)
+
+@[deprecated range_mvfderiv_subtypeVal (since := "2026-08-02")]
 
 中文:
 定理 range_mvfderiv_subtypeVal
@@ -1238,7 +1439,32 @@ theorem range_mvfderiv_subtypeVal
   let U := (OrthonormalBasis.fromOrthogonalSpanSingleton (𝕜 := Real) n
     (ne_zero_of_mem_unit_sphere (-v))).repr
   suffices
-      (fderiv Real ((stereoInvFunAux
+      (fderiv Real ((stereoInvFunAux (-v : E) ∘ (↑)) ∘ U.symm) 0).range = (Real ∙ (v : E))ᗮ by
+    rw [← this]
+    congr 3
+    apply stereographic'_neg
+  have :
+    HasFDerivAt (stereoInvFunAux (-v : E) ∘ (Subtype.val : (Real ∙ (↑(-v) : E))ᗮ -> E))
+      (Real ∙ (↑(-v) : E))ᗮ.subtypeL (U.symm 0) := by
+    convert! hasFDerivAt_stereoInvFunAux_comp_coe (-v : E)
+    simp
+  convert! congr($((this.comp 0 U.symm.toContinuousLinearEquiv.hasFDerivAt).fderiv).range)
+  symm
+  convert!
+    (U.symm : EuclideanSpace Real (Fin n) ≃ₗᵢ[Real] (Real ∙ (↑(-v) : E))ᗮ).range_comp
+      (Real ∙ (↑(-v) : E))ᗮ.subtype using 1
+  simp only [Submodule.range_subtype, coe_neg_sphere]
+  congr 1
+  -- we must show `Submodule.span ℝ {v} = Submodule.span ℝ {-v}`
+  apply Submodule.span_eq_span
+  · simp only [Set.singleton_subset_iff, SetLike.mem_coe]
+    rw [← Submodule.neg_mem_iff]
+    exact Submodule.mem_span_singleton_self (-v : E)
+  · simp only [Set.singleton_subset_iff, SetLike.mem_coe]
+    rw [Submodule.neg_mem_iff]
+    exact Submodule.mem_span_singleton_self (v : E)
+
+@[deprecated range_mvfderiv_subtypeVal (since := "2026-08-02")]
 
 Depends on / 依赖: HasFDerivAt, OrthonormalBasis, OrthonormalBasis.fromOrthogonalSpanSingleton, Subtype, Subtype.val, U.symm, _neg, chartAt, contMDiff_coe_sphere, fderiv, fderivWithin_univ, fromOrthogonalSpanSingleton, mdifferentiableAt, mfld_simps, mvfderiv, ne_zero_of_mem_unit_sphere, one_ne_zero, stereoInvFunAux, stereographic
 -/
@@ -1309,7 +1535,23 @@ theorem injective_mvfderiv_subtypeVal_sphere
   simp only [chartAt, fderivWithin_univ, mfld_simps]
   let U := (OrthonormalBasis.fromOrthogonalSpanSingleton
       (𝕜 := Real) n (ne_zero_of_mem_unit_sphere (-v))).repr
-  suffices Injective (fderiv Real ((stereoInvFunAux (-
+  suffices Injective (fderiv Real ((stereoInvFunAux (-v : E) ∘ (↑)) ∘ U.symm) 0) by
+    convert! this using 3
+    congr 2
+    apply stereographic'_neg (v := v)
+  have : HasFDerivAt (stereoInvFunAux (-v : E) ∘ (Subtype.val : (Real ∙ (↑(-v) : E))ᗮ -> E))
+      (Real ∙ (↑(-v) : E))ᗮ.subtypeL (U.symm 0) := by
+    convert! hasFDerivAt_stereoInvFunAux_comp_coe (-v : E)
+    -- Otherwise, the lemma `EmbeddingLike.map_eq_zero_iff` is not applied.
+    set_option backward.isDefEq.respectTransparency false in
+    simp
+have := congr_arg DFunLike.coe (this.comp 0 U.symm.toContinuousLinearEquiv.hasFDerivAt).fderiv
+  refine Eq.subst this.symm ?_
+  rw [ContinuousLinearMap.coe_comp]; rw [ContinuousLinearEquiv.coe_coe]
+  set_option backward.isDefEq.respectTransparency false in
+  simpa [-Subtype.val_injective] using Subtype.val_injective
+
+@[deprecated injective_mvfderiv_subtypeVal_sphere (since := "2026-08-02")]
 
 中文:
 定理 injective_mvfderiv_subtypeVal_sphere
@@ -1319,7 +1561,23 @@ theorem injective_mvfderiv_subtypeVal_sphere
   simp only [chartAt, fderivWithin_univ, mfld_simps]
   let U := (OrthonormalBasis.fromOrthogonalSpanSingleton
       (𝕜 := Real) n (ne_zero_of_mem_unit_sphere (-v))).repr
-  suffices Injective (fderiv Real ((stereoInvFunAux (-
+  suffices Injective (fderiv Real ((stereoInvFunAux (-v : E) ∘ (↑)) ∘ U.symm) 0) by
+    convert! this using 3
+    congr 2
+    apply stereographic'_neg (v := v)
+  have : HasFDerivAt (stereoInvFunAux (-v : E) ∘ (Subtype.val : (Real ∙ (↑(-v) : E))ᗮ -> E))
+      (Real ∙ (↑(-v) : E))ᗮ.subtypeL (U.symm 0) := by
+    convert! hasFDerivAt_stereoInvFunAux_comp_coe (-v : E)
+    -- Otherwise, the lemma `EmbeddingLike.map_eq_zero_iff` is not applied.
+    set_option backward.isDefEq.respectTransparency false in
+    simp
+have := congr_arg DFunLike.coe (this.comp 0 U.symm.toContinuousLinearEquiv.hasFDerivAt).fderiv
+  refine Eq.subst this.symm ?_
+  rw [ContinuousLinearMap.coe_comp]; rw [ContinuousLinearEquiv.coe_coe]
+  set_option backward.isDefEq.respectTransparency false in
+  simpa [-Subtype.val_injective] using Subtype.val_injective
+
+@[deprecated injective_mvfderiv_subtypeVal_sphere (since := "2026-08-02")]
 
 Depends on / 依赖: HasFDerivAt, Injective, OrthonormalBasis, OrthonormalBasis.fromOrthogonalSpanSingleton, Subtype, Subtype.val, U.symm, _neg, chartAt, contMDiff_coe_sphere, convert, fderiv, fderivWithin_univ, fromOrthogonalSpanSingleton, mdifferentiableAt, mfld_simps, mvfderiv, ne_zero_of_mem_unit_sphere, one_ne_zero, stereoInvFunAux
 -/
@@ -1441,7 +1699,15 @@ instance :
     let c : Circle -> Complex := (↑)
     have h₂ : ContMDiff (𝓘(Real, Complex).prod 𝓘(Real, Complex)) 𝓘(Real, Complex) ω fun z : Complex × Complex => z.fst * z.snd := by
       rw [contMDiff_iff]
-      exact ⟨continuous_mul, fun x y => contDiff_mul.contDiffOn
+      exact ⟨continuous_mul, fun x y => contDiff_mul.contDiffOn⟩
+    -- TODO bug: filling in ω yields an error; expected type has metavariables...
+    suffices h₁ : ContMDiff _ _ _ (Prod.map c c) from
+      h₂.comp h₁
+    apply ContMDiff.prodMap <;> exact contMDiff_coe_sphere
+  contMDiff_inv := by
+    apply ContMDiff.codRestrict_sphere
+    simp only [← Circle.coe_inv, Circle.coe_inv_eq_conj]
+    exact Complex.conjCLE.contDiff.contMDiff.comp contMDiff_coe_sphere
 
 中文:
 实例 :
@@ -1451,7 +1717,15 @@ instance :
     let c : Circle -> Complex := (↑)
     have h₂ : ContMDiff (𝓘(Real, Complex).prod 𝓘(Real, Complex)) 𝓘(Real, Complex) ω fun z : Complex × Complex => z.fst * z.snd := by
       rw [contMDiff_iff]
-      exact ⟨continuous_mul, fun x y => contDiff_mul.contDiffOn
+      exact ⟨continuous_mul, fun x y => contDiff_mul.contDiffOn⟩
+    -- TODO bug: filling in ω yields an error; expected type has metavariables...
+    suffices h₁ : ContMDiff _ _ _ (Prod.map c c) from
+      h₂.comp h₁
+    apply ContMDiff.prodMap <;> exact contMDiff_coe_sphere
+  contMDiff_inv := by
+    apply ContMDiff.codRestrict_sphere
+    simp only [← Circle.coe_inv, Circle.coe_inv_eq_conj]
+    exact Complex.conjCLE.contDiff.contMDiff.comp contMDiff_coe_sphere
 
 Depends on / 依赖: Circle, ContMDiff, ContMDiff.codRestrict_sphere, codRestrict_sphere, contDiffOn, contDiff_mul, contDiff_mul.contDiffOn, contMDiff_iff, continuous_mul, z.fst, z.snd
 -/

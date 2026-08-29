@@ -134,7 +134,8 @@ definition cechNerveTerminalFromIso
   body: NatIso.ofComponents (fun _ => limit.isoLimitCone (Action.ofMulActionLimitCone _ _)) fun f => by
     refine IsLimit.hom_ext (Action.ofMulActionLimitCone.{u, 0} G fun _ => G).2 fun j => ?_
     dsimp only [cechNerveTerminalFrom, Pi.lift]
-    rw [Category.assoc]; rw [limit.isoLimitCone_hom_π]; rw [limit
+    rw [Category.assoc]; rw [limit.isoLimitCone_hom_π]; rw [limit.lift_π]; rw [Category.assoc]
+    exact (limit.isoLimitCone_hom_π _ _).symm
 
 中文:
 定义 cechNerveTerminalFromIso
@@ -142,7 +143,8 @@ definition cechNerveTerminalFromIso
   定义体: NatIso.ofComponents (fun _ => limit.isoLimitCone (Action.ofMulActionLimitCone _ _)) fun f => by
     refine IsLimit.hom_ext (Action.ofMulActionLimitCone.{u, 0} G fun _ => G).2 fun j => ?_
     dsimp only [cechNerveTerminalFrom, Pi.lift]
-    rw [Category.assoc]; rw [limit.isoLimitCone_hom_π]; rw [limit
+    rw [Category.assoc]; rw [limit.isoLimitCone_hom_π]; rw [limit.lift_π]; rw [Category.assoc]
+    exact (limit.isoLimitCone_hom_π _ _).symm
 
 Depends on / 依赖: Action, Action.ofMulActionLimitCone, Category, Category.assoc, IsLimit, IsLimit.hom_ext, NatIso, NatIso.ofComponents, Pi.lift, cechNerveTerminalFrom, hom_ext, isoLimitCone, limit.isoLimitCone, limit.isoLimitCone_hom_, limit.lift_, ofComponents, ofMulActionLimitCone
 -/
@@ -241,7 +243,7 @@ definition extraDegeneracyCompForgetAugmented
       (extraDegeneracyAugmentedCechNerve G)
   exact
     Comma.isoMk (CechNerveTerminalFrom.iso G ≪≫ cechNerveTerminalFromIsoCompForget G)
-      (Iso.refl _) (by ext : 1; exact IsTerminal.hom_ext termina
+      (Iso.refl _) (by ext : 1; exact IsTerminal.hom_ext terminalIsTerminal _ _)
 
 中文:
 定义 extraDegeneracyCompForgetAugmented
@@ -252,7 +254,7 @@ definition extraDegeneracyCompForgetAugmented
       (extraDegeneracyAugmentedCechNerve G)
   exact
     Comma.isoMk (CechNerveTerminalFrom.iso G ≪≫ cechNerveTerminalFromIsoCompForget G)
-      (Iso.refl _) (by ext : 1; exact IsTerminal.hom_ext termina
+      (Iso.refl _) (by ext : 1; exact IsTerminal.hom_ext terminalIsTerminal _ _)
 
 Depends on / 依赖: Arrow.mk, CechNerveTerminalFrom, CechNerveTerminalFrom.iso, Comma.isoMk, ExtraDegeneracy, ExtraDegeneracy.ofIso, IsTerminal, IsTerminal.hom_ext, Iso.refl, augmentedCechNerve, cechNerveTerminalFromIsoCompForget, extraDegeneracyAugmentedCechNerve, hom_ext, terminal, terminal.from, terminalIsTerminal
 -/
@@ -462,7 +464,9 @@ theorem d_eq
   refine MonoidAlgebra.lhom_ext' fun (x : Fin (n + 2) -> G) => LinearMap.ext_ring ?_
   simp [standardComplex, Action.ofMulAction_V, SimplicialObject.δ, SimplexCategory.δ,
     Fin.succAboveOrderEmb, ← Int.cast_smul_eq_zsmul k ((-1) ^ _ : Int), ← ofHom_smul, ← ofHom_sum,
-    Representation.Intertwi
+    Representation.IntertwiningMap.coe_toLinearMap, Representation.IntertwiningMap.sum_apply,
+    Representation.IntertwiningMap.smul_apply, (Representation.linearizeMap_single),
+    smul_eq_mul, mul_one]
 
 中文:
 定理 d_eq
@@ -472,7 +476,9 @@ theorem d_eq
   refine MonoidAlgebra.lhom_ext' fun (x : Fin (n + 2) -> G) => LinearMap.ext_ring ?_
   simp [standardComplex, Action.ofMulAction_V, SimplicialObject.δ, SimplexCategory.δ,
     Fin.succAboveOrderEmb, ← Int.cast_smul_eq_zsmul k ((-1) ^ _ : Int), ← ofHom_smul, ← ofHom_sum,
-    Representation.Intertwi
+    Representation.IntertwiningMap.coe_toLinearMap, Representation.IntertwiningMap.sum_apply,
+    Representation.IntertwiningMap.smul_apply, (Representation.linearizeMap_single),
+    smul_eq_mul, mul_one]
 
 Depends on / 依赖: Action, Action.ofMulAction_V, Fin.succAboveOrderEmb, Int.cast_smul_eq_zsmul, IntertwiningMap, LinearMap, LinearMap.ext_ring, MonoidAlgebra, MonoidAlgebra.lhom_ext, Representation, Representation.IntertwiningMap.coe_toLinearMap, Representation.IntertwiningMap.smul_apply, Representation.IntertwiningMap.sum_apply, Representation.linearizeMap_single, SimplexCategory, SimplicialObject, cast_smul_eq_zsmul, coe_toLinearMap, ext_ring, lhom_ext
 -/
@@ -563,7 +569,9 @@ definition forget₂ToModuleCatHomotopyEquiv
           (extraDegeneracyCompForgetAugmentedToModule k G)).trans
       (HomotopyEquiv.ofIso <|
         (ChainComplex.single₀ (ModuleCat.{u} k)).mapIso
-          (letI : Unique
+          (letI : Unique (⊤_ Type u) := Types.terminalIso.toEquiv.unique
+           ((MonoidAlgebra.coeffLinearEquiv k (M := ⊤_ Type u)).trans
+             (Finsupp.uniqueLinearEquiv k k default)).toModuleIso))
 
 中文:
 定义 forget₂ToModuleCatHomotopyEquiv
@@ -573,7 +581,9 @@ definition forget₂ToModuleCatHomotopyEquiv
           (extraDegeneracyCompForgetAugmentedToModule k G)).trans
       (HomotopyEquiv.ofIso <|
         (ChainComplex.single₀ (ModuleCat.{u} k)).mapIso
-          (letI : Unique
+          (letI : Unique (⊤_ Type u) := Types.terminalIso.toEquiv.unique
+           ((MonoidAlgebra.coeffLinearEquiv k (M := ⊤_ Type u)).trans
+             (Finsupp.uniqueLinearEquiv k k default)).toModuleIso))
 
 Depends on / 依赖: Augmented, ChainComplex, ChainComplex.single, ExtraDegeneracy, Finsupp, Finsupp.uniqueLinearEquiv, HomotopyEquiv, HomotopyEquiv.ofIso, ModuleCat, MonoidAlgebra, MonoidAlgebra.coeffLinearEquiv, SimplicialObject, SimplicialObject.Augmented.ExtraDegeneracy.homotopyEquiv, Types.terminalIso.toEquiv.unique, Unique, coeffLinearEquiv, compForgetAugmentedIso, extraDegeneracyCompForgetAugmentedToModule, homotopyEquiv, mapIso
 -/
@@ -621,7 +631,10 @@ theorem forget₂ToModuleCatHomotopyEquiv_f_0_eq
 refine ModuleCat.hom_ext MonoidAlgebra.lhom_ext' fun (x : Fin 1 -> G) => LinearMap.ext_ring ?_
   simp [forget₂ToModuleCatHomotopyEquiv, HomotopyEquiv.ofIso, HomotopyEquiv.trans,
     SimplicialObject.Augmented.ExtraDegeneracy.homotopyEquiv, ChainComplex.single₀_map_f_zero,
-    AlgebraicTopology.Al
+    AlgebraicTopology.AlternatingFaceMapComplex.ε_app_f_zero, compForgetAugmentedIso, eqToIso.inv,
+    HomologicalComplex.eqToHom_f, compForgetAugmented, compForgetAugmented.toModule, ε,
+    SimplicialObject.augment, Unique.eq_default (terminal.from _), MonoidAlgebra.coeff_single,
+    Finsupp.single_apply, if_pos (Subsingleton.elim _ _)]
 
 中文:
 定理 forget₂ToModuleCatHomotopyEquiv_f_0_eq
@@ -629,7 +642,10 @@ refine ModuleCat.hom_ext MonoidAlgebra.lhom_ext' fun (x : Fin 1 -> G) => LinearM
 refine ModuleCat.hom_ext MonoidAlgebra.lhom_ext' fun (x : Fin 1 -> G) => LinearMap.ext_ring ?_
   simp [forget₂ToModuleCatHomotopyEquiv, HomotopyEquiv.ofIso, HomotopyEquiv.trans,
     SimplicialObject.Augmented.ExtraDegeneracy.homotopyEquiv, ChainComplex.single₀_map_f_zero,
-    AlgebraicTopology.Al
+    AlgebraicTopology.AlternatingFaceMapComplex.ε_app_f_zero, compForgetAugmentedIso, eqToIso.inv,
+    HomologicalComplex.eqToHom_f, compForgetAugmented, compForgetAugmented.toModule, ε,
+    SimplicialObject.augment, Unique.eq_default (terminal.from _), MonoidAlgebra.coeff_single,
+    Finsupp.single_apply, if_pos (Subsingleton.elim _ _)]
 
 Depends on / 依赖: AlgebraicTopology, AlgebraicTopology.AlternatingFaceMapComplex, AlternatingFaceMapComplex, Augmented, ChainComplex, ChainComplex.single, ExtraDegeneracy, HomologicalComplex, HomologicalComplex.eqToHom_f, HomotopyEquiv, HomotopyEquiv.ofIso, HomotopyEquiv.trans, LinearMap, LinearMap.ext_ring, ModuleCat, ModuleCat.hom_ext, MonoidAlgebra, MonoidAlgebra.lhom_ext, SimplicialObject, SimplicialObject.Augmented.ExtraDegeneracy.homotopyEquiv
 -/
@@ -656,7 +672,7 @@ theorem d_comp_ε
       ≫ (forget₂ (Rep k G) (ModuleCat.{u} k)).map (ε k G) = 0 := by
     rw [← forget₂ToModuleCatHomotopyEquiv_f_0_eq]; rw [← (forget₂ToModuleCatHomotopyEquiv k G).1.2 1 0 rfl]
     exact comp_zero
-  exact LinearMap.ext_iff.1 (ModuleCat.hom_ext_iff.
+  exact LinearMap.ext_iff.1 (ModuleCat.hom_ext_iff.mp this) _
 
 中文:
 定理 d_comp_ε
@@ -667,7 +683,7 @@ theorem d_comp_ε
       ≫ (forget₂ (Rep k G) (ModuleCat.{u} k)).map (ε k G) = 0 := by
     rw [← forget₂ToModuleCatHomotopyEquiv_f_0_eq]; rw [← (forget₂ToModuleCatHomotopyEquiv k G).1.2 1 0 rfl]
     exact comp_zero
-  exact LinearMap.ext_iff.1 (ModuleCat.hom_ext_iff.
+  exact LinearMap.ext_iff.1 (ModuleCat.hom_ext_iff.mp this) _
 
 Depends on / 依赖: LinearMap, LinearMap.ext_iff, ModuleCat, ModuleCat.hom_ext_iff.mp, comp_zero, ext_iff, hom_ext_iff
 -/
@@ -884,7 +900,33 @@ lemma d_comp_diagonalSuccIsoFree_inv_eq
     have eq3 : MonoidAlgebra.single (i 0 • Fin.partialProd fun i_1 => i i_1.succ) (1 : k) =
         MonoidAlgebra.single (Fin.partialProd i ∘ Fin.succ) 1 := by
 .symm congr; exact funext fun j => Fin.partialProd_succ' i j
-    simp only [Rep.hom_comp, Representation.Inte
+    simp only [Rep.hom_comp, Representation.IntertwiningMap.comp_apply]
+    rw [d_single (k := k)]; rw [map_add]; rw [map_sum]
+    -- in-context `have`: at `Action` carriers, only locally re-elaborated statements key-match
+    have H : forall (m : Nat) (f : Fin m -> G) (g : G) (r : k),
+        (diagonalSuccIsoFree k G m).inv.hom (single f (MonoidAlgebra.single g r)) =
+          MonoidAlgebra.single (g • Fin.partialProd f) r := by
+      intro m f g r
+      simp only [diagonalSuccIsoFree, diagonalSuccIsoTensorTrivial, Iso.trans_inv, Rep.hom_comp,
+        Representation.IntertwiningMap.comp_apply]
+      have step1 : (Hom.hom (leftRegularTensorTrivialIsoFree k G (Fin m -> G)).inv)
+          (single f (.single g r)) = .single g 1 otimesₜ[k] .single f r :=
+        Representation.leftRegularTensorTrivialIsoFree_symm_apply_single_single f g r
+      rw [step1]
+      simp only [mkIso_inv, Representation.linearizeOfMulActionIso, Representation.Equiv.mk_symm,
+        LinearEquiv.refl_symm, ConcreteCategory.hom_ofHom, Action.tensorObj_V, Action.trivial_V,
+        Functor.mapIso_inv, tensor_V, tensor_ρ, Iso.symm_inv, Functor.Monoidal.μIso_hom, μ_hom,
+        MonoidalCategory.tensorIso_inv, Representation.linearizeTrivialIso, hom_tensorHom,
+        Representation.IntertwiningMap.tensor_apply, Representation.Equiv.coe_toIntertwiningMap,
+        Representation.Equiv.mk_apply, LinearEquiv.refl_apply]
+      have key₁ := Representation.linearizeMap_single (k := k)
+        (Action.diagonalSuccIsoTensorTrivial G m).inv (g, f) ((1 : k) * r)
+      have key₂ := Representation.LinearizeMonoidal.μ_apply_single_single (k := k)
+        (X := Action.leftRegular G) (Y := Action.trivial G (Fin m -> G)) g f 1 r
+      exact ((congrArg (fun z => (Representation.linearizeMap
+        (Action.diagonalSuccIsoTensorTrivial G m).inv) z) key₂).trans key₁).trans (by simp)
+    simp only [H, one_smul]
+    simp [d_apply (k := k), Fin.partialProd_contractNth, Fin.sum_univ_succ, eq3]
 
 中文:
 引理 d_comp_diagonalSuccIsoFree_inv_eq
@@ -892,7 +934,33 @@ lemma d_comp_diagonalSuccIsoFree_inv_eq
     have eq3 : MonoidAlgebra.single (i 0 • Fin.partialProd fun i_1 => i i_1.succ) (1 : k) =
         MonoidAlgebra.single (Fin.partialProd i ∘ Fin.succ) 1 := by
 .symm congr; exact funext fun j => Fin.partialProd_succ' i j
-    simp only [Rep.hom_comp, Representation.Inte
+    simp only [Rep.hom_comp, Representation.IntertwiningMap.comp_apply]
+    rw [d_single (k := k)]; rw [map_add]; rw [map_sum]
+    -- in-context `have`: at `Action` carriers, only locally re-elaborated statements key-match
+    have H : forall (m : Nat) (f : Fin m -> G) (g : G) (r : k),
+        (diagonalSuccIsoFree k G m).inv.hom (single f (MonoidAlgebra.single g r)) =
+          MonoidAlgebra.single (g • Fin.partialProd f) r := by
+      intro m f g r
+      simp only [diagonalSuccIsoFree, diagonalSuccIsoTensorTrivial, Iso.trans_inv, Rep.hom_comp,
+        Representation.IntertwiningMap.comp_apply]
+      have step1 : (Hom.hom (leftRegularTensorTrivialIsoFree k G (Fin m -> G)).inv)
+          (single f (.single g r)) = .single g 1 otimesₜ[k] .single f r :=
+        Representation.leftRegularTensorTrivialIsoFree_symm_apply_single_single f g r
+      rw [step1]
+      simp only [mkIso_inv, Representation.linearizeOfMulActionIso, Representation.Equiv.mk_symm,
+        LinearEquiv.refl_symm, ConcreteCategory.hom_ofHom, Action.tensorObj_V, Action.trivial_V,
+        Functor.mapIso_inv, tensor_V, tensor_ρ, Iso.symm_inv, Functor.Monoidal.μIso_hom, μ_hom,
+        MonoidalCategory.tensorIso_inv, Representation.linearizeTrivialIso, hom_tensorHom,
+        Representation.IntertwiningMap.tensor_apply, Representation.Equiv.coe_toIntertwiningMap,
+        Representation.Equiv.mk_apply, LinearEquiv.refl_apply]
+      have key₁ := Representation.linearizeMap_single (k := k)
+        (Action.diagonalSuccIsoTensorTrivial G m).inv (g, f) ((1 : k) * r)
+      have key₂ := Representation.LinearizeMonoidal.μ_apply_single_single (k := k)
+        (X := Action.leftRegular G) (Y := Action.trivial G (Fin m -> G)) g f 1 r
+      exact ((congrArg (fun z => (Representation.linearizeMap
+        (Action.diagonalSuccIsoTensorTrivial G m).inv) z) key₂).trans key₁).trans (by simp)
+    simp only [H, one_smul]
+    simp [d_apply (k := k), Fin.partialProd_contractNth, Fin.sum_univ_succ, eq3]
 
 Depends on / 依赖: Fin.partialProd, Fin.partialProd_succ, Fin.succ, IntertwiningMap, MonoidAlgebra, MonoidAlgebra.single, Rep.hom_comp, Representation, Representation.IntertwiningMap.comp_apply, comp_apply, d_single, free_ext, hom_comp, i_1.succ, map_add, map_sum, partialProd, partialProd_succ, single
 -/
@@ -944,14 +1012,16 @@ abbreviation barComplex
   signature: : ChainComplex (Rep k G) Nat
   body: ChainComplex.of (fun n => free k G (Fin n -> G)) (fun n => d k G n) fun m => by
     have key : (d k G (m + 1) ≫ d k G m) ≫ (diagonalSuccIsoFree k G m).inv = 0 := by
-      rw [Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [← Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [C
+      rw [Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [← Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [Category.assoc]; rw [HomologicalComplex.d_comp_d]; rw [Limits.comp_zero]
+    exact (cancel_mono (diagonalSuccIsoFree k G m).inv).mp (by simpa using key)
 
 中文:
 缩写 barComplex
   签名: : 链复形 (Rep k G) 自然数
   定义体: ChainComplex.of (fun n => free k G (Fin n -> G)) (fun n => d k G n) fun m => by
     have key : (d k G (m + 1) ≫ d k G m) ≫ (diagonalSuccIsoFree k G m).inv = 0 := by
-      rw [Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [← Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [C
+      rw [Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [← Category.assoc]; rw [d_comp_diagonalSuccIsoFree_inv_eq]; rw [Category.assoc]; rw [HomologicalComplex.d_comp_d]; rw [Limits.comp_zero]
+    exact (cancel_mono (diagonalSuccIsoFree k G m).inv).mp (by simpa using key)
 
 Depends on / 依赖: Category, Category.assoc, ChainComplex, ChainComplex.of, HomologicalComplex, HomologicalComplex.d_comp_d, Limits, Limits.comp_zero, cancel_mono, comp_zero, d_comp_d, d_comp_diagonalSuccIsoFree_inv_eq, diagonalSuccIsoFree
 -/

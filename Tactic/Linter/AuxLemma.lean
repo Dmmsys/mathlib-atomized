@@ -112,7 +112,8 @@ definition auxLemmaLinter
       return
     if let some id := stx.find? fun s => s.isIdent && nameRefersToAuxLemma s.getId then
       logLint linter.auxLemma id
-        m!"`{id.getId}` 
+        m!"`{id.getId}` refers to an auto-generated auxiliary declaration. \
+          These are not stable across refactors; consider using a different approach."
 
 中文:
 定义 auxLemmaLinter
@@ -124,7 +125,8 @@ definition auxLemmaLinter
       return
     if let some id := stx.find? fun s => s.isIdent && nameRefersToAuxLemma s.getId then
       logLint linter.auxLemma id
-        m!"`{id.getId}` 
+        m!"`{id.getId}` refers to an auto-generated auxiliary declaration. \
+          These are not stable across refactors; consider using a different approach."
 
 Depends on / 依赖: withSetOptionIn
 -/

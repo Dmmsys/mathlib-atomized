@@ -448,7 +448,9 @@ definition comap
     let g : G ->* (H ⧸ K.toSubgroup) := (QuotientGroup.mk' K.toSubgroup).comp f
     have hker : K.toSubgroup.comap f = g.ker := by
       simpa using MonoidHom.comap_ker (g := QuotientGroup.mk' K.toSubgroup) (f := f)
-    simpa [hker] using (inferInstance : 
+    simpa [hker] using (inferInstance : g.ker.FiniteIndex)
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 comap
@@ -458,7 +460,9 @@ definition comap
     let g : G ->* (H ⧸ K.toSubgroup) := (QuotientGroup.mk' K.toSubgroup).comp f
     have hker : K.toSubgroup.comap f = g.ker := by
       simpa using MonoidHom.comap_ker (g := QuotientGroup.mk' K.toSubgroup) (f := f)
-    simpa [hker] using (inferInstance : 
+    simpa [hker] using (inferInstance : g.ker.FiniteIndex)
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: K.toSubgroup.comap, toSubgroup
 -/

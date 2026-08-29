@@ -33,7 +33,13 @@ abbreviation AddCommMonoid.zmodModule
   match n with
   | n + 1 => exact {
     smul := fun (c : Fin _) x => c.val • x
-    smul_zero :
+    smul_zero := fun _ => nsmul_zero _
+    zero_smul := fun _ => zero_nsmul _
+    smul_add := fun _ _ _ => nsmul_add _ _ _
+one_smul := fun _ => (h_mod _ _).trans one_nsmul _
+add_smul := fun _ _ _ => (h_mod _ _).trans add_nsmul _ _ _
+mul_smul := fun _ _ _ => (h_mod _ _).trans mul_nsmul' _ _ _
+  }
 
 中文:
 缩写 加法交换幺半群.zmodModule
@@ -46,7 +52,13 @@ abbreviation AddCommMonoid.zmodModule
   match n with
   | n + 1 => exact {
     smul := fun (c : Fin _) x => c.val • x
-    smul_zero :
+    smul_zero := fun _ => nsmul_zero _
+    zero_smul := fun _ => zero_nsmul _
+    smul_add := fun _ _ _ => nsmul_add _ _ _
+one_smul := fun _ => (h_mod _ _).trans one_nsmul _
+add_smul := fun _ _ _ => (h_mod _ _).trans add_nsmul _ _ _
+mul_smul := fun _ _ _ => (h_mod _ _).trans mul_nsmul' _ _ _
+  }
 
 Depends on / 依赖: Nat.mod_add_div, NeZero, NeZero.ne, add_nsmul, add_smul, add_zero, c.val, h_mod, mod_add_div, mul_nsmul, mul_smul, nsmul_add, nsmul_zero, one_nsmul, one_smul, smul_add, smul_zero, zero_nsmul, zero_smul
 -/

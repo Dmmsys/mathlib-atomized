@@ -62,7 +62,10 @@ definition strictUniversalPropertyFixedTarget
   fac F hF := rfl
   uniq F₁ F₂ h := by
     fapply Functor.ext
-  
+    · rintro ⟨X⟩
+      exact Functor.congr_obj h X
+    · rintro ⟨X⟩ ⟨Y⟩ ⟨f⟩
+      exact Functor.congr_hom h f
 
 中文:
 定义 strictUniversalPropertyFixedTarget
@@ -77,7 +80,10 @@ definition strictUniversalPropertyFixedTarget
   fac F hF := rfl
   uniq F₁ F₂ h := by
     fapply Functor.ext
-  
+    · rintro ⟨X⟩
+      exact Functor.congr_obj h X
+    · rintro ⟨X⟩ ⟨Y⟩ ⟨f⟩
+      exact Functor.congr_hom h f
 -/
 private def strictUniversalPropertyFixedTarget (E : Type*) [Category* E] :
     Localization.StrictUniversalPropertyFixedTarget (functor r) W E where
@@ -137,7 +143,8 @@ lemma isLocalization_of_essSurj_of_full_of_exists_cylinders
     have : IsIso (F.map ((Quotient.functor L.homRel).map f)) := hW _ hf
     apply isIso_of_reflects_iso _ F
   have := Quotient.isLocalization_functor L.homRel W hW' hr
-  exa
+  exact IsLocalization.of_equivalence_target (Quotient.functor L.homRel) W L
+    F.asEquivalence (Iso.refl _)
 
 中文:
 引理 isLocalization_of_essSurj_of_full_of_存在_cylinders
@@ -147,7 +154,8 @@ lemma isLocalization_of_essSurj_of_full_of_exists_cylinders
     have : IsIso (F.map ((Quotient.functor L.homRel).map f)) := hW _ hf
     apply isIso_of_reflects_iso _ F
   have := Quotient.isLocalization_functor L.homRel W hW' hr
-  exa
+  exact IsLocalization.of_equivalence_target (Quotient.functor L.homRel) W L
+    F.asEquivalence (Iso.refl _)
 
 Depends on / 依赖: F.asEquivalence, F.map, IsInvertedBy, IsLocalization, IsLocalization.of_equivalence_target, Iso.refl, L.homRel, Quotient, Quotient.functor, Quotient.isLocalization_functor, Quotient.lift, W.IsInvertedBy, asEquivalence, functor, homRel, isIso_of_reflects_iso, isLocalization_functor, of_equivalence_target
 -/

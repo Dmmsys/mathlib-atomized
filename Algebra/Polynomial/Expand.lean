@@ -342,7 +342,16 @@ theorem coeff_expand
       rw [if_neg]
       intro hb3
       apply hb2
-      rw [← hb3]; rw [Nat.mu
+      rw [← hb3]; rw [Nat.mul_div_cancel_left b hp]
+    · intro hn
+      rw [notMem_support_iff.1 hn]
+      split_ifs <;> rfl
+  · rw [Finset.sum_eq_zero]
+    intro k _
+    rw [if_neg]
+    exact fun hkn => h ⟨k, hkn.symm⟩
+
+@[simp]
 
 中文:
 定理 coeff_expand
@@ -356,7 +365,16 @@ theorem coeff_expand
       rw [if_neg]
       intro hb3
       apply hb2
-      rw [← hb3]; rw [Nat.mu
+      rw [← hb3]; rw [Nat.mul_div_cancel_left b hp]
+    · intro hn
+      rw [notMem_support_iff.1 hn]
+      split_ifs <;> rfl
+  · rw [Finset.sum_eq_zero]
+    intro k _
+    rw [if_neg]
+    exact fun hkn => h ⟨k, hkn.symm⟩
+
+@[simp]
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, Finset, Finset.sum_eq_single, Finset.sum_eq_zero, Nat.mul_div_cancel, Nat.mul_div_cancel_left, coeff_monomial, coeff_sum, expand_eq_sum, hkn.symm, if_neg, if_pos, mul_div_cancel, mul_div_cancel_left, notMem_support_iff, pow_mul, simp_rw, split_ifs, sum_eq_single, sum_eq_zero
 -/
@@ -539,7 +557,19 @@ theorem natDegree_expand
   by_cases hf : f = 0
   · rw [hf, map_zero, natDegree_zero, zero_mul]
   have hf1 : expand R p f != 0 := mt (expand_eq_zero hp).1 hf
-  rw [← Nat.cast_inj (R := WithBot Nat)]; rw [← deg
+  rw [← Nat.cast_inj (R := WithBot Nat)]; rw [← degree_eq_natDegree hf1]
+  refine le_antisymm ((degree_le_iff_coeff_zero _ _).2 fun n hn => ?_) ?_
+  · rw [coeff_expand hp]
+    split_ifs with hpn
+    · rw [coeff_eq_zero_of_natDegree_lt]
+      contrapose! hn
+      norm_cast
+      rw [← Nat.div_mul_cancel hpn]
+      exact Nat.mul_le_mul_right p hn
+    · rfl
+  · refine le_degree_of_ne_zero ?_
+    rw [coeff_expand_mul hp]; rw [← leadingCoeff]
+    exact mt leadingCoeff_eq_zero.1 hf
 
 中文:
 定理 natDegree_expand
@@ -551,7 +581,19 @@ theorem natDegree_expand
   by_cases hf : f = 0
   · rw [hf, map_zero, natDegree_zero, zero_mul]
   have hf1 : expand R p f != 0 := mt (expand_eq_zero hp).1 hf
-  rw [← Nat.cast_inj (R := WithBot Nat)]; rw [← deg
+  rw [← Nat.cast_inj (R := WithBot Nat)]; rw [← degree_eq_natDegree hf1]
+  refine le_antisymm ((degree_le_iff_coeff_zero _ _).2 fun n hn => ?_) ?_
+  · rw [coeff_expand hp]
+    split_ifs with hpn
+    · rw [coeff_eq_zero_of_natDegree_lt]
+      contrapose! hn
+      norm_cast
+      rw [← Nat.div_mul_cancel hpn]
+      exact Nat.mul_le_mul_right p hn
+    · rfl
+  · refine le_degree_of_ne_zero ?_
+    rw [coeff_expand_mul hp]; rw [← leadingCoeff]
+    exact mt leadingCoeff_eq_zero.1 hf
 
 Depends on / 依赖: Nat.cast_inj, Nat.div_, WithBot, cast_inj, coe_expand, coeff_eq_zero_of_natDegree_lt, coeff_expand, contrapose, degree_eq_natDegree, degree_le_iff_coeff_zero, div_, eq_zero_or_pos, expand, expand_eq_zero, le_antisymm, map_zero, mul_zero, natDegree_C, natDegree_zero, p.eq_zero_or_pos
 -/
@@ -748,7 +790,7 @@ theorem coeff_contract
   calc
     f.natDegree < f.natDegree + 1 := Nat.lt_succ_self _
     _ <= n * 1 := by simpa only [mul_one] using hn
-    _ <= n * p :
+    _ <= n * p := by gcongr; exact hp.bot_lt
 
 中文:
 定理 coeff_contract
@@ -761,7 +803,7 @@ theorem coeff_contract
   calc
     f.natDegree < f.natDegree + 1 := Nat.lt_succ_self _
     _ <= n * 1 := by simpa only [mul_one] using hn
-    _ <= n * p :
+    _ <= n * p := by gcongr; exact hp.bot_lt
 
 Depends on / 依赖: Nat.lt_succ_self, bot_lt, coeff_eq_zero_of_natDegree_lt, coeff_monomial, contract, f.natDegree, finsetSum_coeff, hp.bot_lt, ite_eq_left_iff, lt_succ_self, mem_range, mul_one, natDegree, not_lt, sum_ite_eq
 -/
@@ -891,7 +933,16 @@ theorem contract_mul_expand
   rw [coeff_contract hp]; rw [coeff_mul]; rw [coeff_mul]; rw [← sum_subset
     (s₁ := (antidiagonal n).image fun x => (x.1 * p]; rw [x.2 * p))]; rw [sum_image]
   · simp_rw [coeff_expand_mul hp.bot_lt, coeff_contract hp]
-  · intro x hx y hy eq; simpa only [Prod.ext_iff, Nat.mul_right_cance
+  · intro x hx y hy eq; simpa only [Prod.ext_iff, Nat.mul_right_cancel_iff hp.bot_lt] using eq
+  · simp_rw [subset_iff, mem_image, mem_antidiagonal]; rintro _ ⟨x, rfl, rfl⟩; simp_rw [add_mul]
+  simp_rw [mem_image, mem_antidiagonal]
+  intro ⟨x, y⟩ eq nex
+  by_cases h : p ∣ y
+  · obtain ⟨x, rfl⟩ : p ∣ x := (Nat.dvd_add_iff_left h).mpr (eq ▸ dvd_mul_left p n)
+    obtain ⟨y, rfl⟩ := h
+    refine (nex ⟨⟨x, y⟩, (Nat.mul_right_cancel_iff hp.bot_lt).mp ?_, by simp_rw [mul_comm]⟩).elim
+    rw [← eq]; rw [mul_comm]; rw [mul_add]
+  · rw [coeff_expand hp.bot_lt, if_neg h, mul_zero]
 
 中文:
 定理 contract_mul_expand
@@ -901,7 +952,16 @@ theorem contract_mul_expand
   rw [coeff_contract hp]; rw [coeff_mul]; rw [coeff_mul]; rw [← sum_subset
     (s₁ := (antidiagonal n).image fun x => (x.1 * p]; rw [x.2 * p))]; rw [sum_image]
   · simp_rw [coeff_expand_mul hp.bot_lt, coeff_contract hp]
-  · intro x hx y hy eq; simpa only [Prod.ext_iff, Nat.mul_right_cance
+  · intro x hx y hy eq; simpa only [Prod.ext_iff, Nat.mul_right_cancel_iff hp.bot_lt] using eq
+  · simp_rw [subset_iff, mem_image, mem_antidiagonal]; rintro _ ⟨x, rfl, rfl⟩; simp_rw [add_mul]
+  simp_rw [mem_image, mem_antidiagonal]
+  intro ⟨x, y⟩ eq nex
+  by_cases h : p ∣ y
+  · obtain ⟨x, rfl⟩ : p ∣ x := (Nat.dvd_add_iff_left h).mpr (eq ▸ dvd_mul_left p n)
+    obtain ⟨y, rfl⟩ := h
+    refine (nex ⟨⟨x, y⟩, (Nat.mul_right_cancel_iff hp.bot_lt).mp ?_, by simp_rw [mul_comm]⟩).elim
+    rw [← eq]; rw [mul_comm]; rw [mul_add]
+  · rw [coeff_expand hp.bot_lt, if_neg h, mul_zero]
 
 Depends on / 依赖: Nat.mul_right_cancel_iff, Prod.ext_iff, add_mul, antidiagonal, bot_lt, coeff_contract, coeff_expand_mul, coeff_mul, ext_iff, hp.bot_lt, mem_antidiagonal, mem_image, mul_right_cancel_iff, simp_rw, subset_iff, sum_image, sum_subset
 -/
@@ -960,7 +1020,10 @@ theorem expand_contract
     have := coeff_derivative f n
     rw [hf]; rw [coeff_zero]; rw [zero_eq_mul] at this
     rcases this with h' | _
-    · rw [h'
+    · rw [h']
+    rename_i _ _ _ h'
+    rw [← Nat.cast_succ]; rw [CharP.cast_eq_zero_iff R p] at h'
+    exact absurd h' h
 
 中文:
 定理 expand_contract
@@ -975,7 +1038,10 @@ theorem expand_contract
     have := coeff_derivative f n
     rw [hf]; rw [coeff_zero]; rw [zero_eq_mul] at this
     rcases this with h' | _
-    · rw [h'
+    · rw [h']
+    rename_i _ _ _ h'
+    rw [← Nat.cast_succ]; rw [CharP.cast_eq_zero_iff R p] at h'
+    exact absurd h' h
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, Nat.cast_succ, Nat.div_mul_cancel, absurd, bot_lt, cast_eq_zero_iff, cast_succ, coeff_contract, coeff_derivative, coeff_expand, coeff_zero, div_mul_cancel, dvd_zero, hp.bot_lt, rename_i, split_ifs, zero_eq_mul
 -/
@@ -1114,7 +1180,9 @@ theorem rootMultiplicity_expand_pow
   obtain rfl | h0 := eq_or_ne f 0; · simp
   obtain ⟨g, hg, ndvd⟩ := f.exists_eq_pow_rootMultiplicity_mul_and_not_dvd h0 (r ^ p ^ n)
   rw [dvd_iff_isRoot]; rw [← eval_X (x := r)]; rw [← eval_pow]; rw [← isRoot_comp]; rw [← expand_eq_comp_X_pow] at ndvd
-  conv_lhs => rw [hg, map_mul, map_pow, map_s
+  conv_lhs => rw [hg, map_mul, map_pow, map_sub, expand_X, expand_C, map_pow, ← sub_pow_expChar_pow,
+    ← pow_mul, mul_comm, rootMultiplicity_mul_X_sub_C_pow (expand_ne_zero (expChar_pow_pos R p n)
+.mpr right_ne_zero_of_mul hg ▸ h0), rootMultiplicity_eq_zero ndvd, zero_add]
 
 中文:
 定理 rootMultiplicity_expand_pow
@@ -1122,7 +1190,9 @@ theorem rootMultiplicity_expand_pow
   obtain rfl | h0 := eq_or_ne f 0; · simp
   obtain ⟨g, hg, ndvd⟩ := f.exists_eq_pow_rootMultiplicity_mul_and_not_dvd h0 (r ^ p ^ n)
   rw [dvd_iff_isRoot]; rw [← eval_X (x := r)]; rw [← eval_pow]; rw [← isRoot_comp]; rw [← expand_eq_comp_X_pow] at ndvd
-  conv_lhs => rw [hg, map_mul, map_pow, map_s
+  conv_lhs => rw [hg, map_mul, map_pow, map_sub, expand_X, expand_C, map_pow, ← sub_pow_expChar_pow,
+    ← pow_mul, mul_comm, rootMultiplicity_mul_X_sub_C_pow (expand_ne_zero (expChar_pow_pos R p n)
+.mpr right_ne_zero_of_mul hg ▸ h0), rootMultiplicity_eq_zero ndvd, zero_add]
 
 Depends on / 依赖: conv_lhs, dvd_iff_isRoot, eq_or_ne, eval_X, eval_pow, exists_eq_pow_rootMultiplicity_mul_and_not_dvd, expChar_pow_pos, expand_C, expand_X, expand_eq_comp_X_pow, expand_ne_zero, f.exists_eq_pow_rootMultiplicity_mul_and_not_dvd, isRoot_comp, map_mul, map_pow, map_sub, mul_comm, pow_mul, right_ne_zero_of_mul, rootMultiplicity_eq_ze
 -/

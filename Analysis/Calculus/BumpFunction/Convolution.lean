@@ -172,7 +172,26 @@ theorem ae_convolution_tendsto_right_of_locallyIntegrable
   -- By Lebesgue differentiation theorem, the average of `g` on a small ball converges
   -- almost everywhere to the value of `g` as the radius shrinks to zero.
   -- We will see that this set of points satisfies the desired conclusion.
-  filter_upwards [(Besicovitch.vitaliFamily μ).ae_tendsto_ave
+  filter_upwards [(Besicovitch.vitaliFamily μ).ae_tendsto_average_norm_sub hg] with x₀ h₀
+  simp only [convolution_eq_swap, lsmul_apply]
+  have hφ' : Tendsto (fun i => (φ i).rOut) l (𝓝[>] 0) :=
+    tendsto_nhdsWithin_iff.2 ⟨hφ, Eventually.of_forall (fun i => (φ i).rOut_pos)⟩
+  have := (h₀.comp (Besicovitch.tendsto_filterAt μ x₀)).comp hφ'
+  apply tendsto_integral_smul_of_tendsto_average_norm_sub (K ^ (Module.finrank Real G)) this
+  · filter_upwards with i using
+      hg.integrableOn_isCompact (isCompact_closedBall _ _)
+  · apply tendsto_const_nhds.congr (fun i => ?_)
+    rw [← integral_neg_eq_self]
+    simp only [sub_neg_eq_add, integral_add_left_eq_self, integral_normed]
+  · filter_upwards with i
+    change support ((ContDiffBump.normed (φ i) μ) ∘ (fun y => x₀ - y)) subseteq closedBall x₀ (φ i).rOut
+    simp only [support_comp_eq_preimage, support_normed_eq]
+    intro x hx
+    simp only [mem_preimage, mem_ball, dist_zero_right] at hx
+    simpa [dist_eq_norm_sub'] using hx.le
+  · filter_upwards [h'φ] with i hi x
+    rw [abs_of_nonneg (nonneg_normed _ _)]; rw [addHaar_real_closedBall_center]
+    exact (φ i).normed_le_div_measure_closedBall_rOut _ _ hi _
 
 中文:
 定理 ae_convolution_tendsto_right_of_locally整数egrable
@@ -180,7 +199,26 @@ theorem ae_convolution_tendsto_right_of_locallyIntegrable
   -- By Lebesgue differentiation theorem, the average of `g` on a small ball converges
   -- almost everywhere to the value of `g` as the radius shrinks to zero.
   -- We will see that this set of points satisfies the desired conclusion.
-  filter_upwards [(Besicovitch.vitaliFamily μ).ae_tendsto_ave
+  filter_upwards [(Besicovitch.vitaliFamily μ).ae_tendsto_average_norm_sub hg] with x₀ h₀
+  simp only [convolution_eq_swap, lsmul_apply]
+  have hφ' : Tendsto (fun i => (φ i).rOut) l (𝓝[>] 0) :=
+    tendsto_nhdsWithin_iff.2 ⟨hφ, Eventually.of_forall (fun i => (φ i).rOut_pos)⟩
+  have := (h₀.comp (Besicovitch.tendsto_filterAt μ x₀)).comp hφ'
+  apply tendsto_integral_smul_of_tendsto_average_norm_sub (K ^ (Module.finrank Real G)) this
+  · filter_upwards with i using
+      hg.integrableOn_isCompact (isCompact_closedBall _ _)
+  · apply tendsto_const_nhds.congr (fun i => ?_)
+    rw [← integral_neg_eq_self]
+    simp only [sub_neg_eq_add, integral_add_left_eq_self, integral_normed]
+  · filter_upwards with i
+    change support ((ContDiffBump.normed (φ i) μ) ∘ (fun y => x₀ - y)) subseteq closedBall x₀ (φ i).rOut
+    simp only [support_comp_eq_preimage, support_normed_eq]
+    intro x hx
+    simp only [mem_preimage, mem_ball, dist_zero_right] at hx
+    simpa [dist_eq_norm_sub'] using hx.le
+  · filter_upwards [h'φ] with i hi x
+    rw [abs_of_nonneg (nonneg_normed _ _)]; rw [addHaar_real_closedBall_center]
+    exact (φ i).normed_le_div_measure_closedBall_rOut _ _ hi _
 -/
 theorem ae_convolution_tendsto_right_of_locallyIntegrable
     {ι} {φ : ι -> ContDiffBump (0 : G)} {l : Filter ι} {K : Real}

@@ -894,7 +894,12 @@ theorem oangle_eq_of_parallel
     rw [Set.pair_comm p₃]
     exact AffineSubspace.direction_le (affineSpan_pair_le_of_mem_of_mem h₆ h₄)
   obtain ⟨r, hr, h₅₄, h₆₅, -⟩ := exists_eq_smul_of_parallel h₂ h₁₂₄₅
-    (Set.pair_com
+    (Set.pair_comm p₃ p₂ ▸ Set.pair_comm p₆ p₅ ▸ h₃₂₆₅).direction_eq.symm.le hd
+  rw [← neg_inj]; rw [neg_vsub_eq_vsub_rev]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev] at h₅₄
+  rw [h₅₄]; rw [h₆₅]
+  rcases hr.lt_or_gt with hlt | hlt
+  · simp [-neg_vsub_eq_vsub_rev, hlt]
+  · simp [hlt]
 
 中文:
 定理 oangle_eq_of_parallel
@@ -905,7 +910,12 @@ theorem oangle_eq_of_parallel
     rw [Set.pair_comm p₃]
     exact AffineSubspace.direction_le (affineSpan_pair_le_of_mem_of_mem h₆ h₄)
   obtain ⟨r, hr, h₅₄, h₆₅, -⟩ := exists_eq_smul_of_parallel h₂ h₁₂₄₅
-    (Set.pair_com
+    (Set.pair_comm p₃ p₂ ▸ Set.pair_comm p₆ p₅ ▸ h₃₂₆₅).direction_eq.symm.le hd
+  rw [← neg_inj]; rw [neg_vsub_eq_vsub_rev]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev] at h₅₄
+  rw [h₅₄]; rw [h₆₅]
+  rcases hr.lt_or_gt with hlt | hlt
+  · simp [-neg_vsub_eq_vsub_rev, hlt]
+  · simp [hlt]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.direction_le, Set.pair_comm, affineSpan_pair_le_of_mem_of_mem, direction, direction_eq, direction_eq.symm.le, direction_le, exists_eq_smul_of_parallel, hr.lt_or_gt, lt_or_gt, neg_inj, neg_vsub_eq_vsub_rev, oangle, pair_comm, smul_neg
 -/
@@ -1068,7 +1078,7 @@ theorem oangle_eq_pi_sub_two_zsmul_oangle_of_dist_eq
   convert! o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq _ h using 1
   · rw [← neg_vsub_eq_vsub_rev p₁ p₃, ← neg_vsub_eq_vsub_rev p₁ p₂, o.oangle_neg_neg]
   · rw [← o.oangle_sub_eq_oangle_sub_rev_of_norm_eq h]; simp
-  · simpa us
+  · simpa using hn
 
 中文:
 定理 oangle_eq_pi_sub_two_zsmul_oangle_of_dist_eq
@@ -1079,7 +1089,7 @@ theorem oangle_eq_pi_sub_two_zsmul_oangle_of_dist_eq
   convert! o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq _ h using 1
   · rw [← neg_vsub_eq_vsub_rev p₁ p₃, ← neg_vsub_eq_vsub_rev p₁ p₂, o.oangle_neg_neg]
   · rw [← o.oangle_sub_eq_oangle_sub_rev_of_norm_eq h]; simp
-  · simpa us
+  · simpa using hn
 
 Depends on / 依赖: convert, dist_eq_norm_vsub, neg_vsub_eq_vsub_rev, o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq, o.oangle_neg_neg, o.oangle_sub_eq_oangle_sub_rev_of_norm_eq, oangle, oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq, oangle_neg_neg, oangle_sub_eq_oangle_sub_rev_of_norm_eq, simp_rw
 -/
@@ -1271,7 +1281,11 @@ theorem oangle_eq_or_eq_neg_of_angle_eq
   · left
     rw [h₁]; rw [h₂]; rw [h]
   · right
-    rw [h₁]; rw [h₂]; rw [h]; rw [n
+    rw [h₁]; rw [h₂]; rw [h]; rw [neg_neg]
+  · right
+    rw [h₁]; rw [h₂]; rw [h]
+  · left
+    rw [h₁]; rw [h₂]; rw [h]
 
 中文:
 定理 oangle_eq_or_eq_neg_of_angle_eq
@@ -1283,7 +1297,11 @@ theorem oangle_eq_or_eq_neg_of_angle_eq
   · left
     rw [h₁]; rw [h₂]; rw [h]
   · right
-    rw [h₁]; rw [h₂]; rw [h]; rw [n
+    rw [h₁]; rw [h₂]; rw [h]; rw [neg_neg]
+  · right
+    rw [h₁]; rw [h₂]; rw [h]
+  · left
+    rw [h₁]; rw [h₂]; rw [h]
 
 Depends on / 依赖: EuclideanGeometry, EuclideanGeometry.oangle_eq_angle_or_eq_neg_angle, h1.symm, h2.symm, h3.symm, h4.symm, neg_neg, oangle_eq_angle_or_eq_neg_angle
 -/
@@ -1528,6 +1546,9 @@ theorem oangle_swap₁₂_sign
   proof: by
   rw [eq_comm]; rw [oangle]; rw [oangle]; rw [← o.oangle_neg_neg]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [←
     vsub_sub_vsub_cancel_left p₁ p₃ p₂]; rw [← neg_vsub_eq_vsub_rev p₃ p₂]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev p₂ p₁]; rw [add_comm]; rw [← @neg_one_smul Real]
+  nth_rw 2 [← one_smul Real (p₁ -ᵥ p₂)]
+  rw [o.oangle_sign_smul_add_smul_right]
+  simp
 
 中文:
 定理 oangle_swap₁₂_sign
@@ -1536,6 +1557,9 @@ theorem oangle_swap₁₂_sign
   证明: by
   rw [eq_comm]; rw [oangle]; rw [oangle]; rw [← o.oangle_neg_neg]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [←
     vsub_sub_vsub_cancel_left p₁ p₃ p₂]; rw [← neg_vsub_eq_vsub_rev p₃ p₂]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev p₂ p₁]; rw [add_comm]; rw [← @neg_one_smul Real]
+  nth_rw 2 [← one_smul Real (p₁ -ᵥ p₂)]
+  rw [o.oangle_sign_smul_add_smul_right]
+  simp
 
 Depends on / 依赖: add_comm, eq_comm, neg_one_smul, neg_vsub_eq_vsub_rev, nth_rw, o.oangle_neg_neg, o.oangle_sign_smul_add_smul_right, oangle, oangle_neg_neg, oangle_sign_smul_add_smul_right, one_smul, sub_eq_add_neg, vsub_sub_vsub_cancel_left
 -/
@@ -2137,7 +2161,7 @@ lemma oangle_pointReflection_right
     rw [(AffineEquiv.pointReflection Real p₂).injective.ne_iff]
     exact h₃₂
   rw [← sub_eq_iff_eq_add']; rw [oangle_sub_left h₁₂ h₃₂ h₂₃']
-exact Sbtw.oangle₁₂₃_eq_p
+exact Sbtw.oangle₁₂₃_eq_pi sbtw_pointReflection_of_ne Real h₃₂.symm
 
 中文:
 引理 oangle_pointReflection_right
@@ -2148,7 +2172,7 @@ exact Sbtw.oangle₁₂₃_eq_p
     rw [(AffineEquiv.pointReflection Real p₂).injective.ne_iff]
     exact h₃₂
   rw [← sub_eq_iff_eq_add']; rw [oangle_sub_left h₁₂ h₃₂ h₂₃']
-exact Sbtw.oangle₁₂₃_eq_p
+exact Sbtw.oangle₁₂₃_eq_pi sbtw_pointReflection_of_ne Real h₃₂.symm
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.pointReflection, AffineEquiv.pointReflection_self, Sbtw.oangle, conv_rhs, injective, injective.ne_iff, ne_iff, oangle_sub_left, pointReflection, pointReflection_self, sbtw_pointReflection_of_ne, sub_eq_iff_eq_add
 -/
@@ -2196,7 +2220,8 @@ theorem _root_.Collinear.two_zsmul_oangle_eq_left
   rcases h.wbtw_or_wbtw_or_wbtw with (hw | hw | hw)
   · have hw' : Sbtw Real p₁ p₂ p₁' := ⟨hw, hp₁p₂.symm, hp₁'p₂.symm⟩
     rw [hw'.oangle_eq_add_pi_left hp₃p₂]; rw [smul_add]; rw [Real.Angle.two_zsmul_coe_pi]; rw [add_zero]
-  · rw [hw.oangle_eq_left hp₁
+  · rw [hw.oangle_eq_left hp₁'p₂]
+  · rw [hw.symm.oangle_eq_left hp₁p₂]
 
 中文:
 定理 _root_.Collinear.two_zsmul_oangle_eq_left
@@ -2206,7 +2231,8 @@ theorem _root_.Collinear.two_zsmul_oangle_eq_left
   rcases h.wbtw_or_wbtw_or_wbtw with (hw | hw | hw)
   · have hw' : Sbtw Real p₁ p₂ p₁' := ⟨hw, hp₁p₂.symm, hp₁'p₂.symm⟩
     rw [hw'.oangle_eq_add_pi_left hp₃p₂]; rw [smul_add]; rw [Real.Angle.two_zsmul_coe_pi]; rw [add_zero]
-  · rw [hw.oangle_eq_left hp₁
+  · rw [hw.oangle_eq_left hp₁'p₂]
+  · rw [hw.symm.oangle_eq_left hp₁p₂]
 
 Depends on / 依赖: Real.Angle.two_zsmul_coe_pi, add_zero, h.wbtw_or_wbtw_or_wbtw, hw.oangle_eq_left, hw.symm.oangle_eq_left, oangle_eq_add_pi_left, oangle_eq_left, smul_add, two_zsmul_coe_pi, wbtw_or_wbtw_or_wbtw
 -/
@@ -2253,7 +2279,19 @@ theorem dist_eq_iff_eq_smul_rotation_pi_div_two_vadd_midpoint
   · have hi : ⟪p₂ -ᵥ p₁, p -ᵥ midpoint Real p₁ p₂⟫ = 0 := by
       rw [@dist_eq_norm_vsub' V]; rw [@dist_eq_norm_vsub' V]; rw [←
         mul_self_inj (norm_nonneg _) (norm_nonneg _)]; rw [← real_inner_self_eq_norm_mul_norm]; rw [←
-        real_inner_self_eq_n
+        real_inner_self_eq_norm_mul_norm] at hd
+      simp_rw [vsub_midpoint, ← vsub_sub_vsub_cancel_left p₂ p₁ p, inner_sub_left, inner_add_right,
+        inner_smul_right, hd, real_inner_comm (p -ᵥ p₁)]
+      abel
+    rw [@Orientation.inner_eq_zero_iff_eq_zero_or_eq_smul_rotation_pi_div_two V _ _ _ o]; rw [or_iff_right (vsub_ne_zero.2 h.symm)] at hi
+    rcases hi with ⟨r, hr⟩
+    rw [eq_comm]; rw [← eq_vadd_iff_vsub_eq] at hr
+    exact ⟨r, hr.symm⟩
+  · rcases hr with ⟨r, rfl⟩
+    simp_rw [@dist_eq_norm_vsub V, vsub_vadd_eq_vsub_sub, left_vsub_midpoint, right_vsub_midpoint,
+      invOf_eq_inv, ← neg_vsub_eq_vsub_rev p₂ p₁, ← mul_self_inj (norm_nonneg _) (norm_nonneg _), ←
+      real_inner_self_eq_norm_mul_norm, inner_sub_sub_self]
+    simp [-neg_vsub_eq_vsub_rev]
 
 中文:
 定理 dist_eq_iff_eq_smul_rotation_pi_div_two_vadd_midpoint
@@ -2263,7 +2301,19 @@ theorem dist_eq_iff_eq_smul_rotation_pi_div_two_vadd_midpoint
   · have hi : ⟪p₂ -ᵥ p₁, p -ᵥ midpoint Real p₁ p₂⟫ = 0 := by
       rw [@dist_eq_norm_vsub' V]; rw [@dist_eq_norm_vsub' V]; rw [←
         mul_self_inj (norm_nonneg _) (norm_nonneg _)]; rw [← real_inner_self_eq_norm_mul_norm]; rw [←
-        real_inner_self_eq_n
+        real_inner_self_eq_norm_mul_norm] at hd
+      simp_rw [vsub_midpoint, ← vsub_sub_vsub_cancel_left p₂ p₁ p, inner_sub_left, inner_add_right,
+        inner_smul_right, hd, real_inner_comm (p -ᵥ p₁)]
+      abel
+    rw [@Orientation.inner_eq_zero_iff_eq_zero_or_eq_smul_rotation_pi_div_two V _ _ _ o]; rw [or_iff_right (vsub_ne_zero.2 h.symm)] at hi
+    rcases hi with ⟨r, hr⟩
+    rw [eq_comm]; rw [← eq_vadd_iff_vsub_eq] at hr
+    exact ⟨r, hr.symm⟩
+  · rcases hr with ⟨r, rfl⟩
+    simp_rw [@dist_eq_norm_vsub V, vsub_vadd_eq_vsub_sub, left_vsub_midpoint, right_vsub_midpoint,
+      invOf_eq_inv, ← neg_vsub_eq_vsub_rev p₂ p₁, ← mul_self_inj (norm_nonneg _) (norm_nonneg _), ←
+      real_inner_self_eq_norm_mul_norm, inner_sub_sub_self]
+    simp [-neg_vsub_eq_vsub_rev]
 
 Depends on / 依赖: Orientation, Orientation.inner_eq_zero_iff_eq_zero_or_eq_smul_rota, dist_eq_norm_vsub, inner_add_right, inner_eq_zero_iff_eq_zero_or_eq_smul_rota, inner_smul_right, inner_sub_left, midpoint, mul_self_inj, norm_nonneg, real_inner_comm, real_inner_self_eq_norm_mul_norm, simp_rw, vsub_midpoint, vsub_sub_vsub_cancel_left
 -/
@@ -2301,7 +2351,74 @@ theorem _root_.Collinear.oangle_sign_of_sameRay_vsub
   · have hc₅₁₂₃₄ : Collinear Real ({p₅, p₁, p₂, p₃, p₄} : Set P) :=
       (hc.collinear_insert_iff_of_ne (Set.mem_insert _ _)
         (Set.mem_insert_of_mem _ (Set.mem_insert _ _)) hp₁p₂).2 hc₅₁₂
-    have hc₅₃₄ : Collinear Real ({p₅, p₃, p₄
+    have hc₅₃₄ : Collinear Real ({p₅, p₃, p₄} : Set P) :=
+      (hc.collinear_insert_iff_of_ne
+        (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_insert _ _)))
+        (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _
+          (Set.mem_singleton _)))) hp₃p₄).1 hc₅₁₂₃₄
+    rw [Set.insert_comm] at hc₅₁₂ hc₅₃₄
+    have hs₁₅₂ := oangle_eq_zero_or_eq_pi_iff_collinear.2 hc₅₁₂
+    have hs₃₅₄ := oangle_eq_zero_or_eq_pi_iff_collinear.2 hc₅₃₄
+    rw [← Real.Angle.sign_eq_zero_iff] at hs₁₅₂ hs₃₅₄
+    rw [hs₁₅₂]; rw [hs₃₅₄]
+  · let s : Set (P × P × P) :=
+      (fun x : line[Real, p₁, p₂] × V => (x.1, p₅, x.2 +ᵥ (x.1 : P))) ''
+        Set.univ ×ˢ {v | SameRay Real (p₂ -ᵥ p₁) v ∧ v != 0}
+    have hco : IsConnected s :=
+      haveI : ConnectedSpace line[Real, p₁, p₂] := AddTorsor.connectedSpace _ _
+      (isConnected_univ.prod (isConnected_setOfPred_sameRay_and_ne_zero
+        (vsub_ne_zero.2 hp₁p₂.symm))).image _ (by fun_prop)
+    have hf : ContinuousOn (fun p : P × P × P => ∡ p.1 p.2.1 p.2.2) s := by
+      refine continuousOn_of_forall_continuousAt fun p hp => continuousAt_oangle ?_ ?_
+      all_goals
+        simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_univ, true_and, Prod.ext_iff] at hp
+        obtain ⟨q₁, q₅, q₂⟩ := p
+        dsimp only at hp ⊢
+        obtain ⟨⟨⟨q, hq⟩, v⟩, hv, rfl, rfl, rfl⟩ := hp
+        dsimp only [Subtype.coe_mk, Set.mem_ofPred] at hv ⊢
+        obtain ⟨hvr, -⟩ := hv
+        rintro rfl
+        refine hc₅₁₂ ((collinear_insert_iff_of_mem_affineSpan ?_).2 (collinear_pair _ _ _))
+      · exact hq
+      · refine vadd_mem_of_mem_direction ?_ hq
+        rw [← exists_nonneg_left_iff_sameRay (vsub_ne_zero.2 hp₁p₂.symm)] at hvr
+        obtain ⟨r, -, rfl⟩ := hvr
+        rw [direction_affineSpan]
+        exact smul_vsub_rev_mem_vectorSpan_pair _ _ _
+    have hsp : forall p : P × P × P, p in s -> ∡ p.1 p.2.1 p.2.2 != 0 ∧ ∡ p.1 p.2.1 p.2.2 != π := by
+      intro p hp
+      simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_ofPred, Set.mem_univ, true_and,
+        Prod.ext_iff] at hp
+      obtain ⟨q₁, q₅, q₂⟩ := p
+      dsimp only at hp ⊢
+      obtain ⟨⟨⟨q, hq⟩, v⟩, hv, rfl, rfl, rfl⟩ := hp
+      dsimp only [Subtype.coe_mk, Set.mem_ofPred] at hv ⊢
+      obtain ⟨hvr, hv0⟩ := hv
+      rw [← exists_nonneg_left_iff_sameRay (vsub_ne_zero.2 hp₁p₂.symm)] at hvr
+      obtain ⟨r, -, rfl⟩ := hvr
+      change q in line[Real, p₁, p₂] at hq
+      rw [oangle_ne_zero_and_ne_pi_iff_affineIndependent]
+      refine affineIndependent_of_ne_of_mem_of_notMem_of_mem ?_ hq
+          (fun h => hc₅₁₂ ((collinear_insert_iff_of_mem_affineSpan h).2 (collinear_pair _ _ _))) ?_
+      · rwa [← @vsub_ne_zero V, vsub_vadd_eq_vsub_sub, vsub_self, zero_sub, neg_ne_zero]
+      · refine vadd_mem_of_mem_direction ?_ hq
+        rw [direction_affineSpan]
+        exact smul_vsub_rev_mem_vectorSpan_pair _ _ _
+    have hp₁p₂s : (p₁, p₅, p₂) in s := by
+      simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_ofPred, Set.mem_univ, true_and,
+        Prod.ext_iff]
+      refine ⟨⟨⟨p₁, left_mem_affineSpan_pair Real _ _⟩, p₂ -ᵥ p₁⟩,
+        ⟨SameRay.rfl, vsub_ne_zero.2 hp₁p₂.symm⟩, ?_⟩
+      simp
+    have hp₃p₄s : (p₃, p₅, p₄) in s := by
+      simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_ofPred, Set.mem_univ, true_and,
+        Prod.ext_iff]
+      refine ⟨⟨⟨p₃, hc.mem_affineSpan_of_mem_of_ne (Set.mem_insert _ _)
+        (Set.mem_insert_of_mem _ (Set.mem_insert _ _))
+        (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_insert _ _))) hp₁p₂⟩, p₄ -ᵥ p₃⟩,
+        ⟨hr, vsub_ne_zero.2 hp₃p₄.symm⟩, ?_⟩
+      simp
+    convert! Real.Angle.sign_eq_of_continuousOn hco hf hsp hp₃p₄s hp₁p₂s
 
 中文:
 定理 _root_.Collinear.oangle_sign_of_sameRay_vsub
@@ -2311,7 +2428,74 @@ theorem _root_.Collinear.oangle_sign_of_sameRay_vsub
   · have hc₅₁₂₃₄ : Collinear Real ({p₅, p₁, p₂, p₃, p₄} : Set P) :=
       (hc.collinear_insert_iff_of_ne (Set.mem_insert _ _)
         (Set.mem_insert_of_mem _ (Set.mem_insert _ _)) hp₁p₂).2 hc₅₁₂
-    have hc₅₃₄ : Collinear Real ({p₅, p₃, p₄
+    have hc₅₃₄ : Collinear Real ({p₅, p₃, p₄} : Set P) :=
+      (hc.collinear_insert_iff_of_ne
+        (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_insert _ _)))
+        (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _
+          (Set.mem_singleton _)))) hp₃p₄).1 hc₅₁₂₃₄
+    rw [Set.insert_comm] at hc₅₁₂ hc₅₃₄
+    have hs₁₅₂ := oangle_eq_zero_or_eq_pi_iff_collinear.2 hc₅₁₂
+    have hs₃₅₄ := oangle_eq_zero_or_eq_pi_iff_collinear.2 hc₅₃₄
+    rw [← Real.Angle.sign_eq_zero_iff] at hs₁₅₂ hs₃₅₄
+    rw [hs₁₅₂]; rw [hs₃₅₄]
+  · let s : Set (P × P × P) :=
+      (fun x : line[Real, p₁, p₂] × V => (x.1, p₅, x.2 +ᵥ (x.1 : P))) ''
+        Set.univ ×ˢ {v | SameRay Real (p₂ -ᵥ p₁) v ∧ v != 0}
+    have hco : IsConnected s :=
+      haveI : ConnectedSpace line[Real, p₁, p₂] := AddTorsor.connectedSpace _ _
+      (isConnected_univ.prod (isConnected_setOfPred_sameRay_and_ne_zero
+        (vsub_ne_zero.2 hp₁p₂.symm))).image _ (by fun_prop)
+    have hf : ContinuousOn (fun p : P × P × P => ∡ p.1 p.2.1 p.2.2) s := by
+      refine continuousOn_of_forall_continuousAt fun p hp => continuousAt_oangle ?_ ?_
+      all_goals
+        simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_univ, true_and, Prod.ext_iff] at hp
+        obtain ⟨q₁, q₅, q₂⟩ := p
+        dsimp only at hp ⊢
+        obtain ⟨⟨⟨q, hq⟩, v⟩, hv, rfl, rfl, rfl⟩ := hp
+        dsimp only [Subtype.coe_mk, Set.mem_ofPred] at hv ⊢
+        obtain ⟨hvr, -⟩ := hv
+        rintro rfl
+        refine hc₅₁₂ ((collinear_insert_iff_of_mem_affineSpan ?_).2 (collinear_pair _ _ _))
+      · exact hq
+      · refine vadd_mem_of_mem_direction ?_ hq
+        rw [← exists_nonneg_left_iff_sameRay (vsub_ne_zero.2 hp₁p₂.symm)] at hvr
+        obtain ⟨r, -, rfl⟩ := hvr
+        rw [direction_affineSpan]
+        exact smul_vsub_rev_mem_vectorSpan_pair _ _ _
+    have hsp : forall p : P × P × P, p in s -> ∡ p.1 p.2.1 p.2.2 != 0 ∧ ∡ p.1 p.2.1 p.2.2 != π := by
+      intro p hp
+      simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_ofPred, Set.mem_univ, true_and,
+        Prod.ext_iff] at hp
+      obtain ⟨q₁, q₅, q₂⟩ := p
+      dsimp only at hp ⊢
+      obtain ⟨⟨⟨q, hq⟩, v⟩, hv, rfl, rfl, rfl⟩ := hp
+      dsimp only [Subtype.coe_mk, Set.mem_ofPred] at hv ⊢
+      obtain ⟨hvr, hv0⟩ := hv
+      rw [← exists_nonneg_left_iff_sameRay (vsub_ne_zero.2 hp₁p₂.symm)] at hvr
+      obtain ⟨r, -, rfl⟩ := hvr
+      change q in line[Real, p₁, p₂] at hq
+      rw [oangle_ne_zero_and_ne_pi_iff_affineIndependent]
+      refine affineIndependent_of_ne_of_mem_of_notMem_of_mem ?_ hq
+          (fun h => hc₅₁₂ ((collinear_insert_iff_of_mem_affineSpan h).2 (collinear_pair _ _ _))) ?_
+      · rwa [← @vsub_ne_zero V, vsub_vadd_eq_vsub_sub, vsub_self, zero_sub, neg_ne_zero]
+      · refine vadd_mem_of_mem_direction ?_ hq
+        rw [direction_affineSpan]
+        exact smul_vsub_rev_mem_vectorSpan_pair _ _ _
+    have hp₁p₂s : (p₁, p₅, p₂) in s := by
+      simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_ofPred, Set.mem_univ, true_and,
+        Prod.ext_iff]
+      refine ⟨⟨⟨p₁, left_mem_affineSpan_pair Real _ _⟩, p₂ -ᵥ p₁⟩,
+        ⟨SameRay.rfl, vsub_ne_zero.2 hp₁p₂.symm⟩, ?_⟩
+      simp
+    have hp₃p₄s : (p₃, p₅, p₄) in s := by
+      simp_rw [s, Set.mem_image, Set.mem_prod, Set.mem_ofPred, Set.mem_univ, true_and,
+        Prod.ext_iff]
+      refine ⟨⟨⟨p₃, hc.mem_affineSpan_of_mem_of_ne (Set.mem_insert _ _)
+        (Set.mem_insert_of_mem _ (Set.mem_insert _ _))
+        (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_insert _ _))) hp₁p₂⟩, p₄ -ᵥ p₃⟩,
+        ⟨hr, vsub_ne_zero.2 hp₃p₄.symm⟩, ?_⟩
+      simp
+    convert! Real.Angle.sign_eq_of_continuousOn hco hf hsp hp₃p₄s hp₁p₂s
 
 Depends on / 依赖: Collinear, Set.mem_insert, Set.mem_insert_of_mem, Set.mem_singleton, collinear_insert_iff_of_ne, hc.collinear_insert_iff_of_ne, mem_insert, mem_insert_of_mem, mem_singleton
 -/
@@ -2552,7 +2736,26 @@ theorem _root_.AffineSubspace.SSameSide.oangle_sign_eq
   let sp : Set (P × P × P) := (fun p : P => (p₁, p, p₂)) '' {p | s.SSameSide p₃ p}
   have hc : IsConnected sp :=
     (isConnected_setOfPred_sSameSide hp₃p₄.2.1 hp₃p₄.nonempty).image _ (by fun_prop)
-  have hf : ContinuousOn (fun p : P × P × P => ∡ p.1 p.2.1 p.2.2
+  have hf : ContinuousOn (fun p : P × P × P => ∡ p.1 p.2.1 p.2.2) sp := by
+    refine continuousOn_of_forall_continuousAt fun p hp => continuousAt_oangle ?_ ?_
+    all_goals
+      simp_rw [sp, Set.mem_image, Set.mem_ofPred] at hp
+      obtain ⟨p', hp', rfl⟩ := hp
+      dsimp only
+      rintro rfl
+    · exact hp'.2.2 hp₁
+    · exact hp'.2.2 hp₂
+  have hsp : forall p : P × P × P, p in sp -> ∡ p.1 p.2.1 p.2.2 != 0 ∧ ∡ p.1 p.2.1 p.2.2 != π := by
+    intro p hp
+    simp_rw [sp, Set.mem_image, Set.mem_ofPred] at hp
+    obtain ⟨p', hp', rfl⟩ := hp
+    dsimp only
+    rw [oangle_ne_zero_and_ne_pi_iff_affineIndependent]
+    exact affineIndependent_of_ne_of_mem_of_notMem_of_mem h hp₁ hp'.2.2 hp₂
+  have hp₃ : (p₁, p₃, p₂) in sp :=
+    Set.mem_image_of_mem _ (sSameSide_self_iff.2 ⟨hp₃p₄.nonempty, hp₃p₄.2.1⟩)
+  have hp₄ : (p₁, p₄, p₂) in sp := Set.mem_image_of_mem _ hp₃p₄
+  convert! Real.Angle.sign_eq_of_continuousOn hc hf hsp hp₃ hp₄
 
 中文:
 定理 _root_.仿射子空间.SSameSide.oangle_sign_eq
@@ -2562,7 +2765,26 @@ theorem _root_.AffineSubspace.SSameSide.oangle_sign_eq
   let sp : Set (P × P × P) := (fun p : P => (p₁, p, p₂)) '' {p | s.SSameSide p₃ p}
   have hc : IsConnected sp :=
     (isConnected_setOfPred_sSameSide hp₃p₄.2.1 hp₃p₄.nonempty).image _ (by fun_prop)
-  have hf : ContinuousOn (fun p : P × P × P => ∡ p.1 p.2.1 p.2.2
+  have hf : ContinuousOn (fun p : P × P × P => ∡ p.1 p.2.1 p.2.2) sp := by
+    refine continuousOn_of_forall_continuousAt fun p hp => continuousAt_oangle ?_ ?_
+    all_goals
+      simp_rw [sp, Set.mem_image, Set.mem_ofPred] at hp
+      obtain ⟨p', hp', rfl⟩ := hp
+      dsimp only
+      rintro rfl
+    · exact hp'.2.2 hp₁
+    · exact hp'.2.2 hp₂
+  have hsp : forall p : P × P × P, p in sp -> ∡ p.1 p.2.1 p.2.2 != 0 ∧ ∡ p.1 p.2.1 p.2.2 != π := by
+    intro p hp
+    simp_rw [sp, Set.mem_image, Set.mem_ofPred] at hp
+    obtain ⟨p', hp', rfl⟩ := hp
+    dsimp only
+    rw [oangle_ne_zero_and_ne_pi_iff_affineIndependent]
+    exact affineIndependent_of_ne_of_mem_of_notMem_of_mem h hp₁ hp'.2.2 hp₂
+  have hp₃ : (p₁, p₃, p₂) in sp :=
+    Set.mem_image_of_mem _ (sSameSide_self_iff.2 ⟨hp₃p₄.nonempty, hp₃p₄.2.1⟩)
+  have hp₄ : (p₁, p₄, p₂) in sp := Set.mem_image_of_mem _ hp₃p₄
+  convert! Real.Angle.sign_eq_of_continuousOn hc hf hsp hp₃ hp₄
 
 Depends on / 依赖: ContinuousOn, IsConnected, SSameSide, Set.mem_image, Set.mem_ofPred, all_goals, continuousAt_oangle, continuousOn_of_forall_continuousAt, fun_prop, isConnected_setOfPred_sSameSide, mem_image, mem_ofPred, nonempty, s.SSameSide, simp_rw
 -/
@@ -2602,14 +2824,14 @@ theorem _root_.AffineSubspace.SOppSide.oangle_sign_eq_neg
   statement: {s : AffineSubspace Real P} {p₁ p₂ p₃ p₄ : P}
   proof: by
   have hp₁p₃ : p₁ != p₃ := by rintro rfl; exact hp₃p₄.left_notMem hp₁
-  rw [← (hp₃p₄.symm.trans (sOppSide_pointReflection hp₁ hp₃p₄.left_notMem)).oangle_sign_eq hp₁ hp₂]; rw [← oangle_rotate_sign p₁]; rw [← oangle_rotate_sign p₁]; rw [oangle_swap₁₃_sign]; rw [(sbtw_pointReflection_of_ne Real hp₁p
+  rw [← (hp₃p₄.symm.trans (sOppSide_pointReflection hp₁ hp₃p₄.left_notMem)).oangle_sign_eq hp₁ hp₂]; rw [← oangle_rotate_sign p₁]; rw [← oangle_rotate_sign p₁]; rw [oangle_swap₁₃_sign]; rw [(sbtw_pointReflection_of_ne Real hp₁p₃).symm.oangle_sign_eq _]
 
 中文:
 定理 _root_.仿射子空间.SOppSide.oangle_sign_eq_neg
   结论: {s : 仿射子空间 实数 P} {p₁ p₂ p₃ p₄ : P}
   证明: by
   have hp₁p₃ : p₁ != p₃ := by rintro rfl; exact hp₃p₄.left_notMem hp₁
-  rw [← (hp₃p₄.symm.trans (sOppSide_pointReflection hp₁ hp₃p₄.left_notMem)).oangle_sign_eq hp₁ hp₂]; rw [← oangle_rotate_sign p₁]; rw [← oangle_rotate_sign p₁]; rw [oangle_swap₁₃_sign]; rw [(sbtw_pointReflection_of_ne Real hp₁p
+  rw [← (hp₃p₄.symm.trans (sOppSide_pointReflection hp₁ hp₃p₄.left_notMem)).oangle_sign_eq hp₁ hp₂]; rw [← oangle_rotate_sign p₁]; rw [← oangle_rotate_sign p₁]; rw [oangle_swap₁₃_sign]; rw [(sbtw_pointReflection_of_ne Real hp₁p₃).symm.oangle_sign_eq _]
 
 Depends on / 依赖: left_notMem, oangle_rotate_sign, oangle_sign_eq, sOppSide_pointReflection, sbtw_pointReflection_of_ne, symm.oangle_sign_eq, symm.trans
 -/
@@ -2631,7 +2853,12 @@ lemma angle_eq_iff_oangle_eq_or_wbtw
   apply or_congr_right
   refine ⟨fun h => ?_, fun h => ?_⟩
   · obtain ⟨r, hr, he⟩ := h.exists_pos_left (vsub_ne_zero.2 hp₁) (vsub_ne_zero.2 hp₄)
-    rw [← vsub_vadd p₁ p₂]; rw [← vsub_vadd
+    rw [← vsub_vadd p₁ p₂]; rw [← vsub_vadd p₄ p₂]; rw [← he]
+    nth_rw 1 4 [← one_smul Real (p₁ -ᵥ p₂)]
+    exact wbtw_or_wbtw_smul_vadd_of_nonneg _ _ zero_le_one hr.le
+  · rcases h with h | h
+    · exact h.sameRay_vsub_left
+    · exact h.sameRay_vsub_left.symm
 
 中文:
 引理 angle_eq_iff_oangle_eq_or_wbtw
@@ -2642,7 +2869,12 @@ lemma angle_eq_iff_oangle_eq_or_wbtw
   apply or_congr_right
   refine ⟨fun h => ?_, fun h => ?_⟩
   · obtain ⟨r, hr, he⟩ := h.exists_pos_left (vsub_ne_zero.2 hp₁) (vsub_ne_zero.2 hp₄)
-    rw [← vsub_vadd p₁ p₂]; rw [← vsub_vadd
+    rw [← vsub_vadd p₁ p₂]; rw [← vsub_vadd p₄ p₂]; rw [← he]
+    nth_rw 1 4 [← one_smul Real (p₁ -ᵥ p₂)]
+    exact wbtw_or_wbtw_smul_vadd_of_nonneg _ _ zero_le_one hr.le
+  · rcases h with h | h
+    · exact h.sameRay_vsub_left
+    · exact h.sameRay_vsub_left.symm
 
 Depends on / 依赖: angle_eq_iff_oangle_eq_or_sameRay, exists_pos_left, h.exists_pos_left, h.sameRay_vsub_left, h.sameRay_vsub_left.symm, hr.le, nth_rw, o.angle_eq_iff_oangle_eq_or_sameRay, oangle, one_smul, or_congr_right, sameRay_vsub_left, simp_rw, vsub_ne_zero, vsub_vadd, wbtw_or_wbtw_smul_vadd_of_nonneg, zero_le_one
 -/
@@ -2674,7 +2906,16 @@ lemma angle_eq_angle_div_two_of_oangle_eq_of_sSameSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   suffices ((∡ p₁ p₂ p₃).toReal + (∡ p₃ p₂ p₄).toReal) / 2 = (∡ p₁ p₂ p₄).toReal / 2 by
-    
+    rw [← ha]; rw [add_self_div_two] at this
+    rw [angle_eq_abs_oangle_toReal h₁₂ h₃₂]; rw [angle_eq_abs_oangle_toReal h₁₂ h₄₂]; rw [this]; rw [abs_div]
+    simp
+  have hadd := oangle_add h₁₂ h₃₂ h₄₂
+  rw [div_left_inj' (by norm_num)]; rw [← hadd]
+  have h : ∡ p₁ p₂ p₃ != π := fun h => hs.left_notMem ((oangle_eq_zero_or_eq_pi_iff_collinear.1
+    (.inr h)).mem_affineSpan_of_mem_of_ne (by grind) (by grind) (by grind) h₁₂)
+  refine (Real.Angle.toReal_add_eq_toReal_add_toReal h (ha ▸ h) (.inr ?_)).symm
+  rw [hadd]; rw [← oangle_swap₂₃_sign p₁ p₃ p₂]; rw [← oangle_swap₂₃_sign p₁ p₄ p₂]; rw [neg_inj]; rw [eq_comm]
+  exact hs.oangle_sign_eq (left_mem_affineSpan_pair _ _ _) (right_mem_affineSpan_pair _ _ _)
 
 中文:
 引理 angle_eq_angle_div_two_of_oangle_eq_of_sSameSide
@@ -2687,7 +2928,16 @@ lemma angle_eq_angle_div_two_of_oangle_eq_of_sSameSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   suffices ((∡ p₁ p₂ p₃).toReal + (∡ p₃ p₂ p₄).toReal) / 2 = (∡ p₁ p₂ p₄).toReal / 2 by
-    
+    rw [← ha]; rw [add_self_div_two] at this
+    rw [angle_eq_abs_oangle_toReal h₁₂ h₃₂]; rw [angle_eq_abs_oangle_toReal h₁₂ h₄₂]; rw [this]; rw [abs_div]
+    simp
+  have hadd := oangle_add h₁₂ h₃₂ h₄₂
+  rw [div_left_inj' (by norm_num)]; rw [← hadd]
+  have h : ∡ p₁ p₂ p₃ != π := fun h => hs.left_notMem ((oangle_eq_zero_or_eq_pi_iff_collinear.1
+    (.inr h)).mem_affineSpan_of_mem_of_ne (by grind) (by grind) (by grind) h₁₂)
+  refine (Real.Angle.toReal_add_eq_toReal_add_toReal h (ha ▸ h) (.inr ?_)).symm
+  rw [hadd]; rw [← oangle_swap₂₃_sign p₁ p₃ p₂]; rw [← oangle_swap₂₃_sign p₁ p₄ p₂]; rw [neg_inj]; rw [eq_comm]
+  exact hs.oangle_sign_eq (left_mem_affineSpan_pair _ _ _) (right_mem_affineSpan_pair _ _ _)
 
 Depends on / 依赖: abs_div, add_self_div_two, angle_eq_abs_oangle_toReal, div_left_inj, hs.left_notMem, hs.right_notMem, left_notMem, oangle_add, right_mem_affineSpan_pair, right_notMem, toReal
 -/
@@ -2726,7 +2976,14 @@ lemma angle_eq_pi_sub_angle_div_two_of_oangle_eq_of_sOppSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   have ha' : ∡ p₁ p₂ (AffineEquiv.pointReflection Real p₂ p₃) =
-      ∡ (AffineEquiv.pointRe
+      ∡ (AffineEquiv.pointReflection Real p₂ p₃) p₂ p₄ := by
+    rw [oangle_pointReflection_left h₃₂ h₄₂]; rw [oangle_pointReflection_right h₁₂ h₃₂]
+    simpa using ha
+  have hs' : line[Real, p₁, p₂].SOppSide p₃ (AffineEquiv.pointReflection Real p₂ p₃) :=
+    AffineSubspace.sOppSide_pointReflection (right_mem_affineSpan_pair _ _ _) (hs.left_notMem)
+  obtain h := angle_eq_angle_div_two_of_oangle_eq_of_sSameSide h₁₂ ha' (hs'.symm.trans hs)
+  rw [angle_pointReflection_right] at h
+  linear_combination -h
 
 中文:
 引理 angle_eq_pi_sub_angle_div_two_of_oangle_eq_of_sOppSide
@@ -2739,7 +2996,14 @@ lemma angle_eq_pi_sub_angle_div_two_of_oangle_eq_of_sOppSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   have ha' : ∡ p₁ p₂ (AffineEquiv.pointReflection Real p₂ p₃) =
-      ∡ (AffineEquiv.pointRe
+      ∡ (AffineEquiv.pointReflection Real p₂ p₃) p₂ p₄ := by
+    rw [oangle_pointReflection_left h₃₂ h₄₂]; rw [oangle_pointReflection_right h₁₂ h₃₂]
+    simpa using ha
+  have hs' : line[Real, p₁, p₂].SOppSide p₃ (AffineEquiv.pointReflection Real p₂ p₃) :=
+    AffineSubspace.sOppSide_pointReflection (right_mem_affineSpan_pair _ _ _) (hs.left_notMem)
+  obtain h := angle_eq_angle_div_two_of_oangle_eq_of_sSameSide h₁₂ ha' (hs'.symm.trans hs)
+  rw [angle_pointReflection_right] at h
+  linear_combination -h
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.pointReflection, AffineSubs, SOppSide, hs.left_notMem, hs.right_notMem, left_notMem, oangle_pointReflection_left, oangle_pointReflection_right, pointReflection, right_mem_affineSpan_pair, right_notMem
 -/
@@ -2776,7 +3040,13 @@ lemma angle_eq_angle_add_pi_div_two_of_oangle_eq_add_pi_of_sSameSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   have ha' : ∡ p₁ p₂ p₃ = ∡ p₃ p₂ (AffineEquiv.pointReflection Real p₂ p₄) := by
-    rw [oan
+    rw [oangle_pointReflection_right h₃₂ h₄₂]
+    exact ha
+  have hs' : line[Real, p₁, p₂].SOppSide p₄ (AffineEquiv.pointReflection Real p₂ p₄) :=
+    AffineSubspace.sOppSide_pointReflection (right_mem_affineSpan_pair _ _ _) (hs.right_notMem)
+  obtain h := angle_eq_pi_sub_angle_div_two_of_oangle_eq_of_sOppSide h₁₂ ha' (hs.trans_sOppSide hs')
+  rw [angle_pointReflection_right] at h
+  linear_combination h
 
 中文:
 引理 angle_eq_angle_add_pi_div_two_of_oangle_eq_add_pi_of_sSameSide
@@ -2789,7 +3059,13 @@ lemma angle_eq_angle_add_pi_div_two_of_oangle_eq_add_pi_of_sSameSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   have ha' : ∡ p₁ p₂ p₃ = ∡ p₃ p₂ (AffineEquiv.pointReflection Real p₂ p₄) := by
-    rw [oan
+    rw [oangle_pointReflection_right h₃₂ h₄₂]
+    exact ha
+  have hs' : line[Real, p₁, p₂].SOppSide p₄ (AffineEquiv.pointReflection Real p₂ p₄) :=
+    AffineSubspace.sOppSide_pointReflection (right_mem_affineSpan_pair _ _ _) (hs.right_notMem)
+  obtain h := angle_eq_pi_sub_angle_div_two_of_oangle_eq_of_sOppSide h₁₂ ha' (hs.trans_sOppSide hs')
+  rw [angle_pointReflection_right] at h
+  linear_combination h
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.pointReflection, AffineSubspace, AffineSubspace.sOppSide_pointReflection, SOppSide, hs.left_notMem, hs.right_notMem, left_notMem, oangle_pointReflection_right, pointReflection, right_mem_affineSpan_pair, right_notMem, sOppSide_pointReflection
 -/
@@ -2825,7 +3101,13 @@ lemma angle_eq_pi_sub_angle_div_two_of_oangle_eq_add_pi_of_sOppSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   have ha' : ∡ p₁ p₂ p₃ = ∡ p₃ p₂ (AffineEquiv.pointReflection Real p₂ p₄) := by
-    rw [oan
+    rw [oangle_pointReflection_right h₃₂ h₄₂]
+    exact ha
+  have hs' : line[Real, p₁, p₂].SOppSide p₄ (AffineEquiv.pointReflection Real p₂ p₄) :=
+    AffineSubspace.sOppSide_pointReflection (right_mem_affineSpan_pair _ _ _) (hs.right_notMem)
+  obtain h := angle_eq_angle_div_two_of_oangle_eq_of_sSameSide h₁₂ ha' (hs.trans hs')
+  rw [angle_pointReflection_right] at h
+  exact h
 
 中文:
 引理 angle_eq_pi_sub_angle_div_two_of_oangle_eq_add_pi_of_sOppSide
@@ -2838,7 +3120,13 @@ lemma angle_eq_pi_sub_angle_div_two_of_oangle_eq_add_pi_of_sOppSide
     rintro rfl
     exact hs.right_notMem (right_mem_affineSpan_pair _ _ _)
   have ha' : ∡ p₁ p₂ p₃ = ∡ p₃ p₂ (AffineEquiv.pointReflection Real p₂ p₄) := by
-    rw [oan
+    rw [oangle_pointReflection_right h₃₂ h₄₂]
+    exact ha
+  have hs' : line[Real, p₁, p₂].SOppSide p₄ (AffineEquiv.pointReflection Real p₂ p₄) :=
+    AffineSubspace.sOppSide_pointReflection (right_mem_affineSpan_pair _ _ _) (hs.right_notMem)
+  obtain h := angle_eq_angle_div_two_of_oangle_eq_of_sSameSide h₁₂ ha' (hs.trans hs')
+  rw [angle_pointReflection_right] at h
+  exact h
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.pointReflection, AffineSubspace, AffineSubspace.sOppSide_pointReflection, SOppSide, hs.left_notMem, hs.right_notMem, left_notMem, oangle_pointReflection_right, pointReflection, right_mem_affineSpan_pair, right_notMem, sOppSide_pointReflection
 -/

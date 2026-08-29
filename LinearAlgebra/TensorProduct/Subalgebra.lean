@@ -64,7 +64,9 @@ definition lTensorBot
     obtain ⟨x', hx⟩ := Algebra.mem_bot.1 x.2
     replace hx : algebraMap R _ x' = x := Subtype.val_injective hx
     obtain ⟨y', hy⟩ := Algebra.mem_bot.1 y.2
-    replace hy : algeb
+    replace hy : algebraMap R _ y' = y := Subtype.val_injective hy
+    rw [← hx]; rw [← hy]; rw [← map_mul]; rw [(toSubmodule A).lTensorOne_tmul x' a]; rw [(toSubmodule A).lTensorOne_tmul y' b]; rw [(toSubmodule A).lTensorOne_tmul (x' * y') (a * b)]; rw [Algebra.mul_smul_comm]; rw [Algebra.smul_mul_assoc]; rw [smul_smul]; rw [mul_comm x' y']
+  · exact Submodule.lTensorOne_one_tmul _
 
 中文:
 定义 lTensorBot
@@ -75,7 +77,9 @@ definition lTensorBot
     obtain ⟨x', hx⟩ := Algebra.mem_bot.1 x.2
     replace hx : algebraMap R _ x' = x := Subtype.val_injective hx
     obtain ⟨y', hy⟩ := Algebra.mem_bot.1 y.2
-    replace hy : algeb
+    replace hy : algebraMap R _ y' = y := Subtype.val_injective hy
+    rw [← hx]; rw [← hy]; rw [← map_mul]; rw [(toSubmodule A).lTensorOne_tmul x' a]; rw [(toSubmodule A).lTensorOne_tmul y' b]; rw [(toSubmodule A).lTensorOne_tmul (x' * y') (a * b)]; rw [Algebra.mul_smul_comm]; rw [Algebra.smul_mul_assoc]; rw [smul_smul]; rw [mul_comm x' y']
+  · exact Submodule.lTensorOne_one_tmul _
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algEquivOfLinearEquivTensorProduct, Algebra.mem_bot, Subtype, Subtype.val_injective, TensorProduct, algEquivOfLinearEquivTensorProduct, algebraMap, lTensorOne, lTensorOne_tmul, map_mul, mem_bot, replace, toSubmodule, val_injective
 -/
@@ -172,7 +176,11 @@ definition rTensorBot
     obtain ⟨x', hx⟩ := Algebra.mem_bot.1 x.2
     replace hx : algebraMap R _ x' = x := Subtype.val_injective hx
     obtain ⟨y', hy⟩ := Algebra.mem_bot.1 y.2
-    replace hy : algeb
+    replace hy : algebraMap R _ y' = y := Subtype.val_injective hy
+    rw [← hx]; rw [← hy]; rw [← map_mul]; rw [(toSubmodule A).rTensorOne_tmul x' a]; rw [(toSubmodule A).rTensorOne_tmul y' b]; rw [(toSubmodule A).rTensorOne_tmul (x' * y') (a * b)]; rw [Algebra.mul_smul_comm]; rw [Algebra.smul_mul_assoc]; rw [smul_smul]; rw [mul_comm x' y']
+  · exact Submodule.rTensorOne_tmul_one _
+
+@[simp]
 
 中文:
 定义 rTensorBot
@@ -183,7 +191,11 @@ definition rTensorBot
     obtain ⟨x', hx⟩ := Algebra.mem_bot.1 x.2
     replace hx : algebraMap R _ x' = x := Subtype.val_injective hx
     obtain ⟨y', hy⟩ := Algebra.mem_bot.1 y.2
-    replace hy : algeb
+    replace hy : algebraMap R _ y' = y := Subtype.val_injective hy
+    rw [← hx]; rw [← hy]; rw [← map_mul]; rw [(toSubmodule A).rTensorOne_tmul x' a]; rw [(toSubmodule A).rTensorOne_tmul y' b]; rw [(toSubmodule A).rTensorOne_tmul (x' * y') (a * b)]; rw [Algebra.mul_smul_comm]; rw [Algebra.smul_mul_assoc]; rw [smul_smul]; rw [mul_comm x' y']
+  · exact Submodule.rTensorOne_tmul_one _
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algEquivOfLinearEquivTensorProduct, Algebra.mem_bot, Subtype, Subtype.val_injective, TensorProduct, algEquivOfLinearEquivTensorProduct, algebraMap, map_mul, mem_bot, rTensorOne, rTensorOne_tmul, replace, toSubmodule, val_injective
 -/
@@ -325,7 +337,16 @@ definition linearEquivIncludeRange
     includeLeft.toLinearMap.rangeRestrict includeRight.toLinearMap.rangeRestrict)
   (includeLeft.toLinearMap.range.mulMap includeRight.toLinearMap.range)
   (_root_.TensorProduct.ext' <| by
-    rintro ⟨x', x, rfl : x otimesₜ 1 = x'⟩ ⟨y', y, rfl : 1 otimesₜ y =
+    rintro ⟨x', x, rfl : x otimesₜ 1 = x'⟩ ⟨y', y, rfl : 1 otimesₜ y = y'⟩
+    rw [LinearMap.comp_apply]; rw [LinearMap.id_apply]
+    erw [Submodule.mulMap_tmul]
+    rw [tmul_mul_tmul]; rw [mul_one]; rw [one_mul]; rw [_root_.TensorProduct.map_tmul]
+    rfl)
+  (_root_.TensorProduct.ext' fun x y => by
+    rw [LinearMap.comp_apply]; rw [LinearMap.id_apply]; rw [_root_.TensorProduct.map_tmul]
+    erw [Submodule.mulMap_tmul]
+    change (x otimesₜ 1) * (1 otimesₜ y) = _
+    rw [tmul_mul_tmul]; rw [mul_one]; rw [one_mul])
 
 中文:
 定义 linearEquivIncludeRange
@@ -335,7 +356,16 @@ definition linearEquivIncludeRange
     includeLeft.toLinearMap.rangeRestrict includeRight.toLinearMap.rangeRestrict)
   (includeLeft.toLinearMap.range.mulMap includeRight.toLinearMap.range)
   (_root_.TensorProduct.ext' <| by
-    rintro ⟨x', x, rfl : x otimesₜ 1 = x'⟩ ⟨y', y, rfl : 1 otimesₜ y =
+    rintro ⟨x', x, rfl : x otimesₜ 1 = x'⟩ ⟨y', y, rfl : 1 otimesₜ y = y'⟩
+    rw [LinearMap.comp_apply]; rw [LinearMap.id_apply]
+    erw [Submodule.mulMap_tmul]
+    rw [tmul_mul_tmul]; rw [mul_one]; rw [one_mul]; rw [_root_.TensorProduct.map_tmul]
+    rfl)
+  (_root_.TensorProduct.ext' fun x y => by
+    rw [LinearMap.comp_apply]; rw [LinearMap.id_apply]; rw [_root_.TensorProduct.map_tmul]
+    erw [Submodule.mulMap_tmul]
+    change (x otimesₜ 1) * (1 otimesₜ y) = _
+    rw [tmul_mul_tmul]; rw [mul_one]; rw [one_mul])
 
 Depends on / 依赖: ofLinearMap
 -/

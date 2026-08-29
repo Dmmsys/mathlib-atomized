@@ -583,7 +583,7 @@ instance ObjectProperty.FullSubcategory.concreteCategory
   id_apply _ := ConcreteCategory.id_apply _
 
 @[deprecated (since := "2026-04-18")] alias FullSubcategory.concreteCategory :=
-  ObjectP
+  ObjectProperty.FullSubcategory.concreteCategory
 
 中文:
 实例 ObjectProperty.满子范畴.concreteCategory
@@ -596,7 +596,7 @@ instance ObjectProperty.FullSubcategory.concreteCategory
   id_apply _ := ConcreteCategory.id_apply _
 
 @[deprecated (since := "2026-04-18")] alias FullSubcategory.concreteCategory :=
-  ObjectP
+  ObjectProperty.FullSubcategory.concreteCategory
 
 Depends on / 依赖: f.hom
 -/

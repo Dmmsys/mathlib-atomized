@@ -203,7 +203,65 @@ lemma span_degreeLT
     rw [SetLike.mem_coe]; rw [Polynomial.mem_degreeLT]; rw [S.degree_eq i]; rw [Nat.cast_lt]
     exact Set.mem_Iio.mp hi
   intro P hP
-  -- we proceed via strong induction on the degree `n`, after getting t
+  -- we proceed via strong induction on the degree `n`, after getting the 0 polynomial done
+  nontriviality R using Subsingleton.eq_zero P
+  generalize hp : P.natDegree = n
+  induction n using Nat.strong_induction_on generalizing P with
+  | h n ih =>
+    by_cases! p_ne_zero : P = 0
+    · simp [p_ne_zero]
+    have hn : n < m := by
+      rw [Polynomial.mem_degreeLT] at hP
+      have := Polynomial.degree_eq_natDegree p_ne_zero
+      aesop
+    -- let u be the inverse of `S n`'s leading coefficient
+obtain ⟨u, leftinv, rightinv⟩ := isUnit_iff_exists.mp hCoeff n hn
+    -- We'll show `P` is the difference of two terms in the span:
+    -- a polynomial whose leading term matches `P`'s and lower degree terms match `S n`'s
+    let head := P.leadingCoeff • u • S n -- a polynomial whose leading term matches P's and whose
+    -- and then an error correcting polynomial which gets us to `P`'s actual lower degree terms
+    let tail := P - head
+    -- `head` is in the span because it's a multiple of `S n`
+    have head_mem_span : head in span R (S '' Set.Iio m) := by
+      have in_span : S n in span R (S '' Set.Iio m) := subset_span ⟨n, by simp [hn], rfl⟩
+      have smul_span := smul_mem (span R (S '' Set.Iio m)) (P.leadingCoeff • u) in_span
+      rwa [smul_assoc] at smul_span
+    -- to show the tail is in the span we really need consider only when we needed to "correct" for
+    -- some lower degree terms in `P`
+    by_cases tail_eq_zero : tail = 0
+    · simp [head_mem_span, sub_eq_iff_eq_add.mp tail_eq_zero]
+    -- we'll do so via the induction hypothesis,
+    -- and once we show we can use it, `P` is a difference of two members of the span
+.mp apply sub_mem_iff_left _ head_mem_span
+    -- so let's prove the tail has degree less than `n`
+    suffices tail.degree < n by
+      refine ih tail.natDegree ((natDegree_lt_iff_degree_lt tail_eq_zero).mpr this) ?_ rfl
+      grw [(Nat.cast_lt (α := WithBot Nat)).mpr hn] at this
+      rwa [Polynomial.mem_degreeLT]
+    -- first we want that `P` and `head` have the same degree
+    have isRightRegular_smul_leadingCoeff : IsRightRegular (u • S n).leadingCoeff := by
+      simpa [leadingCoeff_smul_of_smul_regular, IsSMulRegular.of_mul_eq_one leftinv, rightinv]
+        using isRegular_one.right
+    have u_degree_same := degree_smul_of_isRightRegular_leadingCoeff
+      (left_ne_zero_of_mul_eq_one rightinv) (hCoeff n hn).isRegular.right
+    have head_degree_eq := degree_smul_of_isRightRegular_leadingCoeff
+      (leadingCoeff_ne_zero.mpr p_ne_zero) isRightRegular_smul_leadingCoeff
+    rw [u_degree_same]; rw [S.degree_eq n]; rw [← hp]; rw [eq_comm]; rw [← degree_eq_natDegree p_ne_zero]; rw [hp] at head_degree_eq
+    -- and that this degree is also their `natDegree`
+have head_degree_eq_natDegree : head.degree = head.natDegree := degree_eq_natDegree by
+      grind [degree_eq_bot]
+    -- and that they have matching leading coefficients
+    have hPhead : P.leadingCoeff = head.leadingCoeff := by
+      rw [degree_eq_natDegree p_ne_zero]; rw [head_degree_eq_natDegree] at head_degree_eq
+      nth_rw 2 [← coeff_natDegree]
+      rw_mod_cast [← head_degree_eq, hp]
+      dsimp [head]
+      nth_rw 2 [← S.natDegree_eq n]
+      rw [coeff_smul]; rw [coeff_smul]; rw [coeff_natDegree]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [rightinv]; rw [mul_one]
+    -- which we can now combine to show that `P - head` must have strictly lower degree,
+    -- as its leading term has been cancelled, completing our proof.
+    have tail_degree_lt := P.degree_sub_lt_left head_degree_eq p_ne_zero hPhead
+    rwa [degree_eq_natDegree p_ne_zero, hp] at tail_degree_lt
 
 中文:
 引理 span_degreeLT
@@ -215,7 +273,65 @@ lemma span_degreeLT
     rw [SetLike.mem_coe]; rw [Polynomial.mem_degreeLT]; rw [S.degree_eq i]; rw [Nat.cast_lt]
     exact Set.mem_Iio.mp hi
   intro P hP
-  -- we proceed via strong induction on the degree `n`, after getting t
+  -- we proceed via strong induction on the degree `n`, after getting the 0 polynomial done
+  nontriviality R using Subsingleton.eq_zero P
+  generalize hp : P.natDegree = n
+  induction n using Nat.strong_induction_on generalizing P with
+  | h n ih =>
+    by_cases! p_ne_zero : P = 0
+    · simp [p_ne_zero]
+    have hn : n < m := by
+      rw [Polynomial.mem_degreeLT] at hP
+      have := Polynomial.degree_eq_natDegree p_ne_zero
+      aesop
+    -- let u be the inverse of `S n`'s leading coefficient
+obtain ⟨u, leftinv, rightinv⟩ := isUnit_iff_exists.mp hCoeff n hn
+    -- We'll show `P` is the difference of two terms in the span:
+    -- a polynomial whose leading term matches `P`'s and lower degree terms match `S n`'s
+    let head := P.leadingCoeff • u • S n -- a polynomial whose leading term matches P's and whose
+    -- and then an error correcting polynomial which gets us to `P`'s actual lower degree terms
+    let tail := P - head
+    -- `head` is in the span because it's a multiple of `S n`
+    have head_mem_span : head in span R (S '' Set.Iio m) := by
+      have in_span : S n in span R (S '' Set.Iio m) := subset_span ⟨n, by simp [hn], rfl⟩
+      have smul_span := smul_mem (span R (S '' Set.Iio m)) (P.leadingCoeff • u) in_span
+      rwa [smul_assoc] at smul_span
+    -- to show the tail is in the span we really need consider only when we needed to "correct" for
+    -- some lower degree terms in `P`
+    by_cases tail_eq_zero : tail = 0
+    · simp [head_mem_span, sub_eq_iff_eq_add.mp tail_eq_zero]
+    -- we'll do so via the induction hypothesis,
+    -- and once we show we can use it, `P` is a difference of two members of the span
+.mp apply sub_mem_iff_left _ head_mem_span
+    -- so let's prove the tail has degree less than `n`
+    suffices tail.degree < n by
+      refine ih tail.natDegree ((natDegree_lt_iff_degree_lt tail_eq_zero).mpr this) ?_ rfl
+      grw [(Nat.cast_lt (α := WithBot Nat)).mpr hn] at this
+      rwa [Polynomial.mem_degreeLT]
+    -- first we want that `P` and `head` have the same degree
+    have isRightRegular_smul_leadingCoeff : IsRightRegular (u • S n).leadingCoeff := by
+      simpa [leadingCoeff_smul_of_smul_regular, IsSMulRegular.of_mul_eq_one leftinv, rightinv]
+        using isRegular_one.right
+    have u_degree_same := degree_smul_of_isRightRegular_leadingCoeff
+      (left_ne_zero_of_mul_eq_one rightinv) (hCoeff n hn).isRegular.right
+    have head_degree_eq := degree_smul_of_isRightRegular_leadingCoeff
+      (leadingCoeff_ne_zero.mpr p_ne_zero) isRightRegular_smul_leadingCoeff
+    rw [u_degree_same]; rw [S.degree_eq n]; rw [← hp]; rw [eq_comm]; rw [← degree_eq_natDegree p_ne_zero]; rw [hp] at head_degree_eq
+    -- and that this degree is also their `natDegree`
+have head_degree_eq_natDegree : head.degree = head.natDegree := degree_eq_natDegree by
+      grind [degree_eq_bot]
+    -- and that they have matching leading coefficients
+    have hPhead : P.leadingCoeff = head.leadingCoeff := by
+      rw [degree_eq_natDegree p_ne_zero]; rw [head_degree_eq_natDegree] at head_degree_eq
+      nth_rw 2 [← coeff_natDegree]
+      rw_mod_cast [← head_degree_eq, hp]
+      dsimp [head]
+      nth_rw 2 [← S.natDegree_eq n]
+      rw [coeff_smul]; rw [coeff_smul]; rw [coeff_natDegree]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [rightinv]; rw [mul_one]
+    -- which we can now combine to show that `P - head` must have strictly lower degree,
+    -- as its leading term has been cancelled, completing our proof.
+    have tail_degree_lt := P.degree_sub_lt_left head_degree_eq p_ne_zero hPhead
+    rwa [degree_eq_natDegree p_ne_zero, hp] at tail_degree_lt
 
 Depends on / 依赖: Nat.cast_lt, Polynomial, Polynomial.mem_degreeLT, S.degree_eq, Set.mem_Iio.mp, Set.mem_image, SetLike, SetLike.mem_coe, cast_lt, degree_eq, mem_Iio, mem_coe, mem_degreeLT, mem_image, span_eq_of_le
 -/
@@ -362,7 +478,17 @@ lemma linearIndependent
   by_cases hsupzero : s.sup (fun i => (g i • S i).degree) = ⊥
   · have le_sup := Finset.le_sup hi (f := fun i => (g i • S i).degree)
 exact (smul_eq_zero_iff_left (S.ne_zero i)).mp degree_eq_bot.mp (eq_bot_mono le_sup hsupzero)
-  have hpairwise : {
+  have hpairwise : {i | i in s ∧ g i • S i != 0}.Pairwise (Ne on fun i => (g i • S i).degree) := by
+    intro x ⟨_, hx⟩ y ⟨_, hy⟩ xney
+    have zgx : g x != 0 := (smul_ne_zero_iff.mp hx).1
+    have zgy : g y != 0 := (smul_ne_zero_iff.mp hy).1
+.right have rx : IsRightRegular (S x).leadingCoeff := IsRegular.of_ne_zero (by simp)
+.right have ry : IsRightRegular (S y).leadingCoeff := IsRegular.of_ne_zero (by simp)
+    simp [degree_smul_of_isRightRegular_leadingCoeff, rx, ry, zgx, zgy, xney]
+  obtain ⟨n, hn⟩ : exists n, (s.sup fun i => (g i • S i).degree) = n := exists_eq'
+.elim refine degree_ne_bot.mp ?_ eqzero
+  have hsum := degree_sum_eq_of_disjoint _ s hpairwise
+.trans_ne (ne_of_ne_of_eq (hsupzero ·.symm) hn).symm exact hsum.trans hn
 
 中文:
 引理 linearIndependent
@@ -370,7 +496,17 @@ exact (smul_eq_zero_iff_left (S.ne_zero i)).mp degree_eq_bot.mp (eq_bot_mono le_
   by_cases hsupzero : s.sup (fun i => (g i • S i).degree) = ⊥
   · have le_sup := Finset.le_sup hi (f := fun i => (g i • S i).degree)
 exact (smul_eq_zero_iff_left (S.ne_zero i)).mp degree_eq_bot.mp (eq_bot_mono le_sup hsupzero)
-  have hpairwise : {
+  have hpairwise : {i | i in s ∧ g i • S i != 0}.Pairwise (Ne on fun i => (g i • S i).degree) := by
+    intro x ⟨_, hx⟩ y ⟨_, hy⟩ xney
+    have zgx : g x != 0 := (smul_ne_zero_iff.mp hx).1
+    have zgy : g y != 0 := (smul_ne_zero_iff.mp hy).1
+.right have rx : IsRightRegular (S x).leadingCoeff := IsRegular.of_ne_zero (by simp)
+.right have ry : IsRightRegular (S y).leadingCoeff := IsRegular.of_ne_zero (by simp)
+    simp [degree_smul_of_isRightRegular_leadingCoeff, rx, ry, zgx, zgy, xney]
+  obtain ⟨n, hn⟩ : exists n, (s.sup fun i => (g i • S i).degree) = n := exists_eq'
+.elim refine degree_ne_bot.mp ?_ eqzero
+  have hsum := degree_sum_eq_of_disjoint _ s hpairwise
+.trans_ne (ne_of_ne_of_eq (hsupzero ·.symm) hn).symm exact hsum.trans hn
 
 Depends on / 依赖: Finset, Finset.le_sup, Pairwise, S.ne_zero, degree, degree_eq_bot, degree_eq_bot.mp, eq_bot_mono, eqzero, hpairwise, hsupzero, le_sup, linearIndependent_iff, ne_zero, s.sup, smul_eq_zero_iff_left, smul_ne_zero_iff, smul_ne_zero_iff.mp
 -/

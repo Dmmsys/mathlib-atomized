@@ -329,7 +329,36 @@ theorem increasing_cantorFunction
       intro n hn
       cases n
       · rw [fn] at hn
-        contradic
+        contradiction
+      simp [f_max]
+    let g_min : Nat -> Bool := fun n => Nat.rec true (fun _ _ => false) n
+    have hg_min : forall n, g_min n -> g n := by
+      intro n hn
+      cases n
+      · rw [gn]
+      simp at hn
+    apply (cantorFunction_le (le_of_lt h1) h3 hf_max).trans_lt
+    refine lt_of_lt_of_le ?_ (cantorFunction_le (le_of_lt h1) h3 hg_min)
+    have : c / (1 - c) < 1 := by
+      rw [div_lt_one]; rw [lt_sub_iff_add_lt]
+      · convert! _root_.add_lt_add h2 h2
+        norm_num
+      rwa [sub_pos]
+    convert! this
+    · rw [cantorFunction_succ _ (le_of_lt h1) h3, div_eq_mul_inv, ←
+        tsum_geometric_of_lt_one (le_of_lt h1) h3]
+      apply zero_add
+    · refine (tsum_eq_single 0 ?_).trans ?_
+      · intro n hn
+        cases n
+        · contradiction
+        simp [g_min]
+      · exact cantorFunctionAux_zero _
+  | succ n ih =>
+  rw [cantorFunction_succ f h1.le h3]; rw [cantorFunction_succ g h1.le h3]
+  rw [hn 0 <| zero_lt_succ n]
+  gcongr
+  exact ih (fun k hk => hn _ <| Nat.succ_lt_succ hk) fn gn
 
 中文:
 定理 increasing_cantorFunction
@@ -345,7 +374,36 @@ theorem increasing_cantorFunction
       intro n hn
       cases n
       · rw [fn] at hn
-        contradic
+        contradiction
+      simp [f_max]
+    let g_min : Nat -> Bool := fun n => Nat.rec true (fun _ _ => false) n
+    have hg_min : forall n, g_min n -> g n := by
+      intro n hn
+      cases n
+      · rw [gn]
+      simp at hn
+    apply (cantorFunction_le (le_of_lt h1) h3 hf_max).trans_lt
+    refine lt_of_lt_of_le ?_ (cantorFunction_le (le_of_lt h1) h3 hg_min)
+    have : c / (1 - c) < 1 := by
+      rw [div_lt_one]; rw [lt_sub_iff_add_lt]
+      · convert! _root_.add_lt_add h2 h2
+        norm_num
+      rwa [sub_pos]
+    convert! this
+    · rw [cantorFunction_succ _ (le_of_lt h1) h3, div_eq_mul_inv, ←
+        tsum_geometric_of_lt_one (le_of_lt h1) h3]
+      apply zero_add
+    · refine (tsum_eq_single 0 ?_).trans ?_
+      · intro n hn
+        cases n
+        · contradiction
+        simp [g_min]
+      · exact cantorFunctionAux_zero _
+  | succ n ih =>
+  rw [cantorFunction_succ f h1.le h3]; rw [cantorFunction_succ g h1.le h3]
+  rw [hn 0 <| zero_lt_succ n]
+  gcongr
+  exact ih (fun k hk => hn _ <| Nat.succ_lt_succ hk) fn gn
 
 Depends on / 依赖: Nat.rec, cantorFunction_le, f_max, g_min, generalizing, h2.trans, hf_max, hg_min, le_of_lt, lt_of_lt_, trans_lt
 -/
@@ -410,7 +468,18 @@ theorem cantorFunction_injective
       apply of_not_not
       exact Nat.find_min this hk
     cases fn : f n
-    · apply _
+    · apply _root_.ne_of_lt
+      refine increasing_cantorFunction h1 h2 hn fn ?_
+      apply Bool.eq_true_of_not_eq_false
+      rw [← fn]
+      apply Ne.symm
+      exact Nat.find_spec this
+    · apply _root_.ne_of_gt
+      refine increasing_cantorFunction h1 h2 (fun k hk => (hn k hk).symm) ?_ fn
+      apply Bool.eq_false_of_not_eq_true
+      rw [← fn]
+      apply Ne.symm
+      exact Nat.find_spec this
 
 中文:
 定理 cantorFunction_injective
@@ -426,7 +495,18 @@ theorem cantorFunction_injective
       apply of_not_not
       exact Nat.find_min this hk
     cases fn : f n
-    · apply _
+    · apply _root_.ne_of_lt
+      refine increasing_cantorFunction h1 h2 hn fn ?_
+      apply Bool.eq_true_of_not_eq_false
+      rw [← fn]
+      apply Ne.symm
+      exact Nat.find_spec this
+    · apply _root_.ne_of_gt
+      refine increasing_cantorFunction h1 h2 (fun k hk => (hn k hk).symm) ?_ fn
+      apply Bool.eq_false_of_not_eq_true
+      rw [← fn]
+      apply Ne.symm
+      exact Nat.find_spec this
 
 Depends on / 依赖: Bool.eq_true_of_not_eq_false, Function, Function.ne_iff.mp, Nat.find, Nat.find_min, Nat.find_spec, Ne.symm, _root_, _root_.ne_of_gt, _root_.ne_of_lt, classical, contrapose, eq_true_of_not_eq_false, find_min, find_spec, increasing_cantorFunction, ne_iff, ne_of_gt, ne_of_lt, of_not_not
 -/
@@ -468,7 +548,10 @@ theorem mk_real
     apply (mk_subtype_le _).trans_eq
     rw [← power_def]; rw [mk_nat]; rw [mkRat]; rw [aleph0_power_aleph0]
   · convert! mk_le_of_injective (cantorFunction_injective _ _)
-    · rw [← power_def, mk_bool, mk_n
+    · rw [← power_def, mk_bool, mk_nat, two_power_aleph0]
+    · exact 1 / 3
+    · simp
+    · norm_num
 
 中文:
 定理 mk_real
@@ -480,7 +563,10 @@ theorem mk_real
     apply (mk_subtype_le _).trans_eq
     rw [← power_def]; rw [mk_nat]; rw [mkRat]; rw [aleph0_power_aleph0]
   · convert! mk_le_of_injective (cantorFunction_injective _ _)
-    · rw [← power_def, mk_bool, mk_n
+    · rw [← power_def, mk_bool, mk_nat, two_power_aleph0]
+    · exact 1 / 3
+    · simp
+    · norm_num
 
 Depends on / 依赖: Real.equivCauchy.cardinal_eq, aleph0_power_aleph0, cantorFunction_injective, cardinal_eq, convert, equivCauchy, le_antisymm, mk_bool, mk_le_of_injective, mk_nat, mk_quotient_le, mk_quotient_le.trans, mk_subtype_le, power_def, trans_eq, two_power_aleph0
 -/
@@ -571,7 +657,14 @@ theorem mk_Ioi_real
     exact Iio_union_right
   rw [← hu]
   grw [mk_union_le, mk_union_le]
-  have h2 : (fun 
+  have h2 : (fun x => a + a - x) '' Ioi a = Iio a := by
+    convert! @image_const_sub_Ioi Real _ _ _
+    simp
+  rw [← h2]
+  refine add_lt_of_lt (cantor _).le ?_ h
+  refine add_lt_of_lt (cantor _).le (mk_image_le.trans_lt h) ?_
+  rw [mk_singleton]
+  exact one_lt_aleph0.trans (cantor _)
 
 中文:
 定理 mk_Ioi_real
@@ -587,7 +680,14 @@ theorem mk_Ioi_real
     exact Iio_union_right
   rw [← hu]
   grw [mk_union_le, mk_union_le]
-  have h2 : (fun 
+  have h2 : (fun x => a + a - x) '' Ioi a = Iio a := by
+    convert! @image_const_sub_Ioi Real _ _ _
+    simp
+  rw [← h2]
+  refine add_lt_of_lt (cantor _).le ?_ h
+  refine add_lt_of_lt (cantor _).le (mk_image_le.trans_lt h) ?_
+  rw [mk_singleton]
+  exact one_lt_aleph0.trans (cantor _)
 
 Depends on / 依赖: Iic_union_Ioi, Iio_union_right, Set.univ, _root_, _root_.ne_of_lt, add_lt_of_lt, cantor, convert, image_const_sub_Ioi, le_antisymm, mk_image_le, mk_image_le.trans_lt, mk_real, mk_set_le, mk_singleton, mk_union_le, mk_univ_real, ne_of_lt, not_lt, one_
 -/
@@ -695,7 +795,8 @@ theorem mk_Ioo_real
   rw [image_sub_const_Ioo]; rw [sub_self]
   replace h := sub_pos_of_lt h
   have h2 : #(Inv.inv '' Ioo 0 (b - a)) <= #(Ioo 0 (b - a)) := mk_image_le
-  ref
+  refine le_trans ?_ h2
+  rw [image_inv_eq_inv]; rw [inv_Ioo_0_left h]; rw [mk_Ioi_real]
 
 中文:
 定理 mk_Ioo_real
@@ -708,7 +809,8 @@ theorem mk_Ioo_real
   rw [image_sub_const_Ioo]; rw [sub_self]
   replace h := sub_pos_of_lt h
   have h2 : #(Inv.inv '' Ioo 0 (b - a)) <= #(Ioo 0 (b - a)) := mk_image_le
-  ref
+  refine le_trans ?_ h2
+  rw [image_inv_eq_inv]; rw [inv_Ioo_0_left h]; rw [mk_Ioi_real]
 
 Depends on / 依赖: Inv.inv, image_inv_eq_inv, image_sub_const_Ioo, inv_Ioo_0_left, le_antisymm, le_trans, mk_Ioi_real, mk_image_le, mk_real, mk_set_le, replace, sub_pos_of_lt, sub_self
 -/

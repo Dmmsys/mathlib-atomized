@@ -48,7 +48,52 @@ lemma isUniformInducing_cast_withVal
   have hp0 : 0 < (p : Real)⁻¹ := by simp [Nat.Prime.pos Fact.out]
   have hp1' : 1 < (p : Rat) := by simp [Nat.Prime.one_lt Fact.out]
   have hp1 : (p : Real)⁻¹ < 1 := by simp [inv_lt_one_iff₀, Nat.Prime.one_lt Fact.out]
-  rw [Filter.H
+  rw [Filter.HasBasis.isUniformInducing_iff (Valued.hasBasis_uniformity _ _)
+    (Metric.uniformity_basis_dist_le_pow hp0 hp1)]
+  simp only [Set.mem_ofPred_eq, dist_eq_norm_sub, inv_pow, RingEquiv.toRingHom_eq_coe,
+    RingHom.coe_comp, Rat.coe_castHom, RingHom.coe_coe, Function.comp_apply, ← Rat.cast_sub,
+    ← map_sub, Padic.eq_padicNorm, true_and, forall_const]
+  constructor
+  · intro n
+    have hn : Valued.v (R := (WithVal (Rat.padicValuation p))) (p ^ n) =
+      exp (-n : Int) := by
+      simp only [← WithVal.val_apply_equiv, map_pow, map_natCast, Rat.padicValuation_self,
+        Int.reduceNeg, exp_neg, inv_pow, ← exp_nsmul, nsmul_eq_mul, mul_one]
+    use Units.mk0 (Valued.v.restrict (p ^ n)) (by
+      simp [Valuation.restrict_def, Nat.Prime.ne_zero Fact.out])
+    intro x y h
+    set x' := (WithVal.equiv (Rat.padicValuation p)) x with hx
+    set y' := (WithVal.equiv (Rat.padicValuation p)) y with hy
+    rw [Valuation.map_sub_swap]; rw [Units.val_mk0]; rw [Valuation.restrict_lt_iff]; rw [hn] at h
+    change Rat.padicValuation p (x' - y') < exp _ at h
+    rw [← Nat.cast_pow]; rw [← Rat.cast_natCast]; rw [← Rat.cast_inv_of_ne_zero]; rw [Rat.cast_le]
+    · rw [map_sub, ← hx, ← hy]
+      simp only [Rat.padicValuation, Valuation.coe_mk, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk,
+        padicNorm, zpow_neg, Nat.cast_pow] at h ⊢
+      split_ifs with H
+      · simp
+      · simp only [H, ↓reduceIte, exp_lt_exp, neg_lt_neg_iff] at h
+        simpa [hp0', zpow_pos, pow_pos, inv_le_inv₀] using
+          zpow_right_mono₀ (by exact_mod_cast (Nat.Prime.one_le Fact.out)) h.le
+    · simp [Nat.Prime.ne_zero Fact.out]
+  · intro γ
+    use (log ((embedding γ.val) * exp (-1))).natAbs
+    intro x y h
+    set x' := (WithVal.equiv (Rat.padicValuation p)) x with hx
+    set y' := (WithVal.equiv (Rat.padicValuation p)) y with hy
+    rw [Valuation.map_sub_swap]; rw [Valuation.restrict_lt_iff_lt_embedding]
+    change Rat.padicValuation p (x' - y') < embedding γ.1
+    rw [← Nat.cast_pow]; rw [← Rat.cast_natCast]; rw [← Rat.cast_inv_of_ne_zero]; rw [Rat.cast_le] at h
+    · change padicNorm p (x' - y') <= _ at h
+      simp only [Rat.padicValuation, Valuation.coe_mk, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk,
+        padicNorm, zpow_neg, Nat.cast_pow] at h ⊢
+      split_ifs with H
+      · simp only [exp_neg]
+        exact embedding_unit_pos _
+      · rw [← lt_log_iff_exp_lt (embedding_unit_ne_zero _)]
+        simp_all [← zpow_natCast, zpow_pos, inv_le_inv₀, zpow_le_zpow_iff_right₀ hp1', abs_le,
+          Int.lt_iff_add_one_le]
+    · simp [Nat.Prime.ne_zero Fact.out]
 
 中文:
 引理 isUniformInducing_cast_withVal
@@ -58,7 +103,52 @@ lemma isUniformInducing_cast_withVal
   have hp0 : 0 < (p : Real)⁻¹ := by simp [Nat.Prime.pos Fact.out]
   have hp1' : 1 < (p : Rat) := by simp [Nat.Prime.one_lt Fact.out]
   have hp1 : (p : Real)⁻¹ < 1 := by simp [inv_lt_one_iff₀, Nat.Prime.one_lt Fact.out]
-  rw [Filter.H
+  rw [Filter.HasBasis.isUniformInducing_iff (Valued.hasBasis_uniformity _ _)
+    (Metric.uniformity_basis_dist_le_pow hp0 hp1)]
+  simp only [Set.mem_ofPred_eq, dist_eq_norm_sub, inv_pow, RingEquiv.toRingHom_eq_coe,
+    RingHom.coe_comp, Rat.coe_castHom, RingHom.coe_coe, Function.comp_apply, ← Rat.cast_sub,
+    ← map_sub, Padic.eq_padicNorm, true_and, forall_const]
+  constructor
+  · intro n
+    have hn : Valued.v (R := (WithVal (Rat.padicValuation p))) (p ^ n) =
+      exp (-n : Int) := by
+      simp only [← WithVal.val_apply_equiv, map_pow, map_natCast, Rat.padicValuation_self,
+        Int.reduceNeg, exp_neg, inv_pow, ← exp_nsmul, nsmul_eq_mul, mul_one]
+    use Units.mk0 (Valued.v.restrict (p ^ n)) (by
+      simp [Valuation.restrict_def, Nat.Prime.ne_zero Fact.out])
+    intro x y h
+    set x' := (WithVal.equiv (Rat.padicValuation p)) x with hx
+    set y' := (WithVal.equiv (Rat.padicValuation p)) y with hy
+    rw [Valuation.map_sub_swap]; rw [Units.val_mk0]; rw [Valuation.restrict_lt_iff]; rw [hn] at h
+    change Rat.padicValuation p (x' - y') < exp _ at h
+    rw [← Nat.cast_pow]; rw [← Rat.cast_natCast]; rw [← Rat.cast_inv_of_ne_zero]; rw [Rat.cast_le]
+    · rw [map_sub, ← hx, ← hy]
+      simp only [Rat.padicValuation, Valuation.coe_mk, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk,
+        padicNorm, zpow_neg, Nat.cast_pow] at h ⊢
+      split_ifs with H
+      · simp
+      · simp only [H, ↓reduceIte, exp_lt_exp, neg_lt_neg_iff] at h
+        simpa [hp0', zpow_pos, pow_pos, inv_le_inv₀] using
+          zpow_right_mono₀ (by exact_mod_cast (Nat.Prime.one_le Fact.out)) h.le
+    · simp [Nat.Prime.ne_zero Fact.out]
+  · intro γ
+    use (log ((embedding γ.val) * exp (-1))).natAbs
+    intro x y h
+    set x' := (WithVal.equiv (Rat.padicValuation p)) x with hx
+    set y' := (WithVal.equiv (Rat.padicValuation p)) y with hy
+    rw [Valuation.map_sub_swap]; rw [Valuation.restrict_lt_iff_lt_embedding]
+    change Rat.padicValuation p (x' - y') < embedding γ.1
+    rw [← Nat.cast_pow]; rw [← Rat.cast_natCast]; rw [← Rat.cast_inv_of_ne_zero]; rw [Rat.cast_le] at h
+    · change padicNorm p (x' - y') <= _ at h
+      simp only [Rat.padicValuation, Valuation.coe_mk, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk,
+        padicNorm, zpow_neg, Nat.cast_pow] at h ⊢
+      split_ifs with H
+      · simp only [exp_neg]
+        exact embedding_unit_pos _
+      · rw [← lt_log_iff_exp_lt (embedding_unit_ne_zero _)]
+        simp_all [← zpow_natCast, zpow_pos, inv_le_inv₀, zpow_le_zpow_iff_right₀ hp1', abs_le,
+          Int.lt_iff_add_one_le]
+    · simp [Nat.Prime.ne_zero Fact.out]
 
 Depends on / 依赖: Fact.out, Filter, Filter.HasBasis.isUniformInducing_iff, HasBasis, Metric, Metric.uniformity_basis_dist_le_pow, Nat.Prime.one_lt, Nat.Prime.pos, RingEquiv, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.coe_com, Set.mem_ofPred_eq, Valued, Valued.hasBasis_uniformity, coe_com, dist_eq_norm_sub, hasBasis_uniformity, inv_pow, isUniformInducing_iff
 -/
@@ -161,7 +251,32 @@ definition withValRingEquiv
   invFun := Padic.isDenseInducing_cast_withVal.extend coe'
   left_inv y := by
     induction y using induction_on
-    · generalize_proofs 
+    · generalize_proofs _ _ _ H
+      refine isClosed_eq ?_ continuous_id
+      exact (uniformContinuous_uniformly_extend Padic.isUniformInducing_cast_withVal
+        Padic.isDenseInducing_cast_withVal.dense (uniformContinuous_coe _)).continuous.comp
+        (continuous_extension)
+    · rw [extensionHom_coe]
+      apply IsDenseInducing.extend_eq
+      exact continuous_coe _
+  right_inv y := by
+    induction y using isClosed_property (Padic.denseRange_ratCast p)
+    · refine isClosed_eq ?_ continuous_id
+      refine continuous_extension.comp ?_
+      exact (uniformContinuous_uniformly_extend Padic.isUniformInducing_cast_withVal
+        Padic.isDenseInducing_cast_withVal.dense (uniformContinuous_coe _)).continuous
+    · have : forall q : Rat, Padic.isDenseInducing_cast_withVal.extend coe' q = coe'
+        ((WithVal.equiv (Rat.padicValuation p)).symm q) := by
+        intro q
+        apply IsDenseInducing.extend_eq
+        exact continuous_coe _
+      rw [this]; rw [extensionHom_coe]
+      simp
+  map_mul' := map_mul _
+  map_add' := map_add _
+
+
+@[simp]
 
 中文:
 定义 withValRingEquiv
@@ -171,7 +286,32 @@ definition withValRingEquiv
   invFun := Padic.isDenseInducing_cast_withVal.extend coe'
   left_inv y := by
     induction y using induction_on
-    · generalize_proofs 
+    · generalize_proofs _ _ _ H
+      refine isClosed_eq ?_ continuous_id
+      exact (uniformContinuous_uniformly_extend Padic.isUniformInducing_cast_withVal
+        Padic.isDenseInducing_cast_withVal.dense (uniformContinuous_coe _)).continuous.comp
+        (continuous_extension)
+    · rw [extensionHom_coe]
+      apply IsDenseInducing.extend_eq
+      exact continuous_coe _
+  right_inv y := by
+    induction y using isClosed_property (Padic.denseRange_ratCast p)
+    · refine isClosed_eq ?_ continuous_id
+      refine continuous_extension.comp ?_
+      exact (uniformContinuous_uniformly_extend Padic.isUniformInducing_cast_withVal
+        Padic.isDenseInducing_cast_withVal.dense (uniformContinuous_coe _)).continuous
+    · have : forall q : Rat, Padic.isDenseInducing_cast_withVal.extend coe' q = coe'
+        ((WithVal.equiv (Rat.padicValuation p)).symm q) := by
+        intro q
+        apply IsDenseInducing.extend_eq
+        exact continuous_coe _
+      rw [this]; rw [extensionHom_coe]
+      simp
+  map_mul' := map_mul _
+  map_add' := map_add _
+
+
+@[simp]
 
 Depends on / 依赖: Rat.castHom, Rat.padicValuation, Rat_, WithVal, WithVal.equiv, castHom, extensionHom, padicValuation, toRingHom
 -/
@@ -361,7 +501,11 @@ theorem withValUniformEquiv_norm_le_one_iff
     rw [Set.ext fun _ => Iff.comm]
     simp_rw [← Valuation.restrict_le_one_iff Valued.v]
     apply withValUniformEquiv.toHomeomorph.isClosed_setOfPred_iff (q := fun x => ‖x‖ <= 1)
-      (Valued.isClopen_closedBall _ one_ne_z
+      (Valued.isClopen_closedBall _ one_ne_zero)
+    simpa [Metric.closedBall] using IsUltrametricDist.isClopen_closedBall (0 : Rat_[p]) one_ne_zero
+  | ih a =>
+    rw [Valued.valuedCompletion_apply]; rw [← WithVal.apply_ofVal]; rw [withValUniformEquiv_cast_apply]
+    exact (norm_rat_le_one_iff_padicValuation_le_one p)
 
 中文:
 定理 withValUniformEquiv_norm_le_one_iff
@@ -372,7 +516,11 @@ theorem withValUniformEquiv_norm_le_one_iff
     rw [Set.ext fun _ => Iff.comm]
     simp_rw [← Valuation.restrict_le_one_iff Valued.v]
     apply withValUniformEquiv.toHomeomorph.isClosed_setOfPred_iff (q := fun x => ‖x‖ <= 1)
-      (Valued.isClopen_closedBall _ one_ne_z
+      (Valued.isClopen_closedBall _ one_ne_zero)
+    simpa [Metric.closedBall] using IsUltrametricDist.isClopen_closedBall (0 : Rat_[p]) one_ne_zero
+  | ih a =>
+    rw [Valued.valuedCompletion_apply]; rw [← WithVal.apply_ofVal]; rw [withValUniformEquiv_cast_apply]
+    exact (norm_rat_le_one_iff_padicValuation_le_one p)
 
 Depends on / 依赖: Completion, Iff.comm, IsUltrametricDist, IsUltrametricDist.isClopen_closedBall, Metric, Metric.closedBall, Rat_, Set.ext, UniformSpace, UniformSpace.Completion.induction_on, Valuation, Valuation.restrict_le_one_iff, Valued, Valued.isClopen_closedBall, Valued.v, Valued.valuedCompletion_apply, WithVal, WithVal.apply_ofVal, apply_ofVal, closedBall
 -/

@@ -39,7 +39,23 @@ lemma of_abv_le
   have hi₁ := hi j (le_trans (le_max_right n i) ji)
   have hi₂ := hi (max n i) (le_max_right n i)
   have sub_le :=
-    abs_sub_le (∑ k in range j, a k) (∑ k in range i, a k) (∑ k in range (max n i)
+    abs_sub_le (∑ k in range j, a k) (∑ k in range i, a k) (∑ k in range (max n i), a k)
+  have := add_lt_add hi₁ hi₂
+  rw [abs_sub_comm (∑ k in range (max n i)]; rw [a k)]; rw [add_halves ε] at this
+  refine lt_of_le_of_lt (le_trans (le_trans ?_ (le_abs_self _)) sub_le) this
+  generalize hk : j - max n i = k
+  clear this hi₂ hi₁ hi ε0 ε hg sub_le
+  rw [tsub_eq_iff_eq_add_of_le ji] at hk
+  rw [hk]
+  dsimp only
+  clear hk ji j
+  induction k with
+  | zero => simp [abv_zero abv]
+  | succ k hi =>
+    simp only [Nat.succ_add, Nat.succ_eq_add_one, Finset.sum_range_succ_comm]
+    simp only [add_assoc, sub_eq_add_neg]
+    simp only [sub_eq_add_neg] at hi
+    grw [abv_add abv, hm _ (by omega), hi]
 
 中文:
 引理 of_abv_le
@@ -52,7 +68,23 @@ lemma of_abv_le
   have hi₁ := hi j (le_trans (le_max_right n i) ji)
   have hi₂ := hi (max n i) (le_max_right n i)
   have sub_le :=
-    abs_sub_le (∑ k in range j, a k) (∑ k in range i, a k) (∑ k in range (max n i)
+    abs_sub_le (∑ k in range j, a k) (∑ k in range i, a k) (∑ k in range (max n i), a k)
+  have := add_lt_add hi₁ hi₂
+  rw [abs_sub_comm (∑ k in range (max n i)]; rw [a k)]; rw [add_halves ε] at this
+  refine lt_of_le_of_lt (le_trans (le_trans ?_ (le_abs_self _)) sub_le) this
+  generalize hk : j - max n i = k
+  clear this hi₂ hi₁ hi ε0 ε hg sub_le
+  rw [tsub_eq_iff_eq_add_of_le ji] at hk
+  rw [hk]
+  dsimp only
+  clear hk ji j
+  induction k with
+  | zero => simp [abv_zero abv]
+  | succ k hi =>
+    simp only [Nat.succ_add, Nat.succ_eq_add_one, Finset.sum_range_succ_comm]
+    simp only [add_assoc, sub_eq_add_neg]
+    simp only [sub_eq_add_neg] at hi
+    grw [abv_add abv, hm _ (by omega), hi]
 
 Depends on / 依赖: abs_sub_comm, abs_sub_le, add_halves, add_lt_add, div_pos, generalize, le_abs_self, le_max_right, le_trans, lt_of_le_of_lt, sub_le
 -/
@@ -115,7 +147,79 @@ theorem _root_.cauchy_product
   have hPε0 : 0 < ε / (2 * P) := div_pos ε0 (mul_pos (show (2 : α) > 0 by simp) hP0)
   let ⟨N, hN⟩ := hb.cauchy₂ hPε0
   have hQε0 : 0 < ε / (4 * Q) :=
-    div_pos ε0 (mul_pos (show (
+    div_pos ε0 (mul_pos (show (0 : α) < 4 by simp) (lt_of_le_of_lt (abv_nonneg _ _) (hQ 0)))
+  let ⟨M, hM⟩ := ha.cauchy₂ hQε0
+  refine ⟨2 * (max N M + 1), fun K hK => ?_⟩
+  have h₁ :
+    (∑ m in range K, ∑ k in range (m + 1), f k * g (m - k)) =
+      ∑ m in range K, ∑ n in range (K - m), f m * g n := by
+    simpa using sum_range_diag_flip K fun m n => f m * g n
+  have h₂ :
+    (fun i => ∑ k in range (K - i), f i * g k) = fun i => f i * ∑ k in range (K - i), g k := by
+    simp [Finset.mul_sum]
+  have h₃ :
+    ∑ i in range K, f i * ∑ k in range (K - i), g k =
+      ∑ i in range K, f i * (∑ k in range (K - i), g k - ∑ k in range K, g k) +
+        ∑ i in range K, f i * ∑ k in range K, g k := by
+    rw [← sum_add_distrib]; simp [(mul_add _ _ _).symm]
+  have two_mul_two : (4 : α) = 2 * 2 := by norm_num
+  have hQ0 : Q != 0 := fun h => by simp [h] at hQε0
+  have h2Q0 : 2 * Q != 0 := mul_ne_zero two_ne_zero hQ0
+  have hε : ε / (2 * P) * P + ε / (4 * Q) * (2 * Q) = ε := by
+    rw [← div_div]; rw [div_mul_cancel₀ _ (Ne.symm (ne_of_lt hP0))]; rw [two_mul_two]; rw [mul_assoc]; rw [← div_div]; rw [div_mul_cancel₀ _ h2Q0]; rw [add_halves]
+  have hNMK : max N M + 1 < K :=
+    lt_of_lt_of_le (by rw [two_mul]; exact lt_add_of_pos_left _ (Nat.succ_pos _)) hK
+  have hKN : N < K :=
+    calc
+      N <= max N M := le_max_left _ _
+      _ < max N M + 1 := Nat.lt_succ_self _
+      _ < K := hNMK
+  have hsumlesum :
+      (∑ i in range (max N M + 1),
+        abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) <=
+      ∑ i in range (max N M + 1), abv (f i) * (ε / (2 * P)) := by
+    gcongr with m hmJ
+refine le_of_lt hN (K - m) (le_tsub_of_add_le_left <| hK.trans' ?_) K hKN.le
+    rw [two_mul]
+    gcongr
+    · exact (mem_range.1 hmJ).le
+    · exact Nat.le_succ_of_le (le_max_left _ _)
+  have hsumltP : (∑ n in range (max N M + 1), abv (f n)) < P :=
+    calc
+      (∑ n in range (max N M + 1), abv (f n)) = |∑ n in range (max N M + 1), abv (f n)| :=
+        Eq.symm (abs_of_nonneg (sum_nonneg fun x _ => abv_nonneg abv (f x)))
+      _ < P := hP (max N M + 1)
+  rw [h₁]; rw [h₂]; rw [h₃]; rw [sum_mul]; rw [← sub_sub]; rw [sub_right_comm]; rw [sub_self]; rw [zero_sub]; rw [abv_neg abv]
+  refine lt_of_le_of_lt (IsAbsoluteValue.abv_sum _ _ _) ?_
+  suffices
+    (∑ i in range (max N M + 1),
+          abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) +
+        ((∑ i in range K, abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) -
+          ∑ i in range (max N M + 1),
+            abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) <
+      ε / (2 * P) * P + ε / (4 * Q) * (2 * Q) by
+    rw [hε] at this
+    simpa [abv_mul abv] using this
+  gcongr
+  · exact lt_of_le_of_lt hsumlesum
+        (by rw [← sum_mul, mul_comm]; gcongr)
+  rw [sum_range_sub_sum_range (le_of_lt hNMK)]
+  calc
+    (∑ i in range K with max N M + 1 <= i,
+          abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) <=
+        ∑ i in range K with max N M + 1 <= i, abv (f i) * (2 * Q) := by
+        gcongr
+        rw [sub_eq_add_neg]
+        grw [abv_add abv]
+        rw [two_mul]; rw [abv_neg abv]
+        gcongr <;> exact le_of_lt (hQ _)
+    _ < ε / (4 * Q) * (2 * Q) := by
+        rw [← sum_mul]; rw [← sum_range_sub_sum_range (le_of_lt hNMK)]
+        have := lt_of_le_of_lt (abv_nonneg _ _) (hQ 0)
+        gcongr
+exact (le_abs_self _).trans_lt
+hM _ ((Nat.le_succ_of_le (le_max_right _ _)).trans hNMK.le) _
+Nat.le_succ_of_le le_max_right _ _
 
 中文:
 定理 _root_.cauchy_product
@@ -127,7 +231,79 @@ theorem _root_.cauchy_product
   have hPε0 : 0 < ε / (2 * P) := div_pos ε0 (mul_pos (show (2 : α) > 0 by simp) hP0)
   let ⟨N, hN⟩ := hb.cauchy₂ hPε0
   have hQε0 : 0 < ε / (4 * Q) :=
-    div_pos ε0 (mul_pos (show (
+    div_pos ε0 (mul_pos (show (0 : α) < 4 by simp) (lt_of_le_of_lt (abv_nonneg _ _) (hQ 0)))
+  let ⟨M, hM⟩ := ha.cauchy₂ hQε0
+  refine ⟨2 * (max N M + 1), fun K hK => ?_⟩
+  have h₁ :
+    (∑ m in range K, ∑ k in range (m + 1), f k * g (m - k)) =
+      ∑ m in range K, ∑ n in range (K - m), f m * g n := by
+    simpa using sum_range_diag_flip K fun m n => f m * g n
+  have h₂ :
+    (fun i => ∑ k in range (K - i), f i * g k) = fun i => f i * ∑ k in range (K - i), g k := by
+    simp [Finset.mul_sum]
+  have h₃ :
+    ∑ i in range K, f i * ∑ k in range (K - i), g k =
+      ∑ i in range K, f i * (∑ k in range (K - i), g k - ∑ k in range K, g k) +
+        ∑ i in range K, f i * ∑ k in range K, g k := by
+    rw [← sum_add_distrib]; simp [(mul_add _ _ _).symm]
+  have two_mul_two : (4 : α) = 2 * 2 := by norm_num
+  have hQ0 : Q != 0 := fun h => by simp [h] at hQε0
+  have h2Q0 : 2 * Q != 0 := mul_ne_zero two_ne_zero hQ0
+  have hε : ε / (2 * P) * P + ε / (4 * Q) * (2 * Q) = ε := by
+    rw [← div_div]; rw [div_mul_cancel₀ _ (Ne.symm (ne_of_lt hP0))]; rw [two_mul_two]; rw [mul_assoc]; rw [← div_div]; rw [div_mul_cancel₀ _ h2Q0]; rw [add_halves]
+  have hNMK : max N M + 1 < K :=
+    lt_of_lt_of_le (by rw [two_mul]; exact lt_add_of_pos_left _ (Nat.succ_pos _)) hK
+  have hKN : N < K :=
+    calc
+      N <= max N M := le_max_left _ _
+      _ < max N M + 1 := Nat.lt_succ_self _
+      _ < K := hNMK
+  have hsumlesum :
+      (∑ i in range (max N M + 1),
+        abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) <=
+      ∑ i in range (max N M + 1), abv (f i) * (ε / (2 * P)) := by
+    gcongr with m hmJ
+refine le_of_lt hN (K - m) (le_tsub_of_add_le_left <| hK.trans' ?_) K hKN.le
+    rw [two_mul]
+    gcongr
+    · exact (mem_range.1 hmJ).le
+    · exact Nat.le_succ_of_le (le_max_left _ _)
+  have hsumltP : (∑ n in range (max N M + 1), abv (f n)) < P :=
+    calc
+      (∑ n in range (max N M + 1), abv (f n)) = |∑ n in range (max N M + 1), abv (f n)| :=
+        Eq.symm (abs_of_nonneg (sum_nonneg fun x _ => abv_nonneg abv (f x)))
+      _ < P := hP (max N M + 1)
+  rw [h₁]; rw [h₂]; rw [h₃]; rw [sum_mul]; rw [← sub_sub]; rw [sub_right_comm]; rw [sub_self]; rw [zero_sub]; rw [abv_neg abv]
+  refine lt_of_le_of_lt (IsAbsoluteValue.abv_sum _ _ _) ?_
+  suffices
+    (∑ i in range (max N M + 1),
+          abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) +
+        ((∑ i in range K, abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) -
+          ∑ i in range (max N M + 1),
+            abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) <
+      ε / (2 * P) * P + ε / (4 * Q) * (2 * Q) by
+    rw [hε] at this
+    simpa [abv_mul abv] using this
+  gcongr
+  · exact lt_of_le_of_lt hsumlesum
+        (by rw [← sum_mul, mul_comm]; gcongr)
+  rw [sum_range_sub_sum_range (le_of_lt hNMK)]
+  calc
+    (∑ i in range K with max N M + 1 <= i,
+          abv (f i) * abv ((∑ k in range (K - i), g k) - ∑ k in range K, g k)) <=
+        ∑ i in range K with max N M + 1 <= i, abv (f i) * (2 * Q) := by
+        gcongr
+        rw [sub_eq_add_neg]
+        grw [abv_add abv]
+        rw [two_mul]; rw [abv_neg abv]
+        gcongr <;> exact le_of_lt (hQ _)
+    _ < ε / (4 * Q) * (2 * Q) := by
+        rw [← sum_mul]; rw [← sum_range_sub_sum_range (le_of_lt hNMK)]
+        have := lt_of_le_of_lt (abv_nonneg _ _) (hQ 0)
+        gcongr
+exact (le_abs_self _).trans_lt
+hM _ ((Nat.le_succ_of_le (le_max_right _ _)).trans hNMK.le) _
+Nat.le_succ_of_le le_max_right _ _
 
 Depends on / 依赖: abs_nonneg, abv_nonneg, bounded, div_pos, ha.bounded, ha.cauchy, hb.bounded, hb.cauchy, lt_of_le_of_lt, mul_pos
 -/
@@ -232,7 +408,27 @@ lemma of_decreasing_bounded
       lt_of_lt_of_le (show a - (k + (k + 1)) • ε < -|f n| from
 lt_neg.1 (ham n hnm).trans_lt
               (by
-                rw [neg_sub]; rw [lt_su
+                rw [neg_sub]; rw [lt_sub_iff_add_lt]; rw [add_nsmul]; rw [add_nsmul]; rw [one_nsmul]
+                exact add_lt_add_of_le_of_lt hk (lt_of_le_of_lt hk (lt_add_of_pos_right _ ε0))))
+        (neg_le.2 <| abs_neg (f n) ▸ le_abs_self _)⟩
+  let l := Nat.find h
+  have hl : forall n : Nat, n >= m -> f n > a - l • ε := Nat.find_spec h
+  have hl0 : l != 0 := fun hl0 =>
+    not_lt_of_ge (ham m le_rfl)
+      (lt_of_lt_of_le (by have := hl m (le_refl m); simpa [hl0] using this) (le_abs_self (f m)))
+  obtain ⟨i, hi⟩ := not_forall.1 (Nat.find_min h (Nat.pred_lt hl0))
+  rw [Classical.not_imp]; rw [not_lt] at hi
+  exists i
+  intro j hj
+  have hfij : f j <= f i := (Nat.rel_of_forall_rel_succ_of_le_of_le (· >= ·) hnm hi.1 hj).le
+  rw [abs_of_nonpos (sub_nonpos.2 hfij)]; rw [neg_sub]; rw [sub_lt_iff_lt_add']
+  calc
+    f i <= a - Nat.pred l • ε := hi.2
+    _ = a - l • ε + ε := by
+      conv =>
+        rhs
+        rw [← Nat.succ_pred_eq_of_pos (Nat.pos_of_ne_zero hl0)]; rw [succ_nsmul]; rw [sub_add]; rw [add_sub_cancel_right]
+_ < f j + ε := by gcongr; exact hl _ hi.1.trans hj
 
 中文:
 引理 of_decreasing_bounded
@@ -245,7 +441,27 @@ lt_neg.1 (ham n hnm).trans_lt
       lt_of_lt_of_le (show a - (k + (k + 1)) • ε < -|f n| from
 lt_neg.1 (ham n hnm).trans_lt
               (by
-                rw [neg_sub]; rw [lt_su
+                rw [neg_sub]; rw [lt_sub_iff_add_lt]; rw [add_nsmul]; rw [add_nsmul]; rw [one_nsmul]
+                exact add_lt_add_of_le_of_lt hk (lt_of_le_of_lt hk (lt_add_of_pos_right _ ε0))))
+        (neg_le.2 <| abs_neg (f n) ▸ le_abs_self _)⟩
+  let l := Nat.find h
+  have hl : forall n : Nat, n >= m -> f n > a - l • ε := Nat.find_spec h
+  have hl0 : l != 0 := fun hl0 =>
+    not_lt_of_ge (ham m le_rfl)
+      (lt_of_lt_of_le (by have := hl m (le_refl m); simpa [hl0] using this) (le_abs_self (f m)))
+  obtain ⟨i, hi⟩ := not_forall.1 (Nat.find_min h (Nat.pred_lt hl0))
+  rw [Classical.not_imp]; rw [not_lt] at hi
+  exists i
+  intro j hj
+  have hfij : f j <= f i := (Nat.rel_of_forall_rel_succ_of_le_of_le (· >= ·) hnm hi.1 hj).le
+  rw [abs_of_nonpos (sub_nonpos.2 hfij)]; rw [neg_sub]; rw [sub_lt_iff_lt_add']
+  calc
+    f i <= a - Nat.pred l • ε := hi.2
+    _ = a - l • ε + ε := by
+      conv =>
+        rhs
+        rw [← Nat.succ_pred_eq_of_pos (Nat.pos_of_ne_zero hl0)]; rw [succ_nsmul]; rw [sub_add]; rw [add_sub_cancel_right]
+_ < f j + ε := by gcongr; exact hl _ hi.1.trans hj
 
 Depends on / 依赖: Archimedean, Archimedean.arch, Nat.find, abs_neg, add_lt_add_of_le_of_lt, add_nsmul, classical, le_abs_self, lt_add_of_pos_right, lt_neg, lt_of_le_of_lt, lt_of_lt_of_le, lt_sub_iff_add_lt, neg_le, neg_sub, one_nsmul, trans_lt
 -/
@@ -312,7 +528,15 @@ lemma geo_series
   conv in _ / _ => rw [← neg_div_neg_eq, neg_sub, neg_sub]
   have : 0 < 1 - abv x := sub_pos.2 hx1
   refine of_mono_bounded _ (a := (1 : α) / (1 - abv x)) (m := 0) ?_ ?_
-  · intr
+  · intro n _
+    rw [abs_of_nonneg]
+    · gcongr
+      exact sub_le_self _ (abv_pow abv x n ▸ abv_nonneg _ _)
+    refine div_nonneg (sub_nonneg.2 ?_) (sub_nonneg.2 <| le_of_lt hx1)
+    exact pow_le_one₀ (by positivity) hx1.le
+  · intro n _
+    rw [← one_mul (abv x ^ n)]; rw [pow_succ']
+    gcongr
 
 中文:
 引理 geo_series
@@ -324,7 +548,15 @@ lemma geo_series
   conv in _ / _ => rw [← neg_div_neg_eq, neg_sub, neg_sub]
   have : 0 < 1 - abv x := sub_pos.2 hx1
   refine of_mono_bounded _ (a := (1 : α) / (1 - abv x)) (m := 0) ?_ ?_
-  · intr
+  · intro n _
+    rw [abs_of_nonneg]
+    · gcongr
+      exact sub_le_self _ (abv_pow abv x n ▸ abv_nonneg _ _)
+    refine div_nonneg (sub_nonneg.2 ?_) (sub_nonneg.2 <| le_of_lt hx1)
+    exact pow_le_one₀ (by positivity) hx1.le
+  · intro n _
+    rw [← one_mul (abv x ^ n)]; rw [pow_succ']
+    gcongr
 
 Depends on / 依赖: abs_of_nonneg, abv_nonneg, abv_pow, div_nonneg, geom_sum_eq, hx1.le, le_of_lt, neg_div_neg_eq, neg_sub, of_abv, of_mono_bounded, sub_le_self, sub_nonneg, sub_pos
 -/
@@ -378,7 +610,22 @@ lemma series_ratio_test
   refine (geo_series_const (abv (f n.succ) * r⁻¹ ^ n.succ) har1).of_abv_le n.succ fun m hmn => ?_
   obtain rfl | hr := hr0.eq_or_lt
   · have m_pos := lt_of_lt_of_le (Nat.succ_pos n) hmn
-    have := h m.pred (Nat.le_of_succ_le_succ (by rwa [Nat.s
+    have := h m.pred (Nat.le_of_succ_le_succ (by rwa [Nat.succ_pred_eq_of_pos m_pos]))
+    simpa [Nat.sub_add_cancel m_pos, pow_succ] using this
+  generalize hk : m - n.succ = k
+  replace hk : m = k + n.succ := (tsub_eq_iff_eq_add_of_le hmn).1 hk
+  induction k generalizing m n with
+  | zero =>
+    rw [hk]; rw [Nat.zero_add]; rw [mul_right_comm]; rw [inv_pow _ _]; rw [← div_eq_mul_inv]; rw [mul_div_cancel_right₀]
+    positivity
+  | succ k ih =>
+    have kn : k + n.succ >= n.succ := by
+      rw [← zero_add n.succ]; exact add_le_add (Nat.zero_le _) (by simp)
+    rw [hk]; rw [Nat.succ_add]; rw [pow_succ r]; rw [← mul_assoc]
+    refine
+      le_trans (by rw [mul_comm] <;> exact h _ (Nat.le_of_succ_le kn))
+        (mul_le_mul_of_nonneg_right ?_ hr0)
+    exact ih _ h _ (by simp) rfl
 
 中文:
 引理 series_ratio_test
@@ -388,7 +635,22 @@ lemma series_ratio_test
   refine (geo_series_const (abv (f n.succ) * r⁻¹ ^ n.succ) har1).of_abv_le n.succ fun m hmn => ?_
   obtain rfl | hr := hr0.eq_or_lt
   · have m_pos := lt_of_lt_of_le (Nat.succ_pos n) hmn
-    have := h m.pred (Nat.le_of_succ_le_succ (by rwa [Nat.s
+    have := h m.pred (Nat.le_of_succ_le_succ (by rwa [Nat.succ_pred_eq_of_pos m_pos]))
+    simpa [Nat.sub_add_cancel m_pos, pow_succ] using this
+  generalize hk : m - n.succ = k
+  replace hk : m = k + n.succ := (tsub_eq_iff_eq_add_of_le hmn).1 hk
+  induction k generalizing m n with
+  | zero =>
+    rw [hk]; rw [Nat.zero_add]; rw [mul_right_comm]; rw [inv_pow _ _]; rw [← div_eq_mul_inv]; rw [mul_div_cancel_right₀]
+    positivity
+  | succ k ih =>
+    have kn : k + n.succ >= n.succ := by
+      rw [← zero_add n.succ]; exact add_le_add (Nat.zero_le _) (by simp)
+    rw [hk]; rw [Nat.succ_add]; rw [pow_succ r]; rw [← mul_assoc]
+    refine
+      le_trans (by rw [mul_comm] <;> exact h _ (Nat.le_of_succ_le kn))
+        (mul_le_mul_of_nonneg_right ?_ hr0)
+    exact ih _ h _ (by simp) rfl
 
 Depends on / 依赖: Nat.le_of_succ_le_succ, Nat.sub_add_cancel, Nat.succ_pos, Nat.succ_pred_eq_of_pos, abs_of_nonneg, eq_or_lt, generalize, generalizing, geo_series_const, hr0.eq_or_lt, le_of_succ_le_succ, lt_of_lt_of_le, m.pred, m_pos, n.succ, of_abv_le, pow_succ, replace, sub_add_cancel, succ_pos
 -/

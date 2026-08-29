@@ -69,7 +69,11 @@ lemma isStrongGenerator
   rw [NatTrans.isIso_iff_isIso_app]
   rintro ⟨X⟩
   refine hP₂ _ (fun G hG f => ?_)
-  obt
+  obtain ⟨y, rfl⟩ := freeYonedaHomEquiv.surjective f
+  obtain ⟨x, rfl⟩ := hi (freeYoneda X G)
+    (ObjectProperty.ofObj_apply (fun (T : C × (Subtype P)) =>
+      freeYoneda T.1 T.2.1) ⟨X, G, hG⟩) y
+  exact ⟨freeYonedaHomEquiv x, by simp [freeYonedaHomEquiv_comp]⟩
 
 中文:
 引理 isStrongGenerator
@@ -82,7 +86,11 @@ lemma isStrongGenerator
   rw [NatTrans.isIso_iff_isIso_app]
   rintro ⟨X⟩
   refine hP₂ _ (fun G hG f => ?_)
-  obt
+  obtain ⟨y, rfl⟩ := freeYonedaHomEquiv.surjective f
+  obtain ⟨x, rfl⟩ := hi (freeYoneda X G)
+    (ObjectProperty.ofObj_apply (fun (T : C × (Subtype P)) =>
+      freeYoneda T.1 T.2.1) ⟨X, G, hG⟩) y
+  exact ⟨freeYonedaHomEquiv x, by simp [freeYonedaHomEquiv_comp]⟩
 
 Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, ObjectProperty, ObjectProperty.isStrongGenerator_iff, ObjectProperty.ofObj_apply, Presheaf, Presheaf.isSeparating, Subtype, Subtype.val, freeYoneda, freeYonedaHomEquiv, freeYonedaHomEquiv.surjective, isIso_iff_isIso_app, isSeparating, isStrongGenerator_iff, ofObj_apply, surjective
 -/

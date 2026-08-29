@@ -702,7 +702,12 @@ theorem residue_eq_zero_iff_sMod_eq_zero
     -- and `lucas_lehmer_residue p = 0 → 2^p - 1 ∣ s_mod p (p-2)`.
     intro h
     apply Int.eq_zero_of_dvd_of_nonneg_of_lt _ _
-      (by simpa [ZMod.intCast_zmod_e
+      (by simpa [ZMod.intCast_zmod_eq_zero_iff_dvd] using h) <;> clear h
+    · exact sMod_nonneg _ (by positivity) _
+    · exact sMod_lt _ (by positivity) _
+  · intro h
+    rw [h]
+    simp
 
 中文:
 定理 residue_eq_zero_iff_sMod_eq_zero
@@ -715,7 +720,12 @@ theorem residue_eq_zero_iff_sMod_eq_zero
     -- and `lucas_lehmer_residue p = 0 → 2^p - 1 ∣ s_mod p (p-2)`.
     intro h
     apply Int.eq_zero_of_dvd_of_nonneg_of_lt _ _
-      (by simpa [ZMod.intCast_zmod_e
+      (by simpa [ZMod.intCast_zmod_eq_zero_iff_dvd] using h) <;> clear h
+    · exact sMod_nonneg _ (by positivity) _
+    · exact sMod_lt _ (by positivity) _
+  · intro h
+    rw [h]
+    simp
 
 Depends on / 依赖: lucasLehmerResidue, sZMod_eq_sMod, s_mod
 -/
@@ -1232,7 +1242,7 @@ instance :
     natCast_succ := fun _ => by ext <;> simp
     intCast := fun n => ⟨n, 0⟩
     intCast_ofNat := fun n => by ext <;> simp
-    intCast_negSucc := fun 
+    intCast_negSucc := fun n => by ext <;> simp }
 
 中文:
 实例 :
@@ -1243,7 +1253,7 @@ instance :
     natCast_succ := fun _ => by ext <;> simp
     intCast := fun n => ⟨n, 0⟩
     intCast_ofNat := fun n => by ext <;> simp
-    intCast_negSucc := fun 
+    intCast_negSucc := fun n => by ext <;> simp }
 
 Depends on / 依赖: AddCommGroup, Monoid, NatCast, intCast, intCast_negSucc, intCast_ofNat, natCast_succ, natCast_zero
 -/
@@ -1548,7 +1558,10 @@ theorem closed_form
       (s (i + 1) : X q) = (s i ^ 2 - 2 : Int) := rfl
       _ = (s i : X q) ^ 2 - 2 := by push_cast; rfl
       _ = (ω ^ 2 ^ i + ωb ^ 2 ^ i) ^ 2 - 2 := by rw [ih]
-      _ = (ω ^ 2 ^ i) ^ 2 + (ωb ^ 2 ^
+      _ = (ω ^ 2 ^ i) ^ 2 + (ωb ^ 2 ^ i) ^ 2 + 2 * (ωb ^ 2 ^ i * ω ^ 2 ^ i) - 2 := by ring
+      _ = (ω ^ 2 ^ i) ^ 2 + (ωb ^ 2 ^ i) ^ 2 := by
+        rw [← mul_pow ωb ω]; rw [ωb_mul_ω]; rw [one_pow]; rw [mul_one]; rw [add_sub_cancel_right]
+      _ = ω ^ 2 ^ (i + 1) + ωb ^ 2 ^ (i + 1) := by rw [← pow_mul, ← pow_mul, _root_.pow_succ]
 
 中文:
 定理 closed_form
@@ -1564,7 +1577,10 @@ theorem closed_form
       (s (i + 1) : X q) = (s i ^ 2 - 2 : Int) := rfl
       _ = (s i : X q) ^ 2 - 2 := by push_cast; rfl
       _ = (ω ^ 2 ^ i + ωb ^ 2 ^ i) ^ 2 - 2 := by rw [ih]
-      _ = (ω ^ 2 ^ i) ^ 2 + (ωb ^ 2 ^
+      _ = (ω ^ 2 ^ i) ^ 2 + (ωb ^ 2 ^ i) ^ 2 + 2 * (ωb ^ 2 ^ i * ω ^ 2 ^ i) - 2 := by ring
+      _ = (ω ^ 2 ^ i) ^ 2 + (ωb ^ 2 ^ i) ^ 2 := by
+        rw [← mul_pow ωb ω]; rw [ωb_mul_ω]; rw [one_pow]; rw [mul_one]; rw [add_sub_cancel_right]
+      _ = ω ^ 2 ^ (i + 1) + ωb ^ 2 ^ (i + 1) := by rw [← pow_mul, ← pow_mul, _root_.pow_succ]
 
 Depends on / 依赖: add_sub_cancel_right, mul_one, mul_pow, one_pow
 -/
@@ -1714,7 +1730,7 @@ lemma one_add_α_pow_q
     simpa [leg3, mul_add_div, eq_comm] using legendreSym.eq_pow (2 * k + 1) 3
   rw [add_pow_expChar]; rw [α_pow]; rw [show (3 : X q) = (3 : ZMod q) by rw [map_ofNat], ← map_pow, this,
     map_neg]
-  simp [sub_eq_ad
+  simp [sub_eq_add_neg]
 
 中文:
 引理 one_add_α_pow_q
@@ -1726,7 +1742,7 @@ lemma one_add_α_pow_q
     simpa [leg3, mul_add_div, eq_comm] using legendreSym.eq_pow (2 * k + 1) 3
   rw [add_pow_expChar]; rw [α_pow]; rw [show (3 : X q) = (3 : ZMod q) by rw [map_ofNat], ← map_pow, this,
     map_neg]
-  simp [sub_eq_ad
+  simp [sub_eq_add_neg]
 
 Depends on / 依赖: add_pow_expChar, eq_comm, eq_pow, legendreSym, legendreSym.eq_pow, map_neg, map_ofNat, map_pow, mul_add_div, sub_eq_add_neg
 -/
@@ -1814,7 +1830,13 @@ lemma pow_ω
     have : (2 : ZMod q) = ((2 : Int) : ZMod q) := by norm_cast
     rw [this]; rw [← leg]; rw [leg2]
     ring
-  have := tw
+  have := two_mul_ω_pow odd leg3
+  rw [mul_pow] at this
+  have coe : (2 : X q) = (2 : ZMod q) := by rw [map_ofNat]
+  rw [coe]; rw [← map_pow]; rw [pow2]; rw [← coe]; rw [(by ring : (-2 : X q) = 2 * -1)] at this
+  refine (IsUnit.of_mul_eq_one (M := X q) ↑((q + 1) / 2) ?_).mul_left_cancel this
+  norm_cast
+  simp [Nat.mul_div_cancel' odd.add_one.two_dvd]
 
 中文:
 引理 pow_ω
@@ -1827,7 +1849,13 @@ lemma pow_ω
     have : (2 : ZMod q) = ((2 : Int) : ZMod q) := by norm_cast
     rw [this]; rw [← leg]; rw [leg2]
     ring
-  have := tw
+  have := two_mul_ω_pow odd leg3
+  rw [mul_pow] at this
+  have coe : (2 : X q) = (2 : ZMod q) := by rw [map_ofNat]
+  rw [coe]; rw [← map_pow]; rw [pow2]; rw [← coe]; rw [(by ring : (-2 : X q) = 2 * -1)] at this
+  refine (IsUnit.of_mul_eq_one (M := X q) ↑((q + 1) / 2) ?_).mul_left_cancel this
+  norm_cast
+  simp [Nat.mul_div_cancel' odd.add_one.two_dvd]
 
 Depends on / 依赖: IsUnit, IsUnit.of_mul_eq_one, eq_pow, legendreSym, legendreSym.eq_pow, map_ofNat, map_pow, mul_pow, of_mul_eq_one, pow_succ
 -/
@@ -1861,7 +1889,9 @@ lemma ω_pow_trace
     rw [pow_ω odd leg3 leg2]
     ring
   have div4 : (q + 1) / 2 = (q + 1) / 4 + (q + 1) / 4 := by rcases hq4 with ⟨k, hk⟩; lia
-  rw [div4]; rw [pow_add]; rw [mul_assoc]; rw [← mul_pow]; rw [ω_mul_ωb]; rw [one_pow]
+  rw [div4]; rw [pow_add]; rw [mul_assoc]; rw [← mul_pow]; rw [ω_mul_ωb]; rw [one_pow]; rw [mul_one] at this
+  rw [this]
+  ring
 
 中文:
 引理 ω_pow_trace
@@ -1871,7 +1901,9 @@ lemma ω_pow_trace
     rw [pow_ω odd leg3 leg2]
     ring
   have div4 : (q + 1) / 2 = (q + 1) / 4 + (q + 1) / 4 := by rcases hq4 with ⟨k, hk⟩; lia
-  rw [div4]; rw [pow_add]; rw [mul_assoc]; rw [← mul_pow]; rw [ω_mul_ωb]; rw [one_pow]
+  rw [div4]; rw [pow_add]; rw [mul_assoc]; rw [← mul_pow]; rw [ω_mul_ωb]; rw [one_pow]; rw [mul_one] at this
+  rw [this]
+  ring
 
 Depends on / 依赖: mul_assoc, mul_one, mul_pow, one_pow, pow_add
 -/
@@ -1989,7 +2021,14 @@ theorem ω_pow_formula
   use k
   replace h := congr_arg (fun n : Int => (n : X (q (p' + 2)))) h
   rw [closed_form] at h
-  replace h := congr_arg 
+  replace h := congr_arg (fun x => ω ^ 2 ^ p' * x) h
+  have t : 2 ^ p' + 2 ^ p' = 2 ^ (p' + 1) := by ring
+  rw [mul_add]; rw [← pow_add ω]; rw [t]; rw [← mul_pow ω ωb (2 ^ p')]; rw [ω_mul_ωb]; rw [one_pow] at h
+  rw [mul_comm]; rw [coe_mul] at h
+  rw [mul_comm _ (k : X (q (p' + 2)))] at h
+  replace h := eq_sub_of_add_eq h
+  have : 1 <= 2 ^ (p' + 2) := Nat.one_le_pow _ _ (by decide)
+  exact mod_cast h
 
 中文:
 定理 ω_pow_formula
@@ -2002,7 +2041,14 @@ theorem ω_pow_formula
   use k
   replace h := congr_arg (fun n : Int => (n : X (q (p' + 2)))) h
   rw [closed_form] at h
-  replace h := congr_arg 
+  replace h := congr_arg (fun x => ω ^ 2 ^ p' * x) h
+  have t : 2 ^ p' + 2 ^ p' = 2 ^ (p' + 1) := by ring
+  rw [mul_add]; rw [← pow_add ω]; rw [t]; rw [← mul_pow ω ωb (2 ^ p')]; rw [ω_mul_ωb]; rw [one_pow] at h
+  rw [mul_comm]; rw [coe_mul] at h
+  rw [mul_comm _ (k : X (q (p' + 2)))] at h
+  replace h := eq_sub_of_add_eq h
+  have : 1 <= 2 ^ (p' + 2) := Nat.one_le_pow _ _ (by decide)
+  exact mod_cast h
 
 Depends on / 依赖: ZMod.intCast_zmod_eq_zero_iff_dvd, closed_form, coe_mul, congr_arg, intCast_zmod_eq_zero_iff_dvd, lucasLehmerResidue, mul_add, mul_comm, mul_pow, one_pow, pow_add, replace, sZMod_eq_s
 -/
@@ -2169,7 +2215,14 @@ theorem order_ω
     have ω_pow :=
 congr_arg (Units.coeHom (X (q (p' + 2))) : Units (X (q (p' + 2))) -> X (q (p' + 2)))
         orderOf_dvd_iff_pow_eq_one.1 o
-    have h : (1 : ZMod (q (p' + 2))) = 
+    have h : (1 : ZMod (q (p' + 2))) = -1 :=
+      congr_arg Prod.fst (ω_pow.symm.trans (ω_pow_eq_neg_one p' h))
+    have : Fact (2 < (q (p' + 2) : Nat)) := ⟨two_lt_q _⟩
+    apply ZMod.neg_one_ne_one h.symm
+  · apply orderOf_dvd_iff_pow_eq_one.2
+    apply Units.ext
+    push_cast
+    exact ω_pow_eq_one p' h
 
 中文:
 定理 order_ω
@@ -2182,7 +2235,14 @@ congr_arg (Units.coeHom (X (q (p' + 2))) : Units (X (q (p' + 2))) -> X (q (p' + 
     have ω_pow :=
 congr_arg (Units.coeHom (X (q (p' + 2))) : Units (X (q (p' + 2))) -> X (q (p' + 2)))
         orderOf_dvd_iff_pow_eq_one.1 o
-    have h : (1 : ZMod (q (p' + 2))) = 
+    have h : (1 : ZMod (q (p' + 2))) = -1 :=
+      congr_arg Prod.fst (ω_pow.symm.trans (ω_pow_eq_neg_one p' h))
+    have : Fact (2 < (q (p' + 2) : Nat)) := ⟨two_lt_q _⟩
+    apply ZMod.neg_one_ne_one h.symm
+  · apply orderOf_dvd_iff_pow_eq_one.2
+    apply Units.ext
+    push_cast
+    exact ω_pow_eq_one p' h
 
 Depends on / 依赖: Nat.eq_prime_pow_of_dvd_least_prime_pow, eq_prime_pow_of_dvd_least_prime_pow
 -/
@@ -2257,7 +2317,7 @@ theorem lucas_lehmer_sufficiency
   have h₁ := order_ineq p' t
   have h₂ := Nat.minFac_sq_le_self (mersenne_pos.2 (Nat.lt_of_succ_lt w)) a
   have h := lt_of_lt_of_le h₁ h₂
-  e
+  exact not_lt_of_ge (Nat.sub_le _ _) h
 
 中文:
 定理 lucas_lehmer_sufficiency
@@ -2273,7 +2333,7 @@ theorem lucas_lehmer_sufficiency
   have h₁ := order_ineq p' t
   have h₂ := Nat.minFac_sq_le_self (mersenne_pos.2 (Nat.lt_of_succ_lt w)) a
   have h := lt_of_lt_of_le h₁ h₂
-  e
+  exact not_lt_of_ge (Nat.sub_le _ _) h
 
 Depends on / 依赖: Nat.lt_of_sub_eq_succ, Nat.lt_of_succ_lt, Nat.minFac_sq_le_self, Nat.sub_le, clear_value, contrapose, lt_of_lt_of_le, lt_of_sub_eq_succ, lt_of_succ_lt, mersenne_pos, minFac_sq_le_self, not_lt_of_ge, order_ineq, sub_le
 -/
@@ -2303,7 +2363,12 @@ theorem lucas_lehmer_necessity
   obtain rfl : p = p' + 2 := by lia
   dsimp [LucasLehmerTest, lucasLehmerResidue]
   rw [sZMod_eq_s p']; rw [← X.fst_intCast]; rw [X.closed_form]; rw [add_tsub_cancel_right]
-  have := X.ω_pow_trace (q := mersenne
+  have := X.ω_pow_trace (q := mersenne (p' + 2)) (by simp)
+    (legendreSym_mersenne_three w <| hp.of_mersenne.odd_of_ne_two (by lia))
+    (legendreSym_mersenne_two w) (by simp [pow_add])
+  rw [succ_mersenne]; rw [pow_add]; rw [show 2 ^ 2 = 4 by norm_num]; rw [mul_div_cancel_right₀ _ (by norm_num)]
+    at this
+  simp [this]
 
 中文:
 定理 lucas_lehmer_necessity
@@ -2315,7 +2380,12 @@ theorem lucas_lehmer_necessity
   obtain rfl : p = p' + 2 := by lia
   dsimp [LucasLehmerTest, lucasLehmerResidue]
   rw [sZMod_eq_s p']; rw [← X.fst_intCast]; rw [X.closed_form]; rw [add_tsub_cancel_right]
-  have := X.ω_pow_trace (q := mersenne
+  have := X.ω_pow_trace (q := mersenne (p' + 2)) (by simp)
+    (legendreSym_mersenne_three w <| hp.of_mersenne.odd_of_ne_two (by lia))
+    (legendreSym_mersenne_two w) (by simp [pow_add])
+  rw [succ_mersenne]; rw [pow_add]; rw [show 2 ^ 2 = 4 by norm_num]; rw [mul_div_cancel_right₀ _ (by norm_num)]
+    at this
+  simp [this]
 
 Depends on / 依赖: LucasLehmerTest, X.closed_form, X.fst_intCast, add_tsub_cancel_right, clear_value, closed_form, fst_intCast, hp.of_mersenne.odd_of_ne_two, legendreSym_mersenne_three, legendreSym_mersenne_two, lucasLehmerResidue, mersenne, odd_of_ne_two, of_mersenne, pow_add, sZMod_eq_s, succ_mersenne
 -/
@@ -2620,7 +2690,8 @@ theorem modEq_mersenne
   calc
     k = 2 ^ n * (k / 2 ^ n) + k % 2 ^ n := (Nat.div_add_mod k (2 ^ n)).symm
     _ ≡ 1 * (k / 2 ^ n) + k % 2 ^ n [MOD 2 ^ n - 1] :=
-      ((Nat.modEq_sub <| Nat.succ_le_of_
+      ((Nat.modEq_sub <| Nat.succ_le_of_lt <| pow_pos zero_lt_two _).mul_right _).add_right _
+    _ = k / 2 ^ n + k % 2 ^ n := by rw [one_mul]
 
 中文:
 定理 modEq_mersenne
@@ -2630,7 +2701,8 @@ theorem modEq_mersenne
   calc
     k = 2 ^ n * (k / 2 ^ n) + k % 2 ^ n := (Nat.div_add_mod k (2 ^ n)).symm
     _ ≡ 1 * (k / 2 ^ n) + k % 2 ^ n [MOD 2 ^ n - 1] :=
-      ((Nat.modEq_sub <| Nat.succ_le_of_
+      ((Nat.modEq_sub <| Nat.succ_le_of_lt <| pow_pos zero_lt_two _).mul_right _).add_right _
+    _ = k / 2 ^ n + k % 2 ^ n := by rw [one_mul]
 -/
 theorem modEq_mersenne (n k : Nat) : k ≡ k / 2 ^ n + k % 2 ^ n [MOD 2 ^ n - 1] :=
   -- See https://leanprover.zulipchat.com/#narrow/stream/113489-new-members/topic/help.20finding.20a.20lemma/near/177698446

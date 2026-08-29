@@ -394,7 +394,13 @@ lemma toPGL_surj_of_roots
   obtain ⟨r, hr⟩ : exists r : Rˣ, r ^ Fintype.card n * g.det = 1 := by
     obtain ⟨r, hr⟩ := hR g.det⁻¹
     exact ⟨r, by simpa [mul_eq_one_iff_eq_inv] using hr⟩
-  simp only [Units.ext_iff, Units.val_mul, Units.val_pow
+  simp only [Units.ext_iff, Units.val_mul, Units.val_pow_eq_pow_val,
+    GeneralLinearGroup.val_det_apply, ← Matrix.det_smul g.1 r.1, Units.val_one] at hr
+  use QuotientGroup.mk ⟨r.1 • g.1, hr⟩
+  simp only [ProjectiveSpecialLinearGroup.toPGL_mk, mk_eq_mk_iff]
+  refine ⟨r⁻¹, Units.ext ?_⟩
+  simp only [Units.val_mul, coe_GL_coe_matrix, GeneralLinearGroup.coe_scalar]
+  simp [← Matrix.mul_smul, ← Matrix.diagonal_smul, Pi.smul_def, smul_eq_mul]
 
 中文:
 引理 toPGL_surj_of_roots
@@ -403,7 +409,13 @@ lemma toPGL_surj_of_roots
   obtain ⟨r, hr⟩ : exists r : Rˣ, r ^ Fintype.card n * g.det = 1 := by
     obtain ⟨r, hr⟩ := hR g.det⁻¹
     exact ⟨r, by simpa [mul_eq_one_iff_eq_inv] using hr⟩
-  simp only [Units.ext_iff, Units.val_mul, Units.val_pow
+  simp only [Units.ext_iff, Units.val_mul, Units.val_pow_eq_pow_val,
+    GeneralLinearGroup.val_det_apply, ← Matrix.det_smul g.1 r.1, Units.val_one] at hr
+  use QuotientGroup.mk ⟨r.1 • g.1, hr⟩
+  simp only [ProjectiveSpecialLinearGroup.toPGL_mk, mk_eq_mk_iff]
+  refine ⟨r⁻¹, Units.ext ?_⟩
+  simp only [Units.val_mul, coe_GL_coe_matrix, GeneralLinearGroup.coe_scalar]
+  simp [← Matrix.mul_smul, ← Matrix.diagonal_smul, Pi.smul_def, smul_eq_mul]
 
 Depends on / 依赖: Fintype, Fintype.card, GeneralLinearGroup, GeneralLinearGroup.val_det_apply, Matrix, Matrix.ProjGenLinGroup.induction_on, Matrix.det_smul, ProjGenLinGroup, ProjectiveSpecialLinearGroup, ProjectiveSpecialLinearGroup.toPGL_mk, QuotientGroup, QuotientGroup.mk, Units.ext_iff, Units.val_mul, Units.val_one, Units.val_pow_eq_pow_val, det_smul, ext_iff, g.det, induction_on
 -/
@@ -433,7 +445,9 @@ lemma toPGL_surj_iff
   obtain ⟨A, hA⟩ := GeneralLinearGroup.det_surjective (n := n) r
   obtain ⟨X, hX⟩ := h (.mk A)
   induction X using QuotientGroup.induction_on with | H X =>
-  obtain ⟨u, hu⟩ : exists u, toGL X * (GeneralLinearGroup.scalar n
+  obtain ⟨u, hu⟩ : exists u, toGL X * (GeneralLinearGroup.scalar n) u = A := by
+    simpa [mk_eq_mk_iff] using hX
+  exact ⟨u, by simpa [hA] using congr(Matrix.GeneralLinearGroup.det $hu)⟩
 
 中文:
 引理 toPGL_surj_iff
@@ -443,7 +457,9 @@ lemma toPGL_surj_iff
   obtain ⟨A, hA⟩ := GeneralLinearGroup.det_surjective (n := n) r
   obtain ⟨X, hX⟩ := h (.mk A)
   induction X using QuotientGroup.induction_on with | H X =>
-  obtain ⟨u, hu⟩ : exists u, toGL X * (GeneralLinearGroup.scalar n
+  obtain ⟨u, hu⟩ : exists u, toGL X * (GeneralLinearGroup.scalar n) u = A := by
+    simpa [mk_eq_mk_iff] using hX
+  exact ⟨u, by simpa [hA] using congr(Matrix.GeneralLinearGroup.det $hu)⟩
 -/
 lemma toPGL_surj_iff [Nonempty n] :
     Function.Surjective (ProjectiveSpecialLinearGroup.toPGL (n := n) (R := R)) ↔
@@ -467,7 +483,10 @@ definition isoPSLOfAlgClosedOfNonempty
     ⟨Matrix.ProjectiveSpecialLinearGroup.toPGL_injective,
     Matrix.ProjectiveSpecialLinearGroup.toPGL_surj_of_roots fun r => by
   obtain ⟨x, hx⟩ := IsAlgClosed.exists_root (X ^ Fintype.card n - C r.1 : F[X]) (by
-    simp
+    simp [Polynomial.degree_X_pow_sub_C Fintype.card_pos])
+  have hx' : x != 0 := by aesop
+  exact ⟨⟨x, x⁻¹, mul_inv_cancel₀ hx', inv_mul_cancel₀ hx'⟩, by
+    simpa [Units.ext_iff, sub_eq_zero] using hx⟩⟩)
 
 中文:
 定义 isoPSLOfAlgClosedOfNonempty
@@ -476,7 +495,10 @@ definition isoPSLOfAlgClosedOfNonempty
     ⟨Matrix.ProjectiveSpecialLinearGroup.toPGL_injective,
     Matrix.ProjectiveSpecialLinearGroup.toPGL_surj_of_roots fun r => by
   obtain ⟨x, hx⟩ := IsAlgClosed.exists_root (X ^ Fintype.card n - C r.1 : F[X]) (by
-    simp
+    simp [Polynomial.degree_X_pow_sub_C Fintype.card_pos])
+  have hx' : x != 0 := by aesop
+  exact ⟨⟨x, x⁻¹, mul_inv_cancel₀ hx', inv_mul_cancel₀ hx'⟩, by
+    simpa [Units.ext_iff, sub_eq_zero] using hx⟩⟩)
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_pos, IsAlgClosed, IsAlgClosed.exists_root, Matrix, Matrix.ProjectiveSpecialLinearGroup.toPGL, Matrix.ProjectiveSpecialLinearGroup.toPGL_injective, Matrix.ProjectiveSpecialLinearGroup.toPGL_surj_of_roots, MulEquiv, MulEquiv.ofBijective, MulEquiv.symm, Polynomial, Polynomial.degree_X_pow_sub_C, ProjectiveSpecialLinearGroup, Units.ext_iff, card_pos, degree_X_pow_sub_C, exists_root, ext_iff
 -/
@@ -502,7 +524,7 @@ definition isoPSLOfAlgClosed
   have : IsEmpty n := by simpa using h
   have : Subsingleton (PGL(n, F)) := mk_surjective.subsingleton
   MulEquiv.symm (MulEquiv.ofBijective Matrix.ProjectiveSpecialLinearGroup.toPGL
-    ⟨Matrix.ProjectiveSpecialLinea
+    ⟨Matrix.ProjectiveSpecialLinearGroup.toPGL_injective, Function.surjective_to_subsingleton _⟩)
 
 中文:
 定义 isoPSLOfAlgClosed
@@ -512,7 +534,7 @@ definition isoPSLOfAlgClosed
   have : IsEmpty n := by simpa using h
   have : Subsingleton (PGL(n, F)) := mk_surjective.subsingleton
   MulEquiv.symm (MulEquiv.ofBijective Matrix.ProjectiveSpecialLinearGroup.toPGL
-    ⟨Matrix.ProjectiveSpecialLinea
+    ⟨Matrix.ProjectiveSpecialLinearGroup.toPGL_injective, Function.surjective_to_subsingleton _⟩)
 
 Depends on / 依赖: Classical, Function, Function.surjective_to_subsingleton, IsEmpty, Matrix, Matrix.ProjectiveSpecialLinearGroup.toPGL, Matrix.ProjectiveSpecialLinearGroup.toPGL_injective, MulEquiv, MulEquiv.ofBijective, MulEquiv.symm, Nonempty, ProjectiveSpecialLinearGroup, Subsingleton, isoPSLOfAlgClosedOfNonempty, mk_surjective, mk_surjective.subsingleton, ofBijective, scoped, subsingleton, surjective_to_subsingleton
 -/

@@ -581,7 +581,12 @@ theorem pairwise_disjoint_Ioc_mul_zpow
   have hb : 1 < b := by
     have : a * b ^ m < a * b ^ (m + 1) := hx.1.1.trans_le hx.1.2
     rwa [mul_lt_mul_iff_left, ← mul_one (b ^ m), zpow_add_one, mul_lt_mul_iff_left] at this
-  have 
+  have i1 := hx.1.1.trans_le hx.2.2
+  have i2 := hx.2.1.trans_le hx.1.2
+  rw [mul_lt_mul_iff_left]; rw [zpow_lt_zpow_iff_right hb]; rw [Int.lt_add_one_iff] at i1 i2
+  exact le_antisymm i1 i2
+
+@[to_additive]
 
 中文:
 定理 pairwise_disjoint_Ioc_mul_zpow
@@ -593,7 +598,12 @@ theorem pairwise_disjoint_Ioc_mul_zpow
   have hb : 1 < b := by
     have : a * b ^ m < a * b ^ (m + 1) := hx.1.1.trans_le hx.1.2
     rwa [mul_lt_mul_iff_left, ← mul_one (b ^ m), zpow_add_one, mul_lt_mul_iff_left] at this
-  have 
+  have i1 := hx.1.1.trans_le hx.2.2
+  have i2 := hx.2.1.trans_le hx.1.2
+  rw [mul_lt_mul_iff_left]; rw [zpow_lt_zpow_iff_right hb]; rw [Int.lt_add_one_iff] at i1 i2
+  exact le_antisymm i1 i2
+
+@[to_additive]
 
 Depends on / 依赖: Function, Function.onFun, Int.lt_add_one_iff, Set.disjoint_iff, disjoint_iff, le_antisymm, lt_add_one_iff, mul_lt_mul_iff_left, mul_one, simp_rw, trans_le, unfoldPartialApp, zpow_add_one, zpow_lt_zpow_iff_right
 -/
@@ -625,7 +635,12 @@ theorem pairwise_disjoint_Ico_mul_zpow
   have hb : 1 < b := by
     have : a * b ^ m < a * b ^ (m + 1) := hx.1.1.trans_lt hx.1.2
     rwa [mul_lt_mul_iff_left, ← mul_one (b ^ m), zpow_add_one, mul_lt_mul_iff_left] at this
-  have 
+  have i1 := hx.1.1.trans_lt hx.2.2
+  have i2 := hx.2.1.trans_lt hx.1.2
+  rw [mul_lt_mul_iff_left]; rw [zpow_lt_zpow_iff_right hb]; rw [Int.lt_add_one_iff] at i1 i2
+  exact le_antisymm i1 i2
+
+@[to_additive]
 
 中文:
 定理 pairwise_disjoint_Ico_mul_zpow
@@ -637,7 +652,12 @@ theorem pairwise_disjoint_Ico_mul_zpow
   have hb : 1 < b := by
     have : a * b ^ m < a * b ^ (m + 1) := hx.1.1.trans_lt hx.1.2
     rwa [mul_lt_mul_iff_left, ← mul_one (b ^ m), zpow_add_one, mul_lt_mul_iff_left] at this
-  have 
+  have i1 := hx.1.1.trans_lt hx.2.2
+  have i2 := hx.2.1.trans_lt hx.1.2
+  rw [mul_lt_mul_iff_left]; rw [zpow_lt_zpow_iff_right hb]; rw [Int.lt_add_one_iff] at i1 i2
+  exact le_antisymm i1 i2
+
+@[to_additive]
 
 Depends on / 依赖: Function, Function.onFun, Int.lt_add_one_iff, Set.disjoint_iff, disjoint_iff, le_antisymm, lt_add_one_iff, mul_lt_mul_iff_left, mul_one, simp_rw, trans_lt, unfoldPartialApp, zpow_add_one, zpow_lt_zpow_iff_right
 -/

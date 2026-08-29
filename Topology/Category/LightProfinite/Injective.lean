@@ -56,7 +56,51 @@ lemma exists_lift_of_finite_of_injective_of_surjective
   have : Finite T := Finite.of_surjective f' f'_surj
   -- define the closed partition `Z` so `Z i` is the image under `f` of the fiber of `g` at `i`
   let Z : S -> Set Y := fun i => f '' g ⁻¹' {i}
-  have Z_closed (i) : IsClosed (
+  have Z_closed (i) : IsClosed (Z i) :=
+    (IsClosedEmbedding.isClosed_iff_image_isClosed (Continuous.isClosedEmbedding hf f_inj)).mp
+    (IsClosed.preimage hg isClosed_singleton)
+  have Z_disj : univ.PairwiseDisjoint Z := by
+    rw [Set.pairwiseDisjoint_iff]
+    simp only [image_inter_nonempty_iff, Z]
+    rintro _ _ _ _ ⟨_, rfl, ⟨_, rfl, hy⟩⟩
+    rw [f_inj hy]
+  -- define `D i` to be the fiber of `g'` at `f' i`
+  let D : S -> Set Y := fun i => g' ⁻¹' ({f' i})
+  -- each `D i` is clopen
+  have D_clopen i : IsClopen (D i) := IsClopen.preimage (isClopen_discrete {f' i}) hg'
+  -- each `Z i` is contained in `D i`
+  have Z_subset_D i : Z i subseteq D i := by
+    intro z hz
+    rw [mem_preimage]; rw [mem_singleton_iff]
+    obtain ⟨x, _, _⟩ := (mem_image _ _ _).mp hz
+    have h_comm' : g' (f x) = f' (g x) := congr_fun h_comm x
+    simp_all
+  -- obtain a clopen partition `C` of `Y` such that `Z i ⊆ C i ⊆ D i`.
+  obtain ⟨C, C_clopen, Z_subset_C, C_subset_D, C_cover_D, C_disj⟩ :=
+    exists_clopen_partition_of_clopen_cover Z_closed D_clopen Z_subset_D Z_disj
+  have D_cover_univ : univ subseteq (⋃ i, D i) := by
+    intro y _
+    simp only [mem_iUnion]
+    obtain ⟨s, hs⟩ := f'_surj (g' y)
+    grind
+  have C_cover_univ : ⋃ i, C i = univ := univ_subset_iff.mp (subset_trans D_cover_univ C_cover_D)
+  -- define k to be the unique map sending C i to ψ i
+  have h_glue (i j : S) (x : Y) (hxi : x in C i) (hxj : x in C j) : i = j := by
+    rw [Set.pairwiseDisjoint_iff] at C_disj
+    exact C_disj (by simp) (by simp) ⟨x, by grind⟩
+  refine ⟨liftCover C (fun i _ => i) h_glue C_cover_univ, IsLocallyConstant.continuous ?_, ?_, ?_⟩
+  · rw [IsLocallyConstant.iff_isOpen_fiber]
+    intro s
+    convert! (C_clopen s).2
+    ext y
+    simp [preimage_liftCover]
+  · ext y
+    -- y is contained in C i for some i
+    have hy : y in ⋃ i, C i := by simp [C_cover_univ]
+    obtain ⟨i, hi⟩ := mem_iUnion.mp hy
+    simpa [liftCover_of_mem hi] using symm (C_subset_D i hi)
+  · ext x
+    simp [liftCover_of_mem <| Z_subset_C (g x) (by simpa [mem_image] using ⟨x, rfl, rfl⟩)]
 
 中文:
 引理 存在_lift_of_finite_of_injective_of_surjective
@@ -66,7 +110,51 @@ lemma exists_lift_of_finite_of_injective_of_surjective
   have : Finite T := Finite.of_surjective f' f'_surj
   -- define the closed partition `Z` so `Z i` is the image under `f` of the fiber of `g` at `i`
   let Z : S -> Set Y := fun i => f '' g ⁻¹' {i}
-  have Z_closed (i) : IsClosed (
+  have Z_closed (i) : IsClosed (Z i) :=
+    (IsClosedEmbedding.isClosed_iff_image_isClosed (Continuous.isClosedEmbedding hf f_inj)).mp
+    (IsClosed.preimage hg isClosed_singleton)
+  have Z_disj : univ.PairwiseDisjoint Z := by
+    rw [Set.pairwiseDisjoint_iff]
+    simp only [image_inter_nonempty_iff, Z]
+    rintro _ _ _ _ ⟨_, rfl, ⟨_, rfl, hy⟩⟩
+    rw [f_inj hy]
+  -- define `D i` to be the fiber of `g'` at `f' i`
+  let D : S -> Set Y := fun i => g' ⁻¹' ({f' i})
+  -- each `D i` is clopen
+  have D_clopen i : IsClopen (D i) := IsClopen.preimage (isClopen_discrete {f' i}) hg'
+  -- each `Z i` is contained in `D i`
+  have Z_subset_D i : Z i subseteq D i := by
+    intro z hz
+    rw [mem_preimage]; rw [mem_singleton_iff]
+    obtain ⟨x, _, _⟩ := (mem_image _ _ _).mp hz
+    have h_comm' : g' (f x) = f' (g x) := congr_fun h_comm x
+    simp_all
+  -- obtain a clopen partition `C` of `Y` such that `Z i ⊆ C i ⊆ D i`.
+  obtain ⟨C, C_clopen, Z_subset_C, C_subset_D, C_cover_D, C_disj⟩ :=
+    exists_clopen_partition_of_clopen_cover Z_closed D_clopen Z_subset_D Z_disj
+  have D_cover_univ : univ subseteq (⋃ i, D i) := by
+    intro y _
+    simp only [mem_iUnion]
+    obtain ⟨s, hs⟩ := f'_surj (g' y)
+    grind
+  have C_cover_univ : ⋃ i, C i = univ := univ_subset_iff.mp (subset_trans D_cover_univ C_cover_D)
+  -- define k to be the unique map sending C i to ψ i
+  have h_glue (i j : S) (x : Y) (hxi : x in C i) (hxj : x in C j) : i = j := by
+    rw [Set.pairwiseDisjoint_iff] at C_disj
+    exact C_disj (by simp) (by simp) ⟨x, by grind⟩
+  refine ⟨liftCover C (fun i _ => i) h_glue C_cover_univ, IsLocallyConstant.continuous ?_, ?_, ?_⟩
+  · rw [IsLocallyConstant.iff_isOpen_fiber]
+    intro s
+    convert! (C_clopen s).2
+    ext y
+    simp [preimage_liftCover]
+  · ext y
+    -- y is contained in C i for some i
+    have hy : y in ⋃ i, C i := by simp [C_cover_univ]
+    obtain ⟨i, hi⟩ := mem_iUnion.mp hy
+    simpa [liftCover_of_mem hi] using symm (C_subset_D i hi)
+  · ext x
+    simp [liftCover_of_mem <| Z_subset_C (g x) (by simpa [mem_image] using ⟨x, rfl, rfl⟩)]
 -/
 lemma exists_lift_of_finite_of_injective_of_surjective {X Y S T : Type*}
     [TopologicalSpace X] [CompactSpace X]
@@ -138,7 +226,7 @@ lemma exists_lift_of_finite_of_mono_of_epi
     f (by fun_prop) ((CompHausLike.mono_iff_injective f).mp inferInstance)
     f' ((epi_iff_surjective f').mp inferInstance)
     g (by fun_prop) g' (by fun_prop) (by simp [← CompHausLike.coe_comp, h_comm])
-  exac
+  exact ⟨CompHausLike.ofHom _ ⟨k_fun, k_cont⟩, by ext; simp [← h₁], by ext; simp [← h₂]⟩
 
 中文:
 引理 存在_lift_of_finite_of_mono_of_epi
@@ -148,7 +236,7 @@ lemma exists_lift_of_finite_of_mono_of_epi
     f (by fun_prop) ((CompHausLike.mono_iff_injective f).mp inferInstance)
     f' ((epi_iff_surjective f').mp inferInstance)
     g (by fun_prop) g' (by fun_prop) (by simp [← CompHausLike.coe_comp, h_comm])
-  exac
+  exact ⟨CompHausLike.ofHom _ ⟨k_fun, k_cont⟩, by ext; simp [← h₁], by ext; simp [← h₂]⟩
 
 Depends on / 依赖: CompHausLike, CompHausLike.coe_comp, CompHausLike.mono_iff_injective, CompHausLike.ofHom, coe_comp, epi_iff_surjective, exists_lift_of_finite_of_injective_of_surjective, fun_prop, h_comm, k_cont, k_fun, mono_iff_injective
 -/
@@ -172,7 +260,9 @@ instance injective_of_finite
     have (T : Profinite.{u}) [Nonempty T] : IsSplitEpi (CompHausLike.isTerminalPUnit.from T) :=
       IsSplitEpi.mk' { section_ := CompHausLike.const _ (Nonempty.some inferInstance) }
     obtain ⟨k, _, h2⟩ := exists_lift_of_finite_of_mono_of_epi f
-        (CompHausLike.isTerminalPUnit.from S) g (
+        (CompHausLike.isTerminalPUnit.from S) g (CompHausLike.isTerminalPUnit.from Y)
+      (CompHausLike.isTerminalPUnit.hom_ext _ _)
+    exact ⟨k, h2⟩
 
 中文:
 实例 injective_of_finite
@@ -181,7 +271,9 @@ instance injective_of_finite
     have (T : Profinite.{u}) [Nonempty T] : IsSplitEpi (CompHausLike.isTerminalPUnit.from T) :=
       IsSplitEpi.mk' { section_ := CompHausLike.const _ (Nonempty.some inferInstance) }
     obtain ⟨k, _, h2⟩ := exists_lift_of_finite_of_mono_of_epi f
-        (CompHausLike.isTerminalPUnit.from S) g (
+        (CompHausLike.isTerminalPUnit.from S) g (CompHausLike.isTerminalPUnit.from Y)
+      (CompHausLike.isTerminalPUnit.hom_ext _ _)
+    exact ⟨k, h2⟩
 
 Depends on / 依赖: CompHausLike, CompHausLike.const, CompHausLike.isTerminalPUnit.from, CompHausLike.isTerminalPUnit.hom_ext, IsSplitEpi, IsSplitEpi.mk, Nonempty, Nonempty.some, Profinite, exists_lift_of_finite_of_mono_of_epi, hom_ext, isTerminalPUnit, section_
 -/
@@ -208,7 +300,57 @@ have (n : Nat) : Finite lightToProfinite.obj (S.component n) :=
       inferInstanceAs (Finite (FintypeCat.toLightProfinite.obj _))
 have : Nonempty lightToProfinite.obj (S.component 0) :=
       Nonempty.map (S.proj 0) inferInstance
-    have (n : Nat) : Epi 
+    have (n : Nat) : Epi (S.transitionMap n) := (LightProfinite.epi_iff_surjective _).mpr
+      (S.surjective_transitionMap n)
+    -- base step of the induction: find k0 : Y ⟶ S.component 0
+    obtain ⟨k0, h_down0⟩ := Injective.factors (g ≫ lightToProfinite.map (S.proj 0)) f
+    /- Induction step: `next` produces k n+1 out of k n:
+    ```
+    X --f--> Y
+    |g' (n+1) |k n
+    v v
+    S (n+1) --p n-> S n
+    ```
+    find `k (n+1) : Y ⟶ S' (n+1)` making both diagrams commute. That is:
+      - `h_up (n+1) : k (n+1) ≫ p n = k n`
+      - `h_down n+1 : f ≫ k (n+1) = g' (n+1)`
+    Construction of `k (n+1)` through extension lemma requires as input:
+      - `h_comm n : g' (n+1) ≫ p n = f ≫ k n`, which can be obtained from h_down n. -/
+    have h_comm (n : Nat) (k : Y ⟶ lightToProfinite.obj (S.component n)) (h_down :
+        f ≫ k = g ≫ lightToProfinite.map (S.proj n)) : f ≫ k =
+          g ≫ lightToProfinite.map (S.proj (n + 1)) ≫ lightToProfinite.map (S.transitionMap n) := by
+      rw [h_down]; rw [← Functor.map_comp]; rw [← S.proj_comp_transitionMap n]
+    have h_step (n : Nat) (k : Y ⟶ lightToProfinite.obj (S.component n))
+        (h_down : f ≫ k = g ≫ lightToProfinite.map (S.proj n)) :
+        exists k' : Y ⟶ lightToProfinite.obj (S.component (n + 1)), k' ≫
+          lightToProfinite.map (S.transitionMap n) = k ∧ f ≫ k' = g ≫
+            lightToProfinite.map (S.proj (n + 1)) :=
+      exists_lift_of_finite_of_mono_of_epi f (lightToProfinite.map (S.transitionMap n))
+        (g ≫ lightToProfinite.map (S.proj (n + 1))) k (h_comm _ _ h_down)
+    let lifts (n : Nat) := { k : Y ⟶ lightToProfinite.obj (S.component n) //
+      f ≫ k = g ≫ lightToProfinite.map (S.proj n) }
+    let next (n : Nat) : lifts n -> lifts (n + 1) :=
+      fun k => ⟨(h_step n k.val k.property).choose, (h_step n k.val k.property).choose_spec.2⟩
+    -- now define a sequence of lifts using induction
+    let k_seq (n : Nat) : lifts n := Nat.rec ⟨k0, h_down0⟩ next n
+    -- `h_up` and `h_down` are the required commutativity properties
+    have h_down (n : Nat) : f ≫ (k_seq n).val = g ≫ lightToProfinite.map (S.proj n) :=
+      (k_seq n).prop
+    have h_up : forall n, (k_seq (n + 1)).val ≫ lightToProfinite.map (S.transitionMap n) = (k_seq n).val
+    | 0 => (h_step 0 k0 h_down0).choose_spec.1
+    | n + 1 => (h_step (n + 1) (k_seq (n + 1)).val (k_seq (n + 1)).prop).choose_spec.1
+    let k_cone : Cone (S.diagram ⋙ lightToProfinite) :=
+      { pt := Y, π := NatTrans.ofOpSequence (fun n => (k_seq n).val) (fun n => (h_up n).symm) }
+    -- now the induced map `Y ⟶ S = limₙ Sₙ` is the desired map
+    refine ⟨(isLimitOfPreserves _ S.asLimit).lift k_cone, ?_⟩
+    have hg : g = (isLimitOfPreserves _ S.asLimit).lift (k_cone.extend f) := by
+      apply (isLimitOfPreserves _ S.asLimit).uniq (k_cone.extend f)
+      intro n
+      simp [show k_cone.π.app n = (k_seq n.unop).1 from rfl, h_down]
+    rw [hg]
+    apply (isLimitOfPreserves _ S.asLimit).uniq (k_cone.extend f)
+    intro n
+    simp [-Functor.mapCone_pt, -Functor.mapCone_π_app]
 
 中文:
 实例 injective_of_light
@@ -219,7 +361,57 @@ have (n : Nat) : Finite lightToProfinite.obj (S.component n) :=
       inferInstanceAs (Finite (FintypeCat.toLightProfinite.obj _))
 have : Nonempty lightToProfinite.obj (S.component 0) :=
       Nonempty.map (S.proj 0) inferInstance
-    have (n : Nat) : Epi 
+    have (n : Nat) : Epi (S.transitionMap n) := (LightProfinite.epi_iff_surjective _).mpr
+      (S.surjective_transitionMap n)
+    -- base step of the induction: find k0 : Y ⟶ S.component 0
+    obtain ⟨k0, h_down0⟩ := Injective.factors (g ≫ lightToProfinite.map (S.proj 0)) f
+    /- Induction step: `next` produces k n+1 out of k n:
+    ```
+    X --f--> Y
+    |g' (n+1) |k n
+    v v
+    S (n+1) --p n-> S n
+    ```
+    find `k (n+1) : Y ⟶ S' (n+1)` making both diagrams commute. That is:
+      - `h_up (n+1) : k (n+1) ≫ p n = k n`
+      - `h_down n+1 : f ≫ k (n+1) = g' (n+1)`
+    Construction of `k (n+1)` through extension lemma requires as input:
+      - `h_comm n : g' (n+1) ≫ p n = f ≫ k n`, which can be obtained from h_down n. -/
+    have h_comm (n : Nat) (k : Y ⟶ lightToProfinite.obj (S.component n)) (h_down :
+        f ≫ k = g ≫ lightToProfinite.map (S.proj n)) : f ≫ k =
+          g ≫ lightToProfinite.map (S.proj (n + 1)) ≫ lightToProfinite.map (S.transitionMap n) := by
+      rw [h_down]; rw [← Functor.map_comp]; rw [← S.proj_comp_transitionMap n]
+    have h_step (n : Nat) (k : Y ⟶ lightToProfinite.obj (S.component n))
+        (h_down : f ≫ k = g ≫ lightToProfinite.map (S.proj n)) :
+        exists k' : Y ⟶ lightToProfinite.obj (S.component (n + 1)), k' ≫
+          lightToProfinite.map (S.transitionMap n) = k ∧ f ≫ k' = g ≫
+            lightToProfinite.map (S.proj (n + 1)) :=
+      exists_lift_of_finite_of_mono_of_epi f (lightToProfinite.map (S.transitionMap n))
+        (g ≫ lightToProfinite.map (S.proj (n + 1))) k (h_comm _ _ h_down)
+    let lifts (n : Nat) := { k : Y ⟶ lightToProfinite.obj (S.component n) //
+      f ≫ k = g ≫ lightToProfinite.map (S.proj n) }
+    let next (n : Nat) : lifts n -> lifts (n + 1) :=
+      fun k => ⟨(h_step n k.val k.property).choose, (h_step n k.val k.property).choose_spec.2⟩
+    -- now define a sequence of lifts using induction
+    let k_seq (n : Nat) : lifts n := Nat.rec ⟨k0, h_down0⟩ next n
+    -- `h_up` and `h_down` are the required commutativity properties
+    have h_down (n : Nat) : f ≫ (k_seq n).val = g ≫ lightToProfinite.map (S.proj n) :=
+      (k_seq n).prop
+    have h_up : forall n, (k_seq (n + 1)).val ≫ lightToProfinite.map (S.transitionMap n) = (k_seq n).val
+    | 0 => (h_step 0 k0 h_down0).choose_spec.1
+    | n + 1 => (h_step (n + 1) (k_seq (n + 1)).val (k_seq (n + 1)).prop).choose_spec.1
+    let k_cone : Cone (S.diagram ⋙ lightToProfinite) :=
+      { pt := Y, π := NatTrans.ofOpSequence (fun n => (k_seq n).val) (fun n => (h_up n).symm) }
+    -- now the induced map `Y ⟶ S = limₙ Sₙ` is the desired map
+    refine ⟨(isLimitOfPreserves _ S.asLimit).lift k_cone, ?_⟩
+    have hg : g = (isLimitOfPreserves _ S.asLimit).lift (k_cone.extend f) := by
+      apply (isLimitOfPreserves _ S.asLimit).uniq (k_cone.extend f)
+      intro n
+      simp [show k_cone.π.app n = (k_seq n.unop).1 from rfl, h_down]
+    rw [hg]
+    apply (isLimitOfPreserves _ S.asLimit).uniq (k_cone.extend f)
+    intro n
+    simp [-Functor.mapCone_pt, -Functor.mapCone_π_app]
 -/
 instance injective_of_light (S : LightProfinite.{u}) [Nonempty S] :
     Injective (lightToProfinite.obj S) where

@@ -379,6 +379,8 @@ definition liftOn
     rcases s.entries with ⟨l⟩
     exact id
 
+@[simp]
+
 中文:
 定义 liftOn
   签名: {γ} (s : Finmap β) (f : AList β -> γ)
@@ -392,6 +394,8 @@ definition liftOn
     revert this
     rcases s.entries with ⟨l⟩
     exact id
+
+@[simp]
 
 Depends on / 依赖: Part.ext, Quotient, Quotient.liftOn, entries, liftOn, nodupKeys, perm_nodupKeys, revert, s.entries, s.nodupKeys
 -/
@@ -1269,7 +1273,14 @@ definition keysLookupEquiv
 invFun f := mk (f.1.1.sigma fun i => (f.1.2 i).toFinset).val by
     refine Multiset.nodup_keys.1 ((Finset.nodup _).map_on ?_)
     simp only [Finset.mem_val, Finset.mem_sigma, Option.mem_toFinset, Option.mem_def]
-    rintro ⟨i, x⟩ ⟨_, hx⟩ ⟨j, y⟩
+    rintro ⟨i, x⟩ ⟨_, hx⟩ ⟨j, y⟩ ⟨_, hy⟩ (rfl : i = j)
+    simpa using hx.symm.trans hy
+left_inv f := ext by simp
+  right_inv := fun ⟨(s, f), hf⟩ => by
+    dsimp only at hf
+    ext
+    · simp [keys, Multiset.keys, ← hf, Option.isSome_iff_exists]
+    · simp +contextual [lookup_eq_some_iff, ← hf]
 
 中文:
 定义 keysLookupEquiv
@@ -1278,7 +1289,14 @@ invFun f := mk (f.1.1.sigma fun i => (f.1.2 i).toFinset).val by
 invFun f := mk (f.1.1.sigma fun i => (f.1.2 i).toFinset).val by
     refine Multiset.nodup_keys.1 ((Finset.nodup _).map_on ?_)
     simp only [Finset.mem_val, Finset.mem_sigma, Option.mem_toFinset, Option.mem_def]
-    rintro ⟨i, x⟩ ⟨_, hx⟩ ⟨j, y⟩
+    rintro ⟨i, x⟩ ⟨_, hx⟩ ⟨j, y⟩ ⟨_, hy⟩ (rfl : i = j)
+    simpa using hx.symm.trans hy
+left_inv f := ext by simp
+  right_inv := fun ⟨(s, f), hf⟩ => by
+    dsimp only at hf
+    ext
+    · simp [keys, Multiset.keys, ← hf, Option.isSome_iff_exists]
+    · simp +contextual [lookup_eq_some_iff, ← hf]
 
 Depends on / 依赖: lookup, lookup_isSome, s.keys, s.lookup
 -/
@@ -1982,7 +2000,11 @@ theorem mem_list_toFinmap
   | cons x xs =>
     obtain ⟨fst_i, snd_i⟩ := x
     simp only [toFinmap_cons, *, exists_or, mem_cons, mem_insert, exists_and_left, Sigma.mk.inj_iff]
-    refine (or_congr_left <| and_iff_left_of_imp ?_
+    refine (or_congr_left <| and_iff_left_of_imp ?_).symm
+    rintro rfl
+    simp only [exists_eq, heq_iff_eq]
+
+@[simp]
 
 中文:
 定理 mem_list_toFinmap
@@ -1993,7 +2015,11 @@ theorem mem_list_toFinmap
   | cons x xs =>
     obtain ⟨fst_i, snd_i⟩ := x
     simp only [toFinmap_cons, *, exists_or, mem_cons, mem_insert, exists_and_left, Sigma.mk.inj_iff]
-    refine (or_congr_left <| and_iff_left_of_imp ?_
+    refine (or_congr_left <| and_iff_left_of_imp ?_).symm
+    rintro rfl
+    simp only [exists_eq, heq_iff_eq]
+
+@[simp]
 
 Depends on / 依赖: Sigma.mk.inj_iff, and_iff_left_of_imp, exists_and_left, exists_eq, exists_false, exists_or, fst_i, heq_iff_eq, inj_iff, mem_cons, mem_insert, notMem_empty, not_mem_nil, or_congr_left, snd_i, toFinmap_cons, toFinmap_nil
 -/
@@ -2646,7 +2672,8 @@ theorem union_cancel
     by_cases hs₁ : x in s₁
     · rwa [lookup_union_left hs₁, lookup_union_left_of_not_in (h _ hs₁)] at this
     · by_cases hs₂ : x in s₂
-      · rwa [lookup_union_left_of_not_in (h
+      · rwa [lookup_union_left_of_not_in (h' _ hs₂), lookup_union_left hs₂] at this
+      · rw [lookup_eq_none.mpr hs₁, lookup_eq_none.mpr hs₂], fun h => h ▸ rfl⟩
 
 中文:
 定理 union_cancel
@@ -2658,7 +2685,8 @@ theorem union_cancel
     by_cases hs₁ : x in s₁
     · rwa [lookup_union_left hs₁, lookup_union_left_of_not_in (h _ hs₁)] at this
     · by_cases hs₂ : x in s₂
-      · rwa [lookup_union_left_of_not_in (h
+      · rwa [lookup_union_left_of_not_in (h' _ hs₂), lookup_union_left hs₂] at this
+      · rw [lookup_eq_none.mpr hs₁, lookup_eq_none.mpr hs₂], fun h => h ▸ rfl⟩
 
 Depends on / 依赖: ext_lookup, lookup, lookup_eq_none, lookup_eq_none.mpr, lookup_union_left, lookup_union_left_of_not_in
 -/

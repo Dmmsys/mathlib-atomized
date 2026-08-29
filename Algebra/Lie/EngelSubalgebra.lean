@@ -61,7 +61,12 @@ definition engel
         Submodule.mem_toAddSubmonoid, Module.End.mem_maxGenEigenspace, zero_smul,
         sub_zero, forall_exists_index]
       intro y z m hm n hn
-      refine ⟨m + 
+      refine ⟨m + n, ?_⟩
+      rw [ad_pow_lie]
+      apply Finset.sum_eq_zero
+      intro ij hij
+      obtain (h | h) : m <= ij.1 ∨ n <= ij.2 := by rw [Finset.mem_antidiagonal] at hij; lia
+      all_goals simp [Module.End.pow_map_zero_of_le h, hm, hn] }
 
 中文:
 定义 engel
@@ -72,7 +77,12 @@ definition engel
         Submodule.mem_toAddSubmonoid, Module.End.mem_maxGenEigenspace, zero_smul,
         sub_zero, forall_exists_index]
       intro y z m hm n hn
-      refine ⟨m + 
+      refine ⟨m + n, ?_⟩
+      rw [ad_pow_lie]
+      apply Finset.sum_eq_zero
+      intro ij hij
+      obtain (h | h) : m <= ij.1 ∨ n <= ij.2 := by rw [Finset.mem_antidiagonal] at hij; lia
+      all_goals simp [Module.End.pow_map_zero_of_le h, hm, hn] }
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_toSubsemigroup, AddSubsemigroup, AddSubsemigroup.mem_carrier, Finset, Finset.mem_antidiagonal, Finset.sum_eq_zero, Module, Module.End.mem_maxGenEigenspace, Module.End.pow_map_zero_of_le, Module.toMulActionWithZero, Submodule, Submodule.mem_toAddSubmonoid, ad_pow_lie, all_goals, forall_exists_index, lie_mem, maxGenEigenspace, mem_antidiagonal, mem_carrier
 -/
@@ -193,7 +203,7 @@ lemma normalizer_engel
   rw [mem_engel_iff]
   use n + 1
   rw [pow_succ]; rw [Module.End.mul_apply]
- 
+  exact hn
 
 中文:
 引理 normalizer_engel
@@ -209,7 +219,7 @@ lemma normalizer_engel
   rw [mem_engel_iff]
   use n + 1
   rw [pow_succ]; rw [Module.End.mul_apply]
- 
+  exact hn
 
 Depends on / 依赖: Module, Module.End.mul_apply, le_antisymm, le_normalizer, lie_skew, mem_engel_iff, mem_normalizer_iff, mul_apply, neg_mem_iff, pow_succ, self_mem_engel, specialize
 -/
@@ -242,7 +252,35 @@ lemma normalizer_eq_self_of_engel_le
   have aux₁ : forall n in N, ⁅x, n⁆ in H := by
     intro n hn
     rw [mem_normalizer_iff] at hn
-    specialize hn x (h (self_
+    specialize hn x (h (self_mem_engel R x))
+    rwa [← lie_skew, neg_mem_iff (G := L)]
+  have aux₂ : forall n in N, ⁅x, n⁆ in N := fun n hn => le_normalizer H (aux₁ _ hn)
+  let dx : N ->ₗ[R] N := (ad R L x).restrict aux₂
+  obtain ⟨k, hk⟩ : exists a, forall b >= a, Codisjoint (LinearMap.ker (dx ^ b)) (LinearMap.range (dx ^ b)) :=
+eventually_atTop.mp dx.eventually_codisjoint_ker_pow_range_pow
+  specialize hk (k + 1) (Nat.le_add_right k 1)
+  rw [← Submodule.map_subtype_top N.toSubmodule]; rw [Submodule.map_le_iff_le_comap]
+  apply hk
+  · rw [← Submodule.map_le_iff_le_comap]
+    apply le_sup_of_le_left
+    rw [Submodule.map_le_iff_le_comap]
+    intro y hy
+    simp only [Submodule.mem_comap, mem_engel_iff, mem_toSubmodule]
+    use k + 1
+    clear hk; revert hy
+    generalize k + 1 = k
+    induction k generalizing y with
+    | zero =>
+      cases y; intro hy; simp only [pow_zero, Module.End.one_apply]
+      exact (AddSubmonoid.mk_eq_zero N.toAddSubmonoid).mp hy
+    | succ k ih => solve_by_elim
+  · rw [← Submodule.map_le_iff_le_comap]
+    apply le_sup_of_le_right
+    rw [Submodule.map_le_iff_le_comap]
+    rintro _ ⟨y, rfl⟩
+    simp only [pow_succ', Module.End.mul_apply, Submodule.mem_comap, mem_toSubmodule]
+    apply aux₁
+    simp only [Submodule.coe_subtype, SetLike.coe_mem]
 
 中文:
 引理 normalizer_eq_self_of_engel_le
@@ -255,7 +293,35 @@ lemma normalizer_eq_self_of_engel_le
   have aux₁ : forall n in N, ⁅x, n⁆ in H := by
     intro n hn
     rw [mem_normalizer_iff] at hn
-    specialize hn x (h (self_
+    specialize hn x (h (self_mem_engel R x))
+    rwa [← lie_skew, neg_mem_iff (G := L)]
+  have aux₂ : forall n in N, ⁅x, n⁆ in N := fun n hn => le_normalizer H (aux₁ _ hn)
+  let dx : N ->ₗ[R] N := (ad R L x).restrict aux₂
+  obtain ⟨k, hk⟩ : exists a, forall b >= a, Codisjoint (LinearMap.ker (dx ^ b)) (LinearMap.range (dx ^ b)) :=
+eventually_atTop.mp dx.eventually_codisjoint_ker_pow_range_pow
+  specialize hk (k + 1) (Nat.le_add_right k 1)
+  rw [← Submodule.map_subtype_top N.toSubmodule]; rw [Submodule.map_le_iff_le_comap]
+  apply hk
+  · rw [← Submodule.map_le_iff_le_comap]
+    apply le_sup_of_le_left
+    rw [Submodule.map_le_iff_le_comap]
+    intro y hy
+    simp only [Submodule.mem_comap, mem_engel_iff, mem_toSubmodule]
+    use k + 1
+    clear hk; revert hy
+    generalize k + 1 = k
+    induction k generalizing y with
+    | zero =>
+      cases y; intro hy; simp only [pow_zero, Module.End.one_apply]
+      exact (AddSubmonoid.mk_eq_zero N.toAddSubmonoid).mp hy
+    | succ k ih => solve_by_elim
+  · rw [← Submodule.map_le_iff_le_comap]
+    apply le_sup_of_le_right
+    rw [Submodule.map_le_iff_le_comap]
+    rintro _ ⟨y, rfl⟩
+    simp only [pow_succ', Module.End.mul_apply, Submodule.mem_comap, mem_toSubmodule]
+    apply aux₁
+    simp only [Submodule.coe_subtype, SetLike.coe_mem]
 
 Depends on / 依赖: H.toSubmodule, N.toSubmodule, le_antisymm, le_normalizer, lie_skew, mem_normalizer_iff, neg_mem_iff, normalizer, restrict, self_mem_engel, specialize, sup_eq_right, toSubmodule
 -/
@@ -315,7 +381,17 @@ lemma isNilpotent_of_forall_le_engel
     intro y hy
     rw [LinearMap.mem_ker] at hy ⊢
     exact Module.End.pow_map_zero_of_le hmn hy
-  obtain ⟨n, hn⟩ := mo
+  obtain ⟨n, hn⟩ := monotone_stabilizes_iff_noetherian.mpr inferInstance K
+  use n
+  ext y
+  rw [coe_ad_pow]
+  specialize h x x.2 y.2
+  rw [mem_engel_iff] at h
+  obtain ⟨m, hm⟩ := h
+  obtain (hmn | hmn) : m <= n ∨ n <= m := le_total m n
+  · exact Module.End.pow_map_zero_of_le hmn hm
+  · have : forall k : Nat, ((ad R L) x ^ k) y = 0 ↔ y in K k := by simp [K, Subtype.ext_iff, coe_ad_pow]
+    rwa [this, ← hn m hmn, ← this] at hm
 
 中文:
 引理 isNilpotent_of_对任意_le_engel
@@ -329,7 +405,17 @@ lemma isNilpotent_of_forall_le_engel
     intro y hy
     rw [LinearMap.mem_ker] at hy ⊢
     exact Module.End.pow_map_zero_of_le hmn hy
-  obtain ⟨n, hn⟩ := mo
+  obtain ⟨n, hn⟩ := monotone_stabilizes_iff_noetherian.mpr inferInstance K
+  use n
+  ext y
+  rw [coe_ad_pow]
+  specialize h x x.2 y.2
+  rw [mem_engel_iff] at h
+  obtain ⟨m, hm⟩ := h
+  obtain (hmn | hmn) : m <= n ∨ n <= m := le_total m n
+  · exact Module.End.pow_map_zero_of_le hmn hm
+  · have : forall k : Nat, ((ad R L) x ^ k) y = 0 ↔ y in K k := by simp [K, Subtype.ext_iff, coe_ad_pow]
+    rwa [this, ← hn m hmn, ← this] at hm
 
 Depends on / 依赖: LieAlgebra, LieAlgebra.isNilpotent_iff_forall, LinearMap, LinearMap.ker, LinearMap.mem_ker, Module, Module.End.pow_ma, Module.End.pow_map_zero_of_le, Submodule, coe_ad_pow, isNilpotent_iff_forall, le_total, mem_engel_iff, mem_ker, monotone_stabilizes_iff_noetherian, monotone_stabilizes_iff_noetherian.mpr, pow_ma, pow_map_zero_of_le, specialize
 -/

@@ -56,7 +56,8 @@ definition tensorObjMap
     (by
       intro m₁ m₂ m₂'
       dsimp +instances
-      
+      rw [map_add]; rw [TensorProduct.tmul_add])
+    (by intro a m₁ m₂; dsimp; erw [M₂.map_smul, TensorProduct.tmul_smul (r := R.map f a)]; rfl)
 
 中文:
 定义 tensorObjMap
@@ -70,7 +71,8 @@ definition tensorObjMap
     (by
       intro m₁ m₂ m₂'
       dsimp +instances
-      
+      rw [map_add]; rw [TensorProduct.tmul_add])
+    (by intro a m₁ m₂; dsimp; erw [M₂.map_smul, TensorProduct.tmul_smul (r := R.map f a)]; rfl)
 
 Depends on / 依赖: ModuleCat, ModuleCat.MonoidalCategory.tensorLift, MonoidalCategory, R.map, TensorProduct, TensorProduct.add_tmul, TensorProduct.tmul_add, TensorProduct.tmul_smul, add_tmul, instances, map_add, map_smul, tensorLift, tmul_add, tmul_smul
 -/
@@ -105,7 +107,10 @@ definition tensorObj
     dsimp [tensorObjMap]
     simp
     rfl) -- `ModuleCat.restrictScalarsId'App_inv_apply` doesn't get picked up due to type mismatch
-  map_comp f g := ModuleCat.MonoidalCa
+  map_comp f g := ModuleCat.MonoidalCategory.tensor_ext (by
+    intro m₁ m₂
+    dsimp [tensorObjMap]
+    simp +instances)
 
 中文:
 定义 tensorObj
@@ -117,7 +122,10 @@ definition tensorObj
     dsimp [tensorObjMap]
     simp
     rfl) -- `ModuleCat.restrictScalarsId'App_inv_apply` doesn't get picked up due to type mismatch
-  map_comp f g := ModuleCat.MonoidalCa
+  map_comp f g := ModuleCat.MonoidalCategory.tensor_ext (by
+    intro m₁ m₂
+    dsimp [tensorObjMap]
+    simp +instances)
 
 Depends on / 依赖: otimes
 -/
@@ -175,7 +183,8 @@ definition tensorHom
     rw [tensorObj_map_tmul]
     -- Need `erw` because of the type mismatch in `map` and the tensor product.
     erw [ModuleCat.MonoidalCategory.tensorHom_tmul, tensorObj_map_tmul]
-    rw 
+    rw [naturality_apply]; rw [naturality_apply]
+    simp)
 
 中文:
 定义 tensorHom
@@ -186,7 +195,8 @@ definition tensorHom
     rw [tensorObj_map_tmul]
     -- Need `erw` because of the type mismatch in `map` and the tensor product.
     erw [ModuleCat.MonoidalCategory.tensorHom_tmul, tensorObj_map_tmul]
-    rw 
+    rw [naturality_apply]; rw [naturality_apply]
+    simp)
 
 Depends on / 依赖: f.app, g.app
 -/
@@ -218,7 +228,16 @@ instance monoidalCategoryStruct
   tensorUnit := unit _
   associator M₁ M₂ M₃ := isoMk (fun _ => α_ _ _ _)
     (fun _ _ _ => ModuleCat.MonoidalCategory.tensor_ext₃' (by intros; rfl))
-  leftUnitor M := Iso.symm (isoM
+  leftUnitor M := Iso.symm (isoMk (fun _ => (fun_ _).symm) (fun X Y f => by
+    ext m
+    dsimp [CommRingCat.forgetToRingCat_obj]
+    erw [leftUnitor_inv_apply, leftUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
+    rfl))
+  rightUnitor M := Iso.symm (isoMk (fun _ => (ρ_ _).symm) (fun X Y f => by
+    ext m
+    dsimp [CommRingCat.forgetToRingCat_obj]
+    erw [rightUnitor_inv_apply, rightUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
+    rfl))
 
 中文:
 实例 monoidalCategoryStruct
@@ -230,7 +249,16 @@ instance monoidalCategoryStruct
   tensorUnit := unit _
   associator M₁ M₂ M₃ := isoMk (fun _ => α_ _ _ _)
     (fun _ _ _ => ModuleCat.MonoidalCategory.tensor_ext₃' (by intros; rfl))
-  leftUnitor M := Iso.symm (isoM
+  leftUnitor M := Iso.symm (isoMk (fun _ => (fun_ _).symm) (fun X Y f => by
+    ext m
+    dsimp [CommRingCat.forgetToRingCat_obj]
+    erw [leftUnitor_inv_apply, leftUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
+    rfl))
+  rightUnitor M := Iso.symm (isoMk (fun _ => (ρ_ _).symm) (fun X Y f => by
+    ext m
+    dsimp [CommRingCat.forgetToRingCat_obj]
+    erw [rightUnitor_inv_apply, rightUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
+    rfl))
 
 Depends on / 依赖: tensorObj
 -/
@@ -267,7 +295,13 @@ instance monoidalCategory
     ext1 X
     apply MonoidalCategory.whiskerLeft_id (C := ModuleCat (R.obj X))
   id_whiskerRight _ _ := by
-
+    ext1 X
+    apply MonoidalCategory.id_whiskerRight (C := ModuleCat (R.obj X))
+  associator_naturality _ _ _ := by ext1; apply associator_naturality
+  leftUnitor_naturality _ := by ext1; apply leftUnitor_naturality
+  rightUnitor_naturality _ := by ext1; apply rightUnitor_naturality
+  pentagon _ _ _ _ := by ext1; apply pentagon
+  triangle _ _ := by ext1; apply triangle
 
 中文:
 实例 monoidalCategory
@@ -279,7 +313,13 @@ instance monoidalCategory
     ext1 X
     apply MonoidalCategory.whiskerLeft_id (C := ModuleCat (R.obj X))
   id_whiskerRight _ _ := by
-
+    ext1 X
+    apply MonoidalCategory.id_whiskerRight (C := ModuleCat (R.obj X))
+  associator_naturality _ _ _ := by ext1; apply associator_naturality
+  leftUnitor_naturality _ := by ext1; apply leftUnitor_naturality
+  rightUnitor_naturality _ := by ext1; apply rightUnitor_naturality
+  pentagon _ _ _ _ := by ext1; apply pentagon
+  triangle _ _ := by ext1; apply triangle
 
 Depends on / 依赖: ModuleCat, MonoidalCategory, MonoidalCategory.id_whiskerRight, MonoidalCategory.whiskerLeft_id, R.obj, associator_naturality, id_tensorHom_id, id_whiskerRight, leftUnitor_naturality, rightUnitor, tensorHom_comp_tensorHom, tensorHom_def, whiskerLeft_id
 -/
@@ -313,7 +353,18 @@ instance symmetricCategory
   braiding_naturality_right _ _ _ _ := by
     ext : 1
     exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
-  braiding_naturality_left _ _
+  braiding_naturality_left _ _ := by
+    ext : 1
+    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
+  hexagon_forward _ _ _ := by
+    ext : 1
+    apply hexagon_forward (C := ModuleCat (R.obj _))
+  hexagon_reverse _ _ _ := by
+    ext : 1
+    apply hexagon_reverse (C := ModuleCat (R.obj _))
+  symmetry _ _ := by
+    ext : 1
+    apply SymmetricCategory.symmetry (C := ModuleCat (R.obj _))
 
 中文:
 实例 symmetricCategory
@@ -323,7 +374,18 @@ instance symmetricCategory
   braiding_naturality_right _ _ _ _ := by
     ext : 1
     exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
-  braiding_naturality_left _ _
+  braiding_naturality_left _ _ := by
+    ext : 1
+    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
+  hexagon_forward _ _ _ := by
+    ext : 1
+    apply hexagon_forward (C := ModuleCat (R.obj _))
+  hexagon_reverse _ _ _ := by
+    ext : 1
+    apply hexagon_reverse (C := ModuleCat (R.obj _))
+  symmetry _ _ := by
+    ext : 1
+    apply SymmetricCategory.symmetry (C := ModuleCat (R.obj _))
 
 Depends on / 依赖: ModuleCat, ModuleCat.MonoidalCategory.tensor_ext, MonoidalCategory, R.obj, braiding, braiding_naturality_left, braiding_naturality_right, hexagon_forward, hexagon_reverse, tensor_ext
 -/

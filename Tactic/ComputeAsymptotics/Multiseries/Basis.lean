@@ -157,7 +157,12 @@ theorem compare_left_aux
   · simp at hg
   simp only [List.concat_eq_append, List.mem_append, List.mem_cons, List.not_mem_nil, or_false,
     List.getLast?_append, List.getLast?_singleton, Option.some_or, Option.some.injEq,
-    forall_eq'
+    forall_eq'] at hg h_comp
+  rcases hg with hg | hg
+  · simp only [WellFormedBasis, List.concat_eq_append, List.mem_append, List.mem_cons,
+      List.not_mem_nil, or_false] at h
+    exact h_comp.trans (by grind)
+  · grind
 
 中文:
 定理 compare_left_aux
@@ -168,7 +173,12 @@ theorem compare_left_aux
   · simp at hg
   simp only [List.concat_eq_append, List.mem_append, List.mem_cons, List.not_mem_nil, or_false,
     List.getLast?_append, List.getLast?_singleton, Option.some_or, Option.some.injEq,
-    forall_eq'
+    forall_eq'] at hg h_comp
+  rcases hg with hg | hg
+  · simp only [WellFormedBasis, List.concat_eq_append, List.mem_append, List.mem_cons,
+      List.not_mem_nil, or_false] at h
+    exact h_comp.trans (by grind)
+  · grind
 
 Depends on / 依赖: List.concat_eq_append, List.getLast, List.mem_append, List.mem_cons, List.not_mem_nil, Option.some.injEq, Option.some_or, WellFormedBasis, _append, _singleton, basis.eq_nil_or_concat, basis_begin, basis_end, concat_eq_append, eq_nil_or_concat, forall_eq, getLast, h_comp, h_comp.trans, mem_append
 -/
@@ -203,7 +213,7 @@ theorem compare_right_aux
     rcases hg with hg | hg
     · simpa [hg]
     · simp only [WellFormedBasis, List.pairwise_cons, List.mem_cons, forall_eq_or_imp] at h
-
+      exact .trans (by grind) h_comp
 
 中文:
 定理 compare_right_aux
@@ -218,7 +228,7 @@ theorem compare_right_aux
     rcases hg with hg | hg
     · simpa [hg]
     · simp only [WellFormedBasis, List.pairwise_cons, List.mem_cons, forall_eq_or_imp] at h
-
+      exact .trans (by grind) h_comp
 
 Depends on / 依赖: List.mem_cons, List.pairwise_cons, WellFormedBasis, basis_hd, basis_tl, forall_eq_or_imp, h_comp, mem_cons, pairwise_cons, specialize
 -/
@@ -305,7 +315,7 @@ theorem insert
     (compare_right_aux (h.of_sublist (by simp)) hf_comp_right)
   apply compare_left_aux (h.of_sublist (by simp)) at hf_comp_left
   apply append (h.of_sublist (by simp)) this
-  exact fun g hg => compare_right_aux thi
+  exact fun g hg => compare_right_aux this (by grind)
 
 中文:
 定理 insert
@@ -315,7 +325,7 @@ theorem insert
     (compare_right_aux (h.of_sublist (by simp)) hf_comp_right)
   apply compare_left_aux (h.of_sublist (by simp)) at hf_comp_left
   apply append (h.of_sublist (by simp)) this
-  exact fun g hg => compare_right_aux thi
+  exact fun g hg => compare_right_aux this (by grind)
 
 Depends on / 依赖: WellFormedBasis, append, compare_left_aux, compare_right_aux, h.of_sublist, hf_comp_left, hf_comp_right, hf_tendsto, of_sublist
 -/
@@ -496,7 +506,14 @@ theorem pow_isLittleO_pow_of_log
   apply Tendsto.congr' (f₁ := Real.exp ∘ (b • Real.log ∘ g - a • Real.log ∘ f))
   · refine (hf.and (hg.eventually_gt_atTop 0)).mono (fun x ⟨hf, hg⟩ => ?_)
     simp [Real.exp_sub, mul_comm a, mul_comm b, Real.exp_mul, Real.exp_log hg, Real.exp_log hf]
-  apply
+  apply Real.tendsto_exp_atTop.comp
+  have h' : (b • Real.log ∘ g - a • Real.log ∘ f) ~[atTop] b • Real.log ∘ g := by
+    replace h : (a • Real.log ∘ f) =o[atTop] (b • Real.log ∘ g) :=
+      (h.const_mul_left a).const_mul_right (hb.ne')
+    grind only [IsEquivalent.sub_isLittleO, IsEquivalent.refl]
+  rw [h'.tendsto_atTop_iff]
+  apply Filter.Tendsto.const_mul_atTop hb
+  apply Real.tendsto_log_atTop.comp hg
 
 中文:
 定理 pow_isLittleO_pow_of_log
@@ -506,7 +523,14 @@ theorem pow_isLittleO_pow_of_log
   apply Tendsto.congr' (f₁ := Real.exp ∘ (b • Real.log ∘ g - a • Real.log ∘ f))
   · refine (hf.and (hg.eventually_gt_atTop 0)).mono (fun x ⟨hf, hg⟩ => ?_)
     simp [Real.exp_sub, mul_comm a, mul_comm b, Real.exp_mul, Real.exp_log hg, Real.exp_log hf]
-  apply
+  apply Real.tendsto_exp_atTop.comp
+  have h' : (b • Real.log ∘ g - a • Real.log ∘ f) ~[atTop] b • Real.log ∘ g := by
+    replace h : (a • Real.log ∘ f) =o[atTop] (b • Real.log ∘ g) :=
+      (h.const_mul_left a).const_mul_right (hb.ne')
+    grind only [IsEquivalent.sub_isLittleO, IsEquivalent.refl]
+  rw [h'.tendsto_atTop_iff]
+  apply Filter.Tendsto.const_mul_atTop hb
+  apply Real.tendsto_log_atTop.comp hg
 
 Depends on / 依赖: IsLittleO, IsLittleO.of_tendsto_div_atTop, Real.exp, Real.exp_log, Real.exp_mul, Real.exp_sub, Real.log, Real.tendsto_exp_atTop.comp, Tendsto, Tendsto.congr, const_mul_left, const_mul_right, eventually_gt_atTop, exp_log, exp_mul, exp_sub, h.const_mul_left, hf.and, hg.eventually_gt_atTop, mul_comm
 -/

@@ -396,7 +396,11 @@ theorem mapClusterPt_leftLim
     simp only [mem_map] at hs'
     apply mem_of_mem_nhdsWithin self_mem_Iic hs'
   rcases eq_or_neBot (𝓝[<] a) with h' | h'
-  · simp only [MapClusterPt, 
+  · simp only [MapClusterPt, ClusterPt, h', leftLim_eq_of_eq_bot, A]
+  by_cases! H : ¬ exists y, Tendsto f (𝓝[<] a) (𝓝 y)
+  · simp [MapClusterPt, ClusterPt, H, leftLim_eq_of_not_tendsto, A]
+  have : MapClusterPt (f.leftLim a) (𝓝[<] a) f := (tendsto_leftLim_of_tendsto H).mapClusterPt
+  exact MapClusterPt.mono this (nhdsWithin_mono _ Iio_subset_Iic_self)
 
 中文:
 定理 mapClusterPt_leftLim
@@ -408,7 +412,11 @@ theorem mapClusterPt_leftLim
     simp only [mem_map] at hs'
     apply mem_of_mem_nhdsWithin self_mem_Iic hs'
   rcases eq_or_neBot (𝓝[<] a) with h' | h'
-  · simp only [MapClusterPt, 
+  · simp only [MapClusterPt, ClusterPt, h', leftLim_eq_of_eq_bot, A]
+  by_cases! H : ¬ exists y, Tendsto f (𝓝[<] a) (𝓝 y)
+  · simp [MapClusterPt, ClusterPt, H, leftLim_eq_of_not_tendsto, A]
+  have : MapClusterPt (f.leftLim a) (𝓝[<] a) f := (tendsto_leftLim_of_tendsto H).mapClusterPt
+  exact MapClusterPt.mono this (nhdsWithin_mono _ Iio_subset_Iic_self)
 
 Depends on / 依赖: ClusterPt, MapClusterPt, Tendsto, eq_or_neBot, f.leftLim, inf_neBot_iff, inf_neBot_iff.mpr, leftLim, leftLim_eq_of_eq_bot, leftLim_eq_of_not_tendsto, mem_map, mem_of_mem_nhds, mem_of_mem_nhdsWithin, self_mem_Iic, tendsto_leftLim_
 -/
@@ -458,7 +466,20 @@ theorem continuousWithinAt_leftLim_Iic
   rw [ContinuousWithinAt]; rw [this]; rw [tendsto_sup]
   simp only [tendsto_pure_nhds, and_true]
   apply (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.2
-  rintro s ⟨s_mem, s_close
+  rintro s ⟨s_mem, s_closed⟩
+  rcases eq_or_neBot (𝓝[<] a) with h' | h'
+  · simp [h']
+  obtain ⟨b, hb⟩ : (Iio a).Nonempty := Filter.nonempty_of_mem (self_mem_nhdsWithin (a := a))
+  obtain ⟨u, au, hu⟩ : exists u, u < a ∧ Ioo u a subseteq {x | f x in s} := by
+    have := (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.1 h s ⟨s_mem, s_closed⟩
+    simpa using (mem_nhdsLT_iff_exists_Ioo_subset' hb).1 this
+  filter_upwards [Ioo_mem_nhdsLT au] with c hc
+  rcases eq_or_neBot (𝓝[<] c) with h'c | h'c
+  · simpa [h'c, leftLim_eq_of_eq_bot] using hu hc
+  by_cases! h''c : ¬ exists y, Tendsto f (𝓝[<] c) (𝓝 y)
+  · simpa [leftLim_eq_of_not_tendsto _ h''c] using hu hc
+  apply s_closed.mem_of_tendsto (tendsto_leftLim_of_tendsto h''c)
+  filter_upwards [Ioo_mem_nhdsLT_of_mem ⟨hc.1, hc.2.le⟩] with d hd using hu hd
 
 中文:
 定理 continuousWithinAt_leftLim_Iic
@@ -470,7 +491,20 @@ theorem continuousWithinAt_leftLim_Iic
   rw [ContinuousWithinAt]; rw [this]; rw [tendsto_sup]
   simp only [tendsto_pure_nhds, and_true]
   apply (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.2
-  rintro s ⟨s_mem, s_close
+  rintro s ⟨s_mem, s_closed⟩
+  rcases eq_or_neBot (𝓝[<] a) with h' | h'
+  · simp [h']
+  obtain ⟨b, hb⟩ : (Iio a).Nonempty := Filter.nonempty_of_mem (self_mem_nhdsWithin (a := a))
+  obtain ⟨u, au, hu⟩ : exists u, u < a ∧ Ioo u a subseteq {x | f x in s} := by
+    have := (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.1 h s ⟨s_mem, s_closed⟩
+    simpa using (mem_nhdsLT_iff_exists_Ioo_subset' hb).1 this
+  filter_upwards [Ioo_mem_nhdsLT au] with c hc
+  rcases eq_or_neBot (𝓝[<] c) with h'c | h'c
+  · simpa [h'c, leftLim_eq_of_eq_bot] using hu hc
+  by_cases! h''c : ¬ exists y, Tendsto f (𝓝[<] c) (𝓝 y)
+  · simpa [leftLim_eq_of_not_tendsto _ h''c] using hu hc
+  apply s_closed.mem_of_tendsto (tendsto_leftLim_of_tendsto h''c)
+  filter_upwards [Ioo_mem_nhdsLT_of_mem ⟨hc.1, hc.2.le⟩] with d hd using hu hd
 
 Depends on / 依赖: ContinuousWithinAt, Filter, Filter.nonempty_of_mem, Iio_union_Icc_eq_Iic, Nonempty, and_true, closed_nhds_basis, eq_or_neBot, f.leftLim, le_rfl, leftLim, nhdsWithin_union, nonempty_of_mem, s_closed, s_mem, self_mem_nhdsWithin, subseteq, tendsto_pure_nhds, tendsto_right_iff, tendsto_sup
 -/
@@ -570,7 +604,15 @@ theorem leftLim_rightLim
   apply (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.2
   rintro s ⟨s_mem, s_closed⟩
   obtain ⟨u, au, hu⟩ : exists u, u < a ∧ Ioo u a subseteq {x | f x in s} := by
-    
+    have := (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.1 h s ⟨s_mem, s_closed⟩
+    simpa using (mem_nhdsLT_iff_exists_Ioo_subset' hb).1 this
+  filter_upwards [Ioo_mem_nhdsLT au] with c hc
+  rcases eq_or_neBot (𝓝[>] c) with h'c | h'c
+  · simpa [h'c, rightLim_eq_of_eq_bot] using hu hc
+  by_cases! h''c : ¬ exists y, Tendsto f (𝓝[>] c) (𝓝 y)
+  · simpa [rightLim_eq_of_not_tendsto _ h''c] using hu hc
+  apply s_closed.mem_of_tendsto (tendsto_rightLim_of_tendsto h''c)
+  filter_upwards [Ioo_mem_nhdsGT_of_mem ⟨hc.1.le, hc.2⟩] with d hd using hu hd
 
 中文:
 定理 leftLim_rightLim
@@ -581,7 +623,15 @@ theorem leftLim_rightLim
   apply (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.2
   rintro s ⟨s_mem, s_closed⟩
   obtain ⟨u, au, hu⟩ : exists u, u < a ∧ Ioo u a subseteq {x | f x in s} := by
-    
+    have := (closed_nhds_basis (f.leftLim a)).tendsto_right_iff.1 h s ⟨s_mem, s_closed⟩
+    simpa using (mem_nhdsLT_iff_exists_Ioo_subset' hb).1 this
+  filter_upwards [Ioo_mem_nhdsLT au] with c hc
+  rcases eq_or_neBot (𝓝[>] c) with h'c | h'c
+  · simpa [h'c, rightLim_eq_of_eq_bot] using hu hc
+  by_cases! h''c : ¬ exists y, Tendsto f (𝓝[>] c) (𝓝 y)
+  · simpa [rightLim_eq_of_not_tendsto _ h''c] using hu hc
+  apply s_closed.mem_of_tendsto (tendsto_rightLim_of_tendsto h''c)
+  filter_upwards [Ioo_mem_nhdsGT_of_mem ⟨hc.1.le, hc.2⟩] with d hd using hu hd
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, Ioo_mem_nhdsLT, Nonempty, closed_nhds_basis, eq_or_neBot, f.leftLim, filter_upwards, leftLim, leftLim_eq_of_tendsto, mem_nhdsLT_iff_exists_Ioo_subset, nonempty_of_mem, s_closed, s_mem, self_mem_nhdsWithin, subseteq, tendsto_right_iff
 -/
@@ -634,7 +684,10 @@ theorem tendsto_atTop_of_mapClusterPt
   apply (closed_nhds_basis b).tendsto_right_iff.2
   rintro s ⟨s_mem, s_closed⟩
   obtain ⟨u, hu⟩ : exists a, forall (b : α), a <= b -> MapClusterPt (g b) (𝓝 b) f ∧ f b in s := by
-    simpa [eventually_atTop] usin
+    simpa [eventually_atTop] using h'.and (h s_mem)
+  filter_upwards [Ioi_mem_atTop u] with a (ha : u < a)
+  apply s_closed.mem_of_mapClusterPt (hu a ha.le).1
+  filter_upwards [Ici_mem_nhds ha] with y hy using (hu y hy).2
 
 中文:
 定理 tendsto_atTop_of_mapClusterPt
@@ -644,7 +697,10 @@ theorem tendsto_atTop_of_mapClusterPt
   apply (closed_nhds_basis b).tendsto_right_iff.2
   rintro s ⟨s_mem, s_closed⟩
   obtain ⟨u, hu⟩ : exists a, forall (b : α), a <= b -> MapClusterPt (g b) (𝓝 b) f ∧ f b in s := by
-    simpa [eventually_atTop] usin
+    simpa [eventually_atTop] using h'.and (h s_mem)
+  filter_upwards [Ioi_mem_atTop u] with a (ha : u < a)
+  apply s_closed.mem_of_mapClusterPt (hu a ha.le).1
+  filter_upwards [Ici_mem_nhds ha] with y hy using (hu y hy).2
 
 Depends on / 依赖: Ici_mem_nhds, Ioi_mem_atTop, MapClusterPt, closed_nhds_basis, eventually_atTop, filter_eq_bot_of_isEmpty, filter_upwards, ha.le, isEmpty_or_nonempty, mem_of_mapClusterPt, s_closed, s_closed.mem_of_mapClusterPt, s_mem, tendsto_right_iff
 -/
@@ -717,7 +773,8 @@ theorem tendsto_rightLim_atTop_of_tendsto
     have : f.rightLim ⊤ = f ⊤ := rightLim_eq_of_isTop isTop_top
     rw [tendsto_nhds_unique h (tendsto_pure_nhds f ⊤)]; rw [← this]
     apply tendsto_pure_nhds
-  · apply tendsto_atTop_of_mapClusterPt h (Eventually.of_forall
+  · apply tendsto_atTop_of_mapClusterPt h (Eventually.of_forall (fun x => ?_))
+    exact MapClusterPt.mono (mapClusterPt_rightLim _ _) nhdsWithin_le_nhds
 
 中文:
 定理 tendsto_rightLim_atTop_of_tendsto
@@ -728,7 +785,8 @@ theorem tendsto_rightLim_atTop_of_tendsto
     have : f.rightLim ⊤ = f ⊤ := rightLim_eq_of_isTop isTop_top
     rw [tendsto_nhds_unique h (tendsto_pure_nhds f ⊤)]; rw [← this]
     apply tendsto_pure_nhds
-  · apply tendsto_atTop_of_mapClusterPt h (Eventually.of_forall
+  · apply tendsto_atTop_of_mapClusterPt h (Eventually.of_forall (fun x => ?_))
+    exact MapClusterPt.mono (mapClusterPt_rightLim _ _) nhdsWithin_le_nhds
 
 Depends on / 依赖: Eventually, Eventually.of_forall, MapClusterPt, MapClusterPt.mono, OrderTop, OrderTop.atTop_eq, atTop_eq, f.rightLim, isTop_top, mapClusterPt_rightLim, nhdsWithin_le_nhds, of_forall, rightLim, rightLim_eq_of_isTop, tendsto_atTop_of_mapClusterPt, tendsto_nhds_unique, tendsto_pure_nhds, topOrderOrNoTopOrder
 -/
@@ -845,7 +903,10 @@ theorem leftLim_le
   rw [leftLim_eq_sSup hf]
   refine csSup_le ?_ ?_
   · simp only [image_nonempty]
-    exact (forall_mem_nonempty_iff_neBot.2 h') _ self_
+    exact (forall_mem_nonempty_iff_neBot.2 h') _ self_mem_nhdsWithin
+  · simp only [mem_image, mem_Iio, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+    intro z hz
+    exact hf (hz.le.trans h)
 
 中文:
 定理 leftLim_le
@@ -859,7 +920,10 @@ theorem leftLim_le
   rw [leftLim_eq_sSup hf]
   refine csSup_le ?_ ?_
   · simp only [image_nonempty]
-    exact (forall_mem_nonempty_iff_neBot.2 h') _ self_
+    exact (forall_mem_nonempty_iff_neBot.2 h') _ self_mem_nhdsWithin
+  · simp only [mem_image, mem_Iio, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+    intro z hz
+    exact hf (hz.le.trans h)
 
 Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, TopologicalSpace, and_imp, csSup_le, eq_or_neBot, forall_exists_index, forall_mem_nonempty_iff_neBot, hz.le.trans, image_nonempty, leftLim, leftLim_eq_sSup, mem_Iio, mem_image, self_mem_nhdsWithin, topology
 -/
@@ -891,7 +955,12 @@ theorem le_leftLim
     exact hf h.le
   rw [leftLim_eq_sSup hf]
   refine le_csSup ⟨f y, ?_⟩ (mem_image_of_mem _ h)
-  simp only [upperBounds, mem_image, mem
+  simp only [upperBounds, mem_image, mem_Iio, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂, mem_ofPred_eq]
+  intro z hz
+  exact hf hz.le
+
+@[gcongr, mono]
 
 中文:
 定理 le_leftLim
@@ -905,7 +974,12 @@ theorem le_leftLim
     exact hf h.le
   rw [leftLim_eq_sSup hf]
   refine le_csSup ⟨f y, ?_⟩ (mem_image_of_mem _ h)
-  simp only [upperBounds, mem_image, mem
+  simp only [upperBounds, mem_image, mem_Iio, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂, mem_ofPred_eq]
+  intro z hz
+  exact hf hz.le
+
+@[gcongr, mono]
 
 Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, TopologicalSpace, and_imp, eq_or_neBot, forall_exists_index, h.le, hz.le, le_csSup, leftLim_eq_of_eq_bot, leftLim_eq_sSup, mem_Iio, mem_image, mem_image_of_mem, mem_ofPred_eq, topology, upperBounds
 -/
@@ -1044,7 +1118,8 @@ theorem rightLim_le_leftLim
   · simpa [leftLim, h'] using rightLim_le hf h
   obtain ⟨a, ⟨xa, ay⟩⟩ : (Ioo x y).Nonempty := nonempty_of_mem (Ioo_mem_nhdsLT h)
   calc
-    rightLim f x <= f a := hf.ri
+    rightLim f x <= f a := hf.rightLim_le xa
+    _ <= leftLim f y := hf.le_leftLim ay
 
 中文:
 定理 rightLim_le_leftLim
@@ -1057,7 +1132,8 @@ theorem rightLim_le_leftLim
   · simpa [leftLim, h'] using rightLim_le hf h
   obtain ⟨a, ⟨xa, ay⟩⟩ : (Ioo x y).Nonempty := nonempty_of_mem (Ioo_mem_nhdsLT h)
   calc
-    rightLim f x <= f a := hf.ri
+    rightLim f x <= f a := hf.rightLim_le xa
+    _ <= leftLim f y := hf.le_leftLim ay
 
 Depends on / 依赖: Ioo_mem_nhdsLT, Nonempty, OrderTopology, Preorder, Preorder.topology, TopologicalSpace, eq_or_neBot, hf.le_leftLim, hf.rightLim_le, le_leftLim, leftLim, nonempty_of_mem, rightLim, rightLim_le, topology
 -/
@@ -1219,7 +1295,14 @@ theorem continuousAt_iff_leftLim_eq_rightLim
     have B : rightLim f x = f x :=
       hf.continuousWithinAt_Ioi_iff_rightLim_eq.1 h.continuousWithinAt
     exact A.trans B.symm
-  · have h' : leftLim f x 
+  · have h' : leftLim f x = f x := by
+      apply le_antisymm (leftLim_le hf (le_refl _))
+      rw [h]
+      exact le_rightLim hf (le_refl _)
+    refine continuousAt_iff_continuous_left'_right'.2 ⟨?_, ?_⟩
+    · exact hf.continuousWithinAt_Iio_iff_leftLim_eq.2 h'
+    · rw [h] at h'
+      exact hf.continuousWithinAt_Ioi_iff_rightLim_eq.2 h'
 
 中文:
 定理 continuousAt_iff_leftLim_eq_rightLim
@@ -1231,7 +1314,14 @@ theorem continuousAt_iff_leftLim_eq_rightLim
     have B : rightLim f x = f x :=
       hf.continuousWithinAt_Ioi_iff_rightLim_eq.1 h.continuousWithinAt
     exact A.trans B.symm
-  · have h' : leftLim f x 
+  · have h' : leftLim f x = f x := by
+      apply le_antisymm (leftLim_le hf (le_refl _))
+      rw [h]
+      exact le_rightLim hf (le_refl _)
+    refine continuousAt_iff_continuous_left'_right'.2 ⟨?_, ?_⟩
+    · exact hf.continuousWithinAt_Iio_iff_leftLim_eq.2 h'
+    · rw [h] at h'
+      exact hf.continuousWithinAt_Ioi_iff_rightLim_eq.2 h'
 
 Depends on / 依赖: A.trans, B.symm, _right, continuousAt_iff_continuous_left, continuousWithinAt, continuousWithinAt_Iio_iff_leftLim_eq, continuousWithinAt_Ioi_iff_rightLim_eq, h.continuousWithinAt, hf.continuousWithinAt_Iio_iff_leftLim_eq, hf.continuousWithinAt_Ioi_iff_rightLim_eq, le_antisymm, le_refl, le_rightLim, leftLim, leftLim_le, rightLim
 -/

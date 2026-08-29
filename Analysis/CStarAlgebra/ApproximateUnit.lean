@@ -61,7 +61,14 @@ lemma CFC.monotoneOn_one_sub_one_add_inv
   rw [← inr_le_iff ..]; rw [nnreal_cfcₙ_eq_cfc_inr a _]; rw [nnreal_cfcₙ_eq_cfc_inr b _]
   rw [← inr_le_iff a b (.of_nonneg ha) (.of_nonneg hb)] at hab
   rw [← inr_nonneg_iff] at ha hb
-  have h_cfc_one_sub (c : A⁺¹) (hc : 0 <= c := by cfc_t
+  have h_cfc_one_sub (c : A⁺¹) (hc : 0 <= c := by cfc_tac) :
+      cfc (fun x : Real>=0 => 1 - (1 + x)⁻¹) c = 1 - cfc (·⁻¹ : Real>=0 -> Real>=0) (1 + c) := by
+    rw [cfc_tsub _ _ _ (fun x _ => by simp) (hg := by fun_prop (disch := intro _ _; positivity))]; rw [cfc_const_one Real>=0 c]; rw [cfc_comp' (·⁻¹) (1 + ·) c ?_]; rw [cfc_add ..]; rw [cfc_const_one Real>=0 c]; rw [cfc_id' Real>=0 c]
+    exact continuousOn_id.inv₀ (Set.forall_mem_image.mpr fun x _ => by dsimp only [id]; positivity)
+  rw [h_cfc_one_sub (a : A⁺¹)]; rw [h_cfc_one_sub (b : A⁺¹)]
+  gcongr
+  rw [← CFC.rpow_neg_one_eq_cfc_inv]; rw [← CFC.rpow_neg_one_eq_cfc_inv]
+  exact rpow_neg_one_le_rpow_neg_one (by gcongr)
 
 中文:
 引理 CFC.monotoneOn_one_sub_one_add_inv
@@ -71,7 +78,14 @@ lemma CFC.monotoneOn_one_sub_one_add_inv
   rw [← inr_le_iff ..]; rw [nnreal_cfcₙ_eq_cfc_inr a _]; rw [nnreal_cfcₙ_eq_cfc_inr b _]
   rw [← inr_le_iff a b (.of_nonneg ha) (.of_nonneg hb)] at hab
   rw [← inr_nonneg_iff] at ha hb
-  have h_cfc_one_sub (c : A⁺¹) (hc : 0 <= c := by cfc_t
+  have h_cfc_one_sub (c : A⁺¹) (hc : 0 <= c := by cfc_tac) :
+      cfc (fun x : Real>=0 => 1 - (1 + x)⁻¹) c = 1 - cfc (·⁻¹ : Real>=0 -> Real>=0) (1 + c) := by
+    rw [cfc_tsub _ _ _ (fun x _ => by simp) (hg := by fun_prop (disch := intro _ _; positivity))]; rw [cfc_const_one Real>=0 c]; rw [cfc_comp' (·⁻¹) (1 + ·) c ?_]; rw [cfc_add ..]; rw [cfc_const_one Real>=0 c]; rw [cfc_id' Real>=0 c]
+    exact continuousOn_id.inv₀ (Set.forall_mem_image.mpr fun x _ => by dsimp only [id]; positivity)
+  rw [h_cfc_one_sub (a : A⁺¹)]; rw [h_cfc_one_sub (b : A⁺¹)]
+  gcongr
+  rw [← CFC.rpow_neg_one_eq_cfc_inv]; rw [← CFC.rpow_neg_one_eq_cfc_inv]
+  exact rpow_neg_one_le_rpow_neg_one (by gcongr)
 
 Depends on / 依赖: Set.mem_Ici, cfc_const_one, cfc_tac, cfc_tsub, fun_prop, h_cfc_one_sub, inr_le_iff, inr_nonneg_iff, mem_Ici, of_nonneg
 -/
@@ -104,7 +118,14 @@ lemma CFC.monotoneOn_one_sub_one_add_inv_real
           intro x hx
           have hx' : 0 <= x := by grind
           simp [hx']
-    _ <= cfcₙ (fun x : Real>=0 => 1 - (
+    _ <= cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) b :=
+          CFC.monotoneOn_one_sub_one_add_inv ha hb hab
+    _ = cfcₙ (fun x : Real => 1 - (1 + x)⁻¹) b := by
+          rw [cfcₙ_nnreal_eq_real _ _ hb]
+          refine cfcₙ_congr ?_
+          intro x hx
+          have hx' : 0 <= x := by grind
+          simp [hx']
 
 中文:
 引理 CFC.monotoneOn_one_sub_one_add_inv_real
@@ -116,7 +137,14 @@ lemma CFC.monotoneOn_one_sub_one_add_inv_real
           intro x hx
           have hx' : 0 <= x := by grind
           simp [hx']
-    _ <= cfcₙ (fun x : Real>=0 => 1 - (
+    _ <= cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) b :=
+          CFC.monotoneOn_one_sub_one_add_inv ha hb hab
+    _ = cfcₙ (fun x : Real => 1 - (1 + x)⁻¹) b := by
+          rw [cfcₙ_nnreal_eq_real _ _ hb]
+          refine cfcₙ_congr ?_
+          intro x hx
+          have hx' : 0 <= x := by grind
+          simp [hx']
 
 Depends on / 依赖: CFC.monotoneOn_one_sub_one_add_inv, monotoneOn_one_sub_one_add_inv
 -/
@@ -152,7 +180,9 @@ lemma Set.InvOn.one_sub_one_add_inv
   constructor <;> intro x (hx : x < 1)
   · have : 0 < 1 - x := tsub_pos_of_lt hx
     simp [field, tsub_add_cancel_of_le hx.le]
-  · simp [mul_assoc, ← mul_inv, mul_tsub
+  · simp [mul_assoc, ← mul_inv, mul_tsub]
+    field_simp
+    simp
 
 中文:
 引理 集合.InvOn.one_sub_one_add_inv
@@ -165,7 +195,9 @@ lemma Set.InvOn.one_sub_one_add_inv
   constructor <;> intro x (hx : x < 1)
   · have : 0 < 1 - x := tsub_pos_of_lt hx
     simp [field, tsub_add_cancel_of_le hx.le]
-  · simp [mul_assoc, ← mul_inv, mul_tsub
+  · simp [mul_assoc, ← mul_inv, mul_tsub]
+    field_simp
+    simp
 
 Depends on / 依赖: hx.le, mul_assoc, mul_inv, mul_tsub, tsub_add_cancel_of_le, tsub_pos_of_lt
 -/
@@ -212,7 +244,28 @@ lemma CStarAlgebra.directedOn_nonneg_ball
   suffices forall a b : A, 0 <= a -> 0 <= b -> ‖a‖ < 1 -> ‖b‖ < 1 ->
       a <= cfcₙ f (cfcₙ g a + cfcₙ g b) by
     rintro a ⟨(ha₁ : 0 <= a), ha₂⟩ b ⟨(hb₁ : 0 <= b), hb₂⟩
-    simp only [M
+    simp only [Metric.mem_ball, dist_zero_right] at ha₂ hb₂
+    refine ⟨cfcₙ f (cfcₙ g a + cfcₙ g b), ⟨by simp, ?_⟩, ?_, ?_⟩
+    · simpa only [Metric.mem_ball, dist_zero_right] using norm_cfcₙ_one_sub_one_add_inv_lt_one _
+    · exact this a b ha₁ hb₁ ha₂ hb₂
+    · exact add_comm (cfcₙ g a) (cfcₙ g b) ▸ this b a hb₁ ha₁ hb₂ ha₂
+  rintro a b ha₁ - ha₂ -
+  calc
+    a = cfcₙ (f ∘ g) a := by
+      conv_lhs => rw [← cfcₙ_id Real>=0 a]
+      refine cfcₙ_congr (Set.InvOn.one_sub_one_add_inv.1.eqOn.symm.mono fun x hx => ?_)
+      exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
+    _ = cfcₙ f (cfcₙ g a) := by
+      rw [cfcₙ_comp f g a ?_ (by simp [f]; rw [tsub_self]) ?_ (by simp [g]) ha₁]
+      · fun_prop (disch := intro _ _; positivity)
+      · have (x) (hx : x in σₙ Real>=0 a) : 1 - x != 0 := by
+.ne' refine tsub_pos_of_lt ?_
+          exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
+        fun_prop
+    _ <= cfcₙ f (cfcₙ g a + cfcₙ g b) := by
+      have hab' : cfcₙ g a <= cfcₙ g a + cfcₙ g b := le_add_of_nonneg_right cfcₙ_nonneg_of_predicate
+      exact CFC.monotoneOn_one_sub_one_add_inv cfcₙ_nonneg_of_predicate
+        (cfcₙ_nonneg_of_predicate.trans hab') hab'
 
 中文:
 引理 CStar代数.directedOn_nonneg_ball
@@ -222,7 +275,28 @@ lemma CStarAlgebra.directedOn_nonneg_ball
   suffices forall a b : A, 0 <= a -> 0 <= b -> ‖a‖ < 1 -> ‖b‖ < 1 ->
       a <= cfcₙ f (cfcₙ g a + cfcₙ g b) by
     rintro a ⟨(ha₁ : 0 <= a), ha₂⟩ b ⟨(hb₁ : 0 <= b), hb₂⟩
-    simp only [M
+    simp only [Metric.mem_ball, dist_zero_right] at ha₂ hb₂
+    refine ⟨cfcₙ f (cfcₙ g a + cfcₙ g b), ⟨by simp, ?_⟩, ?_, ?_⟩
+    · simpa only [Metric.mem_ball, dist_zero_right] using norm_cfcₙ_one_sub_one_add_inv_lt_one _
+    · exact this a b ha₁ hb₁ ha₂ hb₂
+    · exact add_comm (cfcₙ g a) (cfcₙ g b) ▸ this b a hb₁ ha₁ hb₂ ha₂
+  rintro a b ha₁ - ha₂ -
+  calc
+    a = cfcₙ (f ∘ g) a := by
+      conv_lhs => rw [← cfcₙ_id Real>=0 a]
+      refine cfcₙ_congr (Set.InvOn.one_sub_one_add_inv.1.eqOn.symm.mono fun x hx => ?_)
+      exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
+    _ = cfcₙ f (cfcₙ g a) := by
+      rw [cfcₙ_comp f g a ?_ (by simp [f]; rw [tsub_self]) ?_ (by simp [g]) ha₁]
+      · fun_prop (disch := intro _ _; positivity)
+      · have (x) (hx : x in σₙ Real>=0 a) : 1 - x != 0 := by
+.ne' refine tsub_pos_of_lt ?_
+          exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
+        fun_prop
+    _ <= cfcₙ f (cfcₙ g a + cfcₙ g b) := by
+      have hab' : cfcₙ g a <= cfcₙ g a + cfcₙ g b := le_add_of_nonneg_right cfcₙ_nonneg_of_predicate
+      exact CFC.monotoneOn_one_sub_one_add_inv cfcₙ_nonneg_of_predicate
+        (cfcₙ_nonneg_of_predicate.trans hab') hab'
 
 Depends on / 依赖: Metric, Metric.mem_ball, dist_zero_right, mem_ball
 -/
@@ -411,7 +485,9 @@ lemma tendsto_mul_right_of_forall_nonneg_tendsto
   simp_rw [Finset.mul_sum]
   refine tendsto_finsetSum _ fun i _ => ?_
   simp_rw [mul_smul_comm]
-exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simp
+exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simpa using (x i).2.2
+
+omit [PartialOrder A] in
 
 中文:
 引理 tendsto_mul_right_of_对任意_nonneg_tendsto
@@ -422,7 +498,9 @@ exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simp
   simp_rw [Finset.mul_sum]
   refine tendsto_finsetSum _ fun i _ => ?_
   simp_rw [mul_smul_comm]
-exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simp
+exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simpa using (x i).2.2
+
+omit [PartialOrder A] in
 
 Depends on / 依赖: Finset, Finset.mul_sum, mem_span_set, mul_smul_comm, mul_sum, simp_rw, span_nonneg_inter_unitBall, tendsto_const_nhds, tendsto_const_nhds.smul, tendsto_finsetSum
 -/
@@ -542,7 +620,15 @@ lemma nnnorm_sub_mul_self_le
   rw [← sqrt_sq c]; rw [le_sqrt_iff_sq_le]; rw [← sub_mul]; rw [sq]; rw [← CStarRing.nnnorm_star_mul_self]
   simp only [star_mul, star_sub, star_one]
   have hy₀ : y in Set.Icc 0 1 := ⟨hx₀.trans hy.1, hy.2⟩
-  have hy' : 1 - y in Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_righ
+  have hy' : 1 - y in Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_right.mpr hy₀
+  rw [hy₀.1.star_eq]; rw [← mul_assoc]; rw [mul_assoc (star _)]; rw [← sq]
+  refine nnnorm_le_nnnorm_of_nonneg_of_le (star_left_conjugate_nonneg (pow_nonneg hy'.1 2) _) ?_
+.trans h
+  refine star_left_conjugate_le_conjugate ?_ _
+  trans (1 - y)
+  · simpa using pow_antitone hy'.1 hy'.2 one_le_two
+  · gcongr
+    exact hy.1
 
 中文:
 引理 nnnorm_sub_mul_self_le
@@ -552,7 +638,15 @@ lemma nnnorm_sub_mul_self_le
   rw [← sqrt_sq c]; rw [le_sqrt_iff_sq_le]; rw [← sub_mul]; rw [sq]; rw [← CStarRing.nnnorm_star_mul_self]
   simp only [star_mul, star_sub, star_one]
   have hy₀ : y in Set.Icc 0 1 := ⟨hx₀.trans hy.1, hy.2⟩
-  have hy' : 1 - y in Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_righ
+  have hy' : 1 - y in Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_right.mpr hy₀
+  rw [hy₀.1.star_eq]; rw [← mul_assoc]; rw [mul_assoc (star _)]; rw [← sq]
+  refine nnnorm_le_nnnorm_of_nonneg_of_le (star_left_conjugate_nonneg (pow_nonneg hy'.1 2) _) ?_
+.trans h
+  refine star_left_conjugate_le_conjugate ?_ _
+  trans (1 - y)
+  · simpa using pow_antitone hy'.1 hy'.2 one_le_two
+  · gcongr
+    exact hy.1
 
 Depends on / 依赖: CStarRing, CStarRing.nnnorm_star_mul_self, Set.Icc, Set.sub_mem_Icc_zero_iff_right.mpr, le_sqrt_iff_sq_le, mul_assoc, nnnorm_le_nnnorm_of_nonneg_of_le, nnnorm_star_mul_self, nth_rw, one_mul, pow_nonneg, sqrt_sq, star_eq, star_left_conjug, star_left_conjugate_nonneg, star_mul, star_one, star_sub, sub_mem_Icc_zero_iff_right, sub_mul
 -/
@@ -608,7 +702,7 @@ lemma norm_sub_mul_self_le_of_inr
   · rwa [inr_nonneg_iff]
   · have hy := hx₀.trans hxy
     rw [Set.mem_Icc]; rw [inr_le_iff _ _ hx₀.isSelfAdjoint hy.isSelfAdjoint]; rw [← norm_le_one_iff_of_nonneg _]; rw [norm_inr]
-    exact ⟨
+    exact ⟨hxy, hy₁⟩
 
 中文:
 引理 norm_sub_mul_self_le_of_inr
@@ -619,7 +713,7 @@ lemma norm_sub_mul_self_le_of_inr
   · rwa [inr_nonneg_iff]
   · have hy := hx₀.trans hxy
     rw [Set.mem_Icc]; rw [inr_le_iff _ _ hx₀.isSelfAdjoint hy.isSelfAdjoint]; rw [← norm_le_one_iff_of_nonneg _]; rw [norm_inr]
-    exact ⟨
+    exact ⟨hxy, hy₁⟩
 
 Depends on / 依赖: Set.mem_Icc, hy.isSelfAdjoint, inr_le_iff, inr_mul, inr_nonneg_iff, inr_sub, isSelfAdjoint, mem_Icc, norm_inr, norm_le_one_iff_of_nonneg, norm_sub_mul_self_le
 -/
@@ -647,7 +741,44 @@ lemma tendsto_mul_right_approximateUnit
   lift ε to Real>=0 using hε.le
   rw [coe_pos] at hε
   refine ⟨cfcₙ (fun y : Real>=0 => 1 - (1 + y)⁻¹) (ε⁻¹ ^ 2 • m),
-    ⟨cfcₙ_nonneg_of_
+    ⟨cfcₙ_nonneg_of_predicate, norm_cfcₙ_one_sub_one_add_inv_lt_one (ε⁻¹ ^ 2 • m)⟩, ?_⟩
+  rintro x ⟨(hx₁ : _ <= x), hx₂⟩
+  simp only [mem_closedBall, dist_eq_norm', zero_sub, norm_neg] at hx₂ ⊢
+  rw [← coe_nnnorm]; rw [coe_le_coe]
+  have hx₀ : 0 <= x := cfcₙ_nonneg_of_predicate.trans hx₁
+  rw [← inr_le_iff _ _ (.of_nonneg cfcₙ_nonneg_of_predicate) (.of_nonneg hx₀)]; rw [nnreal_cfcₙ_eq_cfc_inr _ _ (by simp [tsub_self]), inr_smul] at hx₁
+  rw [← norm_inr (𝕜 := Complex)] at hm₂ hx₂
+  rw [← inr_nonneg_iff] at hx₀ hm₁
+  rw [← nnnorm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
+  generalize (x : A⁺¹) = x, (m : A⁺¹) = m at *
+  set g : Real>=0 -> Real>=0 := fun y => 1 - (1 + y)⁻¹
+  have hg : Continuous g := by
+    rw [← continuousOn_univ]
+    fun_prop (disch := intro _ _; positivity)
+  have hg' : ContinuousOn (fun y => (1 + ε⁻¹ ^ 2 • y)⁻¹) (spectrum Real>=0 m) :=
+    ContinuousOn.inv₀ (by fun_prop) fun _ _ => by positivity
+  have hx : x in Set.Icc 0 1 := mem_Icc_iff_norm_le_one.mpr ⟨hx₀, hx₂⟩
+  have hx' : x in Set.Icc _ 1 := ⟨hx₁, hx.2⟩
+  refine nnnorm_sub_mul_self_le m cfc_nonneg_of_predicate hx' ?_
+  suffices star m * (1 - cfc g (ε⁻¹ ^ 2 • m)) * m =
+      cfc (fun y : Real>=0 => y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y) m by
+    rw [this]
+    refine nnnorm_cfc_nnreal_le fun y hy => ?_
+    calc
+      y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y = y * ε ^ 2 * (y / (ε ^ 2 + y)) := by simp [field]
+      _ <= ε ^ 2 * 1 := by
+        gcongr
+        · apply mul_le_of_le_one_left'
+          have hm' := hm₂.le
+          rw [norm_le_one_iff_of_nonneg m hm₁]; rw [← cfc_id' Real>=0 m]; rw [← cfc_one (R := Real>=0) m]; rw [cfc_nnreal_le_iff _ _ _ (QuasispectrumRestricts.nnreal_of_nonneg hm₁)] at hm'
+          exact hm' y hy
+.mpr le_add_self · exact div_le_one (by positivity)
+      _ = ε ^ 2 := mul_one _
+  rw [cfc_mul _ _ m (continuousOn_id' _ |>.fun_mul hg') (continuousOn_id' _)]; rw [cfc_mul _ _ m (continuousOn_id' _) hg']; rw [cfc_id' ..]; rw [hm₁.star_eq]
+  congr
+  rw [← cfc_one (R := Real>=0) m]; rw [← cfc_comp_smul _ _ _ hg.continuousOn hm₁]; rw [← cfc_tsub _ _ m (by simp [g]) hm₁ (by fun_prop) (Continuous.continuousOn <| by fun_prop)]
+  refine cfc_congr (fun y _ => ?_)
+  simp [g, tsub_tsub_cancel_of_le]
 
 中文:
 引理 tendsto_mul_right_approximateUnit
@@ -659,7 +790,44 @@ lemma tendsto_mul_right_approximateUnit
   lift ε to Real>=0 using hε.le
   rw [coe_pos] at hε
   refine ⟨cfcₙ (fun y : Real>=0 => 1 - (1 + y)⁻¹) (ε⁻¹ ^ 2 • m),
-    ⟨cfcₙ_nonneg_of_
+    ⟨cfcₙ_nonneg_of_predicate, norm_cfcₙ_one_sub_one_add_inv_lt_one (ε⁻¹ ^ 2 • m)⟩, ?_⟩
+  rintro x ⟨(hx₁ : _ <= x), hx₂⟩
+  simp only [mem_closedBall, dist_eq_norm', zero_sub, norm_neg] at hx₂ ⊢
+  rw [← coe_nnnorm]; rw [coe_le_coe]
+  have hx₀ : 0 <= x := cfcₙ_nonneg_of_predicate.trans hx₁
+  rw [← inr_le_iff _ _ (.of_nonneg cfcₙ_nonneg_of_predicate) (.of_nonneg hx₀)]; rw [nnreal_cfcₙ_eq_cfc_inr _ _ (by simp [tsub_self]), inr_smul] at hx₁
+  rw [← norm_inr (𝕜 := Complex)] at hm₂ hx₂
+  rw [← inr_nonneg_iff] at hx₀ hm₁
+  rw [← nnnorm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
+  generalize (x : A⁺¹) = x, (m : A⁺¹) = m at *
+  set g : Real>=0 -> Real>=0 := fun y => 1 - (1 + y)⁻¹
+  have hg : Continuous g := by
+    rw [← continuousOn_univ]
+    fun_prop (disch := intro _ _; positivity)
+  have hg' : ContinuousOn (fun y => (1 + ε⁻¹ ^ 2 • y)⁻¹) (spectrum Real>=0 m) :=
+    ContinuousOn.inv₀ (by fun_prop) fun _ _ => by positivity
+  have hx : x in Set.Icc 0 1 := mem_Icc_iff_norm_le_one.mpr ⟨hx₀, hx₂⟩
+  have hx' : x in Set.Icc _ 1 := ⟨hx₁, hx.2⟩
+  refine nnnorm_sub_mul_self_le m cfc_nonneg_of_predicate hx' ?_
+  suffices star m * (1 - cfc g (ε⁻¹ ^ 2 • m)) * m =
+      cfc (fun y : Real>=0 => y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y) m by
+    rw [this]
+    refine nnnorm_cfc_nnreal_le fun y hy => ?_
+    calc
+      y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y = y * ε ^ 2 * (y / (ε ^ 2 + y)) := by simp [field]
+      _ <= ε ^ 2 * 1 := by
+        gcongr
+        · apply mul_le_of_le_one_left'
+          have hm' := hm₂.le
+          rw [norm_le_one_iff_of_nonneg m hm₁]; rw [← cfc_id' Real>=0 m]; rw [← cfc_one (R := Real>=0) m]; rw [cfc_nnreal_le_iff _ _ _ (QuasispectrumRestricts.nnreal_of_nonneg hm₁)] at hm'
+          exact hm' y hy
+.mpr le_add_self · exact div_le_one (by positivity)
+      _ = ε ^ 2 := mul_one _
+  rw [cfc_mul _ _ m (continuousOn_id' _ |>.fun_mul hg') (continuousOn_id' _)]; rw [cfc_mul _ _ m (continuousOn_id' _) hg']; rw [cfc_id' ..]; rw [hm₁.star_eq]
+  congr
+  rw [← cfc_one (R := Real>=0) m]; rw [← cfc_comp_smul _ _ _ hg.continuousOn hm₁]; rw [← cfc_tsub _ _ m (by simp [g]) hm₁ (by fun_prop) (Continuous.continuousOn <| by fun_prop)]
+  refine cfc_congr (fun y _ => ?_)
+  simp [g, tsub_tsub_cancel_of_le]
 -/
 private lemma tendsto_mul_right_approximateUnit (m : A) :
     Tendsto (· * m) (approximateUnit A) (𝓝 m) := by
@@ -719,7 +887,12 @@ lemma increasingApproximateUnit
     · rw [(hasBasis_approximateUnit A).eventually_iff]
       peel (hasBasis_approximateUnit A).ex_mem with x hx
       exact ⟨hx, fun y hy => (hx.1.trans hy.1).isSelfAdjoint⟩
-  tendsto_mul_right := tendst
+  tendsto_mul_right := tendsto_mul_right_approximateUnit
+eventually_nonneg := .filter_mono inf_le_left
+    (isBasis_nonneg_sections A).hasBasis.eventually_iff.mpr ⟨0, by simp⟩
+eventually_norm := .filter_mono inf_le_right by simp
+.neBot_iff.mpr neBot := hasBasis_approximateUnit A
+    fun hx => ⟨_, ⟨le_rfl, by simpa using hx.2.le⟩⟩
 
 中文:
 引理 increasingApproximateUnit
@@ -729,7 +902,12 @@ lemma increasingApproximateUnit
     · rw [(hasBasis_approximateUnit A).eventually_iff]
       peel (hasBasis_approximateUnit A).ex_mem with x hx
       exact ⟨hx, fun y hy => (hx.1.trans hy.1).isSelfAdjoint⟩
-  tendsto_mul_right := tendst
+  tendsto_mul_right := tendsto_mul_right_approximateUnit
+eventually_nonneg := .filter_mono inf_le_left
+    (isBasis_nonneg_sections A).hasBasis.eventually_iff.mpr ⟨0, by simp⟩
+eventually_norm := .filter_mono inf_le_right by simp
+.neBot_iff.mpr neBot := hasBasis_approximateUnit A
+    fun hx => ⟨_, ⟨le_rfl, by simpa using hx.2.le⟩⟩
 
 Depends on / 依赖: eventually_iff, eventually_nonneg, eventually_norm, ex_mem, filter_mono, hasBas, hasBasis, hasBasis.eventually_iff.mpr, hasBasis_approximateUnit, inf_le_left, inf_le_right, isBasis_nonneg_sections, isSelfAdjoint, neBot_iff, neBot_iff.mpr, tendsto_mul_left_iff_tendsto_mul_right, tendsto_mul_right, tendsto_mul_right_approximateUnit
 -/

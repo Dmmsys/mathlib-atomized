@@ -245,7 +245,7 @@ theorem liftp_iff'
     apply (f i).property
   rintro ⟨⟨a, f⟩, h₀, h₁⟩; dsimp at *
   use abs ⟨a, fun i => ⟨f i, h₁ i⟩⟩
-  rw [←
+  rw [← abs_map]; rw [← h₀]; rfl
 
 中文:
 定理 liftp_iff'
@@ -263,7 +263,7 @@ theorem liftp_iff'
     apply (f i).property
   rintro ⟨⟨a, f⟩, h₀, h₁⟩; dsimp at *
   use abs ⟨a, fun i => ⟨f i, h₁ i⟩⟩
-  rw [←
+  rw [← abs_map]; rw [← h₀]; rfl
 
 Depends on / 依赖: abs_map, abs_repr, property
 -/
@@ -302,7 +302,13 @@ theorem liftr_iff
     · rw [← yeq, ← abs_repr u, h, ← abs_map]
       rfl
     intro i
-    exact (f
+    exact (f i).property
+  rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
+  use abs ⟨a, fun i => ⟨(f₀ i, f₁ i), h i⟩⟩
+  constructor
+  · rw [xeq, ← abs_map]
+    rfl
+  rw [yeq]; rw [← abs_map]; rfl
 
 中文:
 定理 liftr_iff
@@ -319,7 +325,13 @@ theorem liftr_iff
     · rw [← yeq, ← abs_repr u, h, ← abs_map]
       rfl
     intro i
-    exact (f
+    exact (f i).property
+  rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
+  use abs ⟨a, fun i => ⟨(f₀ i, f₁ i), h i⟩⟩
+  constructor
+  · rw [xeq, ← abs_map]
+    rfl
+  rw [yeq]; rw [← abs_map]; rfl
 
 Depends on / 依赖: abs_map, abs_repr, property, val.fst, val.snd
 -/
@@ -737,7 +749,7 @@ theorem Fix.rec_eq
     rw [Fix.rec]; rw [Fix.mk]
     dsimp
   rcases h : repr x with ⟨a, f⟩
-  rw [PFunctor.map_eq]; rw [recF_eq]; rw [← PFunctor.map_eq]; rw [PFunctor.W.dest_mk];
+  rw [PFunctor.map_eq]; rw [recF_eq]; rw [← PFunctor.map_eq]; rw [PFunctor.W.dest_mk]; rw [PFunctor.map_map]; rw [abs_map]; rw [← h]; rw [abs_repr]; rw [this]
 
 中文:
 定理 Fix.rec_eq
@@ -753,7 +765,7 @@ theorem Fix.rec_eq
     rw [Fix.rec]; rw [Fix.mk]
     dsimp
   rcases h : repr x with ⟨a, f⟩
-  rw [PFunctor.map_eq]; rw [recF_eq]; rw [← PFunctor.map_eq]; rw [PFunctor.W.dest_mk];
+  rw [PFunctor.map_eq]; rw [recF_eq]; rw [← PFunctor.map_eq]; rw [PFunctor.W.dest_mk]; rw [PFunctor.map_map]; rw [abs_map]; rw [← h]; rw [abs_repr]; rw [this]
 -/
 theorem Fix.rec_eq {α : Type _} (g : F α -> α) (x : F (Fix F)) :
     Fix.rec g (Fix.mk x) = g (Fix.rec g <$> x) := by
@@ -783,7 +795,8 @@ theorem Fix.ind_aux
     simp only [Wrepr, recF_eq, PFunctor.W.dest_mk, abs_repr, Function.comp]
     rfl
   rw [this]
- 
+  apply Quot.sound
+  apply Wrepr_equiv
 
 中文:
 定理 Fix.ind_aux
@@ -795,7 +808,8 @@ theorem Fix.ind_aux
     simp only [Wrepr, recF_eq, PFunctor.W.dest_mk, abs_repr, Function.comp]
     rfl
   rw [this]
- 
+  apply Quot.sound
+  apply Wrepr_equiv
 -/
 theorem Fix.ind_aux (a : q.P.A) (f : q.P.B a -> q.P.W) :
     Fix.mk (abs ⟨a, fun x => ⟦f x⟧⟩) = ⟦⟨a, f⟩⟧ := by
@@ -1143,7 +1157,7 @@ definition Cofix.dest
       rw [← Quot.factor_mk_eq _ _ this]
       conv =>
         lhs
-        rw [comp_map]; rw [← abs_map
+        rw [comp_map]; rw [← abs_map]; rw [pr rxy]; rw [abs_map]; rw [← comp_map])
 
 中文:
 定义 Cofix.dest
@@ -1157,7 +1171,7 @@ definition Cofix.dest
       rw [← Quot.factor_mk_eq _ _ this]
       conv =>
         lhs
-        rw [comp_map]; rw [← abs_map
+        rw [comp_map]; rw [← abs_map]; rw [pr rxy]; rw [abs_map]; rw [← comp_map])
 -/
 def Cofix.dest : Cofix F -> F (Cofix F) :=
   Quot.lift (fun x => Quot.mk Mcongr <$> abs (PFunctor.M.dest x))
@@ -1220,7 +1234,20 @@ theorem Cofix.bisim_aux
 Quot.mk r < > Quot.mk Mcongr < > abs (PFunctor.M.dest a) =
 Quot.mk r < > Quot.mk Mcongr < > abs (PFunctor.M.dest b) :=
       h _ _ r'ab
-    have h₁ :
+    have h₁ : forall u v : q.P.M, Mcongr u v -> Quot.mk r' u = Quot.mk r' v := by
+      intro u v cuv
+      apply Quot.sound
+      simp only [r']
+      rw [Quot.sound cuv]
+      apply h'
+    let f : Quot r -> Quot r' :=
+Quot.lift (Quot.lift (Quot.mk r') h₁) by
+        rintro ⟨c⟩ ⟨d⟩ rcd
+        exact Quot.sound rcd
+    have : f ∘ Quot.mk r ∘ Quot.mk Mcongr = Quot.mk r' := rfl
+    rw [← this]; rw [← PFunctor.map_map _ _ f]; rw [← PFunctor.map_map _ _ (Quot.mk r)]; rw [abs_map]; rw [abs_map]; rw [abs_map]; rw [h₀]
+    rw [← PFunctor.map_map _ _ f]; rw [← PFunctor.map_map _ _ (Quot.mk r)]; rw [abs_map]; rw [abs_map]; rw [abs_map]
+  exact ⟨r', this, rxy⟩
 
 中文:
 定理 Cofix.bisim_aux
@@ -1235,7 +1262,20 @@ Quot.mk r < > Quot.mk Mcongr < > abs (PFunctor.M.dest b) :=
 Quot.mk r < > Quot.mk Mcongr < > abs (PFunctor.M.dest a) =
 Quot.mk r < > Quot.mk Mcongr < > abs (PFunctor.M.dest b) :=
       h _ _ r'ab
-    have h₁ :
+    have h₁ : forall u v : q.P.M, Mcongr u v -> Quot.mk r' u = Quot.mk r' v := by
+      intro u v cuv
+      apply Quot.sound
+      simp only [r']
+      rw [Quot.sound cuv]
+      apply h'
+    let f : Quot r -> Quot r' :=
+Quot.lift (Quot.lift (Quot.mk r') h₁) by
+        rintro ⟨c⟩ ⟨d⟩ rcd
+        exact Quot.sound rcd
+    have : f ∘ Quot.mk r ∘ Quot.mk Mcongr = Quot.mk r' := rfl
+    rw [← this]; rw [← PFunctor.map_map _ _ f]; rw [← PFunctor.map_map _ _ (Quot.mk r)]; rw [abs_map]; rw [abs_map]; rw [abs_map]; rw [h₀]
+    rw [← PFunctor.map_map _ _ f]; rw [← PFunctor.map_map _ _ (Quot.mk r)]; rw [abs_map]; rw [abs_map]; rw [abs_map]
+  exact ⟨r', this, rxy⟩
 -/
 private theorem Cofix.bisim_aux (r : Cofix F -> Cofix F -> Prop) (h' : forall x, r x x)
     (h : forall x y, r x y -> Quot.mk r <$> Cofix.dest x = Quot.mk r <$> Cofix.dest y) :
@@ -1283,7 +1323,9 @@ theorem Cofix.bisim_rel
     have : forall x y, r x y -> r' x y := fun x y h => Or.inr h
     rw [← Quot.factor_mk_eq _ _ this]
     dsimp [r']
-    rw [
+    rw [@comp_map _ q _ _ _ (Quot.mk r)]; rw [@comp_map _ q _ _ _ (Quot.mk r)]
+    rw [h _ _ r'xy]
+  right; exact rxy
 
 中文:
 定理 Cofix.bisim_rel
@@ -1301,7 +1343,9 @@ theorem Cofix.bisim_rel
     have : forall x y, r x y -> r' x y := fun x y h => Or.inr h
     rw [← Quot.factor_mk_eq _ _ this]
     dsimp [r']
-    rw [
+    rw [@comp_map _ q _ _ _ (Quot.mk r)]; rw [@comp_map _ q _ _ _ (Quot.mk r)]
+    rw [h _ _ r'xy]
+  right; exact rxy
 -/
 theorem Cofix.bisim_rel (r : Cofix F -> Cofix F -> Prop)
     (h : forall x y, r x y -> Quot.mk r <$> Cofix.dest x = Quot.mk r <$> Cofix.dest y) :
@@ -1373,7 +1417,7 @@ theorem Cofix.bisim'
       rcases h x' Qx' with ⟨a, f, f', ux'eq, vx'eq, h'⟩
       rw [liftr_iff]
       exact ⟨a, f, f', xeq.symm ▸ ux'eq, yeq.symm ▸ vx'eq, h'⟩)
-    _ _ ⟨x, Qx, rfl, r
+    _ _ ⟨x, Qx, rfl, rfl⟩
 
 中文:
 定理 Cofix.bisim'
@@ -1385,7 +1429,7 @@ theorem Cofix.bisim'
       rcases h x' Qx' with ⟨a, f, f', ux'eq, vx'eq, h'⟩
       rw [liftr_iff]
       exact ⟨a, f, f', xeq.symm ▸ ux'eq, yeq.symm ▸ vx'eq, h'⟩)
-    _ _ ⟨x, Qx, rfl, r
+    _ _ ⟨x, Qx, rfl, rfl⟩
 -/
 theorem Cofix.bisim' {α : Type*} (Q : α -> Prop) (u v : α -> Cofix F)
     (h : forall x, Q x -> exists a f f', Cofix.dest (u x) = abs ⟨a, f⟩ ∧ Cofix.dest (v x) = abs ⟨a, f'⟩ ∧
@@ -1429,7 +1473,34 @@ definition comp
     refine ⟨⟨(repr y).1, fun u => (repr ((repr y).2 u)).1⟩, ?_⟩
     dsimp [PFunctor.comp]
     intro x
-
+    exact (repr ((repr y).2 x.1)).snd x.2
+  abs_repr {α} := by
+    dsimp [Functor.Comp]
+    intro x
+    conv =>
+      rhs
+      rw [← abs_repr x]
+    obtain ⟨a, f⟩ := repr x
+    dsimp
+    congr with x
+    rcases h' : repr (f x) with ⟨b, g⟩
+    dsimp; rw [← h', abs_repr]
+  abs_map {α β} f := by
+    dsimp +unfoldPartialApp [Functor.Comp, PFunctor.comp]
+    intro p
+    obtain ⟨a, g⟩ := p; dsimp
+    obtain ⟨b, h⟩ := a; dsimp
+    symm
+    trans
+    · symm
+      apply abs_map
+    congr
+    rw [PFunctor.map_eq]
+    dsimp [Function.comp_def]
+    congr
+    ext x
+    rw [← abs_map]
+    rfl
 
 中文:
 定义 comp
@@ -1445,7 +1516,34 @@ definition comp
     refine ⟨⟨(repr y).1, fun u => (repr ((repr y).2 u)).1⟩, ?_⟩
     dsimp [PFunctor.comp]
     intro x
-
+    exact (repr ((repr y).2 x.1)).snd x.2
+  abs_repr {α} := by
+    dsimp [Functor.Comp]
+    intro x
+    conv =>
+      rhs
+      rw [← abs_repr x]
+    obtain ⟨a, f⟩ := repr x
+    dsimp
+    congr with x
+    rcases h' : repr (f x) with ⟨b, g⟩
+    dsimp; rw [← h', abs_repr]
+  abs_map {α β} f := by
+    dsimp +unfoldPartialApp [Functor.Comp, PFunctor.comp]
+    intro p
+    obtain ⟨a, g⟩ := p; dsimp
+    obtain ⟨b, h⟩ := a; dsimp
+    symm
+    trans
+    · symm
+      apply abs_map
+    congr
+    rw [PFunctor.map_eq]
+    dsimp [Function.comp_def]
+    congr
+    ext x
+    rw [← abs_map]
+    rfl
 
 Depends on / 依赖: PFunctor, PFunctor.comp
 -/
@@ -1566,7 +1664,8 @@ theorem mem_supp
     exact h this
   intro h p; rw [liftp_iff]
   rintro ⟨a, f, xeq, h'⟩
-  rcases h a f xeq.symm with ⟨i,
+  rcases h a f xeq.symm with ⟨i, _, hi⟩
+  rw [← hi]; apply h'
 
 中文:
 定理 mem_supp
@@ -1580,7 +1679,8 @@ theorem mem_supp
     exact h this
   intro h p; rw [liftp_iff]
   rintro ⟨a, f, xeq, h'⟩
-  rcases h a f xeq.symm with ⟨i,
+  rcases h a f xeq.symm with ⟨i, _, hi⟩
+  rw [← hi]; apply h'
 
 Depends on / 依赖: haf.symm, liftp_iff, mem_image_of_mem, mem_univ, xeq.symm
 -/
@@ -1637,7 +1737,18 @@ theorem has_good_supp_iff
     intro a' f' h''
     rintro u ⟨i, _, hfi⟩
     have : u in supp x := by rw [← hfi]; apply h'
-    exact (mem_
+    exact (mem_supp x u).mp this _ _ h''
+  rintro ⟨a, f, xeq, h⟩ p; rw [liftp_iff]; constructor
+  · rintro ⟨a', f', xeq', h'⟩ u usuppx
+    rcases (mem_supp x u).mp usuppx a' f' xeq'.symm with ⟨i, _, f'ieq⟩
+    rw [← f'ieq]
+    apply h'
+  intro h'
+  refine ⟨a, f, xeq.symm, ?_⟩; intro i
+  apply h'; rw [mem_supp]
+  intro a' f' xeq'
+  apply h a' f' xeq'
+  apply mem_image_of_mem _ (mem_univ _)
 
 中文:
 定理 has_good_supp_iff
@@ -1652,7 +1763,18 @@ theorem has_good_supp_iff
     intro a' f' h''
     rintro u ⟨i, _, hfi⟩
     have : u in supp x := by rw [← hfi]; apply h'
-    exact (mem_
+    exact (mem_supp x u).mp this _ _ h''
+  rintro ⟨a, f, xeq, h⟩ p; rw [liftp_iff]; constructor
+  · rintro ⟨a', f', xeq', h'⟩ u usuppx
+    rcases (mem_supp x u).mp usuppx a' f' xeq'.symm with ⟨i, _, f'ieq⟩
+    rw [← f'ieq]
+    apply h'
+  intro h'
+  refine ⟨a, f, xeq.symm, ?_⟩; intro i
+  apply h'; rw [mem_supp]
+  intro a' f' xeq'
+  apply h a' f' xeq'
+  apply mem_image_of_mem _ (mem_univ _)
 
 Depends on / 依赖: liftp_iff, mem_supp, usuppx, xeq.symm
 -/
@@ -1784,7 +1906,7 @@ theorem liftp_iff_of_isUniform
   intro h'
   refine ⟨a, f, rfl, fun i => h' _ ?_⟩
   rw [supp_eq_of_isUniform h]
-  exac
+  exact ⟨i, mem_univ i, rfl⟩
 
 中文:
 定理 liftp_iff_of_isUniform
@@ -1800,7 +1922,7 @@ theorem liftp_iff_of_isUniform
   intro h'
   refine ⟨a, f, rfl, fun i => h' _ ?_⟩
   rw [supp_eq_of_isUniform h]
-  exac
+  exact ⟨i, mem_univ i, rfl⟩
 
 Depends on / 依赖: abs_repr, liftp_iff, mem_univ, supp_eq_of_isUniform
 -/
@@ -1892,7 +2014,8 @@ theorem suppPreservation_iff_liftpPreservation
     rw [liftp_iff_of_isUniform h']; rw [supp_eq_of_isUniform h']; rw [PFunctor.liftp_iff']
     simp
   · rintro α ⟨a, f⟩
-    simp only [LiftpPre
+    simp only [LiftpPreservation] at h
+    simp only [supp, h]
 
 中文:
 定理 suppPreservation_iff_liftpPreservation
@@ -1906,7 +2029,8 @@ theorem suppPreservation_iff_liftpPreservation
     rw [liftp_iff_of_isUniform h']; rw [supp_eq_of_isUniform h']; rw [PFunctor.liftp_iff']
     simp
   · rintro α ⟨a, f⟩
-    simp only [LiftpPre
+    simp only [LiftpPreservation] at h
+    simp only [supp, h]
 
 Depends on / 依赖: LiftpPreservation, PFunctor, PFunctor.liftp_iff, SuppPreservation, liftp_iff, liftp_iff_of_isUniform, suppPreservation_iff_uniform, supp_eq_of_isUniform
 -/

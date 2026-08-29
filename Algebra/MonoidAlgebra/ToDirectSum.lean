@@ -420,7 +420,7 @@ theorem toDirectSum_mul
   revert f g
   rw [AddMonoidHom.map_mul_iff]
   ext xi xv yi yv : 4
-  simp [to_hom, AddMonoidAlgebra.sing
+  simp [to_hom, AddMonoidAlgebra.single_mul_single, DirectSum.of_mul_of]
 
 中文:
 定理 toDirectSum_mul
@@ -434,7 +434,7 @@ theorem toDirectSum_mul
   revert f g
   rw [AddMonoidHom.map_mul_iff]
   ext xi xv yi yv : 4
-  simp [to_hom, AddMonoidAlgebra.sing
+  simp [to_hom, AddMonoidAlgebra.single_mul_single, DirectSum.of_mul_of]
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.single_mul_single, AddMonoidHom, AddMonoidHom.map_mul_iff, DirectSum, DirectSum.of_mul_of, map_add, map_mul_iff, map_zero, of_mul_of, revert, single_mul_single, toDirectSum, toDirectSum_add, toDirectSum_zero, to_hom
 -/

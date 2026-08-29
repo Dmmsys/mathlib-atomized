@@ -251,7 +251,11 @@ theorem finRotate_succ_eq_decomposeFin
   rw [coe_finRotate]; rw [decomposeFin_symm_apply_succ]; rw [if_congr i.succ_eq_last_succ rfl rfl]
   split_ifs with h
   · simp [h]
-  · rw [Fin.val_succ, Function.Injective.map_swap Fin.val_injective, Fin.val_succ, coe_finRot
+  · rw [Fin.val_succ, Function.Injective.map_swap Fin.val_injective, Fin.val_succ, coe_finRotate,
+      if_neg h, Fin.val_zero, Fin.val_one,
+      swap_apply_of_ne_of_ne (Nat.succ_ne_zero _) (Nat.succ_succ_ne_one _)]
+
+@[simp]
 
 中文:
 定理 finRotate_succ_eq_decomposeFin
@@ -264,7 +268,11 @@ theorem finRotate_succ_eq_decomposeFin
   rw [coe_finRotate]; rw [decomposeFin_symm_apply_succ]; rw [if_congr i.succ_eq_last_succ rfl rfl]
   split_ifs with h
   · simp [h]
-  · rw [Fin.val_succ, Function.Injective.map_swap Fin.val_injective, Fin.val_succ, coe_finRot
+  · rw [Fin.val_succ, Function.Injective.map_swap Fin.val_injective, Fin.val_succ, coe_finRotate,
+      if_neg h, Fin.val_zero, Fin.val_one,
+      swap_apply_of_ne_of_ne (Nat.succ_ne_zero _) (Nat.succ_succ_ne_one _)]
+
+@[simp]
 
 Depends on / 依赖: Fin.cases, Fin.val_injective, Fin.val_one, Fin.val_succ, Fin.val_zero, Function, Function.Injective.map_swap, Injective, Nat.succ_ne_zero, Nat.succ_succ_ne_one, coe_finRotate, decomposeFin_symm_apply_succ, i.succ_eq_last_succ, if_congr, if_neg, map_swap, split_ifs, succ_eq_last_succ, succ_ne_zero, succ_succ_ne_one
 -/
@@ -394,7 +402,8 @@ theorem isCycle_finRotate
   | zero => rfl
   | succ x ih =>
     rw [pow_succ']; rw [Perm.mul_apply]; rw [coe_finRotate_of_ne_last]; rw [ih (lt_trans x.lt_succ_self hx)]
-   
+    rw [Ne]; rw [Fin.ext_iff]; rw [ih (lt_trans x.lt_succ_self hx)]; rw [Fin.val_last]
+    exact ne_of_lt (Nat.lt_of_succ_lt_succ hx)
 
 中文:
 定理 isCycle_finRotate
@@ -409,7 +418,8 @@ theorem isCycle_finRotate
   | zero => rfl
   | succ x ih =>
     rw [pow_succ']; rw [Perm.mul_apply]; rw [coe_finRotate_of_ne_last]; rw [ih (lt_trans x.lt_succ_self hx)]
-   
+    rw [Ne]; rw [Fin.ext_iff]; rw [ih (lt_trans x.lt_succ_self hx)]; rw [Fin.val_last]
+    exact ne_of_lt (Nat.lt_of_succ_lt_succ hx)
 
 Depends on / 依赖: Fin.ext_iff, Fin.val_last, Fin.val_mk, Nat.lt_of_succ_lt_succ, Perm.mul_apply, coe_finRotate_of_ne_last, ext_iff, lt_of_succ_lt_succ, lt_succ_self, lt_trans, mul_apply, ne_of_lt, pow_succ, val_last, val_mk, x.lt_succ_self, zpow_natCast
 -/
@@ -564,7 +574,16 @@ theorem cycleRange_of_le
     simp; lia
   have : (castLEEmb (by lia)).toEquivRange (castLT i (by lia)) = ⟨i, iin⟩ := by
     simp [coe_castLEEmb]; rfl
-  rw [cycleRange]; rw [(finRotate (j + 1)).extendDomain_apply_subtype (castLEEmb (by lia)).toEquivRange i
+  rw [cycleRange]; rw [(finRotate (j + 1)).extendDomain_apply_subtype (castLEEmb (by lia)).toEquivRange iin]; rw [Function.Embedding.toEquivRange_apply]
+  split_ifs with ch
+  · have : ((castLEEmb (by lia)).toEquivRange.symm ⟨i, iin⟩) = last j := by
+      simpa only [coe_castLEEmb, ← this, symm_apply_apply] using eq_of_val_eq (by simp [ch])
+    rw [this]; rw [finRotate_last]
+    rfl
+  · have hj1 : (i + 1).1 = i.1 + 1 := val_add_one_of_lt' (by lia)
+    have hj2 : (i.castLT (by lia) + 1 : Fin (j + 1)).1 =
+      (i.castLT (by lia) : Fin (j + 1)) + 1 := val_add_one_of_lt' (by simp; lia)
+    exact eq_of_val_eq (by simp [← this, hj1, hj2])
 
 中文:
 定理 cycleRange_of_le
@@ -574,7 +593,16 @@ theorem cycleRange_of_le
     simp; lia
   have : (castLEEmb (by lia)).toEquivRange (castLT i (by lia)) = ⟨i, iin⟩ := by
     simp [coe_castLEEmb]; rfl
-  rw [cycleRange]; rw [(finRotate (j + 1)).extendDomain_apply_subtype (castLEEmb (by lia)).toEquivRange i
+  rw [cycleRange]; rw [(finRotate (j + 1)).extendDomain_apply_subtype (castLEEmb (by lia)).toEquivRange iin]; rw [Function.Embedding.toEquivRange_apply]
+  split_ifs with ch
+  · have : ((castLEEmb (by lia)).toEquivRange.symm ⟨i, iin⟩) = last j := by
+      simpa only [coe_castLEEmb, ← this, symm_apply_apply] using eq_of_val_eq (by simp [ch])
+    rw [this]; rw [finRotate_last]
+    rfl
+  · have hj1 : (i + 1).1 = i.1 + 1 := val_add_one_of_lt' (by lia)
+    have hj2 : (i.castLT (by lia) + 1 : Fin (j + 1)).1 =
+      (i.castLT (by lia) : Fin (j + 1)) + 1 := val_add_one_of_lt' (by simp; lia)
+    exact eq_of_val_eq (by simp [← this, hj1, hj2])
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.toEquivRange_apply, Set.range, castLEEmb, castLT, coe_castLEEmb, cycleRange, eq_of_val_eq, extendDomain_apply_subtype, finRotate, split_ifs, symm_apply_apply, toEquivRange, toEquivRange.symm, toEquivRange_apply
 -/
@@ -900,7 +928,20 @@ theorem succAbove_cycleRange
   · have : castSucc (j + 1) = j.succ := by
       ext
       rw [val_castSucc]; rw [val_succ]; rw [Fin.val_add_one_of_lt (lt_of_lt_of_le hlt i.le_last)]
-    rw [Fin.cycleRange_of_lt hlt]; rw [Fin.succAbove_of_cast
+    rw [Fin.cycleRange_of_lt hlt]; rw [Fin.succAbove_of_castSucc_lt]; rw [this]; rw [swap_apply_of_ne_of_ne]
+    · apply Fin.succ_ne_zero
+    · exact (Fin.succ_injective _).ne hlt.ne
+    · rw [Fin.lt_def]
+      simpa [this] using hlt
+  · rw [heq, Fin.cycleRange_self, Fin.succAbove_of_castSucc_lt, swap_apply_right, Fin.castSucc_zero]
+    · rw [Fin.castSucc_zero]
+      apply Fin.succ_pos
+  · rw [Fin.cycleRange_of_gt hgt, Fin.succAbove_of_le_castSucc, swap_apply_of_ne_of_ne]
+    · apply Fin.succ_ne_zero
+    · apply (Fin.succ_injective _).ne hgt.ne.symm
+    · simpa [Fin.le_iff_val_le_val] using hgt
+
+@[simp]
 
 中文:
 定理 succAbove_cycleRange
@@ -912,7 +953,20 @@ theorem succAbove_cycleRange
   · have : castSucc (j + 1) = j.succ := by
       ext
       rw [val_castSucc]; rw [val_succ]; rw [Fin.val_add_one_of_lt (lt_of_lt_of_le hlt i.le_last)]
-    rw [Fin.cycleRange_of_lt hlt]; rw [Fin.succAbove_of_cast
+    rw [Fin.cycleRange_of_lt hlt]; rw [Fin.succAbove_of_castSucc_lt]; rw [this]; rw [swap_apply_of_ne_of_ne]
+    · apply Fin.succ_ne_zero
+    · exact (Fin.succ_injective _).ne hlt.ne
+    · rw [Fin.lt_def]
+      simpa [this] using hlt
+  · rw [heq, Fin.cycleRange_self, Fin.succAbove_of_castSucc_lt, swap_apply_right, Fin.castSucc_zero]
+    · rw [Fin.castSucc_zero]
+      apply Fin.succ_pos
+  · rw [Fin.cycleRange_of_gt hgt, Fin.succAbove_of_le_castSucc, swap_apply_of_ne_of_ne]
+    · apply Fin.succ_ne_zero
+    · apply (Fin.succ_injective _).ne hgt.ne.symm
+    · simpa [Fin.le_iff_val_le_val] using hgt
+
+@[simp]
 
 Depends on / 依赖: Fin.cycleRange_of_lt, Fin.cycleRange_self, Fin.lt_def, Fin.succAbove_of_castSucc_lt, Fin.succ_injective, Fin.succ_ne_zero, Fin.val_add_one_of_lt, castSucc, cycleRange_of_lt, cycleRange_self, hlt.ne, i.le_last, j.succ, le_last, lt_def, lt_of_lt_of_le, lt_trichotomy, succAbove_of_castSucc_lt, succ_injective, succ_ne_zero
 -/
@@ -1423,7 +1477,13 @@ theorem cycleIcc_of_gt
       simp [range_natAdd_castLEEmb]; lia
     have : (((addNatEmb (n - (n - i.1))).trans (finCongr _).toEmbedding).toEquivRange.symm ⟨k, kin⟩)
       = subNat i.1 (k.cast (by lia)) (by simp; lia) := by
- 
+      simpa [symm_apply_eq] using eq_of_val_eq (by simp; lia)
+    simp only [cycleIcc_to_cycleRange hij kin, natAdd_castLEEmb, this,
+      Function.Embedding.trans_apply, addNatEmb_apply, coe_toEmbedding, finCongr_apply]
+    rw [cycleRange_of_gt]
+    · exact eq_of_val_eq (by simp; lia)
+    · exact lt_def.mpr (by simp [sub_val_of_le hij]; lia)
+  · simp [hij]
 
 中文:
 定理 cycleIcc_of_gt
@@ -1435,7 +1495,13 @@ theorem cycleIcc_of_gt
       simp [range_natAdd_castLEEmb]; lia
     have : (((addNatEmb (n - (n - i.1))).trans (finCongr _).toEmbedding).toEquivRange.symm ⟨k, kin⟩)
       = subNat i.1 (k.cast (by lia)) (by simp; lia) := by
- 
+      simpa [symm_apply_eq] using eq_of_val_eq (by simp; lia)
+    simp only [cycleIcc_to_cycleRange hij kin, natAdd_castLEEmb, this,
+      Function.Embedding.trans_apply, addNatEmb_apply, coe_toEmbedding, finCongr_apply]
+    rw [cycleRange_of_gt]
+    · exact eq_of_val_eq (by simp; lia)
+    · exact lt_def.mpr (by simp [sub_val_of_le hij]; lia)
+  · simp [hij]
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.trans_apply, Nat.sub_le, Set.range, addNatEmb, addNatEmb_apply, coe_toEmbedding, cycleIcc_to_cycleRange, cycleRange_o, eq_of_val_eq, finCongr, finCongr_apply, k.cast, natAdd_castLEEmb, range_natAdd_castLEEmb, subNat, sub_le, symm_apply_eq, toEmbedding
 -/
@@ -1466,7 +1532,21 @@ theorem cycleIcc_of_le_of_le
   have kin : k in Set.range (natAdd_castLEEmb (Nat.sub_le n i)) := by
     simp [range_natAdd_castLEEmb]; lia
   have : (((addNatEmb (n - (n - i.1))).trans (finCongr _).toEmbedding).toEquivRange.symm ⟨k, kin⟩)
-      = subNat i.1 (k.cast (by lia)) (by simp; li
+      = subNat i.1 (k.cast (by lia)) (by simp; lia) := by
+    simpa [symm_apply_eq] using eq_of_val_eq (by simp; lia)
+  simp only [cycleIcc_to_cycleRange hij kin, natAdd_castLEEmb, this, Function.Embedding.trans_apply,
+    addNatEmb_apply, coe_toEmbedding, finCongr_apply]
+  refine eq_of_val_eq ?_
+  split_ifs with ch
+  · have : subNat i.1 (j.cast (by lia)) (by simp [hij]) = (j - i).castLT (sub_val_lt_sub hij) :=
+      eq_of_val_eq (by simp [sub_val_of_le hij])
+    simp [ch, cycleRange_of_eq this]; lia
+  · have : subNat i.1 (k.cast (by lia)) (by simp [hik]) < (j - i).castLT (sub_val_lt_sub hij) := by
+      simp [lt_def, sub_val_of_le hij]; lia
+    rw [cycleRange_of_lt this]; rw [subNat]
+    simp only [val_cast, add_def, val_one', Nat.add_mod_mod, addNat_mk, cast_mk]
+    rw [Nat.mod_eq_of_lt (by lia)]; rw [Nat.mod_eq_of_lt (by lia)]
+    lia
 
 中文:
 定理 cycleIcc_of_le_of_le
@@ -1476,7 +1556,21 @@ theorem cycleIcc_of_le_of_le
   have kin : k in Set.range (natAdd_castLEEmb (Nat.sub_le n i)) := by
     simp [range_natAdd_castLEEmb]; lia
   have : (((addNatEmb (n - (n - i.1))).trans (finCongr _).toEmbedding).toEquivRange.symm ⟨k, kin⟩)
-      = subNat i.1 (k.cast (by lia)) (by simp; li
+      = subNat i.1 (k.cast (by lia)) (by simp; lia) := by
+    simpa [symm_apply_eq] using eq_of_val_eq (by simp; lia)
+  simp only [cycleIcc_to_cycleRange hij kin, natAdd_castLEEmb, this, Function.Embedding.trans_apply,
+    addNatEmb_apply, coe_toEmbedding, finCongr_apply]
+  refine eq_of_val_eq ?_
+  split_ifs with ch
+  · have : subNat i.1 (j.cast (by lia)) (by simp [hij]) = (j - i).castLT (sub_val_lt_sub hij) :=
+      eq_of_val_eq (by simp [sub_val_of_le hij])
+    simp [ch, cycleRange_of_eq this]; lia
+  · have : subNat i.1 (k.cast (by lia)) (by simp [hik]) < (j - i).castLT (sub_val_lt_sub hij) := by
+      simp [lt_def, sub_val_of_le hij]; lia
+    rw [cycleRange_of_lt this]; rw [subNat]
+    simp only [val_cast, add_def, val_one', Nat.add_mod_mod, addNat_mk, cast_mk]
+    rw [Nat.mod_eq_of_lt (by lia)]; rw [Nat.mod_eq_of_lt (by lia)]
+    lia
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.trans_apply, Nat.sub_le, Set.range, addNatEmb, addNatEmb_apply, coe_toEmbedding, cycleIcc_to_cycleRange, eq_of_val_eq, finCongr, finCongr_apply, k.cast, le_trans, natAdd_castLEEmb, range_natAdd_castLEEmb, subNat, sub_le, symm_apply_eq, toEmbedding
 -/
@@ -1828,7 +1922,13 @@ theorem cycleIcc.trans
   rcases lt_or_ge k x with ch | ch1
   · simp [cycleIcc_of_gt (lt_of_le_of_lt hjk ch), cycleIcc_of_gt ch]
   rcases lt_or_ge x j with ch2 | ch2
-  · simp [cycleIcc_of_lt ch2, cycleIcc_of_l
+  · simp [cycleIcc_of_lt ch2, cycleIcc_of_le_of_le ch ch1, cycleIcc_of_le_of_le ch (le_of_lt ch2)]
+    split_ifs
+    repeat lia
+  · simp only [Function.comp_apply, cycleIcc_of_le_of_le ch2 ch1, cycleIcc_of_le_of_le ch ch1]
+    split_ifs with h
+    · exact val_eq_of_eq (cycleIcc_of_last hij)
+    · simp [cycleIcc_of_gt (lt_of_le_of_lt ch2 (lt_add_one_of_succ_lt (by lia)))]
 
 中文:
 定理 cycleIcc.trans
@@ -1840,7 +1940,13 @@ theorem cycleIcc.trans
   rcases lt_or_ge k x with ch | ch1
   · simp [cycleIcc_of_gt (lt_of_le_of_lt hjk ch), cycleIcc_of_gt ch]
   rcases lt_or_ge x j with ch2 | ch2
-  · simp [cycleIcc_of_lt ch2, cycleIcc_of_l
+  · simp [cycleIcc_of_lt ch2, cycleIcc_of_le_of_le ch ch1, cycleIcc_of_le_of_le ch (le_of_lt ch2)]
+    split_ifs
+    repeat lia
+  · simp only [Function.comp_apply, cycleIcc_of_le_of_le ch2 ch1, cycleIcc_of_le_of_le ch ch1]
+    split_ifs with h
+    · exact val_eq_of_eq (cycleIcc_of_last hij)
+    · simp [cycleIcc_of_gt (lt_of_le_of_lt ch2 (lt_add_one_of_succ_lt (by lia)))]
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, cycleIcc_of_gt, cycleIcc_of_le_of_le, cycleIcc_of_lt, le_of_lt, lt_of_le_of_lt, lt_of_lt_of_le, lt_or_ge, repeat, split_ifs, val_eq_of_eq
 -/
@@ -1919,7 +2025,7 @@ theorem Equiv.Perm.sign_eq_prod_prod_Iio
     · simp [Finset.ext_iff, Equiv.Perm.mem_finPairsLT]
     simp [← ite_not (p := _ <= _)]
   refine σ.swap_induction_on (by simp) fun π i j hne h_eq => ?_
-  rw [Equi
+  rw [Equiv.Perm.signAux_mul]; rw [Equiv.Perm.sign_mul]; rw [h_eq]; rw [Equiv.Perm.sign_swap hne]; rw [Equiv.Perm.signAux_swap hne]
 
 中文:
 定理 等价.置换.sign_eq_prod_prod_Iio
@@ -1931,7 +2037,7 @@ theorem Equiv.Perm.sign_eq_prod_prod_Iio
     · simp [Finset.ext_iff, Equiv.Perm.mem_finPairsLT]
     simp [← ite_not (p := _ <= _)]
   refine σ.swap_induction_on (by simp) fun π i j hne h_eq => ?_
-  rw [Equi
+  rw [Equiv.Perm.signAux_mul]; rw [Equiv.Perm.sign_mul]; rw [h_eq]; rw [Equiv.Perm.sign_swap hne]; rw [Equiv.Perm.signAux_swap hne]
 
 Depends on / 依赖: Equiv.Perm.mem_finPairsLT, Equiv.Perm.signAux, Equiv.Perm.signAux_mul, Equiv.Perm.signAux_swap, Equiv.Perm.sign_mul, Equiv.Perm.sign_swap, Finset, Finset.ext_iff, Finset.prod_sigma, convert, ext_iff, h_eq, ite_not, mem_finPairsLT, prod_sigma, signAux, signAux_mul, signAux_swap, sign_mul, sign_swap
 -/
@@ -1981,7 +2087,20 @@ theorem Equiv.Perm.prod_Iio_comp_eq_sign_mul_prod
   set D := (Finset.univ : Finset (Fin n)).sigma Finset.Iio with hD
   have hφD : D.image (fun x => ⟨σ x.1 ⊔ σ x.2, σ x.1 ⊓ σ x.2⟩) = D := by
     ext ⟨x1, x2⟩
-    su
+    suffices (exists a, exists b < a, σ a ⊔ σ b = x1 ∧ σ a ⊓ σ b = x2) ↔ x2 < x1 by simpa [hD]
+    refine ⟨?_, fun hlt => ?_⟩
+    · rintro ⟨i, j, hij, rfl, rfl⟩
+exact inf_le_sup.lt_of_ne by simp [hij.ne.symm]
+    obtain hlt' | hle := lt_or_ge (σ.symm x1) (σ.symm x2)
+    · exact ⟨_, _, hlt', by simp [hlt.le]⟩
+    exact ⟨_, _, hle.lt_of_ne (by simp [hlt.ne]), by simp [hlt.le]⟩
+  nth_rw 2 [← hφD]
+  rw [Finset.prod_image fun x hx y hy => Finset.injOn_of_card_image_eq (by rw [hφD]) hx hy]
+  refine Finset.prod_congr rfl fun ⟨x₁, x₂⟩ hx => ?_
+  replace hx : x₂ < x₁ := by simpa [hD] using hx
+  obtain hlt | hle := lt_or_ge (σ x₁) (σ x₂)
+  · simp [inf_eq_left.2 hlt.le, sup_eq_right.2 hlt.le, hx.not_gt, ← hf]
+  simp [inf_eq_right.2 hle, sup_eq_left.2 hle, hx]
 
 中文:
 定理 等价.置换.prod_Iio_comp_eq_sign_mul_prod
@@ -1992,7 +2111,20 @@ theorem Equiv.Perm.prod_Iio_comp_eq_sign_mul_prod
   set D := (Finset.univ : Finset (Fin n)).sigma Finset.Iio with hD
   have hφD : D.image (fun x => ⟨σ x.1 ⊔ σ x.2, σ x.1 ⊓ σ x.2⟩) = D := by
     ext ⟨x1, x2⟩
-    su
+    suffices (exists a, exists b < a, σ a ⊔ σ b = x1 ∧ σ a ⊓ σ b = x2) ↔ x2 < x1 by simpa [hD]
+    refine ⟨?_, fun hlt => ?_⟩
+    · rintro ⟨i, j, hij, rfl, rfl⟩
+exact inf_le_sup.lt_of_ne by simp [hij.ne.symm]
+    obtain hlt' | hle := lt_or_ge (σ.symm x1) (σ.symm x2)
+    · exact ⟨_, _, hlt', by simp [hlt.le]⟩
+    exact ⟨_, _, hle.lt_of_ne (by simp [hlt.ne]), by simp [hlt.le]⟩
+  nth_rw 2 [← hφD]
+  rw [Finset.prod_image fun x hx y hy => Finset.injOn_of_card_image_eq (by rw [hφD]) hx hy]
+  refine Finset.prod_congr rfl fun ⟨x₁, x₂⟩ hx => ?_
+  replace hx : x₂ < x₁ := by simpa [hD] using hx
+  obtain hlt | hle := lt_or_ge (σ x₁) (σ x₂)
+  · simp [inf_eq_left.2 hlt.le, sup_eq_right.2 hlt.le, hx.not_gt, ← hf]
+  simp [inf_eq_right.2 hle, sup_eq_left.2 hle, hx]
 
 Depends on / 依赖: D.image, Finset, Finset.Iio, Finset.prod_mul_distrib, Finset.prod_sigma, Finset.univ, Int.cast_prod, Units.coe_prod, cast_prod, coe_prod, hij.ne.symm, inf_le_sup, inf_le_sup.lt_of_ne, lt_of_ne, prod_mul_distrib, prod_sigma, sign_eq_prod_prod_Iio, sign_inv, simp_rw
 -/

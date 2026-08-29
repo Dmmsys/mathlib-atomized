@@ -107,7 +107,9 @@ theorem dist_smul_add_one_sub_smul_le
       simp_rw [dist_eq_norm', ← norm_smul, sub_smul, one_smul, smul_sub, ← sub_sub, ← sub_add,
         sub_right_comm]
     _ = (1 - r) * dist y x := by
-      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (sub_nonneg.mpr h.2)]; rw [dist_eq_
+      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (sub_nonneg.mpr h.2)]; rw [dist_eq_norm']
+    _ <= (1 - 0) * dist y x := by gcongr; exact h.1
+    _ = dist y x := by rw [sub_zero, one_mul]
 
 中文:
 定理 dist_smul_add_one_sub_smul_le
@@ -117,7 +119,9 @@ theorem dist_smul_add_one_sub_smul_le
       simp_rw [dist_eq_norm', ← norm_smul, sub_smul, one_smul, smul_sub, ← sub_sub, ← sub_add,
         sub_right_comm]
     _ = (1 - r) * dist y x := by
-      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (sub_nonneg.mpr h.2)]; rw [dist_eq_
+      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (sub_nonneg.mpr h.2)]; rw [dist_eq_norm']
+    _ <= (1 - 0) * dist y x := by gcongr; exact h.1
+    _ = dist y x := by rw [sub_zero, one_mul]
 
 Depends on / 依赖: Real.norm_eq_abs, abs_eq_self, abs_eq_self.mpr, dist_eq_norm, norm_eq_abs, norm_smul, one_mul, one_smul, simp_rw, smul_sub, sub_add, sub_nonneg, sub_nonneg.mpr, sub_right_comm, sub_smul, sub_sub, sub_zero
 -/
@@ -146,6 +150,10 @@ theorem closure_ball
   · rw [one_smul, sub_add_cancel]
   · simp [closure_Ico zero_ne_one, zero_le_one]
   · rintro c ⟨hc0, hc1⟩
+    rw [mem_ball]; rw [dist_eq_norm]; rw [add_sub_cancel_right]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_of_nonneg hc0]; rw [mul_comm]; rw [← mul_one r]
+    rw [mem_closedBall]; rw [dist_eq_norm] at hy
+    replace hr : 0 < r := ((norm_nonneg _).trans hy).lt_of_ne hr.symm
+    apply mul_lt_mul' <;> assumption
 
 中文:
 定理 closure_ball
@@ -158,6 +166,10 @@ theorem closure_ball
   · rw [one_smul, sub_add_cancel]
   · simp [closure_Ico zero_ne_one, zero_le_one]
   · rintro c ⟨hc0, hc1⟩
+    rw [mem_ball]; rw [dist_eq_norm]; rw [add_sub_cancel_right]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_of_nonneg hc0]; rw [mul_comm]; rw [← mul_one r]
+    rw [mem_closedBall]; rw [dist_eq_norm] at hy
+    replace hr : 0 < r := ((norm_nonneg _).trans hy).lt_of_ne hr.symm
+    apply mul_lt_mul' <;> assumption
 
 Depends on / 依赖: ContinuousWithinAt, Real.norm_eq_abs, Subset, Subset.antisymm, abs_of_nonneg, add_sub_cancel_right, antisymm, closure_Ico, closure_ball_subset_closedBall, convert, dist_eq_norm, fun_prop, mem_ball, mem_closedBall, mem_closure, mul_comm, mul_one, norm_eq_abs, norm_smul, one_smul
 -/
@@ -207,7 +219,14 @@ theorem interior_closedBall
   intro y hy
   rcases (mem_closedBall.1 <| interior_subset hy).lt_or_eq with (hr | rfl)
   · exact hr
-  set f : Real -> E := fun c 
+  set f : Real -> E := fun c : Real => c • (y - x) + x
+  suffices f ⁻¹' closedBall x (dist y x) subseteq Icc (-1) 1 by
+    have h1 : (1 : Real) in interior (Icc (-1 : Real) 1) :=
+      interior_mono this (preimage_interior_subset_interior_preimage (by fun_prop) (by simpa [f]))
+    simp at h1
+  intro c hc
+  rw [mem_Icc]; rw [← abs_le]; rw [← Real.norm_eq_abs]; rw [← mul_le_mul_iff_left₀ hr]
+  simpa [f, dist_eq_norm, norm_smul] using hc
 
 中文:
 定理 interior_closedBall
@@ -219,7 +238,14 @@ theorem interior_closedBall
   intro y hy
   rcases (mem_closedBall.1 <| interior_subset hy).lt_or_eq with (hr | rfl)
   · exact hr
-  set f : Real -> E := fun c 
+  set f : Real -> E := fun c : Real => c • (y - x) + x
+  suffices f ⁻¹' closedBall x (dist y x) subseteq Icc (-1) 1 by
+    have h1 : (1 : Real) in interior (Icc (-1 : Real) 1) :=
+      interior_mono this (preimage_interior_subset_interior_preimage (by fun_prop) (by simpa [f]))
+    simp at h1
+  intro c hc
+  rw [mem_Icc]; rw [← abs_le]; rw [← Real.norm_eq_abs]; rw [← mul_le_mul_iff_left₀ hr]
+  simpa [f, dist_eq_norm, norm_smul] using hc
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, ball_eq_empty, ball_subset_interior_closedBall, closedBall, closedBall_eq_empty, hr.le, hr.lt_or_gt, interior, interior_empty, interior_mono, interior_subset, lt_or_eq, lt_or_gt, mem_closedBall, preimage_interior_subset_interior_preimage, subseteq
 -/

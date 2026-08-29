@@ -91,7 +91,10 @@ w := F.map_injective by
       rw [← Category.assoc]; rw [eq_whisker hf.w]
     simp [reassoc']
 isLimit := isLimitOfReflects F
-IsLimit.ofConeEquiv (C
+IsLimit.ofConeEquiv (Cone.postcomposeEquivalence (compNatIso F))
+      (IsLimit.ofIsoLimit (IsKernel.ofCompIso _ _ (F.objObjPreimageIso hf.Z) (by
+        simp only [Functor.map_preimage, Category.assoc, Iso.inv_hom_id, Category.comp_id])
+        hf.isLimit)) (Fork.ext (Iso.refl _) (by simp [compNatIso, Fork.ι]))
 
 中文:
 定义 equivalenceReflectsNormalMono
@@ -103,7 +106,10 @@ w := F.map_injective by
       rw [← Category.assoc]; rw [eq_whisker hf.w]
     simp [reassoc']
 isLimit := isLimitOfReflects F
-IsLimit.ofConeEquiv (C
+IsLimit.ofConeEquiv (Cone.postcomposeEquivalence (compNatIso F))
+      (IsLimit.ofIsoLimit (IsKernel.ofCompIso _ _ (F.objObjPreimageIso hf.Z) (by
+        simp only [Functor.map_preimage, Category.assoc, Iso.inv_hom_id, Category.comp_id])
+        hf.isLimit)) (Fork.ext (Iso.refl _) (by simp [compNatIso, Fork.ι]))
 
 Depends on / 依赖: F.objPreimage, hf.Z, objPreimage
 -/
@@ -188,7 +194,9 @@ definition normalOfIsPullbackSndOfNormal
       simp only [← Category.assoc, eq_whisker comm]
     rw [← reassoc']; rw [hn.w]; rw [HasZeroMorphisms.comp_zero]
   isLimit := by
-    letI gr := regularOfIsPullbackSndOfRegular hn.regularMono comm
+    letI gr := regularOfIsPullbackSndOfRegular hn.regularMono comm t
+    have q := (HasZeroMorphisms.comp_zero k hn.Z).symm
+    convert! gr.isLimit
 
 中文:
 定义 normalOfIsPullbackSndOfNormal
@@ -200,7 +208,9 @@ definition normalOfIsPullbackSndOfNormal
       simp only [← Category.assoc, eq_whisker comm]
     rw [← reassoc']; rw [hn.w]; rw [HasZeroMorphisms.comp_zero]
   isLimit := by
-    letI gr := regularOfIsPullbackSndOfRegular hn.regularMono comm
+    letI gr := regularOfIsPullbackSndOfRegular hn.regularMono comm t
+    have q := (HasZeroMorphisms.comp_zero k hn.Z).symm
+    convert! gr.isLimit
 
 Depends on / 依赖: hn.Z
 -/
@@ -263,7 +273,7 @@ definition NormalMono.ofArrowIso
   isLimit := by
     refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isLimit
     · exact parallelPair.ext (Arrow.rightFunc.mapIso e) (Iso.refl _)
-    · exact 
+    · exact Fork.ext (Arrow.leftFunc.mapIso e)
 
 中文:
 定义 正规单态射.ofArrowIso
@@ -277,7 +287,7 @@ definition NormalMono.ofArrowIso
   isLimit := by
     refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isLimit
     · exact parallelPair.ext (Arrow.rightFunc.mapIso e) (Iso.refl _)
-    · exact 
+    · exact Fork.ext (Arrow.leftFunc.mapIso e)
 
 Depends on / 依赖: hf.Z
 -/
@@ -401,7 +411,8 @@ w := F.map_injective by simp [hf.w]
 isColimit := isColimitOfReflects F
 IsColimit.ofCoconeEquiv (Cocone.precomposeEquivalence (compNatIso F))
       (IsColimit.ofIsoColimit
-        (IsCokernel.ofIsoComp _ _ (F.objObjPreimageI
+        (IsCokernel.ofIsoComp _ _ (F.objObjPreimageIso hf.W).symm (by simp) hf.isColimit)
+          (Cofork.ext (Iso.refl _) (by simp [compNatIso, Cofork.π])))
 
 中文:
 定义 equivalenceReflectsNormalEpi
@@ -412,7 +423,8 @@ w := F.map_injective by simp [hf.w]
 isColimit := isColimitOfReflects F
 IsColimit.ofCoconeEquiv (Cocone.precomposeEquivalence (compNatIso F))
       (IsColimit.ofIsoColimit
-        (IsCokernel.ofIsoComp _ _ (F.objObjPreimageI
+        (IsCokernel.ofIsoComp _ _ (F.objObjPreimageIso hf.W).symm (by simp) hf.isColimit)
+          (Cofork.ext (Iso.refl _) (by simp [compNatIso, Cofork.π])))
 
 Depends on / 依赖: F.objPreimage, hf.W, objPreimage
 -/
@@ -494,7 +506,9 @@ definition normalOfIsPushoutSndOfNormal
       rw [← Category.assoc]; rw [eq_whisker gn.w]
     rw [Category.assoc]; rw [comm]; rw [reassoc']; rw [zero_comp]
   isColimit := by
-    letI hn := regularOfIsPushoutSndOfRegular gn.regularEpi comm 
+    letI hn := regularOfIsPushoutSndOfRegular gn.regularEpi comm t
+    have q := (@zero_comp _ _ _ gn.W _ _ f).symm
+    convert! hn.isColimit
 
 中文:
 定义 normalOfIsPushoutSndOfNormal
@@ -506,7 +520,9 @@ definition normalOfIsPushoutSndOfNormal
       rw [← Category.assoc]; rw [eq_whisker gn.w]
     rw [Category.assoc]; rw [comm]; rw [reassoc']; rw [zero_comp]
   isColimit := by
-    letI hn := regularOfIsPushoutSndOfRegular gn.regularEpi comm 
+    letI hn := regularOfIsPushoutSndOfRegular gn.regularEpi comm t
+    have q := (@zero_comp _ _ _ gn.W _ _ f).symm
+    convert! hn.isColimit
 
 Depends on / 依赖: gn.W
 -/
@@ -574,7 +590,8 @@ definition NormalEpi.ofArrowIso
     rw [Category.assoc]; rw [this]; rw [reassoc_of% hf.w]; rw [zero_comp]
   isColimit := by
     refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isColimit
-    · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc
+    · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc.mapIso e)
+    · exact Cofork.ext (Arrow.rightFunc.mapIso e) (by simp [Cofork.π])
 
 中文:
 定义 正规满态射.ofArrowIso
@@ -587,7 +604,8 @@ definition NormalEpi.ofArrowIso
     rw [Category.assoc]; rw [this]; rw [reassoc_of% hf.w]; rw [zero_comp]
   isColimit := by
     refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1 hf.isColimit
-    · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc
+    · exact parallelPair.ext (Iso.refl _) (Arrow.leftFunc.mapIso e)
+    · exact Cofork.ext (Arrow.rightFunc.mapIso e) (by simp [Cofork.π])
 
 Depends on / 依赖: hf.W
 -/
@@ -624,7 +642,12 @@ definition normalEpiOfNormalMonoUnop
         (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
       (fun g' w' =>
         congrArg Quiver.Hom.op
-          (KernelFork.IsLimit.lif
+          (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).2)
+      (by
+        rintro Z' g' w' m' rfl
+        apply Quiver.Hom.unop_inj
+        apply m.isLimit.uniq (KernelFork.ofι (m'.unop ≫ f.unop) _) m'.unop
+        rintro (⟨⟩ | ⟨⟩) <;> simp)
 
 中文:
 定义 normalEpiOfNormalMonoUnop
@@ -638,7 +661,12 @@ definition normalEpiOfNormalMonoUnop
         (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
       (fun g' w' =>
         congrArg Quiver.Hom.op
-          (KernelFork.IsLimit.lif
+          (KernelFork.IsLimit.lift' m.isLimit g'.unop (congrArg Quiver.Hom.unop w')).2)
+      (by
+        rintro Z' g' w' m' rfl
+        apply Quiver.Hom.unop_inj
+        apply m.isLimit.uniq (KernelFork.ofι (m'.unop ≫ f.unop) _) m'.unop
+        rintro (⟨⟩ | ⟨⟩) <;> simp)
 -/
 def normalEpiOfNormalMonoUnop {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalMono f.unop) : NormalEpi f where
   W := op m.Z
@@ -675,7 +703,12 @@ definition normalMonoOfNormalEpiUnop
         (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
       (fun g' w' =>
         congrArg Quiver.Hom.op
-          (CokernelCofork.IsColim
+          (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).2)
+      (by
+        rintro Z' g' w' m' rfl
+        apply Quiver.Hom.unop_inj
+        apply m.isColimit.uniq (CokernelCofork.ofπ (f.unop ≫ m'.unop) _) m'.unop
+        rintro (⟨⟩ | ⟨⟩) <;> simp)
 
 中文:
 定义 normalMonoOfNormalEpiUnop
@@ -689,7 +722,12 @@ definition normalMonoOfNormalEpiUnop
         (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).1.op)
       (fun g' w' =>
         congrArg Quiver.Hom.op
-          (CokernelCofork.IsColim
+          (CokernelCofork.IsColimit.desc' m.isColimit g'.unop (congrArg Quiver.Hom.unop w')).2)
+      (by
+        rintro Z' g' w' m' rfl
+        apply Quiver.Hom.unop_inj
+        apply m.isColimit.uniq (CokernelCofork.ofπ (f.unop ≫ m'.unop) _) m'.unop
+        rintro (⟨⟩ | ⟨⟩) <;> simp)
 -/
 def normalMonoOfNormalEpiUnop {X Y : Cᵒᵖ} (f : X ⟶ Y) (m : NormalEpi f.unop) : NormalMono f where
   Z := op m.W

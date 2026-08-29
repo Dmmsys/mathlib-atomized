@@ -122,7 +122,8 @@ theorem mem_antidiagonalTuple
   | cons x₀ x ih =>
     simp_rw [Fin.sum_cons, antidiagonalTuple, List.mem_flatMap, List.mem_map,
       List.Nat.mem_antidiagonal, Fin.cons_inj, exists_eq_right_right, ih,
-      @eq_comm _ _
+      @eq_comm _ _ (Prod.snd _), and_comm (a := Prod.snd _ = _),
+      ← Prod.mk_inj (a₁ := Prod.fst _), exists_eq_right]
 
 中文:
 定理 mem_antidiagonalTuple
@@ -136,7 +137,8 @@ theorem mem_antidiagonalTuple
   | cons x₀ x ih =>
     simp_rw [Fin.sum_cons, antidiagonalTuple, List.mem_flatMap, List.mem_map,
       List.Nat.mem_antidiagonal, Fin.cons_inj, exists_eq_right_right, ih,
-      @eq_comm _ _
+      @eq_comm _ _ (Prod.snd _), and_comm (a := Prod.snd _ = _),
+      ← Prod.mk_inj (a₁ := Prod.fst _), exists_eq_right]
 
 Depends on / 依赖: Fin.consInduction, Fin.cons_inj, Fin.sum_cons, List.Nat.mem_antidiagonal, List.mem_flatMap, List.mem_map, Prod.fst, Prod.mk_inj, Prod.snd, and_comm, antidiagonalTuple, consInduction, cons_inj, eq_comm, exists_eq_right, exists_eq_right_right, generalizing, mem_antidiagonal, mem_flatMap, mem_map
 -/
@@ -169,7 +171,21 @@ theorem nodup_antidiagonalTuple
   · intro i _
     exact (ih i.snd).map (Fin.cons_right_injective (α := fun _ => Nat) i.fst)
   induction n with
-  | zero => exact List.pairwise_singlet
+  | zero => exact List.pairwise_singleton _ _
+  | succ n n_ih =>
+    rw [List.Nat.antidiagonal_succ]
+    refine List.Pairwise.cons (fun a ha x hx₁ hx₂ => ?_) (n_ih.map _ fun a b h x hx₁ hx₂ => ?_)
+    · rw [List.mem_map] at hx₁ hx₂ ha
+      obtain ⟨⟨a, -, rfl⟩, ⟨x₁, -, rfl⟩, ⟨x₂, -, h⟩⟩ := ha, hx₁, hx₂
+      rw [Fin.cons_inj] at h
+      injection h.1
+    · rw [List.mem_map] at hx₁ hx₂
+      obtain ⟨⟨x₁, hx₁, rfl⟩, ⟨x₂, hx₂, h₁₂⟩⟩ := hx₁, hx₂
+      dsimp at h₁₂
+      rw [Fin.cons_inj]; rw [Nat.succ_inj] at h₁₂
+      obtain ⟨h₁₂, rfl⟩ := h₁₂
+      rw [Function.onFun]; rw [h₁₂] at h
+      exact h (List.mem_map_of_mem hx₁) (List.mem_map_of_mem hx₂)
 
 中文:
 定理 nodup_antidiagonalTuple
@@ -184,7 +200,21 @@ theorem nodup_antidiagonalTuple
   · intro i _
     exact (ih i.snd).map (Fin.cons_right_injective (α := fun _ => Nat) i.fst)
   induction n with
-  | zero => exact List.pairwise_singlet
+  | zero => exact List.pairwise_singleton _ _
+  | succ n n_ih =>
+    rw [List.Nat.antidiagonal_succ]
+    refine List.Pairwise.cons (fun a ha x hx₁ hx₂ => ?_) (n_ih.map _ fun a b h x hx₁ hx₂ => ?_)
+    · rw [List.mem_map] at hx₁ hx₂ ha
+      obtain ⟨⟨a, -, rfl⟩, ⟨x₁, -, rfl⟩, ⟨x₂, -, h⟩⟩ := ha, hx₁, hx₂
+      rw [Fin.cons_inj] at h
+      injection h.1
+    · rw [List.mem_map] at hx₁ hx₂
+      obtain ⟨⟨x₁, hx₁, rfl⟩, ⟨x₂, hx₂, h₁₂⟩⟩ := hx₁, hx₂
+      dsimp at h₁₂
+      rw [Fin.cons_inj]; rw [Nat.succ_inj] at h₁₂
+      obtain ⟨h₁₂, rfl⟩ := h₁₂
+      rw [Function.onFun]; rw [h₁₂] at h
+      exact h (List.mem_map_of_mem hx₁) (List.mem_map_of_mem hx₂)
 
 Depends on / 依赖: Fin.cons_right_injective, List.Nat.antidiagonal_succ, List.Pairwise.cons, List.mem_map, List.nodup_flatMap, List.pairwise_singleton, Pairwise, antidiagonalTuple, antidiagonal_succ, cons_right_injective, generalizing, i.fst, i.snd, mem_map, n_ih, n_ih.map, nodup_flatMap, pairwise_singleton, simp_rw
 -/
@@ -243,7 +273,10 @@ theorem antidiagonalTuple_one
     Nat.sub_self, List.flatMap_append, List.flatMap_singleton, List.flatMap_map]
   conv_rhs => rw [← List.nil_append [![n]]]
   congr 1
-  simp_rw [List.flatMap_eq_nil_iff, List.mem_range, List.map_eq_
+  simp_rw [List.flatMap_eq_nil_iff, List.mem_range, List.map_eq_nil_iff]
+  intro x hx
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_lt hx
+  rw [add_assoc]; rw [add_tsub_cancel_left]; rw [antidiagonalTuple_zero_succ]
 
 中文:
 定理 antidiagonalTuple_one
@@ -254,7 +287,10 @@ theorem antidiagonalTuple_one
     Nat.sub_self, List.flatMap_append, List.flatMap_singleton, List.flatMap_map]
   conv_rhs => rw [← List.nil_append [![n]]]
   congr 1
-  simp_rw [List.flatMap_eq_nil_iff, List.mem_range, List.map_eq_
+  simp_rw [List.flatMap_eq_nil_iff, List.mem_range, List.map_eq_nil_iff]
+  intro x hx
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_lt hx
+  rw [add_assoc]; rw [add_tsub_cancel_left]; rw [antidiagonalTuple_zero_succ]
 
 Depends on / 依赖: List.flatMap_append, List.flatMap_eq_nil_iff, List.flatMap_map, List.flatMap_singleton, List.map_append, List.map_eq_nil_iff, List.map_singleton, List.mem_range, List.nil_append, List.range_succ, Nat.exists_eq_add_of_lt, Nat.sub_self, add_assoc, add_tsub_cancel_left, antidiagonal, antidiagonalTuple, antidiagonalTuple_zero_succ, conv_rhs, exists_eq_add_of_lt, flatMap_append
 -/

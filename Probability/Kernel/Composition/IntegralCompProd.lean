@@ -76,7 +76,12 @@ theorem hasFiniteIntegral_prodMk_left
     ∫⁻ b, ENNReal.ofReal (η (a, b) (Prod.mk b ⁻¹' s)).toReal ∂κ a
     _ <= ∫⁻ b, η (a, b) (Prod.mk b ⁻¹' t) ∂κ a := by
       refine lintegral_mono_ae ?_
-     
+      filter_upwards [ae_kernel_lt_top a h2s] with b hb
+      rw [ofReal_toReal hb.ne]
+      exact measure_mono (preimage_mono (subset_toMeasurable _ _))
+    _ <= (κ otimesₖ η) a t := le_compProd_apply _ _ _ _
+    _ = (κ otimesₖ η) a s := measure_toMeasurable s
+    _ < ⊤ := h2s.lt_top
 
 中文:
 定理 hasFinite整数egral_prodMk_left
@@ -88,7 +93,12 @@ theorem hasFiniteIntegral_prodMk_left
     ∫⁻ b, ENNReal.ofReal (η (a, b) (Prod.mk b ⁻¹' s)).toReal ∂κ a
     _ <= ∫⁻ b, η (a, b) (Prod.mk b ⁻¹' t) ∂κ a := by
       refine lintegral_mono_ae ?_
-     
+      filter_upwards [ae_kernel_lt_top a h2s] with b hb
+      rw [ofReal_toReal hb.ne]
+      exact measure_mono (preimage_mono (subset_toMeasurable _ _))
+    _ <= (κ otimesₖ η) a t := le_compProd_apply _ _ _ _
+    _ = (κ otimesₖ η) a s := measure_toMeasurable s
+    _ < ⊤ := h2s.lt_top
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, Prod.mk, ae_kernel_lt_top, enorm_eq_ofReal, filter_upwards, hasFiniteIntegral_iff_enorm, hb.ne, le_compProd_apply, lintegral_mono_ae, measureReal_def, measure_mono, measure_toMe, ofReal, ofReal_toReal, preimage_mono, simp_rw, subset_toMeasurable, toMeasurable, toReal
 -/
@@ -196,7 +206,15 @@ theorem hasFiniteIntegral_compProd_iff
   rw [lintegral_compProd _ _ _ h1f.enorm]
   have : forall x, forallᵐ y ∂η (a, x), 0 <= ‖f (x, y)‖ := fun x => Eventually.of_forall fun y => norm_nonneg _
   simp_rw [integral_eq_lintegral_of_nonneg_ae (this _)
-      (h1f.norm.comp_measurable measurable_pro
+      (h1f.norm.comp_measurable measurable_prodMk_left).aestronglyMeasurable,
+    enorm_eq_ofReal toReal_nonneg, ofReal_norm]
+  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p -> (r ↔ q) := fun {p q r} h1 => by
+    rw [← and_congr_right_iff]; rw [and_iff_right_of_imp h1]
+  rw [this]
+  · intro h2f; rw [lintegral_congr_ae]
+    filter_upwards [h2f] with x hx
+    rw [ofReal_toReal]; finiteness
+  · intro h2f; refine ae_lt_top ?_ h2f.ne; exact h1f.enorm.lintegral_kernel_prod_right''
 
 中文:
 定理 hasFinite整数egral_compProd_iff
@@ -207,7 +225,15 @@ theorem hasFiniteIntegral_compProd_iff
   rw [lintegral_compProd _ _ _ h1f.enorm]
   have : forall x, forallᵐ y ∂η (a, x), 0 <= ‖f (x, y)‖ := fun x => Eventually.of_forall fun y => norm_nonneg _
   simp_rw [integral_eq_lintegral_of_nonneg_ae (this _)
-      (h1f.norm.comp_measurable measurable_pro
+      (h1f.norm.comp_measurable measurable_prodMk_left).aestronglyMeasurable,
+    enorm_eq_ofReal toReal_nonneg, ofReal_norm]
+  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p -> (r ↔ q) := fun {p q r} h1 => by
+    rw [← and_congr_right_iff]; rw [and_iff_right_of_imp h1]
+  rw [this]
+  · intro h2f; rw [lintegral_congr_ae]
+    filter_upwards [h2f] with x hx
+    rw [ofReal_toReal]; finiteness
+  · intro h2f; refine ae_lt_top ?_ h2f.ne; exact h1f.enorm.lintegral_kernel_prod_right''
 
 Depends on / 依赖: Eventually, Eventually.of_forall, aestronglyMeasurable, and_congr_right_iff, and_iff_righ, comp_measurable, enorm_eq_ofReal, h1f.enorm, h1f.norm.comp_measurable, hasFiniteIntegral_iff_enorm, integral_eq_lintegral_of_nonneg_ae, lintegral_compProd, measurable_prodMk_left, norm_nonneg, ofReal_norm, of_forall, simp_rw, toReal_nonneg
 -/
@@ -243,7 +269,8 @@ theorem hasFiniteIntegral_compProd_iff'
     filter_upwards [ae_ae_of_ae_compProd h1f.ae_eq_mk.symm] with x hx using
       hasFiniteIntegral_congr hx
   · apply hasFiniteIntegral_congr
-  
+    filter_upwards [ae_ae_of_ae_compProd h1f.ae_eq_mk.symm] with _ hx using
+      integral_congr_ae (EventuallyEq.fun_comp hx _)
 
 中文:
 定理 hasFinite整数egral_compProd_iff'
@@ -256,7 +283,8 @@ theorem hasFiniteIntegral_compProd_iff'
     filter_upwards [ae_ae_of_ae_compProd h1f.ae_eq_mk.symm] with x hx using
       hasFiniteIntegral_congr hx
   · apply hasFiniteIntegral_congr
-  
+    filter_upwards [ae_ae_of_ae_compProd h1f.ae_eq_mk.symm] with _ hx using
+      integral_congr_ae (EventuallyEq.fun_comp hx _)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.fun_comp, ae_ae_of_ae_compProd, ae_eq_mk, and_congr, eventually_congr, filter_upwards, fun_comp, h1f.ae_eq_mk, h1f.ae_eq_mk.symm, h1f.stronglyMeasurable_mk, hasFiniteIntegral_compProd_iff, hasFiniteIntegral_congr, integral_congr_ae, stronglyMeasurable_mk
 -/
@@ -585,7 +613,17 @@ theorem Kernel.continuous_integral_integral
   refine
     tendsto_integral_of_L1 _ (L1.integrable_coeFn g).integral_compProd.aestronglyMeasurable
       (Eventually.of_forall fun h => (L1.integrable_coeFn h).integral_compProd) ?_
-  simp_rw [← lintegral_fn_integral_sub (‖·‖ₑ) (L1.integrable_coeFn _)
+  simp_rw [← lintegral_fn_integral_sub (‖·‖ₑ) (L1.integrable_coeFn _) (L1.integrable_coeFn g)]
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds _ (fun i => zero_le) _
+  · exact fun i => ∫⁻ x, ∫⁻ y, ‖i (x, y) - g (x, y)‖ₑ ∂η (a, x) ∂κ a
+  swap; · exact fun i => lintegral_mono fun x => enorm_integral_le_lintegral_enorm _
+  have (i : Lp (α := β × γ) E 1 (((κ otimesₖ η) a) : Measure (β × γ))) :
+      Measurable fun z => ‖i z - g z‖ₑ :=
+    ((Lp.stronglyMeasurable i).sub (Lp.stronglyMeasurable g)).enorm
+  simp_rw [← lintegral_compProd _ _ _ (this _), ← L1.ofReal_norm_sub_eq_lintegral, ← ofReal_zero]
+  refine (continuous_ofReal.tendsto 0).comp ?_
+  rw [← tendsto_iff_norm_sub_tendsto_zero]
+  exact tendsto_id
 
 中文:
 定理 核.continuous_integral_integral
@@ -594,7 +632,17 @@ theorem Kernel.continuous_integral_integral
   refine
     tendsto_integral_of_L1 _ (L1.integrable_coeFn g).integral_compProd.aestronglyMeasurable
       (Eventually.of_forall fun h => (L1.integrable_coeFn h).integral_compProd) ?_
-  simp_rw [← lintegral_fn_integral_sub (‖·‖ₑ) (L1.integrable_coeFn _)
+  simp_rw [← lintegral_fn_integral_sub (‖·‖ₑ) (L1.integrable_coeFn _) (L1.integrable_coeFn g)]
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds _ (fun i => zero_le) _
+  · exact fun i => ∫⁻ x, ∫⁻ y, ‖i (x, y) - g (x, y)‖ₑ ∂η (a, x) ∂κ a
+  swap; · exact fun i => lintegral_mono fun x => enorm_integral_le_lintegral_enorm _
+  have (i : Lp (α := β × γ) E 1 (((κ otimesₖ η) a) : Measure (β × γ))) :
+      Measurable fun z => ‖i z - g z‖ₑ :=
+    ((Lp.stronglyMeasurable i).sub (Lp.stronglyMeasurable g)).enorm
+  simp_rw [← lintegral_compProd _ _ _ (this _), ← L1.ofReal_norm_sub_eq_lintegral, ← ofReal_zero]
+  refine (continuous_ofReal.tendsto 0).comp ?_
+  rw [← tendsto_iff_norm_sub_tendsto_zero]
+  exact tendsto_id
 
 Depends on / 依赖: Eventually, Eventually.of_forall, L1.integrable_coeFn, aestronglyMeasurable, continuous_iff_continuousAt, integrable_coeFn, integral_compProd, integral_compProd.aestronglyMeasurable, lintegral_, lintegral_fn_integral_sub, of_forall, simp_rw, tendsto_const_nhds, tendsto_integral_of_L1, tendsto_of_tendsto_of_tendsto_of_le_of_le, zero_le
 -/
@@ -628,7 +676,22 @@ theorem integral_compProd
   · intro c s hs h2s
     simp_rw [integral_indicator hs, ← indicator_comp_right, Function.comp_def,
       integral_indicator (measurable_prodMk_left hs), MeasureTheory.setIntegral_const,
-      integral_smul
+      integral_smul_const, measureReal_def]
+    congr 1
+    rw [integral_toReal]
+    rotate_left
+    · exact (Kernel.measurable_kernel_prodMk_left' hs _).aemeasurable
+    · exact ae_kernel_lt_top a h2s.ne
+    rw [Kernel.compProd_apply hs]
+  · intro f g _ i_f i_g hf hg
+    simp_rw [integral_add' i_f i_g, Kernel.integral_integral_add' i_f i_g, hf, hg]
+  · exact isClosed_eq continuous_integral Kernel.continuous_integral_integral
+  · intro f g hfg _ hf
+    convert! hf using 1
+    · exact integral_congr_ae hfg.symm
+    · apply integral_congr_ae
+      filter_upwards [ae_ae_of_ae_compProd hfg] with x hfgx using
+        integral_congr_ae (ae_eq_symm hfgx)
 
 中文:
 定理 integral_compProd
@@ -639,7 +702,22 @@ theorem integral_compProd
   · intro c s hs h2s
     simp_rw [integral_indicator hs, ← indicator_comp_right, Function.comp_def,
       integral_indicator (measurable_prodMk_left hs), MeasureTheory.setIntegral_const,
-      integral_smul
+      integral_smul_const, measureReal_def]
+    congr 1
+    rw [integral_toReal]
+    rotate_left
+    · exact (Kernel.measurable_kernel_prodMk_left' hs _).aemeasurable
+    · exact ae_kernel_lt_top a h2s.ne
+    rw [Kernel.compProd_apply hs]
+  · intro f g _ i_f i_g hf hg
+    simp_rw [integral_add' i_f i_g, Kernel.integral_integral_add' i_f i_g, hf, hg]
+  · exact isClosed_eq continuous_integral Kernel.continuous_integral_integral
+  · intro f g hfg _ hf
+    convert! hf using 1
+    · exact integral_congr_ae hfg.symm
+    · apply integral_congr_ae
+      filter_upwards [ae_ae_of_ae_compProd hfg] with x hfgx using
+        integral_congr_ae (ae_eq_symm hfgx)
 
 Depends on / 依赖: CompleteSpace, Function, Function.comp_def, Integrable, Integrable.induction, Kernel, Kernel.compProd_apply, Kernel.measurable_kernel_prodMk_left, MeasureTheory, MeasureTheory.setIntegral_const, ae_kernel_lt_top, aemeasurable, compProd_apply, comp_def, h2s.ne, indicator_comp_right, integral, integral_indicator, integral_smul_const, integral_toReal
 -/
@@ -808,7 +886,15 @@ theorem hasFiniteIntegral_comp_iff
   simp_rw [hasFiniteIntegral_iff_enorm, lintegral_comp _ _ _ hf.enorm]
   simp_rw [integral_eq_lintegral_of_nonneg_ae (ae_of_all _ fun y => norm_nonneg _)
       hf.norm.aestronglyMeasurable, enorm_eq_ofReal toReal_nonneg, ofReal_norm]
-  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p ->
+  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p -> (r ↔ q) := fun h => by
+    rw [← and_congr_right_iff]; rw [and_iff_right_of_imp h]
+  rw [this]
+  · intro h
+    rw [lintegral_congr_ae]
+    filter_upwards [h] with x hx
+    rw [ofReal_toReal]
+    finiteness
+  · exact fun h => ae_lt_top hf.enorm.lintegral_kernel h.ne
 
 中文:
 定理 hasFinite整数egral_comp_iff
@@ -818,7 +904,15 @@ theorem hasFiniteIntegral_comp_iff
   simp_rw [hasFiniteIntegral_iff_enorm, lintegral_comp _ _ _ hf.enorm]
   simp_rw [integral_eq_lintegral_of_nonneg_ae (ae_of_all _ fun y => norm_nonneg _)
       hf.norm.aestronglyMeasurable, enorm_eq_ofReal toReal_nonneg, ofReal_norm]
-  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p ->
+  have : forall {p q r : Prop} (_ : r -> p), (r ↔ p ∧ q) ↔ p -> (r ↔ q) := fun h => by
+    rw [← and_congr_right_iff]; rw [and_iff_right_of_imp h]
+  rw [this]
+  · intro h
+    rw [lintegral_congr_ae]
+    filter_upwards [h] with x hx
+    rw [ofReal_toReal]
+    finiteness
+  · exact fun h => ae_lt_top hf.enorm.lintegral_kernel h.ne
 
 Depends on / 依赖: ae_lt_top, ae_of_all, aestronglyMeasurable, and_congr_right_iff, and_iff_right_of_imp, enorm_eq_ofReal, filter_upwards, finiteness, hasFiniteIntegral_iff_enorm, hf.enorm, hf.norm.aestronglyMeasurable, integral_eq_lintegral_of_nonneg_ae, lintegral_comp, lintegral_congr_ae, norm_nonneg, ofReal_norm, ofReal_toReal, simp_rw, toReal_nonneg
 -/
@@ -850,7 +944,8 @@ theorem hasFiniteIntegral_comp_iff'
   refine and_congr (eventually_congr ?_) (hasFiniteIntegral_congr ?_)
   · filter_upwards [ae_ae_of_ae_comp hf.ae_eq_mk.symm] with _ hx using
       hasFiniteIntegral_congr hx
-  · filter_upwards [ae
+  · filter_upwards [ae_ae_of_ae_comp hf.ae_eq_mk.symm] with _ hx using
+      integral_congr_ae (EventuallyEq.fun_comp hx _)
 
 中文:
 定理 hasFinite整数egral_comp_iff'
@@ -861,7 +956,8 @@ theorem hasFiniteIntegral_comp_iff'
   refine and_congr (eventually_congr ?_) (hasFiniteIntegral_congr ?_)
   · filter_upwards [ae_ae_of_ae_comp hf.ae_eq_mk.symm] with _ hx using
       hasFiniteIntegral_congr hx
-  · filter_upwards [ae
+  · filter_upwards [ae_ae_of_ae_comp hf.ae_eq_mk.symm] with _ hx using
+      integral_congr_ae (EventuallyEq.fun_comp hx _)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.fun_comp, ae_ae_of_ae_comp, ae_eq_mk, and_congr, eventually_congr, filter_upwards, fun_comp, hasFiniteIntegral_comp_iff, hasFiniteIntegral_congr, hf.ae_eq_mk, hf.ae_eq_mk.symm, hf.stronglyMeasurable_mk, integral_congr_ae, stronglyMeasurable_mk
 -/
@@ -1190,7 +1286,15 @@ theorem continuous_integral_integral_comp
   refine continuous_iff_continuousAt.2 fun g => ?_
   refine tendsto_integral_of_L1 _ (L1.integrable_coeFn g).integral_comp.aestronglyMeasurable
       (Eventually.of_forall fun h => (L1.integrable_coeFn h).integral_comp) ?_
-  simp_rw [← lintegral_fn_integral_sub_comp (‖·‖ₑ) (L1.integrable_coeFn _)
+  simp_rw [← lintegral_fn_integral_sub_comp (‖·‖ₑ) (L1.integrable_coeFn _) (L1.integrable_coeFn g)]
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le
+    (h := fun i => ∫⁻ x, ∫⁻ y, ‖i y - g y‖ₑ ∂η x ∂κ a)
+    tendsto_const_nhds ?_ (fun _ => zero_le) ?_
+  swap; · exact fun _ => lintegral_mono fun _ => enorm_integral_le_lintegral_enorm _
+  have (i : γ ->₁[(η ∘ₖ κ) a] E) : Measurable fun z => ‖i z - g z‖ₑ :=
+    ((Lp.stronglyMeasurable i).sub (Lp.stronglyMeasurable g)).enorm
+  simp_rw [← lintegral_comp _ _ _ (this _), ← L1.ofReal_norm_sub_eq_lintegral, ← ofReal_zero]
+  exact (continuous_ofReal.tendsto 0).comp (tendsto_iff_norm_sub_tendsto_zero.1 tendsto_id)
 
 中文:
 定理 continuous_integral_integral_comp
@@ -1198,7 +1302,15 @@ theorem continuous_integral_integral_comp
   refine continuous_iff_continuousAt.2 fun g => ?_
   refine tendsto_integral_of_L1 _ (L1.integrable_coeFn g).integral_comp.aestronglyMeasurable
       (Eventually.of_forall fun h => (L1.integrable_coeFn h).integral_comp) ?_
-  simp_rw [← lintegral_fn_integral_sub_comp (‖·‖ₑ) (L1.integrable_coeFn _)
+  simp_rw [← lintegral_fn_integral_sub_comp (‖·‖ₑ) (L1.integrable_coeFn _) (L1.integrable_coeFn g)]
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le
+    (h := fun i => ∫⁻ x, ∫⁻ y, ‖i y - g y‖ₑ ∂η x ∂κ a)
+    tendsto_const_nhds ?_ (fun _ => zero_le) ?_
+  swap; · exact fun _ => lintegral_mono fun _ => enorm_integral_le_lintegral_enorm _
+  have (i : γ ->₁[(η ∘ₖ κ) a] E) : Measurable fun z => ‖i z - g z‖ₑ :=
+    ((Lp.stronglyMeasurable i).sub (Lp.stronglyMeasurable g)).enorm
+  simp_rw [← lintegral_comp _ _ _ (this _), ← L1.ofReal_norm_sub_eq_lintegral, ← ofReal_zero]
+  exact (continuous_ofReal.tendsto 0).comp (tendsto_iff_norm_sub_tendsto_zero.1 tendsto_id)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, L1.integrable_coeFn, aestronglyMeasurable, continuous_iff_continuousAt, integrable_coeFn, integral_comp, integral_comp.aestronglyMeasurable, lintegral_fn_integral_sub_comp, lintegral_mono, of_forall, simp_rw, tendsto_const_nhds, tendsto_integral_of_L1, tendsto_of_tendsto_of_tendsto_of_le_of_le, zero_le
 -/
@@ -1232,7 +1344,16 @@ theorem integral_comp
       measureReal_def]
     congr
     rw [integral_toReal]; rw [Kernel.comp_apply' _ _ _ hs]
-    
+    · exact (Kernel.measurable_coe _ hs).aemeasurable
+    · exact ae_lt_top_of_comp_ne_top a ms.ne
+  · rintro f g - i_f i_g hf hg
+    simp_rw [integral_add' i_f i_g, integral_integral_add'_comp i_f i_g, hf, hg]
+  · exact isClosed_eq continuous_integral Kernel.continuous_integral_integral_comp
+  · rintro f g hfg - hf
+    convert! hf using 1
+    · exact integral_congr_ae hfg.symm
+    · apply integral_congr_ae
+      filter_upwards [ae_ae_of_ae_comp hfg] with x hfgx using integral_congr_ae (ae_eq_symm hfgx)
 
 中文:
 定理 integral_comp
@@ -1246,7 +1367,16 @@ theorem integral_comp
       measureReal_def]
     congr
     rw [integral_toReal]; rw [Kernel.comp_apply' _ _ _ hs]
-    
+    · exact (Kernel.measurable_coe _ hs).aemeasurable
+    · exact ae_lt_top_of_comp_ne_top a ms.ne
+  · rintro f g - i_f i_g hf hg
+    simp_rw [integral_add' i_f i_g, integral_integral_add'_comp i_f i_g, hf, hg]
+  · exact isClosed_eq continuous_integral Kernel.continuous_integral_integral_comp
+  · rintro f g hfg - hf
+    convert! hf using 1
+    · exact integral_congr_ae hfg.symm
+    · apply integral_congr_ae
+      filter_upwards [ae_ae_of_ae_comp hfg] with x hfgx using integral_congr_ae (ae_eq_symm hfgx)
 
 Depends on / 依赖: CompleteSpace, Integrable, Integrable.induction, Kernel, Kernel.comp_apply, Kernel.measurable_coe, MeasureTheory, MeasureTheory.setIntegral_const, _comp, ae_lt_top_of_comp_ne_top, aemeasurable, comp_apply, continuous_in, integral, integral_add, integral_indicator, integral_integral_add, integral_smul_const, integral_toReal, isClosed_eq
 -/

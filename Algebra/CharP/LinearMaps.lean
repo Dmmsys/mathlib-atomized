@@ -50,7 +50,7 @@ theorem charP_end
       simp only [Nat.cast_smul_eq_nsmul, nsmul_eq_mul, mul_one]
     rw [exact]; rw [LinearMap.ext_iff]; rw [← hchar.1]
     exact ⟨fun h => htorsion.casesOn fun x hx => by simpa [← Ideal.mem_torsionOf_iff, hx] using h x,
-      fun h => (congrAr
+      fun h => (congrArg (fun t => forall x, t • x = 0) h).mpr fun x => zero_smul R x⟩
 
 中文:
 定理 charP_end
@@ -60,7 +60,7 @@ theorem charP_end
       simp only [Nat.cast_smul_eq_nsmul, nsmul_eq_mul, mul_one]
     rw [exact]; rw [LinearMap.ext_iff]; rw [← hchar.1]
     exact ⟨fun h => htorsion.casesOn fun x hx => by simpa [← Ideal.mem_torsionOf_iff, hx] using h x,
-      fun h => (congrAr
+      fun h => (congrArg (fun t => forall x, t • x = 0) h).mpr fun x => zero_smul R x⟩
 
 Depends on / 依赖: Ideal.mem_torsionOf_iff, LinearMap, LinearMap.ext_iff, Nat.cast_smul_eq_nsmul, casesOn, cast_smul_eq_nsmul, ext_iff, htorsion, htorsion.casesOn, mem_torsionOf_iff, mul_one, nsmul_eq_mul, zero_smul
 -/

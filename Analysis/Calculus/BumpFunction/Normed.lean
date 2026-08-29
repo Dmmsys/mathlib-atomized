@@ -386,7 +386,7 @@ theorem measure_closedBall_le_integral
   μ.real (closedBall c f.rIn) = ∫ x in closedBall c f.rIn, 1 ∂μ := by simp
   _ = ∫ x in closedBall c f.rIn, f x ∂μ := setIntegral_congr_fun measurableSet_closedBall
         (fun x hx => (one_of_mem_closedBall f hx).symm)
-  _ <= ∫ x, f x ∂μ := setIntegral_le_integral f.integrable (Eventually.
+  _ <= ∫ x, f x ∂μ := setIntegral_le_integral f.integrable (Eventually.of_forall (fun x => f.nonneg))
 
 中文:
 定理 measure_closedBall_le_integral
@@ -395,7 +395,7 @@ theorem measure_closedBall_le_integral
   μ.real (closedBall c f.rIn) = ∫ x in closedBall c f.rIn, 1 ∂μ := by simp
   _ = ∫ x in closedBall c f.rIn, f x ∂μ := setIntegral_congr_fun measurableSet_closedBall
         (fun x hx => (one_of_mem_closedBall f hx).symm)
-  _ <= ∫ x, f x ∂μ := setIntegral_le_integral f.integrable (Eventually.
+  _ <= ∫ x, f x ∂μ := setIntegral_le_integral f.integrable (Eventually.of_forall (fun x => f.nonneg))
 
 Depends on / 依赖: Eventually, Eventually.of_forall, closedBall, f.integrable, f.nonneg, f.rIn, integrable, measurableSet_closedBall, nonneg, of_forall, one_of_mem_closedBall, setIntegral_congr_fun, setIntegral_le_integral
 -/
@@ -450,7 +450,9 @@ theorem integral_le_measure_closedBall
     apply f.zero_of_le_dist (le_of_lt _)
     simpa using hx
   _ <= ∫ x in closedBall c f.rOut, 1 ∂μ := by
-    apply setIntegral_mono f.integrable.integra
+    apply setIntegral_mono f.integrable.integrableOn _ (fun x => f.le_one)
+    simp [measure_closedBall_lt_top]
+  _ = μ.real (closedBall c f.rOut) := by simp
 
 中文:
 定理 integral_le_measure_closedBall
@@ -461,7 +463,9 @@ theorem integral_le_measure_closedBall
     apply f.zero_of_le_dist (le_of_lt _)
     simpa using hx
   _ <= ∫ x in closedBall c f.rOut, 1 ∂μ := by
-    apply setIntegral_mono f.integrable.integra
+    apply setIntegral_mono f.integrable.integrableOn _ (fun x => f.le_one)
+    simp [measure_closedBall_lt_top]
+  _ = μ.real (closedBall c f.rOut) := by simp
 
 Depends on / 依赖: closedBall, f.integrable.integrableOn, f.le_one, f.rOut, f.zero_of_le_dist, integrable, integrableOn, le_of_lt, le_one, measure_closedBall_lt_top, setIntegral_eq_integral_of_forall_compl_eq_zero, setIntegral_mono, zero_of_le_dist
 -/
@@ -485,7 +489,9 @@ theorem measure_closedBall_div_le_integral
   have K_pos : 0 < K := by
     simpa [f.rIn_pos, not_lt.2 f.rIn_pos.le] using mul_pos_iff.1 (f.rOut_pos.trans_le h)
   apply le_trans _ (f.measure_closedBall_le_integral μ)
-  rw [div_le_iff₀ (pow_pos K_pos _)]; rw [addHaar_real_closedBall' _ _ f.rIn_pos.le]; rw [addHaar_real_closedBall' _ _ f.rOut
+  rw [div_le_iff₀ (pow_pos K_pos _)]; rw [addHaar_real_closedBall' _ _ f.rIn_pos.le]; rw [addHaar_real_closedBall' _ _ f.rOut_pos.le]; rw [mul_assoc]; rw [mul_comm _ (K ^ _)]; rw [← mul_assoc]; rw [← mul_pow]; rw [mul_comm _ K]
+  gcongr
+  exact f.rOut_pos.le
 
 中文:
 定理 measure_closedBall_div_le_integral
@@ -494,7 +500,9 @@ theorem measure_closedBall_div_le_integral
   have K_pos : 0 < K := by
     simpa [f.rIn_pos, not_lt.2 f.rIn_pos.le] using mul_pos_iff.1 (f.rOut_pos.trans_le h)
   apply le_trans _ (f.measure_closedBall_le_integral μ)
-  rw [div_le_iff₀ (pow_pos K_pos _)]; rw [addHaar_real_closedBall' _ _ f.rIn_pos.le]; rw [addHaar_real_closedBall' _ _ f.rOut
+  rw [div_le_iff₀ (pow_pos K_pos _)]; rw [addHaar_real_closedBall' _ _ f.rIn_pos.le]; rw [addHaar_real_closedBall' _ _ f.rOut_pos.le]; rw [mul_assoc]; rw [mul_comm _ (K ^ _)]; rw [← mul_assoc]; rw [← mul_pow]; rw [mul_comm _ K]
+  gcongr
+  exact f.rOut_pos.le
 
 Depends on / 依赖: K_pos, addHaar_real_closedBall, f.measure_closedBall_le_integral, f.rIn_pos, f.rIn_pos.le, f.rOut_pos.le, f.rOut_pos.trans_le, le_trans, measure_closedBall_le_integral, mul_assoc, mul_comm, mul_pos_iff, mul_pow, not_lt, pow_pos, rIn_pos, rOut_pos, trans_le
 -/
@@ -521,7 +529,10 @@ theorem normed_le_div_measure_closedBall_rOut
     · exact f.integral_pos.le
     · exact f.le_one
   apply this.trans
-  rw [div_le_div_iff₀ f.integral_pos]; rw [one_m
+  rw [div_le_div_iff₀ f.integral_pos]; rw [one_mul]; rw [← div_le_iff₀' (pow_pos K_pos _)]
+  · exact f.measure_closedBall_div_le_integral μ K h
+  · exact ENNReal.toReal_pos (measure_closedBall_pos _ _ f.rOut_pos).ne'
+      measure_closedBall_lt_top.ne
 
 中文:
 定理 normed_le_div_measure_closedBall_rOut
@@ -534,7 +545,10 @@ theorem normed_le_div_measure_closedBall_rOut
     · exact f.integral_pos.le
     · exact f.le_one
   apply this.trans
-  rw [div_le_div_iff₀ f.integral_pos]; rw [one_m
+  rw [div_le_div_iff₀ f.integral_pos]; rw [one_mul]; rw [← div_le_iff₀' (pow_pos K_pos _)]
+  · exact f.measure_closedBall_div_le_integral μ K h
+  · exact ENNReal.toReal_pos (measure_closedBall_pos _ _ f.rOut_pos).ne'
+      measure_closedBall_lt_top.ne
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos, K_pos, f.integral_pos, f.integral_pos.le, f.le_one, f.measure_closedBall_div_le_integral, f.rIn_pos, f.rIn_pos.le, f.rOut_pos, f.rOut_pos.trans_le, integral_pos, le_one, measure_closedBall_div_le_integral, measure_closedBall_lt_top, measure_closedBall_lt_top.ne, measure_closedBall_pos, mul_pos_iff, not_lt, one_mul
 -/

@@ -370,7 +370,8 @@ lemma isConstructible_toSet
     exact (isRetrocompact_zeroLocus_compl (Set.finite_range _)).isConstructible
       (isClosed_zeroLocus _).isOpen_compl
   · rw [← isConstructible_compl]
-    exact (isRetrocompact_zeroLocus_compl (Set.finit
+    exact (isRetrocompact_zeroLocus_compl (Set.finite_singleton _)).isConstructible
+      (isClosed_zeroLocus _).isOpen_compl
 
 中文:
 引理 isConstructible_toSet
@@ -381,7 +382,8 @@ lemma isConstructible_toSet
     exact (isRetrocompact_zeroLocus_compl (Set.finite_range _)).isConstructible
       (isClosed_zeroLocus _).isOpen_compl
   · rw [← isConstructible_compl]
-    exact (isRetrocompact_zeroLocus_compl (Set.finit
+    exact (isRetrocompact_zeroLocus_compl (Set.finite_singleton _)).isConstructible
+      (isClosed_zeroLocus _).isOpen_compl
 
 Depends on / 依赖: S.finite_toSet, Set.finite_range, Set.finite_singleton, biUnion, finite_range, finite_singleton, finite_toSet, isClosed_zeroLocus, isConstructible, isConstructible_compl, isOpen_compl, isRetrocompact_zeroLocus_compl
 -/
@@ -410,7 +412,21 @@ lemma exists_constructibleSetData_iff
   | isCompact_basis i => exact isCompact_basicOpen _
   | sdiff i s hs =>
     have : Finite s := hs
-    re
+    refine ⟨{⟨i, Nat.card s, fun i => ((Finite.equivFin s).symm i).1⟩}, ?_⟩
+    simp only [ConstructibleSetData.toSet, Finset.mem_singleton, BasicConstructibleSetData.toSet,
+      Set.iUnion_iUnion_eq_left, basicOpen_eq_zeroLocus_compl, ← Set.compl_iInter₂,
+        compl_sdiff_compl, ← zeroLocus_iUnion₂, Set.biUnion_of_singleton]
+    congr! 2
+    ext
+    simp [← (Finite.equivFin s).exists_congr_right, -Nat.card_coe_set_eq]
+  | union s hs t ht Hs Ht =>
+    obtain ⟨S, rfl⟩ := Hs
+    obtain ⟨T, rfl⟩ := Ht
+    refine ⟨S union T, ?_⟩
+    simp only [ConstructibleSetData.toSet, Set.biUnion_union, ← Finset.mem_coe, Finset.coe_union]
+
+universe u in
+@[stacks 00F8 "without the finite presentation part"]
 
 中文:
 引理 存在_constructibleSetData_iff
@@ -422,7 +438,21 @@ lemma exists_constructibleSetData_iff
   | isCompact_basis i => exact isCompact_basicOpen _
   | sdiff i s hs =>
     have : Finite s := hs
-    re
+    refine ⟨{⟨i, Nat.card s, fun i => ((Finite.equivFin s).symm i).1⟩}, ?_⟩
+    simp only [ConstructibleSetData.toSet, Finset.mem_singleton, BasicConstructibleSetData.toSet,
+      Set.iUnion_iUnion_eq_left, basicOpen_eq_zeroLocus_compl, ← Set.compl_iInter₂,
+        compl_sdiff_compl, ← zeroLocus_iUnion₂, Set.biUnion_of_singleton]
+    congr! 2
+    ext
+    simp [← (Finite.equivFin s).exists_congr_right, -Nat.card_coe_set_eq]
+  | union s hs t ht Hs Ht =>
+    obtain ⟨S, rfl⟩ := Hs
+    obtain ⟨T, rfl⟩ := Ht
+    refine ⟨S union T, ?_⟩
+    simp only [ConstructibleSetData.toSet, Set.biUnion_union, ← Finset.mem_coe, Finset.coe_union]
+
+universe u in
+@[stacks 00F8 "without the finite presentation part"]
 
 Depends on / 依赖: BasicConstructibleSetData, BasicConstructibleSetData.toSet, ConstructibleSetData, ConstructibleSetData.toSet, Finite, Finite.equivFin, Finset, Finset.mem_singleton, IsConstructible, IsConstructible.induction_of_isTopologicalBasis, Nat.card, S.isConstructible_toSet, Set.iUnion_iUnion_eq_left, basicOpen_eq_zeroLocus_compl, equivFin, iUnion_iUnion_eq_left, induction_of_isTopologicalBasis, isCompact_basicOpen, isCompact_basis, isConstructible_toSet
 -/
@@ -461,7 +491,18 @@ lemma exists_range_eq_of_isConstructible
   refine ⟨Π i : s, Localization.Away (Ideal.Quotient.mk (Ideal.span (Set.range i.1.g)) i.1.f),
     inferInstance, algebraMap _ _, ?_⟩
   rw [← iUnion_range_comap_comp_evalRingHom]; rw [ConstructibleSetData.toSet]
-  simp_rw [← Finset.mem_c
+  simp_rw [← Finset.mem_coe, Set.biUnion_eq_iUnion]
+  congr! with _ _ C
+  let I := Ideal.span (Set.range C.1.g)
+  let f := Ideal.Quotient.mk I C.1.f
+  trans comap (Ideal.Quotient.mk I) '' (Set.range (comap (algebraMap _ (Localization.Away f))))
+  · rw [← Set.range_comp]; rfl
+  · rw [localization_away_comap_range _ f, ← comap_basicOpen, TopologicalSpace.Opens.coe_comap,
+      ContinuousMap.coe_mk, Set.image_preimage_eq_inter_range,
+      range_comap_of_surjective _ _ Ideal.Quotient.mk_surjective, BasicConstructibleSetData.toSet,
+      Set.sdiff_eq_compl_inter, basicOpen_eq_zeroLocus_compl, Ideal.mk_ker, zeroLocus_span]
+
+@[stacks 00I0 "(1)"]
 
 中文:
 引理 存在_range_eq_of_isConstructible
@@ -471,7 +512,18 @@ lemma exists_range_eq_of_isConstructible
   refine ⟨Π i : s, Localization.Away (Ideal.Quotient.mk (Ideal.span (Set.range i.1.g)) i.1.f),
     inferInstance, algebraMap _ _, ?_⟩
   rw [← iUnion_range_comap_comp_evalRingHom]; rw [ConstructibleSetData.toSet]
-  simp_rw [← Finset.mem_c
+  simp_rw [← Finset.mem_coe, Set.biUnion_eq_iUnion]
+  congr! with _ _ C
+  let I := Ideal.span (Set.range C.1.g)
+  let f := Ideal.Quotient.mk I C.1.f
+  trans comap (Ideal.Quotient.mk I) '' (Set.range (comap (algebraMap _ (Localization.Away f))))
+  · rw [← Set.range_comp]; rfl
+  · rw [localization_away_comap_range _ f, ← comap_basicOpen, TopologicalSpace.Opens.coe_comap,
+      ContinuousMap.coe_mk, Set.image_preimage_eq_inter_range,
+      range_comap_of_surjective _ _ Ideal.Quotient.mk_surjective, BasicConstructibleSetData.toSet,
+      Set.sdiff_eq_compl_inter, basicOpen_eq_zeroLocus_compl, Ideal.mk_ker, zeroLocus_span]
+
+@[stacks 00I0 "(1)"]
 
 Depends on / 依赖: ConstructibleSetData, ConstructibleSetData.toSet, Finset, Finset.mem_coe, Ideal.Quotient.mk, Ideal.span, Localization, Localization.Away, Quotient, Set.biUnion_eq_iUnion, Set.range, algebraMap, biUnion_eq_iUnion, exists_constructibleSetData_iff, exists_constructibleSetData_iff.mpr, iUnion_range_comap_comp_evalRingHom, mem_coe, simp_rw
 -/

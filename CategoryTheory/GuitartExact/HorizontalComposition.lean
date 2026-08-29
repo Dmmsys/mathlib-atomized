@@ -69,7 +69,8 @@ lemma whiskerHorizontal
   let e : costructuredArrowRightwards (w.whiskerHorizontal α.inv β.hom) X₂ ≅
       w.costructuredArrowRightwards X₂ ⋙ (CostructuredArrow.mapIso (β.app X₂)).functor :=
     NatIso.ofComponents (fun f => CostructuredArrow.isoMk (α.symm.app f.left))
-  rw [Func
+  rw [Functor.final_natIso_iff e]
+  infer_instance
 
 中文:
 引理 whiskerHorizontal
@@ -80,7 +81,8 @@ lemma whiskerHorizontal
   let e : costructuredArrowRightwards (w.whiskerHorizontal α.inv β.hom) X₂ ≅
       w.costructuredArrowRightwards X₂ ⋙ (CostructuredArrow.mapIso (β.app X₂)).functor :=
     NatIso.ofComponents (fun f => CostructuredArrow.isoMk (α.symm.app f.left))
-  rw [Func
+  rw [Functor.final_natIso_iff e]
+  infer_instance
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.isoMk, CostructuredArrow.mapIso, Functor, Functor.final_natIso_iff, NatIso, NatIso.ofComponents, costructuredArrowRightwards, f.left, final_natIso_iff, functor, guitartExact_iff_final, infer_instance, mapIso, ofComponents, symm.app, w.costructuredArrowRightwards, w.whiskerHorizontal, whiskerHorizontal
 -/
@@ -266,7 +268,8 @@ lemma of_hComp
   rw [costructuredArrowRightwards_final_iff_of_iso _ (B₁.objObjPreimageIso Y₂).symm]
   have : (w.costructuredArrowRightwards (B₁.objPreimage Y₂) ⋙
       w'.costructuredArrowRightwards (B₁.obj (B₁.objPreimage Y₂))).Final :=
-    (Functor.final_of_natIso (cos
+    (Functor.final_of_natIso (costructuredArrowRightwardsComp w w' _).symm :)
+  exact Functor.final_of_final_comp (w.costructuredArrowRightwards (B₁.objPreimage Y₂)) _
 
 中文:
 引理 of_hComp
@@ -277,7 +280,8 @@ lemma of_hComp
   rw [costructuredArrowRightwards_final_iff_of_iso _ (B₁.objObjPreimageIso Y₂).symm]
   have : (w.costructuredArrowRightwards (B₁.objPreimage Y₂) ⋙
       w'.costructuredArrowRightwards (B₁.obj (B₁.objPreimage Y₂))).Final :=
-    (Functor.final_of_natIso (cos
+    (Functor.final_of_natIso (costructuredArrowRightwardsComp w w' _).symm :)
+  exact Functor.final_of_final_comp (w.costructuredArrowRightwards (B₁.objPreimage Y₂)) _
 
 Depends on / 依赖: Functor, Functor.final_of_final_comp, Functor.final_of_natIso, costructuredArrowRightwards, costructuredArrowRightwardsComp, costructuredArrowRightwards_final_iff_of_iso, final_of_final_comp, final_of_natIso, guitartExact_iff_final, objObjPreimageIso, objPreimage, w.costructuredArrowRightwards
 -/

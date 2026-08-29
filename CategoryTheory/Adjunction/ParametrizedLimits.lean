@@ -47,7 +47,19 @@ lemma preservesLimit_flip_obj
         ι.app j := adj₂.homEquiv.symm (s.π.app j.unop)
         ι.naturality _ _ f := by
           simp [← s.w f.unop, dsimp% adj₂.homEquiv_symm_naturality_one (P.map f.unop).unop] }
-  
+    let hc' (s : Cone (P ⋙ G.flip.obj X₃)) :=
+      isColimitOfPreserves (F.flip.obj s.pt) (isColimitCoconeLeftOpOfCone _ hc)
+    exact {
+      lift s := adj₂.homEquiv ((hc' s).desc (cocone s))
+      fac s j := by
+        dsimp
+        rw [← dsimp% adj₂.homEquiv_naturality_one (c.π.app j).unop]; rw [dsimp% (hc' s).fac (cocone s) (op j)]
+        simp [cocone]
+      uniq s m hm := adj₂.homEquiv.symm.injective (by
+        simp only [op_unop, Equiv.symm_apply_apply]
+        refine (hc' s).uniq (cocone s) _ (fun j => ?_)
+        simp [cocone, ← hm,
+          dsimp% adj₂.homEquiv_symm_naturality_one (c.π.app j.unop).unop]) }⟩
 
 中文:
 引理 preservesLimit_flip_obj
@@ -59,7 +71,19 @@ lemma preservesLimit_flip_obj
         ι.app j := adj₂.homEquiv.symm (s.π.app j.unop)
         ι.naturality _ _ f := by
           simp [← s.w f.unop, dsimp% adj₂.homEquiv_symm_naturality_one (P.map f.unop).unop] }
-  
+    let hc' (s : Cone (P ⋙ G.flip.obj X₃)) :=
+      isColimitOfPreserves (F.flip.obj s.pt) (isColimitCoconeLeftOpOfCone _ hc)
+    exact {
+      lift s := adj₂.homEquiv ((hc' s).desc (cocone s))
+      fac s j := by
+        dsimp
+        rw [← dsimp% adj₂.homEquiv_naturality_one (c.π.app j).unop]; rw [dsimp% (hc' s).fac (cocone s) (op j)]
+        simp [cocone]
+      uniq s m hm := adj₂.homEquiv.symm.injective (by
+        simp only [op_unop, Equiv.symm_apply_apply]
+        refine (hc' s).uniq (cocone s) _ (fun j => ?_)
+        simp [cocone, ← hm,
+          dsimp% adj₂.homEquiv_symm_naturality_one (c.π.app j.unop).unop]) }⟩
 
 Depends on / 依赖: Cocone, F.flip.obj, G.flip.obj, P.leftOp, P.map, cocone, f.unop, homEquiv, homEquiv.symm, homEquiv_naturality_one, homEquiv_symm_naturality_one, isColimitCoconeLeftOpOfCone, isColimitOfPreserves, j.unop, leftOp, naturality, s.pt
 -/

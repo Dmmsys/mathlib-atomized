@@ -483,7 +483,7 @@ lemma isEmbedding_val_mk'
   rw [topology_eq_inf]; rw [inf_eq_left]; rw [← continuous_iff_le_induced]; rw [@continuous_iff_continuousAt _ _ (.induced _ _)]
   intro u s hs
   simp only [← hf, nhds_induced, Filter.mem_map] at hs ⊢
-  exact ⟨_, mem_inf_principal.1 (hc u u.isUnit hs), fun u' hu' =>
+  exact ⟨_, mem_inf_principal.1 (hc u u.isUnit hs), fun u' hu' => hu' u'.isUnit⟩
 
 中文:
 引理 isEmbedding_val_mk'
@@ -493,7 +493,7 @@ lemma isEmbedding_val_mk'
   rw [topology_eq_inf]; rw [inf_eq_left]; rw [← continuous_iff_le_induced]; rw [@continuous_iff_continuousAt _ _ (.induced _ _)]
   intro u s hs
   simp only [← hf, nhds_induced, Filter.mem_map] at hs ⊢
-  exact ⟨_, mem_inf_principal.1 (hc u u.isUnit hs), fun u' hu' =>
+  exact ⟨_, mem_inf_principal.1 (hc u u.isUnit hs), fun u' hu' => hu' u'.isUnit⟩
 
 Depends on / 依赖: Filter, Filter.mem_map, continuous_iff_continuousAt, continuous_iff_le_induced, induced, inf_eq_left, isUnit, mem_inf_principal, mem_map, nhds_induced, topology_eq_inf, u.isUnit, val_injective
 -/
@@ -669,7 +669,12 @@ lemma isOpenMap_map
 have hg_openMap := hf.prodMap opHomeomorph.isOpenMap.comp (hf.comp opHomeomorph.symm.isOpenMap)
   refine ⟨_, hg_openMap U hU, Set.ext fun y => ?_⟩
   simp only [embedProduct, OneHom.coe_mk, Set.mem_preimage, Set.mem_image, Prod.mk.injEq,
-    Prod.map, Prod.exists, MulOpposi
+    Prod.map, Prod.exists, MulOpposite.exists, MonoidHom.coe_mk]
+  refine ⟨fun ⟨a, b, h, ha, hb⟩ => ⟨⟨a, b, hf_inj ?_, hf_inj ?_⟩, ?_⟩,
+    fun ⟨x, hxV, hx⟩ => ⟨x, x.inv, by simp [hxV, ← hx]⟩⟩
+  all_goals simp_all
+
+@[to_additive]
 
 中文:
 引理 isOpenMap_map
@@ -679,7 +684,12 @@ have hg_openMap := hf.prodMap opHomeomorph.isOpenMap.comp (hf.comp opHomeomorph.
 have hg_openMap := hf.prodMap opHomeomorph.isOpenMap.comp (hf.comp opHomeomorph.symm.isOpenMap)
   refine ⟨_, hg_openMap U hU, Set.ext fun y => ?_⟩
   simp only [embedProduct, OneHom.coe_mk, Set.mem_preimage, Set.mem_image, Prod.mk.injEq,
-    Prod.map, Prod.exists, MulOpposi
+    Prod.map, Prod.exists, MulOpposite.exists, MonoidHom.coe_mk]
+  refine ⟨fun ⟨a, b, h, ha, hb⟩ => ⟨⟨a, b, hf_inj ?_, hf_inj ?_⟩, ?_⟩,
+    fun ⟨x, hxV, hx⟩ => ⟨x, x.inv, by simp [hxV, ← hx]⟩⟩
+  all_goals simp_all
+
+@[to_additive]
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_mk, MulOpposite, MulOpposite.exists, OneHom, OneHom.coe_mk, Prod.exists, Prod.map, Prod.mk.injEq, Set.ext, Set.mem_image, Set.mem_preimage, all_goals, coe_mk, embedProduct, hf.comp, hf.prodMap, hf_inj, hg_openMap, isOpenMap
 -/

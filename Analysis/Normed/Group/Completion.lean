@@ -83,7 +83,10 @@ instance [SeminormedAddCommGroup
     induction x, y using Completion.induction_on₂
     · refine isClosed_eq (Completion.uniformContinuous_extension₂ _).continuous ?_
       exact Continuous.comp Completion.continuous_extension (continuous_neg.fst.add continuous_snd)
-    · rw [← Completion.coe_neg, ← Completion.coe_add, norm_coe, 
+    · rw [← Completion.coe_neg, ← Completion.coe_add, norm_coe, Completion.dist_eq,
+        dist_eq_norm_neg_add]
+
+@[simp]
 
 中文:
 实例 [SeminormedAddComm群
@@ -92,7 +95,10 @@ instance [SeminormedAddCommGroup
     induction x, y using Completion.induction_on₂
     · refine isClosed_eq (Completion.uniformContinuous_extension₂ _).continuous ?_
       exact Continuous.comp Completion.continuous_extension (continuous_neg.fst.add continuous_snd)
-    · rw [← Completion.coe_neg, ← Completion.coe_add, norm_coe, 
+    · rw [← Completion.coe_neg, ← Completion.coe_add, norm_coe, Completion.dist_eq,
+        dist_eq_norm_neg_add]
+
+@[simp]
 
 Depends on / 依赖: Completion, Completion.coe_add, Completion.coe_neg, Completion.continuous_extension, Completion.dist_eq, Completion.induction_on, Completion.uniformContinuous_extension, Continuous, Continuous.comp, coe_add, coe_neg, continuous, continuous_extension, continuous_neg, continuous_neg.fst.add, continuous_snd, dist_eq, dist_eq_norm_neg_add, isClosed_eq, norm_coe
 -/

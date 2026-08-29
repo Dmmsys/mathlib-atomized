@@ -83,7 +83,11 @@ theorem sum_derivRootWeight_pos
     · intro w hw
       apply div_pos (by simp_all)
       suffices z != w by simpa [sq_pos_iff, sub_eq_zero]
-    
+      rintro rfl
+      simp_all
+    · rw [Multiset.toFinset_nonempty]
+      apply Splits.roots_ne_zero (IsAlgClosed.splits _)
+      rwa [← pos_iff_ne_zero, natDegree_pos_iff_degree_pos]
 
 中文:
 定理 sum_derivRootWeight_pos
@@ -97,7 +101,11 @@ theorem sum_derivRootWeight_pos
     · intro w hw
       apply div_pos (by simp_all)
       suffices z != w by simpa [sq_pos_iff, sub_eq_zero]
-    
+      rintro rfl
+      simp_all
+    · rw [Multiset.toFinset_nonempty]
+      apply Splits.roots_ne_zero (IsAlgClosed.splits _)
+      rwa [← pos_iff_ne_zero, natDegree_pos_iff_degree_pos]
 
 Depends on / 依赖: Finset, Finset.sum_pos, IsAlgClosed, IsAlgClosed.splits, Multiset, Multiset.toFinset_nonempty, P.eval, Splits, Splits.roots_ne_zero, derivRootWeight, div_pos, if_neg, natDegree_pos_iff_degree_pos, pos_iff_ne_zero, roots_ne_zero, splits, sq_pos_iff, sub_eq_zero, sum_pos, toFinset_nonempty
 -/
@@ -129,7 +137,28 @@ theorem eq_centerMass_of_eval_derivative_eq_zero
   suffices ∑ x in s, weight x • (z - x) = 0 by calc
     z = s.centerMass weight fun _ => z := by
       rw [Finset.centerMass]; rw [← Finset.sum_smul]; rw [inv_smul_smul₀]
-      exact (sum_derivRootWeight_pos hP z).n
+      exact (sum_derivRootWeight_pos hP z).ne'
+    _ = s.centerMass weight (z - ·) + s.centerMass weight id := by
+      simp only [Finset.centerMass, ← smul_add, ← Finset.sum_add_distrib, id, sub_add_cancel]
+    _ = s.centerMass weight id := by
+      simp only [add_eq_right, Finset.centerMass, this, smul_zero]
+  by_cases hzP : P.eval z = 0
+  · simp only [weight, derivRootWeight, if_pos hzP]
+    rw [Finset.sum_eq_single z] <;> simp_all
+  calc
+    ∑ x in s, weight x • (z - x) = conj (∑ x in s, P.rootMultiplicity x • (1 / (z - x))) := by
+      simp only [map_sum, weight, derivRootWeight, if_neg hzP]
+      refine Finset.sum_congr rfl fun x hx => ?_
+      have : z - x != 0 := by
+        rw [sub_ne_zero]
+        rintro rfl
+        simp_all [s]
+      simp [← Complex.conj_mul', field]
+    _ = conj (P.roots.map fun x => 1 / (z - x)).sum := by
+      simp only [Finset.sum_multiset_map_count, P.count_roots, s]
+    _ = 0 := by
+      rw [← (IsAlgClosed.splits _).eval_derivative_div_eval_of_ne_zero hzP]
+      simp [hz]
 
 中文:
 定理 eq_centerMass_of_eval_derivative_eq_zero
@@ -140,7 +169,28 @@ theorem eq_centerMass_of_eval_derivative_eq_zero
   suffices ∑ x in s, weight x • (z - x) = 0 by calc
     z = s.centerMass weight fun _ => z := by
       rw [Finset.centerMass]; rw [← Finset.sum_smul]; rw [inv_smul_smul₀]
-      exact (sum_derivRootWeight_pos hP z).n
+      exact (sum_derivRootWeight_pos hP z).ne'
+    _ = s.centerMass weight (z - ·) + s.centerMass weight id := by
+      simp only [Finset.centerMass, ← smul_add, ← Finset.sum_add_distrib, id, sub_add_cancel]
+    _ = s.centerMass weight id := by
+      simp only [add_eq_right, Finset.centerMass, this, smul_zero]
+  by_cases hzP : P.eval z = 0
+  · simp only [weight, derivRootWeight, if_pos hzP]
+    rw [Finset.sum_eq_single z] <;> simp_all
+  calc
+    ∑ x in s, weight x • (z - x) = conj (∑ x in s, P.rootMultiplicity x • (1 / (z - x))) := by
+      simp only [map_sum, weight, derivRootWeight, if_neg hzP]
+      refine Finset.sum_congr rfl fun x hx => ?_
+      have : z - x != 0 := by
+        rw [sub_ne_zero]
+        rintro rfl
+        simp_all [s]
+      simp [← Complex.conj_mul', field]
+    _ = conj (P.roots.map fun x => 1 / (z - x)).sum := by
+      simp only [Finset.sum_multiset_map_count, P.count_roots, s]
+    _ = 0 := by
+      rw [← (IsAlgClosed.splits _).eval_derivative_div_eval_of_ne_zero hzP]
+      simp [hz]
 
 Depends on / 依赖: Finset, Finset.cen, Finset.centerMass, Finset.sum_add_distrib, Finset.sum_smul, P.derivRootWeight, P.roots.toFinset, add_eq_right, centerMass, derivRootWeight, s.centerMass, smul_add, sub_add_cancel, sum_add_distrib, sum_derivRootWeight_pos, sum_smul, toFinset, weight
 -/

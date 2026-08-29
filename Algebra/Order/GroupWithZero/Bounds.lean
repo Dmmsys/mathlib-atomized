@@ -30,7 +30,7 @@ lemma BddAbove.range_comp_of_nonneg
   obtain ⟨b, hb⟩ := hf
   use b, hb
   simp only [mem_upperBounds, mem_range, forall_exists_index, forall_apply_eq_imp_iff] at hb
-  exact le_trans (h
+  exact le_trans (hf0 Classical.ofNonempty) (hb Classical.ofNonempty)
 
 中文:
 引理 BddAbove.range_comp_of_nonneg
@@ -42,7 +42,7 @@ lemma BddAbove.range_comp_of_nonneg
   obtain ⟨b, hb⟩ := hf
   use b, hb
   simp only [mem_upperBounds, mem_range, forall_exists_index, forall_apply_eq_imp_iff] at hb
-  exact le_trans (h
+  exact le_trans (hf0 Classical.ofNonempty) (hb Classical.ofNonempty)
 
 Depends on / 依赖: BddAbove, Classical, Classical.ofNonempty, Function, Function.comp_def, Set.range_comp, comp_def, forall_apply_eq_imp_iff, forall_exists_index, hg.map_bddAbove, le_trans, map_bddAbove, mem_range, mem_upperBounds, ofNonempty, range_comp
 -/

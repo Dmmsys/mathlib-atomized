@@ -37,7 +37,9 @@ lemma oangle_self_orthogonalProjection
       ∡ p (orthogonalProjection s p) p' = (-π / 2 : Real) := by
   have : Nonempty s := ⟨p', h⟩
   have hpne : p != orthogonalProjection s p := Ne.symm (orthogonalProjection_eq_self_iff.not.2 hp)
-  have ha := oangle_eq_angle_or_eq_neg_an
+  have ha := oangle_eq_angle_or_eq_neg_angle hpne hp'
+  rw [angle_self_orthogonalProjection p h] at ha
+  rwa [neg_div]
 
 中文:
 引理 oangle_self_orthogonalProjection
@@ -47,7 +49,9 @@ lemma oangle_self_orthogonalProjection
       ∡ p (orthogonalProjection s p) p' = (-π / 2 : Real) := by
   have : Nonempty s := ⟨p', h⟩
   have hpne : p != orthogonalProjection s p := Ne.symm (orthogonalProjection_eq_self_iff.not.2 hp)
-  have ha := oangle_eq_angle_or_eq_neg_an
+  have ha := oangle_eq_angle_or_eq_neg_angle hpne hp'
+  rw [angle_self_orthogonalProjection p h] at ha
+  rwa [neg_div]
 
 Depends on / 依赖: orthogonalProjection
 -/
@@ -72,7 +76,8 @@ lemma oangle_orthogonalProjection_self
   proof: ⟨p', h⟩
     ∡ p' (orthogonalProjection s p) p = (π / 2 : Real) ∨
       ∡ p' (orthogonalProjection s p) p = (-π / 2 : Real) := by
-  rw [oangle_rev]; rw [neg_eq_iff_eq_neg]; rw [neg_eq_iff_eq_neg]; rw [or_comm]; rw [← Real.Angle.coe_neg]; rw [neg_div]; rw [neg_neg]; rw [← Real.Angle.coe_neg]; rw [← ne
+  rw [oangle_rev]; rw [neg_eq_iff_eq_neg]; rw [neg_eq_iff_eq_neg]; rw [or_comm]; rw [← Real.Angle.coe_neg]; rw [neg_div]; rw [neg_neg]; rw [← Real.Angle.coe_neg]; rw [← neg_div]
+  exact oangle_self_orthogonalProjection p hp h hp'
 
 中文:
 引理 oangle_orthogonalProjection_self
@@ -80,7 +85,8 @@ lemma oangle_orthogonalProjection_self
   证明: ⟨p', h⟩
     ∡ p' (orthogonalProjection s p) p = (π / 2 : Real) ∨
       ∡ p' (orthogonalProjection s p) p = (-π / 2 : Real) := by
-  rw [oangle_rev]; rw [neg_eq_iff_eq_neg]; rw [neg_eq_iff_eq_neg]; rw [or_comm]; rw [← Real.Angle.coe_neg]; rw [neg_div]; rw [neg_neg]; rw [← Real.Angle.coe_neg]; rw [← ne
+  rw [oangle_rev]; rw [neg_eq_iff_eq_neg]; rw [neg_eq_iff_eq_neg]; rw [or_comm]; rw [← Real.Angle.coe_neg]; rw [neg_div]; rw [neg_neg]; rw [← Real.Angle.coe_neg]; rw [← neg_div]
+  exact oangle_self_orthogonalProjection p hp h hp'
 
 Depends on / 依赖: orthogonalProjection
 -/

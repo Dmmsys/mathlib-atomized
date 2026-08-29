@@ -61,7 +61,9 @@ definition elabNameVariablesOver
     let var := quote s!"{var.getId}"
     let idx : TSyntax `term ← `(($(quote idx) : Fin $sizeStx))
     let cmd ← `(command|local notation3 $var:str =>
-MvPolynomial.
+MvPolynomial.X (R := $R) (σ := Fin $sizeStx) idx)
+    elabCommand cmd
+| _ => throwUnsupportedSyntax
 
 中文:
 定义 elabNameVariablesOver
@@ -74,7 +76,9 @@ MvPolynomial.
     let var := quote s!"{var.getId}"
     let idx : TSyntax `term ← `(($(quote idx) : Fin $sizeStx))
     let cmd ← `(command|local notation3 $var:str =>
-MvPolynomial.
+MvPolynomial.X (R := $R) (σ := Fin $sizeStx) idx)
+    elabCommand cmd
+| _ => throwUnsupportedSyntax
 
 Depends on / 依赖: getElems, vars.getElems
 -/

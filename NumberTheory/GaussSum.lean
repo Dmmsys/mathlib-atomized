@@ -236,7 +236,9 @@ theorem gaussSum_one_left
     simp [← ({0} : Finset R).sum_compl_add_sum]
   _ = ∑ a in {0}ᶜ, ψ a + ψ 0 := by
     congr! <;> aesop (add simp MulChar.one_apply)
-  _ 
+  _ = 0 := by
+    rw [← AddChar.sum_eq_zero_of_ne_one hψ]; rw [← Finset.sum_compl_add_sum (s := {0})]
+    simp
 
 中文:
 定理 gaussSum_one_left
@@ -249,7 +251,9 @@ theorem gaussSum_one_left
     simp [← ({0} : Finset R).sum_compl_add_sum]
   _ = ∑ a in {0}ᶜ, ψ a + ψ 0 := by
     congr! <;> aesop (add simp MulChar.one_apply)
-  _ 
+  _ = 0 := by
+    rw [← AddChar.sum_eq_zero_of_ne_one hψ]; rw [← Finset.sum_compl_add_sum (s := {0})]
+    simp
 
 Depends on / 依赖: AddChar, AddChar.sum_eq_zero_of_ne_one, Finset, Finset.sum_compl_add_sum, MulChar, MulChar.one_apply, add_eq_zero_iff_eq_neg, classical, gaussSum, one_apply, sum_compl_add_sum, sum_eq_zero_of_ne_one
 -/
@@ -287,7 +291,11 @@ lemma gaussSum_mul
   simp only [← ψ.map_add_eq_mul]
   have sum_eq x : ∑ y : R, χ x * φ y * ψ (x + y) = ∑ y : R, χ x * φ (y - x) * ψ y := by
     rw [sum_bij (fun a _ => a + x)]
-    · simp only [mem_univ, forall_
+    · simp only [mem_univ, forall_const]
+    · simp only [mem_univ, add_left_inj, imp_self, forall_const]
+    · exact fun b _ => ⟨b - x, mem_univ _, by rw [sub_add_cancel]⟩
+    · exact fun a _ => by rw [add_sub_cancel_right, add_comm]
+  rw [sum_congr rfl fun x _ => sum_eq x]; rw [sum_comm]
 
 中文:
 引理 gaussSum_mul
@@ -298,7 +306,11 @@ lemma gaussSum_mul
   simp only [← ψ.map_add_eq_mul]
   have sum_eq x : ∑ y : R, χ x * φ y * ψ (x + y) = ∑ y : R, χ x * φ (y - x) * ψ y := by
     rw [sum_bij (fun a _ => a + x)]
-    · simp only [mem_univ, forall_
+    · simp only [mem_univ, forall_const]
+    · simp only [mem_univ, add_left_inj, imp_self, forall_const]
+    · exact fun b _ => ⟨b - x, mem_univ _, by rw [sub_add_cancel]⟩
+    · exact fun a _ => by rw [add_sub_cancel_right, add_comm]
+  rw [sum_congr rfl fun x _ => sum_eq x]; rw [sum_comm]
 
 Depends on / 依赖: add_comm, add_left_inj, add_sub_cancel_right, forall_const, gaussSum, imp_self, map_add_eq_mul, mem_univ, mul_mul_mul_comm, sub_add_cancel, sum_bij, sum_congr, sum_eq, sum_mul_sum
 -/
@@ -359,7 +371,8 @@ theorem gaussSum_mul_aux
     simp only [hb, inv_zero, mul_zero, MulChar.map_zero, zero_mul,
       Finset.sum_const_zero, map_zero_eq_one, mul_one, χ.sum_eq_zero_of_ne_one hχ]
   · -- case `b ≠ 0`
-    refine (Fintype.sum_bijective _ (mulLeft_bijective₀ b hb) _ _ fun x 
+    refine (Fintype.sum_bijective _ (mulLeft_bijective₀ b hb) _ _ fun x => ?_).symm
+    rw [mul_assoc]; rw [mul_comm x]; rw [← mul_assoc]; rw [mul_inv_cancel₀ hb]; rw [one_mul]; rw [mul_sub]; rw [mul_one]
 
 中文:
 定理 gaussSum_mul_aux
@@ -370,7 +383,8 @@ theorem gaussSum_mul_aux
     simp only [hb, inv_zero, mul_zero, MulChar.map_zero, zero_mul,
       Finset.sum_const_zero, map_zero_eq_one, mul_one, χ.sum_eq_zero_of_ne_one hχ]
   · -- case `b ≠ 0`
-    refine (Fintype.sum_bijective _ (mulLeft_bijective₀ b hb) _ _ fun x 
+    refine (Fintype.sum_bijective _ (mulLeft_bijective₀ b hb) _ _ fun x => ?_).symm
+    rw [mul_assoc]; rw [mul_comm x]; rw [← mul_assoc]; rw [mul_inv_cancel₀ hb]; rw [one_mul]; rw [mul_sub]; rw [mul_one]
 -/
 private theorem gaussSum_mul_aux {χ : MulChar R R'} (hχ : χ != 1) (ψ : AddChar R R')
     (b : R) :
@@ -431,7 +445,7 @@ lemma gaussSum_mul_gaussSum_pow_orderOf_sub_one
   have h : χ ^ (orderOf χ - 1) = χ⁻¹ := by
     refine (inv_eq_of_mul_eq_one_right ?_).symm
     rw [← pow_succ']; rw [Nat.sub_one_add_one_eq_of_pos χ.orderOf_pos]; rw [pow_orderOf_eq_one]
-  rw [h]; rw [← mul_gaussSum_inv_eq_gaussSum χ⁻¹]; rw [mul_left_comm]; rw [gaussSum_mul_gaussSum_eq_card hχ hψ
+  rw [h]; rw [← mul_gaussSum_inv_eq_gaussSum χ⁻¹]; rw [mul_left_comm]; rw [gaussSum_mul_gaussSum_eq_card hχ hψ]; rw [MulChar.inv_apply']; rw [inv_neg_one]
 
 中文:
 引理 gaussSum_mul_gaussSum_pow_orderOf_sub_one
@@ -440,7 +454,7 @@ lemma gaussSum_mul_gaussSum_pow_orderOf_sub_one
   have h : χ ^ (orderOf χ - 1) = χ⁻¹ := by
     refine (inv_eq_of_mul_eq_one_right ?_).symm
     rw [← pow_succ']; rw [Nat.sub_one_add_one_eq_of_pos χ.orderOf_pos]; rw [pow_orderOf_eq_one]
-  rw [h]; rw [← mul_gaussSum_inv_eq_gaussSum χ⁻¹]; rw [mul_left_comm]; rw [gaussSum_mul_gaussSum_eq_card hχ hψ
+  rw [h]; rw [← mul_gaussSum_inv_eq_gaussSum χ⁻¹]; rw [mul_left_comm]; rw [gaussSum_mul_gaussSum_eq_card hχ hψ]; rw [MulChar.inv_apply']; rw [inv_neg_one]
 
 Depends on / 依赖: MulChar, MulChar.inv_apply, Nat.sub_one_add_one_eq_of_pos, gaussSum_mul_gaussSum_eq_card, inv_apply, inv_eq_of_mul_eq_one_right, inv_neg_one, mul_gaussSum_inv_eq_gaussSum, mul_left_comm, orderOf, orderOf_pos, pow_orderOf_eq_one, pow_succ, sub_one_add_one_eq_of_pos
 -/
@@ -575,7 +589,7 @@ theorem MulChar.IsQuadratic.gaussSum_frob_iter
   induction n with
   | zero => rw [pow_zero, pow_one, pow_zero, MulChar.map_one, one_mul]
   | succ n ih =>
-    rw [pow_succ]; rw [pow_mul]; rw [ih]; rw [mul_pow]; rw [hχ.gaussSum_frob _ hp]; rw [← mul_assoc]; rw [pow_succ]; rw [map_mul]; rw [← pow_apply' χ fp.1.ne_zero ((p : R) ^ n)]; rw [hχ.pow_
+    rw [pow_succ]; rw [pow_mul]; rw [ih]; rw [mul_pow]; rw [hχ.gaussSum_frob _ hp]; rw [← mul_assoc]; rw [pow_succ]; rw [map_mul]; rw [← pow_apply' χ fp.1.ne_zero ((p : R) ^ n)]; rw [hχ.pow_char p]
 
 中文:
 定理 乘法特征.IsQuadratic.gaussSum_frob_iter
@@ -584,7 +598,7 @@ theorem MulChar.IsQuadratic.gaussSum_frob_iter
   induction n with
   | zero => rw [pow_zero, pow_one, pow_zero, MulChar.map_one, one_mul]
   | succ n ih =>
-    rw [pow_succ]; rw [pow_mul]; rw [ih]; rw [mul_pow]; rw [hχ.gaussSum_frob _ hp]; rw [← mul_assoc]; rw [pow_succ]; rw [map_mul]; rw [← pow_apply' χ fp.1.ne_zero ((p : R) ^ n)]; rw [hχ.pow_
+    rw [pow_succ]; rw [pow_mul]; rw [ih]; rw [mul_pow]; rw [hχ.gaussSum_frob _ hp]; rw [← mul_assoc]; rw [pow_succ]; rw [map_mul]; rw [← pow_apply' χ fp.1.ne_zero ((p : R) ^ n)]; rw [hχ.pow_char p]
 
 Depends on / 依赖: MulChar, MulChar.map_one, gaussSum_frob, map_mul, map_one, mul_assoc, mul_pow, ne_zero, one_mul, pow_apply, pow_char, pow_mul, pow_one, pow_succ, pow_zero
 -/
@@ -619,7 +633,8 @@ theorem Char.card_pow_char_pow
     exact not_isUnit_prime_of_dvd_card
         ((CharP.cast_eq_zero_iff R' p _).mp <| hg.resolve_left (isUnit_one.neg.map χ).ne_zero) hp
   rw [← hg]
-  apply mul_right_cancel₀
+  apply mul_right_cancel₀ this
+  rw [← hχ.gaussSum_frob_iter p n hp ψ]; rw [← pow_mul]; rw [← pow_succ]; rw [Nat.two_mul_div_two_add_one_of_odd (fp.1.eq_two_or_odd'.resolve_left hp').pow]
 
 中文:
 定理 Char.card_pow_char_pow
@@ -631,7 +646,8 @@ theorem Char.card_pow_char_pow
     exact not_isUnit_prime_of_dvd_card
         ((CharP.cast_eq_zero_iff R' p _).mp <| hg.resolve_left (isUnit_one.neg.map χ).ne_zero) hp
   rw [← hg]
-  apply mul_right_cancel₀
+  apply mul_right_cancel₀ this
+  rw [← hχ.gaussSum_frob_iter p n hp ψ]; rw [← pow_mul]; rw [← pow_succ]; rw [Nat.two_mul_div_two_add_one_of_odd (fp.1.eq_two_or_odd'.resolve_left hp').pow]
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, Nat.two_mul_div_two_add_one_of_odd, cast_eq_zero_iff, eq_comm, eq_two_or_odd, gaussSum, gaussSum_frob_iter, hg.resolve_left, isUnit_one, isUnit_one.neg.map, mul_eq_zero, ne_zero, not_isUnit_prime_of_dvd_card, pow_mul, pow_succ, resolve_left, two_mul_div_two_add_one_of_odd, two_ne_zero, zero_pow
 -/
@@ -661,7 +677,13 @@ theorem Char.card_pow_card
   let FF' := CyclotomicField ψ.n F'
   have hchar := Algebra.ringChar_eq F' FF'
   apply (algebraMap F' FF').injective
-  rw [map_pow]; 
+  rw [map_pow]; rw [map_mul]; rw [map_natCast]; rw [hc']; rw [hchar]; rw [Nat.cast_pow]
+  simp only [← MulChar.ringHomComp_apply]
+  have := Fact.mk hp'
+  have := Fact.mk (hchar.subst hp')
+  rw [Ne]; rw [← Nat.prime_dvd_prime_iff_eq hp' hp]; rw [← isUnit_iff_not_dvd_char]; rw [hchar] at hch₁
+  exact Char.card_pow_char_pow (hχ₂.comp _) ψ.char (ringChar FF') n' hch₁ (hchar ▸ hch₂)
+       (gaussSum_sq ((ringHomComp_ne_one_iff (RingHom.injective _)).mpr hχ₁) (hχ₂.comp _) ψ.prim)
 
 中文:
 定理 Char.card_pow_card
@@ -673,7 +695,13 @@ theorem Char.card_pow_card
   let FF' := CyclotomicField ψ.n F'
   have hchar := Algebra.ringChar_eq F' FF'
   apply (algebraMap F' FF').injective
-  rw [map_pow]; 
+  rw [map_pow]; rw [map_mul]; rw [map_natCast]; rw [hc']; rw [hchar]; rw [Nat.cast_pow]
+  simp only [← MulChar.ringHomComp_apply]
+  have := Fact.mk hp'
+  have := Fact.mk (hchar.subst hp')
+  rw [Ne]; rw [← Nat.prime_dvd_prime_iff_eq hp' hp]; rw [← isUnit_iff_not_dvd_char]; rw [hchar] at hch₁
+  exact Char.card_pow_char_pow (hχ₂.comp _) ψ.char (ringChar FF') n' hch₁ (hchar ▸ hch₂)
+       (gaussSum_sq ((ringHomComp_ne_one_iff (RingHom.injective _)).mpr hχ₁) (hχ₂.comp _) ψ.prim)
 
 Depends on / 依赖: Algebra, Algebra.ringChar_eq, CyclotomicField, Fact.mk, FiniteField, FiniteField.card, FiniteField.primitiveChar, MulChar, MulChar.ringHomComp_apply, Nat.cast_pow, Nat.prime_dvd_prime_iff_eq, algebraMap, cast_pow, hchar.subst, injective, map_mul, map_natCast, map_pow, prime_dvd_prime_iff_eq, primitiveChar
 -/
@@ -727,7 +755,54 @@ theorem FiniteField.two_pow_card
   -- we work in `FF`, the eighth cyclotomic field extension of `F`
   let FF := CyclotomicField 8 F
   have hchar := Algebra.ringChar_eq F FF
-  have FFp := hchar.su
+  have FFp := hchar.subst hp
+  have := Fact.mk FFp
+  have hFF := hchar ▸ hF -- `ringChar FF ≠ 2`
+  have hu : IsUnit (ringChar FF : ZMod 8) := by
+    rw [isUnit_iff_not_dvd_char]; rw [ringChar_zmod_n]
+    rw [Ne]; rw [← Nat.prime_dvd_prime_iff_eq FFp Nat.prime_two] at hFF
+    change ¬_ ∣ 2 ^ 3
+    exact mt FFp.dvd_of_dvd_pow hFF
+  -- there is a primitive additive character `ℤ/8ℤ → FF`, sending `a + 8ℤ ↦ τ^a`
+  -- with a primitive eighth root of unity `τ`
+  let ψ₈ := primitiveZModChar 8 F (by convert! hp2 3 using 1; norm_cast)
+  -- We cast from `AddChar (ZMod (8 : ℕ+)) FF` to `AddChar (ZMod 8) FF`
+  -- This is needed to make `simp_rw [← h₁]` below work.
+  let ψ₈char : AddChar (ZMod 8) FF := ψ₈.char
+  let τ : FF := ψ₈char 1
+  have τ_spec : τ ^ 4 = -1 := by
+    rw [show τ = ψ₈.char 1 from rfl] -- to make `rw [ψ₈.prim.zmod_char_eq_one_iff]` work
+    refine (sq_eq_one_iff.1 ?_).resolve_left ?_
+    · rw [← pow_mul, ← map_nsmul_eq_pow ψ₈.char, ψ₈.prim.zmod_char_eq_one_iff]
+      decide
+    · rw [← map_nsmul_eq_pow ψ₈.char, ψ₈.prim.zmod_char_eq_one_iff]
+      decide
+  -- we consider `χ₈` as a multiplicative character `ℤ/8ℤ → FF`
+  let χ := χ₈.ringHomComp (Int.castRingHom FF)
+  have hχ : χ (-1) = 1 := Int.cast_one
+  have hq : IsQuadratic χ := isQuadratic_χ₈.comp _
+  -- we now show that the Gauss sum of `χ` and `ψ₈` has the relevant property
+  have h₁ : (fun (a : Fin 8) => ↑(χ₈ a) * τ ^ (a : Nat)) = fun a => χ a * ↑(ψ₈char a) := by
+    ext1; congr; apply pow_one
+  have hg₁ : gaussSum χ ψ₈char = 2 * (τ - τ ^ 3) := by
+    rw [gaussSum]; rw [← h₁]; rw [Fin.sum_univ_eight]; rw [-- evaluate `χ₈`
+      show χ₈ 0 = 0 from rfl]; rw [show χ₈ 1 = 1 from rfl]; rw [show χ₈ 2 = 0 from rfl]; rw [show χ₈ 3 = -1 from rfl]; rw [show χ₈ 4 = 0 from rfl]; rw [show χ₈ 5 = -1 from rfl]; rw [show χ₈ 6 = 0 from rfl]; rw [show χ₈ 7 = 1 from rfl]; rw [-- normalize exponents
+      show ((3 : Fin 8) : Nat) = 3 from rfl]; rw [show ((5 : Fin 8) : Nat) = 5 from rfl]; rw [show ((7 : Fin 8) : Nat) = 7 from rfl]
+    simp only [Int.cast_zero, zero_mul, Int.cast_one, Fin.val_one, pow_one, one_mul, zero_add,
+      Fin.val_two, add_zero, Int.reduceNeg, Int.cast_neg]
+    linear_combination (τ ^ 3 - τ) * τ_spec
+  have hg : gaussSum χ ψ₈char ^ 2 = χ (-1) * Fintype.card (ZMod 8) := by
+    rw [hχ]; rw [one_mul]; rw [ZMod.card]; rw [Nat.cast_ofNat]; rw [hg₁]
+    linear_combination (4 * τ ^ 2 - 8) * τ_spec
+  -- this allows us to apply `card_pow_char_pow` to our situation
+  have h := Char.card_pow_char_pow (R := ZMod 8) hq ψ₈char (ringChar FF) n hu hFF hg
+  rw [ZMod.card]; rw [← hchar]; rw [hχ]; rw [one_mul]; rw [← hc]; rw [← Nat.cast_pow (ringChar F)]; rw [← hc] at h
+  -- finally, we change `2` to `8` on the left-hand side
+  convert_to (8 : F) ^ (Fintype.card F / 2) = _
+  · rw [(by norm_num : (8 : F) = 2 ^ 2 * 2), mul_pow,
+      (FiniteField.isSquare_iff hF <| hp2 2).mp ⟨2, pow_two 2⟩, one_mul]
+  apply (algebraMap F FF).injective
+  simpa only [map_pow, map_ofNat, map_intCast, Nat.cast_ofNat] using! h
 
 中文:
 定理 FiniteField.two_pow_card
@@ -738,7 +813,54 @@ theorem FiniteField.two_pow_card
   -- we work in `FF`, the eighth cyclotomic field extension of `F`
   let FF := CyclotomicField 8 F
   have hchar := Algebra.ringChar_eq F FF
-  have FFp := hchar.su
+  have FFp := hchar.subst hp
+  have := Fact.mk FFp
+  have hFF := hchar ▸ hF -- `ringChar FF ≠ 2`
+  have hu : IsUnit (ringChar FF : ZMod 8) := by
+    rw [isUnit_iff_not_dvd_char]; rw [ringChar_zmod_n]
+    rw [Ne]; rw [← Nat.prime_dvd_prime_iff_eq FFp Nat.prime_two] at hFF
+    change ¬_ ∣ 2 ^ 3
+    exact mt FFp.dvd_of_dvd_pow hFF
+  -- there is a primitive additive character `ℤ/8ℤ → FF`, sending `a + 8ℤ ↦ τ^a`
+  -- with a primitive eighth root of unity `τ`
+  let ψ₈ := primitiveZModChar 8 F (by convert! hp2 3 using 1; norm_cast)
+  -- We cast from `AddChar (ZMod (8 : ℕ+)) FF` to `AddChar (ZMod 8) FF`
+  -- This is needed to make `simp_rw [← h₁]` below work.
+  let ψ₈char : AddChar (ZMod 8) FF := ψ₈.char
+  let τ : FF := ψ₈char 1
+  have τ_spec : τ ^ 4 = -1 := by
+    rw [show τ = ψ₈.char 1 from rfl] -- to make `rw [ψ₈.prim.zmod_char_eq_one_iff]` work
+    refine (sq_eq_one_iff.1 ?_).resolve_left ?_
+    · rw [← pow_mul, ← map_nsmul_eq_pow ψ₈.char, ψ₈.prim.zmod_char_eq_one_iff]
+      decide
+    · rw [← map_nsmul_eq_pow ψ₈.char, ψ₈.prim.zmod_char_eq_one_iff]
+      decide
+  -- we consider `χ₈` as a multiplicative character `ℤ/8ℤ → FF`
+  let χ := χ₈.ringHomComp (Int.castRingHom FF)
+  have hχ : χ (-1) = 1 := Int.cast_one
+  have hq : IsQuadratic χ := isQuadratic_χ₈.comp _
+  -- we now show that the Gauss sum of `χ` and `ψ₈` has the relevant property
+  have h₁ : (fun (a : Fin 8) => ↑(χ₈ a) * τ ^ (a : Nat)) = fun a => χ a * ↑(ψ₈char a) := by
+    ext1; congr; apply pow_one
+  have hg₁ : gaussSum χ ψ₈char = 2 * (τ - τ ^ 3) := by
+    rw [gaussSum]; rw [← h₁]; rw [Fin.sum_univ_eight]; rw [-- evaluate `χ₈`
+      show χ₈ 0 = 0 from rfl]; rw [show χ₈ 1 = 1 from rfl]; rw [show χ₈ 2 = 0 from rfl]; rw [show χ₈ 3 = -1 from rfl]; rw [show χ₈ 4 = 0 from rfl]; rw [show χ₈ 5 = -1 from rfl]; rw [show χ₈ 6 = 0 from rfl]; rw [show χ₈ 7 = 1 from rfl]; rw [-- normalize exponents
+      show ((3 : Fin 8) : Nat) = 3 from rfl]; rw [show ((5 : Fin 8) : Nat) = 5 from rfl]; rw [show ((7 : Fin 8) : Nat) = 7 from rfl]
+    simp only [Int.cast_zero, zero_mul, Int.cast_one, Fin.val_one, pow_one, one_mul, zero_add,
+      Fin.val_two, add_zero, Int.reduceNeg, Int.cast_neg]
+    linear_combination (τ ^ 3 - τ) * τ_spec
+  have hg : gaussSum χ ψ₈char ^ 2 = χ (-1) * Fintype.card (ZMod 8) := by
+    rw [hχ]; rw [one_mul]; rw [ZMod.card]; rw [Nat.cast_ofNat]; rw [hg₁]
+    linear_combination (4 * τ ^ 2 - 8) * τ_spec
+  -- this allows us to apply `card_pow_char_pow` to our situation
+  have h := Char.card_pow_char_pow (R := ZMod 8) hq ψ₈char (ringChar FF) n hu hFF hg
+  rw [ZMod.card]; rw [← hchar]; rw [hχ]; rw [one_mul]; rw [← hc]; rw [← Nat.cast_pow (ringChar F)]; rw [← hc] at h
+  -- finally, we change `2` to `8` on the left-hand side
+  convert_to (8 : F) ^ (Fintype.card F / 2) = _
+  · rw [(by norm_num : (8 : F) = 2 ^ 2 * 2), mul_pow,
+      (FiniteField.isSquare_iff hF <| hp2 2).mp ⟨2, pow_two 2⟩, one_mul]
+  apply (algebraMap F FF).injective
+  simpa only [map_pow, map_ofNat, map_intCast, Nat.cast_ofNat] using! h
 
 Depends on / 依赖: FiniteField, FiniteField.card, Ring.two_ne_zero, pow_ne_zero, ringChar, two_ne_zero
 -/

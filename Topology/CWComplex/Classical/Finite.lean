@@ -152,7 +152,11 @@ definition RelCWComplex.mkFiniteType.{u}
   disjointBase' := disjointBase'
   mapsTo n i := by
     use fun m => finite_univ.toFinset (s := (univ : Set (cell m)))
-    simp only [Finite.mem
+    simp only [Finite.mem_toFinset, mem_univ, iUnion_true]
+    exact mapsTo n i
+  closed' := closed'
+  isClosedBase := isClosedBase
+  union' := union'
 
 中文:
 定义 RelCWComplex.mkFiniteType.{u}
@@ -166,7 +170,11 @@ definition RelCWComplex.mkFiniteType.{u}
   disjointBase' := disjointBase'
   mapsTo n i := by
     use fun m => finite_univ.toFinset (s := (univ : Set (cell m)))
-    simp only [Finite.mem
+    simp only [Finite.mem_toFinset, mem_univ, iUnion_true]
+    exact mapsTo n i
+  closed' := closed'
+  isClosedBase := isClosedBase
+  union' := union'
 -/
 def RelCWComplex.mkFiniteType.{u} {X : Type u} [TopologicalSpace X] (C : Set X)
     (D : outParam (Set X))
@@ -210,7 +218,8 @@ lemma RelCWComplex.finiteType_mkFiniteType.{u}
       pairwiseDisjoint' disjointBase' mapsTo closed' isClosedBase union'
     FiniteType C :=
   letI := mkFiniteType C D cell map finite_cell source_eq continuousOn continuousOn_symm
-      pairwiseDisjoint' disjointBase' m
+      pairwiseDisjoint' disjointBase' mapsTo closed' isClosedBase union'
+  { finite_cell := finite_cell }
 
 中文:
 引理 RelCWComplex.finiteType_mkFiniteType.{u}
@@ -219,7 +228,8 @@ lemma RelCWComplex.finiteType_mkFiniteType.{u}
       pairwiseDisjoint' disjointBase' mapsTo closed' isClosedBase union'
     FiniteType C :=
   letI := mkFiniteType C D cell map finite_cell source_eq continuousOn continuousOn_symm
-      pairwiseDisjoint' disjointBase' m
+      pairwiseDisjoint' disjointBase' mapsTo closed' isClosedBase union'
+  { finite_cell := finite_cell }
 
 Depends on / 依赖: continuousOn, continuousOn_symm, finite_cell, mkFiniteType, source_eq
 -/
@@ -263,7 +273,10 @@ definition CWComplex.mkFiniteType.{u}
   pairwiseDisjoint' := pairwiseDisjoint'
   mapsTo' n i := by
     use fun m => finite_univ.toFinset (s := (univ : Set (cell m)))
-    simp only [Finite.mem_toFinset, mem_univ, iUnion_true
+    simp only [Finite.mem_toFinset, mem_univ, iUnion_true]
+    exact mapsTo n i
+  closed' := closed'
+  union' := union'
 
 中文:
 定义 CWComplex.mkFiniteType.{u}
@@ -276,7 +289,10 @@ definition CWComplex.mkFiniteType.{u}
   pairwiseDisjoint' := pairwiseDisjoint'
   mapsTo' n i := by
     use fun m => finite_univ.toFinset (s := (univ : Set (cell m)))
-    simp only [Finite.mem_toFinset, mem_univ, iUnion_true
+    simp only [Finite.mem_toFinset, mem_univ, iUnion_true]
+    exact mapsTo n i
+  closed' := closed'
+  union' := union'
 -/
 def CWComplex.mkFiniteType.{u} {X : Type u} [TopologicalSpace X] (C : Set X)
     (cell : (n : Nat) -> Type u) (map : (n : Nat) -> (i : cell n) -> PartialEquiv (Fin n -> Real) X)
@@ -316,7 +332,7 @@ lemma CWComplex.finiteType_mkFiniteType.{u}
     FiniteType C :=
   letI := mkFiniteType C cell map finite_cell source_eq continuousOn continuousOn_symm
       pairwiseDisjoint' mapsTo closed' union'
-  { finite_cell := finit
+  { finite_cell := finite_cell }
 
 中文:
 引理 CWComplex.finiteType_mkFiniteType.{u}
@@ -326,7 +342,7 @@ lemma CWComplex.finiteType_mkFiniteType.{u}
     FiniteType C :=
   letI := mkFiniteType C cell map finite_cell source_eq continuousOn continuousOn_symm
       pairwiseDisjoint' mapsTo closed' union'
-  { finite_cell := finit
+  { finite_cell := finite_cell }
 
 Depends on / 依赖: continuousOn, continuousOn_symm, finite_cell, mkFiniteType, source_eq
 -/
@@ -369,7 +385,28 @@ definition RelCWComplex.mkFinite.{u}
   disjointBase' := disjointBase'
   mapsTo n i := by
     use fun m => finite_univ.toFinset (s := (univ : Set (cell m)))
-    simp only [Finite.mem
+    simp only [Finite.mem_toFinset, mem_univ, iUnion_true]
+    exact mapsTo n i
+  closed' A asubc := by
+    intro h
+    -- `A = A ∩ C = A ∩ (D ∪ ⋃ n, ⋃ j, closedCell n j)` is closed by assumption since `C` has only
+    -- finitely many cells.
+    rw [← inter_eq_left.2 asubc]
+    simp_rw [Filter.eventually_atTop] at eventually_isEmpty_cell
+    obtain ⟨N, hN⟩ := eventually_isEmpty_cell
+    suffices IsClosed (A inter (D union ⋃ (n : {n : Nat // n < N}), ⋃ j, ↑(map n j) '' closedBall 0 1)) by
+      convert! this using 2
+      rw [← union']; rw [iUnion_subtype]
+      congrm D union ⋃ n, ?_
+      refine subset_antisymm ?_ (iUnion_subset (fun i => by rfl))
+      apply iUnion_subset
+      intro i
+      have : n < N := Decidable.byContradiction fun h => (hN n (Nat.ge_of_not_lt h)).false i
+      exact subset_iUnion₂ (s := fun _ i => (map n i) '' closedBall 0 1) this i
+    simp_rw [inter_union_distrib_left, inter_iUnion]
+    exact h.2.union (isClosed_iUnion_of_finite (fun n => isClosed_iUnion_of_finite (h.1 n.1)))
+  isClosedBase := isClosedBase
+  union' := union'
 
 中文:
 定义 RelCWComplex.mkFinite.{u}
@@ -383,7 +420,28 @@ definition RelCWComplex.mkFinite.{u}
   disjointBase' := disjointBase'
   mapsTo n i := by
     use fun m => finite_univ.toFinset (s := (univ : Set (cell m)))
-    simp only [Finite.mem
+    simp only [Finite.mem_toFinset, mem_univ, iUnion_true]
+    exact mapsTo n i
+  closed' A asubc := by
+    intro h
+    -- `A = A ∩ C = A ∩ (D ∪ ⋃ n, ⋃ j, closedCell n j)` is closed by assumption since `C` has only
+    -- finitely many cells.
+    rw [← inter_eq_left.2 asubc]
+    simp_rw [Filter.eventually_atTop] at eventually_isEmpty_cell
+    obtain ⟨N, hN⟩ := eventually_isEmpty_cell
+    suffices IsClosed (A inter (D union ⋃ (n : {n : Nat // n < N}), ⋃ j, ↑(map n j) '' closedBall 0 1)) by
+      convert! this using 2
+      rw [← union']; rw [iUnion_subtype]
+      congrm D union ⋃ n, ?_
+      refine subset_antisymm ?_ (iUnion_subset (fun i => by rfl))
+      apply iUnion_subset
+      intro i
+      have : n < N := Decidable.byContradiction fun h => (hN n (Nat.ge_of_not_lt h)).false i
+      exact subset_iUnion₂ (s := fun _ i => (map n i) '' closedBall 0 1) this i
+    simp_rw [inter_union_distrib_left, inter_iUnion]
+    exact h.2.union (isClosed_iUnion_of_finite (fun n => isClosed_iUnion_of_finite (h.1 n.1)))
+  isClosedBase := isClosedBase
+  union' := union'
 -/
 def RelCWComplex.mkFinite.{u} {X : Type u} [TopologicalSpace X] (C : Set X)
     (D : outParam (Set X)) (cell : (n : Nat) -> Type u)
@@ -443,7 +501,9 @@ lemma RelCWComplex.finite_mkFinite.{u}
       continuousOn_symm pairwiseDisjoint' disjointBase' mapsTo isClosedBase union'
     Finite C :=
   letI := mkFinite C D cell map eventually_isEmpty_cell finite_cell source_eq continuousOn
-      continuousOn_symm pairw
+      continuousOn_symm pairwiseDisjoint' disjointBase' mapsTo isClosedBase union'
+  { eventually_isEmpty_cell := eventually_isEmpty_cell
+    finite_cell := finite_cell }
 
 中文:
 引理 RelCWComplex.finite_mkFinite.{u}
@@ -452,7 +512,9 @@ lemma RelCWComplex.finite_mkFinite.{u}
       continuousOn_symm pairwiseDisjoint' disjointBase' mapsTo isClosedBase union'
     Finite C :=
   letI := mkFinite C D cell map eventually_isEmpty_cell finite_cell source_eq continuousOn
-      continuousOn_symm pairw
+      continuousOn_symm pairwiseDisjoint' disjointBase' mapsTo isClosedBase union'
+  { eventually_isEmpty_cell := eventually_isEmpty_cell
+    finite_cell := finite_cell }
 
 Depends on / 依赖: continuousOn, eventually_isEmpty_cell, finite_cell, mkFinite, source_eq
 -/
@@ -497,7 +559,10 @@ definition CWComplex.mkFinite.{u}
   (continuousOn := continuousOn)
   (continuousOn_symm := continuousOn_symm)
   (pairwiseDisjoint' := pairwiseDisjoint')
-  (disjoi
+  (disjointBase' := by simp only [disjoint_empty, implies_true])
+  (mapsTo := by simpa only [empty_union])
+  (isClosedBase := isClosed_empty)
+  (union' := by simpa only [empty_union])).toCWComplex
 
 中文:
 定义 CWComplex.mkFinite.{u}
@@ -511,7 +576,10 @@ definition CWComplex.mkFinite.{u}
   (continuousOn := continuousOn)
   (continuousOn_symm := continuousOn_symm)
   (pairwiseDisjoint' := pairwiseDisjoint')
-  (disjoi
+  (disjointBase' := by simp only [disjoint_empty, implies_true])
+  (mapsTo := by simpa only [empty_union])
+  (isClosedBase := isClosed_empty)
+  (union' := by simpa only [empty_union])).toCWComplex
 
 Depends on / 依赖: RelCWComplex, RelCWComplex.mkFinite, mkFinite
 -/
@@ -552,7 +620,8 @@ lemma CWComplex.finite_mkFinite.{u}
     Finite C :=
   letI := mkFinite C cell map eventually_isEmpty_cell finite_cell source_eq continuousOn
       continuousOn_symm pairwiseDisjoint' mapsTo union'
-  { 
+  { eventually_isEmpty_cell := eventually_isEmpty_cell
+    finite_cell := finite_cell }
 
 中文:
 引理 CWComplex.finite_mkFinite.{u}
@@ -562,7 +631,8 @@ lemma CWComplex.finite_mkFinite.{u}
     Finite C :=
   letI := mkFinite C cell map eventually_isEmpty_cell finite_cell source_eq continuousOn
       continuousOn_symm pairwiseDisjoint' mapsTo union'
-  { 
+  { eventually_isEmpty_cell := eventually_isEmpty_cell
+    finite_cell := finite_cell }
 
 Depends on / 依赖: continuousOn, eventually_isEmpty_cell, finite_cell, mkFinite, source_eq
 -/
@@ -605,7 +675,17 @@ lemma RelCWComplex.finite_of_finite_cells
     -- We take the greatest `n` such that there is a `j : cell C n` and show that this fulfills
     -- the necessary conditions.
     have _ := Fintype.ofFinite (Σ n, cell C n)
-    le
+    let A := (Finset.univ : Finset (Σ n, cell C n)).image Sigma.fst
+    use A.max' (Finset.image_nonempty.2 Finset.univ_nonempty) + 1
+    intro m _
+    by_contra! h'
+    have hmA : m in A := by
+      simp only [Finset.mem_image, Finset.mem_univ, true_and, A]
+      simp only [← exists_true_iff_nonempty] at h'
+      obtain ⟨j, _⟩ := h'
+      use ⟨m, j⟩
+    linarith [A.le_max' m hmA]
+  finite_cell _ := Finite.of_injective (Sigma.mk _) sigma_mk_injective
 
 中文:
 引理 RelCWComplex.finite_of_finite_cells
@@ -618,7 +698,17 @@ lemma RelCWComplex.finite_of_finite_cells
     -- We take the greatest `n` such that there is a `j : cell C n` and show that this fulfills
     -- the necessary conditions.
     have _ := Fintype.ofFinite (Σ n, cell C n)
-    le
+    let A := (Finset.univ : Finset (Σ n, cell C n)).image Sigma.fst
+    use A.max' (Finset.image_nonempty.2 Finset.univ_nonempty) + 1
+    intro m _
+    by_contra! h'
+    have hmA : m in A := by
+      simp only [Finset.mem_image, Finset.mem_univ, true_and, A]
+      simp only [← exists_true_iff_nonempty] at h'
+      obtain ⟨j, _⟩ := h'
+      use ⟨m, j⟩
+    linarith [A.le_max' m hmA]
+  finite_cell _ := Finite.of_injective (Sigma.mk _) sigma_mk_injective
 
 Depends on / 依赖: Filter, Filter.eventually_atTop, eventually_atTop, isEmpty_or_nonempty
 -/
@@ -660,7 +750,15 @@ lemma RelCWComplex.finite_cells_of_finite
   simp only [Filter.eventually_atTop] at h
   rcases h with ⟨n, hn⟩
   have (m) (j : cell C m) : m < n := by
-    by
+    by_contra h
+    exact (hn m (not_lt.1 h)).false j
+  let f : (Σ (m : {m : Nat // m < n}), cell C m) ≃ Σ m, cell C m := {
+    toFun := fun ⟨m, j⟩ => ⟨m, j⟩
+    invFun := fun ⟨m, j⟩ => ⟨⟨m, this m j⟩, j⟩
+    left_inv := by simp [Function.LeftInverse]
+    right_inv := by simp [Function.RightInverse, Function.LeftInverse] }
+  rw [← Equiv.finite_iff f]
+  exact Finite.instSigma
 
 中文:
 引理 RelCWComplex.finite_cells_of_finite
@@ -674,7 +772,15 @@ lemma RelCWComplex.finite_cells_of_finite
   simp only [Filter.eventually_atTop] at h
   rcases h with ⟨n, hn⟩
   have (m) (j : cell C m) : m < n := by
-    by
+    by_contra h
+    exact (hn m (not_lt.1 h)).false j
+  let f : (Σ (m : {m : Nat // m < n}), cell C m) ≃ Σ m, cell C m := {
+    toFun := fun ⟨m, j⟩ => ⟨m, j⟩
+    invFun := fun ⟨m, j⟩ => ⟨⟨m, this m j⟩, j⟩
+    left_inv := by simp [Function.LeftInverse]
+    right_inv := by simp [Function.RightInverse, Function.LeftInverse] }
+  rw [← Equiv.finite_iff f]
+  exact Finite.instSigma
 -/
 lemma RelCWComplex.finite_cells_of_finite [finite : Finite C] : _root_.Finite (Σ n, cell C n) := by
   -- We show that there is a bijection between `Σ n, cell C n` and

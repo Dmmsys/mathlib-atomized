@@ -108,7 +108,27 @@ instance HSpace.prod
     simp only [ContinuousMap.coe_mk, Prod.mk_inj]
     exact ⟨HSpace.hmul_e_e, HSpace.hmul_e_e⟩
   eHmul := by
-    let G : I × X × Y -> X × Y := fun p => (HSpace.eHmul (p.1, p.2.1), HSpace.eHmul (p.1, p
+    let G : I × X × Y -> X × Y := fun p => (HSpace.eHmul (p.1, p.2.1), HSpace.eHmul (p.1, p.2.2))
+    have hG : Continuous G := by fun_prop
+    use! ⟨G, hG⟩
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.eHmul.1.2 x) (HSpace.eHmul.1.2 y)
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.eHmul.1.3 x) (HSpace.eHmul.1.3 y)
+    · rintro t ⟨x, y⟩ h
+      replace h := Prod.mk_inj.mp h
+      exact Prod.ext (HSpace.eHmul.2 t x h.1) (HSpace.eHmul.2 t y h.2)
+  hmulE := by
+    let G : I × X × Y -> X × Y := fun p => (HSpace.hmulE (p.1, p.2.1), HSpace.hmulE (p.1, p.2.2))
+    have hG : Continuous G := by fun_prop
+    use! ⟨G, hG⟩
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.hmulE.1.2 x) (HSpace.hmulE.1.2 y)
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.hmulE.1.3 x) (HSpace.hmulE.1.3 y)
+    · rintro t ⟨x, y⟩ h
+      replace h := Prod.mk_inj.mp h
+      exact Prod.ext (HSpace.hmulE.2 t x h.1) (HSpace.hmulE.2 t y h.2)
 
 中文:
 实例 H空间.乘积
@@ -119,7 +139,27 @@ instance HSpace.prod
     simp only [ContinuousMap.coe_mk, Prod.mk_inj]
     exact ⟨HSpace.hmul_e_e, HSpace.hmul_e_e⟩
   eHmul := by
-    let G : I × X × Y -> X × Y := fun p => (HSpace.eHmul (p.1, p.2.1), HSpace.eHmul (p.1, p
+    let G : I × X × Y -> X × Y := fun p => (HSpace.eHmul (p.1, p.2.1), HSpace.eHmul (p.1, p.2.2))
+    have hG : Continuous G := by fun_prop
+    use! ⟨G, hG⟩
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.eHmul.1.2 x) (HSpace.eHmul.1.2 y)
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.eHmul.1.3 x) (HSpace.eHmul.1.3 y)
+    · rintro t ⟨x, y⟩ h
+      replace h := Prod.mk_inj.mp h
+      exact Prod.ext (HSpace.eHmul.2 t x h.1) (HSpace.eHmul.2 t y h.2)
+  hmulE := by
+    let G : I × X × Y -> X × Y := fun p => (HSpace.hmulE (p.1, p.2.1), HSpace.hmulE (p.1, p.2.2))
+    have hG : Continuous G := by fun_prop
+    use! ⟨G, hG⟩
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.hmulE.1.2 x) (HSpace.hmulE.1.2 y)
+    · rintro ⟨x, y⟩
+      exact Prod.ext (HSpace.hmulE.1.3 x) (HSpace.hmulE.1.3 y)
+    · rintro t ⟨x, y⟩ h
+      replace h := Prod.mk_inj.mp h
+      exact Prod.ext (HSpace.hmulE.2 t x h.1) (HSpace.hmulE.2 t y h.2)
 
 Depends on / 依赖: fun_prop
 -/

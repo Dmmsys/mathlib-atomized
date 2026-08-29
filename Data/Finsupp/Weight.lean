@@ -312,7 +312,8 @@ theorem le_weight
     apply Nat.le_mul_of_pos_right
     exact Nat.zero_lt_of_ne_zero hs
   · simp only [notMem_support_iff] at h
-   
+    rw [h]
+    apply zero_le
 
 中文:
 定理 le_weight
@@ -326,7 +327,8 @@ theorem le_weight
     apply Nat.le_mul_of_pos_right
     exact Nat.zero_lt_of_ne_zero hs
   · simp only [notMem_support_iff] at h
-   
+    rw [h]
+    apply zero_le
 
 Depends on / 依赖: Finset, Finset.sum_eq_add_sum_sdiff_singleton_of_mem, Finsupp, Finsupp.sum, Nat.le_add_right, Nat.le_mul_of_pos_right, Nat.zero_lt_of_ne_zero, classical, f.support, le_add_right, le_mul_of_pos_right, le_trans, notMem_support_iff, sum_eq_add_sum_sdiff_singleton_of_mem, support, weight_apply, zero_le, zero_lt_of_ne_zero
 -/
@@ -363,7 +365,7 @@ theorem le_weight_of_ne_zero
   · rw [← Finsupp.mem_support_iff] at hs
     rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem hs]
 exact le_add_of_nonneg_right Finset.sum_nonneg
-  
+      fun i _ => nsmul_nonneg (hw i) (f i)
 
 中文:
 定理 le_weight_of_ne_zero
@@ -377,7 +379,7 @@ exact le_add_of_nonneg_right Finset.sum_nonneg
   · rw [← Finsupp.mem_support_iff] at hs
     rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem hs]
 exact le_add_of_nonneg_right Finset.sum_nonneg
-  
+      fun i _ => nsmul_nonneg (hw i) (f i)
 
 Depends on / 依赖: Finset, Finset.sum_eq_add_sum_sdiff_singleton_of_mem, Finset.sum_nonneg, Finsupp, Finsupp.mem_support_iff, Finsupp.sum, Nat.one_le_iff_ne_zero.mpr, classical, le_add_of_nonneg_right, le_smul_of_one_le_left, mem_support_iff, nsmul_nonneg, one_le_iff_ne_zero, sum_eq_add_sum_sdiff_singleton_of_mem, sum_nonneg, weight_apply
 -/
@@ -480,7 +482,13 @@ theorem finite_of_nat_weight_le
     exact Set.Finite.subset (Finset.finite_toSet _) this
   intro d hd
   rw [hfg]
-  simp only [Finset.coe_
+  simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe,
+    Finset.mem_antidiagonal, Prod.exists, exists_and_right, exists_eq_right]
+  use Finsupp.equivFunOnFinite.symm (Function.const σ n) - d
+  ext x
+  dsimp at hd
+  grw [← le_weight _ (hw x)] at hd
+  simp [*]
 
 中文:
 定理 finite_of_nat_weight_le
@@ -492,7 +500,13 @@ theorem finite_of_nat_weight_le
     exact Set.Finite.subset (Finset.finite_toSet _) this
   intro d hd
   rw [hfg]
-  simp only [Finset.coe_
+  simp only [Finset.coe_image, Set.mem_image, Finset.mem_coe,
+    Finset.mem_antidiagonal, Prod.exists, exists_and_right, exists_eq_right]
+  use Finsupp.equivFunOnFinite.symm (Function.const σ n) - d
+  ext x
+  dsimp at hd
+  grw [← le_weight _ (hw x)] at hd
+  simp [*]
 
 Depends on / 依赖: Finite, Finset, Finset.antidiagonal, Finset.coe_image, Finset.finite_toSet, Finset.mem_antidiagonal, Finset.mem_coe, Finsupp, Finsupp.equivFunOnFinite.symm, Function, Function.const, Prod.exists, Set.Finite.subset, Set.mem_image, antidiagonal, classical, coe_image, equivFunOnFinite, exists_and_right, exists_eq_right
 -/
@@ -1025,7 +1039,10 @@ lemma nsmul_single_one_image
     rw [succ_nsmul]; rw [ih]
     refine subset_antisymm ?_ fun f ⟨f_deg, f_supp⟩ => ?_
     · simp [Set.subset_def, Set.mem_add, @forall_comm (α ->₀ Nat)]; grind
-    obtain ⟨i, hi⟩ : f.support.Nonempty 
+    obtain ⟨i, hi⟩ : f.support.Nonempty := by aesop
+    obtain ⟨x, hx⟩ := le_iff_exists_add'.mp
+      (show single i 1 <= f by simpa [Nat.one_le_iff_ne_zero] using hi)
+    exact ⟨x, by aesop (add simp Set.subset_def), _, ⟨_, f_supp (by simp_all), rfl⟩, hx.symm⟩
 
 中文:
 引理 nsmul_single_one_image
@@ -1038,7 +1055,10 @@ lemma nsmul_single_one_image
     rw [succ_nsmul]; rw [ih]
     refine subset_antisymm ?_ fun f ⟨f_deg, f_supp⟩ => ?_
     · simp [Set.subset_def, Set.mem_add, @forall_comm (α ->₀ Nat)]; grind
-    obtain ⟨i, hi⟩ : f.support.Nonempty 
+    obtain ⟨i, hi⟩ : f.support.Nonempty := by aesop
+    obtain ⟨x, hx⟩ := le_iff_exists_add'.mp
+      (show single i 1 <= f by simpa [Nat.one_le_iff_ne_zero] using hi)
+    exact ⟨x, by aesop (add simp Set.subset_def), _, ⟨_, f_supp (by simp_all), rfl⟩, hx.symm⟩
 
 Depends on / 依赖: Nat.one_le_iff_ne_zero, Nonempty, Set.mem_add, Set.subset_def, classical, degree_eq_zero_iff, f.support.Nonempty, f_deg, f_supp, forall_comm, hx.symm, le_iff_exists_add, mem_add, one_le_iff_ne_zero, single, subset_antisymm, subset_def, succ_nsmul, support
 -/
@@ -1070,7 +1090,9 @@ theorem image_pow_eq_finsuppProd_image
     simp [← nsmul_single_one_image, ← this, Set.image_image]
   intro s
   refine (Set.image_pow (⟨⟨(·.prod (f · ^ ·)) ∘ Multiplicative.toAdd, by simp⟩,
-    by simp [Finsupp.prod_ad
+    by simp [Finsupp.prod_add_index, pow_add]⟩ : Multiplicative (α ->₀ Nat) ->* β) _ _).symm.trans ?_
+  simp [-Function.comp_apply, Set.image_comp, show Multiplicative.toAdd '' s = s from
+    Set.image_id _]
 
 中文:
 定理 image_pow_eq_finsuppProd_image
@@ -1081,7 +1103,9 @@ theorem image_pow_eq_finsuppProd_image
     simp [← nsmul_single_one_image, ← this, Set.image_image]
   intro s
   refine (Set.image_pow (⟨⟨(·.prod (f · ^ ·)) ∘ Multiplicative.toAdd, by simp⟩,
-    by simp [Finsupp.prod_ad
+    by simp [Finsupp.prod_add_index, pow_add]⟩ : Multiplicative (α ->₀ Nat) ->* β) _ _).symm.trans ?_
+  simp [-Function.comp_apply, Set.image_comp, show Multiplicative.toAdd '' s = s from
+    Set.image_id _]
 
 Depends on / 依赖: Finsupp, Finsupp.prod_add_index, Function, Function.comp_apply, Multiplicative, Multiplicative.toAdd, Set.image_comp, Set.image_id, Set.image_image, Set.image_pow, classical, comp_apply, image_comp, image_id, image_image, image_pow, nsmul_single_one_image, pow_add, prod_add_index, symm.trans
 -/

@@ -602,7 +602,13 @@ theorem extDerivWithin_extDerivWithin_apply
   _ = alternatizeUncurryFin (alternatizeUncurryFinCLM _ _ _ ∘L
         fderivWithin 𝕜 (fderivWithin 𝕜 ω s) s x) := by
     congr 1
-   
+    have : DifferentiableWithinAt 𝕜 (fderivWithin 𝕜 ω s) s x := by
+      refine (hω.fderivWithin_right hs ?_ h'x).differentiableWithinAt one_ne_zero
+      exact le_minSmoothness.trans hr
+.hasFDerivAt.comp_hasFDerivWithinAt x exact alternatizeUncurryFinCLM _ _ _
+.fderivWithin (hs.uniqueDiffWithinAt h'x) this.hasFDerivWithinAt
+_ = 0 := alternatizeUncurryFin_alternatizeUncurryFinCLM_comp_of_symmetric
+    hω.isSymmSndFDerivWithinAt hr hs hx h'x
 
 中文:
 定理 extDerivWithin_extDerivWithin_apply
@@ -614,7 +620,13 @@ theorem extDerivWithin_extDerivWithin_apply
   _ = alternatizeUncurryFin (alternatizeUncurryFinCLM _ _ _ ∘L
         fderivWithin 𝕜 (fderivWithin 𝕜 ω s) s x) := by
     congr 1
-   
+    have : DifferentiableWithinAt 𝕜 (fderivWithin 𝕜 ω s) s x := by
+      refine (hω.fderivWithin_right hs ?_ h'x).differentiableWithinAt one_ne_zero
+      exact le_minSmoothness.trans hr
+.hasFDerivAt.comp_hasFDerivWithinAt x exact alternatizeUncurryFinCLM _ _ _
+.fderivWithin (hs.uniqueDiffWithinAt h'x) this.hasFDerivWithinAt
+_ = 0 := alternatizeUncurryFin_alternatizeUncurryFinCLM_comp_of_symmetric
+    hω.isSymmSndFDerivWithinAt hr hs hx h'x
 -/
 theorem extDerivWithin_extDerivWithin_apply (hω : ContDiffWithinAt 𝕜 r ω s x)
     (hr : minSmoothness 𝕜 2 <= r) (hs : UniqueDiffOn 𝕜 s) (hx : x in closure (interior s))
@@ -712,7 +724,11 @@ theorem extDerivWithin_pullback
 hf.differentiableWithinAt (two_pos.trans_le <| le_minSmoothness.trans hr).ne'
   have hd2f : DifferentiableWithinAt 𝕜 (fderivWithin 𝕜 f s) s x :=
     (hf.fderivWithin_right hs (le_minSmoothness.trans hr) hxs).differentiableWithinAt one_ne_zero
-  rw [e
+  rw [extDerivWithin]; rw [fderivWithin_continuousAlternatingMapCompContinuousLinearMap (by exact hω.comp x hdf hst) hd2f
+      (hs x hxs)]; rw [alternatizeUncurryFin_add]; rw [fderivWithin_fun_comp _ hω hdf hst (hs x hxs)]; rw [extDerivWithin]; rw [alternatizeUncurryFin_fderivCompContinuousLinearMap_eq_zero]; rw [add_zero]
+  · ext v
+    simp +unfoldPartialApp [alternatizeUncurryFin_apply, Fin.removeNth, Function.comp_def]
+  · apply hf.isSymmSndFDerivWithinAt <;> assumption
 
 中文:
 定理 extDerivWithin_pullback
@@ -722,7 +738,11 @@ hf.differentiableWithinAt (two_pos.trans_le <| le_minSmoothness.trans hr).ne'
 hf.differentiableWithinAt (two_pos.trans_le <| le_minSmoothness.trans hr).ne'
   have hd2f : DifferentiableWithinAt 𝕜 (fderivWithin 𝕜 f s) s x :=
     (hf.fderivWithin_right hs (le_minSmoothness.trans hr) hxs).differentiableWithinAt one_ne_zero
-  rw [e
+  rw [extDerivWithin]; rw [fderivWithin_continuousAlternatingMapCompContinuousLinearMap (by exact hω.comp x hdf hst) hd2f
+      (hs x hxs)]; rw [alternatizeUncurryFin_add]; rw [fderivWithin_fun_comp _ hω hdf hst (hs x hxs)]; rw [extDerivWithin]; rw [alternatizeUncurryFin_fderivCompContinuousLinearMap_eq_zero]; rw [add_zero]
+  · ext v
+    simp +unfoldPartialApp [alternatizeUncurryFin_apply, Fin.removeNth, Function.comp_def]
+  · apply hf.isSymmSndFDerivWithinAt <;> assumption
 
 Depends on / 依赖: DifferentiableWithinAt, alternatizeUncurryFin_add, differentiableWithinAt, extDerivWithin, fderivWithin, fderivWithin_continuousAlternatingMapCompContinuousLinearMap, fderivWithin_fun_comp, fderivWithin_right, hf.differentiableWithinAt, hf.fderivWithin_right, le_minSmoothness, le_minSmoothness.trans, one_ne_zero, trans_le, two_pos, two_pos.trans_le
 -/

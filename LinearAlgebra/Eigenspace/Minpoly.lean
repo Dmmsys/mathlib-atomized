@@ -77,7 +77,8 @@ theorem aeval_apply_of_hasEigenvector
   · intro p q hp hq; simp [hp, hq, add_smul]
   · intro n a hna
     rw [mul_comm]; rw [pow_succ']; rw [mul_assoc]; rw [map_mul]; rw [Module.End.mul_apply]; rw [mul_comm]; rw [hna]
-    simp only [mem_eigenspace_iff.1 h
+    simp only [mem_eigenspace_iff.1 h.1, smul_smul, aeval_X, eval_mul, eval_C, eval_pow, eval_X,
+      map_smulₛₗ, RingHom.id_apply, mul_comm]
 
 中文:
 定理 aeval_apply_of_hasEigenvector
@@ -88,7 +89,8 @@ theorem aeval_apply_of_hasEigenvector
   · intro p q hp hq; simp [hp, hq, add_smul]
   · intro n a hna
     rw [mul_comm]; rw [pow_succ']; rw [mul_assoc]; rw [map_mul]; rw [Module.End.mul_apply]; rw [mul_comm]; rw [hna]
-    simp only [mem_eigenspace_iff.1 h
+    simp only [mem_eigenspace_iff.1 h.1, smul_smul, aeval_X, eval_mul, eval_C, eval_pow, eval_X,
+      map_smulₛₗ, RingHom.id_apply, mul_comm]
 
 Depends on / 依赖: Module, Module.End.mul_apply, Module.algebraMap_end_apply, RingHom, RingHom.id_apply, add_smul, aeval_X, algebraMap_end_apply, eval_C, eval_X, eval_mul, eval_pow, id_apply, induction_on, map_mul, mem_eigenspace_iff, mul_apply, mul_assoc, mul_comm, p.induction_on
 -/
@@ -177,7 +179,12 @@ theorem hasEigenvalue_of_isRoot
     have := minpoly.min R f
       ((monic_X_sub_C μ).of_mul_monic_left (hq ▸ minpoly.monic (Algebra.IsIntegral.isIntegral f)))
       (LinearMap.ext h_contra)
-    rw [hq]; rw [d
+    rw [hq]; rw [degree_mul]; rw [degree_X_sub_C]; rw [degree_eq_natDegree] at this
+    · norm_cast at this; grind
+    · rintro rfl
+      exact minpoly.ne_zero (Algebra.IsIntegral.isIntegral f) (mul_zero (X - C μ) ▸ hq)
+  refine Module.End.hasEigenvalue_of_hasEigenvector (hasEigenvector_iff.mpr ⟨?_, hv⟩)
+  simpa [sub_eq_zero, hq] using congr($(minpoly.aeval R f) v)
 
 中文:
 定理 hasEigenvalue_of_isRoot
@@ -190,7 +197,12 @@ theorem hasEigenvalue_of_isRoot
     have := minpoly.min R f
       ((monic_X_sub_C μ).of_mul_monic_left (hq ▸ minpoly.monic (Algebra.IsIntegral.isIntegral f)))
       (LinearMap.ext h_contra)
-    rw [hq]; rw [d
+    rw [hq]; rw [degree_mul]; rw [degree_X_sub_C]; rw [degree_eq_natDegree] at this
+    · norm_cast at this; grind
+    · rintro rfl
+      exact minpoly.ne_zero (Algebra.IsIntegral.isIntegral f) (mul_zero (X - C μ) ▸ hq)
+  refine Module.End.hasEigenvalue_of_hasEigenvector (hasEigenvector_iff.mpr ⟨?_, hv⟩)
+  simpa [sub_eq_zero, hq] using congr($(minpoly.aeval R f) v)
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, LinearMap, LinearMap.ext, Module, Module.End.hasEigenvalue_of_hasEi, degree_X_sub_C, degree_eq_natDegree, degree_mul, dvd_iff_isRoot, dvd_iff_isRoot.mpr, h_contra, hasEigenvalue_of_hasEi, isIntegral, minpoly, minpoly.min, minpoly.monic, minpoly.ne_zero, monic_X_sub_C
 -/
@@ -295,7 +307,9 @@ theorem eigenspace_aeval_polynomial_degree_1
           apply eigenspace_div
           rw [Ne]; rw [leadingCoeff_eq_zero_iff_deg_eq_bot]; rw [hq]
           exact WithBot.one_ne_bot
-    _ = LinearMap.ker (aev
+    _ = LinearMap.ker (aeval f (C q.leadingCoeff * X + C (q.coeff 0))) := by
+          rw [C_mul']; rw [aeval_def]; simp [algebraMap, Algebra.algebraMap]
+    _ = LinearMap.ker (aeval f q) := by rwa [← eq_X_add_C_of_degree_eq_one]
 
 中文:
 定理 eigenspace_aeval_polynomial_degree_1
@@ -306,7 +320,9 @@ theorem eigenspace_aeval_polynomial_degree_1
           apply eigenspace_div
           rw [Ne]; rw [leadingCoeff_eq_zero_iff_deg_eq_bot]; rw [hq]
           exact WithBot.one_ne_bot
-    _ = LinearMap.ker (aev
+    _ = LinearMap.ker (aeval f (C q.leadingCoeff * X + C (q.coeff 0))) := by
+          rw [C_mul']; rw [aeval_def]; simp [algebraMap, Algebra.algebraMap]
+    _ = LinearMap.ker (aeval f q) := by rwa [← eq_X_add_C_of_degree_eq_one]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap, C_mul, LinearMap, LinearMap.ker, WithBot, WithBot.one_ne_bot, aeval_def, algebraMap, eigenspace, eigenspace_div, eq_X_add_C_of_degree_eq_one, leadingCoeff, leadingCoeff_eq_zero_iff_deg_eq_bot, one_ne_bot, q.coeff, q.leadingCoeff
 -/

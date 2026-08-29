@@ -114,7 +114,9 @@ instance model_hasChar_of_charP
   | inr hp =>
     subst hp
     simp only [ite_true, Theory.model_iff, Set.mem_image, Set.mem_ofPred_eq,
-      Sentence.Realize, for
+      Sentence.Realize, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
+      Formula.realize_not, realize_eqZero, ← CharZero.charZero_iff_forall_prime_ne_zero]
+    exact CharP.charP_to_charZero K
 
 中文:
 实例 model_hasChar_of_charP
@@ -127,7 +129,9 @@ instance model_hasChar_of_charP
   | inr hp =>
     subst hp
     simp only [ite_true, Theory.model_iff, Set.mem_image, Set.mem_ofPred_eq,
-      Sentence.Realize, for
+      Sentence.Realize, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
+      Formula.realize_not, realize_eqZero, ← CharZero.charZero_iff_forall_prime_ne_zero]
+    exact CharP.charP_to_charZero K
 
 Depends on / 依赖: CharP.charP_to_charZero, CharP.char_is_prime_or_zero, CharZero, CharZero.charZero_iff_forall_prime_ne_zero, Formula, Formula.realize_not, Language, Language.Theory.model_union_iff, Realize, Sentence, Sentence.Realize, Set.mem_image, Set.mem_ofPred_eq, Theory, Theory.model_iff, and_imp, charP_to_charZero, charZero_iff_forall_prime_ne_zero, char_is_prime_or_zero, forall_exists_index
 -/
@@ -156,7 +160,15 @@ theorem charP_iff_model_fieldOfChar
   split_ifs with hp0 hp
   · subst hp0
     simp only [Theory.model_iff, Set.mem_image, Set.mem_ofPred_eq, Sentence.Realize,
-      forall_exists_index, and_imp, forall_apply_eq_im
+      forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, Formula.realize_not,
+      realize_eqZero, ← CharZero.charZero_iff_forall_prime_ne_zero]
+    exact ⟨fun _ => CharP.ofCharZero _, fun _ => CharP.charP_to_charZero K⟩
+  · simp only [Theory.model_iff, Set.mem_singleton_iff, Sentence.Realize, forall_eq,
+      realize_eqZero, ← CharP.charP_iff_prime_eq_zero hp]
+  · simp only [Theory.model_iff, Set.mem_singleton_iff, Sentence.Realize,
+      forall_eq, Formula.realize_bot, false_iff]
+    intro H
+    cases (CharP.char_is_prime_or_zero K p) <;> simp_all
 
 中文:
 定理 charP_iff_model_fieldOfChar
@@ -167,7 +179,15 @@ theorem charP_iff_model_fieldOfChar
   split_ifs with hp0 hp
   · subst hp0
     simp only [Theory.model_iff, Set.mem_image, Set.mem_ofPred_eq, Sentence.Realize,
-      forall_exists_index, and_imp, forall_apply_eq_im
+      forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, Formula.realize_not,
+      realize_eqZero, ← CharZero.charZero_iff_forall_prime_ne_zero]
+    exact ⟨fun _ => CharP.ofCharZero _, fun _ => CharP.charP_to_charZero K⟩
+  · simp only [Theory.model_iff, Set.mem_singleton_iff, Sentence.Realize, forall_eq,
+      realize_eqZero, ← CharP.charP_iff_prime_eq_zero hp]
+  · simp only [Theory.model_iff, Set.mem_singleton_iff, Sentence.Realize,
+      forall_eq, Formula.realize_bot, false_iff]
+    intro H
+    cases (CharP.char_is_prime_or_zero K p) <;> simp_all
 
 Depends on / 依赖: CharP.charP_to_charZero, CharP.ofCharZero, CharZero, CharZero.charZero_iff_forall_prime_ne_zero, Formula, Formula.realize_not, Realize, Sentence, Sentence.Realize, Set.mem_image, Set.mem_ofPred_eq, Set.mem_singleton_iff, Theory, Theory.field.Model, Theory.fieldOfChar, Theory.model_iff, Theory.model_union_iff, and_imp, charP_to_charZero, charZero_iff_forall_prime_ne_zero
 -/

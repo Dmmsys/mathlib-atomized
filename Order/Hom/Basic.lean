@@ -3617,7 +3617,14 @@ left_inv p := DFunLike.coe_injective by
     change (g.symm ∘ g) ∘ p ∘ (f.symm ∘ f) = p
     simp only [← OrderIso.coe_trans, Function.id_comp,
                OrderIso.self_trans_symm, OrderIso.coe_refl, Function.comp_id]
-right_inv p := DFunLik
+right_inv p := DFunLike.coe_injective by
+    change (g ∘ g.symm) ∘ p ∘ (f ∘ f.symm) = p
+    simp only [← OrderIso.coe_trans, Function.id_comp,
+               OrderIso.symm_trans_self, OrderIso.coe_refl, Function.comp_id]
+  map_rel_iff' {p q} := by
+    simp only [Equiv.coe_fn_mk, OrderHom.le_def, OrderHom.comp_coe,
+               OrderHomClass.coe_coe, Function.comp_apply, map_le_map_iff]
+    exact Iff.symm f.forall_congr_left
 
 中文:
 定义 arrowCongr
@@ -3628,7 +3635,14 @@ left_inv p := DFunLike.coe_injective by
     change (g.symm ∘ g) ∘ p ∘ (f.symm ∘ f) = p
     simp only [← OrderIso.coe_trans, Function.id_comp,
                OrderIso.self_trans_symm, OrderIso.coe_refl, Function.comp_id]
-right_inv p := DFunLik
+right_inv p := DFunLike.coe_injective by
+    change (g ∘ g.symm) ∘ p ∘ (f ∘ f.symm) = p
+    simp only [← OrderIso.coe_trans, Function.id_comp,
+               OrderIso.symm_trans_self, OrderIso.coe_refl, Function.comp_id]
+  map_rel_iff' {p q} := by
+    simp only [Equiv.coe_fn_mk, OrderHom.le_def, OrderHom.comp_coe,
+               OrderHomClass.coe_coe, Function.comp_apply, map_le_map_iff]
+    exact Iff.symm f.forall_congr_left
 
 Depends on / 依赖: f.symm
 -/
@@ -4425,7 +4439,9 @@ definition ofCmpEqCmp
       rw [← cmp_eq_eq_iff]; rw [← h]; rw [cmp_self_eq_eq],
     map_rel_iff' := by
       intro a b
- 
+      apply le_iff_le_of_cmp_eq_cmp
+      convert! (h a (f b)).symm
+      apply gf }
 
 中文:
 定义 ofCmpEqCmp
@@ -4439,7 +4455,9 @@ definition ofCmpEqCmp
       rw [← cmp_eq_eq_iff]; rw [← h]; rw [cmp_self_eq_eq],
     map_rel_iff' := by
       intro a b
- 
+      apply le_iff_le_of_cmp_eq_cmp
+      convert! (h a (f b)).symm
+      apply gf }
 
 Depends on / 依赖: cmp_eq_eq_iff, cmp_self_eq_eq, convert, invFun, le_iff_le_of_cmp_eq_cmp, left_inv, map_rel_iff, right_inv
 -/
@@ -5148,7 +5166,7 @@ lemma denselyOrdered_iff_of_orderIsoClass
   · intro H
     refine ⟨fun a b h => ?_⟩
     obtain ⟨c, hc⟩ := exists_between ((map_lt_map_iff f).mpr h)
-    exact ⟨EquivLike.inv f c, 
+    exact ⟨EquivLike.inv f c, by simpa using hc⟩
 
 中文:
 引理 denselyOrdered_iff_of_orderIsoClass
@@ -5162,7 +5180,7 @@ lemma denselyOrdered_iff_of_orderIsoClass
   · intro H
     refine ⟨fun a b h => ?_⟩
     obtain ⟨c, hc⟩ := exists_between ((map_lt_map_iff f).mpr h)
-    exact ⟨EquivLike.inv f c, 
+    exact ⟨EquivLike.inv f c, by simpa using hc⟩
 
 Depends on / 依赖: EquivLike, EquivLike.inv, exists_between, map_inv_lt_map_inv_iff, map_lt_map_iff
 -/
@@ -5192,7 +5210,7 @@ lemma denselyOrdered_iff_of_strictAnti
   · simp only [Equiv.trans_apply, EquivLike.coe_coe, OrderDual.forall, OrderDual.ofDual_toDual,
       OrderDual.toDual_le_toDual]
     intro a b
-    rw [
+    rw [hf.le_iff_ge]
 
 中文:
 引理 denselyOrdered_iff_of_strictAnti
@@ -5204,7 +5222,7 @@ lemma denselyOrdered_iff_of_strictAnti
   · simp only [Equiv.trans_apply, EquivLike.coe_coe, OrderDual.forall, OrderDual.ofDual_toDual,
       OrderDual.toDual_le_toDual]
     intro a b
-    rw [
+    rw [hf.le_iff_ge]
 
 Depends on / 依赖: Equiv.trans_apply, EquivLike, EquivLike.coe_coe, OrderDual, OrderDual.forall, OrderDual.ofDual.trans, OrderDual.ofDual_toDual, OrderDual.toDual_le_toDual, coe_coe, denselyOrdered_iff_of_orderIsoClass, denselyOrdered_orderDual, hf.le_iff_ge, le_iff_ge, ofDual, ofDual_toDual, toDual_le_toDual, trans_apply
 -/

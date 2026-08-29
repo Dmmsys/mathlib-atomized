@@ -45,7 +45,54 @@ definition polarCoord
   map_target' := by
     rintro ⟨r, θ⟩ ⟨hr, hθ⟩
     dsimp at hr hθ
-    rcases eq_or_ne θ 0 with (rfl 
+    rcases eq_or_ne θ 0 with (rfl | h'θ)
+    · simpa using! hr
+    · right
+      simp at hr
+      simpa only [ne_of_gt hr, Ne, mem_ofPred_eq, mul_eq_zero, false_or,
+        sin_eq_zero_iff_of_lt_of_lt hθ.1 hθ.2] using! h'θ
+  map_source' := by
+    rintro ⟨x, y⟩ hxy
+    simp only [prodMk_mem_set_prod_eq, mem_Ioi, sqrt_pos, mem_Ioo, Complex.neg_pi_lt_arg,
+      true_and, Complex.arg_lt_pi_iff]
+    constructor
+    · rcases hxy with hxy | hxy
+      · dsimp at hxy; linarith [sq_pos_of_ne_zero hxy.ne', sq_nonneg y]
+      · linarith [sq_nonneg x, sq_pos_of_ne_zero hxy]
+    · rcases hxy with hxy | hxy
+      · exact Or.inl (le_of_lt hxy)
+      · exact Or.inr hxy
+  right_inv' := by
+    rintro ⟨r, θ⟩ ⟨hr, hθ⟩
+    ext <;> dsimp at hr hθ ⊢
+    · conv_rhs => rw [← sqrt_sq (le_of_lt hr), ← one_mul (r ^ 2), ← sin_sq_add_cos_sq θ]
+      congr 1
+      ring
+    · convert! Complex.arg_mul_cos_add_sin_mul_I hr ⟨hθ.1, hθ.2.le⟩
+      simp only [Complex.equivRealProd_symm_apply, Complex.ofReal_mul, Complex.ofReal_cos,
+        Complex.ofReal_sin]
+      ring
+  left_inv' := by
+    rintro ⟨x, y⟩ _
+    have A : √(x ^ 2 + y ^ 2) = ‖x + y * Complex.I‖ := by
+      rw [Complex.norm_def]; rw [Complex.normSq_add_mul_I]
+    simp [A]
+  open_target := isOpen_Ioi.prod isOpen_Ioo
+  open_source :=
+    (isOpen_lt continuous_const continuous_fst).union
+      (isOpen_ne_fun continuous_snd continuous_const)
+  continuousOn_invFun := by fun_prop
+  continuousOn_toFun := by
+    refine .prodMk (by fun_prop) ?_
+    have A : MapsTo Complex.equivRealProd.symm ({q : Real × Real | 0 < q.1} union {q : Real × Real | q.2 != 0})
+        Complex.slitPlane := by
+      rintro ⟨x, y⟩ hxy; simpa only using! hxy
+    refine ContinuousOn.comp (f := Complex.equivRealProd.symm)
+      (g := Complex.arg) (fun z hz => ?_) ?_ A
+    · exact (Complex.continuousAt_arg hz).continuousWithinAt
+    · exact Complex.equivRealProdCLM.symm.continuous.continuousOn
+
+@[fun_prop]
 
 中文:
 定义 polarCoord
@@ -57,7 +104,54 @@ definition polarCoord
   map_target' := by
     rintro ⟨r, θ⟩ ⟨hr, hθ⟩
     dsimp at hr hθ
-    rcases eq_or_ne θ 0 with (rfl 
+    rcases eq_or_ne θ 0 with (rfl | h'θ)
+    · simpa using! hr
+    · right
+      simp at hr
+      simpa only [ne_of_gt hr, Ne, mem_ofPred_eq, mul_eq_zero, false_or,
+        sin_eq_zero_iff_of_lt_of_lt hθ.1 hθ.2] using! h'θ
+  map_source' := by
+    rintro ⟨x, y⟩ hxy
+    simp only [prodMk_mem_set_prod_eq, mem_Ioi, sqrt_pos, mem_Ioo, Complex.neg_pi_lt_arg,
+      true_and, Complex.arg_lt_pi_iff]
+    constructor
+    · rcases hxy with hxy | hxy
+      · dsimp at hxy; linarith [sq_pos_of_ne_zero hxy.ne', sq_nonneg y]
+      · linarith [sq_nonneg x, sq_pos_of_ne_zero hxy]
+    · rcases hxy with hxy | hxy
+      · exact Or.inl (le_of_lt hxy)
+      · exact Or.inr hxy
+  right_inv' := by
+    rintro ⟨r, θ⟩ ⟨hr, hθ⟩
+    ext <;> dsimp at hr hθ ⊢
+    · conv_rhs => rw [← sqrt_sq (le_of_lt hr), ← one_mul (r ^ 2), ← sin_sq_add_cos_sq θ]
+      congr 1
+      ring
+    · convert! Complex.arg_mul_cos_add_sin_mul_I hr ⟨hθ.1, hθ.2.le⟩
+      simp only [Complex.equivRealProd_symm_apply, Complex.ofReal_mul, Complex.ofReal_cos,
+        Complex.ofReal_sin]
+      ring
+  left_inv' := by
+    rintro ⟨x, y⟩ _
+    have A : √(x ^ 2 + y ^ 2) = ‖x + y * Complex.I‖ := by
+      rw [Complex.norm_def]; rw [Complex.normSq_add_mul_I]
+    simp [A]
+  open_target := isOpen_Ioi.prod isOpen_Ioo
+  open_source :=
+    (isOpen_lt continuous_const continuous_fst).union
+      (isOpen_ne_fun continuous_snd continuous_const)
+  continuousOn_invFun := by fun_prop
+  continuousOn_toFun := by
+    refine .prodMk (by fun_prop) ?_
+    have A : MapsTo Complex.equivRealProd.symm ({q : Real × Real | 0 < q.1} union {q : Real × Real | q.2 != 0})
+        Complex.slitPlane := by
+      rintro ⟨x, y⟩ hxy; simpa only using! hxy
+    refine ContinuousOn.comp (f := Complex.equivRealProd.symm)
+      (g := Complex.arg) (fun z hz => ?_) ?_ A
+    · exact (Complex.continuousAt_arg hz).continuousWithinAt
+    · exact Complex.equivRealProdCLM.symm.continuous.continuousOn
+
+@[fun_prop]
 
 Depends on / 依赖: Complex.arg, Complex.equivRealProd.symm, equivRealProd
 -/
@@ -167,7 +261,9 @@ theorem hasFDerivAt_polarCoord_symm
   convert!
     HasFDerivAt.prodMk (𝕜 := Real)
       (hasFDerivAt_fst.mul ((hasDerivAt_cos p.2).comp_hasFDerivAt p hasFDerivAt_snd))
-      (hasFDerivAt_fst.mul ((hasDerivAt_sin p.2).comp_hasFDerivAt p hasFDerivAt_sn
+      (hasFDerivAt_fst.mul ((hasDerivAt_sin p.2).comp_hasFDerivAt p hasFDerivAt_snd)) using
+    2 <;>
+  simp [smul_smul, add_comm, neg_mul, smul_neg, neg_smul _ (ContinuousLinearMap.snd Real Real Real)]
 
 中文:
 定理 hasFDerivAt_polarCoord_symm
@@ -178,7 +274,9 @@ theorem hasFDerivAt_polarCoord_symm
   convert!
     HasFDerivAt.prodMk (𝕜 := Real)
       (hasFDerivAt_fst.mul ((hasDerivAt_cos p.2).comp_hasFDerivAt p hasFDerivAt_snd))
-      (hasFDerivAt_fst.mul ((hasDerivAt_sin p.2).comp_hasFDerivAt p hasFDerivAt_sn
+      (hasFDerivAt_fst.mul ((hasDerivAt_sin p.2).comp_hasFDerivAt p hasFDerivAt_snd)) using
+    2 <;>
+  simp [smul_smul, add_comm, neg_mul, smul_neg, neg_smul _ (ContinuousLinearMap.snd Real Real Real)]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.snd, HasFDerivAt, HasFDerivAt.prodMk, Matrix, Matrix.toLin_finTwoProd_toContinuousLinearMap, add_comm, comp_hasFDerivAt, convert, fderivPolarCoordSymm, hasDerivAt_cos, hasDerivAt_sin, hasFDerivAt_fst, hasFDerivAt_fst.mul, hasFDerivAt_snd, neg_mul, neg_smul, prodMk, smul_neg, smul_smul
 -/
@@ -254,7 +352,14 @@ theorem polarCoord_source_ae_eq_univ
     simp only [polarCoord_source, compl_union, mem_inter_iff, mem_compl_iff, mem_ofPred_eq, not_lt,
       Classical.not_not] at hx
     exact hx.2
-  have B : volume (LinearMap.ker (LinearMap.sn
+  have B : volume (LinearMap.ker (LinearMap.snd Real Real Real) : Set (Real × Real)) = 0 := by
+    apply Measure.addHaar_submodule
+    rw [Ne]; rw [LinearMap.ker_eq_top]
+    intro h
+    have : (LinearMap.snd Real Real Real) (0, 1) = (0 : Real × Real ->ₗ[Real] Real) (0, 1) := by rw [h]
+    simp at this
+  simp only [ae_eq_univ]
+  exact le_antisymm ((measure_mono A).trans (le_of_eq B)) bot_le
 
 中文:
 定理 polarCoord_source_ae_eq_univ
@@ -265,7 +370,14 @@ theorem polarCoord_source_ae_eq_univ
     simp only [polarCoord_source, compl_union, mem_inter_iff, mem_compl_iff, mem_ofPred_eq, not_lt,
       Classical.not_not] at hx
     exact hx.2
-  have B : volume (LinearMap.ker (LinearMap.sn
+  have B : volume (LinearMap.ker (LinearMap.snd Real Real Real) : Set (Real × Real)) = 0 := by
+    apply Measure.addHaar_submodule
+    rw [Ne]; rw [LinearMap.ker_eq_top]
+    intro h
+    have : (LinearMap.snd Real Real Real) (0, 1) = (0 : Real × Real ->ₗ[Real] Real) (0, 1) := by rw [h]
+    simp at this
+  simp only [ae_eq_univ]
+  exact le_antisymm ((measure_mono A).trans (le_of_eq B)) bot_le
 
 Depends on / 依赖: Classical, Classical.not_not, LinearMap, LinearMap.ker, LinearMap.ker_eq_top, LinearMap.snd, Measure, Measure.addHaar_submodule, addHaar_submodule, compl_union, ker_eq_top, mem_compl_iff, mem_inter_iff, mem_ofPred_eq, not_lt, not_not, polarCoord, polarCoord.source, polarCoord_source, subseteq
 -/
@@ -298,7 +410,12 @@ theorem integral_comp_polarCoord_symm
       apply setIntegral_congr_set
       exact polarCoord_source_ae_eq_univ.symm
     _ = ∫ p in polarCoord.target, |p.1| • f (polarCoord.symm p) := by
-      rw [← OpenPartialHomeomorph.symm_target]; rw [
+      rw [← OpenPartialHomeomorph.symm_target]; rw [integral_target_eq_integral_abs_det_fderiv_smul volume
+      (fun p _ => hasFDerivAt_polarCoord_symm p)]; rw [OpenPartialHomeomorph.symm_source]
+      simp_rw [det_fderivPolarCoordSymm]
+    _ = ∫ p in polarCoord.target, p.1 • f (polarCoord.symm p) := by
+      apply setIntegral_congr_fun polarCoord.open_target.measurableSet fun x hx => ?_
+      rw [abs_of_pos hx.1]
 
 中文:
 定理 integral_comp_polarCoord_symm
@@ -311,7 +428,12 @@ theorem integral_comp_polarCoord_symm
       apply setIntegral_congr_set
       exact polarCoord_source_ae_eq_univ.symm
     _ = ∫ p in polarCoord.target, |p.1| • f (polarCoord.symm p) := by
-      rw [← OpenPartialHomeomorph.symm_target]; rw [
+      rw [← OpenPartialHomeomorph.symm_target]; rw [integral_target_eq_integral_abs_det_fderiv_smul volume
+      (fun p _ => hasFDerivAt_polarCoord_symm p)]; rw [OpenPartialHomeomorph.symm_source]
+      simp_rw [det_fderivPolarCoordSymm]
+    _ = ∫ p in polarCoord.target, p.1 • f (polarCoord.symm p) := by
+      apply setIntegral_congr_fun polarCoord.open_target.measurableSet fun x hx => ?_
+      rw [abs_of_pos hx.1]
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.symm_source, OpenPartialHomeomorph.symm_target, det_fderivPolarCoordSymm, hasFDerivAt_polarCoord_symm, integral_target_eq_integral_abs_det_fderiv_smul, polarCoord, polarCoord.source, polarCoord.symm, polarCoord.target, polarCoord_source_ae_eq_univ, polarCoord_source_ae_eq_univ.symm, setIntegral_congr_set, setIntegral_univ, simp_rw, source, symm_source, symm_target, target, volume
 -/
@@ -343,7 +465,14 @@ theorem lintegral_comp_polarCoord_symm
   calc
     _ = ∫⁻ p in polarCoord.symm '' polarCoord.target, f p := by
       rw [← setLIntegral_univ]; rw [setLIntegral_congr polarCoord_source_ae_eq_univ.symm]; rw [polarCoord.symm_image_target_eq_source]
-    _ = ∫⁻ (p : Real × Real) in polarCoord.target, ENNReal.ofReal |p.1| • f (polarCo
+    _ = ∫⁻ (p : Real × Real) in polarCoord.target, ENNReal.ofReal |p.1| • f (polarCoord.symm p) := by
+      rw [lintegral_image_eq_lintegral_abs_det_fderiv_mul volume _
+        (fun p _ => (hasFDerivAt_polarCoord_symm p).hasFDerivWithinAt)]
+      · simp_rw [det_fderivPolarCoordSymm]; rfl
+      exacts [polarCoord.symm.injOn, measurableSet_Ioi.prod measurableSet_Ioo]
+    _ = ∫⁻ (p : Real × Real) in polarCoord.target, ENNReal.ofReal p.1 • f (polarCoord.symm p) := by
+      refine setLIntegral_congr_fun polarCoord.open_target.measurableSet (fun x hx => ?_)
+      rw [abs_of_pos hx.1]
 
 中文:
 定理 lintegral_comp_polarCoord_symm
@@ -353,7 +482,14 @@ theorem lintegral_comp_polarCoord_symm
   calc
     _ = ∫⁻ p in polarCoord.symm '' polarCoord.target, f p := by
       rw [← setLIntegral_univ]; rw [setLIntegral_congr polarCoord_source_ae_eq_univ.symm]; rw [polarCoord.symm_image_target_eq_source]
-    _ = ∫⁻ (p : Real × Real) in polarCoord.target, ENNReal.ofReal |p.1| • f (polarCo
+    _ = ∫⁻ (p : Real × Real) in polarCoord.target, ENNReal.ofReal |p.1| • f (polarCoord.symm p) := by
+      rw [lintegral_image_eq_lintegral_abs_det_fderiv_mul volume _
+        (fun p _ => (hasFDerivAt_polarCoord_symm p).hasFDerivWithinAt)]
+      · simp_rw [det_fderivPolarCoordSymm]; rfl
+      exacts [polarCoord.symm.injOn, measurableSet_Ioi.prod measurableSet_Ioo]
+    _ = ∫⁻ (p : Real × Real) in polarCoord.target, ENNReal.ofReal p.1 • f (polarCoord.symm p) := by
+      refine setLIntegral_congr_fun polarCoord.open_target.measurableSet (fun x hx => ?_)
+      rw [abs_of_pos hx.1]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, det_fderivPolarCoordSymm, exacts, hasFDerivAt_polarCoord_symm, hasFDerivWithinAt, lintegral_image_eq_lintegral_abs_det_fderiv_mul, ofReal, polarCoord, polarCoord.symm, polarCoord.symm.injOn, polarCoord.symm_image_target_eq_source, polarCoord.target, polarCoord_source_ae_eq_univ, polarCoord_source_ae_eq_univ.symm, setLIntegral_congr, setLIntegral_univ, simp_rw, symm_image_target_eq_source, target
 -/
@@ -733,7 +869,10 @@ theorem integral_comp_pi_polarCoord_symm
   rw [← setIntegral_univ (f := f)]; rw [← setIntegral_congr_set pi_polarCoord_symm_target_ae_eq_univ]
   convert!
     (integral_image_eq_integral_abs_det_fderiv_smul volume measurableSet_pi_polarCoord_target
-        (fun p _ => (hasFDerivAt_pi_polarCoord_symm p).hasFDerivWithinAt) injOn_pi_polarCo
+        (fun p _ => (hasFDerivAt_pi_polarCoord_symm p).hasFDerivWithinAt) injOn_pi_polarCoord_symm
+        f).symm using 1
+  refine setIntegral_congr_fun measurableSet_pi_polarCoord_target fun x hx => ?_
+  simp_rw [det_fderivPiPolarCoordSymm, Finset.abs_prod, abs_fst_of_mem_pi_polarCoord_target hx]
 
 中文:
 定理 integral_comp_pi_polarCoord_symm
@@ -742,7 +881,10 @@ theorem integral_comp_pi_polarCoord_symm
   rw [← setIntegral_univ (f := f)]; rw [← setIntegral_congr_set pi_polarCoord_symm_target_ae_eq_univ]
   convert!
     (integral_image_eq_integral_abs_det_fderiv_smul volume measurableSet_pi_polarCoord_target
-        (fun p _ => (hasFDerivAt_pi_polarCoord_symm p).hasFDerivWithinAt) injOn_pi_polarCo
+        (fun p _ => (hasFDerivAt_pi_polarCoord_symm p).hasFDerivWithinAt) injOn_pi_polarCoord_symm
+        f).symm using 1
+  refine setIntegral_congr_fun measurableSet_pi_polarCoord_target fun x hx => ?_
+  simp_rw [det_fderivPiPolarCoordSymm, Finset.abs_prod, abs_fst_of_mem_pi_polarCoord_target hx]
 
 Depends on / 依赖: Finset, Finset.abs_prod, abs_fst_of_mem_pi_polarCoord_target, abs_prod, convert, det_fderivPiPolarCoordSymm, hasFDerivAt_pi_polarCoord_symm, hasFDerivWithinAt, injOn_pi_polarCoord_symm, integral_image_eq_integral_abs_det_fderiv_smul, mapComp, measurableSet_pi_polarCoord_target, pi_polarCoord_symm_target_ae_eq_univ, setIntegral_congr_fun, setIntegral_congr_set, setIntegral_univ, simp_rw, volume
 -/
@@ -799,6 +941,10 @@ theorem lintegral_comp_pi_polarCoord_symm
   convert!
     (lintegral_image_eq_lintegral_abs_det_fderiv_mul volume measurableSet_pi_polarCoord_target
         (fun p _ => (hasFDerivAt_pi_polarCoord_symm p).hasFDerivWithinAt) injOn_pi_polarCoord_symm
+        f).symm using 1
+  refine setLIntegral_congr_fun measurableSet_pi_polarCoord_target (fun x hx => ?_)
+  simp_rw [det_fderivPiPolarCoordSymm, Finset.abs_prod, ENNReal.ofReal_prod_of_nonneg (fun _ _ =>
+    abs_nonneg _), abs_fst_of_mem_pi_polarCoord_target hx]
 
 中文:
 定理 lintegral_comp_pi_polarCoord_symm
@@ -808,6 +954,10 @@ theorem lintegral_comp_pi_polarCoord_symm
   convert!
     (lintegral_image_eq_lintegral_abs_det_fderiv_mul volume measurableSet_pi_polarCoord_target
         (fun p _ => (hasFDerivAt_pi_polarCoord_symm p).hasFDerivWithinAt) injOn_pi_polarCoord_symm
+        f).symm using 1
+  refine setLIntegral_congr_fun measurableSet_pi_polarCoord_target (fun x hx => ?_)
+  simp_rw [det_fderivPiPolarCoordSymm, Finset.abs_prod, ENNReal.ofReal_prod_of_nonneg (fun _ _ =>
+    abs_nonneg _), abs_fst_of_mem_pi_polarCoord_target hx]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_prod_of_nonneg, Finset, Finset.abs_prod, abs_fs, abs_nonneg, abs_prod, convert, det_fderivPiPolarCoordSymm, hasFDerivAt_pi_polarCoord_symm, hasFDerivWithinAt, injOn_pi_polarCoord_symm, lintegral_image_eq_lintegral_abs_det_fderiv_mul, measurableSet_pi_polarCoord_target, ofReal_prod_of_nonneg, pi_polarCoord_symm_target_ae_eq_univ, setLIntegral_congr, setLIntegral_congr_fun, setLIntegral_univ, simp_rw
 -/
@@ -833,7 +983,7 @@ theorem Complex.lintegral_comp_pi_polarCoord_symm
   let e := MeasurableEquiv.piCongrRight (fun _ : ι => measurableEquivRealProd.symm)
   have := volume_preserving_pi (fun _ : ι => Complex.volume_preserving_equiv_real_prod.symm)
   rw [← MeasurePreserving.lintegral_comp_emb this e.measurableEmbedding]
-  exact lintegral_comp_pi_polarCoord_symm (f ∘ 
+  exact lintegral_comp_pi_polarCoord_symm (f ∘ e)
 
 中文:
 定理 复形.lintegral_comp_pi_polarCoord_symm
@@ -842,7 +992,7 @@ theorem Complex.lintegral_comp_pi_polarCoord_symm
   let e := MeasurableEquiv.piCongrRight (fun _ : ι => measurableEquivRealProd.symm)
   have := volume_preserving_pi (fun _ : ι => Complex.volume_preserving_equiv_real_prod.symm)
   rw [← MeasurePreserving.lintegral_comp_emb this e.measurableEmbedding]
-  exact lintegral_comp_pi_polarCoord_symm (f ∘ 
+  exact lintegral_comp_pi_polarCoord_symm (f ∘ e)
 -/
 protected theorem Complex.lintegral_comp_pi_polarCoord_symm (f : (ι -> Complex) -> Real>=0∞) :
     ∫⁻ p in (Set.univ.pi fun _ : ι => Complex.polarCoord.target),

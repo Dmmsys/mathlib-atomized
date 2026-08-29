@@ -537,7 +537,13 @@ theorem curveIntegralFun_trans_of_lt_half
   have H₁ : (γab.trans γbc).extend =ᶠ[𝓝 t] (fun s => γab.extend (2 * s)) :=
     (eventually_le_nhds ht).mono fun _ => Path.extend_trans_of_le_half _ _
   have H₂ : (2 : Real) • I =ᶠ[𝓝 (2 * t)] I := by
-    rw [LinearOrderedField.smul_Icc two_pos];
+    rw [LinearOrderedField.smul_Icc two_pos]; rw [mul_zero]; rw [mul_one]; rw [← nhdsWithin_eq_iff_eventuallyEq]
+    rcases lt_trichotomy t 0 with ht₀ | rfl | ht₀
+    · rw [notMem_closure_iff_nhdsWithin_eq_bot.mp, notMem_closure_iff_nhdsWithin_eq_bot.mp] <;>
+        simp_intro h <;> linarith
+    · simp
+    · rw [nhdsWithin_eq_nhds.2, nhdsWithin_eq_nhds.2] <;> simp [*] <;> linarith
+  rw [curveIntegralFun_def]; rw [H₁.self_of_nhds]; rw [H₁.derivWithin_eq_of_nhds]; rw [curveIntegralFun_def]; rw [derivWithin_comp_mul_left]; rw [ofNat_smul_eq_nsmul]; rw [map_nsmul]; rw [derivWithin_congr_set H₂]
 
 中文:
 定理 curve整数egralFun_trans_of_lt_half
@@ -547,7 +553,13 @@ theorem curveIntegralFun_trans_of_lt_half
   have H₁ : (γab.trans γbc).extend =ᶠ[𝓝 t] (fun s => γab.extend (2 * s)) :=
     (eventually_le_nhds ht).mono fun _ => Path.extend_trans_of_le_half _ _
   have H₂ : (2 : Real) • I =ᶠ[𝓝 (2 * t)] I := by
-    rw [LinearOrderedField.smul_Icc two_pos];
+    rw [LinearOrderedField.smul_Icc two_pos]; rw [mul_zero]; rw [mul_one]; rw [← nhdsWithin_eq_iff_eventuallyEq]
+    rcases lt_trichotomy t 0 with ht₀ | rfl | ht₀
+    · rw [notMem_closure_iff_nhdsWithin_eq_bot.mp, notMem_closure_iff_nhdsWithin_eq_bot.mp] <;>
+        simp_intro h <;> linarith
+    · simp
+    · rw [nhdsWithin_eq_nhds.2, nhdsWithin_eq_nhds.2] <;> simp [*] <;> linarith
+  rw [curveIntegralFun_def]; rw [H₁.self_of_nhds]; rw [H₁.derivWithin_eq_of_nhds]; rw [curveIntegralFun_def]; rw [derivWithin_comp_mul_left]; rw [ofNat_smul_eq_nsmul]; rw [map_nsmul]; rw [derivWithin_congr_set H₂]
 
 Depends on / 依赖: LinearOrderedField, LinearOrderedField.smul_Icc, NormedSpace, NormedSpace.restrictScalars, Path.extend_trans_of_le_half, ab.extend, ab.trans, eventually_le_nhds, extend, extend_trans_of_le_half, lt_trichotomy, mul_one, mul_zero, nhdsWithin_eq_iff_eventuallyEq, notMem_closure_iff_nhdsWithin_eq_bot, notMem_closure_iff_nhdsWithin_eq_bot.mp, restrictScalars, simp_int, smul_Icc, two_pos
 -/
@@ -726,7 +738,11 @@ theorem curveIntegral_trans
   let instF := NormedSpace.restrictScalars Real 𝕜 F
   rw [curveIntegral_def]; rw [← intervalIntegral.integral_add_adjacent_intervals
     (h₁.intervalIntegrable_curveIntegralFun_trans_left γbc)
-    (h₂.intervalIntegrable_curveIntegralFun_trans_right γab)]; rw [intervalIntegral.integral_congr_ae_re
+    (h₂.intervalIntegrable_curveIntegralFun_trans_right γab)]; rw [intervalIntegral.integral_congr_ae_restrict (curveIntegralFun_trans_aeeq_left _ _ _)]; rw [intervalIntegral.integral_congr_ae_restrict (curveIntegralFun_trans_aeeq_right _ _ _)]
+  simp only [← ofNat_smul_eq_nsmul (R := Real)]
+  rw [intervalIntegral.integral_smul]; rw [intervalIntegral.smul_integral_comp_mul_left]; rw [intervalIntegral.integral_smul]; rw [intervalIntegral.smul_integral_comp_mul_left (f := (curveIntegralFun ω γbc <| · - 1))]; rw [intervalIntegral.integral_comp_sub_right]
+  simp only [curveIntegral_def]
+  norm_num
 
 中文:
 定理 curve整数egral_trans
@@ -735,7 +751,11 @@ theorem curveIntegral_trans
   let instF := NormedSpace.restrictScalars Real 𝕜 F
   rw [curveIntegral_def]; rw [← intervalIntegral.integral_add_adjacent_intervals
     (h₁.intervalIntegrable_curveIntegralFun_trans_left γbc)
-    (h₂.intervalIntegrable_curveIntegralFun_trans_right γab)]; rw [intervalIntegral.integral_congr_ae_re
+    (h₂.intervalIntegrable_curveIntegralFun_trans_right γab)]; rw [intervalIntegral.integral_congr_ae_restrict (curveIntegralFun_trans_aeeq_left _ _ _)]; rw [intervalIntegral.integral_congr_ae_restrict (curveIntegralFun_trans_aeeq_right _ _ _)]
+  simp only [← ofNat_smul_eq_nsmul (R := Real)]
+  rw [intervalIntegral.integral_smul]; rw [intervalIntegral.smul_integral_comp_mul_left]; rw [intervalIntegral.integral_smul]; rw [intervalIntegral.smul_integral_comp_mul_left (f := (curveIntegralFun ω γbc <| · - 1))]; rw [intervalIntegral.integral_comp_sub_right]
+  simp only [curveIntegral_def]
+  norm_num
 
 Depends on / 依赖: NormedSpace, NormedSpace.restrictScalars, curveIntegralFun_trans_aeeq_left, curveIntegralFun_trans_aeeq_right, curveIntegral_def, integral_add_adjacent_intervals, integral_congr_ae_restrict, intervalIntegrable_curveIntegralFun_trans_left, intervalIntegrable_curveIntegralFun_trans_right, intervalIntegral, intervalIntegral.inte, intervalIntegral.integral_add_adjacent_intervals, intervalIntegral.integral_congr_ae_restrict, ofNat_smul_eq_nsmul, restrictScalars
 -/
@@ -880,7 +900,9 @@ theorem norm_curveIntegral_segment_le
     rw [curveIntegral_segment]
     refine intervalIntegral.norm_integral_le_of_norm_le_const fun t ht => ?_
     rw [segment_eq_image_lineMap] at h
-    rw [uIoc_of_le zero_le_on
+    rw [uIoc_of_le zero_le_one] at ht
+    apply_rules [(ω _).le_of_opNorm_le, mem_image_of_mem, Ioc_subset_Icc_self]
+  _ = C * ‖b - a‖ := by simp
 
 中文:
 定理 norm_curve整数egral_segment_le
@@ -891,7 +913,9 @@ theorem norm_curveIntegral_segment_le
     rw [curveIntegral_segment]
     refine intervalIntegral.norm_integral_le_of_norm_le_const fun t ht => ?_
     rw [segment_eq_image_lineMap] at h
-    rw [uIoc_of_le zero_le_on
+    rw [uIoc_of_le zero_le_one] at ht
+    apply_rules [(ω _).le_of_opNorm_le, mem_image_of_mem, Ioc_subset_Icc_self]
+  _ = C * ‖b - a‖ := by simp
 -/
 theorem norm_curveIntegral_segment_le [NormedSpace Real E] {C : Real} (h : forall z in [a -[Real] b], ‖ω z‖ <= C) :
     ‖∫ᶜ x in .segment a b, ω x‖ <= C * ‖b - a‖ := calc
@@ -1631,7 +1655,31 @@ theorem HasFDerivWithinAt.curveIntegral_segment_source'
   Then for `b ∈ ball a δ ∩ s`, we have
   `‖(∫ᶜ x in .segment a b, ω x) - ω a (b - a)‖
     = ‖(∫ᶜ x in .segment a b, ω x) - ∫ᶜ x in .segment a b, ω a‖
-    ≤ ∫ x in 0..1, ‖ω 
+    ≤ ∫ x in 0..1, ‖ω x - ω a‖ * ‖b - a‖
+    ≤ ε * ‖b - a‖`
+  -/
+  simp only [hasFDerivWithinAt_iff_isLittleO, Path.segment_same, curveIntegral_refl, sub_zero,
+    Asymptotics.isLittleO_iff]
+  intro ε hε
+  obtain ⟨δ, hδ₀, hδ⟩ : exists δ > 0,
+      ball a δ inter s subseteq {z | ContinuousWithinAt ω s z ∧ dist (ω z) (ω a) <= ε} := by
+    rw [← Metric.mem_nhdsWithin_iff]; rw [ofPred_and]; rw [inter_mem_iff]
+exact ⟨hω, (hω.self_of_nhdsWithin ha).eventually closedBall_mem_nhds _ hε⟩
+  rw [eventually_nhdsWithin_iff]
+  filter_upwards [Metric.ball_mem_nhds _ hδ₀] with b hb hbs
+  have hsub : [a -[Real] b] subseteq ball a δ inter s :=
+    ((convex_ball _ _).inter hs).segment_subset (by simp [*]) (by simp [*])
+  rw [← curveIntegral_segment_const]; rw [← curveIntegral_fun_sub]
+  · refine norm_curveIntegral_segment_le fun z hz => ?_
+    simpa [dist_eq_norm] using (hδ (hsub hz)).2
+  · rw [curveIntegrable_segment]
+    refine ContinuousOn.intervalIntegrable_of_Icc zero_le_one fun t ht => ?_
+    refine ((hδ ?_).1.eval_const _).comp AffineMap.lineMap_continuous.continuousWithinAt ?_
+· exact hsub lineMap_mem_segment Real a b ht
+    · rw [mapsTo_iff_image_subset, ← segment_eq_image_lineMap]
+      exact hs.segment_subset ha hbs
+  · rw [curveIntegrable_segment]
+    exact intervalIntegrable_const
 
 中文:
 定理 HasFDerivWithinAt.curve整数egral_segment_source'
@@ -1642,7 +1690,31 @@ theorem HasFDerivWithinAt.curveIntegral_segment_source'
   Then for `b ∈ ball a δ ∩ s`, we have
   `‖(∫ᶜ x in .segment a b, ω x) - ω a (b - a)‖
     = ‖(∫ᶜ x in .segment a b, ω x) - ∫ᶜ x in .segment a b, ω a‖
-    ≤ ∫ x in 0..1, ‖ω 
+    ≤ ∫ x in 0..1, ‖ω x - ω a‖ * ‖b - a‖
+    ≤ ε * ‖b - a‖`
+  -/
+  simp only [hasFDerivWithinAt_iff_isLittleO, Path.segment_same, curveIntegral_refl, sub_zero,
+    Asymptotics.isLittleO_iff]
+  intro ε hε
+  obtain ⟨δ, hδ₀, hδ⟩ : exists δ > 0,
+      ball a δ inter s subseteq {z | ContinuousWithinAt ω s z ∧ dist (ω z) (ω a) <= ε} := by
+    rw [← Metric.mem_nhdsWithin_iff]; rw [ofPred_and]; rw [inter_mem_iff]
+exact ⟨hω, (hω.self_of_nhdsWithin ha).eventually closedBall_mem_nhds _ hε⟩
+  rw [eventually_nhdsWithin_iff]
+  filter_upwards [Metric.ball_mem_nhds _ hδ₀] with b hb hbs
+  have hsub : [a -[Real] b] subseteq ball a δ inter s :=
+    ((convex_ball _ _).inter hs).segment_subset (by simp [*]) (by simp [*])
+  rw [← curveIntegral_segment_const]; rw [← curveIntegral_fun_sub]
+  · refine norm_curveIntegral_segment_le fun z hz => ?_
+    simpa [dist_eq_norm] using (hδ (hsub hz)).2
+  · rw [curveIntegrable_segment]
+    refine ContinuousOn.intervalIntegrable_of_Icc zero_le_one fun t ht => ?_
+    refine ((hδ ?_).1.eval_const _).comp AffineMap.lineMap_continuous.continuousWithinAt ?_
+· exact hsub lineMap_mem_segment Real a b ht
+    · rw [mapsTo_iff_image_subset, ← segment_eq_image_lineMap]
+      exact hs.segment_subset ha hbs
+  · rw [curveIntegrable_segment]
+    exact intervalIntegrable_const
 -/
 theorem HasFDerivWithinAt.curveIntegral_segment_source' (hs : Convex Real s)
     (hω : forallᶠ x in 𝓝[s] a, ContinuousWithinAt ω s x) (ha : a in s) :

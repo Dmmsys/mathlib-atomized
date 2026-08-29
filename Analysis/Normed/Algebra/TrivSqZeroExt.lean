@@ -137,7 +137,7 @@ theorem hasSum_snd_expSeries_of_smul_comm
   simp_rw [snd_expSeries_of_smul_comm _ _ hx]
   simp_rw [expSeries_apply_eq] at *
   rw [Finset.range_one]; rw [Finset.sum_singleton]; rw [Nat.factorial_zero]; rw [Nat.cast_one]; rw [pow_zero]; rw [inv_one]; rw [one_smul]; rw [snd_one]; rw [sub_zero]
-  exact h.smul_c
+  exact h.smul_const _
 
 中文:
 定理 hasSum_snd_expSeries_of_smul_comm
@@ -147,7 +147,7 @@ theorem hasSum_snd_expSeries_of_smul_comm
   simp_rw [snd_expSeries_of_smul_comm _ _ hx]
   simp_rw [expSeries_apply_eq] at *
   rw [Finset.range_one]; rw [Finset.sum_singleton]; rw [Nat.factorial_zero]; rw [Nat.cast_one]; rw [pow_zero]; rw [inv_one]; rw [one_smul]; rw [snd_one]; rw [sub_zero]
-  exact h.smul_c
+  exact h.smul_const _
 
 Depends on / 依赖: Finset, Finset.range_one, Finset.sum_singleton, Nat.cast_one, Nat.factorial_zero, cast_one, expSeries_apply_eq, factorial_zero, h.smul_const, hasSum_nat_add_iff, inv_one, one_smul, pow_zero, range_one, simp_rw, smul_const, snd_expSeries_of_smul_comm, snd_one, sub_zero, sum_singleton
 -/
@@ -205,7 +205,13 @@ theorem exp_def_of_smul_comm
   by_cases h : Summable (fun (n : Nat) => (expSeries Rat R n) fun _ => fst x)
   · refine (hasSum_expSeries_of_smul_comm Rat x hx ?_).tsum_eq
     exact h.hasSum
-  · rw [tsum_eq_zero_of_not_summable h, zero_smul, inr_zero, inl_zero, 
+  · rw [tsum_eq_zero_of_not_summable h, zero_smul, inr_zero, inl_zero, zero_add,
+      tsum_eq_zero_of_not_summable]
+    simp_rw [← fst_expSeries] at h
+    refine mt ?_ h
+    exact (Summable.map · (TrivSqZeroExt.fstHom Rat R M).toLinearMap continuous_fst)
+
+@[simp]
 
 中文:
 定理 exp_def_of_smul_comm
@@ -215,7 +221,13 @@ theorem exp_def_of_smul_comm
   by_cases h : Summable (fun (n : Nat) => (expSeries Rat R n) fun _ => fst x)
   · refine (hasSum_expSeries_of_smul_comm Rat x hx ?_).tsum_eq
     exact h.hasSum
-  · rw [tsum_eq_zero_of_not_summable h, zero_smul, inr_zero, inl_zero, 
+  · rw [tsum_eq_zero_of_not_summable h, zero_smul, inr_zero, inl_zero, zero_add,
+      tsum_eq_zero_of_not_summable]
+    simp_rw [← fst_expSeries] at h
+    refine mt ?_ h
+    exact (Summable.map · (TrivSqZeroExt.fstHom Rat R M).toLinearMap continuous_fst)
+
+@[simp]
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.sum, Summable, Summable.map, TrivSqZeroExt, TrivSqZeroExt.fstHom, continuous_fst, expSeries, exp_eq_expSeries_sum, fstHom, fst_expSeries, h.hasSum, hasSum, hasSum_expSeries_of_smul_comm, inl_zero, inr_zero, simp_rw, toLinearMap, tsum_eq, tsum_eq_zero_of_not_summable
 -/
@@ -616,7 +628,8 @@ instance instL1SeminormedRing
       apply le_add_of_nonneg_right
       positivity
     _ = (‖r₁‖ + ‖m₁‖) * (‖r₂‖ + ‖m₂‖) := by ring
-  __ : Ring (t
+  __ : Ring (tsze R M) := inferInstance
+  __ : SeminormedAddCommGroup (tsze R M) := inferInstance
 
 中文:
 实例 instL1SeminormedRing
@@ -630,7 +643,8 @@ instance instL1SeminormedRing
       apply le_add_of_nonneg_right
       positivity
     _ = (‖r₁‖ + ‖m₁‖) * (‖r₂‖ + ‖m₂‖) := by ring
-  __ : Ring (t
+  __ : Ring (tsze R M) := inferInstance
+  __ : SeminormedAddCommGroup (tsze R M) := inferInstance
 
 Depends on / 依赖: SeminormedAddCommGroup, le_add_of_nonneg_right, norm_add_le_of_le, norm_mul_le, norm_smul_le
 -/

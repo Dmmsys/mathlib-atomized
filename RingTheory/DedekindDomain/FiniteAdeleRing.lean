@@ -69,7 +69,17 @@ lemma HeightOneSpectrum.Support.finite
   suffices {v : HeightOneSpectrum R | v.valuation K (algebraMap R K d) < 1}.Finite by
     apply Set.Finite.subset this
     intro v hv
-    apply_fun v.val
+    apply_fun v.valuation K at hk
+    simp only [Valuation.map_mul, valuation_of_algebraMap] at hk
+    rw [Set.mem_ofPred_eq]; rw [valuation_of_algebraMap]
+    have := intValuation_le_one v n
+    contrapose! this
+    rw [← hk]; rw [mul_comm]
+exact (lt_mul_of_one_lt_right (by simp) hv).trans_le
+      mul_le_mul_of_nonneg_right this (by simp)
+  simp_rw [valuation_lt_one_iff_dvd]
+  apply Ideal.finite_factors
+  simpa only [Submodule.zero_eq_bot, ne_eq, Ideal.span_singleton_eq_bot]
 
 中文:
 引理 高一谱.Support.finite
@@ -82,7 +92,17 @@ lemma HeightOneSpectrum.Support.finite
   suffices {v : HeightOneSpectrum R | v.valuation K (algebraMap R K d) < 1}.Finite by
     apply Set.Finite.subset this
     intro v hv
-    apply_fun v.val
+    apply_fun v.valuation K at hk
+    simp only [Valuation.map_mul, valuation_of_algebraMap] at hk
+    rw [Set.mem_ofPred_eq]; rw [valuation_of_algebraMap]
+    have := intValuation_le_one v n
+    contrapose! this
+    rw [← hk]; rw [mul_comm]
+exact (lt_mul_of_one_lt_right (by simp) hv).trans_le
+      mul_le_mul_of_nonneg_right this (by simp)
+  simp_rw [valuation_lt_one_iff_dvd]
+  apply Ideal.finite_factors
+  simpa only [Submodule.zero_eq_bot, ne_eq, Ideal.span_singleton_eq_bot]
 -/
 lemma HeightOneSpectrum.Support.finite (k : K) : (Support R k).Finite := by
   -- We write k=n/d.
@@ -209,7 +229,9 @@ definition algebraMap
      valuedAdicCompletion_eq_valuation', not_le]
     exact HeightOneSpectrum.Support.finite R k⟩
 map_one' := Subtype.ext funext fun _ => adicCompletion.coe_one ..
-map_mul' x y := Subtype.ext f
+map_mul' x y := Subtype.ext funext fun _ => adicCompletion.coe_mul ..
+map_zero' := Subtype.ext funext fun _ => adicCompletion.coe_zero ..
+map_add' x y := Subtype.ext funext fun _ => adicCompletion.coe_add ..
 
 中文:
 定义 algebraMap
@@ -219,7 +241,9 @@ map_mul' x y := Subtype.ext f
      valuedAdicCompletion_eq_valuation', not_le]
     exact HeightOneSpectrum.Support.finite R k⟩
 map_one' := Subtype.ext funext fun _ => adicCompletion.coe_one ..
-map_mul' x y := Subtype.ext f
+map_mul' x y := Subtype.ext funext fun _ => adicCompletion.coe_mul ..
+map_zero' := Subtype.ext funext fun _ => adicCompletion.coe_zero ..
+map_add' x y := Subtype.ext funext fun _ => adicCompletion.coe_add ..
 -/
 protected def algebraMap : K ->+* 𝔸ᶠ[R, K] where
   toFun k := ⟨fun i => k, by

@@ -134,7 +134,18 @@ theorem norm_sub_modPart_aux
   simp only [Int.cast_natCast, Int.cast_mul, Int.cast_sub]
   have := congr_arg (fun x => x % p : Int -> ZMod p) (gcd_eq_gcd_ab r.den p)
   simp only [Int.cast_natCast, CharP.cast_eq_zero, EuclideanDomain.mod_zero, Int.cast_add,
-    Int.cast_mul, zero_mul,
+    Int.cast_mul, zero_mul, add_zero] at this
+  push_cast
+  rw [mul_right_comm]; rw [mul_assoc]; rw [← this]
+  suffices rdcp : r.den.Coprime p by
+    rw [rdcp.gcd_eq_one]
+    simp only [mul_one, cast_one, sub_self]
+  apply Coprime.symm
+  apply (coprime_or_dvd_of_prime hp_prime.1 _).resolve_right
+  rw [← Int.natCast_dvd_natCast]; rw [← norm_int_lt_one_iff_dvd]; rw [not_lt]
+  apply ge_of_eq
+  rw [← isUnit_iff]
+  exact isUnit_den r h
 
 中文:
 定理 norm_sub_modPart_aux
@@ -144,7 +155,18 @@ theorem norm_sub_modPart_aux
   simp only [Int.cast_natCast, Int.cast_mul, Int.cast_sub]
   have := congr_arg (fun x => x % p : Int -> ZMod p) (gcd_eq_gcd_ab r.den p)
   simp only [Int.cast_natCast, CharP.cast_eq_zero, EuclideanDomain.mod_zero, Int.cast_add,
-    Int.cast_mul, zero_mul,
+    Int.cast_mul, zero_mul, add_zero] at this
+  push_cast
+  rw [mul_right_comm]; rw [mul_assoc]; rw [← this]
+  suffices rdcp : r.den.Coprime p by
+    rw [rdcp.gcd_eq_one]
+    simp only [mul_one, cast_one, sub_self]
+  apply Coprime.symm
+  apply (coprime_or_dvd_of_prime hp_prime.1 _).resolve_right
+  rw [← Int.natCast_dvd_natCast]; rw [← norm_int_lt_one_iff_dvd]; rw [not_lt]
+  apply ge_of_eq
+  rw [← isUnit_iff]
+  exact isUnit_den r h
 
 Depends on / 依赖: CharP.cast_eq_zero, Coprime, Coprime.symm, EuclideanDomain, EuclideanDomain.mod_zero, Int.cast_add, Int.cast_mul, Int.cast_natCast, Int.cast_sub, ZMod.intCast_zmod_eq_zero_iff_dvd, add_zero, cast_add, cast_eq_zero, cast_mul, cast_natCast, cast_one, cast_sub, congr_arg, coprime_or_d, gcd_eq_gcd_ab
 -/
@@ -182,7 +204,11 @@ theorem norm_sub_modPart
     convert! (map_dvd (Int.castRingHom Int_[p])) this
     simp only [n, sub_mul, Int.cast_natCast, eq_intCast, Int.cast_mul, sub_left_inj,
       Int.cast_sub]
-    apply Su
+    apply Subtype.coe_injective
+    simp only [coe_mul, coe_natCast]
+    norm_cast
+    simp
+  exact norm_sub_modPart_aux r h
 
 中文:
 定理 norm_sub_modPart
@@ -195,7 +221,11 @@ theorem norm_sub_modPart
     convert! (map_dvd (Int.castRingHom Int_[p])) this
     simp only [n, sub_mul, Int.cast_natCast, eq_intCast, Int.cast_mul, sub_left_inj,
       Int.cast_sub]
-    apply Su
+    apply Subtype.coe_injective
+    simp only [coe_mul, coe_natCast]
+    norm_cast
+    simp
+  exact norm_sub_modPart_aux r h
 
 Depends on / 依赖: Int.castRingHom, Int.cast_mul, Int.cast_natCast, Int.cast_sub, Int_, Subtype, Subtype.coe_injective, castRingHom, cast_mul, cast_natCast, cast_sub, coe_injective, coe_mul, coe_natCast, convert, dvd_mul_right, eq_intCast, isUnit_den, map_dvd, modPart
 -/
@@ -243,7 +273,7 @@ theorem zmod_congr_of_sub_mem_span_aux
   rw [← dvd_neg]; rw [neg_sub] at ha
   have := dvd_add ha hb
   rwa [sub_eq_add_neg, sub_eq_add_neg, add_assoc, neg_add_cancel_left, ← sub_eq_add_neg, ←
-
+    Int.cast_sub, pow_p_dvd_int_iff] at this
 
 中文:
 定理 zmod_congr_of_sub_mem_span_aux
@@ -254,7 +284,7 @@ theorem zmod_congr_of_sub_mem_span_aux
   rw [← dvd_neg]; rw [neg_sub] at ha
   have := dvd_add ha hb
   rwa [sub_eq_add_neg, sub_eq_add_neg, add_assoc, neg_add_cancel_left, ← sub_eq_add_neg, ←
-
+    Int.cast_sub, pow_p_dvd_int_iff] at this
 
 Depends on / 依赖: Ideal.mem_span_singleton, Int.cast_sub, Int.natCast_pow, ZMod.intCast_zmod_eq_zero_iff_dvd, add_assoc, cast_sub, dvd_add, dvd_neg, intCast_zmod_eq_zero_iff_dvd, mem_span_singleton, natCast_pow, neg_add_cancel_left, neg_sub, pow_p_dvd_int_iff, sub_eq_add_neg, sub_eq_zero
 -/
@@ -345,7 +375,18 @@ theorem exists_mem_range
     rw [norm_sub_rev] at hr
     calc
       _ = ‖(r : Rat_[p]) - x + x‖ := by ring_nf
-      _ <= _ := Padic.nonarchi
+      _ <= _ := Padic.nonarchimedean _ _
+      _ <= _ := max_le (le_of_lt hr) x.2
+  obtain ⟨n, hzn, hnp, hn⟩ := exists_mem_range_of_norm_rat_le_one r H
+  lift n to Nat using hzn
+  use n
+  constructor
+  · exact mod_cast hnp
+  simp only [norm_def, coe_sub, coe_natCast] at hn ⊢
+  rw [show (x - n : Rat_[p]) = x - r + (r - n) by ring]
+  apply lt_of_le_of_lt (Padic.nonarchimedean _ _)
+  apply max_lt hr
+  simpa using hn
 
 中文:
 定理 存在_mem_range
@@ -357,7 +398,18 @@ theorem exists_mem_range
     rw [norm_sub_rev] at hr
     calc
       _ = ‖(r : Rat_[p]) - x + x‖ := by ring_nf
-      _ <= _ := Padic.nonarchi
+      _ <= _ := Padic.nonarchimedean _ _
+      _ <= _ := max_le (le_of_lt hr) x.2
+  obtain ⟨n, hzn, hnp, hn⟩ := exists_mem_range_of_norm_rat_le_one r H
+  lift n to Nat using hzn
+  use n
+  constructor
+  · exact mod_cast hnp
+  simp only [norm_def, coe_sub, coe_natCast] at hn ⊢
+  rw [show (x - n : Rat_[p]) = x - r + (r - n) by ring]
+  apply lt_of_le_of_lt (Padic.nonarchimedean _ _)
+  apply max_lt hr
+  simpa using hn
 
 Depends on / 依赖: Ideal.mem_span_singleton, Padic.nonarchimedean, Rat_, coe_natCast, coe_sub, exists_mem_range_of_norm_rat_le_one, le_of_lt, max_le, maximalIdeal_eq_span_p, mem_span_singleton, mod_cast, nonarchimedean, norm_def, norm_lt_one_iff_dvd, norm_sub_rev, rat_dense, ring_nf, zero_lt_one
 -/
@@ -864,7 +916,21 @@ definition toZModHom
     rw [f_congr (1 : Int_[p]) _ 1, cast_one]
     · exact f_spec _
     · simp only [sub_self, cast_one, Submodule.zero_mem]
-  map_add' :=
+  map_add' := by
+    intro x y
+    rw [f_congr (x + y) _ (f x + f y)]; rw [cast_add]
+    · exact f_spec _
+    · convert! Ideal.add_mem _ (f_spec x) (f_spec y) using 1
+      rw [cast_add]
+      ring
+  map_mul' := by
+    intro x y
+    rw [f_congr (x * y) _ (f x * f y)]; rw [cast_mul]
+    · exact f_spec _
+    · let I : Ideal Int_[p] := Ideal.span {↑v}
+      convert! I.add_mem (I.mul_mem_left x (f_spec y)) (I.mul_mem_right ↑(f y) (f_spec x)) using 1
+      rw [cast_mul]
+      ring
 
 中文:
 定义 toZModHom
@@ -878,7 +944,21 @@ definition toZModHom
     rw [f_congr (1 : Int_[p]) _ 1, cast_one]
     · exact f_spec _
     · simp only [sub_self, cast_one, Submodule.zero_mem]
-  map_add' :=
+  map_add' := by
+    intro x y
+    rw [f_congr (x + y) _ (f x + f y)]; rw [cast_add]
+    · exact f_spec _
+    · convert! Ideal.add_mem _ (f_spec x) (f_spec y) using 1
+      rw [cast_add]
+      ring
+  map_mul' := by
+    intro x y
+    rw [f_congr (x * y) _ (f x * f y)]; rw [cast_mul]
+    · exact f_spec _
+    · let I : Ideal Int_[p] := Ideal.span {↑v}
+      convert! I.add_mem (I.mul_mem_left x (f_spec y)) (I.mul_mem_right ↑(f y) (f_spec x)) using 1
+      rw [cast_mul]
+      ring
 -/
 def toZModHom (v : Nat) (f : Int_[p] -> Nat) (f_spec : forall x, x - f x in (Ideal.span {↑v} : Ideal Int_[p]))
     (f_congr :
@@ -1004,7 +1084,7 @@ theorem ker_toZMod
     · norm_cast
     · apply sub_zmodRepr_mem
 
-@[sim
+@[simp]
 
 中文:
 定理 ker_toZMod
@@ -1022,7 +1102,7 @@ theorem ker_toZMod
     · norm_cast
     · apply sub_zmodRepr_mem
 
-@[sim
+@[simp]
 
 Depends on / 依赖: RingHom, RingHom.mem_ker, ZMod.cast_zero, cast_zero, convert, mem_ker, sub_zero, sub_zmodRepr_mem, toZMod, toZModHom, toZMod_spec, zmod_congr_of_sub_mem_max_ideal
 -/
@@ -1146,7 +1226,17 @@ theorem appr_lt
   | succ n ih =>
     simp only [appr, map_natCast, ZMod.natCast_self, map_pow, Int.natAbs, map_mul]
     have hp : p ^ n < p ^ (n + 1) := by apply Nat.pow_lt_pow_right hp_prime.1.one_lt n.lt_add_one
-    sp
+    split_ifs with h
+    · apply lt_trans (ih _) hp
+    · calc
+        _ < p ^ n + p ^ n * (p - 1) := ?_
+        _ = p ^ (n + 1) := ?_
+      · apply add_lt_add_of_lt_of_le (ih _)
+        apply Nat.mul_le_mul_left
+        apply le_pred_of_lt
+        apply ZMod.val_lt
+      · rw [mul_tsub, mul_one, ← _root_.pow_succ]
+        apply add_tsub_cancel_of_le (le_of_lt hp)
 
 中文:
 定理 appr_lt
@@ -1158,7 +1248,17 @@ theorem appr_lt
   | succ n ih =>
     simp only [appr, map_natCast, ZMod.natCast_self, map_pow, Int.natAbs, map_mul]
     have hp : p ^ n < p ^ (n + 1) := by apply Nat.pow_lt_pow_right hp_prime.1.one_lt n.lt_add_one
-    sp
+    split_ifs with h
+    · apply lt_trans (ih _) hp
+    · calc
+        _ < p ^ n + p ^ n * (p - 1) := ?_
+        _ = p ^ (n + 1) := ?_
+      · apply add_lt_add_of_lt_of_le (ih _)
+        apply Nat.mul_le_mul_left
+        apply le_pred_of_lt
+        apply ZMod.val_lt
+      · rw [mul_tsub, mul_one, ← _root_.pow_succ]
+        apply add_tsub_cancel_of_le (le_of_lt hp)
 
 Depends on / 依赖: Int.natAbs, Nat.mul_le_mul_left, Nat.pow_lt_pow_right, ZMod.natCast_self, ZMod.val_lt, _root_, _root_.pow_zero, add_lt_add_of_lt_of_le, generalizing, hp_prime, le_pred_of_lt, lt_add_one, lt_trans, map_mul, map_natCast, map_pow, mul_le_mul_left, mul_t, n.lt_add_one, natAbs
 -/
@@ -1231,7 +1331,10 @@ theorem dvd_appr_sub_appr
     dsimp [appr]
     split_ifs with h
     · exact ih
-    rw [add_comm]; rw [add_tsub_assoc_of_le (appr_mono 
+    rw [add_comm]; rw [add_tsub_assoc_of_le (appr_mono _ (Nat.le_add_right m k))]
+    apply dvd_add _ ih
+    apply dvd_mul_of_dvd_left
+    apply pow_dvd_pow _ (Nat.le_add_right m k)
 
 中文:
 定理 dvd_appr_sub_appr
@@ -1247,7 +1350,10 @@ theorem dvd_appr_sub_appr
     dsimp [appr]
     split_ifs with h
     · exact ih
-    rw [add_comm]; rw [add_tsub_assoc_of_le (appr_mono 
+    rw [add_comm]; rw [add_tsub_assoc_of_le (appr_mono _ (Nat.le_add_right m k))]
+    apply dvd_add _ ih
+    apply dvd_mul_of_dvd_left
+    apply pow_dvd_pow _ (Nat.le_add_right m k)
 
 Depends on / 依赖: Nat.exists_eq_add_of_le, Nat.le_add_right, add_assoc, add_comm, add_tsub_assoc_of_le, add_zero, appr_mono, dvd_add, dvd_mul_of_dvd_left, dvd_zero, exists_eq_add_of_le, le_add_right, le_refl, pow_dvd_pow, split_ifs, tsub_eq_zero_of_le
 -/
@@ -1285,7 +1391,30 @@ theorem appr_spec
       apply dvd_zero
     push_cast
     rw [sub_add_eq_sub_sub]
-    obtain ⟨c
+    obtain ⟨c, hc⟩ := ih x
+    simp only [map_natCast, ZMod.natCast_self, map_pow, map_mul, ZMod.natCast_val]
+    have hc' : c != 0 := by
+      rintro rfl
+      simp only [mul_zero] at hc
+      contradiction
+    conv_rhs =>
+      congr
+      simp only [hc]
+    rw [show (x - (appr x n : Int_[p])).valuation = ((p : Int_[p]) ^ n * c).valuation by rw [hc]]
+    rw [valuation_p_pow_mul _ _ hc']; rw [Nat.cast_add]; rw [add_sub_cancel_left]; rw [_root_.pow_succ]; rw [← mul_sub]
+    apply mul_dvd_mul_left
+    obtain hc0 | hc0 := eq_or_ne c.valuation 0
+    · simp only [hc0, mul_one, _root_.pow_zero, Nat.cast_zero, Int.natAbs_zero]
+      rw [mul_comm]; rw [unitCoeff_spec h] at hc
+      suffices c = unitCoeff h by
+        rw [← this]; rw [← Ideal.mem_span_singleton]; rw [← maximalIdeal_eq_span_p]
+        apply toZMod_spec
+      lift c to Int_[p]ˣ using by simp [isUnit_iff, norm_eq_zpow_neg_valuation hc', hc0]
+      rw [IsDiscreteValuationRing.unit_mul_pow_congr_unit _ _ _ _ _ hc]
+      exact irreducible_p
+    · simp only [Int.natAbs_natCast, zero_pow hc0, sub_zero, ZMod.cast_zero, mul_zero]
+      rw [unitCoeff_spec hc']
+      exact (dvd_pow_self (p : Int_[p]) hc0).mul_left _
 
 中文:
 定理 appr_spec
@@ -1303,7 +1432,30 @@ theorem appr_spec
       apply dvd_zero
     push_cast
     rw [sub_add_eq_sub_sub]
-    obtain ⟨c
+    obtain ⟨c, hc⟩ := ih x
+    simp only [map_natCast, ZMod.natCast_self, map_pow, map_mul, ZMod.natCast_val]
+    have hc' : c != 0 := by
+      rintro rfl
+      simp only [mul_zero] at hc
+      contradiction
+    conv_rhs =>
+      congr
+      simp only [hc]
+    rw [show (x - (appr x n : Int_[p])).valuation = ((p : Int_[p]) ^ n * c).valuation by rw [hc]]
+    rw [valuation_p_pow_mul _ _ hc']; rw [Nat.cast_add]; rw [add_sub_cancel_left]; rw [_root_.pow_succ]; rw [← mul_sub]
+    apply mul_dvd_mul_left
+    obtain hc0 | hc0 := eq_or_ne c.valuation 0
+    · simp only [hc0, mul_one, _root_.pow_zero, Nat.cast_zero, Int.natAbs_zero]
+      rw [mul_comm]; rw [unitCoeff_spec h] at hc
+      suffices c = unitCoeff h by
+        rw [← this]; rw [← Ideal.mem_span_singleton]; rw [← maximalIdeal_eq_span_p]
+        apply toZMod_spec
+      lift c to Int_[p]ˣ using by simp [isUnit_iff, norm_eq_zpow_neg_valuation hc', hc0]
+      rw [IsDiscreteValuationRing.unit_mul_pow_congr_unit _ _ _ _ _ hc]
+      exact irreducible_p
+    · simp only [Int.natAbs_natCast, zero_pow hc0, sub_zero, ZMod.cast_zero, mul_zero]
+      rw [unitCoeff_spec hc']
+      exact (dvd_pow_self (p : Int_[p]) hc0).mul_left _
 
 Depends on / 依赖: Ideal.mem_span_singleton, Int_, IsUnit, IsUnit.dvd, ZMod.natCast_self, ZMod.natCast_val, _root_, _root_.pow_zero, conv_rhs, dvd_zero, forall_const, isUnit_one, map_mul, map_natCast, map_pow, mem_span_singleton, mul_zero, natCast_self, natCast_val, pow_zero
 -/
@@ -1424,7 +1576,10 @@ theorem ker_toZModPow
     rw [ZMod.natCast_eq_zero_iff] at h
     apply eq_zero_of_dvd_of_lt h (appr_lt _ _)
   · intro h
-  
+    rw [← sub_zero x] at h
+    dsimp [toZModPow, toZModHom]
+    rw [zmod_congr_of_sub_mem_span n x _ 0 _ h]; rw [cast_zero]
+    apply appr_spec
 
 中文:
 定理 ker_toZModPow
@@ -1441,7 +1596,10 @@ theorem ker_toZModPow
     rw [ZMod.natCast_eq_zero_iff] at h
     apply eq_zero_of_dvd_of_lt h (appr_lt _ _)
   · intro h
-  
+    rw [← sub_zero x] at h
+    dsimp [toZModPow, toZModHom]
+    rw [zmod_congr_of_sub_mem_span n x _ 0 _ h]; rw [cast_zero]
+    apply appr_spec
 
 Depends on / 依赖: RingHom, RingHom.mem_ker, ZMod.natCast_eq_zero_iff, appr_lt, appr_spec, cast_zero, convert, eq_zero_of_dvd_of_lt, mem_ker, natCast_eq_zero_iff, sub_zero, toZModHom, toZModPow, x.appr, zmod_congr_of_sub_mem_span
 -/
@@ -1477,7 +1635,15 @@ theorem zmod_cast_comp_toZModPow
   simp only [Function.comp_apply, ZMod.castHom_apply, RingHom.coe_comp]
   simp only [toZModPow, toZModHom, RingHom.coe_mk]
   dsimp
-  rw [ZMod.cast_natCast (pow_dvd_pow p h)]; rw [zmod_congr_of_sub_mem_span m (x
+  rw [ZMod.cast_natCast (pow_dvd_pow p h)]; rw [zmod_congr_of_sub_mem_span m (x.appr n) (x.appr n) (x.appr m)]
+  · rw [sub_self]
+    apply Ideal.zero_mem _
+  · rw [Ideal.mem_span_singleton]
+    rcases dvd_appr_sub_appr x m n h with ⟨c, hc⟩
+    use c
+    rw [← Nat.cast_sub (appr_mono _ h)]; rw [hc]; rw [Nat.cast_mul]; rw [Nat.cast_pow]
+
+@[simp]
 
 中文:
 定理 zmod_cast_comp_toZModPow
@@ -1489,7 +1655,15 @@ theorem zmod_cast_comp_toZModPow
   simp only [Function.comp_apply, ZMod.castHom_apply, RingHom.coe_comp]
   simp only [toZModPow, toZModHom, RingHom.coe_mk]
   dsimp
-  rw [ZMod.cast_natCast (pow_dvd_pow p h)]; rw [zmod_congr_of_sub_mem_span m (x
+  rw [ZMod.cast_natCast (pow_dvd_pow p h)]; rw [zmod_congr_of_sub_mem_span m (x.appr n) (x.appr n) (x.appr m)]
+  · rw [sub_self]
+    apply Ideal.zero_mem _
+  · rw [Ideal.mem_span_singleton]
+    rcases dvd_appr_sub_appr x m n h with ⟨c, hc⟩
+    use c
+    rw [← Nat.cast_sub (appr_mono _ h)]; rw [hc]; rw [Nat.cast_mul]; rw [Nat.cast_pow]
+
+@[simp]
 
 Depends on / 依赖: Function, Function.comp_apply, Ideal.mem_span_singleton, Ideal.zero_mem, Nat.cast_, Nat.cast_sub, RingHom, RingHom.coe_comp, RingHom.coe_mk, RingHom.mem_ker, ZMod.castHom_apply, ZMod.cast_natCast, ZMod.ringHom_eq_of_ker_eq, appr_mono, castHom_apply, cast_, cast_natCast, cast_sub, coe_comp, coe_mk
 -/
@@ -1721,6 +1895,10 @@ theorem isCauSeq_nthHom
   refine lt_of_le_of_lt ?_ hk
   -- Need to do beta reduction first, as `norm_cast` doesn't.
   -- Added to adapt to https://github.com/leanprover/lean4/pull/2734.
+  beta_reduce
+  norm_cast
+  rw [← padicNorm.dvd_iff_norm_le]
+  exact mod_cast pow_dvd_nthHom_sub f_compat r k j hj
 
 中文:
 定理 isCauSeq_nthHom
@@ -1734,6 +1912,10 @@ theorem isCauSeq_nthHom
   refine lt_of_le_of_lt ?_ hk
   -- Need to do beta reduction first, as `norm_cast` doesn't.
   -- Added to adapt to https://github.com/leanprover/lean4/pull/2734.
+  beta_reduce
+  norm_cast
+  rw [← padicNorm.dvd_iff_norm_le]
+  exact mod_cast pow_dvd_nthHom_sub f_compat r k j hj
 
 Depends on / 依赖: exists_pow_neg_lt_rat, lt_of_le_of_lt
 -/
@@ -1825,7 +2007,9 @@ theorem nthHomSeq_add
   rw [← Int.cast_add]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
     ZMod.intCast_zmod_eq_zero_iff_dvd]
   dsimp [nthHom]
-  simp only [ZMod.natCast_va
+  simp only [ZMod.natCast_val, map_add, Int.cast_sub, ZMod.intCast_cast, Int.cast_add]
+  rw [ZMod.cast_add (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]
+  simp only [sub_self]
 
 中文:
 定理 nthHomSeq_add
@@ -1840,7 +2024,9 @@ theorem nthHomSeq_add
   rw [← Int.cast_add]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
     ZMod.intCast_zmod_eq_zero_iff_dvd]
   dsimp [nthHom]
-  simp only [ZMod.natCast_va
+  simp only [ZMod.natCast_val, map_add, Int.cast_sub, ZMod.intCast_cast, Int.cast_add]
+  rw [ZMod.cast_add (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]
+  simp only [sub_self]
 
 Depends on / 依赖: Int.cast_add, Int.cast_sub, ZMod.cast_add, ZMod.intCast_cast, ZMod.intCast_zmod_eq_zero_iff_dvd, ZMod.natCast_val, cast_add, cast_sub, dvd_iff_norm_le, exists_pow_neg_lt_rat, intCast_cast, intCast_zmod_eq_zero_iff_dvd, lt_of_le_of_lt, map_add, natCast_val, nthHom, nthHomSeq, padicNorm, padicNorm.dvd_iff_norm_le, pow_dvd_pow
 -/
@@ -1876,7 +2062,8 @@ theorem nthHomSeq_mul
   rw [← Int.cast_mul]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
     ZMod.intCast_zmod_eq_zero_iff_dvd]
   dsimp [nthHom]
-  simp only [ZMod.natCast_va
+  simp only [ZMod.natCast_val, map_mul, Int.cast_sub, ZMod.intCast_cast, Int.cast_mul]
+  rw [ZMod.cast_mul (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]; rw [sub_self]
 
 中文:
 定理 nthHomSeq_mul
@@ -1891,7 +2078,8 @@ theorem nthHomSeq_mul
   rw [← Int.cast_mul]; rw [← Int.cast_sub]; rw [← padicNorm.dvd_iff_norm_le]; rw [←
     ZMod.intCast_zmod_eq_zero_iff_dvd]
   dsimp [nthHom]
-  simp only [ZMod.natCast_va
+  simp only [ZMod.natCast_val, map_mul, Int.cast_sub, ZMod.intCast_cast, Int.cast_mul]
+  rw [ZMod.cast_mul (show p ^ n ∣ p ^ j from pow_dvd_pow _ hj)]; rw [sub_self]
 
 Depends on / 依赖: Int.cast_mul, Int.cast_sub, ZMod.cast_mul, ZMod.intCast_cast, ZMod.intCast_zmod_eq_zero_iff_dvd, ZMod.natCast_val, cast_mul, cast_sub, dvd_iff_norm_le, exists_pow_neg_lt_rat, intCast_cast, intCast_zmod_eq_zero_iff_dvd, lt_of_le_of_lt, map_mul, natCast_val, nthHom, nthHomSeq, padicNorm, padicNorm.dvd_iff_norm_le, pow_dvd_pow
 -/
@@ -1943,7 +2131,7 @@ theorem limNthHom_spec
   apply _root_.lt_trans _ hε'
   change (padicNormE _ : Real) < _
   norm_cast
-  exact hN _ 
+  exact hN _ hn
 
 中文:
 定理 limNthHom_spec
@@ -1958,7 +2146,7 @@ theorem limNthHom_spec
   apply _root_.lt_trans _ hε'
   change (padicNormE _ : Real) < _
   norm_cast
-  exact hN _ 
+  exact hN _ hn
 
 Depends on / 依赖: _root_, _root_.lt_trans, exists_rat_btwn, f_compat, lt_trans, nthHomSeq, padicNormE, padicNormE.defn
 -/
@@ -2092,7 +2280,13 @@ theorem lift_sub_val_mem_span
   have := le_of_lt (hk (max n k) (le_max_right _ _))
   rw [norm_le_pow_iff_mem_span_pow] at this
   dsimp [lift]
-  rw [sub_eq_sub_add_sub (limNthHom f_com
+  rw [sub_eq_sub_add_sub (limNthHom f_compat r) _ ↑(nthHom f r (max n k))]
+  apply Ideal.add_mem _ _ this
+  rw [Ideal.mem_span_singleton]
+  convert!
+    map_dvd (Int.castRingHom Int_[p]) (pow_dvd_nthHom_sub f_compat r n (max n k) (le_max_left _ _))
+  · simp
+  · simp [nthHom]
 
 中文:
 定理 lift_sub_val_mem_span
@@ -2104,7 +2298,13 @@ theorem lift_sub_val_mem_span
   have := le_of_lt (hk (max n k) (le_max_right _ _))
   rw [norm_le_pow_iff_mem_span_pow] at this
   dsimp [lift]
-  rw [sub_eq_sub_add_sub (limNthHom f_com
+  rw [sub_eq_sub_add_sub (limNthHom f_compat r) _ ↑(nthHom f r (max n k))]
+  apply Ideal.add_mem _ _ this
+  rw [Ideal.mem_span_singleton]
+  convert!
+    map_dvd (Int.castRingHom Int_[p]) (pow_dvd_nthHom_sub f_compat r n (max n k) (le_max_left _ _))
+  · simp
+  · simp [nthHom]
 
 Depends on / 依赖: Ideal.add_mem, Ideal.mem_span_singleton, Int.castRingHom, Int_, add_mem, castRingHom, convert, f_compat, hp_prime, le_max_left, le_max_right, le_of_lt, limNthHom, limNthHom_spec, map_dvd, mem_span_singleton, mod_cast, norm_le_pow_iff_mem_span_pow, nthHom, pow_dvd_nthHom_sub
 -/
@@ -2167,7 +2367,7 @@ theorem lift_unique
   intro ε hε
   obtain ⟨n, hn⟩ := exists_pow_neg_lt p hε
   apply le_trans _ (le_of_lt hn)
-  rw [dist_eq_norm]; rw [norm_le_pow_iff_mem_span_pow]; rw [← ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [← RingHom.comp_apply]; rw [← RingHom.comp_apply]; rw
+  rw [dist_eq_norm]; rw [norm_le_pow_iff_mem_span_pow]; rw [← ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [← RingHom.comp_apply]; rw [← RingHom.comp_apply]; rw [lift_spec]; rw [hg]; rw [sub_self]
 
 中文:
 定理 lift_unique
@@ -2178,7 +2378,7 @@ theorem lift_unique
   intro ε hε
   obtain ⟨n, hn⟩ := exists_pow_neg_lt p hε
   apply le_trans _ (le_of_lt hn)
-  rw [dist_eq_norm]; rw [norm_le_pow_iff_mem_span_pow]; rw [← ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [← RingHom.comp_apply]; rw [← RingHom.comp_apply]; rw
+  rw [dist_eq_norm]; rw [norm_le_pow_iff_mem_span_pow]; rw [← ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [← RingHom.comp_apply]; rw [← RingHom.comp_apply]; rw [lift_spec]; rw [hg]; rw [sub_self]
 
 Depends on / 依赖: RingHom, RingHom.comp_apply, RingHom.mem_ker, comp_apply, dist_eq_norm, eq_of_forall_dist_le, exists_pow_neg_lt, ker_toZModPow, le_of_lt, le_trans, lift_spec, map_sub, mem_ker, norm_le_pow_iff_mem_span_pow, sub_self
 -/
@@ -2321,7 +2521,8 @@ lemma isCauSeq_padicNorm_of_pow_dvd_sub
   induction i with
   | zero => simp
   | succ n IH =>
-    have : (↑(p ^ k
+    have : (↑(p ^ k) : Int) ∣ ↑p ^ (k + n) := ⟨p ^ n, by simp [pow_add]⟩
+    simpa using! (this.trans (hi _)).add IH
 
 中文:
 引理 isCauSeq_padicNorm_of_pow_dvd_sub
@@ -2335,7 +2536,8 @@ lemma isCauSeq_padicNorm_of_pow_dvd_sub
   induction i with
   | zero => simp
   | succ n IH =>
-    have : (↑(p ^ k
+    have : (↑(p ^ k) : Int) ∣ ↑p ^ (k + n) := ⟨p ^ n, by simp [pow_add]⟩
+    simpa using! (this.trans (hi _)).add IH
 
 Depends on / 依赖: Int.cast_sub, PadicInt, PadicInt.exists_pow_neg_lt_rat, cast_sub, dvd_iff_norm_le, exists_add_of_le, exists_pow_neg_lt_rat, padicNorm, padicNorm.dvd_iff_norm_le.mp, pow_add, this.trans, trans_lt
 -/
@@ -2365,7 +2567,28 @@ lemma toZModPow_ofIntSeq_of_pow_dvd_sub
   have hs : x = Padic.mk s := rfl
   obtain ⟨e, he⟩ := Ideal.mem_span_singleton.mp (PadicInt.appr_spec n x)
   rw [sub_eq_iff_eq_add] at he
-  obtain ⟨N
+  obtain ⟨N, hN⟩ := padicNormE.defn s (ε := p ^ (-n : Int))
+    (by simp only [zpow_neg, zpow_natCast, inv_pos]; exact_mod_cast Nat.pos_of_neZero _)
+  replace hN := hN (N + n) (Nat.le_add_right N n)
+  rw [← hs]; rw [he]; rw [← Rat.cast_lt (K := Real)] at hN
+  push_cast at hN
+  simp only [← add_sub, s, Rat.cast_intCast, padicNormE.is_norm,
+    ← Int.cast_natCast (R := Rat_[p]) (x.appr n), ← Int.cast_sub] at hN
+  have : ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ <= ↑p ^ (-n : Int) := by
+    by_contra! H
+    have H' : ‖(p ^ n * e : Rat_[p])‖ < ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ := by
+      refine LE.le.trans_lt ?_ H
+      simpa using mul_le_mul_of_nonneg le_rfl e.2 (show 0 <= (↑p ^ n)⁻¹ by simp) zero_le_one
+    rw [Padic.add_eq_max_of_ne H'.ne]; rw [sup_eq_right.mpr H'.le] at hN
+    exact lt_asymm hN H
+  rw [Padic.norm_int_le_pow_iff_dvd]; rw [← Nat.cast_pow]; rw [← ZMod.intCast_eq_intCast_iff_dvd_sub]; rw [Int.cast_natCast] at this
+  refine this.symm.trans ?_
+  clear * - hi
+  induction N with
+  | zero => simp
+  | succ N IH =>
+    rw [← IH]; rw [eq_comm]; rw [add_right_comm]; rw [ZMod.intCast_eq_intCast_iff_dvd_sub]
+    exact .trans ⟨p ^ N, by simp [pow_add, mul_comm]⟩ (hi _)
 
 中文:
 引理 toZModPow_of整数Seq_of_pow_dvd_sub
@@ -2375,7 +2598,28 @@ lemma toZModPow_ofIntSeq_of_pow_dvd_sub
   have hs : x = Padic.mk s := rfl
   obtain ⟨e, he⟩ := Ideal.mem_span_singleton.mp (PadicInt.appr_spec n x)
   rw [sub_eq_iff_eq_add] at he
-  obtain ⟨N
+  obtain ⟨N, hN⟩ := padicNormE.defn s (ε := p ^ (-n : Int))
+    (by simp only [zpow_neg, zpow_natCast, inv_pos]; exact_mod_cast Nat.pos_of_neZero _)
+  replace hN := hN (N + n) (Nat.le_add_right N n)
+  rw [← hs]; rw [he]; rw [← Rat.cast_lt (K := Real)] at hN
+  push_cast at hN
+  simp only [← add_sub, s, Rat.cast_intCast, padicNormE.is_norm,
+    ← Int.cast_natCast (R := Rat_[p]) (x.appr n), ← Int.cast_sub] at hN
+  have : ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ <= ↑p ^ (-n : Int) := by
+    by_contra! H
+    have H' : ‖(p ^ n * e : Rat_[p])‖ < ‖(((x.appr n) - f (N + n) : Int) : Rat_[p])‖ := by
+      refine LE.le.trans_lt ?_ H
+      simpa using mul_le_mul_of_nonneg le_rfl e.2 (show 0 <= (↑p ^ n)⁻¹ by simp) zero_le_one
+    rw [Padic.add_eq_max_of_ne H'.ne]; rw [sup_eq_right.mpr H'.le] at hN
+    exact lt_asymm hN H
+  rw [Padic.norm_int_le_pow_iff_dvd]; rw [← Nat.cast_pow]; rw [← ZMod.intCast_eq_intCast_iff_dvd_sub]; rw [Int.cast_natCast] at this
+  refine this.symm.trans ?_
+  clear * - hi
+  induction N with
+  | zero => simp
+  | succ N IH =>
+    rw [← IH]; rw [eq_comm]; rw [add_right_comm]; rw [ZMod.intCast_eq_intCast_iff_dvd_sub]
+    exact .trans ⟨p ^ N, by simp [pow_add, mul_comm]⟩ (hi _)
 
 Depends on / 依赖: Ideal.mem_span_singleton.mp, Nat.le_add_right, Nat.pos_of_neZero, Padic.mk, PadicInt, PadicInt.appr_spec, PadicInt.ofIntSeq, PadicSeq, appr_spec, inv_pos, isCauSeq_padicNorm_of_pow_dvd_sub, le_add_right, mem_span_singleton, ofIntSeq, padicNormE, padicNormE.defn, pos_of_neZero, replace, sub_eq_iff_eq_add, zpow_natCast
 -/

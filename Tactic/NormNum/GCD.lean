@@ -326,7 +326,35 @@ definition proveNatGCD
 | 0, _ => have : ex =Q nat_lit 0 := ⟨⟩; ⟨ey, q(Nat.gcd_zero_left $ey)⟩
 | _, 0 => have : ey =Q nat_lit 0 := ⟨⟩; ⟨ex, q(Nat.gcd_zero_right $ex)⟩
 | 1, _ => have : ex =Q nat_lit 1 := ⟨⟩; ⟨q(nat_lit 1), q(Nat.gcd_one_left $ey)⟩
-| _, 1 => have : ey =Q nat_lit 1 := ⟨⟩; ⟨q(
+| _, 1 => have : ey =Q nat_lit 1 := ⟨⟩; ⟨q(nat_lit 1), q(Nat.gcd_one_right $ex)⟩
+  | x, y =>
+    let (d, a, b) := Nat.xgcdAux x 1 0 y 0 1
+    if d = x then
+      have pq : Q(Nat.mod $ey $ex = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+      ⟨ex, q(nat_gcd_helper_dvd_left $ex $ey $pq)⟩
+    else if d = y then
+      have pq : Q(Nat.mod $ex $ey = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+      ⟨ey, q(nat_gcd_helper_dvd_right $ex $ey $pq)⟩
+    else
+      have ea' : Q(Nat) := mkRawNatLit a.natAbs
+      have eb' : Q(Nat) := mkRawNatLit b.natAbs
+      if d = 1 then
+        if a >= 0 then
+          have pt : Q($ex * $ea' = $ey * $eb' + 1) := (q(Eq.refl ($ex * $ea')) : Expr)
+          ⟨q(nat_lit 1), q(nat_gcd_helper_2' $ex $ey $ea' $eb' $pt)⟩
+        else
+          have pt : Q($ey * $eb' = $ex * $ea' + 1) := (q(Eq.refl ($ey * $eb')) : Expr)
+          ⟨q(nat_lit 1), q(nat_gcd_helper_1' $ex $ey $ea' $eb' $pt)⟩
+      else
+        have ed : Q(Nat) := mkRawNatLit d
+        have pu : Q(Nat.mod $ex $ed = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+        have pv : Q(Nat.mod $ey $ed = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+        if a >= 0 then
+          have pt : Q($ex * $ea' = $ey * $eb' + $ed) := (q(Eq.refl ($ex * $ea')) : Expr)
+          ⟨ed, q(nat_gcd_helper_2 $ed $ex $ey $ea' $eb' $pu $pv $pt)⟩
+        else
+          have pt : Q($ey * $eb' = $ex * $ea' + $ed) := (q(Eq.refl ($ey * $eb')) : Expr)
+          ⟨ed, q(nat_gcd_helper_1 $ed $ex $ey $ea' $eb' $pu $pv $pt)⟩
 
 中文:
 定义 prove自然数GCD
@@ -335,7 +363,35 @@ definition proveNatGCD
 | 0, _ => have : ex =Q nat_lit 0 := ⟨⟩; ⟨ey, q(Nat.gcd_zero_left $ey)⟩
 | _, 0 => have : ey =Q nat_lit 0 := ⟨⟩; ⟨ex, q(Nat.gcd_zero_right $ex)⟩
 | 1, _ => have : ex =Q nat_lit 1 := ⟨⟩; ⟨q(nat_lit 1), q(Nat.gcd_one_left $ey)⟩
-| _, 1 => have : ey =Q nat_lit 1 := ⟨⟩; ⟨q(
+| _, 1 => have : ey =Q nat_lit 1 := ⟨⟩; ⟨q(nat_lit 1), q(Nat.gcd_one_right $ex)⟩
+  | x, y =>
+    let (d, a, b) := Nat.xgcdAux x 1 0 y 0 1
+    if d = x then
+      have pq : Q(Nat.mod $ey $ex = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+      ⟨ex, q(nat_gcd_helper_dvd_left $ex $ey $pq)⟩
+    else if d = y then
+      have pq : Q(Nat.mod $ex $ey = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+      ⟨ey, q(nat_gcd_helper_dvd_right $ex $ey $pq)⟩
+    else
+      have ea' : Q(Nat) := mkRawNatLit a.natAbs
+      have eb' : Q(Nat) := mkRawNatLit b.natAbs
+      if d = 1 then
+        if a >= 0 then
+          have pt : Q($ex * $ea' = $ey * $eb' + 1) := (q(Eq.refl ($ex * $ea')) : Expr)
+          ⟨q(nat_lit 1), q(nat_gcd_helper_2' $ex $ey $ea' $eb' $pt)⟩
+        else
+          have pt : Q($ey * $eb' = $ex * $ea' + 1) := (q(Eq.refl ($ey * $eb')) : Expr)
+          ⟨q(nat_lit 1), q(nat_gcd_helper_1' $ex $ey $ea' $eb' $pt)⟩
+      else
+        have ed : Q(Nat) := mkRawNatLit d
+        have pu : Q(Nat.mod $ex $ed = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+        have pv : Q(Nat.mod $ey $ed = 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+        if a >= 0 then
+          have pt : Q($ex * $ea' = $ey * $eb' + $ed) := (q(Eq.refl ($ex * $ea')) : Expr)
+          ⟨ed, q(nat_gcd_helper_2 $ed $ex $ey $ea' $eb' $pu $pv $pt)⟩
+        else
+          have pt : Q($ey * $eb' = $ex * $ea' + $ed) := (q(Eq.refl ($ey * $eb')) : Expr)
+          ⟨ed, q(nat_gcd_helper_1 $ed $ex $ey $ea' $eb' $pu $pv $pt)⟩
 
 Depends on / 依赖: Eq.refl, Nat.gcd_one_left, Nat.gcd_one_right, Nat.gcd_zero_left, Nat.gcd_zero_right, Nat.mod, Nat.xgcdAux, ex.natLit, ey.natLit, gcd_one_left, gcd_one_right, gcd_zero_left, gcd_zero_right, natLit, nat_gcd_helper_dvd_lef, nat_lit, xgcdAux
 -/
@@ -389,7 +445,8 @@ haveI' : e =Q Nat.gcd x y := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex, p⟩ ← deriveNat x sNat
   let ⟨ey, q⟩ ← deriveNat y sNat
-  let ⟨ed, p
+  let ⟨ed, pf⟩ := proveNatGCD ex ey
+  return .isNat sNat ed q(isNat_gcd $p $q $pf)
 
 中文:
 定义 eval自然数GCD
@@ -401,7 +458,8 @@ haveI' : e =Q Nat.gcd x y := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex, p⟩ ← deriveNat x sNat
   let ⟨ey, q⟩ ← deriveNat y sNat
-  let ⟨ed, p
+  let ⟨ed, pf⟩ := proveNatGCD ex ey
+  return .isNat sNat ed q(isNat_gcd $p $q $pf)
 -/
 def evalNatGCD : NormNumExt where eval {u α} e := do
   let .app (.app _ (x : Q(Nat))) (y : Q(Nat)) ← Meta.whnfR e | failure
@@ -424,7 +482,14 @@ definition proveNatLCM
     show (ed : Q(Nat)) × Q(Nat.lcm 0 $ey = $ed) from ⟨q(nat_lit 0), q(Nat.lcm_zero_left $ey)⟩
   | _, 0 =>
     show (ed : Q(Nat)) × Q(Nat.lcm $ex 0 = $ed) from ⟨q(nat_lit 0), q(Nat.lcm_zero_right $ex)⟩
-  | 1, _ => show (ed : Q(Nat)) × Q(Nat.lcm 1 $ey = $e
+  | 1, _ => show (ed : Q(Nat)) × Q(Nat.lcm 1 $ey = $ed) from ⟨ey, q(Nat.lcm_one_left $ey)⟩
+  | _, 1 => show (ed : Q(Nat)) × Q(Nat.lcm $ex 1 = $ed) from ⟨ex, q(Nat.lcm_one_right $ex)⟩
+  | x, y =>
+    let ⟨ed, pd⟩ := proveNatGCD ex ey
+    have p0 : Q(Nat.beq $ed 0 = false) := (q(Eq.refl false) : Expr)
+    have em : Q(Nat) := mkRawNatLit (x * y / ed.natLit!)
+    have pm : Q($ex * $ey = $ed * $em) := (q(Eq.refl ($ex * $ey)) : Expr)
+    ⟨em, q(nat_lcm_helper $ex $ey $ed $em $pd $p0 $pm)⟩
 
 中文:
 定义 prove自然数LCM
@@ -434,7 +499,14 @@ definition proveNatLCM
     show (ed : Q(Nat)) × Q(Nat.lcm 0 $ey = $ed) from ⟨q(nat_lit 0), q(Nat.lcm_zero_left $ey)⟩
   | _, 0 =>
     show (ed : Q(Nat)) × Q(Nat.lcm $ex 0 = $ed) from ⟨q(nat_lit 0), q(Nat.lcm_zero_right $ex)⟩
-  | 1, _ => show (ed : Q(Nat)) × Q(Nat.lcm 1 $ey = $e
+  | 1, _ => show (ed : Q(Nat)) × Q(Nat.lcm 1 $ey = $ed) from ⟨ey, q(Nat.lcm_one_left $ey)⟩
+  | _, 1 => show (ed : Q(Nat)) × Q(Nat.lcm $ex 1 = $ed) from ⟨ex, q(Nat.lcm_one_right $ex)⟩
+  | x, y =>
+    let ⟨ed, pd⟩ := proveNatGCD ex ey
+    have p0 : Q(Nat.beq $ed 0 = false) := (q(Eq.refl false) : Expr)
+    have em : Q(Nat) := mkRawNatLit (x * y / ed.natLit!)
+    have pm : Q($ex * $ey = $ed * $em) := (q(Eq.refl ($ex * $ey)) : Expr)
+    ⟨em, q(nat_lcm_helper $ex $ey $ed $em $pd $p0 $pm)⟩
 
 Depends on / 依赖: Nat.beq, Nat.lcm, Nat.lcm_one_left, Nat.lcm_one_right, Nat.lcm_zero_left, Nat.lcm_zero_right, PerfectlyNormalSpace, PerfectlyNormalSpace.toCompletelyNormalSpace, ex.natLit, ey.natLit, lcm_one_left, lcm_one_right, lcm_zero_left, lcm_zero_right, natLit, nat_lit, proveNatGCD, toCompletelyNormalSpace
 -/
@@ -468,7 +540,8 @@ haveI' : e =Q Nat.lcm x y := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex, p⟩ ← deriveNat x sNat
   let ⟨ey, q⟩ ← deriveNat y sNat
-  let ⟨ed, p
+  let ⟨ed, pf⟩ := proveNatLCM ex ey
+  return .isNat sNat ed q(isNat_lcm $p $q $pf)
 
 中文:
 定义 eval自然数LCM
@@ -480,7 +553,8 @@ haveI' : e =Q Nat.lcm x y := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex, p⟩ ← deriveNat x sNat
   let ⟨ey, q⟩ ← deriveNat y sNat
-  let ⟨ed, p
+  let ⟨ed, pf⟩ := proveNatLCM ex ey
+  return .isNat sNat ed q(isNat_lcm $p $q $pf)
 -/
 def evalNatLCM : NormNumExt where eval {u α} e := do
   let .app (.app _ (x : Q(Nat))) (y : Q(Nat)) ← Meta.whnfR e | failure
@@ -698,7 +772,9 @@ have : u =QL 0 := ⟨⟩; have : α =Q Int := ⟨⟩; have : e =Q Rat.num q := �
   let ⟨q', n, d, eq⟩ ← deriveRat q (_inst := q(inferInstance))
   let ⟨n', hn⟩ := rawIntLitNatAbs n
   -- deriveRat ensures these are coprime, so the gcd will be 1
-  let ⟨g
+  let ⟨gcd, pf⟩ := proveNatGCD q($n') q($d)
+have : gcd =Q nat_lit 1 := ⟨⟩
+  return .isInt _ n q'.num q(isInt_ratNum $eq $hn $pf)
 
 中文:
 定义 evalRatNum
@@ -709,7 +785,9 @@ have : u =QL 0 := ⟨⟩; have : α =Q Int := ⟨⟩; have : e =Q Rat.num q := �
   let ⟨q', n, d, eq⟩ ← deriveRat q (_inst := q(inferInstance))
   let ⟨n', hn⟩ := rawIntLitNatAbs n
   -- deriveRat ensures these are coprime, so the gcd will be 1
-  let ⟨g
+  let ⟨gcd, pf⟩ := proveNatGCD q($n') q($d)
+have : gcd =Q nat_lit 1 := ⟨⟩
+  return .isInt _ n q'.num q(isInt_ratNum $eq $hn $pf)
 -/
 def evalRatNum : NormNumExt where eval {u α} e := do
   let .proj _ _ (q : Q(Rat)) ← Meta.whnfR e | failure
@@ -735,7 +813,9 @@ have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Rat.den q := �
   let ⟨q', n, d, eq⟩ ← deriveRat q (_inst := q(inferInstance))
   let ⟨n', hn⟩ := rawIntLitNatAbs n
   -- deriveRat ensures these are coprime, so the gcd will be 1
-  let ⟨g
+  let ⟨gcd, pf⟩ := proveNatGCD q($n') q($d)
+have : gcd =Q nat_lit 1 := ⟨⟩
+  return .isNat _ d q(isNat_ratDen $eq $hn $pf)
 
 中文:
 定义 evalRatDen
@@ -746,7 +826,9 @@ have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Rat.den q := �
   let ⟨q', n, d, eq⟩ ← deriveRat q (_inst := q(inferInstance))
   let ⟨n', hn⟩ := rawIntLitNatAbs n
   -- deriveRat ensures these are coprime, so the gcd will be 1
-  let ⟨g
+  let ⟨gcd, pf⟩ := proveNatGCD q($n') q($d)
+have : gcd =Q nat_lit 1 := ⟨⟩
+  return .isNat _ d q(isNat_ratDen $eq $hn $pf)
 -/
 def evalRatDen : NormNumExt where eval {u α} e := do
   let .proj _ _ (q : Q(Rat)) ← Meta.whnfR e | failure

@@ -54,7 +54,11 @@ definition finsuppAntidiagEquivSubtype
     simpa [sum, filter_mem_eq_inter, inter_eq_left.mpr hf.2] using hf.1⟩
   invFun f := ⟨extendDomain f.val, mem_finsuppAntidiag'.mpr
     ⟨by simpa [sum] using f.2, by simp [map_eq_image, image_subset_iff]⟩⟩
-  le
+  left_inv f := by
+    obtain ⟨hsum, hs⟩ := mem_finsuppAntidiag.mp f.prop
+    ext1
+    exact extendDomain_subtypeDomain _ hs
+  right_inv f := by simp
 
 中文:
 定义 finsuppAntidiagEquivSubtype
@@ -65,7 +69,11 @@ definition finsuppAntidiagEquivSubtype
     simpa [sum, filter_mem_eq_inter, inter_eq_left.mpr hf.2] using hf.1⟩
   invFun f := ⟨extendDomain f.val, mem_finsuppAntidiag'.mpr
     ⟨by simpa [sum] using f.2, by simp [map_eq_image, image_subset_iff]⟩⟩
-  le
+  left_inv f := by
+    obtain ⟨hsum, hs⟩ := mem_finsuppAntidiag.mp f.prop
+    ext1
+    exact extendDomain_subtypeDomain _ hs
+  right_inv f := by simp
 
 Depends on / 依赖: extendDomain, extendDomain_subtypeDomain, f.prop, f.val, filter_mem_eq_inter, image_subset_iff, inter_eq_left, inter_eq_left.mpr, invFun, left_inv, map_eq_image, mem_finsuppAntidiag, mem_finsuppAntidiag.mp, right_inv, subtypeDomain
 -/

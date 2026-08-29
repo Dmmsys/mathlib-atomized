@@ -580,7 +580,22 @@ definition functorCategory.Z
         rw [← data.mapZ_comp]
         congr <;> simp }
   map τ :=
- 
+    { app j := data.mapZ (Arrow.homMk (τ.left.app j) (τ.right.app j) (congr_app τ.w j))
+      naturality _ _ _ := by
+        dsimp
+        rw [← data.mapZ_comp]; rw [← data.mapZ_comp]
+        congr 1
+        ext <;> simp }
+  map_id f := by
+    ext j
+    dsimp
+    rw [← data.mapZ_id]
+    congr 1
+  map_comp f g := by
+    ext j
+    dsimp
+    rw [← data.mapZ_comp]
+    congr 1
 
 中文:
 定义 functorCategory.Z
@@ -594,7 +609,22 @@ definition functorCategory.Z
         rw [← data.mapZ_comp]
         congr <;> simp }
   map τ :=
- 
+    { app j := data.mapZ (Arrow.homMk (τ.left.app j) (τ.right.app j) (congr_app τ.w j))
+      naturality _ _ _ := by
+        dsimp
+        rw [← data.mapZ_comp]; rw [← data.mapZ_comp]
+        congr 1
+        ext <;> simp }
+  map_id f := by
+    ext j
+    dsimp
+    rw [← data.mapZ_id]
+    congr 1
+  map_comp f g := by
+    ext j
+    dsimp
+    rw [← data.mapZ_comp]
+    congr 1
 
 Depends on / 依赖: Arrow.homMk, congr_app, data.factorizationData, data.mapZ, data.mapZ_comp, data.mapZ_id, f.hom.app, f.left.map, f.right.map, factorizationData, left.app, mapZ_comp, mapZ_id, map_comp, map_id, naturality, right.app
 -/
@@ -755,7 +785,10 @@ definition MapFactorizationData.ofIsEquivalence
     refine Arrow.isoMk (Iso.refl _) (F.objObjPreimageIso h.Z).symm ?_
     simp [F.map_preimage]
   hp := by
-    refin
+    refine (W₂.arrow_mk_iso_iff ?_).1 h.hp
+    refine Arrow.isoMk (F.objObjPreimageIso h.Z).symm (Iso.refl _) ?_
+    simp [F.map_preimage]
+  fac := F.map_injective (by simp)
 
 中文:
 定义 MapFactorizationData.ofIsEquivalence
@@ -768,7 +801,10 @@ definition MapFactorizationData.ofIsEquivalence
     refine Arrow.isoMk (Iso.refl _) (F.objObjPreimageIso h.Z).symm ?_
     simp [F.map_preimage]
   hp := by
-    refin
+    refine (W₂.arrow_mk_iso_iff ?_).1 h.hp
+    refine Arrow.isoMk (F.objObjPreimageIso h.Z).symm (Iso.refl _) ?_
+    simp [F.map_preimage]
+  fac := F.map_injective (by simp)
 
 Depends on / 依赖: F.objPreimage, objPreimage
 -/

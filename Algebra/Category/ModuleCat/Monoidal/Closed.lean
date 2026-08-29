@@ -69,7 +69,11 @@ instance :
             { homEquiv := fun N P => monoidalClosedHomEquiv M N P
               -- Porting note: this proof was automatic in mathlib3
               homEquiv_naturality_left_symm := by
-                i
+                intros
+                ext : 1
+                apply TensorProduct.ext'
+                intro m n
+                rfl } }
 
 中文:
 实例 :
@@ -79,7 +83,11 @@ instance :
             { homEquiv := fun N P => monoidalClosedHomEquiv M N P
               -- Porting note: this proof was automatic in mathlib3
               homEquiv_naturality_left_symm := by
-                i
+                intros
+                ext : 1
+                apply TensorProduct.ext'
+                intro m n
+                rfl } }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, ConcreteCategory, ConcreteCategory.hom_injective, Function, Function.Injective.addCommGroup, Hom.hom, Injective, ModuleCat, addCommGroup, homEquiv, hom_injective, linearCoyoneda, mkOfHomEquiv, monoidalClosedHomEquiv, rightAdj
 -/

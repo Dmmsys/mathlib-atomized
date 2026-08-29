@@ -129,7 +129,17 @@ theorem Metric.uniformCauchySeqOn_iff
     have hu : u in 𝓤 α := Metric.mem_uniformity_dist.mpr ⟨ε, hε, by simp [u]⟩
     rw [← Filter.eventually_atTop_prod_self' (p := fun m =>
       forall x in s]; rw [dist (F m.fst x) (F m.snd x) < ε)]
-    specialize h 
+    specialize h u hu
+    rw [prod_atTop_atTop_eq] at h
+    exact h.mono fun n h x hx => h x hx
+  · intro h u hu
+    rcases Metric.mem_uniformity_dist.mp hu with ⟨ε, hε, hab⟩
+    rcases h ε hε with ⟨N, hN⟩
+    rw [prod_atTop_atTop_eq]; rw [eventually_atTop]
+    use (N, N)
+    intro b hb x hx
+    rcases hb with ⟨hbl, hbr⟩
+    exact hab (hN b.fst hbl.ge b.snd hbr.ge x hx)
 
 中文:
 定理 Metric.uniformCauchySeqOn_iff
@@ -141,7 +151,17 @@ theorem Metric.uniformCauchySeqOn_iff
     have hu : u in 𝓤 α := Metric.mem_uniformity_dist.mpr ⟨ε, hε, by simp [u]⟩
     rw [← Filter.eventually_atTop_prod_self' (p := fun m =>
       forall x in s]; rw [dist (F m.fst x) (F m.snd x) < ε)]
-    specialize h 
+    specialize h u hu
+    rw [prod_atTop_atTop_eq] at h
+    exact h.mono fun n h x hx => h x hx
+  · intro h u hu
+    rcases Metric.mem_uniformity_dist.mp hu with ⟨ε, hε, hab⟩
+    rcases h ε hε with ⟨N, hN⟩
+    rw [prod_atTop_atTop_eq]; rw [eventually_atTop]
+    use (N, N)
+    intro b hb x hx
+    rcases hb with ⟨hbl, hbr⟩
+    exact hab (hN b.fst hbl.ge b.snd hbr.ge x hx)
 
 Depends on / 依赖: Filter, Filter.eventually_atTop_prod_self, Metric, Metric.mem_uniformity_dist.mp, Metric.mem_uniformity_dist.mpr, a.fst, a.snd, eventually_atTop, eventually_atTop_prod_self, h.mono, m.fst, m.snd, mem_uniformity_dist, prod_atTop_atTop_eq, specialize
 -/
@@ -226,7 +246,12 @@ theorem cauchySeq_bdd
   rsuffices ⟨R, R0, H⟩ : exists R > 0, forall n, dist (u n) (u N) < R
   · exact ⟨_, add_pos R0 R0, fun m n =>
       lt_of_le_of_lt (dist_triangle_right _ _ _) (add_lt_add (H m) (H n))⟩
-  let R := Finset.sup (Finset.range N) fun n => n
+  let R := Finset.sup (Finset.range N) fun n => nndist (u n) (u N)
+  refine ⟨↑R + 1, add_pos_of_nonneg_of_pos R.2 zero_lt_one, fun n => ?_⟩
+  rcases le_or_gt N n with h | h
+  · exact lt_of_lt_of_le (hN _ h) (le_add_of_nonneg_left R.2)
+  · have : _ <= R := Finset.le_sup (Finset.mem_range.2 h)
+    exact lt_of_le_of_lt this (lt_add_of_pos_right _ zero_lt_one)
 
 中文:
 定理 cauchySeq_bdd
@@ -237,7 +262,12 @@ theorem cauchySeq_bdd
   rsuffices ⟨R, R0, H⟩ : exists R > 0, forall n, dist (u n) (u N) < R
   · exact ⟨_, add_pos R0 R0, fun m n =>
       lt_of_le_of_lt (dist_triangle_right _ _ _) (add_lt_add (H m) (H n))⟩
-  let R := Finset.sup (Finset.range N) fun n => n
+  let R := Finset.sup (Finset.range N) fun n => nndist (u n) (u N)
+  refine ⟨↑R + 1, add_pos_of_nonneg_of_pos R.2 zero_lt_one, fun n => ?_⟩
+  rcases le_or_gt N n with h | h
+  · exact lt_of_lt_of_le (hN _ h) (le_add_of_nonneg_left R.2)
+  · have : _ <= R := Finset.le_sup (Finset.mem_range.2 h)
+    exact lt_of_le_of_lt this (lt_add_of_pos_right _ zero_lt_one)
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.range, Finset.sup, Metric, Metric.cauchySeq_iff, add_lt_add, add_pos, add_pos_of_nonneg_of_pos, cauchySeq_iff, dist_triangle_right, le_add_of_nonneg_left, le_or_gt, le_sup, lt_of_le_of_lt, lt_of_lt_of_le, nndist, rsuffices, zero_lt_one
 -/
@@ -264,7 +294,25 @@ theorem cauchySeq_iff_le_tendsto_0
       the supremum of the distances between `s n` and `s m` for `n m ≥ N`.
       First, we prove that all these distances are bounded, as otherwise the Sup
       would not make sense. -/
-    let S N := (fun
+    let S N := (fun p : Nat × Nat => dist (s p.1) (s p.2)) '' { p | p.1 >= N ∧ p.2 >= N }
+    have hS : forall N, exists x, forall y in S N, y <= x := by
+      rcases cauchySeq_bdd hs with ⟨R, -, hR⟩
+      refine fun N => ⟨R, ?_⟩
+      rintro _ ⟨⟨m, n⟩, _, rfl⟩
+      exact le_of_lt (hR m n)
+    -- Prove that it bounds the distances of points in the Cauchy sequence
+    have ub : forall m n N, N <= m -> N <= n -> dist (s m) (s n) <= sSup (S N) := fun m n N hm hn =>
+      le_csSup (hS N) ⟨⟨_, _⟩, ⟨hm, hn⟩, rfl⟩
+    have S0m : forall n, (0 : Real) in S n := fun n => ⟨⟨n, n⟩, ⟨le_rfl, le_rfl⟩, dist_self _⟩
+    have S0 := fun n => le_csSup (hS n) (S0m n)
+    -- Prove that it tends to `0`, by using the Cauchy property of `s`
+    refine ⟨fun N => sSup (S N), S0, ub, Metric.tendsto_atTop.2 fun ε ε0 => ?_⟩
+    refine (Metric.cauchySeq_iff.1 hs (ε / 2) (half_pos ε0)).imp fun N hN n hn => ?_
+    rw [Real.dist_0_eq_abs]; rw [abs_of_nonneg (S0 n)]
+    refine lt_of_le_of_lt (csSup_le ⟨_, S0m _⟩ ?_) (half_lt_self ε0)
+    rintro _ ⟨⟨m', n'⟩, ⟨hm', hn'⟩, rfl⟩
+    exact le_of_lt (hN _ (le_trans hn hm') _ (le_trans hn hn')),
+   fun ⟨b, _, b_bound, b_lim⟩ => cauchySeq_of_le_tendsto_0 b b_bound b_lim⟩
 
 中文:
 定理 cauchySeq_iff_le_tendsto_0
@@ -274,7 +322,25 @@ theorem cauchySeq_iff_le_tendsto_0
       the supremum of the distances between `s n` and `s m` for `n m ≥ N`.
       First, we prove that all these distances are bounded, as otherwise the Sup
       would not make sense. -/
-    let S N := (fun
+    let S N := (fun p : Nat × Nat => dist (s p.1) (s p.2)) '' { p | p.1 >= N ∧ p.2 >= N }
+    have hS : forall N, exists x, forall y in S N, y <= x := by
+      rcases cauchySeq_bdd hs with ⟨R, -, hR⟩
+      refine fun N => ⟨R, ?_⟩
+      rintro _ ⟨⟨m, n⟩, _, rfl⟩
+      exact le_of_lt (hR m n)
+    -- Prove that it bounds the distances of points in the Cauchy sequence
+    have ub : forall m n N, N <= m -> N <= n -> dist (s m) (s n) <= sSup (S N) := fun m n N hm hn =>
+      le_csSup (hS N) ⟨⟨_, _⟩, ⟨hm, hn⟩, rfl⟩
+    have S0m : forall n, (0 : Real) in S n := fun n => ⟨⟨n, n⟩, ⟨le_rfl, le_rfl⟩, dist_self _⟩
+    have S0 := fun n => le_csSup (hS n) (S0m n)
+    -- Prove that it tends to `0`, by using the Cauchy property of `s`
+    refine ⟨fun N => sSup (S N), S0, ub, Metric.tendsto_atTop.2 fun ε ε0 => ?_⟩
+    refine (Metric.cauchySeq_iff.1 hs (ε / 2) (half_pos ε0)).imp fun N hN n hn => ?_
+    rw [Real.dist_0_eq_abs]; rw [abs_of_nonneg (S0 n)]
+    refine lt_of_le_of_lt (csSup_le ⟨_, S0m _⟩ ?_) (half_lt_self ε0)
+    rintro _ ⟨⟨m', n'⟩, ⟨hm', hn'⟩, rfl⟩
+    exact le_of_lt (hN _ (le_trans hn hm') _ (le_trans hn hn')),
+   fun ⟨b, _, b_bound, b_lim⟩ => cauchySeq_of_le_tendsto_0 b b_bound b_lim⟩
 -/
 theorem cauchySeq_iff_le_tendsto_0 {s : Nat -> α} :
     CauchySeq s ↔
@@ -319,7 +385,7 @@ lemma Metric.exists_subseq_bounded_of_cauchySeq
     rw [eventually_atTop]
     obtain ⟨N, hN⟩ := hu (b k) (hb k)
     exact ⟨N, fun m hm r hr => hN r (hm.trans hr) m hm⟩
-  exact Filter.extraction_forall_of_eventua
+  exact Filter.extraction_forall_of_eventually hu'
 
 中文:
 引理 Metric.存在_subseq_bounded_of_cauchySeq
@@ -331,7 +397,7 @@ lemma Metric.exists_subseq_bounded_of_cauchySeq
     rw [eventually_atTop]
     obtain ⟨N, hN⟩ := hu (b k) (hb k)
     exact ⟨N, fun m hm r hr => hN r (hm.trans hr) m hm⟩
-  exact Filter.extraction_forall_of_eventua
+  exact Filter.extraction_forall_of_eventually hu'
 
 Depends on / 依赖: Filter, Filter.extraction_forall_of_eventually, cauchySeq_iff, eventually_atTop, extraction_forall_of_eventually, hm.trans
 -/

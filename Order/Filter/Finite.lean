@@ -160,7 +160,15 @@ theorem mem_generate_iff
       exact ⟨{V}, singleton_subset_iff.2 V_in, finite_singleton _, (sInter_singleton _).subset⟩
     | univ => exact ⟨∅, empty_subset _, finite_empty, subset_univ _⟩
     | superset _ hVW hV =>
-      rcases hV with ⟨t, hts, ht, h
+      rcases hV with ⟨t, hts, ht, htV⟩
+      exact ⟨t, hts, ht, htV.trans hVW⟩
+    | inter _ _ hV hW =>
+      rcases hV, hW with ⟨⟨t, hts, ht, htV⟩, u, hus, hu, huW⟩
+      exact
+        ⟨t union u, union_subset hts hus, ht.union hu,
+(sInter_union _ _).subset.trans inter_subset_inter htV huW⟩
+  · rcases h with ⟨t, hts, tfin, h⟩
+    exact mem_of_superset ((sInter_mem tfin).2 fun V hV => GenerateSets.basic <| hts hV) h
 
 中文:
 定理 mem_generate_iff
@@ -172,7 +180,15 @@ theorem mem_generate_iff
       exact ⟨{V}, singleton_subset_iff.2 V_in, finite_singleton _, (sInter_singleton _).subset⟩
     | univ => exact ⟨∅, empty_subset _, finite_empty, subset_univ _⟩
     | superset _ hVW hV =>
-      rcases hV with ⟨t, hts, ht, h
+      rcases hV with ⟨t, hts, ht, htV⟩
+      exact ⟨t, hts, ht, htV.trans hVW⟩
+    | inter _ _ hV hW =>
+      rcases hV, hW with ⟨⟨t, hts, ht, htV⟩, u, hus, hu, huW⟩
+      exact
+        ⟨t union u, union_subset hts hus, ht.union hu,
+(sInter_union _ _).subset.trans inter_subset_inter htV huW⟩
+  · rcases h with ⟨t, hts, tfin, h⟩
+    exact mem_of_superset ((sInter_mem tfin).2 fun V hV => GenerateSets.basic <| hts hV) h
 
 Depends on / 依赖: V_in, empty_subset, finite_empty, finite_singleton, ht.union, htV.trans, inter_subset_inter, sInter_singleton, sInter_union, singleton_subset_iff, subset, subset.trans, subset_univ, superset, union_subset
 -/
@@ -235,7 +251,16 @@ theorem mem_iInf
     rcases eq_finite_iUnion_of_finite_subset_iUnion tfin tsub with ⟨I, Ifin, σ, σfin, σsub, rfl⟩
     rw [sInter_iUnion] at tinter
     set V := fun i => U union ⋂₀ σ i with hV
-    have V_in : forall (i : I
+    have V_in : forall (i : I), V i in s i := by
+      rintro i
+      have : ⋂₀ σ i in s i := by
+        rw [sInter_mem (σfin _)]
+        apply σsub
+      exact mem_of_superset this subset_union_right
+    refine ⟨I, Ifin, V, V_in, ?_⟩
+    rwa [hV, ← union_iInter, union_eq_self_of_subset_right]
+  · rintro ⟨I, Ifin, V, V_in, rfl⟩
+    exact mem_iInf_of_iInter Ifin V_in Subset.rfl
 
 中文:
 定理 mem_iInf
@@ -247,7 +272,16 @@ theorem mem_iInf
     rcases eq_finite_iUnion_of_finite_subset_iUnion tfin tsub with ⟨I, Ifin, σ, σfin, σsub, rfl⟩
     rw [sInter_iUnion] at tinter
     set V := fun i => U union ⋂₀ σ i with hV
-    have V_in : forall (i : I
+    have V_in : forall (i : I), V i in s i := by
+      rintro i
+      have : ⋂₀ σ i in s i := by
+        rw [sInter_mem (σfin _)]
+        apply σsub
+      exact mem_of_superset this subset_union_right
+    refine ⟨I, Ifin, V, V_in, ?_⟩
+    rwa [hV, ← union_iInter, union_eq_self_of_subset_right]
+  · rintro ⟨I, Ifin, V, V_in, rfl⟩
+    exact mem_iInf_of_iInter Ifin V_in Subset.rfl
 
 Depends on / 依赖: V_in, eq_finite_iUnion_of_finite_subset_iUnion, iInf_eq_generate, mem_generate_iff, mem_of_superset, sInter_iUnion, sInter_mem, subset_union_right, tinter, union_eq_self_of_subset_right, union_iInter
 -/
@@ -284,7 +318,11 @@ theorem mem_iInf'
   rintro ⟨I, If, V, hV, rfl⟩
   refine ⟨I, If, fun i => if hi : i in I then V ⟨i, hi⟩ else univ, fun i => ?_, fun i hi => ?_, ?_⟩
   · dsimp only
-    spl
+    split_ifs
+    exacts [hV ⟨i,_⟩, univ_mem]
+  · exact dif_neg hi
+  · simp only [iInter_dite, biInter_eq_iInter, dif_pos (Subtype.coe_prop _), Subtype.coe_eta,
+      iInter_univ, inter_univ, true_and]
 
 中文:
 定理 mem_iInf'
@@ -296,7 +334,11 @@ theorem mem_iInf'
   rintro ⟨I, If, V, hV, rfl⟩
   refine ⟨I, If, fun i => if hi : i in I then V ⟨i, hi⟩ else univ, fun i => ?_, fun i hi => ?_, ?_⟩
   · dsimp only
-    spl
+    split_ifs
+    exacts [hV ⟨i,_⟩, univ_mem]
+  · exact dif_neg hi
+  · simp only [iInter_dite, biInter_eq_iInter, dif_pos (Subtype.coe_prop _), Subtype.coe_eta,
+      iInter_univ, inter_univ, true_and]
 
 Depends on / 依赖: Subtype, Subtype.coe_eta, Subtype.coe_prop, biInter_eq_iInter, classical, coe_eta, coe_prop, dif_neg, dif_pos, exacts, iInter_dite, iInter_univ, inter_univ, mem_iInf, split_ifs, true_and, univ_mem
 -/
@@ -386,7 +428,13 @@ theorem mem_biInf_principal
     rintro ⟨I, hIf, V, hV₁, hV₂, rfl⟩
     choose! t ht₁ ht₂ using hV₁
     refine ⟨I inter {i | p i}, hIf.inter_of_left _, fun i => And.right, ?_⟩
-    simp only [mem_inter_iff, iInter_and, biInter_eq_iInter, ht₂, me
+    simp only [mem_inter_iff, iInter_and, biInter_eq_iInter, ht₂, mem_ofPred_eq]
+    gcongr with i hpi
+    exact ht₁ i hpi
+  · rintro ⟨I, hIf, hpI, hst⟩
+    rw [biInter_eq_iInter] at hst
+    refine mem_iInf_of_iInter hIf (fun i => ?_) hst
+    simp [hpI i i.2]
 
 中文:
 定理 mem_biInf_principal
@@ -397,7 +445,13 @@ theorem mem_biInf_principal
     rintro ⟨I, hIf, V, hV₁, hV₂, rfl⟩
     choose! t ht₁ ht₂ using hV₁
     refine ⟨I inter {i | p i}, hIf.inter_of_left _, fun i => And.right, ?_⟩
-    simp only [mem_inter_iff, iInter_and, biInter_eq_iInter, ht₂, me
+    simp only [mem_inter_iff, iInter_and, biInter_eq_iInter, ht₂, mem_ofPred_eq]
+    gcongr with i hpi
+    exact ht₁ i hpi
+  · rintro ⟨I, hIf, hpI, hst⟩
+    rw [biInter_eq_iInter] at hst
+    refine mem_iInf_of_iInter hIf (fun i => ?_) hst
+    simp [hpI i i.2]
 
 Depends on / 依赖: And.right, biInter_eq_iInter, hIf.inter_of_left, iInter_and, inter_of_left, mem_iInf, mem_iInf_of_finite, mem_iInf_of_iInter, mem_inter_iff, mem_ofPred_eq, mem_principal
 -/
@@ -428,7 +482,10 @@ theorem _root_.Pairwise.exists_mem_filter_of_disjoint
   have : Pairwise fun i j => exists (s : {s // s in l i}) (t : {t // t in l j}), Disjoint s.1 t.1 := by
     simpa only [Pairwise, Function.onFun, Filter.disjoint_iff, exists_prop, Subtype.exists] using hd
   choose! s t hst using this
-  refine ⟨fun i => ⋂ j, @s i j inter @t j i, fun i => ?_, fun i
+  refine ⟨fun i => ⋂ j, @s i j inter @t j i, fun i => ?_, fun i j hij => ?_⟩
+  exacts [iInter_mem.2 fun j => inter_mem (@s i j).2 (@t j i).2,
+    (hst hij).mono ((iInter_subset _ j).trans inter_subset_left)
+      ((iInter_subset _ i).trans inter_subset_right)]
 
 中文:
 定理 _root_.两两.存在_mem_filter_of_disjoint
@@ -437,7 +494,10 @@ theorem _root_.Pairwise.exists_mem_filter_of_disjoint
   have : Pairwise fun i j => exists (s : {s // s in l i}) (t : {t // t in l j}), Disjoint s.1 t.1 := by
     simpa only [Pairwise, Function.onFun, Filter.disjoint_iff, exists_prop, Subtype.exists] using hd
   choose! s t hst using this
-  refine ⟨fun i => ⋂ j, @s i j inter @t j i, fun i => ?_, fun i
+  refine ⟨fun i => ⋂ j, @s i j inter @t j i, fun i => ?_, fun i j hij => ?_⟩
+  exacts [iInter_mem.2 fun j => inter_mem (@s i j).2 (@t j i).2,
+    (hst hij).mono ((iInter_subset _ j).trans inter_subset_left)
+      ((iInter_subset _ i).trans inter_subset_right)]
 
 Depends on / 依赖: CommRing, Disjoint, Filter, Filter.disjoint_iff, Function, Function.onFun, IsArtinianRing, IsLocalRing, Pairwise, Subtype, Subtype.exists, disjoint_iff, exacts, exists_prop, iInter_mem, iInter_subset, inter_mem, inter_subset_left, inter_subset_right
 -/
@@ -463,7 +523,7 @@ theorem _root_.Set.PairwiseDisjoint.exists_mem_filter
   rcases (hd.subtype _ _).exists_mem_filter_of_disjoint with ⟨s, hsl, hsd⟩
   lift s to (i : t) -> {s // s in l i} using hsl
   rcases @Subtype.exists_pi_extension ι (fun i => { s // s in l i }) _ _ s with ⟨s, rfl⟩
-  exact ⟨fun i => s i, fun i => (s i).2, hsd.set_of_subtype 
+  exact ⟨fun i => s i, fun i => (s i).2, hsd.set_of_subtype _ _⟩
 
 中文:
 定理 _root_.集合.PairwiseDisjoint.存在_mem_filter
@@ -473,7 +533,7 @@ theorem _root_.Set.PairwiseDisjoint.exists_mem_filter
   rcases (hd.subtype _ _).exists_mem_filter_of_disjoint with ⟨s, hsl, hsd⟩
   lift s to (i : t) -> {s // s in l i} using hsl
   rcases @Subtype.exists_pi_extension ι (fun i => { s // s in l i }) _ _ s with ⟨s, rfl⟩
-  exact ⟨fun i => s i, fun i => (s i).2, hsd.set_of_subtype 
+  exact ⟨fun i => s i, fun i => (s i).2, hsd.set_of_subtype _ _⟩
 
 Depends on / 依赖: Subtype, Subtype.exists_pi_extension, exists_mem_filter_of_disjoint, exists_pi_extension, hd.subtype, hsd.set_of_subtype, ht.to_subtype, set_of_subtype, subtype, to_subtype
 -/
@@ -583,7 +643,11 @@ theorem mem_iInf_finset
   · rcases (mem_iInf_of_finite _).1 h with ⟨p, hp, rfl⟩
     refine ⟨fun a => if h : a in s then p ⟨a, h⟩ else univ,
             fun a ha => by simpa [ha] using hp ⟨a, ha⟩, ?_⟩
-    refin
+    refine iInter_congr_of_surjective id surjective_id ?_
+    rintro ⟨a, ha⟩
+    simp [ha]
+  · rintro ⟨p, hpf, rfl⟩
+    exact iInter_mem.2 fun a => mem_iInf_of_mem a (hpf a a.2)
 
 中文:
 定理 mem_iInf_finset
@@ -595,7 +659,11 @@ theorem mem_iInf_finset
   · rcases (mem_iInf_of_finite _).1 h with ⟨p, hp, rfl⟩
     refine ⟨fun a => if h : a in s then p ⟨a, h⟩ else univ,
             fun a ha => by simpa [ha] using hp ⟨a, ha⟩, ?_⟩
-    refin
+    refine iInter_congr_of_surjective id surjective_id ?_
+    rintro ⟨a, ha⟩
+    simp [ha]
+  · rintro ⟨p, hpf, rfl⟩
+    exact iInter_mem.2 fun a => mem_iInf_of_mem a (hpf a a.2)
 
 Depends on / 依赖: Finset, Finset.set_biInter_coe, biInter_eq_iInter, classical, iInf_subtype, iInter_congr_of_surjective, iInter_mem, mem_iInf_of_finite, mem_iInf_of_mem, set_biInter_coe, surjective_id
 -/

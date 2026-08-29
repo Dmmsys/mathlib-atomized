@@ -201,7 +201,9 @@ theorem linearIndepOn_iUnion_of_directed
     rcases finite_subset_iUnion ft ht with ⟨I, fi, hI⟩
     rcases hs.finset_le fi.toFinset with ⟨i, hi⟩
     exact (h i).mono (Subset.trans hI <| iUnion₂_subset fun j hj => hi j (fi.mem_toFinset.2 hj))
-  · r
+  · refine (linearIndepOn_empty R v).mono (t := iUnion (s ·)) ?_
+    rintro _ ⟨_, ⟨i, _⟩, _⟩
+    exact hη ⟨i⟩
 
 中文:
 定理 linearIndepOn_iUnion_of_directed
@@ -212,7 +214,9 @@ theorem linearIndepOn_iUnion_of_directed
     rcases finite_subset_iUnion ft ht with ⟨I, fi, hI⟩
     rcases hs.finset_le fi.toFinset with ⟨i, hi⟩
     exact (h i).mono (Subset.trans hI <| iUnion₂_subset fun j hj => hi j (fi.mem_toFinset.2 hj))
-  · r
+  · refine (linearIndepOn_empty R v).mono (t := iUnion (s ·)) ?_
+    rintro _ ⟨_, ⟨i, _⟩, _⟩
+    exact hη ⟨i⟩
 
 Depends on / 依赖: Nonempty, Subset, Subset.trans, fi.mem_toFinset, fi.toFinset, finite_subset_iUnion, finset_le, hs.finset_le, iUnion, linearIndepOn_empty, linearIndepOn_of_finite, mem_toFinset, toFinset
 -/
@@ -293,7 +297,7 @@ theorem iSupIndep_range_lsingle
     have := (Finsupp.mem_supported ..).mp (this hm); simp_all
   refine iSup₂_le fun j ne => ?_
   rintro _ ⟨m, rfl⟩
-  simp [Finsupp.mem_s
+  simp [Finsupp.mem_supported, ne]
 
 中文:
 定理 iSupIndep_range_lsingle
@@ -304,7 +308,7 @@ theorem iSupIndep_range_lsingle
     have := (Finsupp.mem_supported ..).mp (this hm); simp_all
   refine iSup₂_le fun j ne => ?_
   rintro _ ⟨m, rfl⟩
-  simp [Finsupp.mem_s
+  simp [Finsupp.mem_supported, ne]
 
 Depends on / 依赖: Finsupp, Finsupp.lsingle, Finsupp.mem_supported, Finsupp.supported, LinearMap, LinearMap.range, disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, lsingle, mem_supported, supported
 -/
@@ -397,7 +401,7 @@ theorem linearIndependent_inl_union_inr'
       .prodMap (linearCombination R v) (linearCombination R v') ∘ₗ
       (sumFinsuppLEquivProdFinsupp R).toLinearMap := by ext (_ | _) <;> simp
   rw [LinearIndependent]; rw [this]
-  simpa [LinearMap.coe_prodMap] using ⟨h
+  simpa [LinearMap.coe_prodMap] using ⟨hv, hv'⟩
 
 中文:
 定理 linearIndependent_inl_union_inr'
@@ -407,7 +411,7 @@ theorem linearIndependent_inl_union_inr'
       .prodMap (linearCombination R v) (linearCombination R v') ∘ₗ
       (sumFinsuppLEquivProdFinsupp R).toLinearMap := by ext (_ | _) <;> simp
   rw [LinearIndependent]; rw [this]
-  simpa [LinearMap.coe_prodMap] using ⟨h
+  simpa [LinearMap.coe_prodMap] using ⟨hv, hv'⟩
 
 Depends on / 依赖: LinearIndependent, LinearMap, LinearMap.coe_prodMap, Sum.elim, coe_prodMap, linearCombination, prodMap, sumFinsuppLEquivProdFinsupp, toLinearMap
 -/
@@ -431,7 +435,9 @@ theorem LinearIndependent.inl_union_inr
   let e : s oplus t ≃ ↥(inl R M M' '' s union inr R M M' '' t) :=
     .ofBijective (Sum.elim (fun i => ⟨_, .inl ⟨_, i.2, rfl⟩⟩) fun i => ⟨_, .inr ⟨_, i.2, rfl⟩⟩)
       ⟨by rintro (_ | _) (_ | _) eq <;> simp [hs.ne_zero, ht.ne_zero] at eq <;> aesop,
-        by rintro ⟨_, ⟨_, _, r
+        by rintro ⟨_, ⟨_, _, rfl⟩ | ⟨_, _, rfl⟩⟩ <;> aesop⟩
+  refine (linearIndependent_equiv' e ?_).mp (linearIndependent_inl_union_inr' hs ht)
+  ext (_ | _) <;> rfl
 
 中文:
 定理 LinearIndependent.inl_union_inr
@@ -441,7 +447,9 @@ theorem LinearIndependent.inl_union_inr
   let e : s oplus t ≃ ↥(inl R M M' '' s union inr R M M' '' t) :=
     .ofBijective (Sum.elim (fun i => ⟨_, .inl ⟨_, i.2, rfl⟩⟩) fun i => ⟨_, .inr ⟨_, i.2, rfl⟩⟩)
       ⟨by rintro (_ | _) (_ | _) eq <;> simp [hs.ne_zero, ht.ne_zero] at eq <;> aesop,
-        by rintro ⟨_, ⟨_, _, r
+        by rintro ⟨_, ⟨_, _, rfl⟩ | ⟨_, _, rfl⟩⟩ <;> aesop⟩
+  refine (linearIndependent_equiv' e ?_).mp (linearIndependent_inl_union_inr' hs ht)
+  ext (_ | _) <;> rfl
 
 Depends on / 依赖: Sum.elim, hs.ne_zero, ht.ne_zero, linearIndependent_equiv, linearIndependent_inl_union_inr, ne_zero, nontriviality, ofBijective
 -/
@@ -478,7 +486,22 @@ theorem exists_maximal_linearIndepOn'
   have key : forall c : Set X, IsChain r c -> indep (⋃ (I : X) (_ : I in c), I) := by
     intro c hc
     dsimp [indep]
-    rw [linearIndepOn_iffₛ
+    rw [linearIndepOn_iffₛ]
+    intro f hfsupp g hgsupp hsum
+    rcases eq_empty_or_nonempty c with (rfl | hn)
+    · rw [show f = 0 by simpa using! hfsupp, show g = 0 by simpa using! hgsupp]
+    have : Std.Refl r := ⟨fun _ => Set.Subset.refl _⟩
+    classical
+    obtain ⟨I, _I_mem, hI⟩ : exists I in c, (f.support union g.support : Set ι) subseteq I :=
+f.support.coe_union _ ▸ hc.directedOn.exists_mem_subset_of_finset_subset_biUnion hn by
+        simpa using! And.intro hfsupp hgsupp
+    exact linearIndepOn_iffₛ.mp I.2 f (subset_union_left.trans hI)
+      g (subset_union_right.trans hI) hsum
+  obtain ⟨⟨I, hli : indep I⟩, hmax : forall a, r ⟨I, hli⟩ a -> r a ⟨I, hli⟩⟩ :=
+    exists_maximal_of_chains_bounded (r := r)
+      (fun c hc => ⟨⟨⋃ I in c, (I : Set ι), key c hc⟩, fun I => Set.subset_biUnion_of_mem⟩)
+      Set.Subset.trans
+  exact ⟨I, hli, fun J hsub hli => Set.Subset.antisymm hsub (hmax ⟨J, hli⟩ hsub)⟩
 
 中文:
 定理 存在_maximal_linearIndepOn'
@@ -490,7 +513,22 @@ theorem exists_maximal_linearIndepOn'
   have key : forall c : Set X, IsChain r c -> indep (⋃ (I : X) (_ : I in c), I) := by
     intro c hc
     dsimp [indep]
-    rw [linearIndepOn_iffₛ
+    rw [linearIndepOn_iffₛ]
+    intro f hfsupp g hgsupp hsum
+    rcases eq_empty_or_nonempty c with (rfl | hn)
+    · rw [show f = 0 by simpa using! hfsupp, show g = 0 by simpa using! hgsupp]
+    have : Std.Refl r := ⟨fun _ => Set.Subset.refl _⟩
+    classical
+    obtain ⟨I, _I_mem, hI⟩ : exists I in c, (f.support union g.support : Set ι) subseteq I :=
+f.support.coe_union _ ▸ hc.directedOn.exists_mem_subset_of_finset_subset_biUnion hn by
+        simpa using! And.intro hfsupp hgsupp
+    exact linearIndepOn_iffₛ.mp I.2 f (subset_union_left.trans hI)
+      g (subset_union_right.trans hI) hsum
+  obtain ⟨⟨I, hli : indep I⟩, hmax : forall a, r ⟨I, hli⟩ a -> r a ⟨I, hli⟩⟩ :=
+    exists_maximal_of_chains_bounded (r := r)
+      (fun c hc => ⟨⟨⋃ I in c, (I : Set ι), key c hc⟩, fun I => Set.subset_biUnion_of_mem⟩)
+      Set.Subset.trans
+  exact ⟨I, hli, fun J hsub hli => Set.Subset.antisymm hsub (hmax ⟨J, hli⟩ hsub)⟩
 
 Depends on / 依赖: IsChain, LinearIndepOn, Set.Subset.refl, Std.Refl, Subset, classical, eq_empty_or_nonempty, hfsupp, hgsupp, subseteq
 -/
@@ -609,7 +647,11 @@ lemma LinearIndepOn.pair_iff
   refine ⟨fun h c d hcd => ?_, fun h t g ht hg0 h0 => ?_⟩
   · specialize h {i, j} (Pi.single i c + Pi.single j d)
     simpa +contextual [Finset.sum_pair, Pi.single_apply, hij, hij.symm, hcd] using h
-  have ht' : t subseteq {i, j} := by simpa [← Finset.coe_su
+  have ht' : t subseteq {i, j} := by simpa [← Finset.coe_subset]
+  rw [Finset.sum_subset ht']; rw [Finset.sum_pair hij] at h0
+  · obtain ⟨hi0, hj0⟩ := h _ _ h0
+    exact fun k hkt => Or.elim (ht hkt) (fun h => h ▸ hi0) (fun h => h ▸ hj0)
+  simp +contextual [hg0]
 
 中文:
 引理 LinearIndepOn.pair_iff
@@ -620,7 +662,11 @@ lemma LinearIndepOn.pair_iff
   refine ⟨fun h c d hcd => ?_, fun h t g ht hg0 h0 => ?_⟩
   · specialize h {i, j} (Pi.single i c + Pi.single j d)
     simpa +contextual [Finset.sum_pair, Pi.single_apply, hij, hij.symm, hcd] using h
-  have ht' : t subseteq {i, j} := by simpa [← Finset.coe_su
+  have ht' : t subseteq {i, j} := by simpa [← Finset.coe_subset]
+  rw [Finset.sum_subset ht']; rw [Finset.sum_pair hij] at h0
+  · obtain ⟨hi0, hj0⟩ := h _ _ h0
+    exact fun k hkt => Or.elim (ht hkt) (fun h => h ▸ hi0) (fun h => h ▸ hj0)
+  simp +contextual [hg0]
 
 Depends on / 依赖: Finset, Finset.coe_subset, Finset.sum_pair, Finset.sum_subset, Or.elim, Pi.single, Pi.single_apply, classical, coe_subset, contextual, hij.symm, linearIndepOn_iff, single, single_apply, specialize, subseteq, sum_pair, sum_subset
 -/
@@ -749,7 +795,9 @@ lemma LinearIndependent.pair_smul_smul_iff
     apply h
     simpa [← mul_smul, mul_assoc]
   · specialize h (s * hu.unit) (t * hv.unit)
-    simp only [Units
+    simp only [Units.mul_left_eq_zero] at h
+    apply h
+    simpa [mul_smul]
 
 中文:
 引理 LinearIndependent.pair_smul_smul_iff
@@ -762,7 +810,9 @@ lemma LinearIndependent.pair_smul_smul_iff
     apply h
     simpa [← mul_smul, mul_assoc]
   · specialize h (s * hu.unit) (t * hv.unit)
-    simp only [Units
+    simp only [Units.mul_left_eq_zero] at h
+    apply h
+    simpa [mul_smul]
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.pair_iff, Units.mul_left_eq_zero, hu.unit, hv.unit, mul_assoc, mul_left_eq_zero, mul_smul, pair_iff, specialize
 -/
@@ -790,7 +840,7 @@ lemma LinearIndependent.pair_smul_iff
   refine ⟨fun h s t hst => ?_, fun h s t hst => ?_⟩
   · exact h s t (by rw [← smul_comm u s, ← smul_comm u t, ← smul_add, hst, smul_zero])
   · specialize h (u • s) (u • t) (by rw [smul_assoc, smul_assoc, smul_comm u s, smul_comm u t, hst])
-    exact ⟨(smul
+    exact ⟨(smul_eq_zero_iff_right hu).mp h.1, (smul_eq_zero_iff_right hu).mp h.2⟩
 
 中文:
 引理 LinearIndependent.pair_smul_iff
@@ -800,7 +850,7 @@ lemma LinearIndependent.pair_smul_iff
   refine ⟨fun h s t hst => ?_, fun h s t hst => ?_⟩
   · exact h s t (by rw [← smul_comm u s, ← smul_comm u t, ← smul_add, hst, smul_zero])
   · specialize h (u • s) (u • t) (by rw [smul_assoc, smul_assoc, smul_comm u s, smul_comm u t, hst])
-    exact ⟨(smul
+    exact ⟨(smul_eq_zero_iff_right hu).mp h.1, (smul_eq_zero_iff_right hu).mp h.2⟩
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.pair_iff, pair_iff, smul_add, smul_assoc, smul_comm, smul_eq_zero_iff_right, smul_zero, specialize
 -/
@@ -825,7 +875,21 @@ lemma LinearIndependent.pair_add_smul_add_smul_iff_aux
     smul_assoc, smul_comm a s, smul_comm c t, smul_comm b s, smul_comm d t]; abel)
   obtain ⟨h₁, h₂⟩ := h'
   constructor
-  · suffices (a * d) 
+  · suffices (a * d) • s = (b * c) • s by
+      by_contra hs; exact h (_root_.smul_left_injective S hs ‹_›)
+    calc (a * d) • s
+        = d • a • s := by rw [mul_comm, mul_smul]
+      _ = -(d • c • t) := by rw [eq_neg_iff_add_eq_zero, ← smul_add, h₁, smul_zero]
+      _ = (b * c) • s := ?_
+    · rw [mul_comm, mul_smul, neg_eq_iff_add_eq_zero, add_comm, smul_comm d c, ← smul_add, h₂,
+        smul_zero]
+  · suffices (a * d) • t = (b * c) • t by
+      by_contra ht; exact h (_root_.smul_left_injective S ht ‹_›)
+    calc (a * d) • t
+        = a • d • t := by rw [mul_smul]
+      _ = -(a • b • s) := by rw [eq_neg_iff_add_eq_zero, ← smul_add, add_comm, h₂, smul_zero]
+      _ = (b * c) • t := ?_
+    · rw [mul_smul, neg_eq_iff_add_eq_zero, smul_comm a b, ← smul_add, h₁, smul_zero]
 
 中文:
 引理 LinearIndependent.pair_add_smul_add_smul_iff_aux
@@ -837,7 +901,21 @@ lemma LinearIndependent.pair_add_smul_add_smul_iff_aux
     smul_assoc, smul_comm a s, smul_comm c t, smul_comm b s, smul_comm d t]; abel)
   obtain ⟨h₁, h₂⟩ := h'
   constructor
-  · suffices (a * d) 
+  · suffices (a * d) • s = (b * c) • s by
+      by_contra hs; exact h (_root_.smul_left_injective S hs ‹_›)
+    calc (a * d) • s
+        = d • a • s := by rw [mul_comm, mul_smul]
+      _ = -(d • c • t) := by rw [eq_neg_iff_add_eq_zero, ← smul_add, h₁, smul_zero]
+      _ = (b * c) • s := ?_
+    · rw [mul_comm, mul_smul, neg_eq_iff_add_eq_zero, add_comm, smul_comm d c, ← smul_add, h₂,
+        smul_zero]
+  · suffices (a * d) • t = (b * c) • t by
+      by_contra ht; exact h (_root_.smul_left_injective S ht ‹_›)
+    calc (a * d) • t
+        = a • d • t := by rw [mul_smul]
+      _ = -(a • b • s) := by rw [eq_neg_iff_add_eq_zero, ← smul_add, add_comm, h₂, smul_zero]
+      _ = (b * c) • t := ?_
+    · rw [mul_smul, neg_eq_iff_add_eq_zero, smul_comm a b, ← smul_add, h₁, smul_zero]
 -/
 private lemma LinearIndependent.pair_add_smul_add_smul_iff_aux (h : a * d != b * c)
     (h' : LinearIndependent R ![x, y]) :
@@ -877,7 +955,18 @@ lemma LinearIndependent.pair_add_smul_add_smul_iff
     push Not
     by_cases hbd : b = 0 ∧ d = 0
     · simp only [hbd.1, hbd.2, zero_smul, add_zero]
-      by_cases hac : a = 0 ∧ c = 0; · exact ⟨1, 0, by si
+      by_cases hac : a = 0 ∧ c = 0; · exact ⟨1, 0, by simp [hac.1, hac.2], by simp⟩
+      refine ⟨c • 1, -a • 1, ?_, by aesop⟩
+      simp only [smul_assoc, one_smul, neg_smul]
+      module
+    refine ⟨d • 1, -b • 1, ?_, by contrapose! hbd; simp_all⟩
+    simp only [smul_add, smul_assoc, one_smul, smul_smul, mul_comm d, h]
+    module
+  refine ⟨fun h' => ⟨?_, h⟩, fun ⟨h₁, h₂⟩ => pair_add_smul_add_smul_iff_aux _ _ _ _ h₂ h₁⟩
+  suffices LinearIndependent R ![(a * d - b * c) • x, (a * d - b * c) • y] by
+    rwa [pair_smul_iff (sub_ne_zero_of_ne h)] at this
+  convert! pair_add_smul_add_smul_iff_aux d (-b) (-c) a (by simpa [mul_comm d a]) h' using 1
+  ext i; fin_cases i <;> simp <;> module
 
 中文:
 引理 LinearIndependent.pair_add_smul_add_smul_iff
@@ -889,7 +978,18 @@ lemma LinearIndependent.pair_add_smul_add_smul_iff
     push Not
     by_cases hbd : b = 0 ∧ d = 0
     · simp only [hbd.1, hbd.2, zero_smul, add_zero]
-      by_cases hac : a = 0 ∧ c = 0; · exact ⟨1, 0, by si
+      by_cases hac : a = 0 ∧ c = 0; · exact ⟨1, 0, by simp [hac.1, hac.2], by simp⟩
+      refine ⟨c • 1, -a • 1, ?_, by aesop⟩
+      simp only [smul_assoc, one_smul, neg_smul]
+      module
+    refine ⟨d • 1, -b • 1, ?_, by contrapose! hbd; simp_all⟩
+    simp only [smul_add, smul_assoc, one_smul, smul_smul, mul_comm d, h]
+    module
+  refine ⟨fun h' => ⟨?_, h⟩, fun ⟨h₁, h₂⟩ => pair_add_smul_add_smul_iff_aux _ _ _ _ h₂ h₁⟩
+  suffices LinearIndependent R ![(a * d - b * c) • x, (a * d - b * c) • y] by
+    rwa [pair_smul_iff (sub_ne_zero_of_ne h)] at this
+  convert! pair_add_smul_add_smul_iff_aux d (-b) (-c) a (by simpa [mul_comm d a]) h' using 1
+  ext i; fin_cases i <;> simp <;> module
 -/
 @[simp] lemma LinearIndependent.pair_add_smul_add_smul_iff [Nontrivial R] :
     LinearIndependent R ![a • x + b • y, c • x + d • y] ↔
@@ -969,7 +1069,9 @@ lemma LinearIndependent.pair_add_right_iff
     ⟨this x y, fun h => by simpa using this (-x) (x + y) (by simpa)⟩
   simp only [LinearIndependent.pair_iff]
   intro x y h s t h'
-  obtain ⟨h₁, h₂⟩ := h (s - t) t (by rw [sub_smul, smul_add, ← h']; abe
+  obtain ⟨h₁, h₂⟩ := h (s - t) t (by rw [sub_smul, smul_add, ← h']; abel)
+  rw [h₂]; rw [sub_zero] at h₁
+  tauto
 
 中文:
 引理 LinearIndependent.pair_add_right_iff
@@ -978,7 +1080,9 @@ lemma LinearIndependent.pair_add_right_iff
     ⟨this x y, fun h => by simpa using this (-x) (x + y) (by simpa)⟩
   simp only [LinearIndependent.pair_iff]
   intro x y h s t h'
-  obtain ⟨h₁, h₂⟩ := h (s - t) t (by rw [sub_smul, smul_add, ← h']; abe
+  obtain ⟨h₁, h₂⟩ := h (s - t) t (by rw [sub_smul, smul_add, ← h']; abel)
+  rw [h₂]; rw [sub_zero] at h₁
+  tauto
 -/
 @[simp] lemma LinearIndependent.pair_add_right_iff :
     LinearIndependent R ![x, x + y] ↔ LinearIndependent R ![x, y] := by
@@ -1035,7 +1139,11 @@ theorem linearIndepOn_id_iUnion_finite
   intro t
   induction t using Finset.induction_on with
   | empty => simp
-  | insert i s
+  | insert i s his ih =>
+    rw [Finset.set_biUnion_insert]
+    refine (hl _).id_union ih ?_
+    rw [span_iUnion₂]
+    exact hd i s s.finite_toSet his
 
 中文:
 定理 linearIndepOn_id_iUnion_finite
@@ -1049,7 +1157,11 @@ theorem linearIndepOn_id_iUnion_finite
   intro t
   induction t using Finset.induction_on with
   | empty => simp
-  | insert i s
+  | insert i s his ih =>
+    rw [Finset.set_biUnion_insert]
+    refine (hl _).id_union ih ?_
+    rw [span_iUnion₂]
+    exact hd i s s.finite_toSet his
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.set_biUnion_insert, classical, directed_of_isDirected_le, finite_toSet, iUnion_eq_iUnion_finset, iUnion_mono, iUnion_subset_iUnion_const, id_union, induction_on, insert, linearIndepOn_iUnion_of_directed, s.finite_toSet, set_biUnion_insert
 -/
@@ -1086,7 +1198,15 @@ theorem linearIndependent_iUnion_finite
       rw [LinearIndependent.injective (hindep _) hxy]
     · have h0 : f x₁ x₂ = 0 := by
         apply
-          di
+          disjoint_def.1 (hd x₁ {y₁} (finite_singleton y₁) fun h => h_cases (eq_of_mem_singleton h))
+            (f x₁ x₂) (subset_span (mem_range_self _))
+        rw [iSup_singleton]
+        simp only at hxy
+        rw [hxy]
+        exact subset_span (mem_range_self y₂)
+      exact False.elim ((hindep x₁).ne_zero _ h0)
+  rw [range_sigma_eq_iUnion_range]
+  apply linearIndepOn_id_iUnion_finite (fun j => (hindep j).linearIndepOn_id) hd
 
 中文:
 定理 linearIndependent_iUnion_finite
@@ -1101,7 +1221,15 @@ theorem linearIndependent_iUnion_finite
       rw [LinearIndependent.injective (hindep _) hxy]
     · have h0 : f x₁ x₂ = 0 := by
         apply
-          di
+          disjoint_def.1 (hd x₁ {y₁} (finite_singleton y₁) fun h => h_cases (eq_of_mem_singleton h))
+            (f x₁ x₂) (subset_span (mem_range_self _))
+        rw [iSup_singleton]
+        simp only at hxy
+        rw [hxy]
+        exact subset_span (mem_range_self y₂)
+      exact False.elim ((hindep x₁).ne_zero _ h0)
+  rw [range_sigma_eq_iUnion_range]
+  apply linearIndepOn_id_iUnion_finite (fun j => (hindep j).linearIndepOn_id) hd
 
 Depends on / 依赖: False.elim, LinearIndependent, LinearIndependent.injective, LinearIndependent.of_linearIndepOn_id_range, Sigma.eq, disjoint_def, eq_of_mem_singleton, finite_singleton, h_cases, hindep, iSup_singleton, injective, mem_range_self, nontriviality, of_linearIndepOn_id_range, subset_span
 -/
@@ -1146,7 +1274,29 @@ theorem exists_maximal_linearIndepOn
     specialize hImaximal (I union {i}) (by simp)
     set J := I union {i} with hJ
     have memJ : forall {x}, x in J ↔ x = i ∨ x in I := by simp [hJ]
-    have hiJ : i in J := 
+    have hiJ : i in J := by simp [J]
+    have h := by
+      refine mt hImaximal ?_
+      · intro h2
+        rw [h2] at hi
+        exact absurd hiJ hi
+    obtain ⟨f, supp_f, sum_f, f_ne⟩ := linearDepOn_iff.mp h
+    have hfi : f i != 0 := by
+      contrapose hIlinind
+      refine linearDepOn_iff.mpr ⟨f, ?_, sum_f, f_ne⟩
+      simp only [Finsupp.mem_supported, hJ] at supp_f ⊢
+      rintro x hx
+      refine (memJ.mp (supp_f hx)).resolve_left ?_
+      rintro rfl
+      exact (Finsupp.mem_support_iff.mp hx) hIlinind
+    use f i, hfi
+    have hfi' : i in f.support := Finsupp.mem_support_iff.mpr hfi
+    rw [← Finset.insert_erase hfi']; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [add_eq_zero_iff_eq_neg] at sum_f
+    rw [sum_f]
+    refine neg_mem (sum_mem fun c hc => smul_mem _ _ (subset_span ⟨c, ?_, rfl⟩))
+    exact (memJ.mp (supp_f (Finset.erase_subset _ _ hc))).resolve_left (Finset.ne_of_mem_erase hc)
+
+@[stacks 0CKM]
 
 中文:
 定理 存在_maximal_linearIndepOn
@@ -1159,7 +1309,29 @@ theorem exists_maximal_linearIndepOn
     specialize hImaximal (I union {i}) (by simp)
     set J := I union {i} with hJ
     have memJ : forall {x}, x in J ↔ x = i ∨ x in I := by simp [hJ]
-    have hiJ : i in J := 
+    have hiJ : i in J := by simp [J]
+    have h := by
+      refine mt hImaximal ?_
+      · intro h2
+        rw [h2] at hi
+        exact absurd hiJ hi
+    obtain ⟨f, supp_f, sum_f, f_ne⟩ := linearDepOn_iff.mp h
+    have hfi : f i != 0 := by
+      contrapose hIlinind
+      refine linearDepOn_iff.mpr ⟨f, ?_, sum_f, f_ne⟩
+      simp only [Finsupp.mem_supported, hJ] at supp_f ⊢
+      rintro x hx
+      refine (memJ.mp (supp_f hx)).resolve_left ?_
+      rintro rfl
+      exact (Finsupp.mem_support_iff.mp hx) hIlinind
+    use f i, hfi
+    have hfi' : i in f.support := Finsupp.mem_support_iff.mpr hfi
+    rw [← Finset.insert_erase hfi']; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [add_eq_zero_iff_eq_neg] at sum_f
+    rw [sum_f]
+    refine neg_mem (sum_mem fun c hc => smul_mem _ _ (subset_span ⟨c, ?_, rfl⟩))
+    exact (memJ.mp (supp_f (Finset.erase_subset _ _ hc))).resolve_left (Finset.ne_of_mem_erase hc)
+
+@[stacks 0CKM]
 
 Depends on / 依赖: absurd, classical, contrapose, exists_maximal_linearIndepOn, f_ne, hIlinind, hImaximal, linearDepOn_iff, linearDepOn_iff.mp, linearDepOn_iff.mpr, specialize, sum_f, supp_f
 -/
@@ -1257,7 +1429,7 @@ lemma LinearMap.injective_of_linearIndependent
   obtain ⟨c, rfl⟩ := Finsupp.mem_span_range_iff_exists_finsupp.mp this
   simp only [map_finsuppSum, map_smul] at hx
   obtain rfl := linearIndependent_iff.mp hli c hx
-  
+  simp
 
 中文:
 引理 线性映射.injective_of_linearIndependent
@@ -1268,7 +1440,7 @@ lemma LinearMap.injective_of_linearIndependent
   obtain ⟨c, rfl⟩ := Finsupp.mem_span_range_iff_exists_finsupp.mp this
   simp only [map_finsuppSum, map_smul] at hx
   obtain rfl := linearIndependent_iff.mp hli c hx
-  
+  simp
 
 Depends on / 依赖: Finsupp, Finsupp.mem_span_range_iff_exists_finsupp.mp, Submodule, Submodule.span, injective_iff_map_eq_zero, linearIndependent_iff, linearIndependent_iff.mp, map_finsuppSum, map_smul, mem_span_range_iff_exists_finsupp, mem_top
 -/
@@ -1404,7 +1576,11 @@ lemma LinearIndependent.update
   apply_fun (r • ·) at hl'
   simp_rw [Pi.update_eq_sub_add_single, ← bilinearCombination_apply _ (S := R), map_add, map_sub,
     bilinearCombination_apply, LinearMap.add_apply, LinearMap.sub_apply,
-    linearCo
+    linearCombination_single_index, smul_add, smul_sub, smul_zero, smul_comm r (l' i) m,
+    hg, ← LinearMap.map_smul, smul_smul, ← linearCombination_single, ← map_sub, ← map_add] at hl'
+  replace hl' : forall j, (r * l' j - (single i (r * l' i)) j) + l' i * l j = 0 :=
+    fun j => DFunLike.congr_fun (hf _ hl') j
+  grind [mem_nonZeroDivisors_iff]
 
 中文:
 引理 LinearIndependent.update
@@ -1416,7 +1592,11 @@ lemma LinearIndependent.update
   apply_fun (r • ·) at hl'
   simp_rw [Pi.update_eq_sub_add_single, ← bilinearCombination_apply _ (S := R), map_add, map_sub,
     bilinearCombination_apply, LinearMap.add_apply, LinearMap.sub_apply,
-    linearCo
+    linearCombination_single_index, smul_add, smul_sub, smul_zero, smul_comm r (l' i) m,
+    hg, ← LinearMap.map_smul, smul_smul, ← linearCombination_single, ← map_sub, ← map_add] at hl'
+  replace hl' : forall j, (r * l' j - (single i (r * l' i)) j) + l' i * l j = 0 :=
+    fun j => DFunLike.congr_fun (hf _ hl') j
+  grind [mem_nonZeroDivisors_iff]
 
 Depends on / 依赖: LinearMap, LinearMap.add_apply, LinearMap.map_smul, LinearMap.sub_apply, Pi.update_eq_sub_add_single, add_apply, apply_fun, bilinearCombination_apply, intros, linearCombination_single, linearCombination_single_index, linearIndependent_iff, map_add, map_smul, map_sub, replace, simp_rw, single, smul_add, smul_comm
 -/
@@ -1542,14 +1722,20 @@ theorem linearIndependent_option'
   proof: by
   -- Porting note: Explicit universe level is required in `Equiv.optionEquivSumPUnit`.
   rw [← linearIndependent_equiv (Equiv.optionEquivSumPUnit.{u'} ι).symm]; rw [linearIndependent_sum]; rw [@range_unique _ PUnit]; rw [@linearIndependent_unique_iff PUnit]; rw [disjoint_span_singleton]
-  dsimp [
+  dsimp [(· ∘ ·)]
+refine ⟨fun h => ⟨h.1, fun hx => h.2.1 h.2.2 hx⟩, fun h => ⟨h.1, ?_, fun hx => (h.2 hx).elim⟩⟩
+  rintro rfl
+  exact h.2 (zero_mem _)
 
 中文:
 定理 linearIndependent_option'
   证明: by
   -- Porting note: Explicit universe level is required in `Equiv.optionEquivSumPUnit`.
   rw [← linearIndependent_equiv (Equiv.optionEquivSumPUnit.{u'} ι).symm]; rw [linearIndependent_sum]; rw [@range_unique _ PUnit]; rw [@linearIndependent_unique_iff PUnit]; rw [disjoint_span_singleton]
-  dsimp [
+  dsimp [(· ∘ ·)]
+refine ⟨fun h => ⟨h.1, fun hx => h.2.1 h.2.2 hx⟩, fun h => ⟨h.1, ?_, fun hx => (h.2 hx).elim⟩⟩
+  rintro rfl
+  exact h.2 (zero_mem _)
 -/
 theorem linearIndependent_option' :
     LinearIndependent K (fun o => Option.casesOn' o x v : Option ι -> V) ↔
@@ -1996,7 +2182,7 @@ theorem LinearIndependent.finSnoc_of_not_mem_span_over
     rwa [ne_eq, FaithfulSMul.algebraMap_eq_zero_iff]
   rw [← algebraMap_smul K c x] at heq
   rw [(eq_inv_smul_iff₀ hc').mpr (eq_neg_of_add_eq_zero_left heq)]; rw [smul_neg]
-  exact Submo
+  exact Submodule.neg_mem _ (Submodule.smul_mem _ _ (Submodule.span_subset_span R K _ hcy))
 
 中文:
 定理 LinearIndependent.finSnoc_of_not_mem_span_over
@@ -2009,7 +2195,7 @@ theorem LinearIndependent.finSnoc_of_not_mem_span_over
     rwa [ne_eq, FaithfulSMul.algebraMap_eq_zero_iff]
   rw [← algebraMap_smul K c x] at heq
   rw [(eq_inv_smul_iff₀ hc').mpr (eq_neg_of_add_eq_zero_left heq)]; rw [smul_neg]
-  exact Submo
+  exact Submodule.neg_mem _ (Submodule.smul_mem _ _ (Submodule.span_subset_span R K _ hcy))
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, Submodule, Submodule.neg_mem, Submodule.smul_mem, Submodule.span_subset_span, algebraMap, algebraMap_eq_zero_iff, algebraMap_smul, eq_neg_of_add_eq_zero_left, finSnoc, hv.finSnoc, ne_eq, neg_mem, smul_mem, smul_neg, span_subset_span
 -/
@@ -2104,7 +2290,9 @@ definition equiv_linearIndependent
     ⟨s.val 0, (linearIndependent_finSucc.mp s.property).right⟩⟩
   invFun s := ⟨Fin.cons s.2.val s.1.val,
     linearIndependent_finCons.mpr ⟨s.1.property, s.2.property⟩⟩
-  left_inv _ := by simp only [Fin.cons_self_tail, Subtype.coe_et
+  left_inv _ := by simp only [Fin.cons_self_tail, Subtype.coe_eta]
+  right_inv := fun ⟨_, _⟩ => by simp only [Fin.cons_zero, Subtype.coe_eta, Sigma.mk.inj_iff,
+    Fin.tail_cons, heq_eq_eq, and_self]
 
 中文:
 定义 equiv_linearIndependent
@@ -2113,7 +2301,9 @@ definition equiv_linearIndependent
     ⟨s.val 0, (linearIndependent_finSucc.mp s.property).right⟩⟩
   invFun s := ⟨Fin.cons s.2.val s.1.val,
     linearIndependent_finCons.mpr ⟨s.1.property, s.2.property⟩⟩
-  left_inv _ := by simp only [Fin.cons_self_tail, Subtype.coe_et
+  left_inv _ := by simp only [Fin.cons_self_tail, Subtype.coe_eta]
+  right_inv := fun ⟨_, _⟩ => by simp only [Fin.cons_zero, Subtype.coe_eta, Sigma.mk.inj_iff,
+    Fin.tail_cons, heq_eq_eq, and_self]
 
 Depends on / 依赖: Fin.tail, linearIndependent_finSucc, linearIndependent_finSucc.mp, property, s.property, s.val
 -/
@@ -2161,7 +2351,12 @@ theorem exists_linearIndepOn_extension
     refine zorn_subset_nonempty { b | b subseteq t ∧ LinearIndepOn K v b} ?_ _ ⟨hst, hs⟩
     · refine fun c hc cc _c0 => ⟨⋃₀ c, ⟨?_, ?_⟩, fun x => ?_⟩
       · exact sUnion_subset fun x xc => (hc xc).1
-      · exact linearIndepOn_sUnion_of_directed cc.directedOn fun x xc 
+      · exact linearIndepOn_sUnion_of_directed cc.directedOn fun x xc => (hc xc).2
+      · exact subset_sUnion_of_mem
+  refine ⟨b, h.prop.1, sb, fun _ ⟨x, hx, hvx⟩ => by_contra fun hn => hn ?_, h.prop.2⟩
+  subst hvx
+exact subset_span mem_image_of_mem v h.mem_of_prop_insert
+    ⟨insert_subset hx h.prop.1, h.prop.2.insert hn⟩
 
 中文:
 定理 存在_linearIndepOn_extension
@@ -2171,7 +2366,12 @@ theorem exists_linearIndepOn_extension
     refine zorn_subset_nonempty { b | b subseteq t ∧ LinearIndepOn K v b} ?_ _ ⟨hst, hs⟩
     · refine fun c hc cc _c0 => ⟨⋃₀ c, ⟨?_, ?_⟩, fun x => ?_⟩
       · exact sUnion_subset fun x xc => (hc xc).1
-      · exact linearIndepOn_sUnion_of_directed cc.directedOn fun x xc 
+      · exact linearIndepOn_sUnion_of_directed cc.directedOn fun x xc => (hc xc).2
+      · exact subset_sUnion_of_mem
+  refine ⟨b, h.prop.1, sb, fun _ ⟨x, hx, hvx⟩ => by_contra fun hn => hn ?_, h.prop.2⟩
+  subst hvx
+exact subset_span mem_image_of_mem v h.mem_of_prop_insert
+    ⟨insert_subset hx h.prop.1, h.prop.2.insert hn⟩
 
 Depends on / 依赖: LinearIndepOn, cc.directedOn, directedOn, h.mem_of_prop_insert, h.prop, insert_subset, linearIndepOn_sUnion_of_directed, mem_image_of_mem, mem_of_prop_insert, sUnion_subset, subset_sUnion_of_mem, subset_span, subseteq, zorn_subset_nonempty
 -/
@@ -2248,7 +2448,12 @@ lemma exists_linearIndependent'
   let s : Set ι := Set.range (fun a : t => f a.property)
   have hs {i : ι} (hi : i in s) : v i in t := by obtain ⟨a, rfl⟩ := hi; simp [hf]
   let f' (a : s) : t := ⟨v a.val, hs a.property⟩
-  refine ⟨s, Su
+  refine ⟨s, Subtype.val, Subtype.val_injective, hsp.symm ▸ by congr; aesop, ?_⟩
+  · rw [← show Subtype.val ∘ f' = v ∘ Subtype.val by ext; simp [f']]
+    apply hli.comp
+    rintro ⟨i, x, rfl⟩ ⟨j, y, rfl⟩ hij
+    simp only [Subtype.ext_iff, hf, f'] at hij
+    simp [hij]
 
 中文:
 引理 存在_linearIndependent'
@@ -2259,7 +2464,12 @@ lemma exists_linearIndependent'
   let s : Set ι := Set.range (fun a : t => f a.property)
   have hs {i : ι} (hi : i in s) : v i in t := by obtain ⟨a, rfl⟩ := hi; simp [hf]
   let f' (a : s) : t := ⟨v a.val, hs a.property⟩
-  refine ⟨s, Su
+  refine ⟨s, Subtype.val, Subtype.val_injective, hsp.symm ▸ by congr; aesop, ?_⟩
+  · rw [← show Subtype.val ∘ f' = v ∘ Subtype.val by ext; simp [f']]
+    apply hli.comp
+    rintro ⟨i, x, rfl⟩ ⟨j, y, rfl⟩ hij
+    simp only [Subtype.ext_iff, hf, f'] at hij
+    simp [hij]
 
 Depends on / 依赖: Set.range, Subtype, Subtype.ext_iff, Subtype.val, Subtype.val_injective, a.property, a.val, exists_linearIndependent, ext_iff, hli.comp, hsp.symm, property, val_injective
 -/
@@ -2466,7 +2676,57 @@ theorem exists_of_linearIndepOn_of_finite_span
         ↑s' subseteq s ->
           s inter ↑t = ∅ ->
             s subseteq (span K ↑(s' union t) : Submodule K V) ->
-              exists t' : Finset V, ↑t' subseteq s union ↑t ∧ s subseteq ↑t' ∧ t'.card = (s' union t).ca
+              exists t' : Finset V, ↑t' subseteq s union ↑t ∧ s subseteq ↑t' ∧ t'.card = (s' union t).card :=
+    fun t =>
+    Finset.induction_on t
+      (fun s' hs' _ hss' =>
+have : s = ↑s' := eq_of_linearIndepOn_id_of_span_subtype hs hs' by simpa using hss'
+        ⟨s', by simp [this]⟩)
+      fun b₁ t hb₁t ih s' hs' hst hss' =>
+      have hb₁s : b₁ ∉ s := fun h => by
+        have : b₁ in s inter ↑(insert b₁ t) := ⟨h, Finset.mem_insert_self _ _⟩
+        rwa [hst] at this
+have hb₁s' : b₁ ∉ s' := fun h => hb₁s hs' h
+      have hst : s inter ↑t = ∅ :=
+eq_empty_of_subset_empty
+          -- Porting note: `-subset_inter_iff` required.
+          Subset.trans
+            (by simp [inter_subset_inter, -subset_inter_iff])
+            (le_of_eq hst)
+      Classical.by_cases (p := s subseteq (span K ↑(s' union t) : Submodule K V))
+        (fun this =>
+          let ⟨u, hust, hsu, Eq⟩ := ih _ hs' hst this
+          have hb₁u : b₁ ∉ u := fun h => (hust h).elim hb₁s hb₁t
+          ⟨insert b₁ u, by simp [insert_subset_insert hust], Subset.trans hsu (by simp), by
+            simp [Eq, hb₁t, hb₁s', hb₁u]⟩)
+        fun this =>
+        let ⟨b₂, hb₂s, hb₂t⟩ := not_subset.mp this
+have hb₂t' : b₂ ∉ s' union t := fun h => hb₂t subset_span h
+        have : s subseteq (span K ↑(insert b₂ s' union t) : Submodule K V) := fun b₃ hb₃ => by
+          have : ↑(s' union insert b₁ t) subseteq insert b₁ (insert b₂ ↑(s' union t) : Set V) := by
+            simp only [insert_eq, union_subset_union, Subset.refl,
+              subset_union_right, Finset.union_insert, Finset.coe_insert]
+          have hb₃ : b₃ in span K (insert b₁ (insert b₂ ↑(s' union t) : Set V)) :=
+            span_mono this (hss' hb₃)
+          have : s subseteq (span K (insert b₁ ↑(s' union t)) : Submodule K V) := by
+            simpa [insert_eq, -singleton_union, -union_singleton] using hss'
+          have hb₁ : b₁ in span K (insert b₂ ↑(s' union t)) :=
+            mem_span_insert_exchange (this hb₂s) hb₂t
+          rw [span_insert_eq_span hb₁] at hb₃; simpa using hb₃
+        let ⟨u, hust, hsu, eq⟩ := ih _ (by simp [insert_subset_iff, hb₂s, hs']) hst this
+⟨u, Subset.trans hust union_subset_union (Subset.refl _) (by simp [subset_insert]), hsu,
+          by simp [eq, hb₂t', hb₁t, hb₁s']⟩
+  have eq : ((t.filter fun x => x in s) union t.filter fun x => x ∉ s) = t := by
+    ext1 x
+    by_cases x in s <;> simp [*]
+  apply
+    Exists.elim
+      (this (t.filter fun x => x ∉ s) (t.filter fun x => x in s) (by simp [Set.subset_def])
+        (by simp +contextual [Set.ext_iff]) (by rwa [eq]))
+  intro u h
+  exact
+    ⟨u, Subset.trans h.1 (by simp +contextual [subset_def, or_imp]),
+      h.2.1, by simp only [h.2.2, eq]⟩
 
 中文:
 定理 存在_of_linearIndepOn_of_finite_span
@@ -2479,7 +2739,57 @@ theorem exists_of_linearIndepOn_of_finite_span
         ↑s' subseteq s ->
           s inter ↑t = ∅ ->
             s subseteq (span K ↑(s' union t) : Submodule K V) ->
-              exists t' : Finset V, ↑t' subseteq s union ↑t ∧ s subseteq ↑t' ∧ t'.card = (s' union t).ca
+              exists t' : Finset V, ↑t' subseteq s union ↑t ∧ s subseteq ↑t' ∧ t'.card = (s' union t).card :=
+    fun t =>
+    Finset.induction_on t
+      (fun s' hs' _ hss' =>
+have : s = ↑s' := eq_of_linearIndepOn_id_of_span_subtype hs hs' by simpa using hss'
+        ⟨s', by simp [this]⟩)
+      fun b₁ t hb₁t ih s' hs' hst hss' =>
+      have hb₁s : b₁ ∉ s := fun h => by
+        have : b₁ in s inter ↑(insert b₁ t) := ⟨h, Finset.mem_insert_self _ _⟩
+        rwa [hst] at this
+have hb₁s' : b₁ ∉ s' := fun h => hb₁s hs' h
+      have hst : s inter ↑t = ∅ :=
+eq_empty_of_subset_empty
+          -- Porting note: `-subset_inter_iff` required.
+          Subset.trans
+            (by simp [inter_subset_inter, -subset_inter_iff])
+            (le_of_eq hst)
+      Classical.by_cases (p := s subseteq (span K ↑(s' union t) : Submodule K V))
+        (fun this =>
+          let ⟨u, hust, hsu, Eq⟩ := ih _ hs' hst this
+          have hb₁u : b₁ ∉ u := fun h => (hust h).elim hb₁s hb₁t
+          ⟨insert b₁ u, by simp [insert_subset_insert hust], Subset.trans hsu (by simp), by
+            simp [Eq, hb₁t, hb₁s', hb₁u]⟩)
+        fun this =>
+        let ⟨b₂, hb₂s, hb₂t⟩ := not_subset.mp this
+have hb₂t' : b₂ ∉ s' union t := fun h => hb₂t subset_span h
+        have : s subseteq (span K ↑(insert b₂ s' union t) : Submodule K V) := fun b₃ hb₃ => by
+          have : ↑(s' union insert b₁ t) subseteq insert b₁ (insert b₂ ↑(s' union t) : Set V) := by
+            simp only [insert_eq, union_subset_union, Subset.refl,
+              subset_union_right, Finset.union_insert, Finset.coe_insert]
+          have hb₃ : b₃ in span K (insert b₁ (insert b₂ ↑(s' union t) : Set V)) :=
+            span_mono this (hss' hb₃)
+          have : s subseteq (span K (insert b₁ ↑(s' union t)) : Submodule K V) := by
+            simpa [insert_eq, -singleton_union, -union_singleton] using hss'
+          have hb₁ : b₁ in span K (insert b₂ ↑(s' union t)) :=
+            mem_span_insert_exchange (this hb₂s) hb₂t
+          rw [span_insert_eq_span hb₁] at hb₃; simpa using hb₃
+        let ⟨u, hust, hsu, eq⟩ := ih _ (by simp [insert_subset_iff, hb₂s, hs']) hst this
+⟨u, Subset.trans hust union_subset_union (Subset.refl _) (by simp [subset_insert]), hsu,
+          by simp [eq, hb₂t', hb₁t, hb₁s']⟩
+  have eq : ((t.filter fun x => x in s) union t.filter fun x => x ∉ s) = t := by
+    ext1 x
+    by_cases x in s <;> simp [*]
+  apply
+    Exists.elim
+      (this (t.filter fun x => x ∉ s) (t.filter fun x => x in s) (by simp [Set.subset_def])
+        (by simp +contextual [Set.ext_iff]) (by rwa [eq]))
+  intro u h
+  exact
+    ⟨u, Subset.trans h.1 (by simp +contextual [subset_def, or_imp]),
+      h.2.1, by simp only [h.2.2, eq]⟩
 
 Depends on / 依赖: Finset, Finset.induction_on, Submodule, classical, eq_of_linearIndepOn_id_of_span_subtype, induction_on, subseteq
 -/

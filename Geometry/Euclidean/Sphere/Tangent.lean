@@ -362,7 +362,8 @@ lemma IsTangentAt.eq_orthRadius_of_finrank_add_one_eq
   have hp : p != s.center := fun h => (h ▸ s.center_mem_iff).not.2 hr ht.mem_sphere
   rw [← finrank_orthRadius hp]; rw [Nat.add_right_cancel_iff] at hfr
   exact eq_of_direction_eq_of_nonempty_of_le
-    (Submodule.eq_of
+    (Submodule.eq_of_le_of_finrank_eq (direction_le ht.le_orthRadius) hfr) ⟨p, ht.mem_space⟩
+    ht.le_orthRadius
 
 中文:
 引理 是TangentAt.eq_orthRadius_of_finrank_add_one_eq
@@ -372,7 +373,8 @@ lemma IsTangentAt.eq_orthRadius_of_finrank_add_one_eq
   have hp : p != s.center := fun h => (h ▸ s.center_mem_iff).not.2 hr ht.mem_sphere
   rw [← finrank_orthRadius hp]; rw [Nat.add_right_cancel_iff] at hfr
   exact eq_of_direction_eq_of_nonempty_of_le
-    (Submodule.eq_of
+    (Submodule.eq_of_le_of_finrank_eq (direction_le ht.le_orthRadius) hfr) ⟨p, ht.mem_space⟩
+    ht.le_orthRadius
 
 Depends on / 依赖: FiniteDimensional, Module, Module.finite_of_finrank_eq_succ, Nat.add_right_cancel_iff, Submodule, Submodule.eq_of_le_of_finrank_eq, add_right_cancel_iff, center, center_mem_iff, direction_le, eq_of_direction_eq_of_nonempty_of_le, eq_of_le_of_finrank_eq, finite_of_finrank_eq_succ, finrank_orthRadius, hfr.symm, ht.le_orthRadius, ht.mem_space, ht.mem_sphere, le_orthRadius, mem_space
 -/
@@ -527,7 +529,7 @@ lemma IsTangent.infDist_eq_radius
     have : Nonempty as := ⟨⟨p, h.mem_space⟩⟩
     refine le_ciInf fun x => ?_
     rw [dist_comm]
-    exact h.isTangent.radius_l
+    exact h.isTangent.radius_le_dist_center x.property
 
 中文:
 引理 IsTangent.infDist_eq_radius
@@ -541,7 +543,7 @@ lemma IsTangent.infDist_eq_radius
     have : Nonempty as := ⟨⟨p, h.mem_space⟩⟩
     refine le_ciInf fun x => ?_
     rw [dist_comm]
-    exact h.isTangent.radius_l
+    exact h.isTangent.radius_le_dist_center x.property
 
 Depends on / 依赖: Metric, Metric.infDist_eq_iInf, Metric.infDist_le_dist_of_mem, Nonempty, convert, dist_comm, h.isTangent.radius_le_dist_center, h.mem_space, h.mem_sphere, infDist_eq_iInf, infDist_le_dist_of_mem, isTangent, le_antisymm, le_ciInf, mem_space, mem_sphere, property, radius_le_dist_center, x.property
 -/
@@ -569,7 +571,8 @@ lemma dist_orthogonalProjection_eq_radius_iff_isTangentAt
     · rwa [mem_sphere']
     · rw [mem_orthRadius_iff_inner_left]
       exact orthogonalProjection_vsub_mem_direction_orthogonal as s.center _
-        (vsub_orthogonalProjection_mem_direction s.center h
+        (vsub_orthogonalProjection_mem_direction s.center hp)
+  · rw [dist_orthogonalProjection_eq_infDist, h.isTangent.infDist_eq_radius]
 
 中文:
 引理 dist_orthogonalProjection_eq_radius_iff_isTangentAt
@@ -580,7 +583,8 @@ lemma dist_orthogonalProjection_eq_radius_iff_isTangentAt
     · rwa [mem_sphere']
     · rw [mem_orthRadius_iff_inner_left]
       exact orthogonalProjection_vsub_mem_direction_orthogonal as s.center _
-        (vsub_orthogonalProjection_mem_direction s.center h
+        (vsub_orthogonalProjection_mem_direction s.center hp)
+  · rw [dist_orthogonalProjection_eq_infDist, h.isTangent.infDist_eq_radius]
 
 Depends on / 依赖: center, dist_orthogonalProjection_eq_infDist, h.isTangent.infDist_eq_radius, infDist_eq_radius, isTangent, mem_orthRadius_iff_inner_left, mem_sphere, orthogonalProjection_mem, orthogonalProjection_vsub_mem_direction_orthogonal, s.center, vsub_orthogonalProjection_mem_direction
 -/
@@ -685,7 +689,28 @@ lemma IsTangent.eq_orthRadius_or_eq_orthRadius_pointReflection_of_parallel_orthR
   rcases eq_or_ne s.radius 0 with hrad | hrad
   · rw [mem_sphere, hrad, dist_eq_zero] at hp hqs
     rw [hp]; rw [orthRadius_center] at hpar ⊢
- 
+    rw [hqs]; rw [orthRadius_center] at hqo
+    exact .inl (eq_of_direction_eq_of_nonempty_of_le hpar.direction_eq ⟨q, hqas⟩ hqo)
+  obtain rfl : as = s.orthRadius q := by
+    refine eq_of_direction_eq_of_nonempty_of_le ?_ ⟨q, hqas⟩ hqo
+    rw [hpar.direction_eq]; rw [direction_orthRadius]; rw [direction_orthRadius]
+    congr 1
+    rcases eq_or_ne r 0 with rfl | hr0
+    · simp_all
+    · rw [hr, Submodule.span_singleton_smul_eq hr0.isUnit]
+  rcases eq_or_ne r 0 with rfl | hr0
+  · simp_all
+  · have hr' : ‖q -ᵥ s.center‖ = ‖r • (p -ᵥ s.center)‖ := by
+      rw [hr]
+    simp_rw [norm_smul, Real.norm_eq_abs, ← dist_eq_norm_vsub, mem_sphere.1 hp,
+      mem_sphere.1 hqs, right_eq_mul₀ hrad] at hr'
+    rcases eq_or_eq_neg_of_abs_eq hr' with rfl | rfl
+    · simp_all
+    · right
+      convert! rfl
+      rw [← eq_vadd_iff_vsub_eq] at hr
+      rw [hr]
+      simp [Equiv.pointReflection_apply]
 
 中文:
 引理 IsTangent.eq_orthRadius_or_eq_orthRadius_pointReflection_of_parallel_orthRadius
@@ -698,7 +723,28 @@ lemma IsTangent.eq_orthRadius_or_eq_orthRadius_pointReflection_of_parallel_orthR
   rcases eq_or_ne s.radius 0 with hrad | hrad
   · rw [mem_sphere, hrad, dist_eq_zero] at hp hqs
     rw [hp]; rw [orthRadius_center] at hpar ⊢
- 
+    rw [hqs]; rw [orthRadius_center] at hqo
+    exact .inl (eq_of_direction_eq_of_nonempty_of_le hpar.direction_eq ⟨q, hqas⟩ hqo)
+  obtain rfl : as = s.orthRadius q := by
+    refine eq_of_direction_eq_of_nonempty_of_le ?_ ⟨q, hqas⟩ hqo
+    rw [hpar.direction_eq]; rw [direction_orthRadius]; rw [direction_orthRadius]
+    congr 1
+    rcases eq_or_ne r 0 with rfl | hr0
+    · simp_all
+    · rw [hr, Submodule.span_singleton_smul_eq hr0.isUnit]
+  rcases eq_or_ne r 0 with rfl | hr0
+  · simp_all
+  · have hr' : ‖q -ᵥ s.center‖ = ‖r • (p -ᵥ s.center)‖ := by
+      rw [hr]
+    simp_rw [norm_smul, Real.norm_eq_abs, ← dist_eq_norm_vsub, mem_sphere.1 hp,
+      mem_sphere.1 hqs, right_eq_mul₀ hrad] at hr'
+    rcases eq_or_eq_neg_of_abs_eq hr' with rfl | rfl
+    · simp_all
+    · right
+      convert! rfl
+      rw [← eq_vadd_iff_vsub_eq] at hr
+      rw [hr]
+      simp [Equiv.pointReflection_apply]
 
 Depends on / 依赖: direction_eq, direction_le, direction_orthRadius_le_iff, dist_eq_zero, eq_of_direction_eq_of_nonempty_of_le, eq_or_ne, hpar.direction_eq, mem_sphere, orthRadius, orthRadius_center, radius, s.orthRadius, s.radius
 -/
@@ -1066,7 +1112,7 @@ lemma commonIntTangents_union_commonExtTangents
   · exact .inl h
   · refine .inr ?_
     rintro p hp
-    exact mt Sbtw.wbtw (h p h
+    exact mt Sbtw.wbtw (h p hp)
 
 中文:
 引理 common整数Tangents_union_commonExtTangents
@@ -1079,7 +1125,7 @@ lemma commonIntTangents_union_commonExtTangents
   · exact .inl h
   · refine .inr ?_
     rintro p hp
-    exact mt Sbtw.wbtw (h p h
+    exact mt Sbtw.wbtw (h p hp)
 -/
 @[simp] lemma commonIntTangents_union_commonExtTangents (s₁ s₂ : Sphere P) :
     s₁.commonIntTangents s₂ union s₁.commonExtTangents s₂ = s₁.commonTangents s₂ := by
@@ -1494,6 +1540,20 @@ lemma isExtTangent_iff_dist_center
   · rintro ⟨h, h₁, h₂⟩
     refine ⟨AffineMap.lineMap s₁.center s₂.center (s₁.radius / (s₁.radius + s₂.radius)), ?_⟩
     by_cases h0 : s₁.radius + s₂.radius = 0
+    · simp only [h0, div_zero, AffineMap.lineMap_apply_zero, isExtTangentAt_center_iff, mem_sphere]
+      exact ⟨by linarith, by linarith⟩
+    · refine ⟨?_, ?_, ?_⟩
+      · simp only [mem_sphere, dist_lineMap_left, norm_div, Real.norm_eq_abs, h, abs_of_nonneg h₁,
+          abs_of_nonneg (add_nonneg h₁ h₂)]
+        field
+      · simp only [mem_sphere, dist_lineMap_right, Real.norm_eq_abs, h]
+        rw [one_sub_div h0]; rw [add_sub_cancel_left]; rw [abs_div]; rw [abs_of_nonneg h₂]; rw [abs_of_nonneg (add_nonneg h₁ h₂)]
+        field
+      · simp only [wbtw_lineMap_iff]
+        refine .inr ⟨?_, ?_⟩
+        · positivity
+        · rw [div_le_one (by positivity)]
+          linarith
 
 中文:
 引理 isExtTangent_iff_dist_center
@@ -1506,6 +1566,20 @@ lemma isExtTangent_iff_dist_center
   · rintro ⟨h, h₁, h₂⟩
     refine ⟨AffineMap.lineMap s₁.center s₂.center (s₁.radius / (s₁.radius + s₂.radius)), ?_⟩
     by_cases h0 : s₁.radius + s₂.radius = 0
+    · simp only [h0, div_zero, AffineMap.lineMap_apply_zero, isExtTangentAt_center_iff, mem_sphere]
+      exact ⟨by linarith, by linarith⟩
+    · refine ⟨?_, ?_, ?_⟩
+      · simp only [mem_sphere, dist_lineMap_left, norm_div, Real.norm_eq_abs, h, abs_of_nonneg h₁,
+          abs_of_nonneg (add_nonneg h₁ h₂)]
+        field
+      · simp only [mem_sphere, dist_lineMap_right, Real.norm_eq_abs, h]
+        rw [one_sub_div h0]; rw [add_sub_cancel_left]; rw [abs_div]; rw [abs_of_nonneg h₂]; rw [abs_of_nonneg (add_nonneg h₁ h₂)]
+        field
+      · simp only [wbtw_lineMap_iff]
+        refine .inr ⟨?_, ?_⟩
+        · positivity
+        · rw [div_le_one (by positivity)]
+          linarith
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap, AffineMap.lineMap_apply_zero, Real.norm_eq, center, dist_center, dist_lineMap_left, div_zero, h.dist_center, isExtTangentAt_center_iff, lineMap, lineMap_apply_zero, mem_sphere, norm_div, norm_eq, radius, radius_nonneg_of_mem
 -/
@@ -1548,7 +1622,32 @@ lemma isIntTangent_iff_dist_center
     by_cases h0 : s₁.center = s₂.center
     · rw [h0, dist_self, eq_comm, sub_eq_zero, eq_comm] at h
       have hs : s₁ = s₂ := by
-     
+        ext <;> assumption
+      simp [hs, h₂]
+    · rw [dist_comm] at h
+      have ha : |s₂.radius - s₁.radius| = s₂.radius - s₁.radius := by
+        refine abs_of_nonneg ?_
+        rw [← h]
+        exact dist_nonneg
+      have hr0 : s₂.radius - s₁.radius != 0 := by
+        intro hr0
+        rw [hr0]; rw [dist_eq_zero] at h
+        exact h0 h.symm
+      refine ⟨AffineMap.lineMap s₂.center s₁.center (s₂.radius / (s₂.radius - s₁.radius)),
+              ?_, ?_, ?_⟩
+      · simp only [mem_sphere, dist_lineMap_right, Real.norm_eq_abs, h, one_sub_div hr0, abs_div,
+          sub_sub_cancel_left, abs_neg, abs_of_nonneg h₁, ha]
+        field
+      · simp only [mem_sphere, dist_lineMap_left, norm_div, Real.norm_eq_abs, h, ha,
+          abs_of_nonneg h₂]
+        field
+      · rw [wbtw_iff_left_eq_or_right_mem_image_Ici]
+        simp only [Ne.symm h0, Set.mem_image, Set.mem_Ici, AffineMap.lineMap_eq_lineMap_iff,
+          false_or, exists_eq_right]
+        rw [one_le_div]
+        · linarith
+        · rw [← h]
+          simp [Ne.symm h0]
 
 中文:
 引理 is整数Tangent_iff_dist_center
@@ -1562,7 +1661,32 @@ lemma isIntTangent_iff_dist_center
     by_cases h0 : s₁.center = s₂.center
     · rw [h0, dist_self, eq_comm, sub_eq_zero, eq_comm] at h
       have hs : s₁ = s₂ := by
-     
+        ext <;> assumption
+      simp [hs, h₂]
+    · rw [dist_comm] at h
+      have ha : |s₂.radius - s₁.radius| = s₂.radius - s₁.radius := by
+        refine abs_of_nonneg ?_
+        rw [← h]
+        exact dist_nonneg
+      have hr0 : s₂.radius - s₁.radius != 0 := by
+        intro hr0
+        rw [hr0]; rw [dist_eq_zero] at h
+        exact h0 h.symm
+      refine ⟨AffineMap.lineMap s₂.center s₁.center (s₂.radius / (s₂.radius - s₁.radius)),
+              ?_, ?_, ?_⟩
+      · simp only [mem_sphere, dist_lineMap_right, Real.norm_eq_abs, h, one_sub_div hr0, abs_div,
+          sub_sub_cancel_left, abs_neg, abs_of_nonneg h₁, ha]
+        field
+      · simp only [mem_sphere, dist_lineMap_left, norm_div, Real.norm_eq_abs, h, ha,
+          abs_of_nonneg h₂]
+        field
+      · rw [wbtw_iff_left_eq_or_right_mem_image_Ici]
+        simp only [Ne.symm h0, Set.mem_image, Set.mem_Ici, AffineMap.lineMap_eq_lineMap_iff,
+          false_or, exists_eq_right]
+        rw [one_le_div]
+        · linarith
+        · rw [← h]
+          simp [Ne.symm h0]
 
 Depends on / 依赖: abs_of_nonneg, center, dist_center, dist_comm, dist_nonneg, dist_self, eq_comm, h.dist_center, radius, radius_nonneg_of_mem, sub_eq_zero
 -/

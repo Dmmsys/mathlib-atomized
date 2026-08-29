@@ -1643,7 +1643,8 @@ definition arrowCongr
     simp only [AlgHom.comp_assoc, symm_comp]
     simp only [← AlgHom.comp_assoc, symm_comp, AlgHom.id_comp, AlgHom.comp_id]
   right_inv f := by
-    simp only [AlgHom.comp_assoc, com
+    simp only [AlgHom.comp_assoc, comp_symm]
+    simp only [← AlgHom.comp_assoc, comp_symm, AlgHom.id_comp, AlgHom.comp_id]
 
 中文:
 定义 arrowCongr
@@ -1654,7 +1655,8 @@ definition arrowCongr
     simp only [AlgHom.comp_assoc, symm_comp]
     simp only [← AlgHom.comp_assoc, symm_comp, AlgHom.id_comp, AlgHom.comp_id]
   right_inv f := by
-    simp only [AlgHom.comp_assoc, com
+    simp only [AlgHom.comp_assoc, comp_symm]
+    simp only [← AlgHom.comp_assoc, comp_symm, AlgHom.id_comp, AlgHom.comp_id]
 
 Depends on / 依赖: symm.toAlgHom, toAlgHom, toAlgHom.comp
 -/
@@ -3126,7 +3128,8 @@ definition algHomUnitsEquiv
       invFun := ↑(f⁻¹)
       left_inv := (fun x => show (↑(f⁻¹ * f) : S ->ₐ[R] S) x = x by rw [inv_mul_cancel]; rfl)
       right_inv := (fun x => show (↑(f * f⁻¹) : S ->ₐ[R] S) x = x by rw [mul_inv_cancel]; rfl) }
-  invFun := fun f => ⟨f, f.symm, f.comp_symm, f.s
+  invFun := fun f => ⟨f, f.symm, f.comp_symm, f.symm_comp⟩
+  map_mul' := fun _ _ => rfl
 
 中文:
 定义 algHomUnitsEquiv
@@ -3136,7 +3139,8 @@ definition algHomUnitsEquiv
       invFun := ↑(f⁻¹)
       left_inv := (fun x => show (↑(f⁻¹ * f) : S ->ₐ[R] S) x = x by rw [inv_mul_cancel]; rfl)
       right_inv := (fun x => show (↑(f * f⁻¹) : S ->ₐ[R] S) x = x by rw [mul_inv_cancel]; rfl) }
-  invFun := fun f => ⟨f, f.symm, f.comp_symm, f.s
+  invFun := fun f => ⟨f, f.symm, f.comp_symm, f.symm_comp⟩
+  map_mul' := fun _ _ => rfl
 -/
 def algHomUnitsEquiv (R S : Type*) [CommSemiring R] [Semiring S] [Algebra R S] :
     (S ->ₐ[R] S)ˣ ≃* (S ≃ₐ[R] S) where
@@ -3714,7 +3718,12 @@ definition LinearEquiv.algEquivOfRing
       = e.symm (x • e 1) := by rw [Algebra.smul_def, mul_comm]
     _ = x := by rw [map_smul, e.symm_apply_apply, smul_eq_mul, mul_one]
   right_inv x := calc
-    (algebraMap R A) (e.symm (e 1 * 
+    (algebraMap R A) (e.symm (e 1 * x))
+      = (algebraMap R A) (e.symm (e 1 * x)) * e (e.symm 1 • 1) := by
+          rw [smul_eq_mul]; rw [mul_one]; rw [e.apply_symm_apply]; rw [mul_one]
+    _ = x := by rw [map_smul, Algebra.smul_def, mul_left_comm, ← Algebra.smul_def _ (e 1),
+          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, ← mul_assoc, ← Algebra.smul_def,
+          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, one_mul]
 
 中文:
 定义 线性等价.algEquivOfRing
@@ -3725,7 +3734,12 @@ definition LinearEquiv.algEquivOfRing
       = e.symm (x • e 1) := by rw [Algebra.smul_def, mul_comm]
     _ = x := by rw [map_smul, e.symm_apply_apply, smul_eq_mul, mul_one]
   right_inv x := calc
-    (algebraMap R A) (e.symm (e 1 * 
+    (algebraMap R A) (e.symm (e 1 * x))
+      = (algebraMap R A) (e.symm (e 1 * x)) * e (e.symm 1 • 1) := by
+          rw [smul_eq_mul]; rw [mul_one]; rw [e.apply_symm_apply]; rw [mul_one]
+    _ = x := by rw [map_smul, Algebra.smul_def, mul_left_comm, ← Algebra.smul_def _ (e 1),
+          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, ← mul_assoc, ← Algebra.smul_def,
+          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, one_mul]
 -/
 @[simps] def LinearEquiv.algEquivOfRing
     {R A : Type*} [CommSemiring R] [CommSemiring A] [Algebra R A]

@@ -91,7 +91,17 @@ theorem finTrdeg_iff_trdeg
     rw [← trdeg_add_eq K E]; rw [trdeg_eq_zero_iff.2 alg]; rw [add_zero]
     rw [← essFiniteType_iff]; rw [Algebra.essFiniteType_iff_exists_subalgebra] at fg
     obtain ⟨S₀, M, fin, islocal⟩ := fg
-    rw [← trdeg_add_eq K S₀]; rw [trdeg_eq_zero_iff.2 islocal.i
+    rw [← trdeg_add_eq K S₀]; rw [trdeg_eq_zero_iff.2 islocal.isAlgebraic]; rw [add_zero]
+    exact trdeg_lt_aleph0_of_finiteType
+  · intro h
+    obtain ⟨s, hs⟩ := exists_isTranscendenceBasis K L
+    have fin : s.Finite := Cardinal.lt_aleph0_iff_set_finite.1 (hs.cardinalMk_eq_trdeg.trans_lt h)
+    constructor
+    refine ⟨adjoin K s, fg_adjoin_of_finite fin, ?_⟩
+    have alg := hs.isAlgebraic_field
+    rwa [Subtype.range_coe] at alg
+
+alias ⟨_, FinTrdeg.of_trdeg⟩ := finTrdeg_iff_trdeg
 
 中文:
 定理 finTrdeg_iff_trdeg
@@ -102,7 +112,17 @@ theorem finTrdeg_iff_trdeg
     rw [← trdeg_add_eq K E]; rw [trdeg_eq_zero_iff.2 alg]; rw [add_zero]
     rw [← essFiniteType_iff]; rw [Algebra.essFiniteType_iff_exists_subalgebra] at fg
     obtain ⟨S₀, M, fin, islocal⟩ := fg
-    rw [← trdeg_add_eq K S₀]; rw [trdeg_eq_zero_iff.2 islocal.i
+    rw [← trdeg_add_eq K S₀]; rw [trdeg_eq_zero_iff.2 islocal.isAlgebraic]; rw [add_zero]
+    exact trdeg_lt_aleph0_of_finiteType
+  · intro h
+    obtain ⟨s, hs⟩ := exists_isTranscendenceBasis K L
+    have fin : s.Finite := Cardinal.lt_aleph0_iff_set_finite.1 (hs.cardinalMk_eq_trdeg.trans_lt h)
+    constructor
+    refine ⟨adjoin K s, fg_adjoin_of_finite fin, ?_⟩
+    have alg := hs.isAlgebraic_field
+    rwa [Subtype.range_coe] at alg
+
+alias ⟨_, FinTrdeg.of_trdeg⟩ := finTrdeg_iff_trdeg
 
 Depends on / 依赖: Algebra, Algebra.essFiniteType_iff_exists_subalgebra, Cardinal, Cardinal.lt_aleph0_iff_set_finite, Finite, add_zero, cardinalMk_eq_trdeg, essFiniteType_iff, essFiniteType_iff_exists_subalgebra, exists_isTranscendenceBasis, hs.cardinalMk_eq_trdeg.trans_lt, isAlgebraic, islocal, islocal.isAlgebraic, lt_aleph0_iff_set_finite, s.Finite, trans_lt, trdeg_add_eq, trdeg_eq_zero_iff, trdeg_lt_aleph0_of_finiteType
 -/

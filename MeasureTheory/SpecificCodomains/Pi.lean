@@ -41,7 +41,7 @@ lemma memLp_pi_iff
     refine memLp_finsetSum' _ fun i _ => ?_
     exact (Isometry.single i).lipschitz.comp_memLp (by simp) (hf i)
 
-alias ⟨MemLp.eval, MemLp.of_eval⟩ 
+alias ⟨MemLp.eval, MemLp.of_eval⟩ := memLp_pi_iff
 
 中文:
 引理 memLp_pi_iff
@@ -54,7 +54,7 @@ alias ⟨MemLp.eval, MemLp.of_eval⟩
     refine memLp_finsetSum' _ fun i _ => ?_
     exact (Isometry.single i).lipschitz.comp_memLp (by simp) (hf i)
 
-alias ⟨MemLp.eval, MemLp.of_eval⟩ 
+alias ⟨MemLp.eval, MemLp.of_eval⟩ := memLp_pi_iff
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.eval, comp_memLp
 -/
@@ -139,7 +139,8 @@ lemma memLp_prod_iff
         (AddMonoidHom.inr E F) ∘ (fun x => (f x).snd) := by
       ext; all_goals simp
     rw [this]
-    exact MemLp.add (Iso
+    exact MemLp.add (Isometry.inl.lipschitz.comp_memLp (by simp) h.1)
+      (Isometry.inr.lipschitz.comp_memLp (by simp) h.2)
 
 中文:
 引理 memLp_prod_iff
@@ -150,7 +151,8 @@ lemma memLp_prod_iff
         (AddMonoidHom.inr E F) ∘ (fun x => (f x).snd) := by
       ext; all_goals simp
     rw [this]
-    exact MemLp.add (Iso
+    exact MemLp.add (Isometry.inl.lipschitz.comp_memLp (by simp) h.1)
+      (Isometry.inr.lipschitz.comp_memLp (by simp) h.2)
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.prod_fst.comp_memLp, comp_memLp, prod_fst
 -/

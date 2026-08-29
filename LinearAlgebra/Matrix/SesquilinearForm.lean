@@ -61,7 +61,9 @@ definition Matrix.toLinearMap₂'Aux
   mk₂'ₛₗ σ₁ σ₂ (fun (v : n -> R₁) (w : m -> R₂) => ∑ i, ∑ j, σ₂ (w j) • σ₁ (v i) • f i j)
     (fun _ _ _ => by simp only [Pi.add_apply, map_add, smul_add, sum_add_distrib, add_smul])
     (fun c v w => by
-      simp only [Pi.smul_ap
+      simp only [Pi.smul_apply, smul_sum, smul_eq_mul, σ₁.map_mul, ← smul_comm _ (σ₁ c), mul_smul])
+    (fun _ _ _ => by simp only [Pi.add_apply, map_add, add_smul, sum_add_distrib])
+    (fun _ v w => by simp only [Pi.smul_apply, smul_eq_mul, map_mul, mul_smul, smul_sum])
 
 中文:
 定义 矩阵.toLinearMap₂'Aux
@@ -70,7 +72,9 @@ definition Matrix.toLinearMap₂'Aux
   mk₂'ₛₗ σ₁ σ₂ (fun (v : n -> R₁) (w : m -> R₂) => ∑ i, ∑ j, σ₂ (w j) • σ₁ (v i) • f i j)
     (fun _ _ _ => by simp only [Pi.add_apply, map_add, smul_add, sum_add_distrib, add_smul])
     (fun c v w => by
-      simp only [Pi.smul_ap
+      simp only [Pi.smul_apply, smul_sum, smul_eq_mul, σ₁.map_mul, ← smul_comm _ (σ₁ c), mul_smul])
+    (fun _ _ _ => by simp only [Pi.add_apply, map_add, add_smul, sum_add_distrib])
+    (fun _ v w => by simp only [Pi.smul_apply, smul_eq_mul, map_mul, mul_smul, smul_sum])
 -/
 def Matrix.toLinearMap₂'Aux (f : Matrix n m N₂) : (n -> R₁) ->ₛₗ[σ₁] (m -> R₂) ->ₛₗ[σ₂] N₂ :=
   -- porting note: we don't seem to have `∑ i j` as valid notation yet
@@ -95,7 +99,9 @@ theorem Matrix.toLinearMap₂'Aux_single
         (if j = j' then (1 : S₂) else (0 : S₂)) • f i' j') =
       f i j := by
     simp_rw [← Finset.smul_sum]
-    simp only [ite_smul, one_smul, zero_smul, sum_ite_eq, mem_univ, ↓red
+    simp only [ite_smul, one_smul, zero_smul, sum_ite_eq, mem_univ, ↓reduceIte]
+  rw [← this]
+  exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by aesop
 
 中文:
 定理 矩阵.toLinearMap₂'Aux_single
@@ -106,7 +112,9 @@ theorem Matrix.toLinearMap₂'Aux_single
         (if j = j' then (1 : S₂) else (0 : S₂)) • f i' j') =
       f i j := by
     simp_rw [← Finset.smul_sum]
-    simp only [ite_smul, one_smul, zero_smul, sum_ite_eq, mem_univ, ↓red
+    simp only [ite_smul, one_smul, zero_smul, sum_ite_eq, mem_univ, ↓reduceIte]
+  rw [← this]
+  exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by aesop
 -/
 theorem Matrix.toLinearMap₂'Aux_single (f : Matrix n m N₂) (i : n) (j : m) :
     f.toLinearMap₂'Aux σ₁ σ₂ (Pi.single i 1) (Pi.single j 1) = f i j := by
@@ -675,7 +683,19 @@ theorem LinearMap.toMatrix₂'_compl₁₂
   simp only [LinearMap.toMatrix₂'_apply, LinearMap.compl₁₂_apply, transpose_apply, Matrix.mul_apply,
     LinearMap.toMatrix', LinearEquiv.coe_mk, LinearMap.coe_mk, AddHom.coe_mk, sum_mul]
   rw [sum_comm]
-  conv_lhs => rw [← LinearMap.sum_repr_mul_repr_mul (Pi.basisFun R n) (Pi.basisFun 
+  conv_lhs => rw [← LinearMap.sum_repr_mul_repr_mul (Pi.basisFun R n) (Pi.basisFun R m) (l _) (r _)]
+  rw [Finsupp.sum_fintype]
+  · apply sum_congr rfl
+    rintro i' -
+    rw [Finsupp.sum_fintype]
+    · apply sum_congr rfl
+      rintro j' -
+      simp only [smul_eq_mul, Pi.basisFun_repr, mul_assoc, mul_comm, mul_left_comm,
+        Pi.basisFun_apply, of_apply]
+    · intros
+      simp only [zero_smul, smul_zero]
+  · intros
+    simp
 
 中文:
 定理 线性映射.toMatrix₂'_compl₁₂
@@ -685,7 +705,19 @@ theorem LinearMap.toMatrix₂'_compl₁₂
   simp only [LinearMap.toMatrix₂'_apply, LinearMap.compl₁₂_apply, transpose_apply, Matrix.mul_apply,
     LinearMap.toMatrix', LinearEquiv.coe_mk, LinearMap.coe_mk, AddHom.coe_mk, sum_mul]
   rw [sum_comm]
-  conv_lhs => rw [← LinearMap.sum_repr_mul_repr_mul (Pi.basisFun R n) (Pi.basisFun 
+  conv_lhs => rw [← LinearMap.sum_repr_mul_repr_mul (Pi.basisFun R n) (Pi.basisFun R m) (l _) (r _)]
+  rw [Finsupp.sum_fintype]
+  · apply sum_congr rfl
+    rintro i' -
+    rw [Finsupp.sum_fintype]
+    · apply sum_congr rfl
+      rintro j' -
+      simp only [smul_eq_mul, Pi.basisFun_repr, mul_assoc, mul_comm, mul_left_comm,
+        Pi.basisFun_apply, of_apply]
+    · intros
+      simp only [zero_smul, smul_zero]
+  · intros
+    simp
 -/
 theorem LinearMap.toMatrix₂'_compl₁₂ (B : (n -> R) ->ₗ[R] (m -> R) ->ₗ[R] R) (l : (n' -> R) ->ₗ[R] n -> R)
     (r : (m' -> R) ->ₗ[R] m -> R) :
@@ -1057,7 +1089,8 @@ theorem dotProduct_toMatrix₂_mulVec
     Finset.sum_apply, Pi.smul_apply, transpose_apply, toMatrix₂_apply, smul_eq_mul, mul_sum,
     Basis.equivFun_symm_apply, map_sum, map_smulₛₗ, coe_sum, LinearMap.smul_apply]
   rw [Finset.sum_comm]
- 
+  refine Finset.sum_congr rfl (fun i _ => Finset.sum_congr rfl fun j _ => ?_)
+  ring
 
 中文:
 定理 dotProduct_toMatrix₂_mulVec
@@ -1067,7 +1100,8 @@ theorem dotProduct_toMatrix₂_mulVec
     Finset.sum_apply, Pi.smul_apply, transpose_apply, toMatrix₂_apply, smul_eq_mul, mul_sum,
     Basis.equivFun_symm_apply, map_sum, map_smulₛₗ, coe_sum, LinearMap.smul_apply]
   rw [Finset.sum_comm]
- 
+  refine Finset.sum_congr rfl (fun i _ => Finset.sum_congr rfl fun j _ => ?_)
+  ring
 
 Depends on / 依赖: Basis.equivFun_symm_apply, Finset, Finset.sum_apply, Finset.sum_comm, Finset.sum_congr, Function, Function.comp_apply, Function.comp_def, LinearMap, LinearMap.smul_apply, Pi.smul_apply, coe_sum, comp_apply, comp_def, dotProduct, equivFun_symm_apply, map_sum, mulVec_eq_sum, mul_sum, op_smul_eq_smul
 -/
@@ -1092,7 +1126,8 @@ lemma apply_eq_dotProduct_toMatrix₂_mulVec
   suffices ∑ j, ∑ i, σ₂ (b₂.repr y j) * σ₁ (b₁.repr x i) * B (b₁ i) (b₂ j) =
            ∑ i, ∑ j, σ₁ (b₁.repr x i) * σ₂ (b₂.repr y j) * B (b₁ i) (b₂ j) by
     simpa [dotProduct, Matrix.mulVec_eq_sum, Finset.mul_sum, -Basis.sum_repr, ← mul_assoc]
-  sim
+  simp_rw [mul_comm (σ₂ _)]
+  exact Finset.sum_comm
 
 中文:
 引理 apply_eq_dotProduct_toMatrix₂_mulVec
@@ -1102,7 +1137,8 @@ lemma apply_eq_dotProduct_toMatrix₂_mulVec
   suffices ∑ j, ∑ i, σ₂ (b₂.repr y j) * σ₁ (b₁.repr x i) * B (b₁ i) (b₂ j) =
            ∑ i, ∑ j, σ₁ (b₁.repr x i) * σ₂ (b₂.repr y j) * B (b₁ i) (b₂ j) by
     simpa [dotProduct, Matrix.mulVec_eq_sum, Finset.mul_sum, -Basis.sum_repr, ← mul_assoc]
-  sim
+  simp_rw [mul_comm (σ₂ _)]
+  exact Finset.sum_comm
 
 Depends on / 依赖: Basis.sum_repr, Finset, Finset.mul_sum, Finset.sum_comm, Matrix, Matrix.mulVec_eq_sum, dotProduct, mulVec_eq_sum, mul_assoc, mul_comm, mul_sum, nth_rw, simp_rw, sum_comm, sum_repr
 -/
@@ -1364,7 +1400,15 @@ theorem LinearMap.toMatrix₂_compl₁₂
   rw [Finsupp.sum_fintype]
   · apply sum_congr rfl
     rintro i' -
-    rw [Finsupp.
+    rw [Finsupp.sum_fintype]
+    · apply sum_congr rfl
+      rintro j' -
+      simp only [smul_eq_mul, mul_assoc, mul_comm,
+        mul_left_comm]
+    · intros
+      simp only [zero_smul, smul_zero]
+  · intros
+    simp
 
 中文:
 定理 线性映射.toMatrix₂_compl₁₂
@@ -1378,7 +1422,15 @@ theorem LinearMap.toMatrix₂_compl₁₂
   rw [Finsupp.sum_fintype]
   · apply sum_congr rfl
     rintro i' -
-    rw [Finsupp.
+    rw [Finsupp.sum_fintype]
+    · apply sum_congr rfl
+      rintro j' -
+      simp only [smul_eq_mul, mul_assoc, mul_comm,
+        mul_left_comm]
+    · intros
+      simp only [zero_smul, smul_zero]
+  · intros
+    simp
 
 Depends on / 依赖: Finsupp, Finsupp.sum_fintype, LinearMap, LinearMap.sum_repr_mul_repr_mul, LinearMap.toMatrix, LinearMap.toMatrix_apply, Matrix, Matrix.mul_apply, conv_lhs, intros, mul_apply, mul_assoc, mul_comm, mul_left_comm, smul_eq_mul, smul_zero, sum_comm, sum_congr, sum_fintype, sum_mul
 -/
@@ -1659,7 +1711,11 @@ theorem isAdjointPair_toLinearMap₂'
     constructor <;> intro h
     · rw [h]
     · exact (LinearMap.toMatrix₂' R).injective h
-  simp_rw [h,
+  simp_rw [h, LinearMap.toMatrix₂'_comp, LinearMap.toMatrix₂'_compl₂,
+    LinearMap.toMatrix'_toLin', LinearMap.toMatrix'_toLinearMap₂']
+  rfl
+
+@[simp]
 
 中文:
 定理 isAdjointPair_toLinearMap₂'
@@ -1672,7 +1728,11 @@ theorem isAdjointPair_toLinearMap₂'
     constructor <;> intro h
     · rw [h]
     · exact (LinearMap.toMatrix₂' R).injective h
-  simp_rw [h,
+  simp_rw [h, LinearMap.toMatrix₂'_comp, LinearMap.toMatrix₂'_compl₂,
+    LinearMap.toMatrix'_toLin', LinearMap.toMatrix'_toLinearMap₂']
+  rfl
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, _comp, _toLin, injective, simp_rw, toMatrix
 -/
@@ -1707,7 +1767,9 @@ theorem isAdjointPair_toLinearMap₂
     constructor <;> intro h
     · rw [h]
     · exact (LinearMap.toMatrix₂ b₁ b₂).injective h
-  simp_rw [h, Lin
+  simp_rw [h, LinearMap.toMatrix₂_comp b₂ b₂, LinearMap.toMatrix₂_compl₂ b₁ b₁,
+    LinearMap.toMatrix_toLin, LinearMap.toMatrix₂_toLinearMap₂]
+  rfl
 
 中文:
 定理 isAdjointPair_toLinearMap₂
@@ -1720,7 +1782,9 @@ theorem isAdjointPair_toLinearMap₂
     constructor <;> intro h
     · rw [h]
     · exact (LinearMap.toMatrix₂ b₁ b₂).injective h
-  simp_rw [h, Lin
+  simp_rw [h, LinearMap.toMatrix₂_comp b₂ b₂, LinearMap.toMatrix₂_compl₂ b₁ b₁,
+    LinearMap.toMatrix_toLin, LinearMap.toMatrix₂_toLinearMap₂]
+  rfl
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, LinearMap.toMatrix_toLin, injective, simp_rw, toMatrix_toLin
 -/
@@ -1754,7 +1818,16 @@ theorem Matrix.isAdjointPair_equiv
   let y := J * P * A₂
   suffices x * u = v * y ↔ v⁻¹ * x = y * u⁻¹ by
     dsimp only [Matrix.IsAdjointPair]
-    simp only [Matri
+    simp only [Matrix.transpose_mul]
+    simp only [← mul_assoc, P.transpose_nonsing_inv]
+    convert! this using 2
+    · rw [mul_assoc, mul_assoc, ← mul_assoc J]
+      rfl
+    · rw [mul_assoc, mul_assoc, ← mul_assoc _ _ J]
+      rfl
+  rw [Units.eq_mul_inv_iff_mul_eq]
+  conv_rhs => rw [mul_assoc]
+  rw [v.inv_mul_eq_iff_eq_mul]
 
 中文:
 定理 矩阵.isAdjointPair_equiv
@@ -1767,7 +1840,16 @@ theorem Matrix.isAdjointPair_equiv
   let y := J * P * A₂
   suffices x * u = v * y ↔ v⁻¹ * x = y * u⁻¹ by
     dsimp only [Matrix.IsAdjointPair]
-    simp only [Matri
+    simp only [Matrix.transpose_mul]
+    simp only [← mul_assoc, P.transpose_nonsing_inv]
+    convert! this using 2
+    · rw [mul_assoc, mul_assoc, ← mul_assoc J]
+      rfl
+    · rw [mul_assoc, mul_assoc, ← mul_assoc _ _ J]
+      rfl
+  rw [Units.eq_mul_inv_iff_mul_eq]
+  conv_rhs => rw [mul_assoc]
+  rw [v.inv_mul_eq_iff_eq_mul]
 
 Depends on / 依赖: IsAdjointPair, IsUnit, Matrix, Matrix.IsAdjointPair, Matrix.transpose_mul, P.det, P.isUnit_det_transpose, P.isUnit_iff_isUnit_det.mp, P.nonsingInvUnit, P.transpose_nonsing_inv, Units.eq_mul_inv_iff_mul_eq, convert, eq_mul_inv_iff_mul_eq, isUnit_det_transpose, isUnit_iff_isUnit_det, mul_assoc, nonsingInvUnit, transpose_mul, transpose_nonsing_inv
 -/

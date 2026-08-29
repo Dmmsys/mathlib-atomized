@@ -119,14 +119,16 @@ definition PInftyToNormalizedMooreComplex
   signature: (X : SimplicialObject A)
   body: ChainComplex.ofHom
     (fun n => factorThru _ _ (factors_normalizedMooreComplex_PInfty n)) fun n => by
-    rw [← cancel_mono (NormalizedMooreComplex.objX X n).arrow]; rw [assoc]; rw [assoc]; rw [factorThru_arrow]; rw [← inclusionOfMooreComplexMap_f]; rw [NormalizedMooreComplex.obj_d]; rw [ChainCompl
+    rw [← cancel_mono (NormalizedMooreComplex.objX X n).arrow]; rw [assoc]; rw [assoc]; rw [factorThru_arrow]; rw [← inclusionOfMooreComplexMap_f]; rw [NormalizedMooreComplex.obj_d]; rw [ChainComplex.of_d]; rw [← normalizedMooreComplex_objD]; rw [← (inclusionOfMooreComplexMap X).comm (n + 1) n]; rw [inclusionOfMooreComplexMap_f]; rw [factorThru_arrow_assoc]; rw [alternatingFaceMapComplex_obj_d]; rw [← alternatingFaceMapComplex_obj_d]
+    exact PInfty.comm (n + 1) n
 
 中文:
 定义 PInftyToNormalizedMooreComplex
   签名: (X : SimplicialObject A)
   定义体: ChainComplex.ofHom
     (fun n => factorThru _ _ (factors_normalizedMooreComplex_PInfty n)) fun n => by
-    rw [← cancel_mono (NormalizedMooreComplex.objX X n).arrow]; rw [assoc]; rw [assoc]; rw [factorThru_arrow]; rw [← inclusionOfMooreComplexMap_f]; rw [NormalizedMooreComplex.obj_d]; rw [ChainCompl
+    rw [← cancel_mono (NormalizedMooreComplex.objX X n).arrow]; rw [assoc]; rw [assoc]; rw [factorThru_arrow]; rw [← inclusionOfMooreComplexMap_f]; rw [NormalizedMooreComplex.obj_d]; rw [ChainComplex.of_d]; rw [← normalizedMooreComplex_objD]; rw [← (inclusionOfMooreComplexMap X).comm (n + 1) n]; rw [inclusionOfMooreComplexMap_f]; rw [factorThru_arrow_assoc]; rw [alternatingFaceMapComplex_obj_d]; rw [← alternatingFaceMapComplex_obj_d]
+    exact PInfty.comm (n + 1) n
 
 Depends on / 依赖: ChainComplex, ChainComplex.ofHom, ChainComplex.of_d, NormalizedMooreComplex, NormalizedMooreComplex.objX, NormalizedMooreComplex.obj_d, alternatingFaceMapComplex_obj_d, cancel_mono, factorThru, factorThru_arrow, factorThru_arrow_assoc, factors_normalizedMooreComplex_PInfty, inclusionOfMooreComplexMap, inclusionOfMooreComplexMap_f, normalizedMooreComplex_objD, obj_d, of_d
 -/
@@ -317,7 +319,15 @@ definition N₁_iso_normalizedMooreComplex_comp_toKaroubi
   hom_inv_id := by
     ext X : 3
     simp only [PInftyToNormalizedMooreComplex_comp_inclusionOfMooreComplexMap,
-      NatTrans.comp_app, Karoubi.comp_f, N₁_obj_p, NatT
+      NatTrans.comp_app, Karoubi.comp_f, N₁_obj_p, NatTrans.id_app, Karoubi.id_f]
+  inv_hom_id := by
+    ext X : 3
+    rw [← cancel_mono (inclusionOfMooreComplexMap X)]
+    simp only [NatTrans.comp_app, Karoubi.comp_f, assoc, NatTrans.id_app, Karoubi.id_f,
+      PInftyToNormalizedMooreComplex_comp_inclusionOfMooreComplexMap,
+      inclusionOfMooreComplexMap_comp_PInfty]
+    dsimp only [Functor.comp_obj, toKaroubi]
+    rw [id_comp]
 
 中文:
 定义 N₁_iso_normalizedMooreComplex_comp_toKaroubi
@@ -328,7 +338,15 @@ definition N₁_iso_normalizedMooreComplex_comp_toKaroubi
   hom_inv_id := by
     ext X : 3
     simp only [PInftyToNormalizedMooreComplex_comp_inclusionOfMooreComplexMap,
-      NatTrans.comp_app, Karoubi.comp_f, N₁_obj_p, NatT
+      NatTrans.comp_app, Karoubi.comp_f, N₁_obj_p, NatTrans.id_app, Karoubi.id_f]
+  inv_hom_id := by
+    ext X : 3
+    rw [← cancel_mono (inclusionOfMooreComplexMap X)]
+    simp only [NatTrans.comp_app, Karoubi.comp_f, assoc, NatTrans.id_app, Karoubi.id_f,
+      PInftyToNormalizedMooreComplex_comp_inclusionOfMooreComplexMap,
+      inclusionOfMooreComplexMap_comp_PInfty]
+    dsimp only [Functor.comp_obj, toKaroubi]
+    rw [id_comp]
 
 Depends on / 依赖: Karoubi, Karoubi.comp_f, Karoubi.id_f, NatTrans, NatTrans.comp_app, NatTrans.id_app, PInftyToNormalizedMooreComplex, PInftyToNormalizedMooreComplex_com, PInftyToNormalizedMooreComplex_comp_inclusionOfMooreComplexMap, cancel_mono, comp_app, comp_f, hom_inv_id, id_app, id_f, inclusionOfMooreComplexMap, inv_hom_id
 -/

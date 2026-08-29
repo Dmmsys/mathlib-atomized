@@ -1090,6 +1090,9 @@ instance :
     top := ⊤
     le_top := fun _ _ _ => trivial
     inf := (· ⊓ ·)
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right
+    le_inf := fun _s _t₁ _t₂ h₁ h₂ _x hx => ⟨h₁ hx, h₂ hx⟩ }
 
 中文:
 实例 :
@@ -1102,6 +1105,9 @@ instance :
     top := ⊤
     le_top := fun _ _ _ => trivial
     inf := (· ⊓ ·)
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right
+    le_inf := fun _s _t₁ _t₂ h₁ h₂ _x hx => ⟨h₁ hx, h₂ hx⟩ }
 
 Depends on / 依赖: And.left, And.right, IsGLB.of_image, NonUnitalSubring, SetLike, SetLike.coe_subset_coe, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_bot, mem_bot.mp, of_image, zero_mem
 -/
@@ -1698,7 +1704,7 @@ theorem closure_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       neg_mem' := fun ⟨_, hpx⟩ => ⟨_, neg _ _ hpx⟩
       zero_mem' := ⟨_, zero⟩ }
-.elim fun
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 中文:
 定理 closure_induction
@@ -1709,7 +1715,7 @@ theorem closure_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       neg_mem' := fun ⟨_, hpx⟩ => ⟨_, neg _ _ hpx⟩
       zero_mem' := ⟨_, zero⟩ }
-.elim fun
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 Depends on / 依赖: NonUnitalSubring, add_mem, carrier, closure_le, mul_mem, neg_mem, subset_closure, zero_mem
 -/
@@ -1742,7 +1748,11 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
- 
+    | neg _ _ h => exact neg_left _ _ _ _ h
+  | zero => exact zero_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | neg _ _ h => exact neg_right _ _ _ _ h
 
 中文:
 定理 closure_induction₂
@@ -1754,7 +1764,11 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
- 
+    | neg _ _ h => exact neg_left _ _ _ _ h
+  | zero => exact zero_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | neg _ _ h => exact neg_right _ _ _ _ h
 
 Depends on / 依赖: add_left, add_right, closure_induction, mem_mem, mul_left, mul_right, neg_left, neg_right, zero_left, zero_right
 -/
@@ -1794,7 +1808,23 @@ theorem mem_closure_iff
     | add _ _ _ _ hx hy => exact add_mem hx hy
     | neg x _ hx => exact neg_mem hx
     | mul _ _ _hx _hy hx hy =>
-      clear 
+      clear _hx _hy
+      induction hx, hy using AddSubgroup.closure_induction₂ with
+      | mem _ _ hx hy => exact AddSubgroup.subset_closure (mul_mem hx hy)
+      | zero_left => simp
+      | zero_right => simp
+      | add_left _ _ _ _ _ _ h₁ h₂ => simpa [add_mul] using add_mem h₁ h₂
+      | add_right _ _ _ _ _ _ h₁ h₂ => simpa [mul_add] using add_mem h₁ h₂
+      | neg_left _ _ _ _ h => simpa [neg_mul] using neg_mem h
+      | neg_right _ _ _ _ h => simpa [mul_neg] using neg_mem h,
+  fun h => by
+    induction h using AddSubgroup.closure_induction with
+    | mem _ hx => induction hx using Subsemigroup.closure_induction with
+      | mem _ h => exact subset_closure h
+      | mul _ _ _ _ h₁ h₂ => exact mul_mem h₁ h₂
+    | zero => exact zero_mem _
+    | add _ _ _ _ h₁ h₂ => exact add_mem h₁ h₂
+    | neg _ _ h => exact neg_mem h⟩
 
 中文:
 定理 mem_closure_iff
@@ -1806,7 +1836,23 @@ theorem mem_closure_iff
     | add _ _ _ _ hx hy => exact add_mem hx hy
     | neg x _ hx => exact neg_mem hx
     | mul _ _ _hx _hy hx hy =>
-      clear 
+      clear _hx _hy
+      induction hx, hy using AddSubgroup.closure_induction₂ with
+      | mem _ _ hx hy => exact AddSubgroup.subset_closure (mul_mem hx hy)
+      | zero_left => simp
+      | zero_right => simp
+      | add_left _ _ _ _ _ _ h₁ h₂ => simpa [add_mul] using add_mem h₁ h₂
+      | add_right _ _ _ _ _ _ h₁ h₂ => simpa [mul_add] using add_mem h₁ h₂
+      | neg_left _ _ _ _ h => simpa [neg_mul] using neg_mem h
+      | neg_right _ _ _ _ h => simpa [mul_neg] using neg_mem h,
+  fun h => by
+    induction h using AddSubgroup.closure_induction with
+    | mem _ hx => induction hx using Subsemigroup.closure_induction with
+      | mem _ h => exact subset_closure h
+      | mul _ _ _ _ h₁ h₂ => exact mul_mem h₁ h₂
+    | zero => exact zero_mem _
+    | add _ _ _ _ h₁ h₂ => exact add_mem h₁ h₂
+    | neg _ _ h => exact neg_mem h⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.closure_induction, AddSubgroup.subset_closure, Subsemigroup, Subsemigroup.subset_closure, add_left, add_mem, add_mul, closure_induction, mul_mem, neg_mem, subset_closure, zero_left, zero_mem, zero_right
 -/
@@ -2490,7 +2536,8 @@ theorem mem_iSup_of_directed
   let U : NonUnitalSubring R :=
     NonUnitalSubring.mk' (⋃ i, (S i : Set R)) (⨆ i, (S i).toSubsemigroup) (⨆ i, (S i).toAddSubgroup)
       (Subsemigroup.coe_iSup_of_directed hS) (AddSubgroup.coe_iSup_of_directed hS)
-  suffices ⨆ i, S i <= U by simpa [U
+  suffices ⨆ i, S i <= U by simpa [U] using @this x
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 中文:
 定理 mem_iSup_of_directed
@@ -2500,7 +2547,8 @@ theorem mem_iSup_of_directed
   let U : NonUnitalSubring R :=
     NonUnitalSubring.mk' (⋃ i, (S i : Set R)) (⨆ i, (S i).toSubsemigroup) (⨆ i, (S i).toAddSubgroup)
       (Subsemigroup.coe_iSup_of_directed hS) (AddSubgroup.coe_iSup_of_directed hS)
-  suffices ⨆ i, S i <= U by simpa [U
+  suffices ⨆ i, S i <= U by simpa [U] using @this x
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.coe_iSup_of_directed, NonUnitalSubring, NonUnitalSubring.mk, Set.mem_iUnion, Subsemigroup, Subsemigroup.coe_iSup_of_directed, coe_iSup_of_directed, iSup_le, le_iSup, mem_iUnion, toAddSubgroup, toSubsemigroup
 -/
@@ -3076,7 +3124,7 @@ Subtype.ext
         let ⟨x', hx'⟩ := NonUnitalRingHom.mem_range.mp x.prop
         show f (g x) = x by rw [← hx', h x'] }
 
-@[
+@[simp]
 
 中文:
 定义 ofLeftInverse'
@@ -3090,7 +3138,7 @@ Subtype.ext
         let ⟨x', hx'⟩ := NonUnitalRingHom.mem_range.mp x.prop
         show f (g x) = x by rw [← hx', h x'] }
 
-@[
+@[simp]
 
 Depends on / 依赖: NonUnitalRingHom, NonUnitalRingHom.mem_range.mp, NonUnitalSubringClass, NonUnitalSubringClass.subtype, Subtype, Subtype.ext, f.range, f.rangeRestrict, invFun, left_inv, mem_range, rangeRestrict, right_inv, subtype, x.prop
 -/

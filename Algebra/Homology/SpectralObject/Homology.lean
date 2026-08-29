@@ -85,7 +85,11 @@ lemma dCokernelSequence_exact
   rw [assoc]; rw [zero_comp]; rw [X.map_ιE f₁ f₂ f₃ f₁ f₂ f₃₄ (fourδ₄Toδ₃ f₁ f₂ f₃ f₄ f₃₄)
     (threeδ₃Toδ₂ f₂ f₃ f₄ f₃₄) n₁ n₂ n₃] at hx₂'
   obtain ⟨A₁, π₁, _, x₁, hx₁⟩ :=
-    ((
+    ((X.sequenceΨ_exact f₂ f₃ f₄ _ rfl f₃₄ h₃₄ n₁ n₂).exact 1).exact_up_to_refinements
+      (x₂ ≫ X.ιE ..) (by simp [sequenceΨ, Precomp.map, hx₂'])
+  dsimp [sequenceΨ, Precomp.map] at hx₁
+  refine ⟨A₁, π₁, inferInstance, x₁ ≫ X.πE f₃ f₄ f₅ n₀ n₁ n₂, ?_⟩
+  rw [← cancel_mono (X.ιE ..)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [hx₁]; rw [πE_d_ιE ..]
 
 中文:
 引理 dCokernelSequence_exact
@@ -97,7 +101,11 @@ lemma dCokernelSequence_exact
   rw [assoc]; rw [zero_comp]; rw [X.map_ιE f₁ f₂ f₃ f₁ f₂ f₃₄ (fourδ₄Toδ₃ f₁ f₂ f₃ f₄ f₃₄)
     (threeδ₃Toδ₂ f₂ f₃ f₄ f₃₄) n₁ n₂ n₃] at hx₂'
   obtain ⟨A₁, π₁, _, x₁, hx₁⟩ :=
-    ((
+    ((X.sequenceΨ_exact f₂ f₃ f₄ _ rfl f₃₄ h₃₄ n₁ n₂).exact 1).exact_up_to_refinements
+      (x₂ ≫ X.ιE ..) (by simp [sequenceΨ, Precomp.map, hx₂'])
+  dsimp [sequenceΨ, Precomp.map] at hx₁
+  refine ⟨A₁, π₁, inferInstance, x₁ ≫ X.πE f₃ f₄ f₅ n₀ n₁ n₂, ?_⟩
+  rw [← cancel_mono (X.ιE ..)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [hx₁]; rw [πE_d_ιE ..]
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, X.dCokernelSequence, X.map_, X.sequence, dCokernelSequence, exact_iff_exact_up_to_refinements, exact_up_to_refinements, zero_comp
 -/
@@ -156,7 +164,12 @@ lemma dKernelSequence_exact
   obtain ⟨A₁, π₁, _, y₂, hy₂⟩ :=
     surjective_up_to_refinements_of_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂) x₂
   have hy₂' := hy₂ =≫ X.d f₁ f₂ f₃ f₄ f₅ n₀ n₁ n₂ n₃ ≫ X.ιE ..
-  simp only [assoc, reassoc_of% hx₂, zero_com
+  simp only [assoc, reassoc_of% hx₂, zero_comp, comp_zero, πE_d_ιE] at hy₂'
+  obtain ⟨A₂, π₂, _, y₁, hy₁⟩ :=
+    ((X.sequenceΨ_exact f₂ f₃ f₄ f₂₃ h₂₃ _ rfl n₁ n₂).exact 0).exact_up_to_refinements y₂ hy₂'.symm
+  refine ⟨A₂, π₂ ≫ π₁, inferInstance, y₁ ≫ X.πE f₂₃ f₄ f₅ n₀ n₁ n₂, ?_⟩
+  simp [sequenceΨ, hy₂, reassoc_of% hy₁, X.πE_map f₂₃ f₄ f₅ f₃ f₄ f₅ (fourδ₁Toδ₀ f₂ f₃ f₄ f₅ f₂₃)
+    (threeδ₁Toδ₀ f₂ f₃ f₄ f₂₃) n₀ n₁ n₂]
 
 中文:
 引理 dKernelSequence_exact
@@ -167,7 +180,12 @@ lemma dKernelSequence_exact
   obtain ⟨A₁, π₁, _, y₂, hy₂⟩ :=
     surjective_up_to_refinements_of_epi (X.πE f₃ f₄ f₅ n₀ n₁ n₂) x₂
   have hy₂' := hy₂ =≫ X.d f₁ f₂ f₃ f₄ f₅ n₀ n₁ n₂ n₃ ≫ X.ιE ..
-  simp only [assoc, reassoc_of% hx₂, zero_com
+  simp only [assoc, reassoc_of% hx₂, zero_comp, comp_zero, πE_d_ιE] at hy₂'
+  obtain ⟨A₂, π₂, _, y₁, hy₁⟩ :=
+    ((X.sequenceΨ_exact f₂ f₃ f₄ f₂₃ h₂₃ _ rfl n₁ n₂).exact 0).exact_up_to_refinements y₂ hy₂'.symm
+  refine ⟨A₂, π₂ ≫ π₁, inferInstance, y₁ ≫ X.πE f₂₃ f₄ f₅ n₀ n₁ n₂, ?_⟩
+  simp [sequenceΨ, hy₂, reassoc_of% hy₁, X.πE_map f₂₃ f₄ f₅ f₃ f₄ f₅ (fourδ₁Toδ₀ f₂ f₃ f₄ f₅ f₂₃)
+    (threeδ₁Toδ₀ f₂ f₃ f₄ f₂₃) n₀ n₁ n₂]
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, X.dKernelSequence, X.sequence, comp_zero, dKernelSequence, exact_iff_exact_up_to_refinements, reassoc_of, surjective_up_to_refinements_of_epi, zero_comp
 -/
@@ -264,7 +282,7 @@ definition dHomologyData
     (X.dShortComplex f₁ f₂ f₃ f₄ f₅ f₆ f₇ n₀ n₁ n₂ n₃ n₄)
     (X.dKernelSequence_exact f₁ f₂ f₃ f₄ f₅ f₂₃ h₂₃ n₁ n₂ n₃ n₄).fIsKernel
     (X.dCokernelSequence_exact f₃ f₄ f₅ f₆ f₇ f₅₆ h₅₆ n₀ n₁ n₂ n₃).gIsCokernel
-    (X.map_fourδ₁Toδ₀_EMap_fourδ₄Toδ₃ f
+    (X.map_fourδ₁Toδ₀_EMap_fourδ₄Toδ₃ f₂ f₃ f₄ f₅ f₆ f₂₃ h₂₃ f₅₆ h₅₆ n₁ n₂ n₃)
 
 中文:
 定义 dHomologyData
@@ -272,7 +290,7 @@ definition dHomologyData
     (X.dShortComplex f₁ f₂ f₃ f₄ f₅ f₆ f₇ n₀ n₁ n₂ n₃ n₄)
     (X.dKernelSequence_exact f₁ f₂ f₃ f₄ f₅ f₂₃ h₂₃ n₁ n₂ n₃ n₄).fIsKernel
     (X.dCokernelSequence_exact f₃ f₄ f₅ f₆ f₇ f₅₆ h₅₆ n₀ n₁ n₂ n₃).gIsCokernel
-    (X.map_fourδ₁Toδ₀_EMap_fourδ₄Toδ₃ f
+    (X.map_fourδ₁Toδ₀_EMap_fourδ₄Toδ₃ f₂ f₃ f₄ f₅ f₆ f₂₃ h₂₃ f₅₆ h₅₆ n₁ n₂ n₃)
 
 Depends on / 依赖: HomologyData, ShortComplex, ShortComplex.HomologyData.ofEpiMonoFactorisation, X.dCokernelSequence_exact, X.dKernelSequence_exact, X.dShortComplex, X.map_four, dCokernelSequence_exact, dKernelSequence_exact, dShortComplex, fIsKernel, gIsCokernel, ofEpiMonoFactorisation
 -/

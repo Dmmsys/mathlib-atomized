@@ -346,7 +346,37 @@ definition unitIso
                 simp only [HomologicalComplex.Hom.comm, HomologicalComplex.Hom.comm_assoc,
                   HomologicalComplex.p_idem] }
           comm := by
-           
+            ext n
+            dsimp
+            simp only [HomologicalComplex.p_idem] }
+      naturality := fun P Q φ => by
+        ext
+        dsimp
+        simp only [HomologicalComplex.comp_p_d,
+          HomologicalComplex.p_comp_d] }
+  inv :=
+    { app := fun P =>
+        { f :=
+            { f := fun n => P.p.f n
+              comm' := fun i j _ => by
+                dsimp
+                simp only [HomologicalComplex.Hom.comm, assoc, HomologicalComplex.p_idem] }
+          comm := by
+            ext n
+            dsimp
+            simp only [HomologicalComplex.p_idem] }
+      naturality := fun P Q φ => by
+        ext
+        dsimp
+        simp only [HomologicalComplex.comp_p_d, HomologicalComplex.p_comp_d] }
+  hom_inv_id := by
+    ext
+    dsimp
+    simp only [HomologicalComplex.p_idem]
+  inv_hom_id := by
+    ext
+    dsimp
+    simp only [HomologicalComplex.p_idem]
 
 中文:
 定义 unitIso
@@ -359,7 +389,37 @@ definition unitIso
                 simp only [HomologicalComplex.Hom.comm, HomologicalComplex.Hom.comm_assoc,
                   HomologicalComplex.p_idem] }
           comm := by
-           
+            ext n
+            dsimp
+            simp only [HomologicalComplex.p_idem] }
+      naturality := fun P Q φ => by
+        ext
+        dsimp
+        simp only [HomologicalComplex.comp_p_d,
+          HomologicalComplex.p_comp_d] }
+  inv :=
+    { app := fun P =>
+        { f :=
+            { f := fun n => P.p.f n
+              comm' := fun i j _ => by
+                dsimp
+                simp only [HomologicalComplex.Hom.comm, assoc, HomologicalComplex.p_idem] }
+          comm := by
+            ext n
+            dsimp
+            simp only [HomologicalComplex.p_idem] }
+      naturality := fun P Q φ => by
+        ext
+        dsimp
+        simp only [HomologicalComplex.comp_p_d, HomologicalComplex.p_comp_d] }
+  hom_inv_id := by
+    ext
+    dsimp
+    simp only [HomologicalComplex.p_idem]
+  inv_hom_id := by
+    ext
+    dsimp
+    simp only [HomologicalComplex.p_idem]
 
 Depends on / 依赖: Homologi, HomologicalComplex, HomologicalComplex.Hom.comm, HomologicalComplex.Hom.comm_assoc, HomologicalComplex.comp_p_d, HomologicalComplex.p_comp_d, HomologicalComplex.p_idem, P.p.f, comm_assoc, comp_p_d, naturality, p_comp_d, p_idem
 -/

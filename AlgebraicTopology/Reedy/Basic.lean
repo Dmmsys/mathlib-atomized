@@ -87,7 +87,8 @@ definition op
   lt₂ f hf hf' := r.lt₁ f.unop hf (by
     simpa [MorphismProperty.identities_op_iff] using hf')
   nonempty_unique f :=
-    MorphismProperty.MapFactorizationData.opEquiv.uniqueCongr.n
+    MorphismProperty.MapFactorizationData.opEquiv.uniqueCongr.nonempty_congr.1
+      (r.nonempty_unique f.unop)
 
 中文:
 定义 op
@@ -98,7 +99,8 @@ definition op
   lt₂ f hf hf' := r.lt₁ f.unop hf (by
     simpa [MorphismProperty.identities_op_iff] using hf')
   nonempty_unique f :=
-    MorphismProperty.MapFactorizationData.opEquiv.uniqueCongr.n
+    MorphismProperty.MapFactorizationData.opEquiv.uniqueCongr.nonempty_congr.1
+      (r.nonempty_unique f.unop)
 -/
 protected def op : ReedyStructure W₂.op W₁.op α where
   deg := r.deg ∘ Opposite.unop
@@ -423,7 +425,10 @@ lemma degHom_le
   obtain ⟨Zg, g₁, g₂, hg₁, hg₂, fac_g, eq_g⟩ := r.exists_fac g
   obtain ⟨Zh, h₁, h₂, hh₁, hh₂, fac_h, eq_h⟩ := r.exists_fac (f₂ ≫ g₁)
   let factfg := MorphismProperty.MapFactorizationData.mk (f := f ≫ g) Zh (f₁ ≫ h₁) (h₂ ≫ g₂)
-    (by
+    (by simp [reassoc_of% fac_h, reassoc_of% fac_f, fac_g])
+    (W₁.comp_mem _ _ hf₁ hh₁) (W₂.comp_mem _ _ hh₂ hg₂)
+  rw [r.degHom_eq factfg]
+  exact (r.le₁ _ hh₁).trans (r.le₂ _ hf₂)
 
 中文:
 引理 degHom_le
@@ -433,7 +438,10 @@ lemma degHom_le
   obtain ⟨Zg, g₁, g₂, hg₁, hg₂, fac_g, eq_g⟩ := r.exists_fac g
   obtain ⟨Zh, h₁, h₂, hh₁, hh₂, fac_h, eq_h⟩ := r.exists_fac (f₂ ≫ g₁)
   let factfg := MorphismProperty.MapFactorizationData.mk (f := f ≫ g) Zh (f₁ ≫ h₁) (h₂ ≫ g₂)
-    (by
+    (by simp [reassoc_of% fac_h, reassoc_of% fac_f, fac_g])
+    (W₁.comp_mem _ _ hf₁ hh₁) (W₂.comp_mem _ _ hh₂ hg₂)
+  rw [r.degHom_eq factfg]
+  exact (r.le₁ _ hh₁).trans (r.le₂ _ hf₂)
 
 Depends on / 依赖: MapFactorizationData, MorphismProperty, MorphismProperty.MapFactorizationData.mk, comp_mem, degHom_eq, eq_f, eq_g, eq_h, exists_fac, fac_f, fac_g, fac_h, factfg, r.degHom_eq, r.exists_fac, r.le, reassoc_of
 -/

@@ -62,7 +62,8 @@ theorem limsup_trim
   ext1 a
   suffices h_meas_eq : μ { x | ¬f x <= a } = μ.trim hm { x | ¬f x <= a } by
     simp_rw [Set.mem_ofPred_eq, ae_iff, h_meas_eq]
-  
+  refine (trim_measurableSet_eq hm ?_).symm
+  exact (measurableSet_le hf measurable_const).compl
 
 中文:
 定理 limsup_trim
@@ -74,7 +75,8 @@ theorem limsup_trim
   ext1 a
   suffices h_meas_eq : μ { x | ¬f x <= a } = μ.trim hm { x | ¬f x <= a } by
     simp_rw [Set.mem_ofPred_eq, ae_iff, h_meas_eq]
-  
+  refine (trim_measurableSet_eq hm ?_).symm
+  exact (measurableSet_le hf measurable_const).compl
 
 Depends on / 依赖: Set.mem_ofPred_eq, ae_iff, h_meas_eq, h_set_eq, limsup_eq, measurableSet_le, measurable_const, mem_ofPred_eq, simp_rw, trim_measurableSet_eq
 -/

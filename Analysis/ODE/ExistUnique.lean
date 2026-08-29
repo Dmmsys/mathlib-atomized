@@ -60,7 +60,11 @@ theorem exists_eq_forall_mem_Icc_hasDerivWithinAt
   obtain ⟨α, hα⟩ := FunSpace.exists_isFixedPt_next hf hx
   refine ⟨α.compProj, by rw [FunSpace.compProj_val, ← hα, FunSpace.next_apply₀], fun t ht => ?_⟩
   apply hasDerivWithinAt_picard_Icc t₀.2 hf.continuousOn_uncurry
-    α.continuous_compProj.continuousOn (fun _ ht' => α.compProj_mem_closedBall
+    α.continuous_compProj.continuousOn (fun _ ht' => α.compProj_mem_closedBall hf.mul_max_le)
+.congr_of_mem _ ht x ht
+  intro t' ht'
+  nth_rw 1 [← hα]
+  rw [FunSpace.compProj_of_mem ht']; rw [FunSpace.next_apply]
 
 中文:
 定理 存在_eq_对任意_mem_Icc_hasDerivWithinAt
@@ -68,7 +72,11 @@ theorem exists_eq_forall_mem_Icc_hasDerivWithinAt
   obtain ⟨α, hα⟩ := FunSpace.exists_isFixedPt_next hf hx
   refine ⟨α.compProj, by rw [FunSpace.compProj_val, ← hα, FunSpace.next_apply₀], fun t ht => ?_⟩
   apply hasDerivWithinAt_picard_Icc t₀.2 hf.continuousOn_uncurry
-    α.continuous_compProj.continuousOn (fun _ ht' => α.compProj_mem_closedBall
+    α.continuous_compProj.continuousOn (fun _ ht' => α.compProj_mem_closedBall hf.mul_max_le)
+.congr_of_mem _ ht x ht
+  intro t' ht'
+  nth_rw 1 [← hα]
+  rw [FunSpace.compProj_of_mem ht']; rw [FunSpace.next_apply]
 
 Depends on / 依赖: FunSpace, FunSpace.compProj_of_mem, FunSpace.compProj_val, FunSpace.exists_isFixedPt_next, FunSpace.next_apply, compProj, compProj_mem_closedBall, compProj_of_mem, compProj_val, congr_of_mem, continuousOn, continuousOn_uncurry, continuous_compProj, continuous_compProj.continuousOn, exists_isFixedPt_next, hasDerivWithinAt_picard_Icc, hf.continuousOn_uncurry, hf.mul_max_le, mul_max_le, next_apply
 -/
@@ -118,7 +126,24 @@ theorem exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
   refine ⟨α', fun x hx => ⟨?_, fun t ht => ?_⟩, ?_⟩
   · rw [hα']
     beta_reduce
-    rw
+    rw [dif_pos hx]; rw [FunSpace.compProj_val]; rw [← hα]; rw [FunSpace.next_apply₀]
+  · rw [hα']
+    beta_reduce
+    rw [dif_pos hx]; rw [FunSpace.compProj_apply]
+    apply hasDerivWithinAt_picard_Icc t₀.2 hf.continuousOn_uncurry
+      (α x hx |>.continuous_compProj.continuousOn)
+      (fun _ ht' => α x hx |>.compProj_mem_closedBall hf.mul_max_le)
+.congr_of_mem _ ht x ht
+    intro t' ht'
+    nth_rw 1 [← hα]
+    rw [FunSpace.compProj_of_mem ht']; rw [FunSpace.next_apply]
+  · obtain ⟨L', h⟩ := FunSpace.exists_forall_closedBall_funSpace_dist_le_mul hf
+    refine ⟨L', fun t ht => LipschitzOnWith.of_dist_le_mul fun x hx y hy => ?_⟩
+    simp_rw [hα']
+    rw [dif_pos hx]; rw [dif_pos hy]; rw [FunSpace.compProj_apply]; rw [FunSpace.compProj_apply]; rw [← FunSpace.toContinuousMap_apply_eq_apply]; rw [← FunSpace.toContinuousMap_apply_eq_apply]
+    have : Nonempty (Icc tmin tmax) := ⟨t₀⟩
+    apply ContinuousMap.dist_le_iff_of_nonempty.mp
+    exact h x y hx hy (α x hx) (α y hy) (hα x hx) (hα y hy)
 
 中文:
 定理 存在_对任意_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
@@ -131,7 +156,24 @@ theorem exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
   refine ⟨α', fun x hx => ⟨?_, fun t ht => ?_⟩, ?_⟩
   · rw [hα']
     beta_reduce
-    rw
+    rw [dif_pos hx]; rw [FunSpace.compProj_val]; rw [← hα]; rw [FunSpace.next_apply₀]
+  · rw [hα']
+    beta_reduce
+    rw [dif_pos hx]; rw [FunSpace.compProj_apply]
+    apply hasDerivWithinAt_picard_Icc t₀.2 hf.continuousOn_uncurry
+      (α x hx |>.continuous_compProj.continuousOn)
+      (fun _ ht' => α x hx |>.compProj_mem_closedBall hf.mul_max_le)
+.congr_of_mem _ ht x ht
+    intro t' ht'
+    nth_rw 1 [← hα]
+    rw [FunSpace.compProj_of_mem ht']; rw [FunSpace.next_apply]
+  · obtain ⟨L', h⟩ := FunSpace.exists_forall_closedBall_funSpace_dist_le_mul hf
+    refine ⟨L', fun t ht => LipschitzOnWith.of_dist_le_mul fun x hx y hy => ?_⟩
+    simp_rw [hα']
+    rw [dif_pos hx]; rw [dif_pos hy]; rw [FunSpace.compProj_apply]; rw [FunSpace.compProj_apply]; rw [← FunSpace.toContinuousMap_apply_eq_apply]; rw [← FunSpace.toContinuousMap_apply_eq_apply]
+    have : Nonempty (Icc tmin tmax) := ⟨t₀⟩
+    apply ContinuousMap.dist_le_iff_of_nonempty.mp
+    exact h x y hx hy (α x hx) (α y hy) (hα x hx) (hα y hy)
 
 Depends on / 依赖: FunSpace, FunSpace.compProj_apply, FunSpace.compProj_val, FunSpace.exists_isFixedPt_next, FunSpace.next_apply, beta_reduce, classical, closedBall, compProj, compProj_apply, compProj_val, continuousOn_uncurry, dif_pos, exists_isFixedPt_next, hasDerivWithinAt_picard_Icc, hf.continuousOn_uncurry
 -/
@@ -239,7 +281,7 @@ theorem exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt
   refine ⟨r, hr, ε, hε, fun x hx => ?_⟩
   have ⟨α, hα1, hα2⟩ := (hpl t₀).exists_eq_forall_mem_Icc_hasDerivWithinAt hx
   refine ⟨α, hα1, fun t ht => ?_⟩
-.hasDerivAt (Icc_mem_nhds ht.1 ht.2) exact hα2 t (Ioo_subset_Icc_sel
+.hasDerivAt (Icc_mem_nhds ht.1 ht.2) exact hα2 t (Ioo_subset_Icc_self ht)
 
 中文:
 定理 存在_对任意_mem_closedBall_存在_eq_对任意_mem_Ioo_hasDerivAt
@@ -248,7 +290,7 @@ theorem exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt
   refine ⟨r, hr, ε, hε, fun x hx => ?_⟩
   have ⟨α, hα1, hα2⟩ := (hpl t₀).exists_eq_forall_mem_Icc_hasDerivWithinAt hx
   refine ⟨α, hα1, fun t ht => ?_⟩
-.hasDerivAt (Icc_mem_nhds ht.1 ht.2) exact hα2 t (Ioo_subset_Icc_sel
+.hasDerivAt (Icc_mem_nhds ht.1 ht.2) exact hα2 t (Ioo_subset_Icc_self ht)
 
 Depends on / 依赖: Icc_mem_nhds, Ioo_subset_Icc_self, IsPicardLindelof, IsPicardLindelof.of_contDiffAt_one, exists_eq_forall_mem_Icc_hasDerivWithinAt, hasDerivAt, of_contDiffAt_one
 -/
@@ -298,7 +340,10 @@ theorem exists_eventually_eq_hasDerivAt
   choose α hα using H
   refine ⟨fun (x : E) => if hx : x in closedBall x₀ r then α x hx else 0, ?_⟩
   rw [Filter.eventually_iff_exists_mem]
-  refine ⟨closedBall x₀ r ×ˢ Ioo (t₀ - ε) (t
+  refine ⟨closedBall x₀ r ×ˢ Ioo (t₀ - ε) (t₀ + ε), ?_, ?_⟩
+  · rw [Filter.prod_mem_prod_iff]
+    exact ⟨closedBall_mem_nhds x₀ hr, Ioo_mem_nhds (by linarith) (by linarith)⟩
+  · grind
 
 中文:
 定理 存在_eventually_eq_hasDerivAt
@@ -308,7 +353,10 @@ theorem exists_eventually_eq_hasDerivAt
   choose α hα using H
   refine ⟨fun (x : E) => if hx : x in closedBall x₀ r then α x hx else 0, ?_⟩
   rw [Filter.eventually_iff_exists_mem]
-  refine ⟨closedBall x₀ r ×ˢ Ioo (t₀ - ε) (t
+  refine ⟨closedBall x₀ r ×ˢ Ioo (t₀ - ε) (t₀ + ε), ?_, ?_⟩
+  · rw [Filter.prod_mem_prod_iff]
+    exact ⟨closedBall_mem_nhds x₀ hr, Ioo_mem_nhds (by linarith) (by linarith)⟩
+  · grind
 
 Depends on / 依赖: Filter, Filter.eventually_iff_exists_mem, Filter.prod_mem_prod_iff, Ioo_mem_nhds, classical, closedBall, closedBall_mem_nhds, eventually_iff_exists_mem, exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt, prod_mem_prod_iff
 -/
@@ -376,7 +424,29 @@ theorem ODE_solution_unique_of_mem_Icc_left
       constructor <;> linarith
     rw [← one_mul K]
     exact LipschitzWith.id.neg.comp_lipschitzOnWith (hv _ ht)
-  have hmt1
+  have hmt1 : MapsTo Neg.neg (Icc (-b) (-a)) (Icc a b) :=
+    fun _ ht => ⟨le_neg.mp ht.2, neg_le.mp ht.1⟩
+  have hmt2 : MapsTo Neg.neg (Ico (-b) (-a)) (Ioc a b) :=
+    fun _ ht => ⟨lt_neg.mp ht.2, neg_le.mp ht.1⟩
+  have hmt3 (t : Real) : MapsTo Neg.neg (Ici t) (Iic (-t)) :=
+fun _ ht' => mem_Iic.mpr neg_le_neg ht'
+  suffices EqOn (f ∘ Neg.neg) (g ∘ Neg.neg) (Icc (-b) (-a)) by
+    rw [eqOn_comp_right_iff] at this
+    convert this
+    simp
+  apply ODE_solution_unique_of_mem_Icc_right hv'
+    (hf.comp continuousOn_neg hmt1) _ (fun _ ht => hfs _ (hmt2 ht))
+    (hg.comp continuousOn_neg hmt1) _ (fun _ ht => hgs _ (hmt2 ht)) (by simp [hb])
+  · intro t ht
+    convert!
+      HasFDerivWithinAt.comp_hasDerivWithinAt t (hf' (-t) (hmt2 ht))
+        (hasDerivAt_neg t).hasDerivWithinAt (hmt3 t)
+    simp
+  · intro t ht
+    convert!
+      HasFDerivWithinAt.comp_hasDerivWithinAt t (hg' (-t) (hmt2 ht))
+        (hasDerivAt_neg t).hasDerivWithinAt (hmt3 t)
+    simp
 
 中文:
 定理 ODE_solution_unique_of_mem_Icc_left
@@ -388,7 +458,29 @@ theorem ODE_solution_unique_of_mem_Icc_left
       constructor <;> linarith
     rw [← one_mul K]
     exact LipschitzWith.id.neg.comp_lipschitzOnWith (hv _ ht)
-  have hmt1
+  have hmt1 : MapsTo Neg.neg (Icc (-b) (-a)) (Icc a b) :=
+    fun _ ht => ⟨le_neg.mp ht.2, neg_le.mp ht.1⟩
+  have hmt2 : MapsTo Neg.neg (Ico (-b) (-a)) (Ioc a b) :=
+    fun _ ht => ⟨lt_neg.mp ht.2, neg_le.mp ht.1⟩
+  have hmt3 (t : Real) : MapsTo Neg.neg (Ici t) (Iic (-t)) :=
+fun _ ht' => mem_Iic.mpr neg_le_neg ht'
+  suffices EqOn (f ∘ Neg.neg) (g ∘ Neg.neg) (Icc (-b) (-a)) by
+    rw [eqOn_comp_right_iff] at this
+    convert this
+    simp
+  apply ODE_solution_unique_of_mem_Icc_right hv'
+    (hf.comp continuousOn_neg hmt1) _ (fun _ ht => hfs _ (hmt2 ht))
+    (hg.comp continuousOn_neg hmt1) _ (fun _ ht => hgs _ (hmt2 ht)) (by simp [hb])
+  · intro t ht
+    convert!
+      HasFDerivWithinAt.comp_hasDerivWithinAt t (hf' (-t) (hmt2 ht))
+        (hasDerivAt_neg t).hasDerivWithinAt (hmt3 t)
+    simp
+  · intro t ht
+    convert!
+      HasFDerivWithinAt.comp_hasDerivWithinAt t (hg' (-t) (hmt2 ht))
+        (hasDerivAt_neg t).hasDerivWithinAt (hmt3 t)
+    simp
 
 Depends on / 依赖: LipschitzOnWith, LipschitzWith, LipschitzWith.id.neg.comp_lipschitzOnWith, MapsTo, Neg.neg, comp_lipschitzOnWith, le_neg, le_neg.mp, lt_neg, lt_neg.mp, neg_le, neg_le.mp, one_mul, replace
 -/
@@ -444,7 +536,15 @@ theorem ODE_solution_unique_of_mem_Icc
   · have hss : Ioc a t₀ subseteq Ioo a b := Ioc_subset_Ioo_right ht.2
     exact ODE_solution_unique_of_mem_Icc_left (fun t ht => hv t (hss ht))
       (hf.mono <| Icc_subset_Icc_right <| le_of_lt ht.2)
-      (fun _ ht
+      (fun _ ht' => (hf' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hfs _ (hss ht')))
+      (hg.mono <| Icc_subset_Icc_right <| le_of_lt ht.2)
+      (fun _ ht' => (hg' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hgs _ (hss ht'))) heq
+  · have hss : Ico t₀ b subseteq Ioo a b := Ico_subset_Ioo_left ht.1
+    exact ODE_solution_unique_of_mem_Icc_right (fun t ht => hv t (hss ht))
+      (hf.mono <| Icc_subset_Icc_left <| le_of_lt ht.1)
+      (fun _ ht' => (hf' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hfs _ (hss ht')))
+      (hg.mono <| Icc_subset_Icc_left <| le_of_lt ht.1)
+      (fun _ ht' => (hg' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hgs _ (hss ht'))) heq
 
 中文:
 定理 ODE_solution_unique_of_mem_Icc
@@ -454,7 +554,15 @@ theorem ODE_solution_unique_of_mem_Icc
   · have hss : Ioc a t₀ subseteq Ioo a b := Ioc_subset_Ioo_right ht.2
     exact ODE_solution_unique_of_mem_Icc_left (fun t ht => hv t (hss ht))
       (hf.mono <| Icc_subset_Icc_right <| le_of_lt ht.2)
-      (fun _ ht
+      (fun _ ht' => (hf' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hfs _ (hss ht')))
+      (hg.mono <| Icc_subset_Icc_right <| le_of_lt ht.2)
+      (fun _ ht' => (hg' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hgs _ (hss ht'))) heq
+  · have hss : Ico t₀ b subseteq Ioo a b := Ico_subset_Ioo_left ht.1
+    exact ODE_solution_unique_of_mem_Icc_right (fun t ht => hv t (hss ht))
+      (hf.mono <| Icc_subset_Icc_left <| le_of_lt ht.1)
+      (fun _ ht' => (hf' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hfs _ (hss ht')))
+      (hg.mono <| Icc_subset_Icc_left <| le_of_lt ht.1)
+      (fun _ ht' => (hg' _ (hss ht')).hasDerivWithinAt) (fun _ ht' => (hgs _ (hss ht'))) heq
 
 Depends on / 依赖: EqOn.union, Icc_subset_Icc_right, Icc_union_Icc_eq_Icc, Ioc_subset_Ioo_right, ODE_solution_unique_of_mem_Icc_left, hasDerivWithinAt, hf.mono, hg.mono, le_of_lt, subseteq
 -/
@@ -496,7 +604,24 @@ theorem ODE_solution_unique_of_mem_Ioo
       fun _ ht'' => ⟨lt_of_lt_of_le ht'.1 ht''.1, lt_of_le_of_lt ht''.2 ht.2⟩
     exact ODE_solution_unique_of_mem_Icc_left
       (fun t'' ht'' => hv t'' ((Ioc_subset_Icc_self.trans hss) ht''))
-      
+      (HasDerivAt.continuousOn fun _ ht'' => (hf _ <| hss ht'').1)
+      (fun _ ht'' => (hf _ <| hss <| Ioc_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hf _ <| hss <| Ioc_subset_Icc_self ht'').2)
+      (HasDerivAt.continuousOn fun _ ht'' => (hg _ <| hss ht'').1)
+      (fun _ ht'' => (hg _ <| hss <| Ioc_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hg _ <| hss <| Ioc_subset_Icc_self ht'').2) heq
+      ⟨le_rfl, le_of_lt h⟩
+  · have hss : Icc t₀ t' subseteq Ioo a b :=
+      fun _ ht'' => ⟨lt_of_lt_of_le ht.1 ht''.1, lt_of_le_of_lt ht''.2 ht'.2⟩
+    exact ODE_solution_unique_of_mem_Icc_right
+      (fun t'' ht'' => hv t'' ((Ico_subset_Icc_self.trans hss) ht''))
+      (HasDerivAt.continuousOn fun _ ht'' => (hf _ <| hss ht'').1)
+      (fun _ ht'' => (hf _ <| hss <| Ico_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hf _ <| hss <| Ico_subset_Icc_self ht'').2)
+      (HasDerivAt.continuousOn fun _ ht'' => (hg _ <| hss ht'').1)
+      (fun _ ht'' => (hg _ <| hss <| Ico_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hg _ <| hss <| Ico_subset_Icc_self ht'').2) heq
+      ⟨h, le_rfl⟩
 
 中文:
 定理 ODE_solution_unique_of_mem_Ioo
@@ -507,7 +632,24 @@ theorem ODE_solution_unique_of_mem_Ioo
       fun _ ht'' => ⟨lt_of_lt_of_le ht'.1 ht''.1, lt_of_le_of_lt ht''.2 ht.2⟩
     exact ODE_solution_unique_of_mem_Icc_left
       (fun t'' ht'' => hv t'' ((Ioc_subset_Icc_self.trans hss) ht''))
-      
+      (HasDerivAt.continuousOn fun _ ht'' => (hf _ <| hss ht'').1)
+      (fun _ ht'' => (hf _ <| hss <| Ioc_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hf _ <| hss <| Ioc_subset_Icc_self ht'').2)
+      (HasDerivAt.continuousOn fun _ ht'' => (hg _ <| hss ht'').1)
+      (fun _ ht'' => (hg _ <| hss <| Ioc_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hg _ <| hss <| Ioc_subset_Icc_self ht'').2) heq
+      ⟨le_rfl, le_of_lt h⟩
+  · have hss : Icc t₀ t' subseteq Ioo a b :=
+      fun _ ht'' => ⟨lt_of_lt_of_le ht.1 ht''.1, lt_of_le_of_lt ht''.2 ht'.2⟩
+    exact ODE_solution_unique_of_mem_Icc_right
+      (fun t'' ht'' => hv t'' ((Ico_subset_Icc_self.trans hss) ht''))
+      (HasDerivAt.continuousOn fun _ ht'' => (hf _ <| hss ht'').1)
+      (fun _ ht'' => (hf _ <| hss <| Ico_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hf _ <| hss <| Ico_subset_Icc_self ht'').2)
+      (HasDerivAt.continuousOn fun _ ht'' => (hg _ <| hss ht'').1)
+      (fun _ ht'' => (hg _ <| hss <| Ico_subset_Icc_self ht'').1.hasDerivWithinAt)
+      (fun _ ht'' => (hg _ <| hss <| Ico_subset_Icc_self ht'').2) heq
+      ⟨h, le_rfl⟩
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.continuousOn, Ioc_subset_Icc_self, Ioc_subset_Icc_self.trans, ODE_solution_unique_of_mem_Icc_left, continuousOn, hasDerivWithinAt, lt_of_le_of_lt, lt_of_lt_of_le, lt_or_ge, subseteq
 -/
@@ -554,7 +696,8 @@ theorem ODE_solution_unique_of_eventually
   refine ⟨ball t₀ ε, ball_mem_nhds _ hε, ?_⟩
   simp_rw [Real.ball_eq_Ioo] at *
   apply ODE_solution_unique_of_mem_Ioo (fun _ ht => (h _ ht).1)
-    (Real.ball_eq_Ioo t₀ ε ▸ mem_ball_se
+    (Real.ball_eq_Ioo t₀ ε ▸ mem_ball_self hε)
+    (fun _ ht => (h _ ht).2.1) (fun _ ht => (h _ ht).2.2) heq
 
 中文:
 定理 ODE_solution_unique_of_eventually
@@ -564,7 +707,8 @@ theorem ODE_solution_unique_of_eventually
   refine ⟨ball t₀ ε, ball_mem_nhds _ hε, ?_⟩
   simp_rw [Real.ball_eq_Ioo] at *
   apply ODE_solution_unique_of_mem_Ioo (fun _ ht => (h _ ht).1)
-    (Real.ball_eq_Ioo t₀ ε ▸ mem_ball_se
+    (Real.ball_eq_Ioo t₀ ε ▸ mem_ball_self hε)
+    (fun _ ht => (h _ ht).2.1) (fun _ ht => (h _ ht).2.2) heq
 
 Depends on / 依赖: Filter, Filter.eventuallyEq_iff_exists_mem, ODE_solution_unique_of_mem_Ioo, Real.ball_eq_Ioo, ball_eq_Ioo, ball_mem_nhds, eventuallyEq_iff_exists_mem, eventually_nhds_iff_ball, eventually_nhds_iff_ball.mp, hf.and, hv.and, mem_ball_self, simp_rw
 -/

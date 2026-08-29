@@ -61,7 +61,20 @@ definition liftAddHom
       match x, y, hxy with
       | _, _, .of_zero_left n =>
 (AddCon.ker_rel _).2 by simp_rw [map_zero, FreeAddMonoid.lift_eval_of, map_zero,
-          AddMonoidHom
+          AddMonoidHom.zero_apply]
+      | _, _, .of_zero_right m =>
+(AddCon.ker_rel _).2 by simp_rw [map_zero, FreeAddMonoid.lift_eval_of, map_zero]
+      | _, _, .of_add_left m₁ m₂ n =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, FreeAddMonoid.lift_eval_of, map_add,
+          AddMonoidHom.add_apply]
+      | _, _, .of_add_right m n₁ n₂ =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, FreeAddMonoid.lift_eval_of, map_add]
+      | _, _, .of_smul s m n =>
+(AddCon.ker_rel _).2 by rw [FreeAddMonoid.lift_eval_of, FreeAddMonoid.lift_eval_of, hf]
+      | _, _, .add_comm x y =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, add_comm]
+
+@[simp]
 
 中文:
 定义 liftAddHom
@@ -71,7 +84,20 @@ definition liftAddHom
       match x, y, hxy with
       | _, _, .of_zero_left n =>
 (AddCon.ker_rel _).2 by simp_rw [map_zero, FreeAddMonoid.lift_eval_of, map_zero,
-          AddMonoidHom
+          AddMonoidHom.zero_apply]
+      | _, _, .of_zero_right m =>
+(AddCon.ker_rel _).2 by simp_rw [map_zero, FreeAddMonoid.lift_eval_of, map_zero]
+      | _, _, .of_add_left m₁ m₂ n =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, FreeAddMonoid.lift_eval_of, map_add,
+          AddMonoidHom.add_apply]
+      | _, _, .of_add_right m n₁ n₂ =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, FreeAddMonoid.lift_eval_of, map_add]
+      | _, _, .of_smul s m n =>
+(AddCon.ker_rel _).2 by rw [FreeAddMonoid.lift_eval_of, FreeAddMonoid.lift_eval_of, hf]
+      | _, _, .add_comm x y =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, add_comm]
+
+@[simp]
 
 Depends on / 依赖: AddCon, AddCon.addConGen_le, AddCon.ker_rel, AddMonoidHom, AddMonoidHom.zero_apply, FreeAddMonoid, FreeAddMonoid.lift, FreeAddMonoid.lift_eval_of, TensorProduct, TensorProduct.Eqv, addConGen, addConGen_le, ker_rel, lift_eval_of, map_add, map_zero, of_add_left, of_zero_left, of_zero_right, simp_rw
 -/
@@ -973,7 +999,8 @@ map_add' := fun _ _ => LinearMap.ext by simp
   map_smul' s x := by
     induction x with
     | zero => simp
-    | add x y _ _ => sim
+    | add x y _ _ => simp_all
+    | tmul x y => simp [smul_tmul']
 
 中文:
 定义 mapOfCompatibleSMul
@@ -987,7 +1014,8 @@ map_add' := fun _ _ => LinearMap.ext by simp
   map_smul' s x := by
     induction x with
     | zero => simp
-    | add x y _ _ => sim
+    | add x y _ _ => simp_all
+    | tmul x y => simp [smul_tmul']
 
 Depends on / 依赖: LinearMap, LinearMap.ext, RingHom, RingHom.id, map_add, map_smul, smul_tmul
 -/
@@ -1154,6 +1182,8 @@ theorem neg_add_cancel
       unfold Neg.neg neg
       simp only
       rw [map_add]
+      abel
+    rw [hx]; rw [hy]; rw [add_zero]
 
 中文:
 定理 neg_add_cancel
@@ -1168,6 +1198,8 @@ theorem neg_add_cancel
       unfold Neg.neg neg
       simp only
       rw [map_add]
+      abel
+    rw [hx]; rw [hy]; rw [add_zero]
 -/
 protected theorem neg_add_cancel (x : M otimes[R] N) : -x + x = 0 :=
   x.induction_on
@@ -1193,7 +1225,8 @@ instance addCommGroup
   zsmul_succ' := by simp [add_comm, TensorProduct.add_smul]
   zsmul_neg' := fun n x => by
     change (-n.succ : Int) • x = -(((n : Int) + 1) • x)
-    rw [← zero_add (_ • x)]; rw [← TensorProduct.neg_add_cancel ((n.succ : Int) • x)]; rw
+    rw [← zero_add (_ • x)]; rw [← TensorProduct.neg_add_cancel ((n.succ : Int) • x)]; rw [add_assoc]; rw [← add_smul]; rw [← sub_eq_add_neg]; rw [sub_self]; rw [zero_smul]; rw [add_zero]
+    rfl
 
 中文:
 实例 addCommGroup
@@ -1203,7 +1236,8 @@ instance addCommGroup
   zsmul_succ' := by simp [add_comm, TensorProduct.add_smul]
   zsmul_neg' := fun n x => by
     change (-n.succ : Int) • x = -(((n : Int) + 1) • x)
-    rw [← zero_add (_ • x)]; rw [← TensorProduct.neg_add_cancel ((n.succ : Int) • x)]; rw
+    rw [← zero_add (_ • x)]; rw [← TensorProduct.neg_add_cancel ((n.succ : Int) • x)]; rw [add_assoc]; rw [← add_smul]; rw [← sub_eq_add_neg]; rw [sub_self]; rw [zero_smul]; rw [add_zero]
+    rfl
 
 Depends on / 依赖: TensorProduct, TensorProduct.neg_add_cancel, neg_add_cancel
 -/

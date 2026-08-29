@@ -178,7 +178,20 @@ definition galLift
   haveI H : forall (y : Algebra.algebraMapSubmonoid B A⁰),
       IsUnit (((algebraMap B₂ L₂).comp σ) (y : B)) := by
     rintro ⟨_, x, hx, rfl⟩
-    s
+    simpa only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, AlgHom.commutes,
+      isUnit_iff_ne_zero, ne_eq, map_eq_zero_iff _ (FaithfulSMul.algebraMap_injective _ _),
+      ← IsScalarTower.algebraMap_apply] using nonZeroDivisors.ne_zero hx
+  haveI H_eq : (IsLocalization.lift (S := L) H).comp (algebraMap K L) = (algebraMap K L₂) := by
+    apply IsLocalization.ringHom_ext A⁰
+    ext
+    simp only [RingHom.coe_comp, Function.comp_apply, ← IsScalarTower.algebraMap_apply A K L,
+      ← IsScalarTower.algebraMap_apply A K L₂,
+      IsScalarTower.algebraMap_apply A B L, IsScalarTower.algebraMap_apply A B₂ L₂,
+      IsLocalization.lift_eq, RingHom.coe_coe, AlgHom.commutes]
+  { IsLocalization.lift (S := L) H with commutes' := DFunLike.congr_fun H_eq }
+
+omit [IsIntegralClosure B₂ A L₂] in
+@[simp]
 
 中文:
 定义 galLift
@@ -189,7 +202,20 @@ definition galLift
   haveI H : forall (y : Algebra.algebraMapSubmonoid B A⁰),
       IsUnit (((algebraMap B₂ L₂).comp σ) (y : B)) := by
     rintro ⟨_, x, hx, rfl⟩
-    s
+    simpa only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, AlgHom.commutes,
+      isUnit_iff_ne_zero, ne_eq, map_eq_zero_iff _ (FaithfulSMul.algebraMap_injective _ _),
+      ← IsScalarTower.algebraMap_apply] using nonZeroDivisors.ne_zero hx
+  haveI H_eq : (IsLocalization.lift (S := L) H).comp (algebraMap K L) = (algebraMap K L₂) := by
+    apply IsLocalization.ringHom_ext A⁰
+    ext
+    simp only [RingHom.coe_comp, Function.comp_apply, ← IsScalarTower.algebraMap_apply A K L,
+      ← IsScalarTower.algebraMap_apply A K L₂,
+      IsScalarTower.algebraMap_apply A B L, IsScalarTower.algebraMap_apply A B₂ L₂,
+      IsLocalization.lift_eq, RingHom.coe_coe, AlgHom.commutes]
+  { IsLocalization.lift (S := L) H with commutes' := DFunLike.congr_fun H_eq }
+
+omit [IsIntegralClosure B₂ A L₂] in
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, Algebra, Algebra.algebraMapSubmonoid, FaithfulSMul, FaithfulSMul.algebraMap_injective, Function, Function.comp_apply, IsFractionRing, IsFractionRing.injective, IsIntegralClosure, IsIntegralClosure.isLocalization, IsScalarTower, IsScalarTower.algebraMap_apply, IsTorsionFree, IsTorsionFree.trans_faithfulSMul, IsUnit, RingHom, RingHom.coe_coe, RingHom.coe_comp
 -/
@@ -597,7 +623,7 @@ lemma prod_galRestrict_eq_norm
   apply IsIntegralClosure.algebraMap_injective B A L
   rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_eq A K L]
   simp only [map_prod, algebraMap_galRestrict_apply, IsIntegralClosure.algebraMap_mk',
-    Algebra.norm_eq_prod_automorphisms, RingHom.coe_comp, Function.comp_apply
+    Algebra.norm_eq_prod_automorphisms, RingHom.coe_comp, Function.comp_apply]
 
 中文:
 引理 prod_galRestrict_eq_norm
@@ -606,7 +632,7 @@ lemma prod_galRestrict_eq_norm
   apply IsIntegralClosure.algebraMap_injective B A L
   rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_eq A K L]
   simp only [map_prod, algebraMap_galRestrict_apply, IsIntegralClosure.algebraMap_mk',
-    Algebra.norm_eq_prod_automorphisms, RingHom.coe_comp, Function.comp_apply
+    Algebra.norm_eq_prod_automorphisms, RingHom.coe_comp, Function.comp_apply]
 
 Depends on / 依赖: Algebra, Algebra.norm, algebraMap
 -/
@@ -654,7 +680,7 @@ definition Algebra.intTraceAux
     ((((Algebra.trace K L).restrictScalars A).comp
       (IsScalarTower.toAlgHom A B L).toLinearMap).codRestrict
         (Subalgebra.toSubmodule <| integralClosure A K) (fun x => isIntegral_trace
-          (IsIntegral.algebraMap 
+          (IsIntegral.algebraMap (IsIntegralClosure.isIntegral A L x))))
 
 中文:
 定义 代数.intTraceAux
@@ -663,7 +689,7 @@ definition Algebra.intTraceAux
     ((((Algebra.trace K L).restrictScalars A).comp
       (IsScalarTower.toAlgHom A B L).toLinearMap).codRestrict
         (Subalgebra.toSubmodule <| integralClosure A K) (fun x => isIntegral_trace
-          (IsIntegral.algebraMap 
+          (IsIntegral.algebraMap (IsIntegralClosure.isIntegral A L x))))
 
 Depends on / 依赖: Algebra, Algebra.trace, IsIntegral, IsIntegral.algebraMap, IsIntegralClosure, IsIntegralClosure.equiv, IsIntegralClosure.isIntegral, IsScalarTower, IsScalarTower.toAlgHom, Subalgebra, Subalgebra.toSubmodule, algebraMap, codRestrict, integralClosure, isIntegral, isIntegral_trace, restrictScalars, toAlgHom, toLinearMap, toLinearMap.comp
 -/
@@ -714,7 +740,10 @@ definition Algebra.intTrace
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  haveI : IsLo
+  haveI : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  haveI : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
+  Algebra.intTraceAux A (FractionRing A) (FractionRing B) B
 
 中文:
 定义 代数.intTrace
@@ -724,7 +753,10 @@ definition Algebra.intTrace
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   haveI : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  haveI : IsLo
+  haveI : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  haveI : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
+  Algebra.intTraceAux A (FractionRing A) (FractionRing B) B
 
 Depends on / 依赖: FractionRing, IsIntegralClosure, IsIntegralClosure.of_isIntegrallyClosed, of_isIntegrallyClosed
 -/
@@ -753,7 +785,16 @@ lemma Algebra.algebraMap_intTrace
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  have : Is
+  have : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  have : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
+  have := IsIntegralClosure.isFractionRing_of_finite_extension A K L B
+  apply (FractionRing.algEquiv A K).symm.injective
+  rw [AlgEquiv.commutes]; rw [Algebra.intTrace]; rw [Algebra.map_intTraceAux]; rw [← AlgEquiv.commutes (FractionRing.algEquiv B L)]
+  apply Algebra.trace_eq_of_equiv_equiv (FractionRing.algEquiv A K).toRingEquiv
+    (FractionRing.algEquiv B L).toRingEquiv
+  ext
+  exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K) (FractionRing.algEquiv B L) _
 
 中文:
 引理 代数.algebraMap_intTrace
@@ -764,7 +805,16 @@ lemma Algebra.algebraMap_intTrace
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  have : Is
+  have : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  have : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
+  have := IsIntegralClosure.isFractionRing_of_finite_extension A K L B
+  apply (FractionRing.algEquiv A K).symm.injective
+  rw [AlgEquiv.commutes]; rw [Algebra.intTrace]; rw [Algebra.map_intTraceAux]; rw [← AlgEquiv.commutes (FractionRing.algEquiv B L)]
+  apply Algebra.trace_eq_of_equiv_equiv (FractionRing.algEquiv A K).toRingEquiv
+    (FractionRing.algEquiv B L).toRingEquiv
+  ext
+  exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K) (FractionRing.algEquiv B L) _
 
 Depends on / 依赖: FractionRing, IsIntegralClosure, IsIntegralClosure.of_isIntegrallyClosed, of_isIntegrallyClosed
 -/
@@ -798,7 +848,10 @@ lemma Algebra.algebraMap_intTrace_fractionRing
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  have : Is
+  have : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  have : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
+  exact Algebra.map_intTraceAux x
 
 中文:
 引理 代数.algebraMap_intTrace_fractionRing
@@ -809,7 +862,10 @@ lemma Algebra.algebraMap_intTrace_fractionRing
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  have : Is
+  have : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  have : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
+  exact Algebra.map_intTraceAux x
 
 Depends on / 依赖: FractionRing, IsIntegralClosure, IsIntegralClosure.of_isIntegrallyClosed, of_isIntegrallyClosed
 -/
@@ -842,7 +898,10 @@ lemma Algebra.intTrace_eq_trace
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  h
+  have : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  apply IsFractionRing.injective A (FractionRing A)
+  rw [Algebra.algebraMap_intTrace_fractionRing]; rw [Algebra.trace_localization A A⁰]
 
 中文:
 引理 代数.intTrace_eq_trace
@@ -855,7 +914,10 @@ lemma Algebra.intTrace_eq_trace
   -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
   have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
     isAlgebraic_of_isFractionRing A B ..
-  h
+  have : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  apply IsFractionRing.injective A (FractionRing A)
+  rw [Algebra.algebraMap_intTrace_fractionRing]; rw [Algebra.trace_localization A A⁰]
 
 Depends on / 依赖: FractionRing, IsIntegralClosure, IsIntegralClosure.of_isIntegrallyClosed, of_isIntegrallyClosed
 -/
@@ -890,7 +952,36 @@ lemma Algebra.intTrace_eq_of_isLocalization
   let K := FractionRing A
   let L := FractionRing B
   have : IsIntegralClosure B A L :=
-    IsIntegralClosure.of_i
+    IsIntegralClosure.of_isIntegrallyClosed _ _ _
+  -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
+  have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
+    isAlgebraic_of_isFractionRing A B ..
+  have : IsLocalization (algebraMapSubmonoid B A⁰) L :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  let f : Aₘ ->+* K := IsLocalization.map _ (T := A⁰) (RingHom.id A) hM
+  let := f.toAlgebra
+  have : IsScalarTower A Aₘ K := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M Aₘ K
+  let g : Bₘ ->+* L := IsLocalization.map _
+      (M := algebraMapSubmonoid B M) (T := algebraMapSubmonoid B A⁰)
+      (RingHom.id B) (Submonoid.monotone_map hM)
+  let := g.toAlgebra
+  have : IsScalarTower B Bₘ L := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := ((algebraMap K L).comp f).toAlgebra
+  have : IsScalarTower Aₘ K L := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower Aₘ Bₘ L := by
+    apply IsScalarTower.of_algebraMap_eq'
+    apply IsLocalization.ringHom_ext M
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra (R := Bₘ)]; rw [RingHom.comp_assoc]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq A B Bₘ]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← RingHom.comp_assoc]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization
+    (algebraMapSubmonoid B M) Bₘ L
+  have : FiniteDimensional K L := .of_isLocalization A B A⁰
+  have : IsIntegralClosure Bₘ Aₘ L :=
+    IsIntegralClosure.of_isIntegrallyClosed _ _ _
+  apply IsFractionRing.injective Aₘ K
+  rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.algebraMap_intTrace_fractionRing]; rw [Algebra.algebraMap_intTrace (L := L)]; rw [← IsScalarTower.algebraMap_apply]
 
 中文:
 引理 代数.intTrace_eq_of_isLocalization
@@ -901,7 +992,36 @@ lemma Algebra.intTrace_eq_of_isLocalization
   let K := FractionRing A
   let L := FractionRing B
   have : IsIntegralClosure B A L :=
-    IsIntegralClosure.of_i
+    IsIntegralClosure.of_isIntegrallyClosed _ _ _
+  -- TODO: How is this even supposed to fire? `R` and `S` cannot be inferred.
+  have : Algebra.IsAlgebraic (FractionRing A) (FractionRing B) :=
+    isAlgebraic_of_isFractionRing A B ..
+  have : IsLocalization (algebraMapSubmonoid B A⁰) L :=
+    IsIntegralClosure.isLocalization _ (FractionRing A) _ _
+  let f : Aₘ ->+* K := IsLocalization.map _ (T := A⁰) (RingHom.id A) hM
+  let := f.toAlgebra
+  have : IsScalarTower A Aₘ K := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M Aₘ K
+  let g : Bₘ ->+* L := IsLocalization.map _
+      (M := algebraMapSubmonoid B M) (T := algebraMapSubmonoid B A⁰)
+      (RingHom.id B) (Submonoid.monotone_map hM)
+  let := g.toAlgebra
+  have : IsScalarTower B Bₘ L := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := ((algebraMap K L).comp f).toAlgebra
+  have : IsScalarTower Aₘ K L := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower Aₘ Bₘ L := by
+    apply IsScalarTower.of_algebraMap_eq'
+    apply IsLocalization.ringHom_ext M
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra (R := Bₘ)]; rw [RingHom.comp_assoc]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq A B Bₘ]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← RingHom.comp_assoc]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization
+    (algebraMapSubmonoid B M) Bₘ L
+  have : FiniteDimensional K L := .of_isLocalization A B A⁰
+  have : IsIntegralClosure Bₘ Aₘ L :=
+    IsIntegralClosure.of_isIntegrallyClosed _ _ _
+  apply IsFractionRing.injective Aₘ K
+  rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.algebraMap_intTrace_fractionRing]; rw [Algebra.algebraMap_intTrace (L := L)]; rw [← IsScalarTower.algebraMap_apply]
 
 Depends on / 依赖: FractionRing, IsIntegralClosure, IsIntegralClosure.of_isIntegrallyClosed, IsLocalization, IsLocalization.uniqueOfZeroMem, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mpr, of_isIntegrallyClosed, replace, subsingleton, uniqueOfZeroMem
 -/
@@ -1048,7 +1168,12 @@ lemma Algebra.algebraMap_intNorm
   have := IsIntegralClosure.isFractionRing_of_finite_extension A K L B
   apply (FractionRing.algEquiv A K).symm.injective
   rw [AlgEquiv.commutes]; rw [Algebra.intNorm]; rw [Algebra.map_intNormAux]; rw [← AlgEquiv.commutes (FractionRing.algEquiv B L)]
-  apply Algebra.norm_eq_of_equiv_equiv (Fract
+  apply Algebra.norm_eq_of_equiv_equiv (FractionRing.algEquiv A K).toRingEquiv
+    (FractionRing.algEquiv B L).toRingEquiv
+  ext
+  exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K) (FractionRing.algEquiv B L) _
+
+@[simp]
 
 中文:
 引理 代数.algebraMap_intNorm
@@ -1057,7 +1182,12 @@ lemma Algebra.algebraMap_intNorm
   have := IsIntegralClosure.isFractionRing_of_finite_extension A K L B
   apply (FractionRing.algEquiv A K).symm.injective
   rw [AlgEquiv.commutes]; rw [Algebra.intNorm]; rw [Algebra.map_intNormAux]; rw [← AlgEquiv.commutes (FractionRing.algEquiv B L)]
-  apply Algebra.norm_eq_of_equiv_equiv (Fract
+  apply Algebra.norm_eq_of_equiv_equiv (FractionRing.algEquiv A K).toRingEquiv
+    (FractionRing.algEquiv B L).toRingEquiv
+  ext
+  exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K) (FractionRing.algEquiv B L) _
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, Algebra, Algebra.intNorm, Algebra.map_intNormAux, Algebra.norm_eq_of_equiv_equiv, FractionRing, FractionRing.algEquiv, IsFractionRing, IsFractionRing.algEquiv_commutes, IsIntegralClosure, IsIntegralClosure.isFractionRing_of_finite_extension, algEquiv, algEquiv_commutes, commutes, injective, intNorm, isFractionRing_of_finite_extension, map_intNormAux, norm_eq_of_equiv_equiv
 -/
@@ -1282,7 +1412,29 @@ lemma Algebra.intNorm_eq_of_isLocalization
   replace hM : M <= A⁰ := fun x hx => mem_nonZeroDivisors_iff_ne_zero.mpr (fun e => hM (e ▸ hx))
   let K := FractionRing A
   let L := FractionRing B
-  let f : Aₘ ->+* K := IsLocalization.map _ (T := A⁰) (RingHom
+  let f : Aₘ ->+* K := IsLocalization.map _ (T := A⁰) (RingHom.id A) hM
+  let := f.toAlgebra
+  have : IsScalarTower A Aₘ K := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M Aₘ K
+  let g : Bₘ ->+* L := IsLocalization.map _
+      (M := algebraMapSubmonoid B M) (T := algebraMapSubmonoid B A⁰)
+      (RingHom.id B) (Submonoid.monotone_map hM)
+  let := g.toAlgebra
+  have : IsScalarTower B Bₘ L := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := ((algebraMap K L).comp f).toAlgebra
+  have : IsScalarTower Aₘ K L := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower Aₘ Bₘ L := by
+    apply IsScalarTower.of_algebraMap_eq'
+    apply IsLocalization.ringHom_ext M
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra (R := Bₘ)]; rw [RingHom.comp_assoc]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq A B Bₘ]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← RingHom.comp_assoc]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization
+    (algebraMapSubmonoid B M) Bₘ L
+  have : IsIntegralClosure Bₘ Aₘ L :=
+    IsIntegralClosure.of_isIntegrallyClosed _ _ _
+  apply IsFractionRing.injective Aₘ K
+  rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.algebraMap_intNorm_fractionRing]; rw [Algebra.algebraMap_intNorm (L := L)]; rw [← IsScalarTower.algebraMap_apply]
 
 中文:
 引理 代数.intNorm_eq_of_isLocalization
@@ -1293,7 +1445,29 @@ lemma Algebra.intNorm_eq_of_isLocalization
   replace hM : M <= A⁰ := fun x hx => mem_nonZeroDivisors_iff_ne_zero.mpr (fun e => hM (e ▸ hx))
   let K := FractionRing A
   let L := FractionRing B
-  let f : Aₘ ->+* K := IsLocalization.map _ (T := A⁰) (RingHom
+  let f : Aₘ ->+* K := IsLocalization.map _ (T := A⁰) (RingHom.id A) hM
+  let := f.toAlgebra
+  have : IsScalarTower A Aₘ K := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M Aₘ K
+  let g : Bₘ ->+* L := IsLocalization.map _
+      (M := algebraMapSubmonoid B M) (T := algebraMapSubmonoid B A⁰)
+      (RingHom.id B) (Submonoid.monotone_map hM)
+  let := g.toAlgebra
+  have : IsScalarTower B Bₘ L := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let := ((algebraMap K L).comp f).toAlgebra
+  have : IsScalarTower Aₘ K L := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower Aₘ Bₘ L := by
+    apply IsScalarTower.of_algebraMap_eq'
+    apply IsLocalization.ringHom_ext M
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra (R := Bₘ)]; rw [RingHom.comp_assoc]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq A B Bₘ]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← RingHom.comp_assoc]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  let := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization
+    (algebraMapSubmonoid B M) Bₘ L
+  have : IsIntegralClosure Bₘ Aₘ L :=
+    IsIntegralClosure.of_isIntegrallyClosed _ _ _
+  apply IsFractionRing.injective Aₘ K
+  rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.algebraMap_intNorm_fractionRing]; rw [Algebra.algebraMap_intNorm (L := L)]; rw [← IsScalarTower.algebraMap_apply]
 
 Depends on / 依赖: FractionRing, IsFractionRing, IsFractionRing.isFract, IsLocalization, IsLocalization.map, IsLocalization.map_comp, IsLocalization.uniqueOfZeroMem, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraMap_toAlgebra, RingHom.id, RingHomCompTriple, RingHomCompTriple.comp_eq, algebraMap_toAlgebra, comp_eq, f.toAlgebra, isFract, map_comp, mem_nonZeroDivisors_iff_ne_zero
 -/
@@ -1344,7 +1518,7 @@ lemma Algebra.algebraMap_intNorm_of_isGalois
   have : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
   rw [← (galRestrict A (FractionRing A) (FractionRing B) B).toEquiv.prod_comp]
   simp only [MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe]
-  convert! (prod_galRestrict_eq_norm A (FractionRing A) (FractionRing B
+  convert! (prod_galRestrict_eq_norm A (FractionRing A) (FractionRing B) B x).symm
 
 中文:
 引理 代数.algebraMap_intNorm_of_isGalois
@@ -1353,7 +1527,7 @@ lemma Algebra.algebraMap_intNorm_of_isGalois
   have : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
   rw [← (galRestrict A (FractionRing A) (FractionRing B) B).toEquiv.prod_comp]
   simp only [MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe]
-  convert! (prod_galRestrict_eq_norm A (FractionRing A) (FractionRing B
+  convert! (prod_galRestrict_eq_norm A (FractionRing A) (FractionRing B) B x).symm
 
 Depends on / 依赖: EquivLike, EquivLike.coe_coe, FiniteDimensional, FractionRing, MulEquiv, MulEquiv.toEquiv_eq_coe, coe_coe, convert, galRestrict, of_isLocalization, prod_comp, prod_galRestrict_eq_norm, toEquiv, toEquiv.prod_comp, toEquiv_eq_coe
 -/
@@ -1380,7 +1554,32 @@ theorem Algebra.dvd_algebraMap_intNorm_self
   let K := FractionRing A
   let L := FractionRing B
   let E := AlgebraicClosure L
-  suffices IsIntegral A ((algebraMap B L x)⁻¹ * (algebraMap A L
+  suffices IsIntegral A ((algebraMap B L x)⁻¹ * (algebraMap A L (intNorm A B x))) by
+obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.mp
+      _root_.IsIntegral.tower_top (A := B) this
+    refine ⟨y, ?_⟩
+    apply FaithfulSMul.algebraMap_injective B L
+    rw [← algebraMap_apply]; rw [map_mul]; rw [hy]; rw [mul_inv_cancel_left₀]
+    exact (map_ne_zero_iff _ (FaithfulSMul.algebraMap_injective B L)).mpr hx
+  rw [← isIntegral_algHom_iff (toAlgHom A L E)
+    (FaithfulSMul.algebraMap_injective L E)]; rw [coe_toAlgHom']; rw [map_mul]; rw [map_inv₀]; rw [algebraMap_apply A K L]; rw [algebraMap_intNorm (L := L)]; rw [← algebraMap_apply]; rw [← algebraMap_apply]; rw [norm_eq_prod_roots _ (IsAlgClosed.splits _)]; rw [← Multiset.prod_erase
+    (a := algebraMap B E x)]
+  · have := IsTorsionFree.trans_faithfulSMul B L E
+    rw [mul_pow]; rw [← mul_pow_sub_one (Nat.pos_iff_ne_zero.1 Module.finrank_pos) (algebraMap B E x)]; rw [mul_assoc]; rw [inv_mul_cancel_left₀]
+    · refine IsIntegral.mul (IsIntegral.pow ?_ _)
+        (IsIntegral.pow (IsIntegral.multiset_prod (fun a ha => ⟨minpoly A x, minpoly.monic
+          (IsIntegral.isIntegral x), ?_⟩)) _)
+      · exact (isIntegral_algebraMap_iff (isTorsionFree_iff_algebraMap_injective.1 this)).mpr
+          (IsIntegral.isIntegral x)
+      · replace ha := Multiset.erase_subset _ _ ha
+        suffices (aeval a) ((minpoly A x).map (algebraMap A K)) = 0 by simpa
+        rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L (IsIntegral.isIntegral x)]
+        simp only [mem_roots', ne_eq, Polynomial.map_eq_zero, IsRoot.def, eval_map_algebraMap] at ha
+        exact ha.2
+    · exact (map_ne_zero_iff _ (FaithfulSMul.algebraMap_injective B E)).mpr hx
+  · simp only [mem_roots', ne_eq, Polynomial.map_eq_zero, IsRoot.def, eval_map_algebraMap]
+    refine ⟨minpoly.ne_zero (IsIntegral.isIntegral _), ?_⟩
+    simp [algebraMap_apply B L E, aeval_algebraMap_apply]
 
 中文:
 定理 代数.dvd_algebraMap_intNorm_self
@@ -1394,7 +1593,32 @@ theorem Algebra.dvd_algebraMap_intNorm_self
   let K := FractionRing A
   let L := FractionRing B
   let E := AlgebraicClosure L
-  suffices IsIntegral A ((algebraMap B L x)⁻¹ * (algebraMap A L
+  suffices IsIntegral A ((algebraMap B L x)⁻¹ * (algebraMap A L (intNorm A B x))) by
+obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.mp
+      _root_.IsIntegral.tower_top (A := B) this
+    refine ⟨y, ?_⟩
+    apply FaithfulSMul.algebraMap_injective B L
+    rw [← algebraMap_apply]; rw [map_mul]; rw [hy]; rw [mul_inv_cancel_left₀]
+    exact (map_ne_zero_iff _ (FaithfulSMul.algebraMap_injective B L)).mpr hx
+  rw [← isIntegral_algHom_iff (toAlgHom A L E)
+    (FaithfulSMul.algebraMap_injective L E)]; rw [coe_toAlgHom']; rw [map_mul]; rw [map_inv₀]; rw [algebraMap_apply A K L]; rw [algebraMap_intNorm (L := L)]; rw [← algebraMap_apply]; rw [← algebraMap_apply]; rw [norm_eq_prod_roots _ (IsAlgClosed.splits _)]; rw [← Multiset.prod_erase
+    (a := algebraMap B E x)]
+  · have := IsTorsionFree.trans_faithfulSMul B L E
+    rw [mul_pow]; rw [← mul_pow_sub_one (Nat.pos_iff_ne_zero.1 Module.finrank_pos) (algebraMap B E x)]; rw [mul_assoc]; rw [inv_mul_cancel_left₀]
+    · refine IsIntegral.mul (IsIntegral.pow ?_ _)
+        (IsIntegral.pow (IsIntegral.multiset_prod (fun a ha => ⟨minpoly A x, minpoly.monic
+          (IsIntegral.isIntegral x), ?_⟩)) _)
+      · exact (isIntegral_algebraMap_iff (isTorsionFree_iff_algebraMap_injective.1 this)).mpr
+          (IsIntegral.isIntegral x)
+      · replace ha := Multiset.erase_subset _ _ ha
+        suffices (aeval a) ((minpoly A x).map (algebraMap A K)) = 0 by simpa
+        rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L (IsIntegral.isIntegral x)]
+        simp only [mem_roots', ne_eq, Polynomial.map_eq_zero, IsRoot.def, eval_map_algebraMap] at ha
+        exact ha.2
+    · exact (map_ne_zero_iff _ (FaithfulSMul.algebraMap_injective B E)).mpr hx
+  · simp only [mem_roots', ne_eq, Polynomial.map_eq_zero, IsRoot.def, eval_map_algebraMap]
+    refine ⟨minpoly.ne_zero (IsIntegral.isIntegral _), ?_⟩
+    simp [algebraMap_apply B L E, aeval_algebraMap_apply]
 
 Depends on / 依赖: AlgebraicClosure, FaithfulSMul, FaithfulSMul.algebraMap_injective, FiniteDimensional, FractionRing, IsIntegral, IsIntegrallyClosed, IsIntegrallyClosed.isIntegral_iff.mp, _root_, _root_.IsIntegral.tower_top, algebraMap, algebraMap_apply, algebraMap_injective, classical, intNorm, isIntegral_iff, map_mul, of_isLocalization, tower_top
 -/

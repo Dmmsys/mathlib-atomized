@@ -193,7 +193,30 @@ instance ring
       ((inferInstance : Mul (Completion α))), ((inferInstance : One (Completion α))) with
     zero_mul a :=
       Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
-        fun a => by rw [← coe_zero, ← co
+        fun a => by rw [← coe_zero, ← coe_mul, zero_mul]
+    mul_zero a :=
+      Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
+        fun a => by rw [← coe_zero, ← coe_mul, mul_zero]
+    one_mul a :=
+      Completion.induction_on a
+        (isClosed_eq (by fun_prop) continuous_id)
+        fun a => by rw [← coe_one, ← coe_mul, one_mul]
+    mul_one a :=
+      Completion.induction_on a
+        (isClosed_eq (by fun_prop) continuous_id)
+        fun a => by rw [← coe_one, ← coe_mul, mul_one]
+    mul_assoc a b c :=
+      Completion.induction_on₃ a b c
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b c => by rw [← coe_mul, ← coe_mul, ← coe_mul, ← coe_mul, mul_assoc]
+    left_distrib a b c :=
+      Completion.induction_on₃ a b c
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, mul_add]
+    right_distrib a b c :=
+      Completion.induction_on₃ a b c
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, add_mul] }
 
 中文:
 实例 ring
@@ -202,7 +225,30 @@ instance ring
       ((inferInstance : Mul (Completion α))), ((inferInstance : One (Completion α))) with
     zero_mul a :=
       Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
-        fun a => by rw [← coe_zero, ← co
+        fun a => by rw [← coe_zero, ← coe_mul, zero_mul]
+    mul_zero a :=
+      Completion.induction_on a (isClosed_eq (by fun_prop) continuous_const)
+        fun a => by rw [← coe_zero, ← coe_mul, mul_zero]
+    one_mul a :=
+      Completion.induction_on a
+        (isClosed_eq (by fun_prop) continuous_id)
+        fun a => by rw [← coe_one, ← coe_mul, one_mul]
+    mul_one a :=
+      Completion.induction_on a
+        (isClosed_eq (by fun_prop) continuous_id)
+        fun a => by rw [← coe_one, ← coe_mul, mul_one]
+    mul_assoc a b c :=
+      Completion.induction_on₃ a b c
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b c => by rw [← coe_mul, ← coe_mul, ← coe_mul, ← coe_mul, mul_assoc]
+    left_distrib a b c :=
+      Completion.induction_on₃ a b c
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, mul_add]
+    right_distrib a b c :=
+      Completion.induction_on₃ a b c
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b c => by rw [← coe_add, ← coe_mul, ← coe_mul, ← coe_mul, ← coe_add, add_mul] }
 
 Depends on / 依赖: AddCommGroup, AddMonoidWithOne, AddMonoidWithOne.unary, Completion, Completion.induction_on, coe_mul, coe_zero, continu, continuous_const, fun_prop, induction_on, isClosed_eq, mul_zero, one_mul, zero_mul
 -/
@@ -297,7 +343,14 @@ definition extensionHom
   { toFun := Completion.extension f
     map_zero' := by simp_rw [← coe_zero, extension_coe hf, f.map_zero]
     map_add' a b :=
-      Completion.in
+      Completion.induction_on₂ a b
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b => by simp_rw [← coe_add, extension_coe hf, f.map_add]
+    map_one' := by rw [← coe_one, extension_coe hf, f.map_one]
+    map_mul' a b :=
+      Completion.induction_on₂ a b
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b => by simp_rw [← coe_mul, extension_coe hf, f.map_mul] }
 
 中文:
 定义 extensionHom
@@ -308,7 +361,14 @@ definition extensionHom
   { toFun := Completion.extension f
     map_zero' := by simp_rw [← coe_zero, extension_coe hf, f.map_zero]
     map_add' a b :=
-      Completion.in
+      Completion.induction_on₂ a b
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b => by simp_rw [← coe_add, extension_coe hf, f.map_add]
+    map_one' := by rw [← coe_one, extension_coe hf, f.map_one]
+    map_mul' a b :=
+      Completion.induction_on₂ a b
+        (isClosed_eq (by fun_prop) (by fun_prop))
+        fun a b => by simp_rw [← coe_mul, extension_coe hf, f.map_mul] }
 
 Depends on / 依赖: Continuous
 -/
@@ -572,7 +632,8 @@ instance algebra
   commutes' := fun r x =>
     Completion.induction_on x (isClosed_eq (continuous_const_mul _) (continuous_mul_const _))
       fun a => by
-      simpa only [coe_mul] using! congr_arg ((↑) : A -> Completion A) (Algebra.co
+      simpa only [coe_mul] using! congr_arg ((↑) : A -> Completion A) (Algebra.commutes r a)
+  smul_def' := fun r x => congr_fun (map_smul_eq_mul_coe A R r) x
 
 中文:
 实例 algebra
@@ -581,7 +642,8 @@ instance algebra
   commutes' := fun r x =>
     Completion.induction_on x (isClosed_eq (continuous_const_mul _) (continuous_mul_const _))
       fun a => by
-      simpa only [coe_mul] using! congr_arg ((↑) : A -> Completion A) (Algebra.co
+      simpa only [coe_mul] using! congr_arg ((↑) : A -> Completion A) (Algebra.commutes r a)
+  smul_def' := fun r x => congr_fun (map_smul_eq_mul_coe A R r) x
 
 Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion.coeRingHom, algebraMap, coeRingHom
 -/
@@ -772,7 +834,18 @@ definition IsDenseInducing.extendRingHom
   map_zero' := by
     convert! IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous 0 <;>
     simp only [map_zero]
- 
+  map_add' := by
+    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
+    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
+    · exact isClosed_eq (by fun_prop) (by fun_prop)
+    · simp_rw [← i.map_add, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
+        ← f.map_add]
+  map_mul' := by
+    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
+    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
+    · exact isClosed_eq (by fun_prop) (by fun_prop)
+    · simp_rw [← i.map_mul, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
+        ← f.map_mul]
 
 中文:
 定义 是DenseInducing.extendRingHom
@@ -784,7 +857,18 @@ definition IsDenseInducing.extendRingHom
   map_zero' := by
     convert! IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous 0 <;>
     simp only [map_zero]
- 
+  map_add' := by
+    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
+    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
+    · exact isClosed_eq (by fun_prop) (by fun_prop)
+    · simp_rw [← i.map_add, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
+        ← f.map_add]
+  map_mul' := by
+    have h := (uniformContinuous_uniformly_extend ue dr hf).continuous
+    refine fun x y => DenseRange.induction_on₂ dr ?_ (fun a b => ?_) x y
+    · exact isClosed_eq (by fun_prop) (by fun_prop)
+    · simp_rw [← i.map_mul, IsDenseInducing.extend_eq (ue.isDenseInducing dr) hf.continuous _,
+        ← f.map_mul]
 
 Depends on / 依赖: extend, isDenseInducing, ue.isDenseInducing
 -/

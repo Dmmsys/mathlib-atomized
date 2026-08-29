@@ -44,7 +44,30 @@ instance :
   δ_natural_left _ _ := by
     ext
     simp [tensorHom_def', ← comp_whiskerRight, ← whisker_exchange_assoc]
-  δ_
+  δ_natural_right P f := by
+    ext
+    simp [tensorHom_def, ← MonoidalCategory.whiskerLeft_comp, whisker_exchange_assoc]
+  oplax_associativity P₁ P₂ P₃ := by
+    ext X x
+    dsimp
+    conv_lhs =>
+      simp only [toPresheafFiber_presheafFiberDesc_assoc, tensorHom_def'_assoc,
+        ← comp_whiskerRight_assoc, toPresheafFiber_presheafFiberDesc]
+      rw [← tensorHom_def'_assoc]; rw [associator_naturality]
+    conv_rhs =>
+      simp only [toPresheafFiber_naturality_assoc, toPresheafFiber_presheafFiberDesc_assoc,
+        tensorHom_def_assoc, ← MonoidalCategory.whiskerLeft_comp,
+        toPresheafFiber_presheafFiberDesc]
+      rw [← tensorHom_def]
+      dsimp
+  oplax_left_unitality _ := by
+    ext
+    simp [tensorHom_def', ← comp_whiskerRight]
+  oplax_right_unitality _ := by
+    ext
+    simp [tensorHom_def, ← MonoidalCategory.whiskerLeft_comp]
+
+@[reassoc (attr := simp)]
 
 中文:
 实例 :
@@ -55,7 +78,30 @@ instance :
   δ_natural_left _ _ := by
     ext
     simp [tensorHom_def', ← comp_whiskerRight, ← whisker_exchange_assoc]
-  δ_
+  δ_natural_right P f := by
+    ext
+    simp [tensorHom_def, ← MonoidalCategory.whiskerLeft_comp, whisker_exchange_assoc]
+  oplax_associativity P₁ P₂ P₃ := by
+    ext X x
+    dsimp
+    conv_lhs =>
+      simp only [toPresheafFiber_presheafFiberDesc_assoc, tensorHom_def'_assoc,
+        ← comp_whiskerRight_assoc, toPresheafFiber_presheafFiberDesc]
+      rw [← tensorHom_def'_assoc]; rw [associator_naturality]
+    conv_rhs =>
+      simp only [toPresheafFiber_naturality_assoc, toPresheafFiber_presheafFiberDesc_assoc,
+        tensorHom_def_assoc, ← MonoidalCategory.whiskerLeft_comp,
+        toPresheafFiber_presheafFiberDesc]
+      rw [← tensorHom_def]
+      dsimp
+  oplax_left_unitality _ := by
+    ext
+    simp [tensorHom_def', ← comp_whiskerRight]
+  oplax_right_unitality _ := by
+    ext
+    simp [tensorHom_def, ← MonoidalCategory.whiskerLeft_comp]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: OplaxMonoidal
 -/

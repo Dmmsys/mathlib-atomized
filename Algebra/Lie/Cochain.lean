@@ -291,7 +291,10 @@ definition d₁₂
         map_add' _ _ := by ext; simp; abel
         map_smul' _ _ := by ext; simp [smul_sub] }
       property x := by simp }
-  
+  map_add' _ _ := by ext; simp; abel
+  map_smul' _ _ := by ext; simp [smul_sub]
+
+@[simp]
 
 中文:
 定义 d₁₂
@@ -304,7 +307,10 @@ definition d₁₂
         map_add' _ _ := by ext; simp; abel
         map_smul' _ _ := by ext; simp [smul_sub] }
       property x := by simp }
-  
+  map_add' _ _ := by ext; simp; abel
+  map_smul' _ _ := by ext; simp [smul_sub]
+
+@[simp]
 
 Depends on / 依赖: map_add, map_smul, property, smul_sub
 -/
@@ -372,7 +378,13 @@ definition d₂₃
         map_add' _ _ := by simp; abel
         map_smul' _ _ := by simp; abel_nf; simp }
       map_add' _ _ := by ext; simp; abel
-      map_smul' _ _ := by ext; simp; a
+      map_smul' _ _ := by ext; simp; abel_nf; simp }
+    map_add' _ _ := by ext; simp; abel
+    map_smul' _ _ := by ext; simp; abel_nf; simp }
+  map_add' _ _ := by ext; simp; abel
+  map_smul' _ _ := by ext; simp; abel_nf; simp
+
+@[simp]
 
 中文:
 定义 d₂₃
@@ -384,7 +396,13 @@ definition d₂₃
         map_add' _ _ := by simp; abel
         map_smul' _ _ := by simp; abel_nf; simp }
       map_add' _ _ := by ext; simp; abel
-      map_smul' _ _ := by ext; simp; a
+      map_smul' _ _ := by ext; simp; abel_nf; simp }
+    map_add' _ _ := by ext; simp; abel
+    map_smul' _ _ := by ext; simp; abel_nf; simp }
+  map_add' _ _ := by ext; simp; abel
+  map_smul' _ _ := by ext; simp; abel_nf; simp
+
+@[simp]
 -/
 def d₂₃ : twoCochain R L M ->ₗ[R] L ->ₗ[R] L ->ₗ[R] L ->ₗ[R] M where
   toFun a := {
@@ -431,7 +449,11 @@ lemma d₂₃_comp_d₁₂
   simp only [LinearMap.comp_apply, d₂₃_apply, LinearMap.zero_apply, this,
     d₁₂_apply_coe_apply_apply R L M, lie_sub, lie_lie]
   rw [leibniz_lie y x]; rw [leibniz_lie z x]; rw [leibniz_lie z y]
-  ha
+  have : a ⁅y, ⁅z, x⁆⁆ = a ⁅x, ⁅z, y⁆⁆ + a ⁅z, ⁅y, x⁆⁆ := by
+    rw [congr_arg a (leibniz_lie y z x)]; rw [← lie_skew]; rw [← lie_skew z y]; rw [lie_neg]; rw [map_add]
+  simp only [lie_lie, sub_add_cancel, map_sub, ← lie_skew x y, ← lie_skew x z, ← lie_skew y z,
+    lie_neg, map_neg, this]
+  abel
 
 中文:
 引理 d₂₃_comp_d₁₂
@@ -442,7 +464,11 @@ lemma d₂₃_comp_d₁₂
   simp only [LinearMap.comp_apply, d₂₃_apply, LinearMap.zero_apply, this,
     d₁₂_apply_coe_apply_apply R L M, lie_sub, lie_lie]
   rw [leibniz_lie y x]; rw [leibniz_lie z x]; rw [leibniz_lie z y]
-  ha
+  have : a ⁅y, ⁅z, x⁆⁆ = a ⁅x, ⁅z, y⁆⁆ + a ⁅z, ⁅y, x⁆⁆ := by
+    rw [congr_arg a (leibniz_lie y z x)]; rw [← lie_skew]; rw [← lie_skew z y]; rw [lie_neg]; rw [map_add]
+  simp only [lie_lie, sub_add_cancel, map_sub, ← lie_skew x y, ← lie_skew x z, ← lie_skew y z,
+    lie_neg, map_neg, this]
+  abel
 
 Depends on / 依赖: LinearMap, LinearMap.comp_apply, LinearMap.zero_apply, comp_apply, congr_arg, leibniz_lie, lie_lie, lie_neg, lie_ske, lie_skew, lie_sub, map_add, map_sub, oneCochain, sub_add_cancel, zero_apply
 -/
@@ -510,7 +536,13 @@ lemma mem_twoCocycle_iff_of_trivial
     have : (d₂₃ R L M) a x y z = 0 := (congrArg (fun b => b x y z = 0) h).mpr rfl
     simp only [d₂₃_apply, trivial_lie_zero, sub_self, add_zero, zero_sub] at this
     rw [sub_eq_zero] at this
-    rw [← twoCochain_skew a _ x]; rw [←
+    rw [← twoCochain_skew a _ x]; rw [← twoCochain_skew a _ y]; rw [← this]
+    abel
+  · intro h
+    ext x y z
+    simp only [d₂₃_apply, trivial_lie_zero, sub_self, add_zero, zero_sub, LinearMap.zero_apply]
+    rw [← twoCochain_skew a x]; rw [← twoCochain_skew a y]; rw [h x y z]
+    abel
 
 中文:
 引理 mem_twoCocycle_iff_of_trivial
@@ -522,7 +554,13 @@ lemma mem_twoCocycle_iff_of_trivial
     have : (d₂₃ R L M) a x y z = 0 := (congrArg (fun b => b x y z = 0) h).mpr rfl
     simp only [d₂₃_apply, trivial_lie_zero, sub_self, add_zero, zero_sub] at this
     rw [sub_eq_zero] at this
-    rw [← twoCochain_skew a _ x]; rw [←
+    rw [← twoCochain_skew a _ x]; rw [← twoCochain_skew a _ y]; rw [← this]
+    abel
+  · intro h
+    ext x y z
+    simp only [d₂₃_apply, trivial_lie_zero, sub_self, add_zero, zero_sub, LinearMap.zero_apply]
+    rw [← twoCochain_skew a x]; rw [← twoCochain_skew a y]; rw [h x y z]
+    abel
 
 Depends on / 依赖: LinearMap, LinearMap.zero_apply, add_zero, mem_twoCocycle_iff, sub_eq_zero, sub_self, trivial_lie_zero, twoCochain_skew, zero_apply, zero_sub
 -/

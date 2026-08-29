@@ -213,7 +213,10 @@ instance :
         rintro _ ⟨⟨_, F, hF, rfl⟩, rfl⟩
         exact ⟨_, ⟨⟨_, F, hF, rfl⟩, rfl⟩, F.mono i⟩
       smul_le := fun i => by
-        rw [sSup_eq_iSup']; rw [iSup_apply]; rw [Submodu
+        rw [sSup_eq_iSup']; rw [iSup_apply]; rw [Submodule.smul_iSup]; rw [iSup_apply]
+        apply iSup_mono _
+        rintro ⟨_, F, hF, rfl⟩
+        exact F.smul_le i }⟩
 
 中文:
 实例 :
@@ -225,7 +228,10 @@ instance :
         rintro _ ⟨⟨_, F, hF, rfl⟩, rfl⟩
         exact ⟨_, ⟨⟨_, F, hF, rfl⟩, rfl⟩, F.mono i⟩
       smul_le := fun i => by
-        rw [sSup_eq_iSup']; rw [iSup_apply]; rw [Submodu
+        rw [sSup_eq_iSup']; rw [iSup_apply]; rw [Submodule.smul_iSup]; rw [iSup_apply]
+        apply iSup_mono _
+        rintro ⟨_, F, hF, rfl⟩
+        exact F.smul_le i }⟩
 
 Depends on / 依赖: F.mono, F.smul_le, Filtration, Ideal.Filtration.N, Submodule, Submodule.smul_iSup, iSup_apply, iSup_mono, sSup_eq_iSup, sSup_le_sSup_of_isCofinalFor, smul_iSup, smul_le
 -/
@@ -279,7 +285,11 @@ instance :
         rintro _ ⟨⟨_, F, hF, rfl⟩, rfl⟩
         exact ⟨_, ⟨⟨_, F, hF, rfl⟩, rfl⟩, F.mono i⟩
       smul_le := fun i => by
-        rw [sInf_eq_iInf']; rw [iInf_apply]; rw [iInf_
+        rw [sInf_eq_iInf']; rw [iInf_apply]; rw [iInf_apply]
+        refine smul_iInf_le.trans ?_
+        apply iInf_mono _
+        rintro ⟨_, F, hF, rfl⟩
+        exact F.smul_le i }⟩
 
 中文:
 实例 :
@@ -291,7 +301,11 @@ instance :
         rintro _ ⟨⟨_, F, hF, rfl⟩, rfl⟩
         exact ⟨_, ⟨⟨_, F, hF, rfl⟩, rfl⟩, F.mono i⟩
       smul_le := fun i => by
-        rw [sInf_eq_iInf']; rw [iInf_apply]; rw [iInf_
+        rw [sInf_eq_iInf']; rw [iInf_apply]; rw [iInf_apply]
+        refine smul_iInf_le.trans ?_
+        apply iInf_mono _
+        rintro ⟨_, F, hF, rfl⟩
+        exact F.smul_le i }⟩
 
 Depends on / 依赖: F.mono, F.smul_le, Filtration, Ideal.Filtration.N, iInf_apply, iInf_mono, sInf_eq_iInf, sInf_le_sInf_of_isCoinitialFor, smul_iInf_le, smul_iInf_le.trans, smul_le
 -/
@@ -843,7 +857,11 @@ definition noncomputable
     rw [Subalgebra.smul_def]; rw [PolynomialModule.smul_apply]
     apply Submodule.sum_mem
     rintro ⟨j, k⟩ e
-    rw [Finset.mem_antidiagonal
+    rw [Finset.mem_antidiagonal] at e
+    subst e
+    exact F.pow_smul_le j k (Submodule.smul_mem_smul (r.2 j) (hf k))
+
+@[simp]
 
 中文:
 定义 noncomputable
@@ -855,7 +873,11 @@ definition noncomputable
     rw [Subalgebra.smul_def]; rw [PolynomialModule.smul_apply]
     apply Submodule.sum_mem
     rintro ⟨j, k⟩ e
-    rw [Finset.mem_antidiagonal
+    rw [Finset.mem_antidiagonal] at e
+    subst e
+    exact F.pow_smul_le j k (Submodule.smul_mem_smul (r.2 j) (hf k))
+
+@[simp]
 -/
 protected noncomputable def submodule : Submodule (reesAlgebra I) (PolynomialModule R M) where
   carrier := { f | forall i, f.coeff i in F.N i }
@@ -953,7 +975,10 @@ theorem submodule_closure_single
     · rwa [← h]
     · exact (F.N j).zero_mem
   · intro f hf
-    rw [← f.ofCoeff_coeff]; rw [← f.coeff.sum_single]; rw [of
+    rw [← f.ofCoeff_coeff]; rw [← f.coeff.sum_single]; rw [ofCoeff_finsuppSum]
+    apply AddSubmonoid.sum_mem _ _
+    rintro c -
+    exact AddSubmonoid.subset_closure (Set.subset_iUnion _ c <| Set.mem_image_of_mem _ (hf c))
 
 中文:
 定理 submodule_closure_single
@@ -966,7 +991,10 @@ theorem submodule_closure_single
     · rwa [← h]
     · exact (F.N j).zero_mem
   · intro f hf
-    rw [← f.ofCoeff_coeff]; rw [← f.coeff.sum_single]; rw [of
+    rw [← f.ofCoeff_coeff]; rw [← f.coeff.sum_single]; rw [ofCoeff_finsuppSum]
+    apply AddSubmonoid.sum_mem _ _
+    rintro c -
+    exact AddSubmonoid.subset_closure (Set.subset_iUnion _ c <| Set.mem_image_of_mem _ (hf c))
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_le, AddSubmonoid.subset_closure, AddSubmonoid.sum_mem, Finsupp, Finsupp.single_apply, Set.iUnion_subset_iff, Set.mem_image_of_mem, Set.subset_iUnion, closure_le, coeff_single, f.coeff.sum_single, f.ofCoeff_coeff, iUnion_subset_iff, le_antisymm, mem_image_of_mem, ofCoeff_coeff, ofCoeff_finsuppSum, single_apply, split_ifs
 -/
@@ -1020,7 +1048,38 @@ theorem submodule_eq_span_le_iff_stable_ge
   · intro H n hn
     refine (F.smul_le n).antisymm ?_
     intro x hx
-    obtain ⟨l, hl⟩ := (Finsupp.mem_span_iff_linearCombinat
+    obtain ⟨l, hl⟩ := (Finsupp.mem_span_iff_linearCombination _ _ _).mp (H _ ⟨x, hx, rfl⟩)
+    replace hl := congr_arg (fun f : PolynomialModule R M => f.coeff (n + 1)) hl
+    rw [PolynomialModule.coeff_single]; rw [Finsupp.single_apply]; rw [if_pos rfl] at hl
+    rw [← hl]; rw [Finsupp.linearCombination_apply]; rw [PolynomialModule.coeff_finsuppSum]; rw [Finsupp.sum_apply]
+    apply Submodule.sum_mem _ _
+    rintro ⟨_, _, ⟨n', rfl⟩, _, ⟨hn', rfl⟩, m, hm, rfl⟩ -
+    dsimp only [Subtype.coe_mk]
+    rw [Subalgebra.smul_def]; rw [smul_single_apply]; rw [if_pos (show n' <= n + 1 by lia)]
+    have e : n' <= n := by lia
+    have := F.pow_smul_le_pow_smul (n - n') n' 1
+    rw [tsub_add_cancel_of_le e]; rw [pow_one]; rw [add_comm _ 1]; rw [← add_tsub_assoc_of_le e]; rw [add_comm] at this
+    exact this (Submodule.smul_mem_smul ((l _).2 <| n + 1 - n') hm)
+  · let F' := Submodule.span (reesAlgebra I) (⋃ i <= n₀, single R i '' (F.N i : Set M))
+    intro hF i
+    have : forall i <= n₀, single R i '' (F.N i : Set M) subseteq F' := fun i hi =>
+      -- Porting note: need to add hint for `s`
+      (Set.subset_iUnion₂ (s := fun i _ => (single R i '' (N F i : Set M))) i hi).trans
+        Submodule.subset_span
+    induction i with
+    | zero => exact this _ zero_le
+    | succ j hj => ?_
+    by_cases hj' : j.succ <= n₀
+    · exact this _ hj'
+    simp only [not_le, Nat.lt_succ_iff] at hj'
+    rw [← hF _ hj']
+    rintro _ ⟨m, hm, rfl⟩
+    refine Submodule.smul_induction_on hm (fun r hr m' hm' => ?_) (fun x y hx hy => ?_)
+    · rw [add_comm, ← monomial_smul_single]
+      exact F'.smul_mem
+        ⟨_, reesAlgebra.monomial_mem.mpr (by rwa [pow_one])⟩ (hj <| Set.mem_image_of_mem _ hm')
+    · rw [PolynomialModule.single_add]
+      exact F'.add_mem hx hy
 
 中文:
 定理 submodule_eq_span_le_iff_stable_ge
@@ -1031,7 +1090,38 @@ theorem submodule_eq_span_le_iff_stable_ge
   · intro H n hn
     refine (F.smul_le n).antisymm ?_
     intro x hx
-    obtain ⟨l, hl⟩ := (Finsupp.mem_span_iff_linearCombinat
+    obtain ⟨l, hl⟩ := (Finsupp.mem_span_iff_linearCombination _ _ _).mp (H _ ⟨x, hx, rfl⟩)
+    replace hl := congr_arg (fun f : PolynomialModule R M => f.coeff (n + 1)) hl
+    rw [PolynomialModule.coeff_single]; rw [Finsupp.single_apply]; rw [if_pos rfl] at hl
+    rw [← hl]; rw [Finsupp.linearCombination_apply]; rw [PolynomialModule.coeff_finsuppSum]; rw [Finsupp.sum_apply]
+    apply Submodule.sum_mem _ _
+    rintro ⟨_, _, ⟨n', rfl⟩, _, ⟨hn', rfl⟩, m, hm, rfl⟩ -
+    dsimp only [Subtype.coe_mk]
+    rw [Subalgebra.smul_def]; rw [smul_single_apply]; rw [if_pos (show n' <= n + 1 by lia)]
+    have e : n' <= n := by lia
+    have := F.pow_smul_le_pow_smul (n - n') n' 1
+    rw [tsub_add_cancel_of_le e]; rw [pow_one]; rw [add_comm _ 1]; rw [← add_tsub_assoc_of_le e]; rw [add_comm] at this
+    exact this (Submodule.smul_mem_smul ((l _).2 <| n + 1 - n') hm)
+  · let F' := Submodule.span (reesAlgebra I) (⋃ i <= n₀, single R i '' (F.N i : Set M))
+    intro hF i
+    have : forall i <= n₀, single R i '' (F.N i : Set M) subseteq F' := fun i hi =>
+      -- Porting note: need to add hint for `s`
+      (Set.subset_iUnion₂ (s := fun i _ => (single R i '' (N F i : Set M))) i hi).trans
+        Submodule.subset_span
+    induction i with
+    | zero => exact this _ zero_le
+    | succ j hj => ?_
+    by_cases hj' : j.succ <= n₀
+    · exact this _ hj'
+    simp only [not_le, Nat.lt_succ_iff] at hj'
+    rw [← hF _ hj']
+    rintro _ ⟨m, hm, rfl⟩
+    refine Submodule.smul_induction_on hm (fun r hr m' hm' => ?_) (fun x y hx hy => ?_)
+    · rw [add_comm, ← monomial_smul_single]
+      exact F'.smul_mem
+        ⟨_, reesAlgebra.monomial_mem.mpr (by rwa [pow_one])⟩ (hj <| Set.mem_image_of_mem _ hm')
+    · rw [PolynomialModule.single_add]
+      exact F'.add_mem hx hy
 
 Depends on / 依赖: F.smul_le, Finsupp, Finsupp.mem_span_iff_linearCombination, Finsupp.single_apply, PolynomialModule, PolynomialModule.coeff_single, Set.iUnion, Set.iUnion_subset_iff, Submodule, Submodule.span_le, Submodule.span_mono, antisymm, coeff_single, congr_arg, f.coeff, ge_iff_eq, iUnion_subset_iff, if_pos, mem_span_iff_linearCombination, replace
 -/
@@ -1093,7 +1183,25 @@ theorem submodule_fg_iff_stable
     refine H.stabilizes_of_iSup_eq
         ⟨fun n₀ => Submodule.span _ (⋃ (i : Nat) (_ : i <= n₀), single R i '' ↑(F.N i)), ?_⟩ ?_
     · intro n m e
-      rw [Submodule.span_l
+      rw [Submodule.span_le]; rw [Set.iUnion₂_subset_iff]
+      intro i hi
+      refine Set.Subset.trans ?_ Submodule.subset_span
+      refine @Set.subset_iUnion₂ _ _ _ (fun i _ => ↑((single R i) '' ((N F i) : Set M))) i ?_
+      exact hi.trans e
+    · dsimp
+      rw [← Submodule.span_iUnion]; rw [← submodule_span_single]
+      simp [Set.biUnion_le_eq_iUnion]
+  · rintro ⟨n, hn⟩
+    rw [hn]
+    simp_rw [Submodule.span_iUnion₂, ← Finset.mem_range_succ_iff, iSup_subtype']
+    apply Submodule.fg_iSup
+    rintro ⟨i, hi⟩
+    obtain ⟨s, hs⟩ := hF' i
+    have : Submodule.span (reesAlgebra I) (s.image (lsingle R i) : Set (PolynomialModule R M)) =
+        Submodule.span _ (single R i '' (F.N i : Set M)) := by
+      rw [Finset.coe_image]; rw [← Submodule.span_span_of_tower R]; rw [← Submodule.map_span]; rw [hs]; rfl
+    rw [Subtype.coe_mk]; rw [← this]
+    exact ⟨_, rfl⟩
 
 中文:
 定理 submodule_fg_iff_stable
@@ -1108,7 +1216,25 @@ theorem submodule_fg_iff_stable
     refine H.stabilizes_of_iSup_eq
         ⟨fun n₀ => Submodule.span _ (⋃ (i : Nat) (_ : i <= n₀), single R i '' ↑(F.N i)), ?_⟩ ?_
     · intro n m e
-      rw [Submodule.span_l
+      rw [Submodule.span_le]; rw [Set.iUnion₂_subset_iff]
+      intro i hi
+      refine Set.Subset.trans ?_ Submodule.subset_span
+      refine @Set.subset_iUnion₂ _ _ _ (fun i _ => ↑((single R i) '' ((N F i) : Set M))) i ?_
+      exact hi.trans e
+    · dsimp
+      rw [← Submodule.span_iUnion]; rw [← submodule_span_single]
+      simp [Set.biUnion_le_eq_iUnion]
+  · rintro ⟨n, hn⟩
+    rw [hn]
+    simp_rw [Submodule.span_iUnion₂, ← Finset.mem_range_succ_iff, iSup_subtype']
+    apply Submodule.fg_iSup
+    rintro ⟨i, hi⟩
+    obtain ⟨s, hs⟩ := hF' i
+    have : Submodule.span (reesAlgebra I) (s.image (lsingle R i) : Set (PolynomialModule R M)) =
+        Submodule.span _ (single R i '' (F.N i : Set M)) := by
+      rw [Finset.coe_image]; rw [← Submodule.span_span_of_tower R]; rw [← Submodule.map_span]; rw [hs]; rfl
+    rw [Subtype.coe_mk]; rw [← this]
+    exact ⟨_, rfl⟩
 
 Depends on / 依赖: F.submodule_eq_span_le_iff_stable_ge, Filtration, H.stabilizes_of_iSup_eq, Ideal.Filtration.Stable, Set.Subset.trans, Set.iUnion, Set.subset_iUnion, Stable, Submodule, Submodule.span, Submodule.span_iUnion, Submodule.span_le, Submodule.subset_span, Subset, classical, hi.trans, simp_rw, single, span_iUnion, span_le
 -/
@@ -1249,7 +1375,21 @@ theorem Ideal.mem_iInf_smul_pow_eq_bot_iff
     fun k => inf_eq_right.mpr ((iInf_le _ k).trans <| le_of_eq <| by simp)
   constructor
   · obtain ⟨r, hr₁, hr₂⟩ :=
-      Submodule.exists_mem_and_smul_eq_self_of_fg_
+      Submodule.exists_mem_and_smul_eq_self_of_fg_of_le_smul I N (IsNoetherian.noetherian N) (by
+        obtain ⟨k, hk⟩ := (I.stableFiltration_stable ⊤).inter_right (I.trivialFiltration N)
+        have := hk k (le_refl _)
+        rw [hN]; rw [hN] at this
+        exact le_of_eq this.symm)
+    intro H
+    exact ⟨⟨r, hr₁⟩, hr₂ _ H⟩
+  · rintro ⟨r, eq⟩
+    rw [Submodule.mem_iInf]
+    intro i
+    induction i with
+    | zero => simp
+    | succ i hi =>
+      rw [add_comm]; rw [pow_add]; rw [← smul_smul]; rw [pow_one]; rw [← eq]
+      exact Submodule.smul_mem_smul r.prop hi
 
 中文:
 定理 理想.mem_iInf_smul_pow_eq_bot_iff
@@ -1260,7 +1400,21 @@ theorem Ideal.mem_iInf_smul_pow_eq_bot_iff
     fun k => inf_eq_right.mpr ((iInf_le _ k).trans <| le_of_eq <| by simp)
   constructor
   · obtain ⟨r, hr₁, hr₂⟩ :=
-      Submodule.exists_mem_and_smul_eq_self_of_fg_
+      Submodule.exists_mem_and_smul_eq_self_of_fg_of_le_smul I N (IsNoetherian.noetherian N) (by
+        obtain ⟨k, hk⟩ := (I.stableFiltration_stable ⊤).inter_right (I.trivialFiltration N)
+        have := hk k (le_refl _)
+        rw [hN]; rw [hN] at this
+        exact le_of_eq this.symm)
+    intro H
+    exact ⟨⟨r, hr₁⟩, hr₂ _ H⟩
+  · rintro ⟨r, eq⟩
+    rw [Submodule.mem_iInf]
+    intro i
+    induction i with
+    | zero => simp
+    | succ i hi =>
+      rw [add_comm]; rw [pow_add]; rw [← smul_smul]; rw [pow_one]; rw [← eq]
+      exact Submodule.smul_mem_smul r.prop hi
 
 Depends on / 依赖: I.stableFiltration, I.stableFiltration_stable, I.trivialFiltration, IsNoetherian, IsNoetherian.noetherian, Submodule, Submodule.exists_mem_and_smul_eq_self_of_fg_of_le_smul, exists_mem_and_smul_eq_self_of_fg_of_le_smul, iInf_le, inf_eq_right, inf_eq_right.mpr, inter_right, le_of_eq, le_refl, noetherian, stableFiltration, stableFiltration_stable, this.symm, trivialFiltration
 -/
@@ -1433,7 +1587,8 @@ theorem Ideal.iInf_pow_smul_eq_bot_of_isTorsionFree
   exact I.eq_top_iff_one.not.mp h (this ▸ r.prop)
 
 @[deprecated (since := "2026-01-17")]
-alias Ideal.iI
+alias Ideal.iInf_pow_smul_eq_bot_of_noZeroSMulDivisors :=
+  Ideal.iInf_pow_smul_eq_bot_of_isTorsionFree
 
 中文:
 定理 理想.iInf_pow_smul_eq_bot_of_isTorsionFree
@@ -1448,7 +1603,8 @@ alias Ideal.iI
   exact I.eq_top_iff_one.not.mp h (this ▸ r.prop)
 
 @[deprecated (since := "2026-01-17")]
-alias Ideal.iI
+alias Ideal.iInf_pow_smul_eq_bot_of_noZeroSMulDivisors :=
+  Ideal.iInf_pow_smul_eq_bot_of_isTorsionFree
 
 Depends on / 依赖: I.eq_top_iff_one.not.mp, Ideal.mem_iInf_smul_pow_eq_bot_iff, eq_bot_iff, eq_top_iff_one, hr.trans, mem_iInf_smul_pow_eq_bot_iff, one_smul, r.prop, smul_left_injective, this.mp
 -/

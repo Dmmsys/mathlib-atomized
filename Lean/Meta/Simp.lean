@@ -318,7 +318,11 @@ definition simpEq
     let ⟨rhs', rhspf?, _⟩ ← S rhs
     let mut pf' := mkAppN pf fvars
     if let some lhspf := lhspf? then
-      pf' ← mkEq
+      pf' ← mkEqTrans (← mkEqSymm lhspf) pf'
+    if let some rhspf := rhspf? then
+      pf' ← mkEqTrans pf' rhspf
+    let type' := mkApp3 (mkConst ``Eq [u]) α lhs' rhs'
+    return (← mkForallFVars fvars type', ← mkLambdaFVars fvars pf')
 
 中文:
 定义 simpEq
@@ -330,7 +334,11 @@ definition simpEq
     let ⟨rhs', rhspf?, _⟩ ← S rhs
     let mut pf' := mkAppN pf fvars
     if let some lhspf := lhspf? then
-      pf' ← mkEq
+      pf' ← mkEqTrans (← mkEqSymm lhspf) pf'
+    if let some rhspf := rhspf? then
+      pf' ← mkEqTrans pf' rhspf
+    let type' := mkApp3 (mkConst ``Eq [u]) α lhs' rhs'
+    return (← mkForallFVars fvars type', ← mkLambdaFVars fvars pf')
 -/
 def simpEq (S : Expr -> MetaM Simp.Result) (type pf : Expr) : MetaM (Expr × Expr) := do
   forallTelescope type fun fvars type => do

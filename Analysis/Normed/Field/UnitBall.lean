@@ -1020,7 +1020,7 @@ instance Metric.unitSphere.instGroup
     (fun _x _y => Units.ext rfl)
     (fun _x => Units.ext rfl) (fun _x _y => Units.ext <| div_eq_mul_inv _ _)
     (fun x n => Units.ext (Units.val_pow_eq_pow_val (unitSphereToUnits 𝕜 x) n).symm) fun x n =>
-    Uni
+    Units.ext (Units.val_zpow_eq_zpow_val (unitSphereToUnits 𝕜 x) n).symm
 
 中文:
 实例 Metric.unitSphere.instGroup
@@ -1029,7 +1029,7 @@ instance Metric.unitSphere.instGroup
     (fun _x _y => Units.ext rfl)
     (fun _x => Units.ext rfl) (fun _x _y => Units.ext <| div_eq_mul_inv _ _)
     (fun x n => Units.ext (Units.val_pow_eq_pow_val (unitSphereToUnits 𝕜 x) n).symm) fun x n =>
-    Uni
+    Units.ext (Units.val_zpow_eq_zpow_val (unitSphereToUnits 𝕜 x) n).symm
 
 Depends on / 依赖: Units.ext, Units.val_pow_eq_pow_val, Units.val_zpow_eq_zpow_val, div_eq_mul_inv, fast_instance, unitSphereToUnits, unitSphereToUnits_injective, unitSphereToUnits_injective.group, val_pow_eq_pow_val, val_zpow_eq_zpow_val
 -/

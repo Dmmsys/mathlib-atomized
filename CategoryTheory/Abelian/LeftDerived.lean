@@ -226,14 +226,20 @@ lemma ProjectiveResolution.isoLeftDerivedObj_hom_naturality
   proof: by
   dsimp [isoLeftDerivedObj, Functor.leftDerived]
   rw [assoc]; rw [← Functor.map_comp_assoc]; rw [ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_hom_naturality f P Q φ comm F]; rw [Functor.map_comp]; rw [assoc]
-  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n)
+  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n).hom.naturality]
+  rfl
+
+@[reassoc]
 
 中文:
 引理 投射消解.isoLeftDerivedObj_hom_naturality
   证明: by
   dsimp [isoLeftDerivedObj, Functor.leftDerived]
   rw [assoc]; rw [← Functor.map_comp_assoc]; rw [ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_hom_naturality f P Q φ comm F]; rw [Functor.map_comp]; rw [assoc]
-  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n)
+  erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n).hom.naturality]
+  rfl
+
+@[reassoc]
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, Functor, Functor.leftDerived, Functor.map_comp, Functor.map_comp_assoc, HomotopyCategory, HomotopyCategory.homologyFunctorFactors, ProjectiveResolution, ProjectiveResolution.isoLeftDerivedToHomotopyCategoryObj_hom_naturality, hom.naturality, homologyFunctorFactors, isoLeftDerivedObj, isoLeftDerivedToHomotopyCategoryObj_hom_naturality, leftDerived, map_comp, map_comp_assoc, naturality
 -/
@@ -361,7 +367,13 @@ lemma ProjectiveResolution.leftDerivedToHomotopyCategory_app_eq
     NatTrans.leftDerivedToHomotopyCategory]
   rw [assoc]
   erw [id_comp, comp_id]
-  obtai
+  obtain ⟨β, hβ⟩ := (HomotopyCategory.quotient _ _).map_surjective (iso P).hom
+  rw [← hβ]
+  dsimp
+  simp only [← Functor.map_comp, NatTrans.mapHomologicalComplex_naturality]
+  rfl
+
+@[simp]
 
 中文:
 引理 投射消解.leftDerivedToHomotopyCategory_app_eq
@@ -371,7 +383,13 @@ lemma ProjectiveResolution.leftDerivedToHomotopyCategory_app_eq
     NatTrans.leftDerivedToHomotopyCategory]
   rw [assoc]
   erw [id_comp, comp_id]
-  obtai
+  obtain ⟨β, hβ⟩ := (HomotopyCategory.quotient _ _).map_surjective (iso P).hom
+  rw [← hβ]
+  dsimp
+  simp only [← Functor.map_comp, NatTrans.mapHomologicalComplex_naturality]
+  rfl
+
+@[simp]
 
 Depends on / 依赖: Functor, Functor.mapHomotopyCategoryFactors, Functor.map_comp, HomotopyCategory, HomotopyCategory.quotient, Iso.inv_hom_id, NatTrans, NatTrans.leftDerivedToHomotopyCategory, NatTrans.mapHomologicalComplex_naturality, P.isoLeftDerivedToHomotopyCategoryObj, cancel_mono, comp_id, id_comp, inv_hom_id, isoLeftDerivedToHomotopyCategoryObj, leftDerivedToHomotopyCategory, mapHomologicalComplex_naturality, mapHomotopyCategoryFactors, map_comp, map_surjective
 -/
@@ -521,7 +539,8 @@ lemma leftDerived_app_eq
   dsimp [NatTrans.leftDerived, isoLeftDerivedObj]
   rw [ProjectiveResolution.leftDerivedToHomotopyCategory_app_eq α P]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]
   erw [← (HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n).hom.naturality_assoc
-    ((NatTrans.mapHo
+    ((NatTrans.mapHomologicalComplex α (ComplexShape.down Nat)).app P.complex)]
+  simp only [Functor.comp_map, Iso.hom_inv_id_app_assoc]
 
 中文:
 引理 leftDerived_app_eq
@@ -529,7 +548,8 @@ lemma leftDerived_app_eq
   dsimp [NatTrans.leftDerived, isoLeftDerivedObj]
   rw [ProjectiveResolution.leftDerivedToHomotopyCategory_app_eq α P]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]
   erw [← (HomotopyCategory.homologyFunctorFactors D (ComplexShape.down Nat) n).hom.naturality_assoc
-    ((NatTrans.mapHo
+    ((NatTrans.mapHomologicalComplex α (ComplexShape.down Nat)).app P.complex)]
+  simp only [Functor.comp_map, Iso.hom_inv_id_app_assoc]
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, Functor, Functor.comp_map, Functor.map_comp, HomotopyCategory, HomotopyCategory.homologyFunctorFactors, Iso.hom_inv_id_app_assoc, NatTrans, NatTrans.leftDerived, NatTrans.mapHomologicalComplex, P.complex, ProjectiveResolution, ProjectiveResolution.leftDerivedToHomotopyCategory_app_eq, comp_map, complex, hom.naturality_assoc, hom_inv_id_app_assoc, homologyFunctorFactors, isoLeftDerivedObj
 -/
@@ -655,7 +675,11 @@ definition Functor.fromLeftDerivedZero
       (ChainComplex.isoHomologyι₀ _).hom ≫ (projectiveResolution X).fromLeftDerivedZero' F
   naturality {X Y} f := by
     dsimp [leftDerived]
-    rw [assoc]; rw [assoc]; rw [← ProjectiveResolution.fromLeftDerivedZero'_
+    rw [assoc]; rw [assoc]; rw [← ProjectiveResolution.fromLeftDerivedZero'_naturality f
+      (projectiveResolution X) (projectiveResolution Y)
+      (ProjectiveResolution.lift f _ _) (by simp)]; rw [← HomologicalComplex.homologyι_naturality_assoc]
+    erw [← NatTrans.naturality_assoc]
+    rfl
 
 中文:
 定义 函子.fromLeftDerivedZero
@@ -664,7 +688,11 @@ definition Functor.fromLeftDerivedZero
       (ChainComplex.isoHomologyι₀ _).hom ≫ (projectiveResolution X).fromLeftDerivedZero' F
   naturality {X Y} f := by
     dsimp [leftDerived]
-    rw [assoc]; rw [assoc]; rw [← ProjectiveResolution.fromLeftDerivedZero'_
+    rw [assoc]; rw [assoc]; rw [← ProjectiveResolution.fromLeftDerivedZero'_naturality f
+      (projectiveResolution X) (projectiveResolution Y)
+      (ProjectiveResolution.lift f _ _) (by simp)]; rw [← HomologicalComplex.homologyι_naturality_assoc]
+    erw [← NatTrans.naturality_assoc]
+    rfl
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, HomotopyCategory, HomotopyCategory.homologyFunctorFactors, hom.app, homologyFunctorFactors
 -/
@@ -692,7 +720,13 @@ lemma ProjectiveResolution.fromLeftDerivedZero_eq
   have h₁ := ProjectiveResolution.fromLeftDerivedZero'_naturality
     (𝟙 X) P (projectiveResolution X) (lift (𝟙 X) _ _) (by simp) F
   have h₂ : (P.isoLeftDerivedToHomotopyCategoryObj F).inv =
-    (F.mapHomologicalComplex _ ⋙ HomotopyCategor
+    (F.mapHomologicalComplex _ ⋙ HomotopyCategory.quotient _ _).map (lift (𝟙 X) _ _) :=
+      id_comp _
+  simp only [Functor.map_id, comp_id] at h₁
+  rw [assoc]; rw [← cancel_epi ((HomotopyCategory.homologyFunctor _ _ 0).map
+      (P.isoLeftDerivedToHomotopyCategoryObj F).inv)]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [id_comp]; rw [← h₁]; rw [h₂]; rw [← HomologicalComplex.homologyι_naturality_assoc]
+  erw [← NatTrans.naturality_assoc]
+  rfl
 
 中文:
 引理 投射消解.fromLeftDerivedZero_eq
@@ -701,7 +735,13 @@ lemma ProjectiveResolution.fromLeftDerivedZero_eq
   have h₁ := ProjectiveResolution.fromLeftDerivedZero'_naturality
     (𝟙 X) P (projectiveResolution X) (lift (𝟙 X) _ _) (by simp) F
   have h₂ : (P.isoLeftDerivedToHomotopyCategoryObj F).inv =
-    (F.mapHomologicalComplex _ ⋙ HomotopyCategor
+    (F.mapHomologicalComplex _ ⋙ HomotopyCategory.quotient _ _).map (lift (𝟙 X) _ _) :=
+      id_comp _
+  simp only [Functor.map_id, comp_id] at h₁
+  rw [assoc]; rw [← cancel_epi ((HomotopyCategory.homologyFunctor _ _ 0).map
+      (P.isoLeftDerivedToHomotopyCategoryObj F).inv)]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [id_comp]; rw [← h₁]; rw [h₂]; rw [← HomologicalComplex.homologyι_naturality_assoc]
+  erw [← NatTrans.naturality_assoc]
+  rfl
 
 Depends on / 依赖: F.mapHomologicalComplex, Functor, Functor.fromLeftDerivedZero, Functor.map_id, HomotopyCategory, HomotopyCategory.homologyFunctor, HomotopyCategory.quotient, P.isoLeftDerivedToHomotopyCategoryObj, ProjectiveResolution, ProjectiveResolution.fromLeftDerivedZero, _naturality, cancel_epi, comp_id, fromLeftDerivedZero, homologyFunctor, id_comp, isoLeftDerivedObj, isoLeftDerivedToHomotopyCategoryObj, mapHomologicalComplex, map_id
 -/

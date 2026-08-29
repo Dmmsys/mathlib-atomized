@@ -42,7 +42,12 @@ definition transport
       (associator _ _ _).hom ≫ whiskerLeft _ (associator _ _ _).inv ≫
       whiskerLeft _ (whiskerRight e.hom _) ≫ (associator _ _ _).inv ≫
       whiskerRight (associator _ _ _).inv _ ≫
-      whiskerRight (whis
+      whiskerRight (whiskerRight (associator _ _ _).hom _) _ ≫
+      whiskerRight (whiskerRight (whiskerLeft _ ((associator _ _ _).hom ≫
+      whiskerLeft Λ.F eC.counitIso.hom ≫ Λ.F.rightUnitor.hom)) _) _ ≫
+        (whiskerRight ((associator _ _ _).hom ≫ whiskerLeft _ Λ.π ≫
+          (rightUnitor _).hom) _) ≫ eA.unitIso.inv
+  epi_π_app _ := by dsimp; infer_instance
 
 中文:
 定义 transport
@@ -52,7 +57,12 @@ definition transport
       (associator _ _ _).hom ≫ whiskerLeft _ (associator _ _ _).inv ≫
       whiskerLeft _ (whiskerRight e.hom _) ≫ (associator _ _ _).inv ≫
       whiskerRight (associator _ _ _).inv _ ≫
-      whiskerRight (whis
+      whiskerRight (whiskerRight (associator _ _ _).hom _) _ ≫
+      whiskerRight (whiskerRight (whiskerLeft _ ((associator _ _ _).hom ≫
+      whiskerLeft Λ.F eC.counitIso.hom ≫ Λ.F.rightUnitor.hom)) _) _ ≫
+        (whiskerRight ((associator _ _ _).hom ≫ whiskerLeft _ Λ.π ≫
+          (rightUnitor _).hom) _) ≫ eA.unitIso.inv
+  epi_π_app _ := by dsimp; infer_instance
 
 Depends on / 依赖: eA.functor, eC.inverse, functor, inverse
 -/

@@ -221,7 +221,22 @@ lemma orthRadius_le_orthRadius_iff
     have h'' := Submodule.orthogonal_le h'
     simp only [Submodule.orthogonal_orthogonal, Submodule.span_singleton_le_iff_mem,
       Submodule.mem_span_singleton] at h''
-    rcases h'' wi
+    rcases h'' with ⟨r, hr⟩
+    have hp : p in s.orthRadius q := h (s.self_mem_orthRadius p)
+    rw [mem_orthRadius_iff_inner_left]; rw [← vsub_sub_vsub_cancel_right p q s.center]; rw [← hr]; rw [inner_sub_left]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [← mul_assoc]; rw [← sub_mul]; rw [mul_eq_zero] at hp
+    rcases hp with hp | hp
+    · nth_rw 1 [← one_mul r] at hp
+      rw [← sub_mul]; rw [mul_eq_zero] at hp
+      rcases hp with hp | rfl
+      · rw [sub_eq_zero] at hp
+        rw [← hp]; rw [one_smul]; rw [vsub_left_cancel_iff] at hr
+        exact .inl hr
+      · rw [zero_smul, eq_comm, vsub_eq_zero_iff_eq] at hr
+        exact .inr hr
+    · simp only [inner_self_eq_zero, vsub_eq_zero_iff_eq] at hp
+      rw [hp]; rw [vsub_self]; rw [smul_zero]; rw [eq_comm]; rw [vsub_eq_zero_iff_eq] at hr
+      exact .inr hr
+  · rcases h with rfl | rfl <;> simp
 
 中文:
 引理 orthRadius_le_orthRadius_iff
@@ -233,7 +248,22 @@ lemma orthRadius_le_orthRadius_iff
     have h'' := Submodule.orthogonal_le h'
     simp only [Submodule.orthogonal_orthogonal, Submodule.span_singleton_le_iff_mem,
       Submodule.mem_span_singleton] at h''
-    rcases h'' wi
+    rcases h'' with ⟨r, hr⟩
+    have hp : p in s.orthRadius q := h (s.self_mem_orthRadius p)
+    rw [mem_orthRadius_iff_inner_left]; rw [← vsub_sub_vsub_cancel_right p q s.center]; rw [← hr]; rw [inner_sub_left]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [← mul_assoc]; rw [← sub_mul]; rw [mul_eq_zero] at hp
+    rcases hp with hp | hp
+    · nth_rw 1 [← one_mul r] at hp
+      rw [← sub_mul]; rw [mul_eq_zero] at hp
+      rcases hp with hp | rfl
+      · rw [sub_eq_zero] at hp
+        rw [← hp]; rw [one_smul]; rw [vsub_left_cancel_iff] at hr
+        exact .inl hr
+      · rw [zero_smul, eq_comm, vsub_eq_zero_iff_eq] at hr
+        exact .inr hr
+    · simp only [inner_self_eq_zero, vsub_eq_zero_iff_eq] at hp
+      rw [hp]; rw [vsub_self]; rw [smul_zero]; rw [eq_comm]; rw [vsub_eq_zero_iff_eq] at hr
+      exact .inr hr
+  · rcases h with rfl | rfl <;> simp
 
 Depends on / 依赖: Submodule, Submodule.mem_span_singleton, Submodule.orthogonal_le, Submodule.orthogonal_orthogonal, Submodule.span_singleton_le_iff_mem, center, direction_le, direction_orthRadius, inner_sub_left, mem_orthRadius_iff_inner_left, mem_span_singleton, orthRadius, orthogonal_le, orthogonal_orthogonal, real_in, real_inner_smul_left, s.center, s.orthRadius, s.self_mem_orthRadius, self_mem_orthRadius
 -/
@@ -399,7 +429,8 @@ lemma orthRadius_parallel_orthRadius_iff
   simp_rw [orthRadius, parallel_iff_direction_eq_and_eq_bot_iff_eq_bot, direction_mk',
     Submodule.orthogonalComplement_eq_orthogonalComplement,
     Submodule.span_singleton_eq_span_singleton, ← coe_eq_bot_iff,
-    ← Set.not_nonempty_iff_eq_empty, mk'_nonempty, and_true, ← Units.exists_iff_ne_z
+    ← Set.not_nonempty_iff_eq_empty, mk'_nonempty, and_true, ← Units.exists_iff_ne_zero, eq_comm,
+    Units.smul_def]
 
 中文:
 引理 orthRadius_parallel_orthRadius_iff
@@ -408,7 +439,8 @@ lemma orthRadius_parallel_orthRadius_iff
   simp_rw [orthRadius, parallel_iff_direction_eq_and_eq_bot_iff_eq_bot, direction_mk',
     Submodule.orthogonalComplement_eq_orthogonalComplement,
     Submodule.span_singleton_eq_span_singleton, ← coe_eq_bot_iff,
-    ← Set.not_nonempty_iff_eq_empty, mk'_nonempty, and_true, ← Units.exists_iff_ne_z
+    ← Set.not_nonempty_iff_eq_empty, mk'_nonempty, and_true, ← Units.exists_iff_ne_zero, eq_comm,
+    Units.smul_def]
 
 Depends on / 依赖: Set.not_nonempty_iff_eq_empty, Submodule, Submodule.orthogonalComplement_eq_orthogonalComplement, Submodule.span_singleton_eq_span_singleton, Units.exists_iff_ne_zero, Units.smul_def, _nonempty, and_true, coe_eq_bot_iff, direction_mk, eq_comm, exists_iff_ne_zero, not_nonempty_iff_eq_empty, orthRadius, orthogonalComplement_eq_orthogonalComplement, parallel_iff_direction_eq_and_eq_bot_iff_eq_bot, simp_rw, smul_def, span_singleton_eq_span_singleton
 -/
@@ -468,7 +500,14 @@ lemma mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq
     vsub_right_mem_direction_iff_mem (s.self_mem_orthRadius p), ← dist_eq_norm_vsub]
   nth_rw 3 [and_comm]
   rw [← and_assoc]; rw [and_congr_left_iff]
-  intro
+  intro h
+  rw [← sub_eq_iff_eq_add'] at h
+  rw [← h]
+  rcases le_or_gt 0 s.radius with h0 | h0
+  · simp [h0]
+  · simp only [h0.not_ge, sub_left_inj, false_and, iff_false]
+    intro hm
+    exact h0.not_ge (radius_nonneg_of_mem hm)
 
 中文:
 引理 mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq
@@ -479,7 +518,14 @@ lemma mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq
     vsub_right_mem_direction_iff_mem (s.self_mem_orthRadius p), ← dist_eq_norm_vsub]
   nth_rw 3 [and_comm]
   rw [← and_assoc]; rw [and_congr_left_iff]
-  intro
+  intro h
+  rw [← sub_eq_iff_eq_add'] at h
+  rw [← h]
+  rcases le_or_gt 0 s.radius with h0 | h0
+  · simp [h0]
+  · simp only [h0.not_ge, sub_left_inj, false_and, iff_false]
+    intro hm
+    exact h0.not_ge (radius_nonneg_of_mem hm)
 
 Depends on / 依赖: Metric, Metric.mem_sphere, Set.mem_inter_iff, SetLike, SetLike.mem_coe, and_assoc, and_comm, and_congr_left_iff, direction_orthRadius, dist_eq_norm_vsub, dist_sq_eq_iff_mem_orthRadius, false_and, h0.not_ge, iff_false, le_or_gt, mem_coe, mem_inter_iff, mem_sphere, not_ge, nth_rw
 -/
@@ -609,7 +655,18 @@ lemma inter_orthRadius_eq_singleton_iff
     have hq : q in (s inter s.orthRadius p : Set P) := h ▸ Set.mem_singleton _
     have h' (q' : P) : q' in (s inter s.orthRadius p : Set P) ↔ q' = q := by simp [h]
     have hr : 0 <= s.radius := radius_nonneg_of_mem hq.1
-    simp_rw [mem_inter_orthRadius_iff_vsub_mem_an
+    simp_rw [mem_inter_orthRadius_iff_vsub_mem_and_norm_sq hr] at h'
+    have hq' := (h' q).2 rfl
+    have hq'' : (-(q -ᵥ p) +ᵥ p) -ᵥ p in (Real ∙ (p -ᵥ s.center))ᗮ ∧
+        ‖(-(q -ᵥ p) +ᵥ p) -ᵥ p‖ ^ 2 = s.radius ^ 2 - dist p s.center ^ 2 := by
+      simpa [-neg_vsub_eq_vsub_rev] using hq'
+    have hqq := (h' _).1 hq''
+    rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]; rw [eq_neg_iff_add_eq_zero]; rw [← two_smul Real]; rw [smul_eq_zero_iff_right (by norm_num)]; rw [vsub_eq_zero_iff_eq] at hqq
+    refine ⟨hqq, ?_⟩
+    subst hqq
+    exact hq.1
+  · rintro ⟨rfl, h⟩
+    exact inter_orthRadius_eq_singleton_of_dist_eq_radius h
 
 中文:
 引理 inter_orthRadius_eq_singleton_iff
@@ -620,7 +677,18 @@ lemma inter_orthRadius_eq_singleton_iff
     have hq : q in (s inter s.orthRadius p : Set P) := h ▸ Set.mem_singleton _
     have h' (q' : P) : q' in (s inter s.orthRadius p : Set P) ↔ q' = q := by simp [h]
     have hr : 0 <= s.radius := radius_nonneg_of_mem hq.1
-    simp_rw [mem_inter_orthRadius_iff_vsub_mem_an
+    simp_rw [mem_inter_orthRadius_iff_vsub_mem_and_norm_sq hr] at h'
+    have hq' := (h' q).2 rfl
+    have hq'' : (-(q -ᵥ p) +ᵥ p) -ᵥ p in (Real ∙ (p -ᵥ s.center))ᗮ ∧
+        ‖(-(q -ᵥ p) +ᵥ p) -ᵥ p‖ ^ 2 = s.radius ^ 2 - dist p s.center ^ 2 := by
+      simpa [-neg_vsub_eq_vsub_rev] using hq'
+    have hqq := (h' _).1 hq''
+    rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]; rw [eq_neg_iff_add_eq_zero]; rw [← two_smul Real]; rw [smul_eq_zero_iff_right (by norm_num)]; rw [vsub_eq_zero_iff_eq] at hqq
+    refine ⟨hqq, ?_⟩
+    subst hqq
+    exact hq.1
+  · rintro ⟨rfl, h⟩
+    exact inter_orthRadius_eq_singleton_of_dist_eq_radius h
 
 Depends on / 依赖: Set.mem_singleton, center, mem_inter_orthRadius_iff_vsub_mem_and_norm_sq, mem_singleton, neg_vsub_eq_vsub_rev, orthRadius, radius, radius_nonneg_of_mem, s.center, s.orthRadius, s.radius, simp_rw
 -/
@@ -690,7 +758,12 @@ lemma inter_orthRadius_eq_empty_of_finrank_eq_one
   intro hr hpo
   have : FiniteDimensional Real V := Module.finite_of_finrank_eq_succ hf
   have ha := (Real ∙ (p -ᵥ s.center)).finrank_add_finrank_orthogonal
-  
+  simp only [finrank_span_singleton (vsub_ne_zero.2 hpc), hf, Nat.add_eq_left,
+    Submodule.finrank_eq_zero, Submodule.orthogonal_eq_bot_iff] at ha
+  simp only [ha, Submodule.top_orthogonal_eq_bot, Submodule.mem_bot, vsub_eq_zero_iff_eq] at hpo
+  simp only [hpo, vsub_self, norm_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow]
+  rw [eq_comm]; rw [sub_eq_zero]; rw [eq_comm]; rw [sq_eq_sq₀ dist_nonneg hr]
+  exact hp
 
 中文:
 引理 inter_orthRadius_eq_empty_of_finrank_eq_one
@@ -702,7 +775,12 @@ lemma inter_orthRadius_eq_empty_of_finrank_eq_one
   intro hr hpo
   have : FiniteDimensional Real V := Module.finite_of_finrank_eq_succ hf
   have ha := (Real ∙ (p -ᵥ s.center)).finrank_add_finrank_orthogonal
-  
+  simp only [finrank_span_singleton (vsub_ne_zero.2 hpc), hf, Nat.add_eq_left,
+    Submodule.finrank_eq_zero, Submodule.orthogonal_eq_bot_iff] at ha
+  simp only [ha, Submodule.top_orthogonal_eq_bot, Submodule.mem_bot, vsub_eq_zero_iff_eq] at hpo
+  simp only [hpo, vsub_self, norm_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow]
+  rw [eq_comm]; rw [sub_eq_zero]; rw [eq_comm]; rw [sq_eq_sq₀ dist_nonneg hr]
+  exact hp
 
 Depends on / 依赖: FiniteDimensional, Module, Module.finite_of_finrank_eq_succ, Nat.add_eq_left, Set.mem_empty_iff_false, Submodule, Submodule.finrank_eq_zero, Submodule.mem_bot, Submodule.orthogonal_eq_bot_iff, Submodule.top_orthogonal_eq_bot, add_eq_left, center, finite_of_finrank_eq_succ, finrank_add_finrank_orthogonal, finrank_eq_zero, finrank_span_singleton, iff_false, mem_bot, mem_empty_iff_false, mem_inter_orthRadius_iff_radius_nonneg_and_vsub_mem_and_norm_sq
 -/
@@ -734,7 +812,56 @@ lemma inter_orthRadius_eq_empty_iff
       and_true, false_or]
     obtain rfl | hp := eq_or_ne p s.center
     · rcases subsingleton_or_nontrivial V with hs | hs
-      · have h
+      · have hs' := (AddTorsor.subsingleton_iff V P).1 hs
+        simp [hs, Metric.sphere_eq_empty_of_subsingleton (dist_nonneg.trans_lt h).ne']
+      · simp only [orthRadius_center, top_coe, Set.inter_univ, not_true_eq_false, and_false,
+          not_subsingleton_iff_nontrivial.2 hs, or_self, iff_false, ← Set.nonempty_iff_ne_empty]
+        obtain ⟨v, hv⟩ := exists_norm_eq V (dist_nonneg.trans_lt h).le
+        exact ⟨v +ᵥ s.center, by simp [hv]⟩
+    · simp only [hp, not_false_eq_true, and_true]
+      rcases eq_or_ne (Real ∙ (p -ᵥ s.center)) ⊤ with hb | hb
+      · have hb' := hb
+        rw [Submodule.span_singleton_eq_top_iff] at hb'
+        have hf := finrank_eq_one_iff'.2 ⟨p -ᵥ s.center, vsub_ne_zero.2 hp, hb'⟩
+        simpa [hf] using inter_orthRadius_eq_empty_of_finrank_eq_one hp h.ne
+      · have hn : ¬Subsingleton V := by
+          rw [AddTorsor.subsingleton_iff V P]
+          intro hs
+          simp [Subsingleton.elim p s.center] at hp
+        have hnf : Module.finrank Real V != 1 := by
+          intro hf
+          apply hb
+          rw [Submodule.span_singleton_eq_top_iff]
+          rw [finrank_eq_one_iff'] at hf
+          obtain ⟨v, hv0, hv⟩ := hf
+          obtain ⟨c, hc⟩ := hv (p -ᵥ s.center)
+          have hc0 : c != 0 := by
+            rintro rfl
+            rw [zero_smul]; rw [eq_comm]; rw [vsub_eq_zero_iff_eq] at hc
+            simp [hc] at hp
+          intro v'
+          obtain ⟨c', rfl⟩ := hv v'
+          refine ⟨c' / c, ?_⟩
+          simp [← hc, smul_smul, hc0]
+        simp only [hnf, hn, or_self, iff_false, ← Set.nonempty_iff_ne_empty]
+        rw [ne_eq]; rw [← Submodule.orthogonal_eq_bot_iff] at hb
+        obtain ⟨v, hvm, hv0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hb
+        refine ⟨(√(s.radius ^ 2 - (dist p s.center) ^ 2) / ‖v‖) • v +ᵥ p, ?_⟩
+        rw [vadd_mem_inter_orthRadius_iff_norm_sq (dist_nonneg.trans_lt h).le
+          (Submodule.smul_mem _ _ hvm)]
+        rw [norm_smul]; rw [norm_div]; rw [norm_norm]; rw [div_mul_cancel₀ _ (norm_ne_zero_iff.2 hv0)]
+        simp only [Real.norm_eq_abs, sq_abs]
+        refine Real.sq_sqrt ?_
+        rw [sub_nonneg]; rw [sq_le_sq]; rw [abs_of_nonneg dist_nonneg]
+        exact h.le.trans (le_abs_self _)
+  · rw [inter_orthRadius_eq_singleton_of_dist_eq_radius h]
+    simp only [Set.singleton_ne_empty, h, lt_self_iff_false, ne_eq, false_and, and_false, false_or,
+      false_iff, not_and, not_not]
+    intro hs
+    rw [AddTorsor.subsingleton_iff V P] at hs
+    rw [Subsingleton.elim p s.center] at h
+    simpa using h.symm
+  · simp [h, inter_orthRadius_eq_empty_of_radius_lt_dist]
 
 中文:
 引理 inter_orthRadius_eq_empty_iff
@@ -745,7 +872,56 @@ lemma inter_orthRadius_eq_empty_iff
       and_true, false_or]
     obtain rfl | hp := eq_or_ne p s.center
     · rcases subsingleton_or_nontrivial V with hs | hs
-      · have h
+      · have hs' := (AddTorsor.subsingleton_iff V P).1 hs
+        simp [hs, Metric.sphere_eq_empty_of_subsingleton (dist_nonneg.trans_lt h).ne']
+      · simp only [orthRadius_center, top_coe, Set.inter_univ, not_true_eq_false, and_false,
+          not_subsingleton_iff_nontrivial.2 hs, or_self, iff_false, ← Set.nonempty_iff_ne_empty]
+        obtain ⟨v, hv⟩ := exists_norm_eq V (dist_nonneg.trans_lt h).le
+        exact ⟨v +ᵥ s.center, by simp [hv]⟩
+    · simp only [hp, not_false_eq_true, and_true]
+      rcases eq_or_ne (Real ∙ (p -ᵥ s.center)) ⊤ with hb | hb
+      · have hb' := hb
+        rw [Submodule.span_singleton_eq_top_iff] at hb'
+        have hf := finrank_eq_one_iff'.2 ⟨p -ᵥ s.center, vsub_ne_zero.2 hp, hb'⟩
+        simpa [hf] using inter_orthRadius_eq_empty_of_finrank_eq_one hp h.ne
+      · have hn : ¬Subsingleton V := by
+          rw [AddTorsor.subsingleton_iff V P]
+          intro hs
+          simp [Subsingleton.elim p s.center] at hp
+        have hnf : Module.finrank Real V != 1 := by
+          intro hf
+          apply hb
+          rw [Submodule.span_singleton_eq_top_iff]
+          rw [finrank_eq_one_iff'] at hf
+          obtain ⟨v, hv0, hv⟩ := hf
+          obtain ⟨c, hc⟩ := hv (p -ᵥ s.center)
+          have hc0 : c != 0 := by
+            rintro rfl
+            rw [zero_smul]; rw [eq_comm]; rw [vsub_eq_zero_iff_eq] at hc
+            simp [hc] at hp
+          intro v'
+          obtain ⟨c', rfl⟩ := hv v'
+          refine ⟨c' / c, ?_⟩
+          simp [← hc, smul_smul, hc0]
+        simp only [hnf, hn, or_self, iff_false, ← Set.nonempty_iff_ne_empty]
+        rw [ne_eq]; rw [← Submodule.orthogonal_eq_bot_iff] at hb
+        obtain ⟨v, hvm, hv0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hb
+        refine ⟨(√(s.radius ^ 2 - (dist p s.center) ^ 2) / ‖v‖) • v +ᵥ p, ?_⟩
+        rw [vadd_mem_inter_orthRadius_iff_norm_sq (dist_nonneg.trans_lt h).le
+          (Submodule.smul_mem _ _ hvm)]
+        rw [norm_smul]; rw [norm_div]; rw [norm_norm]; rw [div_mul_cancel₀ _ (norm_ne_zero_iff.2 hv0)]
+        simp only [Real.norm_eq_abs, sq_abs]
+        refine Real.sq_sqrt ?_
+        rw [sub_nonneg]; rw [sq_le_sq]; rw [abs_of_nonneg dist_nonneg]
+        exact h.le.trans (le_abs_self _)
+  · rw [inter_orthRadius_eq_singleton_of_dist_eq_radius h]
+    simp only [Set.singleton_ne_empty, h, lt_self_iff_false, ne_eq, false_and, and_false, false_or,
+      false_iff, not_and, not_not]
+    intro hs
+    rw [AddTorsor.subsingleton_iff V P] at hs
+    rw [Subsingleton.elim p s.center] at h
+    simpa using h.symm
+  · simp [h, inter_orthRadius_eq_empty_of_radius_lt_dist]
 
 Depends on / 依赖: AddTorsor, AddTorsor.subsingleton_iff, Metric, Metric.sphere_eq_empty_of_subsingleton, Module, Module.Free, Set.inter_univ, _root_, _root_.Module.Free.of_divisionRing, and_false, and_true, center, dist_nonneg, dist_nonneg.trans_lt, eq_or_ne, false_or, h.not_gt, inter_univ, lt_trichotomy, ne_eq
 -/
@@ -822,7 +998,30 @@ lemma inter_orthRadius_eq_of_dist_le_radius_of_norm_eq_one
   have hf := finrank_orthRadius hpc
   rw [direction_orthRadius] at hf
   simp only [hf2.out, Nat.reduceEqDiff] at hf
-  rw [finrank_eq_one_iff_of_nonzero' ⟨v]; rw [hv⟩ (by 
+  rw [finrank_eq_one_iff_of_nonzero' ⟨v]; rw [hv⟩ (by simpa using hv0)] at hf
+  have hvc : forall w in (Real ∙ (p -ᵥ s.center))ᗮ, exists c : Real, c • v = w := by
+    intro w hw
+    simpa using hf ⟨w, hw⟩
+  have hvp : 0 <= s.radius ^ 2 - (dist p s.center) ^ 2 := by
+    rw [sub_nonneg]; rw [sq_le_sq]; rw [abs_of_nonneg dist_nonneg]
+    exact le_abs.2 (.inl hp)
+  ext p'
+  refine ⟨fun h => ?_, fun h => ?_⟩
+  · rw [← vsub_vadd p' p, Set.mem_insert_iff, Set.mem_singleton_iff, vadd_right_cancel_iff,
+      vadd_right_cancel_iff]
+    have h' : p' -ᵥ p in (Real ∙ (p -ᵥ s.center))ᗮ := by
+      rw [← direction_orthRadius]; rw [vsub_right_mem_direction_iff_mem (s.self_mem_orthRadius p)]
+      exact h.2
+    rw [← vsub_vadd p' p]; rw [vadd_mem_inter_orthRadius_iff_norm_sq hr h'] at h
+    obtain ⟨c, hc⟩ := hvc _ h'
+    rw [← hc] at h ⊢
+    rw [← neg_smul]
+    simp_rw [(smul_left_injective Real hv0).eq_iff, ← sq_eq_sq_iff_eq_or_eq_neg, Real.sq_sqrt hvp]
+    simpa [norm_smul, hv1] using h
+  · rw [← neg_smul] at h
+    rcases h with rfl | rfl <;>
+      rw [vadd_mem_inter_orthRadius_iff_norm_sq hr (Submodule.smul_mem _ _ hv)] <;>
+      simp [norm_smul, hv1, hvp]
 
 中文:
 引理 inter_orthRadius_eq_of_dist_le_radius_of_norm_eq_one
@@ -834,7 +1033,30 @@ lemma inter_orthRadius_eq_of_dist_le_radius_of_norm_eq_one
   have hf := finrank_orthRadius hpc
   rw [direction_orthRadius] at hf
   simp only [hf2.out, Nat.reduceEqDiff] at hf
-  rw [finrank_eq_one_iff_of_nonzero' ⟨v]; rw [hv⟩ (by 
+  rw [finrank_eq_one_iff_of_nonzero' ⟨v]; rw [hv⟩ (by simpa using hv0)] at hf
+  have hvc : forall w in (Real ∙ (p -ᵥ s.center))ᗮ, exists c : Real, c • v = w := by
+    intro w hw
+    simpa using hf ⟨w, hw⟩
+  have hvp : 0 <= s.radius ^ 2 - (dist p s.center) ^ 2 := by
+    rw [sub_nonneg]; rw [sq_le_sq]; rw [abs_of_nonneg dist_nonneg]
+    exact le_abs.2 (.inl hp)
+  ext p'
+  refine ⟨fun h => ?_, fun h => ?_⟩
+  · rw [← vsub_vadd p' p, Set.mem_insert_iff, Set.mem_singleton_iff, vadd_right_cancel_iff,
+      vadd_right_cancel_iff]
+    have h' : p' -ᵥ p in (Real ∙ (p -ᵥ s.center))ᗮ := by
+      rw [← direction_orthRadius]; rw [vsub_right_mem_direction_iff_mem (s.self_mem_orthRadius p)]
+      exact h.2
+    rw [← vsub_vadd p' p]; rw [vadd_mem_inter_orthRadius_iff_norm_sq hr h'] at h
+    obtain ⟨c, hc⟩ := hvc _ h'
+    rw [← hc] at h ⊢
+    rw [← neg_smul]
+    simp_rw [(smul_left_injective Real hv0).eq_iff, ← sq_eq_sq_iff_eq_or_eq_neg, Real.sq_sqrt hvp]
+    simpa [norm_smul, hv1] using h
+  · rw [← neg_smul] at h
+    rcases h with rfl | rfl <;>
+      rw [vadd_mem_inter_orthRadius_iff_norm_sq hr (Submodule.smul_mem _ _ hv)] <;>
+      simp [norm_smul, hv1, hvp]
 
 Depends on / 依赖: Nat.reduceEqDiff, center, direction_orthRadius, dist_nonneg, dist_nonneg.trans, finrank_eq_one_iff_of_nonzero, finrank_orthRadius, hf2.out, neg_smul, norm_ne_zero_iff, radius, reduceEqDiff, s.center, s.radius, sub_nonneg
 -/
@@ -924,7 +1146,13 @@ lemma ncard_inter_orthRadius_eq_two_of_dist_lt_radius
   simp only [hf2.out, Nat.reduceEqDiff, finrank_eq_one_iff'] at hf
   obtain ⟨v, hv0, hv⟩ := hf
   replace hv0 : (v : V) != 0 := by simpa using hv0
-  rw [inter_orthRadius_eq_of_dist_le_radius hp.le hpc (by simpa using v.property) hv0]; rw [Submodule.norm_coe]; rw
+  rw [inter_orthRadius_eq_of_dist_le_radius hp.le hpc (by simpa using v.property) hv0]; rw [Submodule.norm_coe]; rw [neg_smul]; rw [Set.ncard_pair]
+  rw [ne_eq]; rw [vadd_right_cancel_iff]; rw [← add_eq_zero_iff_eq_neg]; rw [← two_smul Real]; rw [smul_eq_zero_iff_right two_ne_zero]; rw [smul_eq_zero_iff_left hv0]; rw [div_eq_iff]; rw [zero_mul]
+  · have hvp : 0 < √(s.radius ^ 2 - dist p s.center ^ 2) := by
+      rw [Real.sqrt_pos]; rw [sub_pos]; rw [sq_lt_sq]; rw [abs_of_nonneg dist_nonneg]
+      exact lt_abs.2 (.inl hp)
+    exact hvp.ne'
+  · simpa using hv0
 
 中文:
 引理 ncard_inter_orthRadius_eq_two_of_dist_lt_radius
@@ -934,7 +1162,13 @@ lemma ncard_inter_orthRadius_eq_two_of_dist_lt_radius
   simp only [hf2.out, Nat.reduceEqDiff, finrank_eq_one_iff'] at hf
   obtain ⟨v, hv0, hv⟩ := hf
   replace hv0 : (v : V) != 0 := by simpa using hv0
-  rw [inter_orthRadius_eq_of_dist_le_radius hp.le hpc (by simpa using v.property) hv0]; rw [Submodule.norm_coe]; rw
+  rw [inter_orthRadius_eq_of_dist_le_radius hp.le hpc (by simpa using v.property) hv0]; rw [Submodule.norm_coe]; rw [neg_smul]; rw [Set.ncard_pair]
+  rw [ne_eq]; rw [vadd_right_cancel_iff]; rw [← add_eq_zero_iff_eq_neg]; rw [← two_smul Real]; rw [smul_eq_zero_iff_right two_ne_zero]; rw [smul_eq_zero_iff_left hv0]; rw [div_eq_iff]; rw [zero_mul]
+  · have hvp : 0 < √(s.radius ^ 2 - dist p s.center ^ 2) := by
+      rw [Real.sqrt_pos]; rw [sub_pos]; rw [sq_lt_sq]; rw [abs_of_nonneg dist_nonneg]
+      exact lt_abs.2 (.inl hp)
+    exact hvp.ne'
+  · simpa using hv0
 
 Depends on / 依赖: Nat.reduceEqDiff, Set.ncard_pair, Submodule, Submodule.norm_coe, add_eq_zero_iff_eq_neg, div_eq_, finrank_eq_one_iff, finrank_orthRadius, hf2.out, hp.le, inter_orthRadius_eq_of_dist_le_radius, ncard_pair, ne_eq, neg_smul, norm_coe, property, reduceEqDiff, replace, smul_eq_zero_iff_left, smul_eq_zero_iff_right
 -/

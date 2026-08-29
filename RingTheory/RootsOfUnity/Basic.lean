@@ -431,7 +431,8 @@ definition rootsOfUnityUnitsMulEquiv
     simp only [mem_rootsOfUnity, ← map_pow, EmbeddingLike.map_eq_one_iff]
     exact (mem_rootsOfUnity ..).mp ζ.prop⟩
   left_inv ζ := by simp only [toUnits_val_apply, Subtype.coe_eta]
-  right_inv ζ :=
+  right_inv ζ := by simp only [val_toUnits_apply, Subtype.coe_eta]
+  map_mul' ζ ζ' := by simp only [Subgroup.coe_mul, Units.val_mul, MulMemClass.mk_mul_mk]
 
 中文:
 定义 rootsOfUnityUnitsMulEquiv
@@ -441,7 +442,8 @@ definition rootsOfUnityUnitsMulEquiv
     simp only [mem_rootsOfUnity, ← map_pow, EmbeddingLike.map_eq_one_iff]
     exact (mem_rootsOfUnity ..).mp ζ.prop⟩
   left_inv ζ := by simp only [toUnits_val_apply, Subtype.coe_eta]
-  right_inv ζ :=
+  right_inv ζ := by simp only [val_toUnits_apply, Subtype.coe_eta]
+  map_mul' ζ ζ' := by simp only [Subgroup.coe_mul, Units.val_mul, MulMemClass.mk_mul_mk]
 
 Depends on / 依赖: mem_rootsOfUnity
 -/
@@ -470,7 +472,9 @@ definition restrictRootsOfUnity
       exact map_one σ⟩
     map_one' := by ext1; simp only [OneMemClass.coe_one, map_one]
     map_mul' := fun ξ₁ ξ₂ => by
-      ext1; simp only [Subgroup.coe_
+      ext1; simp only [Subgroup.coe_mul, map_mul, MulMemClass.mk_mul_mk] }
+
+@[simp]
 
 中文:
 定义 restrictRootsOfUnity
@@ -480,7 +484,9 @@ definition restrictRootsOfUnity
       exact map_one σ⟩
     map_one' := by ext1; simp only [OneMemClass.coe_one, map_one]
     map_mul' := fun ξ₁ ξ₂ => by
-      ext1; simp only [Subgroup.coe_
+      ext1; simp only [Subgroup.coe_mul, map_mul, MulMemClass.mk_mul_mk] }
+
+@[simp]
 
 Depends on / 依赖: MulMemClass, MulMemClass.mk_mul_mk, OneMemClass, OneMemClass.coe_one, Subgroup, Subgroup.coe_mul, Units.coe_map, Units.ext_iff, Units.map, coe_map, coe_mul, coe_one, ext_iff, map_mul, map_one, map_pow, mem_rootsOfUnity, mk_mul_mk
 -/
@@ -705,7 +711,7 @@ definition rootsOfUnityEquivNthRoots
     all_goals
       rcases x with ⟨x, hx⟩; rw [mem_nthRoots <| NeZero.pos k] at hx
       simp only [← pow_succ, ← pow_succ', hx, tsub_add_cancel_of_le NeZero.one_le]
-    simp only [
+    simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, hx, Units.val_one]
 
 中文:
 定义 rootsOfUnityEquivNthRoots
@@ -716,7 +722,7 @@ definition rootsOfUnityEquivNthRoots
     all_goals
       rcases x with ⟨x, hx⟩; rw [mem_nthRoots <| NeZero.pos k] at hx
       simp only [← pow_succ, ← pow_succ', hx, tsub_add_cancel_of_le NeZero.one_le]
-    simp only [
+    simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, hx, Units.val_one]
 
 Depends on / 依赖: mem_rootsOfUnity_iff_mem_nthRoots, mem_rootsOfUnity_iff_mem_nthRoots.mp
 -/
@@ -824,7 +830,9 @@ theorem card_rootsOfUnity
     Nat.card (rootsOfUnity k R) = Nat.card { x // x in nthRoots k (1 : R) } :=
       Nat.card_congr (rootsOfUnityEquivNthRoots R k)
     _ = Fintype.card { x // x in nthRoots k (1 : R) } := Nat.card_eq_fintype_card
-    _ <= Multiset.card (nthRoots k (1 : R)).attach := Multiset.c
+    _ <= Multiset.card (nthRoots k (1 : R)).attach := Multiset.card_le_card (Multiset.dedup_le _)
+    _ = Multiset.card (nthRoots k (1 : R)) := Multiset.card_attach
+    _ <= k := card_nthRoots k 1
 
 中文:
 定理 card_rootsOfUnity
@@ -835,7 +843,9 @@ theorem card_rootsOfUnity
     Nat.card (rootsOfUnity k R) = Nat.card { x // x in nthRoots k (1 : R) } :=
       Nat.card_congr (rootsOfUnityEquivNthRoots R k)
     _ = Fintype.card { x // x in nthRoots k (1 : R) } := Nat.card_eq_fintype_card
-    _ <= Multiset.card (nthRoots k (1 : R)).attach := Multiset.c
+    _ <= Multiset.card (nthRoots k (1 : R)).attach := Multiset.card_le_card (Multiset.dedup_le _)
+    _ = Multiset.card (nthRoots k (1 : R)) := Multiset.card_attach
+    _ <= k := card_nthRoots k 1
 
 Depends on / 依赖: Fintype, Fintype.card, Multiset, Multiset.card, Multiset.card_attach, Multiset.card_le_card, Multiset.dedup_le, Nat.card, Nat.card_congr, Nat.card_eq_fintype_card, attach, card_attach, card_congr, card_eq_fintype_card, card_le_card, card_nthRoots, classical, dedup_le, nthRoots, rootsOfUnity
 -/
@@ -860,7 +870,8 @@ theorem map_rootsOfUnity_eq_pow_self
   proof: by
   obtain ⟨m, hm⟩ := MonoidHom.map_cyclic (restrictRootsOfUnity σ k)
   rw [← restrictRootsOfUnity_coe_apply]; rw [hm]; rw [← zpow_mod_orderOf]; rw [← Int.toNat_of_nonneg
-      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ))))]; rw [zpow_natCast]; rw [rootsOfUnity.coe_p
+      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ))))]; rw [zpow_natCast]; rw [rootsOfUnity.coe_pow]
+  exact ⟨(m % orderOf ζ).toNat, rfl⟩
 
 中文:
 定理 map_rootsOfUnity_eq_pow_self
@@ -868,7 +879,8 @@ theorem map_rootsOfUnity_eq_pow_self
   证明: by
   obtain ⟨m, hm⟩ := MonoidHom.map_cyclic (restrictRootsOfUnity σ k)
   rw [← restrictRootsOfUnity_coe_apply]; rw [hm]; rw [← zpow_mod_orderOf]; rw [← Int.toNat_of_nonneg
-      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ))))]; rw [zpow_natCast]; rw [rootsOfUnity.coe_p
+      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ))))]; rw [zpow_natCast]; rw [rootsOfUnity.coe_pow]
+  exact ⟨(m % orderOf ζ).toNat, rfl⟩
 
 Depends on / 依赖: Int.natCast_ne_zero.mpr, Int.toNat_of_nonneg, MonoidHom, MonoidHom.map_cyclic, coe_pow, emod_nonneg, m.emod_nonneg, map_cyclic, natCast_ne_zero, orderOf, orderOf_pos, pos_iff_ne_zero, pos_iff_ne_zero.mp, restrictRootsOfUnity, restrictRootsOfUnity_coe_apply, rootsOfUnity, rootsOfUnity.coe_pow, toNat_of_nonneg, zpow_mod_orderOf, zpow_natCast
 -/
@@ -962,7 +974,15 @@ definition monoidHomMulEquivRootsOfUnityOfGenerator
     simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, IsUnit.unit_spec,
       ← map_pow, pow_card_eq_one', map_one, Units.val_one]⟩
 invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) by
-    simpa only [orderOf_eq_card_of_for
+    simpa only [orderOf_eq_card_of_forall_mem_zpowers hg, orderOf_dvd_iff_pow_eq_one,
+      ← Units.val_pow_eq_pow_val, Units.val_eq_one] using! ζ.prop
+left_inv φ := (MonoidHom.eq_iff_eq_on_generator hg _ φ).mpr by
+    simp only [IsUnit.unit_spec, monoidHomOfForallMemZpowers_apply_gen]
+right_inv φ := Subtype.ext by
+    simp only [monoidHomOfForallMemZpowers_apply_gen, IsUnit.unit_of_val_units]
+  map_mul' x y := by
+    simp only [MonoidHom.mul_apply, MulMemClass.mk_mul_mk, Subtype.mk.injEq, Units.ext_iff,
+      IsUnit.unit_spec, Units.val_mul]
 
 中文:
 定义 monoidHomMulEquivRootsOfUnityOfGenerator
@@ -971,7 +991,15 @@ invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) by
     simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, IsUnit.unit_spec,
       ← map_pow, pow_card_eq_one', map_one, Units.val_one]⟩
 invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) by
-    simpa only [orderOf_eq_card_of_for
+    simpa only [orderOf_eq_card_of_forall_mem_zpowers hg, orderOf_dvd_iff_pow_eq_one,
+      ← Units.val_pow_eq_pow_val, Units.val_eq_one] using! ζ.prop
+left_inv φ := (MonoidHom.eq_iff_eq_on_generator hg _ φ).mpr by
+    simp only [IsUnit.unit_spec, monoidHomOfForallMemZpowers_apply_gen]
+right_inv φ := Subtype.ext by
+    simp only [monoidHomOfForallMemZpowers_apply_gen, IsUnit.unit_of_val_units]
+  map_mul' x y := by
+    simp only [MonoidHom.mul_apply, MulMemClass.mk_mul_mk, Subtype.mk.injEq, Units.ext_iff,
+      IsUnit.unit_spec, Units.val_mul]
 
 Depends on / 依赖: Group.isUnit, IsUnit, IsUnit.map, IsUnit.unit_spec, MonoidHom, MonoidHom.eq_iff_eq_on_generator, Units.ext_iff, Units.val_eq_one, Units.val_one, Units.val_pow_eq_pow_val, eq_iff_eq_on_generator, ext_iff, invFun, isUnit, left_inv, map_one, map_pow, mem_rootsOfUnity, monoidHomOfFor, monoidHomOfForallMemZpowers
 -/

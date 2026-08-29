@@ -690,7 +690,9 @@ instance normal_subgroupOf_centralizer_normalizer
   refine (Subgroup.normal_subgroupOf_iff <| centralizer_le_normalizer s).mpr fun c n hc hn => ?_
   refine mem_centralizer_iff_commutator_eq_one'.mpr fun g hg => ?_
   suffices n * (c * (n⁻¹ * g * n) * c⁻¹ * n⁻¹ * g⁻¹) = 1 by simpa [commutatorElement_def, mul_assoc]
-  simp [← hc _ <| mem_set_normal
+  simp [← hc _ <| mem_set_normalizer_iff''.mp hn g |>.mp hg]
+
+@[to_additive]
 
 中文:
 实例 normal_subgroupOf_centralizer_normalizer
@@ -699,7 +701,9 @@ instance normal_subgroupOf_centralizer_normalizer
   refine (Subgroup.normal_subgroupOf_iff <| centralizer_le_normalizer s).mpr fun c n hc hn => ?_
   refine mem_centralizer_iff_commutator_eq_one'.mpr fun g hg => ?_
   suffices n * (c * (n⁻¹ * g * n) * c⁻¹ * n⁻¹ * g⁻¹) = 1 by simpa [commutatorElement_def, mul_assoc]
-  simp [← hc _ <| mem_set_normal
+  simp [← hc _ <| mem_set_normalizer_iff''.mp hn g |>.mp hg]
+
+@[to_additive]
 
 Depends on / 依赖: Subgroup, Subgroup.normal_subgroupOf_iff, centralizer_le_normalizer, commutatorElement_def, mem_centralizer_iff_commutator_eq_one, mem_set_normalizer_iff, mul_assoc, normal_subgroupOf_iff
 -/

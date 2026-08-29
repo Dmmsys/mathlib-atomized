@@ -433,7 +433,14 @@ definition hcomp
   body: if (x.2 : Real) <= 1 / 2 then (F.eval x.1).extend (2 * x.2) else (G.eval x.1).extend (2 * x.2 - 1)
   continuous_toFun := continuous_if_le (continuous_induced_dom.comp continuous_snd) continuous_const
     (F.toHomotopy.continuous.comp (by fun_prop)).continuousOn
-    (G.toHomotopy.continuous.comp (by 
+    (G.toHomotopy.continuous.comp (by fun_prop)).continuousOn fun x hx => by norm_num [hx]
+  map_zero_left x := by simp [Path.trans]
+  map_one_left x := by simp [Path.trans]
+  prop' x t ht := by
+    rcases ht with ht | ht
+    · norm_num [ht]
+    · rw [Set.mem_singleton_iff] at ht
+      norm_num [ht]
 
 中文:
 定义 hcomp
@@ -441,7 +448,14 @@ definition hcomp
   定义体: if (x.2 : Real) <= 1 / 2 then (F.eval x.1).extend (2 * x.2) else (G.eval x.1).extend (2 * x.2 - 1)
   continuous_toFun := continuous_if_le (continuous_induced_dom.comp continuous_snd) continuous_const
     (F.toHomotopy.continuous.comp (by fun_prop)).continuousOn
-    (G.toHomotopy.continuous.comp (by 
+    (G.toHomotopy.continuous.comp (by fun_prop)).continuousOn fun x hx => by norm_num [hx]
+  map_zero_left x := by simp [Path.trans]
+  map_one_left x := by simp [Path.trans]
+  prop' x t ht := by
+    rcases ht with ht | ht
+    · norm_num [ht]
+    · rw [Set.mem_singleton_iff] at ht
+      norm_num [ht]
 
 Depends on / 依赖: F.eval, F.toHomotopy.continuous.comp, G.eval, G.toHomotopy.continuous.comp, Path.trans, Set.mem_single, continuous, continuousOn, continuous_const, continuous_if_le, continuous_induced_dom, continuous_induced_dom.comp, continuous_snd, continuous_toFun, extend, fun_prop, map_one_left, map_zero_left, mem_single, toHomotopy
 -/
@@ -514,7 +528,13 @@ definition reparam
   map_zero_left x := by norm_num
   map_one_left x := by norm_num
   prop' t x hx := by
-    rcases hx wit
+    rcases hx with hx | hx
+    · rw [hx]
+      simp [hf₀]
+    · rw [Set.mem_singleton_iff] at hx
+      rw [hx]
+      simp [hf₁]
+  continuous_toFun := by fun_prop
 
 中文:
 定义 reparam
@@ -525,7 +545,13 @@ definition reparam
   map_zero_left x := by norm_num
   map_one_left x := by norm_num
   prop' t x hx := by
-    rcases hx wit
+    rcases hx with hx | hx
+    · rw [hx]
+      simp [hf₀]
+    · rw [Set.mem_singleton_iff] at hx
+      rw [hx]
+      simp [hf₁]
+  continuous_toFun := by fun_prop
 -/
 def reparam (p : Path x₀ x₁) (f : I -> I) (hf : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1) :
     Homotopy p (p.reparam f hf hf₀ hf₁) where

@@ -151,7 +151,7 @@ lemma rotate_essImageDistTriang
       rot_of_distTriang T' hT'⟩
   · rintro ⟨T', e', hT'⟩
     exact ⟨T'.invRotate, (triangleRotation D).unitIso.app T ≪≫ (invRotate D).mapIso e' ≪≫
-      L.mapTriangleInvRotateIso.ap
+      L.mapTriangleInvRotateIso.app T', inv_rot_of_distTriang T' hT'⟩
 
 中文:
 引理 rotate_essImageDistTriang
@@ -163,7 +163,7 @@ lemma rotate_essImageDistTriang
       rot_of_distTriang T' hT'⟩
   · rintro ⟨T', e', hT'⟩
     exact ⟨T'.invRotate, (triangleRotation D).unitIso.app T ≪≫ (invRotate D).mapIso e' ≪≫
-      L.mapTriangleInvRotateIso.ap
+      L.mapTriangleInvRotateIso.app T', inv_rot_of_distTriang T' hT'⟩
 
 Depends on / 依赖: L.mapTriangleInvRotateIso.app, L.mapTriangleRotateIso.app, invRotate, inv_rot_of_distTriang, mapIso, mapTriangleInvRotateIso, mapTriangleRotateIso, rot_of_distTriang, rotate, triangleRotation, unitIso, unitIso.app
 -/
@@ -195,7 +195,22 @@ lemma complete_distinguished_essImageDistTriang_morphism
   have comm₃ := e₁.inv.comm₃
   have comm₃' := e₂.hom.comm₃
   dsimp at comm₁ comm₁' comm₂ comm₂' comm₃ comm₃'
-  simp
+  simp only [assoc] at comm₃
+  obtain ⟨φ, hφ₁, hφ₂⟩ := H T₁' T₂' hT₁' hT₂' (e₁.inv.hom₁ ≫ a ≫ e₂.hom.hom₁)
+    (e₁.inv.hom₂ ≫ b ≫ e₂.hom.hom₂)
+    (by simp only [assoc, ← comm₁', ← reassoc_of% fac, ← reassoc_of% comm₁])
+  have h₂ := φ.comm₂
+  have h₃ := φ.comm₃
+  dsimp at h₂ h₃
+  simp only [assoc] at h₃
+  refine ⟨e₁.hom.hom₃ ≫ φ.hom₃ ≫ e₂.inv.hom₃, ?_, ?_⟩
+  · rw [reassoc_of% comm₂, reassoc_of% h₂, hφ₂, assoc, assoc,
+      Iso.hom_inv_id_triangle_hom₂_assoc, ← reassoc_of% comm₂',
+      Iso.hom_inv_id_triangle_hom₃, comp_id]
+  · rw [assoc, assoc, ← cancel_epi e₁.inv.hom₃, ← reassoc_of% comm₃,
+      Iso.inv_hom_id_triangle_hom₃_assoc, ← cancel_mono (e₂.hom.hom₁⟦(1 : Int)⟧'),
+      assoc, assoc, assoc, assoc, assoc, ← Functor.map_comp, ← Functor.map_comp, ← hφ₁,
+      h₃, comm₃', Iso.inv_hom_id_triangle_hom₃_assoc]
 
 中文:
 引理 complete_distinguished_essImageDistTriang_morphism
@@ -209,7 +224,22 @@ lemma complete_distinguished_essImageDistTriang_morphism
   have comm₃ := e₁.inv.comm₃
   have comm₃' := e₂.hom.comm₃
   dsimp at comm₁ comm₁' comm₂ comm₂' comm₃ comm₃'
-  simp
+  simp only [assoc] at comm₃
+  obtain ⟨φ, hφ₁, hφ₂⟩ := H T₁' T₂' hT₁' hT₂' (e₁.inv.hom₁ ≫ a ≫ e₂.hom.hom₁)
+    (e₁.inv.hom₂ ≫ b ≫ e₂.hom.hom₂)
+    (by simp only [assoc, ← comm₁', ← reassoc_of% fac, ← reassoc_of% comm₁])
+  have h₂ := φ.comm₂
+  have h₃ := φ.comm₃
+  dsimp at h₂ h₃
+  simp only [assoc] at h₃
+  refine ⟨e₁.hom.hom₃ ≫ φ.hom₃ ≫ e₂.inv.hom₃, ?_, ?_⟩
+  · rw [reassoc_of% comm₂, reassoc_of% h₂, hφ₂, assoc, assoc,
+      Iso.hom_inv_id_triangle_hom₂_assoc, ← reassoc_of% comm₂',
+      Iso.hom_inv_id_triangle_hom₃, comp_id]
+  · rw [assoc, assoc, ← cancel_epi e₁.inv.hom₃, ← reassoc_of% comm₃,
+      Iso.inv_hom_id_triangle_hom₃_assoc, ← cancel_mono (e₂.hom.hom₁⟦(1 : Int)⟧'),
+      assoc, assoc, assoc, assoc, assoc, ← Functor.map_comp, ← Functor.map_comp, ← hφ₁,
+      h₃, comm₃', Iso.inv_hom_id_triangle_hom₃_assoc]
 
 Depends on / 依赖: hom.comm, hom.hom, inv.comm, inv.hom, reassoc_of
 -/
@@ -272,7 +302,12 @@ lemma distinguished_cocone_triangle
     ⟨_, ⟨Functor.objObjPreimageIso _ _⟩⟩
   obtain ⟨Z, g, h, H⟩ := Pretriangulated.distinguished_cocone_triangle φ.hom
   refine ⟨L.obj Z, e.inv.right ≫ L.map g,
-    L.map h ≫ (L.com
+    L.map h ≫ (L.commShiftIso (1 : Int)).hom.app _ ≫ e.hom.left⟦(1 : Int)⟧', _, ?_, H⟩
+  refine Triangle.isoMk _ _ (Arrow.leftFunc.mapIso e.symm) (Arrow.rightFunc.mapIso e.symm)
+    (Iso.refl _) e.inv.w.symm (by simp) ?_
+  dsimp
+  simp only [assoc, id_comp, ← Functor.map_comp, ← Arrow.comp_left, e.hom_inv_id, Arrow.id_left,
+    Functor.mapArrow_obj, Arrow.mk_left, Functor.map_id, comp_id]
 
 中文:
 引理 distinguished_cocone_triangle
@@ -283,7 +318,12 @@ lemma distinguished_cocone_triangle
     ⟨_, ⟨Functor.objObjPreimageIso _ _⟩⟩
   obtain ⟨Z, g, h, H⟩ := Pretriangulated.distinguished_cocone_triangle φ.hom
   refine ⟨L.obj Z, e.inv.right ≫ L.map g,
-    L.map h ≫ (L.com
+    L.map h ≫ (L.commShiftIso (1 : Int)).hom.app _ ≫ e.hom.left⟦(1 : Int)⟧', _, ?_, H⟩
+  refine Triangle.isoMk _ _ (Arrow.leftFunc.mapIso e.symm) (Arrow.rightFunc.mapIso e.symm)
+    (Iso.refl _) e.inv.w.symm (by simp) ?_
+  dsimp
+  simp only [assoc, id_comp, ← Functor.map_comp, ← Arrow.comp_left, e.hom_inv_id, Arrow.id_left,
+    Functor.mapArrow_obj, Arrow.mk_left, Functor.map_id, comp_id]
 
 Depends on / 依赖: Arrow.leftFunc.mapIso, Arrow.mk, Arrow.rightFunc.mapIso, Functor, Functor.objObjPreimageIso, Iso.refl, L.commShiftIso, L.map, L.mapArrow.obj, L.obj, Nonempty, Pretriangulated, Pretriangulated.distinguished_cocone_triangle, Triangle, Triangle.isoMk, commShiftIso, distinguished_cocone_triangle, e.hom.left, e.inv.right, e.inv.w.symm
 -/
@@ -320,7 +360,32 @@ lemma complete_distinguished_triangle_morphism
   intro T₁ T₂ hT₁ hT₂ a b fac
   obtain ⟨α, hα⟩ := exists_leftFraction L W a
   obtain ⟨β, hβ⟩ := (MorphismProperty.RightFraction.mk α.s α.hs T₂.mor₁).exists_leftFraction
-  obtain ⟨γ
+  obtain ⟨γ, hγ⟩ := exists_leftFraction L W (b ≫ L.map β.s)
+  dsimp at hβ
+  obtain ⟨Z₂, σ, hσ, fac⟩ := (MorphismProperty.map_eq_iff_postcomp L W
+    (α.f ≫ β.f ≫ γ.s) (T₁.mor₁ ≫ γ.f)).1 (by
+      rw [← cancel_mono (L.map β.s)]; rw [assoc]; rw [assoc]; rw [hγ]; rw [← cancel_mono (L.map γ.s)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [hα]; rw [MorphismProperty.LeftFraction.map_comp_map_s]; rw [← Functor.map_comp] at fac
+      rw [fac]; rw [← Functor.map_comp_assoc]; rw [hβ]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [MorphismProperty.LeftFraction.map_comp_map_s_assoc])
+  simp only [assoc] at fac
+  obtain ⟨Y₃, g, h, hT₃⟩ := Pretriangulated.distinguished_cocone_triangle (β.f ≫ γ.s ≫ σ)
+  let T₃ := Triangle.mk (β.f ≫ γ.s ≫ σ) g h
+  change T₃ in distTriang C at hT₃
+  have hβγσ : W (β.s ≫ γ.s ≫ σ) := W.comp_mem _ _ β.hs (W.comp_mem _ _ γ.hs hσ)
+  obtain ⟨ψ₃, hψ₃, hψ₁, hψ₂⟩ := MorphismProperty.compatible_with_triangulation
+    T₂ T₃ hT₂ hT₃ α.s (β.s ≫ γ.s ≫ σ) α.hs hβγσ (by dsimp [T₃]; rw [reassoc_of% hβ])
+  let ψ : T₂ ⟶ T₃ := Triangle.homMk _ _ α.s (β.s ≫ γ.s ≫ σ) ψ₃
+    (by dsimp [T₃]; rw [reassoc_of% hβ]) hψ₁ hψ₂
+  have : IsIso (L.mapTriangle.map ψ) := Triangle.isIso_of_isIsos _
+    (inverts L W α.s α.hs) (inverts L W _ hβγσ) (inverts L W ψ₃ hψ₃)
+  refine ⟨L.mapTriangle.map (completeDistinguishedTriangleMorphism T₁ T₃ hT₁ hT₃ α.f
+      (γ.f ≫ σ) fac.symm) ≫ inv (L.mapTriangle.map ψ), ?_, ?_⟩
+  · rw [← cancel_mono (L.mapTriangle.map ψ).hom₁, ← comp_hom₁, assoc, IsIso.inv_hom_id, comp_id]
+    dsimp [ψ]
+    rw [hα]; rw [MorphismProperty.LeftFraction.map_comp_map_s]
+  · rw [← cancel_mono (L.mapTriangle.map ψ).hom₂, ← comp_hom₂, assoc, IsIso.inv_hom_id, comp_id]
+    dsimp [ψ]
+    simp only [Functor.map_comp, reassoc_of% hγ,
+      MorphismProperty.LeftFraction.map_comp_map_s_assoc]
 
 中文:
 引理 complete_distinguished_triangle_morphism
@@ -331,7 +396,32 @@ lemma complete_distinguished_triangle_morphism
   intro T₁ T₂ hT₁ hT₂ a b fac
   obtain ⟨α, hα⟩ := exists_leftFraction L W a
   obtain ⟨β, hβ⟩ := (MorphismProperty.RightFraction.mk α.s α.hs T₂.mor₁).exists_leftFraction
-  obtain ⟨γ
+  obtain ⟨γ, hγ⟩ := exists_leftFraction L W (b ≫ L.map β.s)
+  dsimp at hβ
+  obtain ⟨Z₂, σ, hσ, fac⟩ := (MorphismProperty.map_eq_iff_postcomp L W
+    (α.f ≫ β.f ≫ γ.s) (T₁.mor₁ ≫ γ.f)).1 (by
+      rw [← cancel_mono (L.map β.s)]; rw [assoc]; rw [assoc]; rw [hγ]; rw [← cancel_mono (L.map γ.s)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [hα]; rw [MorphismProperty.LeftFraction.map_comp_map_s]; rw [← Functor.map_comp] at fac
+      rw [fac]; rw [← Functor.map_comp_assoc]; rw [hβ]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [MorphismProperty.LeftFraction.map_comp_map_s_assoc])
+  simp only [assoc] at fac
+  obtain ⟨Y₃, g, h, hT₃⟩ := Pretriangulated.distinguished_cocone_triangle (β.f ≫ γ.s ≫ σ)
+  let T₃ := Triangle.mk (β.f ≫ γ.s ≫ σ) g h
+  change T₃ in distTriang C at hT₃
+  have hβγσ : W (β.s ≫ γ.s ≫ σ) := W.comp_mem _ _ β.hs (W.comp_mem _ _ γ.hs hσ)
+  obtain ⟨ψ₃, hψ₃, hψ₁, hψ₂⟩ := MorphismProperty.compatible_with_triangulation
+    T₂ T₃ hT₂ hT₃ α.s (β.s ≫ γ.s ≫ σ) α.hs hβγσ (by dsimp [T₃]; rw [reassoc_of% hβ])
+  let ψ : T₂ ⟶ T₃ := Triangle.homMk _ _ α.s (β.s ≫ γ.s ≫ σ) ψ₃
+    (by dsimp [T₃]; rw [reassoc_of% hβ]) hψ₁ hψ₂
+  have : IsIso (L.mapTriangle.map ψ) := Triangle.isIso_of_isIsos _
+    (inverts L W α.s α.hs) (inverts L W _ hβγσ) (inverts L W ψ₃ hψ₃)
+  refine ⟨L.mapTriangle.map (completeDistinguishedTriangleMorphism T₁ T₃ hT₁ hT₃ α.f
+      (γ.f ≫ σ) fac.symm) ≫ inv (L.mapTriangle.map ψ), ?_, ?_⟩
+  · rw [← cancel_mono (L.mapTriangle.map ψ).hom₁, ← comp_hom₁, assoc, IsIso.inv_hom_id, comp_id]
+    dsimp [ψ]
+    rw [hα]; rw [MorphismProperty.LeftFraction.map_comp_map_s]
+  · rw [← cancel_mono (L.mapTriangle.map ψ).hom₂, ← comp_hom₂, assoc, IsIso.inv_hom_id, comp_id]
+    dsimp [ψ]
+    simp only [Functor.map_comp, reassoc_of% hγ,
+      MorphismProperty.LeftFraction.map_comp_map_s_assoc]
 
 Depends on / 依赖: L.complete_distinguished_essImageDistTriang_morphism, L.map, MorphismProperty, MorphismProperty.RightFraction.mk, MorphismProperty.map_eq_iff_postcomp, RightFraction, cancel_mono, complete_distinguished_essImageDistTriang_morphism, exists_leftFraction, map_eq_iff_postcomp
 -/
@@ -386,7 +476,8 @@ definition pretriangulated
   contractible_distinguished :=
     have := essSurj L W; L.contractible_mem_essImageDistTriang
   distinguished_cocone_triangle f := distinguished_cocone_triangle L W f
-  rotate_distinguished_triangle :
+  rotate_distinguished_triangle := L.rotate_essImageDistTriang
+  complete_distinguished_triangle_morphism := complete_distinguished_triangle_morphism L W
 
 中文:
 定义 pretriangulated
@@ -396,7 +487,8 @@ definition pretriangulated
   contractible_distinguished :=
     have := essSurj L W; L.contractible_mem_essImageDistTriang
   distinguished_cocone_triangle f := distinguished_cocone_triangle L W f
-  rotate_distinguished_triangle :
+  rotate_distinguished_triangle := L.rotate_essImageDistTriang
+  complete_distinguished_triangle_morphism := complete_distinguished_triangle_morphism L W
 
 Depends on / 依赖: L.essImageDistTriang, essImageDistTriang
 -/
@@ -568,7 +660,9 @@ lemma distTriang_iff
     obtain ⟨Z, g : f.right ⟶ Z, h : Z ⟶ f.left⟦(1 : Int)⟧, mem⟩ :=
       Pretriangulated.distinguished_cocone_triangle f.hom
     exact ⟨_, (exists_iso_of_arrow_iso T _ hT (L.map_distinguished _ mem)
-      (L.mapArrow.objObjPrei
+      (L.mapArrow.objObjPreimageIso T.mor₁).symm).choose, mem⟩
+  · rintro ⟨T₀, e, hT₀⟩
+    exact isomorphic_distinguished _ (L.map_distinguished _ hT₀) _ e
 
 中文:
 引理 distTriang_iff
@@ -580,7 +674,9 @@ lemma distTriang_iff
     obtain ⟨Z, g : f.right ⟶ Z, h : Z ⟶ f.left⟦(1 : Int)⟧, mem⟩ :=
       Pretriangulated.distinguished_cocone_triangle f.hom
     exact ⟨_, (exists_iso_of_arrow_iso T _ hT (L.map_distinguished _ mem)
-      (L.mapArrow.objObjPrei
+      (L.mapArrow.objObjPreimageIso T.mor₁).symm).choose, mem⟩
+  · rintro ⟨T₀, e, hT₀⟩
+    exact isomorphic_distinguished _ (L.map_distinguished _ hT₀) _ e
 
 Depends on / 依赖: L.mapArrow.objObjPreimageIso, L.mapArrow.objPreimage, L.map_distinguished, Pretriangulated, Pretriangulated.distinguished_cocone_triangle, T.mor, distinguished_cocone_triangle, exists_iso_of_arrow_iso, f.hom, f.left, f.right, isomorphic_distinguished, mapArrow, map_distinguished, objObjPreimageIso, objPreimage
 -/

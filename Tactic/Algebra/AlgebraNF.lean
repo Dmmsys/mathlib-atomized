@@ -31,7 +31,13 @@ definition cleanupSMul
   let thms ← [``add_zero, ``add_assoc_rev, ``_root_.mul_one, ``mul_assoc_rev, ``_root_.pow_one,
     ``mul_neg, ``add_neg, ``one_smul, ``mul_smul_comm, ``Algebra.algebraMap_eq_smul_one
     ].foldlM (·.addConst ·) thms
-  let thms ← [``nat_rawCast_0, ``nat_rawCast_1, 
+  let thms ← [``nat_rawCast_0, ``nat_rawCast_1, ``nat_rawCast_2, ``int_rawCast_neg,
+      ``nnrat_rawCast, ``rat_rawCast_neg].foldlM (·.addConst · (post := false)) thms
+  let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
+    (simpTheorems := #[thms])
+    (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+    r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 
 中文:
 定义 cleanupSMul
@@ -41,7 +47,13 @@ definition cleanupSMul
   let thms ← [``add_zero, ``add_assoc_rev, ``_root_.mul_one, ``mul_assoc_rev, ``_root_.pow_one,
     ``mul_neg, ``add_neg, ``one_smul, ``mul_smul_comm, ``Algebra.algebraMap_eq_smul_one
     ].foldlM (·.addConst ·) thms
-  let thms ← [``nat_rawCast_0, ``nat_rawCast_1, 
+  let thms ← [``nat_rawCast_0, ``nat_rawCast_1, ``nat_rawCast_2, ``int_rawCast_neg,
+      ``nnrat_rawCast, ``rat_rawCast_neg].foldlM (·.addConst · (post := false)) thms
+  let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
+    (simpTheorems := #[thms])
+    (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+    r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 -/
 def cleanupSMul (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
   let thms : SimpTheorems := {}
@@ -68,7 +80,12 @@ definition cleanupConsts
     ``neg_mul, ``add_neg].foldlM (·.addConst ·) thms
   let thms ← [``ofNat_smul, ``neg_ofNat_smul, ``neg_1_smul, ``nnRat_ofNat_smul_1,
     ``nnRat_ofNat_smul_2, ``rat_ofNat_smul_1, ``rat_ofNat_smul_2
-   
+    ].foldlM (·.addConst · (post := false)) thms
+  let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
+    (simpTheorems := #[thms])
+    (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+    r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 
 中文:
 定义 cleanupConsts
@@ -79,7 +96,12 @@ definition cleanupConsts
     ``neg_mul, ``add_neg].foldlM (·.addConst ·) thms
   let thms ← [``ofNat_smul, ``neg_ofNat_smul, ``neg_1_smul, ``nnRat_ofNat_smul_1,
     ``nnRat_ofNat_smul_2, ``rat_ofNat_smul_1, ``rat_ofNat_smul_2
-   
+    ].foldlM (·.addConst · (post := false)) thms
+  let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
+    (simpTheorems := #[thms])
+    (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+    r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 -/
 def cleanupConsts (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
   let thms : SimpTheorems := {}

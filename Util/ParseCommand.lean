@@ -32,7 +32,7 @@ definition captureException
   else if ictx.atEnd s.pos then
     .ok s.stxStack.back
   else
-    .error ((s.mkError "end of input").toErro
+    .error ((s.mkError "end of input").toErrorMsg ictx)
 
 中文:
 定义 captureException
@@ -44,7 +44,7 @@ definition captureException
   else if ictx.atEnd s.pos then
     .ok s.stxStack.back
   else
-    .error ((s.mkError "end of input").toErro
+    .error ((s.mkError "end of input").toErrorMsg ictx)
 
 Depends on / 依赖: allErrors, getTokenTable, ictx.atEnd, isEmpty, mkError, mkInputContext, mkParserState, options, s.allErrors.isEmpty, s.mkError, s.pos, s.run, s.stxStack.back, s.toErrorMsg, stxStack, toErrorMsg
 -/
@@ -72,7 +72,7 @@ definition parseAsTacticSeq
   else if s.pos.atEnd input then
     .ok ⟨s.stxStack.back⟩
   else
- 
+    .error ((s.mkError "end of input").toErrorMsg ictx)
 
 中文:
 定义 parseAsTacticSeq
@@ -85,7 +85,7 @@ definition parseAsTacticSeq
   else if s.pos.atEnd input then
     .ok ⟨s.stxStack.back⟩
   else
- 
+    .error ((s.mkError "end of input").toErrorMsg ictx)
 -/
 def parseAsTacticSeq (env : Environment) (input : String) (fileName := "<input>") :
     Except String (TSyntax ``Lean.Parser.Tactic.tacticSeq) :=

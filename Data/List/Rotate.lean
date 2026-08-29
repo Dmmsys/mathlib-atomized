@@ -187,14 +187,18 @@ theorem rotate'_eq_drop_append_take
   proof: le_of_succ_le_succ h
     have hnl' : n <= (l ++ [a]).length := by
       rw [length_append]; rw [length_cons]; rw [List.length]; exact le_of_succ_le h
-    rw [rotate'_cons_succ]; rw [rotate'_eq_drop_append_take hnl']; rw [drop]; rw [take]; rw [drop_append_of_le_length hnl]; rw [take_append_of_le_leng
+    rw [rotate'_cons_succ]; rw [rotate'_eq_drop_append_take hnl']; rw [drop]; rw [take]; rw [drop_append_of_le_length hnl]; rw [take_append_of_le_length hnl]; simp
+
+@[simp]
 
 中文:
 定理 rotate'_eq_drop_append_take
   证明: le_of_succ_le_succ h
     have hnl' : n <= (l ++ [a]).length := by
       rw [length_append]; rw [length_cons]; rw [List.length]; exact le_of_succ_le h
-    rw [rotate'_cons_succ]; rw [rotate'_eq_drop_append_take hnl']; rw [drop]; rw [take]; rw [drop_append_of_le_length hnl]; rw [take_append_of_le_leng
+    rw [rotate'_cons_succ]; rw [rotate'_eq_drop_append_take hnl']; rw [drop]; rw [take]; rw [drop_append_of_le_length hnl]; rw [take_append_of_le_length hnl]; simp
+
+@[simp]
 -/
 theorem rotate'_eq_drop_append_take :
     forall {l : List α} {n : Nat}, n <= l.length -> l.rotate' n = l.drop n ++ l.take n
@@ -811,7 +815,19 @@ theorem getElem?_rotate
   · rw [getElem?_append_left hm, getElem?_drop, ← add_mod_mod]
     rw [length_drop]; rw [Nat.lt_sub_iff_add_lt] at hm
     rw [mod_eq_of_lt hm]; rw [Nat.add_comm]
-  · have hlt : n % length l < len
+  · have hlt : n % length l < length l := mod_lt _ (m.zero_le.trans_lt hml)
+    rw [getElem?_append_right hm]; rw [getElem?_take_of_lt]; rw [length_drop]
+    · congr 1
+      rw [length_drop] at hm
+      have hm' := Nat.sub_le_iff_le_add'.1 hm
+      have : n % length l + m - length l < length l := by
+        rw [Nat.sub_lt_iff_lt_add hm']
+        exact Nat.add_lt_add hlt hml
+      conv_rhs => rw [Nat.add_comm m, ← mod_add_mod, mod_eq_sub_mod hm', mod_eq_of_lt this]
+      lia
+    · rwa [Nat.sub_lt_iff_lt_add' hm, length_drop, Nat.sub_add_cancel hlt.le]
+
+@[simp]
 
 中文:
 定理 getElem?_rotate
@@ -822,7 +838,19 @@ theorem getElem?_rotate
   · rw [getElem?_append_left hm, getElem?_drop, ← add_mod_mod]
     rw [length_drop]; rw [Nat.lt_sub_iff_add_lt] at hm
     rw [mod_eq_of_lt hm]; rw [Nat.add_comm]
-  · have hlt : n % length l < len
+  · have hlt : n % length l < length l := mod_lt _ (m.zero_le.trans_lt hml)
+    rw [getElem?_append_right hm]; rw [getElem?_take_of_lt]; rw [length_drop]
+    · congr 1
+      rw [length_drop] at hm
+      have hm' := Nat.sub_le_iff_le_add'.1 hm
+      have : n % length l + m - length l < length l := by
+        rw [Nat.sub_lt_iff_lt_add hm']
+        exact Nat.add_lt_add hlt hml
+      conv_rhs => rw [Nat.add_comm m, ← mod_add_mod, mod_eq_sub_mod hm', mod_eq_of_lt this]
+      lia
+    · rwa [Nat.sub_lt_iff_lt_add' hm, length_drop, Nat.sub_add_cancel hlt.le]
+
+@[simp]
 -/
 theorem getElem?_rotate {l : List α} {n m : Nat} (hml : m < l.length) :
     (l.rotate n)[m]? = l[(m + n) % l.length]? := by
@@ -1050,7 +1078,9 @@ theorem rotate_injective
   have hle : l.length = l'.length := (l.length_rotate n).symm.trans (h.symm ▸ l'.length_rotate n)
   rw [rotate_eq_drop_append_take_mod]; rw [rotate_eq_drop_append_take_mod] at h
   obtain ⟨hd, ht⟩ := append_inj h (by simp_all)
-  rw [← take_append_drop _
+  rw [← take_append_drop _ l]; rw [ht]; rw [hd]; rw [take_append_drop]
+
+@[simp]
 
 中文:
 定理 rotate_injective
@@ -1061,7 +1091,9 @@ theorem rotate_injective
   have hle : l.length = l'.length := (l.length_rotate n).symm.trans (h.symm ▸ l'.length_rotate n)
   rw [rotate_eq_drop_append_take_mod]; rw [rotate_eq_drop_append_take_mod] at h
   obtain ⟨hd, ht⟩ := append_inj h (by simp_all)
-  rw [← take_append_drop _
+  rw [← take_append_drop _ l]; rw [ht]; rw [hd]; rw [take_append_drop]
+
+@[simp]
 
 Depends on / 依赖: append_inj, h.symm, l.length, l.length_rotate, l.rotate, length, length_rotate, rotate, rotate_eq_drop_append_take_mod, symm.trans, take_append_drop
 -/
@@ -1105,7 +1137,10 @@ theorem rotate_eq_iff
   · rw [eq_nil_of_length_eq_zero hl.symm, rotate_nil]
   · rcases (Nat.zero_le (n % l'.length)).eq_or_lt with hn | hn
     · simp [← hn]
-    · rw [mod_eq_of_lt
+    · rw [mod_eq_of_lt (Nat.sub_lt hl hn), Nat.sub_add_cancel, mod_self, rotate_zero]
+      exact (Nat.mod_lt _ hl).le
+
+@[simp]
 
 中文:
 定理 rotate_eq_iff
@@ -1116,7 +1151,10 @@ theorem rotate_eq_iff
   · rw [eq_nil_of_length_eq_zero hl.symm, rotate_nil]
   · rcases (Nat.zero_le (n % l'.length)).eq_or_lt with hn | hn
     · simp [← hn]
-    · rw [mod_eq_of_lt
+    · rw [mod_eq_of_lt (Nat.sub_lt hl hn), Nat.sub_add_cancel, mod_self, rotate_zero]
+      exact (Nat.mod_lt _ hl).le
+
+@[simp]
 
 Depends on / 依赖: Nat.mod_lt, Nat.sub_add_cancel, Nat.sub_lt, Nat.zero_le, add_mod, eq_nil_of_length_eq_zero, eq_or_lt, hl.symm, length, length.zero_le.eq_or_lt, mod_eq_of_lt, mod_lt, mod_self, rotate_eq_rotate, rotate_mod, rotate_nil, rotate_rotate, rotate_zero, sub_add_cancel, sub_lt
 -/
@@ -1236,7 +1274,13 @@ theorem rotate_reverse
   let k := n % l.reverse.length
   rcases hk' : k with - | k'
   · simp_all! [k, length_reverse, ← rotate_rotate]
-  · rcases l with - | ⟨x,
+  · rcases l with - | ⟨x, l⟩
+    · simp
+    · rw [Nat.mod_eq_of_lt, Nat.sub_add_cancel, rotate_length]
+      · exact Nat.sub_le _ _
+      · exact Nat.sub_lt (by simp) (by simp_all! [k])
+
+@[simp]
 
 中文:
 定理 rotate_reverse
@@ -1249,7 +1293,13 @@ theorem rotate_reverse
   let k := n % l.reverse.length
   rcases hk' : k with - | k'
   · simp_all! [k, length_reverse, ← rotate_rotate]
-  · rcases l with - | ⟨x,
+  · rcases l with - | ⟨x, l⟩
+    · simp
+    · rw [Nat.mod_eq_of_lt, Nat.sub_add_cancel, rotate_length]
+      · exact Nat.sub_le _ _
+      · exact Nat.sub_lt (by simp) (by simp_all! [k])
+
+@[simp]
 
 Depends on / 依赖: Nat.mod_eq_of_lt, Nat.sub_add_cancel, Nat.sub_le, Nat.sub_lt, l.reverse.length, length, length_reverse, length_rotate, mod_eq_of_lt, reverse, reverse_reverse, reverse_rotate, rotate_eq_iff, rotate_length, rotate_rotate, simp_rw, sub_add_cancel, sub_le, sub_lt
 -/
@@ -2382,7 +2432,10 @@ theorem cyclicPermutations_rotate
     · simp
     · rw [length_cyclicPermutations_of_ne_nil] <;> simp
   refine ext_get this fun n hn hn' => ?_
-  rw [get_rotate]; rw [get_cyclicPermutations]; rw [rotate_rotate]; rw [← rotate_m
+  rw [get_rotate]; rw [get_cyclicPermutations]; rw [rotate_rotate]; rw [← rotate_mod]; rw [Nat.add_comm]
+  cases l <;> simp
+
+@[simp]
 
 中文:
 定理 cyclicPermutations_rotate
@@ -2393,7 +2446,10 @@ theorem cyclicPermutations_rotate
     · simp
     · rw [length_cyclicPermutations_of_ne_nil] <;> simp
   refine ext_get this fun n hn hn' => ?_
-  rw [get_rotate]; rw [get_cyclicPermutations]; rw [rotate_rotate]; rw [← rotate_m
+  rw [get_rotate]; rw [get_cyclicPermutations]; rw [rotate_rotate]; rw [← rotate_mod]; rw [Nat.add_comm]
+  cases l <;> simp
+
+@[simp]
 
 Depends on / 依赖: Nat.add_comm, add_comm, cyclicPermutations, cyclicPermutations.length, ext_get, get_cyclicPermutations, get_rotate, l.cyclicPermutations.rotate, l.rotate, length, length_cyclicPermutations_of_ne_nil, rotate, rotate_mod, rotate_rotate
 -/

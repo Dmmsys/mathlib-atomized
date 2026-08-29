@@ -64,7 +64,28 @@ theorem zarankiewicz_of_fintypeCard_eq
   let K := completeBipartiteGraph (Fin s) (Fin t)
   let e₂ := completeBipartiteGraphCongr
     (Fintype.equivFinOfCardEq hs) (Fintype.equivFinOfCardEq ht)
-  rw [zarankiewicz]; rw [le_antisymm_if
+  rw [zarankiewicz]; rw [le_antisymm_iff]
+  and_intros
+  on_goal 1 =>
+    let e₁ := e₁.symm
+    let K := completeBipartiteGraph α β
+    let e₂ := e₂.symm
+  all_goals
+    simp_rw [Finset.sup_le_iff, mem_filter, mem_univ, true_and]
+    intro G ⟨h_le, h_free⟩
+    simp_rw [Iso.card_edgeFinset_eq (.map e₁.toEquiv G)]
+    have h' : G.map e₁.toEquiv.toEmbedding in univ.filter fun G =>
+        G <= completeBipartiteGraph _ _ ∧ K.Free G := by
+      rw [mem_filter_univ]; rw [map_le_iff_le_comap]
+      refine ⟨fun _ _ hadj => ?_, ?_⟩
+      · replace h_le := h_le hadj
+        rw [← Embedding.map_adj_iff e₁.toEmbedding]; rw [← comap_adj] at h_le
+        exact h_le
+      · rw [Function.Embedding.coeFn_mk, ← free_congr e₂ (.map e₁.toEquiv G)]
+        exact h_free
+    have h_le_sup := @le_sup _ _ _ _ _ (#·.edgeFinset) (G.map e₁.toEquiv.toEmbedding) h'
+    simp_rw [← card_coe, mem_edgeFinset] at h_le_sup ⊢
+    exact h_le_sup
 
 中文:
 定理 zarankiewicz_of_fintypeCard_eq
@@ -74,7 +95,28 @@ theorem zarankiewicz_of_fintypeCard_eq
   let K := completeBipartiteGraph (Fin s) (Fin t)
   let e₂ := completeBipartiteGraphCongr
     (Fintype.equivFinOfCardEq hs) (Fintype.equivFinOfCardEq ht)
-  rw [zarankiewicz]; rw [le_antisymm_if
+  rw [zarankiewicz]; rw [le_antisymm_iff]
+  and_intros
+  on_goal 1 =>
+    let e₁ := e₁.symm
+    let K := completeBipartiteGraph α β
+    let e₂ := e₂.symm
+  all_goals
+    simp_rw [Finset.sup_le_iff, mem_filter, mem_univ, true_and]
+    intro G ⟨h_le, h_free⟩
+    simp_rw [Iso.card_edgeFinset_eq (.map e₁.toEquiv G)]
+    have h' : G.map e₁.toEquiv.toEmbedding in univ.filter fun G =>
+        G <= completeBipartiteGraph _ _ ∧ K.Free G := by
+      rw [mem_filter_univ]; rw [map_le_iff_le_comap]
+      refine ⟨fun _ _ hadj => ?_, ?_⟩
+      · replace h_le := h_le hadj
+        rw [← Embedding.map_adj_iff e₁.toEmbedding]; rw [← comap_adj] at h_le
+        exact h_le
+      · rw [Function.Embedding.coeFn_mk, ← free_congr e₂ (.map e₁.toEquiv G)]
+        exact h_free
+    have h_le_sup := @le_sup _ _ _ _ _ (#·.edgeFinset) (G.map e₁.toEquiv.toEmbedding) h'
+    simp_rw [← card_coe, mem_edgeFinset] at h_le_sup ⊢
+    exact h_le_sup
 
 Depends on / 依赖: Finset, Finset.sup_le_iff, Fintype, Fintype.equivFinOfCardEq, Iso.card_edgeFi, all_goals, and_intros, card_edgeFi, completeBipartiteGraph, completeBipartiteGraphCongr, equivFinOfCardEq, h_free, h_le, le_antisymm_iff, mem_filter, mem_univ, on_goal, simp_rw, sup_le_iff, true_and
 -/
@@ -246,7 +288,9 @@ theorem zarankiewicz_le_extremalNumber
   intro B ⟨_, h⟩
   rw [(Iso.map finSumFinEquiv B).card_edgeFinset_eq]
 refine card_edgeFinset_le_extremalNumber
-    (h.congr_left ?_).congr_right (Iso.map finS
+    (h.congr_left ?_).congr_right (Iso.map finSumFinEquiv B).symm
+  exact completeBipartiteGraphCongr
+    (Fintype.equivFinOfCardEq hs) (Fintype.equivFinOfCardEq ht)
 
 中文:
 定理 zarankiewicz_le_extremalNumber
@@ -259,7 +303,9 @@ refine card_edgeFinset_le_extremalNumber
   intro B ⟨_, h⟩
   rw [(Iso.map finSumFinEquiv B).card_edgeFinset_eq]
 refine card_edgeFinset_le_extremalNumber
-    (h.congr_left ?_).congr_right (Iso.map finS
+    (h.congr_left ?_).congr_right (Iso.map finSumFinEquiv B).symm
+  exact completeBipartiteGraphCongr
+    (Fintype.equivFinOfCardEq hs) (Fintype.equivFinOfCardEq ht)
 
 Depends on / 依赖: Finset, Finset.sup_le_iff, Fintype, Fintype.card_fin, Fintype.equivFinOfCardEq, Iso.map, card_edgeFinset_eq, card_edgeFinset_le_extremalNumber, card_fin, completeBipartiteGraphCongr, congr_left, congr_right, equivFinOfCardEq, finSumFinEquiv, h.congr_left, mem_filter, mem_univ, simp_rw, sup_le_iff, true_and
 -/
@@ -289,7 +335,15 @@ theorem two_mul_extremalNumber_le_zarankiewicz_symm
   rw [← le_div_iff₀' (by positivity)]; rw [extremalNumber_le_iff_of_nonneg _ (by positivity)]
   intro G _ h
   rw [le_div_iff₀' (by positivity)]; rw [← Nat.cast_two]; rw [← Nat.cast_mul]; rw [Nat.cast_le]
-  apply Finset.le_sup_of_l
+  apply Finset.le_sup_of_le (b := G.bipartiteDoubleCover)
+  · simp_rw [mem_filter, mem_univ, true_and]
+    refine ⟨bipartiteDoubleCover_le, ?_⟩
+    contrapose! h
+refine completeBipartiteGraph_isContained_bipartiteDoubleCover.mp
+      h.trans' ⟨Iso.toCopy ?_⟩
+    exact completeBipartiteGraphCongr
+      (Fintype.equivFinOfCardEq hs) (Fintype.equivFinOfCardEq ht)
+  · convert card_edgeFinset_bipartiteDoubleCover.symm.le
 
 中文:
 定理 two_mul_extremalNumber_le_zarankiewicz_symm
@@ -301,7 +355,15 @@ theorem two_mul_extremalNumber_le_zarankiewicz_symm
   rw [← le_div_iff₀' (by positivity)]; rw [extremalNumber_le_iff_of_nonneg _ (by positivity)]
   intro G _ h
   rw [le_div_iff₀' (by positivity)]; rw [← Nat.cast_two]; rw [← Nat.cast_mul]; rw [Nat.cast_le]
-  apply Finset.le_sup_of_l
+  apply Finset.le_sup_of_le (b := G.bipartiteDoubleCover)
+  · simp_rw [mem_filter, mem_univ, true_and]
+    refine ⟨bipartiteDoubleCover_le, ?_⟩
+    contrapose! h
+refine completeBipartiteGraph_isContained_bipartiteDoubleCover.mp
+      h.trans' ⟨Iso.toCopy ?_⟩
+    exact completeBipartiteGraphCongr
+      (Fintype.equivFinOfCardEq hs) (Fintype.equivFinOfCardEq ht)
+  · convert card_edgeFinset_bipartiteDoubleCover.symm.le
 
 Depends on / 依赖: Finset, Finset.le_sup_of_le, Fintype, Fintype.card_fin, G.bipartiteDoubleCover, Iso.toCopy, Nat.cast_le, Nat.cast_mul, Nat.cast_two, bipartiteDoubleCover, bipartiteDoubleCover_le, card_fin, cast_le, cast_mul, cast_two, completeBipartiteGraph_isContained_bipartiteDoubleCover, completeBipartiteGraph_isContained_bipartiteDoubleCover.mp, contrapose, extremalNumber_le_iff_of_nonneg, h.trans
 -/

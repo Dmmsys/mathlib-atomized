@@ -214,7 +214,9 @@ definition mkUncurryFun
       do return (n ++ toString (← x.fvarId!.getUserName).eraseMacroScopes)
     let xProdType ← inferType (← mkProdElem xs)
 
-    withLocalDecl (.mkSi
+    withLocalDecl (.mkSimple xProdName) default xProdType fun xProd => do
+      let xs' ← mkProdSplitElem xProd n
+      mkLambdaFVars #[xProd] (← mkAppM' f xs').headBeta
 
 中文:
 定义 mkUncurryFun
@@ -227,7 +229,9 @@ definition mkUncurryFun
       do return (n ++ toString (← x.fvarId!.getUserName).eraseMacroScopes)
     let xProdType ← inferType (← mkProdElem xs)
 
-    withLocalDecl (.mkSi
+    withLocalDecl (.mkSimple xProdName) default xProdType fun xProd => do
+      let xs' ← mkProdSplitElem xProd n
+      mkLambdaFVars #[xProd] (← mkAppM' f xs').headBeta
 -/
 def mkUncurryFun (n : Nat) (f : Expr) : MetaM Expr := do
   if n <= 1 then

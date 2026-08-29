@@ -299,7 +299,12 @@ e'.symm.open_source.mem_nhds e'.mapsTo hxe'
   constructor
   · intro h
     rw [hG.is_local_nhds h3f] at h
-    have h2 := hG.left_invar
+    have h2 := hG.left_invariance' (G'.symm he') inter_subset_right (e'.mapsTo hxe') h
+    rw [← hG.is_local_nhds h3f] at h2
+    refine hG.congr_nhdsWithin ?_ (e'.left_inv hxe') h2
+    exact eventually_of_mem h2f fun x' => e'.left_inv
+  · simp_rw [hG.is_local_nhds h2f]
+    exact hG.left_invariance' he' inter_subset_right hxe'
 
 中文:
 定理 left_invariance
@@ -312,7 +317,12 @@ e'.symm.open_source.mem_nhds e'.mapsTo hxe'
   constructor
   · intro h
     rw [hG.is_local_nhds h3f] at h
-    have h2 := hG.left_invar
+    have h2 := hG.left_invariance' (G'.symm he') inter_subset_right (e'.mapsTo hxe') h
+    rw [← hG.is_local_nhds h3f] at h2
+    refine hG.congr_nhdsWithin ?_ (e'.left_inv hxe') h2
+    exact eventually_of_mem h2f fun x' => e'.left_inv
+  · simp_rw [hG.is_local_nhds h2f]
+    exact hG.left_invariance' he' inter_subset_right hxe'
 
 Depends on / 依赖: comp_continuousWithinAt, congr_nhdsWithin, continuousAt, eventually_of_mem, hG.congr_nhdsWithin, hG.is_loca, hG.is_local_nhds, hG.left_invariance, hfs.preimage_mem_nhdsWithin, inter_subset_right, is_loca, is_local_nhds, left_inv, left_invariance, mapsTo, mem_nhds, open_source, open_source.mem_nhds, preimage_mem_nhdsWithin, simp_rw
 -/
@@ -345,7 +355,10 @@ theorem right_invariance
   rw [e.symm_symm]; rw [e.left_inv hxe] at this
   refine hG.congr ?_ ((hG.congr_set ?_).mp this)
   · refine eventually_of_mem (e.open_source.mem_nhds hxe) fun x' hx' => ?_
-    simp_rw [
+    simp_rw [Function.comp_apply, e.left_inv hx']
+  · rw [eventuallyEq_set]
+    refine eventually_of_mem (e.open_source.mem_nhds hxe) fun x' hx' => ?_
+    simp_rw [mem_preimage, e.left_inv hx']
 
 中文:
 定理 right_invariance
@@ -356,7 +369,10 @@ theorem right_invariance
   rw [e.symm_symm]; rw [e.left_inv hxe] at this
   refine hG.congr ?_ ((hG.congr_set ?_).mp this)
   · refine eventually_of_mem (e.open_source.mem_nhds hxe) fun x' hx' => ?_
-    simp_rw [
+    simp_rw [Function.comp_apply, e.left_inv hx']
+  · rw [eventuallyEq_set]
+    refine eventually_of_mem (e.open_source.mem_nhds hxe) fun x' hx' => ?_
+    simp_rw [mem_preimage, e.left_inv hx']
 
 Depends on / 依赖: Function, Function.comp_apply, G.symm, comp_apply, congr_set, e.left_inv, e.mapsTo, e.open_source.mem_nhds, e.symm_symm, eventuallyEq_set, eventually_of_mem, hG.congr, hG.congr_set, hG.right_invariance, left_inv, mapsTo, mem_nhds, mem_preimage, open_source, right_invariance
 -/
@@ -697,7 +713,15 @@ theorem liftPropWithinAt_indep_chart_source_aux
   · simp [xe]
   simp only [OpenPartialHomeomorph.trans_apply, mem_chart_source, OpenPartialHomeomorph.left_inv]
   apply hG.congr_set_fun
-  · refine (eventually_of_mem ?_ fun y (hy : y in e.symm ⁻¹' (chartAt H x)
+  · refine (eventually_of_mem ?_ fun y (hy : y in e.symm ⁻¹' (chartAt H x).source) => ?_).set_eq
+    · refine (e.symm.continuousAt <| e.mapsTo xe).preimage_mem_nhds
+        ((chartAt H x).open_source.mem_nhds ?_)
+      simp_rw [e.left_inv xe, mem_chart_source H x]
+    simp_rw [mem_preimage, OpenPartialHomeomorph.coe_trans_symm, OpenPartialHomeomorph.symm_symm,
+      Function.comp_apply, (chartAt H x).left_inv hy]
+  · refine ((e.eventually_nhds' _ xe).mpr <| (chartAt H x).eventually_left_inverse
+      (mem_chart_source H x)).mono fun y hy => ?_
+    simp [hy]
 
 中文:
 定理 liftPropWithinAt_indep_chart_source_aux
@@ -707,7 +731,15 @@ theorem liftPropWithinAt_indep_chart_source_aux
   · simp [xe]
   simp only [OpenPartialHomeomorph.trans_apply, mem_chart_source, OpenPartialHomeomorph.left_inv]
   apply hG.congr_set_fun
-  · refine (eventually_of_mem ?_ fun y (hy : y in e.symm ⁻¹' (chartAt H x)
+  · refine (eventually_of_mem ?_ fun y (hy : y in e.symm ⁻¹' (chartAt H x).source) => ?_).set_eq
+    · refine (e.symm.continuousAt <| e.mapsTo xe).preimage_mem_nhds
+        ((chartAt H x).open_source.mem_nhds ?_)
+      simp_rw [e.left_inv xe, mem_chart_source H x]
+    simp_rw [mem_preimage, OpenPartialHomeomorph.coe_trans_symm, OpenPartialHomeomorph.symm_symm,
+      Function.comp_apply, (chartAt H x).left_inv hy]
+  · refine ((e.eventually_nhds' _ xe).mpr <| (chartAt H x).eventually_left_inverse
+      (mem_chart_source H x)).mono fun y hy => ?_
+    simp [hy]
 
 Depends on / 依赖: OpenPartialHom, OpenPartialHomeomorph, OpenPartialHomeomorph.left_inv, OpenPartialHomeomorph.trans_apply, chartAt, compatible_of_mem_maximalAtlas_right, congr_set_fun, continuousAt, e.left_inv, e.mapsTo, e.symm, e.symm.continuousAt, eventually_of_mem, hG.congr_set_fun, hG.right_invariance, left_inv, mapsTo, mem_chart_source, mem_nhds, mem_preimage
 -/
@@ -740,7 +772,9 @@ theorem liftPropWithinAt_indep_chart_target_aux2
     ((chartAt H' (g x)).continuousAt (by simp)).comp_continuousWithinAt hgs
   rw [← hG.left_invariance (compatible_of_mem_maximalAtlas_right (x := g x) hf) hcont
       (by simp [xf]; rw [mfld_simps])]
-  refine hG.congr_iff_nhdsWith
+  refine hG.congr_iff_nhdsWithin ?_ (by simp)
+  exact (hgs.eventually <| (chartAt H' (g x)).eventually_left_inverse
+    (mem_chart_source H' (g x))).mono fun y => congr_arg f
 
 中文:
 定理 liftPropWithinAt_indep_chart_target_aux2
@@ -750,7 +784,9 @@ theorem liftPropWithinAt_indep_chart_target_aux2
     ((chartAt H' (g x)).continuousAt (by simp)).comp_continuousWithinAt hgs
   rw [← hG.left_invariance (compatible_of_mem_maximalAtlas_right (x := g x) hf) hcont
       (by simp [xf]; rw [mfld_simps])]
-  refine hG.congr_iff_nhdsWith
+  refine hG.congr_iff_nhdsWithin ?_ (by simp)
+  exact (hgs.eventually <| (chartAt H' (g x)).eventually_left_inverse
+    (mem_chart_source H' (g x))).mono fun y => congr_arg f
 
 Depends on / 依赖: ContinuousWithinAt, chartAt, comp_continuousWithinAt, compatible_of_mem_maximalAtlas_right, congr_arg, congr_iff_nhdsWithin, continuousAt, eventually, eventually_left_inverse, hG.congr_iff_nhdsWithin, hG.left_invariance, hgs.eventually, left_invariance, mem_chart_source, mfld_simps
 -/
@@ -881,7 +917,7 @@ theorem liftPropWithinAt_indep_chart_source
   proof: by
   rw [liftPropWithinAt_self_source]; rw [liftPropWithinAt_iff']; rw [e.symm.continuousWithinAt_iff_continuousWithinAt_comp_right xe]; rw [e.symm_symm]
   refine and_congr Iff.rfl ?_
-  rw [Function.comp_apply]; rw [e.left_inv xe]; rw [← Function.comp_assoc]; rw [hG.liftPropWithinAt_indep_chart_sour
+  rw [Function.comp_apply]; rw [e.left_inv xe]; rw [← Function.comp_assoc]; rw [hG.liftPropWithinAt_indep_chart_source_aux (chartAt _ (g x) ∘ g) he xe]; rw [Function.comp_assoc]
 
 中文:
 定理 liftPropWithinAt_indep_chart_source
@@ -889,7 +925,7 @@ theorem liftPropWithinAt_indep_chart_source
   证明: by
   rw [liftPropWithinAt_self_source]; rw [liftPropWithinAt_iff']; rw [e.symm.continuousWithinAt_iff_continuousWithinAt_comp_right xe]; rw [e.symm_symm]
   refine and_congr Iff.rfl ?_
-  rw [Function.comp_apply]; rw [e.left_inv xe]; rw [← Function.comp_assoc]; rw [hG.liftPropWithinAt_indep_chart_sour
+  rw [Function.comp_apply]; rw [e.left_inv xe]; rw [← Function.comp_assoc]; rw [hG.liftPropWithinAt_indep_chart_source_aux (chartAt _ (g x) ∘ g) he xe]; rw [Function.comp_assoc]
 
 Depends on / 依赖: Function, Function.comp_apply, Function.comp_assoc, Iff.rfl, and_congr, chartAt, comp_apply, comp_assoc, continuousWithinAt_iff_continuousWithinAt_comp_right, e.left_inv, e.symm.continuousWithinAt_iff_continuousWithinAt_comp_right, e.symm_symm, hG.liftPropWithinAt_indep_chart_source_aux, left_inv, liftPropWithinAt_iff, liftPropWithinAt_indep_chart_source_aux, liftPropWithinAt_self_source, symm_symm
 -/
@@ -940,7 +976,8 @@ theorem liftPropWithinAt_indep_chart'
   intro h
   have h1 := (e.symm.continuousWithinAt_iff_continuousWithinAt_comp_right xe).mp h.1
   have : ContinuousAt f ((g ∘ e.symm) (e x)) := by
-    simp_
+    simp_rw [Function.comp, e.left_inv xe, f.continuousAt xf]
+  exact this.comp_continuousWithinAt h1
 
 中文:
 定理 liftPropWithinAt_indep_chart'
@@ -949,7 +986,8 @@ theorem liftPropWithinAt_indep_chart'
   intro h
   have h1 := (e.symm.continuousWithinAt_iff_continuousWithinAt_comp_right xe).mp h.1
   have : ContinuousAt f ((g ∘ e.symm) (e x)) := by
-    simp_
+    simp_rw [Function.comp, e.left_inv xe, f.continuousAt xf]
+  exact this.comp_continuousWithinAt h1
 
 Depends on / 依赖: ContinuousAt, Function, Function.comp, Iff.comm, and_iff_right_iff_imp, and_left_comm, comp_continuousWithinAt, continuousAt, continuousWithinAt_iff_continuousWithinAt_comp_right, e.left_inv, e.symm, e.symm.continuousWithinAt_iff_continuousWithinAt_comp_right, f.continuousAt, hG.liftPropWithinAt_indep_chart, left_inv, liftPropWithinAt_indep_chart, liftPropWithinAt_self, simp_rw, this.comp_continuousWithinAt
 -/
@@ -1001,7 +1039,7 @@ theorem liftPropWithinAt_inter'
   rw [liftPropWithinAt_iff']; rw [liftPropWithinAt_iff']; rw [continuousWithinAt_inter' ht]; rw [hG.congr_set]
   simp_rw [eventuallyEq_set, mem_preimage,
     (chartAt _ x).eventually_nhds' (fun x => x in s inter t ↔ x in s) (mem_chart_source _ x)]
-  exact (mem_nhdsWithin_iff_eventuallyEq.mp ht).s
+  exact (mem_nhdsWithin_iff_eventuallyEq.mp ht).symm.mem_iff
 
 中文:
 定理 liftPropWithinAt_inter'
@@ -1010,7 +1048,7 @@ theorem liftPropWithinAt_inter'
   rw [liftPropWithinAt_iff']; rw [liftPropWithinAt_iff']; rw [continuousWithinAt_inter' ht]; rw [hG.congr_set]
   simp_rw [eventuallyEq_set, mem_preimage,
     (chartAt _ x).eventually_nhds' (fun x => x in s inter t ↔ x in s) (mem_chart_source _ x)]
-  exact (mem_nhdsWithin_iff_eventuallyEq.mp ht).s
+  exact (mem_nhdsWithin_iff_eventuallyEq.mp ht).symm.mem_iff
 
 Depends on / 依赖: chartAt, congr_set, continuousWithinAt_inter, eventuallyEq_set, eventually_nhds, hG.congr_set, liftPropWithinAt_iff, mem_chart_source, mem_iff, mem_nhdsWithin_iff_eventuallyEq, mem_nhdsWithin_iff_eventuallyEq.mp, mem_preimage, simp_rw, symm.mem_iff
 -/
@@ -1179,7 +1217,8 @@ theorem liftPropWithinAt_congr_of_eventuallyEq
     (by simp_rw [Function.comp_apply, (chartAt H x).left_inv (mem_chart_source H x), hx]) h.2
   simp_rw [EventuallyEq, Function.comp_apply]
   rw [(chartAt H x).eventually_nhdsWithin'
-    (fun y => chartAt H' (g' x) (g
+    (fun y => chartAt H' (g' x) (g' y) = chartAt H' (g x) (g y)) (mem_chart_source H x)]
+  exact h₁.mono fun y hy => by rw [hx, hy]
 
 中文:
 定理 liftPropWithinAt_congr_of_eventuallyEq
@@ -1190,7 +1229,8 @@ theorem liftPropWithinAt_congr_of_eventuallyEq
     (by simp_rw [Function.comp_apply, (chartAt H x).left_inv (mem_chart_source H x), hx]) h.2
   simp_rw [EventuallyEq, Function.comp_apply]
   rw [(chartAt H x).eventually_nhdsWithin'
-    (fun y => chartAt H' (g' x) (g
+    (fun y => chartAt H' (g' x) (g' y) = chartAt H' (g x) (g y)) (mem_chart_source H x)]
+  exact h₁.mono fun y hy => by rw [hx, hy]
 
 Depends on / 依赖: EventuallyEq, Function, Function.comp_apply, chartAt, comp_apply, congr_nhdsWithin, congr_of_eventuallyEq, eventually_nhdsWithin, hG.congr_nhdsWithin, left_inv, mem_chart_source, simp_rw
 -/
@@ -1590,7 +1630,7 @@ theorem liftPropAt_symm_of_mem_maximalAtlas
     rw [LiftPropAt]; rw [hG.liftPropWithinAt_indep_chart G.id_mem_maximalAtlas (mem_univ _) he this]
     refine ⟨(e.symm.continuousAt hx).continuousWithinAt, ?_⟩
     simp only [h, mfld_simps]
-
+  exact hG.congr' (e.eventually_right_inverse hx) (hQ x)
 
 中文:
 定理 liftPropAt_symm_of_mem_maximalAtlas
@@ -1601,7 +1641,7 @@ theorem liftPropAt_symm_of_mem_maximalAtlas
     rw [LiftPropAt]; rw [hG.liftPropWithinAt_indep_chart G.id_mem_maximalAtlas (mem_univ _) he this]
     refine ⟨(e.symm.continuousAt hx).continuousWithinAt, ?_⟩
     simp only [h, mfld_simps]
-
+  exact hG.congr' (e.eventually_right_inverse hx) (hQ x)
 
 Depends on / 依赖: G.id_mem_maximalAtlas, LiftPropAt, continuousAt, continuousWithinAt, e.eventually_right_inverse, e.source, e.symm, e.symm.continuousAt, eventually_right_inverse, hG.congr, hG.liftPropWithinAt_indep_chart, id_mem_maximalAtlas, liftPropWithinAt_indep_chart, mem_univ, mfld_simps, source
 -/
@@ -1828,7 +1868,7 @@ theorem liftPropAt_iff_comp_inclusion
       (TopologicalSpace.Opens.isOpenEmbedding_of_le hUV).continuousAt_iff]
   · apply hG.congr_iff
     exact (TopologicalSpace.Opens.chartAt_inclusion_symm_eventuallyEq hUV).fun_comp
-      (chart
+      (chartAt H' (f (Set.inclusion hUV x)) ∘ f)
 
 中文:
 定理 liftPropAt_iff_comp_inclusion
@@ -1840,7 +1880,7 @@ theorem liftPropAt_iff_comp_inclusion
       (TopologicalSpace.Opens.isOpenEmbedding_of_le hUV).continuousAt_iff]
   · apply hG.congr_iff
     exact (TopologicalSpace.Opens.chartAt_inclusion_symm_eventuallyEq hUV).fun_comp
-      (chart
+      (chartAt H' (f (Set.inclusion hUV x)) ∘ f)
 
 Depends on / 依赖: LiftPropAt, Set.inclusion, TopologicalSpace, TopologicalSpace.Opens.chartAt_inclusion_symm_eventuallyEq, TopologicalSpace.Opens.isOpenEmbedding_of_le, chartAt, chartAt_inclusion_symm_eventuallyEq, congr_iff, congrm, continuousAt_iff, continuousWithinAt_univ, fun_comp, hG.congr_iff, inclusion, isOpenEmbedding_of_le, liftPropWithinAt_iff, simp_rw
 -/
@@ -1957,7 +1997,35 @@ theorem isLocalStructomorphWithinAt_localInvariantProp
         have : s inter u inter e.source subseteq s inter e.source := by mfld_set_tac
         exact ⟨e, heG, hef.mono this, hex⟩
       · rintro h hx
-        rcases h ⟨hx, hu
+        rcases h ⟨hx, hux⟩ with ⟨e, heG, hef, hex⟩
+        refine ⟨e.restr (interior u), ?_, ?_, ?_⟩
+        · exact closedUnderRestriction' heG isOpen_interior
+        · have : s inter u inter e.source = s inter (e.source inter u) := by mfld_set_tac
+          simpa only [this, interior_interior, hu.interior_eq, mfld_simps] using hef
+        · simp only [*, hu.interior_eq, mfld_simps]
+    right_invariance' := by
+      intro s x f e' he'G he'x h hx
+      have hxs : x in s := by simpa only [e'.left_inv he'x, mfld_simps] using hx
+      rcases h hxs with ⟨e, heG, hef, hex⟩
+      refine ⟨e'.symm.trans e, G.trans (G.symm he'G) heG, ?_, ?_⟩
+      · intro y hy
+        simp only [mfld_simps] at hy
+        simp only [hef ⟨hy.1, hy.2.2⟩, mfld_simps]
+      · simp only [hex, he'x, mfld_simps]
+    congr_of_forall := by
+      intro s x f g hfgs _ h hx
+      rcases h hx with ⟨e, heG, hef, hex⟩
+      refine ⟨e, heG, ?_, hex⟩
+      intro y hy
+      rw [← hef hy]; rw [hfgs y hy.1]
+    left_invariance' := by
+      intro s x f e' he'G _ hfx h hx
+      rcases h hx with ⟨e, heG, hef, hex⟩
+      refine ⟨e.trans e', G.trans heG he'G, ?_, ?_⟩
+      · intro y hy
+        simp only [mfld_simps] at hy
+        simp only [hef ⟨hy.1, hy.2.1⟩, mfld_simps]
+      · simpa only [hex, hef ⟨hx, hex⟩, mfld_simps] using hfx }
 
 中文:
 定理 isLocalStructomorphWithinAt_localInvariantProp
@@ -1970,7 +2038,35 @@ theorem isLocalStructomorphWithinAt_localInvariantProp
         have : s inter u inter e.source subseteq s inter e.source := by mfld_set_tac
         exact ⟨e, heG, hef.mono this, hex⟩
       · rintro h hx
-        rcases h ⟨hx, hu
+        rcases h ⟨hx, hux⟩ with ⟨e, heG, hef, hex⟩
+        refine ⟨e.restr (interior u), ?_, ?_, ?_⟩
+        · exact closedUnderRestriction' heG isOpen_interior
+        · have : s inter u inter e.source = s inter (e.source inter u) := by mfld_set_tac
+          simpa only [this, interior_interior, hu.interior_eq, mfld_simps] using hef
+        · simp only [*, hu.interior_eq, mfld_simps]
+    right_invariance' := by
+      intro s x f e' he'G he'x h hx
+      have hxs : x in s := by simpa only [e'.left_inv he'x, mfld_simps] using hx
+      rcases h hxs with ⟨e, heG, hef, hex⟩
+      refine ⟨e'.symm.trans e, G.trans (G.symm he'G) heG, ?_, ?_⟩
+      · intro y hy
+        simp only [mfld_simps] at hy
+        simp only [hef ⟨hy.1, hy.2.2⟩, mfld_simps]
+      · simp only [hex, he'x, mfld_simps]
+    congr_of_forall := by
+      intro s x f g hfgs _ h hx
+      rcases h hx with ⟨e, heG, hef, hex⟩
+      refine ⟨e, heG, ?_, hex⟩
+      intro y hy
+      rw [← hef hy]; rw [hfgs y hy.1]
+    left_invariance' := by
+      intro s x f e' he'G _ hfx h hx
+      rcases h hx with ⟨e, heG, hef, hex⟩
+      refine ⟨e.trans e', G.trans heG he'G, ?_, ?_⟩
+      · intro y hy
+        simp only [mfld_simps] at hy
+        simp only [hef ⟨hy.1, hy.2.1⟩, mfld_simps]
+      · simpa only [hex, hef ⟨hx, hex⟩, mfld_simps] using hfx }
 
 Depends on / 依赖: closedUnderRestriction, e.restr, e.source, hef.mono, hu.interior_eq, interior, interior_eq, interior_interior, isOpen_interior, is_local, mfld_set_tac, source, subseteq
 -/
@@ -2028,7 +2124,12 @@ theorem _root_.OpenPartialHomeomorph.isLocalStructomorphWithinAt_iff
     · simp_rw [OpenPartialHomeomorph.restr_source]
       exact inter_subset_right.trans interior_subset
     · intro x' hx'
-      exact hfe
+      exact hfe ⟨hx'.1, hx'.2.1⟩
+    · rw [f.open_source.interior_eq]
+      exact Or.resolve_right hx (not_not.mpr h2x)
+  · intro hf hx
+    obtain ⟨e, he, _, hfe, hxe⟩ := hf hx
+    exact ⟨e, he, hfe, hxe⟩
 
 中文:
 定理 _root_.OpenPartialHomeomorph.isLocalStructomorphWithinAt_iff
@@ -2041,7 +2142,12 @@ theorem _root_.OpenPartialHomeomorph.isLocalStructomorphWithinAt_iff
     · simp_rw [OpenPartialHomeomorph.restr_source]
       exact inter_subset_right.trans interior_subset
     · intro x' hx'
-      exact hfe
+      exact hfe ⟨hx'.1, hx'.2.1⟩
+    · rw [f.open_source.interior_eq]
+      exact Or.resolve_right hx (not_not.mpr h2x)
+  · intro hf hx
+    obtain ⟨e, he, _, hfe, hxe⟩ := hf hx
+    exact ⟨e, he, hfe, hxe⟩
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.restr_source, Or.resolve_right, closedUnderRestriction, e.restr, f.open_source, f.open_source.interior_eq, f.source, inter_subset_right, inter_subset_right.trans, interior_eq, interior_subset, not_not, not_not.mpr, open_source, resolve_right, restr_source, simp_rw, source
 -/
@@ -2138,7 +2244,23 @@ theorem HasGroupoid.comp
       intro x hx
       simp only [mfld_simps] at hx
       have hxs : x in f.symm ⁻¹' (e.symm ≫ₕ e').source := by simp only [hx, mfld_simps]
-      have hxs' : 
+      have hxs' : x in f.target inter
+          f.symm ⁻¹' ((e.symm ≫ₕ e').source inter e.symm ≫ₕ e' ⁻¹' f'.source) := by
+        simp only [hx, mfld_simps]
+      obtain ⟨φ, hφG₁, hφ, hφ_dom⟩ := LocalInvariantProp.liftPropOn_indep_chart
+        (isLocalStructomorphWithinAt_localInvariantProp G₁) (G₁.subset_maximalAtlas hf)
+        (G₁.subset_maximalAtlas hf') (H _ (G₂.compatible he he')) hxs' hxs
+      simp_rw [← OpenPartialHomeomorph.coe_trans, OpenPartialHomeomorph.trans_assoc] at hφ
+      simp_rw [OpenPartialHomeomorph.trans_symm_eq_symm_trans_symm,
+        OpenPartialHomeomorph.trans_assoc]
+      have hs : IsOpen (f.symm ≫ₕ e.symm ≫ₕ e' ≫ₕ f').source :=
+        (f.symm ≫ₕ e.symm ≫ₕ e' ≫ₕ f').open_source
+      refine ⟨_, hs.inter φ.open_source, ?_, ?_⟩
+      · simp only [hx, hφ_dom, mfld_simps]
+      · refine G₁.mem_of_eqOnSource (closedUnderRestriction' hφG₁ hs) ?_
+        rw [OpenPartialHomeomorph.restr_source_inter]
+        refine OpenPartialHomeomorph.Set.EqOn.restr_eqOn_source (hφ.mono ?_)
+        mfld_set_tac }
 
 中文:
 定理 有群胚.comp
@@ -2149,7 +2271,23 @@ theorem HasGroupoid.comp
       intro x hx
       simp only [mfld_simps] at hx
       have hxs : x in f.symm ⁻¹' (e.symm ≫ₕ e').source := by simp only [hx, mfld_simps]
-      have hxs' : 
+      have hxs' : x in f.target inter
+          f.symm ⁻¹' ((e.symm ≫ₕ e').source inter e.symm ≫ₕ e' ⁻¹' f'.source) := by
+        simp only [hx, mfld_simps]
+      obtain ⟨φ, hφG₁, hφ, hφ_dom⟩ := LocalInvariantProp.liftPropOn_indep_chart
+        (isLocalStructomorphWithinAt_localInvariantProp G₁) (G₁.subset_maximalAtlas hf)
+        (G₁.subset_maximalAtlas hf') (H _ (G₂.compatible he he')) hxs' hxs
+      simp_rw [← OpenPartialHomeomorph.coe_trans, OpenPartialHomeomorph.trans_assoc] at hφ
+      simp_rw [OpenPartialHomeomorph.trans_symm_eq_symm_trans_symm,
+        OpenPartialHomeomorph.trans_assoc]
+      have hs : IsOpen (f.symm ≫ₕ e.symm ≫ₕ e' ≫ₕ f').source :=
+        (f.symm ≫ₕ e.symm ≫ₕ e' ≫ₕ f').open_source
+      refine ⟨_, hs.inter φ.open_source, ?_, ?_⟩
+      · simp only [hx, hφ_dom, mfld_simps]
+      · refine G₁.mem_of_eqOnSource (closedUnderRestriction' hφG₁ hs) ?_
+        rw [OpenPartialHomeomorph.restr_source_inter]
+        refine OpenPartialHomeomorph.Set.EqOn.restr_eqOn_source (hφ.mono ?_)
+        mfld_set_tac }
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.comp, LocalInvariantProp, LocalInvariantProp.liftPropOn_indep_chart, compatible, e.symm, f.symm, f.target, isLocalStructomorphWithinAt_localInvariant, liftPropOn_indep_chart, locality, mfld_simps, source, target
 -/

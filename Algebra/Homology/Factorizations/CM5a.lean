@@ -360,7 +360,14 @@ lemma quasiIsoAt_π
     have : IsIso φ.τ₁ := isIso_π_f ..
     have : IsIso φ.τ₂ := isIso_π_f ..
     have : IsIso φ.τ₃ := isIso_π_f ..
-    exact 
+    exact ShortComplex.quasiIso_of_epi_of_isIso_of_mono φ
+  · rw [quasiIsoAt_iff_isIso_homologyMap]
+    have : homologyMap (biprod.inl : _ ⟶ mid K L n₁) i = 0 :=
+      (ShortComplex.isZero_homology_of_isZero_X₂ _
+        (isZero_single_obj_X (.up Int) _ _ _ (by lia))).eq_of_src _ _
+    refine ⟨homologyMap (σ K L n₁) i, ?_, ?_⟩
+    · simp [← homologyMap_id, ← biprod.total, homologyMap_comp, this]
+    · simp [← homologyMap_comp, homologyMap_id]
 
 中文:
 引理 quasiIsoAt_π
@@ -372,7 +379,14 @@ lemma quasiIsoAt_π
     have : IsIso φ.τ₁ := isIso_π_f ..
     have : IsIso φ.τ₂ := isIso_π_f ..
     have : IsIso φ.τ₃ := isIso_π_f ..
-    exact 
+    exact ShortComplex.quasiIso_of_epi_of_isIso_of_mono φ
+  · rw [quasiIsoAt_iff_isIso_homologyMap]
+    have : homologyMap (biprod.inl : _ ⟶ mid K L n₁) i = 0 :=
+      (ShortComplex.isZero_homology_of_isZero_X₂ _
+        (isZero_single_obj_X (.up Int) _ _ _ (by lia))).eq_of_src _ _
+    refine ⟨homologyMap (σ K L n₁) i, ?_, ?_⟩
+    · simp [← homologyMap_id, ← biprod.total, homologyMap_comp, this]
+    · simp [← homologyMap_comp, homologyMap_id]
 
 Depends on / 依赖: QuasiIsoAt, ShortComplex, ShortComplex.isZero_homology_of_isZero_X, ShortComplex.quasiIso_of_epi_of_isIso_of_mono, biprod, biprod.inl, hi.lt_or_eq, homologyMap, isZero_homology_of_isZero_X, lt_or_eq, quasiIsoAt_iff, quasiIsoAt_iff_isIso_homologyMap, quasiIso_of_epi_of_isIso_of_mono, shortComplexFunctor
 -/
@@ -435,7 +449,19 @@ instance :
   intro A x₁ _ y₀ hy₀
   obtain ⟨y₀, rfl⟩ : exists (z₁ : A ⟶ L.X n₀), z₁ ≫ (σ K L n₁).f n₀ = y₀ := by
     refine ⟨y₀ ≫ (π K L n₁).f n₀, Eq.trans ?_ (Category.comp_id _)⟩
-    have : (biprod.in
+    have : (biprod.inl : _ ⟶ mid K L n₁).f n₀ = 0 :=
+      (isZero_single_obj_X (.up Int) _ _ _ (by lia)).eq_of_src _ _
+    simp [this, ← biprod_total_f]
+  simp only [Category.assoc, Hom.comm, biprodX_ext_to_iff, biprod_lift_fst_f,
+    biprod_inr_fst_f, comp_zero, biprod_lift_snd_f, biprod_inr_snd_f,
+    Category.comp_id] at hy₀
+  obtain ⟨h₁, h₂⟩ := hy₀
+  replace h₁ : x₁ ≫ K.pOpcycles n₁ = 0 := by
+    rw [← cancel_mono (Injective.ι _)]
+    simpa [i, ← cancel_mono (singleObjXSelf (.up Int) n₁ _).hom] using h₁
+  obtain ⟨A₁, π, _, x₀, hx₀⟩ :=
+    (K.comp_pOpcycles_eq_zero_iff_up_to_refinements x₁ n₀ (by simp; lia)).1 h₁
+  exact ⟨A₁, π, inferInstance, x₀, hx₀⟩
 
 中文:
 实例 :
@@ -446,7 +472,19 @@ instance :
   intro A x₁ _ y₀ hy₀
   obtain ⟨y₀, rfl⟩ : exists (z₁ : A ⟶ L.X n₀), z₁ ≫ (σ K L n₁).f n₀ = y₀ := by
     refine ⟨y₀ ≫ (π K L n₁).f n₀, Eq.trans ?_ (Category.comp_id _)⟩
-    have : (biprod.in
+    have : (biprod.inl : _ ⟶ mid K L n₁).f n₀ = 0 :=
+      (isZero_single_obj_X (.up Int) _ _ _ (by lia)).eq_of_src _ _
+    simp [this, ← biprod_total_f]
+  simp only [Category.assoc, Hom.comm, biprodX_ext_to_iff, biprod_lift_fst_f,
+    biprod_inr_fst_f, comp_zero, biprod_lift_snd_f, biprod_inr_snd_f,
+    Category.comp_id] at hy₀
+  obtain ⟨h₁, h₂⟩ := hy₀
+  replace h₁ : x₁ ≫ K.pOpcycles n₁ = 0 := by
+    rw [← cancel_mono (Injective.ι _)]
+    simpa [i, ← cancel_mono (singleObjXSelf (.up Int) n₁ _).hom] using h₁
+  obtain ⟨A₁, π, _, x₀, hx₀⟩ :=
+    (K.comp_pOpcycles_eq_zero_iff_up_to_refinements x₁ n₀ (by simp; lia)).1 h₁
+  exact ⟨A₁, π, inferInstance, x₀, hx₀⟩
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Eq.trans, Hom.comm, biprod, biprod.inl, biprodX_ext_to_iff, biprod_inr_fst_f, biprod_lift_fst_f, biprod_total_f, comp_id, eq_of_src, isZero_single_obj_X, mono_homologyMap_iff_up_to_refinements
 -/
@@ -743,7 +781,7 @@ lemma degreewiseEpiWithInjectiveKernel_π
   exact ⟨_, inferInstance, (mappingCocone.inr (α f n)).1.v (i - 1) i (by lia), by simp,
     ⟨{r := (mappingCocone.snd (α f n)).v _ _ (by lia)
       s := (mappingCocone.inl (α f n)).v _ _ (by lia)
-      id := (add_comm _ _).trans (by simp [mappingCocone.
+      id := (add_comm _ _).trans (by simp [mappingCocone.id_X]) }⟩⟩
 
 中文:
 引理 degreewiseEpiWithInjectiveKernel_π
@@ -753,7 +791,7 @@ lemma degreewiseEpiWithInjectiveKernel_π
   exact ⟨_, inferInstance, (mappingCocone.inr (α f n)).1.v (i - 1) i (by lia), by simp,
     ⟨{r := (mappingCocone.snd (α f n)).v _ _ (by lia)
       s := (mappingCocone.inl (α f n)).v _ _ (by lia)
-      id := (add_comm _ _).trans (by simp [mappingCocone.
+      id := (add_comm _ _).trans (by simp [mappingCocone.id_X]) }⟩⟩
 
 Depends on / 依赖: add_comm, epiWithInjectiveKernel_iff, id_X, mappingCocone, mappingCocone.id_X, mappingCocone.inl, mappingCocone.inr, mappingCocone.snd
 -/
@@ -942,7 +980,11 @@ instance :
     rw [homologyπ_naturality (p f n) n]
     infer_instance
   have := (truncGE (cokernel f) n).isIso_homologyπ (n - 1) n (by simp)
-    ((isZero_of_isSt
+    ((isZero_of_isStrictlyGE _ n _ (by lia)).eq_of_src _ _)
+  rw [← IsIso.inv_hom_id_assoc ((truncGE (cokernel f) n).homologyπ n) (homologyMap (p f n) n)]
+  infer_instance
+
+omit [EnoughInjectives C] in
 
 中文:
 实例 :
@@ -953,7 +995,11 @@ instance :
     rw [homologyπ_naturality (p f n) n]
     infer_instance
   have := (truncGE (cokernel f) n).isIso_homologyπ (n - 1) n (by simp)
-    ((isZero_of_isSt
+    ((isZero_of_isStrictlyGE _ n _ (by lia)).eq_of_src _ _)
+  rw [← IsIso.inv_hom_id_assoc ((truncGE (cokernel f) n).homologyπ n) (homologyMap (p f n) n)]
+  infer_instance
+
+omit [EnoughInjectives C] in
 
 Depends on / 依赖: IsIso.inv_hom_id_assoc, cokernel, eq_of_src, homologyMap, infer_instance, inv_hom_id_assoc, isZero_of_isStrictlyGE, truncGE
 -/
@@ -1002,7 +1048,15 @@ lemma exact_homologyShortComplex
     { τ₁ := 𝟙 _
       τ₂ := 𝟙 _
       τ₃ := homologyMap ((cokernel f).πTruncGE n ≫ p f n) n
-      comm₂₃ := 
+      comm₂₃ := by
+        dsimp
+        rw [Category.id_comp]; rw [← homologyMap_comp]; rw [α] }
+  obtain ⟨_, _, _⟩ : Mono φ.τ₃ ∧ IsIso φ.τ₂ ∧ Epi φ.τ₁ := by
+    dsimp [φ]
+    rw [homologyMap_comp]
+    exact ⟨inferInstance, inferInstance, inferInstance⟩
+  rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ]
+  exact (shortExact f).homology_exact₂ n
 
 中文:
 引理 exact_homologyShortComplex
@@ -1014,7 +1068,15 @@ lemma exact_homologyShortComplex
     { τ₁ := 𝟙 _
       τ₂ := 𝟙 _
       τ₃ := homologyMap ((cokernel f).πTruncGE n ≫ p f n) n
-      comm₂₃ := 
+      comm₂₃ := by
+        dsimp
+        rw [Category.id_comp]; rw [← homologyMap_comp]; rw [α] }
+  obtain ⟨_, _, _⟩ : Mono φ.τ₃ ∧ IsIso φ.τ₂ ∧ Epi φ.τ₁ := by
+    dsimp [φ]
+    rw [homologyMap_comp]
+    exact ⟨inferInstance, inferInstance, inferInstance⟩
+  rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ]
+  exact (shortExact f).homology_exact₂ n
 
 Depends on / 依赖: Category, Category.id_comp, ShortComplex, ShortComplex.ex, ShortComplex.mk, cokernel, cokernel.condition, condition, homologyMap, homologyMap_comp, homologyMap_zero, homologyShortComplex, id_comp
 -/
@@ -1056,7 +1118,14 @@ lemma isGE_cokernel
   · have := hf i hi
     rw [← ((shortExact f).homology_exact₂ i).epi_f_iff]
     infer_instance
-  · rw [← ((shortExact f).homology_exact₁ i (i + 1) (by simp
+  · rw [← ((shortExact f).homology_exact₁ i (i + 1) (by simp)).mono_g_iff]
+    by_cases hi' : i + 1 < n
+    · have := hf (i + 1) (by lia)
+      infer_instance
+    · obtain rfl : n = i + 1 := by lia
+      infer_instance
+
+omit [EnoughInjectives C] in
 
 中文:
 引理 isGE_cokernel
@@ -1070,7 +1139,14 @@ lemma isGE_cokernel
   · have := hf i hi
     rw [← ((shortExact f).homology_exact₂ i).epi_f_iff]
     infer_instance
-  · rw [← ((shortExact f).homology_exact₁ i (i + 1) (by simp
+  · rw [← ((shortExact f).homology_exact₁ i (i + 1) (by simp)).mono_g_iff]
+    by_cases hi' : i + 1 < n
+    · have := hf (i + 1) (by lia)
+      infer_instance
+    · obtain rfl : n = i + 1 := by lia
+      infer_instance
+
+omit [EnoughInjectives C] in
 
 Depends on / 依赖: epi_f_iff, exactAt_iff_isZero_homology, infer_instance, isGE_iff, mono_g_iff, shortExact
 -/
@@ -1130,7 +1206,16 @@ lemma quasiIsoAt_ι
     exact hf q hq
   · have := mono_homologyMap_π f n n (by lia)
     have : Mono (homologyMap (mappingCocone.triangle (α f n)).mor₁ n) := by
-      dsimp; 
+      dsimp; infer_instance
+    have h₁ := (exact_homologyShortComplex f n).fIsKernel
+    have h₂ := (CochainComplex.homologyMap_exact₂_of_distTriang _
+      (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) n).fIsKernel
+    have : homologyMap (ι f n) n = (IsLimit.conePointUniqueUpToIso h₁ h₂).hom := by
+      simp [← cancel_mono (homologyMap (π f n) n),
+        dsimp% IsLimit.conePointUniqueUpToIso_hom_comp h₁ h₂ .zero,
+        ← homologyMap_comp, mappingCocone.lift_fst]
+    rw [quasiIsoAt_iff_isIso_homologyMap]; rw [this]
+    infer_instance
 
 中文:
 引理 quasiIsoAt_ι
@@ -1142,7 +1227,16 @@ lemma quasiIsoAt_ι
     exact hf q hq
   · have := mono_homologyMap_π f n n (by lia)
     have : Mono (homologyMap (mappingCocone.triangle (α f n)).mor₁ n) := by
-      dsimp; 
+      dsimp; infer_instance
+    have h₁ := (exact_homologyShortComplex f n).fIsKernel
+    have h₂ := (CochainComplex.homologyMap_exact₂_of_distTriang _
+      (DerivedCategory.mappingCocone_triangle_distinguished (α f n)) n).fIsKernel
+    have : homologyMap (ι f n) n = (IsLimit.conePointUniqueUpToIso h₁ h₂).hom := by
+      simp [← cancel_mono (homologyMap (π f n) n),
+        dsimp% IsLimit.conePointUniqueUpToIso_hom_comp h₁ h₂ .zero,
+        ← homologyMap_comp, mappingCocone.lift_fst]
+    rw [quasiIsoAt_iff_isIso_homologyMap]; rw [this]
+    infer_instance
 
 Depends on / 依赖: CochainComplex, CochainComplex.homologyMap_exact, DerivedCategory, DerivedCategory.mappingCocone_triangle_distinguished, exact_homologyShortComplex, fIsKernel, homologyMa, homologyMap, hq.lt_or_eq, infer_instance, lift_fst, lt_or_eq, mappingCocone, mappingCocone.lift_fst, mappingCocone.triangle, mappingCocone_triangle_distinguished, quasiIsoAt_iff_comp_right, triangle
 -/
@@ -1209,7 +1303,10 @@ lemma step
   refine ⟨.mk { mid := F₂.obj.mid, ι := F₂.obj.ι, π := F₂.obj.π ≫ F₁.obj.π }
     ⟨by dsimp; infer_instance, MorphismProperty.comp_mem _ _ _ F₂.property.2 F₁.property.2⟩,
     ⟨h₃, fun i hi => ?_⟩⟩
-  have 
+  have := h₂ i hi
+  have := h₄ i (by lia)
+  dsimp
+  infer_instance
 
 中文:
 引理 step
@@ -1220,7 +1317,10 @@ lemma step
   refine ⟨.mk { mid := F₂.obj.mid, ι := F₂.obj.ι, π := F₂.obj.π ≫ F₁.obj.π }
     ⟨by dsimp; infer_instance, MorphismProperty.comp_mem _ _ _ F₂.property.2 F₁.property.2⟩,
     ⟨h₃, fun i hi => ?_⟩⟩
-  have 
+  have := h₂ i hi
+  have := h₄ i (by lia)
+  dsimp
+  infer_instance
 
 Depends on / 依赖: FullSubcategory, MorphismProperty, MorphismProperty.comp_mem, cofFib, comp_mem, infer_instance, isIsoLE, obj.mid, property, quasiIsoLE
 -/
@@ -1272,7 +1372,7 @@ definition zero
       apply IsZero.isIso
       all_goals
       · rw [← exactAt_iff_isZero_homology]
-        exact exactAt_of_is
+        exact exactAt_of_isGE _ (n + 1) i)
 
 中文:
 定义 zero
@@ -1285,7 +1385,7 @@ definition zero
       apply IsZero.isIso
       all_goals
       · rw [← exactAt_iff_isZero_homology]
-        exact exactAt_of_is
+        exact exactAt_of_isGE _ (n + 1) i)
 
 Depends on / 依赖: IsZero, IsZero.isIso, all_goals, epiWithInjectiveKernel_of_iso, exactAt_iff_isZero_homology, exactAt_of_isGE, quasiIsoAt_iff_isIso_homologyMap
 -/
@@ -1313,7 +1413,7 @@ lemma exists_next
   exact ⟨.mk (.mk { mid := F₁₂.obj.mid, ι := F₁₂.obj.ι, π := F₁₂.obj.π ≫ F.obj.obj.π }
     ⟨by dsimp; infer_instance,
       MorphismProperty.comp_mem _ _ _ F₁₂.property.2 F.obj.property.2⟩) h₁,
-      ObjectProperty.homMk { h := F₁₂.obj.π
+      ObjectProperty.homMk { h := F₁₂.obj.π }, h₂⟩
 
 中文:
 引理 存在_next
@@ -1323,7 +1423,7 @@ lemma exists_next
   exact ⟨.mk (.mk { mid := F₁₂.obj.mid, ι := F₁₂.obj.ι, π := F₁₂.obj.π ≫ F.obj.obj.π }
     ⟨by dsimp; infer_instance,
       MorphismProperty.comp_mem _ _ _ F₁₂.property.2 F.obj.property.2⟩) h₁,
-      ObjectProperty.homMk { h := F₁₂.obj.π
+      ObjectProperty.homMk { h := F₁₂.obj.π }, h₂⟩
 
 Depends on / 依赖: F.obj.obj, F.obj.property, F.property, MorphismProperty, MorphismProperty.comp_mem, ObjectProperty, ObjectProperty.homMk, comp_mem, infer_instance, obj.mid, property
 -/
@@ -1473,7 +1573,15 @@ lemma isIso_functor_map_hom_h_f
     | zero =>
       obtain rfl : q₁ = q₂ := by simpa using hk
       simp only [homOfLE_refl, op_id, CategoryTheory.Functor.map_id,
-        ObjectProperty.FullSubc
+        ObjectProperty.FullSubcategory.id_hom, Factorisation.id_h, id_f]
+      infer_instance
+    | succ k h =>
+      rw [← homOfLE_comp (show q₁ <= q₁ + k by lia) (show q₁ + k <= q₂ by lia)]; rw [op_comp]; rw [Functor.map_comp]
+      exact IsIso.comp_isIso' (this _ (by lia) (by lia)) (h _ (by lia) rfl)
+  subst hq'
+  dsimp [functor]
+  rw [Functor.ofSequence_map_homOfLE_succ]
+  exact CofFibFactorizationQuasiIsoLE.isIso_fromNext_hom_h_f _ _ _ _ hi
 
 中文:
 引理 isIso_functor_map_hom_h_f
@@ -1486,7 +1594,15 @@ lemma isIso_functor_map_hom_h_f
     | zero =>
       obtain rfl : q₁ = q₂ := by simpa using hk
       simp only [homOfLE_refl, op_id, CategoryTheory.Functor.map_id,
-        ObjectProperty.FullSubc
+        ObjectProperty.FullSubcategory.id_hom, Factorisation.id_h, id_f]
+      infer_instance
+    | succ k h =>
+      rw [← homOfLE_comp (show q₁ <= q₁ + k by lia) (show q₁ + k <= q₂ by lia)]; rw [op_comp]; rw [Functor.map_comp]
+      exact IsIso.comp_isIso' (this _ (by lia) (by lia)) (h _ (by lia) rfl)
+  subst hq'
+  dsimp [functor]
+  rw [Functor.ofSequence_map_homOfLE_succ]
+  exact CofFibFactorizationQuasiIsoLE.isIso_fromNext_hom_h_f _ _ _ _ hi
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Factorisation, Factorisation.id_h, FullSubcategory, Functor, Functor.map_comp, IsIso.comp_isIso, Nat.le.dest, ObjectProperty, ObjectProperty.FullSubcategory.id_hom, comp_isIso, generalizing, homOfLE_comp, homOfLE_refl, id_f, id_h, id_hom, infer_instance, map_comp
 -/

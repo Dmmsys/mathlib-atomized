@@ -41,7 +41,30 @@ theorem add_pow
   change (x + y) ^ n = ∑ m in range (n + 1), t n m
   have h_first : forall n, t n 0 = y ^ n := fun n => by
     simp only [t, choose_zero_right, pow_zero, cast_one, mul_one, one_mul, Nat.sub_zero]
-  have h_last : forall n, t 
+  have h_last : forall n, t n n.succ = 0 := fun n => by
+    simp only [t, choose_succ_self, cast_zero, mul_zero]
+  have h_middle :
+      forall n i : Nat, i in range n.succ -> (t n.succ i.succ) = x * t n i + y * t n i.succ := by
+    intro n i h_mem
+    have h_le : i <= n := le_of_lt_succ (mem_range.mp h_mem)
+    dsimp only [t]
+    rw [choose_succ_succ]; rw [cast_add]; rw [mul_add]
+    congr 1
+    · rw [pow_succ' x, succ_sub_succ, mul_assoc, mul_assoc, mul_assoc]
+    · rw [← mul_assoc y, ← mul_assoc y, (h.symm.pow_right i.succ).eq]
+      by_cases h_eq : i = n
+      · rw [h_eq, choose_succ_self, cast_zero, mul_zero, mul_zero]
+      · rw [succ_sub (lt_of_le_of_ne h_le h_eq)]
+        rw [pow_succ' y]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_assoc]
+  induction n with
+  | zero =>
+    rw [pow_zero]; rw [sum_range_succ]; rw [range_zero]; rw [sum_empty]; rw [zero_add]
+    dsimp only [t]
+    rw [pow_zero]; rw [pow_zero]; rw [choose_self]; rw [cast_one]; rw [mul_one]; rw [mul_one]
+  | succ n ih =>
+    rw [sum_range_succ']; rw [h_first]; rw [sum_congr rfl (h_middle n)]; rw [sum_add_distrib]; rw [add_assoc]; rw [pow_succ' (x + y)]; rw [ih]; rw [add_mul]; rw [mul_sum]; rw [mul_sum]
+    congr 1
+    rw [sum_range_succ']; rw [sum_range_succ]; rw [h_first]; rw [h_last]; rw [mul_zero]; rw [add_zero]; rw [_root_.pow_succ']
 
 中文:
 定理 add_pow
@@ -51,7 +74,30 @@ theorem add_pow
   change (x + y) ^ n = ∑ m in range (n + 1), t n m
   have h_first : forall n, t n 0 = y ^ n := fun n => by
     simp only [t, choose_zero_right, pow_zero, cast_one, mul_one, one_mul, Nat.sub_zero]
-  have h_last : forall n, t 
+  have h_last : forall n, t n n.succ = 0 := fun n => by
+    simp only [t, choose_succ_self, cast_zero, mul_zero]
+  have h_middle :
+      forall n i : Nat, i in range n.succ -> (t n.succ i.succ) = x * t n i + y * t n i.succ := by
+    intro n i h_mem
+    have h_le : i <= n := le_of_lt_succ (mem_range.mp h_mem)
+    dsimp only [t]
+    rw [choose_succ_succ]; rw [cast_add]; rw [mul_add]
+    congr 1
+    · rw [pow_succ' x, succ_sub_succ, mul_assoc, mul_assoc, mul_assoc]
+    · rw [← mul_assoc y, ← mul_assoc y, (h.symm.pow_right i.succ).eq]
+      by_cases h_eq : i = n
+      · rw [h_eq, choose_succ_self, cast_zero, mul_zero, mul_zero]
+      · rw [succ_sub (lt_of_le_of_ne h_le h_eq)]
+        rw [pow_succ' y]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_assoc]
+  induction n with
+  | zero =>
+    rw [pow_zero]; rw [sum_range_succ]; rw [range_zero]; rw [sum_empty]; rw [zero_add]
+    dsimp only [t]
+    rw [pow_zero]; rw [pow_zero]; rw [choose_self]; rw [cast_one]; rw [mul_one]; rw [mul_one]
+  | succ n ih =>
+    rw [sum_range_succ']; rw [h_first]; rw [sum_congr rfl (h_middle n)]; rw [sum_add_distrib]; rw [add_assoc]; rw [pow_succ' (x + y)]; rw [ih]; rw [add_mul]; rw [mul_sum]; rw [mul_sum]
+    congr 1
+    rw [sum_range_succ']; rw [sum_range_succ]; rw [h_first]; rw [h_last]; rw [mul_zero]; rw [add_zero]; rw [_root_.pow_succ']
 
 Depends on / 依赖: Nat.sub_zero, cast_one, cast_zero, choose_succ_self, choose_zero_right, h_first, h_last, h_mem, h_middle, i.succ, mul_one, mul_zero, n.choose, n.succ, one_mul, pow_zero, sub_zero
 -/
@@ -210,7 +256,16 @@ sum_congr rfl fun i hi => choose_symm by linarith [mem_range.1 hi]
 mul_right_injective₀ two_ne_zero
     calc
       (2 * ∑ i in range (m + 1), (2 * m + 1).choose i) =
-          (∑ i
+          (∑ i in range (m + 1), (2 * m + 1).choose i) +
+            ∑ i in range (m + 1), (2 * m + 1).choose (2 * m + 1 - i) := by rw [two_mul, this]
+      _ = (∑ i in range (m + 1), (2 * m + 1).choose i) +
+            ∑ i in Ico (m + 1) (2 * m + 2), (2 * m + 1).choose i := by
+        rw [range_eq_Ico]; rw [sum_Ico_reflect _ _ (by lia)]
+        congr
+        lia
+      _ = ∑ i in range (2 * m + 2), (2 * m + 1).choose i := sum_range_add_sum_Ico _ (by lia)
+      _ = 2 ^ (2 * m + 1) := sum_range_choose (2 * m + 1)
+      _ = 2 * 4 ^ m := by rw [pow_succ, pow_mul, mul_comm]; rfl
 
 中文:
 定理 sum_range_choose_halfway
@@ -222,7 +277,16 @@ sum_congr rfl fun i hi => choose_symm by linarith [mem_range.1 hi]
 mul_right_injective₀ two_ne_zero
     calc
       (2 * ∑ i in range (m + 1), (2 * m + 1).choose i) =
-          (∑ i
+          (∑ i in range (m + 1), (2 * m + 1).choose i) +
+            ∑ i in range (m + 1), (2 * m + 1).choose (2 * m + 1 - i) := by rw [two_mul, this]
+      _ = (∑ i in range (m + 1), (2 * m + 1).choose i) +
+            ∑ i in Ico (m + 1) (2 * m + 2), (2 * m + 1).choose i := by
+        rw [range_eq_Ico]; rw [sum_Ico_reflect _ _ (by lia)]
+        congr
+        lia
+      _ = ∑ i in range (2 * m + 2), (2 * m + 1).choose i := sum_range_add_sum_Ico _ (by lia)
+      _ = 2 ^ (2 * m + 1) := sum_range_choose (2 * m + 1)
+      _ = 2 * 4 ^ m := by rw [pow_succ, pow_mul, mul_comm]; rfl
 
 Depends on / 依赖: choose_symm, mem_range, sum_congr, two_mul, two_ne_zero
 -/
@@ -316,7 +380,7 @@ theorem sum_Icc_choose
   · induction n, h using le_induction with
     | base => simp
     | succ n _ ih =>
-      rw [← Ico_insert_right (by lia)]; rw [sum_insert (by simp)]; rw [Ico_add_one_right_eq_Icc]; rw [ih]; rw
+      rw [← Ico_insert_right (by lia)]; rw [sum_insert (by simp)]; rw [Ico_add_one_right_eq_Icc]; rw [ih]; rw [choose_succ_succ' (n + 1)]
 
 中文:
 定理 sum_Icc_choose
@@ -328,7 +392,7 @@ theorem sum_Icc_choose
   · induction n, h using le_induction with
     | base => simp
     | succ n _ ih =>
-      rw [← Ico_insert_right (by lia)]; rw [sum_insert (by simp)]; rw [Ico_add_one_right_eq_Icc]; rw [ih]; rw
+      rw [← Ico_insert_right (by lia)]; rw [sum_insert (by simp)]; rw [Ico_add_one_right_eq_Icc]; rw [ih]; rw [choose_succ_succ' (n + 1)]
 
 Depends on / 依赖: Icc_eq_empty_of_lt, Ico_add_one_right_eq_Icc, Ico_insert_right, choose_eq_zero_of_lt, choose_succ_succ, le_induction, lt_or_ge, sum_empty, sum_insert
 -/
@@ -382,7 +446,18 @@ theorem sum_range_mul_choose
       = ∑ i in Finset.range (n + 1), (n - i) * n.choose (n - i)
         + ∑ i in Finset.range (n + 1), i * n.choose i := by
       rw [two_mul]; rw [← sum_flip]
-    _
+    _ = ∑ i in Finset.range (n + 1), (n - i) * n.choose i
+        + ∑ i in Finset.range (n + 1), i * n.choose i := by
+      congr! 2 with _ h'
+      rw [choose_symm (mem_range_succ_iff.mp h')]
+    _ = ∑ i in Finset.range (n + 1), n * n.choose i := by
+      rw [← sum_add_distrib]
+      congr! 1 with _ h'
+      rw [← add_mul]; rw [Nat.sub_add_cancel (mem_range_succ_iff.mp h')]
+    _ = n * 2 ^ n := by
+      rw [← mul_sum]; rw [Nat.sum_range_choose]
+    _ = 2 * (n * 2 ^ (n - 1)) := by
+      rw [← mul_assoc]; rw [mul_comm 2 n]; rw [mul_assoc]; rw [mul_pow_sub_one h]
 
 中文:
 定理 sum_range_mul_choose
@@ -396,7 +471,18 @@ theorem sum_range_mul_choose
       = ∑ i in Finset.range (n + 1), (n - i) * n.choose (n - i)
         + ∑ i in Finset.range (n + 1), i * n.choose i := by
       rw [two_mul]; rw [← sum_flip]
-    _
+    _ = ∑ i in Finset.range (n + 1), (n - i) * n.choose i
+        + ∑ i in Finset.range (n + 1), i * n.choose i := by
+      congr! 2 with _ h'
+      rw [choose_symm (mem_range_succ_iff.mp h')]
+    _ = ∑ i in Finset.range (n + 1), n * n.choose i := by
+      rw [← sum_add_distrib]
+      congr! 1 with _ h'
+      rw [← add_mul]; rw [Nat.sub_add_cancel (mem_range_succ_iff.mp h')]
+    _ = n * 2 ^ n := by
+      rw [← mul_sum]; rw [Nat.sum_range_choose]
+    _ = 2 * (n * 2 ^ (n - 1)) := by
+      rw [← mul_assoc]; rw [mul_comm 2 n]; rw [mul_assoc]; rw [mul_pow_sub_one h]
 
 Depends on / 依赖: Finset, Finset.range, choose_symm, mem_range_succ_iff, mem_range_succ_iff.mp, mul_right_inj, n.choose, sum_add_, sum_flip, two_mul, two_ne_zero
 -/
@@ -549,7 +635,9 @@ theorem sum_powerset_apply_card
     rw [mem_powerset] at hy
     exact card_le_card hy
   · refine sum_congr rfl fun y _ => ?_
-    rw [← card_powersetCard]; rw 
+    rw [← card_powersetCard]; rw [← sum_const]
+    refine sum_congr powersetCard_eq_filter.symm fun z hz => ?_
+    rw [(mem_powersetCard.1 hz).2]
 
 中文:
 定理 sum_powerset_apply_card
@@ -562,7 +650,9 @@ theorem sum_powerset_apply_card
     rw [mem_powerset] at hy
     exact card_le_card hy
   · refine sum_congr rfl fun y _ => ?_
-    rw [← card_powersetCard]; rw 
+    rw [← card_powersetCard]; rw [← sum_const]
+    refine sum_congr powersetCard_eq_filter.symm fun z hz => ?_
+    rw [(mem_powersetCard.1 hz).2]
 
 Depends on / 依赖: Nat.lt_succ_iff, card_le_card, card_powersetCard, lt_succ_iff, mem_powerset, mem_powersetCard, mem_range, powerset, powersetCard_eq_filter, powersetCard_eq_filter.symm, sum_congr, sum_const, sum_fiberwise_of_maps_to, x.powerset
 -/
@@ -644,7 +734,9 @@ theorem prod_pow_choose_succ
       ∏ i in range (n + 1), f i (n + 1 - i) ^ (n.choose i) := by
     rw [prod_range_succ]; rw [prod_range_succ']; simp
   rw [prod_range_succ']
-  simpa [choose_succ_succ, pow_add, prod_mul_distrib, A, mul_ass
+  simpa [choose_succ_succ, pow_add, prod_mul_distrib, A, mul_assoc] using mul_comm _ _
+
+@[to_additive sum_antidiagonal_choose_succ_nsmul]
 
 中文:
 定理 prod_pow_choose_succ
@@ -654,7 +746,9 @@ theorem prod_pow_choose_succ
       ∏ i in range (n + 1), f i (n + 1 - i) ^ (n.choose i) := by
     rw [prod_range_succ]; rw [prod_range_succ']; simp
   rw [prod_range_succ']
-  simpa [choose_succ_succ, pow_add, prod_mul_distrib, A, mul_ass
+  simpa [choose_succ_succ, pow_add, prod_mul_distrib, A, mul_assoc] using mul_comm _ _
+
+@[to_additive sum_antidiagonal_choose_succ_nsmul]
 
 Depends on / 依赖: choose_succ_succ, mul_assoc, mul_comm, n.choose, pow_add, prod_mul_distrib, prod_range_succ
 -/
@@ -681,7 +775,8 @@ theorem prod_antidiagonal_pow_choose_succ
   congr 1
   · refine prod_congr rfl fun i hi => ?_
     rw [tsub_add_eq_add_tsub (this _ hi)]
-  · refine prod_congr rfl fun 
+  · refine prod_congr rfl fun i hi => ?_
+    rw [choose_symm (this _ hi)]
 
 中文:
 定理 prod_antidiagonal_pow_choose_succ
@@ -692,7 +787,8 @@ theorem prod_antidiagonal_pow_choose_succ
   congr 1
   · refine prod_congr rfl fun i hi => ?_
     rw [tsub_add_eq_add_tsub (this _ hi)]
-  · refine prod_congr rfl fun 
+  · refine prod_congr rfl fun i hi => ?_
+    rw [choose_symm (this _ hi)]
 
 Depends on / 依赖: Nat.lt_succ_iff, Nat.prod_antidiagonal_eq_prod_range_succ_mk, choose_symm, lt_succ_iff, prod_antidiagonal_eq_prod_range_succ_mk, prod_congr, prod_pow_choose_succ, tsub_add_eq_add_tsub
 -/

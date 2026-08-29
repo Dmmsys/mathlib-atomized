@@ -825,7 +825,36 @@ instance :
     obtain ⟨j, x', hx⟩ := Types.jointly_surjective_of_isColimit hc x
     exact ⟨j, x', x', hx, hx, le_rfl⟩
   le_trans := by
-    rintro x y z ⟨j, x₁, y₁, hx₁, hy₁, hxy⟩ ⟨k, y₂, z₁, hy₂, 
+    rintro x y z ⟨j, x₁, y₁, hx₁, hy₁, hxy⟩ ⟨k, y₂, z₁, hy₂, hz₁, hyz⟩
+    obtain ⟨l, a, b, h⟩ :=
+      (Types.FilteredColimit.isColimit_eq_iff _ hc (xi := y₁) (xj := y₂)).1
+        (hy₁.trans hy₂.symm)
+    exact ⟨l, F.map a x₁, F.map b z₁,
+      (ConcreteCategory.congr_hom (c.w a) x₁).trans hx₁,
+      (ConcreteCategory.congr_hom (c.w b) z₁).trans hz₁,
+      ((F.map a).hom.monotone hxy).trans
+        (le_of_eq_of_le h ((F.map b).hom.monotone hyz))⟩
+  le_antisymm := by
+    rintro x y ⟨j, x₁, y₁, hx₁, hy₁, h₁⟩ ⟨k, y₂, x₂, hy₂, hx₂, h₂⟩
+    obtain ⟨l, a, b, x₃, y₃, h₃, h₄, h₅, h₆⟩ :
+        exists (l : J) (a : j ⟶ l) (b : k ⟶ l) (x₃ y₃ : _),
+        x₃ = F.map a x₁ ∧ x₃ = F.map b x₂ ∧ y₃ = F.map a y₁ ∧ y₃ = F.map b y₂ := by
+      obtain ⟨l₁, a, b, h₃⟩ :=
+        (Types.FilteredColimit.isColimit_eq_iff _ hc (xi := x₁) (xj := x₂)).1
+          (hx₁.trans hx₂.symm)
+      obtain ⟨l₂, a', b', h₄⟩ :=
+        (Types.FilteredColimit.isColimit_eq_iff _ hc (xi := y₁) (xj := y₂)).1
+          (hy₁.trans hy₂.symm)
+      obtain ⟨l, d, d', h₅, h₆⟩ := IsFiltered.bowtie a a' b b'
+      exact ⟨l, a ≫ d, b ≫ d, F.map (a ≫ d) x₁, F.map (a' ≫ d') y₁, rfl,
+        by simpa, by rw [h₅], by simpa [h₆]⟩
+    have h₇ : x₃ = y₃ :=
+      le_antisymm
+        (by simpa only [h₃, h₅] using (F.map a).hom.monotone h₁)
+        (by simpa only [h₄, h₆] using (F.map b).hom.monotone h₂)
+    exact hx₁.symm.trans ((ConcreteCategory.congr_hom (c.w a) x₁).symm.trans
+      ((congr_arg (c.ι.app l) (h₃.symm.trans (h₇.trans h₅))).trans
+        ((ConcreteCategory.congr_hom (c.w a) y₁).trans hy₁)))
 
 中文:
 实例 :
@@ -836,7 +865,36 @@ instance :
     obtain ⟨j, x', hx⟩ := Types.jointly_surjective_of_isColimit hc x
     exact ⟨j, x', x', hx, hx, le_rfl⟩
   le_trans := by
-    rintro x y z ⟨j, x₁, y₁, hx₁, hy₁, hxy⟩ ⟨k, y₂, z₁, hy₂, 
+    rintro x y z ⟨j, x₁, y₁, hx₁, hy₁, hxy⟩ ⟨k, y₂, z₁, hy₂, hz₁, hyz⟩
+    obtain ⟨l, a, b, h⟩ :=
+      (Types.FilteredColimit.isColimit_eq_iff _ hc (xi := y₁) (xj := y₂)).1
+        (hy₁.trans hy₂.symm)
+    exact ⟨l, F.map a x₁, F.map b z₁,
+      (ConcreteCategory.congr_hom (c.w a) x₁).trans hx₁,
+      (ConcreteCategory.congr_hom (c.w b) z₁).trans hz₁,
+      ((F.map a).hom.monotone hxy).trans
+        (le_of_eq_of_le h ((F.map b).hom.monotone hyz))⟩
+  le_antisymm := by
+    rintro x y ⟨j, x₁, y₁, hx₁, hy₁, h₁⟩ ⟨k, y₂, x₂, hy₂, hx₂, h₂⟩
+    obtain ⟨l, a, b, x₃, y₃, h₃, h₄, h₅, h₆⟩ :
+        exists (l : J) (a : j ⟶ l) (b : k ⟶ l) (x₃ y₃ : _),
+        x₃ = F.map a x₁ ∧ x₃ = F.map b x₂ ∧ y₃ = F.map a y₁ ∧ y₃ = F.map b y₂ := by
+      obtain ⟨l₁, a, b, h₃⟩ :=
+        (Types.FilteredColimit.isColimit_eq_iff _ hc (xi := x₁) (xj := x₂)).1
+          (hx₁.trans hx₂.symm)
+      obtain ⟨l₂, a', b', h₄⟩ :=
+        (Types.FilteredColimit.isColimit_eq_iff _ hc (xi := y₁) (xj := y₂)).1
+          (hy₁.trans hy₂.symm)
+      obtain ⟨l, d, d', h₅, h₆⟩ := IsFiltered.bowtie a a' b b'
+      exact ⟨l, a ≫ d, b ≫ d, F.map (a ≫ d) x₁, F.map (a' ≫ d') y₁, rfl,
+        by simpa, by rw [h₅], by simpa [h₆]⟩
+    have h₇ : x₃ = y₃ :=
+      le_antisymm
+        (by simpa only [h₃, h₅] using (F.map a).hom.monotone h₁)
+        (by simpa only [h₄, h₆] using (F.map b).hom.monotone h₂)
+    exact hx₁.symm.trans ((ConcreteCategory.congr_hom (c.w a) x₁).symm.trans
+      ((congr_arg (c.ι.app l) (h₃.symm.trans (h₇.trans h₅))).trans
+        ((ConcreteCategory.congr_hom (c.w a) y₁).trans hy₁)))
 
 Depends on / 依赖: F.obj
 -/
@@ -895,7 +953,17 @@ definition cocone
         exact (F.map a).injective ha
       map_rel_iff' {x y} := by
         refine ⟨?_, fun h => ⟨j, x, y, rfl, rfl, h⟩⟩
-        rint
+        rintro ⟨k, x', y', hx, hy, h⟩
+        obtain ⟨l₁, a₁, b₁, hl₁⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hx
+        obtain ⟨l₂, a₂, b₂, hl₂⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hy
+        dsimp at hx hy hl₁ hl₂
+        obtain ⟨m, d, d', h₁, h₂⟩ := bowtie a₁ a₂ b₁ b₂
+        rw [← (F.map (a₁ ≫ d)).le_iff_le] at h
+        rw [← (F.map (b₁ ≫ d)).le_iff_le]
+        conv_rhs => rw [h₂]
+        conv_rhs at h => rw [h₁]
+        simpa [← hl₁, ← hl₂] using h }
+  ι.naturality _ _ f := by ext x; exact ConcreteCategory.congr_hom (c.w f) x
 
 中文:
 定义 cocone
@@ -908,7 +976,17 @@ definition cocone
         exact (F.map a).injective ha
       map_rel_iff' {x y} := by
         refine ⟨?_, fun h => ⟨j, x, y, rfl, rfl, h⟩⟩
-        rint
+        rintro ⟨k, x', y', hx, hy, h⟩
+        obtain ⟨l₁, a₁, b₁, hl₁⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hx
+        obtain ⟨l₂, a₂, b₂, hl₂⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hy
+        dsimp at hx hy hl₁ hl₂
+        obtain ⟨m, d, d', h₁, h₂⟩ := bowtie a₁ a₂ b₁ b₂
+        rw [← (F.map (a₁ ≫ d)).le_iff_le] at h
+        rw [← (F.map (b₁ ≫ d)).le_iff_le]
+        conv_rhs => rw [h₂]
+        conv_rhs at h => rw [h₁]
+        simpa [← hl₁, ← hl₂] using h }
+  ι.naturality _ _ f := by ext x; exact ConcreteCategory.congr_hom (c.w f) x
 
 Depends on / 依赖: CoconePt
 -/
@@ -947,7 +1025,27 @@ definition CoconePt.desc
       Types.FilteredColimit.jointly_surjective_of_isColimit₂ hc x y
     obtain rfl := (s.ι.app j).injective
       (((ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) x').symm.trans h).trans
-        
+        (ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) y'))
+    rfl
+  map_rel_iff' {x y} := by
+    obtain ⟨j, x', y', rfl, rfl⟩ :=
+      Types.FilteredColimit.jointly_surjective_of_isColimit₂ hc x y
+    have hx := ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) x'
+    have hy := ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) y'
+    simp only [Functor.mapCocone_pt, Functor.comp_obj, Functor.const_obj_obj,
+      CategoryTheory.comp_apply, Functor.mapCocone_ι_app, ConcreteCategory.hom_ofHom,
+      TypeCat.Fun.coe_mk, Function.Embedding.coeFn_mk] at hx hy ⊢
+    rw [hx]; rw [hy]; rw [OrderEmbedding.le_iff_le]
+    refine ⟨fun h => ⟨j, _, _, rfl, rfl, h⟩, fun ⟨k, x, y, hx', hy', h⟩ => ?_⟩
+    obtain ⟨l, f, g, hl⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hx'
+    obtain ⟨l', f', g', hl'⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hy'
+    obtain ⟨m, a, b, h₁, h₂⟩ := bowtie f f' g g'
+    dsimp at hl hl'
+    rw [← (F.map (f ≫ a)).le_iff_le] at h
+    rw [← (F.map (g ≫ a)).le_iff_le]
+    exact le_of_eq_of_le (by simp [hl]) (le_of_le_of_eq h (by simp [h₁, h₂, hl']))
+
+@[simp]
 
 中文:
 定义 CoconePt.desc
@@ -958,7 +1056,27 @@ definition CoconePt.desc
       Types.FilteredColimit.jointly_surjective_of_isColimit₂ hc x y
     obtain rfl := (s.ι.app j).injective
       (((ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) x').symm.trans h).trans
-        
+        (ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) y'))
+    rfl
+  map_rel_iff' {x y} := by
+    obtain ⟨j, x', y', rfl, rfl⟩ :=
+      Types.FilteredColimit.jointly_surjective_of_isColimit₂ hc x y
+    have hx := ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) x'
+    have hy := ConcreteCategory.congr_hom (hc.fac ((forget _).mapCocone s) j) y'
+    simp only [Functor.mapCocone_pt, Functor.comp_obj, Functor.const_obj_obj,
+      CategoryTheory.comp_apply, Functor.mapCocone_ι_app, ConcreteCategory.hom_ofHom,
+      TypeCat.Fun.coe_mk, Function.Embedding.coeFn_mk] at hx hy ⊢
+    rw [hx]; rw [hy]; rw [OrderEmbedding.le_iff_le]
+    refine ⟨fun h => ⟨j, _, _, rfl, rfl, h⟩, fun ⟨k, x, y, hx', hy', h⟩ => ?_⟩
+    obtain ⟨l, f, g, hl⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hx'
+    obtain ⟨l', f', g', hl'⟩ := (Types.FilteredColimit.isColimit_eq_iff _ hc).1 hy'
+    obtain ⟨m, a, b, h₁, h₂⟩ := bowtie f f' g g'
+    dsimp at hl hl'
+    rw [← (F.map (f ≫ a)).le_iff_le] at h
+    rw [← (F.map (g ≫ a)).le_iff_le]
+    exact le_of_eq_of_le (by simp [hl]) (le_of_le_of_eq h (by simp [h₁, h₂, hl']))
+
+@[simp]
 
 Depends on / 依赖: forget, hc.desc, mapCocone
 -/
@@ -1022,7 +1140,7 @@ definition isColimitCocone
   uniq s m hm := by
     ext x
     obtain ⟨j, x, rfl⟩ := Types.jointly_surjective_of_isColimit hc x
-    exact ((ConcreteCategory.congr_hom (hm j)) x).trans (CoconePt.fac_app
+    exact ((ConcreteCategory.congr_hom (hm j)) x).trans (CoconePt.fac_apply hc s j x).symm
 
 中文:
 定义 isColimitCocone
@@ -1034,7 +1152,7 @@ definition isColimitCocone
   uniq s m hm := by
     ext x
     obtain ⟨j, x, rfl⟩ := Types.jointly_surjective_of_isColimit hc x
-    exact ((ConcreteCategory.congr_hom (hm j)) x).trans (CoconePt.fac_app
+    exact ((ConcreteCategory.congr_hom (hm j)) x).trans (CoconePt.fac_apply hc s j x).symm
 
 Depends on / 依赖: CoconePt, CoconePt.desc
 -/

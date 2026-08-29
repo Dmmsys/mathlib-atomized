@@ -55,7 +55,7 @@ definition ad
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.neg_apply, coe_neg,
         Pi.neg_apply, inner_apply_apply, commutator_apply]
       rw [leibniz_lie]; rw [neg_lie]; rw [neg_lie]; rw [← lie_skew x]
-      abel
+      abel }
 
 中文:
 定义 ad
@@ -67,7 +67,7 @@ definition ad
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.neg_apply, coe_neg,
         Pi.neg_apply, inner_apply_apply, commutator_apply]
       rw [leibniz_lie]; rw [neg_lie]; rw [neg_lie]; rw [← lie_skew x]
-      abel
+      abel }
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, LinearMap, LinearMap.coe_toAddHom, LinearMap.neg_apply, Pi.neg_apply, coe_neg, coe_toAddHom, commutator_apply, inner_apply_apply, leibniz_lie, lie_skew, map_lie, neg_apply, neg_lie, toFun_eq_coe
 -/

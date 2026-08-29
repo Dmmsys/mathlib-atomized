@@ -371,7 +371,13 @@ instance sequentialFunctor_final
       ⟨StructuredArrow.mk (homOfLE g)⟩
     apply isConnected_of_zigzag
     refine fun i j => ⟨[j], ?_⟩
-    simp only [List.isChain_cons_cons, 
+    simp only [List.isChain_cons_cons, Zag, List.isChain_singleton, and_true, ne_eq,
+      not_false_eq_true, List.getLast_cons, List.getLast_singleton', reduceCtorEq]
+    clear! C
+    wlog! h : j.right <= i.right
+    · exact or_comm.1 (this J d n g inferInstance j i (le_of_lt h))
+    · right
+      exact ⟨StructuredArrow.homMk (homOfLE h) rfl⟩
 
 中文:
 实例 sequentialFunctor_final
@@ -382,7 +388,13 @@ instance sequentialFunctor_final
       ⟨StructuredArrow.mk (homOfLE g)⟩
     apply isConnected_of_zigzag
     refine fun i j => ⟨[j], ?_⟩
-    simp only [List.isChain_cons_cons, 
+    simp only [List.isChain_cons_cons, Zag, List.isChain_singleton, and_true, ne_eq,
+      not_false_eq_true, List.getLast_cons, List.getLast_singleton', reduceCtorEq]
+    clear! C
+    wlog! h : j.right <= i.right
+    · exact or_comm.1 (this J d n g inferInstance j i (le_of_lt h))
+    · right
+      exact ⟨StructuredArrow.homMk (homOfLE h) rfl⟩
 
 Depends on / 依赖: List.getLast_cons, List.getLast_singleton, List.isChain_cons_cons, List.isChain_singleton, Nonempty, StructuredArrow, StructuredArrow.mk, and_true, getLast_cons, getLast_singleton, homOfLE, i.right, isChain_cons_cons, isChain_singleton, isConnected_of_zigzag, j.right, le_of_lt, ne_eq, not_false_eq_true, or_comm
 -/
@@ -521,7 +533,17 @@ instance sequentialFunctor_initial
       ⟨CostructuredArrow.mk (homOfLE g)⟩
     apply isConnected_of_zigzag
     refine fun i j => ⟨[j], ?_⟩
-    simp only [List.isChain_con
+    simp only [List.isChain_cons_cons, Zag, List.isChain_singleton, and_true, ne_eq,
+      not_false_eq_true, List.getLast_cons, List.getLast_singleton', reduceCtorEq]
+    clear! C
+    wlog! h : (unop i.left) <= (unop j.left)
+    · exact or_comm.1 (this J d n g inferInstance j i (le_of_lt h))
+    · right
+      exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
+
+@[stacks 0032]
+proof_wanted preorder_of_cofiltered (J : Type*) [Category* J] [IsCofiltered J] :
+    exists (I : Type*) (_ : Preorder I) (_ : IsCofiltered I) (F : I ⥤ J), F.Initial
 
 中文:
 实例 sequentialFunctor_initial
@@ -532,7 +554,17 @@ instance sequentialFunctor_initial
       ⟨CostructuredArrow.mk (homOfLE g)⟩
     apply isConnected_of_zigzag
     refine fun i j => ⟨[j], ?_⟩
-    simp only [List.isChain_con
+    simp only [List.isChain_cons_cons, Zag, List.isChain_singleton, and_true, ne_eq,
+      not_false_eq_true, List.getLast_cons, List.getLast_singleton', reduceCtorEq]
+    clear! C
+    wlog! h : (unop i.left) <= (unop j.left)
+    · exact or_comm.1 (this J d n g inferInstance j i (le_of_lt h))
+    · right
+      exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
+
+@[stacks 0032]
+proof_wanted preorder_of_cofiltered (J : Type*) [Category* J] [IsCofiltered J] :
+    exists (I : Type*) (_ : Preorder I) (_ : IsCofiltered I) (F : I ⥤ J), F.Initial
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, List.getLast_cons, List.getLast_singleton, List.isChain_cons_cons, List.isChain_singleton, Nonempty, and_true, getLast_cons, getLast_singleton, homOfLE, i.left, isChain_cons_cons, isChain_singleton, isConnected_of_zigzag, j.left, ne_eq, not_false_eq_true, or_comm, reduceCtorEq
 -/

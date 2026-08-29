@@ -207,7 +207,9 @@ theorem even.algHom_ext
   | add x y hx hy ihx ihy =>
     have := congr_arg₂ (· + ·) ihx ihy
     exact (map_add f _ _).trans (this.trans <| (map_add g _ _).symm)
-  |
+  | ι_mul_ι_mul m₁ m₂ x hx ih =>
+    have := congr_arg₂ (· * ·) (LinearMap.congr_fun (LinearMap.congr_fun h m₁) m₂) ih
+    exact (map_mul f _ _).trans (this.trans <| (map_mul g _ _).symm)
 
 中文:
 定理 even.algHom_ext
@@ -222,7 +224,9 @@ theorem even.algHom_ext
   | add x y hx hy ihx ihy =>
     have := congr_arg₂ (· + ·) ihx ihy
     exact (map_add f _ _).trans (this.trans <| (map_add g _ _).symm)
-  |
+  | ι_mul_ι_mul m₁ m₂ x hx ih =>
+    have := congr_arg₂ (· * ·) (LinearMap.congr_fun (LinearMap.congr_fun h m₁) m₂) ih
+    exact (map_mul f _ _).trans (this.trans <| (map_mul g _ _).symm)
 
 Depends on / 依赖: EvenHom, EvenHom.ext_iff, LinearMap, LinearMap.congr_fun, algebraMap, commutes, congr_fun, even_induction, ext_iff, f.commutes, g.commutes, map_add, map_mul, this.trans
 -/
@@ -276,7 +280,28 @@ definition fFold
       /- We could write this `snd` term in a point-free style as follows, but it wouldn't help as we
         don't have any prod or subtype combinators to deal with n-linear maps of this degree.
         ```lean
-        (LinearMap.lcomp R _ (Algebra.lmul R A).to_line
+        (LinearMap.lcomp R _ (Algebra.lmul R A).to_linear_map.flip).comp <|
+          (LinearMap.llcomp R M A A).flip.comp f.flip : M →ₗ[R] A →ₗ[R] M →ₗ[R] A)
+        ```
+        -/
+      (acc.2.val m,
+⟨(LinearMap.mulRight R acc.1).comp (f.bilin.flip m), Submodule.subset_span ⟨_, _, rfl⟩⟩))
+    (fun m₁ m₂ a =>
+      Prod.ext (map_add _ m₁ m₂)
+        (Subtype.ext <|
+          LinearMap.ext fun m₃ =>
+            show f.bilin m₃ (m₁ + m₂) * a.1 = f.bilin m₃ m₁ * a.1 + f.bilin m₃ m₂ * a.1 by
+              rw [map_add]; rw [add_mul]))
+    (fun c m a =>
+      Prod.ext (map_smul _ c m)
+        (Subtype.ext <|
+          LinearMap.ext fun m₃ =>
+            show f.bilin m₃ (c • m) * a.1 = c • (f.bilin m₃ m * a.1) by
+              rw [map_smul]; rw [smul_mul_assoc]))
+    (fun _ _ _ => Prod.ext rfl (Subtype.ext <| LinearMap.ext fun _ => mul_add _ _ _))
+    fun _ _ _ => Prod.ext rfl (Subtype.ext <| LinearMap.ext fun _ => mul_smul_comm _ _ _)
+
+@[simp]
 
 中文:
 定义 fFold
@@ -286,7 +311,28 @@ definition fFold
       /- We could write this `snd` term in a point-free style as follows, but it wouldn't help as we
         don't have any prod or subtype combinators to deal with n-linear maps of this degree.
         ```lean
-        (LinearMap.lcomp R _ (Algebra.lmul R A).to_line
+        (LinearMap.lcomp R _ (Algebra.lmul R A).to_linear_map.flip).comp <|
+          (LinearMap.llcomp R M A A).flip.comp f.flip : M →ₗ[R] A →ₗ[R] M →ₗ[R] A)
+        ```
+        -/
+      (acc.2.val m,
+⟨(LinearMap.mulRight R acc.1).comp (f.bilin.flip m), Submodule.subset_span ⟨_, _, rfl⟩⟩))
+    (fun m₁ m₂ a =>
+      Prod.ext (map_add _ m₁ m₂)
+        (Subtype.ext <|
+          LinearMap.ext fun m₃ =>
+            show f.bilin m₃ (m₁ + m₂) * a.1 = f.bilin m₃ m₁ * a.1 + f.bilin m₃ m₂ * a.1 by
+              rw [map_add]; rw [add_mul]))
+    (fun c m a =>
+      Prod.ext (map_smul _ c m)
+        (Subtype.ext <|
+          LinearMap.ext fun m₃ =>
+            show f.bilin m₃ (c • m) * a.1 = c • (f.bilin m₃ m * a.1) by
+              rw [map_smul]; rw [smul_mul_assoc]))
+    (fun _ _ _ => Prod.ext rfl (Subtype.ext <| LinearMap.ext fun _ => mul_add _ _ _))
+    fun _ _ _ => Prod.ext rfl (Subtype.ext <| LinearMap.ext fun _ => mul_smul_comm _ _ _)
+
+@[simp]
 -/
 private def fFold : M ->ₗ[R] A × S f ->ₗ[R] A × S f :=
   LinearMap.mk₂ R
@@ -372,7 +418,13 @@ theorem fFold_fFold
     change f.bilin _ _ * g m = Q m • g m₁
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hg
     · rintro _ ⟨b, m₃, rfl⟩
-      change f.bilin _ _ * (f.bilin _ _ * b) = Q
+      change f.bilin _ _ * (f.bilin _ _ * b) = Q m • (f.bilin _ _ * b)
+      rw [← smul_mul_assoc]; rw [← mul_assoc]; rw [f.contract_mid]
+    · simp
+    · rintro x y _hx _hy ihx ihy
+      rw [LinearMap.add_apply]; rw [LinearMap.add_apply]; rw [mul_add]; rw [smul_add]; rw [ihx]; rw [ihy]
+    · rintro x hx _c ihx
+      rw [LinearMap.smul_apply]; rw [LinearMap.smul_apply]; rw [mul_smul_comm]; rw [ihx]; rw [smul_comm]
 
 中文:
 定理 fFold_fFold
@@ -387,7 +439,13 @@ theorem fFold_fFold
     change f.bilin _ _ * g m = Q m • g m₁
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hg
     · rintro _ ⟨b, m₃, rfl⟩
-      change f.bilin _ _ * (f.bilin _ _ * b) = Q
+      change f.bilin _ _ * (f.bilin _ _ * b) = Q m • (f.bilin _ _ * b)
+      rw [← smul_mul_assoc]; rw [← mul_assoc]; rw [f.contract_mid]
+    · simp
+    · rintro x y _hx _hy ihx ihy
+      rw [LinearMap.add_apply]; rw [LinearMap.add_apply]; rw [mul_add]; rw [smul_add]; rw [ihx]; rw [ihy]
+    · rintro x hx _c ihx
+      rw [LinearMap.smul_apply]; rw [LinearMap.smul_apply]; rw [mul_smul_comm]; rw [ihx]; rw [smul_comm]
 -/
 private theorem fFold_fFold (m : M) (x : A × S f) : fFold f m (fFold f m x) = Q m • x := by
   obtain ⟨a, ⟨g, hg⟩⟩ := x
@@ -536,7 +594,10 @@ theorem aux_mul
     generalize_proofs at ⊢
     simpa using! Algebra.smul_def r _
   | add x y hx hy ihx ihy =>
-    rw [map_a
+    rw [map_add]; rw [Prod.fst_add]
+    simp [ihx, ihy, ← add_mul, ← map_add]
+  | ι_mul_ι_mul m₁ m₂ x hx ih =>
+    simp [aux_apply, ih, ← mul_assoc]
 
 中文:
 定理 aux_mul
@@ -552,7 +613,10 @@ theorem aux_mul
     generalize_proofs at ⊢
     simpa using! Algebra.smul_def r _
   | add x y hx hy ihx ihy =>
-    rw [map_a
+    rw [map_add]; rw [Prod.fst_add]
+    simp [ihx, ihy, ← add_mul, ← map_add]
+  | ι_mul_ι_mul m₁ m₂ x hx ih =>
+    simp [aux_apply, ih, ← mul_assoc]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Prod.fst, Prod.fst_add, add_mul, algebraMap, aux_apply, congr_arg, even_induction, foldr_mul, fst_add, generalize_proofs, map_add, mul_assoc, smul_def, x_property
 -/

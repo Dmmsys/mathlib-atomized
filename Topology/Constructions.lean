@@ -1241,7 +1241,7 @@ definition TopologicalSpace.cofinite
   isOpen_sUnion := by
     rintro s h ⟨x, t, hts, hzt⟩
     rw [compl_sUnion]
-    exact Finite.sInter (mem_image_of_mem _ hts) (
+    exact Finite.sInter (mem_image_of_mem _ hts) (h t hts ⟨x, hzt⟩)
 
 中文:
 定义 拓扑空间.cofinite
@@ -1255,7 +1255,7 @@ definition TopologicalSpace.cofinite
   isOpen_sUnion := by
     rintro s h ⟨x, t, hts, hzt⟩
     rw [compl_sUnion]
-    exact Finite.sInter (mem_image_of_mem _ hts) (
+    exact Finite.sInter (mem_image_of_mem _ hts) (h t hts ⟨x, hzt⟩)
 -/
 protected def TopologicalSpace.cofinite {X : Type*} : TopologicalSpace X where
   IsOpen s := s.Nonempty -> Set.Finite sᶜ
@@ -2846,14 +2846,16 @@ lemma isClosed_preimage_val
   given: {s t : Set X}
   statement: IsClosed (s ↓inter t) ↔ s inter closure (s inter t) subseteq t
   proof: by
-  rw [← closure_eq_iff_isClosed]; rw [IsEmbedding.subtypeVal.closure_eq_preimage_closure_image]; rw [← Subtype.val_injective.image_injective.eq_iff]; rw [Subtype.image_preimage_coe]; rw [Subtype.image_preimage_coe]; rw [subset_antisymm_iff]; rw [and_iff_left]; rw [Set.subset_inter_iff]; rw [and_i
+  rw [← closure_eq_iff_isClosed]; rw [IsEmbedding.subtypeVal.closure_eq_preimage_closure_image]; rw [← Subtype.val_injective.image_injective.eq_iff]; rw [Subtype.image_preimage_coe]; rw [Subtype.image_preimage_coe]; rw [subset_antisymm_iff]; rw [and_iff_left]; rw [Set.subset_inter_iff]; rw [and_iff_right]
+  exacts [Set.inter_subset_left, Set.subset_inter Set.inter_subset_left subset_closure]
 
 中文:
 引理 isClosed_preimage_val
   条件: {s t : 集合 X}
   结论: 是闭集 (s ↓inter t) ↔ s inter closure (s inter t) subseteq t
   证明: by
-  rw [← closure_eq_iff_isClosed]; rw [IsEmbedding.subtypeVal.closure_eq_preimage_closure_image]; rw [← Subtype.val_injective.image_injective.eq_iff]; rw [Subtype.image_preimage_coe]; rw [Subtype.image_preimage_coe]; rw [subset_antisymm_iff]; rw [and_iff_left]; rw [Set.subset_inter_iff]; rw [and_i
+  rw [← closure_eq_iff_isClosed]; rw [IsEmbedding.subtypeVal.closure_eq_preimage_closure_image]; rw [← Subtype.val_injective.image_injective.eq_iff]; rw [Subtype.image_preimage_coe]; rw [Subtype.image_preimage_coe]; rw [subset_antisymm_iff]; rw [and_iff_left]; rw [Set.subset_inter_iff]; rw [and_iff_right]
+  exacts [Set.inter_subset_left, Set.subset_inter Set.inter_subset_left subset_closure]
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.closure_eq_preimage_closure_image, Set.inter_subset_left, Set.subset_inter, Set.subset_inter_iff, Subtype, Subtype.image_preimage_coe, Subtype.val_injective.image_injective.eq_iff, and_iff_left, and_iff_right, closure_eq_iff_isClosed, closure_eq_preimage_closure_image, eq_iff, exacts, image_injective, image_preimage_coe, inter_subset_left, subset_antisymm_iff, subset_closure, subset_inter
 -/
@@ -2948,7 +2950,7 @@ lemma exists_open_dense_of_open_dense_subtype
   refine nonempty_of_nonempty_preimage (f := (Subtype.val : s -> X)) (hud (Subtype.val ⁻¹' t) ?_ ?_)
   · exact IsOpen.preimage_val ht
   · obtain ⟨x, hx⟩ := hs t ht ht'
-    simpa u
+    simpa using ⟨⟨x, hx.2⟩, hx.1⟩
 
 中文:
 引理 存在_open_dense_of_open_dense_subtype
@@ -2962,7 +2964,7 @@ lemma exists_open_dense_of_open_dense_subtype
   refine nonempty_of_nonempty_preimage (f := (Subtype.val : s -> X)) (hud (Subtype.val ⁻¹' t) ?_ ?_)
   · exact IsOpen.preimage_val ht
   · obtain ⟨x, hx⟩ := hs t ht ht'
-    simpa u
+    simpa using ⟨⟨x, hx.2⟩, hx.1⟩
 
 Depends on / 依赖: IsOpen, IsOpen.preimage_val, Subtype, Subtype.val, dense_iff_inter_open, nonempty_of_nonempty_preimage, preimage_val
 -/
@@ -4577,7 +4579,23 @@ theorem isOpen_pi_iff
   refine forall₂_congr fun a _ => ⟨?_, ?_⟩
   · rintro ⟨I, t, ⟨h1, h2⟩⟩
     refine ⟨I, fun a => eval a '' (I : Set ι).pi fun a => (h1 a).choose, fun i hi => ?_, ?_⟩
-    · simp_rw [eval_image_pi (Finset.mem_c
+    · simp_rw [eval_image_pi (Finset.mem_coe.mpr hi)
+          (pi_nonempty_iff.mpr fun i => ⟨_, fun _ => (h1 i).choose_spec.2.2⟩)]
+      exact (h1 i).choose_spec.2
+    · exact Subset.trans
+        (pi_mono fun i hi => (eval_image_pi_subset hi).trans (h1 i).choose_spec.1) h2
+  · rintro ⟨I, t, ⟨h1, h2⟩⟩
+    classical
+    refine ⟨I, fun a => ite (a in I) (t a) univ, fun i => ?_, ?_⟩
+    · by_cases hi : i in I
+      · use t i
+        simp_rw [if_pos hi]
+        exact ⟨Subset.rfl, (h1 i) hi⟩
+      · use univ
+        simp_rw [if_neg hi]
+        exact ⟨Subset.rfl, isOpen_univ, mem_univ _⟩
+    · rw [← univ_pi_ite]
+      simp only [← ite_and, ← Finset.mem_coe, and_self_iff, univ_pi_ite, h2]
 
 中文:
 定理 isOpen_pi_iff
@@ -4588,7 +4606,23 @@ theorem isOpen_pi_iff
   refine forall₂_congr fun a _ => ⟨?_, ?_⟩
   · rintro ⟨I, t, ⟨h1, h2⟩⟩
     refine ⟨I, fun a => eval a '' (I : Set ι).pi fun a => (h1 a).choose, fun i hi => ?_, ?_⟩
-    · simp_rw [eval_image_pi (Finset.mem_c
+    · simp_rw [eval_image_pi (Finset.mem_coe.mpr hi)
+          (pi_nonempty_iff.mpr fun i => ⟨_, fun _ => (h1 i).choose_spec.2.2⟩)]
+      exact (h1 i).choose_spec.2
+    · exact Subset.trans
+        (pi_mono fun i hi => (eval_image_pi_subset hi).trans (h1 i).choose_spec.1) h2
+  · rintro ⟨I, t, ⟨h1, h2⟩⟩
+    classical
+    refine ⟨I, fun a => ite (a in I) (t a) univ, fun i => ?_, ?_⟩
+    · by_cases hi : i in I
+      · use t i
+        simp_rw [if_pos hi]
+        exact ⟨Subset.rfl, (h1 i) hi⟩
+      · use univ
+        simp_rw [if_neg hi]
+        exact ⟨Subset.rfl, isOpen_univ, mem_univ _⟩
+    · rw [← univ_pi_ite]
+      simp only [← ite_and, ← Finset.mem_coe, and_self_iff, univ_pi_ite, h2]
 
 Depends on / 依赖: Filter, Filter.mem_pi, Finset, Finset.mem_coe.mpr, Subset, Subset.trans, choose_spec, eval_image_pi, eval_image_pi_subset, isOpen_iff_nhds, le_principal_iff, mem_coe, mem_nhds_iff, mem_pi, nhds_pi, pi_mono, pi_nonempty_iff, pi_nonempty_iff.mpr, simp_rw
 -/
@@ -4634,7 +4668,11 @@ theorem isOpen_pi_iff'
     refine
       ⟨fun i => (h1 i).choose,
         ⟨fun i => (h1 i).choose_spec.2,
-          (pi_mono fun i _
+          (pi_mono fun i _ => (h1 i).choose_spec.1).trans (Subset.trans ?_ h2)⟩⟩
+    rw [← pi_inter_compl (I : Set ι)]
+    exact inter_subset_left
+  · exact fun ⟨u, ⟨h1, _⟩⟩ =>
+      ⟨Finset.univ, u, ⟨fun i => ⟨u i, ⟨rfl.subset, h1 i⟩⟩, by rwa [Finset.coe_univ]⟩⟩
 
 中文:
 定理 isOpen_pi_iff'
@@ -4648,7 +4686,11 @@ theorem isOpen_pi_iff'
     refine
       ⟨fun i => (h1 i).choose,
         ⟨fun i => (h1 i).choose_spec.2,
-          (pi_mono fun i _
+          (pi_mono fun i _ => (h1 i).choose_spec.1).trans (Subset.trans ?_ h2)⟩⟩
+    rw [← pi_inter_compl (I : Set ι)]
+    exact inter_subset_left
+  · exact fun ⟨u, ⟨h1, _⟩⟩ =>
+      ⟨Finset.univ, u, ⟨fun i => ⟨u i, ⟨rfl.subset, h1 i⟩⟩, by rwa [Finset.coe_univ]⟩⟩
 
 Depends on / 依赖: Filter, Filter.mem_pi, Finset, Finset.coe_univ, Finset.univ, Subset, Subset.trans, choose_spec, coe_univ, inter_subset_left, isOpen_iff_nhds, le_principal_iff, mem_nhds_iff, mem_pi, nhds_pi, nonempty_fintype, pi_inter_compl, pi_mono, rfl.subset, simp_rw
 -/
@@ -4857,7 +4899,9 @@ theorem pi_generateFrom_eq
     let := fun a => generateFrom (g a)
     exact isOpen_set_pi i.finite_toSet (fun a ha => GenerateOpen.basic _ (hi a ha))
   · classical
-refine le_iInf fun i => coinduced_le_iff_le_induced.1 le_generateFrom fun s hs
+refine le_iInf fun i => coinduced_le_iff_le_induced.1 le_generateFrom fun s hs => ?_
+    refine GenerateOpen.basic _ ⟨update (fun i => univ) i s, {i}, ?_⟩
+    simp [hs]
 
 中文:
 定理 pi_generateFrom_eq
@@ -4869,7 +4913,9 @@ refine le_iInf fun i => coinduced_le_iff_le_induced.1 le_generateFrom fun s hs
     let := fun a => generateFrom (g a)
     exact isOpen_set_pi i.finite_toSet (fun a ha => GenerateOpen.basic _ (hi a ha))
   · classical
-refine le_iInf fun i => coinduced_le_iff_le_induced.1 le_generateFrom fun s hs
+refine le_iInf fun i => coinduced_le_iff_le_induced.1 le_generateFrom fun s hs => ?_
+    refine GenerateOpen.basic _ ⟨update (fun i => univ) i s, {i}, ?_⟩
+    simp [hs]
 
 Depends on / 依赖: GenerateOpen, GenerateOpen.basic, classical, coinduced_le_iff_le_induced, finite_toSet, generateFrom, i.finite_toSet, isOpen_set_pi, le_antisymm, le_generateFrom, le_iInf, update
 -/
@@ -4927,7 +4973,14 @@ theorem pi_generateFrom_eq_finite
   refine le_antisymm (generateFrom_anti ?_) (le_generateFrom ?_)
   · exact fun s ⟨t, ht, Eq⟩ => ⟨t, Finset.univ, by simp [ht, Eq]⟩
   · rintro s ⟨t, i, ht, rfl⟩
-    let := generateFrom { t | exists s : forall a, Set (X a), (forall a, s a in g a)
+    let := generateFrom { t | exists s : forall a, Set (X a), (forall a, s a in g a) ∧ t = pi univ s }
+    refine isOpen_iff_forall_mem_open.2 fun f hf => ?_
+    choose c hcg hfc using fun a => sUnion_eq_univ_iff.1 (hg a) (f a)
+    refine ⟨pi i t inter pi ((↑i)ᶜ : Set ι) c, inter_subset_left, ?_, ⟨hf, fun a _ => hfc a⟩⟩
+    classical
+    rw [← univ_pi_piecewise]
+    refine GenerateOpen.basic _ ⟨_, fun a => ?_, rfl⟩
+    by_cases a in i <;> simp [*]
 
 中文:
 定理 pi_generateFrom_eq_finite
@@ -4938,7 +4991,14 @@ theorem pi_generateFrom_eq_finite
   refine le_antisymm (generateFrom_anti ?_) (le_generateFrom ?_)
   · exact fun s ⟨t, ht, Eq⟩ => ⟨t, Finset.univ, by simp [ht, Eq]⟩
   · rintro s ⟨t, i, ht, rfl⟩
-    let := generateFrom { t | exists s : forall a, Set (X a), (forall a, s a in g a)
+    let := generateFrom { t | exists s : forall a, Set (X a), (forall a, s a in g a) ∧ t = pi univ s }
+    refine isOpen_iff_forall_mem_open.2 fun f hf => ?_
+    choose c hcg hfc using fun a => sUnion_eq_univ_iff.1 (hg a) (f a)
+    refine ⟨pi i t inter pi ((↑i)ᶜ : Set ι) c, inter_subset_left, ?_, ⟨hf, fun a _ => hfc a⟩⟩
+    classical
+    rw [← univ_pi_piecewise]
+    refine GenerateOpen.basic _ ⟨_, fun a => ?_, rfl⟩
+    by_cases a in i <;> simp [*]
 
 Depends on / 依赖: Finset, Finset.univ, generateFrom, generateFrom_anti, inter_subset_left, isOpen_iff_forall_mem_open, le_antisymm, le_generateFrom, nonempty_fintype, pi_generateFrom_eq, sUnion_eq_univ_iff
 -/
@@ -5465,7 +5525,12 @@ theorem inducing_sigma
     refine ⟨U, hUo, ?_⟩
     simpa [Set.ext_iff] using hU
   · refine fun ⟨h₁, h₂⟩ => isInducing_iff_nhds.2 fun ⟨i, x⟩ => ?_
-    rw [Sigma.nhds_mk
+    rw [Sigma.nhds_mk]; rw [(h₁ i).nhds_eq_comap]; rw [comp_apply]; rw [← comap_comap]; rw [map_comap_of_mem]
+    rcases h₂ i with ⟨U, hUo, hU⟩
+    filter_upwards [preimage_mem_comap <| hUo.mem_nhds <| (hU _).2 rfl] with y hy
+    simpa [hU] using hy
+
+@[simp 1100]
 
 中文:
 定理 inducing_sigma
@@ -5476,7 +5541,12 @@ theorem inducing_sigma
     refine ⟨U, hUo, ?_⟩
     simpa [Set.ext_iff] using hU
   · refine fun ⟨h₁, h₂⟩ => isInducing_iff_nhds.2 fun ⟨i, x⟩ => ?_
-    rw [Sigma.nhds_mk
+    rw [Sigma.nhds_mk]; rw [(h₁ i).nhds_eq_comap]; rw [comp_apply]; rw [← comap_comap]; rw [map_comap_of_mem]
+    rcases h₂ i with ⟨U, hUo, hU⟩
+    filter_upwards [preimage_mem_comap <| hUo.mem_nhds <| (hU _).2 rfl] with y hy
+    simpa [hU] using hy
+
+@[simp 1100]
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.sigmaMk, Set.ext_iff, Sigma.nhds_mk, comap_comap, comp_apply, ext_iff, filter_upwards, h.comp, h.isOpen_iff, hUo.mem_nhds, isInducing_iff_nhds, isOpen_iff, isOpen_range_sigmaMk, map_comap_of_mem, mem_nhds, nhds_eq_comap, nhds_mk, preimage_mem_comap, sigmaMk
 -/

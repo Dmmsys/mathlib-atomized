@@ -119,7 +119,10 @@ NatIso.ofComponents (fun e => Iso.op <| Iso.refl _) fun _ =>
 NatIso.ofComponents (fun e => Iso.refl _) fun _ => by
       ext c
       simp [symm, symmEquivInverse]
-  functor_uni
+  functor_unitIso_comp X := by
+    simp [symm, symmEquivInverse]
+
+#adaptation_note
 
 中文:
 定义 symmEquiv
@@ -133,7 +136,10 @@ NatIso.ofComponents (fun e => Iso.op <| Iso.refl _) fun _ =>
 NatIso.ofComponents (fun e => Iso.refl _) fun _ => by
       ext c
       simp [symm, symmEquivInverse]
-  functor_uni
+  functor_unitIso_comp X := by
+    simp [symm, symmEquivInverse]
+
+#adaptation_note
 
 Depends on / 依赖: symmEquivFunctor
 -/

@@ -392,7 +392,7 @@ refine OrderDual.ofDual_le_ofDual.mpr
   · exact degtm _ _
 
 @[deprecated (since := "2026-06-18")]
-alias le_inf_support_multiset_prod := le_inf_support_coef
+alias le_inf_support_multiset_prod := le_inf_support_coeff_multisetProd
 
 中文:
 定理 le_inf_support_coeff_multisetProd
@@ -405,7 +405,7 @@ refine OrderDual.ofDual_le_ofDual.mpr
   · exact degtm _ _
 
 @[deprecated (since := "2026-06-18")]
-alias le_inf_support_multiset_prod := le_inf_support_coef
+alias le_inf_support_multiset_prod := le_inf_support_coeff_multisetProd
 
 Depends on / 依赖: OrderDual, OrderDual.ofDual_le_ofDual.mp, OrderDual.ofDual_le_ofDual.mpr, ofDual_le_ofDual, sup_support_coeff_multisetProd_le
 -/
@@ -433,7 +433,7 @@ theorem sup_support_coeff_finsetProd_le
 alias sup_support_finsetProd_le := sup_support_coeff_finsetProd_le
 
 @[deprecated (since := "2026-04-08")]
-alias sup_support_finset_prod_le := sup_support_coeff_finsetProd
+alias sup_support_finset_prod_le := sup_support_coeff_finsetProd_le
 
 中文:
 定理 sup_support_coeff_finsetProd_le
@@ -444,7 +444,7 @@ alias sup_support_finset_prod_le := sup_support_coeff_finsetProd
 alias sup_support_finsetProd_le := sup_support_coeff_finsetProd_le
 
 @[deprecated (since := "2026-04-08")]
-alias sup_support_finset_prod_le := sup_support_coeff_finsetProd
+alias sup_support_finset_prod_le := sup_support_coeff_finsetProd_le
 
 Depends on / 依赖: Multiset, Multiset.map_map, congr_arg, map_map, sup_support_coeff_multisetProd_le, trans_eq
 -/
@@ -471,7 +471,7 @@ theorem le_inf_support_coeff_finsetProd
 alias le_inf_support_finsetProd := le_inf_support_coeff_finsetProd
 
 @[deprecated (since := "2026-04-08")]
-alias le_inf_support_finset_prod := le_inf_support_coeff_f
+alias le_inf_support_finset_prod := le_inf_support_coeff_finsetProd
 
 中文:
 定理 le_inf_support_coeff_finsetProd
@@ -482,7 +482,7 @@ alias le_inf_support_finset_prod := le_inf_support_coeff_f
 alias le_inf_support_finsetProd := le_inf_support_coeff_finsetProd
 
 @[deprecated (since := "2026-04-08")]
-alias le_inf_support_finset_prod := le_inf_support_coeff_f
+alias le_inf_support_finset_prod := le_inf_support_coeff_finsetProd
 
 Depends on / 依赖: Multiset, Multiset.map_map, le_inf_support_coeff_multisetProd, le_of_eq_of_le, map_map
 -/
@@ -900,7 +900,18 @@ theorem coeff_add_of_supDegree_le
   rw [Finset.sum_eq_single ap]; rw [Finset.sum_eq_single aq]; rw [if_pos rfl]
   · refine fun a ha hne => if_neg (fun he => ?_)
     apply_fun D at he; simp_rw [hadd] at he
-    exact (add_lt_add_right (((Finset.le_sup ha).trans hq).lt_of_ne <| hD.ne_if
+    exact (add_lt_add_right (((Finset.le_sup ha).trans hq).lt_of_ne <| hD.ne_iff.2 hne) _).ne he
+  · intro h; rw [if_pos rfl, Finsupp.notMem_support_iff.1 h, mul_zero]
+  · refine fun a ha hne => Finset.sum_eq_zero (fun a' ha' => if_neg <| fun he => ?_)
+    apply_fun D at he
+    simp_rw [hadd] at he
+    have := addLeftMono_of_addLeftStrictMono B
+    exact (add_lt_add_of_lt_of_le (((Finset.le_sup ha).trans hp).lt_of_ne <| hD.ne_iff.2 hne)
+ (Finset.le_sup ha').trans hq).ne he
+  · refine fun h => Finset.sum_eq_zero (fun a _ => ite_eq_right_iff.mpr <| fun _ => ?_)
+    rw [Finsupp.notMem_support_iff.mp h]; rw [zero_mul]
+
+@[deprecated (since := "2026-06-18")] alias apply_add_of_supDegree_le := coeff_add_of_supDegree_le
 
 中文:
 定理 coeff_add_of_supDegree_le
@@ -911,7 +922,18 @@ theorem coeff_add_of_supDegree_le
   rw [Finset.sum_eq_single ap]; rw [Finset.sum_eq_single aq]; rw [if_pos rfl]
   · refine fun a ha hne => if_neg (fun he => ?_)
     apply_fun D at he; simp_rw [hadd] at he
-    exact (add_lt_add_right (((Finset.le_sup ha).trans hq).lt_of_ne <| hD.ne_if
+    exact (add_lt_add_right (((Finset.le_sup ha).trans hq).lt_of_ne <| hD.ne_iff.2 hne) _).ne he
+  · intro h; rw [if_pos rfl, Finsupp.notMem_support_iff.1 h, mul_zero]
+  · refine fun a ha hne => Finset.sum_eq_zero (fun a' ha' => if_neg <| fun he => ?_)
+    apply_fun D at he
+    simp_rw [hadd] at he
+    have := addLeftMono_of_addLeftStrictMono B
+    exact (add_lt_add_of_lt_of_le (((Finset.le_sup ha).trans hp).lt_of_ne <| hD.ne_iff.2 hne)
+ (Finset.le_sup ha').trans hq).ne he
+  · refine fun h => Finset.sum_eq_zero (fun a _ => ite_eq_right_iff.mpr <| fun _ => ?_)
+    rw [Finsupp.notMem_support_iff.mp h]; rw [zero_mul]
+
+@[deprecated (since := "2026-06-18")] alias apply_add_of_supDegree_le := coeff_add_of_supDegree_le
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sum_eq_single, Finset.sum_eq_zero, Finsupp, Finsupp.notMem_support_iff, Finsupp.sum, add_lt_add_right, apply_fun, classical, coeff_mul, hD.ne_iff, if_neg, if_pos, le_sup, lt_of_ne, mul_zero, ne_iff, notMem_support_iff, simp_rw
 -/
@@ -1219,7 +1241,7 @@ lemma leadingCoeff_add_eq_left
   proof: by
   obtain ⟨a, he⟩ := supDegree_mem_range D (ne_zero_of_not_supDegree_le h.not_ge)
   rw [leadingCoeff]; rw [supDegree_add_eq_left h]; rw [coeff_add]; rw [Finsupp.add_apply]; rw [← leadingCoeff]; rw [coeff_eq_zero_of_not_le_supDegree (D := D)]; rw [add_zero]
-  rw [← he]; rw [Function.apply_invFun_ap
+  rw [← he]; rw [Function.apply_invFun_apply (f := D)]; rw [he]; exact h.not_ge
 
 中文:
 引理 leadingCoeff_add_eq_left
@@ -1227,7 +1249,7 @@ lemma leadingCoeff_add_eq_left
   证明: by
   obtain ⟨a, he⟩ := supDegree_mem_range D (ne_zero_of_not_supDegree_le h.not_ge)
   rw [leadingCoeff]; rw [supDegree_add_eq_left h]; rw [coeff_add]; rw [Finsupp.add_apply]; rw [← leadingCoeff]; rw [coeff_eq_zero_of_not_le_supDegree (D := D)]; rw [add_zero]
-  rw [← he]; rw [Function.apply_invFun_ap
+  rw [← he]; rw [Function.apply_invFun_apply (f := D)]; rw [he]; exact h.not_ge
 
 Depends on / 依赖: Finsupp, Finsupp.add_apply, Function, Function.apply_invFun_apply, add_apply, add_zero, apply_invFun_apply, coeff_add, coeff_eq_zero_of_not_le_supDegree, h.not_ge, leadingCoeff, ne_zero_of_not_supDegree_le, not_ge, supDegree_add_eq_left, supDegree_mem_range
 -/
@@ -1382,7 +1404,7 @@ lemma supDegree_leadingCoeff_sum_eq
   suffices _ from ⟨supDegree_add_eq_left this, leadingCoeff_add_eq_left this⟩
   refine supDegree_sum_lt ?_ (fun j hj => ?_)
   · exact hs
-  · rw [Finset.mem_erase] at 
+  · rw [Finset.mem_erase] at hj; exact hmax j hj.2 hj.1
 
 中文:
 引理 supDegree_leadingCoeff_sum_eq
@@ -1394,7 +1416,7 @@ lemma supDegree_leadingCoeff_sum_eq
   suffices _ from ⟨supDegree_add_eq_left this, leadingCoeff_add_eq_left this⟩
   refine supDegree_sum_lt ?_ (fun j hj => ?_)
   · exact hs
-  · rw [Finset.mem_erase] at 
+  · rw [Finset.mem_erase] at hj; exact hmax j hj.2 hj.1
 
 Depends on / 依赖: Finset, Finset.mem_erase, Finset.sum_empty, add_sum_erase, add_zero, classical, leadingCoeff_add_eq_left, mem_erase, s.add_sum_erase, s.erase, sum_empty, supDegree_add_eq_left, supDegree_sum_lt
 -/
@@ -1425,7 +1447,11 @@ lemma sum_ne_zero_of_injOn_supDegree'
   · refine (sum_eq_single_of_mem j hj (fun k hk hne => ?_)).trans_ne hne
     rw [h k hk]; rw [h j hj] at hne; exact hne.irrefl.elim
   obtain ⟨j, hj, hne⟩ := h
-  a
+  apply ne_zero_of_supDegree_ne_bot (D := D)
+  have (k) (hk : k in s) (hne : k != i) : supDegree D (f k) < supDegree D (f i) :=
+    ((le_sup hk).trans_eq he).lt_of_ne (hd.ne hk hi hne)
+  rw [(supDegree_leadingCoeff_sum_eq hi this).1]
+  exact (this j hj hne).ne_bot
 
 中文:
 引理 sum_ne_zero_of_injOn_supDegree'
@@ -1437,7 +1463,11 @@ lemma sum_ne_zero_of_injOn_supDegree'
   · refine (sum_eq_single_of_mem j hj (fun k hk hne => ?_)).trans_ne hne
     rw [h k hk]; rw [h j hj] at hne; exact hne.irrefl.elim
   obtain ⟨j, hj, hne⟩ := h
-  a
+  apply ne_zero_of_supDegree_ne_bot (D := D)
+  have (k) (hk : k in s) (hne : k != i) : supDegree D (f k) < supDegree D (f i) :=
+    ((le_sup hk).trans_eq he).lt_of_ne (hd.ne hk hi hne)
+  rw [(supDegree_leadingCoeff_sum_eq hi this).1]
+  exact (this j hj hne).ne_bot
 
 Depends on / 依赖: exists_mem_eq_sup, hd.ne, hne.irrefl.elim, irrefl, le_sup, lt_of_ne, ne_zero_of_supDegree_ne_bot, sum_eq_single_of_mem, supDegree, supDegree_leadingCoeff_sum_eq, trans_eq, trans_ne
 -/
@@ -1496,7 +1526,10 @@ lemma coeff_supDegree_add_supDegree
   obtain ⟨ap, -, hp⟩ := exists_supDegree_mem_support D hp
   obtain ⟨aq, -, hq⟩ := exists_supDegree_mem_support D hq
   simp_rw [leadingCoeff, hp, hq, ← hadd, Function.leftInverse_invFun hD _]
-  exact coeff_add_of
+  exact coeff_add_of_supDegree_le hadd hD hp.le hq.le
+
+@[deprecated (since := "2026-06-18")]
+alias apply_supDegree_add_supDegree := coeff_supDegree_add_supDegree
 
 中文:
 引理 coeff_supDegree_add_supDegree
@@ -1509,7 +1542,10 @@ lemma coeff_supDegree_add_supDegree
   obtain ⟨ap, -, hp⟩ := exists_supDegree_mem_support D hp
   obtain ⟨aq, -, hq⟩ := exists_supDegree_mem_support D hq
   simp_rw [leadingCoeff, hp, hq, ← hadd, Function.leftInverse_invFun hD _]
-  exact coeff_add_of
+  exact coeff_add_of_supDegree_le hadd hD hp.le hq.le
+
+@[deprecated (since := "2026-06-18")]
+alias apply_supDegree_add_supDegree := coeff_supDegree_add_supDegree
 
 Depends on / 依赖: Function, Function.leftInverse_invFun, coeff_add_of_supDegree_le, eq_or_ne, exists_supDegree_mem_support, hp.le, hq.le, leadingCoeff, leftInverse_invFun, simp_rw
 -/
@@ -1539,7 +1575,11 @@ lemma supDegree_mul
   · rw [← AddSubsemigroup.coe_set_mk (Set.range D), ← AddHom.srange_mk _ hadd, SetLike.mem_coe]
     · exact add_mem (supDegree_mem_range D hp) (supDegree_mem_range D hq)
     · exact (AddHom.srange ⟨D, hadd⟩).add_mem
-  · simp_rw [Finsupp.mem_support_iff, coeff_supDegree
+  · simp_rw [Finsupp.mem_support_iff, coeff_supDegree_add_supDegree hD hadd]
+    exact hpq
+  · have := addLeftMono_of_addLeftStrictMono B
+    have := addRightMono_of_addRightStrictMono B
+    exact fun a ha => (Finset.le_sup ha).trans (supDegree_mul_le hadd)
 
 中文:
 引理 supDegree_mul
@@ -1548,7 +1588,11 @@ lemma supDegree_mul
   · rw [← AddSubsemigroup.coe_set_mk (Set.range D), ← AddHom.srange_mk _ hadd, SetLike.mem_coe]
     · exact add_mem (supDegree_mem_range D hp) (supDegree_mem_range D hq)
     · exact (AddHom.srange ⟨D, hadd⟩).add_mem
-  · simp_rw [Finsupp.mem_support_iff, coeff_supDegree
+  · simp_rw [Finsupp.mem_support_iff, coeff_supDegree_add_supDegree hD hadd]
+    exact hpq
+  · have := addLeftMono_of_addLeftStrictMono B
+    have := addRightMono_of_addRightStrictMono B
+    exact fun a ha => (Finset.le_sup ha).trans (supDegree_mul_le hadd)
 
 Depends on / 依赖: AddHom, AddHom.srange, AddHom.srange_mk, AddSubsemigroup, AddSubsemigroup.coe_set_mk, Finset, Finset.le_sup, Finsupp, Finsupp.mem_support_iff, Set.range, SetLike, SetLike.mem_coe, addLeftMono_of_addLeftStrictMono, addRightMono_of_addRightStrictMono, add_mem, coe_set_mk, coeff_supDegree_add_supDegree, le_sup, mem_coe, mem_support_iff
 -/
@@ -1660,7 +1704,7 @@ lemma leadingCoeff_mul
   obtain rfl | hq := eq_or_ne q 0
   · simp_rw [leadingCoeff_zero, mul_zero, leadingCoeff_zero]
   rw [← coeff_supDegree_add_supDegree hD hadd]; rw [← supDegree_mul hD hadd ?_ hp hq]; rw [leadingCoeff]
-  
+  apply mul_ne_zero <;> rwa [Ne, leadingCoeff_eq_zero hD]
 
 中文:
 引理 leadingCoeff_mul
@@ -1671,7 +1715,7 @@ lemma leadingCoeff_mul
   obtain rfl | hq := eq_or_ne q 0
   · simp_rw [leadingCoeff_zero, mul_zero, leadingCoeff_zero]
   rw [← coeff_supDegree_add_supDegree hD hadd]; rw [← supDegree_mul hD hadd ?_ hp hq]; rw [leadingCoeff]
-  
+  apply mul_ne_zero <;> rwa [Ne, leadingCoeff_eq_zero hD]
 
 Depends on / 依赖: coeff_supDegree_add_supDegree, eq_or_ne, leadingCoeff, leadingCoeff_eq_zero, leadingCoeff_zero, mul_ne_zero, mul_zero, simp_rw, supDegree_mul, zero_mul
 -/

@@ -807,7 +807,7 @@ theorem absConvexHull_eq_convexHull_balancedHull
     ((subset_convexHull 𝕜 s).trans (convexHull_mono (subset_balancedHull 𝕜)))
       ⟨Balanced.convexHull (balancedHull.balanced s), convex_convexHull ..⟩)
   (convexHull_min (balanced_absConvexHull.balancedHull_subset_of_subset subset_absConvexHull)
-      convex_absCo
+      convex_absConvexHull)
 
 中文:
 定理 absConvexHull_eq_convexHull_balancedHull
@@ -817,7 +817,7 @@ theorem absConvexHull_eq_convexHull_balancedHull
     ((subset_convexHull 𝕜 s).trans (convexHull_mono (subset_balancedHull 𝕜)))
       ⟨Balanced.convexHull (balancedHull.balanced s), convex_convexHull ..⟩)
   (convexHull_min (balanced_absConvexHull.balancedHull_subset_of_subset subset_absConvexHull)
-      convex_absCo
+      convex_absConvexHull)
 
 Depends on / 依赖: le_antisymm
 -/
@@ -904,7 +904,9 @@ theorem nhds_hasBasis_absConvex
     (LocallyConvexSpace.convex_basis_zero 𝕜 E).to_hasBasis (fun s hs => ?_) fun s hs =>
       ⟨s, ⟨hs.1, hs.2.2⟩, rfl.subset⟩
   refine ⟨convexHull 𝕜 (balancedCore 𝕜 s), ?_, convexHull_min (balancedCore_subset s) hs.2⟩
-  refine ⟨Filter.mem_of_superset (balancedCore_mem_nhds_zero hs.1) (su
+  refine ⟨Filter.mem_of_superset (balancedCore_mem_nhds_zero hs.1) (subset_convexHull 𝕜 _), ?_⟩
+  refine ⟨(balancedCore_balanced s).convexHull, ?_⟩
+  exact convex_convexHull 𝕜 (balancedCore 𝕜 s)
 
 中文:
 定理 nhds_hasBasis_absConvex
@@ -913,7 +915,9 @@ theorem nhds_hasBasis_absConvex
     (LocallyConvexSpace.convex_basis_zero 𝕜 E).to_hasBasis (fun s hs => ?_) fun s hs =>
       ⟨s, ⟨hs.1, hs.2.2⟩, rfl.subset⟩
   refine ⟨convexHull 𝕜 (balancedCore 𝕜 s), ?_, convexHull_min (balancedCore_subset s) hs.2⟩
-  refine ⟨Filter.mem_of_superset (balancedCore_mem_nhds_zero hs.1) (su
+  refine ⟨Filter.mem_of_superset (balancedCore_mem_nhds_zero hs.1) (subset_convexHull 𝕜 _), ?_⟩
+  refine ⟨(balancedCore_balanced s).convexHull, ?_⟩
+  exact convex_convexHull 𝕜 (balancedCore 𝕜 s)
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, LocallyConvexSpace, LocallyConvexSpace.convex_basis_zero, balancedCore, balancedCore_balanced, balancedCore_mem_nhds_zero, balancedCore_subset, convexHull, convexHull_min, convex_basis_zero, convex_convexHull, mem_of_superset, rfl.subset, subset, subset_convexHull, to_hasBasis
 -/
@@ -940,7 +944,9 @@ theorem nhds_hasBasis_absConvex_open
     refine ⟨interior s, ?_, interior_subset⟩
     exact
       ⟨mem_interior_iff_mem_nhds.mpr hs_nhds, isOpen_interior,
-        hs_balanced.interior (mem_interior_iff_mem_nhds.mpr hs_nhds), hs_con
+        hs_balanced.interior (mem_interior_iff_mem_nhds.mpr hs_nhds), hs_convex.interior⟩
+  intro s ⟨hs_zero, hs_open, hs_balanced, hs_convex⟩
+  exact ⟨s, ⟨hs_open.mem_nhds hs_zero, hs_balanced, hs_convex⟩, rfl.subset⟩
 
 中文:
 定理 nhds_hasBasis_absConvex_open
@@ -950,7 +956,9 @@ theorem nhds_hasBasis_absConvex_open
     refine ⟨interior s, ?_, interior_subset⟩
     exact
       ⟨mem_interior_iff_mem_nhds.mpr hs_nhds, isOpen_interior,
-        hs_balanced.interior (mem_interior_iff_mem_nhds.mpr hs_nhds), hs_con
+        hs_balanced.interior (mem_interior_iff_mem_nhds.mpr hs_nhds), hs_convex.interior⟩
+  intro s ⟨hs_zero, hs_open, hs_balanced, hs_convex⟩
+  exact ⟨s, ⟨hs_open.mem_nhds hs_zero, hs_balanced, hs_convex⟩, rfl.subset⟩
 
 Depends on / 依赖: hs_balanced, hs_balanced.interior, hs_convex, hs_convex.interior, hs_nhds, hs_open, hs_open.mem_nhds, hs_zero, interior, interior_subset, isOpen_interior, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mpr, mem_nhds, nhds_hasBasis_absConvex, rfl.subset, subset, to_hasBasis
 -/
@@ -977,7 +985,13 @@ theorem nhds_hasBasis_absConvex_closed
   intro s ⟨hs_zero, hs_open⟩
   obtain ⟨W, hW_open, hW_zero, hW_add⟩ :=
     exists_open_nhds_zero_add_subset (hs_open.mem_nhds hs_zero)
-  o
+  obtain ⟨V, ⟨hV_zero, hV_open, hV_abs⟩, hVW⟩ :=
+    (nhds_hasBasis_absConvex_open 𝕜 E).mem_iff.mp (hW_open.mem_nhds hW_zero)
+  exact ⟨closure V,
+    ⟨Filter.mem_of_superset (hV_open.mem_nhds hV_zero) subset_closure, isClosed_closure,
+     hV_abs.closure⟩,
+    (closure_subset_add_self_of_mem_nhds_zero (hV_open.mem_nhds hV_zero)).trans
+      ((add_subset_add hVW hVW).trans hW_add)⟩
 
 中文:
 定理 nhds_hasBasis_absConvex_closed
@@ -988,7 +1002,13 @@ theorem nhds_hasBasis_absConvex_closed
   intro s ⟨hs_zero, hs_open⟩
   obtain ⟨W, hW_open, hW_zero, hW_add⟩ :=
     exists_open_nhds_zero_add_subset (hs_open.mem_nhds hs_zero)
-  o
+  obtain ⟨V, ⟨hV_zero, hV_open, hV_abs⟩, hVW⟩ :=
+    (nhds_hasBasis_absConvex_open 𝕜 E).mem_iff.mp (hW_open.mem_nhds hW_zero)
+  exact ⟨closure V,
+    ⟨Filter.mem_of_superset (hV_open.mem_nhds hV_zero) subset_closure, isClosed_closure,
+     hV_abs.closure⟩,
+    (closure_subset_add_self_of_mem_nhds_zero (hV_open.mem_nhds hV_zero)).trans
+      ((add_subset_add hVW hVW).trans hW_add)⟩
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, closure, exists_open_nhds_zero_add_subset, hV_abs, hV_open, hV_open.mem_nhds, hV_zero, hW_add, hW_open, hW_open.mem_nhds, hW_zero, hs_nhds, hs_open, hs_open.mem_nhds, hs_zero, interior, interior_subset, isClosed_closure, mem_iff
 -/
@@ -1019,7 +1039,29 @@ theorem exists_nhds_hasAntitoneBasis_absConvex_open_add_closure_subset
   have hu_zero (n : Nat) : 0 in interior (u n) :=
     mem_interior_iff_mem_nhds.mpr (hu_basis.mem_of_mem trivial)
   let v (n : Nat) := absConvexHull 𝕜 (interior (u n))
-  have hv_open (n : Nat) : IsOpen (v n) := i
+  have hv_open (n : Nat) : IsOpen (v n) := isOpen_interior.absConvexHull 𝕜 (hu_zero n)
+  have hv_nhds (n : Nat) : v n in 𝓝 0 := (hv_open n).mem_nhds (subset_absConvexHull (hu_zero n))
+  have hv_basis : (𝓝 0).HasAntitoneBasis v := by
+    refine ⟨hu_basis.to_hasBasis ?_ ?_,
+      fun _ _ hij => absConvexHull_mono (interior_mono (hu_basis.antitone hij))⟩
+    · intro n _
+      obtain ⟨W, ⟨hW_nhds, hW_abs⟩, hWn⟩ :=
+        (nhds_hasBasis_absConvex 𝕜 E).mem_iff.mp (hu_basis.mem_of_mem trivial)
+      obtain ⟨m, hm⟩ := hu_basis.mem_iff.mp hW_nhds
+      exact ⟨m, trivial, (absConvexHull_min (interior_subset.trans hm) hW_abs).trans hWn⟩
+    · intro n _
+      obtain ⟨m, hm⟩ := hu_basis.mem_iff.mp (isOpen_interior.mem_nhds (hu_zero n))
+      exact ⟨m, trivial, hm.trans subset_absConvexHull⟩
+  obtain ⟨φ, -, hφ_add, hφ_basis⟩ := hv_basis.subbasis_with_rel
+    (r := fun i j => v j + v j subseteq v i) fun m => by
+      obtain ⟨W, hW_open, hW_zero, hW_add⟩ := exists_open_nhds_zero_add_subset (hv_nhds m)
+      obtain ⟨N, hN⟩ := hv_basis.mem_iff.mp (hW_open.mem_nhds hW_zero)
+      filter_upwards [Filter.eventually_ge_atTop N] with M hM
+      exact (add_subset_add ((hv_basis.antitone hM).trans hN)
+        ((hv_basis.antitone hM).trans hN)).trans hW_add
+  exact ⟨v ∘ φ, hφ_basis, fun n => ⟨hv_open (φ n), absConvex_absConvexHull, hφ_add (by simp),
+    (closure_subset_add_self_of_mem_nhds_zero (hv_nhds (φ (n + 1)))).trans
+        (hφ_add n.lt_succ_self)⟩⟩
 
 中文:
 定理 存在_nhds_hasAntitoneBasis_absConvex_open_add_closure_subset
@@ -1029,7 +1071,29 @@ theorem exists_nhds_hasAntitoneBasis_absConvex_open_add_closure_subset
   have hu_zero (n : Nat) : 0 in interior (u n) :=
     mem_interior_iff_mem_nhds.mpr (hu_basis.mem_of_mem trivial)
   let v (n : Nat) := absConvexHull 𝕜 (interior (u n))
-  have hv_open (n : Nat) : IsOpen (v n) := i
+  have hv_open (n : Nat) : IsOpen (v n) := isOpen_interior.absConvexHull 𝕜 (hu_zero n)
+  have hv_nhds (n : Nat) : v n in 𝓝 0 := (hv_open n).mem_nhds (subset_absConvexHull (hu_zero n))
+  have hv_basis : (𝓝 0).HasAntitoneBasis v := by
+    refine ⟨hu_basis.to_hasBasis ?_ ?_,
+      fun _ _ hij => absConvexHull_mono (interior_mono (hu_basis.antitone hij))⟩
+    · intro n _
+      obtain ⟨W, ⟨hW_nhds, hW_abs⟩, hWn⟩ :=
+        (nhds_hasBasis_absConvex 𝕜 E).mem_iff.mp (hu_basis.mem_of_mem trivial)
+      obtain ⟨m, hm⟩ := hu_basis.mem_iff.mp hW_nhds
+      exact ⟨m, trivial, (absConvexHull_min (interior_subset.trans hm) hW_abs).trans hWn⟩
+    · intro n _
+      obtain ⟨m, hm⟩ := hu_basis.mem_iff.mp (isOpen_interior.mem_nhds (hu_zero n))
+      exact ⟨m, trivial, hm.trans subset_absConvexHull⟩
+  obtain ⟨φ, -, hφ_add, hφ_basis⟩ := hv_basis.subbasis_with_rel
+    (r := fun i j => v j + v j subseteq v i) fun m => by
+      obtain ⟨W, hW_open, hW_zero, hW_add⟩ := exists_open_nhds_zero_add_subset (hv_nhds m)
+      obtain ⟨N, hN⟩ := hv_basis.mem_iff.mp (hW_open.mem_nhds hW_zero)
+      filter_upwards [Filter.eventually_ge_atTop N] with M hM
+      exact (add_subset_add ((hv_basis.antitone hM).trans hN)
+        ((hv_basis.antitone hM).trans hN)).trans hW_add
+  exact ⟨v ∘ φ, hφ_basis, fun n => ⟨hv_open (φ n), absConvex_absConvexHull, hφ_add (by simp),
+    (closure_subset_add_self_of_mem_nhds_zero (hv_nhds (φ (n + 1)))).trans
+        (hφ_add n.lt_succ_self)⟩⟩
 
 Depends on / 依赖: HasAntitoneBasis, IsOpen, IsTopologicalAddGroup, IsTopologicalAddGroup.exists_antitone_basis_nhds_zero, absConvexHull, exists_antitone_basis_nhds_zero, hu_basis, hu_basis.mem_of_mem, hu_basis.to_hasBasi, hu_zero, hv_basis, hv_nhds, hv_open, interior, isOpen_interior, isOpen_interior.absConvexHull, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mpr, mem_nhds, mem_of_mem
 -/
@@ -1083,7 +1147,11 @@ lemma balancedHull_subset_convexHull_union_neg
   apply segment_subset_convexHull (mem_union_left (-s) hy) (mem_union_right _ (neg_mem_neg.mpr hy))
   have : 0 <= 1 + r := neg_le_iff_add_nonneg'.mp (neg_le_of_abs_le hr)
   have : 0 <= 1 - r := sub_nonneg.2 (le_of_abs_le hr)
- 
+  refine ⟨(1 + r)/2, (1 - r)/2, by positivity, by positivity, by ring, ?_⟩
+  rw [smul_neg]; rw [← sub_eq_add_neg]; rw [← sub_smul]
+  ring_nf
+
+@[simp]
 
 中文:
 引理 balancedHull_subset_convexHull_union_neg
@@ -1094,7 +1162,11 @@ lemma balancedHull_subset_convexHull_union_neg
   apply segment_subset_convexHull (mem_union_left (-s) hy) (mem_union_right _ (neg_mem_neg.mpr hy))
   have : 0 <= 1 + r := neg_le_iff_add_nonneg'.mp (neg_le_of_abs_le hr)
   have : 0 <= 1 - r := sub_nonneg.2 (le_of_abs_le hr)
- 
+  refine ⟨(1 + r)/2, (1 - r)/2, by positivity, by positivity, by ring, ?_⟩
+  rw [smul_neg]; rw [← sub_eq_add_neg]; rw [← sub_smul]
+  ring_nf
+
+@[simp]
 
 Depends on / 依赖: le_of_abs_le, mem_balancedHull_iff, mem_union_left, mem_union_right, neg_le_iff_add_nonneg, neg_le_of_abs_le, neg_mem_neg, neg_mem_neg.mpr, ring_nf, segment_subset_convexHull, smul_neg, sub_eq_add_neg, sub_nonneg, sub_smul
 -/
@@ -1122,7 +1194,7 @@ theorem convexHull_union_neg_eq_absConvexHull
     (fun _ _ => by rw [mem_balancedHull_iff]; use -1; simp_all)))
     (by
       rw [← Convex.convexHull_eq (convex_convexHull Real (s union -s))]
-      exact convexHull_mo
+      exact convexHull_mono balancedHull_subset_convexHull_union_neg)
 
 中文:
 定理 convexHull_union_neg_eq_absConvexHull
@@ -1133,7 +1205,7 @@ theorem convexHull_union_neg_eq_absConvexHull
     (fun _ _ => by rw [mem_balancedHull_iff]; use -1; simp_all)))
     (by
       rw [← Convex.convexHull_eq (convex_convexHull Real (s union -s))]
-      exact convexHull_mo
+      exact convexHull_mono balancedHull_subset_convexHull_union_neg)
 
 Depends on / 依赖: Convex, Convex.convexHull_eq, absConvexHull_eq_convexHull_balancedHull, balancedHull_subset_convexHull_union_neg, convexHull_eq, convexHull_mono, convex_convexHull, le_antisymm, mem_balancedHull_iff, subset_balancedHull, union_subset
 -/

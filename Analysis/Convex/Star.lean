@@ -481,7 +481,8 @@ theorem starConvex_iff_forall_pos
     rwa [hab, one_smul, zero_smul, zero_add]
   obtain rfl | hb := hb.eq_or_lt
   · rw [add_zero] at hab
-    rwa [hab, one_smul, zero_smul, add_zero
+    rwa [hab, one_smul, zero_smul, add_zero]
+  exact h hy ha hb hab
 
 中文:
 定理 starConvex_iff_对任意_pos
@@ -495,7 +496,8 @@ theorem starConvex_iff_forall_pos
     rwa [hab, one_smul, zero_smul, zero_add]
   obtain rfl | hb := hb.eq_or_lt
   · rw [add_zero] at hab
-    rwa [hab, one_smul, zero_smul, add_zero
+    rwa [hab, one_smul, zero_smul, add_zero]
+  exact h hy ha hb hab
 
 Depends on / 依赖: add_zero, eq_or_lt, ha.eq_or_lt, ha.le, hb.eq_or_lt, hb.le, one_smul, zero_add, zero_smul
 -/
@@ -525,7 +527,10 @@ theorem starConvex_iff_forall_ne_pos
     rwa [hab, zero_smul, one_smul, zero_add]
   obtain rfl | hb' := hb.eq_or_lt
   · rw [add_zero] at hab
-    rwa [hab, zero_smul, one_smul, add_
+    rwa [hab, zero_smul, one_smul, add_zero]
+  obtain rfl | hxy := eq_or_ne x y
+  · rwa [Convex.combo_self hab]
+  exact h hy hxy ha' hb' hab
 
 中文:
 定理 starConvex_iff_对任意_ne_pos
@@ -538,7 +543,10 @@ theorem starConvex_iff_forall_ne_pos
     rwa [hab, zero_smul, one_smul, zero_add]
   obtain rfl | hb' := hb.eq_or_lt
   · rw [add_zero] at hab
-    rwa [hab, zero_smul, one_smul, add_
+    rwa [hab, zero_smul, one_smul, add_zero]
+  obtain rfl | hxy := eq_or_ne x y
+  · rwa [Convex.combo_self hab]
+  exact h hy hxy ha' hb' hab
 
 Depends on / 依赖: Convex, Convex.combo_self, add_zero, combo_self, eq_or_lt, eq_or_ne, ha.eq_or_lt, ha.le, hb.eq_or_lt, hb.le, one_smul, zero_add, zero_smul
 -/
@@ -975,7 +983,7 @@ theorem starConvex_zero_iff
   · simpa only [sub_add_cancel, eq_self_iff_true, forall_true_left, zero_add, smul_zero] using
       h (sub_nonneg_of_le ha₁) ha₀
   · rw [smul_zero, zero_add]
-    exact h hb (by rw [← hab
+    exact h hb (by rw [← hab]; exact le_add_of_nonneg_left ha)
 
 中文:
 定理 starConvex_zero_iff
@@ -985,7 +993,7 @@ theorem starConvex_zero_iff
   · simpa only [sub_add_cancel, eq_self_iff_true, forall_true_left, zero_add, smul_zero] using
       h (sub_nonneg_of_le ha₁) ha₀
   · rw [smul_zero, zero_add]
-    exact h hb (by rw [← hab
+    exact h hb (by rw [← hab]; exact le_add_of_nonneg_left ha)
 
 Depends on / 依赖: eq_self_iff_true, forall_congr, forall_true_left, le_add_of_nonneg_left, smul_zero, sub_add_cancel, sub_nonneg_of_le, zero_add
 -/
@@ -1210,7 +1218,9 @@ lemma starConvex_compl_Iic
   refine (lt_of_smul_lt_smul_of_nonneg_left ?_ hb.le).le
   calc
     b • z <= (a + b) • x - a • y := by rwa [le_sub_iff_add_le', hab, one_smul]
-   
+    _ < b • x := by
+      rw [add_smul]; rw [sub_lt_iff_lt_add']
+      gcongr
 
 中文:
 引理 starConvex_compl_Iic
@@ -1223,7 +1233,9 @@ lemma starConvex_compl_Iic
   refine (lt_of_smul_lt_smul_of_nonneg_left ?_ hb.le).le
   calc
     b • z <= (a + b) • x - a • y := by rwa [le_sub_iff_add_le', hab, one_smul]
-   
+    _ < b • x := by
+      rw [add_smul]; rw [sub_lt_iff_lt_add']
+      gcongr
 
 Depends on / 依赖: add_smul, contrapose, h.not_ge, hb.le, le_sub_iff_add_le, lt_of_smul_lt_smul_of_nonneg_left, mem_Iic, mem_compl_iff, not_ge, one_smul, starConvex_iff_forall_pos, sub_lt_iff_lt_add
 -/
@@ -1367,7 +1379,14 @@ theorem Set.OrdConnected.starConvex
         _ <= a • x + b • y := by gcongr
     calc
       a • x + b • y <= a • y + b • y := by gcongr
-      _ = y := Convex.comb
+      _ = y := Convex.combo_self hab _
+  · refine hs.out hy hx (mem_Icc.2 ⟨?_, ?_⟩)
+    · calc
+        y = a • y + b • y := (Convex.combo_self hab _).symm
+        _ <= a • x + b • y := by gcongr
+    calc
+      a • x + b • y <= a • x + b • x := by gcongr
+      _ = x := Convex.combo_self hab _
 
 中文:
 定理 集合.序连通.starConvex
@@ -1381,7 +1400,14 @@ theorem Set.OrdConnected.starConvex
         _ <= a • x + b • y := by gcongr
     calc
       a • x + b • y <= a • y + b • y := by gcongr
-      _ = y := Convex.comb
+      _ = y := Convex.combo_self hab _
+  · refine hs.out hy hx (mem_Icc.2 ⟨?_, ?_⟩)
+    · calc
+        y = a • y + b • y := (Convex.combo_self hab _).symm
+        _ <= a • x + b • y := by gcongr
+    calc
+      a • x + b • y <= a • x + b • x := by gcongr
+      _ = x := Convex.combo_self hab _
 
 Depends on / 依赖: Convex, Convex.combo_self, combo_self, hs.out, mem_Icc
 -/

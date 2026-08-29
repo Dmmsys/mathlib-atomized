@@ -129,7 +129,7 @@ lemma schwarz_applied
     have := sub_eq_zero.mp h ▸ hf₁ hx
     aesop
   · simpa [hf₂] using
-     
+      div_le_one_of_le₀ (norm_le_norm_two_mul_sub hM (hf₁ hx)) (by positivity)
 
 中文:
 引理 schwarz_applied
@@ -142,7 +142,7 @@ lemma schwarz_applied
     have := sub_eq_zero.mp h ▸ hf₁ hx
     aesop
   · simpa [hf₂] using
-     
+      div_le_one_of_le₀ (norm_le_norm_two_mul_sub hM (hf₁ hx)) (by positivity)
 
 Depends on / 依赖: const_sub, dist_le_div_mul_dist_of_mapsTo_ball, dist_zero_right, hf.const_sub, hf.div, norm_le_norm_two_mul_sub, nth_rw, sub_eq_zero, sub_eq_zero.mp, zero_div
 -/

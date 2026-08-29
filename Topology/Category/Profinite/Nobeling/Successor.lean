@@ -353,7 +353,8 @@ theorem swapTrue_mem_C1
   · simp only [Proj, ite_eq_left_iff, not_lt, @eq_comm _ false, ← Bool.not_eq_true]
     specialize hsC g hg.1 i
     intro h'
- 
+    contrapose! hsC
+    exact ⟨hsC, Order.succ_le_of_lt (h'.lt_of_ne' h)⟩
 
 中文:
 定理 swapTrue_mem_C1
@@ -369,7 +370,8 @@ theorem swapTrue_mem_C1
   · simp only [Proj, ite_eq_left_iff, not_lt, @eq_comm _ false, ← Bool.not_eq_true]
     specialize hsC g hg.1 i
     intro h'
- 
+    contrapose! hsC
+    exact ⟨hsC, Order.succ_le_of_lt (h'.lt_of_ne' h)⟩
 
 Depends on / 依赖: Bool.not_eq_true, Order.succ_le_of_lt, SwapTrue, contrapose, convert, eq_comm, ite_eq_left_iff, lt_of_ne, not_eq_true, not_lt, ord_term, specialize, split_ifs, succ_le_of_lt, unfoldPartialApp
 -/
@@ -530,7 +532,9 @@ theorem CC_comp_zero
   apply if_ctx_congr Iff.rfl _ (fun _ => rfl)
   simp only [SwapTrue, ite_eq_right_iff]
   intro h₁ h₂
-  exact (h₁.ne h₂).
+  exact (h₁.ne h₂).elim
+
+include hsC in
 
 中文:
 定理 CC_comp_zero
@@ -546,7 +550,9 @@ theorem CC_comp_zero
   apply if_ctx_congr Iff.rfl _ (fun _ => rfl)
   simp only [SwapTrue, ite_eq_right_iff]
   intro h₁ h₂
-  exact (h₁.ne h₂).
+  exact (h₁.ne h₂).elim
+
+include hsC in
 
 Depends on / 依赖: Iff.rfl, Linear_CC, LocallyConstant, LocallyConstant.sub_apply, ProjRestrict, SwapTrue, if_ctx_congr, ite_eq_right_iff, sub_apply, sub_eq_zero
 -/
@@ -580,7 +586,11 @@ theorem C0_projOrd
     rw [← not_imp_not] at hsC
     simp only [not_lt, Bool.not_eq_true, Order.succ_le_iff] at hsC
     exact (hsC hi).symm
-  · simp only [C0, Set.mem_inter_iff, Set.mem_ofPre
+  · simp only [C0, Set.mem_inter_iff, Set.mem_ofPred_eq] at hx
+    rw [eq_comm]; rw [ord_term ho] at hi
+    rw [← hx.2]; rw [hi]
+
+include hsC in
 
 中文:
 定理 C0_projOrd
@@ -595,7 +605,11 @@ theorem C0_projOrd
     rw [← not_imp_not] at hsC
     simp only [not_lt, Bool.not_eq_true, Order.succ_le_iff] at hsC
     exact (hsC hi).symm
-  · simp only [C0, Set.mem_inter_iff, Set.mem_ofPre
+  · simp only [C0, Set.mem_inter_iff, Set.mem_ofPred_eq] at hx
+    rw [eq_comm]; rw [ord_term ho] at hi
+    rw [← hx.2]; rw [hi]
+
+include hsC in
 
 Depends on / 依赖: Bool.not_eq_true, Order.succ_le_iff, Set.mem_inter_iff, Set.mem_ofPred_eq, eq_comm, hi.lt_or_eq, ite_eq_left_iff, lt_or_eq, mem_inter_iff, mem_ofPred_eq, not_eq_true, not_imp_not, not_lt, ord_term, specialize, succ_le_iff
 -/
@@ -631,7 +645,8 @@ theorem C1_projOrd
     have h' : o < ord I i := lt_of_le_of_ne h (Ne.symm hi)
     specialize hsC x hx.1 i
     rw [← not_imp_not] at hsC
-    simp only [not_lt, Bool.not_eq_tr
+    simp only [not_lt, Bool.not_eq_true, Order.succ_le_iff] at hsC
+    exact (hsC h').symm
 
 中文:
 定理 C1_projOrd
@@ -648,7 +663,8 @@ theorem C1_projOrd
     have h' : o < ord I i := lt_of_le_of_ne h (Ne.symm hi)
     specialize hsC x hx.1 i
     rw [← not_imp_not] at hsC
-    simp only [not_lt, Bool.not_eq_tr
+    simp only [not_lt, Bool.not_eq_true, Order.succ_le_iff] at hsC
+    exact (hsC h').symm
 
 Depends on / 依赖: Bool.not_eq_true, Ne.symm, Order.succ_le_iff, SwapTrue, lt_of_le_of_ne, not_eq_true, not_imp_not, not_lt, ord_term, specialize, split_ifs, succ_le_iff
 -/
@@ -680,7 +696,33 @@ theorem CC_exact
   simp only [sub_eq_zero, ← LocallyConstant.coe_inj] at hf
   let C₀C : C0 C ho -> C := fun x => ⟨x.val, x.prop.1⟩
   have h₀ : Continuous C₀C := Continuous.subtype_mk continuous_induced_dom _
-  let C₁C : π (C1 C ho) (ord I · < o) -> 
+  let C₁C : π (C1 C ho) (ord I · < o) -> C :=
+    fun x => ⟨SwapTrue o x.val, (swapTrue_mem_C1 C hsC ho x).1⟩
+  have h₁ : Continuous C₁C := Continuous.subtype_mk
+    ((continuous_swapTrue o).comp continuous_subtype_val) _
+  refine ⟨LocallyConstant.piecewise' ?_ (isClosed_C0 C hC ho)
+      (isClosed_proj _ o (isClosed_C1 C hC ho)) (f.comap ⟨C₀C, h₀⟩) (f.comap ⟨C₁C, h₁⟩) ?_, ?_⟩
+  · rintro _ ⟨y, hyC, rfl⟩
+    simp only [Set.mem_union]
+    rw [← union_C0C1_eq C ho] at hyC
+    refine hyC.imp (fun hyC => ?_) (fun hyC => ⟨y, hyC, rfl⟩)
+    rwa [C0_projOrd C hsC ho hyC]
+  · intro x hx
+    simpa only [h₀, h₁, LocallyConstant.coe_comap] using! (congrFun hf ⟨x, hx⟩).symm
+  · ext ⟨x, hx⟩
+    rw [← union_C0C1_eq C ho] at hx
+    rcases hx with hx₀ | hx₁
+    · have hx₀' : ProjRestrict C (ord I · < o) ⟨x, hx⟩ = x := by
+        simpa only [ProjRestrict, Set.MapsTo.val_restrict_apply] using! C0_projOrd C hsC ho hx₀
+      simp only [C₀C, πs_apply_apply, hx₀', hx₀, LocallyConstant.piecewise'_apply_left,
+        LocallyConstant.coe_comap, ContinuousMap.coe_mk, Function.comp_apply]
+    · have hx₁' : (ProjRestrict C (ord I · < o) ⟨x, hx⟩).val in π (C1 C ho) (ord I · < o) := by
+        simpa only [ProjRestrict, Set.MapsTo.val_restrict_apply] using! ⟨x, hx₁, rfl⟩
+      simp only [C₁C, πs_apply_apply, LocallyConstant.coe_comap,
+        Function.comp_apply, hx₁', LocallyConstant.piecewise'_apply_right]
+      congr
+      simp only [ContinuousMap.coe_mk, Subtype.mk.injEq]
+      exact C1_projOrd C hsC ho hx₁
 
 中文:
 定理 CC_exact
@@ -691,7 +733,33 @@ theorem CC_exact
   simp only [sub_eq_zero, ← LocallyConstant.coe_inj] at hf
   let C₀C : C0 C ho -> C := fun x => ⟨x.val, x.prop.1⟩
   have h₀ : Continuous C₀C := Continuous.subtype_mk continuous_induced_dom _
-  let C₁C : π (C1 C ho) (ord I · < o) -> 
+  let C₁C : π (C1 C ho) (ord I · < o) -> C :=
+    fun x => ⟨SwapTrue o x.val, (swapTrue_mem_C1 C hsC ho x).1⟩
+  have h₁ : Continuous C₁C := Continuous.subtype_mk
+    ((continuous_swapTrue o).comp continuous_subtype_val) _
+  refine ⟨LocallyConstant.piecewise' ?_ (isClosed_C0 C hC ho)
+      (isClosed_proj _ o (isClosed_C1 C hC ho)) (f.comap ⟨C₀C, h₀⟩) (f.comap ⟨C₁C, h₁⟩) ?_, ?_⟩
+  · rintro _ ⟨y, hyC, rfl⟩
+    simp only [Set.mem_union]
+    rw [← union_C0C1_eq C ho] at hyC
+    refine hyC.imp (fun hyC => ?_) (fun hyC => ⟨y, hyC, rfl⟩)
+    rwa [C0_projOrd C hsC ho hyC]
+  · intro x hx
+    simpa only [h₀, h₁, LocallyConstant.coe_comap] using! (congrFun hf ⟨x, hx⟩).symm
+  · ext ⟨x, hx⟩
+    rw [← union_C0C1_eq C ho] at hx
+    rcases hx with hx₀ | hx₁
+    · have hx₀' : ProjRestrict C (ord I · < o) ⟨x, hx⟩ = x := by
+        simpa only [ProjRestrict, Set.MapsTo.val_restrict_apply] using! C0_projOrd C hsC ho hx₀
+      simp only [C₀C, πs_apply_apply, hx₀', hx₀, LocallyConstant.piecewise'_apply_left,
+        LocallyConstant.coe_comap, ContinuousMap.coe_mk, Function.comp_apply]
+    · have hx₁' : (ProjRestrict C (ord I · < o) ⟨x, hx⟩).val in π (C1 C ho) (ord I · < o) := by
+        simpa only [ProjRestrict, Set.MapsTo.val_restrict_apply] using! ⟨x, hx₁, rfl⟩
+      simp only [C₁C, πs_apply_apply, LocallyConstant.coe_comap,
+        Function.comp_apply, hx₁', LocallyConstant.piecewise'_apply_right]
+      congr
+      simp only [ContinuousMap.coe_mk, Subtype.mk.injEq]
+      exact C1_projOrd C hsC ho hx₁
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, Linear_CC, LocallyConstant, LocallyConstant.coe_inj, LocallyConstant.piecewise, SwapTrue, classical, coe_inj, continuous_induced_dom, continuous_subtype_val, continuous_swapTrue, piecewise, sub_eq_zero, subtype_mk, swapTrue_mem_C1, x.prop, x.val
 -/
@@ -827,7 +895,18 @@ theorem union_succ
       intro he
       apply h
       have h' := Products.prop_of_isGood_of_contained C _ h hsC
-      simp 
+      simp only [Order.lt_succ_iff] at h'
+      have hh' : forall a in l.val, ord I a < o := by
+        intro a ha
+        refine (h' a ha).lt_of_ne ?_
+        rw [ne_eq]; rw [ord_term ho a]
+        rintro rfl
+        contradiction
+      rwa [Products.eval_πs_image C hh', ← Products.eval_πs C hh',
+        Submodule.apply_mem_span_image_iff_mem_span (injective_πs _ _)]
+  · refine h.elim (fun hh => ?_) And.left
+    have := Products.isGood_mono C (Order.lt_succ o).le hh
+    rwa [contained_eq_proj C (Order.succ o) hsC]
 
 中文:
 定理 union_succ
@@ -842,7 +921,18 @@ theorem union_succ
       intro he
       apply h
       have h' := Products.prop_of_isGood_of_contained C _ h hsC
-      simp 
+      simp only [Order.lt_succ_iff] at h'
+      have hh' : forall a in l.val, ord I a < o := by
+        intro a ha
+        refine (h' a ha).lt_of_ne ?_
+        rw [ne_eq]; rw [ord_term ho a]
+        rintro rfl
+        contradiction
+      rwa [Products.eval_πs_image C hh', ← Products.eval_πs C hh',
+        Submodule.apply_mem_span_image_iff_mem_span (injective_πs _ _)]
+  · refine h.elim (fun hh => ?_) And.left
+    have := Products.isGood_mono C (Order.lt_succ o).le hh
+    rwa [contained_eq_proj C (Order.succ o) hsC]
 
 Depends on / 依赖: GoodProducts, MaxProducts, Or.inr, Order.lt_succ_iff, Products, Products.eval_, Products.prop_of_isGood_of_contained, Set.mem_ofPred_eq, Set.mem_union, l.val, lt_of_ne, lt_succ_iff, mem_ofPred_eq, mem_union, ne_eq, ord_term, prop_of_isGood_of_contained
 -/
@@ -1215,7 +1305,12 @@ theorem GoodProducts.head!_eq_o_of_maxProducts
     (List.head!_mem_self (List.ne_nil_of_mem hm))
   simp only [Order.lt_succ_iff] at this
   refine eq_of_le_of_not_lt this (not_lt.mpr ?_)
-  have h : ord I (ter
+  have h : ord I (term I ho) <= ord I l.val.val.head! := by
+    simp only [ord, Ordinal.typein_le_typein, not_lt]
+    exact Products.rel_head!_of_mem hm
+  rwa [ord_term_aux] at h
+
+include hsC in
 
 中文:
 定理 GoodProducts.head!_eq_o_of_maxProducts
@@ -1227,7 +1322,12 @@ theorem GoodProducts.head!_eq_o_of_maxProducts
     (List.head!_mem_self (List.ne_nil_of_mem hm))
   simp only [Order.lt_succ_iff] at this
   refine eq_of_le_of_not_lt this (not_lt.mpr ?_)
-  have h : ord I (ter
+  have h : ord I (term I ho) <= ord I l.val.val.head! := by
+    simp only [ord, Ordinal.typein_le_typein, not_lt]
+    exact Products.rel_head!_of_mem hm
+  rwa [ord_term_aux] at h
+
+include hsC in
 
 Depends on / 依赖: List.head, List.ne_nil_of_mem, Order.lt_succ_iff, Ordinal, Ordinal.typein_le_typein, Products, Products.prop_of_isGood_of_contained, Products.rel_head, _mem_self, _of_mem, eq_comm, eq_of_le_of_not_lt, l.prop, l.val.val.head, lt_succ_iff, ne_nil_of_mem, not_lt, not_lt.mpr, ord_term, ord_term_aux
 -/
@@ -1306,7 +1406,26 @@ theorem Products.max_eq_eval
   rw [max_eq_o_cons_tail' ho l hl hlh hlc]; rw [Products.evalCons]
   ext x
   simp only [Linear_CC', Linear_CC'₁, LocallyConstant.comapₗ, Linear_CC'₀, Subtype.coe_eta,
-    LinearM
+    LinearMap.sub_apply, LinearMap.coe_mk, AddHom.coe_mk, LocallyConstant.sub_apply,
+    LocallyConstant.coe_comap, LocallyConstant.coe_mul, ContinuousMap.coe_mk, Function.comp_apply,
+    Pi.mul_apply]
+  rw [CC'₁]; rw [CC'₀]; rw [Products.eval_eq]; rw [Products.eval_eq]; rw [Products.eval_eq]
+  simp only [mul_ite, mul_one, mul_zero]
+  have hi' : forall i, i in l.Tail.val -> (x.val i = SwapTrue o x.val i) := by
+    intro i hi
+    simp only [SwapTrue, @eq_comm _ (x.val i), ite_eq_right_iff, ord_term ho]
+    rintro rfl
+    exact ((List.IsChain.rel_cons hlc hi).ne rfl).elim
+  have H : (forall i, i in l.Tail.val -> (x.val i = true)) =
+      (forall i, i in l.Tail.val -> (SwapTrue o x.val i = true)) := by
+    apply forall_congr; intro i; apply forall_congr; intro hi; rw [hi' i hi]
+  simp only [H]
+  split_ifs with h₁ h₂ h₃ <;> try (dsimp [e])
+  · rw [if_pos (swapTrue_eq_true _ _), if_neg]
+    · rfl
+    · simp [mem_C'_eq_false C ho x x.prop]
+  · push Not at h₂; obtain ⟨i, hi⟩ := h₂; exfalso; rw [hi' i hi.1] at hi; exact hi.2 (h₁ i hi.1)
+  · push Not at h₁; obtain ⟨i, hi⟩ := h₁; exfalso; rw [← hi' i hi.1] at hi; exact hi.2 (h₃ i hi.1)
 
 中文:
 定理 Products.max_eq_eval
@@ -1317,7 +1436,26 @@ theorem Products.max_eq_eval
   rw [max_eq_o_cons_tail' ho l hl hlh hlc]; rw [Products.evalCons]
   ext x
   simp only [Linear_CC', Linear_CC'₁, LocallyConstant.comapₗ, Linear_CC'₀, Subtype.coe_eta,
-    LinearM
+    LinearMap.sub_apply, LinearMap.coe_mk, AddHom.coe_mk, LocallyConstant.sub_apply,
+    LocallyConstant.coe_comap, LocallyConstant.coe_mul, ContinuousMap.coe_mk, Function.comp_apply,
+    Pi.mul_apply]
+  rw [CC'₁]; rw [CC'₀]; rw [Products.eval_eq]; rw [Products.eval_eq]; rw [Products.eval_eq]
+  simp only [mul_ite, mul_one, mul_zero]
+  have hi' : forall i, i in l.Tail.val -> (x.val i = SwapTrue o x.val i) := by
+    intro i hi
+    simp only [SwapTrue, @eq_comm _ (x.val i), ite_eq_right_iff, ord_term ho]
+    rintro rfl
+    exact ((List.IsChain.rel_cons hlc hi).ne rfl).elim
+  have H : (forall i, i in l.Tail.val -> (x.val i = true)) =
+      (forall i, i in l.Tail.val -> (SwapTrue o x.val i = true)) := by
+    apply forall_congr; intro i; apply forall_congr; intro hi; rw [hi' i hi]
+  simp only [H]
+  split_ifs with h₁ h₂ h₃ <;> try (dsimp [e])
+  · rw [if_pos (swapTrue_eq_true _ _), if_neg]
+    · rfl
+    · simp [mem_C'_eq_false C ho x x.prop]
+  · push Not at h₂; obtain ⟨i, hi⟩ := h₂; exfalso; rw [hi' i hi.1] at hi; exact hi.2 (h₁ i hi.1)
+  · push Not at h₁; obtain ⟨i, hi⟩ := h₁; exfalso; rw [← hi' i hi.1] at hi; exact hi.2 (h₃ i hi.1)
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, ContinuousMap, ContinuousMap.coe_mk, Function, Function.comp_apply, IsChain, LinearMap, LinearMap.coe_mk, LinearMap.sub_apply, Linear_CC, LocallyConstant, LocallyConstant.coe_comap, LocallyConstant.coe_mul, LocallyConstant.comap, LocallyConstant.sub_apply, Pi.mul_apply, Product, Products, Products.evalCons
 -/
@@ -1417,7 +1555,15 @@ theorem isChain_cons_of_lt
   simp only [gt_iff_lt, List.pairwise_cons]
   refine ⟨fun a ha => lt_of_le_of_lt (Products.rel_head!_of_mem ha) ?_,
     List.isChain_iff_pairwise.mp q.prop⟩
-  refine lt_of_le_of_lt (Products.head!_le_of_lt hq (q.val.ne_nil_of_me
+  refine lt_of_le_of_lt (Products.head!_le_of_lt hq (q.val.ne_nil_of_mem ha)) ?_
+  by_cases hM : l.val.Tail.val = []
+  · rw [Products.lt_iff_lex_lt, hM] at hq
+    simp only [List.not_lex_nil] at hq
+  · have := l.val.prop
+    rw [max_eq_o_cons_tail C hsC ho l]; rw [List.isChain_iff_pairwise] at this
+    exact List.rel_of_pairwise_cons this (List.head!_mem_self hM)
+
+include hsC in
 
 中文:
 定理 isChain_cons_of_lt
@@ -1428,7 +1574,15 @@ theorem isChain_cons_of_lt
   simp only [gt_iff_lt, List.pairwise_cons]
   refine ⟨fun a ha => lt_of_le_of_lt (Products.rel_head!_of_mem ha) ?_,
     List.isChain_iff_pairwise.mp q.prop⟩
-  refine lt_of_le_of_lt (Products.head!_le_of_lt hq (q.val.ne_nil_of_me
+  refine lt_of_le_of_lt (Products.head!_le_of_lt hq (q.val.ne_nil_of_mem ha)) ?_
+  by_cases hM : l.val.Tail.val = []
+  · rw [Products.lt_iff_lex_lt, hM] at hq
+    simp only [List.not_lex_nil] at hq
+  · have := l.val.prop
+    rw [max_eq_o_cons_tail C hsC ho l]; rw [List.isChain_iff_pairwise] at this
+    exact List.rel_of_pairwise_cons this (List.head!_mem_self hM)
+
+include hsC in
 
 Depends on / 依赖: Inhabited, List.isChain_iff_pairwise, List.isChain_iff_pairwise.mp, List.not_lex_nil, List.pairwise_cons, Products, Products.head, Products.lt_iff_lex_lt, Products.rel_head, _le_of_lt, _of_mem, gt_iff_lt, isChain_iff_pairwise, l.val.Tail.val, l.val.prop, lt_iff_lex_lt, lt_of_le_of_lt, max_eq_o_cons_tail, ne_nil_of_mem, not_lex_nil
 -/
@@ -1463,7 +1617,8 @@ theorem good_lt_maxProducts
   · rw [← List.cons_head!_tail h, max_eq_o_cons_tail C hsC ho l]
     apply List.Lex.rel
     rw [← Ordinal.typein_lt_typein (· < ·)]
-    simp only [term, Ordinal.typei
+    simp only [term, Ordinal.typein_enum]
+    exact Products.prop_of_isGood C _ q.prop q.val.val.head! (List.head!_mem_self h)
 
 中文:
 定理 good_lt_maxProducts
@@ -1476,7 +1631,8 @@ theorem good_lt_maxProducts
   · rw [← List.cons_head!_tail h, max_eq_o_cons_tail C hsC ho l]
     apply List.Lex.rel
     rw [← Ordinal.typein_lt_typein (· < ·)]
-    simp only [term, Ordinal.typei
+    simp only [term, Ordinal.typein_enum]
+    exact Products.prop_of_isGood C _ q.prop q.val.val.head! (List.head!_mem_self h)
 
 Depends on / 依赖: Inhabited, List.Lex.nil, List.Lex.rel, List.cons_head, List.head, Ordinal, Ordinal.typein_enum, Ordinal.typein_lt_typein, Products, Products.prop_of_isGood, _mem_self, _tail, cons_head, max_eq_o_cons_tail, prop_of_isGood, q.prop, q.val.val, q.val.val.head, typein_enum, typein_lt_typein
 -/
@@ -1507,7 +1663,61 @@ theorem maxTail_isGood
   rw [Finsupp.mem_span_image_iff_linearCombination]; rw [← max_eq_eval C hsC ho] at h
   obtain ⟨m, ⟨hmmem, hmsum⟩⟩ := h
   rw [Finsupp.linearCombination_apply] at hmsum
-  -- Write the ima
+  -- Write the image of `l` under `Linear_CC'` as `Linear_CC'` applied to the linear combination
+  -- above, with leading `term I ho`'s added to each term:
+  have : (Linear_CC' C hsC ho) (l.val.eval C) = (Linear_CC' C hsC ho)
+      (Finsupp.sum m fun i a => a • ((term I ho :: i.1).map (e C)).prod) := by
+    rw [← hmsum]
+    simp only [map_finsuppSum]
+    apply Finsupp.sum_congr
+    intro q hq
+    rw [map_smul]
+    rw [Finsupp.mem_supported] at hmmem
+    have hx'' : q < l.val.Tail := hmmem hq
+    have : exists (p : Products I), p.val != [] ∧ p.val.head! = term I ho ∧ q = p.Tail :=
+      ⟨⟨term I ho :: q.val, isChain_cons_of_lt C hsC ho l q hx''⟩,
+        ⟨List.cons_ne_nil _ _, by simp only [List.head!_cons],
+        by simp only [Products.Tail, List.tail_cons, Subtype.coe_eta]⟩⟩
+    obtain ⟨p, hp⟩ := this
+    rw [hp.2.2]; rw [← Products.max_eq_eval C hsC ho p hp.1 hp.2.1]
+    dsimp [Products.eval]
+    rw [Products.max_eq_o_cons_tail ho p hp.1 hp.2.1]; rw [List.map_cons]; rw [List.prod_cons]
+  have hse := succ_exact C hC hsC ho
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hse
+  dsimp [ModuleCat.ofHom] at hse
+  -- Rewrite `this` using exact sequence manipulations to conclude that a term is in the range of
+  -- the linear map `πs`:
+  rw [← LinearMap.sub_mem_ker_iff]; rw [← hse] at this
+  obtain ⟨(n : LocallyConstant (π C (ord I · < o)) Int), hn⟩ := this
+  rw [eq_sub_iff_add_eq] at hn
+  have hn' := h₁ (Submodule.mem_top : n in ⊤)
+  rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn'
+  obtain ⟨w, hc⟩ := hn'
+  rw [← hc]; rw [map_finsuppSum] at hn
+  apply l.prop.1
+  rw [← hn]
+  -- Now we just need to prove that a sum of two terms belongs to a span:
+  apply Submodule.add_mem
+  · apply Submodule.finsuppSum_mem
+    intro q _
+    rw [map_smul]
+    apply Submodule.smul_mem
+    apply Submodule.subset_span
+    dsimp only [eval]
+    rw [Products.eval_πs C (Products.prop_of_isGood _ _ q.prop)]
+    refine ⟨q.val, ⟨?_, rfl⟩⟩
+    simp only [Products.lt_iff_lex_lt, Set.mem_ofPred_eq]
+    exact good_lt_maxProducts C hsC ho q l
+  · apply Submodule.finsuppSum_mem
+    intro q hq
+    apply Submodule.smul_mem
+    apply Submodule.subset_span
+    rw [Finsupp.mem_supported] at hmmem
+    rw [← Finsupp.mem_support_iff] at hq
+    refine ⟨⟨term I ho :: q.val, isChain_cons_of_lt C hsC ho l q (hmmem hq)⟩, ⟨?_, rfl⟩⟩
+    simp only [Products.lt_iff_lex_lt, Set.mem_ofPred_eq]
+    rw [max_eq_o_cons_tail C hsC ho l]
+    exact List.Lex.cons ((Products.lt_iff_lex_lt q l.val.Tail).mp (hmmem hq))
 
 中文:
 定理 maxTail_isGood
@@ -1519,7 +1729,61 @@ theorem maxTail_isGood
   rw [Finsupp.mem_span_image_iff_linearCombination]; rw [← max_eq_eval C hsC ho] at h
   obtain ⟨m, ⟨hmmem, hmsum⟩⟩ := h
   rw [Finsupp.linearCombination_apply] at hmsum
-  -- Write the ima
+  -- Write the image of `l` under `Linear_CC'` as `Linear_CC'` applied to the linear combination
+  -- above, with leading `term I ho`'s added to each term:
+  have : (Linear_CC' C hsC ho) (l.val.eval C) = (Linear_CC' C hsC ho)
+      (Finsupp.sum m fun i a => a • ((term I ho :: i.1).map (e C)).prod) := by
+    rw [← hmsum]
+    simp only [map_finsuppSum]
+    apply Finsupp.sum_congr
+    intro q hq
+    rw [map_smul]
+    rw [Finsupp.mem_supported] at hmmem
+    have hx'' : q < l.val.Tail := hmmem hq
+    have : exists (p : Products I), p.val != [] ∧ p.val.head! = term I ho ∧ q = p.Tail :=
+      ⟨⟨term I ho :: q.val, isChain_cons_of_lt C hsC ho l q hx''⟩,
+        ⟨List.cons_ne_nil _ _, by simp only [List.head!_cons],
+        by simp only [Products.Tail, List.tail_cons, Subtype.coe_eta]⟩⟩
+    obtain ⟨p, hp⟩ := this
+    rw [hp.2.2]; rw [← Products.max_eq_eval C hsC ho p hp.1 hp.2.1]
+    dsimp [Products.eval]
+    rw [Products.max_eq_o_cons_tail ho p hp.1 hp.2.1]; rw [List.map_cons]; rw [List.prod_cons]
+  have hse := succ_exact C hC hsC ho
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hse
+  dsimp [ModuleCat.ofHom] at hse
+  -- Rewrite `this` using exact sequence manipulations to conclude that a term is in the range of
+  -- the linear map `πs`:
+  rw [← LinearMap.sub_mem_ker_iff]; rw [← hse] at this
+  obtain ⟨(n : LocallyConstant (π C (ord I · < o)) Int), hn⟩ := this
+  rw [eq_sub_iff_add_eq] at hn
+  have hn' := h₁ (Submodule.mem_top : n in ⊤)
+  rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn'
+  obtain ⟨w, hc⟩ := hn'
+  rw [← hc]; rw [map_finsuppSum] at hn
+  apply l.prop.1
+  rw [← hn]
+  -- Now we just need to prove that a sum of two terms belongs to a span:
+  apply Submodule.add_mem
+  · apply Submodule.finsuppSum_mem
+    intro q _
+    rw [map_smul]
+    apply Submodule.smul_mem
+    apply Submodule.subset_span
+    dsimp only [eval]
+    rw [Products.eval_πs C (Products.prop_of_isGood _ _ q.prop)]
+    refine ⟨q.val, ⟨?_, rfl⟩⟩
+    simp only [Products.lt_iff_lex_lt, Set.mem_ofPred_eq]
+    exact good_lt_maxProducts C hsC ho q l
+  · apply Submodule.finsuppSum_mem
+    intro q hq
+    apply Submodule.smul_mem
+    apply Submodule.subset_span
+    rw [Finsupp.mem_supported] at hmmem
+    rw [← Finsupp.mem_support_iff] at hq
+    refine ⟨⟨term I ho :: q.val, isChain_cons_of_lt C hsC ho l q (hmmem hq)⟩, ⟨?_, rfl⟩⟩
+    simp only [Products.lt_iff_lex_lt, Set.mem_ofPred_eq]
+    rw [max_eq_o_cons_tail C hsC ho l]
+    exact List.Lex.cons ((Products.lt_iff_lex_lt q l.val.Tail).mp (hmmem hq))
 
 Depends on / 依赖: Inhabited
 -/

@@ -98,6 +98,14 @@ theorem StronglyMeasurable.exists_eq_measurable_comp
     obtain ⟨t, ht, rfl⟩ := hs
     obtain ⟨h₁, mh₁, rfl⟩ := h₁
     obtain ⟨h₂, mh₂, rfl⟩ := h₂
+    classical
+    exact ⟨t.piecewise h₁ h₂, mh₁.piecewise ht mh₂, by rw [piecewise_comp]⟩
+  | @lim g i hg hi h₁ h₂ =>
+    choose h mh hh using h₁
+    refine ⟨fun y => limUnder atTop (h · y), StronglyMeasurable.limUnder mh, ?_⟩
+    ext x
+    rw [Function.comp_apply]; rw [Tendsto.limUnder_eq]
+    simp_all
 
 中文:
 定理 StronglyMeasurable.存在_eq_measurable_comp
@@ -110,6 +118,14 @@ theorem StronglyMeasurable.exists_eq_measurable_comp
     obtain ⟨t, ht, rfl⟩ := hs
     obtain ⟨h₁, mh₁, rfl⟩ := h₁
     obtain ⟨h₂, mh₂, rfl⟩ := h₂
+    classical
+    exact ⟨t.piecewise h₁ h₂, mh₁.piecewise ht mh₂, by rw [piecewise_comp]⟩
+  | @lim g i hg hi h₁ h₂ =>
+    choose h mh hh using h₁
+    refine ⟨fun y => limUnder atTop (h · y), StronglyMeasurable.limUnder mh, ?_⟩
+    ext x
+    rw [Function.comp_apply]; rw [Tendsto.limUnder_eq]
+    simp_all
 
 Depends on / 依赖: MeasurableSpace, StronglyMeasurable, StronglyMeasurable.induction, StronglyMeasurable.limUnder, classical, limUnder, mY.comap, piecewise, piecewise_comp, stronglyMeasurable_const, t.piecewise
 -/

@@ -418,7 +418,14 @@ theorem fwdDiff_iter_eq_sum_shift
   have : fwdDiffₗ M G h = shiftₗ M G h - 1 := by simp only [shiftₗ, add_sub_cancel_right]
   rw [← coe_fwdDiffₗ]; rw [this]; rw [← Module.End.pow_apply]
   -- use binomial theorem `Commute.add_pow` to expand this
-  have : Commute (shiftₗ M G h) (-1) := (C
+  have : Commute (shiftₗ M G h) (-1) := (Commute.one_right _).neg_right
+  convert congr_fun (LinearMap.congr_fun (this.add_pow n) f) y
+  · simp only [sub_eq_add_neg]
+  · rw [LinearMap.sum_apply, sum_apply]
+    congr 1 with k
+    have : ((-1) ^ (n - k) * n.choose k : Module.End Int (M -> G))
+              = ↑((-1) ^ (n - k) * n.choose k : Int) := by norm_cast
+    rw [mul_assoc]; rw [Module.End.mul_apply]; rw [this]; rw [Module.End.intCast_apply]; rw [map_smul]; rw [Pi.smul_apply]; rw [shiftₗ_pow_apply]
 
 中文:
 定理 fwdDiff_iter_eq_sum_shift
@@ -428,7 +435,14 @@ theorem fwdDiff_iter_eq_sum_shift
   have : fwdDiffₗ M G h = shiftₗ M G h - 1 := by simp only [shiftₗ, add_sub_cancel_right]
   rw [← coe_fwdDiffₗ]; rw [this]; rw [← Module.End.pow_apply]
   -- use binomial theorem `Commute.add_pow` to expand this
-  have : Commute (shiftₗ M G h) (-1) := (C
+  have : Commute (shiftₗ M G h) (-1) := (Commute.one_right _).neg_right
+  convert congr_fun (LinearMap.congr_fun (this.add_pow n) f) y
+  · simp only [sub_eq_add_neg]
+  · rw [LinearMap.sum_apply, sum_apply]
+    congr 1 with k
+    have : ((-1) ^ (n - k) * n.choose k : Module.End Int (M -> G))
+              = ↑((-1) ^ (n - k) * n.choose k : Int) := by norm_cast
+    rw [mul_assoc]; rw [Module.End.mul_apply]; rw [this]; rw [Module.End.intCast_apply]; rw [map_smul]; rw [Pi.smul_apply]; rw [shiftₗ_pow_apply]
 -/
 theorem fwdDiff_iter_eq_sum_shift (f : M -> G) (n : Nat) (y : M) :
     Δ_[h]^[n] f y = ∑ k in range (n + 1), ((-1 : Int) ^ (n - k) * n.choose k) • f (y + k • h) := by
@@ -585,7 +599,10 @@ lemma fwdDiff_iter_choose_zero
   · rcases Nat.exists_eq_add_of_lt hmn with ⟨k, rfl⟩
     simp_rw [hmn.ne', if_false, (by ring : m + k + 1 = k + 1 + m), iterate_add_apply,
       add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, iterate_one, cast_one, fwdDiff_const,
-      fwd
+      fwdDiff_iter_eq_sum_shift, smul_zero, sum_const_zero]
+  · simp only [if_true, add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, cast_one]
+  · rcases Nat.exists_eq_add_of_lt hnm with ⟨k, rfl⟩
+    simp_rw [hnm.ne, if_false, add_assoc n k 1, fwdDiff_iter_choose, choose_zero_succ, cast_zero]
 
 中文:
 引理 fwdDiff_iter_choose_zero
@@ -595,7 +612,10 @@ lemma fwdDiff_iter_choose_zero
   · rcases Nat.exists_eq_add_of_lt hmn with ⟨k, rfl⟩
     simp_rw [hmn.ne', if_false, (by ring : m + k + 1 = k + 1 + m), iterate_add_apply,
       add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, iterate_one, cast_one, fwdDiff_const,
-      fwd
+      fwdDiff_iter_eq_sum_shift, smul_zero, sum_const_zero]
+  · simp only [if_true, add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, cast_one]
+  · rcases Nat.exists_eq_add_of_lt hnm with ⟨k, rfl⟩
+    simp_rw [hnm.ne, if_false, add_assoc n k 1, fwdDiff_iter_choose, choose_zero_succ, cast_zero]
 
 Depends on / 依赖: Nat.exists_eq_add_of_lt, add_zero, cast_one, choose_zero_right, exists_eq_add_of_lt, fwdDiff_const, fwdDiff_iter_choose, fwdDiff_iter_eq_sum_shift, hmn.ne, hnm.ne, if_false, if_true, iterate_add_apply, iterate_one, lt_trichotomy, simp_rw, smul_zero, sum_const_zero
 -/
@@ -674,7 +694,9 @@ theorem fwdDiff_iter_pow_eq_zero_of_lt
     have : (Δ_[1] fun (r : R) => r ^ j) = ∑ i in range j, j.choose i • fun r => r ^ i := by
       ext x
       simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    rw [iterate_succ_apply]; rw [this]; rw [fwdDiff_it
+    rw [iterate_succ_apply]; rw [this]; rw [fwdDiff_iter_finsetSum]
+    exact sum_eq_zero fun i hi => by
+      rw [fwdDiff_iter_const_smul]; rw [ih (by have := mem_range.1 hi; lia)]; rw [nsmul_zero]
 
 中文:
 定理 fwdDiff_iter_pow_eq_zero_of_lt
@@ -686,7 +708,9 @@ theorem fwdDiff_iter_pow_eq_zero_of_lt
     have : (Δ_[1] fun (r : R) => r ^ j) = ∑ i in range j, j.choose i • fun r => r ^ i := by
       ext x
       simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    rw [iterate_succ_apply]; rw [this]; rw [fwdDiff_it
+    rw [iterate_succ_apply]; rw [this]; rw [fwdDiff_iter_finsetSum]
+    exact sum_eq_zero fun i hi => by
+      rw [fwdDiff_iter_const_smul]; rw [ih (by have := mem_range.1 hi; lia)]; rw [nsmul_zero]
 
 Depends on / 依赖: add_pow, fwdDiff, fwdDiff_iter_const_smul, fwdDiff_iter_finsetSum, generalizing, iterate_succ_apply, j.choose, mem_range, mul_comm, nsmul_eq_mul, nsmul_zero, sum_eq_zero, sum_range_succ
 -/
@@ -716,7 +740,10 @@ theorem fwdDiff_iter_eq_factorial
       ∑ i in range (n + 1), (n + 1).choose i • fun r => r ^ i := by
       ext x
       simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    simp_rw [iterate_succ_apply, this, fwdDif
+    simp_rw [iterate_succ_apply, this, fwdDiff_iter_finsetSum, fwdDiff_iter_const_smul,
+       sum_range_succ]
+    simpa [IH, factorial_succ] using sum_eq_zero fun i hi => by
+      rw [fwdDiff_iter_pow_eq_zero_of_lt (by have := mem_range.1 hi; lia)]; rw [mul_zero]
 
 中文:
 定理 fwdDiff_iter_eq_factorial
@@ -729,7 +756,10 @@ theorem fwdDiff_iter_eq_factorial
       ∑ i in range (n + 1), (n + 1).choose i • fun r => r ^ i := by
       ext x
       simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    simp_rw [iterate_succ_apply, this, fwdDif
+    simp_rw [iterate_succ_apply, this, fwdDiff_iter_finsetSum, fwdDiff_iter_const_smul,
+       sum_range_succ]
+    simpa [IH, factorial_succ] using sum_eq_zero fun i hi => by
+      rw [fwdDiff_iter_pow_eq_zero_of_lt (by have := mem_range.1 hi; lia)]; rw [mul_zero]
 
 Depends on / 依赖: add_pow, factorial_succ, fwdDiff, fwdDiff_iter_const_smul, fwdDiff_iter_finsetSum, fwdDiff_iter_pow_eq_zero_of_lt, iterate_succ_apply, mem_range, mul_comm, mul_zero, nsmul_eq_mul, simp_rw, sum_eq_zero, sum_range_succ
 -/
@@ -756,7 +786,8 @@ theorem Polynomial.fwdDiff_iter_degree_eq_factorial
   proof: funext fun x => by
   simp_rw [P.eval_eq_sum_range, ← sum_apply _ _ (fun i x => P.coeff i * x ^ i),
     fwdDiff_iter_finsetSum, ← smul_eq_mul, ← Pi.smul_def, fwdDiff_iter_const_smul, Pi.smul_apply]
-  rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_it
+  rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_iter_eq_factorial]; rw [leadingCoeff]; rw [Pi.smul_apply]
+  rw [fwdDiff_iter_pow_eq_zero_of_lt (mem_range.mp hi)]; rw [smul_zero]; rw [Pi.zero_apply]
 
 中文:
 定理 多项式.fwdDiff_iter_degree_eq_factorial
@@ -764,7 +795,8 @@ theorem Polynomial.fwdDiff_iter_degree_eq_factorial
   证明: funext fun x => by
   simp_rw [P.eval_eq_sum_range, ← sum_apply _ _ (fun i x => P.coeff i * x ^ i),
     fwdDiff_iter_finsetSum, ← smul_eq_mul, ← Pi.smul_def, fwdDiff_iter_const_smul, Pi.smul_apply]
-  rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_it
+  rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_iter_eq_factorial]; rw [leadingCoeff]; rw [Pi.smul_apply]
+  rw [fwdDiff_iter_pow_eq_zero_of_lt (mem_range.mp hi)]; rw [smul_zero]; rw [Pi.zero_apply]
 
 Depends on / 依赖: P.coeff, P.eval_eq_sum_range, Pi.smul_apply, Pi.smul_def, Pi.zero_apply, eval_eq_sum_range, fwdDiff_iter_const_smul, fwdDiff_iter_eq_factorial, fwdDiff_iter_finsetSum, fwdDiff_iter_pow_eq_zero_of_lt, leadingCoeff, mem_range, mem_range.mp, simp_rw, smul_apply, smul_def, smul_eq_mul, smul_zero, sum_apply, sum_eq_zero
 -/

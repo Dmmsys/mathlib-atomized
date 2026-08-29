@@ -160,7 +160,10 @@ lemma exists_hom
     (isColimitOfPreserves (HomologicalComplex.eval _ _ n) hQ))
     ((cocycle₁' sq hsq).1.v n m hnm) (by simp)
   dsimp [CokernelCofork.map] at l hl
-  obt
+  obtain ⟨l', hl'⟩ := KernelFork.IsLimit.lift' ((KernelFork.isLimitMapConeEquiv _ _).1
+    (isLimitOfPreserves (HomologicalComplex.eval _ _ m) hK)) l (by
+      simp [← cancel_epi (π.f n), reassoc_of% hl])
+  exact ⟨l', by cat_disch⟩
 
 中文:
 引理 存在_hom
@@ -172,7 +175,10 @@ lemma exists_hom
     (isColimitOfPreserves (HomologicalComplex.eval _ _ n) hQ))
     ((cocycle₁' sq hsq).1.v n m hnm) (by simp)
   dsimp [CokernelCofork.map] at l hl
-  obt
+  obtain ⟨l', hl'⟩ := KernelFork.IsLimit.lift' ((KernelFork.isLimitMapConeEquiv _ _).1
+    (isLimitOfPreserves (HomologicalComplex.eval _ _ m) hK)) l (by
+      simp [← cancel_epi (π.f n), reassoc_of% hl])
+  exact ⟨l', by cat_disch⟩
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.epi, CokernelCofork, CokernelCofork.IsColimit.desc, CokernelCofork.isColimitMapCoconeEquiv, CokernelCofork.map, HomologicalComplex, HomologicalComplex.eval, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.lift, KernelFork.isLimitMapConeEquiv, isColimitMapCoconeEquiv, isColimitOfPreserves, isLimitMapConeEquiv, isLimitOfPreserves
 -/
@@ -242,7 +248,12 @@ definition cocycle₁
     have : Mono ι := Fork.IsLimit.mono hK
     ext n _ rfl
     have := Cochain.congr_v ((cocycle₁' sq hsq).δ_eq_zero 2) n _ rfl
-    rw [Cochain.zero_v]; rw [δ_v _ _ (by simp) _ _ _ _ (n + 1) _ (by lia) rfl]
+    rw [Cochain.zero_v]; rw [δ_v _ _ (by simp) _ _ _ _ (n + 1) _ (by lia) rfl]; rw [Int.negOnePow_even 2 ⟨1]; rw [by simp⟩]; rw [one_smul] at this ⊢
+    rwa [← cancel_mono (ι.f (n + 2)), ← cancel_epi (π.f n),
+      Preadditive.add_comp, Category.assoc, Category.assoc, Preadditive.comp_add,
+      HomologicalComplex.Hom.comm_assoc,
+      π_f_cochain₁_v_ι_f, zero_comp, comp_zero, ← ι.comm,
+      π_f_cochain₁_v_ι_f_assoc])
 
 中文:
 定义 cocycle₁
@@ -252,7 +263,12 @@ definition cocycle₁
     have : Mono ι := Fork.IsLimit.mono hK
     ext n _ rfl
     have := Cochain.congr_v ((cocycle₁' sq hsq).δ_eq_zero 2) n _ rfl
-    rw [Cochain.zero_v]; rw [δ_v _ _ (by simp) _ _ _ _ (n + 1) _ (by lia) rfl]
+    rw [Cochain.zero_v]; rw [δ_v _ _ (by simp) _ _ _ _ (n + 1) _ (by lia) rfl]; rw [Int.negOnePow_even 2 ⟨1]; rw [by simp⟩]; rw [one_smul] at this ⊢
+    rwa [← cancel_mono (ι.f (n + 2)), ← cancel_epi (π.f n),
+      Preadditive.add_comp, Category.assoc, Category.assoc, Preadditive.comp_add,
+      HomologicalComplex.Hom.comm_assoc,
+      π_f_cochain₁_v_ι_f, zero_comp, comp_zero, ← ι.comm,
+      π_f_cochain₁_v_ι_f_assoc])
 
 Depends on / 依赖: Category, Category.assoc, Cochain, Cochain.congr_v, Cochain.zero_v, Cocycle, Cocycle.mk, Cofork, Cofork.IsColimit.epi, Fork.IsLimit.mono, HomologicalComple, Int.negOnePow_even, IsColimit, IsLimit, Preadditive, Preadditive.add_comp, Preadditive.comp_add, add_comp, cancel_epi, cancel_mono
 -/
@@ -306,7 +322,28 @@ lemma hasLift
     let l : Cocycle B X 0 :=
       Cocycle.mk (cochain₀ sq hsq -
         (Cochain.ofHom π).comp
-          (α
+          (α.comp (.ofHom ι) (add_zero 0)) (zero_add 0)) 1 (by simp) (by
+            ext p _ rfl
+            replace hα := Cochain.congr_v hα p _ rfl
+            simp only [Cochain.zero_cochain_comp_v, Cochain.ofHom_v, Cochain.comp_zero_cochain_v,
+              δ_zero_cochain_v, Preadditive.sub_comp, Category.assoc, Preadditive.comp_sub,
+              HomologicalComplex.Hom.comm_assoc, cocycle₁', Cocycle.mk_coe, Cochain.ofHoms_v,
+              HomologicalComplex.eval_obj, HomologicalComplex.eval_map] at hα
+            simp [hα])
+    exact ⟨{
+      l := l.homOf
+      fac_left := by
+        ext n
+        have h₁ : i.f n ≫ π.f n = 0 := by
+          simp [← HomologicalComplex.comp_f, hπ]
+        have h₂ := (hsq n).fac_left
+        dsimp at h₁ h₂
+        simp [l, reassoc_of% h₁, h₂]
+      fac_right := by
+        ext n
+        have : ι.f n ≫ p.f n = 0 := by
+          simp [← HomologicalComplex.comp_f, hι]
+        simpa [l, this] using (hsq n).fac_right }⟩
 
 中文:
 引理 hasLift
@@ -318,7 +355,28 @@ lemma hasLift
     let l : Cocycle B X 0 :=
       Cocycle.mk (cochain₀ sq hsq -
         (Cochain.ofHom π).comp
-          (α
+          (α.comp (.ofHom ι) (add_zero 0)) (zero_add 0)) 1 (by simp) (by
+            ext p _ rfl
+            replace hα := Cochain.congr_v hα p _ rfl
+            simp only [Cochain.zero_cochain_comp_v, Cochain.ofHom_v, Cochain.comp_zero_cochain_v,
+              δ_zero_cochain_v, Preadditive.sub_comp, Category.assoc, Preadditive.comp_sub,
+              HomologicalComplex.Hom.comm_assoc, cocycle₁', Cocycle.mk_coe, Cochain.ofHoms_v,
+              HomologicalComplex.eval_obj, HomologicalComplex.eval_map] at hα
+            simp [hα])
+    exact ⟨{
+      l := l.homOf
+      fac_left := by
+        ext n
+        have h₁ : i.f n ≫ π.f n = 0 := by
+          simp [← HomologicalComplex.comp_f, hπ]
+        have h₂ := (hsq n).fac_left
+        dsimp at h₁ h₂
+        simp [l, reassoc_of% h₁, h₂]
+      fac_right := by
+        ext n
+        have : ι.f n ≫ p.f n = 0 := by
+          simp [← HomologicalComplex.comp_f, hι]
+        simpa [l, this] using (hsq n).fac_right }⟩
 
 Depends on / 依赖: Catego, Cochain, Cochain.comp_zero_cochain_v, Cochain.congr_v, Cochain.ofHom, Cochain.ofHom_v, Cochain.zero_cochain_comp_v, Cocycle, Cocycle.mk, Preadditive, Preadditive.sub_comp, add_zero, comp_zero_cochain_v, congr_v, ofHom_v, replace, sub_comp, zero_add, zero_cochain_comp_v
 -/

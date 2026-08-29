@@ -529,7 +529,10 @@ lemma ofLocalizationSpanTarget
     finitePresentation_ofLocalizationSpanTarget _ s hs fun r => (hf r).finitePresentation
   algebraize [f]
   refine ⟨?_, ‹_›⟩
-  rw [← Algebra.smoothLocus_eq_univ_iff]; rw [← Set.univ_subset_iff]; rw [← TopologicalSpace.Opens.coe_top]; rw [← PrimeS
+  rw [← Algebra.smoothLocus_eq_univ_iff]; rw [← Set.univ_subset_iff]; rw [← TopologicalSpace.Opens.coe_top]; rw [← PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs]
+  simp only [TopologicalSpace.Opens.coe_iSup, Set.iUnion_subset_iff,
+    Algebra.basicOpen_subset_smoothLocus_iff, ← formallySmooth_algebraMap]
+  exact fun r hr => (hf ⟨r, hr⟩).1
 
 中文:
 引理 ofLocalizationSpanTarget
@@ -540,7 +543,10 @@ lemma ofLocalizationSpanTarget
     finitePresentation_ofLocalizationSpanTarget _ s hs fun r => (hf r).finitePresentation
   algebraize [f]
   refine ⟨?_, ‹_›⟩
-  rw [← Algebra.smoothLocus_eq_univ_iff]; rw [← Set.univ_subset_iff]; rw [← TopologicalSpace.Opens.coe_top]; rw [← PrimeS
+  rw [← Algebra.smoothLocus_eq_univ_iff]; rw [← Set.univ_subset_iff]; rw [← TopologicalSpace.Opens.coe_top]; rw [← PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs]
+  simp only [TopologicalSpace.Opens.coe_iSup, Set.iUnion_subset_iff,
+    Algebra.basicOpen_subset_smoothLocus_iff, ← formallySmooth_algebraMap]
+  exact fun r hr => (hf ⟨r, hr⟩).1
 
 Depends on / 依赖: Algebra, Algebra.basicOpen_subset_smoothLocus_iff, Algebra.smoothLocus_eq_univ_iff, FinitePresentation, PrimeSpectrum, PrimeSpectrum.iSup_basicOpen_eq_top_iff, Set.iUnion_subset_iff, Set.univ_subset_iff, TopologicalSpace, TopologicalSpace.Opens.coe_iSup, TopologicalSpace.Opens.coe_top, algebraize, basicOpen_subset_smoothLocus_iff, coe_iSup, coe_top, f.FinitePresentation, finitePresentation, finitePresentation_ofLocalizationSpanTarget, formallySmooth_algebraMap, iSup_basicOpen_eq_top_iff
 -/
@@ -566,7 +572,9 @@ lemma propertyIsLocal
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
     (stableUnderComposition.stableUnderCompositionWithLocalizationAway
       holdsForLocalizationAway).left
-  StableUnderCompo
+  StableUnderCompositionWithLocalizationAwayTarget :=
+    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      holdsForLocalizationAway).right
 
 中文:
 引理 propertyIsLocal
@@ -576,7 +584,9 @@ lemma propertyIsLocal
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
     (stableUnderComposition.stableUnderCompositionWithLocalizationAway
       holdsForLocalizationAway).left
-  StableUnderCompo
+  StableUnderCompositionWithLocalizationAwayTarget :=
+    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      holdsForLocalizationAway).right
 
 Depends on / 依赖: isStableUnderBaseChange, isStableUnderBaseChange.localizationPreserves.away, localizationPreserves
 -/

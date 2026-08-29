@@ -370,7 +370,7 @@ definition inf
         · apply pullback.lift (pullback.fst _ _) (pullback.snd _ _ ≫ k.hom.left) _
           rw [pullback.condition]; rw [assoc]; rw [w k]
         dsimp
-        rw [pullback.lift_snd_assoc]; rw [assoc]; rw [w 
+        rw [pullback.lift_snd_assoc]; rw [assoc]; rw [w k] }
 
 中文:
 定义 下确界
@@ -382,7 +382,7 @@ definition inf
         · apply pullback.lift (pullback.fst _ _) (pullback.snd _ _ ≫ k.hom.left) _
           rw [pullback.condition]; rw [assoc]; rw [w k]
         dsimp
-        rw [pullback.lift_snd_assoc]; rw [assoc]; rw [w 
+        rw [pullback.lift_snd_assoc]; rw [assoc]; rw [w k] }
 
 Depends on / 依赖: f.arrow, pullback
 -/
@@ -1433,7 +1433,7 @@ theorem inf_isPullback
   · ext
     simp [s.condition]
   · ext
-    si
+    simp [← h]
 
 中文:
 定理 inf_isPullback
@@ -1446,7 +1446,7 @@ theorem inf_isPullback
   · ext
     simp [s.condition]
   · ext
-    si
+    simp [← h]
 
 Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.mk, cat_disch, condition, f.arrow, factorThru, factors_comp_arrow, s.condition, s.fst, s.snd
 -/
@@ -1554,7 +1554,10 @@ theorem finset_inf_arrow_factors
     simp only [Finset.mem_insert] at m
     rcases m with (rfl | m)
     · rw [← factorThru_arrow _ _ (inf_arrow_factors_left _ _)]
-      ex
+      exact factors_comp_arrow _
+    · rw [← factorThru_arrow _ _ (inf_arrow_factors_right _ _)]
+      apply factors_of_factors_right
+      exact ih _ m
 
 中文:
 定理 finset_inf_arrow_factors
@@ -1570,7 +1573,10 @@ theorem finset_inf_arrow_factors
     simp only [Finset.mem_insert] at m
     rcases m with (rfl | m)
     · rw [← factorThru_arrow _ _ (inf_arrow_factors_left _ _)]
-      ex
+      exact factors_comp_arrow _
+    · rw [← factorThru_arrow _ _ (inf_arrow_factors_right _ _)]
+      apply factors_of_factors_right
+      exact ih _ m
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.inf_insert, Finset.mem_insert, classical, factorThru_arrow, factors_comp_arrow, factors_of_factors_right, induction_on, inf_arrow_factors_left, inf_arrow_factors_right, inf_insert, insert, mem_insert, revert
 -/
@@ -1803,7 +1809,7 @@ instance semilatticeSup
   le_sup_left := fun m n => Quotient.inductionOn₂' m n fun _ _ => ⟨MonoOver.leSupLeft _ _⟩
   le_sup_right := fun m n => Quotient.inductionOn₂' m n fun _ _ => ⟨MonoOver.leSupRight _ _⟩
   sup_le := fun m n k =>
-    Quotient.inductionOn₃' m n k fun _ _ _ ⟨i⟩ ⟨j⟩ => ⟨MonoOve
+    Quotient.inductionOn₃' m n k fun _ _ _ ⟨i⟩ ⟨j⟩ => ⟨MonoOver.supLe _ _ _ i j⟩
 
 中文:
 实例 semilatticeSup
@@ -1812,7 +1818,7 @@ instance semilatticeSup
   le_sup_left := fun m n => Quotient.inductionOn₂' m n fun _ _ => ⟨MonoOver.leSupLeft _ _⟩
   le_sup_right := fun m n => Quotient.inductionOn₂' m n fun _ _ => ⟨MonoOver.leSupRight _ _⟩
   sup_le := fun m n k =>
-    Quotient.inductionOn₃' m n k fun _ _ _ ⟨i⟩ ⟨j⟩ => ⟨MonoOve
+    Quotient.inductionOn₃' m n k fun _ _ _ ⟨i⟩ ⟨j⟩ => ⟨MonoOver.supLe _ _ _ i j⟩
 
 Depends on / 依赖: sup.obj
 -/
@@ -1880,7 +1886,7 @@ theorem finset_sup_factors
     simp only [Finset.mem_insert] at m
     rcases m with (rfl | m)
     · exact sup_factors_of_factors_left h
-    · e
+    · exact sup_factors_of_factors_right (ih ⟨j, ⟨m, h⟩⟩)
 
 中文:
 定理 finset_sup_factors
@@ -1896,7 +1902,7 @@ theorem finset_sup_factors
     simp only [Finset.mem_insert] at m
     rcases m with (rfl | m)
     · exact sup_factors_of_factors_left h
-    · e
+    · exact sup_factors_of_factors_right (ih ⟨j, ⟨m, h⟩⟩)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.sup_insert, classical, induction_on, insert, mem_insert, revert, sup_factors_of_factors_left, sup_factors_of_factors_right, sup_insert
 -/
@@ -2171,7 +2177,11 @@ theorem sInf_le
         (some ⟨equivShrink (Subobject A) f,
           Set.mem_image_of_mem (equivShrink (Subobject A)) hf⟩) ≫
       eqToHom (congr_arg (fun X : Subobject A => (X : C)) (Equiv.symm_apply_apply _ _))
-  · dsimp
+  · dsimp [sInf]
+    simp only [Category.assoc, ← underlyingIso_hom_comp_eq_mk,
+      Iso.cancel_iso_hom_left]
+    convert! limit.w (wideCospan s) (WidePullbackShape.Hom.term _)
+    simp
 
 中文:
 定理 sInf_le
@@ -2184,7 +2194,11 @@ theorem sInf_le
         (some ⟨equivShrink (Subobject A) f,
           Set.mem_image_of_mem (equivShrink (Subobject A)) hf⟩) ≫
       eqToHom (congr_arg (fun X : Subobject A => (X : C)) (Equiv.symm_apply_apply _ _))
-  · dsimp
+  · dsimp [sInf]
+    simp only [Category.assoc, ← underlyingIso_hom_comp_eq_mk,
+      Iso.cancel_iso_hom_left]
+    convert! limit.w (wideCospan s) (WidePullbackShape.Hom.term _)
+    simp
 
 Depends on / 依赖: Category, Category.assoc, Equiv.symm_apply_apply, Iso.cancel_iso_hom_left, Limits, Limits.limit, Set.mem_image_of_mem, Subobject, WidePullbackShape, WidePullbackShape.Hom.term, cancel_iso_hom_left, congr_arg, convert, eqToHom, equivShrink, fapply, le_of_comm, limit.w, mem_image_of_mem, symm_apply_apply
 -/
@@ -2373,7 +2387,7 @@ theorem sSup_le
       dsimp [smallCoproductDesc]
       simp
   · dsimp [sSup]
-    rw [assoc]; rw [image
+    rw [assoc]; rw [image.lift_fac]; rw [underlyingIso_hom_comp_eq_mk]
 
 中文:
 定理 sSup_le
@@ -2389,7 +2403,7 @@ theorem sSup_le
       dsimp [smallCoproductDesc]
       simp
   · dsimp [sSup]
-    rw [assoc]; rw [image
+    rw [assoc]; rw [image.lift_fac]; rw [underlyingIso_hom_comp_eq_mk]
 
 Depends on / 依赖: Sigma.desc, f.arrow, fapply, homOfLE, image.lift, image.lift_fac, le_of_comm, lift_fac, smallCoproductDesc, underlying, underlying.map, underlyingIso, underlyingIso_hom_comp_eq_mk
 -/
@@ -2456,7 +2470,9 @@ lemma subsingleton_of_isInitial
   let e : A ≅ X :=
     { hom := i
       inv := hX.to A
-      hom_inv_id := by rw [← cancel_mono i, assoc, fac, id_comp, co
+      hom_inv_id := by rw [← cancel_mono i, assoc, fac, id_comp, comp_id]
+      inv_hom_id := fac }
+  exact mk_eq_mk_of_comm i (𝟙 X) e (by simp [e])
 
 中文:
 引理 subsingleton_of_isInitial
@@ -2470,7 +2486,9 @@ lemma subsingleton_of_isInitial
   let e : A ≅ X :=
     { hom := i
       inv := hX.to A
-      hom_inv_id := by rw [← cancel_mono i, assoc, fac, id_comp, co
+      hom_inv_id := by rw [← cancel_mono i, assoc, fac, id_comp, comp_id]
+      inv_hom_id := fac }
+  exact mk_eq_mk_of_comm i (𝟙 X) e (by simp [e])
 
 Depends on / 依赖: S.mk_surjective, Subobject, cancel_mono, comp_id, hX.hom_ext, hX.to, hom_ext, hom_inv_id, id_comp, inv_hom_id, mk_eq_mk_of_comm, mk_surjective
 -/
@@ -2547,7 +2565,16 @@ definition subobjectOrderIso
       Set.mem_Iic.mpr (le_of_comm ((underlyingIso _).hom ≫ Z.arrow) (by simp))⟩
   invFun Z := Subobject.mk (ofLE _ _ Z.2)
   left_inv Z := mk_eq_of_comm _ (underlyingIso _) (by cat_disch)
-  right_inv Z := Subtype.ext (mk_eq_of_comm _ (underlyingIso _) (by simp [← Is
+  right_inv Z := Subtype.ext (mk_eq_of_comm _ (underlyingIso _) (by simp [← Iso.eq_inv_comp]))
+  map_rel_iff' {W Z} := by
+    dsimp
+    constructor
+    · intro h
+      exact le_of_comm (((underlyingIso _).inv ≫ ofLE _ _ (Subtype.mk_le_mk.mp h) ≫
+        (underlyingIso _).hom)) (by cat_disch)
+    · intro h
+      exact Subtype.mk_le_mk.mpr (le_of_comm
+        ((underlyingIso _).hom ≫ ofLE _ _ h ≫ (underlyingIso _).inv) (by simp))
 
 中文:
 定义 subobjectOrderIso
@@ -2556,7 +2583,16 @@ definition subobjectOrderIso
       Set.mem_Iic.mpr (le_of_comm ((underlyingIso _).hom ≫ Z.arrow) (by simp))⟩
   invFun Z := Subobject.mk (ofLE _ _ Z.2)
   left_inv Z := mk_eq_of_comm _ (underlyingIso _) (by cat_disch)
-  right_inv Z := Subtype.ext (mk_eq_of_comm _ (underlyingIso _) (by simp [← Is
+  right_inv Z := Subtype.ext (mk_eq_of_comm _ (underlyingIso _) (by simp [← Iso.eq_inv_comp]))
+  map_rel_iff' {W Z} := by
+    dsimp
+    constructor
+    · intro h
+      exact le_of_comm (((underlyingIso _).inv ≫ ofLE _ _ (Subtype.mk_le_mk.mp h) ≫
+        (underlyingIso _).hom)) (by cat_disch)
+    · intro h
+      exact Subtype.mk_le_mk.mpr (le_of_comm
+        ((underlyingIso _).hom ≫ ofLE _ _ h ≫ (underlyingIso _).inv) (by simp))
 
 Depends on / 依赖: Iso.eq_inv_comp, Set.mem_Iic.mpr, Subobject, Subobject.mk, Subtype, Subtype.ext, Subtype.m, Subtype.mk_le_mk.mp, Y.arrow, Z.arrow, cat_disch, eq_inv_comp, invFun, le_of_comm, left_inv, map_rel_iff, mem_Iic, mk_eq_of_comm, mk_le_mk, right_inv
 -/

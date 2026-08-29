@@ -254,7 +254,11 @@ lemma le_φ
       hasCardinalLT_of_finite _ _ (IsRegular.aleph0_le Fact.out)⟩
     refine Set.subset_iUnion _ ⟨C, hC⟩ (Or.inl ?_)
     simp only [Set.mem_image, Subtype.exists, exists_and_right, exists_eq_right]
-    
+    exact ⟨hb, @hC' ⟨b, hb⟩ (by simp)⟩
+  · simp
+
+include h₀ hA hY in
+omit [PartialOrder X] in
 
 中文:
 引理 le_φ
@@ -268,7 +272,11 @@ lemma le_φ
       hasCardinalLT_of_finite _ _ (IsRegular.aleph0_le Fact.out)⟩
     refine Set.subset_iUnion _ ⟨C, hC⟩ (Or.inl ?_)
     simp only [Set.mem_image, Subtype.exists, exists_and_right, exists_eq_right]
-    
+    exact ⟨hb, @hC' ⟨b, hb⟩ (by simp)⟩
+  · simp
+
+include h₀ hA hY in
+omit [PartialOrder X] in
 
 Depends on / 依赖: Fact.out, IsRegular, IsRegular.aleph0_le, Or.inl, Set.mem_image, Set.subset_iUnion, Subtype, Subtype.exists, aleph0_le, exists_and_right, exists_eq_right, hasCardinalLT_of_finite, mem_image, split_ifs, subset_iUnion
 -/
@@ -299,7 +307,23 @@ lemma hasCardinalLT_transfiniteIterate_φ
     simpa [hj.eq_bot]
   | succ j hj hj' =>
     have hκ₂ : κ₂.IsRegular := Fact.out
-    rw [transfiniteI
+    rw [transfiniteIterate_succ _ _ _ hj]; rw [φ_eq _ _ _ hj']
+    refine hasCardinalLT_iUnion _ (hY _ _)
+      (fun ⟨C, hC⟩ => hasCardinalLT_union hκ₂.aleph0_le ?_
+        (hasCardinalLT_of_finite _ _ hκ₂.aleph0_le))
+    refine (C.prop.of_le h₀.le).of_injective (fun ⟨c, hc⟩ => ?_)
+      (fun c₁ c₂ hc => ?_)
+    · simp only [Set.mem_image, Subtype.exists, exists_and_right, exists_eq_right] at hc
+      exact ⟨⟨c, hc.choose⟩, hc.choose_spec⟩
+    · simpa only [Subtype.ext_iff] using hc
+  | isSuccLimit j hj hj' =>
+    rw [transfiniteIterate_limit _ _ _ hj]; rw [Set.iSup_eq_iUnion]
+    refine hasCardinalLT_iUnion _
+      (HasCardinalLT.of_injective ?_ _ Subtype.val_injective) (fun ⟨k, hk⟩ => hj' _ hk)
+    simpa [hasCardinalLT_iff_cardinal_mk_lt]
+
+include hY' in
+omit [Fact κ₂.IsRegular] [PartialOrder X] in
 
 中文:
 引理 hasCardinalLT_transfiniteIterate_φ
@@ -312,7 +336,23 @@ lemma hasCardinalLT_transfiniteIterate_φ
     simpa [hj.eq_bot]
   | succ j hj hj' =>
     have hκ₂ : κ₂.IsRegular := Fact.out
-    rw [transfiniteI
+    rw [transfiniteIterate_succ _ _ _ hj]; rw [φ_eq _ _ _ hj']
+    refine hasCardinalLT_iUnion _ (hY _ _)
+      (fun ⟨C, hC⟩ => hasCardinalLT_union hκ₂.aleph0_le ?_
+        (hasCardinalLT_of_finite _ _ hκ₂.aleph0_le))
+    refine (C.prop.of_le h₀.le).of_injective (fun ⟨c, hc⟩ => ?_)
+      (fun c₁ c₂ hc => ?_)
+    · simp only [Set.mem_image, Subtype.exists, exists_and_right, exists_eq_right] at hc
+      exact ⟨⟨c, hc.choose⟩, hc.choose_spec⟩
+    · simpa only [Subtype.ext_iff] using hc
+  | isSuccLimit j hj hj' =>
+    rw [transfiniteIterate_limit _ _ _ hj]; rw [Set.iSup_eq_iUnion]
+    refine hasCardinalLT_iUnion _
+      (HasCardinalLT.of_injective ?_ _ Subtype.val_injective) (fun ⟨k, hk⟩ => hj' _ hk)
+    simpa [hasCardinalLT_iff_cardinal_mk_lt]
+
+include hY' in
+omit [Fact κ₂.IsRegular] [PartialOrder X] in
 
 Depends on / 依赖: C.prop.of_le, Cardinal, Cardinal.nonempty_ord_toType, Fact.out, IsRegular, IsRegular.ne_zero, SuccOrder, SuccOrder.limitRecOn, ToType, WellFoundedLT, WellFoundedLT.toOrderBot, aleph0_le, eq_bot, hasCardinalLT_iUnion, hasCardinalLT_of_finite, hasCardinalLT_union, hj.eq_bot, limitRecOn, ne_zero, nonempty_ord_toType
 -/
@@ -411,7 +451,22 @@ lemma isCardinalFiltered_iUnion
       (hK : HasCardinalLT K κ₁),
       exists (x : (transfiniteIterate (φ Y m) (Order.succ j) A : Set _)),
           forall (k : K), (f k).val <= x.val by
-    refine isCardinalFiltered_preorder 
+    refine isCardinalFiltered_preorder _ _ (fun K f hK => ?_)
+    rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
+    have (k : K) : exists (j : κ₁.ord.ToType), (f k).val in transfiniteIterate (φ Y m) j A := by
+      simpa only [Set.mem_iUnion] using (f k).prop
+    choose a ha using this
+    obtain ⟨⟨z, hz⟩, hz'⟩ := this (IsCardinalFiltered.max a hK) (fun k =>
+      ⟨(f k).val, monotone_transfiniteIterate_φ Y hY' m A
+          (leOfHom (IsCardinalFiltered.toMax a hK k)) (ha k)⟩) hK
+    exact ⟨⟨z, Set.subset_iUnion _ _ hz⟩, hz'⟩
+  intro K j f hK
+  obtain ⟨⟨x, hx⟩, hx'⟩ := hφ₀ Y hY' m hm _
+    (hasCardinalLT_transfiniteIterate_φ h₀ Y hY m A hA _) f hK
+  refine ⟨⟨x, ?_⟩, hx'⟩
+  have : NoMaxOrder κ₁.ord.ToType := noMaxOrder (IsRegular.aleph0_le Fact.out)
+  rwa [transfiniteIterate_succ _ _ _ (not_isMax j),
+    φ_eq _ _ _ (hasCardinalLT_transfiniteIterate_φ h₀ Y hY m A hA _)]
 
 中文:
 引理 isCardinalFiltered_iUnion
@@ -420,7 +475,22 @@ lemma isCardinalFiltered_iUnion
       (hK : HasCardinalLT K κ₁),
       exists (x : (transfiniteIterate (φ Y m) (Order.succ j) A : Set _)),
           forall (k : K), (f k).val <= x.val by
-    refine isCardinalFiltered_preorder 
+    refine isCardinalFiltered_preorder _ _ (fun K f hK => ?_)
+    rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
+    have (k : K) : exists (j : κ₁.ord.ToType), (f k).val in transfiniteIterate (φ Y m) j A := by
+      simpa only [Set.mem_iUnion] using (f k).prop
+    choose a ha using this
+    obtain ⟨⟨z, hz⟩, hz'⟩ := this (IsCardinalFiltered.max a hK) (fun k =>
+      ⟨(f k).val, monotone_transfiniteIterate_φ Y hY' m A
+          (leOfHom (IsCardinalFiltered.toMax a hK k)) (ha k)⟩) hK
+    exact ⟨⟨z, Set.subset_iUnion _ _ hz⟩, hz'⟩
+  intro K j f hK
+  obtain ⟨⟨x, hx⟩, hx'⟩ := hφ₀ Y hY' m hm _
+    (hasCardinalLT_transfiniteIterate_φ h₀ Y hY m A hA _) f hK
+  refine ⟨⟨x, ?_⟩, hx'⟩
+  have : NoMaxOrder κ₁.ord.ToType := noMaxOrder (IsRegular.aleph0_le Fact.out)
+  rwa [transfiniteIterate_succ _ _ _ (not_isMax j),
+    φ_eq _ _ _ (hasCardinalLT_transfiniteIterate_φ h₀ Y hY m A hA _)]
 
 Depends on / 依赖: HasCardinalLT, Order.succ, Set.mem_iUnion, ToType, hasCardinalLT_iff_cardinal_mk_lt, isCardinalFiltered_preorder, mem_iUnion, ord.ToType, transfiniteIterate, x.val
 -/

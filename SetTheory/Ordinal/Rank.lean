@@ -109,7 +109,7 @@ theorem mem_range_rank_of_le
     obtain ⟨⟨b, hb⟩, ho⟩ := ho
     rw [Order.lt_succ_iff] at ho
     obtain rfl | ho := ho.eq_or_lt
-    exacts [⟨b, ha b hb, rfl⟩, IH _ hb
+    exacts [⟨b, ha b hb, rfl⟩, IH _ hb ho]
 
 中文:
 定理 mem_range_rank_of_le
@@ -123,7 +123,7 @@ theorem mem_range_rank_of_le
     obtain ⟨⟨b, hb⟩, ho⟩ := ho
     rw [Order.lt_succ_iff] at ho
     obtain rfl | ho := ho.eq_or_lt
-    exacts [⟨b, ha b hb, rfl⟩, IH _ hb
+    exacts [⟨b, ha b hb, rfl⟩, IH _ hb ho]
 
 Depends on / 依赖: Order.lt_succ_iff, Ordinal, Ordinal.lt_iSup_iff, eq_or_lt, exacts, ha.recOn, ho.eq_or_lt, lt_iSup_iff, lt_succ_iff, rank_eq, revert
 -/

@@ -61,7 +61,18 @@ definition bicone
   π j :=
     { f := (biproduct.map fun j => (F j).p) ≫ Bicone.π _ j
       comm := by
-        simp only [assoc, biproduct.
+        simp only [assoc, biproduct.bicone_π, biproduct.map_π, biproduct.map_π_assoc, (F j).idem] }
+  ι j :=
+    { f := biproduct.ι (fun j => (F j).X) j ≫ biproduct.map fun j => (F j).p
+      comm := by simp only [biproduct.ι_map, assoc, idem_assoc] }
+  ι_π j j' := by
+    split_ifs with h
+    · subst h
+      simp only [biproduct.ι_map, biproduct.bicone_π, biproduct.map_π, eqToHom_refl,
+        id_f, hom_ext_iff, comp_f, assoc, bicone_ι_π_self_assoc, idem]
+    · dsimp
+      simp only [biproduct.ι_map, biproduct.map_π, hom_ext_iff, comp_f,
+        assoc, biproduct.ι_π_ne_assoc _ h, zero_comp, comp_zero]
 
 中文:
 定义 bicone
@@ -74,7 +85,18 @@ definition bicone
   π j :=
     { f := (biproduct.map fun j => (F j).p) ≫ Bicone.π _ j
       comm := by
-        simp only [assoc, biproduct.
+        simp only [assoc, biproduct.bicone_π, biproduct.map_π, biproduct.map_π_assoc, (F j).idem] }
+  ι j :=
+    { f := biproduct.ι (fun j => (F j).X) j ≫ biproduct.map fun j => (F j).p
+      comm := by simp only [biproduct.ι_map, assoc, idem_assoc] }
+  ι_π j j' := by
+    split_ifs with h
+    · subst h
+      simp only [biproduct.ι_map, biproduct.bicone_π, biproduct.map_π, eqToHom_refl,
+        id_f, hom_ext_iff, comp_f, assoc, bicone_ι_π_self_assoc, idem]
+    · dsimp
+      simp only [biproduct.ι_map, biproduct.map_π, hom_ext_iff, comp_f,
+        assoc, biproduct.ι_π_ne_assoc _ h, zero_comp, comp_zero]
 
 Depends on / 依赖: Bicone, biproduct, biproduct.bicone_, biproduct.map, biproduct.map_, idem_assoc, split_ifs
 -/
@@ -200,7 +222,21 @@ definition decomposition
     apply biprod.hom_ext'
     · rw [biprod.inl_desc_assoc, comp_id, biprod.lift_eq, comp_add, ← decompId_assoc,
         add_eq_left, ← assoc]
-      refine (?_ =≫ _).trans zer
+      refine (?_ =≫ _).trans zero_comp
+      ext
+      simp only [comp_f, toKaroubi_obj_X, decompId_i_f, decompId_p_f,
+        complement_p, comp_sub, comp_id, idem, sub_self, zero_def]
+    · rw [biprod.inr_desc_assoc, comp_id, biprod.lift_eq, comp_add, ← decompId_assoc,
+        add_eq_right, ← assoc]
+      refine (?_ =≫ _).trans zero_comp
+      ext
+      simp only [complement_X, comp_f, decompId_i_f, complement_p,
+        decompId_p_f, sub_comp, id_comp, idem, sub_self, zero_def]
+  inv_hom_id := by
+    ext
+    simp only [toKaroubi_obj_X, biprod.lift_desc, add_def, comp_f, decompId_p_f, decompId_i_f,
+      idem, complement_X, complement_p, comp_sub, comp_id, sub_comp, id_comp, sub_self, sub_zero,
+      add_sub_cancel, id_f, toKaroubi_obj_p]
 
 中文:
 定义 decomposition
@@ -211,7 +247,21 @@ definition decomposition
     apply biprod.hom_ext'
     · rw [biprod.inl_desc_assoc, comp_id, biprod.lift_eq, comp_add, ← decompId_assoc,
         add_eq_left, ← assoc]
-      refine (?_ =≫ _).trans zer
+      refine (?_ =≫ _).trans zero_comp
+      ext
+      simp only [comp_f, toKaroubi_obj_X, decompId_i_f, decompId_p_f,
+        complement_p, comp_sub, comp_id, idem, sub_self, zero_def]
+    · rw [biprod.inr_desc_assoc, comp_id, biprod.lift_eq, comp_add, ← decompId_assoc,
+        add_eq_right, ← assoc]
+      refine (?_ =≫ _).trans zero_comp
+      ext
+      simp only [complement_X, comp_f, decompId_i_f, complement_p,
+        decompId_p_f, sub_comp, id_comp, idem, sub_self, zero_def]
+  inv_hom_id := by
+    ext
+    simp only [toKaroubi_obj_X, biprod.lift_desc, add_def, comp_f, decompId_p_f, decompId_i_f,
+      idem, complement_X, complement_p, comp_sub, comp_id, sub_comp, id_comp, sub_self, sub_zero,
+      add_sub_cancel, id_f, toKaroubi_obj_p]
 
 Depends on / 依赖: P.complement.decompId_i, P.decompId_i, biprod, biprod.desc, complement, decompId_i
 -/

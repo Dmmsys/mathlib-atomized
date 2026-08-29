@@ -62,7 +62,7 @@ theorem LieAlgebra.ad_nilpotent_of_nilpotent
   rw [LieAlgebra.ad_eq_lmul_left_sub_lmul_right]
   have hl : IsNilpotent (LinearMap.mulLeft R a) := by rwa [LinearMap.isNilpotent_mulLeft_iff]
   have hr : IsNilpotent (LinearMap.mulRight R a) := by rwa [LinearMap.isNilpotent_mulRight_iff]
-  exact (LinearMap.commute_mulLeft_right a a).isNilpotent_
+  exact (LinearMap.commute_mulLeft_right a a).isNilpotent_sub hl hr
 
 中文:
 定理 Lie代数.ad_nilpotent_of_nilpotent
@@ -71,7 +71,7 @@ theorem LieAlgebra.ad_nilpotent_of_nilpotent
   rw [LieAlgebra.ad_eq_lmul_left_sub_lmul_right]
   have hl : IsNilpotent (LinearMap.mulLeft R a) := by rwa [LinearMap.isNilpotent_mulLeft_iff]
   have hr : IsNilpotent (LinearMap.mulRight R a) := by rwa [LinearMap.isNilpotent_mulRight_iff]
-  exact (LinearMap.commute_mulLeft_right a a).isNilpotent_
+  exact (LinearMap.commute_mulLeft_right a a).isNilpotent_sub hl hr
 
 Depends on / 依赖: IsNilpotent, LieAlgebra, LieAlgebra.ad_eq_lmul_left_sub_lmul_right, LinearMap, LinearMap.commute_mulLeft_right, LinearMap.isNilpotent_mulLeft_iff, LinearMap.isNilpotent_mulRight_iff, LinearMap.mulLeft, LinearMap.mulRight, ad_eq_lmul_left_sub_lmul_right, commute_mulLeft_right, isNilpotent_mulLeft_iff, isNilpotent_mulRight_iff, isNilpotent_sub, mulLeft, mulRight
 -/
@@ -148,7 +148,15 @@ theorem LieAlgebra.ad_isSemisimple_of_isSemisimple
   have hl : Module.End.IsSemisimple (LinearMap.mulLeft K a) := by
     apply Module.End.isSemisimple_of_squarefree_aeval_eq_zero ha.minpoly_squarefree
     have : Polynomial.aeval (Algebra.lmul K (Module.End K V) a) (minpoly K a) = 0 := by
-      rw [
+      rw [Polynomial.aeval_algHom_apply]; rw [minpoly.aeval]; rw [map_zero]
+    simpa using! this
+  have hr : Module.End.IsSemisimple (LinearMap.mulRight K a) := by
+    apply Module.End.isSemisimple_of_squarefree_aeval_eq_zero ha.minpoly_squarefree
+    have hrw : LinearMap.mulRight K a =
+        (Algebra.lsmul (A := (Module.End K V)ᵐᵒᵖ) K K (Module.End K V)) (.op a) := by
+      ext; simp [Algebra.lsmul]
+    rw [hrw]; rw [Polynomial.aeval_algHom_apply]; rw [Polynomial.aeval_op_apply]; rw [minpoly.aeval]; rw [MulOpposite.op_zero]; rw [map_zero]
+  exact hl.sub_of_commute (LinearMap.commute_mulLeft_right a a) hr
 
 中文:
 定理 Lie代数.ad_isSemisimple_of_isSemisimple
@@ -158,7 +166,15 @@ theorem LieAlgebra.ad_isSemisimple_of_isSemisimple
   have hl : Module.End.IsSemisimple (LinearMap.mulLeft K a) := by
     apply Module.End.isSemisimple_of_squarefree_aeval_eq_zero ha.minpoly_squarefree
     have : Polynomial.aeval (Algebra.lmul K (Module.End K V) a) (minpoly K a) = 0 := by
-      rw [
+      rw [Polynomial.aeval_algHom_apply]; rw [minpoly.aeval]; rw [map_zero]
+    simpa using! this
+  have hr : Module.End.IsSemisimple (LinearMap.mulRight K a) := by
+    apply Module.End.isSemisimple_of_squarefree_aeval_eq_zero ha.minpoly_squarefree
+    have hrw : LinearMap.mulRight K a =
+        (Algebra.lsmul (A := (Module.End K V)ᵐᵒᵖ) K K (Module.End K V)) (.op a) := by
+      ext; simp [Algebra.lsmul]
+    rw [hrw]; rw [Polynomial.aeval_algHom_apply]; rw [Polynomial.aeval_op_apply]; rw [minpoly.aeval]; rw [MulOpposite.op_zero]; rw [map_zero]
+  exact hl.sub_of_commute (LinearMap.commute_mulLeft_right a a) hr
 
 Depends on / 依赖: Algebra, Algebra.lmul, IsSemisimple, LieAlgebra, LieAlgebra.ad_eq_lmul_left_sub_lmul_right, LinearMap, LinearMap.mulLeft, LinearMap.mulRight, Module, Module.End, Module.End.IsSemisimple, Module.End.isSemisimple_of_squarefree_aeval_eq_zero, Polynomial, Polynomial.aeval, Polynomial.aeval_algHom_apply, ad_eq_lmul_left_sub_lmul_right, aeval_algHom_apply, ha.minpoly_, ha.minpoly_squarefree, isSemisimple_of_squarefree_aeval_eq_zero
 -/

@@ -103,7 +103,10 @@ lemma RCLike.rank_le_two
     _ <= #({1, I} : Finset K) := by
       -- TODO: `simp` doesn't rewrite inside the type argument to `Module.rank`, but `rw` does.
       -- We should introduce `Submodule.rank` to fix this.
-      have 
+      have := rank_span_finset_le (R := Real) (M := K) {1, I}
+      rw [Finset.coe_pair] at this
+      simpa [span_one_I] using this
+    _ <= 2 := mod_cast Finset.card_le_two
 
 中文:
 引理 RCLike.rank_le_two
@@ -113,7 +116,10 @@ lemma RCLike.rank_le_two
     _ <= #({1, I} : Finset K) := by
       -- TODO: `simp` doesn't rewrite inside the type argument to `Module.rank`, but `rw` does.
       -- We should introduce `Submodule.rank` to fix this.
-      have 
+      have := rank_span_finset_le (R := Real) (M := K) {1, I}
+      rw [Finset.coe_pair] at this
+      simpa [span_one_I] using this
+    _ <= 2 := mod_cast Finset.card_le_two
 
 Depends on / 依赖: Finset, Module, Module.rank, Submodule, Submodule.span, span_one_I
 -/

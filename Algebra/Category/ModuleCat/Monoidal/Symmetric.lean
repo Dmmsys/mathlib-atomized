@@ -220,7 +220,13 @@ instance symmetricCategory
   hexagon_forward := hexagon_forward
   hexagon_reverse := hexagon_reverse
   -- Porting note: this proof was automatic in Lean3
-  -- now `aesop` is applying `SemimoduleCat.ext` in 
+  -- now `aesop` is applying `SemimoduleCat.ext` in favour of `TensorProduct.ext`.
+  symmetry _ _ := by
+    ext : 1
+    apply TensorProduct.ext'
+    cat_disch
+
+@[simp]
 
 中文:
 实例 symmetricCategory
@@ -231,7 +237,13 @@ instance symmetricCategory
   hexagon_forward := hexagon_forward
   hexagon_reverse := hexagon_reverse
   -- Porting note: this proof was automatic in Lean3
-  -- now `aesop` is applying `SemimoduleCat.ext` in 
+  -- now `aesop` is applying `SemimoduleCat.ext` in favour of `TensorProduct.ext`.
+  symmetry _ _ := by
+    ext : 1
+    apply TensorProduct.ext'
+    cat_disch
+
+@[simp]
 
 Depends on / 依赖: braiding
 -/

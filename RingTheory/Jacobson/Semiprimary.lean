@@ -52,7 +52,7 @@ theorem IsSemisimpleModule.jacobson_eq_bot
   proof: have ⟨s, e, simple⟩ := isSemisimpleModule_iff_exists_linearEquiv_dfinsupp.mp ‹_›
   let f : M ->ₗ[R] forall m : s, m.1 := (LinearMap.pi DFinsupp.lapply).comp e.toLinearMap
   Module.jacobson_eq_bot_of_injective f (DFinsupp.injective_pi_lapply (R := R).comp e.injective)
-    (Module.jacobson_pi_eq_bot _
+    (Module.jacobson_pi_eq_bot _ _ fun i => IsSimpleModule.jacobson_eq_bot R _)
 
 中文:
 定理 是半单模.jacobson_eq_bot
@@ -60,7 +60,7 @@ theorem IsSemisimpleModule.jacobson_eq_bot
   证明: have ⟨s, e, simple⟩ := isSemisimpleModule_iff_exists_linearEquiv_dfinsupp.mp ‹_›
   let f : M ->ₗ[R] forall m : s, m.1 := (LinearMap.pi DFinsupp.lapply).comp e.toLinearMap
   Module.jacobson_eq_bot_of_injective f (DFinsupp.injective_pi_lapply (R := R).comp e.injective)
-    (Module.jacobson_pi_eq_bot _
+    (Module.jacobson_pi_eq_bot _ _ fun i => IsSimpleModule.jacobson_eq_bot R _)
 
 Depends on / 依赖: DFinsupp, DFinsupp.injective_pi_lapply, DFinsupp.lapply, IsSimpleModule, IsSimpleModule.jacobson_eq_bot, LinearMap, LinearMap.pi, Module, Module.jacobson_eq_bot_of_injective, Module.jacobson_pi_eq_bot, e.injective, e.toLinearMap, injective, injective_pi_lapply, isSemisimpleModule_iff_exists_linearEquiv_dfinsupp, isSemisimpleModule_iff_exists_linearEquiv_dfinsupp.mp, jacobson_eq_bot, jacobson_eq_bot_of_injective, jacobson_pi_eq_bot, lapply
 -/

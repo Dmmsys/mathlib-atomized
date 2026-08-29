@@ -73,7 +73,10 @@ lemma Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
     (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
     (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
     (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationA
+    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv) ?_ ?_ ?_ ?_
+  all_goals
+    ext x
+    simp [Adjunction.homEquiv, yonedaEquiv_naturality]
 
 中文:
 引理 层.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
@@ -82,7 +85,10 @@ lemma Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
     (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
     (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
     (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
-    (((sheafificationA
+    (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv) ?_ ?_ ?_ ?_
+  all_goals
+    ext x
+    simp [Adjunction.homEquiv, yonedaEquiv_naturality]
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv, IsPullback, Square, Square.IsPullback.iff_of_equiv, all_goals, homEquiv, iff_of_equiv, sheafificationAdjunction, yonedaEquiv, yonedaEquiv_naturality
 -/
@@ -193,7 +199,22 @@ definition mk_of_isPullback
         (fun j => WalkingPair.casesOn j s.fst s.snd)
         (fun W => by
           rintro (_ | _) (_ | _) a b fac
-          · obtai
+          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₂₄] using fac
+            rfl
+          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac
+            simpa using s.condition =≫ F.obj.map φ.op
+          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac.symm
+            simpa using s.condition.symm =≫ F.obj.map φ.op
+          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₃₄] using fac
+            rfl)) (fun _ => ?_) (fun _ => ?_) (fun s m hm₁ hm₂ => ?_)
+    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left
+    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right
+    · apply F.2.hom_ext_ofArrows _ h₂
+      rintro (_ | _)
+      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left]
+        exact hm₁
+      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right]
+        exact hm₂)
 
 中文:
 定义 mk_of_isPullback
@@ -206,7 +227,22 @@ definition mk_of_isPullback
         (fun j => WalkingPair.casesOn j s.fst s.snd)
         (fun W => by
           rintro (_ | _) (_ | _) a b fac
-          · obtai
+          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₂₄] using fac
+            rfl
+          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac
+            simpa using s.condition =≫ F.obj.map φ.op
+          · obtain ⟨φ, rfl, rfl⟩ := PullbackCone.IsLimit.lift' h₁.isLimit _ _ fac.symm
+            simpa using s.condition.symm =≫ F.obj.map φ.op
+          · obtain rfl : a = b := by simpa only [← cancel_mono sq.f₃₄] using fac
+            rfl)) (fun _ => ?_) (fun _ => ?_) (fun s m hm₁ hm₂ => ?_)
+    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left
+    · exact F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right
+    · apply F.2.hom_ext_ofArrows _ h₂
+      rintro (_ | _)
+      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.left]
+        exact hm₁
+      · rw [F.2.amalgamateOfArrows_map _ _ _ _ WalkingPair.right]
+        exact hm₂)
 
 Depends on / 依赖: F.obj.map, IsLimit, IsPullback, PullbackCone, PullbackCone.IsLimit.lift, PullbackCone.IsLimit.mk, Square, Square.IsPullback.mk, WalkingPair, WalkingPair.casesOn, amalgamateOfArrows, cancel_mono, casesOn, condition, isLimit, s.condition, s.fst, s.snd, sq.f
 -/
@@ -517,7 +553,15 @@ definition shortComplex
     (presheafToSheaf J _).obj (yoneda.obj S.X₃ ⋙ AddCommGrpCat.free)
   X₃ := (presheafToSheaf J _).obj (yoneda.obj S.X₄ ⋙ AddCommGrpCat.free)
   f :=
-    biprod.
+    biprod.lift
+      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₂) _))
+      (-(presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₃) _))
+  g :=
+    biprod.desc
+      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₂₄) _))
+      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₃₄) _))
+  zero := (S.map (yoneda ⋙ (Functor.whiskeringRight _ _ _).obj AddCommGrpCat.free ⋙
+      presheafToSheaf J _)).cokernelCofork.condition
 
 中文:
 定义 shortComplex
@@ -527,7 +571,15 @@ definition shortComplex
     (presheafToSheaf J _).obj (yoneda.obj S.X₃ ⋙ AddCommGrpCat.free)
   X₃ := (presheafToSheaf J _).obj (yoneda.obj S.X₄ ⋙ AddCommGrpCat.free)
   f :=
-    biprod.
+    biprod.lift
+      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₂) _))
+      (-(presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₁₃) _))
+  g :=
+    biprod.desc
+      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₂₄) _))
+      ((presheafToSheaf J _).map (Functor.whiskerRight (yoneda.map S.f₃₄) _))
+  zero := (S.map (yoneda ⋙ (Functor.whiskeringRight _ _ _).obj AddCommGrpCat.free ⋙
+      presheafToSheaf J _)).cokernelCofork.condition
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.free, presheafToSheaf, yoneda, yoneda.obj
 -/

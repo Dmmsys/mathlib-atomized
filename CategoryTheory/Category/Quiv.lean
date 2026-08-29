@@ -619,7 +619,9 @@ definition isoOfEquiv
   hom_inv_id := Prefunctor.ext' e.left_inv (fun X Y f => by
     dsimp [Quiv.id_eq_id, Quiv.comp_eq_comp]
     apply (he _ _).injective
-    apply Quiver.homOfEq_injective (
+    apply Quiver.homOfEq_injective (X' := e X) (Y' := e Y) (by simp) (by simp)
+    simp)
+  inv_hom_id := Prefunctor.ext' e.right_inv (by simp [Quiv.id_eq_id, Quiv.comp_eq_comp])
 
 中文:
 定义 isoOfEquiv
@@ -631,7 +633,9 @@ definition isoOfEquiv
   hom_inv_id := Prefunctor.ext' e.left_inv (fun X Y f => by
     dsimp [Quiv.id_eq_id, Quiv.comp_eq_comp]
     apply (he _ _).injective
-    apply Quiver.homOfEq_injective (
+    apply Quiver.homOfEq_injective (X' := e X) (Y' := e Y) (by simp) (by simp)
+    simp)
+  inv_hom_id := Prefunctor.ext' e.right_inv (by simp [Quiv.id_eq_id, Quiv.comp_eq_comp])
 
 Depends on / 依赖: HasBinaryCoproducts, HasColimit, OrderBot, Prefunctor, Prefunctor.mk, SemilatticeSup, hasBinaryCoproducts_of_hasColimit_pair, hasFiniteColimits_of_hasFiniteColimits_of_size, infer_instance
 -/
@@ -819,7 +823,10 @@ definition adj
     left_triangle := by
       ext V
       exact freeMap_pathsOf_pathComposition V
-    r
+    right_triangle := by
+      ext C
+      exact pathsOf_pathComposition_toPrefunctor C
+  }
 
 中文:
 定义 adj
@@ -833,7 +840,10 @@ definition adj
     left_triangle := by
       ext V
       exact freeMap_pathsOf_pathComposition V
-    r
+    right_triangle := by
+      ext C
+      exact pathsOf_pathComposition_toPrefunctor C
+  }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfUnitCounit, F.toFunctor, Paths.of, counit, freeMap_pathsOf_pathComposition, left_triangle, mkOfUnitCounit, naturality, pathComposition, pathComposition_naturality, pathsOf_pathComposition_toPrefunctor, right_triangle, toCatHom, toFunctor
 -/
@@ -865,6 +875,9 @@ definition pathsEquiv
     rw [Cat.freeMap_comp]; rw [Functor.assoc]; rw [pathComposition_naturality]; rw [← Functor.assoc]; rw [freeMap_pathsOf_pathComposition]; rw [Functor.id_comp]
   right_inv G := by
     dsimp
+    rw [← Functor.toPrefunctor_comp]; rw [← Prefunctor.comp_assoc]; rw [pathsOf_freeMap_toPrefunctor]; rw [Prefunctor.comp_assoc]; rw [pathsOf_pathComposition_toPrefunctor]; rw [Prefunctor.comp_id]
+
+@[simp]
 
 中文:
 定义 pathsEquiv
@@ -876,6 +889,9 @@ definition pathsEquiv
     rw [Cat.freeMap_comp]; rw [Functor.assoc]; rw [pathComposition_naturality]; rw [← Functor.assoc]; rw [freeMap_pathsOf_pathComposition]; rw [Functor.id_comp]
   right_inv G := by
     dsimp
+    rw [← Functor.toPrefunctor_comp]; rw [← Prefunctor.comp_assoc]; rw [pathsOf_freeMap_toPrefunctor]; rw [Prefunctor.comp_assoc]; rw [pathsOf_pathComposition_toPrefunctor]; rw [Prefunctor.comp_id]
+
+@[simp]
 
 Depends on / 依赖: F.toPrefunctor, Paths.of, toPrefunctor
 -/

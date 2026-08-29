@@ -244,7 +244,18 @@ theorem contDiffAt_log
     apply expPartialHomeomorph.contDiffAt_symm_deriv (f₀' := y) hy.ne' (by simpa)
     · convert! hasDerivAt_exp (log y)
       rw [exp_log hy]
-    · exact analyticAt_rexp
+    · exact analyticAt_rexp.contDiffAt
+  rcases hx.lt_or_gt with hx | hx
+  · have : ContDiffAt Real n (log ∘ (fun y => -y)) x := by
+      apply ContDiffAt.comp
+      · apply A _ (Left.neg_pos_iff.mpr hx)
+      apply contDiffAt_id.neg
+    convert! this
+    ext x
+    simp
+  · exact A x hx
+
+@[fun_prop]
 
 中文:
 定理 contDiffAt_log
@@ -256,7 +267,18 @@ theorem contDiffAt_log
     apply expPartialHomeomorph.contDiffAt_symm_deriv (f₀' := y) hy.ne' (by simpa)
     · convert! hasDerivAt_exp (log y)
       rw [exp_log hy]
-    · exact analyticAt_rexp
+    · exact analyticAt_rexp.contDiffAt
+  rcases hx.lt_or_gt with hx | hx
+  · have : ContDiffAt Real n (log ∘ (fun y => -y)) x := by
+      apply ContDiffAt.comp
+      · apply A _ (Left.neg_pos_iff.mpr hx)
+      apply contDiffAt_id.neg
+    convert! this
+    ext x
+    simp
+  · exact A x hx
+
+@[fun_prop]
 
 Depends on / 依赖: ContDiffAt, ContDiffAt.comp, Left.neg_pos_iff.mpr, analyticAt_rexp, analyticAt_rexp.contDiffAt, contDiffAt, contDiffAt_id, contDiffAt_id.neg, contDiffAt_symm_deriv, continuousAt, continuousAt_log_iff, convert, expPartialHomeomorph, expPartialHomeomorph.contDiffAt_symm_deriv, exp_log, h.continuousAt, hasDerivAt_exp, hx.lt_or_gt, hy.ne, lt_or_gt
 -/
@@ -760,7 +782,38 @@ theorem abs_log_sub_add_sum_range_le
     and then apply the mean value inequality. -/
   let F : Real -> Real := fun x => (∑ i in range n, x ^ (i + 1) / (i + 1)) + log (1 - x)
   let F' : Real -> Real := fun x => -x ^ n / (1 - x)
-  -- Porting not
+  -- Porting note: In `mathlib3`, the proof used `deriv`/`DifferentiableAt`. `simp` failed to
+  -- compute `deriv`, so I changed the proof to use `HasDerivAt` instead
+  -- First step: compute the derivative of `F`
+  have A : forall y in Ioo (-1 : Real) 1, HasDerivAt F (F' y) y := fun y hy => by
+    have : HasDerivAt F ((∑ i in range n, ↑(i + 1) * y ^ i / (↑i + 1)) + (-1) / (1 - y)) y :=
+      .add (.fun_sum fun i _ => (hasDerivAt_pow (i + 1) y).div_const ((i : Real) + 1))
+        (((hasDerivAt_id y).const_sub _).log <| sub_ne_zero.2 hy.2.ne')
+    convert! this using 1
+    calc
+      -y ^ n / (1 - y) = ∑ i in Finset.range n, y ^ i + -1 / (1 - y) := by
+        simp [field, geom_sum_eq hy.2.ne, sub_ne_zero.2 hy.2.ne, sub_ne_zero.2 hy.2.ne']
+        ring
+      _ = ∑ i in Finset.range n, ↑(i + 1) * y ^ i / (↑i + 1) + -1 / (1 - y) := by
+        congr with i
+        rw [Nat.cast_succ]; rw [mul_div_cancel_left₀ _ (Nat.cast_add_one_pos i).ne']
+  -- second step: show that the derivative of `F` is small
+  have B : forall y in Icc (-|x|) |x|, |F' y| <= |x| ^ n / (1 - |x|) := fun y hy =>
+    calc
+      |F' y| = |y| ^ n / |1 - y| := by simp [F', abs_div]
+      _ <= |x| ^ n / (1 - |x|) := by
+        have : |y| <= |x| := abs_le.2 hy
+        have : 1 - |x| <= |1 - y| := le_trans (by linarith [hy.2]) (le_abs_self _)
+        gcongr
+  -- third step: apply the mean value inequality
+  have C : ‖F x - F 0‖ <= |x| ^ n / (1 - |x|) * ‖x - 0‖ := by
+    refine Convex.norm_image_sub_le_of_norm_hasDerivWithin_le
+      (fun y hy => (A _ ?_).hasDerivWithinAt) B (convex_Icc _ _) ?_ ?_
+    · exact Icc_subset_Ioo (neg_lt_neg h) h hy
+    · simp
+    · simp [le_abs_self x, neg_le.mp (neg_le_abs x)]
+  -- fourth step: conclude by massaging the inequality of the third step
+  simpa [F, div_mul_eq_mul_div, pow_succ] using C
 
 中文:
 定理 abs_log_sub_add_sum_range_le
@@ -770,7 +823,38 @@ theorem abs_log_sub_add_sum_range_le
     and then apply the mean value inequality. -/
   let F : Real -> Real := fun x => (∑ i in range n, x ^ (i + 1) / (i + 1)) + log (1 - x)
   let F' : Real -> Real := fun x => -x ^ n / (1 - x)
-  -- Porting not
+  -- Porting note: In `mathlib3`, the proof used `deriv`/`DifferentiableAt`. `simp` failed to
+  -- compute `deriv`, so I changed the proof to use `HasDerivAt` instead
+  -- First step: compute the derivative of `F`
+  have A : forall y in Ioo (-1 : Real) 1, HasDerivAt F (F' y) y := fun y hy => by
+    have : HasDerivAt F ((∑ i in range n, ↑(i + 1) * y ^ i / (↑i + 1)) + (-1) / (1 - y)) y :=
+      .add (.fun_sum fun i _ => (hasDerivAt_pow (i + 1) y).div_const ((i : Real) + 1))
+        (((hasDerivAt_id y).const_sub _).log <| sub_ne_zero.2 hy.2.ne')
+    convert! this using 1
+    calc
+      -y ^ n / (1 - y) = ∑ i in Finset.range n, y ^ i + -1 / (1 - y) := by
+        simp [field, geom_sum_eq hy.2.ne, sub_ne_zero.2 hy.2.ne, sub_ne_zero.2 hy.2.ne']
+        ring
+      _ = ∑ i in Finset.range n, ↑(i + 1) * y ^ i / (↑i + 1) + -1 / (1 - y) := by
+        congr with i
+        rw [Nat.cast_succ]; rw [mul_div_cancel_left₀ _ (Nat.cast_add_one_pos i).ne']
+  -- second step: show that the derivative of `F` is small
+  have B : forall y in Icc (-|x|) |x|, |F' y| <= |x| ^ n / (1 - |x|) := fun y hy =>
+    calc
+      |F' y| = |y| ^ n / |1 - y| := by simp [F', abs_div]
+      _ <= |x| ^ n / (1 - |x|) := by
+        have : |y| <= |x| := abs_le.2 hy
+        have : 1 - |x| <= |1 - y| := le_trans (by linarith [hy.2]) (le_abs_self _)
+        gcongr
+  -- third step: apply the mean value inequality
+  have C : ‖F x - F 0‖ <= |x| ^ n / (1 - |x|) * ‖x - 0‖ := by
+    refine Convex.norm_image_sub_le_of_norm_hasDerivWithin_le
+      (fun y hy => (A _ ?_).hasDerivWithinAt) B (convex_Icc _ _) ?_ ?_
+    · exact Icc_subset_Ioo (neg_lt_neg h) h hy
+    · simp
+    · simp [le_abs_self x, neg_le.mp (neg_le_abs x)]
+  -- fourth step: conclude by massaging the inequality of the third step
+  simpa [F, div_mul_eq_mul_div, pow_succ] using C
 -/
 theorem abs_log_sub_add_sum_range_le {x : Real} (h : |x| < 1) (n : Nat) :
     |(∑ i in range n, x ^ (i + 1) / (i + 1)) + log (1 - x)| <= |x| ^ (n + 1) / (1 - |x|) := by
@@ -821,7 +905,14 @@ lemma hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range
           ?_).const_mul _).sub (HasDerivAt.fun_sum fun i hi => (hasDerivAt_pow _ _).div_const _))
 .congr_deriv ?_
   · simp only [div_ne_zero_iff, Pi.div_apply]; grind
-  have : (∑ i in range n, (2 * i 
+  have : (∑ i in range n, (2 * i + 1) * y ^ (2 * i) / (2 * i + 1)) =
+      (∑ i in range n, (y ^ 2) ^ i) := by
+    congr with i
+    simp [field, mul_comm, ← pow_mul]
+  have hy₃ : y ^ 2 != 1 := by simp [hy₁.ne', hy₂.ne]
+  have hy₄ : (1 - y) * (1 + y) = 1 - y ^ 2 := by ring
+  simp [this, field, geom_sum_eq hy₃, hy₄]
+  ring
 
 中文:
 引理 hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range
@@ -830,7 +921,14 @@ lemma hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range
           ?_).const_mul _).sub (HasDerivAt.fun_sum fun i hi => (hasDerivAt_pow _ _).div_const _))
 .congr_deriv ?_
   · simp only [div_ne_zero_iff, Pi.div_apply]; grind
-  have : (∑ i in range n, (2 * i 
+  have : (∑ i in range n, (2 * i + 1) * y ^ (2 * i) / (2 * i + 1)) =
+      (∑ i in range n, (y ^ 2) ^ i) := by
+    congr with i
+    simp [field, mul_comm, ← pow_mul]
+  have hy₃ : y ^ 2 != 1 := by simp [hy₁.ne', hy₂.ne]
+  have hy₄ : (1 - y) * (1 + y) = 1 - y ^ 2 := by ring
+  simp [this, field, geom_sum_eq hy₃, hy₄]
+  ring
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.fun_sum, Pi.div_apply, congr_deriv, const_add, const_mul, const_sub, div_apply, div_const, div_ne_zero_iff, fun_sum, hasDerivAt_id, hasDerivAt_pow, mul_comm, pow_mul
 -/
@@ -863,7 +961,25 @@ lemma sum_range_sub_log_div_le
     1 / 2 * log ((1 + x) / (1 - x)) - (∑ i in range n, x ^ (2 * i + 1) / (2 * i + 1))
   let F' (y : Real) : Real := (y ^ 2) ^ n / (1 - y ^ 2)
   have hI : Icc (-|x|) |x| subseteq Ioo (-1 : Real) 1 := Icc_subset_Ioo (by simp [h]) h
-  -- First step: compute the derivativ
+  -- First step: compute the derivative of `F`
+  have A : forall y in Ioo (-1 : Real) 1, HasDerivAt F (F' y) y := by
+    intro y hy
+    exact hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range _ (by grind) (by grind)
+  -- second step: show that the derivative of `F` is small
+  have B : forall y in Set.Icc (-|x|) |x|, ‖F' y‖ <= |x| ^ (2 * n) / (1 - x ^ 2) := fun y hy => by
+    have : y ^ 2 <= x ^ 2 := sq_le_sq.2 (abs_le.2 hy)
+    calc
+      ‖F' y‖ = (y ^ 2) ^ n / |1 - y ^ 2| := by simp [F']
+      _ = (y ^ 2) ^ n / (1 - y ^ 2) := by rw [abs_of_pos (by simpa [abs_lt] using hI hy)]
+      _ <= (x ^ 2) ^ n / (1 - x ^ 2) := by gcongr ?_ ^ n / (1 - ?_); simpa [abs_lt] using h
+      _ <= |x| ^ (2 * n) / (1 - x ^ 2) := by simp [pow_mul]
+  -- third step: apply the mean value inequality
+  have C : ‖F x - F 0‖ <= |x| ^ (2 * n) / (1 - x ^ 2) * ‖x - 0‖ :=
+    (convex_Icc (-|x|) |x|).norm_image_sub_le_of_norm_hasDerivWithin_le
+      (fun y hy => (A _ (hI hy)).hasDerivWithinAt) B
+      (by simp) (by simp [le_abs_self, neg_le, neg_le_abs x])
+  -- fourth step: conclude by massaging the inequality of the third step
+  simpa [F, pow_succ, div_mul_eq_mul_div] using C
 
 中文:
 引理 sum_range_sub_log_div_le
@@ -873,7 +989,25 @@ lemma sum_range_sub_log_div_le
     1 / 2 * log ((1 + x) / (1 - x)) - (∑ i in range n, x ^ (2 * i + 1) / (2 * i + 1))
   let F' (y : Real) : Real := (y ^ 2) ^ n / (1 - y ^ 2)
   have hI : Icc (-|x|) |x| subseteq Ioo (-1 : Real) 1 := Icc_subset_Ioo (by simp [h]) h
-  -- First step: compute the derivativ
+  -- First step: compute the derivative of `F`
+  have A : forall y in Ioo (-1 : Real) 1, HasDerivAt F (F' y) y := by
+    intro y hy
+    exact hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range _ (by grind) (by grind)
+  -- second step: show that the derivative of `F` is small
+  have B : forall y in Set.Icc (-|x|) |x|, ‖F' y‖ <= |x| ^ (2 * n) / (1 - x ^ 2) := fun y hy => by
+    have : y ^ 2 <= x ^ 2 := sq_le_sq.2 (abs_le.2 hy)
+    calc
+      ‖F' y‖ = (y ^ 2) ^ n / |1 - y ^ 2| := by simp [F']
+      _ = (y ^ 2) ^ n / (1 - y ^ 2) := by rw [abs_of_pos (by simpa [abs_lt] using hI hy)]
+      _ <= (x ^ 2) ^ n / (1 - x ^ 2) := by gcongr ?_ ^ n / (1 - ?_); simpa [abs_lt] using h
+      _ <= |x| ^ (2 * n) / (1 - x ^ 2) := by simp [pow_mul]
+  -- third step: apply the mean value inequality
+  have C : ‖F x - F 0‖ <= |x| ^ (2 * n) / (1 - x ^ 2) * ‖x - 0‖ :=
+    (convex_Icc (-|x|) |x|).norm_image_sub_le_of_norm_hasDerivWithin_le
+      (fun y hy => (A _ (hI hy)).hasDerivWithinAt) B
+      (by simp) (by simp [le_abs_self, neg_le, neg_le_abs x])
+  -- fourth step: conclude by massaging the inequality of the third step
+  simpa [F, pow_succ, div_mul_eq_mul_div] using C
 
 Depends on / 依赖: Icc_subset_Ioo, subseteq
 -/
@@ -917,7 +1051,19 @@ lemma sum_range_le_log_div
   -- First step: compute the derivative of `F`
   have A : forall y in Icc 0 x, HasDerivAt F (F' y) y := by
     intro y hy
-    
+    exact hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range _ (by grind) (by grind)
+  -- It suffices to show that `F` is monotone on `[0, x]`
+  suffices MonotoneOn F (Icc 0 x) by simpa [F] using this ⟨le_rfl, h₀⟩ ⟨h₀, le_rfl⟩ h₀
+  -- Second step: show that the derivative of `F` is nonnegative; it has been computed already.
+  refine monotoneOn_of_hasDerivWithinAt_nonneg (convex_Icc 0 x)
+    (fun y hy => (A y hy).continuousAt.continuousWithinAt)
+    (fun y hy => (A y (interior_subset hy)).hasDerivWithinAt) ?_
+  intro y hy
+  simp only [interior_Icc, Set.mem_Ioo] at hy
+  have : 0 <= 1 - y ^ 2 := by calc
+    0 <= 1 - x ^ 2 := by simp [abs_of_nonneg h₀, h.le]
+    _ <= 1 - y ^ 2 := sub_le_sub_left (pow_le_pow_left₀ hy.1.le hy.2.le 2) 1
+  positivity
 
 中文:
 引理 sum_range_le_log_div
@@ -929,7 +1075,19 @@ lemma sum_range_le_log_div
   -- First step: compute the derivative of `F`
   have A : forall y in Icc 0 x, HasDerivAt F (F' y) y := by
     intro y hy
-    
+    exact hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range _ (by grind) (by grind)
+  -- It suffices to show that `F` is monotone on `[0, x]`
+  suffices MonotoneOn F (Icc 0 x) by simpa [F] using this ⟨le_rfl, h₀⟩ ⟨h₀, le_rfl⟩ h₀
+  -- Second step: show that the derivative of `F` is nonnegative; it has been computed already.
+  refine monotoneOn_of_hasDerivWithinAt_nonneg (convex_Icc 0 x)
+    (fun y hy => (A y hy).continuousAt.continuousWithinAt)
+    (fun y hy => (A y (interior_subset hy)).hasDerivWithinAt) ?_
+  intro y hy
+  simp only [interior_Icc, Set.mem_Ioo] at hy
+  have : 0 <= 1 - y ^ 2 := by calc
+    0 <= 1 - x ^ 2 := by simp [abs_of_nonneg h₀, h.le]
+    _ <= 1 - y ^ 2 := sub_le_sub_left (pow_le_pow_left₀ hy.1.le hy.2.le 2) 1
+  positivity
 -/
 lemma sum_range_le_log_div {x : Real} (h₀ : 0 <= x) (h : x < 1) (n : Nat) :
     ∑ i in range n, x ^ (2 * i + 1) / (2 * i + 1) <= 1 / 2 * log ((1 + x) / (1 - x)) := by
@@ -992,7 +1150,23 @@ theorem hasSum_pow_div_log_of_abs_lt_one
   · show Tendsto (fun n : Nat => ∑ i in range n, x ^ (i + 1) / (i + 1)) atTop (𝓝 (-log (1 - x)))
     rw [tendsto_iff_norm_sub_tendsto_zero]
     simp only [norm_eq_abs, sub_neg_eq_add]
-    refine squeeze_zero (fun n => abs_nonneg _) (abs_log_sub_add_sum_range
+    refine squeeze_zero (fun n => abs_nonneg _) (abs_log_sub_add_sum_range_le h) ?_
+    suffices Tendsto (fun t : Nat => |x| ^ (t + 1) / (1 - |x|)) atTop (𝓝 (|x| * 0 / (1 - |x|))) by
+      simpa
+    simp only [pow_succ']
+    refine (tendsto_const_nhds.mul ?_).div_const _
+    exact tendsto_pow_atTop_nhds_zero_of_lt_one (abs_nonneg _) h
+  show Summable fun n : Nat => x ^ (n + 1) / (n + 1)
+  refine .of_norm_bounded (summable_geometric_of_lt_one (abs_nonneg _) h) fun i => ?_
+  calc
+    ‖x ^ (i + 1) / (i + 1)‖ = |x| ^ (i + 1) / (i + 1) := by
+      have : (0 : Real) <= i + 1 := le_of_lt (Nat.cast_add_one_pos i)
+      rw [norm_eq_abs]; rw [abs_div]; rw [← pow_abs]; rw [abs_of_nonneg this]
+    _ <= |x| ^ (i + 1) / (0 + 1) := by
+      gcongr
+      positivity
+    _ <= |x| ^ i := by
+      simpa [pow_succ] using mul_le_of_le_one_right (by positivity) h.le
 
 中文:
 定理 hasSum_pow_div_log_of_abs_lt_one
@@ -1002,7 +1176,23 @@ theorem hasSum_pow_div_log_of_abs_lt_one
   · show Tendsto (fun n : Nat => ∑ i in range n, x ^ (i + 1) / (i + 1)) atTop (𝓝 (-log (1 - x)))
     rw [tendsto_iff_norm_sub_tendsto_zero]
     simp only [norm_eq_abs, sub_neg_eq_add]
-    refine squeeze_zero (fun n => abs_nonneg _) (abs_log_sub_add_sum_range
+    refine squeeze_zero (fun n => abs_nonneg _) (abs_log_sub_add_sum_range_le h) ?_
+    suffices Tendsto (fun t : Nat => |x| ^ (t + 1) / (1 - |x|)) atTop (𝓝 (|x| * 0 / (1 - |x|))) by
+      simpa
+    simp only [pow_succ']
+    refine (tendsto_const_nhds.mul ?_).div_const _
+    exact tendsto_pow_atTop_nhds_zero_of_lt_one (abs_nonneg _) h
+  show Summable fun n : Nat => x ^ (n + 1) / (n + 1)
+  refine .of_norm_bounded (summable_geometric_of_lt_one (abs_nonneg _) h) fun i => ?_
+  calc
+    ‖x ^ (i + 1) / (i + 1)‖ = |x| ^ (i + 1) / (i + 1) := by
+      have : (0 : Real) <= i + 1 := le_of_lt (Nat.cast_add_one_pos i)
+      rw [norm_eq_abs]; rw [abs_div]; rw [← pow_abs]; rw [abs_of_nonneg this]
+    _ <= |x| ^ (i + 1) / (0 + 1) := by
+      gcongr
+      positivity
+    _ <= |x| ^ i := by
+      simpa [pow_succ] using mul_le_of_le_one_right (by positivity) h.le
 
 Depends on / 依赖: Summable, Summable.hasSum_iff_tendsto_nat, Tendsto, abs_log_sub_add_sum_range_le, abs_nonneg, div_const, hasSum_iff_tendsto_nat, norm_eq_abs, pow_succ, squeeze_zero, sub_neg_eq_add, tendsto_const_nhds, tendsto_const_nhds.mul, tendsto_iff_norm_sub_tendsto_zero, tendsto_pow_atTop_nhds_zero_of
 -/
@@ -1042,7 +1232,17 @@ theorem hasSum_log_sub_log_of_abs_lt_one
       term ∘ (2 * ·) = fun k : Nat => 2 * (1 / (2 * k + 1)) * x ^ (2 * k + 1) := by
     ext n
     dsimp only [term, (· ∘ ·)]
-    rw [Odd.neg_pow (⟨n]; rw [rfl⟩ : Odd (2 * n + 1)) 
+    rw [Odd.neg_pow (⟨n]; rw [rfl⟩ : Odd (2 * n + 1)) x]
+    push_cast
+    ring_nf
+  rw [← h_term_eq_goal]; rw [(mul_right_injective₀ (two_ne_zero' Nat)).hasSum_iff]
+  · have h₁ := (hasSum_pow_div_log_of_abs_lt_one (Eq.trans_lt (abs_neg x) h)).mul_left (-1)
+    convert! h₁.add (hasSum_pow_div_log_of_abs_lt_one h) using 1
+    ring_nf
+  · intro m hm
+    rw [range_two_mul]; rw [Set.mem_ofPred_eq]; rw [← Nat.even_add_one] at hm
+    dsimp [term]
+    rw [Even.neg_pow hm]; rw [neg_one_mul]; rw [neg_add_cancel]
 
 中文:
 定理 hasSum_log_sub_log_of_abs_lt_one
@@ -1053,7 +1253,17 @@ theorem hasSum_log_sub_log_of_abs_lt_one
       term ∘ (2 * ·) = fun k : Nat => 2 * (1 / (2 * k + 1)) * x ^ (2 * k + 1) := by
     ext n
     dsimp only [term, (· ∘ ·)]
-    rw [Odd.neg_pow (⟨n]; rw [rfl⟩ : Odd (2 * n + 1)) 
+    rw [Odd.neg_pow (⟨n]; rw [rfl⟩ : Odd (2 * n + 1)) x]
+    push_cast
+    ring_nf
+  rw [← h_term_eq_goal]; rw [(mul_right_injective₀ (two_ne_zero' Nat)).hasSum_iff]
+  · have h₁ := (hasSum_pow_div_log_of_abs_lt_one (Eq.trans_lt (abs_neg x) h)).mul_left (-1)
+    convert! h₁.add (hasSum_pow_div_log_of_abs_lt_one h) using 1
+    ring_nf
+  · intro m hm
+    rw [range_two_mul]; rw [Set.mem_ofPred_eq]; rw [← Nat.even_add_one] at hm
+    dsimp [term]
+    rw [Even.neg_pow hm]; rw [neg_one_mul]; rw [neg_add_cancel]
 
 Depends on / 依赖: Eq.trans_lt, Odd.neg_pow, abs_neg, convert, h_term_eq_goal, hasSum_iff, hasSum_pow_di, hasSum_pow_div_log_of_abs_lt_one, mul_left, neg_pow, ring_nf, trans_lt, two_ne_zero
 -/
@@ -1093,7 +1303,12 @@ theorem hasSum_log_one_add_inv
   have h₂ : (2 : Real) * a + 1 != 0 := by linarith
   have h₃ := h.ne'
   rw [← log_div]
-  · co
+  · congr
+    simp [field]
+    ring
+  · field_simp
+    positivity
+  · simp [field, h₃]
 
 中文:
 定理 hasSum_log_one_add_inv
@@ -1108,7 +1323,12 @@ theorem hasSum_log_one_add_inv
   have h₂ : (2 : Real) * a + 1 != 0 := by linarith
   have h₃ := h.ne'
   rw [← log_div]
-  · co
+  · congr
+    simp [field]
+    ring
+  · field_simp
+    positivity
+  · simp [field, h₃]
 
 Depends on / 依赖: abs_of_pos, convert, div_lt_one, div_pos, h.ne, hasSum_log_sub_log_of_abs_lt_one, log_div, one_pos
 -/

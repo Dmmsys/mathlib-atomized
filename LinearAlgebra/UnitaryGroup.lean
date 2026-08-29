@@ -165,7 +165,15 @@ theorem kronecker_mem_unitary
   simp_rw [Unitary.mem_iff, star_eq_conjTranspose, conjTranspose_kronecker']
   constructor <;> ext <;> simp only [mul_apply, submatrix_apply, kroneckerMap_apply, Prod.fst_swap,
     conjTranspose_apply, ← star_apply, Prod.snd_swap, ← mul_assoc]
-  · simp_rw [mul_assoc _ (star U₁ _ _), ← Finset.univ
+  · simp_rw [mul_assoc _ (star U₁ _ _), ← Finset.univ_product_univ, Finset.sum_product]
+    rw [Finset.sum_comm]
+    simp_rw [← Finset.sum_mul, ← Finset.mul_sum, ← Matrix.mul_apply, hU₁.1, Matrix.one_apply,
+      mul_boole, ite_mul, zero_mul, Finset.sum_ite_irrel, ← Matrix.mul_apply, hU₂.1,
+      Matrix.one_apply, Finset.sum_const_zero, ← ite_and, Prod.eq_iff_fst_eq_snd_eq]
+  · simp_rw [mul_assoc _ _ (star U₂ _ _), ← Finset.univ_product_univ, Finset.sum_product,
+      ← Finset.sum_mul, ← Finset.mul_sum, ← Matrix.mul_apply, hU₂.2, Matrix.one_apply, mul_boole,
+      ite_mul, zero_mul, Finset.sum_ite_irrel, ← Matrix.mul_apply, hU₁.2, Matrix.one_apply,
+      Finset.sum_const_zero, ← ite_and, and_comm, Prod.eq_iff_fst_eq_snd_eq]
 
 中文:
 定理 kronecker_mem_unitary
@@ -174,7 +182,15 @@ theorem kronecker_mem_unitary
   simp_rw [Unitary.mem_iff, star_eq_conjTranspose, conjTranspose_kronecker']
   constructor <;> ext <;> simp only [mul_apply, submatrix_apply, kroneckerMap_apply, Prod.fst_swap,
     conjTranspose_apply, ← star_apply, Prod.snd_swap, ← mul_assoc]
-  · simp_rw [mul_assoc _ (star U₁ _ _), ← Finset.univ
+  · simp_rw [mul_assoc _ (star U₁ _ _), ← Finset.univ_product_univ, Finset.sum_product]
+    rw [Finset.sum_comm]
+    simp_rw [← Finset.sum_mul, ← Finset.mul_sum, ← Matrix.mul_apply, hU₁.1, Matrix.one_apply,
+      mul_boole, ite_mul, zero_mul, Finset.sum_ite_irrel, ← Matrix.mul_apply, hU₂.1,
+      Matrix.one_apply, Finset.sum_const_zero, ← ite_and, Prod.eq_iff_fst_eq_snd_eq]
+  · simp_rw [mul_assoc _ _ (star U₂ _ _), ← Finset.univ_product_univ, Finset.sum_product,
+      ← Finset.sum_mul, ← Finset.mul_sum, ← Matrix.mul_apply, hU₂.2, Matrix.one_apply, mul_boole,
+      ite_mul, zero_mul, Finset.sum_ite_irrel, ← Matrix.mul_apply, hU₁.2, Matrix.one_apply,
+      Finset.sum_const_zero, ← ite_and, and_comm, Prod.eq_iff_fst_eq_snd_eq]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_comm, Finset.sum_ite_irrel, Finset.sum_mul, Finset.sum_product, Finset.univ_product_univ, Matrix, Matrix.mul, Matrix.mul_apply, Matrix.one_apply, Prod.fst_swap, Prod.snd_swap, Unitary, Unitary.mem_iff, conjTranspose_apply, conjTranspose_kronecker, fst_swap, ite_mul, kroneckerMap_apply
 -/
@@ -549,7 +565,8 @@ definition toLinearEquiv
         _ = x := by rw [inv_mul_cancel, toLin'_one, id_apply]
     right_inv := fun x =>
       calc
-        (toLin' A).comp (toLi
+        (toLin' A).comp (toLin' A⁻¹) x = toLin' (A * A⁻¹) x := by rw [← toLin'_mul]
+        _ = x := by rw [mul_inv_cancel, toLin'_one, id_apply] }
 
 中文:
 定义 toLinearEquiv
@@ -562,7 +579,8 @@ definition toLinearEquiv
         _ = x := by rw [inv_mul_cancel, toLin'_one, id_apply]
     right_inv := fun x =>
       calc
-        (toLin' A).comp (toLi
+        (toLin' A).comp (toLin' A⁻¹) x = toLin' (A * A⁻¹) x := by rw [← toLin'_mul]
+        _ = x := by rw [mul_inv_cancel, toLin'_one, id_apply] }
 
 Depends on / 依赖: Matrix, Matrix.toLin, _mul, _one, id_apply, invFun, inv_mul_cancel, left_inv, mul_inv_cancel, right_inv
 -/

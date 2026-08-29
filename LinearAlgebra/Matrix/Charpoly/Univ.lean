@@ -222,7 +222,17 @@ lemma optionEquivLeft_symm_univ_isHomogeneous
   have aux : Fintype.card n = 0 + ∑ i : n, 1 := by
     simp only [zero_add, Finset.sum_const, smul_eq_mul, mul_one, Fintype.card]
   simp only [aux, univ, charpoly, charmatrix, scalar_apply, RingHom.mapMatrix_apply, det_apply',
-    sub_apply, map_apply, of_apply, map_sum, map_mul, map_intCast, map
+    sub_apply, map_apply, of_apply, map_sum, map_mul, map_intCast, map_prod, map_sub,
+    optionEquivLeft_symm_apply, Polynomial.aevalTower_C, rename_X, diagonal, mvPolynomialX]
+  apply IsHomogeneous.sum
+  rintro i -
+  apply IsHomogeneous.mul
+  · apply isHomogeneous_C
+  · apply IsHomogeneous.prod
+    rintro j -
+    by_cases h : i j = j
+    · simp only [h, ↓reduceIte, Polynomial.aevalTower_X, IsHomogeneous.sub, isHomogeneous_X]
+    · simp only [h, ↓reduceIte, map_zero, zero_sub, (isHomogeneous_X _ _).neg]
 
 中文:
 引理 optionEquivLeft_symm_univ_isHomogeneous
@@ -230,7 +240,17 @@ lemma optionEquivLeft_symm_univ_isHomogeneous
   have aux : Fintype.card n = 0 + ∑ i : n, 1 := by
     simp only [zero_add, Finset.sum_const, smul_eq_mul, mul_one, Fintype.card]
   simp only [aux, univ, charpoly, charmatrix, scalar_apply, RingHom.mapMatrix_apply, det_apply',
-    sub_apply, map_apply, of_apply, map_sum, map_mul, map_intCast, map
+    sub_apply, map_apply, of_apply, map_sum, map_mul, map_intCast, map_prod, map_sub,
+    optionEquivLeft_symm_apply, Polynomial.aevalTower_C, rename_X, diagonal, mvPolynomialX]
+  apply IsHomogeneous.sum
+  rintro i -
+  apply IsHomogeneous.mul
+  · apply isHomogeneous_C
+  · apply IsHomogeneous.prod
+    rintro j -
+    by_cases h : i j = j
+    · simp only [h, ↓reduceIte, Polynomial.aevalTower_X, IsHomogeneous.sub, isHomogeneous_X]
+    · simp only [h, ↓reduceIte, map_zero, zero_sub, (isHomogeneous_X _ _).neg]
 
 Depends on / 依赖: Finset, Finset.sum_const, Fintype, Fintype.card, IsHomogeneous, IsHomogeneous.mul, IsHomogeneous.pro, IsHomogeneous.sum, Polynomial, Polynomial.aevalTower_C, RingHom, RingHom.mapMatrix_apply, aevalTower_C, charmatrix, charpoly, det_apply, diagonal, isHomogeneous_C, mapMatrix_apply, map_apply
 -/

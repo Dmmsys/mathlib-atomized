@@ -1111,7 +1111,12 @@ definition SpecToEquivOfField
   left_inv := Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField K X
   right_inv f := by
     rw [SpecToEquivOfField_eq_iff]
-    simp only [CommRingCat.coe_of, Scheme.Hom.comp
+    simp only [CommRingCat.coe_of, Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply,
+      Scheme.fromSpecResidueField_apply, exists_true_left]
+    rw [← Spec.map_inj]; rw [Spec.map_comp]; rw [← cancel_mono (X.fromSpecResidueField _)]
+    grind [Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField,
+      Scheme.fromSpecResidueField_apply,
+      Scheme.residueFieldCongr_fromSpecResidueField]
 
 中文:
 定义 SpecToEquivOfField
@@ -1121,7 +1126,12 @@ definition SpecToEquivOfField
   left_inv := Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField K X
   right_inv f := by
     rw [SpecToEquivOfField_eq_iff]
-    simp only [CommRingCat.coe_of, Scheme.Hom.comp
+    simp only [CommRingCat.coe_of, Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply,
+      Scheme.fromSpecResidueField_apply, exists_true_left]
+    rw [← Spec.map_inj]; rw [Spec.map_comp]; rw [← cancel_mono (X.fromSpecResidueField _)]
+    grind [Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField,
+      Scheme.fromSpecResidueField_apply,
+      Scheme.residueFieldCongr_fromSpecResidueField]
 
 Depends on / 依赖: CommRingCat, CommRingCat.coe_of, Function, Function.comp_apply, Scheme, Scheme.Hom.comp_base, Scheme.descResidueFiel, Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField, Scheme.fromSpecResidueField_apply, Scheme.stalkClosedPointTo, Spec.map, Spec.map_comp, Spec.map_inj, SpecToEquivOfField_eq_iff, TopCat, TopCat.coe_comp, X.descResidueField, X.fromSpecResidueField, cancel_mono, coe_comp
 -/

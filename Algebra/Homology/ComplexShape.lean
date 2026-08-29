@@ -233,7 +233,9 @@ definition trans
     obtain ⟨k, w₁, w₂⟩ := w
     obtain ⟨k', w₁', w₂'⟩ := w'
     rw [c₂.prev_eq w₂ w₂'] at w₁
-    exact c₁.pre
+    exact c₁.prev_eq w₁ w₁'
+
+@[to_dual]
 
 中文:
 定义 trans
@@ -248,7 +250,9 @@ definition trans
     obtain ⟨k, w₁, w₂⟩ := w
     obtain ⟨k', w₁', w₂'⟩ := w'
     rw [c₂.prev_eq w₂ w₂'] at w₁
-    exact c₁.pre
+    exact c₁.prev_eq w₁ w₁'
+
+@[to_dual]
 
 Depends on / 依赖: Relation, Relation.Comp, infer_instance
 -/

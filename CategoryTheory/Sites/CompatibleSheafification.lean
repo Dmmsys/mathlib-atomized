@@ -247,7 +247,9 @@ theorem whiskerRight_toSheafify_sheafifyCompIso_hom
   simp only [toSheafify, sheafify, whiskerRight_comp, Category.assoc]
   slice_lhs 2 3 => rw [plusCompIso_whiskerRight]
   rw [Category.assoc]; rw [← J.plusMap_comp]; rw [whiskerRight_toPlus_comp_plusCompIso_hom]; rw [←
-    Category.assoc]; rw [whiskerRight_toPlus_comp_plu
+    Category.assoc]; rw [whiskerRight_toPlus_comp_plusCompIso_hom]
+
+@[simp, reassoc]
 
 中文:
 定理 whiskerRight_toSheafify_sheafifyCompIso_hom
@@ -256,7 +258,9 @@ theorem whiskerRight_toSheafify_sheafifyCompIso_hom
   simp only [toSheafify, sheafify, whiskerRight_comp, Category.assoc]
   slice_lhs 2 3 => rw [plusCompIso_whiskerRight]
   rw [Category.assoc]; rw [← J.plusMap_comp]; rw [whiskerRight_toPlus_comp_plusCompIso_hom]; rw [←
-    Category.assoc]; rw [whiskerRight_toPlus_comp_plu
+    Category.assoc]; rw [whiskerRight_toPlus_comp_plusCompIso_hom]
+
+@[simp, reassoc]
 
 Depends on / 依赖: Category, Category.assoc, J.plusMap_comp, plusCompIso_whiskerRight, plusMap_comp, sheafify, sheafifyCompIso, slice_lhs, toSheafify, whiskerRight_comp, whiskerRight_toPlus_comp_plusCompIso_hom
 -/

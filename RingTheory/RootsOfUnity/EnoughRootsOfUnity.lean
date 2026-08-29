@@ -120,7 +120,9 @@ instance finite_rootsOfUnity
   have hg' : g ^ n = 1 := OneMemClass.coe_eq_one.mp g.prop
   let f (j : ZMod n) : rootsOfUnity n M := g ^ (j.val : Int)
   refine Finite.of_surjective f fun x => ?_
-obtain ⟨k, hk⟩ := Subgroup.
+obtain ⟨k, hk⟩ := Subgroup.mem_zpowers_iff.mp hg x
+  refine ⟨k, ?_⟩
+  simpa only [ZMod.natCast_val, ← hk, f, ZMod.coe_intCast] using (zpow_eq_zpow_emod' k hg').symm
 
 中文:
 实例 finite_rootsOfUnity
@@ -131,7 +133,9 @@ obtain ⟨k, hk⟩ := Subgroup.
   have hg' : g ^ n = 1 := OneMemClass.coe_eq_one.mp g.prop
   let f (j : ZMod n) : rootsOfUnity n M := g ^ (j.val : Int)
   refine Finite.of_surjective f fun x => ?_
-obtain ⟨k, hk⟩ := Subgroup.
+obtain ⟨k, hk⟩ := Subgroup.mem_zpowers_iff.mp hg x
+  refine ⟨k, ?_⟩
+  simpa only [ZMod.natCast_val, ← hk, f, ZMod.coe_intCast] using (zpow_eq_zpow_emod' k hg').symm
 
 Depends on / 依赖: Finite, Finite.of_surjective, IsCyclic, IsCyclic.exists_generator, OneMemClass, OneMemClass.coe_eq_one.mp, Subgroup, Subgroup.mem_zpowers_iff.mp, ZMod.coe_intCast, ZMod.natCast_val, coe_eq_one, coe_intCast, exists_generator, g.prop, j.val, mem_zpowers_iff, natCast_val, of_surjective, rootsOfUnity, rootsOfUnity_isCyclic
 -/
@@ -160,7 +164,11 @@ lemma natCard_rootsOfUnity
   · exact Monoid.exponent_dvd_of_forall_pow_eq_one fun g => OneMemClass.coe_eq_one.mp g.prop
   · nth_rewrite 1 [h.eq_orderOf]
     rw [← (h.isUnit NeZero.out).unit_spec]; rw [orderOf_units]
- 
+    let ζ' : rootsOfUnity n M := ⟨(h.isUnit NeZero.out).unit, ?_⟩
+    · rw [← Subgroup.orderOf_mk]
+      exact Monoid.order_dvd_exponent ζ'
+    simp only [mem_rootsOfUnity]
+    rw [← Units.val_inj]; rw [Units.val_pow_eq_pow_val]; rw [IsUnit.unit_spec]; rw [h.pow_eq_one]; rw [Units.val_one]
 
 中文:
 引理 natCard_rootsOfUnity
@@ -172,7 +180,11 @@ lemma natCard_rootsOfUnity
   · exact Monoid.exponent_dvd_of_forall_pow_eq_one fun g => OneMemClass.coe_eq_one.mp g.prop
   · nth_rewrite 1 [h.eq_orderOf]
     rw [← (h.isUnit NeZero.out).unit_spec]; rw [orderOf_units]
- 
+    let ζ' : rootsOfUnity n M := ⟨(h.isUnit NeZero.out).unit, ?_⟩
+    · rw [← Subgroup.orderOf_mk]
+      exact Monoid.order_dvd_exponent ζ'
+    simp only [mem_rootsOfUnity]
+    rw [← Units.val_inj]; rw [Units.val_pow_eq_pow_val]; rw [IsUnit.unit_spec]; rw [h.pow_eq_one]; rw [Units.val_one]
 
 Depends on / 依赖: IsCyclic, IsCyclic.exponent_eq_card, Monoid, Monoid.exponent_dvd_of_forall_pow_eq_one, Monoid.order_dvd_exponent, NeZero, NeZero.out, OneMemClass, OneMemClass.coe_eq_one.mp, Subgroup, Subgroup.orderOf_mk, Units.val_inj, Units.val_pow_eq_pow_val, coe_eq_one, dvd_antisymm, eq_orderOf, exists_primitiveRoot, exponent_dvd_of_forall_pow_eq_one, exponent_eq_card, g.prop
 -/
@@ -227,7 +239,7 @@ lemma MulEquiv.hasEnoughRootsOfUnity
     rw [IsPrimitiveRoot.coe_units_iff]; rw [IsPrimitiveRoot.coe_submonoidClass_iff]
     refine .map_of_injective ?_ e.injective
     rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, ← IsPrimitiveRoot.coe_units_iff]
-  cyc := isCyclic
+  cyc := isCyclic_of_surjective e e.surjective
 
 中文:
 引理 乘法等价.hasEnoughRootsOfUnity
@@ -238,7 +250,7 @@ lemma MulEquiv.hasEnoughRootsOfUnity
     rw [IsPrimitiveRoot.coe_units_iff]; rw [IsPrimitiveRoot.coe_submonoidClass_iff]
     refine .map_of_injective ?_ e.injective
     rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, ← IsPrimitiveRoot.coe_units_iff]
-  cyc := isCyclic
+  cyc := isCyclic_of_surjective e e.surjective
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff, IsPrimitiveRoot.coe_units_iff, coe_submonoidClass_iff, coe_units_iff, e.injective, e.surjective, hm.prim, hm.toRootsOfUnity, injective, isCyclic_of_surjective, map_of_injective, surjective, toRootsOfUnity, val.val
 -/

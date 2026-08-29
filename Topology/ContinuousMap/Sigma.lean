@@ -56,7 +56,9 @@ theorem isEmbedding_sigmaMk_comp
       ⟨_, (isOpen_sigma_fst_preimage {i}).preimage (continuous_eval_const x), fun _ => Iff.rfl⟩⟩
   injective := by
     rintro ⟨i, g⟩ ⟨i', g'⟩ h
-    obtain ⟨rfl, hg⟩ :
+    obtain ⟨rfl, hg⟩ : i = i' ∧ ⇑g ≍ ⇑g' :=
+Function.eq_of_sigmaMk_comp congr_arg DFunLike.coe h
+    simpa using hg
 
 中文:
 定理 isEmbedding_sigmaMk_comp
@@ -67,7 +69,9 @@ theorem isEmbedding_sigmaMk_comp
       ⟨_, (isOpen_sigma_fst_preimage {i}).preimage (continuous_eval_const x), fun _ => Iff.rfl⟩⟩
   injective := by
     rintro ⟨i, g⟩ ⟨i', g'⟩ h
-    obtain ⟨rfl, hg⟩ :
+    obtain ⟨rfl, hg⟩ : i = i' ∧ ⇑g ≍ ⇑g' :=
+Function.eq_of_sigmaMk_comp congr_arg DFunLike.coe h
+    simpa using hg
 
 Depends on / 依赖: inducing_sigma
 -/

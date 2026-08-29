@@ -207,7 +207,17 @@ theorem seminormFromConst_seq_antitone
   rw [pow_add]; rw [← mul_assoc]
   have hc_pos : 0 < f c := lt_of_le_of_ne (apply_nonneg f _) hc.symm
   apply le_trans ((div_le_div_iff_of_pos_right (pow_pos hc_pos _)).mpr (map_mul_le_mul f _ _))
-  cases hmn
+  cases hmn.eq_or_lt with
+  | inl heq =>
+    have hnm : n - m = 0 := by rw [heq, Nat.sub_self n]
+    rw [hnm]; rw [heq]; rw [div_le_div_iff_of_pos_right (pow_pos hc_pos _)]; rw [pow_zero]
+    conv_rhs => rw [← mul_one (f (x * c ^ n))]
+    gcongr
+  | inr hlt =>
+    have h1 : 1 <= n - m := by
+      rw [Nat.one_le_iff_ne_zero]
+      exact Nat.sub_ne_zero_of_lt hlt
+    rw [hpm c h1]; rw [mul_div_assoc]; rw [div_eq_mul_inv]; rw [pow_sub₀ _ hc hmn]; rw [mul_assoc]; rw [mul_comm (f c ^ m)⁻¹]; rw [← mul_assoc (f c ^ n)]; rw [mul_inv_cancel₀ (pow_ne_zero n hc)]; rw [one_mul]; rw [div_eq_mul_inv]
 
 中文:
 定理 seminormFromConst_seq_antitone
@@ -220,7 +230,17 @@ theorem seminormFromConst_seq_antitone
   rw [pow_add]; rw [← mul_assoc]
   have hc_pos : 0 < f c := lt_of_le_of_ne (apply_nonneg f _) hc.symm
   apply le_trans ((div_le_div_iff_of_pos_right (pow_pos hc_pos _)).mpr (map_mul_le_mul f _ _))
-  cases hmn
+  cases hmn.eq_or_lt with
+  | inl heq =>
+    have hnm : n - m = 0 := by rw [heq, Nat.sub_self n]
+    rw [hnm]; rw [heq]; rw [div_le_div_iff_of_pos_right (pow_pos hc_pos _)]; rw [pow_zero]
+    conv_rhs => rw [← mul_one (f (x * c ^ n))]
+    gcongr
+  | inr hlt =>
+    have h1 : 1 <= n - m := by
+      rw [Nat.one_le_iff_ne_zero]
+      exact Nat.sub_ne_zero_of_lt hlt
+    rw [hpm c h1]; rw [mul_div_assoc]; rw [div_eq_mul_inv]; rw [pow_sub₀ _ hc hmn]; rw [mul_assoc]; rw [mul_comm (f c ^ m)⁻¹]; rw [← mul_assoc (f c ^ n)]; rw [mul_inv_cancel₀ (pow_ne_zero n hc)]; rw [one_mul]; rw [div_eq_mul_inv]
 
 Depends on / 依赖: Nat.add_sub_of_le, Nat.sub_self, add_sub_of_le, apply_nonneg, conv_rhs, div_le_div_iff_of_pos_right, eq_or_lt, hc.symm, hc_pos, hmn.eq_or_lt, le_trans, lt_of_le_of_ne, map_mul_le_mul, mul_assoc, mul_one, nth_rw, pow_add, pow_pos, pow_zero, seminormFromConst_seq
 -/
@@ -332,7 +352,32 @@ definition seminormFromConst
   map_zero' := tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm 0)
     (by simpa [seminormFromConst_seq_zero c (map_zero _)] using! tendsto_const_nhds)
   add_le' x y := by
-apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x + y
+apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x + y))
+      (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).add
+        (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y)
+    intro n
+    have h_add : f ((x + y) * c ^ n) <= f (x * c ^ n) + f (y * c ^ n) := by
+      simp only [add_mul, map_add_le_add f _ _]
+    simp only [seminormFromConst_seq, ← add_div]
+    gcongr
+  neg' x := by
+    apply tendsto_nhds_unique_of_eventuallyEq (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (-x))
+      (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x)
+    simp only [EventuallyEq, eventually_atTop]
+    use 0
+    simp only [seminormFromConst_seq, neg_mul, map_neg_eq_map, zero_le, implies_true]
+  mul_le' x y := by
+    have hlim : Tendsto (fun n => seminormFromConst_seq c f (x * y) (2 * n)) atTop
+        (𝓝 (seminormFromConst' c f (x * y))) := by
+      apply (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x * y)).comp
+        (tendsto_atTop_atTop_of_monotone (fun _ _ hnm => by
+          simp only [mul_le_mul_iff_right₀, Nat.succ_pos', hnm]) _)
+      · rintro n; use n; lia
+    refine le_of_tendsto_of_tendsto' hlim ((tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).mul
+      (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y)) (fun n => ?_)
+    simp only [seminormFromConst_seq]
+    rw [div_mul_div_comm]; rw [← pow_add]; rw [two_mul]; rw [div_le_div_iff_of_pos_right (pow_pos (lt_of_le_of_ne (apply_nonneg f _) hc.symm) _)]; rw [pow_add]; rw [← mul_assoc]; rw [mul_comm (x * y)]; rw [← mul_assoc]; rw [mul_assoc]; rw [mul_comm (c ^ n)]
+    exact map_mul_le_mul f (x * c ^ n) (y * c ^ n)
 
 中文:
 定义 seminormFromConst
@@ -341,7 +386,32 @@ apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm 
   map_zero' := tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm 0)
     (by simpa [seminormFromConst_seq_zero c (map_zero _)] using! tendsto_const_nhds)
   add_le' x y := by
-apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x + y
+apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x + y))
+      (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).add
+        (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y)
+    intro n
+    have h_add : f ((x + y) * c ^ n) <= f (x * c ^ n) + f (y * c ^ n) := by
+      simp only [add_mul, map_add_le_add f _ _]
+    simp only [seminormFromConst_seq, ← add_div]
+    gcongr
+  neg' x := by
+    apply tendsto_nhds_unique_of_eventuallyEq (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (-x))
+      (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x)
+    simp only [EventuallyEq, eventually_atTop]
+    use 0
+    simp only [seminormFromConst_seq, neg_mul, map_neg_eq_map, zero_le, implies_true]
+  mul_le' x y := by
+    have hlim : Tendsto (fun n => seminormFromConst_seq c f (x * y) (2 * n)) atTop
+        (𝓝 (seminormFromConst' c f (x * y))) := by
+      apply (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x * y)).comp
+        (tendsto_atTop_atTop_of_monotone (fun _ _ hnm => by
+          simp only [mul_le_mul_iff_right₀, Nat.succ_pos', hnm]) _)
+      · rintro n; use n; lia
+    refine le_of_tendsto_of_tendsto' hlim ((tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).mul
+      (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y)) (fun n => ?_)
+    simp only [seminormFromConst_seq]
+    rw [div_mul_div_comm]; rw [← pow_add]; rw [two_mul]; rw [div_le_div_iff_of_pos_right (pow_pos (lt_of_le_of_ne (apply_nonneg f _) hc.symm) _)]; rw [pow_add]; rw [← mul_assoc]; rw [mul_comm (x * y)]; rw [← mul_assoc]; rw [mul_assoc]; rw [mul_comm (c ^ n)]
+    exact map_mul_le_mul f (x * c ^ n) (y * c ^ n)
 
 Depends on / 依赖: seminormFromConst
 -/
@@ -423,7 +493,11 @@ apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm 
     (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).max
       (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y)
   intro n
-  have hmax : f ((x + y) * c ^ n) <= max (f (x * c ^ n)) (f (y * c ^ n)
+  have hmax : f ((x + y) * c ^ n) <= max (f (x * c ^ n)) (f (y * c ^ n)) := by
+    simp only [add_mul, hna _ _]
+  rw [le_max_iff] at hmax ⊢
+  unfold seminormFromConst_seq
+  apply hmax.imp <;> intro <;> gcongr
 
 中文:
 定理 seminormFromConst_isNonarchimedean
@@ -433,7 +507,11 @@ apply le_of_tendsto_of_tendsto' (tendsto_seminormFromConst_seq_atTop hf1 hc hpm 
     (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).max
       (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y)
   intro n
-  have hmax : f ((x + y) * c ^ n) <= max (f (x * c ^ n)) (f (y * c ^ n)
+  have hmax : f ((x + y) * c ^ n) <= max (f (x * c ^ n)) (f (y * c ^ n)) := by
+    simp only [add_mul, hna _ _]
+  rw [le_max_iff] at hmax ⊢
+  unfold seminormFromConst_seq
+  apply hmax.imp <;> intro <;> gcongr
 
 Depends on / 依赖: add_mul, hmax.imp, le_max_iff, le_of_tendsto_of_tendsto, seminormFromConst_seq, tendsto_seminormFromConst_seq_atTop
 -/
@@ -460,7 +538,12 @@ theorem seminormFromConst_isPowMul
   have hlim : Tendsto (fun n => seminormFromConst_seq c f (x ^ m) (m * n)) atTop
       (𝓝 (seminormFromConst' c f (x ^ m))) := by
     apply (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x ^ m)).comp
-      (tendsto_atTop_atTop_of_monotone (fun _ _ 
+      (tendsto_atTop_atTop_of_monotone (fun _ _ hnk => mul_le_mul_right hnk m) _)
+    rintro n; use n; exact le_mul_of_one_le_left' hm
+  apply tendsto_nhds_unique hlim
+  convert! (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).pow m using 1
+  ext n
+  simp only [seminormFromConst_seq, div_pow, ← hpm _ hm, ← pow_mul, mul_pow, mul_comm m n]
 
 中文:
 定理 seminormFromConst_isPowMul
@@ -470,7 +553,12 @@ theorem seminormFromConst_isPowMul
   have hlim : Tendsto (fun n => seminormFromConst_seq c f (x ^ m) (m * n)) atTop
       (𝓝 (seminormFromConst' c f (x ^ m))) := by
     apply (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x ^ m)).comp
-      (tendsto_atTop_atTop_of_monotone (fun _ _ 
+      (tendsto_atTop_atTop_of_monotone (fun _ _ hnk => mul_le_mul_right hnk m) _)
+    rintro n; use n; exact le_mul_of_one_le_left' hm
+  apply tendsto_nhds_unique hlim
+  convert! (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).pow m using 1
+  ext n
+  simp only [seminormFromConst_seq, div_pow, ← hpm _ hm, ← pow_mul, mul_pow, mul_comm m n]
 
 Depends on / 依赖: Tendsto, convert, le_mul_of_one_le_left, mul_le_mul_right, seminormFromCon, seminormFromConst, seminormFromConst_seq, tendsto_atTop_atTop_of_monotone, tendsto_nhds_unique, tendsto_seminormFromConst_seq_atTop
 -/
@@ -534,7 +622,11 @@ theorem seminormFromConst_apply_of_isMul
       ext n
       by_cases hn : n = 0
       · simp only [seminormFromConst_seq, hn, pow_zero, mul_one, div_one]
-      · simp only [seminormFromConst_seq, hx (c ^ 
+      · simp only [seminormFromConst_seq, hx (c ^ n), hpm _ (Nat.one_le_iff_ne_zero.mpr hn),
+          mul_div_assoc, div_self (pow_ne_zero n hc), mul_one]
+    rw [hseq]
+    exact tendsto_const_nhds
+  tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x) hlim
 
 中文:
 定理 seminormFromConst_apply_of_isMul
@@ -544,7 +636,11 @@ theorem seminormFromConst_apply_of_isMul
       ext n
       by_cases hn : n = 0
       · simp only [seminormFromConst_seq, hn, pow_zero, mul_one, div_one]
-      · simp only [seminormFromConst_seq, hx (c ^ 
+      · simp only [seminormFromConst_seq, hx (c ^ n), hpm _ (Nat.one_le_iff_ne_zero.mpr hn),
+          mul_div_assoc, div_self (pow_ne_zero n hc), mul_one]
+    rw [hseq]
+    exact tendsto_const_nhds
+  tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x) hlim
 
 Depends on / 依赖: Nat.one_le_iff_ne_zero.mpr, Tendsto, div_one, div_self, mul_div_assoc, mul_one, one_le_iff_ne_zero, pow_ne_zero, pow_zero, seminormFromConst_seq, tendsto_const_nhds, tendsto_nhds_unique, tendsto_seminormFromConst_seq_atTop
 -/
@@ -572,7 +668,10 @@ theorem seminormFromConst_isMul_of_isMul
     rw [seminormFromConst_apply_of_isMul hf1 hc hpm hx]
     have hseq : seminormFromConst_seq c f (x * y) =
         fun n => f x * seminormFromConst_seq c f y n := by
- 
+      ext n
+      simp only [seminormFromConst_seq, mul_assoc, hx, mul_div_assoc]
+    simpa [hseq] using (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y).const_mul _
+  tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x * y)) hlim
 
 中文:
 定理 seminormFromConst_isMul_of_isMul
@@ -582,7 +681,10 @@ theorem seminormFromConst_isMul_of_isMul
     rw [seminormFromConst_apply_of_isMul hf1 hc hpm hx]
     have hseq : seminormFromConst_seq c f (x * y) =
         fun n => f x * seminormFromConst_seq c f y n := by
- 
+      ext n
+      simp only [seminormFromConst_seq, mul_assoc, hx, mul_div_assoc]
+    simpa [hseq] using (tendsto_seminormFromConst_seq_atTop hf1 hc hpm y).const_mul _
+  tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (x * y)) hlim
 
 Depends on / 依赖: Tendsto, const_mul, mul_assoc, mul_div_assoc, seminormFromConst, seminormFromConst_apply_of_isMul, seminormFromConst_seq, tendsto_nhds_unique, tendsto_seminormFromConst_seq_atTop
 -/
@@ -609,7 +711,10 @@ theorem seminormFromConst_apply_c
     have hseq : seminormFromConst_seq c f c = fun _n => f c := by
       ext n
       simp only [seminormFromConst_seq]
-      rw [mul_comm]; rw [← pow_succ]; rw [hpm _ le_add_self]; rw [pow_succ]; rw [mul_comm]; rw [mul_div_assoc]
+      rw [mul_comm]; rw [← pow_succ]; rw [hpm _ le_add_self]; rw [pow_succ]; rw [mul_comm]; rw [mul_div_assoc]; rw [div_self (pow_ne_zero n hc)]; rw [mul_one]
+    rw [hseq]
+    exact tendsto_const_nhds
+  tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm c) hlim
 
 中文:
 定理 seminormFromConst_apply_c
@@ -618,7 +723,10 @@ theorem seminormFromConst_apply_c
     have hseq : seminormFromConst_seq c f c = fun _n => f c := by
       ext n
       simp only [seminormFromConst_seq]
-      rw [mul_comm]; rw [← pow_succ]; rw [hpm _ le_add_self]; rw [pow_succ]; rw [mul_comm]; rw [mul_div_assoc]
+      rw [mul_comm]; rw [← pow_succ]; rw [hpm _ le_add_self]; rw [pow_succ]; rw [mul_comm]; rw [mul_div_assoc]; rw [div_self (pow_ne_zero n hc)]; rw [mul_one]
+    rw [hseq]
+    exact tendsto_const_nhds
+  tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm c) hlim
 
 Depends on / 依赖: Tendsto, div_self, le_add_self, mul_comm, mul_div_assoc, mul_one, pow_ne_zero, pow_succ, seminormFromConst_seq, tendsto_const_nhds, tendsto_nhds_unique, tendsto_seminormFromConst_seq_atTop
 -/
@@ -644,7 +752,15 @@ theorem seminormFromConst_const_mul
     apply (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).comp
       (tendsto_atTop_atTop_of_monotone add_left_mono _)
     rintro n; use n; lia
-  rw [seminormFromConst_apply_c 
+  rw [seminormFromConst_apply_c hf1 hc hpm]
+  apply tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (c * x))
+  have hterm : seminormFromConst_seq c f (c * x) =
+      fun n => f c * seminormFromConst_seq c f x (n + 1) := by
+    simp only [seminormFromConst_seq_def]
+    ext n
+    ring_nf
+    rw [mul_assoc _ (f c)]; rw [mul_inv_cancel₀ hc]; rw [mul_one]
+  simpa [hterm] using tendsto_const_nhds.mul hlim
 
 中文:
 定理 seminormFromConst_const_mul
@@ -655,7 +771,15 @@ theorem seminormFromConst_const_mul
     apply (tendsto_seminormFromConst_seq_atTop hf1 hc hpm x).comp
       (tendsto_atTop_atTop_of_monotone add_left_mono _)
     rintro n; use n; lia
-  rw [seminormFromConst_apply_c 
+  rw [seminormFromConst_apply_c hf1 hc hpm]
+  apply tendsto_nhds_unique (tendsto_seminormFromConst_seq_atTop hf1 hc hpm (c * x))
+  have hterm : seminormFromConst_seq c f (c * x) =
+      fun n => f c * seminormFromConst_seq c f x (n + 1) := by
+    simp only [seminormFromConst_seq_def]
+    ext n
+    ring_nf
+    rw [mul_assoc _ (f c)]; rw [mul_inv_cancel₀ hc]; rw [mul_one]
+  simpa [hterm] using tendsto_const_nhds.mul hlim
 
 Depends on / 依赖: Tendsto, add_left_mono, seminormFrom, seminormFromConst, seminormFromConst_apply_c, seminormFromConst_seq, tendsto_atTop_atTop_of_monotone, tendsto_nhds_unique, tendsto_seminormFromConst_seq_atTop
 -/

@@ -161,7 +161,8 @@ lemma isCoatom_comap_of_surjective
   · intro K hK
     specialize hM (K.map φ)
     rw [← comap_lt_comap_of_surjective hφ]; rw [← (comap_injective hφ).eq_iff] at hM
-    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le)]; r
+    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le)]; rw [comap_top] at hM
+    exact hM hK
 
 中文:
 引理 isCoatom_comap_of_surjective
@@ -171,7 +172,8 @@ lemma isCoatom_comap_of_surjective
   · intro K hK
     specialize hM (K.map φ)
     rw [← comap_lt_comap_of_surjective hφ]; rw [← (comap_injective hφ).eq_iff] at hM
-    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le)]; r
+    rw [comap_map_eq_self ((M.ker_le_comap φ).trans hK.le)]; rw [comap_top] at hM
+    exact hM hK
 
 Depends on / 依赖: And.imp, K.map, M.ker_le_comap, comap_injective, comap_lt_comap_of_surjective, comap_map_eq_self, comap_top, eq_iff, hK.le, ker_le_comap, ne_iff, specialize
 -/

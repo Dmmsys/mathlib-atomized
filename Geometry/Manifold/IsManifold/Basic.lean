@@ -255,7 +255,9 @@ definition ModelWithCorners.ofTargetUniv
     let := h.rclike 𝕜
     let := NormedSpace.restrictScalars Real 𝕜 E
     exact convex_univ
-  nonempt
+  nonempty_interior' := by
+    have : range φ = φ.target := by rw [← φ.image_source_eq_target, hsource, image_univ.symm]
+    simp [this, htarget]
 
 中文:
 定义 带角模型.ofTargetUniv
@@ -269,7 +271,9 @@ definition ModelWithCorners.ofTargetUniv
     let := h.rclike 𝕜
     let := NormedSpace.restrictScalars Real 𝕜 E
     exact convex_univ
-  nonempt
+  nonempty_interior' := by
+    have : range φ = φ.target := by rw [← φ.image_source_eq_target, hsource, image_univ.symm]
+    simp [this, htarget]
 -/
 def ModelWithCorners.ofTargetUniv (𝕜 : Type*) [NontriviallyNormedField 𝕜]
     {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] {H : Type*} [TopologicalSpace H]
@@ -715,7 +719,8 @@ lemma _root_.Convex.convex_isRCLikeNormedField
   simp only [Convex, StarConvex] at hs ⊢
   intro u hu v hv a b ha hb hab
   convert! hs hu hv ha hb hab using 2
-  · rw [← @algebraMap_smul (R := Real) (A :
+  · rw [← @algebraMap_smul (R := Real) (A := 𝕜), ← @algebraMap_smul (R := Real) (A := 𝕜)]
+  · rw [← @algebraMap_smul (R := Real) (A := 𝕜), ← @algebraMap_smul (R := Real) (A := 𝕜)]
 
 中文:
 引理 _root_.凸.convex_isRCLikeNormedField
@@ -728,7 +733,8 @@ lemma _root_.Convex.convex_isRCLikeNormedField
   simp only [Convex, StarConvex] at hs ⊢
   intro u hu v hv a b ha hb hab
   convert! hs hu hv ha hb hab using 2
-  · rw [← @algebraMap_smul (R := Real) (A :
+  · rw [← @algebraMap_smul (R := Real) (A := 𝕜), ← @algebraMap_smul (R := Real) (A := 𝕜)]
+  · rw [← @algebraMap_smul (R := Real) (A := 𝕜), ← @algebraMap_smul (R := Real) (A := 𝕜)]
 
 Depends on / 依赖: h.rclike, rclike
 -/
@@ -757,7 +763,8 @@ definition ofConvexRange
     simp only [instIsRCLikeNormedField, ↓reduceDIte, this]
     exact htarget.convex_isRCLikeNormedField
   nonempty_interior' := by
-    have : range φ = φ.targe
+    have : range φ = φ.target := by rw [← φ.image_source_eq_target, hsource, image_univ.symm]
+    simp [this, hint]
 
 中文:
 定义 ofConvexRange
@@ -768,7 +775,8 @@ definition ofConvexRange
     simp only [instIsRCLikeNormedField, ↓reduceDIte, this]
     exact htarget.convex_isRCLikeNormedField
   nonempty_interior' := by
-    have : range φ = φ.targe
+    have : range φ = φ.target := by rw [← φ.image_source_eq_target, hsource, image_univ.symm]
+    simp [this, hint]
 -/
 def ofConvexRange
     {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] {H : Type*} [TopologicalSpace H]
@@ -800,7 +808,11 @@ theorem convex_range
     simp only [Convex, StarConvex] at W ⊢
     intro u hu v hv a b ha hb hab
     convert! W hu hv ha hb hab using 2
-    · rw [← @algebraMap_smul
+    · rw [← @algebraMap_smul (R := Real) (A := 𝕜)]
+      rfl
+    · rw [← @algebraMap_smul (R := Real) (A := 𝕜)]
+      rfl
+  · simp [range_eq_univ_of_not_isRCLikeNormedField I h, convex_univ]
 
 中文:
 定理 convex_range
@@ -814,7 +826,11 @@ theorem convex_range
     simp only [Convex, StarConvex] at W ⊢
     intro u hu v hv a b ha hb hab
     convert! W hu hv ha hb hab using 2
-    · rw [← @algebraMap_smul
+    · rw [← @algebraMap_smul (R := Real) (A := 𝕜)]
+      rfl
+    · rw [← @algebraMap_smul (R := Real) (A := 𝕜)]
+      rfl
+  · simp [range_eq_univ_of_not_isRCLikeNormedField I h, convex_univ]
 
 Depends on / 依赖: Convex, I.convex_range, IsRCLikeNormedField, RCLike, StarConvex, algebraMap_smul, convert, convex_range, convex_univ, h.rclike, range_eq_univ_of_not_isRCLikeNormedField, rclike, reduceDIte, toPartialEquiv_coe
 -/
@@ -879,7 +895,9 @@ theorem range_subset_closure_interior
     · apply subset_closure
     · apply I.convex_range
     · apply I.nonempty_interior
-  · simp [range_eq_univ_of_
+  · simp [range_eq_univ_of_not_isRCLikeNormedField I h]
+
+@[simp, mfld_simps]
 
 中文:
 定理 range_subset_closure_interior
@@ -892,7 +910,9 @@ theorem range_subset_closure_interior
     · apply subset_closure
     · apply I.convex_range
     · apply I.nonempty_interior
-  · simp [range_eq_univ_of_
+  · simp [range_eq_univ_of_not_isRCLikeNormedField I h]
+
+@[simp, mfld_simps]
 
 Depends on / 依赖: Convex, Convex.closure_interior_eq_closure_of_nonempty_interior, I.convex_range, I.nonempty_interior, IsRCLikeNormedField, NormedSpace, NormedSpace.restrictScalars, closure_interior_eq_closure_of_nonempty_interior, convex_range, h.rclike, nonempty_interior, range_eq_univ_of_not_isRCLikeNormedField, rclike, restrictScalars, subset_closure
 -/
@@ -1300,7 +1320,7 @@ theorem symm_continuousWithinAt_comp_right_iff
     simp_rw [preimage_inter, preimage_preimage, I.left_inv, preimage_id', preimage_range,
       inter_univ] at this
     rwa [Function.comp_assoc, I.symm_comp_self] at this
-  · rw [← I.left_inv x] at 
+  · rw [← I.left_inv x] at h; exact h.comp I.continuousWithinAt_symm inter_subset_left
 
 中文:
 定理 symm_continuousWithinAt_comp_right_iff
@@ -1311,7 +1331,7 @@ theorem symm_continuousWithinAt_comp_right_iff
     simp_rw [preimage_inter, preimage_preimage, I.left_inv, preimage_id', preimage_range,
       inter_univ] at this
     rwa [Function.comp_assoc, I.symm_comp_self] at this
-  · rw [← I.left_inv x] at 
+  · rw [← I.left_inv x] at h; exact h.comp I.continuousWithinAt_symm inter_subset_left
 
 Depends on / 依赖: Function, Function.comp_assoc, I.continuousWithinAt, I.continuousWithinAt_symm, I.left_inv, I.symm_comp_self, comp_assoc, continuousWithinAt, continuousWithinAt_symm, h.comp, inter_subset_left, inter_univ, left_inv, mapsTo_preimage, preimage_id, preimage_inter, preimage_preimage, preimage_range, simp_rw, symm_comp_self
 -/
@@ -1338,7 +1358,7 @@ theorem locallyCompactSpace
     exact ((compact_basis_nhds (I x)).inf_principal _).map _
   refine .of_hasBasis this ?_
   rintro x s ⟨-, hsc⟩
-  exact (hs
+  exact (hsc.inter_right I.isClosed_range).image I.continuous_symm
 
 中文:
 定理 locallyCompactSpace
@@ -1350,7 +1370,7 @@ theorem locallyCompactSpace
     exact ((compact_basis_nhds (I x)).inf_principal _).map _
   refine .of_hasBasis this ?_
   rintro x s ⟨-, hsc⟩
-  exact (hs
+  exact (hsc.inter_right I.isClosed_range).image I.continuous_symm
 -/
 protected theorem locallyCompactSpace [LocallyCompactSpace E] (I : ModelWithCorners 𝕜 E H) :
     LocallyCompactSpace H := by
@@ -1501,7 +1521,18 @@ definition ModelWithCorners.prod
     source := { x | x.1 in I.source ∧ x.2 in I'.source }
     source_eq := by simp only [ofPred_true, mfld_simps]
     convex_range' := by
-      have : range (fun (x : 
+      have : range (fun (x : ModelProd H H') => (I x.1, I' x.2)) = range (Prod.map I I') := rfl
+      rw [this]; rw [Set.range_prodMap]
+      split_ifs with h
+      · let := h.rclike
+        let := NormedSpace.restrictScalars Real 𝕜 E; let := NormedSpace.restrictScalars Real 𝕜 E'
+        exact I.convex_range.prod I'.convex_range
+      · simp [range_eq_univ_of_not_isRCLikeNormedField, h]
+    nonempty_interior' := by
+      have : range (fun (x : ModelProd H H') => (I x.1, I' x.2)) = range (Prod.map I I') := rfl
+      simp [this, interior_prod_eq, nonempty_interior]
+    continuous_toFun := I.continuous_toFun.prodMap I'.continuous_toFun
+    continuous_invFun := I.continuous_invFun.prodMap I'.continuous_invFun }
 
 中文:
 定义 带角模型.乘积
@@ -1512,7 +1543,18 @@ definition ModelWithCorners.prod
     source := { x | x.1 in I.source ∧ x.2 in I'.source }
     source_eq := by simp only [ofPred_true, mfld_simps]
     convex_range' := by
-      have : range (fun (x : 
+      have : range (fun (x : ModelProd H H') => (I x.1, I' x.2)) = range (Prod.map I I') := rfl
+      rw [this]; rw [Set.range_prodMap]
+      split_ifs with h
+      · let := h.rclike
+        let := NormedSpace.restrictScalars Real 𝕜 E; let := NormedSpace.restrictScalars Real 𝕜 E'
+        exact I.convex_range.prod I'.convex_range
+      · simp [range_eq_univ_of_not_isRCLikeNormedField, h]
+    nonempty_interior' := by
+      have : range (fun (x : ModelProd H H') => (I x.1, I' x.2)) = range (Prod.map I I') := rfl
+      simp [this, interior_prod_eq, nonempty_interior]
+    continuous_toFun := I.continuous_toFun.prodMap I'.continuous_toFun
+    continuous_invFun := I.continuous_invFun.prodMap I'.continuous_invFun }
 
 Depends on / 依赖: I.source, I.symm, I.toPartialEquiv.prod, ModelProd, NormedSpace, NormedSpace.restrictScalars, Prod.map, Set.range_prodMap, convex_range, h.rclike, invFun, mfld_simps, ofPred_true, range_prodMap, rclike, restrictScalars, source, source_eq, split_ifs, toPartialEquiv
 -/
@@ -1553,7 +1595,13 @@ definition ModelWithCorners.pi
     split_ifs with h
     · let := h.rclike
       let := fun i => NormedSpace.restrictScalars Real 𝕜 (E i)
-      exact convex_pi f
+      exact convex_pi fun i _hi => (I i).convex_range
+    · simp [range_eq_univ_of_not_isRCLikeNormedField, h]
+  nonempty_interior' := by
+    rw [PartialEquiv.pi_apply]; rw [Set.range_piMap]
+    simp [interior_pi_set finite_univ, univ_pi_nonempty_iff, nonempty_interior]
+  continuous_toFun := continuous_pi fun i => (I i).continuous.comp (continuous_apply i)
+  continuous_invFun := continuous_pi fun i => (I i).continuous_symm.comp (continuous_apply i)
 
 中文:
 定义 带角模型.pi
@@ -1565,7 +1613,13 @@ definition ModelWithCorners.pi
     split_ifs with h
     · let := h.rclike
       let := fun i => NormedSpace.restrictScalars Real 𝕜 (E i)
-      exact convex_pi f
+      exact convex_pi fun i _hi => (I i).convex_range
+    · simp [range_eq_univ_of_not_isRCLikeNormedField, h]
+  nonempty_interior' := by
+    rw [PartialEquiv.pi_apply]; rw [Set.range_piMap]
+    simp [interior_pi_set finite_univ, univ_pi_nonempty_iff, nonempty_interior]
+  continuous_toFun := continuous_pi fun i => (I i).continuous.comp (continuous_apply i)
+  continuous_invFun := continuous_pi fun i => (I i).continuous_symm.comp (continuous_apply i)
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.pi, toPartialEquiv
 -/
@@ -1852,7 +1906,34 @@ definition contDiffPregroupoid
     simp only [this]
     refine hg.comp (hf.mono fun x ⟨hx1, hx2⟩ => ⟨hx1.1, hx2⟩) ?_
     rintro x ⟨hx1, _⟩
-    simp o
+    simp only [mfld_simps] at hx1 ⊢
+    exact hx1.2
+  id_mem := by
+    apply ContDiffOn.congr contDiff_id.contDiffOn
+    rintro x ⟨_, hx2⟩
+    rcases mem_range.1 hx2 with ⟨y, hy⟩
+    rw [← hy]
+    simp only [mfld_simps]
+  locality {f u} _ H := by
+    apply contDiffOn_of_locally_contDiffOn
+    rintro y ⟨hy1, hy2⟩
+    rcases mem_range.1 hy2 with ⟨x, hx⟩
+    rw [← hx] at hy1 ⊢
+    simp only [mfld_simps] at hy1 ⊢
+    rcases H x hy1 with ⟨v, v_open, xv, hv⟩
+    have : I.symm ⁻¹' (u inter v) inter range I = I.symm ⁻¹' u inter range I inter I.symm ⁻¹' v := by
+      rw [preimage_inter]; rw [inter_assoc]; rw [inter_assoc]
+      congr 1
+      rw [inter_comm]
+    rw [this] at hv
+    exact ⟨I.symm ⁻¹' v, v_open.preimage I.continuous_symm, by simpa, hv⟩
+  congr {f g u} _ fg hf := by
+    apply hf.congr
+    rintro y ⟨hy1, hy2⟩
+    rcases mem_range.1 hy2 with ⟨x, hx⟩
+    rw [← hx] at hy1 ⊢
+    simp only [mfld_simps] at hy1 ⊢
+    rw [fg _ hy1]
 
 中文:
 定义 contDiffPregroupoid
@@ -1863,7 +1944,34 @@ definition contDiffPregroupoid
     simp only [this]
     refine hg.comp (hf.mono fun x ⟨hx1, hx2⟩ => ⟨hx1.1, hx2⟩) ?_
     rintro x ⟨hx1, _⟩
-    simp o
+    simp only [mfld_simps] at hx1 ⊢
+    exact hx1.2
+  id_mem := by
+    apply ContDiffOn.congr contDiff_id.contDiffOn
+    rintro x ⟨_, hx2⟩
+    rcases mem_range.1 hx2 with ⟨y, hy⟩
+    rw [← hy]
+    simp only [mfld_simps]
+  locality {f u} _ H := by
+    apply contDiffOn_of_locally_contDiffOn
+    rintro y ⟨hy1, hy2⟩
+    rcases mem_range.1 hy2 with ⟨x, hx⟩
+    rw [← hx] at hy1 ⊢
+    simp only [mfld_simps] at hy1 ⊢
+    rcases H x hy1 with ⟨v, v_open, xv, hv⟩
+    have : I.symm ⁻¹' (u inter v) inter range I = I.symm ⁻¹' u inter range I inter I.symm ⁻¹' v := by
+      rw [preimage_inter]; rw [inter_assoc]; rw [inter_assoc]
+      congr 1
+      rw [inter_comm]
+    rw [this] at hv
+    exact ⟨I.symm ⁻¹' v, v_open.preimage I.continuous_symm, by simpa, hv⟩
+  congr {f g u} _ fg hf := by
+    apply hf.congr
+    rintro y ⟨hy1, hy2⟩
+    rcases mem_range.1 hy2 with ⟨x, hx⟩
+    rw [← hx] at hy1 ⊢
+    simp only [mfld_simps] at hy1 ⊢
+    rw [fg _ hy1]
 
 Depends on / 依赖: ContDiffOn, I.symm
 -/
@@ -1966,7 +2074,12 @@ theorem contDiffGroupoid_zero_eq
   -- by unfolding its definition
   change u in contDiffGroupoid 0 I
   rw [contDiffGroupoid]; rw [mem_groupoid_of_pregroupoid]; rw [contDiffPregroupoid]
-  simp only
+  simp only [contDiffOn_zero]
+  constructor
+  · refine I.continuous.comp_continuousOn (u.continuousOn.comp I.continuousOn_symm ?_)
+    exact (mapsTo_preimage _ _).mono_left inter_subset_left
+  · refine I.continuous.comp_continuousOn (u.symm.continuousOn.comp I.continuousOn_symm ?_)
+    exact (mapsTo_preimage _ _).mono_left inter_subset_left
 
 中文:
 定理 contDiffGroupoid_zero_eq
@@ -1978,7 +2091,12 @@ theorem contDiffGroupoid_zero_eq
   -- by unfolding its definition
   change u in contDiffGroupoid 0 I
   rw [contDiffGroupoid]; rw [mem_groupoid_of_pregroupoid]; rw [contDiffPregroupoid]
-  simp only
+  simp only [contDiffOn_zero]
+  constructor
+  · refine I.continuous.comp_continuousOn (u.continuousOn.comp I.continuousOn_symm ?_)
+    exact (mapsTo_preimage _ _).mono_left inter_subset_left
+  · refine I.continuous.comp_continuousOn (u.symm.continuousOn.comp I.continuousOn_symm ?_)
+    exact (mapsTo_preimage _ _).mono_left inter_subset_left
 
 Depends on / 依赖: le_antisymm, le_top
 -/
@@ -2077,7 +2195,7 @@ theorem ofSet_mem_contDiffGroupoid
   suffices h : ContDiffOn 𝕜 n (I ∘ I.symm) (I.symm ⁻¹' s inter range I) by
     simp [h, contDiffPregroupoid]
   have : ContDiffOn 𝕜 n id (univ : Set E) := contDiff_id.contDiffOn
-  exact this.congr_mono (fun x hx => I.right_inv hx.2) (subset
+  exact this.congr_mono (fun x hx => I.right_inv hx.2) (subset_univ _)
 
 中文:
 定理 ofSet_mem_contDiffGroupoid
@@ -2087,7 +2205,7 @@ theorem ofSet_mem_contDiffGroupoid
   suffices h : ContDiffOn 𝕜 n (I ∘ I.symm) (I.symm ⁻¹' s inter range I) by
     simp [h, contDiffPregroupoid]
   have : ContDiffOn 𝕜 n id (univ : Set E) := contDiff_id.contDiffOn
-  exact this.congr_mono (fun x hx => I.right_inv hx.2) (subset
+  exact this.congr_mono (fun x hx => I.right_inv hx.2) (subset_univ _)
 
 Depends on / 依赖: ContDiffOn, I.right_inv, I.symm, congr_mono, contDiffGroupoid, contDiffOn, contDiffPregroupoid, contDiff_id, contDiff_id.contDiffOn, mem_groupoid_of_pregroupoid, right_inv, subset_univ, this.congr_mono
 -/
@@ -2140,7 +2258,12 @@ theorem contDiffGroupoid_prod
     contDiffPregroupoid]
   · have h3 := ContDiffOn.prodMap he he'
     rw [← I.image_eq]; rw [← I'.image_eq]; rw [prod_image_image_eq] at h3
-    rw [← (I.prod I
+    rw [← (I.prod I').image_eq]
+    exact h3
+  · have h3 := ContDiffOn.prodMap he_symm he'_symm
+    rw [← I.image_eq]; rw [← I'.image_eq]; rw [prod_image_image_eq] at h3
+    rw [← (I.prod I').image_eq]
+    exact h3
 
 中文:
 定理 contDiffGroupoid_prod
@@ -2152,7 +2275,12 @@ theorem contDiffGroupoid_prod
     contDiffPregroupoid]
   · have h3 := ContDiffOn.prodMap he he'
     rw [← I.image_eq]; rw [← I'.image_eq]; rw [prod_image_image_eq] at h3
-    rw [← (I.prod I
+    rw [← (I.prod I').image_eq]
+    exact h3
+  · have h3 := ContDiffOn.prodMap he_symm he'_symm
+    rw [← I.image_eq]; rw [← I'.image_eq]; rw [prod_image_image_eq] at h3
+    rw [← (I.prod I').image_eq]
+    exact h3
 
 Depends on / 依赖: ContDiffOn, ContDiffOn.prodMap, I.image_eq, I.prod, OpenPartialHomeomorph, OpenPartialHomeomorph.prod_toPartialHomeomorph, _symm, contDiffPregroupoid, he_symm, image_eq, prodMap, prod_image_image_eq, prod_toPartialHomeomorph
 -/
@@ -2606,7 +2734,16 @@ instance empty
   set t := I.symm ⁻¹' (e.symm ≫ₕ e').source inter range I
   -- Since `M` is empty, the condition about compatibility of transition maps is vacuous.
   have : (e.symm ≫ₕ e').source = ∅ := calc (e.symm ≫ₕ e').source
-    _ = (e.symm.source) inter
+    _ = (e.symm.source) inter e.symm ⁻¹' e'.source := by rw [← OpenPartialHomeomorph.trans_source]
+    _ = (e.symm.source) inter e.symm ⁻¹' ∅ := by rw [eq_empty_of_isEmpty (e'.source)]
+    _ = (e.symm.source) inter ∅ := by rw [preimage_empty]
+    _ = ∅ := inter_empty e.symm.source
+  have : t = ∅ := calc t
+    _ = I.symm ⁻¹' (e.symm ≫ₕ e').source inter range I := by
+      rw [← Subtype.preimage_val_eq_preimage_val_iff]
+    _ = ∅ inter range I := by rw [this, preimage_empty]
+    _ = ∅ := empty_inter (range I)
+  apply (this ▸ hx).elim
 
 中文:
 实例 empty
@@ -2617,7 +2754,16 @@ instance empty
   set t := I.symm ⁻¹' (e.symm ≫ₕ e').source inter range I
   -- Since `M` is empty, the condition about compatibility of transition maps is vacuous.
   have : (e.symm ≫ₕ e').source = ∅ := calc (e.symm ≫ₕ e').source
-    _ = (e.symm.source) inter
+    _ = (e.symm.source) inter e.symm ⁻¹' e'.source := by rw [← OpenPartialHomeomorph.trans_source]
+    _ = (e.symm.source) inter e.symm ⁻¹' ∅ := by rw [eq_empty_of_isEmpty (e'.source)]
+    _ = (e.symm.source) inter ∅ := by rw [preimage_empty]
+    _ = ∅ := inter_empty e.symm.source
+  have : t = ∅ := calc t
+    _ = I.symm ⁻¹' (e.symm ≫ₕ e').source inter range I := by
+      rw [← Subtype.preimage_val_eq_preimage_val_iff]
+    _ = ∅ inter range I := by rw [this, preimage_empty]
+    _ = ∅ := empty_inter (range I)
+  apply (this ▸ hx).elim
 
 Depends on / 依赖: I.symm, e.symm, isManifold_of_contDiffOn, source
 -/
@@ -2762,7 +2908,20 @@ instance disjointUnion
     · exact ContDiffGroupoid.mem_of_source_eq_empty _ (eq_empty_of_isEmpty _)
     obtain (⟨f, hf, hef⟩ | ⟨f, hf, hef⟩) := ChartedSpace.mem_atlas_sum he
     · obtain (⟨f', hf', he'f'⟩ | ⟨f', hf', he'f'⟩) := ChartedSpace.mem_atlas_sum he'
-      · rw [hef,
+      · rw [hef, he'f', f.lift_openEmbedding_trans f' IsOpenEmbedding.inl]
+        exact hM.compatible hf hf'
+      · rw [hef, he'f']
+        apply ContDiffGroupoid.mem_of_source_eq_empty
+        ext x
+        exact ⟨fun ⟨hx₁, hx₂⟩ => by simp_all, fun hx => hx.elim⟩
+    · -- Analogous argument to the first case: is there a way to deduplicate?
+      obtain (⟨f', hf', he'f'⟩ | ⟨f', hf', he'f'⟩) := ChartedSpace.mem_atlas_sum he'
+      · rw [hef, he'f']
+        apply ContDiffGroupoid.mem_of_source_eq_empty
+        ext x
+        exact ⟨fun ⟨hx₁, hx₂⟩ => by simp_all, fun hx => hx.elim⟩
+      · rw [hef, he'f', f.lift_openEmbedding_trans f' IsOpenEmbedding.inr]
+        exact hM'.compatible hf hf'
 
 中文:
 实例 disjointUnion
@@ -2772,7 +2931,20 @@ instance disjointUnion
     · exact ContDiffGroupoid.mem_of_source_eq_empty _ (eq_empty_of_isEmpty _)
     obtain (⟨f, hf, hef⟩ | ⟨f, hf, hef⟩) := ChartedSpace.mem_atlas_sum he
     · obtain (⟨f', hf', he'f'⟩ | ⟨f', hf', he'f'⟩) := ChartedSpace.mem_atlas_sum he'
-      · rw [hef,
+      · rw [hef, he'f', f.lift_openEmbedding_trans f' IsOpenEmbedding.inl]
+        exact hM.compatible hf hf'
+      · rw [hef, he'f']
+        apply ContDiffGroupoid.mem_of_source_eq_empty
+        ext x
+        exact ⟨fun ⟨hx₁, hx₂⟩ => by simp_all, fun hx => hx.elim⟩
+    · -- Analogous argument to the first case: is there a way to deduplicate?
+      obtain (⟨f', hf', he'f'⟩ | ⟨f', hf', he'f'⟩) := ChartedSpace.mem_atlas_sum he'
+      · rw [hef, he'f']
+        apply ContDiffGroupoid.mem_of_source_eq_empty
+        ext x
+        exact ⟨fun ⟨hx₁, hx₂⟩ => by simp_all, fun hx => hx.elim⟩
+      · rw [hef, he'f', f.lift_openEmbedding_trans f' IsOpenEmbedding.inr]
+        exact hM'.compatible hf hf'
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.mem_atlas_sum, ContDiffGroupoid, ContDiffGroupoid.mem_of_source_eq_empty, IsOpenEmbedding, IsOpenEmbedding.inl, compatible, eq_empty_of_isEmpty, f.lift_openEmbedding_trans, hM.compatible, hx.elim, isEmpty_or_nonempty, lift_openEmbedding_trans, mem_atlas_sum, mem_of_source_eq_empty
 -/
@@ -2903,7 +3075,7 @@ deriving
   ContinuousSMul 𝕜,
   -- the following instance derives from the previous one, but through an instance with priority 100
   -- which takes a long time to be found. We register a shortcut instance instead
-  ContinuousConstSM
+  ContinuousConstSMul 𝕜
 
 中文:
 定义 TangentSpace
@@ -2914,7 +3086,7 @@ deriving
   ContinuousSMul 𝕜,
   -- the following instance derives from the previous one, but through an instance with priority 100
   -- which takes a long time to be found. We register a shortcut instance instead
-  ContinuousConstSM
+  ContinuousConstSMul 𝕜
 -/
 def TangentSpace {𝕜 : Type*} [NontriviallyNormedField 𝕜]
     {E : Type u} [NormedAddCommGroup E] [NormedSpace 𝕜 E]

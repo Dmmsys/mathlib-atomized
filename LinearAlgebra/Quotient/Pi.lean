@@ -299,7 +299,11 @@ theorem right_inv
   refine pi_ext fun i x => ?_
   induction x using Submodule.Quotient.induction_on with | _ x'
   refine funext fun j => ?_
-  rw [comp_apply]; rw [piQuotientLift_single]; rw [mapQ_apply]; r
+  rw [comp_apply]; rw [piQuotientLift_single]; rw [mapQ_apply]; rw [quotientPiLift_mk]; rw [id_apply]
+  by_cases hij : i = j <;> simp only [mkQ_apply, coe_single]
+  · subst hij
+    rw [Pi.single_eq_same]; rw [Pi.single_eq_same]
+  · rw [Pi.single_eq_of_ne (Ne.symm hij), Pi.single_eq_of_ne (Ne.symm hij), Quotient.mk_zero]
 
 中文:
 定理 right_inv
@@ -311,7 +315,11 @@ theorem right_inv
   refine pi_ext fun i x => ?_
   induction x using Submodule.Quotient.induction_on with | _ x'
   refine funext fun j => ?_
-  rw [comp_apply]; rw [piQuotientLift_single]; rw [mapQ_apply]; r
+  rw [comp_apply]; rw [piQuotientLift_single]; rw [mapQ_apply]; rw [quotientPiLift_mk]; rw [id_apply]
+  by_cases hij : i = j <;> simp only [mkQ_apply, coe_single]
+  · subst hij
+    rw [Pi.single_eq_same]; rw [Pi.single_eq_same]
+  · rw [Pi.single_eq_of_ne (Ne.symm hij), Pi.single_eq_of_ne (Ne.symm hij), Quotient.mk_zero]
 
 Depends on / 依赖: Function, Function.rightInverse_iff_comp, Ne.symm, Pi.single_eq_of_ne, Pi.single_eq_same, Quotient, Submodule, Submodule.Quotient.induction_on, coe_comp, coe_single, comp_apply, id_apply, id_coe, induction_on, invFun, mapQ_apply, mkQ_apply, piQuotientLift_single, pi_ext, quotientPiLift_mk
 -/

@@ -651,7 +651,18 @@ definition infIccOrderIsoIccSup
       (by
         change a ⊓ (↑x ⊔ b) = ↑x
         rw [sup_comm]; rw [← inf_sup_assoc_of_le _ x.prop.2]; rw [sup_eq_right.2 x.prop.1])
-  right_inv x :
+  right_inv x :=
+    Subtype.ext
+      (by
+        change a ⊓ ↑x ⊔ b = ↑x
+        rw [inf_comm]; rw [inf_sup_assoc_of_le _ x.prop.1]; rw [inf_eq_left.2 x.prop.2])
+  map_rel_iff' {x y} := by
+    simp only [Subtype.mk_le_mk, Equiv.coe_fn_mk]
+    rw [← Subtype.coe_le_coe]
+    refine ⟨fun h => ?_, fun h => sup_le_sup_right h _⟩
+    rw [← sup_eq_right.2 x.prop.1]; rw [inf_sup_assoc_of_le _ x.prop.2]; rw [sup_comm]; rw [←
+      sup_eq_right.2 y.prop.1]; rw [inf_sup_assoc_of_le _ y.prop.2]; rw [sup_comm b]
+    exact inf_le_inf_left _ h
 
 中文:
 定义 infIccOrderIsoIccSup
@@ -663,7 +674,18 @@ definition infIccOrderIsoIccSup
       (by
         change a ⊓ (↑x ⊔ b) = ↑x
         rw [sup_comm]; rw [← inf_sup_assoc_of_le _ x.prop.2]; rw [sup_eq_right.2 x.prop.1])
-  right_inv x :
+  right_inv x :=
+    Subtype.ext
+      (by
+        change a ⊓ ↑x ⊔ b = ↑x
+        rw [inf_comm]; rw [inf_sup_assoc_of_le _ x.prop.1]; rw [inf_eq_left.2 x.prop.2])
+  map_rel_iff' {x y} := by
+    simp only [Subtype.mk_le_mk, Equiv.coe_fn_mk]
+    rw [← Subtype.coe_le_coe]
+    refine ⟨fun h => ?_, fun h => sup_le_sup_right h _⟩
+    rw [← sup_eq_right.2 x.prop.1]; rw [inf_sup_assoc_of_le _ x.prop.2]; rw [sup_comm]; rw [←
+      sup_eq_right.2 y.prop.1]; rw [inf_sup_assoc_of_le _ y.prop.2]; rw [sup_comm b]
+    exact inf_le_inf_left _ h
 
 Depends on / 依赖: le_sup_right, sup_le_sup_right, x.prop
 -/
@@ -767,7 +789,20 @@ le_sup_right.trans_lt
       sup_strictMonoOn_Icc_inf (Ioo_subset_Icc_self c.2) (right_mem_Icc.2 inf_le_left) c.2.2⟩
   invFun c :=
     ⟨a ⊓ c,
-      inf_strictMonoOn_Icc_sup (left_mem_Icc.2 le_sup_r
+      inf_strictMonoOn_Icc_sup (left_mem_Icc.2 le_sup_right) (Ioo_subset_Icc_self c.2) c.2.1,
+inf_le_left.trans_lt'
+        inf_strictMonoOn_Icc_sup (Ioo_subset_Icc_self c.2) (right_mem_Icc.2 le_sup_right) c.2.2⟩
+  left_inv c :=
+Subtype.ext by
+      dsimp
+      rw [sup_comm]; rw [← inf_sup_assoc_of_le _ c.prop.2.le]; rw [sup_eq_right.2 c.prop.1.le]
+  right_inv c :=
+Subtype.ext by
+      dsimp
+      rw [inf_comm]; rw [inf_sup_assoc_of_le _ c.prop.1.le]; rw [inf_eq_left.2 c.prop.2.le]
+  map_rel_iff' := @fun c d =>
+    @OrderIso.le_iff_le _ _ _ _ (infIccOrderIsoIccSup _ _) ⟨c.1, Ioo_subset_Icc_self c.2⟩
+      ⟨d.1, Ioo_subset_Icc_self d.2⟩
 
 中文:
 定义 infIooOrderIsoIooSup
@@ -778,7 +813,20 @@ le_sup_right.trans_lt
       sup_strictMonoOn_Icc_inf (Ioo_subset_Icc_self c.2) (right_mem_Icc.2 inf_le_left) c.2.2⟩
   invFun c :=
     ⟨a ⊓ c,
-      inf_strictMonoOn_Icc_sup (left_mem_Icc.2 le_sup_r
+      inf_strictMonoOn_Icc_sup (left_mem_Icc.2 le_sup_right) (Ioo_subset_Icc_self c.2) c.2.1,
+inf_le_left.trans_lt'
+        inf_strictMonoOn_Icc_sup (Ioo_subset_Icc_self c.2) (right_mem_Icc.2 le_sup_right) c.2.2⟩
+  left_inv c :=
+Subtype.ext by
+      dsimp
+      rw [sup_comm]; rw [← inf_sup_assoc_of_le _ c.prop.2.le]; rw [sup_eq_right.2 c.prop.1.le]
+  right_inv c :=
+Subtype.ext by
+      dsimp
+      rw [inf_comm]; rw [inf_sup_assoc_of_le _ c.prop.1.le]; rw [inf_eq_left.2 c.prop.2.le]
+  map_rel_iff' := @fun c d =>
+    @OrderIso.le_iff_le _ _ _ _ (infIccOrderIsoIccSup _ _) ⟨c.1, Ioo_subset_Icc_self c.2⟩
+      ⟨d.1, Ioo_subset_Icc_self d.2⟩
 
 Depends on / 依赖: Ioo_subset_Icc_self, Subtype, Subtype.ext, inf_le_left, inf_le_left.trans_lt, inf_strictMonoOn_Icc_sup, inf_sup_assoc_of_le, invFun, le_sup_right, le_sup_right.trans_lt, left_inv, left_mem_Icc, right_mem_Icc, sup_comm, sup_strictMonoOn_Icc_inf, trans_lt
 -/

@@ -86,7 +86,17 @@ scoped instance (X) [SMul X F] [SMul X E] [IsScalarTower X F E] :
   Subalgebra.inclusion.isScalarTower_left (algebra_adjoin_le_adjoin F S) _
 
 scoped instance (X) [MulAction E X] : IsScalarTower (Algebra.adjoin F S) (adjoin F S) X :=
-  Sub
+  Subalgebra.inclusion.isScalarTower_right (algebra_adjoin_le_adjoin F S) _
+
+scoped instance : FaithfulSMul (Algebra.adjoin F S) (adjoin F S) :=
+  Subalgebra.inclusion.faithfulSMul (algebra_adjoin_le_adjoin F S)
+
+scoped instance : IsFractionRing (Algebra.adjoin F S) (adjoin F S) :=
+  .of_field _ _ fun ⟨_, h⟩ => have ⟨x, hx, y, hy, eq⟩ := mem_adjoin_iff_div.mp h
+    ⟨⟨x, hx⟩, ⟨y, hy⟩, Subtype.ext eq⟩
+
+scoped instance : Algebra.IsAlgebraic (Algebra.adjoin F S) (adjoin F S) :=
+  IsLocalization.isAlgebraic _ (nonZeroDivisors (Algebra.adjoin F S))
 
 中文:
 定理 algebraMap_eq_gen_self
@@ -98,7 +108,17 @@ scoped instance (X) [SMul X F] [SMul X E] [IsScalarTower X F E] :
   Subalgebra.inclusion.isScalarTower_left (algebra_adjoin_le_adjoin F S) _
 
 scoped instance (X) [MulAction E X] : IsScalarTower (Algebra.adjoin F S) (adjoin F S) X :=
-  Sub
+  Subalgebra.inclusion.isScalarTower_right (algebra_adjoin_le_adjoin F S) _
+
+scoped instance : FaithfulSMul (Algebra.adjoin F S) (adjoin F S) :=
+  Subalgebra.inclusion.faithfulSMul (algebra_adjoin_le_adjoin F S)
+
+scoped instance : IsFractionRing (Algebra.adjoin F S) (adjoin F S) :=
+  .of_field _ _ fun ⟨_, h⟩ => have ⟨x, hx, y, hy, eq⟩ := mem_adjoin_iff_div.mp h
+    ⟨⟨x, hx⟩, ⟨y, hy⟩, Subtype.ext eq⟩
+
+scoped instance : Algebra.IsAlgebraic (Algebra.adjoin F S) (adjoin F S) :=
+  IsLocalization.isAlgebraic _ (nonZeroDivisors (Algebra.adjoin F S))
 -/
 theorem algebraMap_eq_gen_self {x : E} :
     algebraMap (Algebra.adjoin F {x}) F⟮x⟯ ⟨x, Algebra.self_mem_adjoin_singleton F x⟩ =
@@ -226,7 +246,20 @@ lemma fg_top_iff
     have : Algebra.FiniteType F (Algebra.adjoin F (s : Set E)) := .adjoin_of_finite s.finite_toSet
     have : Algebra.EssFiniteType (Algebra.adjoin F (s : Set E)) (adjoin F (s : Set E)) :=
       .of_isLocalization _ (nonZeroDivisors _)
-    have : Algebra.EssFiniteT
+    have : Algebra.EssFiniteType F (adjoin F (s : Set E)) :=
+      .comp _ (Algebra.adjoin F (s : Set E)) _
+    rw [hs] at this
+    exact .of_surjective IntermediateField.topEquiv.toAlgHom IntermediateField.topEquiv.surjective
+  · intro _
+    use Algebra.EssFiniteType.finset F E
+    refine top_le_iff.mp fun x _ => ?_
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq (Algebra.EssFiniteType.submonoid F E) x
+    have hs : s.1.1 != 0 := (IsLocalization.map_units E s).ne_zero
+    have H : IsLocalization.mk' E x s = x / s := by
+      simp [IsLocalization.mk'_eq_iff_eq_mul, hs]
+    rw [H]
+    exact div_mem (IntermediateField.algebra_adjoin_le_adjoin _ _ x.2)
+      (IntermediateField.algebra_adjoin_le_adjoin _ _ s.1.2)
 
 中文:
 引理 fg_top_iff
@@ -236,7 +269,20 @@ lemma fg_top_iff
     have : Algebra.FiniteType F (Algebra.adjoin F (s : Set E)) := .adjoin_of_finite s.finite_toSet
     have : Algebra.EssFiniteType (Algebra.adjoin F (s : Set E)) (adjoin F (s : Set E)) :=
       .of_isLocalization _ (nonZeroDivisors _)
-    have : Algebra.EssFiniteT
+    have : Algebra.EssFiniteType F (adjoin F (s : Set E)) :=
+      .comp _ (Algebra.adjoin F (s : Set E)) _
+    rw [hs] at this
+    exact .of_surjective IntermediateField.topEquiv.toAlgHom IntermediateField.topEquiv.surjective
+  · intro _
+    use Algebra.EssFiniteType.finset F E
+    refine top_le_iff.mp fun x _ => ?_
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq (Algebra.EssFiniteType.submonoid F E) x
+    have hs : s.1.1 != 0 := (IsLocalization.map_units E s).ne_zero
+    have H : IsLocalization.mk' E x s = x / s := by
+      simp [IsLocalization.mk'_eq_iff_eq_mul, hs]
+    rw [H]
+    exact div_mem (IntermediateField.algebra_adjoin_le_adjoin _ _ x.2)
+      (IntermediateField.algebra_adjoin_le_adjoin _ _ s.1.2)
 
 Depends on / 依赖: Algebra, Algebra.EssFiniteType, Algebra.EssFiniteType.fi, Algebra.FiniteType, Algebra.adjoin, EssFiniteType, FiniteType, IntermediateField, IntermediateField.topEquiv.surjective, IntermediateField.topEquiv.toAlgHom, adjoin, adjoin_of_finite, finite_toSet, nonZeroDivisors, of_isLocalization, of_surjective, s.finite_toSet, surjective, toAlgHom, topEquiv
 -/
@@ -296,7 +342,8 @@ lemma essFiniteType_iff
       exists t : Finset E, adjoin F ↑t = K by
     simpa [IntermediateField.FG, (Equiv.finsetSubtypeComm _).exists_congr_left,
       ← (IntermediateField.map_injective K.val).eq_iff, ← IntermediateField.fg_top_iff,
-      
+      adjoin_map, ← Set.range_comp, Function.comp_def, ← AlgHom.fieldRange_eq_map] using! this
+  exact ⟨fun ⟨s, _, hs⟩ => ⟨s, hs⟩, fun ⟨s, hs⟩ => ⟨s, hs ▸ subset_adjoin _ _, hs⟩⟩
 
 中文:
 引理 essFiniteType_iff
@@ -306,7 +353,8 @@ lemma essFiniteType_iff
       exists t : Finset E, adjoin F ↑t = K by
     simpa [IntermediateField.FG, (Equiv.finsetSubtypeComm _).exists_congr_left,
       ← (IntermediateField.map_injective K.val).eq_iff, ← IntermediateField.fg_top_iff,
-      
+      adjoin_map, ← Set.range_comp, Function.comp_def, ← AlgHom.fieldRange_eq_map] using! this
+  exact ⟨fun ⟨s, _, hs⟩ => ⟨s, hs⟩, fun ⟨s, hs⟩ => ⟨s, hs ▸ subset_adjoin _ _, hs⟩⟩
 
 Depends on / 依赖: AlgHom, AlgHom.fieldRange_eq_map, Equiv.finsetSubtypeComm, Finset, Function, Function.comp_def, IntermediateField, IntermediateField.FG, IntermediateField.fg_top_iff, IntermediateField.map_injective, K.val, Set.range_comp, adjoin, adjoin_map, comp_def, eq_iff, exists_congr_left, fg_top_iff, fieldRange_eq_map, finsetSubtypeComm
 -/
@@ -649,7 +697,12 @@ theorem sup_toSubalgebra_of_isAlgebraic_right
   have : (adjoin E1 (E2 : Set L)).toSubalgebra = _ := adjoin_toSubalgebra_of_isAlgebraic fun x h =>
     IsAlgebraic.tower_top _ (isAlgebraic_iff.mp (Algebra.IsAlgebraic.isAlgebraic (⟨x, h⟩ : E2)))
   apply_fun Subalgebra.restrictScalars K at this
-  rw [← restrictScalars_toSubalgebra]; rw [restrict
+  rw [← restrictScalars_toSubalgebra]; rw [restrictScalars_adjoin] at this
+  -- TODO: rather than using `← coe_type_toSubalgebra` here, perhaps we should restate another
+  -- version of `Algebra.restrictScalars_adjoin` for intermediate fields?
+  simp only [← coe_type_toSubalgebra] at this
+  rw [Algebra.restrictScalars_adjoin] at this
+  exact this
 
 中文:
 定理 sup_toSubalgebra_of_isAlgebraic_right
@@ -658,7 +711,12 @@ theorem sup_toSubalgebra_of_isAlgebraic_right
   have : (adjoin E1 (E2 : Set L)).toSubalgebra = _ := adjoin_toSubalgebra_of_isAlgebraic fun x h =>
     IsAlgebraic.tower_top _ (isAlgebraic_iff.mp (Algebra.IsAlgebraic.isAlgebraic (⟨x, h⟩ : E2)))
   apply_fun Subalgebra.restrictScalars K at this
-  rw [← restrictScalars_toSubalgebra]; rw [restrict
+  rw [← restrictScalars_toSubalgebra]; rw [restrictScalars_adjoin] at this
+  -- TODO: rather than using `← coe_type_toSubalgebra` here, perhaps we should restate another
+  -- version of `Algebra.restrictScalars_adjoin` for intermediate fields?
+  simp only [← coe_type_toSubalgebra] at this
+  rw [Algebra.restrictScalars_adjoin] at this
+  exact this
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, IsAlgebraic.tower_top, Subalgebra, Subalgebra.restrictScalars, adjoin, adjoin_toSubalgebra_of_isAlgebraic, apply_fun, isAlgebraic, isAlgebraic_iff, isAlgebraic_iff.mp, restrictScalars, restrictScalars_adjoin, restrictScalars_toSubalgebra, toSubalgebra, tower_top
 -/
@@ -776,7 +834,11 @@ theorem adjoin_intermediateField_toSubalgebra_of_isAlgebraic
   let i' : E ≃ₐ[F] E' := AlgEquiv.ofInjectiveField i
   have hi : algebraMap E K = (algebraMap E' K) ∘ i' := by ext x; rfl
   apply_fun _ using Subalgebra.restrictScalars_injective F
-  rw [← restrictScalars_toSubalgebra]; rw [restrict
+  rw [← restrictScalars_toSubalgebra]; rw [restrictScalars_adjoin_of_algEquiv i' hi]; rw [Algebra.restrictScalars_adjoin_of_algEquiv i' hi]; rw [restrictScalars_adjoin]
+  dsimp only [← E'.coe_type_toSubalgebra]
+  rw [Algebra.restrictScalars_adjoin F E'.toSubalgebra]
+  exact E'.sup_toSubalgebra_of_isAlgebraic L (halg.imp
+    (fun (_ : Algebra.IsAlgebraic F E) => i'.isAlgebraic) id)
 
 中文:
 定理 adjoin_intermediateField_toSubalgebra_of_isAlgebraic
@@ -787,7 +849,11 @@ theorem adjoin_intermediateField_toSubalgebra_of_isAlgebraic
   let i' : E ≃ₐ[F] E' := AlgEquiv.ofInjectiveField i
   have hi : algebraMap E K = (algebraMap E' K) ∘ i' := by ext x; rfl
   apply_fun _ using Subalgebra.restrictScalars_injective F
-  rw [← restrictScalars_toSubalgebra]; rw [restrict
+  rw [← restrictScalars_toSubalgebra]; rw [restrictScalars_adjoin_of_algEquiv i' hi]; rw [Algebra.restrictScalars_adjoin_of_algEquiv i' hi]; rw [restrictScalars_adjoin]
+  dsimp only [← E'.coe_type_toSubalgebra]
+  rw [Algebra.restrictScalars_adjoin F E'.toSubalgebra]
+  exact E'.sup_toSubalgebra_of_isAlgebraic L (halg.imp
+    (fun (_ : Algebra.IsAlgebraic F E) => i'.isAlgebraic) id)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, Algebra, Algebra.restrictScalars_adjoin, Algebra.restrictScalars_adjoin_of_algEquiv, IsScalarTower, IsScalarTower.toAlgHom, Subalgebra, Subalgebra.restrictScalars_injective, algebraMap, apply_fun, coe_type_toSubalgebra, fieldRange, i.fieldRange, ofInjectiveField, restrictScalars_adjoin, restrictScalars_adjoin_of_algEquiv, restrictScalars_injective, restrictScalars_toSubalgebra, toAlgHom
 -/

@@ -42,7 +42,27 @@ lemma isIso_of_coversTop
     (NatTrans.isIso_iff_isIso_app ((K.overPullback A (X i)).map f).hom).mp inferInstance
       (op (Over.mk g))
   intro W
-  let S : K.Cover W.unop := hX
+  let S : K.Cover W.unop := hX.cover W.unop
+  have harrow (I : S.Arrow) : IsIso (f.hom.app (op I.Y)) := by
+    obtain ⟨i, ⟨g⟩⟩ := I.hf
+    exact hiso I.Y i g
+  let invMap : G.obj.obj (op W.unop) ⟶ F.obj.obj (op W.unop) :=
+    F.property.amalgamate S (fun I => G.obj.map I.f.op ≫ inv (f.hom.app (op I.Y))) (by
+      intro I₁ I₂ r
+      have hZ : IsIso (f.hom.app (op r.Z)) := by
+        obtain ⟨i, ⟨g⟩⟩ := I₁.hf
+        exact hiso r.Z i (r.g₁ ≫ g)
+      simp only [Category.assoc, f.hom.naturality_inv]
+      rw [← Category.assoc]; rw [← Category.assoc]; rw [← G.obj.map_comp]; rw [← G.obj.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [r.w])
+  refine ⟨⟨invMap, ?_, ?_⟩⟩
+  · refine F.property.hom_ext S _ _ fun I => ?_
+    simp only [op_unop, Category.assoc, Category.id_comp]
+    rw [Presheaf.IsSheaf.amalgamate_map]; rw [← f.hom.naturality_assoc]
+    simp
+  · refine G.property.hom_ext S _ _ fun I => ?_
+    simp only [op_unop, Category.assoc, Category.id_comp]
+    rw [← f.hom.naturality]; rw [Presheaf.IsSheaf.amalgamate_map_assoc]
+    simp
 
 中文:
 引理 isIso_of_coversTop
@@ -53,7 +73,27 @@ lemma isIso_of_coversTop
     (NatTrans.isIso_iff_isIso_app ((K.overPullback A (X i)).map f).hom).mp inferInstance
       (op (Over.mk g))
   intro W
-  let S : K.Cover W.unop := hX
+  let S : K.Cover W.unop := hX.cover W.unop
+  have harrow (I : S.Arrow) : IsIso (f.hom.app (op I.Y)) := by
+    obtain ⟨i, ⟨g⟩⟩ := I.hf
+    exact hiso I.Y i g
+  let invMap : G.obj.obj (op W.unop) ⟶ F.obj.obj (op W.unop) :=
+    F.property.amalgamate S (fun I => G.obj.map I.f.op ≫ inv (f.hom.app (op I.Y))) (by
+      intro I₁ I₂ r
+      have hZ : IsIso (f.hom.app (op r.Z)) := by
+        obtain ⟨i, ⟨g⟩⟩ := I₁.hf
+        exact hiso r.Z i (r.g₁ ≫ g)
+      simp only [Category.assoc, f.hom.naturality_inv]
+      rw [← Category.assoc]; rw [← Category.assoc]; rw [← G.obj.map_comp]; rw [← G.obj.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [r.w])
+  refine ⟨⟨invMap, ?_, ?_⟩⟩
+  · refine F.property.hom_ext S _ _ fun I => ?_
+    simp only [op_unop, Category.assoc, Category.id_comp]
+    rw [Presheaf.IsSheaf.amalgamate_map]; rw [← f.hom.naturality_assoc]
+    simp
+  · refine G.property.hom_ext S _ _ fun I => ?_
+    simp only [op_unop, Category.assoc, Category.id_comp]
+    rw [← f.hom.naturality]; rw [Presheaf.IsSheaf.amalgamate_map_assoc]
+    simp
 
 Depends on / 依赖: F.obj.obj, F.property.amalgamate, G.ob, G.obj.obj, I.hf, K.Cover, K.overPullback, NatTrans, NatTrans.isIso_iff_isIso_app, ObjectProperty, ObjectProperty.isIso_hom_iff, Over.mk, S.Arrow, W.unop, amalgamate, f.hom.app, hX.cover, harrow, invMap, isIso_hom_iff
 -/

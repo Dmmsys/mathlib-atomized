@@ -122,7 +122,11 @@ instance smul
     have : Finite (a • (s : Set V) : Set V) := Finite.Set.finite_image _ _
     exact Submodule.fg_span (Set.toFinite (a • (s : Set V)))
   span_eq_top := by
-    rw [Submodule.coe_pointwise_smul]; rw [← Submodule.smul_span]; 
+    rw [Submodule.coe_pointwise_smul]; rw [← Submodule.smul_span]; rw [IsLattice.span_eq_top]
+    ext x
+    refine ⟨fun _ => trivial, fun _ => ?_⟩
+    rw [show x = a • a⁻¹ • x by simp]
+    exact Submodule.smul_mem_pointwise_smul _ _ _ (by trivial)
 
 中文:
 实例 smul
@@ -133,7 +137,11 @@ instance smul
     have : Finite (a • (s : Set V) : Set V) := Finite.Set.finite_image _ _
     exact Submodule.fg_span (Set.toFinite (a • (s : Set V)))
   span_eq_top := by
-    rw [Submodule.coe_pointwise_smul]; rw [← Submodule.smul_span]; 
+    rw [Submodule.coe_pointwise_smul]; rw [← Submodule.smul_span]; rw [IsLattice.span_eq_top]
+    ext x
+    refine ⟨fun _ => trivial, fun _ => ?_⟩
+    rw [show x = a • a⁻¹ • x by simp]
+    exact Submodule.smul_mem_pointwise_smul _ _ _ (by trivial)
 
 Depends on / 依赖: Finite, Finite.Set.finite_image, IsLattice, IsLattice.fg, IsLattice.span_eq_top, Set.toFinite, Submodule, Submodule.coe_pointwise_smul, Submodule.fg_span, Submodule.smul_mem_pointwise_smul, Submodule.smul_span, coe_pointwise_smul, fg_span, finite_image, smul_mem_pointwise_smul, smul_span, span_eq_top, toFinite
 -/
@@ -208,7 +216,14 @@ lemma _root_.Submodule.span_range_eq_top_of_injective_of_rank_le
   replace hli := hli.map' f (LinearMap.ker_eq_bot.mpr hf)
   rw [LinearIndependent.iff_fractionRing (R := R) (K := K)] at hli
   replace hs : Cardinal.mk s = Module.rank K N :=
-    le_antisymm (LinearIndependent.cardinal_le_rank hli) (hs ▸ h
+    le_antisymm (LinearIndependent.cardinal_le_rank hli) (hs ▸ h)
+  rw [← Module.finrank_eq_rank]; rw [Cardinal.mk_eq_nat_iff_fintype] at hs
+  obtain ⟨hfin, hcard⟩ := hs
+  have hsubset : Set.range (fun x : s => f x.val) subseteq (LinearMap.range f : Set N) := by
+    rintro x ⟨a, rfl⟩
+    simp
+  rw [eq_top_iff]; rw [← LinearIndependent.span_eq_top_of_card_eq_finrank' hli hcard]
+  exact Submodule.span_mono hsubset
 
 中文:
 引理 _root_.子模.span_range_eq_top_of_injective_of_rank_le
@@ -218,7 +233,14 @@ lemma _root_.Submodule.span_range_eq_top_of_injective_of_rank_le
   replace hli := hli.map' f (LinearMap.ker_eq_bot.mpr hf)
   rw [LinearIndependent.iff_fractionRing (R := R) (K := K)] at hli
   replace hs : Cardinal.mk s = Module.rank K N :=
-    le_antisymm (LinearIndependent.cardinal_le_rank hli) (hs ▸ h
+    le_antisymm (LinearIndependent.cardinal_le_rank hli) (hs ▸ h)
+  rw [← Module.finrank_eq_rank]; rw [Cardinal.mk_eq_nat_iff_fintype] at hs
+  obtain ⟨hfin, hcard⟩ := hs
+  have hsubset : Set.range (fun x : s => f x.val) subseteq (LinearMap.range f : Set N) := by
+    rintro x ⟨a, rfl⟩
+    simp
+  rw [eq_top_iff]; rw [← LinearIndependent.span_eq_top_of_card_eq_finrank' hli hcard]
+  exact Submodule.span_mono hsubset
 
 Depends on / 依赖: Cardinal, Cardinal.mk, Cardinal.mk_eq_nat_iff_fintype, LinearIndependent, LinearIndependent.cardinal_le_rank, LinearIndependent.iff_fractionRing, LinearMap, LinearMap.ker_eq_bot.mpr, LinearMap.range, Module, Module.finrank_eq_rank, Module.rank, Set.range, cardinal_le_rank, exists_set_linearIndependent, finrank_eq_rank, hli.map, hsubset, iff_fractionRing, ker_eq_bot
 -/
@@ -252,7 +274,11 @@ definition _root_.Module.Basis.extendOfIsLattice
     rw [← LinearIndependent.iff_fractionRing (R := R)]; rw [linearIndependent_iff']
     intro s g hs
     simp_rw [← Submodule.coe_smul_of_tower, ← Submodule.coe_sum, Submodule.coe_eq_zero] at hs
-    exact linearIndependent_iff'.mp b.linearInd
+    exact linearIndependent_iff'.mp b.linearIndependent s g hs
+  have hsp : ⊤ <= span K (Set.range fun i => (M.subtype ∘ b) i) := by
+    rw [← Submodule.span_span_of_tower R]; rw [Set.range_comp]; rw [← Submodule.map_span]
+    simp [b.span_eq, Submodule.map_top, span_eq_top]
+  Basis.mk hli hsp
 
 中文:
 定义 _root_.模.基.extendOfIsLattice
@@ -261,7 +287,11 @@ definition _root_.Module.Basis.extendOfIsLattice
     rw [← LinearIndependent.iff_fractionRing (R := R)]; rw [linearIndependent_iff']
     intro s g hs
     simp_rw [← Submodule.coe_smul_of_tower, ← Submodule.coe_sum, Submodule.coe_eq_zero] at hs
-    exact linearIndependent_iff'.mp b.linearInd
+    exact linearIndependent_iff'.mp b.linearIndependent s g hs
+  have hsp : ⊤ <= span K (Set.range fun i => (M.subtype ∘ b) i) := by
+    rw [← Submodule.span_span_of_tower R]; rw [Set.range_comp]; rw [← Submodule.map_span]
+    simp [b.span_eq, Submodule.map_top, span_eq_top]
+  Basis.mk hli hsp
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.iff_fractionRing, M.subtype, Set.range, Set.range_comp, Submodule, Submodule.coe_eq_zero, Submodule.coe_smul_of_tower, Submodule.coe_sum, Submodule.map_span, Submodule.map_top, Submodule.span_span_of_tower, b.linearIndependent, b.span_eq, coe_eq_zero, coe_smul_of_tower, coe_sum, iff_fractionRing, linearIndependent, linearIndependent_iff
 -/
@@ -435,7 +465,9 @@ instance inf
   span_eq_top := by
     rw [← range_subtype (M ⊓ N)]
     apply Submodule.span_range_eq_top_of_injective_of_rank_le (M ⊓ N).injective_subtype
-    have h := Submodule.rank_sup_add
+    have h := Submodule.rank_sup_add_rank_inf_eq M N
+    rw [IsLattice.rank' K M]; rw [IsLattice.rank' K N]; rw [IsLattice.rank'] at h
+    rw [Cardinal.eq_of_add_eq_add_left h (Module.rank_lt_aleph0 K V)]
 
 中文:
 实例 下确界
@@ -447,7 +479,9 @@ instance inf
   span_eq_top := by
     rw [← range_subtype (M ⊓ N)]
     apply Submodule.span_range_eq_top_of_injective_of_rank_le (M ⊓ N).injective_subtype
-    have h := Submodule.rank_sup_add
+    have h := Submodule.rank_sup_add_rank_inf_eq M N
+    rw [IsLattice.rank' K M]; rw [IsLattice.rank' K N]; rw [IsLattice.rank'] at h
+    rw [Cardinal.eq_of_add_eq_add_left h (Module.rank_lt_aleph0 K V)]
 
 Depends on / 依赖: Cardinal, Cardinal.eq_of_add_eq_add_left, Finite, IsLattice, IsLattice.rank, IsNoetherian, Module, Module.Finite.iff_fg, Module.rank_lt_aleph0, Submodule, Submodule.rank_sup_add_rank_inf_eq, Submodule.span_range_eq_top_of_injective_of_rank_le, eq_of_add_eq_add_left, iff_fg, inf_le_left, infer_instance, injective_subtype, isNoetherian_of_le, range_subtype, rank_lt_aleph0
 -/

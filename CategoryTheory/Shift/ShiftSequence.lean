@@ -95,7 +95,15 @@ definition ShiftSequence.tautological
   shiftIso_zero a := by
     rw [shiftFunctorAdd'_zero_add]
     cat_disch
-  shiftIso_add n 
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext X
+    dsimp
+    simp only [id_comp, ← Functor.map_comp]
+    congr
+    simpa only [← cancel_epi ((shiftFunctor C a).map ((shiftFunctorAdd C m n).hom.app X)),
+      shiftFunctorAdd'_eq_shiftFunctorAdd, ← Functor.map_comp_assoc, Iso.hom_inv_id_app,
+      Functor.map_id, id_comp] using! shiftFunctorAdd'_assoc_inv_app m n a (m + n) a' a'' rfl ha'
+        (by rw [← ha'', ← ha', add_assoc]) X
 
 中文:
 定义 ShiftSequence.tautological
@@ -107,7 +115,15 @@ definition ShiftSequence.tautological
   shiftIso_zero a := by
     rw [shiftFunctorAdd'_zero_add]
     cat_disch
-  shiftIso_add n 
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext X
+    dsimp
+    simp only [id_comp, ← Functor.map_comp]
+    congr
+    simpa only [← cancel_epi ((shiftFunctor C a).map ((shiftFunctorAdd C m n).hom.app X)),
+      shiftFunctorAdd'_eq_shiftFunctorAdd, ← Functor.map_comp_assoc, Iso.hom_inv_id_app,
+      Functor.map_id, id_comp] using! shiftFunctorAdd'_assoc_inv_app m n a (m + n) a' a'' rfl ha'
+        (by rw [← ha'', ← ha', add_assoc]) X
 
 Depends on / 依赖: shiftFunctor
 -/
@@ -746,7 +762,14 @@ definition leftComp
       isoWhiskerLeft π (H.shiftIso n a a' ha')
   shiftIso_zero a := by
     ext K
-    simp [← F
+    simp [← Functor.map_comp, commShiftIso_zero]
+  shiftIso_add n m a a' a'' ha' ha'':= by
+    ext K
+    dsimp
+    simp only [H.shiftIso_add_hom_app n m a a' a'' ha' ha'', assoc,
+      commShiftIso_add, CommShift.isoAdd_hom_app, ← Functor.map_comp_assoc,
+      id_comp, Iso.inv_hom_id_app, comp_obj, comp_id]
+    simp
 
 中文:
 定义 leftComp
@@ -759,7 +782,14 @@ definition leftComp
       isoWhiskerLeft π (H.shiftIso n a a' ha')
   shiftIso_zero a := by
     ext K
-    simp [← F
+    simp [← Functor.map_comp, commShiftIso_zero]
+  shiftIso_add n m a a' a'' ha' ha'':= by
+    ext K
+    dsimp
+    simp only [H.shiftIso_add_hom_app n m a a' a'' ha' ha'', assoc,
+      commShiftIso_add, CommShift.isoAdd_hom_app, ← Functor.map_comp_assoc,
+      id_comp, Iso.inv_hom_id_app, comp_obj, comp_id]
+    simp
 
 Depends on / 依赖: H.shift
 -/

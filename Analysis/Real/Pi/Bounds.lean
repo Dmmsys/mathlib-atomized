@@ -40,7 +40,7 @@ theorem pi_gt_sqrtTwoAddSeries
       apply div_pos pi_pos
     all_goals apply pow_pos; norm_num
   refine lt_of_le_of_lt (le_of_eq ?_) this
-  rw [pow_succ' _ (n + 1)]; rw [← mul_a
+  rw [pow_succ' _ (n + 1)]; rw [← mul_assoc]; rw [div_mul_cancel₀]; rw [mul_comm]; simp
 
 中文:
 定理 pi_gt_sqrtTwoAddSeries
@@ -54,7 +54,7 @@ theorem pi_gt_sqrtTwoAddSeries
       apply div_pos pi_pos
     all_goals apply pow_pos; norm_num
   refine lt_of_le_of_lt (le_of_eq ?_) this
-  rw [pow_succ' _ (n + 1)]; rw [← mul_a
+  rw [pow_succ' _ (n + 1)]; rw [← mul_assoc]; rw [div_mul_cancel₀]; rw [mul_comm]; simp
 
 Depends on / 依赖: all_goals, div_pos, le_of_eq, lt_of_le_of_lt, mul_assoc, mul_comm, pi_pos, pow_pos, pow_succ, sin_lt, sin_pi_over_two_pow_succ, sqrtTwoAddSeries
 -/
@@ -79,7 +79,15 @@ theorem pi_lt_sqrtTwoAddSeries
     rw [← div_lt_iff₀ (by simp)]; rw [← sin_pi_over_two_pow_succ]; rw [← sub_lt_iff_lt_add']
     calc
       π / 2 ^ (n + 2) - sin (π / 2 ^ (n + 2)) < (π / 2 ^ (n + 2)) ^ 3 / 6 :=
-sub_lt_comm.1 sin_gt
+sub_lt_comm.1 sin_gt_sub_cube (by positivity)
+      _ <= (4 / 2 ^ (n + 2)) ^ 3 / 4 := by gcongr; exacts [pi_le_four, by norm_num]
+      _ = 1 / (2 ^ n) ^ 3 / 4 := by simp [add_comm n, pow_add, div_mul_eq_div_div]; norm_num
+  refine lt_of_lt_of_le this (le_of_eq ?_); rw [add_mul]; congr 1
+  · ring
+  simp only [show (4 : Real) = 2 ^ 2 by norm_num, ← pow_mul, div_div, ← pow_add]
+  rw [one_div]; rw [one_div]; rw [inv_mul_eq_iff_eq_mul₀]; rw [eq_comm]; rw [mul_inv_eq_iff_eq_mul₀]; rw [← pow_add]
+  · rw [add_assoc, Nat.mul_succ, add_comm, add_comm n, add_assoc, mul_comm n]
+  all_goals norm_num
 
 中文:
 定理 pi_lt_sqrtTwoAddSeries
@@ -89,7 +97,15 @@ sub_lt_comm.1 sin_gt
     rw [← div_lt_iff₀ (by simp)]; rw [← sin_pi_over_two_pow_succ]; rw [← sub_lt_iff_lt_add']
     calc
       π / 2 ^ (n + 2) - sin (π / 2 ^ (n + 2)) < (π / 2 ^ (n + 2)) ^ 3 / 6 :=
-sub_lt_comm.1 sin_gt
+sub_lt_comm.1 sin_gt_sub_cube (by positivity)
+      _ <= (4 / 2 ^ (n + 2)) ^ 3 / 4 := by gcongr; exacts [pi_le_four, by norm_num]
+      _ = 1 / (2 ^ n) ^ 3 / 4 := by simp [add_comm n, pow_add, div_mul_eq_div_div]; norm_num
+  refine lt_of_lt_of_le this (le_of_eq ?_); rw [add_mul]; congr 1
+  · ring
+  simp only [show (4 : Real) = 2 ^ 2 by norm_num, ← pow_mul, div_div, ← pow_add]
+  rw [one_div]; rw [one_div]; rw [inv_mul_eq_iff_eq_mul₀]; rw [eq_comm]; rw [mul_inv_eq_iff_eq_mul₀]; rw [← pow_add]
+  · rw [add_assoc, Nat.mul_succ, add_comm, add_comm n, add_assoc, mul_comm n]
+  all_goals norm_num
 
 Depends on / 依赖: add_comm, div_mul_eq_div_div, exacts, lt_of_lt_of_le, pi_le_four, pow_add, sin_gt_sub_cube, sin_pi_over_two_pow_succ, sqrtTwoAddSeries, sub_lt_comm, sub_lt_iff_lt_add
 -/
@@ -147,7 +163,8 @@ theorem sqrtTwoAddSeries_step_up
   refine le_trans ?_ hz; rw [sqrtTwoAddSeries_succ]; apply sqrtTwoAddSeries_monotone_left
   have hb' : 0 < (b : Real) := Nat.cast_pos.2 hb
   have hd' : 0 < (d : Real) := Nat.cast_pos.2 hd
-  rw [sqrt_le_left (div_nonneg c.cast_nonneg d.cast_nonneg)]; rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (n
+  rw [sqrt_le_left (div_nonneg c.cast_nonneg d.cast_nonneg)]; rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (ne_of_gt hb')]; rw [div_le_div_iff₀ hb' (pow_pos hd' _)]
+  exact mod_cast h
 
 中文:
 定理 sqrtTwoAddSeries_step_up
@@ -156,7 +173,8 @@ theorem sqrtTwoAddSeries_step_up
   refine le_trans ?_ hz; rw [sqrtTwoAddSeries_succ]; apply sqrtTwoAddSeries_monotone_left
   have hb' : 0 < (b : Real) := Nat.cast_pos.2 hb
   have hd' : 0 < (d : Real) := Nat.cast_pos.2 hd
-  rw [sqrt_le_left (div_nonneg c.cast_nonneg d.cast_nonneg)]; rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (n
+  rw [sqrt_le_left (div_nonneg c.cast_nonneg d.cast_nonneg)]; rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (ne_of_gt hb')]; rw [div_le_div_iff₀ hb' (pow_pos hd' _)]
+  exact mod_cast h
 
 Depends on / 依赖: Nat.cast_pos, add_div_eq_mul_add_div, c.cast_nonneg, cast_nonneg, cast_pos, d.cast_nonneg, div_nonneg, div_pow, le_trans, mod_cast, ne_of_gt, pow_pos, sqrtTwoAddSeries_monotone_left, sqrtTwoAddSeries_succ, sqrt_le_left
 -/
@@ -215,7 +233,8 @@ theorem sqrtTwoAddSeries_step_down
   apply le_sqrt_of_sq_le
   have hb' : 0 < (b : Real) := Nat.cast_pos.2 hb
   have hd' : 0 < (d : Real) := Nat.cast_pos.2 hd
-  rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (ne_of_gt hd')]; rw [div_le_div_iff₀ (pow
+  rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (ne_of_gt hd')]; rw [div_le_div_iff₀ (pow_pos hb' _) hd']
+  exact mod_cast h
 
 中文:
 定理 sqrtTwoAddSeries_step_down
@@ -225,7 +244,8 @@ theorem sqrtTwoAddSeries_step_down
   apply le_sqrt_of_sq_le
   have hb' : 0 < (b : Real) := Nat.cast_pos.2 hb
   have hd' : 0 < (d : Real) := Nat.cast_pos.2 hd
-  rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (ne_of_gt hd')]; rw [div_le_div_iff₀ (pow
+  rw [div_pow]; rw [add_div_eq_mul_add_div _ _ (ne_of_gt hd')]; rw [div_le_div_iff₀ (pow_pos hb' _) hd']
+  exact mod_cast h
 
 Depends on / 依赖: Nat.cast_pos, add_div_eq_mul_add_div, cast_pos, div_pow, le_sqrt_of_sq_le, le_trans, mod_cast, ne_of_gt, pow_pos, sqrtTwoAddSeries_monotone_left, sqrtTwoAddSeries_succ
 -/
@@ -472,7 +492,16 @@ theorem pi_gt_d20
   pi_lower_bound [
     671574048197/474874563549, 58134718954/31462283181, 3090459598621/1575502640777,
     2-7143849599/741790664068, 8431536490061/4220852446654, 2-2725579171/4524814682468,
-    2-2494895647/165
+    2-2494895647/16566776788806, 2-608997841/16175484287402, 2-942567063/100141194694075,
+    2-341084060/144951150987041, 2-213717653/363295959742218, 2-71906926/488934711121807,
+    2-29337101/797916288104986, 2-45326311/4931175952730065, 2-7506877/3266776448781479,
+    2-5854787/10191338039232571, 2-4538642/31601378399861717, 2-276149/7691013341581098,
+    2-350197/39013283396653714, 2-442757/197299283738495963, 2-632505/1127415566199968707,
+    2-1157/8249230030392285, 2-205461/5859619883403334178, 2-33721/3846807755987625852,
+    2-11654/5317837263222296743, 2-8162/14897610345776687857, 2-731/5337002285107943372,
+    2-1320/38549072592845336201, 2-707/82588467645883795866, 2-53/24764858756615791675,
+    2-237/442963888703240952920, 2-128/956951523274512100791, 2-32/956951523274512100783,
+    2-27/3229711391051478340136]
 
 中文:
 定理 pi_gt_d20
@@ -482,7 +511,16 @@ theorem pi_gt_d20
   pi_lower_bound [
     671574048197/474874563549, 58134718954/31462283181, 3090459598621/1575502640777,
     2-7143849599/741790664068, 8431536490061/4220852446654, 2-2725579171/4524814682468,
-    2-2494895647/165
+    2-2494895647/16566776788806, 2-608997841/16175484287402, 2-942567063/100141194694075,
+    2-341084060/144951150987041, 2-213717653/363295959742218, 2-71906926/488934711121807,
+    2-29337101/797916288104986, 2-45326311/4931175952730065, 2-7506877/3266776448781479,
+    2-5854787/10191338039232571, 2-4538642/31601378399861717, 2-276149/7691013341581098,
+    2-350197/39013283396653714, 2-442757/197299283738495963, 2-632505/1127415566199968707,
+    2-1157/8249230030392285, 2-205461/5859619883403334178, 2-33721/3846807755987625852,
+    2-11654/5317837263222296743, 2-8162/14897610345776687857, 2-731/5337002285107943372,
+    2-1320/38549072592845336201, 2-707/82588467645883795866, 2-53/24764858756615791675,
+    2-237/442963888703240952920, 2-128/956951523274512100791, 2-32/956951523274512100783,
+    2-27/3229711391051478340136]
 -/
 theorem pi_gt_d20 : 3.14159265358979323846 < π := by
   -- bound[314159265358979323846*^-20, Iters -> 34, Rounding -> .6, Precision -> 46]
@@ -511,7 +549,16 @@ theorem pi_lt_d20
   pi_upper_bound [
     215157040700/152139002499, 936715022285/506946517009, 1760670193473/897581880893,
     2-6049918861/628200981455, 2-8543385003/3546315642356, 2-2687504973/4461606579043,
-    2-1443277808/958
+    2-1443277808/9583752057175, 2-546886849/14525765179168, 2-650597193/69121426717657,
+    2-199969519/84981432264454, 2-226282901/384655467333100, 2-60729699/412934601558121,
+    2-25101251/682708800188252, 2-7156464/778571703825145, 2-7524725/3274543383827551,
+    2-4663362/8117442793616861, 2-1913009/13319781840326041, 2-115805/3225279830894912,
+    2-708749/78957345705688293, 2-131255/58489233342660393, 2-101921/181670219085488669,
+    2-44784/319302953916238627, 2-82141/2342610212364552264, 2-4609/525783249231842696,
+    2-4567/2083967975041722089, 2-2273/4148770928197796067, 2-563/4110440884426500846,
+    2-784/22895812812720260289, 2-1717/200571992854289218531, 2-368/171952226838388893139,
+    2-149/278487845640434185590, 2-207/1547570041545500037992, 2-20/598094702046570062987,
+    2-7/837332582865198088180]
 
 中文:
 定理 pi_lt_d20
@@ -521,7 +568,16 @@ theorem pi_lt_d20
   pi_upper_bound [
     215157040700/152139002499, 936715022285/506946517009, 1760670193473/897581880893,
     2-6049918861/628200981455, 2-8543385003/3546315642356, 2-2687504973/4461606579043,
-    2-1443277808/958
+    2-1443277808/9583752057175, 2-546886849/14525765179168, 2-650597193/69121426717657,
+    2-199969519/84981432264454, 2-226282901/384655467333100, 2-60729699/412934601558121,
+    2-25101251/682708800188252, 2-7156464/778571703825145, 2-7524725/3274543383827551,
+    2-4663362/8117442793616861, 2-1913009/13319781840326041, 2-115805/3225279830894912,
+    2-708749/78957345705688293, 2-131255/58489233342660393, 2-101921/181670219085488669,
+    2-44784/319302953916238627, 2-82141/2342610212364552264, 2-4609/525783249231842696,
+    2-4567/2083967975041722089, 2-2273/4148770928197796067, 2-563/4110440884426500846,
+    2-784/22895812812720260289, 2-1717/200571992854289218531, 2-368/171952226838388893139,
+    2-149/278487845640434185590, 2-207/1547570041545500037992, 2-20/598094702046570062987,
+    2-7/837332582865198088180]
 -/
 theorem pi_lt_d20 : π < 3.14159265358979323847 := by
   -- bound[314159265358979323847*^-20, Iters -> 34, Rounding -> .5, Precision -> 46]

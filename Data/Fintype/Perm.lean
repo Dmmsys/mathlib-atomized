@@ -81,7 +81,17 @@ theorem mem_permsOfList_of_mem
   by_cases hfa : f a = a
   · refine mem_append_left _ (IH fun x hx => mem_of_ne_of_mem ?_ (h x hx))
     rintro rfl
-
+    exact hx hfa
+  have hfa' : f (f a) != f a := mt (fun h => f.injective h) hfa
+  have : forall x : α, (Equiv.swap a (f a) * f) x != x -> x in l := by
+    simp
+    grind
+  suffices f in permsOfList l ∨ exists b in l, exists g in permsOfList l, Equiv.swap a b * g = f by
+    simpa only [permsOfList, exists_prop, List.mem_map, mem_append, List.mem_flatMap]
+  refine or_iff_not_imp_left.2 fun _hfl => ⟨f a, ?_, Equiv.swap a (f a) * f, IH this, ?_⟩
+  · exact mem_of_ne_of_mem hfa (h _ hfa')
+  · rw [← mul_assoc, mul_def (Equiv.swap a (f a)) (Equiv.swap a (f a)), Equiv.swap_swap,
+      ← Perm.one_def, one_mul]
 
 中文:
 定理 mem_permsOfList_of_mem
@@ -95,7 +105,17 @@ theorem mem_permsOfList_of_mem
   by_cases hfa : f a = a
   · refine mem_append_left _ (IH fun x hx => mem_of_ne_of_mem ?_ (h x hx))
     rintro rfl
-
+    exact hx hfa
+  have hfa' : f (f a) != f a := mt (fun h => f.injective h) hfa
+  have : forall x : α, (Equiv.swap a (f a) * f) x != x -> x in l := by
+    simp
+    grind
+  suffices f in permsOfList l ∨ exists b in l, exists g in permsOfList l, Equiv.swap a b * g = f by
+    simpa only [permsOfList, exists_prop, List.mem_map, mem_append, List.mem_flatMap]
+  refine or_iff_not_imp_left.2 fun _hfl => ⟨f a, ?_, Equiv.swap a (f a) * f, IH this, ?_⟩
+  · exact mem_of_ne_of_mem hfa (h _ hfa')
+  · rw [← mul_assoc, mul_def (Equiv.swap a (f a)) (Equiv.swap a (f a)), Equiv.swap_swap,
+      ← Perm.one_def, one_mul]
 
 Depends on / 依赖: Decidable, Decidable.byContradiction, Equiv.ext, Equiv.swap, List.mem_singleton, byContradiction, f.injective, generalizing, injective, mem_append_left, mem_of_ne_of_mem, mem_singleton, not_mem_nil, permsOfLis, permsOfList
 -/
@@ -133,7 +153,12 @@ theorem mem_of_mem_permsOfList
       fun h hx =>
       let ⟨y, hy, hy'⟩ := List.mem_flatMap.1 h
       let ⟨g, hg₁, hg₂⟩ := List.mem_map.1 hy'
-      if hxa : x = a then b
+      if hxa : x = a then by simp [hxa]
+      else
+if hxy : x = y then mem_cons_of_mem _ by rwa [hxy]
+else mem_cons_of_mem a mem_of_mem_permsOfList hg₁ by
+              rw [eq_inv_mul_iff_mul_eq.2 hg₂]; rw [mul_apply]; rw [swap_inv]; rw [swap_apply_def]
+              split_ifs <;> [exact Ne.symm hxy; exact Ne.symm hxa; exact hx]
 
 中文:
 定理 mem_of_mem_permsOfList
@@ -144,7 +169,12 @@ theorem mem_of_mem_permsOfList
       fun h hx =>
       let ⟨y, hy, hy'⟩ := List.mem_flatMap.1 h
       let ⟨g, hg₁, hg₂⟩ := List.mem_map.1 hy'
-      if hxa : x = a then b
+      if hxa : x = a then by simp [hxa]
+      else
+if hxy : x = y then mem_cons_of_mem _ by rwa [hxy]
+else mem_cons_of_mem a mem_of_mem_permsOfList hg₁ by
+              rw [eq_inv_mul_iff_mul_eq.2 hg₂]; rw [mul_apply]; rw [swap_inv]; rw [swap_apply_def]
+              split_ifs <;> [exact Ne.symm hxy; exact Ne.symm hxa; exact hx]
 
 Depends on / 依赖: List.mem_flatMap, List.mem_map, Ne.sym, eq_inv_mul_iff_mul_eq, mem_append, mem_cons_of_mem, mem_flatMap, mem_map, mem_of_mem_permsOfList, mul_apply, permsOfList, split_ifs, swap_apply_def, swap_inv
 -/
@@ -194,7 +224,25 @@ theorem nodup_permsOfList
     have hln' : (permsOfList l).Nodup := nodup_permsOfList hl'
     have hmeml : forall {f : Perm α}, f in permsOfList l -> f a = a := fun {f} hf =>
       not_not.1 (mt (mem_of_mem_permsOfList hf) (nodup_cons.1 hl).1)
-    rw [permsOfList]; rw [List.nodup_append']; rw [List.nodup_flatMap]; 
+    rw [permsOfList]; rw [List.nodup_append']; rw [List.nodup_flatMap]; rw [pairwise_iff_getElem]
+    refine ⟨?_, ⟨⟨?_,?_ ⟩, ?_⟩⟩
+    · exact hln'
+    · exact fun _ _ => hln'.map fun _ _ => mul_left_cancel
+    · intro i j hi hj hij x hx₁ hx₂
+      let ⟨f, hf⟩ := List.mem_map.1 hx₁
+      let ⟨g, hg⟩ := List.mem_map.1 hx₂
+      have hix : x a = l[i] := by
+        rw [← hf.2]; rw [mul_apply]; rw [hmeml hf.1]; rw [swap_apply_left]
+      have hiy : x a = l[j] := by
+        rw [← hg.2]; rw [mul_apply]; rw [hmeml hg.1]; rw [swap_apply_left]
+      have hieqj : i = j := hl'.getElem_inj_iff.1 (hix.symm.trans hiy)
+      exact absurd hieqj (_root_.ne_of_lt hij)
+    · intro f hf₁ hf₂
+      let ⟨x, hx, hx'⟩ := List.mem_flatMap.1 hf₂
+      let ⟨g, hg⟩ := List.mem_map.1 hx'
+obtain rfl : g.symm x = a := f.injective by rw [hmeml hf₁, ← hg.2]; simp
+      have hxa : x != g.symm x := fun h => (List.nodup_cons.1 hl).1 (h ▸ hx)
+exact (List.nodup_cons.1 hl).1 mem_of_mem_permsOfList hg.1 (by simpa using hxa)
 
 中文:
 定理 nodup_permsOfList
@@ -203,7 +251,25 @@ theorem nodup_permsOfList
     have hln' : (permsOfList l).Nodup := nodup_permsOfList hl'
     have hmeml : forall {f : Perm α}, f in permsOfList l -> f a = a := fun {f} hf =>
       not_not.1 (mt (mem_of_mem_permsOfList hf) (nodup_cons.1 hl).1)
-    rw [permsOfList]; rw [List.nodup_append']; rw [List.nodup_flatMap]; 
+    rw [permsOfList]; rw [List.nodup_append']; rw [List.nodup_flatMap]; rw [pairwise_iff_getElem]
+    refine ⟨?_, ⟨⟨?_,?_ ⟩, ?_⟩⟩
+    · exact hln'
+    · exact fun _ _ => hln'.map fun _ _ => mul_left_cancel
+    · intro i j hi hj hij x hx₁ hx₂
+      let ⟨f, hf⟩ := List.mem_map.1 hx₁
+      let ⟨g, hg⟩ := List.mem_map.1 hx₂
+      have hix : x a = l[i] := by
+        rw [← hf.2]; rw [mul_apply]; rw [hmeml hf.1]; rw [swap_apply_left]
+      have hiy : x a = l[j] := by
+        rw [← hg.2]; rw [mul_apply]; rw [hmeml hg.1]; rw [swap_apply_left]
+      have hieqj : i = j := hl'.getElem_inj_iff.1 (hix.symm.trans hiy)
+      exact absurd hieqj (_root_.ne_of_lt hij)
+    · intro f hf₁ hf₂
+      let ⟨x, hx, hx'⟩ := List.mem_flatMap.1 hf₂
+      let ⟨g, hg⟩ := List.mem_map.1 hx'
+obtain rfl : g.symm x = a := f.injective by rw [hmeml hf₁, ← hg.2]; simp
+      have hxa : x != g.symm x := fun h => (List.nodup_cons.1 hl).1 (h ▸ hx)
+exact (List.nodup_cons.1 hl).1 mem_of_mem_permsOfList hg.1 (by simpa using hxa)
 
 Depends on / 依赖: hl.of_cons, of_cons
 -/
@@ -334,7 +400,10 @@ instance Equiv.instFintype
     Trunc.recOnSubsingleton (Fintype.truncEquivFin α) fun eα =>
       Trunc.recOnSubsingleton (Fintype.truncEquivFin β) fun eβ =>
         @Fintype.ofEquiv _ (Perm α) fintypePerm
-          (equivCongr (Equiv.refl α) (eα.trans (Eq.recOn h eβ.symm)) : α ≃ α ≃
+          (equivCongr (Equiv.refl α) (eα.trans (Eq.recOn h eβ.symm)) : α ≃ α ≃ (α ≃ β))
+  else ⟨∅, fun x => False.elim (h (Fintype.card_eq.2 ⟨x.symm⟩))⟩
+
+@[to_additive]
 
 中文:
 实例 等价.instFintype
@@ -343,7 +412,10 @@ instance Equiv.instFintype
     Trunc.recOnSubsingleton (Fintype.truncEquivFin α) fun eα =>
       Trunc.recOnSubsingleton (Fintype.truncEquivFin β) fun eβ =>
         @Fintype.ofEquiv _ (Perm α) fintypePerm
-          (equivCongr (Equiv.refl α) (eα.trans (Eq.recOn h eβ.symm)) : α ≃ α ≃
+          (equivCongr (Equiv.refl α) (eα.trans (Eq.recOn h eβ.symm)) : α ≃ α ≃ (α ≃ β))
+  else ⟨∅, fun x => False.elim (h (Fintype.card_eq.2 ⟨x.symm⟩))⟩
+
+@[to_additive]
 
 Depends on / 依赖: Eq.recOn, Equiv.refl, False.elim, Fintype, Fintype.card, Fintype.card_eq, Fintype.ofEquiv, Fintype.truncEquivFin, Trunc.recOnSubsingleton, card_eq, equivCongr, fintypePerm, ofEquiv, recOnSubsingleton, truncEquivFin, x.symm
 -/

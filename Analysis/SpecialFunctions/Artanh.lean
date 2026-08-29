@@ -219,7 +219,8 @@ theorem artanh_tanh
   proof: by
   have h : 0 < (1 + tanh x) / (1 - tanh x) :=
     div_pos (by grind [neg_one_lt_tanh]) (by grind [tanh_lt_one])
-  rw [artanh]; rw [← exp_eq_exp]; rw [exp_log (sqrt_pos_of_pos h)]; rw [← sq_eq_sq₀ (le_of_lt <| sqrt_pos_of_pos h) (exp_nonneg x)]; rw [sq_sqrt (le_of_lt h)]; rw [tanh_eq]; rw [exp_neg
+  rw [artanh]; rw [← exp_eq_exp]; rw [exp_log (sqrt_pos_of_pos h)]; rw [← sq_eq_sq₀ (le_of_lt <| sqrt_pos_of_pos h) (exp_nonneg x)]; rw [sq_sqrt (le_of_lt h)]; rw [tanh_eq]; rw [exp_neg]
+  field
 
 中文:
 定理 artanh_tanh
@@ -228,7 +229,8 @@ theorem artanh_tanh
   证明: by
   have h : 0 < (1 + tanh x) / (1 - tanh x) :=
     div_pos (by grind [neg_one_lt_tanh]) (by grind [tanh_lt_one])
-  rw [artanh]; rw [← exp_eq_exp]; rw [exp_log (sqrt_pos_of_pos h)]; rw [← sq_eq_sq₀ (le_of_lt <| sqrt_pos_of_pos h) (exp_nonneg x)]; rw [sq_sqrt (le_of_lt h)]; rw [tanh_eq]; rw [exp_neg
+  rw [artanh]; rw [← exp_eq_exp]; rw [exp_log (sqrt_pos_of_pos h)]; rw [← sq_eq_sq₀ (le_of_lt <| sqrt_pos_of_pos h) (exp_nonneg x)]; rw [sq_sqrt (le_of_lt h)]; rw [tanh_eq]; rw [exp_neg]
+  field
 
 Depends on / 依赖: artanh, div_pos, exp_eq_exp, exp_log, exp_neg, exp_nonneg, le_of_lt, neg_one_lt_tanh, sq_sqrt, sqrt_pos_of_pos, tanh_eq, tanh_lt_one
 -/

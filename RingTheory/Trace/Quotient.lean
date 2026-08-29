@@ -49,7 +49,9 @@ lemma Algebra.trace_quotient_mk
   rw [trace_eq_matrix_trace b]; rw [trace_eq_matrix_trace (basisQuotient b)]; rw [AddMonoidHom.map_trace]
   congr 1
   ext i j
-  simp only [leftMulMatrix_apply, coe_lmul_eq_mul, LinearMap.toMatr
+  simp only [leftMulMatrix_apply, coe_lmul_eq_mul, LinearMap.toMatrix_apply,
+    basisQuotient_apply, LinearMap.mul_apply', Matrix.map_apply, ← map_mul,
+    basisQuotient_repr]
 
 中文:
 引理 代数.trace_quotient_mk
@@ -60,7 +62,9 @@ lemma Algebra.trace_quotient_mk
   rw [trace_eq_matrix_trace b]; rw [trace_eq_matrix_trace (basisQuotient b)]; rw [AddMonoidHom.map_trace]
   congr 1
   ext i j
-  simp only [leftMulMatrix_apply, coe_lmul_eq_mul, LinearMap.toMatr
+  simp only [leftMulMatrix_apply, coe_lmul_eq_mul, LinearMap.toMatrix_apply,
+    basisQuotient_apply, LinearMap.mul_apply', Matrix.map_apply, ← map_mul,
+    basisQuotient_repr]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_trace, ChooseBasisIndex, LinearMap, LinearMap.mul_apply, LinearMap.toMatrix_apply, Matrix, Matrix.map_apply, Module, Module.Basis, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, basisQuotient, basisQuotient_apply, basisQuotient_repr, chooseBasis, coe_lmul_eq_mul, leftMulMatrix_apply, map_apply, map_mul
 -/
@@ -103,7 +107,15 @@ lemma trace_quotient_eq_trace_localization_quotient
   have : IsScalarTower R (Rₚ ⧸ maximalIdeal Rₚ) (Sₚ ⧸ pSₚ) := by
     apply IsScalarTower.of_algebraMap_eq'
     rw [IsScalarTower.algebraMap_eq R Rₚ (Rₚ ⧸ _)]; rw [IsScalarTower.algebraMap_eq R Rₚ (Sₚ ⧸ _)]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq Rₚ]
-  rw [Algebra.trace_eq_of
+  rw [Algebra.trace_eq_of_equiv_equiv (equivQuotMaximalIdeal p Rₚ)
+    (equivQuotientMapMaximalIdeal S p Rₚ Sₚ)]
+  · congr
+  · ext x
+    simp only [equivQuotMaximalIdeal, RingHom.quotientKerEquivOfSurjective,
+      RingEquiv.coe_ringHom_trans, RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply,
+      Ideal.quotEquivOfEq_mk, RingHom.quotientKerEquivOfRightInverse.apply, RingHom.kerLift_mk,
+      equivQuotientMapMaximalIdeal, Ideal.Quotient.algebraMap_quotient_map_quotient]
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]
 
 中文:
 引理 trace_quotient_eq_trace_localization_quotient
@@ -112,7 +124,15 @@ lemma trace_quotient_eq_trace_localization_quotient
   have : IsScalarTower R (Rₚ ⧸ maximalIdeal Rₚ) (Sₚ ⧸ pSₚ) := by
     apply IsScalarTower.of_algebraMap_eq'
     rw [IsScalarTower.algebraMap_eq R Rₚ (Rₚ ⧸ _)]; rw [IsScalarTower.algebraMap_eq R Rₚ (Sₚ ⧸ _)]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq Rₚ]
-  rw [Algebra.trace_eq_of
+  rw [Algebra.trace_eq_of_equiv_equiv (equivQuotMaximalIdeal p Rₚ)
+    (equivQuotientMapMaximalIdeal S p Rₚ Sₚ)]
+  · congr
+  · ext x
+    simp only [equivQuotMaximalIdeal, RingHom.quotientKerEquivOfSurjective,
+      RingEquiv.coe_ringHom_trans, RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply,
+      Ideal.quotEquivOfEq_mk, RingHom.quotientKerEquivOfRightInverse.apply, RingHom.kerLift_mk,
+      equivQuotientMapMaximalIdeal, Ideal.Quotient.algebraMap_quotient_map_quotient]
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]
 
 Depends on / 依赖: Algebra, Algebra.trace_eq_of_equiv_equiv, IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, RingEquiv, RingEquiv.coe_ringHom_trans, RingHom, RingHom.coe, RingHom.comp_assoc, RingHom.quotientKerEquivOfSurjective, algebraMap_eq, coe_ringHom_trans, comp_assoc, equivQuotMaximalIdeal, equivQuotientMapMaximalIdeal, maximalIdeal, of_algebraMap_eq, quotientKerEquivOfSurjective, trace_eq_of_equiv_equiv
 -/
@@ -145,7 +165,30 @@ lemma Algebra.trace_quotient_eq_of_isDedekindDomain
   let Sₚ := Localization (Algebra.algebraMapSubmonoid S p.primeCompl)
   let : Algebra Rₚ Sₚ := localizationAlgebra p.primeCompl S
   have : IsScalarTower R Rₚ Sₚ := IsScalarTower.of_algebraMap_eq'
-    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp,
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq])
+  have : IsLocalization (Submonoid.map (algebraMap R S) (Ideal.primeCompl p)) Sₚ :=
+    inferInstanceAs (IsLocalization (Algebra.algebraMapSubmonoid S p.primeCompl) Sₚ)
+  have e : Algebra.algebraMapSubmonoid S p.primeCompl <= S⁰ :=
+Submonoid.map_le_of_le_comap _ p.primeCompl_le_nonZeroDivisors.trans
+      (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
+        (FaithfulSMul.algebraMap_injective _ _))
+  have : IsDomain Sₚ := IsLocalization.isDomain_of_le_nonZeroDivisors _ e
+  have : IsTorsionFree Rₚ Sₚ := by
+    rw [isTorsionFree_iff_algebraMap_injective]; rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
+    simp
+  have : Module.Finite Rₚ Sₚ := .of_isLocalization R S p.primeCompl
+  have : IsIntegrallyClosed Sₚ := isIntegrallyClosed_of_isLocalization _ _ e
+  have : IsPrincipalIdealRing Rₚ := by
+    by_cases hp : p = ⊥
+    · infer_instance
+    · have := (IsDedekindDomain.isDedekindDomainDvr R).2 p hp inferInstance
+      infer_instance
+  have : Module.Free Rₚ Sₚ := Module.free_of_finite_type_torsion_free'
+  apply (equivQuotMaximalIdeal p Rₚ).injective
+  rw [trace_quotient_eq_trace_localization_quotient S p Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq S Sₚ]; rw [RingHom.comp_apply]; rw [Ideal.Quotient.algebraMap_eq]; rw [Algebra.trace_quotient_mk]; rw [RingEquiv.apply_symm_apply]; rw [← Algebra.intTrace_eq_trace]; rw [← Algebra.intTrace_eq_of_isLocalization R S p.primeCompl (Aₘ := Rₚ) (Bₘ := Sₚ) x]; rw [← Ideal.Quotient.algebraMap_eq]; rw [← IsScalarTower.algebraMap_apply]
+  simp only [equivQuotMaximalIdeal, RingHom.quotientKerEquivOfSurjective, RingEquiv.coe_trans,
+    Function.comp_apply, Ideal.quotEquivOfEq_mk, RingHom.quotientKerEquivOfRightInverse.apply,
+    RingHom.kerLift_mk]
 
 中文:
 引理 代数.trace_quotient_eq_of_isDedekindDomain
@@ -155,7 +198,30 @@ lemma Algebra.trace_quotient_eq_of_isDedekindDomain
   let Sₚ := Localization (Algebra.algebraMapSubmonoid S p.primeCompl)
   let : Algebra Rₚ Sₚ := localizationAlgebra p.primeCompl S
   have : IsScalarTower R Rₚ Sₚ := IsScalarTower.of_algebraMap_eq'
-    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp,
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq])
+  have : IsLocalization (Submonoid.map (algebraMap R S) (Ideal.primeCompl p)) Sₚ :=
+    inferInstanceAs (IsLocalization (Algebra.algebraMapSubmonoid S p.primeCompl) Sₚ)
+  have e : Algebra.algebraMapSubmonoid S p.primeCompl <= S⁰ :=
+Submonoid.map_le_of_le_comap _ p.primeCompl_le_nonZeroDivisors.trans
+      (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
+        (FaithfulSMul.algebraMap_injective _ _))
+  have : IsDomain Sₚ := IsLocalization.isDomain_of_le_nonZeroDivisors _ e
+  have : IsTorsionFree Rₚ Sₚ := by
+    rw [isTorsionFree_iff_algebraMap_injective]; rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
+    simp
+  have : Module.Finite Rₚ Sₚ := .of_isLocalization R S p.primeCompl
+  have : IsIntegrallyClosed Sₚ := isIntegrallyClosed_of_isLocalization _ _ e
+  have : IsPrincipalIdealRing Rₚ := by
+    by_cases hp : p = ⊥
+    · infer_instance
+    · have := (IsDedekindDomain.isDedekindDomainDvr R).2 p hp inferInstance
+      infer_instance
+  have : Module.Free Rₚ Sₚ := Module.free_of_finite_type_torsion_free'
+  apply (equivQuotMaximalIdeal p Rₚ).injective
+  rw [trace_quotient_eq_trace_localization_quotient S p Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq S Sₚ]; rw [RingHom.comp_apply]; rw [Ideal.Quotient.algebraMap_eq]; rw [Algebra.trace_quotient_mk]; rw [RingEquiv.apply_symm_apply]; rw [← Algebra.intTrace_eq_trace]; rw [← Algebra.intTrace_eq_of_isLocalization R S p.primeCompl (Aₘ := Rₚ) (Bₘ := Sₚ) x]; rw [← Ideal.Quotient.algebraMap_eq]; rw [← IsScalarTower.algebraMap_apply]
+  simp only [equivQuotMaximalIdeal, RingHom.quotientKerEquivOfSurjective, RingEquiv.coe_trans,
+    Function.comp_apply, Ideal.quotEquivOfEq_mk, RingHom.quotientKerEquivOfRightInverse.apply,
+    RingHom.kerLift_mk]
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, AtPrime, Ideal.primeCompl, IsLocalization, IsLocalization.map_comp, IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, Localization, Localization.AtPrime, RingHom, RingHom.algebraMap_toAlgebra, Submonoid, Submonoid.map, algebraMap, algebraMapSubmonoid, algebraMap_eq, algebraMap_toAlgebra, localizationAlgebra
 -/

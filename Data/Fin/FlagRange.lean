@@ -39,7 +39,11 @@ theorem IsMaxChain.range_fin_of_covBy
   rw [mem_range]; by_contra! h
   suffices forall k, f k < x by simpa [hlast] using this (.last _)
   intro k
-  induction k using Fin.induction 
+  induction k using Fin.induction with
+  | zero => simpa [h0, bot_lt_iff_ne_bot] using (h 0).symm
+  | succ k ihk =>
+    rw [range_subset_iff] at hbt
+    exact (htc.lt_of_le (hbt k.succ) hx (h _)).resolve_right ((hcovBy k).2 ihk)
 
 中文:
 定理 IsMaxChain.range_fin_of_covBy
@@ -50,7 +54,11 @@ theorem IsMaxChain.range_fin_of_covBy
   rw [mem_range]; by_contra! h
   suffices forall k, f k < x by simpa [hlast] using this (.last _)
   intro k
-  induction k using Fin.induction 
+  induction k using Fin.induction with
+  | zero => simpa [h0, bot_lt_iff_ne_bot] using (h 0).symm
+  | succ k ihk =>
+    rw [range_subset_iff] at hbt
+    exact (htc.lt_of_le (hbt k.succ) hx (h _)).resolve_right ((hcovBy k).2 ihk)
 
 Depends on / 依赖: Fin.induction, Fin.monotone_iff_le_succ, Monotone, antisymm, bot_lt_iff_ne_bot, hbt.antisymm, hcovBy, hmono.isChain_range, htc.lt_of_le, isChain_range, k.succ, lt_of_le, mem_range, monotone_iff_le_succ, range_subset_iff, resolve_right
 -/

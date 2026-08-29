@@ -281,7 +281,11 @@ lemma shape
   | .negSucc 0, .ofNat 0 => by simp at hnm
   | .ofNat _, .negSucc m => rfl
   | .negSucc n, .ofNat m => by
-    obtain _ 
+    obtain _ | n := n
+    · obtain _ | m := m
+      · simp at hnm
+      · rfl
+    · simp only [d]
 
 中文:
 引理 shape
@@ -294,7 +298,11 @@ lemma shape
   | .negSucc 0, .ofNat 0 => by simp at hnm
   | .ofNat _, .negSucc m => rfl
   | .negSucc n, .ofNat m => by
-    obtain _ 
+    obtain _ | n := n
+    · obtain _ | m := m
+      · simp at hnm
+      · rfl
+    · simp only [d]
 
 Depends on / 依赖: K.op, K.shape, L.shape, d_negSucc, e.op, negSucc
 -/
@@ -329,7 +337,16 @@ lemma d_comp_d
   obtain n | (_ | _ | n) := n
   · obtain rfl : m = .ofNat (n + 1) := by simp [← hnm]
     obtain rfl : p = .ofNat (n + 2) := by simp [← hmp]; lia
-    simp only 
+    simp only [Int.ofNat_eq_natCast, X_ofNat, d_ofNat, HomologicalComplex.d_comp_d]
+  · obtain rfl : m = 0 := by lia
+    obtain rfl : p = 1 := by lia
+    simp
+  · obtain rfl : m = -1 := by lia
+    obtain rfl : p = 0 := by lia
+    simp
+  · obtain rfl : m = .negSucc (n + 1) := by lia
+    obtain rfl : p = .negSucc n := by lia
+    simp
 
 中文:
 引理 d_comp_d
@@ -343,7 +360,16 @@ lemma d_comp_d
   obtain n | (_ | _ | n) := n
   · obtain rfl : m = .ofNat (n + 1) := by simp [← hnm]
     obtain rfl : p = .ofNat (n + 2) := by simp [← hmp]; lia
-    simp only 
+    simp only [Int.ofNat_eq_natCast, X_ofNat, d_ofNat, HomologicalComplex.d_comp_d]
+  · obtain rfl : m = 0 := by lia
+    obtain rfl : p = 1 := by lia
+    simp
+  · obtain rfl : m = -1 := by lia
+    obtain rfl : p = 0 := by lia
+    simp
+  · obtain rfl : m = .negSucc (n + 1) := by lia
+    obtain rfl : p = .negSucc n := by lia
+    simp
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.d_comp_d, Int.ofNat_eq_natCast, X_ofNat, comp_zero, d_comp_d, d_ofNat, h.shape, ofNat_eq_natCast, zero_comp
 -/
@@ -408,7 +434,8 @@ definition restrictionGEIso
       (i := n) (i' := n) (by simp)) (by
     rintro n _ rfl
     rw [restriction_d_eq (e := (ComplexShape.embeddingUpIntGE 0)) _ (i' := n)
-      (j' := (n + 1 : Nat)) (by simp) (by simp)]; rw [cochainC
+      (j' := (n + 1 : Nat)) (by simp) (by simp)]; rw [cochainComplex_d]; rw [h.d_ofNat]
+    simp)
 
 中文:
 定义 restrictionGEIso
@@ -418,7 +445,8 @@ definition restrictionGEIso
       (i := n) (i' := n) (by simp)) (by
     rintro n _ rfl
     rw [restriction_d_eq (e := (ComplexShape.embeddingUpIntGE 0)) _ (i' := n)
-      (j' := (n + 1 : Nat)) (by simp) (by simp)]; rw [cochainC
+      (j' := (n + 1 : Nat)) (by simp) (by simp)]; rw [cochainComplex_d]; rw [h.d_ofNat]
+    simp)
 
 Depends on / 依赖: ComplexShape, ComplexShape.embeddingUpIntGE, Hom.isoOfComponents, cochainComplex, cochainComplex_d, d_ofNat, embeddingUpIntGE, h.cochainComplex.restrictionXIso, h.d_ofNat, isoOfComponents, restrictionXIso, restriction_d_eq
 -/
@@ -447,7 +475,8 @@ definition restrictionLEIso
         (i := n) (i' := .negSucc n) (by dsimp; lia)) (by
     rintro _ n rfl
     rw [restriction_d_eq (e := (ComplexShape.embeddingUpIntLE (-1))) _
-      (i' := Int.negSucc (n + 1)) (j' := Int.negS
+      (i' := Int.negSucc (n + 1)) (j' := Int.negSucc n) (by dsimp; lia) (by dsimp; lia)]; rw [cochainComplex_d]; rw [d_negSucc]
+    simp)
 
 中文:
 定义 restrictionLEIso
@@ -457,7 +486,8 @@ definition restrictionLEIso
         (i := n) (i' := .negSucc n) (by dsimp; lia)) (by
     rintro _ n rfl
     rw [restriction_d_eq (e := (ComplexShape.embeddingUpIntLE (-1))) _
-      (i' := Int.negSucc (n + 1)) (j' := Int.negS
+      (i' := Int.negSucc (n + 1)) (j' := Int.negSucc n) (by dsimp; lia) (by dsimp; lia)]; rw [cochainComplex_d]; rw [d_negSucc]
+    simp)
 
 Depends on / 依赖: ComplexShape, ComplexShape.embeddingUpIntLE, Hom.isoOfComponents, Int.negSucc, IsStrictlySupported, K.op.truncGE, cochainComplex, cochainComplex_d, d_negSucc, e.op, embeddingUpIntLE, h.cochainComplex.restrictionXIso, isStrictlySupported_op_iff, isoOfComponents, negSucc, restrictionXIso, restriction_d_eq, truncGE
 -/
@@ -481,7 +511,8 @@ definition homologyIsoPos
   (h.cochainComplex.restrictionHomologyIso
     (ComplexShape.embeddingUpIntGE 0) (n - 1) n (n + 1) (by cases n <;> simp) (by simp)
       (i' := m - 1) (j' := m) (k' := m + 1) (by have := NeZero.ne n; cases n <;> simp <;> lia)
-      (by simp; lia) 
+      (by simp; lia) (by simp; lia) (by simp) (by simp)).symm ≪≫
+    HomologicalComplex.homologyMapIso h.restrictionGEIso n
 
 中文:
 定义 homologyIsoPos
@@ -490,7 +521,8 @@ definition homologyIsoPos
   (h.cochainComplex.restrictionHomologyIso
     (ComplexShape.embeddingUpIntGE 0) (n - 1) n (n + 1) (by cases n <;> simp) (by simp)
       (i' := m - 1) (j' := m) (k' := m + 1) (by have := NeZero.ne n; cases n <;> simp <;> lia)
-      (by simp; lia) 
+      (by simp; lia) (by simp; lia) (by simp) (by simp)).symm ≪≫
+    HomologicalComplex.homologyMapIso h.restrictionGEIso n
 
 Depends on / 依赖: ComplexShape, ComplexShape.embeddingUpIntGE, HomologicalComplex, HomologicalComplex.homologyMapIso, NeZero, NeZero.ne, cochainComplex, embeddingUpIntGE, h.cochainComplex.restrictionHomologyIso, h.restrictionGEIso, h.restrictionGEIso.symm, hasHomology_of_iso, homologyMapIso, restrictionGEIso, restrictionHomologyIso
 -/
@@ -514,7 +546,8 @@ definition homologyIsoNeg
   (h.cochainComplex.restrictionHomologyIso
     (ComplexShape.embeddingUpIntLE (-1)) (n + 1) n (n - 1) (by simp) (by cases n <;> simp)
       (i' := m - 1) (j' := m) (k' := m + 1) (by simp; lia) (by simp; lia)
-      (by have := NeZero.ne n; cases n 
+      (by have := NeZero.ne n; cases n <;> simp <;> lia) (by simp) (by simp)).symm ≪≫
+    HomologicalComplex.homologyMapIso h.restrictionLEIso n
 
 中文:
 定义 homologyIsoNeg
@@ -523,7 +556,8 @@ definition homologyIsoNeg
   (h.cochainComplex.restrictionHomologyIso
     (ComplexShape.embeddingUpIntLE (-1)) (n + 1) n (n - 1) (by simp) (by cases n <;> simp)
       (i' := m - 1) (j' := m) (k' := m + 1) (by simp; lia) (by simp; lia)
-      (by have := NeZero.ne n; cases n 
+      (by have := NeZero.ne n; cases n <;> simp <;> lia) (by simp) (by simp)).symm ≪≫
+    HomologicalComplex.homologyMapIso h.restrictionLEIso n
 
 Depends on / 依赖: ComplexShape, ComplexShape.embeddingUpIntLE, HomologicalComplex, HomologicalComplex.homologyMapIso, NeZero, NeZero.ne, cochainComplex, embeddingUpIntLE, h.cochainComplex.restrictionHomologyIso, h.restrictionLEIso, h.restrictionLEIso.symm, hasHomology_of_iso, homologyMapIso, restrictionHomologyIso, restrictionLEIso
 -/
@@ -614,7 +648,9 @@ lemma homologyMap_map_of_eq_succ
   simp only [homologyι_naturality, Category.assoc, restrictionHomologyIso_hom_homologyι,
     homologyι_naturality_assoc, restrictionHomologyIso_inv_homologyι_assoc]
   congr 1
-  rw [← cancel_epi (HomologicalComplex.pOp
+  rw [← cancel_epi (HomologicalComplex.pOpcycles ..)]
+  subst hmn
+  simp
 
 中文:
 引理 homologyMap_map_of_eq_succ
@@ -625,7 +661,9 @@ lemma homologyMap_map_of_eq_succ
   simp only [homologyι_naturality, Category.assoc, restrictionHomologyIso_hom_homologyι,
     homologyι_naturality_assoc, restrictionHomologyIso_inv_homologyι_assoc]
   congr 1
-  rw [← cancel_epi (HomologicalComplex.pOp
+  rw [← cancel_epi (HomologicalComplex.pOpcycles ..)]
+  subst hmn
+  simp
 
 Depends on / 依赖: Category, Category.assoc, HomologicalComplex, HomologicalComplex.homology, HomologicalComplex.pOpcycles, cancel_epi, cancel_mono, homologyIsoPos, pOpcycles
 -/
@@ -657,7 +695,9 @@ lemma homologyMap_map_of_eq_neg_succ
   simp only [homologyι_naturality, Category.assoc, restrictionHomologyIso_hom_homologyι,
     homologyι_naturality_assoc, restrictionHomologyIso_inv_homologyι_assoc]
   congr 1
-  rw [← cancel_epi (HomologicalComplex.pOp
+  rw [← cancel_epi (HomologicalComplex.pOpcycles ..)]
+  obtain rfl : m = .negSucc n := hmn
+  simp
 
 中文:
 引理 homologyMap_map_of_eq_neg_succ
@@ -668,7 +708,9 @@ lemma homologyMap_map_of_eq_neg_succ
   simp only [homologyι_naturality, Category.assoc, restrictionHomologyIso_hom_homologyι,
     homologyι_naturality_assoc, restrictionHomologyIso_inv_homologyι_assoc]
   congr 1
-  rw [← cancel_epi (HomologicalComplex.pOp
+  rw [← cancel_epi (HomologicalComplex.pOpcycles ..)]
+  obtain rfl : m = .negSucc n := hmn
+  simp
 
 Depends on / 依赖: Category, Category.assoc, HomologicalComplex, HomologicalComplex.homology, HomologicalComplex.pOpcycles, cancel_epi, cancel_mono, homologyIsoNeg, negSucc, pOpcycles
 -/

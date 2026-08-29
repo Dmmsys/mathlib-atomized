@@ -38,7 +38,14 @@ lemma MemLp.isProbabilityMeasure_of_indepFun
     contrapose! h'f
     have A (c : Real>=0) (hc : 0 < c) : forallᵐ ω ∂μ, ‖f ω‖₊ < c := by simpa [ae_iff] using h'f c hc
     obtain ⟨u, -, u_pos, u_lim⟩ : exists u, StrictAnti u ∧ (forall (n : Nat), 0 < u n)
-   
+      ∧ Tendsto u atTop (𝓝 0) := exists_seq_strictAnti_tendsto (0 : Real>=0)
+    filter_upwards [ae_all_iff.2 (fun n => A (u n) (u_pos n))] with ω hω
+    simpa using ge_of_tendsto' u_lim (fun i => (hω i).le)
+  have h'c : μ {ω | c <= ‖f ω‖₊} < ∞ := hℒp.meas_ge_lt_top hp hp' c_pos.ne'
+  have := hindep.measure_inter_preimage_eq_mul {x | c <= ‖x‖₊} Set.univ
+    (isClosed_le continuous_const continuous_nnnorm).measurableSet MeasurableSet.univ
+  simp only [Set.preimage_ofPred_eq, Set.preimage_univ, Set.inter_univ] at this
+  exact ⟨(ENNReal.mul_eq_left hc.ne' h'c.ne).1 this.symm⟩
 
 中文:
 引理 MemLp.isProbabilityMeasure_of_indepFun
@@ -47,7 +54,14 @@ lemma MemLp.isProbabilityMeasure_of_indepFun
     contrapose! h'f
     have A (c : Real>=0) (hc : 0 < c) : forallᵐ ω ∂μ, ‖f ω‖₊ < c := by simpa [ae_iff] using h'f c hc
     obtain ⟨u, -, u_pos, u_lim⟩ : exists u, StrictAnti u ∧ (forall (n : Nat), 0 < u n)
-   
+      ∧ Tendsto u atTop (𝓝 0) := exists_seq_strictAnti_tendsto (0 : Real>=0)
+    filter_upwards [ae_all_iff.2 (fun n => A (u n) (u_pos n))] with ω hω
+    simpa using ge_of_tendsto' u_lim (fun i => (hω i).le)
+  have h'c : μ {ω | c <= ‖f ω‖₊} < ∞ := hℒp.meas_ge_lt_top hp hp' c_pos.ne'
+  have := hindep.measure_inter_preimage_eq_mul {x | c <= ‖x‖₊} Set.univ
+    (isClosed_le continuous_const continuous_nnnorm).measurableSet MeasurableSet.univ
+  simp only [Set.preimage_ofPred_eq, Set.preimage_univ, Set.inter_univ] at this
+  exact ⟨(ENNReal.mul_eq_left hc.ne' h'c.ne).1 this.symm⟩
 
 Depends on / 依赖: StrictAnti, Tendsto, ae_all_iff, ae_iff, c_pos, contrapose, exists_seq_strictAnti_tendsto, filter_upwards, ge_of_tendsto, u_lim, u_pos
 -/

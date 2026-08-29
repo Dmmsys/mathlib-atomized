@@ -83,7 +83,40 @@ lemma ContinuousSMul.topology_eq_of_nhds_inf_principal_eq
   set 𝓕₂ := @nhds E t₂ 0
   -- Note that, because `V ∈ 𝓕₁`, `H` may be rewritten as `𝓕₁ = 𝓕₂ ⊓ 𝓟 V`.
   replace H : 𝓕₁ = 𝓕₂ ⊓ 𝓟 V := by simpa [← H]
-  -- Because both `t
+  -- Because both `t₁` and `t₂` are additive group topologies, it is enough to show `𝓕₁ = 𝓕₂`.
+  suffices 𝓕₁ = 𝓕₂ by rwa [IsTopologicalAddGroup.ext_iff] <;> infer_instance
+  -- If we can show that `V ∈ 𝓕₂` we are done, because then `𝓕₁ = 𝓕₂ ⊓ 𝓟 V = 𝓕₂`.
+  suffices V in 𝓕₂ by simpa [H]
+  -- Hence, let us show that `V ∈ 𝓕₂`. Fix a scalar `c` with `0 < ‖c‖ < 1`.
+  obtain ⟨c, hc₀, hc₁⟩ := NormedField.exists_norm_lt_one 𝕜₁
+  have c_ne : c != 0 := norm_pos_iff.mp hc₀
+  -- We know that `c • V ∈ 𝓕₁ = 𝓕₂ ⊓ 𝓟 V`.
+  have cV_mem : c • V in 𝓕₂ ⊓ 𝓟 V := by
+    simpa [← H, 𝓕₁, set_smul_mem_nhds_zero_iff c_ne]
+  -- Furthermore, we know that `𝓕₂` has a basis of balanced sets
+  have basis_𝓕₂ : HasBasis 𝓕₂ (fun (s : Set E) => s in 𝓕₂ ∧ Balanced 𝕜₁ s) id :=
+    let := t₂; nhds_basis_balanced 𝕜₁ E
+  -- Hence, we get a balanced set `W ∈ 𝓕₂` such that `W ∩ V ⊆ c • V`.
+.mem_iff.mp cV_mem obtain ⟨W, ⟨W_mem_𝓕₂, W_bal⟩, hW⟩ := basis_𝓕₂.inf_principal V
+  -- We claim that `W ⊆ V`. This will conclude the proof, since `W ∈ 𝓕₂`.
+  suffices W subseteq V from mem_of_superset W_mem_𝓕₂ this
+  -- Let `w ∈ W` be arbitrary.
+  intro w w_in_W
+  -- Because `V` is a `t₁`-neighborhood of `0`, we have `c ^ n • w ∈ V` for some natural number `n`.
+  obtain ⟨n, hn⟩ : exists n : Nat, c ^ n • w in V :=
+    let := t₁
+.zero_smul_const w tendsto_pow_atTop_nhds_zero_of_norm_lt_one hc₁
+.exists .eventually_mem V_mem
+  -- We will conclude by reducing `c ^ n • w ∈ V` to `w = c ^ 0 • w ∈ V` inductively.
+  suffices c ^ 0 • w in V by simpa
+  apply Nat.decreasingInduction (motive := fun (k : Nat) _ => c^k • w in V) ?_ hn n.zero_le
+  -- To do so, we show that if `k : ℕ` is such that `c ^ (k + 1) • w ∈ V` then `c ^ k • w ∈ V`.
+  intro k _ (hk : c ^ (k + 1) • w in V)
+  -- Indeed, because `W` is balanced, we have `c ^ (k + 1) • w ∈ W ∩ V ⊆ c • V`
+  have : c ^ (k + 1) • w in c • V :=
+    hW ⟨W_bal.smul_mem (by grw [norm_pow, hc₁.le, one_pow]) w_in_W, hk⟩
+  -- Cancelling `c`, we get `c ^ k • w ∈ V` as we claimed.
+  rwa [pow_add, pow_one, mul_comm, mul_smul, smul_mem_smul_set_iff₀ c_ne V] at this
 
 中文:
 引理 连续标量乘法.topology_eq_of_nhds_inf_principal_eq
@@ -95,7 +128,40 @@ lemma ContinuousSMul.topology_eq_of_nhds_inf_principal_eq
   set 𝓕₂ := @nhds E t₂ 0
   -- Note that, because `V ∈ 𝓕₁`, `H` may be rewritten as `𝓕₁ = 𝓕₂ ⊓ 𝓟 V`.
   replace H : 𝓕₁ = 𝓕₂ ⊓ 𝓟 V := by simpa [← H]
-  -- Because both `t
+  -- Because both `t₁` and `t₂` are additive group topologies, it is enough to show `𝓕₁ = 𝓕₂`.
+  suffices 𝓕₁ = 𝓕₂ by rwa [IsTopologicalAddGroup.ext_iff] <;> infer_instance
+  -- If we can show that `V ∈ 𝓕₂` we are done, because then `𝓕₁ = 𝓕₂ ⊓ 𝓟 V = 𝓕₂`.
+  suffices V in 𝓕₂ by simpa [H]
+  -- Hence, let us show that `V ∈ 𝓕₂`. Fix a scalar `c` with `0 < ‖c‖ < 1`.
+  obtain ⟨c, hc₀, hc₁⟩ := NormedField.exists_norm_lt_one 𝕜₁
+  have c_ne : c != 0 := norm_pos_iff.mp hc₀
+  -- We know that `c • V ∈ 𝓕₁ = 𝓕₂ ⊓ 𝓟 V`.
+  have cV_mem : c • V in 𝓕₂ ⊓ 𝓟 V := by
+    simpa [← H, 𝓕₁, set_smul_mem_nhds_zero_iff c_ne]
+  -- Furthermore, we know that `𝓕₂` has a basis of balanced sets
+  have basis_𝓕₂ : HasBasis 𝓕₂ (fun (s : Set E) => s in 𝓕₂ ∧ Balanced 𝕜₁ s) id :=
+    let := t₂; nhds_basis_balanced 𝕜₁ E
+  -- Hence, we get a balanced set `W ∈ 𝓕₂` such that `W ∩ V ⊆ c • V`.
+.mem_iff.mp cV_mem obtain ⟨W, ⟨W_mem_𝓕₂, W_bal⟩, hW⟩ := basis_𝓕₂.inf_principal V
+  -- We claim that `W ⊆ V`. This will conclude the proof, since `W ∈ 𝓕₂`.
+  suffices W subseteq V from mem_of_superset W_mem_𝓕₂ this
+  -- Let `w ∈ W` be arbitrary.
+  intro w w_in_W
+  -- Because `V` is a `t₁`-neighborhood of `0`, we have `c ^ n • w ∈ V` for some natural number `n`.
+  obtain ⟨n, hn⟩ : exists n : Nat, c ^ n • w in V :=
+    let := t₁
+.zero_smul_const w tendsto_pow_atTop_nhds_zero_of_norm_lt_one hc₁
+.exists .eventually_mem V_mem
+  -- We will conclude by reducing `c ^ n • w ∈ V` to `w = c ^ 0 • w ∈ V` inductively.
+  suffices c ^ 0 • w in V by simpa
+  apply Nat.decreasingInduction (motive := fun (k : Nat) _ => c^k • w in V) ?_ hn n.zero_le
+  -- To do so, we show that if `k : ℕ` is such that `c ^ (k + 1) • w ∈ V` then `c ^ k • w ∈ V`.
+  intro k _ (hk : c ^ (k + 1) • w in V)
+  -- Indeed, because `W` is balanced, we have `c ^ (k + 1) • w ∈ W ∩ V ⊆ c • V`
+  have : c ^ (k + 1) • w in c • V :=
+    hW ⟨W_bal.smul_mem (by grw [norm_pow, hc₁.le, one_pow]) w_in_W, hk⟩
+  -- Cancelling `c`, we get `c ^ k • w ∈ V` as we claimed.
+  rwa [pow_add, pow_one, mul_comm, mul_smul, smul_mem_smul_set_iff₀ c_ne V] at this
 
 Depends on / 依赖: classical
 -/
@@ -196,7 +262,10 @@ lemma LinearMap.isInducing_of_restrict_nhds_zero
   -- `f` is linear, `t₂` is also a vector space topology.
   have := topologicalAddGroup_induced f
   have := continuousSMul_inducedₛₗ f σ.isometry.continuous
-  -- Because `Set.domRestri
+  -- Because `Set.domRestrict V f` is an inducing, `t₁` and `t₂` induce the same topology
+  -- on `V`, so we get `t₁ = t₂` from the lemmas above.
+  apply ContinuousSMul.topology_eq_of_induced_eq 𝕜₁ _ (.induced f _) V_mem
+  rw [induced_compose]; rw [← domRestrict_eq]; rw [← H.eq_induced]; rw [← IsInducing.subtypeVal.eq_induced]
 
 中文:
 引理 线性映射.isInducing_of_restrict_nhds_zero
@@ -207,7 +276,10 @@ lemma LinearMap.isInducing_of_restrict_nhds_zero
   -- `f` is linear, `t₂` is also a vector space topology.
   have := topologicalAddGroup_induced f
   have := continuousSMul_inducedₛₗ f σ.isometry.continuous
-  -- Because `Set.domRestri
+  -- Because `Set.domRestrict V f` is an inducing, `t₁` and `t₂` induce the same topology
+  -- on `V`, so we get `t₁ = t₂` from the lemmas above.
+  apply ContinuousSMul.topology_eq_of_induced_eq 𝕜₁ _ (.induced f _) V_mem
+  rw [induced_compose]; rw [← domRestrict_eq]; rw [← H.eq_induced]; rw [← IsInducing.subtypeVal.eq_induced]
 
 Depends on / 依赖: isInducing_iff
 -/
@@ -235,7 +307,8 @@ lemma LinearMap.isEmbedding_of_restrict_nhds_zero
   rw [← LinearMap.ker_eq_bot]; rw [Submodule.eq_bot_iff]
   intro x hx
   obtain ⟨c, hc, c_ne : c != 0⟩ := absorbent_nhds_zero (𝕜 := 𝕜₁) V_mem
-.exists .and eventually_m
+.exists .and eventually_mem_nhdsWithin .eventually_nhdsNE_zero x
+  rw [← smul_eq_zero_iff_right c_ne]; rw [← f_injOn.eq_iff hc (mem_of_mem_nhds V_mem)]; rw [map_zero]; rw [map_smulₛₗ]; rw [hx]; rw [smul_zero]
 
 中文:
 引理 线性映射.isEmbedding_of_restrict_nhds_zero
@@ -246,7 +319,8 @@ lemma LinearMap.isEmbedding_of_restrict_nhds_zero
   rw [← LinearMap.ker_eq_bot]; rw [Submodule.eq_bot_iff]
   intro x hx
   obtain ⟨c, hc, c_ne : c != 0⟩ := absorbent_nhds_zero (𝕜 := 𝕜₁) V_mem
-.exists .and eventually_m
+.exists .and eventually_mem_nhdsWithin .eventually_nhdsNE_zero x
+  rw [← smul_eq_zero_iff_right c_ne]; rw [← f_injOn.eq_iff hc (mem_of_mem_nhds V_mem)]; rw [map_zero]; rw [map_smulₛₗ]; rw [hx]; rw [smul_zero]
 
 Depends on / 依赖: H.injective, H.isInducing, LinearMap, LinearMap.ker_eq_bot, Submodule, Submodule.eq_bot_iff, V_mem, absorbent_nhds_zero, c_ne, eq_bot_iff, eq_iff, eventually_mem_nhdsWithin, eventually_nhdsNE_zero, f_injOn, f_injOn.eq_iff, injOn_iff_injective, injective, isInducing, isInducing_of_restrict_nhds_zero, ker_eq_bot
 -/

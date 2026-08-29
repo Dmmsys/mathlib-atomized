@@ -38,7 +38,12 @@ definition polynomialTensorProductLEquivPolynomialModule
     ext n x
     simp [inv, e, ← monomial_one_right_eq_X_pow, smul_tmul']
   have right : e.restrictScalars R ∘ₗ inv = .id := by
-    ex
+    ext n x
+    simp [e, inv, ← monomial_one_right_eq_X_pow]
+  { __ := e
+    invFun := inv
+    left_inv := (congr($left ·))
+    right_inv := (congr($right ·)) }
 
 中文:
 定义 polynomialTensorProductLEquivPolynomialModule
@@ -49,7 +54,12 @@ definition polynomialTensorProductLEquivPolynomialModule
     ext n x
     simp [inv, e, ← monomial_one_right_eq_X_pow, smul_tmul']
   have right : e.restrictScalars R ∘ₗ inv = .id := by
-    ex
+    ext n x
+    simp [e, inv, ← monomial_one_right_eq_X_pow]
+  { __ := e
+    invFun := inv
+    left_inv := (congr($left ·))
+    right_inv := (congr($right ·)) }
 
 Depends on / 依赖: TensorProduct, TensorProduct.mk, e.restrictScalars, invFun, left_inv, liftBaseChange, lsingle, monomial_one_right_eq_X_pow, restrictScalars, right_inv, smul_tmul
 -/

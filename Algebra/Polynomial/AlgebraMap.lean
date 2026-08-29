@@ -64,7 +64,11 @@ instance algebraOfAlgebra
   commutes' r p :=
 toFinsupp_injective by
       dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply]
-      simp_rw [to
+      simp_rw [toFinsupp_mul, toFinsupp_C]
+      convert! Algebra.commutes' r p.toFinsupp
+  algebraMap := C.comp (algebraMap R A)
+
+@[simp]
 
 中文:
 实例 algebraOfAlgebra
@@ -76,7 +80,11 @@ toFinsupp_injective by
   commutes' r p :=
 toFinsupp_injective by
       dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply]
-      simp_rw [to
+      simp_rw [toFinsupp_mul, toFinsupp_C]
+      convert! Algebra.commutes' r p.toFinsupp
+  algebraMap := C.comp (algebraMap R A)
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.smul_def, C.comp, RingHom, RingHom.comp_apply, RingHom.toFun_eq_coe, algebraMap, commutes, comp_apply, convert, p.toFinsupp, simp_rw, smul_def, toFinsupp, toFinsupp_C, toFinsupp_injective, toFinsupp_mul, toFinsupp_smul, toFun_eq_coe
 -/
@@ -2413,7 +2421,10 @@ theorem dvd_term_of_dvd_eval_of_dvd_terms
     refine (dvd_add_left ?_).mp dvd_eval
     apply Finset.dvd_sum
     intro j hj
-    exact dvd_terms j (Finset.ne_of_mem_
+    exact dvd_terms j (Finset.ne_of_mem_erase hj)
+  · convert! dvd_zero p
+    rw [notMem_support_iff] at hi
+    simp [hi]
 
 中文:
 定理 dvd_term_of_dvd_eval_of_dvd_terms
@@ -2425,7 +2436,10 @@ theorem dvd_term_of_dvd_eval_of_dvd_terms
     refine (dvd_add_left ?_).mp dvd_eval
     apply Finset.dvd_sum
     intro j hj
-    exact dvd_terms j (Finset.ne_of_mem_
+    exact dvd_terms j (Finset.ne_of_mem_erase hj)
+  · convert! dvd_zero p
+    rw [notMem_support_iff] at hi
+    simp [hi]
 
 Depends on / 依赖: Finset, Finset.dvd_sum, Finset.insert_erase, Finset.ne_of_mem_erase, Finset.notMem_erase, Finset.sum_insert, convert, dvd_add_left, dvd_eval, dvd_sum, dvd_terms, dvd_zero, f.support, insert_erase, ne_of_mem_erase, notMem_erase, notMem_support_iff, sum_def, sum_insert, support
 -/
@@ -2783,7 +2797,7 @@ lemma aeval_apply_smul_mem_of_le_comap'
     exact Submodule.add_mem q h₁ h₂
   | monomial n t hmq =>
     rw [pow_succ']; rw [mul_left_comm]; rw [map_mul]; rw [aeval_X]; rw [mul_smul]
- 
+    solve_by_elim
 
 中文:
 引理 aeval_apply_smul_mem_of_le_comap'
@@ -2795,7 +2809,7 @@ lemma aeval_apply_smul_mem_of_le_comap'
     exact Submodule.add_mem q h₁ h₂
   | monomial n t hmq =>
     rw [pow_succ']; rw [mul_left_comm]; rw [map_mul]; rw [aeval_X]; rw [mul_smul]
- 
+    solve_by_elim
 
 Depends on / 依赖: Polynomial, Polynomial.induction_on, SMulMemClass, SMulMemClass.smul_mem, Submodule, Submodule.add_mem, add_mem, add_smul, aeval_X, induction_on, map_add, map_mul, monomial, mul_left_comm, mul_smul, pow_succ, simp_rw, smul_mem, solve_by_elim
 -/
@@ -2850,7 +2864,25 @@ theorem eq_zero_of_mul_eq_zero_of_smul
   apply Nat.strong_decreasing_induction
   · use P.natDegree
     intro i hi
-    rw [coeff_eq_zero_of_natDegree_
+    rw [coeff_eq_zero_of_natDegree_lt hi]; rw [zero_smul]
+  intro l IH
+  obtain _ | hl := (natDegree_smul_le (P.coeff l) Q).lt_or_eq
+  · apply eq_zero_of_mul_eq_zero_of_smul _ h (P.coeff l • Q)
+    rw [smul_eq_C_mul]; rw [mul_left_comm]; rw [hQ]; rw [mul_zero]
+  suffices P.coeff l * Q.leadingCoeff = 0 by
+    rwa [← leadingCoeff_eq_zero, ← coeff_natDegree, coeff_smul, hl, coeff_natDegree, smul_eq_mul]
+  let m := Q.natDegree
+  suffices (P * Q).coeff (l + m) = P.coeff l * Q.leadingCoeff by rw [← this, hQ, coeff_zero]
+  rw [coeff_mul]
+  apply Finset.sum_eq_single (l, m) _ (by simp)
+  simp only [Finset.mem_antidiagonal, ne_eq, Prod.forall, Prod.mk.injEq, not_and]
+  intro i j hij H
+  obtain hi | rfl | hi := lt_trichotomy i l
+  · have hj : m < j := by lia
+    rw [coeff_eq_zero_of_natDegree_lt hj]; rw [mul_zero]
+  · lia
+  · rw [← coeff_C_mul, ← smul_eq_C_mul, IH _ hi, coeff_zero]
+termination_by Q.natDegree
 
 中文:
 定理 eq_zero_of_mul_eq_zero_of_smul
@@ -2863,7 +2895,25 @@ theorem eq_zero_of_mul_eq_zero_of_smul
   apply Nat.strong_decreasing_induction
   · use P.natDegree
     intro i hi
-    rw [coeff_eq_zero_of_natDegree_
+    rw [coeff_eq_zero_of_natDegree_lt hi]; rw [zero_smul]
+  intro l IH
+  obtain _ | hl := (natDegree_smul_le (P.coeff l) Q).lt_or_eq
+  · apply eq_zero_of_mul_eq_zero_of_smul _ h (P.coeff l • Q)
+    rw [smul_eq_C_mul]; rw [mul_left_comm]; rw [hQ]; rw [mul_zero]
+  suffices P.coeff l * Q.leadingCoeff = 0 by
+    rwa [← leadingCoeff_eq_zero, ← coeff_natDegree, coeff_smul, hl, coeff_natDegree, smul_eq_mul]
+  let m := Q.natDegree
+  suffices (P * Q).coeff (l + m) = P.coeff l * Q.leadingCoeff by rw [← this, hQ, coeff_zero]
+  rw [coeff_mul]
+  apply Finset.sum_eq_single (l, m) _ (by simp)
+  simp only [Finset.mem_antidiagonal, ne_eq, Prod.forall, Prod.mk.injEq, not_and]
+  intro i j hij H
+  obtain hi | rfl | hi := lt_trichotomy i l
+  · have hj : m < j := by lia
+    rw [coeff_eq_zero_of_natDegree_lt hj]; rw [mul_zero]
+  · lia
+  · rw [← coeff_C_mul, ← smul_eq_C_mul, IH _ hi, coeff_zero]
+termination_by Q.natDegree
 
 Depends on / 依赖: Nat.strong_decreasing_induction, P.coeff, P.natDegree, Q.leadingCoeff, Q.natDegree, coeff_eq_zero_of_natDegree_lt, congr_arg, eq_zero_of_mul_eq_zero_of_smul, ext_iff, leadingCoeff, leadingCoeff_eq_zero, lt_or_eq, mul_comm, mul_left_comm, mul_zero, natDegree, natDegree_smul_le, smul_eq_C_mul, strong_decreasing_induction, zero_smul
 -/

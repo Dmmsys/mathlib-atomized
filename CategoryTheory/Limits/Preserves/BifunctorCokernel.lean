@@ -116,7 +116,11 @@ lemma exists_desc
     rw [coprod.inl_desc_assoc]; rw [comp_zero] at this
     rwa [zero_comp])
   obtain ⟨l', hl'⟩ := Cofork.IsColimit.desc' (mapIsColimit _ hc₂ (F.obj c₁.pt)) l (by
-    have 
+    have := coprod.inr ≫= s.condition
+    rw [coprod.inr_desc_assoc]; rw [← dsimp% hl]; rw [NatTrans.naturality_assoc]; rw [comp_zero] at this
+    apply Cofork.IsColimit.hom_ext (mapIsColimit _ hc₁ (F.flip.obj X₂))
+    rwa [zero_comp, comp_zero])
+  exact ⟨l', by cat_disch⟩
 
 中文:
 引理 存在_desc
@@ -127,7 +131,11 @@ lemma exists_desc
     rw [coprod.inl_desc_assoc]; rw [comp_zero] at this
     rwa [zero_comp])
   obtain ⟨l', hl'⟩ := Cofork.IsColimit.desc' (mapIsColimit _ hc₂ (F.obj c₁.pt)) l (by
-    have 
+    have := coprod.inr ≫= s.condition
+    rw [coprod.inr_desc_assoc]; rw [← dsimp% hl]; rw [NatTrans.naturality_assoc]; rw [comp_zero] at this
+    apply Cofork.IsColimit.hom_ext (mapIsColimit _ hc₁ (F.flip.obj X₂))
+    rwa [zero_comp, comp_zero])
+  exact ⟨l', by cat_disch⟩
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.desc, Cofork.IsColimit.hom_ext, F.flip.obj, F.obj, IsColimit, NatTrans, NatTrans.naturality_assoc, comp_z, comp_zero, condition, coprod, coprod.inl, coprod.inl_desc_assoc, coprod.inr, coprod.inr_desc_assoc, hom_ext, inl_desc_assoc, inr_desc_assoc, mapIsColimit
 -/

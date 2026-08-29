@@ -600,7 +600,9 @@ theorem add_iff_left
   rcases hadd with ⟨m, n, hadd⟩
   use m + l, n + k
   apply add_right_cancel (b := a)
-  rw [add_assoc]; rw [add_comm c]; rw [add_nsmul]; rw [add_right_comm]; rw [hadd]; rw [← add_assoc]; rw [add_right_comm _ b];
+  rw [add_assoc]; rw [add_comm c]; rw [add_nsmul]; rw [add_right_comm]; rw [hadd]; rw [← add_assoc]; rw [add_right_comm _ b]; rw [add_right_comm _ b]; rw [add_assoc]; rw [← h]; rw [add_add_add_comm]; rw [add_nsmul]; rw [← add_assoc]
+
+@[simp]
 
 中文:
 定理 add_iff_left
@@ -612,7 +614,9 @@ theorem add_iff_left
   rcases hadd with ⟨m, n, hadd⟩
   use m + l, n + k
   apply add_right_cancel (b := a)
-  rw [add_assoc]; rw [add_comm c]; rw [add_nsmul]; rw [add_right_comm]; rw [hadd]; rw [← add_assoc]; rw [add_right_comm _ b];
+  rw [add_assoc]; rw [add_comm c]; rw [add_nsmul]; rw [add_right_comm]; rw [hadd]; rw [← add_assoc]; rw [add_right_comm _ b]; rw [add_right_comm _ b]; rw [add_assoc]; rw [← h]; rw [add_add_add_comm]; rw [add_nsmul]; rw [← add_assoc]
+
+@[simp]
 -/
 protected theorem add_iff_left (h : a ≡ b [PMOD p]) :
     a + c ≡ b + d [PMOD p] ↔ c ≡ d [PMOD p] := by
@@ -757,7 +761,8 @@ theorem modEq_iff_zsmul
     exact mod_cast h
   · rintro ⟨m, h⟩
     use m.toNat, (-m).toNat
-    rwa [add_comm _ b, ← sub_eq_sub_iff_add_eq_add, ← natCast_zsmul
+    rwa [add_comm _ b, ← sub_eq_sub_iff_add_eq_add, ← natCast_zsmul, ← natCast_zsmul,
+      sub_eq_add_neg, ← sub_zsmul, m.toNat_sub_toNat_neg]
 
 中文:
 定理 modEq_iff_zsmul
@@ -771,7 +776,8 @@ theorem modEq_iff_zsmul
     exact mod_cast h
   · rintro ⟨m, h⟩
     use m.toNat, (-m).toNat
-    rwa [add_comm _ b, ← sub_eq_sub_iff_add_eq_add, ← natCast_zsmul
+    rwa [add_comm _ b, ← sub_eq_sub_iff_add_eq_add, ← natCast_zsmul, ← natCast_zsmul,
+      sub_eq_add_neg, ← sub_zsmul, m.toNat_sub_toNat_neg]
 
 Depends on / 依赖: add_comm, m.toNat, m.toNat_sub_toNat_neg, modEq_iff_nsmul, mod_cast, natCast_zsmul, sub_eq_add_neg, sub_eq_sub_iff_add_eq_add, sub_zsmul, toNat_sub_toNat_neg
 -/
@@ -1379,7 +1385,16 @@ theorem modEq_nsmul_cases
   constructor
   · rintro ⟨k, hk⟩
     refine ⟨(k % n).toNat, ?_⟩
-    rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonneg (
+    rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ (mod_cast hn))]
+    refine ⟨?_, k / n, ?_⟩
+    · refine Int.emod_lt_of_pos _ ?_
+      lia
+    · rw [hk, Int.ediv_mul_add_emod]
+  · rintro ⟨k, _, j, hj⟩
+    rw [hj]
+    exact ⟨_, rfl⟩
+
+alias ⟨ModEq.nsmul_cases, _⟩ := AddCommGroup.modEq_nsmul_cases
 
 中文:
 定理 modEq_nsmul_cases
@@ -1391,7 +1406,16 @@ theorem modEq_nsmul_cases
   constructor
   · rintro ⟨k, hk⟩
     refine ⟨(k % n).toNat, ?_⟩
-    rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonneg (
+    rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ (mod_cast hn))]
+    refine ⟨?_, k / n, ?_⟩
+    · refine Int.emod_lt_of_pos _ ?_
+      lia
+    · rw [hk, Int.ediv_mul_add_emod]
+  · rintro ⟨k, _, j, hj⟩
+    rw [hj]
+    exact ⟨_, rfl⟩
+
+alias ⟨ModEq.nsmul_cases, _⟩ := AddCommGroup.modEq_nsmul_cases
 
 Depends on / 依赖: Int.ediv_mul_add_emod, Int.emod_lt_of_pos, Int.emod_nonneg, Int.ofNat_lt, Int.toNat_of_nonneg, add_zsmul, ediv_mul_add_emod, emod_lt_of_pos, emod_nonneg, modEq_comm, modEq_iff_zsmul, mod_cast, mul_zsmul, natCast_zsmul, ofNat_lt, simp_rw, sub_eq_iff_eq_add, sub_modEq_iff_modEq_add, sub_right_comm, toNat_of_nonneg
 -/

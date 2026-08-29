@@ -1088,7 +1088,10 @@ lemma nodup_bind
   have : f = fun a => ofList (f' a) := funext h'
   have _ : Std.Symm fun a b : List β => List.Disjoint a b := { symm a b h := h.symm }
 exact Quot.induction_on s by
-    unf
+    unfold Function.onFun
+    simp [this, List.nodup_flatMap, pairwise_coe_iff_pairwise]
+
+@[simp]
 
 中文:
 引理 nodup_bind
@@ -1098,7 +1101,10 @@ exact Quot.induction_on s by
   have : f = fun a => ofList (f' a) := funext h'
   have _ : Std.Symm fun a b : List β => List.Disjoint a b := { symm a b h := h.symm }
 exact Quot.induction_on s by
-    unf
+    unfold Function.onFun
+    simp [this, List.nodup_flatMap, pairwise_coe_iff_pairwise]
+
+@[simp]
 -/
 @[simp] lemma nodup_bind :
     Nodup (bind s f) ↔ (forall a in s, Nodup (f a)) ∧ s.Pairwise (Disjoint on f) := by

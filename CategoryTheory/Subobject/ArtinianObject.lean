@@ -205,7 +205,13 @@ lemma isArtinianObject_iff_isEventuallyConstant
   · obtain ⟨n, hn⟩ := h ⟨_, (G ⋙ (Subobject.equivMonoOver X).inverse.op ⋙
       (orderDualEquivalence _).inverse).monotone⟩
     refine ⟨n, fun m hm => ?_⟩
-    rw [← isIso_unop_iff]; rw [MonoOver.isIso_iff
+    rw [← isIso_unop_iff]; rw [MonoOver.isIso_iff_subobjectMk_eq]
+    exact (hn m (leOfHom hm)).symm
+  · obtain ⟨n, hn⟩ := h (F.monotone.functor ⋙ (orderDualEquivalence _).functor ⋙
+      Subobject.representative.op)
+    refine ⟨n, fun m hm => Eq.symm ?_⟩
+    simpa [isIso_op_iff, isIso_iff_of_reflects_iso, PartialOrder.isIso_iff_eq]
+      using hn (homOfLE hm)
 
 中文:
 引理 isArtinianObject_iff_isEventuallyConstant
@@ -215,7 +221,13 @@ lemma isArtinianObject_iff_isEventuallyConstant
   · obtain ⟨n, hn⟩ := h ⟨_, (G ⋙ (Subobject.equivMonoOver X).inverse.op ⋙
       (orderDualEquivalence _).inverse).monotone⟩
     refine ⟨n, fun m hm => ?_⟩
-    rw [← isIso_unop_iff]; rw [MonoOver.isIso_iff
+    rw [← isIso_unop_iff]; rw [MonoOver.isIso_iff_subobjectMk_eq]
+    exact (hn m (leOfHom hm)).symm
+  · obtain ⟨n, hn⟩ := h (F.monotone.functor ⋙ (orderDualEquivalence _).functor ⋙
+      Subobject.representative.op)
+    refine ⟨n, fun m hm => Eq.symm ?_⟩
+    simpa [isIso_op_iff, isIso_iff_of_reflects_iso, PartialOrder.isIso_iff_eq]
+      using hn (homOfLE hm)
 
 Depends on / 依赖: Eq.symm, F.monotone.functor, MonoOver, MonoOver.isIso_iff_subobjectMk_eq, Subobject, Subobject.equivMonoOver, Subobject.representative.op, equivMonoOver, functor, inverse, inverse.op, isArtinianObject_iff_antitone_chain_condition, isIso_if, isIso_iff_subobjectMk_eq, isIso_op_iff, isIso_unop_iff, leOfHom, monotone, orderDualEquivalence, representative
 -/

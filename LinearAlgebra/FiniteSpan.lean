@@ -34,7 +34,13 @@ lemma LinearEquiv.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo
   refine ⟨k, hk₀, ?_⟩
   ext m
   have hm : m in span R Φ := hΦ₂ ▸ Submodule.mem_top
-  simp only 
+  simp only [mul_left_iterate, mul_one, LinearEquiv.coe_one, id_eq]
+  refine Submodule.span_induction (fun x hx => ?_) (by simp)
+    (fun x y _ _ hx hy => by simp [map_add, hx, hy]) (fun t x _ hx => by simp [hx]) hm
+  rw [LinearEquiv.pow_apply]; rw [← he.1.coe_iterate_restrict ⟨x]; rw [hx⟩ k]
+  replace hk : (e') ^ k = 1 := by simpa [IsPeriodicPt, IsFixedPt] using hk
+  replace hk := Equiv.congr_fun hk ⟨x, hx⟩
+  rwa [Equiv.Perm.coe_one, id_eq, Subtype.ext_iff, Equiv.Perm.coe_pow] at hk
 
 中文:
 引理 线性等价.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo
@@ -46,7 +52,13 @@ lemma LinearEquiv.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo
   refine ⟨k, hk₀, ?_⟩
   ext m
   have hm : m in span R Φ := hΦ₂ ▸ Submodule.mem_top
-  simp only 
+  simp only [mul_left_iterate, mul_one, LinearEquiv.coe_one, id_eq]
+  refine Submodule.span_induction (fun x hx => ?_) (by simp)
+    (fun x y _ _ hx hy => by simp [map_add, hx, hy]) (fun t x _ hx => by simp [hx]) hm
+  rw [LinearEquiv.pow_apply]; rw [← he.1.coe_iterate_restrict ⟨x]; rw [hx⟩ k]
+  replace hk : (e') ^ k = 1 := by simpa [IsPeriodicPt, IsFixedPt] using hk
+  replace hk := Equiv.congr_fun hk ⟨x, hx⟩
+  rwa [Equiv.Perm.coe_one, id_eq, Subtype.ext_iff, Equiv.Perm.coe_pow] at hk
 
 Depends on / 依赖: Finite, LinearEquiv, LinearEquiv.coe_one, LinearEquiv.po, Submodule, Submodule.mem_top, Submodule.span_induction, coe_one, e.injective.injOn, finite_coe_iff, finite_coe_iff.mpr, he.equiv, id_eq, injOn_iff_bijOn_of_mapsTo, injective, isOfFinOrder_of_finite, map_add, mem_top, mul_left_iterate, mul_one
 -/

@@ -199,7 +199,16 @@ theorem asymptoticNhds_eq_smul
   · refine iSup_le fun u => ?_
     simp_rw [vadd_eq_add, add_pure, ← map₂_smul, map_map₂, ← map_prod_eq_map₂]
     have : (fun x : k × V => x.1 • x.2 + u) =ᶠ[atTop ×ˢ 𝓝 v]
-        (Function.uncurry (· • ·)) ∘ (fun x : k × V => (x.1, x.2 + x.1⁻¹ • u)) := 
+        (Function.uncurry (· • ·)) ∘ (fun x : k × V => (x.1, x.2 + x.1⁻¹ • u)) := by
+      filter_upwards [tendsto_fst.eventually (eventually_ne_atTop 0)] with _ h
+      simp [h]
+    rw [map_congr this]; rw [← map_map]
+    apply map_mono
+    have : Tendsto (fun x : k × V => (x.1, x.2 + x.1⁻¹ • u)) (atTop ×ˢ 𝓝 v) _ :=
+tendsto_fst.prodMk tendsto_snd.add tendsto_fst.inv_tendsto_atTop.smul_const u
+    simpa
+  · apply (le_iSup _ 0).trans'
+    simp
 
 中文:
 定理 asymptoticNhds_eq_smul
@@ -211,7 +220,16 @@ theorem asymptoticNhds_eq_smul
   · refine iSup_le fun u => ?_
     simp_rw [vadd_eq_add, add_pure, ← map₂_smul, map_map₂, ← map_prod_eq_map₂]
     have : (fun x : k × V => x.1 • x.2 + u) =ᶠ[atTop ×ˢ 𝓝 v]
-        (Function.uncurry (· • ·)) ∘ (fun x : k × V => (x.1, x.2 + x.1⁻¹ • u)) := 
+        (Function.uncurry (· • ·)) ∘ (fun x : k × V => (x.1, x.2 + x.1⁻¹ • u)) := by
+      filter_upwards [tendsto_fst.eventually (eventually_ne_atTop 0)] with _ h
+      simp [h]
+    rw [map_congr this]; rw [← map_map]
+    apply map_mono
+    have : Tendsto (fun x : k × V => (x.1, x.2 + x.1⁻¹ • u)) (atTop ×ˢ 𝓝 v) _ :=
+tendsto_fst.prodMk tendsto_snd.add tendsto_fst.inv_tendsto_atTop.smul_const u
+    simpa
+  · apply (le_iSup _ 0).trans'
+    simp
 
 Depends on / 依赖: Function, Function.uncurry, Tendsto, add_pure, asymptoticNhds, eventually, eventually_ne_atTop, filter_upwards, iSup_le, le_antisymm, map_congr, map_map, map_mono, simp_rw, tendsto_fst, tendsto_fst.eventually, uncurry, vadd_eq_add
 -/
@@ -272,7 +290,13 @@ theorem asymptoticNhds_zero'
       (Function.uncurry (· • ·)) ∘ (fun c => (c, c⁻¹ • v)) := by
     filter_upwards [eventually_ne_atTop 0] with _ h
     simp [h]
-  rw [map_co
+  rw [map_congr this]; rw [← map_map]; rw [asymptoticNhds_eq_smul]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]
+  apply map_mono
+  have : Tendsto (fun c => (c, c⁻¹ • v)) (atTop (α := k)) _ :=
+tendsto_id.prodMk tendsto_inv_atTop_zero.smul_const v
+  simpa
+
+@[simp]
 
 中文:
 定理 asymptoticNhds_zero'
@@ -285,7 +309,13 @@ theorem asymptoticNhds_zero'
       (Function.uncurry (· • ·)) ∘ (fun c => (c, c⁻¹ • v)) := by
     filter_upwards [eventually_ne_atTop 0] with _ h
     simp [h]
-  rw [map_co
+  rw [map_congr this]; rw [← map_map]; rw [asymptoticNhds_eq_smul]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]
+  apply map_mono
+  have : Tendsto (fun c => (c, c⁻¹ • v)) (atTop (α := k)) _ :=
+tendsto_id.prodMk tendsto_inv_atTop_zero.smul_const v
+  simpa
+
+@[simp]
 -/
 private theorem asymptoticNhds_zero' : asymptoticNhds k V (0 : V) = ⊤ := by
   rw [← top_le_iff]; rw [← iSup_pure_eq_top]; rw [iSup_le_iff]
@@ -385,7 +415,9 @@ theorem asymptoticNhds_smul
     ← show map (c • ·) (𝓝 v) = 𝓝 (c • v) from
       (Homeomorph.smulOfNeZero c hc.ne').map_nhds_eq v,
     ← map₂_smul, map₂_map_right, smul_smul, ← map₂_map_left,
-    show map (· * c) atTop = atTop from (OrderIso
+    show map (· * c) atTop = atTop from (OrderIso.mulRight₀ _ hc).map_atTop]
+
+@[simp]
 
 中文:
 定理 asymptoticNhds_smul
@@ -396,7 +428,9 @@ theorem asymptoticNhds_smul
     ← show map (c • ·) (𝓝 v) = 𝓝 (c • v) from
       (Homeomorph.smulOfNeZero c hc.ne').map_nhds_eq v,
     ← map₂_smul, map₂_map_right, smul_smul, ← map₂_map_left,
-    show map (· * c) atTop = atTop from (OrderIso
+    show map (· * c) atTop = atTop from (OrderIso.mulRight₀ _ hc).map_atTop]
+
+@[simp]
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, Nonempty, OrderIso, OrderIso.mulRight, asymptoticNhds_eq_smul_vadd, hc.ne, map_atTop, map_nhds_eq, simp_rw, smulOfNeZero, smul_smul
 -/
@@ -425,7 +459,9 @@ theorem nhds_bind_asymptoticNhds
     simp only [le_def, mem_map, ← map₂_smul, mem_map₂_iff, mem_bind]
     grind
   · rw [← pure_bind v (asymptoticNhds k P)]
-    exa
+    exact bind_mono (pure_le_nhds v) .rfl
+
+@[simp]
 
 中文:
 定理 nhds_bind_asymptoticNhds
@@ -439,7 +475,9 @@ theorem nhds_bind_asymptoticNhds
     simp only [le_def, mem_map, ← map₂_smul, mem_map₂_iff, mem_bind]
     grind
   · rw [← pure_bind v (asymptoticNhds k P)]
-    exa
+    exact bind_mono (pure_le_nhds v) .rfl
+
+@[simp]
 
 Depends on / 依赖: Nonempty, asymptoticNhds, asymptoticNhds_eq_smul_vadd, bind_mono, eta_expand, le_antisymm, le_def, mem_bind, mem_map, nhds_bind_nhds, nth_rw, pure_bind, pure_le_nhds, simp_rw, vadd_pure
 -/
@@ -469,7 +507,18 @@ theorem asymptoticNhds_bind_nhds
   rw [← nhds_bind_nhds] at h
   obtain ⟨t₁, ht₁, t₂, ht₂, hs⟩ := h
   rw [mem_bind] at ht₂
-  obtain ⟨t₃, ht₃, ht₂⟩
+  obtain ⟨t₃, ht₃, ht₂⟩ := ht₂
+  rw [bind_map]; rw [mem_bind]
+  refine ⟨(t₁ inter Set.Ioi 0) • t₃, smul_mem_smul (inter_mem ht₁ (Ioi_mem_atTop _)) ht₃,
+    Set.forall_mem_image2.mpr fun c ⟨hc₁, hc₂⟩ u hu => ?_⟩
+  rw [show s = (· -ᵥ p) ⁻¹' ((· +ᵥ p) ⁻¹' s) by simp [Set.preimage_preimage]]
+  apply tendsto_id.vsub tendsto_const_nhds
+  rw [vadd_vsub]
+  filter_upwards [smul_mem_nhds_smul₀ hc₂.ne' (ht₂ u hu)]
+  rw [← Set.image_smul]; rw [Set.forall_mem_image]
+  exact fun w hw => hs (Set.smul_mem_smul hc₁ hw)
+
+@[simp]
 
 中文:
 定理 asymptoticNhds_bind_nhds
@@ -481,7 +530,18 @@ theorem asymptoticNhds_bind_nhds
   rw [← nhds_bind_nhds] at h
   obtain ⟨t₁, ht₁, t₂, ht₂, hs⟩ := h
   rw [mem_bind] at ht₂
-  obtain ⟨t₃, ht₃, ht₂⟩
+  obtain ⟨t₃, ht₃, ht₂⟩ := ht₂
+  rw [bind_map]; rw [mem_bind]
+  refine ⟨(t₁ inter Set.Ioi 0) • t₃, smul_mem_smul (inter_mem ht₁ (Ioi_mem_atTop _)) ht₃,
+    Set.forall_mem_image2.mpr fun c ⟨hc₁, hc₂⟩ u hu => ?_⟩
+  rw [show s = (· -ᵥ p) ⁻¹' ((· +ᵥ p) ⁻¹' s) by simp [Set.preimage_preimage]]
+  apply tendsto_id.vsub tendsto_const_nhds
+  rw [vadd_vsub]
+  filter_upwards [smul_mem_nhds_smul₀ hc₂.ne' (ht₂ u hu)]
+  rw [← Set.image_smul]; rw [Set.forall_mem_image]
+  exact fun w hw => hs (Set.smul_mem_smul hc₁ hw)
+
+@[simp]
 
 Depends on / 依赖: Ioi_mem_atTop, Nonempty, Set.Ioi, Set.forall_mem_image2.mpr, asymptoticNhds_eq_smul_vadd, bind_map, bind_mono, forall_mem_image2, inter_mem, le_antisymm, le_rfl, mem_bind, nhds_bind_nhds, of_forall, pure_le_nhds, smul_mem_smul, vadd_pure
 -/
@@ -516,7 +576,9 @@ theorem asymptoticNhds_bind_asymptoticNhds
   rw [asymptoticNhds_eq_smul]; rw [eventually_bind]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [eventually_map]; rw [← nhds_bind_asymptoticNhds]; rw [eventually_bind]
   nth_rw 2 [← map_snd_prod (atTop (α := k)) (𝓝 v)]
   rw [eventually_map]
-  apply eventually_c
+  apply eventually_congr
+  filter_upwards [tendsto_fst.eventually (eventually_gt_atTop 0)] with ⟨c, u⟩ (hc : 0 < c)
+  simp only [asymptoticNhds_smul _ hc]
 
 中文:
 定理 asymptoticNhds_bind_asymptoticNhds
@@ -526,7 +588,9 @@ theorem asymptoticNhds_bind_asymptoticNhds
   rw [asymptoticNhds_eq_smul]; rw [eventually_bind]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [eventually_map]; rw [← nhds_bind_asymptoticNhds]; rw [eventually_bind]
   nth_rw 2 [← map_snd_prod (atTop (α := k)) (𝓝 v)]
   rw [eventually_map]
-  apply eventually_c
+  apply eventually_congr
+  filter_upwards [tendsto_fst.eventually (eventually_gt_atTop 0)] with ⟨c, u⟩ (hc : 0 < c)
+  simp only [asymptoticNhds_smul _ hc]
 
 Depends on / 依赖: Filter, Filter.ext, asymptoticNhds_eq_smul, asymptoticNhds_smul, eventually, eventually_bind, eventually_congr, eventually_gt_atTop, eventually_map, filter_upwards, map_snd_prod, nhds_bind_asymptoticNhds, nth_rw, tendsto_fst, tendsto_fst.eventually
 -/
@@ -848,7 +912,10 @@ theorem asymptoticCone_eq_closure_of_forall_smul_mem
   ext v
   rw [mem_closure_iff_frequently]; rw [← map_snd_prod (atTop (α := k)) (𝓝 v)]; rw [frequently_map]; rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map]
   apply frequently_congr
-  filter_upwards [tendsto_fst.eventually (e
+  filter_upwards [tendsto_fst.eventually (eventually_gt_atTop 0)] with ⟨c, u⟩ hc
+  refine ⟨fun hu => ?_, hs c hc u⟩
+  specialize hs c⁻¹ (inv_pos_of_pos hc) (c • u) hu
+  rwa [inv_smul_smul₀ hc.ne'] at hs
 
 中文:
 定理 asymptoticCone_eq_closure_of_对任意_smul_mem
@@ -857,7 +924,10 @@ theorem asymptoticCone_eq_closure_of_forall_smul_mem
   ext v
   rw [mem_closure_iff_frequently]; rw [← map_snd_prod (atTop (α := k)) (𝓝 v)]; rw [frequently_map]; rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map]
   apply frequently_congr
-  filter_upwards [tendsto_fst.eventually (e
+  filter_upwards [tendsto_fst.eventually (eventually_gt_atTop 0)] with ⟨c, u⟩ hc
+  refine ⟨fun hu => ?_, hs c hc u⟩
+  specialize hs c⁻¹ (inv_pos_of_pos hc) (c • u) hu
+  rwa [inv_smul_smul₀ hc.ne'] at hs
 
 Depends on / 依赖: asymptoticNhds_eq_smul, eventually, eventually_gt_atTop, filter_upwards, frequently_congr, frequently_map, hc.ne, inv_pos_of_pos, map_snd_prod, mem_asymptoticCone_iff, mem_closure_iff_frequently, specialize, tendsto_fst, tendsto_fst.eventually
 -/
@@ -1058,7 +1128,14 @@ theorem StarConvex.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone
 refine isClosed_iff_frequently.mp hs₂ _
 .frequently ?_ .vadd_const _ .const_smul _ tendsto_snd (f := atTop (α := k))
   rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul_vadd v p]; rw [vadd_pure]; rw [frequently_map]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map] at hv
-  app
+  apply hv.mp
+  filter_upwards [tendsto_fst.eventually (eventually_ge_atTop c)]
+    with ⟨t, u⟩ (ht : c <= t) (h : t • u +ᵥ p in s)
+  change c • u +ᵥ p in s
+  apply hs₁.segment_subset h
+  simp_rw [mem_segment_iff_sameRay, ← vsub_eq_sub, vadd_vsub, vadd_vsub_vadd_cancel_right,
+    ← sub_smul]
+  exact (SameRay.sameRay_nonneg_smul_left _ hc).nonneg_smul_right (sub_nonneg.mpr ht)
 
 中文:
 定理 StarConvex.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone
@@ -1067,7 +1144,14 @@ refine isClosed_iff_frequently.mp hs₂ _
 refine isClosed_iff_frequently.mp hs₂ _
 .frequently ?_ .vadd_const _ .const_smul _ tendsto_snd (f := atTop (α := k))
   rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul_vadd v p]; rw [vadd_pure]; rw [frequently_map]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map] at hv
-  app
+  apply hv.mp
+  filter_upwards [tendsto_fst.eventually (eventually_ge_atTop c)]
+    with ⟨t, u⟩ (ht : c <= t) (h : t • u +ᵥ p in s)
+  change c • u +ᵥ p in s
+  apply hs₁.segment_subset h
+  simp_rw [mem_segment_iff_sameRay, ← vsub_eq_sub, vadd_vsub, vadd_vsub_vadd_cancel_right,
+    ← sub_smul]
+  exact (SameRay.sameRay_nonneg_smul_left _ hc).nonneg_smul_right (sub_nonneg.mpr ht)
 
 Depends on / 依赖: asymptoticNhds_eq_smul_vadd, const_smul, eventually, eventually_ge_atTop, filter_upwards, frequently, frequently_map, hv.mp, isClosed_iff_frequently, isClosed_iff_frequently.mp, mem_asymptoticCone_iff, mem_segment_iff_sameRay, segment_subset, simp_rw, tendsto_fst, tendsto_fst.eventually, tendsto_snd, vadd_const, vadd_pure
 -/
@@ -1120,7 +1204,16 @@ theorem Convex.asymptoticCone
   · rw [asymptoticCone_empty]; exact convex_empty
   intro v hv u hu a b ha hb hab
   rw [mem_asymptoticCone_iff]
-.asymptoticNhds_vadd_
+.asymptoticNhds_vadd_const p refine tendsto_id.atTop_smul_const_tendsto_asymptoticNhds _
+.frequently (Eventually.frequently ?_)
+  filter_upwards [eventually_ge_atTop 0] with c hc
+  simp_rw [id, smul_add, smul_smul]
+  have h₁ : c • v +ᵥ p in s := hs.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone hs' hc hv hp
+  have h₂ : c • u +ᵥ p in s := hs.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone hs' hc hu hp
+  apply hs.segment_subset h₁ h₂
+  rw [← affineSegment_eq_segment]; rw [mem_vadd_const_affineSegment]; rw [affineSegment_eq_segment]
+  exists a, b, ha, hb, hab
+  module
 
 中文:
 定理 凸.asymptoticCone
@@ -1133,7 +1226,16 @@ theorem Convex.asymptoticCone
   · rw [asymptoticCone_empty]; exact convex_empty
   intro v hv u hu a b ha hb hab
   rw [mem_asymptoticCone_iff]
-.asymptoticNhds_vadd_
+.asymptoticNhds_vadd_const p refine tendsto_id.atTop_smul_const_tendsto_asymptoticNhds _
+.frequently (Eventually.frequently ?_)
+  filter_upwards [eventually_ge_atTop 0] with c hc
+  simp_rw [id, smul_add, smul_smul]
+  have h₁ : c • v +ᵥ p in s := hs.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone hs' hc hv hp
+  have h₂ : c • u +ᵥ p in s := hs.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone hs' hc hu hp
+  apply hs.segment_subset h₁ h₂
+  rw [← affineSegment_eq_segment]; rw [mem_vadd_const_affineSegment]; rw [affineSegment_eq_segment]
+  exists a, b, ha, hb, hab
+  module
 -/
 protected theorem Convex.asymptoticCone (hs : Convex k s) : Convex k (asymptoticCone k s) := by
   wlog hs' : IsClosed s generalizing s
@@ -1163,7 +1265,13 @@ theorem Convex.smul_vadd_mem_of_mem_nhds_of_mem_asymptoticCone
   rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul_vadd v (c • v +ᵥ p)]; rw [vadd_pure]; rw [frequently_map]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map] at hv
   refine frequently_const.mp (hv.mp ?_)
   have : Tendsto (fun u => -(c • u : V) +ᵥ c • v +ᵥ p) (𝓝 v) (𝓝 p) :=
- 
+    Continuous.tendsto' (by fun_prop) _ _ (by simp)
+  filter_upwards [tendsto_fst.eventually <| eventually_gt_atTop 0, this.comp tendsto_snd hp]
+    with ⟨t, u⟩ (ht : 0 < t) (hu : -(c • u) +ᵥ c • v +ᵥ p in s) (h : t • u +ᵥ c • v +ᵥ p in s)
+  apply hs.segment_subset hu h
+  simp_rw [mem_segment_iff_sameRay, ← vsub_eq_sub]
+  rw [vsub_vadd_eq_vsub_sub]; rw [vsub_self]; rw [zero_sub]; rw [neg_neg]; rw [vadd_vsub]
+  exact (SameRay.sameRay_nonneg_smul_left _ hc).pos_smul_right ht
 
 中文:
 定理 凸.smul_vadd_mem_of_mem_nhds_of_mem_asymptoticCone
@@ -1172,7 +1280,13 @@ theorem Convex.smul_vadd_mem_of_mem_nhds_of_mem_asymptoticCone
   rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul_vadd v (c • v +ᵥ p)]; rw [vadd_pure]; rw [frequently_map]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map] at hv
   refine frequently_const.mp (hv.mp ?_)
   have : Tendsto (fun u => -(c • u : V) +ᵥ c • v +ᵥ p) (𝓝 v) (𝓝 p) :=
- 
+    Continuous.tendsto' (by fun_prop) _ _ (by simp)
+  filter_upwards [tendsto_fst.eventually <| eventually_gt_atTop 0, this.comp tendsto_snd hp]
+    with ⟨t, u⟩ (ht : 0 < t) (hu : -(c • u) +ᵥ c • v +ᵥ p in s) (h : t • u +ᵥ c • v +ᵥ p in s)
+  apply hs.segment_subset hu h
+  simp_rw [mem_segment_iff_sameRay, ← vsub_eq_sub]
+  rw [vsub_vadd_eq_vsub_sub]; rw [vsub_self]; rw [zero_sub]; rw [neg_neg]; rw [vadd_vsub]
+  exact (SameRay.sameRay_nonneg_smul_left _ hc).pos_smul_right ht
 
 Depends on / 依赖: Continuous, Continuous.tendsto, Tendsto, asymptoticNhds_eq_smul_vadd, eventually, eventually_gt_atTop, filter_upwards, frequently_const, frequently_const.mp, frequently_map, fun_prop, hv.mp, mem_asymptoticCone_iff, tendsto, tendsto_fst, tendsto_fst.eventually, tendsto_snd, this.comp, vadd_pure
 -/

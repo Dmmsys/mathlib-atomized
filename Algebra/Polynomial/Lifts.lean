@@ -478,7 +478,12 @@ theorem exists_support_eq_of_mem_lifts
   let g : Nat -> R := fun k => (hlifts k).choose
   have hg : forall k, f (g k) = p.coeff k := fun k => (hlifts k).choose_spec
   let q : R[X] := ∑ k in p.support, monomial k (g k)
-  have hq : map f q = p := by simp_rw [q, Polynomial.map_sum, map_monomial, hg,
+  have hq : map f q = p := by simp_rw [q, Polynomial.map_sum, map_monomial, hg, ← as_sum_support]
+  have hq' : q.support = p.support := by
+    simp_rw [Finset.ext_iff, mem_support_iff, q, finsetSum_coeff, coeff_monomial,
+      Finset.sum_ite_eq', ite_ne_right_iff, mem_support_iff, and_iff_left_iff_imp, not_imp_not]
+    exact fun k h => by rw [← hg, h, map_zero]
+  exact ⟨q, hq, hq'⟩
 
 中文:
 定理 存在_support_eq_of_mem_lifts
@@ -488,7 +493,12 @@ theorem exists_support_eq_of_mem_lifts
   let g : Nat -> R := fun k => (hlifts k).choose
   have hg : forall k, f (g k) = p.coeff k := fun k => (hlifts k).choose_spec
   let q : R[X] := ∑ k in p.support, monomial k (g k)
-  have hq : map f q = p := by simp_rw [q, Polynomial.map_sum, map_monomial, hg,
+  have hq : map f q = p := by simp_rw [q, Polynomial.map_sum, map_monomial, hg, ← as_sum_support]
+  have hq' : q.support = p.support := by
+    simp_rw [Finset.ext_iff, mem_support_iff, q, finsetSum_coeff, coeff_monomial,
+      Finset.sum_ite_eq', ite_ne_right_iff, mem_support_iff, and_iff_left_iff_imp, not_imp_not]
+    exact fun k h => by rw [← hg, h, map_zero]
+  exact ⟨q, hq, hq'⟩
 
 Depends on / 依赖: Finset, Finset.ext_iff, Finset.sum_ite_eq, Polynomial, Polynomial.map_sum, and_iff_left_iff_im, as_sum_support, choose_spec, coeff_monomial, ext_iff, finsetSum_coeff, hlifts, ite_ne_right_iff, lifts_iff_coeff_lifts, map_monomial, map_sum, mem_support_iff, monomial, p.coeff, p.support
 -/
@@ -573,7 +583,10 @@ theorem lifts_and_degree_eq_and_monic
   have hg k : f (g k) = p.coeff k := (hlifts k).choose_spec
   let q : R[X] := X ^ p.natDegree + ∑ k in Finset.range p.natDegree, C (g k) * X ^ k
   have hq : map f q = p := by
-    simp_rw [q, Polynomial.map_add
+    simp_rw [q, Polynomial.map_add, Polynomial.map_sum, Polynomial.map_mul, Polynomial.map_pow,
+      map_X, map_C, hg, ← hp.as_sum]
+  have h : q.Monic := monic_X_pow_add (by simp_rw [← Fin.sum_univ_eq_sum_range, degree_sum_fin_lt])
+  exact ⟨q, hq, hq ▸ (h.degree_map f).symm, h⟩
 
 中文:
 定理 lifts_and_degree_eq_and_monic
@@ -584,7 +597,10 @@ theorem lifts_and_degree_eq_and_monic
   have hg k : f (g k) = p.coeff k := (hlifts k).choose_spec
   let q : R[X] := X ^ p.natDegree + ∑ k in Finset.range p.natDegree, C (g k) * X ^ k
   have hq : map f q = p := by
-    simp_rw [q, Polynomial.map_add
+    simp_rw [q, Polynomial.map_add, Polynomial.map_sum, Polynomial.map_mul, Polynomial.map_pow,
+      map_X, map_C, hg, ← hp.as_sum]
+  have h : q.Monic := monic_X_pow_add (by simp_rw [← Fin.sum_univ_eq_sum_range, degree_sum_fin_lt])
+  exact ⟨q, hq, hq ▸ (h.degree_map f).symm, h⟩
 
 Depends on / 依赖: Fin.sum_univ_eq_sum_range, Finset, Finset.range, Polynomial, Polynomial.map_add, Polynomial.map_mul, Polynomial.map_pow, Polynomial.map_sum, as_sum, choose_spec, degree_sum_fin_lt, hlifts, hp.as_sum, lifts_iff_coeff_lifts, map_C, map_X, map_add, map_mul, map_pow, map_sum
 -/

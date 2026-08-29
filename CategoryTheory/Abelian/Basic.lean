@@ -353,7 +353,17 @@ lemma isNormalMonoCategory
         haveI : Limits.HasImages C := hasImages
         haveI : HasEqualizers C := Preadditive.hasEqualizers_of_hasKernels
         haveI : HasZeroObject C := Limits.hasZeroObject_of_hasFiniteBiproducts _
-        have aux 
+        have aux (s : KernelFork (cokernel.π f)) :
+            (limit.lift (parallelPair (cokernel.π f) 0) s ≫ inv (imageMonoFactorisation f).e) ≫
+            Fork.ι (KernelFork.ofι _ (cokernel.condition f)) = Fork.ι s := ?_
+        · refine isLimitAux _ (fun A => limit.lift _ _ ≫ inv (imageMonoFactorisation f).e) aux ?_
+          intro A g hg
+          rw [KernelFork.ι_ofι] at hg
+          rw [← cancel_mono f]; rw [hg]; rw [← aux]; rw [KernelFork.ι_ofι]
+        · simp only [KernelFork.ι_ofι, Category.assoc]
+          convert! limit.lift_π s WalkingParallelPair.zero using 2
+          rw [IsIso.inv_comp_eq]; rw [eq_comm]
+          exact (imageMonoFactorisation f).fac }⟩
 
 中文:
 引理 isNormalMonoCategory
@@ -366,7 +376,17 @@ lemma isNormalMonoCategory
         haveI : Limits.HasImages C := hasImages
         haveI : HasEqualizers C := Preadditive.hasEqualizers_of_hasKernels
         haveI : HasZeroObject C := Limits.hasZeroObject_of_hasFiniteBiproducts _
-        have aux 
+        have aux (s : KernelFork (cokernel.π f)) :
+            (limit.lift (parallelPair (cokernel.π f) 0) s ≫ inv (imageMonoFactorisation f).e) ≫
+            Fork.ι (KernelFork.ofι _ (cokernel.condition f)) = Fork.ι s := ?_
+        · refine isLimitAux _ (fun A => limit.lift _ _ ≫ inv (imageMonoFactorisation f).e) aux ?_
+          intro A g hg
+          rw [KernelFork.ι_ofι] at hg
+          rw [← cancel_mono f]; rw [hg]; rw [← aux]; rw [KernelFork.ι_ofι]
+        · simp only [KernelFork.ι_ofι, Category.assoc]
+          convert! limit.lift_π s WalkingParallelPair.zero using 2
+          rw [IsIso.inv_comp_eq]; rw [eq_comm]
+          exact (imageMonoFactorisation f).fac }⟩
 -/
 lemma isNormalMonoCategory : IsNormalMonoCategory C where
   normalMonoOfMono f m := ⟨{
@@ -404,6 +424,19 @@ lemma isNormalEpiCategory
         haveI : Limits.HasImages C := hasImages
         haveI : HasEqualizers C := Preadditive.hasEqualizers_of_hasKernels
         haveI : HasZeroObject C := Limits.hasZeroObject_of_hasFiniteBiproducts _
+        have aux (s : CokernelCofork (kernel.ι f)) :
+            Cofork.π (CokernelCofork.ofπ _ (kernel.condition f)) ≫
+              inv (imageMonoFactorisation f).m ≫ inv (Abelian.coimageImageComparison f) ≫
+                colimit.desc (parallelPair (kernel.ι f) 0) s = Cofork.π s := ?_
+        · refine isColimitAux _ (fun A => inv (imageMonoFactorisation f).m ≫
+                  inv (Abelian.coimageImageComparison f) ≫ colimit.desc _ _) aux ?_
+          intro A g hg
+          rw [CokernelCofork.π_ofπ] at hg
+          rw [← cancel_epi f]; rw [hg]; rw [← aux]; rw [CokernelCofork.π_ofπ]
+        · simp only [CokernelCofork.π_ofπ, ← Category.assoc]
+          convert! colimit.ι_desc s WalkingParallelPair.one using 2
+          rw [IsIso.comp_inv_eq]; rw [IsIso.comp_inv_eq]; rw [eq_comm]; rw [← imageMonoFactorisation_e']
+          exact (imageMonoFactorisation f).fac }⟩
 
 中文:
 引理 isNormalEpiCategory
@@ -416,6 +449,19 @@ lemma isNormalEpiCategory
         haveI : Limits.HasImages C := hasImages
         haveI : HasEqualizers C := Preadditive.hasEqualizers_of_hasKernels
         haveI : HasZeroObject C := Limits.hasZeroObject_of_hasFiniteBiproducts _
+        have aux (s : CokernelCofork (kernel.ι f)) :
+            Cofork.π (CokernelCofork.ofπ _ (kernel.condition f)) ≫
+              inv (imageMonoFactorisation f).m ≫ inv (Abelian.coimageImageComparison f) ≫
+                colimit.desc (parallelPair (kernel.ι f) 0) s = Cofork.π s := ?_
+        · refine isColimitAux _ (fun A => inv (imageMonoFactorisation f).m ≫
+                  inv (Abelian.coimageImageComparison f) ≫ colimit.desc _ _) aux ?_
+          intro A g hg
+          rw [CokernelCofork.π_ofπ] at hg
+          rw [← cancel_epi f]; rw [hg]; rw [← aux]; rw [CokernelCofork.π_ofπ]
+        · simp only [CokernelCofork.π_ofπ, ← Category.assoc]
+          convert! colimit.ι_desc s WalkingParallelPair.one using 2
+          rw [IsIso.comp_inv_eq]; rw [IsIso.comp_inv_eq]; rw [eq_comm]; rw [← imageMonoFactorisation_e']
+          exact (imageMonoFactorisation f).fac }⟩
 -/
 lemma isNormalEpiCategory : IsNormalEpiCategory C where
   normalEpiOfEpi f m := ⟨{
@@ -1233,7 +1279,9 @@ definition isLimitMapConeOfKernelForkOfι
     parallelPair.ext (Iso.refl _) (asIso (cokernelComparison i F)) (by simp) (by simp)
   refine IsLimit.postcomposeInvEquiv e _ ?_
   let hi := Abelian.monoIsKernelOfCokernel _ (cokernelIsCokernel (F.map i))
-  r
+  refine IsLimit.ofIsoLimit hi (Fork.ext (Iso.refl _) ?_)
+  change 𝟙 _ ≫ F.map i ≫ 𝟙 _ = F.map i
+  rw [Category.comp_id]; rw [Category.id_comp]
 
 中文:
 定义 isLimitMapConeOfKernelForkOfι
@@ -1242,7 +1290,9 @@ definition isLimitMapConeOfKernelForkOfι
     parallelPair.ext (Iso.refl _) (asIso (cokernelComparison i F)) (by simp) (by simp)
   refine IsLimit.postcomposeInvEquiv e _ ?_
   let hi := Abelian.monoIsKernelOfCokernel _ (cokernelIsCokernel (F.map i))
-  r
+  refine IsLimit.ofIsoLimit hi (Fork.ext (Iso.refl _) ?_)
+  change 𝟙 _ ≫ F.map i ≫ 𝟙 _ = F.map i
+  rw [Category.comp_id]; rw [Category.id_comp]
 
 Depends on / 依赖: Abelian, Abelian.monoIsKernelOfCokernel, Category, Category.comp_id, Category.id_comp, F.map, Fork.ext, IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeInvEquiv, Iso.refl, cokernel, cokernelComparison, cokernelIsCokernel, comp_id, id_comp, monoIsKernelOfCokernel, ofIsoLimit, parallelPair, parallelPair.ext
 -/
@@ -1270,7 +1320,9 @@ definition isColimitMapCoconeOfCokernelCoforkOfπ
     parallelPair.ext (asIso (kernelComparison p F)) (Iso.refl _) (by simp) (by simp)
   refine IsColimit.precomposeInvEquiv e _ ?_
   let hp := Abelian.epiIsCokernelOfKernel _ (kernelIsKernel (F.map p))
-  refine IsCo
+  refine IsColimit.ofIsoColimit hp (Cofork.ext (Iso.refl _) ?_)
+  change F.map p ≫ 𝟙 _ = 𝟙 _ ≫ F.map p
+  rw [Category.comp_id]; rw [Category.id_comp]
 
 中文:
 定义 isColimitMapCoconeOfCokernelCoforkOfπ
@@ -1279,7 +1331,9 @@ definition isColimitMapCoconeOfCokernelCoforkOfπ
     parallelPair.ext (asIso (kernelComparison p F)) (Iso.refl _) (by simp) (by simp)
   refine IsColimit.precomposeInvEquiv e _ ?_
   let hp := Abelian.epiIsCokernelOfKernel _ (kernelIsKernel (F.map p))
-  refine IsCo
+  refine IsColimit.ofIsoColimit hp (Cofork.ext (Iso.refl _) ?_)
+  change F.map p ≫ 𝟙 _ = 𝟙 _ ≫ F.map p
+  rw [Category.comp_id]; rw [Category.id_comp]
 
 Depends on / 依赖: Abelian, Abelian.epiIsCokernelOfKernel, Category, Category.comp_id, Category.id_comp, Cofork, Cofork.ext, F.map, IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeInvEquiv, Iso.refl, comp_id, epiIsCokernelOfKernel, id_comp, kernel, kernelComparison, kernelIsKernel, ofIsoColimit, parallelPair
 -/
@@ -1389,7 +1443,10 @@ sub_eq_zero.1 by
           rw [Category.assoc]; rw [Category.assoc]; rw [← comp_sub]; rw [sub_eq_add_neg]; rw [← comp_neg]; rw [←
             biprod.desc_eq]; rw [KernelFork.condition s])
     (fun s => by
- 
+      apply biprod.hom_ext <;> rw [Fork.ι_ofι, Category.assoc]
+      · rw [biprod.lift_fst, pullback.lift_fst]
+      · rw [biprod.lift_snd, pullback.lift_snd])
+    fun s m h => by apply pullback.hom_ext <;> simp [← h]
 
 中文:
 定义 isLimitPullbackToBiproduct
@@ -1401,7 +1458,10 @@ sub_eq_zero.1 by
           rw [Category.assoc]; rw [Category.assoc]; rw [← comp_sub]; rw [sub_eq_add_neg]; rw [← comp_neg]; rw [←
             biprod.desc_eq]; rw [KernelFork.condition s])
     (fun s => by
- 
+      apply biprod.hom_ext <;> rw [Fork.ι_ofι, Category.assoc]
+      · rw [biprod.lift_fst, pullback.lift_fst]
+      · rw [biprod.lift_snd, pullback.lift_snd])
+    fun s m h => by apply pullback.hom_ext <;> simp [← h]
 
 Depends on / 依赖: Category, Category.assoc, Fork.IsLimit.mk, IsLimit, KernelFork, KernelFork.condition, biprod, biprod.desc_eq, biprod.fst, biprod.hom_ext, biprod.lift_fst, biprod.lift_snd, biprod.snd, comp_neg, comp_sub, condition, desc_eq, hom_ext, lift_fst, lift_snd
 -/
@@ -1475,7 +1535,9 @@ definition isColimitBiproductToPushout
 pushout.desc (biprod.inl ≫ Cofork.π s) (biprod.inr ≫ Cofork.π s)
 sub_eq_zero.1 by
           rw [← Category.assoc]; rw [← Category.assoc]; rw [← sub_comp]; rw [sub_eq_add_neg]; rw [← neg_comp]; rw [←
-            biprod.lift_eq]; rw [Cofork.condition s]; rw [zero_co
+            biprod.lift_eq]; rw [Cofork.condition s]; rw [zero_comp])
+    (fun s => by apply biprod.hom_ext' <;> simp)
+    fun s m h => by apply pushout.hom_ext <;> simp [← h]
 
 中文:
 定义 isColimitBiproductToPushout
@@ -1485,7 +1547,9 @@ sub_eq_zero.1 by
 pushout.desc (biprod.inl ≫ Cofork.π s) (biprod.inr ≫ Cofork.π s)
 sub_eq_zero.1 by
           rw [← Category.assoc]; rw [← Category.assoc]; rw [← sub_comp]; rw [sub_eq_add_neg]; rw [← neg_comp]; rw [←
-            biprod.lift_eq]; rw [Cofork.condition s]; rw [zero_co
+            biprod.lift_eq]; rw [Cofork.condition s]; rw [zero_comp])
+    (fun s => by apply biprod.hom_ext' <;> simp)
+    fun s m h => by apply pushout.hom_ext <;> simp [← h]
 
 Depends on / 依赖: Category, Category.assoc, Cofork, Cofork.IsColimit.mk, Cofork.condition, IsColimit, biprod, biprod.hom_ext, biprod.inl, biprod.inr, biprod.lift_eq, condition, hom_ext, lift_eq, neg_comp, pushout, pushout.desc, pushout.hom_ext, sub_comp, sub_eq_add_neg
 -/
@@ -1517,7 +1581,30 @@ instance epi_pullback_of_epi_f
     epi_of_cancel_zero _ fun {R} e h => by
     -- Consider the morphism u := (0, e) : X ⊞ Y⟶ R.
     let u := biprod.desc (0 : X ⟶ R) e
-    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R i
+    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R is zero by assumption.
+    have hu : PullbackToBiproductIsKernel.pullbackToBiproduct f g ≫ u = 0 := by simpa [u]
+    -- pullbackToBiproduct f g is a kernel of (f, -g), so (f, -g) is a
+    -- cokernel of pullbackToBiproduct f g
+    have :=
+      epiIsCokernelOfKernel _
+        (PullbackToBiproductIsKernel.isLimitPullbackToBiproduct f g)
+    -- We use this fact to obtain a factorization of u through (f, -g) via some d : Z ⟶ R.
+    obtain ⟨d, hd⟩ := CokernelCofork.IsColimit.desc' this u hu
+    dsimp at d; dsimp [u] at hd
+    -- But then f ≫ d = 0:
+    have : f ≫ d = 0 := calc
+      f ≫ d = (biprod.inl ≫ biprod.desc f (-g)) ≫ d := by rw [biprod.inl_desc]
+      _ = biprod.inl ≫ u := by rw [Category.assoc, hd]
+      _ = 0 := biprod.inl_desc _ _
+    -- But f is an epimorphism, so d = 0...
+    have : d = 0 := (cancel_epi f).1 (by simpa)
+    -- ...or, in other words, e = 0.
+    calc
+      e = biprod.inr ≫ biprod.desc (0 : X ⟶ R) e := by rw [biprod.inr_desc]
+      _ = biprod.inr ≫ biprod.desc f (-g) ≫ d := by rw [← hd]
+      _ = biprod.inr ≫ biprod.desc f (-g) ≫ 0 := by rw [this]
+      _ = (biprod.inr ≫ biprod.desc f (-g)) ≫ 0 := by rw [← Category.assoc]
+      _ = 0 := HasZeroMorphisms.comp_zero _ _
 
 中文:
 实例 epi_pullback_of_epi_f
@@ -1527,7 +1614,30 @@ instance epi_pullback_of_epi_f
     epi_of_cancel_zero _ fun {R} e h => by
     -- Consider the morphism u := (0, e) : X ⊞ Y⟶ R.
     let u := biprod.desc (0 : X ⟶ R) e
-    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R i
+    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R is zero by assumption.
+    have hu : PullbackToBiproductIsKernel.pullbackToBiproduct f g ≫ u = 0 := by simpa [u]
+    -- pullbackToBiproduct f g is a kernel of (f, -g), so (f, -g) is a
+    -- cokernel of pullbackToBiproduct f g
+    have :=
+      epiIsCokernelOfKernel _
+        (PullbackToBiproductIsKernel.isLimitPullbackToBiproduct f g)
+    -- We use this fact to obtain a factorization of u through (f, -g) via some d : Z ⟶ R.
+    obtain ⟨d, hd⟩ := CokernelCofork.IsColimit.desc' this u hu
+    dsimp at d; dsimp [u] at hd
+    -- But then f ≫ d = 0:
+    have : f ≫ d = 0 := calc
+      f ≫ d = (biprod.inl ≫ biprod.desc f (-g)) ≫ d := by rw [biprod.inl_desc]
+      _ = biprod.inl ≫ u := by rw [Category.assoc, hd]
+      _ = 0 := biprod.inl_desc _ _
+    -- But f is an epimorphism, so d = 0...
+    have : d = 0 := (cancel_epi f).1 (by simpa)
+    -- ...or, in other words, e = 0.
+    calc
+      e = biprod.inr ≫ biprod.desc (0 : X ⟶ R) e := by rw [biprod.inr_desc]
+      _ = biprod.inr ≫ biprod.desc f (-g) ≫ d := by rw [← hd]
+      _ = biprod.inr ≫ biprod.desc f (-g) ≫ 0 := by rw [this]
+      _ = (biprod.inr ≫ biprod.desc f (-g)) ≫ 0 := by rw [← Category.assoc]
+      _ = 0 := HasZeroMorphisms.comp_zero _ _
 -/
 instance epi_pullback_of_epi_f [Epi f] : Epi (pullback.snd f g) :=
   -- It will suffice to consider some morphism e : Y ⟶ R such that
@@ -1572,7 +1682,30 @@ instance epi_pullback_of_epi_g
   epi_of_cancel_zero _ fun {R} e h => by
     -- Consider the morphism u := (e, 0) : X ⊞ Y ⟶ R.
     let u := biprod.desc e (0 : Y ⟶ R)
-    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R is z
+    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R is zero by assumption.
+    have hu : PullbackToBiproductIsKernel.pullbackToBiproduct f g ≫ u = 0 := by simpa [u]
+    -- pullbackToBiproduct f g is a kernel of (f, -g), so (f, -g) is a
+    -- cokernel of pullbackToBiproduct f g
+    have :=
+      epiIsCokernelOfKernel _
+        (PullbackToBiproductIsKernel.isLimitPullbackToBiproduct f g)
+    -- We use this fact to obtain a factorization of u through (f, -g) via some d : Z ⟶ R.
+    obtain ⟨d, hd⟩ := CokernelCofork.IsColimit.desc' this u hu
+    dsimp at d; dsimp [u] at hd
+    -- But then (-g) ≫ d = 0:
+    have : (-g) ≫ d = 0 := calc
+      (-g) ≫ d = (biprod.inr ≫ biprod.desc f (-g)) ≫ d := by rw [biprod.inr_desc]
+      _ = biprod.inr ≫ u := by rw [Category.assoc, hd]
+      _ = 0 := biprod.inr_desc _ _
+    -- But g is an epimorphism, thus so is -g, so d = 0...
+    have : d = 0 := (cancel_epi (-g)).1 (by simpa)
+    -- ...or, in other words, e = 0.
+    calc
+      e = biprod.inl ≫ biprod.desc e (0 : Y ⟶ R) := by rw [biprod.inl_desc]
+      _ = biprod.inl ≫ biprod.desc f (-g) ≫ d := by rw [← hd]
+      _ = biprod.inl ≫ biprod.desc f (-g) ≫ 0 := by rw [this]
+      _ = (biprod.inl ≫ biprod.desc f (-g)) ≫ 0 := by rw [← Category.assoc]
+      _ = 0 := HasZeroMorphisms.comp_zero _ _
 
 中文:
 实例 epi_pullback_of_epi_g
@@ -1582,7 +1715,30 @@ instance epi_pullback_of_epi_g
   epi_of_cancel_zero _ fun {R} e h => by
     -- Consider the morphism u := (e, 0) : X ⊞ Y ⟶ R.
     let u := biprod.desc e (0 : Y ⟶ R)
-    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R is z
+    -- The composite pullback f g ⟶ X ⊞ Y ⟶ R is zero by assumption.
+    have hu : PullbackToBiproductIsKernel.pullbackToBiproduct f g ≫ u = 0 := by simpa [u]
+    -- pullbackToBiproduct f g is a kernel of (f, -g), so (f, -g) is a
+    -- cokernel of pullbackToBiproduct f g
+    have :=
+      epiIsCokernelOfKernel _
+        (PullbackToBiproductIsKernel.isLimitPullbackToBiproduct f g)
+    -- We use this fact to obtain a factorization of u through (f, -g) via some d : Z ⟶ R.
+    obtain ⟨d, hd⟩ := CokernelCofork.IsColimit.desc' this u hu
+    dsimp at d; dsimp [u] at hd
+    -- But then (-g) ≫ d = 0:
+    have : (-g) ≫ d = 0 := calc
+      (-g) ≫ d = (biprod.inr ≫ biprod.desc f (-g)) ≫ d := by rw [biprod.inr_desc]
+      _ = biprod.inr ≫ u := by rw [Category.assoc, hd]
+      _ = 0 := biprod.inr_desc _ _
+    -- But g is an epimorphism, thus so is -g, so d = 0...
+    have : d = 0 := (cancel_epi (-g)).1 (by simpa)
+    -- ...or, in other words, e = 0.
+    calc
+      e = biprod.inl ≫ biprod.desc e (0 : Y ⟶ R) := by rw [biprod.inl_desc]
+      _ = biprod.inl ≫ biprod.desc f (-g) ≫ d := by rw [← hd]
+      _ = biprod.inl ≫ biprod.desc f (-g) ≫ 0 := by rw [this]
+      _ = (biprod.inl ≫ biprod.desc f (-g)) ≫ 0 := by rw [← Category.assoc]
+      _ = 0 := HasZeroMorphisms.comp_zero _ _
 -/
 instance epi_pullback_of_epi_g [Epi g] : Epi (pullback.fst f g) :=
   -- It will suffice to consider some morphism e : X ⟶ R such that
@@ -1714,7 +1870,20 @@ instance mono_pushout_of_mono_f
     have :=
       monoIsKernelOfCokernel _
         (BiproductToPushoutIsCokernel.isColimitBiproductToPushout f g)
-    obtain ⟨d, hd
+    obtain ⟨d, hd⟩ := KernelFork.IsLimit.lift' this u hu
+    dsimp at d
+    dsimp [u] at hd
+    have : d ≫ f = 0 := calc
+      d ≫ f = d ≫ biprod.lift f (-g) ≫ biprod.fst := by rw [biprod.lift_fst]
+      _ = u ≫ biprod.fst := by rw [← Category.assoc, hd]
+      _ = 0 := biprod.lift_fst _ _
+    have : d = 0 := (cancel_mono f).1 (by simpa)
+    calc
+      e = biprod.lift (0 : R ⟶ Y) e ≫ biprod.snd := by rw [biprod.lift_snd]
+      _ = (d ≫ biprod.lift f (-g)) ≫ biprod.snd := by rw [← hd]
+      _ = (0 ≫ biprod.lift f (-g)) ≫ biprod.snd := by rw [this]
+      _ = 0 ≫ biprod.lift f (-g) ≫ biprod.snd := by rw [Category.assoc]
+      _ = 0 := zero_comp
 
 中文:
 实例 mono_pushout_of_mono_f
@@ -1725,7 +1894,20 @@ instance mono_pushout_of_mono_f
     have :=
       monoIsKernelOfCokernel _
         (BiproductToPushoutIsCokernel.isColimitBiproductToPushout f g)
-    obtain ⟨d, hd
+    obtain ⟨d, hd⟩ := KernelFork.IsLimit.lift' this u hu
+    dsimp at d
+    dsimp [u] at hd
+    have : d ≫ f = 0 := calc
+      d ≫ f = d ≫ biprod.lift f (-g) ≫ biprod.fst := by rw [biprod.lift_fst]
+      _ = u ≫ biprod.fst := by rw [← Category.assoc, hd]
+      _ = 0 := biprod.lift_fst _ _
+    have : d = 0 := (cancel_mono f).1 (by simpa)
+    calc
+      e = biprod.lift (0 : R ⟶ Y) e ≫ biprod.snd := by rw [biprod.lift_snd]
+      _ = (d ≫ biprod.lift f (-g)) ≫ biprod.snd := by rw [← hd]
+      _ = (0 ≫ biprod.lift f (-g)) ≫ biprod.snd := by rw [this]
+      _ = 0 ≫ biprod.lift f (-g) ≫ biprod.snd := by rw [Category.assoc]
+      _ = 0 := zero_comp
 
 Depends on / 依赖: BiproductToPushoutIsCokernel, BiproductToPushoutIsCokernel.biproductToPushout, BiproductToPushoutIsCokernel.isColimitBiproductToPushout, Category, Category.assoc, IsLimit, KernelFork, KernelFork.IsLimit.lift, biprod, biprod.fst, biprod.lift, biprod.lift_fst, biproductToPushout, isColimitBiproductToPushout, lift_fst, monoIsKernelOfCokernel, mono_of_cancel_zero
 -/
@@ -1764,7 +1946,20 @@ instance mono_pushout_of_mono_g
     have :=
       monoIsKernelOfCokernel _
         (BiproductToPushoutIsCokernel.isColimitBiproductToPushout f g)
-    obtain ⟨d, hd
+    obtain ⟨d, hd⟩ := KernelFork.IsLimit.lift' this u hu
+    dsimp at d
+    dsimp [u] at hd
+    have : d ≫ (-g) = 0 := calc
+      d ≫ (-g) = d ≫ biprod.lift f (-g) ≫ biprod.snd := by rw [biprod.lift_snd]
+      _ = biprod.lift e (0 : R ⟶ Z) ≫ biprod.snd := by rw [← Category.assoc, hd]
+      _ = 0 := biprod.lift_snd _ _
+    have : d = 0 := (cancel_mono (-g)).1 (by simpa)
+    calc
+      e = biprod.lift e (0 : R ⟶ Z) ≫ biprod.fst := by rw [biprod.lift_fst]
+      _ = (d ≫ biprod.lift f (-g)) ≫ biprod.fst := by rw [← hd]
+      _ = (0 ≫ biprod.lift f (-g)) ≫ biprod.fst := by rw [this]
+      _ = 0 ≫ biprod.lift f (-g) ≫ biprod.fst := by rw [Category.assoc]
+      _ = 0 := zero_comp
 
 中文:
 实例 mono_pushout_of_mono_g
@@ -1775,7 +1970,20 @@ instance mono_pushout_of_mono_g
     have :=
       monoIsKernelOfCokernel _
         (BiproductToPushoutIsCokernel.isColimitBiproductToPushout f g)
-    obtain ⟨d, hd
+    obtain ⟨d, hd⟩ := KernelFork.IsLimit.lift' this u hu
+    dsimp at d
+    dsimp [u] at hd
+    have : d ≫ (-g) = 0 := calc
+      d ≫ (-g) = d ≫ biprod.lift f (-g) ≫ biprod.snd := by rw [biprod.lift_snd]
+      _ = biprod.lift e (0 : R ⟶ Z) ≫ biprod.snd := by rw [← Category.assoc, hd]
+      _ = 0 := biprod.lift_snd _ _
+    have : d = 0 := (cancel_mono (-g)).1 (by simpa)
+    calc
+      e = biprod.lift e (0 : R ⟶ Z) ≫ biprod.fst := by rw [biprod.lift_fst]
+      _ = (d ≫ biprod.lift f (-g)) ≫ biprod.fst := by rw [← hd]
+      _ = (0 ≫ biprod.lift f (-g)) ≫ biprod.fst := by rw [this]
+      _ = 0 ≫ biprod.lift f (-g) ≫ biprod.fst := by rw [Category.assoc]
+      _ = 0 := zero_comp
 
 Depends on / 依赖: BiproductToPushoutIsCokernel, BiproductToPushoutIsCokernel.biproductToPushout, BiproductToPushoutIsCokernel.isColimitBiproductToPushout, Catego, IsLimit, KernelFork, KernelFork.IsLimit.lift, biprod, biprod.lift, biprod.lift_snd, biprod.snd, biproductToPushout, isColimitBiproductToPushout, lift_snd, monoIsKernelOfCokernel, mono_of_cancel_zero
 -/
@@ -2017,7 +2225,19 @@ definition mk'
       g := hf.cokernelCofork.π
       w := by simp
       isLimit :=
-        have : IsIso 
+        have : IsIso hf.imageπ :=
+          CokernelCofork.IsColimit.isIso_π _ hf.imageIsCokernel (by simp [← cancel_mono f])
+        IsLimit.ofIsoLimit hf.imageIsKernel (Fork.ext (asIso hf.imageπ)).symm }⟩
+  normalEpiOfEpi f _ := by
+    obtain ⟨hf⟩ := h f
+    exact ⟨{
+      W := hf.kernelFork.pt
+      g := hf.kernelFork.ι
+      w := by simp
+      isColimit :=
+        have : IsIso hf.imageι :=
+          KernelFork.IsLimit.isIso_ι _ hf.imageIsKernel (by simp [← cancel_epi f])
+        IsColimit.ofIsoColimit hf.imageIsCokernel (Cofork.ext (asIso hf.imageι)) }⟩
 
 中文:
 定义 mk'
@@ -2031,7 +2251,19 @@ definition mk'
       g := hf.cokernelCofork.π
       w := by simp
       isLimit :=
-        have : IsIso 
+        have : IsIso hf.imageπ :=
+          CokernelCofork.IsColimit.isIso_π _ hf.imageIsCokernel (by simp [← cancel_mono f])
+        IsLimit.ofIsoLimit hf.imageIsKernel (Fork.ext (asIso hf.imageπ)).symm }⟩
+  normalEpiOfEpi f _ := by
+    obtain ⟨hf⟩ := h f
+    exact ⟨{
+      W := hf.kernelFork.pt
+      g := hf.kernelFork.ι
+      w := by simp
+      isColimit :=
+        have : IsIso hf.imageι :=
+          KernelFork.IsLimit.isIso_ι _ hf.imageIsKernel (by simp [← cancel_epi f])
+        IsColimit.ofIsoColimit hf.imageIsCokernel (Cofork.ext (asIso hf.imageι)) }⟩
 
 Depends on / 依赖: isLimitKernelFork, some.isLimitKernelFork
 -/

@@ -378,7 +378,7 @@ theorem isChain_iff_forall_rel_of_append_cons_cons
   | cons_cons head head' tail _ ih =>
     refine fun h => isChain_cons_cons.mpr ⟨h (nil_append _).symm, ih _ fun ⦃a b l₁ l₂⦄ eq => ?_⟩
     apply h
- 
+    rw [eq]; rw [cons_append]
 
 中文:
 定理 isChain_iff_对任意_rel_of_append_cons_cons
@@ -390,7 +390,7 @@ theorem isChain_iff_forall_rel_of_append_cons_cons
   | cons_cons head head' tail _ ih =>
     refine fun h => isChain_cons_cons.mpr ⟨h (nil_append _).symm, ih _ fun ⦃a b l₁ l₂⦄ eq => ?_⟩
     apply h
- 
+    rw [eq]; rw [cons_append]
 
 Depends on / 依赖: cons_append, cons_cons, isChain_append_cons_cons, isChain_append_cons_cons.mp, isChain_cons_cons, isChain_cons_cons.mpr, nil_append, singleton, twoStepInduction
 -/
@@ -1161,7 +1161,7 @@ theorem isChain_reverse
   | nil => grind
   | singleton a => grind
   | cons_cons a b l IH IH2 =>
-    rw [isChain_cons_cons]; rw [reverse_cons]; rw [reverse_cons]; rw [append_assoc]; rw [cons_append]; rw [nil_append]; rw [isChain_split]; rw [← reverse_cons]; rw [IH2]; rw [and_comm
+    rw [isChain_cons_cons]; rw [reverse_cons]; rw [reverse_cons]; rw [append_assoc]; rw [cons_append]; rw [nil_append]; rw [isChain_split]; rw [← reverse_cons]; rw [IH2]; rw [and_comm]; rw [isChain_pair]
 
 中文:
 定理 isChain_reverse
@@ -1172,7 +1172,7 @@ theorem isChain_reverse
   | nil => grind
   | singleton a => grind
   | cons_cons a b l IH IH2 =>
-    rw [isChain_cons_cons]; rw [reverse_cons]; rw [reverse_cons]; rw [append_assoc]; rw [cons_append]; rw [nil_append]; rw [isChain_split]; rw [← reverse_cons]; rw [IH2]; rw [and_comm
+    rw [isChain_cons_cons]; rw [reverse_cons]; rw [reverse_cons]; rw [append_assoc]; rw [cons_append]; rw [nil_append]; rw [isChain_split]; rw [← reverse_cons]; rw [IH2]; rw [and_comm]; rw [isChain_pair]
 
 Depends on / 依赖: and_comm, append_assoc, cons_append, cons_cons, isChain_cons_cons, isChain_pair, isChain_split, nil_append, reverse_cons, singleton, twoStepInduction
 -/
@@ -1565,7 +1565,11 @@ theorem IsChain.cons_of_le
       exact (List.not_lt_nil _ hmas).elim
     | cons a' as =>
       rw [List.isChain_cons_cons] at ha
-      refine lt_of_le_of_l
+      refine lt_of_le_of_lt ?_ ha.1
+      rw [le_iff_lt_or_eq] at hmas
+      rcases hmas with hmas | hmas
+      · exact head_le_of_lt hmas
+      · simp_all only [List.cons.injEq, le_refl]
 
 中文:
 定理 IsChain.cons_of_le
@@ -1581,7 +1585,11 @@ theorem IsChain.cons_of_le
       exact (List.not_lt_nil _ hmas).elim
     | cons a' as =>
       rw [List.isChain_cons_cons] at ha
-      refine lt_of_le_of_l
+      refine lt_of_le_of_lt ?_ ha.1
+      rw [le_iff_lt_or_eq] at hmas
+      rcases hmas with hmas | hmas
+      · exact head_le_of_lt hmas
+      · simp_all only [List.cons.injEq, le_refl]
 
 Depends on / 依赖: List.cons.injEq, List.isChain_cons_cons, List.not_lt_nil, cons_cons, head_le_of_lt, hm.cons_cons, isChain_cons_cons, le_iff_lt_or_eq, le_refl, lt_of_le_of_lt, not_lt_nil, or_false, reduceCtorEq
 -/
@@ -1866,7 +1874,26 @@ theorem Acc.list_chain'
   /- For an r-decreasing chain of the form a :: l, apply induction on a -/
   induction acc generalizing l with
   | intro a _ ih =>
-    /- Bundle l with a proof tha
+    /- Bundle l with a proof that it is r-decreasing to form l' -/
+    have hl' := (List.isChain_cons.1 hl).2
+    let l' : List.chains r := ⟨l, hl'⟩
+    have : Acc (List.lex_chains r) l' := by
+      rcases l with - | ⟨b, l⟩
+      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
+      /- l' is accessible by induction hypothesis -/
+      · apply ih b (List.isChain_cons_cons.1 hl).1
+    /- make l' a free variable and induct on l' -/
+    revert hl
+    rw [(by rfl : l = l'.1)]
+    clear_value l'
+    induction this with
+    | intro l _ ihl =>
+      intro hl
+      apply Acc.intro
+      rintro ⟨_ | ⟨b, m⟩, hm⟩ (_ | hr | hr)
+      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
+      · apply ih b hr
+      · apply ihl ⟨m, (List.isChain_cons.1 hm).2⟩ hr
 
 中文:
 定理 Acc.list_chain'
@@ -1879,7 +1906,26 @@ theorem Acc.list_chain'
   /- For an r-decreasing chain of the form a :: l, apply induction on a -/
   induction acc generalizing l with
   | intro a _ ih =>
-    /- Bundle l with a proof tha
+    /- Bundle l with a proof that it is r-decreasing to form l' -/
+    have hl' := (List.isChain_cons.1 hl).2
+    let l' : List.chains r := ⟨l, hl'⟩
+    have : Acc (List.lex_chains r) l' := by
+      rcases l with - | ⟨b, l⟩
+      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
+      /- l' is accessible by induction hypothesis -/
+      · apply ih b (List.isChain_cons_cons.1 hl).1
+    /- make l' a free variable and induct on l' -/
+    revert hl
+    rw [(by rfl : l = l'.1)]
+    clear_value l'
+    induction this with
+    | intro l _ ihl =>
+      intro hl
+      apply Acc.intro
+      rintro ⟨_ | ⟨b, m⟩, hm⟩ (_ | hr | hr)
+      · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
+      · apply ih b hr
+      · apply ihl ⟨m, (List.isChain_cons.1 hm).2⟩ hr
 
 Depends on / 依赖: Acc.intro, List.head, Option.mem_some_iff, _cons, mem_some_iff, specialize
 -/

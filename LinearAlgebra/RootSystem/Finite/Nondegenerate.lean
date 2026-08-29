@@ -183,7 +183,37 @@ lemma smul_coroot_eq_of_root_add_root_eq
     Q • P.coroot k = m • P.pairing i j • P.coroot i + n • P.pairing j i • P.coroot j := by
   let B := P.toInvariantForm
   let lsq (i) : R := B.form (P.root i) (P.root i)
-  have hlsq (i : ι) : lsq i = P.Root
+  have hlsq (i : ι) : lsq i = P.RootForm (P.root i) (P.root i) := rfl
+  have h₁ : lsq k • P.coroot k = (m • lsq i) • P.coroot i + (n • lsq j) • P.coroot j := by
+    simp only [hlsq, smul_assoc, P.rootForm_self_smul_coroot, smul_comm _ 2]
+    rw [← map_smul _ m]; rw [← map_smul _ n]; rw [← nsmul_add]; rw [← map_add]; rw [hk]
+  have h₂ :
+      lsq k = (m * m) * lsq i + (m * n) * (2 * B.form (P.root i) (P.root j)) + (n * n) * lsq j := by
+    have aux : P.RootForm (P.root j) (P.root i) = B.form (P.root i) (P.root j) :=
+      P.rootForm_symmetric.eq (P.root j) (P.root i)
+    simp [hlsq, ← hk, aux, B]
+    ring
+  have h₃ : 2 * B.form (P.root i) (P.root j) = P.pairing i j * lsq j :=
+    B.two_mul_apply_root_root i j
+  have h₄ : P.pairing j i * lsq i = P.pairing i j * lsq j := B.pairing_mul_eq_pairing_mul_swap i j
+  replace h₁ :
+      (m * m * (P.pairing j i * lsq i)) • P.coroot k +
+      (m * n * (P.pairing j i * P.pairing i j * lsq j)) • P.coroot k +
+      (n * n * (P.pairing j i * lsq j)) • P.coroot k =
+        (m * (P.pairing j i * lsq i)) • P.coroot i +
+        (n * (P.pairing j i * lsq j)) • P.coroot j := by
+    rw [h₂]; rw [h₃] at h₁
+    replace h₁ := congr_arg (fun n => P.pairing j i • n) h₁
+    simp only [add_smul, smul_add, ← mul_smul, smul_eq_mul] at h₁
+    convert! h₁ using 1
+    · module
+    · ring_nf
+  simp only [h₄] at h₁
+  apply smul_right_injective _ (r := lsq j) (RootPairing.IsAnisotropic.rootForm_root_ne_zero j)
+  simp only
+  convert! h₁ using 1
+  · module
+  · module
 
 中文:
 引理 smul_coroot_eq_of_root_add_root_eq
@@ -192,7 +222,37 @@ lemma smul_coroot_eq_of_root_add_root_eq
     Q • P.coroot k = m • P.pairing i j • P.coroot i + n • P.pairing j i • P.coroot j := by
   let B := P.toInvariantForm
   let lsq (i) : R := B.form (P.root i) (P.root i)
-  have hlsq (i : ι) : lsq i = P.Root
+  have hlsq (i : ι) : lsq i = P.RootForm (P.root i) (P.root i) := rfl
+  have h₁ : lsq k • P.coroot k = (m • lsq i) • P.coroot i + (n • lsq j) • P.coroot j := by
+    simp only [hlsq, smul_assoc, P.rootForm_self_smul_coroot, smul_comm _ 2]
+    rw [← map_smul _ m]; rw [← map_smul _ n]; rw [← nsmul_add]; rw [← map_add]; rw [hk]
+  have h₂ :
+      lsq k = (m * m) * lsq i + (m * n) * (2 * B.form (P.root i) (P.root j)) + (n * n) * lsq j := by
+    have aux : P.RootForm (P.root j) (P.root i) = B.form (P.root i) (P.root j) :=
+      P.rootForm_symmetric.eq (P.root j) (P.root i)
+    simp [hlsq, ← hk, aux, B]
+    ring
+  have h₃ : 2 * B.form (P.root i) (P.root j) = P.pairing i j * lsq j :=
+    B.two_mul_apply_root_root i j
+  have h₄ : P.pairing j i * lsq i = P.pairing i j * lsq j := B.pairing_mul_eq_pairing_mul_swap i j
+  replace h₁ :
+      (m * m * (P.pairing j i * lsq i)) • P.coroot k +
+      (m * n * (P.pairing j i * P.pairing i j * lsq j)) • P.coroot k +
+      (n * n * (P.pairing j i * lsq j)) • P.coroot k =
+        (m * (P.pairing j i * lsq i)) • P.coroot i +
+        (n * (P.pairing j i * lsq j)) • P.coroot j := by
+    rw [h₂]; rw [h₃] at h₁
+    replace h₁ := congr_arg (fun n => P.pairing j i • n) h₁
+    simp only [add_smul, smul_add, ← mul_smul, smul_eq_mul] at h₁
+    convert! h₁ using 1
+    · module
+    · ring_nf
+  simp only [h₄] at h₁
+  apply smul_right_injective _ (r := lsq j) (RootPairing.IsAnisotropic.rootForm_root_ne_zero j)
+  simp only
+  convert! h₁ using 1
+  · module
+  · module
 
 Depends on / 依赖: B.form, P.RootForm, P.coroot, P.pairing, P.root, P.rootForm_self_smul_coroot, P.toInvariantForm, RootForm, coroot, map_smul, pairing, rootForm_self_smul_coroot, smul_assoc, smul_comm, toInvariantForm
 -/
@@ -251,7 +311,19 @@ lemma finrank_range_polarization_eq_finrank_span_coroot
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   have : Module.IsTorsionFree S N := .trans_faithfulSMul S R N
   have h_ne : ∏ i, (P.RootFormIn S (P.rootSpanMem S i) (P.rootSpanMem S i)) != 0 := by
- 
+    refine Finset.prod_ne_zero_iff.mpr fun i _ h => ?_
+    have := (FaithfulSMul.algebraMap_eq_zero_iff S R).mpr h
+    rw [algebraMap_rootFormIn] at this
+    apply IsAnisotropic.rootForm_root_ne_zero i this
+  refine LinearMap.finrank_le_of_isSMulRegular (P.corootSpan S)
+    (LinearMap.range (M₂ := N) (P.PolarizationIn S))
+    (smul_right_injective N h_ne) ?_
+  intro _ hx
+  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun S).mp hx
+  rw [← hc]; rw [Finset.smul_sum]
+  simp_rw [smul_smul, mul_comm, ← smul_smul]
+  exact Submodule.sum_smul_mem (LinearMap.range (P.PolarizationIn S)) c
+    fun j _ => prod_rootFormIn_smul_coroot_mem_range_PolarizationIn P S j
 
 中文:
 引理 finrank_range_polarization_eq_finrank_span_coroot
@@ -261,7 +333,19 @@ lemma finrank_range_polarization_eq_finrank_span_coroot
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   have : Module.IsTorsionFree S N := .trans_faithfulSMul S R N
   have h_ne : ∏ i, (P.RootFormIn S (P.rootSpanMem S i) (P.rootSpanMem S i)) != 0 := by
- 
+    refine Finset.prod_ne_zero_iff.mpr fun i _ h => ?_
+    have := (FaithfulSMul.algebraMap_eq_zero_iff S R).mpr h
+    rw [algebraMap_rootFormIn] at this
+    apply IsAnisotropic.rootForm_root_ne_zero i this
+  refine LinearMap.finrank_le_of_isSMulRegular (P.corootSpan S)
+    (LinearMap.range (M₂ := N) (P.PolarizationIn S))
+    (smul_right_injective N h_ne) ?_
+  intro _ hx
+  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun S).mp hx
+  rw [← hc]; rw [Finset.smul_sum]
+  simp_rw [smul_smul, mul_comm, ← smul_smul]
+  exact Submodule.sum_smul_mem (LinearMap.range (P.PolarizationIn S)) c
+    fun j _ => prod_rootFormIn_smul_coroot_mem_range_PolarizationIn P S j
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, Finset, Finset.prod_ne_zero_iff.mpr, IsAnisotropic, IsAnisotropic.rootForm_root_ne_zero, IsReflexive, IsTorsionFree, LinearMap, LinearMap.f, Module, Module.IsTorsionFree, P.RootFormIn, P.flip.toLinearMap, P.range_polarizationIn_le_span_coroot, P.rootSpanMem, RootFormIn, Submodule, Submodule.finrank_mono, algebraMap_eq_zero_iff
 -/
@@ -337,7 +421,8 @@ lemma polarizationIn_Injective
   have : Module.IsTorsionFree S M := .trans_faithfulSMul S R M
   rw [← LinearMap.ker_eq_bot]; rw [← top_disjoint]
   refine Submodule.disjoint_ker_of_finrank_le (L := ⊤) (P.PolarizationIn S) ?_
-  rw [finrank_top]; rw [← finrank_corootSpan_eq
+  rw [finrank_top]; rw [← finrank_corootSpan_eq]; rw [← finrank_range_polarization_eq_finrank_span_coroot]
+exact Submodule.finrank_mono le_of_eq LinearMap.range_eq_map (P.PolarizationIn S)
 
 中文:
 引理 polarizationIn_Injective
@@ -347,7 +432,8 @@ lemma polarizationIn_Injective
   have : Module.IsTorsionFree S M := .trans_faithfulSMul S R M
   rw [← LinearMap.ker_eq_bot]; rw [← top_disjoint]
   refine Submodule.disjoint_ker_of_finrank_le (L := ⊤) (P.PolarizationIn S) ?_
-  rw [finrank_top]; rw [← finrank_corootSpan_eq
+  rw [finrank_top]; rw [← finrank_corootSpan_eq]; rw [← finrank_range_polarization_eq_finrank_span_coroot]
+exact Submodule.finrank_mono le_of_eq LinearMap.range_eq_map (P.PolarizationIn S)
 
 Depends on / 依赖: IsReflexive, IsTorsionFree, LinearMap, LinearMap.ker_eq_bot, LinearMap.range_eq_map, Module, Module.IsTorsionFree, P.PolarizationIn, P.toLinearMap, PolarizationIn, Submodule, Submodule.disjoint_ker_of_finrank_le, Submodule.finrank_mono, disjoint_ker_of_finrank_le, finrank_corootSpan_eq, finrank_mono, finrank_range_polarization_eq_finrank_span_coroot, finrank_top, ker_eq_bot, le_of_eq
 -/
@@ -415,7 +501,7 @@ theorem posRootForm_posForm_pos_of_ne_zero
     obtain ⟨i, hi⟩ := P.exists_coroot_ne S hx
     use i
     exact ⟨Finset.mem_univ i, mul_self_pos.mpr hi⟩
-  exact Finset.sum_pos'
+  exact Finset.sum_pos' (fun i a => mul_self_nonneg ((P.coroot'In S i) x)) this
 
 中文:
 定理 posRootForm_posForm_pos_of_ne_zero
@@ -427,7 +513,7 @@ theorem posRootForm_posForm_pos_of_ne_zero
     obtain ⟨i, hi⟩ := P.exists_coroot_ne S hx
     use i
     exact ⟨Finset.mem_univ i, mul_self_pos.mpr hi⟩
-  exact Finset.sum_pos'
+  exact Finset.sum_pos' (fun i a => mul_self_nonneg ((P.coroot'In S i) x)) this
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_pos, Finset.univ, P.coroot, P.exists_coroot_ne, P.isAnisotropic_of_isValuedIn, coroot, exists_coroot_ne, isAnisotropic_of_isValuedIn, mem_univ, mul_self_nonneg, mul_self_pos, mul_self_pos.mpr, posRootForm_posForm_apply_apply, sum_pos
 -/
@@ -663,7 +749,11 @@ lemma isCompl_rootSpan_ker_rootForm
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   refine (Submodule.isCompl_iff_disjoint _ _ ?_).mpr P.disjoint_rootSpan_ker_rootForm
   have aux : finrank R M =
-      finrank R (P.rootSpan R) + finrank R (P.corootSpan R).dualA
+      finrank R (P.rootSpan R) + finrank R (P.corootSpan R).dualAnnihilator := by
+    rw [P.toPerfPair.finrank_eq]; rw [← P.finrank_corootSpan_eq']; rw [Subspace.finrank_add_finrank_dualAnnihilator_eq (P.corootSpan R)]; rw [Subspace.dual_finrank_eq]
+  rw [aux]; rw [add_le_add_iff_left]
+  convert! Submodule.finrank_mono P.corootSpan_dualAnnihilator_le_ker_rootForm
+  exact (LinearEquiv.finrank_map_eq _ _).symm
 
 中文:
 引理 isCompl_rootSpan_ker_rootForm
@@ -672,7 +762,11 @@ lemma isCompl_rootSpan_ker_rootForm
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   refine (Submodule.isCompl_iff_disjoint _ _ ?_).mpr P.disjoint_rootSpan_ker_rootForm
   have aux : finrank R M =
-      finrank R (P.rootSpan R) + finrank R (P.corootSpan R).dualA
+      finrank R (P.rootSpan R) + finrank R (P.corootSpan R).dualAnnihilator := by
+    rw [P.toPerfPair.finrank_eq]; rw [← P.finrank_corootSpan_eq']; rw [Subspace.finrank_add_finrank_dualAnnihilator_eq (P.corootSpan R)]; rw [Subspace.dual_finrank_eq]
+  rw [aux]; rw [add_le_add_iff_left]
+  convert! Submodule.finrank_mono P.corootSpan_dualAnnihilator_le_ker_rootForm
+  exact (LinearEquiv.finrank_map_eq _ _).symm
 
 Depends on / 依赖: IsReflexive, P.corootSpan, P.disjoint_rootSpan_ker_rootForm, P.finrank_corootSpan_eq, P.flip.toLinearMap, P.rootSpan, P.toLinearMap, P.toPerfPair.finrank_eq, Submodule, Submodule.isCompl_iff_disjoint, Subspace, Subspace.dual_finrank_eq, Subspace.finrank_add_finrank_dualAnnihilator_eq, add_le_add_iff_left, corootSpan, disjoint_rootSpan_ker_rootForm, dualAnnihilator, dual_finrank_eq, finrank, finrank_add_finrank_dualAnnihilator_eq
 -/
@@ -714,7 +808,13 @@ lemma ker_rootForm_eq_dualAnnihilator
   have : IsReflexive R M := .of_isPerfPair P.toLinearMap
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   suffices finrank R (LinearMap.ker P.RootForm) = finrank R (P.corootSpan R).dualAnnihilator by
-    refine (Submodule.eq_of_le_of_finrank_eq P.corootSpan_dualAnnihilator_le_ker_r
+    refine (Submodule.eq_of_le_of_finrank_eq P.corootSpan_dualAnnihilator_le_ker_rootForm ?_).symm
+    rw [this]
+    apply LinearEquiv.finrank_map_eq
+  have aux0 := Subspace.finrank_add_finrank_dualAnnihilator_eq (P.corootSpan R)
+  have aux1 := Submodule.finrank_add_eq_of_isCompl P.isCompl_rootSpan_ker_rootForm
+  rw [← P.finrank_corootSpan_eq']; rw [P.toPerfPair.finrank_eq]; rw [Subspace.dual_finrank_eq] at aux1
+  lia
 
 中文:
 引理 ker_rootForm_eq_dualAnnihilator
@@ -722,7 +822,13 @@ lemma ker_rootForm_eq_dualAnnihilator
   have : IsReflexive R M := .of_isPerfPair P.toLinearMap
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   suffices finrank R (LinearMap.ker P.RootForm) = finrank R (P.corootSpan R).dualAnnihilator by
-    refine (Submodule.eq_of_le_of_finrank_eq P.corootSpan_dualAnnihilator_le_ker_r
+    refine (Submodule.eq_of_le_of_finrank_eq P.corootSpan_dualAnnihilator_le_ker_rootForm ?_).symm
+    rw [this]
+    apply LinearEquiv.finrank_map_eq
+  have aux0 := Subspace.finrank_add_finrank_dualAnnihilator_eq (P.corootSpan R)
+  have aux1 := Submodule.finrank_add_eq_of_isCompl P.isCompl_rootSpan_ker_rootForm
+  rw [← P.finrank_corootSpan_eq']; rw [P.toPerfPair.finrank_eq]; rw [Subspace.dual_finrank_eq] at aux1
+  lia
 
 Depends on / 依赖: IsReflexive, LinearEquiv, LinearEquiv.finrank_map_eq, LinearMap, LinearMap.ker, P.RootForm, P.corootSpan, P.corootSpan_dualAnnihilator_le_ker_rootForm, P.flip.toLinearMap, P.isCompl_rootSpan_ker_, P.toLinearMap, RootForm, Submodule, Submodule.eq_of_le_of_finrank_eq, Submodule.finrank_add_eq_of_isCompl, Subspace, Subspace.finrank_add_finrank_dualAnnihilator_eq, corootSpan, corootSpan_dualAnnihilator_le_ker_rootForm, dualAnnihilator
 -/
@@ -818,7 +924,12 @@ lemma orthogonal_rootSpan_eq
   refine le_antisymm ?_ (by intro; simp_all)
   rintro x hx y -
   simp only [LinearMap.BilinForm.mem_orthogonal_iff] at hx ⊢
-  obtain ⟨u, hu, v, hv, rfl⟩ : existsᵉ (u in P.rootSpan R) (v in LinearMap.ker P.RootForm), u 
+  obtain ⟨u, hu, v, hv, rfl⟩ : existsᵉ (u in P.rootSpan R) (v in LinearMap.ker P.RootForm), u + v = y := by
+    rw [← Submodule.mem_sup]; rw [P.isCompl_rootSpan_ker_rootForm.sup_eq_top]; exact Submodule.mem_top
+  simp only [LinearMap.mem_ker] at hv
+  simp [hx _ hu, hv]
+
+@[simp]
 
 中文:
 引理 orthogonal_rootSpan_eq
@@ -827,7 +938,12 @@ lemma orthogonal_rootSpan_eq
   refine le_antisymm ?_ (by intro; simp_all)
   rintro x hx y -
   simp only [LinearMap.BilinForm.mem_orthogonal_iff] at hx ⊢
-  obtain ⟨u, hu, v, hv, rfl⟩ : existsᵉ (u in P.rootSpan R) (v in LinearMap.ker P.RootForm), u 
+  obtain ⟨u, hu, v, hv, rfl⟩ : existsᵉ (u in P.rootSpan R) (v in LinearMap.ker P.RootForm), u + v = y := by
+    rw [← Submodule.mem_sup]; rw [P.isCompl_rootSpan_ker_rootForm.sup_eq_top]; exact Submodule.mem_top
+  simp only [LinearMap.mem_ker] at hv
+  simp [hx _ hu, hv]
+
+@[simp]
 
 Depends on / 依赖: BilinForm, LinearMap, LinearMap.BilinForm.mem_orthogonal_iff, LinearMap.BilinForm.orthogonal_top_eq_ker, LinearMap.ker, LinearMap.mem_ker, P.RootForm, P.isCompl_rootSpan_ker_rootForm.sup_eq_top, P.rootForm_symmetric.isRefl, P.rootSpan, RootForm, Submodule, Submodule.mem_sup, Submodule.mem_top, isCompl_rootSpan_ker_rootForm, isRefl, le_antisymm, mem_ker, mem_orthogonal_iff, mem_sup
 -/
@@ -870,7 +986,8 @@ lemma rootSpan_eq_top_iff
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   refine ⟨fun h => ?_, fun h => ?_⟩ <;> apply Submodule.eq_top_of_finrank_eq
   · rw [P.finrank_corootSpan_eq', h, finrank_top, P.toPerfPair.finrank_eq, Subspace.dual_finrank_eq]
-
+  · rw [← P.finrank_corootSpan_eq', h, finrank_top, P.toPerfPair.finrank_eq,
+      Subspace.dual_finrank_eq]
 
 中文:
 引理 rootSpan_eq_top_iff
@@ -879,7 +996,8 @@ lemma rootSpan_eq_top_iff
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   refine ⟨fun h => ?_, fun h => ?_⟩ <;> apply Submodule.eq_top_of_finrank_eq
   · rw [P.finrank_corootSpan_eq', h, finrank_top, P.toPerfPair.finrank_eq, Subspace.dual_finrank_eq]
-
+  · rw [← P.finrank_corootSpan_eq', h, finrank_top, P.toPerfPair.finrank_eq,
+      Subspace.dual_finrank_eq]
 
 Depends on / 依赖: IsReflexive, P.finrank_corootSpan_eq, P.flip.toLinearMap, P.toLinearMap, P.toPerfPair.finrank_eq, Submodule, Submodule.eq_top_of_finrank_eq, Subspace, Subspace.dual_finrank_eq, dual_finrank_eq, eq_top_of_finrank_eq, finrank_corootSpan_eq, finrank_eq, finrank_top, of_isPerfPair, toLinearMap, toPerfPair
 -/
@@ -1036,7 +1154,11 @@ lemma linearIndepOn_coroot_iff_aux
   obtain ⟨f, hf⟩ : exists f : s -> Rˣ, forall i : s, P.coroot i = f i • P.PolarizationEquiv (P.root i) :=
     ⟨fun i => Units.mk0 (2 / P.RootForm (P.root i) (P.root i))
       (by simp [two_ne_zero, IsAnisotropic.rootForm_root_ne_zero]),
-     fun i => by simp [coroot_eq_polarizationEquiv_apply_roo
+     fun i => by simp [coroot_eq_polarizationEquiv_apply_root]⟩
+  have : s.domRestrict P.coroot = P.PolarizationEquiv.toLinearMap ∘ (f • s.domRestrict P.root) := by
+    ext; simp [hf, polarizationEquiv_apply]
+  rw [← linearIndependent_restrict_iff]; rw [this]; rw [LinearMap.linearIndependent_iff_of_injOn _ P.PolarizationEquiv.injective.injOn]
+  simpa
 
 中文:
 引理 linearIndepOn_coroot_iff_aux
@@ -1045,7 +1167,11 @@ lemma linearIndepOn_coroot_iff_aux
   obtain ⟨f, hf⟩ : exists f : s -> Rˣ, forall i : s, P.coroot i = f i • P.PolarizationEquiv (P.root i) :=
     ⟨fun i => Units.mk0 (2 / P.RootForm (P.root i) (P.root i))
       (by simp [two_ne_zero, IsAnisotropic.rootForm_root_ne_zero]),
-     fun i => by simp [coroot_eq_polarizationEquiv_apply_roo
+     fun i => by simp [coroot_eq_polarizationEquiv_apply_root]⟩
+  have : s.domRestrict P.coroot = P.PolarizationEquiv.toLinearMap ∘ (f • s.domRestrict P.root) := by
+    ext; simp [hf, polarizationEquiv_apply]
+  rw [← linearIndependent_restrict_iff]; rw [this]; rw [LinearMap.linearIndependent_iff_of_injOn _ P.PolarizationEquiv.injective.injOn]
+  simpa
 -/
 private lemma linearIndepOn_coroot_iff_aux {s : Set ι} (h : LinearIndepOn R P.root s) :
     LinearIndepOn R P.coroot s := by

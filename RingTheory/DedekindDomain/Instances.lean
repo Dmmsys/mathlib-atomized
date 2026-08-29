@@ -86,7 +86,20 @@ theorem FractionRing.isSeparable_of_isLocalization
   let f₁ : Rₘ ->+* K := map _ (T := R⁰) (RingHom.id R) hM
   let f₂ : Sₘ ->+* L := map _ (T := S⁰) (RingHom.id S) hM'
   algebraize [f₁, f₂]
-  have := lo
+  have := localization_isScalarTower_of_submonoid_le Rₘ K _ _ hM
+  have := localization_isScalarTower_of_submonoid_le Sₘ L _ _ hM'
+  have := isFractionRing_of_isDomain_of_isLocalization M Rₘ K
+  have := isFractionRing_of_isDomain_of_isLocalization M' Sₘ L
+  have : IsDomain Rₘ := isDomain_of_le_nonZeroDivisors _ hM
+  apply Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv Rₘ K).symm.toRingEquiv
+    (FractionRing.algEquiv Sₘ L).symm.toRingEquiv
+  apply ringHom_ext R⁰
+  ext
+  simp only [RingHom.coe_comp,
+      RingHom.coe_coe, Function.comp_apply, ← algebraMap_apply]
+  rw [algebraMap_apply R Rₘ (FractionRing R)]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]; rw [algebraMap_apply R S L]; rw [algebraMap_apply S Sₘ L]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]
+  simp only [← algebraMap_apply]
+  rw [algebraMap_apply R Rₘ (FractionRing Rₘ)]; rw [← algebraMap_apply Rₘ]; rw [← algebraMap_apply]
 
 中文:
 定理 FractionRing.isSeparable_of_isLocalization
@@ -98,7 +111,20 @@ theorem FractionRing.isSeparable_of_isLocalization
   let f₁ : Rₘ ->+* K := map _ (T := R⁰) (RingHom.id R) hM
   let f₂ : Sₘ ->+* L := map _ (T := S⁰) (RingHom.id S) hM'
   algebraize [f₁, f₂]
-  have := lo
+  have := localization_isScalarTower_of_submonoid_le Rₘ K _ _ hM
+  have := localization_isScalarTower_of_submonoid_le Sₘ L _ _ hM'
+  have := isFractionRing_of_isDomain_of_isLocalization M Rₘ K
+  have := isFractionRing_of_isDomain_of_isLocalization M' Sₘ L
+  have : IsDomain Rₘ := isDomain_of_le_nonZeroDivisors _ hM
+  apply Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv Rₘ K).symm.toRingEquiv
+    (FractionRing.algEquiv Sₘ L).symm.toRingEquiv
+  apply ringHom_ext R⁰
+  ext
+  simp only [RingHom.coe_comp,
+      RingHom.coe_coe, Function.comp_apply, ← algebraMap_apply]
+  rw [algebraMap_apply R Rₘ (FractionRing R)]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]; rw [algebraMap_apply R S L]; rw [algebraMap_apply S Sₘ L]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]
+  simp only [← algebraMap_apply]
+  rw [algebraMap_apply R Rₘ (FractionRing Rₘ)]; rw [← algebraMap_apply Rₘ]; rw [← algebraMap_apply]
 
 Depends on / 依赖: RingHom, RingHom.id, algebraMapSubmonoid, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, algebraize, isFractionRing_of_isDomain_of_i, isFractionRing_of_isDomain_of_isLocalization, localization_isScalarTower_of_submonoid_le
 -/
@@ -342,14 +368,14 @@ instance :
   signature: IsScalarTower Rₚ Sₚ L
   body: by
 refine IsScalarTower.of_algebraMap_eq' IsLocalization.ringHom_ext P.primeCompl ?_
-  rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq R
+  rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq Rₚ K L]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
 
 中文:
 实例 :
   签名: 标量塔 Rₚ Sₚ L
   定义体: by
 refine IsScalarTower.of_algebraMap_eq' IsLocalization.ringHom_ext P.primeCompl ?_
-  rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq R
+  rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq R Rₚ Sₚ]; rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq S Sₚ L]; rw [IsScalarTower.algebraMap_eq Rₚ K L]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
 
 Depends on / 依赖: IsLocalization, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.algebraMap_eq, IsScalarTower.of_algebraMap_eq, P.primeCompl, RingHom, RingHom.comp_assoc, algebraMap_eq, comp_assoc, of_algebraMap_eq, primeCompl, ringHom_ext
 -/
@@ -410,7 +436,8 @@ instance [Algebra.IsSeparable
   let _ : Algebra Rₚ (FractionRing Sₚ) := OreLocalization.instAlgebra
   FractionRing.isSeparable_of_isLocalization S _ _ P.primeCompl_le_nonZeroDivisors
 
-local notation3 "P''" => algebraMapSubmonoid T P.primeC
+local notation3 "P''" => algebraMapSubmonoid T P.primeCompl
+local notation3 "Tₚ" => Localization P''
 
 中文:
 实例 [代数.是可分
@@ -420,7 +447,8 @@ local notation3 "P''" => algebraMapSubmonoid T P.primeC
   let _ : Algebra Rₚ (FractionRing Sₚ) := OreLocalization.instAlgebra
   FractionRing.isSeparable_of_isLocalization S _ _ P.primeCompl_le_nonZeroDivisors
 
-local notation3 "P''" => algebraMapSubmonoid T P.primeC
+local notation3 "P''" => algebraMapSubmonoid T P.primeCompl
+local notation3 "Tₚ" => Localization P''
 
 Depends on / 依赖: OreLocalization, OreLocalization.instAlgebra, instAlgebra
 -/
@@ -595,7 +623,7 @@ instance :
   refine ⟨fun a b c => a.ind fun ⟨a₁, a₂⟩ => ?_⟩
 have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivisors P a₂.prop
   rw [← smul_right_inj this]; rw [← _root_.smul_assoc (M := R) (N := Sₚ)]; rw [← _root_.smul_assoc (M := R)
-    (α := Sₚ)]; rw [← _root_.smul_assoc (M := R)
+    (α := Sₚ)]; rw [← _root_.smul_assoc (M := R) (α := Tₚ)]; rw [Localization.smul_mk]; rw [smul_eq_mul]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_mul_cancel_left]; rw [algebraMap_smul]; rw [algebraMap_smul]; rw [_root_.smul_assoc]
 
 中文:
 实例 :
@@ -604,7 +632,7 @@ have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivis
   refine ⟨fun a b c => a.ind fun ⟨a₁, a₂⟩ => ?_⟩
 have : a₂.val != 0 := nonZeroDivisors.ne_zero Ideal.primeCompl_le_nonZeroDivisors P a₂.prop
   rw [← smul_right_inj this]; rw [← _root_.smul_assoc (M := R) (N := Sₚ)]; rw [← _root_.smul_assoc (M := R)
-    (α := Sₚ)]; rw [← _root_.smul_assoc (M := R)
+    (α := Sₚ)]; rw [← _root_.smul_assoc (M := R) (α := Tₚ)]; rw [Localization.smul_mk]; rw [smul_eq_mul]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_mul_cancel_left]; rw [algebraMap_smul]; rw [algebraMap_smul]; rw [_root_.smul_assoc]
 
 Depends on / 依赖: Ideal.primeCompl_le_nonZeroDivisors, IsLocalization, IsLocalization.mk, Localization, Localization.mk_eq_mk, Localization.smul_mk, _mul_cancel_left, _root_, _root_.smul_assoc, a.ind, algebraMap_smul, mk_eq_mk, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, primeCompl_le_nonZeroDivisors, smul_assoc, smul_eq_mul, smul_mk, smul_right_inj
 -/

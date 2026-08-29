@@ -90,7 +90,49 @@ definition funPropTac
 withReducible forallTelescopeReducing (← whnfR goalType) fun _ type => do
         unless (← getFunProp? type).isSome do
           let hint :=
-            if
+            if let some n := type.getAppFn.constName?
+            then s!" Consider marking `{n}` with `@[fun_prop]`."
+            else ""
+          throwError "`{← ppExpr type}` is not a `fun_prop` goal!{hint}"
+
+      let cfg ← elabFunPropConfig cfg
+
+      let disch ← show MetaM (Expr -> MetaM (Option Expr)) from do
+        match d with
+        | none => pure assumptionDischarge
+        | some d =>
+          match d with
+          | `(discharger| (discharger:=$tac)) =>
+pure tacticToDischarge (← `(tactic| first | with_reducible assumption | ($tac)))
+          | _ => pure assumptionDischarge
+
+      let namesToUnfold ← show CoreM (Array Name) from
+        match names with
+        | none => pure #[]
+        | some ns => ns.getElems.mapM Elab.realizeGlobalConstNoOverloadWithInfo
+
+      let namesToUnfold := namesToUnfold.append defaultNamesToUnfold
+
+      let ctx : Context :=
+        { config := cfg,
+          disch := disch
+          constToUnfold := .ofArray namesToUnfold _}
+      let env ← getEnv
+      let s := {
+        morTheorems := morTheoremsExt.getState env
+        transitionTheorems := transitionTheoremsExt.getState env }
+.run s let (r?, s) ← funProp goalType ctx
+      if let some r := r? then
+        goal.assign r.proof
+      else
+        let mut msg := s!"`fun_prop` was unable to prove `{← Meta.ppExpr goalType}`\n\n"
+
+        msg := msg ++ "Issues:"
+        msg := s.msgLog.foldl (init := msg) (fun msg m => msg ++ "\n " ++ m)
+
+        throwError msg
+
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 funPropTac
@@ -100,7 +142,49 @@ withReducible forallTelescopeReducing (← whnfR goalType) fun _ type => do
 withReducible forallTelescopeReducing (← whnfR goalType) fun _ type => do
         unless (← getFunProp? type).isSome do
           let hint :=
-            if
+            if let some n := type.getAppFn.constName?
+            then s!" Consider marking `{n}` with `@[fun_prop]`."
+            else ""
+          throwError "`{← ppExpr type}` is not a `fun_prop` goal!{hint}"
+
+      let cfg ← elabFunPropConfig cfg
+
+      let disch ← show MetaM (Expr -> MetaM (Option Expr)) from do
+        match d with
+        | none => pure assumptionDischarge
+        | some d =>
+          match d with
+          | `(discharger| (discharger:=$tac)) =>
+pure tacticToDischarge (← `(tactic| first | with_reducible assumption | ($tac)))
+          | _ => pure assumptionDischarge
+
+      let namesToUnfold ← show CoreM (Array Name) from
+        match names with
+        | none => pure #[]
+        | some ns => ns.getElems.mapM Elab.realizeGlobalConstNoOverloadWithInfo
+
+      let namesToUnfold := namesToUnfold.append defaultNamesToUnfold
+
+      let ctx : Context :=
+        { config := cfg,
+          disch := disch
+          constToUnfold := .ofArray namesToUnfold _}
+      let env ← getEnv
+      let s := {
+        morTheorems := morTheoremsExt.getState env
+        transitionTheorems := transitionTheoremsExt.getState env }
+.run s let (r?, s) ← funProp goalType ctx
+      if let some r := r? then
+        goal.assign r.proof
+      else
+        let mut msg := s!"`fun_prop` was unable to prove `{← Meta.ppExpr goalType}`\n\n"
+
+        msg := msg ++ "Issues:"
+        msg := s.msgLog.foldl (init := msg) (fun msg m => msg ++ "\n " ++ m)
+
+        throwError msg
+
+  | _ => throwUnsupportedSyntax
 
 Depends on / 依赖: Continuous
 -/

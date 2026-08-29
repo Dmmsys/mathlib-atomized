@@ -41,7 +41,12 @@ definition unitary
     refine ⟨?_, ?_⟩
     · calc
         star (U * B) * (U * B) = star B * star U * U * B := by simp only [mul_assoc, star_mul]
-   
+        _ = star B * (star U * U) * B := by rw [← mul_assoc]
+        _ = 1 := by rw [hA₁, mul_one, hB₁]
+    · calc
+        U * B * star (U * B) = U * B * (star B * star U) := by rw [star_mul]
+        _ = U * (B * star B) * star U := by simp_rw [← mul_assoc]
+        _ = 1 := by rw [hB₂, mul_one, hA₂]
 
 中文:
 定义 unitary
@@ -52,7 +57,12 @@ definition unitary
     refine ⟨?_, ?_⟩
     · calc
         star (U * B) * (U * B) = star B * star U * U * B := by simp only [mul_assoc, star_mul]
-   
+        _ = star B * (star U * U) * B := by rw [← mul_assoc]
+        _ = 1 := by rw [hA₁, mul_one, hB₁]
+    · calc
+        U * B * star (U * B) = U * B * (star B * star U) := by rw [star_mul]
+        _ = U * (B * star B) * star U := by simp_rw [← mul_assoc]
+        _ = 1 := by rw [hB₂, mul_one, hA₂]
 -/
 def unitary (R : Type*) [Monoid R] [StarMul R] : Submonoid R where
   carrier := { U | star U * U = 1 ∧ U * star U = 1 }

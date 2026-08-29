@@ -168,7 +168,13 @@ definition sectionsUncurry
   Over.homMk ((β_ A I).hom ≫ uncurry v₂) (by
     have comm : toUnit A ≫ (curryRightUnitorHom I) = v₂ ≫ (ihom I).map X.hom := by
       rw [IsTerminal.hom_ext isTerminalTensorUnit (toUnit A) (v ≫ snd ..)]
-      simp
+      simp [v₂, condition]
+    dsimp [curryRightUnitorHom] at comm
+    have w' := (ihom.adjunction I).homEquiv_naturality_right_square _ _ _ _ comm
+    simp only [curriedTensor_obj_obj, curriedTensor_obj_map, curry,
+      Equiv.symm_apply_apply] at w'
+    dsimp [uncurry] at *
+    rw [Category.assoc]; rw [← w']; rw [whiskerLeft_toUnit_comp_rightUnitor_hom]; rw [braiding_hom_fst])
 
 中文:
 定义 sectionsUncurry
@@ -177,7 +183,13 @@ definition sectionsUncurry
   Over.homMk ((β_ A I).hom ≫ uncurry v₂) (by
     have comm : toUnit A ≫ (curryRightUnitorHom I) = v₂ ≫ (ihom I).map X.hom := by
       rw [IsTerminal.hom_ext isTerminalTensorUnit (toUnit A) (v ≫ snd ..)]
-      simp
+      simp [v₂, condition]
+    dsimp [curryRightUnitorHom] at comm
+    have w' := (ihom.adjunction I).homEquiv_naturality_right_square _ _ _ _ comm
+    simp only [curriedTensor_obj_obj, curriedTensor_obj_map, curry,
+      Equiv.symm_apply_apply] at w'
+    dsimp [uncurry] at *
+    rw [Category.assoc]; rw [← w']; rw [whiskerLeft_toUnit_comp_rightUnitor_hom]; rw [braiding_hom_fst])
 
 Depends on / 依赖: Equiv.symm_apply_apply, IsTerminal, IsTerminal.hom_ext, Over.homMk, X.hom, X.left, adjunction, condition, curriedTensor_obj_map, curriedTensor_obj_obj, curryRightUnitorHom, homEquiv_naturality_right_square, hom_ext, ihom.adjunction, isTerminalTensorUnit, symm_apply_apply, toUnit, uncurry
 -/
@@ -269,7 +281,18 @@ definition coreHomEquivToOverSections
   homEquiv_naturality_left_symm := by
     intro A' A X g v
     dsimp [sectionsCurry, sectionsUncurry, curryRightUnitorHom]
-    simp only 
+    simp only [toOver_map]
+    rw [← Over.homMk_comp]
+    congr 1
+    simp [uncurry_natural_left]
+  homEquiv_naturality_right := by
+    intro A X' X u g
+    dsimp [sectionsCurry, sectionsUncurry, curryRightUnitorHom]
+    apply ChosenPullbacksAlong.hom_ext
+    · simp [← curry_natural_right]
+    · simp
+
+#adaptation_note
 
 中文:
 定义 coreHomEquivToOverSections
@@ -281,7 +304,18 @@ definition coreHomEquivToOverSections
   homEquiv_naturality_left_symm := by
     intro A' A X g v
     dsimp [sectionsCurry, sectionsUncurry, curryRightUnitorHom]
-    simp only 
+    simp only [toOver_map]
+    rw [← Over.homMk_comp]
+    congr 1
+    simp [uncurry_natural_left]
+  homEquiv_naturality_right := by
+    intro A X' X u g
+    dsimp [sectionsCurry, sectionsUncurry, curryRightUnitorHom]
+    apply ChosenPullbacksAlong.hom_ext
+    · simp [← curry_natural_right]
+    · simp
+
+#adaptation_note
 
 Depends on / 依赖: ChosenPullbacksAlong, ChosenPullbacksAlong.hom_ext, Over.homMk_comp, curryRightUnitorHom, curry_, homEquiv_naturality_left_symm, homEquiv_naturality_right, homMk_comp, hom_ext, invFun, left_inv, right_inv, sectionsCurry, sectionsCurry_sectionUncurry, sectionsUncurry, sectionsUncurry_sectionsCurry, toOver_map, uncurry_natural_left
 -/

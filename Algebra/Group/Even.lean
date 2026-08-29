@@ -625,7 +625,8 @@ lemma Even.isSquare_zpow
 example {G : Type*} [CommGroup G] {a b c d e : G} (ha : IsSquare a) {n : Nat} {k : Int} (hk : Even k) :
 IsSquare a * (b * b) / (c ^ 2) * (d ^ k) * (e ^ (n + n)) := by aesop
 
-example {G : Type*} [AddCommGroup G] {a b c d e : G} (ha : Even a) {n : Nat} {k : Int} (hk : E
+example {G : Type*} [AddCommGroup G] {a b c d e : G} (ha : Even a) {n : Nat} {k : Int} (hk : Even k) :
+Even a + (b + b) - 2 • c + k • d + (n + n) • e := by aesop
 
 中文:
 引理 Even.isSquare_zpow
@@ -637,7 +638,8 @@ example {G : Type*} [AddCommGroup G] {a b c d e : G} (ha : Even a) {n : Nat} {k 
 example {G : Type*} [CommGroup G] {a b c d e : G} (ha : IsSquare a) {n : Nat} {k : Int} (hk : Even k) :
 IsSquare a * (b * b) / (c ^ 2) * (d ^ k) * (e ^ (n + n)) := by aesop
 
-example {G : Type*} [AddCommGroup G] {a b c d e : G} (ha : Even a) {n : Nat} {k : Int} (hk : E
+example {G : Type*} [AddCommGroup G] {a b c d e : G} (ha : Even a) {n : Nat} {k : Int} (hk : Even k) :
+Even a + (b + b) - 2 • c + k • d + (n + n) • e := by aesop
 
 Depends on / 依赖: zpow_add
 -/

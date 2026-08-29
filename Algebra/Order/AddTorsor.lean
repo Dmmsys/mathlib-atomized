@@ -329,7 +329,9 @@ theorem smul_lt_smul_of_le_of_lt
   by_contra hbdc
   have h : d <= c := IsOrderedCancelSMul.le_of_smul_le_smul_left b d c hbdc
   rw [@lt_iff_le_not_ge] at h₂
-  simp_all only [not
+  simp_all only [not_true_eq_false, and_false]
+
+@[to_additive]
 
 中文:
 定理 smul_lt_smul_of_le_of_lt
@@ -340,7 +342,9 @@ theorem smul_lt_smul_of_le_of_lt
   by_contra hbdc
   have h : d <= c := IsOrderedCancelSMul.le_of_smul_le_smul_left b d c hbdc
   rw [@lt_iff_le_not_ge] at h₂
-  simp_all only [not
+  simp_all only [not_true_eq_false, and_false]
+
+@[to_additive]
 
 Depends on / 依赖: IsOrderedCancelSMul, IsOrderedCancelSMul.le_of_smul_le_smul_left, IsOrderedSMul, IsOrderedSMul.smul_le_smul_left, IsOrderedSMul.smul_le_smul_right, and_false, le_of_lt, le_of_smul_le_smul_left, lt_iff_le_not_ge, lt_of_le_not_ge, lt_of_le_of_lt, not_true_eq_false, smul_le_smul_left, smul_le_smul_right
 -/
@@ -367,7 +371,7 @@ theorem smul_lt_smul_of_lt_of_le
   by_contra hbad
   have h : b <= a := IsOrderedCancelSMul.le_of_smul_le_smul_right b a d hbad
   rw [@lt_iff_le_not_ge] at h₁
-  simp_all only [no
+  simp_all only [not_true_eq_false, and_false]
 
 中文:
 定理 smul_lt_smul_of_lt_of_le
@@ -378,7 +382,7 @@ theorem smul_lt_smul_of_lt_of_le
   by_contra hbad
   have h : b <= a := IsOrderedCancelSMul.le_of_smul_le_smul_right b a d hbad
   rw [@lt_iff_le_not_ge] at h₁
-  simp_all only [no
+  simp_all only [not_true_eq_false, and_false]
 
 Depends on / 依赖: IsOrderedCancelSMul, IsOrderedCancelSMul.le_of_smul_le_smul_right, IsOrderedSMul, IsOrderedSMul.smul_le_smul_left, IsOrderedSMul.smul_le_smul_right, and_false, le_of_lt, le_of_smul_le_smul_right, lt_iff_le_not_ge, lt_of_le_not_ge, lt_of_le_of_lt, not_true_eq_false, smul_le_smul_left, smul_le_smul_right
 -/

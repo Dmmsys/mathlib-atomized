@@ -37,7 +37,22 @@ definition sumEmbeddingEquivProdEmbeddingDisjoint
     ⟨fun x =>
       match x with
       | Sum.inl a => f a
-   
+      | Sum.inr b => g b, by
+      rintro (a₁ | b₁) (a₂ | b₂) f_eq <;>
+        simp only at f_eq
+      · rw [f.injective f_eq]
+      · exfalso
+        exact disj.le_bot ⟨⟨a₁, f_eq⟩, ⟨b₂, by simp⟩⟩
+      · exfalso
+        exact disj.le_bot ⟨⟨a₂, rfl⟩, ⟨b₁, f_eq⟩⟩
+      · rw [g.injective f_eq]⟩
+  left_inv f := by
+    dsimp only
+    ext x
+    cases x <;> simp!
+  right_inv := fun ⟨⟨f, g⟩, _⟩ => by
+    simp only
+    rfl
 
 中文:
 定义 sumEmbeddingEquivProdEmbeddingDisjoint
@@ -52,7 +67,22 @@ definition sumEmbeddingEquivProdEmbeddingDisjoint
     ⟨fun x =>
       match x with
       | Sum.inl a => f a
-   
+      | Sum.inr b => g b, by
+      rintro (a₁ | b₁) (a₂ | b₂) f_eq <;>
+        simp only at f_eq
+      · rw [f.injective f_eq]
+      · exfalso
+        exact disj.le_bot ⟨⟨a₁, f_eq⟩, ⟨b₂, by simp⟩⟩
+      · exfalso
+        exact disj.le_bot ⟨⟨a₂, rfl⟩, ⟨b₁, f_eq⟩⟩
+      · rw [g.injective f_eq]⟩
+  left_inv f := by
+    dsimp only
+    ext x
+    cases x <;> simp!
+  right_inv := fun ⟨⟨f, g⟩, _⟩ => by
+    simp only
+    rfl
 
 Depends on / 依赖: Set.disjoint_left, Sum.inl, Sum.inr, disj.le_bot, disjoint_left, f.injective, f_eq, g.injective, injective, inl.trans, inr.trans, invFun, le_bot, left_inv, reduceCtorEq
 -/
@@ -120,7 +150,8 @@ definition prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
     Equiv.sigmaCongrRight fun a =>
       (subtypeEquivProp <| by
             ext f
-            rw [← Set.range_subset_iff]; rw [Set.subset_compl_iff_disjoint_right]; rw [disjoint_comm]
+            rw [← Set.range_subset_iff]; rw [Set.subset_compl_iff_disjoint_right]; rw [disjoint_comm]).trans
+        (codRestrict _ _)
 
 中文:
 定义 prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
@@ -130,7 +161,8 @@ definition prodEmbeddingDisjointEquivSigmaEmbeddingRestricted
     Equiv.sigmaCongrRight fun a =>
       (subtypeEquivProp <| by
             ext f
-            rw [← Set.range_subset_iff]; rw [Set.subset_compl_iff_disjoint_right]; rw [disjoint_comm]
+            rw [← Set.range_subset_iff]; rw [Set.subset_compl_iff_disjoint_right]; rw [disjoint_comm]).trans
+        (codRestrict _ _)
 
 Depends on / 依赖: Disjoint, Equiv.sigmaCongrRight, Set.range, Set.range_subset_iff, Set.subset_compl_iff_disjoint_right, codRestrict, disjoint_comm, range_subset_iff, sigmaCongrRight, subset_compl_iff_disjoint_right, subtypeEquivProp, subtypeProdEquivSigmaSubtype
 -/

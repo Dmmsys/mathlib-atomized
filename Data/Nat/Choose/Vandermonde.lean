@@ -39,7 +39,7 @@ theorem add_choose_eq
     _ = ((X + 1) ^ m * (X + 1) ^ n).coeff k := by rw [pow_add]
     _ = ∑ ij in antidiagonal k, m.choose ij.1 * n.choose ij.2 := by
       rw [coeff_mul]; rw [Finset.sum_congr rfl]
-      simp only [coe
+      simp only [coeff_X_add_one_pow, cast_id, imp_true_iff]
 
 中文:
 定理 add_choose_eq
@@ -50,7 +50,7 @@ theorem add_choose_eq
     _ = ((X + 1) ^ m * (X + 1) ^ n).coeff k := by rw [pow_add]
     _ = ∑ ij in antidiagonal k, m.choose ij.1 * n.choose ij.2 := by
       rw [coeff_mul]; rw [Finset.sum_congr rfl]
-      simp only [coe
+      simp only [coeff_X_add_one_pow, cast_id, imp_true_iff]
 
 Depends on / 依赖: Finset, Finset.sum_congr, antidiagonal, cast_id, coeff_X_add_one_pow, coeff_mul, imp_true_iff, m.choose, n.choose, pow_add, sum_congr
 -/

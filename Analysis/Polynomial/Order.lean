@@ -55,7 +55,14 @@ theorem zero_lt_eval_of_roots_lt_of_leadingCoeff_nonneg
     exact ⟨x, by simp [leadingCoeff_eq_zero.mp <| eq_of_le_of_ge hroots hlc], le_refl x⟩
   by_cases! hdeg : P.degree <= 0
   · rwa [eq_C_of_degree_le_zero hdeg, ← natDegree_eq_zero_iff_degree_le_zero.mpr hdeg, eval_C]
-  contrapose! hr
+  contrapose! hroots
+obtain ⟨z, hz⟩ := Filter.Eventually.exists_forall_of_atTop
+    (P.tendsto_atTop_of_leadingCoeff_nonneg hdeg hlc.le).eventually_gt_atTop 0
+  let w := max x z
+  have hw : x <= w ∧ 0 < P.eval w := ⟨le_max_left .., hz w (le_max_right ..)⟩
+  obtain ⟨y, hy⟩ := (Set.mem_image ..).mp
+    (intermediate_value_Icc hw.1 P.continuous.continuousOn (show 0 in _ by grind))
+  exact ⟨y, ⟨hy.2, by grind⟩⟩
 
 中文:
 定理 zero_lt_eval_of_roots_lt_of_leadingCoeff_nonneg
@@ -65,7 +72,14 @@ theorem zero_lt_eval_of_roots_lt_of_leadingCoeff_nonneg
     exact ⟨x, by simp [leadingCoeff_eq_zero.mp <| eq_of_le_of_ge hroots hlc], le_refl x⟩
   by_cases! hdeg : P.degree <= 0
   · rwa [eq_C_of_degree_le_zero hdeg, ← natDegree_eq_zero_iff_degree_le_zero.mpr hdeg, eval_C]
-  contrapose! hr
+  contrapose! hroots
+obtain ⟨z, hz⟩ := Filter.Eventually.exists_forall_of_atTop
+    (P.tendsto_atTop_of_leadingCoeff_nonneg hdeg hlc.le).eventually_gt_atTop 0
+  let w := max x z
+  have hw : x <= w ∧ 0 < P.eval w := ⟨le_max_left .., hz w (le_max_right ..)⟩
+  obtain ⟨y, hy⟩ := (Set.mem_image ..).mp
+    (intermediate_value_Icc hw.1 P.continuous.continuousOn (show 0 in _ by grind))
+  exact ⟨y, ⟨hy.2, by grind⟩⟩
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.exists_forall_of_atTop, P.degree, P.eval, P.leadingCoeff, P.tendsto_atTop_of_leadingCoeff_nonneg, contrapose, degree, eq_C_of_degree_le_zero, eq_of_le_of_ge, eval_C, eventually_gt_atTop, exists_forall_of_atTop, hlc.le, hroots, le_max_left, le_refl, leadingCoeff, leadingCoeff_eq_zero
 -/
@@ -178,7 +192,23 @@ theorem zero_lt_negOnePow_mul_eval_of_lt_roots_of_leadingCoeff_nonneg
   have hroots' y (hy : (P.comp (-X)).IsRoot y) : y < -x := by
     grind [show P.IsRoot (-y) by rwa [IsRoot.def, eval_comp, eval_neg, eval_X, ← IsRoot.def] at hy]
   have hlc' : 0 <= Int.negOnePow (P.comp (-X)).natDegree * (P.comp (-X)).leadingCoeff := by
-    rw [show (P.comp (-X)).leadingCoeff = P
+    rw [show (P.comp (-X)).leadingCoeff = P.leadingCoeff * Int.negOnePow P.natDegree by simp; ring]; rw [show (P.comp (-X)).natDegree = P.natDegree by simp [natDegree_comp], mul_comm, mul_assoc]
+    simpa [Int.cast_negOnePow_natCast, pow_right_comm]
+  cases P.natDegree.even_or_odd
+  case inl h =>
+    rw [Int.negOnePow_even] at hlc' ⊢
+    · push_cast at hlc' ⊢; rw [one_mul] at hlc' ⊢
+      have := zero_lt_eval_of_roots_lt_of_leadingCoeff_nonneg hroots' hlc'
+      simpa using this
+    · simpa
+    · simpa [natDegree_comp]
+  case inr h =>
+    rw [Int.negOnePow_odd] at hlc' ⊢
+    · push_cast at hlc' ⊢; rw [neg_one_mul] at hlc' ⊢
+      have := eval_lt_zero_of_roots_lt_of_leadingCoeff_nonpos hroots' (nonpos_of_neg_nonneg hlc')
+      exact neg_pos.mpr (by simpa using this)
+    · simpa
+    · simpa [natDegree_comp]
 
 中文:
 定理 zero_lt_negOnePow_mul_eval_of_lt_roots_of_leadingCoeff_nonneg
@@ -186,7 +216,23 @@ theorem zero_lt_negOnePow_mul_eval_of_lt_roots_of_leadingCoeff_nonneg
   have hroots' y (hy : (P.comp (-X)).IsRoot y) : y < -x := by
     grind [show P.IsRoot (-y) by rwa [IsRoot.def, eval_comp, eval_neg, eval_X, ← IsRoot.def] at hy]
   have hlc' : 0 <= Int.negOnePow (P.comp (-X)).natDegree * (P.comp (-X)).leadingCoeff := by
-    rw [show (P.comp (-X)).leadingCoeff = P
+    rw [show (P.comp (-X)).leadingCoeff = P.leadingCoeff * Int.negOnePow P.natDegree by simp; ring]; rw [show (P.comp (-X)).natDegree = P.natDegree by simp [natDegree_comp], mul_comm, mul_assoc]
+    simpa [Int.cast_negOnePow_natCast, pow_right_comm]
+  cases P.natDegree.even_or_odd
+  case inl h =>
+    rw [Int.negOnePow_even] at hlc' ⊢
+    · push_cast at hlc' ⊢; rw [one_mul] at hlc' ⊢
+      have := zero_lt_eval_of_roots_lt_of_leadingCoeff_nonneg hroots' hlc'
+      simpa using this
+    · simpa
+    · simpa [natDegree_comp]
+  case inr h =>
+    rw [Int.negOnePow_odd] at hlc' ⊢
+    · push_cast at hlc' ⊢; rw [neg_one_mul] at hlc' ⊢
+      have := eval_lt_zero_of_roots_lt_of_leadingCoeff_nonpos hroots' (nonpos_of_neg_nonneg hlc')
+      exact neg_pos.mpr (by simpa using this)
+    · simpa
+    · simpa [natDegree_comp]
 
 Depends on / 依赖: Int.cast_negOnePow_natCast, Int.negOnePow, IsRoot, IsRoot.def, P.IsRoot, P.comp, P.leadingCoeff, P.natDegree, cast_negOnePow_natCast, eval_X, eval_comp, eval_neg, hroots, leadingCoeff, mul_assoc, mul_comm, natDegree, natDegree_comp, negOnePow, pow_right_comm
 -/

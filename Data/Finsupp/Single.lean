@@ -1869,7 +1869,13 @@ theorem single_of_embDomain_single
     have ha : a in Finset.map f l.support := by simp only [h_map_support, Finset.mem_singleton]
     rcases Finset.mem_map.1 ha with ⟨c, _hc₁, hc₂⟩
     use c
-   
+    constructor
+    · ext d
+      rw [← embDomain_apply_self f l]; rw [h]
+      grind
+    · exact hc₂
+
+@[simp]
 
 中文:
 定理 single_of_embDomain_single
@@ -1881,7 +1887,13 @@ theorem single_of_embDomain_single
     have ha : a in Finset.map f l.support := by simp only [h_map_support, Finset.mem_singleton]
     rcases Finset.mem_map.1 ha with ⟨c, _hc₁, hc₂⟩
     use c
-   
+    constructor
+    · ext d
+      rw [← embDomain_apply_self f l]; rw [h]
+      grind
+    · exact hc₂
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.map, Finset.mem_map, Finset.mem_singleton, classical, embDomain_apply_self, h_map_support, l.support, mem_map, mem_singleton, support, support_embDomain, support_single
 -/

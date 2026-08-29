@@ -160,7 +160,19 @@ instance :
       ⟨G.trans' e e' he.left he'.left, G'.trans' e e' he.right he'.right⟩)
     (symm' := fun e he => ⟨G.symm' e he.left, G'.symm' e he.right⟩)
     (id_mem' := ⟨G.id_mem', G'.id_mem'⟩)
-    
+    (locality' := by
+      intro e hx
+      apply (mem_inter_iff e G.members G'.members).mpr
+      refine And.intro (G.locality' e ?_) (G'.locality' e ?_)
+      all_goals
+        intro x hex
+        rcases hx x hex with ⟨s, hs⟩
+        use s
+        refine And.intro hs.left (And.intro hs.right.left ?_)
+      · exact hs.right.right.left
+      · exact hs.right.right.right)
+    (mem_of_eqOnSource' := fun e e' he hee' =>
+      ⟨G.mem_of_eqOnSource' e e' he.left hee', G'.mem_of_eqOnSource' e e' he.right hee'⟩)⟩
 
 中文:
 实例 :
@@ -171,7 +183,19 @@ instance :
       ⟨G.trans' e e' he.left he'.left, G'.trans' e e' he.right he'.right⟩)
     (symm' := fun e he => ⟨G.symm' e he.left, G'.symm' e he.right⟩)
     (id_mem' := ⟨G.id_mem', G'.id_mem'⟩)
-    
+    (locality' := by
+      intro e hx
+      apply (mem_inter_iff e G.members G'.members).mpr
+      refine And.intro (G.locality' e ?_) (G'.locality' e ?_)
+      all_goals
+        intro x hex
+        rcases hx x hex with ⟨s, hs⟩
+        use s
+        refine And.intro hs.left (And.intro hs.right.left ?_)
+      · exact hs.right.right.left
+      · exact hs.right.right.right)
+    (mem_of_eqOnSource' := fun e e' he hee' =>
+      ⟨G.mem_of_eqOnSource' e e' he.left hee', G'.mem_of_eqOnSource' e e' he.right hee'⟩)⟩
 
 Depends on / 依赖: And.intro, G.id_mem, G.locality, G.members, G.symm, G.trans, StructureGroupoid, StructureGroupoid.mk, all_goals, he.left, he.right, hs.left, id_mem, locality, mem_inter_iff, members
 -/
@@ -212,7 +236,21 @@ instance :
       simp only [mem_iInter]
       intro e he i hi
       exact i.symm' e (he i hi))
-    (id
+    (id_mem' := by
+      simp only [mem_iInter]
+      intro i _
+      exact i.id_mem')
+    (locality' := by
+      simp only [mem_iInter]
+      intro e he i hi
+      refine i.locality' e ?_
+      intro x hex
+      rcases he x hex with ⟨s, hs⟩
+      exact ⟨s, ⟨hs.left, ⟨hs.right.left, hs.right.right i hi⟩⟩⟩)
+    (mem_of_eqOnSource' := by
+      simp only [mem_iInter]
+      intro e e' he he'e
+      exact fun i hi => i.mem_of_eqOnSource' e e' (he i hi) he'e)⟩
 
 中文:
 实例 :
@@ -227,7 +265,21 @@ instance :
       simp only [mem_iInter]
       intro e he i hi
       exact i.symm' e (he i hi))
-    (id
+    (id_mem' := by
+      simp only [mem_iInter]
+      intro i _
+      exact i.id_mem')
+    (locality' := by
+      simp only [mem_iInter]
+      intro e he i hi
+      refine i.locality' e ?_
+      intro x hex
+      rcases he x hex with ⟨s, hs⟩
+      exact ⟨s, ⟨hs.left, ⟨hs.right.left, hs.right.right i hi⟩⟩⟩)
+    (mem_of_eqOnSource' := by
+      simp only [mem_iInter]
+      intro e e' he he'e
+      exact fun i hi => i.mem_of_eqOnSource' e e' (he i hi) he'e)⟩
 
 Depends on / 依赖: StructureGroupoid, StructureGroupoid.mk, hs.left, hs.right.left, hs.right.right, i.id_mem, i.locality, i.symm, i.trans, id_mem, locality, mem_iInter, mem_of_e, members, s.members
 -/
@@ -438,7 +490,49 @@ definition idGroupoid
     · simpa only [mem_singleton_iff.1 he, refl_trans]
     · have : (e ≫ₕ e').source subseteq e.source := sep_subset _ _
       rw [he] at this
-      have : e ≫ₕ 
+      have : e ≫ₕ e' in { e : OpenPartialHomeomorph H H | e.source = ∅ } := eq_bot_iff.2 this
+      exact (mem_union _ _ _).2 (Or.inr this)
+  symm' e he := by
+    rcases (mem_union _ _ _).1 he with E | E
+    · simp [mem_singleton_iff.mp E]
+    · right
+      simpa only [e.toPartialEquiv.image_source_eq_target.symm, mfld_simps] using! E
+  id_mem' := mem_union_left _ rfl
+  locality' e he := by
+    rcases e.source.eq_empty_or_nonempty with h | h
+    · right
+      exact h
+    · left
+      rcases h with ⟨x, hx⟩
+      rcases he x hx with ⟨s, open_s, xs, hs⟩
+      have x's : x in (e.restr s).source := by
+        rw [restr_source]; rw [open_s.interior_eq]
+        exact ⟨hx, xs⟩
+      rcases hs with hs | hs
+      · replace hs : OpenPartialHomeomorph.restr e s = OpenPartialHomeomorph.refl H := by
+          simpa only using! hs
+        have : (e.restr s).source = univ := by
+          rw [hs]
+          simp
+        have : e.toPartialEquiv.source inter interior s = univ := this
+        have : univ subseteq interior s := by
+          rw [← this]
+          exact inter_subset_right
+        have : s = univ := by rwa [open_s.interior_eq, univ_subset_iff] at this
+        simpa only [this, restr_univ] using! hs
+      · exfalso
+        rw [mem_ofPred_eq] at hs
+        rwa [hs] at x's
+  mem_of_eqOnSource' e e' he he'e := by
+    rcases he with he | he
+    · left
+      have : e = e' := by
+        refine eq_of_eqOnSource_univ (Setoid.symm he'e) ?_ ?_ <;>
+          rw [Set.mem_singleton_iff.1 he] <;> rfl
+      rwa [← this]
+    · right
+      have he : e.toPartialEquiv.source = ∅ := he
+      rwa [Set.mem_ofPred_eq, EqOnSource.source_eq he'e]
 
 中文:
 定义 idGroupoid
@@ -449,7 +543,49 @@ definition idGroupoid
     · simpa only [mem_singleton_iff.1 he, refl_trans]
     · have : (e ≫ₕ e').source subseteq e.source := sep_subset _ _
       rw [he] at this
-      have : e ≫ₕ 
+      have : e ≫ₕ e' in { e : OpenPartialHomeomorph H H | e.source = ∅ } := eq_bot_iff.2 this
+      exact (mem_union _ _ _).2 (Or.inr this)
+  symm' e he := by
+    rcases (mem_union _ _ _).1 he with E | E
+    · simp [mem_singleton_iff.mp E]
+    · right
+      simpa only [e.toPartialEquiv.image_source_eq_target.symm, mfld_simps] using! E
+  id_mem' := mem_union_left _ rfl
+  locality' e he := by
+    rcases e.source.eq_empty_or_nonempty with h | h
+    · right
+      exact h
+    · left
+      rcases h with ⟨x, hx⟩
+      rcases he x hx with ⟨s, open_s, xs, hs⟩
+      have x's : x in (e.restr s).source := by
+        rw [restr_source]; rw [open_s.interior_eq]
+        exact ⟨hx, xs⟩
+      rcases hs with hs | hs
+      · replace hs : OpenPartialHomeomorph.restr e s = OpenPartialHomeomorph.refl H := by
+          simpa only using! hs
+        have : (e.restr s).source = univ := by
+          rw [hs]
+          simp
+        have : e.toPartialEquiv.source inter interior s = univ := this
+        have : univ subseteq interior s := by
+          rw [← this]
+          exact inter_subset_right
+        have : s = univ := by rwa [open_s.interior_eq, univ_subset_iff] at this
+        simpa only [this, restr_univ] using! hs
+      · exfalso
+        rw [mem_ofPred_eq] at hs
+        rwa [hs] at x's
+  mem_of_eqOnSource' e e' he he'e := by
+    rcases he with he | he
+    · left
+      have : e = e' := by
+        refine eq_of_eqOnSource_univ (Setoid.symm he'e) ?_ ?_ <;>
+          rw [Set.mem_singleton_iff.1 he] <;> rfl
+      rwa [← this]
+    · right
+      have he : e.toPartialEquiv.source = ∅ := he
+      rwa [Set.mem_ofPred_eq, EqOnSource.source_eq he'e]
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.refl, e.source, source
 -/
@@ -520,6 +656,10 @@ instance instStructureGroupoidOrderBot
     rcases hf with hf | hf
     · rw [hf]
       apply u.id_mem
+    · apply u.locality
+      intro x hx
+      rw [hf]; rw [mem_empty_iff_false] at hx
+      exact hx.elim
 
 中文:
 实例 instStructureGroupoidOrderBot
@@ -534,6 +674,10 @@ instance instStructureGroupoidOrderBot
     rcases hf with hf | hf
     · rw [hf]
       apply u.id_mem
+    · apply u.locality
+      intro x hx
+      rw [hf]; rw [mem_empty_iff_false] at hx
+      exact hx.elim
 
 Depends on / 依赖: idGroupoid
 -/
@@ -620,7 +764,34 @@ definition Pregroupoid.groupoid
     constructor
     · apply PG.comp he.1 he'.1 e.open_source e'.open_source
       apply e.continuousOn_toFun.isOpen_inter_preimage e.open_source e'.open_source
-    · apply PG.comp he'.
+    · apply PG.comp he'.2 he.2 e'.open_target e.open_target
+      apply e'.continuousOn_invFun.isOpen_inter_preimage e'.open_target e.open_target
+  symm' _ he := ⟨he.2, he.1⟩
+  id_mem' := ⟨PG.id_mem, PG.id_mem⟩
+  locality' e he := by
+    constructor
+    · refine PG.locality e.open_source fun x xu => ?_
+      rcases he x xu with ⟨s, s_open, xs, hs⟩
+      refine ⟨s, s_open, xs, ?_⟩
+      convert! hs.1 using 1
+      dsimp [OpenPartialHomeomorph.restr]
+      rw [s_open.interior_eq]
+    · refine PG.locality e.open_target fun x xu => ?_
+      rcases he (e.symm x) (e.map_target xu) with ⟨s, s_open, xs, hs⟩
+      refine ⟨e.target inter e.symm ⁻¹' s, ?_, ⟨xu, xs⟩, ?_⟩
+      · exact ContinuousOn.isOpen_inter_preimage e.continuousOn_invFun e.open_target s_open
+      · rw [← inter_assoc, inter_self]
+        convert! hs.2 using 1
+        dsimp [OpenPartialHomeomorph.restr]
+        rw [s_open.interior_eq]
+  mem_of_eqOnSource' e e' he ee' := by
+    constructor
+    · apply PG.congr e'.open_source ee'.2
+      simp only [ee'.1, he.1]
+    · have A := EqOnSource.symm' ee'
+      apply PG.congr e'.symm.open_source A.2
+      convert! he.2 using 1
+      rw [A.1]; rw [symm_toPartialEquiv]; rw [PartialEquiv.symm_source]
 
 中文:
 定义 Pregroupoid.groupoid
@@ -630,7 +801,34 @@ definition Pregroupoid.groupoid
     constructor
     · apply PG.comp he.1 he'.1 e.open_source e'.open_source
       apply e.continuousOn_toFun.isOpen_inter_preimage e.open_source e'.open_source
-    · apply PG.comp he'.
+    · apply PG.comp he'.2 he.2 e'.open_target e.open_target
+      apply e'.continuousOn_invFun.isOpen_inter_preimage e'.open_target e.open_target
+  symm' _ he := ⟨he.2, he.1⟩
+  id_mem' := ⟨PG.id_mem, PG.id_mem⟩
+  locality' e he := by
+    constructor
+    · refine PG.locality e.open_source fun x xu => ?_
+      rcases he x xu with ⟨s, s_open, xs, hs⟩
+      refine ⟨s, s_open, xs, ?_⟩
+      convert! hs.1 using 1
+      dsimp [OpenPartialHomeomorph.restr]
+      rw [s_open.interior_eq]
+    · refine PG.locality e.open_target fun x xu => ?_
+      rcases he (e.symm x) (e.map_target xu) with ⟨s, s_open, xs, hs⟩
+      refine ⟨e.target inter e.symm ⁻¹' s, ?_, ⟨xu, xs⟩, ?_⟩
+      · exact ContinuousOn.isOpen_inter_preimage e.continuousOn_invFun e.open_target s_open
+      · rw [← inter_assoc, inter_self]
+        convert! hs.2 using 1
+        dsimp [OpenPartialHomeomorph.restr]
+        rw [s_open.interior_eq]
+  mem_of_eqOnSource' e e' he ee' := by
+    constructor
+    · apply PG.congr e'.open_source ee'.2
+      simp only [ee'.1, he.1]
+    · have A := EqOnSource.symm' ee'
+      apply PG.congr e'.symm.open_source A.2
+      convert! he.2 using 1
+      rw [A.1]; rw [symm_toPartialEquiv]; rw [PartialEquiv.symm_source]
 
 Depends on / 依赖: OpenPartialHomeomorph, PG.comp, PG.id_mem, PG.property, continuousOn_invFun, continuousOn_invFun.isOpen_inter_preimage, continuousOn_toFun, e.continuousOn_toFun.isOpen_inter_preimage, e.open_source, e.open_target, e.source, e.symm, e.target, id_mem, isOpen_inter_preimage, locality, open_source, open_target, property, source
 -/
@@ -823,7 +1021,13 @@ instance :
     le := (· <= ·)
     lt := (· < ·)
     bot := instStructureGroupoidOrderBot.bot
-    bot_le := instStructureGroupoidOrderBot.bot_l
+    bot_le := instStructureGroupoidOrderBot.bot_le
+    top := instStructureGroupoidOrderTop.top
+    le_top := instStructureGroupoidOrderTop.le_top
+    inf := (· ⊓ ·)
+    le_inf := fun _ _ _ h₁₂ h₁₃ _ hm => ⟨h₁₂ hm, h₁₃ hm⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 中文:
 实例 :
@@ -835,7 +1039,13 @@ instance :
     le := (· <= ·)
     lt := (· < ·)
     bot := instStructureGroupoidOrderBot.bot
-    bot_le := instStructureGroupoidOrderBot.bot_l
+    bot_le := instStructureGroupoidOrderBot.bot_le
+    top := instStructureGroupoidOrderTop.top
+    le_top := instStructureGroupoidOrderTop.le_top
+    inf := (· ⊓ ·)
+    le_inf := fun _ _ _ h₁₂ h₁₃ _ hm => ⟨h₁₂ hm, h₁₃ hm⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 Depends on / 依赖: And.left, And.right, bot_le, completeLatticeOfInf, inf_le_left, inf_le_right, instStructureGroupoidOrderBot, instStructureGroupoidOrderBot.bot, instStructureGroupoidOrderBot.bot_le, instStructureGroupoidOrderTop, instStructureGroupoidOrderTop.le_top, instStructureGroupoidOrderTop.top, le_inf, le_top
 -/
@@ -928,7 +1138,26 @@ definition idRestrGroupoid
     refine ⟨s inter s', hs.inter hs', ?_⟩
     have := OpenPartialHomeomorph.EqOnSource.trans' hse hse'
     rwa [OpenPartialHomeomorph.ofSet_trans_ofSet] at this
-
+  symm' := by
+    rintro e ⟨s, hs, hse⟩
+    refine ⟨s, hs, ?_⟩
+    rw [← ofSet_symm]
+    exact OpenPartialHomeomorph.EqOnSource.symm' hse
+  id_mem' := ⟨univ, isOpen_univ, by simp only [mfld_simps, refl]⟩
+  locality' := by
+    intro e h
+    refine ⟨e.source, e.open_source, by simp only [mfld_simps], ?_⟩
+    intro x hx
+    rcases h x hx with ⟨s, hs, hxs, s', hs', hes'⟩
+    have hes : x in (e.restr s).source := by
+      rw [e.restr_source]
+      refine ⟨hx, ?_⟩
+      rw [hs.interior_eq]
+      exact hxs
+    simpa only [mfld_simps] using OpenPartialHomeomorph.EqOnSource.eqOn hes' hes
+  mem_of_eqOnSource' := by
+    rintro e e' ⟨s, hs, hse⟩ hee'
+    exact ⟨s, hs, Setoid.trans hee' hse⟩
 
 中文:
 定义 idRestrGroupoid
@@ -939,7 +1168,26 @@ definition idRestrGroupoid
     refine ⟨s inter s', hs.inter hs', ?_⟩
     have := OpenPartialHomeomorph.EqOnSource.trans' hse hse'
     rwa [OpenPartialHomeomorph.ofSet_trans_ofSet] at this
-
+  symm' := by
+    rintro e ⟨s, hs, hse⟩
+    refine ⟨s, hs, ?_⟩
+    rw [← ofSet_symm]
+    exact OpenPartialHomeomorph.EqOnSource.symm' hse
+  id_mem' := ⟨univ, isOpen_univ, by simp only [mfld_simps, refl]⟩
+  locality' := by
+    intro e h
+    refine ⟨e.source, e.open_source, by simp only [mfld_simps], ?_⟩
+    intro x hx
+    rcases h x hx with ⟨s, hs, hxs, s', hs', hes'⟩
+    have hes : x in (e.restr s).source := by
+      rw [e.restr_source]
+      refine ⟨hx, ?_⟩
+      rw [hs.interior_eq]
+      exact hxs
+    simpa only [mfld_simps] using OpenPartialHomeomorph.EqOnSource.eqOn hes' hes
+  mem_of_eqOnSource' := by
+    rintro e e' ⟨s, hs, hse⟩ hee'
+    exact ⟨s, hs, Setoid.trans hee' hse⟩
 
 Depends on / 依赖: IsOpen, OpenPartialHomeomorph, OpenPartialHomeomorph.ofSet
 -/
@@ -1036,7 +1284,10 @@ theorem closedUnderRestriction_iff_id_le
   · intro h
     constructor
     intro e he s hs
-    rw [← ofSet_trans (e : OpenPartialHom
+    rw [← ofSet_trans (e : OpenPartialHomeomorph H H) hs]
+    refine G.trans ?_ he
+    apply StructureGroupoid.le_iff.mp h
+    exact idRestrGroupoid_mem hs
 
 中文:
 定理 closedUnderRestriction_iff_id_le
@@ -1052,7 +1303,10 @@ theorem closedUnderRestriction_iff_id_le
   · intro h
     constructor
     intro e he s hs
-    rw [← ofSet_trans (e : OpenPartialHom
+    rw [← ofSet_trans (e : OpenPartialHomeomorph H H) hs]
+    refine G.trans ?_ he
+    apply StructureGroupoid.le_iff.mp h
+    exact idRestrGroupoid_mem hs
 
 Depends on / 依赖: G.id_mem, G.mem_of_eqOnSource, G.trans, OpenPartialHomeomorph, StructureGroupoid, StructureGroupoid.le_iff, StructureGroupoid.le_iff.mp, closedUnderRestriction, convert, hs.interior_eq, idRestrGroupoid_mem, id_mem, interior_eq, le_iff, mem_of_eqOnSource, ofSet_trans
 -/

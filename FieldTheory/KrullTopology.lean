@@ -128,7 +128,8 @@ definition galBasis
     rintro _ _ ⟨_, ⟨E1, h_E1, rfl⟩, rfl⟩ ⟨_, ⟨E2, h_E2, rfl⟩, rfl⟩
     have : FiniteDimensional K E1 := h_E1
     have : FiniteDimensional K E2 := h_E2
-    refine ⟨(E1 ⊔ E2).fixingSubgroup.carrie
+    refine ⟨(E1 ⊔ E2).fixingSubgroup.carrier, ⟨_, ⟨_, E1.finiteDimensional_sup E2, rfl⟩, rfl⟩, ?_⟩
+    exact Set.subset_inter (E1.fixingSubgroup_le le_sup_left) (E2.fixingSubgroup_le le_sup_right)
 
 中文:
 定义 galBasis
@@ -139,7 +140,8 @@ definition galBasis
     rintro _ _ ⟨_, ⟨E1, h_E1, rfl⟩, rfl⟩ ⟨_, ⟨E2, h_E2, rfl⟩, rfl⟩
     have : FiniteDimensional K E1 := h_E1
     have : FiniteDimensional K E2 := h_E2
-    refine ⟨(E1 ⊔ E2).fixingSubgroup.carrie
+    refine ⟨(E1 ⊔ E2).fixingSubgroup.carrier, ⟨_, ⟨_, E1.finiteDimensional_sup E2, rfl⟩, rfl⟩, ?_⟩
+    exact Set.subset_inter (E1.fixingSubgroup_le le_sup_left) (E2.fixingSubgroup_le le_sup_right)
 
 Depends on / 依赖: carrier, fixedByFinite, g.carrier
 -/
@@ -193,6 +195,22 @@ definition galGroupBasis
       rcases hU with ⟨H, _, rfl⟩
       exact fun _ => H.inv_mem'⟩
   conj' := by
+    rintro σ U ⟨H, ⟨E, hE, rfl⟩, rfl⟩
+    let F : IntermediateField K L := E.map σ.symm.toAlgHom
+    refine ⟨F.fixingSubgroup.carrier, ⟨⟨F.fixingSubgroup, ⟨F, ?_, rfl⟩, rfl⟩, fun g hg => ?_⟩⟩
+    · have : FiniteDimensional K E := hE
+      exact IntermediateField.finiteDimensional_map σ.symm.toAlgHom
+    change σ * g * σ⁻¹ in E.fixingSubgroup
+    rw [IntermediateField.mem_fixingSubgroup_iff]
+    intro x hx
+    change σ (g (σ⁻¹ x)) = x
+    have h_in_F : σ⁻¹ x in F := ⟨x, hx, by dsimp⟩
+    have h_g_fix : g (σ⁻¹ x) = σ⁻¹ x := by
+      rw [Subgroup.mem_carrier]; rw [IntermediateField.mem_fixingSubgroup_iff F g] at hg
+      exact hg (σ⁻¹ x) h_in_F
+    rw [h_g_fix]
+    change σ (σ⁻¹ x) = x
+    exact AlgEquiv.apply_symm_apply σ x
 
 中文:
 定义 galGroupBasis
@@ -209,6 +227,22 @@ definition galGroupBasis
       rcases hU with ⟨H, _, rfl⟩
       exact fun _ => H.inv_mem'⟩
   conj' := by
+    rintro σ U ⟨H, ⟨E, hE, rfl⟩, rfl⟩
+    let F : IntermediateField K L := E.map σ.symm.toAlgHom
+    refine ⟨F.fixingSubgroup.carrier, ⟨⟨F.fixingSubgroup, ⟨F, ?_, rfl⟩, rfl⟩, fun g hg => ?_⟩⟩
+    · have : FiniteDimensional K E := hE
+      exact IntermediateField.finiteDimensional_map σ.symm.toAlgHom
+    change σ * g * σ⁻¹ in E.fixingSubgroup
+    rw [IntermediateField.mem_fixingSubgroup_iff]
+    intro x hx
+    change σ (g (σ⁻¹ x)) = x
+    have h_in_F : σ⁻¹ x in F := ⟨x, hx, by dsimp⟩
+    have h_g_fix : g (σ⁻¹ x) = σ⁻¹ x := by
+      rw [Subgroup.mem_carrier]; rw [IntermediateField.mem_fixingSubgroup_iff F g] at hg
+      exact hg (σ⁻¹ x) h_in_F
+    rw [h_g_fix]
+    change σ (σ⁻¹ x) = x
+    exact AlgEquiv.apply_symm_apply σ x
 
 Depends on / 依赖: galBasis
 -/
@@ -317,7 +351,7 @@ lemma krullTopology_mem_nhds_one_iff_of_normal
   refine ⟨fun ⟨E, _, hE⟩ => ?_, fun ⟨E, hE⟩ => ⟨E, hE.1, hE.2.2⟩⟩
   use (IntermediateField.normalClosure K E L)
   simp only [normalClosure.is_finiteDimensional K E L, normalClosure.normal K E L, true_and]
-  exact le_trans (E.fixingSubgroup_antitone E.le_norma
+  exact le_trans (E.fixingSubgroup_antitone E.le_normalClosure) hE
 
 中文:
 引理 krullTopology_mem_nhds_one_iff_of_normal
@@ -327,7 +361,7 @@ lemma krullTopology_mem_nhds_one_iff_of_normal
   refine ⟨fun ⟨E, _, hE⟩ => ?_, fun ⟨E, hE⟩ => ⟨E, hE.1, hE.2.2⟩⟩
   use (IntermediateField.normalClosure K E L)
   simp only [normalClosure.is_finiteDimensional K E L, normalClosure.normal K E L, true_and]
-  exact le_trans (E.fixingSubgroup_antitone E.le_norma
+  exact le_trans (E.fixingSubgroup_antitone E.le_normalClosure) hE
 
 Depends on / 依赖: E.fixingSubgroup_antitone, E.le_normalClosure, IntermediateField, IntermediateField.normalClosure, fixingSubgroup_antitone, is_finiteDimensional, krullTopology_mem_nhds_one_iff, le_normalClosure, le_trans, normal, normalClosure, normalClosure.is_finiteDimensional, normalClosure.normal, true_and
 -/
@@ -409,7 +443,29 @@ theorem krullTopology_t2
         change f (f.symm (g x)) != f x
         rw [AlgEquiv.apply_symm_apply f (g x)]; rw [ne_comm]
         exact hx
-      let E : Intermedia
+      let E : IntermediateField K L := IntermediateField.adjoin K {x}
+      let h_findim : FiniteDimensional K E := IntermediateField.adjoin.finiteDimensional
+        (Algebra.IsIntegral.isIntegral x)
+      let H := E.fixingSubgroup
+      have h_basis : (H : Set Gal(L/K)) in galGroupBasis K L := ⟨H, ⟨E, ⟨h_findim, rfl⟩⟩, rfl⟩
+      have h_nhds := GroupFilterBasis.mem_nhds_one (galGroupBasis K L) h_basis
+      rw [mem_nhds_iff] at h_nhds
+      rcases h_nhds with ⟨W, hWH, hW_open, hW_1⟩
+      refine ⟨f • W, g • W,
+        ⟨hW_open.leftCoset f, hW_open.leftCoset g, ⟨1, hW_1, mul_one _⟩, ⟨1, hW_1, mul_one _⟩, ?_⟩⟩
+      rw [Set.disjoint_left]
+      rintro σ ⟨w1, hw1, h⟩ ⟨w2, hw2, rfl⟩
+      dsimp at h
+      rw [eq_inv_mul_iff_mul_eq.symm]; rw [← mul_assoc]; rw [mul_inv_eq_iff_eq_mul.symm] at h
+      have h_in_H : w1 * w2⁻¹ in H := H.mul_mem (hWH hw1) (H.inv_mem (hWH hw2))
+      rw [h] at h_in_H
+      change φ in E.fixingSubgroup at h_in_H
+      rw [IntermediateField.mem_fixingSubgroup_iff] at h_in_H
+      specialize h_in_H x
+      have hxE : x in E := by
+        apply IntermediateField.subset_adjoin
+        apply Set.mem_singleton
+      exact hφx (h_in_H hxE) }
 
 中文:
 定理 krullTopology_t2
@@ -422,7 +478,29 @@ theorem krullTopology_t2
         change f (f.symm (g x)) != f x
         rw [AlgEquiv.apply_symm_apply f (g x)]; rw [ne_comm]
         exact hx
-      let E : Intermedia
+      let E : IntermediateField K L := IntermediateField.adjoin K {x}
+      let h_findim : FiniteDimensional K E := IntermediateField.adjoin.finiteDimensional
+        (Algebra.IsIntegral.isIntegral x)
+      let H := E.fixingSubgroup
+      have h_basis : (H : Set Gal(L/K)) in galGroupBasis K L := ⟨H, ⟨E, ⟨h_findim, rfl⟩⟩, rfl⟩
+      have h_nhds := GroupFilterBasis.mem_nhds_one (galGroupBasis K L) h_basis
+      rw [mem_nhds_iff] at h_nhds
+      rcases h_nhds with ⟨W, hWH, hW_open, hW_1⟩
+      refine ⟨f • W, g • W,
+        ⟨hW_open.leftCoset f, hW_open.leftCoset g, ⟨1, hW_1, mul_one _⟩, ⟨1, hW_1, mul_one _⟩, ?_⟩⟩
+      rw [Set.disjoint_left]
+      rintro σ ⟨w1, hw1, h⟩ ⟨w2, hw2, rfl⟩
+      dsimp at h
+      rw [eq_inv_mul_iff_mul_eq.symm]; rw [← mul_assoc]; rw [mul_inv_eq_iff_eq_mul.symm] at h
+      have h_in_H : w1 * w2⁻¹ in H := H.mul_mem (hWH hw1) (H.inv_mem (hWH hw2))
+      rw [h] at h_in_H
+      change φ in E.fixingSubgroup at h_in_H
+      rw [IntermediateField.mem_fixingSubgroup_iff] at h_in_H
+      specialize h_in_H x
+      have hxE : x in E := by
+        apply IntermediateField.subset_adjoin
+        apply Set.mem_singleton
+      exact hφx (h_in_H hxE) }
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, Algebra, Algebra.IsIntegral.isIntegral, DFunLike, DFunLike.exists_ne, E.fixingSubgroup, FiniteDimensional, IntermediateField, IntermediateField.adjoin, IntermediateField.adjoin.finiteDimensional, IsIntegral, adjoin, apply_symm_apply, exists_ne, f.symm, finiteDimensional, fixingSubgroup, galGroupBasis, h_basis
 -/

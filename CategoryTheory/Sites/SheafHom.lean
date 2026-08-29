@@ -59,7 +59,8 @@ definition presheafHom
     simpa [Over.mapId] using φ.naturality ((Over.mapId X).hom.app Y).op
   map_comp := by
     rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ ⟨f : Y ⟶ X⟩ ⟨g : Z ⟶ Y⟩
-    ext
+    ext φ ⟨W⟩
+    simpa [Over.mapComp] using φ.naturality ((Over.mapComp g f).hom.app W).op
 
 中文:
 定义 presheafHom
@@ -72,7 +73,8 @@ definition presheafHom
     simpa [Over.mapId] using φ.naturality ((Over.mapId X).hom.app Y).op
   map_comp := by
     rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ ⟨f : Y ⟶ X⟩ ⟨g : Z ⟶ Y⟩
-    ext
+    ext φ ⟨W⟩
+    simpa [Over.mapComp] using φ.naturality ((Over.mapComp g f).hom.app W).op
 
 Depends on / 依赖: Over.forget, X.unop, forget
 -/
@@ -155,7 +157,16 @@ definition presheafHomSectionsEquiv
           (Over.homMk f : Over.mk f ⟶ Over.mk (𝟙 X₁)).op)
         rw [← s.2 f.op]
         dsimp
-        rw [presheafHom_map_app_
+        rw [presheafHom_map_app_op_mk_id]
+        rfl }
+  invFun f := ⟨fun _ => Functor.whiskerLeft _ f, fun _ => rfl⟩
+  left_inv s := by
+    dsimp
+    ext ⟨X⟩ ⟨Y : Over X⟩
+    have H := s.2 Y.hom.op
+    dsimp at H ⊢
+    rw [← H]
+    apply presheafHom_map_app_op_mk_id
 
 中文:
 定义 presheafHomSectionsEquiv
@@ -168,7 +179,16 @@ definition presheafHomSectionsEquiv
           (Over.homMk f : Over.mk f ⟶ Over.mk (𝟙 X₁)).op)
         rw [← s.2 f.op]
         dsimp
-        rw [presheafHom_map_app_
+        rw [presheafHom_map_app_op_mk_id]
+        rfl }
+  invFun f := ⟨fun _ => Functor.whiskerLeft _ f, fun _ => rfl⟩
+  left_inv s := by
+    dsimp
+    ext ⟨X⟩ ⟨Y : Over X⟩
+    have H := s.2 Y.hom.op
+    dsimp at H ⊢
+    rw [← H]
+    apply presheafHom_map_app_op_mk_id
 
 Depends on / 依赖: Eq.trans, Functor, Functor.whiskerLeft, Over.homMk, Over.mk, Y.hom.op, f.op, invFun, left_inv, naturality, presheafHom_map_app_op_mk_id, whiskerLeft
 -/
@@ -213,7 +233,9 @@ lemma PresheafHom.isAmalgamation_iff
     ext ⟨W : Over Y⟩
     refine (h W.left (W.hom ≫ g) (S.downward_closed hg _)).trans ?_
     have H := hx (𝟙 _) W.hom (S.downward_closed hg W.hom) hg (by simp)
-    simp 
+    simp only [op_id, Functor.map_id, id_apply] at H
+    rw [H]; rw [presheafHom_map_app _ _ W.hom (by simp)]
+    rfl
 
 中文:
 引理 PresheafHom.isAmalgamation_iff
@@ -229,7 +251,9 @@ lemma PresheafHom.isAmalgamation_iff
     ext ⟨W : Over Y⟩
     refine (h W.left (W.hom ≫ g) (S.downward_closed hg _)).trans ?_
     have H := hx (𝟙 _) W.hom (S.downward_closed hg W.hom) hg (by simp)
-    simp 
+    simp only [op_id, Functor.map_id, id_apply] at H
+    rw [H]; rw [presheafHom_map_app _ _ W.hom (by simp)]
+    rfl
 
 Depends on / 依赖: Functor, Functor.map_id, S.downward_closed, W.hom, W.left, downward_closed, id_apply, map_id, op_id, presheafHom_map_app, presheafHom_map_app_op_mk_id
 -/
@@ -278,7 +302,17 @@ lemma exists_app
           naturality := by
             rintro ⟨Z₁, hZ₁⟩ ⟨Z₂, hZ₂⟩ ⟨⟨f : Z₂ ⟶ Z₁⟩⟩
             dsimp
-    
+            rw [id_comp]; rw [assoc]
+            have H := hx f.left (𝟙 _) hZ₁ hZ₂ (by simp)
+            simp only [op_id, Functor.map_id, id_apply] at H
+            let φ : Over.mk f.left ⟶ Over.mk (𝟙 Z₁.left) := Over.homMk f.left
+            have H' := (x (Z₁.hom ≫ g) hZ₁).naturality φ.op
+            dsimp at H H' ⊢
+            erw [← H, ← H', presheafHom_map_app_op_mk_id, ← F.map_comp_assoc,
+              ← op_comp, Over.w f] } }
+  use (hG g).lift c
+  intro Z p hp
+  exact ((hG g).fac c ⟨Over.mk p, hp⟩)
 
 中文:
 引理 存在_app
@@ -291,7 +325,17 @@ lemma exists_app
           naturality := by
             rintro ⟨Z₁, hZ₁⟩ ⟨Z₂, hZ₂⟩ ⟨⟨f : Z₂ ⟶ Z₁⟩⟩
             dsimp
-    
+            rw [id_comp]; rw [assoc]
+            have H := hx f.left (𝟙 _) hZ₁ hZ₂ (by simp)
+            simp only [op_id, Functor.map_id, id_apply] at H
+            let φ : Over.mk f.left ⟶ Over.mk (𝟙 Z₁.left) := Over.homMk f.left
+            have H' := (x (Z₁.hom ≫ g) hZ₁).naturality φ.op
+            dsimp at H H' ⊢
+            erw [← H, ← H', presheafHom_map_app_op_mk_id, ← F.map_comp_assoc,
+              ← op_comp, Over.w f] } }
+  use (hG g).lift c
+  intro Z p hp
+  exact ((hG g).fac c ⟨Over.mk p, hp⟩)
 
 Depends on / 依赖: F.map, F.obj, Functor, Functor.map_id, Over.homMk, Over.mk, Presieve, Presieve.diagram, Sieve.pullback, Z.hom.op, arrows, diagram, f.left, id_apply, id_comp, map_id, naturality, op_id, pullback
 -/
@@ -378,7 +422,26 @@ lemma presheafHom_isSheafFor
           apply (hG Y₂.hom).hom_ext
           rintro ⟨Z : Over Y₂.left, hZ⟩
           dsimp
-       
+          rw [assoc]; rw [assoc]; rw [app_cond hG x hx Y₂.hom Z.hom hZ]; rw [← G.map_comp]; rw [← op_comp]
+          rw [app_cond hG x hx Y₁.hom (Z.hom ≫ φ.left) (by simpa using hZ)]; rw [← F.map_comp_assoc]; rw [op_comp]
+          congr 3
+          simp }, ?_⟩
+    rw [PresheafHom.isAmalgamation_iff _ _ hx]
+    intro Y g hg
+    dsimp
+    have H := app_cond hG x hx g (𝟙 _) (by simpa using hg)
+    rw [op_id]; rw [G.map_id]; rw [comp_id]; rw [F.map_id]; rw [id_comp] at H
+    exact H.trans (by congr; simp)
+  · intro y₁ y₂ hy₁ hy₂
+    rw [PresheafHom.isAmalgamation_iff _ _ hx] at hy₁ hy₂
+    apply NatTrans.ext
+    ext ⟨Y : Over X⟩
+    apply (hG Y.hom).hom_ext
+    rintro ⟨Z : Over Y.left, hZ⟩
+    dsimp
+    let φ : Over.mk (Z.hom ≫ Y.hom) ⟶ Y := Over.homMk Z.hom
+    refine (y₁.naturality φ.op).symm.trans (Eq.trans ?_ (y₂.naturality φ.op))
+    rw [(hy₁ _ _ hZ)]; rw [← ((hy₂ _ _ hZ))]
 
 中文:
 引理 presheafHom_isSheafFor
@@ -392,7 +455,26 @@ lemma presheafHom_isSheafFor
           apply (hG Y₂.hom).hom_ext
           rintro ⟨Z : Over Y₂.left, hZ⟩
           dsimp
-       
+          rw [assoc]; rw [assoc]; rw [app_cond hG x hx Y₂.hom Z.hom hZ]; rw [← G.map_comp]; rw [← op_comp]
+          rw [app_cond hG x hx Y₁.hom (Z.hom ≫ φ.left) (by simpa using hZ)]; rw [← F.map_comp_assoc]; rw [op_comp]
+          congr 3
+          simp }, ?_⟩
+    rw [PresheafHom.isAmalgamation_iff _ _ hx]
+    intro Y g hg
+    dsimp
+    have H := app_cond hG x hx g (𝟙 _) (by simpa using hg)
+    rw [op_id]; rw [G.map_id]; rw [comp_id]; rw [F.map_id]; rw [id_comp] at H
+    exact H.trans (by congr; simp)
+  · intro y₁ y₂ hy₁ hy₂
+    rw [PresheafHom.isAmalgamation_iff _ _ hx] at hy₁ hy₂
+    apply NatTrans.ext
+    ext ⟨Y : Over X⟩
+    apply (hG Y.hom).hom_ext
+    rintro ⟨Z : Over Y.left, hZ⟩
+    dsimp
+    let φ : Over.mk (Z.hom ≫ Y.hom) ⟶ Y := Over.homMk Z.hom
+    refine (y₁.naturality φ.op).symm.trans (Eq.trans ?_ (y₂.naturality φ.op))
+    rw [(hy₁ _ _ hZ)]; rw [← ((hy₂ _ _ hZ))]
 
 Depends on / 依赖: F.map_comp_assoc, G.map_comp, PresheafHom, PresheafHom.isAmalgamation_iff, Y.unop.hom, Z.hom, app_cond, existsUnique_of_exists_of_unique, hom_ext, isAmalgamation_iff, map_comp, map_comp_assoc, naturality, op_comp
 -/
@@ -476,7 +558,7 @@ definition sheafHom'
     exact ConcreteCategory.congr_hom ((presheafHom F.1 G.1).map_id X) φ.1
   map_comp f g := by
     ext φ : 4
-    exact ConcreteCategory.congr_hom ((preshe
+    exact ConcreteCategory.congr_hom ((presheafHom F.1 G.1).map_comp f g) φ.1
 
 中文:
 定义 sheafHom'
@@ -488,7 +570,7 @@ definition sheafHom'
     exact ConcreteCategory.congr_hom ((presheafHom F.1 G.1).map_id X) φ.1
   map_comp f g := by
     ext φ : 4
-    exact ConcreteCategory.congr_hom ((preshe
+    exact ConcreteCategory.congr_hom ((presheafHom F.1 G.1).map_comp f g) φ.1
 
 Depends on / 依赖: J.overPullback, X.unop, overPullback
 -/

@@ -125,7 +125,8 @@ definition stabilizerEquiv_invFun_aux
     rw [stabilizerEquiv_invFun_eq _ (comp_stabilizerEquiv_invFun g a)]
     exact congr_arg Subtype.val ((g <| f a).left_inv _)
   right_inv a := by
-    rw [stabilizerEquiv_invFun_eq _ (comp_stabilizer
+    rw [stabilizerEquiv_invFun_eq _ (comp_stabilizerEquiv_invFun _ a)]
+    exact congr_arg Subtype.val ((g <| f a).right_inv _)
 
 中文:
 定义 stabilizerEquiv_invFun_aux
@@ -136,7 +137,8 @@ definition stabilizerEquiv_invFun_aux
     rw [stabilizerEquiv_invFun_eq _ (comp_stabilizerEquiv_invFun g a)]
     exact congr_arg Subtype.val ((g <| f a).left_inv _)
   right_inv a := by
-    rw [stabilizerEquiv_invFun_eq _ (comp_stabilizer
+    rw [stabilizerEquiv_invFun_eq _ (comp_stabilizerEquiv_invFun _ a)]
+    exact congr_arg Subtype.val ((g <| f a).right_inv _)
 
 Depends on / 依赖: stabilizerEquiv_invFun
 -/
@@ -163,7 +165,8 @@ definition stabilizerMulEquiv
     ext a
     rw [smul_apply]; rw [symm_apply_apply]; rw [Perm.smul_def]
     apply comp_stabilizerEquiv_invFun⟩
-  right_i
+  right_inv g := by ext i a; apply stabilizerEquiv_invFun_eq
+  map_mul' _ _ := rfl
 
 中文:
 定义 stabilizerMulEquiv
@@ -174,7 +177,8 @@ definition stabilizerMulEquiv
     ext a
     rw [smul_apply]; rw [symm_apply_apply]; rw [Perm.smul_def]
     apply comp_stabilizerEquiv_invFun⟩
-  right_i
+  right_inv g := by ext i a; apply stabilizerEquiv_invFun_eq
+  map_mul' _ _ := rfl
 
 Depends on / 依赖: Function, Function.comp_apply, Perm.smul_def, Perm.subtypePerm, comp_apply, comp_stabilizerEquiv_invFun, g.unop, g.unop.prop, invFun, map_mul, mem_stabilizer_iff, mem_stabilizer_iff.mp, mk.symm, right_inv, smul_apply, smul_def, stabilizerEquiv_invFun_aux, stabilizerEquiv_invFun_eq, subtypePerm, symm_apply_apply
 -/
@@ -221,7 +225,10 @@ theorem stabilizer_card
   proof: by
   -- rewriting via Nat.card because Fintype instance is not found
   rw [← Nat.card_eq_fintype_card]; rw [Nat.card_congr (subtypeEquiv mk fun _ => ?_)]; rw [Nat.card_congr MulOpposite.opEquiv]; rw [Nat.card_congr (DomMulAct.stabilizerMulEquiv f).toEquiv]; rw [Nat.card_pi]
-  · exact Finset.prod_con
+  · exact Finset.prod_congr rfl fun i _ => by rw [Nat.card_eq_fintype_card, Fintype.card_perm]
+  · rfl
+
+omit [Fintype α] in
 
 中文:
 定理 stabilizer_card
@@ -229,7 +236,10 @@ theorem stabilizer_card
   证明: by
   -- rewriting via Nat.card because Fintype instance is not found
   rw [← Nat.card_eq_fintype_card]; rw [Nat.card_congr (subtypeEquiv mk fun _ => ?_)]; rw [Nat.card_congr MulOpposite.opEquiv]; rw [Nat.card_congr (DomMulAct.stabilizerMulEquiv f).toEquiv]; rw [Nat.card_pi]
-  · exact Finset.prod_con
+  · exact Finset.prod_congr rfl fun i _ => by rw [Nat.card_eq_fintype_card, Fintype.card_perm]
+  · rfl
+
+omit [Fintype α] in
 -/
 theorem stabilizer_card [DecidableEq α] [DecidableEq ι] [Fintype ι] :
     Fintype.card {g : Perm α // f ∘ g = f} = ∏ i, (Fintype.card {a // f a = i})! := by
@@ -283,7 +293,20 @@ theorem stabilizer_card'
     simp only [this, stabilizer_card]
     apply Finset.prod_bij (fun g _ => g.val)
     · exact fun g _ => Finset.coe_mem g
-    · exact fun g 
+    · exact fun g _ g' _ => SetCoe.ext
+    · simp
+    · intro i _
+      apply congr_arg
+      apply Fintype.card_congr
+      apply Equiv.subtypeEquiv (Equiv.refl α)
+      intro a
+      rw [refl_apply]; rw [← Subtype.coe_inj]
+      simp only [φ, Set.val_codRestrict_apply]
+  · intro g
+    simp only [funext_iff]
+    apply forall_congr'
+    intro a
+    simp only [Function.comp_apply, φ, ← Subtype.coe_inj, Set.val_codRestrict_apply]
 
 中文:
 定理 stabilizer_card'
@@ -294,7 +317,20 @@ theorem stabilizer_card'
     simp only [this, stabilizer_card]
     apply Finset.prod_bij (fun g _ => g.val)
     · exact fun g _ => Finset.coe_mem g
-    · exact fun g 
+    · exact fun g _ g' _ => SetCoe.ext
+    · simp
+    · intro i _
+      apply congr_arg
+      apply Fintype.card_congr
+      apply Equiv.subtypeEquiv (Equiv.refl α)
+      intro a
+      rw [refl_apply]; rw [← Subtype.coe_inj]
+      simp only [φ, Set.val_codRestrict_apply]
+  · intro g
+    simp only [funext_iff]
+    apply forall_congr'
+    intro a
+    simp only [Function.comp_apply, φ, ← Subtype.coe_inj, Set.val_codRestrict_apply]
 
 Depends on / 依赖: Equiv.refl, Equiv.subtypeEquiv, Finset, Finset.coe_mem, Finset.prod_bij, Finset.univ.image, Fintype, Fintype.card_congr, Set.codRestrict, Set.val_codRestrict_apply, SetCoe, SetCoe.ext, Subtype, Subtype.coe_inj, card_congr, codRestrict, coe_inj, coe_mem, congr_arg, g.val
 -/

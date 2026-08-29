@@ -211,7 +211,25 @@ theorem support_powerSeriesFamily_subset
     intro n hn
     have he : exists c in antidiagonal n, (PowerSeries.coeff c.1) a • (PowerSeries.coeff c.2) b •
         ((powers x) n).coeff g != 0 := by
-      refine exists_ne_zero_of_sum
+      refine exists_ne_zero_of_sum_ne_zero ?_
+      simpa [PowerSeries.coeff_mul, sum_smul, mul_smul, h] using hn
+    simp only [powers_of_orderTop_pos h, HasAntidiagonal.mem_antidiagonal] at he
+    obtain ⟨c, hcn, hc⟩ := he
+    simp only [coe_image, Set.Finite.coe_toFinset, Set.mem_image]
+    use c
+    simp only [mul_toFun, smulFamily_toFun, Function.mem_support, hcn,
+      and_true]
+    rw [powers_of_orderTop_pos h c.1]; rw [powers_of_orderTop_pos h c.2]; rw [Algebra.smul_mul_assoc]; rw [Algebra.mul_smul_comm]; rw [← pow_add]; rw [hcn]
+    simp [hc]
+  · simp only [coeff_support, Set.Finite.toFinset_subset, support_subset_iff]
+    intro n hn
+    by_cases hz : n = 0
+    · have : g = 0 ∧ (a.constantCoeff * b.constantCoeff) • (1 : V) != 0 := by
+        simpa [hz, h] using hn
+      simp only [coe_image, Set.mem_image]
+      use (0, 0)
+      simp [this.2, this.1, h, hz, smul_smul, mul_comm]
+    · simp [h, hz] at hn
 
 中文:
 定理 support_powerSeriesFamily_subset
@@ -222,7 +240,25 @@ theorem support_powerSeriesFamily_subset
     intro n hn
     have he : exists c in antidiagonal n, (PowerSeries.coeff c.1) a • (PowerSeries.coeff c.2) b •
         ((powers x) n).coeff g != 0 := by
-      refine exists_ne_zero_of_sum
+      refine exists_ne_zero_of_sum_ne_zero ?_
+      simpa [PowerSeries.coeff_mul, sum_smul, mul_smul, h] using hn
+    simp only [powers_of_orderTop_pos h, HasAntidiagonal.mem_antidiagonal] at he
+    obtain ⟨c, hcn, hc⟩ := he
+    simp only [coe_image, Set.Finite.coe_toFinset, Set.mem_image]
+    use c
+    simp only [mul_toFun, smulFamily_toFun, Function.mem_support, hcn,
+      and_true]
+    rw [powers_of_orderTop_pos h c.1]; rw [powers_of_orderTop_pos h c.2]; rw [Algebra.smul_mul_assoc]; rw [Algebra.mul_smul_comm]; rw [← pow_add]; rw [hcn]
+    simp [hc]
+  · simp only [coeff_support, Set.Finite.toFinset_subset, support_subset_iff]
+    intro n hn
+    by_cases hz : n = 0
+    · have : g = 0 ∧ (a.constantCoeff * b.constantCoeff) • (1 : V) != 0 := by
+        simpa [hz, h] using hn
+      simp only [coe_image, Set.mem_image]
+      use (0, 0)
+      simp [this.2, this.1, h, hz, smul_smul, mul_comm]
+    · simp [h, hz] at hn
 
 Depends on / 依赖: Finite, HasAntidiagonal, HasAntidiagonal.mem_antidiagonal, PowerSeries, PowerSeries.coeff, PowerSeries.coeff_mul, Set.Finite.coe_toFinset, Set.Finite.toFinset_subset, antidiagonal, coe_image, coe_toFinset, coeff_mul, coeff_support, exists_ne_zero_of_sum_ne_zero, mem_antidiagonal, mul_smul, orderTop, powers, powers_of_orderTop_pos, sum_smul
 -/
@@ -267,7 +303,31 @@ theorem hsum_powerSeriesFamily_mul
     simp only [coeff_hsum_eq_sum, smulFamily_toFun, h, powers_of_orderTop_pos,
       HahnSeries.coeff_smul, mul_toFun, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
     rw [sum_subset (support_powerSeriesFamily_subset a b g)
-      (fun i hi his => by simp
+      (fun i hi his => by simpa [h]; rw [PowerSeries.coeff_mul]; rw [sum_smul] using his)]
+    simp only [coeff_support, mul_toFun, smulFamily_toFun, Algebra.mul_smul_comm,
+      Algebra.smul_mul_assoc, HahnSeries.coeff_smul, PowerSeries.coeff_mul, sum_smul]
+    rw [sum_sigma']
+    refine (Finset.sum_of_injOn (fun x => ⟨x.1 + x.2, x⟩) (fun _ _ _ _ => by simp) ?_ ?_
+      (fun _ _ => by simp [smul_smul, mul_comm, pow_add])).symm
+    · intro ij hij
+      simp only [coe_sigma, coe_image, Set.mem_sigma_iff, Set.mem_image, Prod.exists, mem_coe,
+        HasAntidiagonal.mem_antidiagonal, and_true]
+      use ij.1, ij.2
+      simp_all
+    · intro i hi his
+      have hisc : forall j k : Nat, ⟨j + k, (j, k)⟩ = i -> (PowerSeries.coeff k) b •
+          (PowerSeries.coeff j a • (x ^ j * x ^ k).coeff g) = 0 := by
+        intro m n
+        contrapose!
+        simp only [powers_of_orderTop_pos h, Set.Finite.coe_toFinset, Set.mem_image,
+          Function.mem_support, ne_eq, Prod.exists, not_exists, not_and] at his
+        exact his m n
+      simp only [mem_sigma, HasAntidiagonal.mem_antidiagonal] at hi
+      rw [mul_comm ((PowerSeries.coeff i.snd.1) a)]; rw [← hi.2]; rw [mul_smul]; rw [pow_add]
+exact hisc i.snd.1 i.snd.2 Sigma.eq hi.2 (by simp)
+  · simp only [h, not_false_eq_true, powerSeriesFamily_of_not_orderTop_pos,
+      powerSeriesFamily_hsum_zero, map_mul, hsum_mul]
+    rw [smul_mul_smul_comm]; rw [mul_one]
 
 中文:
 定理 hsum_powerSeriesFamily_mul
@@ -278,7 +338,31 @@ theorem hsum_powerSeriesFamily_mul
     simp only [coeff_hsum_eq_sum, smulFamily_toFun, h, powers_of_orderTop_pos,
       HahnSeries.coeff_smul, mul_toFun, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
     rw [sum_subset (support_powerSeriesFamily_subset a b g)
-      (fun i hi his => by simp
+      (fun i hi his => by simpa [h]; rw [PowerSeries.coeff_mul]; rw [sum_smul] using his)]
+    simp only [coeff_support, mul_toFun, smulFamily_toFun, Algebra.mul_smul_comm,
+      Algebra.smul_mul_assoc, HahnSeries.coeff_smul, PowerSeries.coeff_mul, sum_smul]
+    rw [sum_sigma']
+    refine (Finset.sum_of_injOn (fun x => ⟨x.1 + x.2, x⟩) (fun _ _ _ _ => by simp) ?_ ?_
+      (fun _ _ => by simp [smul_smul, mul_comm, pow_add])).symm
+    · intro ij hij
+      simp only [coe_sigma, coe_image, Set.mem_sigma_iff, Set.mem_image, Prod.exists, mem_coe,
+        HasAntidiagonal.mem_antidiagonal, and_true]
+      use ij.1, ij.2
+      simp_all
+    · intro i hi his
+      have hisc : forall j k : Nat, ⟨j + k, (j, k)⟩ = i -> (PowerSeries.coeff k) b •
+          (PowerSeries.coeff j a • (x ^ j * x ^ k).coeff g) = 0 := by
+        intro m n
+        contrapose!
+        simp only [powers_of_orderTop_pos h, Set.Finite.coe_toFinset, Set.mem_image,
+          Function.mem_support, ne_eq, Prod.exists, not_exists, not_and] at his
+        exact his m n
+      simp only [mem_sigma, HasAntidiagonal.mem_antidiagonal] at hi
+      rw [mul_comm ((PowerSeries.coeff i.snd.1) a)]; rw [← hi.2]; rw [mul_smul]; rw [pow_add]
+exact hisc i.snd.1 i.snd.2 Sigma.eq hi.2 (by simp)
+  · simp only [h, not_false_eq_true, powerSeriesFamily_of_not_orderTop_pos,
+      powerSeriesFamily_hsum_zero, map_mul, hsum_mul]
+    rw [smul_mul_smul_comm]; rw [mul_one]
 
 Depends on / 依赖: Algebra, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, HahnSeries, HahnSeries.coeff_smul, PowerSeries, PowerSeries.coeff_mul, coeff_hsum_eq_sum, coeff_mul, coeff_smul, coeff_support, mul_smul_comm, mul_toFun, orderTop, powers_of_orderTop_pos, smulFamily_toFun, smul_mul_assoc, sum_smul, sum_subset, support_powerSeriesFamily_subset
 -/
@@ -346,7 +430,18 @@ definition heval
     rw [finsum_eq_single _ (0 : Nat) (fun n hn => by simp [hn])]
     simp
   map_mul' a b := by
-    simp only [← hsum_mul, hsum_powerSer
+    simp only [← hsum_mul, hsum_powerSeriesFamily_mul]
+  map_zero' := by
+    simp only [hsum, smulFamily_toFun, map_zero, zero_smul,
+      coeff_zero, finsum_zero, mk_eq_zero, Pi.zero_def]
+  map_add' a b := by
+    simp only [powerSeriesFamily_add, hsum_add]
+  commutes' r := by
+    simp only [algebraMap_eq]
+    ext g
+    simp only [coeff_hsum, smulFamily_toFun, coeff_C, powers_toFun, ite_smul, zero_smul]
+    rw [finsum_eq_single _ 0 fun n hn => by simp [hn]]
+    by_cases hg : g = 0 <;> simp [hg, Algebra.algebraMap_eq_smul_one]
 
 中文:
 定义 heval
@@ -359,7 +454,18 @@ definition heval
     rw [finsum_eq_single _ (0 : Nat) (fun n hn => by simp [hn])]
     simp
   map_mul' a b := by
-    simp only [← hsum_mul, hsum_powerSer
+    simp only [← hsum_mul, hsum_powerSeriesFamily_mul]
+  map_zero' := by
+    simp only [hsum, smulFamily_toFun, map_zero, zero_smul,
+      coeff_zero, finsum_zero, mk_eq_zero, Pi.zero_def]
+  map_add' a b := by
+    simp only [powerSeriesFamily_add, hsum_add]
+  commutes' r := by
+    simp only [algebraMap_eq]
+    ext g
+    simp only [coeff_hsum, smulFamily_toFun, coeff_C, powers_toFun, ite_smul, zero_smul]
+    rw [finsum_eq_single _ 0 fun n hn => by simp [hn]]
+    by_cases hg : g = 0 <;> simp [hg, Algebra.algebraMap_eq_smul_one]
 
 Depends on / 依赖: powerSeriesFamily
 -/
@@ -536,7 +642,11 @@ theorem coeff_heval_zero
   · simp
   · intro n hn
     simp only [coeff_apply, smulFamily_toFun, HahnSeries.coeff_smul, smul_eq_mul]
-    refine mul_eq_zero_of_right (coeff n f) (c
+    refine mul_eq_zero_of_right (coeff n f) (coeff_eq_zero_of_lt_orderTop ?_)
+    by_cases h : 0 < x.orderTop
+    · refine (lt_of_lt_of_le ((nsmul_pos_iff hn).mpr h) ?_)
+      simp [h, orderTop_nsmul_le_orderTop_pow]
+    · simp [h, hn]
 
 中文:
 定理 coeff_heval_zero
@@ -546,7 +656,11 @@ theorem coeff_heval_zero
   · simp
   · intro n hn
     simp only [coeff_apply, smulFamily_toFun, HahnSeries.coeff_smul, smul_eq_mul]
-    refine mul_eq_zero_of_right (coeff n f) (c
+    refine mul_eq_zero_of_right (coeff n f) (coeff_eq_zero_of_lt_orderTop ?_)
+    by_cases h : 0 < x.orderTop
+    · refine (lt_of_lt_of_le ((nsmul_pos_iff hn).mpr h) ?_)
+      simp [h, orderTop_nsmul_le_orderTop_pow]
+    · simp [h, hn]
 
 Depends on / 依赖: HahnSeries, HahnSeries.coeff_smul, PowerSeries, PowerSeries.coeff_zero_eq_constantCoeff_apply, coeff_apply, coeff_eq_zero_of_lt_orderTop, coeff_heval, coeff_smul, coeff_zero_eq_constantCoeff_apply, finsum_eq_single, lt_of_lt_of_le, mul_eq_zero_of_right, nsmul_pos_iff, orderTop, orderTop_nsmul_le_orderTop_pow, powerSeriesFamily, smulFamily_toFun, smul_eq_mul, x.orderTop
 -/

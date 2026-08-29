@@ -72,7 +72,8 @@ lemma le_integral_rnDeriv_of_ac
     = f (∫ x, (μ.rnDeriv ν x).toReal ∂ν) := by rw [Measure.integral_toReal_rnDeriv hμν]
   _ <= ∫ x, f (μ.rnDeriv ν x).toReal ∂ν := by
     rw [← average_eq_integral]; rw [← average_eq_integral]
-    e
+    exact ConvexOn.map_average_le hf_cvx hf_cont' isClosed_Ici (by simp)
+      Measure.integrable_toReal_rnDeriv hf_int
 
 中文:
 引理 le_integral_rnDeriv_of_ac
@@ -83,7 +84,8 @@ lemma le_integral_rnDeriv_of_ac
     = f (∫ x, (μ.rnDeriv ν x).toReal ∂ν) := by rw [Measure.integral_toReal_rnDeriv hμν]
   _ <= ∫ x, f (μ.rnDeriv ν x).toReal ∂ν := by
     rw [← average_eq_integral]; rw [← average_eq_integral]
-    e
+    exact ConvexOn.map_average_le hf_cvx hf_cont' isClosed_Ici (by simp)
+      Measure.integrable_toReal_rnDeriv hf_int
 
 Depends on / 依赖: ContinuousOn, ConvexOn, ConvexOn.map_average_le, Measure, Measure.integrable_toReal_rnDeriv, Measure.integral_toReal_rnDeriv, Nonempty, average_eq_integral, continuousOn_Ici, hf_cont, hf_cvx, hf_cvx.continuousOn_Ici, hf_int, integrable_toReal_rnDeriv, integral_toReal_rnDeriv, isClosed_Ici, map_average_le, rnDeriv, toReal, top_nonempty
 -/
@@ -114,7 +116,38 @@ lemma mul_le_integral_rnDeriv_of_ac
   have : IsFiniteMeasure μ' := μ.smul_finite (by simp [hν])
   have hμν' : μ' ≪ ν' := hμν.smul _
   have h_rnDeriv_eq : μ'.rnDeriv ν' =ᵐ[ν] μ.rnDeriv ν := by
-    have h1' : μ'.rnDeriv
+    have h1' : μ'.rnDeriv ν' =ᵐ[ν'] (ν univ)⁻¹ • μ.rnDeriv ν' :=
+      Measure.rnDeriv_smul_left_of_ne_top' (μ := ν') (ν := μ) (by simp [hν])
+    have h1 : μ'.rnDeriv ν' =ᵐ[ν] (ν univ)⁻¹ • μ.rnDeriv ν' := by
+      rwa [Measure.ae_ennreal_smul_measure_eq] at h1'
+      simp
+    have h2 : μ.rnDeriv ν' =ᵐ[ν] (ν univ)⁻¹⁻¹ • μ.rnDeriv ν :=
+      Measure.rnDeriv_smul_right_of_ne_top' (μ := ν) (ν := μ) (by simp) (by simp [hν])
+    filter_upwards [h1, h2] with x h1 h2
+    rw [h1]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [h2]
+    simp only [inv_inv, Pi.smul_apply, smul_eq_mul]
+    rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel]; rw [one_mul]
+    · simp [hν]
+    · simp
+  have h_eq : ∫ x, f (μ'.rnDeriv ν' x).toReal ∂ν'
+      = (ν.real univ)⁻¹ * ∫ x, f ((μ.rnDeriv ν x).toReal) ∂ν := by
+    rw [integral_smul_measure]; rw [smul_eq_mul]; rw [ENNReal.toReal_inv]
+    congr 1
+    refine integral_congr_ae ?_
+    filter_upwards [h_rnDeriv_eq] with x hx
+    rw [hx]
+  have h : f (μ'.real univ) <= ∫ x, f (μ'.rnDeriv ν' x).toReal ∂ν' :=
+    le_integral_rnDeriv_of_ac hf_cvx hf_cont ?_ hμν'
+  swap
+  · refine Integrable.smul_measure ?_ (by simp [hν])
+    refine (integrable_congr ?_).mpr hf_int
+    filter_upwards [h_rnDeriv_eq] with x hx
+    rw [hx]
+  rw [h_eq]; rw [mul_comm]; rw [← div_le_iff₀]; rw [div_eq_inv_mul]; rw [inv_inv] at h
+  · convert! h
+    · simp only [div_eq_inv_mul, Measure.smul_apply, smul_eq_mul, ENNReal.toReal_mul,
+      ENNReal.toReal_inv, μ', measureReal_def]
+  · simp [ENNReal.toReal_pos_iff, hν, measureReal_def]
 
 中文:
 引理 mul_le_integral_rnDeriv_of_ac
@@ -128,7 +161,38 @@ lemma mul_le_integral_rnDeriv_of_ac
   have : IsFiniteMeasure μ' := μ.smul_finite (by simp [hν])
   have hμν' : μ' ≪ ν' := hμν.smul _
   have h_rnDeriv_eq : μ'.rnDeriv ν' =ᵐ[ν] μ.rnDeriv ν := by
-    have h1' : μ'.rnDeriv
+    have h1' : μ'.rnDeriv ν' =ᵐ[ν'] (ν univ)⁻¹ • μ.rnDeriv ν' :=
+      Measure.rnDeriv_smul_left_of_ne_top' (μ := ν') (ν := μ) (by simp [hν])
+    have h1 : μ'.rnDeriv ν' =ᵐ[ν] (ν univ)⁻¹ • μ.rnDeriv ν' := by
+      rwa [Measure.ae_ennreal_smul_measure_eq] at h1'
+      simp
+    have h2 : μ.rnDeriv ν' =ᵐ[ν] (ν univ)⁻¹⁻¹ • μ.rnDeriv ν :=
+      Measure.rnDeriv_smul_right_of_ne_top' (μ := ν) (ν := μ) (by simp) (by simp [hν])
+    filter_upwards [h1, h2] with x h1 h2
+    rw [h1]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [h2]
+    simp only [inv_inv, Pi.smul_apply, smul_eq_mul]
+    rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel]; rw [one_mul]
+    · simp [hν]
+    · simp
+  have h_eq : ∫ x, f (μ'.rnDeriv ν' x).toReal ∂ν'
+      = (ν.real univ)⁻¹ * ∫ x, f ((μ.rnDeriv ν x).toReal) ∂ν := by
+    rw [integral_smul_measure]; rw [smul_eq_mul]; rw [ENNReal.toReal_inv]
+    congr 1
+    refine integral_congr_ae ?_
+    filter_upwards [h_rnDeriv_eq] with x hx
+    rw [hx]
+  have h : f (μ'.real univ) <= ∫ x, f (μ'.rnDeriv ν' x).toReal ∂ν' :=
+    le_integral_rnDeriv_of_ac hf_cvx hf_cont ?_ hμν'
+  swap
+  · refine Integrable.smul_measure ?_ (by simp [hν])
+    refine (integrable_congr ?_).mpr hf_int
+    filter_upwards [h_rnDeriv_eq] with x hx
+    rw [hx]
+  rw [h_eq]; rw [mul_comm]; rw [← div_le_iff₀]; rw [div_eq_inv_mul]; rw [inv_inv] at h
+  · convert! h
+    · simp only [div_eq_inv_mul, Measure.smul_apply, smul_eq_mul, ENNReal.toReal_mul,
+      ENNReal.toReal_inv, μ', measureReal_def]
+  · simp [ENNReal.toReal_pos_iff, hν, measureReal_def]
 
 Depends on / 依赖: IsFiniteMeasure, Measure, Measure.ae_ennreal_smul_measure_eq, Measure.rnDeriv_smul_left_of_ne_top, NeZero, ae_ennreal_smul_measure_eq, h_rnDeriv_eq, rnDeriv, rnDeriv_smul_left_of_ne_top, smul_finite
 -/
@@ -194,7 +258,8 @@ lemma lintegral_rnDeriv_compProd
   intro s hs hsμ
   calc ∫⁻ a in s, ∫⁻ b, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a) ∂μ
   _ = ∫⁻ a in s, ∫⁻ b in univ, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a) ∂μ := by simp
-  _ = ∫⁻ a
+  _ = ∫⁻ a in s, (κ a) univ ∂μ := by
+    rw [← Measure.setLIntegral_compProd (by fun_prop) hs .univ]; rw [Measure.setLIntegral_rnDeriv hκη]; rw [Measure.compProd_apply_prod hs .univ]
 
 中文:
 引理 lintegral_rnDeriv_compProd
@@ -204,7 +269,8 @@ lemma lintegral_rnDeriv_compProd
   intro s hs hsμ
   calc ∫⁻ a in s, ∫⁻ b, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a) ∂μ
   _ = ∫⁻ a in s, ∫⁻ b in univ, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a) ∂μ := by simp
-  _ = ∫⁻ a
+  _ = ∫⁻ a in s, (κ a) univ ∂μ := by
+    rw [← Measure.setLIntegral_compProd (by fun_prop) hs .univ]; rw [Measure.setLIntegral_rnDeriv hκη]; rw [Measure.compProd_apply_prod hs .univ]
 
 Depends on / 依赖: Measure, Measure.compProd_apply_prod, Measure.setLIntegral_compProd, Measure.setLIntegral_rnDeriv, ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite, compProd_apply_prod, fun_prop, measurable_coe, rnDeriv, setLIntegral_compProd, setLIntegral_rnDeriv
 -/
@@ -230,7 +296,41 @@ lemma _root_.ConvexOn.apply_rnDeriv_ae_le_integral
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   have h_lt_top : forallᵐ a ∂ν, forallᵐ b ∂η a, (μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b) < ∞ :=
 Measure.ae_ae_of_ae_compProd (μ otimesₘ κ).rnDeriv_lt_top (ν otimesₘ η)
-  have h_integrable : Integrable (fun x => ((μ ot
+  have h_integrable : Integrable (fun x => ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) x).toReal) (ν otimesₘ η) :=
+    Measure.integrable_toReal_rnDeriv
+  rw [Measure.integrable_compProd_iff] at h_integrable h_int
+  rotate_left
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  have h_ae1 : forallᵐ a ∂ν,
+      μ.rnDeriv ν a * ∫⁻ b, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a) = μ.rnDeriv ν a := by
+    filter_upwards [Measure.ae_rnDeriv_ne_zero_imp_of_ae _ (lintegral_rnDeriv_compProd hκη)]
+      with a ha
+    by_cases h0 : μ.rnDeriv ν a = 0
+    · simp [h0]
+    · simp [ha h0]
+  have h_ae2 : forallᵐ a ∂ν, forallᵐ b ∂(η a), μ.rnDeriv ν a * (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) =
+      (μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b) := by
+    have h_compProd : (fun p => μ.rnDeriv ν p.1 * (μ otimesₘ κ).rnDeriv (μ otimesₘ η) p) =ᵐ[ν otimesₘ η]
+        (μ otimesₘ κ).rnDeriv (ν otimesₘ η) := (rnDeriv_compProd hκη ν).symm
+    rwa [Filter.EventuallyEq, Measure.ae_compProd_iff] at h_compProd
+    simp only [measurableSet_setOfPred]
+    fun_prop
+  filter_upwards [h_ae1, h_ae2, h_lt_top, h_integrable.1, h_int.1]
+    with a h_eq_one h_mul_eq h_lt_top h_int' h_int
+  calc f (μ.rnDeriv ν a).toReal
+    = f (μ.rnDeriv ν a * ∫⁻ b, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a)).toReal := by simp [h_eq_one]
+  _ = f (∫⁻ b, (μ.rnDeriv ν a) * (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a)).toReal := by
+    rw [lintegral_const_mul _ (by fun_prop)]
+  _ = f (∫⁻ b, (μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b) ∂(η a)).toReal := by
+    congr 2
+    refine lintegral_congr_ae ?_
+    filter_upwards [h_mul_eq] with b hb using hb
+  _ = f (∫ b, ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b)).toReal ∂(η a)) := by
+    rw [integral_toReal (by fun_prop) h_lt_top]
+  _ <= ∫ b, f ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b)).toReal ∂(η a) := by
+    rw [← average_eq_integral]; rw [← average_eq_integral]
+    exact ConvexOn.map_average_le hf_cvx hf_cont isClosed_Ici (by simp) h_int' h_int
 
 中文:
 引理 _root_.ConvexOn.apply_rnDeriv_ae_le_integral
@@ -239,7 +339,41 @@ Measure.ae_ae_of_ae_compProd (μ otimesₘ κ).rnDeriv_lt_top (ν otimesₘ η)
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   have h_lt_top : forallᵐ a ∂ν, forallᵐ b ∂η a, (μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b) < ∞ :=
 Measure.ae_ae_of_ae_compProd (μ otimesₘ κ).rnDeriv_lt_top (ν otimesₘ η)
-  have h_integrable : Integrable (fun x => ((μ ot
+  have h_integrable : Integrable (fun x => ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) x).toReal) (ν otimesₘ η) :=
+    Measure.integrable_toReal_rnDeriv
+  rw [Measure.integrable_compProd_iff] at h_integrable h_int
+  rotate_left
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  have h_ae1 : forallᵐ a ∂ν,
+      μ.rnDeriv ν a * ∫⁻ b, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a) = μ.rnDeriv ν a := by
+    filter_upwards [Measure.ae_rnDeriv_ne_zero_imp_of_ae _ (lintegral_rnDeriv_compProd hκη)]
+      with a ha
+    by_cases h0 : μ.rnDeriv ν a = 0
+    · simp [h0]
+    · simp [ha h0]
+  have h_ae2 : forallᵐ a ∂ν, forallᵐ b ∂(η a), μ.rnDeriv ν a * (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) =
+      (μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b) := by
+    have h_compProd : (fun p => μ.rnDeriv ν p.1 * (μ otimesₘ κ).rnDeriv (μ otimesₘ η) p) =ᵐ[ν otimesₘ η]
+        (μ otimesₘ κ).rnDeriv (ν otimesₘ η) := (rnDeriv_compProd hκη ν).symm
+    rwa [Filter.EventuallyEq, Measure.ae_compProd_iff] at h_compProd
+    simp only [measurableSet_setOfPred]
+    fun_prop
+  filter_upwards [h_ae1, h_ae2, h_lt_top, h_integrable.1, h_int.1]
+    with a h_eq_one h_mul_eq h_lt_top h_int' h_int
+  calc f (μ.rnDeriv ν a).toReal
+    = f (μ.rnDeriv ν a * ∫⁻ b, (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a)).toReal := by simp [h_eq_one]
+  _ = f (∫⁻ b, (μ.rnDeriv ν a) * (μ otimesₘ κ).rnDeriv (μ otimesₘ η) (a, b) ∂(η a)).toReal := by
+    rw [lintegral_const_mul _ (by fun_prop)]
+  _ = f (∫⁻ b, (μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b) ∂(η a)).toReal := by
+    congr 2
+    refine lintegral_congr_ae ?_
+    filter_upwards [h_mul_eq] with b hb using hb
+  _ = f (∫ b, ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b)).toReal ∂(η a)) := by
+    rw [integral_toReal (by fun_prop) h_lt_top]
+  _ <= ∫ b, f ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) (a, b)).toReal ∂(η a) := by
+    rw [← average_eq_integral]; rw [← average_eq_integral]
+    exact ConvexOn.map_average_le hf_cvx hf_cont isClosed_Ici (by simp) h_int' h_int
 
 Depends on / 依赖: ContinuousOn, Integrable, Measure, Measure.ae_ae_of_ae_compProd, Measure.integrable_compProd_iff, Measure.integrable_toReal_rnDeriv, StronglyMeasurable, StronglyMeasurable.aestronglyMeasu, ae_ae_of_ae_compProd, aestronglyMeasu, continuousOn_Ici, h_int, h_integrable, h_lt_top, hf_cont, hf_cont_at, hf_cvx, hf_cvx.continuousOn_Ici, integrable_compProd_iff, integrable_toReal_rnDeriv
 -/
@@ -298,7 +432,14 @@ lemma _root_.ConvexOn.integrable_apply_rnDeriv_of_integrable_compProd
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   obtain ⟨c, c', h⟩ : exists c c', forall x, 0 <= x -> c * x + c' <= f x :=
     hf_cvx.exists_affine_le_real isClosed_Ici hf_cont.lowerSemicontinuousOn
-  refine integrable_of_le_of_le (f := fun a => f (μ.rnDeriv ν a).to
+  refine integrable_of_le_of_le (f := fun a => f (μ.rnDeriv ν a).toReal)
+    (g₁ := fun x => c * (μ.rnDeriv ν x).toReal + c')
+    (g₂ := fun x => ∫ b, f ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) (x, b)).toReal ∂(η x))
+    ?_ ?_ ?_ (by fun_prop) ?_
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact ae_of_all _ fun x => h _ ENNReal.toReal_nonneg
+  · exact hf_cvx.apply_rnDeriv_ae_le_integral hf hf_cont_at hf_int hκη
+  · exact hf_int.integral_compProd
 
 中文:
 引理 _root_.ConvexOn.integrable_apply_rnDeriv_of_integrable_compProd
@@ -307,7 +448,14 @@ lemma _root_.ConvexOn.integrable_apply_rnDeriv_of_integrable_compProd
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   obtain ⟨c, c', h⟩ : exists c c', forall x, 0 <= x -> c * x + c' <= f x :=
     hf_cvx.exists_affine_le_real isClosed_Ici hf_cont.lowerSemicontinuousOn
-  refine integrable_of_le_of_le (f := fun a => f (μ.rnDeriv ν a).to
+  refine integrable_of_le_of_le (f := fun a => f (μ.rnDeriv ν a).toReal)
+    (g₁ := fun x => c * (μ.rnDeriv ν x).toReal + c')
+    (g₂ := fun x => ∫ b, f ((μ otimesₘ κ).rnDeriv (ν otimesₘ η) (x, b)).toReal ∂(η x))
+    ?_ ?_ ?_ (by fun_prop) ?_
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  · exact ae_of_all _ fun x => h _ ENNReal.toReal_nonneg
+  · exact hf_cvx.apply_rnDeriv_ae_le_integral hf hf_cont_at hf_int hκη
+  · exact hf_int.integral_compProd
 
 Depends on / 依赖: ContinuousOn, StronglyMeasurable, StronglyMeasurable.aestronglyMeasurabl, aestronglyMeasurabl, continuousOn_Ici, exists_affine_le_real, fun_prop, hf_cont, hf_cont.lowerSemicontinuousOn, hf_cont_at, hf_cvx, hf_cvx.continuousOn_Ici, hf_cvx.exists_affine_le_real, integrable_of_le_of_le, isClosed_Ici, lowerSemicontinuousOn, rnDeriv, toReal
 -/

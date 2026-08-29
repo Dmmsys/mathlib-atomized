@@ -192,7 +192,7 @@ instance [Field
   simp only [realize_genericMonicPolyHasRoot]
   rintro ⟨p, _, rfl⟩
   exact IsAlgClosed.exists_root p (ne_of_gt
-    (natDegree_pos_iff_degree_p
+    (natDegree_pos_iff_degree_pos.1 hn0))
 
 中文:
 实例 [域
@@ -205,7 +205,7 @@ instance [Field
   simp only [realize_genericMonicPolyHasRoot]
   rintro ⟨p, _, rfl⟩
   exact IsAlgClosed.exists_root p (ne_of_gt
-    (natDegree_pos_iff_degree_p
+    (natDegree_pos_iff_degree_pos.1 hn0))
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.exists_root, Set.mem_image, Theory, Theory.model_iff, Theory.model_union_iff, and_imp, exists_root, forall_exists_index, mem_image, model_iff, model_union_iff, natDegree_pos_iff_degree_pos, ne_of_gt, realize_genericMonicPolyHasRoot
 -/
@@ -281,7 +281,10 @@ theorem isAlgClosed_of_model_ACF
     Theory.Model.mono h (by simp [Theory.ACF])
   simp only [Theory.model_iff, Set.mem_image,
     forall_exists_index, and_imp] at h
-  have := h _ p.natDegree (natDegree_pos_iff_degr
+  have := h _ p.natDegree (natDegree_pos_iff_degree_pos.2
+    (degree_pos_of_irreducible hpi)) rfl
+  rw [realize_genericMonicPolyHasRoot] at this
+  exact this ⟨_, hpm, rfl⟩
 
 中文:
 定理 isAlgClosed_of_model_ACF
@@ -293,7 +296,10 @@ theorem isAlgClosed_of_model_ACF
     Theory.Model.mono h (by simp [Theory.ACF])
   simp only [Theory.model_iff, Set.mem_image,
     forall_exists_index, and_imp] at h
-  have := h _ p.natDegree (natDegree_pos_iff_degr
+  have := h _ p.natDegree (natDegree_pos_iff_degree_pos.2
+    (degree_pos_of_irreducible hpi)) rfl
+  rw [realize_genericMonicPolyHasRoot] at this
+  exact this ⟨_, hpm, rfl⟩
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.of_exists_root, Set.mem_image, Theory, Theory.ACF, Theory.Model.mono, Theory.model_iff, and_imp, degree_pos_of_irreducible, forall_exists_index, genericMonicPolyHasRoot, mem_image, model_iff, natDegree, natDegree_pos_iff_degree_pos, of_exists_root, p.natDegree, realize_genericMonicPolyHasRoot
 -/
@@ -373,7 +379,15 @@ theorem ACF_categorical
   have := charP_of_model_fieldOfChar p M
   let _ := fieldOfModelACF p N
   have := modelField_of_modelACF p N
-  let _ := compati
+  let _ := compatibleRingOfModelField N
+  have := isAlgClosed_of_model_ACF p N
+  have := charP_of_model_fieldOfChar p N
+  constructor
+  refine languageEquivEquivRingEquiv.symm ?_
+  apply Classical.choice
+  refine IsAlgClosed.ringEquiv_of_equiv_of_char_eq p ?_ ?_
+  · rw [hM]; exact hκ
+  · rw [← Cardinal.eq, hM, hN]
 
 中文:
 定理 ACF_categorical
@@ -387,7 +401,15 @@ theorem ACF_categorical
   have := charP_of_model_fieldOfChar p M
   let _ := fieldOfModelACF p N
   have := modelField_of_modelACF p N
-  let _ := compati
+  let _ := compatibleRingOfModelField N
+  have := isAlgClosed_of_model_ACF p N
+  have := charP_of_model_fieldOfChar p N
+  constructor
+  refine languageEquivEquivRingEquiv.symm ?_
+  apply Classical.choice
+  refine IsAlgClosed.ringEquiv_of_equiv_of_char_eq p ?_ ?_
+  · rw [hM]; exact hκ
+  · rw [← Cardinal.eq, hM, hN]
 
 Depends on / 依赖: Classical, Classical.choice, IsAlgClosed, IsAlgClosed.ringEquiv_of_equiv_of_c, charP_of_model_fieldOfChar, choice, compatibleRingOfModelField, fieldOfModelACF, isAlgClosed_of_model_ACF, languageEquivEquivRingEquiv, languageEquivEquivRingEquiv.symm, modelField_of_modelACF, ringEquiv_of_equiv_of_c
 -/
@@ -425,7 +447,11 @@ theorem ACF_isComplete
     exact le_trans (le_of_lt (lt_aleph0_of_finite _)) (Order.le_succ _)
   · exact ACF_isSatisfiable hp
   · rintro ⟨M⟩
-    let _ := fieldO
+    let _ := fieldOfModelACF p M
+    have := modelField_of_modelACF p M
+    let _ := compatibleRingOfModelField M
+    have := isAlgClosed_of_model_ACF p M
+    infer_instance
 
 中文:
 定理 ACF_isComplete
@@ -438,7 +464,11 @@ theorem ACF_isComplete
     exact le_trans (le_of_lt (lt_aleph0_of_finite _)) (Order.le_succ _)
   · exact ACF_isSatisfiable hp
   · rintro ⟨M⟩
-    let _ := fieldO
+    let _ := fieldOfModelACF p M
+    have := modelField_of_modelACF p M
+    let _ := compatibleRingOfModelField M
+    have := isAlgClosed_of_model_ACF p M
+    infer_instance
 
 Depends on / 依赖: ACF_categorical, ACF_isSatisfiable, Categorical, Categorical.isComplete, Order.le_succ, Order.lt_succ, Order.succ, card_ring, compatibleRingOfModelField, fieldOfModelACF, infer_instance, isAlgClosed_of_model_ACF, isComplete, le_of_lt, le_succ, le_trans, lift_id, lt_aleph0_of_finite, lt_succ, modelField_of_modelACF
 -/
@@ -469,7 +499,35 @@ theorem finite_ACF_prime_not_realize_of_ACF_zero_realize
   have f : forall ψ in Theory.ACF 0,
       { s : Finset Nat.Primes // forall q : Nat.Primes, q ∉ s -> Theory.ACF q ⊨ᵇ ψ } := by
     intro ψ hψ
-    rw [Theory.ACF]; rw [Theory.fieldOfChar]; rw [Set.union_right_comm]; rw [Set.
+    rw [Theory.ACF]; rw [Theory.fieldOfChar]; rw [Set.union_right_comm]; rw [Set.mem_union]; rw [if_pos rfl]; rw [Set.mem_image] at hψ
+    apply Classical.choice
+    rcases hψ with h | ⟨p, hp, rfl⟩
+    · refine ⟨⟨∅, ?_⟩⟩
+      intro q _
+      exact Theory.models_sentence_of_mem
+        (by rw [Theory.ACF, Theory.fieldOfChar, Set.union_right_comm];
+            exact Set.mem_union_left _ h)
+    · refine ⟨⟨{⟨p, hp⟩}, ?_⟩⟩
+      rintro ⟨q, _⟩ hq ⟨K⟩ _ _
+      have hqp : q != p := by simpa [← Nat.Primes.coe_nat_inj] using hq
+      let _ := fieldOfModelACF q K
+      have := modelField_of_modelACF q K
+      let _ := compatibleRingOfModelField K
+      have := charP_of_model_fieldOfChar q K
+      simp only [eqZero, Term.equal, BoundedFormula.realize_not, BoundedFormula.realize_bdEqual,
+        Term.realize_relabel, Sum.elim_comp_inl, realize_termOfFreeCommRing, map_natCast,
+        realize_zero, ← CharP.charP_iff_prime_eq_zero hp]
+      intro _
+exact hqp CharP.eq K this inferInstance
+  let s : Finset Nat.Primes := T0.attach.biUnion (fun φ => f φ.1 (hT0 φ.2))
+  have hs : forall (p : Nat.Primes) ψ, ψ in T0 -> p ∉ s -> Theory.ACF p ⊨ᵇ ψ := by
+    intro p ψ hψ hpψ
+    simp only [s, Finset.mem_biUnion, Finset.mem_attach, true_and,
+      Subtype.exists, not_exists] at hpψ
+    exact (f ψ (hT0 hψ)).2 p (hpψ _ hψ)
+  refine Set.Finite.subset (Finset.finite_toSet s) (Set.compl_subset_comm.2 ?_)
+  intro p hp
+  exact Theory.models_of_models_theory (fun ψ hψ => hs p ψ hψ hp) h
 
 中文:
 定理 finite_ACF_prime_not_realize_of_ACF_zero_realize
@@ -479,7 +537,35 @@ theorem finite_ACF_prime_not_realize_of_ACF_zero_realize
   have f : forall ψ in Theory.ACF 0,
       { s : Finset Nat.Primes // forall q : Nat.Primes, q ∉ s -> Theory.ACF q ⊨ᵇ ψ } := by
     intro ψ hψ
-    rw [Theory.ACF]; rw [Theory.fieldOfChar]; rw [Set.union_right_comm]; rw [Set.
+    rw [Theory.ACF]; rw [Theory.fieldOfChar]; rw [Set.union_right_comm]; rw [Set.mem_union]; rw [if_pos rfl]; rw [Set.mem_image] at hψ
+    apply Classical.choice
+    rcases hψ with h | ⟨p, hp, rfl⟩
+    · refine ⟨⟨∅, ?_⟩⟩
+      intro q _
+      exact Theory.models_sentence_of_mem
+        (by rw [Theory.ACF, Theory.fieldOfChar, Set.union_right_comm];
+            exact Set.mem_union_left _ h)
+    · refine ⟨⟨{⟨p, hp⟩}, ?_⟩⟩
+      rintro ⟨q, _⟩ hq ⟨K⟩ _ _
+      have hqp : q != p := by simpa [← Nat.Primes.coe_nat_inj] using hq
+      let _ := fieldOfModelACF q K
+      have := modelField_of_modelACF q K
+      let _ := compatibleRingOfModelField K
+      have := charP_of_model_fieldOfChar q K
+      simp only [eqZero, Term.equal, BoundedFormula.realize_not, BoundedFormula.realize_bdEqual,
+        Term.realize_relabel, Sum.elim_comp_inl, realize_termOfFreeCommRing, map_natCast,
+        realize_zero, ← CharP.charP_iff_prime_eq_zero hp]
+      intro _
+exact hqp CharP.eq K this inferInstance
+  let s : Finset Nat.Primes := T0.attach.biUnion (fun φ => f φ.1 (hT0 φ.2))
+  have hs : forall (p : Nat.Primes) ψ, ψ in T0 -> p ∉ s -> Theory.ACF p ⊨ᵇ ψ := by
+    intro p ψ hψ hpψ
+    simp only [s, Finset.mem_biUnion, Finset.mem_attach, true_and,
+      Subtype.exists, not_exists] at hpψ
+    exact (f ψ (hT0 hψ)).2 p (hpψ _ hψ)
+  refine Set.Finite.subset (Finset.finite_toSet s) (Set.compl_subset_comm.2 ?_)
+  intro p hp
+  exact Theory.models_of_models_theory (fun ψ hψ => hs p ψ hψ hp) h
 
 Depends on / 依赖: Classical, Classical.choice, Finset, Nat.Primes, Primes, Set.mem_image, Set.mem_union, Set.un, Set.union_right_comm, Theory, Theory.ACF, Theory.fieldOfChar, Theory.models_iff_finset_models, Theory.models_sentence_of_mem, choice, fieldOfChar, if_pos, mem_image, mem_union, models_iff_finset_models
 -/
@@ -533,7 +619,7 @@ theorem ACF_zero_realize_iff_infinite_ACF_prime_realize
     not_imp_not.1 ?_⟩
   simpa [(ACF_isComplete (Or.inr rfl)).models_not_iff,
       fun p : Nat.Primes => (ACF_isComplete (Or.inl p.2)).models_not_iff] using
-    finite_ACF_prime_not_reali
+    finite_ACF_prime_not_realize_of_ACF_zero_realize φ.not
 
 中文:
 定理 ACF_zero_realize_iff_infinite_ACF_prime_realize
@@ -544,7 +630,7 @@ theorem ACF_zero_realize_iff_infinite_ACF_prime_realize
     not_imp_not.1 ?_⟩
   simpa [(ACF_isComplete (Or.inr rfl)).models_not_iff,
       fun p : Nat.Primes => (ACF_isComplete (Or.inl p.2)).models_not_iff] using
-    finite_ACF_prime_not_reali
+    finite_ACF_prime_not_realize_of_ACF_zero_realize φ.not
 
 Depends on / 依赖: ACF_isComplete, Nat.Primes, Or.inl, Or.inr, Primes, Set.infinite_of_finite_compl, finite_ACF_prime_not_realize_of_ACF_zero_realize, infinite_of_finite_compl, models_not_iff, not_imp_not
 -/

@@ -86,7 +86,11 @@ definition equivOfTranscendenceBasis
   have e : Algebra.adjoin R (Set.range v) ≃+* Algebra.adjoin R (Set.range w) := by
     refine hv.1.aevalEquiv.symm.toRingEquiv.trans ?_
     refine (AlgEquiv.ofAlgHom (MvPolynomial.rename e)
-     
+      (MvPolynomial.rename e.symm) ?_ ?_).toRingEquiv.trans ?_
+    · ext; simp
+    · ext; simp
+    exact hw.1.aevalEquiv.toRingEquiv
+  exact IsAlgClosure.equivOfEquiv K L e
 
 中文:
 定义 equivOfTranscendenceBasis
@@ -97,7 +101,11 @@ definition equivOfTranscendenceBasis
   have e : Algebra.adjoin R (Set.range v) ≃+* Algebra.adjoin R (Set.range w) := by
     refine hv.1.aevalEquiv.symm.toRingEquiv.trans ?_
     refine (AlgEquiv.ofAlgHom (MvPolynomial.rename e)
-     
+      (MvPolynomial.rename e.symm) ?_ ?_).toRingEquiv.trans ?_
+    · ext; simp
+    · ext; simp
+    exact hw.1.aevalEquiv.toRingEquiv
+  exact IsAlgClosure.equivOfEquiv K L e
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, Algebra, Algebra.adjoin, IsAlgClosure, IsAlgClosure.equivOfEquiv, MvPolynomial, MvPolynomial.rename, Set.range, adjoin, aevalEquiv, aevalEquiv.symm.toRingEquiv.trans, aevalEquiv.toRingEquiv, e.symm, equivOfEquiv, isAlgClosure_of_transcendence_basis, ofAlgHom, toRingEquiv, toRingEquiv.trans
 -/
@@ -137,7 +145,11 @@ theorem cardinal_le_max_transcendence_basis
         (max #(Algebra.adjoin R (Set.range v)) ℵ₀) := by
       let := isAlgClosure_of_transcendence_basis v hv
       simpa using Algebra.IsAlgebraic.cardinalMk_le_max (Algebra.adjoin R (Set.range v)) K
-    _ = Cardinal.lift.{v} (max #(Mv
+    _ = Cardinal.lift.{v} (max #(MvPolynomial ι R) ℵ₀) := by
+      rw [lift_max]; rw [← Cardinal.lift_mk_eq.2 ⟨hv.1.aevalEquiv.toEquiv⟩]; rw [lift_aleph0]; rw [← lift_aleph0.{max u v w]; rw [max u w}]; rw [← lift_max]; rw [lift_umax.{max u w]; rw [v}]
+    _ <= Cardinal.lift.{v} (max (max (max (Cardinal.lift #R) (Cardinal.lift #ι)) ℵ₀) ℵ₀) :=
+        lift_le.2 (max_le_max MvPolynomial.cardinalMk_le_max_lift le_rfl)
+    _ = _ := by simp
 
 中文:
 定理 cardinal_le_max_transcendence_basis
@@ -147,7 +159,11 @@ theorem cardinal_le_max_transcendence_basis
         (max #(Algebra.adjoin R (Set.range v)) ℵ₀) := by
       let := isAlgClosure_of_transcendence_basis v hv
       simpa using Algebra.IsAlgebraic.cardinalMk_le_max (Algebra.adjoin R (Set.range v)) K
-    _ = Cardinal.lift.{v} (max #(Mv
+    _ = Cardinal.lift.{v} (max #(MvPolynomial ι R) ℵ₀) := by
+      rw [lift_max]; rw [← Cardinal.lift_mk_eq.2 ⟨hv.1.aevalEquiv.toEquiv⟩]; rw [lift_aleph0]; rw [← lift_aleph0.{max u v w]; rw [max u w}]; rw [← lift_max]; rw [lift_umax.{max u w]; rw [v}]
+    _ <= Cardinal.lift.{v} (max (max (max (Cardinal.lift #R) (Cardinal.lift #ι)) ℵ₀) ℵ₀) :=
+        lift_le.2 (max_le_max MvPolynomial.cardinalMk_le_max_lift le_rfl)
+    _ = _ := by simp
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.cardinalMk_le_max, Algebra.adjoin, Cardinal, Cardinal.lif, Cardinal.lift, Cardinal.lift_mk_eq, IsAlgebraic, MvPolynomial, Set.range, adjoin, aevalEquiv, aevalEquiv.toEquiv, cardinalMk_le_max, isAlgClosure_of_transcendence_basis, lift_aleph0, lift_max, lift_mk_eq, lift_umax, toEquiv
 -/
@@ -196,7 +212,20 @@ theorem cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt
 (show ℵ₀ < Cardinal.lift.{max u w} #K by simpa)
     calc
       Cardinal.lift.{max u w, v} #K <= max (max (Cardinal.lift.{max v w, u} #R)
-        (Cardinal.lift.{max u v, w} #ι)) ℵ₀ := cardinal_le_max_transcendence_basis v 
+        (Cardinal.lift.{max u v, w} #ι)) ℵ₀ := cardinal_le_max_transcendence_basis v hv
+      _ <= _ := max_le (max_le (by simpa) (by simpa using le_of_lt h)) le_rfl
+  suffices Cardinal.lift.{max u w} #K = Cardinal.lift.{max u v} #ι
+    from Cardinal.lift_injective.{u, max v w} (by simpa)
+  le_antisymm
+    (calc
+      Cardinal.lift.{max u w} #K <= max (max
+        (Cardinal.lift.{max v w} #R) (Cardinal.lift.{max u v} #ι)) ℵ₀ :=
+        cardinal_le_max_transcendence_basis v hv
+      _ = Cardinal.lift #ι := by
+        rw [max_eq_left]; rw [max_eq_right]
+        · exact le_trans (by simpa using hR) this
+        · exact le_max_of_le_right this)
+    (lift_mk_le.2 ⟨⟨v, hv.1.injective⟩⟩)
 
 中文:
 定理 cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt
@@ -205,7 +234,20 @@ theorem cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt
 (show ℵ₀ < Cardinal.lift.{max u w} #K by simpa)
     calc
       Cardinal.lift.{max u w, v} #K <= max (max (Cardinal.lift.{max v w, u} #R)
-        (Cardinal.lift.{max u v, w} #ι)) ℵ₀ := cardinal_le_max_transcendence_basis v 
+        (Cardinal.lift.{max u v, w} #ι)) ℵ₀ := cardinal_le_max_transcendence_basis v hv
+      _ <= _ := max_le (max_le (by simpa) (by simpa using le_of_lt h)) le_rfl
+  suffices Cardinal.lift.{max u w} #K = Cardinal.lift.{max u v} #ι
+    from Cardinal.lift_injective.{u, max v w} (by simpa)
+  le_antisymm
+    (calc
+      Cardinal.lift.{max u w} #K <= max (max
+        (Cardinal.lift.{max v w} #R) (Cardinal.lift.{max u v} #ι)) ℵ₀ :=
+        cardinal_le_max_transcendence_basis v hv
+      _ = Cardinal.lift #ι := by
+        rw [max_eq_left]; rw [max_eq_right]
+        · exact le_trans (by simpa using hR) this
+        · exact le_max_of_le_right this)
+    (lift_mk_le.2 ⟨⟨v, hv.1.injective⟩⟩)
 
 Depends on / 依赖: Cardina, Cardinal, Cardinal.lift, Cardinal.lift_injective, cardinal_le_max_transcendence_basis, le_antisymm, le_of_lt, le_of_not_gt, le_rfl, lift_injective, max_le, not_le_of_gt
 -/
@@ -268,7 +310,12 @@ theorem ringEquiv_of_equiv_of_charZero
   have hL : ℵ₀ < #L := by
     rwa [← aleph0_lt_lift.{v, u}, ← lift_mk_eq'.2 hKL, aleph0_lt_lift]
   have : Cardinal.lift.{v} #s = Cardinal.lift.{u} #t := by
-    rw [← lift_injective (cardina
+    rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        hs (le_of_eq mk_int) hK)]; rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        ht (le_of_eq mk_int) hL)]
+    exact Cardinal.lift_mk_eq'.2 hKL
+  obtain ⟨e⟩ := Cardinal.lift_mk_eq'.1 this
+  exact ⟨equivOfTranscendenceBasis _ _ e hs ht⟩
 
 中文:
 定理 ringEquiv_of_equiv_of_charZero
@@ -279,7 +326,12 @@ theorem ringEquiv_of_equiv_of_charZero
   have hL : ℵ₀ < #L := by
     rwa [← aleph0_lt_lift.{v, u}, ← lift_mk_eq'.2 hKL, aleph0_lt_lift]
   have : Cardinal.lift.{v} #s = Cardinal.lift.{u} #t := by
-    rw [← lift_injective (cardina
+    rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        hs (le_of_eq mk_int) hK)]; rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        ht (le_of_eq mk_int) hL)]
+    exact Cardinal.lift_mk_eq'.2 hKL
+  obtain ⟨e⟩ := Cardinal.lift_mk_eq'.1 this
+  exact ⟨equivOfTranscendenceBasis _ _ e hs ht⟩
 
 Depends on / 依赖: Cardinal, Cardinal.lift, Cardinal.lift_mk_eq, aleph0_lt_lift, cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt, exists_isTranscendenceBasis, le_of_eq, lift_injective, lift_mk_eq, mk_int
 -/
@@ -309,7 +361,14 @@ theorem ringEquiv_of_Cardinal_eq_of_charP
   obtain ⟨s, hs⟩ := exists_isTranscendenceBasis (ZMod p) K
   obtain ⟨t, ht⟩ := exists_isTranscendenceBasis (ZMod p) L
   have hL : ℵ₀ < #L := by
-    rwa [← aleph0_lt_lift.{v, u}, ← lift_mk_eq'.2 hKL, alep
+    rwa [← aleph0_lt_lift.{v, u}, ← lift_mk_eq'.2 hKL, aleph0_lt_lift]
+  have : Cardinal.lift.{v} #s = Cardinal.lift.{u} #t := by
+    rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        hs (le_of_lt (lt_aleph0_of_finite _)) hK)]; rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        ht (le_of_lt (lt_aleph0_of_finite _)) hL)]
+    exact Cardinal.lift_mk_eq'.2 hKL
+  obtain ⟨e⟩ := Cardinal.lift_mk_eq'.1 this
+  exact ⟨equivOfTranscendenceBasis _ _ e hs ht⟩
 
 中文:
 定理 ringEquiv_of_Cardinal_eq_of_charP
@@ -320,7 +379,14 @@ theorem ringEquiv_of_Cardinal_eq_of_charP
   obtain ⟨s, hs⟩ := exists_isTranscendenceBasis (ZMod p) K
   obtain ⟨t, ht⟩ := exists_isTranscendenceBasis (ZMod p) L
   have hL : ℵ₀ < #L := by
-    rwa [← aleph0_lt_lift.{v, u}, ← lift_mk_eq'.2 hKL, alep
+    rwa [← aleph0_lt_lift.{v, u}, ← lift_mk_eq'.2 hKL, aleph0_lt_lift]
+  have : Cardinal.lift.{v} #s = Cardinal.lift.{u} #t := by
+    rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        hs (le_of_lt (lt_aleph0_of_finite _)) hK)]; rw [← lift_injective (cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt _
+        ht (le_of_lt (lt_aleph0_of_finite _)) hL)]
+    exact Cardinal.lift_mk_eq'.2 hKL
+  obtain ⟨e⟩ := Cardinal.lift_mk_eq'.1 this
+  exact ⟨equivOfTranscendenceBasis _ _ e hs ht⟩
 -/
 private theorem ringEquiv_of_Cardinal_eq_of_charP (p : Nat) [Fact p.Prime] [CharP K p] [CharP L p]
     (hK : ℵ₀ < #K) (hKL : Nonempty (K ≃ L)) : Nonempty (K ≃+* L) := by
@@ -351,7 +417,7 @@ theorem ringEquiv_of_equiv_of_char_eq
   · simp only [hp] at *
     let : CharZero K := CharP.charP_to_charZero K
     let : CharZero L := CharP.charP_to_charZero L
-    exact ringEquiv_of_equiv_of_
+    exact ringEquiv_of_equiv_of_charZero hK hKL
 
 中文:
 定理 ringEquiv_of_equiv_of_char_eq
@@ -363,7 +429,7 @@ theorem ringEquiv_of_equiv_of_char_eq
   · simp only [hp] at *
     let : CharZero K := CharP.charP_to_charZero K
     let : CharZero L := CharP.charP_to_charZero L
-    exact ringEquiv_of_equiv_of_
+    exact ringEquiv_of_equiv_of_charZero hK hKL
 
 Depends on / 依赖: CharP.charP_to_charZero, CharP.char_is_prime_or_zero, CharZero, charP_to_charZero, char_is_prime_or_zero, p.Prime, ringEquiv_of_Cardinal_eq_of_charP, ringEquiv_of_equiv_of_charZero
 -/

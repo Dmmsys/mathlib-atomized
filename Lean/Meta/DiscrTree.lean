@@ -29,7 +29,13 @@ definition getSubexpressionMatches
 pure acc ++ (← d.getSubexpressionMatches (← inferType arg)))
         (← d.getSubexpressionMatches body).reverse)
   | .lam _ _ _ _
-  | .letE _ _ _ _ _ => lam
+  | .letE _ _ _ _ _ => lambdaLetTelescope e (fun args body => do
+      args.foldlM (fun acc arg => do
+pure acc ++ (← d.getSubexpressionMatches (← inferType arg)))
+        (← d.getSubexpressionMatches body).reverse)
+  | _ =>
+    e.foldlM (fun a f => do
+pure a ++ (← d.getSubexpressionMatches f)) (← d.getMatch e).reverse
 
 中文:
 定义 getSubexpressionMatches
@@ -42,7 +48,13 @@ pure acc ++ (← d.getSubexpressionMatches (← inferType arg)))
 pure acc ++ (← d.getSubexpressionMatches (← inferType arg)))
         (← d.getSubexpressionMatches body).reverse)
   | .lam _ _ _ _
-  | .letE _ _ _ _ _ => lam
+  | .letE _ _ _ _ _ => lambdaLetTelescope e (fun args body => do
+      args.foldlM (fun acc arg => do
+pure acc ++ (← d.getSubexpressionMatches (← inferType arg)))
+        (← d.getSubexpressionMatches body).reverse)
+  | _ =>
+    e.foldlM (fun a f => do
+pure a ++ (← d.getSubexpressionMatches f)) (← d.getMatch e).reverse
 -/
 partial def getSubexpressionMatches {α : Type}
     (d : DiscrTree α) (e : Expr) : MetaM (Array α) := do

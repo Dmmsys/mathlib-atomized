@@ -195,7 +195,10 @@ definition comparisonN
     _ ≅ N ⋙ (toKaroubiEquivalence _).functor ⋙ (toKaroubiEquivalence _).inverse :=
           Functor.isoWhiskerLeft _ (toKaroubiEquivalence _).unitIso
     _ ≅ (N ⋙ (toKaroubiEquivalence _).functor) ⋙ (toKaroubiEquivalence _).inverse :=
-          Iso.refl 
+          Iso.refl _
+    _ ≅ N₁ ⋙ (toKaroubiEquivalence _).inverse :=
+          Functor.isoWhiskerRight (N₁_iso_normalizedMooreComplex_comp_toKaroubi A).symm _
+    _ ≅ Idempotents.DoldKan.N := Iso.refl _
 
 中文:
 定义 comparisonN
@@ -205,7 +208,10 @@ definition comparisonN
     _ ≅ N ⋙ (toKaroubiEquivalence _).functor ⋙ (toKaroubiEquivalence _).inverse :=
           Functor.isoWhiskerLeft _ (toKaroubiEquivalence _).unitIso
     _ ≅ (N ⋙ (toKaroubiEquivalence _).functor) ⋙ (toKaroubiEquivalence _).inverse :=
-          Iso.refl 
+          Iso.refl _
+    _ ≅ N₁ ⋙ (toKaroubiEquivalence _).inverse :=
+          Functor.isoWhiskerRight (N₁_iso_normalizedMooreComplex_comp_toKaroubi A).symm _
+    _ ≅ Idempotents.DoldKan.N := Iso.refl _
 
 Depends on / 依赖: DoldKan, Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Functor.leftUnitor, Idempotents, Idempotents.DoldKan.N, Iso.refl, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, toKaroubiEquivalence, unitIso
 -/

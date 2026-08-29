@@ -195,7 +195,13 @@ lemma setBernoulli_ae_subset
   · simp [*]
   calc
     setBer(u, p) ({s | i in s} inter {s | i ∉ u})
-    _ = setBer(u, p) {s | i i
+    _ = setBer(u, p) {s | i in s} := by simp [hi]
+    _ = infinitePi (fun i => toNNReal p • dirac (i in u) + toNNReal (σ p) • dirac False)
+          (cylinder {i} {fun _ => True}) := by
+      rw [setBernoulli_apply']; congr!; ext; simp [funext_iff]
+    _ = 0 := by simp [infinitePi_cylinder, hi]
+
+@[simp]
 
 中文:
 引理 setBernoulli_ae_subset
@@ -208,7 +214,13 @@ lemma setBernoulli_ae_subset
   · simp [*]
   calc
     setBer(u, p) ({s | i in s} inter {s | i ∉ u})
-    _ = setBer(u, p) {s | i i
+    _ = setBer(u, p) {s | i in s} := by simp [hi]
+    _ = infinitePi (fun i => toNNReal p • dirac (i in u) + toNNReal (σ p) • dirac False)
+          (cylinder {i} {fun _ => True}) := by
+      rw [setBernoulli_apply']; congr!; ext; simp [funext_iff]
+    _ = 0 := by simp [infinitePi_cylinder, hi]
+
+@[simp]
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually, Set.compl_ofPred, Set.not_subset_iff_exists_mem_notMem, Set.ofPred_and, Set.ofPred_exists, compl_ofPred, cylinder, funext_iff, infinitePi, measure_iUnion_null_iff, mem_ae_iff, not_subset_iff_exists_mem_notMem, ofPred_and, ofPred_exists, setBer, setBernoulli_apply, toNNReal
 -/
@@ -309,7 +321,14 @@ lemma setBernoulli_singleton
     _ = ∏' i, ((if i in u ↔ i in s then (toNNReal p : Real>=0∞) else 0) +
           if i in s then 0 else (toNNReal (σ p) : Real>=0∞)) := by
       simp [setBernoulli_apply, Set.image_singleton, Set.indicator]
-    _ = ∏ i in u, 
+    _ = ∏ i in u, (if i in s then (toNNReal p : Real>=0∞) else (toNNReal (σ p) : Real>=0∞)) := by
+      rw [tprod_eq_prod]; rw [Finset.prod_congr rfl] <;>
+        simp +contextual [ite_add_ite, mt (@hsu _), ← ENNReal.coe_add]
+    _ = toNNReal p ^ s.ncard * toNNReal (σ p) ^ (↑u \ s).ncard := by
+      simp [Finset.prod_ite, ← Set.ncard_coe_finset, Set.ofPred_and,
+        Set.inter_eq_right.2 hsu, ← Set.compl_ofPred, Set.sdiff_eq_compl_inter, Set.inter_comm]
+
+@[simp]
 
 中文:
 引理 setBernoulli_singleton
@@ -322,7 +341,14 @@ lemma setBernoulli_singleton
     _ = ∏' i, ((if i in u ↔ i in s then (toNNReal p : Real>=0∞) else 0) +
           if i in s then 0 else (toNNReal (σ p) : Real>=0∞)) := by
       simp [setBernoulli_apply, Set.image_singleton, Set.indicator]
-    _ = ∏ i in u, 
+    _ = ∏ i in u, (if i in s then (toNNReal p : Real>=0∞) else (toNNReal (σ p) : Real>=0∞)) := by
+      rw [tprod_eq_prod]; rw [Finset.prod_congr rfl] <;>
+        simp +contextual [ite_add_ite, mt (@hsu _), ← ENNReal.coe_add]
+    _ = toNNReal p ^ s.ncard * toNNReal (σ p) ^ (↑u \ s).ncard := by
+      simp [Finset.prod_ite, ← Set.ncard_coe_finset, Set.ofPred_and,
+        Set.inter_eq_right.2 hsu, ← Set.compl_ofPred, Set.sdiff_eq_compl_inter, Set.inter_comm]
+
+@[simp]
 -/
 @[simp] lemma setBernoulli_singleton (hsu : s subseteq u) (hu : u.Finite) :
     setBer(u, p) {s} = toNNReal p ^ s.ncard * toNNReal (σ p) ^ (u \ s).ncard := by
@@ -372,7 +398,13 @@ lemma map_ncard_setBernoulli_real_singleton
   have : {s subseteq u | s.ncard in ({k} : Set Nat)}.Finite := hu.finite_subsets.subset (by grind)
   rw [measureReal_def]; rw [map_ncard_setBernoulli_apply]; rw [← measureReal_def]; rw [← Set.biUnion_of_singleton (Set.ofPred _)]
   simp_rw [← this.mem_toFinset]
-  rw [measureReal_biUnion_finset (by
+  rw [measureReal_biUnion_finset (by simp) (by simp)]
+  have h1 s (hs : s in this.toFinset) :
+      setBer(u, p).real {s} = p ^ k * (1 - p) ^ (u.ncard - k) := by
+    simp only [Set.mem_singleton_iff, Set.Finite.mem_toFinset, Set.mem_ofPred_eq] at hs
+    rw [setBernoulli_real_singleton _ hs.1 hu]; rw [Set.ncard_sdiff' hs.1 hu]; rw [hs.2]
+  rw [Finset.sum_congr rfl h1]; rw [Finset.sum_const]; rw [nsmul_eq_mul]; rw [mul_assoc]; rw [← Set.ncard_eq_toFinset_card _ _]
+  simp [Set.ncard_powerset_ncard, hu]
 
 中文:
 引理 map_ncard_setBernoulli_real_singleton
@@ -381,7 +413,13 @@ lemma map_ncard_setBernoulli_real_singleton
   have : {s subseteq u | s.ncard in ({k} : Set Nat)}.Finite := hu.finite_subsets.subset (by grind)
   rw [measureReal_def]; rw [map_ncard_setBernoulli_apply]; rw [← measureReal_def]; rw [← Set.biUnion_of_singleton (Set.ofPred _)]
   simp_rw [← this.mem_toFinset]
-  rw [measureReal_biUnion_finset (by
+  rw [measureReal_biUnion_finset (by simp) (by simp)]
+  have h1 s (hs : s in this.toFinset) :
+      setBer(u, p).real {s} = p ^ k * (1 - p) ^ (u.ncard - k) := by
+    simp only [Set.mem_singleton_iff, Set.Finite.mem_toFinset, Set.mem_ofPred_eq] at hs
+    rw [setBernoulli_real_singleton _ hs.1 hu]; rw [Set.ncard_sdiff' hs.1 hu]; rw [hs.2]
+  rw [Finset.sum_congr rfl h1]; rw [Finset.sum_const]; rw [nsmul_eq_mul]; rw [mul_assoc]; rw [← Set.ncard_eq_toFinset_card _ _]
+  simp [Set.ncard_powerset_ncard, hu]
 
 Depends on / 依赖: Finite, Set.Finite.mem_toFinset, Set.biUnion_of_singleton, Set.mem_ofPred_eq, Set.mem_singleton_iff, Set.ofPred, biUnion_of_singleton, finite_subsets, hu.finite_subsets.subset, map_ncard_setBernoulli_apply, measureReal_biUnion_finset, measureReal_def, mem_ofPred_eq, mem_singleton_iff, mem_toFinset, ofPred, s.ncard, setBer, simp_rw, subset
 -/

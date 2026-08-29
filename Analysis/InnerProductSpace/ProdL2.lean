@@ -45,7 +45,9 @@ instance instProdInnerProductSpace
     ring
   smul_left x y r := by
     simp only [smul_fst, inner_smul_left, smul_snd]
-    rin
+    ring
+
+@[simp]
 
 中文:
 实例 instProdInnerProductSpace
@@ -60,7 +62,9 @@ instance instProdInnerProductSpace
     ring
   smul_left x y r := by
     simp only [smul_fst, inner_smul_left, smul_snd]
-    rin
+    ring
+
+@[simp]
 
 Depends on / 依赖: x.fst, x.snd, y.fst, y.snd
 -/
@@ -114,7 +118,11 @@ definition prod
     · simp
     · unfold Pairwise
       simp only [ne_eq, Basis.map_apply, Basis.prod_apply, LinearMap.coe_inl,
-        OrthonormalBasis.coe_toBasis, LinearMap.coe_inr, WithLp.coe_symm_line
+        OrthonormalBasis.coe_toBasis, LinearMap.coe_inr, WithLp.coe_symm_linearEquiv,
+        WithLp.prod_inner_apply, Sum.forall, Sum.elim_inl, Function.comp_apply, inner_zero_right,
+        add_zero, Sum.elim_inr, zero_add, Sum.inl.injEq, reduceCtorEq, not_false_eq_true,
+        inner_zero_left, imp_self, implies_true, and_true, Sum.inr.injEq, true_and]
+      exact ⟨v.orthonormal.2, w.orthonormal.2⟩)
 
 中文:
 定义 乘积
@@ -125,7 +133,11 @@ definition prod
     · simp
     · unfold Pairwise
       simp only [ne_eq, Basis.map_apply, Basis.prod_apply, LinearMap.coe_inl,
-        OrthonormalBasis.coe_toBasis, LinearMap.coe_inr, WithLp.coe_symm_line
+        OrthonormalBasis.coe_toBasis, LinearMap.coe_inr, WithLp.coe_symm_linearEquiv,
+        WithLp.prod_inner_apply, Sum.forall, Sum.elim_inl, Function.comp_apply, inner_zero_right,
+        add_zero, Sum.elim_inr, zero_add, Sum.inl.injEq, reduceCtorEq, not_false_eq_true,
+        inner_zero_left, imp_self, implies_true, and_true, Sum.inr.injEq, true_and]
+      exact ⟨v.orthonormal.2, w.orthonormal.2⟩)
 
 Depends on / 依赖: Basis.map_apply, Basis.prod_apply, Function, Function.comp_apply, LinearMap, LinearMap.coe_inl, LinearMap.coe_inr, OrthonormalBasis, OrthonormalBasis.coe_toBasis, Pairwise, Sum.elim_inl, Sum.elim_inr, Sum.forall, Sum.inl.injEq, WithLp, WithLp.coe_symm_linearEquiv, WithLp.linearEquiv, WithLp.prod_inner_apply, add_zero, and_tr
 -/
@@ -189,7 +201,9 @@ definition orthogonalDecomposition
     ≪≫ₗ (WithLp.linearEquiv 2 𝕜 (K × Kᗮ)).symm
   norm_map' _ := by
     rw [← sq_eq_sq₀ (by positivity) (by positivity)]; rw [WithLp.prod_norm_sq_eq_of_L2]; rw [K.norm_sq_eq_add_norm_sq_projection]
-    simp [starProjection_apply_eq_isComplProjection
+    simp [starProjection_apply_eq_isComplProjection]
+
+@[simp]
 
 中文:
 定义 orthogonalDecomposition
@@ -198,7 +212,9 @@ definition orthogonalDecomposition
     ≪≫ₗ (WithLp.linearEquiv 2 𝕜 (K × Kᗮ)).symm
   norm_map' _ := by
     rw [← sq_eq_sq₀ (by positivity) (by positivity)]; rw [WithLp.prod_norm_sq_eq_of_L2]; rw [K.norm_sq_eq_add_norm_sq_projection]
-    simp [starProjection_apply_eq_isComplProjection
+    simp [starProjection_apply_eq_isComplProjection]
+
+@[simp]
 
 Depends on / 依赖: K.isCompl_orthogonal, K.prodEquivOfIsCompl, isCompl_orthogonal, prodEquivOfIsCompl
 -/
@@ -376,7 +392,15 @@ definition quotientEquivOrthogonal
   body: K.quotientEquivOfIsCompl Kᗮ K.isCompl_orthogonal
   norm_map' y := by
     set f := K.quotientEquivOfIsCompl Kᗮ K.isCompl_orthogonal
-    rw [coe_norm]; rw [← norm_orthogonalProjectionOnto_apply Kᗮ (f y).2]; rw [orthogonalProjectionOnto_orthogonal]; rw [coe_norm]; rw [starProjection_minimal]; rw [eq_co
+    rw [coe_norm]; rw [← norm_orthogonalProjectionOnto_apply Kᗮ (f y).2]; rw [orthogonalProjectionOnto_orthogonal]; rw [coe_norm]; rw [starProjection_minimal]; rw [eq_comm]
+    have h : ‖Quotient.mk (f y).val‖ = sInf ((fun (x : E) => ‖(f y).val + x‖) '' K.toAddSubgroup) :=
+      quotient_norm_mk_eq K.toAddSubgroup (f y).1
+    convert! h using 2
+    · simp [f]
+    · rw [sInf_image', ← Equiv.iInf_comp (Equiv.neg K)]
+      simp
+
+@[simp]
 
 中文:
 定义 quotientEquivOrthogonal
@@ -384,7 +408,15 @@ definition quotientEquivOrthogonal
   定义体: K.quotientEquivOfIsCompl Kᗮ K.isCompl_orthogonal
   norm_map' y := by
     set f := K.quotientEquivOfIsCompl Kᗮ K.isCompl_orthogonal
-    rw [coe_norm]; rw [← norm_orthogonalProjectionOnto_apply Kᗮ (f y).2]; rw [orthogonalProjectionOnto_orthogonal]; rw [coe_norm]; rw [starProjection_minimal]; rw [eq_co
+    rw [coe_norm]; rw [← norm_orthogonalProjectionOnto_apply Kᗮ (f y).2]; rw [orthogonalProjectionOnto_orthogonal]; rw [coe_norm]; rw [starProjection_minimal]; rw [eq_comm]
+    have h : ‖Quotient.mk (f y).val‖ = sInf ((fun (x : E) => ‖(f y).val + x‖) '' K.toAddSubgroup) :=
+      quotient_norm_mk_eq K.toAddSubgroup (f y).1
+    convert! h using 2
+    · simp [f]
+    · rw [sInf_image', ← Equiv.iInf_comp (Equiv.neg K)]
+      simp
+
+@[simp]
 
 Depends on / 依赖: K.isCompl_orthogonal, K.quotientEquivOfIsCompl, isCompl_orthogonal, quotientEquivOfIsCompl
 -/
@@ -508,6 +540,7 @@ instance instQuotientInnerProductSpace
   conj_inner_symm x y := inner_conj_symm _ _
   norm_sq_eq_re_inner y := by rw [inner_self_eq_norm_sq, LinearIsometryEquiv.norm_map]
 
+@[simp]
 
 中文:
 实例 instQuotientInnerProductSpace
@@ -518,6 +551,7 @@ instance instQuotientInnerProductSpace
   conj_inner_symm x y := inner_conj_symm _ _
   norm_sq_eq_re_inner y := by rw [inner_self_eq_norm_sq, LinearIsometryEquiv.norm_map]
 
+@[simp]
 
 Depends on / 依赖: K.quotientEquivOrthogonal, quotientEquivOrthogonal
 -/

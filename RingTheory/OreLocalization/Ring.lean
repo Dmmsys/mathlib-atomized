@@ -71,7 +71,21 @@ theorem add_smul
   rcases oreDivSMulChar' (sa • r₂) r₁ (sa * s₂) s₁ with ⟨rb, sb, hb, q⟩
   rw [q]
   clear q
-  h
+  have hs₃rasb : sb * ra * s₃ in S := by
+    rw [mul_assoc]; rw [← ha]
+    norm_cast
+    apply SetLike.coe_mem
+  rw [OreLocalization.expand _ _ _ hs₃rasb]
+  have ha' : ↑((sb * sa) * s₂) = sb * ra * s₃ := by simp [ha, mul_assoc]
+  rw [← Subtype.coe_eq_of_eq_mk ha']
+  rcases oreDivSMulChar' ((sb * ra) • r₃) r₁ (sb * sa * s₂) s₁ with ⟨rc, sc, hc, hc'⟩
+  rw [hc']
+  rw [oreDiv_add_char _ _ 1 sc (by simp [mul_assoc])]
+  rw [OreLocalization.expand' (sa • r₂ + ra • r₃) (sa * s₂) (sc * sb)]
+  simp only [smul_eq_mul, one_smul, Submonoid.smul_def, mul_add, Submonoid.coe_mul] at hb hc ⊢
+  rw [mul_assoc]; rw [hb]; rw [mul_assoc]; rw [← mul_assoc _ ra]; rw [hc]; rw [← mul_assoc]; rw [← add_mul]
+  rw [OreLocalization.smul_cancel']
+  simp only [add_smul, ← mul_assoc, smul_smul]
 
 中文:
 定理 add_smul
@@ -87,7 +101,21 @@ theorem add_smul
   rcases oreDivSMulChar' (sa • r₂) r₁ (sa * s₂) s₁ with ⟨rb, sb, hb, q⟩
   rw [q]
   clear q
-  h
+  have hs₃rasb : sb * ra * s₃ in S := by
+    rw [mul_assoc]; rw [← ha]
+    norm_cast
+    apply SetLike.coe_mem
+  rw [OreLocalization.expand _ _ _ hs₃rasb]
+  have ha' : ↑((sb * sa) * s₂) = sb * ra * s₃ := by simp [ha, mul_assoc]
+  rw [← Subtype.coe_eq_of_eq_mk ha']
+  rcases oreDivSMulChar' ((sb * ra) • r₃) r₁ (sb * sa * s₂) s₁ with ⟨rc, sc, hc, hc'⟩
+  rw [hc']
+  rw [oreDiv_add_char _ _ 1 sc (by simp [mul_assoc])]
+  rw [OreLocalization.expand' (sa • r₂ + ra • r₃) (sa * s₂) (sc * sb)]
+  simp only [smul_eq_mul, one_smul, Submonoid.smul_def, mul_add, Submonoid.coe_mul] at hb hc ⊢
+  rw [mul_assoc]; rw [hb]; rw [mul_assoc]; rw [← mul_assoc _ ra]; rw [hc]; rw [← mul_assoc]; rw [← add_mul]
+  rw [OreLocalization.smul_cancel']
+  simp only [add_smul, ← mul_assoc, smul_smul]
 -/
 protected theorem add_smul (y z : R[S⁻¹]) (x : X[S⁻¹]) :
     (y + z) • x = y • x + z • x := by
@@ -229,7 +257,7 @@ lemma nsmul_eq_nsmul
   proof: OreLocalization.instModuleOfIsScalarTower (R₀ := Nat) (R := R) (X := X) (S := S)
     HSMul.hSMul (self := @instHSMul _ _ inst.toSMul) n x = n • x := by
   let inst := OreLocalization.instModuleOfIsScalarTower (R₀ := Nat) (R := R) (X := X) (S := S)
-  exact congr($(AddCommMonoid.uniqueNatModule.2 inst)
+  exact congr($(AddCommMonoid.uniqueNatModule.2 inst).smul n x)
 
 中文:
 引理 nsmul_eq_nsmul
@@ -237,7 +265,7 @@ lemma nsmul_eq_nsmul
   证明: OreLocalization.instModuleOfIsScalarTower (R₀ := Nat) (R := R) (X := X) (S := S)
     HSMul.hSMul (self := @instHSMul _ _ inst.toSMul) n x = n • x := by
   let inst := OreLocalization.instModuleOfIsScalarTower (R₀ := Nat) (R := R) (X := X) (S := S)
-  exact congr($(AddCommMonoid.uniqueNatModule.2 inst)
+  exact congr($(AddCommMonoid.uniqueNatModule.2 inst).smul n x)
 
 Depends on / 依赖: OreLocalization, OreLocalization.instModuleOfIsScalarTower, instModuleOfIsScalarTower
 -/
@@ -302,7 +330,25 @@ definition universalHom
       rw [OreLocalization.zero_def]; rw [universalMulHom_apply]
       simp
     map_add' := fun x y => by
-      simp only [RingHom.toMonoidHom_eq_co
+      simp only [RingHom.toMonoidHom_eq_coe, OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe]
+      induction x with | _ r₁ s₁
+      induction y with | _ r₂ s₂
+      rcases oreDivAddChar' r₁ r₂ s₁ s₂ with ⟨r₃, s₃, h₃, h₃'⟩
+      rw [h₃']
+      clear h₃'
+      simp only [smul_eq_mul, universalMulHom_apply, MonoidHom.coe_coe,
+        Submonoid.smul_def]
+      simp only [mul_inv_rev, map_mul, map_add, map_mul, Units.val_mul]
+      rw [mul_add]; rw [mul_assoc]; rw [← mul_assoc _ (f s₃)]; rw [hf]; rw [← Units.val_mul]
+      simp only [one_mul, inv_mul_cancel, Units.val_one]
+      congr 1
+      rw [← mul_assoc]
+      congr 1
+      norm_cast at h₃
+      have h₃' := Subtype.coe_eq_of_eq_mk h₃
+      rw [← Units.val_mul]; rw [← mul_inv_rev]; rw [← fS.map_mul]; rw [h₃']
+      rw [Units.inv_mul_eq_iff_eq_mul]; rw [Units.eq_mul_inv_iff_mul_eq]; rw [← hf]; rw [← hf]
+      simp only [map_mul] }
 
 中文:
 定义 universalHom
@@ -313,7 +359,25 @@ definition universalHom
       rw [OreLocalization.zero_def]; rw [universalMulHom_apply]
       simp
     map_add' := fun x y => by
-      simp only [RingHom.toMonoidHom_eq_co
+      simp only [RingHom.toMonoidHom_eq_coe, OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe]
+      induction x with | _ r₁ s₁
+      induction y with | _ r₂ s₂
+      rcases oreDivAddChar' r₁ r₂ s₁ s₂ with ⟨r₃, s₃, h₃, h₃'⟩
+      rw [h₃']
+      clear h₃'
+      simp only [smul_eq_mul, universalMulHom_apply, MonoidHom.coe_coe,
+        Submonoid.smul_def]
+      simp only [mul_inv_rev, map_mul, map_add, map_mul, Units.val_mul]
+      rw [mul_add]; rw [mul_assoc]; rw [← mul_assoc _ (f s₃)]; rw [hf]; rw [← Units.val_mul]
+      simp only [one_mul, inv_mul_cancel, Units.val_one]
+      congr 1
+      rw [← mul_assoc]
+      congr 1
+      norm_cast at h₃
+      have h₃' := Subtype.coe_eq_of_eq_mk h₃
+      rw [← Units.val_mul]; rw [← mul_inv_rev]; rw [← fS.map_mul]; rw [h₃']
+      rw [Units.inv_mul_eq_iff_eq_mul]; rw [Units.eq_mul_inv_iff_mul_eq]; rw [← hf]; rw [← hf]
+      simp only [map_mul] }
 
 Depends on / 依赖: MonoidH, MonoidHom, MonoidHom.toOneHom_coe, OneHom, OneHom.toFun_eq_coe, OreLocalization, OreLocalization.zero_def, RingHom, RingHom.toMonoidHom_eq_coe, f.toMonoidHom, map_add, map_zero, oreDivAddChar, smul_eq_mul, toFun_eq_coe, toMonoidHom, toMonoidHom_eq_coe, toOneHom_coe, universalMulHom, universalMulHom_apply
 -/
@@ -446,7 +510,7 @@ lemma zsmul_eq_zsmul
   proof: OreLocalization.instModuleOfIsScalarTower (R₀ := Int) (R := R) (X := X) (S := S)
     HSMul.hSMul (self := @instHSMul _ _ inst.toSMul) n x = n • x := by
   let inst := OreLocalization.instModuleOfIsScalarTower (R₀ := Int) (R := R) (X := X) (S := S)
-  exact congr($(AddCommGroup.uniqueIntModule.2 inst).
+  exact congr($(AddCommGroup.uniqueIntModule.2 inst).smul n x)
 
 中文:
 引理 zsmul_eq_zsmul
@@ -454,7 +518,7 @@ lemma zsmul_eq_zsmul
   证明: OreLocalization.instModuleOfIsScalarTower (R₀ := Int) (R := R) (X := X) (S := S)
     HSMul.hSMul (self := @instHSMul _ _ inst.toSMul) n x = n • x := by
   let inst := OreLocalization.instModuleOfIsScalarTower (R₀ := Int) (R := R) (X := X) (S := S)
-  exact congr($(AddCommGroup.uniqueIntModule.2 inst).
+  exact congr($(AddCommGroup.uniqueIntModule.2 inst).smul n x)
 
 Depends on / 依赖: OreLocalization, OreLocalization.instModuleOfIsScalarTower, instModuleOfIsScalarTower
 -/

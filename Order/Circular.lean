@@ -1157,7 +1157,14 @@ abbreviation Preorder.toCircularPreorder
   btw_refl _ := .inl ⟨le_rfl, le_rfl⟩
   btw_cyclic_left {a b c} := .rotate
   sbtw_trans_left {a b c d} := by
-    rintro (⟨hab, hbc⟩ | ⟨hbc, hca⟩ | ⟨hca, hab⟩) (⟨hbd, hdc⟩ | ⟨hdc, hcb⟩ | 
+    rintro (⟨hab, hbc⟩ | ⟨hbc, hca⟩ | ⟨hca, hab⟩) (⟨hbd, hdc⟩ | ⟨hdc, hcb⟩ | ⟨hcb, hbd⟩) <;>
+      first
+      | refine .inl ?_; constructor <;> order
+| refine .inr .inl ?_; constructor <;> order
+| refine .inr .inr ?_; constructor <;> order
+  sbtw_iff_btw_not_btw {a b c} := by
+    simp_rw [lt_iff_le_not_ge]
+    grind
 
 中文:
 缩写 预序.toCircularPreorder
@@ -1167,7 +1174,14 @@ abbreviation Preorder.toCircularPreorder
   btw_refl _ := .inl ⟨le_rfl, le_rfl⟩
   btw_cyclic_left {a b c} := .rotate
   sbtw_trans_left {a b c d} := by
-    rintro (⟨hab, hbc⟩ | ⟨hbc, hca⟩ | ⟨hca, hab⟩) (⟨hbd, hdc⟩ | ⟨hdc, hcb⟩ | 
+    rintro (⟨hab, hbc⟩ | ⟨hbc, hca⟩ | ⟨hca, hab⟩) (⟨hbd, hdc⟩ | ⟨hdc, hcb⟩ | ⟨hcb, hbd⟩) <;>
+      first
+      | refine .inl ?_; constructor <;> order
+| refine .inr .inl ?_; constructor <;> order
+| refine .inr .inr ?_; constructor <;> order
+  sbtw_iff_btw_not_btw {a b c} := by
+    simp_rw [lt_iff_le_not_ge]
+    grind
 -/
 abbrev Preorder.toCircularPreorder (α : Type*) [Preorder α] : CircularPreorder α where
   btw a b c := a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
@@ -1196,7 +1210,12 @@ abbreviation PartialOrder.toCircularPartialOrder
       · exact Or.inl (hab.antisymm hba)
       · exact Or.inl (hab.antisymm hba)
       · exact Or.inr (Or.inl <| hbc.antisymm hcb)
-    
+      · exact Or.inr (Or.inl <| hbc.antisymm hcb)
+      · exact Or.inr (Or.inr <| hca.antisymm hac)
+      · exact Or.inr (Or.inl <| hbc.antisymm hcb)
+      · exact Or.inl (hab.antisymm hba)
+      · exact Or.inl (hab.antisymm hba)
+      · exact Or.inr (Or.inr <| hca.antisymm hac) }
 
 中文:
 缩写 偏序.toCircularPartialOrder
@@ -1207,7 +1226,12 @@ abbreviation PartialOrder.toCircularPartialOrder
       · exact Or.inl (hab.antisymm hba)
       · exact Or.inl (hab.antisymm hba)
       · exact Or.inr (Or.inl <| hbc.antisymm hcb)
-    
+      · exact Or.inr (Or.inl <| hbc.antisymm hcb)
+      · exact Or.inr (Or.inr <| hca.antisymm hac)
+      · exact Or.inr (Or.inl <| hbc.antisymm hcb)
+      · exact Or.inl (hab.antisymm hba)
+      · exact Or.inl (hab.antisymm hba)
+      · exact Or.inr (Or.inr <| hca.antisymm hac) }
 
 Depends on / 依赖: Or.inl, Or.inr, Preorder, Preorder.toCircularPreorder, antisymm, btw_antisymm, hab.antisymm, hbc.antisymm, hca.an, hca.antisymm, toCircularPreorder
 -/
@@ -1237,7 +1261,12 @@ abbreviation LinearOrder.toCircularOrder
         rcases le_total c a with hca | hac
       · exact Or.inl (Or.inl ⟨hab, hbc⟩)
       · exact Or.inl (Or.inl ⟨hab, hbc⟩)
-      · exact
+      · exact Or.inl (Or.inr <| Or.inr ⟨hca, hab⟩)
+      · exact Or.inr (Or.inr <| Or.inr ⟨hac, hcb⟩)
+      · exact Or.inl (Or.inr <| Or.inl ⟨hbc, hca⟩)
+      · exact Or.inr (Or.inr <| Or.inl ⟨hba, hac⟩)
+      · exact Or.inr (Or.inl ⟨hcb, hba⟩)
+      · exact Or.inr (Or.inr <| Or.inl ⟨hba, hac⟩) }
 
 中文:
 缩写 线性序.toCircularOrder
@@ -1248,7 +1277,12 @@ abbreviation LinearOrder.toCircularOrder
         rcases le_total c a with hca | hac
       · exact Or.inl (Or.inl ⟨hab, hbc⟩)
       · exact Or.inl (Or.inl ⟨hab, hbc⟩)
-      · exact
+      · exact Or.inl (Or.inr <| Or.inr ⟨hca, hab⟩)
+      · exact Or.inr (Or.inr <| Or.inr ⟨hac, hcb⟩)
+      · exact Or.inl (Or.inr <| Or.inl ⟨hbc, hca⟩)
+      · exact Or.inr (Or.inr <| Or.inl ⟨hba, hac⟩)
+      · exact Or.inr (Or.inl ⟨hcb, hba⟩)
+      · exact Or.inr (Or.inr <| Or.inl ⟨hba, hac⟩) }
 
 Depends on / 依赖: Or.inl, Or.inr, PartialOrder, PartialOrder.toCircularPartialOrder, btw_total, le_total, toCircularPartialOrder
 -/

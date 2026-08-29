@@ -197,13 +197,21 @@ English:
 theorem mk_mem_carrier
   given: (z : HomogeneousLocalization.NumDenSameDeg 𝒜 (.powers f))
   proof: by
-  rw [carrier]; rw [Ideal.mem_comap]; rw [HomogeneousLocalization.algebraMap_apply]; rw [HomogeneousLocalization.val_mk]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_comm]; rw [Ideal.unit_mul_mem_iff_mem]; rw [← Ideal.mem_under]; rw [IsLocalization.under_map_of_is
+  rw [carrier]; rw [Ideal.mem_comap]; rw [HomogeneousLocalization.algebraMap_apply]; rw [HomogeneousLocalization.val_mk]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_comm]; rw [Ideal.unit_mul_mem_iff_mem]; rw [← Ideal.mem_under]; rw [IsLocalization.under_map_of_isPrime_disjoint (.powers f)]
+  · rfl
+  · infer_instance
+  · exact (disjoint_powers_iff_notMem_of_isPrime _).mpr x.2
+  · exact isUnit_of_invertible _
 
 中文:
 定理 mk_mem_carrier
   条件: (z : HomogeneousLocalization.NumDenSameDeg 𝒜 (.powers f))
   证明: by
-  rw [carrier]; rw [Ideal.mem_comap]; rw [HomogeneousLocalization.algebraMap_apply]; rw [HomogeneousLocalization.val_mk]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_comm]; rw [Ideal.unit_mul_mem_iff_mem]; rw [← Ideal.mem_under]; rw [IsLocalization.under_map_of_is
+  rw [carrier]; rw [Ideal.mem_comap]; rw [HomogeneousLocalization.algebraMap_apply]; rw [HomogeneousLocalization.val_mk]; rw [Localization.mk_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_comm]; rw [Ideal.unit_mul_mem_iff_mem]; rw [← Ideal.mem_under]; rw [IsLocalization.under_map_of_isPrime_disjoint (.powers f)]
+  · rfl
+  · infer_instance
+  · exact (disjoint_powers_iff_notMem_of_isPrime _).mpr x.2
+  · exact isUnit_of_invertible _
 
 Depends on / 依赖: HomogeneousLocalization, HomogeneousLocalization.algebraMap_apply, HomogeneousLocalization.val_mk, Ideal.mem_comap, Ideal.mem_under, Ideal.unit_mul_mem_iff_mem, IsLocalization, IsLocalization.mk, IsLocalization.under_map_of_isPrime_disjoint, Localization, Localization.mk_eq_mk, _eq_mul_mk, _one, algebraMap_apply, carrier, disjoint_powers_iff_notMem_of_isPrime, infer_instance, isUnit_of_invertible, mem_comap, mem_under
 -/
@@ -310,7 +318,7 @@ definition toSpec
       rintro _ ⟨x, rfl⟩
       obtain ⟨x, rfl⟩ := Quotient.mk''_surjective x
       rw [ToSpec.preimage_basicOpen]
-      exact (pbo (x.num : A)).2.preimage continu
+      exact (pbo (x.num : A)).2.preimage continuous_subtype_val }
 
 中文:
 定义 toSpec
@@ -322,7 +330,7 @@ definition toSpec
       rintro _ ⟨x, rfl⟩
       obtain ⟨x, rfl⟩ := Quotient.mk''_surjective x
       rw [ToSpec.preimage_basicOpen]
-      exact (pbo (x.num : A)).2.preimage continu
+      exact (pbo (x.num : A)).2.preimage continuous_subtype_val }
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.isTopologicalBasis_basic_opens.continuous_iff, Quotient, Quotient.mk, ToSpec, ToSpec.preimage_basicOpen, ToSpec.toFun, TopCat, TopCat.ofHom, _surjective, continuous_iff, continuous_subtype_val, continuous_toFun, isSmall_ofHoms, isTopologicalBasis_basic_opens, preimage, preimage_basicOpen, x.num
 -/
@@ -435,7 +443,8 @@ theorem mem_carrier_iff'
       · rw [Set.mem_image] at h; rcases h with ⟨x, h, hx⟩
         change x in q.asIdeal at h
         convert! h
-        rw [HomogeneousLocalization.ext_iff_val]
+        rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]
+        dsimp only [Subtype.coe_mk]; rw [← hx]; rfl)
 
 中文:
 定理 mem_carrier_iff'
@@ -447,7 +456,8 @@ theorem mem_carrier_iff'
       · rw [Set.mem_image] at h; rcases h with ⟨x, h, hx⟩
         change x in q.asIdeal at h
         convert! h
-        rw [HomogeneousLocalization.ext_iff_val]
+        rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]
+        dsimp only [Subtype.coe_mk]; rw [← hx]; rfl)
 
 Depends on / 依赖: HomogeneousLocalization, HomogeneousLocalization.ext_iff_val, HomogeneousLocalization.val_mk, Set.mem_image, Subtype, Subtype.coe_mk, asIdeal, coe_mk, convert, ext_iff_val, f_deg, mem_carrier_iff, mem_image, q.asIdeal, specialize, val_mk
 -/
@@ -476,7 +486,10 @@ theorem mem_carrier_iff_of_mem
     ⟨f ^ n, by rw [mul_comm]; mem_tac⟩, ⟨_, rfl⟩⟩ : A⁰_ f) in q.asIdeal
   · refine ⟨fun h => h n, fun h i => if hi : i = n then hi ▸ h else ?_⟩
     convert! zero_mem q.asIdeal
-    apply HomogeneousLocali
+    apply HomogeneousLocalization.val_injective
+    simp only [proj_apply, decompose_of_mem_ne _ hn (Ne.symm hi), zero_pow hm.ne',
+      HomogeneousLocalization.val_mk, Localization.mk_zero, HomogeneousLocalization.val_zero]
+  · simp only [proj_apply, decompose_of_mem_same _ hn]
 
 中文:
 定理 mem_carrier_iff_of_mem
@@ -486,7 +499,10 @@ theorem mem_carrier_iff_of_mem
     ⟨f ^ n, by rw [mul_comm]; mem_tac⟩, ⟨_, rfl⟩⟩ : A⁰_ f) in q.asIdeal
   · refine ⟨fun h => h n, fun h i => if hi : i = n then hi ▸ h else ?_⟩
     convert! zero_mem q.asIdeal
-    apply HomogeneousLocali
+    apply HomogeneousLocalization.val_injective
+    simp only [proj_apply, decompose_of_mem_ne _ hn (Ne.symm hi), zero_pow hm.ne',
+      HomogeneousLocalization.val_mk, Localization.mk_zero, HomogeneousLocalization.val_zero]
+  · simp only [proj_apply, decompose_of_mem_same _ hn]
 
 Depends on / 依赖: HomogeneousLocalization, HomogeneousLocalization.mk, HomogeneousLocalization.val_injective, HomogeneousLocalization.val_mk, HomogeneousLocalization.val_zero, Localization, Localization.mk_zero, Ne.symm, asIdeal, convert, decompose_of_mem_ne, hm.ne, mem_tac, mk_zero, mul_comm, proj_apply, q.asIdeal, smul_eq_mul, val_injective, val_mk
 -/
@@ -515,7 +531,8 @@ theorem mem_carrier_iff_of_mem_mul
   congr 1
   apply HomogeneousLocalization.val_injective
   simp only [HomogeneousLocalization.val_mk, HomogeneousLocalization.val_pow,
-    Localization
+    Localization.mk_pow, pow_mul]
+  rfl
 
 中文:
 定理 mem_carrier_iff_of_mem_mul
@@ -525,7 +542,8 @@ theorem mem_carrier_iff_of_mem_mul
   congr 1
   apply HomogeneousLocalization.val_injective
   simp only [HomogeneousLocalization.val_mk, HomogeneousLocalization.val_pow,
-    Localization
+    Localization.mk_pow, pow_mul]
+  rfl
 
 Depends on / 依赖: HomogeneousLocalization, HomogeneousLocalization.val_injective, HomogeneousLocalization.val_mk, HomogeneousLocalization.val_pow, Ideal.IsPrime.pow_mem_iff_mem, IsPrime, Localization, Localization.mk_pow, eq_comm, f_deg, iff_iff_eq, mem_carrier_iff_of_mem, mk_pow, pow_mem_iff_mem, pow_mul, val_injective, val_mk, val_pow
 -/
@@ -551,7 +569,10 @@ theorem num_mem_carrier_iff
   have : f ^ n != 0 := fun e => by
     have := HomogeneousLocalization.subsingleton 𝒜 (x := .powers f) ⟨n, e⟩
     exact IsEmpty.elim (inferInstanceAs (IsEmpty (PrimeSpectrum (A⁰_ f)))) q
-  convert! mem_carrier_iff_of_mem_mul f_deg hm q z.num.1 (n := n) ?_
+  convert! mem_carrier_iff_of_mem_mul f_deg hm q z.num.1 (n := n) ?_ using 2
+  · apply HomogeneousLocalization.val_injective; simp only [hn, HomogeneousLocalization.val_mk]
+  · have := degree_eq_of_mem_mem 𝒜 (SetLike.pow_mem_graded n f_deg) (hn.symm ▸ z.den.2) this
+    rw [← smul_eq_mul]; rw [this]; exact z.num.2
 
 中文:
 定理 num_mem_carrier_iff
@@ -561,7 +582,10 @@ theorem num_mem_carrier_iff
   have : f ^ n != 0 := fun e => by
     have := HomogeneousLocalization.subsingleton 𝒜 (x := .powers f) ⟨n, e⟩
     exact IsEmpty.elim (inferInstanceAs (IsEmpty (PrimeSpectrum (A⁰_ f)))) q
-  convert! mem_carrier_iff_of_mem_mul f_deg hm q z.num.1 (n := n) ?_
+  convert! mem_carrier_iff_of_mem_mul f_deg hm q z.num.1 (n := n) ?_ using 2
+  · apply HomogeneousLocalization.val_injective; simp only [hn, HomogeneousLocalization.val_mk]
+  · have := degree_eq_of_mem_mem 𝒜 (SetLike.pow_mem_graded n f_deg) (hn.symm ▸ z.den.2) this
+    rw [← smul_eq_mul]; rw [this]; exact z.num.2
 
 Depends on / 依赖: HomogeneousLocalization, HomogeneousLocalization.subsingleton, HomogeneousLocalization.val_injective, HomogeneousLocalization.val_mk, IsEmpty, IsEmpty.elim, PrimeSpectrum, SetLike, SetLike.pow_mem_graded, convert, degree_eq_of_mem_mem, den_mem, f_deg, hn.symm, mem_carrier_iff_of_mem_mul, pow_mem_graded, powers, smul_eq_mul, subsingleton, val_injective
 -/
@@ -588,7 +612,47 @@ theorem carrier.add_mem
   change (HomogeneousLocalization.mk ⟨_, _, _, _⟩ : A⁰_ f) in q.1; dsimp only [Subtype.coe_mk]
   simp_rw [← pow_add, map_add, add_pow, mul_comm, ← nsmul_eq_mul]
   let g : Nat -> A⁰_ f := fun j => (m + m).choose j •
-      if h2 : m + m < j then (0 :
+      if h2 : m + m < j then (0 : A⁰_ f)
+      else
+        if h1 : j <= m then
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i a ^ j * proj 𝒜 i b ^ (m - j), ?_⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f) *
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i b ^ m, by rw [← smul_eq_mul]; mem_tac⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f)
+        else
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i a ^ m, by rw [← smul_eq_mul]; mem_tac⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f) *
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i a ^ (j - m) * proj 𝒜 i b ^ (m + m - j), ?_⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f)
+  rotate_left
+  · rw [(_ : m * i = _)]
+    apply GradedMonoid.toGradedMul.mul_mem <;> mem_tac
+    rw [← add_smul]; rw [Nat.add_sub_of_le h1]; rfl
+  · rw [(_ : m * i = _)]
+    apply GradedMonoid.toGradedMul.mul_mem (i := (j - m) • i) (j := (m + m - j) • i) <;> mem_tac
+    rw [← add_smul]; congr; lia
+  convert_to ∑ i in range (m + m + 1), g i in q.1; swap
+  · refine q.1.sum_mem fun j _ => nsmul_mem ?_ _; split_ifs
+    exacts [q.1.zero_mem, q.1.mul_mem_left _ (hb i), q.1.mul_mem_right _ (ha i)]
+  rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]
+  change _ = (algebraMap (HomogeneousLocalization.Away 𝒜 f) (Localization.Away f)) _
+  dsimp only [Subtype.coe_mk]; rw [map_sum, mk_sum]
+  apply Finset.sum_congr rfl fun j hj => _
+  intro j hj
+  change _ = HomogeneousLocalization.val _
+  rw [HomogeneousLocalization.val_smul]
+  split_ifs with h2 h1
+  · exact ((Finset.mem_range.1 hj).not_ge h2).elim
+  all_goals simp only [HomogeneousLocalization.val_mul,
+    HomogeneousLocalization.val_mk, Localization.mk_mul, ← smul_mk]; congr 2
+  · dsimp; rw [mul_assoc, ← pow_add, add_comm (m - j), Nat.add_sub_assoc h1]
+  · simp_rw [pow_add]; rfl
+  · dsimp; rw [← mul_assoc, ← pow_add, Nat.add_sub_of_le (le_of_not_ge h1)]
+  · simp_rw [pow_add]; rfl
 
 中文:
 定理 carrier.add_mem
@@ -598,7 +662,47 @@ theorem carrier.add_mem
   change (HomogeneousLocalization.mk ⟨_, _, _, _⟩ : A⁰_ f) in q.1; dsimp only [Subtype.coe_mk]
   simp_rw [← pow_add, map_add, add_pow, mul_comm, ← nsmul_eq_mul]
   let g : Nat -> A⁰_ f := fun j => (m + m).choose j •
-      if h2 : m + m < j then (0 :
+      if h2 : m + m < j then (0 : A⁰_ f)
+      else
+        if h1 : j <= m then
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i a ^ j * proj 𝒜 i b ^ (m - j), ?_⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f) *
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i b ^ m, by rw [← smul_eq_mul]; mem_tac⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f)
+        else
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i a ^ m, by rw [← smul_eq_mul]; mem_tac⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f) *
+          (HomogeneousLocalization.mk
+            ⟨m * i, ⟨proj 𝒜 i a ^ (j - m) * proj 𝒜 i b ^ (m + m - j), ?_⟩,
+              ⟨_, by rw [mul_comm]; mem_tac⟩, ⟨i, rfl⟩⟩ : A⁰_ f)
+  rotate_left
+  · rw [(_ : m * i = _)]
+    apply GradedMonoid.toGradedMul.mul_mem <;> mem_tac
+    rw [← add_smul]; rw [Nat.add_sub_of_le h1]; rfl
+  · rw [(_ : m * i = _)]
+    apply GradedMonoid.toGradedMul.mul_mem (i := (j - m) • i) (j := (m + m - j) • i) <;> mem_tac
+    rw [← add_smul]; congr; lia
+  convert_to ∑ i in range (m + m + 1), g i in q.1; swap
+  · refine q.1.sum_mem fun j _ => nsmul_mem ?_ _; split_ifs
+    exacts [q.1.zero_mem, q.1.mul_mem_left _ (hb i), q.1.mul_mem_right _ (ha i)]
+  rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]
+  change _ = (algebraMap (HomogeneousLocalization.Away 𝒜 f) (Localization.Away f)) _
+  dsimp only [Subtype.coe_mk]; rw [map_sum, mk_sum]
+  apply Finset.sum_congr rfl fun j hj => _
+  intro j hj
+  change _ = HomogeneousLocalization.val _
+  rw [HomogeneousLocalization.val_smul]
+  split_ifs with h2 h1
+  · exact ((Finset.mem_range.1 hj).not_ge h2).elim
+  all_goals simp only [HomogeneousLocalization.val_mul,
+    HomogeneousLocalization.val_mk, Localization.mk_mul, ← smul_mk]; congr 2
+  · dsimp; rw [mul_assoc, ← pow_add, add_comm (m - j), Nat.add_sub_assoc h1]
+  · simp_rw [pow_add]; rfl
+  · dsimp; rw [← mul_assoc, ← pow_add, Nat.add_sub_of_le (le_of_not_ge h1)]
+  · simp_rw [pow_add]; rfl
 
 Depends on / 依赖: HomogeneousLocalization, HomogeneousLocalization.mk, Subtype, Subtype.coe_mk, add_pow, coe_mk, map_add, mem_or_mem, mem_tac, mul_comm, nsmul_eq_mul, pow_add, simp_rw
 -/
@@ -694,7 +798,24 @@ theorem carrier.smul_mem
     simp_rw [proj_apply, smul_eq_mul, coe_decompose_mul_of_left_mem 𝒜 i ha]
     let product : A⁰_ f :=
       (HomogeneousLocalization.mk
-          ⟨_, ⟨a
+          ⟨_, ⟨a ^ m, pow_mem_graded m ha⟩, ⟨_, ?_⟩, ⟨n, rfl⟩⟩ : A⁰_ f) *
+        (HomogeneousLocalization.mk
+          ⟨_, ⟨proj 𝒜 (i - n) x ^ m, by mem_tac⟩, ⟨_, ?_⟩, ⟨i - n, rfl⟩⟩ : A⁰_ f)
+    · split_ifs with h
+      · convert_to product in q.1
+        · dsimp [product]
+          rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]; rw [HomogeneousLocalization.val_mul]; rw [HomogeneousLocalization.val_mk]; rw [HomogeneousLocalization.val_mk]
+          · simp_rw [mul_pow]; rw [Localization.mk_mul]
+            · congr; rw [← pow_add, Nat.add_sub_of_le h]
+        · apply Ideal.mul_mem_left (α := A⁰_ f) _ _ (hx _)
+          rw [(_ : m • n = _)]
+          · mem_tac
+          · simp only [smul_eq_mul, mul_comm]
+      · simpa only [map_zero, zero_pow hm.ne'] using zero_mem f_deg hm q i
+    rw [(_ : m • (i - n) = _)]
+    · mem_tac
+    · simp only [smul_eq_mul, mul_comm]
+  · simp_rw [add_smul]; exact fun _ _ => carrier.add_mem f_deg q
 
 中文:
 定理 carrier.smul_mem
@@ -708,7 +829,24 @@ theorem carrier.smul_mem
     simp_rw [proj_apply, smul_eq_mul, coe_decompose_mul_of_left_mem 𝒜 i ha]
     let product : A⁰_ f :=
       (HomogeneousLocalization.mk
-          ⟨_, ⟨a
+          ⟨_, ⟨a ^ m, pow_mem_graded m ha⟩, ⟨_, ?_⟩, ⟨n, rfl⟩⟩ : A⁰_ f) *
+        (HomogeneousLocalization.mk
+          ⟨_, ⟨proj 𝒜 (i - n) x ^ m, by mem_tac⟩, ⟨_, ?_⟩, ⟨i - n, rfl⟩⟩ : A⁰_ f)
+    · split_ifs with h
+      · convert_to product in q.1
+        · dsimp [product]
+          rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]; rw [HomogeneousLocalization.val_mul]; rw [HomogeneousLocalization.val_mk]; rw [HomogeneousLocalization.val_mk]
+          · simp_rw [mul_pow]; rw [Localization.mk_mul]
+            · congr; rw [← pow_add, Nat.add_sub_of_le h]
+        · apply Ideal.mul_mem_left (α := A⁰_ f) _ _ (hx _)
+          rw [(_ : m • n = _)]
+          · mem_tac
+          · simp only [smul_eq_mul, mul_comm]
+      · simpa only [map_zero, zero_pow hm.ne'] using zero_mem f_deg hm q i
+    rw [(_ : m • (i - n) = _)]
+    · mem_tac
+    · simp only [smul_eq_mul, mul_comm]
+  · simp_rw [add_smul]; exact fun _ _ => carrier.add_mem f_deg q
 
 Depends on / 依赖: Decomposition, DirectSum, DirectSum.Decomposition.inductionOn, HomogeneousLocalization, HomogeneousLocalization.mk, carrier, carrier.zero_mem, coe_decompose_mul_of_left_mem, convert_to, f_deg, inductionOn, mem_tac, pow_mem_graded, product, proj_apply, revert, simp_rw, smul_eq_mul, split_ifs, zero_mem
 -/
@@ -900,7 +1038,20 @@ theorem carrier.asIdeal.prime
     (carrier.asIdeal.ne_top f_deg hm q) fun {x y} ⟨nx, hnx⟩ ⟨ny, hny⟩ hxy =>
     show (forall _, _ in _) ∨ forall _, _ in _ by
       rw [← and_forall_ne nx]; rw [and_iff_left]; rw [← and_forall_ne ny]; rw [and_iff_left]
-     
+      · apply q.2.mem_or_mem; convert! hxy (nx + ny)
+        dsimp
+        simp_rw [decompose_of_mem_same 𝒜 hnx, decompose_of_mem_same 𝒜 hny,
+          decompose_of_mem_same 𝒜 (SetLike.GradedMonoid.toGradedMul.mul_mem hnx hny),
+          mul_pow, pow_add]
+        simp only [HomogeneousLocalization.ext_iff_val, HomogeneousLocalization.val_mk,
+          HomogeneousLocalization.val_mul, Localization.mk_mul]
+        simp only [Submonoid.mk_mul_mk, mk_eq_monoidOf_mk']
+      all_goals
+        intro n hn; convert q.1.zero_mem
+        rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]; rw [HomogeneousLocalization.val_zero]; simp_rw [proj_apply]
+        convert! mk_zero (S := Submonoid.powers f) _
+        rw [decompose_of_mem_ne 𝒜 _ hn.symm]; rw [zero_pow hm.ne']
+        · first | exact hnx | exact hny
 
 中文:
 定理 carrier.asIdeal.prime
@@ -909,7 +1060,20 @@ theorem carrier.asIdeal.prime
     (carrier.asIdeal.ne_top f_deg hm q) fun {x y} ⟨nx, hnx⟩ ⟨ny, hny⟩ hxy =>
     show (forall _, _ in _) ∨ forall _, _ in _ by
       rw [← and_forall_ne nx]; rw [and_iff_left]; rw [← and_forall_ne ny]; rw [and_iff_left]
-     
+      · apply q.2.mem_or_mem; convert! hxy (nx + ny)
+        dsimp
+        simp_rw [decompose_of_mem_same 𝒜 hnx, decompose_of_mem_same 𝒜 hny,
+          decompose_of_mem_same 𝒜 (SetLike.GradedMonoid.toGradedMul.mul_mem hnx hny),
+          mul_pow, pow_add]
+        simp only [HomogeneousLocalization.ext_iff_val, HomogeneousLocalization.val_mk,
+          HomogeneousLocalization.val_mul, Localization.mk_mul]
+        simp only [Submonoid.mk_mul_mk, mk_eq_monoidOf_mk']
+      all_goals
+        intro n hn; convert q.1.zero_mem
+        rw [HomogeneousLocalization.ext_iff_val]; rw [HomogeneousLocalization.val_mk]; rw [HomogeneousLocalization.val_zero]; simp_rw [proj_apply]
+        convert! mk_zero (S := Submonoid.powers f) _
+        rw [decompose_of_mem_ne 𝒜 _ hn.symm]; rw [zero_pow hm.ne']
+        · first | exact hnx | exact hny
 
 Depends on / 依赖: GradedMonoid, SetLike, SetLike.GradedMonoid.toGradedMul.mul_mem, and_forall_ne, and_iff_left, asIdeal, carrier, carrier.asIdeal.homogeneous, carrier.asIdeal.ne_top, convert, decompose_of_mem_same, f_deg, homogeneous, isPrime_of_homogeneous_mem_or_mem, mem_or_mem, mul_mem, mul_pow, ne_top, pow_add, simp_rw
 -/
@@ -1149,7 +1313,14 @@ definition fromSpec
 .continuous_iff] (· in pbo f)
       rintro s ⟨_, ⟨a, rfl⟩, rfl⟩
       have h₁ : Subtype.val (p := (· in pbo f)) ⁻¹' (pbo a) =
-      
+          ⋃ i : Nat, Subtype.val (p := (· in pbo f)) ⁻¹' (pbo (decompose 𝒜 a i)) := by
+        simp [ProjectiveSpectrum.basicOpen_eq_union_of_projection 𝒜 a]
+      let e : _ ≃ _ :=
+        ⟨FromSpec.toFun f_deg hm, ToSpec.toFun f, toSpec_fromSpec _ _ _, fromSpec_toSpec _ _ _⟩
+change IsOpen e ⁻¹' _
+      rw [← Equiv.image_symm_eq_preimage]; rw [h₁]; rw [Set.image_iUnion]
+      exact isOpen_iUnion fun i => toSpec.image_basicOpen_eq_basicOpen f_deg hm a i ▸
+        PrimeSpectrum.isOpen_basicOpen }
 
 中文:
 定义 fromSpec
@@ -1161,7 +1332,14 @@ definition fromSpec
 .continuous_iff] (· in pbo f)
       rintro s ⟨_, ⟨a, rfl⟩, rfl⟩
       have h₁ : Subtype.val (p := (· in pbo f)) ⁻¹' (pbo a) =
-      
+          ⋃ i : Nat, Subtype.val (p := (· in pbo f)) ⁻¹' (pbo (decompose 𝒜 a i)) := by
+        simp [ProjectiveSpectrum.basicOpen_eq_union_of_projection 𝒜 a]
+      let e : _ ≃ _ :=
+        ⟨FromSpec.toFun f_deg hm, ToSpec.toFun f, toSpec_fromSpec _ _ _, fromSpec_toSpec _ _ _⟩
+change IsOpen e ⁻¹' _
+      rw [← Equiv.image_symm_eq_preimage]; rw [h₁]; rw [Set.image_iUnion]
+      exact isOpen_iUnion fun i => toSpec.image_basicOpen_eq_basicOpen f_deg hm a i ▸
+        PrimeSpectrum.isOpen_basicOpen }
 
 Depends on / 依赖: FromSpec, FromSpec.toFun, ProjectiveSpectrum, ProjectiveSpectrum.basicOpen_eq_union_of_projection, ProjectiveSpectrum.isTopologicalBasis_basic_opens, Subtype, Subtype.val, ToSpec, ToSpec.toFun, TopCat, TopCat.ofHom, basicOpen_eq_union_of_projection, continuous_iff, continuous_toFun, decompose, f_deg, fromSpec, isTopologicalBasis_basic_opens, isTopologicalBasis_subtype, toSpec_fromSpec
 -/
@@ -1235,7 +1413,14 @@ definition awayToSection
     (S := (structureSheaf 𝒜).1.obj (op (pbo f)))
   { toFun s :=
       ⟨fun x => HomogeneousLocalization.mapId 𝒜 (Submonoid.powers_le.mpr x.2) s, fun x => by
-        obtain ⟨s,
+        obtain ⟨s, rfl⟩ := HomogeneousLocalization.mk_surjective s
+        obtain ⟨n, hn : f ^ n = s.den.1⟩ := s.den_mem
+        exact ⟨_, x.2, 𝟙 _, s.1, s.2, s.3,
+          fun x hsx => x.2 (Ideal.IsPrime.mem_of_pow_mem inferInstance n (hn ▸ hsx)), fun _ => rfl⟩⟩
+    map_add' _ _ := by ext; simp only [map_add, HomogeneousLocalization.val_add, Proj.add_apply]
+    map_mul' _ _ := by ext; simp only [map_mul, HomogeneousLocalization.val_mul, Proj.mul_apply]
+    map_zero' := by ext; simp only [map_zero, HomogeneousLocalization.val_zero, Proj.zero_apply]
+    map_one' := by ext; simp only [map_one, HomogeneousLocalization.val_one, Proj.one_apply] }
 
 中文:
 定义 awayToSection
@@ -1246,7 +1431,14 @@ definition awayToSection
     (S := (structureSheaf 𝒜).1.obj (op (pbo f)))
   { toFun s :=
       ⟨fun x => HomogeneousLocalization.mapId 𝒜 (Submonoid.powers_le.mpr x.2) s, fun x => by
-        obtain ⟨s,
+        obtain ⟨s, rfl⟩ := HomogeneousLocalization.mk_surjective s
+        obtain ⟨n, hn : f ^ n = s.den.1⟩ := s.den_mem
+        exact ⟨_, x.2, 𝟙 _, s.1, s.2, s.3,
+          fun x hsx => x.2 (Ideal.IsPrime.mem_of_pow_mem inferInstance n (hn ▸ hsx)), fun _ => rfl⟩⟩
+    map_add' _ _ := by ext; simp only [map_add, HomogeneousLocalization.val_add, Proj.add_apply]
+    map_mul' _ _ := by ext; simp only [map_mul, HomogeneousLocalization.val_mul, Proj.mul_apply]
+    map_zero' := by ext; simp only [map_zero, HomogeneousLocalization.val_zero, Proj.zero_apply]
+    map_one' := by ext; simp only [map_one, HomogeneousLocalization.val_one, Proj.one_apply] }
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom
 -/
@@ -1363,7 +1555,8 @@ lemma awayToΓ_ΓToStalk
   rw [awayToΓ]; rw [Category.assoc]; rw [← Category.assoc _ (Iso.inv _)]; rw [Iso.eq_comp_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [Presheaf.Γgerm]
   rw [LocallyRingedSpace.restrictStalkIso_hom_eq_germ]
   simp only [Proj.toLocallyRingedSpace, Proj.toSheafedSpace]
-  rw [Presheaf.germ_res
+  rw [Presheaf.germ_res]; rw [awayToSection_germ]
+  rfl
 
 中文:
 引理 awayToΓ_ΓToStalk
@@ -1372,7 +1565,8 @@ lemma awayToΓ_ΓToStalk
   rw [awayToΓ]; rw [Category.assoc]; rw [← Category.assoc _ (Iso.inv _)]; rw [Iso.eq_comp_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [Presheaf.Γgerm]
   rw [LocallyRingedSpace.restrictStalkIso_hom_eq_germ]
   simp only [Proj.toLocallyRingedSpace, Proj.toSheafedSpace]
-  rw [Presheaf.germ_res
+  rw [Presheaf.germ_res]; rw [awayToSection_germ]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, Iso.eq_comp_inv, Iso.inv, LocallyRingedSpace, LocallyRingedSpace.restrictStalkIso_hom_eq_germ, Presheaf, Presheaf.germ_res, Proj.toLocallyRingedSpace, Proj.toSheafedSpace, awayToSection_germ, eq_comp_inv, germ_res, restrictStalkIso_hom_eq_germ, toLocallyRingedSpace, toSheafedSpace
 -/
@@ -1421,7 +1615,9 @@ lemma toSpec_base_apply_eq_comap
   change PrimeSpectrum.comap (awayToΓ 𝒜 f ≫ (Proj| pbo f).presheaf.Γgerm x).hom
         (IsLocalRing.closedPoint ((Proj| pbo f).presheaf.stalk x)) = _
   rw [awayToΓ_ΓToStalk]; rw [CommRingCat.hom_comp]; rw [PrimeSpectrum.comap_comp]
-  exact congr(PrimeSpectrum.comap _ $(@IsLocalRing.comap_closedP
+  exact congr(PrimeSpectrum.comap _ $(@IsLocalRing.comap_closedPoint
+    (HomogeneousLocalization.AtPrime 𝒜 x.1.asHomogeneousIdeal.toIdeal) _ _
+    ((Proj| pbo f).presheaf.stalk x) _ _ _ (isLocalHom_of_isIso _)))
 
 中文:
 引理 toSpec_base_apply_eq_comap
@@ -1430,7 +1626,9 @@ lemma toSpec_base_apply_eq_comap
   change PrimeSpectrum.comap (awayToΓ 𝒜 f ≫ (Proj| pbo f).presheaf.Γgerm x).hom
         (IsLocalRing.closedPoint ((Proj| pbo f).presheaf.stalk x)) = _
   rw [awayToΓ_ΓToStalk]; rw [CommRingCat.hom_comp]; rw [PrimeSpectrum.comap_comp]
-  exact congr(PrimeSpectrum.comap _ $(@IsLocalRing.comap_closedP
+  exact congr(PrimeSpectrum.comap _ $(@IsLocalRing.comap_closedPoint
+    (HomogeneousLocalization.AtPrime 𝒜 x.1.asHomogeneousIdeal.toIdeal) _ _
+    ((Proj| pbo f).presheaf.stalk x) _ _ _ (isLocalHom_of_isIso _)))
 
 Depends on / 依赖: AtPrime, CommRingCat, CommRingCat.hom_comp, HomogeneousLocalization, HomogeneousLocalization.AtPrime, IsLocalRing, IsLocalRing.closedPoint, IsLocalRing.comap_closedPoint, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.comap_comp, asHomogeneousIdeal, asHomogeneousIdeal.toIdeal, closedPoint, comap_closedPoint, comap_comp, hom_comp, isLocalHom_of_isIso, presheaf, presheaf.stalk
 -/
@@ -1454,7 +1652,8 @@ lemma toSpec_base_apply_eq
   proof: .trans PrimeSpectrum.ext Ideal.ext fun z => toSpec_base_apply_eq_comap 𝒜 x
   show ¬ IsUnit _ ↔ z in ProjIsoSpecTopComponent.ToSpec.carrier _ by
   obtain ⟨z, rfl⟩ := z.mk_surjective
-  rw [← HomogeneousLocalization.isUnit_iff_isUnit_val]; rw [ProjIsoSpecTopComponent.ToSpec.mk_mem_carrier]; rw [Homogen
+  rw [← HomogeneousLocalization.isUnit_iff_isUnit_val]; rw [ProjIsoSpecTopComponent.ToSpec.mk_mem_carrier]; rw [HomogeneousLocalization.map_mk]; rw [HomogeneousLocalization.val_mk]; rw [Localization.mk_eq_mk']; rw [IsLocalization.AtPrime.isUnit_mk'_iff]
+  exact not_not
 
 中文:
 引理 toSpec_base_apply_eq
@@ -1462,7 +1661,8 @@ lemma toSpec_base_apply_eq
   证明: .trans PrimeSpectrum.ext Ideal.ext fun z => toSpec_base_apply_eq_comap 𝒜 x
   show ¬ IsUnit _ ↔ z in ProjIsoSpecTopComponent.ToSpec.carrier _ by
   obtain ⟨z, rfl⟩ := z.mk_surjective
-  rw [← HomogeneousLocalization.isUnit_iff_isUnit_val]; rw [ProjIsoSpecTopComponent.ToSpec.mk_mem_carrier]; rw [Homogen
+  rw [← HomogeneousLocalization.isUnit_iff_isUnit_val]; rw [ProjIsoSpecTopComponent.ToSpec.mk_mem_carrier]; rw [HomogeneousLocalization.map_mk]; rw [HomogeneousLocalization.val_mk]; rw [Localization.mk_eq_mk']; rw [IsLocalization.AtPrime.isUnit_mk'_iff]
+  exact not_not
 
 Depends on / 依赖: AtPrime, HomogeneousLocalization, HomogeneousLocalization.isUnit_iff_isUnit_val, HomogeneousLocalization.map_mk, HomogeneousLocalization.val_mk, Ideal.ext, IsLocalization, IsLocalization.AtPrime.isUnit_mk, IsUnit, Localization, Localization.mk_eq_mk, PrimeSpectrum, PrimeSpectrum.ext, ProjIsoSpecTopComponent, ProjIsoSpecTopComponent.ToSpec.carrier, ProjIsoSpecTopComponent.ToSpec.mk_mem_carrier, ToSpec, _iff, carrier, isUnit_iff_isUnit_val
 -/
@@ -1623,7 +1823,47 @@ lemma isLocalization_atPrime
   · rintro ⟨y, hy⟩
     obtain ⟨y, rfl⟩ := HomogeneousLocalization.mk_surjective y
     refine .of_mul_eq_one
-(.mk ⟨y.deg, y.den, y.num, (mk_mem_
+(.mk ⟨y.deg, y.den, y.num, (mk_mem_toSpec_base_apply _ _ _).not.mp hy⟩) val_injective _ ?_
+    simp only [RingHom.algebraMap_toAlgebra, map_mk, GradedRingHom.id_apply, val_mul, val_mk,
+      mk_eq_mk', val_one, IsLocalization.mk'_mul_mk'_eq_one']
+  · intro z
+    obtain ⟨⟨i, a, ⟨b, hb⟩, (hb' : b ∉ x.1.1)⟩, rfl⟩ := z.mk_surjective
+    refine ⟨⟨HomogeneousLocalization.mk ⟨i * m, ⟨a * b ^ (m - 1), ?_⟩,
+        ⟨f ^ i, SetLike.pow_mem_graded _ f_deg⟩, ⟨_, rfl⟩⟩,
+      ⟨HomogeneousLocalization.mk ⟨i * m, ⟨b ^ m, mul_comm m i ▸ SetLike.pow_mem_graded _ hb⟩,
+        ⟨f ^ i, SetLike.pow_mem_graded _ f_deg⟩, ⟨_, rfl⟩⟩,
+(mk_mem_toSpec_base_apply _ _ _).not.mpr x.1.1.toIdeal.primeCompl.pow_mem hb' m⟩⟩,
+        val_injective _ ?_⟩
+    · convert SetLike.mul_mem_graded a.2 (SetLike.pow_mem_graded (m - 1) hb)
+      rw [← succ_nsmul']; rw [tsub_add_cancel_of_le (by lia)]; rw [mul_comm]; rw [smul_eq_mul]
+    · simp only [RingHom.algebraMap_toAlgebra, map_mk, GradedRingHom.id_apply, val_mul, val_mk,
+        mk_eq_mk', ← IsLocalization.mk'_mul, Submonoid.mk_mul_mk, IsLocalization.mk'_eq_iff_eq]
+      rw [mul_comm b]; rw [mul_mul_mul_comm]; rw [← pow_succ']; rw [mul_assoc]; rw [tsub_add_cancel_of_le (by lia)]
+  · intro y z e
+    obtain ⟨y, rfl⟩ := HomogeneousLocalization.mk_surjective y
+    obtain ⟨z, rfl⟩ := HomogeneousLocalization.mk_surjective z
+    obtain ⟨i, c, hc, hc', e⟩ : exists i, exists c in 𝒜 i, c ∉ x.1.asHomogeneousIdeal ∧
+        c * (z.den.1 * y.num.1) = c * (y.den.1 * z.num.1) := by
+      apply_fun HomogeneousLocalization.val at e
+      simp only [RingHom.algebraMap_toAlgebra, map_mk, GradedRingHom.id_apply, val_mk, mk_eq_mk',
+        IsLocalization.mk'_eq_iff_eq] at e
+      obtain ⟨⟨c, hcx⟩, hc⟩ := IsLocalization.exists_of_eq (M := x.1.1.toIdeal.primeCompl) e
+      obtain ⟨i, hi⟩ := not_forall.mp ((x.1.1.isHomogeneous.mem_iff _).not.mp hcx)
+      refine ⟨i, _, (decompose 𝒜 c i).2, hi, ?_⟩
+      apply_fun fun x => (decompose 𝒜 x (i + z.deg + y.deg)).1 at hc
+      conv_rhs at hc => rw [add_right_comm]
+      rwa [← mul_assoc, coe_decompose_mul_add_of_right_mem, coe_decompose_mul_add_of_right_mem,
+        ← mul_assoc, coe_decompose_mul_add_of_right_mem, coe_decompose_mul_add_of_right_mem,
+        mul_assoc, mul_assoc] at hc
+      exacts [y.den.2, z.num.2, z.den.2, y.num.2]
+    refine ⟨⟨HomogeneousLocalization.mk ⟨m * i, ⟨c ^ m, SetLike.pow_mem_graded _ hc⟩,
+      ⟨f ^ i, mul_comm m i ▸ SetLike.pow_mem_graded _ f_deg⟩, ⟨_, rfl⟩⟩,
+(mk_mem_toSpec_base_apply _ _ _).not.mpr x.1.1.toIdeal.primeCompl.pow_mem hc' _⟩,
+      val_injective _ ?_⟩
+    simp only [val_mul, val_mk, mk_eq_mk', ← IsLocalization.mk'_mul, Submonoid.mk_mul_mk,
+      IsLocalization.mk'_eq_iff_eq, mul_assoc]
+    congr 2
+    rw [mul_left_comm]; rw [mul_left_comm y.den.1]; rw [← tsub_add_cancel_of_le (show 1 <= m from hm)]; rw [pow_succ]; rw [mul_assoc]; rw [mul_assoc]; rw [e]
 
 中文:
 引理 isLocalization_atPrime
@@ -1635,7 +1875,47 @@ lemma isLocalization_atPrime
   · rintro ⟨y, hy⟩
     obtain ⟨y, rfl⟩ := HomogeneousLocalization.mk_surjective y
     refine .of_mul_eq_one
-(.mk ⟨y.deg, y.den, y.num, (mk_mem_
+(.mk ⟨y.deg, y.den, y.num, (mk_mem_toSpec_base_apply _ _ _).not.mp hy⟩) val_injective _ ?_
+    simp only [RingHom.algebraMap_toAlgebra, map_mk, GradedRingHom.id_apply, val_mul, val_mk,
+      mk_eq_mk', val_one, IsLocalization.mk'_mul_mk'_eq_one']
+  · intro z
+    obtain ⟨⟨i, a, ⟨b, hb⟩, (hb' : b ∉ x.1.1)⟩, rfl⟩ := z.mk_surjective
+    refine ⟨⟨HomogeneousLocalization.mk ⟨i * m, ⟨a * b ^ (m - 1), ?_⟩,
+        ⟨f ^ i, SetLike.pow_mem_graded _ f_deg⟩, ⟨_, rfl⟩⟩,
+      ⟨HomogeneousLocalization.mk ⟨i * m, ⟨b ^ m, mul_comm m i ▸ SetLike.pow_mem_graded _ hb⟩,
+        ⟨f ^ i, SetLike.pow_mem_graded _ f_deg⟩, ⟨_, rfl⟩⟩,
+(mk_mem_toSpec_base_apply _ _ _).not.mpr x.1.1.toIdeal.primeCompl.pow_mem hb' m⟩⟩,
+        val_injective _ ?_⟩
+    · convert SetLike.mul_mem_graded a.2 (SetLike.pow_mem_graded (m - 1) hb)
+      rw [← succ_nsmul']; rw [tsub_add_cancel_of_le (by lia)]; rw [mul_comm]; rw [smul_eq_mul]
+    · simp only [RingHom.algebraMap_toAlgebra, map_mk, GradedRingHom.id_apply, val_mul, val_mk,
+        mk_eq_mk', ← IsLocalization.mk'_mul, Submonoid.mk_mul_mk, IsLocalization.mk'_eq_iff_eq]
+      rw [mul_comm b]; rw [mul_mul_mul_comm]; rw [← pow_succ']; rw [mul_assoc]; rw [tsub_add_cancel_of_le (by lia)]
+  · intro y z e
+    obtain ⟨y, rfl⟩ := HomogeneousLocalization.mk_surjective y
+    obtain ⟨z, rfl⟩ := HomogeneousLocalization.mk_surjective z
+    obtain ⟨i, c, hc, hc', e⟩ : exists i, exists c in 𝒜 i, c ∉ x.1.asHomogeneousIdeal ∧
+        c * (z.den.1 * y.num.1) = c * (y.den.1 * z.num.1) := by
+      apply_fun HomogeneousLocalization.val at e
+      simp only [RingHom.algebraMap_toAlgebra, map_mk, GradedRingHom.id_apply, val_mk, mk_eq_mk',
+        IsLocalization.mk'_eq_iff_eq] at e
+      obtain ⟨⟨c, hcx⟩, hc⟩ := IsLocalization.exists_of_eq (M := x.1.1.toIdeal.primeCompl) e
+      obtain ⟨i, hi⟩ := not_forall.mp ((x.1.1.isHomogeneous.mem_iff _).not.mp hcx)
+      refine ⟨i, _, (decompose 𝒜 c i).2, hi, ?_⟩
+      apply_fun fun x => (decompose 𝒜 x (i + z.deg + y.deg)).1 at hc
+      conv_rhs at hc => rw [add_right_comm]
+      rwa [← mul_assoc, coe_decompose_mul_add_of_right_mem, coe_decompose_mul_add_of_right_mem,
+        ← mul_assoc, coe_decompose_mul_add_of_right_mem, coe_decompose_mul_add_of_right_mem,
+        mul_assoc, mul_assoc] at hc
+      exacts [y.den.2, z.num.2, z.den.2, y.num.2]
+    refine ⟨⟨HomogeneousLocalization.mk ⟨m * i, ⟨c ^ m, SetLike.pow_mem_graded _ hc⟩,
+      ⟨f ^ i, mul_comm m i ▸ SetLike.pow_mem_graded _ f_deg⟩, ⟨_, rfl⟩⟩,
+(mk_mem_toSpec_base_apply _ _ _).not.mpr x.1.1.toIdeal.primeCompl.pow_mem hc' _⟩,
+      val_injective _ ?_⟩
+    simp only [val_mul, val_mk, mk_eq_mk', ← IsLocalization.mk'_mul, Submonoid.mk_mul_mk,
+      IsLocalization.mk'_eq_iff_eq, mul_assoc]
+    congr 2
+    rw [mul_left_comm]; rw [mul_left_comm y.den.1]; rw [← tsub_add_cancel_of_le (show 1 <= m from hm)]; rw [pow_succ]; rw [mul_assoc]; rw [mul_assoc]; rw [e]
 
 Depends on / 依赖: Algebra, AtPrime, GradedRingHom, GradedRingHom.id_apply, HomogeneousLocalization, HomogeneousLocalization.mk_surjective, IsLocalization, IsLocalization.mk, RingHom, RingHom.algebraMap_toAlgebra, Submonoid, Submonoid.powers_le.mpr, _eq_one, _mul_mk, algebraMap_toAlgebra, asHomogeneousIdeal, asHomogeneousIdeal.toIdeal, id_apply, map_mk, mk_eq_mk
 -/
@@ -1704,7 +1984,8 @@ definition specStalkEquiv
   (IsLocalization.algEquiv
     (R := A⁰_ f)
     (M := ((toSpec 𝒜 f).base x).asIdeal.primeCompl)
-    (S := (Spec.structureShea
+    (S := (Spec.structureSheaf (A⁰_ f)).presheaf.stalk ((toSpec 𝒜 f).base x))
+    (Q := AtPrime 𝒜 x.1.asHomogeneousIdeal.toIdeal)).toRingEquiv.toCommRingCatIso
 
 中文:
 定义 specStalkEquiv
@@ -1715,7 +1996,8 @@ definition specStalkEquiv
   (IsLocalization.algEquiv
     (R := A⁰_ f)
     (M := ((toSpec 𝒜 f).base x).asIdeal.primeCompl)
-    (S := (Spec.structureShea
+    (S := (Spec.structureSheaf (A⁰_ f)).presheaf.stalk ((toSpec 𝒜 f).base x))
+    (Q := AtPrime 𝒜 x.1.asHomogeneousIdeal.toIdeal)).toRingEquiv.toCommRingCatIso
 
 Depends on / 依赖: Algebra, AtPrime, IsLocalization, IsLocalization.algEquiv, Spec.structureSheaf, Submonoid, Submonoid.powers_le.mpr, algEquiv, asHomogeneousIdeal, asHomogeneousIdeal.toIdeal, asIdeal, asIdeal.primeCompl, f_deg, isLocalization_atPrime, powers_le, presheaf, presheaf.stalk, primeCompl, structureSheaf, toAlgebra
 -/
@@ -1744,7 +2026,8 @@ lemma toStalk_specStalkEquiv
   CommRingCat.hom_ext (IsLocalization.algEquiv
     (R := A⁰_ f)
     (M := ((toSpec 𝒜 f).base x).asIdeal.primeCompl)
-    (S := 
+    (S := (Spec.structureSheaf (A⁰_ f)).presheaf.stalk ((toSpec 𝒜 f).base x))
+    (Q := AtPrime 𝒜 x.1.asHomogeneousIdeal.toIdeal)).toAlgHom.comp_algebraMap
 
 中文:
 引理 toStalk_specStalkEquiv
@@ -1755,7 +2038,8 @@ lemma toStalk_specStalkEquiv
   CommRingCat.hom_ext (IsLocalization.algEquiv
     (R := A⁰_ f)
     (M := ((toSpec 𝒜 f).base x).asIdeal.primeCompl)
-    (S := 
+    (S := (Spec.structureSheaf (A⁰_ f)).presheaf.stalk ((toSpec 𝒜 f).base x))
+    (Q := AtPrime 𝒜 x.1.asHomogeneousIdeal.toIdeal)).toAlgHom.comp_algebraMap
 
 Depends on / 依赖: Algebra, AtPrime, CommRingCat, CommRingCat.hom_ext, IsLocalization, IsLocalization.algEquiv, Spec.structureSheaf, Submonoid, Submonoid.powers_le.mpr, algEquiv, asHomogeneousIdeal, asHomogeneousIdeal.toIdeal, asIdeal, asIdeal.primeCompl, comp_algebraMap, f_deg, hom_ext, isLocalization_atPrime, powers_le, presheaf
 -/
@@ -1784,7 +2068,7 @@ refine CommRingCat.hom_ext
 (S := (Spec.structureSheaf (A⁰_ f)).presheaf.stalk ((toSpec 𝒜 f).base x)) ?_
   ext a
   refine congr($(toStalk_stalkMap_toSpec 𝒜 f x) _).trans ?_
-  rw [awayToΓ_ΓToStalk]; rw [← toStalk_s
+  rw [awayToΓ_ΓToStalk]; rw [← toStalk_specStalkEquiv]; rw [Category.assoc]; rfl
 
 中文:
 引理 stalkMap_toSpec
@@ -1795,7 +2079,7 @@ refine CommRingCat.hom_ext
 (S := (Spec.structureSheaf (A⁰_ f)).presheaf.stalk ((toSpec 𝒜 f).base x)) ?_
   ext a
   refine congr($(toStalk_stalkMap_toSpec 𝒜 f x) _).trans ?_
-  rw [awayToΓ_ΓToStalk]; rw [← toStalk_s
+  rw [awayToΓ_ΓToStalk]; rw [← toStalk_specStalkEquiv]; rw [Category.assoc]; rfl
 
 Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.hom_ext, IsLocalization, IsLocalization.ringHom_ext, Spec.structureSheaf, asIdeal, asIdeal.primeCompl, hom_ext, presheaf, presheaf.stalk, primeCompl, ringHom_ext, structureSheaf, toSpec, toStalk_specStalkEquiv, toStalk_stalkMap_toSpec
 -/
@@ -1822,7 +2106,9 @@ lemma isIso_toSpec
   have _ (x) : IsIso ((toSpec 𝒜 f).stalkMap x) := by
     rw [stalkMap_toSpec 𝒜 f x f_deg hm]; infer_instance
   have : LocallyRingedSpace.IsOpenImmersion (toSpec 𝒜 f) :=
-    LocallyRingedSpace.IsOpenImmersion.of_stalk_iso (toSpec 𝒜 f
+    LocallyRingedSpace.IsOpenImmersion.of_stalk_iso (toSpec 𝒜 f)
+      (TopCat.homeoOfIso (asIso <| (toSpec 𝒜 f).base)).isOpenEmbedding
+  exact LocallyRingedSpace.IsOpenImmersion.to_iso _
 
 中文:
 引理 isIso_toSpec
@@ -1832,7 +2118,9 @@ lemma isIso_toSpec
   have _ (x) : IsIso ((toSpec 𝒜 f).stalkMap x) := by
     rw [stalkMap_toSpec 𝒜 f x f_deg hm]; infer_instance
   have : LocallyRingedSpace.IsOpenImmersion (toSpec 𝒜 f) :=
-    LocallyRingedSpace.IsOpenImmersion.of_stalk_iso (toSpec 𝒜 f
+    LocallyRingedSpace.IsOpenImmersion.of_stalk_iso (toSpec 𝒜 f)
+      (TopCat.homeoOfIso (asIso <| (toSpec 𝒜 f).base)).isOpenEmbedding
+  exact LocallyRingedSpace.IsOpenImmersion.to_iso _
 
 Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion, LocallyRingedSpace.IsOpenImmersion.of_stalk_iso, LocallyRingedSpace.IsOpenImmersion.to_iso, TopCat, TopCat.homeoOfIso, f_deg, homeoOfIso, infer_instance, isOpenEmbedding, of_stalk_iso, stalkMap, stalkMap_toSpec, toSpec, toSpec_base_isIso, to_iso
 -/
@@ -1882,7 +2170,8 @@ definition «Proj»
       by_contra!
       refine x.not_irrelevant_le fun z hz => ?_
       rw [← DirectSum.sum_support_decompose 𝒜 z]
-exact x.
+exact x.1.toIdeal.sum_mem fun k hk => this _ k (SetLike.coe_mem _) by_contra by aesop
+    exact ⟨⟨pbo f, hx⟩, .of (A⁰_ f), ⟨projIsoSpec 𝒜 f f_deg hm⟩⟩
 
 中文:
 定义 «Proj»
@@ -1894,7 +2183,8 @@ exact x.
       by_contra!
       refine x.not_irrelevant_le fun z hz => ?_
       rw [← DirectSum.sum_support_decompose 𝒜 z]
-exact x.
+exact x.1.toIdeal.sum_mem fun k hk => this _ k (SetLike.coe_mem _) by_contra by aesop
+    exact ⟨⟨pbo f, hx⟩, .of (A⁰_ f), ⟨projIsoSpec 𝒜 f f_deg hm⟩⟩
 -/
 def «Proj» : Scheme where
   __ := Proj.toLocallyRingedSpace 𝒜

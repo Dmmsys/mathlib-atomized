@@ -1904,7 +1904,10 @@ definition equalizer
   add_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
     rw [Set.mem_ofPred_eq]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
   mul_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
-    rw [Set.mem_ofPred_eq]; rw
+    rw [Set.mem_ofPred_eq]; rw [map_mul]; rw [map_mul]; rw [hx]; rw [hy]
+  smul_mem' r x (hx : ϕ x = ψ x) := by rw [Set.mem_ofPred_eq, map_smul, map_smul, hx]
+
+@[simp]
 
 中文:
 定义 equalizer
@@ -1914,7 +1917,10 @@ definition equalizer
   add_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
     rw [Set.mem_ofPred_eq]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
   mul_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
-    rw [Set.mem_ofPred_eq]; rw
+    rw [Set.mem_ofPred_eq]; rw [map_mul]; rw [map_mul]; rw [hx]; rw [hy]
+  smul_mem' r x (hx : ϕ x = ψ x) := by rw [Set.mem_ofPred_eq, map_smul, map_smul, hx]
+
+@[simp]
 -/
 def equalizer (ϕ ψ : F) : NonUnitalSubalgebra R A where
   carrier := {a | (ϕ a : B) = ψ a}
@@ -2010,7 +2016,18 @@ definition adjoin
     mul_mem' :=
       fun {a b} (ha : a in Submodule.span R (NonUnitalSubsemiring.closure s : Set A))
         (hb : b in Submodule.span R (NonUnitalSubsemiring.closure s : Set A)) =>
-      show a * b in Submodule.span R (NonUnitalSubse
+      show a * b in Submodule.span R (NonUnitalSubsemiring.closure s : Set A) by
+        refine Submodule.span_induction ?_ ?_ ?_ ?_ ha
+        · refine Submodule.span_induction ?_ ?_ ?_ ?_ hb
+          · exact fun x (hx : x in NonUnitalSubsemiring.closure s) y
+              (hy : y in NonUnitalSubsemiring.closure s) => Submodule.subset_span (mul_mem hy hx)
+          · exact fun x _hx => (mul_zero x).symm ▸ Submodule.zero_mem _
+          · exact fun x y _ _ hx hy z hz => (mul_add z x y).symm ▸ add_mem (hx z hz) (hy z hz)
+          · exact fun r x _ hx y hy =>
+              (mul_smul_comm r y x).symm ▸ SMulMemClass.smul_mem r (hx y hy)
+        · exact (zero_mul b).symm ▸ Submodule.zero_mem _
+        · exact fun x y _ _ => (add_mul x y b).symm ▸ add_mem
+        · exact fun r x _ hx => (smul_mul_assoc r x b).symm ▸ SMulMemClass.smul_mem r hx }
 
 中文:
 定义 adjoin
@@ -2019,7 +2036,18 @@ definition adjoin
     mul_mem' :=
       fun {a b} (ha : a in Submodule.span R (NonUnitalSubsemiring.closure s : Set A))
         (hb : b in Submodule.span R (NonUnitalSubsemiring.closure s : Set A)) =>
-      show a * b in Submodule.span R (NonUnitalSubse
+      show a * b in Submodule.span R (NonUnitalSubsemiring.closure s : Set A) by
+        refine Submodule.span_induction ?_ ?_ ?_ ?_ ha
+        · refine Submodule.span_induction ?_ ?_ ?_ ?_ hb
+          · exact fun x (hx : x in NonUnitalSubsemiring.closure s) y
+              (hy : y in NonUnitalSubsemiring.closure s) => Submodule.subset_span (mul_mem hy hx)
+          · exact fun x _hx => (mul_zero x).symm ▸ Submodule.zero_mem _
+          · exact fun x y _ _ hx hy z hz => (mul_add z x y).symm ▸ add_mem (hx z hz) (hy z hz)
+          · exact fun r x _ hx y hy =>
+              (mul_smul_comm r y x).symm ▸ SMulMemClass.smul_mem r (hx y hy)
+        · exact (zero_mul b).symm ▸ Submodule.zero_mem _
+        · exact fun x y _ _ => (add_mul x y b).symm ▸ add_mem
+        · exact fun r x _ hx => (smul_mul_assoc r x b).symm ▸ SMulMemClass.smul_mem r hx }
 
 Depends on / 依赖: NonUnitalSubsemiring, NonUnitalSubsemiring.closure, Submodule, Submodule.span, Submodule.span_induction, closure, mul_mem, span_induction
 -/
@@ -2333,7 +2361,11 @@ theorem adjoin_induction
     { carrier := { x | exists hx, p x hx }
       mul_mem' := (Exists.elim · fun _ ha => (Exists.elim · fun _ hb => ⟨_, mul _ _ _ _ ha hb⟩))
       add_mem' := (Exists.elim · fun _ ha => (Exists.elim · fun _ hb => ⟨_, add _ _ _ _ ha hb⟩))
-      smul_mem' := fun r => 
+      smul_mem' := fun r => (Exists.elim · fun _ hb => ⟨_, smul r _ _ hb⟩)
+      zero_mem' := ⟨_, zero⟩ }
+.elim fun _ => id adjoin_le (S := S) (fun y hy => ⟨subset_adjoin R hy, mem y hy⟩) hx
+
+@[elab_as_elim]
 
 中文:
 定理 adjoin_induction
@@ -2342,7 +2374,11 @@ theorem adjoin_induction
     { carrier := { x | exists hx, p x hx }
       mul_mem' := (Exists.elim · fun _ ha => (Exists.elim · fun _ hb => ⟨_, mul _ _ _ _ ha hb⟩))
       add_mem' := (Exists.elim · fun _ ha => (Exists.elim · fun _ hb => ⟨_, add _ _ _ _ ha hb⟩))
-      smul_mem' := fun r => 
+      smul_mem' := fun r => (Exists.elim · fun _ hb => ⟨_, smul r _ _ hb⟩)
+      zero_mem' := ⟨_, zero⟩ }
+.elim fun _ => id adjoin_le (S := S) (fun y hy => ⟨subset_adjoin R hy, mem y hy⟩) hx
+
+@[elab_as_elim]
 
 Depends on / 依赖: Exists, Exists.elim, NonUnitalSubalgebra, add_mem, adjoin_le, carrier, mul_mem, smul_mem, subset_adjoin, zero_mem
 -/
@@ -2375,6 +2411,11 @@ theorem adjoin_induction₂
     | zero => exact zero_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | smul _ _ _ h => exact smul_left _ _ _ _ _ h
+  | zero => exact zero_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | smul _ _ _ h => exact smul_right _ _ _ _ _ h
 
 中文:
 定理 adjoin_induction₂
@@ -2387,6 +2428,11 @@ theorem adjoin_induction₂
     | zero => exact zero_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | smul _ _ _ h => exact smul_left _ _ _ _ _ h
+  | zero => exact zero_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | smul _ _ _ h => exact smul_right _ _ _ _ _ h
 
 Depends on / 依赖: add_left, add_right, adjoin_induction, mem_mem, mul_left, mul_right, smul_left, smul_ri, zero_left, zero_right
 -/
@@ -2430,7 +2476,16 @@ lemma adjoin_eq_span
     | add x y _ _ hpx hpy => exact add_mem hpx hpy
     | zero => exact zero_mem _
     | mul x y _ _ hpx hpy =>
-      apply span_induction₂ ?Hs (by simp) (
+      apply span_induction₂ ?Hs (by simp) (by simp) ?Hadd_l ?Hadd_r ?Hsmul_l ?Hsmul_r hpx hpy
+case Hs => exact fun x y hx hy => subset_span mul_mem hx hy
+      case Hadd_l => exact fun x y z _ _ _ hxz hyz => by simpa [add_mul] using add_mem hxz hyz
+      case Hadd_r => exact fun x y z _ _ _ hxz hyz => by simpa [mul_add] using add_mem hxz hyz
+      case Hsmul_l => exact fun r x y _ _ hxy => by simpa [smul_mul_assoc] using smul_mem _ _ hxy
+      case Hsmul_r => exact fun r x y _ _ hxy => by simpa [mul_smul_comm] using smul_mem _ _ hxy
+    | smul r x _ hpx => exact smul_mem _ _ hpx
+  · apply span_le.2 _
+    change Subsemigroup.closure s <= (adjoin R s).toSubsemigroup
+    exact Subsemigroup.closure_le.2 (subset_adjoin R)
 
 中文:
 引理 adjoin_eq_span
@@ -2444,7 +2499,16 @@ lemma adjoin_eq_span
     | add x y _ _ hpx hpy => exact add_mem hpx hpy
     | zero => exact zero_mem _
     | mul x y _ _ hpx hpy =>
-      apply span_induction₂ ?Hs (by simp) (
+      apply span_induction₂ ?Hs (by simp) (by simp) ?Hadd_l ?Hadd_r ?Hsmul_l ?Hsmul_r hpx hpy
+case Hs => exact fun x y hx hy => subset_span mul_mem hx hy
+      case Hadd_l => exact fun x y z _ _ _ hxz hyz => by simpa [add_mul] using add_mem hxz hyz
+      case Hadd_r => exact fun x y z _ _ _ hxz hyz => by simpa [mul_add] using add_mem hxz hyz
+      case Hsmul_l => exact fun r x y _ _ hxy => by simpa [smul_mul_assoc] using smul_mem _ _ hxy
+      case Hsmul_r => exact fun r x y _ _ hxy => by simpa [mul_smul_comm] using smul_mem _ _ hxy
+    | smul r x _ hpx => exact smul_mem _ _ hpx
+  · apply span_le.2 _
+    change Subsemigroup.closure s <= (adjoin R s).toSubsemigroup
+    exact Subsemigroup.closure_le.2 (subset_adjoin R)
 
 Depends on / 依赖: Hadd_l, Hadd_r, Hsmul_l, Hsmul_r, Subsemigroup, Subsemigroup.subset_closure, add_mem, add_mul, adjoin_induction, le_antisymm, mul_mem, subset_closure, subset_span, zero_mem
 -/
@@ -3788,7 +3852,8 @@ theorem coe_iSup_of_directed
         let ⟨i, hi⟩ := Set.mem_iUnion.1 hx
         Set.mem_iUnion.2 ⟨i, (S i).smul_mem' r hi⟩ }
   have : iSup S = K := le_antisymm
-    (
+    (iSup_le fun i => le_iSup (fun i => (S i : Set A)) i) (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
 
 中文:
 定理 coe_iSup_of_directed
@@ -3799,7 +3864,8 @@ theorem coe_iSup_of_directed
         let ⟨i, hi⟩ := Set.mem_iUnion.1 hx
         Set.mem_iUnion.2 ⟨i, (S i).smul_mem' r hi⟩ }
   have : iSup S = K := le_antisymm
-    (
+    (iSup_le fun i => le_iSup (fun i => (S i : Set A)) i) (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
 
 Depends on / 依赖: NonUnitalSubalgebra, NonUnitalSubsemiring, NonUnitalSubsemiring.coe_iSup_of_directed, NonUnitalSubsemiring.copy, Set.iUnion_subset, Set.mem_iUnion, coe_iSup_of_directed, iSup_le, iUnion_subset, le_antisymm, le_iSup, mem_iUnion, smul_mem, this.symm
 -/
@@ -3878,7 +3944,22 @@ definition iSupLift
               rw [hf i k hik]; rw [hf j k hjk]
               rfl)
             _ (by rw [coe_iSup_of_directed dir])
-    
+        map_zero' := by
+          dsimp
+          exact Set.iUnionLift_const _ (fun i : ι => (0 : K i)) (fun _ => rfl) _ (by simp)
+        map_mul' := by
+          dsimp
+          apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· * ·))
+          all_goals simp
+        map_add' := by
+          dsimp
+          apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· + ·))
+          all_goals simp
+        map_smul' := fun r => by
+          dsimp
+          apply Set.iUnionLift_unary (coe_iSup_of_directed dir) _ (fun _ x => r • x)
+            (fun _ _ => rfl)
+          all_goals simp }
 
 中文:
 定义 iSupLift
@@ -3893,7 +3974,22 @@ definition iSupLift
               rw [hf i k hik]; rw [hf j k hjk]
               rfl)
             _ (by rw [coe_iSup_of_directed dir])
-    
+        map_zero' := by
+          dsimp
+          exact Set.iUnionLift_const _ (fun i : ι => (0 : K i)) (fun _ => rfl) _ (by simp)
+        map_mul' := by
+          dsimp
+          apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· * ·))
+          all_goals simp
+        map_add' := by
+          dsimp
+          apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· + ·))
+          all_goals simp
+        map_smul' := fun r => by
+          dsimp
+          apply Set.iUnionLift_unary (coe_iSup_of_directed dir) _ (fun _ x => r • x)
+            (fun _ _ => rfl)
+          all_goals simp }
 
 Depends on / 依赖: Set.iUnionLift, Set.iUnionLift_binary, Set.iUnionLift_const, all_goals, coe_iSup_of_directed, iUnionLift, iUnionLift_binary, iUnionLift_const, map_add, map_mul, map_zero
 -/

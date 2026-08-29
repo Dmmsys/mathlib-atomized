@@ -587,7 +587,8 @@ lemma integrable_klFun_rnDeriv_iff
       + (1 - (μ.rnDeriv ν x).toReal)) ν ↔ Integrable (llr μ ν) μ by
     convert! this using 3 with x
     rw [klFun]; rw [add_sub_assoc]
-  rw [integrable_add_iff_integrable_left']; rw [integrable_rnDeriv_mul_log_if
+  rw [integrable_add_iff_integrable_left']; rw [integrable_rnDeriv_mul_log_iff hμν]
+  fun_prop
 
 中文:
 引理 integrable_klFun_rnDeriv_iff
@@ -597,7 +598,8 @@ lemma integrable_klFun_rnDeriv_iff
       + (1 - (μ.rnDeriv ν x).toReal)) ν ↔ Integrable (llr μ ν) μ by
     convert! this using 3 with x
     rw [klFun]; rw [add_sub_assoc]
-  rw [integrable_add_iff_integrable_left']; rw [integrable_rnDeriv_mul_log_if
+  rw [integrable_add_iff_integrable_left']; rw [integrable_rnDeriv_mul_log_iff hμν]
+  fun_prop
 
 Depends on / 依赖: Integrable, add_sub_assoc, convert, fun_prop, integrable_add_iff_integrable_left, integrable_rnDeriv_mul_log_iff, rnDeriv, toReal
 -/
@@ -623,7 +625,9 @@ lemma integral_klFun_rnDeriv
     exact integral_rnDeriv_smul hμν
   · rwa [integrable_rnDeriv_mul_log_iff hμν]
   · fun_prop
-  · refine Integrable.add ?_ (integrable_c
+  · refine Integrable.add ?_ (integrable_const _)
+    rwa [integrable_rnDeriv_mul_log_iff hμν]
+  · fun_prop
 
 中文:
 引理 integral_klFun_rnDeriv
@@ -635,7 +639,9 @@ lemma integral_klFun_rnDeriv
     exact integral_rnDeriv_smul hμν
   · rwa [integrable_rnDeriv_mul_log_iff hμν]
   · fun_prop
-  · refine Integrable.add ?_ (integrable_c
+  · refine Integrable.add ?_ (integrable_const _)
+    rwa [integrable_rnDeriv_mul_log_iff hμν]
+  · fun_prop
 
 Depends on / 依赖: Integrable, Integrable.add, Measure, Measure.integral_toReal_rnDeriv, fun_prop, integrable_const, integrable_rnDeriv_mul_log_iff, integral_add, integral_const, integral_rnDeriv_smul, integral_sub, integral_toReal_rnDeriv, mul_one, smul_eq_mul
 -/

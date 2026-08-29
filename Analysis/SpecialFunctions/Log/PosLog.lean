@@ -553,7 +553,8 @@ theorem posLog_prod
     calc log⁺ (∏ t in insert a s, f t)
     _ = log⁺ (f a * ∏ t in s, f t) := by rw [Finset.prod_insert ha]
     _ <= log⁺ (f a) + log⁺ (∏ t in s, f t) := posLog_mul
-    _ <= log⁺ (f a) + ∑ t in
+    _ <= log⁺ (f a) + ∑ t in s, log⁺ (f t) := add_le_add (by rfl) hs
+    _ = ∑ t in insert a s, log⁺ (f t) := by rw [Finset.sum_insert ha]
 
 中文:
 定理 posLog_prod
@@ -566,7 +567,8 @@ theorem posLog_prod
     calc log⁺ (∏ t in insert a s, f t)
     _ = log⁺ (f a * ∏ t in s, f t) := by rw [Finset.prod_insert ha]
     _ <= log⁺ (f a) + log⁺ (∏ t in s, f t) := posLog_mul
-    _ <= log⁺ (f a) + ∑ t in
+    _ <= log⁺ (f a) + ∑ t in s, log⁺ (f t) := add_le_add (by rfl) hs
+    _ = ∑ t in insert a s, log⁺ (f t) := by rw [Finset.sum_insert ha]
 
 Depends on / 依赖: Finset, Finset.induction, Finset.prod_insert, Finset.sum_insert, add_le_add, classical, insert, posLog, posLog_mul, prod_insert, sum_insert
 -/
@@ -602,7 +604,19 @@ theorem posLog_sum
   calc log⁺ (∑ t in s, f t)
   _ = log⁺ |∑ t in s, f t| := by
     rw [Real.posLog_abs]
-  _
+  _ <= log⁺ (∑ t in s, |f t|) := by
+    apply monotoneOn_posLog (by simp) (by simp [Finset.sum_nonneg])
+    simp [Finset.abs_sum_le_sum_abs]
+  _ <= log⁺ (∑ t in s, |f t_max|) := by
+    apply monotoneOn_posLog (by simp [Finset.sum_nonneg]) (by simp [mul_nonneg])
+    apply Finset.sum_le_sum (fun i ih => ht_max.2 i ih)
+  _ = log⁺ (s.card * |f t_max|) := by
+    simp [Finset.sum_const]
+  _ <= log s.card + log⁺ |f t_max| := posLog_nat_mul
+  _ <= log s.card + ∑ t in s, log⁺ (f t) := by
+    gcongr
+    rw [posLog_abs]
+    apply Finset.single_le_sum (fun _ _ => posLog_nonneg) ht_max.1
 
 中文:
 定理 posLog_sum
@@ -617,7 +631,19 @@ theorem posLog_sum
   calc log⁺ (∑ t in s, f t)
   _ = log⁺ |∑ t in s, f t| := by
     rw [Real.posLog_abs]
-  _
+  _ <= log⁺ (∑ t in s, |f t|) := by
+    apply monotoneOn_posLog (by simp) (by simp [Finset.sum_nonneg])
+    simp [Finset.abs_sum_le_sum_abs]
+  _ <= log⁺ (∑ t in s, |f t_max|) := by
+    apply monotoneOn_posLog (by simp [Finset.sum_nonneg]) (by simp [mul_nonneg])
+    apply Finset.sum_le_sum (fun i ih => ht_max.2 i ih)
+  _ = log⁺ (s.card * |f t_max|) := by
+    simp [Finset.sum_const]
+  _ <= log s.card + log⁺ |f t_max| := posLog_nat_mul
+  _ <= log s.card + ∑ t in s, log⁺ (f t) := by
+    gcongr
+    rw [posLog_abs]
+    apply Finset.single_le_sum (fun _ _ => posLog_nonneg) ht_max.1
 -/
 theorem posLog_sum {α : Type*} (s : Finset α) (f : α -> Real) :
     log⁺ (∑ t in s, f t) <= log (s.card) + ∑ t in s, log⁺ (f t) := by

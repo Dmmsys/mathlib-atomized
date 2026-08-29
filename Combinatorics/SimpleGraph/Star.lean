@@ -216,7 +216,7 @@ lemma isAcyclic_starGraph
   · subst h
     apply not_reachable_of_neighborSet_right_eq_empty hadj.1
     ext x
-    aes
+    aesop
 
 中文:
 引理 isAcyclic_starGraph
@@ -231,7 +231,7 @@ lemma isAcyclic_starGraph
   · subst h
     apply not_reachable_of_neighborSet_right_eq_empty hadj.1
     ext x
-    aes
+    aesop
 
 Depends on / 依赖: Sym2.eq_swap, eq_swap, isAcyclic_iff_forall_adj_isBridge, isAcyclic_iff_forall_adj_isBridge.mpr, not_reachable_of_neighborSet_right_eq_empty, resolve_left, starGraph_adj
 -/

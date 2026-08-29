@@ -89,7 +89,9 @@ lemma right_fac
   obtain ⟨X', s, hs, g, rfl⟩ := φ.cases
   obtain ⟨X', rfl⟩ := HomotopyCategory.quotient_obj_surjective X'
   obtain ⟨s, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective s
-  obtain ⟨g, rfl⟩ := (HomotopyCa
+  obtain ⟨g, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective g
+  rw [← isIso_Qh_map_iff] at hs
+  exact ⟨X', s, hs, g, hφ⟩
 
 中文:
 引理 right_fac
@@ -99,7 +101,9 @@ lemma right_fac
   obtain ⟨X', s, hs, g, rfl⟩ := φ.cases
   obtain ⟨X', rfl⟩ := HomotopyCategory.quotient_obj_surjective X'
   obtain ⟨s, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective s
-  obtain ⟨g, rfl⟩ := (HomotopyCa
+  obtain ⟨g, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective g
+  rw [← isIso_Qh_map_iff] at hs
+  exact ⟨X', s, hs, g, hφ⟩
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quasiIso, HomotopyCategory.quotient, HomotopyCategory.quotient_obj_surjective, Localization, Localization.exists_rightFraction, exists_rightFraction, isIso_Qh_map_iff, map_surjective, quasiIso, quotient, quotient_obj_surjective
 -/
@@ -126,7 +130,9 @@ lemma left_fac
   obtain ⟨X', g, s, hs, rfl⟩ := φ.cases
   obtain ⟨X', rfl⟩ := HomotopyCategory.quotient_obj_surjective X'
   obtain ⟨s, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective s
-  obtain ⟨g, rfl⟩ := (HomotopyCat
+  obtain ⟨g, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective g
+  rw [← isIso_Qh_map_iff] at hs
+  exact ⟨X', g, s, hs, hφ⟩
 
 中文:
 引理 left_fac
@@ -136,7 +142,9 @@ lemma left_fac
   obtain ⟨X', g, s, hs, rfl⟩ := φ.cases
   obtain ⟨X', rfl⟩ := HomotopyCategory.quotient_obj_surjective X'
   obtain ⟨s, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective s
-  obtain ⟨g, rfl⟩ := (HomotopyCat
+  obtain ⟨g, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective g
+  rw [← isIso_Qh_map_iff] at hs
+  exact ⟨X', g, s, hs, hφ⟩
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quasiIso, HomotopyCategory.quotient, HomotopyCategory.quotient_obj_surjective, Localization, Localization.exists_leftFraction, exists_leftFraction, isIso_Qh_map_iff, map_surjective, quasiIso, quotient, quotient_obj_surjective
 -/
@@ -163,7 +171,11 @@ lemma right_fac_of_isStrictlyLE
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncLEMap_iff]
     rw [isIso_Q_map_iff_quasiIso] at hs
     infer_instance
-  refine ⟨X'.truncLE n, inferInstance, CochainComplex.
+  refine ⟨X'.truncLE n, inferInstance, CochainComplex.truncLEMap s n ≫ X.ιTruncLE n, ?_,
+      CochainComplex.truncLEMap g n ≫ Y.ιTruncLE n, ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · simp
 
 中文:
 引理 right_fac_of_isStrictlyLE
@@ -174,7 +186,11 @@ lemma right_fac_of_isStrictlyLE
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncLEMap_iff]
     rw [isIso_Q_map_iff_quasiIso] at hs
     infer_instance
-  refine ⟨X'.truncLE n, inferInstance, CochainComplex.
+  refine ⟨X'.truncLE n, inferInstance, CochainComplex.truncLEMap s n ≫ X.ιTruncLE n, ?_,
+      CochainComplex.truncLEMap g n ≫ Y.ιTruncLE n, ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · simp
 
 Depends on / 依赖: CochainComplex, CochainComplex.quasiIso_truncLEMap_iff, CochainComplex.truncLEMap, Q.map, Q.map_comp, infer_instance, isIso_Q_map_iff_quasiIso, map_comp, quasiIso_truncLEMap_iff, right_fac, truncLE, truncLEMap
 -/
@@ -205,7 +221,16 @@ lemma left_fac_of_isStrictlyGE
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncGEMap_iff]
     rw [isIso_Q_map_iff_quasiIso] at hs
     infer_instance
-  refine ⟨Y'.truncGE n, inferInstance, X.πTruncGE n ≫ C
+  refine ⟨Y'.truncGE n, inferInstance, X.πTruncGE n ≫ CochainComplex.truncGEMap g n,
+    Y.πTruncGE n ≫ CochainComplex.truncGEMap s n, ?_, ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · have eq := Q.congr_map (CochainComplex.πTruncGE_naturality s n)
+    have eq' := Q.congr_map (CochainComplex.πTruncGE_naturality g n)
+    simp only [Functor.map_comp] at eq eq'
+    simp only [Functor.map_comp, ← cancel_mono (Q.map (CochainComplex.πTruncGE Y n)
+      ≫ Q.map (CochainComplex.truncGEMap s n)), assoc, IsIso.inv_hom_id, comp_id]
+    simp only [eq, IsIso.inv_hom_id_assoc, eq']
 
 中文:
 引理 left_fac_of_isStrictlyGE
@@ -216,7 +241,16 @@ lemma left_fac_of_isStrictlyGE
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncGEMap_iff]
     rw [isIso_Q_map_iff_quasiIso] at hs
     infer_instance
-  refine ⟨Y'.truncGE n, inferInstance, X.πTruncGE n ≫ C
+  refine ⟨Y'.truncGE n, inferInstance, X.πTruncGE n ≫ CochainComplex.truncGEMap g n,
+    Y.πTruncGE n ≫ CochainComplex.truncGEMap s n, ?_, ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · have eq := Q.congr_map (CochainComplex.πTruncGE_naturality s n)
+    have eq' := Q.congr_map (CochainComplex.πTruncGE_naturality g n)
+    simp only [Functor.map_comp] at eq eq'
+    simp only [Functor.map_comp, ← cancel_mono (Q.map (CochainComplex.πTruncGE Y n)
+      ≫ Q.map (CochainComplex.truncGEMap s n)), assoc, IsIso.inv_hom_id, comp_id]
+    simp only [eq, IsIso.inv_hom_id_assoc, eq']
 
 Depends on / 依赖: CochainCom, CochainComplex, CochainComplex.quasiIso_truncGEMap_iff, CochainComplex.truncGEMap, Q.congr_map, Q.map, Q.map_comp, congr_map, infer_instance, isIso_Q_map_iff_quasiIso, left_fac, map_comp, quasiIso_truncGEMap_iff, truncGE, truncGEMap
 -/
@@ -251,7 +285,14 @@ lemma right_fac_of_isStrictlyLE_of_isStrictlyGE
     rw [isIso_Q_map_iff_quasiIso] at hs
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncGEMap_iff]
     infer_instance
-  refine ⟨X'.truncGE a, inferIn
+  refine ⟨X'.truncGE a, inferInstance, inferInstance,
+    CochainComplex.truncGEMap s a ≫ inv (X.πTruncGE a), ?_,
+      CochainComplex.truncGEMap g a ≫ inv (Y.πTruncGE a), ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · simp only [Functor.map_comp, Functor.map_inv, IsIso.inv_comp, IsIso.inv_inv, assoc, fac,
+      ← cancel_epi (Q.map s), IsIso.hom_inv_id_assoc]
+    rw [← Functor.map_comp_assoc]; rw [← CochainComplex.πTruncGE_naturality s a]; rw [Functor.map_comp]; rw [assoc]; rw [IsIso.hom_inv_id_assoc]; rw [← Functor.map_comp_assoc]; rw [CochainComplex.πTruncGE_naturality g a]; rw [Functor.map_comp]; rw [assoc]; rw [IsIso.hom_inv_id]; rw [comp_id]
 
 中文:
 引理 right_fac_of_isStrictlyLE_of_isStrictlyGE
@@ -261,7 +302,14 @@ lemma right_fac_of_isStrictlyLE_of_isStrictlyGE
     rw [isIso_Q_map_iff_quasiIso] at hs
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncGEMap_iff]
     infer_instance
-  refine ⟨X'.truncGE a, inferIn
+  refine ⟨X'.truncGE a, inferInstance, inferInstance,
+    CochainComplex.truncGEMap s a ≫ inv (X.πTruncGE a), ?_,
+      CochainComplex.truncGEMap g a ≫ inv (Y.πTruncGE a), ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · simp only [Functor.map_comp, Functor.map_inv, IsIso.inv_comp, IsIso.inv_inv, assoc, fac,
+      ← cancel_epi (Q.map s), IsIso.hom_inv_id_assoc]
+    rw [← Functor.map_comp_assoc]; rw [← CochainComplex.πTruncGE_naturality s a]; rw [Functor.map_comp]; rw [assoc]; rw [IsIso.hom_inv_id_assoc]; rw [← Functor.map_comp_assoc]; rw [CochainComplex.πTruncGE_naturality g a]; rw [Functor.map_comp]; rw [assoc]; rw [IsIso.hom_inv_id]; rw [comp_id]
 
 Depends on / 依赖: CochainComplex, CochainComplex.quasiIso_truncGEMap_iff, CochainComplex.truncGEMap, Functor, Functor.map_comp, Functor.map_inv, Q.map, Q.map_comp, infer_instance, isIso_Q_map_iff_quasiIso, map_comp, map_inv, quasiIso_truncGEMap_iff, right_fac_of_isStrictlyLE, truncGE, truncGEMap
 -/
@@ -295,7 +343,14 @@ lemma left_fac_of_isStrictlyLE_of_isStrictlyGE
     rw [isIso_Q_map_iff_quasiIso] at hs
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncLEMap_iff]
     infer_instance
-  refine ⟨Y'.truncLE b, inferIns
+  refine ⟨Y'.truncLE b, inferInstance, inferInstance,
+    inv (X.ιTruncLE b) ≫ CochainComplex.truncLEMap g b,
+    inv (Y.ιTruncLE b) ≫ CochainComplex.truncLEMap s b, ?_, ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · simp only [Functor.map_comp, Functor.map_inv, IsIso.inv_comp, IsIso.inv_inv, assoc, fac,
+      ← cancel_mono (Q.map s), IsIso.inv_hom_id, comp_id]
+    rw [← Functor.map_comp]; rw [← CochainComplex.ιTruncLE_naturality s b]; rw [Functor.map_comp]; rw [IsIso.inv_hom_id_assoc]; rw [← Functor.map_comp]; rw [CochainComplex.ιTruncLE_naturality g b]; rw [Functor.map_comp]; rw [IsIso.inv_hom_id_assoc]
 
 中文:
 引理 left_fac_of_isStrictlyLE_of_isStrictlyGE
@@ -305,7 +360,14 @@ lemma left_fac_of_isStrictlyLE_of_isStrictlyGE
     rw [isIso_Q_map_iff_quasiIso] at hs
     rw [isIso_Q_map_iff_quasiIso]; rw [CochainComplex.quasiIso_truncLEMap_iff]
     infer_instance
-  refine ⟨Y'.truncLE b, inferIns
+  refine ⟨Y'.truncLE b, inferInstance, inferInstance,
+    inv (X.ιTruncLE b) ≫ CochainComplex.truncLEMap g b,
+    inv (Y.ιTruncLE b) ≫ CochainComplex.truncLEMap s b, ?_, ?_⟩
+  · rw [Q.map_comp]
+    infer_instance
+  · simp only [Functor.map_comp, Functor.map_inv, IsIso.inv_comp, IsIso.inv_inv, assoc, fac,
+      ← cancel_mono (Q.map s), IsIso.inv_hom_id, comp_id]
+    rw [← Functor.map_comp]; rw [← CochainComplex.ιTruncLE_naturality s b]; rw [Functor.map_comp]; rw [IsIso.inv_hom_id_assoc]; rw [← Functor.map_comp]; rw [CochainComplex.ιTruncLE_naturality g b]; rw [Functor.map_comp]; rw [IsIso.inv_hom_id_assoc]
 
 Depends on / 依赖: CochainComplex, CochainComplex.quasiIso_truncLEMap_iff, CochainComplex.truncLEMap, Functor, Functor.map_comp, Functor.map_inv, Q.map, Q.map_comp, infer_instance, isIso_Q_map_iff_quasiIso, left_fac_of_isStrictlyGE, map_comp, map_inv, quasiIso_truncLEMap_iff, truncLE, truncLEMap
 -/
@@ -342,7 +404,8 @@ lemma subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE
     ext i
     by_cases hi : a < i
     · apply (X'.isZero_of_isStrictlyLE a i hi).eq_of_src
-    · apply (Y.isZero_of_isStrictlyGE b 
+    · apply (Y.isZero_of_isStrictlyGE b i (by lia)).eq_of_tgt
+  rw [this]; rw [Q.map_zero]; rw [comp_zero]
 
 中文:
 引理 subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE
@@ -355,7 +418,8 @@ lemma subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE
     ext i
     by_cases hi : a < i
     · apply (X'.isZero_of_isStrictlyLE a i hi).eq_of_src
-    · apply (Y.isZero_of_isStrictlyGE b 
+    · apply (Y.isZero_of_isStrictlyGE b i (by lia)).eq_of_tgt
+  rw [this]; rw [Q.map_zero]; rw [comp_zero]
 
 Depends on / 依赖: Q.map_zero, Q.obj, Y.isZero_of_isStrictlyGE, comp_zero, eq_of_src, eq_of_tgt, isZero_of_isStrictlyGE, isZero_of_isStrictlyLE, map_zero, right_fac_of_isStrictlyLE
 -/

@@ -248,7 +248,7 @@ lemma of_section
   intro hs
   use g s
   apply (TensorProduct.lid R S).symm.injective
-  rw [TensorProduct.lid_symm_apply]; rw [TensorProduct.lid_symm_apply]; rw [← mul_one ((Algebra.linearMap R S) _)]; rw [Algebra.coe_linearMap]; rw [← Al
+  rw [TensorProduct.lid_symm_apply]; rw [TensorProduct.lid_symm_apply]; rw [← mul_one ((Algebra.linearMap R S) _)]; rw [Algebra.coe_linearMap]; rw [← Algebra.smul_def]; rw [← TensorProduct.smul_tmul]; rw [smul_eq_mul]; rw [mul_one]; rw [← AlgHom.id_apply (R := R) (1 : S)]; rw [← TensorProduct.map_tmul]; rw [sub_eq_zero.mp ((TensorProduct.includeLeftSubRight_apply s).symm.trans hs)]; rw [TensorProduct.map_tmul]; rw [map_one]; rw [AlgHom.id_apply]
 
 中文:
 引理 of_section
@@ -260,7 +260,7 @@ lemma of_section
   intro hs
   use g s
   apply (TensorProduct.lid R S).symm.injective
-  rw [TensorProduct.lid_symm_apply]; rw [TensorProduct.lid_symm_apply]; rw [← mul_one ((Algebra.linearMap R S) _)]; rw [Algebra.coe_linearMap]; rw [← Al
+  rw [TensorProduct.lid_symm_apply]; rw [TensorProduct.lid_symm_apply]; rw [← mul_one ((Algebra.linearMap R S) _)]; rw [Algebra.coe_linearMap]; rw [← Algebra.smul_def]; rw [← TensorProduct.smul_tmul]; rw [smul_eq_mul]; rw [mul_one]; rw [← AlgHom.id_apply (R := R) (1 : S)]; rw [← TensorProduct.map_tmul]; rw [sub_eq_zero.mp ((TensorProduct.includeLeftSubRight_apply s).symm.trans hs)]; rw [TensorProduct.map_tmul]; rw [map_one]; rw [AlgHom.id_apply]
 
 Depends on / 依赖: AlgHom, AlgHom.id_apply, Algebra, Algebra.coe_linearMap, Algebra.linearMap, Algebra.smul_def, TensorProduct, TensorProduct.includeLeftSubRight_appl, TensorProduct.includeLeftSubRight_zero_of_mem_range, TensorProduct.lid, TensorProduct.lid_symm_apply, TensorProduct.map_tmul, TensorProduct.smul_tmul, coe_linearMap, id_apply, includeLeftSubRight_appl, includeLeftSubRight_zero_of_mem_range, injective, lid_symm_apply, linearMap
 -/
@@ -287,7 +287,18 @@ lemma of_isEffective_tensorProduct_of_faithfullyFlat
 refine Module.FaithfullyFlat.lTensor_reflects_exact _ _ _ _
     AddMonoidHom.exact_iff_of_surjective_of_bijective_of_injective
       ((Algebra.linearMap R S).lTensor T) ((TensorProduct.includeLeftSubRight R S).lTensor T)
-      (Algebra.linearMap T (T otimes[R] S)) (TensorProduct.includeLeftSubRig
+      (Algebra.linearMap T (T otimes[R] S)) (TensorProduct.includeLeftSubRight T (T otimes[R] S))
+      (TensorProduct.rid R R T).toAddMonoidHom (AddMonoidHom.id (T otimes[R] S))
+      (TensorProduct.AlgebraTensorModule.distribBaseChange R T S S).toAddMonoidHom ?_ ?_
+      (TensorProduct.rid R R T).surjective Function.bijective_id
+.mpr ‹_› ((TensorProduct.AlgebraTensorModule.distribBaseChange R T S S).injective)
+  · ext
+    simp [← Algebra.TensorProduct.linearMap_comp_rid]
+    -- The goal is TensorProduct.rid .. = TensorProduct.AlgebraTensorModule.rid ..
+    -- TODO: merge both into one definition, and remove the rfl.
+    rfl
+  · ext
+    simp
 
 中文:
 引理 of_isEffective_tensorProduct_of_faithfullyFlat
@@ -295,7 +306,18 @@ refine Module.FaithfullyFlat.lTensor_reflects_exact _ _ _ _
 refine Module.FaithfullyFlat.lTensor_reflects_exact _ _ _ _
     AddMonoidHom.exact_iff_of_surjective_of_bijective_of_injective
       ((Algebra.linearMap R S).lTensor T) ((TensorProduct.includeLeftSubRight R S).lTensor T)
-      (Algebra.linearMap T (T otimes[R] S)) (TensorProduct.includeLeftSubRig
+      (Algebra.linearMap T (T otimes[R] S)) (TensorProduct.includeLeftSubRight T (T otimes[R] S))
+      (TensorProduct.rid R R T).toAddMonoidHom (AddMonoidHom.id (T otimes[R] S))
+      (TensorProduct.AlgebraTensorModule.distribBaseChange R T S S).toAddMonoidHom ?_ ?_
+      (TensorProduct.rid R R T).surjective Function.bijective_id
+.mpr ‹_› ((TensorProduct.AlgebraTensorModule.distribBaseChange R T S S).injective)
+  · ext
+    simp [← Algebra.TensorProduct.linearMap_comp_rid]
+    -- The goal is TensorProduct.rid .. = TensorProduct.AlgebraTensorModule.rid ..
+    -- TODO: merge both into one definition, and remove the rfl.
+    rfl
+  · ext
+    simp
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.exact_iff_of_surjective_of_bijective_of_injective, AddMonoidHom.id, Algebra, Algebra.linearMap, AlgebraTensorModule, FaithfullyFlat, Module, Module.FaithfullyFlat.lTensor_reflects_exact, TensorProduct, TensorProduct.AlgebraTensorModule.distribBaseChange, TensorProduct.includeLeftSubRight, TensorProduct.rid, distribBaseChange, exact_iff_of_surjective_of_bijective_of_injective, includeLeftSubRight, lTensor, lTensor_reflects_exact, linearMap, otimes
 -/

@@ -65,7 +65,7 @@ theorem realSqrt_lt_ratSqrt_add_inv_prec
   · push_cast at this
     exact this
   · push_cast
-    exact add_nonneg (by simp
+    exact add_nonneg (by simpa using ratSqrt_nonneg _ _) (by simp)
 
 中文:
 定理 realSqrt_lt_ratSqrt_add_inv_prec
@@ -78,7 +78,7 @@ theorem realSqrt_lt_ratSqrt_add_inv_prec
   · push_cast at this
     exact this
   · push_cast
-    exact add_nonneg (by simp
+    exact add_nonneg (by simpa using ratSqrt_nonneg _ _) (by simp)
 
 Depends on / 依赖: Rat.cast_pow, Real.sqrt_lt_sqrt, Real.sqrt_sq, add_nonneg, cast_pow, lt_ratSqrt_add_inv_prec_sq, ratSqrt, ratSqrt_nonneg, sqrt_lt_sqrt, sqrt_sq, x.ratSqrt
 -/

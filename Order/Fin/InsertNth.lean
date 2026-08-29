@@ -93,7 +93,9 @@ lemma insertNth_monotone
   obtain hj | rfl | hj := lt_trichotomy j i.castSucc
   · obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hj)
     grind [insertNth_apply_below, castPred_castSucc, hf j.castSucc_le_succ]
-  · rwa [← succAbove_succ_self i.castSucc, insertNth_ap
+  · rwa [← succAbove_succ_self i.castSucc, insertNth_apply_succAbove, insertNth_apply_same]
+  · obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hj)
+    grind [insertNth_apply_same, insertNth_apply_above, hf j.castSucc_le_succ]
 
 中文:
 引理 insertNth_monotone
@@ -103,7 +105,9 @@ lemma insertNth_monotone
   obtain hj | rfl | hj := lt_trichotomy j i.castSucc
   · obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hj)
     grind [insertNth_apply_below, castPred_castSucc, hf j.castSucc_le_succ]
-  · rwa [← succAbove_succ_self i.castSucc, insertNth_ap
+  · rwa [← succAbove_succ_self i.castSucc, insertNth_apply_succAbove, insertNth_apply_same]
+  · obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hj)
+    grind [insertNth_apply_same, insertNth_apply_above, hf j.castSucc_le_succ]
 
 Depends on / 依赖: Fin.monotone_iff_le_succ, Fin.ne_last_of_lt, Fin.ne_zero_of_lt, castPred_castSucc, castSucc, castSucc_le_succ, eq_castSucc_of_ne_last, eq_succ_of_ne_zero, i.castSucc, insertNth_apply_above, insertNth_apply_below, insertNth_apply_same, insertNth_apply_succAbove, j.castSucc_le_succ, j.eq_castSucc_of_ne_last, j.eq_succ_of_ne_zero, lt_trichotomy, monotone_iff_le_succ, ne_last_of_lt, ne_zero_of_lt
 -/
@@ -131,7 +135,9 @@ lemma strictMono_insertNth
   obtain hj | rfl | hj := lt_trichotomy j i.castSucc
   · obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hj)
     grind [insertNth_apply_below, castPred_castSucc]
-  · rwa [← succAbove_succ_self i.castSucc, insertNth_apply_succAbove
+  · rwa [← succAbove_succ_self i.castSucc, insertNth_apply_succAbove, insertNth_apply_same]
+  · obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hj)
+    grind [insertNth_apply_same, insertNth_apply_above]
 
 中文:
 引理 strictMono_insertNth
@@ -141,7 +147,9 @@ lemma strictMono_insertNth
   obtain hj | rfl | hj := lt_trichotomy j i.castSucc
   · obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hj)
     grind [insertNth_apply_below, castPred_castSucc]
-  · rwa [← succAbove_succ_self i.castSucc, insertNth_apply_succAbove
+  · rwa [← succAbove_succ_self i.castSucc, insertNth_apply_succAbove, insertNth_apply_same]
+  · obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hj)
+    grind [insertNth_apply_same, insertNth_apply_above]
 
 Depends on / 依赖: Fin.ne_last_of_lt, Fin.ne_zero_of_lt, Fin.strictMono_iff_lt_succ, castPred_castSucc, castSucc, eq_castSucc_of_ne_last, eq_succ_of_ne_zero, i.castSucc, insertNth_apply_above, insertNth_apply_below, insertNth_apply_same, insertNth_apply_succAbove, j.eq_castSucc_of_ne_last, j.eq_succ_of_ne_zero, lt_trichotomy, ne_last_of_lt, ne_zero_of_lt, strictMono_iff_lt_succ, succAbove_succ_self
 -/

@@ -72,7 +72,7 @@ theorem pow_coeff_zero_ne_zero_of_unit
   have hx₀ : IsIntegral K x := (Algebra.IsAlgebraic.isAlgebraic x).isIntegral
   have hdeg := Nat.div_pos (natDegree_le x) (natDegree_pos hx₀)
   rw [ne_eq]; rw [pow_eq_zero_iff hdeg.ne.symm]; rw [Valuation.zero_iff]
-  exac
+  exact coeff_zero_ne_zero hx₀ hx.ne_zero
 
 中文:
 定理 pow_coeff_zero_ne_zero_of_unit
@@ -82,7 +82,7 @@ theorem pow_coeff_zero_ne_zero_of_unit
   have hx₀ : IsIntegral K x := (Algebra.IsAlgebraic.isAlgebraic x).isIntegral
   have hdeg := Nat.div_pos (natDegree_le x) (natDegree_pos hx₀)
   rw [ne_eq]; rw [pow_eq_zero_iff hdeg.ne.symm]; rw [Valuation.zero_iff]
-  exac
+  exact coeff_zero_ne_zero hx₀ hx.ne_zero
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsAlgebraic.isAlgebraic, Algebra.IsAlgebraic.of_finite, IsAlgebraic, IsIntegral, Nat.div_pos, Valuation, Valuation.zero_iff, coeff_zero_ne_zero, div_pos, h_alg, hdeg.ne.symm, hx.ne_zero, isAlgebraic, isIntegral, natDegree_le, natDegree_pos, ne_eq, ne_zero
 -/

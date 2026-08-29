@@ -62,7 +62,17 @@ theorem hasInitial_of_weakly_initial_and_hasWideEqualizers
   have : forall X : C, Unique (wideEqualizer (id : endos -> endos) ⟶ X) := by
     intro X
     refine ⟨⟨i ≫ Classical.choice (hT X)⟩, fun a => ?_⟩
-    let E := equalizer a (i ≫ Classical.choice (
+    let E := equalizer a (i ≫ Classical.choice (hT _))
+    let e : E ⟶ wideEqualizer id := equalizer.ι _ _
+    let h : T ⟶ E := Classical.choice (hT E)
+    have : ((i ≫ h) ≫ e) ≫ i = i ≫ 𝟙 _ := by
+      rw [Category.assoc]; rw [Category.assoc]
+      apply wideEqualizer.condition (id : endos -> endos) (h ≫ e ≫ i)
+    rw [Category.comp_id]; rw [cancel_mono_id i] at this
+    have : IsSplitEpi e := IsSplitEpi.mk' ⟨i ≫ h, this⟩
+    rw [← cancel_epi e]
+    apply equalizer.condition
+  exact hasInitial_of_unique (wideEqualizer (id : endos -> endos))
 
 中文:
 定理 hasInitial_of_weakly_initial_and_hasWideEqualizers
@@ -74,7 +84,17 @@ theorem hasInitial_of_weakly_initial_and_hasWideEqualizers
   have : forall X : C, Unique (wideEqualizer (id : endos -> endos) ⟶ X) := by
     intro X
     refine ⟨⟨i ≫ Classical.choice (hT X)⟩, fun a => ?_⟩
-    let E := equalizer a (i ≫ Classical.choice (
+    let E := equalizer a (i ≫ Classical.choice (hT _))
+    let e : E ⟶ wideEqualizer id := equalizer.ι _ _
+    let h : T ⟶ E := Classical.choice (hT E)
+    have : ((i ≫ h) ≫ e) ≫ i = i ≫ 𝟙 _ := by
+      rw [Category.assoc]; rw [Category.assoc]
+      apply wideEqualizer.condition (id : endos -> endos) (h ≫ e ≫ i)
+    rw [Category.comp_id]; rw [cancel_mono_id i] at this
+    have : IsSplitEpi e := IsSplitEpi.mk' ⟨i ≫ h, this⟩
+    rw [← cancel_epi e]
+    apply equalizer.condition
+  exact hasInitial_of_unique (wideEqualizer (id : endos -> endos))
 
 Depends on / 依赖: Category, Category.assoc, Classical, Classical.choice, Nonempty, Unique, choice, condition, equalizer, wideEqualizer, wideEqualizer.condition
 -/

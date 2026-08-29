@@ -58,7 +58,9 @@ refine .of_isLittleOTVS ho.trans_isLittleOTVS .triangle (.symm ?_) hh.isLittleOT
 .trans_isBigOTVS ?_ refine (hf.isLittleOTVS.comp_tendsto htendsto).congr' ?_ .rfl
   · refine hcomp.mono ?_
     simp +contextual
-.trans ?_ .symm.isBigOTVS.comp_tendsto htendsto · refine hf.isThetaTVS_sub hf_emb.isIn
+.trans ?_ .symm.isBigOTVS.comp_tendsto htendsto · refine hf.isThetaTVS_sub hf_emb.isInducing
+    refine hh.isBigOTVS_sub.congr' (hcomp.mono ?_) .rfl
+    simp +contextual
 
 中文:
 定理 有FDerivAtFilter.of_comp_aux
@@ -68,7 +70,9 @@ refine .of_isLittleOTVS ho.trans_isLittleOTVS .triangle (.symm ?_) hh.isLittleOT
 .trans_isBigOTVS ?_ refine (hf.isLittleOTVS.comp_tendsto htendsto).congr' ?_ .rfl
   · refine hcomp.mono ?_
     simp +contextual
-.trans ?_ .symm.isBigOTVS.comp_tendsto htendsto · refine hf.isThetaTVS_sub hf_emb.isIn
+.trans ?_ .symm.isBigOTVS.comp_tendsto htendsto · refine hf.isThetaTVS_sub hf_emb.isInducing
+    refine hh.isBigOTVS_sub.congr' (hcomp.mono ?_) .rfl
+    simp +contextual
 -/
 private theorem HasFDerivAtFilter.of_comp_aux (hf_emb : Topology.IsEmbedding f')
     (htendsto : Tendsto (Prod.map g g) lE lF)

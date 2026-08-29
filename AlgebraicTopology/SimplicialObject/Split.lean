@@ -185,7 +185,14 @@ instance :
       IndexSet Δ -> Sigma fun k : Fin (Δ.unop.len + 1) => Fin (Δ.unop.len + 1) -> Fin (k + 1))
     (by
       rintro ⟨⟨Δ₁⟩, α₁⟩ ⟨⟨Δ₂⟩, α₂⟩ h₁
-      simp only [unop_op, Sigma.mk.
+      simp only [unop_op, Sigma.mk.inj_iff, Fin.mk.injEq] at h₁
+      have h₂ : Δ₁ = Δ₂ := by
+        ext1
+        simpa only [Fin.mk_eq_mk] using h₁.1
+      subst h₂
+      refine ext _ _ rfl ?_
+      ext : 2
+      exact eq_of_heq h₁.2)
 
 中文:
 实例 :
@@ -197,7 +204,14 @@ instance :
       IndexSet Δ -> Sigma fun k : Fin (Δ.unop.len + 1) => Fin (Δ.unop.len + 1) -> Fin (k + 1))
     (by
       rintro ⟨⟨Δ₁⟩, α₁⟩ ⟨⟨Δ₂⟩, α₂⟩ h₁
-      simp only [unop_op, Sigma.mk.
+      simp only [unop_op, Sigma.mk.inj_iff, Fin.mk.injEq] at h₁
+      have h₂ : Δ₁ = Δ₂ := by
+        ext1
+        simpa only [Fin.mk_eq_mk] using h₁.1
+      subst h₂
+      refine ext _ _ rfl ?_
+      ext : 2
+      exact eq_of_heq h₁.2)
 
 Depends on / 依赖: A.e.toOrderHom, Fin.mk.injEq, Fin.mk_eq_mk, Fintype, Fintype.ofInjective, IndexSet, Nat.lt_succ_iff.mpr, Sigma.mk.inj_iff, eq_of_heq, inj_iff, len_le_of_epi, lt_succ_iff, mk_eq_mk, ofInjective, toOrderHom, unop.len, unop_op
 -/

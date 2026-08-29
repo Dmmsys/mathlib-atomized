@@ -686,7 +686,8 @@ theorem MemBaseSet.exists_common_compl
   by_cases hD : (l.bDistortion : Prop)
   · rcases h₁.4 hD with ⟨π, hπU, hπc⟩
     exact ⟨π, hπU, fun _ => hπc, fun _ => hπc.trans hc⟩
-  · exact ⟨π₁.toPrepartition.co
+  · exact ⟨π₁.toPrepartition.compl, π₁.toPrepartition.iUnion_compl,
+      fun h => (hD h).elim, fun h => (hD h).elim⟩
 
 中文:
 定理 MemBaseSet.存在_common_compl
@@ -697,7 +698,8 @@ theorem MemBaseSet.exists_common_compl
   by_cases hD : (l.bDistortion : Prop)
   · rcases h₁.4 hD with ⟨π, hπU, hπc⟩
     exact ⟨π, hπU, fun _ => hπc, fun _ => hπc.trans hc⟩
-  · exact ⟨π₁.toPrepartition.co
+  · exact ⟨π₁.toPrepartition.compl, π₁.toPrepartition.iUnion_compl,
+      fun h => (hD h).elim, fun h => (hD h).elim⟩
 
 Depends on / 依赖: _root_, _root_.and_comm, and_comm, bDistortion, c.trans, hU.symm, iUnion_compl, l.bDistortion, le_of_not_ge, toPrepartition, toPrepartition.compl, toPrepartition.iUnion_compl
 -/
@@ -758,7 +760,22 @@ theorem MemBaseSet.filter
     fun hD => (distortion_filter_le _ _).trans (hπ.3 hD), fun hD => ?_⟩
   rcases hπ.4 hD with ⟨π₁, hπ₁U, hc⟩
   set π₂ := π.filter fun J => ¬p J
-  have : Disjoint π₁.iUnion π₂.iUnion := 
+  have : Disjoint π₁.iUnion π₂.iUnion := by
+    simpa [π₂, hπ₁U] using disjoint_sdiff_self_left.mono_right sdiff_le
+  refine ⟨π₁.disjUnion π₂.toPrepartition this, ?_, ?_⟩
+  · suffices ↑I \ π.iUnion union π.iUnion \ (π.filter p).iUnion = ↑I \ (π.filter p).iUnion by
+      simp [π₂, *]
+    have h : (π.filter p).iUnion subseteq π.iUnion :=
+      biUnion_subset_biUnion_left (Finset.filter_subset _ _)
+    ext x
+    fconstructor
+    · rintro (⟨hxI, hxπ⟩ | ⟨hxπ, hxp⟩)
+      exacts [⟨hxI, mt (@h x) hxπ⟩, ⟨π.iUnion_subset hxπ, hxp⟩]
+    · rintro ⟨hxI, hxp⟩
+      by_cases hxπ : x in π.iUnion
+      exacts [Or.inr ⟨hxπ, hxp⟩, Or.inl ⟨hxI, hxπ⟩]
+  · have : (π.filter fun J => ¬p J).distortion <= c := (distortion_filter_le _ _).trans (hπ.3 hD)
+    simpa [hc]
 
 中文:
 定理 MemBaseSet.filter
@@ -769,7 +786,22 @@ theorem MemBaseSet.filter
     fun hD => (distortion_filter_le _ _).trans (hπ.3 hD), fun hD => ?_⟩
   rcases hπ.4 hD with ⟨π₁, hπ₁U, hc⟩
   set π₂ := π.filter fun J => ¬p J
-  have : Disjoint π₁.iUnion π₂.iUnion := 
+  have : Disjoint π₁.iUnion π₂.iUnion := by
+    simpa [π₂, hπ₁U] using disjoint_sdiff_self_left.mono_right sdiff_le
+  refine ⟨π₁.disjUnion π₂.toPrepartition this, ?_, ?_⟩
+  · suffices ↑I \ π.iUnion union π.iUnion \ (π.filter p).iUnion = ↑I \ (π.filter p).iUnion by
+      simp [π₂, *]
+    have h : (π.filter p).iUnion subseteq π.iUnion :=
+      biUnion_subset_biUnion_left (Finset.filter_subset _ _)
+    ext x
+    fconstructor
+    · rintro (⟨hxI, hxπ⟩ | ⟨hxπ, hxp⟩)
+      exacts [⟨hxI, mt (@h x) hxπ⟩, ⟨π.iUnion_subset hxπ, hxp⟩]
+    · rintro ⟨hxI, hxp⟩
+      by_cases hxπ : x in π.iUnion
+      exacts [Or.inr ⟨hxπ, hxp⟩, Or.inl ⟨hxI, hxπ⟩]
+  · have : (π.filter fun J => ¬p J).distortion <= c := (distortion_filter_le _ _).trans (hπ.3 hD)
+    simpa [hc]
 -/
 protected theorem MemBaseSet.filter (hπ : l.MemBaseSet I c r π) (p : Box ι -> Prop) :
     l.MemBaseSet I c r (π.filter p) := by
@@ -806,7 +838,12 @@ theorem biUnionTagged_memBaseSet
     fun hH => TaggedPrepartition.isHenstock_biUnionTagged.2 fun J hJ => (h J hJ).2 hH,
     fun hD => ?_, fun hD => ?_⟩
   · rw [Prepartition.distortion_biUnionTagged, Finset.sup_le_iff]
-    exact fun J hJ => (h J hJ
+    exact fun J hJ => (h J hJ).3 hD
+  · refine ⟨_, ?_, hc hD⟩
+    rw [π.iUnion_compl]; rw [← π.iUnion_biUnion_partition hp]
+    rfl
+
+@[gcongr, mono]
 
 中文:
 定理 biUnionTagged_memBaseSet
@@ -816,7 +853,12 @@ theorem biUnionTagged_memBaseSet
     fun hH => TaggedPrepartition.isHenstock_biUnionTagged.2 fun J hJ => (h J hJ).2 hH,
     fun hD => ?_, fun hD => ?_⟩
   · rw [Prepartition.distortion_biUnionTagged, Finset.sup_le_iff]
-    exact fun J hJ => (h J hJ
+    exact fun J hJ => (h J hJ).3 hD
+  · refine ⟨_, ?_, hc hD⟩
+    rw [π.iUnion_compl]; rw [← π.iUnion_biUnion_partition hp]
+    rfl
+
+@[gcongr, mono]
 
 Depends on / 依赖: Finset, Finset.sup_le_iff, Prepartition, Prepartition.distortion_biUnionTagged, TaggedPrepartition, TaggedPrepartition.isHenstock_biUnionTagged, TaggedPrepartition.isSubordinate_biUnionTagged, distortion_biUnionTagged, iUnion_biUnion_partition, iUnion_compl, isHenstock_biUnionTagged, isSubordinate_biUnionTagged, sup_le_iff
 -/
@@ -1099,7 +1141,13 @@ theorem tendsto_embedBox_toFilteriUnion_top
   refine le_iSup_of_le (max c π₀.compl.distortion) ?_
   refine ((l.hasBasis_toFilterDistortioniUnion I c ⊤).tendsto_iff
     (l.hasBasis_toFilterDistortioniUnion J _ _)).2 fun r hr => ?_
-  refine ⟨r, hr, fun 
+  refine ⟨r, hr, fun π hπ => ?_⟩
+  rw [mem_ofPred_eq]; rw [Prepartition.iUnion_top] at hπ
+  refine ⟨⟨hπ.1.1, hπ.1.2, fun hD => le_trans (hπ.1.3 hD) (le_max_left _ _), fun _ => ?_⟩, ?_⟩
+  · refine ⟨_, π₀.iUnion_compl.trans ?_, le_max_right _ _⟩
+    congr 1
+    exact (Prepartition.iUnion_single h).trans hπ.2.symm
+  · exact hπ.2.trans (Prepartition.iUnion_single _).symm
 
 中文:
 定理 tendsto_embedBox_toFilteriUnion_top
@@ -1110,7 +1158,13 @@ theorem tendsto_embedBox_toFilteriUnion_top
   refine le_iSup_of_le (max c π₀.compl.distortion) ?_
   refine ((l.hasBasis_toFilterDistortioniUnion I c ⊤).tendsto_iff
     (l.hasBasis_toFilterDistortioniUnion J _ _)).2 fun r hr => ?_
-  refine ⟨r, hr, fun 
+  refine ⟨r, hr, fun π hπ => ?_⟩
+  rw [mem_ofPred_eq]; rw [Prepartition.iUnion_top] at hπ
+  refine ⟨⟨hπ.1.1, hπ.1.2, fun hD => le_trans (hπ.1.3 hD) (le_max_left _ _), fun _ => ?_⟩, ?_⟩
+  · refine ⟨_, π₀.iUnion_compl.trans ?_, le_max_right _ _⟩
+    congr 1
+    exact (Prepartition.iUnion_single h).trans hπ.2.symm
+  · exact hπ.2.trans (Prepartition.iUnion_single _).symm
 
 Depends on / 依赖: Prepartition, Prepartition.iUnion_top, Prepartition.single, compl.distortion, distortion, hasBasis_toFilterDistortioniUnion, iUnion_compl, iUnion_compl.trans, iUnion_top, l.hasBasis_toFilterDistortioniUnion, le_iSup_of_le, le_max_left, le_max_right, le_trans, mem_ofPred_eq, single, tendsto_iSup, tendsto_iff, toFilteriUnion
 -/

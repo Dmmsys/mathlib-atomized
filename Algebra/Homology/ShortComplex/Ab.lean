@@ -104,7 +104,15 @@ i := AddCommGrpCat.ofHom (AddMonoidHom.ker S.g.hom).subtype
   wi := by
     ext ⟨_, hx⟩
     exact hx
-  hi := AddCommGrpCat
+  hi := AddCommGrpCat.kernelIsLimit _
+  wπ := by
+    ext (x : S.X₁)
+    dsimp
+    rw [QuotientAddGroup.eq_zero_iff]; rw [AddMonoidHom.mem_range]
+    apply exists_apply_eq_apply
+  hπ := AddCommGrpCat.cokernelIsColimit (AddCommGrpCat.ofHom S.abToCycles)
+
+@[simp]
 
 中文:
 定义 abLeftHomologyData
@@ -116,7 +124,15 @@ i := AddCommGrpCat.ofHom (AddMonoidHom.ker S.g.hom).subtype
   wi := by
     ext ⟨_, hx⟩
     exact hx
-  hi := AddCommGrpCat
+  hi := AddCommGrpCat.kernelIsLimit _
+  wπ := by
+    ext (x : S.X₁)
+    dsimp
+    rw [QuotientAddGroup.eq_zero_iff]; rw [AddMonoidHom.mem_range]
+    apply exists_apply_eq_apply
+  hπ := AddCommGrpCat.cokernelIsColimit (AddCommGrpCat.ofHom S.abToCycles)
+
+@[simp]
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.of, AddMonoidHom, AddMonoidHom.ker, S.g.hom
 -/

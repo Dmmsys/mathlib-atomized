@@ -44,7 +44,12 @@ theorem iInf_localization_eq_bot
     intro hrange hlocal
     let denom : Ideal R := (1 : Submodule R K).comap (LinearMap.toSpanSingleton R K x)
     have hdenom : (1 : R) ∉ denom := by simpa [denom] using hrange
-    rcases denom.exists_le_maximal (
+    rcases denom.exists_le_maximal (denom.ne_top_iff_one.mpr hdenom) with ⟨max, hmax, hle⟩
+    rcases hlocal ⟨max, hmax⟩ with ⟨n, d, hd, rfl⟩
+    exact hd (hle ⟨n, by simp [Algebra.smul_def, mul_left_comm, mul_inv_cancel₀ <|
+      (map_ne_zero_iff _ <| IsFractionRing.injective R K).mpr fun h => hd (h ▸ max.zero_mem :)]⟩)
+  · rintro ⟨y, rfl⟩ ⟨v, hv⟩
+    exact ⟨y, 1, v.ne_top_iff_one.mp hv.ne_top, by rw [map_one, inv_one, mul_one]⟩
 
 中文:
 定理 iInf_localization_eq_bot
@@ -57,7 +62,12 @@ theorem iInf_localization_eq_bot
     intro hrange hlocal
     let denom : Ideal R := (1 : Submodule R K).comap (LinearMap.toSpanSingleton R K x)
     have hdenom : (1 : R) ∉ denom := by simpa [denom] using hrange
-    rcases denom.exists_le_maximal (
+    rcases denom.exists_le_maximal (denom.ne_top_iff_one.mpr hdenom) with ⟨max, hmax, hle⟩
+    rcases hlocal ⟨max, hmax⟩ with ⟨n, d, hd, rfl⟩
+    exact hd (hle ⟨n, by simp [Algebra.smul_def, mul_left_comm, mul_inv_cancel₀ <|
+      (map_ne_zero_iff _ <| IsFractionRing.injective R K).mpr fun h => hd (h ▸ max.zero_mem :)]⟩)
+  · rintro ⟨y, rfl⟩ ⟨v, hv⟩
+    exact ⟨y, 1, v.ne_top_iff_one.mp hv.ne_top, by rw [map_one, inv_one, mul_one]⟩
 
 Depends on / 依赖: Algebra, Algebra.mem_bot, Algebra.mem_iInf, Algebra.smul_def, IsFractionRing, IsFractionRing.inject, LinearMap, LinearMap.toSpanSingleton, Submodule, contrapose, denom.exists_le_maximal, denom.ne_top_iff_one.mpr, exists_le_maximal, hdenom, hlocal, hrange, inject, map_ne_zero_iff, mem_bot, mem_iInf
 -/
@@ -300,7 +310,8 @@ theorem mapPiLocalization_bijective
   · exact e.bijective
   · rw [← mapPiLocalization_comp]
     simp_rw [RingEquiv.comp_symm, mapPiLocalization_id]
-  · rw [← mapPiLocalizat
+  · rw [← mapPiLocalization_comp]
+    simp_rw [RingEquiv.symm_comp, mapPiLocalization_id]
 
 中文:
 定理 mapPiLocalization_bijective
@@ -312,7 +323,8 @@ theorem mapPiLocalization_bijective
   · exact e.bijective
   · rw [← mapPiLocalization_comp]
     simp_rw [RingEquiv.comp_symm, mapPiLocalization_id]
-  · rw [← mapPiLocalizat
+  · rw [← mapPiLocalization_comp]
+    simp_rw [RingEquiv.symm_comp, mapPiLocalization_id]
 
 Depends on / 依赖: RingEquiv, RingEquiv.comp_symm, RingEquiv.ofBijective, RingEquiv.ofRingHom, RingEquiv.symm_comp, bijective, comp_symm, e.bijective, f.symm, f.symm.bijective, mapPiLocalization, mapPiLocalization_comp, mapPiLocalization_id, ofBijective, ofRingHom, simp_rw, symm_comp
 -/
@@ -341,7 +353,15 @@ theorem toPiLocalization_not_surjective_of_infinite
   have ⟨J, max, notMem⟩ := PrimeSpectrum.exists_maximal_notMem_range_sigmaToPi_of_infinite R
   obtain ⟨r, hr⟩ := surj (Function.update 0 ⟨J, max⟩ 1)
 have : r = 0 := funext fun i => toPiLocalization_injective _ funext fun I => by
-    replace hr := congr_fun hr ⟨_, I.2.comap
+    replace hr := congr_fun hr ⟨_, I.2.comap_piEvalRingHom⟩
+    dsimp only [toPiLocalization_apply_apply, Subtype.coe_mk] at hr
+    simp_rw [toPiLocalization_apply_apply,
+      ← Localization.AtPrime.mapPiEvalRingHom_algebraMap_apply, hr]
+    rw [Function.update_of_ne]; · simp_rw [Pi.zero_apply, map_zero]
+    exact fun h => notMem ⟨⟨i, I.1, I.2.isPrime⟩, PrimeSpectrum.ext congr($h.1)⟩
+  replace hr := congr_fun hr ⟨J, max⟩
+  rw [this]; rw [map_zero]; rw [Function.update_self] at hr
+  exact zero_ne_one hr
 
 中文:
 定理 toPiLocalization_not_surjective_of_infinite
@@ -351,7 +371,15 @@ have : r = 0 := funext fun i => toPiLocalization_injective _ funext fun I => by
   have ⟨J, max, notMem⟩ := PrimeSpectrum.exists_maximal_notMem_range_sigmaToPi_of_infinite R
   obtain ⟨r, hr⟩ := surj (Function.update 0 ⟨J, max⟩ 1)
 have : r = 0 := funext fun i => toPiLocalization_injective _ funext fun I => by
-    replace hr := congr_fun hr ⟨_, I.2.comap
+    replace hr := congr_fun hr ⟨_, I.2.comap_piEvalRingHom⟩
+    dsimp only [toPiLocalization_apply_apply, Subtype.coe_mk] at hr
+    simp_rw [toPiLocalization_apply_apply,
+      ← Localization.AtPrime.mapPiEvalRingHom_algebraMap_apply, hr]
+    rw [Function.update_of_ne]; · simp_rw [Pi.zero_apply, map_zero]
+    exact fun h => notMem ⟨⟨i, I.1, I.2.isPrime⟩, PrimeSpectrum.ext congr($h.1)⟩
+  replace hr := congr_fun hr ⟨J, max⟩
+  rw [this]; rw [map_zero]; rw [Function.update_self] at hr
+  exact zero_ne_one hr
 
 Depends on / 依赖: AtPrime, Function, Function.update, Function.update_of_ne, Localization, Localization.AtPrime.mapPiEvalRingHom_algebraMap_apply, PrimeSpectrum, PrimeSpectrum.exists_maximal_notMem_range_sigmaToPi_of_infinite, Subtype, Subtype.coe_mk, classical, coe_mk, comap_piEvalRingHom, congr_fun, exists_maximal_notMem_range_sigmaToPi_of_infinite, mapPiEvalRingHom_algebraMap_apply, notMem, replace, simp_rw, toPiLocalization_apply_apply
 -/
@@ -603,7 +631,10 @@ theorem isMaximal_of_toPiLocalization_surjective
   by_contra h
   have hJ : algebraMap _ _ r = _ := (congr_fun hr _).trans (Function.update_self ..)
   have hI : algebraMap _ _ r = _ := congr_fun hr I
-  rw [← IsLocal
+  rw [← IsLocalization.lift_eq (M := J.primeCompl) (S := Localization J.primeCompl)]; rw [hJ]; rw [map_one]; rw [Function.update_of_ne] at hI
+  · exact one_ne_zero hI
+  · intro eq; have : I.1 = J := congr_arg (·.1) eq; exact h (this ▸ max)
+  · exact fun ⟨s, hs⟩ => IsLocalization.map_units (M := I.1.primeCompl) _ ⟨s, fun h => hs (le h)⟩
 
 中文:
 定理 isMaximal_of_toPiLocalization_surjective
@@ -615,7 +646,10 @@ theorem isMaximal_of_toPiLocalization_surjective
   by_contra h
   have hJ : algebraMap _ _ r = _ := (congr_fun hr _).trans (Function.update_self ..)
   have hI : algebraMap _ _ r = _ := congr_fun hr I
-  rw [← IsLocal
+  rw [← IsLocalization.lift_eq (M := J.primeCompl) (S := Localization J.primeCompl)]; rw [hJ]; rw [map_one]; rw [Function.update_of_ne] at hI
+  · exact one_ne_zero hI
+  · intro eq; have : I.1 = J := congr_arg (·.1) eq; exact h (this ▸ max)
+  · exact fun ⟨s, hs⟩ => IsLocalization.map_units (M := I.1.primeCompl) _ ⟨s, fun h => hs (le h)⟩
 
 Depends on / 依赖: Function, Function.update, Function.update_of_ne, Function.update_self, IrreducibleSpace, IrreducibleSpace.connectedSpace, IsLocalization, IsLocalization.lift_eq, J.primeCompl, Localization, TopologicalSpace, algebraMap, classical, congr_arg, congr_fun, connectedSpace, exists_le_maximal, isPrime, lift_eq, map_one
 -/
@@ -735,7 +769,7 @@ theorem mapPiLocalization_bijective
   let e := RingEquiv.ofRingHom (mapPiLocalization (f : R ->+* S)) (mapPiLocalization f.symm) ?_ ?_
   · exact e.bijective
   · rw [← mapPiLocalization_comp, RingEquiv.comp_symm, mapPiLocalization_id]
-  · rw [← mapPiLocalization_comp, RingEquiv.symm_comp, mapPiL
+  · rw [← mapPiLocalization_comp, RingEquiv.symm_comp, mapPiLocalization_id]
 
 中文:
 定理 mapPiLocalization_bijective
@@ -745,7 +779,7 @@ theorem mapPiLocalization_bijective
   let e := RingEquiv.ofRingHom (mapPiLocalization (f : R ->+* S)) (mapPiLocalization f.symm) ?_ ?_
   · exact e.bijective
   · rw [← mapPiLocalization_comp, RingEquiv.comp_symm, mapPiLocalization_id]
-  · rw [← mapPiLocalization_comp, RingEquiv.symm_comp, mapPiL
+  · rw [← mapPiLocalization_comp, RingEquiv.symm_comp, mapPiLocalization_id]
 
 Depends on / 依赖: RingEquiv, RingEquiv.comp_symm, RingEquiv.ofBijective, RingEquiv.ofRingHom, RingEquiv.symm_comp, bijective, comp_symm, e.bijective, f.symm, mapPiLocalization, mapPiLocalization_comp, mapPiLocalization_id, ofBijective, ofRingHom, symm_comp
 -/

@@ -318,7 +318,18 @@ theorem sInter
   · exact .sInter_of_cof_le_one (cof_lt_aleph0_iff.1 hα) hs
   refine ⟨.sInter fun x hx => (hs x hx).dirSupClosed, fun a => ?_⟩
   choose f hf using fun x : s => (hs _ x.2).isCofinal
-  let g : Nat -> α := Nat.rec a fun _ IH => sS
+  let g : Nat -> α := Nat.rec a fun _ IH => sSup (.range (f · IH))
+  have hg : BddAbove (.range g) := by
+    refine .of_not_isCofinal fun hg => (cof_le hg).not_gt (hα.trans_le' ?_)
+    simpa using mk_range_le_lift (f := g)
+  refine ⟨_, fun t ht => ?_, le_csSup hg ⟨0, rfl⟩⟩
+  apply (hs t ht).isLUB_mem (t := .range fun n => f ⟨t, ht⟩ (g n)) _ (range_nonempty _)
+  · refine ⟨?_, fun b hb => csSup_le' ?_⟩ <;> rintro _ ⟨n, rfl⟩
+    · apply (le_csSup (.of_not_isCofinal _) _).trans (le_csSup hg ⟨n + 1, rfl⟩)
+      · exact fun hg' => (cof_le hg').not_gt (mk_range_le.trans_lt hsα)
+      · use ⟨t, ht⟩
+· exact (hf ⟨t, ht⟩ _).2.trans hb ⟨_, rfl⟩
+  · grind
 
 中文:
 定理 集合交集
@@ -329,7 +340,18 @@ theorem sInter
   · exact .sInter_of_cof_le_one (cof_lt_aleph0_iff.1 hα) hs
   refine ⟨.sInter fun x hx => (hs x hx).dirSupClosed, fun a => ?_⟩
   choose f hf using fun x : s => (hs _ x.2).isCofinal
-  let g : Nat -> α := Nat.rec a fun _ IH => sS
+  let g : Nat -> α := Nat.rec a fun _ IH => sSup (.range (f · IH))
+  have hg : BddAbove (.range g) := by
+    refine .of_not_isCofinal fun hg => (cof_le hg).not_gt (hα.trans_le' ?_)
+    simpa using mk_range_le_lift (f := g)
+  refine ⟨_, fun t ht => ?_, le_csSup hg ⟨0, rfl⟩⟩
+  apply (hs t ht).isLUB_mem (t := .range fun n => f ⟨t, ht⟩ (g n)) _ (range_nonempty _)
+  · refine ⟨?_, fun b hb => csSup_le' ?_⟩ <;> rintro _ ⟨n, rfl⟩
+    · apply (le_csSup (.of_not_isCofinal _) _).trans (le_csSup hg ⟨n + 1, rfl⟩)
+      · exact fun hg' => (cof_le hg').not_gt (mk_range_le.trans_lt hsα)
+      · use ⟨t, ht⟩
+· exact (hf ⟨t, ht⟩ _).2.trans hb ⟨_, rfl⟩
+  · grind
 -/
 protected theorem sInter {s : Set (Set α)} (hα : cof α != ℵ₀) (hsα : #s < cof α)
     (hs : forall x in s, IsClub x) : IsClub (⋂₀ s) := by
@@ -493,7 +515,12 @@ theorem _root_.Order.IsNormal.isClub_fixedPoints
   · cases topOrderOrNoTopOrder α with
     | inl => use ⊤; simpa using! hf.strictMono.id_le ⊤
     | inr h =>
-      rw [noTopOrder_iff_noMaxOrder]
+      rw [noTopOrder_iff_noMaxOrder] at h
+      suffices BddAbove (.range fun n => f^[n] a) from
+        ⟨_, hf.iSup_iterate_mem_fixedPoints a this, le_csSup this ⟨0, rfl⟩⟩
+      refine .of_not_isCofinal fun h => (cof_le h).not_gt
+        ((aleph0_le_cof.lt_of_ne' hα).trans_le' ?_)
+      simpa using mk_range_le_lift (f := fun n : Nat => f^[n] a)
 
 中文:
 定理 _root_.Order.是正规.isClub_fixedPoints
@@ -505,7 +532,12 @@ theorem _root_.Order.IsNormal.isClub_fixedPoints
   · cases topOrderOrNoTopOrder α with
     | inl => use ⊤; simpa using! hf.strictMono.id_le ⊤
     | inr h =>
-      rw [noTopOrder_iff_noMaxOrder]
+      rw [noTopOrder_iff_noMaxOrder] at h
+      suffices BddAbove (.range fun n => f^[n] a) from
+        ⟨_, hf.iSup_iterate_mem_fixedPoints a this, le_csSup this ⟨0, rfl⟩⟩
+      refine .of_not_isCofinal fun h => (cof_le h).not_gt
+        ((aleph0_le_cof.lt_of_ne' hα).trans_le' ?_)
+      simpa using mk_range_le_lift (f := fun n : Nat => f^[n] a)
 
 Depends on / 依赖: BddAbove, aleph0_le_cof, aleph0_le_cof.lt_of_ne, cof_le, hf.iSup_iterate_mem_fixedPoints, hf.map_isLUB, hf.strictMono.id_le, iSup_iterate_mem_fixedPoints, id_le, image_congr, image_id, isEmpty_or_nonempty, le_csSup, lt_of_ne, map_isLUB, noTopOrder_iff_noMaxOrder, not_gt, of_not_isCofinal, strictMono, topOrderOrNoTopOrder
 -/
@@ -803,7 +835,7 @@ theorem isStationary_sUnion_iff_of_cof_le_one
       simpa
     · rw [disjoint_sUnion_left]
       exact fun x hx => (hxf _ hx).mono_right (iInter_subset _ ⟨x, hx⟩)
-  mpr := fun
+  mpr := fun ⟨x, hxs, hx⟩ => hx.mono (subset_sUnion_of_mem hxs)
 
 中文:
 定理 isStationary_sUnion_iff_of_cof_le_one
@@ -817,7 +849,7 @@ theorem isStationary_sUnion_iff_of_cof_le_one
       simpa
     · rw [disjoint_sUnion_left]
       exact fun x hx => (hxf _ hx).mono_right (iInter_subset _ ⟨x, hx⟩)
-  mpr := fun
+  mpr := fun ⟨x, hxs, hx⟩ => hx.mono (subset_sUnion_of_mem hxs)
 
 Depends on / 依赖: IsClub, IsClub.iInter_of_cof_le_one, contrapose, disjoint_sUnion_left, hx.mono, iInter_of_cof_le_one, iInter_subset, mono_right, not_isStationary_iff, simp_rw, subset_sUnion_of_mem
 -/
@@ -933,7 +965,7 @@ theorem isStationary_sUnion_iff
     · apply IsClub.iInter hα <;> simpa
     · rw [disjoint_sUnion_left]
       exact fun x hx => (hxf _ hx).mono_right (iInter_subset _ ⟨x, hx⟩)
-  mpr := fun ⟨x, hxs, hx⟩ =>
+  mpr := fun ⟨x, hxs, hx⟩ => hx.mono (subset_sUnion_of_mem hxs)
 
 中文:
 定理 isStationary_sUnion_iff
@@ -946,7 +978,7 @@ theorem isStationary_sUnion_iff
     · apply IsClub.iInter hα <;> simpa
     · rw [disjoint_sUnion_left]
       exact fun x hx => (hxf _ hx).mono_right (iInter_subset _ ⟨x, hx⟩)
-  mpr := fun ⟨x, hxs, hx⟩ =>
+  mpr := fun ⟨x, hxs, hx⟩ => hx.mono (subset_sUnion_of_mem hxs)
 
 Depends on / 依赖: IsClub, IsClub.iInter, contrapose, disjoint_sUnion_left, hx.mono, iInter, iInter_subset, mono_right, not_isStationary_iff, simp_rw, subset_sUnion_of_mem
 -/

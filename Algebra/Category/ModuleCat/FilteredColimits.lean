@@ -393,7 +393,12 @@ instance colimitModule
   smul_add := fun r x y => by
     obtain ⟨i, x, rfl⟩ := M.mk_surjective F x
     obtain ⟨j, y, rfl⟩ := M.mk_surjective F y
-    rw [colimit_smul_mk_eq]; rw [colimit_smul_mk_eq]; rw [colimit_add_mk_eq _ ⟨i]; rw [_⟩ ⟨j]; rw [_⟩ (max' i j) (IsFiltered.le
+    rw [colimit_smul_mk_eq]; rw [colimit_smul_mk_eq]; rw [colimit_add_mk_eq _ ⟨i]; rw [_⟩ ⟨j]; rw [_⟩ (max' i j) (IsFiltered.leftToMax i j)
+      (IsFiltered.rightToMax i j)]; rw [colimit_smul_mk_eq]; rw [smul_add]; rw [colimit_add_mk_eq _ ⟨i]; rw [_⟩ ⟨j]; rw [_⟩ (max' i j) (IsFiltered.leftToMax i j)
+      (IsFiltered.rightToMax i j)]; rw [map_smul]; rw [map_smul]
+  add_smul r s x := by
+    obtain ⟨i, x, rfl⟩ := M.mk_surjective F x
+    simp [_root_.add_smul, colimit_add_mk_eq'] }
 
 中文:
 实例 colimitModule
@@ -403,7 +408,12 @@ instance colimitModule
   smul_add := fun r x y => by
     obtain ⟨i, x, rfl⟩ := M.mk_surjective F x
     obtain ⟨j, y, rfl⟩ := M.mk_surjective F y
-    rw [colimit_smul_mk_eq]; rw [colimit_smul_mk_eq]; rw [colimit_add_mk_eq _ ⟨i]; rw [_⟩ ⟨j]; rw [_⟩ (max' i j) (IsFiltered.le
+    rw [colimit_smul_mk_eq]; rw [colimit_smul_mk_eq]; rw [colimit_add_mk_eq _ ⟨i]; rw [_⟩ ⟨j]; rw [_⟩ (max' i j) (IsFiltered.leftToMax i j)
+      (IsFiltered.rightToMax i j)]; rw [colimit_smul_mk_eq]; rw [smul_add]; rw [colimit_add_mk_eq _ ⟨i]; rw [_⟩ ⟨j]; rw [_⟩ (max' i j) (IsFiltered.leftToMax i j)
+      (IsFiltered.rightToMax i j)]; rw [map_smul]; rw [map_smul]
+  add_smul r s x := by
+    obtain ⟨i, x, rfl⟩ := M.mk_surjective F x
+    simp [_root_.add_smul, colimit_add_mk_eq'] }
 
 Depends on / 依赖: IsFiltered, IsFiltered.leftToMax, IsFiltered.rightToMax, M.mk_surjective, colimitMulAction, colimitSMulWithZero, colimit_add_mk_eq, colimit_smul_mk_eq, leftToMax, map_smul, mk_surjective, rightToMax, smul_add
 -/
@@ -513,7 +523,12 @@ definition colimitDesc
   body: let h := (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit (F ⋙ forget₂ _ _))
   let f : colimit F ->+ t.pt := (h.desc ((forget₂ _ _).mapCocone t)).hom
   have hf {j : J} (x : F.obj j) : f (M.mk _ ⟨j, x⟩) = t.ι.app j x :=
-    congr_hom ((forget AddCommGrpCat).congr_map (h.fac ((forget₂ _ _).mapCo
+    congr_hom ((forget AddCommGrpCat).congr_map (h.fac ((forget₂ _ _).mapCocone t) j)) x
+  ofHom
+    { f with
+      map_smul' := fun r x => by
+        obtain ⟨j, x, rfl⟩ := M.mk_surjective F x
+        simp [hf] }
 
 中文:
 定义 colimitDesc
@@ -521,7 +536,12 @@ definition colimitDesc
   定义体: let h := (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit (F ⋙ forget₂ _ _))
   let f : colimit F ->+ t.pt := (h.desc ((forget₂ _ _).mapCocone t)).hom
   have hf {j : J} (x : F.obj j) : f (M.mk _ ⟨j, x⟩) = t.ι.app j x :=
-    congr_hom ((forget AddCommGrpCat).congr_map (h.fac ((forget₂ _ _).mapCo
+    congr_hom ((forget AddCommGrpCat).congr_map (h.fac ((forget₂ _ _).mapCocone t) j)) x
+  ofHom
+    { f with
+      map_smul' := fun r x => by
+        obtain ⟨j, x, rfl⟩ := M.mk_surjective F x
+        simp [hf] }
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit, F.obj, FilteredColimits, M.mk, M.mk_surjective, colimit, colimitCoconeIsColimit, congr_hom, congr_map, forget, h.desc, h.fac, mapCocone, map_smul, mk_surjective, t.pt
 -/

@@ -1095,7 +1095,9 @@ definition finSumNatEquiv
     (fun _ => dif_pos (Fin.is_lt _))
     (fun _ => (dif_neg (Nat.le_add_right _ _).not_gt).trans <|
       congrArg _ (Nat.add_sub_cancel_left _ _)))
-right_inv i := (apply_dite _ _ _ _)
+right_inv i := (apply_dite _ _ _ _).trans (i.lt_or_ge n).by_cases
+    (fun hi => dif_pos hi)
+    (fun hi => (dif_neg hi.not_gt).trans <| Nat.add_sub_cancel' hi)
 
 中文:
 定义 finSum自然数Equiv
@@ -1106,7 +1108,9 @@ right_inv i := (apply_dite _ _ _ _)
     (fun _ => dif_pos (Fin.is_lt _))
     (fun _ => (dif_neg (Nat.le_add_right _ _).not_gt).trans <|
       congrArg _ (Nat.add_sub_cancel_left _ _)))
-right_inv i := (apply_dite _ _ _ _)
+right_inv i := (apply_dite _ _ _ _).trans (i.lt_or_ge n).by_cases
+    (fun hi => dif_pos hi)
+    (fun hi => (dif_neg hi.not_gt).trans <| Nat.add_sub_cancel' hi)
 
 Depends on / 依赖: Fin.val, Sum.elim
 -/
@@ -1416,7 +1420,19 @@ _ = (x.1.1 + 1) * n := Eq.symm Nat.succ_mul _ _
         _ <= m * n := Nat.mul_le_mul_right _ x.1.2
         ⟩
   invFun x := (x.divNat, x.modNat)
-  le
+  left_inv := fun ⟨x, y⟩ =>
+have H : 0 < n := Nat.pos_of_ne_zero fun H => Nat.not_lt_zero y.1 H ▸ y.2
+    Prod.ext
+      (Fin.eq_of_val_eq <|
+        calc
+          (y.1 + n * x.1) / n = y.1 / n + x.1 := Nat.add_mul_div_left _ _ H
+          _ = 0 + x.1 := by rw [Nat.div_eq_of_lt y.2]
+          _ = x.1 := Nat.zero_add x.1)
+      (Fin.eq_of_val_eq <|
+        calc
+          (y.1 + n * x.1) % n = y.1 % n := Nat.add_mul_mod_self_left _ _ _
+          _ = y.1 := Nat.mod_eq_of_lt y.2)
+right_inv _ := Fin.eq_of_val_eq Nat.mod_add_div _ _
 
 中文:
 定义 finProdFinEquiv
@@ -1429,7 +1445,19 @@ _ = (x.1.1 + 1) * n := Eq.symm Nat.succ_mul _ _
         _ <= m * n := Nat.mul_le_mul_right _ x.1.2
         ⟩
   invFun x := (x.divNat, x.modNat)
-  le
+  left_inv := fun ⟨x, y⟩ =>
+have H : 0 < n := Nat.pos_of_ne_zero fun H => Nat.not_lt_zero y.1 H ▸ y.2
+    Prod.ext
+      (Fin.eq_of_val_eq <|
+        calc
+          (y.1 + n * x.1) / n = y.1 / n + x.1 := Nat.add_mul_div_left _ _ H
+          _ = 0 + x.1 := by rw [Nat.div_eq_of_lt y.2]
+          _ = x.1 := Nat.zero_add x.1)
+      (Fin.eq_of_val_eq <|
+        calc
+          (y.1 + n * x.1) % n = y.1 % n := Nat.add_mul_mod_self_left _ _ _
+          _ = y.1 := Nat.mod_eq_of_lt y.2)
+right_inv _ := Fin.eq_of_val_eq Nat.mod_add_div _ _
 
 Depends on / 依赖: Eq.symm, Fin.eq_of_val_eq, Nat.add_le_add_left, Nat.add_mul_div_left, Nat.div_eq_of_lt, Nat.mul_le_mul_right, Nat.not_lt_zero, Nat.pos_of_ne_zero, Nat.succ_mul, Prod.ext, add_le_add_left, add_mul_div_left, divNat, div_eq_of_lt, eq_of_val_eq, invFun, left_inv, modNat, mul_le_mul_right, not_lt_zero
 -/
@@ -1474,7 +1502,7 @@ definition Nat.divModEquiv
   right_inv p := by
     refine Prod.ext ?_ (Fin.ext <| Nat.mul_add_mod_of_lt p.2.is_lt)
     dsimp only
-    rw [Nat.add_comm]; rw [Nat.add_mul_div_right 
+    rw [Nat.add_comm]; rw [Nat.add_mul_div_right _ _ n.pos_of_neZero]; rw [Nat.div_eq_of_lt p.2.is_lt]; rw [Nat.zero_add]
 
 中文:
 定义 自然数.divModEquiv
@@ -1486,7 +1514,7 @@ definition Nat.divModEquiv
   right_inv p := by
     refine Prod.ext ?_ (Fin.ext <| Nat.mul_add_mod_of_lt p.2.is_lt)
     dsimp only
-    rw [Nat.add_comm]; rw [Nat.add_mul_div_right 
+    rw [Nat.add_comm]; rw [Nat.add_mul_div_right _ _ n.pos_of_neZero]; rw [Nat.div_eq_of_lt p.2.is_lt]; rw [Nat.zero_add]
 
 Depends on / 依赖: Fin.ofNat
 -/
@@ -1516,7 +1544,10 @@ definition Int.divModEquiv
       toNat_of_nonneg (emod_nonneg _ <| natCast_eq_zero.not.2 (NeZero.ne n)), emod_emod,
       ediv_mul_add_emod]
   right_inv := fun ⟨q, r, hrn⟩ => by
-    simp only [Pro
+    simp only [Prod.mk_inj, Fin.ext_iff]
+    obtain ⟨h1, h2⟩ := Int.natCast_nonneg r, Int.ofNat_lt.2 hrn
+    rw [Int.add_comm]; rw [add_mul_ediv_right _ _ (natCast_eq_zero.not.2 (NeZero.ne n))]; rw [ediv_eq_zero_of_lt h1 h2]; rw [natMod]; rw [add_mul_emod_self_right]; rw [emod_eq_of_lt h1 h2]; rw [toNat_natCast]
+    exact ⟨q.zero_add, Fin.val_cast_of_lt hrn⟩
 
 中文:
 定义 整数.divModEquiv
@@ -1528,7 +1559,10 @@ definition Int.divModEquiv
       toNat_of_nonneg (emod_nonneg _ <| natCast_eq_zero.not.2 (NeZero.ne n)), emod_emod,
       ediv_mul_add_emod]
   right_inv := fun ⟨q, r, hrn⟩ => by
-    simp only [Pro
+    simp only [Prod.mk_inj, Fin.ext_iff]
+    obtain ⟨h1, h2⟩ := Int.natCast_nonneg r, Int.ofNat_lt.2 hrn
+    rw [Int.add_comm]; rw [add_mul_ediv_right _ _ (natCast_eq_zero.not.2 (NeZero.ne n))]; rw [ediv_eq_zero_of_lt h1 h2]; rw [natMod]; rw [add_mul_emod_self_right]; rw [emod_eq_of_lt h1 h2]; rw [toNat_natCast]
+    exact ⟨q.zero_add, Fin.val_cast_of_lt hrn⟩
 
 Depends on / 依赖: Fin.ofNat, a.natMod, natMod
 -/

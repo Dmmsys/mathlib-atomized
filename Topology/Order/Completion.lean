@@ -52,7 +52,8 @@ theorem DedekindCut.continuous_principal
     simp [lt_principal_iff]
   · have : IsOpen (⋃ a in c.left, Iio a) := isOpen_biUnion fun _ _ => isOpen_Iio
     convert this
- 
+    ext
+    simp [principal_lt_iff]
 
 中文:
 定理 DedekindCut.continuous_principal
@@ -66,7 +67,8 @@ theorem DedekindCut.continuous_principal
     simp [lt_principal_iff]
   · have : IsOpen (⋃ a in c.left, Iio a) := isOpen_biUnion fun _ _ => isOpen_Iio
     convert this
- 
+    ext
+    simp [principal_lt_iff]
 
 Depends on / 依赖: IsOpen, OrderTopology, OrderTopology.continuous_iff, c.left, c.right, continuous_iff, convert, isOpen_Iio, isOpen_Ioi, isOpen_biUnion, lt_principal_iff, principal_lt_iff
 -/
@@ -181,7 +183,16 @@ instance :
     · by_cases hx : IsPredPrelimit x
       · obtain ⟨z, hz, hz'⟩ := hx.lt_iff_exists_lt.1 h
         use some z
-        simp [some, 
+        simp [some, Prod.Lex.lt_iff, hz', hz]
+      obtain ⟨s, hs⟩ := exists_gt (max 0 q)
+      rw [max_lt_iff] at hs
+      refine ⟨⟨toLex (x, s), ?_⟩, ?_⟩
+      · simp [hx, hs.1.le]
+      · simp [Prod.Lex.lt_iff, hs.2, h]
+    · obtain ⟨s, hs, hs'⟩ := exists_between h
+      refine ⟨⟨toLex (x, s), ?_⟩, ?_⟩
+      · grind [ofLex_toLex]
+      · simp [Prod.Lex.lt_iff, hs, hs']
 
 中文:
 实例 :
@@ -193,7 +204,16 @@ instance :
     · by_cases hx : IsPredPrelimit x
       · obtain ⟨z, hz, hz'⟩ := hx.lt_iff_exists_lt.1 h
         use some z
-        simp [some, 
+        simp [some, Prod.Lex.lt_iff, hz', hz]
+      obtain ⟨s, hs⟩ := exists_gt (max 0 q)
+      rw [max_lt_iff] at hs
+      refine ⟨⟨toLex (x, s), ?_⟩, ?_⟩
+      · simp [hx, hs.1.le]
+      · simp [Prod.Lex.lt_iff, hs.2, h]
+    · obtain ⟨s, hs, hs'⟩ := exists_between h
+      refine ⟨⟨toLex (x, s), ?_⟩, ?_⟩
+      · grind [ofLex_toLex]
+      · simp [Prod.Lex.lt_iff, hs, hs']
 
 Depends on / 依赖: IsPredPrelimit, Lex.forall, Prod.Lex.lt_iff, Prod.forall, Subtype, Subtype.forall, Subtype.mk_lt_mk, exists_between, exists_gt, hx.lt_iff_exists_lt, lt_iff, lt_iff_exists_lt, max_lt_iff, mk_lt_mk, ofLex_toLex
 -/
@@ -231,7 +251,18 @@ theorem continuous_some
     · convert isOpen_Ioi (a := x)
       ext
       simp [some, Prod.Lex.lt_iff, hq.not_gt]
-· obtain ⟨y, hy⟩ := not_isSuccPreli
+· obtain ⟨y, hy⟩ := not_isSuccPrelimit_iff.1 mt hx₁ hq.not_ge
+      convert isOpen_Ioi (a := y)
+      ext
+      simpa [some, Prod.Lex.lt_iff, hq, le_iff_lt_or_eq] using hy.le_iff_lt_right
+  · obtain hq | hq := le_or_gt q 0
+    · convert isOpen_Iio (a := x)
+      ext
+      simp [some, Prod.Lex.lt_iff, hq.not_gt]
+· obtain ⟨y, hy⟩ := not_isPredPrelimit_iff.1 mt hx₂ hq.not_ge
+      convert isOpen_Iio (a := y)
+      ext
+      simpa [some, Prod.Lex.lt_iff, hq, le_iff_lt_or_eq] using hy.le_iff_lt_left
 
 中文:
 定理 continuous_some
@@ -244,7 +275,18 @@ theorem continuous_some
     · convert isOpen_Ioi (a := x)
       ext
       simp [some, Prod.Lex.lt_iff, hq.not_gt]
-· obtain ⟨y, hy⟩ := not_isSuccPreli
+· obtain ⟨y, hy⟩ := not_isSuccPrelimit_iff.1 mt hx₁ hq.not_ge
+      convert isOpen_Ioi (a := y)
+      ext
+      simpa [some, Prod.Lex.lt_iff, hq, le_iff_lt_or_eq] using hy.le_iff_lt_right
+  · obtain hq | hq := le_or_gt q 0
+    · convert isOpen_Iio (a := x)
+      ext
+      simp [some, Prod.Lex.lt_iff, hq.not_gt]
+· obtain ⟨y, hy⟩ := not_isPredPrelimit_iff.1 mt hx₂ hq.not_ge
+      convert isOpen_Iio (a := y)
+      ext
+      simpa [some, Prod.Lex.lt_iff, hq, le_iff_lt_or_eq] using hy.le_iff_lt_left
 
 Depends on / 依赖: Lex.forall, OrderTopology, OrderTopology.continuous_iff, Prod.Lex.lt_iff, Prod.forall, Subtype, Subtype.forall, continuous_iff, convert, hq.not_ge, hq.not_gt, hy.le_iff_lt_right, isOpen_Iio, isOpen_Ioi, le_iff_lt_or_eq, le_iff_lt_right, le_or_gt, lt_iff, not_ge, not_gt
 -/
@@ -281,7 +323,7 @@ theorem exists_dense_continuous_completion
   have : OrderTopology (DedekindCut (Fill α)) := ⟨rfl⟩
   ⟨_, inferInstance, inferInstance, inferInstance, inferInstance,
     Fill.some.trans DedekindCut.principalEmbedding,
-    DedekindCut.continuous_principal.comp Fill.continuous_
+    DedekindCut.continuous_principal.comp Fill.continuous_some⟩
 
 中文:
 定理 存在_dense_continuous_completion
@@ -289,7 +331,7 @@ theorem exists_dense_continuous_completion
   have : OrderTopology (DedekindCut (Fill α)) := ⟨rfl⟩
   ⟨_, inferInstance, inferInstance, inferInstance, inferInstance,
     Fill.some.trans DedekindCut.principalEmbedding,
-    DedekindCut.continuous_principal.comp Fill.continuous_
+    DedekindCut.continuous_principal.comp Fill.continuous_some⟩
 
 Depends on / 依赖: DedekindCut, DedekindCut.continuous_principal.comp, DedekindCut.principalEmbedding, Fill.continuous_some, Fill.some.trans, OrderTopology, Preorder, Preorder.topology, TopologicalSpace, continuous_principal, continuous_some, principalEmbedding, topology
 -/

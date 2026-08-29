@@ -498,7 +498,13 @@ theorem convexJoin_assoc_aux
   rintro _ ⟨z, ⟨x, hx, y, hy, a₁, b₁, ha₁, hb₁, hab₁, rfl⟩, z, hz, a₂, b₂, ha₂, hb₂, hab₂, rfl⟩
   obtain rfl | hb₂ := hb₂.eq_or_lt
   · refine ⟨x, hx, y, ⟨y, hy, z, hz, left_mem_segment 𝕜 _ _⟩, a₁, b₁, ha₁, hb₁, hab₁, ?_⟩
-    linear_combination (norm := modul
+    linear_combination (norm := module) -hab₂ • (a₁ • x + b₁ • y)
+  refine
+    ⟨x, hx, (a₂ * b₁ / (a₂ * b₁ + b₂)) • y + (b₂ / (a₂ * b₁ + b₂)) • z,
+      ⟨y, hy, z, hz, _, _, by positivity, by positivity, by field, rfl⟩,
+      a₂ * a₁, a₂ * b₁ + b₂, by positivity, by positivity, ?_, ?_⟩
+  · linear_combination a₂ * hab₁ + hab₂
+  · match_scalars <;> field
 
 中文:
 定理 convexJoin_assoc_aux
@@ -508,7 +514,13 @@ theorem convexJoin_assoc_aux
   rintro _ ⟨z, ⟨x, hx, y, hy, a₁, b₁, ha₁, hb₁, hab₁, rfl⟩, z, hz, a₂, b₂, ha₂, hb₂, hab₂, rfl⟩
   obtain rfl | hb₂ := hb₂.eq_or_lt
   · refine ⟨x, hx, y, ⟨y, hy, z, hz, left_mem_segment 𝕜 _ _⟩, a₁, b₁, ha₁, hb₁, hab₁, ?_⟩
-    linear_combination (norm := modul
+    linear_combination (norm := module) -hab₂ • (a₁ • x + b₁ • y)
+  refine
+    ⟨x, hx, (a₂ * b₁ / (a₂ * b₁ + b₂)) • y + (b₂ / (a₂ * b₁ + b₂)) • z,
+      ⟨y, hy, z, hz, _, _, by positivity, by positivity, by field, rfl⟩,
+      a₂ * a₁, a₂ * b₁ + b₂, by positivity, by positivity, ?_, ?_⟩
+  · linear_combination a₂ * hab₁ + hab₂
+  · match_scalars <;> field
 
 Depends on / 依赖: eq_or_lt, left_mem_segment, linear_combination, mem_convexJoin, module, simp_rw, subset_def
 -/
@@ -628,7 +640,11 @@ theorem Convex.convexJoin
   rintro _ ⟨x₁, hx₁, y₁, hy₁, a₁, b₁, ha₁, hb₁, hab₁, rfl⟩
     _ ⟨x₂, hx₂, y₂, hy₂, a₂, b₂, ha₂, hb₂, hab₂, rfl⟩ p q hp hq hpq
   rcases hs.exists_mem_add_smul_eq hx₁ hx₂ (mul_nonneg hp ha₁) (mul_nonneg hq ha₂) with ⟨x, hxs, hx⟩
-  rcases ht.
+  rcases ht.exists_mem_add_smul_eq hy₁ hy₂ (mul_nonneg hp hb₁) (mul_nonneg hq hb₂) with ⟨y, hyt, hy⟩
+  refine ⟨_, hxs, _, hyt, p * a₁ + q * a₂, p * b₁ + q * b₂, ?_, ?_, ?_, ?_⟩ <;> try positivity
+  · linear_combination p * hab₁ + q * hab₂ + hpq
+  · rw [hx, hy]
+    module
 
 中文:
 定理 凸.convexJoin
@@ -638,7 +654,11 @@ theorem Convex.convexJoin
   rintro _ ⟨x₁, hx₁, y₁, hy₁, a₁, b₁, ha₁, hb₁, hab₁, rfl⟩
     _ ⟨x₂, hx₂, y₂, hy₂, a₂, b₂, ha₂, hb₂, hab₂, rfl⟩ p q hp hq hpq
   rcases hs.exists_mem_add_smul_eq hx₁ hx₂ (mul_nonneg hp ha₁) (mul_nonneg hq ha₂) with ⟨x, hxs, hx⟩
-  rcases ht.
+  rcases ht.exists_mem_add_smul_eq hy₁ hy₂ (mul_nonneg hp hb₁) (mul_nonneg hq hb₂) with ⟨y, hyt, hy⟩
+  refine ⟨_, hxs, _, hyt, p * a₁ + q * a₂, p * b₁ + q * b₂, ?_, ?_, ?_, ?_⟩ <;> try positivity
+  · linear_combination p * hab₁ + q * hab₂ + hpq
+  · rw [hx, hy]
+    module
 -/
 protected theorem Convex.convexJoin (hs : Convex 𝕜 s) (ht : Convex 𝕜 t) :
     Convex 𝕜 (convexJoin 𝕜 s t) := by

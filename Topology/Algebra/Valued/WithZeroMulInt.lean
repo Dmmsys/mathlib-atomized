@@ -39,7 +39,11 @@ lemma tendsto_zero_pow_of_v_lt_one
   let v : Valuation R Γ₀ := Valued.v
   obtain ⟨n, hn⟩ := exists_pow_lt₀ hx
     (Units.map (MonoidWithZeroHom.ValueGroup₀.embedding (f := (.ofClass v))) y)
-  refine ⟨n, fu
+  refine ⟨n, fun m hm => ?_⟩
+  rw [← map_pow]; rw [Valuation.restrict_lt_iff_lt_embedding]
+  refine hn.trans_le' ?_
+  rw [map_pow]
+  exact pow_le_pow_right_of_le_one' hx.le hm
 
 中文:
 引理 tendsto_zero_pow_of_v_lt_one
@@ -51,7 +55,11 @@ lemma tendsto_zero_pow_of_v_lt_one
   let v : Valuation R Γ₀ := Valued.v
   obtain ⟨n, hn⟩ := exists_pow_lt₀ hx
     (Units.map (MonoidWithZeroHom.ValueGroup₀.embedding (f := (.ofClass v))) y)
-  refine ⟨n, fu
+  refine ⟨n, fun m hm => ?_⟩
+  rw [← map_pow]; rw [Valuation.restrict_lt_iff_lt_embedding]
+  refine hn.trans_le' ?_
+  rw [map_pow]
+  exact pow_le_pow_right_of_le_one' hx.le hm
 
 Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.ValueGroup, Units.map, Valuation, Valuation.restrict_lt_iff_lt_embedding, Valued, Valued.v, embedding, eventually_atTop, forall_const, hasBasis_nhds_zero, hn.trans_le, hx.le, map_pow, mem_ofPred_eq, ofClass, pow_le_pow_right_of_le_one, restrict_lt_iff_lt_embedding, tendsto_right_iff, trans_le
 -/

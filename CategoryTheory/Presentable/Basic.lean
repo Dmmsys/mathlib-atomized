@@ -507,7 +507,15 @@ lemma isCardinalPresentable_of_equivalence
   have := preservesColimitsOfShape_of_isCardinalPresentable X κ J
   suffices PreservesColimit Y (coyoneda.obj (op (e.functor.obj X)) ⋙ uliftFunctor.{v₁}) from
     ⟨fun {c} hc => ⟨isColimitOfReflects uliftFunctor.{v₁}
-        (isColimitOfPreserves (coyoneda.
+        (isColimitOfPreserves (coyoneda.obj (op (e.functor.obj X)) ⋙ uliftFunctor.{v₁}) hc)⟩⟩
+  have iso : coyoneda.obj (op (e.functor.obj X)) ⋙ uliftFunctor.{v₁} ≅
+    e.inverse ⋙ coyoneda.obj (op X) ⋙ uliftFunctor.{v₃} :=
+    NatIso.ofComponents (fun Z =>
+      (Equiv.ulift.trans ((e.toAdjunction.homEquiv X Z).trans Equiv.ulift.symm)).toIso) (by
+        intro _ _ f
+        ext ⟨g⟩
+        simp [Adjunction.homEquiv_unit])
+  exact preservesColimit_of_natIso Y iso.symm
 
 中文:
 引理 isCardinalPresentable_of_equivalence
@@ -516,7 +524,15 @@ lemma isCardinalPresentable_of_equivalence
   have := preservesColimitsOfShape_of_isCardinalPresentable X κ J
   suffices PreservesColimit Y (coyoneda.obj (op (e.functor.obj X)) ⋙ uliftFunctor.{v₁}) from
     ⟨fun {c} hc => ⟨isColimitOfReflects uliftFunctor.{v₁}
-        (isColimitOfPreserves (coyoneda.
+        (isColimitOfPreserves (coyoneda.obj (op (e.functor.obj X)) ⋙ uliftFunctor.{v₁}) hc)⟩⟩
+  have iso : coyoneda.obj (op (e.functor.obj X)) ⋙ uliftFunctor.{v₁} ≅
+    e.inverse ⋙ coyoneda.obj (op X) ⋙ uliftFunctor.{v₃} :=
+    NatIso.ofComponents (fun Z =>
+      (Equiv.ulift.trans ((e.toAdjunction.homEquiv X Z).trans Equiv.ulift.symm)).toIso) (by
+        intro _ _ f
+        ext ⟨g⟩
+        simp [Adjunction.homEquiv_unit])
+  exact preservesColimit_of_natIso Y iso.symm
 
 Depends on / 依赖: Equiv.uli, NatIso, NatIso.ofComponents, PreservesColimit, coyoneda, coyoneda.obj, e.functor.obj, e.inverse, functor, inverse, isColimitOfPreserves, isColimitOfReflects, ofComponents, preservesColimitsOfShape_of_isCardinalPresentable, uliftFunctor
 -/
@@ -853,7 +869,7 @@ lemma isCardinalPresentable_iff_isCardinalAccessible_uliftCoyoneda_obj
   refine ⟨fun _ => inferInstance, fun _ => ⟨fun J _ _ => ?_⟩⟩
   have := Functor.preservesColimitsOfShape_of_isCardinalAccessible
     (coyoneda.obj (op X) ⋙ uliftFunctor.{t}) κ J
-  exact preservesColimitsOfShape_of_reflec
+  exact preservesColimitsOfShape_of_reflects_of_preserves _ uliftFunctor.{t, v₁}
 
 中文:
 引理 isCardinalPresentable_iff_isCardinalAccessible_uliftCoyoneda_obj
@@ -862,7 +878,7 @@ lemma isCardinalPresentable_iff_isCardinalAccessible_uliftCoyoneda_obj
   refine ⟨fun _ => inferInstance, fun _ => ⟨fun J _ _ => ?_⟩⟩
   have := Functor.preservesColimitsOfShape_of_isCardinalAccessible
     (coyoneda.obj (op X) ⋙ uliftFunctor.{t}) κ J
-  exact preservesColimitsOfShape_of_reflec
+  exact preservesColimitsOfShape_of_reflects_of_preserves _ uliftFunctor.{t, v₁}
 
 Depends on / 依赖: Functor, Functor.preservesColimitsOfShape_of_isCardinalAccessible, IsCardinalAccessible, coyoneda, coyoneda.obj, preservesColimitsOfShape_of_isCardinalAccessible, preservesColimitsOfShape_of_reflects_of_preserves, uliftFunctor
 -/

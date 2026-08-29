@@ -105,7 +105,24 @@ definition module'
     zero_smul := fun f => by
       obtain ⟨f, rfl⟩ := (functor r).map_surjective f
       dsimp [smul]
-      rw [zero_smul]; rw [Functor.map_
+      rw [zero_smul]; rw [Functor.map_zero]
+    one_smul := fun f => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      dsimp [smul]
+      rw [one_smul]
+    mul_smul := fun a b f => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      dsimp [smul]
+      rw [mul_smul]
+    smul_add := fun a f g => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      obtain ⟨g, rfl⟩ := (functor r).map_surjective g
+      dsimp [smul]
+      rw [← (functor r).map_add]; rw [smul_eq]; rw [← (functor r).map_add]; rw [smul_add]
+    add_smul := fun a b f => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      dsimp [smul]
+      rw [add_smul]; rw [Functor.map_add] }
 
 中文:
 定义 module'
@@ -116,7 +133,24 @@ definition module'
     zero_smul := fun f => by
       obtain ⟨f, rfl⟩ := (functor r).map_surjective f
       dsimp [smul]
-      rw [zero_smul]; rw [Functor.map_
+      rw [zero_smul]; rw [Functor.map_zero]
+    one_smul := fun f => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      dsimp [smul]
+      rw [one_smul]
+    mul_smul := fun a b f => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      dsimp [smul]
+      rw [mul_smul]
+    smul_add := fun a f g => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      obtain ⟨g, rfl⟩ := (functor r).map_surjective g
+      dsimp [smul]
+      rw [← (functor r).map_add]; rw [smul_eq]; rw [← (functor r).map_add]; rw [smul_add]
+    add_smul := fun a b f => by
+      obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+      dsimp [smul]
+      rw [add_smul]; rw [Functor.map_add] }
 
 Depends on / 依赖: Functor, Functor.map_zero, functor, map_surjective, map_zero, mul_smul, one_smul, smul_add, smul_eq, smul_zero, zero_smul
 -/
@@ -192,7 +226,12 @@ definition linear
         rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ a f g
         obtain ⟨f, rfl⟩ := (functor r).map_surjective f
         obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smu
+        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.smul_comp]
+      comp_smul := by
+        rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ f a g
+        obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+        obtain ⟨g, rfl⟩ := (functor r).map_surjective g
+        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.comp_smul] }
 
 中文:
 定义 linear
@@ -204,7 +243,12 @@ definition linear
         rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ a f g
         obtain ⟨f, rfl⟩ := (functor r).map_surjective f
         obtain ⟨g, rfl⟩ := (functor r).map_surjective g
-        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smu
+        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.smul_comp]
+      comp_smul := by
+        rintro ⟨X⟩ ⟨Y⟩ ⟨Z⟩ f a g
+        obtain ⟨f, rfl⟩ := (functor r).map_surjective f
+        obtain ⟨g, rfl⟩ := (functor r).map_surjective g
+        rw [Linear.smul_eq]; rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Linear.smul_eq]; rw [Linear.comp_smul] }
 
 Depends on / 依赖: Functor, Functor.map_comp, Linear, Linear.module, Linear.smul_comp, Linear.smul_eq, comp_smul, functor, map_comp, map_surjective, module, smul_comp, smul_eq
 -/

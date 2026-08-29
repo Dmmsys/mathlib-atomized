@@ -72,7 +72,9 @@ theorem iterateMapComap_le_succ
   | succ n ih =>
     simp_rw [iterateMapComap, iterate_succ', Function.comp_apply]
     calc
-      _ <= (f.iterateMapComap i n K).m
+      _ <= (f.iterateMapComap i n K).map i := map_comap_le _ _
+      _ <= (((f.iterateMapComap i n K).map f).comap f).map i := by grw [← le_comap_map]
+      _ <= _ := by gcongr; exact ih
 
 中文:
 定理 iterateMapComap_le_succ
@@ -85,7 +87,9 @@ theorem iterateMapComap_le_succ
   | succ n ih =>
     simp_rw [iterateMapComap, iterate_succ', Function.comp_apply]
     calc
-      _ <= (f.iterateMapComap i n K).m
+      _ <= (f.iterateMapComap i n K).map i := map_comap_le _ _
+      _ <= (((f.iterateMapComap i n K).map f).comap f).map i := by grw [← le_comap_map]
+      _ <= _ := by gcongr; exact ih
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, f.iterateMapComap, iterateMapComap, iterate_succ, le_comap_map, map_comap_le, map_le_iff_le_comap, nth_rw, simp_rw
 -/
@@ -117,7 +121,8 @@ theorem iterateMapComap_eq_succ
     | succ m ih =>
       rw [iterateMapComap]; rw [iterateMapComap]; rw [iterate_succ']; rw [iterate_succ']
       exact fun H => ih (map_injective_of_injective hi (comap_injective_of_surjective hf H))
-
+  | succ n ih =>
+    rw [iterateMapComap]; rw [iterateMapComap]; rw [iterate_succ']; rw [iterate_succ']; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← iterateMapComap]; rw [← iterateMapComap]; rw [ih]
 
 中文:
 定理 iterateMapComap_eq_succ
@@ -131,7 +136,8 @@ theorem iterateMapComap_eq_succ
     | succ m ih =>
       rw [iterateMapComap]; rw [iterateMapComap]; rw [iterate_succ']; rw [iterate_succ']
       exact fun H => ih (map_injective_of_injective hi (comap_injective_of_surjective hf H))
-
+  | succ n ih =>
+    rw [iterateMapComap]; rw [iterateMapComap]; rw [iterate_succ']; rw [iterate_succ']; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← iterateMapComap]; rw [← iterateMapComap]; rw [ih]
 
 Depends on / 依赖: Function, Function.comp_apply, comap_injective_of_surjective, comp_apply, contrapose, iterateMapComap, iterate_succ, map_injective_of_injective
 -/

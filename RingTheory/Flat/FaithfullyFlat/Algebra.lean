@@ -57,7 +57,7 @@ lemma Module.FaithfullyFlat.of_comap_surjective
     rw [← PrimeSpectrum.comap_asIdeal (algebraMap A B) m']; rw [hm']
   rw [Ideal.smul_top_eq_map]; rw [this]
   exact (Submodule.restrictScalars_eq_top_iff _ _ _).ne.mpr
-fun
+fun top => m'.isPrime.ne_top top_le_iff.mp top ▸ Ideal.map_comap_le
 
 中文:
 引理 模.忠实平坦.of_comap_surjective
@@ -69,7 +69,7 @@ fun
     rw [← PrimeSpectrum.comap_asIdeal (algebraMap A B) m']; rw [hm']
   rw [Ideal.smul_top_eq_map]; rw [this]
   exact (Submodule.restrictScalars_eq_top_iff _ _ _).ne.mpr
-fun
+fun top => m'.isPrime.ne_top top_le_iff.mp top ▸ Ideal.map_comap_le
 
 Depends on / 依赖: Ideal.comap, Ideal.map_comap_le, Ideal.smul_top_eq_map, PrimeSpectrum, PrimeSpectrum.comap_asIdeal, Submodule, Submodule.restrictScalars_eq_top_iff, algebraMap, asIdeal, comap_asIdeal, hm.isPrime, isPrime, isPrime.ne_top, map_comap_le, ne.mpr, ne_top, restrictScalars_eq_top_iff, smul_top_eq_map, top_le_iff, top_le_iff.mp
 -/
@@ -96,7 +96,9 @@ lemma Module.FaithfullyFlat.of_flat_of_isLocalHom
   by_contra eqt
   have : Submodule.restrictScalars A (Ideal.map (algebraMap A B) (IsLocalRing.maximalIdeal A)) <=
       Submodule.restrictScalars A (IsLocalRing.maximalIdeal B) :=
-    ((IsLocalRing.local_h
+    ((IsLocalRing.local_hom_TFAE (algebraMap A B)).out 0 2).mp ‹_›
+  rw [eqt]; rw [top_le_iff]; rw [Submodule.restrictScalars_eq_top_iff] at this
+  exact Ideal.IsPrime.ne_top' this
 
 中文:
 引理 模.忠实平坦.of_flat_of_isLocalHom
@@ -107,7 +109,9 @@ lemma Module.FaithfullyFlat.of_flat_of_isLocalHom
   by_contra eqt
   have : Submodule.restrictScalars A (Ideal.map (algebraMap A B) (IsLocalRing.maximalIdeal A)) <=
       Submodule.restrictScalars A (IsLocalRing.maximalIdeal B) :=
-    ((IsLocalRing.local_h
+    ((IsLocalRing.local_hom_TFAE (algebraMap A B)).out 0 2).mp ‹_›
+  rw [eqt]; rw [top_le_iff]; rw [Submodule.restrictScalars_eq_top_iff] at this
+  exact Ideal.IsPrime.ne_top' this
 
 Depends on / 依赖: Ideal.IsPrime.ne_top, Ideal.map, Ideal.smul_top_eq_map, IsLocalRing, IsLocalRing.eq_maximalIdeal, IsLocalRing.local_hom_TFAE, IsLocalRing.maximalIdeal, IsPrime, Submodule, Submodule.restrictScalars, Submodule.restrictScalars_eq_top_iff, algebraMap, eq_maximalIdeal, local_hom_TFAE, maximalIdeal, ne_top, restrictScalars, restrictScalars_eq_top_iff, smul_top_eq_map, top_le_iff
 -/
@@ -132,7 +136,7 @@ instance Module.FaithfullyFlat.of_isIntegral_of_isDomain
   refine Module.FaithfullyFlat.of_comap_surjective fun P => ?_
   obtain ⟨P, hP₁, hP₂⟩ := Ideal.exists_ideal_over_prime_of_isIntegral_of_isDomain P.1 (S := B)
     (by simp [(RingHom.injective_iff_ker_eq_bot _).mp (FaithfulSMul.algebraMap_injective A B)])
-  exact ⟨⟨P, hP₁⟩, PrimeSpectrum.ext_iff.mp
+  exact ⟨⟨P, hP₁⟩, PrimeSpectrum.ext_iff.mpr hP₂⟩
 
 中文:
 实例 模.忠实平坦.of_is整数egral_of_isDomain
@@ -141,7 +145,7 @@ instance Module.FaithfullyFlat.of_isIntegral_of_isDomain
   refine Module.FaithfullyFlat.of_comap_surjective fun P => ?_
   obtain ⟨P, hP₁, hP₂⟩ := Ideal.exists_ideal_over_prime_of_isIntegral_of_isDomain P.1 (S := B)
     (by simp [(RingHom.injective_iff_ker_eq_bot _).mp (FaithfulSMul.algebraMap_injective A B)])
-  exact ⟨⟨P, hP₁⟩, PrimeSpectrum.ext_iff.mp
+  exact ⟨⟨P, hP₁⟩, PrimeSpectrum.ext_iff.mpr hP₂⟩
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FaithfullyFlat, Ideal.exists_ideal_over_prime_of_isIntegral_of_isDomain, Module, Module.FaithfullyFlat.of_comap_surjective, PrimeSpectrum, PrimeSpectrum.ext_iff.mpr, RingHom, RingHom.injective_iff_ker_eq_bot, algebraMap_injective, exists_ideal_over_prime_of_isIntegral_of_isDomain, ext_iff, injective_iff_ker_eq_bot, of_comap_surjective
 -/
@@ -168,7 +172,8 @@ lemma Module.FaithfullyFlat.tensorProduct_mk_injective
     apply TensorProduct.ext'
     intro x y
     simp
-  rw [this]; rw [coe_comp]; rw 
+  rw [this]; rw [coe_comp]; rw [LinearEquiv.coe_coe]; rw [EmbeddingLike.comp_injective]
+  exact Algebra.TensorProduct.mk_one_injective_of_isScalarTower _
 
 中文:
 引理 模.忠实平坦.tensorProduct_mk_injective
@@ -180,7 +185,8 @@ lemma Module.FaithfullyFlat.tensorProduct_mk_injective
     apply TensorProduct.ext'
     intro x y
     simp
-  rw [this]; rw [coe_comp]; rw 
+  rw [this]; rw [coe_comp]; rw [LinearEquiv.coe_coe]; rw [EmbeddingLike.comp_injective]
+  exact Algebra.TensorProduct.mk_one_injective_of_isScalarTower _
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.mk_one_injective_of_isScalarTower, EmbeddingLike, EmbeddingLike.comp_injective, FaithfullyFlat, LinearEquiv, LinearEquiv.coe_coe, Module, Module.FaithfullyFlat.lTensor_injective_iff_injective, TensorProduct, TensorProduct.ext, TensorProduct.leftComm, TensorProduct.mk, coe_coe, coe_comp, comp_injective, lTensor, lTensor_injective_iff_injective, leftComm, mk_one_injective_of_isScalarTower
 -/
@@ -243,7 +249,16 @@ lemma Ideal.comap_map_eq_self_of_faithfullyFlat
       ((quotIdealMapEquivTensorQuot B I).symm.toLinearMap.restrictScalars _ ∘ₗ
         TensorProduct.mk A B (A ⧸ I) 1) := by
     rw [LinearMap.coe_comp]; rw [AlgEquiv.toLinearMap]; rw [← LinearEquiv.restrictScalars_toLinearMap]
-
+exact (LinearEquiv.injective _).comp
+      Module.FaithfullyFlat.tensorProduct_mk_injective (A ⧸ I)
+  intro x hx
+  rw [Ideal.mem_comap] at hx
+  rw [← Ideal.Quotient.eq_zero_iff_mem] at hx ⊢
+  apply inj
+  have : ((quotIdealMapEquivTensorQuot B I).symm.toLinearEquiv.toLinearMap.restrictScalars _ ∘ₗ
+      TensorProduct.mk A B (A ⧸ I) 1) x = 0 := by
+    simp [← Algebra.algebraMap_eq_smul_one, hx]
+  simp [this]
 
 中文:
 引理 理想.comap_map_eq_self_of_faithfullyFlat
@@ -254,7 +269,16 @@ lemma Ideal.comap_map_eq_self_of_faithfullyFlat
       ((quotIdealMapEquivTensorQuot B I).symm.toLinearMap.restrictScalars _ ∘ₗ
         TensorProduct.mk A B (A ⧸ I) 1) := by
     rw [LinearMap.coe_comp]; rw [AlgEquiv.toLinearMap]; rw [← LinearEquiv.restrictScalars_toLinearMap]
-
+exact (LinearEquiv.injective _).comp
+      Module.FaithfullyFlat.tensorProduct_mk_injective (A ⧸ I)
+  intro x hx
+  rw [Ideal.mem_comap] at hx
+  rw [← Ideal.Quotient.eq_zero_iff_mem] at hx ⊢
+  apply inj
+  have : ((quotIdealMapEquivTensorQuot B I).symm.toLinearEquiv.toLinearMap.restrictScalars _ ∘ₗ
+      TensorProduct.mk A B (A ⧸ I) 1) x = 0 := by
+    simp [← Algebra.algebraMap_eq_smul_one, hx]
+  simp [this]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.toLinearMap, FaithfullyFlat, Function, Function.Injective, Ideal.Quotient.eq_zero_iff_mem, Ideal.mem_comap, Injective, LinearEquiv, LinearEquiv.injective, LinearEquiv.restrictScalars_toLinearMap, LinearMap, LinearMap.coe_comp, Module, Module.FaithfullyFlat.tensorProduct_mk_injective, Quotient, TensorProduct, TensorProduct.mk, coe_comp, eq_zero_iff_mem
 -/

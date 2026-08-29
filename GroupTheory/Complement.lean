@@ -190,7 +190,12 @@ theorem IsComplement'.symm
     Equiv.mk (fun x => ⟨x.2⁻¹, x.1⁻¹⟩) (fun x => ⟨x.2⁻¹, x.1⁻¹⟩)
       (fun x => Prod.ext (inv_inv _) (inv_inv _)) fun x => Prod.ext (inv_inv _) (inv_inv _)
   let ψ : G ≃ G := Equiv.mk (fun g : G => g⁻¹) (fun g : G => g⁻¹) inv_inv inv_inv
-  suffices hf : (ψ ∘ fun x : H 
+  suffices hf : (ψ ∘ fun x : H × K => x.1.1 * x.2.1) = (fun x : K × H => x.1.1 * x.2.1) ∘ ϕ by
+    rwa [isComplement'_def, isComplement_iff_bijective, ← Equiv.bijective_comp ϕ, ← hf,
+      ψ.comp_bijective]
+  exact funext fun x => mul_inv_rev _ _
+
+@[to_additive]
 
 中文:
 定理 IsComplement'.symm
@@ -201,7 +206,12 @@ theorem IsComplement'.symm
     Equiv.mk (fun x => ⟨x.2⁻¹, x.1⁻¹⟩) (fun x => ⟨x.2⁻¹, x.1⁻¹⟩)
       (fun x => Prod.ext (inv_inv _) (inv_inv _)) fun x => Prod.ext (inv_inv _) (inv_inv _)
   let ψ : G ≃ G := Equiv.mk (fun g : G => g⁻¹) (fun g : G => g⁻¹) inv_inv inv_inv
-  suffices hf : (ψ ∘ fun x : H 
+  suffices hf : (ψ ∘ fun x : H × K => x.1.1 * x.2.1) = (fun x : K × H => x.1.1 * x.2.1) ∘ ϕ by
+    rwa [isComplement'_def, isComplement_iff_bijective, ← Equiv.bijective_comp ϕ, ← hf,
+      ψ.comp_bijective]
+  exact funext fun x => mul_inv_rev _ _
+
+@[to_additive]
 -/
 theorem IsComplement'.symm (h : IsComplement' H K) : IsComplement' K H := by
   let ϕ : H × K ≃ K × H :=
@@ -381,7 +391,12 @@ theorem isComplement_univ_left
   · obtain ⟨a, _⟩ := h.2 1
     exact ⟨a.2.1, a.2.2⟩
   · have : (⟨⟨_, mem_top a⁻¹⟩, ⟨a, ha⟩⟩ : (⊤ : Set G) × S) = ⟨⟨_, mem_top b⁻¹⟩, ⟨b, hb⟩⟩ :=
-      h.1 ((inv_mul_cancel a).trans (inv_mul_
+      h.1 ((inv_mul_cancel a).trans (inv_mul_cancel b).symm)
+    exact Subtype.ext_iff.mp (Prod.ext_iff.mp this).2
+  · rintro ⟨g, rfl⟩
+    exact isComplement_univ_singleton
+
+@[to_additive]
 
 中文:
 定理 isComplement_univ_left
@@ -392,7 +407,12 @@ theorem isComplement_univ_left
   · obtain ⟨a, _⟩ := h.2 1
     exact ⟨a.2.1, a.2.2⟩
   · have : (⟨⟨_, mem_top a⁻¹⟩, ⟨a, ha⟩⟩ : (⊤ : Set G) × S) = ⟨⟨_, mem_top b⁻¹⟩, ⟨b, hb⟩⟩ :=
-      h.1 ((inv_mul_cancel a).trans (inv_mul_
+      h.1 ((inv_mul_cancel a).trans (inv_mul_cancel b).symm)
+    exact Subtype.ext_iff.mp (Prod.ext_iff.mp this).2
+  · rintro ⟨g, rfl⟩
+    exact isComplement_univ_singleton
+
+@[to_additive]
 
 Depends on / 依赖: Prod.ext_iff.mp, Set.exists_eq_singleton_iff_nonempty_subsingleton.mpr, Subtype, Subtype.ext_iff.mp, exists_eq_singleton_iff_nonempty_subsingleton, ext_iff, inv_mul_cancel, isComplement_univ_singleton, mem_top
 -/
@@ -420,7 +440,12 @@ theorem isComplement_univ_right
   · obtain ⟨a, _⟩ := h.2 1
     exact ⟨a.1.1, a.1.2⟩
   · have : (⟨⟨a, ha⟩, ⟨_, mem_top a⁻¹⟩⟩ : S × (⊤ : Set G)) = ⟨⟨b, hb⟩, ⟨_, mem_top b⁻¹⟩⟩ :=
-      h.1 ((mul_inv_cancel a).trans (mul_inv_
+      h.1 ((mul_inv_cancel a).trans (mul_inv_cancel b).symm)
+    exact Subtype.ext_iff.mp (Prod.ext_iff.mp this).1
+  · rintro ⟨g, rfl⟩
+    exact isComplement_singleton_univ
+
+@[to_additive]
 
 中文:
 定理 isComplement_univ_right
@@ -431,7 +456,12 @@ theorem isComplement_univ_right
   · obtain ⟨a, _⟩ := h.2 1
     exact ⟨a.1.1, a.1.2⟩
   · have : (⟨⟨a, ha⟩, ⟨_, mem_top a⁻¹⟩⟩ : S × (⊤ : Set G)) = ⟨⟨b, hb⟩, ⟨_, mem_top b⁻¹⟩⟩ :=
-      h.1 ((mul_inv_cancel a).trans (mul_inv_
+      h.1 ((mul_inv_cancel a).trans (mul_inv_cancel b).symm)
+    exact Subtype.ext_iff.mp (Prod.ext_iff.mp this).1
+  · rintro ⟨g, rfl⟩
+    exact isComplement_singleton_univ
+
+@[to_additive]
 
 Depends on / 依赖: Prod.ext_iff.mp, Set.exists_eq_singleton_iff_nonempty_subsingleton.mpr, Subtype, Subtype.ext_iff.mp, exists_eq_singleton_iff_nonempty_subsingleton, ext_iff, isComplement_singleton_univ, mem_top, mul_inv_cancel
 -/
@@ -1103,7 +1133,10 @@ lemma exists_isComplement_left
   refine ⟨Set.range (Function.update Quotient.out _ g), isComplement_range_left fun q => ?_,
     QuotientGroup.mk g, Function.update_self (Quotient.mk'' g) g Quotient.out⟩
   by_cases hq : q = Quotient.mk'' g
-  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quo
+  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quotient.out)
+  · simp [Function.update, dif_neg hq, q.out_eq']
+
+@[to_additive]
 
 中文:
 引理 存在_isComplement_left
@@ -1114,7 +1147,10 @@ lemma exists_isComplement_left
   refine ⟨Set.range (Function.update Quotient.out _ g), isComplement_range_left fun q => ?_,
     QuotientGroup.mk g, Function.update_self (Quotient.mk'' g) g Quotient.out⟩
   by_cases hq : q = Quotient.mk'' g
-  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quo
+  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quotient.out)
+  · simp [Function.update, dif_neg hq, q.out_eq']
+
+@[to_additive]
 
 Depends on / 依赖: Function, Function.update, Function.update_self, Quotient, Quotient.mk, Quotient.out, QuotientGroup, QuotientGroup.mk, Set.range, classical, congr_arg, dif_neg, hq.symm, isComplement_range_left, out_eq, q.out_eq, update, update_self
 -/
@@ -1138,7 +1174,8 @@ lemma exists_isComplement_right
   refine ⟨Set.range (Function.update Quotient.out _ g), isComplement_range_right fun q => ?_,
     Quotient.mk'' g, Function.update_self (Quotient.mk'' g) g Quotient.out⟩
   by_cases hq : q = Quotient.mk'' g
-  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quoti
+  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quotient.out)
+  · simp [Function.update, dif_neg hq, q.out_eq']
 
 中文:
 引理 存在_isComplement_right
@@ -1148,7 +1185,8 @@ lemma exists_isComplement_right
   refine ⟨Set.range (Function.update Quotient.out _ g), isComplement_range_right fun q => ?_,
     Quotient.mk'' g, Function.update_self (Quotient.mk'' g) g Quotient.out⟩
   by_cases hq : q = Quotient.mk'' g
-  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quoti
+  · exact hq.symm ▸ congr_arg _ (Function.update_self (Quotient.mk'' g) g Quotient.out)
+  · simp [Function.update, dif_neg hq, q.out_eq']
 
 Depends on / 依赖: Function, Function.update, Function.update_self, Quotient, Quotient.mk, Quotient.out, Set.range, classical, congr_arg, dif_neg, hq.symm, isComplement_range_right, out_eq, q.out_eq, update, update_self
 -/
@@ -1176,7 +1214,11 @@ lemma exists_left_transversal_of_le
   obtain ⟨S, cmem, -⟩ := H''.exists_isComplement_left 1
   refine ⟨H.subtype '' S, ?_, ?_⟩
   · have : H.subtype '' (S * H'') = H.subtype '' S * H''.map H.subtype := image_mul H.subtype
-    
+    rw [← this]; rw [cmem.mul_eq]
+    simp
+  · rw [← cmem.card_mul_card]
+    refine congr_arg₂ (· * ·) ?_ ?_ <;>
+      exact Nat.card_congr (Equiv.Set.image _ _ <| subtype_injective H).symm
 
 中文:
 引理 存在_left_transversal_of_le
@@ -1188,7 +1230,11 @@ lemma exists_left_transversal_of_le
   obtain ⟨S, cmem, -⟩ := H''.exists_isComplement_left 1
   refine ⟨H.subtype '' S, ?_, ?_⟩
   · have : H.subtype '' (S * H'') = H.subtype '' S * H''.map H.subtype := image_mul H.subtype
-    
+    rw [← this]; rw [cmem.mul_eq]
+    simp
+  · rw [← cmem.card_mul_card]
+    refine congr_arg₂ (· * ·) ?_ ?_ <;>
+      exact Nat.card_congr (Equiv.Set.image _ _ <| subtype_injective H).symm
 
 Depends on / 依赖: Equiv.Set.image, H.subtype, Nat.card_congr, Subgroup, card_congr, card_mul_card, cmem.card_mul_card, cmem.mul_eq, exists_isComplement_left, image_mul, mul_eq, subtype, subtype_injective
 -/
@@ -1221,7 +1267,12 @@ lemma exists_right_transversal_of_le
   obtain ⟨S, cmem, -⟩ := H''.exists_isComplement_right 1
   refine ⟨H.subtype '' S, ?_, ?_⟩
   · have : H.subtype '' (H'' * S) = H''.map H.subtype * H.subtype '' S := image_mul H.subtype
-   
+    rw [← this]; rw [cmem.mul_eq]
+    simp
+  · have : Nat.card H'' * Nat.card S = Nat.card H := cmem.card_mul_card
+    rw [← this]
+    refine congr_arg₂ (· * ·) ?_ ?_ <;>
+      exact Nat.card_congr (Equiv.Set.image _ _ <| subtype_injective H).symm
 
 中文:
 引理 存在_right_transversal_of_le
@@ -1233,7 +1284,12 @@ lemma exists_right_transversal_of_le
   obtain ⟨S, cmem, -⟩ := H''.exists_isComplement_right 1
   refine ⟨H.subtype '' S, ?_, ?_⟩
   · have : H.subtype '' (H'' * S) = H''.map H.subtype * H.subtype '' S := image_mul H.subtype
-   
+    rw [← this]; rw [cmem.mul_eq]
+    simp
+  · have : Nat.card H'' * Nat.card S = Nat.card H := cmem.card_mul_card
+    rw [← this]
+    refine congr_arg₂ (· * ·) ?_ ?_ <;>
+      exact Nat.card_congr (Equiv.Set.image _ _ <| subtype_injective H).symm
 
 Depends on / 依赖: Equiv.Set.image, H.subtype, Nat.card, Nat.card_congr, Subgroup, card_congr, card_mul_card, cmem.card_mul_card, cmem.mul_eq, exists_isComplement_right, image_mul, mul_eq, subtype, subtype_injective
 -/
@@ -1368,7 +1424,13 @@ theorem equiv_fst_eq_iff_leftCosetEquivalence
   · intro h
     rw [← hSK.equiv_fst_mul_equiv_snd g₂]; rw [← hSK.equiv_fst_mul_equiv_snd g₁]; rw [← h]; rw [mul_inv_rev]; rw [← mul_assoc]; rw [inv_mul_cancel_right]; rw [← coe_inv]; rw [← coe_mul]
     exact Subtype.property _
-  · i
+  · intro h
+    apply (isComplement_iff_existsUnique_inv_mul_mem.1 hSK g₁).unique
+    · -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_fst_eq_mul_inv]; simp
+    · rw [SetLike.mem_coe, ← mul_mem_cancel_right h]
+      -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_fst_eq_mul_inv]; simp [← mul_assoc]
 
 中文:
 定理 equiv_fst_eq_iff_leftCosetEquivalence
@@ -1379,7 +1441,13 @@ theorem equiv_fst_eq_iff_leftCosetEquivalence
   · intro h
     rw [← hSK.equiv_fst_mul_equiv_snd g₂]; rw [← hSK.equiv_fst_mul_equiv_snd g₁]; rw [← h]; rw [mul_inv_rev]; rw [← mul_assoc]; rw [inv_mul_cancel_right]; rw [← coe_inv]; rw [← coe_mul]
     exact Subtype.property _
-  · i
+  · intro h
+    apply (isComplement_iff_existsUnique_inv_mul_mem.1 hSK g₁).unique
+    · -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_fst_eq_mul_inv]; simp
+    · rw [SetLike.mem_coe, ← mul_mem_cancel_right h]
+      -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_fst_eq_mul_inv]; simp [← mul_assoc]
 
 Depends on / 依赖: LeftCosetEquivalence, SetLike, SetLike.mem_coe, Subtype, Subtype.property, before, coe_inv, coe_mul, equiv_fst_eq_mul_inv, equiv_fst_mul_equiv_snd, github, github.com, hSK.equiv_fst_mul_equiv_snd, inv_mul_cancel_right, isComplement_iff_existsUnique_inv_mul_mem, leanprover, leftCoset_eq_iff, mem_coe, mul_assoc, mul_inv_rev
 -/
@@ -1410,7 +1478,13 @@ theorem equiv_snd_eq_iff_rightCosetEquivalence
   · intro h
     rw [← hHT.equiv_fst_mul_equiv_snd g₂]; rw [← hHT.equiv_fst_mul_equiv_snd g₁]; rw [← h]; rw [mul_inv_rev]; rw [mul_assoc]; rw [mul_inv_cancel_left]; rw [← coe_inv]; rw [← coe_mul]
     exact Subtype.property _
-  · in
+  · intro h
+    apply (isComplement_iff_existsUnique_mul_inv_mem.1 hHT g₁).unique
+    · -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_snd_eq_inv_mul]; simp
+    · rw [SetLike.mem_coe, ← mul_mem_cancel_left h]
+      -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_snd_eq_inv_mul]; rw [mul_assoc]; simp
 
 中文:
 定理 equiv_snd_eq_iff_rightCosetEquivalence
@@ -1421,7 +1495,13 @@ theorem equiv_snd_eq_iff_rightCosetEquivalence
   · intro h
     rw [← hHT.equiv_fst_mul_equiv_snd g₂]; rw [← hHT.equiv_fst_mul_equiv_snd g₁]; rw [← h]; rw [mul_inv_rev]; rw [mul_assoc]; rw [mul_inv_cancel_left]; rw [← coe_inv]; rw [← coe_mul]
     exact Subtype.property _
-  · in
+  · intro h
+    apply (isComplement_iff_existsUnique_mul_inv_mem.1 hHT g₁).unique
+    · -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_snd_eq_inv_mul]; simp
+    · rw [SetLike.mem_coe, ← mul_mem_cancel_left h]
+      -- This used to be `simp [...]` before https://github.com/leanprover/lean4/pull/2644
+      rw [equiv_snd_eq_inv_mul]; rw [mul_assoc]; simp
 
 Depends on / 依赖: RightCosetEquivalence, SetLike, SetLike.mem_coe, Subtype, Subtype.property, before, coe_inv, coe_mul, equiv_fst_mul_equiv_snd, equiv_snd_eq_inv_mul, github, github.com, hHT.equiv_fst_mul_equiv_snd, isComplement_iff_existsUnique_mul_inv_mem, leanprover, mem_coe, mul_assoc, mul_inv_cancel_left, mul_inv_rev, property
 -/
@@ -2331,7 +2411,15 @@ instance :
       refine isComplement_iff_existsUnique_inv_mul_mem.mpr fun g => ?_
       obtain ⟨t, ht1, ht2⟩ := isComplement_iff_existsUnique_inv_mul_mem.mp T.2 (f⁻¹ • g)
       refine ⟨⟨f • (t : G), Set.smul_mem_smul_set t.2⟩, ?_, ?_⟩
-      · exact smul_inv_smul f g ▸ QuotientAction.inv_mu
+      · exact smul_inv_smul f g ▸ QuotientAction.inv_mul_mem f ht1
+      · rintro ⟨-, t', ht', rfl⟩ h
+        replace h := QuotientAction.inv_mul_mem f⁻¹ h
+        simp only [Subtype.ext_iff, smul_left_cancel_iff, inv_smul_smul] at h ⊢
+        exact Subtype.ext_iff.mp (ht2 ⟨t', ht'⟩ h)⟩
+  one_smul T := Subtype.ext (one_smul F (T : Set G))
+  mul_smul f₁ f₂ T := Subtype.ext (mul_smul f₁ f₂ (T : Set G))
+
+@[to_additive]
 
 中文:
 实例 :
@@ -2340,7 +2428,15 @@ instance :
       refine isComplement_iff_existsUnique_inv_mul_mem.mpr fun g => ?_
       obtain ⟨t, ht1, ht2⟩ := isComplement_iff_existsUnique_inv_mul_mem.mp T.2 (f⁻¹ • g)
       refine ⟨⟨f • (t : G), Set.smul_mem_smul_set t.2⟩, ?_, ?_⟩
-      · exact smul_inv_smul f g ▸ QuotientAction.inv_mu
+      · exact smul_inv_smul f g ▸ QuotientAction.inv_mul_mem f ht1
+      · rintro ⟨-, t', ht', rfl⟩ h
+        replace h := QuotientAction.inv_mul_mem f⁻¹ h
+        simp only [Subtype.ext_iff, smul_left_cancel_iff, inv_smul_smul] at h ⊢
+        exact Subtype.ext_iff.mp (ht2 ⟨t', ht'⟩ h)⟩
+  one_smul T := Subtype.ext (one_smul F (T : Set G))
+  mul_smul f₁ f₂ T := Subtype.ext (mul_smul f₁ f₂ (T : Set G))
+
+@[to_additive]
 
 Depends on / 依赖: QuotientAction, QuotientAction.inv_mul_mem, Set.smul_mem_smul_set, Subtype, Subtype.ext_iff, Subtype.ext_iff.mp, ext_iff, inv_mul_mem, inv_smul_smul, isComplement_iff_existsUnique_inv_mul_mem, isComplement_iff_existsUnique_inv_mul_mem.mp, isComplement_iff_existsUnique_inv_mul_mem.mpr, one_smul, replace, smul_inv_smul, smul_left_cancel_iff, smul_mem_smul_set
 -/
@@ -2369,7 +2465,10 @@ theorem smul_toLeftFun
     (isComplement_iff_existsUnique_inv_mul_mem.mp (f • S).2 (f • g))
     ⟨f • (S.2.toLeftFun g : G), Set.smul_mem_smul_set (Subtype.coe_prop _)⟩
       ((f • S).2.toLeftFun (f • g))
-    (QuotientAction.inv_mul
+    (QuotientAction.inv_mul_mem f (S.2.inv_toLeftFun_mul_mem g))
+      ((f • S).2.inv_toLeftFun_mul_mem (f • g))
+
+@[to_additive]
 
 中文:
 定理 smul_toLeftFun
@@ -2378,7 +2477,10 @@ theorem smul_toLeftFun
     (isComplement_iff_existsUnique_inv_mul_mem.mp (f • S).2 (f • g))
     ⟨f • (S.2.toLeftFun g : G), Set.smul_mem_smul_set (Subtype.coe_prop _)⟩
       ((f • S).2.toLeftFun (f • g))
-    (QuotientAction.inv_mul
+    (QuotientAction.inv_mul_mem f (S.2.inv_toLeftFun_mul_mem g))
+      ((f • S).2.inv_toLeftFun_mul_mem (f • g))
+
+@[to_additive]
 
 Depends on / 依赖: ExistsUnique, ExistsUnique.unique, QuotientAction, QuotientAction.inv_mul_mem, Set.smul_mem_smul_set, Subtype, Subtype.coe_prop, Subtype.ext_iff.mp, coe_prop, ext_iff, inv_mul_mem, inv_toLeftFun_mul_mem, isComplement_iff_existsUnique_inv_mul_mem, isComplement_iff_existsUnique_inv_mul_mem.mp, smul_mem_smul_set, toLeftFun, unique
 -/
@@ -2500,7 +2602,8 @@ theorem IsComplement'.isCompl
         Subtype.ext_iff.mp
           (Prod.ext_iff.mp (show x = y from h.1 ((mul_one g).trans (one_mul g).symm))).1,
       codisjoint_iff_le_sup.mpr fun g _ => ?_⟩
-  obtai
+  obtain ⟨⟨h, k⟩, rfl⟩ := h.2 g
+  exact Subgroup.mul_mem_sup h.2 k.2
 
 中文:
 定理 IsComplement'.isCompl
@@ -2514,7 +2617,8 @@ theorem IsComplement'.isCompl
         Subtype.ext_iff.mp
           (Prod.ext_iff.mp (show x = y from h.1 ((mul_one g).trans (one_mul g).symm))).1,
       codisjoint_iff_le_sup.mpr fun g _ => ?_⟩
-  obtai
+  obtain ⟨⟨h, k⟩, rfl⟩ := h.2 g
+  exact Subgroup.mul_mem_sup h.2 k.2
 -/
 theorem IsComplement'.isCompl (h : IsComplement' H K) : IsCompl H K := by
   refine
@@ -2741,7 +2845,9 @@ theorem isComplement'_stabilizer
   have hh' : (↑h * g) • a = a := by rwa [mul_smul]
   refine ⟨⟨h⁻¹, h * g, hh'⟩, inv_mul_cancel_left ↑h g, ?_⟩
   rintro ⟨h', g, hg : g • a = a⟩ rfl
-  specialize h1 (h * h') (by rwa [mul_smul, smul_def h', ← hg, ← mul_s
+  specialize h1 (h * h') (by rwa [mul_smul, smul_def h', ← hg, ← mul_smul, hg])
+  refine Prod.ext (eq_inv_of_mul_eq_one_right h1) (Subtype.ext ?_)
+  rwa [Subtype.ext_iff, coe_one, coe_mul, ← right_eq_mul, mul_assoc (↑h) (↑h') g] at h1
 
 中文:
 定理 isComplement'_stabilizer
@@ -2752,7 +2858,9 @@ theorem isComplement'_stabilizer
   have hh' : (↑h * g) • a = a := by rwa [mul_smul]
   refine ⟨⟨h⁻¹, h * g, hh'⟩, inv_mul_cancel_left ↑h g, ?_⟩
   rintro ⟨h', g, hg : g • a = a⟩ rfl
-  specialize h1 (h * h') (by rwa [mul_smul, smul_def h', ← hg, ← mul_s
+  specialize h1 (h * h') (by rwa [mul_smul, smul_def h', ← hg, ← mul_smul, hg])
+  refine Prod.ext (eq_inv_of_mul_eq_one_right h1) (Subtype.ext ?_)
+  rwa [Subtype.ext_iff, coe_one, coe_mul, ← right_eq_mul, mul_assoc (↑h) (↑h') g] at h1
 -/
 theorem isComplement'_stabilizer {α : Type*} [MulAction G α] (a : α)
     (h1 : forall h : H, h • a = a -> h = 1) (h2 : forall g : G, exists h : H, h • g • a = a) :

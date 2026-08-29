@@ -51,7 +51,9 @@ definition eqLocus
     carrier := { x | f x = g x }
     smul_mem' := fun {r} {x} (hx : _ = _) => show _ = _ by
       -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
-      simpa only [map_smulₛₗ _] using congr_arg (τ₁₂ r • ·) 
+      simpa only [map_smulₛₗ _] using congr_arg (τ₁₂ r • ·) hx }
+
+@[simp]
 
 中文:
 定义 eqLocus
@@ -60,7 +62,9 @@ definition eqLocus
     carrier := { x | f x = g x }
     smul_mem' := fun {r} {x} (hx : _ = _) => show _ = _ by
       -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
-      simpa only [map_smulₛₗ _] using congr_arg (τ₁₂ r • ·) 
+      simpa only [map_smulₛₗ _] using congr_arg (τ₁₂ r • ·) hx }
+
+@[simp]
 
 Depends on / 依赖: carrier, eqLocusM, smul_mem
 -/

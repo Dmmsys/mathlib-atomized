@@ -733,7 +733,15 @@ lemma trans
   obtain ⟨⟨v₄, v₅, hv₅⟩, fac⟩ := HasLeftCalculusOfFractions.exists_leftFraction
     (RightFraction.mk (z₁.s ≫ t₁) ht (z₃.s ≫ u₃))
   simp only [Category.assoc] at fac
-  have eq : z₂.s ≫ u₂ ≫ v₅ = z₂.s ≫ t₂ ≫ v₄ :
+  have eq : z₂.s ≫ u₂ ≫ v₅ = z₂.s ≫ t₂ ≫ v₄ := by
+    simpa only [← reassoc_of% hsu, reassoc_of% hst] using fac
+  obtain ⟨Z₇, w, hw, fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ z₂.hs eq
+  simp only [Category.assoc] at fac'
+  refine ⟨Z₇, t₁ ≫ v₄ ≫ w, u₃ ≫ v₅ ≫ w, ?_, ?_, ?_⟩
+  · rw [reassoc_of% fac]
+  · rw [reassoc_of% hft, ← fac', reassoc_of% hfu]
+  · rw [← reassoc_of% fac, ← reassoc_of% hsu, ← Category.assoc]
+    exact W.comp_mem _ _ hu (W.comp_mem _ _ hv₅ hw)
 
 中文:
 引理 trans
@@ -744,7 +752,15 @@ lemma trans
   obtain ⟨⟨v₄, v₅, hv₅⟩, fac⟩ := HasLeftCalculusOfFractions.exists_leftFraction
     (RightFraction.mk (z₁.s ≫ t₁) ht (z₃.s ≫ u₃))
   simp only [Category.assoc] at fac
-  have eq : z₂.s ≫ u₂ ≫ v₅ = z₂.s ≫ t₂ ≫ v₄ :
+  have eq : z₂.s ≫ u₂ ≫ v₅ = z₂.s ≫ t₂ ≫ v₄ := by
+    simpa only [← reassoc_of% hsu, reassoc_of% hst] using fac
+  obtain ⟨Z₇, w, hw, fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ z₂.hs eq
+  simp only [Category.assoc] at fac'
+  refine ⟨Z₇, t₁ ≫ v₄ ≫ w, u₃ ≫ v₅ ≫ w, ?_, ?_, ?_⟩
+  · rw [reassoc_of% fac]
+  · rw [reassoc_of% hft, ← fac', reassoc_of% hfu]
+  · rw [← reassoc_of% fac, ← reassoc_of% hsu, ← Category.assoc]
+    exact W.comp_mem _ _ hu (W.comp_mem _ _ hv₅ hw)
 
 Depends on / 依赖: Category, Category.assoc, HasLeftCalculusOfFractions, HasLeftCalculusOfFractions.exists_leftFraction, HasLeftCalculusOfFractions.ext, RightFraction, RightFraction.mk, exists_leftFraction, reassoc_of
 -/
@@ -838,7 +854,12 @@ lemma comp₀_rel
   have eq : z₁.s ≫ z₃.f ≫ z₄.f = z₁.s ≫ z₃'.f ≫ z₄.s := by
     rw [← reassoc_of% h₃]; rw [← reassoc_of% h₃']; rw [fac]
   obtain ⟨Y, t, ht, fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ z₁.hs eq
-  simp onl
+  simp only [assoc] at fac'
+  refine ⟨Y, z₄.f ≫ t, z₄.s ≫ t, ?_, ?_, ?_⟩
+  · simp only [comp₀, assoc, reassoc_of% fac]
+  · simp only [comp₀, assoc, fac']
+  · simp only [comp₀, assoc, ← reassoc_of% fac]
+    exact W.comp_mem _ _ z₂.hs (W.comp_mem _ _ z₃'.hs (W.comp_mem _ _ z₄.hs ht))
 
 中文:
 引理 comp₀_rel
@@ -849,7 +870,12 @@ lemma comp₀_rel
   have eq : z₁.s ≫ z₃.f ≫ z₄.f = z₁.s ≫ z₃'.f ≫ z₄.s := by
     rw [← reassoc_of% h₃]; rw [← reassoc_of% h₃']; rw [fac]
   obtain ⟨Y, t, ht, fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ z₁.hs eq
-  simp onl
+  simp only [assoc] at fac'
+  refine ⟨Y, z₄.f ≫ t, z₄.s ≫ t, ?_, ?_, ?_⟩
+  · simp only [comp₀, assoc, reassoc_of% fac]
+  · simp only [comp₀, assoc, fac']
+  · simp only [comp₀, assoc, ← reassoc_of% fac]
+    exact W.comp_mem _ _ z₂.hs (W.comp_mem _ _ z₃'.hs (W.comp_mem _ _ z₄.hs ht))
 
 Depends on / 依赖: HasLeftCalculusOfFractions, HasLeftCalculusOfFractions.ext, RightFraction, RightFraction.mk, W.comp_mem, comp_mem, exists_leftFraction, reassoc_of
 -/
@@ -985,7 +1011,78 @@ definition Hom.comp
   · rintro a b₁ b₂ ⟨U, t₁, t₂, hst, hft, ht⟩
     obtain ⟨z₁, fac₁⟩ := exists_leftFraction (RightFraction.mk a.s a.hs b₁.f)
     obtain ⟨z₂, fac₂⟩ := exists_leftFraction (RightFraction.mk a.s a.hs b₂.f)
-    obtain ⟨w₁, fac₁'⟩ := exists_leftFract
+    obtain ⟨w₁, fac₁'⟩ := exists_leftFraction (RightFraction.mk z₁.s z₁.hs t₁)
+    obtain ⟨w₂, fac₂'⟩ := exists_leftFraction (RightFraction.mk z₂.s z₂.hs t₂)
+    obtain ⟨u, fac₃⟩ := exists_leftFraction (RightFraction.mk w₁.s w₁.hs w₂.s)
+    dsimp at fac₁ fac₂ fac₁' fac₂' fac₃ ⊢
+    have eq : a.s ≫ z₁.f ≫ w₁.f ≫ u.f = a.s ≫ z₂.f ≫ w₂.f ≫ u.s := by
+      rw [← reassoc_of% fac₁]; rw [← reassoc_of% fac₂]; rw [← reassoc_of% fac₁']; rw [← reassoc_of% fac₂']; rw [reassoc_of% hft]; rw [fac₃]
+    obtain ⟨Z, p, hp, fac₄⟩ := HasLeftCalculusOfFractions.ext _ _ _ a.hs eq
+    simp only [assoc] at fac₄
+    rw [comp_eq _ _ z₁ fac₁]; rw [comp_eq _ _ z₂ fac₂]
+    apply Quot.sound
+    refine ⟨Z, w₁.f ≫ u.f ≫ p, w₂.f ≫ u.s ≫ p, ?_, ?_, ?_⟩
+    · dsimp
+      simp only [assoc, ← reassoc_of% fac₁', ← reassoc_of% fac₂',
+        reassoc_of% hst, reassoc_of% fac₃]
+    · dsimp
+      simp only [assoc, fac₄]
+    · dsimp
+      simp only [assoc]
+      rw [← reassoc_of% fac₁']; rw [← reassoc_of% fac₃]; rw [← assoc]
+      exact W.comp_mem _ _ ht (W.comp_mem _ _ w₂.hs (W.comp_mem _ _ u.hs hp))
+  · rintro a₁ a₂ b ⟨U, t₁, t₂, hst, hft, ht⟩
+    obtain ⟨z₁, fac₁⟩ := exists_leftFraction (RightFraction.mk a₁.s a₁.hs b.f)
+    obtain ⟨z₂, fac₂⟩ := exists_leftFraction (RightFraction.mk a₂.s a₂.hs b.f)
+    obtain ⟨w₁, fac₁'⟩ := exists_leftFraction (RightFraction.mk (a₁.s ≫ t₁) ht (b.f ≫ z₁.s))
+    obtain ⟨w₂, fac₂'⟩ := exists_leftFraction (RightFraction.mk (a₂.s ≫ t₂)
+      (show W _ by rw [← hst]; exact ht) (b.f ≫ z₂.s))
+    let p₁ : W.LeftFraction X Z := LeftFraction.mk (a₁.f ≫ t₁ ≫ w₁.f) (b.s ≫ z₁.s ≫ w₁.s)
+      (W.comp_mem _ _ b.hs (W.comp_mem _ _ z₁.hs w₁.hs))
+    let p₂ : W.LeftFraction X Z := LeftFraction.mk (a₂.f ≫ t₂ ≫ w₂.f) (b.s ≫ z₂.s ≫ w₂.s)
+      (W.comp_mem _ _ b.hs (W.comp_mem _ _ z₂.hs w₂.hs))
+    dsimp at fac₁ fac₂ fac₁' fac₂' ⊢
+    simp only [assoc] at fac₁' fac₂'
+    rw [comp_eq _ _ z₁ fac₁]; rw [comp_eq _ _ z₂ fac₂]
+    apply Quot.sound
+    refine LeftFractionRel.trans ?_ ((?_ : LeftFractionRel p₁ p₂).trans ?_)
+    · have eq : a₁.s ≫ z₁.f ≫ w₁.s = a₁.s ≫ t₁ ≫ w₁.f := by rw [← fac₁', reassoc_of% fac₁]
+      obtain ⟨Z, u, hu, fac₃⟩ := HasLeftCalculusOfFractions.ext _ _ _ a₁.hs eq
+      simp only [assoc] at fac₃
+      refine ⟨Z, w₁.s ≫ u, u, ?_, ?_, ?_⟩
+      · dsimp [p₁]
+        simp only [assoc]
+      · dsimp [p₁]
+        simp only [assoc, fac₃]
+      · dsimp
+        simp only [assoc]
+        exact W.comp_mem _ _ b.hs (W.comp_mem _ _ z₁.hs (W.comp_mem _ _ w₁.hs hu))
+    · obtain ⟨q, fac₃⟩ := exists_leftFraction (RightFraction.mk (z₁.s ≫ w₁.s)
+        (W.comp_mem _ _ z₁.hs w₁.hs) (z₂.s ≫ w₂.s))
+      dsimp at fac₃
+      simp only [assoc] at fac₃
+      have eq : a₁.s ≫ t₁ ≫ w₁.f ≫ q.f = a₁.s ≫ t₁ ≫ w₂.f ≫ q.s := by
+        rw [← reassoc_of% fac₁']; rw [← fac₃]; rw [reassoc_of% hst]; rw [reassoc_of% fac₂']
+      obtain ⟨Z, u, hu, fac₄⟩ := HasLeftCalculusOfFractions.ext _ _ _ a₁.hs eq
+      simp only [assoc] at fac₄
+      refine ⟨Z, q.f ≫ u, q.s ≫ u, ?_, ?_, ?_⟩
+      · simp only [p₁, p₂, assoc, reassoc_of% fac₃]
+      · rw [assoc, assoc, assoc, assoc, fac₄, reassoc_of% hft]
+      · simp only [p₁, assoc, ← reassoc_of% fac₃]
+        exact W.comp_mem _ _ b.hs (W.comp_mem _ _ z₂.hs
+          (W.comp_mem _ _ w₂.hs (W.comp_mem _ _ q.hs hu)))
+    · have eq : a₂.s ≫ z₂.f ≫ w₂.s = a₂.s ≫ t₂ ≫ w₂.f := by
+        rw [← fac₂']; rw [reassoc_of% fac₂]
+      obtain ⟨Z, u, hu, fac₄⟩ := HasLeftCalculusOfFractions.ext _ _ _ a₂.hs eq
+      simp only [assoc] at fac₄
+      refine ⟨Z, u, w₂.s ≫ u, ?_, ?_, ?_⟩
+      · dsimp [p₁, p₂]
+        simp only [assoc]
+      · dsimp [p₁, p₂]
+        simp only [assoc, fac₄]
+      · dsimp [p₁, p₂]
+        simp only [assoc]
+        exact W.comp_mem _ _ b.hs (W.comp_mem _ _ z₂.hs (W.comp_mem _ _ w₂.hs hu))
 
 中文:
 定义 态射.comp
@@ -995,7 +1092,78 @@ definition Hom.comp
   · rintro a b₁ b₂ ⟨U, t₁, t₂, hst, hft, ht⟩
     obtain ⟨z₁, fac₁⟩ := exists_leftFraction (RightFraction.mk a.s a.hs b₁.f)
     obtain ⟨z₂, fac₂⟩ := exists_leftFraction (RightFraction.mk a.s a.hs b₂.f)
-    obtain ⟨w₁, fac₁'⟩ := exists_leftFract
+    obtain ⟨w₁, fac₁'⟩ := exists_leftFraction (RightFraction.mk z₁.s z₁.hs t₁)
+    obtain ⟨w₂, fac₂'⟩ := exists_leftFraction (RightFraction.mk z₂.s z₂.hs t₂)
+    obtain ⟨u, fac₃⟩ := exists_leftFraction (RightFraction.mk w₁.s w₁.hs w₂.s)
+    dsimp at fac₁ fac₂ fac₁' fac₂' fac₃ ⊢
+    have eq : a.s ≫ z₁.f ≫ w₁.f ≫ u.f = a.s ≫ z₂.f ≫ w₂.f ≫ u.s := by
+      rw [← reassoc_of% fac₁]; rw [← reassoc_of% fac₂]; rw [← reassoc_of% fac₁']; rw [← reassoc_of% fac₂']; rw [reassoc_of% hft]; rw [fac₃]
+    obtain ⟨Z, p, hp, fac₄⟩ := HasLeftCalculusOfFractions.ext _ _ _ a.hs eq
+    simp only [assoc] at fac₄
+    rw [comp_eq _ _ z₁ fac₁]; rw [comp_eq _ _ z₂ fac₂]
+    apply Quot.sound
+    refine ⟨Z, w₁.f ≫ u.f ≫ p, w₂.f ≫ u.s ≫ p, ?_, ?_, ?_⟩
+    · dsimp
+      simp only [assoc, ← reassoc_of% fac₁', ← reassoc_of% fac₂',
+        reassoc_of% hst, reassoc_of% fac₃]
+    · dsimp
+      simp only [assoc, fac₄]
+    · dsimp
+      simp only [assoc]
+      rw [← reassoc_of% fac₁']; rw [← reassoc_of% fac₃]; rw [← assoc]
+      exact W.comp_mem _ _ ht (W.comp_mem _ _ w₂.hs (W.comp_mem _ _ u.hs hp))
+  · rintro a₁ a₂ b ⟨U, t₁, t₂, hst, hft, ht⟩
+    obtain ⟨z₁, fac₁⟩ := exists_leftFraction (RightFraction.mk a₁.s a₁.hs b.f)
+    obtain ⟨z₂, fac₂⟩ := exists_leftFraction (RightFraction.mk a₂.s a₂.hs b.f)
+    obtain ⟨w₁, fac₁'⟩ := exists_leftFraction (RightFraction.mk (a₁.s ≫ t₁) ht (b.f ≫ z₁.s))
+    obtain ⟨w₂, fac₂'⟩ := exists_leftFraction (RightFraction.mk (a₂.s ≫ t₂)
+      (show W _ by rw [← hst]; exact ht) (b.f ≫ z₂.s))
+    let p₁ : W.LeftFraction X Z := LeftFraction.mk (a₁.f ≫ t₁ ≫ w₁.f) (b.s ≫ z₁.s ≫ w₁.s)
+      (W.comp_mem _ _ b.hs (W.comp_mem _ _ z₁.hs w₁.hs))
+    let p₂ : W.LeftFraction X Z := LeftFraction.mk (a₂.f ≫ t₂ ≫ w₂.f) (b.s ≫ z₂.s ≫ w₂.s)
+      (W.comp_mem _ _ b.hs (W.comp_mem _ _ z₂.hs w₂.hs))
+    dsimp at fac₁ fac₂ fac₁' fac₂' ⊢
+    simp only [assoc] at fac₁' fac₂'
+    rw [comp_eq _ _ z₁ fac₁]; rw [comp_eq _ _ z₂ fac₂]
+    apply Quot.sound
+    refine LeftFractionRel.trans ?_ ((?_ : LeftFractionRel p₁ p₂).trans ?_)
+    · have eq : a₁.s ≫ z₁.f ≫ w₁.s = a₁.s ≫ t₁ ≫ w₁.f := by rw [← fac₁', reassoc_of% fac₁]
+      obtain ⟨Z, u, hu, fac₃⟩ := HasLeftCalculusOfFractions.ext _ _ _ a₁.hs eq
+      simp only [assoc] at fac₃
+      refine ⟨Z, w₁.s ≫ u, u, ?_, ?_, ?_⟩
+      · dsimp [p₁]
+        simp only [assoc]
+      · dsimp [p₁]
+        simp only [assoc, fac₃]
+      · dsimp
+        simp only [assoc]
+        exact W.comp_mem _ _ b.hs (W.comp_mem _ _ z₁.hs (W.comp_mem _ _ w₁.hs hu))
+    · obtain ⟨q, fac₃⟩ := exists_leftFraction (RightFraction.mk (z₁.s ≫ w₁.s)
+        (W.comp_mem _ _ z₁.hs w₁.hs) (z₂.s ≫ w₂.s))
+      dsimp at fac₃
+      simp only [assoc] at fac₃
+      have eq : a₁.s ≫ t₁ ≫ w₁.f ≫ q.f = a₁.s ≫ t₁ ≫ w₂.f ≫ q.s := by
+        rw [← reassoc_of% fac₁']; rw [← fac₃]; rw [reassoc_of% hst]; rw [reassoc_of% fac₂']
+      obtain ⟨Z, u, hu, fac₄⟩ := HasLeftCalculusOfFractions.ext _ _ _ a₁.hs eq
+      simp only [assoc] at fac₄
+      refine ⟨Z, q.f ≫ u, q.s ≫ u, ?_, ?_, ?_⟩
+      · simp only [p₁, p₂, assoc, reassoc_of% fac₃]
+      · rw [assoc, assoc, assoc, assoc, fac₄, reassoc_of% hft]
+      · simp only [p₁, assoc, ← reassoc_of% fac₃]
+        exact W.comp_mem _ _ b.hs (W.comp_mem _ _ z₂.hs
+          (W.comp_mem _ _ w₂.hs (W.comp_mem _ _ q.hs hu)))
+    · have eq : a₂.s ≫ z₂.f ≫ w₂.s = a₂.s ≫ t₂ ≫ w₂.f := by
+        rw [← fac₂']; rw [reassoc_of% fac₂]
+      obtain ⟨Z, u, hu, fac₄⟩ := HasLeftCalculusOfFractions.ext _ _ _ a₂.hs eq
+      simp only [assoc] at fac₄
+      refine ⟨Z, u, w₂.s ≫ u, ?_, ?_, ?_⟩
+      · dsimp [p₁, p₂]
+        simp only [assoc]
+      · dsimp [p₁, p₂]
+        simp only [assoc, fac₄]
+      · dsimp [p₁, p₂]
+        simp only [assoc]
+        exact W.comp_mem _ _ b.hs (W.comp_mem _ _ z₂.hs (W.comp_mem _ _ w₂.hs hu))
 -/
 noncomputable def Hom.comp {X Y Z : C} (z₁ : Hom W X Y) (z₂ : Hom W Y Z) : Hom W X Z := by
   refine Quot.lift₂ (fun a b => a.comp b) ?_ ?_ z₁ z₂
@@ -1128,7 +1296,28 @@ instance :
     obtain ⟨z, rfl⟩ := Hom.mk_surjective f
     rw [Hom.comp_eq]; rw [comp_eq z (ofHom W (𝟙 Y)) (ofInv z.s z.hs) (by simp)]
     dsimp [comp₀]
-    simp only [comp_id, id_c
+    simp only [comp_id, id_comp]
+  id_comp := by
+    rintro (X Y : C) f
+    obtain ⟨z, rfl⟩ := Hom.mk_surjective f
+    rw [Hom.comp_eq]; rw [comp_eq (ofHom W (𝟙 X)) z (ofHom W z.f) (by simp)]
+    dsimp
+    simp only [id_comp, comp_id]
+  assoc := by
+    rintro (X₁ X₂ X₃ X₄ : C) f₁ f₂ f₃
+    obtain ⟨z₁, rfl⟩ := Hom.mk_surjective f₁
+    obtain ⟨z₂, rfl⟩ := Hom.mk_surjective f₂
+    obtain ⟨z₃, rfl⟩ := Hom.mk_surjective f₃
+    rw [Hom.comp_eq z₁ z₂]; rw [Hom.comp_eq z₂ z₃]
+    obtain ⟨z₁₂, fac₁₂⟩ := exists_leftFraction (RightFraction.mk z₁.s z₁.hs z₂.f)
+    obtain ⟨z₂₃, fac₂₃⟩ := exists_leftFraction (RightFraction.mk z₂.s z₂.hs z₃.f)
+    obtain ⟨z', fac⟩ := exists_leftFraction (RightFraction.mk z₁₂.s z₁₂.hs z₂₃.f)
+    dsimp at fac₁₂ fac₂₃ fac
+    rw [comp_eq z₁ z₂ z₁₂ fac₁₂]; rw [comp_eq z₂ z₃ z₂₃ fac₂₃]; rw [comp₀]; rw [comp₀]; rw [Hom.comp_eq]; rw [Hom.comp_eq]; rw [comp_eq _ z₃ (mk z'.f (z₂₃.s ≫ z'.s) (W.comp_mem _ _ z₂₃.hs z'.hs))
+        (by dsimp; rw [assoc]; rw [reassoc_of% fac₂₃]; rw [fac]),
+      comp_eq z₁ _ (mk (z₁₂.f ≫ z'.f) z'.s z'.hs)
+        (by dsimp; rw [assoc, ← reassoc_of% fac₁₂, fac])]
+    simp
 
 中文:
 实例 :
@@ -1141,7 +1330,28 @@ instance :
     obtain ⟨z, rfl⟩ := Hom.mk_surjective f
     rw [Hom.comp_eq]; rw [comp_eq z (ofHom W (𝟙 Y)) (ofInv z.s z.hs) (by simp)]
     dsimp [comp₀]
-    simp only [comp_id, id_c
+    simp only [comp_id, id_comp]
+  id_comp := by
+    rintro (X Y : C) f
+    obtain ⟨z, rfl⟩ := Hom.mk_surjective f
+    rw [Hom.comp_eq]; rw [comp_eq (ofHom W (𝟙 X)) z (ofHom W z.f) (by simp)]
+    dsimp
+    simp only [id_comp, comp_id]
+  assoc := by
+    rintro (X₁ X₂ X₃ X₄ : C) f₁ f₂ f₃
+    obtain ⟨z₁, rfl⟩ := Hom.mk_surjective f₁
+    obtain ⟨z₂, rfl⟩ := Hom.mk_surjective f₂
+    obtain ⟨z₃, rfl⟩ := Hom.mk_surjective f₃
+    rw [Hom.comp_eq z₁ z₂]; rw [Hom.comp_eq z₂ z₃]
+    obtain ⟨z₁₂, fac₁₂⟩ := exists_leftFraction (RightFraction.mk z₁.s z₁.hs z₂.f)
+    obtain ⟨z₂₃, fac₂₃⟩ := exists_leftFraction (RightFraction.mk z₂.s z₂.hs z₃.f)
+    obtain ⟨z', fac⟩ := exists_leftFraction (RightFraction.mk z₁₂.s z₁₂.hs z₂₃.f)
+    dsimp at fac₁₂ fac₂₃ fac
+    rw [comp_eq z₁ z₂ z₁₂ fac₁₂]; rw [comp_eq z₂ z₃ z₂₃ fac₂₃]; rw [comp₀]; rw [comp₀]; rw [Hom.comp_eq]; rw [Hom.comp_eq]; rw [comp_eq _ z₃ (mk z'.f (z₂₃.s ≫ z'.s) (W.comp_mem _ _ z₂₃.hs z'.hs))
+        (by dsimp; rw [assoc]; rw [reassoc_of% fac₂₃]; rw [fac]),
+      comp_eq z₁ _ (mk (z₁₂.f ≫ z'.f) z'.s z'.hs)
+        (by dsimp; rw [assoc, ← reassoc_of% fac₁₂, fac])]
+    simp
 
 Depends on / 依赖: Localization, Localization.Hom
 -/
@@ -1402,7 +1612,10 @@ definition Qiso
   inv_hom_id := by
     dsimp only [Qinv, Q_map]
     rw [homMk_comp_homMk (ofInv s hs) (ofHom W s) (ofHom W (𝟙 Y)) (by simp)]
-   
+    apply homMk_eq_of_leftFractionRel
+    exact ⟨_, 𝟙 Y, 𝟙 Y, by simp, by simp, by simpa using W.id_mem Y⟩
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 Qiso
@@ -1416,7 +1629,10 @@ definition Qiso
   inv_hom_id := by
     dsimp only [Qinv, Q_map]
     rw [homMk_comp_homMk (ofInv s hs) (ofHom W s) (ofHom W (𝟙 Y)) (by simp)]
-   
+    apply homMk_eq_of_leftFractionRel
+    exact ⟨_, 𝟙 Y, 𝟙 Y, by simp, by simp, by simpa using W.id_mem Y⟩
+
+@[reassoc (attr := simp)]
 -/
 noncomputable def Qiso {X Y : C} (s : X ⟶ Y) (hs : W s) : (Q W).obj X ≅ (Q W).obj Y where
   hom := (Q W).map s
@@ -1489,7 +1705,9 @@ definition Hom.map
   body: Quot.lift (fun f => f.map F hF) (by
     intro a₁ a₂ ⟨Z, t₁, t₂, hst, hft, h⟩
     have := hF _ h
-    rw [← cancel_mono (F.map (a₁.s ≫ t₁))]; rw [F.map_comp]; rw [map_comp_map_s_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [hst]; rw [hft]; rw [F.map_comp]; rw [F.map_comp]; rw [map_comp_map_s_assoc
+    rw [← cancel_mono (F.map (a₁.s ≫ t₁))]; rw [F.map_comp]; rw [map_comp_map_s_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [hst]; rw [hft]; rw [F.map_comp]; rw [F.map_comp]; rw [map_comp_map_s_assoc]) f
+
+@[simp]
 
 中文:
 定义 态射.map
@@ -1497,7 +1715,9 @@ definition Hom.map
   定义体: Quot.lift (fun f => f.map F hF) (by
     intro a₁ a₂ ⟨Z, t₁, t₂, hst, hft, h⟩
     have := hF _ h
-    rw [← cancel_mono (F.map (a₁.s ≫ t₁))]; rw [F.map_comp]; rw [map_comp_map_s_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [hst]; rw [hft]; rw [F.map_comp]; rw [F.map_comp]; rw [map_comp_map_s_assoc
+    rw [← cancel_mono (F.map (a₁.s ≫ t₁))]; rw [F.map_comp]; rw [map_comp_map_s_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [hst]; rw [hft]; rw [F.map_comp]; rw [F.map_comp]; rw [map_comp_map_s_assoc]) f
+
+@[simp]
 
 Depends on / 依赖: F.map, F.map_comp, Quot.lift, cancel_mono, f.map, map_comp, map_comp_map_s_assoc
 -/
@@ -1565,7 +1785,17 @@ definition lift
   map_comp := by
     rintro (X Y Z : C) f g
     obtain ⟨f, rfl⟩ := Hom.mk_surjective f
-    obtain ⟨g, rfl⟩ := Hom.mk_surjective
+    obtain ⟨g, rfl⟩ := Hom.mk_surjective g
+    dsimp
+    obtain ⟨z, fac⟩ := HasLeftCalculusOfFractions.exists_leftFraction
+      (RightFraction.mk f.s f.hs g.f)
+    rw [homMk_comp_homMk f g z fac]; rw [Hom.map_mk]
+    dsimp at fac ⊢
+    have := hF _ g.hs
+    have := hF _ z.hs
+    rw [← cancel_mono (F.map g.s)]; rw [assoc]; rw [map_comp_map_s]; rw [← cancel_mono (F.map z.s)]; rw [assoc]; rw [assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [map_comp_map_s]; rw [fac]
+    dsimp
+    rw [F.map_comp]; rw [F.map_comp]; rw [map_comp_map_s_assoc]
 
 中文:
 定义 lift
@@ -1579,7 +1809,17 @@ definition lift
   map_comp := by
     rintro (X Y Z : C) f g
     obtain ⟨f, rfl⟩ := Hom.mk_surjective f
-    obtain ⟨g, rfl⟩ := Hom.mk_surjective
+    obtain ⟨g, rfl⟩ := Hom.mk_surjective g
+    dsimp
+    obtain ⟨z, fac⟩ := HasLeftCalculusOfFractions.exists_leftFraction
+      (RightFraction.mk f.s f.hs g.f)
+    rw [homMk_comp_homMk f g z fac]; rw [Hom.map_mk]
+    dsimp at fac ⊢
+    have := hF _ g.hs
+    have := hF _ z.hs
+    rw [← cancel_mono (F.map g.s)]; rw [assoc]; rw [map_comp_map_s]; rw [← cancel_mono (F.map z.s)]; rw [assoc]; rw [assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [map_comp_map_s]; rw [fac]
+    dsimp
+    rw [F.map_comp]; rw [F.map_comp]; rw [map_comp_map_s_assoc]
 
 Depends on / 依赖: F.obj
 -/
@@ -1647,7 +1887,15 @@ lemma uniq
     obtain ⟨f, rfl⟩ := Hom.mk_surjective f
     rw [show Hom.mk f = homMk (mk f.f f.s f.hs) by rfl]; rw [← Q_map_comp_Qinv f.f f.s f.hs]; rw [F₁.map_comp]; rw [F₂.map_comp]; rw [assoc]
     erw [Functor.congr_hom h f.f]
-    rw [as
+    rw [assoc]; rw [assoc]
+    congr 2
+    have := inverts W _ f.hs
+    rw [← cancel_epi (F₂.map ((Q W).map f.s))]; rw [← F₂.map_comp_assoc]; rw [Qiso_hom_inv_id]; rw [Functor.map_id]; rw [id_comp]
+    erw [Functor.congr_hom h.symm f.s]
+    dsimp
+    rw [assoc]; rw [assoc]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [id_comp]; rw [← F₁.map_comp]; rw [Qiso_hom_inv_id]
+    dsimp
+    rw [F₁.map_id]; rw [comp_id])
 
 中文:
 引理 uniq
@@ -1658,7 +1906,15 @@ lemma uniq
     obtain ⟨f, rfl⟩ := Hom.mk_surjective f
     rw [show Hom.mk f = homMk (mk f.f f.s f.hs) by rfl]; rw [← Q_map_comp_Qinv f.f f.s f.hs]; rw [F₁.map_comp]; rw [F₂.map_comp]; rw [assoc]
     erw [Functor.congr_hom h f.f]
-    rw [as
+    rw [assoc]; rw [assoc]
+    congr 2
+    have := inverts W _ f.hs
+    rw [← cancel_epi (F₂.map ((Q W).map f.s))]; rw [← F₂.map_comp_assoc]; rw [Qiso_hom_inv_id]; rw [Functor.map_id]; rw [id_comp]
+    erw [Functor.congr_hom h.symm f.s]
+    dsimp
+    rw [assoc]; rw [assoc]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [id_comp]; rw [← F₁.map_comp]; rw [Qiso_hom_inv_id]
+    dsimp
+    rw [F₁.map_id]; rw [comp_id])
 
 Depends on / 依赖: Functor, Functor.congr_hom, Functor.congr_obj, Functor.ext, Functor.map_id, Hom.mk, Hom.mk_surjective, Q_map_comp_Qinv, Qiso_hom_inv_id, cancel_epi, congr_hom, congr_obj, f.hs, h.symm, id_comp, inverts, map_comp, map_comp_assoc, map_id, mk_surjective
 -/
@@ -1832,7 +2088,7 @@ lemma map_compatibility
   proof: by
   let e := Localization.compUniqFunctor L₁ L₂ W
   rw [← cancel_mono (e.hom.app Y)]; rw [assoc]; rw [assoc]; rw [e.inv_hom_id_app]; rw [comp_id]; rw [← cancel_mono (L₂.map φ.s)]; rw [assoc]; rw [assoc]; rw [map_comp_map_s]; rw [← e.hom.naturality]
-  simpa [← Functor.map_comp_assoc, map_comp_map_s]
+  simpa [← Functor.map_comp_assoc, map_comp_map_s] using e.hom.naturality φ.f
 
 中文:
 引理 map_compatibility
@@ -1840,7 +2096,7 @@ lemma map_compatibility
   证明: by
   let e := Localization.compUniqFunctor L₁ L₂ W
   rw [← cancel_mono (e.hom.app Y)]; rw [assoc]; rw [assoc]; rw [e.inv_hom_id_app]; rw [comp_id]; rw [← cancel_mono (L₂.map φ.s)]; rw [assoc]; rw [assoc]; rw [map_comp_map_s]; rw [← e.hom.naturality]
-  simpa [← Functor.map_comp_assoc, map_comp_map_s]
+  simpa [← Functor.map_comp_assoc, map_comp_map_s] using e.hom.naturality φ.f
 
 Depends on / 依赖: Functor, Functor.map_comp_assoc, Localization, Localization.compUniqFunctor, cancel_mono, compUniqFunctor, comp_id, e.hom.app, e.hom.naturality, e.inv_hom_id_app, inv_hom_id_app, map_comp_assoc, map_comp_map_s, naturality
 -/
@@ -1893,7 +2149,7 @@ lemma map_comp_map_eq_map
     rw [L.map_comp]
     infer_instance
   dsimp [LeftFraction.comp₀]
-  rw [← cancel_mono (L.map (z₂.s ≫ z₃.s))]; rw [map_comp_map_s]; rw [L.map_comp]; rw [assoc]; rw [map_comp_map_s_assoc]; rw [← L.map_comp]; rw [h₃]; rw [L.map_comp]; rw [map_comp_map_s_a
+  rw [← cancel_mono (L.map (z₂.s ≫ z₃.s))]; rw [map_comp_map_s]; rw [L.map_comp]; rw [assoc]; rw [map_comp_map_s_assoc]; rw [← L.map_comp]; rw [h₃]; rw [L.map_comp]; rw [map_comp_map_s_assoc]; rw [L.map_comp]
 
 中文:
 引理 map_comp_map_eq_map
@@ -1903,7 +2159,7 @@ lemma map_comp_map_eq_map
     rw [L.map_comp]
     infer_instance
   dsimp [LeftFraction.comp₀]
-  rw [← cancel_mono (L.map (z₂.s ≫ z₃.s))]; rw [map_comp_map_s]; rw [L.map_comp]; rw [assoc]; rw [map_comp_map_s_assoc]; rw [← L.map_comp]; rw [h₃]; rw [L.map_comp]; rw [map_comp_map_s_a
+  rw [← cancel_mono (L.map (z₂.s ≫ z₃.s))]; rw [map_comp_map_s]; rw [L.map_comp]; rw [assoc]; rw [map_comp_map_s_assoc]; rw [← L.map_comp]; rw [h₃]; rw [L.map_comp]; rw [map_comp_map_s_assoc]; rw [L.map_comp]
 
 Depends on / 依赖: L.map, L.map_comp, LeftFraction, LeftFraction.comp, cancel_mono, infer_instance, map_comp, map_comp_map_s, map_comp_map_s_assoc
 -/
@@ -1943,7 +2199,11 @@ lemma Localization.exists_leftFraction
   let E := Localization.uniq (MorphismProperty.LeftFraction.Localization.Q W) L W
   let e : _ ⋙ E.functor ≅ L := Localization.compUniqFunctor _ _ _
   obtain ⟨f', rfl⟩ : exists (f' : E.functor.obj X ⟶ E.functor.obj Y),
-      f = e.inv.app _ ≫ f' ≫ e.hom.app _ := ⟨e.hom.app _ ≫ f ≫ e.inv.app _, by 
+      f = e.inv.app _ ≫ f' ≫ e.hom.app _ := ⟨e.hom.app _ ≫ f ≫ e.inv.app _, by simp⟩
+  obtain ⟨g, rfl⟩ := E.functor.map_surjective f'
+  obtain ⟨g, rfl⟩ := MorphismProperty.LeftFraction.Localization.Hom.mk_surjective g
+  refine ⟨g, ?_⟩
+  rw [← MorphismProperty.LeftFraction.Localization.homMk_eq_hom_mk]; rw [MorphismProperty.LeftFraction.Localization.homMk_eq g]; rw [g.map_compatibility (MorphismProperty.LeftFraction.Localization.Q W) L]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [comp_id]; rw [Iso.inv_hom_id_app_assoc]
 
 中文:
 引理 Localization.存在_leftFraction
@@ -1952,7 +2212,11 @@ lemma Localization.exists_leftFraction
   let E := Localization.uniq (MorphismProperty.LeftFraction.Localization.Q W) L W
   let e : _ ⋙ E.functor ≅ L := Localization.compUniqFunctor _ _ _
   obtain ⟨f', rfl⟩ : exists (f' : E.functor.obj X ⟶ E.functor.obj Y),
-      f = e.inv.app _ ≫ f' ≫ e.hom.app _ := ⟨e.hom.app _ ≫ f ≫ e.inv.app _, by 
+      f = e.inv.app _ ≫ f' ≫ e.hom.app _ := ⟨e.hom.app _ ≫ f ≫ e.inv.app _, by simp⟩
+  obtain ⟨g, rfl⟩ := E.functor.map_surjective f'
+  obtain ⟨g, rfl⟩ := MorphismProperty.LeftFraction.Localization.Hom.mk_surjective g
+  refine ⟨g, ?_⟩
+  rw [← MorphismProperty.LeftFraction.Localization.homMk_eq_hom_mk]; rw [MorphismProperty.LeftFraction.Localization.homMk_eq g]; rw [g.map_compatibility (MorphismProperty.LeftFraction.Localization.Q W) L]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [comp_id]; rw [Iso.inv_hom_id_app_assoc]
 
 Depends on / 依赖: E.functor, E.functor.map_surjective, E.functor.obj, LeftFraction, Localization, Localization.compUniqFunctor, Localization.uniq, MorphismProperty, MorphismProperty.LeftFraction.Localization.Hom.mk_surjective, MorphismProperty.LeftFraction.Localization.Q, MorphismProperty.LeftFraction.Localization.homMk_eq_hom_, compUniqFunctor, e.hom.app, e.inv.app, functor, homMk_eq_hom_, map_surjective, mk_surjective
 -/
@@ -2023,7 +2287,9 @@ lemma MorphismProperty.map_eq_iff_postcomp
     obtain ⟨Z, t₁, t₂, hst, hft, ht⟩ := h
     dsimp at t₁ t₂ hst hft ht
     grind
-  · rintro ⟨Z, s, hs, f
+  · rintro ⟨Z, s, hs, fac⟩
+    simp only [← cancel_mono (Localization.isoOfHom L W s hs).hom,
+      Localization.isoOfHom_hom, ← L.map_comp, fac]
 
 中文:
 引理 MorphismProperty.map_eq_iff_postcomp
@@ -2035,7 +2301,9 @@ lemma MorphismProperty.map_eq_iff_postcomp
     obtain ⟨Z, t₁, t₂, hst, hft, ht⟩ := h
     dsimp at t₁ t₂ hst hft ht
     grind
-  · rintro ⟨Z, s, hs, f
+  · rintro ⟨Z, s, hs, fac⟩
+    simp only [← cancel_mono (Localization.isoOfHom L W s hs).hom,
+      Localization.isoOfHom_hom, ← L.map_comp, fac]
 
 Depends on / 依赖: L.map_comp, LeftFraction, LeftFraction.map_eq_iff, LeftFraction.map_ofHom, Localization, Localization.inverts, Localization.isoOfHom, Localization.isoOfHom_hom, cancel_mono, inverts, isoOfHom, isoOfHom_hom, map_comp, map_eq_iff, map_ofHom
 -/
@@ -2064,7 +2332,12 @@ lemma Localization.essSurj_mapArrow
       ⟨_, ⟨L.objObjPreimageIso f.left⟩⟩
     obtain ⟨Y, ⟨eY⟩⟩ : exists (Y : C), Nonempty (L.obj Y ≅ f.right) :=
       ⟨_, ⟨L.objObjPreimageIso f.right⟩⟩
-    obtain ⟨φ, hφ⟩ := Localization.exi
+    obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L W (eX.hom ≫ f.hom ≫ eY.inv)
+    refine ⟨Arrow.mk φ.f, ⟨Iso.symm ?_⟩⟩
+    refine Arrow.isoMk eX.symm (eY.symm ≪≫ Localization.isoOfHom L W φ.s φ.hs) ?_
+    dsimp
+    simp only [← cancel_epi eX.hom, Iso.hom_inv_id_assoc, reassoc_of% hφ,
+      MorphismProperty.LeftFraction.map_comp_map_s]
 
 中文:
 引理 Localization.essSurj_mapArrow
@@ -2074,7 +2347,12 @@ lemma Localization.essSurj_mapArrow
       ⟨_, ⟨L.objObjPreimageIso f.left⟩⟩
     obtain ⟨Y, ⟨eY⟩⟩ : exists (Y : C), Nonempty (L.obj Y ≅ f.right) :=
       ⟨_, ⟨L.objObjPreimageIso f.right⟩⟩
-    obtain ⟨φ, hφ⟩ := Localization.exi
+    obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L W (eX.hom ≫ f.hom ≫ eY.inv)
+    refine ⟨Arrow.mk φ.f, ⟨Iso.symm ?_⟩⟩
+    refine Arrow.isoMk eX.symm (eY.symm ≪≫ Localization.isoOfHom L W φ.s φ.hs) ?_
+    dsimp
+    simp only [← cancel_epi eX.hom, Iso.hom_inv_id_assoc, reassoc_of% hφ,
+      MorphismProperty.LeftFraction.map_comp_map_s]
 
 Depends on / 依赖: Arrow.isoMk, Arrow.mk, Iso.hom_inv_id_assoc, Iso.symm, L.obj, L.objObjPreimageIso, Localization, Localization.essSurj, Localization.exists_leftFraction, Localization.isoOfHom, Nonempty, cancel_epi, eX.hom, eX.symm, eY.inv, eY.symm, essSurj, exists_leftFraction, f.hom, f.left
 -/
@@ -2689,7 +2967,11 @@ lemma MorphismProperty.map_eq_iff_precomp
     obtain ⟨Z, t₁, t₂, hst, hft, ht⟩ := h
     dsimp at t₁ t₂ hst hft ht
     grind
-  · rintro ⟨Z, s, hs
+  · rintro ⟨Z, s, hs, fac⟩
+    simp only [← cancel_epi (Localization.isoOfHom L W s hs).hom,
+      Localization.isoOfHom_hom, ← L.map_comp, fac]
+
+include W in
 
 中文:
 引理 MorphismProperty.map_eq_iff_precomp
@@ -2701,7 +2983,11 @@ lemma MorphismProperty.map_eq_iff_precomp
     obtain ⟨Z, t₁, t₂, hst, hft, ht⟩ := h
     dsimp at t₁ t₂ hst hft ht
     grind
-  · rintro ⟨Z, s, hs
+  · rintro ⟨Z, s, hs, fac⟩
+    simp only [← cancel_epi (Localization.isoOfHom L W s hs).hom,
+      Localization.isoOfHom_hom, ← L.map_comp, fac]
+
+include W in
 
 Depends on / 依赖: L.map_comp, Localization, Localization.inverts, Localization.isoOfHom, Localization.isoOfHom_hom, RightFraction, RightFraction.map_eq_iff, RightFraction.map_ofHom, cancel_epi, inverts, isoOfHom, isoOfHom_hom, map_comp, map_eq_iff, map_ofHom
 -/
@@ -2728,7 +3014,7 @@ lemma Localization.essSurj_mapArrow_of_hasRightCalculusOfFractions
     obtain ⟨g, ⟨e⟩⟩ : exists (g : _), Nonempty (L.op.mapArrow.obj g ≅ Arrow.mk f.hom.op) :=
       ⟨_, ⟨Functor.objObjPreimageIso _ _⟩⟩
     exact ⟨Arrow.mk g.hom.unop, ⟨Arrow.isoMk (Arrow.rightFunc.mapIso e.symm).unop
-      (Arrow.leftFunc.mapIso
+      (Arrow.leftFunc.mapIso e.symm).unop (Quiver.Hom.op_inj e.inv.w.symm)⟩⟩
 
 中文:
 引理 Localization.essSurj_mapArrow_of_hasRightCalculusOfFractions
@@ -2737,7 +3023,7 @@ lemma Localization.essSurj_mapArrow_of_hasRightCalculusOfFractions
     obtain ⟨g, ⟨e⟩⟩ : exists (g : _), Nonempty (L.op.mapArrow.obj g ≅ Arrow.mk f.hom.op) :=
       ⟨_, ⟨Functor.objObjPreimageIso _ _⟩⟩
     exact ⟨Arrow.mk g.hom.unop, ⟨Arrow.isoMk (Arrow.rightFunc.mapIso e.symm).unop
-      (Arrow.leftFunc.mapIso
+      (Arrow.leftFunc.mapIso e.symm).unop (Quiver.Hom.op_inj e.inv.w.symm)⟩⟩
 
 Depends on / 依赖: Arrow.isoMk, Arrow.leftFunc.mapIso, Arrow.mk, Arrow.rightFunc.mapIso, Functor, Functor.objObjPreimageIso, L.op, L.op.mapArrow.obj, Localization, Localization.essSurj_mapArrow, Nonempty, Quiver, Quiver.Hom.op_inj, W.op, e.inv.w.symm, e.symm, essSurj_mapArrow, f.hom.op, g.hom.unop, leftFunc
 -/

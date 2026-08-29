@@ -73,7 +73,13 @@ definition tensorHomImpl
     simp only [tensorObjImpl, Subobject.inf_pullback]
     apply inf_le_inf <;> rw [← Subobject.pullback_comp, ← Subobject.pullback_comp]
     · have := (Subobject.pullback (prod.map π₁ π₁ :
-        (X₁.src ⨯ Y₁.src) ⨯ X₂
+        (X₁.src ⨯ Y₁.src) ⨯ X₂.tgt ⨯ Y₂.tgt ⟶ _)).monotone (Hom.le f)
+      rw [← Subobject.pullback_comp]; rw [← Subobject.pullback_comp] at this
+      convert! this using 3 <;> simp
+    · have := (Subobject.pullback (prod.map π₂ π₂ :
+        (X₁.src ⨯ Y₁.src) ⨯ X₂.tgt ⨯ Y₂.tgt ⟶ _)).monotone (Hom.le g)
+      rw [← Subobject.pullback_comp]; rw [← Subobject.pullback_comp] at this
+      convert! this using 3 <;> simp
 
 中文:
 定义 tensorHomImpl
@@ -84,7 +90,13 @@ definition tensorHomImpl
     simp only [tensorObjImpl, Subobject.inf_pullback]
     apply inf_le_inf <;> rw [← Subobject.pullback_comp, ← Subobject.pullback_comp]
     · have := (Subobject.pullback (prod.map π₁ π₁ :
-        (X₁.src ⨯ Y₁.src) ⨯ X₂
+        (X₁.src ⨯ Y₁.src) ⨯ X₂.tgt ⨯ Y₂.tgt ⟶ _)).monotone (Hom.le f)
+      rw [← Subobject.pullback_comp]; rw [← Subobject.pullback_comp] at this
+      convert! this using 3 <;> simp
+    · have := (Subobject.pullback (prod.map π₂ π₂ :
+        (X₁.src ⨯ Y₁.src) ⨯ X₂.tgt ⨯ Y₂.tgt ⟶ _)).monotone (Hom.le g)
+      rw [← Subobject.pullback_comp]; rw [← Subobject.pullback_comp] at this
+      convert! this using 3 <;> simp
 -/
 @[simps] def tensorHomImpl {X₁ X₂ Y₁ Y₂ : Dial C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) :
     tensorObjImpl X₁ Y₁ ⟶ tensorObjImpl X₂ Y₂ where
@@ -401,6 +413,7 @@ instance :
     (leftUnitor_naturality := leftUnitor_naturality)
     (rightUnitor_naturality := rightUnitor_naturality)
     (pentagon := pentagon)
+    (triangle := triangle)
 
 中文:
 实例 :
@@ -412,6 +425,7 @@ instance :
     (leftUnitor_naturality := leftUnitor_naturality)
     (rightUnitor_naturality := rightUnitor_naturality)
     (pentagon := pentagon)
+    (triangle := triangle)
 
 Depends on / 依赖: associator_naturality, id_tensorHom_id, leftUnitor_naturality, ofTensorHom, pentagon, rightUnitor_naturality, tensorHom_comp_tensorHom, triangle
 -/

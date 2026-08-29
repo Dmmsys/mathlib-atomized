@@ -235,7 +235,14 @@ instance [MvQPF
               (map fun i => (repr : G i α -> (fun i : Fin2 n => Obj (P (G i)) α) i)) ∘ Comp.get
   abs_repr := by
     intros
-    simp +unfoldPartialApp only
+    simp +unfoldPartialApp only [Function.comp_def, comp.get_mk, abs_repr,
+      map_map, TypeVec.comp, MvFunctor.id_map', Comp.mk_get]
+  abs_map := by
+    intros
+    simp only [(· ∘ ·)]
+    rw [← abs_map]
+    simp +unfoldPartialApp only [comp.get_map, map_map, TypeVec.comp,
+      abs_map, map_mk]
 
 中文:
 实例 [MvQPF
@@ -246,7 +253,14 @@ instance [MvQPF
               (map fun i => (repr : G i α -> (fun i : Fin2 n => Obj (P (G i)) α) i)) ∘ Comp.get
   abs_repr := by
     intros
-    simp +unfoldPartialApp only
+    simp +unfoldPartialApp only [Function.comp_def, comp.get_mk, abs_repr,
+      map_map, TypeVec.comp, MvFunctor.id_map', Comp.mk_get]
+  abs_map := by
+    intros
+    simp only [(· ∘ ·)]
+    rw [← abs_map]
+    simp +unfoldPartialApp only [comp.get_map, map_map, TypeVec.comp,
+      abs_map, map_mk]
 
 Depends on / 依赖: MvPFunctor, MvPFunctor.comp
 -/

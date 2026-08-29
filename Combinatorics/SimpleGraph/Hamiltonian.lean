@@ -489,7 +489,7 @@ lemma isHamiltonian_iff_isPath_and_length_eq
   have := p.isPath_iff_injective_get_support.mp hp
   refine isHamiltonian_iff_support_get_bijective.mpr ⟨this, this.surjective_of_finite ?_⟩
   refine (Fintype.equivFinOfCardEq ?_).symm
-  s
+  simp_rw [length_support, h, Nat.sub_one_add_one Fintype.card_ne_zero]
 
 中文:
 引理 isHamiltonian_iff_isPath_and_length_eq
@@ -501,7 +501,7 @@ lemma isHamiltonian_iff_isPath_and_length_eq
   have := p.isPath_iff_injective_get_support.mp hp
   refine isHamiltonian_iff_support_get_bijective.mpr ⟨this, this.surjective_of_finite ?_⟩
   refine (Fintype.equivFinOfCardEq ?_).symm
-  s
+  simp_rw [length_support, h, Nat.sub_one_add_one Fintype.card_ne_zero]
 
 Depends on / 依赖: Fintype, Fintype.card_ne_zero, Fintype.equivFinOfCardEq, IsEmpty, Nat.sub_one_add_one, card_ne_zero, equivFinOfCardEq, h.elim, h.isPath, h.length_eq, isHamiltonian_iff_support_get_bijective, isHamiltonian_iff_support_get_bijective.mpr, isPath, isPath_iff_injective_get_support, length_eq, length_support, p.isPath_iff_injective_get_support.mp, simp_rw, sub_one_add_one, surjective_of_finite
 -/
@@ -570,7 +570,8 @@ lemma IsHamiltonianCycle.map
     rcases p with (_ | ⟨y, p⟩)
     · cases hp.ne_nil rfl
     simp only [map_cons, getVert_cons_succ, tail_cons, support_copy, support_map]
-    rw [List.count_map_of_injective _ _ hf
+    rw [List.count_map_of_injective _ _ hf.injective]
+    simpa using hp.isHamiltonian_tail x
 
 中文:
 引理 是HamiltonianCycle.map
@@ -582,7 +583,8 @@ lemma IsHamiltonianCycle.map
     rcases p with (_ | ⟨y, p⟩)
     · cases hp.ne_nil rfl
     simp only [map_cons, getVert_cons_succ, tail_cons, support_copy, support_map]
-    rw [List.count_map_of_injective _ _ hf
+    rw [List.count_map_of_injective _ _ hf.injective]
+    simpa using hp.isHamiltonian_tail x
 
 Depends on / 依赖: hf.injective, hp.isCycle.map, injective, isCycle
 -/
@@ -932,7 +934,7 @@ lemma IsHamiltonian.connected
     have a_mem := hp.mem_support a
     have b_mem := hp.mem_support b
     exact ((p.takeUntil a a_mem).reverse.append <| p.takeUntil b b_mem).reachable
-  nonem
+  nonempty := not_isEmpty_iff.mp fun _ => not_isHamiltonian_of_isEmpty hG
 
 中文:
 引理 IsHamiltonian.connected
@@ -946,7 +948,7 @@ lemma IsHamiltonian.connected
     have a_mem := hp.mem_support a
     have b_mem := hp.mem_support b
     exact ((p.takeUntil a a_mem).reverse.append <| p.takeUntil b b_mem).reachable
-  nonem
+  nonempty := not_isEmpty_iff.mp fun _ => not_isHamiltonian_of_isEmpty hG
 
 Depends on / 依赖: Fintype, Fintype.one_lt_card.ne, Nontrivial, a_mem, append, b_mem, eq_or_ne, hp.mem_support, mem_support, nonempty, not_isEmpty_iff, not_isEmpty_iff.mp, not_isHamiltonian_of_isEmpty, one_lt_card, p.takeUntil, reachable, reverse, reverse.append, takeUntil
 -/
@@ -1073,7 +1075,7 @@ theorem IsBridge.not_isHamiltonian
   obtain ⟨p, hp⟩ := hG.exists_isHamiltonianCycle u
   refine hp.isHamiltonian_tail.isPath.isTrail.not_mem_support_of_not_reachable
     (fun huv => he <| .trans ?_ huv) he (hp.isHamiltonian_tail.mem_support v)
-  apply hp.isTrail.isEdgeRe
+  apply hp.isTrail.isEdgeReachable_two <;> simp
 
 中文:
 定理 IsBridge.not_isHamiltonian
@@ -1086,7 +1088,7 @@ theorem IsBridge.not_isHamiltonian
   obtain ⟨p, hp⟩ := hG.exists_isHamiltonianCycle u
   refine hp.isHamiltonian_tail.isPath.isTrail.not_mem_support_of_not_reachable
     (fun huv => he <| .trans ?_ huv) he (hp.isHamiltonian_tail.mem_support v)
-  apply hp.isTrail.isEdgeRe
+  apply hp.isTrail.isEdgeReachable_two <;> simp
 
 Depends on / 依赖: exists_isHamiltonianCycle, hG.exists_isHamiltonianCycle, he.nontrivial, hp.isHamiltonian_tail.isPath.isTrail.not_mem_support_of_not_reachable, hp.isHamiltonian_tail.mem_support, hp.isTrail.isEdgeReachable_two, isEdgeReachable_two, isHamiltonian_tail, isPath, isTrail, mem_support, nontrivial, not_mem_support_of_not_reachable
 -/

@@ -154,7 +154,8 @@ lemma mul_auxMat_blockTriangular
   proof: fun i j lt => by
     simp_rw [lt_iff_not_ge, le_Prop_eq, Classical.not_imp] at lt
     simp_rw [Matrix.mul_apply, auxMat, of_apply, if_neg lt.2, mul_ite, mul_neg, mul_zero]
-    rw [Finset.sum_ite]; rw [Finset.filter_eq']; rw [if_pos (Finset.mem_univ _)]; rw [Finset.sum_singleton]; rw [Finset.sum_ite_
+    rw [Finset.sum_ite]; rw [Finset.filter_eq']; rw [if_pos (Finset.mem_univ _)]; rw [Finset.sum_singleton]; rw [Finset.sum_ite_eq']; rw [if_pos]; rw [lt.1]; rw [mul_comm]; rw [neg_add_cancel]
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, lt.2⟩
 
 中文:
 引理 mul_auxMat_blockTriangular
@@ -162,7 +163,8 @@ lemma mul_auxMat_blockTriangular
   证明: fun i j lt => by
     simp_rw [lt_iff_not_ge, le_Prop_eq, Classical.not_imp] at lt
     simp_rw [Matrix.mul_apply, auxMat, of_apply, if_neg lt.2, mul_ite, mul_neg, mul_zero]
-    rw [Finset.sum_ite]; rw [Finset.filter_eq']; rw [if_pos (Finset.mem_univ _)]; rw [Finset.sum_singleton]; rw [Finset.sum_ite_
+    rw [Finset.sum_ite]; rw [Finset.filter_eq']; rw [if_pos (Finset.mem_univ _)]; rw [Finset.sum_singleton]; rw [Finset.sum_ite_eq']; rw [if_pos]; rw [lt.1]; rw [mul_comm]; rw [neg_add_cancel]
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, lt.2⟩
 
 Depends on / 依赖: Classical, Classical.not_imp, Finset, Finset.filter_eq, Finset.mem_filter.mpr, Finset.mem_univ, Finset.sum_ite, Finset.sum_ite_eq, Finset.sum_singleton, Matrix, Matrix.mul_apply, auxMat, filter_eq, if_neg, if_pos, le_Prop_eq, lt_iff_not_ge, mem_filter, mem_univ, mul_apply
 -/
@@ -229,7 +231,11 @@ lemma det_mul_corner_pow
   · simp [det_mul, (auxMat_blockTriangular M k).det_fintype,
       auxMat_toSquareBlock_ne, auxMat_toSquareBlock_eq]
   rw [(mul_auxMat_blockTriangular M k).det_fintype]; rw [Fintype.prod_Prop]; rw [mul_auxMat_toSquareBlock_eq]
-  simp_rw [det_smul_of_tower, eq_iff_iff,
+  simp_rw [det_smul_of_tower, eq_iff_iff, iff_true, Fintype.card_unique,
+    pow_one, det_one, smul_eq_mul, mul_one]
+  -- `Decidable (P = Q)` diamond induced by `Prop.linearOrder`, which is classical, when `P` and `Q`
+  -- are themselves decidable.
+  convert! rfl
 
 中文:
 引理 det_mul_corner_pow
@@ -238,7 +244,11 @@ lemma det_mul_corner_pow
   · simp [det_mul, (auxMat_blockTriangular M k).det_fintype,
       auxMat_toSquareBlock_ne, auxMat_toSquareBlock_eq]
   rw [(mul_auxMat_blockTriangular M k).det_fintype]; rw [Fintype.prod_Prop]; rw [mul_auxMat_toSquareBlock_eq]
-  simp_rw [det_smul_of_tower, eq_iff_iff,
+  simp_rw [det_smul_of_tower, eq_iff_iff, iff_true, Fintype.card_unique,
+    pow_one, det_one, smul_eq_mul, mul_one]
+  -- `Decidable (P = Q)` diamond induced by `Prop.linearOrder`, which is classical, when `P` and `Q`
+  -- are themselves decidable.
+  convert! rfl
 
 Depends on / 依赖: Fintype, Fintype.card_unique, Fintype.prod_Prop, auxMat, auxMat_blockTriangular, auxMat_toSquareBlock_eq, auxMat_toSquareBlock_ne, card_unique, det_fintype, det_mul, det_one, det_smul_of_tower, eq_iff_iff, iff_true, mul_auxMat_blockTriangular, mul_auxMat_toSquareBlock_eq, mul_one, pow_one, prod_Prop, simp_rw
 -/
@@ -329,7 +339,9 @@ lemma eval_zero_comp_det
   simp_rw [← coe_evalRingHom, RingHom.map_det, ← compRingEquiv_apply, ← RingEquiv.coe_toRingHom,
     ← RingHom.mapMatrix_apply, ← RingHom.comp_apply, ← RingHom.comp_assoc,
     evalRingHom_mapMatrix_comp_compRingEquiv, RingHom.comp_assoc, RingHom.mapMatrix_comp,
-    evalRingHom_mapMatrix_comp_poly
+    evalRingHom_mapMatrix_comp_polyToMatrix, ← RingHom.mapMatrix_comp, RingHom.comp_apply]
+  congr with i j
+  simp [cornerAddX, diagonal, apply_ite]
 
 中文:
 引理 eval_zero_comp_det
@@ -337,7 +349,9 @@ lemma eval_zero_comp_det
   simp_rw [← coe_evalRingHom, RingHom.map_det, ← compRingEquiv_apply, ← RingEquiv.coe_toRingHom,
     ← RingHom.mapMatrix_apply, ← RingHom.comp_apply, ← RingHom.comp_assoc,
     evalRingHom_mapMatrix_comp_compRingEquiv, RingHom.comp_assoc, RingHom.mapMatrix_comp,
-    evalRingHom_mapMatrix_comp_poly
+    evalRingHom_mapMatrix_comp_polyToMatrix, ← RingHom.mapMatrix_comp, RingHom.comp_apply]
+  congr with i j
+  simp [cornerAddX, diagonal, apply_ite]
 
 Depends on / 依赖: RingEquiv, RingEquiv.coe_toRingHom, RingHom, RingHom.comp_apply, RingHom.comp_assoc, RingHom.mapMatrix_apply, RingHom.mapMatrix_comp, RingHom.map_det, apply_ite, coe_evalRingHom, coe_toRingHom, compRingEquiv_apply, comp_apply, comp_assoc, cornerAddX, diagonal, evalRingHom_mapMatrix_comp_compRingEquiv, evalRingHom_mapMatrix_comp_polyToMatrix, mapMatrix_apply, mapMatrix_comp
 -/
@@ -360,7 +374,15 @@ theorem comp_det_mul_pow
   trans (((M * auxMat M k).map f).comp m m n n R).det
   · simp_rw [← f.mapMatrix_apply, ← compRingEquiv_apply, map_mul, det_mul, f.mapMatrix_apply,
       compRingEquiv_apply, ((auxMat_blockTriangular M k).map f).comp.det_fintype, Fintype.prod_Prop,
-      comp_toSquareBlock (b := (· != k)), det_re
+      comp_toSquareBlock (b := (· != k)), det_reindex_self, map_toSquareBlock,
+      auxMat_toSquareBlock_eq, auxMat_toSquareBlock_ne, smul_one_eq_diagonal, ← diagonal_one,
+      diagonal_map (map_zero _), comp_diagonal, det_reindex_self]
+    simp
+  · simp_rw [((mul_auxMat_blockTriangular M k).map f).comp.det_fintype, Fintype.prod_Prop,
+      comp_toSquareBlock (b := (· = k)), det_reindex_self, map_toSquareBlock,
+      mul_auxMat_toSquareBlock_eq, smul_one_eq_diagonal,
+      diagonal_map (map_zero _), comp_diagonal, det_reindex_self]
+    simp
 
 中文:
 定理 comp_det_mul_pow
@@ -368,7 +390,15 @@ theorem comp_det_mul_pow
   trans (((M * auxMat M k).map f).comp m m n n R).det
   · simp_rw [← f.mapMatrix_apply, ← compRingEquiv_apply, map_mul, det_mul, f.mapMatrix_apply,
       compRingEquiv_apply, ((auxMat_blockTriangular M k).map f).comp.det_fintype, Fintype.prod_Prop,
-      comp_toSquareBlock (b := (· != k)), det_re
+      comp_toSquareBlock (b := (· != k)), det_reindex_self, map_toSquareBlock,
+      auxMat_toSquareBlock_eq, auxMat_toSquareBlock_ne, smul_one_eq_diagonal, ← diagonal_one,
+      diagonal_map (map_zero _), comp_diagonal, det_reindex_self]
+    simp
+  · simp_rw [((mul_auxMat_blockTriangular M k).map f).comp.det_fintype, Fintype.prod_Prop,
+      comp_toSquareBlock (b := (· = k)), det_reindex_self, map_toSquareBlock,
+      mul_auxMat_toSquareBlock_eq, smul_one_eq_diagonal,
+      diagonal_map (map_zero _), comp_diagonal, det_reindex_self]
+    simp
 
 Depends on / 依赖: Fintype, Fintype.prod_Prop, auxMat, auxMat_blockTriangular, auxMat_toSquareBlock_eq, auxMat_toSquareBlock_ne, comp.det_fintype, compRingEquiv_apply, comp_diagonal, comp_toSquareBlock, det_fintype, det_mul, det_reindex_self, diagonal_map, diagonal_one, f.mapMatrix_apply, mapMatrix_apply, map_mul, map_toSquareBlock, map_zero
 -/
@@ -429,6 +459,13 @@ theorem Matrix.det_det
     have ⟨k⟩ := Fintype.card_pos_iff.mp (Nat.lt_of_sub_eq_succ l)
     let f' := f.polyToMatrix
     let M' := cornerAddX M k
+    have : (f' M'.det).det = ((M'.map f').comp m m n n R[X]).det := by
+refine sub_eq_zero.mp mem_nonZeroDivisors_iff_right.mp
+        (pow_mem ?_ _) _ (det_det_aux k fun M => ih _ _ <| by
+          grind [Fintype.card_subtype_compl, Fintype.card_unique])
+      rw [polyToMatrix_cornerAddX]; rw [← charpoly]
+      exact (Matrix.charpoly_monic _).mem_nonZeroDivisors
+    rw [← eval_zero_det_det]; rw [congr_arg (eval 0) this]; rw [eval_zero_comp_det]
 
 中文:
 定理 矩阵.det_det
@@ -442,6 +479,13 @@ theorem Matrix.det_det
     have ⟨k⟩ := Fintype.card_pos_iff.mp (Nat.lt_of_sub_eq_succ l)
     let f' := f.polyToMatrix
     let M' := cornerAddX M k
+    have : (f' M'.det).det = ((M'.map f').comp m m n n R[X]).det := by
+refine sub_eq_zero.mp mem_nonZeroDivisors_iff_right.mp
+        (pow_mem ?_ _) _ (det_det_aux k fun M => ih _ _ <| by
+          grind [Fintype.card_subtype_compl, Fintype.card_unique])
+      rw [polyToMatrix_cornerAddX]; rw [← charpoly]
+      exact (Matrix.charpoly_monic _).mem_nonZeroDivisors
+    rw [← eval_zero_det_det]; rw [congr_arg (eval 0) this]; rw [eval_zero_comp_det]
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_eq_zero_iff, Fintype.card_pos_iff.mp, Fintype.card_subtype_compl, Fintype.card_u, Matrix, Matrix.det_isEmpty, Nat.lt_of_sub_eq_succ, card_eq_zero_iff, card_pos_iff, card_subtype_compl, card_u, cornerAddX, det_det_aux, det_isEmpty, det_one, f.polyToMatrix, generalizing, lt_of_sub_eq_succ
 -/
@@ -481,7 +525,12 @@ theorem LinearMap.det_restrictScalars
   have := bS.index_nonempty
   have := bA.index_nonempty
   cases fintypeOrInfinite ιS; swap
-  · 
+  · rw [Algebra.norm_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis bS),
+      det_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis (bS.smulTower bA))]
+  cases fintypeOrInfinite ιA; swap
+  · rw [det_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis bA), map_one,
+      det_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis (bS.smulTower bA))]
+  rw [Algebra.norm_eq_matrix_det bS]; rw [← AlgHom.coe_toRingHom]; rw [← det_toMatrix bA]; rw [det_det]; rw [← det_toMatrix (bS.smulTower' bA)]; rw [restrictScalars_toMatrix]; rw [RingHom.coe_coe]
 
 中文:
 定理 线性映射.det_restrictScalars
@@ -496,7 +545,12 @@ theorem LinearMap.det_restrictScalars
   have := bS.index_nonempty
   have := bA.index_nonempty
   cases fintypeOrInfinite ιS; swap
-  · 
+  · rw [Algebra.norm_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis bS),
+      det_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis (bS.smulTower bA))]
+  cases fintypeOrInfinite ιA; swap
+  · rw [det_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis bA), map_one,
+      det_eq_one_of_not_module_finite (Module.not_finite_of_infinite_basis (bS.smulTower bA))]
+  rw [Algebra.norm_eq_matrix_det bS]; rw [← AlgHom.coe_toRingHom]; rw [← det_toMatrix bA]; rw [det_det]; rw [← det_toMatrix (bS.smulTower' bA)]; rw [restrictScalars_toMatrix]; rw [RingHom.coe_coe]
 
 Depends on / 依赖: Algebra, Algebra.norm_eq_one_of_not_module_finite, Module, Module.Free.exists_basis, Module.nontrivial, Module.not_finite_of_infinite_basis, bA.index_nonempty, bS.index_nonempty, bS.smulTower, classical, det_e, det_eq_one_of_not_module_finite, exists_basis, fintypeOrInfinite, index_nonempty, nontrivial, nontriviality, norm_eq_one_of_not_module_finite, not_finite_of_infinite_basis, smulTower
 -/
@@ -558,7 +612,13 @@ theorem isIntegral_norm
   swap
   · simpa [norm_eq_one_of_not_module_finite h] using isIntegral_one
   let F := K⟮x⟯
-  rw [← norm_norm (S := F)]; rw [← coe_gen K x]; rw [← IntermediateField.algebraMap_apply]; rw [norm_algebraMap_of_basis (Module.Free.chooseBasis F L) (gen K x)]; rw [ma
+  rw [← norm_norm (S := F)]; rw [← coe_gen K x]; rw [← IntermediateField.algebraMap_apply]; rw [norm_algebraMap_of_basis (Module.Free.chooseBasis F L) (gen K x)]; rw [map_pow]
+  apply IsIntegral.pow
+  rw [← isIntegral_algebraMap_iff (algebraMap K (AlgebraicClosure F)).injective]; rw [norm_gen_eq_prod_roots _ (IsAlgClosed.splits _)]
+  refine IsIntegral.multiset_prod (fun y hy => ⟨minpoly R x, minpoly.monic hx, ?_⟩)
+  suffices (aeval y) ((minpoly R x).map (algebraMap R K)) = 0 by simpa
+  obtain ⟨P, hP⟩ := minpoly.dvd K x (show aeval x ((minpoly R x).map (algebraMap R K)) = 0 by simp)
+  simp [hP, aeval_mul, (mem_aroots'.mp hy).2]
 
 中文:
 定理 is整数egral_norm
@@ -568,7 +628,13 @@ theorem isIntegral_norm
   swap
   · simpa [norm_eq_one_of_not_module_finite h] using isIntegral_one
   let F := K⟮x⟯
-  rw [← norm_norm (S := F)]; rw [← coe_gen K x]; rw [← IntermediateField.algebraMap_apply]; rw [norm_algebraMap_of_basis (Module.Free.chooseBasis F L) (gen K x)]; rw [ma
+  rw [← norm_norm (S := F)]; rw [← coe_gen K x]; rw [← IntermediateField.algebraMap_apply]; rw [norm_algebraMap_of_basis (Module.Free.chooseBasis F L) (gen K x)]; rw [map_pow]
+  apply IsIntegral.pow
+  rw [← isIntegral_algebraMap_iff (algebraMap K (AlgebraicClosure F)).injective]; rw [norm_gen_eq_prod_roots _ (IsAlgClosed.splits _)]
+  refine IsIntegral.multiset_prod (fun y hy => ⟨minpoly R x, minpoly.monic hx, ?_⟩)
+  suffices (aeval y) ((minpoly R x).map (algebraMap R K)) = 0 by simpa
+  obtain ⟨P, hP⟩ := minpoly.dvd K x (show aeval x ((minpoly R x).map (algebraMap R K)) = 0 by simp)
+  simp [hP, aeval_mul, (mem_aroots'.mp hy).2]
 
 Depends on / 依赖: AlgebraicClosure, FiniteDimensional, IntermediateField, IntermediateField.algebraMap_apply, IsAlgClosed, IsAlgClosed.splits, IsIntegral, IsIntegral.multiset_prod, IsIntegral.pow, Module, Module.Free.chooseBasis, algebraMap, algebraMap_apply, chooseBasis, coe_gen, injective, isIntegral_algebraMap_iff, isIntegral_one, map_pow, multiset_prod
 -/
@@ -600,7 +666,15 @@ theorem norm_eq_norm_adjoin
 · have h₁ : ¬ FiniteDimensional K⟮x⟯ L := fun H => h by
         have : FiniteDimensional K K⟮x⟯ := adjoin.finiteDimensional hx
         exact Finite.trans K⟮x⟯ L
-      simp [fin
+      simp [finrank_of_not_finite h₁]
+    · rw [norm_eq_one_of_not_module_finite]
+      · simp
+      · refine fun H => hx ?_
+        rw [← isIntegral_gen]
+        exact IsIntegral.isIntegral (gen K x)
+  let F := K⟮x⟯
+  nth_rw 1 [← coe_gen K x]
+  rw [← norm_norm (S := F)]; rw [← IntermediateField.algebraMap_apply]; rw [norm_algebraMap_of_basis (Module.Free.chooseBasis F L) (gen K x)]; rw [map_pow]; rw [finrank_eq_card_chooseBasisIndex]
 
 中文:
 定理 norm_eq_norm_adjoin
@@ -613,7 +687,15 @@ theorem norm_eq_norm_adjoin
 · have h₁ : ¬ FiniteDimensional K⟮x⟯ L := fun H => h by
         have : FiniteDimensional K K⟮x⟯ := adjoin.finiteDimensional hx
         exact Finite.trans K⟮x⟯ L
-      simp [fin
+      simp [finrank_of_not_finite h₁]
+    · rw [norm_eq_one_of_not_module_finite]
+      · simp
+      · refine fun H => hx ?_
+        rw [← isIntegral_gen]
+        exact IsIntegral.isIntegral (gen K x)
+  let F := K⟮x⟯
+  nth_rw 1 [← coe_gen K x]
+  rw [← norm_norm (S := F)]; rw [← IntermediateField.algebraMap_apply]; rw [norm_algebraMap_of_basis (Module.Free.chooseBasis F L) (gen K x)]; rw [map_pow]; rw [finrank_eq_card_chooseBasisIndex]
 
 Depends on / 依赖: Finite, Finite.trans, FiniteDimensional, Interm, IsIntegral, IsIntegral.isIntegral, adjoin, adjoin.finiteDimensional, coe_gen, finiteDimensional, finrank_of_not_finite, isIntegral, isIntegral_gen, norm_eq_one_of_not_module_finite, norm_norm, nth_rw
 -/
@@ -673,7 +755,8 @@ theorem norm_eq_prod_embeddings
   have hx := Algebra.IsSeparable.isIntegral K x
   rw [norm_eq_norm_adjoin K x]; rw [map_pow]; rw [← adjoin.powerBasis_gen hx]; rw [norm_eq_prod_embeddings_gen E (adjoin.powerBasis hx) (IsAlgClosed.splits _)]
   · exact (prod_embeddings_eq_finrank_pow L (L := K⟮x⟯) E (adjoin.powerBasis hx)).symm
-  
+  · have := Algebra.isSeparable_tower_bot_of_isSeparable K K⟮x⟯ L
+    exact Algebra.IsSeparable.isSeparable K _
 
 中文:
 定理 norm_eq_prod_embeddings
@@ -682,7 +765,8 @@ theorem norm_eq_prod_embeddings
   have hx := Algebra.IsSeparable.isIntegral K x
   rw [norm_eq_norm_adjoin K x]; rw [map_pow]; rw [← adjoin.powerBasis_gen hx]; rw [norm_eq_prod_embeddings_gen E (adjoin.powerBasis hx) (IsAlgClosed.splits _)]
   · exact (prod_embeddings_eq_finrank_pow L (L := K⟮x⟯) E (adjoin.powerBasis hx)).symm
-  
+  · have := Algebra.isSeparable_tower_bot_of_isSeparable K K⟮x⟯ L
+    exact Algebra.IsSeparable.isSeparable K _
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, Algebra.IsSeparable.isSeparable, Algebra.isSeparable_tower_bot_of_isSeparable, IsAlgClosed, IsAlgClosed.splits, IsSeparable, adjoin, adjoin.powerBasis, adjoin.powerBasis_gen, isIntegral, isSeparable, isSeparable_tower_bot_of_isSeparable, map_pow, norm_eq_norm_adjoin, norm_eq_prod_embeddings_gen, powerBasis, powerBasis_gen, prod_embeddings_eq_finrank_pow, splits
 -/
@@ -706,7 +790,8 @@ theorem norm_eq_prod_automorphisms
   rw [← Fintype.prod_equiv (Normal.algHomEquivAut K (AlgebraicClosure L) L)]
   · rw [← norm_eq_prod_embeddings _ _ x, ← IsScalarTower.algebraMap_apply]
   · intro σ
-    simp only [N
+    simp only [Normal.algHomEquivAut, AlgHom.restrictNormal', Equiv.coe_fn_mk,
+      AlgEquiv.coe_ofBijective, AlgHom.restrictNormal_commutes, algebraMap_self, RingHom.id_apply]
 
 中文:
 定理 norm_eq_prod_automorphisms
@@ -717,7 +802,8 @@ theorem norm_eq_prod_automorphisms
   rw [← Fintype.prod_equiv (Normal.algHomEquivAut K (AlgebraicClosure L) L)]
   · rw [← norm_eq_prod_embeddings _ _ x, ← IsScalarTower.algebraMap_apply]
   · intro σ
-    simp only [N
+    simp only [Normal.algHomEquivAut, AlgHom.restrictNormal', Equiv.coe_fn_mk,
+      AlgEquiv.coe_ofBijective, AlgHom.restrictNormal_commutes, algebraMap_self, RingHom.id_apply]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_ofBijective, AlgHom, AlgHom.restrictNormal, AlgHom.restrictNormal_commutes, AlgebraicClosure, Equiv.coe_fn_mk, FaithfulSMul, FaithfulSMul.algebraMap_injective, Fintype, Fintype.prod_equiv, IsScalarTower, IsScalarTower.algebraMap_apply, Normal, Normal.algHomEquivAut, RingHom, RingHom.id_apply, algHomEquivAut, algebraMap, algebraMap_apply
 -/

@@ -64,7 +64,10 @@ definition Pi.binaryFanOfPropIsLimit
       s.π.app ⟨WalkingPair.left⟩ ≫ Pi.π (fun (i : {x : I // P x}) => X i.val) ⟨b, h⟩ else
       s.π.app ⟨WalkingPair.right⟩ ≫ Pi.π (fun (i : {x : I // ¬ P x}) => X i.val) ⟨b, h⟩)
     (by aesop) (by aesop)
-    (fun _ _ h₁ h₂ => Pi.hom
+    (fun _ _ h₁ h₂ => Pi.hom_ext _ _ fun b => by
+      by_cases h : P b
+      · simp [← h₁, dif_pos h]
+      · simp [← h₂, dif_neg h])
 
 中文:
 定义 依赖函数类型.binaryFanOfPropIsLimit
@@ -74,7 +77,10 @@ definition Pi.binaryFanOfPropIsLimit
       s.π.app ⟨WalkingPair.left⟩ ≫ Pi.π (fun (i : {x : I // P x}) => X i.val) ⟨b, h⟩ else
       s.π.app ⟨WalkingPair.right⟩ ≫ Pi.π (fun (i : {x : I // ¬ P x}) => X i.val) ⟨b, h⟩)
     (by aesop) (by aesop)
-    (fun _ _ h₁ h₂ => Pi.hom
+    (fun _ _ h₁ h₂ => Pi.hom_ext _ _ fun b => by
+      by_cases h : P b
+      · simp [← h₁, dif_pos h]
+      · simp [← h₂, dif_neg h])
 
 Depends on / 依赖: BinaryFan, BinaryFan.isLimitMk, Pi.hom_ext, Pi.lift, WalkingPair, WalkingPair.left, WalkingPair.right, dif_neg, dif_pos, hom_ext, i.val, isLimitMk
 -/

@@ -67,7 +67,12 @@ theorem tfae
     exact ⟨U, hU, hx, eq⟩
   tfae_have 5 -> 1
   | h, s => by
-    refine 
+    refine isOpen_iff_forall_mem_open.2 fun x hx => ?_
+    rcases h x with ⟨U, hU, hxU, eq⟩
+exact ⟨U, fun x' hx' => mem_preimage.2 (eq x' hx').symm ▸ hx, hU, hxU⟩
+  tfae_finish
+
+@[nontriviality]
 
 中文:
 定理 tfae
@@ -82,7 +87,12 @@ theorem tfae
     exact ⟨U, hU, hx, eq⟩
   tfae_have 5 -> 1
   | h, s => by
-    refine 
+    refine isOpen_iff_forall_mem_open.2 fun x hx => ?_
+    rcases h x with ⟨U, hU, hxU, eq⟩
+exact ⟨U, fun x' hx' => mem_preimage.2 (eq x' hx').symm ▸ hx, hU, hxU⟩
+  tfae_finish
+
+@[nontriviality]
 -/
 protected theorem tfae (f : X -> Y) :
     TFAE [IsLocallyConstant f,
@@ -1197,7 +1207,12 @@ refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
       simp only [mem_singleton_iff, Fin.one_eq_zero_iff, mem_preimage, ite_eq_left_iff,
         Nat.succ_succ_ne_one]
       tauto
-    · rw
+    · rw [← isClosed_compl_iff]
+      convert! hU.1
+      ext
+      simp
+
+@[simp]
 
 中文:
 定义 ofIsClopen
@@ -1210,7 +1225,12 @@ refine IsLocallyConstant.iff_isOpen_fiber.2 Fin.forall_fin_two.2 ⟨?_, ?_⟩
       simp only [mem_singleton_iff, Fin.one_eq_zero_iff, mem_preimage, ite_eq_left_iff,
         Nat.succ_succ_ne_one]
       tauto
-    · rw
+    · rw [← isClosed_compl_iff]
+      convert! hU.1
+      ext
+      simp
+
+@[simp]
 -/
 def ofIsClopen {X : Type*} [TopologicalSpace X] {U : Set X} [forall x, Decidable (x in U)]
     (hU : IsClopen U) : LocallyConstant X (Fin 2) where
@@ -2039,6 +2059,19 @@ definition piecewise
     obtain ⟨f, hf⟩ := f
     obtain ⟨g, hg⟩ := g
     rw [IsLocallyConstant.iff_continuous] at hf hg ⊢
+    dsimp only [coe_mk]
+    rw [Set.union_eq_iUnion] at h
+    refine (locallyFinite_of_finite _).continuous h (fun i => ?_) (fun i => ?_)
+    · cases i <;> [exact h₂; exact h₁]
+    · cases i <;> rw [continuousOn_iff_continuous_domRestrict]
+      · convert! hg
+        ext x
+        simp only [cond_false, domRestrict_apply, Subtype.coe_eta, dite_eq_right_iff]
+        exact fun hx => hfg x ⟨hx, x.prop⟩
+      · simp only [cond_true, domRestrict_dite, Subtype.coe_eta]
+        exact hf
+
+@[simp]
 
 中文:
 定义 piecewise
@@ -2050,6 +2083,19 @@ definition piecewise
     obtain ⟨f, hf⟩ := f
     obtain ⟨g, hg⟩ := g
     rw [IsLocallyConstant.iff_continuous] at hf hg ⊢
+    dsimp only [coe_mk]
+    rw [Set.union_eq_iUnion] at h
+    refine (locallyFinite_of_finite _).continuous h (fun i => ?_) (fun i => ?_)
+    · cases i <;> [exact h₂; exact h₁]
+    · cases i <;> rw [continuousOn_iff_continuous_domRestrict]
+      · convert! hg
+        ext x
+        simp only [cond_false, domRestrict_apply, Subtype.coe_eta, dite_eq_right_iff]
+        exact fun hx => hfg x ⟨hx, x.prop⟩
+      · simp only [cond_true, domRestrict_dite, Subtype.coe_eta]
+        exact hf
+
+@[simp]
 
 Depends on / 依赖: Set.compl_subset_iff_union.mpr, compl_subset_iff_union
 -/
@@ -2157,7 +2203,12 @@ definition piecewise'
   body: letI : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
   piecewise (h₁.preimage continuous_subtype_val) (h₂.preimage continuous_subtype_val)
     (by simpa [eq_univ_iff_forall] using! h₀)
-    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ -> X)), continuo
+    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩)
+(f₂.comap ⟨(restrictPreimage C₂ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩) by
+      rintro ⟨x, hx₀⟩ ⟨hx₁ : x in C₁, hx₂ : x in C₂⟩
+      simpa using hf x ⟨hx₁, hx₂⟩
+
+@[simp]
 
 中文:
 定义 piecewise'
@@ -2165,7 +2216,12 @@ definition piecewise'
   定义体: letI : forall j : C₀, Decidable (j in Subtype.val ⁻¹' C₁) := fun j => decidable_of_iff (↑j in C₁) Iff.rfl
   piecewise (h₁.preimage continuous_subtype_val) (h₂.preimage continuous_subtype_val)
     (by simpa [eq_univ_iff_forall] using! h₀)
-    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ -> X)), continuo
+    (f₁.comap ⟨(restrictPreimage C₁ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩)
+(f₂.comap ⟨(restrictPreimage C₂ ((↑) : C₀ -> X)), continuous_subtype_val.restrictPreimage⟩) by
+      rintro ⟨x, hx₀⟩ ⟨hx₁ : x in C₁, hx₂ : x in C₂⟩
+      simpa using hf x ⟨hx₁, hx₂⟩
+
+@[simp]
 
 Depends on / 依赖: Decidable, Iff.rfl, Subtype, Subtype.val, continuous_subtype_val, continuous_subtype_val.restrictPreimage, decidable_of_iff, eq_univ_iff_forall, piecewise, preimage, restrictPreimage
 -/

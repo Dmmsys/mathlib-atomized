@@ -82,7 +82,8 @@ lemma isSeparating
   rintro _ ⟨X, i⟩ a
   apply ((sheafificationAdjunction _ _).homEquiv _ _).symm.injective
   simpa only [← Adjunction.homEquiv_naturality_right_symm] using
-    hfg _ (ObjectProperty.ofObj_apply _ ⟨X
+    hfg _ (ObjectProperty.ofObj_apply _ ⟨X, i⟩)
+      (((sheafificationAdjunction _ _).homEquiv _ _).symm a)
 
 中文:
 引理 isSeparating
@@ -93,7 +94,8 @@ lemma isSeparating
   rintro _ ⟨X, i⟩ a
   apply ((sheafificationAdjunction _ _).homEquiv _ _).symm.injective
   simpa only [← Adjunction.homEquiv_naturality_right_symm] using
-    hfg _ (ObjectProperty.ofObj_apply _ ⟨X
+    hfg _ (ObjectProperty.ofObj_apply _ ⟨X, i⟩)
+      (((sheafificationAdjunction _ _).homEquiv _ _).symm a)
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_right_symm, ObjectProperty, ObjectProperty.ofObj_apply, Presheaf, Presheaf.isSeparating, homEquiv, homEquiv_naturality_right_symm, injective, isSeparating, map_injective, ofObj_apply, sheafToPresheaf, sheafificationAdjunction, symm.injective
 -/

@@ -33,7 +33,18 @@ theorem sum_Ico_by_parts
     simp only [add_tsub_cancel_right]
   have h₂ :
     (∑ i in Ico (m + 1) n, f i • G (i + 1)) =
-      (∑ i in Ico m (n - 1), 
+      (∑ i in Ico m (n - 1), f i • G (i + 1)) + f (n - 1) • G n - f m • G (m + 1) := by
+    rw [← sum_Ico_sub_bot _ hmn]; rw [← sum_Ico_succ_sub_top _ (Nat.le_sub_one_of_lt hmn)]; rw [Nat.sub_add_cancel (pos_of_gt hmn)]; rw [sub_add_cancel]
+  rw [sum_eq_sum_Ico_succ_bot hmn]
+  conv in (occs := 3) (f _ • g _) => rw [← sum_range_succ_sub_sum g]
+  simp_rw [smul_sub, sum_sub_distrib, h₂, h₁]
+  conv_lhs => congr; rfl; rw [← add_sub, add_comm, ← add_sub, ← sum_sub_distrib]
+  have : forall i, f i • G (i + 1) - f (i + 1) • G (i + 1) = -((f (i + 1) - f i) • G (i + 1)) := by
+    intro i
+    rw [sub_smul]
+    abel
+  simp_rw [this, sum_neg_distrib, sum_range_succ, smul_add]
+  abel
 
 中文:
 定理 sum_Ico_by_parts
@@ -44,7 +55,18 @@ theorem sum_Ico_by_parts
     simp only [add_tsub_cancel_right]
   have h₂ :
     (∑ i in Ico (m + 1) n, f i • G (i + 1)) =
-      (∑ i in Ico m (n - 1), 
+      (∑ i in Ico m (n - 1), f i • G (i + 1)) + f (n - 1) • G n - f m • G (m + 1) := by
+    rw [← sum_Ico_sub_bot _ hmn]; rw [← sum_Ico_succ_sub_top _ (Nat.le_sub_one_of_lt hmn)]; rw [Nat.sub_add_cancel (pos_of_gt hmn)]; rw [sub_add_cancel]
+  rw [sum_eq_sum_Ico_succ_bot hmn]
+  conv in (occs := 3) (f _ • g _) => rw [← sum_range_succ_sub_sum g]
+  simp_rw [smul_sub, sum_sub_distrib, h₂, h₁]
+  conv_lhs => congr; rfl; rw [← add_sub, add_comm, ← add_sub, ← sum_sub_distrib]
+  have : forall i, f i • G (i + 1) - f (i + 1) • G (i + 1) = -((f (i + 1) - f i) • G (i + 1)) := by
+    intro i
+    rw [sub_smul]
+    abel
+  simp_rw [this, sum_neg_distrib, sum_range_succ, smul_add]
+  abel
 
 Depends on / 依赖: Nat.le_sub_one_of_lt, Nat.one_le_of_lt, Nat.sub_add_cancel, add_tsub_cancel_right, le_sub_one_of_lt, one_le_of_lt, pos_of_gt, sub_add_cancel, sum_Ico_add, sum_Ico_sub_bot, sum_Ico_succ_sub_top, sum_eq_sum
 -/

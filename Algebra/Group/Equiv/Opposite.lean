@@ -443,7 +443,7 @@ definition MonoidHom.op
       map_mul' x y := unop_injective (f.map_mul y.unop x.unop) }
   invFun f :=
     { toFun := unop ∘ f ∘ MulOpposite.op, map_one' := congrArg unop f.map_one,
-      map_mul' x y := congrArg unop (f.map_mul (MulOpposi
+      map_mul' x y := congrArg unop (f.map_mul (MulOpposite.op y) (MulOpposite.op x)) }
 
 中文:
 定义 幺半群态射.op
@@ -452,7 +452,7 @@ definition MonoidHom.op
       map_mul' x y := unop_injective (f.map_mul y.unop x.unop) }
   invFun f :=
     { toFun := unop ∘ f ∘ MulOpposite.op, map_one' := congrArg unop f.map_one,
-      map_mul' x y := congrArg unop (f.map_mul (MulOpposi
+      map_mul' x y := congrArg unop (f.map_mul (MulOpposite.op y) (MulOpposite.op x)) }
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, f.map_mul, f.map_one, invFun, map_mul, map_one, unop_injective, x.unop, y.unop
 -/
@@ -524,7 +524,7 @@ definition AddMonoidHom.mulOp
     { toFun := MulOpposite.unop ∘ f ∘ MulOpposite.op,
       map_zero' := congrArg MulOpposite.unop f.map_zero,
       map_add' :=
-  
+        fun x y => congrArg MulOpposite.unop (f.map_add (MulOpposite.op x) (MulOpposite.op y)) }
 
 中文:
 定义 加法幺半群态射.mulOp
@@ -535,7 +535,7 @@ definition AddMonoidHom.mulOp
     { toFun := MulOpposite.unop ∘ f ∘ MulOpposite.op,
       map_zero' := congrArg MulOpposite.unop f.map_zero,
       map_add' :=
-  
+        fun x y => congrArg MulOpposite.unop (f.map_add (MulOpposite.op x) (MulOpposite.op y)) }
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, MulOpposite.unop, f.map_add, f.map_zero, invFun, map_add, map_zero, unop_injective, x.unop, y.unop
 -/
@@ -627,7 +627,10 @@ definition MulEquiv.op
       right_inv x := unop_injective (f.apply_symm_apply x.unop),
       map_mul' x y := unop_injective (map_mul f y.unop x.unop) }
   invFun f :=
-    { toFun 
+    { toFun := unop ∘ f ∘ MulOpposite.op, invFun := unop ∘ f.symm ∘ MulOpposite.op,
+      left_inv x := by simp,
+      right_inv x := by simp,
+      map_mul' x y := congr_arg unop (map_mul f (MulOpposite.op y) (MulOpposite.op x)) }
 
 中文:
 定义 乘法等价.op
@@ -637,7 +640,10 @@ definition MulEquiv.op
       right_inv x := unop_injective (f.apply_symm_apply x.unop),
       map_mul' x y := unop_injective (map_mul f y.unop x.unop) }
   invFun f :=
-    { toFun 
+    { toFun := unop ∘ f ∘ MulOpposite.op, invFun := unop ∘ f.symm ∘ MulOpposite.op,
+      left_inv x := by simp,
+      right_inv x := by simp,
+      map_mul' x y := congr_arg unop (map_mul f (MulOpposite.op y) (MulOpposite.op x)) }
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, apply_symm_apply, congr_arg, f.apply_symm_apply, f.symm, f.symm_apply_apply, invFun, left_inv, map_mul, right_inv, symm_apply_apply, unop_injective, x.unop, y.unop
 -/

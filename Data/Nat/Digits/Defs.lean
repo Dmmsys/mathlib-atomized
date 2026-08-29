@@ -767,7 +767,16 @@ theorem digits_ofDigits
       · intro h
         rw [List.getLast_cons h] at w₂
         convert! w₂
-    
+    · exact w₁ d List.mem_cons_self
+    · by_cases h' : L = []
+      · rcases h' with rfl
+        left
+        simpa using w₂
+      · right
+        contrapose w₂
+        refine digits_zero_of_eq_zero h.ne_bot w₂ _ ?_
+        rw [List.getLast_cons h']
+        exact List.getLast_mem h'
 
 中文:
 定理 digits_ofDigits
@@ -786,7 +795,16 @@ theorem digits_ofDigits
       · intro h
         rw [List.getLast_cons h] at w₂
         convert! w₂
-    
+    · exact w₁ d List.mem_cons_self
+    · by_cases h' : L = []
+      · rcases h' with rfl
+        left
+        simpa using w₂
+      · right
+        contrapose w₂
+        refine digits_zero_of_eq_zero h.ne_bot w₂ _ ?_
+        rw [List.getLast_cons h']
+        exact List.getLast_mem h'
 
 Depends on / 依赖: List.getLast_cons, List.getLast_mem, List.mem_cons_of_mem, List.mem_cons_self, contrapose, convert, digits_add, digits_zero_of_eq_zero, getLast_cons, getLast_mem, h.ne_bot, mem_cons_of_mem, mem_cons_self, ne_bot, ofDigits, replace
 -/
@@ -834,7 +852,14 @@ theorem ofDigits_digits
       | succ n ih =>
         rw [Nat.zero_add] at ih ⊢
         simp only [ih, add_comm 1, ofDigits_one_cons, Nat.cast_id, digits_one_succ]
-    · induction n using 
+    · induction n using Nat.strongRecOn with | ind n h => ?_
+      cases n
+      · rw [digits_zero]
+        rfl
+      · simp only [digits_add_two_add_one]
+        dsimp [ofDigits]
+        rw [h _ (Nat.div_lt_self' _ b)]
+        rw [Nat.mod_add_div]
 
 中文:
 定理 ofDigits_digits
@@ -851,7 +876,14 @@ theorem ofDigits_digits
       | succ n ih =>
         rw [Nat.zero_add] at ih ⊢
         simp only [ih, add_comm 1, ofDigits_one_cons, Nat.cast_id, digits_one_succ]
-    · induction n using 
+    · induction n using Nat.strongRecOn with | ind n h => ?_
+      cases n
+      · rw [digits_zero]
+        rfl
+      · simp only [digits_add_two_add_one]
+        dsimp [ofDigits]
+        rw [h _ (Nat.div_lt_self' _ b)]
+        rw [Nat.mod_add_div]
 
 Depends on / 依赖: Nat.cast_id, Nat.div_lt_self, Nat.mod_add_div, Nat.strongRecOn, Nat.zero_add, add_comm, cast_id, digits_add_two_add_one, digits_one_succ, digits_zero, div_lt_self, mod_add_div, ofDigits, ofDigits_one_cons, strongRecOn, zero_add
 -/
@@ -1106,7 +1138,15 @@ lemma ofDigits_inj_of_len_eq
   | cons D L ih => ?_
   obtain ⟨d, l, rfl⟩ := List.exists_cons_of_length_eq_add_one len.symm
   simp only [List.length_cons, add_left_inj] at len
-  simp only [
+  simp only [ofDigits_cons] at h
+  have eqd : D = d := by
+    have H : (D + b * ofDigits b L) % b = (d + b * ofDigits b l) % b := by rw [h]
+    simpa [mod_eq_of_lt (w2 d List.mem_cons_self),
+      mod_eq_of_lt (w1 D List.mem_cons_self)] using H
+  simp only [eqd, add_right_inj, mul_left_cancel_iff_of_pos (zero_lt_of_lt hb)] at h
+  have := ih len (fun a ha => w1 a <| List.mem_cons_of_mem D ha)
+    (fun a ha => w2 a <| List.mem_cons_of_mem d ha) h
+  rw [eqd]; rw [this]
 
 中文:
 引理 ofDigits_inj_of_len_eq
@@ -1119,7 +1159,15 @@ lemma ofDigits_inj_of_len_eq
   | cons D L ih => ?_
   obtain ⟨d, l, rfl⟩ := List.exists_cons_of_length_eq_add_one len.symm
   simp only [List.length_cons, add_left_inj] at len
-  simp only [
+  simp only [ofDigits_cons] at h
+  have eqd : D = d := by
+    have H : (D + b * ofDigits b L) % b = (d + b * ofDigits b l) % b := by rw [h]
+    simpa [mod_eq_of_lt (w2 d List.mem_cons_self),
+      mod_eq_of_lt (w1 D List.mem_cons_self)] using H
+  simp only [eqd, add_right_inj, mul_left_cancel_iff_of_pos (zero_lt_of_lt hb)] at h
+  have := ih len (fun a ha => w1 a <| List.mem_cons_of_mem D ha)
+    (fun a ha => w2 a <| List.mem_cons_of_mem d ha) h
+  rw [eqd]; rw [this]
 
 Depends on / 依赖: List.exists_cons_of_length_eq_add_one, List.length_cons, List.length_eq_zero_iff.mp, List.length_nil, List.mem_cons_self, add_left_inj, exists_cons_of_length_eq_add_one, generalizing, len.symm, length_cons, length_eq_zero_iff, length_nil, mem_cons_self, mod_eq_of_lt, ofDigits, ofDigits_cons
 -/
@@ -1157,7 +1205,9 @@ theorem ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq
     | nil => simp_all
     | cons hd₂ tl₂ ih₂ =>
       simp_all only [List.length_cons, ofDigits_cons, add_left_inj,
-        eq_comm, 
+        eq_comm, List.zipWith_cons_cons]
+      rw [← ih₁ h.symm]; rw [mul_add]
+      ac_rfl
 
 中文:
 定理 ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq
@@ -1170,7 +1220,9 @@ theorem ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq
     | nil => simp_all
     | cons hd₂ tl₂ ih₂ =>
       simp_all only [List.length_cons, ofDigits_cons, add_left_inj,
-        eq_comm, 
+        eq_comm, List.zipWith_cons_cons]
+      rw [← ih₁ h.symm]; rw [mul_add]
+      ac_rfl
 
 Depends on / 依赖: List.length_cons, List.length_eq_zero_iff, List.zipWith_cons_cons, add_left_inj, eq_comm, generalizing, h.symm, length_cons, length_eq_zero_iff, mul_add, ofDigits, ofDigits_cons, zipWith_cons_cons
 -/
@@ -1206,7 +1258,8 @@ theorem digits_lt_base'
   cases hd
   · exact n.succ.mod_lt (by linarith)
   · apply IH ((n + 1) / (b + 2))
-   
+    · apply Nat.div_lt_self <;> lia
+    · assumption
 
 中文:
 定理 digits_lt_base'
@@ -1223,7 +1276,8 @@ theorem digits_lt_base'
   cases hd
   · exact n.succ.mod_lt (by linarith)
   · apply IH ((n + 1) / (b + 2))
-   
+    · apply Nat.div_lt_self <;> lia
+    · assumption
 
 Depends on / 依赖: Nat.strongRecOn, digits_zero, strongRecOn
 -/
@@ -1275,7 +1329,10 @@ theorem ofDigits_lt_base_pow_length'
   | cons hd tl IH =>
     rw [ofDigits]; rw [List.length_cons]; rw [pow_succ]
     have : (ofDigits (b + 2) tl + 1) * (b + 2) <= (b + 2) ^ tl.length * (b + 2) :=
-      mul_le_mul (IH fun x hx => hl _ (List.mem_cons_of_mem _ hx)) (by rfl) (by simp only [
+      mul_le_mul (IH fun x hx => hl _ (List.mem_cons_of_mem _ hx)) (by rfl) (by simp only [zero_le])
+        (Nat.zero_le _)
+    suffices ↑hd < b + 2 by linarith
+    exact hl hd List.mem_cons_self
 
 中文:
 定理 ofDigits_lt_base_pow_length'
@@ -1286,7 +1343,10 @@ theorem ofDigits_lt_base_pow_length'
   | cons hd tl IH =>
     rw [ofDigits]; rw [List.length_cons]; rw [pow_succ]
     have : (ofDigits (b + 2) tl + 1) * (b + 2) <= (b + 2) ^ tl.length * (b + 2) :=
-      mul_le_mul (IH fun x hx => hl _ (List.mem_cons_of_mem _ hx)) (by rfl) (by simp only [
+      mul_le_mul (IH fun x hx => hl _ (List.mem_cons_of_mem _ hx)) (by rfl) (by simp only [zero_le])
+        (Nat.zero_le _)
+    suffices ↑hd < b + 2 by linarith
+    exact hl hd List.mem_cons_self
 
 Depends on / 依赖: List.length_cons, List.mem_cons_of_mem, List.mem_cons_self, Nat.zero_le, length, length_cons, mem_cons_of_mem, mem_cons_self, mul_le_mul, ofDigits, pow_succ, tl.length, zero_le
 -/
@@ -1519,7 +1579,8 @@ theorem digit_sum_le
     | zero => rw [digits_zero_succ, List.sum_cons, List.sum_nil, add_zero]
     | succ p =>
       nth_rw 2 [← ofDigits_digits p.succ (n + 1)]
-      rw [← ofDigits_one <| digits p.succ 
+      rw [← ofDigits_one <| digits p.succ n.succ]
+exact ofDigits_monotone (digits p.succ n.succ) Nat.succ_pos p
 
 中文:
 定理 digit_sum_le
@@ -1533,7 +1594,8 @@ theorem digit_sum_le
     | zero => rw [digits_zero_succ, List.sum_cons, List.sum_nil, add_zero]
     | succ p =>
       nth_rw 2 [← ofDigits_digits p.succ (n + 1)]
-      rw [← ofDigits_one <| digits p.succ 
+      rw [← ofDigits_one <| digits p.succ n.succ]
+exact ofDigits_monotone (digits p.succ n.succ) Nat.succ_pos p
 
 Depends on / 依赖: List.sum, List.sum_cons, List.sum_nil, Nat.le_refl, Nat.succ_pos, add_zero, digits, digits_zero, digits_zero_succ, le_refl, n.succ, nth_rw, ofDigits_digits, ofDigits_monotone, ofDigits_one, p.succ, succ_pos, sum_cons, sum_nil
 -/
@@ -1655,7 +1717,12 @@ lemma ofDigits_mod_pow_eq_ofDigits_take
     cases digits with
     | nil => simp
     | cons hd tl =>
-      rw [List.take_succ_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih _ fun x hx => w₁ x List.mem_cons_of_mem hd hx]; rw [add_mod]; rw [mod_eq_
+      rw [List.take_succ_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih _ fun x hx => w₁ x List.mem_cons_of_mem hd hx]; rw [add_mod]; rw [mod_eq_of_lt lt_of_lt_of_le (w₁ hd List.mem_cons_self) (le_pow <| add_one_pos i)]; rw [pow_succ']; rw [mul_mod_mul_left]; rw [mod_eq_of_lt]
+      apply add_lt_of_lt_sub
+      apply lt_of_lt_of_le (b := p)
+      · exact w₁ hd List.mem_cons_self
+      · rw [← Nat.mul_sub]
+exact Nat.le_mul_of_pos_right _ Nat.sub_pos_of_lt mod_lt _ pow_pos hpos i
 
 中文:
 引理 ofDigits_mod_pow_eq_ofDigits_take
@@ -1666,7 +1733,12 @@ lemma ofDigits_mod_pow_eq_ofDigits_take
     cases digits with
     | nil => simp
     | cons hd tl =>
-      rw [List.take_succ_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih _ fun x hx => w₁ x List.mem_cons_of_mem hd hx]; rw [add_mod]; rw [mod_eq_
+      rw [List.take_succ_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih _ fun x hx => w₁ x List.mem_cons_of_mem hd hx]; rw [add_mod]; rw [mod_eq_of_lt lt_of_lt_of_le (w₁ hd List.mem_cons_self) (le_pow <| add_one_pos i)]; rw [pow_succ']; rw [mul_mod_mul_left]; rw [mod_eq_of_lt]
+      apply add_lt_of_lt_sub
+      apply lt_of_lt_of_le (b := p)
+      · exact w₁ hd List.mem_cons_self
+      · rw [← Nat.mul_sub]
+exact Nat.le_mul_of_pos_right _ Nat.sub_pos_of_lt mod_lt _ pow_pos hpos i
 
 Depends on / 依赖: List.mem_cons_of_mem, List.mem_cons_self, List.take_succ_cons, add_lt_of_lt_sub, add_mod, add_one_pos, digits, generalizing, le_pow, lt_of_lt_of_le, mem_cons_of_mem, mem_cons_self, mod_eq_of_lt, mod_one, mul_mod_mul_left, ofDigits_cons, pow_succ, take_succ_cons
 -/
@@ -1731,7 +1803,9 @@ lemma toDigitsCore_lens_eq_aux
       simp only [hx, if_true, List.length, congrArg (fun l => l + 1) hlen]
     else
       simp only [hx, if_false]
-      specialize ih (n / b) (Nat.digitChar (n
+      specialize ih (n / b) (Nat.digitChar (n % b) :: l1) (Nat.digitChar (n % b) :: l2)
+      simp only [List.length, congrArg (fun l => l + 1) hlen] at ih
+      exact ih trivial
 
 中文:
 引理 toDigitsCore_lens_eq_aux
@@ -1744,7 +1818,9 @@ lemma toDigitsCore_lens_eq_aux
       simp only [hx, if_true, List.length, congrArg (fun l => l + 1) hlen]
     else
       simp only [hx, if_false]
-      specialize ih (n / b) (Nat.digitChar (n
+      specialize ih (n / b) (Nat.digitChar (n % b) :: l1) (Nat.digitChar (n % b) :: l2)
+      simp only [List.length, congrArg (fun l => l + 1) hlen] at ih
+      exact ih trivial
 
 Depends on / 依赖: List.length, Nat.digitChar, Nat.toDigitsCore, digitChar, if_false, if_true, length, specialize, toDigitsCore
 -/
@@ -1832,7 +1908,14 @@ lemma toDigitsCore_length
     | succ e =>
       cases e with
       | zero =>
-        rw [zero_ad
+        rw [zero_add]; rw [pow_one] at hlt
+        simp [Nat.div_eq_of_lt hlt]
+      | succ e =>
+        specialize ih (n / b) _ (add_one_pos e) (Nat.div_lt_of_lt_mul <| by rwa [← pow_add_one'])
+        split_ifs
+        · simp
+        · simp only [toDigitsCore_lens_eq b f (n / b) (Nat.digitChar <| n % b),
+            Nat.succ_le_succ_iff, ih]
 
 中文:
 引理 toDigitsCore_length
@@ -1847,7 +1930,14 @@ lemma toDigitsCore_length
     | succ e =>
       cases e with
       | zero =>
-        rw [zero_ad
+        rw [zero_add]; rw [pow_one] at hlt
+        simp [Nat.div_eq_of_lt hlt]
+      | succ e =>
+        specialize ih (n / b) _ (add_one_pos e) (Nat.div_lt_of_lt_mul <| by rwa [← pow_add_one'])
+        split_ifs
+        · simp
+        · simp only [toDigitsCore_lens_eq b f (n / b) (Nat.digitChar <| n % b),
+            Nat.succ_le_succ_iff, ih]
 
 Depends on / 依赖: False.elim, List.length, Nat.digitChar, Nat.div_eq_of_lt, Nat.div_lt_of_lt_mul, Nat.lt_irrefl, add_one_pos, digitChar, div_eq_of_lt, div_lt_of_lt_mul, generalizing, h_e_pos, length, lt_irrefl, pow_add_one, pow_one, specialize, split_ifs, toDigitsCore, toDigitsCore_lens_eq
 -/

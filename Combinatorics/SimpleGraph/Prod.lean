@@ -437,7 +437,11 @@ lemma length_boxProd
     rw [length_cons]; rw [length_boxProd w']
     have disj : (G.Adj a₁ c.1 ∧ b₁ = c.2) ∨ (H.Adj b₁ c.2 ∧ a₁ = c.1) := by simp_all
     rcases disj with h₁ | h₂
-    · 
+    · simp only [h₁, and_self, ↓reduceDIte, length_cons, Or.by_cases]
+      rw [add_comm]; rw [add_comm w'.ofBoxProdLeft.length 1]; rw [add_assoc]
+      congr <;> simp [h₁.2.symm]
+    · simp only [h₂, add_assoc, Or.by_cases]
+      congr <;> simp [h₂.2.symm]
 
 中文:
 引理 length_boxProd
@@ -450,7 +454,11 @@ lemma length_boxProd
     rw [length_cons]; rw [length_boxProd w']
     have disj : (G.Adj a₁ c.1 ∧ b₁ = c.2) ∨ (H.Adj b₁ c.2 ∧ a₁ = c.1) := by simp_all
     rcases disj with h₁ | h₂
-    · 
+    · simp only [h₁, and_self, ↓reduceDIte, length_cons, Or.by_cases]
+      rw [add_comm]; rw [add_comm w'.ofBoxProdLeft.length 1]; rw [add_assoc]
+      congr <;> simp [h₁.2.symm]
+    · simp only [h₂, add_assoc, Or.by_cases]
+      congr <;> simp [h₂.2.symm]
 
 Depends on / 依赖: G.Adj, H.Adj, Or.by_cases, add_assoc, add_comm, and_self, length, length_boxProd, length_cons, ofBoxProdLeft, ofBoxProdLeft.length, ofBoxProdRight, reduceDIte
 -/
@@ -669,7 +677,9 @@ instance boxProdFintypeNeighborSet
     ((G.neighborFinset x.1 ×ˢ {x.2}).disjUnion ({x.1} ×ˢ H.neighborFinset x.2) <|
 Finset.disjoint_product.mpr Or.inl neighborFinset_disjoint_singleton _ _)
     ((Equiv.refl _).subtypeEquiv fun y => by
-      simp_rw [Finset.mem_disjUnion, Finset.mem_product, Finset.mem_singleton, mem_
+      simp_rw [Finset.mem_disjUnion, Finset.mem_product, Finset.mem_singleton, mem_neighborFinset,
+        mem_neighborSet, Equiv.refl_apply, boxProd_adj]
+      simp only [eq_comm, and_comm])
 
 中文:
 实例 boxProdFintypeNeighborSet
@@ -678,7 +688,9 @@ Finset.disjoint_product.mpr Or.inl neighborFinset_disjoint_singleton _ _)
     ((G.neighborFinset x.1 ×ˢ {x.2}).disjUnion ({x.1} ×ˢ H.neighborFinset x.2) <|
 Finset.disjoint_product.mpr Or.inl neighborFinset_disjoint_singleton _ _)
     ((Equiv.refl _).subtypeEquiv fun y => by
-      simp_rw [Finset.mem_disjUnion, Finset.mem_product, Finset.mem_singleton, mem_
+      simp_rw [Finset.mem_disjUnion, Finset.mem_product, Finset.mem_singleton, mem_neighborFinset,
+        mem_neighborSet, Equiv.refl_apply, boxProd_adj]
+      simp only [eq_comm, and_comm])
 
 Depends on / 依赖: Equiv.refl, Equiv.refl_apply, Finset, Finset.disjoint_product.mpr, Finset.mem_disjUnion, Finset.mem_product, Finset.mem_singleton, Fintype, Fintype.ofEquiv, G.neighborFinset, H.neighborFinset, Or.inl, and_comm, boxProd_adj, disjUnion, disjoint_product, eq_comm, mem_disjUnion, mem_neighborFinset, mem_neighborSet
 -/
@@ -798,7 +810,22 @@ lemma edist_boxProd
   -- The case `(G □ H).edist x y = ⊤` is used twice, so better to factor it out.
   have top_case : (G □ H).edist x y = ⊤ ↔ G.edist x.1 y.1 = ⊤ ∨ H.edist x.2 y.2 = ⊤ := by
     simp_rw [← not_ne_iff, edist_ne_top_iff_reachable, reachable_boxProd, not_and_or]
-  by_cases h : (G □ H).edist
+  by_cases h : (G □ H).edist x y = ⊤
+  · rw [top_case] at h
+    aesop
+  · have rGH : G.edist x.1 y.1 != ⊤ ∧ H.edist x.2 y.2 != ⊤ := by rw [top_case] at h; aesop
+    have ⟨wG, hwG⟩ := exists_walk_of_edist_ne_top rGH.1
+    have ⟨wH, hwH⟩ := exists_walk_of_edist_ne_top rGH.2
+    let w_app := (wG.boxProdLeft _ _).append (wH.boxProdRight _ _)
+    have w_len : w_app.length = wG.length + wH.length := by
+      unfold w_app Walk.boxProdLeft Walk.boxProdRight; simp
+    refine le_antisymm ?_ ?_
+    · calc (G □ H).edist x y <= w_app.length := by exact edist_le _
+          _ = wG.length + wH.length := by exact_mod_cast w_len
+          _ = G.edist x.1 y.1 + H.edist x.2 y.2 := by simp only [hwG, hwH]
+    · have ⟨w, hw⟩ := exists_walk_of_edist_ne_top h
+      rw [← hw]; rw [Walk.length_boxProd]
+      exact add_le_add (edist_le w.ofBoxProdLeft) (edist_le w.ofBoxProdRight)
 
 中文:
 引理 edist_boxProd
@@ -808,7 +835,22 @@ lemma edist_boxProd
   -- The case `(G □ H).edist x y = ⊤` is used twice, so better to factor it out.
   have top_case : (G □ H).edist x y = ⊤ ↔ G.edist x.1 y.1 = ⊤ ∨ H.edist x.2 y.2 = ⊤ := by
     simp_rw [← not_ne_iff, edist_ne_top_iff_reachable, reachable_boxProd, not_and_or]
-  by_cases h : (G □ H).edist
+  by_cases h : (G □ H).edist x y = ⊤
+  · rw [top_case] at h
+    aesop
+  · have rGH : G.edist x.1 y.1 != ⊤ ∧ H.edist x.2 y.2 != ⊤ := by rw [top_case] at h; aesop
+    have ⟨wG, hwG⟩ := exists_walk_of_edist_ne_top rGH.1
+    have ⟨wH, hwH⟩ := exists_walk_of_edist_ne_top rGH.2
+    let w_app := (wG.boxProdLeft _ _).append (wH.boxProdRight _ _)
+    have w_len : w_app.length = wG.length + wH.length := by
+      unfold w_app Walk.boxProdLeft Walk.boxProdRight; simp
+    refine le_antisymm ?_ ?_
+    · calc (G □ H).edist x y <= w_app.length := by exact edist_le _
+          _ = wG.length + wH.length := by exact_mod_cast w_len
+          _ = G.edist x.1 y.1 + H.edist x.2 y.2 := by simp only [hwG, hwH]
+    · have ⟨w, hw⟩ := exists_walk_of_edist_ne_top h
+      rw [← hw]; rw [Walk.length_boxProd]
+      exact add_le_add (edist_le w.ofBoxProdLeft) (edist_le w.ofBoxProdRight)
 
 Depends on / 依赖: classical
 -/

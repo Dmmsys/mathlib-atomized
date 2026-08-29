@@ -66,7 +66,14 @@ theorem isLocalHomeomorphOn_iff_isOpenEmbedding_restrict
     exact ⟨e.source, e.open_source.mem_nhds hxe, e.isOpenEmbedding_restrict⟩
   · obtain ⟨U, hU, emb⟩ := h x hx
     have : IsOpenEmbedding ((interior U).domRestrict f) := by
-      refine emb.comp ⟨.inclusion interior_
+      refine emb.comp ⟨.inclusion interior_subset, ?_⟩
+      rw [Set.range_inclusion]; exact isOpen_induced isOpen_interior
+    obtain ⟨cont, inj, openMap⟩ := isOpenEmbedding_iff_continuous_injective_isOpenMap.mp this
+    have : Nonempty X := ⟨x⟩
+    exact ⟨OpenPartialHomeomorph.ofContinuousOpenRestrict
+      (Set.injOn_iff_injective.mpr inj).toPartialEquiv
+      (continuousOn_iff_continuous_domRestrict.mpr cont) openMap isOpen_interior,
+      mem_interior_iff_mem_nhds.mpr hU, rfl⟩
 
 中文:
 定理 isLocalHomeomorphOn_iff_isOpenEmbedding_restrict
@@ -77,7 +84,14 @@ theorem isLocalHomeomorphOn_iff_isOpenEmbedding_restrict
     exact ⟨e.source, e.open_source.mem_nhds hxe, e.isOpenEmbedding_restrict⟩
   · obtain ⟨U, hU, emb⟩ := h x hx
     have : IsOpenEmbedding ((interior U).domRestrict f) := by
-      refine emb.comp ⟨.inclusion interior_
+      refine emb.comp ⟨.inclusion interior_subset, ?_⟩
+      rw [Set.range_inclusion]; exact isOpen_induced isOpen_interior
+    obtain ⟨cont, inj, openMap⟩ := isOpenEmbedding_iff_continuous_injective_isOpenMap.mp this
+    have : Nonempty X := ⟨x⟩
+    exact ⟨OpenPartialHomeomorph.ofContinuousOpenRestrict
+      (Set.injOn_iff_injective.mpr inj).toPartialEquiv
+      (continuousOn_iff_continuous_domRestrict.mpr cont) openMap isOpen_interior,
+      mem_interior_iff_mem_nhds.mpr hU, rfl⟩
 
 Depends on / 依赖: IsOpenEmbedding, Nonempty, OpenPartialHomeomorph, OpenPartialHomeomorph.o, Set.range_inclusion, domRestrict, e.isOpenEmbedding_restrict, e.open_source.mem_nhds, e.source, emb.comp, inclusion, interior, interior_subset, isOpenEmbedding_iff_continuous_injective_isOpenMap, isOpenEmbedding_iff_continuous_injective_isOpenMap.mp, isOpenEmbedding_restrict, isOpen_induced, isOpen_interior, mem_nhds, openMap
 -/
@@ -112,7 +126,9 @@ theorem discreteTopology_of_image
     obtain ⟨e, hx, rfl⟩ := h x x.2
     have ⟨U, hU, eq⟩ := isOpen_discrete {(⟨_, _, x.2, rfl⟩ : e '' s)}
     refine ⟨e.source inter e ⁻¹' U, e.continuousOn_toFun.isOpen_inter_preimage e.open_source hU,
-      subset_antisymm (fun x' mem => Subtype
+      subset_antisymm (fun x' mem => Subtype.ext <| e.injOn mem.1 hx ?_) ?_⟩
+    · simpa using Set.subset_singleton_iff.1 eq.subset ⟨_, x', x'.2, rfl⟩ mem.2
+    · rintro x rfl; exact ⟨hx, eq.superset rfl⟩
 
 中文:
 定理 discreteTopology_of_image
@@ -121,7 +137,9 @@ theorem discreteTopology_of_image
     obtain ⟨e, hx, rfl⟩ := h x x.2
     have ⟨U, hU, eq⟩ := isOpen_discrete {(⟨_, _, x.2, rfl⟩ : e '' s)}
     refine ⟨e.source inter e ⁻¹' U, e.continuousOn_toFun.isOpen_inter_preimage e.open_source hU,
-      subset_antisymm (fun x' mem => Subtype
+      subset_antisymm (fun x' mem => Subtype.ext <| e.injOn mem.1 hx ?_) ?_⟩
+    · simpa using Set.subset_singleton_iff.1 eq.subset ⟨_, x', x'.2, rfl⟩ mem.2
+    · rintro x rfl; exact ⟨hx, eq.superset rfl⟩
 
 Depends on / 依赖: Set.subset_singleton_iff, Subtype, Subtype.ext, continuousOn_toFun, discreteTopology_iff_isOpen_singleton, discreteTopology_iff_isOpen_singleton.mpr, e.continuousOn_toFun.isOpen_inter_preimage, e.injOn, e.open_source, e.source, eq.subset, eq.superset, isOpen_discrete, isOpen_inter_preimage, open_source, source, subset, subset_antisymm, subset_singleton_iff, superset
 -/
@@ -166,7 +184,8 @@ theorem discreteTopology_image_iff
   rintro hX ⟨_, x, hx, rfl⟩
   obtain ⟨e, hxe, rfl⟩ := h x hx
   refine ⟨e '' {x}, e.isOpen_image_of_subset_source ?_ (Set.singleton_subset_iff.mpr hxe), ?_⟩
-  · simpa using hs.isOpenMap_subtype_va
+  · simpa using hs.isOpenMap_subtype_val _ (hX ⟨x, hx⟩)
+  · ext; simp [Subtype.ext_iff]
 
 中文:
 定理 discreteTopology_image_iff
@@ -177,7 +196,8 @@ theorem discreteTopology_image_iff
   rintro hX ⟨_, x, hx, rfl⟩
   obtain ⟨e, hxe, rfl⟩ := h x hx
   refine ⟨e '' {x}, e.isOpen_image_of_subset_source ?_ (Set.singleton_subset_iff.mpr hxe), ?_⟩
-  · simpa using hs.isOpenMap_subtype_va
+  · simpa using hs.isOpenMap_subtype_val _ (hX ⟨x, hx⟩)
+  · ext; simp [Subtype.ext_iff]
 
 Depends on / 依赖: Set.singleton_subset_iff.mpr, Subtype, Subtype.ext_iff, discreteTopology_iff_isOpen_singleton, discreteTopology_of_image, e.isOpen_image_of_subset_source, ext_iff, h.discreteTopology_of_image, hs.isOpenMap_subtype_val, isOpenMap_subtype_val, isOpen_image_of_subset_source, simp_rw, singleton_subset_iff
 -/
@@ -225,7 +245,9 @@ theorem mk
         toFun := f
         map_source' := fun _x hx => by rw [he hx]; exact e.map_source' hx
         left_inv' := fun _x hx => by rw [he hx]; exact e.left_inv' hx
-        right_inv' := fun _y hy => by rw [he (e.map_target' hy)]; ex
+        right_inv' := fun _y hy => by rw [he (e.map_target' hy)]; exact e.right_inv' hy
+        continuousOn_toFun := (continuousOn_congr he).mpr e.continuousOn_toFun },
+      hx, rfl⟩
 
 中文:
 定理 mk
@@ -238,7 +260,9 @@ theorem mk
         toFun := f
         map_source' := fun _x hx => by rw [he hx]; exact e.map_source' hx
         left_inv' := fun _x hx => by rw [he hx]; exact e.left_inv' hx
-        right_inv' := fun _y hy => by rw [he (e.map_target' hy)]; ex
+        right_inv' := fun _y hy => by rw [he (e.map_target' hy)]; exact e.right_inv' hy
+        continuousOn_toFun := (continuousOn_congr he).mpr e.continuousOn_toFun },
+      hx, rfl⟩
 
 Depends on / 依赖: continuousOn_congr, continuousOn_toFun, e.continuousOn_toFun, e.left_inv, e.map_source, e.map_target, e.right_inv, left_inv, map_source, map_target, right_inv
 -/
@@ -303,7 +327,10 @@ theorem of_comp_left
   obtain ⟨gf, hgf, he⟩ := hgf x hx
   refine ⟨(gf.restr <| f ⁻¹' g.source).trans g.symm, ⟨⟨hgf, mem_interior_iff_mem_nhds.mpr
     ((cont x hx).preimage_mem_nhds <| g.open_source.mem_nhds hxg)⟩, he ▸ g.map_source hxg⟩,
-    fun y hy 
+    fun y hy => ?_⟩
+  change f y = g.symm (gf y)
+  have : f y in g.source := by apply interior_subset hy.1.2
+  rw [← he]; rw [g.eq_symm_apply this (by apply g.map_source this)]; rw [Function.comp_apply]
 
 中文:
 定理 of_comp_left
@@ -313,7 +340,10 @@ theorem of_comp_left
   obtain ⟨gf, hgf, he⟩ := hgf x hx
   refine ⟨(gf.restr <| f ⁻¹' g.source).trans g.symm, ⟨⟨hgf, mem_interior_iff_mem_nhds.mpr
     ((cont x hx).preimage_mem_nhds <| g.open_source.mem_nhds hxg)⟩, he ▸ g.map_source hxg⟩,
-    fun y hy 
+    fun y hy => ?_⟩
+  change f y = g.symm (gf y)
+  have : f y in g.source := by apply interior_subset hy.1.2
+  rw [← he]; rw [g.eq_symm_apply this (by apply g.map_source this)]; rw [Function.comp_apply]
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, eq_symm_apply, g.eq_symm_apply, g.map_source, g.open_source.mem_nhds, g.source, g.symm, gf.restr, interior_subset, map_source, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mpr, mem_nhds, open_source, preimage_mem_nhds, source
 -/
@@ -341,7 +371,7 @@ theorem of_comp_right
   refine ⟨f.symm.trans gf, ⟨f.map_source hxf, ?_⟩, fun y hy => ?_⟩
   · apply (f.left_inv hxf).symm ▸ hgf
   · change g y = gf (f.symm y)
-    rw [← he]; rw [Function.comp_apply]; rw [f.right_inv hy.1
+    rw [← he]; rw [Function.comp_apply]; rw [f.right_inv hy.1]
 
 中文:
 定理 of_comp_right
@@ -353,7 +383,7 @@ theorem of_comp_right
   refine ⟨f.symm.trans gf, ⟨f.map_source hxf, ?_⟩, fun y hy => ?_⟩
   · apply (f.left_inv hxf).symm ▸ hgf
   · change g y = gf (f.symm y)
-    rw [← he]; rw [Function.comp_apply]; rw [f.right_inv hy.1
+    rw [← he]; rw [Function.comp_apply]; rw [f.right_inv hy.1]
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, f.left_inv, f.map_source, f.right_inv, f.symm, f.symm.trans, left_inv, map_source, right_inv
 -/
@@ -862,7 +892,13 @@ theorem isTopologicalBasis
       s.continuous).isOpen_range
     rwa [Subtype.range_val]
   · obtain ⟨f, hxf, rfl⟩ := hf x
-    refine ⟨f.source inter
+    refine ⟨f.source inter U, ⟨f.target inter f.symm ⁻¹' U, f.symm.isOpen_inter_preimage hU,
+      ⟨_, continuousOn_iff_continuous_domRestrict.mp (f.continuousOn_invFun.mono fun _ h => h.1)⟩,
+      ?_, (Set.range_domRestrict _ _).trans ?_⟩, ⟨hxf, hx⟩, fun _ h => h.2⟩
+    · ext y; exact f.right_inv y.2.1
+    · apply (f.symm_image_target_inter_eq _).trans
+      rw [Set.preimage_inter]; rw [← Set.inter_assoc]; rw [Set.inter_eq_self_of_subset_left
+        f.source_preimage_target]; rw [f.source_inter_preimage_inv_preimage]
 
 中文:
 定理 isTopologicalBasis
@@ -875,7 +911,13 @@ theorem isTopologicalBasis
       s.continuous).isOpen_range
     rwa [Subtype.range_val]
   · obtain ⟨f, hxf, rfl⟩ := hf x
-    refine ⟨f.source inter
+    refine ⟨f.source inter U, ⟨f.target inter f.symm ⁻¹' U, f.symm.isOpen_inter_preimage hU,
+      ⟨_, continuousOn_iff_continuous_domRestrict.mp (f.continuousOn_invFun.mono fun _ h => h.1)⟩,
+      ?_, (Set.range_domRestrict _ _).trans ?_⟩, ⟨hxf, hx⟩, fun _ h => h.2⟩
+    · ext y; exact f.right_inv y.2.1
+    · apply (f.symm_image_target_inter_eq _).trans
+      rw [Set.preimage_inter]; rw [← Set.inter_assoc]; rw [Set.inter_eq_self_of_subset_left
+        f.source_preimage_target]; rw [f.source_inter_preimage_inv_preimage]
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal, Set.range_domRestrict, Subtype, Subtype.range_val, continuous, continuousOn_iff_continuous_domRestrict, continuousOn_iff_continuous_domRestrict.mp, continuousOn_invFun, f.continuousOn_invFun.mono, f.source, f.symm, f.symm.isOpen_inter_preimage, f.target, isOpenEmbedding_of_comp, isOpen_inter_preimage, isOpen_range, isTopologicalBasis_of_isOpen_of_nhds, range_domRestrict, range_val
 -/

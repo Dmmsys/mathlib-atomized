@@ -228,7 +228,16 @@ lemma inverse_mfderiv_mul_left
   have A : mfderiv% ((fun x => g⁻¹ * x) ∘ (fun x => g * x)) h =
       ContinuousLinearMap.id _ _ := by
     have : (fun x => g⁻¹ * x) ∘ (fun x => g * x) = id := by ext x; simp
-    rw [this]; rw [id_eq]; rw [mfderiv_i
+    rw [this]; rw [id_eq]; rw [mfderiv_id]
+  rw [mfderiv_comp (I' := I) _ (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)
+    (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)] at A
+  have A' : mfderiv% ((fun x => g * x) ∘ (fun x => g⁻¹ * x)) (g * h) =
+      ContinuousLinearMap.id _ _ := by
+    have : (fun x => g * x) ∘ (fun x => g⁻¹ * x) = id := by ext x; simp
+    rw [this]; rw [id_eq]; rw [mfderiv_id]
+  rw [mfderiv_comp (I' := I) _ (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)
+    (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)]; rw [inv_mul_cancel_left g h] at A'
+  exact ContinuousLinearMap.inverse_eq A' A
 
 中文:
 引理 inverse_mfderiv_mul_left
@@ -238,7 +247,16 @@ lemma inverse_mfderiv_mul_left
   have A : mfderiv% ((fun x => g⁻¹ * x) ∘ (fun x => g * x)) h =
       ContinuousLinearMap.id _ _ := by
     have : (fun x => g⁻¹ * x) ∘ (fun x => g * x) = id := by ext x; simp
-    rw [this]; rw [id_eq]; rw [mfderiv_i
+    rw [this]; rw [id_eq]; rw [mfderiv_id]
+  rw [mfderiv_comp (I' := I) _ (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)
+    (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)] at A
+  have A' : mfderiv% ((fun x => g * x) ∘ (fun x => g⁻¹ * x)) (g * h) =
+      ContinuousLinearMap.id _ _ := by
+    have : (fun x => g * x) ∘ (fun x => g⁻¹ * x) = id := by ext x; simp
+    rw [this]; rw [id_eq]; rw [mfderiv_id]
+  rw [mfderiv_comp (I' := I) _ (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)
+    (contMDiff_mul_left.contMDiffAt.mdifferentiableAt M)]; rw [inv_mul_cancel_left g h] at A'
+  exact ContinuousLinearMap.inverse_eq A' A
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, contMDiffAt, contMDiff_mul_left, contMDiff_mul_left.contMDiffAt.mdifferentiableAt, id_eq, le_minSmoothness, lt_of_lt_of_le, mdifferentiableAt, mfderiv, mfderiv_comp, mfderiv_id, minSmoothness
 -/
@@ -273,7 +291,11 @@ lemma mpullback_mulInvariantVectorField
   simp only [mpullback, inverse_mfderiv_mul_left, mulInvariantVectorField]
   have D : (fun x => h * x) = (fun b => g⁻¹ * b) ∘ (fun x => g * h * x) := by
     ext x; simp only [comp_apply]; group
-  rw [D]; rw 
+  rw [D]; rw [mfderiv_comp (I' := I)]
+  · congr 2
+    simp
+  · exact contMDiff_mul_left.contMDiffAt.mdifferentiableAt M
+  · exact contMDiff_mul_left.contMDiffAt.mdifferentiableAt M
 
 中文:
 引理 mpullback_mulInvariantVectorField
@@ -284,7 +306,11 @@ lemma mpullback_mulInvariantVectorField
   simp only [mpullback, inverse_mfderiv_mul_left, mulInvariantVectorField]
   have D : (fun x => h * x) = (fun b => g⁻¹ * b) ∘ (fun x => g * h * x) := by
     ext x; simp only [comp_apply]; group
-  rw [D]; rw 
+  rw [D]; rw [mfderiv_comp (I' := I)]
+  · congr 2
+    simp
+  · exact contMDiff_mul_left.contMDiffAt.mdifferentiableAt M
+  · exact contMDiff_mul_left.contMDiffAt.mdifferentiableAt M
 
 Depends on / 依赖: comp_apply, contMDiffAt, contMDiff_mul_left, contMDiff_mul_left.contMDiffAt.mdifferentiableAt, inverse_mfderiv_mul_left, le_minSmoothness, lt_of_lt_of_le, mdifferentiableAt, mfderiv_comp, minSmoothness, mpullback, mulInvariantVectorField
 -/
@@ -346,7 +372,41 @@ theorem contMDiff_mulInvariantVectorField
   /- We will write the desired map as a composition of obviously smooth maps.
   The derivative of the product `P : (g, h) ↦ g * h` is given by
   `DP (g, h) ⬝ (u, v) = DL_g v + DR_h u`, where `L_g` and `R_h` are respectively left and right
-  multiplication by `g` and `h`. As `P` is smooth, so is `
+  multiplication by `g` and `h`. As `P` is smooth, so is `DP`.
+  Consider the map `F₁ : M → T (M × M)` mapping `g` to `(0, v) ∈ T_(g, e) (M × M)`. Then the
+  composition of `DP` with `F₁` maps `g` to `DL_g v ∈ T_g M`, thanks to the above formula. This
+  is the desired invariant vector field. Since both `DP` and `F₁` are smooth, their composition is
+  smooth as desired.
+  There is a small abuse of notation in the above argument, where we have identified `T (M × M)`
+  and `TM × TM`. In the formal proof, we need to introduce this identification, called `F₂` below,
+  which is also already known to be smooth. -/
+.ne' have M : minSmoothness 𝕜 3 != 0 := lt_of_lt_of_le (by simp) le_minSmoothness
+  have A : minSmoothness 𝕜 2 + 1 = minSmoothness 𝕜 3 := by
+    rw [← minSmoothness_add]
+    norm_num
+  let fg : G -> TangentBundle I G := fun g => TotalSpace.mk' E g 0
+  have sfg : CMDiff (minSmoothness 𝕜 2) fg := contMDiff_zeroSection _ _
+  let fv : G -> TangentBundle I G := fun _ => TotalSpace.mk' E 1 v
+  have sfv : CMDiff (minSmoothness 𝕜 2) fv := contMDiff_const
+  let F₁ : G -> (TangentBundle I G × TangentBundle I G) := fun g => (fg g, fv g)
+  have S₁ : CMDiff (minSmoothness 𝕜 2) F₁ := sfg.prodMk sfv
+  let F₂ : (TangentBundle I G × TangentBundle I G) -> TangentBundle (I.prod I) (G × G) :=
+    (equivTangentBundleProd I G I G).symm
+  have S₂ : CMDiff (minSmoothness 𝕜 2) F₂ := contMDiff_equivTangentBundleProd_symm
+  let F₃ : TangentBundle (I.prod I) (G × G) -> TangentBundle I G :=
+    tangentMap% (fun (p : G × G) => p.1 * p.2)
+  have S₃ : CMDiff (minSmoothness 𝕜 2) F₃ := by
+    apply ContMDiff.contMDiff_tangentMap _ (m := minSmoothness 𝕜 2) le_rfl
+    rw [A]
+    exact contMDiff_mul I (minSmoothness 𝕜 3)
+  let S := (S₃.comp S₂).comp S₁
+  convert! S with g
+  · simp [F₁, F₂, F₃, fg, fv]
+  · simp only [comp_apply, tangentMap, F₃, F₂, F₁, fg, fv]
+    rw [mfderiv_prod_eq_add_apply ((contMDiff_mul I (minSmoothness 𝕜 3)).mdifferentiableAt M)]
+    simp +instances [mulInvariantVectorField]
+
+@[to_additive]
 
 中文:
 定理 contMDiff_mulInvariantVectorField
@@ -355,7 +415,41 @@ theorem contMDiff_mulInvariantVectorField
   /- We will write the desired map as a composition of obviously smooth maps.
   The derivative of the product `P : (g, h) ↦ g * h` is given by
   `DP (g, h) ⬝ (u, v) = DL_g v + DR_h u`, where `L_g` and `R_h` are respectively left and right
-  multiplication by `g` and `h`. As `P` is smooth, so is `
+  multiplication by `g` and `h`. As `P` is smooth, so is `DP`.
+  Consider the map `F₁ : M → T (M × M)` mapping `g` to `(0, v) ∈ T_(g, e) (M × M)`. Then the
+  composition of `DP` with `F₁` maps `g` to `DL_g v ∈ T_g M`, thanks to the above formula. This
+  is the desired invariant vector field. Since both `DP` and `F₁` are smooth, their composition is
+  smooth as desired.
+  There is a small abuse of notation in the above argument, where we have identified `T (M × M)`
+  and `TM × TM`. In the formal proof, we need to introduce this identification, called `F₂` below,
+  which is also already known to be smooth. -/
+.ne' have M : minSmoothness 𝕜 3 != 0 := lt_of_lt_of_le (by simp) le_minSmoothness
+  have A : minSmoothness 𝕜 2 + 1 = minSmoothness 𝕜 3 := by
+    rw [← minSmoothness_add]
+    norm_num
+  let fg : G -> TangentBundle I G := fun g => TotalSpace.mk' E g 0
+  have sfg : CMDiff (minSmoothness 𝕜 2) fg := contMDiff_zeroSection _ _
+  let fv : G -> TangentBundle I G := fun _ => TotalSpace.mk' E 1 v
+  have sfv : CMDiff (minSmoothness 𝕜 2) fv := contMDiff_const
+  let F₁ : G -> (TangentBundle I G × TangentBundle I G) := fun g => (fg g, fv g)
+  have S₁ : CMDiff (minSmoothness 𝕜 2) F₁ := sfg.prodMk sfv
+  let F₂ : (TangentBundle I G × TangentBundle I G) -> TangentBundle (I.prod I) (G × G) :=
+    (equivTangentBundleProd I G I G).symm
+  have S₂ : CMDiff (minSmoothness 𝕜 2) F₂ := contMDiff_equivTangentBundleProd_symm
+  let F₃ : TangentBundle (I.prod I) (G × G) -> TangentBundle I G :=
+    tangentMap% (fun (p : G × G) => p.1 * p.2)
+  have S₃ : CMDiff (minSmoothness 𝕜 2) F₃ := by
+    apply ContMDiff.contMDiff_tangentMap _ (m := minSmoothness 𝕜 2) le_rfl
+    rw [A]
+    exact contMDiff_mul I (minSmoothness 𝕜 3)
+  let S := (S₃.comp S₂).comp S₁
+  convert! S with g
+  · simp [F₁, F₂, F₃, fg, fv]
+  · simp only [comp_apply, tangentMap, F₃, F₂, F₁, fg, fv]
+    rw [mfderiv_prod_eq_add_apply ((contMDiff_mul I (minSmoothness 𝕜 3)).mdifferentiableAt M)]
+    simp +instances [mulInvariantVectorField]
+
+@[to_additive]
 -/
 theorem contMDiff_mulInvariantVectorField (v : GroupLieAlgebra I G) :
     CMDiff (minSmoothness 𝕜 2)
@@ -492,7 +586,8 @@ lemma mulInvariantVector_mlieBracket
   rw [mulInvariantVectorField_eq_mpullback]; rw [mpullback_mlieBracket (n := minSmoothness 𝕜 3)]; rw [mpullback_mulInvariantVectorField]; rw [mpullback_mulInvariantVectorField]
   · exact mdifferentiableAt_mulInvariantVectorField _
   · exact mdifferentiableAt_mulInvariantVectorField _
-  · 
+  · exact contMDiffAt_mul_left
+  · exact minSmoothness_monotone (by norm_cast)
 
 中文:
 引理 mulInvariantVector_mlieBracket
@@ -502,7 +597,8 @@ lemma mulInvariantVector_mlieBracket
   rw [mulInvariantVectorField_eq_mpullback]; rw [mpullback_mlieBracket (n := minSmoothness 𝕜 3)]; rw [mpullback_mulInvariantVectorField]; rw [mpullback_mulInvariantVectorField]
   · exact mdifferentiableAt_mulInvariantVectorField _
   · exact mdifferentiableAt_mulInvariantVectorField _
-  · 
+  · exact contMDiffAt_mul_left
+  · exact minSmoothness_monotone (by norm_cast)
 
 Depends on / 依赖: contMDiffAt_mul_left, mdifferentiableAt_mulInvariantVectorField, minSmoothness, minSmoothness_monotone, mpullback_mlieBracket, mpullback_mulInvariantVectorField, mulInvariantVectorField_eq_mpullback
 -/
@@ -533,7 +629,15 @@ instance :
     · exact mdifferentiableAt_mulInvariantVectorField _
     · exact mdifferentiableAt_mulInvariantVectorField _
   lie_add u v w := by
-    simp only [GroupLieAlgebra.bracket_def, mulInvariantVect
+    simp only [GroupLieAlgebra.bracket_def, mulInvariantVectorField_add]
+    rw [mlieBracket_add_right]
+    · exact mdifferentiableAt_mulInvariantVectorField _
+    · exact mdifferentiableAt_mulInvariantVectorField _
+  lie_self v := by simp [GroupLieAlgebra.bracket_def]
+  leibniz_lie u v w := by
+    simp only [GroupLieAlgebra.bracket_def, mulInvariantVector_mlieBracket]
+    apply leibniz_identity_mlieBracket_apply <;>
+      exact contMDiff_mulInvariantVectorField _ _
 
 中文:
 实例 :
@@ -544,7 +648,15 @@ instance :
     · exact mdifferentiableAt_mulInvariantVectorField _
     · exact mdifferentiableAt_mulInvariantVectorField _
   lie_add u v w := by
-    simp only [GroupLieAlgebra.bracket_def, mulInvariantVect
+    simp only [GroupLieAlgebra.bracket_def, mulInvariantVectorField_add]
+    rw [mlieBracket_add_right]
+    · exact mdifferentiableAt_mulInvariantVectorField _
+    · exact mdifferentiableAt_mulInvariantVectorField _
+  lie_self v := by simp [GroupLieAlgebra.bracket_def]
+  leibniz_lie u v w := by
+    simp only [GroupLieAlgebra.bracket_def, mulInvariantVector_mlieBracket]
+    apply leibniz_identity_mlieBracket_apply <;>
+      exact contMDiff_mulInvariantVectorField _ _
 
 Depends on / 依赖: GroupLieAlgebra, GroupLieAlgebra.bracket_def, bracket_def, leibniz_lie, lie_add, lie_self, mdifferentiableAt_mulInvariantVectorField, mlieBracket_add_left, mlieBracket_add_right, mulInvariantVectorField_add
 -/

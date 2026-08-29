@@ -97,7 +97,10 @@ theorem exists_coeff_ne_zero_mem_comap_of_non_zero_divisor_root_mem
     simp [coeff_eq_zero, a_ne_zero]
   · intro p p_nonzero ih _ hp
     rw [eval₂_mul]; rw [eval₂_X] at hp
-    obtain ⟨i, hi, mem⟩ :=
+    obtain ⟨i, hi, mem⟩ := ih p_nonzero (r_non_zero_divisor hp)
+    refine ⟨i + 1, ?_, ?_⟩
+    · simp [hi]
+    · simpa [hi] using mem
 
 中文:
 定理 存在_coeff_ne_zero_mem_comap_of_non_zero_divisor_root_mem
@@ -111,7 +114,10 @@ theorem exists_coeff_ne_zero_mem_comap_of_non_zero_divisor_root_mem
     simp [coeff_eq_zero, a_ne_zero]
   · intro p p_nonzero ih _ hp
     rw [eval₂_mul]; rw [eval₂_X] at hp
-    obtain ⟨i, hi, mem⟩ :=
+    obtain ⟨i, hi, mem⟩ := ih p_nonzero (r_non_zero_divisor hp)
+    refine ⟨i + 1, ?_, ?_⟩
+    · simp [hi]
+    · simpa [hi] using mem
 
 Depends on / 依赖: a_ne_zero, coeff_eq_zero, coeff_zero_mem_comap_of_root_mem, p.recOnHorner, p_nonzero, r_non_zero_divisor, recOnHorner
 -/
@@ -141,7 +147,10 @@ theorem injective_quotient_le_comap_map
   refine quotientMap_injective' (le_of_eq ?_)
   rw [comap_map_of_surjective (mapRingHom (Ideal.Quotient.mk (P.comap (C : R ->+* R[X]))))
       (map_surjective (Ideal.Quotient.mk (P.comap (C : R ->+* R[X]))) Ideal.Quotient.mk_surjective)]
-  refine le_antisymm (sup_le le_rfl ?_) (le_sup_of_le_left 
+  refine le_antisymm (sup_le le_rfl ?_) (le_sup_of_le_left le_rfl)
+  refine fun p hp =>
+    polynomial_mem_ideal_of_coeff_mem_ideal P p fun n => Ideal.Quotient.eq_zero_iff_mem.mp ?_
+  simpa only [coeff_map, coe_mapRingHom] using! ext_iff.mp (Ideal.mem_bot.mp (mem_comap.mp hp)) n
 
 中文:
 定理 injective_quotient_le_comap_map
@@ -150,7 +159,10 @@ theorem injective_quotient_le_comap_map
   refine quotientMap_injective' (le_of_eq ?_)
   rw [comap_map_of_surjective (mapRingHom (Ideal.Quotient.mk (P.comap (C : R ->+* R[X]))))
       (map_surjective (Ideal.Quotient.mk (P.comap (C : R ->+* R[X]))) Ideal.Quotient.mk_surjective)]
-  refine le_antisymm (sup_le le_rfl ?_) (le_sup_of_le_left 
+  refine le_antisymm (sup_le le_rfl ?_) (le_sup_of_le_left le_rfl)
+  refine fun p hp =>
+    polynomial_mem_ideal_of_coeff_mem_ideal P p fun n => Ideal.Quotient.eq_zero_iff_mem.mp ?_
+  simpa only [coeff_map, coe_mapRingHom] using! ext_iff.mp (Ideal.mem_bot.mp (mem_comap.mp hp)) n
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem.mp, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.mem_bot.mp, P.comap, Quotient, coe_mapRingHom, coeff_map, comap_map_of_surjective, eq_zero_iff_mem, ext_iff, ext_iff.mp, le_antisymm, le_of_eq, le_rfl, le_sup_of_le_left, mapRingHom, map_surjective, mem_bot, mem_comap
 -/
@@ -207,7 +219,9 @@ theorem exists_nonzero_mem_of_ne_bot
     (injective_iff_map_eq_zero (Polynomial.mapRingHom (Ideal.Quotient.mk
       (P.comap (C : R ->+* R[X]))))).mp
       ?_ _ pp0
-  
+  refine map_injective _ ((RingHom.injective_iff_ker_eq_bot (Ideal.Quotient.mk (P.comap C))).mpr ?_)
+  rw [mk_ker]
+  exact (Submodule.eq_bot_iff _).mpr fun x hx => hP x (mem_comap.mp hx)
 
 中文:
 定理 存在_nonzero_mem_of_ne_bot
@@ -219,7 +233,9 @@ theorem exists_nonzero_mem_of_ne_bot
     (injective_iff_map_eq_zero (Polynomial.mapRingHom (Ideal.Quotient.mk
       (P.comap (C : R ->+* R[X]))))).mp
       ?_ _ pp0
-  
+  refine map_injective _ ((RingHom.injective_iff_ker_eq_bot (Ideal.Quotient.mk (P.comap C))).mpr ?_)
+  rw [mk_ker]
+  exact (Submodule.eq_bot_iff _).mpr fun x hx => hP x (mem_comap.mp hx)
 
 Depends on / 依赖: Ideal.Quotient.mk, P.comap, Polynomial, Polynomial.mapRingHom, Quotient, RingHom, RingHom.injective_iff_ker_eq_bot, Submodule, Submodule.coe_eq_zero.mp, Submodule.coe_mem, Submodule.eq_bot_iff, Submodule.nonzero_mem_of_bot_lt, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, coe_eq_zero, coe_mem, eq_bot_iff, injective_iff_ker_eq_bot, injective_iff_map_eq_zero, mapRingHom
 -/
@@ -276,7 +292,19 @@ theorem exists_coeff_mem_comap_sdiff_comap_of_root_mem_sdiff
   have rbar_ne_zero : Ideal.Quotient.mk I r != 0 := mt (Quotient.mk_eq_zero I).mp hrI
   have rbar_mem_J : Ideal.Quotient.mk I r in J.map (Ideal.Quotient.mk I) := mem_map_of_mem _ hrJ
   have quotient_f : forall x in I.comap f, (Ideal.Quotient.mk I).comp f x = 0 := by
-    
+    simp [Quotient.eq_zero_iff_mem]
+  have rbar_root :
+    (p.map (Ideal.Quotient.mk (I.comap f))).eval₂ (Quotient.lift (I.comap f) _ quotient_f)
+        (Ideal.Quotient.mk I r) =
+      0 := by
+    convert! Quotient.eq_zero_iff_mem.mpr hpI
+    exact _root_.trans (eval₂_map _ _ _) (hom_eval₂ p f (Ideal.Quotient.mk I) r).symm
+  obtain ⟨i, ne_zero, mem⟩ :=
+    exists_coeff_ne_zero_mem_comap_of_root_mem rbar_ne_zero rbar_mem_J p_ne_zero rbar_root
+  rw [coeff_map] at ne_zero mem
+  refine ⟨i, (mem_quotient_iff_mem hIJ).mp ?_, mt ?_ ne_zero⟩
+  · simpa using mem
+  simp [Quotient.eq_zero_iff_mem]
 
 中文:
 定理 存在_coeff_mem_comap_sdiff_comap_of_root_mem_sdiff
@@ -286,7 +314,19 @@ theorem exists_coeff_mem_comap_sdiff_comap_of_root_mem_sdiff
   have rbar_ne_zero : Ideal.Quotient.mk I r != 0 := mt (Quotient.mk_eq_zero I).mp hrI
   have rbar_mem_J : Ideal.Quotient.mk I r in J.map (Ideal.Quotient.mk I) := mem_map_of_mem _ hrJ
   have quotient_f : forall x in I.comap f, (Ideal.Quotient.mk I).comp f x = 0 := by
-    
+    simp [Quotient.eq_zero_iff_mem]
+  have rbar_root :
+    (p.map (Ideal.Quotient.mk (I.comap f))).eval₂ (Quotient.lift (I.comap f) _ quotient_f)
+        (Ideal.Quotient.mk I r) =
+      0 := by
+    convert! Quotient.eq_zero_iff_mem.mpr hpI
+    exact _root_.trans (eval₂_map _ _ _) (hom_eval₂ p f (Ideal.Quotient.mk I) r).symm
+  obtain ⟨i, ne_zero, mem⟩ :=
+    exists_coeff_ne_zero_mem_comap_of_root_mem rbar_ne_zero rbar_mem_J p_ne_zero rbar_root
+  rw [coeff_map] at ne_zero mem
+  refine ⟨i, (mem_quotient_iff_mem hIJ).mp ?_, mt ?_ ne_zero⟩
+  · simpa using mem
+  simp [Quotient.eq_zero_iff_mem]
 
 Depends on / 依赖: I.comap, Ideal.Quotient.mk, J.map, Quotient, Quotient.eq_zero_iff_mem, Quotient.eq_zero_iff_mem.mpr, Quotient.lift, Quotient.mk_eq_zero, convert, eq_zero_iff_mem, mem_map_of_mem, mk_eq_zero, p.map, quotient_f, rbar_mem_J, rbar_ne_zero, rbar_root
 -/
@@ -775,7 +815,18 @@ theorem exists_ideal_over_prime_of_isIntegral_of_isDomain
     exact absurd (hP x0) hx
   let Rₚ := Localization P.primeCompl
   let Sₚ := Localization (Algebra.algebraMapSubmonoid S P.primeCompl)
-  let : IsDomain (Localization (Algebra.algebraMapSubmonoid S P.
+  let : IsDomain (Localization (Algebra.algebraMapSubmonoid S P.primeCompl)) :=
+    IsLocalization.isDomain_localization (le_nonZeroDivisors_of_noZeroDivisors hP0)
+  obtain ⟨Qₚ : Ideal Sₚ, Qₚ_maximal⟩ := exists_maximal Sₚ
+  have : Algebra.IsIntegral Rₚ Sₚ := ⟨isIntegral_localization⟩
+  have Qₚ_max : IsMaximal (comap _ Qₚ) :=
+    isMaximal_comap_of_isIntegral_of_isMaximal (R := Rₚ) (S := Sₚ) Qₚ
+  refine ⟨comap (algebraMap S Sₚ) Qₚ, ⟨comap_isPrime _ Qₚ, ?_⟩⟩
+  convert! Localization.AtPrime.under_maximalIdeal (I := P)
+  rw [comap_comap]; rw [← IsLocalRing.eq_maximalIdeal Qₚ_max]; rw [← IsLocalization.map_comp (P := S) (Q := Sₚ) (g := algebraMap R S)
+    (M := P.primeCompl) (T := Algebra.algebraMapSubmonoid S P.primeCompl) (S := Rₚ)
+    (fun p hp => Algebra.mem_algebraMapSubmonoid_of_mem ⟨p]; rw [hp⟩)]
+  rfl
 
 中文:
 定理 存在_ideal_over_prime_of_is整数egral_of_isDomain
@@ -786,7 +837,18 @@ theorem exists_ideal_over_prime_of_isIntegral_of_isDomain
     exact absurd (hP x0) hx
   let Rₚ := Localization P.primeCompl
   let Sₚ := Localization (Algebra.algebraMapSubmonoid S P.primeCompl)
-  let : IsDomain (Localization (Algebra.algebraMapSubmonoid S P.
+  let : IsDomain (Localization (Algebra.algebraMapSubmonoid S P.primeCompl)) :=
+    IsLocalization.isDomain_localization (le_nonZeroDivisors_of_noZeroDivisors hP0)
+  obtain ⟨Qₚ : Ideal Sₚ, Qₚ_maximal⟩ := exists_maximal Sₚ
+  have : Algebra.IsIntegral Rₚ Sₚ := ⟨isIntegral_localization⟩
+  have Qₚ_max : IsMaximal (comap _ Qₚ) :=
+    isMaximal_comap_of_isIntegral_of_isMaximal (R := Rₚ) (S := Sₚ) Qₚ
+  refine ⟨comap (algebraMap S Sₚ) Qₚ, ⟨comap_isPrime _ Qₚ, ?_⟩⟩
+  convert! Localization.AtPrime.under_maximalIdeal (I := P)
+  rw [comap_comap]; rw [← IsLocalRing.eq_maximalIdeal Qₚ_max]; rw [← IsLocalization.map_comp (P := S) (Q := Sₚ) (g := algebraMap R S)
+    (M := P.primeCompl) (T := Algebra.algebraMapSubmonoid S P.primeCompl) (S := Rₚ)
+    (fun p hp => Algebra.mem_algebraMapSubmonoid_of_mem ⟨p]; rw [hp⟩)]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, Algebra.algebraMapSubmonoid, IsDomain, IsIntegral, IsLocalization, IsLocalization.isDomain_localization, Localization, P.primeCompl, absurd, algebraMapSubmonoid, exists_maximal, isDomain_localization, isIntegral_localization, le_nonZeroDivisors_of_noZeroDivisors, primeCompl
 -/
@@ -823,7 +885,17 @@ theorem exists_ideal_over_prime_of_isIntegral_of_isPrime
     @exists_ideal_over_prime_of_isIntegral_of_isDomain (R ⧸ I.comap (algebraMap R S)) _ (S ⧸ I) _
       Ideal.quotientAlgebra _ _
       (map (Ideal.Quotient.mk (I.comap (algebraMap R S))) P)
-      (map_isPrime_of_surjective Quotient.mk_surjective 
+      (map_isPrime_of_surjective Quotient.mk_surjective (by simp [hIP]))
+      (le_trans (le_of_eq ((RingHom.injective_iff_ker_eq_bot _).1 algebraMap_quotient_injective))
+        bot_le)
+  refine ⟨Q'.comap _, le_trans (le_of_eq mk_ker.symm) (ker_le_comap _), ⟨comap_isPrime _ Q', ?_⟩⟩
+  rw [comap_comap]
+  refine _root_.trans ?_ (_root_.trans (congr_arg (comap (Ideal.Quotient.mk
+    (comap (algebraMap R S) I))) hQ') ?_)
+  · rw [comap_comap]
+    exact congr_arg (comap · Q') (RingHom.ext fun r => rfl)
+  · refine _root_.trans (comap_map_of_surjective _ Quotient.mk_surjective _) (sup_eq_left.2 ?_)
+    simpa [← RingHom.ker_eq_comap_bot] using hIP
 
 中文:
 定理 存在_ideal_over_prime_of_is整数egral_of_isPrime
@@ -832,7 +904,17 @@ theorem exists_ideal_over_prime_of_isIntegral_of_isPrime
     @exists_ideal_over_prime_of_isIntegral_of_isDomain (R ⧸ I.comap (algebraMap R S)) _ (S ⧸ I) _
       Ideal.quotientAlgebra _ _
       (map (Ideal.Quotient.mk (I.comap (algebraMap R S))) P)
-      (map_isPrime_of_surjective Quotient.mk_surjective 
+      (map_isPrime_of_surjective Quotient.mk_surjective (by simp [hIP]))
+      (le_trans (le_of_eq ((RingHom.injective_iff_ker_eq_bot _).1 algebraMap_quotient_injective))
+        bot_le)
+  refine ⟨Q'.comap _, le_trans (le_of_eq mk_ker.symm) (ker_le_comap _), ⟨comap_isPrime _ Q', ?_⟩⟩
+  rw [comap_comap]
+  refine _root_.trans ?_ (_root_.trans (congr_arg (comap (Ideal.Quotient.mk
+    (comap (algebraMap R S) I))) hQ') ?_)
+  · rw [comap_comap]
+    exact congr_arg (comap · Q') (RingHom.ext fun r => rfl)
+  · refine _root_.trans (comap_map_of_surjective _ Quotient.mk_surjective _) (sup_eq_left.2 ?_)
+    simpa [← RingHom.ker_eq_comap_bot] using hIP
 
 Depends on / 依赖: I.comap, Ideal.Quotient.mk, Ideal.quotientAlgebra, Quotient, Quotient.mk_surjective, RingHom, RingHom.injective_iff_ker_eq_bot, _prime, algebraMap, algebraMap_quotient_injective, bot_le, comap_c, comap_isPrime, exists_ideal_over_prime_of_isIntegral_of_isDomain, injective_iff_ker_eq_bot, ker_le_comap, le_of_eq, le_trans, map_isPrime_of_surjective, mk_ker
 -/
@@ -979,7 +1061,8 @@ lemma map_eq_top_iff_of_ker_le
   let _ := f.toAlgebra
   have : Algebra.IsIntegral _ _ := ⟨hf₂⟩
   obtain ⟨m', _, rfl⟩ := exists_ideal_over_maximal_of_isIntegral m (hf₁.trans hm)
-  rw [← map_le_iff_
+  rw [← map_le_iff_le_comap] at hm
+  exact (hm.trans_lt (lt_top_iff_ne_top.mpr (IsMaximal.ne_top ‹_›))).ne
 
 中文:
 引理 map_eq_top_iff_of_ker_le
@@ -993,7 +1076,8 @@ lemma map_eq_top_iff_of_ker_le
   let _ := f.toAlgebra
   have : Algebra.IsIntegral _ _ := ⟨hf₂⟩
   obtain ⟨m', _, rfl⟩ := exists_ideal_over_maximal_of_isIntegral m (hf₁.trans hm)
-  rw [← map_le_iff_
+  rw [← map_le_iff_le_comap] at hm
+  exact (hm.trans_lt (lt_top_iff_ne_top.mpr (IsMaximal.ne_top ‹_›))).ne
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, Ideal.exists_le_maximal, Ideal.map_top, IsIntegral, IsMaximal, IsMaximal.ne_top, contrapose, exists_ideal_over_maximal_of_isIntegral, exists_le_maximal, f.toAlgebra, hm.trans_lt, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, map_le_iff_le_comap, map_top, ne_top, toAlgebra, trans_lt
 -/
@@ -1042,7 +1126,14 @@ lemma exists_notMem_dvd_algebraMap_of_primesOver_eq_singleton
   obtain ⟨Q, hQ, hxQ, hQp⟩ := Ideal.exists_le_prime_disjoint (.span {x})
     (Algebra.algebraMapSubmonoid _ p.primeCompl)
     (by simpa [Set.disjoint_iff_forall_ne, Ideal.mem_span_singleton',
-      Algebra.algebraMapSubmonoid, @forall_comm S
+      Algebra.algebraMapSubmonoid, @forall_comm S])
+  have hQp' : Q.under _ <= p := by
+    intro x hxQ
+    by_contra hxp
+    exact Set.subset_compl_iff_disjoint_right.mpr hQp hxQ ⟨x, hxp, rfl⟩
+  obtain ⟨Q', hQ'Q, hQ', hQ'p⟩ := Ideal.exists_ideal_over_prime_of_isIntegral_of_isPrime _ _ hQp'
+  obtain rfl : Q' = q := hq.le ⟨hQ', ⟨hQ'p.symm⟩⟩
+  exact hx (hQ'Q (hxQ (Ideal.mem_span_singleton_self _)))
 
 中文:
 引理 存在_notMem_dvd_algebraMap_of_primesOver_eq_singleton
@@ -1052,7 +1143,14 @@ lemma exists_notMem_dvd_algebraMap_of_primesOver_eq_singleton
   obtain ⟨Q, hQ, hxQ, hQp⟩ := Ideal.exists_le_prime_disjoint (.span {x})
     (Algebra.algebraMapSubmonoid _ p.primeCompl)
     (by simpa [Set.disjoint_iff_forall_ne, Ideal.mem_span_singleton',
-      Algebra.algebraMapSubmonoid, @forall_comm S
+      Algebra.algebraMapSubmonoid, @forall_comm S])
+  have hQp' : Q.under _ <= p := by
+    intro x hxQ
+    by_contra hxp
+    exact Set.subset_compl_iff_disjoint_right.mpr hQp hxQ ⟨x, hxp, rfl⟩
+  obtain ⟨Q', hQ'Q, hQ', hQ'p⟩ := Ideal.exists_ideal_over_prime_of_isIntegral_of_isPrime _ _ hQp'
+  obtain rfl : Q' = q := hq.le ⟨hQ', ⟨hQ'p.symm⟩⟩
+  exact hx (hQ'Q (hxQ (Ideal.mem_span_singleton_self _)))
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, Ideal.exists_ideal_over_prime_of_isIntegral_of_isPrime, Ideal.exists_le_prime_disjoint, Ideal.mem_span_singleton, Q.under, Set.disjoint_iff_forall_ne, Set.subset_compl_iff_disjoint_right.mpr, algebraMapSubmonoid, disjoint_iff_forall_ne, dvd_def, eq_comm, exists_ideal_over_prime_of_isIntegral_of_isPrime, exists_le_prime_disjoint, forall_comm, mem_span_singleton, mul_comm, p.primeCompl, primeCompl, subset_compl_iff_disjoint_right
 -/

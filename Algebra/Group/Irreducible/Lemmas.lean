@@ -71,7 +71,9 @@ lemma irreducible_units_mul
     rw [mul_assoc]; rw [← HAB]
   · rw [← u⁻¹.isUnit_units_mul]
     apply h
-    rw [mul_assoc]; rw [← HAB]; rw [Units.in
+    rw [mul_assoc]; rw [← HAB]; rw [Units.inv_mul_cancel_left]
+
+@[to_additive]
 
 中文:
 引理 irreducible_units_mul
@@ -85,7 +87,9 @@ lemma irreducible_units_mul
     rw [mul_assoc]; rw [← HAB]
   · rw [← u⁻¹.isUnit_units_mul]
     apply h
-    rw [mul_assoc]; rw [← HAB]; rw [Units.in
+    rw [mul_assoc]; rw [← HAB]; rw [Units.inv_mul_cancel_left]
+
+@[to_additive]
 
 Depends on / 依赖: Units.inv_mul_cancel_left, Units.isUnit_units_mul, and_congr_right_iff, inv_mul_cancel_left, irreducible_iff, isUnit_units_mul, mul_assoc, u.isUnit_units_mul
 -/
@@ -143,7 +147,9 @@ lemma irreducible_mul_units
     rw [← mul_assoc]; rw [← HAB]
   · rw [← u⁻¹.isUnit_mul_units B]
     apply h
-    rw [← mul_assoc]; rw [← HAB]; rw [
+    rw [← mul_assoc]; rw [← HAB]; rw [Units.mul_inv_cancel_right]
+
+@[to_additive]
 
 中文:
 引理 irreducible_mul_units
@@ -157,7 +163,9 @@ lemma irreducible_mul_units
     rw [← mul_assoc]; rw [← HAB]
   · rw [← u⁻¹.isUnit_mul_units B]
     apply h
-    rw [← mul_assoc]; rw [← HAB]; rw [
+    rw [← mul_assoc]; rw [← HAB]; rw [Units.mul_inv_cancel_right]
+
+@[to_additive]
 
 Depends on / 依赖: Units.isUnit_mul_units, Units.mul_inv_cancel_right, and_congr_right_iff, irreducible_iff, isUnit_mul_units, mul_assoc, mul_inv_cancel_right, u.isUnit_mul_units
 -/
@@ -212,7 +220,7 @@ lemma irreducible_mul_iff
     · rwa [irreducible_isUnit_mul h'] at h
   · rintro (⟨ha, hb⟩ | ⟨hb, ha⟩)
     · rwa [irreducible_mul_isUnit hb]
-    · rwa [irreducible_isUn
+    · rwa [irreducible_isUnit_mul ha]
 
 中文:
 引理 irreducible_mul_iff
@@ -223,7 +231,7 @@ lemma irreducible_mul_iff
     · rwa [irreducible_isUnit_mul h'] at h
   · rintro (⟨ha, hb⟩ | ⟨hb, ha⟩)
     · rwa [irreducible_mul_isUnit hb]
-    · rwa [irreducible_isUn
+    · rwa [irreducible_isUnit_mul ha]
 
 Depends on / 依赖: Or.imp, h.isUnit_or_isUnit, irreducible_isUnit_mul, irreducible_mul_isUnit, isUnit_or_isUnit
 -/

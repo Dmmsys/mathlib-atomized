@@ -219,7 +219,15 @@ lemma functorPushforward_sieve₁'_of_preservesLimit
   refine le_antisymm ?_ ?_
   · rw [PreOneHypercover.sieve₁'_eq_sieve₁]
     apply PreOneHypercover.functorPushforward_sieve₁_map_le
-  · rw [PreOneHypercover.sieve₁_eq_pullback_sieve₁'
+  · rw [PreOneHypercover.sieve₁_eq_pullback_sieve₁' _ _ _
+      (by simp [← Functor.map_comp, pullback.condition])]
+    rintro W f ⟨Z, u, v, ⟨k⟩, h⟩
+    refine ⟨E.Y k, pullback.lift (E.p₁ k) (E.p₂ k) (E.w _), u, ?_, ?_⟩
+    · use E.Y k, 𝟙 _, pullback.lift (E.p₁ k) (E.p₂ k) (E.w _), ⟨k⟩
+      simp
+    · simp only [pullback.hom_ext_iff, Category.assoc, limit.lift_π, PullbackCone.mk_π_app] at h
+      apply IsPullback.hom_ext (IsPullback.map _ (.of_hasPullback _ _)) <;>
+        simp [← h.left, ← h.right, ← Functor.map_comp]
 
 中文:
 引理 functorPushforward_sieve₁'_of_preservesLimit
@@ -230,7 +238,15 @@ lemma functorPushforward_sieve₁'_of_preservesLimit
   refine le_antisymm ?_ ?_
   · rw [PreOneHypercover.sieve₁'_eq_sieve₁]
     apply PreOneHypercover.functorPushforward_sieve₁_map_le
-  · rw [PreOneHypercover.sieve₁_eq_pullback_sieve₁'
+  · rw [PreOneHypercover.sieve₁_eq_pullback_sieve₁' _ _ _
+      (by simp [← Functor.map_comp, pullback.condition])]
+    rintro W f ⟨Z, u, v, ⟨k⟩, h⟩
+    refine ⟨E.Y k, pullback.lift (E.p₁ k) (E.p₂ k) (E.w _), u, ?_, ?_⟩
+    · use E.Y k, 𝟙 _, pullback.lift (E.p₁ k) (E.p₂ k) (E.w _), ⟨k⟩
+      simp
+    · simp only [pullback.hom_ext_iff, Category.assoc, limit.lift_π, PullbackCone.mk_π_app] at h
+      apply IsPullback.hom_ext (IsPullback.map _ (.of_hasPullback _ _)) <;>
+        simp [← h.left, ← h.right, ← Functor.map_comp]
 
 Depends on / 依赖: E.map, Functor, Functor.map_comp, HasPullback, PreOneHypercover, PreOneHypercover.functorPushforward_sieve, PreOneHypercover.sieve, condition, hasPullback_of_preservesPullback, le_antisymm, map_comp, pullback, pullback.condition, pullback.lift
 -/
@@ -266,7 +282,15 @@ lemma functorPushforward_sieve₁_of_preservesPullbacks
     hasPullback_of_preservesPullback F (E.f i₁) (E.f i₂)
   rintro T f ⟨k, u, hf₁, hf₂⟩
   let l : W ⟶ pullback (E.f i₁) (E.f i₂) := pullback.lift p₁ p₂ h
-  ha
+  have hl₁ : l ≫ pullback.fst _ _ = p₁ := by simp [l]
+  have hl₂ : l ≫ pullback.snd _ _ = p₂ := by simp [l]
+  let r : E.Y k ⟶ pullback (E.f i₁) (E.f i₂) := pullback.lift (E.p₁ _) (E.p₂ _) (E.w _)
+  refine ⟨pullback l r, pullback.fst _ _, IsPullback.lift
+    (IsPullback.map _ (.of_hasPullback _ _)) f u ?_, ?_, ?_⟩
+  · apply (IsPullback.map _ (.of_hasPullback _ _)).hom_ext <;>
+      simp [l, r, ← Functor.map_comp, hf₁, hf₂]
+  · refine ⟨k, pullback.snd _ _, ?_, ?_⟩ <;> simp [← hl₁, ← hl₂, pullback.condition_assoc, r]
+  · simp
 
 中文:
 引理 functorPushforward_sieve₁_of_preservesPullbacks
@@ -277,7 +301,15 @@ lemma functorPushforward_sieve₁_of_preservesPullbacks
     hasPullback_of_preservesPullback F (E.f i₁) (E.f i₂)
   rintro T f ⟨k, u, hf₁, hf₂⟩
   let l : W ⟶ pullback (E.f i₁) (E.f i₂) := pullback.lift p₁ p₂ h
-  ha
+  have hl₁ : l ≫ pullback.fst _ _ = p₁ := by simp [l]
+  have hl₂ : l ≫ pullback.snd _ _ = p₂ := by simp [l]
+  let r : E.Y k ⟶ pullback (E.f i₁) (E.f i₂) := pullback.lift (E.p₁ _) (E.p₂ _) (E.w _)
+  refine ⟨pullback l r, pullback.fst _ _, IsPullback.lift
+    (IsPullback.map _ (.of_hasPullback _ _)) f u ?_, ?_, ?_⟩
+  · apply (IsPullback.map _ (.of_hasPullback _ _)).hom_ext <;>
+      simp [l, r, ← Functor.map_comp, hf₁, hf₂]
+  · refine ⟨k, pullback.snd _ _, ?_, ?_⟩ <;> simp [← hl₁, ← hl₂, pullback.condition_assoc, r]
+  · simp
 
 Depends on / 依赖: E.map, HasPullback, PreOneHypercover, PreOneHypercover.functorPushforward_sieve, hasPullback_of_preservesPullback, le_antisymm, pullback, pullback.fst, pullback.lift, pullback.snd
 -/
@@ -474,7 +506,29 @@ lemma isSheaf_of_isContinuous_aux
   let H : (Cᵒᵖ ⥤ Type max u₁ v₁ u₂ v₂) ⥤ Dᵒᵖ ⥤ Type max u₁ v₁ u₂ v₂ := F.op.lan
   let adj : H ⊣ (Functor.whiskeringLeft _ _ _).obj F.op := F.op.lanAdjunction _
   let H' : (Cᵒᵖ ⥤ Type max w u₁ v₁ u₂ v₂) ⥤ Dᵒᵖ ⥤ Type max w u₁ v₁ u₂ v₂ := F.op.lan
-  let adj' : H' ⊣ (Functor.whiskeringLeft _ _ _).obj
+  let adj' : H' ⊣ (Functor.whiskeringLeft _ _ _).obj F.op := F.op.lanAdjunction _
+  refine Presieve.IsSheaf.comp_of_W_map_of_adjunction _ adj' ?_ _ hG
+  intro X S hS
+  have hWS : J.W (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι :=
+    Sieve.W_shrinkFunctor_ι_of_mem.{max u₁ v₁ u₂ v₂} _ S hS
+  have : K.W _ := Functor.W_map_of_adjunction_of_isContinuous_aux (J := J) K F H adj
+    (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι hWS
+  let e : H ⋙ (Functor.whiskeringRight _ _ _).obj uliftFunctor.{w} ≅
+      (Functor.whiskeringRight _ _ _).obj uliftFunctor.{w} ⋙ H' :=
+    uliftFunctor.{w, max (max (max u₁ u₂) v₁) v₂}.lanCompIsoOfPreserves F.op
+  let iso : Arrow.mk (H'.map (Sieve.shrinkFunctor.{max w u₁ v₁ u₂ v₂} S).ι) ≅
+      .mk (Functor.whiskerRight
+        (H.map (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι) uliftFunctor.{w}) :=
+    Arrow.isoMk' _ _
+      (H'.mapIso (Sieve.shrinkFunctorUliftFunctorIso.{max u₁ v₁ u₂ v₂, w} S).symm ≪≫ (e.app _).symm)
+(H'.mapIso (shrinkYonedaUliftFunctorIso.{max u₁ v₁ u₂ v₂}.app _).symm ≪≫ (e.app _).symm) by
+        simp only [Functor.mapIso_symm, Functor.comp_obj, Functor.whiskeringRight_obj_obj,
+          Iso.trans_hom, Iso.symm_hom, Functor.mapIso_inv, Iso.app_inv, Category.assoc]
+        rw [← Functor.map_comp_assoc]; rw [← dsimp% e.inv.naturality]; rw [← Functor.map_comp_assoc]; rw [Sieve.shrinkFunctorUliftFunctorIso_inv_ι]
+  rw [K.W.arrow_mk_iso_iff iso]
+  apply GrothendieckTopology.W_of_preservesSheafification
+  exact F.W_map_of_adjunction_of_isContinuous_aux J K H adj
+    (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι hWS
 
 中文:
 引理 isSheaf_of_isContinuous_aux
@@ -483,7 +537,29 @@ lemma isSheaf_of_isContinuous_aux
   let H : (Cᵒᵖ ⥤ Type max u₁ v₁ u₂ v₂) ⥤ Dᵒᵖ ⥤ Type max u₁ v₁ u₂ v₂ := F.op.lan
   let adj : H ⊣ (Functor.whiskeringLeft _ _ _).obj F.op := F.op.lanAdjunction _
   let H' : (Cᵒᵖ ⥤ Type max w u₁ v₁ u₂ v₂) ⥤ Dᵒᵖ ⥤ Type max w u₁ v₁ u₂ v₂ := F.op.lan
-  let adj' : H' ⊣ (Functor.whiskeringLeft _ _ _).obj
+  let adj' : H' ⊣ (Functor.whiskeringLeft _ _ _).obj F.op := F.op.lanAdjunction _
+  refine Presieve.IsSheaf.comp_of_W_map_of_adjunction _ adj' ?_ _ hG
+  intro X S hS
+  have hWS : J.W (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι :=
+    Sieve.W_shrinkFunctor_ι_of_mem.{max u₁ v₁ u₂ v₂} _ S hS
+  have : K.W _ := Functor.W_map_of_adjunction_of_isContinuous_aux (J := J) K F H adj
+    (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι hWS
+  let e : H ⋙ (Functor.whiskeringRight _ _ _).obj uliftFunctor.{w} ≅
+      (Functor.whiskeringRight _ _ _).obj uliftFunctor.{w} ⋙ H' :=
+    uliftFunctor.{w, max (max (max u₁ u₂) v₁) v₂}.lanCompIsoOfPreserves F.op
+  let iso : Arrow.mk (H'.map (Sieve.shrinkFunctor.{max w u₁ v₁ u₂ v₂} S).ι) ≅
+      .mk (Functor.whiskerRight
+        (H.map (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι) uliftFunctor.{w}) :=
+    Arrow.isoMk' _ _
+      (H'.mapIso (Sieve.shrinkFunctorUliftFunctorIso.{max u₁ v₁ u₂ v₂, w} S).symm ≪≫ (e.app _).symm)
+(H'.mapIso (shrinkYonedaUliftFunctorIso.{max u₁ v₁ u₂ v₂}.app _).symm ≪≫ (e.app _).symm) by
+        simp only [Functor.mapIso_symm, Functor.comp_obj, Functor.whiskeringRight_obj_obj,
+          Iso.trans_hom, Iso.symm_hom, Functor.mapIso_inv, Iso.app_inv, Category.assoc]
+        rw [← Functor.map_comp_assoc]; rw [← dsimp% e.inv.naturality]; rw [← Functor.map_comp_assoc]; rw [Sieve.shrinkFunctorUliftFunctorIso_inv_ι]
+  rw [K.W.arrow_mk_iso_iff iso]
+  apply GrothendieckTopology.W_of_preservesSheafification
+  exact F.W_map_of_adjunction_of_isContinuous_aux J K H adj
+    (Sieve.shrinkFunctor.{max u₁ v₁ u₂ v₂} S).ι hWS
 -/
 private lemma isSheaf_of_isContinuous_aux (F : C ⥤ D) [Functor.IsContinuous F J K]
     (G : Dᵒᵖ ⥤ Type max w u₁ v₁ u₂ v₂) (hG : Presieve.IsSheaf K G) :
@@ -524,7 +600,8 @@ lemma op_comp_isSheaf_of_types
   proof: by
   rw [← Presieve.isSheaf_comp_uliftFunctor_iff.{t]; rw [max u₁ v₁ u₂ v₂}]; rw [← isSheaf_iff_isSheaf_of_type]; rw [Presheaf.isSheaf_of_iso_iff (Functor.associator _ _ _)]; rw [isSheaf_iff_isSheaf_of_type]
   apply isSheaf_of_isContinuous_aux.{t} J K
-  rw [Presieve.isSheaf_comp_uliftFunctor_iff]; r
+  rw [Presieve.isSheaf_comp_uliftFunctor_iff]; rw [← isSheaf_iff_isSheaf_of_type]
+  exact G.property
 
 中文:
 引理 op_comp_isSheaf_of_types
@@ -532,7 +609,8 @@ lemma op_comp_isSheaf_of_types
   证明: by
   rw [← Presieve.isSheaf_comp_uliftFunctor_iff.{t]; rw [max u₁ v₁ u₂ v₂}]; rw [← isSheaf_iff_isSheaf_of_type]; rw [Presheaf.isSheaf_of_iso_iff (Functor.associator _ _ _)]; rw [isSheaf_iff_isSheaf_of_type]
   apply isSheaf_of_isContinuous_aux.{t} J K
-  rw [Presieve.isSheaf_comp_uliftFunctor_iff]; r
+  rw [Presieve.isSheaf_comp_uliftFunctor_iff]; rw [← isSheaf_iff_isSheaf_of_type]
+  exact G.property
 
 Depends on / 依赖: Functor, Functor.associator, G.property, Presheaf, Presheaf.isSheaf_of_iso_iff, Presieve, Presieve.isSheaf_comp_uliftFunctor_iff, associator, isSheaf_comp_uliftFunctor_iff, isSheaf_iff_isSheaf_of_type, isSheaf_of_isContinuous_aux, isSheaf_of_iso_iff, property
 -/
@@ -779,7 +857,9 @@ lemma isContinuous_toGrothendieck_of_pullbacksPreservedBy
     rw [← Precoverage.toGrothendieck_toCoverage]; rw [Presieve.isSheaf_coverage] at H ⊢
     intro X R hR
     have : F.PreservesPairwisePullbacks R := J.preservesPairwisePullbacks_of_mem hR
-    have : R.HasPairwisePullbacks := J.hasPairwisePu
+    have : R.HasPairwisePullbacks := J.hasPairwisePullbacks_of_mem hR
+    rw [Presieve.IsSheafFor.comp_iff_of_preservesPairwisePullbacks]
+    exact H _ (h _ hR)
 
 中文:
 引理 isContinuous_toGrothendieck_of_pullbacksPreservedBy
@@ -789,7 +869,9 @@ lemma isContinuous_toGrothendieck_of_pullbacksPreservedBy
     rw [← Precoverage.toGrothendieck_toCoverage]; rw [Presieve.isSheaf_coverage] at H ⊢
     intro X R hR
     have : F.PreservesPairwisePullbacks R := J.preservesPairwisePullbacks_of_mem hR
-    have : R.HasPairwisePullbacks := J.hasPairwisePu
+    have : R.HasPairwisePullbacks := J.hasPairwisePullbacks_of_mem hR
+    rw [Presieve.IsSheafFor.comp_iff_of_preservesPairwisePullbacks]
+    exact H _ (h _ hR)
 
 Depends on / 依赖: F.PreservesPairwisePullbacks, HasPairwisePullbacks, IsSheafFor, J.hasPairwisePullbacks_of_mem, J.preservesPairwisePullbacks_of_mem, Precoverage, Precoverage.toGrothendieck_toCoverage, PreservesPairwisePullbacks, Presieve, Presieve.IsSheafFor.comp_iff_of_preservesPairwisePullbacks, Presieve.isSheaf_coverage, R.HasPairwisePullbacks, comp_iff_of_preservesPairwisePullbacks, hasPairwisePullbacks_of_mem, isSheaf_coverage, isSheaf_iff_isSheaf_of_type, preservesPairwisePullbacks_of_mem, toGrothendieck_toCoverage
 -/
@@ -1116,7 +1198,7 @@ definition Adjunction.sheafPushforwardContinuous
     exact (adj.op.whiskerLeft _).left_triangle_components P.obj
   right_triangle_components P := by
     ext : 1
-    exact (adj.op.whisk
+    exact (adj.op.whiskerLeft _).right_triangle_components P.obj
 
 中文:
 定义 伴随.sheafPushforwardContinuous
@@ -1128,7 +1210,7 @@ definition Adjunction.sheafPushforwardContinuous
     exact (adj.op.whiskerLeft _).left_triangle_components P.obj
   right_triangle_components P := by
     ext : 1
-    exact (adj.op.whisk
+    exact (adj.op.whiskerLeft _).right_triangle_components P.obj
 
 Depends on / 依赖: P.obj, adj.op.whiskerLeft, unit.app, whiskerLeft
 -/

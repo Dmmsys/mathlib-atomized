@@ -380,7 +380,7 @@ abbreviation Function.Surjective.groupWithZero
     inv_zero := by rw [← zero, ← inv, inv_zero],
     mul_inv_cancel := hf.forall.2 fun x hx => by
         rw [← inv]; rw [← mul]; rw [mul_inv_cancel₀ (mt (congr_arg f) fun h => hx (h.trans zero))]; rw [one]
-   
+    exists_pair_ne := ⟨0, 1, h01⟩ }
 
 中文:
 缩写 函数.满射.groupWithZero
@@ -389,7 +389,7 @@ abbreviation Function.Surjective.groupWithZero
     inv_zero := by rw [← zero, ← inv, inv_zero],
     mul_inv_cancel := hf.forall.2 fun x hx => by
         rw [← inv]; rw [← mul]; rw [mul_inv_cancel₀ (mt (congr_arg f) fun h => hx (h.trans zero))]; rw [one]
-   
+    exists_pair_ne := ⟨0, 1, h01⟩ }
 -/
 protected abbrev Function.Surjective.groupWithZero [Zero G₀'] [Mul G₀'] [One G₀'] [Inv G₀']
     [Div G₀'] [Pow G₀' Nat] [Pow G₀' Int] (h01 : (0 : G₀') != 1) (f : G₀ -> G₀') (hf : Surjective f)

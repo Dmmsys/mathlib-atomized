@@ -100,7 +100,8 @@ definition functorObj
       isMonHom_hom :=
         { one_hom := by dsimp; rw [← η[A].naturality, tensorUnit_map]; dsimp; rw [Category.id_comp]
           mul_hom := by dsimp; rw [← μ[A].naturality, tensorObj_map] } }
-  map_id X := by ext; dsimp; rw [CategoryTheory.Functor.m
+  map_id X := by ext; dsimp; rw [CategoryTheory.Functor.map_id]
+  map_comp f g := by ext; dsimp; rw [Functor.map_comp]
 
 中文:
 定义 functorObj
@@ -111,7 +112,8 @@ definition functorObj
       isMonHom_hom :=
         { one_hom := by dsimp; rw [← η[A].naturality, tensorUnit_map]; dsimp; rw [Category.id_comp]
           mul_hom := by dsimp; rw [← μ[A].naturality, tensorObj_map] } }
-  map_id X := by ext; dsimp; rw [CategoryTheory.Functor.m
+  map_id X := by ext; dsimp; rw [CategoryTheory.Functor.map_id]
+  map_comp f g := by ext; dsimp; rw [Functor.map_comp]
 
 Depends on / 依赖: functorObjObj
 -/
@@ -382,7 +384,8 @@ definition functorObj
       isComonHom_hom.hom_counit := by
         dsimp; rw [ε[A].naturality, tensorUnit_map]; dsimp; rw [Category.comp_id]
       isComonHom_hom.hom_comul := by dsimp; rw [Δ[A].naturality, tensorObj_map] }
-  map_id X := by ext; dsimp; rw [CategoryTheory.Fu
+  map_id X := by ext; dsimp; rw [CategoryTheory.Functor.map_id]
+  map_comp f g := by ext; dsimp; rw [Functor.map_comp]
 
 中文:
 定义 functorObj
@@ -393,7 +396,8 @@ definition functorObj
       isComonHom_hom.hom_counit := by
         dsimp; rw [ε[A].naturality, tensorUnit_map]; dsimp; rw [Category.comp_id]
       isComonHom_hom.hom_comul := by dsimp; rw [Δ[A].naturality, tensorObj_map] }
-  map_id X := by ext; dsimp; rw [CategoryTheory.Fu
+  map_id X := by ext; dsimp; rw [CategoryTheory.Functor.map_id]
+  map_comp f g := by ext; dsimp; rw [Functor.map_comp]
 
 Depends on / 依赖: functorObjObj
 -/
@@ -495,7 +499,7 @@ definition inverse
       { app := fun X => (α.app X).hom
         naturality := fun _ _ f => congr_arg Comon.Hom.hom (α.naturality f) }
       isComonHom_hom.hom_counit := by ext x; dsimp; rw [IsComonHom.hom_counit (α.app x).hom]
-      isComonHom_hom.hom_comul := by ext x; dsimp; rw [I
+      isComonHom_hom.hom_comul := by ext x; dsimp; rw [IsComonHom.hom_comul (α.app x).hom] }
 
 中文:
 定义 inverse
@@ -506,7 +510,7 @@ definition inverse
       { app := fun X => (α.app X).hom
         naturality := fun _ _ f => congr_arg Comon.Hom.hom (α.naturality f) }
       isComonHom_hom.hom_counit := by ext x; dsimp; rw [IsComonHom.hom_counit (α.app x).hom]
-      isComonHom_hom.hom_comul := by ext x; dsimp; rw [I
+      isComonHom_hom.hom_comul := by ext x; dsimp; rw [IsComonHom.hom_comul (α.app x).hom] }
 -/
 private def inverse : (C ⥤ Comon D) ⥤ Comon (C ⥤ D) where
   obj := inverseObj
@@ -638,7 +642,7 @@ definition functor
         CommMon.homMk (((monFunctorCategoryEquivalence C D).functor.obj A.toMon).map f) }
   map f :=
     { app X :=
-   
+        CommMon.homMk (((monFunctorCategoryEquivalence C D).functor.map f.hom).app X) }
 
 中文:
 定义 functor
@@ -650,7 +654,7 @@ definition functor
         CommMon.homMk (((monFunctorCategoryEquivalence C D).functor.obj A.toMon).map f) }
   map f :=
     { app X :=
-   
+        CommMon.homMk (((monFunctorCategoryEquivalence C D).functor.map f.hom).app X) }
 
 Depends on / 依赖: A.toMon, CommMon, CommMon.homMk, IsCommMonObj, IsCommMonObj.mul_comm, congr_app, f.hom, functor, functor.map, functor.obj, monFunctorCategoryEquivalence, mul_comm
 -/

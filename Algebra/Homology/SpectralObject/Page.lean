@@ -450,7 +450,17 @@ definition leftHomologyDataShortComplex
     Fork.IsLimit.hom_ext hi (by simpa using! hi.fac _ .zero)
   exact {
     K := X.cycles f₁ f₂ n₁
-    H := cokernel 
+    H := cokernel (X.δToCycles f₁ f₂ f₃ n₀ n₁)
+    i := X.iCycles f₁ f₂ n₁
+    π := cokernel.π _
+    wi := by simp
+    hi := hi
+    wπ := by rw [this]; simp
+    hπ := by
+      refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).2
+        (cokernelIsCokernel (X.δToCycles f₁ f₂ f₃ n₀ n₁))
+      · exact parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa) (by simp)
+      · exact Cofork.ext (Iso.refl _) }
 
 中文:
 定义 leftHomologyDataShortComplex
@@ -461,7 +471,17 @@ definition leftHomologyDataShortComplex
     Fork.IsLimit.hom_ext hi (by simpa using! hi.fac _ .zero)
   exact {
     K := X.cycles f₁ f₂ n₁
-    H := cokernel 
+    H := cokernel (X.δToCycles f₁ f₂ f₃ n₀ n₁)
+    i := X.iCycles f₁ f₂ n₁
+    π := cokernel.π _
+    wi := by simp
+    hi := hi
+    wπ := by rw [this]; simp
+    hπ := by
+      refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).2
+        (cokernelIsCokernel (X.δToCycles f₁ f₂ f₃ n₀ n₁))
+      · exact parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa) (by simp)
+      · exact Cofork.ext (Iso.refl _) }
 
 Depends on / 依赖: Fork.IsLimit.hom_ext, IsLimit, KernelFork, KernelFork.of, LeftHomologyData, X.cycles, X.iCycles, X.kernelSequenceCycles_exact, X.shortComplex, cokernel, cycles, fIsKernel, hi.fac, hi.lift, hom_ext, iCycles, kernelSequenceCycles_exact, shortComplex
 -/
@@ -741,7 +761,18 @@ definition rightHomologyDataShortComplex
       X.δFromOpcycles f₁ f₂ f₃ n₁ n₂ hn₂ :=
     Cofork.IsColimit.hom_ext hp (by simpa using! hp.fac _ .one)
   exact {
-    Q := X.opcyc
+    Q := X.opcycles f₂ f₃ n₁
+    H := kernel (X.δFromOpcycles f₁ f₂ f₃ n₁ n₂)
+    p := X.pOpcycles f₂ f₃ n₁
+    ι := kernel.ι _
+    wp := by simp
+    hp := hp
+    wι := by rw [this]; simp
+    hι := by
+      refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).2
+        (kernelIsKernel (X.δFromOpcycles f₁ f₂ f₃ n₁ n₂))
+      · exact parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa) (by simp)
+      · exact Fork.ext (Iso.refl _) }
 
 中文:
 定义 rightHomologyDataShortComplex
@@ -751,7 +782,18 @@ definition rightHomologyDataShortComplex
       X.δFromOpcycles f₁ f₂ f₃ n₁ n₂ hn₂ :=
     Cofork.IsColimit.hom_ext hp (by simpa using! hp.fac _ .one)
   exact {
-    Q := X.opcyc
+    Q := X.opcycles f₂ f₃ n₁
+    H := kernel (X.δFromOpcycles f₁ f₂ f₃ n₁ n₂)
+    p := X.pOpcycles f₂ f₃ n₁
+    ι := kernel.ι _
+    wp := by simp
+    hp := hp
+    wι := by rw [this]; simp
+    hι := by
+      refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).2
+        (kernelIsKernel (X.δFromOpcycles f₁ f₂ f₃ n₁ n₂))
+      · exact parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa) (by simp)
+      · exact Fork.ext (Iso.refl _) }
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, CokernelCofork, CokernelCofork.of, IsColimit, RightHomologyData, X.cokernelSequenceOpcycles_exact, X.opcycles, X.pOpcycles, X.shortComplex, cokernelSequenceOpcycles_exact, gIsCokernel, hom_ext, hp.desc, hp.fac, kernel, opcycles, pOpcycles, shortComplex
 -/
@@ -1095,7 +1137,12 @@ lemma cokernelSequenceE_exact
     (X.cokernelSequenceCyclesE_exact f₁ f₂ f₃ n₀ n₁ n₂).exact_up_to_refinements
       (x₂ ≫ X.toCycles f₁ f₂ f₁₂ h₁₂ n₁) (by simpa using! hx₂)
   dsimp at y₁ hy₁
-  let z := π₁ 
+  let z := π₁ ≫ x₂ - y₁ ≫ X.δ f₁₂ f₃ n₀ n₁
+  obtain ⟨A₂, π₂, _, x₁, hx₁⟩ := (X.exact₂ f₁ f₂ f₁₂ h₁₂ n₁).exact_up_to_refinements z (by
+      have : z ≫ X.toCycles f₁ f₂ f₁₂ h₁₂ n₁ = 0 := by simp [z, hy₁]
+      simpa only [zero_comp, Category.assoc, toCycles_i] using! this =≫ X.iCycles f₁ f₂ n₁)
+  dsimp at x₁ hx₁
+  exact ⟨A₂, π₂ ≫ π₁, epi_comp _ _, biprod.lift x₁ (π₂ ≫ y₁), by simp [z, ← hx₁]⟩
 
 中文:
 引理 cokernelSequenceE_exact
@@ -1108,7 +1155,12 @@ lemma cokernelSequenceE_exact
     (X.cokernelSequenceCyclesE_exact f₁ f₂ f₃ n₀ n₁ n₂).exact_up_to_refinements
       (x₂ ≫ X.toCycles f₁ f₂ f₁₂ h₁₂ n₁) (by simpa using! hx₂)
   dsimp at y₁ hy₁
-  let z := π₁ 
+  let z := π₁ ≫ x₂ - y₁ ≫ X.δ f₁₂ f₃ n₀ n₁
+  obtain ⟨A₂, π₂, _, x₁, hx₁⟩ := (X.exact₂ f₁ f₂ f₁₂ h₁₂ n₁).exact_up_to_refinements z (by
+      have : z ≫ X.toCycles f₁ f₂ f₁₂ h₁₂ n₁ = 0 := by simp [z, hy₁]
+      simpa only [zero_comp, Category.assoc, toCycles_i] using! this =≫ X.iCycles f₁ f₂ n₁)
+  dsimp at x₁ hx₁
+  exact ⟨A₂, π₂ ≫ π₁, epi_comp _ _, biprod.lift x₁ (π₂ ≫ y₁), by simp [z, ← hx₁]⟩
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, X.cokernelSequenceCyclesE_exact, X.cokernelSequenceE, X.exact, X.toCycles, cokernelSequenceCyclesE_exact, cokernelSequenceE, exact_iff_exact_up_to_refinements, exact_up_to_refinements, toCycles
 -/
@@ -1243,7 +1295,13 @@ lemma kernelSequenceE_exact
   obtain ⟨A₁, π₁, _, x₁, hx₁⟩ :=
     (X.kernelSequenceOpcyclesE_exact f₁ f₂ f₃ n₀ n₁ n₂ hn₁ hn₂).exact_up_to_refinements
       (X.liftOpcycles f₂ f₃ f₂₃ h₂₃ x₂ (by simpa using hx₂ =≫ biprod.fst)) (by
-        
+        dsimp
+        rw [← X.fromOpcyles_δ f₁ f₂ f₃ f₂₃ h₂₃ n₁ n₂]; rw [X.liftOpcycles_fromOpcycles_assoc]
+        simpa using hx₂ =≫ biprod.snd)
+  dsimp at x₁ hx₁
+  refine ⟨A₁, π₁, inferInstance, x₁, ?_⟩
+  dsimp
+  rw [← reassoc_of% hx₁]; rw [liftOpcycles_fromOpcycles]
 
 中文:
 引理 kernelSequenceE_exact
@@ -1255,7 +1313,13 @@ lemma kernelSequenceE_exact
   obtain ⟨A₁, π₁, _, x₁, hx₁⟩ :=
     (X.kernelSequenceOpcyclesE_exact f₁ f₂ f₃ n₀ n₁ n₂ hn₁ hn₂).exact_up_to_refinements
       (X.liftOpcycles f₂ f₃ f₂₃ h₂₃ x₂ (by simpa using hx₂ =≫ biprod.fst)) (by
-        
+        dsimp
+        rw [← X.fromOpcyles_δ f₁ f₂ f₃ f₂₃ h₂₃ n₁ n₂]; rw [X.liftOpcycles_fromOpcycles_assoc]
+        simpa using hx₂ =≫ biprod.snd)
+  dsimp at x₁ hx₁
+  refine ⟨A₁, π₁, inferInstance, x₁, ?_⟩
+  dsimp
+  rw [← reassoc_of% hx₁]; rw [liftOpcycles_fromOpcycles]
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, X.fromOpcyles_, X.kernelSequenceE, X.kernelSequenceOpcyclesE_exact, X.liftOpcycles, X.liftOpcycles_fromOpcycles_assoc, biprod, biprod.fst, biprod.snd, exact_iff_exact_up_to_refinements, exact_up_to_refinements, kernelSequenceE, kernelSequenceOpcyclesE_exact, liftOpcycles, liftOpcycles_fromOpcycles_assoc
 -/
@@ -1593,7 +1657,16 @@ lemma cokernelSequenceOpcyclesE_exact
   obtain ⟨A₁, π₁, _, y₂, hy₂⟩ :=
     surjective_up_to_refinements_of_epi (X.pOpcycles f₁₂ f₃ n₁) x₂
   obtain ⟨A₂, π₂, _, y₁, hy₁⟩ :=
-    (X.cokernelSequenceE_exact f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂ hn₁ hn₂).exact_up_
+    (X.cokernelSequenceE_exact f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂ hn₁ hn₂).exact_up_to_refinements y₂
+      (by simpa only [Category.assoc, p_opcyclesToE, hx₂, comp_zero]
+        using! hy₂.symm =≫ X.opcyclesToE f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂ hn₁ hn₂)
+  dsimp at y₁ hy₁
+  obtain ⟨a, b, rfl⟩ : exists a b, y₁ = a ≫ biprod.inl + b ≫ biprod.inr :=
+    ⟨y₁ ≫ biprod.fst, y₁ ≫ biprod.snd, by ext <;> simp⟩
+  simp only [Preadditive.add_comp, Category.assoc, biprod.inl_desc, biprod.inr_desc] at hy₁
+  refine ⟨A₂, π₂ ≫ π₁, inferInstance, a, ?_⟩
+  simp [Category.assoc, hy₂, reassoc_of% hy₁, Preadditive.add_comp, δ_pOpcycles,
+    comp_zero, add_zero]
 
 中文:
 引理 cokernelSequenceOpcyclesE_exact
@@ -1604,7 +1677,16 @@ lemma cokernelSequenceOpcyclesE_exact
   obtain ⟨A₁, π₁, _, y₂, hy₂⟩ :=
     surjective_up_to_refinements_of_epi (X.pOpcycles f₁₂ f₃ n₁) x₂
   obtain ⟨A₂, π₂, _, y₁, hy₁⟩ :=
-    (X.cokernelSequenceE_exact f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂ hn₁ hn₂).exact_up_
+    (X.cokernelSequenceE_exact f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂ hn₁ hn₂).exact_up_to_refinements y₂
+      (by simpa only [Category.assoc, p_opcyclesToE, hx₂, comp_zero]
+        using! hy₂.symm =≫ X.opcyclesToE f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂ hn₁ hn₂)
+  dsimp at y₁ hy₁
+  obtain ⟨a, b, rfl⟩ : exists a b, y₁ = a ≫ biprod.inl + b ≫ biprod.inr :=
+    ⟨y₁ ≫ biprod.fst, y₁ ≫ biprod.snd, by ext <;> simp⟩
+  simp only [Preadditive.add_comp, Category.assoc, biprod.inl_desc, biprod.inr_desc] at hy₁
+  refine ⟨A₂, π₂ ≫ π₁, inferInstance, a, ?_⟩
+  simp [Category.assoc, hy₂, reassoc_of% hy₁, Preadditive.add_comp, δ_pOpcycles,
+    comp_zero, add_zero]
 
 Depends on / 依赖: Category, Category.assoc, ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, X.cokernelSequenceE_exact, X.cokernelSequenceOpcyclesE, X.opc, X.pOpcycles, cokernelSequenceE_exact, cokernelSequenceOpcyclesE, comp_zero, exact_iff_exact_up_to_refinements, exact_up_to_refinements, pOpcycles, p_opcyclesToE, surjective_up_to_refinements_of_epi
 -/
@@ -1762,7 +1844,7 @@ lemma kernelSequenceCyclesE_exact
   obtain ⟨A₁, π₁, _, x₁, hx₁⟩ :=
     (X.kernelSequenceE_exact f₁ f₂ f₃ f₂₃ h₂₃ n₀ n₁ n₂).exact_up_to_refinements
       (x₂ ≫ X.iCycles f₁ f₂₃ n₁) (by cat_disch)
-  exact ⟨A₁, π₁, inferInstance, x₁, by simpa [←
+  exact ⟨A₁, π₁, inferInstance, x₁, by simpa [← cancel_mono (X.iCycles ..)]⟩
 
 中文:
 引理 kernelSequenceCyclesE_exact
@@ -1774,7 +1856,7 @@ lemma kernelSequenceCyclesE_exact
   obtain ⟨A₁, π₁, _, x₁, hx₁⟩ :=
     (X.kernelSequenceE_exact f₁ f₂ f₃ f₂₃ h₂₃ n₀ n₁ n₂).exact_up_to_refinements
       (x₂ ≫ X.iCycles f₁ f₂₃ n₁) (by cat_disch)
-  exact ⟨A₁, π₁, inferInstance, x₁, by simpa [←
+  exact ⟨A₁, π₁, inferInstance, x₁, by simpa [← cancel_mono (X.iCycles ..)]⟩
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, X.iCycles, X.kernelSequenceCyclesE, X.kernelSequenceE_exact, cancel_mono, cat_disch, exact_iff_exact_up_to_refinements, exact_up_to_refinements, iCycles, kernelSequenceCyclesE, kernelSequenceE_exact
 -/
@@ -2142,7 +2224,16 @@ lemma cyclesIsoH_hom_EIsoH_inv
   have : h.cyclesIso.inv =
       X.toCycles (𝟙 i) f f (by simp) n₁ ≫
         (X.cyclesIso (𝟙 i) f (𝟙 j) n₀ n₁ n₂ hn₁ hn₂).inv := by
-    rw [← cancel_mono (X.cyclesIso ..).hom]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id];
+    rw [← cancel_mono (X.cyclesIso ..).hom]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [← cancel_mono (X.iCycles ..)]; rw [Category.assoc]; rw [cyclesIso_hom_i ..]; rw [h.cyclesIso_inv_comp_iCycles]; rw [toCycles_i]
+    dsimp [h]
+    rw [← Functor.map_id]
+    congr 1
+    cat_disch
+  obtain rfl : n₀ = n₁ - 1 := by lia
+  rw [← cancel_epi (X.cyclesIsoH f n₁ n₂ hn₂).inv]; rw [cyclesIsoH_inv ..]; rw [cyclesIsoH_inv_hom_id_assoc ..]
+  dsimp [EIsoH]
+  rw [← cancel_epi h.π]; rw [h.π_comp_homologyIso_inv]
+  simp [πE, h, this]
 
 中文:
 引理 cyclesIsoH_hom_EIsoH_inv
@@ -2151,7 +2242,16 @@ lemma cyclesIsoH_hom_EIsoH_inv
   have : h.cyclesIso.inv =
       X.toCycles (𝟙 i) f f (by simp) n₁ ≫
         (X.cyclesIso (𝟙 i) f (𝟙 j) n₀ n₁ n₂ hn₁ hn₂).inv := by
-    rw [← cancel_mono (X.cyclesIso ..).hom]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id];
+    rw [← cancel_mono (X.cyclesIso ..).hom]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [← cancel_mono (X.iCycles ..)]; rw [Category.assoc]; rw [cyclesIso_hom_i ..]; rw [h.cyclesIso_inv_comp_iCycles]; rw [toCycles_i]
+    dsimp [h]
+    rw [← Functor.map_id]
+    congr 1
+    cat_disch
+  obtain rfl : n₀ = n₁ - 1 := by lia
+  rw [← cancel_epi (X.cyclesIsoH f n₁ n₂ hn₂).inv]; rw [cyclesIsoH_inv ..]; rw [cyclesIsoH_inv_hom_id_assoc ..]
+  dsimp [EIsoH]
+  rw [← cancel_epi h.π]; rw [h.π_comp_homologyIso_inv]
+  simp [πE, h, this]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Functor, Functor.map_id, Iso.inv_hom_id, X.cyclesIso, X.homologyDataIdId, X.iCycles, X.toCycles, cancel_mono, cat_disch, comp_id, cyclesIso, cyclesIso_hom_i, cyclesIso_inv_comp_iCycles, h.cyclesIso.inv, h.cyclesIso_inv_comp_iCycles, homologyDataIdId, iCycles
 -/
@@ -2186,7 +2286,16 @@ lemma EIsoH_hom_opcyclesIsoH_inv
   have : h.right.opcyclesIso.hom =
       (X.opcyclesIso (𝟙 i) f (𝟙 j) n₀ n₁ n₂ hn₁ hn₂).hom ≫
         X.fromOpcycles f (𝟙 j) f (by simp) n₁ := by
-    rw [← cancel_epi (X.opcyclesIso ..).inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (X.pOpcycl
+    rw [← cancel_epi (X.opcyclesIso ..).inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (X.pOpcycles ..)]; rw [p_opcyclesIso_inv_assoc ..]; rw [h.right.pOpcycles_comp_opcyclesIso_hom]; rw [p_fromOpcycles]
+    dsimp [h]
+    rw [← Functor.map_id]
+    congr 1
+    cat_disch
+  obtain rfl : n₂ = n₁ + 1 := by lia
+  rw [← cancel_mono (X.opcyclesIsoH f n₀ n₁ hn₁).hom]; rw [Category.assoc]; rw [opcyclesIsoH_hom ..]; rw [opcyclesIsoH_inv_hom_id ..]
+  dsimp [EIsoH, ιE]
+  rw [Category.assoc]; rw [← this]; rw [h.left_homologyIso_eq_right_homologyIso_trans_iso_symm]; rw [← ShortComplex.RightHomologyData.homologyIso_hom_comp_ι]
+  simp [h]
 
 中文:
 引理 EIsoH_hom_opcyclesIsoH_inv
@@ -2195,7 +2304,16 @@ lemma EIsoH_hom_opcyclesIsoH_inv
   have : h.right.opcyclesIso.hom =
       (X.opcyclesIso (𝟙 i) f (𝟙 j) n₀ n₁ n₂ hn₁ hn₂).hom ≫
         X.fromOpcycles f (𝟙 j) f (by simp) n₁ := by
-    rw [← cancel_epi (X.opcyclesIso ..).inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (X.pOpcycl
+    rw [← cancel_epi (X.opcyclesIso ..).inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (X.pOpcycles ..)]; rw [p_opcyclesIso_inv_assoc ..]; rw [h.right.pOpcycles_comp_opcyclesIso_hom]; rw [p_fromOpcycles]
+    dsimp [h]
+    rw [← Functor.map_id]
+    congr 1
+    cat_disch
+  obtain rfl : n₂ = n₁ + 1 := by lia
+  rw [← cancel_mono (X.opcyclesIsoH f n₀ n₁ hn₁).hom]; rw [Category.assoc]; rw [opcyclesIsoH_hom ..]; rw [opcyclesIsoH_inv_hom_id ..]
+  dsimp [EIsoH, ιE]
+  rw [Category.assoc]; rw [← this]; rw [h.left_homologyIso_eq_right_homologyIso_trans_iso_symm]; rw [← ShortComplex.RightHomologyData.homologyIso_hom_comp_ι]
+  simp [h]
 
 Depends on / 依赖: Functor, Functor.map_id, Iso.inv_hom_id_assoc, X.fromOpcycles, X.homologyDataIdId, X.opcyclesI, X.opcyclesIso, X.pOpcycles, cancel_epi, cancel_mono, cat_disch, fromOpcycles, h.right.opcyclesIso.hom, h.right.pOpcycles_comp_opcyclesIso_hom, homologyDataIdId, inv_hom_id_assoc, map_id, opcyclesI, opcyclesIso, pOpcycles
 -/
@@ -2306,7 +2424,9 @@ lemma shortComplexOpcyclesThreeδ₂Toδ₁_exact
       τ₃ := 𝟙 _
       comm₁₂ := by
         dsimp
-        rw [Category.comp_id]; rw [X.p_opcyclesMap _ 
+        rw [Category.comp_id]; rw [X.p_opcyclesMap _ _ _ _ _ (twoδ₂Toδ₁ f₁ f₂ f₁₂)] }
+  rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ]
+  exact X.cokernelSequenceOpcyclesE_exact f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂
 
 中文:
 引理 shortComplexOpcyclesThreeδ₂Toδ₁_exact
@@ -2318,7 +2438,9 @@ lemma shortComplexOpcyclesThreeδ₂Toδ₁_exact
       τ₃ := 𝟙 _
       comm₁₂ := by
         dsimp
-        rw [Category.comp_id]; rw [X.p_opcyclesMap _ 
+        rw [Category.comp_id]; rw [X.p_opcyclesMap _ _ _ _ _ (twoδ₂Toδ₁ f₁ f₂ f₁₂)] }
+  rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ]
+  exact X.cokernelSequenceOpcyclesE_exact f₁ f₂ f₃ f₁₂ h₁₂ n₀ n₁ n₂
 
 Depends on / 依赖: Category, Category.comp_id, ShortComplex, ShortComplex.exact_iff_of_epi_of_isIso_of_mono, X.cokernelSequenceOpcycl, X.cokernelSequenceOpcyclesE, X.pOpcycles, X.p_opcyclesMap, X.shortComplexOpcyclesThree, cokernelSequenceOpcycl, cokernelSequenceOpcyclesE, comp_id, exact_iff_of_epi_of_isIso_of_mono, pOpcycles, p_opcyclesMap
 -/
@@ -2372,14 +2494,22 @@ lemma opcyclesToE_map
   statement: (α : mk₃ f₁ f₂ f₃ ⟶ mk₃ f₁' f₂' f₃') (β : mk₂ f₁₂ f₃ ⟶ mk₂ f₁₂' f₃')
   proof: by
   rw [← cancel_mono (X.ιE ..)]; rw [Category.assoc]; rw [Category.assoc]; rw [opcyclesToE_ιE ..]; rw [← cancel_epi (X.pOpcycles ..)]; rw [p_opcyclesToE_assoc ..]; rw [X.πE_map_assoc _ _ _ _ _ _ _
-      (homMk₂ (α.app 0) (α.app 1) (α.app 2) (naturality' α 0 1) (naturality' α 1 2)) ..]; rw [πE_ιE .
+      (homMk₂ (α.app 0) (α.app 1) (α.app 2) (naturality' α 0 1) (naturality' α 1 2)) ..]; rw [πE_ιE ..]; rw [X.cyclesMap_i_assoc ..]; rw [toCycles_i_assoc]; rw [X.p_opcyclesMap_assoc ..]; rw [X.p_opcyclesMap ..]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
+  congr 2
+  ext
+  · simpa [h₀] using naturality' α 0 1
+  · simp [h₁]
 
 中文:
 引理 opcyclesToE_map
   结论: (α : mk₃ f₁ f₂ f₃ ⟶ mk₃ f₁' f₂' f₃') (β : mk₂ f₁₂ f₃ ⟶ mk₂ f₁₂' f₃')
   证明: by
   rw [← cancel_mono (X.ιE ..)]; rw [Category.assoc]; rw [Category.assoc]; rw [opcyclesToE_ιE ..]; rw [← cancel_epi (X.pOpcycles ..)]; rw [p_opcyclesToE_assoc ..]; rw [X.πE_map_assoc _ _ _ _ _ _ _
-      (homMk₂ (α.app 0) (α.app 1) (α.app 2) (naturality' α 0 1) (naturality' α 1 2)) ..]; rw [πE_ιE .
+      (homMk₂ (α.app 0) (α.app 1) (α.app 2) (naturality' α 0 1) (naturality' α 1 2)) ..]; rw [πE_ιE ..]; rw [X.cyclesMap_i_assoc ..]; rw [toCycles_i_assoc]; rw [X.p_opcyclesMap_assoc ..]; rw [X.p_opcyclesMap ..]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
+  congr 2
+  ext
+  · simpa [h₀] using naturality' α 0 1
+  · simp [h₁]
 
 Depends on / 依赖: Category, Category.assoc, X.map, X.opcyclesMap, X.opcyclesToE, X.pOpcycles, cancel_epi, cancel_mono, cat_disch, opcyclesMap, opcyclesToE, pOpcycles, p_opcyclesToE_assoc
 -/

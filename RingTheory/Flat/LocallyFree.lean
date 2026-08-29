@@ -62,7 +62,24 @@ theorem Free.away_of_finite_of_flat_of_rankAtStalk_constant
     exact Module.Free.of_subsingleton' (Localization.Away 1) (LocalizedModule.Away 1 M)
   · let Rₚ := Localization.AtPrime p
     let n := rankAtStalk M ⟨p, inferInstance⟩
-    let f : (Fin n ->₀ R) ->ₗ[R] Fin 
+    let f : (Fin n ->₀ R) ->ₗ[R] Fin n ->₀ Rₚ := Finsupp.mapRange.linearMap (Algebra.linearMap R Rₚ)
+    let g : M ->ₗ[R] LocalizedModule.AtPrime p M := LocalizedModule.mkLinearMap p.primeCompl M
+    obtain ⟨φ, -, -, hφps⟩ := exists_localizedMap_surjective_of_surjective p.primeCompl f g
+      ((finBasis Rₚ (LocalizedModule.AtPrime p M)).repr.restrictScalars R).symm.surjective
+    obtain ⟨a, hap, hφas⟩ := by
+      refine exists_localizedMap_away_surjective_of_localizedMap_atPrime_surjective p φ ?_
+      simpa [LocalizedModule.coe_map_eq f g]
+    have : Module.Free (Localization.Away a) (LocalizedModule.Away a (Fin n ->₀ R)) :=
+      free_of_isLocalizedModule (Submonoid.powers a) (mkLinearMap (Submonoid.powers a) (Fin n ->₀ R))
+    let φₐ : LocalizedModule.Away a (Fin n ->₀ R) ->ₗ[Localization.Away a] LocalizedModule.Away a M :=
+      LocalizedModule.map (Submonoid.powers a) φ
+refine ⟨a, hap, Module.Free.of_equiv LinearEquiv.ofBijective φₐ
+bijective_of_surjective_of_rankAtStalk_eq hφas fun m _ => ?_⟩
+    obtain ⟨𝔪, _, hm𝔪⟩ : exists 𝔪 : Ideal R, 𝔪.IsMaximal ∧ PrimeSpectrum.comap
+        (algebraMap R (Localization (Submonoid.powers a))) ⟨m, inferInstance⟩ <= 𝔪 :=
+      (m.comap (algebraMap R (Localization.Away a))).exists_le_maximal Ideal.IsPrime.ne_top'
+    simp [rankAtStalk_isBaseChange (LocalizedModule.isBaseChange (Submonoid.powers a) _),
+      rankAtStalk_eq_of_le_of_finite_of_flat' M hm𝔪, h 𝔪, n]
 
 中文:
 定理 自由.away_of_finite_of_flat_of_rankAtStalk_constant
@@ -73,7 +90,24 @@ theorem Free.away_of_finite_of_flat_of_rankAtStalk_constant
     exact Module.Free.of_subsingleton' (Localization.Away 1) (LocalizedModule.Away 1 M)
   · let Rₚ := Localization.AtPrime p
     let n := rankAtStalk M ⟨p, inferInstance⟩
-    let f : (Fin n ->₀ R) ->ₗ[R] Fin 
+    let f : (Fin n ->₀ R) ->ₗ[R] Fin n ->₀ Rₚ := Finsupp.mapRange.linearMap (Algebra.linearMap R Rₚ)
+    let g : M ->ₗ[R] LocalizedModule.AtPrime p M := LocalizedModule.mkLinearMap p.primeCompl M
+    obtain ⟨φ, -, -, hφps⟩ := exists_localizedMap_surjective_of_surjective p.primeCompl f g
+      ((finBasis Rₚ (LocalizedModule.AtPrime p M)).repr.restrictScalars R).symm.surjective
+    obtain ⟨a, hap, hφas⟩ := by
+      refine exists_localizedMap_away_surjective_of_localizedMap_atPrime_surjective p φ ?_
+      simpa [LocalizedModule.coe_map_eq f g]
+    have : Module.Free (Localization.Away a) (LocalizedModule.Away a (Fin n ->₀ R)) :=
+      free_of_isLocalizedModule (Submonoid.powers a) (mkLinearMap (Submonoid.powers a) (Fin n ->₀ R))
+    let φₐ : LocalizedModule.Away a (Fin n ->₀ R) ->ₗ[Localization.Away a] LocalizedModule.Away a M :=
+      LocalizedModule.map (Submonoid.powers a) φ
+refine ⟨a, hap, Module.Free.of_equiv LinearEquiv.ofBijective φₐ
+bijective_of_surjective_of_rankAtStalk_eq hφas fun m _ => ?_⟩
+    obtain ⟨𝔪, _, hm𝔪⟩ : exists 𝔪 : Ideal R, 𝔪.IsMaximal ∧ PrimeSpectrum.comap
+        (algebraMap R (Localization (Submonoid.powers a))) ⟨m, inferInstance⟩ <= 𝔪 :=
+      (m.comap (algebraMap R (Localization.Away a))).exists_le_maximal Ideal.IsPrime.ne_top'
+    simp [rankAtStalk_isBaseChange (LocalizedModule.isBaseChange (Submonoid.powers a) _),
+      rankAtStalk_eq_of_le_of_finite_of_flat' M hm𝔪, h 𝔪, n]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, AtPrime, Finsupp, Finsupp.mapRange.linearMap, Ideal.IsPrime.one_notMem, IsPrime, Localization, Localization.AtPrime, Localization.Away, LocalizedModule, LocalizedModule.AtPrime, LocalizedModule.Away, LocalizedModule.mkLinearMap, Module, Module.Free.of_subsingleton, exists_localizedMap_surjective_of_sur, linearMap, mapRange, mkLinearMap
 -/

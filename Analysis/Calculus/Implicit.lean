@@ -631,7 +631,10 @@ theorem fderiv_implicitFunction_apply_eq_iff
   simp only [← HasStrictFDerivAt.localInverse_def]
   rw [φ.hasStrictFDerivAt.to_localInverse.comp (φ.rightFun φ.pt)
 .fderiv] .hasFDerivAt ((hasStrictFDerivAt_const _ _).prodMk (hasStrictFDerivAt_id _))
-  simp [ContinuousLinearEquiv.
+  simp [ContinuousLinearEquiv.symm_apply_eq, @eq_comm _ (φ.leftDeriv _),
+    @eq_comm _ (φ.rightDeriv _)]
+
+@[simp]
 
 中文:
 定理 fderiv_implicitFunction_apply_eq_iff
@@ -641,7 +644,10 @@ theorem fderiv_implicitFunction_apply_eq_iff
   simp only [← HasStrictFDerivAt.localInverse_def]
   rw [φ.hasStrictFDerivAt.to_localInverse.comp (φ.rightFun φ.pt)
 .fderiv] .hasFDerivAt ((hasStrictFDerivAt_const _ _).prodMk (hasStrictFDerivAt_id _))
-  simp [ContinuousLinearEquiv.
+  simp [ContinuousLinearEquiv.symm_apply_eq, @eq_comm _ (φ.leftDeriv _),
+    @eq_comm _ (φ.rightDeriv _)]
+
+@[simp]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.symm_apply_eq, Function, Function.curry, HasStrictFDerivAt, HasStrictFDerivAt.localInverse_def, eq_comm, fderiv, hasFDerivAt, hasStrictFDerivAt, hasStrictFDerivAt.to_localInverse.comp, hasStrictFDerivAt_const, hasStrictFDerivAt_id, implicitFunction, leftDeriv, localInverse_def, prodMk, rightDeriv, rightFun, symm_apply_eq
 -/
@@ -753,7 +759,18 @@ theorem map_implicitFunction_nhdsWithin_preimage
   proof: by
   have H : φ.implicitFunction (φ.leftFun φ.pt) =
       φ.toOpenPartialHomeomorph.symm ∘ (φ.leftFun φ.pt, ·) := rfl
-  rw [H]; rw [← Filter.map_map]; rw [(isInducing_prodMkRight _).map_nhdsWithin_eq]; rw [← Set.singleton_prod]; rw [OpenPartialHomeomorph.map_nhdsWithin_eq]; rw [← prodFun_apply]; rw 
+  rw [H]; rw [← Filter.map_map]; rw [(isInducing_prodMkRight _).map_nhdsWithin_eq]; rw [← Set.singleton_prod]; rw [OpenPartialHomeomorph.map_nhdsWithin_eq]; rw [← prodFun_apply]; rw [← toOpenPartialHomeomorph_coe]; rw [φ.toOpenPartialHomeomorph.leftInvOn φ.pt_mem_toOpenPartialHomeomorph_source]; rw [OpenPartialHomeomorph.image_source_inter_eq']
+  · conv_rhs =>
+      rw [← φ.toOpenPartialHomeomorph.nhdsWithin_source_inter
+        φ.pt_mem_toOpenPartialHomeomorph_source]
+    congr 1
+    ext x
+    suffices x in φ.toOpenPartialHomeomorph.source -> φ.leftFun x = φ.leftFun φ.pt ->
+        (φ.toOpenPartialHomeomorph.symm (φ.leftFun φ.pt, φ.rightFun x) in s ↔ x in s) by
+      simpa [@and_comm (_ = _)]
+    intro hxs hx_eq
+    rw [← hx_eq]; rw [← prodFun_apply]; rw [← toOpenPartialHomeomorph_coe]; rw [φ.toOpenPartialHomeomorph.leftInvOn hxs]
+  · exact φ.toOpenPartialHomeomorph.mapsTo φ.pt_mem_toOpenPartialHomeomorph_source
 
 中文:
 定理 map_implicitFunction_nhdsWithin_preimage
@@ -761,7 +778,18 @@ theorem map_implicitFunction_nhdsWithin_preimage
   证明: by
   have H : φ.implicitFunction (φ.leftFun φ.pt) =
       φ.toOpenPartialHomeomorph.symm ∘ (φ.leftFun φ.pt, ·) := rfl
-  rw [H]; rw [← Filter.map_map]; rw [(isInducing_prodMkRight _).map_nhdsWithin_eq]; rw [← Set.singleton_prod]; rw [OpenPartialHomeomorph.map_nhdsWithin_eq]; rw [← prodFun_apply]; rw 
+  rw [H]; rw [← Filter.map_map]; rw [(isInducing_prodMkRight _).map_nhdsWithin_eq]; rw [← Set.singleton_prod]; rw [OpenPartialHomeomorph.map_nhdsWithin_eq]; rw [← prodFun_apply]; rw [← toOpenPartialHomeomorph_coe]; rw [φ.toOpenPartialHomeomorph.leftInvOn φ.pt_mem_toOpenPartialHomeomorph_source]; rw [OpenPartialHomeomorph.image_source_inter_eq']
+  · conv_rhs =>
+      rw [← φ.toOpenPartialHomeomorph.nhdsWithin_source_inter
+        φ.pt_mem_toOpenPartialHomeomorph_source]
+    congr 1
+    ext x
+    suffices x in φ.toOpenPartialHomeomorph.source -> φ.leftFun x = φ.leftFun φ.pt ->
+        (φ.toOpenPartialHomeomorph.symm (φ.leftFun φ.pt, φ.rightFun x) in s ↔ x in s) by
+      simpa [@and_comm (_ = _)]
+    intro hxs hx_eq
+    rw [← hx_eq]; rw [← prodFun_apply]; rw [← toOpenPartialHomeomorph_coe]; rw [φ.toOpenPartialHomeomorph.leftInvOn hxs]
+  · exact φ.toOpenPartialHomeomorph.mapsTo φ.pt_mem_toOpenPartialHomeomorph_source
 
 Depends on / 依赖: Filter, Filter.map_map, OpenPartialHomeomorph, OpenPartialHomeomorph.image_source_inter_eq, OpenPartialHomeomorph.map_nhdsWithin_eq, Set.singleton_prod, conv_rhs, image_source_inter_eq, implicitFunction, isInducing_prodMkRight, leftFun, leftInvOn, map_map, map_nhdsWithin_eq, prodFun_apply, pt_mem_toOpenPartialHomeomorph_source, singleton_prod, toOpenPartialHomeomorph, toOpenPartialHomeomorph.leftInvOn, toOpenPartialHomeomorph.symm
 -/
@@ -850,7 +878,8 @@ definition implicitFunctionDataOfComplemented
   hasStrictFDerivAt_rightFun :=
     (Classical.choose hker).hasStrictFDerivAt.comp a ((hasStrictFDerivAt_id a).sub_const a)
   range_leftDeriv := hf'
-  r
+  range_rightDeriv := LinearMap.range_eq_of_proj (Classical.choose_spec hker)
+  isCompl_ker := LinearMap.isCompl_of_proj (Classical.choose_spec hker)
 
 中文:
 定义 implicitFunctionDataOfComplemented
@@ -864,7 +893,8 @@ definition implicitFunctionDataOfComplemented
   hasStrictFDerivAt_rightFun :=
     (Classical.choose hker).hasStrictFDerivAt.comp a ((hasStrictFDerivAt_id a).sub_const a)
   range_leftDeriv := hf'
-  r
+  range_rightDeriv := LinearMap.range_eq_of_proj (Classical.choose_spec hker)
+  isCompl_ker := LinearMap.isCompl_of_proj (Classical.choose_spec hker)
 -/
 def implicitFunctionDataOfComplemented (hf : HasStrictFDerivAt f f' a) (hf' : f'.range = ⊤)
     (hker : f'.ker.ClosedComplemented) : ImplicitFunctionData 𝕜 E F f'.ker where
@@ -1164,7 +1194,13 @@ theorem to_implicitFunctionOfComplemented
   swap
   · ext
     simp only [Classical.choose_spec hker, implicitFunctionDataOfComplemented,
-      ContinuousLinearMap.comp_apply, Submodule.coe_subtypeL, Submodule.c
+      ContinuousLinearMap.comp_apply, Submodule.coe_subtypeL, Submodule.coe_subtype,
+      ContinuousLinearMap.id_apply]
+  swap
+  · ext
+    simp only [ContinuousLinearMap.comp_apply, Submodule.coe_subtypeL, Submodule.coe_subtype,
+      ContinuousLinearMap.apply_val_ker, zero_apply]
+  simp only [implicitFunctionDataOfComplemented, map_sub, sub_self]
 
 中文:
 定理 to_implicitFunctionOfComplemented
@@ -1176,7 +1212,13 @@ theorem to_implicitFunctionOfComplemented
   swap
   · ext
     simp only [Classical.choose_spec hker, implicitFunctionDataOfComplemented,
-      ContinuousLinearMap.comp_apply, Submodule.coe_subtypeL, Submodule.c
+      ContinuousLinearMap.comp_apply, Submodule.coe_subtypeL, Submodule.coe_subtype,
+      ContinuousLinearMap.id_apply]
+  swap
+  · ext
+    simp only [ContinuousLinearMap.comp_apply, Submodule.coe_subtypeL, Submodule.coe_subtype,
+      ContinuousLinearMap.apply_val_ker, zero_apply]
+  simp only [implicitFunctionDataOfComplemented, map_sub, sub_self]
 
 Depends on / 依赖: Classical, Classical.choose_spec, ContinuousLinearMap, ContinuousLinearMap.apply_val_ker, ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply, Submodule, Submodule.coe_subtype, Submodule.coe_subtypeL, apply_val_ker, choose_spec, coe_subtype, coe_subtypeL, comp_apply, convert, hasStrictFDerivAt_implicitFunction, id_apply, implicitFunctionDataOfCom, implicitFunctionDataOfComplemented, ker.subtypeL
 -/

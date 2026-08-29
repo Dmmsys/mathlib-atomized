@@ -233,7 +233,8 @@ lemma leftAdjointCompIso_id_comp
   have h₁ := congr_map F₀'₁ (adj₀₀'.counit.naturality (adj₀'₁.unit.app X₀))
   have h₂ := congr_map (F₀₀' ⋙ F₀'₁) (e₀'₀.inv.naturality (adj₀'₁.unit.app X₀))
   simp only [id_obj, comp_obj, Functor.id_map, Functor.comp_map, Functor.map_comp] at h₁ h₂
-  simp [leftAdjointCompIso_hom
+  simp [leftAdjointCompIso_hom_app, leftAdjointIdIso_hom_app,
+    reassoc_of% h₂, reassoc_of% h₁]
 
 中文:
 引理 leftAdjointCompIso_id_comp
@@ -243,7 +244,8 @@ lemma leftAdjointCompIso_id_comp
   have h₁ := congr_map F₀'₁ (adj₀₀'.counit.naturality (adj₀'₁.unit.app X₀))
   have h₂ := congr_map (F₀₀' ⋙ F₀'₁) (e₀'₀.inv.naturality (adj₀'₁.unit.app X₀))
   simp only [id_obj, comp_obj, Functor.id_map, Functor.comp_map, Functor.map_comp] at h₁ h₂
-  simp [leftAdjointCompIso_hom
+  simp [leftAdjointCompIso_hom_app, leftAdjointIdIso_hom_app,
+    reassoc_of% h₂, reassoc_of% h₁]
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.id_map, Functor.map_comp, comp_map, comp_obj, congr_map, counit, counit.naturality, id_map, id_obj, inv.naturality, leftAdjointCompIso_hom_app, leftAdjointIdIso_hom_app, map_comp, naturality, reassoc_of, unit.app
 -/
@@ -284,7 +286,7 @@ lemma leftAdjointCompNatTrans₀₁₃_eq_conjugateEquiv_symm
   obtain ⟨τ₁₂₃, rfl⟩ := (conjugateEquiv adj₁₃ (adj₁₂.comp adj₂₃)).surjective τ₁₂₃
   obtain ⟨τ₀₁₃, rfl⟩ := (conjugateEquiv adj₀₃ (adj₀₁.comp adj₁₃)).surjective τ₀₁₃
   apply (conjugateEquiv adj₀₃ (adj₀₁.comp (adj₁₂.comp adj₂₃))).injective
-  simp [leftAdjointCompNatTrans, ← conjugateEquiv_whiskerLef
+  simp [leftAdjointCompNatTrans, ← conjugateEquiv_whiskerLeft _ _ adj₀₁]
 
 中文:
 引理 leftAdjointComp自然数Trans₀₁₃_eq_conjugateEquiv_symm
@@ -292,7 +294,7 @@ lemma leftAdjointCompNatTrans₀₁₃_eq_conjugateEquiv_symm
   obtain ⟨τ₁₂₃, rfl⟩ := (conjugateEquiv adj₁₃ (adj₁₂.comp adj₂₃)).surjective τ₁₂₃
   obtain ⟨τ₀₁₃, rfl⟩ := (conjugateEquiv adj₀₃ (adj₀₁.comp adj₁₃)).surjective τ₀₁₃
   apply (conjugateEquiv adj₀₃ (adj₀₁.comp (adj₁₂.comp adj₂₃))).injective
-  simp [leftAdjointCompNatTrans, ← conjugateEquiv_whiskerLef
+  simp [leftAdjointCompNatTrans, ← conjugateEquiv_whiskerLeft _ _ adj₀₁]
 
 Depends on / 依赖: conjugateEquiv, conjugateEquiv_whiskerLeft, injective, leftAdjointCompNatTrans, surjective
 -/
@@ -315,7 +317,8 @@ lemma leftAdjointCompNatTrans₀₂₃_eq_conjugateEquiv_symm
   obtain ⟨τ₀₁₂, rfl⟩ := (conjugateEquiv adj₀₂ (adj₀₁.comp adj₁₂)).surjective τ₀₁₂
   obtain ⟨τ₀₂₃, rfl⟩ := (conjugateEquiv adj₀₃ (adj₀₂.comp adj₂₃)).surjective τ₀₂₃
   apply (conjugateEquiv adj₀₃ (adj₀₁.comp (adj₁₂.comp adj₂₃))).injective
-  simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply,
+  simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply, leftAdjointCompNatTrans]
+  rw [← cancel_mono (associator G₃₂ G₂₁ G₁₀).hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [← conjugateEquiv_associator_hom adj₀₁ adj₁₂ adj₂₃]; rw [← conjugateEquiv_whiskerRight _ _ adj₂₃]; rw [conjugateEquiv_comp]; rw [Iso.hom_inv_id_assoc]; rw [conjugateEquiv_comp]
 
 中文:
 引理 leftAdjointComp自然数Trans₀₂₃_eq_conjugateEquiv_symm
@@ -323,7 +326,8 @@ lemma leftAdjointCompNatTrans₀₂₃_eq_conjugateEquiv_symm
   obtain ⟨τ₀₁₂, rfl⟩ := (conjugateEquiv adj₀₂ (adj₀₁.comp adj₁₂)).surjective τ₀₁₂
   obtain ⟨τ₀₂₃, rfl⟩ := (conjugateEquiv adj₀₃ (adj₀₂.comp adj₂₃)).surjective τ₀₂₃
   apply (conjugateEquiv adj₀₃ (adj₀₁.comp (adj₁₂.comp adj₂₃))).injective
-  simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply,
+  simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply, leftAdjointCompNatTrans]
+  rw [← cancel_mono (associator G₃₂ G₂₁ G₁₀).hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [← conjugateEquiv_associator_hom adj₀₁ adj₁₂ adj₂₃]; rw [← conjugateEquiv_whiskerRight _ _ adj₂₃]; rw [conjugateEquiv_comp]; rw [Iso.hom_inv_id_assoc]; rw [conjugateEquiv_comp]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Equiv.apply_symm_apply, Equiv.symm_apply_apply, Iso.inv_hom_id, apply_symm_apply, associator, cancel_mono, comp_id, conjugateEquiv, conjugateEquiv_associator_hom, injective, inv_hom_id, leftAdjointCompNatTrans, surjective, symm_apply_apply
 -/

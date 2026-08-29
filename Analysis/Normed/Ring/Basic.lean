@@ -764,7 +764,11 @@ instance Prod.nonUnitalSeminormedRing
       _ = max ‖x.1 * y.1‖ ‖x.2 * y.2‖ := rfl
       _ <= max (‖x.1‖ * ‖y.1‖) (‖x.2‖ * ‖y.2‖) :=
         (max_le_max (norm_mul_le x.1 y.1) (norm_mul_le x.2 y.2))
-      _ = max (
+      _ = max (‖x.1‖ * ‖y.1‖) (‖y.2‖ * ‖x.2‖) := by simp [mul_comm]
+      _ <= max ‖x.1‖ ‖x.2‖ * max ‖y.2‖ ‖y.1‖ := by
+        apply max_mul_mul_le_max_mul_max <;> simp [norm_nonneg]
+      _ = max ‖x.1‖ ‖x.2‖ * max ‖y.1‖ ‖y.2‖ := by simp [max_comm]
+      _ = ‖x‖ * ‖y‖ := rfl }
 
 中文:
 实例 积类型.nonUnitalSeminormedRing
@@ -775,7 +779,11 @@ instance Prod.nonUnitalSeminormedRing
       _ = max ‖x.1 * y.1‖ ‖x.2 * y.2‖ := rfl
       _ <= max (‖x.1‖ * ‖y.1‖) (‖x.2‖ * ‖y.2‖) :=
         (max_le_max (norm_mul_le x.1 y.1) (norm_mul_le x.2 y.2))
-      _ = max (
+      _ = max (‖x.1‖ * ‖y.1‖) (‖y.2‖ * ‖x.2‖) := by simp [mul_comm]
+      _ <= max ‖x.1‖ ‖x.2‖ * max ‖y.2‖ ‖y.1‖ := by
+        apply max_mul_mul_le_max_mul_max <;> simp [norm_nonneg]
+      _ = max ‖x.1‖ ‖x.2‖ * max ‖y.1‖ ‖y.2‖ := by simp [max_comm]
+      _ = ‖x‖ * ‖y‖ := rfl }
 
 Depends on / 依赖: instNonUnitalRing, max_comm, max_le_max, max_mul_mul_le_max_mul_max, mul_comm, norm_mul_le, norm_nonneg, seminormedAddCommGroup
 -/
@@ -1426,7 +1434,12 @@ lemma norm_commutator_units_sub_one_le
     ‖(a * b * a⁻¹ * b⁻¹).val - 1‖ = ‖(a * b - b * a) * a⁻¹.val * b⁻¹.val‖ := by simp [sub_mul, *]
     _ <= ‖(a * b - b * a : α)‖ * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := norm_mul₃_le
     _ = ‖(a - 1 : α) * (b - 1) - (b - 1) * (a - 1)‖ * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := by
-      simp_rw [sub_one_mul, mul_sub_one]; ab
+      simp_rw [sub_one_mul, mul_sub_one]; abel_nf
+    _ <= (‖(a - 1 : α) * (b - 1)‖ + ‖(b - 1 : α) * (a - 1)‖) * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := by
+      gcongr; exact norm_sub_le ..
+    _ <= (‖a.val - 1‖ * ‖b.val - 1‖ + ‖b.val - 1‖ * ‖a.val - 1‖) * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := by
+      gcongr <;> exact norm_mul_le ..
+    _ = 2 * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ * ‖a.val - 1‖ * ‖b.val - 1‖ := by ring
 
 中文:
 引理 norm_commutator_units_sub_one_le
@@ -1435,7 +1448,12 @@ lemma norm_commutator_units_sub_one_le
     ‖(a * b * a⁻¹ * b⁻¹).val - 1‖ = ‖(a * b - b * a) * a⁻¹.val * b⁻¹.val‖ := by simp [sub_mul, *]
     _ <= ‖(a * b - b * a : α)‖ * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := norm_mul₃_le
     _ = ‖(a - 1 : α) * (b - 1) - (b - 1) * (a - 1)‖ * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := by
-      simp_rw [sub_one_mul, mul_sub_one]; ab
+      simp_rw [sub_one_mul, mul_sub_one]; abel_nf
+    _ <= (‖(a - 1 : α) * (b - 1)‖ + ‖(b - 1 : α) * (a - 1)‖) * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := by
+      gcongr; exact norm_sub_le ..
+    _ <= (‖a.val - 1‖ * ‖b.val - 1‖ + ‖b.val - 1‖ * ‖a.val - 1‖) * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ := by
+      gcongr <;> exact norm_mul_le ..
+    _ = 2 * ‖a⁻¹.val‖ * ‖b⁻¹.val‖ * ‖a.val - 1‖ * ‖b.val - 1‖ := by ring
 
 Depends on / 依赖: a.val, abel_nf, b.val, mul_sub_one, norm_sub_le, simp_rw, sub_mul, sub_one_mul
 -/
@@ -2956,7 +2974,11 @@ definition toNormedRing
   dist_comm x y := by rw [add_comm (-x), add_comm (-y), ← sub_eq_add_neg, v.map_sub, sub_eq_add_neg]
   dist_triangle x y z := by simpa [neg_add_eq_sub, add_comm (v (y - x))] using v.sub_le z y x
   edist_dist x y := rfl
-  norm_m
+  norm_mul_le x y := (v.map_mul x y).le
+  eq_of_dist_eq_zero := by
+    intro x y hxy
+    rw [add_comm]; rw [← sub_eq_add_neg]; rw [AbsoluteValue.map_sub_eq_zero_iff] at hxy
+    exact hxy.symm
 
 中文:
 定义 toNormedRing
@@ -2968,7 +2990,11 @@ definition toNormedRing
   dist_comm x y := by rw [add_comm (-x), add_comm (-y), ← sub_eq_add_neg, v.map_sub, sub_eq_add_neg]
   dist_triangle x y z := by simpa [neg_add_eq_sub, add_comm (v (y - x))] using v.sub_le z y x
   edist_dist x y := rfl
-  norm_m
+  norm_mul_le x y := (v.map_mul x y).le
+  eq_of_dist_eq_zero := by
+    intro x y hxy
+    rw [add_comm]; rw [← sub_eq_add_neg]; rw [AbsoluteValue.map_sub_eq_zero_iff] at hxy
+    exact hxy.symm
 -/
 noncomputable def toNormedRing {R : Type*} [Ring R] (v : AbsoluteValue R Real) : NormedRing R where
   norm := v
@@ -3048,7 +3074,12 @@ lemma iSup_prod_eq_prod_iSup_of_nonneg
     exact ⟨a, by simp⟩
   refine le_antisymm ?_ ?_
   · exact ciSup_le fun i => Finset.prod_le_prod (by simp [hf₀])
-      fun a ha => Finite.le_c
+      fun a ha => Finite.le_ciSup_of_le _ le_rfl
+  · rw [Classical.nonempty_pi] at h
+    have H a : exists i : ι a, f a i = ⨆ i, f a i := exists_eq_ciSup_of_finite
+    choose i hi using H
+    simp only [← hi]
+    exact Finite.le_ciSup_of_le i le_rfl
 
 中文:
 引理 iSup_prod_eq_prod_iSup_of_nonneg
@@ -3060,7 +3091,12 @@ lemma iSup_prod_eq_prod_iSup_of_nonneg
     exact ⟨a, by simp⟩
   refine le_antisymm ?_ ?_
   · exact ciSup_le fun i => Finset.prod_le_prod (by simp [hf₀])
-      fun a ha => Finite.le_c
+      fun a ha => Finite.le_ciSup_of_le _ le_rfl
+  · rw [Classical.nonempty_pi] at h
+    have H a : exists i : ι a, f a i = ⨆ i, f a i := exists_eq_ciSup_of_finite
+    choose i hi using H
+    simp only [← hi]
+    exact Finite.le_ciSup_of_le i le_rfl
 
 Depends on / 依赖: Classical, Classical.nonempty_pi, Finite, Finite.le_ciSup_of_le, Finset, Finset.prod_eq_zero_iff, Finset.prod_le_prod, ciSup_le, eq_comm, exists_eq_ciSup_of_finite, iSup_of_isEmpty, isEmpty_or_nonempty, isEmpty_pi, isEmpty_pi.mp, le_antisymm, le_ciSup_of_le, le_rfl, nonempty_pi, prod_eq_zero_iff, prod_le_prod
 -/

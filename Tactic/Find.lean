@@ -117,7 +117,19 @@ definition findType
   let mut numFound := 0
   for n in (← findDeclsPerHead.get).getD head #[] do
 .get! let c := env.find? n
-    let cTy := c.instantiateTypeLevelP
+    let cTy := c.instantiateTypeLevelParams (← mkFreshLevelMVars c.numLevelParams)
+    let found ← forallTelescopeReducing cTy fun cParams cTy' => do
+      let pat := pat.expr.instantiateLevelParamsArray pat.paramNames
+        (← mkFreshLevelMVars pat.numMVars).toArray
+      let (_, _, pat) ← lambdaMetaTelescope pat
+      let (patParams, _, pat) ← forallMetaTelescopeReducing pat
+      isDefEq cTy' pat <&&> matchHyps patParams.toList [] cParams.toList
+    if found then
+      numFound := numFound + 1
+      if numFound > 20 then
+        logInfo m!"maximum number of search results reached"
+        break
+      logInfo m!"{n}: {cTy}"
 
 中文:
 定义 findType
@@ -131,7 +143,19 @@ definition findType
   let mut numFound := 0
   for n in (← findDeclsPerHead.get).getD head #[] do
 .get! let c := env.find? n
-    let cTy := c.instantiateTypeLevelP
+    let cTy := c.instantiateTypeLevelParams (← mkFreshLevelMVars c.numLevelParams)
+    let found ← forallTelescopeReducing cTy fun cParams cTy' => do
+      let pat := pat.expr.instantiateLevelParamsArray pat.paramNames
+        (← mkFreshLevelMVars pat.numMVars).toArray
+      let (_, _, pat) ← lambdaMetaTelescope pat
+      let (patParams, _, pat) ← forallMetaTelescopeReducing pat
+      isDefEq cTy' pat <&&> matchHyps patParams.toList [] cParams.toList
+    if found then
+      numFound := numFound + 1
+      if numFound > 20 then
+        logInfo m!"maximum number of search results reached"
+        break
+      logInfo m!"{n}: {cTy}"
 
 Depends on / 依赖: withReducible
 -/

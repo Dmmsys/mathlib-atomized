@@ -1853,7 +1853,10 @@ definition reindexₐ
     map_star' M := by
       ext
       unfold reindexₗ
-      dsimp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Matrix.reindex_symm, AddHom.toFun
+      dsimp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Matrix.reindex_symm, AddHom.toFun_eq_coe,
+        AddHom.coe_mk, Matrix.reindex_apply, Matrix.submatrix_apply]
+      rw [star_apply]; rw [star_apply]
+      simp [Matrix.submatrix_apply] }
 
 中文:
 定义 reindexₐ
@@ -1868,7 +1871,10 @@ definition reindexₐ
     map_star' M := by
       ext
       unfold reindexₗ
-      dsimp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Matrix.reindex_symm, AddHom.toFun
+      dsimp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Matrix.reindex_symm, AddHom.toFun_eq_coe,
+        AddHom.coe_mk, Matrix.reindex_apply, Matrix.submatrix_apply]
+      rw [star_apply]; rw [star_apply]
+      simp [Matrix.submatrix_apply] }
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, AddHom.toFun_eq_coe, Equiv.invFun_as_coe, Equiv.toFun_as_coe, Fintype, Fintype.sum_equiv, Matrix, Matrix.reindex_apply, Matrix.reindex_symm, Matrix.submatrix_apply, coe_mk, invFun_as_coe, map_mul, map_star, mul_apply, reindex_apply, reindex_symm, star_apply, submatrix_apply
 -/
@@ -1964,7 +1970,9 @@ definition mapₙₐ
   map_mul' M N := by
     ext
     -- Un-squeezing this `simp` seems to add about half a second elaboration time.
-    simp only [mapₗ_apply, map, LinearMap.coe_coe, ofMatrix_apply,
+    simp only [mapₗ_apply, map, LinearMap.coe_coe, ofMatrix_apply, mul_apply, map_sum, map_mul,
+      ofMatrix_apply]
+  map_star' M := by ext; simp [map, star_apply, map_star]
 
 中文:
 定义 mapₙₐ
@@ -1976,7 +1984,9 @@ definition mapₙₐ
   map_mul' M N := by
     ext
     -- Un-squeezing this `simp` seems to add about half a second elaboration time.
-    simp only [mapₗ_apply, map, LinearMap.coe_coe, ofMatrix_apply,
+    simp only [mapₗ_apply, map, LinearMap.coe_coe, ofMatrix_apply, mul_apply, map_sum, map_mul,
+      ofMatrix_apply]
+  map_star' M := by ext; simp [map, star_apply, map_star]
 
 Depends on / 依赖: M.map
 -/
@@ -2028,7 +2038,8 @@ definition toOneByOne
     simp [Subsingleton.elim i default, Subsingleton.elim j default]
   map_mul' _ _ := by ext; simp [mul_apply]
   map_add' _ _ := by ext; simp
-  map_star' _ := by ext; simp [star_eq_conjT
+  map_star' _ := by ext; simp [star_eq_conjTranspose]
+  map_smul' _ _ := by ext; simp
 
 中文:
 定义 toOneByOne
@@ -2042,7 +2053,8 @@ definition toOneByOne
     simp [Subsingleton.elim i default, Subsingleton.elim j default]
   map_mul' _ _ := by ext; simp [mul_apply]
   map_add' _ _ := by ext; simp
-  map_star' _ := by ext; simp [star_eq_conjT
+  map_star' _ := by ext; simp [star_eq_conjTranspose]
+  map_smul' _ _ := by ext; simp
 -/
 def toOneByOne [Unique n] [Semiring R] [AddCommMonoid A] [Mul A] [Star A] [Module R A] :
     A ≃⋆ₐ[R] CStarMatrix n n A where
@@ -2074,7 +2086,17 @@ definition toCLM
                map_smul' := M.smul_vecMul }
   map_add' M₁ M₂ := by
     ext
-    simp only [ContinuousLinearMap.coe_mk', LinearMap.coe_mk, AddHom.coe_mk, Function.comp_a
+    simp only [ContinuousLinearMap.coe_mk', LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
+      WithCStarModule.equivL_apply, WithCStarModule.equivL_symm_apply,
+      WithCStarModule.equiv_symm_pi_apply, _root_.add_apply, WithCStarModule.add_apply]
+    rw [Matrix.vecMul_add]; rw [Pi.add_apply]
+  map_smul' c M := by
+    ext x i
+    simp only [ContinuousLinearMap.coe_mk', LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
+      WithCStarModule.equivL_apply, WithCStarModule.equivL_symm_apply,
+      WithCStarModule.equiv_symm_pi_apply, _root_.smul_apply,
+      WithCStarModule.smul_apply, RingHom.id_apply]
+    rw [Matrix.vecMul_smul]; rw [Pi.smul_apply]
 
 中文:
 定义 toCLM
@@ -2084,7 +2106,17 @@ definition toCLM
                map_smul' := M.smul_vecMul }
   map_add' M₁ M₂ := by
     ext
-    simp only [ContinuousLinearMap.coe_mk', LinearMap.coe_mk, AddHom.coe_mk, Function.comp_a
+    simp only [ContinuousLinearMap.coe_mk', LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
+      WithCStarModule.equivL_apply, WithCStarModule.equivL_symm_apply,
+      WithCStarModule.equiv_symm_pi_apply, _root_.add_apply, WithCStarModule.add_apply]
+    rw [Matrix.vecMul_add]; rw [Pi.add_apply]
+  map_smul' c M := by
+    ext x i
+    simp only [ContinuousLinearMap.coe_mk', LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
+      WithCStarModule.equivL_apply, WithCStarModule.equivL_symm_apply,
+      WithCStarModule.equiv_symm_pi_apply, _root_.smul_apply,
+      WithCStarModule.smul_apply, RingHom.id_apply]
+    rw [Matrix.vecMul_smul]; rw [Pi.smul_apply]
 
 Depends on / 依赖: M.vecMul, WithCStarModule, WithCStarModule.equivL, equivL, vecMul
 -/
@@ -2160,7 +2192,10 @@ definition toCLMNonUnitalAlgHom
     map_mul' := by
       intros
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.coe_comp,
-        LinearEquiv.coe_coe, MulOpposite.coe_opLinearEquiv, Function.comp_app
+        LinearEquiv.coe_coe, MulOpposite.coe_opLinearEquiv, Function.comp_apply,
+        ← MulOpposite.op_mul, MulOpposite.op_inj]
+      ext
+      simp [toCLM] }
 
 中文:
 定义 toCLMNonUnitalAlgHom
@@ -2170,7 +2205,10 @@ definition toCLMNonUnitalAlgHom
     map_mul' := by
       intros
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.coe_comp,
-        LinearEquiv.coe_coe, MulOpposite.coe_opLinearEquiv, Function.comp_app
+        LinearEquiv.coe_coe, MulOpposite.coe_opLinearEquiv, Function.comp_apply,
+        ← MulOpposite.op_mul, MulOpposite.op_inj]
+      ext
+      simp [toCLM] }
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, LinearMap.coe_toAddHom, MulOpposite, MulOpposite.coe_opLinearEquiv, MulOpposite.opLinearEquiv, MulOpposite.op_inj, MulOpposite.op_mul, coe_coe, coe_comp, coe_opLinearEquiv, coe_toAddHom, comp_apply, intros
 -/
@@ -2430,7 +2468,7 @@ lemma normedSpaceCore
   norm_smul c M := by rw [norm_def, norm_def, map_smul, norm_smul _ (toCLM M)]
   norm_triangle M₁ M₂ := by simpa [← map_add] using! norm_add_le (toCLM M₁) (toCLM M₂)
   norm_eq_zero_iff := by
-    simpa only [norm_def, norm_eq_zero, ← injective_iff_map_eq_zero'] using! toCLM_in
+    simpa only [norm_def, norm_eq_zero, ← injective_iff_map_eq_zero'] using! toCLM_injective
 
 中文:
 引理 normedSpaceCore
@@ -2439,7 +2477,7 @@ lemma normedSpaceCore
   norm_smul c M := by rw [norm_def, norm_def, map_smul, norm_smul _ (toCLM M)]
   norm_triangle M₁ M₂ := by simpa [← map_add] using! norm_add_le (toCLM M₁) (toCLM M₂)
   norm_eq_zero_iff := by
-    simpa only [norm_def, norm_eq_zero, ← injective_iff_map_eq_zero'] using! toCLM_in
+    simpa only [norm_def, norm_eq_zero, ← injective_iff_map_eq_zero'] using! toCLM_injective
 
 Depends on / 依赖: opNorm_nonneg
 -/
@@ -2465,7 +2503,8 @@ lemma norm_entry_le_norm
     · exact le_of_mul_le_mul_right this h
   rw [← CStarRing.norm_star_mul_self]; rw [← toCLM_apply_single_apply]
 .trans apply norm_apply_le_norm _ _
-.trans apply
+.trans apply (toCLM M).le_opNorm _
+  simp [norm_def]
 
 中文:
 引理 norm_entry_le_norm
@@ -2478,7 +2517,8 @@ lemma norm_entry_le_norm
     · exact le_of_mul_le_mul_right this h
   rw [← CStarRing.norm_star_mul_self]; rw [← toCLM_apply_single_apply]
 .trans apply norm_apply_le_norm _ _
-.trans apply
+.trans apply (toCLM M).le_opNorm _
+  simp [norm_def]
 
 Depends on / 依赖: CStarRing, CStarRing.norm_star_mul_self, classical, eq_zero_or_norm_pos, le_of_mul_le_mul_right, le_opNorm, norm_apply_le_norm, norm_def, norm_star_mul_self, toCLM_apply_single_apply
 -/
@@ -2636,7 +2676,17 @@ lemma antilipschitzWith_toMatrixAux
       refine (toCLM M).opNorm_le_bound (by positivity) fun v => ?_
       simp only [toCLM_apply_eq_sum, Finset.sum_mul]
 .trans apply pi_norm_le_sum_norm _
-      gcongr wit
+      gcongr with i _
+.trans apply norm_sum_le _ _
+      gcongr with j _
+.trans apply norm_mul_le _ _
+      rw [mul_comm]
+      gcongr
+      exact norm_apply_le_norm v j
+    _ <= ∑ _ : n, ∑ _ : m, ‖ofMatrixₗ.symm (R := Complex) M‖ := by
+      gcongr with j _ i _
+.norm_entry_le_entrywise_sup_norm exact ofMatrixₗ.symm (R := Complex) M
+    _ = _ := by simp [mul_assoc]
 
 中文:
 引理 antilipschitzWith_toMatrixAux
@@ -2648,7 +2698,17 @@ lemma antilipschitzWith_toMatrixAux
       refine (toCLM M).opNorm_le_bound (by positivity) fun v => ?_
       simp only [toCLM_apply_eq_sum, Finset.sum_mul]
 .trans apply pi_norm_le_sum_norm _
-      gcongr wit
+      gcongr with i _
+.trans apply norm_sum_le _ _
+      gcongr with j _
+.trans apply norm_mul_le _ _
+      rw [mul_comm]
+      gcongr
+      exact norm_apply_le_norm v j
+    _ <= ∑ _ : n, ∑ _ : m, ‖ofMatrixₗ.symm (R := Complex) M‖ := by
+      gcongr with j _ i _
+.norm_entry_le_entrywise_sup_norm exact ofMatrixₗ.symm (R := Complex) M
+    _ = _ := by simp [mul_assoc]
 -/
 private lemma antilipschitzWith_toMatrixAux :
     AntilipschitzWith (Fintype.card n * Fintype.card m)
@@ -3003,7 +3063,25 @@ instance instCStarRing
       rw [opNorm_le_iff (by positivity)]
       intro v
       rw [norm_eq_sqrt_norm_inner_self (A := A)]; rw [← inner_toCLM_conjTranspose_right]
-      have h₁ : ‖⟪v, (toCLM Mᴴ) ((
+      have h₁ : ‖⟪v, (toCLM Mᴴ) ((toCLM M) v)⟫_A‖ <= ‖M * star M‖ * ‖v‖ ^ 2 := calc
+          _ <= ‖v‖ * ‖(toCLM Mᴴ) (toCLM M v)‖ := norm_inner_le (C⋆ᵐᵒᵈ(A, n -> A))
+          _ <= ‖v‖ * ‖(toCLM Mᴴ).comp (toCLM M)‖ * ‖v‖ := by
+                    rw [mul_assoc]
+                    gcongr
+                    rw [← ContinuousLinearMap.comp_apply]
+                    exact le_opNorm ((toCLM Mᴴ).comp (toCLM M)) v
+          _ = ‖(toCLM Mᴴ).comp (toCLM M)‖ * ‖v‖ ^ 2 := by ring
+          _ = ‖M * star M‖ * ‖v‖ ^ 2 := by
+                    congr
+                    apply MulOpposite.op_injective
+                    simp only [← toCLMNonUnitalAlgHom_eq_toCLM, map_mul]
+                    rfl
+      have h₂ : ‖v‖ = √(‖v‖ ^ 2) := by simp
+      rw [h₂]; rw [← Real.sqrt_mul]
+      · gcongr
+      positivity
+    rw [← Real.sqrt_le_sqrt_iff (by positivity)]
+    simp [hmain]
 
 中文:
 实例 instCStarRing
@@ -3014,7 +3092,25 @@ instance instCStarRing
       rw [opNorm_le_iff (by positivity)]
       intro v
       rw [norm_eq_sqrt_norm_inner_self (A := A)]; rw [← inner_toCLM_conjTranspose_right]
-      have h₁ : ‖⟪v, (toCLM Mᴴ) ((
+      have h₁ : ‖⟪v, (toCLM Mᴴ) ((toCLM M) v)⟫_A‖ <= ‖M * star M‖ * ‖v‖ ^ 2 := calc
+          _ <= ‖v‖ * ‖(toCLM Mᴴ) (toCLM M v)‖ := norm_inner_le (C⋆ᵐᵒᵈ(A, n -> A))
+          _ <= ‖v‖ * ‖(toCLM Mᴴ).comp (toCLM M)‖ * ‖v‖ := by
+                    rw [mul_assoc]
+                    gcongr
+                    rw [← ContinuousLinearMap.comp_apply]
+                    exact le_opNorm ((toCLM Mᴴ).comp (toCLM M)) v
+          _ = ‖(toCLM Mᴴ).comp (toCLM M)‖ * ‖v‖ ^ 2 := by ring
+          _ = ‖M * star M‖ * ‖v‖ ^ 2 := by
+                    congr
+                    apply MulOpposite.op_injective
+                    simp only [← toCLMNonUnitalAlgHom_eq_toCLM, map_mul]
+                    rfl
+      have h₂ : ‖v‖ = √(‖v‖ ^ 2) := by simp
+      rw [h₂]; rw [← Real.sqrt_mul]
+      · gcongr
+      positivity
+    rw [← Real.sqrt_le_sqrt_iff (by positivity)]
+    simp [hmain]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_apply, comp_apply, inner_toCLM_conjTranspose_right, mul_assoc, norm_eq_sqrt_norm_inner_self, norm_inner_le, of_le_norm_mul_star_self, opNorm_le_iff
 -/

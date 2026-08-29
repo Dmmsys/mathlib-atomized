@@ -115,7 +115,10 @@ abbreviation NormalizationMonoid.ofRightInverse
   { normUnit a := if a = 0 then 1 else (assoc a).choose
     normUnit_zero := if_pos rfl
     normUnit_one := by
-      nontriviality α; rw [← Units.val_inj]; convert ← (assoc 1).choose_spec <;> simp [
+      nontriviality α; rw [← Units.val_inj]; convert ← (assoc 1).choose_spec <;> simp [out_one]
+    normUnit_mul_units {a} u ha := by
+      simp_rw [Units.mul_left_eq_zero, if_neg ha, eq_inv_mul_iff_mul_eq, ← Units.val_inj]
+      rw [Units.val_mul]; rw [← (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero ha).eq_iff]; rw [(assoc a).choose_spec]; rw [← mul_assoc]; rw [(assoc _).choose_spec]; rw [Associates.mk_eq_mk_iff_associated.mpr (associated_mul_unit_right a u u.isUnit)] }
 
 中文:
 缩写 Normalization幺半群.ofRightInverse
@@ -125,7 +128,10 @@ abbreviation NormalizationMonoid.ofRightInverse
   { normUnit a := if a = 0 then 1 else (assoc a).choose
     normUnit_zero := if_pos rfl
     normUnit_one := by
-      nontriviality α; rw [← Units.val_inj]; convert ← (assoc 1).choose_spec <;> simp [
+      nontriviality α; rw [← Units.val_inj]; convert ← (assoc 1).choose_spec <;> simp [out_one]
+    normUnit_mul_units {a} u ha := by
+      simp_rw [Units.mul_left_eq_zero, if_neg ha, eq_inv_mul_iff_mul_eq, ← Units.val_inj]
+      rw [Units.val_mul]; rw [← (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero ha).eq_iff]; rw [(assoc a).choose_spec]; rw [← mul_assoc]; rw [(assoc _).choose_spec]; rw [Associates.mk_eq_mk_iff_associated.mpr (associated_mul_unit_right a u u.isUnit)] }
 
 Depends on / 依赖: Associates, Associates.mk_eq_mk_iff_associated.mp, Classical, Classical.dec, IsLeftCancelMulZero, IsLeftCancelMulZero.mul_left_cancel_of_ne_zero, Units.mul_left_eq_zero, Units.val_inj, Units.val_mul, choose_spec, convert, eq_iff, eq_inv_mul_iff_mul_eq, if_neg, if_pos, mk_eq_mk_iff_associated, mk_out, mul_left_cancel_of_ne_zero, mul_left_eq_zero, nontriviality
 -/
@@ -1369,7 +1375,8 @@ theorem gcd_assoc
     (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_left m n))
       (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_right m n)) (gcd_dvd_right (gcd m n) k)))
     (dvd_gcd
-      (dvd_gcd (gcd_dvd_left m (gcd n k)) ((gcd_dvd
+      (dvd_gcd (gcd_dvd_left m (gcd n k)) ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_left n k)))
+      ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_right n k)))
 
 中文:
 定理 gcd_assoc
@@ -1379,7 +1386,8 @@ theorem gcd_assoc
     (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_left m n))
       (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_right m n)) (gcd_dvd_right (gcd m n) k)))
     (dvd_gcd
-      (dvd_gcd (gcd_dvd_left m (gcd n k)) ((gcd_dvd
+      (dvd_gcd (gcd_dvd_left m (gcd n k)) ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_left n k)))
+      ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_right n k)))
 
 Depends on / 依赖: dvd_antisymm_of_normalize_eq, dvd_gcd, gcd_dvd_left, gcd_dvd_right, normalize_gcd
 -/
@@ -1403,7 +1411,7 @@ theorem gcd_assoc'
       (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_right m n)) (gcd_dvd_right (gcd m n) k)))
     (dvd_gcd
       (dvd_gcd (gcd_dvd_left m (gcd n k)) ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_left n k)))
-
+      ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_right n k)))
 
 中文:
 定理 gcd_assoc'
@@ -1414,7 +1422,7 @@ theorem gcd_assoc'
       (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_right m n)) (gcd_dvd_right (gcd m n) k)))
     (dvd_gcd
       (dvd_gcd (gcd_dvd_left m (gcd n k)) ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_left n k)))
-
+      ((gcd_dvd_right m (gcd n k)).trans (gcd_dvd_right n k)))
 
 Depends on / 依赖: associated_of_dvd_dvd, dvd_gcd, gcd_dvd_left, gcd_dvd_right
 -/
@@ -1876,7 +1884,9 @@ theorem gcd_mul_left
     gcd_eq_normalize
       (eq.symm ▸ mul_dvd_mul_left a
         (show d ∣ gcd b c from
-          dvd_gcd ((m
+          dvd_gcd ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_left _ _)
+            ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_right _ _)))
+      (dvd_gcd (mul_dvd_mul_left a <| gcd_dvd_left _ _) (mul_dvd_mul_left a <| gcd_dvd_right _ _))
 
 中文:
 定理 gcd_mul_left
@@ -1888,7 +1898,9 @@ theorem gcd_mul_left
     gcd_eq_normalize
       (eq.symm ▸ mul_dvd_mul_left a
         (show d ∣ gcd b c from
-          dvd_gcd ((m
+          dvd_gcd ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_left _ _)
+            ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_right _ _)))
+      (dvd_gcd (mul_dvd_mul_left a <| gcd_dvd_left _ _) (mul_dvd_mul_left a <| gcd_dvd_right _ _))
 
 Depends on / 依赖: dvd_gcd, dvd_mul_right, eq.symm, gcd_dvd_left, gcd_dvd_right, gcd_eq_normalize, mul_dvd_mul_iff_left, mul_dvd_mul_left, normalize
 -/
@@ -1920,7 +1932,10 @@ theorem gcd_mul_left'
     gcongr
     exact
       dvd_gcd ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_left _ _)
-        ((mul_dvd_mul_
+        ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_right _ _)
+  · exact dvd_gcd (mul_dvd_mul_left a <| gcd_dvd_left _ _) (mul_dvd_mul_left a <| gcd_dvd_right _ _)
+
+@[simp]
 
 中文:
 定理 gcd_mul_left'
@@ -1934,7 +1949,10 @@ theorem gcd_mul_left'
     gcongr
     exact
       dvd_gcd ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_left _ _)
-        ((mul_dvd_mul_
+        ((mul_dvd_mul_iff_left ha).1 <| eq ▸ gcd_dvd_right _ _)
+  · exact dvd_gcd (mul_dvd_mul_left a <| gcd_dvd_left _ _) (mul_dvd_mul_left a <| gcd_dvd_right _ _)
+
+@[simp]
 
 Depends on / 依赖: associated_of_dvd_dvd, dvd_gcd, dvd_mul_right, eq_or_ne, gcd_dvd_left, gcd_dvd_right, gcd_zero_left, mul_dvd_mul_iff_left, mul_dvd_mul_left, zero_mul
 -/
@@ -2267,7 +2285,8 @@ instance [h
       exact ⟨0, n, dvd_refl 0, dvd_refl n, by simp⟩
     · obtain ⟨a, ha⟩ := gcd_dvd_left k m
       refine ⟨gcd k m, a, gcd_dvd_right _ _, ?_, ha⟩
-      rw [← mul_dvd_mul_iff_left h0]; rw [← 
+      rw [← mul_dvd_mul_iff_left h0]; rw [← ha]
+      exact dvd_gcd_mul_of_dvd_mul H
 
 中文:
 实例 [h
@@ -2280,7 +2299,8 @@ instance [h
       exact ⟨0, n, dvd_refl 0, dvd_refl n, by simp⟩
     · obtain ⟨a, ha⟩ := gcd_dvd_left k m
       refine ⟨gcd k m, a, gcd_dvd_right _ _, ?_, ha⟩
-      rw [← mul_dvd_mul_iff_left h0]; rw [← 
+      rw [← mul_dvd_mul_iff_left h0]; rw [← ha]
+      exact dvd_gcd_mul_of_dvd_mul H
 
 Depends on / 依赖: dvd_gcd_mul_of_dvd_mul, dvd_refl, gcd_dvd_left, gcd_dvd_right, gcd_eq_zero_iff, mul_dvd_mul_iff_left
 -/
@@ -2310,7 +2330,9 @@ theorem gcd_mul_dvd_mul_gcd
   have hm'n' : m' * n' ∣ k := h ▸ gcd_dvd_left _ _
   apply mul_dvd_mul
   · have hm'k : m' ∣ k := (dvd_mul_right m' n').trans hm'n'
-    exact dvd_gcd hm'k h
+    exact dvd_gcd hm'k hm'
+  · have hn'k : n' ∣ k := (dvd_mul_left n' m').trans hm'n'
+    exact dvd_gcd hn'k hn'
 
 中文:
 定理 gcd_mul_dvd_mul_gcd
@@ -2323,7 +2345,9 @@ theorem gcd_mul_dvd_mul_gcd
   have hm'n' : m' * n' ∣ k := h ▸ gcd_dvd_left _ _
   apply mul_dvd_mul
   · have hm'k : m' ∣ k := (dvd_mul_right m' n').trans hm'n'
-    exact dvd_gcd hm'k h
+    exact dvd_gcd hm'k hm'
+  · have hn'k : n' ∣ k := (dvd_mul_left n' m').trans hm'n'
+    exact dvd_gcd hn'k hn'
 
 Depends on / 依赖: dvd_gcd, dvd_mul_left, dvd_mul_right, exists_dvd_and_dvd_of_dvd_mul, gcd_dvd_left, gcd_dvd_right, mul_dvd_mul, replace
 -/
@@ -2353,6 +2377,11 @@ theorem gcd_pow_right_dvd_pow_gcd
         (pow_dvd_pow_of_dvd (gcd_zero_left' (0 : α)).symm.dvd _)
   · induction k with
     | zero => rw [pow_zero, pow_zero]; exact (gcd_one_right' a).dvd
+    | succ k hk =>
+      rw [pow_succ']; rw [pow_succ']
+      trans gcd a b * gcd a (b ^ k)
+      · exact gcd_mul_dvd_mul_gcd a b (b ^ k)
+      · exact (mul_dvd_mul_iff_left hg).mpr hk
 
 中文:
 定理 gcd_pow_right_dvd_pow_gcd
@@ -2366,6 +2395,11 @@ theorem gcd_pow_right_dvd_pow_gcd
         (pow_dvd_pow_of_dvd (gcd_zero_left' (0 : α)).symm.dvd _)
   · induction k with
     | zero => rw [pow_zero, pow_zero]; exact (gcd_one_right' a).dvd
+    | succ k hk =>
+      rw [pow_succ']; rw [pow_succ']
+      trans gcd a b * gcd a (b ^ k)
+      · exact gcd_mul_dvd_mul_gcd a b (b ^ k)
+      · exact (mul_dvd_mul_iff_left hg).mpr hk
 
 Depends on / 依赖: StrongNormalizedGCDMonoid, dvd.trans, gcd_eq_zero_iff, gcd_mul_dvd_mul_gcd, gcd_one_right, gcd_zero_left, mul_dvd_mul_iff_left, pow_dvd_pow_of_dvd, pow_succ, pow_zero, symm.dvd
 -/
@@ -2431,7 +2465,17 @@ theorem pow_dvd_of_mul_eq_pow
       grw [hd₁, hab.dvd]
   have h2 : d₁ ^ k ∣ a * b := by
     use d₂ ^ k
-    rw [h]; rw [hc
+    rw [h]; rw [hc]
+    exact mul_pow d₁ d₂ k
+  rw [mul_comm] at h2
+  have h3 : d₁ ^ k ∣ a := by
+    apply (dvd_gcd_mul_of_dvd_mul h2).trans
+    rw [h1.mul_left_dvd]
+  have h4 : d₁ ^ k != 0 := by
+    intro hdk
+    rw [hdk] at h3
+    apply absurd (zero_dvd_iff.mp h3) ha
+  exact ⟨h4, h3⟩
 
 中文:
 定理 pow_dvd_of_mul_eq_pow
@@ -2447,7 +2491,17 @@ theorem pow_dvd_of_mul_eq_pow
       grw [hd₁, hab.dvd]
   have h2 : d₁ ^ k ∣ a * b := by
     use d₂ ^ k
-    rw [h]; rw [hc
+    rw [h]; rw [hc]
+    exact mul_pow d₁ d₂ k
+  rw [mul_comm] at h2
+  have h3 : d₁ ^ k ∣ a := by
+    apply (dvd_gcd_mul_of_dvd_mul h2).trans
+    rw [h1.mul_left_dvd]
+  have h4 : d₁ ^ k != 0 := by
+    intro hdk
+    rw [hdk] at h3
+    apply absurd (zero_dvd_iff.mp h3) ha
+  exact ⟨h4, h3⟩
 
 Depends on / 依赖: IsUnit, IsUnit.dvd, IsUnit.pow, absurd, dvd_gcd_mul_of_dvd_mul, gcd_pow_left_dvd_pow_gcd, h1.mul_left_dvd, hab.dvd, isUnit_of_dvd_one, mul_comm, mul_left_dvd, mul_pow, zero_dvd_iff, zero_dvd_iff.mp
 -/
@@ -2493,7 +2547,32 @@ theorem exists_associated_pow_of_mul_eq_pow
   by_cases hb : b = 0
   · use 1
     rw [one_pow]
-    apply (associated_one_iff_isUnit.mpr hab).sy
+    apply (associated_one_iff_isUnit.mpr hab).symm.trans
+    rw [hb]
+    exact gcd_zero_right' a
+  obtain rfl | hk := k.eq_zero_or_pos
+  · use 1
+    rw [pow_zero] at h ⊢
+    use Units.mkOfMulEqOne _ _ h
+    rw [Units.val_mkOfMulEqOne]; rw [one_mul]
+  have hc : c ∣ a * b := by
+    rw [h]
+    exact dvd_pow_self _ hk.ne'
+  obtain ⟨d₁, d₂, hd₁, hd₂, hc⟩ := exists_dvd_and_dvd_of_dvd_mul hc
+  use d₁
+  obtain ⟨h0₁, ⟨a', ha'⟩⟩ := pow_dvd_of_mul_eq_pow ha hab h hc hd₁
+  rw [mul_comm] at h hc
+  rw [(gcd_comm' a b).isUnit_iff] at hab
+  obtain ⟨h0₂, ⟨b', hb'⟩⟩ := pow_dvd_of_mul_eq_pow hb hab h hc hd₂
+  rw [ha']; rw [hb']; rw [hc]; rw [mul_pow] at h
+  have h' : a' * b' = 1 := by
+    apply (mul_right_inj' h0₁).mp
+    rw [mul_one]
+    apply (mul_right_inj' h0₂).mp
+    rw [← h]
+    rw [mul_assoc]; rw [mul_comm a']; rw [← mul_assoc _ b']; rw [← mul_assoc b']; rw [mul_comm b']
+  use Units.mkOfMulEqOne _ _ h'
+  rw [Units.val_mkOfMulEqOne]; rw [ha']
 
 中文:
 定理 存在_associated_pow_of_mul_eq_pow
@@ -2510,7 +2589,32 @@ theorem exists_associated_pow_of_mul_eq_pow
   by_cases hb : b = 0
   · use 1
     rw [one_pow]
-    apply (associated_one_iff_isUnit.mpr hab).sy
+    apply (associated_one_iff_isUnit.mpr hab).symm.trans
+    rw [hb]
+    exact gcd_zero_right' a
+  obtain rfl | hk := k.eq_zero_or_pos
+  · use 1
+    rw [pow_zero] at h ⊢
+    use Units.mkOfMulEqOne _ _ h
+    rw [Units.val_mkOfMulEqOne]; rw [one_mul]
+  have hc : c ∣ a * b := by
+    rw [h]
+    exact dvd_pow_self _ hk.ne'
+  obtain ⟨d₁, d₂, hd₁, hd₂, hc⟩ := exists_dvd_and_dvd_of_dvd_mul hc
+  use d₁
+  obtain ⟨h0₁, ⟨a', ha'⟩⟩ := pow_dvd_of_mul_eq_pow ha hab h hc hd₁
+  rw [mul_comm] at h hc
+  rw [(gcd_comm' a b).isUnit_iff] at hab
+  obtain ⟨h0₂, ⟨b', hb'⟩⟩ := pow_dvd_of_mul_eq_pow hb hab h hc hd₂
+  rw [ha']; rw [hb']; rw [hc]; rw [mul_pow] at h
+  have h' : a' * b' = 1 := by
+    apply (mul_right_inj' h0₁).mp
+    rw [mul_one]
+    apply (mul_right_inj' h0₂).mp
+    rw [← h]
+    rw [mul_assoc]; rw [mul_comm a']; rw [← mul_assoc _ b']; rw [← mul_assoc b']; rw [mul_comm b']
+  use Units.mkOfMulEqOne _ _ h'
+  rw [Units.val_mkOfMulEqOne]; rw [ha']
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, Units.mkOfMulEqOne, Units.val_mkOfMulEqOne, associated_one_iff_isUnit, associated_one_iff_isUnit.mpr, dvd_pow_self, eq_or_ne, eq_zero_or_pos, gcd_zero_right, hk.ne, k.eq_zero_or_pos, mkOfMulEqOne, one_mul, one_pow, pow_zero, subsingleton_or_nontrivial, symm.trans, val_mkOfMulEqOne, zero_pow
 -/
@@ -2666,7 +2770,7 @@ theorem extract_gcd
     exact ⟨1, 1, by rw [h, zero_mul], by rw [h, zero_mul], gcd_one_left' 1⟩
   obtain ⟨x', ex⟩ := gcd_dvd_left x y
   obtain ⟨y', ey⟩ := gcd_dvd_right x y
-  exact ⟨x', y', ex, ey,
+  exact ⟨x', y', ex, ey, isUnit_gcd_of_eq_mul_gcd ex ey h⟩
 
 中文:
 定理 extract_gcd
@@ -2678,7 +2782,7 @@ theorem extract_gcd
     exact ⟨1, 1, by rw [h, zero_mul], by rw [h, zero_mul], gcd_one_left' 1⟩
   obtain ⟨x', ex⟩ := gcd_dvd_left x y
   obtain ⟨y', ey⟩ := gcd_dvd_right x y
-  exact ⟨x', y', ex, ey,
+  exact ⟨x', y', ex, ey, isUnit_gcd_of_eq_mul_gcd ex ey h⟩
 
 Depends on / 依赖: associated_one_iff_isUnit, gcd_dvd_left, gcd_dvd_right, gcd_eq_zero_iff, gcd_one_left, isUnit_gcd_of_eq_mul_gcd, simp_rw, zero_mul
 -/
@@ -2884,7 +2988,8 @@ theorem lcm_dvd_iff
         zero_dvd_iff, dvd_zero, and_true, imp_true_iff]
   · obtain ⟨h1, h2⟩ := not_or.1 h
     have h : gcd a b != 0 := fun H => h1 ((gcd_eq_zero_iff _ _).1 H).1
-    
+    rw [← mul_dvd_mul_iff_left h]; rw [(gcd_mul_lcm a b).dvd_iff_dvd_left]; rw [←
+      (gcd_mul_right' c a b).dvd_iff_dvd_right]; rw [dvd_gcd_iff]; rw [mul_comm b c]; rw [mul_dvd_mul_iff_left h1]; rw [mul_dvd_mul_iff_right h2]; rw [and_comm]
 
 中文:
 定理 lcm_dvd_iff
@@ -2897,7 +3002,8 @@ theorem lcm_dvd_iff
         zero_dvd_iff, dvd_zero, and_true, imp_true_iff]
   · obtain ⟨h1, h2⟩ := not_or.1 h
     have h : gcd a b != 0 := fun H => h1 ((gcd_eq_zero_iff _ _).1 H).1
-    
+    rw [← mul_dvd_mul_iff_left h]; rw [(gcd_mul_lcm a b).dvd_iff_dvd_left]; rw [←
+      (gcd_mul_right' c a b).dvd_iff_dvd_right]; rw [dvd_gcd_iff]; rw [mul_comm b c]; rw [mul_dvd_mul_iff_left h1]; rw [mul_dvd_mul_iff_right h2]; rw [and_comm]
 
 Depends on / 依赖: and_c, and_true, contextual, dvd_gcd_iff, dvd_iff_dvd_left, dvd_iff_dvd_right, dvd_zero, gcd_eq_zero_iff, gcd_mul_lcm, gcd_mul_right, iff_def, imp_true_iff, lcm_zero_left, lcm_zero_right, mul_comm, mul_dvd_mul_iff_left, mul_dvd_mul_iff_right, not_or, zero_dvd_iff
 -/
@@ -3113,7 +3219,7 @@ theorem lcm_assoc
     (lcm_dvd (lcm_dvd (dvd_lcm_left _ _) ((dvd_lcm_left _ _).trans (dvd_lcm_right _ _)))
       ((dvd_lcm_right _ _).trans (dvd_lcm_right _ _)))
     (lcm_dvd ((dvd_lcm_left _ _).trans (dvd_lcm_left _ _))
-      (lcm_dvd ((dvd_lcm_rig
+      (lcm_dvd ((dvd_lcm_right _ _).trans (dvd_lcm_left _ _)) (dvd_lcm_right _ _)))
 
 中文:
 定理 lcm_assoc
@@ -3123,7 +3229,7 @@ theorem lcm_assoc
     (lcm_dvd (lcm_dvd (dvd_lcm_left _ _) ((dvd_lcm_left _ _).trans (dvd_lcm_right _ _)))
       ((dvd_lcm_right _ _).trans (dvd_lcm_right _ _)))
     (lcm_dvd ((dvd_lcm_left _ _).trans (dvd_lcm_left _ _))
-      (lcm_dvd ((dvd_lcm_rig
+      (lcm_dvd ((dvd_lcm_right _ _).trans (dvd_lcm_left _ _)) (dvd_lcm_right _ _)))
 
 Depends on / 依赖: dvd_antisymm_of_normalize_eq, dvd_lcm_left, dvd_lcm_right, lcm_dvd, normalize_lcm
 -/
@@ -3145,7 +3251,7 @@ theorem lcm_assoc'
     (lcm_dvd (lcm_dvd (dvd_lcm_left _ _) ((dvd_lcm_left _ _).trans (dvd_lcm_right _ _)))
       ((dvd_lcm_right _ _).trans (dvd_lcm_right _ _)))
     (lcm_dvd ((dvd_lcm_left _ _).trans (dvd_lcm_left _ _))
-      (lcm_dvd ((dvd_lcm_right _ _).trans (dvd_lcm_left _ _)) (dvd_lcm_righ
+      (lcm_dvd ((dvd_lcm_right _ _).trans (dvd_lcm_left _ _)) (dvd_lcm_right _ _)))
 
 中文:
 定理 lcm_assoc'
@@ -3155,7 +3261,7 @@ theorem lcm_assoc'
     (lcm_dvd (lcm_dvd (dvd_lcm_left _ _) ((dvd_lcm_left _ _).trans (dvd_lcm_right _ _)))
       ((dvd_lcm_right _ _).trans (dvd_lcm_right _ _)))
     (lcm_dvd ((dvd_lcm_left _ _).trans (dvd_lcm_left _ _))
-      (lcm_dvd ((dvd_lcm_right _ _).trans (dvd_lcm_left _ _)) (dvd_lcm_righ
+      (lcm_dvd ((dvd_lcm_right _ _).trans (dvd_lcm_left _ _)) (dvd_lcm_right _ _)))
 
 Depends on / 依赖: associated_of_dvd_dvd, dvd_lcm_left, dvd_lcm_right, lcm_dvd
 -/
@@ -3428,7 +3534,13 @@ theorem lcm_mul_left
     have : a ∣ lcm (a * b) (a * c) := (dvd_mul_right _ _).trans (dvd_lcm_left _ _)
     let ⟨_, eq⟩ := this
     lcm_eq_normalize
-      (lcm_dvd (mul_dvd_mul_left a (dvd_lcm_left
+      (lcm_dvd (mul_dvd_mul_left a (dvd_lcm_left _ _)) (mul_dvd_mul_left a (dvd_lcm_right _ _)))
+      (eq.symm ▸
+        (mul_dvd_mul_left a <|
+          lcm_dvd ((mul_dvd_mul_iff_left ha).1 <| eq ▸ dvd_lcm_left _ _)
+            ((mul_dvd_mul_iff_left ha).1 <| eq ▸ dvd_lcm_right _ _)))
+
+@[simp]
 
 中文:
 定理 lcm_mul_left
@@ -3439,7 +3551,13 @@ theorem lcm_mul_left
     have : a ∣ lcm (a * b) (a * c) := (dvd_mul_right _ _).trans (dvd_lcm_left _ _)
     let ⟨_, eq⟩ := this
     lcm_eq_normalize
-      (lcm_dvd (mul_dvd_mul_left a (dvd_lcm_left
+      (lcm_dvd (mul_dvd_mul_left a (dvd_lcm_left _ _)) (mul_dvd_mul_left a (dvd_lcm_right _ _)))
+      (eq.symm ▸
+        (mul_dvd_mul_left a <|
+          lcm_dvd ((mul_dvd_mul_iff_left ha).1 <| eq ▸ dvd_lcm_left _ _)
+            ((mul_dvd_mul_iff_left ha).1 <| eq ▸ dvd_lcm_right _ _)))
+
+@[simp]
 
 Depends on / 依赖: dvd_lcm_left, dvd_lcm_right, dvd_mul_right, eq.symm, lcm_dvd, lcm_eq_normalize, mul_dvd_mul_iff_left, mul_dvd_mul_left, normalize
 -/
@@ -3889,7 +4007,12 @@ instance subsingleton_gcdMonoid_of_unique_units
       apply_rules +allowSynthFailures [dvd_gcd, gcd_dvd_left, gcd_dvd_right]
     have hlcm : g₁.lcm = g₂.lcm := by
       ext a b
-      refine associated_iff_eq.mp 
+      refine associated_iff_eq.mp (associated_of_dvd_dvd ?_ ?_) <;>
+      apply_rules +allowSynthFailures [lcm_dvd, dvd_lcm_left, dvd_lcm_right]
+    cases g₁
+    cases g₂
+    dsimp only at hgcd hlcm
+    simp only [hgcd, hlcm]⟩
 
 中文:
 实例 subsingleton_gcdMonoid_of_unique_units
@@ -3901,7 +4024,12 @@ instance subsingleton_gcdMonoid_of_unique_units
       apply_rules +allowSynthFailures [dvd_gcd, gcd_dvd_left, gcd_dvd_right]
     have hlcm : g₁.lcm = g₂.lcm := by
       ext a b
-      refine associated_iff_eq.mp 
+      refine associated_iff_eq.mp (associated_of_dvd_dvd ?_ ?_) <;>
+      apply_rules +allowSynthFailures [lcm_dvd, dvd_lcm_left, dvd_lcm_right]
+    cases g₁
+    cases g₂
+    dsimp only at hgcd hlcm
+    simp only [hgcd, hlcm]⟩
 
 Depends on / 依赖: allowSynthFailures, apply_rules, associated_iff_eq, associated_iff_eq.mp, associated_of_dvd_dvd, dvd_gcd, dvd_lcm_left, dvd_lcm_right, gcd_dvd_left, gcd_dvd_right, lcm_dvd
 -/
@@ -4081,7 +4209,12 @@ theorem gcd_eq_of_dvd_sub_right
     rcases gcd_dvd_right a b with ⟨e, he⟩
     rcases gcd_dvd_left a b with ⟨f, hf⟩
     use e - f * d
-    rw [mul_sub]; rw [← he]; r
+    rw [mul_sub]; rw [← he]; rw [← mul_assoc]; rw [← hf]; rw [← hd]; rw [sub_sub_cancel]
+  · rcases h with ⟨d, hd⟩
+    rcases gcd_dvd_right a c with ⟨e, he⟩
+    rcases gcd_dvd_left a c with ⟨f, hf⟩
+    use e + f * d
+    rw [mul_add]; rw [← he]; rw [← mul_assoc]; rw [← hf]; rw [← hd]; rw [← add_sub_assoc]; rw [add_comm c b]; rw [add_sub_cancel_right]
 
 中文:
 定理 gcd_eq_of_dvd_sub_right
@@ -4095,7 +4228,12 @@ theorem gcd_eq_of_dvd_sub_right
     rcases gcd_dvd_right a b with ⟨e, he⟩
     rcases gcd_dvd_left a b with ⟨f, hf⟩
     use e - f * d
-    rw [mul_sub]; rw [← he]; r
+    rw [mul_sub]; rw [← he]; rw [← mul_assoc]; rw [← hf]; rw [← hd]; rw [sub_sub_cancel]
+  · rcases h with ⟨d, hd⟩
+    rcases gcd_dvd_right a c with ⟨e, he⟩
+    rcases gcd_dvd_left a c with ⟨f, hf⟩
+    use e + f * d
+    rw [mul_add]; rw [← he]; rw [← mul_assoc]; rw [← hf]; rw [← hd]; rw [← add_sub_assoc]; rw [add_comm c b]; rw [add_sub_cancel_right]
 
 Depends on / 依赖: dvd_antisymm_of_normalize_eq, dvd_gcd_iff, gcd_dvd_left, gcd_dvd_right, mul_add, mul_assoc, mul_sub, normalize_gcd, sub_sub_cancel
 -/
@@ -4177,7 +4315,22 @@ definition strongNormalizationMonoidOfMonoidHomRightInverse
   normUnit_zero := if_pos rfl
   normUnit_mul {a b} ha hb := by
     simp_rw [if_neg (mul_ne_zero ha hb), if_neg ha, if_neg hb, Units.ext_iff, Units.val_mul]
-    suffices a * b * ↑(Classical.
+    suffices a * b * ↑(Classical.choose (associated_map_mk hinv (a * b))) =
+        a * ↑(Classical.choose (associated_map_mk hinv a)) *
+        (b * ↑(Classical.choose (associated_map_mk hinv b))) by
+      apply mul_left_cancel₀ (mul_ne_zero ha hb) _
+      simpa only [mul_assoc, mul_comm, mul_left_comm] using this
+    rw [map_mk_unit_aux hinv a]; rw [map_mk_unit_aux hinv (a * b)]; rw [map_mk_unit_aux hinv b]; rw [←
+      map_mul]; rw [Associates.mk_mul_mk]
+  normUnit_coe_units u := by
+    nontriviality α
+    simp_rw [if_neg (Units.ne_zero u), Units.ext_iff]
+    apply mul_left_cancel₀ (Units.ne_zero u)
+    rw [Units.mul_inv]; rw [map_mk_unit_aux hinv u]; rw [Associates.mk_eq_mk_iff_associated.2 (associated_one_iff_isUnit.2 ⟨u]; rw [rfl⟩)]; rw [Associates.mk_one]; rw [map_one]
+
+@[deprecated (since := "2026-07-08")]
+noncomputable alias normalizationMonoidOfMonoidHomRightInverse :=
+  strongNormalizationMonoidOfMonoidHomRightInverse
 
 中文:
 定义 strongNormalizationMonoidOfMonoidHomRightInverse
@@ -4187,7 +4340,22 @@ definition strongNormalizationMonoidOfMonoidHomRightInverse
   normUnit_zero := if_pos rfl
   normUnit_mul {a b} ha hb := by
     simp_rw [if_neg (mul_ne_zero ha hb), if_neg ha, if_neg hb, Units.ext_iff, Units.val_mul]
-    suffices a * b * ↑(Classical.
+    suffices a * b * ↑(Classical.choose (associated_map_mk hinv (a * b))) =
+        a * ↑(Classical.choose (associated_map_mk hinv a)) *
+        (b * ↑(Classical.choose (associated_map_mk hinv b))) by
+      apply mul_left_cancel₀ (mul_ne_zero ha hb) _
+      simpa only [mul_assoc, mul_comm, mul_left_comm] using this
+    rw [map_mk_unit_aux hinv a]; rw [map_mk_unit_aux hinv (a * b)]; rw [map_mk_unit_aux hinv b]; rw [←
+      map_mul]; rw [Associates.mk_mul_mk]
+  normUnit_coe_units u := by
+    nontriviality α
+    simp_rw [if_neg (Units.ne_zero u), Units.ext_iff]
+    apply mul_left_cancel₀ (Units.ne_zero u)
+    rw [Units.mul_inv]; rw [map_mk_unit_aux hinv u]; rw [Associates.mk_eq_mk_iff_associated.2 (associated_one_iff_isUnit.2 ⟨u]; rw [rfl⟩)]; rw [Associates.mk_one]; rw [map_one]
+
+@[deprecated (since := "2026-07-08")]
+noncomputable alias normalizationMonoidOfMonoidHomRightInverse :=
+  strongNormalizationMonoidOfMonoidHomRightInverse
 
 Depends on / 依赖: Associates, Associates.mk, Associates.mk_eq_mk_iff_associated, Classical, Classical.choose, Units.ext_iff, Units.val_mul, associated_map_mk, ext_iff, if_neg, if_pos, mk_eq_mk_iff_associated, mul_ass, mul_ne_zero, normUnit_mul, normUnit_zero, simp_rw, val_mul
 -/
@@ -4234,7 +4402,18 @@ definition gcdMonoidOfGCD
     gcd_mul_lcm := fun a b => by
       split_ifs with a0
       · rw [mul_zero, a0, zero_mul]
-      · rw [← Cla
+      · rw [← Classical.choose_spec ((gcd_dvd_left a b).trans (Dvd.intro b rfl))]
+    lcm_zero_left := fun _ => if_pos rfl
+    lcm_zero_right := fun a => by
+      split_ifs with a0
+      · rfl
+      have h := (Classical.choose_spec ((gcd_dvd_left a 0).trans (Dvd.intro 0 rfl))).symm
+      have a0' : gcd a 0 != 0 := by
+        contrapose a0
+        rw [← associated_zero_iff_eq_zero]; rw [← a0]
+        exact associated_of_dvd_dvd (dvd_gcd (dvd_refl a) (dvd_zero a)) (gcd_dvd_left _ _)
+      apply Or.resolve_left (mul_eq_zero.1 _) a0'
+      rw [h]; rw [mul_zero] }
 
 中文:
 定义 gcdMonoidOfGCD
@@ -4248,7 +4427,18 @@ definition gcdMonoidOfGCD
     gcd_mul_lcm := fun a b => by
       split_ifs with a0
       · rw [mul_zero, a0, zero_mul]
-      · rw [← Cla
+      · rw [← Classical.choose_spec ((gcd_dvd_left a b).trans (Dvd.intro b rfl))]
+    lcm_zero_left := fun _ => if_pos rfl
+    lcm_zero_right := fun a => by
+      split_ifs with a0
+      · rfl
+      have h := (Classical.choose_spec ((gcd_dvd_left a 0).trans (Dvd.intro 0 rfl))).symm
+      have a0' : gcd a 0 != 0 := by
+        contrapose a0
+        rw [← associated_zero_iff_eq_zero]; rw [← a0]
+        exact associated_of_dvd_dvd (dvd_gcd (dvd_refl a) (dvd_zero a)) (gcd_dvd_left _ _)
+      apply Or.resolve_left (mul_eq_zero.1 _) a0'
+      rw [h]; rw [mul_zero] }
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Dvd.intro, choose_spec, dvd_gcd, gcd_dvd_left, gcd_dvd_right, gcd_mul_lcm, if_pos, lcm_zero_left, lcm_zero_right, mul_zero, split_ifs, zero_mul
 -/
@@ -4296,7 +4486,18 @@ definition normalizedGCDMonoidOfGCD
       if a = 0 then 0
       else normalize (Classical.choose ((gcd_dvd_left a b).trans (Dvd.intro b rfl)))
     normalize_lcm a b := by split_ifs <;> simp
-    gcd_mul
+    gcd_mul_lcm a b := by
+      split_ifs with a0
+      · rw [mul_zero, a0, zero_mul]
+      · exact .trans ((normalize_associated _).mul_left _)
+          (.of_eq (Classical.choose_spec (_ : _ ∣ a * b)).symm)
+    lcm_zero_left _ := if_pos rfl
+    lcm_zero_right a := by
+      split_ifs with a0
+      · rfl
+      let := gcdMonoidOfGCD gcd gcd_dvd_left gcd_dvd_right dvd_gcd
+      simpa [gcd_ne_zero_of_left a0] using show GCDMonoid.gcd .. * _ = _
+        from (Classical.choose_spec ((gcd_dvd_left a 0).trans (.intro 0 rfl))).symm }
 
 中文:
 定义 normalizedGCDMonoidOfGCD
@@ -4311,7 +4512,18 @@ definition normalizedGCDMonoidOfGCD
       if a = 0 then 0
       else normalize (Classical.choose ((gcd_dvd_left a b).trans (Dvd.intro b rfl)))
     normalize_lcm a b := by split_ifs <;> simp
-    gcd_mul
+    gcd_mul_lcm a b := by
+      split_ifs with a0
+      · rw [mul_zero, a0, zero_mul]
+      · exact .trans ((normalize_associated _).mul_left _)
+          (.of_eq (Classical.choose_spec (_ : _ ∣ a * b)).symm)
+    lcm_zero_left _ := if_pos rfl
+    lcm_zero_right a := by
+      split_ifs with a0
+      · rfl
+      let := gcdMonoidOfGCD gcd gcd_dvd_left gcd_dvd_right dvd_gcd
+      simpa [gcd_ne_zero_of_left a0] using show GCDMonoid.gcd .. * _ = _
+        from (Classical.choose_spec ((gcd_dvd_left a 0).trans (.intro 0 rfl))).symm }
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Dvd.intro, NormalizationMonoid, choose_spec, dvd_gcd, gcd_dvd_left, gcd_dvd_right, gcd_mul_lcm, if_pos, lcm_zero_left, lcm_zero_right, mul_left, mul_zero, normalize, normalize_associated, normalize_gcd, normalize_lcm, of_eq
 -/
@@ -4355,7 +4567,58 @@ definition gcdMonoidOfLCM
     gcd := fun a b => if a = 0 then b else if b = 0 then a else Classical.choose (exists_gcd a b)
     gcd_mul_lcm := fun a b => by
       split_ifs with h h_1
-      · rw [h, eq_zero_of_zero_dvd (dvd_lcm_left _ _), mul_zero
+      · rw [h, eq_zero_of_zero_dvd (dvd_lcm_left _ _), mul_zero, zero_mul]
+      · rw [h_1, eq_zero_of_zero_dvd (dvd_lcm_right _ _)]
+      rw [mul_comm]; rw [← Classical.choose_spec (exists_gcd a b)]
+    lcm_zero_left := fun _ => eq_zero_of_zero_dvd (dvd_lcm_left _ _)
+    lcm_zero_right := fun _ => eq_zero_of_zero_dvd (dvd_lcm_right _ _)
+    gcd_dvd_left := fun a b => by
+      split_ifs with h h_1
+      · rw [h]
+        apply dvd_zero
+      · exact dvd_rfl
+      have h0 : lcm a b != 0 := by
+        intro con
+        have h := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left a rfl)
+        rw [con]; rw [zero_dvd_iff]; rw [mul_eq_zero] at h
+        cases h
+        · exact absurd ‹a = 0› h
+        · exact absurd ‹b = 0› h_1
+      rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_comm]; rw [mul_dvd_mul_iff_right h]
+      apply dvd_lcm_right
+    gcd_dvd_right := fun a b => by
+      split_ifs with h h_1
+      · exact dvd_rfl
+      · rw [h_1]
+        apply dvd_zero
+      have h0 : lcm a b != 0 := by
+        intro con
+        have h := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left a rfl)
+        rw [con]; rw [zero_dvd_iff]; rw [mul_eq_zero] at h
+        cases h
+        · exact absurd ‹a = 0› h
+        · exact absurd ‹b = 0› h_1
+      rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_dvd_mul_iff_right h_1]
+      apply dvd_lcm_left
+    dvd_gcd := fun {a b c} ac ab => by
+      split_ifs with h h_1
+      · exact ab
+      · exact ac
+      have h0 : lcm c b != 0 := by
+        intro con
+        have h := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left c rfl)
+        rw [con]; rw [zero_dvd_iff]; rw [mul_eq_zero] at h
+        cases h
+        · exact absurd ‹c = 0› h
+        · exact absurd ‹b = 0› h_1
+      rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd c b)]
+      rcases ab with ⟨d, rfl⟩
+      rw [mul_eq_zero] at ‹a * d != 0›
+      push Not at h_1
+      rw [mul_comm a]; rw [← mul_assoc]; rw [mul_dvd_mul_iff_right h_1.1]
+      apply lcm_dvd (Dvd.intro d rfl)
+      rw [mul_comm]; rw [mul_dvd_mul_iff_right h_1.2]
+      apply ac }
 
 中文:
 定义 gcdMonoidOfLCM
@@ -4365,7 +4628,58 @@ definition gcdMonoidOfLCM
     gcd := fun a b => if a = 0 then b else if b = 0 then a else Classical.choose (exists_gcd a b)
     gcd_mul_lcm := fun a b => by
       split_ifs with h h_1
-      · rw [h, eq_zero_of_zero_dvd (dvd_lcm_left _ _), mul_zero
+      · rw [h, eq_zero_of_zero_dvd (dvd_lcm_left _ _), mul_zero, zero_mul]
+      · rw [h_1, eq_zero_of_zero_dvd (dvd_lcm_right _ _)]
+      rw [mul_comm]; rw [← Classical.choose_spec (exists_gcd a b)]
+    lcm_zero_left := fun _ => eq_zero_of_zero_dvd (dvd_lcm_left _ _)
+    lcm_zero_right := fun _ => eq_zero_of_zero_dvd (dvd_lcm_right _ _)
+    gcd_dvd_left := fun a b => by
+      split_ifs with h h_1
+      · rw [h]
+        apply dvd_zero
+      · exact dvd_rfl
+      have h0 : lcm a b != 0 := by
+        intro con
+        have h := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left a rfl)
+        rw [con]; rw [zero_dvd_iff]; rw [mul_eq_zero] at h
+        cases h
+        · exact absurd ‹a = 0› h
+        · exact absurd ‹b = 0› h_1
+      rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_comm]; rw [mul_dvd_mul_iff_right h]
+      apply dvd_lcm_right
+    gcd_dvd_right := fun a b => by
+      split_ifs with h h_1
+      · exact dvd_rfl
+      · rw [h_1]
+        apply dvd_zero
+      have h0 : lcm a b != 0 := by
+        intro con
+        have h := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left a rfl)
+        rw [con]; rw [zero_dvd_iff]; rw [mul_eq_zero] at h
+        cases h
+        · exact absurd ‹a = 0› h
+        · exact absurd ‹b = 0› h_1
+      rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_dvd_mul_iff_right h_1]
+      apply dvd_lcm_left
+    dvd_gcd := fun {a b c} ac ab => by
+      split_ifs with h h_1
+      · exact ab
+      · exact ac
+      have h0 : lcm c b != 0 := by
+        intro con
+        have h := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left c rfl)
+        rw [con]; rw [zero_dvd_iff]; rw [mul_eq_zero] at h
+        cases h
+        · exact absurd ‹c = 0› h
+        · exact absurd ‹b = 0› h_1
+      rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd c b)]
+      rcases ab with ⟨d, rfl⟩
+      rw [mul_eq_zero] at ‹a * d != 0›
+      push Not at h_1
+      rw [mul_comm a]; rw [← mul_assoc]; rw [mul_dvd_mul_iff_right h_1.1]
+      apply lcm_dvd (Dvd.intro d rfl)
+      rw [mul_comm]; rw [mul_dvd_mul_iff_right h_1.2]
+      apply ac }
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Dvd.intro, Dvd.intro_left, choose_spec, dvd_lcm_left, dvd_lcm_right, eq_ze, eq_zero_of_zero_dvd, exists_gcd, gcd_mul_lcm, intro_left, lcm_dvd, lcm_zero_left, lcm_zero_right, mul_comm, mul_zero, split_ifs, zero_mul
 -/
@@ -4446,7 +4760,46 @@ definition normalizedGCDMonoidOfLCM
 gcd a b := normalize
       if a = 0 then b
       else if b = 0 then a else Classical.choose (exists_gcd a b)
-
+    gcd_mul_lcm a b := by
+      split_ifs with h h_1
+      · rw [h, eq_zero_of_zero_dvd (dvd_lcm_left _ _), mul_zero, zero_mul]
+      · rw [h_1, eq_zero_of_zero_dvd (dvd_lcm_right _ _), mul_zero, mul_zero]
+      rw [mul_comm]
+      exact ((normalize_associated _).mul_left _).trans
+        (.of_eq (Classical.choose_spec (exists_gcd a b)).symm)
+    normalize_lcm
+    normalize_gcd a b := normalize_idem _
+    lcm_zero_left _ := eq_zero_of_zero_dvd (dvd_lcm_left _ _)
+    lcm_zero_right _ := eq_zero_of_zero_dvd (dvd_lcm_right _ _)
+    gcd_dvd_left a b := by
+      split_ifs with h h_1
+      · rw [h]
+        apply dvd_zero
+      · exact (normalize_associated _).dvd
+      have h0 : lcm a b != 0 := lcm_ne_zero_iff.mpr ⟨h, h_1⟩
+      rw [normalize_dvd_iff]; rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_comm]; rw [mul_dvd_mul_iff_right h]
+      apply dvd_lcm_right
+    gcd_dvd_right a b := by
+      split_ifs with h h_1
+      · exact (normalize_associated _).dvd
+      · rw [h_1]
+        apply dvd_zero
+      have h0 : lcm a b != 0 := lcm_ne_zero_iff.mpr ⟨h, h_1⟩
+      rw [normalize_dvd_iff]; rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_dvd_mul_iff_right h_1]
+      apply dvd_lcm_left
+    dvd_gcd {a b c} ac ab := by
+      split_ifs with h h_1
+      · apply dvd_normalize_iff.2 ab
+      · apply dvd_normalize_iff.2 ac
+      have h0 : lcm c b != 0 := lcm_ne_zero_iff.mpr ⟨h, h_1⟩
+      rw [dvd_normalize_iff]; rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd c b)]
+      rcases ab with ⟨d, rfl⟩
+      rw [mul_eq_zero] at h_1
+      push Not at h_1
+      rw [mul_comm a]; rw [← mul_assoc]; rw [mul_dvd_mul_iff_right h_1.1]
+      apply lcm_dvd (Dvd.intro d rfl)
+      rw [mul_comm]; rw [mul_dvd_mul_iff_right h_1.2]
+      apply ac }
 
 中文:
 定义 normalizedGCDMonoidOfLCM
@@ -4458,7 +4811,46 @@ gcd a b := normalize
 gcd a b := normalize
       if a = 0 then b
       else if b = 0 then a else Classical.choose (exists_gcd a b)
-
+    gcd_mul_lcm a b := by
+      split_ifs with h h_1
+      · rw [h, eq_zero_of_zero_dvd (dvd_lcm_left _ _), mul_zero, zero_mul]
+      · rw [h_1, eq_zero_of_zero_dvd (dvd_lcm_right _ _), mul_zero, mul_zero]
+      rw [mul_comm]
+      exact ((normalize_associated _).mul_left _).trans
+        (.of_eq (Classical.choose_spec (exists_gcd a b)).symm)
+    normalize_lcm
+    normalize_gcd a b := normalize_idem _
+    lcm_zero_left _ := eq_zero_of_zero_dvd (dvd_lcm_left _ _)
+    lcm_zero_right _ := eq_zero_of_zero_dvd (dvd_lcm_right _ _)
+    gcd_dvd_left a b := by
+      split_ifs with h h_1
+      · rw [h]
+        apply dvd_zero
+      · exact (normalize_associated _).dvd
+      have h0 : lcm a b != 0 := lcm_ne_zero_iff.mpr ⟨h, h_1⟩
+      rw [normalize_dvd_iff]; rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_comm]; rw [mul_dvd_mul_iff_right h]
+      apply dvd_lcm_right
+    gcd_dvd_right a b := by
+      split_ifs with h h_1
+      · exact (normalize_associated _).dvd
+      · rw [h_1]
+        apply dvd_zero
+      have h0 : lcm a b != 0 := lcm_ne_zero_iff.mpr ⟨h, h_1⟩
+      rw [normalize_dvd_iff]; rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd a b)]; rw [mul_dvd_mul_iff_right h_1]
+      apply dvd_lcm_left
+    dvd_gcd {a b c} ac ab := by
+      split_ifs with h h_1
+      · apply dvd_normalize_iff.2 ab
+      · apply dvd_normalize_iff.2 ac
+      have h0 : lcm c b != 0 := lcm_ne_zero_iff.mpr ⟨h, h_1⟩
+      rw [dvd_normalize_iff]; rw [← mul_dvd_mul_iff_left h0]; rw [← Classical.choose_spec (exists_gcd c b)]
+      rcases ab with ⟨d, rfl⟩
+      rw [mul_eq_zero] at h_1
+      push Not at h_1
+      rw [mul_comm a]; rw [← mul_assoc]; rw [mul_dvd_mul_iff_right h_1.1]
+      apply lcm_dvd (Dvd.intro d rfl)
+      rw [mul_comm]; rw [mul_dvd_mul_iff_right h_1.2]
+      apply ac }
 
 Depends on / 依赖: Classical, Classical.choose, Dvd.intro, Dvd.intro_left, NormalizationMonoid, dvd_lcm_left, dvd_lcm_right, eq_zero_of_zero_dvd, exists_gcd, gcdMonoidOfLCM, gcd_mul_lcm, intro_left, lcm_dvd, mul_comm, mul_zero, normalize, normalize_asso, split_ifs, zero_mul
 -/
@@ -4525,7 +4917,7 @@ definition gcdMonoidOfExistsGCD
   body: gcdMonoidOfGCD (fun a b => Classical.choose (h a b))
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
-    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, a
+    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩
 
 中文:
 定义 gcdMonoidOfExistsGCD
@@ -4533,7 +4925,7 @@ definition gcdMonoidOfExistsGCD
   定义体: gcdMonoidOfGCD (fun a b => Classical.choose (h a b))
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
-    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, a
+    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec, dvd_rfl, gcdMonoidOfGCD
 -/
@@ -4556,7 +4948,9 @@ definition normalizedGCDMonoidOfExistsGCD
     (fun a b =>
       normalize_dvd_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b =>
-      normalize_dvd_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_r
+      normalize_dvd_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
+    (fun {a b c} ac ab => dvd_normalize_iff.2 ((Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩))
+    fun _ _ => normalize_idem _
 
 中文:
 定义 normalizedGCDMonoidOfExistsGCD
@@ -4565,7 +4959,9 @@ definition normalizedGCDMonoidOfExistsGCD
     (fun a b =>
       normalize_dvd_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b =>
-      normalize_dvd_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_r
+      normalize_dvd_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
+    (fun {a b c} ac ab => dvd_normalize_iff.2 ((Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩))
+    fun _ _ => normalize_idem _
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec, dvd_normalize_iff, dvd_rfl, normalize, normalize_dvd_iff, normalize_idem, normalizedGCDMonoidOfGCD
 -/
@@ -4664,7 +5060,7 @@ definition gcdMonoidOfExistsLCM
   body: gcdMonoidOfLCM (fun a b => Classical.choose (h a b))
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
-    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, a
+    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩
 
 中文:
 定义 gcdMonoidOfExistsLCM
@@ -4672,7 +5068,7 @@ definition gcdMonoidOfExistsLCM
   定义体: gcdMonoidOfLCM (fun a b => Classical.choose (h a b))
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b => ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
-    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, a
+    fun {a b c} ac ab => (Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec, dvd_rfl, gcdMonoidOfLCM
 -/
@@ -4695,7 +5091,9 @@ definition normalizedGCDMonoidOfExistsLCM
     (fun a b =>
       dvd_normalize_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b =>
-      dvd_normalize_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_r
+      dvd_normalize_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
+    (fun {a b c} ac ab => normalize_dvd_iff.2 ((Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩))
+    fun _ _ => normalize_idem _
 
 中文:
 定义 normalizedGCDMonoidOfExistsLCM
@@ -4704,7 +5102,9 @@ definition normalizedGCDMonoidOfExistsLCM
     (fun a b =>
       dvd_normalize_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
     (fun a b =>
-      dvd_normalize_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_r
+      dvd_normalize_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).2)
+    (fun {a b c} ac ab => normalize_dvd_iff.2 ((Classical.choose_spec (h c b) a).1 ⟨ac, ab⟩))
+    fun _ _ => normalize_idem _
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec, dvd_normalize_iff, dvd_rfl, normalize, normalize_dvd_iff, normalize_idem, normalizedGCDMonoidOfLCM
 -/
@@ -4866,7 +5266,16 @@ instance instGCDMonoid
   body: Quotient.map₂ gcd fun _ _ (ha : Associated _ _) _ _ (hb : Associated _ _) => ha.gcd hb
   lcm := Quotient.map₂ lcm fun _ _ (ha : Associated _ _) _ _ (hb : Associated _ _) => ha.lcm hb
   gcd_dvd_left := by rintro ⟨a⟩ ⟨b⟩; exact mk_le_mk_of_dvd (gcd_dvd_left _ _)
-  gcd_dvd_right := by rintro ⟨a⟩ ⟨b⟩; e
+  gcd_dvd_right := by rintro ⟨a⟩ ⟨b⟩; exact mk_le_mk_of_dvd (gcd_dvd_right _ _)
+  dvd_gcd := by
+    rintro ⟨a⟩ ⟨b⟩ ⟨c⟩ hac hbc
+    exact mk_le_mk_of_dvd (dvd_gcd (dvd_of_mk_le_mk hac) (dvd_of_mk_le_mk hbc))
+  gcd_mul_lcm := by
+    rintro ⟨a⟩ ⟨b⟩
+    rw [associated_iff_eq]
+exact Quotient.sound gcd_mul_lcm _ _
+lcm_zero_left := by rintro ⟨a⟩; exact congr_arg Associates.mk lcm_zero_left _
+lcm_zero_right := by rintro ⟨a⟩; exact congr_arg Associates.mk lcm_zero_right _
 
 中文:
 实例 instGCDMonoid
@@ -4874,7 +5283,16 @@ instance instGCDMonoid
   定义体: Quotient.map₂ gcd fun _ _ (ha : Associated _ _) _ _ (hb : Associated _ _) => ha.gcd hb
   lcm := Quotient.map₂ lcm fun _ _ (ha : Associated _ _) _ _ (hb : Associated _ _) => ha.lcm hb
   gcd_dvd_left := by rintro ⟨a⟩ ⟨b⟩; exact mk_le_mk_of_dvd (gcd_dvd_left _ _)
-  gcd_dvd_right := by rintro ⟨a⟩ ⟨b⟩; e
+  gcd_dvd_right := by rintro ⟨a⟩ ⟨b⟩; exact mk_le_mk_of_dvd (gcd_dvd_right _ _)
+  dvd_gcd := by
+    rintro ⟨a⟩ ⟨b⟩ ⟨c⟩ hac hbc
+    exact mk_le_mk_of_dvd (dvd_gcd (dvd_of_mk_le_mk hac) (dvd_of_mk_le_mk hbc))
+  gcd_mul_lcm := by
+    rintro ⟨a⟩ ⟨b⟩
+    rw [associated_iff_eq]
+exact Quotient.sound gcd_mul_lcm _ _
+lcm_zero_left := by rintro ⟨a⟩; exact congr_arg Associates.mk lcm_zero_left _
+lcm_zero_right := by rintro ⟨a⟩; exact congr_arg Associates.mk lcm_zero_right _
 
 Depends on / 依赖: Associated, Quotient, Quotient.map, ha.gcd
 -/

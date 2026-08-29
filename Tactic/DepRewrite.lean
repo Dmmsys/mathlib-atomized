@@ -398,7 +398,7 @@ definition canUseCache
         prevOccs := prevOccs.push (p - cacheOcc)
       if currOcc <= p && p < currOcc + dCacheOcc then
         currOccs := currOccs.push (p - currOcc)
-    return prevOccs == currOc
+    return prevOccs == currOccs
 
 中文:
 定义 canUseCache
@@ -410,7 +410,7 @@ definition canUseCache
         prevOccs := prevOccs.push (p - cacheOcc)
       if currOcc <= p && p < currOcc + dCacheOcc then
         currOccs := currOccs.push (p - currOcc)
-    return prevOccs == currOc
+    return prevOccs == currOccs
 -/
 def canUseCache (cacheOcc dCacheOcc currOcc : Nat) : Occurrences -> Bool
   | .all => true
@@ -492,7 +492,8 @@ definition zetaDelta
   let pre (e : Expr) : MetaM TransformStep := do
     let .fvar fvarId := e | return .continue
     let some val ← unfold? fvarId | return .continue
-    return 
+    return .visit val
+  transform e (pre := pre)
 
 中文:
 定义 zetaDelta
@@ -505,7 +506,8 @@ definition zetaDelta
   let pre (e : Expr) : MetaM TransformStep := do
     let .fvar fvarId := e | return .continue
     let some val ← unfold? fvarId | return .continue
-    return 
+    return .visit val
+  transform e (pre := pre)
 
 Depends on / 依赖: FVarId, TransformStep, contains, continue, fvarId, fvarId.getValue, fvars.contains, getValue, return, transform
 -/
@@ -611,7 +613,18 @@ definition castFwd
     withLocalDeclD `x' (← inferType x) fun x' => do
     withLocalDeclD `h' (← mkEq p x') fun h' => do
       let te ← zetaDelta te δ
-      let mut fs := #[x
+      let mut fs := #[x, h]
+      let mut es := #[x', h']
+      for (f, M) in Δ do
+        fs := fs.push (.fvar f)
+        es := es.push (.mdata castMData (← mkEqRec M (.fvar f) (← mkEqTrans (← mkEqSymm h) h')))
+      let te := te.replaceFVars fs es
+      mkLambdaFVars #[x', h'] te
+  let e' := .mdata castMData (← mkEqRec motive e h)
+  trace[Tactic.depRewrite.cast] "casting (p => x):{indentExpr e'}"
+  return e'
+
+mutual
 
 中文:
 定义 castFwd
@@ -624,7 +637,18 @@ definition castFwd
     withLocalDeclD `x' (← inferType x) fun x' => do
     withLocalDeclD `h' (← mkEq p x') fun h' => do
       let te ← zetaDelta te δ
-      let mut fs := #[x
+      let mut fs := #[x, h]
+      let mut es := #[x', h']
+      for (f, M) in Δ do
+        fs := fs.push (.fvar f)
+        es := es.push (.mdata castMData (← mkEqRec M (.fvar f) (← mkEqTrans (← mkEqSymm h) h')))
+      let te := te.replaceFVars fs es
+      mkLambdaFVars #[x', h'] te
+  let e' := .mdata castMData (← mkEqRec motive e h)
+  trace[Tactic.depRewrite.cast] "casting (p => x):{indentExpr e'}"
+  return e'
+
+mutual
 -/
 def castFwd (e te p x h : Expr) (Δ : Array (FVarId × Expr)) (δ : Std.HashSet FVarId) :
     MetaM Expr := do
@@ -662,7 +686,22 @@ definition visitAndCast
   -- between definientia and definienda (δ reductions).
 if ← withAtLeastTransparency .default withNewMCtxDepth isDefEq te' et then
     return e'
-  trace
+  trace[Tactic.depRewrite.cast] "casting{indentExpr e'}\nto expected type{indentExpr et}"
+  let ctx ← read
+  checkCastAllowed e' te' ctx.cfg.castMode
+
+  /- Try casting from the inferred type (x ↦ p),
+  and to the expected type (p ↦ x).
+  In certain cases we need to cast in both directions (see `bool_dep_test`). -/
+  match ← castBack? e' te' ctx.x ctx.h ctx.Δ ctx.δ with
+  | some e'' =>
+    let te'' ← inferType e''
+if ← withAtLeastTransparency .default withNewMCtxDepth isDefEq te'' et then
+      return e''
+
+    castFwd e'' et ctx.p ctx.x ctx.h ctx.Δ ctx.δ
+  | none =>
+    castFwd e' et ctx.p ctx.x ctx.h ctx.Δ ctx.δ
 
 中文:
 定义 visitAndCast
@@ -675,7 +714,22 @@ if ← withAtLeastTransparency .default withNewMCtxDepth isDefEq te' et then
   -- between definientia and definienda (δ reductions).
 if ← withAtLeastTransparency .default withNewMCtxDepth isDefEq te' et then
     return e'
-  trace
+  trace[Tactic.depRewrite.cast] "casting{indentExpr e'}\nto expected type{indentExpr et}"
+  let ctx ← read
+  checkCastAllowed e' te' ctx.cfg.castMode
+
+  /- Try casting from the inferred type (x ↦ p),
+  and to the expected type (p ↦ x).
+  In certain cases we need to cast in both directions (see `bool_dep_test`). -/
+  match ← castBack? e' te' ctx.x ctx.h ctx.Δ ctx.δ with
+  | some e'' =>
+    let te'' ← inferType e''
+if ← withAtLeastTransparency .default withNewMCtxDepth isDefEq te'' et then
+      return e''
+
+    castFwd e'' et ctx.p ctx.x ctx.h ctx.Δ ctx.δ
+  | none =>
+    castFwd e' et ctx.p ctx.x ctx.h ctx.Δ ctx.δ
 -/
 partial def visitAndCast (e : Expr) (et? : Option Expr) : M Expr := do
   let e' ← visit e et?
@@ -713,7 +767,13 @@ definition visit
     | .error _ => pure m!"{e} => ??") <| Meta.withIncRecDepth do
   let ctx ← read
   if let some (eup, cacheOcc, dCacheOcc) ← MonadCache.findCached? { val := e : ExprStructEq } then
-    if canUseCache cacheOcc dCacheOcc
+    if canUseCache cacheOcc dCacheOcc (← get) ctx.cfg.occs then
+      modify (· + dCacheOcc)
+      return eup
+  let initOccs ← get
+  let eup ← visitInner e et?
+  MonadCache.cache { val := e : ExprStructEq } (eup, initOccs, (← get) - initOccs)
+  return eup
 
 中文:
 定义 visit
@@ -723,7 +783,13 @@ definition visit
     | .error _ => pure m!"{e} => ??") <| Meta.withIncRecDepth do
   let ctx ← read
   if let some (eup, cacheOcc, dCacheOcc) ← MonadCache.findCached? { val := e : ExprStructEq } then
-    if canUseCache cacheOcc dCacheOcc
+    if canUseCache cacheOcc dCacheOcc (← get) ctx.cfg.occs then
+      modify (· + dCacheOcc)
+      return eup
+  let initOccs ← get
+  let eup ← visitInner e et?
+  MonadCache.cache { val := e : ExprStructEq } (eup, initOccs, (← get) - initOccs)
+  return eup
 -/
 partial def visit (e : Expr) (et? : Option Expr) : M Expr :=
   withTraceNode traceClsVisit (fun
@@ -755,7 +821,83 @@ definition visitInner
   if e.toHeadIndex == ctx.pHeadIdx && e.headNumArgs == ctx.pNumArgs then
     -- We save the metavariable context here,
     -- so that it can be rolled back unless `occs.contains i`.
-    let mctx ← ge
+    let mctx ← getMCtx
+    -- Note that the pattern `ctx.p` is created in the outer lctx,
+    -- so bvars from the visited term will not be unified into the pattern.
+if ← withTransparency ctx.cfg.transparency isDefEq e ctx.p then
+      let i ← modifyGet fun i => (i, i+1)
+      if ctx.cfg.occs.contains i then
+        return ctx.x
+      else
+        -- Revert the metavariable context,
+        -- so that other matches are still possible.
+        setMCtx mctx
+  match e with
+  | .mdata d b => return .mdata d (← visitAndCast b et?)
+  | .app f a =>
+    let (fup, tr) ← do
+      let fup ← visit f none
+      let tfup ← inferType fup
+withAtLeastTransparency .default forallBoundedTelescope tfup (some 1) fun xs _ => do
+        match xs with
+        | #[r] => return (fup, ← inferType r)
+        | _ =>
+          -- The term in function position was rewritten to a non-function,
+          -- so cast it back to one.
+          let some fup' ← castBack? fup tfup ctx.x ctx.h ctx.Δ ctx.δ
+            | throwError "internal error: unexpected castBack failure on{indentExpr fup}"
+          let tfup' ← inferType fup'
+withAtLeastTransparency .default forallBoundedTelescope tfup' (some 1) fun xs _ => do
+            let #[r] := xs | throwError "internal error: function expected, got{indentExpr fup'}"
+            return (fup', ← inferType r)
+
+    let aup ← visitAndCast a tr
+    return .app fup aup
+  | .proj n i b =>
+    let bup ← visit b none
+    let tbup ← inferType bup
+    if (← withAtLeastTransparency .default <| whnf tbup).isAppOf n then
+      return .proj n i bup
+
+    /- Otherwise the term in structure position was rewritten to have a different type,
+    so cast it back to the original type.
+    (While the other type may itself be a structure type,
+    we can't assume that its projections are the same as those of the original.) -/
+    let some bup' ← castBack? bup tbup ctx.x ctx.h ctx.Δ ctx.δ
+      | throwError "internal error: could not cast back in{indentExpr bup}"
+    return .proj n i bup'
+  | .letE n t v b nondep =>
+    let tup ← visit t none
+    let vup ← visitAndCast v tup
+    if nondep || !vup.hasAnyFVar (fun f => f == ctx.x.fvarId! || f == ctx.h.fvarId! ||
+        ctx.Δ.any (·.1 == f) || ctx.δ.contains f) then
+      return ← withLetDecl n tup vup (nondep := nondep) fun r => do
+        let motive ← castBack?.motive tup ctx.x ctx.h ctx.Δ ctx.δ
+        let bup ← withReader (fun ctx => { ctx with Δ := ctx.Δ.push (r.fvarId!, motive) })
+          (visitAndCast (b.instantiate1 r) et?)
+        return .letE n tup vup (bup.abstract #[r]) nondep
+
+    withLetDecl n tup vup (nondep := nondep) fun r => do
+      let bup ← withReader (fun ctx => { ctx with δ := ctx.δ.insert r.fvarId! })
+        (visitAndCast (b.instantiate1 r) et?)
+      return .letE n tup vup (bup.abstract #[r]) nondep
+  | .lam n t b bi =>
+    let tup ← visit t none
+    withLocalDecl n bi tup fun r => do
+      -- NOTE(WN): there should be some way to propagate the expected type here,
+      -- but it is not easy to do correctly (see `lam (as argument)` tests).
+      let motive ← castBack?.motive tup ctx.x ctx.h ctx.Δ ctx.δ
+      let bup ← withReader (fun ctx => { ctx with Δ := ctx.Δ.push (r.fvarId!, motive) })
+        (visit (b.instantiate1 r) none)
+      return .lam n tup (bup.abstract #[r]) bi
+  | .forallE n t b bi =>
+    let tup ← visit t none
+    withLocalDecl n bi tup fun r => do
+      let motive ← castBack?.motive tup ctx.x ctx.h ctx.Δ ctx.δ
+      let bup ← withReader (fun ctx => { ctx with Δ := ctx.Δ.push (r.fvarId!, motive) })
+        (visit (b.instantiate1 r) none)
+      return .forallE n tup (bup.abstract #[r]) bi
+  | _ => return e
 
 中文:
 定义 visitInner
@@ -767,7 +909,83 @@ definition visitInner
   if e.toHeadIndex == ctx.pHeadIdx && e.headNumArgs == ctx.pNumArgs then
     -- We save the metavariable context here,
     -- so that it can be rolled back unless `occs.contains i`.
-    let mctx ← ge
+    let mctx ← getMCtx
+    -- Note that the pattern `ctx.p` is created in the outer lctx,
+    -- so bvars from the visited term will not be unified into the pattern.
+if ← withTransparency ctx.cfg.transparency isDefEq e ctx.p then
+      let i ← modifyGet fun i => (i, i+1)
+      if ctx.cfg.occs.contains i then
+        return ctx.x
+      else
+        -- Revert the metavariable context,
+        -- so that other matches are still possible.
+        setMCtx mctx
+  match e with
+  | .mdata d b => return .mdata d (← visitAndCast b et?)
+  | .app f a =>
+    let (fup, tr) ← do
+      let fup ← visit f none
+      let tfup ← inferType fup
+withAtLeastTransparency .default forallBoundedTelescope tfup (some 1) fun xs _ => do
+        match xs with
+        | #[r] => return (fup, ← inferType r)
+        | _ =>
+          -- The term in function position was rewritten to a non-function,
+          -- so cast it back to one.
+          let some fup' ← castBack? fup tfup ctx.x ctx.h ctx.Δ ctx.δ
+            | throwError "internal error: unexpected castBack failure on{indentExpr fup}"
+          let tfup' ← inferType fup'
+withAtLeastTransparency .default forallBoundedTelescope tfup' (some 1) fun xs _ => do
+            let #[r] := xs | throwError "internal error: function expected, got{indentExpr fup'}"
+            return (fup', ← inferType r)
+
+    let aup ← visitAndCast a tr
+    return .app fup aup
+  | .proj n i b =>
+    let bup ← visit b none
+    let tbup ← inferType bup
+    if (← withAtLeastTransparency .default <| whnf tbup).isAppOf n then
+      return .proj n i bup
+
+    /- Otherwise the term in structure position was rewritten to have a different type,
+    so cast it back to the original type.
+    (While the other type may itself be a structure type,
+    we can't assume that its projections are the same as those of the original.) -/
+    let some bup' ← castBack? bup tbup ctx.x ctx.h ctx.Δ ctx.δ
+      | throwError "internal error: could not cast back in{indentExpr bup}"
+    return .proj n i bup'
+  | .letE n t v b nondep =>
+    let tup ← visit t none
+    let vup ← visitAndCast v tup
+    if nondep || !vup.hasAnyFVar (fun f => f == ctx.x.fvarId! || f == ctx.h.fvarId! ||
+        ctx.Δ.any (·.1 == f) || ctx.δ.contains f) then
+      return ← withLetDecl n tup vup (nondep := nondep) fun r => do
+        let motive ← castBack?.motive tup ctx.x ctx.h ctx.Δ ctx.δ
+        let bup ← withReader (fun ctx => { ctx with Δ := ctx.Δ.push (r.fvarId!, motive) })
+          (visitAndCast (b.instantiate1 r) et?)
+        return .letE n tup vup (bup.abstract #[r]) nondep
+
+    withLetDecl n tup vup (nondep := nondep) fun r => do
+      let bup ← withReader (fun ctx => { ctx with δ := ctx.δ.insert r.fvarId! })
+        (visitAndCast (b.instantiate1 r) et?)
+      return .letE n tup vup (bup.abstract #[r]) nondep
+  | .lam n t b bi =>
+    let tup ← visit t none
+    withLocalDecl n bi tup fun r => do
+      -- NOTE(WN): there should be some way to propagate the expected type here,
+      -- but it is not easy to do correctly (see `lam (as argument)` tests).
+      let motive ← castBack?.motive tup ctx.x ctx.h ctx.Δ ctx.δ
+      let bup ← withReader (fun ctx => { ctx with Δ := ctx.Δ.push (r.fvarId!, motive) })
+        (visit (b.instantiate1 r) none)
+      return .lam n tup (bup.abstract #[r]) bi
+  | .forallE n t b bi =>
+    let tup ← visit t none
+    withLocalDecl n bi tup fun r => do
+      let motive ← castBack?.motive tup ctx.x ctx.h ctx.Δ ctx.δ
+      let bup ← withReader (fun ctx => { ctx with Δ := ctx.Δ.push (r.fvarId!, motive) })
+        (visit (b.instantiate1 r) none)
+      return .forallE n tup (bup.abstract #[r]) bi
+  | _ => return e
 -/
 partial def visitInner (e : Expr) (et? : Option Expr) : M Expr := do
   let ctx ← read
@@ -868,7 +1086,11 @@ definition dabstract
   withTraceNode traceCls (fun
     -- Message shows unified pattern (without mvars) b/c it is constructed after the body runs
     | .ok motive => pure m!"{e} =[x/{p}]=> {motive}"
-    | .error (err : Lean.Exception) => pure m!"{e} =[x/{p}]=> {inde
+    | .error (err : Lean.Exception) => pure m!"{e} =[x/{p}]=> {indentD err.toMessageData}") do
+  withLocalDeclD `x tp fun x => do
+  withLocalDeclD `h (← mkEq p x) fun h => do
+.run.run' 1 .run { cfg, p, x, h, Δ := ∅, δ := ∅ } let e' ← visit e none
+    mkLambdaFVars #[x, h] e'
 
 中文:
 定义 dabstract
@@ -879,7 +1101,11 @@ definition dabstract
   withTraceNode traceCls (fun
     -- Message shows unified pattern (without mvars) b/c it is constructed after the body runs
     | .ok motive => pure m!"{e} =[x/{p}]=> {motive}"
-    | .error (err : Lean.Exception) => pure m!"{e} =[x/{p}]=> {inde
+    | .error (err : Lean.Exception) => pure m!"{e} =[x/{p}]=> {indentD err.toMessageData}") do
+  withLocalDeclD `x tp fun x => do
+  withLocalDeclD `h (← mkEq p x) fun h => do
+.run.run' 1 .run { cfg, p, x, h, Δ := ∅, δ := ∅ } let e' ← visit e none
+    mkLambdaFVars #[x, h] e'
 -/
 def dabstract (e : Expr) (p : Expr) (cfg : DepRewrite.Config) : MetaM Expr := do
   let e ← instantiateMVars e
@@ -905,7 +1131,94 @@ definition _root_.Lean.MVarId.depRewrite
     let heqType ← instantiateMVars (← inferType heq)
     let (newMVars, binderInfos, heqType) ← forallMetaTelescopeReducing heqType
     let heq := mkAppN heq newMVars
-    let cont (heq heqType : Expr) : MetaM RewriteR
+    let cont (heq heqType : Expr) : MetaM RewriteResult := do
+      match (← matchEq? heqType) with
+      | none => throwTacticEx `depRewrite mvarId
+                  m!"equality or iff proof expected{indentExpr heqType}"
+      | some (α, lhs, rhs) =>
+        let cont (heq lhs rhs : Expr) : MetaM RewriteResult := do
+          if lhs.getAppFn.isMVar then
+            throwTacticEx `depRewrite mvarId
+              m!"pattern is a metavariable{indentExpr lhs}\nfrom equation{indentExpr heqType}"
+          let e ← instantiateMVars e
+let eAbst ← withConfig (fun oldConfig => { config, oldConfig with })
+            dabstract e lhs config
+          let .lam _ _ (.lam _ _ eBody _) _ := eAbst |
+            throwTacticEx `depRewrite mvarId
+              m!"internal error: output{indentExpr eAbst}\nof dabstract is not a lambda"
+          /-
+          This error message may not show up in cases that it could reasonably be expected
+          to show up in while using `rw!`.
+          In the case that the `depRewrite` step finds an
+          instance of the pattern to rewrite with, and it does the rewrite, but then the
+          `cleanupCasts` step happens and the result of the `cleanupCasts` step is
+          syntactically equal to the original expression.
+          Then the error message would be skipped, because `depRewrite` found instances
+          of the pattern to rewrite, even though the final result of the `rw!` call
+          is the same as the original expression.
+          -/
+          if !eBody.hasLooseBVars then
+            throwTacticEx `depRewrite mvarId
+              m!"did not find instance of the pattern in the target expression{indentExpr lhs}"
+          try
+            check eAbst
+          catch e : Lean.Exception =>
+throwTacticEx `depRewrite mvarId m!"\
+              motive{indentExpr eAbst}\nis not type correct:{indentD e.toMessageData}\n\
+              unlike with rw/rewrite, this error should NOT happen in rw!/rewrite!: \
+              please report it on the Lean Zulip"
+          -- construct rewrite proof
+          let eType ← inferType e
+          -- `eNew ≡ eAbst rhs heq`
+          let eNew := eBody.instantiateRev #[rhs, heq]
+          -- Has the type of the term that we rewrote changed?
+          -- (Checking whether the motive depends on `x` is overly conservative:
+          -- when rewriting by a definitional equality,
+          -- the motive may use `x` while the type remains the same.)
+let isDep ← withNewMCtxDepth not < > (inferType eNew >>= isDefEq eType)
+          let u1 ← getLevel α
+          let u2 ← getLevel eType
+          -- `eqPrf : eAbst lhs rfl = eNew`
+          -- `eAbst lhs rfl ≡ e`
+          let (eNew, eqPrf) ← do
+            lambdaBoundedTelescope eAbst 2 fun xs eBody => do
+              let #[x, h] := xs | throwError
+                "internal error: expected 2 arguments in{indentExpr eAbst}"
+              let eBodyTyp ← inferType eBody
+              let motive ← mkLambdaFVars xs eBodyTyp
+              if isDep then
+                checkCastAllowed eBody eBodyTyp config.castMode
+                let some eBody ← castBack? eBody eBodyTyp x h ∅ ∅ | throwError
+                  "internal error: body{indentExpr eBody}\nshould mention '{x}' or '{h}'"
+                pure (
+                  eBody.replaceFVars #[x, h] #[rhs, heq],
+                  mkApp6 (.const ``dcongrArg [u1, u2]) α lhs rhs motive heq eAbst)
+              else
+                let heqPrf := mkApp6 (.const ``hdcongrArg [u1, u2]) α lhs rhs motive heq eAbst
+                pure (eNew, mkApp4 (.const ``eq_of_heq [u2]) eType e eNew heqPrf)
+          postprocessAppMVars `depRewrite mvarId newMVars binderInfos
+            (synthAssignedInstances := !tactic.skipAssignedInstances.get (← getOptions))
+.filterM fun mvarId => let newMVarIds ← newMVars.map Expr.mvarId!
+not < > mvarId.isAssigned
+          let otherMVarIds ← getMVarsNoDelayed heqIn
+          let otherMVarIds := otherMVarIds.filter (!newMVarIds.contains ·)
+          let newMVarIds := newMVarIds ++ otherMVarIds
+          pure { eNew := eNew, eqProof := eqPrf, mvarIds := newMVarIds.toList }
+        match symm with
+        | false => cont heq lhs rhs
+        | true => do
+          cont (← mkEqSymm heq) rhs lhs
+    match heqType.iff? with
+    | some (lhs, rhs) =>
+      let heqType ← mkEq lhs rhs
+      let heq := mkApp3 (mkConst ``propext) lhs rhs heq
+      cont heq heqType
+    | none => match heqType.heq? with
+      | some (α, lhs, β, rhs) =>
+        let heq ← mkAppOptM (if symm then ``heqR else ``heqL) #[α, β, lhs, rhs, heq]
+        cont heq (← inferType heq)
+      | none =>
+        cont heq heqType
 
 中文:
 定义 _root_.Lean.MVarId.depRewrite
@@ -916,7 +1229,94 @@ definition _root_.Lean.MVarId.depRewrite
     let heqType ← instantiateMVars (← inferType heq)
     let (newMVars, binderInfos, heqType) ← forallMetaTelescopeReducing heqType
     let heq := mkAppN heq newMVars
-    let cont (heq heqType : Expr) : MetaM RewriteR
+    let cont (heq heqType : Expr) : MetaM RewriteResult := do
+      match (← matchEq? heqType) with
+      | none => throwTacticEx `depRewrite mvarId
+                  m!"equality or iff proof expected{indentExpr heqType}"
+      | some (α, lhs, rhs) =>
+        let cont (heq lhs rhs : Expr) : MetaM RewriteResult := do
+          if lhs.getAppFn.isMVar then
+            throwTacticEx `depRewrite mvarId
+              m!"pattern is a metavariable{indentExpr lhs}\nfrom equation{indentExpr heqType}"
+          let e ← instantiateMVars e
+let eAbst ← withConfig (fun oldConfig => { config, oldConfig with })
+            dabstract e lhs config
+          let .lam _ _ (.lam _ _ eBody _) _ := eAbst |
+            throwTacticEx `depRewrite mvarId
+              m!"internal error: output{indentExpr eAbst}\nof dabstract is not a lambda"
+          /-
+          This error message may not show up in cases that it could reasonably be expected
+          to show up in while using `rw!`.
+          In the case that the `depRewrite` step finds an
+          instance of the pattern to rewrite with, and it does the rewrite, but then the
+          `cleanupCasts` step happens and the result of the `cleanupCasts` step is
+          syntactically equal to the original expression.
+          Then the error message would be skipped, because `depRewrite` found instances
+          of the pattern to rewrite, even though the final result of the `rw!` call
+          is the same as the original expression.
+          -/
+          if !eBody.hasLooseBVars then
+            throwTacticEx `depRewrite mvarId
+              m!"did not find instance of the pattern in the target expression{indentExpr lhs}"
+          try
+            check eAbst
+          catch e : Lean.Exception =>
+throwTacticEx `depRewrite mvarId m!"\
+              motive{indentExpr eAbst}\nis not type correct:{indentD e.toMessageData}\n\
+              unlike with rw/rewrite, this error should NOT happen in rw!/rewrite!: \
+              please report it on the Lean Zulip"
+          -- construct rewrite proof
+          let eType ← inferType e
+          -- `eNew ≡ eAbst rhs heq`
+          let eNew := eBody.instantiateRev #[rhs, heq]
+          -- Has the type of the term that we rewrote changed?
+          -- (Checking whether the motive depends on `x` is overly conservative:
+          -- when rewriting by a definitional equality,
+          -- the motive may use `x` while the type remains the same.)
+let isDep ← withNewMCtxDepth not < > (inferType eNew >>= isDefEq eType)
+          let u1 ← getLevel α
+          let u2 ← getLevel eType
+          -- `eqPrf : eAbst lhs rfl = eNew`
+          -- `eAbst lhs rfl ≡ e`
+          let (eNew, eqPrf) ← do
+            lambdaBoundedTelescope eAbst 2 fun xs eBody => do
+              let #[x, h] := xs | throwError
+                "internal error: expected 2 arguments in{indentExpr eAbst}"
+              let eBodyTyp ← inferType eBody
+              let motive ← mkLambdaFVars xs eBodyTyp
+              if isDep then
+                checkCastAllowed eBody eBodyTyp config.castMode
+                let some eBody ← castBack? eBody eBodyTyp x h ∅ ∅ | throwError
+                  "internal error: body{indentExpr eBody}\nshould mention '{x}' or '{h}'"
+                pure (
+                  eBody.replaceFVars #[x, h] #[rhs, heq],
+                  mkApp6 (.const ``dcongrArg [u1, u2]) α lhs rhs motive heq eAbst)
+              else
+                let heqPrf := mkApp6 (.const ``hdcongrArg [u1, u2]) α lhs rhs motive heq eAbst
+                pure (eNew, mkApp4 (.const ``eq_of_heq [u2]) eType e eNew heqPrf)
+          postprocessAppMVars `depRewrite mvarId newMVars binderInfos
+            (synthAssignedInstances := !tactic.skipAssignedInstances.get (← getOptions))
+.filterM fun mvarId => let newMVarIds ← newMVars.map Expr.mvarId!
+not < > mvarId.isAssigned
+          let otherMVarIds ← getMVarsNoDelayed heqIn
+          let otherMVarIds := otherMVarIds.filter (!newMVarIds.contains ·)
+          let newMVarIds := newMVarIds ++ otherMVarIds
+          pure { eNew := eNew, eqProof := eqPrf, mvarIds := newMVarIds.toList }
+        match symm with
+        | false => cont heq lhs rhs
+        | true => do
+          cont (← mkEqSymm heq) rhs lhs
+    match heqType.iff? with
+    | some (lhs, rhs) =>
+      let heqType ← mkEq lhs rhs
+      let heq := mkApp3 (mkConst ``propext) lhs rhs heq
+      cont heq heqType
+    | none => match heqType.heq? with
+      | some (α, lhs, β, rhs) =>
+        let heq ← mkAppOptM (if symm then ``heqR else ``heqL) #[α, β, lhs, rhs, heq]
+        cont heq (← inferType heq)
+      | none =>
+        cont heq heqType
 
 Depends on / 依赖: Config, DepRewrite, DepRewrite.Config, RewriteResult, config
 -/
@@ -1027,7 +1427,32 @@ definition cleanupCasts
     -- since the `pre` method returns a result instead of calling itself recursively,
     -- the tracing creates many parallel nodes instead of nesting them
     -- unfortunately, there does not seem to be a way to nest the trace nodes
-
+    -- within the bounds of the `Lean.Meta.transform` API
+    withTraceNode traceClsClean (fun
+      | .ok (.visit e') => pure m!"{e} => visit {e'}"
+      | .ok (.continue e'?) => pure m!"{e} => continue {e'?.getD e}"
+      | .ok (.done e') => pure m!"{e} => done {e'}"
+      | .error _ => pure m!"{e} => ??") <| do
+    let .mdata mdata e := e | return .continue
+    if mdata != castMData then return .continue
+    trace[Tactic.depRewrite.cleanupCasts] "found potential cast{indentExpr e}"
+    unless e.isAppOfArity ``Eq.rec 6 do
+      trace[Tactic.depRewrite.cleanupCasts]
+        "cast candidate{indentExpr e}\nis not {.ofConstName ``Eq.rec} application"
+      return .visit e
+    e.withApp fun _ args => do
+      let lhs := args[1]!
+      let rhs := args[4]!
+      let refl := args[3]!
+unless ← withNewMCtxDepth isDefEq lhs rhs do
+        trace[Tactic.depRewrite.cleanupCasts]
+          "lhs{indentExpr lhs}\nis not definitionally equal to rhs{indentExpr rhs}"
+        return .continue
+unless ← withNewMCtxDepth isDefEq e refl do
+        trace[Tactic.depRewrite.cleanupCasts]
+          "refl-cast expression{indentExpr e} is not definitionally equal to{indentExpr refl}"
+        return .continue
+      return .visit refl)
 
 中文:
 定义 cleanupCasts
@@ -1036,7 +1461,32 @@ definition cleanupCasts
     -- since the `pre` method returns a result instead of calling itself recursively,
     -- the tracing creates many parallel nodes instead of nesting them
     -- unfortunately, there does not seem to be a way to nest the trace nodes
-
+    -- within the bounds of the `Lean.Meta.transform` API
+    withTraceNode traceClsClean (fun
+      | .ok (.visit e') => pure m!"{e} => visit {e'}"
+      | .ok (.continue e'?) => pure m!"{e} => continue {e'?.getD e}"
+      | .ok (.done e') => pure m!"{e} => done {e'}"
+      | .error _ => pure m!"{e} => ??") <| do
+    let .mdata mdata e := e | return .continue
+    if mdata != castMData then return .continue
+    trace[Tactic.depRewrite.cleanupCasts] "found potential cast{indentExpr e}"
+    unless e.isAppOfArity ``Eq.rec 6 do
+      trace[Tactic.depRewrite.cleanupCasts]
+        "cast candidate{indentExpr e}\nis not {.ofConstName ``Eq.rec} application"
+      return .visit e
+    e.withApp fun _ args => do
+      let lhs := args[1]!
+      let rhs := args[4]!
+      let refl := args[3]!
+unless ← withNewMCtxDepth isDefEq lhs rhs do
+        trace[Tactic.depRewrite.cleanupCasts]
+          "lhs{indentExpr lhs}\nis not definitionally equal to rhs{indentExpr rhs}"
+        return .continue
+unless ← withNewMCtxDepth isDefEq e refl do
+        trace[Tactic.depRewrite.cleanupCasts]
+          "refl-cast expression{indentExpr e} is not definitionally equal to{indentExpr refl}"
+        return .continue
+      return .visit refl)
 
 Depends on / 依赖: skipConstInApp, transform
 -/
@@ -1137,7 +1587,9 @@ Term.withSynthesize withMainContext do
     let e ← elabTerm stx none true
     let r ← (← getMainGoal).depRewrite (← getMainTarget) e symm (config := config)
     let mvarId' ← (← getMainGoal).replaceTargetEq r.eNew r.eqProof
-    let mvarId'' ← mvarId'.change (← withTransparency config.castTranspar
+    let mvarId'' ← mvarId'.change (← withTransparency config.castTransparency
+      (mvarId'.withContext <| cleanupCasts (← mvarId'.getType)))
+    replaceMainGoal (mvarId'' :: r.mvarIds)
 
 中文:
 定义 depRwTarget
@@ -1147,7 +1599,9 @@ Term.withSynthesize withMainContext do
     let e ← elabTerm stx none true
     let r ← (← getMainGoal).depRewrite (← getMainTarget) e symm (config := config)
     let mvarId' ← (← getMainGoal).replaceTargetEq r.eNew r.eqProof
-    let mvarId'' ← mvarId'.change (← withTransparency config.castTranspar
+    let mvarId'' ← mvarId'.change (← withTransparency config.castTransparency
+      (mvarId'.withContext <| cleanupCasts (← mvarId'.getType)))
+    replaceMainGoal (mvarId'' :: r.mvarIds)
 -/
 def depRwTarget (stx : Syntax) (symm : Bool) (config : DepRewrite.Config := {}) :
     TacticM Unit := do
@@ -1169,7 +1623,11 @@ definition depRewriteLocalDecl
   -- Note: we cannot execute `replaceLocalDecl` inside `Term.withSynthesize`.
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
 let rwResult ← Term.withSynthesize withMainContext do
-    le
+    let e ← elabTerm stx none true
+    let localDecl ← fvarId.getDecl
+    (← getMainGoal).depRewrite localDecl.type e symm (config := config)
+  let replaceResult ← (← getMainGoal).replaceLocalDecl fvarId rwResult.eNew rwResult.eqProof
+  replaceMainGoal (replaceResult.mvarId :: rwResult.mvarIds)
 
 中文:
 定义 depRewriteLocalDecl
@@ -1178,7 +1636,11 @@ let rwResult ← Term.withSynthesize withMainContext do
   -- Note: we cannot execute `replaceLocalDecl` inside `Term.withSynthesize`.
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
 let rwResult ← Term.withSynthesize withMainContext do
-    le
+    let e ← elabTerm stx none true
+    let localDecl ← fvarId.getDecl
+    (← getMainGoal).depRewrite localDecl.type e symm (config := config)
+  let replaceResult ← (← getMainGoal).replaceLocalDecl fvarId rwResult.eNew rwResult.eqProof
+  replaceMainGoal (replaceResult.mvarId :: rwResult.mvarIds)
 
 Depends on / 依赖: TacticM, withMainContext
 -/
@@ -1203,7 +1665,13 @@ definition depRwLocalDecl
   -- Note: we cannot execute `replaceLocalDecl` inside `Term.withSynthesize`.
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
 let rwResult ← Term.withSynthesize withMainContext do
-    le
+    let e ← elabTerm stx none true
+    let localDecl ← fvarId.getDecl
+    (← getMainGoal).depRewrite localDecl.type e symm (config := config)
+  let r ← (← getMainGoal).replaceLocalDecl fvarId rwResult.eNew rwResult.eqProof
+  let mvarId' ← r.mvarId.changeLocalDecl r.fvarId (← withTransparency config.castTransparency
+    (r.mvarId.withContext do cleanupCasts (← r.fvarId.getType)))
+  replaceMainGoal (mvarId' :: rwResult.mvarIds)
 
 中文:
 定义 depRwLocalDecl
@@ -1212,7 +1680,13 @@ let rwResult ← Term.withSynthesize withMainContext do
   -- Note: we cannot execute `replaceLocalDecl` inside `Term.withSynthesize`.
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
 let rwResult ← Term.withSynthesize withMainContext do
-    le
+    let e ← elabTerm stx none true
+    let localDecl ← fvarId.getDecl
+    (← getMainGoal).depRewrite localDecl.type e symm (config := config)
+  let r ← (← getMainGoal).replaceLocalDecl fvarId rwResult.eNew rwResult.eqProof
+  let mvarId' ← r.mvarId.changeLocalDecl r.fvarId (← withTransparency config.castTransparency
+    (r.mvarId.withContext do cleanupCasts (← r.fvarId.getType)))
+  replaceMainGoal (mvarId' :: rwResult.mvarIds)
 
 Depends on / 依赖: TacticM, withMainContext
 -/
@@ -1246,7 +1720,9 @@ definition evalDepRewriteSeq
     withLocation loc
       (depRewriteLocalDecl term symm · cfg)
       (depRewriteTarget term symm cfg)
-      (throwTacticEx `depRewrite · "did not find inst
+      (throwTacticEx `depRewrite · "did not find instance of the pattern in the current goal")
+
+@[tactic depRwSeq, inherit_doc depRwSeq]
 
 中文:
 定义 evalDepRewriteSeq
@@ -1258,7 +1734,9 @@ definition evalDepRewriteSeq
     withLocation loc
       (depRewriteLocalDecl term symm · cfg)
       (depRewriteTarget term symm cfg)
-      (throwTacticEx `depRewrite · "did not find inst
+      (throwTacticEx `depRewrite · "did not find instance of the pattern in the current goal")
+
+@[tactic depRwSeq, inherit_doc depRwSeq]
 -/
 def evalDepRewriteSeq : Tactic := fun stx => do
   let cfg ← elabDepRewriteConfig stx[1]
@@ -1283,7 +1761,7 @@ definition evalDepRwSeq
     withLocation loc
       (depRwLocalDecl term symm · cfg)
       (depRwTarget term symm cfg)
-      (throwTacticEx `depRewrite · "did not find instance of th
+      (throwTacticEx `depRewrite · "did not find instance of the pattern in the current goal")
 
 中文:
 定义 evalDepRwSeq
@@ -1295,7 +1773,7 @@ definition evalDepRwSeq
     withLocation loc
       (depRwLocalDecl term symm · cfg)
       (depRwTarget term symm cfg)
-      (throwTacticEx `depRewrite · "did not find instance of th
+      (throwTacticEx `depRewrite · "did not find instance of the pattern in the current goal")
 -/
 def evalDepRwSeq : Tactic := fun stx => do
   let cfg ← elabDepRewriteConfig stx[1]
@@ -1359,7 +1837,9 @@ Term.withSynthesize withMainContext do
     updateLhs r.eNew r.eqProof
     changeLhs (← withTransparency config.castTransparency
       (withMainContext <| cleanupCasts (← getLhs)))
-    re
+    replaceMainGoal ((← getMainGoal) :: r.mvarIds)
+
+@[tactic depRewrite, inherit_doc depRewriteSeq]
 
 中文:
 定义 depRwTarget
@@ -1371,7 +1851,9 @@ Term.withSynthesize withMainContext do
     updateLhs r.eNew r.eqProof
     changeLhs (← withTransparency config.castTransparency
       (withMainContext <| cleanupCasts (← getLhs)))
-    re
+    replaceMainGoal ((← getMainGoal) :: r.mvarIds)
+
+@[tactic depRewrite, inherit_doc depRewriteSeq]
 
 Depends on / 依赖: TacticM
 -/

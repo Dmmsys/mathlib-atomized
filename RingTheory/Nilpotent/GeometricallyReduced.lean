@@ -85,7 +85,8 @@ lemma isGeometricallyReduced_field_iff
     have := p.algEquivResidueFieldOfField.isAlgebraic
     IsAlgClosure.equiv k _ _
   refine ⟨fun ⟨h⟩ => ?_, fun h => ⟨fun p hp => ?_⟩⟩
-  · exact isReduced_of_injective _ (Algebra.TensorProduct.congr (e
+  · exact isReduced_of_injective _ (Algebra.TensorProduct.congr (e ⊥) AlgEquiv.refl).injective
+  · exact isReduced_of_injective _ (Algebra.TensorProduct.congr (e p).symm AlgEquiv.refl).injective
 
 中文:
 引理 isGeometricallyReduced_field_iff
@@ -95,7 +96,8 @@ lemma isGeometricallyReduced_field_iff
     have := p.algEquivResidueFieldOfField.isAlgebraic
     IsAlgClosure.equiv k _ _
   refine ⟨fun ⟨h⟩ => ?_, fun h => ⟨fun p hp => ?_⟩⟩
-  · exact isReduced_of_injective _ (Algebra.TensorProduct.congr (e
+  · exact isReduced_of_injective _ (Algebra.TensorProduct.congr (e ⊥) AlgEquiv.refl).injective
+  · exact isReduced_of_injective _ (Algebra.TensorProduct.congr (e p).symm AlgEquiv.refl).injective
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.refl, Algebra, Algebra.TensorProduct.congr, AlgebraicClosure, IsAlgClosure, IsAlgClosure.equiv, IsPrime, ResidueField, TensorProduct, algEquivResidueFieldOfField, injective, isAlgebraic, isReduced_of_injective, p.IsPrime, p.ResidueField, p.algEquivResidueFieldOfField.isAlgebraic
 -/

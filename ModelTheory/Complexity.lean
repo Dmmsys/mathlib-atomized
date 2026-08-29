@@ -761,7 +761,19 @@ theorem realize_toPrenexImpRight
     refine _root_.trans (forall_congr' fun _ => ih hφ.liftAt) ?_
     simp only [realize_imp, realize_liftAt_one_self, snoc_comp_castSucc, realize_all]
     exact ⟨fun h1 a h2 => h1 h2 a, fun h1 h2 a => h1 a h2⟩
-  | ex _
+  | ex _ ih =>
+    unfold toPrenexImpRight
+    rw [realize_ex]
+    refine _root_.trans (exists_congr fun _ => ih hφ.liftAt) ?_
+    simp only [realize_imp, realize_liftAt_one_self, snoc_comp_castSucc, realize_ex]
+    refine ⟨?_, fun h' => ?_⟩
+    · rintro ⟨a, ha⟩ h
+      exact ⟨a, ha h⟩
+    · by_cases h : φ.Realize v xs
+      · obtain ⟨a, ha⟩ := h' h
+        exact ⟨a, fun _ => ha⟩
+      · inhabit M
+        exact ⟨default, fun h'' => (h h'').elim⟩
 
 中文:
 定理 realize_toPrenexImpRight
@@ -773,7 +785,19 @@ theorem realize_toPrenexImpRight
     refine _root_.trans (forall_congr' fun _ => ih hφ.liftAt) ?_
     simp only [realize_imp, realize_liftAt_one_self, snoc_comp_castSucc, realize_all]
     exact ⟨fun h1 a h2 => h1 h2 a, fun h1 h2 a => h1 a h2⟩
-  | ex _
+  | ex _ ih =>
+    unfold toPrenexImpRight
+    rw [realize_ex]
+    refine _root_.trans (exists_congr fun _ => ih hφ.liftAt) ?_
+    simp only [realize_imp, realize_liftAt_one_self, snoc_comp_castSucc, realize_ex]
+    refine ⟨?_, fun h' => ?_⟩
+    · rintro ⟨a, ha⟩ h
+      exact ⟨a, ha h⟩
+    · by_cases h : φ.Realize v xs
+      · obtain ⟨a, ha⟩ := h' h
+        exact ⟨a, fun _ => ha⟩
+      · inhabit M
+        exact ⟨default, fun h'' => (h h'').elim⟩
 
 Depends on / 依赖: _root_, _root_.trans, exists_congr, forall_congr, liftAt, of_isQF, realize_all, realize_ex, realize_imp, realize_liftAt_one_self, snoc_comp_castSucc, toPrenexImpRight
 -/
@@ -818,7 +842,14 @@ theorem realize_toPrenexImp
     unfold toPrenexImp
     rw [realize_ex]
     refine _root_.trans (exists_congr fun _ => ih hψ.liftAt) ?_
-    simp only [realize_imp, re
+    simp only [realize_imp, realize_liftAt_one_self, snoc_comp_castSucc, realize_all]
+    exact Iff.symm forall_imp_iff_exists_imp
+  | ex _ ih =>
+    intro ψ hψ
+    refine _root_.trans (forall_congr' fun _ => ih hψ.liftAt) ?_
+    simp
+
+@[simp]
 
 中文:
 定理 realize_toPrenexImp
@@ -835,7 +866,14 @@ theorem realize_toPrenexImp
     unfold toPrenexImp
     rw [realize_ex]
     refine _root_.trans (exists_congr fun _ => ih hψ.liftAt) ?_
-    simp only [realize_imp, re
+    simp only [realize_imp, realize_liftAt_one_self, snoc_comp_castSucc, realize_all]
+    exact Iff.symm forall_imp_iff_exists_imp
+  | ex _ ih =>
+    intro ψ hψ
+    refine _root_.trans (forall_congr' fun _ => ih hψ.liftAt) ?_
+    simp
+
+@[simp]
 
 Depends on / 依赖: Iff.symm, _root_, _root_.trans, exists_congr, forall_congr, forall_imp_iff_exists_imp, liftAt, of_isQF, realize_all, realize_ex, realize_imp, realize_liftAt_one_self, realize_toPrenexImpRight, revert, snoc_comp_castSucc, toPrenexImp
 -/
@@ -875,7 +913,9 @@ theorem realize_toPrenex
     intros
     rw [toPrenex]; rw [realize_toPrenexImp f1.toPrenex_isPrenex f2.toPrenex_isPrenex]; rw [realize_imp]; rw [realize_imp]; rw [h1]; rw [h2]
   | all _ h =>
-    intro
+    intros
+    rw [realize_all]; rw [toPrenex]; rw [realize_all]
+    exact forall_congr' fun a => h
 
 中文:
 定理 realize_toPrenex
@@ -889,7 +929,9 @@ theorem realize_toPrenex
     intros
     rw [toPrenex]; rw [realize_toPrenexImp f1.toPrenex_isPrenex f2.toPrenex_isPrenex]; rw [realize_imp]; rw [realize_imp]; rw [h1]; rw [h2]
   | all _ h =>
-    intro
+    intros
+    rw [realize_all]; rw [toPrenex]; rw [realize_all]
+    exact forall_congr' fun a => h
 
 Depends on / 依赖: Iff.rfl, f1.toPrenex_isPrenex, f2.toPrenex_isPrenex, falsum, forall_congr, intros, realize_all, realize_imp, realize_toPrenexImp, toPrenex, toPrenex_isPrenex
 -/
@@ -1261,7 +1303,9 @@ lemma IsQF.realize_embedding
     | equal t₁ t₂ => simp only [realize_bdEqual, ← Sum.comp_elim, HomClass.realize_term,
         (EmbeddingLike.injective f).eq_iff]
     | rel R ts =>
-      simp only [realize_rel, ← Sum.comp_elim, HomClass.realize_ter
+      simp only [realize_rel, ← Sum.comp_elim, HomClass.realize_term]
+      exact StrongHomClass.map_rel f R (fun i => Term.realize (Sum.elim v xs) (ts i))
+  | imp _ _ ihφ ihψ => simp only [realize_imp, ihφ, ihψ]
 
 中文:
 引理 是QF.realize_embedding
@@ -1273,7 +1317,9 @@ lemma IsQF.realize_embedding
     | equal t₁ t₂ => simp only [realize_bdEqual, ← Sum.comp_elim, HomClass.realize_term,
         (EmbeddingLike.injective f).eq_iff]
     | rel R ts =>
-      simp only [realize_rel, ← Sum.comp_elim, HomClass.realize_ter
+      simp only [realize_rel, ← Sum.comp_elim, HomClass.realize_term]
+      exact StrongHomClass.map_rel f R (fun i => Term.realize (Sum.elim v xs) (ts i))
+  | imp _ _ ihφ ihψ => simp only [realize_imp, ihφ, ihψ]
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.injective, HomClass, HomClass.realize_term, StrongHomClass, StrongHomClass.map_rel, Sum.comp_elim, Sum.elim, Term.realize, comp_elim, eq_iff, falsum, injective, map_rel, of_isAtomic, realize, realize_bdEqual, realize_imp, realize_rel, realize_term
 -/

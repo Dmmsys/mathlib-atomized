@@ -185,7 +185,8 @@ instance :
   tensorHom f g := ObjectProperty.homMk (f.hom otimesₘ g.hom)
   tensorUnit := ⟨𝟙_ C, P.prop_unit⟩
   associator X Y Z := P.isoMk (α_ X.1 Y.1 Z.1)
-
+  leftUnitor X := P.isoMk (fun_ X.1)
+  rightUnitor X := P.isoMk (ρ_ X.1)
 
 中文:
 实例 :
@@ -196,7 +197,8 @@ instance :
   tensorHom f g := ObjectProperty.homMk (f.hom otimesₘ g.hom)
   tensorUnit := ⟨𝟙_ C, P.prop_unit⟩
   associator X Y Z := P.isoMk (α_ X.1 Y.1 Z.1)
-
+  leftUnitor X := P.isoMk (fun_ X.1)
+  rightUnitor X := P.isoMk (ρ_ X.1)
 
 Depends on / 依赖: otimes, prop_tensor
 -/

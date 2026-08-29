@@ -429,7 +429,13 @@ theorem ContinuousLinearEquiv.tsum_eq_iff
         (e.hasSum.mpr (hf.hasSum_iff.mpr h)).tsum_eq⟩
     · simp only [tsum_bot hL, eq_symm_apply]
       constructor <;> rintro rfl
-      exacts [e.m
+      exacts [e.map_finsum f, (e.map_finsum f).symm]
+  · have hf' : ¬Summable (fun z => e (f z)) L := fun h => hf (e.summable.mp h)
+    rw [tsum_eq_zero_of_not_summable hf]; rw [tsum_eq_zero_of_not_summable hf']
+    refine ⟨?_, fun H => ?_⟩
+    · rintro rfl
+      simp
+    · simpa using congr_arg (fun z => e z) H
 
 中文:
 定理 连续线性等价.tsum_eq_iff
@@ -441,7 +447,13 @@ theorem ContinuousLinearEquiv.tsum_eq_iff
         (e.hasSum.mpr (hf.hasSum_iff.mpr h)).tsum_eq⟩
     · simp only [tsum_bot hL, eq_symm_apply]
       constructor <;> rintro rfl
-      exacts [e.m
+      exacts [e.map_finsum f, (e.map_finsum f).symm]
+  · have hf' : ¬Summable (fun z => e (f z)) L := fun h => hf (e.summable.mp h)
+    rw [tsum_eq_zero_of_not_summable hf]; rw [tsum_eq_zero_of_not_summable hf']
+    refine ⟨?_, fun H => ?_⟩
+    · rintro rfl
+      simp
+    · simpa using congr_arg (fun z => e z) H
 
 Depends on / 依赖: L.NeBot, Summable, e.hasSum.mp, e.hasSum.mpr, e.map_finsum, e.summable.mp, e.summable.mpr, eq_symm_apply, exacts, hasSum, hasSum_iff, hasSum_iff.mpr, hf.hasSum_iff.mpr, map_finsum, summable, tsum_bot, tsum_eq, tsum_eq_zero_of_not_summable
 -/
@@ -561,7 +573,11 @@ lemma MulAction.automorphize_smul_left
   set π : β -> Quotient (MulAction.orbitRel α β) := Quotient.mk (MulAction.orbitRel α β)
   have H₁ : forall a : α, π (a • b) = π b := by
     intro a
-    apply (@Quotient.eq _ (MulAct
+    apply (@Quotient.eq _ (MulAction.orbitRel α β) (a • b) b).mpr
+    use a
+  change ∑' a : α, g (π (a • b)) • f (a • b) = g (π b) • ∑' a : α, f (a • b)
+  simp_rw [H₁]
+  exact tsum_const_smul'' _
 
 中文:
 引理 乘法作用.automorphize_smul_left
@@ -573,7 +589,11 @@ lemma MulAction.automorphize_smul_left
   set π : β -> Quotient (MulAction.orbitRel α β) := Quotient.mk (MulAction.orbitRel α β)
   have H₁ : forall a : α, π (a • b) = π b := by
     intro a
-    apply (@Quotient.eq _ (MulAct
+    apply (@Quotient.eq _ (MulAction.orbitRel α β) (a • b) b).mpr
+    use a
+  change ∑' a : α, g (π (a • b)) • f (a • b) = g (π b) • ∑' a : α, f (a • b)
+  simp_rw [H₁]
+  exact tsum_const_smul'' _
 
 Depends on / 依赖: MulAction, MulAction.orbitRel, Pi.smul_apply, Quotient, Quotient.eq, Quotient.inductionOn, Quotient.mk, automorphize, comp_apply, inductionOn, orbitRel, simp_rw, smul_apply, tsum_const_smul
 -/

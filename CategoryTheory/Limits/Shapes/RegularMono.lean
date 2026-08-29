@@ -615,7 +615,18 @@ definition regularOfIsPullbackSndOfRegular
     apply Fork.IsLimit.mk' _ _
     intro s
     have l₁ : (Fork.ι s ≫ k) ≫ hr.left = (Fork.ι s ≫ k) ≫ hr.right := by
-      rw [Catego
+      rw [Category.assoc]; rw [s.condition]; rw [Category.assoc]
+    obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hr.isLimit _ l₁
+    obtain ⟨p, _, hp₂⟩ := PullbackCone.IsLimit.lift' t _ _ hl
+    refine ⟨p, hp₂, ?_⟩
+    intro m w
+    have z : m ≫ g = p ≫ g := w.trans hp₂.symm
+    apply t.hom_ext
+    have := hr.mono
+    apply (PullbackCone.mk f g comm).equalizer_ext
+    · simp only [PullbackCone.mk_π_app, ← cancel_mono h]
+      grind [Fork.ofι, PullbackCone.mk]
+    · exact z
 
 中文:
 定义 regularOfIsPullbackSndOfRegular
@@ -630,7 +641,18 @@ definition regularOfIsPullbackSndOfRegular
     apply Fork.IsLimit.mk' _ _
     intro s
     have l₁ : (Fork.ι s ≫ k) ≫ hr.left = (Fork.ι s ≫ k) ≫ hr.right := by
-      rw [Catego
+      rw [Category.assoc]; rw [s.condition]; rw [Category.assoc]
+    obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hr.isLimit _ l₁
+    obtain ⟨p, _, hp₂⟩ := PullbackCone.IsLimit.lift' t _ _ hl
+    refine ⟨p, hp₂, ?_⟩
+    intro m w
+    have z : m ≫ g = p ≫ g := w.trans hp₂.symm
+    apply t.hom_ext
+    have := hr.mono
+    apply (PullbackCone.mk f g comm).equalizer_ext
+    · simp only [PullbackCone.mk_π_app, ← cancel_mono h]
+      grind [Fork.ofι, PullbackCone.mk]
+    · exact z
 
 Depends on / 依赖: hr.Z
 -/
@@ -695,7 +717,8 @@ lemma RegularMono.strongMono
         repeat (rw [← Category.assoc, ← eq_whisker sq.w])
         simp only [Category.assoc, RegularMono.w]
       obtain ⟨t, ht⟩ := RegularMono.lift' _ _ this
-  
+      refine CommSq.HasLift.mk' ⟨t, (cancel_mono f).1 ?_, ht⟩
+      simp only [Category.assoc, ht, sq.w])
 
 中文:
 引理 正则单态射.strongMono
@@ -709,7 +732,8 @@ lemma RegularMono.strongMono
         repeat (rw [← Category.assoc, ← eq_whisker sq.w])
         simp only [Category.assoc, RegularMono.w]
       obtain ⟨t, ht⟩ := RegularMono.lift' _ _ this
-  
+      refine CommSq.HasLift.mk' ⟨t, (cancel_mono f).1 ?_, ht⟩
+      simp only [Category.assoc, ht, sq.w])
 
 Depends on / 依赖: Category, Category.assoc, CommSq, CommSq.HasLift.mk, HasLift, RegularMono, RegularMono.lift, RegularMono.w, StrongMono, StrongMono.mk, cancel_epi, cancel_mono, eq_whisker, h.left, h.mono, h.right, repeat, sq.w
 -/
@@ -1453,7 +1477,13 @@ definition isColimitCoforkOfEffectiveEpi
       rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
       simp)
   fac s := by
-    have := EffectiveEpi.fac f (s.ι.app Walkin
+    have := EffectiveEpi.fac f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
+      simp only [Cofork.app_one_eq_π]
+      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
+      simp)
+    rintro (_ | _)
+    all_goals simp_all
+  uniq _ _ h := EffectiveEpi.uniq f _ _ _ (h WalkingParallelPair.one)
 
 中文:
 定义 isColimitCoforkOfEffectiveEpi
@@ -1463,7 +1493,13 @@ definition isColimitCoforkOfEffectiveEpi
       rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
       simp)
   fac s := by
-    have := EffectiveEpi.fac f (s.ι.app Walkin
+    have := EffectiveEpi.fac f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
+      simp only [Cofork.app_one_eq_π]
+      rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
+      simp)
+    rintro (_ | _)
+    all_goals simp_all
+  uniq _ _ h := EffectiveEpi.uniq f _ _ _ (h WalkingParallelPair.one)
 
 Depends on / 依赖: Category, Category.assoc, Cofork, Cofork.app_one_eq_, Cofork.app_zero_eq_comp_, EffectiveEpi, EffectiveEpi.desc, EffectiveEpi.fac, IsLimit, PullbackCone, PullbackCone.IsLimit.lift_snd, WalkingParallelPair, WalkingParallelPair.one, all_goals, lift_snd
 -/
@@ -1647,7 +1683,19 @@ definition regularOfIsPushoutSndOfRegular
     apply Cofork.IsColimit.mk' _ _
     intro s
     have l₁ : gr.left ≫ f ≫ s.π = gr.right ≫ f ≫ s.π := by
-      rw [← Category.assoc
+      rw [← Category.assoc]; rw [← Category.assoc]; rw [s.condition]
+    obtain ⟨l, hl⟩ := Cofork.IsColimit.desc' gr.isColimit (f ≫ Cofork.π s) l₁
+    obtain ⟨p, hp₁, _⟩ := PushoutCocone.IsColimit.desc' t _ _ hl.symm
+    refine ⟨p, hp₁, ?_⟩
+    intro m w
+    have z := w.trans hp₁.symm
+    apply t.hom_ext
+    have := gr.epi
+    apply (PushoutCocone.mk _ _ comm).coequalizer_ext
+    · exact z
+    · erw [← cancel_epi g, ← Category.assoc, ← eq_whisker comm]
+      erw [← Category.assoc, ← eq_whisker comm]
+      dsimp at z; simp only [Category.assoc, z]
 
 中文:
 定义 regularOfIsPushoutSndOfRegular
@@ -1660,7 +1708,19 @@ definition regularOfIsPushoutSndOfRegular
     apply Cofork.IsColimit.mk' _ _
     intro s
     have l₁ : gr.left ≫ f ≫ s.π = gr.right ≫ f ≫ s.π := by
-      rw [← Category.assoc
+      rw [← Category.assoc]; rw [← Category.assoc]; rw [s.condition]
+    obtain ⟨l, hl⟩ := Cofork.IsColimit.desc' gr.isColimit (f ≫ Cofork.π s) l₁
+    obtain ⟨p, hp₁, _⟩ := PushoutCocone.IsColimit.desc' t _ _ hl.symm
+    refine ⟨p, hp₁, ?_⟩
+    intro m w
+    have z := w.trans hp₁.symm
+    apply t.hom_ext
+    have := gr.epi
+    apply (PushoutCocone.mk _ _ comm).coequalizer_ext
+    · exact z
+    · erw [← cancel_epi g, ← Category.assoc, ← eq_whisker comm]
+      erw [← Category.assoc, ← eq_whisker comm]
+      dsimp at z; simp only [Category.assoc, z]
 
 Depends on / 依赖: gr.W
 -/

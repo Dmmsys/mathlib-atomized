@@ -121,7 +121,7 @@ instance map
   body: ⟨by rw [map_map, ← IsScalarTower.algebraMap_eq]; exact splits L f,
 Subalgebra.restrictScalars_injective F by
       rw [rootSet]; rw [aroots]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Subalgebra.restrictScalars_top]; rw [eq_top_iff]; rw [← adjoin_rootSet L f]; rw [Algebra.adjoin_le_iff]
-
+      exact fun x hx => @Algebra.subset_adjoin K _ _ _ _ _ _ hx⟩
 
 中文:
 实例 map
@@ -129,7 +129,7 @@ Subalgebra.restrictScalars_injective F by
   定义体: ⟨by rw [map_map, ← IsScalarTower.algebraMap_eq]; exact splits L f,
 Subalgebra.restrictScalars_injective F by
       rw [rootSet]; rw [aroots]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Subalgebra.restrictScalars_top]; rw [eq_top_iff]; rw [← adjoin_rootSet L f]; rw [Algebra.adjoin_le_iff]
-
+      exact fun x hx => @Algebra.subset_adjoin K _ _ _ _ _ _ hx⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le_iff, Algebra.subset_adjoin, IsScalarTower, IsScalarTower.algebraMap_eq, Subalgebra, Subalgebra.restrictScalars_injective, Subalgebra.restrictScalars_top, adjoin_le_iff, adjoin_rootSet, algebraMap_eq, aroots, eq_top_iff, map_map, restrictScalars_injective, restrictScalars_top, rootSet, splits, subset_adjoin
 -/
@@ -151,7 +151,12 @@ theorem splits_iff
     classical
     rw [Multiset.toFinset_map]; rw [Finset.mem_coe]; rw [Finset.mem_image] at hy
     obtain ⟨x : K, -, hxy : algebraMap K L x = y⟩ := hy
-    rw [← h
+    rw [← hxy]
+exact SetLike.mem_coe.2 Subalgebra.algebraMap_mem _ _
+  mpr h := by
+    rw [← Polynomial.map_id (p := f)]; rw [← RingEquiv.toRingHom_refl]; rw [← RingEquiv.self_trans_symm
+      (RingEquiv.ofBijective _ <| Algebra.bijective_algebraMap_iff.2 h)]; rw [RingEquiv.toRingHom_trans]; rw [← map_map]
+    apply (splits L f).map
 
 中文:
 定理 splits_iff
@@ -162,7 +167,12 @@ theorem splits_iff
     classical
     rw [Multiset.toFinset_map]; rw [Finset.mem_coe]; rw [Finset.mem_image] at hy
     obtain ⟨x : K, -, hxy : algebraMap K L x = y⟩ := hy
-    rw [← h
+    rw [← hxy]
+exact SetLike.mem_coe.2 Subalgebra.algebraMap_mem _ _
+  mpr h := by
+    rw [← Polynomial.map_id (p := f)]; rw [← RingEquiv.toRingHom_refl]; rw [← RingEquiv.self_trans_symm
+      (RingEquiv.ofBijective _ <| Algebra.bijective_algebraMap_iff.2 h)]; rw [RingEquiv.toRingHom_trans]; rw [← map_map]
+    apply (splits L f).map
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le_iff, Algebra.bijective_algebraM, Finset, Finset.mem_coe, Finset.mem_image, Multiset, Multiset.toFinset_map, Polynomial, Polynomial.map_id, RingEquiv, RingEquiv.ofBijective, RingEquiv.self_trans_symm, RingEquiv.toRingHom_refl, SetLike, SetLike.mem_coe, Subalgebra, Subalgebra.algebraMap_mem, adjoin_le_iff, adjoin_rootSet
 -/
@@ -216,7 +226,7 @@ theorem mul
   · rw [Polynomial.map_mul, IsScalarTower.algebraMap_eq F K L, ← map_map, ← map_map]
     exact Splits.mul ((splits K f).map _) (splits L (g.map (algebraMap F K)))
   · classical
-    rw [rootSet]; rw [aroots_mul (mul_ne_zero hf hg)]; rw [Multiset.toFinset_add]; rw [Finset.coe_union]; 
+    rw [rootSet]; rw [aroots_mul (mul_ne_zero hf hg)]; rw [Multiset.toFinset_add]; rw [Finset.coe_union]; rw [Algebra.adjoin_union_eq_adjoin_adjoin]; rw [aroots_def]; rw [aroots_def]; rw [IsScalarTower.algebraMap_eq F K L]; rw [← map_map]; rw [(splits K f).roots_map]; rw [Multiset.toFinset_map]; rw [Finset.coe_image]; rw [Algebra.adjoin_algebraMap]; rw [← rootSet]; rw [adjoin_rootSet]; rw [Algebra.map_top]; rw [IsScalarTower.adjoin_range_toAlgHom]; rw [← map_map]; rw [← rootSet]; rw [adjoin_rootSet]; rw [Subalgebra.restrictScalars_top]
 
 中文:
 定理 mul
@@ -226,7 +236,7 @@ theorem mul
   · rw [Polynomial.map_mul, IsScalarTower.algebraMap_eq F K L, ← map_map, ← map_map]
     exact Splits.mul ((splits K f).map _) (splits L (g.map (algebraMap F K)))
   · classical
-    rw [rootSet]; rw [aroots_mul (mul_ne_zero hf hg)]; rw [Multiset.toFinset_add]; rw [Finset.coe_union]; 
+    rw [rootSet]; rw [aroots_mul (mul_ne_zero hf hg)]; rw [Multiset.toFinset_add]; rw [Finset.coe_union]; rw [Algebra.adjoin_union_eq_adjoin_adjoin]; rw [aroots_def]; rw [aroots_def]; rw [IsScalarTower.algebraMap_eq F K L]; rw [← map_map]; rw [(splits K f).roots_map]; rw [Multiset.toFinset_map]; rw [Finset.coe_image]; rw [Algebra.adjoin_algebraMap]; rw [← rootSet]; rw [adjoin_rootSet]; rw [Algebra.map_top]; rw [IsScalarTower.adjoin_range_toAlgHom]; rw [← map_map]; rw [← rootSet]; rw [adjoin_rootSet]; rw [Subalgebra.restrictScalars_top]
 
 Depends on / 依赖: Algebra, Algebra.adjoin_union_eq_adjoin_adjoin, Finset, Finset.coe_image, Finset.coe_union, IsScalarTower, IsScalarTower.algebraMap_eq, Multiset, Multiset.toFinset_add, Multiset.toFinset_map, Polynomial, Polynomial.map_mul, Splits, Splits.mul, adjoin_union_eq_adjoin_adjoin, algebraMap, algebraMap_eq, aroots_def, aroots_mul, classical
 -/
@@ -254,7 +264,11 @@ definition lift
         exact Algebra.toTop
   else AlgHom.comp (by
     rw [← adjoin_rootSet L f]
-    exact Classical.choice (lift_of_splits _ fun
+    exact Classical.choice (lift_of_splits _ fun y hy =>
+have : aeval y f = 0 := (eval₂_eq_eval_map _).trans
+        (mem_roots <| map_ne_zero hf0).1 (Multiset.mem_toFinset.mp hy)
+    ⟨IsAlgebraic.isIntegral ⟨f, hf0, this⟩, hf.of_dvd (map_ne_zero hf0)
+      ((map_dvd_map' _).mpr (minpoly.dvd K y this))⟩)) Algebra.toTop
 
 中文:
 定义 lift
@@ -266,7 +280,11 @@ definition lift
         exact Algebra.toTop
   else AlgHom.comp (by
     rw [← adjoin_rootSet L f]
-    exact Classical.choice (lift_of_splits _ fun
+    exact Classical.choice (lift_of_splits _ fun y hy =>
+have : aeval y f = 0 := (eval₂_eq_eval_map _).trans
+        (mem_roots <| map_ne_zero hf0).1 (Multiset.mem_toFinset.mp hy)
+    ⟨IsAlgebraic.isIntegral ⟨f, hf0, this⟩, hf.of_dvd (map_ne_zero hf0)
+      ((map_dvd_map' _).mpr (minpoly.dvd K y this))⟩)) Algebra.toTop
 
 Depends on / 依赖: AlgHom, AlgHom.comp, Algebra, Algebra.botEquiv, Algebra.ofId, Algebra.toTop, Classical, Classical.choice, IsAlgebraic, IsAlgebraic.isIntegral, Multiset, Multiset.mem_toFinset.mp, Splits, Subalgebra, adjoin_rootSet, botEquiv, choice, f.Splits, hf.of_dvd, isIntegral
 -/
@@ -519,7 +537,8 @@ theorem IntermediateField.isSplittingField_iff
   suffices _ -> (Algebra.adjoin K (p.rootSet F) = ⊤ ↔ F = adjoin K (p.rootSet L)) by
     exact ⟨fun h => ⟨h.1, (this h.1).mp h.2⟩, fun h => ⟨h.1, (this h.1).mpr h.2⟩⟩
   rw [← toSubalgebra_injective.eq_iff]; rw [adjoin_toSubalgebra_of_isAlgebraic fun x => isAlgebraic_of_mem_rootSet]
-  refine fun h
+  refine fun hp => (hp.adjoin_rootSet_eq_range F.val).symm.trans ?_
+  rw [← F.range_val]; rw [eq_comm]
 
 中文:
 定理 中间域.isSplittingField_iff
@@ -527,7 +546,8 @@ theorem IntermediateField.isSplittingField_iff
   suffices _ -> (Algebra.adjoin K (p.rootSet F) = ⊤ ↔ F = adjoin K (p.rootSet L)) by
     exact ⟨fun h => ⟨h.1, (this h.1).mp h.2⟩, fun h => ⟨h.1, (this h.1).mpr h.2⟩⟩
   rw [← toSubalgebra_injective.eq_iff]; rw [adjoin_toSubalgebra_of_isAlgebraic fun x => isAlgebraic_of_mem_rootSet]
-  refine fun h
+  refine fun hp => (hp.adjoin_rootSet_eq_range F.val).symm.trans ?_
+  rw [← F.range_val]; rw [eq_comm]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, F.range_val, F.val, adjoin, adjoin_rootSet_eq_range, adjoin_toSubalgebra_of_isAlgebraic, eq_comm, eq_iff, hp.adjoin_rootSet_eq_range, isAlgebraic_of_mem_rootSet, p.rootSet, range_val, rootSet, symm.trans, toSubalgebra_injective, toSubalgebra_injective.eq_iff
 -/

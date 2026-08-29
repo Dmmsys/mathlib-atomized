@@ -203,7 +203,9 @@ haveI' : e =Q mkRat a b := ⟨⟩
   let ra ← derive a
   let some ⟨_, na, pa⟩ := ra.toInt (q(Int.instRing) : Q(Ring Int)) | failure
   let ⟨nb, pb⟩ ← deriveNat q($b) q(AddCommMonoidWithOne.toAddMonoidWithOne)
-  let rab ←
+  let rab ← derive q($na / $nb : Rat)
+  let ⟨q, n, d, p⟩ ← rab.toRat' q(Rat.instDivisionRing)
+  return .isRat _ q n d q(isRat_mkRat $pa $pb $p)
 
 中文:
 定义 evalMkRat
@@ -214,7 +216,9 @@ haveI' : e =Q mkRat a b := ⟨⟩
   let ra ← derive a
   let some ⟨_, na, pa⟩ := ra.toInt (q(Int.instRing) : Q(Ring Int)) | failure
   let ⟨nb, pb⟩ ← deriveNat q($b) q(AddCommMonoidWithOne.toAddMonoidWithOne)
-  let rab ←
+  let rab ← derive q($na / $nb : Rat)
+  let ⟨q, n, d, p⟩ ← rab.toRat' q(Rat.instDivisionRing)
+  return .isRat _ q n d q(isRat_mkRat $pa $pb $p)
 -/
 def evalMkRat : NormNumExt where eval {u α} (e : Q(Rat)) : MetaM (Result e) := do
   let .app (.app (.const ``mkRat _) (a : Q(Int))) (b : Q(Nat)) ← whnfR e | failure
@@ -240,7 +244,10 @@ definition evalNNRatDivNat
 haveI' : e =Q NNRat.divNat a b := ⟨⟩
   let ra ← derive q($a)
   let ⟨na, pa⟩ ← deriveNat q($a) q(AddCommMonoidWithOne.toAddMonoidWithOne)
-  let ⟨nb, pb⟩ ← deriveNat q($b) q(AddCommMonoidWithOne.toAddMonoidWit
+  let ⟨nb, pb⟩ ← deriveNat q($b) q(AddCommMonoidWithOne.toAddMonoidWithOne)
+  let rab ← derive q($na / $nb : NNRat)
+  let some ⟨q, n, d, p⟩ := rab.toNNRat' q(NNRat.instSemifield.toDivisionSemiring) | failure
+  return .isNNRat _ q n d q(isNNRat_divNat $pa $pb $p)
 
 中文:
 定义 evalNNRatDiv自然数
@@ -250,7 +257,10 @@ haveI' : e =Q NNRat.divNat a b := ⟨⟩
 haveI' : e =Q NNRat.divNat a b := ⟨⟩
   let ra ← derive q($a)
   let ⟨na, pa⟩ ← deriveNat q($a) q(AddCommMonoidWithOne.toAddMonoidWithOne)
-  let ⟨nb, pb⟩ ← deriveNat q($b) q(AddCommMonoidWithOne.toAddMonoidWit
+  let ⟨nb, pb⟩ ← deriveNat q($b) q(AddCommMonoidWithOne.toAddMonoidWithOne)
+  let rab ← derive q($na / $nb : NNRat)
+  let some ⟨q, n, d, p⟩ := rab.toNNRat' q(NNRat.instSemifield.toDivisionSemiring) | failure
+  return .isNNRat _ q n d q(isNNRat_divNat $pa $pb $p)
 -/
 def evalNNRatDivNat : NormNumExt where eval {u α} (e : Q(Rat>=0)) : MetaM (Result e) := do
   let .app (.app (.const ``NNRat.divNat _) (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure
@@ -382,7 +392,18 @@ haveI' : e =Q Rat.cast a := ⟨⟩
   | .isNat _ na pa =>
     assumeInstancesCommute
     return .isNat _ na q(isNat_ratCast $pa)
- 
+  | .isNegNat _ na pa =>
+    assumeInstancesCommute
+    return .isNegNat _ na q(isInt_ratCast $pa)
+  | .isNNRat _ qa na da pa =>
+    assumeInstancesCommute
+    let i ← inferCharZeroOfDivisionRing dα
+    return .isNNRat q(inferInstance) qa na da q(isNNRat_ratCast $pa)
+  | .isNegNNRat _ qa na da pa =>
+    assumeInstancesCommute
+    let i ← inferCharZeroOfDivisionRing dα
+    return .isNegNNRat dα qa na da q(isRat_ratCast $pa)
+  | _ => failure
 
 中文:
 定义 evalRatCast
@@ -397,7 +418,18 @@ haveI' : e =Q Rat.cast a := ⟨⟩
   | .isNat _ na pa =>
     assumeInstancesCommute
     return .isNat _ na q(isNat_ratCast $pa)
- 
+  | .isNegNat _ na pa =>
+    assumeInstancesCommute
+    return .isNegNat _ na q(isInt_ratCast $pa)
+  | .isNNRat _ qa na da pa =>
+    assumeInstancesCommute
+    let i ← inferCharZeroOfDivisionRing dα
+    return .isNNRat q(inferInstance) qa na da q(isNNRat_ratCast $pa)
+  | .isNegNNRat _ qa na da pa =>
+    assumeInstancesCommute
+    let i ← inferCharZeroOfDivisionRing dα
+    return .isNegNNRat dα qa na da q(isRat_ratCast $pa)
+  | _ => failure
 -/
 @[norm_num Rat.cast _, RatCast.ratCast _] def evalRatCast : NormNumExt where eval {u α} e := do
   let dα ← inferDivisionRing α
@@ -439,7 +471,11 @@ guard ← matchesInstance dα' q(@DivisionSemiring.toNNRatCast _ $dα)
   | .isNat _ na pa =>
     assumeInstancesCommute
     return .isNat _ na q(isNat_nnratCast $pa)
-  | .isNNRat _ qa na da p
+  | .isNNRat _ qa na da pa =>
+    assumeInstancesCommute
+    let some _ ← inferCharZeroOfDivisionSemiring? dα | failure
+    return .isNNRat q(inferInstance) qa na da q(isNNRat_nnratCast $pa)
+  | _ => failure
 
 中文:
 定义 evalNNRatCast
@@ -452,7 +488,11 @@ guard ← matchesInstance dα' q(@DivisionSemiring.toNNRatCast _ $dα)
   | .isNat _ na pa =>
     assumeInstancesCommute
     return .isNat _ na q(isNat_nnratCast $pa)
-  | .isNNRat _ qa na da p
+  | .isNNRat _ qa na da pa =>
+    assumeInstancesCommute
+    let some _ ← inferCharZeroOfDivisionSemiring? dα | failure
+    return .isNNRat q(inferInstance) qa na da q(isNNRat_nnratCast $pa)
+  | _ => failure
 -/
 def evalNNRatCast : NormNumExt where eval {u α} e := do
   let dα ← inferDivisionSemiring α
@@ -626,7 +666,35 @@ definition Result.inv
         have lit2 : Q(Nat) := mkRawNatLit (na.natLit! - 1)
 haveI : na =Q ($lit2).succ := ⟨⟩
         return .isNNRat' dsα qb q($da) q($na) q(isNNRat_inv_pos $pa)
-      el
+      else
+        guard (qa = 1)
+        let .isNat inst n pa := ra | failure
+haveI' : n =Q nat_lit 1 := ⟨⟩
+        assumeInstancesCommute
+        return .isNat inst n q(isNat_inv_one $pa)
+    else
+      let .isNat inst n pa := ra | failure
+haveI' : n =Q nat_lit 0 := ⟨⟩
+      assumeInstancesCommute
+      return .isNat inst n q(isNat_inv_zero $pa)
+  else
+    let dα ← inferDivisionRing α
+    assertInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα
+    let qb := qa⁻¹
+guard qa < 0
+    if let some _i := czα? then
+      have lit : Q(Nat) := na.appArg!
+haveI : na =Q Int.negOfNat lit := ⟨⟩
+      have lit2 : Q(Nat) := mkRawNatLit (lit.natLit! - 1)
+haveI : lit =Q ($lit2).succ := ⟨⟩
+      return .isRat dα qb q(.negOfNat $da) lit q(isRat_inv_neg $pa)
+    else
+      guard (qa = -1)
+      let .isNegNat inst n pa := ra | failure
+haveI' : n =Q nat_lit 1 := ⟨⟩
+      assumeInstancesCommute
+      return .isNegNat inst n q(isInt_inv_neg_one $pa)
 
 中文:
 定义 Result.inv
@@ -639,7 +707,35 @@ haveI : na =Q ($lit2).succ := ⟨⟩
         have lit2 : Q(Nat) := mkRawNatLit (na.natLit! - 1)
 haveI : na =Q ($lit2).succ := ⟨⟩
         return .isNNRat' dsα qb q($da) q($na) q(isNNRat_inv_pos $pa)
-      el
+      else
+        guard (qa = 1)
+        let .isNat inst n pa := ra | failure
+haveI' : n =Q nat_lit 1 := ⟨⟩
+        assumeInstancesCommute
+        return .isNat inst n q(isNat_inv_one $pa)
+    else
+      let .isNat inst n pa := ra | failure
+haveI' : n =Q nat_lit 0 := ⟨⟩
+      assumeInstancesCommute
+      return .isNat inst n q(isNat_inv_zero $pa)
+  else
+    let dα ← inferDivisionRing α
+    assertInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα
+    let qb := qa⁻¹
+guard qa < 0
+    if let some _i := czα? then
+      have lit : Q(Nat) := na.appArg!
+haveI : na =Q Int.negOfNat lit := ⟨⟩
+      have lit2 : Q(Nat) := mkRawNatLit (lit.natLit! - 1)
+haveI : lit =Q ($lit2).succ := ⟨⟩
+      return .isRat dα qb q(.negOfNat $da) lit q(isRat_inv_neg $pa)
+    else
+      guard (qa = -1)
+      let .isNegNat inst n pa := ra | failure
+haveI' : n =Q nat_lit 1 := ⟨⟩
+      assumeInstancesCommute
+      return .isNegNat inst n q(isInt_inv_neg_one $pa)
 -/
 def Result.inv {u : Level} {α : Q(Type u)} {a : Q($α)} (ra : Result a)
     (dsα : Q(DivisionSemiring $α)) (czα? : Option Q(CharZero $α)) :

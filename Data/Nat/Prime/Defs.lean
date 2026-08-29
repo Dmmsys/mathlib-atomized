@@ -321,7 +321,7 @@ theorem prime_def
   rintro a b rfl
   simp only [Nat.isUnit_iff]
   refine (h.2 a <| dvd_mul_right ..).imp_right fun hab => ?_
-  rw [← mul_right_inj' (Nat.ne_zero_o
+  rw [← mul_right_inj' (Nat.ne_zero_of_lt h1)]; rw [← hab]; rw [← hab]; rw [mul_one]
 
 中文:
 定理 prime_def
@@ -334,7 +334,7 @@ theorem prime_def
   rintro a b rfl
   simp only [Nat.isUnit_iff]
   refine (h.2 a <| dvd_mul_right ..).imp_right fun hab => ?_
-  rw [← mul_right_inj' (Nat.ne_zero_o
+  rw [← mul_right_inj' (Nat.ne_zero_of_lt h1)]; rw [← hab]; rw [← hab]; rw [mul_one]
 
 Depends on / 依赖: Nat.isUnit_iff, Nat.isUnit_iff.mp, Nat.ne_zero_of_lt, Nat.one_lt_two.trans_le, dvd_mul_right, eq_one_or_self_of_dvd, h.eq_one_or_self_of_dvd, h.two_le, h1.ne, imp_right, isUnit_iff, mul_one, mul_right_inj, ne_zero_of_lt, one_lt_two, trans_le, two_le
 -/
@@ -433,7 +433,7 @@ theorem prime_def_le_sqrt
         rcases le_sqrt_of_eq_mul e with hm | hk
         · exact a m m2 hm mdvd
         · rw [mul_comm] at e
-          exact a k (Nat.lt_of_mul_lt_mul_right (a :=
+          exact a k (Nat.lt_of_mul_lt_mul_right (a := m) (by rwa [one_mul, ← e])) hk ⟨m, e⟩⟩
 
 中文:
 定理 prime_def_le_sqrt
@@ -445,7 +445,7 @@ theorem prime_def_le_sqrt
         rcases le_sqrt_of_eq_mul e with hm | hk
         · exact a m m2 hm mdvd
         · rw [mul_comm] at e
-          exact a k (Nat.lt_of_mul_lt_mul_right (a :=
+          exact a k (Nat.lt_of_mul_lt_mul_right (a := m) (by rwa [one_mul, ← e])) hk ⟨m, e⟩⟩
 
 Depends on / 依赖: Nat.lt_of_mul_lt_mul_right, and_congr_right, le_sqrt_of_eq_mul, lt_of_le_of_lt, lt_of_mul_lt_mul_right, mul_comm, one_mul, prime_def_lt, sqrt_lt_self
 -/
@@ -470,7 +470,9 @@ theorem prime_iff_not_exists_mul_eq
   refine and_congr_right fun hp => forall_congr' fun m => (forall_congr' fun h => ?_).trans forall_comm
   simp_rw [Ne, forall_comm (β := _ = _), eq_comm, imp_false, not_lt]
   refine forall₂_congr fun n hp => ⟨by simp_all, fun hpn => ?_⟩
-  h
+  have := mul_ne_zero_iff.mp (hp ▸ show p != 0 by lia)
+  exact (Nat.mul_eq_right (by lia)).mp
+    (hp.symm.trans (hpn.antisymm (hp ▸ Nat.le_mul_of_pos_left _ (by lia))))
 
 中文:
 定理 prime_iff_not_存在_mul_eq
@@ -481,7 +483,9 @@ theorem prime_iff_not_exists_mul_eq
   refine and_congr_right fun hp => forall_congr' fun m => (forall_congr' fun h => ?_).trans forall_comm
   simp_rw [Ne, forall_comm (β := _ = _), eq_comm, imp_false, not_lt]
   refine forall₂_congr fun n hp => ⟨by simp_all, fun hpn => ?_⟩
-  h
+  have := mul_ne_zero_iff.mp (hp ▸ show p != 0 by lia)
+  exact (Nat.mul_eq_right (by lia)).mp
+    (hp.symm.trans (hpn.antisymm (hp ▸ Nat.le_mul_of_pos_left _ (by lia))))
 
 Depends on / 依赖: Nat.le_mul_of_pos_left, Nat.mul_eq_right, and_congr_right, antisymm, dvd_def, eq_comm, exists_imp, forall_comm, forall_congr, hp.symm.trans, hpn.antisymm, imp_false, le_mul_of_pos_left, mul_eq_right, mul_ne_zero_iff, mul_ne_zero_iff.mp, not_lt, prime_def_lt, simp_rw
 -/
@@ -888,7 +892,23 @@ theorem minFacAux_has_prop
     have k2 : 2 <= k := by
       subst e
       apply Nat.le_add_left
-    simp only [k, h, ↓
+    simp only [k, h, ↓reduceIte]
+    by_cases dk : k ∣ n <;> simp only [k, dk, ↓reduceIte]
+    · exact ⟨k2, dk, a⟩
+    · refine
+        have := minFac_lemma n k h
+        minFacAux_has_prop n2 (k + 2) (i + 1) (by simp [k, e, Nat.left_distrib, add_right_comm])
+          fun m m2 d => ?_
+      rcases Nat.eq_or_lt_of_le (a m m2 d) with rfl | ml
+      · contradiction
+      apply (Nat.eq_or_lt_of_le ml).resolve_left
+      intro me
+      rw [← me]; rw [e] at d
+      have d' : 2 * (i + 2) ∣ n := d
+      have := a _ le_rfl (dvd_of_mul_right_dvd d')
+      rw [e] at this
+      exact absurd this (by contradiction)
+  termination_by k => sqrt n + 2 - k
 
 中文:
 定理 minFacAux_has_prop
@@ -900,7 +920,23 @@ theorem minFacAux_has_prop
     have k2 : 2 <= k := by
       subst e
       apply Nat.le_add_left
-    simp only [k, h, ↓
+    simp only [k, h, ↓reduceIte]
+    by_cases dk : k ∣ n <;> simp only [k, dk, ↓reduceIte]
+    · exact ⟨k2, dk, a⟩
+    · refine
+        have := minFac_lemma n k h
+        minFacAux_has_prop n2 (k + 2) (i + 1) (by simp [k, e, Nat.left_distrib, add_right_comm])
+          fun m m2 d => ?_
+      rcases Nat.eq_or_lt_of_le (a m m2 d) with rfl | ml
+      · contradiction
+      apply (Nat.eq_or_lt_of_le ml).resolve_left
+      intro me
+      rw [← me]; rw [e] at d
+      have d' : 2 * (i + 2) ∣ n := d
+      have := a _ le_rfl (dvd_of_mul_right_dvd d')
+      rw [e] at this
+      exact absurd this (by contradiction)
+  termination_by k => sqrt n + 2 - k
 
 Depends on / 依赖: Nat.le_add_left, Nat.left_distrib, add_right_comm, dvd_prime_two_le, dvd_rfl, le_add_left, le_of_eq, left_distrib, lt_of_lt_of_le, minFacAux_has_prop, minFac_lemma, not_lt_of_ge, prime_def_le_sqrt, reduceIte, sqrt_lt
 -/
@@ -954,7 +990,8 @@ theorem minFac_has_prop
   by_cases d2 : 2 ∣ n <;> simp only [d2, ↓reduceIte]
   · exact ⟨le_rfl, d2, fun k k2 _ => k2⟩
   · refine
-      minFacAux_has_prop
+      minFacAux_has_prop n2 3 0 rfl fun m m2 d => (Nat.eq_or_lt_of_le m2).resolve_left (mt ?_ d2)
+    exact fun e => e.symm ▸ d
 
 中文:
 定理 minFac_has_prop
@@ -970,7 +1007,8 @@ theorem minFac_has_prop
   by_cases d2 : 2 ∣ n <;> simp only [d2, ↓reduceIte]
   · exact ⟨le_rfl, d2, fun k k2 _ => k2⟩
   · refine
-      minFacAux_has_prop
+      minFacAux_has_prop n2 3 0 rfl fun m m2 d => (Nat.eq_or_lt_of_le m2).resolve_left (mt ?_ d2)
+    exact fun e => e.symm ▸ d
 
 Depends on / 依赖: Nat.eq_or_lt_of_le, e.symm, eq_or_lt_of_le, le_rfl, minFacAux_has_prop, minFacProp, minFac_eq, reduceIte, resolve_left, revert, succ_le_succ
 -/
@@ -1324,7 +1362,13 @@ theorem minFac_le_div
   | ⟨1, h1⟩ => by
     rw [mul_one] at h1
     rw [prime_def_minFac]; rw [not_and_or]; rw [← h1]; rw [eq_self_iff_true]; rw [_root_.not_true]; rw [_root_.or_false]; rw [not_le] at np
-    rw [le_antisymm (le_of_lt_succ np) (su
+    rw [le_antisymm (le_of_lt_succ np) (succ_le_of_lt pos)]; rw [minFac_one]; rw [Nat.div_one]
+  | ⟨x + 2, hx⟩ => by
+    conv_rhs =>
+      congr
+      rw [hx]
+    rw [Nat.mul_div_cancel_left _ (minFac_pos _)]
+    exact minFac_le_of_dvd (le_add_left 2 x) ⟨minFac n, by rwa [mul_comm]⟩
 
 中文:
 定理 minFac_le_div
@@ -1335,7 +1379,13 @@ theorem minFac_le_div
   | ⟨1, h1⟩ => by
     rw [mul_one] at h1
     rw [prime_def_minFac]; rw [not_and_or]; rw [← h1]; rw [eq_self_iff_true]; rw [_root_.not_true]; rw [_root_.or_false]; rw [not_le] at np
-    rw [le_antisymm (le_of_lt_succ np) (su
+    rw [le_antisymm (le_of_lt_succ np) (succ_le_of_lt pos)]; rw [minFac_one]; rw [Nat.div_one]
+  | ⟨x + 2, hx⟩ => by
+    conv_rhs =>
+      congr
+      rw [hx]
+    rw [Nat.mul_div_cancel_left _ (minFac_pos _)]
+    exact minFac_le_of_dvd (le_add_left 2 x) ⟨minFac n, by rwa [mul_comm]⟩
 
 Depends on / 依赖: Nat.div_one, Nat.mul_div_cancel_left, _root_, _root_.not_true, _root_.or_false, absurd, conv_rhs, div_one, eq_self_iff_true, le_add_left, le_antisymm, le_of_lt_succ, minFac, minFac_dvd, minFac_le_of_dvd, minFac_one, minFac_pos, mul_comm, mul_div_cancel_left, mul_one
 -/
@@ -1455,7 +1505,7 @@ theorem minFac_eq_two_iff
     have lb := minFac_pos n
     refine ub.eq_or_lt.resolve_right fun h' => ?_
     suffices n.minFac = 1 by simp_all
-    exact (le_antisymm (Nat.succ_le_of_lt lb) (Nat.lt_succ_if
+    exact (le_antisymm (Nat.succ_le_of_lt lb) (Nat.lt_succ_iff.mp h')).symm
 
 中文:
 定理 minFac_eq_two_iff
@@ -1471,7 +1521,7 @@ theorem minFac_eq_two_iff
     have lb := minFac_pos n
     refine ub.eq_or_lt.resolve_right fun h' => ?_
     suffices n.minFac = 1 by simp_all
-    exact (le_antisymm (Nat.succ_le_of_lt lb) (Nat.lt_succ_if
+    exact (le_antisymm (Nat.succ_le_of_lt lb) (Nat.lt_succ_iff.mp h')).symm
 
 Depends on / 依赖: Nat.lt_succ_iff.mp, Nat.succ_le_of_lt, eq_or_lt, le_antisymm, le_refl, lt_succ_iff, minFac, minFac_dvd, minFac_le_of_dvd, minFac_pos, n.minFac, resolve_right, succ_le_of_lt, ub.eq_or_lt.resolve_right
 -/

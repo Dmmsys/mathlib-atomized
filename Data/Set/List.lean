@@ -38,7 +38,7 @@ theorem range_list_map
   | cons a l ihl =>
 rcases ihl fun x hx => hl x subset_cons_self _ _ hx with ⟨l, rfl⟩
     rcases hl a mem_cons_self with ⟨a, rfl⟩
-    exa
+    exact ⟨a :: l, map_cons⟩
 
 中文:
 定理 range_list_map
@@ -52,7 +52,7 @@ rcases ihl fun x hx => hl x subset_cons_self _ _ hx with ⟨l, rfl⟩
   | cons a l ihl =>
 rcases ihl fun x hx => hl x subset_cons_self _ _ hx with ⟨l, rfl⟩
     rcases hl a mem_cons_self with ⟨a, rfl⟩
-    exa
+    exact ⟨a :: l, map_cons⟩
 
 Depends on / 依赖: antisymm, forall_mem_map, map_cons, mem_cons_self, mem_range_self, range_subset_iff, subset_cons_self
 -/
@@ -127,7 +127,9 @@ theorem range_list_getElem?
   · exact (le_or_gt l.length n).imp getElem?_eq_none_iff.mpr
       (fun hlt => ⟨⟨_, hlt⟩, (getElem?_eq_getElem hlt).symm⟩)
   · exact ⟨_, getElem?_eq_none_iff.mpr le_rfl⟩
-  
+  · exact range_subset_iff.2 fun k => ⟨_, getElem?_eq_getElem _⟩
+
+@[simp]
 
 中文:
 定理 range_list_getElem?
@@ -137,7 +139,9 @@ theorem range_list_getElem?
   · exact (le_or_gt l.length n).imp getElem?_eq_none_iff.mpr
       (fun hlt => ⟨⟨_, hlt⟩, (getElem?_eq_getElem hlt).symm⟩)
   · exact ⟨_, getElem?_eq_none_iff.mpr le_rfl⟩
-  
+  · exact range_subset_iff.2 fun k => ⟨_, getElem?_eq_getElem _⟩
+
+@[simp]
 
 Depends on / 依赖: _eq_getElem, _eq_none_iff, _eq_none_iff.mpr, antisymm, getElem, insert_subset_iff, l.length, le_or_gt, le_rfl, length, range_comp, range_list_get, range_subset_iff
 -/

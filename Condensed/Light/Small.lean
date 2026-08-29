@@ -99,7 +99,8 @@ definition equivSmallFreeIso
       (freeForgetAdjunction R)).comp (equivSmall _).toAdjunction) |>.symm <| by
   refine NatIso.ofComponents
     (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
-      (isoWhiskerRight ((equi
+      (isoWhiskerRight ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm _ ≪≫
+        (Functor.associator _ _ _)))
 
 中文:
 定义 equivSmallFreeIso
@@ -109,7 +110,8 @@ definition equivSmallFreeIso
       (freeForgetAdjunction R)).comp (equivSmall _).toAdjunction) |>.symm <| by
   refine NatIso.ofComponents
     (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
-      (isoWhiskerRight ((equi
+      (isoWhiskerRight ((equivSmallModel LightProfinite).op.invFunIdAssoc _).symm _ ≪≫
+        (Functor.associator _ _ _)))
 
 Depends on / 依赖: Functor, Functor.associator, LightProfinite, ModuleCat, ModuleCat.adj, NatIso, NatIso.ofComponents, Sheaf.adjunction, adjunction, associator, conjugateIsoEquiv, equivSmall, equivSmallModel, freeForgetAdjunction, fullyFaithfulSheafToPresheaf, invFunIdAssoc, isoWhiskerRight, ofComponents, op.invFunIdAssoc, preimageIso
 -/

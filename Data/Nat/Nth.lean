@@ -305,7 +305,7 @@ theorem image_nth_Iio_card
       ext x
       simp only [Set.mem_image, Set.mem_range, Fin.exists_iff, ← nth_eq_orderEmbOfFin hf,
         Set.mem_Iio, exists_prop]
-    _ = Set.ofPred p := by rw [range_orderEmbOfFin, Set.Finite.coe_toFinset
+    _ = Set.ofPred p := by rw [range_orderEmbOfFin, Set.Finite.coe_toFinset]
 
 中文:
 定理 image_nth_Iio_card
@@ -315,7 +315,7 @@ theorem image_nth_Iio_card
       ext x
       simp only [Set.mem_image, Set.mem_range, Fin.exists_iff, ← nth_eq_orderEmbOfFin hf,
         Set.mem_Iio, exists_prop]
-    _ = Set.ofPred p := by rw [range_orderEmbOfFin, Set.Finite.coe_toFinset
+    _ = Set.ofPred p := by rw [range_orderEmbOfFin, Set.Finite.coe_toFinset]
 
 Depends on / 依赖: Fin.exists_iff, Finite, Set.Finite.coe_toFinset, Set.Iio, Set.mem_Iio, Set.mem_image, Set.mem_range, Set.ofPred, Set.range, coe_toFinset, exists_iff, exists_prop, hf.toFinset, hf.toFinset.orderEmbOfFin, mem_Iio, mem_image, mem_range, nth_eq_orderEmbOfFin, ofPred, orderEmbOfFin
 -/
@@ -574,7 +574,7 @@ theorem exists_lt_card_nth_eq
     exact ⟨n, fun _ => hn, hx⟩
   · rw [← @Set.mem_ofPred_eq _ _ p, ← range_nth_of_infinite hf] at h
     rcases h with ⟨n, hx⟩
-    exact ⟨n, fun hf' => absurd h
+    exact ⟨n, fun hf' => absurd hf' hf, hx⟩
 
 中文:
 定理 存在_lt_card_nth_eq
@@ -585,7 +585,7 @@ theorem exists_lt_card_nth_eq
     exact ⟨n, fun _ => hn, hx⟩
   · rw [← @Set.mem_ofPred_eq _ _ p, ← range_nth_of_infinite hf] at h
     rcases h with ⟨n, hx⟩
-    exact ⟨n, fun hf' => absurd h
+    exact ⟨n, fun hf' => absurd hf' hf, hx⟩
 
 Depends on / 依赖: Set.mem_ofPred_eq, Set.ofPred, absurd, exists_lt_card_finite_nth_eq, finite_or_infinite, finite_or_infinite.elim, mem_ofPred_eq, ofPred, range_nth_of_infinite
 -/
@@ -809,7 +809,8 @@ theorem nth_eq_sInf
   · rcases hn with ⟨hf, hn⟩
     rw [nth_of_card_le _ hn]
     refine ((congr_arg sInf <| Set.eq_empty_of_forall_notMem fun k hk => ?_).trans sInf_empty).symm
-    rcases exists_lt_card_nth_
+    rcases exists_lt_card_nth_eq hk.1 with ⟨k, hlt, rfl⟩
+    exact (hk.2 _ ((hlt hf).trans_le hn)).false
 
 中文:
 定理 nth_eq_sInf
@@ -821,7 +822,8 @@ theorem nth_eq_sInf
   · rcases hn with ⟨hf, hn⟩
     rw [nth_of_card_le _ hn]
     refine ((congr_arg sInf <| Set.eq_empty_of_forall_notMem fun k hk => ?_).trans sInf_empty).symm
-    rcases exists_lt_card_nth_
+    rcases exists_lt_card_nth_eq hk.1 with ⟨k, hlt, rfl⟩
+    exact (hk.2 _ ((hlt hf).trans_le hn)).false
 
 Depends on / 依赖: Finite, Set.eq_empty_of_forall_notMem, Set.ofPred, congr_arg, csInf_eq, csInf_eq.symm, eq_empty_of_forall_notMem, exists_lt_card_nth_eq, hf.toFinset, isLeast_nth, nth_of_card_le, ofPred, sInf_empty, toFinset, trans_le
 -/
@@ -1032,7 +1034,11 @@ theorem le_nth_of_lt_nth_succ
   · rcases exists_lt_card_finite_nth_eq hf ha with ⟨n, hn, rfl⟩
     rcases lt_or_ge (k + 1) #hf.toFinset with hk | hk
     · rwa [(nth_strictMonoOn hf).lt_iff_lt hn hk, Nat.lt_succ_iff,
-        ← (nth_strictMonoOn hf).le_iff_le hn (k.lt_succ_
+        ← (nth_strictMonoOn hf).le_iff_le hn (k.lt_succ_self.trans hk)] at h
+    · rw [nth_of_card_le _ hk] at h
+      exact absurd h (zero_le _).not_gt
+  · rcases subset_range_nth ha with ⟨n, rfl⟩
+    rwa [nth_lt_nth hf, Nat.lt_succ_iff, ← nth_le_nth hf] at h
 
 中文:
 定理 le_nth_of_lt_nth_succ
@@ -1043,7 +1049,11 @@ theorem le_nth_of_lt_nth_succ
   · rcases exists_lt_card_finite_nth_eq hf ha with ⟨n, hn, rfl⟩
     rcases lt_or_ge (k + 1) #hf.toFinset with hk | hk
     · rwa [(nth_strictMonoOn hf).lt_iff_lt hn hk, Nat.lt_succ_iff,
-        ← (nth_strictMonoOn hf).le_iff_le hn (k.lt_succ_
+        ← (nth_strictMonoOn hf).le_iff_le hn (k.lt_succ_self.trans hk)] at h
+    · rw [nth_of_card_le _ hk] at h
+      exact absurd h (zero_le _).not_gt
+  · rcases subset_range_nth ha with ⟨n, rfl⟩
+    rwa [nth_lt_nth hf, Nat.lt_succ_iff, ← nth_le_nth hf] at h
 
 Depends on / 依赖: Nat.lt_succ_iff, Set.ofPred, absurd, exists_lt_card_finite_nth_eq, finite_or_infinite, hf.toFinset, k.lt_succ_self.trans, le_iff_le, lt_iff_lt, lt_or_ge, lt_succ_iff, lt_succ_self, not_gt, nth_le_nth, nth_lt_nth, nth_of_card_le, nth_strictMonoOn, ofPred, subset_range_nth, toFinset
 -/
@@ -1072,7 +1082,10 @@ lemma nth_mem_anti
     have h'b : exists hf : (Set.ofPred p).Finite, #hf.toFinset <= b := by
       rcases h' with ⟨hf, ha⟩
       exact ⟨hf, ha.trans hab⟩
-    have ha0 : nth p a = 0 := 
+    have ha0 : nth p a = 0 := by simp [nth_eq_zero, h']
+    have hb0 : nth p b = 0 := by simp [nth_eq_zero, h'b]
+    rw [ha0]
+    rwa [hb0] at h
 
 中文:
 引理 nth_mem_anti
@@ -1085,7 +1098,10 @@ lemma nth_mem_anti
     have h'b : exists hf : (Set.ofPred p).Finite, #hf.toFinset <= b := by
       rcases h' with ⟨hf, ha⟩
       exact ⟨hf, ha.trans hab⟩
-    have ha0 : nth p a = 0 := 
+    have ha0 : nth p a = 0 := by simp [nth_eq_zero, h']
+    have hb0 : nth p b = 0 := by simp [nth_eq_zero, h'b]
+    rw [ha0]
+    rwa [hb0] at h
 
 Depends on / 依赖: Finite, Set.ofPred, ha.trans, hf.toFinset, not_forall, not_lt, nth_eq_zero, nth_mem, ofPred, toFinset
 -/
@@ -1114,7 +1130,9 @@ lemma nth_le_of_strictMonoOn_of_mapsTo
     refine csInf_le (by simp) ⟨hmaps hn, fun k hk => ?_⟩
     have : f k < f n := by apply hmono <;> grind
     grind
-  · rcases hn with
+  · rcases hn with ⟨hf, hn⟩
+    rw [nth]; rw [dif_pos hf]; rw [List.getD_eq_default _ _ (by simp [hn])]
+    exact Nat.zero_le _
 
 中文:
 引理 nth_le_of_strictMonoOn_of_mapsTo
@@ -1126,7 +1144,9 @@ lemma nth_le_of_strictMonoOn_of_mapsTo
     refine csInf_le (by simp) ⟨hmaps hn, fun k hk => ?_⟩
     have : f k < f n := by apply hmono <;> grind
     grind
-  · rcases hn with
+  · rcases hn with ⟨hf, hn⟩
+    rw [nth]; rw [dif_pos hf]; rw [List.getD_eq_default _ _ (by simp [hn])]
+    exact Nat.zero_le _
 
 Depends on / 依赖: Finite, List.getD_eq_default, Nat.strong_induction_on, Nat.zero_le, Set.Finite, Set.ofPred, csInf_le, dif_pos, getD_eq_default, hf.toFinset.card, nth_eq_sInf, ofPred, strong_induction_on, toFinset, zero_le
 -/
@@ -1163,7 +1183,12 @@ lemma le_nth_of_monotoneOn_of_surjOn
     rw [nth_eq_sInf]
     refine le_csInf ?_ ?_
     · use nth p (n + 1), nth_mem _ hn
-      exact f
+      exact fun k hk => nth_lt_nth' hk hn
+    rintro b ⟨hb, h⟩
+    rcases hsurj hb with ⟨m, hm, rfl⟩
+    apply hmono hn hm
+    rw [Nat.succ_le_iff]
+    apply hmono.reflect_lt <;> grind
 
 中文:
 引理 le_nth_of_monotoneOn_of_surjOn
@@ -1179,7 +1204,12 @@ lemma le_nth_of_monotoneOn_of_surjOn
     rw [nth_eq_sInf]
     refine le_csInf ?_ ?_
     · use nth p (n + 1), nth_mem _ hn
-      exact f
+      exact fun k hk => nth_lt_nth' hk hn
+    rintro b ⟨hb, h⟩
+    rcases hsurj hb with ⟨m, hm, rfl⟩
+    apply hmono hn hm
+    rw [Nat.succ_le_iff]
+    apply hmono.reflect_lt <;> grind
 
 Depends on / 依赖: Nat.nth_zero, Nat.succ_le_iff, Nat.zero_le, hmono.reflect_lt, le_csInf, nth_eq_sInf, nth_lt_nth, nth_mem, nth_zero, reflect_lt, succ_le_iff, zero_le
 -/
@@ -1250,7 +1280,22 @@ lemma nth_comp_of_strictMono
     rcases h0p' _ he with ⟨t, rfl⟩
     exact ⟨t, he, rfl⟩
   induction n using Nat.case_strong_induction_on
-  cas
+  case _ =>
+    simp_rw [nth_zero]
+    replace h := nth_mem _ h
+    rw [← hs h0]; rw [← hf.monotone.map_csInf]
+    rcases h0 _ h with ⟨t, ht⟩
+    exact ⟨t, Set.mem_ofPred_eq ▸ ht ▸ h⟩
+  case _ n ih =>
+    repeat nth_rw 1 [nth_eq_sInf]
+    have h0' : forall k', (p k' ∧ forall k < n + 1, nth p k < k') -> k' in Set.range f := fun _ h => h0 _ h.1
+    rw [← hs h0']; rw [← hf.monotone.map_csInf]
+    · convert! rfl using 8 with k m' hm
+      nth_rw 2 [← hf.lt_iff_lt]
+      convert! Iff.rfl using 2
+      exact ih m' (Nat.lt_add_one_iff.mp hm) fun hfi => hm.trans (h hfi)
+    · rcases h0 _ (nth_mem _ h) with ⟨t, ht⟩
+      exact ⟨t, ht ▸ (nth_mem _ h), fun _ hk => ht ▸ nth_lt_nth' hk h⟩
 
 中文:
 引理 nth_comp_of_strictMono
@@ -1263,7 +1308,22 @@ lemma nth_comp_of_strictMono
     rcases h0p' _ he with ⟨t, rfl⟩
     exact ⟨t, he, rfl⟩
   induction n using Nat.case_strong_induction_on
-  cas
+  case _ =>
+    simp_rw [nth_zero]
+    replace h := nth_mem _ h
+    rw [← hs h0]; rw [← hf.monotone.map_csInf]
+    rcases h0 _ h with ⟨t, ht⟩
+    exact ⟨t, Set.mem_ofPred_eq ▸ ht ▸ h⟩
+  case _ n ih =>
+    repeat nth_rw 1 [nth_eq_sInf]
+    have h0' : forall k', (p k' ∧ forall k < n + 1, nth p k < k') -> k' in Set.range f := fun _ h => h0 _ h.1
+    rw [← hs h0']; rw [← hf.monotone.map_csInf]
+    · convert! rfl using 8 with k m' hm
+      nth_rw 2 [← hf.lt_iff_lt]
+      convert! Iff.rfl using 2
+      exact ih m' (Nat.lt_add_one_iff.mp hm) fun hfi => hm.trans (h hfi)
+    · rcases h0 _ (nth_mem _ h) with ⟨t, ht⟩
+      exact ⟨t, ht ▸ (nth_mem _ h), fun _ hk => ht ▸ nth_lt_nth' hk h⟩
 
 Depends on / 依赖: Nat.case_strong_induction_on, Set.mem_ofPred_eq, Set.ofPred, Set.range, case_strong_induction_on, hf.monotone.map_csInf, map_csInf, mem_ofPred_eq, monotone, nth_eq_sInf, nth_mem, nth_rw, nth_zero, ofPred, repeat, replace, simp_rw
 -/
@@ -1455,7 +1515,7 @@ theorem filter_range_nth_eq_insert
   have : nth p k < nth p (k + 1) := nth_lt_nth' k.lt_succ_self hlt
   rcases ha with (rfl | ⟨hlt, hpa⟩)
   · exact ⟨this, nth_mem _ fun hf => k.lt_succ_self.trans (hlt hf)⟩
-
+  · exact ⟨hlt.trans this, hpa⟩
 
 中文:
 定理 filter_range_nth_eq_insert
@@ -1466,7 +1526,7 @@ theorem filter_range_nth_eq_insert
   have : nth p k < nth p (k + 1) := nth_lt_nth' k.lt_succ_self hlt
   rcases ha with (rfl | ⟨hlt, hpa⟩)
   · exact ⟨this, nth_mem _ fun hf => k.lt_succ_self.trans (hlt hf)⟩
-
+  · exact ⟨hlt.trans this, hpa⟩
 
 Depends on / 依赖: antisymm, filter_range_nth_subset_insert, hlt.trans, k.lt_succ_self, k.lt_succ_self.trans, lt_succ_self, mem_filter, mem_insert, mem_range, nth_lt_nth, nth_mem
 -/
@@ -1767,7 +1827,7 @@ theorem nth_count_eq_sInf
   refine Set.ext fun a => and_congr_right fun hpa => ?_
   refine ⟨fun h => not_lt.1 fun ha => ?_, fun hn k hk => lt_of_lt_of_le (nth_lt_of_lt_count hk) hn⟩
   have hn : nth p (count p a) < a := h _ (count_strict_mono hpa ha)
-  rwa [nth_count hpa
+  rwa [nth_count hpa, lt_self_iff_false] at hn
 
 中文:
 定理 nth_count_eq_sInf
@@ -1778,7 +1838,7 @@ theorem nth_count_eq_sInf
   refine Set.ext fun a => and_congr_right fun hpa => ?_
   refine ⟨fun h => not_lt.1 fun ha => ?_, fun hn k hk => lt_of_lt_of_le (nth_lt_of_lt_count hk) hn⟩
   have hn : nth p (count p a) < a := h _ (count_strict_mono hpa ha)
-  rwa [nth_count hpa
+  rwa [nth_count hpa, lt_self_iff_false] at hn
 
 Depends on / 依赖: Set.ext, and_congr_right, congr_arg, count_strict_mono, lt_of_lt_of_le, lt_self_iff_false, not_lt, nth_count, nth_eq_sInf, nth_lt_of_lt_count
 -/
@@ -1966,7 +2026,7 @@ theorem nth_of_forall_not
     exact ⟨n', by simpa using hp, Set.mem_ofPred.mp hn'⟩
   rw [nth_of_card_le ((finite_toSet _).subset this)]
   · refine (Finset.card_le_card ?_).trans_eq (Finset.card_range n)
-    exact Set.Finite.toFinset_su
+    exact Set.Finite.toFinset_subset.mpr this
 
 中文:
 定理 nth_of_对任意_not
@@ -1979,7 +2039,7 @@ theorem nth_of_forall_not
     exact ⟨n', by simpa using hp, Set.mem_ofPred.mp hn'⟩
   rw [nth_of_card_le ((finite_toSet _).subset this)]
   · refine (Finset.card_le_card ?_).trans_eq (Finset.card_range n)
-    exact Set.Finite.toFinset_su
+    exact Set.Finite.toFinset_subset.mpr this
 
 Depends on / 依赖: Finite, Finset, Finset.card_le_card, Finset.card_range, Finset.range, Set.Finite.toFinset_subset.mpr, Set.mem_ofPred.mp, Set.ofPred, card_le_card, card_range, contrapose, finite_toSet, mem_ofPred, nth_of_card_le, ofPred, subset, subseteq, toFinset_subset, trans_eq
 -/

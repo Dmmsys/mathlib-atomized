@@ -69,7 +69,12 @@ definition evenKernel
     (fun ξ : Real => rexp (-π * ξ ^ 2 * x) * re (jacobiTheta₂ (ξ * I * x) (I * x))) 1 by
       intro ξ
       simp only [ofReal_add, ofReal_one, add_mul, one_mul, jacobiTheta₂_add_left']
-      have : cexp (-↑π * I * ((I * ↑x) + 2 * (↑ξ * I * ↑x))) = rexp (π * (x + 2 * ξ * x)) 
+      have : cexp (-↑π * I * ((I * ↑x) + 2 * (↑ξ * I * ↑x))) = rexp (π * (x + 2 * ξ * x)) := by
+        ring_nf
+        simp [I_sq]
+      rw [this]; rw [re_ofReal_mul]; rw [← mul_assoc]; rw [← Real.exp_add]
+      congr
+      ring).lift a
 
 中文:
 定义 evenKernel
@@ -78,7 +83,12 @@ definition evenKernel
     (fun ξ : Real => rexp (-π * ξ ^ 2 * x) * re (jacobiTheta₂ (ξ * I * x) (I * x))) 1 by
       intro ξ
       simp only [ofReal_add, ofReal_one, add_mul, one_mul, jacobiTheta₂_add_left']
-      have : cexp (-↑π * I * ((I * ↑x) + 2 * (↑ξ * I * ↑x))) = rexp (π * (x + 2 * ξ * x)) 
+      have : cexp (-↑π * I * ((I * ↑x) + 2 * (↑ξ * I * ↑x))) = rexp (π * (x + 2 * ξ * x)) := by
+        ring_nf
+        simp [I_sq]
+      rw [this]; rw [re_ofReal_mul]; rw [← mul_assoc]; rw [← Real.exp_add]
+      congr
+      ring).lift a
 -/
 @[irreducible] def evenKernel (a : UnitAddCircle) (x : Real) : Real :=
   (show Function.Periodic
@@ -305,7 +315,8 @@ lemma continuousOn_evenKernel
   apply continuous_re.comp_continuousOn (f := fun x => (evenKernel a' x : Complex))
   simp only [evenKernel_def]
   refine continuousOn_of_forall_continuousAt (fun x hx => .mul (by fun_prop) ?_)
-  exact (continuousAt_jacobiTheta₂ (a'
+  exact (continuousAt_jacobiTheta₂ (a' * I * x) <| by simpa).comp
+    (f := fun u : Real => (a' * I * u, I * u)) (by fun_prop)
 
 中文:
 引理 continuousOn_evenKernel
@@ -316,7 +327,8 @@ lemma continuousOn_evenKernel
   apply continuous_re.comp_continuousOn (f := fun x => (evenKernel a' x : Complex))
   simp only [evenKernel_def]
   refine continuousOn_of_forall_continuousAt (fun x hx => .mul (by fun_prop) ?_)
-  exact (continuousAt_jacobiTheta₂ (a'
+  exact (continuousAt_jacobiTheta₂ (a' * I * x) <| by simpa).comp
+    (f := fun u : Real => (a' * I * u, I * u)) (by fun_prop)
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.induction_on, comp_continuousOn, continuousOn_of_forall_continuousAt, continuous_re, continuous_re.comp_continuousOn, evenKernel, evenKernel_def, fun_prop, induction_on
 -/
@@ -341,7 +353,7 @@ lemma continuousOn_cosKernel
   simp only [cosKernel_def]
   refine continuousOn_of_forall_continuousAt (fun x hx => ?_)
   exact (continuousAt_jacobiTheta₂ a' <| by simpa).comp
-   
+    (f := fun u : Real => ((a' : Complex), I * u)) (by fun_prop)
 
 中文:
 引理 continuousOn_cosKernel
@@ -353,7 +365,7 @@ lemma continuousOn_cosKernel
   simp only [cosKernel_def]
   refine continuousOn_of_forall_continuousAt (fun x hx => ?_)
   exact (continuousAt_jacobiTheta₂ a' <| by simpa).comp
-   
+    (f := fun u : Real => ((a' : Complex), I * u)) (by fun_prop)
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.induction_on, comp_continuousOn, continuousOn_of_forall_continuousAt, continuous_re, continuous_re.comp_continuousOn, cosKernel, cosKernel_def, fun_prop, induction_on
 -/
@@ -376,7 +388,20 @@ lemma evenKernel_functional_equation
   · rw [evenKernel_undef _ hx, cosKernel_undef, mul_zero]
     exact div_nonpos_of_nonneg_of_nonpos zero_le_one hx
   induction a using QuotientAddGroup.induction_on with | H a =>
-  rw [← ofReal_inj]; rw [ofReal_mul]; rw [evenKernel_def]; rw [cosKernel_def]; rw [j
+  rw [← ofReal_inj]; rw [ofReal_mul]; rw [evenKernel_def]; rw [cosKernel_def]; rw [jacobiTheta₂_functional_equation]
+  have h1 : I * ↑(1 / x) = -1 / (I * x) := by
+    push_cast
+    rw [← div_div]; rw [mul_one_div]; rw [div_I]; rw [neg_one_mul]; rw [neg_neg]
+  have hx' : I * x != 0 := mul_ne_zero I_ne_zero (ofReal_ne_zero.mpr hx.ne')
+  have h2 : a * I * x / (I * x) = a := by
+    rw [div_eq_iff hx']
+    ring
+  have h3 : 1 / (-I * (I * x)) ^ (1 / 2 : Complex) = 1 / ↑(x ^ (1 / 2 : Real)) := by
+    rw [neg_mul]; rw [← mul_assoc]; rw [I_mul_I]; rw [neg_one_mul]; rw [neg_neg]; rw [ofReal_cpow hx.le]; rw [ofReal_div]; rw [ofReal_one]; rw [ofReal_ofNat]
+  have h4 : -π * I * (a * I * x) ^ 2 / (I * x) = - (-π * a ^ 2 * x) := by
+    rw [mul_pow]; rw [mul_pow]; rw [I_sq]; rw [div_eq_iff hx']
+    ring
+  rw [h1]; rw [h2]; rw [h3]; rw [h4]; rw [← mul_assoc]; rw [mul_comm (cexp _)]; rw [mul_assoc _ (cexp _) (cexp _)]; rw [← Complex.exp_add]; rw [neg_add_cancel]; rw [Complex.exp_zero]; rw [mul_one]; rw [ofReal_div]; rw [ofReal_one]
 
 中文:
 引理 evenKernel_functional_equation
@@ -386,7 +411,20 @@ lemma evenKernel_functional_equation
   · rw [evenKernel_undef _ hx, cosKernel_undef, mul_zero]
     exact div_nonpos_of_nonneg_of_nonpos zero_le_one hx
   induction a using QuotientAddGroup.induction_on with | H a =>
-  rw [← ofReal_inj]; rw [ofReal_mul]; rw [evenKernel_def]; rw [cosKernel_def]; rw [j
+  rw [← ofReal_inj]; rw [ofReal_mul]; rw [evenKernel_def]; rw [cosKernel_def]; rw [jacobiTheta₂_functional_equation]
+  have h1 : I * ↑(1 / x) = -1 / (I * x) := by
+    push_cast
+    rw [← div_div]; rw [mul_one_div]; rw [div_I]; rw [neg_one_mul]; rw [neg_neg]
+  have hx' : I * x != 0 := mul_ne_zero I_ne_zero (ofReal_ne_zero.mpr hx.ne')
+  have h2 : a * I * x / (I * x) = a := by
+    rw [div_eq_iff hx']
+    ring
+  have h3 : 1 / (-I * (I * x)) ^ (1 / 2 : Complex) = 1 / ↑(x ^ (1 / 2 : Real)) := by
+    rw [neg_mul]; rw [← mul_assoc]; rw [I_mul_I]; rw [neg_one_mul]; rw [neg_neg]; rw [ofReal_cpow hx.le]; rw [ofReal_div]; rw [ofReal_one]; rw [ofReal_ofNat]
+  have h4 : -π * I * (a * I * x) ^ 2 / (I * x) = - (-π * a ^ 2 * x) := by
+    rw [mul_pow]; rw [mul_pow]; rw [I_sq]; rw [div_eq_iff hx']
+    ring
+  rw [h1]; rw [h2]; rw [h3]; rw [h4]; rw [← mul_assoc]; rw [mul_comm (cexp _)]; rw [mul_assoc _ (cexp _) (cexp _)]; rw [← Complex.exp_add]; rw [neg_add_cancel]; rw [Complex.exp_zero]; rw [mul_one]; rw [ofReal_div]; rw [ofReal_one]
 
 Depends on / 依赖: I_ne_zero, QuotientAddGroup, QuotientAddGroup.induction_on, cosKernel_def, cosKernel_undef, div_I, div_div, div_nonpos_of_nonneg_of_nonpos, evenKernel_def, evenKernel_undef, induction_on, le_or_gt, mul_ne_zero, mul_one_div, mul_zero, neg_neg, neg_one_mul, ofReal_inj, ofReal_mul, zero_le_one
 -/
@@ -428,7 +466,7 @@ lemma hasSum_int_evenKernel
       jacobiTheta₂_term n (a * I * t) (I * t) := by
     rw [jacobiTheta₂_term]; rw [← Complex.exp_add]
     grind [I_sq]
-  simpa [this] using (hasSum_jacobiTheta₂_term _ (by sim
+  simpa [this] using (hasSum_jacobiTheta₂_term _ (by simpa)).mul_left _
 
 中文:
 引理 hasSum_int_evenKernel
@@ -439,7 +477,7 @@ lemma hasSum_int_evenKernel
       jacobiTheta₂_term n (a * I * t) (I * t) := by
     rw [jacobiTheta₂_term]; rw [← Complex.exp_add]
     grind [I_sq]
-  simpa [this] using (hasSum_jacobiTheta₂_term _ (by sim
+  simpa [this] using (hasSum_jacobiTheta₂_term _ (by simpa)).mul_left _
 
 Depends on / 依赖: Complex.exp_add, I_sq, evenKernel_def, exp_add, hasSum_ofReal, mul_left
 -/
@@ -503,7 +541,11 @@ lemma hasSum_int_evenKernel₀
   split_ifs with h
   · obtain ⟨k, rfl⟩ := h
     simpa [← Int.cast_add, add_eq_zero_iff_eq_neg]
-      using hasSum_ite_sub_hasSum (hasSum_int_evenKernel (k : Real) 
+      using hasSum_ite_sub_hasSum (hasSum_int_evenKernel (k : Real) ht) (-k)
+  · suffices forall (n : Int), n + a != 0 by simpa [this] using hasSum_int_evenKernel a ht
+    contrapose! h
+    let ⟨n, hn⟩ := h
+    exact ⟨-n, by simpa [neg_eq_iff_add_eq_zero]⟩
 
 中文:
 引理 hasSum_int_evenKernel₀
@@ -514,7 +556,11 @@ lemma hasSum_int_evenKernel₀
   split_ifs with h
   · obtain ⟨k, rfl⟩ := h
     simpa [← Int.cast_add, add_eq_zero_iff_eq_neg]
-      using hasSum_ite_sub_hasSum (hasSum_int_evenKernel (k : Real) 
+      using hasSum_ite_sub_hasSum (hasSum_int_evenKernel (k : Real) ht) (-k)
+  · suffices forall (n : Int), n + a != 0 by simpa [this] using hasSum_int_evenKernel a ht
+    contrapose! h
+    let ⟨n, hn⟩ := h
+    exact ⟨-n, by simpa [neg_eq_iff_add_eq_zero]⟩
 
 Depends on / 依赖: AddCircle, AddCircle.coe_eq_zero_iff, Classical, Classical.propDecidable, Int.cast_add, add_eq_zero_iff_eq_neg, cast_add, coe_eq_zero_iff, contrapose, hasSum_int_evenKernel, hasSum_ite_sub_hasSum, instance, neg_eq_iff_add_eq_zero, propDecidable, search, simp_rw, split_ifs, zsmul_one
 -/
@@ -565,7 +611,13 @@ lemma hasSum_nat_cosKernel₀
   have := (hasSum_int_cosKernel a ht).nat_add_neg
   rw [← hasSum_nat_add_iff' 1] at this
   simp_rw [Finset.sum_range_one, Nat.cast_zero, neg_zero, Int.cast_zero, zero_pow two_ne_zero,
-    mul_zero, zero_mul, Complex.exp_zero, Real.exp_zero,
+    mul_zero, zero_mul, Complex.exp_zero, Real.exp_zero, ofReal_one, mul_one, Int.cast_neg,
+    Int.cast_natCast, neg_sq, ← add_mul, add_sub_assoc, ← sub_sub, sub_self, zero_sub,
+    ← sub_eq_add_neg, mul_neg] at this
+  refine this.congr_fun fun n => ?_
+  push_cast
+  rw [Complex.cos]; rw [mul_div_cancel₀ _ two_ne_zero]
+  congr 3 <;> ring
 
 中文:
 引理 hasSum_nat_cosKernel₀
@@ -575,7 +627,13 @@ lemma hasSum_nat_cosKernel₀
   have := (hasSum_int_cosKernel a ht).nat_add_neg
   rw [← hasSum_nat_add_iff' 1] at this
   simp_rw [Finset.sum_range_one, Nat.cast_zero, neg_zero, Int.cast_zero, zero_pow two_ne_zero,
-    mul_zero, zero_mul, Complex.exp_zero, Real.exp_zero,
+    mul_zero, zero_mul, Complex.exp_zero, Real.exp_zero, ofReal_one, mul_one, Int.cast_neg,
+    Int.cast_natCast, neg_sq, ← add_mul, add_sub_assoc, ← sub_sub, sub_self, zero_sub,
+    ← sub_eq_add_neg, mul_neg] at this
+  refine this.congr_fun fun n => ?_
+  push_cast
+  rw [Complex.cos]; rw [mul_div_cancel₀ _ two_ne_zero]
+  congr 3 <;> ring
 
 Depends on / 依赖: Complex.co, Complex.exp_zero, Finset, Finset.sum_range_one, Int.cast_natCast, Int.cast_neg, Int.cast_zero, Nat.cast_zero, Real.exp_zero, add_mul, add_sub_assoc, cast_natCast, cast_neg, cast_zero, congr_fun, exp_zero, hasSum_int_cosKernel, hasSum_nat_add_iff, hasSum_ofReal, mul_neg
 -/
@@ -610,7 +668,7 @@ lemma isBigO_atTop_evenKernel_sub
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_int_zero_sub b
   refine ⟨p, hp, (EventuallyEq.isBigO ?_).trans hp'⟩
   filter_upwards [eventually_gt_atTop 0] with t h
-  simp [← (hasSum_int_evenKernel b h).tsum_eq, HurwitzK
+  simp [← (hasSum_int_evenKernel b h).tsum_eq, HurwitzKernelBounds.F_int, HurwitzKernelBounds.f_int]
 
 中文:
 引理 isBigO_atTop_evenKernel_sub
@@ -621,7 +679,7 @@ lemma isBigO_atTop_evenKernel_sub
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_int_zero_sub b
   refine ⟨p, hp, (EventuallyEq.isBigO ?_).trans hp'⟩
   filter_upwards [eventually_gt_atTop 0] with t h
-  simp [← (hasSum_int_evenKernel b h).tsum_eq, HurwitzK
+  simp [← (hasSum_int_evenKernel b h).tsum_eq, HurwitzKernelBounds.F_int, HurwitzKernelBounds.f_int]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.isBigO, F_int, HurwitzKernelBounds, HurwitzKernelBounds.F_int, HurwitzKernelBounds.f_int, HurwitzKernelBounds.isBigO_atTop_F_int_zero_sub, QuotientAddGroup, QuotientAddGroup.induction_on, eventually_gt_atTop, f_int, filter_upwards, hasSum_int_evenKernel, induction_on, isBigO, isBigO_atTop_F_int_zero_sub, tsum_eq
 -/
@@ -644,7 +702,12 @@ lemma isBigO_atTop_cosKernel_sub
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_nat_zero_sub zero_le_one
   refine ⟨p, hp, (Eventually.isBigO ?_).trans (hp'.const_mul_left 2)⟩
   filter_upwards [eventually_gt_atTop 0] with t ht
-  simp only [eq_false_intro
+  simp only [eq_false_intro one_ne_zero, if_false, sub_zero,
+    ← (hasSum_nat_cosKernel₀ a ht).tsum_eq, HurwitzKernelBounds.F_nat]
+  apply tsum_of_norm_bounded ((HurwitzKernelBounds.summable_f_nat 0 1 ht).hasSum.mul_left 2)
+  intro n
+  rw [norm_mul]; rw [norm_mul]; rw [norm_two]; rw [mul_assoc]; rw [mul_le_mul_iff_of_pos_left two_pos]; rw [norm_of_nonneg (exp_pos _).le]; rw [HurwitzKernelBounds.f_nat]; rw [pow_zero]; rw [one_mul]; rw [Real.norm_eq_abs]
+  exact mul_le_of_le_one_left (exp_pos _).le (abs_cos_le_one _)
 
 中文:
 引理 isBigO_atTop_cosKernel_sub
@@ -654,7 +717,12 @@ lemma isBigO_atTop_cosKernel_sub
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_nat_zero_sub zero_le_one
   refine ⟨p, hp, (Eventually.isBigO ?_).trans (hp'.const_mul_left 2)⟩
   filter_upwards [eventually_gt_atTop 0] with t ht
-  simp only [eq_false_intro
+  simp only [eq_false_intro one_ne_zero, if_false, sub_zero,
+    ← (hasSum_nat_cosKernel₀ a ht).tsum_eq, HurwitzKernelBounds.F_nat]
+  apply tsum_of_norm_bounded ((HurwitzKernelBounds.summable_f_nat 0 1 ht).hasSum.mul_left 2)
+  intro n
+  rw [norm_mul]; rw [norm_mul]; rw [norm_two]; rw [mul_assoc]; rw [mul_le_mul_iff_of_pos_left two_pos]; rw [norm_of_nonneg (exp_pos _).le]; rw [HurwitzKernelBounds.f_nat]; rw [pow_zero]; rw [one_mul]; rw [Real.norm_eq_abs]
+  exact mul_le_of_le_one_left (exp_pos _).le (abs_cos_le_one _)
 
 Depends on / 依赖: Eventually, Eventually.isBigO, F_nat, HurwitzKernelBounds, HurwitzKernelBounds.F_nat, HurwitzKernelBounds.isBigO_atTop_F_nat_zero_sub, HurwitzKernelBounds.summable_f_nat, QuotientAddGroup, QuotientAddGroup.induction_on, const_mul_left, eq_false_intro, eventually_gt_atTop, filter_upwards, hasSum, hasSum.mul_left, if_false, induction_on, isBigO, isBigO_atTop_F_nat_zero_sub, mul_left
 -/
@@ -690,7 +758,24 @@ definition hurwitzEvenFEPair
     measurableSet_Ioi
   hg_int := (continuous_ofReal.comp_continuousOn (continuousOn_cosKernel a)).locallyIntegrableOn
     measurableSet_Ioi
-  k := 1 / 
+  k := 1 / 2
+  hk := one_half_pos
+  ε := 1
+  hε := one_ne_zero
+  f₀ := if a = 0 then 1 else 0
+  hf_top r := by
+    let ⟨v, hv, hv'⟩ := isBigO_atTop_evenKernel_sub a
+    rw [← isBigO_norm_left] at hv' ⊢
+    conv at hv' =>
+      enter [2, x]; rw [← norm_real, ofReal_sub, apply_ite ((↑) : Real -> Complex), ofReal_one, ofReal_zero]
+    exact hv'.trans (isLittleO_exp_neg_mul_rpow_atTop hv _).isBigO
+  g₀ := 1
+  hg_top r := by
+    obtain ⟨p, hp, hp'⟩ := isBigO_atTop_cosKernel_sub a
+simpa using isBigO_ofReal_left.mpr hp'.trans (isLittleO_exp_neg_mul_rpow_atTop hp r).isBigO
+  h_feq x hx := by simp [← ofReal_mul, evenKernel_functional_equation, inv_rpow (le_of_lt hx)]
+
+@[simp]
 
 中文:
 定义 hurwitzEvenFEPair
@@ -701,7 +786,24 @@ definition hurwitzEvenFEPair
     measurableSet_Ioi
   hg_int := (continuous_ofReal.comp_continuousOn (continuousOn_cosKernel a)).locallyIntegrableOn
     measurableSet_Ioi
-  k := 1 / 
+  k := 1 / 2
+  hk := one_half_pos
+  ε := 1
+  hε := one_ne_zero
+  f₀ := if a = 0 then 1 else 0
+  hf_top r := by
+    let ⟨v, hv, hv'⟩ := isBigO_atTop_evenKernel_sub a
+    rw [← isBigO_norm_left] at hv' ⊢
+    conv at hv' =>
+      enter [2, x]; rw [← norm_real, ofReal_sub, apply_ite ((↑) : Real -> Complex), ofReal_one, ofReal_zero]
+    exact hv'.trans (isLittleO_exp_neg_mul_rpow_atTop hv _).isBigO
+  g₀ := 1
+  hg_top r := by
+    obtain ⟨p, hp, hp'⟩ := isBigO_atTop_cosKernel_sub a
+simpa using isBigO_ofReal_left.mpr hp'.trans (isLittleO_exp_neg_mul_rpow_atTop hp r).isBigO
+  h_feq x hx := by simp [← ofReal_mul, evenKernel_functional_equation, inv_rpow (le_of_lt hx)]
+
+@[simp]
 
 Depends on / 依赖: evenKernel, ofReal
 -/
@@ -833,7 +935,10 @@ lemma completedHurwitzZetaEven_eq
   congr 1
   · change completedHurwitzZetaEven₀ a s - (1 / (s / 2)) • (if a = 0 then 1 else 0) / 2 =
       completedHurwitzZetaEven₀ a s - (if a = 0 then 1 else 0) / s
-    rw [smul_eq_mul]; rw [mul_comm]; rw [mul_div_as
+    rw [smul_eq_mul]; rw [mul_comm]; rw [mul_div_assoc]; rw [div_div]; rw [div_mul_cancel₀ _ two_ne_zero]; rw [mul_one_div]
+  · change (1 / (↑(1 / 2 : Real) - s / 2)) • 1 / 2 = 1 / (1 - s)
+    push_cast
+    rw [smul_eq_mul]; rw [mul_one]; rw [← sub_div]; rw [div_div]; rw [div_mul_cancel₀ _ two_ne_zero]
 
 中文:
 引理 completedHurwitzZetaEven_eq
@@ -843,7 +948,10 @@ lemma completedHurwitzZetaEven_eq
   congr 1
   · change completedHurwitzZetaEven₀ a s - (1 / (s / 2)) • (if a = 0 then 1 else 0) / 2 =
       completedHurwitzZetaEven₀ a s - (if a = 0 then 1 else 0) / s
-    rw [smul_eq_mul]; rw [mul_comm]; rw [mul_div_as
+    rw [smul_eq_mul]; rw [mul_comm]; rw [mul_div_assoc]; rw [div_div]; rw [div_mul_cancel₀ _ two_ne_zero]; rw [mul_one_div]
+  · change (1 / (↑(1 / 2 : Real) - s / 2)) • 1 / 2 = 1 / (1 - s)
+    push_cast
+    rw [smul_eq_mul]; rw [mul_one]; rw [← sub_div]; rw [div_div]; rw [div_mul_cancel₀ _ two_ne_zero]
 
 Depends on / 依赖: WeakFEPair, completedHurwitzZetaEven, div_, div_div, mul_comm, mul_div_assoc, mul_one, mul_one_div, smul_eq_mul, sub_div, two_ne_zero
 -/
@@ -906,7 +1014,9 @@ lemma completedCosZeta_eq
   congr 1
   · rw [completedCosZeta₀, WeakFEPair.symm, hurwitzEvenFEPair, smul_eq_mul, mul_one, div_div,
       div_mul_cancel₀ _ (two_ne_zero' Complex)]
-  · simp_rw [WeakFEPair.symm, hurwitzEvenFEPair, push_cast, inv_one, smul_
+  · simp_rw [WeakFEPair.symm, hurwitzEvenFEPair, push_cast, inv_one, smul_eq_mul,
+      mul_comm _ (if _ then _ else _), mul_div_assoc, div_div, ← sub_div,
+      div_mul_cancel₀ _ (two_ne_zero' Complex), mul_one_div]
 
 中文:
 引理 completedCosZeta_eq
@@ -916,7 +1026,9 @@ lemma completedCosZeta_eq
   congr 1
   · rw [completedCosZeta₀, WeakFEPair.symm, hurwitzEvenFEPair, smul_eq_mul, mul_one, div_div,
       div_mul_cancel₀ _ (two_ne_zero' Complex)]
-  · simp_rw [WeakFEPair.symm, hurwitzEvenFEPair, push_cast, inv_one, smul_
+  · simp_rw [WeakFEPair.symm, hurwitzEvenFEPair, push_cast, inv_one, smul_eq_mul,
+      mul_comm _ (if _ then _ else _), mul_div_assoc, div_div, ← sub_div,
+      div_mul_cancel₀ _ (two_ne_zero' Complex), mul_one_div]
 
 Depends on / 依赖: WeakFEPair, WeakFEPair.symm, completedCosZeta, div_div, hurwitzEvenFEPair, inv_one, mul_comm, mul_div_assoc, mul_one, mul_one_div, simp_rw, smul_eq_mul, sub_div, two_ne_zero
 -/
@@ -1059,13 +1171,13 @@ English:
 lemma completedHurwitzZetaEven₀_one_sub
   given: (a : UnitAddCircle) (s : Complex)
   proof: by
-  rw [completedHurwitzZetaEven₀]; rw [completedCosZeta₀]; rw [sub_div]; rw [(by simp : (1 / 2 : Complex) = ↑(1 / 2 : Real))]; rw [(by rfl : (1 / 2 : Real) = (hurwitzEvenFEPair a).k)]; rw [(hurwitzEvenFEPair a).functional_equation₀ (s / 2)]; rw [(by rfl : (hurwitzEvenFEPair a).ε = 1)]; rw [one_smu
+  rw [completedHurwitzZetaEven₀]; rw [completedCosZeta₀]; rw [sub_div]; rw [(by simp : (1 / 2 : Complex) = ↑(1 / 2 : Real))]; rw [(by rfl : (1 / 2 : Real) = (hurwitzEvenFEPair a).k)]; rw [(hurwitzEvenFEPair a).functional_equation₀ (s / 2)]; rw [(by rfl : (hurwitzEvenFEPair a).ε = 1)]; rw [one_smul]
 
 中文:
 引理 completedHurwitzZetaEven₀_one_sub
   条件: (a : UnitAddCircle) (s : 复形)
   证明: by
-  rw [completedHurwitzZetaEven₀]; rw [completedCosZeta₀]; rw [sub_div]; rw [(by simp : (1 / 2 : Complex) = ↑(1 / 2 : Real))]; rw [(by rfl : (1 / 2 : Real) = (hurwitzEvenFEPair a).k)]; rw [(hurwitzEvenFEPair a).functional_equation₀ (s / 2)]; rw [(by rfl : (hurwitzEvenFEPair a).ε = 1)]; rw [one_smu
+  rw [completedHurwitzZetaEven₀]; rw [completedCosZeta₀]; rw [sub_div]; rw [(by simp : (1 / 2 : Complex) = ↑(1 / 2 : Real))]; rw [(by rfl : (1 / 2 : Real) = (hurwitzEvenFEPair a).k)]; rw [(hurwitzEvenFEPair a).functional_equation₀ (s / 2)]; rw [(by rfl : (hurwitzEvenFEPair a).ε = 1)]; rw [one_smul]
 
 Depends on / 依赖: hurwitzEvenFEPair, one_smul, sub_div
 -/
@@ -1135,7 +1247,7 @@ lemma differentiableAt_completedHurwitzZetaEven
     simp [hurwitzEvenFEPair, h]
   · change s / 2 != ↑(1 / 2 : Real)
     rw [ofReal_div]; rw [ofReal_one]; rw [ofReal_ofNat]
-    exact hs' ∘ 
+    exact hs' ∘ (div_left_inj' two_ne_zero).mp
 
 中文:
 引理 differentiableAt_completedHurwitzZetaEven
@@ -1146,7 +1258,7 @@ lemma differentiableAt_completedHurwitzZetaEven
     simp [hurwitzEvenFEPair, h]
   · change s / 2 != ↑(1 / 2 : Real)
     rw [ofReal_div]; rw [ofReal_one]; rw [ofReal_ofNat]
-    exact hs' ∘ 
+    exact hs' ∘ (div_left_inj' two_ne_zero).mp
 
 Depends on / 依赖: Or.inl, differentiableAt_id, differentiableAt_id.div_const, div_const, div_left_inj, hurwitzEvenFEPair, ofReal_div, ofReal_ofNat, ofReal_one, two_ne_zero
 -/
@@ -1192,6 +1304,8 @@ lemma differentiableAt_one_completedHurwitzZetaEven_sub_completedHurwitzZetaEven
     simp_rw [completedHurwitzZetaEven_eq, sub_div]
     abel
   rw [funext this]
+refine .sub ?_ (differentiable_const _ _).div (differentiable_id _) one_ne_zero
+  apply DifferentiableAt.sub <;> apply differentiable_completedHurwitzZetaEven₀
 
 中文:
 引理 differentiableAt_one_completedHurwitzZetaEven_sub_completedHurwitzZetaEven
@@ -1202,6 +1316,8 @@ lemma differentiableAt_one_completedHurwitzZetaEven_sub_completedHurwitzZetaEven
     simp_rw [completedHurwitzZetaEven_eq, sub_div]
     abel
   rw [funext this]
+refine .sub ?_ (differentiable_const _ _).div (differentiable_id _) one_ne_zero
+  apply DifferentiableAt.sub <;> apply differentiable_completedHurwitzZetaEven₀
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.sub, completedHurwitzZetaEven, completedHurwitzZetaEven_eq, differentiable_const, differentiable_id, one_ne_zero, simp_rw, sub_div
 -/
@@ -1227,7 +1343,9 @@ lemma differentiableAt_completedCosZeta
       (differentiableAt_id.div_const _)).div_const _
   · exact div_ne_zero_iff.mpr ⟨hs, two_ne_zero⟩
   · change s / 2 != ↑(1 / 2 : Real) ∨ (if a = 0 then 1 else 0) = 0
-    refine Or.imp (fun h => ?_) (fun ha => ?_) hs
+    refine Or.imp (fun h => ?_) (fun ha => ?_) hs'
+    · simpa [push_cast] using h ∘ (div_left_inj' two_ne_zero).mp
+    · simpa
 
 中文:
 引理 differentiableAt_completedCosZeta
@@ -1236,7 +1354,9 @@ lemma differentiableAt_completedCosZeta
       (differentiableAt_id.div_const _)).div_const _
   · exact div_ne_zero_iff.mpr ⟨hs, two_ne_zero⟩
   · change s / 2 != ↑(1 / 2 : Real) ∨ (if a = 0 then 1 else 0) = 0
-    refine Or.imp (fun h => ?_) (fun ha => ?_) hs
+    refine Or.imp (fun h => ?_) (fun ha => ?_) hs'
+    · simpa [push_cast] using h ∘ (div_left_inj' two_ne_zero).mp
+    · simpa
 
 Depends on / 依赖: Or.imp, Or.inl, differentiableAt_id, differentiableAt_id.div_const, div_const, div_left_inj, div_ne_zero_iff, div_ne_zero_iff.mpr, hurwitzEvenFEPair, symm.differentiableAt_, two_ne_zero
 -/
@@ -1298,7 +1418,7 @@ lemma completedHurwitzZetaEven_residue_one
     (𝓝 ((1 : Complex) * (1 : Complex))) := (hurwitzEvenFEPair a).Λ_residue_k
   simp only [push_cast, one_mul] at h1
   refine (h1.comp <| tendsto_div_two_punctured_nhds 1).congr (fun s => ?_)
-  rw [completed
+  rw [completedHurwitzZetaEven]; rw [Function.comp_apply]; rw [← sub_div]; rw [div_mul_eq_mul_div]; rw [mul_div_assoc]
 
 中文:
 引理 completedHurwitzZetaEven_residue_one
@@ -1308,7 +1428,7 @@ lemma completedHurwitzZetaEven_residue_one
     (𝓝 ((1 : Complex) * (1 : Complex))) := (hurwitzEvenFEPair a).Λ_residue_k
   simp only [push_cast, one_mul] at h1
   refine (h1.comp <| tendsto_div_two_punctured_nhds 1).congr (fun s => ?_)
-  rw [completed
+  rw [completedHurwitzZetaEven]; rw [Function.comp_apply]; rw [← sub_div]; rw [div_mul_eq_mul_div]; rw [mul_div_assoc]
 
 Depends on / 依赖: Function, Function.comp_apply, Tendsto, comp_apply, completedHurwitzZetaEven, div_mul_eq_mul_div, h1.comp, hurwitzEvenFEPair, mul_div_assoc, one_mul, sub_div, tendsto_div_two_punctured_nhds
 -/
@@ -1331,7 +1451,8 @@ lemma completedHurwitzZetaEven_residue_zero
     (𝓝 (-(if a = 0 then 1 else 0))) := (hurwitzEvenFEPair a).Λ_residue_zero
   have : -(if a = 0 then (1 : Complex) else 0) = (if a = 0 then -1 else 0) := by { split_ifs <;> simp }
   simp only [this, push_cast] at h1
-  refine (h1.comp <| zer
+  refine (h1.comp <| zero_div (2 : Complex) ▸ (tendsto_div_two_punctured_nhds 0)).congr (fun s => ?_)
+  simp [completedHurwitzZetaEven, div_mul_eq_mul_div, mul_div_assoc]
 
 中文:
 引理 completedHurwitzZetaEven_residue_zero
@@ -1341,7 +1462,8 @@ lemma completedHurwitzZetaEven_residue_zero
     (𝓝 (-(if a = 0 then 1 else 0))) := (hurwitzEvenFEPair a).Λ_residue_zero
   have : -(if a = 0 then (1 : Complex) else 0) = (if a = 0 then -1 else 0) := by { split_ifs <;> simp }
   simp only [this, push_cast] at h1
-  refine (h1.comp <| zer
+  refine (h1.comp <| zero_div (2 : Complex) ▸ (tendsto_div_two_punctured_nhds 0)).congr (fun s => ?_)
+  simp [completedHurwitzZetaEven, div_mul_eq_mul_div, mul_div_assoc]
 
 Depends on / 依赖: Tendsto, completedHurwitzZetaEven, div_mul_eq_mul_div, h1.comp, hurwitzEvenFEPair, mul_div_assoc, split_ifs, tendsto_div_two_punctured_nhds, zero_div
 -/
@@ -1401,7 +1523,20 @@ lemma hasSum_int_completedCosZeta
   have hF t (ht : 0 < t) : HasSum (fun n : Int => if n = 0 then 0 else c n * rexp (-π * n ^ 2 * t))
       ((cosKernel a t - 1) / 2) := by
     refine ((hasSum_int_cosKernel₀ a ht).div_const 2).congr_fun fun n => ?_
-    split_ifs <;> simp 
+    split_ifs <;> simp [c, div_mul_eq_mul_div]
+  simp only [← Int.cast_eq_zero (α := Real)] at hF
+  rw [show completedCosZeta a s = mellin (fun t => (cosKernel a t - 1 : Complex) / 2) (s / 2) by
+    rw [mellin_div_const]; rw [completedCosZeta]
+    congr 1
+    refine ((hurwitzEvenFEPair a).symm.hasMellin (?_ : 1 / 2 < (s / 2).re)).2.symm
+    rwa [div_ofNat_re, div_lt_div_iff_of_pos_right two_pos]]
+  refine (hasSum_mellin_pi_mul_sq (zero_lt_one.trans hs) hF ?_).congr_fun fun n => ?_
+  · apply (((summable_one_div_int_add_rpow 0 s.re).mpr hs).div_const 2).of_norm_bounded
+    intro i
+    simp only [c, (by { push_cast; ring } : 2 * π * I * a * i = ↑(2 * π * a * i) * I), norm_div,
+      RCLike.norm_ofNat, Complex.norm_exp_ofReal_mul_I, add_zero, norm_one,
+      norm_of_nonneg (by positivity : 0 <= |(i : Real)| ^ s.re), div_right_comm, le_rfl]
+  · simp [c, ← Int.cast_abs, div_right_comm, mul_div_assoc]
 
 中文:
 引理 hasSum_int_completedCosZeta
@@ -1411,7 +1546,20 @@ lemma hasSum_int_completedCosZeta
   have hF t (ht : 0 < t) : HasSum (fun n : Int => if n = 0 then 0 else c n * rexp (-π * n ^ 2 * t))
       ((cosKernel a t - 1) / 2) := by
     refine ((hasSum_int_cosKernel₀ a ht).div_const 2).congr_fun fun n => ?_
-    split_ifs <;> simp 
+    split_ifs <;> simp [c, div_mul_eq_mul_div]
+  simp only [← Int.cast_eq_zero (α := Real)] at hF
+  rw [show completedCosZeta a s = mellin (fun t => (cosKernel a t - 1 : Complex) / 2) (s / 2) by
+    rw [mellin_div_const]; rw [completedCosZeta]
+    congr 1
+    refine ((hurwitzEvenFEPair a).symm.hasMellin (?_ : 1 / 2 < (s / 2).re)).2.symm
+    rwa [div_ofNat_re, div_lt_div_iff_of_pos_right two_pos]]
+  refine (hasSum_mellin_pi_mul_sq (zero_lt_one.trans hs) hF ?_).congr_fun fun n => ?_
+  · apply (((summable_one_div_int_add_rpow 0 s.re).mpr hs).div_const 2).of_norm_bounded
+    intro i
+    simp only [c, (by { push_cast; ring } : 2 * π * I * a * i = ↑(2 * π * a * i) * I), norm_div,
+      RCLike.norm_ofNat, Complex.norm_exp_ofReal_mul_I, add_zero, norm_one,
+      norm_of_nonneg (by positivity : 0 <= |(i : Real)| ^ s.re), div_right_comm, le_rfl]
+  · simp [c, ← Int.cast_abs, div_right_comm, mul_div_assoc]
 
 Depends on / 依赖: HasSum, Int.cast_eq_zero, cast_eq_zero, completedCosZeta, congr_fun, cosKernel, div_const, div_mul_eq_mul_div, mellin, mellin_div_const, split_ifs
 -/
@@ -1449,7 +1597,12 @@ lemma hasSum_nat_completedCosZeta
   have hint := (hasSum_int_completedCosZeta a hs).nat_add_neg
   rw [aux]; rw [div_zero]; rw [zero_div]; rw [add_zero] at hint
   refine hint.congr_fun fun n => ?_
-  sp
+  split_ifs with h
+  · simp only [h, Nat.cast_zero, aux, div_zero, zero_div, neg_zero, zero_add]
+  · simp only [ofReal_cos, ofReal_mul, ofReal_ofNat, ofReal_natCast, Complex.cos,
+      show 2 * π * a * n * I = 2 * π * I * a * n by ring, neg_mul, mul_div_assoc,
+      div_right_comm _ (2 : Complex), Int.cast_natCast, Nat.abs_cast, Int.cast_neg, mul_neg, abs_neg, ←
+      mul_add, ← add_div]
 
 中文:
 引理 hasSum_nat_completedCosZeta
@@ -1460,7 +1613,12 @@ lemma hasSum_nat_completedCosZeta
   have hint := (hasSum_int_completedCosZeta a hs).nat_add_neg
   rw [aux]; rw [div_zero]; rw [zero_div]; rw [add_zero] at hint
   refine hint.congr_fun fun n => ?_
-  sp
+  split_ifs with h
+  · simp only [h, Nat.cast_zero, aux, div_zero, zero_div, neg_zero, zero_add]
+  · simp only [ofReal_cos, ofReal_mul, ofReal_ofNat, ofReal_natCast, Complex.cos,
+      show 2 * π * a * n * I = 2 * π * I * a * n by ring, neg_mul, mul_div_assoc,
+      div_right_comm _ (2 : Complex), Int.cast_natCast, Nat.abs_cast, Int.cast_neg, mul_neg, abs_neg, ←
+      mul_add, ← add_div]
 
 Depends on / 依赖: Complex.cos, Int.cast_zero, Nat.cast_zero, abs_zero, add_zero, cast_zero, congr_fun, div_zero, hasSum_int_completedCosZeta, hint.congr_fun, nat_add_neg, ne_zero_of_one_lt_re, neg_zero, ofReal_cos, ofReal_mul, ofReal_natCast, ofReal_ofNat, split_ifs, zero_add, zero_cpow
 -/
@@ -1489,7 +1647,21 @@ lemma hasSum_int_completedHurwitzZetaEven
   have hF (t : Real) (ht : 0 < t) : HasSum (fun n : Int => if n + a = 0 then 0
       else (1 / 2 : Complex) * rexp (-π * (n + a) ^ 2 * t))
       ((evenKernel a t - (if (a : UnitAddCircle) = 0 then 1 else 0 : Real)) / 2) := by
-    refine (ofReal_sub .. ▸ (hasSum_ofReal.mpr (hasSum_int_evenKernel₀ 
+    refine (ofReal_sub .. ▸ (hasSum_ofReal.mpr (hasSum_int_evenKernel₀ a ht)).div_const
+      2).congr_fun fun n => ?_
+    split_ifs
+    · rw [ofReal_zero, zero_div]
+    · rw [mul_comm, mul_one_div]
+  rw [show completedHurwitzZetaEven a s = mellin (fun t => ((evenKernel (↑a) t : Complex) -
+        ↑(if (a : UnitAddCircle) = 0 then 1 else 0 : Real)) / 2) (s / 2) by
+    simp_rw [mellin_div_const]; rw [apply_ite ofReal]; rw [ofReal_one]; rw [ofReal_zero]
+    refine congr_arg (· / 2) ((hurwitzEvenFEPair a).hasMellin (?_ : 1 / 2 < (s / 2).re)).2.symm
+    rwa [div_ofNat_re, div_lt_div_iff_of_pos_right two_pos]]
+  refine (hasSum_mellin_pi_mul_sq (zero_lt_one.trans hs) hF ?_).congr_fun fun n => ?_
+  · simp_rw [← mul_one_div ‖_‖]
+    apply Summable.mul_left
+    rwa [summable_one_div_int_add_rpow]
+  · rw [mul_one_div, div_right_comm]
 
 中文:
 引理 hasSum_int_completedHurwitzZetaEven
@@ -1498,7 +1670,21 @@ lemma hasSum_int_completedHurwitzZetaEven
   have hF (t : Real) (ht : 0 < t) : HasSum (fun n : Int => if n + a = 0 then 0
       else (1 / 2 : Complex) * rexp (-π * (n + a) ^ 2 * t))
       ((evenKernel a t - (if (a : UnitAddCircle) = 0 then 1 else 0 : Real)) / 2) := by
-    refine (ofReal_sub .. ▸ (hasSum_ofReal.mpr (hasSum_int_evenKernel₀ 
+    refine (ofReal_sub .. ▸ (hasSum_ofReal.mpr (hasSum_int_evenKernel₀ a ht)).div_const
+      2).congr_fun fun n => ?_
+    split_ifs
+    · rw [ofReal_zero, zero_div]
+    · rw [mul_comm, mul_one_div]
+  rw [show completedHurwitzZetaEven a s = mellin (fun t => ((evenKernel (↑a) t : Complex) -
+        ↑(if (a : UnitAddCircle) = 0 then 1 else 0 : Real)) / 2) (s / 2) by
+    simp_rw [mellin_div_const]; rw [apply_ite ofReal]; rw [ofReal_one]; rw [ofReal_zero]
+    refine congr_arg (· / 2) ((hurwitzEvenFEPair a).hasMellin (?_ : 1 / 2 < (s / 2).re)).2.symm
+    rwa [div_ofNat_re, div_lt_div_iff_of_pos_right two_pos]]
+  refine (hasSum_mellin_pi_mul_sq (zero_lt_one.trans hs) hF ?_).congr_fun fun n => ?_
+  · simp_rw [← mul_one_div ‖_‖]
+    apply Summable.mul_left
+    rwa [summable_one_div_int_add_rpow]
+  · rw [mul_one_div, div_right_comm]
 
 Depends on / 依赖: HasSum, UnitAddC, UnitAddCircle, completedHurwitzZetaEven, congr_fun, div_const, evenKernel, hasSum_ofReal, hasSum_ofReal.mpr, mellin, mul_comm, mul_one_div, ofReal_sub, ofReal_zero, split_ifs, zero_div
 -/
@@ -1536,7 +1722,25 @@ lemma differentiableAt_update_of_residue
   have claim (t) (ht : t != 0) (ht' : t != 1) : DifferentiableAt Complex (fun u : Complex => Λ u / GammaReal u) t :=
     (hf t ht ht').mul differentiable_GammaReal_inv.differentiableAt
   have claim2 : Tendsto (fun s : Complex => Λ s / GammaReal s) (𝓝[!=] 0) (𝓝 <| L / 2) := by
-    refine Tendsto.c
+    refine Tendsto.congr' ?_ (h_lim.div GammaReal_residue_zero two_ne_zero)
+    filter_upwards [self_mem_nhdsWithin] with s (hs : s != 0)
+    rw [Pi.div_apply]; rw [← div_div]; rw [mul_div_cancel_left₀ _ hs]
+  rcases ne_or_eq s 0 with hs | rfl
+  · -- Easy case : `s ≠ 0`
+    refine (claim s hs hs').congr_of_eventuallyEq ?_
+    filter_upwards [isOpen_compl_singleton.mem_nhds hs] with x hx
+    simp [Function.update_of_ne hx]
+  · -- Hard case : `s = 0`
+    simp_rw [← claim2.limUnder_eq]
+    have S_nhds : {(1 : Complex)}ᶜ in 𝓝 (0 : Complex) := isOpen_compl_singleton.mem_nhds hs'
+    refine ((Complex.differentiableOn_update_limUnder_of_isLittleO S_nhds
+      (fun t ht => (claim t ht.2 ht.1).differentiableWithinAt) ?_) 0 hs').differentiableAt S_nhds
+    simp only [GammaReal, zero_div, div_zero, Complex.Gamma_zero, mul_zero, sub_zero]
+    -- Remains to show completed zeta is `o (s ^ (-1))` near 0.
+    refine (isBigO_const_of_tendsto claim2 <| one_ne_zero' Complex).trans_isLittleO ?_
+    rw [isLittleO_iff_tendsto']
+    · exact Tendsto.congr (fun x => by rw [← one_div, one_div_one_div]) nhdsWithin_le_nhds
+    · exact eventually_of_mem self_mem_nhdsWithin fun x hx hx' => (hx <| inv_eq_zero.mp hx').elim
 
 中文:
 引理 differentiableAt_update_of_residue
@@ -1544,7 +1748,25 @@ lemma differentiableAt_update_of_residue
   have claim (t) (ht : t != 0) (ht' : t != 1) : DifferentiableAt Complex (fun u : Complex => Λ u / GammaReal u) t :=
     (hf t ht ht').mul differentiable_GammaReal_inv.differentiableAt
   have claim2 : Tendsto (fun s : Complex => Λ s / GammaReal s) (𝓝[!=] 0) (𝓝 <| L / 2) := by
-    refine Tendsto.c
+    refine Tendsto.congr' ?_ (h_lim.div GammaReal_residue_zero two_ne_zero)
+    filter_upwards [self_mem_nhdsWithin] with s (hs : s != 0)
+    rw [Pi.div_apply]; rw [← div_div]; rw [mul_div_cancel_left₀ _ hs]
+  rcases ne_or_eq s 0 with hs | rfl
+  · -- Easy case : `s ≠ 0`
+    refine (claim s hs hs').congr_of_eventuallyEq ?_
+    filter_upwards [isOpen_compl_singleton.mem_nhds hs] with x hx
+    simp [Function.update_of_ne hx]
+  · -- Hard case : `s = 0`
+    simp_rw [← claim2.limUnder_eq]
+    have S_nhds : {(1 : Complex)}ᶜ in 𝓝 (0 : Complex) := isOpen_compl_singleton.mem_nhds hs'
+    refine ((Complex.differentiableOn_update_limUnder_of_isLittleO S_nhds
+      (fun t ht => (claim t ht.2 ht.1).differentiableWithinAt) ?_) 0 hs').differentiableAt S_nhds
+    simp only [GammaReal, zero_div, div_zero, Complex.Gamma_zero, mul_zero, sub_zero]
+    -- Remains to show completed zeta is `o (s ^ (-1))` near 0.
+    refine (isBigO_const_of_tendsto claim2 <| one_ne_zero' Complex).trans_isLittleO ?_
+    rw [isLittleO_iff_tendsto']
+    · exact Tendsto.congr (fun x => by rw [← one_div, one_div_one_div]) nhdsWithin_le_nhds
+    · exact eventually_of_mem self_mem_nhdsWithin fun x hx hx' => (hx <| inv_eq_zero.mp hx').elim
 
 Depends on / 依赖: DifferentiableAt, GammaReal, GammaReal_residue_zero, Pi.div_apply, Tendsto, Tendsto.congr, claim2, differentiableAt, differentiable_GammaReal_inv, differentiable_GammaReal_inv.differentiableAt, div_apply, div_div, filter_upwards, h_lim, h_lim.div, ne_or_eq, self_mem_nhdsWithin, two_ne_zero
 -/
@@ -1736,7 +1958,9 @@ lemma hurwitzZetaEven_residue_one
   have : Tendsto (fun s => (s - 1) * completedHurwitzZetaEven a s / GammaReal s) (𝓝[!=] 1) (𝓝 1) := by
     simpa only [GammaReal_one, inv_one, mul_one] using! (completedHurwitzZetaEven_residue_one a).mul
  (differentiable_GammaReal_inv.continuous.tendsto _).mono_left nhdsWithin_le_nhds
-  refine th
+  refine this.congr' ?_
+  filter_upwards [eventually_ne_nhdsWithin one_ne_zero] with s hs
+  simp [hurwitzZetaEven_def_of_ne_or_ne (Or.inr hs), mul_div_assoc]
 
 中文:
 引理 hurwitzZetaEven_residue_one
@@ -1745,7 +1969,9 @@ lemma hurwitzZetaEven_residue_one
   have : Tendsto (fun s => (s - 1) * completedHurwitzZetaEven a s / GammaReal s) (𝓝[!=] 1) (𝓝 1) := by
     simpa only [GammaReal_one, inv_one, mul_one] using! (completedHurwitzZetaEven_residue_one a).mul
  (differentiable_GammaReal_inv.continuous.tendsto _).mono_left nhdsWithin_le_nhds
-  refine th
+  refine this.congr' ?_
+  filter_upwards [eventually_ne_nhdsWithin one_ne_zero] with s hs
+  simp [hurwitzZetaEven_def_of_ne_or_ne (Or.inr hs), mul_div_assoc]
 
 Depends on / 依赖: GammaReal, GammaReal_one, Or.inr, Tendsto, completedHurwitzZetaEven, completedHurwitzZetaEven_residue_one, continuous, differentiable_GammaReal_inv, differentiable_GammaReal_inv.continuous.tendsto, eventually_ne_nhdsWithin, filter_upwards, hurwitzZetaEven_def_of_ne_or_ne, inv_one, mono_left, mul_div_assoc, mul_one, nhdsWithin_le_nhds, one_ne_zero, tendsto, this.congr
 -/
@@ -1770,7 +1996,12 @@ lemma differentiableAt_hurwitzZetaEven_sub_one_div
     apply this.congr_of_eventuallyEq
     filter_upwards [eventually_ne_nhds one_ne_zero] with x hx
     rw [hurwitzZetaEven]; rw [Function.update_of_ne hx]
-  simp_rw [← 
+  simp_rw [← sub_div, div_eq_mul_inv _ (GammaReal _)]
+  refine DifferentiableAt.mul ?_ differentiable_GammaReal_inv.differentiableAt
+  simp_rw [completedHurwitzZetaEven_eq, sub_sub, add_assoc]
+  conv => enter [2, s, 2]; rw [← neg_sub, div_neg, neg_add_cancel, add_zero]
+  exact (differentiable_completedHurwitzZetaEven₀ a _).sub
+ (differentiableAt_const _).div differentiableAt_id one_ne_zero
 
 中文:
 引理 differentiableAt_hurwitzZetaEven_sub_one_div
@@ -1781,7 +2012,12 @@ lemma differentiableAt_hurwitzZetaEven_sub_one_div
     apply this.congr_of_eventuallyEq
     filter_upwards [eventually_ne_nhds one_ne_zero] with x hx
     rw [hurwitzZetaEven]; rw [Function.update_of_ne hx]
-  simp_rw [← 
+  simp_rw [← sub_div, div_eq_mul_inv _ (GammaReal _)]
+  refine DifferentiableAt.mul ?_ differentiable_GammaReal_inv.differentiableAt
+  simp_rw [completedHurwitzZetaEven_eq, sub_sub, add_assoc]
+  conv => enter [2, s, 2]; rw [← neg_sub, div_neg, neg_add_cancel, add_zero]
+  exact (differentiable_completedHurwitzZetaEven₀ a _).sub
+ (differentiableAt_const _).div differentiableAt_id one_ne_zero
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.mul, Function, Function.update_of_ne, GammaReal, add_assoc, completedHurwitzZetaEven, completedHurwitzZetaEven_eq, congr_of_eventuallyEq, differentiableAt, differentiable_GammaReal_inv, differentiable_GammaReal_inv.differentiableAt, div_eq_mul_inv, div_ne, eventually_ne_nhds, filter_upwards, hurwitzZetaEven, neg_sub, one_ne_zero, simp_rw
 -/
@@ -1873,7 +2109,7 @@ lemma hasSum_int_hurwitzZetaEven
   rw [hurwitzZetaEven]; rw [Function.update_of_ne (ne_zero_of_one_lt_re hs)]
   have := (hasSum_int_completedHurwitzZetaEven a hs).div_const (GammaReal s)
   exact this.congr_fun fun n => by simp only [div_right_comm _ _ (GammaReal _),
-    div_self (GammaReal_ne_zero_of_re_pos (zero_lt_one.trans hs
+    div_self (GammaReal_ne_zero_of_re_pos (zero_lt_one.trans hs))]
 
 中文:
 引理 hasSum_int_hurwitzZetaEven
@@ -1882,7 +2118,7 @@ lemma hasSum_int_hurwitzZetaEven
   rw [hurwitzZetaEven]; rw [Function.update_of_ne (ne_zero_of_one_lt_re hs)]
   have := (hasSum_int_completedHurwitzZetaEven a hs).div_const (GammaReal s)
   exact this.congr_fun fun n => by simp only [div_right_comm _ _ (GammaReal _),
-    div_self (GammaReal_ne_zero_of_re_pos (zero_lt_one.trans hs
+    div_self (GammaReal_ne_zero_of_re_pos (zero_lt_one.trans hs))]
 
 Depends on / 依赖: Function, Function.update_of_ne, GammaReal, GammaReal_ne_zero_of_re_pos, congr_fun, div_const, div_right_comm, div_self, hasSum_int_completedHurwitzZetaEven, hurwitzZetaEven, ne_zero_of_one_lt_re, this.congr_fun, update_of_ne, zero_lt_one, zero_lt_one.trans
 -/
@@ -2050,7 +2286,9 @@ lemma differentiableAt_cosZeta
   · exact differentiableAt_update_of_residue (fun _ ht ht' =>
       differentiableAt_completedCosZeta a ht (Or.inl ht')) (completedCosZeta_residue_zero a) s hs'
   · apply ((differentiableAt_completedCosZeta a one_ne_zero hs').fun_mul
-      (differentiable_Gamm
+      (differentiable_GammaReal_inv.differentiableAt)).congr_of_eventuallyEq
+    filter_upwards [isOpen_compl_singleton.mem_nhds one_ne_zero] with x hx
+    rw [cosZeta]; rw [Function.update_of_ne hx]; rw [div_eq_mul_inv]
 
 中文:
 引理 differentiableAt_cosZeta
@@ -2060,7 +2298,9 @@ lemma differentiableAt_cosZeta
   · exact differentiableAt_update_of_residue (fun _ ht ht' =>
       differentiableAt_completedCosZeta a ht (Or.inl ht')) (completedCosZeta_residue_zero a) s hs'
   · apply ((differentiableAt_completedCosZeta a one_ne_zero hs').fun_mul
-      (differentiable_Gamm
+      (differentiable_GammaReal_inv.differentiableAt)).congr_of_eventuallyEq
+    filter_upwards [isOpen_compl_singleton.mem_nhds one_ne_zero] with x hx
+    rw [cosZeta]; rw [Function.update_of_ne hx]; rw [div_eq_mul_inv]
 
 Depends on / 依赖: Function, Function.update_of_ne, Or.inl, completedCosZeta_residue_zero, congr_of_eventuallyEq, cosZeta, differentiableAt, differentiableAt_completedCosZeta, differentiableAt_update_of_residue, differentiable_GammaReal_inv, differentiable_GammaReal_inv.differentiableAt, div_eq_mul_inv, filter_upwards, fun_mul, isOpen_compl_singleton, isOpen_compl_singleton.mem_nhds, mem_nhds, ne_or_eq, one_ne_zero, update_of_ne
 -/
@@ -2102,7 +2342,7 @@ lemma hasSum_int_cosZeta
   proof: by
   rw [cosZeta]; rw [Function.update_of_ne (ne_zero_of_one_lt_re hs)]
   refine ((hasSum_int_completedCosZeta a hs).div_const (GammaReal s)).congr_fun fun n => ?_
-  rw [mul_div_assoc _ (cexp _)]; rw [div_right_comm _ (2 : Complex)]; rw [mul_div_cancel_left₀ _ (GammaReal_ne_zero_of_re_pos (zero_lt_o
+  rw [mul_div_assoc _ (cexp _)]; rw [div_right_comm _ (2 : Complex)]; rw [mul_div_cancel_left₀ _ (GammaReal_ne_zero_of_re_pos (zero_lt_one.trans hs))]
 
 中文:
 引理 hasSum_int_cosZeta
@@ -2110,7 +2350,7 @@ lemma hasSum_int_cosZeta
   证明: by
   rw [cosZeta]; rw [Function.update_of_ne (ne_zero_of_one_lt_re hs)]
   refine ((hasSum_int_completedCosZeta a hs).div_const (GammaReal s)).congr_fun fun n => ?_
-  rw [mul_div_assoc _ (cexp _)]; rw [div_right_comm _ (2 : Complex)]; rw [mul_div_cancel_left₀ _ (GammaReal_ne_zero_of_re_pos (zero_lt_o
+  rw [mul_div_assoc _ (cexp _)]; rw [div_right_comm _ (2 : Complex)]; rw [mul_div_cancel_left₀ _ (GammaReal_ne_zero_of_re_pos (zero_lt_one.trans hs))]
 
 Depends on / 依赖: Function, Function.update_of_ne, GammaReal, GammaReal_ne_zero_of_re_pos, congr_fun, cosZeta, div_const, div_right_comm, hasSum_int_completedCosZeta, mul_div_assoc, ne_zero_of_one_lt_re, update_of_ne, zero_lt_one, zero_lt_one.trans
 -/
@@ -2131,7 +2371,8 @@ lemma hasSum_nat_cosZeta
   simp_rw [abs_neg, Int.cast_neg, Nat.abs_cast, Int.cast_natCast, mul_neg, abs_zero, Int.cast_zero,
     zero_cpow (ne_zero_of_one_lt_re hs), div_zero, zero_div, add_zero, ← add_div,
     div_right_comm _ _ (2 : Complex)] at this
-  simp_rw [push_cast,
+  simp_rw [push_cast, Complex.cos, neg_mul]
+  exact this.congr_fun fun n => by rw [show 2 * π * a * n * I = 2 * π * I * a * n by ring]
 
 中文:
 引理 hasSum_nat_cosZeta
@@ -2141,7 +2382,8 @@ lemma hasSum_nat_cosZeta
   simp_rw [abs_neg, Int.cast_neg, Nat.abs_cast, Int.cast_natCast, mul_neg, abs_zero, Int.cast_zero,
     zero_cpow (ne_zero_of_one_lt_re hs), div_zero, zero_div, add_zero, ← add_div,
     div_right_comm _ _ (2 : Complex)] at this
-  simp_rw [push_cast,
+  simp_rw [push_cast, Complex.cos, neg_mul]
+  exact this.congr_fun fun n => by rw [show 2 * π * a * n * I = 2 * π * I * a * n by ring]
 
 Depends on / 依赖: Complex.cos, Int.cast_natCast, Int.cast_neg, Int.cast_zero, Nat.abs_cast, abs_cast, abs_neg, abs_zero, add_div, add_zero, cast_natCast, cast_neg, cast_zero, congr_fun, div_right_comm, div_zero, hasSum_int_cosZeta, mul_neg, nat_add_neg, ne_zero_of_one_lt_re
 -/
@@ -2187,7 +2429,9 @@ lemma hurwitzZetaEven_one_sub
   have : hurwitzZetaEven a (1 - s) = completedHurwitzZetaEven a (1 - s) * (GammaReal (1 - s))⁻¹ := by
     rw [hurwitzZetaEven_def_of_ne_or_ne]; rw [div_eq_mul_inv]
     simpa [sub_eq_zero, eq_comm (a := s)] using hs'
-  rw [this]; rw [completedHurwitzZetaEven_one_sub]; rw [inv_GammaReal_one_sub hs]
+  rw [this]; rw [completedHurwitzZetaEven_one_sub]; rw [inv_GammaReal_one_sub hs]; rw [cosZeta]; rw [Function.update_of_ne (by simpa using hs 0)]; rw [← GammaComplex]
+  generalize GammaComplex s * cos (π * s / 2) = A -- speeds up ring_nf call
+  ring_nf
 
 中文:
 引理 hurwitzZetaEven_one_sub
@@ -2196,7 +2440,9 @@ lemma hurwitzZetaEven_one_sub
   have : hurwitzZetaEven a (1 - s) = completedHurwitzZetaEven a (1 - s) * (GammaReal (1 - s))⁻¹ := by
     rw [hurwitzZetaEven_def_of_ne_or_ne]; rw [div_eq_mul_inv]
     simpa [sub_eq_zero, eq_comm (a := s)] using hs'
-  rw [this]; rw [completedHurwitzZetaEven_one_sub]; rw [inv_GammaReal_one_sub hs]
+  rw [this]; rw [completedHurwitzZetaEven_one_sub]; rw [inv_GammaReal_one_sub hs]; rw [cosZeta]; rw [Function.update_of_ne (by simpa using hs 0)]; rw [← GammaComplex]
+  generalize GammaComplex s * cos (π * s / 2) = A -- speeds up ring_nf call
+  ring_nf
 
 Depends on / 依赖: Function, Function.update_of_ne, GammaComplex, GammaReal, completedHurwitzZetaEven, completedHurwitzZetaEven_one_sub, cosZeta, div_eq_mul_inv, eq_comm, generalize, hurwitzZetaEven, hurwitzZetaEven_def_of_ne_or_ne, inv_GammaReal_one_sub, ring_nf, speeds, sub_eq_zero, update_of_ne
 -/
@@ -2221,7 +2467,9 @@ lemma cosZeta_one_sub
   have : cosZeta a (1 - s) = completedCosZeta a (1 - s) * (GammaReal (1 - s))⁻¹ := by
     rw [cosZeta]; rw [Function.update_of_ne]; rw [div_eq_mul_inv]
     simpa [sub_eq_zero] using (hs 0).symm
-  rw [this]; rw [completedCosZeta_one_sub]; rw [inv_GammaReal_one_sub (fun n => b
+  rw [this]; rw [completedCosZeta_one_sub]; rw [inv_GammaReal_one_sub (fun n => by simpa using hs (n + 1))]; rw [hurwitzZetaEven_def_of_ne_or_ne (Or.inr (by simpa using hs 1))]
+  generalize GammaComplex s * cos (π * s / 2) = A -- speeds up ring_nf call
+  ring_nf
 
 中文:
 引理 cosZeta_one_sub
@@ -2231,7 +2479,9 @@ lemma cosZeta_one_sub
   have : cosZeta a (1 - s) = completedCosZeta a (1 - s) * (GammaReal (1 - s))⁻¹ := by
     rw [cosZeta]; rw [Function.update_of_ne]; rw [div_eq_mul_inv]
     simpa [sub_eq_zero] using (hs 0).symm
-  rw [this]; rw [completedCosZeta_one_sub]; rw [inv_GammaReal_one_sub (fun n => b
+  rw [this]; rw [completedCosZeta_one_sub]; rw [inv_GammaReal_one_sub (fun n => by simpa using hs (n + 1))]; rw [hurwitzZetaEven_def_of_ne_or_ne (Or.inr (by simpa using hs 1))]
+  generalize GammaComplex s * cos (π * s / 2) = A -- speeds up ring_nf call
+  ring_nf
 
 Depends on / 依赖: Function, Function.update_of_ne, GammaComplex, GammaReal, Or.inr, completedCosZeta, completedCosZeta_one_sub, cosZeta, div_eq_mul_inv, generalize, hurwitzZetaEven_def_of_ne_or_ne, inv_GammaReal_one_sub, ring_nf, speeds, sub_eq_zero, update_of_ne
 -/

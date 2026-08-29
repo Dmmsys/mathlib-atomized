@@ -64,7 +64,17 @@ lemma G2_partial_sum_eq
   rw [sum_Icc_of_even_eq_range (e2Summand_even z)]; rw [Finset.sum_range_succ']; rw [smul_add]; rw [nsmul_eq_mul]; rw [Nat.cast_zero]; rw [e2Summand_zero_eq_two_riemannZeta_two]
   ring_nf
   simp only [e2Summand, eisSummand, add_comm, Nat.cast_add, Nat.cast_one, Fin.isValue,
-    Matrix.cons_val_ze
+    Matrix.cons_val_zero, Int.cast_add, Int.cast_natCast, Int.cast_one, Matrix.cons_val_one,
+    Matrix.cons_val_fin_one, Int.reduceNeg, zpow_neg, mul_comm, mul_sum]
+  congr with a
+  have H2 := qExpansion_identity_pnat (k := 1) (by grind)
+    ⟨(a + 1) * z, by simpa [show 0 < ((a + 1) : Real) by positivity] using z.2⟩
+  simp only [add_comm, Nat.reduceAdd, one_div, mul_comm, mul_neg, even_two,
+    Even.neg_pow, Nat.factorial_one, Nat.cast_one, div_one, pow_one] at H2
+  simp_rw [zpow_ofNat, H2, ← tsum_mul_left, ← tsum_neg, ← exp_nsmul]
+  refine tsum_congr fun b => ?_
+  ring_nf
+  grind [I_sq, exp_add]
 
 中文:
 引理 G2_partial_sum_eq
@@ -74,7 +84,17 @@ lemma G2_partial_sum_eq
   rw [sum_Icc_of_even_eq_range (e2Summand_even z)]; rw [Finset.sum_range_succ']; rw [smul_add]; rw [nsmul_eq_mul]; rw [Nat.cast_zero]; rw [e2Summand_zero_eq_two_riemannZeta_two]
   ring_nf
   simp only [e2Summand, eisSummand, add_comm, Nat.cast_add, Nat.cast_one, Fin.isValue,
-    Matrix.cons_val_ze
+    Matrix.cons_val_zero, Int.cast_add, Int.cast_natCast, Int.cast_one, Matrix.cons_val_one,
+    Matrix.cons_val_fin_one, Int.reduceNeg, zpow_neg, mul_comm, mul_sum]
+  congr with a
+  have H2 := qExpansion_identity_pnat (k := 1) (by grind)
+    ⟨(a + 1) * z, by simpa [show 0 < ((a + 1) : Real) by positivity] using z.2⟩
+  simp only [add_comm, Nat.reduceAdd, one_div, mul_comm, mul_neg, even_two,
+    Even.neg_pow, Nat.factorial_one, Nat.cast_one, div_one, pow_one] at H2
+  simp_rw [zpow_ofNat, H2, ← tsum_mul_left, ← tsum_neg, ← exp_nsmul]
+  refine tsum_congr fun b => ?_
+  ring_nf
+  grind [I_sq, exp_add]
 -/
 private lemma G2_partial_sum_eq (N : Nat) : ∑ m in Icc (-N : Int) N, e2Summand m z =
     2 * riemannZeta 2 + ∑ m in range N, -8 * π ^ 2 *
@@ -104,7 +124,13 @@ lemma aux_G2_tendsto
   have : -8 * π ^ 2 * ∑' n : Nat+, σ 1 n * 𝕢 z ^ (n : Nat) =
       ∑' m : Nat, (-8 * π ^ 2 * ∑' n : Nat+, n * 𝕢 z ^ ((m + 1) * n)) := by
     have := tsum_prod_pow_eq_tsum_sigma 1 (norm_exp_two_pi_I_lt_one z)
-    rw [tsum_pnat_eq_tsum_succ (f := fun d => ∑' c : Nat+]; rw [c ^ 1 * 𝕢 z ^ (d * c : Na
+    rw [tsum_pnat_eq_tsum_succ (f := fun d => ∑' c : Nat+]; rw [c ^ 1 * 𝕢 z ^ (d * c : Nat))] at this
+    simp [← tsum_mul_left, ← this]
+  rw [this]
+  refine (Summable.mul_left _ ?_).hasSum.comp tendsto_finset_range
+  rw [← summable_pnat_iff_summable_succ (f := fun b => ∑' c : Nat+]; rw [c * 𝕢 z ^ (b * c : Nat))]
+  apply (summable_prod_mul_pow 1 (norm_exp_two_pi_I_lt_one z)).prod.congr
+  simp [← exp_nsmul]
 
 中文:
 引理 aux_G2_tendsto
@@ -113,7 +139,13 @@ lemma aux_G2_tendsto
   have : -8 * π ^ 2 * ∑' n : Nat+, σ 1 n * 𝕢 z ^ (n : Nat) =
       ∑' m : Nat, (-8 * π ^ 2 * ∑' n : Nat+, n * 𝕢 z ^ ((m + 1) * n)) := by
     have := tsum_prod_pow_eq_tsum_sigma 1 (norm_exp_two_pi_I_lt_one z)
-    rw [tsum_pnat_eq_tsum_succ (f := fun d => ∑' c : Nat+]; rw [c ^ 1 * 𝕢 z ^ (d * c : Na
+    rw [tsum_pnat_eq_tsum_succ (f := fun d => ∑' c : Nat+]; rw [c ^ 1 * 𝕢 z ^ (d * c : Nat))] at this
+    simp [← tsum_mul_left, ← this]
+  rw [this]
+  refine (Summable.mul_left _ ?_).hasSum.comp tendsto_finset_range
+  rw [← summable_pnat_iff_summable_succ (f := fun b => ∑' c : Nat+]; rw [c * 𝕢 z ^ (b * c : Nat))]
+  apply (summable_prod_mul_pow 1 (norm_exp_two_pi_I_lt_one z)).prod.congr
+  simp [← exp_nsmul]
 -/
 private lemma aux_G2_tendsto : Tendsto
     (fun N => ∑ m in range N, -8 * π ^ 2 * ∑' n : Nat+, n * 𝕢 z ^ ((m + 1) * n)) atTop
@@ -224,7 +256,8 @@ theorem hasSum_qExpansion_E2
   convert! (hS.mul_left (-24)).hasSum using 1
   · ext : 1
     simp [mul_assoc]
-  · rw [E2_eq_tsum_cexp, tsum_pna
+  · rw [E2_eq_tsum_cexp, tsum_pnat_eq_tsum_succ (f := fun n => σ 1 n * 𝕢 z ^ n), tsum_mul_left]
+    simp
 
 中文:
 定理 hasSum_qExpansion_E2
@@ -235,7 +268,8 @@ theorem hasSum_qExpansion_E2
   convert! (hS.mul_left (-24)).hasSum using 1
   · ext : 1
     simp [mul_assoc]
-  · rw [E2_eq_tsum_cexp, tsum_pna
+  · rw [E2_eq_tsum_cexp, tsum_pnat_eq_tsum_succ (f := fun n => σ 1 n * 𝕢 z ^ n), tsum_mul_left]
+    simp
 
 Depends on / 依赖: E2_eq_tsum_cexp, Summable, convert, hS.mul_left, hasSum, hasSum_nat_add_iff, mul_assoc, mul_left, one_le_two, summable_nat_add_iff, summable_sigma_mul_cexp_pow, tsum_mul_left, tsum_pnat_eq_tsum_succ
 -/
@@ -493,7 +527,7 @@ lemma tendsto_double_sum_S_act
   have := ((summable_e2Summand_symmetricIco (S • z)).mul_left (z.1 ^ 2)⁻¹).hasSum
   simp only [HasSum, symmetricIco, tendsto_map'_iff, modular_S_smul, ← Nat.map_cast_int_atTop] at *
   apply this.congr (fun N => ?_)
-  simpa [e2Summand, eisSumman
+  simpa [e2Summand, eisSummand, ← mul_sum] using! aux_sum_Ico_S_identity z N
 
 中文:
 引理 tendsto_double_sum_S_act
@@ -502,7 +536,7 @@ lemma tendsto_double_sum_S_act
   have := ((summable_e2Summand_symmetricIco (S • z)).mul_left (z.1 ^ 2)⁻¹).hasSum
   simp only [HasSum, symmetricIco, tendsto_map'_iff, modular_S_smul, ← Nat.map_cast_int_atTop] at *
   apply this.congr (fun N => ?_)
-  simpa [e2Summand, eisSumman
+  simpa [e2Summand, eisSummand, ← mul_sum] using! aux_sum_Ico_S_identity z N
 
 Depends on / 依赖: G2_eq_tsum_symmetricIco, HasSum, Nat.map_cast_int_atTop, _iff, aux_sum_Ico_S_identity, e2Summand, eisSummand, hasSum, map_cast_int_atTop, modular_S_smul, mul_left, mul_sum, summable_e2Summand_symmetricIco, symmetricIco, tendsto_map, this.congr, tsum_mul_left
 -/
@@ -610,7 +644,13 @@ lemma aux_tsum_identity_1
     ring_nf
     rw [← Summable.tsum_add]
     · grind
-    · apply (summable_pnat_iff_summab
+    · apply (summable_pnat_iff_summable_nat.mpr ((summable_int_iff_summable_nat_and_neg.mp
+        (summable_left_one_div_linear_sub_one_div_linear z (-d) d)).1)).congr
+      grind [Int.cast_natCast]
+    · apply (summable_pnat_iff_summable_nat.mpr ((summable_int_iff_summable_nat_and_neg.mp
+        (summable_left_one_div_linear_sub_one_div_linear z (-d) d)).2)).congr
+      grind [Int.cast_neg, Int.cast_natCast, neg_mul, one_div]
+  · simpa using! summable_left_one_div_linear_sub_one_div_linear z (-d) d
 
 中文:
 引理 aux_tsum_identity_1
@@ -622,7 +662,13 @@ lemma aux_tsum_identity_1
     ring_nf
     rw [← Summable.tsum_add]
     · grind
-    · apply (summable_pnat_iff_summab
+    · apply (summable_pnat_iff_summable_nat.mpr ((summable_int_iff_summable_nat_and_neg.mp
+        (summable_left_one_div_linear_sub_one_div_linear z (-d) d)).1)).congr
+      grind [Int.cast_natCast]
+    · apply (summable_pnat_iff_summable_nat.mpr ((summable_int_iff_summable_nat_and_neg.mp
+        (summable_left_one_div_linear_sub_one_div_linear z (-d) d)).2)).congr
+      grind [Int.cast_neg, Int.cast_natCast, neg_mul, one_div]
+  · simpa using! summable_left_one_div_linear_sub_one_div_linear z (-d) d
 -/
 private lemma aux_tsum_identity_1 (d : Nat+) :
     ∑' (m : Int), (1 / ((m : Complex) * z - d) - 1 / (m * z + d)) = -(2 / d) +
@@ -653,7 +699,8 @@ lemma aux_tsum_identity_2
   · have := summable_cotTerm (by simpa using z.int_div_mem_integerComplement (n := -d) (by aesop))
     simp only [cotTerm, one_div] at *
     simp only [← Nat.cast_add_one] at this
-    rw [summab
+    rw [summable_nat_add_iff (f := fun n => (-d / (z : Complex) - n)⁻¹ + (-d / (z : Complex) + n)⁻¹)] at this
+    apply this.subtype
 
 中文:
 引理 aux_tsum_identity_2
@@ -664,7 +711,8 @@ lemma aux_tsum_identity_2
   · have := summable_cotTerm (by simpa using z.int_div_mem_integerComplement (n := -d) (by aesop))
     simp only [cotTerm, one_div] at *
     simp only [← Nat.cast_add_one] at this
-    rw [summab
+    rw [summable_nat_add_iff (f := fun n => (-d / (z : Complex) - n)⁻¹ + (-d / (z : Complex) + n)⁻¹)] at this
+    apply this.subtype
 -/
 private lemma aux_tsum_identity_2 (d : Nat+) :
     ∑' m : Nat+, (1 / ((m : Complex) * z - d) + 1 / (-m * z + -d) - (1 / (m * z + d)) -
@@ -712,7 +760,14 @@ lemma aux_tendsto_tsum
       (fun n : Nat+ => (-2 * π * I / z) - (2 / z * (2 * π * I)) *
       (∑' m : Nat+, cexp (2 * π * I * (-n / z)) ^ (m : Nat)) + 2 / n) := by
     ext N
-hav
+have h2 := cot_series_rep coe_mem_integerComplement ⟨-N / z, im_pnat_div_pos N z⟩
+    rw [pi_mul_cot_pi_q_exp]; rw [← sub_eq_iff_eq_add']; rw [one_div]; rw [inv_div]; rw [neg_mul]; rw [← h2]; rw [← tsum_zero_pnat_eq_tsum_nat
+      (by simpa using norm_exp_two_pi_I_lt_one ⟨-N / z]; rw [im_pnat_div_pos N z⟩)] at *
+    field [ne_zero z]
+  rw [H0]
+  nth_rw 2 [show -2 * π * I / z = (-2 * π * I / z) - (2 / z * (2 * π * I)) * 0 + 2 * 0 by ring]
+.add (.const_mul _ ?_) .const_sub _ .const_mul _ refine aux_tendsto_tsum_cexp_pnat z
+  exact PNat.tendsto_comp_val_iff.mpr tendsto_inv_atTop_nhds_zero_nat
 
 中文:
 引理 aux_tendsto_tsum
@@ -723,7 +778,14 @@ hav
       (fun n : Nat+ => (-2 * π * I / z) - (2 / z * (2 * π * I)) *
       (∑' m : Nat+, cexp (2 * π * I * (-n / z)) ^ (m : Nat)) + 2 / n) := by
     ext N
-hav
+have h2 := cot_series_rep coe_mem_integerComplement ⟨-N / z, im_pnat_div_pos N z⟩
+    rw [pi_mul_cot_pi_q_exp]; rw [← sub_eq_iff_eq_add']; rw [one_div]; rw [inv_div]; rw [neg_mul]; rw [← h2]; rw [← tsum_zero_pnat_eq_tsum_nat
+      (by simpa using norm_exp_two_pi_I_lt_one ⟨-N / z]; rw [im_pnat_div_pos N z⟩)] at *
+    field [ne_zero z]
+  rw [H0]
+  nth_rw 2 [show -2 * π * I / z = (-2 * π * I / z) - (2 / z * (2 * π * I)) * 0 + 2 * 0 by ring]
+.add (.const_mul _ ?_) .const_sub _ .const_mul _ refine aux_tendsto_tsum_cexp_pnat z
+  exact PNat.tendsto_comp_val_iff.mpr tendsto_inv_atTop_nhds_zero_nat
 -/
 private lemma aux_tendsto_tsum : Tendsto (fun n : Nat => 2 / z *
     ∑' (m : Nat+), (1 / (-(n : Complex) / z - m) + 1 / (-n / z + m))) atTop (𝓝 (-2 * π * I / z)) := by
@@ -751,7 +813,14 @@ lemma tendsto_tsum_one_div_linear_sub_succ_eq
       ∑ n in Ico (-N : Int) N, ∑' m : Int, (1 / ((m : Complex) * z + n) - 1 / (m * z + n + 1))
       = ∑' m : Int, ∑ n in Ico (-N : Int) N, (1 / ((m : Complex) * z + n) - 1 / (m * z + n + 1)) := by
     rw [Summable.tsum_finsetSum (fun i hi => ?_)]
-    apply (summable_left_one_
+    apply (summable_left_one_div_linear_sub_one_div_linear z i (i + 1)).congr
+    grind
+  simp only [telescope_aux, aux_tsum_identity_1] at this
+  rw [funext this]; rw [show -2 * π * I / z = 0 + -2 * π * I / z by ring]
+  apply Tendsto.add
+  · simpa [← PNat.tendsto_comp_val_iff] using!
+      (tendsto_inv_atTop_nhds_zero_nat (𝕜 := Complex)).const_mul (-2)
+  · simpa only [aux_tsum_identity_2, ← PNat.tendsto_comp_val_iff] using! aux_tendsto_tsum z
 
 中文:
 引理 tendsto_tsum_one_div_linear_sub_succ_eq
@@ -760,7 +829,14 @@ lemma tendsto_tsum_one_div_linear_sub_succ_eq
       ∑ n in Ico (-N : Int) N, ∑' m : Int, (1 / ((m : Complex) * z + n) - 1 / (m * z + n + 1))
       = ∑' m : Int, ∑ n in Ico (-N : Int) N, (1 / ((m : Complex) * z + n) - 1 / (m * z + n + 1)) := by
     rw [Summable.tsum_finsetSum (fun i hi => ?_)]
-    apply (summable_left_one_
+    apply (summable_left_one_div_linear_sub_one_div_linear z i (i + 1)).congr
+    grind
+  simp only [telescope_aux, aux_tsum_identity_1] at this
+  rw [funext this]; rw [show -2 * π * I / z = 0 + -2 * π * I / z by ring]
+  apply Tendsto.add
+  · simpa [← PNat.tendsto_comp_val_iff] using!
+      (tendsto_inv_atTop_nhds_zero_nat (𝕜 := Complex)).const_mul (-2)
+  · simpa only [aux_tsum_identity_2, ← PNat.tendsto_comp_val_iff] using! aux_tendsto_tsum z
 
 Depends on / 依赖: PNat.tendst, Summable, Summable.tsum_finsetSum, Tendsto, Tendsto.add, aux_tsum_identity_1, summable_left_one_div_linear_sub_one_div_linear, telescope_aux, tendst, tsum_finsetSum
 -/

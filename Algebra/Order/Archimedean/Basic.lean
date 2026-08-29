@@ -160,7 +160,18 @@ theorem existsUnique_zpow_near_of_one_lt
   obtain ⟨k, hk⟩ := MulArchimedean.arch g ha
   have h_bdd : forall n in s, n <= (k : Int) := by
     intro n hn
-    apply 
+    apply (zpow_le_zpow_iff_right ha).mp
+    rw [← zpow_natCast] at hk
+    exact le_trans hn hk
+  obtain ⟨m, hm, hm'⟩ := Int.exists_greatest_of_bdd ⟨k, h_bdd⟩ h_ne
+  have hm'' : g < a ^ (m + 1) := by
+    contrapose! hm'
+    exact ⟨m + 1, hm', lt_add_one _⟩
+refine ⟨m, ⟨hm, hm''⟩, fun n hn => (hm' n hn.1).antisymm Int.le_of_lt_add_one ?_⟩
+  rw [← zpow_lt_zpow_iff_right ha]
+  exact lt_of_le_of_lt hm hn.2
+
+@[to_additive]
 
 中文:
 定理 存在Unique_zpow_near_of_one_lt
@@ -172,7 +183,18 @@ theorem existsUnique_zpow_near_of_one_lt
   obtain ⟨k, hk⟩ := MulArchimedean.arch g ha
   have h_bdd : forall n in s, n <= (k : Int) := by
     intro n hn
-    apply 
+    apply (zpow_le_zpow_iff_right ha).mp
+    rw [← zpow_natCast] at hk
+    exact le_trans hn hk
+  obtain ⟨m, hm, hm'⟩ := Int.exists_greatest_of_bdd ⟨k, h_bdd⟩ h_ne
+  have hm'' : g < a ^ (m + 1) := by
+    contrapose! hm'
+    exact ⟨m + 1, hm', lt_add_one _⟩
+refine ⟨m, ⟨hm, hm''⟩, fun n hn => (hm' n hn.1).antisymm Int.le_of_lt_add_one ?_⟩
+  rw [← zpow_lt_zpow_iff_right ha]
+  exact lt_of_le_of_lt hm hn.2
+
+@[to_additive]
 
 Depends on / 依赖: Int.exists_greatest_of_bdd, MulArchimedean, MulArchimedean.arch, Nonempty, contrapose, exists_greatest_of_bdd, h_bdd, h_ne, inv_le_inv, le_trans, lt_ad, s.Nonempty, zpow_le_zpow_iff_right, zpow_natCast
 -/
@@ -374,6 +396,8 @@ theorem add_one_pow_unbounded_of_pos
       _ < 1 + n * y := lt_one_add _
       _ <= (1 + y) ^ n :=
         one_add_mul_le_pow_of_sq_nonneg (pow_nonneg hy.le _) (pow_nonneg this _)
+          (add_nonneg zero_le_two hy.le) _
+      _ = (y + 1) ^ n := by rw [add_comm]
 
 中文:
 定理 add_one_pow_unbounded_of_pos
@@ -387,6 +411,8 @@ theorem add_one_pow_unbounded_of_pos
       _ < 1 + n * y := lt_one_add _
       _ <= (1 + y) ^ n :=
         one_add_mul_le_pow_of_sq_nonneg (pow_nonneg hy.le _) (pow_nonneg this _)
+          (add_nonneg zero_le_two hy.le) _
+      _ = (y + 1) ^ n := by rw [add_comm]
 
 Depends on / 依赖: Archimedean, Archimedean.arch, add_comm, add_nonneg, hy.le, lt_one_add, nsmul_eq_mul, one_add_mul_le_pow_of_sq_nonneg, pow_nonneg, zero_le_one, zero_le_two
 -/
@@ -501,7 +527,9 @@ theorem exists_nat_pow_near
       have hn : x < y ^ n := Nat.find_spec h
       have hnp : 0 < n :=
         pos_iff_ne_zero.2 fun hn0 => by rw [hn0, pow_zero] at hn; exact not_le_of_gt hn hx
-      have hnsp : Nat.pred n + 1
+      have hnsp : Nat.pred n + 1 = n := Nat.succ_pred_eq_of_pos hnp
+      have hltn : Nat.pred n < n := Nat.pred_lt (ne_of_gt hnp)
+      ⟨Nat.pred n, le_of_not_gt (Nat.find_min h hltn), by rwa [hnsp]⟩
 
 中文:
 定理 存在_nat_pow_near
@@ -514,7 +542,9 @@ theorem exists_nat_pow_near
       have hn : x < y ^ n := Nat.find_spec h
       have hnp : 0 < n :=
         pos_iff_ne_zero.2 fun hn0 => by rw [hn0, pow_zero] at hn; exact not_le_of_gt hn hx
-      have hnsp : Nat.pred n + 1
+      have hnsp : Nat.pred n + 1 = n := Nat.succ_pred_eq_of_pos hnp
+      have hltn : Nat.pred n < n := Nat.pred_lt (ne_of_gt hnp)
+      ⟨Nat.pred n, le_of_not_gt (Nat.find_min h hltn), by rwa [hnsp]⟩
 
 Depends on / 依赖: Nat.find, Nat.find_min, Nat.find_spec, Nat.pred, Nat.pred_lt, Nat.succ_pred_eq_of_pos, find_min, find_spec, le_of_not_gt, ne_of_gt, not_le_of_gt, pos_iff_ne_zero, pow_unbounded_of_one_lt, pow_zero, pred_lt, succ_pred_eq_of_pos
 -/
@@ -587,7 +617,13 @@ theorem exists_mem_Ico_zpow
     rw [zpow_neg y ↑N]; rw [zpow_natCast]
     exact ((inv_lt_comm₀ hx (lt_trans (inv_pos.2 hx) hN)).1 hN).le
   have hb : exists b : Int, forall m, y ^ m <= x -> m <= b := by
-    obtain ⟨M,
+    obtain ⟨M, hM⟩ := pow_unbounded_of_one_lt x hy
+    refine ⟨M, fun m hm => ?_⟩
+    contrapose! hM
+    rw [← zpow_natCast]
+    exact le_trans (zpow_le_zpow_right₀ hy.le hM.le) hm
+  obtain ⟨n, hn₁, hn₂⟩ := Int.exists_greatest_of_bdd hb he
+  exact ⟨n, hn₁, lt_of_not_ge fun hge => (Int.lt_succ _).not_ge (hn₂ _ hge)⟩
 
 中文:
 定理 存在_mem_Ico_zpow
@@ -600,7 +636,13 @@ theorem exists_mem_Ico_zpow
     rw [zpow_neg y ↑N]; rw [zpow_natCast]
     exact ((inv_lt_comm₀ hx (lt_trans (inv_pos.2 hx) hN)).1 hN).le
   have hb : exists b : Int, forall m, y ^ m <= x -> m <= b := by
-    obtain ⟨M,
+    obtain ⟨M, hM⟩ := pow_unbounded_of_one_lt x hy
+    refine ⟨M, fun m hm => ?_⟩
+    contrapose! hM
+    rw [← zpow_natCast]
+    exact le_trans (zpow_le_zpow_right₀ hy.le hM.le) hm
+  obtain ⟨n, hn₁, hn₂⟩ := Int.exists_greatest_of_bdd hb he
+  exact ⟨n, hn₁, lt_of_not_ge fun hge => (Int.lt_succ _).not_ge (hn₂ _ hge)⟩
 
 Depends on / 依赖: Int.exists_greatest_of_bdd, contrapose, exists_greatest_of_bdd, hM.le, hy.le, inv_pos, le_trans, lt_trans, pow_unbounded_of_one_lt, zpow_natCast, zpow_neg
 -/
@@ -732,7 +774,8 @@ lemma exists_pow_btwn_of_lt_mul
     intro hf
     simp only [hf, pow_zero] at H
     exact (H.trans <| (mul_lt_of_lt_one_right hb₀ hc₁).trans_le hb₁).false
-  rw [(Nat.succ_pred_
+  rw [(Nat.succ_pred_eq_of_ne_zero hn).symm]; rw [pow_succ]; rw [mul_lt_mul_iff_left₀ hc₀] at H
+  exact Nat.find_min this (Nat.sub_one_lt hn) H
 
 中文:
 引理 存在_pow_btwn_of_lt_mul
@@ -745,7 +788,8 @@ lemma exists_pow_btwn_of_lt_mul
     intro hf
     simp only [hf, pow_zero] at H
     exact (H.trans <| (mul_lt_of_lt_one_right hb₀ hc₁).trans_le hb₁).false
-  rw [(Nat.succ_pred_
+  rw [(Nat.succ_pred_eq_of_ne_zero hn).symm]; rw [pow_succ]; rw [mul_lt_mul_iff_left₀ hc₀] at H
+  exact Nat.find_min this (Nat.sub_one_lt hn) H
 
 Depends on / 依赖: H.trans, Nat.find, Nat.find_min, Nat.find_spec, Nat.sub_one_lt, Nat.succ_pred_eq_of_ne_zero, exists_pow_lt_of_lt_one, find_min, find_spec, h.trans_le, mul_lt_of_lt_one_right, pow_succ, pow_zero, sub_one_lt, succ_pred_eq_of_ne_zero, trans_le
 -/
@@ -775,7 +819,16 @@ lemma exists_zpow_btwn_of_lt_mul
   · rcases le_or_gt b 1 with hb₁ | hb₁
     · obtain ⟨n, hn⟩ := exists_pow_btwn_of_lt_mul h hb₀ hb₁ hc₀ hc₁
       exact ⟨n, mod_cast hn⟩
-    · rcases lt
+    · rcases lt_or_ge a 1 with ha₁ | ha₁
+      · refine ⟨0, ?_⟩
+        rw [zpow_zero]
+        exact ⟨ha₁, hb₁⟩
+      · have : b⁻¹ < a⁻¹ * c := by rwa [lt_inv_mul_iff₀' ha, inv_mul_lt_iff₀ hb₀]
+        obtain ⟨n, hn₁, hn₂⟩ :=
+          exists_pow_btwn_of_lt_mul this (inv_pos_of_pos ha) (inv_le_one_of_one_le₀ ha₁) hc₀ hc₁
+        refine ⟨-n, ?_, ?_⟩
+        · rwa [lt_inv_comm₀ (pow_pos hc₀ n) ha, ← zpow_natCast, ← zpow_neg] at hn₂
+        · rwa [inv_lt_comm₀ hb₀ (pow_pos hc₀ n), ← zpow_natCast, ← zpow_neg] at hn₁
 
 中文:
 引理 存在_zpow_btwn_of_lt_mul
@@ -787,7 +840,16 @@ lemma exists_zpow_btwn_of_lt_mul
   · rcases le_or_gt b 1 with hb₁ | hb₁
     · obtain ⟨n, hn⟩ := exists_pow_btwn_of_lt_mul h hb₀ hb₁ hc₀ hc₁
       exact ⟨n, mod_cast hn⟩
-    · rcases lt
+    · rcases lt_or_ge a 1 with ha₁ | ha₁
+      · refine ⟨0, ?_⟩
+        rw [zpow_zero]
+        exact ⟨ha₁, hb₁⟩
+      · have : b⁻¹ < a⁻¹ * c := by rwa [lt_inv_mul_iff₀' ha, inv_mul_lt_iff₀ hb₀]
+        obtain ⟨n, hn₁, hn₂⟩ :=
+          exists_pow_btwn_of_lt_mul this (inv_pos_of_pos ha) (inv_le_one_of_one_le₀ ha₁) hc₀ hc₁
+        refine ⟨-n, ?_, ?_⟩
+        · rwa [lt_inv_comm₀ (pow_pos hc₀ n) ha, ← zpow_natCast, ← zpow_neg] at hn₂
+        · rwa [inv_lt_comm₀ hb₀ (pow_pos hc₀ n), ← zpow_natCast, ← zpow_neg] at hn₁
 
 Depends on / 依赖: exists_pow_btwn_of_lt_mul, exists_pow_lt_of_lt_one, ha.trans_lt, inv_pos_of_pos, le_or_gt, lt_or_ge, mod_cast, trans_lt, zpow_pos, zpow_zero
 -/
@@ -1058,7 +1120,7 @@ theorem exists_div_btwn
 refine ⟨(lt_div_iff₀ n0').2 (lt_iff_lt_of_le_iff_le (zh _)).1 (lt_add_one _), ?_⟩
   rw [Int.cast_add]; rw [Int.cast_one]
   grw [(zh _).1 le_rfl]
-  rwa [← lt_sub_if
+  rwa [← lt_sub_iff_add_lt', ← sub_mul, ← div_lt_iff₀' (sub_pos.2 h), one_div]
 
 中文:
 定理 存在_div_btwn
@@ -1071,7 +1133,7 @@ refine ⟨(lt_div_iff₀ n0').2 (lt_iff_lt_of_le_iff_le (zh _)).1 (lt_add_one _)
 refine ⟨(lt_div_iff₀ n0').2 (lt_iff_lt_of_le_iff_le (zh _)).1 (lt_add_one _), ?_⟩
   rw [Int.cast_add]; rw [Int.cast_one]
   grw [(zh _).1 le_rfl]
-  rwa [← lt_sub_if
+  rwa [← lt_sub_iff_add_lt', ← sub_mul, ← div_lt_iff₀' (sub_pos.2 h), one_div]
 
 Depends on / 依赖: Int.cast_add, Int.cast_one, cast_add, cast_one, exists_floor, inv_pos, le_rfl, lt_add_one, lt_iff_lt_of_le_iff_le, lt_sub_iff_add_lt, one_div, sub_mul, sub_pos
 -/
@@ -1146,7 +1208,23 @@ theorem exists_pow_btwn
   have ex : exists m : Nat, y <= (m * δ) ^ n := by
     have ⟨m, hm⟩ := exists_nat_ge (y / δ + 1 / δ)
     refine ⟨m, le_trans ?_ (le_self_pow₀ ?_ hn)⟩ <;> rw [← div_le_iff₀ δ_pos]
-
+    · exact (lt_add_of_pos_right _ <| by positivity).le.trans hm
+    · exact (le_add_of_nonneg_left <| by positivity).trans hm
+  let m := Nat.find ex
+have m_pos : 0 < m := (Nat.find_pos _).mpr by simpa [zero_pow hn] using hy
+  let q := m.pred * δ
+  have qny : q ^ n < y := lt_of_not_ge (Nat.find_min ex <| Nat.pred_lt m_pos.ne')
+have q1y : |q| < max 1 y := (abs_eq_self.mpr <| by positivity).trans_lt lt_max_iff.mpr
+    (or_iff_not_imp_left.mpr fun q1 => (le_self_pow₀ (le_of_not_gt q1) hn).trans_lt qny)
+  have xqn : max x 0 < q ^ n :=
+    calc _ = y - (y - max x 0) := by rw [sub_sub_cancel]
+      _ <= (m * δ) ^ n - (y - max x 0) := sub_le_sub_right (Nat.find_spec ex) _
+      _ < (m * δ) ^ n - ((m * δ) ^ n - q ^ n) := by
+        refine sub_lt_sub_left ((le_abs_self _).trans_lt <| cont _ _ q1y.le ?_) _
+        rw [← Nat.succ_pred_eq_of_pos m_pos]; rw [Nat.cast_succ]; rw [← sub_mul]; rw [add_sub_cancel_left]; rw [one_mul]; rw [abs_eq_self.mpr (by positivity)]
+      _ = q ^ n := sub_sub_cancel ..
+  exact ⟨q, lt_of_le_of_ne (by positivity) fun q0 =>
+(le_sup_right.trans_lt xqn).ne q0 ▸ (zero_pow hn).symm, le_sup_left.trans_lt xqn, qny⟩
 
 中文:
 定理 存在_pow_btwn
@@ -1157,7 +1235,23 @@ theorem exists_pow_btwn
   have ex : exists m : Nat, y <= (m * δ) ^ n := by
     have ⟨m, hm⟩ := exists_nat_ge (y / δ + 1 / δ)
     refine ⟨m, le_trans ?_ (le_self_pow₀ ?_ hn)⟩ <;> rw [← div_le_iff₀ δ_pos]
-
+    · exact (lt_add_of_pos_right _ <| by positivity).le.trans hm
+    · exact (le_add_of_nonneg_left <| by positivity).trans hm
+  let m := Nat.find ex
+have m_pos : 0 < m := (Nat.find_pos _).mpr by simpa [zero_pow hn] using hy
+  let q := m.pred * δ
+  have qny : q ^ n < y := lt_of_not_ge (Nat.find_min ex <| Nat.pred_lt m_pos.ne')
+have q1y : |q| < max 1 y := (abs_eq_self.mpr <| by positivity).trans_lt lt_max_iff.mpr
+    (or_iff_not_imp_left.mpr fun q1 => (le_self_pow₀ (le_of_not_gt q1) hn).trans_lt qny)
+  have xqn : max x 0 < q ^ n :=
+    calc _ = y - (y - max x 0) := by rw [sub_sub_cancel]
+      _ <= (m * δ) ^ n - (y - max x 0) := sub_le_sub_right (Nat.find_spec ex) _
+      _ < (m * δ) ^ n - ((m * δ) ^ n - q ^ n) := by
+        refine sub_lt_sub_left ((le_abs_self _).trans_lt <| cont _ _ q1y.le ?_) _
+        rw [← Nat.succ_pred_eq_of_pos m_pos]; rw [Nat.cast_succ]; rw [← sub_mul]; rw [add_sub_cancel_left]; rw [one_mul]; rw [abs_eq_self.mpr (by positivity)]
+      _ = q ^ n := sub_sub_cancel ..
+  exact ⟨q, lt_of_le_of_ne (by positivity) fun q0 =>
+(le_sup_right.trans_lt xqn).ne q0 ▸ (zero_pow hn).symm, le_sup_left.trans_lt xqn, qny⟩
 
 Depends on / 依赖: Nat.find, Nat.find_pos, exists_nat_ge, find_pos, le.trans, le_add_of_nonneg_left, le_trans, lt_add_of_pos_right, m_pos, max_lt_iff, max_lt_iff.mpr, sub_pos, sub_pos.mpr, uniform_continuous_npow_on_bounded, zero_pow
 -/
@@ -1198,7 +1292,7 @@ theorem exists_rat_pow_btwn
   have : (0 : K) < q₂ := (le_max_right _ _).trans_lt hx₂
   norm_cast at hq₁₂ this
   obtain ⟨q, hq, hq₁, hq₂⟩ := exists_pow_btwn hn hq₁₂ this
-refine ⟨q, hq, (le_max_left _ _).trans_lt hx₁.trans
+refine ⟨q, hq, (le_max_left _ _).trans_lt hx₁.trans ?_, hy₂.trans' ?_⟩ <;> assumption_mod_cast
 
 中文:
 定理 存在_rat_pow_btwn
@@ -1209,7 +1303,7 @@ refine ⟨q, hq, (le_max_left _ _).trans_lt hx₁.trans
   have : (0 : K) < q₂ := (le_max_right _ _).trans_lt hx₂
   norm_cast at hq₁₂ this
   obtain ⟨q, hq, hq₁, hq₂⟩ := exists_pow_btwn hn hq₁₂ this
-refine ⟨q, hq, (le_max_left _ _).trans_lt hx₁.trans
+refine ⟨q, hq, (le_max_left _ _).trans_lt hx₁.trans ?_, hy₂.trans' ?_⟩ <;> assumption_mod_cast
 
 Depends on / 依赖: assumption_mod_cast, exists_pow_btwn, exists_rat_btwn, le_max_left, le_max_right, max_lt, trans_lt
 -/

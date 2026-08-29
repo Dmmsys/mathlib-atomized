@@ -34,7 +34,9 @@ theorem Ideal.IsPrime.exists_mem_prime_of_ne_bot
   replace ha₁ : (factors a).prod in I := by
     obtain ⟨u : Rˣ, hu : (factors a).prod * u = a⟩ := factors_prod ha₂
     rwa [← hu, mul_unit_mem_iff_mem _ u.isUnit] at ha₁
-  obtain ⟨p : R, hp₁ : p in factors a
+  obtain ⟨p : R, hp₁ : p in factors a, hp₂ : p in I⟩ :=
+    (hI₂.multiset_prod_mem_iff_exists_mem <| factors a).1 ha₁
+  exact ⟨p, hp₂, prime_of_factor p hp₁⟩
 
 中文:
 定理 理想.是素.存在_mem_prime_of_ne_bot
@@ -44,7 +46,9 @@ theorem Ideal.IsPrime.exists_mem_prime_of_ne_bot
   replace ha₁ : (factors a).prod in I := by
     obtain ⟨u : Rˣ, hu : (factors a).prod * u = a⟩ := factors_prod ha₂
     rwa [← hu, mul_unit_mem_iff_mem _ u.isUnit] at ha₁
-  obtain ⟨p : R, hp₁ : p in factors a
+  obtain ⟨p : R, hp₁ : p in factors a, hp₂ : p in I⟩ :=
+    (hI₂.multiset_prod_mem_iff_exists_mem <| factors a).1 ha₁
+  exact ⟨p, hp₂, prime_of_factor p hp₁⟩
 
 Depends on / 依赖: Submodule, Submodule.exists_mem_ne_zero_of_ne_bot, exists_mem_ne_zero_of_ne_bot, factors, factors_prod, isUnit, mul_unit_mem_iff_mem, multiset_prod_mem_iff_exists_mem, prime_of_factor, replace, u.isUnit
 -/
@@ -74,7 +78,10 @@ lemma Ideal.setOfPred_isPrincipal_wellFoundedOn_gt
   rw [this]; rw [Set.wellFoundedOn_image]; rw [Set.wellFoundedOn_univ]
   convert! wellFounded_dvdNotUnit (α := α)
   ext
-  exact Ideal.span_singleton_lt_span
+  exact Ideal.span_singleton_lt_span_singleton
+
+@[deprecated (since := "2026-07-09")]
+alias Ideal.setOf_isPrincipal_wellFoundedOn_gt := Ideal.setOfPred_isPrincipal_wellFoundedOn_gt
 
 中文:
 引理 理想.setOfPred_isPrincipal_wellFoundedOn_gt
@@ -86,7 +93,10 @@ lemma Ideal.setOfPred_isPrincipal_wellFoundedOn_gt
   rw [this]; rw [Set.wellFoundedOn_image]; rw [Set.wellFoundedOn_univ]
   convert! wellFounded_dvdNotUnit (α := α)
   ext
-  exact Ideal.span_singleton_lt_span
+  exact Ideal.span_singleton_lt_span_singleton
+
+@[deprecated (since := "2026-07-09")]
+alias Ideal.setOf_isPrincipal_wellFoundedOn_gt := Ideal.setOfPred_isPrincipal_wellFoundedOn_gt
 
 Depends on / 依赖: I.IsPrincipal, Ideal.span, Ideal.span_singleton_lt_span_singleton, IsPrincipal, Set.univ, Set.wellFoundedOn_image, Set.wellFoundedOn_univ, Submodule, Submodule.isPrincipal_iff, convert, eq_comm, isPrincipal_iff, span_singleton_lt_span_singleton, wellFoundedOn_image, wellFoundedOn_univ, wellFounded_dvdNotUnit
 -/
@@ -117,7 +127,8 @@ lemma WfDvdMonoid.of_setOfPred_isPrincipal_wellFoundedOn_gt
   exact Ideal.span_singleton_lt_span_singleton.symm
 
 @[deprecated (since := "2026-07-09")]
-alias WfDvdMonoid.of_setOf_isPrincipal
+alias WfDvdMonoid.of_setOf_isPrincipal_wellFoundedOn_gt :=
+  WfDvdMonoid.of_setOfPred_isPrincipal_wellFoundedOn_gt
 
 中文:
 引理 WfDvdMonoid.of_setOfPred_isPrincipal_wellFoundedOn_gt
@@ -130,7 +141,8 @@ alias WfDvdMonoid.of_setOf_isPrincipal
   exact Ideal.span_singleton_lt_span_singleton.symm
 
 @[deprecated (since := "2026-07-09")]
-alias WfDvdMonoid.of_setOf_isPrincipal
+alias WfDvdMonoid.of_setOf_isPrincipal_wellFoundedOn_gt :=
+  WfDvdMonoid.of_setOfPred_isPrincipal_wellFoundedOn_gt
 
 Depends on / 依赖: I.IsPrincipal, Ideal.span, Ideal.span_singleton_lt_span_singleton.symm, InvImage, InvImage.wf, IsPrincipal, WellFounded, convert, span_singleton_lt_span_singleton
 -/

@@ -38,7 +38,10 @@ theorem CauSeq.tendsto_limit
       obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ hε
       exists N
       intro b hb
-      apply 
+      apply hεs
+      dsimp [Metric.ball]
+      rw [dist_comm]; rw [dist_eq_norm]
+      solve_by_elim)
 
 中文:
 定理 CauSeq.tendsto_limit
@@ -51,7 +54,10 @@ theorem CauSeq.tendsto_limit
       obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ hε
       exists N
       intro b hb
-      apply 
+      apply hεs
+      dsimp [Metric.ball]
+      rw [dist_comm]; rw [dist_eq_norm]
+      solve_by_elim)
 
 Depends on / 依赖: CauSeq, CauSeq.equiv_lim, Metric, Metric.ball, Metric.isOpen_iff, Setoid, Setoid.symm, dist_comm, dist_eq_norm, equiv_lim, isOpen_iff, solve_by_elim, tendsto_nhds, tendsto_nhds.mpr
 -/
@@ -97,7 +103,7 @@ theorem CauchySeq.isCauSeq
   intro j hj
   rw [← dist_eq_norm]
   apply @htsub (f j, f N)
-  apply 
+  apply Set.mk_mem_prod <;> solve_by_elim [le_refl]
 
 中文:
 定理 CauchySeq.isCauSeq
@@ -112,7 +118,7 @@ theorem CauchySeq.isCauSeq
   intro j hj
   rw [← dist_eq_norm]
   apply @htsub (f j, f N)
-  apply 
+  apply Set.mk_mem_prod <;> solve_by_elim [le_refl]
 
 Depends on / 依赖: Set.mk_mem_prod, cauchy_iff, dist_eq_norm, dist_mem_uniformity, le_refl, mem_atTop_sets, mem_map, mem_preimage, mk_mem_prod, solve_by_elim
 -/
@@ -144,7 +150,12 @@ theorem CauSeq.cauchySeq
   · exists N
     intro b hb
     exists b
-  · rintro ⟨a, b⟩ ⟨⟨
+  · rintro ⟨a, b⟩ ⟨⟨a', ⟨ha'1, ha'2⟩⟩, ⟨b', ⟨hb'1, hb'2⟩⟩⟩
+    dsimp at ha'1 ha'2 hb'1 hb'2
+    rw [← ha'2]; rw [← hb'2]
+    apply hεs
+    rw [dist_eq_norm]
+    apply hN <;> assumption
 
 中文:
 定理 CauSeq.cauchySeq
@@ -160,7 +171,12 @@ theorem CauSeq.cauchySeq
   · exists N
     intro b hb
     exists b
-  · rintro ⟨a, b⟩ ⟨⟨
+  · rintro ⟨a, b⟩ ⟨⟨a', ⟨ha'1, ha'2⟩⟩, ⟨b', ⟨hb'1, hb'2⟩⟩⟩
+    dsimp at ha'1 ha'2 hb'1 hb'2
+    rw [← ha'2]; rw [← hb'2]
+    apply hεs
+    rw [dist_eq_norm]
+    apply hN <;> assumption
 
 Depends on / 依赖: CauSeq, CauSeq.cauchy, cauchy_iff, dist_eq_norm, infer_instance, mem_atTop_sets, mem_map, mem_uniformity_dist
 -/

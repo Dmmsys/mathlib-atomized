@@ -210,7 +210,43 @@ theorem TFAE_exists_lt_isLittleO_pow
     fun x hx => ⟨(neg_lt_zero.2 (hx.1.trans_lt hx.2)).trans_le hx.1, hx.2⟩
   have B : Ioo 0 R subseteq Ioo (-R) R := Subset.trans Ioo_subset_Ico_self A
   -- First we prove that 1-4 are equivalent using 2 → 3 → 4, 1 → 3, and 2 → 1
-  tfae_have 1 -> 3 := fun
+  tfae_have 1 -> 3 := fun ⟨a, ha, H⟩ => ⟨a, ha, H.isBigO⟩
+  tfae_have 2 -> 1 := fun ⟨a, ha, H⟩ => ⟨a, B ha, H⟩
+  tfae_have 3 -> 2
+  | ⟨a, ha, H⟩ => by
+    rcases exists_between (abs_lt.2 ha) with ⟨b, hab, hbR⟩
+    exact ⟨b, ⟨(abs_nonneg a).trans_lt hab, hbR⟩,
+      H.trans_isLittleO (isLittleO_pow_pow_of_abs_lt_left (hab.trans_le (le_abs_self b)))⟩
+  tfae_have 2 -> 4 := fun ⟨a, ha, H⟩ => ⟨a, ha, H.isBigO⟩
+  tfae_have 4 -> 3 := fun ⟨a, ha, H⟩ => ⟨a, B ha, H⟩
+  -- Add 5 and 6 using 4 → 6 → 5 → 3
+  tfae_have 4 -> 6
+  | ⟨a, ha, H⟩ => by
+    rcases bound_of_isBigO_nat_atTop H with ⟨C, hC₀, hC⟩
+    refine ⟨a, ha, C, hC₀, fun n => ?_⟩
+    simpa only [Real.norm_eq_abs, abs_pow, abs_of_nonneg ha.1.le] using hC (pow_ne_zero n ha.1.ne')
+  tfae_have 6 -> 5 := fun ⟨a, ha, C, H₀, H⟩ => ⟨a, ha.2, C, Or.inl H₀, H⟩
+  tfae_have 5 -> 3
+  | ⟨a, ha, C, h₀, H⟩ => by
+    rcases sign_cases_of_C_mul_pow_nonneg fun n => (abs_nonneg _).trans (H n) with (rfl | ⟨hC₀, ha₀⟩)
+    · obtain rfl : f = 0 := by
+        ext n
+        simpa using H n
+      simp only [lt_irrefl, false_or] at h₀
+      exact ⟨0, ⟨neg_lt_zero.2 h₀, h₀⟩, isBigO_zero _ _⟩
+    exact ⟨a, A ⟨ha₀, ha⟩,
+isBigO_of_le' _ fun n => (H n).trans mul_le_mul_of_nonneg_left (le_abs_self _) hC₀.le⟩
+  -- Add 7 and 8 using 2 → 8 → 7 → 3
+  tfae_have 2 -> 8
+  | ⟨a, ha, H⟩ => by
+    refine ⟨a, ha, (H.def zero_lt_one).mono fun n hn => ?_⟩
+    rwa [Real.norm_eq_abs, Real.norm_eq_abs, one_mul, abs_pow, abs_of_pos ha.1] at hn
+  tfae_have 8 -> 7 := fun ⟨a, ha, H⟩ => ⟨a, ha.2, H⟩
+  tfae_have 7 -> 3
+  | ⟨a, ha, H⟩ => by
+    refine ⟨a, A ⟨?_, ha⟩, .of_norm_eventuallyLE H⟩
+    exact nonneg_of_eventually_pow_nonneg (H.mono fun n => (abs_nonneg _).trans)
+  tfae_finish
 
 中文:
 定理 TFAE_存在_lt_isLittleO_pow
@@ -220,7 +256,43 @@ theorem TFAE_exists_lt_isLittleO_pow
     fun x hx => ⟨(neg_lt_zero.2 (hx.1.trans_lt hx.2)).trans_le hx.1, hx.2⟩
   have B : Ioo 0 R subseteq Ioo (-R) R := Subset.trans Ioo_subset_Ico_self A
   -- First we prove that 1-4 are equivalent using 2 → 3 → 4, 1 → 3, and 2 → 1
-  tfae_have 1 -> 3 := fun
+  tfae_have 1 -> 3 := fun ⟨a, ha, H⟩ => ⟨a, ha, H.isBigO⟩
+  tfae_have 2 -> 1 := fun ⟨a, ha, H⟩ => ⟨a, B ha, H⟩
+  tfae_have 3 -> 2
+  | ⟨a, ha, H⟩ => by
+    rcases exists_between (abs_lt.2 ha) with ⟨b, hab, hbR⟩
+    exact ⟨b, ⟨(abs_nonneg a).trans_lt hab, hbR⟩,
+      H.trans_isLittleO (isLittleO_pow_pow_of_abs_lt_left (hab.trans_le (le_abs_self b)))⟩
+  tfae_have 2 -> 4 := fun ⟨a, ha, H⟩ => ⟨a, ha, H.isBigO⟩
+  tfae_have 4 -> 3 := fun ⟨a, ha, H⟩ => ⟨a, B ha, H⟩
+  -- Add 5 and 6 using 4 → 6 → 5 → 3
+  tfae_have 4 -> 6
+  | ⟨a, ha, H⟩ => by
+    rcases bound_of_isBigO_nat_atTop H with ⟨C, hC₀, hC⟩
+    refine ⟨a, ha, C, hC₀, fun n => ?_⟩
+    simpa only [Real.norm_eq_abs, abs_pow, abs_of_nonneg ha.1.le] using hC (pow_ne_zero n ha.1.ne')
+  tfae_have 6 -> 5 := fun ⟨a, ha, C, H₀, H⟩ => ⟨a, ha.2, C, Or.inl H₀, H⟩
+  tfae_have 5 -> 3
+  | ⟨a, ha, C, h₀, H⟩ => by
+    rcases sign_cases_of_C_mul_pow_nonneg fun n => (abs_nonneg _).trans (H n) with (rfl | ⟨hC₀, ha₀⟩)
+    · obtain rfl : f = 0 := by
+        ext n
+        simpa using H n
+      simp only [lt_irrefl, false_or] at h₀
+      exact ⟨0, ⟨neg_lt_zero.2 h₀, h₀⟩, isBigO_zero _ _⟩
+    exact ⟨a, A ⟨ha₀, ha⟩,
+isBigO_of_le' _ fun n => (H n).trans mul_le_mul_of_nonneg_left (le_abs_self _) hC₀.le⟩
+  -- Add 7 and 8 using 2 → 8 → 7 → 3
+  tfae_have 2 -> 8
+  | ⟨a, ha, H⟩ => by
+    refine ⟨a, ha, (H.def zero_lt_one).mono fun n hn => ?_⟩
+    rwa [Real.norm_eq_abs, Real.norm_eq_abs, one_mul, abs_pow, abs_of_pos ha.1] at hn
+  tfae_have 8 -> 7 := fun ⟨a, ha, H⟩ => ⟨a, ha.2, H⟩
+  tfae_have 7 -> 3
+  | ⟨a, ha, H⟩ => by
+    refine ⟨a, A ⟨?_, ha⟩, .of_norm_eventuallyLE H⟩
+    exact nonneg_of_eventually_pow_nonneg (H.mono fun n => (abs_nonneg _).trans)
+  tfae_finish
 
 Depends on / 依赖: Ioo_subset_Ico_self, Subset, Subset.trans, neg_lt_zero, subseteq, trans_le, trans_lt
 -/
@@ -284,7 +356,16 @@ theorem isLittleO_pow_const_const_pow_of_one_lt
     ((continuous_id.pow k).tendsto' (1 : Real) 1 (one_pow _)).mono_left inf_le_left
   obtain ⟨r' : Real, hr' : r' ^ k < r, h1 : 1 < r'⟩ :=
     ((this.eventually (gt_mem_nhds hr)).and self_mem_nhdsWithin).exists
-  have h0 : 0 <= r' := zero
+  have h0 : 0 <= r' := zero_le_one.trans h1.le
+  suffices (fun n => (n : R) ^ k : Nat -> R) =O[atTop] fun n : Nat => (r' ^ k) ^ n from
+    this.trans_isLittleO (isLittleO_pow_pow_of_lt_left (pow_nonneg h0 _) hr')
+  conv in (r' ^ _) ^ _ => rw [← pow_mul, mul_comm, pow_mul]
+  suffices forall n : Nat, ‖(n : R)‖ <= (r' - 1)⁻¹ * ‖(1 : R)‖ * ‖r' ^ n‖ from
+    (isBigO_of_le' _ this).pow _
+  intro n
+  rw [mul_right_comm]
+  refine n.norm_cast_le.trans (mul_le_mul_of_nonneg_right ?_ (norm_nonneg _))
+  simpa [_root_.div_eq_inv_mul, Real.norm_eq_abs, abs_of_nonneg h0] using n.cast_le_pow_div_sub h1
 
 中文:
 定理 isLittleO_pow_const_const_pow_of_one_lt
@@ -294,7 +375,16 @@ theorem isLittleO_pow_const_const_pow_of_one_lt
     ((continuous_id.pow k).tendsto' (1 : Real) 1 (one_pow _)).mono_left inf_le_left
   obtain ⟨r' : Real, hr' : r' ^ k < r, h1 : 1 < r'⟩ :=
     ((this.eventually (gt_mem_nhds hr)).and self_mem_nhdsWithin).exists
-  have h0 : 0 <= r' := zero
+  have h0 : 0 <= r' := zero_le_one.trans h1.le
+  suffices (fun n => (n : R) ^ k : Nat -> R) =O[atTop] fun n : Nat => (r' ^ k) ^ n from
+    this.trans_isLittleO (isLittleO_pow_pow_of_lt_left (pow_nonneg h0 _) hr')
+  conv in (r' ^ _) ^ _ => rw [← pow_mul, mul_comm, pow_mul]
+  suffices forall n : Nat, ‖(n : R)‖ <= (r' - 1)⁻¹ * ‖(1 : R)‖ * ‖r' ^ n‖ from
+    (isBigO_of_le' _ this).pow _
+  intro n
+  rw [mul_right_comm]
+  refine n.norm_cast_le.trans (mul_le_mul_of_nonneg_right ?_ (norm_nonneg _))
+  simpa [_root_.div_eq_inv_mul, Real.norm_eq_abs, abs_of_nonneg h0] using n.cast_le_pow_div_sub h1
 
 Depends on / 依赖: Tendsto, continuous_id, continuous_id.pow, eventually, gt_mem_nhds, h1.le, inf_le_left, isLittleO_pow_pow_of_lt_left, mono_left, one_pow, pow_, pow_nonneg, self_mem_nhdsWithin, tendsto, this.eventually, this.trans_isLittleO, trans_isLittleO, zero_le_one, zero_le_one.trans
 -/
@@ -348,7 +438,10 @@ theorem isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt
     simp [zero_pow (one_le_iff_ne_zero.1 hn), h0]
   rw [← Ne]; rw [← norm_pos_iff] at h0
   have A : (fun n => (n : R) ^ k : Nat -> R) =o[atTop] fun n => (r₂ / ‖r₁‖) ^ n :=
-    
+    isLittleO_pow_const_const_pow_of_one_lt k ((one_lt_div h0).2 h)
+  suffices (fun n => r₁ ^ n) =O[atTop] fun n => ‖r₁‖ ^ n by
+    simpa [div_mul_cancel₀ _ (pow_pos h0 _).ne', div_pow] using A.mul_isBigO this
+exact .of_norm_eventuallyLE eventually_norm_pow_le r₁
 
 中文:
 定理 isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt
@@ -359,7 +452,10 @@ theorem isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt
     simp [zero_pow (one_le_iff_ne_zero.1 hn), h0]
   rw [← Ne]; rw [← norm_pos_iff] at h0
   have A : (fun n => (n : R) ^ k : Nat -> R) =o[atTop] fun n => (r₂ / ‖r₁‖) ^ n :=
-    
+    isLittleO_pow_const_const_pow_of_one_lt k ((one_lt_div h0).2 h)
+  suffices (fun n => r₁ ^ n) =O[atTop] fun n => ‖r₁‖ ^ n by
+    simpa [div_mul_cancel₀ _ (pow_pos h0 _).ne', div_pow] using A.mul_isBigO this
+exact .of_norm_eventuallyLE eventually_norm_pow_le r₁
 
 Depends on / 依赖: A.mul_isBigO, EventuallyEq, EventuallyEq.rfl, div_pow, isLittleO_pow_const_const_pow_of_one_lt, isLittleO_zero, mem_atTop_sets, mul_isBigO, norm_pos_iff, of_norm_e, one_le_iff_ne_zero, one_lt_div, pow_pos, zero_pow
 -/
@@ -407,7 +503,7 @@ theorem tendsto_pow_const_mul_const_pow_of_abs_lt_one
       (mem_atTop_sets.2 ⟨1, fun n hn => by simp [zero_lt_one.trans_le hn |>.ne', h0]⟩)
   have hr' : 1 < |r|⁻¹ := (one_lt_inv₀ (abs_pos.2 h0)).2 hr
   rw [tendsto_zero_iff_norm_tendsto_zero]
-  simpa [div_eq_mul_inv] using tendsto_pow_const_d
+  simpa [div_eq_mul_inv] using tendsto_pow_const_div_const_pow_of_one_lt k hr'
 
 中文:
 定理 tendsto_pow_const_mul_const_pow_of_abs_lt_one
@@ -418,7 +514,7 @@ theorem tendsto_pow_const_mul_const_pow_of_abs_lt_one
       (mem_atTop_sets.2 ⟨1, fun n hn => by simp [zero_lt_one.trans_le hn |>.ne', h0]⟩)
   have hr' : 1 < |r|⁻¹ := (one_lt_inv₀ (abs_pos.2 h0)).2 hr
   rw [tendsto_zero_iff_norm_tendsto_zero]
-  simpa [div_eq_mul_inv] using tendsto_pow_const_d
+  simpa [div_eq_mul_inv] using tendsto_pow_const_div_const_pow_of_one_lt k hr'
 
 Depends on / 依赖: abs_pos, div_eq_mul_inv, mem_atTop_sets, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_pow_const_div_const_pow_of_one_lt, tendsto_zero_iff_norm_tendsto_zero, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -571,7 +667,10 @@ lemma tendsto_pow_atTop_nhds_zero_iff_norm_lt_one
   refine ⟨?_, tendsto_pow_atTop_nhds_zero_of_norm_lt_one⟩
   rw [← abs_of_nonneg (norm_nonneg _)]; rw [← tendsto_pow_atTop_nhds_zero_iff]; rw [tendsto_zero_iff_norm_tendsto_zero]
   apply Tendsto.congr'
-  filter
+  filter_upwards [eventually_ge_atTop 1] with n hn
+  induction n, hn using Nat.le_induction with
+  | base => simp
+  | succ n hn IH => simp [pow_succ, IH]
 
 中文:
 引理 tendsto_pow_atTop_nhds_zero_iff_norm_lt_one
@@ -581,7 +680,10 @@ lemma tendsto_pow_atTop_nhds_zero_iff_norm_lt_one
   refine ⟨?_, tendsto_pow_atTop_nhds_zero_of_norm_lt_one⟩
   rw [← abs_of_nonneg (norm_nonneg _)]; rw [← tendsto_pow_atTop_nhds_zero_iff]; rw [tendsto_zero_iff_norm_tendsto_zero]
   apply Tendsto.congr'
-  filter
+  filter_upwards [eventually_ge_atTop 1] with n hn
+  induction n, hn using Nat.le_induction with
+  | base => simp
+  | succ n hn IH => simp [pow_succ, IH]
 -/
 lemma tendsto_pow_atTop_nhds_zero_iff_norm_lt_one {R : Type*} [SeminormedRing R] [NormMulClass R]
     {x : R} : Tendsto (fun n : Nat => x ^ n) atTop (𝓝 0) ↔ ‖x‖ < 1 := by
@@ -608,7 +710,9 @@ theorem AbsoluteValue.tendsto_div_one_add_pow_nhds_one
   apply one_div_one (G := S) ▸ Tendsto.div tendsto_const_nhds _ one_ne_zero
   have h_add := (tendsto_pow_atTop_nhds_zero_of_lt_one (v.nonneg _) ha).const_add 1
   have h_sub := (tendsto_pow_atTop_nhds_zero_of_lt_one (v.nonneg _) ha).const_sub 1
-  exact tendsto_of_
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le (by simpa using h_sub) (by simpa using h_add)
+    (fun n => le_trans (by simp) (v.le_add _ _))
+    (fun n => le_trans (v.add_le _ _) (by simp))
 
 中文:
 定理 绝对值.tendsto_div_one_add_pow_nhds_one
@@ -618,7 +722,9 @@ theorem AbsoluteValue.tendsto_div_one_add_pow_nhds_one
   apply one_div_one (G := S) ▸ Tendsto.div tendsto_const_nhds _ one_ne_zero
   have h_add := (tendsto_pow_atTop_nhds_zero_of_lt_one (v.nonneg _) ha).const_add 1
   have h_sub := (tendsto_pow_atTop_nhds_zero_of_lt_one (v.nonneg _) ha).const_sub 1
-  exact tendsto_of_
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le (by simpa using h_sub) (by simpa using h_add)
+    (fun n => le_trans (by simp) (v.le_add _ _))
+    (fun n => le_trans (v.add_le _ _) (by simp))
 
 Depends on / 依赖: Tendsto, Tendsto.div, add_le, const_add, const_sub, h_add, h_sub, le_add, le_trans, map_one, nonneg, one_div_one, one_ne_zero, simp_rw, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_pow_atTop_nhds_zero_of_lt_one, v.add_le, v.le_add, v.map_one
 -/
@@ -642,7 +748,7 @@ theorem AbsoluteValue.tendsto_div_one_add_pow_nhds_zero
   simp_rw [div_eq_mul_inv, one_mul, map_inv₀, fun n => add_comm 1 (a ^ n)]
   refine (tendsto_atTop_mono (fun n => v.le_add _ _) ?_).inv_tendsto_atTop
   simpa using (tendsto_atTop_add_right_of_le _ _ (tendsto_pow_atTop_atTop_of_one_lt ha)
-    (fun _ => le_rfl)).congr fun n => (sub_eq_add_neg (v a 
+    (fun _ => le_rfl)).congr fun n => (sub_eq_add_neg (v a ^ n) 1).symm
 
 中文:
 定理 绝对值.tendsto_div_one_add_pow_nhds_zero
@@ -651,7 +757,7 @@ theorem AbsoluteValue.tendsto_div_one_add_pow_nhds_zero
   simp_rw [div_eq_mul_inv, one_mul, map_inv₀, fun n => add_comm 1 (a ^ n)]
   refine (tendsto_atTop_mono (fun n => v.le_add _ _) ?_).inv_tendsto_atTop
   simpa using (tendsto_atTop_add_right_of_le _ _ (tendsto_pow_atTop_atTop_of_one_lt ha)
-    (fun _ => le_rfl)).congr fun n => (sub_eq_add_neg (v a 
+    (fun _ => le_rfl)).congr fun n => (sub_eq_add_neg (v a ^ n) 1).symm
 
 Depends on / 依赖: add_comm, div_eq_mul_inv, inv_tendsto_atTop, le_add, le_rfl, one_mul, simp_rw, sub_eq_add_neg, tendsto_atTop_add_right_of_le, tendsto_atTop_mono, tendsto_pow_atTop_atTop_of_one_lt, v.le_add
 -/
@@ -726,7 +832,14 @@ theorem tsum_geometric_le_of_norm_lt_one
     refine le_trans (norm_add_le _ _) ?_
     have : ‖∑' b : Nat, (fun n => x ^ (n + 1)) b‖ <= (1 - ‖x‖)⁻¹ - 1 := by
       refine tsum_of_norm_bounded ?_ fun b => norm_pow_le' _ (Nat.succ_pos b)
-
+      convert! (hasSum_nat_add_iff' 1).mpr (hasSum_geometric_of_lt_one (norm_nonneg x) h)
+      simp
+    linarith
+  · simp only [tsum_eq_zero_of_not_summable hx, norm_zero]
+    nontriviality R
+    have : 1 <= ‖(1 : R)‖ := one_le_norm_one R
+    have : 0 <= (1 - ‖x‖)⁻¹ := inv_nonneg.2 (by linarith)
+    linarith
 
 中文:
 定理 tsum_geometric_le_of_norm_lt_one
@@ -738,7 +851,14 @@ theorem tsum_geometric_le_of_norm_lt_one
     refine le_trans (norm_add_le _ _) ?_
     have : ‖∑' b : Nat, (fun n => x ^ (n + 1)) b‖ <= (1 - ‖x‖)⁻¹ - 1 := by
       refine tsum_of_norm_bounded ?_ fun b => norm_pow_le' _ (Nat.succ_pos b)
-
+      convert! (hasSum_nat_add_iff' 1).mpr (hasSum_geometric_of_lt_one (norm_nonneg x) h)
+      simp
+    linarith
+  · simp only [tsum_eq_zero_of_not_summable hx, norm_zero]
+    nontriviality R
+    have : 1 <= ‖(1 : R)‖ := one_le_norm_one R
+    have : 0 <= (1 - ‖x‖)⁻¹ := inv_nonneg.2 (by linarith)
+    linarith
 
 Depends on / 依赖: Nat.succ_pos, Summable, _root_, _root_.pow_zero, convert, hasSum_geometric_of_lt_one, hasSum_nat_add_iff, hx.tsum_eq_zero_add, le_trans, nontriviality, norm_add_le, norm_nonneg, norm_pow_le, norm_zero, one_le_norm_one, pow_zero, succ_pos, tsum_eq_zero_add, tsum_eq_zero_of_not_summable, tsum_of_norm_bounded
 -/
@@ -984,6 +1104,8 @@ theorem hasSum_geometric_of_norm_lt_one
   have A : Tendsto (fun n => (ξ ^ n - 1) * (ξ - 1)⁻¹) atTop (𝓝 ((0 - 1) * (ξ - 1)⁻¹)) :=
     ((tendsto_pow_atTop_nhds_zero_of_norm_lt_one h).sub tendsto_const_nhds).mul tendsto_const_nhds
   rw [hasSum_iff_tendsto_nat_of_summable_norm]
+  · simpa [geom_sum_eq, xi_ne_one, neg_inv, div_eq_mul_inv] using A
+  · simp [norm_pow, summable_geometric_of_lt_one (norm_nonneg _) h]
 
 中文:
 定理 hasSum_geometric_of_norm_lt_one
@@ -996,6 +1118,8 @@ theorem hasSum_geometric_of_norm_lt_one
   have A : Tendsto (fun n => (ξ ^ n - 1) * (ξ - 1)⁻¹) atTop (𝓝 ((0 - 1) * (ξ - 1)⁻¹)) :=
     ((tendsto_pow_atTop_nhds_zero_of_norm_lt_one h).sub tendsto_const_nhds).mul tendsto_const_nhds
   rw [hasSum_iff_tendsto_nat_of_summable_norm]
+  · simpa [geom_sum_eq, xi_ne_one, neg_inv, div_eq_mul_inv] using A
+  · simp [norm_pow, summable_geometric_of_lt_one (norm_nonneg _) h]
 
 Depends on / 依赖: Tendsto, contrapose, div_eq_mul_inv, geom_sum_eq, hasSum_iff_tendsto_nat_of_summable_norm, neg_inv, norm_nonneg, norm_pow, summable_geometric_of_lt_one, tendsto_const_nhds, tendsto_pow_atTop_nhds_zero_of_norm_lt_one, xi_ne_one
 -/
@@ -1121,7 +1245,7 @@ theorem summable_geometric_iff_norm_lt_one
     (h.tendsto_cofinite_zero.eventually (ball_mem_nhds _ zero_lt_one)).exists
   simp only [norm_pow, dist_zero_right] at hk
   rw [← one_pow k] at hk
-  exact lt_of_pow_lt_pow_left₀ _ zero_le_on
+  exact lt_of_pow_lt_pow_left₀ _ zero_le_one hk
 
 中文:
 定理 summable_geometric_iff_norm_lt_one
@@ -1132,7 +1256,7 @@ theorem summable_geometric_iff_norm_lt_one
     (h.tendsto_cofinite_zero.eventually (ball_mem_nhds _ zero_lt_one)).exists
   simp only [norm_pow, dist_zero_right] at hk
   rw [← one_pow k] at hk
-  exact lt_of_pow_lt_pow_left₀ _ zero_le_on
+  exact lt_of_pow_lt_pow_left₀ _ zero_le_one hk
 
 Depends on / 依赖: ball_mem_nhds, dist_zero_right, eventually, h.tendsto_cofinite_zero.eventually, norm_pow, one_pow, summable_geometric_of_norm_lt_one, tendsto_cofinite_zero, zero_le_one, zero_lt_one
 -/
@@ -1163,7 +1287,17 @@ theorem summable_norm_mul_geometric_of_norm_lt_one
   calc
   fun n => ‖↑(u n) * r ^ n‖
   _ =O[atTop] fun n => u n * ‖r‖ ^ n := by
-      apply (IsBigOWith.of_bound (c := ‖(1 : R)‖) 
+      apply (IsBigOWith.of_bound (c := ‖(1 : R)‖) ?_).isBigO
+      filter_upwards [eventually_norm_pow_le r] with n hn
+      simp only [norm_mul, Real.norm_eq_abs, abs_cast, norm_pow, abs_norm]
+      apply (norm_mul_le _ _).trans
+      have : ‖(u n : R)‖ * ‖r ^ n‖ <= (u n * ‖(1 : R)‖) * ‖r‖ ^ n := by
+        gcongr; exact norm_cast_le (u n)
+      exact this.trans (le_of_eq (by ring))
+  _ =O[atTop] fun n => ↑(n ^ k) * ‖r‖ ^ n := hu.mul (isBigO_refl _ _)
+  _ =O[atTop] fun n => r' ^ n := by
+      simp only [cast_pow]
+      exact (isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt k hrr').isBigO
 
 中文:
 定理 summable_norm_mul_geometric_of_norm_lt_one
@@ -1175,7 +1309,17 @@ theorem summable_norm_mul_geometric_of_norm_lt_one
   calc
   fun n => ‖↑(u n) * r ^ n‖
   _ =O[atTop] fun n => u n * ‖r‖ ^ n := by
-      apply (IsBigOWith.of_bound (c := ‖(1 : R)‖) 
+      apply (IsBigOWith.of_bound (c := ‖(1 : R)‖) ?_).isBigO
+      filter_upwards [eventually_norm_pow_le r] with n hn
+      simp only [norm_mul, Real.norm_eq_abs, abs_cast, norm_pow, abs_norm]
+      apply (norm_mul_le _ _).trans
+      have : ‖(u n : R)‖ * ‖r ^ n‖ <= (u n * ‖(1 : R)‖) * ‖r‖ ^ n := by
+        gcongr; exact norm_cast_le (u n)
+      exact this.trans (le_of_eq (by ring))
+  _ =O[atTop] fun n => ↑(n ^ k) * ‖r‖ ^ n := hu.mul (isBigO_refl _ _)
+  _ =O[atTop] fun n => r' ^ n := by
+      simp only [cast_pow]
+      exact (isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt k hrr').isBigO
 
 Depends on / 依赖: IsBigOWith, IsBigOWith.of_bound, Real.norm_eq_abs, abs_cast, abs_norm, eventually_norm_pow_le, exists_between, filter_upwards, isBigO, norm_eq_abs, norm_mul, norm_mul_le, norm_nonneg, norm_norm, norm_pow, of_bound, summable_geometric_of_lt_one, summable_of_isBigO_nat
 -/
@@ -1262,7 +1406,24 @@ lemma hasSum_choose_mul_geometric_of_norm_lt_one'
       have I1 : Summable (fun (n : Nat) => ‖(n + k).choose k * r ^ n‖) := by
         apply summable_norm_mul_geometric_of_norm_lt_one (k := k) hr
         apply isBigO_iff.2 ⟨2 ^ k, ?_⟩
-        filter_upwar
+        filter_upwards [Ioi_mem_atTop k] with n (hn : k < n)
+        simp only [Real.norm_eq_abs, abs_cast, cast_pow, norm_pow]
+        norm_cast
+        calc (n + k).choose k
+          _ <= (2 * n).choose k := choose_le_choose k (by lia)
+          _ <= (2 * n) ^ k := Nat.choose_le_pow _ _
+          _ = 2 ^ k * n ^ k := Nat.mul_pow 2 n k
+      convert!
+        hasSum_sum_range_mul_of_summable_norm' I1 ih.summable
+          (summable_norm_geometric_of_norm_lt_one hr) (summable_geometric_of_norm_lt_one hr) with
+        n
+      · have : ∑ i in Finset.range (n + 1), ↑((i + k).choose k) * r ^ i * r ^ (n - i) =
+            ∑ i in Finset.range (n + 1), ↑((i + k).choose k) * r ^ n := by
+          apply Finset.sum_congr rfl (fun i hi => ?_)
+          simp only [Finset.mem_range] at hi
+          rw [mul_assoc]; rw [← pow_add]; rw [show i + (n - i) = n by lia]
+        simp [this, ← sum_mul, ← Nat.cast_sum, sum_range_add_choose n k, add_assoc]
+      · rw [ih.tsum_eq, (hasSum_geom_series_inverse r hr).tsum_eq, pow_succ]
 
 中文:
 引理 hasSum_choose_mul_geometric_of_norm_lt_one'
@@ -1273,7 +1434,24 @@ lemma hasSum_choose_mul_geometric_of_norm_lt_one'
       have I1 : Summable (fun (n : Nat) => ‖(n + k).choose k * r ^ n‖) := by
         apply summable_norm_mul_geometric_of_norm_lt_one (k := k) hr
         apply isBigO_iff.2 ⟨2 ^ k, ?_⟩
-        filter_upwar
+        filter_upwards [Ioi_mem_atTop k] with n (hn : k < n)
+        simp only [Real.norm_eq_abs, abs_cast, cast_pow, norm_pow]
+        norm_cast
+        calc (n + k).choose k
+          _ <= (2 * n).choose k := choose_le_choose k (by lia)
+          _ <= (2 * n) ^ k := Nat.choose_le_pow _ _
+          _ = 2 ^ k * n ^ k := Nat.mul_pow 2 n k
+      convert!
+        hasSum_sum_range_mul_of_summable_norm' I1 ih.summable
+          (summable_norm_geometric_of_norm_lt_one hr) (summable_geometric_of_norm_lt_one hr) with
+        n
+      · have : ∑ i in Finset.range (n + 1), ↑((i + k).choose k) * r ^ i * r ^ (n - i) =
+            ∑ i in Finset.range (n + 1), ↑((i + k).choose k) * r ^ n := by
+          apply Finset.sum_congr rfl (fun i hi => ?_)
+          simp only [Finset.mem_range] at hi
+          rw [mul_assoc]; rw [← pow_add]; rw [show i + (n - i) = n by lia]
+        simp [this, ← sum_mul, ← Nat.cast_sum, sum_range_add_choose n k, add_assoc]
+      · rw [ih.tsum_eq, (hasSum_geom_series_inverse r hr).tsum_eq, pow_succ]
 
 Depends on / 依赖: Ioi_mem_atTop, Nat.choose_le_pow, Real.norm_eq_abs, Summable, abs_cast, cast_pow, choose_le_choose, choose_le_pow, filter_upwards, hasSum_geom_series_inverse, isBigO_iff, norm_eq_abs, norm_pow, summable_norm_mul_geometric_of_norm_lt_one
 -/
@@ -1424,7 +1602,25 @@ theorem summable_pow_mul_geometric_of_norm_lt_one
   obtain ⟨a, ha⟩ : exists (a : Nat -> Nat), forall n, (n + k).descFactorial k
       = n ^ k + ∑ i in range k, a i * n ^ i := by
     let P : Polynomial Nat := (ascPochhammer Nat k).comp (Polynomial.X + C 1)
-    refine ⟨fun i => P.coeff i, fun n => 
+    refine ⟨fun i => P.coeff i, fun n => ?_⟩
+    have mP : Monic P := Monic.comp_X_add_C (monic_ascPochhammer Nat k) _
+    have dP : P.natDegree = k := by
+      simp only [P, natDegree_comp, ascPochhammer_natDegree, mul_one, natDegree_X_add_C]
+    have A : (n + k).descFactorial k = P.eval n := by
+      have : n + 1 + k - 1 = n + k := by lia
+      simp [P, ascPochhammer_nat_eq_descFactorial, this]
+    conv_lhs => rw [A, mP.as_sum, dP]
+    simp [eval_finsetSum]
+  have : Summable (fun n => (n + k).descFactorial k * r ^ n
+      - ∑ i in range k, a i * n ^ (i : Nat) * r ^ n) := by
+    apply (summable_descFactorial_mul_geometric_of_norm_lt_one k hr).sub
+    apply summable_sum (fun i hi => ?_)
+    simp_rw [mul_assoc]
+    simp only [Finset.mem_range] at hi
+    exact (hk _ hi).mul_left _
+  convert! this using 1
+  ext n
+  simp [ha n, add_mul, sum_mul]
 
 中文:
 定理 summable_pow_mul_geometric_of_norm_lt_one
@@ -1434,7 +1630,25 @@ theorem summable_pow_mul_geometric_of_norm_lt_one
   obtain ⟨a, ha⟩ : exists (a : Nat -> Nat), forall n, (n + k).descFactorial k
       = n ^ k + ∑ i in range k, a i * n ^ i := by
     let P : Polynomial Nat := (ascPochhammer Nat k).comp (Polynomial.X + C 1)
-    refine ⟨fun i => P.coeff i, fun n => 
+    refine ⟨fun i => P.coeff i, fun n => ?_⟩
+    have mP : Monic P := Monic.comp_X_add_C (monic_ascPochhammer Nat k) _
+    have dP : P.natDegree = k := by
+      simp only [P, natDegree_comp, ascPochhammer_natDegree, mul_one, natDegree_X_add_C]
+    have A : (n + k).descFactorial k = P.eval n := by
+      have : n + 1 + k - 1 = n + k := by lia
+      simp [P, ascPochhammer_nat_eq_descFactorial, this]
+    conv_lhs => rw [A, mP.as_sum, dP]
+    simp [eval_finsetSum]
+  have : Summable (fun n => (n + k).descFactorial k * r ^ n
+      - ∑ i in range k, a i * n ^ (i : Nat) * r ^ n) := by
+    apply (summable_descFactorial_mul_geometric_of_norm_lt_one k hr).sub
+    apply summable_sum (fun i hi => ?_)
+    simp_rw [mul_assoc]
+    simp only [Finset.mem_range] at hi
+    exact (hk _ hi).mul_left _
+  convert! this using 1
+  ext n
+  simp [ha n, add_mul, sum_mul]
 
 Depends on / 依赖: Monic.comp_X_add_C, Nat.strong_induction_on, P.coeff, P.natDegree, Polynomial, Polynomial.X, ascPochhammer, ascPochhammer_natDegree, comp_X_add_C, descFactoria, descFactorial, monic_ascPochhammer, mul_one, natDegree, natDegree_X_add_C, natDegree_comp, strong_induction_on
 -/
@@ -1476,7 +1690,12 @@ theorem hasSum_coe_mul_geometric_of_norm_lt_one'
   have B : HasSum (fun (n : Nat) => x ^ n) ((1 - x)⁻¹ʳ) := hasSum_geom_series_inverse x h
   convert! A.sub B using 1
   · ext n
-    simp [add_mul
+    simp [add_mul]
+  · symm
+    calc (1 - x)⁻¹ʳ ^ 2 - (1 - x)⁻¹ʳ
+    _ = (1 - x)⁻¹ʳ ^ 2 - ((1 - x) * (1 - x)⁻¹ʳ) * (1 - x)⁻¹ʳ := by
+      simp [Ring.mul_inverse_cancel (1 - x) (isUnit_one_sub_of_norm_lt_one h)]
+    _ = x * (1 - x)⁻¹ʳ ^ 2 := by noncomm_ring
 
 中文:
 定理 hasSum_coe_mul_geometric_of_norm_lt_one'
@@ -1487,7 +1706,12 @@ theorem hasSum_coe_mul_geometric_of_norm_lt_one'
   have B : HasSum (fun (n : Nat) => x ^ n) ((1 - x)⁻¹ʳ) := hasSum_geom_series_inverse x h
   convert! A.sub B using 1
   · ext n
-    simp [add_mul
+    simp [add_mul]
+  · symm
+    calc (1 - x)⁻¹ʳ ^ 2 - (1 - x)⁻¹ʳ
+    _ = (1 - x)⁻¹ʳ ^ 2 - ((1 - x) * (1 - x)⁻¹ʳ) * (1 - x)⁻¹ʳ := by
+      simp [Ring.mul_inverse_cancel (1 - x) (isUnit_one_sub_of_norm_lt_one h)]
+    _ = x * (1 - x)⁻¹ʳ ^ 2 := by noncomm_ring
 
 Depends on / 依赖: A.sub, HasSum, Ring.mul_inverse_cancel, add_mul, convert, hasSum_choose_mul_geometric_of_norm_lt_one, hasSum_geom_series_inverse, isUnit_one_sub_of_norm_lt_one, mul_inverse_cancel, noncomm_ring
 -/
@@ -1753,7 +1977,16 @@ theorem NormedAddCommGroup.cauchy_series_of_le_geometric''
   have : forall n >= N, u n = v n := by
     intro n hn
     simp [v, if_neg (not_lt.mpr hn)]
-  apply cauchySeq_sum_of_even
+  apply cauchySeq_sum_of_eventually_eq this
+    (NormedAddCommGroup.cauchy_series_of_le_geometric' hr₁ _)
+  · exact C
+  intro n
+  simp only [v]
+  split_ifs with H
+  · rw [norm_zero]
+    exact mul_nonneg hC (pow_nonneg hr₀.le _)
+  · push Not at H
+    exact h _ H
 
 中文:
 定理 赋范交换加群.cauchy_series_of_le_geometric''
@@ -1765,7 +1998,16 @@ theorem NormedAddCommGroup.cauchy_series_of_le_geometric''
   have : forall n >= N, u n = v n := by
     intro n hn
     simp [v, if_neg (not_lt.mpr hn)]
-  apply cauchySeq_sum_of_even
+  apply cauchySeq_sum_of_eventually_eq this
+    (NormedAddCommGroup.cauchy_series_of_le_geometric' hr₁ _)
+  · exact C
+  intro n
+  simp only [v]
+  split_ifs with H
+  · rw [norm_zero]
+    exact mul_nonneg hC (pow_nonneg hr₀.le _)
+  · push Not at H
+    exact h _ H
 
 Depends on / 依赖: NormedAddCommGroup, NormedAddCommGroup.cauchy_series_of_le_geometric, cauchySeq_sum_of_eventually_eq, cauchy_series_of_le_geometric, if_neg, le_refl, mul_nonneg, mul_nonneg_iff_of_pos_right, norm_nonneg, norm_zero, not_lt, not_lt.mpr, pow_nonneg, pow_pos, split_ifs
 -/
@@ -1832,7 +2074,14 @@ theorem summable_of_ratio_norm_eventually_le
     rw [← @summable_nat_add_iff α _ _ _ _ N]
     refine .of_norm_bounded (g := fun n => ‖f N‖ * r ^ n)
       (Summable.mul_left _ <| summable_geometric_of_lt_one hr₀ hr₁) fun n => ?_
-    conv_rhs => rw [mul_comm, ← 
+    conv_rhs => rw [mul_comm, ← zero_add N]
+    refine le_geom (u := fun n => ‖f (n + N)‖) hr₀ n fun i _ => ?_
+    convert! hN (i + N) (N.le_add_left i) using 3
+    ac_rfl
+  · refine .of_norm_bounded_eventually_nat summable_zero ?_
+    filter_upwards [h] with _ hn
+    by_contra! h
+    exact not_lt.mpr (norm_nonneg _) (lt_of_le_of_lt hn <| mul_neg_of_neg_of_pos hr₀ h)
 
 中文:
 定理 summable_of_ratio_norm_eventually_le
@@ -1844,7 +2093,14 @@ theorem summable_of_ratio_norm_eventually_le
     rw [← @summable_nat_add_iff α _ _ _ _ N]
     refine .of_norm_bounded (g := fun n => ‖f N‖ * r ^ n)
       (Summable.mul_left _ <| summable_geometric_of_lt_one hr₀ hr₁) fun n => ?_
-    conv_rhs => rw [mul_comm, ← 
+    conv_rhs => rw [mul_comm, ← zero_add N]
+    refine le_geom (u := fun n => ‖f (n + N)‖) hr₀ n fun i _ => ?_
+    convert! hN (i + N) (N.le_add_left i) using 3
+    ac_rfl
+  · refine .of_norm_bounded_eventually_nat summable_zero ?_
+    filter_upwards [h] with _ hn
+    by_contra! h
+    exact not_lt.mpr (norm_nonneg _) (lt_of_le_of_lt hn <| mul_neg_of_neg_of_pos hr₀ h)
 
 Depends on / 依赖: N.le_add_left, Summable, Summable.mul_left, conv_rhs, convert, eventually_atTop, filter_upwards, le_add_left, le_geom, mul_comm, mul_left, of_norm_bounded, of_norm_bounded_eventually_nat, summable_geometric_of_lt_one, summable_nat_add_iff, summable_zero, zero_add
 -/
@@ -1911,7 +2167,13 @@ theorem not_summable_of_ratio_norm_eventually_ge
   rw [← @summable_nat_add_iff α _ _ _ _ N]
   refine mt Summable.tendsto_atTop_zero
     fun h' => not_tendsto_atTop_of_tendsto_nhds (tendsto_norm_zero.comp h') ?_
-  conv
+  convert! tendsto_atTop_of_geom_le _ hr _
+  · refine lt_of_le_of_ne (norm_nonneg _) ?_
+    intro h''
+    specialize hN₀ N hNN₀
+    simp only [comp_apply, zero_add] at h''
+    exact hN h''.symm
+  · grind
 
 中文:
 定理 not_summable_of_ratio_norm_eventually_ge
@@ -1924,7 +2186,13 @@ theorem not_summable_of_ratio_norm_eventually_ge
   rw [← @summable_nat_add_iff α _ _ _ _ N]
   refine mt Summable.tendsto_atTop_zero
     fun h' => not_tendsto_atTop_of_tendsto_nhds (tendsto_norm_zero.comp h') ?_
-  conv
+  convert! tendsto_atTop_of_geom_le _ hr _
+  · refine lt_of_le_of_ne (norm_nonneg _) ?_
+    intro h''
+    specialize hN₀ N hNN₀
+    simp only [comp_apply, zero_add] at h''
+    exact hN h''.symm
+  · grind
 
 Depends on / 依赖: Summable, Summable.tendsto_atTop_zero, comp_apply, convert, eventually_atTop, frequently_atTop, lt_of_le_of_ne, norm_nonneg, not_tendsto_atTop_of_tendsto_nhds, specialize, summable_nat_add_iff, tendsto_atTop_of_geom_le, tendsto_atTop_zero, tendsto_norm_zero, tendsto_norm_zero.comp, zero_add
 -/
@@ -1959,7 +2227,8 @@ theorem not_summable_of_ratio_test_tendsto_gt_one
     linarith
   rcases exists_between hl with ⟨r, hr₀, hr₁⟩
   refine not_summable_of_ratio_norm_eventually_ge hr₀ key.frequently ?_
-  filter_upwards 
+  filter_upwards [h.eventually_const_le hr₁, key] with _ _ h₁
+  rwa [← le_div_iff₀ (lt_of_le_of_ne (norm_nonneg _) h₁.symm)]
 
 中文:
 定理 not_summable_of_ratio_test_tendsto_gt_one
@@ -1971,7 +2240,8 @@ theorem not_summable_of_ratio_test_tendsto_gt_one
     linarith
   rcases exists_between hl with ⟨r, hr₀, hr₁⟩
   refine not_summable_of_ratio_norm_eventually_ge hr₀ key.frequently ?_
-  filter_upwards 
+  filter_upwards [h.eventually_const_le hr₁, key] with _ _ h₁
+  rwa [← le_div_iff₀ (lt_of_le_of_ne (norm_nonneg _) h₁.symm)]
 
 Depends on / 依赖: _root_, _root_.div_zero, div_zero, eventually_const_le, exists_between, filter_upwards, frequently, h.eventually_const_le, key.frequently, lt_of_le_of_ne, norm_nonneg, not_summable_of_ratio_norm_eventually_ge
 -/
@@ -2003,7 +2273,10 @@ theorem summable_powerSeries_of_norm_lt
   rw [summable_iff_cauchySeq_finset]
   refine cauchySeq_finset_of_geometric_bound (r := ‖z‖ / ‖w‖) (C := C) ((div_lt_one hw).mpr hz)
     (fun n => ?_)
-  rw [norm_mul]; rw [norm_pow]; rw [div_pow];
+  rw [norm_mul]; rw [norm_pow]; rw [div_pow]; rw [← mul_comm_div]
+  conv at hC => enter [n]; rw [norm_mul, norm_pow, ← _root_.le_div_iff₀ (by positivity)]
+  gcongr
+  exact hC n
 
 中文:
 定理 summable_powerSeries_of_norm_lt
@@ -2014,7 +2287,10 @@ theorem summable_powerSeries_of_norm_lt
   rw [summable_iff_cauchySeq_finset]
   refine cauchySeq_finset_of_geometric_bound (r := ‖z‖ / ‖w‖) (C := C) ((div_lt_one hw).mpr hz)
     (fun n => ?_)
-  rw [norm_mul]; rw [norm_pow]; rw [div_pow];
+  rw [norm_mul]; rw [norm_pow]; rw [div_pow]; rw [← mul_comm_div]
+  conv at hC => enter [n]; rw [norm_mul, norm_pow, ← _root_.le_div_iff₀ (by positivity)]
+  gcongr
+  exact hC n
 
 Depends on / 依赖: _root_, _root_.le_div_iff, cauchySeq_finset_of_geometric_bound, div_lt_one, div_pow, exists_norm_le_of_cauchySeq, mul_comm_div, norm_mul, norm_nonneg, norm_pow, summable_iff_cauchySeq_finset, trans_lt
 -/
@@ -2073,7 +2349,15 @@ theorem Monotone.cauchySeq_series_mul_of_tendsto_zero_of_bounded
     tsub_zero]
   apply (NormedField.tendsto_zero_smul_of_tendsto_zero_of_bounded hf0
 ⟨b, eventually_map.mpr Eventually.of_forall fun n => hgb n + 1⟩).cauchySeq.add
-  refine 
+  refine CauchySeq.neg ?_
+  refine cauchySeq_range_of_norm_bounded ?_
+    (fun n => ?_ : forall n, ‖(f (n + 1) + -f n) • (Finset.range (n + 1)).sum z‖ <= b * |f (n + 1) - f n|)
+  · simp_rw [abs_of_nonneg (sub_nonneg_of_le (hfa (Nat.le_succ _))), ← mul_sum]
+    apply Real.uniformContinuous_const_mul.comp_cauchySeq
+    simp_rw [sum_range_sub, sub_eq_add_neg]
+    exact (Tendsto.cauchySeq hf0).add_const
+  · rw [norm_smul, mul_comm]
+    exact mul_le_mul_of_nonneg_right (hgb _) (abs_nonneg _)
 
 中文:
 定理 递增.cauchySeq_series_mul_of_tendsto_zero_of_bounded
@@ -2084,7 +2368,15 @@ theorem Monotone.cauchySeq_series_mul_of_tendsto_zero_of_bounded
     tsub_zero]
   apply (NormedField.tendsto_zero_smul_of_tendsto_zero_of_bounded hf0
 ⟨b, eventually_map.mpr Eventually.of_forall fun n => hgb n + 1⟩).cauchySeq.add
-  refine 
+  refine CauchySeq.neg ?_
+  refine cauchySeq_range_of_norm_bounded ?_
+    (fun n => ?_ : forall n, ‖(f (n + 1) + -f n) • (Finset.range (n + 1)).sum z‖ <= b * |f (n + 1) - f n|)
+  · simp_rw [abs_of_nonneg (sub_nonneg_of_le (hfa (Nat.le_succ _))), ← mul_sum]
+    apply Real.uniformContinuous_const_mul.comp_cauchySeq
+    simp_rw [sum_range_sub, sub_eq_add_neg]
+    exact (Tendsto.cauchySeq hf0).add_const
+  · rw [norm_smul, mul_comm]
+    exact mul_le_mul_of_nonneg_right (hgb _) (abs_nonneg _)
 
 Depends on / 依赖: CauchySeq, CauchySeq.neg, Eventually, Eventually.of_forall, Finset, Finset.range, Finset.sum_range_by_parts, Nat.succ, Nat.succ_sub_succ_eq_sub, NormedField, NormedField.tendsto_zero_smul_of_tendsto_zero_of_bounded, abs_of_nonneg, cauchySeq, cauchySeq.add, cauchySeq_range_of_norm_bounded, cauchySeq_shift, eventually_map, eventually_map.mpr, of_forall, simp_rw
 -/
@@ -2275,7 +2567,11 @@ theorem Monotone.tendsto_le_alternating_series
   have ha : Antitone (fun n => ∑ i in range (2 * n), (-1) ^ i * f i) := by
     refine antitone_nat_of_succ_le (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ]; rw [sum_range_succ]
-    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, 
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, one_mul,
+      ← sub_eq_add_neg, sub_le_iff_le_add]
+    gcongr
+    exact hfm (by lia)
+  exact ha.le_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 中文:
 定理 递增.tendsto_le_alternating_series
@@ -2283,7 +2579,11 @@ theorem Monotone.tendsto_le_alternating_series
   have ha : Antitone (fun n => ∑ i in range (2 * n), (-1) ^ i * f i) := by
     refine antitone_nat_of_succ_le (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ]; rw [sum_range_succ]
-    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, 
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, one_mul,
+      ← sub_eq_add_neg, sub_le_iff_le_add]
+    gcongr
+    exact hfm (by lia)
+  exact ha.le_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 Depends on / 依赖: Antitone, SemilatticeSup, _root_, _root_.pow_succ, antitone_nat_of_succ_le, ha.le_of_tendsto, hfl.comp, isFiltered_of_semilatticeSup_nonempty, le_of_tendsto, neg_one_mul, one_mul, pow_succ, simp_rw, sub_eq_add_neg, sub_le_iff_le_add, sum_range_succ, tendsto_atTop_mono, tendsto_id
 -/
@@ -2308,7 +2608,11 @@ theorem Monotone.alternating_series_le_tendsto
   have hm : Monotone (fun n => ∑ i in range (2 * n + 1), (-1) ^ i * f i) := by
     refine monotone_nat_of_le_succ (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ _ (2 * n + 1 + 1)]; rw [sum_range_succ _ (2 * n + 1)]
-    simp_rw [_root_.pow_succ', show (-1 : E) 
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, neg_neg, one_mul,
+      ← sub_eq_add_neg, sub_add_eq_add_sub, le_sub_iff_add_le]
+    gcongr
+    exact hfm (by lia)
+  exact hm.ge_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 中文:
 定理 递增.alternating_series_le_tendsto
@@ -2316,7 +2620,11 @@ theorem Monotone.alternating_series_le_tendsto
   have hm : Monotone (fun n => ∑ i in range (2 * n + 1), (-1) ^ i * f i) := by
     refine monotone_nat_of_le_succ (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ _ (2 * n + 1 + 1)]; rw [sum_range_succ _ (2 * n + 1)]
-    simp_rw [_root_.pow_succ', show (-1 : E) 
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, neg_neg, one_mul,
+      ← sub_eq_add_neg, sub_add_eq_add_sub, le_sub_iff_add_le]
+    gcongr
+    exact hfm (by lia)
+  exact hm.ge_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 Depends on / 依赖: Monotone, Preorder, _root_, _root_.pow_succ, ge_of_tendsto, hfl.comp, hm.ge_of_tendsto, isFilteredOrEmpty_of_directed_le, le_sub_iff_add_le, monotone_nat_of_le_succ, neg_neg, neg_one_mul, one_mul, pow_succ, simp_rw, sub_add_eq_add_sub, sub_eq_add_neg, sum_range_succ, tendsto_atTop_mono
 -/
@@ -2341,7 +2649,11 @@ theorem Antitone.alternating_series_le_tendsto
   have hm : Monotone (fun n => ∑ i in range (2 * n), (-1) ^ i * f i) := by
     refine monotone_nat_of_le_succ (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ]; rw [sum_range_succ]
-    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, 
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, one_mul,
+      ← sub_eq_add_neg, le_sub_iff_add_le]
+    gcongr
+    exact hfa (by lia)
+  exact hm.ge_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 中文:
 定理 递减.alternating_series_le_tendsto
@@ -2349,7 +2661,11 @@ theorem Antitone.alternating_series_le_tendsto
   have hm : Monotone (fun n => ∑ i in range (2 * n), (-1) ^ i * f i) := by
     refine monotone_nat_of_le_succ (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ]; rw [sum_range_succ]
-    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, 
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, one_mul,
+      ← sub_eq_add_neg, le_sub_iff_add_le]
+    gcongr
+    exact hfa (by lia)
+  exact hm.ge_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 Depends on / 依赖: Monotone, Preorder, _root_, _root_.pow_succ, ge_of_tendsto, hfl.comp, hm.ge_of_tendsto, isFiltered_of_directed_le_nonempty, le_sub_iff_add_le, monotone_nat_of_le_succ, neg_one_mul, one_mul, pow_succ, simp_rw, sub_eq_add_neg, sum_range_succ, tendsto_atTop_mono, tendsto_id
 -/
@@ -2374,7 +2690,11 @@ theorem Antitone.tendsto_le_alternating_series
   have ha : Antitone (fun n => ∑ i in range (2 * n + 1), (-1) ^ i * f i) := by
     refine antitone_nat_of_succ_le (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ]; rw [sum_range_succ]
-    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_m
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, neg_neg, one_mul,
+      ← sub_eq_add_neg, sub_add_eq_add_sub, sub_le_iff_le_add]
+    gcongr
+    exact hfa (by lia)
+  exact ha.le_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 中文:
 定理 递减.tendsto_le_alternating_series
@@ -2382,7 +2702,11 @@ theorem Antitone.tendsto_le_alternating_series
   have ha : Antitone (fun n => ∑ i in range (2 * n + 1), (-1) ^ i * f i) := by
     refine antitone_nat_of_succ_le (fun n => ?_)
     rw [show 2 * (n + 1) = 2 * n + 1 + 1 by ring]; rw [sum_range_succ]; rw [sum_range_succ]
-    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_m
+    simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, neg_neg, one_mul,
+      ← sub_eq_add_neg, sub_add_eq_add_sub, sub_le_iff_le_add]
+    gcongr
+    exact hfa (by lia)
+  exact ha.le_of_tendsto (hfl.comp (tendsto_atTop_mono (fun n => by dsimp; lia) tendsto_id)) _
 
 Depends on / 依赖: Antitone, PUnit.unit, _root_, _root_.pow_succ, antitone_nat_of_succ_le, ha.le_of_tendsto, hfl.comp, le_of_tendsto, neg_neg, neg_one_mul, one_mul, pow_succ, simp_rw, sub_add_eq_add_sub, sub_eq_add_neg, sub_le_iff_le_add, subsingleton, sum_range_succ, tendsto_atTop_mono, tendsto_id
 -/
@@ -2431,7 +2755,25 @@ theorem alternating_series_error_bound
   have I (n : Nat) : 0 <= f n := by
     apply le_of_tendsto hfs.tendsto_atTop_zero
     filter_upwards [Ici_mem_atTop n] with m hm using hfa hm
-
+  obtain (h | h) := even_or_odd n
+  · obtain ⟨n, rfl⟩ := even_iff_exists_two_mul.mp h
+    specialize upper n
+    specialize lower n
+    simp only [sum_range_succ, even_two, Even.mul_right, Even.neg_pow, one_pow, one_mul] at lower
+    rw [abs_sub_le_iff]
+    constructor
+    · rwa [sub_le_iff_le_add, add_comm]
+    · rw [sub_le_iff_le_add, add_comm]
+      exact upper.trans (le_add_of_nonneg_right (I (2 * n)))
+  · obtain ⟨n, rfl⟩ := odd_iff_exists_bit1.mp h
+    specialize upper (n + 1)
+    specialize lower n
+    rw [Nat.mul_add]; rw [Finset.sum_range_succ] at upper
+    rw [abs_sub_le_iff]
+    constructor
+    · rw [sub_le_iff_le_add, add_comm]
+      exact lower.trans (le_add_of_nonneg_right (I (2 * n + 1)))
+    · simpa [Finset.sum_range_succ, add_comm, pow_add] using upper
 
 中文:
 定理 alternating_series_error_bound
@@ -2442,7 +2784,25 @@ theorem alternating_series_error_bound
   have I (n : Nat) : 0 <= f n := by
     apply le_of_tendsto hfs.tendsto_atTop_zero
     filter_upwards [Ici_mem_atTop n] with m hm using hfa hm
-
+  obtain (h | h) := even_or_odd n
+  · obtain ⟨n, rfl⟩ := even_iff_exists_two_mul.mp h
+    specialize upper n
+    specialize lower n
+    simp only [sum_range_succ, even_two, Even.mul_right, Even.neg_pow, one_pow, one_mul] at lower
+    rw [abs_sub_le_iff]
+    constructor
+    · rwa [sub_le_iff_le_add, add_comm]
+    · rw [sub_le_iff_le_add, add_comm]
+      exact upper.trans (le_add_of_nonneg_right (I (2 * n)))
+  · obtain ⟨n, rfl⟩ := odd_iff_exists_bit1.mp h
+    specialize upper (n + 1)
+    specialize lower n
+    rw [Nat.mul_add]; rw [Finset.sum_range_succ] at upper
+    rw [abs_sub_le_iff]
+    constructor
+    · rw [sub_le_iff_le_add, add_comm]
+      exact lower.trans (le_add_of_nonneg_right (I (2 * n + 1)))
+    · simpa [Finset.sum_range_succ, add_comm, pow_add] using upper
 
 Depends on / 依赖: Even.mul_right, Even.neg_pow, Ici_mem_atTop, alternating_series_le_tendsto, even_iff_exists_two_mul, even_iff_exists_two_mul.mp, even_or_odd, even_two, filter_upwards, hfa.alternating_series_le_tendsto, hfa.tendsto_le_alternating_series, hfs.tendsto_alternating_series_tsum, hfs.tendsto_atTop_zero, le_of_tendsto, mul_right, neg_pow, one_mul, one_pow, specialize, sum_range_succ
 -/
@@ -2495,7 +2855,14 @@ theorem Real.summable_pow_div_factorial
   have A : (0 : Real) < ⌊‖x‖⌋₊ + 1 := zero_lt_one.trans_le (by simp)
   have B : ‖x‖ / (⌊‖x‖⌋₊ + 1) < 1 := (div_lt_one A).2 (Nat.lt_floor_add_one _)
   -- Then we apply the ratio test. The estimate works for `n ≥ ⌊‖x‖⌋₊`.
-  suffices forall n >= ⌊‖x‖⌋₊, ‖x ^ (n +
+  suffices forall n >= ⌊‖x‖⌋₊, ‖x ^ (n + 1) / (n + 1)!‖ <= ‖x‖ / (⌊‖x‖⌋₊ + 1) * ‖x ^ n / ↑n !‖ from
+    summable_of_ratio_norm_eventually_le B (eventually_atTop.2 ⟨⌊‖x‖⌋₊, this⟩)
+  -- Finally, we prove the upper estimate
+  intro n hn
+  calc
+    ‖x ^ (n + 1) / (n + 1)!‖ = ‖x‖ / (n + 1) * ‖x ^ n / (n !)‖ := by
+      rw [_root_.pow_succ']; rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [← _root_.div_mul_div_comm]; rw [norm_mul]; rw [norm_div]; rw [Real.norm_natCast]; rw [Nat.cast_succ]
+    _ <= ‖x‖ / (⌊‖x‖⌋₊ + 1) * ‖x ^ n / (n !)‖ := by gcongr
 
 中文:
 定理 实数.summable_pow_div_factorial
@@ -2506,7 +2873,14 @@ theorem Real.summable_pow_div_factorial
   have A : (0 : Real) < ⌊‖x‖⌋₊ + 1 := zero_lt_one.trans_le (by simp)
   have B : ‖x‖ / (⌊‖x‖⌋₊ + 1) < 1 := (div_lt_one A).2 (Nat.lt_floor_add_one _)
   -- Then we apply the ratio test. The estimate works for `n ≥ ⌊‖x‖⌋₊`.
-  suffices forall n >= ⌊‖x‖⌋₊, ‖x ^ (n +
+  suffices forall n >= ⌊‖x‖⌋₊, ‖x ^ (n + 1) / (n + 1)!‖ <= ‖x‖ / (⌊‖x‖⌋₊ + 1) * ‖x ^ n / ↑n !‖ from
+    summable_of_ratio_norm_eventually_le B (eventually_atTop.2 ⟨⌊‖x‖⌋₊, this⟩)
+  -- Finally, we prove the upper estimate
+  intro n hn
+  calc
+    ‖x ^ (n + 1) / (n + 1)!‖ = ‖x‖ / (n + 1) * ‖x ^ n / (n !)‖ := by
+      rw [_root_.pow_succ']; rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [← _root_.div_mul_div_comm]; rw [norm_mul]; rw [norm_div]; rw [Real.norm_natCast]; rw [Nat.cast_succ]
+    _ <= ‖x‖ / (⌊‖x‖⌋₊ + 1) * ‖x ^ n / (n !)‖ := by gcongr
 -/
 theorem Real.summable_pow_div_factorial (x : Real) : Summable (fun n => x ^ n / n ! : Nat -> Real) := by
   -- We start with trivial estimates
@@ -2545,7 +2919,13 @@ lemma tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
   refine Metric.nhds_basis_closedBall.tendsto_right_iff.mpr fun ε hε0 => ?_
   filter_upwards [hc, hasBasis_cobounded_norm.tendsto_right_iff.mp hf (c / ε) trivial,
     hf.eventually_ne_cobounded 0] with x hfgc hεf hf0
-  rcases eq_or_lt_of_le ((norm_nonneg _).
+  rcases eq_or_lt_of_le ((norm_nonneg _).trans hfgc) with rfl | hc0
+  · simpa [(smul_eq_zero_iff_right hf0).mp (norm_le_zero_iff.mp hfgc)] using hε0.le
+  calc
+    _ = ‖g x‖ := by simp
+    _ <= c / ‖f x‖ := by rwa [norm_smul, ← le_div_iff₀' (by positivity)] at hfgc
+    _ <= c / (c / ε) := by gcongr
+    _ = ε := div_div_cancel₀ hc0.ne'
 
 中文:
 引理 tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
@@ -2555,7 +2935,13 @@ lemma tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
   refine Metric.nhds_basis_closedBall.tendsto_right_iff.mpr fun ε hε0 => ?_
   filter_upwards [hc, hasBasis_cobounded_norm.tendsto_right_iff.mp hf (c / ε) trivial,
     hf.eventually_ne_cobounded 0] with x hfgc hεf hf0
-  rcases eq_or_lt_of_le ((norm_nonneg _).
+  rcases eq_or_lt_of_le ((norm_nonneg _).trans hfgc) with rfl | hc0
+  · simpa [(smul_eq_zero_iff_right hf0).mp (norm_le_zero_iff.mp hfgc)] using hε0.le
+  calc
+    _ = ‖g x‖ := by simp
+    _ <= c / ‖f x‖ := by rwa [norm_smul, ← le_div_iff₀' (by positivity)] at hfgc
+    _ <= c / (c / ε) := by gcongr
+    _ = ε := div_div_cancel₀ hc0.ne'
 
 Depends on / 依赖: Metric, Metric.nhds_basis_closedBall.tendsto_right_iff.mpr, eq_or_lt_of_le, eventually_le, eventually_ne_cobounded, filter_upwards, hasBasis_cobounded_norm, hasBasis_cobounded_norm.tendsto_right_iff.mp, hf.eventually_ne_cobounded, hmul.eventually_le, nhds_basis_closedBall, norm_le_zero_iff, norm_le_zero_iff.mp, norm_nonneg, norm_smul, smul_eq_zero_iff_right, tendsto_right_iff
 -/
@@ -2587,7 +2973,7 @@ lemma tendsto_smul_congr_of_tendsto_left_cobounded_of_isBoundedUnder
   · change IsBoundedUnder _ _ fun _ => _
     simpa using hbdd
   · rw [← tendsto_zero_iff_norm_tendsto_zero]
-    exact tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hmul.no
+    exact tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hmul.norm.isBoundedUnder_le hf₁
 
 中文:
 引理 tendsto_smul_congr_of_tendsto_left_cobounded_of_isBoundedUnder
@@ -2598,7 +2984,7 @@ lemma tendsto_smul_congr_of_tendsto_left_cobounded_of_isBoundedUnder
   · change IsBoundedUnder _ _ fun _ => _
     simpa using hbdd
   · rw [← tendsto_zero_iff_norm_tendsto_zero]
-    exact tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hmul.no
+    exact tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hmul.norm.isBoundedUnder_le hf₁
 
 Depends on / 依赖: IsBoundedUnder, congr_dist, dist_eq_norm, hmul.congr_dist, hmul.norm.isBoundedUnder_le, isBoundedUnder_le, isBoundedUnder_le_mul_tendsto_zero, norm_smul, simp_rw, sub_smul, tendsto_zero_iff_norm_tendsto_zero, tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
 -/
@@ -2629,7 +3015,9 @@ lemma tendsto_smul_comp_nat_floor_of_tendsto_nsmul
   apply tendsto_smul_congr_of_tendsto_left_cobounded_of_isBoundedUnder
     (hg.comp tendsto_nat_floor_atTop)
   · exact tendsto_natCast_atTop_cobounded.comp tendsto_nat_floor_atTop
-  · apply isBoundedUnder_of_eventual
+  · apply isBoundedUnder_of_eventually_le (a := ‖(1 : K)‖)
+    apply Eventually.mono _ (fun x h => norm_le_norm_of_abs_le_abs h)
+    simpa using ⟨0, fun _ h => mod_cast Nat.abs_floor_sub_le h⟩
 
 中文:
 引理 tendsto_smul_comp_nat_floor_of_tendsto_nsmul
@@ -2639,7 +3027,9 @@ lemma tendsto_smul_comp_nat_floor_of_tendsto_nsmul
   apply tendsto_smul_congr_of_tendsto_left_cobounded_of_isBoundedUnder
     (hg.comp tendsto_nat_floor_atTop)
   · exact tendsto_natCast_atTop_cobounded.comp tendsto_nat_floor_atTop
-  · apply isBoundedUnder_of_eventual
+  · apply isBoundedUnder_of_eventually_le (a := ‖(1 : K)‖)
+    apply Eventually.mono _ (fun x h => norm_le_norm_of_abs_le_abs h)
+    simpa using ⟨0, fun _ h => mod_cast Nat.abs_floor_sub_le h⟩
 
 Depends on / 依赖: Eventually, Eventually.mono, Nat.abs_floor_sub_le, Tendsto, abs_floor_sub_le, hg.comp, isBoundedUnder_of_eventually_le, mod_cast, norm_le_norm_of_abs_le_abs, replace, tendsto_natCast_atTop_cobounded, tendsto_natCast_atTop_cobounded.comp, tendsto_nat_floor_atTop, tendsto_smul_congr_of_tendsto_left_cobounded_of_isBoundedUnder
 -/

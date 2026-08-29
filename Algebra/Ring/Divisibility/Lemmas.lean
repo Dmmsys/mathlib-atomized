@@ -104,7 +104,7 @@ lemma pow_dvd_add_pow_of_pow_eq_zero_right
   apply dvd_nsmul_of_dvd
   rcases le_or_gt m i with (hi : m <= i) | (hi : i + 1 <= m)
   · exact dvd_mul_of_dvd_left (pow_dvd_pow x hi) _
-  · simp [pow_eq_zero_of_le (by lia : n <= j
+  · simp [pow_eq_zero_of_le (by lia : n <= j) hy]
 
 中文:
 引理 pow_dvd_add_pow_of_pow_eq_zero_right
@@ -116,7 +116,7 @@ lemma pow_dvd_add_pow_of_pow_eq_zero_right
   apply dvd_nsmul_of_dvd
   rcases le_or_gt m i with (hi : m <= i) | (hi : i + 1 <= m)
   · exact dvd_mul_of_dvd_left (pow_dvd_pow x hi) _
-  · simp [pow_eq_zero_of_le (by lia : n <= j
+  · simp [pow_eq_zero_of_le (by lia : n <= j) hy]
 
 Depends on / 依赖: Finset, Finset.dvd_sum, add_pow, dvd_mul_of_dvd_left, dvd_nsmul_of_dvd, dvd_sum, h_comm, h_comm.add_pow, le_or_gt, pow_dvd_pow, pow_eq_zero_of_le, replace
 -/

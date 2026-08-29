@@ -36,7 +36,8 @@ lemma mabs_zpow
   · obtain ⟨n, rfl⟩ := Int.eq_ofNat_of_zero_le n0
     simp only [mabs_pow, zpow_natCast, Nat.abs_cast]
   · obtain ⟨m, h⟩ := Int.eq_ofNat_of_zero_le (neg_nonneg.2 n0)
-    rw [← mabs_inv]; rw [← zpow_neg]; rw [← abs_neg]; rw [h]; rw [zpow_natCast]; rw [Nat.abs_cast]
+    rw [← mabs_inv]; rw [← zpow_neg]; rw [← abs_neg]; rw [h]; rw [zpow_natCast]; rw [Nat.abs_cast]; rw [zpow_natCast]
+    exact mabs_pow m _
 
 中文:
 引理 mabs_zpow
@@ -47,7 +48,8 @@ lemma mabs_zpow
   · obtain ⟨n, rfl⟩ := Int.eq_ofNat_of_zero_le n0
     simp only [mabs_pow, zpow_natCast, Nat.abs_cast]
   · obtain ⟨m, h⟩ := Int.eq_ofNat_of_zero_le (neg_nonneg.2 n0)
-    rw [← mabs_inv]; rw [← zpow_neg]; rw [← abs_neg]; rw [h]; rw [zpow_natCast]; rw [Nat.abs_cast]
+    rw [← mabs_inv]; rw [← zpow_neg]; rw [← abs_neg]; rw [h]; rw [zpow_natCast]; rw [Nat.abs_cast]; rw [zpow_natCast]
+    exact mabs_pow m _
 -/
 @[to_additive] lemma mabs_zpow (n : Int) (a : α) : |a ^ n|ₘ = |a|ₘ ^ |n| := by
   obtain n0 | n0 := le_total 0 n
@@ -871,7 +873,9 @@ theorem abs_geomSum_le
   refine add_le_add ?_ (pow_le_pow_left₀ (abs_nonneg _) le_sup_right _)
   rw [pow_succ]; rw [← mul_assoc]; rw [mul_comm |a|]
   gcongr
+  exacts [abs_nonneg _, (abs_nonneg _).trans ih, le_sup_left]
 
+omit [LinearOrder α] in
 
 中文:
 定理 abs_geomSum_le
@@ -884,7 +888,9 @@ theorem abs_geomSum_le
   refine add_le_add ?_ (pow_le_pow_left₀ (abs_nonneg _) le_sup_right _)
   rw [pow_succ]; rw [← mul_assoc]; rw [mul_comm |a|]
   gcongr
+  exacts [abs_nonneg _, (abs_nonneg _).trans ih, le_sup_left]
 
+omit [LinearOrder α] in
 -/
 private theorem abs_geomSum_le [IsOrderedRing α] : |geomSum a b n| <= (n + 1) * max |a| |b| ^ n := by
   induction n with | zero => simp [geomSum] | succ n ih => ?_

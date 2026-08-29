@@ -271,7 +271,10 @@ definition adjoin
     letI : FiniteDimensional k (IntermediateField.adjoin k (s : Set K)) :=
 IntermediateField.finiteDimensional_adjoin fun z _ =>
         IsAlgebraic.isIntegral (Algebra.IsAlgebraic.isAlgebraic z)
-    normalClo
+    normalClosure.is_finiteDimensional k (IntermediateField.adjoin k (s : Set K)) K
+  isGalois := IsGalois.normalClosure k (IntermediateField.adjoin k (s : Set K)) K }
+
+@[simp]
 
 中文:
 定义 adjoin
@@ -282,7 +285,10 @@ IntermediateField.finiteDimensional_adjoin fun z _ =>
     letI : FiniteDimensional k (IntermediateField.adjoin k (s : Set K)) :=
 IntermediateField.finiteDimensional_adjoin fun z _ =>
         IsAlgebraic.isIntegral (Algebra.IsAlgebraic.isAlgebraic z)
-    normalClo
+    normalClosure.is_finiteDimensional k (IntermediateField.adjoin k (s : Set K)) K
+  isGalois := IsGalois.normalClosure k (IntermediateField.adjoin k (s : Set K)) K }
+
+@[simp]
 -/
 noncomputable def adjoin [IsGalois k K] (s : Set K) [Finite s] :
     FiniteGaloisIntermediateField k K := {
@@ -428,7 +434,7 @@ theorem adjoin_simple_map_algEquiv
 nonrec lemma mem_fixingSubgroup_iff (α : Gal(K/k)) (L : FiniteGaloisIntermediateField k K) :
     α in L.fixingSubgroup ↔ α.restrictNormalHom L = 1 := by
   simp [IntermediateField.fixingSubgroup, mem_fixingSubgroup_iff, AlgEquiv.ext_iff, Subtype.ext_iff,
- 
+    AlgEquiv.restrictNormalHom_apply]
 
 中文:
 定理 adjoin_simple_map_algEquiv
@@ -438,7 +444,7 @@ nonrec lemma mem_fixingSubgroup_iff (α : Gal(K/k)) (L : FiniteGaloisIntermediat
 nonrec lemma mem_fixingSubgroup_iff (α : Gal(K/k)) (L : FiniteGaloisIntermediateField k K) :
     α in L.fixingSubgroup ↔ α.restrictNormalHom L = 1 := by
   simp [IntermediateField.fixingSubgroup, mem_fixingSubgroup_iff, AlgEquiv.ext_iff, Subtype.ext_iff,
- 
+    AlgEquiv.restrictNormalHom_apply]
 
 Depends on / 依赖: adjoin_simple_map_algHom
 -/

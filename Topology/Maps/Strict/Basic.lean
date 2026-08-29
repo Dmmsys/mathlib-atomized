@@ -312,7 +312,7 @@ lemma IsQuotientMap.isStrictMap_iff
 set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_comp g
   have key : rangeFactorization g ∘ f = Φ ∘ rangeFactorization (g ∘ f) := rfl
   simp_rw [isStrictMap_iff_isQuotientMap_rangeFactorization, ← f_quot.of_comp_iff, key]
-  exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap
+  exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap.comp H, fun H => Φ.isQuotientMap.comp H⟩
 
 中文:
 引理 是商映射.isStrictMap_iff
@@ -321,7 +321,7 @@ set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_com
 set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_comp g
   have key : rangeFactorization g ∘ f = Φ ∘ rangeFactorization (g ∘ f) := rfl
   simp_rw [isStrictMap_iff_isQuotientMap_rangeFactorization, ← f_quot.of_comp_iff, key]
-  exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap
+  exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap.comp H, fun H => Φ.isQuotientMap.comp H⟩
 
 Depends on / 依赖: f_quot, f_quot.of_comp_iff, f_quot.surjective.range_comp, isQuotientMap, isQuotientMap.comp, isStrictMap_iff_isQuotientMap_rangeFactorization, of_comp_iff, rangeFactorization, range_comp, setCongr, simp_rw, surjective, symm.isQuotientMap.comp
 -/
@@ -362,7 +362,9 @@ lemma IsEmbedding.isStrictMap_iff
     Homeomorph.Quotient.congrRight (fun _ _ => by simp [g_emb.injective.eq_iff])
   have key : g ∘ kerLift f ∘ Φ = kerLift (g ∘ f) :=
 funext Quotient.ind fun _ => rfl
-  simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_
+  simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_comp_iff, ← key]
+  exact ⟨fun H => H.comp Φ.isEmbedding,
+    fun H => by simpa [comp_assoc] using H.comp Φ.symm.isEmbedding⟩
 
 中文:
 引理 是嵌入.isStrictMap_iff
@@ -372,7 +374,9 @@ funext Quotient.ind fun _ => rfl
     Homeomorph.Quotient.congrRight (fun _ _ => by simp [g_emb.injective.eq_iff])
   have key : g ∘ kerLift f ∘ Φ = kerLift (g ∘ f) :=
 funext Quotient.ind fun _ => rfl
-  simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_
+  simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_comp_iff, ← key]
+  exact ⟨fun H => H.comp Φ.isEmbedding,
+    fun H => by simpa [comp_assoc] using H.comp Φ.symm.isEmbedding⟩
 
 Depends on / 依赖: H.comp, Homeomorph, Homeomorph.Quotient.congrRight, Quotient, Quotient.ind, Setoid, Setoid.ker, comp_assoc, congrRight, eq_iff, g_emb, g_emb.injective.eq_iff, g_emb.of_comp_iff, injective, isEmbedding, isStrictMap_iff_isEmbedding_kerLift, kerLift, of_comp_iff, simp_rw, symm.isEmbedding
 -/
@@ -443,7 +447,7 @@ lemma isEmbedding_iff_isStrictMap_injective
   rw [isStrictMap_iff_isEmbedding_kerLift] at f_strict
   set Φ : Quotient (ker f) ≃ₜ X :=
     (Homeomorph.Quotient.congrRight <| by simp [f_inj.eq_iff]).trans Homeomorph.quotientBot
-  exact f_strict.comp Φ.symm.isEmbedd
+  exact f_strict.comp Φ.symm.isEmbedding
 
 中文:
 引理 isEmbedding_iff_isStrictMap_injective
@@ -452,7 +456,7 @@ lemma isEmbedding_iff_isStrictMap_injective
   rw [isStrictMap_iff_isEmbedding_kerLift] at f_strict
   set Φ : Quotient (ker f) ≃ₜ X :=
     (Homeomorph.Quotient.congrRight <| by simp [f_inj.eq_iff]).trans Homeomorph.quotientBot
-  exact f_strict.comp Φ.symm.isEmbedd
+  exact f_strict.comp Φ.symm.isEmbedding
 
 Depends on / 依赖: H.injective, H.isStrictMap, Homeomorph, Homeomorph.Quotient.congrRight, Homeomorph.quotientBot, Quotient, congrRight, eq_iff, f_inj, f_inj.eq_iff, f_strict, f_strict.comp, injective, isEmbedding, isStrictMap, isStrictMap_iff_isEmbedding_kerLift, quotientBot, symm.isEmbedding
 -/

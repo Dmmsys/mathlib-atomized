@@ -130,7 +130,12 @@ theorem spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_X_mem
   replace hfg : (Ideal.map constantCoeff I).FG := by
     have : RingHomSurjective (constantCoeff (R := R)) := ⟨constantCoeff_surj⟩
     exact map_eq_submodule_map constantCoeff I ▸ Submodule.FG.map _ hfg
-  nth_rw 1 [eq
+  nth_rw 1 [eq_span_insert_X_of_X_mem_of_span_eq hI (I.map constantCoeff).span_generators]
+  refine le_trans (spanFinrank_span_le_ncard_of_finite ?_) (le_trans (Set.ncard_insert_le _ _) ?_)
+  · simpa using! Set.Finite.map _ (FG.finite_generators hfg)
+  · simp only [add_le_add_iff_right]
+    refine le_trans (Set.ncard_image_le (FG.finite_generators hfg)) ?_
+    rw [FG.generators_ncard hfg]
 
 中文:
 定理 spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_X_mem
@@ -141,7 +146,12 @@ theorem spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_X_mem
   replace hfg : (Ideal.map constantCoeff I).FG := by
     have : RingHomSurjective (constantCoeff (R := R)) := ⟨constantCoeff_surj⟩
     exact map_eq_submodule_map constantCoeff I ▸ Submodule.FG.map _ hfg
-  nth_rw 1 [eq
+  nth_rw 1 [eq_span_insert_X_of_X_mem_of_span_eq hI (I.map constantCoeff).span_generators]
+  refine le_trans (spanFinrank_span_le_ncard_of_finite ?_) (le_trans (Set.ncard_insert_le _ _) ?_)
+  · simpa using! Set.Finite.map _ (FG.finite_generators hfg)
+  · simp only [add_le_add_iff_right]
+    refine le_trans (Set.ncard_image_le (FG.finite_generators hfg)) ?_
+    rw [FG.generators_ncard hfg]
 
 Depends on / 依赖: FG.finite, Finite, I.FG, I.map, Ideal.map, Nat.zero_le, RingHomSurjective, Set.Finite.map, Set.ncard_insert_le, Submodule, Submodule.FG.map, constantCoeff, constantCoeff_surj, eq_span_insert_X_of_X_mem_of_span_eq, finite, le_trans, map_eq_submodule_map, ncard_insert_le, nth_rw, replace
 -/
@@ -177,7 +187,28 @@ theorem eq_of_le_of_X_notMem_of_fg_of_isPrime
   obtain ⟨n, F, rfl⟩ := Submodule.fg_iff_exists_fin_generating_family.mp hJ
   rw [submodule_span_eq]; rw [map_span]; rw [← Set.range_comp] at h'
   choose! T hT using fun g (hg : g in I) =>
-    mem_span_range_iff_exists_fun
+    mem_span_range_iff_exists_fun.mp (h'.le (Ideal.mem_map_of_mem _ hg))
+  dsimp at hT
+  intro g hg
+  let G : Nat -> R⟦X⟧ :=
+    Nat.rec g fun _ G' => mk fun p => coeff (p + 1) G' - ∑ i, T G' i * coeff (p + 1) (F i)
+  have hG' (n : Nat) (H : G n in I) : G n - ∑ i, C (T (G n) i) * F i = X * G (n + 1) := by
+    simpa [hT _ H] using sub_const_eq_X_mul_shift (G n - ∑ i, C (T (G n) i) * F i)
+  have hG : forall n, G n in I := Nat.rec hg fun n IH =>
+    (‹I.IsPrime›.mul_mem_iff_mem_or_mem.mp (hG' n IH ▸ I.sub_mem IH (I.sum_mem fun i _ =>
+      I.mul_mem_left _ (hJI (subset_span (Set.mem_range_self _)))))).resolve_left hXI
+  replace hG' := fun n => hG' n (hG n)
+  let H (i : Fin n) : R⟦X⟧ := mk fun n => T (G n) i
+  have h₁ (n : Nat) : g - ∑ i, trunc n (H i) * F i = X ^ n * G n := by
+    induction n with
+    | zero => simp [G]
+    | succ n IH =>
+      simp [trunc_succ, add_mul, sum_add_distrib, ← sub_sub, IH, pow_succ, mul_assoc, ← hG',
+        mul_sub, H, mul_sum, monomial_eq_C_mul_X_pow, mul_left_comm (C _)]
+  have h₂ : g = ∑ i, H i * F i := by
+    ext n; simpa [coeff_trunc, sub_eq_zero] using congr(($(h₁ (n + 1)).trunc (n + 1)).coeff n)
+  rw [h₂]
+  exact Ideal.sum_mem _ fun i _ => Ideal.mul_mem_left _ _ (subset_span (Set.mem_range_self _))
 
 中文:
 定理 eq_of_le_of_X_notMem_of_fg_of_isPrime
@@ -188,7 +219,28 @@ theorem eq_of_le_of_X_notMem_of_fg_of_isPrime
   obtain ⟨n, F, rfl⟩ := Submodule.fg_iff_exists_fin_generating_family.mp hJ
   rw [submodule_span_eq]; rw [map_span]; rw [← Set.range_comp] at h'
   choose! T hT using fun g (hg : g in I) =>
-    mem_span_range_iff_exists_fun
+    mem_span_range_iff_exists_fun.mp (h'.le (Ideal.mem_map_of_mem _ hg))
+  dsimp at hT
+  intro g hg
+  let G : Nat -> R⟦X⟧ :=
+    Nat.rec g fun _ G' => mk fun p => coeff (p + 1) G' - ∑ i, T G' i * coeff (p + 1) (F i)
+  have hG' (n : Nat) (H : G n in I) : G n - ∑ i, C (T (G n) i) * F i = X * G (n + 1) := by
+    simpa [hT _ H] using sub_const_eq_X_mul_shift (G n - ∑ i, C (T (G n) i) * F i)
+  have hG : forall n, G n in I := Nat.rec hg fun n IH =>
+    (‹I.IsPrime›.mul_mem_iff_mem_or_mem.mp (hG' n IH ▸ I.sub_mem IH (I.sum_mem fun i _ =>
+      I.mul_mem_left _ (hJI (subset_span (Set.mem_range_self _)))))).resolve_left hXI
+  replace hG' := fun n => hG' n (hG n)
+  let H (i : Fin n) : R⟦X⟧ := mk fun n => T (G n) i
+  have h₁ (n : Nat) : g - ∑ i, trunc n (H i) * F i = X ^ n * G n := by
+    induction n with
+    | zero => simp [G]
+    | succ n IH =>
+      simp [trunc_succ, add_mul, sum_add_distrib, ← sub_sub, IH, pow_succ, mul_assoc, ← hG',
+        mul_sub, H, mul_sum, monomial_eq_C_mul_X_pow, mul_left_comm (C _)]
+  have h₂ : g = ∑ i, H i * F i := by
+    ext n; simpa [coeff_trunc, sub_eq_zero] using congr(($(h₁ (n + 1)).trunc (n + 1)).coeff n)
+  rw [h₂]
+  exact Ideal.sum_mem _ fun i _ => Ideal.mul_mem_left _ _ (subset_span (Set.mem_range_self _))
 
 Depends on / 依赖: Ideal.map_mono, Ideal.mem_map_of_mem, Nat.rec, Set.range_comp, Submodule, Submodule.fg_iff_exists_fin_generating_family.mp, antisymm, fg_iff_exists_fin_generating_family, hJI.antisymm, map_mono, map_span, mem_map_of_mem, mem_span_range_iff_exists_fun, mem_span_range_iff_exists_fun.mp, range_comp, replace, submodule_span_eq
 -/
@@ -234,7 +286,19 @@ theorem exist_eq_span_eq_ncard_of_X_notMem
     simpa [mem_map_iff_of_surjective _ constantCoeff_surj, hSI] using subset_span hr
   obtain ⟨T, hTI, hinj, hT⟩ := this.exists_subset_injOn_image_eq
   refine ⟨T, eq_of_le_of_X_notMem_of_fg_of_isPrime (span_le.2 hTI) hI (Submodule.fg_def.2
-  
+    ⟨T, (hT ▸ hS).of_finite_image hinj, rfl⟩) ?_, Finite.of_injOn
+    (fun f hf => hT ▸ Set.mem_image_of_mem _ hf) hinj hS, hT ▸ hinj.ncard_image.symm⟩
+  rw [map_le_iff_le_comap]
+  intro f hf
+  rw [mem_comap]; rw [mem_map_iff_of_surjective _ constantCoeff_surj]
+  replace hf : constantCoeff f in span S := hSI ▸ Ideal.mem_map_of_mem constantCoeff hf
+  refine Submodule.span_induction (fun s hs => ?_) ⟨0, zero_mem _, by simp⟩ ?_ ?_ hf
+  · obtain ⟨t, htmem, ht⟩ := hT ▸ hs
+    exact ⟨t, subset_span htmem, ht⟩
+  · intro r₁ r₂ hr₁ hr₂ ⟨s₁, hs₁mem, hs₁⟩ ⟨s₂, hs₂mem, hs₂⟩
+    exact ⟨s₁ + s₂, Ideal.add_mem _ hs₁mem hs₂mem, by simp [hs₁, hs₂]⟩
+  · intro r₁ r₂ hr₁ ⟨f, hfmem, hf⟩
+    exact ⟨r₁ • f, Submodule.smul_of_tower_mem _ _ hfmem, by simp [hf]⟩
 
 中文:
 定理 exist_eq_span_eq_ncard_of_X_notMem
@@ -245,7 +309,19 @@ theorem exist_eq_span_eq_ncard_of_X_notMem
     simpa [mem_map_iff_of_surjective _ constantCoeff_surj, hSI] using subset_span hr
   obtain ⟨T, hTI, hinj, hT⟩ := this.exists_subset_injOn_image_eq
   refine ⟨T, eq_of_le_of_X_notMem_of_fg_of_isPrime (span_le.2 hTI) hI (Submodule.fg_def.2
-  
+    ⟨T, (hT ▸ hS).of_finite_image hinj, rfl⟩) ?_, Finite.of_injOn
+    (fun f hf => hT ▸ Set.mem_image_of_mem _ hf) hinj hS, hT ▸ hinj.ncard_image.symm⟩
+  rw [map_le_iff_le_comap]
+  intro f hf
+  rw [mem_comap]; rw [mem_map_iff_of_surjective _ constantCoeff_surj]
+  replace hf : constantCoeff f in span S := hSI ▸ Ideal.mem_map_of_mem constantCoeff hf
+  refine Submodule.span_induction (fun s hs => ?_) ⟨0, zero_mem _, by simp⟩ ?_ ?_ hf
+  · obtain ⟨t, htmem, ht⟩ := hT ▸ hs
+    exact ⟨t, subset_span htmem, ht⟩
+  · intro r₁ r₂ hr₁ hr₂ ⟨s₁, hs₁mem, hs₁⟩ ⟨s₂, hs₂mem, hs₂⟩
+    exact ⟨s₁ + s₂, Ideal.add_mem _ hs₁mem hs₂mem, by simp [hs₁, hs₂]⟩
+  · intro r₁ r₂ hr₁ ⟨f, hfmem, hf⟩
+    exact ⟨r₁ • f, Submodule.smul_of_tower_mem _ _ hfmem, by simp [hf]⟩
 
 Depends on / 依赖: Finite, Finite.of_injOn, Set.mem_image_of_mem, Submodule, Submodule.fg_def, SurjOn, constantCoeff, constantCoeff_surj, eq_of_le_of_X_notMem_of_fg_of_isPrime, exists_subset_injOn_image_eq, fg_def, hinj.ncard_image.symm, map_le_iff_le_comap, mem_comap, mem_image_of_mem, mem_map_iff_of_s, mem_map_iff_of_surjective, ncard_image, of_finite_image, of_injOn
 -/
@@ -284,7 +360,10 @@ theorem spanFinrank_eq_spanFinrank_map_constantCoeff_of_X_notMem_of_fg_of_isPrim
   have : RingHomSurjective (constantCoeff (R := R)) := ⟨constantCoeff_surj⟩
   obtain ⟨S, rfl, hS, hScard⟩ := exist_eq_span_eq_ncard_of_X_notMem hI
     (I.map constantCoeff).span_generators
-    (FG.finite_g
+    (FG.finite_generators <| map_eq_submodule_map constantCoeff I ▸ Submodule.FG.map _ hfg)
+  refine le_trans (spanFinrank_span_le_ncard_of_finite hS) ?_
+  rw [hScard]; rw [FG.generators_ncard]
+  exact map_eq_submodule_map constantCoeff (Ideal.span S) ▸ Submodule.FG.map _ hfg
 
 中文:
 定理 spanFinrank_eq_spanFinrank_map_constantCoeff_of_X_notMem_of_fg_of_isPrime
@@ -295,7 +374,10 @@ theorem spanFinrank_eq_spanFinrank_map_constantCoeff_of_X_notMem_of_fg_of_isPrim
   have : RingHomSurjective (constantCoeff (R := R)) := ⟨constantCoeff_surj⟩
   obtain ⟨S, rfl, hS, hScard⟩ := exist_eq_span_eq_ncard_of_X_notMem hI
     (I.map constantCoeff).span_generators
-    (FG.finite_g
+    (FG.finite_generators <| map_eq_submodule_map constantCoeff I ▸ Submodule.FG.map _ hfg)
+  refine le_trans (spanFinrank_span_le_ncard_of_finite hS) ?_
+  rw [hScard]; rw [FG.generators_ncard]
+  exact map_eq_submodule_map constantCoeff (Ideal.span S) ▸ Submodule.FG.map _ hfg
 
 Depends on / 依赖: FG.finite_generators, FG.generators_ncard, I.map, Ideal.spanFinrank_map_le_of_fg, RingHomSurjective, Submodule, Submodule.FG.map, constantCoeff, constantCoeff_surj, exist_eq_span_eq_ncard_of_X_notMem, f.hom.right, finite_generators, generators_ncard, hScard, le_antisymm, le_trans, map_eq_submodule_map, spanFinrank_map_le_of_fg, spanFinrank_span_le_ncard_of_finite, span_generators
 -/
@@ -327,7 +409,7 @@ theorem spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_isPrime
   by_cases hP : X in P
   · exact spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_X_mem hP
   · exact le_trans (spanFinrank_eq_spanFinrank_map_constantCoeff_of_X_notMem_of_fg_of_isPrime
-      hP hfg).le (Nat.le_
+      hP hfg).le (Nat.le_succ _)
 
 中文:
 定理 spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_isPrime
@@ -337,7 +419,7 @@ theorem spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_isPrime
   by_cases hP : X in P
   · exact spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_X_mem hP
   · exact le_trans (spanFinrank_eq_spanFinrank_map_constantCoeff_of_X_notMem_of_fg_of_isPrime
-      hP hfg).le (Nat.le_
+      hP hfg).le (Nat.le_succ _)
 
 Depends on / 依赖: Nat.le_succ, Nat.zero_le, P.FG, f.hom.left, le_succ, le_trans, spanFinrank_eq_spanFinrank_map_constantCoeff_of_X_notMem_of_fg_of_isPrime, spanFinrank_le_spanFinrank_map_constantCoeff_add_one_of_X_mem, spanFinrank_of_not_fg, zero_le
 -/
@@ -364,7 +446,11 @@ lemma fg_iff_of_isPrime
     · have H := eq_span_insert_X_of_X_mem_of_span_eq hX hS
       have : (insert X <| (C (R := R)) '' S).Finite :=
 Finite.insert X Finite.image _ S.finite_toSet
-lift insert X (C (R := R)) '' S to Finset R⟦X⟧ using this
+lift insert X (C (R := R)) '' S to Finset R⟦X⟧ using this with T hT
+      exact ⟨T, hT ▸ H.symm⟩
+    · obtain ⟨T, hT, hT₂, _⟩ := exist_eq_span_eq_ncard_of_X_notMem hX hS S.finite_toSet
+      lift T to Finset R⟦X⟧ using hT₂
+      exact ⟨T, hT.symm⟩
 
 中文:
 引理 fg_iff_of_isPrime
@@ -377,7 +463,11 @@ lift insert X (C (R := R)) '' S to Finset R⟦X⟧ using this
     · have H := eq_span_insert_X_of_X_mem_of_span_eq hX hS
       have : (insert X <| (C (R := R)) '' S).Finite :=
 Finite.insert X Finite.image _ S.finite_toSet
-lift insert X (C (R := R)) '' S to Finset R⟦X⟧ using this
+lift insert X (C (R := R)) '' S to Finset R⟦X⟧ using this with T hT
+      exact ⟨T, hT ▸ H.symm⟩
+    · obtain ⟨T, hT, hT₂, _⟩ := exist_eq_span_eq_ncard_of_X_notMem hX hS S.finite_toSet
+      lift T to Finset R⟦X⟧ using hT₂
+      exact ⟨T, hT.symm⟩
 
 Depends on / 依赖: FG.map, Finite, Finite.image, Finite.insert, Finset, H.symm, S.finite_toSet, eq_span_insert_X_of_X_mem_of_span_eq, exist_eq_span_eq_ncard_of_X_notMem, f.hom.w, finite_toSet, hT.symm, insert
 -/
@@ -427,7 +517,11 @@ instance [IsPrincipalIdealRing
   by_cases hXP : X in P
   · exact ⟨X, hXP, X_prime⟩
   · obtain ⟨_, h⟩ := (IsPrincipalIdealRing.principal (P.map constantCoeff)).principal
-    obtain ⟨_, rfl, _, h⟩ := exist_eq_span_eq_ncard_of_X_notMem hXP 
+    obtain ⟨_, rfl, _, h⟩ := exist_eq_span_eq_ncard_of_X_notMem hXP h.symm (finite_singleton _)
+    simp only [ncard_singleton, ncard_eq_one] at h
+    obtain ⟨_, rfl⟩ := h
+    exact ⟨_, mem_span_singleton_self _,
+      (span_singleton_prime (span_singleton_eq_bot.not.1 h₁)).1 h₂⟩
 
 中文:
 实例 [是主理想环
@@ -437,7 +531,11 @@ instance [IsPrincipalIdealRing
   by_cases hXP : X in P
   · exact ⟨X, hXP, X_prime⟩
   · obtain ⟨_, h⟩ := (IsPrincipalIdealRing.principal (P.map constantCoeff)).principal
-    obtain ⟨_, rfl, _, h⟩ := exist_eq_span_eq_ncard_of_X_notMem hXP 
+    obtain ⟨_, rfl, _, h⟩ := exist_eq_span_eq_ncard_of_X_notMem hXP h.symm (finite_singleton _)
+    simp only [ncard_singleton, ncard_eq_one] at h
+    obtain ⟨_, rfl⟩ := h
+    exact ⟨_, mem_span_singleton_self _,
+      (span_singleton_prime (span_singleton_eq_bot.not.1 h₁)).1 h₂⟩
 
 Depends on / 依赖: IsPrincipalIdealRing, IsPrincipalIdealRing.principal, P.map, UniqueFactorizationMonoid, UniqueFactorizationMonoid.iff_exists_prime_mem_of_isPrime.mpr, X_prime, constantCoeff, exist_eq_span_eq_ncard_of_X_notMem, finite_singleton, h.symm, iff_exists_prime_mem_of_isPrime, mem_span_singleton_self, ncard_eq_one, ncard_singleton, principal, span_singleton_eq_bot, span_singleton_eq_bot.not, span_singleton_prime
 -/

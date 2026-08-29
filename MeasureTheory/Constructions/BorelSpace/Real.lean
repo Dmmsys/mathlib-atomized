@@ -71,7 +71,10 @@ theorem borel_eq_generateFrom_Iio_rat
     (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
   rintro _ ⟨a, rfl⟩
   have : IsLUB (range ((↑) : Rat -> Real) inter Iio a) a := by
-    simp [isLUB_iff_le_iff, mem_upperBou
+    simp [isLUB_iff_le_iff, mem_upperBounds, ← le_iff_forall_rat_lt_imp_le]
+  rw [← this.biUnion_Iio_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
+  exact MeasurableSet.biUnion (to_countable _)
+    fun b _ => GenerateMeasurable.basic (Iio (b : Real)) (by simp)
 
 中文:
 定理 borel_eq_generateFrom_Iio_rat
@@ -83,7 +86,10 @@ theorem borel_eq_generateFrom_Iio_rat
     (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
   rintro _ ⟨a, rfl⟩
   have : IsLUB (range ((↑) : Rat -> Real) inter Iio a) a := by
-    simp [isLUB_iff_le_iff, mem_upperBou
+    simp [isLUB_iff_le_iff, mem_upperBounds, ← le_iff_forall_rat_lt_imp_le]
+  rw [← this.biUnion_Iio_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
+  exact MeasurableSet.biUnion (to_countable _)
+    fun b _ => GenerateMeasurable.basic (Iio (b : Real)) (by simp)
 
 Depends on / 依赖: GenerateMeasurab, MeasurableSet, MeasurableSet.biUnion, biUnion, biUnion_Iio_eq, biUnion_image, borel_eq_generateFrom_Iio, generateFrom_le, generateFrom_mono, iUnion_subset, image_inter_preimage, image_univ, isLUB_iff_le_iff, le_antisymm, le_iff_forall_rat_lt_imp_le, mem_range_self, mem_upperBounds, singleton_subset_iff, singleton_subset_iff.mpr, this.biUnion_Iio_eq
 -/
@@ -112,7 +118,10 @@ theorem borel_eq_generateFrom_Ioi_rat
     (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
   rintro _ ⟨a, rfl⟩
   have : IsGLB (range ((↑) : Rat -> Real) inter Ioi a) a := by
-    simp [isGLB_iff_le_iff, mem_lowerBou
+    simp [isGLB_iff_le_iff, mem_lowerBounds, ← le_iff_forall_lt_rat_imp_le]
+  rw [← this.biUnion_Ioi_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
+  exact MeasurableSet.biUnion (to_countable _)
+    fun b _ => GenerateMeasurable.basic (Ioi (b : Real)) (by simp)
 
 中文:
 定理 borel_eq_generateFrom_Ioi_rat
@@ -124,7 +133,10 @@ theorem borel_eq_generateFrom_Ioi_rat
     (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
   rintro _ ⟨a, rfl⟩
   have : IsGLB (range ((↑) : Rat -> Real) inter Ioi a) a := by
-    simp [isGLB_iff_le_iff, mem_lowerBou
+    simp [isGLB_iff_le_iff, mem_lowerBounds, ← le_iff_forall_lt_rat_imp_le]
+  rw [← this.biUnion_Ioi_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
+  exact MeasurableSet.biUnion (to_countable _)
+    fun b _ => GenerateMeasurable.basic (Ioi (b : Real)) (by simp)
 
 Depends on / 依赖: GenerateMeasurab, MeasurableSet, MeasurableSet.biUnion, biUnion, biUnion_Ioi_eq, biUnion_image, borel_eq_generateFrom_Ioi, generateFrom_le, generateFrom_mono, iUnion_subset, image_inter_preimage, image_univ, isGLB_iff_le_iff, le_antisymm, le_iff_forall_lt_rat_imp_le, mem_lowerBounds, mem_range_self, singleton_subset_iff, singleton_subset_iff.mpr, this.biUnion_Ioi_eq
 -/
@@ -152,7 +164,7 @@ theorem borel_eq_generateFrom_Iic_rat
   rintro _ ⟨q, rfl⟩ <;>
   dsimp only <;>
   [rw [← compl_Iic]; rw [← compl_Ioi]] <;>
-  exact MeasurableSet.compl (GenerateMeasurab
+  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
 
 中文:
 定理 borel_eq_generateFrom_Iic_rat
@@ -163,7 +175,7 @@ theorem borel_eq_generateFrom_Iic_rat
   rintro _ ⟨q, rfl⟩ <;>
   dsimp only <;>
   [rw [← compl_Iic]; rw [← compl_Ioi]] <;>
-  exact MeasurableSet.compl (GenerateMeasurab
+  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
 
 Depends on / 依赖: GenerateMeasurable, GenerateMeasurable.basic, MeasurableSet, MeasurableSet.compl, borel_eq_generateFrom_Ioi_rat, compl_Iic, compl_Ioi, generateFrom_le, iUnion_singleton_eq_range, le_antisymm, mem_range_self
 -/
@@ -187,7 +199,7 @@ theorem borel_eq_generateFrom_Ici_rat
   rintro _ ⟨q, rfl⟩ <;>
   dsimp only <;>
   [rw [← compl_Ici]; rw [← compl_Iio]] <;>
-  exact MeasurableSet.compl (GenerateMeasurab
+  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
 
 中文:
 定理 borel_eq_generateFrom_Ici_rat
@@ -198,7 +210,7 @@ theorem borel_eq_generateFrom_Ici_rat
   rintro _ ⟨q, rfl⟩ <;>
   dsimp only <;>
   [rw [← compl_Ici]; rw [← compl_Iio]] <;>
-  exact MeasurableSet.compl (GenerateMeasurab
+  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
 
 Depends on / 依赖: GenerateMeasurable, GenerateMeasurable.basic, MeasurableSet, MeasurableSet.compl, borel_eq_generateFrom_Iio_rat, compl_Ici, compl_Iio, generateFrom_le, iUnion_singleton_eq_range, le_antisymm, mem_range_self
 -/
@@ -354,7 +366,9 @@ definition finiteSpanningSetsInIooRat
     exact neg_lt_self n.cast_add_one_pos
   finite _ := measure_Ioo_lt_top
   spanning :=
-    iUnion_eq_univ_iff.2 fun
+    iUnion_eq_univ_iff.2 fun x =>
+      ⟨⌊|x|⌋₊, neg_lt.1 ((neg_le_abs x).trans_lt (Nat.lt_floor_add_one _)),
+        (le_abs_self x).trans_lt (Nat.lt_floor_add_one _)⟩
 
 中文:
 定义 finiteSpanningSetsInIooRat
@@ -368,7 +382,9 @@ definition finiteSpanningSetsInIooRat
     exact neg_lt_self n.cast_add_one_pos
   finite _ := measure_Ioo_lt_top
   spanning :=
-    iUnion_eq_univ_iff.2 fun
+    iUnion_eq_univ_iff.2 fun x =>
+      ⟨⌊|x|⌋₊, neg_lt.1 ((neg_le_abs x).trans_lt (Nat.lt_floor_add_one _)),
+        (le_abs_self x).trans_lt (Nat.lt_floor_add_one _)⟩
 -/
 def finiteSpanningSetsInIooRat (μ : Measure Real) [IsLocallyFiniteMeasure μ] :
     μ.FiniteSpanningSetsIn (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (a : Real) (b : Real)}) where
@@ -927,7 +943,8 @@ instance instMeasurableMul₂
   · simp only [← ENNReal.coe_mul, measurable_mul.coe_nnreal_ennreal]
   · simp only [ENNReal.top_mul', ENNReal.coe_eq_zero]
     exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
-  · simp only [ENNReal.mul_top', 
+  · simp only [ENNReal.mul_top', ENNReal.coe_eq_zero]
+    exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
 
 中文:
 实例 instMeasurableMul₂
@@ -937,7 +954,8 @@ instance instMeasurableMul₂
   · simp only [← ENNReal.coe_mul, measurable_mul.coe_nnreal_ennreal]
   · simp only [ENNReal.top_mul', ENNReal.coe_eq_zero]
     exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
-  · simp only [ENNReal.mul_top', 
+  · simp only [ENNReal.mul_top', ENNReal.coe_eq_zero]
+    exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
 
 Depends on / 依赖: ENNReal, ENNReal.coe_eq_zero, ENNReal.coe_mul, ENNReal.mul_top, ENNReal.top_mul, coe_eq_zero, coe_mul, coe_nnreal_ennreal, measurableSet_singleton, measurable_const, measurable_const.piecewise, measurable_mul, measurable_mul.coe_nnreal_ennreal, measurable_of_measurable_nnreal_nnreal, mul_top, piecewise, top_mul
 -/
@@ -1026,7 +1044,7 @@ theorem measurable_of_tendsto'
     exact ((lim y).comp hx).liminf_eq
   rw [← this]
   change Measurable fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop
-  exact 
+  exact .liminf fun n => hf (x n)
 
 中文:
 定理 measurable_of_tendsto'
@@ -1039,7 +1057,7 @@ theorem measurable_of_tendsto'
     exact ((lim y).comp hx).liminf_eq
   rw [← this]
   change Measurable fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop
-  exact 
+  exact .liminf fun n => hf (x n)
 
 Depends on / 依赖: Measurable, exists_seq_tendsto, liminf, liminf_eq, tendsto_pi_nhds, u.exists_seq_tendsto
 -/
@@ -1085,7 +1103,19 @@ lemma aemeasurable_of_tendsto'
   have h'f : forall n, AEMeasurable (f (v n)) μ := fun n => hf (v n)
   set p : α -> (Nat -> Real>=0∞) -> Prop := fun x f' => Tendsto f' atTop (𝓝 (g x))
   have hp : forallᵐ x ∂μ, p x fun n => f (v n) x := by
-    filter_upwards [hlim] with x hx using hx.co
+    filter_upwards [hlim] with x hx using hx.comp hv
+  classical
+  set aeSeqLim := fun x => ite (x in aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some
+  refine ⟨aeSeqLim, measurable_of_tendsto' atTop (aeSeq.measurable h'f p)
+    (tendsto_pi_nhds.mpr fun x => ?_), ?_⟩
+  · unfold aeSeqLim
+    simp_rw [aeSeq]
+    split_ifs with hx
+    · simp_rw [aeSeq.mk_eq_fun_of_mem_aeSeqSet h'f hx]
+      exact aeSeq.fun_prop_of_mem_aeSeqSet h'f hx
+    · exact tendsto_const_nhds
+  · exact (ite_ae_eq_of_measure_compl_zero g (fun x => (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some)
+      (aeSeqSet h'f p) (aeSeq.measure_compl_aeSeqSet_eq_zero h'f hp)).symm
 
 中文:
 引理 aemeasurable_of_tendsto'
@@ -1095,7 +1125,19 @@ lemma aemeasurable_of_tendsto'
   have h'f : forall n, AEMeasurable (f (v n)) μ := fun n => hf (v n)
   set p : α -> (Nat -> Real>=0∞) -> Prop := fun x f' => Tendsto f' atTop (𝓝 (g x))
   have hp : forallᵐ x ∂μ, p x fun n => f (v n) x := by
-    filter_upwards [hlim] with x hx using hx.co
+    filter_upwards [hlim] with x hx using hx.comp hv
+  classical
+  set aeSeqLim := fun x => ite (x in aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some
+  refine ⟨aeSeqLim, measurable_of_tendsto' atTop (aeSeq.measurable h'f p)
+    (tendsto_pi_nhds.mpr fun x => ?_), ?_⟩
+  · unfold aeSeqLim
+    simp_rw [aeSeq]
+    split_ifs with hx
+    · simp_rw [aeSeq.mk_eq_fun_of_mem_aeSeqSet h'f hx]
+      exact aeSeq.fun_prop_of_mem_aeSeqSet h'f hx
+    · exact tendsto_const_nhds
+  · exact (ite_ae_eq_of_measure_compl_zero g (fun x => (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some)
+      (aeSeqSet h'f p) (aeSeq.measure_compl_aeSeqSet_eq_zero h'f hp)).symm
 
 Depends on / 依赖: AEMeasurable, Nonempty, Tendsto, aeSeq.measurable, aeSeqLim, aeSeqSet, classical, exists_seq_tendsto, filter_upwards, hx.comp, measurable, measurable_of_tendsto, tendsto_pi_nhds, tendsto_pi_nhds.mpr, u.exists_seq_tendsto
 -/
@@ -1984,7 +2026,9 @@ instance :
   · exact (measurable_const_mul _).comp measurable_coe_real_ereal
   · exact (measurable_const_mul _).comp measurable_coe_real_ereal
   · simp_rw [mul_comm _ ⊥]
-    exact (measurable_const
+    exact (measurable_const_mul _).comp measurable_coe_real_ereal
+  · simp_rw [mul_comm _ ⊤]
+    exact (measurable_const_mul _).comp measurable_coe_real_ereal
 
 中文:
 实例 :
@@ -1995,7 +2039,9 @@ instance :
   · exact (measurable_const_mul _).comp measurable_coe_real_ereal
   · exact (measurable_const_mul _).comp measurable_coe_real_ereal
   · simp_rw [mul_comm _ ⊥]
-    exact (measurable_const
+    exact (measurable_const_mul _).comp measurable_coe_real_ereal
+  · simp_rw [mul_comm _ ⊤]
+    exact (measurable_const_mul _).comp measurable_coe_real_ereal
 
 Depends on / 依赖: coe_real_ereal, measurable_coe_real_ereal, measurable_const_mul, measurable_fst, measurable_fst.mul, measurable_of_real_real, measurable_snd, mul_comm, simp_rw
 -/
@@ -2026,7 +2072,23 @@ theorem exists_spanning_measurableSet_le
     ext1 x
     simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
     exact exists_nat_ge (f x)
-  let sets n := sigma_finite_sets n inter norm
+  let sets n := sigma_finite_sets n inter norm_sets n
+  have h_meas : forall n, MeasurableSet (sets n) := by
+    refine fun n => MeasurableSet.inter ?_ ?_
+    · exact measurableSet_spanningSets μ n
+    · exact hf measurableSet_Iic
+  have h_finite : forall n, μ (sets n) < ∞ := by
+    refine fun n => (measure_mono Set.inter_subset_left).trans_lt ?_
+    exact measure_spanningSets_lt_top μ n
+  refine ⟨sets, fun n => ⟨h_meas n, h_finite n, ?_⟩, ?_⟩
+  · exact fun x hx => hx.2
+  · have :
+      ⋃ i, sigma_finite_sets i inter norm_sets i = (⋃ i, sigma_finite_sets i) inter ⋃ i, norm_sets i := by
+      refine Set.iUnion_inter_of_monotone (monotone_spanningSets μ) fun i j hij x => ?_
+      simp only [norm_sets, Set.mem_ofPred_eq]
+      refine fun hif => hif.trans ?_
+      exact mod_cast hij
+    rw [this]; rw [norm_sets_spanning]; rw [iUnion_spanningSets μ]; rw [Set.inter_univ]
 
 中文:
 定理 存在_spanning_measurableSet_le
@@ -2038,7 +2100,23 @@ theorem exists_spanning_measurableSet_le
     ext1 x
     simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
     exact exists_nat_ge (f x)
-  let sets n := sigma_finite_sets n inter norm
+  let sets n := sigma_finite_sets n inter norm_sets n
+  have h_meas : forall n, MeasurableSet (sets n) := by
+    refine fun n => MeasurableSet.inter ?_ ?_
+    · exact measurableSet_spanningSets μ n
+    · exact hf measurableSet_Iic
+  have h_finite : forall n, μ (sets n) < ∞ := by
+    refine fun n => (measure_mono Set.inter_subset_left).trans_lt ?_
+    exact measure_spanningSets_lt_top μ n
+  refine ⟨sets, fun n => ⟨h_meas n, h_finite n, ?_⟩, ?_⟩
+  · exact fun x hx => hx.2
+  · have :
+      ⋃ i, sigma_finite_sets i inter norm_sets i = (⋃ i, sigma_finite_sets i) inter ⋃ i, norm_sets i := by
+      refine Set.iUnion_inter_of_monotone (monotone_spanningSets μ) fun i j hij x => ?_
+      simp only [norm_sets, Set.mem_ofPred_eq]
+      refine fun hif => hif.trans ?_
+      exact mod_cast hij
+    rw [this]; rw [norm_sets_spanning]; rw [iUnion_spanningSets μ]; rw [Set.inter_univ]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.inter, Set.mem_iUnion, Set.mem_univ, Set.univ, exists_nat_ge, h_finite, h_meas, iff_true, measurableSet_Iic, measurableSet_spanningSets, mem_iUnion, mem_univ, norm_sets, norm_sets_spanning, sigma_finite_sets, spanningSets
 -/

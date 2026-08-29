@@ -159,7 +159,8 @@ lemma shortExact_iff
       exact fun i => (hS i).mono_f
     have : Epi S.g := by
       rw [hP.jointlyReflectEpimorphisms.epi_iff]
-     
+      exact fun i => (hS i).epi_g
+    exact { exact := (hP.exact_iff S).2 (fun i => (hS i).exact) }
 
 中文:
 引理 shortExact_iff
@@ -174,7 +175,8 @@ lemma shortExact_iff
       exact fun i => (hS i).mono_f
     have : Epi S.g := by
       rw [hP.jointlyReflectEpimorphisms.epi_iff]
-     
+      exact fun i => (hS i).epi_g
+    exact { exact := (hP.exact_iff S).2 (fun i => (hS i).exact) }
 
 Depends on / 依赖: epi_g, epi_iff, exact_iff, hP.exact_iff, hP.jointlyReflectEpimorphisms.epi_iff, hP.jointlyReflectMonomorphisms.mono_iff, hS.epi_g, hS.map, hS.mono_f, jointlyReflectEpimorphisms, jointlyReflectMonomorphisms, mono_f, mono_iff
 -/
@@ -204,7 +206,7 @@ lemma shortComplexQuasiIso_iff
   rw [hP.isIso_iff]
   exact fun i => ((MorphismProperty.isomorphisms _).arrow_mk_iso_iff
     (((Functor.mapArrowFunctor _ _).mapIso (ShortComplex.homologyFunctorIso (F i))).app
-      (Arrow.mk f))).
+      (Arrow.mk f))).1 (hf i)
 
 中文:
 引理 shortComplexQuasiIso_iff
@@ -215,7 +217,7 @@ lemma shortComplexQuasiIso_iff
   rw [hP.isIso_iff]
   exact fun i => ((MorphismProperty.isomorphisms _).arrow_mk_iso_iff
     (((Functor.mapArrowFunctor _ _).mapIso (ShortComplex.homologyFunctorIso (F i))).app
-      (Arrow.mk f))).
+      (Arrow.mk f))).1 (hf i)
 
 Depends on / 依赖: Arrow.mk, Functor, Functor.mapArrowFunctor, MorphismProperty, MorphismProperty.isomorphisms, ShortComplex, ShortComplex.homologyFunctorIso, ShortComplex.quasiIso_iff, arrow_mk_iso_iff, hP.isIso_iff, homologyFunctorIso, isIso_iff, isomorphisms, mapArrowFunctor, mapIso, quasiIso_iff
 -/

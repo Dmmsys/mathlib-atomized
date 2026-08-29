@@ -52,7 +52,13 @@ lemma hasLeftCalculusOfFractions
       hs := hW' Y}, by
       have := adj.unit.naturality s
       dsimp at this ⊢
-      rw [reassoc_of% this
+      rw [reassoc_of% this]; rw [Functor.map_inv]; rw [IsIso.hom_inv_id_assoc]; rw [adj.unit_naturality]⟩
+  ext X' X Y f₁ f₂ s _ h := by
+    have := hW s (by assumption)
+    refine ⟨_, adj.unit.app Y, hW' _, ?_⟩
+    rw [← adj.unit_naturality f₁]; rw [← adj.unit_naturality f₂]
+    congr 2
+    rw [← cancel_epi (G.map s)]; rw [← G.map_comp]; rw [← G.map_comp]; rw [h]
 
 中文:
 引理 hasLeftCalculusOfFractions
@@ -67,7 +73,13 @@ lemma hasLeftCalculusOfFractions
       hs := hW' Y}, by
       have := adj.unit.naturality s
       dsimp at this ⊢
-      rw [reassoc_of% this
+      rw [reassoc_of% this]; rw [Functor.map_inv]; rw [IsIso.hom_inv_id_assoc]; rw [adj.unit_naturality]⟩
+  ext X' X Y f₁ f₂ s _ h := by
+    have := hW s (by assumption)
+    refine ⟨_, adj.unit.app Y, hW' _, ?_⟩
+    rw [← adj.unit_naturality f₁]; rw [← adj.unit_naturality f₂]
+    congr 2
+    rw [← cancel_epi (G.map s)]; rw [← G.map_comp]; rw [← G.map_comp]; rw [h]
 
 Depends on / 依赖: F.map, Functor, Functor.map_inv, G.map, IsIso.hom_inv_id_assoc, adj.unit.app, adj.unit.naturality, adj.unit_naturality, hom_inv_id_assoc, map_inv, naturality, reassoc_of, unit_naturality
 -/
@@ -131,7 +143,12 @@ lemma isLocalization_leftAdjoint
     rw [NatTrans.isIso_iff_isIso_app]
     intro X
     exact Localization.inverts W.Q W _ (hW' X)
-  exact Functor.IsLocalization.o
+  exact Functor.IsLocalization.of_equivalence_target W.Q W _
+    (Equivalence.mk Φ (F ⋙ W.Q)
+      (Localization.liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
+        (W.Q.leftUnitor.symm ≪≫ asIso (Functor.whiskerRight adj.unit W.Q) ≪≫
+        Functor.associator _ _ _))
+      (Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ e ≪≫ asIso adj.counit)) e
 
 中文:
 引理 isLocalization_leftAdjoint
@@ -142,7 +159,12 @@ lemma isLocalization_leftAdjoint
     rw [NatTrans.isIso_iff_isIso_app]
     intro X
     exact Localization.inverts W.Q W _ (hW' X)
-  exact Functor.IsLocalization.o
+  exact Functor.IsLocalization.of_equivalence_target W.Q W _
+    (Equivalence.mk Φ (F ⋙ W.Q)
+      (Localization.liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
+        (W.Q.leftUnitor.symm ≪≫ asIso (Functor.whiskerRight adj.unit W.Q) ≪≫
+        Functor.associator _ _ _))
+      (Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ e ≪≫ asIso adj.counit)) e
 
 Depends on / 依赖: Equivalence, Equivalence.mk, Functor, Functor.IsLocalization.of_equivalence_target, Functor.assoc, Functor.associator, Functor.whiskerRight, IsLocalization, Localization, Localization.fac, Localization.inverts, Localization.lift, Localization.liftNatIso, NatTrans, NatTrans.isIso_iff_isIso_app, W.Localization, W.Q.leftUnitor.symm, adj.unit, associator, inverts
 -/

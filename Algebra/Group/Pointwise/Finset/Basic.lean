@@ -4238,7 +4238,7 @@ theorem isUnit_iff
   · rintro ⟨a, rfl, ha⟩
     exact ha.finset
 
-@[to_additive (a
+@[to_additive (attr := simp)]
 
 中文:
 定理 isUnit_iff
@@ -4253,7 +4253,7 @@ theorem isUnit_iff
   · rintro ⟨a, rfl, ha⟩
     exact ha.finset
 
-@[to_additive (a
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Finset, Finset.mul_eq_one_iff, finset, ha.finset, inv_mul, mul_eq_one_iff, mul_inv, singleton_injective, singleton_mul_singleton, u.inv_mul, u.mul_inv
 -/

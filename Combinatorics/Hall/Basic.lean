@@ -186,7 +186,7 @@ instance hallMatchingsOn.finite
     intro f f' h
     ext a
     rw [funext_iff] at h
-    
+    simpa [g] using h a
 
 中文:
 实例 hallMatchingsOn.finite
@@ -203,7 +203,7 @@ instance hallMatchingsOn.finite
     intro f f' h
     ext a
     rw [funext_iff] at h
-    
+    simpa [g] using h a
 
 Depends on / 依赖: Finite, Finite.of_injective, biUnion, classical, f.property, f.val, funext_iff, hallMatchingsOn, i.property, mem_biUnion, of_injective, property
 -/
@@ -236,7 +236,32 @@ theorem Finset.all_card_le_biUnion_card_iff_exists_injective
       hallMatchingsOn.nonempty t h ι'.unop
     classical
       have : forall ι' : (Finset ι)ᵒᵖ, Finite ((hallMatchingsFunctor t).obj ι') := by
-        i
+        intro ι'
+        rw [hallMatchingsFunctor]
+        infer_instance
+      -- Apply the compactness argument
+      obtain ⟨u, hu⟩ := nonempty_sections_of_finite_inverse_system (hallMatchingsFunctor t)
+      -- Interpret the resulting section of the inverse limit
+      refine ⟨?_, ?_, ?_⟩
+      · -- Build the matching function from the section
+        exact fun i =>
+          (u (Opposite.op ({i} : Finset ι))).val ⟨i, by simp only [mem_singleton]⟩
+      · -- Show that it is injective
+        intro i i'
+        have subi : ({i} : Finset ι) subseteq {i, i'} := by simp
+        have subi' : ({i'} : Finset ι) subseteq {i, i'} := by simp
+        simp only
+        rw [← hu (CategoryTheory.homOfLE subi).op]; rw [← hu (CategoryTheory.homOfLE subi').op]
+        let uii' := u (Opposite.op ({i, i'} : Finset ι))
+        exact fun h => Subtype.mk_eq_mk.mp (uii'.property.1 h)
+      · -- Show that it maps each index to the corresponding finite set
+        intro i
+        apply (u (Opposite.op ({i} : Finset ι))).property.2
+  · -- The reverse direction is a straightforward cardinality argument
+    rintro ⟨f, hf₁, hf₂⟩ s
+    rw [← Finset.card_image_of_injective s hf₁]
+    apply Finset.card_le_card
+    grind
 
 中文:
 定理 有限集.all_card_le_biUnion_card_iff_存在_injective
@@ -249,7 +274,32 @@ theorem Finset.all_card_le_biUnion_card_iff_exists_injective
       hallMatchingsOn.nonempty t h ι'.unop
     classical
       have : forall ι' : (Finset ι)ᵒᵖ, Finite ((hallMatchingsFunctor t).obj ι') := by
-        i
+        intro ι'
+        rw [hallMatchingsFunctor]
+        infer_instance
+      -- Apply the compactness argument
+      obtain ⟨u, hu⟩ := nonempty_sections_of_finite_inverse_system (hallMatchingsFunctor t)
+      -- Interpret the resulting section of the inverse limit
+      refine ⟨?_, ?_, ?_⟩
+      · -- Build the matching function from the section
+        exact fun i =>
+          (u (Opposite.op ({i} : Finset ι))).val ⟨i, by simp only [mem_singleton]⟩
+      · -- Show that it is injective
+        intro i i'
+        have subi : ({i} : Finset ι) subseteq {i, i'} := by simp
+        have subi' : ({i'} : Finset ι) subseteq {i, i'} := by simp
+        simp only
+        rw [← hu (CategoryTheory.homOfLE subi).op]; rw [← hu (CategoryTheory.homOfLE subi').op]
+        let uii' := u (Opposite.op ({i, i'} : Finset ι))
+        exact fun h => Subtype.mk_eq_mk.mp (uii'.property.1 h)
+      · -- Show that it maps each index to the corresponding finite set
+        intro i
+        apply (u (Opposite.op ({i} : Finset ι))).property.2
+  · -- The reverse direction is a straightforward cardinality argument
+    rintro ⟨f, hf₁, hf₂⟩ s
+    rw [← Finset.card_image_of_injective s hf₁]
+    apply Finset.card_le_card
+    grind
 -/
 theorem Finset.all_card_le_biUnion_card_iff_exists_injective {ι : Type u} {α : Type v}
     [DecidableEq α] (t : ι -> Finset α) :
@@ -315,7 +365,9 @@ theorem Fintype.all_card_le_rel_image_card_iff_exists_injective
     apply congr_arg
     ext b
     simp [r', SetRel.image]
-  have h' : forall (f : α -> β) (x), x ~[R] f x ↔ f x in r' x := by simp [r', Se
+  have h' : forall (f : α -> β) (x), x ~[R] f x ↔ f x in r' x := by simp [r', SetRel.image]
+  simp only [h, h']
+  apply Finset.all_card_le_biUnion_card_iff_exists_injective
 
 中文:
 定理 有限类型.all_card_le_rel_image_card_iff_存在_injective
@@ -328,7 +380,9 @@ theorem Fintype.all_card_le_rel_image_card_iff_exists_injective
     apply congr_arg
     ext b
     simp [r', SetRel.image]
-  have h' : forall (f : α -> β) (x), x ~[R] f x ↔ f x in r' x := by simp [r', Se
+  have h' : forall (f : α -> β) (x), x ~[R] f x ↔ f x in r' x := by simp [r', SetRel.image]
+  simp only [h, h']
+  apply Finset.all_card_le_biUnion_card_iff_exists_injective
 
 Depends on / 依赖: A.biUnion, Finset, Finset.all_card_le_biUnion_card_iff_exists_injective, Fintype, Fintype.card, R.image, Set.toFinset_card, SetRel, SetRel.image, all_card_le_biUnion_card_iff_exists_injective, biUnion, congr_arg, toFinset, toFinset_card
 -/
@@ -362,7 +416,7 @@ theorem Fintype.all_card_le_filter_rel_iff_exists_injective
     simp [r']
   have h' : forall (f : α -> β) (x), r x (f x) ↔ f x in r' x := by simp [r']
   simp_rw [h, h']
-  apply 
+  apply Finset.all_card_le_biUnion_card_iff_exists_injective
 
 中文:
 定理 有限类型.all_card_le_filter_rel_iff_存在_injective
@@ -376,7 +430,7 @@ theorem Fintype.all_card_le_filter_rel_iff_exists_injective
     simp [r']
   have h' : forall (f : α -> β) (x), r x (f x) ↔ f x in r' x := by simp [r']
   simp_rw [h, h']
-  apply 
+  apply Finset.all_card_le_biUnion_card_iff_exists_injective
 
 Depends on / 依赖: A.biUnion, Classical, Classical.decEq, Finset, Finset.all_card_le_biUnion_card_iff_exists_injective, all_card_le_biUnion_card_iff_exists_injective, biUnion, simp_rw
 -/

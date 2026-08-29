@@ -380,7 +380,7 @@ theorem invOneSubPow_eq_inv_one_sub_pow
       rw [inv_pow]
       exact (DivisionMonoid.inv_eq_of_mul _ (invOneSubPow S (d + 1)) <| by
         rw [← Units.val_eq_one]; rw [Units.val_mul]; rw [Units.val_pow_eq_pow_val]
-        exact (invOneSubPow S (d + 1)).inv_val).sy
+        exact (invOneSubPow S (d + 1)).inv_val).symm
 
 中文:
 定理 invOneSubPow_eq_inv_one_sub_pow
@@ -391,7 +391,7 @@ theorem invOneSubPow_eq_inv_one_sub_pow
       rw [inv_pow]
       exact (DivisionMonoid.inv_eq_of_mul _ (invOneSubPow S (d + 1)) <| by
         rw [← Units.val_eq_one]; rw [Units.val_mul]; rw [Units.val_pow_eq_pow_val]
-        exact (invOneSubPow S (d + 1)).inv_val).sy
+        exact (invOneSubPow S (d + 1)).inv_val).symm
 
 Depends on / 依赖: DivisionMonoid, DivisionMonoid.inv_eq_of_mul, Eq.symm, Units.val_eq_one, Units.val_mul, Units.val_pow_eq_pow_val, invOneSubPow, inv_eq_of_mul, inv_pow, inv_val, pow_zero, val_eq_one, val_mul, val_pow_eq_pow_val
 -/

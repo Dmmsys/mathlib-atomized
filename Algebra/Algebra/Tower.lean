@@ -1177,7 +1177,11 @@ theorem span_smul_of_span_eq_top
   proof: le_antisymm
     (span_le.2 fun _x ⟨p, _hps, _q, hqt, hpqx⟩ => hpqx ▸ (span S t).smul_mem p (subset_span hqt))
     fun _ hp => closure_induction (hx := hp) (zero_mem _) (fun _ _ _ _ => add_mem) fun s0 y hy => by
-      refine span_induction (fun x hx => subset_span <| by exact ⟨x, hx, y, hy, rfl⟩) ?_ 
+      refine span_induction (fun x hx => subset_span <| by exact ⟨x, hx, y, hy, rfl⟩) ?_ ?_ ?_
+        (hs ▸ mem_top : s0 in span R s)
+      · rw [zero_smul]; apply zero_mem
+      · intro _ _ _ _; rw [add_smul]; apply add_mem
+      · intro r s0 _ hy; rw [IsScalarTower.smul_assoc]; exact smul_mem _ r hy
 
 中文:
 定理 span_smul_of_span_eq_top
@@ -1185,7 +1189,11 @@ theorem span_smul_of_span_eq_top
   证明: le_antisymm
     (span_le.2 fun _x ⟨p, _hps, _q, hqt, hpqx⟩ => hpqx ▸ (span S t).smul_mem p (subset_span hqt))
     fun _ hp => closure_induction (hx := hp) (zero_mem _) (fun _ _ _ _ => add_mem) fun s0 y hy => by
-      refine span_induction (fun x hx => subset_span <| by exact ⟨x, hx, y, hy, rfl⟩) ?_ 
+      refine span_induction (fun x hx => subset_span <| by exact ⟨x, hx, y, hy, rfl⟩) ?_ ?_ ?_
+        (hs ▸ mem_top : s0 in span R s)
+      · rw [zero_smul]; apply zero_mem
+      · intro _ _ _ _; rw [add_smul]; apply add_mem
+      · intro r s0 _ hy; rw [IsScalarTower.smul_assoc]; exact smul_mem _ r hy
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.smul_assoc, _hps, add_mem, add_smul, closure_induction, le_antisymm, mem_top, smul_assoc, smul_mem, span_induction, span_le, subset_span, zero_mem, zero_smul
 -/

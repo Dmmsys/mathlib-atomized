@@ -442,7 +442,47 @@ theorem det_projVandermonde_of_field
   /- We can assume not all `w i` are zero, and therefore that `w 0 ≠ 0`,
   since otherwise we can swap row `0` with another nonzero row. -/
   wlog h0 : w 0 != 0 generalizing v w with aux
-  · obtain h0' | ⟨i₀, hi₀ : w i₀ != 0⟩ := forall_or_exist
+  · obtain h0' | ⟨i₀, hi₀ : w i₀ != 0⟩ := forall_or_exists_not (w · = 0)
+    · obtain rfl | hne := eq_or_ne n 0
+      · simp [projVandermonde_apply]
+      rw [det_eq_zero_of_column_eq_zero 0 (fun i => by simpa [projVandermonde_apply]; rw [h0']),
+        Finset.prod_sigma', Finset.prod_eq_zero (i := ⟨0, Fin.last n⟩) (by simpa) (by simp [h0'])]
+    rw [← mul_right_inj' (a := ((Equiv.swap 0 i₀).sign : K))
+      (by simp [show 0 != i₀ by rintro rfl; contradiction]), ← det_permute, ← projVandermonde_comp,
+      aux _ _ (by simpa), ← (Equiv.swap 0 i₀).prod_Ioi_comp_eq_sign_mul_prod (by simp)]
+    rfl
+  /- Let `W` be obtained from the matrix by subtracting `r = (v 0) / (w 0)` times each column
+  from the next column, starting from the penultimate column. This doesn't change the determinant.-/
+  set r := v 0 / w 0 with hr
+  set W : Matrix (Fin (n + 1)) (Fin (n + 1)) K := .of fun i => (cons (projVandermonde v w i 0)
+    (fun j => projVandermonde v w i j.succ - r * projVandermonde v w i j.castSucc))
+  -- deleting the first row and column of `W` gives a row-scaling of a Vandermonde matrix.
+  have hW_eq : (W.submatrix succ succ) = .of fun i j => (v (succ i) - r * w (succ i)) *
+      projVandermonde (v ∘ succ) (w ∘ succ) i j := by
+    ext i j
+    simp only [projVandermonde_apply, val_zero, rev_zero, val_last, val_succ,
+      val_castSucc, submatrix_apply, Function.comp_apply, rev_succ,
+      W, r, rev_castSucc]
+    simp
+    ring
+  /- The first row of `W` is `[(w 0)^n, 0, ..., 0]` - take a cofactor expansion along this row,
+  and apply induction. -/
+  rw [det_eq_of_forall_col_eq_smul_add_pred (B := W) (c := fun _ => r) (by simp [W])
+    (fun i j => by simp [W, r, projVandermonde_apply]), det_succ_row_zero,
+    Finset.sum_eq_single 0 _ (by simp)]
+  · rw [succAbove_zero, hW_eq, det_mul_column, ih]
+    simp only [Nat.succ_eq_add_one, coe_ofNat_eq_mod, Nat.zero_mod,
+      pow_zero, show W 0 0 = w 0 ^ n by simp [W, projVandermonde_apply], one_mul, hr]
+    field_simp
+    simp only [Finset.prod_div_distrib, Finset.prod_const, Finset.card_fin, Function.comp_apply]
+    field_simp
+    simp only [prod_univ_succ, Ioi_zero_eq_map, Finset.prod_map, coe_succEmb, prod_Ioi_succ]
+  intro j _ hj0
+  obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero hj0
+  rw [mul_eq_zero]; rw [mul_eq_zero]
+  refine .inl (.inr ?_)
+  simp only [of_apply, projVandermonde_apply_of_ne_zero h0, val_succ, val_castSucc, cons_succ, W, r]
+  ring
 
 中文:
 定理 det_projVandermonde_of_field
@@ -454,7 +494,47 @@ theorem det_projVandermonde_of_field
   /- We can assume not all `w i` are zero, and therefore that `w 0 ≠ 0`,
   since otherwise we can swap row `0` with another nonzero row. -/
   wlog h0 : w 0 != 0 generalizing v w with aux
-  · obtain h0' | ⟨i₀, hi₀ : w i₀ != 0⟩ := forall_or_exist
+  · obtain h0' | ⟨i₀, hi₀ : w i₀ != 0⟩ := forall_or_exists_not (w · = 0)
+    · obtain rfl | hne := eq_or_ne n 0
+      · simp [projVandermonde_apply]
+      rw [det_eq_zero_of_column_eq_zero 0 (fun i => by simpa [projVandermonde_apply]; rw [h0']),
+        Finset.prod_sigma', Finset.prod_eq_zero (i := ⟨0, Fin.last n⟩) (by simpa) (by simp [h0'])]
+    rw [← mul_right_inj' (a := ((Equiv.swap 0 i₀).sign : K))
+      (by simp [show 0 != i₀ by rintro rfl; contradiction]), ← det_permute, ← projVandermonde_comp,
+      aux _ _ (by simpa), ← (Equiv.swap 0 i₀).prod_Ioi_comp_eq_sign_mul_prod (by simp)]
+    rfl
+  /- Let `W` be obtained from the matrix by subtracting `r = (v 0) / (w 0)` times each column
+  from the next column, starting from the penultimate column. This doesn't change the determinant.-/
+  set r := v 0 / w 0 with hr
+  set W : Matrix (Fin (n + 1)) (Fin (n + 1)) K := .of fun i => (cons (projVandermonde v w i 0)
+    (fun j => projVandermonde v w i j.succ - r * projVandermonde v w i j.castSucc))
+  -- deleting the first row and column of `W` gives a row-scaling of a Vandermonde matrix.
+  have hW_eq : (W.submatrix succ succ) = .of fun i j => (v (succ i) - r * w (succ i)) *
+      projVandermonde (v ∘ succ) (w ∘ succ) i j := by
+    ext i j
+    simp only [projVandermonde_apply, val_zero, rev_zero, val_last, val_succ,
+      val_castSucc, submatrix_apply, Function.comp_apply, rev_succ,
+      W, r, rev_castSucc]
+    simp
+    ring
+  /- The first row of `W` is `[(w 0)^n, 0, ..., 0]` - take a cofactor expansion along this row,
+  and apply induction. -/
+  rw [det_eq_of_forall_col_eq_smul_add_pred (B := W) (c := fun _ => r) (by simp [W])
+    (fun i j => by simp [W, r, projVandermonde_apply]), det_succ_row_zero,
+    Finset.sum_eq_single 0 _ (by simp)]
+  · rw [succAbove_zero, hW_eq, det_mul_column, ih]
+    simp only [Nat.succ_eq_add_one, coe_ofNat_eq_mod, Nat.zero_mod,
+      pow_zero, show W 0 0 = w 0 ^ n by simp [W, projVandermonde_apply], one_mul, hr]
+    field_simp
+    simp only [Finset.prod_div_distrib, Finset.prod_const, Finset.card_fin, Function.comp_apply]
+    field_simp
+    simp only [prod_univ_succ, Ioi_zero_eq_map, Finset.prod_map, coe_succEmb, prod_Ioi_succ]
+  intro j _ hj0
+  obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero hj0
+  rw [mul_eq_zero]; rw [mul_eq_zero]
+  refine .inl (.inr ?_)
+  simp only [of_apply, projVandermonde_apply_of_ne_zero h0, val_succ, val_castSucc, cons_succ, W, r]
+  ring
 -/
 private theorem det_projVandermonde_of_field (v w : Fin n -> K) :
     (projVandermonde v w).det = ∏ i : Fin n, ∏ j in Finset.Ioi i, (v j * w i - v i * w j) := by
@@ -519,7 +599,11 @@ theorem det_projVandermonde
   have hdet := det_projVandermonde_of_field (u true) (u false)
   simp only [u] at hdet
   norm_cast at hdet
-  rw [projVandermonde_map]; rw [
+  rw [projVandermonde_map]; rw [← RingHom.map_det]; rw [IsFractionRing.coe_inj] at hdet
+  apply_fun MvPolynomial.eval₂Hom (Int.castRingHom R) (fun x => (if x.2 then v else w) x.1) at hdet
+  rw [RingHom.map_det] at hdet
+  convert! hdet <;>
+  simp [← Matrix.ext_iff, projVandermonde_apply]
 
 中文:
 定理 det_projVandermonde
@@ -531,7 +615,11 @@ theorem det_projVandermonde
   have hdet := det_projVandermonde_of_field (u true) (u false)
   simp only [u] at hdet
   norm_cast at hdet
-  rw [projVandermonde_map]; rw [
+  rw [projVandermonde_map]; rw [← RingHom.map_det]; rw [IsFractionRing.coe_inj] at hdet
+  apply_fun MvPolynomial.eval₂Hom (Int.castRingHom R) (fun x => (if x.2 then v else w) x.1) at hdet
+  rw [RingHom.map_det] at hdet
+  convert! hdet <;>
+  simp [← Matrix.ext_iff, projVandermonde_apply]
 
 Depends on / 依赖: FractionRing, Int.castRingHom, IsFractionRing, IsFractionRing.coe_inj, MvPolynomial, MvPolynomial.X, MvPolynomial.eval, RingHom, RingHom.map_det, algebraMap, apply_fun, castRingHom, coe_inj, convert, det_projVandermonde_of_field, map_det, projVandermonde_map
 -/
@@ -581,7 +669,8 @@ theorem det_vandermonde_eq_zero_iff
     rintro i ⟨_, j, h₁, h₂⟩
     exact ⟨j, i, h₂, (mem_Ioi.mp h₁).ne'⟩
   · simp only [Ne, forall_exists_index, and_imp]
-    refine fun i j h₁ h₂ => Matrix.det_zero_of_row_eq h₂ (funext fun k 
+    refine fun i j h₁ h₂ => Matrix.det_zero_of_row_eq h₂ (funext fun k => ?_)
+    rw [vandermonde_apply]; rw [vandermonde_apply]; rw [h₁]
 
 中文:
 定理 det_vandermonde_eq_zero_iff
@@ -592,7 +681,8 @@ theorem det_vandermonde_eq_zero_iff
     rintro i ⟨_, j, h₁, h₂⟩
     exact ⟨j, i, h₂, (mem_Ioi.mp h₁).ne'⟩
   · simp only [Ne, forall_exists_index, and_imp]
-    refine fun i j h₁ h₂ => Matrix.det_zero_of_row_eq h₂ (funext fun k 
+    refine fun i j h₁ h₂ => Matrix.det_zero_of_row_eq h₂ (funext fun k => ?_)
+    rw [vandermonde_apply]; rw [vandermonde_apply]; rw [h₁]
 
 Depends on / 依赖: Finset, Finset.prod_eq_zero_iff, Matrix, Matrix.det_zero_of_row_eq, and_imp, det_vandermonde, det_zero_of_row_eq, forall_exists_index, mem_Ioi, mem_Ioi.mp, prod_eq_zero_iff, sub_eq_zero, vandermonde_apply
 -/
@@ -764,7 +854,10 @@ theorem eval_matrixOfPolynomials_eq_vandermonde_mul_matrixOfPolynomials
   simp_rw [Matrix.mul_apply, eval, Matrix.of_apply, eval₂_eq_sum]
   simp only [Matrix.vandermonde]
 have : (p j).support subseteq range n := supp_subset_range Nat.lt_of_le_of_lt (h_deg j) Fin.prop j
-  rw [sum_eq_of_subset _ (fun j => zero_mul ((v i) ^ j)) this]; rw [← Fin.sum_univ_eq_sum
+  rw [sum_eq_of_subset _ (fun j => zero_mul ((v i) ^ j)) this]; rw [← Fin.sum_univ_eq_sum_range]
+  congr
+  ext k
+  rw [mul_comm]; rw [Matrix.of_apply]; rw [RingHom.id_apply]
 
 中文:
 定理 eval_matrixOfPolynomials_eq_vandermonde_mul_matrixOfPolynomials
@@ -774,7 +867,10 @@ have : (p j).support subseteq range n := supp_subset_range Nat.lt_of_le_of_lt (h
   simp_rw [Matrix.mul_apply, eval, Matrix.of_apply, eval₂_eq_sum]
   simp only [Matrix.vandermonde]
 have : (p j).support subseteq range n := supp_subset_range Nat.lt_of_le_of_lt (h_deg j) Fin.prop j
-  rw [sum_eq_of_subset _ (fun j => zero_mul ((v i) ^ j)) this]; rw [← Fin.sum_univ_eq_sum
+  rw [sum_eq_of_subset _ (fun j => zero_mul ((v i) ^ j)) this]; rw [← Fin.sum_univ_eq_sum_range]
+  congr
+  ext k
+  rw [mul_comm]; rw [Matrix.of_apply]; rw [RingHom.id_apply]
 
 Depends on / 依赖: Fin.prop, Fin.sum_univ_eq_sum_range, Matrix, Matrix.mul_apply, Matrix.of_apply, Matrix.vandermonde, Nat.lt_of_le_of_lt, RingHom, RingHom.id_apply, h_deg, id_apply, lt_of_le_of_lt, mul_apply, mul_comm, of_apply, simp_rw, subseteq, sum_eq_of_subset, sum_univ_eq_sum_range, supp_subset_range
 -/
@@ -831,7 +927,9 @@ lemma det_vandermonde_id_eq_superFactorial
     congr
     · simp only [Fin.val_zero, Nat.cast_zero, sub_zero]
       norm_cast
-      simp [Fin.prod_univ_eq_prod_range (fun i => (↑i + 1)) (n +
+      simp [Fin.prod_univ_eq_prod_range (fun i => (↑i + 1)) (n + 1)]
+    · rw [det_vandermonde] at hn
+      simp [hn]
 
 中文:
 引理 det_vandermonde_id_eq_superFactorial
@@ -845,7 +943,9 @@ lemma det_vandermonde_id_eq_superFactorial
     congr
     · simp only [Fin.val_zero, Nat.cast_zero, sub_zero]
       norm_cast
-      simp [Fin.prod_univ_eq_prod_range (fun i => (↑i + 1)) (n +
+      simp [Fin.prod_univ_eq_prod_range (fun i => (↑i + 1)) (n + 1)]
+    · rw [det_vandermonde] at hn
+      simp [hn]
 
 Depends on / 依赖: Fin.prod_univ_eq_prod_range, Fin.prod_univ_succAbove, Fin.val_zero, Nat.cast_zero, Nat.superFactorial, cast_zero, det_vandermonde, prod_univ_eq_prod_range, prod_univ_succAbove, sub_zero, superFactorial, val_zero
 -/
@@ -908,7 +1008,11 @@ lemma superFactorial_dvd_vandermonde_det
   have hw' : forall i, (w' i : Int) = v i - m := fun i => Int.toNat_sub_of_le (inf'_le _ (mem_univ _))
   have h := det_eval_matrixOfPolynomials_eq_det_vandermonde (fun i => ↑(w' i))
       (fun i => descPochhammer Int i)
- 
+      (fun i => descPochhammer_natDegree Int i)
+      (fun i => monic_descPochhammer Int i)
+  conv_lhs at h => simp only [hw', det_vandermonde_sub]
+  use (of (fun (i j : Fin (n + 1)) => (Nat.choose (w' i) (j : Nat) : Int))).det
+  simp [h, of_eval_descPochhammer_eq_mul_of_choose w', Fin.prod_univ_eq_prod_range]
 
 中文:
 引理 superFactorial_dvd_vandermonde_det
@@ -919,7 +1023,11 @@ lemma superFactorial_dvd_vandermonde_det
   have hw' : forall i, (w' i : Int) = v i - m := fun i => Int.toNat_sub_of_le (inf'_le _ (mem_univ _))
   have h := det_eval_matrixOfPolynomials_eq_det_vandermonde (fun i => ↑(w' i))
       (fun i => descPochhammer Int i)
- 
+      (fun i => descPochhammer_natDegree Int i)
+      (fun i => monic_descPochhammer Int i)
+  conv_lhs at h => simp only [hw', det_vandermonde_sub]
+  use (of (fun (i j : Fin (n + 1)) => (Nat.choose (w' i) (j : Nat) : Int))).det
+  simp [h, of_eval_descPochhammer_eq_mul_of_choose w', Fin.prod_univ_eq_prod_range]
 
 Depends on / 依赖: Int.toNat_sub_of_le, Nat.choose, conv_lhs, descPochhammer, descPochhammer_natDegree, det_eval_matrixOfPolynomials_eq_det_vandermonde, det_vandermonde_sub, mem_univ, monic_descPochhammer, toNat_sub_of_le
 -/

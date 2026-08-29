@@ -281,7 +281,36 @@ definition lift
       map_one' := by simp
       map_mul' z w := by
         symm
-        c
+        calc
+          (z.re • (1 : A) + z.im • ↑u) * (w.re • 1 + w.im • ↑u) =
+            (z.re * w.re) • (1 : A) + (z.re * w.im) • u +
+              (z.im * w.re) • u + (z.im * w.im) • (u * u) := by
+              simp only [mul_add, mul_one, add_mul, one_mul, ← add_assoc, smul_mul_smul]
+              apply add_add_add_comm'
+          _ = (z.re * w.re) • (1 : A) + (z.re * w.im + z.im * w.re) • u +
+                (z.im * w.im) • (u * u) := by
+              congr 1
+              simp only [add_assoc]
+              rw [← add_smul]
+          _ = (z.re * w.re) • 1 + (z.re * w.im + z.im * w.re) • u +
+                (z.im * w.im) • (a • 1 + b • u) := by
+              simp [u.prop]
+          _ = (z.re * w.re + a * z.im * w.im) • 1 +
+                (z.re * w.im + z.im * w.re + b * z.im * w.im) • u := by
+              simp only [smul_add]
+              module
+            _ = (z * w).re • 1 + (z * w).im • u := by
+              simp
+      commutes' r := by
+        simp [← Algebra.algebraMap_eq_smul_one] }
+  invFun f := ⟨f (ω), by
+    simp [← map_mul, omega_mul_omega_eq_add]
+    ⟩
+  left_inv r := by
+    simp
+  right_inv f := by
+    ext
+    simp
 
 中文:
 定义 lift
@@ -297,7 +326,36 @@ definition lift
       map_one' := by simp
       map_mul' z w := by
         symm
-        c
+        calc
+          (z.re • (1 : A) + z.im • ↑u) * (w.re • 1 + w.im • ↑u) =
+            (z.re * w.re) • (1 : A) + (z.re * w.im) • u +
+              (z.im * w.re) • u + (z.im * w.im) • (u * u) := by
+              simp only [mul_add, mul_one, add_mul, one_mul, ← add_assoc, smul_mul_smul]
+              apply add_add_add_comm'
+          _ = (z.re * w.re) • (1 : A) + (z.re * w.im + z.im * w.re) • u +
+                (z.im * w.im) • (u * u) := by
+              congr 1
+              simp only [add_assoc]
+              rw [← add_smul]
+          _ = (z.re * w.re) • 1 + (z.re * w.im + z.im * w.re) • u +
+                (z.im * w.im) • (a • 1 + b • u) := by
+              simp [u.prop]
+          _ = (z.re * w.re + a * z.im * w.im) • 1 +
+                (z.re * w.im + z.im * w.re + b * z.im * w.im) • u := by
+              simp only [smul_add]
+              module
+            _ = (z * w).re • 1 + (z * w).im • u := by
+              simp
+      commutes' r := by
+        simp [← Algebra.algebraMap_eq_smul_one] }
+  invFun f := ⟨f (ω), by
+    simp [← map_mul, omega_mul_omega_eq_add]
+    ⟩
+  left_inv r := by
+    simp
+  right_inv f := by
+    ext
+    simp
 
 Depends on / 依赖: add_add_add_comm, add_assoc, add_comm, add_mul, add_smul, im_add, map_add, map_mul, map_one, map_zero, mul_add, mul_one, one_mul, re_add, smul_mul_smul, w.im, w.re, z.im, z.re
 -/
@@ -855,7 +913,8 @@ theorem algebraMap_mem_nonZeroDivisors_iff
     rw [← map_mul]; rw [hxr]; rw [map_zero]
   · intro h z hz
     rw [QuadraticAlgebra.ext_iff]; rw [re_zero]; rw [im_zero] at hz
-    simp only [re_mul, algebraMap_re, a
+    simp only [re_mul, algebraMap_re, algebraMap_im, mul_zero, add_zero, im_mul, zero_add] at hz
+    simp [QuadraticAlgebra.ext_iff, re_zero, im_zero, h _ hz.left, h _ hz.right]
 
 中文:
 定理 algebraMap_mem_nonZeroDivisors_iff
@@ -869,7 +928,8 @@ theorem algebraMap_mem_nonZeroDivisors_iff
     rw [← map_mul]; rw [hxr]; rw [map_zero]
   · intro h z hz
     rw [QuadraticAlgebra.ext_iff]; rw [re_zero]; rw [im_zero] at hz
-    simp only [re_mul, algebraMap_re, a
+    simp only [re_mul, algebraMap_re, algebraMap_im, mul_zero, add_zero, im_mul, zero_add] at hz
+    simp [QuadraticAlgebra.ext_iff, re_zero, im_zero, h _ hz.left, h _ hz.right]
 
 Depends on / 依赖: QuadraticAlgebra, QuadraticAlgebra.ext_iff, add_zero, algebraMap_im, algebraMap_inj, algebraMap_re, ext_iff, hz.left, hz.right, im_mul, im_zero, map_mul, map_zero, mem_nonZeroDivisors_iff_right, mul_zero, re_mul, re_zero, zero_add
 -/
@@ -962,7 +1022,12 @@ theorem norm_mem_nonZeroDivisors_iff
     intro h w hw
     have : norm z • w = 0 := by
       rw [← C_mul_eq_smul]; rw [C_eq_algebraMap]; rw [algebraMap_norm_eq_mul_star]; rw [mul_comm]; rw [← mul_assoc]; rw [hw]; rw [zero_mul]
-    simp only [QuadraticAlgebra.ext_iff, re_smul
+    simp only [QuadraticAlgebra.ext_iff, re_smul, smul_eq_mul, mul_comm, re_zero, im_smul,
+      im_zero] at this
+    ext <;> simp [h _ this.left, h _ this.right]
+  · intro hz
+    rw [← algebraMap_mem_nonZeroDivisors_iff]; rw [algebraMap_norm_eq_mul_star]
+    exact Submonoid.mul_mem _ hz (star_mem_nonZeroDivisors hz)
 
 中文:
 定理 norm_mem_nonZeroDivisors_iff
@@ -973,7 +1038,12 @@ theorem norm_mem_nonZeroDivisors_iff
     intro h w hw
     have : norm z • w = 0 := by
       rw [← C_mul_eq_smul]; rw [C_eq_algebraMap]; rw [algebraMap_norm_eq_mul_star]; rw [mul_comm]; rw [← mul_assoc]; rw [hw]; rw [zero_mul]
-    simp only [QuadraticAlgebra.ext_iff, re_smul
+    simp only [QuadraticAlgebra.ext_iff, re_smul, smul_eq_mul, mul_comm, re_zero, im_smul,
+      im_zero] at this
+    ext <;> simp [h _ this.left, h _ this.right]
+  · intro hz
+    rw [← algebraMap_mem_nonZeroDivisors_iff]; rw [algebraMap_norm_eq_mul_star]
+    exact Submonoid.mul_mem _ hz (star_mem_nonZeroDivisors hz)
 
 Depends on / 依赖: C_eq_algebraMap, C_mul_eq_smul, QuadraticAlgebra, QuadraticAlgebra.ext_iff, Submonoid, Submonoid.mul_mem, algebraMap_mem_nonZeroDivisors_iff, algebraMap_norm_eq_mul_star, ext_iff, im_smul, im_zero, mem_nonZeroDivisors_iff_right, mul_assoc, mul_comm, mul_mem, re_smul, re_zero, smul_eq_mul, this.left, this.right
 -/
@@ -1401,7 +1471,12 @@ instance :
     rw [ne_eq]; rw [← norm_eq_zero_iff_eq_zero] at hz
     simp only [inv_def, Algebra.mul_smul_comm]
     rw [← C_mul_eq_smul]; rw [C_eq_algebraMap]; rw [← algebraMap_norm_eq_mul_star]; rw [← map_mul]; rw [inv_mul_cancel₀ hz]; rw [map_one]
-  nnratCast_def q
+  nnratCast_def q := by ext <;> simp [sq]; field_simp; simp [NNRat.cast_def]
+  ratCast_def q := by ext <;> simp [sq]; field_simp; simp [Rat.cast_def]
+  nnqsmul := (· • ·)
+  qsmul := (· • ·)
+  nnqsmul_def q x := by ext <;> simp [NNRat.smul_def]
+  qsmul_def q x := by ext <;> simp [Rat.smul_def]
 
 中文:
 实例 :
@@ -1411,7 +1486,12 @@ instance :
     rw [ne_eq]; rw [← norm_eq_zero_iff_eq_zero] at hz
     simp only [inv_def, Algebra.mul_smul_comm]
     rw [← C_mul_eq_smul]; rw [C_eq_algebraMap]; rw [← algebraMap_norm_eq_mul_star]; rw [← map_mul]; rw [inv_mul_cancel₀ hz]; rw [map_one]
-  nnratCast_def q
+  nnratCast_def q := by ext <;> simp [sq]; field_simp; simp [NNRat.cast_def]
+  ratCast_def q := by ext <;> simp [sq]; field_simp; simp [Rat.cast_def]
+  nnqsmul := (· • ·)
+  qsmul := (· • ·)
+  nnqsmul_def q x := by ext <;> simp [NNRat.smul_def]
+  qsmul_def q x := by ext <;> simp [Rat.smul_def]
 
 Depends on / 依赖: Algebra, Algebra.mul_smul_comm, C_eq_algebraMap, C_mul_eq_smul, NNRat.cast_def, NNRat.smul_de, Rat.cast_def, algebraMap_norm_eq_mul_star, cast_def, inv_def, map_mul, map_one, mul_inv_cancel, mul_smul_comm, ne_eq, nnqsmul, nnqsmul_def, nnratCast_def, norm_eq_zero_iff_eq_zero, ratCast_def
 -/

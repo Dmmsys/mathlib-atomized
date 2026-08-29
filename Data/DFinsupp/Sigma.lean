@@ -54,7 +54,11 @@ definition sigmaCurry
     support' := f.support'.map (fun ⟨m, hm⟩ =>
       ⟨m.filterMap (fun ⟨i', j'⟩ => if h : i' = i then some <| h.rec j' else none),
         fun j => (hm ⟨i, j⟩).imp_left (fun h => (m.mem_filterMap _).mpr ⟨⟨i, j⟩, h, dif_pos rfl⟩)⟩) }
-  support' := f.support'.m
+  support' := f.support'.map (fun ⟨m, hm⟩ =>
+    ⟨m.map Sigma.fst, fun i => Decidable.or_iff_not_imp_left.mpr (fun h => DFinsupp.ext
+      (fun j => (hm ⟨i, j⟩).resolve_left (fun H => (Multiset.mem_map.not.mp h) ⟨⟨i, j⟩, H, rfl⟩)))⟩)
+
+@[simp]
 
 中文:
 定义 sigmaCurry
@@ -64,7 +68,11 @@ definition sigmaCurry
     support' := f.support'.map (fun ⟨m, hm⟩ =>
       ⟨m.filterMap (fun ⟨i', j'⟩ => if h : i' = i then some <| h.rec j' else none),
         fun j => (hm ⟨i, j⟩).imp_left (fun h => (m.mem_filterMap _).mpr ⟨⟨i, j⟩, h, dif_pos rfl⟩)⟩) }
-  support' := f.support'.m
+  support' := f.support'.map (fun ⟨m, hm⟩ =>
+    ⟨m.map Sigma.fst, fun i => Decidable.or_iff_not_imp_left.mpr (fun h => DFinsupp.ext
+      (fun j => (hm ⟨i, j⟩).resolve_left (fun H => (Multiset.mem_map.not.mp h) ⟨⟨i, j⟩, H, rfl⟩)))⟩)
+
+@[simp]
 -/
 def sigmaCurry [forall i j, Zero (δ i j)] (f : Π₀ (i : Σ _, _), δ i.1 i.2) :
     Π₀ (i) (j), δ i j where
@@ -243,7 +251,17 @@ definition sigmaUncurry
           rintro ⟨i, a⟩
           cases s.prop i with
           | inl hi =>
-    
+            cases (fs ⟨i, Multiset.mem_toFinset.mpr hi⟩).prop a with
+            | inl ha =>
+              left; rw [Multiset.mem_bind]
+              use ⟨i, Multiset.mem_toFinset.mpr hi⟩
+              constructor
+              case right => simp [ha]
+              case left => apply Multiset.mem_attach
+            | inr ha => right; simp [toFun_eq_coe (f i) ▸ ha]
+          | inr hi => right; simp [toFun_eq_coe f ▸ hi]⟩
+
+@[simp]
 
 中文:
 定义 sigmaUncurry
@@ -256,7 +274,17 @@ definition sigmaUncurry
           rintro ⟨i, a⟩
           cases s.prop i with
           | inl hi =>
-    
+            cases (fs ⟨i, Multiset.mem_toFinset.mpr hi⟩).prop a with
+            | inl ha =>
+              left; rw [Multiset.mem_bind]
+              use ⟨i, Multiset.mem_toFinset.mpr hi⟩
+              constructor
+              case right => simp [ha]
+              case left => apply Multiset.mem_attach
+            | inr ha => right; simp [toFun_eq_coe (f i) ▸ ha]
+          | inr hi => right; simp [toFun_eq_coe f ▸ hi]⟩
+
+@[simp]
 -/
 def sigmaUncurry [forall i j, Zero (δ i j)] (f : Π₀ (i) (j), δ i j) : Π₀ i : Σ _, _, δ i.1 i.2 where
   toFun i := f i.1 i.2

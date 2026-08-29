@@ -643,7 +643,15 @@ instance :
     obtain ⟨z, hz, hyz⟩ := hQR hy
     exact ⟨z, hz, hxy.trans hyz⟩
   le_antisymm P Q hp hq := by
-    refine Partition.ext fun x => ⟨fun h 
+    refine Partition.ext fun x => ⟨fun h => ?_, fun h => ?_⟩
+    · obtain ⟨y, hy, hxy⟩ := hp h
+      obtain ⟨x', hx', hyx'⟩ := hq hy
+      obtain rfl := P.pairwiseDisjoint.eq_of_le h hx' (P.ne_bot_of_mem h) (hxy.trans hyx')
+      rwa [hxy.antisymm hyx']
+    obtain ⟨y, hy, hxy⟩ := hq h
+    obtain ⟨x', hx', hyx'⟩ := hp hy
+    obtain rfl := Q.pairwiseDisjoint.eq_of_le h hx' (Q.ne_bot_of_mem h) (hxy.trans hyx')
+    rwa [hxy.antisymm hyx']
 
 中文:
 实例 :
@@ -656,7 +664,15 @@ instance :
     obtain ⟨z, hz, hyz⟩ := hQR hy
     exact ⟨z, hz, hxy.trans hyz⟩
   le_antisymm P Q hp hq := by
-    refine Partition.ext fun x => ⟨fun h 
+    refine Partition.ext fun x => ⟨fun h => ?_, fun h => ?_⟩
+    · obtain ⟨y, hy, hxy⟩ := hp h
+      obtain ⟨x', hx', hyx'⟩ := hq hy
+      obtain rfl := P.pairwiseDisjoint.eq_of_le h hx' (P.ne_bot_of_mem h) (hxy.trans hyx')
+      rwa [hxy.antisymm hyx']
+    obtain ⟨y, hy, hxy⟩ := hq h
+    obtain ⟨x', hx', hyx'⟩ := hp hy
+    obtain rfl := Q.pairwiseDisjoint.eq_of_le h hx' (Q.ne_bot_of_mem h) (hxy.trans hyx')
+    rwa [hxy.antisymm hyx']
 -/
 instance : PartialOrder (Partition s) where
   le P Q := forall ⦃x⦄, x in P -> exists y in Q, x <= y
@@ -845,7 +861,23 @@ instance instSemilatticeInf
       intro a ha a' ha' h
       grind [Partition.eq_or_disjoint, Disjoint.inf_left, Disjoint.inf_left'])
     (by
-      suffices sSup {a | exists p in P, exists q in Q, a = p ⊓ q} = sSup P ⊓ sSup Q b
+      suffices sSup {a | exists p in P, exists q in Q, a = p ⊓ q} = sSup P ⊓ sSup Q by simpa
+      rw [sSup_inf_sSup]
+      refine le_antisymm ?_ ?_
+· exact sSup_le fun a ⟨p, hp, q, hq, ha⟩ => le_iSup₂_of_le (p, q) ⟨hp, hq⟩ by grind
+      · exact iSup₂_le fun (p, q) ⟨hp, hq⟩ => le_sSup_of_le ⟨p, hp, q, hq, rfl⟩ (by simp))
+  inf_le_left P Q a ha := by
+    obtain ⟨⟨p, hp, q, hq, rfl⟩, h⟩ := ha
+    grind [inf_le_left]
+  inf_le_right P Q a ha := by
+    obtain ⟨⟨p, hp, q, hq, rfl⟩, h⟩ := ha
+    grind [inf_le_right]
+  le_inf P Q R hQ hR a ha := by
+    have ⟨q, hq⟩ := hQ ha
+    have ⟨r, hr⟩ := hR ha
+    refine ⟨q ⊓ r, ⟨?_, ?_⟩, ?_⟩ <;> grind [le_inf_iff, P.ne_bot_of_mem ha]
+
+@[simp]
 
 中文:
 实例 instSemilatticeInf
@@ -855,7 +887,23 @@ instance instSemilatticeInf
       intro a ha a' ha' h
       grind [Partition.eq_or_disjoint, Disjoint.inf_left, Disjoint.inf_left'])
     (by
-      suffices sSup {a | exists p in P, exists q in Q, a = p ⊓ q} = sSup P ⊓ sSup Q b
+      suffices sSup {a | exists p in P, exists q in Q, a = p ⊓ q} = sSup P ⊓ sSup Q by simpa
+      rw [sSup_inf_sSup]
+      refine le_antisymm ?_ ?_
+· exact sSup_le fun a ⟨p, hp, q, hq, ha⟩ => le_iSup₂_of_le (p, q) ⟨hp, hq⟩ by grind
+      · exact iSup₂_le fun (p, q) ⟨hp, hq⟩ => le_sSup_of_le ⟨p, hp, q, hq, rfl⟩ (by simp))
+  inf_le_left P Q a ha := by
+    obtain ⟨⟨p, hp, q, hq, rfl⟩, h⟩ := ha
+    grind [inf_le_left]
+  inf_le_right P Q a ha := by
+    obtain ⟨⟨p, hp, q, hq, rfl⟩, h⟩ := ha
+    grind [inf_le_right]
+  le_inf P Q R hQ hR a ha := by
+    have ⟨q, hq⟩ := hQ ha
+    have ⟨r, hr⟩ := hR ha
+    refine ⟨q ⊓ r, ⟨?_, ?_⟩, ?_⟩ <;> grind [le_inf_iff, P.ne_bot_of_mem ha]
+
+@[simp]
 
 Depends on / 依赖: Disjoint, Disjoint.inf_left, Partition, Partition.eq_or_disjoint, eq_or_disjoint, inf_le_, inf_left, le_antisymm, le_sSup_of_le, removeBot, sSupIndep_iff_pairwiseDisjoint, sSup_inf_sSup, sSup_le
 -/
@@ -1212,7 +1260,9 @@ lemma rel_le_iff_le
     obtain ⟨T, hT, hxT, -⟩ := h x x ⟨S, hS, hxS, hxS⟩
     refine ⟨T, hT, fun a haS => ?_⟩
     obtain ⟨T', hT', haT', hxT'⟩ := h a x ⟨S, hS, haS, hxS⟩
-    exact eq_of_mem_of_mem hT hT' hxT hxT' ▸
+    exact eq_of_mem_of_mem hT hT' hxT hxT' ▸ haT'
+  obtain ⟨t', ht', htt'⟩ := h ht
+  use t', ht', htt' ha, htt' hb
 
 中文:
 引理 rel_le_iff_le
@@ -1223,7 +1273,9 @@ lemma rel_le_iff_le
     obtain ⟨T, hT, hxT, -⟩ := h x x ⟨S, hS, hxS, hxS⟩
     refine ⟨T, hT, fun a haS => ?_⟩
     obtain ⟨T', hT', haT', hxT'⟩ := h a x ⟨S, hS, haS, hxS⟩
-    exact eq_of_mem_of_mem hT hT' hxT hxT' ▸
+    exact eq_of_mem_of_mem hT hT' hxT hxT' ▸ haT'
+  obtain ⟨t', ht', htt'⟩ := h ht
+  use t', ht', htt' ha, htt' hb
 
 Depends on / 依赖: eq_of_mem_of_mem, nonempty_of_mem
 -/
@@ -1914,7 +1966,11 @@ lemma apply_eq_apply_iff
 .mp hab · exact hf.apply_eq_apply_iff_rel ha
     obtain (hb | hb) := em (b in u)
     · exact (hf.apply_eq_apply_iff_rel hb |>.mp hab.symm).symm
-    rw [hf.apply_of_notMem ha]; 
+    rw [hf.apply_of_notMem ha]; rw [hf.apply_of_notMem hb] at hab
+    contradiction
+  obtain rfl | hne := eq_or_ne a b
+  · rfl
+  exact hf.apply_eq_apply (h hne)
 
 中文:
 引理 apply_eq_apply_iff
@@ -1927,7 +1983,11 @@ lemma apply_eq_apply_iff
 .mp hab · exact hf.apply_eq_apply_iff_rel ha
     obtain (hb | hb) := em (b in u)
     · exact (hf.apply_eq_apply_iff_rel hb |>.mp hab.symm).symm
-    rw [hf.apply_of_notMem ha]; 
+    rw [hf.apply_of_notMem ha]; rw [hf.apply_of_notMem hb] at hab
+    contradiction
+  obtain rfl | hne := eq_or_ne a b
+  · rfl
+  exact hf.apply_eq_apply (h hne)
 
 Depends on / 依赖: apply_eq_apply, apply_eq_apply_iff_rel, apply_of_notMem, eq_or_ne, hab.symm, hf.apply_eq_apply, hf.apply_eq_apply_iff_rel, hf.apply_of_notMem, ne_eq, or_iff_not_imp_left
 -/
@@ -2086,7 +2146,24 @@ lemma exists_extend_partial
   set f : α -> α := fun a => if ha : a in u then
     (if hb : exists b : t, P.Rel a b then f₀ hb.choose else P.rep (P.partOf_mem ha)) else a with hfdef
   refine ⟨f, ⟨fun a ha => by simp [hfdef, ha], fun a ha => ?_, fun a b hab => ?_⟩, fun a => ?_⟩
-  · simp only [hfdef, ha, ↓reduceDIte
+  · simp only [hfdef, ha, ↓reduceDIte]
+    split_ifs with h
+· exact h.choose_spec.trans h_mem h.choose h.choose_spec.right_mem
+    push Not at h
+    exact P.rep_rel (P.partOf_mem ha) (P.mem_partOf ha)
+  · simp_rw [hfdef, dif_pos hab.left_mem, dif_pos hab.right_mem]
+    split_ifs with h₁ h₂ h₂
+· exact h_eq _ _ (hab.symm.trans h₁.choose_spec).symm.trans h₂.choose_spec
+.elim · exact h₂ ⟨_, hab.symm.trans h₁.choose_spec⟩
+.elim · exact h₁ ⟨_, hab.trans h₂.choose_spec⟩
+    congr 1
+    rwa [← rel_iff_partOf_eq_partOf_of_mem _ hab.left_mem hab.right_mem]
+.symm obtain (ha | ha) := em (a.1 in u)
+  · simp [hfdef, ha, h_notMem _ ha]
+  simp only [hfdef, ha, ↓reduceDIte]
+  split_ifs with h
+.symm · exact h_eq _ _ h.choose_spec
+.elim exact h ⟨a, rel_rfl_iff.mpr ha⟩
 
 中文:
 引理 存在_extend_partial
@@ -2096,7 +2173,24 @@ lemma exists_extend_partial
   set f : α -> α := fun a => if ha : a in u then
     (if hb : exists b : t, P.Rel a b then f₀ hb.choose else P.rep (P.partOf_mem ha)) else a with hfdef
   refine ⟨f, ⟨fun a ha => by simp [hfdef, ha], fun a ha => ?_, fun a b hab => ?_⟩, fun a => ?_⟩
-  · simp only [hfdef, ha, ↓reduceDIte
+  · simp only [hfdef, ha, ↓reduceDIte]
+    split_ifs with h
+· exact h.choose_spec.trans h_mem h.choose h.choose_spec.right_mem
+    push Not at h
+    exact P.rep_rel (P.partOf_mem ha) (P.mem_partOf ha)
+  · simp_rw [hfdef, dif_pos hab.left_mem, dif_pos hab.right_mem]
+    split_ifs with h₁ h₂ h₂
+· exact h_eq _ _ (hab.symm.trans h₁.choose_spec).symm.trans h₂.choose_spec
+.elim · exact h₂ ⟨_, hab.symm.trans h₁.choose_spec⟩
+.elim · exact h₁ ⟨_, hab.trans h₂.choose_spec⟩
+    congr 1
+    rwa [← rel_iff_partOf_eq_partOf_of_mem _ hab.left_mem hab.right_mem]
+.symm obtain (ha | ha) := em (a.1 in u)
+  · simp [hfdef, ha, h_notMem _ ha]
+  simp only [hfdef, ha, ↓reduceDIte]
+  split_ifs with h
+.symm · exact h_eq _ _ h.choose_spec
+.elim exact h ⟨a, rel_rfl_iff.mpr ha⟩
 
 Depends on / 依赖: P.Rel, P.mem_partOf, P.partOf_mem, P.rep, P.rep_rel, choose_spec, classical, dif_pos, h.choose, h.choose_spec.right_mem, h.choose_spec.trans, h_mem, hab.left_mem, hab.right_me, hb.choose, left_mem, mem_partOf, partOf_mem, reduceDIte, rep_rel
 -/

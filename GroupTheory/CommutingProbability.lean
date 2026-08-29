@@ -78,7 +78,7 @@ theorem commProb_prod
     ← Nat.card_prod, Commute, SemiconjBy, Prod.ext_iff]
   congr 2
   exact Nat.card_congr ⟨fun x => ⟨⟨⟨x.1.1.1, x.1.2.1⟩, x.2.1⟩, ⟨⟨x.1.1.2, x.1.2.2⟩, x.2.2⟩⟩,
-    fun x => ⟨⟨⟨x.1.1.1, x.2.1.1⟩, ⟨x.1.1
+    fun x => ⟨⟨⟨x.1.1.1, x.2.1.1⟩, ⟨x.1.1.2, x.2.1.2⟩⟩, ⟨x.1.2, x.2.2⟩⟩, fun x => rfl, fun x => rfl⟩
 
 中文:
 定理 commProb_prod
@@ -89,7 +89,7 @@ theorem commProb_prod
     ← Nat.card_prod, Commute, SemiconjBy, Prod.ext_iff]
   congr 2
   exact Nat.card_congr ⟨fun x => ⟨⟨⟨x.1.1.1, x.1.2.1⟩, x.2.1⟩, ⟨⟨x.1.1.2, x.1.2.2⟩, x.2.2⟩⟩,
-    fun x => ⟨⟨⟨x.1.1.1, x.2.1.1⟩, ⟨x.1.1
+    fun x => ⟨⟨⟨x.1.1.1, x.2.1.1⟩, ⟨x.1.1.2, x.2.1.2⟩⟩, ⟨x.1.2, x.2.2⟩⟩, fun x => rfl, fun x => rfl⟩
 
 Depends on / 依赖: Commute, Nat.card_congr, Nat.card_prod, Nat.cast_mul, Prod.ext_iff, SemiconjBy, card_congr, card_prod, cast_mul, commProb_def, div_mul_div_comm, ext_iff, mul_pow, simp_rw
 -/
@@ -111,7 +111,7 @@ theorem commProb_pi
     ← Nat.card_pi, Commute, SemiconjBy, funext_iff]
   congr 2
   exact Nat.card_congr ⟨fun x a => ⟨⟨x.1.1 a, x.1.2 a⟩, x.2 a⟩, fun x => ⟨⟨fun a => (x a).1.1,
-    fun a => (x a).1.2⟩, fun a => (x a).2⟩, fun x => rfl
+    fun a => (x a).1.2⟩, fun a => (x a).2⟩, fun x => rfl, fun x => rfl⟩
 
 中文:
 定理 commProb_pi
@@ -121,7 +121,7 @@ theorem commProb_pi
     ← Nat.card_pi, Commute, SemiconjBy, funext_iff]
   congr 2
   exact Nat.card_congr ⟨fun x a => ⟨⟨x.1.1 a, x.1.2 a⟩, x.2 a⟩, fun x => ⟨⟨fun a => (x a).1.1,
-    fun a => (x a).1.2⟩, fun a => (x a).2⟩, fun x => rfl
+    fun a => (x a).1.2⟩, fun a => (x a).2⟩, fun x => rfl, fun x => rfl⟩
 
 Depends on / 依赖: Commute, Finset, Finset.prod_div_distrib, Finset.prod_pow, Nat.card_congr, Nat.card_pi, Nat.cast_prod, SemiconjBy, card_congr, card_pi, cast_prod, commProb_def, funext_iff, prod_div_distrib, prod_pow, simp_rw
 -/
@@ -250,6 +250,8 @@ theorem commProb_eq_one_iff
   have := Fintype.ofFinite M
   rw [commProb]; rw [← Set.coe_ofPred]; rw [Nat.card_eq_fintype_card]; rw [Nat.card_eq_fintype_card]
   rw [div_eq_one_iff_eq]; rw [← Nat.cast_pow]; rw [Nat.cast_inj]; rw [sq]; rw [← card_prod]; rw [set_fintype_card_eq_univ_iff]; rw [Set.eq_univ_iff_forall]
+  · exact ⟨fun h => ⟨⟨fun x y => h (x, y)⟩⟩, fun h x => mul_comm' ..⟩
+  · exact pow_ne_zero 2 (Nat.cast_ne_zero.mpr card_ne_zero)
 
 中文:
 定理 commProb_eq_one_iff
@@ -260,6 +262,8 @@ theorem commProb_eq_one_iff
   have := Fintype.ofFinite M
   rw [commProb]; rw [← Set.coe_ofPred]; rw [Nat.card_eq_fintype_card]; rw [Nat.card_eq_fintype_card]
   rw [div_eq_one_iff_eq]; rw [← Nat.cast_pow]; rw [Nat.cast_inj]; rw [sq]; rw [← card_prod]; rw [set_fintype_card_eq_univ_iff]; rw [Set.eq_univ_iff_forall]
+  · exact ⟨fun h => ⟨⟨fun x y => h (x, y)⟩⟩, fun h x => mul_comm' ..⟩
+  · exact pow_ne_zero 2 (Nat.cast_ne_zero.mpr card_ne_zero)
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, Nat.cast_inj, Nat.cast_ne_zero.mpr, Nat.cast_pow, Set.coe_ofPred, Set.eq_univ_iff_forall, card_eq_fintype_card, card_ne_zero, card_prod, cast_inj, cast_ne_zero, cast_pow, classical, coe_ofPred, commProb, div_eq_one_iff_eq, eq_univ_iff_forall, mul_comm
 -/
@@ -314,7 +318,11 @@ theorem Subgroup.commProb_subgroup_le
   proof: by
   /- After rewriting with `commProb_def`, we reduce to showing that `G` has at least as many
       commuting pairs as `H`. -/
-  rw [commProb_def]; rw [commProb_def]; rw [div_le_iff₀]; rw [mul_assoc]; rw [← mul_pow]; rw [← Nat.cast_mul]; rw [mul_comm H.index]; rw [H.card_mul_index]; rw [div_mul_ca
+  rw [commProb_def]; rw [commProb_def]; rw [div_le_iff₀]; rw [mul_assoc]; rw [← mul_pow]; rw [← Nat.cast_mul]; rw [mul_comm H.index]; rw [H.card_mul_index]; rw [div_mul_cancel₀]; rw [Nat.cast_le]
+  · refine Nat.card_le_card_of_injective (fun p => ⟨⟨p.1.1, p.1.2⟩, Subtype.ext_iff.mp p.2⟩) ?_
+    exact fun p q h => by simpa only [Subtype.ext_iff, Prod.ext_iff] using h
+  · exact pow_ne_zero 2 (Nat.cast_ne_zero.mpr Finite.card_pos.ne')
+  · exact pow_pos (Nat.cast_pos.mpr Finite.card_pos) 2
 
 中文:
 定理 子群.commProb_subgroup_le
@@ -322,7 +330,11 @@ theorem Subgroup.commProb_subgroup_le
   证明: by
   /- After rewriting with `commProb_def`, we reduce to showing that `G` has at least as many
       commuting pairs as `H`. -/
-  rw [commProb_def]; rw [commProb_def]; rw [div_le_iff₀]; rw [mul_assoc]; rw [← mul_pow]; rw [← Nat.cast_mul]; rw [mul_comm H.index]; rw [H.card_mul_index]; rw [div_mul_ca
+  rw [commProb_def]; rw [commProb_def]; rw [div_le_iff₀]; rw [mul_assoc]; rw [← mul_pow]; rw [← Nat.cast_mul]; rw [mul_comm H.index]; rw [H.card_mul_index]; rw [div_mul_cancel₀]; rw [Nat.cast_le]
+  · refine Nat.card_le_card_of_injective (fun p => ⟨⟨p.1.1, p.1.2⟩, Subtype.ext_iff.mp p.2⟩) ?_
+    exact fun p q h => by simpa only [Subtype.ext_iff, Prod.ext_iff] using h
+  · exact pow_ne_zero 2 (Nat.cast_ne_zero.mpr Finite.card_pos.ne')
+  · exact pow_pos (Nat.cast_pos.mpr Finite.card_pos) 2
 -/
 theorem Subgroup.commProb_subgroup_le : commProb H <= commProb G * (H.index : Rat) ^ 2 := by
   /- After rewriting with `commProb_def`, we reduce to showing that `G` has at least as many
@@ -343,7 +355,11 @@ theorem Subgroup.commProb_quotient_le
   proof: by
   /- After rewriting with `commProb_def'`, we reduce to showing that `G` has at least as many
       conjugacy classes as `G ⧸ H`. -/
-  rw [commProb_def']; rw [commProb_def']; rw [div_le_iff₀]; rw [mul_assoc]; rw [← Nat.cast_mul]; rw [← Subgroup.index]; rw [H.card_mul_index]; rw [div_mul_cancel₀];
+  rw [commProb_def']; rw [commProb_def']; rw [div_le_iff₀]; rw [mul_assoc]; rw [← Nat.cast_mul]; rw [← Subgroup.index]; rw [H.card_mul_index]; rw [div_mul_cancel₀]; rw [Nat.cast_le]
+  · apply Nat.card_le_card_of_surjective (f := ConjClasses.map (QuotientGroup.mk' H))
+    exact ConjClasses.map_surjective Quotient.mk''_surjective
+  · exact Nat.cast_ne_zero.mpr Finite.card_pos.ne'
+  · exact Nat.cast_pos.mpr Finite.card_pos
 
 中文:
 定理 子群.commProb_quotient_le
@@ -352,7 +368,11 @@ theorem Subgroup.commProb_quotient_le
   证明: by
   /- After rewriting with `commProb_def'`, we reduce to showing that `G` has at least as many
       conjugacy classes as `G ⧸ H`. -/
-  rw [commProb_def']; rw [commProb_def']; rw [div_le_iff₀]; rw [mul_assoc]; rw [← Nat.cast_mul]; rw [← Subgroup.index]; rw [H.card_mul_index]; rw [div_mul_cancel₀];
+  rw [commProb_def']; rw [commProb_def']; rw [div_le_iff₀]; rw [mul_assoc]; rw [← Nat.cast_mul]; rw [← Subgroup.index]; rw [H.card_mul_index]; rw [div_mul_cancel₀]; rw [Nat.cast_le]
+  · apply Nat.card_le_card_of_surjective (f := ConjClasses.map (QuotientGroup.mk' H))
+    exact ConjClasses.map_surjective Quotient.mk''_surjective
+  · exact Nat.cast_ne_zero.mpr Finite.card_pos.ne'
+  · exact Nat.cast_pos.mpr Finite.card_pos
 -/
 theorem Subgroup.commProb_quotient_le [H.Normal] : commProb (G ⧸ H) <= commProb G * Nat.card H := by
   /- After rewriting with `commProb_def'`, we reduce to showing that `G` has at least as many
@@ -630,7 +650,15 @@ theorem commProb_reciprocal
   by_cases h1 : n = 1
   · rw [h1, reciprocalFactors_one, commProb_nil, Nat.cast_one, div_one]
   rcases Nat.even_or_odd n with h2 | h2
-  ·
+  · rw [reciprocalFactors_even h0 h2, commProb_cons, commProb_reciprocal (n / 2),
+        commProb_odd (by decide)]
+    simp [field, h2.two_dvd]
+    norm_num
+  · rw [reciprocalFactors_odd h1 h2, commProb_cons, commProb_reciprocal (n / 4 + 1)]
+    have hn : Odd (n % 4) := by grind
+    rw [commProb_odd (hn.mul h2)]; rw [div_mul_div_comm]; rw [div_eq_div_iff] <;> norm_cast
+    · grind [Nat.div_add_mod n 4, Odd]
+    · positivity [hn.pos.ne']
 
 中文:
 定理 commProb_reciprocal
@@ -642,7 +670,15 @@ theorem commProb_reciprocal
   by_cases h1 : n = 1
   · rw [h1, reciprocalFactors_one, commProb_nil, Nat.cast_one, div_one]
   rcases Nat.even_or_odd n with h2 | h2
-  ·
+  · rw [reciprocalFactors_even h0 h2, commProb_cons, commProb_reciprocal (n / 2),
+        commProb_odd (by decide)]
+    simp [field, h2.two_dvd]
+    norm_num
+  · rw [reciprocalFactors_odd h1 h2, commProb_cons, commProb_reciprocal (n / 4 + 1)]
+    have hn : Odd (n % 4) := by grind
+    rw [commProb_odd (hn.mul h2)]; rw [div_mul_div_comm]; rw [div_eq_div_iff] <;> norm_cast
+    · grind [Nat.div_add_mod n 4, Odd]
+    · positivity [hn.pos.ne']
 
 Depends on / 依赖: Nat.cast_one, Nat.cast_zero, Nat.even_or_odd, cast_one, cast_zero, commProb_cons, commProb_eq_zero_of_infinite, commProb_nil, commProb_odd, commProb_reciprocal, div_one, div_zero, even_or_odd, h2.two_dvd, mul_one, reciprocalFactors_even, reciprocalFactors_odd, reciprocalFactors_one, reciprocalFactors_zero, two_dvd
 -/

@@ -231,7 +231,7 @@ definition PComp.add
   let vars := c1.vars.union c2.vars
   let effective := (c1.effective.union c2.effective).insert elimVar
   let implicit := (vars.diff (.ofList c.vars _)).diff effective
-  ⟨c, src, history, effective, im
+  ⟨c, src, history, effective, implicit, vars⟩
 
 中文:
 定义 PComp.add
@@ -242,7 +242,7 @@ definition PComp.add
   let vars := c1.vars.union c2.vars
   let effective := (c1.effective.union c2.effective).insert elimVar
   let implicit := (vars.diff (.ofList c.vars _)).diff effective
-  ⟨c, src, history, effective, im
+  ⟨c, src, history, effective, implicit, vars⟩
 
 Depends on / 依赖: c.vars, c1.c.add, c1.effective.union, c1.history.union, c1.src.add, c1.vars.union, c2.c, c2.effective, c2.history, c2.src, c2.vars, effective, elimVar, history, implicit, insert, ofList, vars.diff
 -/
@@ -609,7 +609,11 @@ definition elimVarM
     let ⟨pos, neg, notPresent⟩ := splitSetByVarSign a (← getPCompSet)
     update (vs - 1) (← pos.foldlM (fun s p => do
       Lean.Core.checkSystem decl_name%.toString
-      -- FIXME: `.foldl .insert` should be 
+      -- FIXME: `.foldl .insert` should be equivalent to `.union`, but this breaks the test from
+      -- https://github.com/leanprover-community/mathlib4/issues/8875
+      pure ((elimWithSet a p neg).foldl .insert s)) notPresent)
+  else
+    pure ()
 
 中文:
 定义 elimVarM
@@ -621,7 +625,11 @@ definition elimVarM
     let ⟨pos, neg, notPresent⟩ := splitSetByVarSign a (← getPCompSet)
     update (vs - 1) (← pos.foldlM (fun s p => do
       Lean.Core.checkSystem decl_name%.toString
-      -- FIXME: `.foldl .insert` should be 
+      -- FIXME: `.foldl .insert` should be equivalent to `.union`, but this breaks the test from
+      -- https://github.com/leanprover-community/mathlib4/issues/8875
+      pure ((elimWithSet a p neg).foldl .insert s)) notPresent)
+  else
+    pure ()
 -/
 def elimVarM (a : Nat) : LinarithM Unit := do
   let vs ← getMaxVar

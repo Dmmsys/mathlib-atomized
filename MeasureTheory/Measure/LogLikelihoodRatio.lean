@@ -316,7 +316,13 @@ lemma llr_smul_left
     with x hx_eq hx_pos hx_ne_top
   rw [hx_eq]
   simp only [Pi.smul_apply, smul_eq_mul, ENNReal.toReal_mul]
-  rw
+  rw [log_mul]
+  rotate_left
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hc, hc_ne_top]
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hx_pos.ne', hx_ne_top.ne]
+  ring
 
 中文:
 引理 llr_smul_left
@@ -328,7 +334,13 @@ lemma llr_smul_left
     with x hx_eq hx_pos hx_ne_top
   rw [hx_eq]
   simp only [Pi.smul_apply, smul_eq_mul, ENNReal.toReal_mul]
-  rw
+  rw [log_mul]
+  rotate_left
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hc, hc_ne_top]
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hx_pos.ne', hx_ne_top.ne]
+  ring
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_mul, ENNReal.toReal_ne_zero, Measure, Measure.rnDeriv_lt_top, Measure.rnDeriv_pos, Measure.rnDeriv_smul_left_of_ne_top, Pi.smul_apply, ae_le, filter_upwards, hc_ne_top, hx_eq, hx_ne_top, hx_ne_top.ne, hx_pos, hx_pos.ne, llr_def, log_mul, rnDeriv_lt_top, rnDeriv_pos
 -/
@@ -393,7 +405,14 @@ lemma llr_smul_right
     with x hx_eq hx_pos hx_ne_top
   rw [hx_eq]
   simp only [Pi.smul_apply, smul_eq_mul, ENNReal.toReal_mul]
-
+  rw [log_mul]
+  rotate_left
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hc, hc_ne_top]
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hx_pos.ne', hx_ne_top.ne]
+  rw [ENNReal.toReal_inv]; rw [log_inv]
+  ring
 
 中文:
 引理 llr_smul_right
@@ -405,7 +424,14 @@ lemma llr_smul_right
     with x hx_eq hx_pos hx_ne_top
   rw [hx_eq]
   simp only [Pi.smul_apply, smul_eq_mul, ENNReal.toReal_mul]
-
+  rw [log_mul]
+  rotate_left
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hc, hc_ne_top]
+  · rw [ENNReal.toReal_ne_zero]
+    simp [hx_pos.ne', hx_ne_top.ne]
+  rw [ENNReal.toReal_inv]; rw [log_inv]
+  ring
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_inv, ENNReal.toReal_mul, ENNReal.toReal_ne_zero, Measure, Measure.rnDeriv_lt_top, Measure.rnDeriv_pos, Measure.rnDeriv_smul_right_of_ne_top, Pi.smul_apply, ae_le, filter_upwards, hc_ne_top, hx_eq, hx_ne_top, hx_ne_top.ne, hx_pos, hx_pos.ne, llr_def, log_inv, log_mul
 -/
@@ -610,7 +636,13 @@ lemma llr_tilted_left
   | inr h0 =>
     filter_upwards [hμν.ae_le (toReal_rnDeriv_tilted_left μ hfν), Measure.rnDeriv_pos hμν,
       hμν.ae_le (Measure.rnDeriv_lt_top μ ν)] with x hx hx_pos hx_lt_top
-
+    rw [llr]; rw [hx]; rw [log_mul]; rw [div_eq_mul_inv]; rw [log_mul (exp_pos _).ne']; rw [log_exp]; rw [log_inv]; rw [llr]; rw [← sub_eq_add_neg]
+    · simp only [ne_eq, inv_eq_zero]
+      exact (integral_exp_pos hf).ne'
+    · simp only [ne_eq, div_eq_zero_iff]
+      push Not
+      exact ⟨(exp_pos _).ne', (integral_exp_pos hf).ne'⟩
+    · simp [ENNReal.toReal_eq_zero_iff, hx_lt_top.ne, hx_pos.ne']
 
 中文:
 引理 llr_tilted_left
@@ -622,7 +654,13 @@ lemma llr_tilted_left
   | inr h0 =>
     filter_upwards [hμν.ae_le (toReal_rnDeriv_tilted_left μ hfν), Measure.rnDeriv_pos hμν,
       hμν.ae_le (Measure.rnDeriv_lt_top μ ν)] with x hx hx_pos hx_lt_top
-
+    rw [llr]; rw [hx]; rw [log_mul]; rw [div_eq_mul_inv]; rw [log_mul (exp_pos _).ne']; rw [log_exp]; rw [log_inv]; rw [llr]; rw [← sub_eq_add_neg]
+    · simp only [ne_eq, inv_eq_zero]
+      exact (integral_exp_pos hf).ne'
+    · simp only [ne_eq, div_eq_zero_iff]
+      push Not
+      exact ⟨(exp_pos _).ne', (integral_exp_pos hf).ne'⟩
+    · simp [ENNReal.toReal_eq_zero_iff, hx_lt_top.ne, hx_pos.ne']
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, Filter.eventually_bot, Measure, Measure.rnDeriv_lt_top, Measure.rnDeriv_pos, ae_le, ae_zero, div_eq_mul_inv, eq_zero_or_neZero, eventually_bot, exp_pos, filter_upwards, hx_lt_top, hx_pos, integral_exp_pos, inv_eq_zero, log_exp, log_inv
 -/
@@ -681,7 +719,10 @@ lemma integral_llr_tilted_left
         integral_congr_ae (llr_tilted_left hμν hfμ hfν)
   _ = ∫ x, f x ∂μ - log (∫ x, exp (f x) ∂μ) + ∫ x, llr μ ν x ∂μ := by
         rw [integral_add ?_ h_int]
-        swap; · exact hf.sub (integrable_
+        swap; · exact hf.sub (integrable_const _)
+        rw [integral_sub hf (integrable_const _)]
+        simp only [integral_const, probReal_univ, smul_eq_mul, one_mul]
+  _ = ∫ x, llr μ ν x ∂μ + ∫ x, f x ∂μ - log (∫ x, exp (f x) ∂μ) := by abel
 
 中文:
 引理 integral_llr_tilted_left
@@ -692,7 +733,10 @@ lemma integral_llr_tilted_left
         integral_congr_ae (llr_tilted_left hμν hfμ hfν)
   _ = ∫ x, f x ∂μ - log (∫ x, exp (f x) ∂μ) + ∫ x, llr μ ν x ∂μ := by
         rw [integral_add ?_ h_int]
-        swap; · exact hf.sub (integrable_
+        swap; · exact hf.sub (integrable_const _)
+        rw [integral_sub hf (integrable_const _)]
+        simp only [integral_const, probReal_univ, smul_eq_mul, one_mul]
+  _ = ∫ x, llr μ ν x ∂μ + ∫ x, f x ∂μ - log (∫ x, exp (f x) ∂μ) := by abel
 
 Depends on / 依赖: h_int, hf.sub, integrable_const, integral_add, integral_congr_ae, integral_const, integral_sub, llr_tilted_left, one_mul, probReal_univ, smul_eq_mul, tilted
 -/
@@ -723,7 +767,11 @@ lemma llr_tilted_right
     simp only [hμ, ae_zero, Filter.EventuallyEq, Filter.eventually_bot]
   | inr h0 =>
     filter_upwards [hμν.ae_le (toReal_rnDeriv_tilted_right μ ν hf), Measure.rnDeriv_pos hμν,
-      hμν.ae_
+      hμν.ae_le (Measure.rnDeriv_lt_top μ ν)] with x hx hx_pos hx_lt_top
+    rw [llr]; rw [hx]; rw [log_mul]; rw [log_mul (exp_pos _).ne']; rw [log_exp]; rw [llr]
+    · exact (integral_exp_pos hf).ne'
+    · refine (mul_pos (exp_pos _) (integral_exp_pos hf)).ne'
+    · simp [ENNReal.toReal_eq_zero_iff, hx_lt_top.ne, hx_pos.ne']
 
 中文:
 引理 llr_tilted_right
@@ -735,7 +783,11 @@ lemma llr_tilted_right
     simp only [hμ, ae_zero, Filter.EventuallyEq, Filter.eventually_bot]
   | inr h0 =>
     filter_upwards [hμν.ae_le (toReal_rnDeriv_tilted_right μ ν hf), Measure.rnDeriv_pos hμν,
-      hμν.ae_
+      hμν.ae_le (Measure.rnDeriv_lt_top μ ν)] with x hx hx_pos hx_lt_top
+    rw [llr]; rw [hx]; rw [log_mul]; rw [log_mul (exp_pos _).ne']; rw [log_exp]; rw [llr]
+    · exact (integral_exp_pos hf).ne'
+    · refine (mul_pos (exp_pos _) (integral_exp_pos hf)).ne'
+    · simp [ENNReal.toReal_eq_zero_iff, hx_lt_top.ne, hx_pos.ne']
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, Filter.eventually_bot, Measure, Measure.rnDeriv_lt_top, Measure.rnDeriv_pos, ae_le, ae_zero, eq_zero_or_neZero, eventually_bot, exp_pos, filter_upwards, hx_lt_top, hx_pos, integral_exp_, integral_exp_pos, log_exp, log_mul, mul_pos
 -/
@@ -792,7 +844,11 @@ lemma integral_llr_tilted_right
         integral_congr_ae (llr_tilted_right hμν hfν)
   _ = -∫ x, f x ∂μ + log (∫ x, exp (f x) ∂ν) + ∫ x, llr μ ν x ∂μ := by
         rw [← integral_neg]; rw [integral_add ?_ h_int]
-        swap; · exact
+        swap; · exact hfμ.neg.add (integrable_const _)
+        rw [integral_add ?_ (integrable_const _)]
+        swap; · exact hfμ.neg
+        simp only [integral_const, probReal_univ, smul_eq_mul, one_mul]
+  _ = ∫ x, llr μ ν x ∂μ - ∫ x, f x ∂μ + log (∫ x, exp (f x) ∂ν) := by abel
 
 中文:
 引理 integral_llr_tilted_right
@@ -803,7 +859,11 @@ lemma integral_llr_tilted_right
         integral_congr_ae (llr_tilted_right hμν hfν)
   _ = -∫ x, f x ∂μ + log (∫ x, exp (f x) ∂ν) + ∫ x, llr μ ν x ∂μ := by
         rw [← integral_neg]; rw [integral_add ?_ h_int]
-        swap; · exact
+        swap; · exact hfμ.neg.add (integrable_const _)
+        rw [integral_add ?_ (integrable_const _)]
+        swap; · exact hfμ.neg
+        simp only [integral_const, probReal_univ, smul_eq_mul, one_mul]
+  _ = ∫ x, llr μ ν x ∂μ - ∫ x, f x ∂μ + log (∫ x, exp (f x) ∂ν) := by abel
 
 Depends on / 依赖: h_int, integrable_const, integral_add, integral_congr_ae, integral_const, integral_neg, llr_tilted_right, neg.add, one_mul, probReal_univ, smul_eq_mul, tilted
 -/

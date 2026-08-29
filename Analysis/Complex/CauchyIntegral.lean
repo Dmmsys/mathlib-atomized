@@ -189,7 +189,28 @@ theorem integral_boundary_rect_of_hasFDerivAt_real_off_countable
   have he₁ : e (1, 0) = 1 := rfl; have he₂ : e (0, 1) = I := rfl
   simp only [he] at *
   set F : Real × Real -> E := f ∘ e
-  set F' : Re
+  set F' : Real × Real -> Real × Real ->L[Real] E := fun p => (f' (e p)).comp (e : Real × Real ->L[Real] Complex)
+  have hF' : forall p : Real × Real, (-(I • F' p)) (1, 0) + F' p (0, 1) = -(I • f' (e p) 1 - f' (e p) I) := by
+    rintro ⟨x, y⟩
+    simp only [F', neg_apply, smul_apply, ContinuousLinearMap.comp_apply,
+      ContinuousLinearEquiv.coe_coe, he₁, he₂, neg_add_eq_sub, neg_sub]
+  set R : Set (Real × Real) := [[z.re, w.re]] ×ˢ [[w.im, z.im]]
+  set t : Set (Real × Real) := e ⁻¹' s
+  rw [uIcc_comm z.im] at Hc Hi; rw [min_comm z.im, max_comm z.im] at Hd
+  have hR : e ⁻¹' ([[z.re, w.re]] ×Complex [[w.im, z.im]]) = R := rfl
+  have htc : ContinuousOn F R := Hc.comp e.continuousOn hR.ge
+  have htd :
+    forall p in Ioo (min z.re w.re) (max z.re w.re) ×ˢ Ioo (min w.im z.im) (max w.im z.im) \ t,
+      HasFDerivAt F (F' p) p :=
+    fun p hp => (Hd (e p) hp).comp p e.hasFDerivAt
+  simp_rw [← intervalIntegral.integral_smul, intervalIntegral.integral_symm w.im z.im, ←
+    intervalIntegral.integral_neg, ← hF']
+  refine (integral2_divergence_prod_of_hasFDerivAt_off_countable (fun p => -(I • F p)) F
+    (fun p => -(I • F' p)) F' z.re w.im w.re z.im t (hs.preimage e.injective)
+    (htc.const_smul _).neg htc (fun p hp => ((htd p hp).const_smul I).neg) htd ?_).symm
+  rw [← (volume_preserving_equiv_real_prod.symm _).integrableOn_comp_preimage
+    (MeasurableEquiv.measurableEmbedding _)] at Hi
+  simpa only [hF'] using! Hi.neg
 
 中文:
 定理 integral_boundary_rect_of_hasFDerivAt_real_off_countable
@@ -200,7 +221,28 @@ theorem integral_boundary_rect_of_hasFDerivAt_real_off_countable
   have he₁ : e (1, 0) = 1 := rfl; have he₂ : e (0, 1) = I := rfl
   simp only [he] at *
   set F : Real × Real -> E := f ∘ e
-  set F' : Re
+  set F' : Real × Real -> Real × Real ->L[Real] E := fun p => (f' (e p)).comp (e : Real × Real ->L[Real] Complex)
+  have hF' : forall p : Real × Real, (-(I • F' p)) (1, 0) + F' p (0, 1) = -(I • f' (e p) 1 - f' (e p) I) := by
+    rintro ⟨x, y⟩
+    simp only [F', neg_apply, smul_apply, ContinuousLinearMap.comp_apply,
+      ContinuousLinearEquiv.coe_coe, he₁, he₂, neg_add_eq_sub, neg_sub]
+  set R : Set (Real × Real) := [[z.re, w.re]] ×ˢ [[w.im, z.im]]
+  set t : Set (Real × Real) := e ⁻¹' s
+  rw [uIcc_comm z.im] at Hc Hi; rw [min_comm z.im, max_comm z.im] at Hd
+  have hR : e ⁻¹' ([[z.re, w.re]] ×Complex [[w.im, z.im]]) = R := rfl
+  have htc : ContinuousOn F R := Hc.comp e.continuousOn hR.ge
+  have htd :
+    forall p in Ioo (min z.re w.re) (max z.re w.re) ×ˢ Ioo (min w.im z.im) (max w.im z.im) \ t,
+      HasFDerivAt F (F' p) p :=
+    fun p hp => (Hd (e p) hp).comp p e.hasFDerivAt
+  simp_rw [← intervalIntegral.integral_smul, intervalIntegral.integral_symm w.im z.im, ←
+    intervalIntegral.integral_neg, ← hF']
+  refine (integral2_divergence_prod_of_hasFDerivAt_off_countable (fun p => -(I • F p)) F
+    (fun p => -(I • F' p)) F' z.re w.im w.re z.im t (hs.preimage e.injective)
+    (htc.const_smul _).neg htc (fun p hp => ((htd p hp).const_smul I).neg) htd ?_).symm
+  rw [← (volume_preserving_equiv_real_prod.symm _).integrableOn_comp_preimage
+    (MeasurableEquiv.measurableEmbedding _)] at Hi
+  simpa only [hF'] using! Hi.neg
 
 Depends on / 依赖: equivRealProdCLM, equivRealProdCLM.symm, mk_eq_add_mul_I
 -/
@@ -417,7 +459,28 @@ theorem circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_c
     `[log r, log R] × [0, 2 * π]`. -/
   set A := closedBall c R \ ball c r
   obtain ⟨a, rfl⟩ : exists a, Real.exp a = r := ⟨Real.log r, Real.exp_log h0⟩
-  obtain ⟨b, rfl⟩ : exists b, Real.exp b = R := ⟨Real.log R, Real.e
+  obtain ⟨b, rfl⟩ : exists b, Real.exp b = R := ⟨Real.log R, Real.exp_log (h0.trans_le hle)⟩
+  rw [Real.exp_le_exp] at hle
+  -- Unfold definition of `circleIntegral` and cancel some terms.
+  suffices
+    (∫ θ in 0..2 * π, I • f (circleMap c (Real.exp b) θ)) =
+      ∫ θ in 0..2 * π, I • f (circleMap c (Real.exp a) θ) by
+    simpa only [circleIntegral, add_sub_cancel_left, ofReal_exp, ← exp_add, smul_smul, ←
+      div_eq_mul_inv, mul_div_cancel_left₀ _ (circleMap_ne_center (Real.exp_pos _).ne'),
+      circleMap_sub_center, deriv_circleMap]
+  set R := [[a, b]] ×Complex [[0, 2 * π]]
+  set g : Complex -> Complex := (c + exp ·)
+  have hdg : Differentiable Complex g := differentiable_exp.const_add _
+  replace hs : (g ⁻¹' s).Countable := (hs.preimage (add_right_injective c)).preimage_cexp
+  have h_maps : MapsTo g R A := by
+    rintro z ⟨h, -⟩; simpa [g, A, dist_eq, norm_exp, hle] using h.symm
+  replace hc : ContinuousOn (f ∘ g) R := hc.comp hdg.continuous.continuousOn h_maps
+  replace hd : forall z in Ioo (min a b) (max a b) ×Complex Ioo (min 0 (2 * π)) (max 0 (2 * π)) \ g ⁻¹' s,
+      DifferentiableAt Complex (f ∘ g) z := by
+    refine fun z hz => (hd (g z) ⟨?_, hz.2⟩).comp z (hdg _)
+    simpa [g, dist_eq, norm_exp, hle, and_comm] using hz.1.1
+  simpa [g, circleMap, exp_periodic _, sub_eq_zero, ← exp_add] using
+    integral_boundary_rect_eq_zero_of_differentiable_on_off_countable _ ⟨a, 0⟩ ⟨b, 2 * π⟩ _ hs hc hd
 
 中文:
 定理 circle整数egral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable
@@ -427,7 +490,28 @@ theorem circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_c
     `[log r, log R] × [0, 2 * π]`. -/
   set A := closedBall c R \ ball c r
   obtain ⟨a, rfl⟩ : exists a, Real.exp a = r := ⟨Real.log r, Real.exp_log h0⟩
-  obtain ⟨b, rfl⟩ : exists b, Real.exp b = R := ⟨Real.log R, Real.e
+  obtain ⟨b, rfl⟩ : exists b, Real.exp b = R := ⟨Real.log R, Real.exp_log (h0.trans_le hle)⟩
+  rw [Real.exp_le_exp] at hle
+  -- Unfold definition of `circleIntegral` and cancel some terms.
+  suffices
+    (∫ θ in 0..2 * π, I • f (circleMap c (Real.exp b) θ)) =
+      ∫ θ in 0..2 * π, I • f (circleMap c (Real.exp a) θ) by
+    simpa only [circleIntegral, add_sub_cancel_left, ofReal_exp, ← exp_add, smul_smul, ←
+      div_eq_mul_inv, mul_div_cancel_left₀ _ (circleMap_ne_center (Real.exp_pos _).ne'),
+      circleMap_sub_center, deriv_circleMap]
+  set R := [[a, b]] ×Complex [[0, 2 * π]]
+  set g : Complex -> Complex := (c + exp ·)
+  have hdg : Differentiable Complex g := differentiable_exp.const_add _
+  replace hs : (g ⁻¹' s).Countable := (hs.preimage (add_right_injective c)).preimage_cexp
+  have h_maps : MapsTo g R A := by
+    rintro z ⟨h, -⟩; simpa [g, A, dist_eq, norm_exp, hle] using h.symm
+  replace hc : ContinuousOn (f ∘ g) R := hc.comp hdg.continuous.continuousOn h_maps
+  replace hd : forall z in Ioo (min a b) (max a b) ×Complex Ioo (min 0 (2 * π)) (max 0 (2 * π)) \ g ⁻¹' s,
+      DifferentiableAt Complex (f ∘ g) z := by
+    refine fun z hz => (hd (g z) ⟨?_, hz.2⟩).comp z (hdg _)
+    simpa [g, dist_eq, norm_exp, hle, and_comm] using hz.1.1
+  simpa [g, circleMap, exp_periodic _, sub_eq_zero, ← exp_add] using
+    integral_boundary_rect_eq_zero_of_differentiable_on_off_countable _ ⟨a, 0⟩ ⟨b, 2 * π⟩ _ hs hc hd
 -/
 theorem circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable {c : Complex}
     {r R : Real} (h0 : 0 < r) (hle : r <= R) {f : Complex -> E} {s : Set Complex} (hs : s.Countable)
@@ -472,7 +556,9 @@ theorem circleIntegral_eq_of_differentiable_on_annulus_off_countable
       (circleIntegral.integral_sub_inv_smul_sub_smul _ _ _ _).symm
     _ = ∮ z in C(c, r), (z - c)⁻¹ • (z - c) • f z :=
       (circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable h0 hle hs
-    
+        ((continuousOn_id.sub continuousOn_const).smul hc) fun z hz =>
+        (differentiableAt_id.sub_const _).smul (hd z hz))
+    _ = ∮ z in C(c, r), f z := circleIntegral.integral_sub_inv_smul_sub_smul _ _ _ _
 
 中文:
 定理 circle整数egral_eq_of_differentiable_on_annulus_off_countable
@@ -482,7 +568,9 @@ theorem circleIntegral_eq_of_differentiable_on_annulus_off_countable
       (circleIntegral.integral_sub_inv_smul_sub_smul _ _ _ _).symm
     _ = ∮ z in C(c, r), (z - c)⁻¹ • (z - c) • f z :=
       (circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable h0 hle hs
-    
+        ((continuousOn_id.sub continuousOn_const).smul hc) fun z hz =>
+        (differentiableAt_id.sub_const _).smul (hd z hz))
+    _ = ∮ z in C(c, r), f z := circleIntegral.integral_sub_inv_smul_sub_smul _ _ _ _
 
 Depends on / 依赖: circleIntegral, circleIntegral.integral_sub_inv_smul_sub_smul, circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable, continuousOn_const, continuousOn_id, continuousOn_id.sub, differentiableAt_id, differentiableAt_id.sub_const, integral_sub_inv_smul_sub_smul, sub_const
 -/
@@ -519,7 +607,41 @@ theorem circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable_of
   rw [← sub_eq_zero]; rw [← norm_le_zero_iff]
   refine le_of_forall_gt_imp_ge_of_dense fun ε ε0 => ?_
   obtain ⟨δ, δ0, hδ⟩ : exists δ > (0 : Real), forall z in closedBall c δ \ {c}, dist (f z) y < ε / (2 * π) :=
-    ((nhdsWithin_hasBasis nhds_basis_closedBall _).tendsto_iff nhds_basis_ball).1 hy 
+    ((nhdsWithin_hasBasis nhds_basis_closedBall _).tendsto_iff nhds_basis_ball).1 hy _
+      (div_pos ε0 Real.two_pi_pos)
+  obtain ⟨r, hr0, hrδ, hrR⟩ : exists r, 0 < r ∧ r <= δ ∧ r <= R :=
+    ⟨min δ R, lt_min δ0 h0, min_le_left _ _, min_le_right _ _⟩
+  have hsub : closedBall c R \ ball c r subseteq closedBall c R \ {c} :=
+    sdiff_subset_sdiff_right (singleton_subset_iff.2 <| mem_ball_self hr0)
+  have hsub' : ball c R \ closedBall c r subseteq ball c R \ {c} :=
+    sdiff_subset_sdiff_right (singleton_subset_iff.2 <| mem_closedBall_self hr0.le)
+  have hzne : forall z in sphere c r, z != c := fun z hz =>
+ne_of_mem_of_not_mem hz fun h => hr0.ne' dist_self c ▸ Eq.symm h
+  /- The integral `∮ z in C(c, r), f z / (z - c)` does not depend on `0 < r ≤ R` and tends to
+    `2πIy` as `r → 0`. -/
+  calc
+    ‖(∮ z in C(c, R), (z - c)⁻¹ • f z) - (2 * ↑π * I) • y‖ =
+        ‖(∮ z in C(c, r), (z - c)⁻¹ • f z) - ∮ z in C(c, r), (z - c)⁻¹ • y‖ := by
+      congr 2
+      · exact circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable hr0
+          hrR hs (hc.mono hsub) fun z hz => hd z ⟨hsub' hz.1, hz.2⟩
+      · simp [hr0.ne']
+    _ = ‖∮ z in C(c, r), (z - c)⁻¹ • (f z - y)‖ := by
+      simp only [smul_sub]
+      have hc' : ContinuousOn (fun z => (z - c)⁻¹) (sphere c r) :=
+(continuousOn_id.sub continuousOn_const).inv₀ fun z hz => sub_ne_zero.2 hzne _ hz
+      rw [circleIntegral.integral_sub] <;> refine (hc'.smul ?_).circleIntegrable hr0.le
+· exact hc.mono subset_inter
+          (sphere_subset_closedBall.trans <| closedBall_subset_closedBall hrR) hzne
+      · exact continuousOn_const
+    _ <= 2 * π * r * (r⁻¹ * (ε / (2 * π))) := by
+      refine circleIntegral.norm_integral_le_of_norm_le_const hr0.le fun z hz => ?_
+      specialize hzne z hz
+      rw [mem_sphere]; rw [dist_eq_norm] at hz
+      rw [norm_smul]; rw [norm_inv]; rw [hz]; rw [← dist_eq_norm]
+      refine mul_le_mul_of_nonneg_left (hδ _ ⟨?_, hzne⟩).le (inv_nonneg.2 hr0.le)
+      rwa [mem_closedBall_iff_norm, hz]
+    _ = ε := by field
 
 中文:
 定理 circle整数egral_sub_center_inv_smul_of_differentiable_on_off_countable_of_tendsto
@@ -528,7 +650,41 @@ theorem circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable_of
   rw [← sub_eq_zero]; rw [← norm_le_zero_iff]
   refine le_of_forall_gt_imp_ge_of_dense fun ε ε0 => ?_
   obtain ⟨δ, δ0, hδ⟩ : exists δ > (0 : Real), forall z in closedBall c δ \ {c}, dist (f z) y < ε / (2 * π) :=
-    ((nhdsWithin_hasBasis nhds_basis_closedBall _).tendsto_iff nhds_basis_ball).1 hy 
+    ((nhdsWithin_hasBasis nhds_basis_closedBall _).tendsto_iff nhds_basis_ball).1 hy _
+      (div_pos ε0 Real.two_pi_pos)
+  obtain ⟨r, hr0, hrδ, hrR⟩ : exists r, 0 < r ∧ r <= δ ∧ r <= R :=
+    ⟨min δ R, lt_min δ0 h0, min_le_left _ _, min_le_right _ _⟩
+  have hsub : closedBall c R \ ball c r subseteq closedBall c R \ {c} :=
+    sdiff_subset_sdiff_right (singleton_subset_iff.2 <| mem_ball_self hr0)
+  have hsub' : ball c R \ closedBall c r subseteq ball c R \ {c} :=
+    sdiff_subset_sdiff_right (singleton_subset_iff.2 <| mem_closedBall_self hr0.le)
+  have hzne : forall z in sphere c r, z != c := fun z hz =>
+ne_of_mem_of_not_mem hz fun h => hr0.ne' dist_self c ▸ Eq.symm h
+  /- The integral `∮ z in C(c, r), f z / (z - c)` does not depend on `0 < r ≤ R` and tends to
+    `2πIy` as `r → 0`. -/
+  calc
+    ‖(∮ z in C(c, R), (z - c)⁻¹ • f z) - (2 * ↑π * I) • y‖ =
+        ‖(∮ z in C(c, r), (z - c)⁻¹ • f z) - ∮ z in C(c, r), (z - c)⁻¹ • y‖ := by
+      congr 2
+      · exact circleIntegral_sub_center_inv_smul_eq_of_differentiable_on_annulus_off_countable hr0
+          hrR hs (hc.mono hsub) fun z hz => hd z ⟨hsub' hz.1, hz.2⟩
+      · simp [hr0.ne']
+    _ = ‖∮ z in C(c, r), (z - c)⁻¹ • (f z - y)‖ := by
+      simp only [smul_sub]
+      have hc' : ContinuousOn (fun z => (z - c)⁻¹) (sphere c r) :=
+(continuousOn_id.sub continuousOn_const).inv₀ fun z hz => sub_ne_zero.2 hzne _ hz
+      rw [circleIntegral.integral_sub] <;> refine (hc'.smul ?_).circleIntegrable hr0.le
+· exact hc.mono subset_inter
+          (sphere_subset_closedBall.trans <| closedBall_subset_closedBall hrR) hzne
+      · exact continuousOn_const
+    _ <= 2 * π * r * (r⁻¹ * (ε / (2 * π))) := by
+      refine circleIntegral.norm_integral_le_of_norm_le_const hr0.le fun z hz => ?_
+      specialize hzne z hz
+      rw [mem_sphere]; rw [dist_eq_norm] at hz
+      rw [norm_smul]; rw [norm_inv]; rw [hz]; rw [← dist_eq_norm]
+      refine mul_le_mul_of_nonneg_left (hδ _ ⟨?_, hzne⟩).le (inv_nonneg.2 hr0.le)
+      rwa [mem_closedBall_iff_norm, hz]
+    _ = ε := by field
 
 Depends on / 依赖: Real.two_pi_pos, closedBa, closedBall, div_pos, le_of_forall_gt_imp_ge_of_dense, lt_min, min_le_left, min_le_right, nhdsWithin_hasBasis, nhds_basis_ball, nhds_basis_closedBall, norm_le_zero_iff, sub_eq_zero, subseteq, tendsto_iff, two_pi_pos
 -/
@@ -620,7 +776,14 @@ theorem circleIntegral_eq_zero_of_differentiable_on_off_countable
   rcases h0.eq_or_lt with (rfl | h0); · apply circleIntegral.integral_radius_zero
   calc
     (∮ z in C(c, R), f z) = ∮ z in C(c, R), (z - c)⁻¹ • (z - c) • f z :=
-      (circleIntegral.integral_sub_i
+      (circleIntegral.integral_sub_inv_smul_sub_smul _ _ _ _).symm
+    _ = (2 * ↑π * I : Complex) • (c - c) • f c :=
+      (circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable h0 hs
+        ((continuousOn_id.sub continuousOn_const).smul hc) fun z hz =>
+        (differentiableAt_id.sub_const _).smul (hd z hz))
+    _ = 0 := by rw [sub_self, zero_smul, smul_zero]
+
+omit [CompleteSpace E] in
 
 中文:
 定理 circle整数egral_eq_zero_of_differentiable_on_off_countable
@@ -631,7 +794,14 @@ theorem circleIntegral_eq_zero_of_differentiable_on_off_countable
   rcases h0.eq_or_lt with (rfl | h0); · apply circleIntegral.integral_radius_zero
   calc
     (∮ z in C(c, R), f z) = ∮ z in C(c, R), (z - c)⁻¹ • (z - c) • f z :=
-      (circleIntegral.integral_sub_i
+      (circleIntegral.integral_sub_inv_smul_sub_smul _ _ _ _).symm
+    _ = (2 * ↑π * I : Complex) • (c - c) • f c :=
+      (circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable h0 hs
+        ((continuousOn_id.sub continuousOn_const).smul hc) fun z hz =>
+        (differentiableAt_id.sub_const _).smul (hd z hz))
+    _ = 0 := by rw [sub_self, zero_smul, smul_zero]
+
+omit [CompleteSpace E] in
 
 Depends on / 依赖: CompleteSpace, circleIntegral, circleIntegral.integral_radius_zero, circleIntegral.integral_sub_inv_smul_sub_smul, circleIntegral_sub_center_inv_smul_of_differentiable_on_off_countable, continuousOn_const, continuousOn_id, continuousOn_id.sub, eq_or_lt, generalizing, h0.eq_or_lt, integral, integral_radius_zero, integral_sub_inv_smul_sub_smul, intervalIntegral
 -/
@@ -685,7 +855,21 @@ theorem circleIntegral_sub_inv_smul_of_differentiable_on_off_countable_aux
   have hws : (insert w s).Countable := hs.insert w
   have hcF : ContinuousOn F (closedBall c R) :=
     (continuousOn_dslope <| closedBall_mem_nhds_of_mem hw.1).2 ⟨hc, hd _ hw⟩
-  have hdF : forall z in ball (c : Co
+  have hdF : forall z in ball (c : Complex) R \ insert w s, DifferentiableAt Complex F z := fun z hz =>
+    (differentiableAt_dslope_of_ne (ne_of_mem_of_not_mem (mem_insert _ _) hz.2).symm).2
+      (hd _ (sdiff_subset_sdiff_right (subset_insert _ _) hz))
+  have HI := circleIntegral_eq_zero_of_differentiable_on_off_countable hR.le hws hcF hdF
+  have hne : forall z in sphere c R, z != w := fun z hz => ne_of_mem_of_not_mem hz (ne_of_lt hw.1)
+  have hFeq : EqOn F (fun z => (z - w)⁻¹ • f z - (z - w)⁻¹ • f w) (sphere c R) := fun z hz =>
+    calc
+      F z = (z - w)⁻¹ • (f z - f w) := update_of_ne (hne z hz) ..
+      _ = (z - w)⁻¹ • f z - (z - w)⁻¹ • f w := smul_sub _ _ _
+  have hc' : ContinuousOn (fun z => (z - w)⁻¹) (sphere c R) :=
+(continuousOn_id.sub continuousOn_const).inv₀ fun z hz => sub_ne_zero.2 hne z hz
+  rw [← circleIntegral.integral_sub_inv_of_mem_ball hw.1]; rw [← circleIntegral.integral_smul_const]; rw [←
+    sub_eq_zero]; rw [← circleIntegral.integral_sub]; rw [← circleIntegral.integral_congr hR.le hFeq]; rw [HI]
+  exacts [(hc'.smul (hc.mono sphere_subset_closedBall)).circleIntegrable hR.le,
+    (hc'.smul continuousOn_const).circleIntegrable hR.le]
 
 中文:
 定理 circle整数egral_sub_inv_smul_of_differentiable_on_off_countable_aux
@@ -696,7 +880,21 @@ theorem circleIntegral_sub_inv_smul_of_differentiable_on_off_countable_aux
   have hws : (insert w s).Countable := hs.insert w
   have hcF : ContinuousOn F (closedBall c R) :=
     (continuousOn_dslope <| closedBall_mem_nhds_of_mem hw.1).2 ⟨hc, hd _ hw⟩
-  have hdF : forall z in ball (c : Co
+  have hdF : forall z in ball (c : Complex) R \ insert w s, DifferentiableAt Complex F z := fun z hz =>
+    (differentiableAt_dslope_of_ne (ne_of_mem_of_not_mem (mem_insert _ _) hz.2).symm).2
+      (hd _ (sdiff_subset_sdiff_right (subset_insert _ _) hz))
+  have HI := circleIntegral_eq_zero_of_differentiable_on_off_countable hR.le hws hcF hdF
+  have hne : forall z in sphere c R, z != w := fun z hz => ne_of_mem_of_not_mem hz (ne_of_lt hw.1)
+  have hFeq : EqOn F (fun z => (z - w)⁻¹ • f z - (z - w)⁻¹ • f w) (sphere c R) := fun z hz =>
+    calc
+      F z = (z - w)⁻¹ • (f z - f w) := update_of_ne (hne z hz) ..
+      _ = (z - w)⁻¹ • f z - (z - w)⁻¹ • f w := smul_sub _ _ _
+  have hc' : ContinuousOn (fun z => (z - w)⁻¹) (sphere c R) :=
+(continuousOn_id.sub continuousOn_const).inv₀ fun z hz => sub_ne_zero.2 hne z hz
+  rw [← circleIntegral.integral_sub_inv_of_mem_ball hw.1]; rw [← circleIntegral.integral_smul_const]; rw [←
+    sub_eq_zero]; rw [← circleIntegral.integral_sub]; rw [← circleIntegral.integral_congr hR.le hFeq]; rw [HI]
+  exacts [(hc'.smul (hc.mono sphere_subset_closedBall)).circleIntegrable hR.le,
+    (hc'.smul continuousOn_const).circleIntegrable hR.le]
 
 Depends on / 依赖: ContinuousOn, Countable, DifferentiableAt, closedBall, closedBall_mem_nhds_of_mem, continuousOn_dslope, differentiableAt_dslope_of_ne, dist_nonneg, dist_nonneg.trans_lt, dslope, hs.insert, insert, mem_insert, ne_of_mem_of_not_mem, sdiff_subset_sdiff_right, subset_insert, trans_lt
 -/
@@ -737,7 +935,27 @@ theorem two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_c
     lift R to Real>=0 using hR.le
     have A : ContinuousAt (fun w => (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z) w := by
       have := hasFPowerSeriesOn_cauchy_integral
-        ((hc.mono sphere_
+        ((hc.mono sphere_subset_closedBall).circleIntegrable R.coe_nonneg) hR
+      refine this.continuousOn.continuousAt (Metric.isOpen_eball.mem_nhds ?_)
+      rwa [Metric.eball_coe]
+    have B : ContinuousAt f w := hc.continuousAt (closedBall_mem_nhds_of_mem hw)
+    refine tendsto_nhds_unique_of_frequently_eq A B ((mem_closure_iff_frequently.1 this).mono ?_)
+    intro z hz
+    rw [circleIntegral_sub_inv_smul_of_differentiable_on_off_countable_aux hs hz hc hd]; rw [inv_smul_smul₀]
+    simp [Real.pi_ne_zero, I_ne_zero]
+  refine mem_closure_iff_nhds.2 fun t ht => ?_
+  -- TODO: generalize to any vector space over `ℝ`
+  set g : Real -> Complex := fun x => w + ofReal x
+  have : Tendsto g (𝓝 0) (𝓝 w) := Continuous.tendsto' (by fun_prop) 0 w (add_zero _)
+  rcases mem_nhds_iff_exists_Ioo_subset.1 (this <| inter_mem ht <| isOpen_ball.mem_nhds hw) with
+    ⟨l, u, hlu₀, hlu_sub⟩
+  obtain ⟨x, hx⟩ : (Ioo l u \ g ⁻¹' s).Nonempty := by
+    refine sdiff_nonempty.2 fun hsub => ?_
+    have : (Ioo l u).Countable :=
+      (hs.preimage ((add_right_injective w).comp ofReal_injective)).mono hsub
+    rw [← Cardinal.le_aleph0_iff_set_countable]; rw [Cardinal.mk_Ioo_real (hlu₀.1.trans hlu₀.2)] at this
+    exact this.not_gt Cardinal.aleph0_lt_continuum
+  exact ⟨g x, (hlu_sub hx.1).1, (hlu_sub hx.1).2, hx.2⟩
 
 中文:
 定理 two_pi_I_inv_smul_circle整数egral_sub_inv_smul_of_differentiable_on_off_countable
@@ -748,7 +966,27 @@ theorem two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_c
     lift R to Real>=0 using hR.le
     have A : ContinuousAt (fun w => (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - w)⁻¹ • f z) w := by
       have := hasFPowerSeriesOn_cauchy_integral
-        ((hc.mono sphere_
+        ((hc.mono sphere_subset_closedBall).circleIntegrable R.coe_nonneg) hR
+      refine this.continuousOn.continuousAt (Metric.isOpen_eball.mem_nhds ?_)
+      rwa [Metric.eball_coe]
+    have B : ContinuousAt f w := hc.continuousAt (closedBall_mem_nhds_of_mem hw)
+    refine tendsto_nhds_unique_of_frequently_eq A B ((mem_closure_iff_frequently.1 this).mono ?_)
+    intro z hz
+    rw [circleIntegral_sub_inv_smul_of_differentiable_on_off_countable_aux hs hz hc hd]; rw [inv_smul_smul₀]
+    simp [Real.pi_ne_zero, I_ne_zero]
+  refine mem_closure_iff_nhds.2 fun t ht => ?_
+  -- TODO: generalize to any vector space over `ℝ`
+  set g : Real -> Complex := fun x => w + ofReal x
+  have : Tendsto g (𝓝 0) (𝓝 w) := Continuous.tendsto' (by fun_prop) 0 w (add_zero _)
+  rcases mem_nhds_iff_exists_Ioo_subset.1 (this <| inter_mem ht <| isOpen_ball.mem_nhds hw) with
+    ⟨l, u, hlu₀, hlu_sub⟩
+  obtain ⟨x, hx⟩ : (Ioo l u \ g ⁻¹' s).Nonempty := by
+    refine sdiff_nonempty.2 fun hsub => ?_
+    have : (Ioo l u).Countable :=
+      (hs.preimage ((add_right_injective w).comp ofReal_injective)).mono hsub
+    rw [← Cardinal.le_aleph0_iff_set_countable]; rw [Cardinal.mk_Ioo_real (hlu₀.1.trans hlu₀.2)] at this
+    exact this.not_gt Cardinal.aleph0_lt_continuum
+  exact ⟨g x, (hlu_sub hx.1).1, (hlu_sub hx.1).2, hx.2⟩
 
 Depends on / 依赖: ContinuousAt, Metric, Metric.eball_coe, Metric.isOpen_eball.mem_nhds, R.coe_nonneg, circleIntegrable, closedBall_mem_nhds_of_mem, closure, coe_nonneg, continuousAt, continuousOn, dist_nonneg, dist_nonneg.trans_lt, eball_coe, hR.le, hasFPowerSeriesOn_cauchy_integral, hc.continuousAt, hc.mono, isOpen_eball, mem_nhds
 -/
@@ -846,7 +1084,7 @@ theorem _root_.DiffContOnCl.two_pi_i_inv_smul_circleIntegral_sub_inv_smul
   refine two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
     countable_empty hw ?_ ?_
   · simpa only [closure_ball c hR.ne.symm] using hf.continuousOn
-  · simpa only [sdiff_emp
+  · simpa only [sdiff_empty] using fun z hz => hf.differentiableAt isOpen_ball hz
 
 中文:
 定理 _root_.DiffContOnCl.two_pi_i_inv_smul_circle整数egral_sub_inv_smul
@@ -856,7 +1094,7 @@ theorem _root_.DiffContOnCl.two_pi_i_inv_smul_circleIntegral_sub_inv_smul
   refine two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
     countable_empty hw ?_ ?_
   · simpa only [closure_ball c hR.ne.symm] using hf.continuousOn
-  · simpa only [sdiff_emp
+  · simpa only [sdiff_empty] using fun z hz => hf.differentiableAt isOpen_ball hz
 
 Depends on / 依赖: Set.nonempty_of_mem, ball_eq_empty, ball_eq_empty.not.mp, closure_ball, continuousOn, countable_empty, differentiableAt, hR.ne.symm, hf.continuousOn, hf.differentiableAt, isOpen_ball, ne_empty, nonempty_of_mem, not_le, not_le.mp, sdiff_empty, two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
 -/
@@ -934,7 +1172,10 @@ theorem hasFPowerSeriesOnBall_of_differentiable_off_countable
     have hw' : c + w in ball c R := by
       simpa only [add_mem_ball_iff_norm, ← coe_nnnorm, mem_eball_zero_iff,
         NNReal.coe_lt_coe, enorm_lt_coe] using hw
-    rw [← two_pi_I_inv_smul_circleIntegra
+    rw [← two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
+      hs hw' hc hd]
+    exact (hasFPowerSeriesOn_cauchy_integral
+      ((hc.mono sphere_subset_closedBall).circleIntegrable R.2) hR).hasSum hw
 
 中文:
 定理 hasFPowerSeriesOnBall_of_differentiable_off_countable
@@ -945,7 +1186,10 @@ theorem hasFPowerSeriesOnBall_of_differentiable_off_countable
     have hw' : c + w in ball c R := by
       simpa only [add_mem_ball_iff_norm, ← coe_nnnorm, mem_eball_zero_iff,
         NNReal.coe_lt_coe, enorm_lt_coe] using hw
-    rw [← two_pi_I_inv_smul_circleIntegra
+    rw [← two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable
+      hs hw' hc hd]
+    exact (hasFPowerSeriesOn_cauchy_integral
+      ((hc.mono sphere_subset_closedBall).circleIntegrable R.2) hR).hasSum hw
 
 Depends on / 依赖: le_radius_cauchyPowerSeries
 -/
@@ -1287,7 +1531,8 @@ theorem analyticAt_iff_eventually_differentiableAt
     have h : AnalyticOnNhd Complex f s := by
       refine DifferentiableOn.analyticOnNhd ?_ o
       intro z m
-   
+      exact (d z m).differentiableWithinAt
+    exact h _ m
 
 中文:
 定理 analyticAt_iff_eventually_differentiableAt
@@ -1302,7 +1547,8 @@ theorem analyticAt_iff_eventually_differentiableAt
     have h : AnalyticOnNhd Complex f s := by
       refine DifferentiableOn.analyticOnNhd ?_ o
       intro z m
-   
+      exact (d z m).differentiableWithinAt
+    exact h _ m
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.differentiableAt, AnalyticOnNhd, DifferentiableOn, DifferentiableOn.analyticOnNhd, _root_, _root_.eventually_nhds_iff.mp, analyticOnNhd, differentiableAt, differentiableWithinAt, eventually_analyticAt, eventually_nhds_iff, fa.eventually_analyticAt, filter_upwards
 -/
@@ -1340,7 +1586,8 @@ lemma circleIntegral_one_div_sub_center_pow_smul_of_differentiable_on_off_counta
   have := hasFPowerSeriesOnBall_of_differentiable_off_countable (R := .mk R h0.le) hs hc hd h0
 .factorial_smul 1 n
   rw [iteratedFDeriv_apply_eq_iteratedDeriv_mul_prod]; rw [Finset.prod_const_one]; rw [one_smul] at this
-  rw [← this]; rw [cauchyPowerSeries_apply]; rw [← Nat.cast_smul_eq_nsmul Com
+  rw [← this]; rw [cauchyPowerSeries_apply]; rw [← Nat.cast_smul_eq_nsmul Complex]; rw [← mul_smul]; rw [← mul_smul]; rw [div_mul_cancel₀ _ (mod_cast n.factorial_ne_zero)]; rw [mul_inv_cancel₀ two_pi_I_ne_zero]
+  simp [← mul_smul, pow_succ, mul_comm]
 
 中文:
 引理 circle整数egral_one_div_sub_center_pow_smul_of_differentiable_on_off_countable
@@ -1348,7 +1595,8 @@ lemma circleIntegral_one_div_sub_center_pow_smul_of_differentiable_on_off_counta
   have := hasFPowerSeriesOnBall_of_differentiable_off_countable (R := .mk R h0.le) hs hc hd h0
 .factorial_smul 1 n
   rw [iteratedFDeriv_apply_eq_iteratedDeriv_mul_prod]; rw [Finset.prod_const_one]; rw [one_smul] at this
-  rw [← this]; rw [cauchyPowerSeries_apply]; rw [← Nat.cast_smul_eq_nsmul Com
+  rw [← this]; rw [cauchyPowerSeries_apply]; rw [← Nat.cast_smul_eq_nsmul Complex]; rw [← mul_smul]; rw [← mul_smul]; rw [div_mul_cancel₀ _ (mod_cast n.factorial_ne_zero)]; rw [mul_inv_cancel₀ two_pi_I_ne_zero]
+  simp [← mul_smul, pow_succ, mul_comm]
 
 Depends on / 依赖: Finset, Finset.prod_const_one, Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, cauchyPowerSeries_apply, factorial_ne_zero, factorial_smul, h0.le, hasFPowerSeriesOnBall_of_differentiable_off_countable, iteratedFDeriv_apply_eq_iteratedDeriv_mul_prod, mod_cast, mul_comm, mul_smul, n.factorial_ne_zero, one_smul, pow_succ, prod_const_one, two_pi_I_ne_zero
 -/

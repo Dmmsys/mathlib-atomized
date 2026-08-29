@@ -457,7 +457,8 @@ lemma IsIPCOfShape.of_equiv
 apply IsColimit.equivOfNatIsoOfIso _ _ _ _
         h.whiskerEquivalence (Pi.equivalenceOfEquiv J e).symm
     · exact (Pi.equivalenceOfEquivCompPointwiseProduct F e)
-    · -- Without the double `symm`, one runs into DTT hel
+    · -- Without the double `symm`, one runs into DTT hell
+      exact (Cocone.ext (Pi.whiskerEquiv e fun _ => Iso.refl _).symm).symm
 
 中文:
 引理 是IPCOfShape.of_equiv
@@ -468,7 +469,8 @@ apply IsColimit.equivOfNatIsoOfIso _ _ _ _
 apply IsColimit.equivOfNatIsoOfIso _ _ _ _
         h.whiskerEquivalence (Pi.equivalenceOfEquiv J e).symm
     · exact (Pi.equivalenceOfEquivCompPointwiseProduct F e)
-    · -- Without the double `symm`, one runs into DTT hel
+    · -- Without the double `symm`, one runs into DTT hell
+      exact (Cocone.ext (Pi.whiskerEquiv e fun _ => Iso.refl _).symm).symm
 
 Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.equivOfNatIsoOfIso, Iso.refl, Pi.equivalenceOfEquiv, Pi.equivalenceOfEquivCompPointwiseProduct, Pi.whiskerEquiv, Without, double, equivOfNatIsoOfIso, equivalenceOfEquiv, equivalenceOfEquivCompPointwiseProduct, h.whiskerEquivalence, inl_inr, nonempty_isColimit, whiskerEquiv, whiskerEquivalence
 -/
@@ -550,7 +552,39 @@ theorem Types.isIso_colimitPointwiseProductToProductColimit
   · obtain ⟨ky, yk₀, hyk₀⟩ := Types.jointly_surjective' y
     obtain ⟨ky', yk₀', hyk₀'⟩ := Types.jointly_surjective' y'
     let k := IsFiltered.max ky ky'
-    let yk :
+    let yk : (pointwiseProduct F).obj k :=
+      (pointwiseProduct F).map (IsFiltered.leftToMax ky ky') yk₀
+    let yk' : (pointwiseProduct F).obj k :=
+      (pointwiseProduct F).map (IsFiltered.rightToMax ky ky') yk₀'
+    obtain rfl : y = colimit.ι (pointwiseProduct F) k yk := by
+      simp only [k, yk, colimit.w_apply, hyk₀]
+    obtain rfl : y' = colimit.ι (pointwiseProduct F) k yk' := by
+      simp only [k, yk', colimit.w_apply, hyk₀']
+    dsimp at yk yk'
+    have hch : forall (s : α), exists (i' : I s) (hi' : k s ⟶ i'),
+        (F s).map hi' (Pi.π (fun s => (F s).obj (k s)) s yk) =
+          (F s).map hi' (Pi.π (fun s => (F s).obj (k s)) s yk') := by
+      intro s
+      have hy₁ := congr_hom (ι_colimitPointwiseProductToProductColimit_π F k s) yk
+      have hy₂ := congr_hom (ι_colimitPointwiseProductToProductColimit_π F k s) yk'
+      dsimp at hy₁ hy₂ hy
+      rw [← hy]; rw [hy₁]; rw [Types.FilteredColimit.colimit_eq_iff] at hy₂
+      obtain ⟨i₀, f₀, g₀, h₀⟩ := hy₂
+      refine ⟨IsFiltered.coeq f₀ g₀, f₀ ≫ IsFiltered.coeqHom f₀ g₀, ?_⟩
+      conv_rhs => rw [IsFiltered.coeq_condition]
+      dsimp [Functor.pi] at h₀
+      simp [h₀]
+    choose k' f hk' using hch
+    apply Types.colimit_sound' f f
+    exact Types.limit_ext' _ _ _ (fun ⟨s⟩ => by simpa [Functor.pi, Pi.map_π_apply] using hk' s)
+  · have hch : forall (s : α), exists (i : I s) (xi : (F s).obj i), colimit.ι (F s) i xi =
+        Pi.π (fun s => colimit (F s)) s x := fun s => Types.jointly_surjective' _
+    choose k p hk using hch
+    refine ⟨colimit.ι (pointwiseProduct F) k ((Types.productIso _).inv p), ?_⟩
+    refine Types.limit_ext' _ _ _ (fun ⟨s⟩ => ?_)
+    have := congr_hom (ι_colimitPointwiseProductToProductColimit_π F k s)
+      ((Types.productIso _).inv p)
+    exact this.trans (by simpa [Functor.pi] using hk _)
 
 中文:
 定理 Types.isIso_colimitPointwiseProductToProductColimit
@@ -561,7 +595,39 @@ theorem Types.isIso_colimitPointwiseProductToProductColimit
   · obtain ⟨ky, yk₀, hyk₀⟩ := Types.jointly_surjective' y
     obtain ⟨ky', yk₀', hyk₀'⟩ := Types.jointly_surjective' y'
     let k := IsFiltered.max ky ky'
-    let yk :
+    let yk : (pointwiseProduct F).obj k :=
+      (pointwiseProduct F).map (IsFiltered.leftToMax ky ky') yk₀
+    let yk' : (pointwiseProduct F).obj k :=
+      (pointwiseProduct F).map (IsFiltered.rightToMax ky ky') yk₀'
+    obtain rfl : y = colimit.ι (pointwiseProduct F) k yk := by
+      simp only [k, yk, colimit.w_apply, hyk₀]
+    obtain rfl : y' = colimit.ι (pointwiseProduct F) k yk' := by
+      simp only [k, yk', colimit.w_apply, hyk₀']
+    dsimp at yk yk'
+    have hch : forall (s : α), exists (i' : I s) (hi' : k s ⟶ i'),
+        (F s).map hi' (Pi.π (fun s => (F s).obj (k s)) s yk) =
+          (F s).map hi' (Pi.π (fun s => (F s).obj (k s)) s yk') := by
+      intro s
+      have hy₁ := congr_hom (ι_colimitPointwiseProductToProductColimit_π F k s) yk
+      have hy₂ := congr_hom (ι_colimitPointwiseProductToProductColimit_π F k s) yk'
+      dsimp at hy₁ hy₂ hy
+      rw [← hy]; rw [hy₁]; rw [Types.FilteredColimit.colimit_eq_iff] at hy₂
+      obtain ⟨i₀, f₀, g₀, h₀⟩ := hy₂
+      refine ⟨IsFiltered.coeq f₀ g₀, f₀ ≫ IsFiltered.coeqHom f₀ g₀, ?_⟩
+      conv_rhs => rw [IsFiltered.coeq_condition]
+      dsimp [Functor.pi] at h₀
+      simp [h₀]
+    choose k' f hk' using hch
+    apply Types.colimit_sound' f f
+    exact Types.limit_ext' _ _ _ (fun ⟨s⟩ => by simpa [Functor.pi, Pi.map_π_apply] using hk' s)
+  · have hch : forall (s : α), exists (i : I s) (xi : (F s).obj i), colimit.ι (F s) i xi =
+        Pi.π (fun s => colimit (F s)) s x := fun s => Types.jointly_surjective' _
+    choose k p hk using hch
+    refine ⟨colimit.ι (pointwiseProduct F) k ((Types.productIso _).inv p), ?_⟩
+    refine Types.limit_ext' _ _ _ (fun ⟨s⟩ => ?_)
+    have := congr_hom (ι_colimitPointwiseProductToProductColimit_π F k s)
+      ((Types.productIso _).inv p)
+    exact this.trans (by simpa [Functor.pi] using hk _)
 -/
 theorem Types.isIso_colimitPointwiseProductToProductColimit (F : forall i, I i ⥤ Type u) :
     IsIso (colimitPointwiseProductToProductColimit F) := by

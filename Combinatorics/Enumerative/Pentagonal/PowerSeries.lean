@@ -273,7 +273,7 @@ theorem hasSum_pentagonalSeries
     convert this
     simp
   rw [pentagonal_injective.hasSum_iff fun n hn => by simp [coeff_pentagonalSeries_eq_zero R hn]]
-  simpa [monomial_eq_C_mul_X_pow] using (pentagonalSeries R
+  simpa [monomial_eq_C_mul_X_pow] using (pentagonalSeries R).hasSum_of_monomials_self
 
 中文:
 定理 hasSum_pentagonalSeries
@@ -283,7 +283,7 @@ theorem hasSum_pentagonalSeries
     convert this
     simp
   rw [pentagonal_injective.hasSum_iff fun n hn => by simp [coeff_pentagonalSeries_eq_zero R hn]]
-  simpa [monomial_eq_C_mul_X_pow] using (pentagonalSeries R
+  simpa [monomial_eq_C_mul_X_pow] using (pentagonalSeries R).hasSum_of_monomials_self
 
 Depends on / 依赖: HasSum, coeff_pentagonalSeries_eq_zero, convert, hasSum_iff, hasSum_of_monomials_self, monomial_eq_C_mul_X_pow, pentagonal, pentagonalSeries, pentagonal_injective, pentagonal_injective.hasSum_iff
 -/
@@ -382,7 +382,17 @@ theorem tprod_one_sub_X_pow'
   · rw [IsTopologicallyNilpotent, tendsto_iff_coeff_tendsto]
     refine fun d => tendsto_atTop_of_eventually_const fun i (hi : i >= d + 1) => ?_
     grind
-  · exact Pentagonal
+  · exact Pentagonal.summable_pow_mul_prod_one_sub_pow R
+  · exact Pentagonal.multipliable_one_sub_X_pow R
+  · exact (hasSum_pow_pentagonal_sub_pentagonalSeries R).summable
+  · rw [tendsto_iff_coeff_tendsto]
+    refine fun n => tendsto_atTop_of_eventually_const fun k (hk : k >= n) => ?_
+    rw [map_zero]
+    apply coeff_of_lt_order
+    grw [← le_order_mul, ← le_order_mul]
+    refine (lt_add_of_lt_of_nonneg (lt_add_of_nonneg_of_lt (by simp) ?_) (by simp))
+    rw [order_X_pow]; rw [Nat.cast_lt]; rw [← Nat.add_one_le_iff]; rw [Nat.le_div_iff_mul_le (by simp)]
+    apply Nat.mul_le_mul <;> linarith
 
 中文:
 定理 tprod_one_sub_X_pow'
@@ -394,7 +404,17 @@ theorem tprod_one_sub_X_pow'
   · rw [IsTopologicallyNilpotent, tendsto_iff_coeff_tendsto]
     refine fun d => tendsto_atTop_of_eventually_const fun i (hi : i >= d + 1) => ?_
     grind
-  · exact Pentagonal
+  · exact Pentagonal.summable_pow_mul_prod_one_sub_pow R
+  · exact Pentagonal.multipliable_one_sub_X_pow R
+  · exact (hasSum_pow_pentagonal_sub_pentagonalSeries R).summable
+  · rw [tendsto_iff_coeff_tendsto]
+    refine fun n => tendsto_atTop_of_eventually_const fun k (hk : k >= n) => ?_
+    rw [map_zero]
+    apply coeff_of_lt_order
+    grw [← le_order_mul, ← le_order_mul]
+    refine (lt_add_of_lt_of_nonneg (lt_add_of_nonneg_of_lt (by simp) ?_) (by simp))
+    rw [order_X_pow]; rw [Nat.cast_lt]; rw [← Nat.add_one_le_iff]; rw [Nat.le_div_iff_mul_le (by simp)]
+    apply Nat.mul_le_mul <;> linarith
 -/
 private theorem tprod_one_sub_X_pow' [IsTopologicalRing R] [T2Space R] :
     ∏' n, (1 - X ^ (n + 1) : R⟦X⟧) = pentagonalSeries R := by

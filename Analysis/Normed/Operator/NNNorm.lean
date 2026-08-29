@@ -335,7 +335,7 @@ theorem opENorm_le_bound
   apply opNorm_le_bound _ (by positivity) (fun x => ?_)
   specialize hM x
   simp only [← ofReal_norm, ← ENNReal.ofReal_coe_nnreal] at hM
-  rwa [← ENNReal.ofReal_m
+  rwa [← ENNReal.ofReal_mul (by positivity), ENNReal.ofReal_le_ofReal_iff (by positivity)] at hM
 
 中文:
 定理 opENorm_le_bound
@@ -348,7 +348,7 @@ theorem opENorm_le_bound
   apply opNorm_le_bound _ (by positivity) (fun x => ?_)
   specialize hM x
   simp only [← ofReal_norm, ← ENNReal.ofReal_coe_nnreal] at hM
-  rwa [← ENNReal.ofReal_m
+  rwa [← ENNReal.ofReal_mul (by positivity), ENNReal.ofReal_le_ofReal_iff (by positivity)] at hM
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_coe_nnreal, ENNReal.ofReal_le_coe, ENNReal.ofReal_le_ofReal_iff, ENNReal.ofReal_mul, M.ne, NNReal, eq_top_or_lt_top, ofReal_coe_nnreal, ofReal_le_coe, ofReal_le_ofReal_iff, ofReal_mul, ofReal_norm, opNorm_le_bound, specialize
 -/
@@ -598,7 +598,12 @@ theorem exists_lt_apply_of_lt_opNNNorm
     nnnorm_ne_zero_iff.2 fun heq => by
       simp [heq, nnnorm_zero, map_zero] at hy
   have hfy : ‖f y‖₊ != 0 := hy.ne_zero
-  rw [← inv_inv ‖f y‖₊]; rw [NNReal.lt_inv_iff_mul_lt (inv_ne_zero hfy)]; rw [mul_assoc
+  rw [← inv_inv ‖f y‖₊]; rw [NNReal.lt_inv_iff_mul_lt (inv_ne_zero hfy)]; rw [mul_assoc]; rw [mul_comm ‖y‖₊]; rw [←
+    mul_assoc]; rw [← NNReal.lt_inv_iff_mul_lt hy'] at hy
+  obtain ⟨k, hk₁, hk₂⟩ := NormedField.exists_lt_nnnorm_lt 𝕜 hy
+  refine ⟨k • y, (nnnorm_smul k y).symm ▸ (NNReal.lt_inv_iff_mul_lt hy').1 hk₂, ?_⟩
+  rwa [map_smulₛₗ f, nnnorm_smul, ← div_lt_iff₀ hfy.bot_lt, div_eq_mul_inv,
+    RingHomIsometric.nnnorm_map]
 
 中文:
 定理 存在_lt_apply_of_lt_opNNNorm
@@ -609,7 +614,12 @@ theorem exists_lt_apply_of_lt_opNNNorm
     nnnorm_ne_zero_iff.2 fun heq => by
       simp [heq, nnnorm_zero, map_zero] at hy
   have hfy : ‖f y‖₊ != 0 := hy.ne_zero
-  rw [← inv_inv ‖f y‖₊]; rw [NNReal.lt_inv_iff_mul_lt (inv_ne_zero hfy)]; rw [mul_assoc
+  rw [← inv_inv ‖f y‖₊]; rw [NNReal.lt_inv_iff_mul_lt (inv_ne_zero hfy)]; rw [mul_assoc]; rw [mul_comm ‖y‖₊]; rw [←
+    mul_assoc]; rw [← NNReal.lt_inv_iff_mul_lt hy'] at hy
+  obtain ⟨k, hk₁, hk₂⟩ := NormedField.exists_lt_nnnorm_lt 𝕜 hy
+  refine ⟨k • y, (nnnorm_smul k y).symm ▸ (NNReal.lt_inv_iff_mul_lt hy').1 hk₂, ?_⟩
+  rwa [map_smulₛₗ f, nnnorm_smul, ← div_lt_iff₀ hfy.bot_lt, div_eq_mul_inv,
+    RingHomIsometric.nnnorm_map]
 
 Depends on / 依赖: NNReal, NNReal.lt_inv_iff_mul_lt, NormedField, NormedField.exists_lt_nnnorm_lt, exists_lt_nnnorm_lt, exists_mul_lt_apply_of_lt_opNNNorm, f.exists_mul_lt_apply_of_lt_opNNNorm, hy.ne_zero, inv_inv, inv_ne_zero, lt_inv_iff_mul_lt, map_zero, mul_assoc, mul_comm, ne_zero, nnnorm_ne_zero_iff, nnnorm_smul, nnnorm_zero
 -/
@@ -669,7 +679,7 @@ theorem sSup_unit_ball_eq_nnnorm
   · rintro - ⟨x, hx, rfl⟩
     simpa only [mul_one] using! f.le_opNorm_of_le (mem_ball_zero_iff.1 hx).le
   · obtain ⟨x, hx, hxf⟩ := f.exists_lt_apply_of_lt_opNNNorm hub
-    exact
+    exact ⟨_, ⟨x, mem_ball_zero_iff.2 hx, rfl⟩, hxf⟩
 
 中文:
 定理 sSup_unit_ball_eq_nnnorm
@@ -680,7 +690,7 @@ theorem sSup_unit_ball_eq_nnnorm
   · rintro - ⟨x, hx, rfl⟩
     simpa only [mul_one] using! f.le_opNorm_of_le (mem_ball_zero_iff.1 hx).le
   · obtain ⟨x, hx, hxf⟩ := f.exists_lt_apply_of_lt_opNNNorm hub
-    exact
+    exact ⟨_, ⟨x, mem_ball_zero_iff.2 hx, rfl⟩, hxf⟩
 
 Depends on / 依赖: csSup_eq_of_forall_le_of_forall_lt_exists_gt, exists_lt_apply_of_lt_opNNNorm, f.exists_lt_apply_of_lt_opNNNorm, f.le_opNorm_of_le, le_opNorm_of_le, mem_ball_zero_iff, mul_one, nonempty_ball, nonempty_ball.mpr, zero_lt_one
 -/
@@ -727,7 +737,7 @@ theorem sSup_unitClosedBall_eq_nnnorm
   refine le_antisymm (csSup_le ((nonempty_closedBall.mpr zero_le_one).image _) hbdd) ?_
   rw [← sSup_unit_ball_eq_nnnorm]
   gcongr
- 
+  exacts [⟨‖f‖₊, hbdd⟩, ball_subset_closedBall]
 
 中文:
 定理 sSup_unitClosedBall_eq_nnnorm
@@ -739,7 +749,7 @@ theorem sSup_unitClosedBall_eq_nnnorm
   refine le_antisymm (csSup_le ((nonempty_closedBall.mpr zero_le_one).image _) hbdd) ?_
   rw [← sSup_unit_ball_eq_nnnorm]
   gcongr
- 
+  exacts [⟨‖f‖₊, hbdd⟩, ball_subset_closedBall]
 
 Depends on / 依赖: ball_subset_closedBall, closedBall, csSup_le, exacts, f.unit_le_opNorm, le_antisymm, mem_closedBall_zero_iff, nonempty_closedBall, nonempty_closedBall.mpr, sSup_unit_ball_eq_nnnorm, unit_le_opNorm, zero_le_one
 -/
@@ -791,7 +801,7 @@ theorem exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm
   suffices r < ‖x‖₊⁻¹ * ‖f x‖₊ by simpa [nnnorm_smul, inv_mul_cancel₀ hx0.ne'] using this
   calc
     r < 1⁻¹ * ‖f x‖₊ := by simpa
-    _ < ‖x‖
+    _ < ‖x‖₊⁻¹ * ‖f x‖₊ := by gcongr; exact hr.pos
 
 中文:
 定理 存在_nnnorm_eq_one_lt_apply_of_lt_opNNNorm
@@ -804,7 +814,7 @@ theorem exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm
   suffices r < ‖x‖₊⁻¹ * ‖f x‖₊ by simpa [nnnorm_smul, inv_mul_cancel₀ hx0.ne'] using this
   calc
     r < 1⁻¹ * ‖f x‖₊ := by simpa
-    _ < ‖x‖
+    _ < ‖x‖₊⁻¹ * ‖f x‖₊ := by gcongr; exact hr.pos
 
 Depends on / 依赖: algebraMap, eq_zero_or_nnnorm_pos, exists_lt_apply_of_lt_opNNNorm, hr.pos, hx0.ne, nnnorm_smul
 -/
@@ -832,7 +842,10 @@ theorem sSup_sphere_eq_nnnorm
   have : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
   refine csSup_eq_of_forall_le_of_forall_lt_exists_gt
       ((NormedSpace.sphere_nonempty.mpr zero_le_one).image _) ?_ fun ub hub => ?_
- 
+  · rintro - ⟨x, hx, rfl⟩
+    simpa only [mul_one] using! f.le_opNorm_of_le (mem_sphere_zero_iff_norm.1 hx).le
+  · obtain ⟨x, hx, hxf⟩ := f.exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm hub
+    exact ⟨_, ⟨x, by simpa using! congrArg NNReal.toReal hx, rfl⟩, hxf⟩
 
 中文:
 定理 sSup_sphere_eq_nnnorm
@@ -843,7 +856,10 @@ theorem sSup_sphere_eq_nnnorm
   have : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
   refine csSup_eq_of_forall_le_of_forall_lt_exists_gt
       ((NormedSpace.sphere_nonempty.mpr zero_le_one).image _) ?_ fun ub hub => ?_
- 
+  · rintro - ⟨x, hx, rfl⟩
+    simpa only [mul_one] using! f.le_opNorm_of_le (mem_sphere_zero_iff_norm.1 hx).le
+  · obtain ⟨x, hx, hxf⟩ := f.exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm hub
+    exact ⟨_, ⟨x, by simpa using! congrArg NNReal.toReal hx, rfl⟩, hxf⟩
 
 Depends on / 依赖: NormedSpace, NormedSpace.restrictScalars, NormedSpace.sphere_nonempty.mpr, csSup_eq_of_forall_le_of_forall_lt_exists_gt, exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm, f.exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm, f.le_opNorm_of_le, le_opNorm_of_le, mem_sphere_zero_iff_norm, mul_one, one_ne_zero, restrictScalars, sphere_eq_empty_of_subsingleton, sphere_nonempty, subsingleton_or_nontrivial, zero_le_one
 -/

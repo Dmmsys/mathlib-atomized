@@ -128,7 +128,9 @@ lemma finite_iff_of_finite
   let e := nonZeroEquivProjectivizationProdUnits k V
   have : Finite { v : V // v != 0 } := Finite.of_equiv _ e.symm
   let eq : { v : V // v != 0 } oplus Unit ≃ V :=
-    ⟨(Sum.elim Subtype.val (fun _ => 0)), fun v => if h : v = 0 then Sum
+    ⟨(Sum.elim Subtype.val (fun _ => 0)), fun v => if h : v = 0 then Sum.inr () else Sum.inl ⟨v, h⟩,
+      by intro x; aesop, by intro x; aesop⟩
+  exact Finite.of_equiv _ eq
 
 中文:
 引理 finite_iff_of_finite
@@ -140,7 +142,9 @@ lemma finite_iff_of_finite
   let e := nonZeroEquivProjectivizationProdUnits k V
   have : Finite { v : V // v != 0 } := Finite.of_equiv _ e.symm
   let eq : { v : V // v != 0 } oplus Unit ≃ V :=
-    ⟨(Sum.elim Subtype.val (fun _ => 0)), fun v => if h : v = 0 then Sum
+    ⟨(Sum.elim Subtype.val (fun _ => 0)), fun v => if h : v = 0 then Sum.inr () else Sum.inl ⟨v, h⟩,
+      by intro x; aesop, by intro x; aesop⟩
+  exact Finite.of_equiv _ eq
 
 Depends on / 依赖: Finite, Finite.of_equiv, Subtype, Subtype.val, Sum.elim, Sum.inl, Sum.inr, classical, e.symm, nonZeroEquivProjectivizationProdUnits, of_equiv
 -/
@@ -171,7 +175,16 @@ lemma card
   | inr h =>
     have := not_iff_not.mpr (finite_iff_of_finite k V)
     push Not at this
-    have : Infinite (ℙ k V) := by rwa
+    have : Infinite (ℙ k V) := by rwa [this]
+    simp
+  | inl h =>
+  classical
+  have : Fintype V := Fintype.ofFinite V
+  have : Fintype (ℙ k V) := Fintype.ofFinite (ℙ k V)
+  have : Fintype k := Fintype.ofFinite k
+  have hV : Fintype.card { v : V // v != 0 } = Fintype.card V - 1 := by simp
+  simp_rw [← Fintype.card_eq_nat_card, ← Fintype.card_units (α := k), ← hV]
+  rw [Fintype.card_congr (nonZeroEquivProjectivizationProdUnits k V)]; rw [Fintype.card_prod]
 
 中文:
 引理 card
@@ -187,7 +200,16 @@ lemma card
   | inr h =>
     have := not_iff_not.mpr (finite_iff_of_finite k V)
     push Not at this
-    have : Infinite (ℙ k V) := by rwa
+    have : Infinite (ℙ k V) := by rwa [this]
+    simp
+  | inl h =>
+  classical
+  have : Fintype V := Fintype.ofFinite V
+  have : Fintype (ℙ k V) := Fintype.ofFinite (ℙ k V)
+  have : Fintype k := Fintype.ofFinite k
+  have hV : Fintype.card { v : V // v != 0 } = Fintype.card V - 1 := by simp
+  simp_rw [← Fintype.card_eq_nat_card, ← Fintype.card_units (α := k), ← hV]
+  rw [Fintype.card_congr (nonZeroEquivProjectivizationProdUnits k V)]; rw [Fintype.card_prod]
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.ofFinite, Infinite, Module, Module.Free.infinite, classical, finite_iff_of_finite, finite_or_infinite, infinite, nontriviality, not_iff_not, not_iff_not.mpr, ofFinite
 -/
@@ -290,7 +312,14 @@ lemma card_of_finrank
       contrapose hf
       simpa using Module.finite_of_finite k
     simp [this]
-  have : 1 < Nat.card k
+  have : 1 < Nat.card k := Finite.one_lt_card
+  refine Nat.mul_right_cancel (m := Nat.card k - 1) (by lia) ?_
+  let e : V ≃ₗ[k] (Fin n -> k) := LinearEquiv.ofFinrankEq _ _ (by simpa)
+  have hc : Nat.card V = Nat.card k ^ n := by simp [Nat.card_congr e.toEquiv, Nat.card_fun]
+  zify
+  conv_rhs => rw [Int.natCast_sub this.le, Int.natCast_one, geom_sum_mul]
+  rw [← Int.natCast_mul]; rw [← card k V]; rw [hc]
+  simp
 
 中文:
 引理 card_of_finrank
@@ -306,7 +335,14 @@ lemma card_of_finrank
       contrapose hf
       simpa using Module.finite_of_finite k
     simp [this]
-  have : 1 < Nat.card k
+  have : 1 < Nat.card k := Finite.one_lt_card
+  refine Nat.mul_right_cancel (m := Nat.card k - 1) (by lia) ?_
+  let e : V ≃ₗ[k] (Fin n -> k) := LinearEquiv.ofFinrankEq _ _ (by simpa)
+  have hc : Nat.card V = Nat.card k ^ n := by simp [Nat.card_congr e.toEquiv, Nat.card_fun]
+  zify
+  conv_rhs => rw [Int.natCast_sub this.le, Int.natCast_one, geom_sum_mul]
+  rw [← Int.natCast_mul]; rw [← card k V]; rw [hc]
+  simp
 
 Depends on / 依赖: Finite, Finite.one_lt_card, Infinite, LinearEquiv, LinearEquiv.ofFinrankEq, Module, Module.finite_of_finite, Module.finrank_of_not_finite, Nat.card, Nat.card_congr, Nat.card_fun, Nat.mul_right_cancel, card_congr, card_fun, contrapose, e.toEquiv, finite_iff_of_finite, finite_of_finite, finrank_of_not_finite, mul_right_cancel
 -/

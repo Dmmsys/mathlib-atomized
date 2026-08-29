@@ -864,7 +864,9 @@ instance :
         rintro X Y S hS f _ ⟨⟨_, J, hJ, rfl⟩, rfl⟩
         apply J.pullback_stable _ (f _ ⟨⟨_, _, hJ, rfl⟩, rfl⟩)
       transitive' := by
-        rintro X S hS R h 
+        rintro X S hS R h _ ⟨⟨_, J, hJ, rfl⟩, rfl⟩
+        apply
+          J.transitive (hS _ ⟨⟨_, _, hJ, rfl⟩, rfl⟩) _ fun Y f hf => h hf _ ⟨⟨_, _, hJ, rfl⟩, rfl⟩ }
 
 中文:
 实例 :
@@ -877,7 +879,9 @@ instance :
         rintro X Y S hS f _ ⟨⟨_, J, hJ, rfl⟩, rfl⟩
         apply J.pullback_stable _ (f _ ⟨⟨_, _, hJ, rfl⟩, rfl⟩)
       transitive' := by
-        rintro X S hS R h 
+        rintro X S hS R h _ ⟨⟨_, J, hJ, rfl⟩, rfl⟩
+        apply
+          J.transitive (hS _ ⟨⟨_, _, hJ, rfl⟩, rfl⟩) _ fun Y f hf => h hf _ ⟨⟨_, _, hJ, rfl⟩, rfl⟩ }
 
 Depends on / 依赖: J.pullback_stable, J.transitive, pullback_stable, sieves, top_mem, transitive
 -/
@@ -967,7 +971,11 @@ instance :
     (trivial C)
     (by
       apply le_antisymm
-      · int
+      · intro X S hS
+        rw [trivial_covering] at hS
+        apply covering_of_eq_top _ hS
+      · exact (completeLatticeOfInf _ isGLB_sInf).bot_le (trivial C))
+    _ rfl _ rfl _ rfl sInf rfl
 
 中文:
 实例 :
@@ -981,7 +989,11 @@ instance :
     (trivial C)
     (by
       apply le_antisymm
-      · int
+      · intro X S hS
+        rw [trivial_covering] at hS
+        apply covering_of_eq_top _ hS
+      · exact (completeLatticeOfInf _ isGLB_sInf).bot_le (trivial C))
+    _ rfl _ rfl _ rfl sInf rfl
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.copy, Set.mem_univ, bot_le, completeLatticeOfInf, covering_of_eq_top, discrete, fast_instance, isGLB_sInf, le_antisymm, le_top, mem_univ, trivial_covering
 -/
@@ -1285,7 +1297,8 @@ definition dense
   transitive' := by
     intro X S H₁ R H₂ Y f
     rcases H₁ f with ⟨Z, g, H₃⟩
-    
+    rcases H₂ H₃ (𝟙 Z) with ⟨W, h, H₄⟩
+    exact ⟨W, h ≫ g, by simpa using H₄⟩
 
 中文:
 定义 dense
@@ -1299,7 +1312,8 @@ definition dense
   transitive' := by
     intro X S H₁ R H₂ Y f
     rcases H₁ f with ⟨Z, g, H₃⟩
-    
+    rcases H₂ H₃ (𝟙 Z) with ⟨W, h, H₄⟩
+    exact ⟨W, h ≫ g, by simpa using H₄⟩
 -/
 def dense : GrothendieckTopology C where
   sieves X := {S | forall {Y : C} (f : Y ⟶ X), exists (Z : _) (g : Z ⟶ Y), S (g ≫ f)}
@@ -1384,7 +1398,7 @@ definition atomic
   transitive' := by
     rintro X S ⟨Y, f, hf⟩ R h
     rcases h hf with ⟨Z, g, hg⟩
-    exact ⟨_, 
+    exact ⟨_, _, hg⟩
 
 中文:
 定义 atomic
@@ -1399,7 +1413,7 @@ definition atomic
   transitive' := by
     rintro X S ⟨Y, f, hf⟩ R h
     rcases h hf with ⟨Z, g, hg⟩
-    exact ⟨_, 
+    exact ⟨_, _, hg⟩
 -/
 def atomic (hro : RightOreCondition C) : GrothendieckTopology C where
   sieves X := {S | exists (Y : _) (f : Y ⟶ X), S f}
@@ -1545,7 +1559,7 @@ instance :
     le_antisymm := fun _ _ h1 h2 => ext _ _ fun {Y} f => ⟨by apply h1, by apply h2⟩
     inf_le_left := fun _ _ _ _ hf => hf.1
     inf_le_right := fun _ _ _ _ hf => hf.2
-    le_inf := fu
+    le_inf := fun _ _ _ h1 h2 _ _ h => ⟨h1 _ h, h2 _ h⟩ }
 
 中文:
 实例 :
@@ -1555,7 +1569,7 @@ instance :
     le_antisymm := fun _ _ h1 h2 => ext _ _ fun {Y} f => ⟨by apply h1, by apply h2⟩
     inf_le_left := fun _ _ _ _ hf => hf.1
     inf_le_right := fun _ _ _ _ hf => hf.2
-    le_inf := fu
+    le_inf := fun _ _ _ h1 h2 _ _ h => ⟨h1 _ h, h2 _ h⟩ }
 
 Depends on / 依赖: J.intersection_covering, Preorder, S.condition, T.condition, condition, inf_le_left, inf_le_right, intersection_covering, le_antisymm, le_inf
 -/

@@ -209,7 +209,7 @@ theorem lift₃NatTrans_app_app_app
   simp only [currying₃_unitIso_hom_app_app_app_app, Functor.id_obj,
     currying₃_unitIso_inv_app_app_app_app, Functor.comp_obj,
     Category.comp_id, Category.id_comp]
-  exact liftNatTrans_app _ _ _ _ (uncurry₃.obj 
+  exact liftNatTrans_app _ _ _ _ (uncurry₃.obj F₁') (uncurry₃.obj F₂') (uncurry₃.map τ) ⟨X₁, X₂, X₃⟩
 
 中文:
 定理 lift₃自然数Trans_app_app_app
@@ -219,7 +219,7 @@ theorem lift₃NatTrans_app_app_app
   simp only [currying₃_unitIso_hom_app_app_app_app, Functor.id_obj,
     currying₃_unitIso_inv_app_app_app_app, Functor.comp_obj,
     Category.comp_id, Category.id_comp]
-  exact liftNatTrans_app _ _ _ _ (uncurry₃.obj 
+  exact liftNatTrans_app _ _ _ _ (uncurry₃.obj F₁') (uncurry₃.obj F₂') (uncurry₃.map τ) ⟨X₁, X₂, X₃⟩
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Equivalence, Equivalence.fullyFaithfulFunctor, Functor, Functor.comp_obj, Functor.id_obj, comp_id, comp_obj, fullyFaithfulFunctor, id_comp, id_obj, liftNatTrans_app
 -/
@@ -326,7 +326,7 @@ definition Lifting₃.bifunctorComp₁₂
         ((bifunctorComp₁₂Functor.mapIso
           (Lifting₂.iso L₁ L₂ W₁ W₂ (F₁₂ ⋙ (whiskeringRight _ _ _).obj L₁₂) F₁₂')).app G') ≪≫
         (bifunctorComp₁₂Functor.obj F₁₂).mapIso
-          (
+          (Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight _ _ _).obj L) G')
 
 中文:
 定义 Lifting₃.bifunctorComp₁₂
@@ -336,7 +336,7 @@ definition Lifting₃.bifunctorComp₁₂
         ((bifunctorComp₁₂Functor.mapIso
           (Lifting₂.iso L₁ L₂ W₁ W₂ (F₁₂ ⋙ (whiskeringRight _ _ _).obj L₁₂) F₁₂')).app G') ≪≫
         (bifunctorComp₁₂Functor.obj F₁₂).mapIso
-          (
+          (Lifting₂.iso L₁₂ L₃ W₁₂ W₃ (G ⋙ (whiskeringRight _ _ _).obj L) G')
 
 Depends on / 依赖: Functor.mapIso, Functor.obj, mapIso, whiskeringLeft, whiskeringRight
 -/

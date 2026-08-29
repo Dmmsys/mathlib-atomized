@@ -751,7 +751,10 @@ definition map
   body: clift (mk.comp <| FreeMonoid.map <| Sum.map f g)
     (by simp only [MonoidHom.comp_apply, map_of, Sum.map_inl, map_one, mk_of_inl])
     (by simp only [MonoidHom.comp_apply, map_of, Sum.map_inr, map_one, mk_of_inr])
-    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.map_inl, map_mul, mk_
+    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.map_inl, map_mul, mk_of_inl])
+    fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.map_inr, map_mul, mk_of_inr]
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 map
@@ -759,7 +762,10 @@ definition map
   定义体: clift (mk.comp <| FreeMonoid.map <| Sum.map f g)
     (by simp only [MonoidHom.comp_apply, map_of, Sum.map_inl, map_one, mk_of_inl])
     (by simp only [MonoidHom.comp_apply, map_of, Sum.map_inr, map_one, mk_of_inr])
-    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.map_inl, map_mul, mk_
+    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.map_inl, map_mul, mk_of_inl])
+    fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.map_inr, map_mul, mk_of_inr]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: FreeMonoid, FreeMonoid.map, MonoidHom, MonoidHom.comp_apply, Sum.map, Sum.map_inl, Sum.map_inr, comp_apply, map_inl, map_inr, map_mul, map_of, map_one, mk.comp, mk_of_inl, mk_of_inr
 -/
@@ -965,7 +971,10 @@ definition swap
   body: clift (mk.comp <| FreeMonoid.map Sum.swap)
     (by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inl, mk_of_inr, map_one])
     (by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inr, mk_of_inl, map_one])
-    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inl, mk_of_inr, map_
+    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inl, mk_of_inr, map_mul])
+    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inr, mk_of_inl, map_mul])
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 swap
@@ -973,7 +982,10 @@ definition swap
   定义体: clift (mk.comp <| FreeMonoid.map Sum.swap)
     (by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inl, mk_of_inr, map_one])
     (by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inr, mk_of_inl, map_one])
-    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inl, mk_of_inr, map_
+    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inl, mk_of_inr, map_mul])
+    (fun x y => by simp only [MonoidHom.comp_apply, map_of, Sum.swap_inr, mk_of_inl, map_mul])
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: FreeMonoid, FreeMonoid.map, MonoidHom, MonoidHom.comp_apply, Sum.swap, Sum.swap_inl, Sum.swap_inr, comp_apply, map_mul, map_of, map_one, mk.comp, mk_of_inl, mk_of_inr, swap_inl, swap_inr
 -/
@@ -2314,7 +2326,9 @@ theorem con_inv_mul_cancel
   | one => simp
   | of_mul x xs ihx =>
     simp only [toList_of_mul, map_cons, reverse_cons, ofList_append, map_mul, ofList_singleton]
-    rwa [mul_assoc, ← mul_assoc (mk (of _)), mk_of_inv_mul, one_mul
+    rwa [mul_assoc, ← mul_assoc (mk (of _)), mk_of_inv_mul, one_mul]
+
+@[to_additive]
 
 中文:
 定理 con_inv_mul_cancel
@@ -2325,7 +2339,9 @@ theorem con_inv_mul_cancel
   | one => simp
   | of_mul x xs ihx =>
     simp only [toList_of_mul, map_cons, reverse_cons, ofList_append, map_mul, ofList_singleton]
-    rwa [mul_assoc, ← mul_assoc (mk (of _)), mk_of_inv_mul, one_mul
+    rwa [mul_assoc, ← mul_assoc (mk (of _)), mk_of_inv_mul, one_mul]
+
+@[to_additive]
 
 Depends on / 依赖: FreeMonoid, FreeMonoid.inductionOn, inductionOn, map_cons, map_mul, map_one, mk_eq_mk, mk_of_inv_mul, mul_assoc, ofList_append, ofList_singleton, of_mul, one_mul, reverse_cons, toList_of_mul
 -/

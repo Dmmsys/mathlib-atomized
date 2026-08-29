@@ -1631,7 +1631,8 @@ lemma prod_bijective
 @[deprecated (since := "2026-04-08")]
 alias _root_.Function.Bijective.finset_sum := _root_.Function.Bijective.finsetSum
 
-@[to_additive existing, deprecated (since := "
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias _root_.Function.Bijective.finset_prod := _root_.Function.Bijective.finsetProd
 
 中文:
 引理 prod_bijective
@@ -1643,7 +1644,8 @@ alias _root_.Function.Bijective.finset_sum := _root_.Function.Bijective.finsetSu
 @[deprecated (since := "2026-04-08")]
 alias _root_.Function.Bijective.finset_sum := _root_.Function.Bijective.finsetSum
 
-@[to_additive existing, deprecated (since := "
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias _root_.Function.Bijective.finset_prod := _root_.Function.Bijective.finsetProd
 
 Depends on / 依赖: ofBijective, prod_equiv
 -/

@@ -142,7 +142,58 @@ alias deltaGenerated_eq_coinduced := generatedBy_eq_coinduced
 @[deprecated (since := "2026-04-23")] alias deltaGenerated_le := generatedBy_le
 
 @[deprecated (since := "2026-04-23")]
-alias is
+alias isOpen_deltaGenerated_iff := WithGeneratedByTopology.isOpen_iff
+
+@[deprecated (since := "2026-04-23")]
+alias deltaGenerated_deltaGenerated_eq := generatedBy_generatedBy
+
+@[deprecated (since := "2026-04-23")]
+alias eq_deltaGenerated := IsGeneratedBy.generatedBy_eq
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.isOpen_iff := IsGeneratedBy.isOpen_iff
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.continuous_iff := IsGeneratedBy.continuous_iff
+
+@[deprecated (since := "2026-04-23")]
+alias continuous_to_deltaGenerated := WithGeneratedByTopology.continuous_equiv
+
+@[deprecated (since := "2026-04-23")]
+alias deltaGeneratedSpace_deltaGenerated := IsGeneratedBy.instWithGeneratedByTopology
+
+@[deprecated (since := "2026-04-23")]
+alias deltaGenerated_mono := generatedBy_mono
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.counit := WithGeneratedByTopology.equiv
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.continuous_counit := WithGeneratedByTopology.continuous_equiv
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.coinduced := IsGeneratedBy.coinduced
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.iSup := IsGeneratedBy.iSup
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.sup := IsGeneratedBy.sup
+
+@[deprecated (since := "2026-04-23")]
+alias Topology.IsQuotientMap.deltaGeneratedSpace := Topology.IsQuotientMap.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Quot.deltaGeneratedSpace := Quot.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Quotient.deltaGeneratedSpace := Quotient.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Sum.deltaGeneratedSpace := Sum.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Sigma.deltaGeneratedSpace := Sigma.isGeneratedBy
 
 中文:
 定义 拓扑空间.deltaGenerated
@@ -155,7 +206,58 @@ alias deltaGenerated_eq_coinduced := generatedBy_eq_coinduced
 @[deprecated (since := "2026-04-23")] alias deltaGenerated_le := generatedBy_le
 
 @[deprecated (since := "2026-04-23")]
-alias is
+alias isOpen_deltaGenerated_iff := WithGeneratedByTopology.isOpen_iff
+
+@[deprecated (since := "2026-04-23")]
+alias deltaGenerated_deltaGenerated_eq := generatedBy_generatedBy
+
+@[deprecated (since := "2026-04-23")]
+alias eq_deltaGenerated := IsGeneratedBy.generatedBy_eq
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.isOpen_iff := IsGeneratedBy.isOpen_iff
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.continuous_iff := IsGeneratedBy.continuous_iff
+
+@[deprecated (since := "2026-04-23")]
+alias continuous_to_deltaGenerated := WithGeneratedByTopology.continuous_equiv
+
+@[deprecated (since := "2026-04-23")]
+alias deltaGeneratedSpace_deltaGenerated := IsGeneratedBy.instWithGeneratedByTopology
+
+@[deprecated (since := "2026-04-23")]
+alias deltaGenerated_mono := generatedBy_mono
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.counit := WithGeneratedByTopology.equiv
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.continuous_counit := WithGeneratedByTopology.continuous_equiv
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.coinduced := IsGeneratedBy.coinduced
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.iSup := IsGeneratedBy.iSup
+
+@[deprecated (since := "2026-04-23")]
+alias DeltaGeneratedSpace.sup := IsGeneratedBy.sup
+
+@[deprecated (since := "2026-04-23")]
+alias Topology.IsQuotientMap.deltaGeneratedSpace := Topology.IsQuotientMap.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Quot.deltaGeneratedSpace := Quot.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Quotient.deltaGeneratedSpace := Quotient.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Sum.deltaGeneratedSpace := Sum.isGeneratedBy
+
+@[deprecated (since := "2026-04-23")]
+alias Sigma.deltaGeneratedSpace := Sigma.isGeneratedBy
 
 Depends on / 依赖: coinduced
 -/

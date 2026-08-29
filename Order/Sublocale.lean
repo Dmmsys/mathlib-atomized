@@ -549,7 +549,7 @@ exact S.sInf_mem by simp +contextual [Set.subset_def]⟩
     · exact le_trans (by simp +contextual [restrictAux]) h
     · exact sInf_le (by simp [h])
   le_l_u x := by simp [restrictAux]
-  choice_eq a h := by simp 
+  choice_eq a h := by simp [le_antisymm_iff, restrictAux, sInf_le]
 
 中文:
 定义 giAux
@@ -562,7 +562,7 @@ exact S.sInf_mem by simp +contextual [Set.subset_def]⟩
     · exact le_trans (by simp +contextual [restrictAux]) h
     · exact sInf_le (by simp [h])
   le_l_u x := by simp [restrictAux]
-  choice_eq a h := by simp 
+  choice_eq a h := by simp [le_antisymm_iff, restrictAux, sInf_le]
 -/
 private def giAux (S : Sublocale X) : GaloisInsertion S.restrictAux Subtype.val where
   choice x hx := ⟨x, by
@@ -587,7 +587,21 @@ definition restrict
     refine eq_of_forall_ge_iff (fun s => Iff.symm ?_)
     calc
       _ ↔ S.restrictAux a <= S.restrictAux b ⇨ s := by simp
-      _ ↔ S.restrictAux b <= a ⇨ s 
+      _ ↔ S.restrictAux b <= a ⇨ s := by rw [S.giAux.gc.le_iff_le, @le_himp_comm, coe_himp]
+      _ ↔ b <= a ⇨ s := by
+        set c : S := ⟨a ⇨ s, S.himp_mem s.coe_prop⟩
+        change Sublocale.restrictAux S b <= c.val ↔ b <= c
+        rw [S.giAux.u_le_u_iff]; rw [S.giAux.gc.le_iff_le]
+      _ ↔ S.restrictAux (a ⊓ b) <= s := by simp [inf_comm, S.giAux.gc.le_iff_le]
+  map_sSup' s := by
+    change Sublocale.restrictAux S (sSup s) = _
+    rw [S.giAux.gc.l_sSup]; rw [sSup_image]
+    rfl
+  map_top' := by
+    refine le_antisymm le_top ?_
+    change _ <= restrictAux S ⊤
+    rw [← Subtype.coe_le_coe]; rw [S.giAux.gc.u_top]
+    simp [restrictAux, sInf]
 
 中文:
 定义 restrict
@@ -598,7 +612,21 @@ definition restrict
     refine eq_of_forall_ge_iff (fun s => Iff.symm ?_)
     calc
       _ ↔ S.restrictAux a <= S.restrictAux b ⇨ s := by simp
-      _ ↔ S.restrictAux b <= a ⇨ s 
+      _ ↔ S.restrictAux b <= a ⇨ s := by rw [S.giAux.gc.le_iff_le, @le_himp_comm, coe_himp]
+      _ ↔ b <= a ⇨ s := by
+        set c : S := ⟨a ⇨ s, S.himp_mem s.coe_prop⟩
+        change Sublocale.restrictAux S b <= c.val ↔ b <= c
+        rw [S.giAux.u_le_u_iff]; rw [S.giAux.gc.le_iff_le]
+      _ ↔ S.restrictAux (a ⊓ b) <= s := by simp [inf_comm, S.giAux.gc.le_iff_le]
+  map_sSup' s := by
+    change Sublocale.restrictAux S (sSup s) = _
+    rw [S.giAux.gc.l_sSup]; rw [sSup_image]
+    rfl
+  map_top' := by
+    refine le_antisymm le_top ?_
+    change _ <= restrictAux S ⊤
+    rw [← Subtype.coe_le_coe]; rw [S.giAux.gc.u_top]
+    simp [restrictAux, sInf]
 -/
 def restrict (S : Sublocale X) : FrameHom X S where
   toFun x := sInf {s : S | x <= s}

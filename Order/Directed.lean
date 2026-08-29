@@ -367,7 +367,7 @@ theorem Directed.extend_bot
     simp [Function.extend_apply' _ _ _ hb]
   rcases hf i j with ⟨k, hi, hj⟩
   use e k
-  simp only [h
+  simp only [he.extend_apply, *, true_and]
 
 中文:
 定理 Directed.extend_bot
@@ -382,7 +382,7 @@ theorem Directed.extend_bot
     simp [Function.extend_apply' _ _ _ hb]
   rcases hf i j with ⟨k, hi, hj⟩
   use e k
-  simp only [h
+  simp only [he.extend_apply, *, true_and]
 
 Depends on / 依赖: Function, Function.extend_apply, extend_apply, he.extend_apply, true_and
 -/
@@ -878,7 +878,8 @@ theorem DirectedOn.insert
     exact ⟨w, Set.mem_insert_of_mem _ hws, hwr⟩
   · obtain ⟨w, hws, hwr⟩ := ha x hx
     exact ⟨w, Set.mem_insert_of_mem _ hws, hwr.symm⟩
-  · obtain ⟨w, hws, hwr⟩ := hd x hx y h
+  · obtain ⟨w, hws, hwr⟩ := hd x hx y hy
+    exact ⟨w, Set.mem_insert_of_mem _ hws, hwr⟩
 
 中文:
 定理 DirectedOn.insert
@@ -890,7 +891,8 @@ theorem DirectedOn.insert
     exact ⟨w, Set.mem_insert_of_mem _ hws, hwr⟩
   · obtain ⟨w, hws, hwr⟩ := ha x hx
     exact ⟨w, Set.mem_insert_of_mem _ hws, hwr.symm⟩
-  · obtain ⟨w, hws, hwr⟩ := hd x hx y h
+  · obtain ⟨w, hws, hwr⟩ := hd x hx y hy
+    exact ⟨w, Set.mem_insert_of_mem _ hws, hwr⟩
 -/
 protected theorem DirectedOn.insert [Std.Refl r] (a : α) {s : Set α} (hd : DirectedOn r s)
     (ha : forall b in s, exists c in s, a ≼ c ∧ b ≼ c) : DirectedOn r (insert a s) := by

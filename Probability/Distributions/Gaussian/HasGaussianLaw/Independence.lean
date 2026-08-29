@@ -72,7 +72,14 @@ definition diagonalStrongDualPi
     (fun x y z => by simp [sum_add_distrib])
     (fun c m n => by simp [mul_sum])
     (fun x y z => by simp [sum_add_distrib])
-    (fun c m
+    (fun c m n => by simp [mul_sum])
+LinearMap.mkContinuous₂ g (∑ i, ‖L i‖) by
+    intro x y
+    simp only [LinearMap.mk₂_apply, g]
+    grw [norm_sum_le, sum_mul, sum_mul]
+    gcongr with i _
+    grw [le_opNorm₂]
+    gcongr <;> grw [opNorm_comp_le, norm_single_le_one, mul_one]
 
 中文:
 定义 diagonalStrongDualPi
@@ -82,7 +89,14 @@ definition diagonalStrongDualPi
     (fun x y z => by simp [sum_add_distrib])
     (fun c m n => by simp [mul_sum])
     (fun x y z => by simp [sum_add_distrib])
-    (fun c m
+    (fun c m n => by simp [mul_sum])
+LinearMap.mkContinuous₂ g (∑ i, ‖L i‖) by
+    intro x y
+    simp only [LinearMap.mk₂_apply, g]
+    grw [norm_sum_le, sum_mul, sum_mul]
+    gcongr with i _
+    grw [le_opNorm₂]
+    gcongr <;> grw [opNorm_comp_le, norm_single_le_one, mul_one]
 
 Depends on / 依赖: BilinForm, LinearMap, LinearMap.BilinForm, LinearMap.mk, LinearMap.mkContinuous, StrongDual, mul_sum, norm_si, norm_sum_le, opNorm_comp_le, single, sum_add_distrib, sum_mul
 -/
@@ -191,7 +205,17 @@ definition diagonalStrongDualProd
     (fun x y => L₁ (x ∘L (inl Real E F)) (y ∘L (inl Real E F)) + L₂ (x ∘L (inr Real E F)) (y ∘L (inr Real E F)))
     (fun x y z => by simp [add_add_add_comm])
     (fun c m n => by simp [mul_add])
-    (fun x y z => by s
+    (fun x y z => by simp [add_add_add_comm])
+    (fun c m n => by simp [mul_add])
+LinearMap.mkContinuous₂ g (‖L₁‖ + ‖L₂‖) by
+    intro x y
+    simp only [LinearMap.mk₂_apply, g]
+    grw [norm_add_le, add_mul, add_mul]
+    gcongr
+    · grw [le_opNorm₂]
+      gcongr <;> grw [opNorm_comp_le, norm_inl_le_one, mul_one]
+    · grw [le_opNorm₂]
+      gcongr <;> grw [opNorm_comp_le, norm_inr_le_one, mul_one]
 
 中文:
 定义 diagonalStrongDualProd
@@ -199,7 +223,17 @@ definition diagonalStrongDualProd
     (fun x y => L₁ (x ∘L (inl Real E F)) (y ∘L (inl Real E F)) + L₂ (x ∘L (inr Real E F)) (y ∘L (inr Real E F)))
     (fun x y z => by simp [add_add_add_comm])
     (fun c m n => by simp [mul_add])
-    (fun x y z => by s
+    (fun x y z => by simp [add_add_add_comm])
+    (fun c m n => by simp [mul_add])
+LinearMap.mkContinuous₂ g (‖L₁‖ + ‖L₂‖) by
+    intro x y
+    simp only [LinearMap.mk₂_apply, g]
+    grw [norm_add_le, add_mul, add_mul]
+    gcongr
+    · grw [le_opNorm₂]
+      gcongr <;> grw [opNorm_comp_le, norm_inl_le_one, mul_one]
+    · grw [le_opNorm₂]
+      gcongr <;> grw [opNorm_comp_le, norm_inr_le_one, mul_one]
 
 Depends on / 依赖: BilinForm, LinearMap, LinearMap.BilinForm, LinearMap.mk, LinearMap.mkContinuous, StrongDual, add_add_add_comm, add_mul, mul_add, norm_add_le
 -/
@@ -322,7 +356,15 @@ lemma iIndepFun.hasGaussianLaw
     classical
     refine ⟨fun i => ∫ x, x ∂P.map (X i),
       .diagonalStrongDualPi (fun i => covarianceBilinDual (P.map (X i))),
-      isPosSemidef_diagonalStrongDualPi (fun _ => isPos
+      isPosSemidef_diagonalStrongDualPi (fun _ => isPosSemidef_covarianceBilinDual), fun L => ?_⟩
+    rw [(iIndepFun_iff_charFunDual_pi (by fun_prop)).1 hX2]
+    simp only [← LinearMap.sum_single_apply E (fun i => ∫ x, x ∂P.map (X i)), map_sum, ofReal_sum,
+      sum_mul, diagonalStrongDualPi_apply, sum_div, ← sum_sub_distrib, exp_sum]
+    congr with i
+    rw [(hX1 i).isGaussian_map.charFunDual_eq]; rw [integral_complex_ofReal]; rw [integral_comp_id_comm]; rw [covarianceBilinDual_self_eq_variance]
+    · simp
+    · exact (hX1 i).isGaussian_map.memLp_two_id
+    · exact (hX1 i).isGaussian_map.integrable_id
 
 中文:
 引理 iIndepFun.hasGaussianLaw
@@ -334,7 +376,15 @@ lemma iIndepFun.hasGaussianLaw
     classical
     refine ⟨fun i => ∫ x, x ∂P.map (X i),
       .diagonalStrongDualPi (fun i => covarianceBilinDual (P.map (X i))),
-      isPosSemidef_diagonalStrongDualPi (fun _ => isPos
+      isPosSemidef_diagonalStrongDualPi (fun _ => isPosSemidef_covarianceBilinDual), fun L => ?_⟩
+    rw [(iIndepFun_iff_charFunDual_pi (by fun_prop)).1 hX2]
+    simp only [← LinearMap.sum_single_apply E (fun i => ∫ x, x ∂P.map (X i)), map_sum, ofReal_sum,
+      sum_mul, diagonalStrongDualPi_apply, sum_div, ← sum_sub_distrib, exp_sum]
+    congr with i
+    rw [(hX1 i).isGaussian_map.charFunDual_eq]; rw [integral_complex_ofReal]; rw [integral_comp_id_comm]; rw [covarianceBilinDual_self_eq_variance]
+    · simp
+    · exact (hX1 i).isGaussian_map.memLp_two_id
+    · exact (hX1 i).isGaussian_map.integrable_id
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, LinearMap, LinearMap.sum_single_apply, P.map, classical, covarianceBilinDual, diagonalStrongDualPi, diagonalStrongDualPi_apply, fun_prop, hX2.isProbabilityMeasure, iIndepFun_iff_charFunDual_pi, isGaussian_iff_gaussian_charFunDual, isPosSemidef_covarianceBilinDual, isPosSemidef_diagonalStrongDualPi, isProbabilityMeasure, map_sum, ofFinite, ofReal_sum, sum_mul
 -/
@@ -371,7 +421,17 @@ lemma HasGaussianLaw.iIndepFun_of_covariance_strongDual
   rw [iIndepFun_iff_charFunDual_pi fun i => hX.aemeasurable.eval i]
   intro L
   have this ω : L (X · ω) = ∑ i, (L ∘L (single Real E i)) (X i ω) := by
-    simp [← map_sum, LinearMap.sum_sin
+    simp [← map_sum, LinearMap.sum_single_apply]
+  simp_rw [hX.charFunDual_map_eq_fun, fun i => (hX.eval i).charFunDual_map_eq_fun, ← Complex.exp_sum,
+    sum_sub_distrib, ← sum_mul, this]
+  congr
+  · simp_rw [← Complex.ofReal_sum]
+    rw [integral_finsetSum _ fun i _ => ((hX.eval i).map_fun _).integrable.ofReal]
+  · rw [variance_fun_sum fun i => ((hX.eval i).map_fun _).memLp_two]
+    simp only [← sum_div, ← ofReal_sum, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true,
+      div_left_inj', ofReal_inj]
+    congr with i
+    rw [sum_eq_single_of_mem i (by grind) (fun j _ hij => h i j hij.symm _ _)]; rw [covariance_self ((hX.eval i).map_fun _).aemeasurable]
 
 中文:
 引理 HasGaussianLaw.iIndepFun_of_covariance_strongDual
@@ -384,7 +444,17 @@ lemma HasGaussianLaw.iIndepFun_of_covariance_strongDual
   rw [iIndepFun_iff_charFunDual_pi fun i => hX.aemeasurable.eval i]
   intro L
   have this ω : L (X · ω) = ∑ i, (L ∘L (single Real E i)) (X i ω) := by
-    simp [← map_sum, LinearMap.sum_sin
+    simp [← map_sum, LinearMap.sum_single_apply]
+  simp_rw [hX.charFunDual_map_eq_fun, fun i => (hX.eval i).charFunDual_map_eq_fun, ← Complex.exp_sum,
+    sum_sub_distrib, ← sum_mul, this]
+  congr
+  · simp_rw [← Complex.ofReal_sum]
+    rw [integral_finsetSum _ fun i _ => ((hX.eval i).map_fun _).integrable.ofReal]
+  · rw [variance_fun_sum fun i => ((hX.eval i).map_fun _).memLp_two]
+    simp only [← sum_div, ← ofReal_sum, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true,
+      div_left_inj', ofReal_inj]
+    congr with i
+    rw [sum_eq_single_of_mem i (by grind) (fun j _ hij => h i j hij.symm _ _)]; rw [covariance_self ((hX.eval i).map_fun _).aemeasurable]
 
 Depends on / 依赖: Complex.exp_sum, Complex.ofReal_sum, Fintype, Fintype.ofFinite, Function, Function.comp_def, LinearMap, LinearMap.sum_single_apply, aemeasurable, charFunDual_map_eq_fun, classical, comp_def, exp_sum, hX.aemeasurable.eval, hX.charFunDual_map_eq_fun, hX.eval, hX.isProbabilityMeasure, iIndepFun_iff_charFunDual_pi, integral_finsetSum, isProbabilityMeasure
 -/
@@ -456,7 +526,17 @@ lemma HasGaussianLaw.iIndepFun_of_covariance_eval
   rw [this]
   let (i : ι) := Fintype.ofFinite (κ i)
   let := Fintype.ofFinite ι
-  refine (HasGaussianLaw.iIndepFun_of_covariance_inner ?_ fun i j hij x y => ?_).comp
+  refine (HasGaussianLaw.iIndepFun_of_covariance_inner ?_ fun i j hij x y => ?_).comp _ (by fun_prop)
+  · exact hX.map_equiv (.piCongrRight (fun _ => (PiLp.continuousLinearEquiv 2 Real (fun _ => Real)).symm))
+  rw [← (EuclideanSpace.basisFun _ _).sum_repr x]; rw [← (EuclideanSpace.basisFun _ _).sum_repr y]
+  simp_rw [sum_inner, inner_smul_left]
+  rw [covariance_fun_sum_fun_sum]
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+      EuclideanSpace.basisFun_inner]
+    refine sum_eq_zero fun k _ => sum_eq_zero fun l _ => ?_
+    rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [h i j hij k l]; rw [mul_zero]; rw [mul_zero]
+  · simpa using fun j => ((hX.eval i).eval j).memLp_two.const_mul _
+  · simpa using fun i => ((hX.eval j).eval i).memLp_two.const_mul _
 
 中文:
 引理 HasGaussianLaw.iIndepFun_of_covariance_eval
@@ -467,7 +547,17 @@ lemma HasGaussianLaw.iIndepFun_of_covariance_eval
   rw [this]
   let (i : ι) := Fintype.ofFinite (κ i)
   let := Fintype.ofFinite ι
-  refine (HasGaussianLaw.iIndepFun_of_covariance_inner ?_ fun i j hij x y => ?_).comp
+  refine (HasGaussianLaw.iIndepFun_of_covariance_inner ?_ fun i j hij x y => ?_).comp _ (by fun_prop)
+  · exact hX.map_equiv (.piCongrRight (fun _ => (PiLp.continuousLinearEquiv 2 Real (fun _ => Real)).symm))
+  rw [← (EuclideanSpace.basisFun _ _).sum_repr x]; rw [← (EuclideanSpace.basisFun _ _).sum_repr y]
+  simp_rw [sum_inner, inner_smul_left]
+  rw [covariance_fun_sum_fun_sum]
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+      EuclideanSpace.basisFun_inner]
+    refine sum_eq_zero fun k _ => sum_eq_zero fun l _ => ?_
+    rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [h i j hij k l]; rw [mul_zero]; rw [mul_zero]
+  · simpa using fun j => ((hX.eval i).eval j).memLp_two.const_mul _
+  · simpa using fun i => ((hX.eval j).eval i).memLp_two.const_mul _
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.basisFun, Fintype, Fintype.ofFinite, HasGaussianLaw, HasGaussianLaw.iIndepFun_of_covariance_inner, PiLp.continuousLinearEquiv, basisFun, continuousLinearEquiv, fun_prop, hX.isProbabilityMeasure, hX.map_equiv, iIndepFun_of_covariance_inner, isProbabilityMeasure, map_equiv, ofFinite, piCongrRight, sum_r, sum_repr
 -/
@@ -541,7 +631,25 @@ lemma IndepFun.hasGaussianLaw
     rw [isGaussian_iff_gaussian_charFunDual]
     refine ⟨(∫ x, x ∂P.map X, ∫ y, y ∂P.map Y),
       .diagonalStrongDualProd (covarianceBilinDual (P.map X)) (covarianceBilinDual (P.map Y)),
-      isPosSemidef_diagonalStrongDualProd isPosSemidef_covarianceBilinDua
+      isPosSemidef_diagonalStrongDualProd isPosSemidef_covarianceBilinDual
+        isPosSemidef_covarianceBilinDual, fun L => ?_⟩
+    rw [(indepFun_iff_charFunDual_prod (by fun_prop) (by fun_prop)).1 hXY]
+    have : (∫ x, x ∂Measure.map X P, ∫ y, y ∂Measure.map Y P) =
+        ContinuousLinearMap.inl Real E F (∫ x, x ∂Measure.map X P) +
+        ContinuousLinearMap.inr Real E F (∫ y, y ∂Measure.map Y P) := by simp
+    simp only [this, map_add, ofReal_add, add_mul, diagonalStrongDualProd_apply, add_div,
+      add_sub_add_comm, exp_add]
+    congr
+    · rw [hX.isGaussian_map.charFunDual_eq, integral_complex_ofReal, integral_comp_id_comm,
+        covarianceBilinDual_self_eq_variance]
+      · simp
+      · exact hX.isGaussian_map.memLp_two_id
+      · exact hX.isGaussian_map.integrable_id
+    · rw [hY.isGaussian_map.charFunDual_eq, integral_complex_ofReal, integral_comp_id_comm,
+        covarianceBilinDual_self_eq_variance]
+      · simp
+      · exact hY.isGaussian_map.memLp_two_id
+      · exact hY.isGaussian_map.integrable_id
 
 中文:
 引理 IndepFun.hasGaussianLaw
@@ -551,7 +659,25 @@ lemma IndepFun.hasGaussianLaw
     rw [isGaussian_iff_gaussian_charFunDual]
     refine ⟨(∫ x, x ∂P.map X, ∫ y, y ∂P.map Y),
       .diagonalStrongDualProd (covarianceBilinDual (P.map X)) (covarianceBilinDual (P.map Y)),
-      isPosSemidef_diagonalStrongDualProd isPosSemidef_covarianceBilinDua
+      isPosSemidef_diagonalStrongDualProd isPosSemidef_covarianceBilinDual
+        isPosSemidef_covarianceBilinDual, fun L => ?_⟩
+    rw [(indepFun_iff_charFunDual_prod (by fun_prop) (by fun_prop)).1 hXY]
+    have : (∫ x, x ∂Measure.map X P, ∫ y, y ∂Measure.map Y P) =
+        ContinuousLinearMap.inl Real E F (∫ x, x ∂Measure.map X P) +
+        ContinuousLinearMap.inr Real E F (∫ y, y ∂Measure.map Y P) := by simp
+    simp only [this, map_add, ofReal_add, add_mul, diagonalStrongDualProd_apply, add_div,
+      add_sub_add_comm, exp_add]
+    congr
+    · rw [hX.isGaussian_map.charFunDual_eq, integral_complex_ofReal, integral_comp_id_comm,
+        covarianceBilinDual_self_eq_variance]
+      · simp
+      · exact hX.isGaussian_map.memLp_two_id
+      · exact hX.isGaussian_map.integrable_id
+    · rw [hY.isGaussian_map.charFunDual_eq, integral_complex_ofReal, integral_comp_id_comm,
+        covarianceBilinDual_self_eq_variance]
+      · simp
+      · exact hY.isGaussian_map.memLp_two_id
+      · exact hY.isGaussian_map.integrable_id
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.inl, Measure, Measure.map, P.map, covarianceBilinDual, diagonalStrongDualProd, fun_prop, hX.isProbabilityMeasure, indepFun_iff_charFunDual_prod, isGaussian_iff_gaussian_charFunDual, isPosSemidef_covarianceBilinDual, isPosSemidef_diagonalStrongDualProd, isProbabilityMeasure
 -/
@@ -595,7 +721,12 @@ lemma HasGaussianLaw.indepFun_of_covariance_strongDual
   intro L
   have : L ∘ (fun ω => (X ω, Y ω)) = (L ∘L (.inl Real E F)) ∘ X + (L ∘L (.inr Real E F)) ∘ Y := by
     ext; simp [-comp_apply, ← comp_inl_add_comp_inr]
-  rw [hXY.charFunDual
+  rw [hXY.charFunDual_map_eq]; rw [hXY.fst.charFunDual_map_eq]; rw [hXY.snd.charFunDual_map_eq]; rw [← exp_add]; rw [sub_add_sub_comm]; rw [← add_mul]; rw [← ofReal_add]; rw [← integral_add]; rw [← add_div]; rw [← ofReal_add]; rw [this]; rw [variance_add]; rw [h]; rw [mul_zero]; rw [add_zero]
+  · simp
+  · exact (hXY.fst.map _).memLp_two
+  · exact (hXY.snd.map _).memLp_two
+  · exact (hXY.fst.map _).integrable
+  · exact (hXY.snd.map _).integrable
 
 中文:
 引理 HasGaussianLaw.indepFun_of_covariance_strongDual
@@ -606,7 +737,12 @@ lemma HasGaussianLaw.indepFun_of_covariance_strongDual
   intro L
   have : L ∘ (fun ω => (X ω, Y ω)) = (L ∘L (.inl Real E F)) ∘ X + (L ∘L (.inr Real E F)) ∘ Y := by
     ext; simp [-comp_apply, ← comp_inl_add_comp_inr]
-  rw [hXY.charFunDual
+  rw [hXY.charFunDual_map_eq]; rw [hXY.fst.charFunDual_map_eq]; rw [hXY.snd.charFunDual_map_eq]; rw [← exp_add]; rw [sub_add_sub_comm]; rw [← add_mul]; rw [← ofReal_add]; rw [← integral_add]; rw [← add_div]; rw [← ofReal_add]; rw [this]; rw [variance_add]; rw [h]; rw [mul_zero]; rw [add_zero]
+  · simp
+  · exact (hXY.fst.map _).memLp_two
+  · exact (hXY.snd.map _).memLp_two
+  · exact (hXY.fst.map _).integrable
+  · exact (hXY.snd.map _).integrable
 
 Depends on / 依赖: add_div, add_mul, aemeasurable, charFunDual_map_eq, comp_apply, comp_inl_add_comp_inr, exp_add, hXY.charFunDual_map_eq, hXY.fst.aemeasurable, hXY.fst.charFunDual_map_eq, hXY.isProbabilityMeasure, hXY.snd.aemeasurable, hXY.snd.charFunDual_map_eq, indepFun_iff_charFunDual_prod, integral_add, isProbabilityMeasure, ofReal_add, sub_add_sub_comm
 -/
@@ -663,7 +799,23 @@ lemma HasGaussianLaw.indepFun_of_covariance_eval
   rw [hX]; rw [hY]
   let := Fintype.ofFinite ι
   let := Fintype.ofFinite κ
-  refine IndepF
+  refine IndepFun.comp (HasGaussianLaw.indepFun_of_covariance_inner ?_ fun x y => ?_)
+    (by fun_prop) (by fun_prop)
+  · exact hXY.map_equiv (.prodCongr (PiLp.continuousLinearEquiv 2 Real (fun _ => Real)).symm
+      (PiLp.continuousLinearEquiv 2 Real (fun _ => Real)).symm)
+  rw [← (EuclideanSpace.basisFun _ _).sum_repr x]; rw [← (EuclideanSpace.basisFun _ _).sum_repr y]
+  simp_rw [sum_inner, inner_smul_left]
+  rw [covariance_fun_sum_fun_sum]
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+      EuclideanSpace.basisFun_inner]
+    refine sum_eq_zero fun k _ => sum_eq_zero fun l _ => ?_
+    rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [h]; rw [mul_zero]; rw [mul_zero]
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+    EuclideanSpace.basisFun_inner]
+    exact fun i => (hXY.fst.eval i).memLp_two.const_mul _
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+      EuclideanSpace.basisFun_inner]
+    exact fun j => (hXY.snd.eval j).memLp_two.const_mul _
 
 中文:
 引理 HasGaussianLaw.indepFun_of_covariance_eval
@@ -675,7 +827,23 @@ lemma HasGaussianLaw.indepFun_of_covariance_eval
   rw [hX]; rw [hY]
   let := Fintype.ofFinite ι
   let := Fintype.ofFinite κ
-  refine IndepF
+  refine IndepFun.comp (HasGaussianLaw.indepFun_of_covariance_inner ?_ fun x y => ?_)
+    (by fun_prop) (by fun_prop)
+  · exact hXY.map_equiv (.prodCongr (PiLp.continuousLinearEquiv 2 Real (fun _ => Real)).symm
+      (PiLp.continuousLinearEquiv 2 Real (fun _ => Real)).symm)
+  rw [← (EuclideanSpace.basisFun _ _).sum_repr x]; rw [← (EuclideanSpace.basisFun _ _).sum_repr y]
+  simp_rw [sum_inner, inner_smul_left]
+  rw [covariance_fun_sum_fun_sum]
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+      EuclideanSpace.basisFun_inner]
+    refine sum_eq_zero fun k _ => sum_eq_zero fun l _ => ?_
+    rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [h]; rw [mul_zero]; rw [mul_zero]
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+    EuclideanSpace.basisFun_inner]
+    exact fun i => (hXY.fst.eval i).memLp_two.const_mul _
+  · simp only [EuclideanSpace.basisFun_repr, conj_trivial, Function.comp_apply,
+      EuclideanSpace.basisFun_inner]
+    exact fun j => (hXY.snd.eval j).memLp_two.const_mul _
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, HasGaussianLaw, HasGaussianLaw.indepFun_of_covariance_inner, IndepFun, IndepFun.comp, PiLp.continuousLinearEq, PiLp.continuousLinearEquiv, continuousLinearEq, continuousLinearEquiv, fun_prop, hXY.isProbabilityMeasure, hXY.map_equiv, indepFun_of_covariance_inner, isProbabilityMeasure, map_equiv, ofFinite, prodCongr
 -/
@@ -873,7 +1041,16 @@ lemma IndepFun.hasGaussianLaw_sub_of_sub
   intro L
   apply mul_left_cancel₀ (a := charFunDual (P.map X) L)
   · simp [hX.charFunDual_map_eq]
-  rw [← Pi.mul_apply]; rw [← h.charFunDual_map_add_eq_mul]; rw [add_sub_cancel];
+  rw [← Pi.mul_apply]; rw [← h.charFunDual_map_add_eq_mul]; rw [add_sub_cancel]; rw [hX.charFunDual_map_eq]; rw [← exp_add]; rw [sub_add_sub_comm]; rw [← add_mul]; rw [← ofReal_add]; rw [← integral_add]; rw [← add_div]; rw [← ofReal_add]; rw [← IndepFun.variance_add]; rw [hY.charFunDual_map_eq]
+  · congr with ω <;> simp
+  any_goals fun_prop
+  · exact (hX.map L).memLp_two
+  · rw [map_comp_sub]
+    exact (hY.map L).memLp_two.sub (hX.map L).memLp_two
+  · exact h.comp (by fun_prop) (by fun_prop)
+  · exact (hX.map L).integrable
+  · rw [map_comp_sub]
+    exact (hY.map L).integrable.sub (hX.map L).integrable
 
 中文:
 引理 IndepFun.hasGaussianLaw_sub_of_sub
@@ -884,7 +1061,16 @@ lemma IndepFun.hasGaussianLaw_sub_of_sub
   intro L
   apply mul_left_cancel₀ (a := charFunDual (P.map X) L)
   · simp [hX.charFunDual_map_eq]
-  rw [← Pi.mul_apply]; rw [← h.charFunDual_map_add_eq_mul]; rw [add_sub_cancel];
+  rw [← Pi.mul_apply]; rw [← h.charFunDual_map_add_eq_mul]; rw [add_sub_cancel]; rw [hX.charFunDual_map_eq]; rw [← exp_add]; rw [sub_add_sub_comm]; rw [← add_mul]; rw [← ofReal_add]; rw [← integral_add]; rw [← add_div]; rw [← ofReal_add]; rw [← IndepFun.variance_add]; rw [hY.charFunDual_map_eq]
+  · congr with ω <;> simp
+  any_goals fun_prop
+  · exact (hX.map L).memLp_two
+  · rw [map_comp_sub]
+    exact (hY.map L).memLp_two.sub (hX.map L).memLp_two
+  · exact h.comp (by fun_prop) (by fun_prop)
+  · exact (hX.map L).integrable
+  · rw [map_comp_sub]
+    exact (hY.map L).integrable.sub (hX.map L).integrable
 
 Depends on / 依赖: IndepFun, IndepFun.variance_add, IsProbabilityMeasure, P.map, Pi.mul_apply, add_div, add_mul, add_sub_cancel, charFunDual, charFunDual_map_, charFunDual_map_add_eq_mul, charFunDual_map_eq, exp_add, fun_prop, h.charFunDual_map_add_eq_mul, hX.charFunDual_map_eq, hX.isProbabilityMeasure, hY.charFunDual_map_, hasGaussianLaw_iff_charFunDual_map_eq, integral_add
 -/

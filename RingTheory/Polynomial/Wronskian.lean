@@ -323,7 +323,16 @@ theorem degree_wronskian_lt_add
       constructor
       case left =>
         apply lt_of_le_of_lt
-        · exact degree_mul_le a (derivative 
+        · exact degree_mul_le a (derivative b)
+        · rw [← Polynomial.degree_ne_bot] at ha
+          rw [WithBot.add_lt_add_iff_left ha]
+          exact Polynomial.degree_derivative_lt hb
+      case right =>
+        apply lt_of_le_of_lt
+        · exact degree_mul_le (derivative a) b
+        · rw [← Polynomial.degree_ne_bot] at hb
+          rw [WithBot.add_lt_add_iff_right hb]
+          exact Polynomial.degree_derivative_lt ha
 
 中文:
 定理 degree_wronskian_lt_add
@@ -337,7 +346,16 @@ theorem degree_wronskian_lt_add
       constructor
       case left =>
         apply lt_of_le_of_lt
-        · exact degree_mul_le a (derivative 
+        · exact degree_mul_le a (derivative b)
+        · rw [← Polynomial.degree_ne_bot] at ha
+          rw [WithBot.add_lt_add_iff_left ha]
+          exact Polynomial.degree_derivative_lt hb
+      case right =>
+        apply lt_of_le_of_lt
+        · exact degree_mul_le (derivative a) b
+        · rw [← Polynomial.degree_ne_bot] at hb
+          rw [WithBot.add_lt_add_iff_right hb]
+          exact Polynomial.degree_derivative_lt ha
 
 Depends on / 依赖: Polynomial, Polynomial.degree_derivative_lt, Polynomial.degree_ne_bot, Polynomial.degree_sub_le, WithBot, WithBot.add_, WithBot.add_lt_add_iff_left, a.degree, add_, add_lt_add_iff_left, b.degree, degree, degree_derivative_lt, degree_mul_le, degree_ne_bot, degree_sub_le, derivative, lt_of_le_of_lt, max_lt_iff, wronskian
 -/
@@ -373,7 +391,9 @@ theorem natDegree_wronskian_lt_add
   have hb : b != 0 := by intro h; subst h; rw [wronskian_zero_right] at hw; exact hw rfl
   rw [← WithBot.coe_lt_coe]; rw [WithBot.coe_add]
   convert! ← degree_wronskian_lt_add ha hb
-  · exact Polynomial.degree
+  · exact Polynomial.degree_eq_natDegree hw
+  · exact Polynomial.degree_eq_natDegree ha
+  · exact Polynomial.degree_eq_natDegree hb
 
 中文:
 定理 natDegree_wronskian_lt_add
@@ -383,7 +403,9 @@ theorem natDegree_wronskian_lt_add
   have hb : b != 0 := by intro h; subst h; rw [wronskian_zero_right] at hw; exact hw rfl
   rw [← WithBot.coe_lt_coe]; rw [WithBot.coe_add]
   convert! ← degree_wronskian_lt_add ha hb
-  · exact Polynomial.degree
+  · exact Polynomial.degree_eq_natDegree hw
+  · exact Polynomial.degree_eq_natDegree ha
+  · exact Polynomial.degree_eq_natDegree hb
 
 Depends on / 依赖: Polynomial, Polynomial.degree_eq_natDegree, WithBot, WithBot.coe_add, WithBot.coe_lt_coe, coe_add, coe_lt_coe, convert, degree_eq_natDegree, degree_wronskian_lt_add, wronskian_zero_left, wronskian_zero_right
 -/
@@ -410,7 +432,11 @@ theorem _root_.IsCoprime.wronskian_eq_zero_iff
       rw [← hw]; exact dvd_mul_right _ _
     · rw [← dvd_derivative_iff]
       apply hc.symm.dvd_of_dvd_mul_left
-      rw [hw]; exact dvd_mul_left _ 
+      rw [hw]; exact dvd_mul_left _ _
+  mpr hdab := by
+    obtain ⟨hda, hdb⟩ := hdab
+    rw [wronskian]
+    rw [hda]; rw [hdb]; simp only [mul_zero, zero_mul, sub_self]
 
 中文:
 定理 _root_.IsCoprime.wronskian_eq_zero_iff
@@ -422,7 +448,11 @@ theorem _root_.IsCoprime.wronskian_eq_zero_iff
       rw [← hw]; exact dvd_mul_right _ _
     · rw [← dvd_derivative_iff]
       apply hc.symm.dvd_of_dvd_mul_left
-      rw [hw]; exact dvd_mul_left _ 
+      rw [hw]; exact dvd_mul_left _ _
+  mpr hdab := by
+    obtain ⟨hda, hdb⟩ := hdab
+    rw [wronskian]
+    rw [hda]; rw [hdb]; simp only [mul_zero, zero_mul, sub_self]
 
 Depends on / 依赖: dvd_derivative_iff, dvd_mul_left, dvd_mul_right, dvd_of_dvd_mul_left, dvd_of_dvd_mul_right, hc.dvd_of_dvd_mul_right, hc.symm.dvd_of_dvd_mul_left, mul_zero, sub_eq_iff_eq_add, sub_self, wronskian, zero_add, zero_mul
 -/

@@ -320,7 +320,9 @@ theorem repr_symm_apply
     b.repr.symm v = b.repr.symm (v.sum Finsupp.single) := by simp
     _ = v.sum fun i vi => b.repr.symm (Finsupp.single i vi) := map_finsuppSum ..
     _ = Finsupp.linearCombination R b v := by simp only [repr_symm_single,
-                                                         Finsupp.linearCo
+                                                         Finsupp.linearCombination_apply]
+
+@[simp]
 
 中文:
 定理 repr_symm_apply
@@ -330,7 +332,9 @@ theorem repr_symm_apply
     b.repr.symm v = b.repr.symm (v.sum Finsupp.single) := by simp
     _ = v.sum fun i vi => b.repr.symm (Finsupp.single i vi) := map_finsuppSum ..
     _ = Finsupp.linearCombination R b v := by simp only [repr_symm_single,
-                                                         Finsupp.linearCo
+                                                         Finsupp.linearCombination_apply]
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.linearCombination_apply, Finsupp.single, b.repr.symm, linearCombination, linearCombination_apply, map_finsuppSum, repr_symm_single, single, v.sum
 -/
@@ -1167,7 +1171,12 @@ theorem repr_apply_eq
   have : Finsupp.lapply i ∘ₗ ↑b.repr = f_i := by
     refine b.ext fun j => ?_
     change b.repr (b j) i = f (b j) i
-    rw [b.repr_self]; rw [f
+    rw [b.repr_self]; rw [f_eq]
+  calc
+    b.repr x i = f_i x := by
+      { rw [← this]
+        rfl }
+    _ = f x i := rfl
 
 中文:
 定理 repr_apply_eq
@@ -1180,7 +1189,12 @@ theorem repr_apply_eq
   have : Finsupp.lapply i ∘ₗ ↑b.repr = f_i := by
     refine b.ext fun j => ?_
     change b.repr (b j) i = f (b j) i
-    rw [b.repr_self]; rw [f
+    rw [b.repr_self]; rw [f_eq]
+  calc
+    b.repr x i = f_i x := by
+      { rw [← this]
+        rfl }
+    _ = f x i := rfl
 
 Depends on / 依赖: Finsupp, Finsupp.lapply, Pi.add_apply, Pi.smul_apply, add_apply, b.ext, b.repr, b.repr_self, f_eq, lapply, map_add, map_smul, repr_self, smul_apply
 -/
@@ -1271,7 +1285,7 @@ definition mapCoeffs
         change (f.symm x * y) • z = x • (y • z)
         rw [mul_smul]; rw [← h]; rw [f.apply_symm_apply] }
 exact ofRepr (b.repr.restrictScalars R').trans
-    Finsup
+    Finsupp.mapRange.linearEquiv (Module.compHom.toLinearEquiv f.symm).symm
 
 中文:
 定义 mapCoeffs
@@ -1283,7 +1297,7 @@ exact ofRepr (b.repr.restrictScalars R').trans
         change (f.symm x * y) • z = x • (y • z)
         rw [mul_smul]; rw [← h]; rw [f.apply_symm_apply] }
 exact ofRepr (b.repr.restrictScalars R').trans
-    Finsup
+    Finsupp.mapRange.linearEquiv (Module.compHom.toLinearEquiv f.symm).symm
 
 Depends on / 依赖: Finsupp, Finsupp.mapRange.linearEquiv, IsScalarTower, Module, Module.compHom, Module.compHom.toLinearEquiv, apply_symm_apply, b.repr.restrictScalars, compHom, f.apply_symm_apply, f.symm, linearEquiv, mapRange, mul_smul, ofRepr, restrictScalars, smul_assoc, toLinearEquiv
 -/
@@ -1487,7 +1501,10 @@ theorem reindexRange_repr'
   · intro i
     ext j
     simp only [reindexRange_repr_self]
-    apply Fin
+    apply Finsupp.single_apply_left (f := fun i => (⟨b i, _⟩ : Set.range b))
+    exact fun i j h => b.injective (Subtype.mk.inj h)
+
+@[simp]
 
 中文:
 定理 reindexRange_repr'
@@ -1505,7 +1522,10 @@ theorem reindexRange_repr'
   · intro i
     ext j
     simp only [reindexRange_repr_self]
-    apply Fin
+    apply Finsupp.single_apply_left (f := fun i => (⟨b i, _⟩ : Set.range b))
+    exact fun i j h => b.injective (Subtype.mk.inj h)
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.coe_add, Finsupp.single_apply_left, Pi.add_apply, Set.range, Subtype, Subtype.mk.inj, add_apply, b.injective, b.reindexRange.repr, b.repr_apply_eq, coe_add, injective, map_add, nontriviality, reindexRange, reindexRange_repr_self, repr_apply_eq, single_apply_left
 -/
@@ -1706,7 +1726,8 @@ definition constr
     refine b.ext fun i => ?_
     simp
   map_smul' c f := by
-    refine b.ext fun i => ?
+    refine b.ext fun i => ?_
+    simp
 
 中文:
 定义 constr
@@ -1723,7 +1744,8 @@ definition constr
     refine b.ext fun i => ?_
     simp
   map_smul' c f := by
-    refine b.ext fun i => ?
+    refine b.ext fun i => ?_
+    simp
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.lmapDomain, b.repr, linearCombination, lmapDomain
 -/
@@ -2105,7 +2127,16 @@ definition equiv'
       have : (constr (M' := M) b' R (g ∘ b')).comp (constr (M' := M') b R (f ∘ b)) = LinearMap.id :=
         b.ext fun i =>
           Exists.elim (hf i) fun i' hi' => by
-            rw [LinearMap.comp_a
+            rw [LinearMap.comp_apply]; rw [b.constr_basis]; rw [Function.comp_apply]; rw [← hi']; rw [b'.constr_basis]; rw [Function.comp_apply]; rw [hi']; rw [hgf]; rw [LinearMap.id_apply]
+      fun x => congr_arg (fun h : M ->ₗ[R] M => h x) this
+    right_inv :=
+      have : (constr (M' := M') b R (f ∘ b)).comp (constr (M' := M) b' R (g ∘ b')) = LinearMap.id :=
+        b'.ext fun i =>
+          Exists.elim (hg i) fun i' hi' => by
+            rw [LinearMap.comp_apply]; rw [b'.constr_basis]; rw [Function.comp_apply]; rw [← hi']; rw [b.constr_basis]; rw [Function.comp_apply]; rw [hi']; rw [hfg]; rw [LinearMap.id_apply]
+      fun x => congr_arg (fun h : M' ->ₗ[R] M' => h x) this }
+
+@[simp]
 
 中文:
 定义 equiv'
@@ -2116,7 +2147,16 @@ definition equiv'
       have : (constr (M' := M) b' R (g ∘ b')).comp (constr (M' := M') b R (f ∘ b)) = LinearMap.id :=
         b.ext fun i =>
           Exists.elim (hf i) fun i' hi' => by
-            rw [LinearMap.comp_a
+            rw [LinearMap.comp_apply]; rw [b.constr_basis]; rw [Function.comp_apply]; rw [← hi']; rw [b'.constr_basis]; rw [Function.comp_apply]; rw [hi']; rw [hgf]; rw [LinearMap.id_apply]
+      fun x => congr_arg (fun h : M ->ₗ[R] M => h x) this
+    right_inv :=
+      have : (constr (M' := M') b R (f ∘ b)).comp (constr (M' := M) b' R (g ∘ b')) = LinearMap.id :=
+        b'.ext fun i =>
+          Exists.elim (hg i) fun i' hi' => by
+            rw [LinearMap.comp_apply]; rw [b'.constr_basis]; rw [Function.comp_apply]; rw [← hi']; rw [b.constr_basis]; rw [Function.comp_apply]; rw [hi']; rw [hfg]; rw [LinearMap.id_apply]
+      fun x => congr_arg (fun h : M' ->ₗ[R] M' => h x) this }
+
+@[simp]
 
 Depends on / 依赖: Exists, Exists.elim, Function, Function.comp_apply, LinearMap, LinearMap.comp_apply, LinearMap.id, LinearMap.id_apply, b.constr_basis, b.ext, comp_apply, congr_arg, constr, constr_basis, id_apply, invFun, left_inv, right_inv
 -/
@@ -2419,7 +2459,7 @@ theorem coe_sumCoords_eq_finsum
   simp only [Basis.sumCoords, Basis.coord, Finsupp.lapply_apply, LinearMap.id_coe,
     LinearEquiv.coe_coe, Function.comp_apply, Finsupp.coe_lsum, LinearMap.coe_comp,
     finsum_eq_sum _ (b.repr m).hasFiniteSupport, Finsupp.sum, Finset.finite_toSet_toFinset, id,
-    Finsupp.fun_support_eq
+    Finsupp.fun_support_eq]
 
 中文:
 定理 coe_sumCoords_eq_finsum
@@ -2429,7 +2469,7 @@ theorem coe_sumCoords_eq_finsum
   simp only [Basis.sumCoords, Basis.coord, Finsupp.lapply_apply, LinearMap.id_coe,
     LinearEquiv.coe_coe, Function.comp_apply, Finsupp.coe_lsum, LinearMap.coe_comp,
     finsum_eq_sum _ (b.repr m).hasFiniteSupport, Finsupp.sum, Finset.finite_toSet_toFinset, id,
-    Finsupp.fun_support_eq
+    Finsupp.fun_support_eq]
 
 Depends on / 依赖: Basis.coord, Basis.sumCoords, Finset, Finset.finite_toSet_toFinset, Finsupp, Finsupp.coe_lsum, Finsupp.fun_support_eq, Finsupp.lapply_apply, Finsupp.sum, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, LinearMap.id_coe, b.repr, coe_coe, coe_comp, coe_lsum
 -/

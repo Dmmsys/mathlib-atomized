@@ -701,7 +701,13 @@ lemma Finset.gcd_eq_sum_mul
   | insert a s ha ih =>
     obtain ⟨x, y, hxy⟩ := IsBezout.gcd_eq_sum (f a) (s.gcd f)
     obtain ⟨u, hu⟩ := IsBezout.associated_gcd_gcd R (x := f a) (y := s.gcd f)
-    rw [← hxy]; rw [add_mul]; rw [mul_comm x]; rw [mul_comm y] 
+    rw [← hxy]; rw [add_mul]; rw [mul_comm x]; rw [mul_comm y] at hu
+    obtain ⟨g, hg⟩ := ih
+    refine ⟨Function.update (g · * (y * u)) a (x * u), ?_⟩
+    rw [gcd_insert]; rw [sum_insert ha]; rw [← hu]; rw [hg]
+    simp only [Function.update_self, add_right_inj, sum_mul, mul_assoc]
+exact sum_congr rfl fun b hb => congrArg (f b * ·)
+      (Function.update_of_ne (show b != a by grind) (x * u) (g · * (y * u))).symm
 
 中文:
 引理 有限集.gcd_eq_sum_mul
@@ -712,7 +718,13 @@ lemma Finset.gcd_eq_sum_mul
   | insert a s ha ih =>
     obtain ⟨x, y, hxy⟩ := IsBezout.gcd_eq_sum (f a) (s.gcd f)
     obtain ⟨u, hu⟩ := IsBezout.associated_gcd_gcd R (x := f a) (y := s.gcd f)
-    rw [← hxy]; rw [add_mul]; rw [mul_comm x]; rw [mul_comm y] 
+    rw [← hxy]; rw [add_mul]; rw [mul_comm x]; rw [mul_comm y] at hu
+    obtain ⟨g, hg⟩ := ih
+    refine ⟨Function.update (g · * (y * u)) a (x * u), ?_⟩
+    rw [gcd_insert]; rw [sum_insert ha]; rw [← hu]; rw [hg]
+    simp only [Function.update_self, add_right_inj, sum_mul, mul_assoc]
+exact sum_congr rfl fun b hb => congrArg (f b * ·)
+      (Function.update_of_ne (show b != a by grind) (x * u) (g · * (y * u))).symm
 
 Depends on / 依赖: Finset, Finset.induction, Function, Function.update, Function.update_self, IsBezout, IsBezout.associated_gcd_gcd, IsBezout.gcd_eq_sum, add_mul, add_right_inj, associated_gcd_gcd, classical, gcd_eq_sum, gcd_insert, insert, mul_assoc, mul_comm, s.gcd, sum_co, sum_insert
 -/
@@ -753,7 +765,13 @@ theorem to_maximal_ideal
       cases hpi.mem_or_mem (show generator T * z in S from hz ▸ generator_mem S) with
       | inl h =>
         have hTS : T <= S := by
-        
+          rwa [← T.span_singleton_generator, Ideal.span_le, singleton_subset_iff]
+        exact (hxS <| hTS hxT).elim
+      | inr h =>
+        obtain ⟨y, hy⟩ := (mem_iff_generator_dvd _).1 h
+        have : generator S != 0 := mt (eq_bot_iff_generator_eq_zero _).2 hS
+        rw [← mul_one (generator S)]; rw [hy]; rw [mul_left_comm]; rw [mul_right_inj' this] at hz
+        exact hz.symm ▸ T.mul_mem_right _ (generator_mem T)⟩
 
 中文:
 定理 to_maximal_ideal
@@ -765,7 +783,13 @@ theorem to_maximal_ideal
       cases hpi.mem_or_mem (show generator T * z in S from hz ▸ generator_mem S) with
       | inl h =>
         have hTS : T <= S := by
-        
+          rwa [← T.span_singleton_generator, Ideal.span_le, singleton_subset_iff]
+        exact (hxS <| hTS hxT).elim
+      | inr h =>
+        obtain ⟨y, hy⟩ := (mem_iff_generator_dvd _).1 h
+        have : generator S != 0 := mt (eq_bot_iff_generator_eq_zero _).2 hS
+        rw [← mul_one (generator S)]; rw [hy]; rw [mul_left_comm]; rw [mul_right_inj' this] at hz
+        exact hz.symm ▸ T.mul_mem_right _ (generator_mem T)⟩
 
 Depends on / 依赖: Ideal.span_le, T.span_singleton_generator, eq_bot_iff_generator_eq_zero, generator, generator_mem, hpi.mem_or_mem, isMaximal_iff, mem_iff_generator_dvd, mem_or_mem, mul_one, ne_top_iff_one, singleton_subset_iff, span_le, span_singleton_generator
 -/
@@ -879,7 +903,8 @@ theorem isMaximal_of_irreducible
       rcases principal I with ⟨a, rfl⟩
       rw [Ideal.submodule_span_eq]; rw [Ideal.span_singleton_eq_top]
       rcases Ideal.span_singleton_le_span_singleton.1 (le_of_lt hI) with ⟨b, rfl⟩
-      refine (of_irreducible_mul hp).resolve_right (mt
+      refine (of_irreducible_mul hp).resolve_right (mt (fun hb => ?_) (not_le_of_gt hI))
+      rw [Ideal.submodule_span_eq]; rw [Ideal.submodule_span_eq]; rw [Ideal.span_singleton_le_span_singleton]; rw [IsUnit.mul_right_dvd hb]⟩⟩
 
 中文:
 定理 isMaximal_of_irreducible
@@ -888,7 +913,8 @@ theorem isMaximal_of_irreducible
       rcases principal I with ⟨a, rfl⟩
       rw [Ideal.submodule_span_eq]; rw [Ideal.span_singleton_eq_top]
       rcases Ideal.span_singleton_le_span_singleton.1 (le_of_lt hI) with ⟨b, rfl⟩
-      refine (of_irreducible_mul hp).resolve_right (mt
+      refine (of_irreducible_mul hp).resolve_right (mt (fun hb => ?_) (not_le_of_gt hI))
+      rw [Ideal.submodule_span_eq]; rw [Ideal.submodule_span_eq]; rw [Ideal.span_singleton_le_span_singleton]; rw [IsUnit.mul_right_dvd hb]⟩⟩
 
 Depends on / 依赖: Ideal.span_singleton_eq_top, Ideal.span_singleton_le_span_singleton, Ideal.submodule_span_eq, IsUnit, IsUnit.mul_right_dvd, le_of_lt, mul_right_dvd, not_le_of_gt, of_irreducible_mul, principal, resolve_right, span_singleton_eq_top, span_singleton_le_span_singleton, submodule_span_eq
 -/
@@ -1630,7 +1656,10 @@ theorem nonPrincipals_zorn
   · obtain ⟨K, hKmem⟩ := Set.nonempty_def.1 H
     refine ⟨sSup c, fun ⟨x, hx⟩ => ?_, fun _ => le_sSup⟩
     have hxmem : x in sSup c := hx.symm ▸ Submodule.mem_span_singleton_self x
-    obtain ⟨J, hJc, hxJ⟩ := (Submodule.mem_sSup_of_directed ⟨K, hKmem⟩ hchain.directedOn).
+    obtain ⟨J, hJc, hxJ⟩ := (Submodule.mem_sSup_of_directed ⟨K, hKmem⟩ hchain.directedOn).1 hxmem
+    have hsSupJ : sSup c = J := le_antisymm (by simp [hx, Ideal.span_le, hxJ]) (le_sSup hJc)
+    exact hs hJc ⟨hsSupJ ▸ ⟨x, hx⟩⟩
+  · simpa [Set.not_nonempty_iff_eq_empty.1 H, isPrincipalIdealRing_iff] using hR
 
 中文:
 定理 nonPrincipals_zorn
@@ -1640,7 +1669,10 @@ theorem nonPrincipals_zorn
   · obtain ⟨K, hKmem⟩ := Set.nonempty_def.1 H
     refine ⟨sSup c, fun ⟨x, hx⟩ => ?_, fun _ => le_sSup⟩
     have hxmem : x in sSup c := hx.symm ▸ Submodule.mem_span_singleton_self x
-    obtain ⟨J, hJc, hxJ⟩ := (Submodule.mem_sSup_of_directed ⟨K, hKmem⟩ hchain.directedOn).
+    obtain ⟨J, hJc, hxJ⟩ := (Submodule.mem_sSup_of_directed ⟨K, hKmem⟩ hchain.directedOn).1 hxmem
+    have hsSupJ : sSup c = J := le_antisymm (by simp [hx, Ideal.span_le, hxJ]) (le_sSup hJc)
+    exact hs hJc ⟨hsSupJ ▸ ⟨x, hx⟩⟩
+  · simpa [Set.not_nonempty_iff_eq_empty.1 H, isPrincipalIdealRing_iff] using hR
 
 Depends on / 依赖: Ideal.span_le, Nonempty, Set.nonempty_def, Set.not_nonempty_iff_eq_empty, Submodule, Submodule.mem_sSup_of_directed, Submodule.mem_span_singleton_self, SwapTrue, c.Nonempty, directedOn, g.prop, g.val, hchain, hchain.directedOn, hsSupJ, hx.symm, isPrincipalIdealRing_iff, le_antisymm, le_sSup, mem_sSup_of_directed
 -/

@@ -199,7 +199,10 @@ theorem coeff_ne_zero_of_lexOrder
   rcases hφ' with ⟨ne, hφ'⟩
   simp only [← h, WithTop.coe_eq_coe] at hφ'
   suffices toLex d in toLex '' φ.support by
-    simp only [Se
+    simp only [Set.mem_image_equiv, toLex_symm_eq, ofLex_toLex] at this
+    apply this
+  rw [hφ']
+  apply WellFounded.min_mem
 
 中文:
 定理 coeff_ne_zero_of_lexOrder
@@ -211,7 +214,10 @@ theorem coeff_ne_zero_of_lexOrder
   rcases hφ' with ⟨ne, hφ'⟩
   simp only [← h, WithTop.coe_eq_coe] at hφ'
   suffices toLex d in toLex '' φ.support by
-    simp only [Se
+    simp only [Set.mem_image_equiv, toLex_symm_eq, ofLex_toLex] at this
+    apply this
+  rw [hφ']
+  apply WellFounded.min_mem
 
 Depends on / 依赖: Set.mem_image_equiv, WellFounded, WellFounded.min_mem, WithTop, WithTop.coe_eq_coe, WithTop.coe_ne_top, coe_eq_coe, coe_ne_top, lexOrder_def_of_ne_zero, lexOrder_eq_top_iff_eq_zero, mem_image_equiv, min_mem, ne_eq, not_false_eq_true, ofLex_toLex, support, toLex_symm_eq
 -/
@@ -308,7 +314,9 @@ theorem le_lexOrder_iff
     have hφ : φ != 0 := by
       rw [ne_eq]; rw [← lexOrder_eq_top_iff_eq_zero]
       exact ne_top_of_lt h'
-    obtain ⟨d, hd⟩ := exists_finsupp_eq_lexOrd
+    obtain ⟨d, hd⟩ := exists_finsupp_eq_lexOrder_of_ne_zero hφ
+    refine coeff_ne_zero_of_lexOrder hd.symm (h d ?_)
+    rwa [← hd]
 
 中文:
 定理 le_lexOrder_iff
@@ -324,7 +332,9 @@ theorem le_lexOrder_iff
     have hφ : φ != 0 := by
       rw [ne_eq]; rw [← lexOrder_eq_top_iff_eq_zero]
       exact ne_top_of_lt h'
-    obtain ⟨d, hd⟩ := exists_finsupp_eq_lexOrd
+    obtain ⟨d, hd⟩ := exists_finsupp_eq_lexOrder_of_ne_zero hφ
+    refine coeff_ne_zero_of_lexOrder hd.symm (h d ?_)
+    rwa [← hd]
 
 Depends on / 依赖: coeff_eq_zero_of_lt_lexOrder, coeff_ne_zero_of_lexOrder, exists_finsupp_eq_lexOrder_of_ne_zero, hd.symm, lexOrder_eq_top_iff_eq_zero, lt_of_lt_of_le, ne_eq, ne_top_of_lt, not_lt
 -/
@@ -386,7 +396,12 @@ theorem coeff_mul_of_add_lexOrder
   simp only [Finset.mem_antidiagonal] at h
   rcases trichotomy_of_add_eq_add (congrArg toLex h) with h'' | h'' | h''
   · exact False.elim (h' (by simp [h''.1, h''.2]))
-  · rw [coeff_eq_zero_of_lt_lexOrde
+  · rw [coeff_eq_zero_of_lt_lexOrder (d := u), zero_mul]
+    rw [hp]
+    norm_cast
+  · rw [coeff_eq_zero_of_lt_lexOrder (d := v), mul_zero]
+    rw [hq]
+    norm_cast
 
 中文:
 定理 coeff_mul_of_add_lexOrder
@@ -397,7 +412,12 @@ theorem coeff_mul_of_add_lexOrder
   simp only [Finset.mem_antidiagonal] at h
   rcases trichotomy_of_add_eq_add (congrArg toLex h) with h'' | h'' | h''
   · exact False.elim (h' (by simp [h''.1, h''.2]))
-  · rw [coeff_eq_zero_of_lt_lexOrde
+  · rw [coeff_eq_zero_of_lt_lexOrder (d := u), zero_mul]
+    rw [hp]
+    norm_cast
+  · rw [coeff_eq_zero_of_lt_lexOrder (d := v), mul_zero]
+    rw [hq]
+    norm_cast
 
 Depends on / 依赖: False.elim, Finset, Finset.mem_antidiagonal, Finset.sum_eq_single_of_mem, coeff_eq_zero_of_lt_lexOrder, coeff_mul, mem_antidiagonal, mul_zero, sum_eq_single_of_mem, trichotomy_of_add_eq_add, zero_mul
 -/
@@ -433,7 +453,14 @@ theorem le_lexOrder_mul
   suffices toLex u < lexOrder φ ∨ toLex v < lexOrder ψ by
     rcases this with (hu | hv)
     · rw [coeff_eq_zero_of_lt_lexOrder hu, zero_mul]
-  
+    · rw [coeff_eq_zero_of_lt_lexOrder hv, mul_zero]
+  rw [or_iff_not_imp_left]; rw [not_lt]; rw [← not_le]
+  intro hu hv
+  rw [← not_le] at hd
+  apply hd
+  simp only [← h, toLex_add, WithTop.coe_add, add_le_add hu hv]
+
+alias lexOrder_mul_ge := le_lexOrder_mul
 
 中文:
 定理 le_lexOrder_mul
@@ -449,7 +476,14 @@ theorem le_lexOrder_mul
   suffices toLex u < lexOrder φ ∨ toLex v < lexOrder ψ by
     rcases this with (hu | hv)
     · rw [coeff_eq_zero_of_lt_lexOrder hu, zero_mul]
-  
+    · rw [coeff_eq_zero_of_lt_lexOrder hv, mul_zero]
+  rw [or_iff_not_imp_left]; rw [not_lt]; rw [← not_le]
+  intro hu hv
+  rw [← not_le] at hd
+  apply hd
+  simp only [← h, toLex_add, WithTop.coe_add, add_le_add hu hv]
+
+alias lexOrder_mul_ge := le_lexOrder_mul
 
 Depends on / 依赖: Finset, Finset.mem_antidiagonal, Finset.sum_eq_zero, WithTop, WithTop.coe_add, add_le_add, coe_add, coeff_eq_zero_of_lt_lexOrder, coeff_mul, le_lexOrder_iff, lexOrder, mem_antidiagonal, mul_zero, not_le, not_lt, or_iff_not_imp_left, sum_eq_zero, toLex_add, zero_mul
 -/
@@ -489,7 +523,9 @@ theorem lexOrder_mul
   rcases exists_finsupp_eq_lexOrder_of_ne_zero hψ with ⟨q, hq⟩
   apply le_antisymm _ (lexOrder_mul_ge φ ψ)
   rw [hp]; rw [hq]
-  apply lexOrder_le_of
+  apply lexOrder_le_of_coeff_ne_zero (d := p + q)
+  rw [coeff_mul_of_add_lexOrder hp hq]; rw [mul_ne_zero_iff]
+  exact ⟨coeff_ne_zero_of_lexOrder hp.symm, coeff_ne_zero_of_lexOrder hq.symm⟩
 
 中文:
 定理 lexOrder_mul
@@ -503,7 +539,9 @@ theorem lexOrder_mul
   rcases exists_finsupp_eq_lexOrder_of_ne_zero hψ with ⟨q, hq⟩
   apply le_antisymm _ (lexOrder_mul_ge φ ψ)
   rw [hp]; rw [hq]
-  apply lexOrder_le_of
+  apply lexOrder_le_of_coeff_ne_zero (d := p + q)
+  rw [coeff_mul_of_add_lexOrder hp hq]; rw [mul_ne_zero_iff]
+  exact ⟨coeff_ne_zero_of_lexOrder hp.symm, coeff_ne_zero_of_lexOrder hq.symm⟩
 
 Depends on / 依赖: coeff_mul_of_add_lexOrder, coeff_ne_zero_of_lexOrder, eq_or_ne, exists_finsupp_eq_lexOrder_of_ne_zero, hp.symm, hq.symm, le_antisymm, lexOrder_le_of_coeff_ne_zero, lexOrder_mul_ge, mul_ne_zero_iff
 -/

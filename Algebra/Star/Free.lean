@@ -108,7 +108,17 @@ instance :
     let y := lift R (X := X) (MulOpposite.op ∘ ι R)
     refine induction (motive := fun x => (y (y x).unop).unop = x) _ _ ?_ ?_ ?_ ?_ x
     · intros
-      simp only [AlgHom.commutes, MulOpp
+      simp only [AlgHom.commutes, MulOpposite.algebraMap_apply, MulOpposite.unop_op]
+    · intros
+      simp only [y, lift_ι_apply, Function.comp_apply, MulOpposite.unop_op]
+    · intros
+      simp only [*, map_mul, MulOpposite.unop_mul]
+    · intros
+      simp only [*, map_add, MulOpposite.unop_add]
+  star_mul a b := by simp only [Function.comp_apply, map_mul, MulOpposite.unop_mul]
+  star_add a b := by simp only [Function.comp_apply, map_add, MulOpposite.unop_add]
+
+@[simp]
 
 中文:
 实例 :
@@ -119,7 +129,17 @@ instance :
     let y := lift R (X := X) (MulOpposite.op ∘ ι R)
     refine induction (motive := fun x => (y (y x).unop).unop = x) _ _ ?_ ?_ ?_ ?_ x
     · intros
-      simp only [AlgHom.commutes, MulOpp
+      simp only [AlgHom.commutes, MulOpposite.algebraMap_apply, MulOpposite.unop_op]
+    · intros
+      simp only [y, lift_ι_apply, Function.comp_apply, MulOpposite.unop_op]
+    · intros
+      simp only [*, map_mul, MulOpposite.unop_mul]
+    · intros
+      simp only [*, map_add, MulOpposite.unop_add]
+  star_mul a b := by simp only [Function.comp_apply, map_mul, MulOpposite.unop_mul]
+  star_add a b := by simp only [Function.comp_apply, map_add, MulOpposite.unop_add]
+
+@[simp]
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, MulOpposite.unop
 -/

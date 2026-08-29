@@ -262,7 +262,7 @@ lemma exists_conjugate_one_le_norm
     have h_ge_one : 1 <= w₀ α := InfinitePlace.one_le_of_lt_one hα0 (fun z _ => h_neg z)
     exact (h_neg w₀).not_ge h_ge_one
   use w.embedding
-  rwa [InfinitePla
+  rwa [InfinitePlace.norm_embedding_eq]
 
 中文:
 引理 存在_conjugate_one_le_norm
@@ -274,7 +274,7 @@ lemma exists_conjugate_one_le_norm
     have h_ge_one : 1 <= w₀ α := InfinitePlace.one_le_of_lt_one hα0 (fun z _ => h_neg z)
     exact (h_neg w₀).not_ge h_ge_one
   use w.embedding
-  rwa [InfinitePla
+  rwa [InfinitePlace.norm_embedding_eq]
 
 Depends on / 依赖: Classical, Classical.arbitrary, InfinitePlace, InfinitePlace.norm_embedding_eq, InfinitePlace.one_le_of_lt_one, arbitrary, embedding, h_ge_one, h_neg, norm_embedding_eq, not_ge, one_le_of_lt_one, w.embedding
 -/
@@ -356,7 +356,13 @@ lemma norm_norm_le_norm_mul_house_pow
   calc _ = ‖∏ τ : K ->ₐ[Rat] Complex, τ α‖ := ?_
        _ = ‖(σ' α) * ∏ τ in univ.erase σ', τ α‖ := by rw [mul_prod_erase univ (· α) (mem_univ σ')]
        _ <= ‖σ' α‖ * ∏ τ in univ.erase σ', ‖τ α‖ := ?_
-       _ <= ‖σ' α‖ * ∏ τ in univ.erase σ', house α := by
+       _ <= ‖σ' α‖ * ∏ τ in univ.erase σ', house α := by gcongr; apply norm_embedding_le_house
+       _ = ‖σ' α‖ * house α ^ (Module.finrank Rat K - 1) := by simp
+  · rw [← Algebra.norm_eq_prod_embeddings, ← Rat.norm_cast_real,
+      Real.norm_eq_abs, eq_ratCast, Complex.norm_ratCast]
+  · rw [Complex.norm_mul]
+    gcongr
+    exact norm_prod_le (univ.erase σ') (· α)
 
 中文:
 引理 norm_norm_le_norm_mul_house_pow
@@ -367,7 +373,13 @@ lemma norm_norm_le_norm_mul_house_pow
   calc _ = ‖∏ τ : K ->ₐ[Rat] Complex, τ α‖ := ?_
        _ = ‖(σ' α) * ∏ τ in univ.erase σ', τ α‖ := by rw [mul_prod_erase univ (· α) (mem_univ σ')]
        _ <= ‖σ' α‖ * ∏ τ in univ.erase σ', ‖τ α‖ := ?_
-       _ <= ‖σ' α‖ * ∏ τ in univ.erase σ', house α := by
+       _ <= ‖σ' α‖ * ∏ τ in univ.erase σ', house α := by gcongr; apply norm_embedding_le_house
+       _ = ‖σ' α‖ * house α ^ (Module.finrank Rat K - 1) := by simp
+  · rw [← Algebra.norm_eq_prod_embeddings, ← Rat.norm_cast_real,
+      Real.norm_eq_abs, eq_ratCast, Complex.norm_ratCast]
+  · rw [Complex.norm_mul]
+    gcongr
+    exact norm_prod_le (univ.erase σ') (· α)
 
 Depends on / 依赖: Algebra, Algebra.norm_eq_prod_embeddings, Comple, Complex.norm_ratCast, Module, Module.finrank, Rat.norm_cast_real, Real.norm_eq_abs, classical, eq_ratCast, finrank, mem_univ, mul_prod_erase, norm_cast_real, norm_embedding_le_house, norm_eq_abs, norm_eq_prod_embeddings, norm_ratCast, toRatAlgHom, univ.erase
 -/
@@ -454,7 +466,15 @@ theorem basis_repr_norm_le_const_mul_house
     _ <= ∑ j, ‖(basisMatrix K)ᵀ⁻¹ i j‖ * ‖σ (algebraMap (𝓞 K) K α) j‖ := by
       rw [← inverse_basisMatrix_mulVec_eq_repr]
       exact norm_sum_le_of_le _ fun _ _ => (norm_mul _ _).le
-    _ <= ∑ j, ‖((basisMatrix K).transpose)⁻¹‖ * ‖σ (algebraMap (𝓞 K) K α)
+    _ <= ∑ j, ‖((basisMatrix K).transpose)⁻¹‖ * ‖σ (algebraMap (𝓞 K) K α) j‖ := by
+      gcongr
+      exact norm_entry_le_entrywise_sup_norm ((basisMatrix K).transpose)⁻¹
+    _ <= ∑ _ : K ->+* Complex, ‖fun i j => ((basisMatrix K).transpose)⁻¹ i j‖
+        * house (algebraMap (𝓞 K) K α) := by
+      gcongr with j
+      exact norm_le_pi_norm (σ ((algebraMap (𝓞 K) K) α)) j
+    _ = ↑(finrank Rat K) * ‖((basisMatrix K).transpose)⁻¹‖ * house (algebraMap (𝓞 K) K α) := by
+      simp [Embeddings.card, mul_assoc]
 
 中文:
 定理 basis_repr_norm_le_const_mul_house
@@ -465,7 +485,15 @@ theorem basis_repr_norm_le_const_mul_house
     _ <= ∑ j, ‖(basisMatrix K)ᵀ⁻¹ i j‖ * ‖σ (algebraMap (𝓞 K) K α) j‖ := by
       rw [← inverse_basisMatrix_mulVec_eq_repr]
       exact norm_sum_le_of_le _ fun _ _ => (norm_mul _ _).le
-    _ <= ∑ j, ‖((basisMatrix K).transpose)⁻¹‖ * ‖σ (algebraMap (𝓞 K) K α)
+    _ <= ∑ j, ‖((basisMatrix K).transpose)⁻¹‖ * ‖σ (algebraMap (𝓞 K) K α) j‖ := by
+      gcongr
+      exact norm_entry_le_entrywise_sup_norm ((basisMatrix K).transpose)⁻¹
+    _ <= ∑ _ : K ->+* Complex, ‖fun i j => ((basisMatrix K).transpose)⁻¹ i j‖
+        * house (algebraMap (𝓞 K) K α) := by
+      gcongr with j
+      exact norm_le_pi_norm (σ ((algebraMap (𝓞 K) K) α)) j
+    _ = ↑(finrank Rat K) * ‖((basisMatrix K).transpose)⁻¹‖ * house (algebraMap (𝓞 K) K α) := by
+      simp [Embeddings.card, mul_assoc]
 
 Depends on / 依赖: algebraMap, basisMatrix, canonicalEmbedding, inverse_basisMatrix_mulVec_eq_repr, norm_entry_le_entrywise_sup_norm, norm_le, norm_mul, norm_sum_le_of_le, transpose
 -/
@@ -596,7 +624,14 @@ theorem asiegel_ne_0
   rw [← Matrix.ext_iff]; intro k' l
   specialize hs k'
   let ⟨b⟩ := Fintype.card_pos_iff.1 (Fintype.card_pos (α := (K ->+* Complex)))
-have := ((newBasis K).repr.m
+have := ((newBasis K).repr.map_eq_zero_iff (x := (a k' l * (newBasis K) b))).1 by
+    ext b'
+    specialize hs b'
+    rw [funext_iff] at hs
+    simp only [Prod.forall] at hs
+    apply hs
+  simp only [mul_eq_zero] at this
+  exact this.resolve_right (Basis.ne_zero (newBasis K) b)
 
 中文:
 定理 asiegel_ne_0
@@ -610,7 +645,14 @@ have := ((newBasis K).repr.m
   rw [← Matrix.ext_iff]; intro k' l
   specialize hs k'
   let ⟨b⟩ := Fintype.card_pos_iff.1 (Fintype.card_pos (α := (K ->+* Complex)))
-have := ((newBasis K).repr.m
+have := ((newBasis K).repr.map_eq_zero_iff (x := (a k' l * (newBasis K) b))).1 by
+    ext b'
+    specialize hs b'
+    rw [funext_iff] at hs
+    simp only [Prod.forall] at hs
+    apply hs
+  simp only [mul_eq_zero] at this
+  exact this.resolve_right (Basis.ne_zero (newBasis K) b)
 -/
 private theorem asiegel_ne_0 : asiegel K a != 0 := by
   simp +unfoldPartialApp only [asiegel, a']
@@ -725,7 +767,24 @@ theorem ξ_mulVec_eq_0
     rw [Ne]; rw [funext_iff]; rw [not_forall] at hξ
     rcases hξ with ⟨l, hξ⟩
     rw [funext_iff] at hmulvec0
-    specializ
+    specialize hmulvec0 ⟨k, u⟩
+    simp only [Fintype.sum_prod_type, mulVec, dotProduct, asiegel] at hmulvec0
+    rw [sum_comm] at hmulvec0
+    exact mod_cast hmulvec0
+  have : 0 = ∑ u, (∑ r, ∑ l, a' K a k l r u * x (l, r) : 𝓞 K) * (newBasis K) u := by
+    simp only [lin_0, zero_mul, sum_const_zero]
+  have : 0 = ∑ r, ∑ l, x (l, r) * ∑ u, a' K a k l r u * (newBasis K) u := by
+    conv at this => enter [2, 2, u]; rw [sum_mul]
+    rw [sum_comm] at this
+    rw [this]; congr 1; ext1 r
+    conv => enter [1, 2, l]; rw [sum_mul]
+    rw [sum_comm]; congr 1; ext1 r
+    rw [mul_sum]; congr 1; ext1 r
+    ring
+  rw [sum_comm] at this
+  rw [this]; congr 1; ext1 l
+  rw [ξ]; rw [mul_sum]; congr 1; ext1 l
+  rw [← lin_1]; ring
 
 中文:
 定理 ξ_mulVec_eq_0
@@ -738,7 +797,24 @@ theorem ξ_mulVec_eq_0
     rw [Ne]; rw [funext_iff]; rw [not_forall] at hξ
     rcases hξ with ⟨l, hξ⟩
     rw [funext_iff] at hmulvec0
-    specializ
+    specialize hmulvec0 ⟨k, u⟩
+    simp only [Fintype.sum_prod_type, mulVec, dotProduct, asiegel] at hmulvec0
+    rw [sum_comm] at hmulvec0
+    exact mod_cast hmulvec0
+  have : 0 = ∑ u, (∑ r, ∑ l, a' K a k l r u * x (l, r) : 𝓞 K) * (newBasis K) u := by
+    simp only [lin_0, zero_mul, sum_const_zero]
+  have : 0 = ∑ r, ∑ l, x (l, r) * ∑ u, a' K a k l r u * (newBasis K) u := by
+    conv at this => enter [2, 2, u]; rw [sum_mul]
+    rw [sum_comm] at this
+    rw [this]; congr 1; ext1 r
+    conv => enter [1, 2, l]; rw [sum_mul]
+    rw [sum_comm]; congr 1; ext1 r
+    rw [mul_sum]; congr 1; ext1 r
+    ring
+  rw [sum_comm] at this
+  rw [this]; congr 1; ext1 l
+  rw [ξ]; rw [mul_sum]; congr 1; ext1 l
+  rw [← lin_1]; ring
 -/
 private theorem ξ_mulVec_eq_0 : a *ᵥ ξ K x = 0 := by
   funext k; simp only [Pi.zero_apply]; rw [eq_comm]
@@ -818,7 +894,29 @@ theorem asiegel_remark
       ‖asiegel K a kr lu‖ = |asiegel K a kr lu| := ?_
       _ <= c K * house ((algebraMap (𝓞 K) K) (a kr.1 lu.1 * ((newBasis K) lu.2))) := ?_
       _ <= c K * house ((algebraMap (𝓞 K) K) (a kr.1 lu.1)) *
-        house ((algeb
+        house ((algebraMap (𝓞 K) K) ((newBasis K) lu.2)) := ?_
+      _ <= c K * A * house ((algebraMap (𝓞 K) K) ((newBasis K) lu.2)) := ?_
+      _ <= c K * A * supOfBasis K := ?_
+      _ <= c₂ K * A := ?_
+    · simp only [Int.cast_abs, ← Real.norm_eq_abs (asiegel K a kr lu)]; rfl
+    · have remark := basis_repr_norm_le_const_mul_house K
+      simp only [Basis.repr_reindex, Finsupp.mapDomain_equiv_apply,
+        integralBasis_repr_apply, eq_intCast, Rat.cast_intCast,
+          Complex.norm_intCast] at remark
+      exact mod_cast remark ((a kr.1 lu.1 * ((newBasis K) lu.2))) kr.2
+    · simp only [house, map_mul, mul_assoc]
+      gcongr
+      apply norm_mul_le
+    · rw [mul_assoc, mul_assoc]
+      gcongr _ * (?_ * _)
+      · apply house_nonneg
+      · exact habs kr.1 lu.1
+    · gcongr
+      simp only [supOfBasis, le_sup'_iff, mem_univ]; use lu.2
+    · rw [mul_right_comm, c₂]
+      gcongr
+      exacts [supOfBasis_nonneg _, le_max_right ..]
+  · exact mul_nonneg (c₂_nonneg _) Apos
 
 中文:
 定理 asiegel_remark
@@ -831,7 +929,29 @@ theorem asiegel_remark
       ‖asiegel K a kr lu‖ = |asiegel K a kr lu| := ?_
       _ <= c K * house ((algebraMap (𝓞 K) K) (a kr.1 lu.1 * ((newBasis K) lu.2))) := ?_
       _ <= c K * house ((algebraMap (𝓞 K) K) (a kr.1 lu.1)) *
-        house ((algeb
+        house ((algebraMap (𝓞 K) K) ((newBasis K) lu.2)) := ?_
+      _ <= c K * A * house ((algebraMap (𝓞 K) K) ((newBasis K) lu.2)) := ?_
+      _ <= c K * A * supOfBasis K := ?_
+      _ <= c₂ K * A := ?_
+    · simp only [Int.cast_abs, ← Real.norm_eq_abs (asiegel K a kr lu)]; rfl
+    · have remark := basis_repr_norm_le_const_mul_house K
+      simp only [Basis.repr_reindex, Finsupp.mapDomain_equiv_apply,
+        integralBasis_repr_apply, eq_intCast, Rat.cast_intCast,
+          Complex.norm_intCast] at remark
+      exact mod_cast remark ((a kr.1 lu.1 * ((newBasis K) lu.2))) kr.2
+    · simp only [house, map_mul, mul_assoc]
+      gcongr
+      apply norm_mul_le
+    · rw [mul_assoc, mul_assoc]
+      gcongr _ * (?_ * _)
+      · apply house_nonneg
+      · exact habs kr.1 lu.1
+    · gcongr
+      simp only [supOfBasis, le_sup'_iff, mem_univ]; use lu.2
+    · rw [mul_right_comm, c₂]
+      gcongr
+      exacts [supOfBasis_nonneg _, le_max_right ..]
+  · exact mul_nonneg (c₂_nonneg _) Apos
 -/
 private theorem asiegel_remark : ‖asiegel K a‖ <= c₂ K * A := by
   have := c_nonneg K
@@ -895,7 +1015,27 @@ theorem house_le_bound
   have H₀ : 0 <= NumberField.house.supOfBasis K := supOfBasis_nonneg _
 have H₁ : 0 < (q - p : Real) := sub_pos.mpr mod_cast hpq
   calc _ = house (algebraMap (𝓞 K) K (∑ r, (x (l, r)) * ((newBasis K) r))) := rfl
-       _ <= ∑ r, house (((algebraMap (𝓞 K) K) (x (l,
+       _ <= ∑ r, house (((algebraMap (𝓞 K) K) (x (l, r))) *
+        ((algebraMap (𝓞 K) K) ((newBasis K) r))) := ?_
+       _ <= ∑ r, ‖x (l, r)‖ * house ((algebraMap (𝓞 K) K) ((newBasis K) r)) := ?_
+       _ <= ∑ r, ‖x (l, r)‖ * (supOfBasis K) := ?_
+       _ <= ∑ _r : K ->+* Complex, ((↑q * h * ‖asiegel K a‖) ^ ((p : Real) / (q - p))) * supOfBasis K := ?_
+       _ <= h * (c₂ K) * ((q * c₁ K * A) ^ ((p : Real) / (q - p))) := ?_
+       _ <= c₁ K * ((c₁ K * ↑q * A) ^ ((p : Real) / (q - p))) := ?_
+  · simp_rw [← map_mul, map_sum]; apply house_sum_le_sum_house
+  · gcongr with r _; convert! house_mul_le ..
+    simp only [map_intCast, house_intCast, Int.cast_abs, Int.norm_eq_abs]
+  · unfold supOfBasis
+    gcongr with r _
+    simp only [le_sup'_iff, mem_univ, true_and]; use r
+  · gcongr with r _
+    exact le_trans (norm_le_pi_norm x ⟨l, r⟩) hxbound
+  · simp only [sum_const, card_univ, nsmul_eq_mul]
+    rw [Embeddings.card]; rw [mul_comm _ (supOfBasis K)]; rw [c₂]; rw [c₁]; rw [← mul_assoc]; rw [← mul_assoc (q : Real)]; rw [mul_assoc (q * _ : Real)]
+    gcongr
+    · exact le_mul_of_one_le_left (supOfBasis_nonneg K) (le_max_left ..)
+    · exact asiegel_remark K a habs Apos
+  · rw [mul_comm (q : Real) (c₁ K)]; rfl
 
 中文:
 定理 house_le_bound
@@ -906,7 +1046,27 @@ have H₁ : 0 < (q - p : Real) := sub_pos.mpr mod_cast hpq
   have H₀ : 0 <= NumberField.house.supOfBasis K := supOfBasis_nonneg _
 have H₁ : 0 < (q - p : Real) := sub_pos.mpr mod_cast hpq
   calc _ = house (algebraMap (𝓞 K) K (∑ r, (x (l, r)) * ((newBasis K) r))) := rfl
-       _ <= ∑ r, house (((algebraMap (𝓞 K) K) (x (l,
+       _ <= ∑ r, house (((algebraMap (𝓞 K) K) (x (l, r))) *
+        ((algebraMap (𝓞 K) K) ((newBasis K) r))) := ?_
+       _ <= ∑ r, ‖x (l, r)‖ * house ((algebraMap (𝓞 K) K) ((newBasis K) r)) := ?_
+       _ <= ∑ r, ‖x (l, r)‖ * (supOfBasis K) := ?_
+       _ <= ∑ _r : K ->+* Complex, ((↑q * h * ‖asiegel K a‖) ^ ((p : Real) / (q - p))) * supOfBasis K := ?_
+       _ <= h * (c₂ K) * ((q * c₁ K * A) ^ ((p : Real) / (q - p))) := ?_
+       _ <= c₁ K * ((c₁ K * ↑q * A) ^ ((p : Real) / (q - p))) := ?_
+  · simp_rw [← map_mul, map_sum]; apply house_sum_le_sum_house
+  · gcongr with r _; convert! house_mul_le ..
+    simp only [map_intCast, house_intCast, Int.cast_abs, Int.norm_eq_abs]
+  · unfold supOfBasis
+    gcongr with r _
+    simp only [le_sup'_iff, mem_univ, true_and]; use r
+  · gcongr with r _
+    exact le_trans (norm_le_pi_norm x ⟨l, r⟩) hxbound
+  · simp only [sum_const, card_univ, nsmul_eq_mul]
+    rw [Embeddings.card]; rw [mul_comm _ (supOfBasis K)]; rw [c₂]; rw [c₁]; rw [← mul_assoc]; rw [← mul_assoc (q : Real)]; rw [mul_assoc (q * _ : Real)]
+    gcongr
+    · exact le_mul_of_one_le_left (supOfBasis_nonneg K) (le_max_left ..)
+    · exact asiegel_remark K a habs Apos
+  · rw [mul_comm (q : Real) (c₁ K)]; rfl
 -/
 private theorem house_le_bound : forall l, house (ξ K x l).1 <= (c₁ K) *
     ((c₁ K * q * A) ^ ((p : Real) / (q - p))) := by
@@ -950,6 +1110,19 @@ theorem exists_ne_zero_int_vec_house_le
   have h0ph : 0 < p * h := by rw [mul_pos_iff]; constructor; exact ⟨h0p, finrank_pos⟩
   have hfinp : Fintype.card (α × (K ->+* Complex)) = p * h := by
     rw [Fintype.card_prod]; rw [cardα]; rw [Embeddings.card]
+  have hfinq : Fintype.card (β × (K ->+* Complex)) = q * h := by
+    rw [Fintype.card_prod]; rw [cardβ]; rw [Embeddings.card]
+  have ⟨x, hxl, hmulvec0, hxbound⟩ :=
+    Int.Matrix.exists_ne_zero_int_vec_norm_le' (asiegel K a)
+      (by rwa [hfinp, hfinq]) (by rwa [hfinp]) (asiegel_ne_0 K a ha)
+  simp only [hfinp, hfinq, Nat.cast_mul] at hmulvec0 hxbound
+  rw [← sub_mul]; rw [mul_div_mul_right _ _ (mod_cast finrank_pos.ne')] at hxbound
+  have Apos : 0 <= A := by
+    have ⟨k⟩ := Fintype.card_pos_iff.1 (cardα ▸ h0p)
+    have ⟨l⟩ := Fintype.card_pos_iff.1 (cardβ ▸ h0p.trans hpq)
+    exact le_trans (house_nonneg _) (habs k l)
+  use ξ K x, ξ_ne_0 K x hxl, ξ_mulVec_eq_0 K a x hxl hmulvec0,
+    house_le_bound K a hpq x habs Apos hxbound
 
 中文:
 定理 存在_ne_zero_int_vec_house_le
@@ -959,6 +1132,19 @@ theorem exists_ne_zero_int_vec_house_le
   have h0ph : 0 < p * h := by rw [mul_pos_iff]; constructor; exact ⟨h0p, finrank_pos⟩
   have hfinp : Fintype.card (α × (K ->+* Complex)) = p * h := by
     rw [Fintype.card_prod]; rw [cardα]; rw [Embeddings.card]
+  have hfinq : Fintype.card (β × (K ->+* Complex)) = q * h := by
+    rw [Fintype.card_prod]; rw [cardβ]; rw [Embeddings.card]
+  have ⟨x, hxl, hmulvec0, hxbound⟩ :=
+    Int.Matrix.exists_ne_zero_int_vec_norm_le' (asiegel K a)
+      (by rwa [hfinp, hfinq]) (by rwa [hfinp]) (asiegel_ne_0 K a ha)
+  simp only [hfinp, hfinq, Nat.cast_mul] at hmulvec0 hxbound
+  rw [← sub_mul]; rw [mul_div_mul_right _ _ (mod_cast finrank_pos.ne')] at hxbound
+  have Apos : 0 <= A := by
+    have ⟨k⟩ := Fintype.card_pos_iff.1 (cardα ▸ h0p)
+    have ⟨l⟩ := Fintype.card_pos_iff.1 (cardβ ▸ h0p.trans hpq)
+    exact le_trans (house_nonneg _) (habs k l)
+  use ξ K x, ξ_ne_0 K x hxl, ξ_mulVec_eq_0 K a x hxl hmulvec0,
+    house_le_bound K a hpq x habs Apos hxbound
 
 Depends on / 依赖: Embeddings, Embeddings.card, Fintype, Fintype.card, Fintype.card_prod, Int.Matrix.exists_ne_zero_int_vec_norm_le, Matrix, asiegel, card_prod, exists_ne_zero_int_vec_norm_le, finrank, finrank_pos, hmulvec0, hxbound, mul_pos_iff
 -/

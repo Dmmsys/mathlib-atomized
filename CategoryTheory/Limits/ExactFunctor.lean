@@ -972,7 +972,7 @@ definition ExactFunctor.whiskeringLeft
     (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
       by dsimp; exact comp_preservesFiniteColimits _ _⟩)
   map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H
+    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
 
 中文:
 定义 ExactFunctor.whiskeringLeft
@@ -981,7 +981,7 @@ definition ExactFunctor.whiskeringLeft
     (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
       by dsimp; exact comp_preservesFiniteColimits _ _⟩)
   map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H
+    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
 
 Depends on / 依赖: F.obj, Functor, Functor.whiskeringLeft, ObjectProperty, ObjectProperty.lift, forget, whiskeringLeft
 -/
@@ -1006,7 +1006,7 @@ definition ExactFunctor.whiskeringRight
     (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
       by dsimp; exact comp_preservesFiniteColimits _ _⟩)
   map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app
+    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
 
 中文:
 定义 ExactFunctor.whiskeringRight
@@ -1015,7 +1015,7 @@ definition ExactFunctor.whiskeringRight
     (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
       by dsimp; exact comp_preservesFiniteColimits _ _⟩)
   map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app
+    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
 
 Depends on / 依赖: F.obj, Functor, Functor.whiskeringRight, ObjectProperty, ObjectProperty.lift, forget, whiskeringRight
 -/

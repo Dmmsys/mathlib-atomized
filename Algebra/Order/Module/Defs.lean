@@ -2129,7 +2129,7 @@ lemma smul_eq_smul_iff_eq_and_eq_of_pos
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
   refine ⟨fun ha => h.not_lt ?_, fun hb => h.not_lt ?_⟩
   · exact (smul_le_smul_of_nonneg_left hb h₁.le).trans_lt (smul_lt_smul_of_pos_right ha h₂)
-  · exact (smul_lt_smul_of_pos_left hb h₁).trans_l
+  · exact (smul_lt_smul_of_pos_left hb h₁).trans_le (smul_le_smul_of_nonneg_right ha h₂.le)
 
 中文:
 引理 smul_eq_smul_iff_eq_and_eq_of_pos
@@ -2139,7 +2139,7 @@ lemma smul_eq_smul_iff_eq_and_eq_of_pos
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
   refine ⟨fun ha => h.not_lt ?_, fun hb => h.not_lt ?_⟩
   · exact (smul_le_smul_of_nonneg_left hb h₁.le).trans_lt (smul_lt_smul_of_pos_right ha h₂)
-  · exact (smul_lt_smul_of_pos_left hb h₁).trans_l
+  · exact (smul_lt_smul_of_pos_left hb h₁).trans_le (smul_le_smul_of_nonneg_right ha h₂.le)
 
 Depends on / 依赖: eq_iff_le_not_lt, h.not_lt, not_lt, smul_le_smul_of_nonneg_left, smul_le_smul_of_nonneg_right, smul_lt_smul_of_pos_left, smul_lt_smul_of_pos_right, trans_le, trans_lt, true_and
 -/
@@ -2163,7 +2163,7 @@ lemma smul_eq_smul_iff_eq_and_eq_of_pos'
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
   refine ⟨fun ha => h.not_lt ?_, fun hb => h.not_lt ?_⟩
   · exact (smul_lt_smul_of_pos_right ha h₁).trans_le (smul_le_smul_of_nonneg_left hb h₂.le)
-  · exact (smul_le_smul_of_nonneg_right ha h₁.le).
+  · exact (smul_le_smul_of_nonneg_right ha h₁.le).trans_lt (smul_lt_smul_of_pos_left hb h₂)
 
 中文:
 引理 smul_eq_smul_iff_eq_and_eq_of_pos'
@@ -2173,7 +2173,7 @@ lemma smul_eq_smul_iff_eq_and_eq_of_pos'
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
   refine ⟨fun ha => h.not_lt ?_, fun hb => h.not_lt ?_⟩
   · exact (smul_lt_smul_of_pos_right ha h₁).trans_le (smul_le_smul_of_nonneg_left hb h₂.le)
-  · exact (smul_le_smul_of_nonneg_right ha h₁.le).
+  · exact (smul_le_smul_of_nonneg_right ha h₁.le).trans_lt (smul_lt_smul_of_pos_left hb h₂)
 
 Depends on / 依赖: eq_iff_le_not_lt, h.not_lt, not_lt, smul_le_smul_of_nonneg_left, smul_le_smul_of_nonneg_right, smul_lt_smul_of_pos_left, smul_lt_smul_of_pos_right, trans_le, trans_lt, true_and
 -/
@@ -2204,7 +2204,7 @@ lemma pos_and_pos_or_neg_and_neg_of_smul_pos
   · rw [zero_smul] at hab
     exact hab.false.elim
   · refine Or.inl ⟨ha, lt_imp_lt_of_le_imp_le (fun hb => ?_) hab⟩
-    exact smul_nonp
+    exact smul_nonpos_of_nonneg_of_nonpos ha.le hb
 
 中文:
 引理 pos_and_pos_or_neg_and_neg_of_smul_pos
@@ -2216,7 +2216,7 @@ lemma pos_and_pos_or_neg_and_neg_of_smul_pos
   · rw [zero_smul] at hab
     exact hab.false.elim
   · refine Or.inl ⟨ha, lt_imp_lt_of_le_imp_le (fun hb => ?_) hab⟩
-    exact smul_nonp
+    exact smul_nonpos_of_nonneg_of_nonpos ha.le hb
 
 Depends on / 依赖: Or.inl, Or.inr, ha.le, hab.false.elim, lt_imp_lt_of_le_imp_le, lt_trichotomy, smul_nonpos_of_nonneg_of_nonpos, smul_nonpos_of_nonpos_of_nonneg, zero_smul
 -/

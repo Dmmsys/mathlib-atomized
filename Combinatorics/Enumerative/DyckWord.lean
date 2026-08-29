@@ -189,7 +189,7 @@ instance :
   add_assoc p q r := by ext1; apply append_assoc
   nsmul := nsmulRec
   add_left_cancel p q r h := by rw [DyckWord.ext_iff] at *; exact append_cancel_left h
-  add_right_cancel p q r h := by rw [DyckWord.ext_iff] at *; exact append_cancel_right 
+  add_right_cancel p q r h := by rw [DyckWord.ext_iff] at *; exact append_cancel_right h
 
 中文:
 实例 :
@@ -199,7 +199,7 @@ instance :
   add_assoc p q r := by ext1; apply append_assoc
   nsmul := nsmulRec
   add_left_cancel p q r h := by rw [DyckWord.ext_iff] at *; exact append_cancel_left h
-  add_right_cancel p q r h := by rw [DyckWord.ext_iff] at *; exact append_cancel_right 
+  add_right_cancel p q r h := by rw [DyckWord.ext_iff] at *; exact append_cancel_right h
 
 Depends on / 依赖: DyckWord, DyckWord.ext_iff, add_assoc, add_left_cancel, add_right_cancel, append_assoc, append_cancel_left, append_cancel_right, append_nil, ext_iff, nsmulRec, zero_add
 -/
@@ -367,7 +367,9 @@ lemma cons_tail_dropLast_concat
     · rename_i bal _
       cases s <;> simp at bal
     · tauto
-  nth_rw 2 [← p.toList.dropLast_append_getLast h', ← p.toList.dropLast.take_append_drop 
+  nth_rw 2 [← p.toList.dropLast_append_getLast h', ← p.toList.dropLast.take_append_drop 1]
+  rw [getLast_eq_D]; rw [drop_one]; rw [this]; rw [head_eq_U]
+  rfl
 
 中文:
 引理 cons_tail_dropLast_concat
@@ -380,7 +382,9 @@ lemma cons_tail_dropLast_concat
     · rename_i bal _
       cases s <;> simp at bal
     · tauto
-  nth_rw 2 [← p.toList.dropLast_append_getLast h', ← p.toList.dropLast.take_append_drop 
+  nth_rw 2 [← p.toList.dropLast_append_getLast h', ← p.toList.dropLast.take_append_drop 1]
+  rw [getLast_eq_D]; rw [drop_one]; rw [this]; rw [head_eq_U]
+  rfl
 
 Depends on / 依赖: dropLast, dropLast_append_getLast, drop_one, getLast_eq_D, head_eq_U, nth_rw, p.toList.dropLast.take, p.toList.dropLast.take_append_drop, p.toList.dropLast_append_getLast, p.toList.head, rename_i, take_append_drop, toList, toList_ne_nil, toList_ne_nil.mpr
 -/
@@ -435,7 +439,8 @@ definition drop
     lia
   count_D_le_count_U k := by
     rw [show i = min i (i + k) by omega]; rw [← take_take] at hi
-    rw [take_drop]; rw [← add_le_add_
+    rw [take_drop]; rw [← add_le_add_iff_left (((p.toList.take (i + k)).take i).count U)]; rw [← count_append]; rw [hi]; rw [← count_append]; rw [take_append_drop]
+    exact p.count_D_le_count_U _
 
 中文:
 定义 drop
@@ -447,7 +452,8 @@ definition drop
     lia
   count_D_le_count_U k := by
     rw [show i = min i (i + k) by omega]; rw [← take_take] at hi
-    rw [take_drop]; rw [← add_le_add_
+    rw [take_drop]; rw [← add_le_add_iff_left (((p.toList.take (i + k)).take i).count U)]; rw [← count_append]; rw [hi]; rw [← count_append]; rw [take_append_drop]
+    exact p.count_D_le_count_U _
 
 Depends on / 依赖: p.toList.drop, toList
 -/
@@ -475,7 +481,11 @@ definition nest
     simp only [take_append, count_append]
     rw [← add_rotate (count D _)]; rw [← add_rotate (count U _)]
     apply add_le_add _ (p.count_D_le_count_U _)
-    rcases i.eq_zero_or_pos with hi | hi; · s
+    rcases i.eq_zero_or_pos with hi | hi; · simp [hi]
+    rw [take_of_length_le (show [U].length <= i by rwa [length_singleton]), count_singleton']
+    simp only [reduceCtorEq, ite_false]
+    rw [add_comm]
+    exact add_le_add zero_le (count_le_length.trans (by simp))
 
 中文:
 定义 nest
@@ -486,7 +496,11 @@ definition nest
     simp only [take_append, count_append]
     rw [← add_rotate (count D _)]; rw [← add_rotate (count U _)]
     apply add_le_add _ (p.count_D_le_count_U _)
-    rcases i.eq_zero_or_pos with hi | hi; · s
+    rcases i.eq_zero_or_pos with hi | hi; · simp [hi]
+    rw [take_of_length_le (show [U].length <= i by rwa [length_singleton]), count_singleton']
+    simp only [reduceCtorEq, ite_false]
+    rw [add_comm]
+    exact add_le_add zero_le (count_le_length.trans (by simp))
 -/
 def nest : DyckWord where
   toList := [U] ++ p ++ [D]
@@ -545,7 +559,9 @@ lemma IsNested.nest
   simp_rw [nest, length_append, length_singleton] at ub ⊢
   rw [take_append_of_le_length (by rw [singleton_append]; rw [length_cons]; lia),
     take_append, take_of_length_le (by rw [length_singleton]; lia),
-    length_singleton, singleton_append, count_cons_of_ne (b
+    length_singleton, singleton_append, count_cons_of_ne (by simp), count_cons_self,
+    Nat.lt_add_one_iff]
+  exact p.count_D_le_count_U _⟩
 
 中文:
 引理 IsNested.nest
@@ -554,7 +570,9 @@ lemma IsNested.nest
   simp_rw [nest, length_append, length_singleton] at ub ⊢
   rw [take_append_of_le_length (by rw [singleton_append]; rw [length_cons]; lia),
     take_append, take_of_length_le (by rw [length_singleton]; lia),
-    length_singleton, singleton_append, count_cons_of_ne (b
+    length_singleton, singleton_append, count_cons_of_ne (by simp), count_cons_self,
+    Nat.lt_add_one_iff]
+  exact p.count_D_le_count_U _⟩
 -/
 protected lemma IsNested.nest : p.nest.IsNested := ⟨nest_ne_zero, fun i lb ub => by
   simp_rw [nest, length_append, length_singleton] at ub ⊢
@@ -578,7 +596,22 @@ definition denest
     simpa using this
   count_D_le_count_U i := by
     replace h := toList_ne_nil.mpr hn.1
-    have l1 : p.toList.take 1 = [p.toList
+    have l1 : p.toList.take 1 = [p.toList.head h] := by rcases p with - | - <;> tauto
+    have l3 : p.toList.length - 1 = p.toList.length - 1 - 1 + 1 := by
+      rcases p with - | ⟨s, ⟨- | ⟨t, r⟩⟩⟩
+      · tauto
+      · rename_i bal _
+        cases s <;> simp at bal
+      · tauto
+    rw [← drop_one]; rw [take_drop]; rw [dropLast_eq_take]; rw [take_take]
+    have ub : min (1 + i) (p.toList.length - 1) < p.toList.length :=
+      (min_le_right _ p.toList.length.pred).trans_lt (Nat.pred_lt ((length_pos_iff.mpr h).ne'))
+    have lb : 0 < min (1 + i) (p.toList.length - 1) := by omega
+    have eq := hn.2 lb ub
+    set j := min (1 + i) (p.toList.length - 1)
+    rw [← (p.toList.take j).take_append_drop 1]; rw [count_append]; rw [count_append]; rw [take_take]; rw [min_eq_left (by lia)]; rw [l1]; rw [head_eq_U] at eq
+    simp only [count_singleton', ite_true] at eq
+    lia
 
 中文:
 定义 denest
@@ -590,7 +623,22 @@ definition denest
     simpa using this
   count_D_le_count_U i := by
     replace h := toList_ne_nil.mpr hn.1
-    have l1 : p.toList.take 1 = [p.toList
+    have l1 : p.toList.take 1 = [p.toList.head h] := by rcases p with - | - <;> tauto
+    have l3 : p.toList.length - 1 = p.toList.length - 1 - 1 + 1 := by
+      rcases p with - | ⟨s, ⟨- | ⟨t, r⟩⟩⟩
+      · tauto
+      · rename_i bal _
+        cases s <;> simp at bal
+      · tauto
+    rw [← drop_one]; rw [take_drop]; rw [dropLast_eq_take]; rw [take_take]
+    have ub : min (1 + i) (p.toList.length - 1) < p.toList.length :=
+      (min_le_right _ p.toList.length.pred).trans_lt (Nat.pred_lt ((length_pos_iff.mpr h).ne'))
+    have lb : 0 < min (1 + i) (p.toList.length - 1) := by omega
+    have eq := hn.2 lb ub
+    set j := min (1 + i) (p.toList.length - 1)
+    rw [← (p.toList.take j).take_append_drop 1]; rw [count_append]; rw [count_append]; rw [take_take]; rw [min_eq_left (by lia)]; rw [l1]; rw [head_eq_U] at eq
+    simp only [count_singleton', ite_true] at eq
+    lia
 
 Depends on / 依赖: dropLast, p.toList.dropLast.tail, toList
 -/
@@ -873,7 +921,7 @@ lemma firstReturn_lt_length
   simp only [mem_range, decide_eq_true_eq]
   use p.toList.length - 1
   exact ⟨by lia, by rw [Nat.sub_add_cancel lp, take_of_length_le (le_refl _),
-    p.count_U
+    p.count_U_eq_count_D]⟩
 
 中文:
 引理 firstReturn_lt_length
@@ -885,7 +933,7 @@ lemma firstReturn_lt_length
   simp only [mem_range, decide_eq_true_eq]
   use p.toList.length - 1
   exact ⟨by lia, by rw [Nat.sub_add_cancel lp, take_of_length_le (le_refl _),
-    p.count_U
+    p.count_U_eq_count_D]⟩
 
 Depends on / 依赖: Nat.sub_add_cancel, count_U_eq_count_D, decide_eq_true_eq, findIdx_lt_length_of_exists, le_refl, length, length_pos_of_ne_nil, length_range, mem_range, p.count_U_eq_count_D, p.toList.length, sub_add_cancel, take_of_length_le, toList, toList_ne_nil, toList_ne_nil.mpr
 -/
@@ -970,7 +1018,15 @@ lemma firstReturn_add
   · simp_rw [u, decide_eq_true_eq, getElem_range]
     have v := firstReturn_lt_length h
     constructor
-    · rw [take_append, show p.firstReturn + 1 - p.toList.length = 0 by
+    · rw [take_append, show p.firstReturn + 1 - p.toList.length = 0 by lia,
+        take_zero, append_nil, count_take_firstReturn_add_one h]
+    · intro j hj
+      rw [take_append]; rw [show j + 1 - p.toList.length = 0 by lia]; rw [take_zero]; rw [append_nil]
+      simpa using (count_D_lt_count_U_of_lt_firstReturn hj).ne'
+  · rw [length_range, u, length_append]
+    exact Nat.lt_add_right _ (firstReturn_lt_length h)
+
+@[simp]
 
 中文:
 引理 firstReturn_add
@@ -982,7 +1038,15 @@ lemma firstReturn_add
   · simp_rw [u, decide_eq_true_eq, getElem_range]
     have v := firstReturn_lt_length h
     constructor
-    · rw [take_append, show p.firstReturn + 1 - p.toList.length = 0 by
+    · rw [take_append, show p.firstReturn + 1 - p.toList.length = 0 by lia,
+        take_zero, append_nil, count_take_firstReturn_add_one h]
+    · intro j hj
+      rw [take_append]; rw [show j + 1 - p.toList.length = 0 by lia]; rw [take_zero]; rw [append_nil]
+      simpa using (count_D_lt_count_U_of_lt_firstReturn hj).ne'
+  · rw [length_range, u, length_append]
+    exact Nat.lt_add_right _ (firstReturn_lt_length h)
+
+@[simp]
 
 Depends on / 依赖: append_nil, count_D_lt_count_U_of_lt_firstRetur, count_take_firstReturn_add_one, decide_eq_true_eq, findIdx_eq, firstReturn, firstReturn_lt_length, getElem_range, length, p.firstReturn, p.toList, p.toList.length, q.toList, simp_rw, split_ifs, take_append, take_zero, toList
 -/
@@ -1015,7 +1079,14 @@ lemma firstReturn_nest
     constructor
     · rw [take_of_length_le (by simp), ← u, p.nest.count_U_eq_count_D]
     · intro j hj
-      simp_rw [cons_append, take_succ_cons, count_co
+      simp_rw [cons_append, take_succ_cons, count_cons, beq_self_eq_true, ite_true,
+        beq_iff_eq, reduceCtorEq, ite_false, take_append,
+        show j - p.toList.length = 0 by lia, take_zero, append_nil]
+      have := p.count_D_le_count_U j
+      simp only [add_zero, decide_eq_false_iff_not, ne_eq]
+      lia
+  · simp_rw [length_range, u, length_append, length_cons]
+    exact Nat.lt_add_one _
 
 中文:
 引理 firstReturn_nest
@@ -1027,7 +1098,14 @@ lemma firstReturn_nest
     constructor
     · rw [take_of_length_le (by simp), ← u, p.nest.count_U_eq_count_D]
     · intro j hj
-      simp_rw [cons_append, take_succ_cons, count_co
+      simp_rw [cons_append, take_succ_cons, count_cons, beq_self_eq_true, ite_true,
+        beq_iff_eq, reduceCtorEq, ite_false, take_append,
+        show j - p.toList.length = 0 by lia, take_zero, append_nil]
+      have := p.count_D_le_count_U j
+      simp only [add_zero, decide_eq_false_iff_not, ne_eq]
+      lia
+  · simp_rw [length_range, u, length_append, length_cons]
+    exact Nat.lt_add_one _
 
 Depends on / 依赖: SecondCountableTopology, Subtype, TotallyDisconnectedSpace, add_zero, append_nil, beq_iff_eq, beq_self_eq_true, cons_append, count_D_le_count_U, count_U_eq_count_D, count_cons, decide_eq_false_iff_not, decide_eq_true_eq, findIdx_eq, firstReturn, getElem_range, ite_false, ite_true, length, ne_eq
 -/
@@ -1059,7 +1137,10 @@ definition insidePart
     ⟨by rw [← toList_ne_nil, take]; simpa using toList_ne_nil.mpr h, fun i lb ub => by
       simp only [take, length_take, lt_min_iff] at ub ⊢
       replace ub := ub.1
-      rw [take_take]; rw [min_eq_l
+      rw [take_take]; rw [min_eq_left ub.le]
+      rw [show i = i - 1 + 1 by lia] at ub ⊢
+      rw [Nat.add_lt_add_iff_right] at ub
+      exact count_D_lt_count_U_of_lt_firstReturn ub⟩
 
 中文:
 定义 insidePart
@@ -1069,7 +1150,10 @@ definition insidePart
     ⟨by rw [← toList_ne_nil, take]; simpa using toList_ne_nil.mpr h, fun i lb ub => by
       simp only [take, length_take, lt_min_iff] at ub ⊢
       replace ub := ub.1
-      rw [take_take]; rw [min_eq_l
+      rw [take_take]; rw [min_eq_left ub.le]
+      rw [show i = i - 1 + 1 by lia] at ub ⊢
+      rw [Nat.add_lt_add_iff_right] at ub
+      exact count_D_lt_count_U_of_lt_firstReturn ub⟩
 
 Depends on / 依赖: Nat.add_lt_add_iff_right, add_lt_add_iff_right, count_D_lt_count_U_of_lt_firstReturn, count_take_firstReturn_add_one, denest, firstReturn, length_take, lt_min_iff, min_eq_left, p.firstReturn, p.take, replace, take_take, toList_ne_nil, toList_ne_nil.mpr, ub.le
 -/
@@ -1454,7 +1538,8 @@ lemma infix_of_le
     · rw [insidePart_zero, outsidePart_zero, or_self] at mq
       rwa [mq] at ih
     · have : [U] ++ r.insidePart ++ [D] ++ r.outsidePart = r :=
-        DyckWord.ext_iff.
+        DyckWord.ext_iff.mp (nest_insidePart_add_outsidePart hr)
+      grind
 
 中文:
 引理 infix_of_le
@@ -1469,7 +1554,8 @@ lemma infix_of_le
     · rw [insidePart_zero, outsidePart_zero, or_self] at mq
       rwa [mq] at ih
     · have : [U] ++ r.insidePart ++ [D] ++ r.outsidePart = r :=
-        DyckWord.ext_iff.
+        DyckWord.ext_iff.mp (nest_insidePart_add_outsidePart hr)
+      grind
 
 Depends on / 依赖: DyckWord, DyckWord.ext_iff.mp, eq_or_ne, ext_iff, infix_refl, insidePart, insidePart_zero, nest_insidePart_add_outsidePart, or_self, outsidePart, outsidePart_zero, r.insidePart, r.outsidePart, rename_i
 -/
@@ -1498,7 +1584,12 @@ lemma le_of_suffix
       (q.toList.take (q.toList.length - p.toList.length)).count D := by
     have hq := q.count_U_eq_count_D
     rw [← h] at hq ⊢
-    rw [count_append]; rw [count_append]; rw [p.count_U_eq_count_D]; rw 
+    rw [count_append]; rw [count_append]; rw [p.count_U_eq_count_D]; rw [Nat.add_right_cancel_iff] at hq
+    simp [hq]
+  let r : DyckWord := q.take _ hc
+  have e : r' = r := by
+    simp_rw [r, take, ← h, length_append, add_tsub_cancel_right, take_left']
+  rw [e] at h; replace h : r + p = q := DyckWord.ext h; rw [← h]; exact le_add_self ..
 
 中文:
 引理 le_of_suffix
@@ -1510,7 +1601,12 @@ lemma le_of_suffix
       (q.toList.take (q.toList.length - p.toList.length)).count D := by
     have hq := q.count_U_eq_count_D
     rw [← h] at hq ⊢
-    rw [count_append]; rw [count_append]; rw [p.count_U_eq_count_D]; rw 
+    rw [count_append]; rw [count_append]; rw [p.count_U_eq_count_D]; rw [Nat.add_right_cancel_iff] at hq
+    simp [hq]
+  let r : DyckWord := q.take _ hc
+  have e : r' = r := by
+    simp_rw [r, take, ← h, length_append, add_tsub_cancel_right, take_left']
+  rw [e] at h; replace h : r + p = q := DyckWord.ext h; rw [← h]; exact le_add_self ..
 
 Depends on / 依赖: DyckWord, DyckWord.ext, Nat.add_right_cancel_iff, add_right_cancel_iff, add_tsub_cancel_right, count_U_eq_count_D, count_append, length, length_append, p.count_U_eq_count_D, p.toList.length, q.count_U_eq_count_D, q.take, q.toList.length, q.toList.take, replace, simp_rw, take_left, toList
 -/
@@ -1591,6 +1687,7 @@ lemma monotone_semilength
       rwa [mq] at ih
     · rcases mq with hm | hm
       · exact ih.trans (hm ▸ semilength_insidePart_lt hr).le
+      · exact ih.trans (hm ▸ semilength_outsidePart_lt hr).le
 
 中文:
 引理 monotone_semilength
@@ -1605,6 +1702,7 @@ lemma monotone_semilength
       rwa [mq] at ih
     · rcases mq with hm | hm
       · exact ih.trans (hm ▸ semilength_insidePart_lt hr).le
+      · exact ih.trans (hm ▸ semilength_outsidePart_lt hr).le
 
 Depends on / 依赖: eq_or_ne, ih.trans, insidePart_zero, or_self, outsidePart_zero, rename_i, semilength_insidePart_lt, semilength_outsidePart_lt
 -/
@@ -1715,7 +1813,7 @@ lemma ofTree_toTree
     rw [ofTree_toTree p.insidePart]; rw [ofTree_toTree p.outsidePart]
     exact nest_insidePart_add_outsidePart h
 termination_by p.semilength
-decreasing_by exacts [semilength_insidePart_lt h, semi
+decreasing_by exacts [semilength_insidePart_lt h, semilength_outsidePart_lt h]
 
 中文:
 引理 ofTree_toTree
@@ -1729,7 +1827,7 @@ decreasing_by exacts [semilength_insidePart_lt h, semi
     rw [ofTree_toTree p.insidePart]; rw [ofTree_toTree p.outsidePart]
     exact nest_insidePart_add_outsidePart h
 termination_by p.semilength
-decreasing_by exacts [semilength_insidePart_lt h, semi
+decreasing_by exacts [semilength_insidePart_lt h, semilength_outsidePart_lt h]
 
 Depends on / 依赖: decreasing_by, exacts, insidePart, ite_false, nest_insidePart_add_outsidePart, ofTree, ofTree_toTree, outsidePart, p.insidePart, p.outsidePart, p.semilength, semilength, semilength_insidePart_lt, semilength_outsidePart_lt, simp_rw, termination_by, toTree
 -/
@@ -1802,7 +1900,9 @@ lemma numNodes_toTree
     simp_rw [h, ite_false, numNodes]
     rw [← semilength_insidePart_add_semilength_outsidePart_add_one h]; rw [numNodes_toTree p.insidePart]; rw [numNodes_toTree p.outsidePart]
 termination_by p.semilength
-decreasing_by exacts [semilength_
+decreasing_by exacts [semilength_insidePart_lt h, semilength_outsidePart_lt h]
+
+@[deprecated (since := "2026-02-03")] alias semilength_eq_numNodes_equivTree := numNodes_toTree
 
 中文:
 引理 numNodes_toTree
@@ -1815,7 +1915,9 @@ decreasing_by exacts [semilength_
     simp_rw [h, ite_false, numNodes]
     rw [← semilength_insidePart_add_semilength_outsidePart_add_one h]; rw [numNodes_toTree p.insidePart]; rw [numNodes_toTree p.outsidePart]
 termination_by p.semilength
-decreasing_by exacts [semilength_
+decreasing_by exacts [semilength_insidePart_lt h, semilength_outsidePart_lt h]
+
+@[deprecated (since := "2026-02-03")] alias semilength_eq_numNodes_equivTree := numNodes_toTree
 
 Depends on / 依赖: decreasing_by, exacts, insidePart, ite_false, numNodes, numNodes_toTree, outsidePart, p.insidePart, p.outsidePart, p.semilength, semilength, semilength_insidePart_add_semilength_outsidePart_add_one, semilength_insidePart_lt, semilength_outsidePart_lt, simp_rw, termination_by, toTree
 -/

@@ -89,7 +89,9 @@ definition Submodule.FG.directLimit
     (Module.DirectLimit.lift _ _ _ _ (fun P => P.val.subtype) (fun _ _ _ _ => rfl))
     ⟨Module.DirectLimit.lift_injective _ _ (fun P => Submodule.injective_subtype P.val),
       fun x => ⟨Module.DirectLimit.of _ {P : Submodule R M // P.FG} _ _
-          ⟨Submodule.span R {x}
+          ⟨Submodule.span R {x}, Submodule.fg_span_singleton x⟩
+          ⟨x, Submodule.mem_span_singleton_self x⟩,
+         by simp⟩⟩
 
 中文:
 定义 子模.FG.directLimit
@@ -98,7 +100,9 @@ definition Submodule.FG.directLimit
     (Module.DirectLimit.lift _ _ _ _ (fun P => P.val.subtype) (fun _ _ _ _ => rfl))
     ⟨Module.DirectLimit.lift_injective _ _ (fun P => Submodule.injective_subtype P.val),
       fun x => ⟨Module.DirectLimit.of _ {P : Submodule R M // P.FG} _ _
-          ⟨Submodule.span R {x}
+          ⟨Submodule.span R {x}, Submodule.fg_span_singleton x⟩
+          ⟨x, Submodule.mem_span_singleton_self x⟩,
+         by simp⟩⟩
 
 Depends on / 依赖: P.FG, P.val, Submodule
 -/
@@ -224,7 +228,9 @@ theorem Submodule.FG.rTensor.directLimit_apply
       (Module.DirectLimit.of R {P : Submodule R M // P.FG} (fun P => P.val otimes[R] N)
         (fun _ _ hPQ => rTensor N (Submodule.inclusion hPQ)) P)
       = rTensor N (Submodule.subtype P.val) by
-    exact DFunLike.congr_fun 
+    exact DFunLike.congr_fun this u
+  ext p n
+  simp [Submodule.FG.rTensor.directLimit, Submodule.FG.directLimit]
 
 中文:
 定理 子模.FG.rTensor.directLimit_apply
@@ -234,7 +240,9 @@ theorem Submodule.FG.rTensor.directLimit_apply
       (Module.DirectLimit.of R {P : Submodule R M // P.FG} (fun P => P.val otimes[R] N)
         (fun _ _ hPQ => rTensor N (Submodule.inclusion hPQ)) P)
       = rTensor N (Submodule.subtype P.val) by
-    exact DFunLike.congr_fun 
+    exact DFunLike.congr_fun this u
+  ext p n
+  simp [Submodule.FG.rTensor.directLimit, Submodule.FG.directLimit]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, DirectLimit, Module, Module.DirectLimit.of, P.FG, P.val, Submodule, Submodule.FG.directLimit, Submodule.FG.rTensor.directLimit, Submodule.inclusion, Submodule.subtype, congr_fun, directLimit, inclusion, otimes, rTensor, subtype, toLinearMap, toLinearMap.comp
 -/
@@ -376,7 +384,8 @@ theorem Submodule.FG.lTensor.directLimit_apply
         (fun _ _ hPQ => lTensor M (inclusion hPQ)) Q)
       = lTensor M (Submodule.subtype Q.val) by
     exact DFunLike.congr_fun this u
-  e
+  ext p n
+  simp [Submodule.FG.lTensor.directLimit, Submodule.FG.directLimit]
 
 中文:
 定理 子模.FG.lTensor.directLimit_apply
@@ -387,7 +396,8 @@ theorem Submodule.FG.lTensor.directLimit_apply
         (fun _ _ hPQ => lTensor M (inclusion hPQ)) Q)
       = lTensor M (Submodule.subtype Q.val) by
     exact DFunLike.congr_fun this u
-  e
+  ext p n
+  simp [Submodule.FG.lTensor.directLimit, Submodule.FG.directLimit]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, DirectLimit, Module, Module.DirectLimit.of, Q.FG, Q.val, Submodule, Submodule.FG.directLimit, Submodule.FG.lTensor.directLimit, Submodule.subtype, congr_fun, directLimit, inclusion, lTensor, otimes, subtype, toLinearMap, toLinearMap.comp
 -/
@@ -535,7 +545,8 @@ theorem TensorProduct.eq_of_fg_of_subtype_eq'
     ← subtype_comp_inclusion _ _ (le_sup_right : _ <= P ⊔ P'),
     rTensor_comp, coe_comp, Function.comp_apply] at h
   let ⟨Q, hQ_le, hQ, h⟩ := TensorProduct.eq_of_fg_of_subtype_eq (hP.sup hP') h
-  use Q, le_trans le_sup_left 
+  use Q, le_trans le_sup_left hQ_le, le_trans le_sup_right hQ_le, hQ
+  simpa [← comp_apply, ← rTensor_comp] using! h
 
 中文:
 定理 张量积.eq_of_fg_of_subtype_eq'
@@ -544,7 +555,8 @@ theorem TensorProduct.eq_of_fg_of_subtype_eq'
     ← subtype_comp_inclusion _ _ (le_sup_right : _ <= P ⊔ P'),
     rTensor_comp, coe_comp, Function.comp_apply] at h
   let ⟨Q, hQ_le, hQ, h⟩ := TensorProduct.eq_of_fg_of_subtype_eq (hP.sup hP') h
-  use Q, le_trans le_sup_left 
+  use Q, le_trans le_sup_left hQ_le, le_trans le_sup_right hQ_le, hQ
+  simpa [← comp_apply, ← rTensor_comp] using! h
 
 Depends on / 依赖: Function, Function.comp_apply, TensorProduct, TensorProduct.eq_of_fg_of_subtype_eq, coe_comp, comp_apply, eq_of_fg_of_subtype_eq, hP.sup, hQ_le, le_sup_left, le_sup_right, le_trans, rTensor_comp, subtype_comp_inclusion
 -/
@@ -583,7 +595,10 @@ theorem TensorProduct.Algebra.exists_of_fg
   have : P <= (Algebra.adjoin R (s : Set S)).toSubmodule := by
     simp only [← hs, span_le, Subalgebra.coe_toSubmodule]
     exact Algebra.subset_adjoin
-  rw [← subtype_comp_inclusion
+  rw [← subtype_comp_inclusion P _ this]; rw [rTensor_comp] at hu
+  exact range_comp_le_range _ _ hu
+
+include hA in
 
 中文:
 定理 张量积.代数.存在_of_fg
@@ -593,7 +608,10 @@ theorem TensorProduct.Algebra.exists_of_fg
   have : P <= (Algebra.adjoin R (s : Set S)).toSubmodule := by
     simp only [← hs, span_le, Subalgebra.coe_toSubmodule]
     exact Algebra.subset_adjoin
-  rw [← subtype_comp_inclusion
+  rw [← subtype_comp_inclusion P _ this]; rw [rTensor_comp] at hu
+  exact range_comp_le_range _ _ hu
+
+include hA in
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, Subalgebra, Subalgebra.coe_toSubmodule, Subalgebra.fg_adjoin_finset, TensorProduct, TensorProduct.exists_of_fg, adjoin, coe_toSubmodule, exists_of_fg, fg_adjoin_finset, rTensor_comp, range_comp_le_range, span_le, subset_adjoin, subtype_comp_inclusion, toSubmodule
 -/
@@ -620,7 +638,49 @@ theorem TensorProduct.Algebra.eq_of_fg_of_subtype_eq
   let P₁ := Submodule.map A.toSubmodule.subtype (P ⊔ P')
   have hP₁ : Submodule.FG P₁ := Submodule.FG.map _ (Submodule.FG.sup hP hP')
   -- the embeddings from P and P' to P₁
+  let j : P ->ₗ[R] P₁ := (Subalgebra.toSubmodule A).subtype.restrict
+      (fun p hp => by
+        simp only [coe_subtype, Submodule.map_sup, P₁]
+        exact Submodule.mem_sup_left ⟨p, hp, rfl⟩)
+  let j' : P' ->ₗ[R] P₁ := (Subalgebra.toSubmodule A).subtype.restrict
+      (fun p hp => by
+        simp only [coe_subtype, Submodule.map_sup, P₁]
+        exact Submodule.mem_sup_right ⟨p, hp, rfl⟩)
+  -- we map u and u' to P₁ ⊗[R] N, getting u₁ and u'₁
+  set u₁ := rTensor N j u with hu₁
+  set u'₁ := rTensor N j' u' with hu'₁
+  -- u₁ and u'₁ are equal in S ⊗[R] N
+  have : rTensor N P₁.subtype u₁ = rTensor N P₁.subtype u'₁ := by
+    rw [hu₁]; rw [hu'₁]
+    simp only [← comp_apply, ← rTensor_comp]
+    have hj₁ : P₁.subtype ∘ₗ j = A.val.toLinearMap ∘ₗ P.subtype := rfl
+    have hj'₁ : P₁.subtype ∘ₗ j' = A.val.toLinearMap ∘ₗ P'.subtype := rfl
+    rw [hj₁]; rw [hj'₁]
+    simp only [rTensor_comp, comp_apply]
+    rw [hu]; rw [hu']; rw [h]
+  let ⟨P'₁, hP₁_le, hP'₁, h⟩ := TensorProduct.eq_of_fg_of_subtype_eq hP₁ this
+  let ⟨s, hs⟩ := hP'₁
+  let ⟨w, hw⟩ := hA
+  let B := Algebra.adjoin R ((s union w : Finset S) : Set S)
+  have hBA : A <= B := by
+    simp only [B, ← hw]
+    apply Algebra.adjoin_mono
+    simp only [Finset.coe_union, Set.subset_union_right]
+  use B, hBA, Subalgebra.fg_adjoin_finset _
+  rw [← hu]; rw [← hu']
+  simp only [← comp_apply, ← rTensor_comp]
+  have hP'₁_le : P'₁ <= B.toSubmodule := by
+    simp only [← hs, Finset.coe_union, Submodule.span_le, Subalgebra.coe_toSubmodule, B]
+    exact subset_trans Set.subset_union_left Algebra.subset_adjoin
+  have k : (Subalgebra.inclusion hBA).toLinearMap ∘ₗ P.subtype
+    = inclusion hP'₁_le ∘ₗ inclusion hP₁_le ∘ₗ j := by ext; rfl
+  have k' : (Subalgebra.inclusion hBA).toLinearMap ∘ₗ P'.subtype
+    = inclusion hP'₁_le ∘ₗ inclusion hP₁_le ∘ₗ j' := by ext; rfl
+  rw [k]; rw [k']
+  simp only [rTensor_comp, comp_apply]
+  rw [← hu₁]; rw [← hu'₁]; rw [h]
 
+include hA hA' in
 
 中文:
 定理 张量积.代数.eq_of_fg_of_subtype_eq
@@ -631,7 +691,49 @@ theorem TensorProduct.Algebra.eq_of_fg_of_subtype_eq
   let P₁ := Submodule.map A.toSubmodule.subtype (P ⊔ P')
   have hP₁ : Submodule.FG P₁ := Submodule.FG.map _ (Submodule.FG.sup hP hP')
   -- the embeddings from P and P' to P₁
+  let j : P ->ₗ[R] P₁ := (Subalgebra.toSubmodule A).subtype.restrict
+      (fun p hp => by
+        simp only [coe_subtype, Submodule.map_sup, P₁]
+        exact Submodule.mem_sup_left ⟨p, hp, rfl⟩)
+  let j' : P' ->ₗ[R] P₁ := (Subalgebra.toSubmodule A).subtype.restrict
+      (fun p hp => by
+        simp only [coe_subtype, Submodule.map_sup, P₁]
+        exact Submodule.mem_sup_right ⟨p, hp, rfl⟩)
+  -- we map u and u' to P₁ ⊗[R] N, getting u₁ and u'₁
+  set u₁ := rTensor N j u with hu₁
+  set u'₁ := rTensor N j' u' with hu'₁
+  -- u₁ and u'₁ are equal in S ⊗[R] N
+  have : rTensor N P₁.subtype u₁ = rTensor N P₁.subtype u'₁ := by
+    rw [hu₁]; rw [hu'₁]
+    simp only [← comp_apply, ← rTensor_comp]
+    have hj₁ : P₁.subtype ∘ₗ j = A.val.toLinearMap ∘ₗ P.subtype := rfl
+    have hj'₁ : P₁.subtype ∘ₗ j' = A.val.toLinearMap ∘ₗ P'.subtype := rfl
+    rw [hj₁]; rw [hj'₁]
+    simp only [rTensor_comp, comp_apply]
+    rw [hu]; rw [hu']; rw [h]
+  let ⟨P'₁, hP₁_le, hP'₁, h⟩ := TensorProduct.eq_of_fg_of_subtype_eq hP₁ this
+  let ⟨s, hs⟩ := hP'₁
+  let ⟨w, hw⟩ := hA
+  let B := Algebra.adjoin R ((s union w : Finset S) : Set S)
+  have hBA : A <= B := by
+    simp only [B, ← hw]
+    apply Algebra.adjoin_mono
+    simp only [Finset.coe_union, Set.subset_union_right]
+  use B, hBA, Subalgebra.fg_adjoin_finset _
+  rw [← hu]; rw [← hu']
+  simp only [← comp_apply, ← rTensor_comp]
+  have hP'₁_le : P'₁ <= B.toSubmodule := by
+    simp only [← hs, Finset.coe_union, Submodule.span_le, Subalgebra.coe_toSubmodule, B]
+    exact subset_trans Set.subset_union_left Algebra.subset_adjoin
+  have k : (Subalgebra.inclusion hBA).toLinearMap ∘ₗ P.subtype
+    = inclusion hP'₁_le ∘ₗ inclusion hP₁_le ∘ₗ j := by ext; rfl
+  have k' : (Subalgebra.inclusion hBA).toLinearMap ∘ₗ P'.subtype
+    = inclusion hP'₁_le ∘ₗ inclusion hP₁_le ∘ₗ j' := by ext; rfl
+  rw [k]; rw [k']
+  simp only [rTensor_comp, comp_apply]
+  rw [← hu₁]; rw [← hu'₁]; rw [h]
 
+include hA hA' in
 
 Depends on / 依赖: A.toSubmodule.subtype, Submodule, Submodule.FG, Submodule.FG.map, Submodule.FG.sup, Submodule.map, TensorProduct, TensorProduct.exists_of_fg, classical, exists_of_fg, subtype, toSubmodule
 -/
@@ -699,7 +801,10 @@ theorem TensorProduct.Algebra.eq_of_fg_of_subtype_eq'
   have hj : (A ⊔ A').val.comp (Subalgebra.inclusion le_sup_left) = A.val := by ext; rfl
   have hj' : (A ⊔ A').val.comp (Subalgebra.inclusion le_sup_right) = A'.val := by ext; rfl
   simp only [← hj, ← hj', AlgHom.comp_toLinearMap, rTensor_comp, comp_apply] at h
-  let ⟨B, hB_le, hB, h⟩ := TensorPro
+  let ⟨B, hB_le, hB, h⟩ := TensorProduct.Algebra.eq_of_fg_of_subtype_eq
+    (Subalgebra.FG.sup hA hA') h
+  use B, le_trans le_sup_left hB_le, le_trans le_sup_right hB_le, hB
+  simpa only [← rTensor_comp, ← comp_apply] using! h
 
 中文:
 定理 张量积.代数.eq_of_fg_of_subtype_eq'
@@ -708,7 +813,10 @@ theorem TensorProduct.Algebra.eq_of_fg_of_subtype_eq'
   have hj : (A ⊔ A').val.comp (Subalgebra.inclusion le_sup_left) = A.val := by ext; rfl
   have hj' : (A ⊔ A').val.comp (Subalgebra.inclusion le_sup_right) = A'.val := by ext; rfl
   simp only [← hj, ← hj', AlgHom.comp_toLinearMap, rTensor_comp, comp_apply] at h
-  let ⟨B, hB_le, hB, h⟩ := TensorPro
+  let ⟨B, hB_le, hB, h⟩ := TensorProduct.Algebra.eq_of_fg_of_subtype_eq
+    (Subalgebra.FG.sup hA hA') h
+  use B, le_trans le_sup_left hB_le, le_trans le_sup_right hB_le, hB
+  simpa only [← rTensor_comp, ← comp_apply] using! h
 
 Depends on / 依赖: A.val, AlgHom, AlgHom.comp_toLinearMap, Algebra, Subalgebra, Subalgebra.FG.sup, Subalgebra.inclusion, TensorProduct, TensorProduct.Algebra.eq_of_fg_of_subtype_eq, comp_apply, comp_toLinearMap, eq_of_fg_of_subtype_eq, hB_le, inclusion, le_sup_left, le_sup_right, le_trans, rTensor_comp, val.comp
 -/
@@ -735,7 +843,14 @@ theorem Submodule.exists_fg_of_baseChange_eq_zero
   obtain ⟨u, hu⟩ := _root_.id ht_memA
   have := TensorProduct.Algebra.eq_of_fg_of_subtype_eq hA (t := f.baseChange _ u) (t' := 0)
   simp only [map_zero, exists_and_left] at this
-  have hu' : (A.val.toLinearMap.rTensor N) (f.baseCha
+  have hu' : (A.val.toLinearMap.rTensor N) (f.baseChange (↥A) u) = 0 := by
+    rw [← ht]; rw [← hu]; rw [rTensor_baseChange]
+  obtain ⟨B, hB, hAB, hu'⟩ := this hu'
+  use B, hB, rTensor M (Subalgebra.inclusion hAB).toLinearMap u
+  constructor
+  · rw [← rTensor_baseChange, hu']
+  · rw [← comp_apply, ← rTensor_comp, ← hu]
+    congr
 
 中文:
 定理 子模.存在_fg_of_baseChange_eq_zero
@@ -744,7 +859,14 @@ theorem Submodule.exists_fg_of_baseChange_eq_zero
   obtain ⟨u, hu⟩ := _root_.id ht_memA
   have := TensorProduct.Algebra.eq_of_fg_of_subtype_eq hA (t := f.baseChange _ u) (t' := 0)
   simp only [map_zero, exists_and_left] at this
-  have hu' : (A.val.toLinearMap.rTensor N) (f.baseCha
+  have hu' : (A.val.toLinearMap.rTensor N) (f.baseChange (↥A) u) = 0 := by
+    rw [← ht]; rw [← hu]; rw [rTensor_baseChange]
+  obtain ⟨B, hB, hAB, hu'⟩ := this hu'
+  use B, hB, rTensor M (Subalgebra.inclusion hAB).toLinearMap u
+  constructor
+  · rw [← rTensor_baseChange, hu']
+  · rw [← comp_apply, ← rTensor_comp, ← hu]
+    congr
 
 Depends on / 依赖: A.val.toLinearMap.rTensor, Algebra, Subalgebra, Subalgebra.inclusion, TensorProduct, TensorProduct.Algebra.eq_of_fg_of_subtype_eq, TensorProduct.Algebra.exists_of_fg, _root_, _root_.id, baseChange, eq_of_fg_of_subtype_eq, exists_and_left, exists_of_fg, f.baseChange, ht_memA, inclusion, map_zero, rTensor, rTensor_baseChange, toLinearMap
 -/

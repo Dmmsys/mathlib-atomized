@@ -95,7 +95,28 @@ definition isBilimitOfTotal
         rw [← total]; rw [comp_sum]
         apply Finset.sum_congr rfl
         intro j _
-        have reassoced : m ≫ Bicone.π b j ≫ Bicone.ι b j = s.π.app ⟨j⟩ ≫ Bicone.ι b j
+        have reassoced : m ≫ Bicone.π b j ≫ Bicone.ι b j = s.π.app ⟨j⟩ ≫ Bicone.ι b j := by
+          simpa using eq_whisker (h ⟨j⟩) _
+        rw [reassoced]
+      fac := fun s j => by
+        classical
+        cases j
+        simp only [sum_comp, Category.assoc, Bicone.toCone_π_app, b.ι_π, comp_dite]
+        simp }
+  isColimit :=
+    { desc := fun s => ∑ j : J, b.π j ≫ s.ι.app ⟨j⟩
+      uniq := fun s m h => by
+        rw [← Category.id_comp m]
+        dsimp
+        rw [← total]; rw [sum_comp]
+        apply Finset.sum_congr rfl
+        intro j _
+        simpa using b.π j ≫= h ⟨j⟩
+      fac := fun s j => by
+        classical
+        cases j
+        simp only [comp_sum, ← Category.assoc, Bicone.toCocone_ι_app, b.ι_π, dite_comp]
+        simp }
 
 中文:
 定义 isBilimitOfTotal
@@ -107,7 +128,28 @@ definition isBilimitOfTotal
         rw [← total]; rw [comp_sum]
         apply Finset.sum_congr rfl
         intro j _
-        have reassoced : m ≫ Bicone.π b j ≫ Bicone.ι b j = s.π.app ⟨j⟩ ≫ Bicone.ι b j
+        have reassoced : m ≫ Bicone.π b j ≫ Bicone.ι b j = s.π.app ⟨j⟩ ≫ Bicone.ι b j := by
+          simpa using eq_whisker (h ⟨j⟩) _
+        rw [reassoced]
+      fac := fun s j => by
+        classical
+        cases j
+        simp only [sum_comp, Category.assoc, Bicone.toCone_π_app, b.ι_π, comp_dite]
+        simp }
+  isColimit :=
+    { desc := fun s => ∑ j : J, b.π j ≫ s.ι.app ⟨j⟩
+      uniq := fun s m h => by
+        rw [← Category.id_comp m]
+        dsimp
+        rw [← total]; rw [sum_comp]
+        apply Finset.sum_congr rfl
+        intro j _
+        simpa using b.π j ≫= h ⟨j⟩
+      fac := fun s j => by
+        classical
+        cases j
+        simp only [comp_sum, ← Category.assoc, Bicone.toCocone_ι_app, b.ι_π, dite_comp]
+        simp }
 
 Depends on / 依赖: Bicone, Bicone.toCone_, Category, Category.assoc, Category.comp_id, Finset, Finset.sum_congr, classical, comp_dite, comp_id, comp_sum, eq_whisker, isColimit, reassoced, sum_comp, sum_congr
 -/
@@ -696,7 +738,12 @@ definition biproduct.reindex
     · have : ε b' != ε b := by simp [h]
       simp [biproduct.ι_π_ne _ h, biproduct.ι_π_ne _ this]
   inv_hom_id := by
-    class
+    classical
+    cases nonempty_fintype β
+    ext g g'
+    by_cases h : g' = g <;>
+      simp [Preadditive.sum_comp, biproduct.lift_desc, biproduct.ι_π, comp_dite,
+        ← Equiv.eq_symm_apply, h]
 
 中文:
 定义 biproduct.reindex
@@ -710,7 +757,12 @@ definition biproduct.reindex
     · have : ε b' != ε b := by simp [h]
       simp [biproduct.ι_π_ne _ h, biproduct.ι_π_ne _ this]
   inv_hom_id := by
-    class
+    classical
+    cases nonempty_fintype β
+    ext g g'
+    by_cases h : g' = g <;>
+      simp [Preadditive.sum_comp, biproduct.lift_desc, biproduct.ι_π, comp_dite,
+        ← Equiv.eq_symm_apply, h]
 
 Depends on / 依赖: biproduct, biproduct.desc
 -/
@@ -747,7 +799,16 @@ definition isBinaryBilimitOfTotal
         have hᵣ := h ⟨.right⟩
         dsimp at hₗ hᵣ
         simpa [← hₗ, ← hᵣ] using m ≫= total.symm
-      fac := fun s j => by rcase
+      fac := fun s j => by rcases j with ⟨⟨⟩⟩ <;> simp }
+  isColimit :=
+    { desc := fun s =>
+        (b.fst ≫ BinaryCofan.inl s : b.pt ⟶ s.pt) + (b.snd ≫ BinaryCofan.inr s : b.pt ⟶ s.pt)
+      uniq := fun s m h => by
+        have hₗ := h ⟨.left⟩
+        have hᵣ := h ⟨.right⟩
+        dsimp at hₗ hᵣ
+        simpa [← hₗ, ← hᵣ] using total.symm =≫ m
+      fac := fun s j => by rcases j with ⟨⟨⟩⟩ <;> simp }
 
 中文:
 定义 isBinaryBilimitOfTotal
@@ -759,7 +820,16 @@ definition isBinaryBilimitOfTotal
         have hᵣ := h ⟨.right⟩
         dsimp at hₗ hᵣ
         simpa [← hₗ, ← hᵣ] using m ≫= total.symm
-      fac := fun s j => by rcase
+      fac := fun s j => by rcases j with ⟨⟨⟩⟩ <;> simp }
+  isColimit :=
+    { desc := fun s =>
+        (b.fst ≫ BinaryCofan.inl s : b.pt ⟶ s.pt) + (b.snd ≫ BinaryCofan.inr s : b.pt ⟶ s.pt)
+      uniq := fun s m h => by
+        have hₗ := h ⟨.left⟩
+        have hᵣ := h ⟨.right⟩
+        dsimp at hₗ hᵣ
+        simpa [← hₗ, ← hᵣ] using total.symm =≫ m
+      fac := fun s j => by rcases j with ⟨⟨⟩⟩ <;> simp }
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.inl, BinaryCofan.inr, BinaryFan, BinaryFan.fst, BinaryFan.snd, b.fst, b.inl, b.inr, b.pt, b.snd, isColimit, s.pt, total.symm
 -/
@@ -1376,7 +1446,20 @@ definition binaryBiconeOfIsSplitMonoOfCokernel
       CokernelCofork.ofπ (Cofork.π c) (by simp)
     let i' : IsColimit c' := isCokernelEpiComp i (retraction f) (by simp)
     let i'' := isColimitCoforkOfCokernelCofork i'
-    (sp
+    (splitEpiOfIdempotentOfIsColimitCofork C (by simp) i'').section_
+  inl_fst := by simp
+  inl_snd := by simp
+  inr_fst := by
+    dsimp only
+    rw [splitEpiOfIdempotentOfIsColimitCofork_section_]; rw [isColimitCoforkOfCokernelCofork_desc]; rw [isCokernelEpiComp_desc]
+    dsimp only [cokernelCoforkOfCofork_ofπ]
+    let := epi_of_isColimit_cofork i
+    apply zero_of_epi_comp c.π
+    simp only [sub_comp, comp_sub, Category.comp_id, Category.assoc, IsSplitMono.id, sub_self,
+      Cofork.IsColimit.π_desc_assoc, CokernelCofork.π_ofπ, IsSplitMono.id_assoc]
+    apply sub_eq_zero_of_eq
+    apply Category.id_comp
+  inr_snd := by apply SplitEpi.id
 
 中文:
 定义 binaryBiconeOfIsSplitMonoOfCokernel
@@ -1390,7 +1473,20 @@ definition binaryBiconeOfIsSplitMonoOfCokernel
       CokernelCofork.ofπ (Cofork.π c) (by simp)
     let i' : IsColimit c' := isCokernelEpiComp i (retraction f) (by simp)
     let i'' := isColimitCoforkOfCokernelCofork i'
-    (sp
+    (splitEpiOfIdempotentOfIsColimitCofork C (by simp) i'').section_
+  inl_fst := by simp
+  inl_snd := by simp
+  inr_fst := by
+    dsimp only
+    rw [splitEpiOfIdempotentOfIsColimitCofork_section_]; rw [isColimitCoforkOfCokernelCofork_desc]; rw [isCokernelEpiComp_desc]
+    dsimp only [cokernelCoforkOfCofork_ofπ]
+    let := epi_of_isColimit_cofork i
+    apply zero_of_epi_comp c.π
+    simp only [sub_comp, comp_sub, Category.comp_id, Category.assoc, IsSplitMono.id, sub_self,
+      Cofork.IsColimit.π_desc_assoc, CokernelCofork.π_ofπ, IsSplitMono.id_assoc]
+    apply sub_eq_zero_of_eq
+    apply Category.id_comp
+  inr_snd := by apply SplitEpi.id
 -/
 def binaryBiconeOfIsSplitMonoOfCokernel {X Y : C} {f : X ⟶ Y} [IsSplitMono f] {c : CokernelCofork f}
     (i : IsColimit c) : BinaryBicone X c.pt where
@@ -1432,7 +1528,10 @@ definition isBilimitBinaryBiconeOfIsSplitMonoOfCokernel
         binaryBiconeOfIsSplitMonoOfCokernel_inr,
         binaryBiconeOfIsSplitMonoOfCokernel_snd,
         splitEpiOfIdempotentOfIsColimitCofork_section_]
-      dsimp only [binaryBiconeOfIsSplitMonoOfCokernel_p
+      dsimp only [binaryBiconeOfIsSplitMonoOfCokernel_pt]
+      rw [isColimitCoforkOfCokernelCofork_desc]; rw [isCokernelEpiComp_desc]
+      simp only [binaryBiconeOfIsSplitMonoOfCokernel_inl, Cofork.IsColimit.π_desc,
+        cokernelCoforkOfCofork_π, Cofork.π_ofπ, add_sub_cancel])
 
 中文:
 定义 isBilimitBinaryBiconeOfIsSplitMonoOfCokernel
@@ -1443,7 +1542,10 @@ definition isBilimitBinaryBiconeOfIsSplitMonoOfCokernel
         binaryBiconeOfIsSplitMonoOfCokernel_inr,
         binaryBiconeOfIsSplitMonoOfCokernel_snd,
         splitEpiOfIdempotentOfIsColimitCofork_section_]
-      dsimp only [binaryBiconeOfIsSplitMonoOfCokernel_p
+      dsimp only [binaryBiconeOfIsSplitMonoOfCokernel_pt]
+      rw [isColimitCoforkOfCokernelCofork_desc]; rw [isCokernelEpiComp_desc]
+      simp only [binaryBiconeOfIsSplitMonoOfCokernel_inl, Cofork.IsColimit.π_desc,
+        cokernelCoforkOfCofork_π, Cofork.π_ofπ, add_sub_cancel])
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, IsColimit, add_sub_cancel, binaryBiconeOfIsSplitMonoOfCokernel_fst, binaryBiconeOfIsSplitMonoOfCokernel_inl, binaryBiconeOfIsSplitMonoOfCokernel_inr, binaryBiconeOfIsSplitMonoOfCokernel_pt, binaryBiconeOfIsSplitMonoOfCokernel_snd, isBinaryBilimitOfTotal, isCokernelEpiComp_desc, isColimitCoforkOfCokernelCofork_desc, splitEpiOfIdempotentOfIsColimitCofork_section_
 -/
@@ -1473,7 +1575,10 @@ definition BinaryBicone.isBilimitOfKernelInl
       dsimp at m
       have h₁' : ((m : T ⟶ b.pt) - (f ≫ b.inl + g ≫ b.inr)) ≫ b.fst = 0 := by
         simpa using sub_eq_zero.2 h₁
-     
+      have h₂' : (m - (f ≫ b.inl + g ≫ b.inr)) ≫ b.snd = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : T ⟶ X, hq : q ≫ b.inl = m - (f ≫ b.inl + g ≫ b.inr)⟩ :=
+        KernelFork.IsLimit.lift' hb _ h₂'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.comp_id q]; rw [← b.inl_fst]; rw [← Category.assoc]; rw [hq]; rw [h₁']; rw [zero_comp]
 
 中文:
 定义 BinaryBicone.isBilimitOfKernelInl
@@ -1484,7 +1589,10 @@ definition BinaryBicone.isBilimitOfKernelInl
       dsimp at m
       have h₁' : ((m : T ⟶ b.pt) - (f ≫ b.inl + g ≫ b.inr)) ≫ b.fst = 0 := by
         simpa using sub_eq_zero.2 h₁
-     
+      have h₂' : (m - (f ≫ b.inl + g ≫ b.inr)) ≫ b.snd = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : T ⟶ X, hq : q ≫ b.inl = m - (f ≫ b.inl + g ≫ b.inr)⟩ :=
+        KernelFork.IsLimit.lift' hb _ h₂'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.comp_id q]; rw [← b.inl_fst]; rw [← Category.assoc]; rw [hq]; rw [h₁']; rw [zero_comp]
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.mk, Category, IsLimit, KernelFork, KernelFork.IsLimit.lift, b.fst, b.inl, b.inr, b.pt, b.snd, isBinaryBilimitOfIsLimit, sub_eq_zero
 -/
@@ -1513,7 +1621,10 @@ definition BinaryBicone.isBilimitOfKernelInr
     (fun f g => by simp) fun {T} f g m h₁ h₂ => by
       dsimp at m
       have h₁' : (m - (f ≫ b.inl + g ≫ b.inr)) ≫ b.fst = 0 := by simpa using sub_eq_zero.2 h₁
-      have h₂' : (m - (f ≫ b
+      have h₂' : (m - (f ≫ b.inl + g ≫ b.inr)) ≫ b.snd = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : T ⟶ Y, hq : q ≫ b.inr = m - (f ≫ b.inl + g ≫ b.inr)⟩ :=
+        KernelFork.IsLimit.lift' hb _ h₁'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.comp_id q]; rw [← b.inr_snd]; rw [← Category.assoc]; rw [hq]; rw [h₂']; rw [zero_comp]
 
 中文:
 定义 BinaryBicone.isBilimitOfKernelInr
@@ -1523,7 +1634,10 @@ definition BinaryBicone.isBilimitOfKernelInr
     (fun f g => by simp) fun {T} f g m h₁ h₂ => by
       dsimp at m
       have h₁' : (m - (f ≫ b.inl + g ≫ b.inr)) ≫ b.fst = 0 := by simpa using sub_eq_zero.2 h₁
-      have h₂' : (m - (f ≫ b
+      have h₂' : (m - (f ≫ b.inl + g ≫ b.inr)) ≫ b.snd = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : T ⟶ Y, hq : q ≫ b.inr = m - (f ≫ b.inl + g ≫ b.inr)⟩ :=
+        KernelFork.IsLimit.lift' hb _ h₁'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.comp_id q]; rw [← b.inr_snd]; rw [← Category.assoc]; rw [hq]; rw [h₂']; rw [zero_comp]
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.mk, Category, Category.comp_id, IsLimit, KernelFork, KernelFork.IsLimit.lift, b.fst, b.inl, b.inr, b.snd, comp_id, isBinaryBilimitOfIsLimit, sub_eq_zero
 -/
@@ -1551,7 +1665,10 @@ definition BinaryBicone.isBilimitOfCokernelFst
       (fun f g => by simp) fun {T} f g m h₁ h₂ => by
       dsimp at m
       have h₁' : b.inl ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₁
-      have h₂' : b.i
+      have h₂' : b.inr ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : X ⟶ T, hq : b.fst ≫ q = m - (b.fst ≫ f + b.snd ≫ g)⟩ :=
+        CokernelCofork.IsColimit.desc' hb _ h₂'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.id_comp q]; rw [← b.inl_fst]; rw [Category.assoc]; rw [hq]; rw [h₁']; rw [comp_zero]
 
 中文:
 定义 BinaryBicone.isBilimitOfCokernelFst
@@ -1561,7 +1678,10 @@ definition BinaryBicone.isBilimitOfCokernelFst
       (fun f g => by simp) fun {T} f g m h₁ h₂ => by
       dsimp at m
       have h₁' : b.inl ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₁
-      have h₂' : b.i
+      have h₂' : b.inr ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : X ⟶ T, hq : b.fst ≫ q = m - (b.fst ≫ f + b.snd ≫ g)⟩ :=
+        CokernelCofork.IsColimit.desc' hb _ h₂'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.id_comp q]; rw [← b.inl_fst]; rw [Category.assoc]; rw [hq]; rw [h₁']; rw [comp_zero]
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, Category, CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, b.fst, b.inl, b.inr, b.snd, isBinaryBilimitOfIsColimit, sub_eq_zero
 -/
@@ -1589,7 +1709,10 @@ definition BinaryBicone.isBilimitOfCokernelSnd
       (fun f g => by simp) fun {T} f g m h₁ h₂ => by
       dsimp at m
       have h₁' : b.inl ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₁
-      have h₂' : b.i
+      have h₂' : b.inr ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : Y ⟶ T, hq : b.snd ≫ q = m - (b.fst ≫ f + b.snd ≫ g)⟩ :=
+        CokernelCofork.IsColimit.desc' hb _ h₁'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.id_comp q]; rw [← b.inr_snd]; rw [Category.assoc]; rw [hq]; rw [h₂']; rw [comp_zero]
 
 中文:
 定义 BinaryBicone.isBilimitOfCokernelSnd
@@ -1599,7 +1722,10 @@ definition BinaryBicone.isBilimitOfCokernelSnd
       (fun f g => by simp) fun {T} f g m h₁ h₂ => by
       dsimp at m
       have h₁' : b.inl ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₁
-      have h₂' : b.i
+      have h₂' : b.inr ≫ (m - (b.fst ≫ f + b.snd ≫ g)) = 0 := by simpa using sub_eq_zero.2 h₂
+      obtain ⟨q : Y ⟶ T, hq : b.snd ≫ q = m - (b.fst ≫ f + b.snd ≫ g)⟩ :=
+        CokernelCofork.IsColimit.desc' hb _ h₁'
+      rw [← sub_eq_zero]; rw [← hq]; rw [← Category.id_comp q]; rw [← b.inr_snd]; rw [Category.assoc]; rw [hq]; rw [h₂']; rw [comp_zero]
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, Category, CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, b.fst, b.inl, b.inr, b.snd, isBinaryBilimitOfIsColimit, sub_eq_zero
 -/
@@ -1632,7 +1758,21 @@ definition binaryBiconeOfIsSplitEpiOfKernel
       let c' : KernelFork (𝟙 X - (𝟙 X - f ≫ section_ f)) := KernelFork.ofι (Fork.ι c) (by simp)
       let i' : IsLimit c' := isKernelCompMono i (section_ f) (by simp)
       let i'' := isLimitForkOfKernelFork i'
-      (splitMonoOfIdempotentOfIsLimitFork C (by simp) i'').retractio
+      (splitMonoOfIdempotentOfIsLimitFork C (by simp) i'').retraction
+    snd := f
+    inl := c.ι
+    inr := section_ f
+    inl_fst := by apply SplitMono.id
+    inl_snd := by simp
+    inr_fst := by
+      dsimp only
+      rw [splitMonoOfIdempotentOfIsLimitFork_retraction]; rw [isLimitForkOfKernelFork_lift]; rw [isKernelCompMono_lift]
+      dsimp only [kernelForkOfFork_ι]
+      let := mono_of_isLimit_fork i
+      apply zero_of_comp_mono c.ι
+      simp only [comp_sub, Category.comp_id, Category.assoc, sub_self, Fork.IsLimit.lift_ι,
+        Fork.ι_ofι, IsSplitEpi.id_assoc]
+    inr_snd := by simp }
 
 中文:
 定义 binaryBiconeOfIsSplitEpiOfKernel
@@ -1642,7 +1782,21 @@ definition binaryBiconeOfIsSplitEpiOfKernel
       let c' : KernelFork (𝟙 X - (𝟙 X - f ≫ section_ f)) := KernelFork.ofι (Fork.ι c) (by simp)
       let i' : IsLimit c' := isKernelCompMono i (section_ f) (by simp)
       let i'' := isLimitForkOfKernelFork i'
-      (splitMonoOfIdempotentOfIsLimitFork C (by simp) i'').retractio
+      (splitMonoOfIdempotentOfIsLimitFork C (by simp) i'').retraction
+    snd := f
+    inl := c.ι
+    inr := section_ f
+    inl_fst := by apply SplitMono.id
+    inl_snd := by simp
+    inr_fst := by
+      dsimp only
+      rw [splitMonoOfIdempotentOfIsLimitFork_retraction]; rw [isLimitForkOfKernelFork_lift]; rw [isKernelCompMono_lift]
+      dsimp only [kernelForkOfFork_ι]
+      let := mono_of_isLimit_fork i
+      apply zero_of_comp_mono c.ι
+      simp only [comp_sub, Category.comp_id, Category.assoc, sub_self, Fork.IsLimit.lift_ι,
+        Fork.ι_ofι, IsSplitEpi.id_assoc]
+    inr_snd := by simp }
 
 Depends on / 依赖: IsLimit, KernelFork, KernelFork.of, SplitMono, SplitMono.id, inl_fst, inl_snd, inr_fst, isKernelCompMono, isKernelCompMono_lif, isLimitForkOfKernelFork, isLimitForkOfKernelFork_lift, retraction, section_, splitMonoOfIdempotentOfIsLimitFork, splitMonoOfIdempotentOfIsLimitFork_retraction
 -/
@@ -1748,7 +1902,9 @@ instance subsingleton_preadditive_of_hasBinaryBiproducts
     have h₁ := @biprod.add_eq_lift_id_desc _ _ a _ _ f g
       (by convert! (inferInstance : HasBinaryBiproduct X X); subsingleton)
     have h₂ := @biprod.add_eq_lift_id_desc _ _ b _ _ f g
-      (by convert! (inf
+      (by convert! (inferInstance : HasBinaryBiproduct X X); subsingleton)
+    refine h₁.trans (Eq.trans ?_ h₂.symm)
+    congr! 2 <;> subsingleton
 
 中文:
 实例 subsingleton_preadditive_of_hasBinaryBiproducts
@@ -1758,7 +1914,9 @@ instance subsingleton_preadditive_of_hasBinaryBiproducts
     have h₁ := @biprod.add_eq_lift_id_desc _ _ a _ _ f g
       (by convert! (inferInstance : HasBinaryBiproduct X X); subsingleton)
     have h₂ := @biprod.add_eq_lift_id_desc _ _ b _ _ f g
-      (by convert! (inf
+      (by convert! (inferInstance : HasBinaryBiproduct X X); subsingleton)
+    refine h₁.trans (Eq.trans ?_ h₂.symm)
+    congr! 2 <;> subsingleton
 
 Depends on / 依赖: AddCommGroup, AddCommGroup.ext, Eq.trans, HasBinaryBiproduct, Preadditive, Preadditive.ext, add_eq_lift_id_desc, biprod, biprod.add_eq_lift_id_desc, convert, subsingleton
 -/
@@ -2136,7 +2294,8 @@ definition Biprod.isoElim
         (biprod.inr ≫ f.hom ≫ biprod.fst) (biprod.inr ≫ f.hom ≫ biprod.snd)) := by
     simp only [Biprod.ofComponents_eq]
     infer_instance
-  Biprod.isoElim' (biprod.inl ≫ f.hom ≫ biprod.
+  Biprod.isoElim' (biprod.inl ≫ f.hom ≫ biprod.fst) (biprod.inl ≫ f.hom ≫ biprod.snd)
+    (biprod.inr ≫ f.hom ≫ biprod.fst) (biprod.inr ≫ f.hom ≫ biprod.snd)
 
 中文:
 定义 Biprod.isoElim
@@ -2147,7 +2306,8 @@ definition Biprod.isoElim
         (biprod.inr ≫ f.hom ≫ biprod.fst) (biprod.inr ≫ f.hom ≫ biprod.snd)) := by
     simp only [Biprod.ofComponents_eq]
     infer_instance
-  Biprod.isoElim' (biprod.inl ≫ f.hom ≫ biprod.
+  Biprod.isoElim' (biprod.inl ≫ f.hom ≫ biprod.fst) (biprod.inl ≫ f.hom ≫ biprod.snd)
+    (biprod.inr ≫ f.hom ≫ biprod.fst) (biprod.inr ≫ f.hom ≫ biprod.snd)
 
 Depends on / 依赖: Biprod, Biprod.isoElim, Biprod.ofComponents, Biprod.ofComponents_eq, biprod, biprod.fst, biprod.inl, biprod.inr, biprod.snd, f.hom, infer_instance, isoElim, ofComponents, ofComponents_eq
 -/
@@ -2177,7 +2337,19 @@ theorem Biprod.column_nonzero_of_iso
     conv_lhs =>
       slice 2 3
       rw [comp_add]
-    simp only [Catego
+    simp only [Category.assoc]
+    rw [comp_add_assoc]; rw [add_comp]
+    conv_lhs =>
+      congr
+      next => skip
+      slice 1 3
+      rw [a₂]
+    simp only [zero_comp, add_zero]
+    conv_lhs =>
+      slice 1 3
+      rw [a₁]
+    simp only [zero_comp]
+  exact nz (h₁.symm.trans h₀)
 
 中文:
 定理 Biprod.column_nonzero_of_iso
@@ -2192,7 +2364,19 @@ theorem Biprod.column_nonzero_of_iso
     conv_lhs =>
       slice 2 3
       rw [comp_add]
-    simp only [Catego
+    simp only [Category.assoc]
+    rw [comp_add_assoc]; rw [add_comp]
+    conv_lhs =>
+      congr
+      next => skip
+      slice 1 3
+      rw [a₂]
+    simp only [zero_comp, add_zero]
+    conv_lhs =>
+      slice 1 3
+      rw [a₁]
+    simp only [zero_comp]
+  exact nz (h₁.symm.trans h₀)
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, add_comp, add_zero, biprod, biprod.fst, biprod.inl, biprod.total, comp_add, comp_add_assoc, conv_lhs, id_comp, symm.trans, zero_comp
 -/
@@ -2238,7 +2422,10 @@ theorem Biproduct.column_nonzero_of_iso'
   have h₁ : x = 𝟙 (S s) := by simp [x]
   have h₀ : x = 0 := by
     dsimp [x]
-    rw [← Cat
+    rw [← Category.id_comp (inv f)]; rw [Category.assoc]; rw [← biproduct.total]
+    simp only [comp_sum_assoc]
+    grind [CategoryTheory.Limits.zero_comp, Finset.sum_const_zero]
+  exact h₁.symm.trans h₀
 
 中文:
 定理 Biproduct.column_nonzero_of_iso'
@@ -2252,7 +2439,10 @@ theorem Biproduct.column_nonzero_of_iso'
   have h₁ : x = 𝟙 (S s) := by simp [x]
   have h₀ : x = 0 := by
     dsimp [x]
-    rw [← Cat
+    rw [← Category.id_comp (inv f)]; rw [Category.assoc]; rw [← biproduct.total]
+    simp only [comp_sum_assoc]
+    grind [CategoryTheory.Limits.zero_comp, Finset.sum_const_zero]
+  exact h₁.symm.trans h₀
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, CategoryTheory, CategoryTheory.Limits.zero_comp, Finset, Finset.sum_const_zero, Limits, biproduct, biproduct.total, comp_sum_assoc, id_comp, nonempty_fintype, reassoced, sum_const_zero, symm.trans, zero_comp
 -/
@@ -2431,7 +2621,13 @@ lemma preservesBiproduct_of_mono_biproductComparison
       (F.mapIso (biproduct.isoProduct f)).inv ≫
         biproductComparison F f ≫ (biproduct.isoProduct _).hom := by
     ext j
-    convert! piComparison_comp_π F f 
+    convert! piComparison_comp_π F f j; simp [← Function.comp_def, ← Functor.map_comp]
+  have : IsIso (biproductComparison F f) := isIso_of_mono_of_isSplitEpi _
+  have : IsIso (piComparison F f) := by
+    rw [that]
+    infer_instance
+  have := PreservesProduct.of_iso_comparison F f
+  apply preservesBiproduct_of_preservesProduct
 
 中文:
 引理 preservesBiproduct_of_mono_biproductComparison
@@ -2444,7 +2640,13 @@ lemma preservesBiproduct_of_mono_biproductComparison
       (F.mapIso (biproduct.isoProduct f)).inv ≫
         biproductComparison F f ≫ (biproduct.isoProduct _).hom := by
     ext j
-    convert! piComparison_comp_π F f 
+    convert! piComparison_comp_π F f j; simp [← Function.comp_def, ← Functor.map_comp]
+  have : IsIso (biproductComparison F f) := isIso_of_mono_of_isSplitEpi _
+  have : IsIso (piComparison F f) := by
+    rw [that]
+    infer_instance
+  have := PreservesProduct.of_iso_comparison F f
+  apply preservesBiproduct_of_preservesProduct
 
 Depends on / 依赖: F.mapIso, F.obj, Function, Function.comp_def, Functor, Functor.map_comp, HasProduct, PreservesProduct, PreservesProduct.of_iso_comparison, biproduct, biproduct.isoProduct, biproductComparison, blocks, c.blocks, comp_def, convert, infer_instance, isIso_of_mono_of_isSplitEpi, isoProduct, mapIso
 -/
@@ -2586,7 +2788,7 @@ lemma preservesBiproduct_of_preservesCoproduct
           ((IsColimit.precomposeInvEquiv (Discrete.compNatIsoDiscrete _ _)
                 (F.mapCocone b.toCocone)).symm
             (isColimitOfPreserves F hb.isColimit)) <|
-        Cocone.ext (Iso.refl _) (by rintr
+        Cocone.ext (Iso.refl _) (by rintro ⟨⟩; simp)⟩
 
 中文:
 引理 preservesBiproduct_of_preservesCoproduct
@@ -2597,7 +2799,7 @@ lemma preservesBiproduct_of_preservesCoproduct
           ((IsColimit.precomposeInvEquiv (Discrete.compNatIsoDiscrete _ _)
                 (F.mapCocone b.toCocone)).symm
             (isColimitOfPreserves F hb.isColimit)) <|
-        Cocone.ext (Iso.refl _) (by rintr
+        Cocone.ext (Iso.refl _) (by rintro ⟨⟩; simp)⟩
 
 Depends on / 依赖: Cocone, Cocone.ext, Discrete, Discrete.compNatIsoDiscrete, F.mapCocone, IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeInvEquiv, Iso.refl, b.toCocone, compNatIsoDiscrete, hb.isColimit, isBilimitOfIsColimit, isColimit, isColimitOfPreserves, mapCocone, nonempty_fintype, ofIsoColimit, precomposeInvEquiv, toCocone
 -/
@@ -2738,7 +2940,10 @@ lemma preservesBinaryBiproduct_of_mono_biprodComparison
     ext <;> simp [← Functor.map_comp]
   have : IsIso (biprodComparison F X Y) := isIso_of_mono_of_isSplitEpi _
   have : IsIso (prodComparison F X Y) := by
- 
+    rw [that]
+    infer_instance
+  have := PreservesLimitPair.of_iso_prod_comparison F X Y
+  apply preservesBinaryBiproduct_of_preservesBinaryProduct
 
 中文:
 引理 preservesBinaryBiproduct_of_mono_biprodComparison
@@ -2750,7 +2955,10 @@ lemma preservesBinaryBiproduct_of_mono_biprodComparison
     ext <;> simp [← Functor.map_comp]
   have : IsIso (biprodComparison F X Y) := isIso_of_mono_of_isSplitEpi _
   have : IsIso (prodComparison F X Y) := by
- 
+    rw [that]
+    infer_instance
+  have := PreservesLimitPair.of_iso_prod_comparison F X Y
+  apply preservesBinaryBiproduct_of_preservesBinaryProduct
 
 Depends on / 依赖: F.mapIso, Functor, Functor.map_comp, PreservesLimitPair, PreservesLimitPair.of_iso_prod_comparison, biprod, biprod.isoProd, biprodComparison, infer_instance, isIso_of_mono_of_isSplitEpi, isoProd, mapIso, map_comp, of_iso_prod_comparison, preservesBinaryBiproduct_of_preservesBinaryProduct, prodComparison
 -/

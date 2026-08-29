@@ -143,7 +143,9 @@ theorem det_eq_detp_sub_detp
   rw [det_apply]; rw [← Equiv.sum_comp (Equiv.inv (Perm n))]; rw [← ofSign_disjUnion]; rw [sum_disjUnion]
   simp_rw [inv_apply, sign_inv, sub_eq_add_neg, detp, ← sum_neg_distrib]
   refine congr_arg₂ (· + ·) (sum_congr rfl fun σ hσ => ?_) (sum_congr rfl fun σ hσ => ?_) <;>
-    rw [mem_ofSign.mp hσ
+    rw [mem_ofSign.mp hσ]; rw [← Equiv.prod_comp σ] <;> simp
+
+@[simp]
 
 中文:
 定理 det_eq_detp_sub_detp
@@ -153,7 +155,9 @@ theorem det_eq_detp_sub_detp
   rw [det_apply]; rw [← Equiv.sum_comp (Equiv.inv (Perm n))]; rw [← ofSign_disjUnion]; rw [sum_disjUnion]
   simp_rw [inv_apply, sign_inv, sub_eq_add_neg, detp, ← sum_neg_distrib]
   refine congr_arg₂ (· + ·) (sum_congr rfl fun σ hσ => ?_) (sum_congr rfl fun σ hσ => ?_) <;>
-    rw [mem_ofSign.mp hσ
+    rw [mem_ofSign.mp hσ]; rw [← Equiv.prod_comp σ] <;> simp
+
+@[simp]
 
 Depends on / 依赖: Equiv.inv, Equiv.prod_comp, Equiv.sum_comp, det_apply, inv_apply, mem_ofSign, mem_ofSign.mp, ofSign_disjUnion, prod_comp, sign_inv, simp_rw, sub_eq_add_neg, sum_comp, sum_congr, sum_disjUnion, sum_neg_distrib
 -/
@@ -404,7 +408,13 @@ theorem det_mul_aux
   exact
     sum_involution (fun σ _ => σ * Equiv.swap i j)
       (fun σ _ => by
-        have : (∏ x, M (σ x) (p x)) = ∏ x, M ((σ * Equiv.s
+        have : (∏ x, M (σ x) (p x)) = ∏ x, M ((σ * Equiv.swap i j) x) (p x) :=
+          Fintype.prod_equiv (swap i j) _ _ (by simp [apply_swap_eq_self hpij])
+        simp [this, sign_swap hij, -sign_swap', prod_mul_distrib])
+      (fun σ _ _ => (not_congr mul_swap_eq_iff).mpr hij) (fun _ _ => mem_univ _) fun σ _ =>
+      mul_swap_involutive i j σ
+
+@[simp]
 
 中文:
 定理 det_mul_aux
@@ -417,7 +427,13 @@ theorem det_mul_aux
   exact
     sum_involution (fun σ _ => σ * Equiv.swap i j)
       (fun σ _ => by
-        have : (∏ x, M (σ x) (p x)) = ∏ x, M ((σ * Equiv.s
+        have : (∏ x, M (σ x) (p x)) = ∏ x, M ((σ * Equiv.swap i j) x) (p x) :=
+          Fintype.prod_equiv (swap i j) _ _ (by simp [apply_swap_eq_self hpij])
+        simp [this, sign_swap hij, -sign_swap', prod_mul_distrib])
+      (fun σ _ _ => (not_congr mul_swap_eq_iff).mpr hij) (fun _ _ => mem_univ _) fun σ _ =>
+      mul_swap_involutive i j σ
+
+@[simp]
 
 Depends on / 依赖: Equiv.swap, Finite, Finite.injective_iff_bijective, Fintype, Fintype.prod_equiv, Injective, apply_swap_eq_self, injective_iff_bijective, mem_univ, mul_swap_eq_iff, not_congr, prod_equiv, prod_mul_distrib, sign_swap, sum_involution
 -/
@@ -448,7 +464,31 @@ theorem det_mul
     det (M * N) = ∑ p : n -> n, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
       simp only [det_apply', mul_apply, prod_univ_sum, mul_sum, Fintype.piFinset_univ]
       rw [Finset.sum_comm]
-    _ = ∑ p : n -> n with Bijective p, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i :=
+    _ = ∑ p : n -> n with Bijective p, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
+      refine (sum_subset (filter_subset _ _) fun f _ hbij => det_mul_aux ?_).symm
+      simpa only [mem_filter_univ] using hbij
+    _ = ∑ τ : Perm n, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (τ i) * N (τ i) i :=
+      sum_bij (fun p h => Equiv.ofBijective p (mem_filter.1 h).2) (fun _ _ => mem_univ _)
+        (fun _ _ _ _ h => by injection h)
+        (fun b _ => ⟨b, mem_filter.2 ⟨mem_univ _, b.bijective⟩, coe_fn_injective rfl⟩) fun _ _ => rfl
+    _ = ∑ σ : Perm n, ∑ τ : Perm n, (∏ i, N (σ i) i) * ε τ * ∏ j, M (τ j) (σ j) := by
+      simp only [mul_comm, mul_left_comm, prod_mul_distrib, mul_assoc]
+    _ = ∑ σ : Perm n, ∑ τ : Perm n, (∏ i, N (σ i) i) * (ε σ * ε τ) * ∏ i, M (τ i) i :=
+      (sum_congr rfl fun σ _ =>
+        Fintype.sum_equiv (Equiv.mulRight σ⁻¹) _ _ fun τ => by
+          have : (∏ j, M (τ j) (σ j)) = ∏ j, M ((τ * σ⁻¹) j) j := by
+            rw [← (σ⁻¹ : _ ≃ _).prod_comp]
+            simp
+          have h : ε σ * ε (τ * σ⁻¹) = ε τ :=
+            calc
+              ε σ * ε (τ * σ⁻¹) = ε (τ * σ⁻¹ * σ) := by
+                rw [mul_comm]; rw [sign_mul (τ * σ⁻¹)]
+                simp only [Int.cast_mul, Units.val_mul]
+              _ = ε τ := by simp only [inv_mul_cancel_right]
+          simp_rw [Equiv.coe_mulRight, h]
+          simp only [this])
+    _ = det M * det N := by
+      simp only [det_apply', Finset.mul_sum, mul_comm, mul_left_comm, mul_assoc]
 
 中文:
 定理 det_mul
@@ -458,7 +498,31 @@ theorem det_mul
     det (M * N) = ∑ p : n -> n, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
       simp only [det_apply', mul_apply, prod_univ_sum, mul_sum, Fintype.piFinset_univ]
       rw [Finset.sum_comm]
-    _ = ∑ p : n -> n with Bijective p, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i :=
+    _ = ∑ p : n -> n with Bijective p, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (p i) * N (p i) i := by
+      refine (sum_subset (filter_subset _ _) fun f _ hbij => det_mul_aux ?_).symm
+      simpa only [mem_filter_univ] using hbij
+    _ = ∑ τ : Perm n, ∑ σ : Perm n, ε σ * ∏ i, M (σ i) (τ i) * N (τ i) i :=
+      sum_bij (fun p h => Equiv.ofBijective p (mem_filter.1 h).2) (fun _ _ => mem_univ _)
+        (fun _ _ _ _ h => by injection h)
+        (fun b _ => ⟨b, mem_filter.2 ⟨mem_univ _, b.bijective⟩, coe_fn_injective rfl⟩) fun _ _ => rfl
+    _ = ∑ σ : Perm n, ∑ τ : Perm n, (∏ i, N (σ i) i) * ε τ * ∏ j, M (τ j) (σ j) := by
+      simp only [mul_comm, mul_left_comm, prod_mul_distrib, mul_assoc]
+    _ = ∑ σ : Perm n, ∑ τ : Perm n, (∏ i, N (σ i) i) * (ε σ * ε τ) * ∏ i, M (τ i) i :=
+      (sum_congr rfl fun σ _ =>
+        Fintype.sum_equiv (Equiv.mulRight σ⁻¹) _ _ fun τ => by
+          have : (∏ j, M (τ j) (σ j)) = ∏ j, M ((τ * σ⁻¹) j) j := by
+            rw [← (σ⁻¹ : _ ≃ _).prod_comp]
+            simp
+          have h : ε σ * ε (τ * σ⁻¹) = ε τ :=
+            calc
+              ε σ * ε (τ * σ⁻¹) = ε (τ * σ⁻¹ * σ) := by
+                rw [mul_comm]; rw [sign_mul (τ * σ⁻¹)]
+                simp only [Int.cast_mul, Units.val_mul]
+              _ = ε τ := by simp only [inv_mul_cancel_right]
+          simp_rw [Equiv.coe_mulRight, h]
+          simp only [this])
+    _ = det M * det N := by
+      simp only [det_apply', Finset.mul_sum, mul_comm, mul_left_comm, mul_assoc]
 
 Depends on / 依赖: Bijective, Equiv.of, Finset, Finset.sum_comm, Fintype, Fintype.piFinset_univ, det_apply, det_mul_aux, filter_subset, mem_filter_univ, mul_apply, mul_sum, piFinset_univ, prod_univ_sum, sum_bij, sum_comm, sum_subset
 -/
@@ -1478,7 +1542,8 @@ theorem det_updateRow_sum_aux
   | empty => rw [Finset.sum_empty, add_zero, smul_eq_mul, det_updateRow_smul, updateRow_eq_self]
   | insert k _ hk h_ind =>
       have h : k != j := fun h => (h ▸ hj) (Finset.mem_insert_self _ _)
-      rw [Finset.sum_insert hk]; rw [add_comm ((c k) • M
+      rw [Finset.sum_insert hk]; rw [add_comm ((c k) • M k)]; rw [← add_assoc]; rw [det_updateRow_add]; rw [det_updateRow_smul]; rw [det_updateRow_eq_zero h]; rw [mul_zero]; rw [add_zero]; rw [h_ind]
+      exact fun h => hj (Finset.mem_insert_of_mem h)
 
 中文:
 定理 det_updateRow_sum_aux
@@ -1488,7 +1553,8 @@ theorem det_updateRow_sum_aux
   | empty => rw [Finset.sum_empty, add_zero, smul_eq_mul, det_updateRow_smul, updateRow_eq_self]
   | insert k _ hk h_ind =>
       have h : k != j := fun h => (h ▸ hj) (Finset.mem_insert_self _ _)
-      rw [Finset.sum_insert hk]; rw [add_comm ((c k) • M
+      rw [Finset.sum_insert hk]; rw [add_comm ((c k) • M k)]; rw [← add_assoc]; rw [det_updateRow_add]; rw [det_updateRow_smul]; rw [det_updateRow_eq_zero h]; rw [mul_zero]; rw [add_zero]; rw [h_ind]
+      exact fun h => hj (Finset.mem_insert_of_mem h)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_empty, Finset.sum_insert, add_assoc, add_comm, add_zero, det_updateRow_add, det_updateRow_eq_zero, det_updateRow_smul, h_ind, induction_on, insert, mem_insert_of_mem, mem_insert_self, mul_zero, smul_eq_mul, sum_empty
 -/
@@ -1810,7 +1876,10 @@ theorem det_vecMulVec
     refine detRowAlternating.map_eq_zero_of_eq _ ?_ hij
     simp [uv', hij]
   have : vecMulVec u v =
-      (uv'.updateRow i (u i • uv' i)).updateRow j (u j • uv'.upd
+      (uv'.updateRow i (u i • uv' i)).updateRow j (u j • uv'.updateRow i (u i • uv' i) j) := by
+    unfold uv'
+    rw [updateRow_comm _ hij]; rw [updateRow_idem]; rw [updateRow_ne hij.symm]; rw [updateRow_ne hij]; rw [updateRow_self]; rw [updateRow_self]; rw [updateRow_comm _ hij]; rw [updateRow_idem]; rw [← update_vecMulVec u v j]; rw [update_eq_self]; rw [← update_vecMulVec u v i]; rw [update_eq_self]
+  rw [this]; rw [det_updateRow_smul]; rw [updateRow_eq_self]; rw [det_updateRow_smul]; rw [updateRow_eq_self]; rw [huv']; rw [mul_zero]; rw [mul_zero]
 
 中文:
 定理 det_vecMulVec
@@ -1823,7 +1892,10 @@ theorem det_vecMulVec
     refine detRowAlternating.map_eq_zero_of_eq _ ?_ hij
     simp [uv', hij]
   have : vecMulVec u v =
-      (uv'.updateRow i (u i • uv' i)).updateRow j (u j • uv'.upd
+      (uv'.updateRow i (u i • uv' i)).updateRow j (u j • uv'.updateRow i (u i • uv' i) j) := by
+    unfold uv'
+    rw [updateRow_comm _ hij]; rw [updateRow_idem]; rw [updateRow_ne hij.symm]; rw [updateRow_ne hij]; rw [updateRow_self]; rw [updateRow_self]; rw [updateRow_comm _ hij]; rw [updateRow_idem]; rw [← update_vecMulVec u v j]; rw [update_eq_self]; rw [← update_vecMulVec u v i]; rw [update_eq_self]
+  rw [this]; rw [det_updateRow_smul]; rw [updateRow_eq_self]; rw [det_updateRow_smul]; rw [updateRow_eq_self]; rw [huv']; rw [mul_zero]; rw [mul_zero]
 
 Depends on / 依赖: detRowAlternating, detRowAlternating.map_eq_zero_of_eq, exists_pair_ne, hij.symm, map_eq_zero_of_eq, updateR, updateRow, updateRow_comm, updateRow_idem, updateRow_ne, updateRow_self, vecMulVec
 -/
@@ -1855,7 +1927,21 @@ theorem det_eq_of_forall_row_eq_smul_add_const_aux
     rw [A_eq]; rw [this]; rw [zero_mul]; rw [add_zero]
   | insert i s _hi ih =>
     intro c hs k hk A_eq
-    have hAi : A i = B i + c i 
+    have hAi : A i = B i + c i • B k := funext (A_eq i)
+    rw [@ih (updateRow B i (A i)) (Function.update c i 0)]; rw [hAi]; rw [det_updateRow_add_smul_self]
+    · exact mt (fun h => show k in insert i s from h ▸ Finset.mem_insert_self _ _) hk
+    · intro i' hi'
+      rw [Function.update_apply]
+      split_ifs with hi'i
+      · rfl
+      · exact hs i' fun h => hi' ((Finset.mem_insert.mp h).resolve_left hi'i)
+    · exact k
+    · exact fun h => hk (Finset.mem_insert_of_mem h)
+    · intro i' j'
+      rw [updateRow_apply]; rw [Function.update_apply]
+      split_ifs with hi'i
+      · simp [hi'i]
+      rw [A_eq]; rw [updateRow_ne fun h : k = i => hk <| h ▸ Finset.mem_insert_self k s]
 
 中文:
 定理 det_eq_of_对任意_row_eq_smul_add_const_aux
@@ -1870,7 +1956,21 @@ theorem det_eq_of_forall_row_eq_smul_add_const_aux
     rw [A_eq]; rw [this]; rw [zero_mul]; rw [add_zero]
   | insert i s _hi ih =>
     intro c hs k hk A_eq
-    have hAi : A i = B i + c i 
+    have hAi : A i = B i + c i • B k := funext (A_eq i)
+    rw [@ih (updateRow B i (A i)) (Function.update c i 0)]; rw [hAi]; rw [det_updateRow_add_smul_self]
+    · exact mt (fun h => show k in insert i s from h ▸ Finset.mem_insert_self _ _) hk
+    · intro i' hi'
+      rw [Function.update_apply]
+      split_ifs with hi'i
+      · rfl
+      · exact hs i' fun h => hi' ((Finset.mem_insert.mp h).resolve_left hi'i)
+    · exact k
+    · exact fun h => hk (Finset.mem_insert_of_mem h)
+    · intro i' j'
+      rw [updateRow_apply]; rw [Function.update_apply]
+      split_ifs with hi'i
+      · simp [hi'i]
+      rw [A_eq]; rw [updateRow_ne fun h : k = i => hk <| h ▸ Finset.mem_insert_self k s]
 
 Depends on / 依赖: A_eq, Finset, Finset.induction_on, Finset.mem_insert_self, Function, Function.update, add_zero, det_updateRow_add_smul_self, generalizing, induction_on, insert, mem_insert_self, update, updateRow, zero_mul
 -/
@@ -1949,7 +2049,31 @@ theorem det_eq_of_forall_row_eq_smul_add_pred_aux
     refine Fin.cases (h0 j) (fun i => ?_) i
     rw [hsucc]; rw [hc i (Fin.succ_pos _)]; rw [zero_mul]; rw [add_zero]
   set M' := updateRow M k.succ (N k.succ) with hM'
-  have hM : M = updateRow M' k.suc
+  have hM : M = updateRow M' k.succ (M' k.succ + c k • M (Fin.castSucc k)) := by
+    ext i j
+    by_cases hi : i = k.succ
+    · simp [hi, hM', hsucc, updateRow_self]
+    rw [updateRow_ne hi]; rw [hM']; rw [updateRow_ne hi]
+  have k_ne_succ : (Fin.castSucc k) != k.succ := Fin.castSucc_lt_succ.ne
+  have M_k : M (Fin.castSucc k) = M' (Fin.castSucc k) := (updateRow_ne k_ne_succ).symm
+  rw [hM]; rw [M_k]; rw [det_updateRow_add_smul_self M' k_ne_succ.symm]; rw [ih (Function.update c k 0)]
+  · intro i hi
+    rw [Fin.lt_def]; rw [Fin.val_castSucc]; rw [Fin.val_succ]; rw [Nat.lt_succ_iff] at hi
+    rw [Function.update_apply]
+    split_ifs with hik
+    · rfl
+    exact hc _ (Fin.succ_lt_succ_iff.mpr (lt_of_le_of_ne hi (Ne.symm hik)))
+  · rwa [hM', updateRow_ne (Fin.succ_ne_zero _).symm]
+  intro i j
+  rw [Function.update_apply]
+  split_ifs with hik
+  · rw [zero_mul, add_zero, hM', hik, updateRow_self]
+  rw [hM']; rw [updateRow_ne ((Fin.succ_injective _).ne hik)]; rw [hsucc]
+  by_cases hik2 : k < i
+  · simp [hc i (Fin.succ_lt_succ_iff.mpr hik2)]
+  rw [updateRow_ne]
+  apply ne_of_lt
+  rwa [Fin.lt_def, Fin.val_castSucc, Fin.val_succ, Nat.lt_succ_iff, ← not_lt]
 
 中文:
 定理 det_eq_of_对任意_row_eq_smul_add_pred_aux
@@ -1961,7 +2085,31 @@ theorem det_eq_of_forall_row_eq_smul_add_pred_aux
     refine Fin.cases (h0 j) (fun i => ?_) i
     rw [hsucc]; rw [hc i (Fin.succ_pos _)]; rw [zero_mul]; rw [add_zero]
   set M' := updateRow M k.succ (N k.succ) with hM'
-  have hM : M = updateRow M' k.suc
+  have hM : M = updateRow M' k.succ (M' k.succ + c k • M (Fin.castSucc k)) := by
+    ext i j
+    by_cases hi : i = k.succ
+    · simp [hi, hM', hsucc, updateRow_self]
+    rw [updateRow_ne hi]; rw [hM']; rw [updateRow_ne hi]
+  have k_ne_succ : (Fin.castSucc k) != k.succ := Fin.castSucc_lt_succ.ne
+  have M_k : M (Fin.castSucc k) = M' (Fin.castSucc k) := (updateRow_ne k_ne_succ).symm
+  rw [hM]; rw [M_k]; rw [det_updateRow_add_smul_self M' k_ne_succ.symm]; rw [ih (Function.update c k 0)]
+  · intro i hi
+    rw [Fin.lt_def]; rw [Fin.val_castSucc]; rw [Fin.val_succ]; rw [Nat.lt_succ_iff] at hi
+    rw [Function.update_apply]
+    split_ifs with hik
+    · rfl
+    exact hc _ (Fin.succ_lt_succ_iff.mpr (lt_of_le_of_ne hi (Ne.symm hik)))
+  · rwa [hM', updateRow_ne (Fin.succ_ne_zero _).symm]
+  intro i j
+  rw [Function.update_apply]
+  split_ifs with hik
+  · rw [zero_mul, add_zero, hM', hik, updateRow_self]
+  rw [hM']; rw [updateRow_ne ((Fin.succ_injective _).ne hik)]; rw [hsucc]
+  by_cases hik2 : k < i
+  · simp [hc i (Fin.succ_lt_succ_iff.mpr hik2)]
+  rw [updateRow_ne]
+  apply ne_of_lt
+  rwa [Fin.lt_def, Fin.val_castSucc, Fin.val_succ, Nat.lt_succ_iff, ← not_lt]
 
 Depends on / 依赖: Fin.cases, Fin.castSucc, Fin.induction, Fin.succ_pos, add_zero, castSucc, k.succ, k_ne_succ, succ_pos, updateRow, updateRow_ne, updateRow_self, zero_mul
 -/
@@ -2068,7 +2216,56 @@ theorem det_blockDiagonal
   -- The right-hand side is a product of sums, rewrite it as a sum of products.
   rw [Finset.prod_sum]
   simp_rw [Finset.prod_attach_univ, Finset.univ_pi_univ]
-  -- We claim that the only permutations contributing to
+  -- We claim that the only permutations contributing to the sum are those that
+  -- preserve their second component.
+  let preserving_snd : Finset (Equiv.Perm (n × o)) := {σ | forall x, (σ x).snd = x.snd}
+  have mem_preserving_snd :
+    forall {σ : Equiv.Perm (n × o)}, σ in preserving_snd ↔ forall x, (σ x).snd = x.snd := fun {σ} =>
+    Finset.mem_filter.trans ⟨fun h => h.2, fun h => ⟨Finset.mem_univ _, h⟩⟩
+  rw [← Finset.sum_subset (Finset.subset_univ preserving_snd) _]
+  -- And that these are in bijection with `o → Equiv.Perm m`.
+  · refine (Finset.sum_bij (fun σ _ => prodCongrLeft fun k => σ k (mem_univ k)) ?_ ?_ ?_ ?_).symm
+    · intro σ _
+      rw [mem_preserving_snd]
+      rintro ⟨-, x⟩
+      simp only [prodCongrLeft_apply]
+    · intro σ _ σ' _ eq
+      ext x hx k
+      have :
+        forall k x,
+          prodCongrLeft (fun k => σ k (Finset.mem_univ _)) (k, x) =
+            prodCongrLeft (fun k => σ' k (Finset.mem_univ _)) (k, x) :=
+        fun k x => by rw [eq]
+      simp only [prodCongrLeft_apply, Prod.mk_inj] at this
+      exact (this k x).1
+    · intro σ hσ
+      rw [mem_preserving_snd] at hσ
+      have hσ' x : (σ.symm x).snd = x.snd := by simpa [eq_comm] using hσ (σ.symm x)
+      have mk_apply_eq : forall k x, ((σ (x, k)).fst, k) = σ (x, k) := by
+        intro k x
+        ext
+        · simp only
+        · simp only [hσ]
+      have mk_inv_apply_eq : forall k x, ((σ.symm (x, k)).fst, k) = σ.symm (x, k) := by grind
+      refine ⟨fun k _ => ⟨fun x => (σ (x, k)).fst, fun x => (σ.symm (x, k)).fst, ?_, ?_⟩, ?_, ?_⟩
+      · intro x
+        simp [mk_apply_eq]
+      · intro x
+        simp [mk_inv_apply_eq]
+      · apply Finset.mem_univ
+      · ext ⟨k, x⟩
+        · simp only [coe_fn_mk, prodCongrLeft_apply]
+        · simp only [prodCongrLeft_apply, hσ]
+    · intro σ _
+      rw [Finset.prod_mul_distrib]; rw [← Finset.univ_product_univ]; rw [Finset.prod_product_right]
+      simp only [sign_prodCongrLeft, Units.coe_prod, Int.cast_prod, blockDiagonal_apply_eq,
+        prodCongrLeft_apply]
+  · intro σ _ hσ
+    rw [mem_preserving_snd] at hσ
+    obtain ⟨⟨k, x⟩, hkx⟩ := not_forall.mp hσ
+    rw [Finset.prod_eq_zero (Finset.mem_univ (k]; rw [x))]; rw [mul_zero]
+    rw [blockDiagonal_apply_ne]
+    exact hkx
 
 中文:
 定理 det_blockDiagonal
@@ -2079,7 +2276,56 @@ theorem det_blockDiagonal
   -- The right-hand side is a product of sums, rewrite it as a sum of products.
   rw [Finset.prod_sum]
   simp_rw [Finset.prod_attach_univ, Finset.univ_pi_univ]
-  -- We claim that the only permutations contributing to
+  -- We claim that the only permutations contributing to the sum are those that
+  -- preserve their second component.
+  let preserving_snd : Finset (Equiv.Perm (n × o)) := {σ | forall x, (σ x).snd = x.snd}
+  have mem_preserving_snd :
+    forall {σ : Equiv.Perm (n × o)}, σ in preserving_snd ↔ forall x, (σ x).snd = x.snd := fun {σ} =>
+    Finset.mem_filter.trans ⟨fun h => h.2, fun h => ⟨Finset.mem_univ _, h⟩⟩
+  rw [← Finset.sum_subset (Finset.subset_univ preserving_snd) _]
+  -- And that these are in bijection with `o → Equiv.Perm m`.
+  · refine (Finset.sum_bij (fun σ _ => prodCongrLeft fun k => σ k (mem_univ k)) ?_ ?_ ?_ ?_).symm
+    · intro σ _
+      rw [mem_preserving_snd]
+      rintro ⟨-, x⟩
+      simp only [prodCongrLeft_apply]
+    · intro σ _ σ' _ eq
+      ext x hx k
+      have :
+        forall k x,
+          prodCongrLeft (fun k => σ k (Finset.mem_univ _)) (k, x) =
+            prodCongrLeft (fun k => σ' k (Finset.mem_univ _)) (k, x) :=
+        fun k x => by rw [eq]
+      simp only [prodCongrLeft_apply, Prod.mk_inj] at this
+      exact (this k x).1
+    · intro σ hσ
+      rw [mem_preserving_snd] at hσ
+      have hσ' x : (σ.symm x).snd = x.snd := by simpa [eq_comm] using hσ (σ.symm x)
+      have mk_apply_eq : forall k x, ((σ (x, k)).fst, k) = σ (x, k) := by
+        intro k x
+        ext
+        · simp only
+        · simp only [hσ]
+      have mk_inv_apply_eq : forall k x, ((σ.symm (x, k)).fst, k) = σ.symm (x, k) := by grind
+      refine ⟨fun k _ => ⟨fun x => (σ (x, k)).fst, fun x => (σ.symm (x, k)).fst, ?_, ?_⟩, ?_, ?_⟩
+      · intro x
+        simp [mk_apply_eq]
+      · intro x
+        simp [mk_inv_apply_eq]
+      · apply Finset.mem_univ
+      · ext ⟨k, x⟩
+        · simp only [coe_fn_mk, prodCongrLeft_apply]
+        · simp only [prodCongrLeft_apply, hσ]
+    · intro σ _
+      rw [Finset.prod_mul_distrib]; rw [← Finset.univ_product_univ]; rw [Finset.prod_product_right]
+      simp only [sign_prodCongrLeft, Units.coe_prod, Int.cast_prod, blockDiagonal_apply_eq,
+        prodCongrLeft_apply]
+  · intro σ _ hσ
+    rw [mem_preserving_snd] at hσ
+    obtain ⟨⟨k, x⟩, hkx⟩ := not_forall.mp hσ
+    rw [Finset.prod_eq_zero (Finset.mem_univ (k]; rw [x))]; rw [mul_zero]
+    rw [blockDiagonal_apply_ne]
+    exact hkx
 -/
 theorem det_blockDiagonal {o : Type*} [Fintype o] [DecidableEq o] (M : o -> Matrix n n R) :
     (blockDiagonal M).det = ∏ k, (M k).det := by
@@ -2158,7 +2404,43 @@ Eq.symm
         sum_subset (M := R) (subset_univ ((sumCongrHom m n).range : Set (Perm (m oplus n))).toFinset) ?_
     · simp_rw [sum_mul_sum, ← sum_product', univ_product_univ]
       refine sum_nbij (fun σ => σ.fst.sumCongr σ.snd) ?_ ?_ ?_ ?_
-     
+      · intro σ₁₂ _
+        simp
+      · intro σ₁ _ σ₂ _
+        dsimp only
+        intro h
+        have h2 : forall x, Perm.sumCongr σ₁.fst σ₁.snd x = Perm.sumCongr σ₂.fst σ₂.snd x :=
+          DFunLike.congr_fun h
+        simp only [Sum.map_inr, Sum.map_inl, Perm.sumCongr_apply, Sum.forall, Sum.inl.injEq,
+          Sum.inr.injEq] at h2
+        ext x
+        · exact h2.left x
+        · exact h2.right x
+      · intro σ hσ
+        rw [mem_coe]; rw [Set.mem_toFinset] at hσ
+        obtain ⟨σ₁₂, hσ₁₂⟩ := hσ
+        use σ₁₂
+        rw [← hσ₁₂]
+        simp
+      · simp only [forall_prop_of_true, Prod.forall, mem_univ]
+        intro σ₁ σ₂
+        rw [Fintype.prod_sum_type]
+        simp_rw [Equiv.sumCongr_apply, Sum.map_inr, Sum.map_inl, fromBlocks_apply₁₁,
+          fromBlocks_apply₂₂]
+        rw [mul_mul_mul_comm]
+        congr
+        rw [sign_sumCongr]; rw [Units.val_mul]; rw [Int.cast_mul]
+    · rintro σ - hσn
+      have h1 : ¬forall x, exists y, Sum.inl y = σ (Sum.inl x) := by
+        rw [Set.mem_toFinset] at hσn
+        simpa only [Set.MapsTo, Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff] using
+          mt mem_sumCongrHom_range_of_perm_mapsTo_inl hσn
+      obtain ⟨a, ha⟩ := not_forall.mp h1
+      rcases hx : σ (Sum.inl a) with a2 | b
+      · have hn := (not_exists.mp ha) a2
+        exact absurd hx.symm hn
+      · rw [Finset.prod_eq_zero (Finset.mem_univ (Sum.inl a)), mul_zero]
+        rw [hx]; rw [fromBlocks_apply₂₁]; rw [zero_apply]
 
 中文:
 定理 det_fromBlocks_zero₂₁
@@ -2171,7 +2453,43 @@ Eq.symm
         sum_subset (M := R) (subset_univ ((sumCongrHom m n).range : Set (Perm (m oplus n))).toFinset) ?_
     · simp_rw [sum_mul_sum, ← sum_product', univ_product_univ]
       refine sum_nbij (fun σ => σ.fst.sumCongr σ.snd) ?_ ?_ ?_ ?_
-     
+      · intro σ₁₂ _
+        simp
+      · intro σ₁ _ σ₂ _
+        dsimp only
+        intro h
+        have h2 : forall x, Perm.sumCongr σ₁.fst σ₁.snd x = Perm.sumCongr σ₂.fst σ₂.snd x :=
+          DFunLike.congr_fun h
+        simp only [Sum.map_inr, Sum.map_inl, Perm.sumCongr_apply, Sum.forall, Sum.inl.injEq,
+          Sum.inr.injEq] at h2
+        ext x
+        · exact h2.left x
+        · exact h2.right x
+      · intro σ hσ
+        rw [mem_coe]; rw [Set.mem_toFinset] at hσ
+        obtain ⟨σ₁₂, hσ₁₂⟩ := hσ
+        use σ₁₂
+        rw [← hσ₁₂]
+        simp
+      · simp only [forall_prop_of_true, Prod.forall, mem_univ]
+        intro σ₁ σ₂
+        rw [Fintype.prod_sum_type]
+        simp_rw [Equiv.sumCongr_apply, Sum.map_inr, Sum.map_inl, fromBlocks_apply₁₁,
+          fromBlocks_apply₂₂]
+        rw [mul_mul_mul_comm]
+        congr
+        rw [sign_sumCongr]; rw [Units.val_mul]; rw [Int.cast_mul]
+    · rintro σ - hσn
+      have h1 : ¬forall x, exists y, Sum.inl y = σ (Sum.inl x) := by
+        rw [Set.mem_toFinset] at hσn
+        simpa only [Set.MapsTo, Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff] using
+          mt mem_sumCongrHom_range_of_perm_mapsTo_inl hσn
+      obtain ⟨a, ha⟩ := not_forall.mp h1
+      rcases hx : σ (Sum.inl a) with a2 | b
+      · have hn := (not_exists.mp ha) a2
+        exact absurd hx.symm hn
+      · rw [Finset.prod_eq_zero (Finset.mem_univ (Sum.inl a)), mul_zero]
+        rw [hx]; rw [fromBlocks_apply₂₁]; rw [zero_apply]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Eq.symm, Perm.sumCongr, Perm.sumCongr_apply, Sum.forall, Sum.map_inl, Sum.map_inr, classical, congr_fun, convert, det_apply, fst.sumCongr, map_inl, map_inr, simp_rw, subset_univ, sumCongr, sumCongrHom, sumCongr_apply
 -/
@@ -2257,7 +2575,29 @@ theorem det_succ_column_zero
   rw [Matrix.det_apply]; rw [Finset.univ_perm_fin_succ]; rw [← Finset.univ_product_univ]
   simp only [Finset.sum_map, Equiv.toEmbedding_apply, Finset.sum_product, Matrix.submatrix]
   refine Finset.sum_congr rfl fun i _ => Fin.cases ?_ (fun i => ?_) i
-  · simp only [Fin.prod_univ_succ, Matrix.det_
+  · simp only [Fin.prod_univ_succ, Matrix.det_apply, Finset.mul_sum,
+      Equiv.Perm.decomposeFin_symm_apply_zero, Fin.val_zero, one_mul,
+      Equiv.Perm.decomposeFin.symm_sign, Equiv.swap_self, if_true, id,
+      Equiv.Perm.decomposeFin_symm_apply_succ, Fin.succAbove_zero, Equiv.coe_refl, pow_zero,
+      mul_smul_comm, of_apply]
+  -- `univ_perm_fin_succ` gives a different embedding of `Perm (Fin n)` into
+  -- `Perm (Fin n.succ)` than the determinant of the submatrix we want,
+  -- permute `A` so that we get the correct one.
+  have : (-1 : R) ^ (i : Nat) = (Perm.sign i.cycleRange) := by simp [Fin.sign_cycleRange]
+  rw [Fin.val_succ]; rw [pow_succ']; rw [this]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_left_comm (ε _)]; rw [← det_permute]; rw [Matrix.det_apply]; rw [Finset.mul_sum]; rw [Finset.mul_sum]
+  -- now we just need to move the corresponding parts to the same place
+  refine Finset.sum_congr rfl fun σ _ => ?_
+  rw [Equiv.Perm.decomposeFin.symm_sign]; rw [if_neg (Fin.succ_ne_zero i)]
+  calc
+    ((-1 * Perm.sign σ : Int) • ∏ i', A (Perm.decomposeFin.symm (Fin.succ i, σ) i') i') =
+        (-1 * Perm.sign σ : Int) • (A (Fin.succ i) 0 *
+          ∏ i', A ((Fin.succ i).succAbove (Fin.cycleRange i (σ i'))) i'.succ) := by
+      simp only [Fin.prod_univ_succ, Fin.succAbove_cycleRange,
+        Equiv.Perm.decomposeFin_symm_apply_zero, Equiv.Perm.decomposeFin_symm_apply_succ]
+    _ = -1 * (A (Fin.succ i) 0 * (Perm.sign σ : Int) •
+        ∏ i', A ((Fin.succ i).succAbove (Fin.cycleRange i (σ i'))) i'.succ) := by
+      simp [_root_.neg_mul, one_mul, zsmul_eq_mul, neg_smul,
+        Fin.succAbove_cycleRange, mul_left_comm]
 
 中文:
 定理 det_succ_column_zero
@@ -2266,7 +2606,29 @@ theorem det_succ_column_zero
   rw [Matrix.det_apply]; rw [Finset.univ_perm_fin_succ]; rw [← Finset.univ_product_univ]
   simp only [Finset.sum_map, Equiv.toEmbedding_apply, Finset.sum_product, Matrix.submatrix]
   refine Finset.sum_congr rfl fun i _ => Fin.cases ?_ (fun i => ?_) i
-  · simp only [Fin.prod_univ_succ, Matrix.det_
+  · simp only [Fin.prod_univ_succ, Matrix.det_apply, Finset.mul_sum,
+      Equiv.Perm.decomposeFin_symm_apply_zero, Fin.val_zero, one_mul,
+      Equiv.Perm.decomposeFin.symm_sign, Equiv.swap_self, if_true, id,
+      Equiv.Perm.decomposeFin_symm_apply_succ, Fin.succAbove_zero, Equiv.coe_refl, pow_zero,
+      mul_smul_comm, of_apply]
+  -- `univ_perm_fin_succ` gives a different embedding of `Perm (Fin n)` into
+  -- `Perm (Fin n.succ)` than the determinant of the submatrix we want,
+  -- permute `A` so that we get the correct one.
+  have : (-1 : R) ^ (i : Nat) = (Perm.sign i.cycleRange) := by simp [Fin.sign_cycleRange]
+  rw [Fin.val_succ]; rw [pow_succ']; rw [this]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_left_comm (ε _)]; rw [← det_permute]; rw [Matrix.det_apply]; rw [Finset.mul_sum]; rw [Finset.mul_sum]
+  -- now we just need to move the corresponding parts to the same place
+  refine Finset.sum_congr rfl fun σ _ => ?_
+  rw [Equiv.Perm.decomposeFin.symm_sign]; rw [if_neg (Fin.succ_ne_zero i)]
+  calc
+    ((-1 * Perm.sign σ : Int) • ∏ i', A (Perm.decomposeFin.symm (Fin.succ i, σ) i') i') =
+        (-1 * Perm.sign σ : Int) • (A (Fin.succ i) 0 *
+          ∏ i', A ((Fin.succ i).succAbove (Fin.cycleRange i (σ i'))) i'.succ) := by
+      simp only [Fin.prod_univ_succ, Fin.succAbove_cycleRange,
+        Equiv.Perm.decomposeFin_symm_apply_zero, Equiv.Perm.decomposeFin_symm_apply_succ]
+    _ = -1 * (A (Fin.succ i) 0 * (Perm.sign σ : Int) •
+        ∏ i', A ((Fin.succ i).succAbove (Fin.cycleRange i (σ i'))) i'.succ) := by
+      simp [_root_.neg_mul, one_mul, zsmul_eq_mul, neg_smul,
+        Fin.succAbove_cycleRange, mul_left_comm]
 
 Depends on / 依赖: Equiv.Perm.decomposeFin.symm_sign, Equiv.Perm.decomposeFin_symm_apply_succ, Equiv.Perm.decomposeFin_symm_apply_zero, Equiv.swap_self, Equiv.toEmbedding_apply, Fin.cases, Fin.prod_univ_succ, Fin.succAbove_z, Fin.val_zero, Finset, Finset.mul_sum, Finset.sum_congr, Finset.sum_map, Finset.sum_product, Finset.univ_perm_fin_succ, Finset.univ_product_univ, Matrix, Matrix.det_apply, Matrix.submatrix, decomposeFin
 -/
@@ -2340,7 +2702,13 @@ theorem det_succ_row
   have : det A = (-1 : R) ^ (i : Nat) * (Perm.sign i.cycleRange⁻¹) * det A := by
     calc
       det A = ↑((-1 : Intˣ) ^ (i : Nat) * (-1 : Intˣ) ^ (i : Nat) : Intˣ) * det A := by simp
-      _ = (-1 : R) ^ (i : Nat) * (Perm.sign i.cycleRange⁻¹) * det A := b
+      _ = (-1 : R) ^ (i : Nat) * (Perm.sign i.cycleRange⁻¹) * det A := by simp [-Int.units_mul_self]
+  rw [this]; rw [mul_assoc]
+  congr
+  rw [← det_permute]; rw [det_succ_row_zero]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [mul_assoc]; rw [Matrix.submatrix_apply]; rw [submatrix_submatrix]; rw [id_comp]; rw [Function.comp_def]; rw [id]
+  simp
 
 中文:
 定理 det_succ_row
@@ -2350,7 +2718,13 @@ theorem det_succ_row
   have : det A = (-1 : R) ^ (i : Nat) * (Perm.sign i.cycleRange⁻¹) * det A := by
     calc
       det A = ↑((-1 : Intˣ) ^ (i : Nat) * (-1 : Intˣ) ^ (i : Nat) : Intˣ) * det A := by simp
-      _ = (-1 : R) ^ (i : Nat) * (Perm.sign i.cycleRange⁻¹) * det A := b
+      _ = (-1 : R) ^ (i : Nat) * (Perm.sign i.cycleRange⁻¹) * det A := by simp [-Int.units_mul_self]
+  rw [this]; rw [mul_assoc]
+  congr
+  rw [← det_permute]; rw [det_succ_row_zero]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [mul_assoc]; rw [Matrix.submatrix_apply]; rw [submatrix_submatrix]; rw [id_comp]; rw [Function.comp_def]; rw [id]
+  simp
 
 Depends on / 依赖: Finset, Finset.sum_congr, Int.units_mul_self, Matrix, Matrix.submatrix_apply, Perm.sign, cycleRange, det_permute, det_succ_row_zero, i.cycleRange, mul_assoc, mul_sum, pow_add, simp_rw, submatrix_apply, submatrix_submatrix, sum_congr, units_mul_self
 -/
@@ -2525,7 +2899,8 @@ theorem det_fin_three
   simp only [det_succ_row_zero, submatrix_apply, Fin.succ_zero_eq_one, submatrix_submatrix,
     det_unique, Fin.default_eq_zero, Function.comp_apply, Fin.succ_one_eq_two, Fin.sum_univ_succ,
     Fin.val_zero, Fin.zero_succAbove, univ_unique, Fin.val_succ, Fin.val_eq_zero,
-    Fin.succ_succAbove_ze
+    Fin.succ_succAbove_zero, sum_singleton, Fin.succ_succAbove_one]
+  ring
 
 中文:
 定理 det_fin_three
@@ -2534,7 +2909,8 @@ theorem det_fin_three
   simp only [det_succ_row_zero, submatrix_apply, Fin.succ_zero_eq_one, submatrix_submatrix,
     det_unique, Fin.default_eq_zero, Function.comp_apply, Fin.succ_one_eq_two, Fin.sum_univ_succ,
     Fin.val_zero, Fin.zero_succAbove, univ_unique, Fin.val_succ, Fin.val_eq_zero,
-    Fin.succ_succAbove_ze
+    Fin.succ_succAbove_zero, sum_singleton, Fin.succ_succAbove_one]
+  ring
 
 Depends on / 依赖: Fin.default_eq_zero, Fin.succ_one_eq_two, Fin.succ_succAbove_one, Fin.succ_succAbove_zero, Fin.succ_zero_eq_one, Fin.sum_univ_succ, Fin.val_eq_zero, Fin.val_succ, Fin.val_zero, Fin.zero_succAbove, Function, Function.comp_apply, comp_apply, default_eq_zero, det_succ_row_zero, det_unique, submatrix_apply, submatrix_submatrix, succ_one_eq_two, succ_succAbove_one
 -/

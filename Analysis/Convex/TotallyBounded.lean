@@ -46,7 +46,11 @@ lemma TotallyBounded.convexHull
   obtain ⟨W, hW₁, hW₂⟩ := exists_nhds_zero_half hU
   obtain ⟨V, hV₁,hV₂, hV₃⟩ := (locallyConvexSpace_iff_exists_convex_subset_zero Real E).mp ‹_› W hW₁
   obtain ⟨t, htf, hts⟩ := hs _ hV₁
-  obtain ⟨t', htf', hts'⟩ := tot
+  obtain ⟨t', htf', hts'⟩ := totallyBounded_iff_subset_finite_iUnion_nhds_zero.mp
+    (htf.isCompact_convexHull Real).totallyBounded _ hV₁
+  use t', htf'
+  simp only [iUnion_vadd_set, vadd_eq_add] at hts hts' ⊢
+  grw [hts, convexHull_add_subset, hV₂.convexHull_eq, hts', add_assoc, hV₃, add_subset_iff.mpr hW₂]
 
 中文:
 引理 全有界.convexHull
@@ -57,7 +61,11 @@ lemma TotallyBounded.convexHull
   obtain ⟨W, hW₁, hW₂⟩ := exists_nhds_zero_half hU
   obtain ⟨V, hV₁,hV₂, hV₃⟩ := (locallyConvexSpace_iff_exists_convex_subset_zero Real E).mp ‹_› W hW₁
   obtain ⟨t, htf, hts⟩ := hs _ hV₁
-  obtain ⟨t', htf', hts'⟩ := tot
+  obtain ⟨t', htf', hts'⟩ := totallyBounded_iff_subset_finite_iUnion_nhds_zero.mp
+    (htf.isCompact_convexHull Real).totallyBounded _ hV₁
+  use t', htf'
+  simp only [iUnion_vadd_set, vadd_eq_add] at hts hts' ⊢
+  grw [hts, convexHull_add_subset, hV₂.convexHull_eq, hts', add_assoc, hV₃, add_subset_iff.mpr hW₂]
 -/
 protected lemma TotallyBounded.convexHull (hs : TotallyBounded s) :
     TotallyBounded (convexHull Real s) := by

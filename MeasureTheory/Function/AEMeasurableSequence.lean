@@ -79,7 +79,8 @@ theorem mk_eq_fun_of_mem_aeSeqSet
   proof: haveI h_ss : aeSeqSet hf p subseteq { x | forall i, f i x = (hf i).mk (f i) x } := by
     rw [aeSeqSet]; rw [← compl_compl { x | forall i]; rw [f i x = (hf i).mk (f i) x }]; rw [Set.compl_subset_compl]
     refine Set.Subset.trans (Set.compl_subset_compl.mpr fun x h => ?_) (subset_toMeasurable _ _)
- 
+    exact h.1
+  (h_ss hx i).symm
 
 中文:
 定理 mk_eq_fun_of_mem_aeSeqSet
@@ -87,7 +88,8 @@ theorem mk_eq_fun_of_mem_aeSeqSet
   证明: haveI h_ss : aeSeqSet hf p subseteq { x | forall i, f i x = (hf i).mk (f i) x } := by
     rw [aeSeqSet]; rw [← compl_compl { x | forall i]; rw [f i x = (hf i).mk (f i) x }]; rw [Set.compl_subset_compl]
     refine Set.Subset.trans (Set.compl_subset_compl.mpr fun x h => ?_) (subset_toMeasurable _ _)
- 
+    exact h.1
+  (h_ss hx i).symm
 
 Depends on / 依赖: Set.Subset.trans, Set.compl_subset_compl, Set.compl_subset_compl.mpr, Subset, aeSeqSet, compl_compl, compl_subset_compl, h_ss, subset_toMeasurable, subseteq
 -/
@@ -152,7 +154,10 @@ theorem prop_of_mem_aeSeqSet
   rw [funext fun n => mk_eq_fun_of_mem_aeSeqSet hf hx n]
   have h_ss : aeSeqSet hf p subseteq { x | p x fun n => f n x } := by
     rw [← compl_compl { x | p x fun n => f n x }]; rw [aeSeqSet]; rw [Set.compl_subset_compl]
-    refine Set.Subset.trans (Set.compl_subs
+    refine Set.Subset.trans (Set.compl_subset_compl.mpr ?_) (subset_toMeasurable _ _)
+    exact fun x hx => hx.2
+  have hx' := Set.mem_of_subset_of_mem h_ss hx
+  exact hx'
 
 中文:
 定理 prop_of_mem_aeSeqSet
@@ -162,7 +167,10 @@ theorem prop_of_mem_aeSeqSet
   rw [funext fun n => mk_eq_fun_of_mem_aeSeqSet hf hx n]
   have h_ss : aeSeqSet hf p subseteq { x | p x fun n => f n x } := by
     rw [← compl_compl { x | p x fun n => f n x }]; rw [aeSeqSet]; rw [Set.compl_subset_compl]
-    refine Set.Subset.trans (Set.compl_subs
+    refine Set.Subset.trans (Set.compl_subset_compl.mpr ?_) (subset_toMeasurable _ _)
+    exact fun x hx => hx.2
+  have hx' := Set.mem_of_subset_of_mem h_ss hx
+  exact hx'
 
 Depends on / 依赖: GeneralLinearGroup, IsArithmetic, Matrix, Matrix.GeneralLinearGroup.det, Matrix.SpecialLinearGroup.det_mapGL, Nat.ne_zero_of_lt, Set.Subset.trans, Set.compl_subset_compl, Set.compl_subset_compl.mpr, Set.mem_of_subset_of_mem, SpecialLinearGroup, Subgroup, Subgroup.IsArithmetic.is_commensurable, Subgroup.exists_pow_mem_of_relIndex_ne_zero, Subset, abs_pow, abs_pow_eq_one, aeSeqSet, compl_compl, compl_subset_compl
 -/

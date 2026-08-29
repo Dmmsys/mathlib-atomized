@@ -53,7 +53,8 @@ theorem totallyBounded_univ
   refine ⟨Nat.cast '' Finset.range (p ^ k), Set.toFinite _, fun z _ => ?_⟩
   simp only [PadicInt, Set.mem_iUnion, Metric.mem_ball, exists_prop, Set.exists_mem_image]
   refine ⟨z.appr k, ?_, ?_⟩
-  · 
+  · simpa only [Finset.mem_coe, Finset.mem_range] using z.appr_lt k
+  · exact (((z - z.appr k).norm_le_pow_iff_mem_span_pow k).mpr (z.appr_spec k)).trans_lt hk
 
 中文:
 定理 totallyBounded_univ
@@ -64,7 +65,8 @@ theorem totallyBounded_univ
   refine ⟨Nat.cast '' Finset.range (p ^ k), Set.toFinite _, fun z _ => ?_⟩
   simp only [PadicInt, Set.mem_iUnion, Metric.mem_ball, exists_prop, Set.exists_mem_image]
   refine ⟨z.appr k, ?_, ?_⟩
-  · 
+  · simpa only [Finset.mem_coe, Finset.mem_range] using z.appr_lt k
+  · exact (((z - z.appr k).norm_le_pow_iff_mem_span_pow k).mpr (z.appr_spec k)).trans_lt hk
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finset.mem_range, Finset.range, Metric, Metric.mem_ball, Metric.totallyBounded_iff.mpr, Nat.cast, PadicInt, Set.exists_mem_image, Set.mem_iUnion, Set.toFinite, appr_lt, appr_spec, exists_mem_image, exists_pow_neg_lt, exists_prop, mem_ball, mem_coe, mem_iUnion
 -/
@@ -114,7 +116,8 @@ instance :
   suffices LocallyCompactSpace Rat_[p] from .of_nontriviallyNormedField_of_weaklyLocallyCompactSpace _
   have : closedBall 0 1 in 𝓝 (0 : Rat_[p]) := closedBall_mem_nhds _ zero_lt_one
   simp only [closedBall, dist_eq_norm_sub, sub_zero] at this
-  refine IsCompact.locallyCompactSpace_of_mem_nhds_of
+  refine IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup ?_ this
+  simpa only [isCompact_iff_compactSpace] using! PadicInt.compactSpace p
 
 中文:
 实例 :
@@ -123,7 +126,8 @@ instance :
   suffices LocallyCompactSpace Rat_[p] from .of_nontriviallyNormedField_of_weaklyLocallyCompactSpace _
   have : closedBall 0 1 in 𝓝 (0 : Rat_[p]) := closedBall_mem_nhds _ zero_lt_one
   simp only [closedBall, dist_eq_norm_sub, sub_zero] at this
-  refine IsCompact.locallyCompactSpace_of_mem_nhds_of
+  refine IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup ?_ this
+  simpa only [isCompact_iff_compactSpace] using! PadicInt.compactSpace p
 
 Depends on / 依赖: IsCompact, IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup, LocallyCompactSpace, PadicInt, PadicInt.compactSpace, Rat_, closedBall, closedBall_mem_nhds, compactSpace, dist_eq_norm_sub, isCompact_iff_compactSpace, locallyCompactSpace_of_mem_nhds_of_addGroup, of_nontriviallyNormedField_of_weaklyLocallyCompactSpace, sub_zero, zero_lt_one
 -/

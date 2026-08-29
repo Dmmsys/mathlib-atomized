@@ -394,7 +394,7 @@ instance instSemifield
   zpow n a := a ^ n
   zpow_zero' a := by ext; apply Field.zpow_zero'
   zpow_succ' n a := by ext; apply Field.zpow_succ'
-  zpow_neg' n a := by ext; apply Field
+  zpow_neg' n a := by ext; apply Field.zpow_neg'
 
 中文:
 实例 instSemifield
@@ -407,7 +407,7 @@ instance instSemifield
   zpow n a := a ^ n
   zpow_zero' a := by ext; apply Field.zpow_zero'
   zpow_succ' n a := by ext; apply Field.zpow_succ'
-  zpow_neg' n a := by ext; apply Field
+  zpow_neg' n a := by ext; apply Field.zpow_neg'
 
 Depends on / 依赖: Field.zpow_neg, Field.zpow_succ, Field.zpow_zero, mul_inv_cancel, nnqsmul, nnqsmul_def, nnratCast_def, num_div_den, q.num_div_den.symm, zpow_neg, zpow_succ, zpow_zero
 -/

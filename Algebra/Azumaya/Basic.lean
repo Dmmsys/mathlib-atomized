@@ -144,7 +144,8 @@ theorem of_AlgEquiv
   let _ : Module.Finite R B := .equiv e.toLinearEquiv
   ⟨Function.Bijective.of_comp_iff (AlgHom.mulLeftRight R B)
 .1 by (Algebra.TensorProduct.congr e e.op).bijective
-    rw [← AlgEqu
+    rw [← AlgEquiv.coe_toAlgHom]; rw [← AlgHom.coe_comp]; rw [mulLeftRight_comp_congr]
+    simp [AlgHom.mulLeftRight_bij]⟩
 
 中文:
 定理 of_AlgEquiv
@@ -155,7 +156,8 @@ theorem of_AlgEquiv
   let _ : Module.Finite R B := .equiv e.toLinearEquiv
   ⟨Function.Bijective.of_comp_iff (AlgHom.mulLeftRight R B)
 .1 by (Algebra.TensorProduct.congr e e.op).bijective
-    rw [← AlgEqu
+    rw [← AlgEquiv.coe_toAlgHom]; rw [← AlgHom.coe_comp]; rw [mulLeftRight_comp_congr]
+    simp [AlgHom.mulLeftRight_bij]⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.coe_comp, AlgHom.mulLeftRight, AlgHom.mulLeftRight_bij, Algebra, Algebra.TensorProduct.congr, Bijective, FaithfulSMul, Finite, Function, Function.Bijective.of_comp_iff, Module, Module.Finite, Module.Projective, Projective, TensorProduct, bijective, coe_comp
 -/

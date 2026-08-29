@@ -63,7 +63,24 @@ definition derived'
       fun Y₁ => by simpa using congr_app this Y₁
     apply G'.leftDerived_ext α W₁
     ext X₁
-    have eq₁ :
+    have eq₁ := ε.naturality (α.app X₁)
+    have eq₂ := G'.congr_map (hη X₁)
+    have eq₃ := α.naturality (adj.unit.app X₁)
+    dsimp at eq₁ eq₂ eq₃ ⊢
+    simp only [Functor.map_comp] at eq₂
+    rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [Category.id_comp]; rw [← eq₁]; rw [reassoc_of% eq₂]; rw [hε (G.obj X₁)]; rw [reassoc_of% eq₃]; rw [← L₂.map_comp]; rw [adj.left_triangle_components]; rw [Functor.map_id]; rw [Category.comp_id]
+  right_triangle_components := by
+    suffices F'.leftUnitor.inv ≫ whiskerLeft F' η ≫ (Functor.associator _ _ _).inv ≫
+      whiskerRight ε F' ≫ F'.rightUnitor.hom = 𝟙 _ from
+        fun Y₂ => by simpa using congr_app this Y₂
+    apply F'.rightDerived_ext β W₂
+    ext X₂
+    have eq₁ := η.naturality (β.app X₂)
+    have eq₂ := F'.congr_map (hε X₂)
+    have eq₃ := β.naturality (adj.counit.app X₂)
+    dsimp at eq₁ eq₂ eq₃ ⊢
+    simp only [Functor.map_comp] at eq₂
+    rw [Category.comp_id]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [reassoc_of% eq₁]; rw [eq₂]; rw [reassoc_of% (hη (F.obj X₂))]; rw [← eq₃]; rw [← L₁.map_comp_assoc]; rw [adj.right_triangle_components]; rw [Functor.map_id]; rw [Category.id_comp]
 
 中文:
 定义 derived'
@@ -76,7 +93,24 @@ definition derived'
       fun Y₁ => by simpa using congr_app this Y₁
     apply G'.leftDerived_ext α W₁
     ext X₁
-    have eq₁ :
+    have eq₁ := ε.naturality (α.app X₁)
+    have eq₂ := G'.congr_map (hη X₁)
+    have eq₃ := α.naturality (adj.unit.app X₁)
+    dsimp at eq₁ eq₂ eq₃ ⊢
+    simp only [Functor.map_comp] at eq₂
+    rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [Category.id_comp]; rw [← eq₁]; rw [reassoc_of% eq₂]; rw [hε (G.obj X₁)]; rw [reassoc_of% eq₃]; rw [← L₂.map_comp]; rw [adj.left_triangle_components]; rw [Functor.map_id]; rw [Category.comp_id]
+  right_triangle_components := by
+    suffices F'.leftUnitor.inv ≫ whiskerLeft F' η ≫ (Functor.associator _ _ _).inv ≫
+      whiskerRight ε F' ≫ F'.rightUnitor.hom = 𝟙 _ from
+        fun Y₂ => by simpa using congr_app this Y₂
+    apply F'.rightDerived_ext β W₂
+    ext X₂
+    have eq₁ := η.naturality (β.app X₂)
+    have eq₂ := F'.congr_map (hε X₂)
+    have eq₃ := β.naturality (adj.counit.app X₂)
+    dsimp at eq₁ eq₂ eq₃ ⊢
+    simp only [Functor.map_comp] at eq₂
+    rw [Category.comp_id]; rw [Category.comp_id]; rw [Category.id_comp]; rw [Category.id_comp]; rw [reassoc_of% eq₁]; rw [eq₂]; rw [reassoc_of% (hη (F.obj X₂))]; rw [← eq₃]; rw [← L₁.map_comp_assoc]; rw [adj.right_triangle_components]; rw [Functor.map_id]; rw [Category.id_comp]
 
 Depends on / 依赖: F.obj, Functor, Functor.associator, adj.counit.app, associator, cat_disch, congr_app, congr_map, counit, leftDerived_ext, leftUnitor, leftUnitor.inv, left_triangle_components, naturality, rightUnitor, rightUnitor.hom, whiskerLeft, whiskerRight
 -/

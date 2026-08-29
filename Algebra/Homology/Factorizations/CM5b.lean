@@ -107,7 +107,7 @@ definition i
       (by lia) (by
         ext p q hpq
         simp [HomComplex.δ_v 1 2 (by lia) _ p q hpq (p + 1) (p + 1) (by lia) rfl]))
-    (HomComplex.Cochain.ofHoms (fun n => Injective.ι 
+    (HomComplex.Cochain.ofHoms (fun n => Injective.ι _)) (by cat_disch)) f
 
 中文:
 定义 i
@@ -117,7 +117,7 @@ definition i
       (by lia) (by
         ext p q hpq
         simp [HomComplex.δ_v 1 2 (by lia) _ p q hpq (p + 1) (p + 1) (by lia) rfl]))
-    (HomComplex.Cochain.ofHoms (fun n => Injective.ι 
+    (HomComplex.Cochain.ofHoms (fun n => Injective.ι _)) (by cat_disch)) f
 
 Depends on / 依赖: Cochain, Cocycle, HomComplex, HomComplex.Cochain.mk, HomComplex.Cochain.ofHoms, HomComplex.Cocycle.mk, Injective, biprod, biprod.lift, cat_disch, mappingCone, mappingCone.lift, ofHoms
 -/
@@ -210,7 +210,7 @@ lemma degreewiseEpiWithInjectiveKernel_p
     (biprod.inl :_ ⟶ (mappingCone (𝟙 (I K))) ⊞ L).f n, ?_,
     (biprod.fst : (mappingCone (𝟙 (I K))) ⊞ L ⟶ _).f n,
     (biprod.inr :_ ⟶ (mappingCone (𝟙 (I K))) ⊞ L).f n, ?_, ?_, ?_⟩
-  all_goals simp 
+  all_goals simp [← HomologicalComplex.comp_f, ← HomologicalComplex.add_f_apply]
 
 中文:
 引理 degreewiseEpiWithInjectiveKernel_p
@@ -221,7 +221,7 @@ lemma degreewiseEpiWithInjectiveKernel_p
     (biprod.inl :_ ⟶ (mappingCone (𝟙 (I K))) ⊞ L).f n, ?_,
     (biprod.fst : (mappingCone (𝟙 (I K))) ⊞ L ⟶ _).f n,
     (biprod.inr :_ ⟶ (mappingCone (𝟙 (I K))) ⊞ L).f n, ?_, ?_, ?_⟩
-  all_goals simp 
+  all_goals simp [← HomologicalComplex.comp_f, ← HomologicalComplex.add_f_apply]
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.add_f_apply, HomologicalComplex.comp_f, add_f_apply, all_goals, biprod, biprod.fst, biprod.inl, biprod.inr, comp_f, epiWithInjectiveKernel_iff, mappingCone
 -/
@@ -249,7 +249,10 @@ definition homotopyEquiv
       mappingCone.liftHomotopy _ _ _ (mappingCone.snd _) 0 (by simp) (by simp)
     let h₁ := (h₀.compRight
       (biprod.inl : _ ⟶ mappingCone (𝟙 (I K)) ⊞ L)).compLeft
-        (biprod.fst : mapping
+        (biprod.fst : mappingCone (𝟙 (I K)) ⊞ L ⟶ _)
+    let h₂ := Homotopy.add h₁ (Homotopy.refl (biprod.snd ≫ biprod.inr))
+    (Homotopy.ofEq (by simp [p])).trans (h₂.symm.trans (Homotopy.ofEq (by simp)))
+  homotopyInvHomId := Homotopy.ofEq (by simp)
 
 中文:
 定义 homotopyEquiv
@@ -261,7 +264,10 @@ definition homotopyEquiv
       mappingCone.liftHomotopy _ _ _ (mappingCone.snd _) 0 (by simp) (by simp)
     let h₁ := (h₀.compRight
       (biprod.inl : _ ⟶ mappingCone (𝟙 (I K)) ⊞ L)).compLeft
-        (biprod.fst : mapping
+        (biprod.fst : mappingCone (𝟙 (I K)) ⊞ L ⟶ _)
+    let h₂ := Homotopy.add h₁ (Homotopy.refl (biprod.snd ≫ biprod.inr))
+    (Homotopy.ofEq (by simp [p])).trans (h₂.symm.trans (Homotopy.ofEq (by simp)))
+  homotopyInvHomId := Homotopy.ofEq (by simp)
 -/
 noncomputable def homotopyEquiv : HomotopyEquiv (mappingCone (𝟙 (I K)) ⊞ L) L where
   hom := p K L

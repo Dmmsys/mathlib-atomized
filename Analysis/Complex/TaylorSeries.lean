@@ -50,7 +50,18 @@ lemma hasSum_taylorSeries_on_ball
     obtain ⟨r', h₁, h₂⟩ := exists_between (Metric.mem_ball'.mp hz)
     exact ⟨r', h₂, Metric.pos_of_mem_ball h₁, Metric.mem_ball'.mpr h₁⟩
   lift r' to NNReal using hr'₀.le
-  have hz' : z - c in Metric.eball 0 r' 
+  have hz' : z - c in Metric.eball 0 r' := by
+    rw [Metric.eball_coe]
+    simpa only [mem_ball_iff_norm, sub_zero] using hzr'
+  have H := (hf.mono <| Metric.closedBall_subset_ball hr').hasFPowerSeriesOnBall hr'₀
+.hasSum_iteratedFDeriv hz'
+  simp only [add_sub_cancel] at H
+  convert H with n
+  simpa only [iteratedDeriv_eq_iteratedFDeriv, smul_eq_mul, mul_one, Finset.prod_const,
+    Finset.card_fin]
+    using ((iteratedFDeriv Complex n f c).map_smul_univ (fun _ => z - c) (fun _ => 1)).symm
+
+include hf hz in
 
 中文:
 引理 hasSum_taylorSeries_on_ball
@@ -59,7 +70,18 @@ lemma hasSum_taylorSeries_on_ball
     obtain ⟨r', h₁, h₂⟩ := exists_between (Metric.mem_ball'.mp hz)
     exact ⟨r', h₂, Metric.pos_of_mem_ball h₁, Metric.mem_ball'.mpr h₁⟩
   lift r' to NNReal using hr'₀.le
-  have hz' : z - c in Metric.eball 0 r' 
+  have hz' : z - c in Metric.eball 0 r' := by
+    rw [Metric.eball_coe]
+    simpa only [mem_ball_iff_norm, sub_zero] using hzr'
+  have H := (hf.mono <| Metric.closedBall_subset_ball hr').hasFPowerSeriesOnBall hr'₀
+.hasSum_iteratedFDeriv hz'
+  simp only [add_sub_cancel] at H
+  convert H with n
+  simpa only [iteratedDeriv_eq_iteratedFDeriv, smul_eq_mul, mul_one, Finset.prod_const,
+    Finset.card_fin]
+    using ((iteratedFDeriv Complex n f c).map_smul_univ (fun _ => z - c) (fun _ => 1)).symm
+
+include hf hz in
 
 Depends on / 依赖: Metric, Metric.ball, Metric.closedBall_subset_ball, Metric.eball, Metric.eball_coe, Metric.mem_ball, Metric.pos_of_mem_ball, NNReal, add_sub_canc, closedBall_subset_ball, eball_coe, exists_between, hasFPowerSeriesOnBall, hasSum_iteratedFDeriv, hf.mono, mem_ball, mem_ball_iff_norm, pos_of_mem_ball, sub_zero
 -/
@@ -148,7 +170,10 @@ lemma hasSum_taylorSeries_on_eball
   rw [← Metric.eball_coe]
 exact hf.mono Metric.eball_subset_eball hr'.le
 
-@[deprec
+@[deprecated (since := "2026-01-24")]
+alias hasSum_taylorSeries_on_emetric_ball := hasSum_taylorSeries_on_eball
+
+include hf hz in
 
 中文:
 引理 hasSum_taylorSeries_on_eball
@@ -160,7 +185,10 @@ exact hf.mono Metric.eball_subset_eball hr'.le
   rw [← Metric.eball_coe]
 exact hf.mono Metric.eball_subset_eball hr'.le
 
-@[deprec
+@[deprecated (since := "2026-01-24")]
+alias hasSum_taylorSeries_on_emetric_ball := hasSum_taylorSeries_on_eball
+
+include hf hz in
 
 Depends on / 依赖: Metric, Metric.eball_coe, Metric.eball_subset_eball, Metric.mem_eball, NNReal, eball_coe, eball_subset_eball, exists_between, hasSum_taylorSeries_on_ball, hf.mono, mem_eball, ne_top_of_lt
 -/

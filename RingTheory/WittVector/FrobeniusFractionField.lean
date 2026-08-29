@@ -79,7 +79,7 @@ definition succNthDefiningPoly
       (a₁.coeff (n + 1) * (bs 0 ^ p) ^ p ^ (n + 1) +
             nthRemainder p n (fun v => bs v ^ p) (truncateFun (n + 1) a₁) -
           a₂.coeff (n + 1) * bs 0 ^ p ^ (n + 1) -
-        nthRemainder p n bs (truncateFun 
+        nthRemainder p n bs (truncateFun (n + 1) a₂))
 
 中文:
 定义 succNthDefiningPoly
@@ -89,7 +89,7 @@ definition succNthDefiningPoly
       (a₁.coeff (n + 1) * (bs 0 ^ p) ^ p ^ (n + 1) +
             nthRemainder p n (fun v => bs v ^ p) (truncateFun (n + 1) a₁) -
           a₂.coeff (n + 1) * bs 0 ^ p ^ (n + 1) -
-        nthRemainder p n bs (truncateFun 
+        nthRemainder p n bs (truncateFun (n + 1) a₂))
 
 Depends on / 依赖: nthRemainder, truncateFun
 -/
@@ -114,7 +114,14 @@ theorem succNthDefiningPoly_degree
     · exact pow_ne_zero _ ha₁
   have : (X ^ p * C (a₁.coeff 0 ^ p ^ (n + 1)) - X * C (a₂.coeff 0 ^ p ^ (n + 1))).degree =
       (p : WithBot Nat) := by
-    rw [degree_sub
+    rw [degree_sub_eq_left_of_degree_lt]; rw [this]
+    rw [this]; rw [degree_mul]; rw [degree_C]; rw [degree_X]; rw [add_zero]
+    · exact mod_cast hp.out.one_lt
+    · exact pow_ne_zero _ ha₂
+  rw [succNthDefiningPoly]; rw [degree_add_eq_left_of_degree_lt]; rw [this]
+  apply lt_of_le_of_lt degree_C_le
+  rw [this]
+  exact mod_cast hp.out.pos
 
 中文:
 定理 succNthDefiningPoly_degree
@@ -126,7 +133,14 @@ theorem succNthDefiningPoly_degree
     · exact pow_ne_zero _ ha₁
   have : (X ^ p * C (a₁.coeff 0 ^ p ^ (n + 1)) - X * C (a₂.coeff 0 ^ p ^ (n + 1))).degree =
       (p : WithBot Nat) := by
-    rw [degree_sub
+    rw [degree_sub_eq_left_of_degree_lt]; rw [this]
+    rw [this]; rw [degree_mul]; rw [degree_C]; rw [degree_X]; rw [add_zero]
+    · exact mod_cast hp.out.one_lt
+    · exact pow_ne_zero _ ha₂
+  rw [succNthDefiningPoly]; rw [degree_add_eq_left_of_degree_lt]; rw [this]
+  apply lt_of_le_of_lt degree_C_le
+  rw [this]
+  exact mod_cast hp.out.pos
 
 Depends on / 依赖: WithBot, add_zero, degree, degree_C, degree_X, degree_add_eq_left_of_degree_lt, degree_mul, degree_sub_eq_left_of_degree_lt, hp.out.one_lt, mod_cast, one_lt, pow_ne_zero, succNthDefiningPoly
 -/
@@ -477,7 +491,18 @@ theorem frobenius_frobeniusRotation
       coeff_mk, frobeniusRotationCoeff]
     exact solution_spec' _ ha₁ _
   · simp only [nthRemainder_spec, WittVector.coeff_frobenius_charP,
-      frobeniusRotation, coeff_
+      frobeniusRotation, coeff_mk, frobeniusRotationCoeff]
+    have :=
+      succNthVal_spec' p n a₁ a₂ (fun i : Fin (n + 1) => frobeniusRotationCoeff p ha₁ ha₂ i.val)
+        ha₁ ha₂
+    simp only [frobeniusRotationCoeff, Fin.val_zero] at this
+    convert! this using 3; clear this
+    apply TruncatedWittVector.ext
+    intro i
+    simp only [WittVector.coeff_truncateFun, WittVector.coeff_frobenius_charP]
+    rfl
+
+local notation "φ" => IsFractionRing.ringEquivOfRingEquiv (frobeniusEquiv p k)
 
 中文:
 定理 frobenius_frobeniusRotation
@@ -489,7 +514,18 @@ theorem frobenius_frobeniusRotation
       coeff_mk, frobeniusRotationCoeff]
     exact solution_spec' _ ha₁ _
   · simp only [nthRemainder_spec, WittVector.coeff_frobenius_charP,
-      frobeniusRotation, coeff_
+      frobeniusRotation, coeff_mk, frobeniusRotationCoeff]
+    have :=
+      succNthVal_spec' p n a₁ a₂ (fun i : Fin (n + 1) => frobeniusRotationCoeff p ha₁ ha₂ i.val)
+        ha₁ ha₂
+    simp only [frobeniusRotationCoeff, Fin.val_zero] at this
+    convert! this using 3; clear this
+    apply TruncatedWittVector.ext
+    intro i
+    simp only [WittVector.coeff_truncateFun, WittVector.coeff_frobenius_charP]
+    rfl
+
+local notation "φ" => IsFractionRing.ringEquivOfRingEquiv (frobeniusEquiv p k)
 
 Depends on / 依赖: Fin.val_zero, WittVector, WittVector.coeff_frobenius_charP, WittVector.mul_coeff_zero, coeff_frobenius_charP, coeff_mk, convert, frobeniusRotation, frobeniusRotationCoeff, i.val, mul_coeff_zero, nthRemainder_spec, solution_spec, succNthVal_spec, val_zero
 -/
@@ -529,7 +565,19 @@ theorem exists_frobenius_solution_fractionRing_aux
           (algebraMap (𝕎 k) (FractionRing (𝕎 k)) b) *
         Localization.mk ((p : 𝕎 k) ^ m * r') ⟨(p : 𝕎 k) ^ n * q', hq⟩ =
       (p : Localization (nonZeroDivisors (𝕎 k))) ^ (m - n : Int) *
-        algebraMap
+        algebraMap (𝕎 k) (FractionRing (𝕎 k)) b := by
+  intro b
+  have key : WittVector.frobenius b * r' = q' * b := by
+    linear_combination frobenius_frobeniusRotation p hr' hq'
+  have hq'' : algebraMap (𝕎 k) (FractionRing (𝕎 k)) q' != 0 := by
+    have hq''' : q' != 0 := fun h => hq' (by simp [h])
+    simpa only [Ne, map_zero] using
+      (IsFractionRing.injective (𝕎 k) (FractionRing (𝕎 k))).ne hq'''
+  rw [zpow_sub₀ (FractionRing.p_nonzero p k)]
+  simp [field, FractionRing.p_nonzero p k]
+  convert! congr_arg (fun x => algebraMap (𝕎 k) (FractionRing (𝕎 k)) x) key using 1
+  · simp only [map_mul]
+  · simp only [map_mul]
 
 中文:
 定理 存在_frobenius_solution_fractionRing_aux
@@ -539,7 +587,19 @@ theorem exists_frobenius_solution_fractionRing_aux
           (algebraMap (𝕎 k) (FractionRing (𝕎 k)) b) *
         Localization.mk ((p : 𝕎 k) ^ m * r') ⟨(p : 𝕎 k) ^ n * q', hq⟩ =
       (p : Localization (nonZeroDivisors (𝕎 k))) ^ (m - n : Int) *
-        algebraMap
+        algebraMap (𝕎 k) (FractionRing (𝕎 k)) b := by
+  intro b
+  have key : WittVector.frobenius b * r' = q' * b := by
+    linear_combination frobenius_frobeniusRotation p hr' hq'
+  have hq'' : algebraMap (𝕎 k) (FractionRing (𝕎 k)) q' != 0 := by
+    have hq''' : q' != 0 := fun h => hq' (by simp [h])
+    simpa only [Ne, map_zero] using
+      (IsFractionRing.injective (𝕎 k) (FractionRing (𝕎 k))).ne hq'''
+  rw [zpow_sub₀ (FractionRing.p_nonzero p k)]
+  simp [field, FractionRing.p_nonzero p k]
+  convert! congr_arg (fun x => algebraMap (𝕎 k) (FractionRing (𝕎 k)) x) key using 1
+  · simp only [map_mul]
+  · simp only [map_mul]
 
 Depends on / 依赖: frobeniusRotation
 -/
@@ -578,6 +638,12 @@ theorem exists_frobenius_solution_fractionRing
   have hr0 : r != 0 := fun h => hrq (by simp [h])
   obtain ⟨m, r', hr', rfl⟩ := exists_eq_pow_p_mul r hr0
   obtain ⟨n, q', hq', rfl⟩ := exists_eq_pow_p_mul q hq0
+  let b := frobeniusRotation p hr' hq'
+  refine ⟨algebraMap (𝕎 k) (FractionRing (𝕎 k)) b, ?_, m - n, ?_⟩
+  · simpa only [map_zero] using
+      (IsFractionRing.injective (WittVector p k) (FractionRing (WittVector p k))).ne
+        (frobeniusRotation_nonzero p hr' hq')
+  exact exists_frobenius_solution_fractionRing_aux p m n r' q' hr' hq' hq
 
 中文:
 定理 存在_frobenius_solution_fractionRing
@@ -590,6 +656,12 @@ theorem exists_frobenius_solution_fractionRing
   have hr0 : r != 0 := fun h => hrq (by simp [h])
   obtain ⟨m, r', hr', rfl⟩ := exists_eq_pow_p_mul r hr0
   obtain ⟨n, q', hq', rfl⟩ := exists_eq_pow_p_mul q hq0
+  let b := frobeniusRotation p hr' hq'
+  refine ⟨algebraMap (𝕎 k) (FractionRing (𝕎 k)) b, ?_, m - n, ?_⟩
+  · simpa only [map_zero] using
+      (IsFractionRing.injective (WittVector p k) (FractionRing (WittVector p k))).ne
+        (frobeniusRotation_nonzero p hr' hq')
+  exact exists_frobenius_solution_fractionRing_aux p m n r' q' hr' hq' hq
 
 Depends on / 依赖: FractionRing, IsFractionRing, IsFractionRing.injective, Localization, Localization.induction_on, WittVector, algebraMap, exists_eq_pow_p_mul, frobeniusRotation, induction_on, injective, map_zero, mem_nonZeroDivisors_iff_ne_zero, revert
 -/

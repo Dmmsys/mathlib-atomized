@@ -186,7 +186,9 @@ lemma compProd_trim_condExpKernel
   rw [condExpKernel_eq]; rw [trim_eq_map hm]
   have : m ⊓ mΩ = m := inf_of_le_left hm
   refine (congrArg _ (Kernel.ext fun a => Measure.ext fun s hs => ?_)).trans
-    (compProd_map_condDistrib measurable_id.aemeasur
+    (compProd_map_condDistrib measurable_id.aemeasurable)
+  simp only [Kernel.coe_comap, Function.comp_apply, id_eq]
+  congr
 
 中文:
 引理 compProd_trim_condExpKernel
@@ -197,7 +199,9 @@ lemma compProd_trim_condExpKernel
   rw [condExpKernel_eq]; rw [trim_eq_map hm]
   have : m ⊓ mΩ = m := inf_of_le_left hm
   refine (congrArg _ (Kernel.ext fun a => Measure.ext fun s hs => ?_)).trans
-    (compProd_map_condDistrib measurable_id.aemeasur
+    (compProd_map_condDistrib measurable_id.aemeasurable)
+  simp only [Kernel.coe_comap, Function.comp_apply, id_eq]
+  congr
 
 Depends on / 依赖: Function, Function.comp_apply, Kernel, Kernel.coe_comap, Kernel.ext, Measure, Measure.eq_zero_of_isEmpty, Measure.ext, aemeasurable, coe_comap, compProd_map_condDistrib, comp_apply, condExpKernel_eq, eq_zero_of_isEmpty, id_eq, inf_of_le_left, isEmpty_or_nonempty, measurable_id, measurable_id.aemeasurable, trim_eq_map
 -/
@@ -607,7 +611,9 @@ lemma condExpKernel_ae_eq_condExp'
     simpa [this] using! trivial
   have h := condDistrib_ae_eq_condExp (μ := μ)
     (measurable_id'' (inf_le_right : m ⊓ mΩ <= mΩ)) measurable_id hs
-  simp only [id_eq, MeasurableSpace.comap_id, preimage_id_
+  simp only [id_eq, MeasurableSpace.comap_id, preimage_id_eq] at h
+  simp_rw [condExpKernel_apply_eq_condDistrib]
+  exact h
 
 中文:
 引理 condExpKernel_ae_eq_condExp'
@@ -618,7 +624,9 @@ lemma condExpKernel_ae_eq_condExp'
     simpa [this] using! trivial
   have h := condDistrib_ae_eq_condExp (μ := μ)
     (measurable_id'' (inf_le_right : m ⊓ mΩ <= mΩ)) measurable_id hs
-  simp only [id_eq, MeasurableSpace.comap_id, preimage_id_
+  simp only [id_eq, MeasurableSpace.comap_id, preimage_id_eq] at h
+  simp_rw [condExpKernel_apply_eq_condDistrib]
+  exact h
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap_id, Measure, Measure.eq_zero_of_isEmpty, comap_id, condDistrib_ae_eq_condExp, condExpKernel_apply_eq_condDistrib, eq_zero_of_isEmpty, id_eq, inf_le_right, isEmpty_or_nonempty, measurable_id, preimage_id_eq, simp_rw
 -/
@@ -725,7 +733,8 @@ theorem condExp_ae_eq_integral_condExpKernel'
     simpa [this] using! trivial
   have hX : @Measurable Ω Ω mΩ (m ⊓ mΩ) id := measurable_id.mono le_rfl (inf_le_right : m ⊓ mΩ <= mΩ)
   simp_rw [condExpKernel_apply_eq_condDistrib]
-  have h := condExp_ae_eq
+  have h := condExp_ae_eq_integral_condDistrib_id hX hf_int
+  simpa only [MeasurableSpace.comap_id, id_eq] using! h
 
 中文:
 定理 condExp_ae_eq_integral_condExpKernel'
@@ -736,7 +745,8 @@ theorem condExp_ae_eq_integral_condExpKernel'
     simpa [this] using! trivial
   have hX : @Measurable Ω Ω mΩ (m ⊓ mΩ) id := measurable_id.mono le_rfl (inf_le_right : m ⊓ mΩ <= mΩ)
   simp_rw [condExpKernel_apply_eq_condDistrib]
-  have h := condExp_ae_eq
+  have h := condExp_ae_eq_integral_condDistrib_id hX hf_int
+  simpa only [MeasurableSpace.comap_id, id_eq] using! h
 
 Depends on / 依赖: Measurable, MeasurableSpace, MeasurableSpace.comap_id, Measure, Measure.eq_zero_of_isEmpty, comap_id, condExpKernel_apply_eq_condDistrib, condExp_ae_eq_integral_condDistrib_id, eq_zero_of_isEmpty, hf_int, id_eq, inf_le_right, isEmpty_or_nonempty, le_rfl, measurable_id, measurable_id.mono, simp_rw
 -/
@@ -812,7 +822,8 @@ theorem condExp_ae_eq_trim_integral_condExpKernel
   refine (condExp_ae_eq_trim_integral_condExpKernel_of_stronglyMeasurable hm
     hf_int.1.stronglyMeasurable_mk ?_).trans ?_
   · rwa [integrable_congr hf_int.1.ae_eq_mk.symm]
-  filter_upwards [aestronglyMeasurable_trim_condExpKernel h
+  filter_upwards [aestronglyMeasurable_trim_condExpKernel hm hf_int.1] with ω hω
+  rw [integral_congr_ae hω]
 
 中文:
 定理 condExp_ae_eq_trim_integral_condExpKernel
@@ -822,7 +833,8 @@ theorem condExp_ae_eq_trim_integral_condExpKernel
   refine (condExp_ae_eq_trim_integral_condExpKernel_of_stronglyMeasurable hm
     hf_int.1.stronglyMeasurable_mk ?_).trans ?_
   · rwa [integrable_congr hf_int.1.ae_eq_mk.symm]
-  filter_upwards [aestronglyMeasurable_trim_condExpKernel h
+  filter_upwards [aestronglyMeasurable_trim_condExpKernel hm hf_int.1] with ω hω
+  rw [integral_congr_ae hω]
 
 Depends on / 依赖: ae_eq_mk, ae_eq_mk.symm, aestronglyMeasurable_trim_condExpKernel, condExp_ae_eq_trim_integral_condExpKernel_of_stronglyMeasurable, condExp_congr_ae_trim, filter_upwards, hf_int, integrable_congr, integral_congr_ae, stronglyMeasurable_mk
 -/
@@ -859,7 +871,27 @@ lemma condExp_generateFrom_singleton
   refine ae_eq_trans (condExp_restrict_ae_eq_restrict
     (generateFrom_singleton_le hs)
     (measurableSet_generateFrom rfl) hf).symm ?_
-  · refine (ae_eq_condExp_of_forall_setIntegral_eq (generateFrom_singleton_le hs) hf.r
+  · refine (ae_eq_condExp_of_forall_setIntegral_eq (generateFrom_singleton_le hs) hf.restrict ?_ ?_
+      stronglyMeasurable_const.aestronglyMeasurable).symm
+    · rintro t - -
+      rw [integrableOn_const_iff]
+exact Or.inr measure_lt_top (μ.restrict s) t
+    · rintro t ht -
+      obtain (h | h | h | h) := measurableSet_generateFrom_singleton_iff.1 ht
+      · simp [h]
+      · simp only [h, cond, integral_smul_measure, ENNReal.toReal_inv, integral_const,
+        MeasurableSet.univ, measureReal_restrict_apply, univ_inter, measureReal_restrict_apply_self,
+        ← measureReal_def]
+        rw [smul_inv_smul₀]; rw [Measure.restrict_restrict hs]; rw [inter_self]
+        exact ENNReal.toReal_ne_zero.2 ⟨hμs, measure_ne_top _ _⟩
+      · simp only [h, integral_const, MeasurableSet.univ, measureReal_restrict_apply, univ_inter,
+          measureReal_restrict_apply hs.compl, compl_inter_self, measureReal_empty, zero_smul,
+          ((Measure.restrict_apply_eq_zero hs.compl).2 <| compl_inter_self s ▸ measure_empty),
+          setIntegral_measure_zero]
+      · simp only [h, Measure.restrict_univ, cond, integral_smul_measure, ENNReal.toReal_inv, ←
+        measureReal_def, integral_const, MeasurableSet.univ, measureReal_restrict_apply, univ_inter]
+        rw [smul_inv_smul₀]
+        exact (measureReal_ne_zero_iff (by finiteness)).2 hμs
 
 中文:
 引理 condExp_generateFrom_singleton
@@ -871,7 +903,27 @@ lemma condExp_generateFrom_singleton
   refine ae_eq_trans (condExp_restrict_ae_eq_restrict
     (generateFrom_singleton_le hs)
     (measurableSet_generateFrom rfl) hf).symm ?_
-  · refine (ae_eq_condExp_of_forall_setIntegral_eq (generateFrom_singleton_le hs) hf.r
+  · refine (ae_eq_condExp_of_forall_setIntegral_eq (generateFrom_singleton_le hs) hf.restrict ?_ ?_
+      stronglyMeasurable_const.aestronglyMeasurable).symm
+    · rintro t - -
+      rw [integrableOn_const_iff]
+exact Or.inr measure_lt_top (μ.restrict s) t
+    · rintro t ht -
+      obtain (h | h | h | h) := measurableSet_generateFrom_singleton_iff.1 ht
+      · simp [h]
+      · simp only [h, cond, integral_smul_measure, ENNReal.toReal_inv, integral_const,
+        MeasurableSet.univ, measureReal_restrict_apply, univ_inter, measureReal_restrict_apply_self,
+        ← measureReal_def]
+        rw [smul_inv_smul₀]; rw [Measure.restrict_restrict hs]; rw [inter_self]
+        exact ENNReal.toReal_ne_zero.2 ⟨hμs, measure_ne_top _ _⟩
+      · simp only [h, integral_const, MeasurableSet.univ, measureReal_restrict_apply, univ_inter,
+          measureReal_restrict_apply hs.compl, compl_inter_self, measureReal_empty, zero_smul,
+          ((Measure.restrict_apply_eq_zero hs.compl).2 <| compl_inter_self s ▸ measure_empty),
+          setIntegral_measure_zero]
+      · simp only [h, Measure.restrict_univ, cond, integral_smul_measure, ENNReal.toReal_inv, ←
+        measureReal_def, integral_const, MeasurableSet.univ, measureReal_restrict_apply, univ_inter]
+        rw [smul_inv_smul₀]
+        exact (measureReal_ne_zero_iff (by finiteness)).2 hμs
 
 Depends on / 依赖: Measure, Measure.restrict_eq_zero, Or.inr, ae_eq_condExp_of_forall_setIntegral_eq, ae_eq_trans, aestronglyMeasurable, condExp_restrict_ae_eq_restrict, generateFrom_singleton_le, hf.restrict, integrableOn_const_iff, measurableSet_generateFr, measurableSet_generateFrom, measure_lt_top, restrict, restrict_eq_zero, stronglyMeasurable_const, stronglyMeasurable_const.aestronglyMeasurable
 -/
@@ -941,7 +993,8 @@ lemma condExpKernel_singleton_ae_eq_cond
 ae_restrict_le condExpKernel_ae_eq_condExp
       (generateFrom_singleton_le hs) ht
   filter_upwards [condExp_set_generateFrom_singleton hs ht, this] with ω hω₁ hω₂
-  rwa [hω₁, measu
+  rwa [hω₁, measureReal_def, measureReal_def,
+    ENNReal.toReal_eq_toReal_iff' (measure_ne_top _ t) (measure_ne_top _ t)] at hω₂
 
 中文:
 引理 condExpKernel_singleton_ae_eq_cond
@@ -952,7 +1005,8 @@ ae_restrict_le condExpKernel_ae_eq_condExp
 ae_restrict_le condExpKernel_ae_eq_condExp
       (generateFrom_singleton_le hs) ht
   filter_upwards [condExp_set_generateFrom_singleton hs ht, this] with ω hω₁ hω₂
-  rwa [hω₁, measu
+  rwa [hω₁, measureReal_def, measureReal_def,
+    ENNReal.toReal_eq_toReal_iff' (measure_ne_top _ t) (measure_ne_top _ t)] at hω₂
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_eq_toReal_iff, ae_restrict_le, condExpKernel, condExpKernel_ae_eq_condExp, condExp_set_generateFrom_singleton, filter_upwards, generateFrom, generateFrom_singleton_le, measureReal_def, measure_ne_top, restrict, toReal_eq_toReal_iff
 -/

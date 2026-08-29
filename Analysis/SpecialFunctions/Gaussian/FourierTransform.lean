@@ -136,7 +136,31 @@ theorem verticalIntegral_norm_le
           |y| <= |c| ->
             ‖cexp (-b * (T + y * I) ^ 2)‖ <=
               exp (-(b.re * T ^ 2 - (2 : Real) * |b.im| * |c| * T - b.re * c ^ 2)) := by
-   
+    intro T hT c y hy
+    rw [norm_cexp_neg_mul_sq_add_mul_I b]
+    gcongr exp (-(_ - ?_ * _ - _ * ?_))
+    · (conv_lhs => rw [mul_assoc]); (conv_rhs => rw [mul_assoc])
+      gcongr _ * ?_
+      refine (le_abs_self _).trans ?_
+      rw [abs_mul]
+      gcongr
+    · rwa [sq_le_sq]
+  -- now main proof
+  apply (intervalIntegral.norm_integral_le_of_norm_le_const _).trans
+  · rw [sub_zero]
+    conv_lhs => simp only [mul_comm _ |c|]
+    conv_rhs =>
+      conv =>
+        congr
+        rw [mul_comm]
+      rw [mul_assoc]
+  · intro y hy
+    have absy : |y| <= |c| := by
+      simpa using abs_sub_left_of_mem_uIcc (uIoc_subset_uIcc hy)
+    rw [norm_mul]; rw [norm_I]; rw [one_mul]; rw [two_mul]
+    refine (norm_sub_le _ _).trans (add_le_add (vert_norm_bound hT absy) ?_)
+    rw [← abs_neg y] at absy
+    simpa only [neg_mul, ofReal_neg] using! vert_norm_bound hT absy
 
 中文:
 定理 vertical整数egral_norm_le
@@ -150,7 +174,31 @@ theorem verticalIntegral_norm_le
           |y| <= |c| ->
             ‖cexp (-b * (T + y * I) ^ 2)‖ <=
               exp (-(b.re * T ^ 2 - (2 : Real) * |b.im| * |c| * T - b.re * c ^ 2)) := by
-   
+    intro T hT c y hy
+    rw [norm_cexp_neg_mul_sq_add_mul_I b]
+    gcongr exp (-(_ - ?_ * _ - _ * ?_))
+    · (conv_lhs => rw [mul_assoc]); (conv_rhs => rw [mul_assoc])
+      gcongr _ * ?_
+      refine (le_abs_self _).trans ?_
+      rw [abs_mul]
+      gcongr
+    · rwa [sq_le_sq]
+  -- now main proof
+  apply (intervalIntegral.norm_integral_le_of_norm_le_const _).trans
+  · rw [sub_zero]
+    conv_lhs => simp only [mul_comm _ |c|]
+    conv_rhs =>
+      conv =>
+        congr
+        rw [mul_comm]
+      rw [mul_assoc]
+  · intro y hy
+    have absy : |y| <= |c| := by
+      simpa using abs_sub_left_of_mem_uIcc (uIoc_subset_uIcc hy)
+    rw [norm_mul]; rw [norm_I]; rw [one_mul]; rw [two_mul]
+    refine (norm_sub_le _ _).trans (add_le_add (vert_norm_bound hT absy) ?_)
+    rw [← abs_neg y] at absy
+    simpa only [neg_mul, ofReal_neg] using! vert_norm_bound hT absy
 -/
 theorem verticalIntegral_norm_le (hb : 0 < b.re) (c : Real) {T : Real} (hT : 0 <= T) :
     ‖verticalIntegral b c T‖ <=
@@ -202,7 +250,13 @@ theorem tendsto_verticalIntegral
     tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds ?_
       (Eventually.of_forall fun _ => norm_nonneg _)
       ((eventually_ge_atTop (0 : Real)).mp
-        (Eventually.of_forall fun T hT 
+        (Eventually.of_forall fun T hT => verticalIntegral_norm_le hb c hT))
+  rw [(by ring : 0 = 2 * |c| * 0)]
+  refine (tendsto_exp_atBot.comp (tendsto_neg_atTop_atBot.comp ?_)).const_mul _
+  apply tendsto_atTop_add_const_right
+  simp_rw [sq, ← mul_assoc, ← sub_mul]
+  refine Tendsto.atTop_mul_atTop₀ (tendsto_atTop_add_const_right _ _ ?_) tendsto_id
+  exact (tendsto_const_mul_atTop_of_pos hb).mpr tendsto_id
 
 中文:
 定理 tendsto_vertical整数egral
@@ -214,7 +268,13 @@ theorem tendsto_verticalIntegral
     tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds ?_
       (Eventually.of_forall fun _ => norm_nonneg _)
       ((eventually_ge_atTop (0 : Real)).mp
-        (Eventually.of_forall fun T hT 
+        (Eventually.of_forall fun T hT => verticalIntegral_norm_le hb c hT))
+  rw [(by ring : 0 = 2 * |c| * 0)]
+  refine (tendsto_exp_atBot.comp (tendsto_neg_atTop_atBot.comp ?_)).const_mul _
+  apply tendsto_atTop_add_const_right
+  simp_rw [sq, ← mul_assoc, ← sub_mul]
+  refine Tendsto.atTop_mul_atTop₀ (tendsto_atTop_add_const_right _ _ ?_) tendsto_id
+  exact (tendsto_const_mul_atTop_of_pos hb).mpr tendsto_id
 -/
 theorem tendsto_verticalIntegral (hb : 0 < b.re) (c : Real) :
     Tendsto (verticalIntegral b c) atTop (𝓝 0) := by
@@ -244,7 +304,9 @@ theorem integrable_cexp_neg_mul_sq_add_real_mul_I
   simp_rw [norm_cexp_neg_mul_sq_add_mul_I' hb.ne', neg_sub _ (c ^ 2 * _),
     sub_eq_add_neg _ (b.re * _), Real.exp_add]
   suffices Integrable fun x : Real => exp (-(b.re * x ^ 2)) by
-    exact (Integrable.comp_sub_right this (b.im * 
+    exact (Integrable.comp_sub_right this (b.im * c / b.re)).hasFiniteIntegral.const_mul _
+  simp_rw [← neg_mul]
+  apply integrable_exp_neg_mul_sq hb
 
 中文:
 定理 integrable_cexp_neg_mul_sq_add_real_mul_I
@@ -255,7 +317,9 @@ theorem integrable_cexp_neg_mul_sq_add_real_mul_I
   simp_rw [norm_cexp_neg_mul_sq_add_mul_I' hb.ne', neg_sub _ (c ^ 2 * _),
     sub_eq_add_neg _ (b.re * _), Real.exp_add]
   suffices Integrable fun x : Real => exp (-(b.re * x ^ 2)) by
-    exact (Integrable.comp_sub_right this (b.im * 
+    exact (Integrable.comp_sub_right this (b.im * c / b.re)).hasFiniteIntegral.const_mul _
+  simp_rw [← neg_mul]
+  apply integrable_exp_neg_mul_sq hb
 
 Depends on / 依赖: Integrable, Integrable.comp_sub_right, Real.exp_add, b.im, b.re, comp_sub_right, const_mul, exp_add, fun_prop, hasFiniteIntegral, hasFiniteIntegral.const_mul, hasFiniteIntegral_norm_iff, hb.ne, integrable_exp_neg_mul_sq, neg_mul, neg_sub, norm_cexp_neg_mul_sq_add_mul_I, simp_rw, sub_eq_add_neg
 -/
@@ -283,7 +347,37 @@ theorem integral_cexp_neg_mul_sq_add_real_mul_I
         tendsto_neg_atTop_atBot tendsto_id)
       ?_
   set I₁ := fun T => ∫ x : Real in -T..T, cexp (-b * (x + c * I) ^ 2) with HI₁
-  let I₂ := fun T : Real => ∫ x : Real in 
+  let I₂ := fun T : Real => ∫ x : Real in -T..T, cexp (-b * (x : Complex) ^ 2)
+  let I₄ := fun T : Real => ∫ y : Real in (0 : Real)..c, cexp (-b * (T + y * I) ^ 2)
+  let I₅ := fun T : Real => ∫ y : Real in (0 : Real)..c, cexp (-b * (-T + y * I) ^ 2)
+  have C : forall T : Real, I₂ T - I₁ T + I * I₄ T - I * I₅ T = 0 := by
+    intro T
+    have :=
+      integral_boundary_rect_eq_zero_of_differentiableOn (fun z => cexp (-b * z ^ 2)) (-T)
+        (T + c * I)
+        (by
+          refine Differentiable.differentiableOn (Differentiable.const_mul ?_ _).cexp
+          exact differentiable_pow 2)
+    simpa only [neg_im, ofReal_im, neg_zero, ofReal_zero, zero_mul, add_zero, neg_re,
+      ofReal_re, add_re, mul_re, I_re, mul_zero, I_im, tsub_zero, add_im, mul_im,
+      mul_one, zero_add, smul_eq_mul, ofReal_neg] using this
+  simp_rw [id, ← HI₁]
+  have : I₁ = fun T : Real => I₂ T + verticalIntegral b c T := by
+    ext1 T
+    specialize C T
+    rw [sub_eq_zero] at C
+    unfold verticalIntegral
+    rw [intervalIntegral.integral_const_mul]; rw [intervalIntegral.integral_sub]
+    · simp_rw [(fun a b => by rw [sq]; ring_nf : forall a b : Complex, (a - b * I) ^ 2 = (-a + b * I) ^ 2)]
+      change I₁ T = I₂ T + I * (I₄ T - I₅ T)
+      rw [mul_sub]; rw [← C]
+      abel
+    all_goals apply Continuous.intervalIntegrable; fun_prop
+  rw [this]; rw [← add_zero ((π / b : Complex) ^ (1 / 2 : Complex))]; rw [← integral_gaussian_complex hb]
+  refine Tendsto.add ?_ (tendsto_verticalIntegral hb c)
+  exact
+    intervalIntegral_tendsto_integral (integrable_cexp_neg_mul_sq hb) tendsto_neg_atTop_atBot
+      tendsto_id
 
 中文:
 定理 integral_cexp_neg_mul_sq_add_real_mul_I
@@ -295,7 +389,37 @@ theorem integral_cexp_neg_mul_sq_add_real_mul_I
         tendsto_neg_atTop_atBot tendsto_id)
       ?_
   set I₁ := fun T => ∫ x : Real in -T..T, cexp (-b * (x + c * I) ^ 2) with HI₁
-  let I₂ := fun T : Real => ∫ x : Real in 
+  let I₂ := fun T : Real => ∫ x : Real in -T..T, cexp (-b * (x : Complex) ^ 2)
+  let I₄ := fun T : Real => ∫ y : Real in (0 : Real)..c, cexp (-b * (T + y * I) ^ 2)
+  let I₅ := fun T : Real => ∫ y : Real in (0 : Real)..c, cexp (-b * (-T + y * I) ^ 2)
+  have C : forall T : Real, I₂ T - I₁ T + I * I₄ T - I * I₅ T = 0 := by
+    intro T
+    have :=
+      integral_boundary_rect_eq_zero_of_differentiableOn (fun z => cexp (-b * z ^ 2)) (-T)
+        (T + c * I)
+        (by
+          refine Differentiable.differentiableOn (Differentiable.const_mul ?_ _).cexp
+          exact differentiable_pow 2)
+    simpa only [neg_im, ofReal_im, neg_zero, ofReal_zero, zero_mul, add_zero, neg_re,
+      ofReal_re, add_re, mul_re, I_re, mul_zero, I_im, tsub_zero, add_im, mul_im,
+      mul_one, zero_add, smul_eq_mul, ofReal_neg] using this
+  simp_rw [id, ← HI₁]
+  have : I₁ = fun T : Real => I₂ T + verticalIntegral b c T := by
+    ext1 T
+    specialize C T
+    rw [sub_eq_zero] at C
+    unfold verticalIntegral
+    rw [intervalIntegral.integral_const_mul]; rw [intervalIntegral.integral_sub]
+    · simp_rw [(fun a b => by rw [sq]; ring_nf : forall a b : Complex, (a - b * I) ^ 2 = (-a + b * I) ^ 2)]
+      change I₁ T = I₂ T + I * (I₄ T - I₅ T)
+      rw [mul_sub]; rw [← C]
+      abel
+    all_goals apply Continuous.intervalIntegrable; fun_prop
+  rw [this]; rw [← add_zero ((π / b : Complex) ^ (1 / 2 : Complex))]; rw [← integral_gaussian_complex hb]
+  refine Tendsto.add ?_ (tendsto_verticalIntegral hb c)
+  exact
+    intervalIntegral_tendsto_integral (integrable_cexp_neg_mul_sq hb) tendsto_neg_atTop_atBot
+      tendsto_id
 
 Depends on / 依赖: integrable_cexp_neg_mul_sq_add_real_mul_I, intervalIntegral_tendsto_integral, tendsto_id, tendsto_neg_atTop_atBot, tendsto_nhds_unique
 -/
@@ -353,7 +477,9 @@ theorem _root_.integral_cexp_quadratic
     congr 1
     field
   simp_rw [h, MeasureTheory.integral_mul_const]
-  rw [
+  rw [← re_add_im (c / (2 * b))]
+  simp_rw [← add_assoc, ← ofReal_add]
+  rw [integral_add_right_eq_self fun a : Real => cexp (- -b * (↑a + ↑(c / (2 * b)).im * I) ^ 2)]; rw [integral_cexp_neg_mul_sq_add_real_mul_I ((neg_re b).symm ▸ (neg_pos.mpr hb))]
 
 中文:
 定理 _root_.integral_cexp_quadratic
@@ -366,7 +492,9 @@ theorem _root_.integral_cexp_quadratic
     congr 1
     field
   simp_rw [h, MeasureTheory.integral_mul_const]
-  rw [
+  rw [← re_add_im (c / (2 * b))]
+  simp_rw [← add_assoc, ← ofReal_add]
+  rw [integral_add_right_eq_self fun a : Real => cexp (- -b * (↑a + ↑(c / (2 * b)).im * I) ^ 2)]; rw [integral_cexp_neg_mul_sq_add_real_mul_I ((neg_re b).symm ▸ (neg_pos.mpr hb))]
 
 Depends on / 依赖: Complex.exp_add, MeasureTheory, MeasureTheory.integral_mul_const, add_assoc, contrapose, exp_add, integral_add_right_eq_self, integral_cexp_neg_mul_sq_add_real_mul_I, integral_mul_const, neg_re, ofReal_add, re_add_im, simp_rw, zero_re
 -/
@@ -478,7 +606,17 @@ theorem _root_.fourier_gaussian_pi'
     simpa only [neg_mul, neg_re, re_ofReal_mul, neg_lt_zero] using mul_pos pi_pos hb
   ext1 t
   simp_rw [fourier_real_eq_integral_exp_smul, smul_eq_mul, ← Complex.exp_add, ← add_assoc]
-  have (x : Real) : ↑(-
+  have (x : Real) : ↑(-2 * π * x * t) * I + -π * b * x ^ 2 + 2 * π * c * x =
+    -π * b * x ^ 2 + (-2 * π * I * t + 2 * π * c) * x + 0 := by push_cast; ring
+  simp_rw [this, integral_cexp_quadratic h, neg_mul, neg_neg]
+  congr 2
+  · rw [← div_div, div_self <| ofReal_ne_zero.mpr pi_ne_zero, one_div, inv_cpow, ← one_div]
+    rw [Ne]; rw [arg_eq_pi_iff]; rw [not_and_or]; rw [not_lt]
+    exact Or.inl hb.le
+  · field_simp
+    ring_nf
+    simp only [I_sq]
+    ring
 
 中文:
 定理 _root_.fourier_gaussian_pi'
@@ -489,7 +627,17 @@ theorem _root_.fourier_gaussian_pi'
     simpa only [neg_mul, neg_re, re_ofReal_mul, neg_lt_zero] using mul_pos pi_pos hb
   ext1 t
   simp_rw [fourier_real_eq_integral_exp_smul, smul_eq_mul, ← Complex.exp_add, ← add_assoc]
-  have (x : Real) : ↑(-
+  have (x : Real) : ↑(-2 * π * x * t) * I + -π * b * x ^ 2 + 2 * π * c * x =
+    -π * b * x ^ 2 + (-2 * π * I * t + 2 * π * c) * x + 0 := by push_cast; ring
+  simp_rw [this, integral_cexp_quadratic h, neg_mul, neg_neg]
+  congr 2
+  · rw [← div_div, div_self <| ofReal_ne_zero.mpr pi_ne_zero, one_div, inv_cpow, ← one_div]
+    rw [Ne]; rw [arg_eq_pi_iff]; rw [not_and_or]; rw [not_lt]
+    exact Or.inl hb.le
+  · field_simp
+    ring_nf
+    simp only [I_sq]
+    ring
 
 Depends on / 依赖: Complex.exp_add, add_assoc, contrapose, div_div, exp_add, fourier_real_eq_integral_exp_smul, integral_cexp_quadratic, mul_pos, neg_lt_zero, neg_mul, neg_neg, neg_re, pi_pos, re_ofReal_mul, simp_rw, smul_eq_mul, zero_re
 -/
@@ -605,7 +753,13 @@ theorem integrable_cexp_neg_mul_sq_norm_add_of_euclideanSpace
     (MeasurableEquiv.toLp 2 _).measurableEmbedding]
   simp only [neg_mul, Function.comp_def]
   convert! integrable_cexp_neg_mul_sum_add hb (fun i => c * w i) using 3 with v
-  simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, PiLp.i
+  simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, PiLp.inner_apply, RCLike.inner_apply,
+    conj_trivial, ofReal_sum, ofReal_mul, Finset.mul_sum, neg_mul, Finset.sum_neg_distrib,
+    mul_assoc]
+  norm_cast
+  rw [sq_sqrt]
+  · simp [Finset.mul_sum, mul_comm]
+  · exact Finset.sum_nonneg (fun i _hi => by positivity)
 
 中文:
 定理 integrable_cexp_neg_mul_sq_norm_add_of_euclideanSpace
@@ -614,7 +768,13 @@ theorem integrable_cexp_neg_mul_sq_norm_add_of_euclideanSpace
     (MeasurableEquiv.toLp 2 _).measurableEmbedding]
   simp only [neg_mul, Function.comp_def]
   convert! integrable_cexp_neg_mul_sum_add hb (fun i => c * w i) using 3 with v
-  simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, PiLp.i
+  simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, PiLp.inner_apply, RCLike.inner_apply,
+    conj_trivial, ofReal_sum, ofReal_mul, Finset.mul_sum, neg_mul, Finset.sum_neg_distrib,
+    mul_assoc]
+  norm_cast
+  rw [sq_sqrt]
+  · simp [Finset.mul_sum, mul_comm]
+  · exact Finset.sum_nonneg (fun i _hi => by positivity)
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.norm_eq, Finset, Finset.mul_sum, Finset.sum_neg_distrib, Finset.sum_nonneg, Function, Function.comp_def, MeasurableEquiv, MeasurableEquiv.toLp, PiLp.inner_apply, PiLp.volume_preserving_toLp, RCLike, RCLike.inner_apply, comp_def, conj_trivial, convert, inner_apply, integrable_cexp_neg_mul_sum_add, integrable_comp_emb
 -/
@@ -644,7 +804,8 @@ theorem integrable_cexp_neg_mul_sq_norm_add
   rw [← e.measurePreserving.integrable_comp_emb e.toHomeomorph.measurableEmbedding]
   convert! integrable_cexp_neg_mul_sq_norm_add_of_euclideanSpace hb c (e.symm w) with v
   simp only [neg_mul, Function.comp_apply, LinearIsometryEquiv.norm_map,
-  
+    LinearIsometryEquiv.symm_symm,
+    LinearIsometryEquiv.inner_map_eq_flip]
 
 中文:
 定理 integrable_cexp_neg_mul_sq_norm_add
@@ -654,7 +815,8 @@ theorem integrable_cexp_neg_mul_sq_norm_add
   rw [← e.measurePreserving.integrable_comp_emb e.toHomeomorph.measurableEmbedding]
   convert! integrable_cexp_neg_mul_sq_norm_add_of_euclideanSpace hb c (e.symm w) with v
   simp only [neg_mul, Function.comp_apply, LinearIsometryEquiv.norm_map,
-  
+    LinearIsometryEquiv.symm_symm,
+    LinearIsometryEquiv.inner_map_eq_flip]
 
 Depends on / 依赖: Function, Function.comp_apply, LinearIsometryEquiv, LinearIsometryEquiv.inner_map_eq_flip, LinearIsometryEquiv.norm_map, LinearIsometryEquiv.symm_symm, comp_apply, convert, e.measurePreserving.integrable_comp_emb, e.symm, e.toHomeomorph.measurableEmbedding, inner_map_eq_flip, integrable_cexp_neg_mul_sq_norm_add_of_euclideanSpace, integrable_comp_emb, measurableEmbedding, measurePreserving, neg_mul, norm_map, repr.symm, stdOrthonormalBasis
 -/
@@ -678,7 +840,7 @@ theorem integral_cexp_neg_sum_mul_add
   rw [integral_fintype_prod_volume_eq_prod (f := fun i (v : Real) => cexp (-b i * v ^ 2 + c i * v))]
   congr with i
   have : (-b i).re < 0 := by simpa using hb i
-  convert! integral_cexp_quadratic this (c i
+  convert! integral_cexp_quadratic this (c i) 0 using 1 <;> simp [div_neg]
 
 中文:
 定理 integral_cexp_neg_sum_mul_add
@@ -688,7 +850,7 @@ theorem integral_cexp_neg_sum_mul_add
   rw [integral_fintype_prod_volume_eq_prod (f := fun i (v : Real) => cexp (-b i * v ^ 2 + c i * v))]
   congr with i
   have : (-b i).re < 0 := by simpa using hb i
-  convert! integral_cexp_quadratic this (c i
+  convert! integral_cexp_quadratic this (c i) 0 using 1 <;> simp [div_neg]
 
 Depends on / 依赖: Complex.exp_sum, Finset, Finset.sum_add_distrib, Finset.sum_neg_distrib, convert, div_neg, exp_sum, integral_cexp_quadratic, integral_fintype_prod_volume_eq_prod, neg_mul, simp_rw, sum_add_distrib, sum_neg_distrib
 -/
@@ -740,7 +902,19 @@ theorem integral_cexp_neg_mul_sq_norm_add_of_euclideanSpace
     (MeasurableEquiv.toLp 2 _).measurableEmbedding]
   simp only [neg_mul]
   convert! integral_cexp_neg_mul_sum_add hb (fun i => c * w i) using 5 with _x y
-  · simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, neg_mul, neg_inj, mul_eq_mul
+  · simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, neg_mul, neg_inj, mul_eq_mul_left_iff]
+    norm_cast
+    left
+    rw [sq_sqrt]
+    exact Finset.sum_nonneg (fun i _hi => by positivity)
+  · simp only [PiLp.inner_apply, RCLike.inner_apply, conj_trivial, ofReal_sum, ofReal_mul,
+      Finset.mul_sum, mul_assoc]
+    simp_rw [mul_comm]
+  · simp only [EuclideanSpace.norm_eq, Real.norm_eq_abs, sq_abs, mul_pow, ← Finset.mul_sum]
+    congr
+    norm_cast
+    rw [sq_sqrt]
+    exact Finset.sum_nonneg (fun i _hi => by positivity)
 
 中文:
 定理 integral_cexp_neg_mul_sq_norm_add_of_euclideanSpace
@@ -749,7 +923,19 @@ theorem integral_cexp_neg_mul_sq_norm_add_of_euclideanSpace
     (MeasurableEquiv.toLp 2 _).measurableEmbedding]
   simp only [neg_mul]
   convert! integral_cexp_neg_mul_sum_add hb (fun i => c * w i) using 5 with _x y
-  · simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, neg_mul, neg_inj, mul_eq_mul
+  · simp only [EuclideanSpace.norm_eq, norm_eq_abs, sq_abs, neg_mul, neg_inj, mul_eq_mul_left_iff]
+    norm_cast
+    left
+    rw [sq_sqrt]
+    exact Finset.sum_nonneg (fun i _hi => by positivity)
+  · simp only [PiLp.inner_apply, RCLike.inner_apply, conj_trivial, ofReal_sum, ofReal_mul,
+      Finset.mul_sum, mul_assoc]
+    simp_rw [mul_comm]
+  · simp only [EuclideanSpace.norm_eq, Real.norm_eq_abs, sq_abs, mul_pow, ← Finset.mul_sum]
+    congr
+    norm_cast
+    rw [sq_sqrt]
+    exact Finset.sum_nonneg (fun i _hi => by positivity)
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.norm_eq, Finset, Finset.mul_sum, Finset.sum_nonneg, MeasurableEquiv, MeasurableEquiv.toLp, PiLp.inner_apply, PiLp.volume_preserving_toLp, RCLike, RCLike.inner_apply, conj_trivial, convert, inner_apply, integral_cexp_neg_mul_sum_add, integral_comp, measurableEmbedding, mul_assoc, mul_eq_mul_left_iff, mul_sum
 -/
@@ -839,7 +1025,8 @@ theorem integral_rexp_neg_mul_sq_norm
   · change ofRealLI (∫ (v : V), rexp (-b * ‖v‖ ^ 2)) = ∫ (v : V), cexp (-↑b * ↑‖v‖ ^ 2)
     rw [← ofRealLI.integral_comp_comm]
     simp [ofRealLI]
-  · rw [← ofReal_div, ofReal_cpow (by positi
+  · rw [← ofReal_div, ofReal_cpow (by positivity)]
+    simp
 
 中文:
 定理 integral_rexp_neg_mul_sq_norm
@@ -850,7 +1037,8 @@ theorem integral_rexp_neg_mul_sq_norm
   · change ofRealLI (∫ (v : V), rexp (-b * ‖v‖ ^ 2)) = ∫ (v : V), cexp (-↑b * ↑‖v‖ ^ 2)
     rw [← ofRealLI.integral_comp_comm]
     simp [ofRealLI]
-  · rw [← ofReal_div, ofReal_cpow (by positi
+  · rw [← ofReal_div, ofReal_cpow (by positivity)]
+    simp
 
 Depends on / 依赖: convert, integral_cexp_neg_mul_sq_norm, integral_comp_comm, ofRealLI, ofRealLI.integral_comp_comm, ofReal_cpow, ofReal_div, ofReal_inj
 -/
@@ -877,7 +1065,9 @@ theorem _root_.fourier_gaussian_innerProductSpace'
   · congr 1
     simp [inner_sub_left]
     ring
-  · have : b != 0 := by contrap
+  · have : b != 0 := by contrapose! hb; rw [hb, zero_re]
+    simp [mul_pow]
+    ring
 
 中文:
 定理 _root_.fourier_gaussian_innerProductSpace'
@@ -889,7 +1079,9 @@ theorem _root_.fourier_gaussian_innerProductSpace'
   · congr 1
     simp [inner_sub_left]
     ring
-  · have : b != 0 := by contrap
+  · have : b != 0 := by contrapose! hb; rw [hb, zero_re]
+    simp [mul_pow]
+    ring
 
 Depends on / 依赖: Complex.I, Complex.exp_add, contrapose, convert, exp_add, fourier_eq, inner_sub_left, integral_cexp_neg_mul_sq_norm_add, mul_pow, neg_mul, ofReal_mul, ofReal_neg, ofReal_ofNat, real_inner_comm, smul_eq_mul, zero_re
 -/

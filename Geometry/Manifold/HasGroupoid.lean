@@ -338,7 +338,20 @@ theorem StructureGroupoid.compatible_of_mem_maximalAtlas
   have hs : IsOpen s := by
     apply e.symm.continuousOn_toFun.isOpen_inter_preimage <;> apply open_source
   have xs : x in s := by
-    simp only [s, f, mem_inter_iff, mem_preim
+    simp only [s, f, mem_inter_iff, mem_preimage, mem_chart_source, and_true]
+    exact ((mem_inter_iff _ _ _).1 hx).1
+  refine ⟨s, hs, xs, ?_⟩
+  have A : e.symm ≫ₕ f in G := (mem_maximalAtlas_iff.1 he f (chart_mem_atlas _ _)).1
+  have B : f.symm ≫ₕ e' in G := (mem_maximalAtlas_iff.1 he' f (chart_mem_atlas _ _)).2
+  have C : (e.symm ≫ₕ f) ≫ₕ f.symm ≫ₕ e' in G := G.trans A B
+  have D : (e.symm ≫ₕ f) ≫ₕ f.symm ≫ₕ e' ≈ (e.symm ≫ₕ e').restr s := calc
+    (e.symm ≫ₕ f) ≫ₕ f.symm ≫ₕ e' = e.symm ≫ₕ (f ≫ₕ f.symm) ≫ₕ e' := by simp only [trans_assoc]
+    _ ≈ e.symm ≫ₕ ofSet f.source f.open_source ≫ₕ e' :=
+      EqOnSource.trans' (refl _) (EqOnSource.trans' (self_trans_symm _) (refl _))
+    _ ≈ (e.symm ≫ₕ ofSet f.source f.open_source) ≫ₕ e' := by rw [trans_assoc]
+    _ ≈ e.symm.restr s ≫ₕ e' := by rw [trans_of_set']; apply refl
+    _ ≈ (e.symm ≫ₕ e').restr s := by rw [restr_trans]
+  exact G.mem_of_eqOnSource C (Setoid.symm D)
 
 中文:
 定理 StructureGroupoid.compatible_of_mem_maximalAtlas
@@ -350,7 +363,20 @@ theorem StructureGroupoid.compatible_of_mem_maximalAtlas
   have hs : IsOpen s := by
     apply e.symm.continuousOn_toFun.isOpen_inter_preimage <;> apply open_source
   have xs : x in s := by
-    simp only [s, f, mem_inter_iff, mem_preim
+    simp only [s, f, mem_inter_iff, mem_preimage, mem_chart_source, and_true]
+    exact ((mem_inter_iff _ _ _).1 hx).1
+  refine ⟨s, hs, xs, ?_⟩
+  have A : e.symm ≫ₕ f in G := (mem_maximalAtlas_iff.1 he f (chart_mem_atlas _ _)).1
+  have B : f.symm ≫ₕ e' in G := (mem_maximalAtlas_iff.1 he' f (chart_mem_atlas _ _)).2
+  have C : (e.symm ≫ₕ f) ≫ₕ f.symm ≫ₕ e' in G := G.trans A B
+  have D : (e.symm ≫ₕ f) ≫ₕ f.symm ≫ₕ e' ≈ (e.symm ≫ₕ e').restr s := calc
+    (e.symm ≫ₕ f) ≫ₕ f.symm ≫ₕ e' = e.symm ≫ₕ (f ≫ₕ f.symm) ≫ₕ e' := by simp only [trans_assoc]
+    _ ≈ e.symm ≫ₕ ofSet f.source f.open_source ≫ₕ e' :=
+      EqOnSource.trans' (refl _) (EqOnSource.trans' (self_trans_symm _) (refl _))
+    _ ≈ (e.symm ≫ₕ ofSet f.source f.open_source) ≫ₕ e' := by rw [trans_assoc]
+    _ ≈ e.symm.restr s ≫ₕ e' := by rw [trans_of_set']; apply refl
+    _ ≈ (e.symm ≫ₕ e').restr s := by rw [restr_trans]
+  exact G.mem_of_eqOnSource C (Setoid.symm D)
 
 Depends on / 依赖: G.locality, IsOpen, and_true, chartAt, chart_mem_atlas, continuousOn_toFun, e.symm, e.symm.continuousOn_toFun.isOpen_inter_preimage, e.target, f.source, f.symm, isOpen_inter_preimage, locality, mem_chart_source, mem_inter_iff, mem_maximal, mem_maximalAtlas_iff, mem_preimage, open_source, source
 -/
@@ -481,7 +507,9 @@ theorem restr_mem_maximalAtlas_aux1
     exact e.open_source.inter hs
   have : (e.restr (e.source inter s)).symm ≫ₕ e' in G := by
     apply G.mem_of_eqOnSource (closedUnderRestriction' (he e' he').1 hs'')
-    exact e.r
+    exact e.restr_symm_trans (e.open_source.inter hs) hs'' inter_subset_left
+  refine G.mem_of_eqOnSource this ?_
+  exact EqOnSource.trans' (Setoid.symm e.restr_inter_source).symm' (eqOnSource_refl e')
 
 中文:
 定理 restr_mem_maximalAtlas_aux1
@@ -492,7 +520,9 @@ theorem restr_mem_maximalAtlas_aux1
     exact e.open_source.inter hs
   have : (e.restr (e.source inter s)).symm ≫ₕ e' in G := by
     apply G.mem_of_eqOnSource (closedUnderRestriction' (he e' he').1 hs'')
-    exact e.r
+    exact e.restr_symm_trans (e.open_source.inter hs) hs'' inter_subset_left
+  refine G.mem_of_eqOnSource this ?_
+  exact EqOnSource.trans' (Setoid.symm e.restr_inter_source).symm' (eqOnSource_refl e')
 -/
 private theorem restr_mem_maximalAtlas_aux1 [ClosedUnderRestriction G]
     {e e' : OpenPartialHomeomorph M H} (he : e in G.maximalAtlas M) (he' : e' in atlas H M)
@@ -520,7 +550,7 @@ theorem restr_mem_maximalAtlas_aux2
   have ht : IsOpen (e'.target inter e'.symm ⁻¹' s) := by
     rw [← image_source_inter_eq']
     exact isOpen_image_source_inter e' hs
-  exact G.m
+  exact G.mem_of_eqOnSource (closedUnderRestriction' (he e' he').2 ht) (e.symm_trans_restr e' hs)
 
 中文:
 定理 restr_mem_maximalAtlas_aux2
@@ -532,7 +562,7 @@ theorem restr_mem_maximalAtlas_aux2
   have ht : IsOpen (e'.target inter e'.symm ⁻¹' s) := by
     rw [← image_source_inter_eq']
     exact isOpen_image_source_inter e' hs
-  exact G.m
+  exact G.mem_of_eqOnSource (closedUnderRestriction' (he e' he').2 ht) (e.symm_trans_restr e' hs)
 -/
 private theorem restr_mem_maximalAtlas_aux2 [ClosedUnderRestriction G]
     {e e' : OpenPartialHomeomorph M H} (he : e in G.maximalAtlas M) (he' : e' in atlas H M)
@@ -673,7 +703,8 @@ theorem singleton_hasGroupoid
       intro e' e'' he' he''
       rw [e.singletonChartedSpace_mem_atlas_eq h e' he']; rw [e.singletonChartedSpace_mem_atlas_eq h e'' he'']
       refine G.mem_of_eqOnSource ?_ e.symm_trans_self
-      have hle : idRestrGroupoid <= G := (closedUnde
+      have hle : idRestrGroupoid <= G := (closedUnderRestriction_iff_id_le G).mp (by assumption)
+      exact StructureGroupoid.le_iff.mp hle _ (idRestrGroupoid_mem _) }
 
 中文:
 定理 singleton_hasGroupoid
@@ -683,7 +714,8 @@ theorem singleton_hasGroupoid
       intro e' e'' he' he''
       rw [e.singletonChartedSpace_mem_atlas_eq h e' he']; rw [e.singletonChartedSpace_mem_atlas_eq h e'' he'']
       refine G.mem_of_eqOnSource ?_ e.symm_trans_self
-      have hle : idRestrGroupoid <= G := (closedUnde
+      have hle : idRestrGroupoid <= G := (closedUnderRestriction_iff_id_le G).mp (by assumption)
+      exact StructureGroupoid.le_iff.mp hle _ (idRestrGroupoid_mem _) }
 
 Depends on / 依赖: G.mem_of_eqOnSource, StructureGroupoid, StructureGroupoid.le_iff.mp, closedUnderRestriction_iff_id_le, compatible, e.singletonChartedSpace, e.singletonChartedSpace_mem_atlas_eq, e.symm_trans_self, idRestrGroupoid, idRestrGroupoid_mem, le_iff, mem_of_eqOnSource, singletonChartedSpace, singletonChartedSpace_mem_atlas_eq, symm_trans_self
 -/
@@ -876,7 +908,9 @@ instance instHasGroupoid
     rw [he]; rw [he']
     refine G.mem_of_eqOnSource ?_
       (subtypeRestr_symm_trans_subtypeRestr (s := s) _ (chartAt H x) (chartAt H x'))
-    app
+    apply closedUnderRestriction'
+    · exact G.compatible (chart_mem_atlas _ _) (chart_mem_atlas _ _)
+    · exact isOpen_inter_preimage_symm (chartAt _ _) s.2
 
 中文:
 实例 instHasGroupoid
@@ -888,7 +922,9 @@ instance instHasGroupoid
     rw [he]; rw [he']
     refine G.mem_of_eqOnSource ?_
       (subtypeRestr_symm_trans_subtypeRestr (s := s) _ (chartAt H x) (chartAt H x'))
-    app
+    apply closedUnderRestriction'
+    · exact G.compatible (chart_mem_atlas _ _) (chart_mem_atlas _ _)
+    · exact isOpen_inter_preimage_symm (chartAt _ _) s.2
 -/
 protected instance instHasGroupoid [ClosedUnderRestriction G] : HasGroupoid s G where
   compatible := by
@@ -947,7 +983,7 @@ theorem chartAt_inclusion_symm_eventuallyEq
     apply (e.subtypeRestr ⟨x⟩).open_target.mem_nhds
     exact e.map_subtype_source ⟨x⟩ (mem_chart_source _ _)
 exact Filter.eventuallyEq_of_mem heUx_nhds e.subtypeRestr_symm_eqOn_of_le ⟨x⟩
-    ⟨Opens.inclu
+    ⟨Opens.inclusion hUV x⟩ hUV
 
 中文:
 定理 chartAt_inclusion_symm_eventuallyEq
@@ -958,7 +994,7 @@ exact Filter.eventuallyEq_of_mem heUx_nhds e.subtypeRestr_symm_eqOn_of_le ⟨x�
     apply (e.subtypeRestr ⟨x⟩).open_target.mem_nhds
     exact e.map_subtype_source ⟨x⟩ (mem_chart_source _ _)
 exact Filter.eventuallyEq_of_mem heUx_nhds e.subtypeRestr_symm_eqOn_of_le ⟨x⟩
-    ⟨Opens.inclu
+    ⟨Opens.inclusion hUV x⟩ hUV
 
 Depends on / 依赖: Filter, Filter.eventuallyEq_of_mem, Opens.inclusion, chartAt, e.map_subtype_source, e.subtypeRestr, e.subtypeRestr_symm_eqOn_of_le, eventuallyEq_of_mem, heUx_nhds, inclusion, map_subtype_source, mem_chart_source, mem_nhds, open_target, open_target.mem_nhds, subtypeRestr, subtypeRestr_symm_eqOn_of_le, target
 -/
@@ -986,7 +1022,9 @@ lemma StructureGroupoid.subtypeRestr_mem_maximalAtlas
   obtain ⟨x, this⟩ := Opens.chart_eq hs he'
   rw [this]
   -- The transition functions between the unrestricted charts lie in the groupoid,
-  -- the transition functions of the restriction are the restriction of the transitio
+  -- the transition functions of the restriction are the restriction of the transition function.
+  exact ⟨G.trans_restricted he (chart_mem_atlas H (x : M)) hs,
+         G.trans_restricted (chart_mem_atlas H (x : M)) he hs⟩
 
 中文:
 引理 StructureGroupoid.subtypeRestr_mem_maximalAtlas
@@ -997,7 +1035,9 @@ lemma StructureGroupoid.subtypeRestr_mem_maximalAtlas
   obtain ⟨x, this⟩ := Opens.chart_eq hs he'
   rw [this]
   -- The transition functions between the unrestricted charts lie in the groupoid,
-  -- the transition functions of the restriction are the restriction of the transitio
+  -- the transition functions of the restriction are the restriction of the transition function.
+  exact ⟨G.trans_restricted he (chart_mem_atlas H (x : M)) hs,
+         G.trans_restricted (chart_mem_atlas H (x : M)) he hs⟩
 -/
 lemma StructureGroupoid.subtypeRestr_mem_maximalAtlas {e : OpenPartialHomeomorph M H}
     (he : e in atlas H M) {s : Opens M} (hs : Nonempty s) {G : StructureGroupoid H} [HasGroupoid M G]
@@ -1081,7 +1121,7 @@ definition Structomorph.symm
       have : (c'.symm ≫ₕ e.toHomeomorph.toOpenPartialHomeomorph ≫ₕ c).symm in G :=
         G.symm (e.mem_groupoid c' c hc' hc)
       rwa [trans_symm_eq_symm_trans_symm, trans_symm_eq_symm_trans_symm, symm_symm, trans_assoc]
-  
+        at this }
 
 中文:
 定义 Structomorph.symm
@@ -1092,7 +1132,7 @@ definition Structomorph.symm
       have : (c'.symm ≫ₕ e.toHomeomorph.toOpenPartialHomeomorph ≫ₕ c).symm in G :=
         G.symm (e.mem_groupoid c' c hc' hc)
       rwa [trans_symm_eq_symm_trans_symm, trans_symm_eq_symm_trans_symm, symm_symm, trans_assoc]
-  
+        at this }
 
 Depends on / 依赖: G.symm, e.mem_groupoid, e.toHomeomorph.symm, e.toHomeomorph.toOpenPartialHomeomorph, mem_groupoid, symm_symm, toHomeomorph, toOpenPartialHomeomorph, trans_assoc, trans_symm_eq_symm_trans_symm
 -/
@@ -1115,7 +1155,48 @@ definition Structomorph.trans
     mem_groupoid := by
       /- Let c and c' be two charts in M and M''. We want to show that e' ∘ e is smooth in these
       charts, around any point x. For this, let y = e (c⁻¹ x), and consider a chart g around y.
-      Then g ∘ e ∘ c⁻¹ and c'
+      Then g ∘ e ∘ c⁻¹ and c' ∘ e' ∘ g⁻¹ are both smooth as e and e' are structomorphisms, so
+      their composition is smooth, and it coincides with c' ∘ e' ∘ e ∘ c⁻¹ around x. -/
+      intro c c' hc hc'
+      refine G.locality fun x hx => ?_
+      let f₁ := e.toHomeomorph.toOpenPartialHomeomorph
+      let f₂ := e'.toHomeomorph.toOpenPartialHomeomorph
+      let f := (e.toHomeomorph.trans e'.toHomeomorph).toOpenPartialHomeomorph
+      have feq : f = f₁ ≫ₕ f₂ := Homeomorph.trans_toOpenPartialHomeomorph _ _
+      -- define the atlas g around y
+      let y := (c.symm ≫ₕ f₁) x
+      let g := chartAt (H := H) y
+      have hg₁ := chart_mem_atlas (H := H) y
+      have hg₂ := mem_chart_source (H := H) y
+      let s := (c.symm ≫ₕ f₁).source inter c.symm ≫ₕ f₁ ⁻¹' g.source
+      have open_s : IsOpen s := by
+        apply (c.symm ≫ₕ f₁).continuousOn_toFun.isOpen_inter_preimage <;> apply open_source
+      have : x in s := by
+        constructor
+        · simp only [f₁, trans_source, preimage_univ, inter_univ,
+            Homeomorph.toOpenPartialHomeomorph_source]
+          rw [trans_source] at hx
+          exact hx.1
+        · exact hg₂
+      refine ⟨s, open_s, this, ?_⟩
+      let F₁ := (c.symm ≫ₕ f₁ ≫ₕ g) ≫ₕ g.symm ≫ₕ f₂ ≫ₕ c'
+      have A : F₁ in G := G.trans (e.mem_groupoid c g hc hg₁) (e'.mem_groupoid g c' hg₁ hc')
+      let F₂ := (c.symm ≫ₕ f ≫ₕ c').restr s
+      have : F₁ ≈ F₂ := calc
+        F₁ ≈ c.symm ≫ₕ f₁ ≫ₕ (g ≫ₕ g.symm) ≫ₕ f₂ ≫ₕ c' := by
+            simp only [F₁, trans_assoc, _root_.refl]
+        _ ≈ c.symm ≫ₕ f₁ ≫ₕ ofSet g.source g.open_source ≫ₕ f₂ ≫ₕ c' :=
+          EqOnSource.trans' (_root_.refl _) (EqOnSource.trans' (_root_.refl _)
+            (EqOnSource.trans' (self_trans_symm g) (_root_.refl _)))
+        _ ≈ ((c.symm ≫ₕ f₁) ≫ₕ ofSet g.source g.open_source) ≫ₕ f₂ ≫ₕ c' := by
+          simp only [trans_assoc, _root_.refl]
+        _ ≈ (c.symm ≫ₕ f₁).restr s ≫ₕ f₂ ≫ₕ c' := by rw [trans_of_set']
+        _ ≈ ((c.symm ≫ₕ f₁) ≫ₕ f₂ ≫ₕ c').restr s := by rw [restr_trans]
+        _ ≈ (c.symm ≫ₕ (f₁ ≫ₕ f₂) ≫ₕ c').restr s := by
+          simp only [trans_assoc, _root_.refl]
+        _ ≈ F₂ := by simp only [F₂, feq, _root_.refl]
+      have : F₂ in G := G.mem_of_eqOnSource A (Setoid.symm this)
+      exact this }
 
 中文:
 定义 Structomorph.trans
@@ -1124,7 +1205,48 @@ definition Structomorph.trans
     mem_groupoid := by
       /- Let c and c' be two charts in M and M''. We want to show that e' ∘ e is smooth in these
       charts, around any point x. For this, let y = e (c⁻¹ x), and consider a chart g around y.
-      Then g ∘ e ∘ c⁻¹ and c'
+      Then g ∘ e ∘ c⁻¹ and c' ∘ e' ∘ g⁻¹ are both smooth as e and e' are structomorphisms, so
+      their composition is smooth, and it coincides with c' ∘ e' ∘ e ∘ c⁻¹ around x. -/
+      intro c c' hc hc'
+      refine G.locality fun x hx => ?_
+      let f₁ := e.toHomeomorph.toOpenPartialHomeomorph
+      let f₂ := e'.toHomeomorph.toOpenPartialHomeomorph
+      let f := (e.toHomeomorph.trans e'.toHomeomorph).toOpenPartialHomeomorph
+      have feq : f = f₁ ≫ₕ f₂ := Homeomorph.trans_toOpenPartialHomeomorph _ _
+      -- define the atlas g around y
+      let y := (c.symm ≫ₕ f₁) x
+      let g := chartAt (H := H) y
+      have hg₁ := chart_mem_atlas (H := H) y
+      have hg₂ := mem_chart_source (H := H) y
+      let s := (c.symm ≫ₕ f₁).source inter c.symm ≫ₕ f₁ ⁻¹' g.source
+      have open_s : IsOpen s := by
+        apply (c.symm ≫ₕ f₁).continuousOn_toFun.isOpen_inter_preimage <;> apply open_source
+      have : x in s := by
+        constructor
+        · simp only [f₁, trans_source, preimage_univ, inter_univ,
+            Homeomorph.toOpenPartialHomeomorph_source]
+          rw [trans_source] at hx
+          exact hx.1
+        · exact hg₂
+      refine ⟨s, open_s, this, ?_⟩
+      let F₁ := (c.symm ≫ₕ f₁ ≫ₕ g) ≫ₕ g.symm ≫ₕ f₂ ≫ₕ c'
+      have A : F₁ in G := G.trans (e.mem_groupoid c g hc hg₁) (e'.mem_groupoid g c' hg₁ hc')
+      let F₂ := (c.symm ≫ₕ f ≫ₕ c').restr s
+      have : F₁ ≈ F₂ := calc
+        F₁ ≈ c.symm ≫ₕ f₁ ≫ₕ (g ≫ₕ g.symm) ≫ₕ f₂ ≫ₕ c' := by
+            simp only [F₁, trans_assoc, _root_.refl]
+        _ ≈ c.symm ≫ₕ f₁ ≫ₕ ofSet g.source g.open_source ≫ₕ f₂ ≫ₕ c' :=
+          EqOnSource.trans' (_root_.refl _) (EqOnSource.trans' (_root_.refl _)
+            (EqOnSource.trans' (self_trans_symm g) (_root_.refl _)))
+        _ ≈ ((c.symm ≫ₕ f₁) ≫ₕ ofSet g.source g.open_source) ≫ₕ f₂ ≫ₕ c' := by
+          simp only [trans_assoc, _root_.refl]
+        _ ≈ (c.symm ≫ₕ f₁).restr s ≫ₕ f₂ ≫ₕ c' := by rw [trans_of_set']
+        _ ≈ ((c.symm ≫ₕ f₁) ≫ₕ f₂ ≫ₕ c').restr s := by rw [restr_trans]
+        _ ≈ (c.symm ≫ₕ (f₁ ≫ₕ f₂) ≫ₕ c').restr s := by
+          simp only [trans_assoc, _root_.refl]
+        _ ≈ F₂ := by simp only [F₂, feq, _root_.refl]
+      have : F₂ in G := G.mem_of_eqOnSource A (Setoid.symm this)
+      exact this }
 
 Depends on / 依赖: CommSemiring, Homeomorph, Homeomorph.trans, Semiring, StrongRankCondition, e.toHomeomorph, mem_groupoid, toHomeomorph
 -/
@@ -1187,7 +1309,23 @@ theorem StructureGroupoid.restriction_mem_maximalAtlas_subtype
     forall c' in atlas H t,
       e.toHomeomorphSourceTarget.toOpenPartialHomeomorph ≫ₕ c' in G.maximalAtlas s := by
   intro s t c' hc'
-  have : Nonempty t := nonemp
+  have : Nonempty t := nonempty_coe_sort.mpr (e.mapsTo.nonempty (nonempty_coe_sort.mp hs))
+  obtain ⟨x, hc'⟩ := Opens.chart_eq this hc'
+  -- As H has only one chart, `chartAt H x` is the identity: i.e., `c'` is the inclusion.
+  rw [hc']; rw [(chartAt_self_eq)]
+  -- Our expression equals this chart, at least on its source.
+  rw [OpenPartialHomeomorph.subtypeRestr_def]; rw [OpenPartialHomeomorph.trans_refl]
+  let goal :=
+    e.toHomeomorphSourceTarget.toOpenPartialHomeomorph ≫ₕ (t.openPartialHomeomorphSubtypeCoe this)
+  have : goal ≈ e.subtypeRestr (s := s) hs :=
+    (goal.eqOnSource_iff (e.subtypeRestr (s := s) hs)).mpr
+      ⟨by
+        simp only [trans_toPartialEquiv, PartialEquiv.trans_source,
+          Homeomorph.toOpenPartialHomeomorph_source, toFun_eq_coe,
+          Homeomorph.toOpenPartialHomeomorph_apply, Opens.openPartialHomeomorphSubtypeCoe_source,
+          preimage_univ, inter_self, subtypeRestr_source, goal, s]
+.symm, by intro _ _; rfl⟩ exact Subtype.coe_preimage_self _
+  exact G.mem_maximalAtlas_of_eqOnSource (M := s) this (G.subtypeRestr_mem_maximalAtlas he hs)
 
 中文:
 定理 StructureGroupoid.restriction_mem_maximalAtlas_subtype
@@ -1196,7 +1334,23 @@ theorem StructureGroupoid.restriction_mem_maximalAtlas_subtype
     forall c' in atlas H t,
       e.toHomeomorphSourceTarget.toOpenPartialHomeomorph ≫ₕ c' in G.maximalAtlas s := by
   intro s t c' hc'
-  have : Nonempty t := nonemp
+  have : Nonempty t := nonempty_coe_sort.mpr (e.mapsTo.nonempty (nonempty_coe_sort.mp hs))
+  obtain ⟨x, hc'⟩ := Opens.chart_eq this hc'
+  -- As H has only one chart, `chartAt H x` is the identity: i.e., `c'` is the inclusion.
+  rw [hc']; rw [(chartAt_self_eq)]
+  -- Our expression equals this chart, at least on its source.
+  rw [OpenPartialHomeomorph.subtypeRestr_def]; rw [OpenPartialHomeomorph.trans_refl]
+  let goal :=
+    e.toHomeomorphSourceTarget.toOpenPartialHomeomorph ≫ₕ (t.openPartialHomeomorphSubtypeCoe this)
+  have : goal ≈ e.subtypeRestr (s := s) hs :=
+    (goal.eqOnSource_iff (e.subtypeRestr (s := s) hs)).mpr
+      ⟨by
+        simp only [trans_toPartialEquiv, PartialEquiv.trans_source,
+          Homeomorph.toOpenPartialHomeomorph_source, toFun_eq_coe,
+          Homeomorph.toOpenPartialHomeomorph_apply, Opens.openPartialHomeomorphSubtypeCoe_source,
+          preimage_univ, inter_self, subtypeRestr_source, goal, s]
+.symm, by intro _ _; rfl⟩ exact Subtype.coe_preimage_self _
+  exact G.mem_maximalAtlas_of_eqOnSource (M := s) this (G.subtypeRestr_mem_maximalAtlas he hs)
 
 Depends on / 依赖: carrier, e.open_source, e.source, is_open, open_source, source
 -/
@@ -1239,7 +1393,17 @@ definition OpenPartialHomeomorph.toStructomorph
   by_cases! h : Nonempty e.source
   · exact { e.toHomeomorphSourceTarget with
       mem_groupoid :=
-        -- The atlas of H on itsel
+        -- The atlas of H on itself has only one chart, hence c' is the inclusion.
+        -- Then, compatibility of `G` *almost* yields our claim --- except that `e` is a chart
+        -- on `M` and `c` is one on `s`: we need to show that restricting `e` to `s` and composing
+        -- with `c'` yields a chart in the maximal atlas of `s`.
+        fun c c' hc hc' => G.compatible_of_mem_maximalAtlas (G.subset_maximalAtlas hc)
+          (G.restriction_mem_maximalAtlas_subtype he h c' hc') }
+  · have : IsEmpty t := isEmpty_coe_sort.mpr
+      (by convert! e.image_source_eq_target ▸ image_eq_empty.mpr (isEmpty_coe_sort.mp h))
+    exact { Homeomorph.empty with
+      -- `c'` cannot exist: it would be the restriction of `chartAt H x` at some `x ∈ t`.
+      mem_groupoid := fun _ c' _ ⟨_, ⟨x, _⟩, _⟩ => (this.false x).elim }
 
 中文:
 定义 OpenPartialHomeomorph.toStructomorph
@@ -1251,7 +1415,17 @@ definition OpenPartialHomeomorph.toStructomorph
   by_cases! h : Nonempty e.source
   · exact { e.toHomeomorphSourceTarget with
       mem_groupoid :=
-        -- The atlas of H on itsel
+        -- The atlas of H on itself has only one chart, hence c' is the inclusion.
+        -- Then, compatibility of `G` *almost* yields our claim --- except that `e` is a chart
+        -- on `M` and `c` is one on `s`: we need to show that restricting `e` to `s` and composing
+        -- with `c'` yields a chart in the maximal atlas of `s`.
+        fun c c' hc hc' => G.compatible_of_mem_maximalAtlas (G.subset_maximalAtlas hc)
+          (G.restriction_mem_maximalAtlas_subtype he h c' hc') }
+  · have : IsEmpty t := isEmpty_coe_sort.mpr
+      (by convert! e.image_source_eq_target ▸ image_eq_empty.mpr (isEmpty_coe_sort.mp h))
+    exact { Homeomorph.empty with
+      -- `c'` cannot exist: it would be the restriction of `chartAt H x` at some `x ∈ t`.
+      mem_groupoid := fun _ c' _ ⟨_, ⟨x, _⟩, _⟩ => (this.false x).elim }
 
 Depends on / 依赖: carrier, e.open_source, e.source, is_open, open_source, source
 -/

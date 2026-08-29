@@ -624,7 +624,8 @@ ext.2 by
     simp only [bind_def, mem_bind]
     exact fun c => ⟨fun ⟨b, ⟨a, as, bf⟩, cg⟩ => ⟨a, as, b, bf, cg⟩,
       fun ⟨a, as, b, bf, cg⟩ => ⟨b, ⟨a, as, bf⟩, cg⟩⟩)
-  (id_map := fun {α} q => ex
+  (id_map := fun {α} q => ext.2 <| by simp)
+  (bind_pure_comp := fun {α β} f s => ext.2 <| by simp [eq_comm])
 
 中文:
 实例 :
@@ -636,7 +637,8 @@ ext.2 by
     simp only [bind_def, mem_bind]
     exact fun c => ⟨fun ⟨b, ⟨a, as, bf⟩, cg⟩ => ⟨a, as, b, bf, cg⟩,
       fun ⟨a, as, b, bf, cg⟩ => ⟨b, ⟨a, as, bf⟩, cg⟩⟩)
-  (id_map := fun {α} q => ex
+  (id_map := fun {α} q => ext.2 <| by simp)
+  (bind_pure_comp := fun {α β} f s => ext.2 <| by simp [eq_comm])
 
 Depends on / 依赖: LawfulMonad, LawfulMonad.mk
 -/

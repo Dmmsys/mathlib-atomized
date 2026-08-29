@@ -376,7 +376,8 @@ theorem Admissible.one_lt_sumInv
   · rw [← H, D', sumInv_pqr]
     norm_num
   all_goals
- 
+    rw [← H]; rw [E']; rw [sumInv_pqr]
+    norm_num
 
 中文:
 定理 Admissible.one_lt_sumInv
@@ -391,7 +392,8 @@ theorem Admissible.one_lt_sumInv
   · rw [← H, D', sumInv_pqr]
     norm_num
   all_goals
- 
+    rw [← H]; rw [E']; rw [sumInv_pqr]
+    norm_num
 
 Depends on / 依赖: Admissible, Nat.cast_one, Nat.cast_pos, PNat.one_coe, PNat.pos, add_assoc, add_pos, all_goals, cast_one, cast_pos, inv_one, inv_pos, lt_add_iff_pos_right, one_coe, sumInv_pqr
 -/
@@ -421,7 +423,10 @@ theorem lt_three
   have h3r := h3q.trans hqr
   have hp : (p : Rat)⁻¹ <= 3⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast H)
   have hq : (q : Rat)⁻¹ <= 3⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast h3q)
-  have hr : (r : Rat)⁻¹ <= 3⁻¹ := inv_anti₀
+  have hr : (r : Rat)⁻¹ <= 3⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast h3r)
+  calc
+    (p : Rat)⁻¹ + (q : Rat)⁻¹ + (r : Rat)⁻¹ <= 3⁻¹ + 3⁻¹ + 3⁻¹ := add_le_add (add_le_add hp hq) hr
+    _ = 1 := by norm_num
 
 中文:
 定理 lt_three
@@ -434,7 +439,10 @@ theorem lt_three
   have h3r := h3q.trans hqr
   have hp : (p : Rat)⁻¹ <= 3⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast H)
   have hq : (q : Rat)⁻¹ <= 3⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast h3q)
-  have hr : (r : Rat)⁻¹ <= 3⁻¹ := inv_anti₀
+  have hr : (r : Rat)⁻¹ <= 3⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast h3r)
+  calc
+    (p : Rat)⁻¹ + (q : Rat)⁻¹ + (r : Rat)⁻¹ <= 3⁻¹ + 3⁻¹ + 3⁻¹ := add_le_add (add_le_add hp hq) hr
+    _ = 1 := by norm_num
 
 Depends on / 依赖: H.trans, add_le_add, contrapose, h3q.trans, sumInv_pqr
 -/
@@ -464,7 +472,8 @@ theorem lt_four
   have hq : (q : Rat)⁻¹ <= 4⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast H)
   have hr : (r : Rat)⁻¹ <= 4⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast h4r)
   calc
-    (2⁻¹ + (q : Rat)⁻¹ + (r : Rat)⁻¹) <= 2⁻¹ + 4⁻¹ + 4⁻¹ := add_
+    (2⁻¹ + (q : Rat)⁻¹ + (r : Rat)⁻¹) <= 2⁻¹ + 4⁻¹ + 4⁻¹ := add_le_add (add_le_add le_rfl hq) hr
+    _ = 1 := by norm_num
 
 中文:
 定理 lt_four
@@ -477,7 +486,8 @@ theorem lt_four
   have hq : (q : Rat)⁻¹ <= 4⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast H)
   have hr : (r : Rat)⁻¹ <= 4⁻¹ := inv_anti₀ (by positivity) (by exact_mod_cast h4r)
   calc
-    (2⁻¹ + (q : Rat)⁻¹ + (r : Rat)⁻¹) <= 2⁻¹ + 4⁻¹ + 4⁻¹ := add_
+    (2⁻¹ + (q : Rat)⁻¹ + (r : Rat)⁻¹) <= 2⁻¹ + 4⁻¹ + 4⁻¹ := add_le_add (add_le_add le_rfl hq) hr
+    _ = 1 := by norm_num
 
 Depends on / 依赖: H.trans, add_le_add, contrapose, le_rfl, sumInv_pqr
 -/
@@ -542,7 +552,17 @@ theorem admissible_of_one_lt_sumInv_aux'
   fin_cases hp3
   · exact admissible_A' q r
   have hq4 : q < 4 := lt_four hqr H
-  replace hq4 := Fin
+  replace hq4 := Finset.mem_Ico.mpr ⟨hpq, hq4⟩; clear hpq
+  conv at hq4 => change q in ({2, 3} : Multiset Nat+)
+  fin_cases hq4
+  · exact admissible_D' r
+  have hr6 : r < 6 := lt_six H
+  replace hr6 := Finset.mem_Ico.mpr ⟨hqr, hr6⟩; clear hqr
+  conv at hr6 => change r in ({3, 4, 5} : Multiset Nat+)
+  fin_cases hr6
+  · exact admissible_E6
+  · exact admissible_E7
+  · exact admissible_E8
 
 中文:
 定理 admissible_of_one_lt_sumInv_aux'
@@ -555,7 +575,17 @@ theorem admissible_of_one_lt_sumInv_aux'
   fin_cases hp3
   · exact admissible_A' q r
   have hq4 : q < 4 := lt_four hqr H
-  replace hq4 := Fin
+  replace hq4 := Finset.mem_Ico.mpr ⟨hpq, hq4⟩; clear hpq
+  conv at hq4 => change q in ({2, 3} : Multiset Nat+)
+  fin_cases hq4
+  · exact admissible_D' r
+  have hr6 : r < 6 := lt_six H
+  replace hr6 := Finset.mem_Ico.mpr ⟨hqr, hr6⟩; clear hqr
+  conv at hr6 => change r in ({3, 4, 5} : Multiset Nat+)
+  fin_cases hr6
+  · exact admissible_E6
+  · exact admissible_E7
+  · exact admissible_E8
 
 Depends on / 依赖: lt_three
 -/
@@ -616,7 +646,7 @@ theorem admissible_of_one_lt_sumInv
   rw [hpqr]
   rw [hpqr] at H
   apply admissible_of_one_lt_sumInv_aux hS _ H
-  simp only [S, insert_
+  simp only [S, insert_eq_cons, length_sort, card_cons, card_singleton]
 
 中文:
 定理 admissible_of_one_lt_sumInv
@@ -629,7 +659,7 @@ theorem admissible_of_one_lt_sumInv
   rw [hpqr]
   rw [hpqr] at H
   apply admissible_of_one_lt_sumInv_aux hS _ H
-  simp only [S, insert_
+  simp only [S, insert_eq_cons, length_sort, card_cons, card_singleton]
 
 Depends on / 依赖: Admissible, LE.le, Multiset, S.SortedLE, SortedLE, admissible_of_one_lt_sumInv_aux, card_cons, card_singleton, insert_eq_cons, length_sort, pairwise_sort, sort_eq, sortedLE
 -/

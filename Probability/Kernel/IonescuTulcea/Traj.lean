@@ -424,7 +424,8 @@ theorem isProjectiveMeasureFamily_inducedFamily
   intro I J hJI
   have sls : J.sup id <= I.sup id := sup_mono hJI
   simp only [inducedFamily]
-  rw [Measure.map_map]; rw [restrict₂_comp_restrict₂]; rw [← restrict₂_comp_restrict₂ J.subset_Iic_sup_id (Iic_subset_Iic.2 sls)]; rw [← Measure.map_map]; rw [← frestrictLe₂.eq_def sls]; rw [h (J.sup id)
+  rw [Measure.map_map]; rw [restrict₂_comp_restrict₂]; rw [← restrict₂_comp_restrict₂ J.subset_Iic_sup_id (Iic_subset_Iic.2 sls)]; rw [← Measure.map_map]; rw [← frestrictLe₂.eq_def sls]; rw [h (J.sup id) (I.sup id) sls]
+  all_goals fun_prop
 
 中文:
 定理 isProjectiveMeasureFamily_inducedFamily
@@ -432,7 +433,8 @@ theorem isProjectiveMeasureFamily_inducedFamily
   intro I J hJI
   have sls : J.sup id <= I.sup id := sup_mono hJI
   simp only [inducedFamily]
-  rw [Measure.map_map]; rw [restrict₂_comp_restrict₂]; rw [← restrict₂_comp_restrict₂ J.subset_Iic_sup_id (Iic_subset_Iic.2 sls)]; rw [← Measure.map_map]; rw [← frestrictLe₂.eq_def sls]; rw [h (J.sup id)
+  rw [Measure.map_map]; rw [restrict₂_comp_restrict₂]; rw [← restrict₂_comp_restrict₂ J.subset_Iic_sup_id (Iic_subset_Iic.2 sls)]; rw [← Measure.map_map]; rw [← frestrictLe₂.eq_def sls]; rw [h (J.sup id) (I.sup id) sls]
+  all_goals fun_prop
 
 Depends on / 依赖: I.sup, Iic_subset_Iic, J.subset_Iic_sup_id, J.sup, Measure, Measure.map_map, all_goals, eq_def, fun_prop, inducedFamily, map_map, subset_Iic_sup_id, sup_mono
 -/
@@ -594,7 +596,60 @@ theorem le_lmarginalPartialTraj_succ
     | hi m hm =>
       have : Nonempty (Π i : Iic m, X i) :=
         ⟨fun i => @Classical.ofNonempty _ (hm i.1 (mem_Iic.1 i.2))⟩
-      exact nonempty_of_isProbabi
+      exact nonempty_of_isProbabilityMeasure (κ m Classical.ofNonempty)
+  -- `Fₙ` is the integral of `fₙ` from time `k + 1` to `aₙ`.
+  let F n : (Π n, X n) -> Real>=0∞ := lmarginalPartialTraj κ (k + 1) (a n) (f n)
+  -- `Fₙ` converges to `l` by hypothesis.
+  have tendstoF x : Tendsto (F · x) atTop (𝓝 (l x)) := htendsto x
+  -- Integrating `fₙ` between time `k` and `aₙ` is the same as integrating
+  -- `Fₙ` between time `k` and time `k + 1`.
+  have f_eq x n : lmarginalPartialTraj κ k (a n) (f n) x =
+      lmarginalPartialTraj κ k (k + 1) (F n) x := by
+    simp_rw [F]
+    obtain h | h | h := lt_trichotomy (k + 1) (a n)
+    · rw [← lmarginalPartialTraj_self k.le_succ h.le (mf n)]
+    · rw [← h, lmarginalPartialTraj_le _ le_rfl (mf n)]
+    · rw [lmarginalPartialTraj_le _ _ (mf n), (hcte n).lmarginalPartialTraj_of_le _ (mf n),
+        (hcte n).lmarginalPartialTraj_of_le _ (mf n)]
+      all_goals lia
+  -- `F` is also a bounded sequence.
+  have F_le n x : F n x <= bound := by
+    simpa [F, lmarginalPartialTraj] using lintegral_le_const (ae_of_all _ fun z => le_bound _ _)
+  -- By dominated convergence, the integral of `fₙ` between time `k` and time `a n` converges
+  -- to the integral of `l` between time `k` and time `k + 1`.
+  have tendsto_int x : Tendsto (fun n => lmarginalPartialTraj κ k (a n) (f n) x) atTop
+      (𝓝 (lmarginalPartialTraj κ k (k + 1) l x)) := by
+    simp_rw [f_eq, lmarginalPartialTraj]
+    exact tendsto_lintegral_of_dominated_convergence (fun _ => bound)
+      (fun n => (measurable_lmarginalPartialTraj _ _ (mf n)).comp measurable_updateFinset)
+      (fun n => Eventually.of_forall <| fun y => F_le n _)
+      (by simp [fin_bound]) (Eventually.of_forall (fun _ => tendstoF _))
+  -- By hypothesis, we have `ε ≤ lmarginalPartialTraj κ k (k + 1) (F n) (updateFinset x _ y)`,
+  -- so this is also true for `l`.
+  have ε_le_lint x : ε <= lmarginalPartialTraj κ k (k + 1) l (updateFinset x _ y) :=
+    ge_of_tendsto (tendsto_int _) (by simp [hpos])
+  let x_ : Π n, X n := Classical.ofNonempty
+  -- We now have that the integral of `l` with respect to a probability measure is greater than `ε`,
+  -- therefore there exists `x` such that `ε ≤ l(y, x)`.
+  obtain ⟨x, hx⟩ : exists x, ε <= l (update (updateFinset x_ _ y) (k + 1) x) := by
+    have : ∫⁻ x, l (update (updateFinset x_ _ y) (k + 1) x) ∂(κ k y) != ∞ :=
+ne_top_of_le_ne_top fin_bound lintegral_le_const ae_of_all _
+fun y => le_of_tendsto' (tendstoF _) fun _ => F_le _ _
+    obtain ⟨x, hx⟩ := exists_lintegral_le this
+    refine ⟨x, (ε_le_lint x_).trans ?_⟩
+    rwa [lmarginalPartialTraj_succ, frestrictLe_updateFinset]
+    exact ENNReal.measurable_of_tendsto (by fun_prop) (tendsto_pi_nhds.2 htendsto)
+  refine ⟨x, fun x' n => ?_⟩
+  -- As `F` is a non-increasing sequence, we have `ε ≤ Fₙ(y, x)` for any `n`.
+  have := le_trans hx ((anti _).le_of_tendsto (tendstoF _) n)
+  -- This part below is just to say that this is true for any `x : (i : ι) → X i`,
+  -- as `Fₙ` technically depends on all the variables, but really depends only on the first `k + 1`.
+  convert! this using 1
+  refine (hcte n).dependsOn_lmarginalPartialTraj _ (mf n) fun i hi => ?_
+  simp only [update, updateFinset, mem_Iic]
+  split_ifs with h1 h2 <;> try rfl
+  rw [mem_coe]; rw [mem_Iic] at hi
+  lia
 
 中文:
 定理 le_lmarginalPartialTraj_succ
@@ -606,7 +661,60 @@ theorem le_lmarginalPartialTraj_succ
     | hi m hm =>
       have : Nonempty (Π i : Iic m, X i) :=
         ⟨fun i => @Classical.ofNonempty _ (hm i.1 (mem_Iic.1 i.2))⟩
-      exact nonempty_of_isProbabi
+      exact nonempty_of_isProbabilityMeasure (κ m Classical.ofNonempty)
+  -- `Fₙ` is the integral of `fₙ` from time `k + 1` to `aₙ`.
+  let F n : (Π n, X n) -> Real>=0∞ := lmarginalPartialTraj κ (k + 1) (a n) (f n)
+  -- `Fₙ` converges to `l` by hypothesis.
+  have tendstoF x : Tendsto (F · x) atTop (𝓝 (l x)) := htendsto x
+  -- Integrating `fₙ` between time `k` and `aₙ` is the same as integrating
+  -- `Fₙ` between time `k` and time `k + 1`.
+  have f_eq x n : lmarginalPartialTraj κ k (a n) (f n) x =
+      lmarginalPartialTraj κ k (k + 1) (F n) x := by
+    simp_rw [F]
+    obtain h | h | h := lt_trichotomy (k + 1) (a n)
+    · rw [← lmarginalPartialTraj_self k.le_succ h.le (mf n)]
+    · rw [← h, lmarginalPartialTraj_le _ le_rfl (mf n)]
+    · rw [lmarginalPartialTraj_le _ _ (mf n), (hcte n).lmarginalPartialTraj_of_le _ (mf n),
+        (hcte n).lmarginalPartialTraj_of_le _ (mf n)]
+      all_goals lia
+  -- `F` is also a bounded sequence.
+  have F_le n x : F n x <= bound := by
+    simpa [F, lmarginalPartialTraj] using lintegral_le_const (ae_of_all _ fun z => le_bound _ _)
+  -- By dominated convergence, the integral of `fₙ` between time `k` and time `a n` converges
+  -- to the integral of `l` between time `k` and time `k + 1`.
+  have tendsto_int x : Tendsto (fun n => lmarginalPartialTraj κ k (a n) (f n) x) atTop
+      (𝓝 (lmarginalPartialTraj κ k (k + 1) l x)) := by
+    simp_rw [f_eq, lmarginalPartialTraj]
+    exact tendsto_lintegral_of_dominated_convergence (fun _ => bound)
+      (fun n => (measurable_lmarginalPartialTraj _ _ (mf n)).comp measurable_updateFinset)
+      (fun n => Eventually.of_forall <| fun y => F_le n _)
+      (by simp [fin_bound]) (Eventually.of_forall (fun _ => tendstoF _))
+  -- By hypothesis, we have `ε ≤ lmarginalPartialTraj κ k (k + 1) (F n) (updateFinset x _ y)`,
+  -- so this is also true for `l`.
+  have ε_le_lint x : ε <= lmarginalPartialTraj κ k (k + 1) l (updateFinset x _ y) :=
+    ge_of_tendsto (tendsto_int _) (by simp [hpos])
+  let x_ : Π n, X n := Classical.ofNonempty
+  -- We now have that the integral of `l` with respect to a probability measure is greater than `ε`,
+  -- therefore there exists `x` such that `ε ≤ l(y, x)`.
+  obtain ⟨x, hx⟩ : exists x, ε <= l (update (updateFinset x_ _ y) (k + 1) x) := by
+    have : ∫⁻ x, l (update (updateFinset x_ _ y) (k + 1) x) ∂(κ k y) != ∞ :=
+ne_top_of_le_ne_top fin_bound lintegral_le_const ae_of_all _
+fun y => le_of_tendsto' (tendstoF _) fun _ => F_le _ _
+    obtain ⟨x, hx⟩ := exists_lintegral_le this
+    refine ⟨x, (ε_le_lint x_).trans ?_⟩
+    rwa [lmarginalPartialTraj_succ, frestrictLe_updateFinset]
+    exact ENNReal.measurable_of_tendsto (by fun_prop) (tendsto_pi_nhds.2 htendsto)
+  refine ⟨x, fun x' n => ?_⟩
+  -- As `F` is a non-increasing sequence, we have `ε ≤ Fₙ(y, x)` for any `n`.
+  have := le_trans hx ((anti _).le_of_tendsto (tendstoF _) n)
+  -- This part below is just to say that this is true for any `x : (i : ι) → X i`,
+  -- as `Fₙ` technically depends on all the variables, but really depends only on the first `k + 1`.
+  convert! this using 1
+  refine (hcte n).dependsOn_lmarginalPartialTraj _ (mf n) fun i hi => ?_
+  simp only [update, updateFinset, mem_Iic]
+  split_ifs with h1 h2 <;> try rfl
+  rw [mem_coe]; rw [mem_Iic] at hi
+  lia
 
 Depends on / 依赖: Classical, Classical.ofNonempty, Nat.case_strong_induction_on, Nonempty, case_strong_induction_on, mem_Iic, nonempty_of_isProbabilityMeasure, ofNonempty, zero_le
 -/
@@ -695,7 +803,105 @@ theorem trajContent_tendsto_zero
     | hi m hm =>
       have : Nonempty (Π i : Iic m, X i) :=
         ⟨fun i => @Classical.ofNonempty _ (hm i.1 (mem_Iic.1 i.2))⟩
-      exact nonempty_of_isProbab
+      exact nonempty_of_isProbabilityMeasure (κ m Classical.ofNonempty)
+  -- `Aₙ` is a cylinder, it can be written as `cylinder (Iic (a n)) Sₙ`.
+  have A_cyl n : exists a S, MeasurableSet S ∧ A n = cylinder (Iic a) S := by
+    simpa [measurableCylinders_nat] using A_mem n
+  choose a S mS A_eq using A_cyl
+  -- We write `χₙ` for the indicator function of `Aₙ`.
+  let χ n := (A n).indicator (1 : (Π n, X n) -> Real>=0∞)
+  -- `χₙ` is measurable.
+  have mχ n : Measurable (χ n) := by
+    simp_rw [χ, A_eq]
+exact (measurable_indicator_const_iff 1).2 (mS n).cylinder
+  -- `χₙ` only depends on the first coordinates.
+  have χ_dep n : DependsOn (χ n) (Iic (a n)) := by
+    simp_rw [χ, A_eq]
+    exact dependsOn_cylinder_indicator_const ..
+  -- Therefore its integral against `partialTraj κ k (a n)` is constant.
+  have lma_const x y n :
+      lmarginalPartialTraj κ p (a n) (χ n) (updateFinset x _ x₀) =
+      lmarginalPartialTraj κ p (a n) (χ n) (updateFinset y _ x₀) := by
+    refine (χ_dep n).dependsOn_lmarginalPartialTraj p (mχ n) fun i hi => ?_
+    rw [mem_coe]; rw [mem_Iic] at hi
+    simp [updateFinset, hi]
+  -- As `(Aₙ)` is non-increasing, so is `(χₙ)`.
+  have χ_anti : Antitone χ := fun m n hmn y => by
+    apply Set.indicator_le fun a ha => ?_
+    simp [χ, A_anti hmn ha]
+  -- Integrating `χₙ` further than the last coordinate it depends on does nothing.
+  -- This is used to then show that the integral of `χₙ` from time `k` is non-increasing.
+  have lma_inv k M n (h : a n <= M) :
+      lmarginalPartialTraj κ k M (χ n) = lmarginalPartialTraj κ k (a n) (χ n) :=
+    (χ_dep n).lmarginalPartialTraj_const_right (mχ n) h le_rfl
+  -- the integral of `χₙ` from time `k` is non-increasing.
+  have anti_lma k x : Antitone fun n => lmarginalPartialTraj κ k (a n) (χ n) x := by
+    intro m n hmn
+    simp only
+    rw [← lma_inv k ((a n).max (a m)) n (le_max_left _ _)]; rw [← lma_inv k ((a n).max (a m)) m (le_max_right _ _)]
+    exact lmarginalPartialTraj_mono _ _ (χ_anti hmn) _
+  -- Therefore it converges to some function `lₖ`.
+  have this k x : exists l, Tendsto (fun n => lmarginalPartialTraj κ k (a n) (χ n) x) atTop (𝓝 l) := by
+    obtain h | h := tendsto_atTop_of_antitone (anti_lma k x)
+    · rw [OrderBot.atBot_eq] at h
+exact ⟨0, h.mono_right pure_le_nhds 0⟩
+    · exact h
+  choose l hl using this
+  -- `lₚ` is constant because it is the limit of constant functions: we call it `ε`.
+  have l_const x y : l p (updateFinset x _ x₀) = l p (updateFinset y _ x₀) := by
+    have := hl p (updateFinset x _ x₀)
+    simp_rw [lma_const x y] at this
+    exact tendsto_nhds_unique this (hl p _)
+  obtain ⟨ε, hε⟩ : exists ε, forall x, l p (updateFinset x _ x₀) = ε :=
+      ⟨l p (updateFinset Classical.ofNonempty _ x₀), fun x => l_const _ _⟩
+  -- As the sequence is decreasing, `ε ≤ ∫ χₙ`.
+  have hpos x n : ε <= lmarginalPartialTraj κ p (a n) (χ n) (updateFinset x _ x₀) :=
+    hε x ▸ ((anti_lma p _).le_of_tendsto (hl p _)) n
+  -- Also, the indicators are bounded by `1`.
+  have χ_le n x : χ n x <= 1 := by
+    apply Set.indicator_le
+    simp
+  -- We have all the conditions to apply `le_lmarginalPartialTraj_succ`.
+  -- This allows us to recursively build a sequence `z` with the following property:
+  -- for any `k ≥ p` and `n`, integrating `χ n` from time `k` to time `a n`
+  -- with the trajectory up to `k` being equal to `z` gives something greater than `ε`.
+  choose! ind hind using
+    fun k y h => le_lmarginalPartialTraj_succ χ_dep mχ (by simp : (1 : Real>=0∞) != ∞)
+      χ_le (anti_lma (k + 1)) (hl (k + 1)) ε y h
+  let z := iterateInduction x₀ ind
+  have main k (hk : p <= k) : forall x n,
+      ε <= lmarginalPartialTraj κ k (a n) (χ n) (updateFinset x _ (frestrictLe k z)) := by
+    induction k, hk using Nat.le_induction with
+    | base => exact fun x n => by simpa [z, frestrictLe_iterateInduction] using hpos x n
+    | succ k hn h =>
+      intro x n
+      convert! hind k (fun i => z i.1) h x n
+      ext i
+      simp only [updateFinset, mem_Iic, frestrictLe_apply, dite_eq_ite, update, z]
+      split_ifs with h1 h2 h3 h4 h5
+      any_goals lia
+      cases h2
+      rw [iterateInduction]; rw [dif_neg (by lia)]
+  -- We now want to prove that the integral of `χₙ`, which is equal to the `trajContent`
+  -- of `Aₙ`, converges to `0`.
+  have aux x n :
+      trajContent κ x₀ (A n) = lmarginalPartialTraj κ p (a n) (χ n) (updateFinset x _ x₀) := by
+    simp_rw [χ, A_eq]
+    nth_rw 1 [← frestrictLe_updateFinset x x₀]
+    exact trajContent_eq_lmarginalPartialTraj (mS n) ..
+  simp_rw [aux z]
+  convert! hl p _
+  rw [hε]
+  -- Which means that we want to prove that `ε = 0`. But if `ε > 0`, then for any `n`,
+  -- choosing `k > aₙ` we get `ε ≤ χₙ(z₀, ..., z_{aₙ})` and therefore `z ∈ Aₙ`.
+  -- This contradicts the fact that `(Aₙ)` has an empty intersection.
+  by_contra!
+  have mem n : z in A n := by
+    have : 0 < χ n z := by
+      rw [← lmarginalPartialTraj_le κ (le_max_right p (a n)) (mχ n)]; rw [← updateFinset_frestrictLe (a := a n) z]
+      simpa using lt_of_lt_of_le this.symm.bot_lt (main _ (le_max_left _ _) z n)
+    exact Set.mem_of_indicator_ne_zero (ne_of_lt this).symm
+  exact (A_inter ▸ Set.mem_iInter.2 mem).elim
 
 中文:
 定理 trajContent_tendsto_zero
@@ -707,7 +913,105 @@ theorem trajContent_tendsto_zero
     | hi m hm =>
       have : Nonempty (Π i : Iic m, X i) :=
         ⟨fun i => @Classical.ofNonempty _ (hm i.1 (mem_Iic.1 i.2))⟩
-      exact nonempty_of_isProbab
+      exact nonempty_of_isProbabilityMeasure (κ m Classical.ofNonempty)
+  -- `Aₙ` is a cylinder, it can be written as `cylinder (Iic (a n)) Sₙ`.
+  have A_cyl n : exists a S, MeasurableSet S ∧ A n = cylinder (Iic a) S := by
+    simpa [measurableCylinders_nat] using A_mem n
+  choose a S mS A_eq using A_cyl
+  -- We write `χₙ` for the indicator function of `Aₙ`.
+  let χ n := (A n).indicator (1 : (Π n, X n) -> Real>=0∞)
+  -- `χₙ` is measurable.
+  have mχ n : Measurable (χ n) := by
+    simp_rw [χ, A_eq]
+exact (measurable_indicator_const_iff 1).2 (mS n).cylinder
+  -- `χₙ` only depends on the first coordinates.
+  have χ_dep n : DependsOn (χ n) (Iic (a n)) := by
+    simp_rw [χ, A_eq]
+    exact dependsOn_cylinder_indicator_const ..
+  -- Therefore its integral against `partialTraj κ k (a n)` is constant.
+  have lma_const x y n :
+      lmarginalPartialTraj κ p (a n) (χ n) (updateFinset x _ x₀) =
+      lmarginalPartialTraj κ p (a n) (χ n) (updateFinset y _ x₀) := by
+    refine (χ_dep n).dependsOn_lmarginalPartialTraj p (mχ n) fun i hi => ?_
+    rw [mem_coe]; rw [mem_Iic] at hi
+    simp [updateFinset, hi]
+  -- As `(Aₙ)` is non-increasing, so is `(χₙ)`.
+  have χ_anti : Antitone χ := fun m n hmn y => by
+    apply Set.indicator_le fun a ha => ?_
+    simp [χ, A_anti hmn ha]
+  -- Integrating `χₙ` further than the last coordinate it depends on does nothing.
+  -- This is used to then show that the integral of `χₙ` from time `k` is non-increasing.
+  have lma_inv k M n (h : a n <= M) :
+      lmarginalPartialTraj κ k M (χ n) = lmarginalPartialTraj κ k (a n) (χ n) :=
+    (χ_dep n).lmarginalPartialTraj_const_right (mχ n) h le_rfl
+  -- the integral of `χₙ` from time `k` is non-increasing.
+  have anti_lma k x : Antitone fun n => lmarginalPartialTraj κ k (a n) (χ n) x := by
+    intro m n hmn
+    simp only
+    rw [← lma_inv k ((a n).max (a m)) n (le_max_left _ _)]; rw [← lma_inv k ((a n).max (a m)) m (le_max_right _ _)]
+    exact lmarginalPartialTraj_mono _ _ (χ_anti hmn) _
+  -- Therefore it converges to some function `lₖ`.
+  have this k x : exists l, Tendsto (fun n => lmarginalPartialTraj κ k (a n) (χ n) x) atTop (𝓝 l) := by
+    obtain h | h := tendsto_atTop_of_antitone (anti_lma k x)
+    · rw [OrderBot.atBot_eq] at h
+exact ⟨0, h.mono_right pure_le_nhds 0⟩
+    · exact h
+  choose l hl using this
+  -- `lₚ` is constant because it is the limit of constant functions: we call it `ε`.
+  have l_const x y : l p (updateFinset x _ x₀) = l p (updateFinset y _ x₀) := by
+    have := hl p (updateFinset x _ x₀)
+    simp_rw [lma_const x y] at this
+    exact tendsto_nhds_unique this (hl p _)
+  obtain ⟨ε, hε⟩ : exists ε, forall x, l p (updateFinset x _ x₀) = ε :=
+      ⟨l p (updateFinset Classical.ofNonempty _ x₀), fun x => l_const _ _⟩
+  -- As the sequence is decreasing, `ε ≤ ∫ χₙ`.
+  have hpos x n : ε <= lmarginalPartialTraj κ p (a n) (χ n) (updateFinset x _ x₀) :=
+    hε x ▸ ((anti_lma p _).le_of_tendsto (hl p _)) n
+  -- Also, the indicators are bounded by `1`.
+  have χ_le n x : χ n x <= 1 := by
+    apply Set.indicator_le
+    simp
+  -- We have all the conditions to apply `le_lmarginalPartialTraj_succ`.
+  -- This allows us to recursively build a sequence `z` with the following property:
+  -- for any `k ≥ p` and `n`, integrating `χ n` from time `k` to time `a n`
+  -- with the trajectory up to `k` being equal to `z` gives something greater than `ε`.
+  choose! ind hind using
+    fun k y h => le_lmarginalPartialTraj_succ χ_dep mχ (by simp : (1 : Real>=0∞) != ∞)
+      χ_le (anti_lma (k + 1)) (hl (k + 1)) ε y h
+  let z := iterateInduction x₀ ind
+  have main k (hk : p <= k) : forall x n,
+      ε <= lmarginalPartialTraj κ k (a n) (χ n) (updateFinset x _ (frestrictLe k z)) := by
+    induction k, hk using Nat.le_induction with
+    | base => exact fun x n => by simpa [z, frestrictLe_iterateInduction] using hpos x n
+    | succ k hn h =>
+      intro x n
+      convert! hind k (fun i => z i.1) h x n
+      ext i
+      simp only [updateFinset, mem_Iic, frestrictLe_apply, dite_eq_ite, update, z]
+      split_ifs with h1 h2 h3 h4 h5
+      any_goals lia
+      cases h2
+      rw [iterateInduction]; rw [dif_neg (by lia)]
+  -- We now want to prove that the integral of `χₙ`, which is equal to the `trajContent`
+  -- of `Aₙ`, converges to `0`.
+  have aux x n :
+      trajContent κ x₀ (A n) = lmarginalPartialTraj κ p (a n) (χ n) (updateFinset x _ x₀) := by
+    simp_rw [χ, A_eq]
+    nth_rw 1 [← frestrictLe_updateFinset x x₀]
+    exact trajContent_eq_lmarginalPartialTraj (mS n) ..
+  simp_rw [aux z]
+  convert! hl p _
+  rw [hε]
+  -- Which means that we want to prove that `ε = 0`. But if `ε > 0`, then for any `n`,
+  -- choosing `k > aₙ` we get `ε ≤ χₙ(z₀, ..., z_{aₙ})` and therefore `z ∈ Aₙ`.
+  -- This contradicts the fact that `(Aₙ)` has an empty intersection.
+  by_contra!
+  have mem n : z in A n := by
+    have : 0 < χ n z := by
+      rw [← lmarginalPartialTraj_le κ (le_max_right p (a n)) (mχ n)]; rw [← updateFinset_frestrictLe (a := a n) z]
+      simpa using lt_of_lt_of_le this.symm.bot_lt (main _ (le_max_left _ _) z n)
+    exact Set.mem_of_indicator_ne_zero (ne_of_lt this).symm
+  exact (A_inter ▸ Set.mem_iInter.2 mem).elim
 
 Depends on / 依赖: Classical, Classical.ofNonempty, Nat.case_strong_induction_on, Nonempty, case_strong_induction_on, mem_Iic, nonempty_of_isProbabilityMeasure, ofNonempty, zero_le
 -/
@@ -834,7 +1138,7 @@ theorem isSigmaSubadditive_trajContent
     isSetRing_measurableCylinders (fun f hf hf_Union hf' => ?_)
   refine addContent_iUnion_eq_sum_of_tendsto_zero isSetRing_measurableCylinders
     (trajContent κ x₀) (fun _ _ => trajContent_ne_top) ?_ hf hf_Union hf'
-  exact fun s hs anti_
+  exact fun s hs anti_s inter_s => trajContent_tendsto_zero hs anti_s inter_s x₀
 
 中文:
 定理 isSigmaSubadditive_trajContent
@@ -844,7 +1148,7 @@ theorem isSigmaSubadditive_trajContent
     isSetRing_measurableCylinders (fun f hf hf_Union hf' => ?_)
   refine addContent_iUnion_eq_sum_of_tendsto_zero isSetRing_measurableCylinders
     (trajContent κ x₀) (fun _ _ => trajContent_ne_top) ?_ hf hf_Union hf'
-  exact fun s hs anti_
+  exact fun s hs anti_s inter_s => trajContent_tendsto_zero hs anti_s inter_s x₀
 
 Depends on / 依赖: addContent_iUnion_eq_sum_of_tendsto_zero, anti_s, hf_Union, inter_s, isSetRing_measurableCylinders, isSigmaSubadditive_of_addContent_iUnion_eq_tsum, trajContent, trajContent_ne_top, trajContent_tendsto_zero
 -/
@@ -915,7 +1219,8 @@ theorem isProjectiveLimit_trajFun
 .2 fun n => ?_ refine isProjectiveLimit_nat_iff (isProjectiveMeasureFamily_partialTraj κ x₀) _
   ext s ms
   rw [Measure.map_apply (measurable_frestrictLe n) ms]; rw [trajFun]; rw [AddContent.measure_eq]; rw [trajContent]; rw [projectiveFamilyContent_congr _ (frestrictLe n ⁻¹' s) rfl ms]
-  · exact
+  · exact generateFrom_measurableCylinders.symm
+  · exact cylinder_mem_measurableCylinders _ _ ms
 
 中文:
 定理 isProjectiveLimit_trajFun
@@ -924,7 +1229,8 @@ theorem isProjectiveLimit_trajFun
 .2 fun n => ?_ refine isProjectiveLimit_nat_iff (isProjectiveMeasureFamily_partialTraj κ x₀) _
   ext s ms
   rw [Measure.map_apply (measurable_frestrictLe n) ms]; rw [trajFun]; rw [AddContent.measure_eq]; rw [trajContent]; rw [projectiveFamilyContent_congr _ (frestrictLe n ⁻¹' s) rfl ms]
-  · exact
+  · exact generateFrom_measurableCylinders.symm
+  · exact cylinder_mem_measurableCylinders _ _ ms
 
 Depends on / 依赖: AddContent, AddContent.measure_eq, Measure, Measure.map_apply, cylinder_mem_measurableCylinders, frestrictLe, generateFrom_measurableCylinders, generateFrom_measurableCylinders.symm, isProjectiveLimit_nat_iff, isProjectiveMeasureFamily_partialTraj, map_apply, measurable_frestrictLe, measure_eq, projectiveFamilyContent_congr, trajContent, trajFun
 -/
@@ -949,7 +1255,17 @@ theorem measurable_trajFun
   refine MeasurableSpace.induction_on_inter
     (C := fun t ht => Measurable (fun x₀ => trajFun κ a x₀ t))
     (s := measurableCylinders X) generateFrom_measurableCylinders.symm
-    isPiSystem_measurableCylinders (by simp) (fun t ht => ?cylinder) (fun 
+    isPiSystem_measurableCylinders (by simp) (fun t ht => ?cylinder) (fun t mt ht => ?compl)
+    (fun f disf mf hf => ?union)
+  · obtain ⟨N, S, mS, t_eq⟩ : exists N S, MeasurableSet S ∧ t = cylinder (Iic N) S := by
+      simpa [measurableCylinders_nat] using ht
+    simp_rw [trajFun, AddContent.measure_eq _ _ generateFrom_measurableCylinders.symm _ ht,
+      trajContent, projectiveFamilyContent_congr _ t t_eq mS, inducedFamily]
+    refine Measure.measurable_measure.1 ?_ _ mS
+    exact (Measure.measurable_map _ (measurable_restrict₂ _)).comp (measurable _)
+  · have := isProbabilityMeasure_trajFun κ a
+    simpa [measure_compl mt (measure_ne_top _ _)] using Measurable.const_sub ht _
+  · simpa [measure_iUnion disf mf] using Measurable.tsum hf
 
 中文:
 定理 measurable_trajFun
@@ -960,7 +1276,17 @@ theorem measurable_trajFun
   refine MeasurableSpace.induction_on_inter
     (C := fun t ht => Measurable (fun x₀ => trajFun κ a x₀ t))
     (s := measurableCylinders X) generateFrom_measurableCylinders.symm
-    isPiSystem_measurableCylinders (by simp) (fun t ht => ?cylinder) (fun 
+    isPiSystem_measurableCylinders (by simp) (fun t ht => ?cylinder) (fun t mt ht => ?compl)
+    (fun f disf mf hf => ?union)
+  · obtain ⟨N, S, mS, t_eq⟩ : exists N S, MeasurableSet S ∧ t = cylinder (Iic N) S := by
+      simpa [measurableCylinders_nat] using ht
+    simp_rw [trajFun, AddContent.measure_eq _ _ generateFrom_measurableCylinders.symm _ ht,
+      trajContent, projectiveFamilyContent_congr _ t t_eq mS, inducedFamily]
+    refine Measure.measurable_measure.1 ?_ _ mS
+    exact (Measure.measurable_map _ (measurable_restrict₂ _)).comp (measurable _)
+  · have := isProbabilityMeasure_trajFun κ a
+    simpa [measure_compl mt (measure_ne_top _ _)] using Measurable.const_sub ht _
+  · simpa [measure_iUnion disf mf] using Measurable.tsum hf
 
 Depends on / 依赖: AddContent, AddContent.measure_eq, Measurable, MeasurableSet, MeasurableSpace, MeasurableSpace.induction_on_inter, Measure, Measure.measurable_of_measurable_coe, cylinder, generateFrom_measurableCylinders, generateFrom_measurableCylinders.symm, induction_on_inter, isPiSystem_measurableCylinders, measurableCylinders, measurableCylinders_nat, measurable_of_measurable_coe, measure_eq, simp_rw, t_eq, trajFun
 -/
@@ -1219,7 +1545,11 @@ theorem traj_eq_prod
   conv_lhs => enter [2]; change (IicProdIoc a b) ∘
     (Prod.map id (fun x i => x ⟨i.1, Set.mem_Ioi.2 (mem_Ioc.1 i.2).1⟩))
   · rw [map_comp_right, ← map_prod_map, ← map_comp_right]
-    · conv_lhs => enter [1, 2, 2]; chang
+    · conv_lhs => enter [1, 2, 2]; change (Ioc a b).restrict
+      rw [← restrict₂_comp_restrict Ioc_subset_Iic_self]; rw [← frestrictLe]; rw [map_comp_right]; rw [traj_map_frestrictLe]; rw [map_id]; rw [← partialTraj_eq_prod]
+      all_goals fun_prop
+    all_goals fun_prop
+  all_goals fun_prop
 
 中文:
 定理 traj_eq_prod
@@ -1230,7 +1560,11 @@ theorem traj_eq_prod
   conv_lhs => enter [2]; change (IicProdIoc a b) ∘
     (Prod.map id (fun x i => x ⟨i.1, Set.mem_Ioi.2 (mem_Ioc.1 i.2).1⟩))
   · rw [map_comp_right, ← map_prod_map, ← map_comp_right]
-    · conv_lhs => enter [1, 2, 2]; chang
+    · conv_lhs => enter [1, 2, 2]; change (Ioc a b).restrict
+      rw [← restrict₂_comp_restrict Ioc_subset_Iic_self]; rw [← frestrictLe]; rw [map_comp_right]; rw [traj_map_frestrictLe]; rw [map_id]; rw [← partialTraj_eq_prod]
+      all_goals fun_prop
+    all_goals fun_prop
+  all_goals fun_prop
 
 Depends on / 依赖: IicProdIoc, Ioc_subset_Iic_self, Prod.map, Set.mem_Ioi, all_goals, conv_lhs, eq_traj, frestrictLe, fun_pr, fun_prop, map_comp_right, map_id, map_prod_map, mem_Ioc, mem_Ioi, partialTraj_eq_prod, restrict, traj_map_frestrictLe
 -/
@@ -1258,7 +1592,8 @@ theorem traj_map_updateFinset
   nth_rw 2 [traj_eq_prod]
   have : (updateFinset · _ x) = IicProdIoi n ∘ (Prod.mk x) ∘ (Set.Ioi n).domRestrict := by
     ext; simp [IicProdIoi, updateFinset]
-  rw [this]; rw [← Function.comp_assoc]; rw [← Measure.map_map]; rw [← Measure.map_map]; rw [map_apply]; rw [prod_apply]; rw [map_apply]; r
+  rw [this]; rw [← Function.comp_assoc]; rw [← Measure.map_map]; rw [← Measure.map_map]; rw [map_apply]; rw [prod_apply]; rw [map_apply]; rw [id_apply]; rw [Measure.dirac_prod]
+  all_goals fun_prop
 
 中文:
 定理 traj_map_updateFinset
@@ -1267,7 +1602,8 @@ theorem traj_map_updateFinset
   nth_rw 2 [traj_eq_prod]
   have : (updateFinset · _ x) = IicProdIoi n ∘ (Prod.mk x) ∘ (Set.Ioi n).domRestrict := by
     ext; simp [IicProdIoi, updateFinset]
-  rw [this]; rw [← Function.comp_assoc]; rw [← Measure.map_map]; rw [← Measure.map_map]; rw [map_apply]; rw [prod_apply]; rw [map_apply]; r
+  rw [this]; rw [← Function.comp_assoc]; rw [← Measure.map_map]; rw [← Measure.map_map]; rw [map_apply]; rw [prod_apply]; rw [map_apply]; rw [id_apply]; rw [Measure.dirac_prod]
+  all_goals fun_prop
 
 Depends on / 依赖: Function, Function.comp_assoc, IicProdIoi, Measure, Measure.dirac_prod, Measure.map_map, Prod.mk, Set.Ioi, all_goals, comp_assoc, dirac_prod, domRestrict, fun_prop, id_apply, map_apply, map_map, nth_rw, prod_apply, traj_eq_prod, updateFinset
 -/
@@ -1445,7 +1781,11 @@ lemma partialTraj_compProd_traj
     rw [← traj_map_updateFinset]; rw [Measure.map_apply]; rw [Measure.map_apply]
     · congr 1 with y
       simp only [Set.mem_preimage]
-      congrm (fun i => ?
+      congrm (fun i => ?_, fun i => ?_) in s <;> simp [updateFinset]
+    any_goals fun_prop
+    all_goals exact ms.preimage (by fun_prop)
+  any_goals exact ms.preimage (by fun_prop)
+  fun_prop
 
 中文:
 引理 partialTraj_compProd_traj
@@ -1457,7 +1797,11 @@ lemma partialTraj_compProd_traj
     rw [← traj_map_updateFinset]; rw [Measure.map_apply]; rw [Measure.map_apply]
     · congr 1 with y
       simp only [Set.mem_preimage]
-      congrm (fun i => ?
+      congrm (fun i => ?_, fun i => ?_) in s <;> simp [updateFinset]
+    any_goals fun_prop
+    all_goals exact ms.preimage (by fun_prop)
+  any_goals exact ms.preimage (by fun_prop)
+  fun_prop
 
 Depends on / 依赖: Measure, Measure.compProd_apply, Measure.map_apply, Set.mem_preimage, all_goals, any_goals, compProd_apply, comp_apply, congrm, fun_prop, map_apply, mem_preimage, ms.preimage, preimage, traj_comp_partialTraj, traj_map_updateFinset, updateFinset
 -/
@@ -1484,7 +1828,7 @@ lemma partialTraj_compProd_eq_map_traj
   proof: by
   have hf : (fun x : Π n, X n => (frestrictLe b x, x (b + 1))) =
       (Prod.map id (fun x => x (b + 1))) ∘ (fun x => (frestrictLe b x, x)) := rfl
-  rw [hf]; rw [← Measure.map_map (by fun_prop) (by fun_prop)]; rw [← partialTraj_compProd_traj hab]; rw [← Measure.compProd_map (by fun_prop)]; rw [ma
+  rw [hf]; rw [← Measure.map_map (by fun_prop) (by fun_prop)]; rw [← partialTraj_compProd_traj hab]; rw [← Measure.compProd_map (by fun_prop)]; rw [map_traj_succ_self]
 
 中文:
 引理 partialTraj_compProd_eq_map_traj
@@ -1492,7 +1836,7 @@ lemma partialTraj_compProd_eq_map_traj
   证明: by
   have hf : (fun x : Π n, X n => (frestrictLe b x, x (b + 1))) =
       (Prod.map id (fun x => x (b + 1))) ∘ (fun x => (frestrictLe b x, x)) := rfl
-  rw [hf]; rw [← Measure.map_map (by fun_prop) (by fun_prop)]; rw [← partialTraj_compProd_traj hab]; rw [← Measure.compProd_map (by fun_prop)]; rw [ma
+  rw [hf]; rw [← Measure.map_map (by fun_prop) (by fun_prop)]; rw [← partialTraj_compProd_traj hab]; rw [← Measure.compProd_map (by fun_prop)]; rw [map_traj_succ_self]
 
 Depends on / 依赖: Measure, Measure.compProd_map, Measure.map_map, Prod.map, compProd_map, frestrictLe, fun_prop, map_map, map_traj_succ_self, partialTraj_compProd_traj
 -/
@@ -1649,7 +1993,14 @@ theorem condExp_traj
     rw [← map_apply _ (measurable_frestrictLe _)]; rw [traj_map_frestrictLe _ _]
     rw [← traj_comp_partialTraj hab] at i_f
     exact i_f.integral_comp
-  refine ae_eq_condExp_of_forall_se
+  refine ae_eq_condExp_of_forall_setIntegral_eq (piLE.le _) i_f
+    (fun s _ _ => i_f'.comp_aemeasurable (measurable_frestrictLe b).aemeasurable |>.integrableOn)
+.symm <;> rw [piLE_eq_comap_frestrictLe] ?_ ?_
+  · rintro - ⟨t, mt, rfl⟩ -
+    simp_rw [Function.comp_apply]
+    rw [← setIntegral_map mt i_f'.1]; rw [← map_apply]; rw [traj_map_frestrictLe]; rw [setIntegral_traj_partialTraj hab i_f mt]
+    all_goals fun_prop
+  · exact (i_f'.1.comp_ae_measurable' (measurable_frestrictLe b).aemeasurable)
 
 中文:
 定理 condExp_traj
@@ -1660,7 +2011,14 @@ theorem condExp_traj
     rw [← map_apply _ (measurable_frestrictLe _)]; rw [traj_map_frestrictLe _ _]
     rw [← traj_comp_partialTraj hab] at i_f
     exact i_f.integral_comp
-  refine ae_eq_condExp_of_forall_se
+  refine ae_eq_condExp_of_forall_setIntegral_eq (piLE.le _) i_f
+    (fun s _ _ => i_f'.comp_aemeasurable (measurable_frestrictLe b).aemeasurable |>.integrableOn)
+.symm <;> rw [piLE_eq_comap_frestrictLe] ?_ ?_
+  · rintro - ⟨t, mt, rfl⟩ -
+    simp_rw [Function.comp_apply]
+    rw [← setIntegral_map mt i_f'.1]; rw [← map_apply]; rw [traj_map_frestrictLe]; rw [setIntegral_traj_partialTraj hab i_f mt]
+    all_goals fun_prop
+  · exact (i_f'.1.comp_ae_measurable' (measurable_frestrictLe b).aemeasurable)
 
 Depends on / 依赖: Function, Function.comp_app, Integrable, ae_eq_condExp_of_forall_setIntegral_eq, aemeasurable, comp_aemeasurable, comp_app, frestrictLe, i_f.integral_comp, integrableOn, integral_comp, map_apply, measurable_frestrictLe, piLE.le, piLE_eq_comap_frestrictLe, simp_rw, traj_comp_partialTraj, traj_map_frestrictLe
 -/
@@ -1694,7 +2052,13 @@ theorem condExp_traj'
   have mcf : StronglyMeasurable ((traj κ a x₀)[f | piLE c]) :=
     stronglyMeasurable_condExp.mono (piLE.le c)
   filter_upwards [piLE.condExp_condExp f hbc, condExp_traj hab i_cf] with x h1 h2
-  rw [← h1]
+  rw [← h1]; rw [h2]; rw [← traj_map_frestrictLe]; rw [Kernel.map_apply]; rw [integral_map]
+  · congr with y
+    apply stronglyMeasurable_condExp.dependsOn_of_piLE
+    simp only [Set.mem_Iic, updateFinset, mem_Iic, frestrictLe_apply, dite_eq_ite]
+    exact fun i hi => (if_pos hi).symm
+  any_goals fun_prop
+  exact (mcf.comp_measurable measurable_updateFinset).aestronglyMeasurable
 
 中文:
 定理 condExp_traj'
@@ -1705,7 +2069,13 @@ theorem condExp_traj'
   have mcf : StronglyMeasurable ((traj κ a x₀)[f | piLE c]) :=
     stronglyMeasurable_condExp.mono (piLE.le c)
   filter_upwards [piLE.condExp_condExp f hbc, condExp_traj hab i_cf] with x h1 h2
-  rw [← h1]
+  rw [← h1]; rw [h2]; rw [← traj_map_frestrictLe]; rw [Kernel.map_apply]; rw [integral_map]
+  · congr with y
+    apply stronglyMeasurable_condExp.dependsOn_of_piLE
+    simp only [Set.mem_Iic, updateFinset, mem_Iic, frestrictLe_apply, dite_eq_ite]
+    exact fun i hi => (if_pos hi).symm
+  any_goals fun_prop
+  exact (mcf.comp_measurable measurable_updateFinset).aestronglyMeasurable
 
 Depends on / 依赖: Integrable, Kernel, Kernel.map_apply, Set.mem_Iic, StronglyMeasurable, condExp_condExp, condExp_traj, dependsOn_of_piLE, filter_upwards, frestrictLe_apply, i_cf, integrable_condExp, integral_map, map_apply, mem_Iic, piLE.condExp_condExp, piLE.le, stronglyMeasurable_condExp, stronglyMeasurable_condExp.dependsOn_of_piLE, stronglyMeasurable_condExp.mono
 -/
@@ -1794,7 +2164,7 @@ lemma map_frestrictLe_trajMeasure_compProd_eq_map_trajMeasure
   proof: by
   rw [Measure.compProd_eq_comp_prod]; rw [trajMeasure]; rw [Measure.map_comp _ _ (by fun_prop)]; rw [traj_map_frestrictLe]; rw [Measure.comp_assoc]; rw [Measure.map_comp _ _ (by fun_prop)]
   congr with x₀ : 1
-  rw [comp_apply]; rw [← Measure.compProd_eq_comp_prod]; rw [map_apply _ (by fun_prop)];
+  rw [comp_apply]; rw [← Measure.compProd_eq_comp_prod]; rw [map_apply _ (by fun_prop)]; rw [partialTraj_compProd_eq_map_traj zero_le]
 
 中文:
 引理 map_frestrictLe_trajMeasure_compProd_eq_map_trajMeasure
@@ -1802,7 +2172,7 @@ lemma map_frestrictLe_trajMeasure_compProd_eq_map_trajMeasure
   证明: by
   rw [Measure.compProd_eq_comp_prod]; rw [trajMeasure]; rw [Measure.map_comp _ _ (by fun_prop)]; rw [traj_map_frestrictLe]; rw [Measure.comp_assoc]; rw [Measure.map_comp _ _ (by fun_prop)]
   congr with x₀ : 1
-  rw [comp_apply]; rw [← Measure.compProd_eq_comp_prod]; rw [map_apply _ (by fun_prop)];
+  rw [comp_apply]; rw [← Measure.compProd_eq_comp_prod]; rw [map_apply _ (by fun_prop)]; rw [partialTraj_compProd_eq_map_traj zero_le]
 
 Depends on / 依赖: Measure, Measure.compProd_eq_comp_prod, Measure.comp_assoc, Measure.map_comp, compProd_eq_comp_prod, comp_apply, comp_assoc, fun_prop, map_apply, map_comp, partialTraj_compProd_eq_map_traj, trajMeasure, traj_map_frestrictLe, zero_le
 -/

@@ -148,7 +148,17 @@ definition comparisonRightAdjointHomEquiv
         refine equalizer.lift (adj.homEquiv _ _ f.f) ?_
         simp only [Adjunction.toComonad_coe, Functor.comp_obj, Adjunction.homEquiv_unit,
           Category.assoc, ← G.map_comp, ← f.h, comparison_obj_A, comparison_obj_a]
-        rw [Functor.comp_map]; rw [Functor.map_comp]; rw [Adjunction.
+        rw [Functor.comp_map]; rw [Functor.map_comp]; rw [Adjunction.unit_naturality_assoc]; rw [Adjunction.unit_naturality]
+      invFun f := by
+        refine ⟨(adj.homEquiv _ _).symm (f ≫ (equalizer.ι _ _)), (adj.homEquiv _ _).injective ?_⟩
+        simp only [Adjunction.toComonad_coe, Functor.comp_obj, comparison_obj_A, comparison_obj_a,
+          Adjunction.homEquiv_counit, Functor.map_comp, Category.assoc,
+          Functor.comp_map, Adjunction.homEquiv_unit, Adjunction.unit_naturality_assoc,
+          Adjunction.unit_naturality, Adjunction.right_triangle_components_assoc]
+        congr 1
+        exact (equalizer.condition _ _).symm
+      left_inv f := by aesop
+      right_inv f := by apply equalizer.hom_ext; simp
 
 中文:
 定义 comparisonRightAdjointHomEquiv
@@ -157,7 +167,17 @@ definition comparisonRightAdjointHomEquiv
         refine equalizer.lift (adj.homEquiv _ _ f.f) ?_
         simp only [Adjunction.toComonad_coe, Functor.comp_obj, Adjunction.homEquiv_unit,
           Category.assoc, ← G.map_comp, ← f.h, comparison_obj_A, comparison_obj_a]
-        rw [Functor.comp_map]; rw [Functor.map_comp]; rw [Adjunction.
+        rw [Functor.comp_map]; rw [Functor.map_comp]; rw [Adjunction.unit_naturality_assoc]; rw [Adjunction.unit_naturality]
+      invFun f := by
+        refine ⟨(adj.homEquiv _ _).symm (f ≫ (equalizer.ι _ _)), (adj.homEquiv _ _).injective ?_⟩
+        simp only [Adjunction.toComonad_coe, Functor.comp_obj, comparison_obj_A, comparison_obj_a,
+          Adjunction.homEquiv_counit, Functor.map_comp, Category.assoc,
+          Functor.comp_map, Adjunction.homEquiv_unit, Adjunction.unit_naturality_assoc,
+          Adjunction.unit_naturality, Adjunction.right_triangle_components_assoc]
+        congr 1
+        exact (equalizer.condition _ _).symm
+      left_inv f := by aesop
+      right_inv f := by apply equalizer.hom_ext; simp
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_unit, Adjunction.toComonad_coe, Adjunction.unit_naturality, Adjunction.unit_naturality_assoc, Category, Category.assoc, Functor, Functor.comp_map, Functor.comp_obj, Functor.map_comp, G.map_comp, adj.homEquiv, comp_map, comp_obj, comparison_obj_A, comparison_obj_a, equalizer, equalizer.lift, homEquiv
 -/
@@ -405,7 +425,10 @@ instance
     [forall A : adj.toComonad.Coalgebra, HasEqualizer (G.map A.a) (adj.unit.app (G.obj A.A))]
     (B : C) : HasLimit (parallelPair
       (G.map (F.map (NatTrans.app adj.unit B)))
-      (NatTrans.app adj.unit (G.obj (F.obj
+      (NatTrans.app adj.unit (G.obj (F.obj B)))) :=
+inferInstanceAs HasEqualizer
+    (G.map ((comparison adj).obj B).a)
+    (adj.unit.app (G.obj ((comparison adj).obj B).A))
 
 中文:
 定义 unitEqualizerOfCoreflectsEqualizer
@@ -416,7 +439,10 @@ instance
     [forall A : adj.toComonad.Coalgebra, HasEqualizer (G.map A.a) (adj.unit.app (G.obj A.A))]
     (B : C) : HasLimit (parallelPair
       (G.map (F.map (NatTrans.app adj.unit B)))
-      (NatTrans.app adj.unit (G.obj (F.obj
+      (NatTrans.app adj.unit (G.obj (F.obj B)))) :=
+inferInstanceAs HasEqualizer
+    (G.map ((comparison adj).obj B).a)
+    (adj.unit.app (G.obj ((comparison adj).obj B).A))
 -/
 def unitEqualizerOfCoreflectsEqualizer (B : C)
     [ReflectsLimit (parallelPair (G.map (F.map (adj.unit.app B)))
@@ -657,7 +683,24 @@ definition comonadicOfHasPreservesReflectsFSplitEqualizers
       intro X
       apply @isIso_of_reflects_iso _ _ _ _ _ _ _ (Comonad.forget adj.toComonad) ?_ _
       · change IsIso ((comparisonAdjunction adj).counit.app X).f
-      
+        rw [comparisonAdjunction_counit_f]
+        change
+          IsIso
+            (IsLimit.conePointUniqueUpToIso (beckEqualizer X)
+                (counitLimitOfPreservesEqualizer X)).inv
+        exact (IsLimit.conePointUniqueUpToIso _ _).isIso_inv
+    have : forall (Y : C), IsIso ((comparisonAdjunction adj).unit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_unit_app]
+      change IsIso (IsLimit.conePointUniqueUpToIso _ ?_).inv
+      · infer_instance
+      apply @unitEqualizerOfCoreflectsEqualizer _ _ _ _ _ _ _ _ ?_
+      let _ :
+        F.IsCosplitPair (G.map (F.map (adj.unit.app Y)))
+          (adj.unit.app (G.obj (F.obj Y))) :=
+        ComonadicityInternal.main_pair_F_cosplit _ ((comparison adj).obj Y)
+      infer_instance
+    exact (comparisonAdjunction adj).toEquivalence.symm.isEquivalence_inverse
 
 中文:
 定义 comonadicOfHasPreservesReflectsFSplitEqualizers
@@ -669,7 +712,24 @@ definition comonadicOfHasPreservesReflectsFSplitEqualizers
       intro X
       apply @isIso_of_reflects_iso _ _ _ _ _ _ _ (Comonad.forget adj.toComonad) ?_ _
       · change IsIso ((comparisonAdjunction adj).counit.app X).f
-      
+        rw [comparisonAdjunction_counit_f]
+        change
+          IsIso
+            (IsLimit.conePointUniqueUpToIso (beckEqualizer X)
+                (counitLimitOfPreservesEqualizer X)).inv
+        exact (IsLimit.conePointUniqueUpToIso _ _).isIso_inv
+    have : forall (Y : C), IsIso ((comparisonAdjunction adj).unit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_unit_app]
+      change IsIso (IsLimit.conePointUniqueUpToIso _ ?_).inv
+      · infer_instance
+      apply @unitEqualizerOfCoreflectsEqualizer _ _ _ _ _ _ _ _ ?_
+      let _ :
+        F.IsCosplitPair (G.map (F.map (adj.unit.app Y)))
+          (adj.unit.app (G.obj (F.obj Y))) :=
+        ComonadicityInternal.main_pair_F_cosplit _ ((comparison adj).obj Y)
+      infer_instance
+    exact (comparisonAdjunction adj).toEquivalence.symm.isEquivalence_inverse
 -/
 def comonadicOfHasPreservesReflectsFSplitEqualizers [HasEqualizerOfIsCosplitPair F]
     [PreservesLimitOfIsCosplitPair F] [ReflectsLimitOfIsCosplitPair F] :
@@ -761,6 +821,9 @@ definition comonadicOfCreatesFSplitEqualizers
     rw [hasLimit_iff_of_iso (diagramIsoParallelPair _)]
 exact inferInstanceAs HasEqualizer (F.map f) (F.map g)
   have : HasEqualizerOfIsCosplitPair F := ⟨fun _ _ => hasLimit_of_created (parallelPair _ _) F⟩
+  have : PreservesLimitOfIsCosplitPair F := ⟨by intros; infer_instance⟩
+  have : ReflectsLimitOfIsCosplitPair F := ⟨by intros; infer_instance⟩
+  exact comonadicOfHasPreservesReflectsFSplitEqualizers adj
 
 中文:
 定义 comonadicOfCreatesFSplitEqualizers
@@ -770,6 +833,9 @@ exact inferInstanceAs HasEqualizer (F.map f) (F.map g)
     rw [hasLimit_iff_of_iso (diagramIsoParallelPair _)]
 exact inferInstanceAs HasEqualizer (F.map f) (F.map g)
   have : HasEqualizerOfIsCosplitPair F := ⟨fun _ _ => hasLimit_of_created (parallelPair _ _) F⟩
+  have : PreservesLimitOfIsCosplitPair F := ⟨by intros; infer_instance⟩
+  have : ReflectsLimitOfIsCosplitPair F := ⟨by intros; infer_instance⟩
+  exact comonadicOfHasPreservesReflectsFSplitEqualizers adj
 
 Depends on / 依赖: F.IsCosplitPair, F.map, HasEqualizer, HasEqualizerOfIsCosplitPair, HasLimit, IsCosplitPair, PreservesLimitOfIsCosplitPair, ReflectsLimitOfIsCosplitPair, comonadicOfHasPreservesReflectsFSplitEqualizers, diagramIsoParallelPair, hasLimit_iff_of_iso, hasLimit_of_created, infer_instance, intros, parallelPair
 -/
@@ -886,7 +952,25 @@ definition comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms
       intro X
       apply
         @isIso_of_reflects_iso _ _ _ _ _ _ _ (Comonad.forget adj.toComonad) ?_ _
-      · change IsIso ((comparisonAdjunction adj).counit.app X).
+      · change IsIso ((comparisonAdjunction adj).counit.app X).f
+        rw [comparisonAdjunction_counit_f]
+        exact (IsLimit.conePointUniqueUpToIso (beckEqualizer X)
+          (counitLimitOfPreservesEqualizer X)).isIso_inv
+    have : forall (Y : C), IsIso ((comparisonAdjunction adj).unit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_unit_app]
+      change IsIso (IsLimit.conePointUniqueUpToIso _ ?_).inv
+      · infer_instance
+      have : IsCoreflexivePair (G.map (F.map (adj.unit.app Y)))
+          (adj.unit.app (G.obj (F.obj Y))) := by
+        apply IsCoreflexivePair.mk' (G.map (adj.counit.app _)) _ _
+        · rw [← G.map_comp, ← G.map_id]
+          exact congr_arg G.map (adj.left_triangle_components Y)
+        · rw [← G.map_id]
+          simp
+      apply @unitEqualizerOfCoreflectsEqualizer _ _ _ _ _ _ _ _ ?_
+      apply reflectsLimit_of_reflectsIsomorphisms
+    exact (comparisonAdjunction adj).toEquivalence.symm.isEquivalence_inverse
 
 中文:
 定义 comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms
@@ -898,7 +982,25 @@ definition comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms
       intro X
       apply
         @isIso_of_reflects_iso _ _ _ _ _ _ _ (Comonad.forget adj.toComonad) ?_ _
-      · change IsIso ((comparisonAdjunction adj).counit.app X).
+      · change IsIso ((comparisonAdjunction adj).counit.app X).f
+        rw [comparisonAdjunction_counit_f]
+        exact (IsLimit.conePointUniqueUpToIso (beckEqualizer X)
+          (counitLimitOfPreservesEqualizer X)).isIso_inv
+    have : forall (Y : C), IsIso ((comparisonAdjunction adj).unit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_unit_app]
+      change IsIso (IsLimit.conePointUniqueUpToIso _ ?_).inv
+      · infer_instance
+      have : IsCoreflexivePair (G.map (F.map (adj.unit.app Y)))
+          (adj.unit.app (G.obj (F.obj Y))) := by
+        apply IsCoreflexivePair.mk' (G.map (adj.counit.app _)) _ _
+        · rw [← G.map_comp, ← G.map_id]
+          exact congr_arg G.map (adj.left_triangle_components Y)
+        · rw [← G.map_id]
+          simp
+      apply @unitEqualizerOfCoreflectsEqualizer _ _ _ _ _ _ _ _ ?_
+      apply reflectsLimit_of_reflectsIsomorphisms
+    exact (comparisonAdjunction adj).toEquivalence.symm.isEquivalence_inverse
 -/
 def comonadicOfHasPreservesCoreflexiveEqualizersOfReflectsIsomorphisms :
     ComonadicLeftAdjoint F where

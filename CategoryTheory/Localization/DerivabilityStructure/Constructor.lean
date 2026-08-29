@@ -74,7 +74,7 @@ definition fromRightResolution
   map {R R'} φ := CostructuredArrow.homMk (StructuredArrow.homMk φ.f) (by
     ext
     dsimp
-    rw [← assoc]; rw [← cancel_epi (isoOfHom L W₂ R.w R.hw).hom]; rw [isoOfHom_hom]; rw [isoOf
+    rw [← assoc]; rw [← cancel_epi (isoOfHom L W₂ R.w R.hw).hom]; rw [isoOfHom_hom]; rw [isoOfHom_hom_inv_id_assoc]; rw [assoc]; rw [← L.map_comp_assoc]; rw [φ.comm]; rw [isoOfHom_hom_inv_id_assoc])
 
 中文:
 定义 fromRightResolution
@@ -84,7 +84,7 @@ definition fromRightResolution
   map {R R'} φ := CostructuredArrow.homMk (StructuredArrow.homMk φ.f) (by
     ext
     dsimp
-    rw [← assoc]; rw [← cancel_epi (isoOfHom L W₂ R.w R.hw).hom]; rw [isoOfHom_hom]; rw [isoOf
+    rw [← assoc]; rw [← cancel_epi (isoOfHom L W₂ R.w R.hw).hom]; rw [isoOfHom_hom]; rw [isoOfHom_hom_inv_id_assoc]; rw [assoc]; rw [← L.map_comp_assoc]; rw [φ.comm]; rw [isoOfHom_hom_inv_id_assoc])
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, StructuredArrow, StructuredArrow.mk
 -/
@@ -110,7 +110,27 @@ lemma isConnected
   have : Nonempty (w.CostructuredArrowDownwards y) :=
     ⟨(fromRightResolution Φ L y).obj (Classical.arbitrary _)⟩
   suffices forall (X : w.CostructuredArrowDownwards y),
-      exists Y, Zigzag X ((fromRightR
+      exists Y, Zigzag X ((fromRightResolution Φ L y).obj Y) by
+    refine zigzag_isConnected (fun X X' => ?_)
+    obtain ⟨Y, hX⟩ := this X
+    obtain ⟨Y', hX'⟩ := this X'
+    exact hX.trans ((zigzag_obj_of_zigzag _ (isPreconnected_zigzag Y Y')).trans hX'.symm)
+  intro X
+  obtain ⟨c, g, x, fac, rfl⟩ := TwoSquare.CostructuredArrowDownwards.mk_surjective X
+  dsimp [w] at x fac
+  rw [id_comp] at fac
+  let ρ : Φ.arrow.RightResolution (Arrow.mk g) := Classical.arbitrary _
+  refine ⟨RightResolution.mk ρ.w.left ρ.hw.1, ?_⟩
+  have := zigzag_obj_of_zigzag
+    (fromRightResolution Φ L x ⋙ w.costructuredArrowDownwardsPrecomp x y g fac)
+      (isPreconnected_zigzag (RightResolution.mk (𝟙 _) (W₂.id_mem _))
+        (RightResolution.mk ρ.w.right ρ.hw.2))
+  refine Zigzag.trans ?_ (Zigzag.trans this ?_)
+  · exact Zigzag.of_hom (eqToHom (by simp))
+  · apply Zigzag.of_inv
+    refine CostructuredArrow.homMk (StructuredArrow.homMk ρ.X₁.hom (by simp)) ?_
+    ext
+    simp [← cancel_epi (isoOfHom L W₂ ρ.w.left ρ.hw.1).hom, ← L.map_comp_assoc, fac]
 
 中文:
 引理 isConnected
@@ -119,7 +139,27 @@ lemma isConnected
   have : Nonempty (w.CostructuredArrowDownwards y) :=
     ⟨(fromRightResolution Φ L y).obj (Classical.arbitrary _)⟩
   suffices forall (X : w.CostructuredArrowDownwards y),
-      exists Y, Zigzag X ((fromRightR
+      exists Y, Zigzag X ((fromRightResolution Φ L y).obj Y) by
+    refine zigzag_isConnected (fun X X' => ?_)
+    obtain ⟨Y, hX⟩ := this X
+    obtain ⟨Y', hX'⟩ := this X'
+    exact hX.trans ((zigzag_obj_of_zigzag _ (isPreconnected_zigzag Y Y')).trans hX'.symm)
+  intro X
+  obtain ⟨c, g, x, fac, rfl⟩ := TwoSquare.CostructuredArrowDownwards.mk_surjective X
+  dsimp [w] at x fac
+  rw [id_comp] at fac
+  let ρ : Φ.arrow.RightResolution (Arrow.mk g) := Classical.arbitrary _
+  refine ⟨RightResolution.mk ρ.w.left ρ.hw.1, ?_⟩
+  have := zigzag_obj_of_zigzag
+    (fromRightResolution Φ L x ⋙ w.costructuredArrowDownwardsPrecomp x y g fac)
+      (isPreconnected_zigzag (RightResolution.mk (𝟙 _) (W₂.id_mem _))
+        (RightResolution.mk ρ.w.right ρ.hw.2))
+  refine Zigzag.trans ?_ (Zigzag.trans this ?_)
+  · exact Zigzag.of_hom (eqToHom (by simp))
+  · apply Zigzag.of_inv
+    refine CostructuredArrow.homMk (StructuredArrow.homMk ρ.X₁.hom (by simp)) ?_
+    ext
+    simp [← cancel_epi (isoOfHom L W₂ ρ.w.left ρ.hw.1).hom, ← L.map_comp_assoc, fac]
 
 Depends on / 依赖: Classical, Classical.arbitrary, CostructuredArrowDownwards, Functor, Functor.rightUnitor, Nonempty, TwoSquare, TwoSquare.mk, Zigzag, arbitrary, fromRightResolution, functor, hX.trans, isPreconnected_zigzag, rightUnitor, w.CostructuredArrowDownwards, zigzag_isConnected, zigzag_obj_of_zigzag
 -/
@@ -199,7 +239,11 @@ lemma IsLeftDerivabilityStructure.mk'
     let R : Φ.arrow.LeftResolution (Arrow.mk f.hom.unop) := Classical.arbitrary _
     exact ⟨{
       X₁ := Arrow.mk R.X₁.hom.op
-      w := Arrow.homMk R.w.right.op R.w.left.op (Quiver.Hom.unop_inj R.w
+      w := Arrow.homMk R.w.right.op R.w.left.op (Quiver.Hom.unop_inj R.w.w.symm)
+      hw := ⟨R.hw.right, R.hw.left⟩ }⟩
+  have (X₂ : C₂ᵒᵖ) : IsConnected (Φ.op.RightResolution X₂) :=
+    isConnected_of_equivalent (LeftResolution.opEquivalence Φ X₂.unop)
+  exact IsRightDerivabilityStructure.mk' _
 
 中文:
 引理 是LeftDerivabilityStructure.mk'
@@ -210,7 +254,11 @@ lemma IsLeftDerivabilityStructure.mk'
     let R : Φ.arrow.LeftResolution (Arrow.mk f.hom.unop) := Classical.arbitrary _
     exact ⟨{
       X₁ := Arrow.mk R.X₁.hom.op
-      w := Arrow.homMk R.w.right.op R.w.left.op (Quiver.Hom.unop_inj R.w
+      w := Arrow.homMk R.w.right.op R.w.left.op (Quiver.Hom.unop_inj R.w.w.symm)
+      hw := ⟨R.hw.right, R.hw.left⟩ }⟩
+  have (X₂ : C₂ᵒᵖ) : IsConnected (Φ.op.RightResolution X₂) :=
+    isConnected_of_equivalent (LeftResolution.opEquivalence Φ X₂.unop)
+  exact IsRightDerivabilityStructure.mk' _
 
 Depends on / 依赖: Arrow.homMk, Arrow.mk, Classical, Classical.arbitrary, HasRightResolutions, IsConnected, IsRightDerivabilityStructure, IsRightDerivabilityStructure.mk, LeftResolution, LeftResolution.opEquivalence, Quiver, Quiver.Hom.unop_inj, R.hw.left, R.hw.right, R.w.left.op, R.w.right.op, R.w.w.symm, RightResolution, arbitrary, arrow.LeftResolution
 -/

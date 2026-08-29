@@ -127,7 +127,11 @@ definition parseBound
     else if ty.isAppOfArity ``LE.le 4 then
       pure (ty.appArg!, ty.appFn!.appArg!, true, false)
     else failure
-  
+  else if ty.isAppOfArity ``LT.lt 4 then
+    pure (ty.appFn!.appArg!, ty.appArg!, true, true)
+  else if ty.isAppOfArity ``LE.le 4 then
+    pure (ty.appFn!.appArg!, ty.appArg!, false, true)
+  else failure
 
 中文:
 定义 parseBound
@@ -141,7 +145,11 @@ definition parseBound
     else if ty.isAppOfArity ``LE.le 4 then
       pure (ty.appArg!, ty.appFn!.appArg!, true, false)
     else failure
-  
+  else if ty.isAppOfArity ``LT.lt 4 then
+    pure (ty.appFn!.appArg!, ty.appArg!, true, true)
+  else if ty.isAppOfArity ``LE.le 4 then
+    pure (ty.appFn!.appArg!, ty.appArg!, false, true)
+  else failure
 -/
 def parseBound (ty : Expr) : MetaM (Expr × Expr × Bool × Bool) := do
   let ty ← whnfR ty
@@ -360,7 +368,21 @@ definition Methods.getBound
     | (b, a, false, false), false =>
       let (z, a', eq) ← m.eval a; pure (b, .le z, a', ← mkAppM ``of_not_lt_left #[pf, eq])
     | (b, a, false, false), true =>
-      let (z, b', eq) ← m.eval b; pure (a, .le z, b', ← mkAppM ``of_not_
+      let (z, b', eq) ← m.eval b; pure (a, .le z, b', ← mkAppM ``of_not_lt_right #[pf, eq])
+    | (a, b, false, true), false =>
+      let (z, b', eq) ← m.eval b; pure (a, .le z, b', ← mkAppM ``of_le_right #[pf, eq])
+    | (a, b, false, true), true =>
+      let (z, a', eq) ← m.eval a; pure (b, .le z, a', ← mkAppM ``of_le_left #[pf, eq])
+    | (b, a, true, false), false =>
+      let (z, a', eq) ← m.eval a; pure (b, .lt z, a', ← mkAppM ``of_not_le_left #[pf, eq])
+    | (b, a, true, false), true =>
+      let (z, b', eq) ← m.eval b; pure (a, .lt z, b', ← mkAppM ``of_not_le_right #[pf, eq])
+    | (a, b, true, true), false =>
+      let (z, b', eq) ← m.eval b; pure (a, .lt z, b', ← mkAppM ``of_lt_right #[pf, eq])
+    | (a, b, true, true), true =>
+      let (z, a', eq) ← m.eval a; pure (b, .lt z, a', ← mkAppM ``of_lt_left #[pf, eq])
+let .true ← withNewMCtxDepth withReducible isDefEq e e' | failure
+  pure c
 
 中文:
 定义 Methods.getBound
@@ -370,7 +392,21 @@ definition Methods.getBound
     | (b, a, false, false), false =>
       let (z, a', eq) ← m.eval a; pure (b, .le z, a', ← mkAppM ``of_not_lt_left #[pf, eq])
     | (b, a, false, false), true =>
-      let (z, b', eq) ← m.eval b; pure (a, .le z, b', ← mkAppM ``of_not_
+      let (z, b', eq) ← m.eval b; pure (a, .le z, b', ← mkAppM ``of_not_lt_right #[pf, eq])
+    | (a, b, false, true), false =>
+      let (z, b', eq) ← m.eval b; pure (a, .le z, b', ← mkAppM ``of_le_right #[pf, eq])
+    | (a, b, false, true), true =>
+      let (z, a', eq) ← m.eval a; pure (b, .le z, a', ← mkAppM ``of_le_left #[pf, eq])
+    | (b, a, true, false), false =>
+      let (z, a', eq) ← m.eval a; pure (b, .lt z, a', ← mkAppM ``of_not_le_left #[pf, eq])
+    | (b, a, true, false), true =>
+      let (z, b', eq) ← m.eval b; pure (a, .lt z, b', ← mkAppM ``of_not_le_right #[pf, eq])
+    | (a, b, true, true), false =>
+      let (z, b', eq) ← m.eval b; pure (a, .lt z, b', ← mkAppM ``of_lt_right #[pf, eq])
+    | (a, b, true, true), true =>
+      let (z, a', eq) ← m.eval a; pure (b, .lt z, a', ← mkAppM ``of_lt_left #[pf, eq])
+let .true ← withNewMCtxDepth withReducible isDefEq e e' | failure
+  pure c
 -/
 def Methods.getBound (m : Methods) (e : Expr) (pf : Expr) (lb : Bool) :
     MetaM (Bound × Expr × Expr) := do
@@ -427,7 +463,12 @@ definition Methods.inconsistentBounds
   | .lt lo, .le hi =>
     if lo == hi then return p1.app p2
     return p1.app (← mkAppM ``le_trans #[p2, ← m.proveLE e2 e1])
-  | .le _, .le _ => return 
+  | .le _, .le _ => return (← m.proveLT e2 e1).app (← mkAppM ``le_trans #[p1, p2])
+  | .lt lo, .lt hi =>
+    if hi <= lo then return p1.app (← mkAppM ``le_of_not_le_of_le #[p2, ← m.proveLE e2 e1])
+    let e3 ← m.mkNumeral (hi - 1)
+    let p3 ← m.roundDown e e2 e3 p2
+    return p1.app (← mkAppM ``le_trans #[p3, ← m.proveLE e3 e1])
 
 中文:
 定义 Methods.inconsistentBounds
@@ -440,7 +481,12 @@ definition Methods.inconsistentBounds
   | .lt lo, .le hi =>
     if lo == hi then return p1.app p2
     return p1.app (← mkAppM ``le_trans #[p2, ← m.proveLE e2 e1])
-  | .le _, .le _ => return 
+  | .le _, .le _ => return (← m.proveLT e2 e1).app (← mkAppM ``le_trans #[p1, p2])
+  | .lt lo, .lt hi =>
+    if hi <= lo then return p1.app (← mkAppM ``le_of_not_le_of_le #[p2, ← m.proveLE e2 e1])
+    let e3 ← m.mkNumeral (hi - 1)
+    let p3 ← m.roundDown e e2 e3 p2
+    return p1.app (← mkAppM ``le_trans #[p3, ← m.proveLE e3 e1])
 -/
 def Methods.inconsistentBounds (m : Methods)
     (z1 z2 : Bound) (e1 e2 p1 p2 e : Expr) : MetaM Expr := do
@@ -472,7 +518,18 @@ definition Methods.bisect
     let e3 ← m.mkNumeral z3
     let le ← mkAppM ``LE.le #[e3, e]
     let g₁ ← mkFreshExprMVar (← mkArrow (mkNot le) tgt) .syntheticOpaque
-    let g₂ ← mkFreshExprMVar (← mkA
+    let g₂ ← mkFreshExprMVar (← mkArrow le tgt) .syntheticOpaque
+g.assign ← mkAppM ``dite #[le, g₂, g₁]
+    let (x₁, g₁) ← g₁.mvarId!.intro1
+    m.bisect g₁ cases[:mid] z1 (.lt z3) e1 e3 p1 (.fvar x₁) e
+    let (x₂, g₂) ← g₂.mvarId!.intro1
+    m.bisect g₂ cases[mid:] (.le z3) z2 e3 e2 (.fvar x₂) p2 e
+  else if _x : 0 < cases.size then
+    let { goal, rhs, .. } := cases[0]
+    let pf₁ ← match z1 with | .le _ => pure p1 | .lt _ => m.roundUp e1 e rhs p1
+    let pf₂ ← match z2 with | .le _ => pure p2 | .lt _ => m.roundDown e e2 rhs p2
+    g.assign (.app (.mvar goal) (← mkAppM ``le_antisymm #[pf₂, pf₁]))
+  else panic! "no goals"
 
 中文:
 定义 Methods.bisect
@@ -485,7 +542,18 @@ definition Methods.bisect
     let e3 ← m.mkNumeral z3
     let le ← mkAppM ``LE.le #[e3, e]
     let g₁ ← mkFreshExprMVar (← mkArrow (mkNot le) tgt) .syntheticOpaque
-    let g₂ ← mkFreshExprMVar (← mkA
+    let g₂ ← mkFreshExprMVar (← mkArrow le tgt) .syntheticOpaque
+g.assign ← mkAppM ``dite #[le, g₂, g₁]
+    let (x₁, g₁) ← g₁.mvarId!.intro1
+    m.bisect g₁ cases[:mid] z1 (.lt z3) e1 e3 p1 (.fvar x₁) e
+    let (x₂, g₂) ← g₂.mvarId!.intro1
+    m.bisect g₂ cases[mid:] (.le z3) z2 e3 e2 (.fvar x₂) p2 e
+  else if _x : 0 < cases.size then
+    let { goal, rhs, .. } := cases[0]
+    let pf₁ ← match z1 with | .le _ => pure p1 | .lt _ => m.roundUp e1 e rhs p1
+    let pf₂ ← match z2 with | .le _ => pure p2 | .lt _ => m.roundDown e e2 rhs p2
+    g.assign (.app (.mvar goal) (← mkAppM ``le_antisymm #[pf₂, pf₁]))
+  else panic! "no goals"
 -/
 partial def Methods.bisect (m : Methods) (g : MVarId) (cases : Subarray IntervalCasesSubgoal)
     (z1 z2 : Bound) (e1 e2 p1 p2 e : Expr) : MetaM Unit := g.withContext do
@@ -521,7 +589,11 @@ definition natMethods
     pure (z, e, p)
   proveLE (lhs rhs : Q(Nat)) := mkDecideProofQ q($lhs <= $rhs)
   proveLT (lhs rhs : Q(Nat)) := mkDecideProofQ q(¬$rhs <= $lhs)
-  roundUp (lhs rhs _ : Q(Nat
+  roundUp (lhs rhs _ : Q(Nat)) (p : Q(¬$rhs <= $lhs)) := pure q(Nat.gt_of_not_le $p)
+  roundDown (lhs _ rhs' : Q(Nat)) (p : Q(¬Nat.succ $rhs' <= $lhs)) := pure q(Nat.ge_of_not_lt $p)
+  mkNumeral
+    | (i : Nat) => pure q($i)
+    | _ => failure
 
 中文:
 定义 natMethods
@@ -532,7 +604,11 @@ definition natMethods
     pure (z, e, p)
   proveLE (lhs rhs : Q(Nat)) := mkDecideProofQ q($lhs <= $rhs)
   proveLT (lhs rhs : Q(Nat)) := mkDecideProofQ q(¬$rhs <= $lhs)
-  roundUp (lhs rhs _ : Q(Nat
+  roundUp (lhs rhs _ : Q(Nat)) (p : Q(¬$rhs <= $lhs)) := pure q(Nat.gt_of_not_le $p)
+  roundDown (lhs _ rhs' : Q(Nat)) (p : Q(¬Nat.succ $rhs' <= $lhs)) := pure q(Nat.ge_of_not_lt $p)
+  mkNumeral
+    | (i : Nat) => pure q($i)
+    | _ => failure
 
 Depends on / 依赖: Nat.ge_of_not_lt, Nat.gt_of_not_le, Nat.succ, Nat.zero_le, NormNum, NormNum.derive, derive, failure, ge_of_not_lt, gt_of_not_le, mkDecideProofQ, mkNumeral, proveLE, proveLT, roundDown, roundUp, toRawIntEq, toRawIntEq.get, zero_le
 -/
@@ -600,7 +676,11 @@ definition intMethods
     pure (z, e, p)
   proveLE (lhs rhs : Q(Int)) := mkDecideProofQ q($lhs <= $rhs)
   proveLT (lhs rhs : Q(Int)) := mkDecideProofQ q(¬$rhs <= $lhs)
-  roundUp (lhs rhs _ : Q(Int)) (p : Q(¬$rhs <= $lhs)) := pure q(Int.add_one_le_of_not_le 
+  roundUp (lhs rhs _ : Q(Int)) (p : Q(¬$rhs <= $lhs)) := pure q(Int.add_one_le_of_not_le $p)
+  roundDown (lhs rhs _ : Q(Int)) (p : Q(¬$rhs <= $lhs)) := pure q(Int.le_sub_one_of_not_le $p)
+  mkNumeral
+    | (i : Nat) => let n : Q(Nat) := mkRawNatLit i; pure q(OfNat.ofNat $n : Int)
+    | .negSucc i => let n : Q(Nat) := mkRawNatLit (i+1); pure q(-OfNat.ofNat $n : Int)
 
 中文:
 定义 intMethods
@@ -610,7 +690,11 @@ definition intMethods
     pure (z, e, p)
   proveLE (lhs rhs : Q(Int)) := mkDecideProofQ q($lhs <= $rhs)
   proveLT (lhs rhs : Q(Int)) := mkDecideProofQ q(¬$rhs <= $lhs)
-  roundUp (lhs rhs _ : Q(Int)) (p : Q(¬$rhs <= $lhs)) := pure q(Int.add_one_le_of_not_le 
+  roundUp (lhs rhs _ : Q(Int)) (p : Q(¬$rhs <= $lhs)) := pure q(Int.add_one_le_of_not_le $p)
+  roundDown (lhs rhs _ : Q(Int)) (p : Q(¬$rhs <= $lhs)) := pure q(Int.le_sub_one_of_not_le $p)
+  mkNumeral
+    | (i : Nat) => let n : Q(Nat) := mkRawNatLit i; pure q(OfNat.ofNat $n : Int)
+    | .negSucc i => let n : Q(Nat) := mkRawNatLit (i+1); pure q(-OfNat.ofNat $n : Int)
 -/
 def intMethods : Methods where
   eval (e : Q(Int)) := do
@@ -637,7 +721,41 @@ definition intervalCases
     if α.isConstOf ``Int then pure intMethods else
     -- if α.isConstOf ``PNat then pure pnatMethods else
     throwError "interval_cases failed: unsupported type {α}"
-  let mut lb ← try? (m
+  let mut lb ← try? (m.initLB e)
+  for pf in lbs do
+    if let some lb1 ← try? (m.getBound e pf true) then
+      if lb.all (·.1.asLower < lb1.1.asLower) then
+        lb := some lb1
+    else if mustUseBounds then
+      throwError "interval_cases failed: provided bound '{← inferType pf}' cannot be evaluated"
+  let mut ub ← try? (m.initUB e)
+  for pf in ubs do
+    if let some ub1 ← try? (m.getBound e pf false) then
+      if ub.all (·.1.asUpper > ub1.1.asUpper) then
+        ub := some ub1
+    else if mustUseBounds then
+      throwError "interval_cases failed: provided bound '{← inferType pf}' cannot be evaluated"
+  match lb, ub with
+  | some (z1, e1, p1), some (z2, e2, p2) =>
+    if z1.asLower > z2.asUpper then
+      (← g.exfalso).assign (← m.inconsistentBounds z1 z2 e1 e2 p1 p2 e)
+      pure #[]
+    else
+      let mut goals := #[]
+      let lo := z1.asLower
+      let tgt ← g.getType
+      let tag ← g.getTag
+      for i in [:(z2.asUpper-lo+1).toNat] do
+        let z := lo+i
+        let rhs ← m.mkNumeral z
+        let ty ← mkArrow (← mkEq e rhs) tgt
+        let goal ← mkFreshExprMVar ty .syntheticOpaque (appendTag tag (.mkSimple (toString z)))
+        goals := goals.push { rhs, value := z, goal := goal.mvarId! }
+      m.bisect g goals.toSubarray z1 z2 e1 e2 p1 p2 e
+      pure goals
+  | none, some _ => throwError "interval_cases failed: could not find lower bound on {e'}"
+  | some _, none => throwError "interval_cases failed: could not find upper bound on {e'}"
+  | none, none => throwError "interval_cases failed: could not find bounds on {e'}"
 
 中文:
 定义 intervalCases
@@ -649,7 +767,41 @@ definition intervalCases
     if α.isConstOf ``Int then pure intMethods else
     -- if α.isConstOf ``PNat then pure pnatMethods else
     throwError "interval_cases failed: unsupported type {α}"
-  let mut lb ← try? (m
+  let mut lb ← try? (m.initLB e)
+  for pf in lbs do
+    if let some lb1 ← try? (m.getBound e pf true) then
+      if lb.all (·.1.asLower < lb1.1.asLower) then
+        lb := some lb1
+    else if mustUseBounds then
+      throwError "interval_cases failed: provided bound '{← inferType pf}' cannot be evaluated"
+  let mut ub ← try? (m.initUB e)
+  for pf in ubs do
+    if let some ub1 ← try? (m.getBound e pf false) then
+      if ub.all (·.1.asUpper > ub1.1.asUpper) then
+        ub := some ub1
+    else if mustUseBounds then
+      throwError "interval_cases failed: provided bound '{← inferType pf}' cannot be evaluated"
+  match lb, ub with
+  | some (z1, e1, p1), some (z2, e2, p2) =>
+    if z1.asLower > z2.asUpper then
+      (← g.exfalso).assign (← m.inconsistentBounds z1 z2 e1 e2 p1 p2 e)
+      pure #[]
+    else
+      let mut goals := #[]
+      let lo := z1.asLower
+      let tgt ← g.getType
+      let tag ← g.getTag
+      for i in [:(z2.asUpper-lo+1).toNat] do
+        let z := lo+i
+        let rhs ← m.mkNumeral z
+        let ty ← mkArrow (← mkEq e rhs) tgt
+        let goal ← mkFreshExprMVar ty .syntheticOpaque (appendTag tag (.mkSimple (toString z)))
+        goals := goals.push { rhs, value := z, goal := goal.mvarId! }
+      m.bisect g goals.toSubarray z1 z2 e1 e2 p1 p2 e
+      pure goals
+  | none, some _ => throwError "interval_cases failed: could not find lower bound on {e'}"
+  | some _, none => throwError "interval_cases failed: could not find upper bound on {e'}"
+  | none, none => throwError "interval_cases failed: could not find bounds on {e'}"
 -/
 def intervalCases (g : MVarId) (e e' : Expr) (lbs ubs : Array Expr) (mustUseBounds := false) :
     MetaM (Array IntervalCasesSubgoal) := g.withContext do

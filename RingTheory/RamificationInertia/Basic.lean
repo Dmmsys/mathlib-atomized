@@ -52,7 +52,21 @@ theorem sum_ramification_inertia_eq_finrank_fiber
   apply Finset.sum_congr rfl
   intro q _
   simp_rw [toEquiv_symm, coe_symm_toEquiv, coe_primesOverOrderIsoFiber_symm_apply]
-  set r := q.1
+  set r := q.1.comap Algebra.TensorProduct.includeRight
+  let := Localization.AtPrime.algebraOfLiesOver p r
+  rw [ramificationIdx_eq p r]; rw [inertiaDeg_eq p r]
+  let Rp := Localization.AtPrime p
+  let Sq := Localization.AtPrime q.1
+  let Sr := Localization.AtPrime r
+  let κp := p.ResidueField
+  let κr := r.ResidueField
+  let A := Sr ⧸ p.map (algebraMap R Sr)
+  suffices length Sr A * finrank κp κr = finrank κp Sq by simpa using congr_arg ENat.toNat this
+  calc length Sr A * finrank κp κr = length Sr A * length κp κr := by rw [length_eq_finrank]
+    _ = length Rp A := (length_restrictScalars Rp Sr A).symm
+    _ = length Rp Sq := (Fiber.localizationAlgEquivQuotient p q.1).toLinearEquiv.length_eq.symm
+    _ = length κp Sq := length_eq_of_surjective residue_surjective
+    _ = finrank κp Sq := length_eq_finrank κp Sq
 
 中文:
 定理 sum_ramification_inertia_eq_finrank_fiber
@@ -62,7 +76,21 @@ theorem sum_ramification_inertia_eq_finrank_fiber
   apply Finset.sum_congr rfl
   intro q _
   simp_rw [toEquiv_symm, coe_symm_toEquiv, coe_primesOverOrderIsoFiber_symm_apply]
-  set r := q.1
+  set r := q.1.comap Algebra.TensorProduct.includeRight
+  let := Localization.AtPrime.algebraOfLiesOver p r
+  rw [ramificationIdx_eq p r]; rw [inertiaDeg_eq p r]
+  let Rp := Localization.AtPrime p
+  let Sq := Localization.AtPrime q.1
+  let Sr := Localization.AtPrime r
+  let κp := p.ResidueField
+  let κr := r.ResidueField
+  let A := Sr ⧸ p.map (algebraMap R Sr)
+  suffices length Sr A * finrank κp κr = finrank κp Sq by simpa using congr_arg ENat.toNat this
+  calc length Sr A * finrank κp κr = length Sr A * length κp κr := by rw [length_eq_finrank]
+    _ = length Rp A := (length_restrictScalars Rp Sr A).symm
+    _ = length Rp Sq := (Fiber.localizationAlgEquivQuotient p q.1).toLinearEquiv.length_eq.symm
+    _ = length κp Sq := length_eq_of_surjective residue_surjective
+    _ = finrank κp Sq := length_eq_finrank κp Sq
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, AtPrime, Finset, Finset.sum_congr, Fintype, Fintype.ofFinite, IsArtinianRing, IsArtinianRing.finrank_eq_sum_primeSpectrum, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, PrimeSpectrum, TensorProduct, algebraOfLiesOver, coe_primesOverOrderIsoFiber_symm_apply, coe_symm_toEquiv, finrank_eq_sum_primeSpectrum, includeRight, inertiaDeg_eq
 -/

@@ -45,7 +45,19 @@ definition ofDerivation
       leibniz' x y := by
         simp only [LinearMap.coe_mk, AddHom.coe_mk]
         refine x.induction_on (by simp) (fun _ l => ?_) (fun _ _ h1 h2 => ?_)
-        · refine y.induction_on (by simp) (fun _ l' => ?_) (fun _ _ h
+        · refine y.induction_on (by simp) (fun _ l' => ?_) (fun _ _ h1 h2 => ?_)
+          · simp [← lie_skew l' l, -lie_skew, add_tmul, tmul_neg]
+          · simp [h1, h2, sub_add_sub_comm]
+        · simp [h1, h2, sub_add_sub_comm] }
+  map_add' _ _ := by ext; simp
+  map_smul' _ _ := by ext; simp
+  map_lie' {_ _} := by
+    ext z
+    refine z.induction_on (by simp) (by simp [sub_tmul]) (fun _ _ hx hy => ?_)
+    simp_all
+    abel
+
+@[simp]
 
 中文:
 定义 ofDerivation
@@ -56,7 +68,19 @@ definition ofDerivation
       leibniz' x y := by
         simp only [LinearMap.coe_mk, AddHom.coe_mk]
         refine x.induction_on (by simp) (fun _ l => ?_) (fun _ _ h1 h2 => ?_)
-        · refine y.induction_on (by simp) (fun _ l' => ?_) (fun _ _ h
+        · refine y.induction_on (by simp) (fun _ l' => ?_) (fun _ _ h1 h2 => ?_)
+          · simp [← lie_skew l' l, -lie_skew, add_tmul, tmul_neg]
+          · simp [h1, h2, sub_add_sub_comm]
+        · simp [h1, h2, sub_add_sub_comm] }
+  map_add' _ _ := by ext; simp
+  map_smul' _ _ := by ext; simp
+  map_lie' {_ _} := by
+    ext z
+    refine z.induction_on (by simp) (by simp [sub_tmul]) (fun _ _ hx hy => ?_)
+    simp_all
+    abel
+
+@[simp]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, LinearMap, LinearMap.coe_mk, add_tmul, coe_mk, d.rTensor, induction_on, leibniz, lie_skew, map_add, map_lie, map_smul, rTensor, sub_add_sub_comm, tmul_neg, x.induction_on, y.induction_on, z.induction
 -/
@@ -113,7 +137,23 @@ definition ofLieDerivation
         refine x.induction_on (by simp) ?_ ?_
         · intros _ _
           refine y.induction_on (by simp) ?_ ?_
-          · intros _
+          · intros _ _
+            simp [LieAlgebra.ExtendScalars.bracket_tmul, tmul_sub, mul_comm]
+          · intros _ _ h1 h2
+            simp [h1, h2]
+            abel_nf
+        · intros _ _ h1 h2
+          simp [h1, h2]
+          abel_nf }
+  map_add' _ _ := by ext _; simp
+  map_smul' _ _ := by ext _; simp
+  map_lie' {_ _} := by
+    ext z
+    refine z.induction_on (by simp) (fun a l => ?_) (fun _ _ hx hy => ?_)
+    · simp [tmul_sub]
+    · simp_all [sub_add_sub_comm]
+
+@[simp]
 
 中文:
 定义 ofLieDerivation
@@ -126,7 +166,23 @@ definition ofLieDerivation
         refine x.induction_on (by simp) ?_ ?_
         · intros _ _
           refine y.induction_on (by simp) ?_ ?_
-          · intros _
+          · intros _ _
+            simp [LieAlgebra.ExtendScalars.bracket_tmul, tmul_sub, mul_comm]
+          · intros _ _ h1 h2
+            simp [h1, h2]
+            abel_nf
+        · intros _ _ h1 h2
+          simp [h1, h2]
+          abel_nf }
+  map_add' _ _ := by ext _; simp
+  map_smul' _ _ := by ext _; simp
+  map_lie' {_ _} := by
+    ext z
+    refine z.induction_on (by simp) (fun a l => ?_) (fun _ _ hx hy => ?_)
+    · simp [tmul_sub]
+    · simp_all [sub_add_sub_comm]
+
+@[simp]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, ExtendScalars, LieAlgebra, LieAlgebra.ExtendScalars.bracket_tmul, LinearMap, LinearMap.coe_mk, abel_nf, bracket_tmul, coe_mk, d.toLinearMap.lTensor, induction_o, induction_on, intros, lTensor, leibniz, map_add, map_lie, map_smul, mul_comm
 -/

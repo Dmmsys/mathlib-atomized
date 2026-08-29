@@ -109,7 +109,20 @@ cardinalMk_le_of_le'
       calc
         (Cardinal.sum fun a => m ^ lift.{u} #(β a)) <= lift.{v} #α * ⨆ a, m ^ lift.{u} #(β a) :=
           Cardinal.sum_le_lift_mk_mul_iSup _
-        _ <= m * ⨆ a, m ^ lift
+        _ <= m * ⨆ a, m ^ lift.{u} #(β a) := mul_le_mul' (le_max_left _ _) le_rfl
+        _ = m :=
+          mul_eq_left (le_max_right _ _)
+(ciSup_le' fun _ => pow_le (le_max_right _ _) (lt_aleph0_of_finite _))
+pos_iff_ne_zero.1
+              Order.succ_le_iff.1
+                (by
+                  rw [succ_zero]
+                  obtain ⟨a⟩ : Nonempty α := hn
+                  refine le_trans ?_ (le_ciSup bddAbove_of_small a)
+                  rw [← power_zero]
+                  exact
+                    power_le_power_left
+                      (pos_iff_ne_zero.1 (aleph0_pos.trans_le (le_max_right _ _))) zero_le)
 
 中文:
 定理 cardinalMk_le_max_aleph0_of_finite'
@@ -121,7 +134,20 @@ cardinalMk_le_of_le'
       calc
         (Cardinal.sum fun a => m ^ lift.{u} #(β a)) <= lift.{v} #α * ⨆ a, m ^ lift.{u} #(β a) :=
           Cardinal.sum_le_lift_mk_mul_iSup _
-        _ <= m * ⨆ a, m ^ lift
+        _ <= m * ⨆ a, m ^ lift.{u} #(β a) := mul_le_mul' (le_max_left _ _) le_rfl
+        _ = m :=
+          mul_eq_left (le_max_right _ _)
+(ciSup_le' fun _ => pow_le (le_max_right _ _) (lt_aleph0_of_finite _))
+pos_iff_ne_zero.1
+              Order.succ_le_iff.1
+                (by
+                  rw [succ_zero]
+                  obtain ⟨a⟩ : Nonempty α := hn
+                  refine le_trans ?_ (le_ciSup bddAbove_of_small a)
+                  rw [← power_zero]
+                  exact
+                    power_le_power_left
+                      (pos_iff_ne_zero.1 (aleph0_pos.trans_le (le_max_right _ _))) zero_le)
 
 Depends on / 依赖: Cardinal, Cardinal.sum, Cardinal.sum_le_lift_mk_mul_iSup, Nonempt, Order.succ_le_iff, cardinalMk_le_of_le, ciSup_le, isEmpty_or_nonempty, le_max_left, le_max_right, le_rfl, lt_aleph0_of_finite, mul_eq_left, mul_le_mul, pos_iff_ne_zero, pow_le, succ_le_iff, succ_zero, sum_le_lift_mk_mul_iSup
 -/

@@ -568,7 +568,7 @@ theorem arcsin_neg
   · rw [arcsin_of_one_le hx₂, arcsin_of_le_neg_one (neg_le_neg hx₂)]
   refine arcsin_eq_of_sin_eq ?_ ?_
   · rw [sin_neg, sin_arcsin hx₁ hx₂]
-  ·
+  · exact ⟨neg_le_neg (arcsin_le_pi_div_two _), neg_le.2 (neg_pi_div_two_le_arcsin _)⟩
 
 中文:
 定理 arcsin_neg
@@ -581,7 +581,7 @@ theorem arcsin_neg
   · rw [arcsin_of_one_le hx₂, arcsin_of_le_neg_one (neg_le_neg hx₂)]
   refine arcsin_eq_of_sin_eq ?_ ?_
   · rw [sin_neg, sin_arcsin hx₁ hx₂]
-  ·
+  · exact ⟨neg_le_neg (arcsin_le_pi_div_two _), neg_le.2 (neg_pi_div_two_le_arcsin _)⟩
 
 Depends on / 依赖: arcsin_eq_of_sin_eq, arcsin_le_pi_div_two, arcsin_of_le_neg_one, arcsin_of_one_le, le_neg, le_total, neg_le, neg_le_neg, neg_neg, neg_pi_div_two_le_arcsin, sin_arcsin, sin_neg
 -/
@@ -1216,7 +1216,11 @@ theorem cos_arcsin
     nlinarith
   by_cases hx₂ : x <= 1; swap
   · rw [not_le] at hx₂
-    rw [arcsin_of_one_le hx₂.le]; rw [cos_pi_div_two]; rw [sqrt_eq_zero_of_
+    rw [arcsin_of_one_le hx₂.le]; rw [cos_pi_div_two]; rw [sqrt_eq_zero_of_nonpos]
+    nlinarith
+  have : sin (arcsin x) ^ 2 + cos (arcsin x) ^ 2 = 1 := sin_sq_add_cos_sq (arcsin x)
+  rw [← eq_sub_iff_add_eq']; rw [← sqrt_inj (sq_nonneg _) (sub_nonneg.2 (sin_sq_le_one (arcsin x)))]; rw [sq]; rw [sqrt_mul_self (cos_arcsin_nonneg _)] at this
+  rw [this]; rw [sin_arcsin hx₁ hx₂]
 
 中文:
 定理 cos_arcsin
@@ -1229,7 +1233,11 @@ theorem cos_arcsin
     nlinarith
   by_cases hx₂ : x <= 1; swap
   · rw [not_le] at hx₂
-    rw [arcsin_of_one_le hx₂.le]; rw [cos_pi_div_two]; rw [sqrt_eq_zero_of_
+    rw [arcsin_of_one_le hx₂.le]; rw [cos_pi_div_two]; rw [sqrt_eq_zero_of_nonpos]
+    nlinarith
+  have : sin (arcsin x) ^ 2 + cos (arcsin x) ^ 2 = 1 := sin_sq_add_cos_sq (arcsin x)
+  rw [← eq_sub_iff_add_eq']; rw [← sqrt_inj (sq_nonneg _) (sub_nonneg.2 (sin_sq_le_one (arcsin x)))]; rw [sq]; rw [sqrt_mul_self (cos_arcsin_nonneg _)] at this
+  rw [this]; rw [sin_arcsin hx₁ hx₂]
 
 Depends on / 依赖: arcsin, arcsin_of_le_neg_one, arcsin_of_one_le, cos_neg, cos_pi_div_two, eq_sub_iff_add_eq, not_le, sin_sq_add_cos_sq, sin_sq_le_one, sq_nonneg, sqrt_eq_zero_of_nonpos, sqrt_inj, sqrt_m, sub_nonneg
 -/
@@ -1264,7 +1272,7 @@ theorem tan_arcsin
   · have h : √(1 - x ^ 2) = 0 := sqrt_eq_zero_of_nonpos (by nlinarith)
     rw [h]
     simp
-  rw [sin_a
+  rw [sin_arcsin hx₁ hx₂]
 
 中文:
 定理 tan_arcsin
@@ -1280,7 +1288,7 @@ theorem tan_arcsin
   · have h : √(1 - x ^ 2) = 0 := sqrt_eq_zero_of_nonpos (by nlinarith)
     rw [h]
     simp
-  rw [sin_a
+  rw [sin_arcsin hx₁ hx₂]
 
 Depends on / 依赖: cos_arcsin, sin_arcsin, sqrt_eq_zero_of_nonpos, tan_eq_sin_div_cos
 -/
@@ -1853,7 +1861,9 @@ theorem sin_arccos
   · rw [not_le] at hx₂
     rw [arccos_of_one_le hx₂.le]; rw [sin_zero]; rw [sqrt_eq_zero_of_nonpos]
     nlinarith
-  rw [
+  rw [arccos_eq_pi_div_two_sub_arcsin]; rw [sin_pi_div_two_sub]; rw [cos_arcsin]
+
+@[simp]
 
 中文:
 定理 sin_arccos
@@ -1868,7 +1878,9 @@ theorem sin_arccos
   · rw [not_le] at hx₂
     rw [arccos_of_one_le hx₂.le]; rw [sin_zero]; rw [sqrt_eq_zero_of_nonpos]
     nlinarith
-  rw [
+  rw [arccos_eq_pi_div_two_sub_arcsin]; rw [sin_pi_div_two_sub]; rw [cos_arcsin]
+
+@[simp]
 
 Depends on / 依赖: arccos_eq_pi_div_two_sub_arcsin, arccos_of_le_neg_one, arccos_of_one_le, cos_arcsin, not_le, sin_pi, sin_pi_div_two_sub, sin_zero, sqrt_eq_zero_of_nonpos
 -/
@@ -2083,7 +2095,11 @@ definition sinPartialHomeomorph
   map_source' := by grind [arcsin_lt_pi_div_two, neg_pi_div_two_lt_arcsin, arcsin_sin]
   map_target' _ hy := ⟨neg_pi_div_two_lt_arcsin.2 hy.1, arcsin_lt_pi_div_two.2 hy.2⟩
   left_inv' _ hx := arcsin_sin hx.1.le hx.2.le
-
+  right_inv' _ hy := sin_arcsin hy.1.le hy.2.le
+  open_source := isOpen_Ioo
+  open_target := isOpen_Ioo
+  continuousOn_toFun := continuous_sin.continuousOn
+  continuousOn_invFun := continuous_arcsin.continuousOn
 
 中文:
 定义 sinPartialHomeomorph
@@ -2095,7 +2111,11 @@ definition sinPartialHomeomorph
   map_source' := by grind [arcsin_lt_pi_div_two, neg_pi_div_two_lt_arcsin, arcsin_sin]
   map_target' _ hy := ⟨neg_pi_div_two_lt_arcsin.2 hy.1, arcsin_lt_pi_div_two.2 hy.2⟩
   left_inv' _ hx := arcsin_sin hx.1.le hx.2.le
-
+  right_inv' _ hy := sin_arcsin hy.1.le hy.2.le
+  open_source := isOpen_Ioo
+  open_target := isOpen_Ioo
+  continuousOn_toFun := continuous_sin.continuousOn
+  continuousOn_invFun := continuous_arcsin.continuousOn
 -/
 def sinPartialHomeomorph : OpenPartialHomeomorph Real Real where
   toFun := sin
@@ -2210,7 +2230,10 @@ definition cosPartialHomeomorph
   map_target' _ hy := ⟨arccos_pos.mpr hy.2, arccos_lt_pi.mpr hy.1⟩
   left_inv' _ hx := arccos_cos hx.1.le hx.2.le
   right_inv' _ hy := cos_arccos hy.1.le hy.2.le
-  open_
+  open_source := isOpen_Ioo
+  open_target := isOpen_Ioo
+  continuousOn_toFun := continuous_cos.continuousOn
+  continuousOn_invFun := continuous_arccos.continuousOn
 
 中文:
 定义 cosPartialHomeomorph
@@ -2223,7 +2246,10 @@ definition cosPartialHomeomorph
   map_target' _ hy := ⟨arccos_pos.mpr hy.2, arccos_lt_pi.mpr hy.1⟩
   left_inv' _ hx := arccos_cos hx.1.le hx.2.le
   right_inv' _ hy := cos_arccos hy.1.le hy.2.le
-  open_
+  open_source := isOpen_Ioo
+  open_target := isOpen_Ioo
+  continuousOn_toFun := continuous_cos.continuousOn
+  continuousOn_invFun := continuous_arccos.continuousOn
 -/
 def cosPartialHomeomorph : OpenPartialHomeomorph Real Real where
   toFun := cos

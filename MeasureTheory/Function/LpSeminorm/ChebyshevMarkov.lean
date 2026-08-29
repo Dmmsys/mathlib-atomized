@@ -64,7 +64,7 @@ theorem mul_meas_ge_le_pow_eLpNorm
     exact not_or_intro hp_ne_zero hp_ne_top
   rw [← ENNReal.rpow_one (ε * μ { x | ε <= ‖f x‖ₑ ^ p.toReal })]; rw [← this]; rw [ENNReal.rpow_mul]
   gcongr
-  exact pow_mul_meas_g
+  exact pow_mul_meas_ge_le_eLpNorm μ hp_ne_zero hp_ne_top hf ε
 
 中文:
 定理 mul_meas_ge_le_pow_eLpNorm
@@ -76,7 +76,7 @@ theorem mul_meas_ge_le_pow_eLpNorm
     exact not_or_intro hp_ne_zero hp_ne_top
   rw [← ENNReal.rpow_one (ε * μ { x | ε <= ‖f x‖ₑ ^ p.toReal })]; rw [← this]; rw [ENNReal.rpow_mul]
   gcongr
-  exact pow_mul_meas_g
+  exact pow_mul_meas_ge_le_eLpNorm μ hp_ne_zero hp_ne_top hf ε
 
 Depends on / 依赖: ENNReal, ENNReal.rpow_mul, ENNReal.rpow_one, ENNReal.toReal_eq_zero_iff, hp_ne_top, hp_ne_zero, not_or_intro, one_div_mul_cancel, p.toReal, pow_mul_meas_ge_le_eLpNorm, rpow_mul, rpow_one, toReal, toReal_eq_zero_iff
 -/
@@ -131,7 +131,9 @@ theorem meas_ge_le_mul_pow_eLpNorm_enorm
       rw [ENNReal.zero_rpow_of_pos (ENNReal.toReal_pos hp_ne_zero hp_ne_top)]
     simp [h, this, hmeas_top]
   · have hεpow : ε ^ p.toReal != 0 := (ENNReal.rpow_pos (pos_iff_ne_zero.2 hε) h).ne.symm
-    have hεpow' : ε ^ p.toReal 
+    have hεpow' : ε ^ p.toReal != ∞ := by finiteness
+    rw [ENNReal.inv_rpow]; rw [← ENNReal.mul_le_mul_iff_right hεpow hεpow']; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel hεpow hεpow']; rw [one_mul]
+    exact mul_meas_ge_le_pow_eLpNorm' μ hp_ne_zero hp_ne_top hf ε
 
 中文:
 定理 meas_ge_le_mul_pow_eLpNorm_enorm
@@ -142,7 +144,9 @@ theorem meas_ge_le_mul_pow_eLpNorm_enorm
       rw [ENNReal.zero_rpow_of_pos (ENNReal.toReal_pos hp_ne_zero hp_ne_top)]
     simp [h, this, hmeas_top]
   · have hεpow : ε ^ p.toReal != 0 := (ENNReal.rpow_pos (pos_iff_ne_zero.2 hε) h).ne.symm
-    have hεpow' : ε ^ p.toReal 
+    have hεpow' : ε ^ p.toReal != ∞ := by finiteness
+    rw [ENNReal.inv_rpow]; rw [← ENNReal.mul_le_mul_iff_right hεpow hεpow']; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel hεpow hεpow']; rw [one_mul]
+    exact mul_meas_ge_le_pow_eLpNorm' μ hp_ne_zero hp_ne_top hf ε
 
 Depends on / 依赖: ENNReal, ENNReal.inv_rpow, ENNReal.mul_inv_cancel, ENNReal.mul_le_mul_iff_right, ENNReal.rpow_pos, ENNReal.toReal_pos, ENNReal.zero_rpow_of_pos, finiteness, hmeas_top, hp_ne, hp_ne_top, hp_ne_zero, inv_rpow, mul_assoc, mul_inv_cancel, mul_le_mul_iff_right, mul_meas_ge_le_pow_eLpNorm, ne.symm, one_mul, p.toReal
 -/

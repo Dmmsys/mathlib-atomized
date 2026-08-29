@@ -212,7 +212,8 @@ theorem gradedComm_of_tmul_of
   proof: by
   rw [gradedComm]
   dsimp only [LinearEquiv.trans_apply, LinearEquiv.coe_ofLinearMap]
-  rw [TensorProduct.directSum_lof_tmul_lof]; rw [gradedCommAux_lof_tmul]; rw [Units.smul_def]; rw [-- Note: https://github.com/leanprover-community/mathlib4/pull/8386 specialized `map_smul` to `LinearEquiv.map_s
+  rw [TensorProduct.directSum_lof_tmul_lof]; rw [gradedCommAux_lof_tmul]; rw [Units.smul_def]; rw [-- Note: https://github.com/leanprover-community/mathlib4/pull/8386 specialized `map_smul` to `LinearEquiv.map_smul` to avoid timeouts.
+    ← Int.cast_smul_eq_zsmul R]; rw [LinearEquiv.map_smul]; rw [TensorProduct.directSum_symm_lof_tmul]; rw [Int.cast_smul_eq_zsmul]; rw [← Units.smul_def]
 
 中文:
 定理 gradedComm_of_tmul_of
@@ -220,7 +221,8 @@ theorem gradedComm_of_tmul_of
   证明: by
   rw [gradedComm]
   dsimp only [LinearEquiv.trans_apply, LinearEquiv.coe_ofLinearMap]
-  rw [TensorProduct.directSum_lof_tmul_lof]; rw [gradedCommAux_lof_tmul]; rw [Units.smul_def]; rw [-- Note: https://github.com/leanprover-community/mathlib4/pull/8386 specialized `map_smul` to `LinearEquiv.map_s
+  rw [TensorProduct.directSum_lof_tmul_lof]; rw [gradedCommAux_lof_tmul]; rw [Units.smul_def]; rw [-- Note: https://github.com/leanprover-community/mathlib4/pull/8386 specialized `map_smul` to `LinearEquiv.map_smul` to avoid timeouts.
+    ← Int.cast_smul_eq_zsmul R]; rw [LinearEquiv.map_smul]; rw [TensorProduct.directSum_symm_lof_tmul]; rw [Int.cast_smul_eq_zsmul]; rw [← Units.smul_def]
 
 Depends on / 依赖: Int.cast_smul_eq_zsmul, LinearEquiv, LinearEquiv.coe_ofLinearMap, LinearEquiv.map_smul, LinearEquiv.trans_apply, TensorProduct, TensorProduct.directSum_lof_tmul_lof, TensorProduct.directSum_symm_lof_tmul, Units.smul_def, cast_smul_eq_zsmul, coe_ofLinearMap, community, directSum_lof_tmul_lof, directSum_symm_lof_tmul, github, github.com, gradedComm, gradedCommAux_lof_tmul, leanprover, map_smul
 -/
@@ -465,7 +467,11 @@ theorem tmul_of_gradedMul_of_tmul
     map_tmul, LinearMap.id_coe, id_eq, assoc_symm_tmul, LinearMap.rTensor_tmul,
     LinearMap.lTensor_tmul]
   rw [mul_comm j₁ i₂]; rw [gradedComm_of_tmul_of]
-  -- the tower smul l
+  -- the tower smul lemmas elaborate too slowly
+  rw [Units.smul_def]; rw [Units.smul_def]; rw [← Int.cast_smul_eq_zsmul R]; rw [← Int.cast_smul_eq_zsmul R]
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` to avoid timeouts.
+  rw [← smul_tmul']; rw [LinearEquiv.map_smul]; rw [tmul_smul]; rw [LinearEquiv.map_smul]; rw [map_smul]
+  dsimp
 
 中文:
 定理 tmul_of_gradedMul_of_tmul
@@ -476,7 +482,11 @@ theorem tmul_of_gradedMul_of_tmul
     map_tmul, LinearMap.id_coe, id_eq, assoc_symm_tmul, LinearMap.rTensor_tmul,
     LinearMap.lTensor_tmul]
   rw [mul_comm j₁ i₂]; rw [gradedComm_of_tmul_of]
-  -- the tower smul l
+  -- the tower smul lemmas elaborate too slowly
+  rw [Units.smul_def]; rw [Units.smul_def]; rw [← Int.cast_smul_eq_zsmul R]; rw [← Int.cast_smul_eq_zsmul R]
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` to avoid timeouts.
+  rw [← smul_tmul']; rw [LinearEquiv.map_smul]; rw [tmul_smul]; rw [LinearEquiv.map_smul]; rw [map_smul]
+  dsimp
 
 Depends on / 依赖: Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, LinearMap.id_coe, LinearMap.lTensor_tmul, LinearMap.rTensor_tmul, assoc_symm_tmul, assoc_tmul, coe_coe, coe_comp, comp_apply, curry_apply, gradedComm_of_tmul_of, gradedMul, id_coe, id_eq, lTensor_tmul
 -/
@@ -572,7 +582,8 @@ theorem gradedMul_algebraMap
   ext
   dsimp
   erw [tmul_of_gradedMul_of_tmul]
-  rw [mul_zero]; rw [uzpow_zero]; rw [one_smul]; rw [smul_tmul']; rw [mul_one]; rw [_root_.Algebra.smul_def]; rw [A
+  rw [mul_zero]; rw [uzpow_zero]; rw [one_smul]; rw [smul_tmul']; rw [mul_one]; rw [_root_.Algebra.smul_def]; rw [Algebra.commutes]
+  rfl
 
 中文:
 定理 gradedMul_algebraMap
@@ -583,7 +594,8 @@ theorem gradedMul_algebraMap
   ext
   dsimp
   erw [tmul_of_gradedMul_of_tmul]
-  rw [mul_zero]; rw [uzpow_zero]; rw [one_smul]; rw [smul_tmul']; rw [mul_one]; rw [_root_.Algebra.smul_def]; rw [A
+  rw [mul_zero]; rw [uzpow_zero]; rw [one_smul]; rw [smul_tmul']; rw [mul_one]; rw [_root_.Algebra.smul_def]; rw [Algebra.commutes]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.commutes, DFunLike, DFunLike.congr_fun, DistribSMul, DistribSMul.toLinearMap, _root_, _root_.Algebra.smul_def, algebraMap, commutes, congr_fun, gradedMul, mul_one, mul_zero, one_smul, smul_def, smul_tmul, tmul_of_gradedMul_of_tmul, toLinearMap, uzpow_zero
 -/
@@ -633,7 +645,16 @@ theorem gradedMul_assoc
   suffices LinearMap.llcomp R _ _ _ mA ∘ₗ mA =
       (LinearMap.llcomp R _ _ _ LinearMap.lflip.toLinearMap <|
         LinearMap.llcomp R _ _ _ mA.flip ∘ₗ mA).flip by
-    exact DFunLike.congr_fun (DFunL
+    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this x) y) z
+  ext ixa xa ixb xb iya ya iyb yb iza za izb zb
+  dsimp [mA]
+  simp_rw [tmul_of_gradedMul_of_tmul, Units.smul_def, ← Int.cast_smul_eq_zsmul R,
+    LinearMap.map_smul₂, map_smul, DirectSum.lof_eq_of, DirectSum.of_mul_of,
+    ← DirectSum.lof_eq_of R, tmul_of_gradedMul_of_tmul, DirectSum.lof_eq_of, ← DirectSum.of_mul_of,
+    ← DirectSum.lof_eq_of R, mul_assoc]
+  simp_rw [Int.cast_smul_eq_zsmul R, ← Units.smul_def, smul_smul, ← uzpow_add, add_mul, mul_add]
+  congr 2
+  abel
 
 中文:
 定理 gradedMul_assoc
@@ -644,7 +665,16 @@ theorem gradedMul_assoc
   suffices LinearMap.llcomp R _ _ _ mA ∘ₗ mA =
       (LinearMap.llcomp R _ _ _ LinearMap.lflip.toLinearMap <|
         LinearMap.llcomp R _ _ _ mA.flip ∘ₗ mA).flip by
-    exact DFunLike.congr_fun (DFunL
+    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this x) y) z
+  ext ixa xa ixb xb iya ya iyb yb iza za izb zb
+  dsimp [mA]
+  simp_rw [tmul_of_gradedMul_of_tmul, Units.smul_def, ← Int.cast_smul_eq_zsmul R,
+    LinearMap.map_smul₂, map_smul, DirectSum.lof_eq_of, DirectSum.of_mul_of,
+    ← DirectSum.lof_eq_of R, tmul_of_gradedMul_of_tmul, DirectSum.lof_eq_of, ← DirectSum.of_mul_of,
+    ← DirectSum.lof_eq_of R, mul_assoc]
+  simp_rw [Int.cast_smul_eq_zsmul R, ← Units.smul_def, smul_smul, ← uzpow_add, add_mul, mul_add]
+  congr 2
+  abel
 
 Depends on / 依赖: gradedMul
 -/
@@ -681,7 +711,17 @@ theorem gradedComm_gradedMul
     LinearMap.congr_fun₂ this x y
   ext i₁ a₁ j₁ b₁ i₂ a₂ j₂ b₂
   dsimp
-  rw [gradedComm_of_tmul_of]; rw [gradedComm_of
+  rw [gradedComm_of_tmul_of]; rw [gradedComm_of_tmul_of]; rw [tmul_of_gradedMul_of_tmul]
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` to avoid timeouts.
+  simp_rw [Units.smul_def, ← Int.cast_smul_eq_zsmul R, LinearEquiv.map_smul, map_smul,
+    LinearMap.smul_apply]
+  simp_rw [Int.cast_smul_eq_zsmul R, ← Units.smul_def, DirectSum.lof_eq_of, DirectSum.of_mul_of,
+    ← DirectSum.lof_eq_of R, gradedComm_of_tmul_of, tmul_of_gradedMul_of_tmul, smul_smul,
+    DirectSum.lof_eq_of, ← DirectSum.of_mul_of, ← DirectSum.lof_eq_of R]
+  simp_rw [← uzpow_add, mul_add, add_mul, mul_comm i₁ j₂]
+  congr 1
+  abel_nf
+  rw [two_nsmul]; rw [uzpow_add]; rw [uzpow_add]; rw [Int.units_mul_self]; rw [one_mul]
 
 中文:
 定理 gradedComm_gradedMul
@@ -693,7 +733,17 @@ theorem gradedComm_gradedMul
     LinearMap.congr_fun₂ this x y
   ext i₁ a₁ j₁ b₁ i₂ a₂ j₂ b₂
   dsimp
-  rw [gradedComm_of_tmul_of]; rw [gradedComm_of
+  rw [gradedComm_of_tmul_of]; rw [gradedComm_of_tmul_of]; rw [tmul_of_gradedMul_of_tmul]
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` to avoid timeouts.
+  simp_rw [Units.smul_def, ← Int.cast_smul_eq_zsmul R, LinearEquiv.map_smul, map_smul,
+    LinearMap.smul_apply]
+  simp_rw [Int.cast_smul_eq_zsmul R, ← Units.smul_def, DirectSum.lof_eq_of, DirectSum.of_mul_of,
+    ← DirectSum.lof_eq_of R, gradedComm_of_tmul_of, tmul_of_gradedMul_of_tmul, smul_smul,
+    DirectSum.lof_eq_of, ← DirectSum.of_mul_of, ← DirectSum.lof_eq_of R]
+  simp_rw [← uzpow_add, mul_add, add_mul, mul_comm i₁ j₂]
+  congr 1
+  abel_nf
+  rw [two_nsmul]; rw [uzpow_add]; rw [uzpow_add]; rw [Int.units_mul_self]; rw [one_mul]
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, gradedComm, gradedComm_of_tmul_of, gradedMul, tmul_of_gradedMul_of_tmul, toLinearMap
 -/

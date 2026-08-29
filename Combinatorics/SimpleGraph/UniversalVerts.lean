@@ -99,7 +99,8 @@ lemma Subgraph.IsMatching.exists_of_universalVerts
   obtain ⟨f⟩ : Nonempty (s ≃ t) := by
     rw [← Cardinal.eq]; rw [← t.cast_ncard t.toFinite]; rw [← s.cast_ncard s.toFinite]; rw [ht.2]
   let hd := Set.disjoint_of_subset_left ht.1 h
-.symm have hadj (v : s) : G.Adj v (f v) :=
+.symm have hadj (v : s) : G.Adj v (f v) := ht.1 (f v).2 (hd.ne_of_mem (f v).2 v.2)
+  exact Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv hd.symm f hadj
 
 中文:
 引理 子图.IsMatching.存在_of_universalVerts
@@ -110,7 +111,8 @@ lemma Subgraph.IsMatching.exists_of_universalVerts
   obtain ⟨f⟩ : Nonempty (s ≃ t) := by
     rw [← Cardinal.eq]; rw [← t.cast_ncard t.toFinite]; rw [← s.cast_ncard s.toFinite]; rw [ht.2]
   let hd := Set.disjoint_of_subset_left ht.1 h
-.symm have hadj (v : s) : G.Adj v (f v) :=
+.symm have hadj (v : s) : G.Adj v (f v) := ht.1 (f v).2 (hd.ne_of_mem (f v).2 v.2)
+  exact Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv hd.symm f hadj
 
 Depends on / 依赖: Cardinal, Cardinal.eq, G.Adj, IsMatching, Nonempty, Set.disjoint_of_subset_left, Set.exists_subset_card_eq, Subgraph, Subgraph.IsMatching.exists_of_disjoint_sets_of_equiv, cast_ncard, disjoint_of_subset_left, exists_of_disjoint_sets_of_equiv, exists_subset_card_eq, hd.ne_of_mem, hd.symm, ne_of_mem, s.cast_ncard, s.toFinite, t.cast_ncard, t.toFinite
 -/
@@ -160,7 +162,7 @@ lemma even_ncard_image_val_supp_sdiff_image_val_rep_union
     ← Set.image_sdiff Subtype.val_injective,
 sdiff_eq_left.mpr Set.disjoint_of_subset_right h (disjoint_image_val_universalVerts _),
     Set.inter_sdiff_distrib_right, ← Set.image_inter Subtype.val_injective,
-    Set.ncard_image_of_inj
+    Set.ncard_image_of_injective _ Subtype.val_injective, K.even_ncard_supp_sdiff_rep hrep]
 
 中文:
 引理 even_ncard_image_val_supp_sdiff_image_val_rep_union
@@ -170,7 +172,7 @@ sdiff_eq_left.mpr Set.disjoint_of_subset_right h (disjoint_image_val_universalVe
     ← Set.image_sdiff Subtype.val_injective,
 sdiff_eq_left.mpr Set.disjoint_of_subset_right h (disjoint_image_val_universalVerts _),
     Set.inter_sdiff_distrib_right, ← Set.image_inter Subtype.val_injective,
-    Set.ncard_image_of_inj
+    Set.ncard_image_of_injective _ Subtype.val_injective, K.even_ncard_supp_sdiff_rep hrep]
 
 Depends on / 依赖: K.even_ncard_supp_sdiff_rep, Set.disjoint_of_subset_right, Set.image_inter, Set.image_sdiff, Set.inter_sdiff_distrib_right, Set.ncard_image_of_injective, Set.sdiff_inter_sdiff, Subtype, Subtype.val_injective, deleteUniversalVerts_verts, disjoint_image_val_universalVerts, disjoint_of_subset_right, even_ncard_supp_sdiff_rep, image_inter, image_sdiff, inter_sdiff_distrib_right, ncard_image_of_injective, sdiff_eq_left, sdiff_eq_left.mpr, sdiff_inter_sdiff
 -/

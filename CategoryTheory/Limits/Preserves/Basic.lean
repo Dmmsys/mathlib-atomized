@@ -391,7 +391,8 @@ instance id_preservesLimitsOfSize
         ⟨fun {c} h =>
           ⟨fun s => h.lift ⟨s.pt, fun j => s.π.app j, fun _ _ f => s.π.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases 
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 中文:
 实例 id_preservesLimitsOfSize
@@ -401,7 +402,8 @@ instance id_preservesLimitsOfSize
         ⟨fun {c} h =>
           ⟨fun s => h.lift ⟨s.pt, fun j => s.π.app j, fun _ _ f => s.π.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases 
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 Depends on / 依赖: h.fac, h.lift, h.uniq, naturality, preservesLimit, s.pt
 -/
@@ -426,7 +428,8 @@ instance id_preservesColimitsOfSize
         ⟨fun {c} h =>
           ⟨fun s => h.desc ⟨s.pt, fun j => s.ι.app j, fun _ _ f => s.ι.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcase
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 中文:
 实例 id_preservesColimitsOfSize
@@ -436,7 +439,8 @@ instance id_preservesColimitsOfSize
         ⟨fun {c} h =>
           ⟨fun s => h.desc ⟨s.pt, fun j => s.ι.app j, fun _ _ f => s.ι.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcase
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 Depends on / 依赖: Algebra, Iso.refl, Monad.Algebra.isoMk, X.assoc, X.unit, h.desc, h.fac, h.uniq, naturality, preservesColimit, s.pt
 -/
@@ -847,7 +851,7 @@ lemma preservesLimitsOfShape_of_equiv
         have := (isLimitOfPreserves F (t.whiskerEquivalence e)).whiskerEquivalence e.symm
         apply ((IsLimit.postcomposeHomEquiv equ _).symm this).ofIsoLimit
         refine Cone.ext (Iso.refl _) fun j => ?_
-        simp 
+        simp [equ, ← Functor.map_comp]⟩ }
 
 中文:
 引理 preservesLimitsOfShape_of_equiv
@@ -857,7 +861,7 @@ lemma preservesLimitsOfShape_of_equiv
         have := (isLimitOfPreserves F (t.whiskerEquivalence e)).whiskerEquivalence e.symm
         apply ((IsLimit.postcomposeHomEquiv equ _).symm this).ofIsoLimit
         refine Cone.ext (Iso.refl _) fun j => ?_
-        simp 
+        simp [equ, ← Functor.map_comp]⟩ }
 
 Depends on / 依赖: Cone.ext, Functor, Functor.map_comp, IsLimit, IsLimit.postcomposeHomEquiv, Iso.refl, e.invFunIdAssoc, e.symm, invFunIdAssoc, isLimitOfPreserves, map_comp, ofIsoLimit, postcomposeHomEquiv, preserves, t.whiskerEquivalence, whiskerEquivalence
 -/
@@ -1150,7 +1154,7 @@ lemma preservesColimitsOfShape_of_equiv
         have := (isColimitOfPreserves F (t.whiskerEquivalence e)).whiskerEquivalence e.symm
         apply ((IsColimit.precomposeInvEquiv equ _).symm this).ofIsoColimit
         refine Cocone.ext (Iso.refl _) fun j => ?_
-      
+        simp [equ, ← Functor.map_comp]⟩ }
 
 中文:
 引理 preservesColimitsOfShape_of_equiv
@@ -1160,7 +1164,7 @@ lemma preservesColimitsOfShape_of_equiv
         have := (isColimitOfPreserves F (t.whiskerEquivalence e)).whiskerEquivalence e.symm
         apply ((IsColimit.precomposeInvEquiv equ _).symm this).ofIsoColimit
         refine Cocone.ext (Iso.refl _) fun j => ?_
-      
+        simp [equ, ← Functor.map_comp]⟩ }
 
 Depends on / 依赖: Cocone, Cocone.ext, Functor, Functor.map_comp, IsColimit, IsColimit.precomposeInvEquiv, Iso.refl, e.invFunIdAssoc, e.symm, invFunIdAssoc, isColimitOfPreserves, map_comp, ofIsoColimit, precomposeInvEquiv, preserves, t.whiskerEquivalence, whiskerEquivalence
 -/
@@ -1585,7 +1589,8 @@ instance id_reflectsLimits
         ⟨fun {c} h =>
           ⟨fun s => h.lift ⟨s.pt, fun j => s.π.app j, fun _ _ f => s.π.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with 
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 中文:
 实例 id_reflectsLimits
@@ -1594,7 +1599,8 @@ instance id_reflectsLimits
         ⟨fun {c} h =>
           ⟨fun s => h.lift ⟨s.pt, fun j => s.π.app j, fun _ _ f => s.π.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with 
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 Depends on / 依赖: h.fac, h.lift, h.uniq, naturality, reflectsLimit, s.pt
 -/
@@ -1617,7 +1623,8 @@ instance id_reflectsColimits
         ⟨fun {c} h =>
           ⟨fun s => h.desc ⟨s.pt, fun j => s.ι.app j, fun _ _ f => s.ι.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s wit
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 中文:
 实例 id_reflectsColimits
@@ -1626,7 +1633,8 @@ instance id_reflectsColimits
         ⟨fun {c} h =>
           ⟨fun s => h.desc ⟨s.pt, fun j => s.ι.app j, fun _ _ f => s.ι.naturality f⟩, by
             cases K; rcases c with ⟨_, _, _⟩; intro s j; cases s; exact h.fac _ j, by
-            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s wit
+            cases K; rcases c with ⟨_, _, _⟩; intro s m w; rcases s with ⟨_, _, _⟩;
+              exact h.uniq _ m w⟩⟩ }
 
 Depends on / 依赖: h.desc, h.fac, h.uniq, naturality, reflectsColimit, s.pt
 -/
@@ -1996,7 +2004,11 @@ lemma reflectsLimit_of_reflectsIsomorphisms
       apply IsLimit.ofPointIso (limit.isLimit F)⟩
     change IsIso ((Cone.forget _).map ((limit.isLimit F).liftConeMorphism c))
     suffices IsIso (IsLimit.liftConeMorphism (limit.isLimit F) c) from by
-      apply (Cone.forget F).map_
+      apply (Cone.forget F).map_isIso _
+    suffices IsIso ((Cone.functoriality F G).map
+      (IsLimit.liftConeMorphism (limit.isLimit F) c)) from by
+        apply isIso_of_reflects_iso _ (Cone.functoriality F G)
+    exact t.hom_isIso (isLimitOfPreserves G (limit.isLimit F)) _
 
 中文:
 引理 reflectsLimit_of_reflectsIsomorphisms
@@ -2006,7 +2018,11 @@ lemma reflectsLimit_of_reflectsIsomorphisms
       apply IsLimit.ofPointIso (limit.isLimit F)⟩
     change IsIso ((Cone.forget _).map ((limit.isLimit F).liftConeMorphism c))
     suffices IsIso (IsLimit.liftConeMorphism (limit.isLimit F) c) from by
-      apply (Cone.forget F).map_
+      apply (Cone.forget F).map_isIso _
+    suffices IsIso ((Cone.functoriality F G).map
+      (IsLimit.liftConeMorphism (limit.isLimit F) c)) from by
+        apply isIso_of_reflects_iso _ (Cone.functoriality F G)
+    exact t.hom_isIso (isLimitOfPreserves G (limit.isLimit F)) _
 
 Depends on / 依赖: Cone.forget, Cone.functoriality, IsLimit, IsLimit.lift, IsLimit.liftConeMorphism, IsLimit.ofPointIso, forget, functoriality, hom_isIso, isIso_of_reflects_iso, isLimit, isLimitOfPreserves, liftConeMorphism, limit.isLimit, map_isIso, ofPointIso, t.hom_isIso
 -/
@@ -2318,7 +2334,11 @@ lemma reflectsColimit_of_reflectsIsomorphisms
       apply IsColimit.ofPointIso (colimit.isColimit F)⟩
     change IsIso ((Cocone.forget _).map ((colimit.isColimit F).descCoconeMorphism c))
     suffices IsIso (IsColimit.descCoconeMorphism (colimit.isColimit F) c) from by
-    
+      apply (Cocone.forget F).map_isIso _
+    suffices IsIso ((Cocone.functoriality F G).map
+      (IsColimit.descCoconeMorphism (colimit.isColimit F) c)) from by
+        apply isIso_of_reflects_iso _ (Cocone.functoriality F G)
+    exact (isColimitOfPreserves G (colimit.isColimit F)).hom_isIso t _
 
 中文:
 引理 reflectsColimit_of_reflectsIsomorphisms
@@ -2328,7 +2348,11 @@ lemma reflectsColimit_of_reflectsIsomorphisms
       apply IsColimit.ofPointIso (colimit.isColimit F)⟩
     change IsIso ((Cocone.forget _).map ((colimit.isColimit F).descCoconeMorphism c))
     suffices IsIso (IsColimit.descCoconeMorphism (colimit.isColimit F) c) from by
-    
+      apply (Cocone.forget F).map_isIso _
+    suffices IsIso ((Cocone.functoriality F G).map
+      (IsColimit.descCoconeMorphism (colimit.isColimit F) c)) from by
+        apply isIso_of_reflects_iso _ (Cocone.functoriality F G)
+    exact (isColimitOfPreserves G (colimit.isColimit F)).hom_isIso t _
 
 Depends on / 依赖: Cocone, Cocone.forget, Cocone.functoriality, IsColimit, IsColimit.desc, IsColimit.descCoconeMorphism, IsColimit.ofPointIso, colimit, colimit.isColimit, descCoconeMorphism, forget, functoriality, isColimit, isColimitOf, isIso_of_reflects_iso, map_isIso, ofPointIso
 -/
@@ -2401,7 +2425,10 @@ lemma isIso_app_coconePt_of_preservesColimit
     (isColimitOfPreserves L hc) (isColimitOfPreserves L' hc) (asIso (whiskerLeft K α))
   convert! (inferInstance : IsIso e.hom)
   apply (isColimitOfPreserves L hc).hom_ext fun j => ?_
-  simp only [Functor.comp_obj, Functor.mapCocone_pt, Functor.mapCoco
+  simp only [Functor.comp_obj, Functor.mapCocone_pt, Functor.mapCocone_ι_app,
+    NatTrans.naturality, IsColimit.coconePointsIsoOfNatIso_hom, asIso_hom, e]
+  refine (((isColimitOfPreserves L hc).ι_map (L'.mapCocone c) (whiskerLeft K α) j).trans ?_).symm
+  simp
 
 中文:
 引理 isIso_app_coconePt_of_preservesColimit
@@ -2410,7 +2437,10 @@ lemma isIso_app_coconePt_of_preservesColimit
     (isColimitOfPreserves L hc) (isColimitOfPreserves L' hc) (asIso (whiskerLeft K α))
   convert! (inferInstance : IsIso e.hom)
   apply (isColimitOfPreserves L hc).hom_ext fun j => ?_
-  simp only [Functor.comp_obj, Functor.mapCocone_pt, Functor.mapCoco
+  simp only [Functor.comp_obj, Functor.mapCocone_pt, Functor.mapCocone_ι_app,
+    NatTrans.naturality, IsColimit.coconePointsIsoOfNatIso_hom, asIso_hom, e]
+  refine (((isColimitOfPreserves L hc).ι_map (L'.mapCocone c) (whiskerLeft K α) j).trans ?_).symm
+  simp
 
 Depends on / 依赖: Functor, Functor.comp_obj, Functor.mapCocone_, Functor.mapCocone_pt, IsColimit, IsColimit.coconePointsIsoOfNatIso, IsColimit.coconePointsIsoOfNatIso_hom, NatTrans, NatTrans.naturality, asIso_hom, coconePointsIsoOfNatIso, coconePointsIsoOfNatIso_hom, comp_obj, convert, e.hom, hom_ext, isColimitOfPreserves, mapCocone, mapCocone_pt, naturality
 -/
@@ -2445,7 +2475,8 @@ instance fullyFaithful_reflectsLimits
                 (Cone.functoriality K F).preimage (t.liftConeMorphism _)) <| by
               apply fun s m => (Cone.functoriality K F).map_injective _
               intro s m
-             
+              rw [Functor.map_preimage]
+              apply t.uniq_cone_morphism⟩ } }
 
 中文:
 实例 fullyFaithful_reflectsLimits
@@ -2456,7 +2487,8 @@ instance fullyFaithful_reflectsLimits
                 (Cone.functoriality K F).preimage (t.liftConeMorphism _)) <| by
               apply fun s m => (Cone.functoriality K F).map_injective _
               intro s m
-             
+              rw [Functor.map_preimage]
+              apply t.uniq_cone_morphism⟩ } }
 
 Depends on / 依赖: Cone.functoriality, Functor, Functor.map_preimage, IsLimit, IsLimit.mkConeMorphism, backward, backward.isDefEq.respectTransparency.types, functoriality, isDefEq, liftConeMorphism, map_injective, map_preimage, mkConeMorphism, preimage, reflects, reflectsLimit, respectTransparency, set_option, t.liftConeMorphism, t.uniq_cone_morphism
 -/
@@ -2483,7 +2515,8 @@ instance fullyFaithful_reflectsColimits
                 (Cocone.functoriality K F).preimage (t.descCoconeMorphism _)) <| by
               apply fun s m => (Cocone.functoriality K F).map_injective _
               intro s m
- 
+              rw [Functor.map_preimage]
+              apply t.uniq_cocone_morphism⟩ } }
 
 中文:
 实例 fullyFaithful_reflectsColimits
@@ -2494,7 +2527,8 @@ instance fullyFaithful_reflectsColimits
                 (Cocone.functoriality K F).preimage (t.descCoconeMorphism _)) <| by
               apply fun s m => (Cocone.functoriality K F).map_injective _
               intro s m
- 
+              rw [Functor.map_preimage]
+              apply t.uniq_cocone_morphism⟩ } }
 
 Depends on / 依赖: Cocone, Cocone.functoriality, Functor, Functor.map_preimage, IsColimit, IsColimit.mkCoconeMorphism, descCoconeMorphism, functoriality, map_injective, map_preimage, mkCoconeMorphism, preimage, reflects, reflectsColimit, t.descCoconeMorphism, t.uniq_cocone_morphism, uniq_cocone_morphism
 -/

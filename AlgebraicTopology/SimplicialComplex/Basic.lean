@@ -356,7 +356,8 @@ instance :
   le_sup_left _ _ := Set.subset_union_left
   le_sup_right _ _ := Set.subset_union_right
   sup_le _ _ _ hK hL := Set.union_subset hK hL
-  le_top K _ ht := (K.isR
+  le_top K _ ht := (K.isRelLowerSet_faces ht).1
+  bot_le _ _ ht := ht.elim
 
 中文:
 实例 :
@@ -369,7 +370,8 @@ instance :
   le_sup_left _ _ := Set.subset_union_left
   le_sup_right _ _ := Set.subset_union_right
   sup_le _ _ _ hK hL := Set.union_subset hK hL
-  le_top K _ ht := (K.isR
+  le_top K _ ht := (K.isRelLowerSet_faces ht).1
+  bot_le _ _ ht := ht.elim
 -/
 instance : CompleteLattice (PreAbstractSimplicialComplex ι) where
   inf := min
@@ -396,7 +398,8 @@ definition map
     constructor
     · exact Finset.image_nonempty.mpr (K.isRelLowerSet_faces hs').1
     · intro t hts ht
-      obtain ⟨t', ht', rfl⟩ := Finset.subset_image_
+      obtain ⟨t', ht', rfl⟩ := Finset.subset_image_iff.mp hts
+      exact ⟨t', (K.isRelLowerSet_faces hs').2 ht' (Finset.image_nonempty.mp ht), rfl⟩
 
 中文:
 定义 map
@@ -408,7 +411,8 @@ definition map
     constructor
     · exact Finset.image_nonempty.mpr (K.isRelLowerSet_faces hs').1
     · intro t hts ht
-      obtain ⟨t', ht', rfl⟩ := Finset.subset_image_
+      obtain ⟨t', ht', rfl⟩ := Finset.subset_image_iff.mp hts
+      exact ⟨t', (K.isRelLowerSet_faces hs').2 ht' (Finset.image_nonempty.mp ht), rfl⟩
 
 Depends on / 依赖: K.faces.image, s.image
 -/
@@ -481,7 +485,9 @@ definition PreAbstractSimplicialComplex.addSingletons
       · rw [hv]; exact Finset.singleton_nonempty _
       · intro t hts ht
         cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-    
+        | inl h => exact (ht.ne_empty h).elim
+        | inr h => exact ⟨v, h⟩)
+    singleton_mem v := Or.inr ⟨v, rfl⟩ }
 
 中文:
 定义 预抽象单纯复形.addSingletons
@@ -491,7 +497,9 @@ definition PreAbstractSimplicialComplex.addSingletons
       · rw [hv]; exact Finset.singleton_nonempty _
       · intro t hts ht
         cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
-    
+        | inl h => exact (ht.ne_empty h).elim
+        | inr h => exact ⟨v, h⟩)
+    singleton_mem v := Or.inr ⟨v, rfl⟩ }
 
 Depends on / 依赖: Finset, Finset.singleton_nonempty, Finset.subset_singleton_iff.mp, IsRelLowerSet, IsRelLowerSet.union, K.faces, K.isRelLowerSet_faces, Or.inr, ht.ne_empty, isRelLowerSet_faces, ne_empty, singleton_mem, singleton_nonempty, subset_singleton_iff
 -/
@@ -728,7 +736,11 @@ instance :
         (fun {x} ⟨v, hv⟩ => by
           constructor
           · rw [hv]; exact Finset.singleton_nonempty _
-          · int
+          · intro t hts ht
+            cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
+            | inl h => exact (ht.ne_empty h).elim
+            | inr h => exact ⟨v, h⟩)
+      singleton_mem v := Or.inr ⟨v, rfl⟩ }
 
 中文:
 实例 :
@@ -739,7 +751,11 @@ instance :
         (fun {x} ⟨v, hv⟩ => by
           constructor
           · rw [hv]; exact Finset.singleton_nonempty _
-          · int
+          · intro t hts ht
+            cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
+            | inl h => exact (ht.ne_empty h).elim
+            | inr h => exact ⟨v, h⟩)
+      singleton_mem v := Or.inr ⟨v, rfl⟩ }
 
 Depends on / 依赖: Finset, Finset.singleton_nonempty, Finset.subset_singleton_iff.mp, IsRelLowerSet, IsRelLowerSet.iUnion, IsRelLowerSet.union, K.faces, K.isRelLowerSet_faces, Or.inr, ht.ne_empty, isRelLowerSet_faces, ne_empty, singleton_mem, singleton_nonempty, subset_singleton_iff
 -/
@@ -768,7 +784,7 @@ instance :
         grind [IsRelLowerSet.mem_of_le, PreAbstractSimplicialComplex.isRelLowerSet_faces,
           mem_iInter]
       singleton_mem v := by
-        grind [Set.mem_iInter, Finset.singleton_none
+        grind [Set.mem_iInter, Finset.singleton_nonempty, singleton_mem] }
 
 中文:
 实例 :
@@ -778,7 +794,7 @@ instance :
         grind [IsRelLowerSet.mem_of_le, PreAbstractSimplicialComplex.isRelLowerSet_faces,
           mem_iInter]
       singleton_mem v := by
-        grind [Set.mem_iInter, Finset.singleton_none
+        grind [Set.mem_iInter, Finset.singleton_nonempty, singleton_mem] }
 
 Depends on / 依赖: Finset, Finset.singleton_nonempty, IsRelLowerSet, IsRelLowerSet.mem_of_le, K.faces, Nonempty, PreAbstractSimplicialComplex, PreAbstractSimplicialComplex.isRelLowerSet_faces, Set.mem_iInter, isRelLowerSet_faces, mem_iInter, mem_of_le, singleton_mem, singleton_nonempty, t.Nonempty
 -/
@@ -841,7 +857,8 @@ instance :
         · intro t hts ht
           cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
           | inl h => exact (ht.ne_empty h).elim
-   
+          | inr h => exact ⟨v, h⟩
+      singleton_mem v := ⟨v, rfl⟩ }
 
 中文:
 实例 :
@@ -853,7 +870,8 @@ instance :
         · intro t hts ht
           cases Finset.subset_singleton_iff.mp (hv ▸ hts) with
           | inl h => exact (ht.ne_empty h).elim
-   
+          | inr h => exact ⟨v, h⟩
+      singleton_mem v := ⟨v, rfl⟩ }
 
 Depends on / 依赖: Finset, Finset.singleton_nonempty, Finset.subset_singleton_iff.mp, ht.ne_empty, isRelLowerSet_faces, ne_empty, singleton_mem, singleton_nonempty, subset_singleton_iff
 -/
@@ -887,7 +905,7 @@ instance :
         exact hL hK htK
       | inr ht =>
         obtain ⟨v, hv⟩ := ht
-        ex
+        exact hv ▸ L.singleton_mem v
 
 中文:
 实例 :
@@ -904,7 +922,7 @@ instance :
         exact hL hK htK
       | inr ht =>
         obtain ⟨v, hv⟩ := ht
-        ex
+        exact hv ▸ L.singleton_mem v
 
 Depends on / 依赖: L.singleton_mem, Or.inl, Set.mem_biUnion, Set.mem_iUnion, mem_biUnion, mem_iUnion, singleton_mem
 -/
@@ -959,7 +977,10 @@ instance :
   le_sup_left _ _ := Set.subset_union_left
   le_sup_right _ _ := Set.subset_union_right
   sup_le _ _ _ := Set.union_subset
-  le_top K _ ht := (K.isRelLowerSet_f
+  le_top K _ ht := (K.isRelLowerSet_faces ht).1
+  bot_le K _ ht := by
+    obtain ⟨v, hv⟩ := ht
+    exact hv ▸ K.singleton_mem v
 
 中文:
 实例 :
@@ -972,7 +993,10 @@ instance :
   le_sup_left _ _ := Set.subset_union_left
   le_sup_right _ _ := Set.subset_union_right
   sup_le _ _ _ := Set.union_subset
-  le_top K _ ht := (K.isRelLowerSet_f
+  le_top K _ ht := (K.isRelLowerSet_faces ht).1
+  bot_le K _ ht := by
+    obtain ⟨v, hv⟩ := ht
+    exact hv ▸ K.singleton_mem v
 -/
 instance : CompleteLattice (AbstractSimplicialComplex ι) where
   inf := min

@@ -102,7 +102,11 @@ definition liftMagma
     map_smul' t' a := by simp [Finsupp.smul_sum, sum_smul_index', mul_smul]
     map_mul' a₁ a₂ := by
       simpa [mul_def, sum_sum_index, add_smul, Finsupp.mul_sum, Finsupp.sum_mul,
-    
+        smul_mul_smul_comm] using Finsupp.sum_comm ..
+  }
+  invFun F := F.toMulHom.comp (ofMagma R M)
+  left_inv f := by ext; simp
+  right_inv F := by ext; simp
 
 中文:
 定义 liftMagma
@@ -113,7 +117,11 @@ definition liftMagma
     map_smul' t' a := by simp [Finsupp.smul_sum, sum_smul_index', mul_smul]
     map_mul' a₁ a₂ := by
       simpa [mul_def, sum_sum_index, add_smul, Finsupp.mul_sum, Finsupp.sum_mul,
-    
+        smul_mul_smul_comm] using Finsupp.sum_comm ..
+  }
+  invFun F := F.toMulHom.comp (ofMagma R M)
+  left_inv f := by ext; simp
+  right_inv F := by ext; simp
 -/
 def liftMagma [Module R A] [IsScalarTower R A A] [SMulCommClass R A A] :
     (M ->ₙ* A) ≃ (R[M] ->ₙₐ[R] A) where
@@ -1695,7 +1703,7 @@ definition equivariantOfLinearOfComm
     · intro g r c' _nm _nz w
       dsimp at *
       simp only [add_smul, f.map_add, w, single_eq_algebraMap_mul_of, ← smul_smul]
-      rw [algebraMap_smul]; rw [algebraMap_smul]; rw [f.map_smul]; rw [of_apply]
+      rw [algebraMap_smul]; rw [algebraMap_smul]; rw [f.map_smul]; rw [of_apply]; rw [h g v]
 
 中文:
 定义 equivariantOfLinearOfComm
@@ -1707,7 +1715,7 @@ definition equivariantOfLinearOfComm
     · intro g r c' _nm _nz w
       dsimp at *
       simp only [add_smul, f.map_add, w, single_eq_algebraMap_mul_of, ← smul_smul]
-      rw [algebraMap_smul]; rw [algebraMap_smul]; rw [f.map_smul]; rw [of_apply]
+      rw [algebraMap_smul]; rw [algebraMap_smul]; rw [f.map_smul]; rw [of_apply]; rw [h g v]
 -/
 def equivariantOfLinearOfComm
     (h : forall (g : M) (v : V), f (single g (1 : R) • v) = single g (1 : R) • f v) :
@@ -1881,7 +1889,12 @@ definition liftMagma
       (liftAddHom fun x => (smulAddHom R A).flip (f <| .ofAdd x)).comp coeffAddEquiv.toAddMonoidHom
     map_smul' t' a := by simp [Finsupp.smul_sum, sum_smul_index', mul_smul]
     map_mul' a₁ a₂ := by
-      simpa [mul_def, sum_sum_index, add_smul, Finsupp.mul_sum, Finsupp.sum
+      simpa [mul_def, sum_sum_index, add_smul, Finsupp.mul_sum, Finsupp.sum_mul,
+        smul_mul_smul_comm] using Finsupp.sum_comm ..
+  }
+  invFun F := F.toMulHom.comp (ofMagma R M)
+  left_inv f := by ext; simp
+  right_inv F := by ext; simp
 
 中文:
 定义 liftMagma
@@ -1891,7 +1904,12 @@ definition liftMagma
       (liftAddHom fun x => (smulAddHom R A).flip (f <| .ofAdd x)).comp coeffAddEquiv.toAddMonoidHom
     map_smul' t' a := by simp [Finsupp.smul_sum, sum_smul_index', mul_smul]
     map_mul' a₁ a₂ := by
-      simpa [mul_def, sum_sum_index, add_smul, Finsupp.mul_sum, Finsupp.sum
+      simpa [mul_def, sum_sum_index, add_smul, Finsupp.mul_sum, Finsupp.sum_mul,
+        smul_mul_smul_comm] using Finsupp.sum_comm ..
+  }
+  invFun F := F.toMulHom.comp (ofMagma R M)
+  left_inv f := by ext; simp
+  right_inv F := by ext; simp
 -/
 def liftMagma [Module R A] [IsScalarTower R A A] [SMulCommClass R A A] :
     (Multiplicative M ->ₙ* A) ≃ (R[M] ->ₙₐ[R] A) where

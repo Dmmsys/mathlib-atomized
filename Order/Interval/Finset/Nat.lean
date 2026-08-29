@@ -41,7 +41,10 @@ instance instLocallyFiniteOrder
   finsetIco a b := ⟨List.range' a (b - a), List.nodup_range'⟩
   finsetIoc a b := ⟨List.range' (a + 1) (b - a), List.nodup_range'⟩
   finsetIoo a b := ⟨List.range' (a + 1) (b - a - 1), List.nodup_range'⟩
-  finset_mem_Icc a b x := by rw [Finset.mem_mk, Mul
+  finset_mem_Icc a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
+  finset_mem_Ico a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
+  finset_mem_Ioc a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
+  finset_mem_Ioo a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
 
 中文:
 实例 instLocallyFiniteOrder
@@ -50,7 +53,10 @@ instance instLocallyFiniteOrder
   finsetIco a b := ⟨List.range' a (b - a), List.nodup_range'⟩
   finsetIoc a b := ⟨List.range' (a + 1) (b - a), List.nodup_range'⟩
   finsetIoo a b := ⟨List.range' (a + 1) (b - a - 1), List.nodup_range'⟩
-  finset_mem_Icc a b x := by rw [Finset.mem_mk, Mul
+  finset_mem_Icc a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
+  finset_mem_Ico a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
+  finset_mem_Ioc a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
+  finset_mem_Ioo a b x := by rw [Finset.mem_mk, Multiset.mem_coe, List.mem_range'_1]; lia
 
 Depends on / 依赖: List.nodup_range, List.range, nodup_range
 -/
@@ -660,7 +666,20 @@ theorem mod_injOn_Ico
     simp only [Finset.mem_range, Finset.mem_coe] at hk hl
     rwa [mod_eq_of_lt hk, mod_eq_of_lt hl] at hkl
   | succ n ih =>
-    rw [Ico_succ_left_eq_erase_Ico]; rw [succ_add]; rw
+    rw [Ico_succ_left_eq_erase_Ico]; rw [succ_add]; rw [succ_eq_add_one]; rw [Ico_succ_right_eq_insert_Ico (by lia)]
+    rintro k hk l hl (hkl : k % a = l % a)
+have ha : 0 < a := Nat.pos_iff_ne_zero.2 by rintro rfl; simp at hk
+    simp only [Finset.mem_coe, Finset.mem_insert, Finset.mem_erase] at hk hl
+    rcases hk with ⟨hkn, rfl | hk⟩ <;> rcases hl with ⟨hln, rfl | hl⟩
+    · rfl
+    · rw [add_mod_right] at hkl
+      refine (hln <| ih hl ?_ hkl.symm).elim
+      simpa using Nat.lt_add_of_pos_right (n := n) ha
+    · rw [add_mod_right] at hkl
+      suffices k = n by contradiction
+      refine ih hk ?_ hkl
+      simpa using Nat.lt_add_of_pos_right (n := n) ha
+    · refine ih ?_ ?_ hkl <;> simp only [Finset.mem_coe, hk, hl]
 
 中文:
 定理 mod_injOn_Ico
@@ -674,7 +693,20 @@ theorem mod_injOn_Ico
     simp only [Finset.mem_range, Finset.mem_coe] at hk hl
     rwa [mod_eq_of_lt hk, mod_eq_of_lt hl] at hkl
   | succ n ih =>
-    rw [Ico_succ_left_eq_erase_Ico]; rw [succ_add]; rw
+    rw [Ico_succ_left_eq_erase_Ico]; rw [succ_add]; rw [succ_eq_add_one]; rw [Ico_succ_right_eq_insert_Ico (by lia)]
+    rintro k hk l hl (hkl : k % a = l % a)
+have ha : 0 < a := Nat.pos_iff_ne_zero.2 by rintro rfl; simp at hk
+    simp only [Finset.mem_coe, Finset.mem_insert, Finset.mem_erase] at hk hl
+    rcases hk with ⟨hkn, rfl | hk⟩ <;> rcases hl with ⟨hln, rfl | hl⟩
+    · rfl
+    · rw [add_mod_right] at hkl
+      refine (hln <| ih hl ?_ hkl.symm).elim
+      simpa using Nat.lt_add_of_pos_right (n := n) ha
+    · rw [add_mod_right] at hkl
+      suffices k = n by contradiction
+      refine ih hk ?_ hkl
+      simpa using Nat.lt_add_of_pos_right (n := n) ha
+    · refine ih ?_ ?_ hkl <;> simp only [Finset.mem_coe, hk, hl]
 
 Depends on / 依赖: Finset, Finset.mem_, Finset.mem_coe, Finset.mem_insert, Finset.mem_range, Ico_succ_left_eq_erase_Ico, Ico_succ_right_eq_insert_Ico, Ico_zero_eq_range, Nat.pos_iff_ne_zero, mem_, mem_coe, mem_insert, mem_range, mod_eq_of_lt, pos_iff_ne_zero, succ_add, succ_eq_add_one, zero_add
 -/
@@ -719,7 +751,17 @@ theorem image_Ico_mod
   intro hia
   have hn := Nat.mod_add_div n a
   obtain hi | hi := lt_or_ge i (n % a)
-  · refi
+  · refine ⟨i + a * (n / a + 1), ⟨?_, ?_⟩, ?_⟩
+    · rw [add_comm (n / a), Nat.mul_add, mul_one, ← add_assoc]
+      refine hn.symm.le.trans (Nat.add_le_add_right ?_ _)
+      simpa only [zero_add] using add_le_add (zero_le i) (Nat.mod_lt n ha.bot_lt).le
+    · refine lt_of_lt_of_le (Nat.add_lt_add_right hi (a * (n / a + 1))) ?_
+      rw [Nat.mul_add]; rw [mul_one]; rw [← add_assoc]; rw [hn]
+    · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt hia]
+  · refine ⟨i + a * (n / a), ⟨?_, ?_⟩, ?_⟩
+    · lia
+    · lia
+    · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt hia]
 
 中文:
 定理 image_Ico_mod
@@ -736,7 +778,17 @@ theorem image_Ico_mod
   intro hia
   have hn := Nat.mod_add_div n a
   obtain hi | hi := lt_or_ge i (n % a)
-  · refi
+  · refine ⟨i + a * (n / a + 1), ⟨?_, ?_⟩, ?_⟩
+    · rw [add_comm (n / a), Nat.mul_add, mul_one, ← add_assoc]
+      refine hn.symm.le.trans (Nat.add_le_add_right ?_ _)
+      simpa only [zero_add] using add_le_add (zero_le i) (Nat.mod_lt n ha.bot_lt).le
+    · refine lt_of_lt_of_le (Nat.add_lt_add_right hi (a * (n / a + 1))) ?_
+      rw [Nat.mul_add]; rw [mul_one]; rw [← add_assoc]; rw [hn]
+    · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt hia]
+  · refine ⟨i + a * (n / a), ⟨?_, ?_⟩, ?_⟩
+    · lia
+    · lia
+    · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt hia]
 
 Depends on / 依赖: Ico_self, Nat.add_le_add_right, Nat.mod_add_div, Nat.mod_lt, Nat.mul_add, add_assoc, add_comm, add_le_add, add_le_add_right, add_zero, bot_lt, eq_or_ne, ha.bot_lt, hn.symm.le.trans, image_empty, lt_or_ge, mem_Ico, mem_image, mem_range, mod_add_div
 -/
@@ -996,6 +1048,7 @@ lemma Nat.strong_decreasing_induction
   · rintro ⟨b, hb⟩
     rcases base with ⟨n, hn⟩
     specialize @hb (n + b + 1) (fun m hm => hn _ _)
+    all_goals lia
 
 中文:
 引理 自然数.strong_decreasing_induction
@@ -1009,6 +1062,7 @@ lemma Nat.strong_decreasing_induction
   · rintro ⟨b, hb⟩
     rcases base with ⟨n, hn⟩
     specialize @hb (n + b + 1) (fun m hm => hn _ _)
+    all_goals lia
 
 Depends on / 依赖: Nat.decreasing_induction_of_not_bddAbove, all_goals, decreasing_induction_of_not_bddAbove, eq_or_lt, hm.eq_or_lt, le_rfl, specialize
 -/

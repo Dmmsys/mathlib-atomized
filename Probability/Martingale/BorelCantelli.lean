@@ -144,7 +144,16 @@ theorem stoppedAbove_le
   · simp only [h_zero, hf0, Pi.zero_apply]
     positivity
   obtain ⟨k, hk⟩ := Nat.exists_eq_add_one_of_ne_zero h_zero
-  rw [hk];
+  rw [hk]; rw [add_comm r]; rw [← sub_le_iff_le_add]
+  have := notMem_of_lt_hittingAfter (?_ : k < leastGE f r ω)
+  · simp only [bot_eq_zero, zero_le, Set.mem_Ici, not_le, forall_const] at this
+    exact (sub_lt_sub_left this _).le.trans ((le_abs_self _).trans (hbddω _))
+  · suffices (k : Nat∞) < min (i : Nat∞) (leastGE f r ω) from this.trans_le (min_le_right _ _)
+    have h_top : min (i : Nat∞) (leastGE f r ω) != ⊤ :=
+      ne_top_of_le_ne_top (by simp) (min_le_left _ _)
+    lift min (i : Nat∞) (leastGE f r ω) to Nat using h_top with p
+    simp only [untopD_coe_enat, Nat.cast_lt, gt_iff_lt] at *
+    lia
 
 中文:
 定理 stoppedAbove_le
@@ -156,7 +165,16 @@ theorem stoppedAbove_le
   · simp only [h_zero, hf0, Pi.zero_apply]
     positivity
   obtain ⟨k, hk⟩ := Nat.exists_eq_add_one_of_ne_zero h_zero
-  rw [hk];
+  rw [hk]; rw [add_comm r]; rw [← sub_le_iff_le_add]
+  have := notMem_of_lt_hittingAfter (?_ : k < leastGE f r ω)
+  · simp only [bot_eq_zero, zero_le, Set.mem_Ici, not_le, forall_const] at this
+    exact (sub_lt_sub_left this _).le.trans ((le_abs_self _).trans (hbddω _))
+  · suffices (k : Nat∞) < min (i : Nat∞) (leastGE f r ω) from this.trans_le (min_le_right _ _)
+    have h_top : min (i : Nat∞) (leastGE f r ω) != ⊤ :=
+      ne_top_of_le_ne_top (by simp) (min_le_left _ _)
+    lift min (i : Nat∞) (leastGE f r ω) to Nat using h_top with p
+    simp only [untopD_coe_enat, Nat.cast_lt, gt_iff_lt] at *
+    lia
 
 Depends on / 依赖: ENat.some_eq_natCast, Nat.exists_eq_add_one_of_ne_zero, Pi.zero_apply, Set.mem_Ici, add_comm, bot_eq_zero, exists_eq_add_one_of_ne_zero, filter_upwards, forall_const, h_zero, le.tr, leastGE, mem_Ici, notMem_of_lt_hittingAfter, not_le, some_eq_natCast, stoppedAbove, stoppedProcess, sub_le_iff_le_add, sub_lt_sub_left
 -/
@@ -252,7 +270,19 @@ theorem Submartingale.exists_tendsto_of_abs_bddAbove_aux
     rw [ae_all_iff]
     exact fun i => Submartingale.exists_ae_tendsto_of_bdd (hf.stoppedAbove i)
       (hf.eLpNorm_stoppedAbove_le' i.cast_nonneg hf0 hbdd)
-  filter_upwards [ht] with ω h
+  filter_upwards [ht] with ω hω hωb
+  rw [BddAbove] at hωb
+  obtain ⟨i, hi⟩ := exists_nat_gt hωb.some
+  have hib : forall n, f n ω < i := by
+    intro n
+    exact lt_of_le_of_lt ((mem_upperBounds.1 hωb.some_mem) _ ⟨n, rfl⟩) hi
+  have heq : forall n, stoppedAbove f i n ω = f n ω := by
+    intro n
+    rw [stoppedAbove]; rw [stoppedProcess]; rw [leastGE]; rw [hittingAfter_eq_top_iff.mpr]
+    · simp only [le_top, inf_of_le_left]
+      congr
+    · simp [hib]
+  simp only [← heq, hω i]
 
 中文:
 定理 Submartingale.存在_tendsto_of_abs_bddAbove_aux
@@ -262,7 +292,19 @@ theorem Submartingale.exists_tendsto_of_abs_bddAbove_aux
     rw [ae_all_iff]
     exact fun i => Submartingale.exists_ae_tendsto_of_bdd (hf.stoppedAbove i)
       (hf.eLpNorm_stoppedAbove_le' i.cast_nonneg hf0 hbdd)
-  filter_upwards [ht] with ω h
+  filter_upwards [ht] with ω hω hωb
+  rw [BddAbove] at hωb
+  obtain ⟨i, hi⟩ := exists_nat_gt hωb.some
+  have hib : forall n, f n ω < i := by
+    intro n
+    exact lt_of_le_of_lt ((mem_upperBounds.1 hωb.some_mem) _ ⟨n, rfl⟩) hi
+  have heq : forall n, stoppedAbove f i n ω = f n ω := by
+    intro n
+    rw [stoppedAbove]; rw [stoppedProcess]; rw [leastGE]; rw [hittingAfter_eq_top_iff.mpr]
+    · simp only [le_top, inf_of_le_left]
+      congr
+    · simp [hib]
+  simp only [← heq, hω i]
 
 Depends on / 依赖: BddAbove, Submartingale, Submartingale.exists_ae_tendsto_of_bdd, Tendsto, ae_all_iff, b.some, b.some_mem, cast_nonneg, eLpNorm_stoppedAbove_le, exists_ae_tendsto_of_bdd, exists_nat_gt, filter_upwards, hf.eLpNorm_stoppedAbove_le, hf.stoppedAbove, i.cast_nonneg, lt_of_le_of_lt, mem_upperBounds, some_mem, stoppedAbove
 -/
@@ -325,7 +367,20 @@ theorem Submartingale.bddAbove_iff_exists_tendsto
   have hg0 : g 0 = 0 := by
     ext ω
     simp only [g, sub_self, Pi.zero_apply]
-  have hgbdd : forallᵐ ω ∂μ, forall i
+  have hgbdd : forallᵐ ω ∂μ, forall i : Nat, |g (i + 1) ω - g i ω| <= ↑R := by
+    simpa only [g, sub_sub_sub_cancel_right]
+  filter_upwards [hg.bddAbove_iff_exists_tendsto_aux hg0 hgbdd] with ω hω
+  convert! hω using 1
+  · refine ⟨fun h => ?_, fun h => ?_⟩ <;> obtain ⟨b, hb⟩ := h <;>
+    refine ⟨b + |f 0 ω|, fun y hy => ?_⟩ <;> obtain ⟨n, rfl⟩ := hy
+    · simp_rw [g, sub_eq_add_neg]
+      exact add_le_add (hb ⟨n, rfl⟩) (neg_le_abs _)
+    · exact sub_le_iff_le_add.1 (le_trans (sub_le_sub_left (le_abs_self _) _) (hb ⟨n, rfl⟩))
+  · refine ⟨fun h => ?_, fun h => ?_⟩ <;> obtain ⟨c, hc⟩ := h
+    · exact ⟨c - f 0 ω, hc.sub_const _⟩
+    · refine ⟨c + f 0 ω, ?_⟩
+      have := hc.add_const (f 0 ω)
+      simpa only [g, sub_add_cancel]
 
 中文:
 定理 Submartingale.bddAbove_iff_存在_tendsto
@@ -337,7 +392,20 @@ theorem Submartingale.bddAbove_iff_exists_tendsto
   have hg0 : g 0 = 0 := by
     ext ω
     simp only [g, sub_self, Pi.zero_apply]
-  have hgbdd : forallᵐ ω ∂μ, forall i
+  have hgbdd : forallᵐ ω ∂μ, forall i : Nat, |g (i + 1) ω - g i ω| <= ↑R := by
+    simpa only [g, sub_sub_sub_cancel_right]
+  filter_upwards [hg.bddAbove_iff_exists_tendsto_aux hg0 hgbdd] with ω hω
+  convert! hω using 1
+  · refine ⟨fun h => ?_, fun h => ?_⟩ <;> obtain ⟨b, hb⟩ := h <;>
+    refine ⟨b + |f 0 ω|, fun y hy => ?_⟩ <;> obtain ⟨n, rfl⟩ := hy
+    · simp_rw [g, sub_eq_add_neg]
+      exact add_le_add (hb ⟨n, rfl⟩) (neg_le_abs _)
+    · exact sub_le_iff_le_add.1 (le_trans (sub_le_sub_left (le_abs_self _) _) (hb ⟨n, rfl⟩))
+  · refine ⟨fun h => ?_, fun h => ?_⟩ <;> obtain ⟨c, hc⟩ := h
+    · exact ⟨c - f 0 ω, hc.sub_const _⟩
+    · refine ⟨c + f 0 ω, ?_⟩
+      have := hc.add_const (f 0 ω)
+      simpa only [g, sub_add_cancel]
 
 Depends on / 依赖: Pi.zero_apply, Submartingale, bddAbove_iff_exists_tendsto_aux, convert, filter_upwards, hf.integrable, hf.stronglyAdapted, hf.sub_martingale, hg.bddAbove_iff_exists_tendsto_aux, integrable, martingale_const_fun, stronglyAdapted, sub_martingale, sub_self, sub_sub_sub_cancel_right, zero_apply
 -/
@@ -380,7 +448,23 @@ theorem Martingale.bddAbove_range_iff_bddBelow_range
     grind
   have hup := hf.submartingale.bddAbove_iff_exists_tendsto hbdd
   have hdown := hf.neg.submartingale.bddAbove_iff_exists_tendsto hbdd'
-  filte
+  filter_upwards [hup, hdown] with ω hω₁ hω₂
+  have : (exists c, Tendsto (fun n => f n ω) atTop (𝓝 c)) ↔
+      exists c, Tendsto (fun n => (-f) n ω) atTop (𝓝 c) := by
+    constructor <;> rintro ⟨c, hc⟩
+    · exact ⟨-c, hc.neg⟩
+    · refine ⟨-c, ?_⟩
+      convert! hc.neg
+      simp only [neg_neg, Pi.neg_apply]
+  rw [hω₁]; rw [this]; rw [← hω₂]
+  constructor <;> rintro ⟨c, hc⟩ <;> refine ⟨-c, fun ω hω => ?_⟩
+  · rw [mem_upperBounds] at hc
+    refine neg_le.2 (hc _ ?_)
+    simpa only [Pi.neg_apply, Set.mem_range, neg_inj]
+  · rw [mem_lowerBounds] at hc
+    simp_rw [Set.mem_range, Pi.neg_apply, neg_eq_iff_eq_neg] at hω
+    refine le_neg.1 (hc _ ?_)
+    simpa only [Set.mem_range]
 
 中文:
 定理 鞅.bddAbove_range_iff_bddBelow_range
@@ -392,7 +476,23 @@ theorem Martingale.bddAbove_range_iff_bddBelow_range
     grind
   have hup := hf.submartingale.bddAbove_iff_exists_tendsto hbdd
   have hdown := hf.neg.submartingale.bddAbove_iff_exists_tendsto hbdd'
-  filte
+  filter_upwards [hup, hdown] with ω hω₁ hω₂
+  have : (exists c, Tendsto (fun n => f n ω) atTop (𝓝 c)) ↔
+      exists c, Tendsto (fun n => (-f) n ω) atTop (𝓝 c) := by
+    constructor <;> rintro ⟨c, hc⟩
+    · exact ⟨-c, hc.neg⟩
+    · refine ⟨-c, ?_⟩
+      convert! hc.neg
+      simp only [neg_neg, Pi.neg_apply]
+  rw [hω₁]; rw [this]; rw [← hω₂]
+  constructor <;> rintro ⟨c, hc⟩ <;> refine ⟨-c, fun ω hω => ?_⟩
+  · rw [mem_upperBounds] at hc
+    refine neg_le.2 (hc _ ?_)
+    simpa only [Pi.neg_apply, Set.mem_range, neg_inj]
+  · rw [mem_lowerBounds] at hc
+    simp_rw [Set.mem_range, Pi.neg_apply, neg_eq_iff_eq_neg] at hω
+    refine le_neg.1 (hc _ ?_)
+    simpa only [Set.mem_range]
 
 Depends on / 依赖: Pi.neg_apply, Tendsto, bddAbove_iff_exists_tendsto, filter_upwards, hc.neg, hf.neg.submartingale.bddAbove_iff_exists_tendsto, hf.submartingale.bddAbove_iff_exists_tendsto, neg_apply, submartingale
 -/
@@ -657,7 +757,25 @@ theorem tendsto_sum_indicator_atTop_iff
   have h₀ := martingalePart_bdd_difference ℱ hbdd
   simp only [Real.norm_eq_abs, ← NNReal.coe_ofNat, ← NNReal.coe_mul 2 R] at h₀
   have h₁ := (martingale_martingalePart hf hint).ae_not_tendsto_atTop_atTop h₀
-  have h₂ := (martingale_martingalePart hf hint)
+  have h₂ := (martingale_martingalePart hf hint).ae_not_tendsto_atTop_atBot h₀
+  have h₃ : forallᵐ ω ∂μ, forall n, 0 <= (μ[f (n + 1) - f n | ℱ n]) ω := by
+    refine ae_all_iff.2 fun n => condExp_nonneg ?_
+    filter_upwards [ae_all_iff.1 hfmono n] with ω hω using sub_nonneg.2 hω
+  filter_upwards [h₁, h₂, h₃, hfmono] with ω hω₁ hω₂ hω₃ hω₄
+  constructor <;> intro ht
+  · refine tendsto_atTop_atTop_of_monotone' ?_ ?_
+    · intro n m hnm
+      simp only [predictablePart, Finset.sum_apply]
+      exact Finset.sum_mono_set_of_nonneg hω₃ (Finset.range_mono hnm)
+    rintro ⟨b, hbdd⟩
+    rw [← tendsto_neg_atBot_iff] at ht
+    simp only [martingalePart, sub_eq_add_neg] at hω₁
+    exact hω₁ (tendsto_atTop_add_right_of_le _ (-b) (tendsto_neg_atBot_iff.1 ht) fun n =>
+      neg_le_neg (hbdd ⟨n, rfl⟩))
+  · refine tendsto_atTop_atTop_of_monotone' (monotone_nat_of_le_succ hω₄) ?_
+    rintro ⟨b, hbdd⟩
+    exact hω₂ ((tendsto_atBot_add_left_of_ge _ b fun n =>
+      hbdd ⟨n, rfl⟩) <| tendsto_neg_atBot_iff.2 ht)
 
 中文:
 定理 tendsto_sum_indicator_atTop_iff
@@ -667,7 +785,25 @@ theorem tendsto_sum_indicator_atTop_iff
   have h₀ := martingalePart_bdd_difference ℱ hbdd
   simp only [Real.norm_eq_abs, ← NNReal.coe_ofNat, ← NNReal.coe_mul 2 R] at h₀
   have h₁ := (martingale_martingalePart hf hint).ae_not_tendsto_atTop_atTop h₀
-  have h₂ := (martingale_martingalePart hf hint)
+  have h₂ := (martingale_martingalePart hf hint).ae_not_tendsto_atTop_atBot h₀
+  have h₃ : forallᵐ ω ∂μ, forall n, 0 <= (μ[f (n + 1) - f n | ℱ n]) ω := by
+    refine ae_all_iff.2 fun n => condExp_nonneg ?_
+    filter_upwards [ae_all_iff.1 hfmono n] with ω hω using sub_nonneg.2 hω
+  filter_upwards [h₁, h₂, h₃, hfmono] with ω hω₁ hω₂ hω₃ hω₄
+  constructor <;> intro ht
+  · refine tendsto_atTop_atTop_of_monotone' ?_ ?_
+    · intro n m hnm
+      simp only [predictablePart, Finset.sum_apply]
+      exact Finset.sum_mono_set_of_nonneg hω₃ (Finset.range_mono hnm)
+    rintro ⟨b, hbdd⟩
+    rw [← tendsto_neg_atBot_iff] at ht
+    simp only [martingalePart, sub_eq_add_neg] at hω₁
+    exact hω₁ (tendsto_atTop_add_right_of_le _ (-b) (tendsto_neg_atBot_iff.1 ht) fun n =>
+      neg_le_neg (hbdd ⟨n, rfl⟩))
+  · refine tendsto_atTop_atTop_of_monotone' (monotone_nat_of_le_succ hω₄) ?_
+    rintro ⟨b, hbdd⟩
+    exact hω₂ ((tendsto_atBot_add_left_of_ge _ b fun n =>
+      hbdd ⟨n, rfl⟩) <| tendsto_neg_atBot_iff.2 ht)
 
 Depends on / 依赖: NNReal, NNReal.coe_mul, NNReal.coe_ofNat, Real.norm_eq_abs, ae_all_iff, ae_not_tendsto_atTop_atBot, ae_not_tendsto_atTop_atTop, coe_mul, coe_ofNat, condExp_nonneg, filter_upwards, hfmono, martingalePart_bdd_difference, martingale_martingalePart, norm_eq_abs
 -/
@@ -714,7 +850,10 @@ theorem tendsto_sum_indicator_atTop_iff'
     (Eventually.of_forall <| process_difference_le s)
   swap
   · rw [process, process, ← sub_nonneg, Finset.sum_apply, Finset.sum_apply,
-      Finset.sum_range
+      Finset.sum_range_succ_sub_sum]
+    exact Set.indicator_nonneg (fun _ _ => zero_le_one) _
+  simp_rw [process, predictablePart_process_ae_eq] at this
+  simpa using this
 
 中文:
 定理 tendsto_sum_indicator_atTop_iff'
@@ -725,7 +864,10 @@ theorem tendsto_sum_indicator_atTop_iff'
     (Eventually.of_forall <| process_difference_le s)
   swap
   · rw [process, process, ← sub_nonneg, Finset.sum_apply, Finset.sum_apply,
-      Finset.sum_range
+      Finset.sum_range_succ_sub_sum]
+    exact Set.indicator_nonneg (fun _ _ => zero_le_one) _
+  simp_rw [process, predictablePart_process_ae_eq] at this
+  simpa using this
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Finset, Finset.sum_apply, Finset.sum_range_succ_sub_sum, Set.indicator_nonneg, indicator_nonneg, integrable_process, of_forall, predictablePart_process_ae_eq, process, process_difference_le, simp_rw, stronglyAdapted_process, sub_nonneg, sum_apply, sum_range_succ_sub_sum, tendsto_sum_indicator_atTop_iff, zero_le_one
 -/

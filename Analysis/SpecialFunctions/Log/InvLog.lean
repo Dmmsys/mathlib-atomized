@@ -38,7 +38,12 @@ lemma not_differentiableAt_inv_log_zero
   simp only [← hasDerivAt_deriv_iff, hasDerivAt_iff_tendsto_slope_zero, zero_add, log_zero,
     inv_zero, sub_zero, smul_eq_mul, ← mul_inv, mul_comm _ (log _)]
   refine fun H => (tendsto_nhdsWithin_mono_left (by grind : Set.Iio (0 : Real) subseteq _) H).not_tendsto
-    (by simp) (tendsto_inv_nhds
+    (by simp) (tendsto_inv_nhdsGT_zero.comp ?_)
+  refine tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
+    tendsto_log_mul_self_nhdsLT_zero ?_
+  simp only [← nhdsWithin_Ioo_eq_nhdsLT neg_one_lt_zero, Set.mem_Ioi]
+  refine eventually_nhdsWithin_of_forall fun x ⟨hx₁, hx₂⟩ => mul_pos_of_neg_of_neg ?_ hx₂
+  apply log_neg_eq_log x ▸ log_neg <;> grind
 
 中文:
 引理 not_differentiableAt_inv_log_zero
@@ -47,7 +52,12 @@ lemma not_differentiableAt_inv_log_zero
   simp only [← hasDerivAt_deriv_iff, hasDerivAt_iff_tendsto_slope_zero, zero_add, log_zero,
     inv_zero, sub_zero, smul_eq_mul, ← mul_inv, mul_comm _ (log _)]
   refine fun H => (tendsto_nhdsWithin_mono_left (by grind : Set.Iio (0 : Real) subseteq _) H).not_tendsto
-    (by simp) (tendsto_inv_nhds
+    (by simp) (tendsto_inv_nhdsGT_zero.comp ?_)
+  refine tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
+    tendsto_log_mul_self_nhdsLT_zero ?_
+  simp only [← nhdsWithin_Ioo_eq_nhdsLT neg_one_lt_zero, Set.mem_Ioi]
+  refine eventually_nhdsWithin_of_forall fun x ⟨hx₁, hx₂⟩ => mul_pos_of_neg_of_neg ?_ hx₂
+  apply log_neg_eq_log x ▸ log_neg <;> grind
 
 Depends on / 依赖: Set.Iio, Set.mem_Ioi, eventually_nhdsWith, hasDerivAt_deriv_iff, hasDerivAt_iff_tendsto_slope_zero, inv_zero, log_zero, mem_Ioi, mul_comm, mul_inv, neg_one_lt_zero, nhdsWithin_Ioo_eq_nhdsLT, not_tendsto, smul_eq_mul, sub_zero, subseteq, tendsto_inv_nhdsGT_zero, tendsto_inv_nhdsGT_zero.comp, tendsto_log_mul_self_nhdsLT_zero, tendsto_nhdsWithin_mono_left
 -/
@@ -125,6 +135,10 @@ theorem deriv_inv_log_apply
   have := not_differentiableAt_inv_log_zero
   obtain (⟨_, _, _⟩ | rfl | rfl | rfl) :
       (x != -1 ∧ x != 0 ∧ x != 1) ∨ x = -1 ∨ x = 0 ∨ x = 1 := by tauto
+  · simp_all
+  all_goals rw [deriv_zero_of_not_differentiableAt ‹_›]; simp
+
+@[simp]
 
 中文:
 定理 deriv_inv_log_apply
@@ -136,6 +150,10 @@ theorem deriv_inv_log_apply
   have := not_differentiableAt_inv_log_zero
   obtain (⟨_, _, _⟩ | rfl | rfl | rfl) :
       (x != -1 ∧ x != 0 ∧ x != 1) ∨ x = -1 ∨ x = 0 ∨ x = 1 := by tauto
+  · simp_all
+  all_goals rw [deriv_zero_of_not_differentiableAt ‹_›]; simp
+
+@[simp]
 
 Depends on / 依赖: all_goals, continuousAt, deriv_zero_of_not_differentiableAt, not_continuousAt_inv_log_neg_one, not_continuousAt_inv_log_one, not_differentiableAt_inv_log_zero
 -/
@@ -280,7 +298,7 @@ lemma not_continuousAt_log_log_zero
     not_continuousAt_of_tendsto this nhdsWithin_le_nhds (disjoint_nhds_cobounded _)
   have : Tendsto log atBot atTop := by
     convert tendsto_log_atTop.comp tendsto_neg_atBot_atTop; ext; simp
-  exact (this.mono_r
+  exact (this.mono_right atTop_le_cobounded).comp tendsto_log_nhdsNE_zero
 
 中文:
 引理 not_continuousAt_log_log_zero
@@ -290,7 +308,7 @@ lemma not_continuousAt_log_log_zero
     not_continuousAt_of_tendsto this nhdsWithin_le_nhds (disjoint_nhds_cobounded _)
   have : Tendsto log atBot atTop := by
     convert tendsto_log_atTop.comp tendsto_neg_atBot_atTop; ext; simp
-  exact (this.mono_r
+  exact (this.mono_right atTop_le_cobounded).comp tendsto_log_nhdsNE_zero
 
 Depends on / 依赖: Tendsto, atTop_le_cobounded, cobounded, convert, disjoint_nhds_cobounded, mono_right, nhdsWithin, nhdsWithin_le_nhds, not_continuousAt_of_tendsto, tendsto_log_atTop, tendsto_log_atTop.comp, tendsto_log_nhdsNE_zero, tendsto_neg_atBot_atTop, this.mono_right
 -/
@@ -311,7 +329,7 @@ lemma not_continuousAt_log_log_one
   suffices Tendsto (fun x => log (log x)) (nhdsWithin 1 {1}ᶜ) (cobounded Real) from
     not_continuousAt_of_tendsto this nhdsWithin_le_nhds (disjoint_nhds_cobounded _)
 exact (tendsto_log_nhdsNE_zero.mono_right atBot_le_cobounded).comp log_one ▸
-    HasDerivAt.tendsto_nhdsNE (by simpa using hasDer
+    HasDerivAt.tendsto_nhdsNE (by simpa using hasDerivAt_log one_ne_zero) one_ne_zero
 
 中文:
 引理 not_continuousAt_log_log_one
@@ -320,7 +338,7 @@ exact (tendsto_log_nhdsNE_zero.mono_right atBot_le_cobounded).comp log_one ▸
   suffices Tendsto (fun x => log (log x)) (nhdsWithin 1 {1}ᶜ) (cobounded Real) from
     not_continuousAt_of_tendsto this nhdsWithin_le_nhds (disjoint_nhds_cobounded _)
 exact (tendsto_log_nhdsNE_zero.mono_right atBot_le_cobounded).comp log_one ▸
-    HasDerivAt.tendsto_nhdsNE (by simpa using hasDer
+    HasDerivAt.tendsto_nhdsNE (by simpa using hasDerivAt_log one_ne_zero) one_ne_zero
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.tendsto_nhdsNE, Tendsto, atBot_le_cobounded, cobounded, disjoint_nhds_cobounded, hasDerivAt_log, log_one, mono_right, nhdsWithin, nhdsWithin_le_nhds, not_continuousAt_of_tendsto, one_ne_zero, tendsto_log_nhdsNE_zero, tendsto_log_nhdsNE_zero.mono_right, tendsto_nhdsNE
 -/
@@ -365,7 +383,9 @@ theorem deriv_log_log_apply
   obtain (⟨_, _, _⟩ | rfl | rfl | rfl) :
       (x != -1 ∧ x != 0 ∧ x != 1) ∨ x = -1 ∨ x = 0 ∨ x = 1 := by tauto
   · simp_all
-  all_goals rw [deriv_zero_of_not_differentiableAt
+  all_goals rw [deriv_zero_of_not_differentiableAt (mt continuousAt ‹_›)]; simp
+
+@[simp]
 
 中文:
 定理 deriv_log_log_apply
@@ -378,7 +398,9 @@ theorem deriv_log_log_apply
   obtain (⟨_, _, _⟩ | rfl | rfl | rfl) :
       (x != -1 ∧ x != 0 ∧ x != 1) ∨ x = -1 ∨ x = 0 ∨ x = 1 := by tauto
   · simp_all
-  all_goals rw [deriv_zero_of_not_differentiableAt
+  all_goals rw [deriv_zero_of_not_differentiableAt (mt continuousAt ‹_›)]; simp
+
+@[simp]
 
 Depends on / 依赖: all_goals, continuousAt, deriv_zero_of_not_differentiableAt, not_continuousAt_log_log_neg_one, not_continuousAt_log_log_one, not_continuousAt_log_log_zero
 -/

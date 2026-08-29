@@ -210,7 +210,10 @@ theorem span_induction
     (fun ⟨hx1, hx2⟩ ⟨hy1, hy2⟩ => ⟨add_mem _ hx1 hy1, add _ _ hx1 hy1 hx2 hy2⟩)
     (fun ⟨hx1, hx2⟩ => ⟨neg_mem _ hx1, neg _ hx1 hx2⟩)
     (fun {x' y'} ⟨hy1, hy2⟩ => ⟨mul_mem_left _ _ _ hy1, left_absorb _ _ _ hy2⟩)
-  
+    (fun {x' y'} ⟨hx1, hx2⟩ => ⟨mul_mem_right _ _ _ hx1, right_absorb _ _ _ hx2⟩)
+.2 span_le (s := s) (I := J)
+    (fun x hx => ⟨by simpa using (mem_span_iff.2 fun I a => a hx), by simp_all⟩) hx
+.elim fun _ => by simp
 
 中文:
 定理 span_induction
@@ -221,7 +224,10 @@ theorem span_induction
     (fun ⟨hx1, hx2⟩ ⟨hy1, hy2⟩ => ⟨add_mem _ hx1 hy1, add _ _ hx1 hy1 hx2 hy2⟩)
     (fun ⟨hx1, hx2⟩ => ⟨neg_mem _ hx1, neg _ hx1 hx2⟩)
     (fun {x' y'} ⟨hy1, hy2⟩ => ⟨mul_mem_left _ _ _ hy1, left_absorb _ _ _ hy2⟩)
-  
+    (fun {x' y'} ⟨hx1, hx2⟩ => ⟨mul_mem_right _ _ _ hx1, right_absorb _ _ _ hx2⟩)
+.2 span_le (s := s) (I := J)
+    (fun x hx => ⟨by simpa using (mem_span_iff.2 fun I a => a hx), by simp_all⟩) hx
+.elim fun _ => by simp
 
 Depends on / 依赖: TwoSidedIdeal, add_mem, left_absorb, mem_span_iff, mul_mem_left, mul_mem_right, neg_mem, right_absorb, span_le, zero_mem
 -/
@@ -461,7 +467,26 @@ lemma mem_span_iff_mem_addSubgroup_closure_absorbing
     rintro - ⟨y, hy, rfl⟩
     exact h_left x y hy
   have h_right' {y x} (hy : y in closure s) : y * x in closure s := by
- 
+    have := (AddMonoidHom.mulRight x).map_closure s ▸ mem_map_of_mem _ hy
+    refine closure_mono ?_ this
+    rintro - ⟨y, hy, rfl⟩
+    exact h_right y x hy
+  let I : TwoSidedIdeal R := .mk' (closure s) (AddSubgroup.zero_mem _)
+    (AddSubgroup.add_mem _) (AddSubgroup.neg_mem _) h_left' h_right'
+  suffices z in span s ↔ z in I by simpa only [I, mem_mk', SetLike.mem_coe]
+  rw [mem_span_iff]
+  -- Suppose that for every ideal `J` with `s ⊆ J`, then `z ∈ J`. Apply this to `I` to get `z ∈ I`.
+  refine ⟨fun h => h I fun x hx => ?mem_closure_of_forall, fun hz J hJ => ?mem_ideal_of_subset⟩
+  case mem_closure_of_forall => simpa only [I, SetLike.mem_coe, mem_mk'] using subset_closure hx
+  /- Conversely, suppose that `z ∈ I` and that `J` is any ideal containing `s`. Then by the
+  induction principle for `AddSubgroup`, we must also have `z ∈ J`. -/
+  case mem_ideal_of_subset =>
+    simp only [I, SetLike.mem_coe, mem_mk'] at hz
+    induction hz using closure_induction with
+    | mem x hx => exact hJ hx
+    | zero => exact zero_mem _
+    | add x y _ _ hx hy => exact J.add_mem hx hy
+    | neg x _ hx => exact J.neg_mem hx
 
 中文:
 引理 mem_span_iff_mem_addSubgroup_closure_absorbing
@@ -473,7 +498,26 @@ lemma mem_span_iff_mem_addSubgroup_closure_absorbing
     rintro - ⟨y, hy, rfl⟩
     exact h_left x y hy
   have h_right' {y x} (hy : y in closure s) : y * x in closure s := by
- 
+    have := (AddMonoidHom.mulRight x).map_closure s ▸ mem_map_of_mem _ hy
+    refine closure_mono ?_ this
+    rintro - ⟨y, hy, rfl⟩
+    exact h_right y x hy
+  let I : TwoSidedIdeal R := .mk' (closure s) (AddSubgroup.zero_mem _)
+    (AddSubgroup.add_mem _) (AddSubgroup.neg_mem _) h_left' h_right'
+  suffices z in span s ↔ z in I by simpa only [I, mem_mk', SetLike.mem_coe]
+  rw [mem_span_iff]
+  -- Suppose that for every ideal `J` with `s ⊆ J`, then `z ∈ J`. Apply this to `I` to get `z ∈ I`.
+  refine ⟨fun h => h I fun x hx => ?mem_closure_of_forall, fun hz J hJ => ?mem_ideal_of_subset⟩
+  case mem_closure_of_forall => simpa only [I, SetLike.mem_coe, mem_mk'] using subset_closure hx
+  /- Conversely, suppose that `z ∈ I` and that `J` is any ideal containing `s`. Then by the
+  induction principle for `AddSubgroup`, we must also have `z ∈ J`. -/
+  case mem_ideal_of_subset =>
+    simp only [I, SetLike.mem_coe, mem_mk'] at hz
+    induction hz using closure_induction with
+    | mem x hx => exact hJ hx
+    | zero => exact zero_mem _
+    | add x y _ _ hx hy => exact J.add_mem hx hy
+    | neg x _ hx => exact J.neg_mem hx
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, AddMonoidHom.mulRight, AddSubgrou, AddSubgroup, AddSubgroup.zero_mem, TwoSidedIdeal, closure, closure_mono, h_left, h_right, map_closure, mem_map_of_mem, mulLeft, mulRight, zero_mem
 -/
@@ -569,7 +613,23 @@ lemma mem_span_iff_mem_addSubgroup_closure_nonunital
   · refine ⟨(span_mono (by simp only [Set.union_assoc, Set.subset_union_left]) ·), fun h => ?_⟩
     refine mem_span_iff.mp h (span s) ?_
     simp only [union_subset_iff, union_assoc]
-    exact ⟨subset_span, subset_mul_set s
+    exact ⟨subset_span, subset_mul_set subset_span _, set_mul_subset subset_span _,
+      subset_mul_set (set_mul_subset subset_span _) _⟩
+  · refine mem_span_iff_mem_addSubgroup_closure_absorbing ?_ ?_
+    · rintro x y (((hy | ⟨y, hy, r, -, rfl⟩) | ⟨r, -, y, hy, rfl⟩) |
+        ⟨-, ⟨r', -, y, hy, rfl⟩, r, -, rfl⟩)
+· exact .inl .inr ⟨x, mem_univ _, y, hy, rfl⟩
+· exact .inr ⟨x * y, ⟨x, mem_univ _, y, hy, rfl⟩, r, mem_univ _, mul_assoc ..⟩
+· exact .inl .inr ⟨x * r, mem_univ _, y, hy, mul_assoc ..⟩
+· refine .inr ⟨x * r' * y, ⟨x * r', mem_univ _, y, hy, ?_⟩, ⟨r, mem_univ _, ?_⟩⟩
+        all_goals simp [mul_assoc]
+    · rintro y x (((hy | ⟨y, hy, r, -, rfl⟩) | ⟨r, -, y, hy, rfl⟩) |
+        ⟨-, ⟨r', -, y, hy, rfl⟩, r, -, rfl⟩)
+· exact .inl .inl .inr ⟨y, hy, x, mem_univ _, rfl⟩
+· exact .inl .inl .inr ⟨y, hy, r * x, mem_univ _, (mul_assoc ..).symm⟩
+· exact .inr ⟨r * y, ⟨r, mem_univ _, y, hy, rfl⟩, x, mem_univ _, rfl⟩
+· refine .inr ⟨r' * y, ⟨r', mem_univ _, y, hy, rfl⟩, r * x, mem_univ _, ?_⟩
+        simp [mul_assoc]
 
 中文:
 引理 mem_span_iff_mem_addSubgroup_closure_nonunital
@@ -579,7 +639,23 @@ lemma mem_span_iff_mem_addSubgroup_closure_nonunital
   · refine ⟨(span_mono (by simp only [Set.union_assoc, Set.subset_union_left]) ·), fun h => ?_⟩
     refine mem_span_iff.mp h (span s) ?_
     simp only [union_subset_iff, union_assoc]
-    exact ⟨subset_span, subset_mul_set s
+    exact ⟨subset_span, subset_mul_set subset_span _, set_mul_subset subset_span _,
+      subset_mul_set (set_mul_subset subset_span _) _⟩
+  · refine mem_span_iff_mem_addSubgroup_closure_absorbing ?_ ?_
+    · rintro x y (((hy | ⟨y, hy, r, -, rfl⟩) | ⟨r, -, y, hy, rfl⟩) |
+        ⟨-, ⟨r', -, y, hy, rfl⟩, r, -, rfl⟩)
+· exact .inl .inr ⟨x, mem_univ _, y, hy, rfl⟩
+· exact .inr ⟨x * y, ⟨x, mem_univ _, y, hy, rfl⟩, r, mem_univ _, mul_assoc ..⟩
+· exact .inl .inr ⟨x * r, mem_univ _, y, hy, mul_assoc ..⟩
+· refine .inr ⟨x * r' * y, ⟨x * r', mem_univ _, y, hy, ?_⟩, ⟨r, mem_univ _, ?_⟩⟩
+        all_goals simp [mul_assoc]
+    · rintro y x (((hy | ⟨y, hy, r, -, rfl⟩) | ⟨r, -, y, hy, rfl⟩) |
+        ⟨-, ⟨r', -, y, hy, rfl⟩, r, -, rfl⟩)
+· exact .inl .inl .inr ⟨y, hy, x, mem_univ _, rfl⟩
+· exact .inl .inl .inr ⟨y, hy, r * x, mem_univ _, (mul_assoc ..).symm⟩
+· exact .inr ⟨r * y, ⟨r, mem_univ _, y, hy, rfl⟩, x, mem_univ _, rfl⟩
+· refine .inr ⟨r' * y, ⟨r', mem_univ _, y, hy, rfl⟩, r * x, mem_univ _, ?_⟩
+        simp [mul_assoc]
 
 Depends on / 依赖: Set.subset_union_left, Set.union_assoc, mem_span_iff, mem_span_iff.mp, mem_span_iff_mem_addSubgroup_closure_absorbing, set_mul_subset, span_mono, subset_mul_set, subset_span, subset_union_left, union_assoc, union_subset_iff
 -/
@@ -626,7 +702,13 @@ lemma mem_span_iff_mem_addSubgroup_closure
   · refine ⟨(span_mono (fun x hx => ?_) ·), fun hz => ?_⟩
     · exact ⟨1 * x, ⟨1, mem_univ _, x, hx, rfl⟩, 1, mem_univ _, by simp⟩
 · exact mem_span_iff.mp hz (span s) subset_mul_set (set_mul_subset subset_span _) _
-  · refine mem_span_iff_mem_addSubgroup_closur
+  · refine mem_span_iff_mem_addSubgroup_closure_absorbing ?_ ?_
+    · intro x y hy
+      rw [mul_assoc] at hy ⊢
+      obtain ⟨r, -, y, hy, rfl⟩ := hy
+      exact ⟨x * r, mem_univ _, y, hy, mul_assoc ..⟩
+    · rintro - x ⟨y, hy, r, -, rfl⟩
+      exact ⟨y, hy, r * x, mem_univ _, (mul_assoc ..).symm⟩
 
 中文:
 引理 mem_span_iff_mem_addSubgroup_closure
@@ -636,7 +718,13 @@ lemma mem_span_iff_mem_addSubgroup_closure
   · refine ⟨(span_mono (fun x hx => ?_) ·), fun hz => ?_⟩
     · exact ⟨1 * x, ⟨1, mem_univ _, x, hx, rfl⟩, 1, mem_univ _, by simp⟩
 · exact mem_span_iff.mp hz (span s) subset_mul_set (set_mul_subset subset_span _) _
-  · refine mem_span_iff_mem_addSubgroup_closur
+  · refine mem_span_iff_mem_addSubgroup_closure_absorbing ?_ ?_
+    · intro x y hy
+      rw [mul_assoc] at hy ⊢
+      obtain ⟨r, -, y, hy, rfl⟩ := hy
+      exact ⟨x * r, mem_univ _, y, hy, mul_assoc ..⟩
+    · rintro - x ⟨y, hy, r, -, rfl⟩
+      exact ⟨y, hy, r * x, mem_univ _, (mul_assoc ..).symm⟩
 
 Depends on / 依赖: mem_span_iff, mem_span_iff.mp, mem_span_iff_mem_addSubgroup_closure_absorbing, mem_univ, mul_assoc, set_mul_subset, span_mono, subset_mul_set, subset_span
 -/
@@ -1139,7 +1227,8 @@ definition orderIsoIdeal
 left_inv _ := SetLike.ext fun _ => mem_span_iff.trans by aesop
   right_inv J := SetLike.ext fun x => mem_span_iff.trans
 .1 h (mk' ⟨fun h => mem_mk' _ _ _ _ _ _ _
-      J J.zero_mem J.add_mem J.neg_mem 
+      J J.zero_mem J.add_mem J.neg_mem (J.mul_mem_left _) (J.mul_mem_right _))
+      (fun x => by simp), by aesop⟩
 
 中文:
 定义 orderIsoIdeal
@@ -1150,7 +1239,8 @@ left_inv _ := SetLike.ext fun _ => mem_span_iff.trans by aesop
 left_inv _ := SetLike.ext fun _ => mem_span_iff.trans by aesop
   right_inv J := SetLike.ext fun x => mem_span_iff.trans
 .1 h (mk' ⟨fun h => mem_mk' _ _ _ _ _ _ _
-      J J.zero_mem J.add_mem J.neg_mem 
+      J J.zero_mem J.add_mem J.neg_mem (J.mul_mem_left _) (J.mul_mem_right _))
+      (fun x => by simp), by aesop⟩
 
 Depends on / 依赖: asIdeal
 -/

@@ -326,7 +326,7 @@ instance instIsStrictOrderedRing
   body: inductionOn x fun _f hf y z => inductionOn₂ y z fun _g _h hgh =>
 coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_lt_mul_of_pos_left
   mul_lt_mul_of_pos_right x := inductionOn x fun _f hf y z => inductionOn₂ y z fun _g _h hgh =>
-coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_
+coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_lt_mul_of_pos_right
 
 中文:
 实例 instIsStrictOrderedRing
@@ -334,7 +334,7 @@ coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_
   定义体: inductionOn x fun _f hf y z => inductionOn₂ y z fun _g _h hgh =>
 coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_lt_mul_of_pos_left
   mul_lt_mul_of_pos_right x := inductionOn x fun _f hf y z => inductionOn₂ y z fun _g _h hgh =>
-coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_
+coe_lt.2 (coe_lt.1 hf).mp (coe_lt.1 hgh).mono fun _a => mul_lt_mul_of_pos_right
 
 Depends on / 依赖: inductionOn
 -/

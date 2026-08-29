@@ -36,7 +36,8 @@ instance [IsCofilteredOrEmpty
   cone_maps x y f g :=
     match x, y with
     | star, _ => ⟨star, 𝟙 _, (IsIso.eq_comp_inv f).mp rfl⟩
-    | x, star => ⟨x, 𝟙 _
+    | x, star => ⟨x, 𝟙 _, Subsingleton.elim _ _⟩
+| of _, of _ => ⟨.of eq f g, eqHom _ _, eq_condition _ _⟩
 
 中文:
 实例 [是余filteredOrEmpty
@@ -48,7 +49,8 @@ instance [IsCofilteredOrEmpty
   cone_maps x y f g :=
     match x, y with
     | star, _ => ⟨star, 𝟙 _, (IsIso.eq_comp_inv f).mp rfl⟩
-    | x, star => ⟨x, 𝟙 _
+    | x, star => ⟨x, 𝟙 _, Subsingleton.elim _ _⟩
+| of _, of _ => ⟨.of eq f g, eqHom _ _, eq_condition _ _⟩
 
 Depends on / 依赖: IsIso.eq_comp_inv, Subsingleton, Subsingleton.elim, cone_maps, eq_comp_inv, eq_condition, minToLeft, minToRight
 -/

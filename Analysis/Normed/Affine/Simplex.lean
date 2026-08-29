@@ -68,7 +68,15 @@ lemma Scalene.dist_ne
   · apply hs.ne (a₁ := ⟨(i₁, i₂), h₁₂lt⟩) (a₂ := ⟨(i₃, i₄), h₃₄lt⟩)
     cases h₁₂₃₄ <;> simp [*]
   · nth_rw 2 [dist_comm]
-    apply hs.ne (a₁ := ⟨(i₁, i₂), h₁
+    apply hs.ne (a₁ := ⟨(i₁, i₂), h₁₂lt⟩) (a₂ := ⟨(i₄, i₃), h₄₃lt⟩)
+    cases h₁₂₄₃ <;> simp [*]
+  · rw [dist_comm]
+    apply hs.ne (a₁ := ⟨(i₂, i₁), h₂₁lt⟩) (a₂ := ⟨(i₃, i₄), h₃₄lt⟩)
+    cases h₁₂₄₃ <;> simp [*]
+  · rw [dist_comm]
+    nth_rw 2 [dist_comm]
+    apply hs.ne (a₁ := ⟨(i₂, i₁), h₂₁lt⟩) (a₂ := ⟨(i₄, i₃), h₄₃lt⟩)
+    cases h₁₂₃₄ <;> simp [*]
 
 中文:
 引理 Scalene.dist_ne
@@ -79,7 +87,15 @@ lemma Scalene.dist_ne
   · apply hs.ne (a₁ := ⟨(i₁, i₂), h₁₂lt⟩) (a₂ := ⟨(i₃, i₄), h₃₄lt⟩)
     cases h₁₂₃₄ <;> simp [*]
   · nth_rw 2 [dist_comm]
-    apply hs.ne (a₁ := ⟨(i₁, i₂), h₁
+    apply hs.ne (a₁ := ⟨(i₁, i₂), h₁₂lt⟩) (a₂ := ⟨(i₄, i₃), h₄₃lt⟩)
+    cases h₁₂₄₃ <;> simp [*]
+  · rw [dist_comm]
+    apply hs.ne (a₁ := ⟨(i₂, i₁), h₂₁lt⟩) (a₂ := ⟨(i₃, i₄), h₃₄lt⟩)
+    cases h₁₂₄₃ <;> simp [*]
+  · rw [dist_comm]
+    nth_rw 2 [dist_comm]
+    apply hs.ne (a₁ := ⟨(i₂, i₁), h₂₁lt⟩) (a₂ := ⟨(i₄, i₃), h₄₃lt⟩)
+    cases h₁₂₃₄ <;> simp [*]
 
 Depends on / 依赖: Classical, Classical.not_and_iff_not_or_not, dist_comm, hs.ne, lt_or_gt, not_and_iff_not_or_not, nth_rw
 -/
@@ -112,7 +128,20 @@ lemma scalene_reindex_iff
     {y : Fin (n + 1) × Fin (n + 1) // y.1 < y.2} :=
     ⟨fun x => if h : e x.val.1 < e x.val.2 then ⟨(e x.val.1, e x.val.2), h⟩ else
       ⟨(e x.val.2, e x.val.1), Ne.lt_of_le (e.injective.ne x.property.ne') (not_lt.1 h)⟩,
-     fun y => if 
+     fun y => if h : e.symm y.val.1 < e.symm y.val.2 then ⟨(e.symm y.val.1, e.symm y.val.2), h⟩ else
+      ⟨(e.symm y.val.2, e.symm y.val.1),
+       Ne.lt_of_le (e.symm.injective.ne y.property.ne') (not_lt.1 h)⟩,
+     by grind,
+     by grind⟩
+  simp_rw [Scalene]
+  convert! (Injective.of_comp_iff' _ (Equiv.bijective f)).symm
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was:
+  `grind [reindex_points, dist_comm]` -/
+  simp only [reindex_points, comp_apply, Equiv.coe_fn_mk, f]
+  split <;> simp [dist_comm]
 
 中文:
 引理 scalene_reindex_iff
@@ -122,7 +151,20 @@ lemma scalene_reindex_iff
     {y : Fin (n + 1) × Fin (n + 1) // y.1 < y.2} :=
     ⟨fun x => if h : e x.val.1 < e x.val.2 then ⟨(e x.val.1, e x.val.2), h⟩ else
       ⟨(e x.val.2, e x.val.1), Ne.lt_of_le (e.injective.ne x.property.ne') (not_lt.1 h)⟩,
-     fun y => if 
+     fun y => if h : e.symm y.val.1 < e.symm y.val.2 then ⟨(e.symm y.val.1, e.symm y.val.2), h⟩ else
+      ⟨(e.symm y.val.2, e.symm y.val.1),
+       Ne.lt_of_le (e.symm.injective.ne y.property.ne') (not_lt.1 h)⟩,
+     by grind,
+     by grind⟩
+  simp_rw [Scalene]
+  convert! (Injective.of_comp_iff' _ (Equiv.bijective f)).symm
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was:
+  `grind [reindex_points, dist_comm]` -/
+  simp only [reindex_points, comp_apply, Equiv.coe_fn_mk, f]
+  split <;> simp [dist_comm]
 -/
 @[simp] lemma scalene_reindex_iff {s : Simplex R P m} (e : Fin (m + 1) ≃ Fin (n + 1)) :
     (s.reindex e).Scalene ↔ s.Scalene := by
@@ -287,7 +329,17 @@ lemma Regular.equilateral
     rcases hr (Equiv.swap 0 j) with ⟨x, hx⟩
     nth_rw 2 [← x.dist_eq]
     simp_rw [← Function.comp_apply (f := x), ← hx]
-    simp only [comp_apply, Equiv.swap_ap
+    simp only [comp_apply, Equiv.swap_apply_left]
+    convert! rfl
+    rw [Equiv.swap_apply_of_ne_of_ne (by simp [hn]) (by lia)]
+  · rcases hr ((Equiv.swap 0 i).trans (Equiv.swap 1 j)) with ⟨x, hx⟩
+    nth_rw 2 [← x.dist_eq]
+    simp_rw [← Function.comp_apply (f := x), ← hx]
+    simp only [Equiv.coe_trans, comp_apply, Equiv.swap_apply_left]
+    convert! rfl
+    · exact Equiv.swap_apply_of_ne_of_ne hi hij
+    · rw [Equiv.swap_apply_of_ne_of_ne (by simp [hn]) (Ne.symm hi)]
+      simp
 
 中文:
 引理 正则.equilateral
@@ -301,7 +353,17 @@ lemma Regular.equilateral
     rcases hr (Equiv.swap 0 j) with ⟨x, hx⟩
     nth_rw 2 [← x.dist_eq]
     simp_rw [← Function.comp_apply (f := x), ← hx]
-    simp only [comp_apply, Equiv.swap_ap
+    simp only [comp_apply, Equiv.swap_apply_left]
+    convert! rfl
+    rw [Equiv.swap_apply_of_ne_of_ne (by simp [hn]) (by lia)]
+  · rcases hr ((Equiv.swap 0 i).trans (Equiv.swap 1 j)) with ⟨x, hx⟩
+    nth_rw 2 [← x.dist_eq]
+    simp_rw [← Function.comp_apply (f := x), ← hx]
+    simp only [Equiv.coe_trans, comp_apply, Equiv.swap_apply_left]
+    convert! rfl
+    · exact Equiv.swap_apply_of_ne_of_ne hi hij
+    · rw [Equiv.swap_apply_of_ne_of_ne (by simp [hn]) (Ne.symm hi)]
+      simp
 
 Depends on / 依赖: Equiv.swap, Equiv.swap_apply_left, Equiv.swap_apply_of_ne_of_ne, Function, Function.comp_apply, comp_apply, convert, dist_comm, dist_eq, nth_rw, points, s.points, simp_rw, swap_apply_left, swap_apply_of_ne_of_ne, x.dist_eq
 -/
@@ -339,7 +401,14 @@ lemma scalene_iff_dist_ne_and_dist_ne_and_dist_ne
   refine ⟨fun h =>
     ⟨h.dist_ne (by decide : (0 : Fin 3) != 1) (by decide : (0 : Fin 3) != 2) (by decide) (by decide),
      h.dist_ne (by decide : (0 : Fin 3) != 1) (by decide : (1 : Fin 3) != 2) (by decide) (by decide),
-     h.dist_ne (by decide : (0 : Fin 3) != 2) (by decide : (1 : Fin 3) != 
+     h.dist_ne (by decide : (0 : Fin 3) != 2) (by decide : (1 : Fin 3) != 2) (by decide) (by decide)⟩,
+    fun ⟨h₁, h₂, h₃⟩ => ?_⟩
+  intro ⟨⟨x₁, x₂⟩, hx⟩ ⟨⟨y₁, y₂⟩, hy⟩ hxy
+  simp only at hx hy hxy
+  simp only [Subtype.mk.injEq, Prod.mk.injEq]
+  fin_cases x₁ <;> fin_cases x₂ <;> simp +decide only at hx <;>
+    fin_cases y₁ <;> fin_cases y₂ <;> simp +decide only at hy <;>
+    simp [h₁, h₂, h₃, h₁.symm, h₂.symm, h₃.symm] at hxy ⊢
 
 中文:
 引理 scalene_iff_dist_ne_and_dist_ne_and_dist_ne
@@ -348,7 +417,14 @@ lemma scalene_iff_dist_ne_and_dist_ne_and_dist_ne
   refine ⟨fun h =>
     ⟨h.dist_ne (by decide : (0 : Fin 3) != 1) (by decide : (0 : Fin 3) != 2) (by decide) (by decide),
      h.dist_ne (by decide : (0 : Fin 3) != 1) (by decide : (1 : Fin 3) != 2) (by decide) (by decide),
-     h.dist_ne (by decide : (0 : Fin 3) != 2) (by decide : (1 : Fin 3) != 
+     h.dist_ne (by decide : (0 : Fin 3) != 2) (by decide : (1 : Fin 3) != 2) (by decide) (by decide)⟩,
+    fun ⟨h₁, h₂, h₃⟩ => ?_⟩
+  intro ⟨⟨x₁, x₂⟩, hx⟩ ⟨⟨y₁, y₂⟩, hy⟩ hxy
+  simp only at hx hy hxy
+  simp only [Subtype.mk.injEq, Prod.mk.injEq]
+  fin_cases x₁ <;> fin_cases x₂ <;> simp +decide only at hx <;>
+    fin_cases y₁ <;> fin_cases y₂ <;> simp +decide only at hy <;>
+    simp [h₁, h₂, h₃, h₁.symm, h₂.symm, h₃.symm] at hxy ⊢
 
 Depends on / 依赖: Prod.mk.injEq, Subtype, Subtype.mk.injEq, dist_ne, fin_cases, h.dist_ne
 -/
@@ -380,7 +456,17 @@ lemma equilateral_iff_dist_eq_and_dist_eq
   · refine ⟨dist (t.points i₁) (t.points i₂), ?_⟩
     intro i j hij
     have hi : (i = i₁ ∧ j = i₂) ∨ (i = i₂ ∧ j = i₁) ∨ (i = i₁ ∧ j = i₃) ∨
-      (i = i₃ ∧ j = i₁) ∨ (i = i₂ ∧ j = i₃) ∨ (i = i₃ ∧ j = i₂) := 
+      (i = i₃ ∧ j = i₁) ∨ (i = i₂ ∧ j = i₃) ∨ (i = i₃ ∧ j = i₂) := by
+      clear h
+      decide +revert
+    rcases h with ⟨h₁, h₂⟩
+    rcases hi with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+    · rfl
+    · exact dist_comm _ _
+    · exact h₁.symm
+    · rw [h₁, dist_comm]
+    · rw [h₂, dist_comm]
+    · rw [h₂, dist_comm]
 
 中文:
 引理 equilateral_iff_dist_eq_and_dist_eq
@@ -391,7 +477,17 @@ lemma equilateral_iff_dist_eq_and_dist_eq
   · refine ⟨dist (t.points i₁) (t.points i₂), ?_⟩
     intro i j hij
     have hi : (i = i₁ ∧ j = i₂) ∨ (i = i₂ ∧ j = i₁) ∨ (i = i₁ ∧ j = i₃) ∨
-      (i = i₃ ∧ j = i₁) ∨ (i = i₂ ∧ j = i₃) ∨ (i = i₃ ∧ j = i₂) := 
+      (i = i₃ ∧ j = i₁) ∨ (i = i₂ ∧ j = i₃) ∨ (i = i₃ ∧ j = i₂) := by
+      clear h
+      decide +revert
+    rcases h with ⟨h₁, h₂⟩
+    rcases hi with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+    · rfl
+    · exact dist_comm _ _
+    · exact h₁.symm
+    · rw [h₁, dist_comm]
+    · rw [h₂, dist_comm]
+    · rw [h₂, dist_comm]
 
 Depends on / 依赖: dist_, dist_comm, points, revert, t.points
 -/

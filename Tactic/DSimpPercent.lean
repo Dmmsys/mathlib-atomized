@@ -53,7 +53,19 @@ definition dsimpPercentElaborator
   let go : TacticM Expr := do
     let e ← Term.elabTerm stx[5] expectedType
     -- `stx` has the same shape as a normal `dsimp` call, so we can pass it to `mkSimpContext`.
-    let { ctx, simprocs, .. } ← mkSimpContext stx (eraseLocal :
+    let { ctx, simprocs, .. } ← mkSimpContext stx (eraseLocal := false) (kind := .dsimp)
+    let dsimp (e : Expr) : MetaM Expr := do
+      -- Ensure that only instantiating metavariables isn't counted as progress.
+      let e ← instantiateMVars e
+      let (dsimpResult, _) ← Meta.dsimp e ctx simprocs
+      if dsimpResult == e then
+        throwError "`dsimp%` made no progress"
+      return dsimpResult
+    if ← isProof e then
+      mkExpectedTypeHint e (← dsimp (← inferType e))
+    else
+      dsimp e
+.run' { goals := [fresh.mvarId!] } go { elaborator := .anonymous }
 
 中文:
 定义 dsimpPercentElaborator
@@ -63,7 +75,19 @@ definition dsimpPercentElaborator
   let go : TacticM Expr := do
     let e ← Term.elabTerm stx[5] expectedType
     -- `stx` has the same shape as a normal `dsimp` call, so we can pass it to `mkSimpContext`.
-    let { ctx, simprocs, .. } ← mkSimpContext stx (eraseLocal :
+    let { ctx, simprocs, .. } ← mkSimpContext stx (eraseLocal := false) (kind := .dsimp)
+    let dsimp (e : Expr) : MetaM Expr := do
+      -- Ensure that only instantiating metavariables isn't counted as progress.
+      let e ← instantiateMVars e
+      let (dsimpResult, _) ← Meta.dsimp e ctx simprocs
+      if dsimpResult == e then
+        throwError "`dsimp%` made no progress"
+      return dsimpResult
+    if ← isProof e then
+      mkExpectedTypeHint e (← dsimp (← inferType e))
+    else
+      dsimp e
+.run' { goals := [fresh.mvarId!] } go { elaborator := .anonymous }
 
 Depends on / 依赖: expectedType
 -/

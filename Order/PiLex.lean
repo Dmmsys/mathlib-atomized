@@ -144,7 +144,9 @@ theorem trichotomous_lex
       let i := wf.min {i | a i != b i} h
       have hri j (hr : r j i) : a j = b j := not_not.mp (fun h => wf.not_lt_min _ (by grind) hr)
       have := Std.Trichotomous.trichotomous (a i) (b i) (hab ⟨i, hri, ·⟩)
-exac
+exact hba ⟨i, (hri · · |>.symm), Not.imp_symm this wf.min_mem {i | a i != b i} h⟩ }
+
+@[deprecated (since := "2026-01-24")] alias isTrichotomous_lex := trichotomous_lex
 
 中文:
 定理 trichotomous_lex
@@ -155,7 +157,9 @@ exac
       let i := wf.min {i | a i != b i} h
       have hri j (hr : r j i) : a j = b j := not_not.mp (fun h => wf.not_lt_min _ (by grind) hr)
       have := Std.Trichotomous.trichotomous (a i) (b i) (hab ⟨i, hri, ·⟩)
-exac
+exact hba ⟨i, (hri · · |>.symm), Not.imp_symm this wf.min_mem {i | a i != b i} h⟩ }
+
+@[deprecated (since := "2026-01-24")] alias isTrichotomous_lex := trichotomous_lex
 
 Depends on / 依赖: WellFounded
 -/
@@ -322,7 +326,8 @@ instance Lex.isStrictOrder
     rintro a b c ⟨N₁, lt_N₁, a_lt_b⟩ ⟨N₂, lt_N₂, b_lt_c⟩
     rcases lt_trichotomy N₁ N₂ with (H | rfl | H)
     exacts [⟨N₁, fun j hj => (lt_N₁ _ hj).trans (lt_N₂ _ <| hj.trans H), lt_N₂ _ H ▸ a_lt_b⟩,
-      ⟨N₁, fun j hj => (lt_N₁ _ hj).trans (l
+      ⟨N₁, fun j hj => (lt_N₁ _ hj).trans (lt_N₂ _ hj), a_lt_b.trans b_lt_c⟩,
+      ⟨N₂, fun j hj => (lt_N₁ _ (hj.trans H)).trans (lt_N₂ _ hj), (lt_N₁ _ H).symm ▸ b_lt_c⟩]
 
 中文:
 实例 Lex.isStrictOrder
@@ -332,7 +337,8 @@ instance Lex.isStrictOrder
     rintro a b c ⟨N₁, lt_N₁, a_lt_b⟩ ⟨N₂, lt_N₂, b_lt_c⟩
     rcases lt_trichotomy N₁ N₂ with (H | rfl | H)
     exacts [⟨N₁, fun j hj => (lt_N₁ _ hj).trans (lt_N₂ _ <| hj.trans H), lt_N₂ _ H ▸ a_lt_b⟩,
-      ⟨N₁, fun j hj => (lt_N₁ _ hj).trans (l
+      ⟨N₁, fun j hj => (lt_N₁ _ hj).trans (lt_N₂ _ hj), a_lt_b.trans b_lt_c⟩,
+      ⟨N₂, fun j hj => (lt_N₁ _ (hj.trans H)).trans (lt_N₂ _ hj), (lt_N₁ _ H).symm ▸ b_lt_c⟩]
 -/
 instance Lex.isStrictOrder [LinearOrder ι] [forall a, PartialOrder (β a)] :
     IsStrictOrder (Lex (forall i, β i)) (· < ·) where
@@ -1024,7 +1030,9 @@ instance [Preorder
       · rw [h j hj]
         dsimp only at hj
         rw [Function.update_of_ne hj.ne a]
-      · rwa [Function.update_self i
+      · rwa [Function.update_self i a]
+      · rw [Function.update_of_ne hj.ne a]
+      · rwa [Function.update_self i a]⟩
 
 中文:
 实例 [预序
@@ -1037,7 +1045,9 @@ instance [Preorder
       · rw [h j hj]
         dsimp only at hj
         rw [Function.update_of_ne hj.ne a]
-      · rwa [Function.update_self i
+      · rwa [Function.update_self i a]
+      · rw [Function.update_of_ne hj.ne a]
+      · rwa [Function.update_self i a]⟩
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.distribBaseChange, Function, Function.update, Function.update_of_ne, Function.update_self, IsLocalizedModule, IsLocalizedModule.linearEquiv, IsLocalizedModule.of_linearEquiv, LinearEquiv, LinearEquiv.eq_symm_apply, Localization, TensorProduct, TensorProduct.equivOfCompatibleSMul, TensorProduct.mk, classical, congrm, convert, distribBaseChange, eq_symm_apply
 -/

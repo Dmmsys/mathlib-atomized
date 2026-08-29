@@ -59,7 +59,8 @@ theorem isChain_range
     | zero => simp
     | succ n =>
       simp only [range_succ, Nat.add_lt_add_iff_right, succ_eq_add_one, append_assoc, cons_append,
-        nil_ap
+        nil_append, isChain_append_cons_cons, IsChain.singleton, and_true] at hn ⊢
+      rw [hn]; rw [forall_lt_succ_right]
 
 中文:
 定理 isChain_range
@@ -73,7 +74,8 @@ theorem isChain_range
     | zero => simp
     | succ n =>
       simp only [range_succ, Nat.add_lt_add_iff_right, succ_eq_add_one, append_assoc, cons_append,
-        nil_ap
+        nil_append, isChain_append_cons_cons, IsChain.singleton, and_true] at hn ⊢
+      rw [hn]; rw [forall_lt_succ_right]
 
 Depends on / 依赖: IsChain, IsChain.singleton, Nat.add_lt_add_iff_right, Nat.add_one_sub_one, Nat.lt_sub_iff_add_lt, add_lt_add_iff_right, add_one_sub_one, and_true, append_assoc, cons_append, forall_lt_succ_right, isChain_append_cons_cons, lt_sub_iff_add_lt, nil_append, range_succ, singleton, succ_eq_add_one
 -/
@@ -171,7 +173,10 @@ theorem ranges_disjoint
       rw [mem_range] at hu
       lia
     · rw [pairwise_map]
-      apply Pairwi
+      apply Pairwise.imp _ hl
+      intro u v
+      apply disjoint_map
+      exact fun u v => Nat.add_left_cancel
 
 中文:
 定理 ranges_disjoint
@@ -189,7 +194,10 @@ theorem ranges_disjoint
       rw [mem_range] at hu
       lia
     · rw [pairwise_map]
-      apply Pairwi
+      apply Pairwise.imp _ hl
+      intro u v
+      apply disjoint_map
+      exact fun u v => Nat.add_left_cancel
 
 Depends on / 依赖: Nat.add_left_cancel, Pairwise, Pairwise.imp, Pairwise.nil, add_left_cancel, disjoint_map, mem_map, mem_map.mp, mem_range, pairwise_cons, pairwise_map, ranges
 -/

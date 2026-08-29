@@ -199,7 +199,9 @@ lemma iff_injective_ringHom_or_subsingleton_codomain
 .imp mpr H := of_eq_bot_or_eq_top fun I => H I.ringCon.mk'
     (fun h => le_antisymm
       (fun _ hx => TwoSidedIdeal.ker_eq_bot _ |>.2 h ▸ I.ker_ringCon_mk'.symm ▸ hx) bot_le)
-    (fun h => le_antisymm le_top fun x _ => I.mem_iff _ |>.2 (Quotient.eq'.1 (h.
+    (fun h => le_antisymm le_top fun x _ => I.mem_iff _ |>.2 (Quotient.eq'.1 (h.elim x 0)))
+
+universe u in
 
 中文:
 引理 iff_injective_ringHom_or_subsingleton_codomain
@@ -208,7 +210,9 @@ lemma iff_injective_ringHom_or_subsingleton_codomain
 .imp mpr H := of_eq_bot_or_eq_top fun I => H I.ringCon.mk'
     (fun h => le_antisymm
       (fun _ hx => TwoSidedIdeal.ker_eq_bot _ |>.2 h ▸ I.ker_ringCon_mk'.symm ▸ hx) bot_le)
-    (fun h => le_antisymm le_top fun x _ => I.mem_iff _ |>.2 (Quotient.eq'.1 (h.
+    (fun h => le_antisymm le_top fun x _ => I.mem_iff _ |>.2 (Quotient.eq'.1 (h.elim x 0)))
+
+universe u in
 
 Depends on / 依赖: injective_ringHom_or_subsingleton_codomain
 -/

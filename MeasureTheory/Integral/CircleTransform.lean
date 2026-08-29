@@ -244,7 +244,7 @@ theorem continuousOn_prod_circle_transform_function
   · exact ((continuous_circleMap z R).comp_continuousOn continuousOn_snd).sub continuousOn_fst
   · rintro ⟨a, b⟩ ⟨ha, -⟩
     have ha2 : a in ball z R := closedBall_subset_ball hr ha
-    exact sub_ne_zero.
+    exact sub_ne_zero.2 (circleMap_ne_mem_ball ha2 b)
 
 中文:
 定理 continuousOn_prod_circle_transform_function
@@ -255,7 +255,7 @@ theorem continuousOn_prod_circle_transform_function
   · exact ((continuous_circleMap z R).comp_continuousOn continuousOn_snd).sub continuousOn_fst
   · rintro ⟨a, b⟩ ⟨ha, -⟩
     have ha2 : a in ball z R := closedBall_subset_ball hr ha
-    exact sub_ne_zero.
+    exact sub_ne_zero.2 (circleMap_ne_mem_ball ha2 b)
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.div, ContinuousOn.pow, apply_rules, circleMap_ne_mem_ball, closedBall_subset_ball, comp_continuousOn, continuousOn_const, continuousOn_fst, continuousOn_snd, continuous_circleMap, one_div, simp_rw, sub_ne_zero
 -/
@@ -280,7 +280,9 @@ theorem continuousOn_norm_circleTransformBoundingFunction
     apply_rules [ContinuousOn.fun_smul, continuousOn_const]
     · simp only [deriv_circleMap]
       apply_rules [ContinuousOn.mul, (continuous_circleMap 0 R).comp_continuousOn continuousOn_snd,
-        cont
+        continuousOn_const]
+    · simpa only [inv_pow] using continuousOn_prod_circle_transform_function hr
+  exact this.norm
 
 中文:
 定理 continuousOn_norm_circleTransformBoundingFunction
@@ -290,7 +292,9 @@ theorem continuousOn_norm_circleTransformBoundingFunction
     apply_rules [ContinuousOn.fun_smul, continuousOn_const]
     · simp only [deriv_circleMap]
       apply_rules [ContinuousOn.mul, (continuous_circleMap 0 R).comp_continuousOn continuousOn_snd,
-        cont
+        continuousOn_const]
+    · simpa only [inv_pow] using continuousOn_prod_circle_transform_function hr
+  exact this.norm
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.fun_smul, ContinuousOn.mul, apply_rules, circleTransformBoundingFunction, closedBall, comp_continuousOn, continuousOn_const, continuousOn_prod_circle_transform_function, continuousOn_snd, continuous_circleMap, deriv_circleMap, fun_smul, inv_pow, this.norm
 -/
@@ -315,7 +319,9 @@ theorem norm_circleTransformBoundingFunction_le
   have comp : IsCompact (closedBall z r ×ˢ [[0, 2 * π]]) := by
     apply_rules [IsCompact.prod, ProperSpace.isCompact_closedBall z r, isCompact_uIcc]
   have none : (closedBall z r ×ˢ [[0, 2 * π]]).Nonempty :=
-    (nonempty_close
+    (nonempty_closedBall.2 hr').prod nonempty_uIcc
+  have := IsCompact.exists_isMaxOn comp none (cts.mono <| prod_mono_right (subset_univ _))
+  simpa [isMaxOn_iff] using this
 
 中文:
 定理 norm_circleTransformBoundingFunction_le
@@ -325,7 +331,9 @@ theorem norm_circleTransformBoundingFunction_le
   have comp : IsCompact (closedBall z r ×ˢ [[0, 2 * π]]) := by
     apply_rules [IsCompact.prod, ProperSpace.isCompact_closedBall z r, isCompact_uIcc]
   have none : (closedBall z r ×ˢ [[0, 2 * π]]).Nonempty :=
-    (nonempty_close
+    (nonempty_closedBall.2 hr').prod nonempty_uIcc
+  have := IsCompact.exists_isMaxOn comp none (cts.mono <| prod_mono_right (subset_univ _))
+  simpa [isMaxOn_iff] using this
 
 Depends on / 依赖: IsCompact, IsCompact.exists_isMaxOn, IsCompact.prod, Nonempty, ProperSpace, ProperSpace.isCompact_closedBall, apply_rules, closedBall, continuousOn_norm_circleTransformBoundingFunction, cts.mono, exists_isMaxOn, isCompact_closedBall, isCompact_uIcc, isMaxOn_iff, nonempty_closedBall, nonempty_uIcc, prod_mono_right, subset_univ
 -/
@@ -351,7 +359,19 @@ theorem circleTransformDeriv_bound
   obtain ⟨ε', hε', H⟩ := exists_ball_subset_ball hrx
   obtain ⟨⟨⟨a, b⟩, ⟨ha, hb⟩⟩, hab⟩ :=
     norm_circleTransformBoundingFunction_le hr (pos_of_mem_ball hrx).le z
-  let V : Real -> Complex -> Complex := fun θ w => circleTransformDeriv R
+  let V : Real -> Complex -> Complex := fun θ w => circleTransformDeriv R z w (fun _ => 1) θ
+  obtain ⟨X, -, HX2⟩ := (isCompact_sphere z R).exists_isMaxOn
+    (NormedSpace.sphere_nonempty.2 hR.le) hf.norm
+  refine ⟨‖V b a‖ * ‖f X‖, ε', hε', H.trans (ball_subset_ball hr.le), fun y v hv => ?_⟩
+  obtain ⟨y1, hy1, hfun⟩ :=
+    Periodic.exists_mem_Ico₀ (circleTransformDeriv_periodic R z v f) Real.two_pi_pos y
+have hy2 : y1 in [[0, 2 * π]] := Icc_subset_uIcc Ico_subset_Icc_self hy1
+  simp only [isMaxOn_iff, mem_sphere_iff_norm] at HX2
+  have := mul_le_mul (hab ⟨⟨v, y1⟩, ⟨ball_subset_closedBall (H hv), hy2⟩⟩)
+    (HX2 (circleMap z R y1) (mem_sphere_iff_norm.1 (circleMap_mem_sphere z hR.le y1)))
+    (norm_nonneg _) (norm_nonneg _)
+  rw [hfun]
+  simpa [V, circleTransformBoundingFunction, circleTransformDeriv, mul_assoc] using this
 
 中文:
 定理 circleTransformDeriv_bound
@@ -361,7 +381,19 @@ theorem circleTransformDeriv_bound
   obtain ⟨ε', hε', H⟩ := exists_ball_subset_ball hrx
   obtain ⟨⟨⟨a, b⟩, ⟨ha, hb⟩⟩, hab⟩ :=
     norm_circleTransformBoundingFunction_le hr (pos_of_mem_ball hrx).le z
-  let V : Real -> Complex -> Complex := fun θ w => circleTransformDeriv R
+  let V : Real -> Complex -> Complex := fun θ w => circleTransformDeriv R z w (fun _ => 1) θ
+  obtain ⟨X, -, HX2⟩ := (isCompact_sphere z R).exists_isMaxOn
+    (NormedSpace.sphere_nonempty.2 hR.le) hf.norm
+  refine ⟨‖V b a‖ * ‖f X‖, ε', hε', H.trans (ball_subset_ball hr.le), fun y v hv => ?_⟩
+  obtain ⟨y1, hy1, hfun⟩ :=
+    Periodic.exists_mem_Ico₀ (circleTransformDeriv_periodic R z v f) Real.two_pi_pos y
+have hy2 : y1 in [[0, 2 * π]] := Icc_subset_uIcc Ico_subset_Icc_self hy1
+  simp only [isMaxOn_iff, mem_sphere_iff_norm] at HX2
+  have := mul_le_mul (hab ⟨⟨v, y1⟩, ⟨ball_subset_closedBall (H hv), hy2⟩⟩)
+    (HX2 (circleMap z R y1) (mem_sphere_iff_norm.1 (circleMap_mem_sphere z hR.le y1)))
+    (norm_nonneg _) (norm_nonneg _)
+  rw [hfun]
+  simpa [V, circleTransformBoundingFunction, circleTransformDeriv, mul_assoc] using this
 
 Depends on / 依赖: H.trans, NormedSpace, NormedSpace.sphere_nonempty, ball_subset_ball, circleTransformDeriv, exists_ball_subset_ball, exists_isMaxOn, exists_lt_mem_ball_of_mem_ball, hR.le, hf.norm, hr.le, isCompact_sphere, norm_circleTransformBoundingFunction_le, pos_of_mem_ball, sphere_nonempty
 -/

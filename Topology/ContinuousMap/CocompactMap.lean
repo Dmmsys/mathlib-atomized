@@ -562,7 +562,7 @@ theorem isCompact_preimage_of_isClosed
             (cocompact_tendsto f <|
               mem_cocompact.mpr ⟨s, hs, compl_subset_compl.mpr (image_preimage_subset f _)⟩))
   exact
-    ht.of_isCl
+    ht.of_isClosed_subset (h's.preimage <| map_continuous f) (by simpa using hts)
 
 中文:
 定理 isCompact_preimage_of_isClosed
@@ -576,7 +576,7 @@ theorem isCompact_preimage_of_isClosed
             (cocompact_tendsto f <|
               mem_cocompact.mpr ⟨s, hs, compl_subset_compl.mpr (image_preimage_subset f _)⟩))
   exact
-    ht.of_isCl
+    ht.of_isClosed_subset (h's.preimage <| map_continuous f) (by simpa using hts)
 
 Depends on / 依赖: cocompact_tendsto, compl_subset_compl, compl_subset_compl.mpr, ht.of_isClosed_subset, image_preimage_subset, map_continuous, mem_cocompact, mem_cocompact.mpr, mem_map, mem_map.mp, of_isClosed_subset, preimage, preimage_compl, preimage_image_preimage, s.preimage
 -/

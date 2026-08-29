@@ -296,7 +296,16 @@ definition embeddingsEquivPrimitiveRoots
         refine ⟨x.1, ?_⟩
         cases x
         rwa [mem_primitiveRoots (NeZero.pos _), ← isRoot_cyclotomic_iff, IsRoot.def,
-          ←
+          ← map_cyclotomic _ (algebraMap K C), hζ.minpoly_eq_cyclotomic_of_irreducible hirr,
+          ← eval₂_eq_eval_map, ← aeval_def]
+      invFun := fun x => by
+        haveI := IsCyclotomicExtension.neZero' n K L
+        haveI hn := NeZero.of_faithfulSMul K C n
+        refine ⟨x.1, ?_⟩
+        cases x
+        rwa [aeval_def, eval₂_eq_eval_map, hζ.powerBasis_gen K, ←
+          hζ.minpoly_eq_cyclotomic_of_irreducible hirr, map_cyclotomic, ← IsRoot.def,
+          isRoot_cyclotomic_iff, ← mem_primitiveRoots (NeZero.pos _)] }
 
 中文:
 定义 embeddingsEquivPrimitiveRoots
@@ -308,7 +317,16 @@ definition embeddingsEquivPrimitiveRoots
         refine ⟨x.1, ?_⟩
         cases x
         rwa [mem_primitiveRoots (NeZero.pos _), ← isRoot_cyclotomic_iff, IsRoot.def,
-          ←
+          ← map_cyclotomic _ (algebraMap K C), hζ.minpoly_eq_cyclotomic_of_irreducible hirr,
+          ← eval₂_eq_eval_map, ← aeval_def]
+      invFun := fun x => by
+        haveI := IsCyclotomicExtension.neZero' n K L
+        haveI hn := NeZero.of_faithfulSMul K C n
+        refine ⟨x.1, ?_⟩
+        cases x
+        rwa [aeval_def, eval₂_eq_eval_map, hζ.powerBasis_gen K, ←
+          hζ.minpoly_eq_cyclotomic_of_irreducible hirr, map_cyclotomic, ← IsRoot.def,
+          isRoot_cyclotomic_iff, ← mem_primitiveRoots (NeZero.pos _)] }
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.neZero, IsRoot, IsRoot.def, NeZero, NeZero.of_faithfulSMul, NeZero.pos, aeval_def, algebraMap, invFun, isRoot_cyclotomic_iff, liftEquiv, liftEquiv.trans, map_cyclotomic, mem_primitiveRoots, minpoly_eq_cyclotomic_of_irreducible, neZero, of_faithfulSMul, powerBasis
 -/
@@ -400,7 +418,11 @@ theorem _root_.IsPrimitiveRoot.lcm_totient_le_finrank
   · simp
   let z := x ^ (p / factorizationLCMLeft p q) * y ^ (q / factorizationLCMRight p q)
   let k := PNat.lcm ⟨p, hppos⟩ ⟨q, hqpos⟩
-  have : IsPrimitiveRoot z k := hx.pow_mul_pow_lcm hy h
+  have : IsPrimitiveRoot z k := hx.pow_mul_pow_lcm hy hppos.ne' hqpos.ne'
+  have := IsPrimitiveRoot.adjoin_isCyclotomicExtension K this
+  convert! Submodule.finrank_le (Subalgebra.toSubmodule (adjoin K { z }))
+  rw [show Nat.lcm p q = (k : Nat) from rfl] at hirr
+  simpa using! (IsCyclotomicExtension.finrank (Algebra.adjoin K {z}) hirr).symm
 
 中文:
 定理 _root_.是PrimitiveRoot.lcm_totient_le_finrank
@@ -412,7 +434,11 @@ theorem _root_.IsPrimitiveRoot.lcm_totient_le_finrank
   · simp
   let z := x ^ (p / factorizationLCMLeft p q) * y ^ (q / factorizationLCMRight p q)
   let k := PNat.lcm ⟨p, hppos⟩ ⟨q, hqpos⟩
-  have : IsPrimitiveRoot z k := hx.pow_mul_pow_lcm hy h
+  have : IsPrimitiveRoot z k := hx.pow_mul_pow_lcm hy hppos.ne' hqpos.ne'
+  have := IsPrimitiveRoot.adjoin_isCyclotomicExtension K this
+  convert! Submodule.finrank_le (Subalgebra.toSubmodule (adjoin K { z }))
+  rw [show Nat.lcm p q = (k : Nat) from rfl] at hirr
+  simpa using! (IsCyclotomicExtension.finrank (Algebra.adjoin K {z}) hirr).symm
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.adjoin_isCyclotomicExtension, Nat.eq_zero_or_pos, Nat.lcm, PNat.lcm, Subalgebra, Subalgebra.toSubmodule, Submodule, Submodule.finrank_le, adjoin, adjoin_isCyclotomicExtension, convert, eq_zero_or_pos, factorizationLCMLeft, factorizationLCMRight, finrank_le, hppos.ne, hqpos.ne, hx.pow_mul_pow_lcm, pow_mul_pow_lcm
 -/
@@ -456,7 +482,21 @@ theorem dvd_of_isCyclotomicExtension
   have hroot := IsCyclotomicExtension.zeta_spec n Rat K
   have key := IsPrimitiveRoot.lcm_totient_le_finrank hζ hroot
     (cyclotomic.irreducible_rat <| Nat.lcm_pos (Nat.pos_of_ne_zero hl.1) (NeZero.pos n))
-  rw [IsCyclotomicExtension.finrank K (cyclotomic.irreducible
+  rw [IsCyclotomicExtension.finrank K (cyclotomic.irreducible_rat (NeZero.pos n))] at key
+  rcases _root_.dvd_lcm_right l n with ⟨r, hr⟩
+  have ineq := Nat.totient_super_multiplicative n r
+  rw [← hr] at ineq
+  replace key := (mul_le_iff_le_one_right (Nat.totient_pos.2 (NeZero.pos n))).mp (le_trans ineq key)
+  have rpos : 0 < r := by
+    refine Nat.pos_of_ne_zero (fun h => ?_)
+    simp only [h, mul_zero, _root_.lcm_eq_zero_iff, NeZero.ne _, or_false] at hr
+  replace key := (Nat.dvd_prime Nat.prime_two).1 (Nat.dvd_two_of_totient_le_one rpos key)
+  rcases key with (key | key)
+  · rw [key, mul_one] at hr
+    rw [← hr]
+    exact dvd_mul_of_dvd_right (_root_.dvd_lcm_left l n) 2
+  · rw [key, mul_comm] at hr
+    simpa [← hr] using _root_.dvd_lcm_left _ _
 
 中文:
 定理 dvd_of_isCyclotomicExtension
@@ -466,7 +506,21 @@ theorem dvd_of_isCyclotomicExtension
   have hroot := IsCyclotomicExtension.zeta_spec n Rat K
   have key := IsPrimitiveRoot.lcm_totient_le_finrank hζ hroot
     (cyclotomic.irreducible_rat <| Nat.lcm_pos (Nat.pos_of_ne_zero hl.1) (NeZero.pos n))
-  rw [IsCyclotomicExtension.finrank K (cyclotomic.irreducible
+  rw [IsCyclotomicExtension.finrank K (cyclotomic.irreducible_rat (NeZero.pos n))] at key
+  rcases _root_.dvd_lcm_right l n with ⟨r, hr⟩
+  have ineq := Nat.totient_super_multiplicative n r
+  rw [← hr] at ineq
+  replace key := (mul_le_iff_le_one_right (Nat.totient_pos.2 (NeZero.pos n))).mp (le_trans ineq key)
+  have rpos : 0 < r := by
+    refine Nat.pos_of_ne_zero (fun h => ?_)
+    simp only [h, mul_zero, _root_.lcm_eq_zero_iff, NeZero.ne _, or_false] at hr
+  replace key := (Nat.dvd_prime Nat.prime_two).1 (Nat.dvd_two_of_totient_le_one rpos key)
+  rcases key with (key | key)
+  · rw [key, mul_one] at hr
+    rw [← hr]
+    exact dvd_mul_of_dvd_right (_root_.dvd_lcm_left l n) 2
+  · rw [key, mul_comm] at hr
+    simpa [← hr] using _root_.dvd_lcm_left _ _
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.finrank, IsCyclotomicExtension.zeta_spec, IsPrimitiveRoot, IsPrimitiveRoot.lcm_totient_le_finrank, Nat.lcm_pos, Nat.pos_of_ne_zero, Nat.totient_pos, Nat.totient_super_multiplicative, NeZero, NeZero.pos, _root_, _root_.dvd_lcm_right, cyclotomic, cyclotomic.irreducible_rat, dvd_lcm_right, finrank, irreducible_rat, lcm_pos, lcm_totient_le_finrank
 -/
@@ -504,7 +558,15 @@ theorem exists_neg_pow_of_isOfFinOrder
     rw [neg_eq_neg_one_mul]; rw [(Commute.all _ _).orderOf_mul_eq_mul_orderOf_of_coprime]
     · simp [hζ.eq_orderOf]
     · simp [← hζ.eq_orderOf, hno]
-  obtain ⟨k, hkpos, hkn⟩ := isOfFinOrder_iff_pow_eq_on
+  obtain ⟨k, hkpos, hkn⟩ := isOfFinOrder_iff_pow_eq_one.1 hx
+  obtain ⟨l, hl, hlroot⟩ := (isRoot_of_unity_iff hkpos _).1 hkn
+  have hlzero : NeZero l := ⟨fun h => by simp [h] at hl⟩
+  have : NeZero (l : K) := ⟨NeZero.natCast_ne l K⟩
+  rw [isRoot_cyclotomic_iff] at hlroot
+  obtain ⟨a, ha⟩ := hlroot.dvd_of_isCyclotomicExtension n hlzero.1
+  replace hlroot : x ^ (2 * n) = 1 := by rw [ha, pow_mul, hlroot.pow_eq_one, one_pow]
+  obtain ⟨s, -, hs⟩ := hnegζ.eq_pow_of_pow_eq_one hlroot
+  exact ⟨s, hs.symm⟩
 
 中文:
 定理 存在_neg_pow_of_isOfFinOrder
@@ -515,7 +577,15 @@ theorem exists_neg_pow_of_isOfFinOrder
     rw [neg_eq_neg_one_mul]; rw [(Commute.all _ _).orderOf_mul_eq_mul_orderOf_of_coprime]
     · simp [hζ.eq_orderOf]
     · simp [← hζ.eq_orderOf, hno]
-  obtain ⟨k, hkpos, hkn⟩ := isOfFinOrder_iff_pow_eq_on
+  obtain ⟨k, hkpos, hkn⟩ := isOfFinOrder_iff_pow_eq_one.1 hx
+  obtain ⟨l, hl, hlroot⟩ := (isRoot_of_unity_iff hkpos _).1 hkn
+  have hlzero : NeZero l := ⟨fun h => by simp [h] at hl⟩
+  have : NeZero (l : K) := ⟨NeZero.natCast_ne l K⟩
+  rw [isRoot_cyclotomic_iff] at hlroot
+  obtain ⟨a, ha⟩ := hlroot.dvd_of_isCyclotomicExtension n hlzero.1
+  replace hlroot : x ^ (2 * n) = 1 := by rw [ha, pow_mul, hlroot.pow_eq_one, one_pow]
+  obtain ⟨s, -, hs⟩ := hnegζ.eq_pow_of_pow_eq_one hlroot
+  exact ⟨s, hs.symm⟩
 
 Depends on / 依赖: Commute, Commute.all, IsPrimitiveRoot, IsPrimitiveRoot.orderOf, NeZero, NeZero.natCast_ne, convert, eq_orderOf, hlroot, hlzero, isOfFinOrder_iff_pow_eq_one, isRoot_cyclotomic_iff, isRoot_of_unity_iff, natCast_ne, neg_eq_neg_one_mul, orderOf, orderOf_mul_eq_mul_orderOf_of_coprime
 -/
@@ -611,7 +681,10 @@ theorem norm_eq_one
   · rw [h1, one_right_iff] at hζ
     rw [hζ]; rw [show 1 = algebraMap K L 1 by simp]; rw [Algebra.norm_algebraMap]; rw [one_pow]
   · replace h1 : 2 <= n := (two_le_iff n).mpr ⟨NeZero.ne _, h1⟩
-    rw [← hζ.powerBasis_gen K]; rw [
+    rw [← hζ.powerBasis_gen K]; rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [hζ.powerBasis_gen K]; rw [← hζ.minpoly_eq_cyclotomic_of_irreducible hirr]; rw [cyclotomic_coeff_zero K h1]; rw [mul_one]; rw [hζ.powerBasis_dim K]; rw [← hζ.minpoly_eq_cyclotomic_of_irreducible hirr]; rw [natDegree_cyclotomic]
+    exact (totient_even <| h1.lt_of_ne hn.symm).neg_one_pow
+
+omit [NeZero n] in
 
 中文:
 定理 norm_eq_one
@@ -622,7 +695,10 @@ theorem norm_eq_one
   · rw [h1, one_right_iff] at hζ
     rw [hζ]; rw [show 1 = algebraMap K L 1 by simp]; rw [Algebra.norm_algebraMap]; rw [one_pow]
   · replace h1 : 2 <= n := (two_le_iff n).mpr ⟨NeZero.ne _, h1⟩
-    rw [← hζ.powerBasis_gen K]; rw [
+    rw [← hζ.powerBasis_gen K]; rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [hζ.powerBasis_gen K]; rw [← hζ.minpoly_eq_cyclotomic_of_irreducible hirr]; rw [cyclotomic_coeff_zero K h1]; rw [mul_one]; rw [hζ.powerBasis_dim K]; rw [← hζ.minpoly_eq_cyclotomic_of_irreducible hirr]; rw [natDegree_cyclotomic]
+    exact (totient_even <| h1.lt_of_ne hn.symm).neg_one_pow
+
+omit [NeZero n] in
 
 Depends on / 依赖: Algebra, Algebra.norm_algebraMap, IsCyclotomicExtension, IsCyclotomicExtension.neZero, IsRegular, NeZero, NeZero.ne, PowerBasis, PowerBasis.norm_gen_eq_coeff_zero_minpoly, algebraMap, compl_compl_inf_distrib, cyclotomic_coeff_zero, ha.eq, hb.eq, minpoly_eq_, minpoly_eq_cyclotomic_of_irreducible, mul_one, neZero, norm_algebraMap, norm_gen_eq_coeff_zero_minpoly
 -/
@@ -721,7 +797,20 @@ theorem sub_one_norm_eq_eval_cyclotomic
   obtain ⟨z, hz⟩ := IsAlgClosed.exists_root _ (degree_cyclotomic_pos n E (NeZero.pos _)).ne.symm
   apply (algebraMap K E).injective
   let := IsCyclotomicExtension.finiteDimensional {n} K L
-  let := IsCyclotomicExtension.i
+  let := IsCyclotomicExtension.isGalois {n} K L
+  rw [norm_eq_prod_embeddings]
+  conv_lhs =>
+    congr
+    rfl
+    ext
+    rw [← neg_sub]; rw [map_neg]; rw [map_sub]; rw [map_one]; rw [neg_eq_neg_one_mul]
+  rw [prod_mul_distrib]; rw [prod_const]; rw [Finset.card_univ]; rw [AlgHom.card]; rw [IsCyclotomicExtension.finrank L hirr]; rw [(totient_even h).neg_one_pow]; rw [one_mul]
+  have Hprod : (Finset.univ.prod fun σ : L ->ₐ[K] E => 1 - σ ζ) = eval 1 (cyclotomic' n E) := by
+    rw [cyclotomic']; rw [eval_prod]; rw [← @Finset.prod_attach E E]; rw [← univ_eq_attach]
+    refine Fintype.prod_equiv (hζ.embeddingsEquivPrimitiveRoots E hirr) _ _ fun σ => ?_
+    simp
+  have : NeZero (n : E) := NeZero.of_faithfulSMul K _ n
+  rw [Hprod]; rw [cyclotomic']; rw [← cyclotomic_eq_prod_X_sub_primitiveRoots (isRoot_cyclotomic_iff.1 hz)]; rw [← map_cyclotomic_int]; rw [_root_.map_intCast]; rw [← Int.cast_one]; rw [eval_intCast_map]; rw [eq_intCast]; rw [Int.cast_id]
 
 中文:
 定理 sub_one_norm_eq_eval_cyclotomic
@@ -732,7 +821,20 @@ theorem sub_one_norm_eq_eval_cyclotomic
   obtain ⟨z, hz⟩ := IsAlgClosed.exists_root _ (degree_cyclotomic_pos n E (NeZero.pos _)).ne.symm
   apply (algebraMap K E).injective
   let := IsCyclotomicExtension.finiteDimensional {n} K L
-  let := IsCyclotomicExtension.i
+  let := IsCyclotomicExtension.isGalois {n} K L
+  rw [norm_eq_prod_embeddings]
+  conv_lhs =>
+    congr
+    rfl
+    ext
+    rw [← neg_sub]; rw [map_neg]; rw [map_sub]; rw [map_one]; rw [neg_eq_neg_one_mul]
+  rw [prod_mul_distrib]; rw [prod_const]; rw [Finset.card_univ]; rw [AlgHom.card]; rw [IsCyclotomicExtension.finrank L hirr]; rw [(totient_even h).neg_one_pow]; rw [one_mul]
+  have Hprod : (Finset.univ.prod fun σ : L ->ₐ[K] E => 1 - σ ζ) = eval 1 (cyclotomic' n E) := by
+    rw [cyclotomic']; rw [eval_prod]; rw [← @Finset.prod_attach E E]; rw [← univ_eq_attach]
+    refine Fintype.prod_equiv (hζ.embeddingsEquivPrimitiveRoots E hirr) _ _ fun σ => ?_
+    simp
+  have : NeZero (n : E) := NeZero.of_faithfulSMul K _ n
+  rw [Hprod]; rw [cyclotomic']; rw [← cyclotomic_eq_prod_X_sub_primitiveRoots (isRoot_cyclotomic_iff.1 hz)]; rw [← map_cyclotomic_int]; rw [_root_.map_intCast]; rw [← Int.cast_one]; rw [eval_intCast_map]; rw [eq_intCast]; rw [Int.cast_id]
 
 Depends on / 依赖: AlgebraicClosure, Finset, Finset.card_uni, IsAlgClosed, IsAlgClosed.exists_root, IsCyclotomicExtension, IsCyclotomicExtension.finiteDimensional, IsCyclotomicExtension.isGalois, IsCyclotomicExtension.neZero, NeZero, NeZero.pos, algebraMap, card_uni, conv_lhs, degree_cyclotomic_pos, exists_root, finiteDimensional, injective, isGalois, map_neg
 -/
@@ -769,7 +871,12 @@ theorem sub_one_norm_isPrimePow
   let hprime : Fact n.minFac.Prime := ⟨minFac_prime (IsPrimePow.ne_one hn)⟩
   rw [sub_one_norm_eq_eval_cyclotomic hζ this hirr]
   nth_rw 1 [← IsPrimePow.minFac_pow_factorization_eq hn]
-  obtain ⟨k, hk⟩ : exists k, n.factoriz
+  obtain ⟨k, hk⟩ : exists k, n.factorization n.minFac = k + 1 :=
+    exists_eq_succ_of_ne_zero
+      ((n.factorization.mem_support_toFun n.minFac).1 <|
+mem_primeFactors_iff_mem_primeFactorsList.2
+          (mem_primeFactorsList (IsPrimePow.ne_zero hn)).2 ⟨hprime.out, minFac_dvd _⟩)
+  simp [hk]
 
 中文:
 定理 sub_one_norm_isPrimePow
@@ -779,7 +886,12 @@ theorem sub_one_norm_isPrimePow
   let hprime : Fact n.minFac.Prime := ⟨minFac_prime (IsPrimePow.ne_one hn)⟩
   rw [sub_one_norm_eq_eval_cyclotomic hζ this hirr]
   nth_rw 1 [← IsPrimePow.minFac_pow_factorization_eq hn]
-  obtain ⟨k, hk⟩ : exists k, n.factoriz
+  obtain ⟨k, hk⟩ : exists k, n.factorization n.minFac = k + 1 :=
+    exists_eq_succ_of_ne_zero
+      ((n.factorization.mem_support_toFun n.minFac).1 <|
+mem_primeFactors_iff_mem_primeFactorsList.2
+          (mem_primeFactorsList (IsPrimePow.ne_zero hn)).2 ⟨hprime.out, minFac_dvd _⟩)
+  simp [hk]
 
 Depends on / 依赖: IsPrimePow, IsPrimePow.minFac_pow_factorization_eq, IsPrimePow.ne_one, IsPrimePow.ne_zero, IsPrimePow.one_lt, exists_eq_succ_of_ne_zero, factorization, h.symm, hprime, hprime.out, lt_of_le_of_ne, mem_primeFactorsList, mem_primeFactors_iff_mem_primeFactorsList, mem_support_toFun, minFac, minFac_pow_factorization_eq, minFac_prime, n.factorization, n.factorization.mem_support_toFun, n.minFac
 -/
@@ -849,7 +961,46 @@ theorem norm_pow_sub_one_of_prime_pow_ne_two
   set η := ζ ^ p ^ s - 1
   let η₁ : K⟮η⟯ := IntermediateField.AdjoinSimple.gen K η
   have hη : IsPrimitiveRoot (η + 1) (p ^ (k + 1 - s)) := by
-    rw [sub_add_canc
+    rw [sub_add_cancel]
+    refine IsPrimitiveRoot.pow (pos_of_neZero (p ^ (k + 1))) hζ ?_
+    rw [← pow_add]; rw [add_comm s]; rw [Nat.sub_add_cancel (le_trans hs (Nat.le_succ k))]
+  have : IsCyclotomicExtension {p ^ (k - s + 1)} K K⟮η⟯ := by
+    have HKη : K⟮η⟯ = K⟮η + 1⟯ := by
+      refine le_antisymm ?_ ?_
+      all_goals rw [IntermediateField.adjoin_simple_le_iff]
+      · nth_rw 2 [← add_sub_cancel_right η 1]
+        exact sub_mem (IntermediateField.mem_adjoin_simple_self K (η + 1)) (one_mem _)
+      · exact add_mem (IntermediateField.mem_adjoin_simple_self K η) (one_mem _)
+    rw [HKη]
+    have H := IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic
+      ((integral {p ^ (k + 1)} K L).isIntegral (η + 1)).isAlgebraic
+    refine IsCyclotomicExtension.equiv _ _ _ (h := ?_) (.refl : K⟮η + 1⟯.toSubalgebra ≃ₐ[K] _)
+    rw [H]
+    have hη' : IsPrimitiveRoot (η + 1) (p ^ (k + 1 - s)) := by simpa using hη
+    convert! hη'.adjoin_isCyclotomicExtension K using 1
+    rw [Nat.sub_add_comm hs]
+  replace hη : IsPrimitiveRoot (η₁ + 1) (p ^ (k - s + 1)) := by
+    apply coe_submonoidClass_iff.1
+    convert! hη using 1
+    rw [Nat.sub_add_comm hs]
+  have := IsCyclotomicExtension.finiteDimensional {p ^ (k + 1)} K L
+  have := IsCyclotomicExtension.isGalois {p ^ (k + 1)} K L
+  rw [norm_eq_norm_adjoin K]
+  have H := hη.sub_one_norm_isPrimePow ?_ hirr₁ htwo
+  swap; · exact hpri.1.isPrimePow.pow (Nat.succ_ne_zero _)
+  rw [add_sub_cancel_right] at H
+  rw [H]
+  congr
+  · rw [Nat.pow_minFac, hpri.1.minFac_eq]
+    exact Nat.succ_ne_zero _
+  have := Module.finrank_mul_finrank K K⟮η⟯ L
+  rw [IsCyclotomicExtension.finrank L hirr]; rw [IsCyclotomicExtension.finrank K⟮η⟯ hirr₁]; rw [Nat.totient_prime_pow hpri.out (k - s).succ_pos]; rw [Nat.totient_prime_pow hpri.out k.succ_pos]; rw [mul_comm _ (p - 1)]; rw [mul_assoc]; rw [mul_comm (p ^ (k.succ - 1))] at this
+  replace this := mul_left_cancel₀ (tsub_pos_iff_lt.2 hpri.out.one_lt).ne' this
+  have Hex : k.succ - 1 = (k - s).succ - 1 + s := by
+    simp only [Nat.succ_sub_succ_eq_sub, tsub_zero]
+    exact (Nat.sub_add_cancel hs).symm
+  rw [Hex]; rw [pow_add] at this
+  exact mul_left_cancel₀ (pow_ne_zero _ hpri.out.ne_zero) this
 
 中文:
 定理 norm_pow_sub_one_of_prime_pow_ne_two
@@ -860,7 +1011,46 @@ theorem norm_pow_sub_one_of_prime_pow_ne_two
   set η := ζ ^ p ^ s - 1
   let η₁ : K⟮η⟯ := IntermediateField.AdjoinSimple.gen K η
   have hη : IsPrimitiveRoot (η + 1) (p ^ (k + 1 - s)) := by
-    rw [sub_add_canc
+    rw [sub_add_cancel]
+    refine IsPrimitiveRoot.pow (pos_of_neZero (p ^ (k + 1))) hζ ?_
+    rw [← pow_add]; rw [add_comm s]; rw [Nat.sub_add_cancel (le_trans hs (Nat.le_succ k))]
+  have : IsCyclotomicExtension {p ^ (k - s + 1)} K K⟮η⟯ := by
+    have HKη : K⟮η⟯ = K⟮η + 1⟯ := by
+      refine le_antisymm ?_ ?_
+      all_goals rw [IntermediateField.adjoin_simple_le_iff]
+      · nth_rw 2 [← add_sub_cancel_right η 1]
+        exact sub_mem (IntermediateField.mem_adjoin_simple_self K (η + 1)) (one_mem _)
+      · exact add_mem (IntermediateField.mem_adjoin_simple_self K η) (one_mem _)
+    rw [HKη]
+    have H := IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic
+      ((integral {p ^ (k + 1)} K L).isIntegral (η + 1)).isAlgebraic
+    refine IsCyclotomicExtension.equiv _ _ _ (h := ?_) (.refl : K⟮η + 1⟯.toSubalgebra ≃ₐ[K] _)
+    rw [H]
+    have hη' : IsPrimitiveRoot (η + 1) (p ^ (k + 1 - s)) := by simpa using hη
+    convert! hη'.adjoin_isCyclotomicExtension K using 1
+    rw [Nat.sub_add_comm hs]
+  replace hη : IsPrimitiveRoot (η₁ + 1) (p ^ (k - s + 1)) := by
+    apply coe_submonoidClass_iff.1
+    convert! hη using 1
+    rw [Nat.sub_add_comm hs]
+  have := IsCyclotomicExtension.finiteDimensional {p ^ (k + 1)} K L
+  have := IsCyclotomicExtension.isGalois {p ^ (k + 1)} K L
+  rw [norm_eq_norm_adjoin K]
+  have H := hη.sub_one_norm_isPrimePow ?_ hirr₁ htwo
+  swap; · exact hpri.1.isPrimePow.pow (Nat.succ_ne_zero _)
+  rw [add_sub_cancel_right] at H
+  rw [H]
+  congr
+  · rw [Nat.pow_minFac, hpri.1.minFac_eq]
+    exact Nat.succ_ne_zero _
+  have := Module.finrank_mul_finrank K K⟮η⟯ L
+  rw [IsCyclotomicExtension.finrank L hirr]; rw [IsCyclotomicExtension.finrank K⟮η⟯ hirr₁]; rw [Nat.totient_prime_pow hpri.out (k - s).succ_pos]; rw [Nat.totient_prime_pow hpri.out k.succ_pos]; rw [mul_comm _ (p - 1)]; rw [mul_assoc]; rw [mul_comm (p ^ (k.succ - 1))] at this
+  replace this := mul_left_cancel₀ (tsub_pos_iff_lt.2 hpri.out.one_lt).ne' this
+  have Hex : k.succ - 1 = (k - s).succ - 1 + s := by
+    simp only [Nat.succ_sub_succ_eq_sub, tsub_zero]
+    exact (Nat.sub_add_cancel hs).symm
+  rw [Hex]; rw [pow_add] at this
+  exact mul_left_cancel₀ (pow_ne_zero _ hpri.out.ne_zero) this
 
 Depends on / 依赖: AdjoinSimple, IntermediateField, IntermediateField.AdjoinSimple.gen, Irreducible, IsCyclotomicExtension, IsPrimitiveRoot, IsPrimitiveRoot.pow, Nat.le_succ, Nat.sub_add_cancel, add_comm, cyclotomic, cyclotomic_irreducible_pow_of_irreducible_pow, le_succ, le_trans, pos_of_neZero, pow_add, sub_add_cancel
 -/
@@ -1013,7 +1203,11 @@ theorem norm_pow_sub_one_two
     (fun h => two_ne_zero (eq_zero_of_pow_eq_zero h)) (pow_dvd_pow 2 (le_succ k))
   rw [Nat.pow_div (le_succ k) zero_lt_two]; rw [Nat.succ_sub (le_refl k)]; rw [Nat.sub_self]; rw [pow_one] at this
   have H : (-1 : L) - (1 : L) = algebraMap K L (-2) := by
-    simp only [map
+    simp only [map_neg, map_ofNat]
+    ring
+  replace hirr : Irreducible (cyclotomic (2 ^ (k + 1)) K) := by simp [hirr]
+  rw [this.eq_neg_one_of_two_right]; rw [H]; rw [Algebra.norm_algebraMap]; rw [IsCyclotomicExtension.finrank L hirr]; rw [totient_prime_pow Nat.prime_two (zero_lt_succ k)]; rw [succ_sub_succ_eq_sub]; rw [tsub_zero]
+  simp
 
 中文:
 定理 norm_pow_sub_one_two
@@ -1023,7 +1217,11 @@ theorem norm_pow_sub_one_two
     (fun h => two_ne_zero (eq_zero_of_pow_eq_zero h)) (pow_dvd_pow 2 (le_succ k))
   rw [Nat.pow_div (le_succ k) zero_lt_two]; rw [Nat.succ_sub (le_refl k)]; rw [Nat.sub_self]; rw [pow_one] at this
   have H : (-1 : L) - (1 : L) = algebraMap K L (-2) := by
-    simp only [map
+    simp only [map_neg, map_ofNat]
+    ring
+  replace hirr : Irreducible (cyclotomic (2 ^ (k + 1)) K) := by simp [hirr]
+  rw [this.eq_neg_one_of_two_right]; rw [H]; rw [Algebra.norm_algebraMap]; rw [IsCyclotomicExtension.finrank L hirr]; rw [totient_prime_pow Nat.prime_two (zero_lt_succ k)]; rw [succ_sub_succ_eq_sub]; rw [tsub_zero]
+  simp
 
 Depends on / 依赖: Algebra, Algebra.norm_algebraMap, Irreducible, IsCyclotomicExtension, IsCyclotomicExtension.finrank, Nat.pow_div, Nat.sub_self, Nat.succ_sub, algebraMap, cyclotomic, eq_neg_one_of_two_right, eq_zero_of_pow_eq_zero, finrank, le_refl, le_succ, map_neg, map_ofNat, norm_algebraMap, pow_div, pow_dvd_pow
 -/
@@ -1053,7 +1251,8 @@ theorem norm_sub_one_two
     exact Nat.pow_lt_pow_right one_lt_two (lt_of_lt_of_le one_lt_two hk)
   replace hirr : Irreducible (cyclotomic (2 ^ k) K) := by simp [hirr]
   replace hζ : IsPrimitiveRoot ζ (2 ^ k) := by simp [hζ]
-  obtain ⟨k₁, hk₁⟩ := exists_eq_succ_of_ne_ze
+  obtain ⟨k₁, hk₁⟩ := exists_eq_succ_of_ne_zero (lt_of_lt_of_le zero_lt_two hk).ne.symm
+  simpa [hk₁] using sub_one_norm_eq_eval_cyclotomic hζ this hirr
 
 中文:
 定理 norm_sub_one_two
@@ -1064,7 +1263,8 @@ theorem norm_sub_one_two
     exact Nat.pow_lt_pow_right one_lt_two (lt_of_lt_of_le one_lt_two hk)
   replace hirr : Irreducible (cyclotomic (2 ^ k) K) := by simp [hirr]
   replace hζ : IsPrimitiveRoot ζ (2 ^ k) := by simp [hζ]
-  obtain ⟨k₁, hk₁⟩ := exists_eq_succ_of_ne_ze
+  obtain ⟨k₁, hk₁⟩ := exists_eq_succ_of_ne_zero (lt_of_lt_of_le zero_lt_two hk).ne.symm
+  simpa [hk₁] using sub_one_norm_eq_eval_cyclotomic hζ this hirr
 
 Depends on / 依赖: Irreducible, IsPrimitiveRoot, Nat.pow_lt_pow_right, cyclotomic, exists_eq_succ_of_ne_zero, lt_of_lt_of_le, ne.symm, nth_rw, one_lt_two, pow_lt_pow_right, pow_one, replace, sub_one_norm_eq_eval_cyclotomic, zero_lt_two
 -/
@@ -1091,7 +1291,10 @@ theorem norm_pow_sub_one_eq_prime_pow_of_ne_zero
     simp only [add_eq_right] at hks
     replace hs : s = k := le_antisymm hs (Nat.sub_eq_zero_iff_le.mp hks)
     simp only [hp, hs] at hζ hirr hcycl ⊢
-    obtain ⟨k₁, hk₁⟩ := Nat.exists_eq_succ_of_ne_z
+    obtain ⟨k₁, hk₁⟩ := Nat.exists_eq_succ_of_ne_zero hk
+    rw [hζ.norm_pow_sub_one_two hirr]; rw [hk₁]; rw [_root_.pow_succ']; rw [pow_mul]; rw [neg_eq_neg_one_mul]; rw [mul_pow]; rw [neg_one_sq]; rw [one_mul]; rw [← pow_mul]; rw [← _root_.pow_succ']
+    simp
+  · exact hζ.norm_pow_sub_one_of_prime_pow_ne_two hirr hs htwo
 
 中文:
 定理 norm_pow_sub_one_eq_prime_pow_of_ne_zero
@@ -1102,7 +1305,10 @@ theorem norm_pow_sub_one_eq_prime_pow_of_ne_zero
     simp only [add_eq_right] at hks
     replace hs : s = k := le_antisymm hs (Nat.sub_eq_zero_iff_le.mp hks)
     simp only [hp, hs] at hζ hirr hcycl ⊢
-    obtain ⟨k₁, hk₁⟩ := Nat.exists_eq_succ_of_ne_z
+    obtain ⟨k₁, hk₁⟩ := Nat.exists_eq_succ_of_ne_zero hk
+    rw [hζ.norm_pow_sub_one_two hirr]; rw [hk₁]; rw [_root_.pow_succ']; rw [pow_mul]; rw [neg_eq_neg_one_mul]; rw [mul_pow]; rw [neg_one_sq]; rw [one_mul]; rw [← pow_mul]; rw [← _root_.pow_succ']
+    simp
+  · exact hζ.norm_pow_sub_one_of_prime_pow_ne_two hirr hs htwo
 
 Depends on / 依赖: Nat.exists_eq_succ_of_ne_zero, Nat.prime_two.pow_eq_iff, Nat.sub_eq_zero_iff_le.mp, _root_, _root_.pow_succ, add_eq_right, exists_eq_succ_of_ne_zero, le_antisymm, mul_pow, neg_eq_neg_one_mul, neg_one_sq, norm_, norm_pow_sub_one_two, one_mul, pow_eq_iff, pow_mul, pow_succ, prime_two, replace, sub_eq_zero_iff_le
 -/

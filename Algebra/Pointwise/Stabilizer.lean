@@ -313,7 +313,13 @@ lemma stabilizer_union_eq_left
       stabilizer G (s union t)
         <= stabilizer G (s union t) ⊓ stabilizer G t := by simpa
       _ <= stabilizer G ((s union t) \ t) := stabilizer_inf_stabilizer_le_stabilizer_sdiff
-      _ = stabilizer G s := by rw [union_sdiff_cancel_right]; simpa [← dis
+      _ = stabilizer G s := by rw [union_sdiff_cancel_right]; simpa [← disjoint_iff_inter_eq_empty]
+  · calc
+      stabilizer G s
+        <= stabilizer G s ⊓ stabilizer G t := by simpa
+      _ <= stabilizer G (s union t) := stabilizer_inf_stabilizer_le_stabilizer_union
+
+@[to_additive]
 
 中文:
 引理 stabilizer_union_eq_left
@@ -324,7 +330,13 @@ lemma stabilizer_union_eq_left
       stabilizer G (s union t)
         <= stabilizer G (s union t) ⊓ stabilizer G t := by simpa
       _ <= stabilizer G ((s union t) \ t) := stabilizer_inf_stabilizer_le_stabilizer_sdiff
-      _ = stabilizer G s := by rw [union_sdiff_cancel_right]; simpa [← dis
+      _ = stabilizer G s := by rw [union_sdiff_cancel_right]; simpa [← disjoint_iff_inter_eq_empty]
+  · calc
+      stabilizer G s
+        <= stabilizer G s ⊓ stabilizer G t := by simpa
+      _ <= stabilizer G (s union t) := stabilizer_inf_stabilizer_le_stabilizer_union
+
+@[to_additive]
 
 Depends on / 依赖: disjoint_iff_inter_eq_empty, le_antisymm, stabilizer, stabilizer_inf_stabilizer_le_stabilizer_sdiff, stabilizer_inf_stabilizer_le_stabilizer_union, union_sdiff_cancel_right
 -/
@@ -530,7 +542,7 @@ lemma stabilizer_op_subgroup
   refine fun a => ⟨fun h => ?_, fun ha b => s.mul_mem_cancel_right ha⟩
   simpa only [op_smul_eq_mul, SetLike.mem_coe, one_mul] using (h 1).2 s.one_mem
 
-@[to_additive
+@[to_additive (attr := simp)]
 
 中文:
 引理 stabilizer_op_subgroup
@@ -542,7 +554,7 @@ lemma stabilizer_op_subgroup
   refine fun a => ⟨fun h => ?_, fun ha b => s.mul_mem_cancel_right ha⟩
   simpa only [op_smul_eq_mul, SetLike.mem_coe, one_mul] using (h 1).2 s.one_mem
 
-@[to_additive
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: SetLike, SetLike.ext_iff, SetLike.mem_coe, Subgroup, Subgroup.mem_op, ext_iff, mem_coe, mem_op, mem_stabilizer_set, mul_mem_cancel_right, one_mem, one_mul, op_smul_eq_mul, s.mul_mem_cancel_right, s.one_mem, simp_rw, smul_eq_mul_unop, unop_op
 -/
@@ -946,7 +958,8 @@ lemma stabilizer_image_coe_quotient
   have : q a • q '' s = q '' (a • s) :=
     (image_smul_distrib (QuotientGroup.mk' <| stabilizer G s) _ _).symm
   rw [this]
-  refine ⟨fun h => ?_, fun h =
+  refine ⟨fun h => ?_, fun h => by rw [h]⟩
+  rwa [QuotientGroup.image_coe_inj, mul_smul_comm, stabilizer_mul_self] at h
 
 中文:
 引理 stabilizer_image_coe_quotient
@@ -958,7 +971,8 @@ lemma stabilizer_image_coe_quotient
   have : q a • q '' s = q '' (a • s) :=
     (image_smul_distrib (QuotientGroup.mk' <| stabilizer G s) _ _).symm
   rw [this]
-  refine ⟨fun h => ?_, fun h =
+  refine ⟨fun h => ?_, fun h => by rw [h]⟩
+  rwa [QuotientGroup.image_coe_inj, mul_smul_comm, stabilizer_mul_self] at h
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.image_coe_inj, QuotientGroup.induction_on, QuotientGroup.mk, Subgroup, Subgroup.mem_bot, eq_one_iff, image_coe_inj, image_smul_distrib, induction_on, mem_bot, mem_stabilizer_iff, mul_smul_comm, stabilizer, stabilizer_mul_self
 -/

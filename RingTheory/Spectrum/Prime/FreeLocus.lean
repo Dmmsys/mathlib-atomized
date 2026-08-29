@@ -99,7 +99,9 @@ lemma mem_freeLocus_of_isLocalization
   apply Module.Free.iff_of_equiv (σ := e)
   refine { __ := IsLocalizedModule.iso p.asIdeal.primeCompl f, map_smul' := ?_ }
   intro r x
-  obtain ⟨r, s, rfl⟩ := IsLocalization.exists_mk'_
+  obtain ⟨r, s, rfl⟩ := IsLocalization.exists_mk'_eq p.asIdeal.primeCompl r
+  apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units f s)).1
+  simp [e, ← map_smul, ← smul_assoc]
 
 中文:
 引理 mem_freeLocus_of_isLocalization
@@ -110,7 +112,9 @@ lemma mem_freeLocus_of_isLocalization
   apply Module.Free.iff_of_equiv (σ := e)
   refine { __ := IsLocalizedModule.iso p.asIdeal.primeCompl f, map_smul' := ?_ }
   intro r x
-  obtain ⟨r, s, rfl⟩ := IsLocalization.exists_mk'_
+  obtain ⟨r, s, rfl⟩ := IsLocalization.exists_mk'_eq p.asIdeal.primeCompl r
+  apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units f s)).1
+  simp [e, ← map_smul, ← smul_assoc]
 
 Depends on / 依赖: AtPrime, IsLocalization, IsLocalization.algEquiv, IsLocalization.exists_mk, IsLocalizedModule, IsLocalizedModule.iso, IsLocalizedModule.map_units, Localization, Localization.AtPrime, Module, Module.End.isUnit_iff, Module.Free.iff_of_equiv, algEquiv, asIdeal, exists_mk, iff_of_equiv, isUnit_iff, map_smul, map_units, p.asIdeal
 -/
@@ -193,7 +197,13 @@ lemma comap_freeLocus_le
   rw [Set.mem_preimage]; rw [mem_freeLocus_iff_tensor _ Rₚ] at hp
   rw [mem_freeLocus_iff_tensor _ Aₚ]
   let algebra : Algebra Rₚ Aₚ := (Localization.localRingHom
-    (comap
+    (comap (algebraMap R A) p).asIdeal p.asIdeal (algebraMap R A) rfl).toAlgebra
+  have : IsScalarTower R Rₚ Aₚ := IsScalarTower.of_algebraMap_eq'
+    (by simp [Rₚ, Aₚ, algebra, RingHom.algebraMap_toAlgebra, Localization.localRingHom,
+        ← IsScalarTower.algebraMap_eq])
+  let e := AlgebraTensorModule.cancelBaseChange R Rₚ Aₚ Aₚ M ≪≫ₗ
+    (AlgebraTensorModule.cancelBaseChange R A Aₚ Aₚ M).symm
+  exact .of_equiv e
 
 中文:
 引理 comap_freeLocus_le
@@ -205,7 +215,13 @@ lemma comap_freeLocus_le
   rw [Set.mem_preimage]; rw [mem_freeLocus_iff_tensor _ Rₚ] at hp
   rw [mem_freeLocus_iff_tensor _ Aₚ]
   let algebra : Algebra Rₚ Aₚ := (Localization.localRingHom
-    (comap
+    (comap (algebraMap R A) p).asIdeal p.asIdeal (algebraMap R A) rfl).toAlgebra
+  have : IsScalarTower R Rₚ Aₚ := IsScalarTower.of_algebraMap_eq'
+    (by simp [Rₚ, Aₚ, algebra, RingHom.algebraMap_toAlgebra, Localization.localRingHom,
+        ← IsScalarTower.algebraMap_eq])
+  let e := AlgebraTensorModule.cancelBaseChange R Rₚ Aₚ Aₚ M ≪≫ₗ
+    (AlgebraTensorModule.cancelBaseChange R A Aₚ Aₚ M).symm
+  exact .of_equiv e
 
 Depends on / 依赖: Algebra, AtPrime, IsScalarTower, IsScalarTower.of_algebraMap_eq, Localization, Localization.AtPrime, Localization.localRingHo, Localization.localRingHom, RingHom, RingHom.algebraMap_toAlgebra, Set.mem_preimage, algebra, algebraMap, algebraMap_toAlgebra, asIdeal, localRingHo, localRingHom, mem_freeLocus_iff_tensor, mem_preimage, of_algebraMap_eq
 -/
@@ -238,7 +254,47 @@ lemma freeLocus_localization
   have hp' : S <= p'.primeCompl := fun x hx H =>
     p.isPrime.ne_top (Ideal.eq_top_of_isUnit_mem _ H (IsLocalization.map_units _ ⟨x, hx⟩))
   let Rₚ := Localization.AtPrime p'
-  let Mₚ := LocalizedModule p'.primeC
+  let Mₚ := LocalizedModule p'.primeCompl M
+  let : Algebra (Localization S) Rₚ :=
+    IsLocalization.localizationAlgebraOfSubmonoidLe _ _ S p'.primeCompl hp'
+  have : IsScalarTower R (Localization S) Rₚ :=
+    IsLocalization.localization_isScalarTower_of_submonoid_le ..
+  have : IsLocalization.AtPrime Rₚ p.asIdeal := by
+    have := IsLocalization.isLocalization_of_submonoid_le (Localization S) Rₚ _ _ hp'
+    apply IsLocalization.isLocalization_of_is_exists_mul_mem _
+      (Submonoid.map (algebraMap R (Localization S)) p'.primeCompl)
+    · rintro _ ⟨x, hx, rfl⟩; exact hx
+    · rintro ⟨x, hx⟩
+      obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
+      refine ⟨algebraMap _ _ s.1, x, fun H => hx ?_, by simp⟩
+      rw [IsLocalization.mk'_eq_mul_mk'_one]
+      exact Ideal.mul_mem_right _ _ H
+  let : Module (Localization S) Mₚ := Module.compHom Mₚ (algebraMap _ Rₚ)
+  have : IsScalarTower R (Localization S) Mₚ :=
+    ⟨fun r r' m => show algebraMap _ Rₚ (r • r') • m = _ by
+      simp [p', Rₚ, Mₚ, Algebra.smul_def, ← IsScalarTower.algebraMap_apply, mul_smul]; rfl⟩
+  have : IsScalarTower (Localization S) Rₚ Mₚ :=
+    ⟨fun r r' m => show _ = algebraMap _ Rₚ r • r' • m by rw [← mul_smul, ← Algebra.smul_def]⟩
+  let l := (IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap S M)
+    (LocalizedModule.mkLinearMap p'.primeCompl M)).extendScalarsOfIsLocalization S
+    (Localization S)
+  have : IsLocalizedModule p.asIdeal.primeCompl l := by
+    have : IsLocalizedModule p'.primeCompl (l.restrictScalars R) :=
+      inferInstanceAs (IsLocalizedModule p'.primeCompl
+        (IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap S M)
+        (LocalizedModule.mkLinearMap p'.primeCompl M)))
+    have : IsLocalizedModule (Algebra.algebraMapSubmonoid (Localization S) p'.primeCompl) l :=
+      IsLocalizedModule.of_restrictScalars p'.primeCompl ..
+    apply IsLocalizedModule.of_exists_mul_mem
+      (Algebra.algebraMapSubmonoid (Localization S) p'.primeCompl)
+    · rintro _ ⟨x, hx, rfl⟩; exact hx
+    · rintro ⟨x, hx⟩
+      obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
+      refine ⟨algebraMap _ _ s.1, x, fun H => hx ?_, by simp⟩
+      rw [IsLocalization.mk'_eq_mul_mk'_one]
+      exact Ideal.mul_mem_right _ _ H
+  rw [mem_freeLocus_of_isLocalization (R := Localization S) p Rₚ Mₚ l]
+  rfl
 
 中文:
 引理 freeLocus_localization
@@ -250,7 +306,47 @@ lemma freeLocus_localization
   have hp' : S <= p'.primeCompl := fun x hx H =>
     p.isPrime.ne_top (Ideal.eq_top_of_isUnit_mem _ H (IsLocalization.map_units _ ⟨x, hx⟩))
   let Rₚ := Localization.AtPrime p'
-  let Mₚ := LocalizedModule p'.primeC
+  let Mₚ := LocalizedModule p'.primeCompl M
+  let : Algebra (Localization S) Rₚ :=
+    IsLocalization.localizationAlgebraOfSubmonoidLe _ _ S p'.primeCompl hp'
+  have : IsScalarTower R (Localization S) Rₚ :=
+    IsLocalization.localization_isScalarTower_of_submonoid_le ..
+  have : IsLocalization.AtPrime Rₚ p.asIdeal := by
+    have := IsLocalization.isLocalization_of_submonoid_le (Localization S) Rₚ _ _ hp'
+    apply IsLocalization.isLocalization_of_is_exists_mul_mem _
+      (Submonoid.map (algebraMap R (Localization S)) p'.primeCompl)
+    · rintro _ ⟨x, hx, rfl⟩; exact hx
+    · rintro ⟨x, hx⟩
+      obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
+      refine ⟨algebraMap _ _ s.1, x, fun H => hx ?_, by simp⟩
+      rw [IsLocalization.mk'_eq_mul_mk'_one]
+      exact Ideal.mul_mem_right _ _ H
+  let : Module (Localization S) Mₚ := Module.compHom Mₚ (algebraMap _ Rₚ)
+  have : IsScalarTower R (Localization S) Mₚ :=
+    ⟨fun r r' m => show algebraMap _ Rₚ (r • r') • m = _ by
+      simp [p', Rₚ, Mₚ, Algebra.smul_def, ← IsScalarTower.algebraMap_apply, mul_smul]; rfl⟩
+  have : IsScalarTower (Localization S) Rₚ Mₚ :=
+    ⟨fun r r' m => show _ = algebraMap _ Rₚ r • r' • m by rw [← mul_smul, ← Algebra.smul_def]⟩
+  let l := (IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap S M)
+    (LocalizedModule.mkLinearMap p'.primeCompl M)).extendScalarsOfIsLocalization S
+    (Localization S)
+  have : IsLocalizedModule p.asIdeal.primeCompl l := by
+    have : IsLocalizedModule p'.primeCompl (l.restrictScalars R) :=
+      inferInstanceAs (IsLocalizedModule p'.primeCompl
+        (IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap S M)
+        (LocalizedModule.mkLinearMap p'.primeCompl M)))
+    have : IsLocalizedModule (Algebra.algebraMapSubmonoid (Localization S) p'.primeCompl) l :=
+      IsLocalizedModule.of_restrictScalars p'.primeCompl ..
+    apply IsLocalizedModule.of_exists_mul_mem
+      (Algebra.algebraMapSubmonoid (Localization S) p'.primeCompl)
+    · rintro _ ⟨x, hx, rfl⟩; exact hx
+    · rintro ⟨x, hx⟩
+      obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
+      refine ⟨algebraMap _ _ s.1, x, fun H => hx ?_, by simp⟩
+      rw [IsLocalization.mk'_eq_mul_mk'_one]
+      exact Ideal.mul_mem_right _ _ H
+  rw [mem_freeLocus_of_isLocalization (R := Localization S) p Rₚ Mₚ l]
+  rfl
 
 Depends on / 依赖: Algebra, AtPrime, Ideal.eq_top_of_isUnit_mem, IsLocalization, IsLocalization.localizationAlgebraOfSubmonoidLe, IsLocalization.localization_isScalarTower_of_submonoid, IsLocalization.map_units, IsScalarTower, Localization, Localization.AtPrime, LocalizedModule, Set.mem_preimage, algebraMap, asIdeal, eq_top_of_isUnit_mem, isPrime, localizationAlgebraOfSubmonoidLe, localization_isScalarTower_of_submonoid, map_units, mem_preimage
 -/
@@ -390,7 +486,7 @@ lemma isOpen_freeLocus
   obtain ⟨r, hr, hr', _⟩ := Module.FinitePresentation.exists_free_localizedModule_powers
     x.asIdeal.primeCompl (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
     (Localization.AtPrime x.asIdeal)
-  exact
+  exact ⟨basicOpen r, basicOpen_subset_freeLocus_iff.mpr inferInstance, (basicOpen r).2, hr⟩
 
 中文:
 引理 isOpen_freeLocus
@@ -401,7 +497,7 @@ lemma isOpen_freeLocus
   obtain ⟨r, hr, hr', _⟩ := Module.FinitePresentation.exists_free_localizedModule_powers
     x.asIdeal.primeCompl (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
     (Localization.AtPrime x.asIdeal)
-  exact
+  exact ⟨basicOpen r, basicOpen_subset_freeLocus_iff.mpr inferInstance, (basicOpen r).2, hr⟩
 
 Depends on / 依赖: AtPrime, FinitePresentation, Localization, Localization.AtPrime, LocalizedModule, LocalizedModule.mkLinearMap, Module, Module.FinitePresentation.exists_free_localizedModule_powers, Module.Free, asIdeal, basicOpen, basicOpen_subset_freeLocus_iff, basicOpen_subset_freeLocus_iff.mpr, exists_free_localizedModule_powers, isOpen_iff_forall_mem_open, isOpen_iff_forall_mem_open.mpr, mkLinearMap, primeCompl, x.asIdeal, x.asIdeal.primeCompl
 -/
@@ -446,7 +542,37 @@ lemma isLocallyConstant_rankAtStalk_freeLocus
   have : Module.Free _ _ := hx
   obtain ⟨f, hf, hf', hf''⟩ := Module.FinitePresentation.exists_free_localizedModule_powers
     x.asIdeal.primeCompl (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
-    (Localization.AtPrime x
+    (Localization.AtPrime x.asIdeal)
+  refine ⟨Subtype.val ⁻¹' basicOpen f, (basicOpen f).2.preimage continuous_subtype_val, hf, ?_⟩
+  rintro ⟨p, hp''⟩ hp
+  let p' := Algebra.algebraMapSubmonoid (Localization (.powers f)) p.asIdeal.primeCompl
+  have hp' : Submonoid.powers f <= p.asIdeal.primeCompl := by
+    simpa [Submonoid.powers_le, Ideal.primeCompl]
+  let Rₚ := Localization.AtPrime p.asIdeal
+  let Mₚ := LocalizedModule p.asIdeal.primeCompl M
+  let : Algebra (Localization.Away f) Rₚ :=
+    IsLocalization.localizationAlgebraOfSubmonoidLe _ _ (.powers f) p.asIdeal.primeCompl hp'
+  have : IsScalarTower R (Localization.Away f) Rₚ :=
+    IsLocalization.localization_isScalarTower_of_submonoid_le ..
+  let : Module (Localization.Away f) Mₚ := Module.compHom Mₚ (algebraMap _ Rₚ)
+  have : IsScalarTower R (Localization.Away f) Mₚ :=
+    ⟨fun r r' m => show algebraMap _ Rₚ (r • r') • m = _ by
+      simp [Rₚ, Mₚ, Algebra.smul_def, ← IsScalarTower.algebraMap_apply, mul_smul]; rfl⟩
+  have : IsScalarTower (Localization.Away f) Rₚ Mₚ :=
+    ⟨fun r r' m => show _ = algebraMap _ Rₚ r • r' • m by rw [← mul_smul, ← Algebra.smul_def]⟩
+  let l := (IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap (.powers f) M)
+    (LocalizedModule.mkLinearMap p.asIdeal.primeCompl M)).extendScalarsOfIsLocalization (.powers f)
+    (Localization.Away f)
+  have : IsLocalization p' Rₚ :=
+    IsLocalization.isLocalization_of_submonoid_le (Localization.Away f) Rₚ _ _ hp'
+  have : IsLocalizedModule p.asIdeal.primeCompl (l.restrictScalars R) :=
+    inferInstanceAs (IsLocalizedModule p.asIdeal.primeCompl
+    ((IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap (.powers f) M)
+      (LocalizedModule.mkLinearMap p.asIdeal.primeCompl M))))
+  have : IsLocalizedModule (Algebra.algebraMapSubmonoid _ p.asIdeal.primeCompl) l :=
+      IsLocalizedModule.of_restrictScalars p.asIdeal.primeCompl ..
+  have := Module.finrank_of_isLocalizedModule_of_free Rₚ p' l
+  simp [Rₚ, rankAtStalk, this, hf'']
 
 中文:
 引理 isLocallyConstant_rankAtStalk_freeLocus
@@ -456,7 +582,37 @@ lemma isLocallyConstant_rankAtStalk_freeLocus
   have : Module.Free _ _ := hx
   obtain ⟨f, hf, hf', hf''⟩ := Module.FinitePresentation.exists_free_localizedModule_powers
     x.asIdeal.primeCompl (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
-    (Localization.AtPrime x
+    (Localization.AtPrime x.asIdeal)
+  refine ⟨Subtype.val ⁻¹' basicOpen f, (basicOpen f).2.preimage continuous_subtype_val, hf, ?_⟩
+  rintro ⟨p, hp''⟩ hp
+  let p' := Algebra.algebraMapSubmonoid (Localization (.powers f)) p.asIdeal.primeCompl
+  have hp' : Submonoid.powers f <= p.asIdeal.primeCompl := by
+    simpa [Submonoid.powers_le, Ideal.primeCompl]
+  let Rₚ := Localization.AtPrime p.asIdeal
+  let Mₚ := LocalizedModule p.asIdeal.primeCompl M
+  let : Algebra (Localization.Away f) Rₚ :=
+    IsLocalization.localizationAlgebraOfSubmonoidLe _ _ (.powers f) p.asIdeal.primeCompl hp'
+  have : IsScalarTower R (Localization.Away f) Rₚ :=
+    IsLocalization.localization_isScalarTower_of_submonoid_le ..
+  let : Module (Localization.Away f) Mₚ := Module.compHom Mₚ (algebraMap _ Rₚ)
+  have : IsScalarTower R (Localization.Away f) Mₚ :=
+    ⟨fun r r' m => show algebraMap _ Rₚ (r • r') • m = _ by
+      simp [Rₚ, Mₚ, Algebra.smul_def, ← IsScalarTower.algebraMap_apply, mul_smul]; rfl⟩
+  have : IsScalarTower (Localization.Away f) Rₚ Mₚ :=
+    ⟨fun r r' m => show _ = algebraMap _ Rₚ r • r' • m by rw [← mul_smul, ← Algebra.smul_def]⟩
+  let l := (IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap (.powers f) M)
+    (LocalizedModule.mkLinearMap p.asIdeal.primeCompl M)).extendScalarsOfIsLocalization (.powers f)
+    (Localization.Away f)
+  have : IsLocalization p' Rₚ :=
+    IsLocalization.isLocalization_of_submonoid_le (Localization.Away f) Rₚ _ _ hp'
+  have : IsLocalizedModule p.asIdeal.primeCompl (l.restrictScalars R) :=
+    inferInstanceAs (IsLocalizedModule p.asIdeal.primeCompl
+    ((IsLocalizedModule.liftOfLE _ _ hp' (LocalizedModule.mkLinearMap (.powers f) M)
+      (LocalizedModule.mkLinearMap p.asIdeal.primeCompl M))))
+  have : IsLocalizedModule (Algebra.algebraMapSubmonoid _ p.asIdeal.primeCompl) l :=
+      IsLocalizedModule.of_restrictScalars p.asIdeal.primeCompl ..
+  have := Module.finrank_of_isLocalizedModule_of_free Rₚ p' l
+  simp [Rₚ, rankAtStalk, this, hf'']
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, AtPrime, FinitePresentation, IsLocallyConstant, IsLocallyConstant.iff_exists_open, Localization, Localization.AtPrime, LocalizedModule, LocalizedModule.mkLinearMap, Module, Module.FinitePresentation.exists_free_localizedModule_powers, Module.Free, Subtype, Subtype.val, algebraMapSubmonoid, asIdeal, basicOpen, continuous_subtype_val, exists_free_localizedModule_powers
 -/
@@ -668,7 +824,13 @@ lemma rankAtStalk_pi
   let f : (Π i, M i) ->ₗ[R] Π i, LocalizedModule p.asIdeal.primeCompl (M i) :=
     .pi (fun i => mkLinearMap p.asIdeal.primeCompl (M i) ∘ₗ LinearMap.proj i)
   let e : LocalizedModule p.asIdeal.primeCompl (Π i, M i) ≃ₗ[Localization.AtPrime p.asIdeal]
-      Π i, Localized
+      Π i, LocalizedModule p.asIdeal.primeCompl (M i) :=
+    IsLocalizedModule.linearEquiv p.asIdeal.primeCompl
+.extendScalarsOfIsLocalization p.asIdeal.primeCompl _ (mkLinearMap _ _) f
+  have (i : ι) : Free (Localization.AtPrime p.asIdeal)
+      (LocalizedModule p.asIdeal.primeCompl (M i)) :=
+    free_of_flat_of_isLocalRing
+  simp_rw [rankAtStalk, e.finrank_eq, Module.finrank_pi_fintype, finsum_eq_sum_of_fintype]
 
 中文:
 引理 rankAtStalk_pi
@@ -678,7 +840,13 @@ lemma rankAtStalk_pi
   let f : (Π i, M i) ->ₗ[R] Π i, LocalizedModule p.asIdeal.primeCompl (M i) :=
     .pi (fun i => mkLinearMap p.asIdeal.primeCompl (M i) ∘ₗ LinearMap.proj i)
   let e : LocalizedModule p.asIdeal.primeCompl (Π i, M i) ≃ₗ[Localization.AtPrime p.asIdeal]
-      Π i, Localized
+      Π i, LocalizedModule p.asIdeal.primeCompl (M i) :=
+    IsLocalizedModule.linearEquiv p.asIdeal.primeCompl
+.extendScalarsOfIsLocalization p.asIdeal.primeCompl _ (mkLinearMap _ _) f
+  have (i : ι) : Free (Localization.AtPrime p.asIdeal)
+      (LocalizedModule p.asIdeal.primeCompl (M i)) :=
+    free_of_flat_of_isLocalRing
+  simp_rw [rankAtStalk, e.finrank_eq, Module.finrank_pi_fintype, finsum_eq_sum_of_fintype]
 
 Depends on / 依赖: AtPrime, IsLocalizedModule, IsLocalizedModule.linearEquiv, LinearMap, LinearMap.proj, Localization, Localization.AtPrime, LocalizedModule, asIdeal, extendScalarsOfIsLocalization, linearEquiv, mkLinearMap, nonempty_fintype, p.asIdeal, p.asIdeal.primeCompl, primeCompl
 -/
@@ -825,7 +993,9 @@ lemma rankAtStalk_prod
   let e : LocalizedModule p.asIdeal.primeCompl (M × N) ≃ₗ[Localization.AtPrime p.asIdeal]
       LocalizedModule p.asIdeal.primeCompl M × LocalizedModule p.asIdeal.primeCompl N :=
     IsLocalizedModule.linearEquiv p.asIdeal.primeCompl (mkLinearMap _ _)
-.extendScalarsOfIsLocalization (.prod
+.extendScalarsOfIsLocalization (.prodMap (mkLinearMap _ M) (mkLinearMap _ N))
+      p.asIdeal.primeCompl _
+  simp [rankAtStalk, e.finrank_eq]
 
 中文:
 引理 rankAtStalk_prod
@@ -835,7 +1005,9 @@ lemma rankAtStalk_prod
   let e : LocalizedModule p.asIdeal.primeCompl (M × N) ≃ₗ[Localization.AtPrime p.asIdeal]
       LocalizedModule p.asIdeal.primeCompl M × LocalizedModule p.asIdeal.primeCompl N :=
     IsLocalizedModule.linearEquiv p.asIdeal.primeCompl (mkLinearMap _ _)
-.extendScalarsOfIsLocalization (.prod
+.extendScalarsOfIsLocalization (.prodMap (mkLinearMap _ M) (mkLinearMap _ N))
+      p.asIdeal.primeCompl _
+  simp [rankAtStalk, e.finrank_eq]
 
 Depends on / 依赖: AtPrime, IsLocalizedModule, IsLocalizedModule.linearEquiv, Localization, Localization.AtPrime, LocalizedModule, asIdeal, e.finrank_eq, extendScalarsOfIsLocalization, finrank_eq, linearEquiv, mkLinearMap, p.asIdeal, p.asIdeal.primeCompl, primeCompl, prodMap, rankAtStalk
 -/
@@ -861,7 +1033,14 @@ lemma rankAtStalk_baseChange
   let := Localization.AtPrime.algebraOfLiesOver q.asIdeal p.asIdeal
   let e : LocalizedModule p.asIdeal.primeCompl (S otimes[R] M) ≃ₗ[Localization.AtPrime p.asIdeal]
       Localization.AtPrime p.asIdeal otimes[Localization.AtPrime q.asIdeal]
- 
+        LocalizedModule q.asIdeal.primeCompl M :=
+    LocalizedModule.equivTensorProduct _ _ ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange R S _ _ M) ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange R _ _ _ M).symm ≪≫ₗ
+      (AlgebraTensorModule.congr (LinearEquiv.refl _ _)
+        (LocalizedModule.equivTensorProduct _ M).symm)
+  rw [rankAtStalk]; rw [e.finrank_eq]
+  apply Module.finrank_baseChange
 
 中文:
 引理 rankAtStalk_baseChange
@@ -871,7 +1050,14 @@ lemma rankAtStalk_baseChange
   let := Localization.AtPrime.algebraOfLiesOver q.asIdeal p.asIdeal
   let e : LocalizedModule p.asIdeal.primeCompl (S otimes[R] M) ≃ₗ[Localization.AtPrime p.asIdeal]
       Localization.AtPrime p.asIdeal otimes[Localization.AtPrime q.asIdeal]
- 
+        LocalizedModule q.asIdeal.primeCompl M :=
+    LocalizedModule.equivTensorProduct _ _ ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange R S _ _ M) ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange R _ _ _ M).symm ≪≫ₗ
+      (AlgebraTensorModule.congr (LinearEquiv.refl _ _)
+        (LocalizedModule.equivTensorProduct _ M).symm)
+  rw [rankAtStalk]; rw [e.finrank_eq]
+  apply Module.finrank_baseChange
 
 Depends on / 依赖: AlgebraTensorMod, AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange, AtPrime, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, LocalizedModule, LocalizedModule.equivTensorProduct, PrimeSpectrum, algebraMap, algebraOfLiesOver, asIdeal, cancelBaseChange, equivTensorProduct, otimes, p.asIdeal, p.asIdeal.primeCompl, p.comap, primeCompl
 -/
@@ -924,7 +1110,8 @@ lemma rankAtStalk_eq_of_le_of_finite_of_flat
   obtain ⟨P, rfl⟩ : p in Set.range (PrimeSpectrum.comap (algebraMap R S)) := by
     rw [PrimeSpectrum.localization_comap_range S q.asIdeal.primeCompl]
     exact disjoint_compl_left_iff.mpr hpq
-  rw [← rankAtStalk_isBaseChange (LocalizedModule.isBaseChange
+  rw [← rankAtStalk_isBaseChange (LocalizedModule.isBaseChange q.asIdeal.primeCompl M)]; rw [rankAtStalk_eq_finrank_of_free]
+  simp [rankAtStalk]
 
 中文:
 引理 rankAtStalk_eq_of_le_of_finite_of_flat
@@ -934,7 +1121,8 @@ lemma rankAtStalk_eq_of_le_of_finite_of_flat
   obtain ⟨P, rfl⟩ : p in Set.range (PrimeSpectrum.comap (algebraMap R S)) := by
     rw [PrimeSpectrum.localization_comap_range S q.asIdeal.primeCompl]
     exact disjoint_compl_left_iff.mpr hpq
-  rw [← rankAtStalk_isBaseChange (LocalizedModule.isBaseChange
+  rw [← rankAtStalk_isBaseChange (LocalizedModule.isBaseChange q.asIdeal.primeCompl M)]; rw [rankAtStalk_eq_finrank_of_free]
+  simp [rankAtStalk]
 
 Depends on / 依赖: AtPrime, Localization, Localization.AtPrime, LocalizedModule, LocalizedModule.isBaseChange, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.localization_comap_range, Set.range, algebraMap, asIdeal, disjoint_compl_left_iff, disjoint_compl_left_iff.mpr, isBaseChange, localization_comap_range, primeCompl, q.asIdeal, q.asIdeal.primeCompl, rankAtStalk, rankAtStalk_eq_finrank_of_free
 -/
@@ -978,7 +1166,9 @@ lemma rankAtStalk_tensorProduct
   let e : Localization.AtPrime p.asIdeal otimes[R] (M otimes[R] N) ≃ₗ[Localization.AtPrime p.asIdeal]
       (Localization.AtPrime p.asIdeal otimes[R] M) otimes[Localization.AtPrime p.asIdeal]
         (Localization.AtPrime p.asIdeal otimes[R] N) :=
-    (AlgebraTensorModule.assoc _ _ _ _ _ 
+    (AlgebraTensorModule.assoc _ _ _ _ _ _).symm ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange _ _ _ _ _).symm
+  rw [rankAtStalk_eq_finrank_tensorProduct]; rw [e.finrank_eq]; rw [finrank_tensorProduct]; rw [← rankAtStalk_eq_finrank_tensorProduct]; rw [← rankAtStalk_eq_finrank_tensorProduct]; rw [Pi.mul_apply]
 
 中文:
 引理 rankAtStalk_tensorProduct
@@ -988,7 +1178,9 @@ lemma rankAtStalk_tensorProduct
   let e : Localization.AtPrime p.asIdeal otimes[R] (M otimes[R] N) ≃ₗ[Localization.AtPrime p.asIdeal]
       (Localization.AtPrime p.asIdeal otimes[R] M) otimes[Localization.AtPrime p.asIdeal]
         (Localization.AtPrime p.asIdeal otimes[R] N) :=
-    (AlgebraTensorModule.assoc _ _ _ _ _ 
+    (AlgebraTensorModule.assoc _ _ _ _ _ _).symm ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange _ _ _ _ _).symm
+  rw [rankAtStalk_eq_finrank_tensorProduct]; rw [e.finrank_eq]; rw [finrank_tensorProduct]; rw [← rankAtStalk_eq_finrank_tensorProduct]; rw [← rankAtStalk_eq_finrank_tensorProduct]; rw [Pi.mul_apply]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.assoc, AlgebraTensorModule.cancelBaseChange, AtPrime, Localization, Localization.AtPrime, asIdeal, cancelBaseChange, e.finrank_eq, finrank_eq, finrank_tensorProduct, otimes, p.asIdeal, rankAtS, rankAtStalk_eq_finrank_tensorProduct
 -/
@@ -1039,7 +1231,7 @@ lemma rankAtStalk_eq
   let e : k otimes[Localization.AtPrime p.asIdeal] (Localization.AtPrime p.asIdeal otimes[R] M) ≃ₗ[k]
       k otimes[R] M :=
     AlgebraTensorModule.cancelBaseChange _ _ _ _ _
-  rw [← e.finrank_eq]; rw [finrank_baseChange]; rw [rankAtStalk_eq_finrank_tensorProduc
+  rw [← e.finrank_eq]; rw [finrank_baseChange]; rw [rankAtStalk_eq_finrank_tensorProduct]
 
 中文:
 引理 rankAtStalk_eq
@@ -1049,7 +1241,7 @@ lemma rankAtStalk_eq
   let e : k otimes[Localization.AtPrime p.asIdeal] (Localization.AtPrime p.asIdeal otimes[R] M) ≃ₗ[k]
       k otimes[R] M :=
     AlgebraTensorModule.cancelBaseChange _ _ _ _ _
-  rw [← e.finrank_eq]; rw [finrank_baseChange]; rw [rankAtStalk_eq_finrank_tensorProduc
+  rw [← e.finrank_eq]; rw [finrank_baseChange]; rw [rankAtStalk_eq_finrank_tensorProduct]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange, AtPrime, Localization, Localization.AtPrime, ResidueField, asIdeal, cancelBaseChange, e.finrank_eq, finrank_baseChange, finrank_eq, otimes, p.asIdeal, p.asIdeal.ResidueField, rankAtStalk_eq_finrank_tensorProduct
 -/
@@ -1090,7 +1282,7 @@ lemma _root_.Ideal.finrank_fiber_eq_finrank
   let K := FractionRing R
   let Rp := Localization.AtPrime p
   let Mp := LocalizedModule.AtPrime p M
-  rw [p.finrank_fiber_eq_rankAtStalk]; rw [rankAtStalk]; rw [← (isBaseChange Rp Mp K).finrank_eq]; rw [(((LocalizedModule.equivTensorProduct p.primeCompl M).baseChange Rp K Mp _)).finrank_eq]; rw 
+  rw [p.finrank_fiber_eq_rankAtStalk]; rw [rankAtStalk]; rw [← (isBaseChange Rp Mp K).finrank_eq]; rw [(((LocalizedModule.equivTensorProduct p.primeCompl M).baseChange Rp K Mp _)).finrank_eq]; rw [(AlgebraTensorModule.cancelBaseChange R Rp K K M).finrank_eq]; rw [(isBaseChange R M K).finrank_eq]
 
 中文:
 引理 _root_.理想.finrank_fiber_eq_finrank
@@ -1099,7 +1291,7 @@ lemma _root_.Ideal.finrank_fiber_eq_finrank
   let K := FractionRing R
   let Rp := Localization.AtPrime p
   let Mp := LocalizedModule.AtPrime p M
-  rw [p.finrank_fiber_eq_rankAtStalk]; rw [rankAtStalk]; rw [← (isBaseChange Rp Mp K).finrank_eq]; rw [(((LocalizedModule.equivTensorProduct p.primeCompl M).baseChange Rp K Mp _)).finrank_eq]; rw 
+  rw [p.finrank_fiber_eq_rankAtStalk]; rw [rankAtStalk]; rw [← (isBaseChange Rp Mp K).finrank_eq]; rw [(((LocalizedModule.equivTensorProduct p.primeCompl M).baseChange Rp K Mp _)).finrank_eq]; rw [(AlgebraTensorModule.cancelBaseChange R Rp K K M).finrank_eq]; rw [(isBaseChange R M K).finrank_eq]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange, AtPrime, FractionRing, Localization, Localization.AtPrime, LocalizedModule, LocalizedModule.AtPrime, LocalizedModule.equivTensorProduct, baseChange, cancelBaseChange, equivTensorProduct, finrank_eq, finrank_fiber_eq_rankAtStalk, isBaseChange, p.finrank_fiber_eq_rankAtStalk, p.primeCompl, primeCompl, rankAtStalk
 -/

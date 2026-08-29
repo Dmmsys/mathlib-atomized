@@ -2804,7 +2804,10 @@ instance :
       intro h
       simp only [h, ne_eq, x.ne_zero, not_false_eq_true, mul_top, top_ne_one] at this
     obtain ⟨y, x_y⟩ := ne_top_iff_exists.1 x_top
-    obtain ⟨z, x_
+    obtain ⟨z, x_z⟩ := ne_top_iff_exists.1 x_inv_top
+    replace x_y := x_y.symm
+    rw [x_y]; rw [← x_z]; rw [← natCast_mul]; rw [← natCast_one]; rw [natCast_inj]; rw [_root_.mul_eq_one] at this
+    rwa [this.1, Nat.cast_one, Units.val_eq_one] at x_y
 
 中文:
 实例 :
@@ -2818,7 +2821,10 @@ instance :
       intro h
       simp only [h, ne_eq, x.ne_zero, not_false_eq_true, mul_top, top_ne_one] at this
     obtain ⟨y, x_y⟩ := ne_top_iff_exists.1 x_top
-    obtain ⟨z, x_
+    obtain ⟨z, x_z⟩ := ne_top_iff_exists.1 x_inv_top
+    replace x_y := x_y.symm
+    rw [x_y]; rw [← x_z]; rw [← natCast_mul]; rw [← natCast_one]; rw [natCast_inj]; rw [_root_.mul_eq_one] at this
+    rwa [this.1, Nat.cast_one, Units.val_eq_one] at x_y
 
 Depends on / 依赖: Nat.cast_one, Units.val_eq_one, _root_, _root_.mul_eq_one, cast_one, mul_eq_one, mul_top, natCast_inj, natCast_mul, natCast_one, ne_eq, ne_top_iff_exists, ne_zero, not_false_eq_true, replace, top_ne_one, val_eq_one, val_inv, x.inv, x.ne_zero
 -/
@@ -3417,7 +3423,17 @@ definition _root_.MonoidWithZeroHom.ENatMap
       have : forall z, map f z = 0 ↔ z = 0 := fun z =>
         (WithTop.map_injective hf).eq_iff' f.toZeroHom.ENatMap.map_zero
       rcases Decidable.eq_or_ne x 0 with (rfl | hx)
-      · 
+      · simp
+      rcases Decidable.eq_or_ne y 0 with (rfl | hy)
+      · simp
+      induction x with
+      | top => simp [hy, this]
+      | coe x =>
+        induction y with
+        | top =>
+          have : (f x : WithTop S) != 0 := by simpa [hf.eq_iff' (map_zero f)] using hx
+          simp [mul_top hx, WithTop.mul_top this]
+        | coe y => simp [← Nat.cast_mul, -natCast_mul] }
 
 中文:
 定义 _root_.带零幺半群态射.E自然数Map
@@ -3428,7 +3444,17 @@ definition _root_.MonoidWithZeroHom.ENatMap
       have : forall z, map f z = 0 ↔ z = 0 := fun z =>
         (WithTop.map_injective hf).eq_iff' f.toZeroHom.ENatMap.map_zero
       rcases Decidable.eq_or_ne x 0 with (rfl | hx)
-      · 
+      · simp
+      rcases Decidable.eq_or_ne y 0 with (rfl | hy)
+      · simp
+      induction x with
+      | top => simp [hy, this]
+      | coe x =>
+        induction y with
+        | top =>
+          have : (f x : WithTop S) != 0 := by simpa [hf.eq_iff' (map_zero f)] using hx
+          simp [mul_top hx, WithTop.mul_top this]
+        | coe y => simp [← Nat.cast_mul, -natCast_mul] }
 -/
 protected def _root_.MonoidWithZeroHom.ENatMap {S : Type*} [MulZeroOneClass S] [DecidableEq S]
     [Nontrivial S] (f : Nat ->*₀ S)
@@ -3549,7 +3575,7 @@ lemma lt_add_one_iff
   cases n
   · simp only [bot_le, WithBot.bot_lt_coe]
   · rw [WithBot.coe_lt_coe, Nat.cast_add, natCast_one, ENat.lt_add_one_iff (natCast_ne_top _),
-      ← WithBot.coe_le_c
+      ← WithBot.coe_le_coe, WithBot.coe_natCast]
 
 中文:
 引理 lt_add_one_iff
@@ -3560,7 +3586,7 @@ lemma lt_add_one_iff
   cases n
   · simp only [bot_le, WithBot.bot_lt_coe]
   · rw [WithBot.coe_lt_coe, Nat.cast_add, natCast_one, ENat.lt_add_one_iff (natCast_ne_top _),
-      ← WithBot.coe_le_c
+      ← WithBot.coe_le_coe, WithBot.coe_natCast]
 
 Depends on / 依赖: ENat.lt_add_one_iff, ENat.natCast_one, Nat.cast_add, WithBot, WithBot.bot_lt_coe, WithBot.coe_le_coe, WithBot.coe_lt_coe, WithBot.coe_natCast, WithBot.coe_one, bot_le, bot_lt_coe, cast_add, coe_le_coe, coe_lt_coe, coe_natCast, coe_one, lt_add_one_iff, natCast_ne_top, natCast_one
 -/

@@ -130,7 +130,34 @@ lemma affineAnd_isLocal
     · simp only [Scheme.preimage_basicOpen, Opens.map_top]
       exact (isAffineOpen_top X).basicOpen _
     · dsimp only
-      rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [h
+      rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [hPi.cancel_right_isIso]
+      -- Not sure why the `show` fixes the following `rw` complaining about "motive is incorrect"
+      change Q (Scheme.Hom.app f ((Y.basicOpen r).ι ''ᵁ ⊤)).hom
+      rw [Scheme.Opens.ι_image_top]
+      rw [(isAffineOpen_top Y).app_basicOpen_eq_away_map f (isAffineOpen_top X)]; rw [CommRingCat.hom_comp]; rw [hPi.cancel_right_isIso]; rw [← Scheme.Hom.appTop]
+      dsimp only [Opens.map_top]
+      apply hQl
+      exact hf
+  of_basicOpenCover {X Y _} f s hs hf := by
+    dsimp [affineAnd] at hf
+    have : IsAffine X := by
+      apply isAffine_of_isAffineOpen_basicOpen (f.appTop '' s)
+      · apply_fun Ideal.map (f.appTop).hom at hs
+        rwa [Ideal.map_span, Ideal.map_top] at hs
+      · rintro - ⟨r, hr, rfl⟩
+        simp_rw [Scheme.preimage_basicOpen] at hf
+        exact (hf ⟨r, hr⟩).left
+    refine ⟨inferInstance, hQs.ofIsLocalization' hPi (f.appTop).hom s hs fun a => ?_⟩
+    refine ⟨Γ(Y, Y.basicOpen a.val), Γ(X, X.basicOpen (f.appTop a.val)), inferInstance,
+      inferInstance, inferInstance, inferInstance, inferInstance, ?_, ?_⟩
+    · exact (isAffineOpen_top X).isLocalization_basicOpen (f.appTop a.val)
+    · obtain ⟨_, hf⟩ := hf a
+      rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [hPi.cancel_right_isIso] at hf
+      -- Not sure why the `show` fixes the following `rw` complaining about "motive is incorrect"
+      have hf : Q (Scheme.Hom.app f ((Y.basicOpen a.1).ι ''ᵁ ⊤)).hom := hf
+      rw [Scheme.Opens.ι_image_top] at hf
+      rw [(isAffineOpen_top Y).app_basicOpen_eq_away_map _ (isAffineOpen_top X)] at hf
+      rwa [CommRingCat.hom_comp, hPi.cancel_right_isIso] at hf
 
 中文:
 引理 affineAnd_isLocal
@@ -142,7 +169,34 @@ lemma affineAnd_isLocal
     · simp only [Scheme.preimage_basicOpen, Opens.map_top]
       exact (isAffineOpen_top X).basicOpen _
     · dsimp only
-      rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [h
+      rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [hPi.cancel_right_isIso]
+      -- Not sure why the `show` fixes the following `rw` complaining about "motive is incorrect"
+      change Q (Scheme.Hom.app f ((Y.basicOpen r).ι ''ᵁ ⊤)).hom
+      rw [Scheme.Opens.ι_image_top]
+      rw [(isAffineOpen_top Y).app_basicOpen_eq_away_map f (isAffineOpen_top X)]; rw [CommRingCat.hom_comp]; rw [hPi.cancel_right_isIso]; rw [← Scheme.Hom.appTop]
+      dsimp only [Opens.map_top]
+      apply hQl
+      exact hf
+  of_basicOpenCover {X Y _} f s hs hf := by
+    dsimp [affineAnd] at hf
+    have : IsAffine X := by
+      apply isAffine_of_isAffineOpen_basicOpen (f.appTop '' s)
+      · apply_fun Ideal.map (f.appTop).hom at hs
+        rwa [Ideal.map_span, Ideal.map_top] at hs
+      · rintro - ⟨r, hr, rfl⟩
+        simp_rw [Scheme.preimage_basicOpen] at hf
+        exact (hf ⟨r, hr⟩).left
+    refine ⟨inferInstance, hQs.ofIsLocalization' hPi (f.appTop).hom s hs fun a => ?_⟩
+    refine ⟨Γ(Y, Y.basicOpen a.val), Γ(X, X.basicOpen (f.appTop a.val)), inferInstance,
+      inferInstance, inferInstance, inferInstance, inferInstance, ?_, ?_⟩
+    · exact (isAffineOpen_top X).isLocalization_basicOpen (f.appTop a.val)
+    · obtain ⟨_, hf⟩ := hf a
+      rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [hPi.cancel_right_isIso] at hf
+      -- Not sure why the `show` fixes the following `rw` complaining about "motive is incorrect"
+      have hf : Q (Scheme.Hom.app f ((Y.basicOpen a.1).ι ''ᵁ ⊤)).hom := hf
+      rw [Scheme.Opens.ι_image_top] at hf
+      rw [(isAffineOpen_top Y).app_basicOpen_eq_away_map _ (isAffineOpen_top X)] at hf
+      rwa [CommRingCat.hom_comp, hPi.cancel_right_isIso] at hf
 
 Depends on / 依赖: affineAnd_respectsIso
 -/
@@ -245,7 +299,12 @@ lemma targetAffineLocally_affineAnd_iff
   refine ⟨fun hf U hU => ?_, fun h U => ?_⟩
   · obtain ⟨hfU, hf⟩ := hf ⟨U, hU⟩
     use hfU
-    have hf : Q (Scheme.Hom.app f (((⟨U, hU⟩ : Y.affineOpens) : Y.Opens).ι ''ᵁ ⊤)).
+    have hf : Q (Scheme.Hom.app f (((⟨U, hU⟩ : Y.affineOpens) : Y.Opens).ι ''ᵁ ⊤)).hom := hf
+    rwa [Scheme.Opens.ι_image_top] at hf
+  · refine ⟨(h U U.2).1, ?_⟩
+    change Q (Scheme.Hom.app f ((U : Y.Opens).ι ''ᵁ ⊤)).hom
+    rw [Scheme.Opens.ι_image_top]
+    exact (h U U.2).2
 
 中文:
 引理 targetAffineLocally_affineAnd_iff
@@ -256,7 +315,12 @@ lemma targetAffineLocally_affineAnd_iff
   refine ⟨fun hf U hU => ?_, fun h U => ?_⟩
   · obtain ⟨hfU, hf⟩ := hf ⟨U, hU⟩
     use hfU
-    have hf : Q (Scheme.Hom.app f (((⟨U, hU⟩ : Y.affineOpens) : Y.Opens).ι ''ᵁ ⊤)).
+    have hf : Q (Scheme.Hom.app f (((⟨U, hU⟩ : Y.affineOpens) : Y.Opens).ι ''ᵁ ⊤)).hom := hf
+    rwa [Scheme.Opens.ι_image_top] at hf
+  · refine ⟨(h U U.2).1, ?_⟩
+    change Q (Scheme.Hom.app f ((U : Y.Opens).ι ''ᵁ ⊤)).hom
+    rw [Scheme.Opens.ι_image_top]
+    exact (h U U.2).2
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, Scheme, Scheme.Hom.app, Scheme.Opens, Y.Opens, Y.affineOpens, affineAnd_apply, affineOpens, cancel_right_isIso, hQi.cancel_right_isIso, hom_comp, morphismRestrict_app, targetAffineLocally
 -/
@@ -318,7 +382,21 @@ lemma targetAffineLocally_affineAnd_iff_affineLocally
   · wlog hY : IsAffine Y
     · intro h
       rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := affineLocally Q)
-      
+        _ (iSup_affineOpens_eq_top _)]
+      intro U
+      have : IsAffine (f ⁻¹ᵁ U) := hf.isAffine_preimage U U.2
+      rw [HasRingHomProperty.iff_of_isAffine (P := affineLocally Q)]; rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [hQ.respectsIso.cancel_right_isIso]
+      apply h
+      rw [Scheme.Opens.ι_image_top]
+      exact U.2
+    intro h
+    have : IsAffine X := isAffine_of_isAffineHom f
+    rw [HasRingHomProperty.iff_of_isAffine (P := affineLocally Q)]
+    exact h ⊤ (isAffineOpen_top Y)
+  · intro h U hU
+    rw [affineLocally_iff_affineOpens_le] at h
+    rw [f.app_eq_appLE]
+    exact h ⟨U, hU⟩ ⟨f ⁻¹ᵁ U, hf.isAffine_preimage U hU⟩ (by simp)
 
 中文:
 引理 targetAffineLocally_affineAnd_iff_affineLocally
@@ -332,7 +410,21 @@ lemma targetAffineLocally_affineAnd_iff_affineLocally
   · wlog hY : IsAffine Y
     · intro h
       rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := affineLocally Q)
-      
+        _ (iSup_affineOpens_eq_top _)]
+      intro U
+      have : IsAffine (f ⁻¹ᵁ U) := hf.isAffine_preimage U U.2
+      rw [HasRingHomProperty.iff_of_isAffine (P := affineLocally Q)]; rw [morphismRestrict_appTop]; rw [CommRingCat.hom_comp]; rw [hQ.respectsIso.cancel_right_isIso]
+      apply h
+      rw [Scheme.Opens.ι_image_top]
+      exact U.2
+    intro h
+    have : IsAffine X := isAffine_of_isAffineHom f
+    rw [HasRingHomProperty.iff_of_isAffine (P := affineLocally Q)]
+    exact h ⊤ (isAffineOpen_top Y)
+  · intro h U hU
+    rw [affineLocally_iff_affineOpens_le] at h
+    rw [f.app_eq_appLE]
+    exact h ⟨U, hU⟩ ⟨f ⁻¹ᵁ U, hf.isAffine_preimage U hU⟩ (by simp)
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, HasRingHomProperty, HasRingHomProperty.iff_of_isAffine, IsAffine, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_iSup_eq_top, Subcomplex, Subcomplex.toRange, affineLocally, and_congr_right_iff, hQ.respe, hQ.respectsIso, hasDimensionLT_of_epi, hf.isAffine_preimage, hom_comp, iSup_affineOpens_eq_top, iff_of_iSup_eq_top, iff_of_isAffine, isAffine_preimage
 -/
@@ -430,7 +522,12 @@ lemma HasAffineProperty.affineAnd_isStableUnderComposition
       rw [morphismRestrict_comp]
       exact this hA hQ _ _ (IsZariskiLocalAtTarget.restrict hf _)
         (IsZariskiLocalAtTarget.restrict hg _) U.2
-    rw [HasAffin
+    rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))] at hg
+    obtain ⟨hY, hg⟩ := hg
+    rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))] at hf
+    obtain ⟨hX, hf⟩ := hf
+    rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))]
+    exact ⟨hX, hQ _ _ hg hf⟩
 
 中文:
 引理 有AffineProperty.affineAnd_isStableUnderComposition
@@ -442,7 +539,12 @@ lemma HasAffineProperty.affineAnd_isStableUnderComposition
       rw [morphismRestrict_comp]
       exact this hA hQ _ _ (IsZariskiLocalAtTarget.restrict hf _)
         (IsZariskiLocalAtTarget.restrict hg _) U.2
-    rw [HasAffin
+    rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))] at hg
+    obtain ⟨hY, hg⟩ := hg
+    rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))] at hf
+    obtain ⟨hX, hf⟩ := hf
+    rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))]
+    exact ⟨hX, hQ _ _ hg hf⟩
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsAffine, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_iSup_eq_top, IsZariskiLocalAtTarget.restrict, affineAnd, iSup_affineOpens_eq_top, iff_of_iSup_eq_top, iff_of_isAffine, morphismRestrict_comp, restrict
 -/
@@ -574,7 +676,8 @@ lemma HasAffineProperty.affineAnd_le_isAffineHom
     intro U
     exact this P hA _ (IsZariskiLocalAtTarget.restrict hf _) U.2
   rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))] at hf
-  
+  rw [HasAffineProperty.iff_of_isAffine (P := @IsAffineHom)]
+  exact hf.1
 
 中文:
 引理 有AffineProperty.affineAnd_le_isAffineHom
@@ -586,7 +689,8 @@ lemma HasAffineProperty.affineAnd_le_isAffineHom
     intro U
     exact this P hA _ (IsZariskiLocalAtTarget.restrict hf _) U.2
   rw [HasAffineProperty.iff_of_isAffine (P := P) (Q := (affineAnd Q))] at hf
-  
+  rw [HasAffineProperty.iff_of_isAffine (P := @IsAffineHom)]
+  exact hf.1
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsAffine, IsAffineHom, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_iSup_eq_top, IsZariskiLocalAtTarget.restrict, affineAnd, iSup_affineOpens_eq_top, iff_of_iSup_eq_top, iff_of_isAffine, restrict
 -/
@@ -696,7 +800,24 @@ lemma HasAffineProperty.coprodDesc_affineAnd
   have := HasAffineProperty.affineAnd_le_isAffineHom P hP g hg
   rw [HasAffineProperty.eq_targetAffineLocally P]; rw [targetAffineLocally_affineAnd_iff hQi] at hf hg ⊢
   refine fun W hW => ⟨hW.preimage _, ?_⟩
-  let e : Γ(U ⨿ V, Limits
+  let e : Γ(U ⨿ V, Limits.coprod.desc f g ⁻¹ᵁ W) ≅ Γ(U, f ⁻¹ᵁ W) ⨯ Γ(V, g ⁻¹ᵁ W) :=
+    Scheme.coprodPresheafObjIso _ ≪≫ Limits.prod.mapIso
+      (U.presheaf.mapIso (eqToIso (by simp [← Scheme.Hom.comp_preimage])).op)
+      (V.presheaf.mapIso (eqToIso (by simp [← Scheme.Hom.comp_preimage])).op)
+  rw [← hQi.cancel_right_isIso _ e.hom]; rw [← CommRingCat.hom_comp]; rw [← hQi.cancel_right_isIso _
+    ((Limits.limit.isLimit _).conePointUniqueUpToIso (CommRingCat.prodFanIsLimit _ _)).hom]; rw [← CommRingCat.hom_comp]
+  have {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] (f : R ->+* S × T) :
+      Q (.comp (.fst _ _) f) -> Q (.comp (.snd _ _) f) -> Q f :=
+    hQ (.comp (.fst _ _) f) (.comp (.snd _ _) f)
+  refine this _ ?_ ?_
+  · have : (Limits.coprod.desc f g).app W ≫ e.hom ≫ Limits.prod.fst = f.app W := by
+      simp [e, Scheme.Hom.app_eq_appLE, Scheme.Hom.appLE_comp_appLE]
+    convert! (hf W hW).2
+    exact congr(($this).1)
+  · have : (Limits.coprod.desc f g).app W ≫ e.hom ≫ Limits.prod.snd = g.app W := by
+      simp [e, Scheme.Hom.app_eq_appLE, Scheme.Hom.appLE_comp_appLE]
+    convert! (hg W hW).2
+    exact congr(($this).1)
 
 中文:
 引理 有AffineProperty.coprodDesc_affineAnd
@@ -706,7 +827,24 @@ lemma HasAffineProperty.coprodDesc_affineAnd
   have := HasAffineProperty.affineAnd_le_isAffineHom P hP g hg
   rw [HasAffineProperty.eq_targetAffineLocally P]; rw [targetAffineLocally_affineAnd_iff hQi] at hf hg ⊢
   refine fun W hW => ⟨hW.preimage _, ?_⟩
-  let e : Γ(U ⨿ V, Limits
+  let e : Γ(U ⨿ V, Limits.coprod.desc f g ⁻¹ᵁ W) ≅ Γ(U, f ⁻¹ᵁ W) ⨯ Γ(V, g ⁻¹ᵁ W) :=
+    Scheme.coprodPresheafObjIso _ ≪≫ Limits.prod.mapIso
+      (U.presheaf.mapIso (eqToIso (by simp [← Scheme.Hom.comp_preimage])).op)
+      (V.presheaf.mapIso (eqToIso (by simp [← Scheme.Hom.comp_preimage])).op)
+  rw [← hQi.cancel_right_isIso _ e.hom]; rw [← CommRingCat.hom_comp]; rw [← hQi.cancel_right_isIso _
+    ((Limits.limit.isLimit _).conePointUniqueUpToIso (CommRingCat.prodFanIsLimit _ _)).hom]; rw [← CommRingCat.hom_comp]
+  have {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] (f : R ->+* S × T) :
+      Q (.comp (.fst _ _) f) -> Q (.comp (.snd _ _) f) -> Q f :=
+    hQ (.comp (.fst _ _) f) (.comp (.snd _ _) f)
+  refine this _ ?_ ?_
+  · have : (Limits.coprod.desc f g).app W ≫ e.hom ≫ Limits.prod.fst = f.app W := by
+      simp [e, Scheme.Hom.app_eq_appLE, Scheme.Hom.appLE_comp_appLE]
+    convert! (hf W hW).2
+    exact congr(($this).1)
+  · have : (Limits.coprod.desc f g).app W ≫ e.hom ≫ Limits.prod.snd = g.app W := by
+      simp [e, Scheme.Hom.app_eq_appLE, Scheme.Hom.appLE_comp_appLE]
+    convert! (hg W hW).2
+    exact congr(($this).1)
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.affineAnd_le_isAffineHom, HasAffineProperty.eq_targetAffineLocally, Limits, Limits.coprod.desc, Limits.prod.mapIso, Scheme, Scheme.Hom.comp_preimage, Scheme.coprodPresheafObjIso, U.presheaf.mapIso, V.presheaf.mapIso, affineAnd_le_isAffineHom, comp_preimage, coprod, coprodPresheafObjIso, eqToIso, eq_targetAffineLocally, hW.preimage, mapIso, preimage
 -/

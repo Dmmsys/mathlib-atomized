@@ -147,7 +147,7 @@ theorem preimage_iUnionLift
     rwa [iUnionLift_of_mem x hi] at h
   · rintro ⟨i, ⟨y, hi⟩, h, hxy⟩
     obtain rfl : y = x := congr_arg Subtype.val hxy
-    rwa [iUn
+    rwa [iUnionLift_of_mem x hi]
 
 中文:
 定理 preimage_iUnionLift
@@ -161,7 +161,7 @@ theorem preimage_iUnionLift
     rwa [iUnionLift_of_mem x hi] at h
   · rintro ⟨i, ⟨y, hi⟩, h, hxy⟩
     obtain rfl : y = x := congr_arg Subtype.val hxy
-    rwa [iUn
+    rwa [iUnionLift_of_mem x hi]
 
 Depends on / 依赖: Subtype, Subtype.val, congr_arg, iUnionLift_of_mem, mem_iUnion, mem_image, mem_preimage, x.prop
 -/
@@ -262,7 +262,14 @@ theorem iUnionLift_binary
   rcases dir i j with ⟨k, hik, hjk⟩
   rw [iUnionLift_of_mem x (hik hi)]; rw [iUnionLift_of_mem y (hjk hj)]; rw [← h k]
   have hx : x = Set.inclusion (Set.subset_iUnion S k) ⟨x, hik hi⟩ := by
-    ca
+    cases x
+    rfl
+  have hy : y = Set.inclusion (Set.subset_iUnion S k) ⟨y, hjk hj⟩ := by
+    cases y
+    rfl
+  have hxy : (Set.inclusion (Set.subset_iUnion S k) (opi k ⟨x, hik hi⟩ ⟨y, hjk hj⟩) : α) in S k :=
+    (opi k ⟨x, hik hi⟩ ⟨y, hjk hj⟩).prop
+  conv_lhs => rw [hx, hy, ← hopi, iUnionLift_of_mem _ hxy]
 
 中文:
 定理 iUnionLift_binary
@@ -274,7 +281,14 @@ theorem iUnionLift_binary
   rcases dir i j with ⟨k, hik, hjk⟩
   rw [iUnionLift_of_mem x (hik hi)]; rw [iUnionLift_of_mem y (hjk hj)]; rw [← h k]
   have hx : x = Set.inclusion (Set.subset_iUnion S k) ⟨x, hik hi⟩ := by
-    ca
+    cases x
+    rfl
+  have hy : y = Set.inclusion (Set.subset_iUnion S k) ⟨y, hjk hj⟩ := by
+    cases y
+    rfl
+  have hxy : (Set.inclusion (Set.subset_iUnion S k) (opi k ⟨x, hik hi⟩ ⟨y, hjk hj⟩) : α) in S k :=
+    (opi k ⟨x, hik hi⟩ ⟨y, hjk hj⟩).prop
+  conv_lhs => rw [hx, hy, ← hopi, iUnionLift_of_mem _ hxy]
 
 Depends on / 依赖: Set.inclusion, Set.mem_iUnion, Set.subset_iUnion, iUnionLift_of_mem, inclusion, mem_iUnion, subset_iUnion, x.prop, y.prop
 -/

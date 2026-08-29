@@ -704,7 +704,11 @@ have : a ^ 2 = b ^ 2 := add_right_cancel
     calc
       a ^ 2 + a * b = 0 := by rw [sq, ← mul_add, hab, mul_zero]
       _ = b ^ 2 + a * b := by rw [sq, ← add_mul, add_comm, hab, zero_mul]
-  refine add_right_cancel (b := 
+  refine add_right_cancel (b := b ^ (2 * k + 1) * a ^ 2) ?_
+  calc
+    _ = (a ^ (2 * k + 1) + b ^ (2 * k + 1)) * a ^ 2 + b ^ (2 * k + 3) := by
+      rw [add_mul]; rw [← pow_add]; rw [add_right_comm]; rfl
+    _ = _ := by rw [ih, zero_mul, zero_add, zero_add, this, ← pow_add]
 
 中文:
 引理 Odd.pow_add_pow_eq_zero
@@ -716,7 +720,11 @@ have : a ^ 2 = b ^ 2 := add_right_cancel
     calc
       a ^ 2 + a * b = 0 := by rw [sq, ← mul_add, hab, mul_zero]
       _ = b ^ 2 + a * b := by rw [sq, ← add_mul, add_comm, hab, zero_mul]
-  refine add_right_cancel (b := 
+  refine add_right_cancel (b := b ^ (2 * k + 1) * a ^ 2) ?_
+  calc
+    _ = (a ^ (2 * k + 1) + b ^ (2 * k + 1)) * a ^ 2 + b ^ (2 * k + 3) := by
+      rw [add_mul]; rw [← pow_add]; rw [add_right_comm]; rfl
+    _ = _ := by rw [ih, zero_mul, zero_add, zero_add, this, ← pow_add]
 
 Depends on / 依赖: add_comm, add_mul, add_right_cancel, add_right_comm, mul_add, mul_zero, pow_, pow_add, zero_add, zero_mul
 -/

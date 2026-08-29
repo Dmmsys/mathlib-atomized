@@ -274,7 +274,8 @@ lemma IsDynCoverOf.closure
   rcases (hasBasis_symmetric.mem_iff' V).1 V_uni with ⟨W, ⟨W_uni, W_symm⟩, W_V⟩
   refine IsDynCoverOf.of_entourage_subset (SetRel.comp_subset_comp_left W_V) fun x hx => ?_
   obtain ⟨y, hxy, hy⟩ := mem_closure_iff_nhds.1 hx _ (ball_dynEntourage_mem_nhds h W_uni n x)
-  obtain ⟨z, hz, hyz⟩ := s_cove
+  obtain ⟨z, hz, hyz⟩ := s_cover hy
+  exact ⟨z, hz, dynEntourage_comp_subset _ _ _ _ ⟨y, hxy, hyz⟩⟩
 
 中文:
 引理 IsDynCoverOf.closure
@@ -283,7 +284,8 @@ lemma IsDynCoverOf.closure
   rcases (hasBasis_symmetric.mem_iff' V).1 V_uni with ⟨W, ⟨W_uni, W_symm⟩, W_V⟩
   refine IsDynCoverOf.of_entourage_subset (SetRel.comp_subset_comp_left W_V) fun x hx => ?_
   obtain ⟨y, hxy, hy⟩ := mem_closure_iff_nhds.1 hx _ (ball_dynEntourage_mem_nhds h W_uni n x)
-  obtain ⟨z, hz, hyz⟩ := s_cove
+  obtain ⟨z, hz, hyz⟩ := s_cover hy
+  exact ⟨z, hz, dynEntourage_comp_subset _ _ _ _ ⟨y, hxy, hyz⟩⟩
 
 Depends on / 依赖: IsDynCoverOf, IsDynCoverOf.of_entourage_subset, SetRel, SetRel.comp_subset_comp_left, V_uni, W_symm, W_uni, ball_dynEntourage_mem_nhds, comp_subset_comp_left, dynEntourage_comp_subset, hasBasis_symmetric, hasBasis_symmetric.mem_iff, mem_closure_iff_nhds, mem_iff, of_entourage_subset, s_cover
 -/
@@ -464,7 +466,11 @@ lemma coverMincard_union_le
   rcases eq_top_or_lt_top (coverMincard T G U n) with hG | hG
   · rw [hG, add_top]; exact le_top
   obtain ⟨s, s_cover, s_coverMincard⟩ := (coverMincard_finite_iff T F U n).1 hF
-  obtain ⟨t
+  obtain ⟨t, t_cover, t_coverMincard⟩ := (coverMincard_finite_iff T G U n).1 hG
+  rw [← s_coverMincard]; rw [← t_coverMincard]; rw [← ENat.natCast_add]
+  apply (IsDynCoverOf.coverMincard_le_card _).trans (WithTop.coe_mono (s.card_union_le t))
+  rw [s.coe_union t]
+  exact s_cover.union t_cover
 
 中文:
 引理 coverMincard_union_le
@@ -476,7 +482,11 @@ lemma coverMincard_union_le
   rcases eq_top_or_lt_top (coverMincard T G U n) with hG | hG
   · rw [hG, add_top]; exact le_top
   obtain ⟨s, s_cover, s_coverMincard⟩ := (coverMincard_finite_iff T F U n).1 hF
-  obtain ⟨t
+  obtain ⟨t, t_cover, t_coverMincard⟩ := (coverMincard_finite_iff T G U n).1 hG
+  rw [← s_coverMincard]; rw [← t_coverMincard]; rw [← ENat.natCast_add]
+  apply (IsDynCoverOf.coverMincard_le_card _).trans (WithTop.coe_mono (s.card_union_le t))
+  rw [s.coe_union t]
+  exact s_cover.union t_cover
 
 Depends on / 依赖: ENat.natCast_add, IsDynCoverOf, IsDynCoverOf.coverMincard_le_card, WithTop, WithTop.coe_mono, add_top, classical, coe_mono, coverMincard, coverMincard_finite_iff, coverMincard_le_card, eq_top_or_lt_top, le_top, natCast_add, s.card, s_cover, s_coverMincard, t_cover, t_coverMincard, top_add
 -/
@@ -505,7 +515,7 @@ lemma coverEntropyEntourage_union
     rw [Pi.add_apply]; rw [← ENat.toENNReal_add]
     exact ENat.toENNReal_mono (coverMincard_union_le T F G U n)
   · exact max_le (coverEntropyEntourage_monotone T U subset_union_left)
-      (
+      (coverEntropyEntourage_monotone T U subset_union_right)
 
 中文:
 引理 coverEntropyEntourage_union
@@ -515,7 +525,7 @@ lemma coverEntropyEntourage_union
     rw [Pi.add_apply]; rw [← ENat.toENNReal_add]
     exact ENat.toENNReal_mono (coverMincard_union_le T F G U n)
   · exact max_le (coverEntropyEntourage_monotone T U subset_union_left)
-      (
+      (coverEntropyEntourage_monotone T U subset_union_right)
 
 Depends on / 依赖: ENat.toENNReal_add, ENat.toENNReal_mono, Pi.add_apply, add_apply, coverEntropyEntourage_monotone, coverMincard_union_le, expGrowthSup_add, expGrowthSup_monotone, le_antisymm, le_of_le_of_eq, max_le, subset_union_left, subset_union_right, toENNReal_add, toENNReal_mono
 -/

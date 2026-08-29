@@ -43,7 +43,9 @@ definition equivalenceMonoOver
       map {X Y} f := homOfLE (by
         rw [← MonoOver.w f]
         apply range_comp_le) }
-  unitIso := NatIso.ofComponents (fun A => eqToIso (by si
+  unitIso := NatIso.ofComponents (fun A => eqToIso (by simp))
+  counitIso := NatIso.ofComponents
+    (fun X => MonoOver.isoMk ((asIso (toRange X.arrow)).symm))
 
 中文:
 定义 equivalenceMonoOver
@@ -55,7 +57,9 @@ definition equivalenceMonoOver
       map {X Y} f := homOfLE (by
         rw [← MonoOver.w f]
         apply range_comp_le) }
-  unitIso := NatIso.ofComponents (fun A => eqToIso (by si
+  unitIso := NatIso.ofComponents (fun A => eqToIso (by simp))
+  counitIso := NatIso.ofComponents
+    (fun X => MonoOver.isoMk ((asIso (toRange X.arrow)).symm))
 
 Depends on / 依赖: MonoOver, MonoOver.homMk, MonoOver.isoMk, MonoOver.mk, MonoOver.w, NatIso, NatIso.ofComponents, Subfunctor, Subfunctor.homOfLe, Subfunctor.range, X.arrow, counitIso, eqToIso, homOfLE, homOfLe, inverse, leOfHom, ofComponents, range_comp_le, toRange
 -/
@@ -137,7 +141,11 @@ definition orderIsoSubobject
     · intro h
       have : range (Subobject.mk A.ι).arrow <= range (Subobject.mk B.ι).arrow :=
         leOfHom (((equivalenceMonoOver F).trans
-         
+          (ThinSkeleton.equivalence _).symm).inverse.map (homOfLE h))
+      simpa using this
+    · intro h
+      exact leOfHom (((equivalenceMonoOver F).trans
+        (ThinSkeleton.equivalence _).symm).functor.map (homOfLE h))
 
 中文:
 定义 orderIsoSubobject
@@ -151,7 +159,11 @@ definition orderIsoSubobject
     · intro h
       have : range (Subobject.mk A.ι).arrow <= range (Subobject.mk B.ι).arrow :=
         leOfHom (((equivalenceMonoOver F).trans
-         
+          (ThinSkeleton.equivalence _).symm).inverse.map (homOfLE h))
+      simpa using this
+    · intro h
+      exact leOfHom (((equivalenceMonoOver F).trans
+        (ThinSkeleton.equivalence _).symm).functor.map (homOfLE h))
 
 Depends on / 依赖: Subobject, Subobject.mk
 -/

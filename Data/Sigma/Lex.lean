@@ -412,7 +412,8 @@ instance [Std.Trichotomous
     · obtain hab | rfl | hba := trichotomous_of (s i) a b
       · exact Or.inl (Lex.right _ _ hab)
       · exact Or.inr (Or.inl rfl)
-      ·
+      · exact Or.inr (Or.inr <| Lex.right _ _ hba)
+    · exact Or.inr (Or.inr <| Lex.left _ _ hji)
 
 中文:
 实例 [Std.三歧
@@ -424,7 +425,8 @@ instance [Std.Trichotomous
     · obtain hab | rfl | hba := trichotomous_of (s i) a b
       · exact Or.inl (Lex.right _ _ hab)
       · exact Or.inr (Or.inl rfl)
-      ·
+      · exact Or.inr (Or.inr <| Lex.right _ _ hba)
+    · exact Or.inr (Or.inr <| Lex.left _ _ hji)
 
 Depends on / 依赖: Lex.left, Lex.right, Or.inl, Or.inr, Std.trichotomous_of_rel_or_eq_or_rel_swap, trichotomous_of, trichotomous_of_rel_or_eq_or_rel_swap
 -/

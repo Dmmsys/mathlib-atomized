@@ -1646,7 +1646,8 @@ definition def_sInf
       let _ := t.1; t.toContinuousAdd
 toContinuousMul := continuousMul_sInf forall_mem_image.2 fun t _ =>
       let _ := t.1; t.toContinuousMul
-toContinuousNeg := continuousNeg_sInf for
+toContinuousNeg := continuousNeg_sInf forall_mem_image.2 fun t _ =>
+      let _ := t.1; t.toContinuousNeg }
 
 中文:
 定义 def_sInf
@@ -1656,7 +1657,8 @@ toContinuousNeg := continuousNeg_sInf for
       let _ := t.1; t.toContinuousAdd
 toContinuousMul := continuousMul_sInf forall_mem_image.2 fun t _ =>
       let _ := t.1; t.toContinuousMul
-toContinuousNeg := continuousNeg_sInf for
+toContinuousNeg := continuousNeg_sInf forall_mem_image.2 fun t _ =>
+      let _ := t.1; t.toContinuousNeg }
 -/
 private def def_sInf (S : Set (RingTopology R)) : RingTopology R :=
   let _ := sInf (toTopologicalSpace '' S)

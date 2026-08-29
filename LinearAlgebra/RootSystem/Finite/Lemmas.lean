@@ -58,7 +58,23 @@ lemma coxeterWeightIn_le_four
   let rj : span S Φ := ⟨α j, Submodule.subset_span (mem_range_self _)⟩
   set li := (P.posRootForm S).rootLength i
   set lj := (P.posRootForm S).rootLength j
-  set lij := (P.posRootForm 
+  set lij := (P.posRootForm S).posForm ri rj
+  obtain ⟨si, hsi, hsi'⟩ := (P.posRootForm S).exists_pos_eq i
+  obtain ⟨sj, hsj, hsj'⟩ := (P.posRootForm S).exists_pos_eq j
+replace hsi' : si = li := algebraMap_injective S R by simpa [li] using hsi'
+replace hsj' : sj = lj := algebraMap_injective S R by simpa [lj] using hsj'
+  rw [hsi'] at hsi
+  rw [hsj'] at hsj
+  have cs : 4 * lij ^ 2 <= 4 * (li * lj) := by
+    rw [mul_le_mul_iff_right₀ four_pos]
+    exact (P.posRootForm S).posForm.apply_sq_le_of_symm (zero_le_posForm _ _ ·)
+      (P.posRootForm S).isSymm_posForm ri rj
+  have key : 4 • lij ^ 2 = P.coxeterWeightIn S i j • (li * lj) := by
+    apply algebraMap_injective S R
+    simpa [map_ofNat, lij, posRootForm, ri, rj, li, lj] using
+       P.four_smul_rootForm_sq_eq_coxeterWeight_smul i j
+  simp only [nsmul_eq_mul, smul_eq_mul, Nat.cast_ofNat] at key
+  rwa [key, mul_le_mul_iff_left₀ (by positivity)] at cs
 
 中文:
 引理 coxeterWeightIn_le_four
@@ -69,7 +85,23 @@ lemma coxeterWeightIn_le_four
   let rj : span S Φ := ⟨α j, Submodule.subset_span (mem_range_self _)⟩
   set li := (P.posRootForm S).rootLength i
   set lj := (P.posRootForm S).rootLength j
-  set lij := (P.posRootForm 
+  set lij := (P.posRootForm S).posForm ri rj
+  obtain ⟨si, hsi, hsi'⟩ := (P.posRootForm S).exists_pos_eq i
+  obtain ⟨sj, hsj, hsj'⟩ := (P.posRootForm S).exists_pos_eq j
+replace hsi' : si = li := algebraMap_injective S R by simpa [li] using hsi'
+replace hsj' : sj = lj := algebraMap_injective S R by simpa [lj] using hsj'
+  rw [hsi'] at hsi
+  rw [hsj'] at hsj
+  have cs : 4 * lij ^ 2 <= 4 * (li * lj) := by
+    rw [mul_le_mul_iff_right₀ four_pos]
+    exact (P.posRootForm S).posForm.apply_sq_le_of_symm (zero_le_posForm _ _ ·)
+      (P.posRootForm S).isSymm_posForm ri rj
+  have key : 4 • lij ^ 2 = P.coxeterWeightIn S i j • (li * lj) := by
+    apply algebraMap_injective S R
+    simpa [map_ofNat, lij, posRootForm, ri, rj, li, lj] using
+       P.four_smul_rootForm_sq_eq_coxeterWeight_smul i j
+  simp only [nsmul_eq_mul, smul_eq_mul, Nat.cast_ofNat] at key
+  rwa [key, mul_le_mul_iff_left₀ (by positivity)] at cs
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, P.posRootForm, Submodule, Submodule.subset_span, algebraMap_injective, exists_pos_eq, mem_range_self, ofFinite, posForm, posRootForm, replace, rootLength, subset_span
 -/
@@ -112,7 +144,12 @@ lemma coxeterWeightIn_mem_set_of_isCrystallographic
   obtain ⟨n, hcn⟩ : exists n : Nat, P.coxeterWeightIn Int i j = n := by
     have : 0 <= P.coxeterWeightIn Int i j := by
       simpa only [P.algebraMap_coxeterWeightIn] using P.coxeterWeight_nonneg (P.posRootForm Int) i j
-    obtain ⟨n, hn⟩ := Int.eq_ofNat_
+    obtain ⟨n, hn⟩ := Int.eq_ofNat_of_zero_le this
+    exact ⟨n, by simp [hn]⟩
+  have : P.coxeterWeightIn Int i j <= 4 := P.coxeterWeightIn_le_four Int i j
+  simp only [hcn, mem_insert_iff, mem_singleton_iff] at this ⊢
+  norm_cast at this ⊢
+  lia
 
 中文:
 引理 coxeterWeightIn_mem_set_of_isCrystallographic
@@ -121,7 +158,12 @@ lemma coxeterWeightIn_mem_set_of_isCrystallographic
   obtain ⟨n, hcn⟩ : exists n : Nat, P.coxeterWeightIn Int i j = n := by
     have : 0 <= P.coxeterWeightIn Int i j := by
       simpa only [P.algebraMap_coxeterWeightIn] using P.coxeterWeight_nonneg (P.posRootForm Int) i j
-    obtain ⟨n, hn⟩ := Int.eq_ofNat_
+    obtain ⟨n, hn⟩ := Int.eq_ofNat_of_zero_le this
+    exact ⟨n, by simp [hn]⟩
+  have : P.coxeterWeightIn Int i j <= 4 := P.coxeterWeightIn_le_four Int i j
+  simp only [hcn, mem_insert_iff, mem_singleton_iff] at this ⊢
+  norm_cast at this ⊢
+  lia
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, Int.eq_ofNat_of_zero_le, P.algebraMap_coxeterWeightIn, P.coxeterWeightIn, P.coxeterWeightIn_le_four, P.coxeterWeight_nonneg, P.posRootForm, algebraMap_coxeterWeightIn, coxeterWeightIn, coxeterWeightIn_le_four, coxeterWeight_nonneg, eq_ofNat_of_zero_le, mem_insert_iff, mem_singleton_iff, ofFinite, posRootForm
 -/
@@ -180,7 +222,8 @@ lemma pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed
   rcases eq_or_ne i j with rfl | h₁; · simp
   rcases eq_or_ne (α i) (-α j) with h₂ | h₂; · simp_all
   have aux₁ := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-  have aux₂ : P.pairingIn Int i j * P.pairingIn Int j i != 4 :
+  have aux₂ : P.pairingIn Int i j * P.pairingIn Int j i != 4 := P.coxeterWeightIn_ne_four Int h₁ h₂
+  aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 中文:
 引理 pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed
@@ -190,7 +233,8 @@ lemma pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed
   rcases eq_or_ne i j with rfl | h₁; · simp
   rcases eq_or_ne (α i) (-α j) with h₂ | h₂; · simp_all
   have aux₁ := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-  have aux₂ : P.pairingIn Int i j * P.pairingIn Int j i != 4 :
+  have aux₂ : P.pairingIn Int i j * P.pairingIn Int j i != 4 := P.coxeterWeightIn_ne_four Int h₁ h₂
+  aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 Depends on / 依赖: IsReflexive, Module, Module.IsReflexive, P.coxeterWeightIn_ne_four, P.pairingIn, P.pairingIn_pairingIn_mem_set_of_isCrystallographic, P.toLinearMap, community, coxeterWeightIn_ne_four, eq_or_ne, faster, github, github.com, issues, leanprover, mathlib4, of_isPerfPair, pairingIn, pairingIn_pairingIn_mem_set_of_isCrystallographic, should
 -/
@@ -246,7 +290,12 @@ lemma RootPositiveForm.rootLength_le_of_pairingIn_eq
   have h : (P.pairingIn Int i j, P.pairingIn Int j i) in
       ({(1, 1), (1, 2), (1, 3), (1, 4), (-1, -1), (-1, -2), (-1, -3), (-1, -4)} : Set (Int × Int)) := by
     have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-    aesop -- https://github.com/leanprover-community/mathlib4/issue
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  simp only [mem_insert_iff, mem_singleton_iff, Prod.mk_one_one, Prod.mk_eq_one, Prod.mk.injEq] at h
+  have h' := B.pairingIn_mul_eq_pairingIn_mul_swap i j
+  have hi := B.rootLength_pos i
+  rcases h with hij' | hij' | hij' | hij' | hij' | hij' | hij' | hij' <;>
+  rw [hij'.1]; rw [hij'.2] at h' <;> lia
 
 中文:
 引理 RootPositiveForm.rootLength_le_of_pairingIn_eq
@@ -255,7 +304,12 @@ lemma RootPositiveForm.rootLength_le_of_pairingIn_eq
   have h : (P.pairingIn Int i j, P.pairingIn Int j i) in
       ({(1, 1), (1, 2), (1, 3), (1, 4), (-1, -1), (-1, -2), (-1, -3), (-1, -4)} : Set (Int × Int)) := by
     have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-    aesop -- https://github.com/leanprover-community/mathlib4/issue
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  simp only [mem_insert_iff, mem_singleton_iff, Prod.mk_one_one, Prod.mk_eq_one, Prod.mk.injEq] at h
+  have h' := B.pairingIn_mul_eq_pairingIn_mul_swap i j
+  have hi := B.rootLength_pos i
+  rcases h with hij' | hij' | hij' | hij' | hij' | hij' | hij' | hij' <;>
+  rw [hij'.1]; rw [hij'.2] at h' <;> lia
 
 Depends on / 依赖: B.pairingIn_mul_eq_pairingIn_mul_swap, B.rootLength_pos, P.pairingIn, P.pairingIn_pairingIn_mem_set_of_isCrystallographic, Prod.mk.injEq, Prod.mk_eq_one, Prod.mk_one_one, community, faster, github, github.com, issues, leanprover, mathlib4, mem_insert_iff, mem_singleton_iff, mk_eq_one, mk_one_one, pairingIn, pairingIn_mul_eq_pairingIn_mul_swap
 -/
@@ -282,7 +336,15 @@ lemma RootPositiveForm.rootLength_lt_of_pairingIn_notMem
   have hij' : P.pairingIn Int i j = -3 ∨ P.pairingIn Int i j = -2 ∨ P.pairingIn Int i j = 2 ∨
       P.pairingIn Int i j = 3 ∨ P.pairingIn Int i j = -4 ∨ P.pairingIn Int i j = 4 := by
     have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-    aesop -- https://github.com/leanprover-com
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  have aux₁ : P.pairingIn Int j i = -1 ∨ P.pairingIn Int j i = 1 := by
+    have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
+    have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  have aux₂ := B.pairingIn_mul_eq_pairingIn_mul_swap i j
+  have hi := B.rootLength_pos i
+  rcases aux₁ with hji | hji <;> rcases hij' with hij' | hij' | hij' | hij' | hij' | hij' <;>
+  rw [hji]; rw [hij'] at aux₂ <;> lia
 
 中文:
 引理 RootPositiveForm.rootLength_lt_of_pairingIn_notMem
@@ -290,7 +352,15 @@ lemma RootPositiveForm.rootLength_lt_of_pairingIn_notMem
   have hij' : P.pairingIn Int i j = -3 ∨ P.pairingIn Int i j = -2 ∨ P.pairingIn Int i j = 2 ∨
       P.pairingIn Int i j = 3 ∨ P.pairingIn Int i j = -4 ∨ P.pairingIn Int i j = 4 := by
     have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-    aesop -- https://github.com/leanprover-com
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  have aux₁ : P.pairingIn Int j i = -1 ∨ P.pairingIn Int j i = 1 := by
+    have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
+    have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  have aux₂ := B.pairingIn_mul_eq_pairingIn_mul_swap i j
+  have hi := B.rootLength_pos i
+  rcases aux₁ with hji | hji <;> rcases hij' with hij' | hij' | hij' | hij' | hij' | hij' <;>
+  rw [hji]; rw [hij'] at aux₂ <;> lia
 
 Depends on / 依赖: IsReflexive, Module, Module.IsReflexive, P.pairingIn, P.pairingIn_pairingIn_me, P.pairingIn_pairingIn_mem_set_of_isCrystallographic, P.toLinearMap, community, faster, github, github.com, issues, leanprover, mathlib4, of_isPerfPair, pairingIn, pairingIn_pairingIn_me, pairingIn_pairingIn_mem_set_of_isCrystallographic, should, toLinearMap
 -/
@@ -323,7 +393,8 @@ lemma pairingIn_pairingIn_mem_set_of_length_eq
   replace len_eq : P.pairingIn Int i j = P.pairingIn Int j i := by
     simp only [← (FaithfulSMul.algebraMap_injective Int R).eq_iff, algebraMap_pairingIn]
     exact mul_right_cancel₀ (B.ne_zero j) (len_eq ▸ B.pairing_mul_eq_pairing_mul_swap j i)
-  have := P.pairingIn_pairingIn_mem_set_of_isCryst
+  have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
+  aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 中文:
 引理 pairingIn_pairingIn_mem_set_of_length_eq
@@ -332,7 +403,8 @@ lemma pairingIn_pairingIn_mem_set_of_length_eq
   replace len_eq : P.pairingIn Int i j = P.pairingIn Int j i := by
     simp only [← (FaithfulSMul.algebraMap_injective Int R).eq_iff, algebraMap_pairingIn]
     exact mul_right_cancel₀ (B.ne_zero j) (len_eq ▸ B.pairing_mul_eq_pairing_mul_swap j i)
-  have := P.pairingIn_pairingIn_mem_set_of_isCryst
+  have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
+  aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 Depends on / 依赖: B.ne_zero, B.pairing_mul_eq_pairing_mul_swap, FaithfulSMul, FaithfulSMul.algebraMap_injective, P.pairingIn, P.pairingIn_pairingIn_mem_set_of_isCrystallographic, algebraMap_injective, algebraMap_pairingIn, community, eq_iff, faster, github, github.com, issues, leanprover, len_eq, mathlib4, ne_zero, pairingIn, pairingIn_pairingIn_mem_set_of_isCrystallographic
 -/
@@ -390,7 +462,8 @@ lemma coxeterWeightIn_eq_zero_iff
   refine ⟨fun h => ?_, fun h => by rw [coxeterWeightIn, h, zero_mul]⟩
   rwa [← (algebraMap_injective Int R).eq_iff, map_zero, algebraMap_coxeterWeightIn,
     RootPairing.coxeterWeight_zero_iff_isOrthogonal, IsOrthogonal,
-    P.pairing_eq_zero_iff' (i := j) (j := i), and_self, ← P.algebraMap_pairi
+    P.pairing_eq_zero_iff' (i := j) (j := i), and_self, ← P.algebraMap_pairingIn Int,
+    FaithfulSMul.algebraMap_eq_zero_iff] at h
 
 中文:
 引理 coxeterWeightIn_eq_zero_iff
@@ -398,7 +471,8 @@ lemma coxeterWeightIn_eq_zero_iff
   refine ⟨fun h => ?_, fun h => by rw [coxeterWeightIn, h, zero_mul]⟩
   rwa [← (algebraMap_injective Int R).eq_iff, map_zero, algebraMap_coxeterWeightIn,
     RootPairing.coxeterWeight_zero_iff_isOrthogonal, IsOrthogonal,
-    P.pairing_eq_zero_iff' (i := j) (j := i), and_self, ← P.algebraMap_pairi
+    P.pairing_eq_zero_iff' (i := j) (j := i), and_self, ← P.algebraMap_pairingIn Int,
+    FaithfulSMul.algebraMap_eq_zero_iff] at h
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, IsOrthogonal, P.algebraMap_pairingIn, P.pairing_eq_zero_iff, RootPairing, RootPairing.coxeterWeight_zero_iff_isOrthogonal, algebraMap_coxeterWeightIn, algebraMap_eq_zero_iff, algebraMap_injective, algebraMap_pairingIn, and_self, coxeterWeightIn, coxeterWeight_zero_iff_isOrthogonal, eq_iff, map_zero, pairing_eq_zero_iff, zero_mul
 -/
@@ -424,7 +498,36 @@ lemma root_sub_root_mem_of_pairingIn_pos
   have : IsAddTorsionFree M := .of_isTorsionFree R M
   by_cases hli : LinearIndependent R ![α i, α j]
   · -- The case where the two roots are linearly independent
- 
+    suffices P.pairingIn Int i j = 1 ∨ P.pairingIn Int j i = 1 by
+      rcases this with h₁ | h₁
+      · replace h₁ : P.pairing i j = 1 := by simpa [← P.algebraMap_pairingIn Int]
+        exact ⟨P.reflectionPerm j i, by simpa [h₁] using P.reflection_apply_root j i⟩
+      · replace h₁ : P.pairing j i = 1 := by simpa [← P.algebraMap_pairingIn Int]
+        rw [← neg_mem_range_root_iff]; rw [neg_sub]
+        exact ⟨P.reflectionPerm i j, by simpa [h₁] using P.reflection_apply_root i j⟩
+    have : P.coxeterWeightIn Int i j in ({1, 2, 3} : Set _) := by
+      have aux₁ := P.coxeterWeightIn_mem_set_of_isCrystallographic i j
+      have aux₂ := (linearIndependent_iff_coxeterWeightIn_ne_four P Int).mp hli
+      have aux₃ : P.coxeterWeightIn Int i j != 0 := by
+        simpa only [ne_eq, P.coxeterWeightIn_eq_zero_iff] using h.ne'
+      simp_all
+    simp_rw [coxeterWeightIn, Int.mul_mem_one_two_three_iff, mem_insert_iff, mem_singleton_iff,
+      Prod.mk.injEq] at this
+    lia
+  · -- The case where the two roots are linearly dependent
+    have : (P.pairingIn Int i j, P.pairingIn Int j i) in ({(1, 4), (2, 2), (4, 1)} : Set _) := by
+      have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
+      replace hli : P.pairingIn Int i j * P.pairingIn Int j i = 4 :=
+        (P.coxeterWeightIn_eq_four_iff_not_linearIndependent Int).mpr hli
+      aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+    simp only [mem_insert_iff, mem_singleton_iff, Prod.mk.injEq] at this
+    rcases this with hij | hij | hij
+    · rw [(P.pairingIn_one_four_iff Int i j).mp hij, two_smul, sub_add_cancel_right]
+      exact neg_root_mem P i
+    · rw [P.pairingIn_two_two_iff] at hij
+      contradiction
+    · rw [and_comm] at hij
+      simp [(P.pairingIn_one_four_iff Int j i).mp hij, two_smul]
 
 中文:
 引理 root_sub_root_mem_of_pairingIn_pos
@@ -435,7 +538,36 @@ lemma root_sub_root_mem_of_pairingIn_pos
   have : IsAddTorsionFree M := .of_isTorsionFree R M
   by_cases hli : LinearIndependent R ![α i, α j]
   · -- The case where the two roots are linearly independent
- 
+    suffices P.pairingIn Int i j = 1 ∨ P.pairingIn Int j i = 1 by
+      rcases this with h₁ | h₁
+      · replace h₁ : P.pairing i j = 1 := by simpa [← P.algebraMap_pairingIn Int]
+        exact ⟨P.reflectionPerm j i, by simpa [h₁] using P.reflection_apply_root j i⟩
+      · replace h₁ : P.pairing j i = 1 := by simpa [← P.algebraMap_pairingIn Int]
+        rw [← neg_mem_range_root_iff]; rw [neg_sub]
+        exact ⟨P.reflectionPerm i j, by simpa [h₁] using P.reflection_apply_root i j⟩
+    have : P.coxeterWeightIn Int i j in ({1, 2, 3} : Set _) := by
+      have aux₁ := P.coxeterWeightIn_mem_set_of_isCrystallographic i j
+      have aux₂ := (linearIndependent_iff_coxeterWeightIn_ne_four P Int).mp hli
+      have aux₃ : P.coxeterWeightIn Int i j != 0 := by
+        simpa only [ne_eq, P.coxeterWeightIn_eq_zero_iff] using h.ne'
+      simp_all
+    simp_rw [coxeterWeightIn, Int.mul_mem_one_two_three_iff, mem_insert_iff, mem_singleton_iff,
+      Prod.mk.injEq] at this
+    lia
+  · -- The case where the two roots are linearly dependent
+    have : (P.pairingIn Int i j, P.pairingIn Int j i) in ({(1, 4), (2, 2), (4, 1)} : Set _) := by
+      have := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
+      replace hli : P.pairingIn Int i j * P.pairingIn Int j i = 4 :=
+        (P.coxeterWeightIn_eq_four_iff_not_linearIndependent Int).mpr hli
+      aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+    simp only [mem_insert_iff, mem_singleton_iff, Prod.mk.injEq] at this
+    rcases this with hij | hij | hij
+    · rw [(P.pairingIn_one_four_iff Int i j).mp hij, two_smul, sub_add_cancel_right]
+      exact neg_root_mem P i
+    · rw [P.pairingIn_two_two_iff] at hij
+      contradiction
+    · rw [and_comm] at hij
+      simp [(P.pairingIn_one_four_iff Int j i).mp hij, two_smul]
 
 Depends on / 依赖: IsAddTorsionFree, IsReflexive, LinearIndependent, Module, Module.IsReflexive, P.algebraMap_pairingIn, P.flip.toLinearMap, P.pairing, P.pairingIn, P.reflectionPerm, P.toLinearMap, algebraMap_pairingIn, independent, linearly, of_isPerfPair, of_isTorsionFree, pairing, pairingIn, reflectionPerm, replace
 -/
@@ -580,7 +712,16 @@ lemma root_mem_submodule_iff_of_add_mem_invtSubmodule
     have aux := this j i (by rwa [add_comm]); tauto
   rintro i j ⟨k, hk⟩ hi
   rcases eq_or_ne (P.pairing i j) 0 with hij₀ | hij₀
-  · have hi
+  · have hik : P.pairing i k != 0 := by
+      rw [ne_eq]; rw [P.pairing_eq_zero_iff]; rw [← root_coroot_eq_pairing]; rw [hk]
+      simpa [P.pairing_eq_zero_iff.mp hij₀] using two_ne_zero
+suffices P.root k in q from (q.add_mem_iff_right hi).mp hk ▸ this
+    replace hq : P.root i - P.pairing i k • P.root k in q := by
+      simpa [reflection_apply_root] using hq k hi
+    rwa [q.sub_mem_iff_right hi, q.smul_mem_iff hik] at hq
+  · replace hq : P.root i - P.pairing i j • P.root j in q := by
+      simpa [reflection_apply_root] using hq j hi
+    rwa [q.sub_mem_iff_right hi, q.smul_mem_iff hij₀] at hq
 
 中文:
 引理 root_mem_submodule_iff_of_add_mem_invtSubmodule
@@ -591,7 +732,16 @@ lemma root_mem_submodule_iff_of_add_mem_invtSubmodule
     have aux := this j i (by rwa [add_comm]); tauto
   rintro i j ⟨k, hk⟩ hi
   rcases eq_or_ne (P.pairing i j) 0 with hij₀ | hij₀
-  · have hi
+  · have hik : P.pairing i k != 0 := by
+      rw [ne_eq]; rw [P.pairing_eq_zero_iff]; rw [← root_coroot_eq_pairing]; rw [hk]
+      simpa [P.pairing_eq_zero_iff.mp hij₀] using two_ne_zero
+suffices P.root k in q from (q.add_mem_iff_right hi).mp hk ▸ this
+    replace hq : P.root i - P.pairing i k • P.root k in q := by
+      simpa [reflection_apply_root] using hq k hi
+    rwa [q.sub_mem_iff_right hi, q.smul_mem_iff hik] at hq
+  · replace hq : P.root i - P.pairing i j • P.root j in q := by
+      simpa [reflection_apply_root] using hq j hi
+    rwa [q.sub_mem_iff_right hi, q.smul_mem_iff hij₀] at hq
 
 Depends on / 依赖: P.pairing, P.pairing_eq_zero_iff, P.pairing_eq_zero_iff.mp, P.root, add_comm, add_mem_iff_right, eq_or_ne, mem_invtRootSubmodule_iff, ne_eq, pairing, pairing_eq_zero_iff, q.add_mem_iff_right, root_coroot_eq_pairing, two_ne_zero
 -/
@@ -632,7 +782,8 @@ lemma apply_eq_or_aux
   have h₁ := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed i j
   have h₂ : algebraMap Int R (P.pairingIn Int j i) * B.form (α i) (α i) =
             algebraMap Int R (P.pairingIn Int i j) * B.form (α j) (α j) := by
-    simpa only [algebraMap_pairingIn] using B.pairing_mul_eq_pairing_mul_swa
+    simpa only [algebraMap_pairingIn] using B.pairing_mul_eq_pairing_mul_swap i j
+  aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 中文:
 引理 apply_eq_or_aux
@@ -641,7 +792,8 @@ lemma apply_eq_or_aux
   have h₁ := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed i j
   have h₂ : algebraMap Int R (P.pairingIn Int j i) * B.form (α i) (α i) =
             algebraMap Int R (P.pairingIn Int i j) * B.form (α j) (α j) := by
-    simpa only [algebraMap_pairingIn] using B.pairing_mul_eq_pairing_mul_swa
+    simpa only [algebraMap_pairingIn] using B.pairing_mul_eq_pairing_mul_swap i j
+  aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 Depends on / 依赖: B.form, B.pairing_mul_eq_pairing_mul_swap, P.pairingIn, P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed, algebraMap, algebraMap_pairingIn, community, faster, github, github.com, issues, leanprover, mathlib4, pairingIn, pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed, pairing_mul_eq_pairing_mul_swap, should
 -/
@@ -670,7 +822,7 @@ lemma apply_eq_or
   suffices P.pairingIn Int i j' != 0 by simp only [← h₁, B.apply_eq_or_aux i j' this]
   contrapose h₂
   replace h₂ : P.pairing i j' = 0 := by rw [← P.algebraMap_pairingIn Int, h₂, map_zero]
-  exact (B.apply_root_root_zero_iff i
+  exact (B.apply_root_root_zero_iff i j').mpr h₂
 
 中文:
 引理 apply_eq_or
@@ -680,7 +832,7 @@ lemma apply_eq_or
   suffices P.pairingIn Int i j' != 0 by simp only [← h₁, B.apply_eq_or_aux i j' this]
   contrapose h₂
   replace h₂ : P.pairing i j' = 0 := by rw [← P.algebraMap_pairingIn Int, h₂, map_zero]
-  exact (B.apply_root_root_zero_iff i
+  exact (B.apply_root_root_zero_iff i j').mpr h₂
 
 Depends on / 依赖: B.apply_eq_or_aux, B.apply_root_root_zero_iff, IsEmpty, IsFiniteMeasure, P.algebraMap_pairingIn, P.exists_form_eq_form_and_form_ne_zero, P.pairing, P.pairingIn, algebraMap_pairingIn, apply_eq_or_aux, apply_root_root_zero_iff, contrapose, eq_zero_of_isEmpty, exists_form_eq_form_and_form_ne_zero, infer_instance, isFiniteMeasureOfIsEmpty, map_zero, pairing, pairingIn, replace
 -/
@@ -710,7 +862,10 @@ lemma exists_apply_eq_or
   · obtain ⟨j, hji_ne⟩ := h
     refine ⟨i, j, fun k => ?_⟩
     by_contra! ⟨hki_ne, hkj_ne⟩
-    have hij := (B.apply_eq_or i j).resolve_left hj
+    have hij := (B.apply_eq_or i j).resolve_left hji_ne.symm
+    have hik := (B.apply_eq_or i k).resolve_left hki_ne.symm
+    have hjk := (B.apply_eq_or j k).resolve_left hkj_ne.symm
+    grind
 
 中文:
 引理 存在_apply_eq_or
@@ -723,7 +878,10 @@ lemma exists_apply_eq_or
   · obtain ⟨j, hji_ne⟩ := h
     refine ⟨i, j, fun k => ?_⟩
     by_contra! ⟨hki_ne, hkj_ne⟩
-    have hij := (B.apply_eq_or i j).resolve_left hj
+    have hij := (B.apply_eq_or i j).resolve_left hji_ne.symm
+    have hik := (B.apply_eq_or i k).resolve_left hki_ne.symm
+    have hjk := (B.apply_eq_or j k).resolve_left hkj_ne.symm
+    grind
 
 Depends on / 依赖: B.apply_eq_or, B.form, Nonempty, apply_eq_or, hji_ne, hji_ne.symm, hki_ne, hki_ne.symm, hkj_ne, hkj_ne.symm, resolve_left
 -/
@@ -791,7 +949,24 @@ lemma forall_pairing_eq_swap_or
   by_cases! h : forall i j, B.form (α i) (α i) = B.form (α j) (α j)
   · refine Or.inl fun i j => Or.inl ?_
     have := B.pairing_mul_eq_pairing_mul_swap j i
-    rwa [h i j, mul_left_inj' (B.ne_zero j)] at thi
+    rwa [h i j, mul_left_inj' (B.ne_zero j)] at this
+  obtain ⟨i, j, hij⟩ := h
+  have key := B.apply_eq_or_of_apply_ne hij
+  set li := B.form (α i) (α i)
+  set lj := B.form (α j) (α j)
+  have : (li = 2 * lj ∨ lj = 2 * li) ∨ (li = 3 * lj ∨ lj = 3 * li) := by
+    have := B.apply_eq_or i j; tauto
+  rcases this with this | this
+  · refine Or.inl fun k₁ k₂ => ?_
+    have hk := B.pairing_mul_eq_pairing_mul_swap k₁ k₂
+    rcases this with h₀ | h₀ <;> rcases key k₁ with h₁ | h₁ <;> rcases key k₂ with h₂ | h₂ <;>
+    simp only [h₁, h₂, h₀, ← mul_assoc, mul_comm, mul_eq_mul_right_iff] at hk <;>
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  · refine Or.inr fun k₁ k₂ => ?_
+    have hk := B.pairing_mul_eq_pairing_mul_swap k₁ k₂
+    rcases this with h₀ | h₀ <;> rcases key k₁ with h₁ | h₁ <;> rcases key k₂ with h₂ | h₂ <;>
+    simp only [h₁, h₂, h₀, ← mul_assoc, mul_comm, mul_eq_mul_right_iff] at hk <;>
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 中文:
 引理 对任意_pairing_eq_swap_or
@@ -802,7 +977,24 @@ lemma forall_pairing_eq_swap_or
   by_cases! h : forall i j, B.form (α i) (α i) = B.form (α j) (α j)
   · refine Or.inl fun i j => Or.inl ?_
     have := B.pairing_mul_eq_pairing_mul_swap j i
-    rwa [h i j, mul_left_inj' (B.ne_zero j)] at thi
+    rwa [h i j, mul_left_inj' (B.ne_zero j)] at this
+  obtain ⟨i, j, hij⟩ := h
+  have key := B.apply_eq_or_of_apply_ne hij
+  set li := B.form (α i) (α i)
+  set lj := B.form (α j) (α j)
+  have : (li = 2 * lj ∨ lj = 2 * li) ∨ (li = 3 * lj ∨ lj = 3 * li) := by
+    have := B.apply_eq_or i j; tauto
+  rcases this with this | this
+  · refine Or.inl fun k₁ k₂ => ?_
+    have hk := B.pairing_mul_eq_pairing_mul_swap k₁ k₂
+    rcases this with h₀ | h₀ <;> rcases key k₁ with h₁ | h₁ <;> rcases key k₂ with h₂ | h₂ <;>
+    simp only [h₁, h₂, h₀, ← mul_assoc, mul_comm, mul_eq_mul_right_iff] at hk <;>
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
+  · refine Or.inr fun k₁ k₂ => ?_
+    have hk := B.pairing_mul_eq_pairing_mul_swap k₁ k₂
+    rcases this with h₀ | h₀ <;> rcases key k₁ with h₁ | h₁ <;> rcases key k₂ with h₂ | h₂ <;>
+    simp only [h₁, h₂, h₀, ← mul_assoc, mul_comm, mul_eq_mul_right_iff] at hk <;>
+    aesop -- https://github.com/leanprover-community/mathlib4/issues/24551 (this should be faster)
 
 Depends on / 依赖: B.apply_eq_, B.apply_eq_or_of_apply_ne, B.form, B.ne_zero, B.pairing_mul_eq_pairing_mul_swap, Fintype, Fintype.ofFinite, Or.inl, P.posRootForm, apply_eq_, apply_eq_or_of_apply_ne, mul_left_inj, ne_zero, ofFinite, pairing_mul_eq_pairing_mul_swap, posRootForm, toInvariantForm
 -/

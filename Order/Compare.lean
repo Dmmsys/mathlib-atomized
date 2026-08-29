@@ -579,7 +579,8 @@ definition linearOrderOfCompares
     toMin := minOfLe,
     toMax := maxOfLe,
     toDecidableLE := H,
-    toDecidableLT := fun a b 
+    toDecidableLT := fun a b => decidable_of_iff _ (h a b).eq_lt,
+    toDecidableEq := fun a b => decidable_of_iff _ (h a b).eq_eq }
 
 中文:
 定义 linearOrderOfCompares
@@ -591,7 +592,8 @@ definition linearOrderOfCompares
     toMin := minOfLe,
     toMax := maxOfLe,
     toDecidableLE := H,
-    toDecidableLT := fun a b 
+    toDecidableLT := fun a b => decidable_of_iff _ (h a b).eq_lt,
+    toDecidableEq := fun a b => decidable_of_iff _ (h a b).eq_eq }
 
 Depends on / 依赖: DecidableLE, Preorder, decidable_of_iff, eq_eq, eq_lt, le_antisymm, le_total, maxOfLe, minOfLe, ne_gt, toDecidableEq, toDecidableLE, toDecidableLT
 -/

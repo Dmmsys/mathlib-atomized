@@ -104,7 +104,8 @@ lemma eventually_notMem_thickening_of_infEDist_pos
   exact (ENNReal.ofReal_le_ofReal hδ.le).trans ε_lt.le
 
 @[deprecated (since := "2026-01-08")]
-alias eventually_notMe
+alias eventually_notMem_thickening_of_infEdist_pos :=
+  eventually_notMem_thickening_of_infEDist_pos
 
 中文:
 引理 eventually_notMem_thickening_of_infEDist_pos
@@ -116,7 +117,8 @@ alias eventually_notMe
   exact (ENNReal.ofReal_le_ofReal hδ.le).trans ε_lt.le
 
 @[deprecated (since := "2026-01-08")]
-alias eventually_notMe
+alias eventually_notMem_thickening_of_infEdist_pos :=
+  eventually_notMem_thickening_of_infEDist_pos
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_le_ofReal, _lt.le, eventually_lt_nhds, exists_real_pos_lt_infEDist_of_notMem_closure, filter_upwards, mem_ofPred_eq, not_lt, ofReal_le_ofReal, thickening
 -/
@@ -313,7 +315,7 @@ theorem frontier_thickening_disjoint
   refine ((disjoint_singleton.2 fun h => hr.ne ?_).preimage _).mono (frontier_thickening_subset _)
     (frontier_thickening_subset _)
   apply_fun ENNReal.toReal at h
-  rwa
+  rwa [ENNReal.toReal_ofReal h₁, ENNReal.toReal_ofReal (h₁.trans hr.le)] at h
 
 中文:
 定理 frontier_thickening_disjoint
@@ -325,7 +327,7 @@ theorem frontier_thickening_disjoint
   refine ((disjoint_singleton.2 fun h => hr.ne ?_).preimage _).mono (frontier_thickening_subset _)
     (frontier_thickening_subset _)
   apply_fun ENNReal.toReal at h
-  rwa
+  rwa [ENNReal.toReal_ofReal h₁, ENNReal.toReal_ofReal (h₁.trans hr.le)] at h
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, ENNReal.toReal_ofReal, apply_fun, disjoint_singleton, frontier_thickening_subset, hr.le, hr.ne, le_total, pairwise_disjoint_on, preimage, thickening_of_nonpos, toReal, toReal_ofReal
 -/
@@ -534,7 +536,7 @@ theorem _root_.Bornology.IsBounded.thickening
   · refine (isBounded_iff_subset_closedBall x).2 ⟨δ + diam E, fun y hy => ?_⟩
     calc
       dist y x <= infDist y E + diam E := dist_le_infDist_add_diam (x := y) h hx
-      _ <= δ + diam E := by grw [(mem_thickening_iff_infDist_lt ⟨x, h
+      _ <= δ + diam E := by grw [(mem_thickening_iff_infDist_lt ⟨x, hx⟩).1 hy]
 
 中文:
 定理 _root_.有界结构.IsBounded.thickening
@@ -545,7 +547,7 @@ theorem _root_.Bornology.IsBounded.thickening
   · refine (isBounded_iff_subset_closedBall x).2 ⟨δ + diam E, fun y hy => ?_⟩
     calc
       dist y x <= infDist y E + diam E := dist_le_infDist_add_diam (x := y) h hx
-      _ <= δ + diam E := by grw [(mem_thickening_iff_infDist_lt ⟨x, h
+      _ <= δ + diam E := by grw [(mem_thickening_iff_infDist_lt ⟨x, hx⟩).1 hy]
 -/
 protected theorem _root_.Bornology.IsBounded.thickening {δ : Real} {E : Set X} (h : IsBounded E) :
     IsBounded (thickening δ E) := by
@@ -618,7 +620,8 @@ lemma eventually_notMem_cthickening_of_infEDist_pos
   exact ((ofReal_lt_ofReal_iff ε_pos).mpr hδ).trans ε_lt
 
 @[deprecated (since := "2026-01-08")]
-alias eventually_no
+alias eventually_notMem_cthickening_of_infEdist_pos :=
+  eventually_notMem_cthickening_of_infEDist_pos
 
 中文:
 引理 eventually_notMem_cthickening_of_infEDist_pos
@@ -630,7 +633,8 @@ alias eventually_no
   exact ((ofReal_lt_ofReal_iff ε_pos).mpr hδ).trans ε_lt
 
 @[deprecated (since := "2026-01-08")]
-alias eventually_no
+alias eventually_notMem_cthickening_of_infEdist_pos :=
+  eventually_notMem_cthickening_of_infEDist_pos
 
 Depends on / 依赖: cthickening, eventually_lt_nhds, exists_real_pos_lt_infEDist_of_notMem_closure, filter_upwards, mem_ofPred_eq, not_le, ofReal_lt_ofReal_iff
 -/
@@ -1331,7 +1335,13 @@ theorem ediam_cthickening_le
   rw [mem_cthickening_iff]; rw [ENNReal.ofReal_coe_nnreal] at hx hy
   have hε : (ε : Real>=0∞) < ε + δ := ENNReal.coe_lt_coe.2 (lt_add_of_pos_right _ hδ)
   replace hx := hx.trans_lt hε
-  obtain ⟨x', hx', hxx'⟩ := 
+  obtain ⟨x', hx', hxx'⟩ := infEDist_lt_iff.mp hx
+  calc
+    edist x y <= edist x x' + edist y x' := edist_triangle_right _ _ _
+    _ <= ε + δ + (infEDist y s + ediam s) :=
+      add_le_add hxx'.le (edist_le_infEDist_add_ediam hx')
+    _ <= ε + δ + (ε + ediam s) := by grw [hy]
+    _ = _ := by rw [two_mul]; ac_rfl
 
 中文:
 定理 ediam_cthickening_le
@@ -1341,7 +1351,13 @@ theorem ediam_cthickening_le
   rw [mem_cthickening_iff]; rw [ENNReal.ofReal_coe_nnreal] at hx hy
   have hε : (ε : Real>=0∞) < ε + δ := ENNReal.coe_lt_coe.2 (lt_add_of_pos_right _ hδ)
   replace hx := hx.trans_lt hε
-  obtain ⟨x', hx', hxx'⟩ := 
+  obtain ⟨x', hx', hxx'⟩ := infEDist_lt_iff.mp hx
+  calc
+    edist x y <= edist x x' + edist y x' := edist_triangle_right _ _ _
+    _ <= ε + δ + (infEDist y s + ediam s) :=
+      add_le_add hxx'.le (edist_le_infEDist_add_ediam hx')
+    _ <= ε + δ + (ε + ediam s) := by grw [hy]
+    _ = _ := by rw [two_mul]; ac_rfl
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_coe, ENNReal.le_of_forall_pos_le_add, ENNReal.ofReal_coe_nnreal, add_le_add, coe_lt_coe, ediam_le, edist_le_infEDist_add_ediam, edist_triangle_right, hx.trans_lt, infEDist, infEDist_lt_iff, infEDist_lt_iff.mp, le_of_forall_pos_le_add, lt_add_of_pos_right, mem_cthickening_iff, ofReal_coe_nnreal, replace, trans_lt
 -/
@@ -1424,7 +1440,10 @@ theorem diam_thickening_le
       (diam_cthickening_le _ hε)
   obtain rfl | hε := hε.eq_or_lt
   · simp [thickening_of_nonpos, diam_nonneg]
-  · rw [diam_eq_zero_of_unbounded (mt (IsBounded.subset · <| self_subset_thicke
+  · rw [diam_eq_zero_of_unbounded (mt (IsBounded.subset · <| self_subset_thickening hε _) hs)]
+    positivity
+
+@[simp]
 
 中文:
 定理 diam_thickening_le
@@ -1435,7 +1454,10 @@ theorem diam_thickening_le
       (diam_cthickening_le _ hε)
   obtain rfl | hε := hε.eq_or_lt
   · simp [thickening_of_nonpos, diam_nonneg]
-  · rw [diam_eq_zero_of_unbounded (mt (IsBounded.subset · <| self_subset_thicke
+  · rw [diam_eq_zero_of_unbounded (mt (IsBounded.subset · <| self_subset_thickening hε _) hs)]
+    positivity
+
+@[simp]
 
 Depends on / 依赖: IsBounded, IsBounded.subset, cthickening, diam_cthickening_le, diam_eq_zero_of_unbounded, diam_mono, diam_nonneg, eq_or_lt, hs.cthickening, self_subset_thickening, subset, thickening_of_nonpos, thickening_subset_cthickening
 -/
@@ -1591,7 +1613,14 @@ theorem _root_.Disjoint.exists_thickenings
   rw [disjoint_iff_inf_le]
   rintro z ⟨hzs, hzt⟩
   rw [mem_thickening_iff_exists_edist_lt] at hzs hzt
-  rw [← NNReal.coe_two]; rw [← NNReal.coe_div]; rw [ENNReal.ofReal_coe_nnreal] at 
+  rw [← NNReal.coe_two]; rw [← NNReal.coe_div]; rw [ENNReal.ofReal_coe_nnreal] at hzs hzt
+  obtain ⟨x, hx, hzx⟩ := hzs
+  obtain ⟨y, hy, hzy⟩ := hzt
+  refine (h x hx y hy).not_ge ?_
+  calc
+    edist x y <= edist z x + edist z y := edist_triangle_left _ _ _
+    _ <= ↑(r / 2) + ↑(r / 2) := add_le_add hzx.le hzy.le
+    _ = r := by rw [← ENNReal.coe_add, add_halves]
 
 中文:
 定理 _root_.Disjoint.存在_thickenings
@@ -1602,7 +1631,14 @@ theorem _root_.Disjoint.exists_thickenings
   rw [disjoint_iff_inf_le]
   rintro z ⟨hzs, hzt⟩
   rw [mem_thickening_iff_exists_edist_lt] at hzs hzt
-  rw [← NNReal.coe_two]; rw [← NNReal.coe_div]; rw [ENNReal.ofReal_coe_nnreal] at 
+  rw [← NNReal.coe_two]; rw [← NNReal.coe_div]; rw [ENNReal.ofReal_coe_nnreal] at hzs hzt
+  obtain ⟨x, hx, hzx⟩ := hzs
+  obtain ⟨y, hy, hzy⟩ := hzt
+  refine (h x hx y hy).not_ge ?_
+  calc
+    edist x y <= edist z x + edist z y := edist_triangle_left _ _ _
+    _ <= ↑(r / 2) + ↑(r / 2) := add_le_add hzx.le hzy.le
+    _ = r := by rw [← ENNReal.coe_add, add_halves]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_coe_nnreal, NNReal, NNReal.coe_div, NNReal.coe_pos, NNReal.coe_two, add_le_add, coe_div, coe_pos, coe_two, disjoint_iff_inf_le, edist_triangle_left, exists_pos_forall_lt_edist, half_pos, hzx.le, mem_thickening_iff_exists_edist_lt, not_ge, ofReal_coe_nnreal
 -/
@@ -1784,7 +1820,10 @@ theorem cthickening_eq_iInter_cthickening'
     simp only [mem_iInter, mem_ofPred_eq] at *
     apply ENNReal.le_of_forall_pos_le_add
     intro η η_pos _
-    rcases hs (δ + η) (lt_add_of_pos_right _ (NNRe
+    rcases hs (δ + η) (lt_add_of_pos_right _ (NNReal.coe_pos.mpr η_pos)) with ⟨ε, ⟨hsε, hε⟩⟩
+    apply ((hx ε hsε).trans (ENNReal.ofReal_le_ofReal hε.2)).trans
+    rw [ENNReal.coe_nnreal_eq η]
+    exact ENNReal.ofReal_add_le
 
 中文:
 定理 cthickening_eq_i整数er_cthickening'
@@ -1797,7 +1836,10 @@ theorem cthickening_eq_iInter_cthickening'
     simp only [mem_iInter, mem_ofPred_eq] at *
     apply ENNReal.le_of_forall_pos_le_add
     intro η η_pos _
-    rcases hs (δ + η) (lt_add_of_pos_right _ (NNRe
+    rcases hs (δ + η) (lt_add_of_pos_right _ (NNReal.coe_pos.mpr η_pos)) with ⟨ε, ⟨hsε, hε⟩⟩
+    apply ((hx ε hsε).trans (ENNReal.ofReal_le_ofReal hε.2)).trans
+    rw [ENNReal.coe_nnreal_eq η]
+    exact ENNReal.ofReal_add_le
 
 Depends on / 依赖: ENNReal, ENNReal.coe_nnreal_eq, ENNReal.le_of_forall_pos_le_add, ENNReal.ofReal_add_le, ENNReal.ofReal_le_ofReal, NNReal, NNReal.coe_pos.mpr, Subset, Subset.antisymm, antisymm, coe_nnreal_eq, coe_pos, cthickening, cthickening_mono, le_of_forall_pos_le_add, le_of_lt, lt_add_of_pos_right, mem_iInter, mem_ofPred_eq, ofReal_add_le
 -/
@@ -1855,7 +1897,7 @@ theorem cthickening_eq_iInter_thickening'
     have ss := cthickening_subset_thickening' (lt_of_le_of_lt δ_nn hε'.1) hε'.1 E
     exact ss.trans (thickening_mono hε'.2 E)
   · rw [cthickening_eq_iInter_cthickening' s hsδ hs E]
-    exact iInter₂_mon
+    exact iInter₂_mono fun ε _ => thickening_subset_cthickening ε E
 
 中文:
 定理 cthickening_eq_i整数er_thickening'
@@ -1866,7 +1908,7 @@ theorem cthickening_eq_iInter_thickening'
     have ss := cthickening_subset_thickening' (lt_of_le_of_lt δ_nn hε'.1) hε'.1 E
     exact ss.trans (thickening_mono hε'.2 E)
   · rw [cthickening_eq_iInter_cthickening' s hsδ hs E]
-    exact iInter₂_mon
+    exact iInter₂_mono fun ε _ => thickening_subset_cthickening ε E
 
 Depends on / 依赖: antisymm, cthickening_eq_iInter_cthickening, cthickening_subset_thickening, lt_of_le_of_lt, ss.trans, thickening_mono, thickening_subset_cthickening
 -/
@@ -1944,7 +1986,9 @@ theorem closure_eq_iInter_cthickening'
   obtain ⟨δ, hδs, δ_nonpos⟩ := not_subset.mp hs₀
   rw [Set.mem_Ioi]; rw [not_lt] at δ_nonpos
   apply Subset.antisymm
-  · exact subset_iInter₂ fun ε _ => closure_subset_cthickening ε
+  · exact subset_iInter₂ fun ε _ => closure_subset_cthickening ε E
+  · rw [← cthickening_of_nonpos δ_nonpos E]
+    exact biInter_subset_of_mem hδs
 
 中文:
 定理 closure_eq_i整数er_cthickening'
@@ -1956,7 +2000,9 @@ theorem closure_eq_iInter_cthickening'
   obtain ⟨δ, hδs, δ_nonpos⟩ := not_subset.mp hs₀
   rw [Set.mem_Ioi]; rw [not_lt] at δ_nonpos
   apply Subset.antisymm
-  · exact subset_iInter₂ fun ε _ => closure_subset_cthickening ε
+  · exact subset_iInter₂ fun ε _ => closure_subset_cthickening ε E
+  · rw [← cthickening_of_nonpos δ_nonpos E]
+    exact biInter_subset_of_mem hδs
 
 Depends on / 依赖: Set.mem_Ioi, Subset, Subset.antisymm, antisymm, biInter_subset_of_mem, closure_subset_cthickening, cthickening_eq_iInter_cthickening, cthickening_of_nonpos, cthickening_zero, mem_Ioi, not_lt, not_subset, not_subset.mp, subseteq
 -/
@@ -2125,7 +2171,12 @@ theorem _root_.IsCompact.cthickening_eq_biUnion_closedBall
   · simp only [cthickening_empty, biUnion_empty]
   refine Subset.antisymm (fun x hx => ?_)
     (iUnion₂_subset fun x hx => closedBall_subset_cthickening hx _)
-  obtain ⟨y, yE, hy⟩ : exists y in E, infEDist x E = edist x y := hE.exists_infEDist_eq_e
+  obtain ⟨y, yE, hy⟩ : exists y in E, infEDist x E = edist x y := hE.exists_infEDist_eq_edist hne _
+  have D1 : edist x y <= ENNReal.ofReal δ := (le_of_eq hy.symm).trans hx
+  have D2 : dist x y <= δ := by
+    rw [edist_dist] at D1
+    exact (ENNReal.ofReal_le_ofReal_iff hδ).1 D1
+  exact mem_biUnion yE D2
 
 中文:
 定理 _root_.是紧集.cthickening_eq_biUnion_closedBall
@@ -2135,7 +2186,12 @@ theorem _root_.IsCompact.cthickening_eq_biUnion_closedBall
   · simp only [cthickening_empty, biUnion_empty]
   refine Subset.antisymm (fun x hx => ?_)
     (iUnion₂_subset fun x hx => closedBall_subset_cthickening hx _)
-  obtain ⟨y, yE, hy⟩ : exists y in E, infEDist x E = edist x y := hE.exists_infEDist_eq_e
+  obtain ⟨y, yE, hy⟩ : exists y in E, infEDist x E = edist x y := hE.exists_infEDist_eq_edist hne _
+  have D1 : edist x y <= ENNReal.ofReal δ := (le_of_eq hy.symm).trans hx
+  have D2 : dist x y <= δ := by
+    rw [edist_dist] at D1
+    exact (ENNReal.ofReal_le_ofReal_iff hδ).1 D1
+  exact mem_biUnion yE D2
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_le_ofReal_iff, Subset, Subset.antisymm, antisymm, biUnion_empty, closedBall_subset_cthickening, cthickening_empty, edist_dist, eq_empty_or_nonempty, exists_infEDist_eq_edist, hE.exists_infEDist_eq_edist, hy.symm, infEDist, le_of_eq, mem_biUnion, ofReal, ofReal_le_ofReal_iff
 -/
@@ -2165,7 +2221,17 @@ theorem cthickening_eq_biUnion_closedBall
   rw [← cthickening_closure]
   refine Subset.antisymm (fun x hx => ?_)
     (iUnion₂_subset fun x hx => closedBall_subset_cthickening hx _)
-  obtain ⟨y, yE, hy⟩ : exists y in closure E,
+  obtain ⟨y, yE, hy⟩ : exists y in closure E, infDist x (closure E) = dist x y :=
+    isClosed_closure.exists_infDist_eq_dist (closure_nonempty_iff.mpr hne) x
+  replace hy : dist x y <= δ :=
+    (ENNReal.ofReal_le_ofReal_iff hδ).mp
+      (((congr_arg ENNReal.ofReal hy.symm).le.trans ENNReal.ofReal_toReal_le).trans hx)
+  exact mem_biUnion yE hy
+
+nonrec theorem _root_.IsClosed.cthickening_eq_biUnion_closedBall {α : Type*} [PseudoMetricSpace α]
+    [ProperSpace α] {E : Set α} (hE : IsClosed E) (hδ : 0 <= δ) :
+    cthickening δ E = ⋃ x in E, closedBall x δ := by
+  rw [cthickening_eq_biUnion_closedBall E hδ]; rw [hE.closure_eq]
 
 中文:
 定理 cthickening_eq_biUnion_closedBall
@@ -2176,7 +2242,17 @@ theorem cthickening_eq_biUnion_closedBall
   rw [← cthickening_closure]
   refine Subset.antisymm (fun x hx => ?_)
     (iUnion₂_subset fun x hx => closedBall_subset_cthickening hx _)
-  obtain ⟨y, yE, hy⟩ : exists y in closure E,
+  obtain ⟨y, yE, hy⟩ : exists y in closure E, infDist x (closure E) = dist x y :=
+    isClosed_closure.exists_infDist_eq_dist (closure_nonempty_iff.mpr hne) x
+  replace hy : dist x y <= δ :=
+    (ENNReal.ofReal_le_ofReal_iff hδ).mp
+      (((congr_arg ENNReal.ofReal hy.symm).le.trans ENNReal.ofReal_toReal_le).trans hx)
+  exact mem_biUnion yE hy
+
+nonrec theorem _root_.IsClosed.cthickening_eq_biUnion_closedBall {α : Type*} [PseudoMetricSpace α]
+    [ProperSpace α] {E : Set α} (hE : IsClosed E) (hδ : 0 <= δ) :
+    cthickening δ E = ⋃ x in E, closedBall x δ := by
+  rw [cthickening_eq_biUnion_closedBall E hδ]; rw [hE.closure_eq]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_le_ofReal_iff, Subset, Subset.antisymm, antisymm, biUnion_empty, closedBall_subset_cthickening, closure, closure_empty, closure_nonempty_iff, closure_nonempty_iff.mpr, congr_arg, cthickening_closure, cthickening_empty, eq_empty_or_nonempty, exists_infDist_eq_dist, hy.symm, infDist, isClosed_closure
 -/
@@ -2210,7 +2286,10 @@ theorem infEDist_le_infEDist_cthickening_add
   obtain ⟨y, hy, hxy⟩ := h
   exact infEDist_le_edist_add_infEDist.trans_lt
     ((ENNReal.add_lt_add_of_lt_of_le (hy.trans_lt ENNReal.ofReal_lt_top).ne hxy hy).trans_eq
-      (tsub_add
+      (tsub_add_cancel_of_le <| le_self_add.trans (lt_tsub_iff_left.1 hxy).le))
+
+@[deprecated (since := "2026-01-08")]
+alias infEdist_le_infEdist_cthickening_add := infEDist_le_infEDist_cthickening_add
 
 中文:
 定理 infEDist_le_infEDist_cthickening_add
@@ -2220,7 +2299,10 @@ theorem infEDist_le_infEDist_cthickening_add
   obtain ⟨y, hy, hxy⟩ := h
   exact infEDist_le_edist_add_infEDist.trans_lt
     ((ENNReal.add_lt_add_of_lt_of_le (hy.trans_lt ENNReal.ofReal_lt_top).ne hxy hy).trans_eq
-      (tsub_add
+      (tsub_add_cancel_of_le <| le_self_add.trans (lt_tsub_iff_left.1 hxy).le))
+
+@[deprecated (since := "2026-01-08")]
+alias infEdist_le_infEdist_cthickening_add := infEDist_le_infEDist_cthickening_add
 
 Depends on / 依赖: ENNReal, ENNReal.add_lt_add_of_lt_of_le, ENNReal.ofReal_lt_top, add_lt_add_of_lt_of_le, hy.trans_lt, infEDist_le_edist_add_infEDist, infEDist_le_edist_add_infEDist.trans_lt, infEDist_lt_iff, le_of_forall_gt, le_self_add, le_self_add.trans, lt_tsub_iff_left, lt_tsub_iff_right, mem_cthickening_iff, ofReal_lt_top, simp_rw, trans_eq, trans_lt, tsub_add_cancel_of_le
 -/
@@ -2277,7 +2359,8 @@ theorem thickening_thickening_subset
   · simp only [thickening_of_nonpos hδ, thickening_empty, empty_subset]
   intro x
   simp_rw [mem_thickening_iff_exists_edist_lt, ENNReal.ofReal_add hε hδ]
-  exact fun ⟨y, ⟨z, hz
+  exact fun ⟨y, ⟨z, hz, hy⟩, hx⟩ =>
+⟨z, hz, (edist_triangle _ _ _).trans_lt ENNReal.add_lt_add hx hy⟩
 
 中文:
 定理 thickening_thickening_subset
@@ -2289,7 +2372,8 @@ theorem thickening_thickening_subset
   · simp only [thickening_of_nonpos hδ, thickening_empty, empty_subset]
   intro x
   simp_rw [mem_thickening_iff_exists_edist_lt, ENNReal.ofReal_add hε hδ]
-  exact fun ⟨y, ⟨z, hz
+  exact fun ⟨y, ⟨z, hz, hy⟩, hx⟩ =>
+⟨z, hz, (edist_triangle _ _ _).trans_lt ENNReal.add_lt_add hx hy⟩
 
 Depends on / 依赖: ENNReal, ENNReal.add_lt_add, ENNReal.ofReal_add, add_lt_add, edist_triangle, empty_subset, le_total, mem_thickening_iff_exists_edist_lt, ofReal_add, simp_rw, thickening_empty, thickening_of_nonpos, trans_lt
 -/
@@ -2320,7 +2404,7 @@ theorem thickening_cthickening_subset
     ENNReal.ofReal_add hε hδ]
   rintro ⟨y, hy, hxy⟩
   exact infEDist_le_edist_add_infEDist.trans_lt
-    (ENNReal.
+    (ENNReal.add_lt_add_of_lt_of_le (hy.trans_lt ENNReal.ofReal_lt_top).ne hxy hy)
 
 中文:
 定理 thickening_cthickening_subset
@@ -2333,7 +2417,7 @@ theorem thickening_cthickening_subset
     ENNReal.ofReal_add hε hδ]
   rintro ⟨y, hy, hxy⟩
   exact infEDist_le_edist_add_infEDist.trans_lt
-    (ENNReal.
+    (ENNReal.add_lt_add_of_lt_of_le (hy.trans_lt ENNReal.ofReal_lt_top).ne hxy hy)
 
 Depends on / 依赖: ENNReal, ENNReal.add_lt_add_of_lt_of_le, ENNReal.ofReal_add, ENNReal.ofReal_lt_top, add_lt_add_of_lt_of_le, empty_subset, hy.trans_lt, infEDist_le_edist_add_infEDist, infEDist_le_edist_add_infEDist.trans_lt, infEDist_lt_iff, le_total, mem_cthickening_iff, mem_thickening_iff_exists_edist_lt, ofReal_add, ofReal_lt_top, simp_rw, thickening_of_nonpos, trans_lt
 -/
@@ -2584,7 +2668,29 @@ theorem IsCompact.exists_thickening_image_subset
   apply hK.induction_on (p := fun K => exists ε > 0, exists V in 𝓝ˢ K, thickening ε (f '' V) subseteq U)
   · use 1, by positivity, ∅, by simp, by simp
   · exact fun s t hst ⟨ε, hε, V, hV, hthickening⟩ => ⟨ε, hε, V, nhdsSet_mono hst hV, hthickening⟩
-  · rintro s t ⟨ε₁, hε₁, V₁, hV₁, hV₁thickening⟩
+  · rintro s t ⟨ε₁, hε₁, V₁, hV₁, hV₁thickening⟩ ⟨ε₂, hε₂, V₂, hV₂, hV₂thickening⟩
+    refine ⟨min ε₁ ε₂, by positivity, V₁ union V₂, union_mem_nhdsSet hV₁ hV₂, ?_⟩
+    rw [image_union]; rw [thickening_union]
+    calc thickening (ε₁ ⊓ ε₂) (f '' V₁) union thickening (ε₁ ⊓ ε₂) (f '' V₂)
+      _ subseteq thickening ε₁ (f '' V₁) union thickening ε₂ (f '' V₂) := by gcongr <;> norm_num
+      _ subseteq U union U := by gcongr
+      _ = U := union_self _
+  · intro x hx
+    have : {f x} subseteq U := by rw [singleton_subset_iff]; exact hKU hx
+    obtain ⟨δ, hδ, hthick⟩ := (isCompact_singleton (x := f x)).exists_thickening_subset_open ho this
+    let V := f ⁻¹' (thickening (δ / 2) {f x})
+    have : V in 𝓝 x := by
+      apply hf x hx
+      apply isOpen_thickening.mem_nhds
+      exact (self_subset_thickening (by positivity) _) rfl
+    refine ⟨K inter (interior V), inter_mem_nhdsWithin K (interior_mem_nhds.mpr this),
+      δ / 2, by positivity, V, by rw [← subset_interior_iff_mem_nhdsSet]; simp, ?_⟩
+    calc thickening (δ / 2) (f '' V)
+      _ subseteq thickening (δ / 2) (thickening (δ / 2) {f x}) :=
+        thickening_subset_of_subset _ (image_preimage_subset f _)
+      _ subseteq thickening ((δ / 2) + (δ / 2)) ({f x}) :=
+        thickening_thickening_subset (δ / 2) (δ / 2) {f x}
+      _ subseteq U := by simp [hthick]
 
 中文:
 定理 是紧集.存在_thickening_image_subset
@@ -2592,7 +2698,29 @@ theorem IsCompact.exists_thickening_image_subset
   apply hK.induction_on (p := fun K => exists ε > 0, exists V in 𝓝ˢ K, thickening ε (f '' V) subseteq U)
   · use 1, by positivity, ∅, by simp, by simp
   · exact fun s t hst ⟨ε, hε, V, hV, hthickening⟩ => ⟨ε, hε, V, nhdsSet_mono hst hV, hthickening⟩
-  · rintro s t ⟨ε₁, hε₁, V₁, hV₁, hV₁thickening⟩
+  · rintro s t ⟨ε₁, hε₁, V₁, hV₁, hV₁thickening⟩ ⟨ε₂, hε₂, V₂, hV₂, hV₂thickening⟩
+    refine ⟨min ε₁ ε₂, by positivity, V₁ union V₂, union_mem_nhdsSet hV₁ hV₂, ?_⟩
+    rw [image_union]; rw [thickening_union]
+    calc thickening (ε₁ ⊓ ε₂) (f '' V₁) union thickening (ε₁ ⊓ ε₂) (f '' V₂)
+      _ subseteq thickening ε₁ (f '' V₁) union thickening ε₂ (f '' V₂) := by gcongr <;> norm_num
+      _ subseteq U union U := by gcongr
+      _ = U := union_self _
+  · intro x hx
+    have : {f x} subseteq U := by rw [singleton_subset_iff]; exact hKU hx
+    obtain ⟨δ, hδ, hthick⟩ := (isCompact_singleton (x := f x)).exists_thickening_subset_open ho this
+    let V := f ⁻¹' (thickening (δ / 2) {f x})
+    have : V in 𝓝 x := by
+      apply hf x hx
+      apply isOpen_thickening.mem_nhds
+      exact (self_subset_thickening (by positivity) _) rfl
+    refine ⟨K inter (interior V), inter_mem_nhdsWithin K (interior_mem_nhds.mpr this),
+      δ / 2, by positivity, V, by rw [← subset_interior_iff_mem_nhdsSet]; simp, ?_⟩
+    calc thickening (δ / 2) (f '' V)
+      _ subseteq thickening (δ / 2) (thickening (δ / 2) {f x}) :=
+        thickening_subset_of_subset _ (image_preimage_subset f _)
+      _ subseteq thickening ((δ / 2) + (δ / 2)) ({f x}) :=
+        thickening_thickening_subset (δ / 2) (δ / 2) {f x}
+      _ subseteq U := by simp [hthick]
 
 Depends on / 依赖: hK.induction_on, hthickening, image_union, induction_on, nhdsSet_mono, subseteq, thickening, thickening_union, union_mem_nhdsSet
 -/

@@ -103,7 +103,7 @@ theorem tendsto_order_genFun_term_atTop_nhds_top
   nontriviality R using Subsingleton.eq_zero (α := R⟦X⟧)
   rw [order_X_pow]
   norm_cast
-  gr
+  grind
 
 中文:
 定理 tendsto_order_genFun_term_atTop_nhds_top
@@ -116,7 +116,7 @@ theorem tendsto_order_genFun_term_atTop_nhds_top
   nontriviality R using Subsingleton.eq_zero (α := R⟦X⟧)
   rw [order_X_pow]
   norm_cast
-  gr
+  grind
 
 Depends on / 依赖: ENat.tendsto_nhds_top_iff_natCast_lt.mpr, Filter, Filter.eventually_atTop.mpr, PowerSeries, PowerSeries.smul_eq_C_mul, Subsingleton, Subsingleton.eq_zero, eq_zero, eventually_atTop, le_order_mul, lt_add_of_nonneg_of_lt, nontriviality, order_X_pow, smul_eq_C_mul, tendsto_nhds_top_iff_natCast_lt
 -/
@@ -197,7 +197,18 @@ theorem aux_dvd_of_coeff_ne_zero
     have hx0 : x != 0 := fun h => hs0 (h ▸ hx)
     rw [map_add]; rw [(summable_genFun_term' f hx0).map_tsum _ (WithPiTopology.continuous_coeff _ _)]
     rw [show (0 : R) = 0 + ∑' (i : Nat)]; rw [0 by simp]
-    congrm (?_ + ∑' (
+    congrm (?_ + ∑' (i : Nat), ?_)
+    · suffices g x != 0 by simp [this]
+      contrapose hprod
+      simp [hprod]
+    · rw [map_smul, coeff_X_pow]
+      apply smul_eq_zero_of_right
+      suffices g x != x * (i + 1) by simp [this]
+      contrapose hprod
+      simp [hprod]
+  · suffices g x = 0 by simp [this]
+    contrapose! hx
+exact mem_of_subset (mem_finsuppAntidiag.mp hg).2 by simpa using hx
 
 中文:
 定理 aux_dvd_of_coeff_ne_zero
@@ -209,7 +220,18 @@ theorem aux_dvd_of_coeff_ne_zero
     have hx0 : x != 0 := fun h => hs0 (h ▸ hx)
     rw [map_add]; rw [(summable_genFun_term' f hx0).map_tsum _ (WithPiTopology.continuous_coeff _ _)]
     rw [show (0 : R) = 0 + ∑' (i : Nat)]; rw [0 by simp]
-    congrm (?_ + ∑' (
+    congrm (?_ + ∑' (i : Nat), ?_)
+    · suffices g x != 0 by simp [this]
+      contrapose hprod
+      simp [hprod]
+    · rw [map_smul, coeff_X_pow]
+      apply smul_eq_zero_of_right
+      suffices g x != x * (i + 1) by simp [this]
+      contrapose hprod
+      simp [hprod]
+  · suffices g x = 0 by simp [this]
+    contrapose! hx
+exact mem_of_subset (mem_finsuppAntidiag.mp hg).2 by simpa using hx
 -/
 private theorem aux_dvd_of_coeff_ne_zero {f : Nat -> Nat -> R} {d : Nat} {s : Finset Nat} (hs0 : 0 ∉ s)
     {g : Nat ->₀ Nat} (hg : g in s.finsuppAntidiag d)
@@ -247,7 +269,21 @@ theorem aux_prod_coeff_eq_zero_of_notMem_range
   contrapose! hg' with hprod
   rw [Set.mem_range]
   have hgne0 (i : Nat) : g i != 0 ↔ i != 0 ∧ i <= g i := by
-    refine ⟨fun h => ⟨?_,
+    refine ⟨fun h => ⟨?_, ?_⟩, by grind⟩
+    · contrapose hs0 with rfl
+      exact mem_of_subset (mem_finsuppAntidiag.mp hg).2 (by simpa using h)
+· exact Nat.le_of_dvd (Nat.pos_of_ne_zero h) aux_dvd_of_coeff_ne_zero hs0 hg hprod _
+  refine ⟨Nat.Partition.mk (Finsupp.mk g.support (fun i => g i / i) ?_).toMultiset ?_ ?_, ?_⟩
+  · simpa using hgne0
+  · suffices forall i, g i != 0 -> i != 0 by simpa [Nat.pos_iff_ne_zero]
+    exact fun i h => ((hgne0 i).mp h).1
+  · obtain ⟨h1, h2⟩ := mem_finsuppAntidiag.mp hg
+    refine Eq.trans ?_ h1
+    suffices ∑ x in g.support, g x / x * x = ∑ x in s, g x by simpa [Finsupp.sum]
+    apply sum_subset_zero_on_sdiff h2 (by simp)
+exact fun x hx => Nat.div_mul_cancel aux_dvd_of_coeff_ne_zero hs0 hg hprod x
+  · ext x
+simpa [toFinsuppAntidiag] using Nat.div_mul_cancel aux_dvd_of_coeff_ne_zero hs0 hg hprod x
 
 中文:
 定理 aux_prod_coeff_eq_zero_of_notMem_range
@@ -259,7 +295,21 @@ theorem aux_prod_coeff_eq_zero_of_notMem_range
   contrapose! hg' with hprod
   rw [Set.mem_range]
   have hgne0 (i : Nat) : g i != 0 ↔ i != 0 ∧ i <= g i := by
-    refine ⟨fun h => ⟨?_,
+    refine ⟨fun h => ⟨?_, ?_⟩, by grind⟩
+    · contrapose hs0 with rfl
+      exact mem_of_subset (mem_finsuppAntidiag.mp hg).2 (by simpa using h)
+· exact Nat.le_of_dvd (Nat.pos_of_ne_zero h) aux_dvd_of_coeff_ne_zero hs0 hg hprod _
+  refine ⟨Nat.Partition.mk (Finsupp.mk g.support (fun i => g i / i) ?_).toMultiset ?_ ?_, ?_⟩
+  · simpa using hgne0
+  · suffices forall i, g i != 0 -> i != 0 by simpa [Nat.pos_iff_ne_zero]
+    exact fun i h => ((hgne0 i).mp h).1
+  · obtain ⟨h1, h2⟩ := mem_finsuppAntidiag.mp hg
+    refine Eq.trans ?_ h1
+    suffices ∑ x in g.support, g x / x * x = ∑ x in s, g x by simpa [Finsupp.sum]
+    apply sum_subset_zero_on_sdiff h2 (by simp)
+exact fun x hx => Nat.div_mul_cancel aux_dvd_of_coeff_ne_zero hs0 hg hprod x
+  · ext x
+simpa [toFinsuppAntidiag] using Nat.div_mul_cancel aux_dvd_of_coeff_ne_zero hs0 hg hprod x
 -/
 private theorem aux_prod_coeff_eq_zero_of_notMem_range (f : Nat -> Nat -> R) {d : Nat} {s : Finset Nat}
     (hs0 : 0 ∉ s) {g : Nat ->₀ Nat} (hg : g in s.finsuppAntidiag d)
@@ -301,7 +351,22 @@ theorem aux_prod_f_eq_prod_coeff
     rw [mem_sdiff]; rw [Multiset.mem_toFinset] at hx
     have hx0 : x != 0 := fun h => hs0 (h ▸ hx.1)
     have hsum := (summable_genFun_term' f hx0).map_tsum _
-
+      (WithPiTopology.continuous_constantCoeff R)
+    simp [toFinsuppAntidiag, hsum, hx.2, hx0]
+  · intro i hi
+    rw [Multiset.mem_toFinset] at hi
+    have hi0 : i != 0 := (p.parts_pos hi).ne.symm
+    rw [map_add]; rw [(summable_genFun_term' f hi0).map_tsum _ (WithPiTopology.continuous_coeff _ _)]
+    suffices f i (Multiset.count i p.parts) =
+        ∑' j, if Multiset.count i p.parts * i = i * (j + 1) then f i (j + 1) else 0 by
+      simpa [toFinsuppAntidiag, hi, hi0, coeff_X_pow]
+    rw [tsum_eq_single (Multiset.count i p.parts - 1) ?_]
+    · rw [mul_comm]
+      simp [Nat.sub_add_cancel (Multiset.one_le_count_iff_mem.mpr hi)]
+    intro b hb
+    suffices Multiset.count i p.parts * i != i * (b + 1) by simp [this]
+    rw [mul_comm i]; rw [(mul_left_inj' (Nat.ne_zero_of_lt (p.parts_pos hi))).ne]
+    grind
 
 中文:
 定理 aux_prod_f_eq_prod_coeff
@@ -314,7 +379,22 @@ theorem aux_prod_f_eq_prod_coeff
     rw [mem_sdiff]; rw [Multiset.mem_toFinset] at hx
     have hx0 : x != 0 := fun h => hs0 (h ▸ hx.1)
     have hsum := (summable_genFun_term' f hx0).map_tsum _
-
+      (WithPiTopology.continuous_constantCoeff R)
+    simp [toFinsuppAntidiag, hsum, hx.2, hx0]
+  · intro i hi
+    rw [Multiset.mem_toFinset] at hi
+    have hi0 : i != 0 := (p.parts_pos hi).ne.symm
+    rw [map_add]; rw [(summable_genFun_term' f hi0).map_tsum _ (WithPiTopology.continuous_coeff _ _)]
+    suffices f i (Multiset.count i p.parts) =
+        ∑' j, if Multiset.count i p.parts * i = i * (j + 1) then f i (j + 1) else 0 by
+      simpa [toFinsuppAntidiag, hi, hi0, coeff_X_pow]
+    rw [tsum_eq_single (Multiset.count i p.parts - 1) ?_]
+    · rw [mul_comm]
+      simp [Nat.sub_add_cancel (Multiset.one_le_count_iff_mem.mpr hi)]
+    intro b hb
+    suffices Multiset.count i p.parts * i != i * (b + 1) by simp [this]
+    rw [mul_comm i]; rw [(mul_left_inj' (Nat.ne_zero_of_lt (p.parts_pos hi))).ne]
+    grind
 -/
 private theorem aux_prod_f_eq_prod_coeff (f : Nat -> Nat -> R) {n : Nat} (p : Partition n) {s : Finset Nat}
     (hs : Icc 1 n subseteq s) (hs0 : 0 ∉ s) :
@@ -354,7 +434,19 @@ theorem hasProd_genFun
   rw [HasProd]; rw [WithPiTopology.tendsto_iff_coeff_tendsto]
   refine fun d => tendsto_atTop_of_eventually_const (fun s (hs : s >= range d) => ?_)
   have : ∏ i in s, ((1 : R⟦X⟧) + ∑' j, f (i + 1) (j + 1) • X ^ ((i + 1) * (j + 1)))
-      = ∏ i in s.map (addRightEmbedding 1), (1 + ∑' j, f i (j + 1
+      = ∏ i in s.map (addRightEmbedding 1), (1 + ∑' j, f i (j + 1) • X ^ (i * (j + 1))) := by simp
+  rw [this]
+  have hs : Icc 1 d subseteq s.map (addRightEmbedding 1) := by
+    intro i
+    suffices 1 <= i -> i <= d -> exists a in s, a + 1 = i by simpa
+    intro h1 h2
+    refine ⟨i - 1, mem_of_subset hs ?_, ?_⟩ <;> grind
+  rw [coeff_genFun]; rw [coeff_prod]
+  refine (sum_of_injOn toFinsuppAntidiag (toFinsuppAntidiag_injective d).injOn ?_ ?_ ?_).symm
+  · intro p _
+    exact mem_of_subset (finsuppAntidiag_mono hs _) p.toFinsuppAntidiag_mem_finsuppAntidiag
+  · exact fun g hg hg' => aux_prod_coeff_eq_zero_of_notMem_range f (by simp) hg (by simpa using hg')
+  · exact fun p _ => aux_prod_f_eq_prod_coeff f p hs (by simp)
 
 中文:
 定理 hasProd_genFun
@@ -363,7 +455,19 @@ theorem hasProd_genFun
   rw [HasProd]; rw [WithPiTopology.tendsto_iff_coeff_tendsto]
   refine fun d => tendsto_atTop_of_eventually_const (fun s (hs : s >= range d) => ?_)
   have : ∏ i in s, ((1 : R⟦X⟧) + ∑' j, f (i + 1) (j + 1) • X ^ ((i + 1) * (j + 1)))
-      = ∏ i in s.map (addRightEmbedding 1), (1 + ∑' j, f i (j + 1
+      = ∏ i in s.map (addRightEmbedding 1), (1 + ∑' j, f i (j + 1) • X ^ (i * (j + 1))) := by simp
+  rw [this]
+  have hs : Icc 1 d subseteq s.map (addRightEmbedding 1) := by
+    intro i
+    suffices 1 <= i -> i <= d -> exists a in s, a + 1 = i by simpa
+    intro h1 h2
+    refine ⟨i - 1, mem_of_subset hs ?_, ?_⟩ <;> grind
+  rw [coeff_genFun]; rw [coeff_prod]
+  refine (sum_of_injOn toFinsuppAntidiag (toFinsuppAntidiag_injective d).injOn ?_ ?_ ?_).symm
+  · intro p _
+    exact mem_of_subset (finsuppAntidiag_mono hs _) p.toFinsuppAntidiag_mem_finsuppAntidiag
+  · exact fun g hg hg' => aux_prod_coeff_eq_zero_of_notMem_range f (by simp) hg (by simpa using hg')
+  · exact fun p _ => aux_prod_f_eq_prod_coeff f p hs (by simp)
 
 Depends on / 依赖: HasProd, WithPiTopology, WithPiTopology.tendsto_iff_coeff_tendsto, addRightEmbedding, mem_of_su, s.map, subseteq, tendsto_atTop_of_eventually_const, tendsto_iff_coeff_tendsto
 -/

@@ -63,7 +63,15 @@ theorem mapClusterPt_self_zpow_atTop_pow
     exists_clusterPt_of_compactSpace _
   rw [← mapClusterPt_atTop_zpow_iff_pow]
   have H : MapClusterPt (x ^ m) (atTop.curry atTop) ↿(fun a b => x ^ (m + b - a)) := by
-    have : ContinuousAt (fun yz => x ^ m * yz.2 / yz.1) (
+    have : ContinuousAt (fun yz => x ^ m * yz.2 / yz.1) (y, y) := by fun_prop
+    simpa only [comp_def, ← zpow_sub, ← zpow_add, div_eq_mul_inv, Prod.map, mul_inv_cancel_right]
+      using! (hy.curry_prodMap hy).continuousAt_comp this
+  suffices Tendsto ↿(fun a b => m + b - a) (atTop.curry atTop) atTop from H.of_comp this
+refine Tendsto.curry .of_forall fun a => ?_
+  simp only [sub_eq_add_neg] -- TODO: add `Tendsto.atTop_sub_const` etc
+  exact tendsto_atTop_add_const_right _ _ (tendsto_atTop_add_const_left atTop m tendsto_id)
+
+@[to_additive]
 
 中文:
 定理 mapClusterPt_self_zpow_atTop_pow
@@ -73,7 +81,15 @@ theorem mapClusterPt_self_zpow_atTop_pow
     exists_clusterPt_of_compactSpace _
   rw [← mapClusterPt_atTop_zpow_iff_pow]
   have H : MapClusterPt (x ^ m) (atTop.curry atTop) ↿(fun a b => x ^ (m + b - a)) := by
-    have : ContinuousAt (fun yz => x ^ m * yz.2 / yz.1) (
+    have : ContinuousAt (fun yz => x ^ m * yz.2 / yz.1) (y, y) := by fun_prop
+    simpa only [comp_def, ← zpow_sub, ← zpow_add, div_eq_mul_inv, Prod.map, mul_inv_cancel_right]
+      using! (hy.curry_prodMap hy).continuousAt_comp this
+  suffices Tendsto ↿(fun a b => m + b - a) (atTop.curry atTop) atTop from H.of_comp this
+refine Tendsto.curry .of_forall fun a => ?_
+  simp only [sub_eq_add_neg] -- TODO: add `Tendsto.atTop_sub_const` etc
+  exact tendsto_atTop_add_const_right _ _ (tendsto_atTop_add_const_left atTop m tendsto_id)
+
+@[to_additive]
 
 Depends on / 依赖: ContinuousAt, MapClusterPt, Prod.map, Tendsto, atTop.curry, comp_def, continuousAt_comp, curry_prodMap, div_eq_mul_inv, exists_clusterPt_of_compactSpace, fun_prop, hy.curry_prodMap, mapClusterPt_atTop_zpow_iff_pow, mul_inv_cancel_right, zpow_add, zpow_sub
 -/
@@ -159,7 +175,13 @@ theorem mapClusterPt_atTop_pow_tfae
     exact ⟨n, zpow_natCast _ _⟩
   tfae_have 4 -> 1 := by
     refine fun h => closure_minimal ?_ isClosed_setOfPred_clusterPt h
-    exact range_subset_i
+    exact range_subset_iff.2 (mapClusterPt_self_zpow_atTop_pow _)
+  tfae_have 1 -> 3 := by
+    rw [mem_closure_iff_clusterPt]
+    exact (ClusterPt.mono · (le_principal_iff.2 range_mem_map))
+  tfae_finish
+
+@[to_additive]
 
 中文:
 定理 mapClusterPt_atTop_pow_tfae
@@ -171,7 +193,13 @@ theorem mapClusterPt_atTop_pow_tfae
     exact ⟨n, zpow_natCast _ _⟩
   tfae_have 4 -> 1 := by
     refine fun h => closure_minimal ?_ isClosed_setOfPred_clusterPt h
-    exact range_subset_i
+    exact range_subset_iff.2 (mapClusterPt_self_zpow_atTop_pow _)
+  tfae_have 1 -> 3 := by
+    rw [mem_closure_iff_clusterPt]
+    exact (ClusterPt.mono · (le_principal_iff.2 range_mem_map))
+  tfae_finish
+
+@[to_additive]
 
 Depends on / 依赖: ClusterPt, ClusterPt.mono, closure_minimal, closure_mono, isClosed_setOfPred_clusterPt, le_principal_iff, mapClusterPt_atTop_zpow_iff_pow, mapClusterPt_self_zpow_atTop_pow, mem_closure_iff_clusterPt, range_mem_map, range_subset_iff, tfae_finish, tfae_have, zpow_natCast
 -/
@@ -311,7 +339,11 @@ theorem topologicalClosure_subgroupClosure_toSubmonoid
   refine Submonoid.topologicalClosure_minimal _ ?_ isClosed_closure
   rw [Subgroup.closure_toSubmonoid]; rw [Submonoid.closure_le]
   refine union_subset (Submonoid.subset_closure.trans subset_closure) fun x hx => ?_
-  ref
+  refine closure_mono (Submonoid.powers_le.2 (Submonoid.subset_closure <| Set.mem_inv.1 hx)) ?_
+  rw [Submonoid.coe_powers]; rw [← closure_range_zpow_eq_pow]; rw [← Subgroup.coe_zpowers]; rw [← Subgroup.topologicalClosure_coe]; rw [SetLike.mem_coe]; rw [← inv_mem_iff]
+exact subset_closure Subgroup.mem_zpowers _
+
+@[to_additive]
 
 中文:
 定理 topologicalClosure_subgroupClosure_toSubmonoid
@@ -321,7 +353,11 @@ theorem topologicalClosure_subgroupClosure_toSubmonoid
   refine Submonoid.topologicalClosure_minimal _ ?_ isClosed_closure
   rw [Subgroup.closure_toSubmonoid]; rw [Submonoid.closure_le]
   refine union_subset (Submonoid.subset_closure.trans subset_closure) fun x hx => ?_
-  ref
+  refine closure_mono (Submonoid.powers_le.2 (Submonoid.subset_closure <| Set.mem_inv.1 hx)) ?_
+  rw [Submonoid.coe_powers]; rw [← closure_range_zpow_eq_pow]; rw [← Subgroup.coe_zpowers]; rw [← Subgroup.topologicalClosure_coe]; rw [SetLike.mem_coe]; rw [← inv_mem_iff]
+exact subset_closure Subgroup.mem_zpowers _
+
+@[to_additive]
 
 Depends on / 依赖: Set.mem_inv, Subgroup, Subgroup.closure_toSubmonoid, Subgroup.coe_zpowers, Subgroup.le_closure_toSubmonoid, Subgroup.topologicalClo, Submonoid, Submonoid.closure_le, Submonoid.coe_powers, Submonoid.powers_le, Submonoid.subset_closure, Submonoid.subset_closure.trans, Submonoid.topologicalClosure_minimal, closure_le, closure_mono, closure_range_zpow_eq_pow, closure_toSubmonoid, coe_powers, coe_zpowers, isClosed_closure
 -/

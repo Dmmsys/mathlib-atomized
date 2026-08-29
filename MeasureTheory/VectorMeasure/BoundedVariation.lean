@@ -106,7 +106,33 @@ lemma exists_vectorMeasure_le_measureAux
   `VectorMeasure.exists_extension_of_isSetSemiring_of_le_measure_of_generateFrom`. For this, we
   need to check that the additive content is bounded by the measure `measureAux`. -/
   rcases isEmpty_or_nonempty α with h'α | h'α
-  · exact ⟨0, by simp
+  · exact ⟨0, by simp⟩
+  let m := AddContent.onIoc f.rightLim
+  have A : forall s in {s | exists u v, u <= v ∧ s = Ioc u v}, ‖m s‖ₑ <= hf.measureAux s := by
+    rintro s ⟨u, v, huv, rfl⟩
+    rw [AddContent.onIoc_apply huv]
+    simp only [BoundedVariationOn.measureAux, h'α, ↓reduceDIte, StieltjesFunction.measure_Ioc,
+      BoundedVariationOn.stieltjesFunctionRightLim_apply]
+    rw [← variationOnFromTo.add hf.rightLim.locallyBoundedVariationOn
+      (mem_univ h'α.some) (mem_univ u) (mem_univ v)]
+    simp only [add_sub_cancel_left, variationOnFromTo, huv, ↓reduceIte, univ_inter]
+    rw [ENNReal.ofReal_toReal]; swap
+    · exact ((eVariationOn.mono _ (subset_univ _)).trans_lt hf.rightLim.lt_top).ne
+    rw [← edist_eq_enorm_sub]
+    exact eVariationOn.edist_le _ (by grind) (by grind)
+  have B : hα = generateFrom {s | exists u v, u <= v ∧ s = Ioc u v} := by
+    borelize α
+    convert! borel_eq_generateFrom_Ioc_le α using 2
+    grind only
+  rcases VectorMeasure.exists_extension_of_isSetSemiring_of_le_measure_of_generateFrom
+    IsSetSemiring.Ioc A B with ⟨m', hm', h'm'⟩
+  refine ⟨m', fun u v huv => ?_, ?_, h'm'⟩
+  · rw [hm']
+    · exact AddContent.onIoc_apply huv
+    · exact ⟨u, v, huv, rfl⟩
+  · apply enorm_eq_zero.1
+    apply le_bot_iff.1
+    exact (h'm' _).trans (by simp [measureAux, h'α])
 
 中文:
 引理 存在_vectorMeasure_le_measureAux
@@ -116,7 +142,33 @@ lemma exists_vectorMeasure_le_measureAux
   `VectorMeasure.exists_extension_of_isSetSemiring_of_le_measure_of_generateFrom`. For this, we
   need to check that the additive content is bounded by the measure `measureAux`. -/
   rcases isEmpty_or_nonempty α with h'α | h'α
-  · exact ⟨0, by simp
+  · exact ⟨0, by simp⟩
+  let m := AddContent.onIoc f.rightLim
+  have A : forall s in {s | exists u v, u <= v ∧ s = Ioc u v}, ‖m s‖ₑ <= hf.measureAux s := by
+    rintro s ⟨u, v, huv, rfl⟩
+    rw [AddContent.onIoc_apply huv]
+    simp only [BoundedVariationOn.measureAux, h'α, ↓reduceDIte, StieltjesFunction.measure_Ioc,
+      BoundedVariationOn.stieltjesFunctionRightLim_apply]
+    rw [← variationOnFromTo.add hf.rightLim.locallyBoundedVariationOn
+      (mem_univ h'α.some) (mem_univ u) (mem_univ v)]
+    simp only [add_sub_cancel_left, variationOnFromTo, huv, ↓reduceIte, univ_inter]
+    rw [ENNReal.ofReal_toReal]; swap
+    · exact ((eVariationOn.mono _ (subset_univ _)).trans_lt hf.rightLim.lt_top).ne
+    rw [← edist_eq_enorm_sub]
+    exact eVariationOn.edist_le _ (by grind) (by grind)
+  have B : hα = generateFrom {s | exists u v, u <= v ∧ s = Ioc u v} := by
+    borelize α
+    convert! borel_eq_generateFrom_Ioc_le α using 2
+    grind only
+  rcases VectorMeasure.exists_extension_of_isSetSemiring_of_le_measure_of_generateFrom
+    IsSetSemiring.Ioc A B with ⟨m', hm', h'm'⟩
+  refine ⟨m', fun u v huv => ?_, ?_, h'm'⟩
+  · rw [hm']
+    · exact AddContent.onIoc_apply huv
+    · exact ⟨u, v, huv, rfl⟩
+  · apply enorm_eq_zero.1
+    apply le_bot_iff.1
+    exact (h'm' _).trans (by simp [measureAux, h'α])
 -/
 private lemma exists_vectorMeasure_le_measureAux (hf : BoundedVariationOn f univ) :
     exists m : VectorMeasure α E, (forall u v, u <= v -> m (Set.Ioc u v) = f.rightLim v - f.rightLim u) ∧
@@ -185,7 +237,14 @@ lemma vectorMeasure_Ioc
       f.rightLim b - f.rightLim a :=
     hf.exists_vectorMeasure_le_measureAux.choose_spec.1 a b h
   have B : (if hx : exists (x : α), IsBot x then VectorMeasure.dirac hx.choose
-      (f.rightLim hx.choose - f hx.choo
+      (f.rightLim hx.choose - f hx.choose) else 0) (Ioc a b) = 0 := by
+    by_cases hx : exists (x : α), IsBot x
+    · simp only [hx, ↓reduceDIte]
+      rw [VectorMeasure.dirac_apply_of_notMem]
+      simp only [mem_Ioc, not_and_or, not_lt, not_le]
+      exact Or.inl (hx.choose_spec _)
+    · simp [hx]
+  simp [vectorMeasure, A, B]
 
 中文:
 引理 vectorMeasure_Ioc
@@ -196,7 +255,14 @@ lemma vectorMeasure_Ioc
       f.rightLim b - f.rightLim a :=
     hf.exists_vectorMeasure_le_measureAux.choose_spec.1 a b h
   have B : (if hx : exists (x : α), IsBot x then VectorMeasure.dirac hx.choose
-      (f.rightLim hx.choose - f hx.choo
+      (f.rightLim hx.choose - f hx.choose) else 0) (Ioc a b) = 0 := by
+    by_cases hx : exists (x : α), IsBot x
+    · simp only [hx, ↓reduceDIte]
+      rw [VectorMeasure.dirac_apply_of_notMem]
+      simp only [mem_Ioc, not_and_or, not_lt, not_le]
+      exact Or.inl (hx.choose_spec _)
+    · simp [hx]
+  simp [vectorMeasure, A, B]
 
 Depends on / 依赖: Or.inl, VectorMeasure, VectorMeasure.dirac, VectorMeasure.dirac_apply_of_notMem, choose_spec, classical, dirac_apply_of_notMem, exists_vectorMeasure_le_measureAux, f.rightLim, hf.exists_vectorMeasure_le_measureAux.choose, hf.exists_vectorMeasure_le_measureAux.choose_spec, hx.choose, hx.choose_spec, mem_Ioc, not_and_or, not_le, not_lt, reduceDIte, rightLim
 -/
@@ -228,7 +294,37 @@ lemma vectorMeasure_singleton
     have heqa : h.choose = a := subsingleton_isBot _ h.choose_spec ha
     have A : hf.exists_vectorMeasure_le_measureAux.choose {a} = 0 := by
       rw [← botSet_eq_singleton_of_isBot ha]
-      exact hf.exists_vectorMeasure_le_measu
+      exact hf.exists_vectorMeasure_le_measureAux.choose_spec.2.1
+    simp only [vectorMeasure, h, ↓reduceDIte, add_apply, A, zero_add]
+    rw [VectorMeasure.dirac_apply_of_mem (MeasurableSet.singleton a)]
+    · simpa only [heqa, sub_right_inj] using (leftLim_eq_of_isBot ha).symm
+    · simp [heqa]
+  obtain ⟨b, hb⟩ : exists b, b < a := by simpa only [IsBot, not_forall, not_le] using ha
+  obtain ⟨u, u_mono, u_lt_a, u_lim⟩ :
+      exists u : Nat -> α, StrictMono u ∧ (forall n : Nat, u n in Ioo b a) ∧ Tendsto u atTop (𝓝 a) :=
+    exists_seq_strictMono_tendsto' hb
+  replace u_lt_a n : u n < a := (u_lt_a n).2
+  have A : {a} = ⋂ n, Ioc (u n) a := by
+    refine Subset.antisymm (fun x hx => by simp [mem_singleton_iff.1 hx, u_lt_a]) fun x hx => ?_
+    replace hx : forall (i : Nat), u i < x ∧ x <= a := by simpa using hx
+    have : a <= x := le_of_tendsto' u_lim fun n => (hx n).1.le
+    simp [le_antisymm this (hx 0).2]
+  have L1 : Tendsto (fun n => hf.vectorMeasure (Ioc (u n) a)) atTop (𝓝 (hf.vectorMeasure {a})) := by
+    rw [A]
+    apply VectorMeasure.tendsto_vectorMeasure_iInter_atTop_nat ?_ (fun n => measurableSet_Ioc)
+    exact fun m n hmn => Ioc_subset_Ioc_left (u_mono.monotone hmn)
+  have L2 : Tendsto (fun n => hf.vectorMeasure (Ioc (u n) a)) atTop
+      (𝓝 (f.rightLim a - f.leftLim a)) := by
+    simp_rw [hf.vectorMeasure_Ioc (u_lt_a _).le]
+    apply tendsto_const_nhds.sub
+    have : Tendsto u atTop (𝓝[<] a) := tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
+      u_lim (Eventually.of_forall u_lt_a)
+    convert! (hf.rightLim.tendsto_leftLim a).comp this using 2
+    have : (𝓝[<] a).NeBot := by
+      rw [← mem_closure_iff_nhdsWithin_neBot]; rw [closure_Iio' ⟨b]; rw [hb⟩]
+      exact self_mem_Iic
+    exact (leftLim_rightLim (hf.tendsto_leftLim _)).symm
+  exact tendsto_nhds_unique L1 L2
 
 中文:
 引理 vectorMeasure_singleton
@@ -239,7 +335,37 @@ lemma vectorMeasure_singleton
     have heqa : h.choose = a := subsingleton_isBot _ h.choose_spec ha
     have A : hf.exists_vectorMeasure_le_measureAux.choose {a} = 0 := by
       rw [← botSet_eq_singleton_of_isBot ha]
-      exact hf.exists_vectorMeasure_le_measu
+      exact hf.exists_vectorMeasure_le_measureAux.choose_spec.2.1
+    simp only [vectorMeasure, h, ↓reduceDIte, add_apply, A, zero_add]
+    rw [VectorMeasure.dirac_apply_of_mem (MeasurableSet.singleton a)]
+    · simpa only [heqa, sub_right_inj] using (leftLim_eq_of_isBot ha).symm
+    · simp [heqa]
+  obtain ⟨b, hb⟩ : exists b, b < a := by simpa only [IsBot, not_forall, not_le] using ha
+  obtain ⟨u, u_mono, u_lt_a, u_lim⟩ :
+      exists u : Nat -> α, StrictMono u ∧ (forall n : Nat, u n in Ioo b a) ∧ Tendsto u atTop (𝓝 a) :=
+    exists_seq_strictMono_tendsto' hb
+  replace u_lt_a n : u n < a := (u_lt_a n).2
+  have A : {a} = ⋂ n, Ioc (u n) a := by
+    refine Subset.antisymm (fun x hx => by simp [mem_singleton_iff.1 hx, u_lt_a]) fun x hx => ?_
+    replace hx : forall (i : Nat), u i < x ∧ x <= a := by simpa using hx
+    have : a <= x := le_of_tendsto' u_lim fun n => (hx n).1.le
+    simp [le_antisymm this (hx 0).2]
+  have L1 : Tendsto (fun n => hf.vectorMeasure (Ioc (u n) a)) atTop (𝓝 (hf.vectorMeasure {a})) := by
+    rw [A]
+    apply VectorMeasure.tendsto_vectorMeasure_iInter_atTop_nat ?_ (fun n => measurableSet_Ioc)
+    exact fun m n hmn => Ioc_subset_Ioc_left (u_mono.monotone hmn)
+  have L2 : Tendsto (fun n => hf.vectorMeasure (Ioc (u n) a)) atTop
+      (𝓝 (f.rightLim a - f.leftLim a)) := by
+    simp_rw [hf.vectorMeasure_Ioc (u_lt_a _).le]
+    apply tendsto_const_nhds.sub
+    have : Tendsto u atTop (𝓝[<] a) := tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _
+      u_lim (Eventually.of_forall u_lt_a)
+    convert! (hf.rightLim.tendsto_leftLim a).comp this using 2
+    have : (𝓝[<] a).NeBot := by
+      rw [← mem_closure_iff_nhdsWithin_neBot]; rw [closure_Iio' ⟨b]; rw [hb⟩]
+      exact self_mem_Iic
+    exact (leftLim_rightLim (hf.tendsto_leftLim _)).symm
+  exact tendsto_nhds_unique L1 L2
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.singleton, VectorMeasure, VectorMeasure.dirac_apply_of_mem, add_apply, botSet_eq_singleton_of_isBot, choose_spec, dirac_apply_of_mem, exists_vectorMeasure_le_measureAux, h.choose, h.choose_spec, hf.exists_vectorMeasure_le_measureAux.choose, hf.exists_vectorMeasure_le_measureAux.choose_spec, leftLim_eq_of_isBot, reduceDIte, singleton, sub_right_inj, subsingleton_isBot, vectorMeasure, zero_add
 -/
@@ -383,7 +509,27 @@ theorem vectorMeasure_Ici
   have hlim : Tendsto f atTop (𝓝 (limUnder atTop f)) := hf.tendsto_atTop_limUnder
   obtain ⟨u, u_mono, hu⟩ : exists u, Monotone u ∧ Tendsto u atTop atTop :=
     Filter.exists_seq_monotone_tendsto_atTop_atTop α
-  have A : Tendsto (fun n => hf.vectorMeasure (Icc a (u n)))
+  have A : Tendsto (fun n => hf.vectorMeasure (Icc a (u n))) atTop
+      (𝓝 (hf.vectorMeasure (Ici a))) := by
+    have : Ici a = ⋃ n, Icc a (u n) := by
+      apply le_antisymm ?_ (by simp [Icc_subset_Ici_self])
+      intro x (hx : a <= x)
+      simpa [hx] using (hu.eventually (Ici_mem_atTop x)).exists
+    rw [this]
+    exact hf.vectorMeasure.tendsto_vectorMeasure_iUnion_atTop_nat (s := fun n => Icc a (u n))
+      (fun i j hij x hx => by grind [Monotone]) (fun i => measurableSet_Icc)
+  have B : Tendsto (fun n => hf.vectorMeasure (Icc a (u n))) atTop
+      (𝓝 (limUnder atTop f - f.leftLim a)) := by
+    have : (fun n => f.rightLim (u n) - f.leftLim a) =ᶠ[atTop]
+        (fun n => hf.vectorMeasure (Icc a (u n))) := by
+      have : forallᶠ n in atTop, a <= u n := by
+        simp only [tendsto_atTop, eventually_atTop] at hu
+        simp [hu]
+      filter_upwards [this] with n hn using by rw [hf.vectorMeasure_Icc hn]
+    apply Tendsto.congr' this
+    apply Tendsto.sub ?_ tendsto_const_nhds
+    exact (tendsto_rightLim_atTop_of_tendsto hlim).comp hu
+  exact tendsto_nhds_unique A B
 
 中文:
 定理 vectorMeasure_Ici
@@ -393,7 +539,27 @@ theorem vectorMeasure_Ici
   have hlim : Tendsto f atTop (𝓝 (limUnder atTop f)) := hf.tendsto_atTop_limUnder
   obtain ⟨u, u_mono, hu⟩ : exists u, Monotone u ∧ Tendsto u atTop atTop :=
     Filter.exists_seq_monotone_tendsto_atTop_atTop α
-  have A : Tendsto (fun n => hf.vectorMeasure (Icc a (u n)))
+  have A : Tendsto (fun n => hf.vectorMeasure (Icc a (u n))) atTop
+      (𝓝 (hf.vectorMeasure (Ici a))) := by
+    have : Ici a = ⋃ n, Icc a (u n) := by
+      apply le_antisymm ?_ (by simp [Icc_subset_Ici_self])
+      intro x (hx : a <= x)
+      simpa [hx] using (hu.eventually (Ici_mem_atTop x)).exists
+    rw [this]
+    exact hf.vectorMeasure.tendsto_vectorMeasure_iUnion_atTop_nat (s := fun n => Icc a (u n))
+      (fun i j hij x hx => by grind [Monotone]) (fun i => measurableSet_Icc)
+  have B : Tendsto (fun n => hf.vectorMeasure (Icc a (u n))) atTop
+      (𝓝 (limUnder atTop f - f.leftLim a)) := by
+    have : (fun n => f.rightLim (u n) - f.leftLim a) =ᶠ[atTop]
+        (fun n => hf.vectorMeasure (Icc a (u n))) := by
+      have : forallᶠ n in atTop, a <= u n := by
+        simp only [tendsto_atTop, eventually_atTop] at hu
+        simp [hu]
+      filter_upwards [this] with n hn using by rw [hf.vectorMeasure_Icc hn]
+    apply Tendsto.congr' this
+    apply Tendsto.sub ?_ tendsto_const_nhds
+    exact (tendsto_rightLim_atTop_of_tendsto hlim).comp hu
+  exact tendsto_nhds_unique A B
 
 Depends on / 依赖: Filter, Filter.exists_seq_monotone_tendsto_atTop_atTop, Icc_subset_Ici_self, Ici_mem_atTop, Monotone, Nonempty, Tendsto, eventually, exists_seq_monotone_tendsto_atTop_atTop, hf.tendsto_atTop_limUnder, hf.vectorMeasure, hu.eventually, le_antisymm, limUnder, tendsto_atTop_limUnder, u_mono, vectorMeasure
 -/
@@ -466,7 +632,27 @@ theorem vectorMeasure_Iic
   have hlim : Tendsto f atBot (𝓝 (limUnder atBot f)) := hf.tendsto_atBot_limUnder
   obtain ⟨u, u_anti, hu⟩ : exists u, Antitone u ∧ Tendsto u atTop atBot :=
     Filter.exists_seq_antitone_tendsto_atTop_atBot α
-  have A : Tendsto (fun n => hf.vectorMeasure (Icc (u n) a))
+  have A : Tendsto (fun n => hf.vectorMeasure (Icc (u n) a)) atTop
+      (𝓝 (hf.vectorMeasure (Iic a))) := by
+    have : Iic a = ⋃ n, Icc (u n) a := by
+      apply le_antisymm ?_ (by simp [Icc_subset_Iic_self])
+      intro x (hx : x <= a)
+      simpa [hx] using (hu.eventually (Iic_mem_atBot x)).exists
+    rw [this]
+    exact hf.vectorMeasure.tendsto_vectorMeasure_iUnion_atTop_nat (s := fun n => Icc (u n) a)
+      (fun i j hij x hx => by grind [Antitone]) (fun i => measurableSet_Icc)
+  have B : Tendsto (fun n => hf.vectorMeasure (Icc (u n) a)) atTop
+      (𝓝 (f.rightLim a - limUnder atBot f)) := by
+    have : (fun n => f.rightLim a - f.leftLim (u n)) =ᶠ[atTop]
+        (fun n => hf.vectorMeasure (Icc (u n) a)) := by
+      have : forallᶠ n in atTop, u n <= a := by
+        simp only [tendsto_atBot, eventually_atTop] at hu
+        simp [hu]
+      filter_upwards [this] with n hn using by rw [hf.vectorMeasure_Icc hn]
+    apply Tendsto.congr' this
+    apply Tendsto.sub tendsto_const_nhds
+    exact (tendsto_leftLim_atBot_of_tendsto hf.tendsto_atBot_limUnder).comp hu
+  exact tendsto_nhds_unique A B
 
 中文:
 定理 vectorMeasure_Iic
@@ -476,7 +662,27 @@ theorem vectorMeasure_Iic
   have hlim : Tendsto f atBot (𝓝 (limUnder atBot f)) := hf.tendsto_atBot_limUnder
   obtain ⟨u, u_anti, hu⟩ : exists u, Antitone u ∧ Tendsto u atTop atBot :=
     Filter.exists_seq_antitone_tendsto_atTop_atBot α
-  have A : Tendsto (fun n => hf.vectorMeasure (Icc (u n) a))
+  have A : Tendsto (fun n => hf.vectorMeasure (Icc (u n) a)) atTop
+      (𝓝 (hf.vectorMeasure (Iic a))) := by
+    have : Iic a = ⋃ n, Icc (u n) a := by
+      apply le_antisymm ?_ (by simp [Icc_subset_Iic_self])
+      intro x (hx : x <= a)
+      simpa [hx] using (hu.eventually (Iic_mem_atBot x)).exists
+    rw [this]
+    exact hf.vectorMeasure.tendsto_vectorMeasure_iUnion_atTop_nat (s := fun n => Icc (u n) a)
+      (fun i j hij x hx => by grind [Antitone]) (fun i => measurableSet_Icc)
+  have B : Tendsto (fun n => hf.vectorMeasure (Icc (u n) a)) atTop
+      (𝓝 (f.rightLim a - limUnder atBot f)) := by
+    have : (fun n => f.rightLim a - f.leftLim (u n)) =ᶠ[atTop]
+        (fun n => hf.vectorMeasure (Icc (u n) a)) := by
+      have : forallᶠ n in atTop, u n <= a := by
+        simp only [tendsto_atBot, eventually_atTop] at hu
+        simp [hu]
+      filter_upwards [this] with n hn using by rw [hf.vectorMeasure_Icc hn]
+    apply Tendsto.congr' this
+    apply Tendsto.sub tendsto_const_nhds
+    exact (tendsto_leftLim_atBot_of_tendsto hf.tendsto_atBot_limUnder).comp hu
+  exact tendsto_nhds_unique A B
 
 Depends on / 依赖: Antitone, Filter, Filter.exists_seq_antitone_tendsto_atTop_atBot, Icc_subset_Iic_self, Iic_mem_atBot, Nonempty, Tendsto, eventually, exists_seq_antitone_tendsto_atTop_atBot, hf.tendsto_atBot_limUnder, hf.vectorMeasure, hu.eventually, le_antisymm, limUnder, tendsto_atBot_limUnder, u_anti, vectorMeasure
 -/

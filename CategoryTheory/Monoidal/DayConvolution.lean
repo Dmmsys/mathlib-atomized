@@ -545,7 +545,20 @@ definition associatorCorepresentingIso
           (whiskeringLeft _ _ _).obj ((tensor C).prod (𝟭 C)) ⋙
           (whiskeringLeft _ _ _).obj (prod.associativity C C C).inverse ⋙
           coyoneda.obj (.op <| (prod.associativity C C C).inverse ⋙ (F ⊠ G) ⊠ H) :=
-      isoWhiskerLeft _ (is
+      isoWhiskerLeft _ (isoWhiskerLeft _
+        (NatIso.ofComponents fun _ => Equiv.toIso <|
+          (prod.associativity C C C).congrLeft.fullyFaithfulFunctor.homEquiv))
+    _ ≅ (whiskeringLeft _ _ _).obj
+            ((prod.associativity C C C).inverse ⋙ (tensor C).prod (𝟭 C) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <| (prod.associativity C C C).inverse ⋙ (F ⊠ G) ⊠ H) :=
+      .refl _
+    _ ≅ (whiskeringLeft _ _ _).obj ((𝟭 C).prod (tensor C) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <| (prod.associativity C C C).inverse ⋙ (F ⊠ G) ⊠ H) :=
+      isoWhiskerRight ((whiskeringLeft _ _ _).mapIso <| NatIso.ofComponents (fun _ => α_ _ _ _)) _
+    _ ≅ (whiskeringLeft _ _ _).obj ((𝟭 C).prod (tensor C) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <| F ⊠ G ⊠ H) :=
+isoWhiskerLeft _
+coyoneda.mapIso Iso.op NatIso.ofComponents (fun _ => α_ _ _ _ |>.symm)
 
 中文:
 定义 associatorCorepresentingIso
@@ -555,7 +568,20 @@ definition associatorCorepresentingIso
           (whiskeringLeft _ _ _).obj ((tensor C).prod (𝟭 C)) ⋙
           (whiskeringLeft _ _ _).obj (prod.associativity C C C).inverse ⋙
           coyoneda.obj (.op <| (prod.associativity C C C).inverse ⋙ (F ⊠ G) ⊠ H) :=
-      isoWhiskerLeft _ (is
+      isoWhiskerLeft _ (isoWhiskerLeft _
+        (NatIso.ofComponents fun _ => Equiv.toIso <|
+          (prod.associativity C C C).congrLeft.fullyFaithfulFunctor.homEquiv))
+    _ ≅ (whiskeringLeft _ _ _).obj
+            ((prod.associativity C C C).inverse ⋙ (tensor C).prod (𝟭 C) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <| (prod.associativity C C C).inverse ⋙ (F ⊠ G) ⊠ H) :=
+      .refl _
+    _ ≅ (whiskeringLeft _ _ _).obj ((𝟭 C).prod (tensor C) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <| (prod.associativity C C C).inverse ⋙ (F ⊠ G) ⊠ H) :=
+      isoWhiskerRight ((whiskeringLeft _ _ _).mapIso <| NatIso.ofComponents (fun _ => α_ _ _ _)) _
+    _ ≅ (whiskeringLeft _ _ _).obj ((𝟭 C).prod (tensor C) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <| F ⊠ G ⊠ H) :=
+isoWhiskerLeft _
+coyoneda.mapIso Iso.op NatIso.ofComponents (fun _ => α_ _ _ _ |>.symm)
 
 Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, associativity, congrLeft, congrLeft.fullyFaithfulFunctor.homEquiv, coyone, coyoneda, coyoneda.obj, fullyFaithfulFunctor, homEquiv, inverse, isoWhiskerLeft, ofComponents, prod.associativity, tensor, whiskeringLeft
 -/
@@ -624,7 +650,13 @@ have := congrArg (fun t => t.app ((x, y), z))
         (corepresentableBy₂ F G H |>.ofIso
 .homEquiv (𝟙 _)) (associatorCorepresentingIso F G H).symm
   dsimp [associator, Coyoneda.fullyFaithful, corepresentableBy₂,
-    corepresentableBy₂', Funct
+    corepresentableBy₂', Functor.CorepresentableBy.ofIso, corepresentableBy₂,
+    Functor.corepresentableByEquiv, associatorCorepresentingIso] at this ⊢
+  simp only [whiskerLeft_id, Category.comp_id, Category.assoc] at this
+  simp only [Category.assoc, this]
+  dsimp [Functor.FullyFaithful.homEquiv, Equivalence.fullyFaithfulFunctor, prod.associativity]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 中文:
 引理 associator_hom_unit_unit
@@ -635,7 +667,13 @@ have := congrArg (fun t => t.app ((x, y), z))
         (corepresentableBy₂ F G H |>.ofIso
 .homEquiv (𝟙 _)) (associatorCorepresentingIso F G H).symm
   dsimp [associator, Coyoneda.fullyFaithful, corepresentableBy₂,
-    corepresentableBy₂', Funct
+    corepresentableBy₂', Functor.CorepresentableBy.ofIso, corepresentableBy₂,
+    Functor.corepresentableByEquiv, associatorCorepresentingIso] at this ⊢
+  simp only [whiskerLeft_id, Category.comp_id, Category.assoc] at this
+  simp only [Category.assoc, this]
+  dsimp [Functor.FullyFaithful.homEquiv, Equivalence.fullyFaithfulFunctor, prod.associativity]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, CorepresentableBy, Coyoneda, Coyoneda.fullyFaithful, Functor, Functor.CorepresentableBy.ofIso, Functor.corepresentableByEquiv, associator, associatorCorepresentingIso, comp_id, corepresentableByEquiv, fullyFaithful, homEquiv, homEquiv.rightInverse_symm, rightInverse_symm, t.app, whiskerLeft_id
 -/
@@ -677,7 +715,13 @@ have := congrArg (fun t => t.app (x, y, z))
         (corepresentableBy₂' F G H |>.ofIso
 .homEquiv (𝟙 _)) (associatorCorepresentingIso F G H)
   dsimp [associator, Coyoneda.fullyFaithful, corepresentableBy₂,
-    corepresentableBy₂', Functor.Core
+    corepresentableBy₂', Functor.CorepresentableBy.ofIso, corepresentableBy₂,
+    Functor.corepresentableByEquiv, associatorCorepresentingIso] at this ⊢
+  simp only [whiskerRight_tensor, id_whiskerRight, Category.id_comp, Iso.inv_hom_id] at this
+  simp only [this]
+  dsimp [Functor.FullyFaithful.homEquiv, Equivalence.fullyFaithfulFunctor, prod.associativity]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 中文:
 引理 associator_inv_unit_unit
@@ -688,7 +732,13 @@ have := congrArg (fun t => t.app (x, y, z))
         (corepresentableBy₂' F G H |>.ofIso
 .homEquiv (𝟙 _)) (associatorCorepresentingIso F G H)
   dsimp [associator, Coyoneda.fullyFaithful, corepresentableBy₂,
-    corepresentableBy₂', Functor.Core
+    corepresentableBy₂', Functor.CorepresentableBy.ofIso, corepresentableBy₂,
+    Functor.corepresentableByEquiv, associatorCorepresentingIso] at this ⊢
+  simp only [whiskerRight_tensor, id_whiskerRight, Category.id_comp, Iso.inv_hom_id] at this
+  simp only [this]
+  dsimp [Functor.FullyFaithful.homEquiv, Equivalence.fullyFaithfulFunctor, prod.associativity]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 Depends on / 依赖: Category, Category.id_comp, CorepresentableBy, Coyoneda, Coyoneda.fullyFaithful, Functor, Functor.CorepresentableBy.ofIso, Functor.corepresentableByEquiv, Iso.inv_hom_id, associator, associatorCorepresentingIso, corepresentableByEquiv, fullyFaithful, homEquiv, homEquiv.rightInverse_symm, id_comp, id_whiskerRight, inv_hom_id, rightInverse_symm, t.app
 -/
@@ -727,7 +777,15 @@ theorem associator_naturality
   ext
   simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, Functor.prod_obj, tensor_obj,
     Functor.id_obj, Functor.homEquivOfIsLeftKanExtension_apply_app,
-    externalProductBifunctor_map_app, Functor.leftUnitor_inv_app, 
+    externalProductBifunctor_map_app, Functor.leftUnitor_inv_app, whiskerLeft_id, Category.comp_id,
+    corepresentableBy_homEquiv_apply_app, NatTrans.comp_app, unit_app_map_app_assoc]
+  rw [associator_hom_unit_unit_assoc]
+  simp only [tensorHom_def, Category.assoc, externalProductBifunctor_obj_obj, tensor_obj,
+    NatTrans.naturality, unit_app_map_app_assoc]
+  rw [← comp_whiskerRight_assoc]; rw [unit_app_map_app]
+  simp only [Functor.comp_obj, tensor_obj, comp_whiskerRight, Category.assoc]
+  rw [← whisker_exchange_assoc]; rw [associator_hom_unit_unit]; rw [whisker_exchange_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [unit_app_map_app]
+  simp [tensorHom_def]
 
 中文:
 定理 associator_naturality
@@ -738,7 +796,15 @@ theorem associator_naturality
   ext
   simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, Functor.prod_obj, tensor_obj,
     Functor.id_obj, Functor.homEquivOfIsLeftKanExtension_apply_app,
-    externalProductBifunctor_map_app, Functor.leftUnitor_inv_app, 
+    externalProductBifunctor_map_app, Functor.leftUnitor_inv_app, whiskerLeft_id, Category.comp_id,
+    corepresentableBy_homEquiv_apply_app, NatTrans.comp_app, unit_app_map_app_assoc]
+  rw [associator_hom_unit_unit_assoc]
+  simp only [tensorHom_def, Category.assoc, externalProductBifunctor_obj_obj, tensor_obj,
+    NatTrans.naturality, unit_app_map_app_assoc]
+  rw [← comp_whiskerRight_assoc]; rw [unit_app_map_app]
+  simp only [Functor.comp_obj, tensor_obj, comp_whiskerRight, Category.assoc]
+  rw [← whisker_exchange_assoc]; rw [associator_hom_unit_unit]; rw [whisker_exchange_assoc]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [unit_app_map_app]
+  simp [tensorHom_def]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Functor, Functor.comp_obj, Functor.homEquivOfIsLeftKanExtension_apply_app, Functor.id_obj, Functor.leftUnitor_inv_app, Functor.prod_obj, NatTrans, NatTrans.comp_app, associator_hom_unit_unit_assoc, comp_app, comp_id, comp_obj, corepresentableBy_homEquiv_apply_app, externalProductBifunc, externalProductBifunctor_map_app, externalProductBifunctor_obj_obj, homEquiv
 -/
@@ -782,7 +848,42 @@ lemma pentagon
   apply Functor.hom_ext_of_isLeftKanExtension (α := unit ((F ⊛ G) ⊛ H) K)
   apply Functor.hom_ext_of_isLeftKanExtension
     (α := extensionUnitLeft ((F ⊛ G) ⊛ H) (unit (F ⊛ G) H) K)
-  have : (((F ⊛ G) ⊠ H) ⊠ K).IsLeftKanE
+  have : (((F ⊛ G) ⊠ H) ⊠ K).IsLeftKanExtension
+    (α := extensionUnitLeft ((F ⊛ G) ⊠ H)
+      (extensionUnitLeft _ (unit F G) H) K) :=
+    isPointwiseLeftKanExtensionExtensionUnitLeft _ _ _
+      (isPointwiseLeftKanExtensionExtensionUnitLeft _ _ _
+        (isPointwiseLeftKanExtensionUnit F G)) |>.isLeftKanExtension
+  apply Functor.hom_ext_of_isLeftKanExtension (α := extensionUnitLeft ((F ⊛ G) ⊠ H)
+      (extensionUnitLeft _ (unit F G) H) K)
+  -- And then we compute...
+  ext ⟨⟨⟨i, j⟩, k⟩, l⟩
+  have aux :
+      ((unit F G).app (i, j) otimesₘ (unit H K).app (k, l)) ≫
+        (unit (F ⊛ G) (H ⊛ K)).app ((i otimes j), (k otimes l)) =
+      (α_ (F.obj i) (G.obj j) (H.obj k otimes K.obj l)).hom ≫
+        F.obj i ◁ G.obj j ◁ (unit H K).app (k, l) ≫ F.obj i ◁ (unit G (H ⊛ K)).app (j, (k otimes l)) ≫
+        (unit F (G ⊛ H ⊛ K)).app (i, (j otimes k otimes l)) ≫ (F ⊛ G ⊛ H ⊛ K).map (α_ i j (k otimes l)).inv ≫
+        (associator F G (H ⊛ K)).inv.app ((i otimes j) otimes k otimes l) := by
+    conv_rhs => simp only [Functor.comp_obj, tensor_obj, NatTrans.naturality,
+      associator_inv_unit_unit_assoc, externalProductBifunctor_obj_obj, Iso.map_hom_inv_id,
+      Category.comp_id]
+    simp only [tensor_whiskerLeft_symm, Category.assoc, Iso.hom_inv_id_assoc,
+    ← tensorHom_def'_assoc]
+  dsimp
+  simp only [MonoidalCategory.whiskerLeft_id, Category.comp_id, unit_app_map_app_assoc,
+    externalProductBifunctor_obj_obj, NatTrans.id_app, tensorHom_id, associator_hom_unit_unit_assoc,
+    tensor_obj, NatTrans.naturality]
+  conv_rhs =>
+    simp only [whiskerRight_tensor_symm_assoc, Iso.inv_hom_id_assoc, ← tensorHom_def_assoc]
+    rw [reassoc_of% aux]
+  simp only [Iso.inv_hom_id_app_assoc, ← comp_whiskerRight_assoc, associator_hom_unit_unit F G H]
+  simp only [Functor.comp_obj, tensor_obj, comp_whiskerRight, whisker_assoc, Category.assoc,
+    whiskerRight_comp_unit_app_assoc (F ⊛ G ⊛ H) K l (α_ i j k).inv,
+    NatTrans.naturality_assoc, NatTrans.naturality, associator_hom_unit_unit_assoc,
+    externalProductBifunctor_obj_obj, unit_app_map_app_assoc, NatTrans.id_app, id_tensorHom,
+    Iso.inv_hom_id_assoc, ← MonoidalCategory.whiskerLeft_comp_assoc, associator_hom_unit_unit]
+  simp [← Functor.map_comp, pentagon_inv, pentagon_assoc]
 
 中文:
 引理 pentagon
@@ -792,7 +893,42 @@ lemma pentagon
   apply Functor.hom_ext_of_isLeftKanExtension (α := unit ((F ⊛ G) ⊛ H) K)
   apply Functor.hom_ext_of_isLeftKanExtension
     (α := extensionUnitLeft ((F ⊛ G) ⊛ H) (unit (F ⊛ G) H) K)
-  have : (((F ⊛ G) ⊠ H) ⊠ K).IsLeftKanE
+  have : (((F ⊛ G) ⊠ H) ⊠ K).IsLeftKanExtension
+    (α := extensionUnitLeft ((F ⊛ G) ⊠ H)
+      (extensionUnitLeft _ (unit F G) H) K) :=
+    isPointwiseLeftKanExtensionExtensionUnitLeft _ _ _
+      (isPointwiseLeftKanExtensionExtensionUnitLeft _ _ _
+        (isPointwiseLeftKanExtensionUnit F G)) |>.isLeftKanExtension
+  apply Functor.hom_ext_of_isLeftKanExtension (α := extensionUnitLeft ((F ⊛ G) ⊠ H)
+      (extensionUnitLeft _ (unit F G) H) K)
+  -- And then we compute...
+  ext ⟨⟨⟨i, j⟩, k⟩, l⟩
+  have aux :
+      ((unit F G).app (i, j) otimesₘ (unit H K).app (k, l)) ≫
+        (unit (F ⊛ G) (H ⊛ K)).app ((i otimes j), (k otimes l)) =
+      (α_ (F.obj i) (G.obj j) (H.obj k otimes K.obj l)).hom ≫
+        F.obj i ◁ G.obj j ◁ (unit H K).app (k, l) ≫ F.obj i ◁ (unit G (H ⊛ K)).app (j, (k otimes l)) ≫
+        (unit F (G ⊛ H ⊛ K)).app (i, (j otimes k otimes l)) ≫ (F ⊛ G ⊛ H ⊛ K).map (α_ i j (k otimes l)).inv ≫
+        (associator F G (H ⊛ K)).inv.app ((i otimes j) otimes k otimes l) := by
+    conv_rhs => simp only [Functor.comp_obj, tensor_obj, NatTrans.naturality,
+      associator_inv_unit_unit_assoc, externalProductBifunctor_obj_obj, Iso.map_hom_inv_id,
+      Category.comp_id]
+    simp only [tensor_whiskerLeft_symm, Category.assoc, Iso.hom_inv_id_assoc,
+    ← tensorHom_def'_assoc]
+  dsimp
+  simp only [MonoidalCategory.whiskerLeft_id, Category.comp_id, unit_app_map_app_assoc,
+    externalProductBifunctor_obj_obj, NatTrans.id_app, tensorHom_id, associator_hom_unit_unit_assoc,
+    tensor_obj, NatTrans.naturality]
+  conv_rhs =>
+    simp only [whiskerRight_tensor_symm_assoc, Iso.inv_hom_id_assoc, ← tensorHom_def_assoc]
+    rw [reassoc_of% aux]
+  simp only [Iso.inv_hom_id_app_assoc, ← comp_whiskerRight_assoc, associator_hom_unit_unit F G H]
+  simp only [Functor.comp_obj, tensor_obj, comp_whiskerRight, whisker_assoc, Category.assoc,
+    whiskerRight_comp_unit_app_assoc (F ⊛ G ⊛ H) K l (α_ i j k).inv,
+    NatTrans.naturality_assoc, NatTrans.naturality, associator_hom_unit_unit_assoc,
+    externalProductBifunctor_obj_obj, unit_app_map_app_assoc, NatTrans.id_app, id_tensorHom,
+    Iso.inv_hom_id_assoc, ← MonoidalCategory.whiskerLeft_comp_assoc, associator_hom_unit_unit]
+  simp [← Functor.map_comp, pentagon_inv, pentagon_assoc]
 -/
 lemma pentagon (H K : C ⥤ V)
     [DayConvolution G H] [DayConvolution (F ⊛ G) H] [DayConvolution F (G ⊛ H)]
@@ -1067,7 +1203,22 @@ definition leftUnitorCorepresentingIso
           (whiskeringLeft _ _ _).obj ((Functor.fromPUnit.{0} (𝟙_ C)).prod (𝟭 C)) ⋙
           (whiskeringLeft _ _ _).obj (prod.leftUnitorEquivalence C).inverse ⋙
           coyoneda.obj (.op <|
-           (prod.leftUnitorEquivalence C).inverse 
+           (prod.leftUnitorEquivalence C).inverse ⋙ Functor.fromPUnit.{0} (𝟙_ V) ⊠ F) :=
+      isoWhiskerLeft _ (isoWhiskerLeft _
+        (NatIso.ofComponents fun _ => Equiv.toIso <|
+          (prod.leftUnitorEquivalence C).congrLeft.fullyFaithfulFunctor.homEquiv))
+    _ ≅ (whiskeringLeft _ _ _).obj
+            ((prod.leftUnitorEquivalence C).inverse ⋙ (Functor.fromPUnit.{0} (𝟙_ C)).prod (𝟭 C) ⋙
+              tensor C) ⋙
+          coyoneda.obj (.op <|
+            (prod.leftUnitorEquivalence C).inverse ⋙ Functor.fromPUnit.{0} (𝟙_ V) ⊠ F) :=
+      .refl _
+    _ ≅ (whiskeringLeft _ _ _).obj (𝟭 _) ⋙ coyoneda.obj (.op <|
+          (prod.leftUnitorEquivalence C).inverse ⋙ Functor.fromPUnit.{0} (𝟙_ V) ⊠ F) :=
+      isoWhiskerRight ((whiskeringLeft _ _ _).mapIso <| NatIso.ofComponents fun _ => fun_ _) _
+_ ≅ _ := coyoneda.mapIso Iso.op NatIso.ofComponents fun _ => (fun_ _).symm
+
+#adaptation_note
 
 中文:
 定义 leftUnitorCorepresentingIso
@@ -1078,7 +1229,22 @@ definition leftUnitorCorepresentingIso
           (whiskeringLeft _ _ _).obj ((Functor.fromPUnit.{0} (𝟙_ C)).prod (𝟭 C)) ⋙
           (whiskeringLeft _ _ _).obj (prod.leftUnitorEquivalence C).inverse ⋙
           coyoneda.obj (.op <|
-           (prod.leftUnitorEquivalence C).inverse 
+           (prod.leftUnitorEquivalence C).inverse ⋙ Functor.fromPUnit.{0} (𝟙_ V) ⊠ F) :=
+      isoWhiskerLeft _ (isoWhiskerLeft _
+        (NatIso.ofComponents fun _ => Equiv.toIso <|
+          (prod.leftUnitorEquivalence C).congrLeft.fullyFaithfulFunctor.homEquiv))
+    _ ≅ (whiskeringLeft _ _ _).obj
+            ((prod.leftUnitorEquivalence C).inverse ⋙ (Functor.fromPUnit.{0} (𝟙_ C)).prod (𝟭 C) ⋙
+              tensor C) ⋙
+          coyoneda.obj (.op <|
+            (prod.leftUnitorEquivalence C).inverse ⋙ Functor.fromPUnit.{0} (𝟙_ V) ⊠ F) :=
+      .refl _
+    _ ≅ (whiskeringLeft _ _ _).obj (𝟭 _) ⋙ coyoneda.obj (.op <|
+          (prod.leftUnitorEquivalence C).inverse ⋙ Functor.fromPUnit.{0} (𝟙_ V) ⊠ F) :=
+      isoWhiskerRight ((whiskeringLeft _ _ _).mapIso <| NatIso.ofComponents fun _ => fun_ _) _
+_ ≅ _ := coyoneda.mapIso Iso.op NatIso.ofComponents fun _ => (fun_ _).symm
+
+#adaptation_note
 
 Depends on / 依赖: Equiv.toIso, Functor, Functor.fromPUnit, NatIso, NatIso.ofComponents, cat_disch, congrLeft, congrLeft.fullyFaithfulFunctor.homEquiv, coyoneda, coyoneda.obj, fromPUnit, fullyFaithfulFunctor, homEquiv, hom_self, inverse, isoWhiskerLeft, leftUnitorEquival, leftUnitorEquivalence, ofComponents, prod.leftUnitorEquival
 -/
@@ -1125,7 +1291,20 @@ definition rightUnitorCorepresentingIso
           (whiskeringLeft _ _ _).obj ((𝟭 C).prod (Functor.fromPUnit.{0} (𝟙_ C))) ⋙
           (whiskeringLeft _ _ _).obj (prod.rightUnitorEquivalence C).inverse ⋙
           coyoneda.obj (.op <|
-           (prod.rightUnitorEquivalence C).invers
+           (prod.rightUnitorEquivalence C).inverse ⋙ F ⊠ Functor.fromPUnit.{0} (𝟙_ V)) :=
+      isoWhiskerLeft _ (isoWhiskerLeft _
+        (NatIso.ofComponents fun _ => Equiv.toIso <|
+          (prod.rightUnitorEquivalence C).congrLeft.fullyFaithfulFunctor.homEquiv))
+    _ ≅ (whiskeringLeft _ _ _).obj
+            ((prod.rightUnitorEquivalence C).inverse ⋙
+              ((𝟭 C).prod (Functor.fromPUnit.{0} (𝟙_ C))) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <|
+            (prod.rightUnitorEquivalence C).inverse ⋙ F ⊠ Functor.fromPUnit.{0} (𝟙_ V)) :=
+      .refl _
+    _ ≅ (whiskeringLeft _ _ _).obj (𝟭 _) ⋙ coyoneda.obj (.op <|
+          (prod.rightUnitorEquivalence C).inverse ⋙ F ⊠ Functor.fromPUnit.{0} (𝟙_ V)) :=
+      isoWhiskerRight ((whiskeringLeft _ _ _).mapIso <| NatIso.ofComponents fun _ => ρ_ _) _
+_ ≅ _ := coyoneda.mapIso Iso.op NatIso.ofComponents fun _ => (ρ_ _).symm
 
 中文:
 定义 rightUnitorCorepresentingIso
@@ -1136,7 +1315,20 @@ definition rightUnitorCorepresentingIso
           (whiskeringLeft _ _ _).obj ((𝟭 C).prod (Functor.fromPUnit.{0} (𝟙_ C))) ⋙
           (whiskeringLeft _ _ _).obj (prod.rightUnitorEquivalence C).inverse ⋙
           coyoneda.obj (.op <|
-           (prod.rightUnitorEquivalence C).invers
+           (prod.rightUnitorEquivalence C).inverse ⋙ F ⊠ Functor.fromPUnit.{0} (𝟙_ V)) :=
+      isoWhiskerLeft _ (isoWhiskerLeft _
+        (NatIso.ofComponents fun _ => Equiv.toIso <|
+          (prod.rightUnitorEquivalence C).congrLeft.fullyFaithfulFunctor.homEquiv))
+    _ ≅ (whiskeringLeft _ _ _).obj
+            ((prod.rightUnitorEquivalence C).inverse ⋙
+              ((𝟭 C).prod (Functor.fromPUnit.{0} (𝟙_ C))) ⋙ tensor C) ⋙
+          coyoneda.obj (.op <|
+            (prod.rightUnitorEquivalence C).inverse ⋙ F ⊠ Functor.fromPUnit.{0} (𝟙_ V)) :=
+      .refl _
+    _ ≅ (whiskeringLeft _ _ _).obj (𝟭 _) ⋙ coyoneda.obj (.op <|
+          (prod.rightUnitorEquivalence C).inverse ⋙ F ⊠ Functor.fromPUnit.{0} (𝟙_ V)) :=
+      isoWhiskerRight ((whiskeringLeft _ _ _).mapIso <| NatIso.ofComponents fun _ => ρ_ _) _
+_ ≅ _ := coyoneda.mapIso Iso.op NatIso.ofComponents fun _ => (ρ_ _).symm
 
 Depends on / 依赖: Equiv.toIso, Functor, Functor.fromPUnit, NatIso, NatIso.ofComponents, congrLeft, congrLeft.fullyFaithfulFunctor.homEquiv, coyoneda, coyoneda.obj, fromPUnit, fullyFaithfulFunctor, homEquiv, inverse, isoWhiskerLeft, ofComponents, prod.rightUnitorEqu, prod.rightUnitorEquivalence, rightUnitorEqu, rightUnitorEquivalence, tensor
 -/
@@ -1227,7 +1419,13 @@ have := congrArg (fun t => t.app (.mk PUnit.unit, y))
 (corepresentableByLeft U F).homEquiv.rightInverse_symm
         ((leftUnitorCorepresentingIso F).symm.hom.app F) (𝟙 _)
   dsimp [leftUnitor, Coyoneda.fullyFaithful, corepresentableByLeft,
-    leftUnitorCorepresentingIso, Functor.CorepresentableB
+    leftUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
+    Functor.corepresentableByEquiv] at this ⊢
+  simp only [whiskerLeft_id, Category.comp_id] at this
+  simp only [Category.comp_id, this]
+  simp [prod.leftUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
+    Functor.FullyFaithful.homEquiv]
+  rfl
 
 中文:
 引理 leftUnitor_hom_unit_app
@@ -1237,7 +1435,13 @@ have := congrArg (fun t => t.app (.mk PUnit.unit, y))
 (corepresentableByLeft U F).homEquiv.rightInverse_symm
         ((leftUnitorCorepresentingIso F).symm.hom.app F) (𝟙 _)
   dsimp [leftUnitor, Coyoneda.fullyFaithful, corepresentableByLeft,
-    leftUnitorCorepresentingIso, Functor.CorepresentableB
+    leftUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
+    Functor.corepresentableByEquiv] at this ⊢
+  simp only [whiskerLeft_id, Category.comp_id] at this
+  simp only [Category.comp_id, this]
+  simp [prod.leftUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
+    Functor.FullyFaithful.homEquiv]
+  rfl
 
 Depends on / 依赖: Category, Category.comp_id, CorepresentableBy, Coyoneda, Coyoneda.fullyFaithful, D.hom, Equivalence, Equivalence.congrLeft, Equivalence.fullyF, Functor, Functor.CorepresentableBy.ofIso, Functor.corepresentableByEquiv, PUnit.unit, comp_id, congrLeft, corepresentableByEquiv, corepresentableByLeft, fullyF, fullyFaithful, homEquiv
 -/
@@ -1270,7 +1474,9 @@ lemma leftUnitor_inv_app
     leftUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
     Functor.corepresentableByEquiv]
   dsimp [prod.leftUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
-    Functor.FullyFaithful.homEqui
+    Functor.FullyFaithful.homEquiv]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 中文:
 引理 leftUnitor_inv_app
@@ -1280,7 +1486,9 @@ lemma leftUnitor_inv_app
     leftUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
     Functor.corepresentableByEquiv]
   dsimp [prod.leftUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
-    Functor.FullyFaithful.homEqui
+    Functor.FullyFaithful.homEquiv]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 Depends on / 依赖: CorepresentableBy, Coyoneda, Coyoneda.fullyFaithful, Equivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor, FullyFaithful, Functor, Functor.CorepresentableBy.ofIso, Functor.FullyFaithful.homEquiv, Functor.corepresentableByEquiv, congrLeft, corepresentableByEquiv, corepresentableByLeft, fullyFaithful, fullyFaithfulFunctor, homEquiv, id_apply, introduced, leftUnitor
 -/
@@ -1352,7 +1560,14 @@ have := congrArg (fun t => t.app (x, .mk PUnit.unit))
 (corepresentableByRight U F).homEquiv.rightInverse_symm
         ((rightUnitorCorepresentingIso F).symm.hom.app F) (𝟙 _)
   dsimp [rightUnitor, Coyoneda.fullyFaithful, corepresentableByRight,
-    rightUnitorCorepresentingIso, Functor.Corepresent
+    rightUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
+    Functor.corepresentableByEquiv] at this ⊢
+  simp only [MonoidalCategory.whiskerRight_id, Category.id_comp, Iso.hom_inv_id,
+    Category.comp_id] at this
+  simp only [Category.comp_id, this]
+  simp [prod.rightUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
+    Functor.FullyFaithful.homEquiv]
+  rfl
 
 中文:
 引理 rightUnitor_hom_unit_app
@@ -1362,7 +1577,14 @@ have := congrArg (fun t => t.app (x, .mk PUnit.unit))
 (corepresentableByRight U F).homEquiv.rightInverse_symm
         ((rightUnitorCorepresentingIso F).symm.hom.app F) (𝟙 _)
   dsimp [rightUnitor, Coyoneda.fullyFaithful, corepresentableByRight,
-    rightUnitorCorepresentingIso, Functor.Corepresent
+    rightUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
+    Functor.corepresentableByEquiv] at this ⊢
+  simp only [MonoidalCategory.whiskerRight_id, Category.id_comp, Iso.hom_inv_id,
+    Category.comp_id] at this
+  simp only [Category.comp_id, this]
+  simp [prod.rightUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
+    Functor.FullyFaithful.homEquiv]
+  rfl
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, CorepresentableBy, Coyoneda, Coyoneda.fullyFaithful, Functor, Functor.CorepresentableBy.ofIso, Functor.corepresentableByEquiv, Iso.hom_inv_id, MonoidalCategory, MonoidalCategory.whiskerRight_id, PUnit.unit, comp_id, corepresentableByEquiv, corepresentableByRight, fullyFaithful, homEquiv, homEquiv.rightInverse_symm, hom_inv_id
 -/
@@ -1396,7 +1618,9 @@ lemma rightUnitor_inv_app
     rightUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
     Functor.corepresentableByEquiv, Iso.toEquiv, Equiv.toIso]
   dsimp [prod.rightUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
-   
+    Functor.FullyFaithful.homEquiv]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 中文:
 引理 rightUnitor_inv_app
@@ -1406,7 +1630,9 @@ lemma rightUnitor_inv_app
     rightUnitorCorepresentingIso, Functor.CorepresentableBy.ofIso,
     Functor.corepresentableByEquiv, Iso.toEquiv, Equiv.toIso]
   dsimp [prod.rightUnitorEquivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor,
-   
+    Functor.FullyFaithful.homEquiv]
+  erw [id_apply] -- TODO: remove this `erw` (introduced in #36613)
+  simp
 
 Depends on / 依赖: CorepresentableBy, Coyoneda, Coyoneda.fullyFaithful, Equiv.toIso, Equivalence, Equivalence.congrLeft, Equivalence.fullyFaithfulFunctor, FullyFaithful, Functor, Functor.CorepresentableBy.ofIso, Functor.FullyFaithful.homEquiv, Functor.corepresentableByEquiv, Iso.toEquiv, congrLeft, corepresentableByEquiv, corepresentableByRight, fullyFaithful, fullyFaithfulFunctor, homEquiv, id_apply
 -/
@@ -1489,7 +1715,23 @@ lemma DayConvolution.triangle
   apply Functor.hom_ext_of_isLeftKanExtension
     (α := extensionUnitLeft (F ⊛ U) (DayConvolution.unit F U) G)
 .IsLeftKanExtension have : (F ⊠ U) ⊠ G
-      (α := extensionUnitLeft (F ⊠ U) (extensionUnitRight U (DayConvolu
+      (α := extensionUnitLeft (F ⊠ U) (extensionUnitRight U (DayConvolutionUnit.φ U) F) G) :=
+    isPointwiseLeftKanExtensionExtensionUnitLeft (F ⊠ U) _ G
+      (isPointwiseLeftKanExtensionExtensionUnitRight U (DayConvolutionUnit.φ U) F <|
+        DayConvolutionUnit.isPointwiseLeftKanExtensionCan (F := U)) |>.isLeftKanExtension
+  apply Functor.hom_ext_of_isLeftKanExtension
+    (α := extensionUnitLeft (F ⊠ U) (extensionUnitRight U (DayConvolutionUnit.φ U) F) G)
+  ext
+  dsimp
+  simp only [MonoidalCategory.whiskerRight_id, Category.id_comp, Iso.hom_inv_id, whisker_assoc,
+    MonoidalCategory.whiskerLeft_id, Category.comp_id,
+    DayConvolution.associator_hom_unit_unit_assoc, externalProductBifunctor_obj_obj, tensor_obj,
+    NatTrans.naturality, unit_app_map_app_assoc, NatTrans.id_app, id_tensorHom,
+    Category.assoc, Iso.inv_hom_id_assoc, unit_app_map_app, Functor.comp_obj,
+    tensorHom_id, Iso.cancel_iso_hom_left]
+  simp only [← MonoidalCategory.whiskerLeft_comp_assoc, leftUnitor_hom_unit_app,
+    associator_inv_naturality_middle_assoc, ← comp_whiskerRight_assoc, rightUnitor_hom_unit_app]
+  simp [← Functor.map_comp]
 
 中文:
 引理 Day卷积.triangle
@@ -1499,7 +1741,23 @@ lemma DayConvolution.triangle
   apply Functor.hom_ext_of_isLeftKanExtension
     (α := extensionUnitLeft (F ⊛ U) (DayConvolution.unit F U) G)
 .IsLeftKanExtension have : (F ⊠ U) ⊠ G
-      (α := extensionUnitLeft (F ⊠ U) (extensionUnitRight U (DayConvolu
+      (α := extensionUnitLeft (F ⊠ U) (extensionUnitRight U (DayConvolutionUnit.φ U) F) G) :=
+    isPointwiseLeftKanExtensionExtensionUnitLeft (F ⊠ U) _ G
+      (isPointwiseLeftKanExtensionExtensionUnitRight U (DayConvolutionUnit.φ U) F <|
+        DayConvolutionUnit.isPointwiseLeftKanExtensionCan (F := U)) |>.isLeftKanExtension
+  apply Functor.hom_ext_of_isLeftKanExtension
+    (α := extensionUnitLeft (F ⊠ U) (extensionUnitRight U (DayConvolutionUnit.φ U) F) G)
+  ext
+  dsimp
+  simp only [MonoidalCategory.whiskerRight_id, Category.id_comp, Iso.hom_inv_id, whisker_assoc,
+    MonoidalCategory.whiskerLeft_id, Category.comp_id,
+    DayConvolution.associator_hom_unit_unit_assoc, externalProductBifunctor_obj_obj, tensor_obj,
+    NatTrans.naturality, unit_app_map_app_assoc, NatTrans.id_app, id_tensorHom,
+    Category.assoc, Iso.inv_hom_id_assoc, unit_app_map_app, Functor.comp_obj,
+    tensorHom_id, Iso.cancel_iso_hom_left]
+  simp only [← MonoidalCategory.whiskerLeft_comp_assoc, leftUnitor_hom_unit_app,
+    associator_inv_naturality_middle_assoc, ← comp_whiskerRight_assoc, rightUnitor_hom_unit_app]
+  simp [← Functor.map_comp]
 
 Depends on / 依赖: DayConvolution, DayConvolution.unit, DayConvolutionUnit, DayConvolutionUnit.isPointwiseLeftKanExtensionCan, Functor, Functor.hom_ext_of_isLeftKanExtension, IsLeftKanExtension, extensionUnitLeft, extensionUnitRight, hom_ext_of_isLeftKanExtension, isPointwiseLeftKanExtensionCan, isPointwiseLeftKanExtensionExtensionUnitLeft, isPointwiseLeftKanExtensionExtensionUnitRight
 -/
@@ -1745,7 +2003,7 @@ lemma ι_map_tensorHom_hom_eq_tensorHom
   simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, tensor_obj,
     DayConvolution.corepresentableBy_homEquiv_apply_app,
     DayConvolution.unit_app_map_app]
-  e
+  exact convolutionExtensionUnit_comp_ι_map_tensorHom_app C V _ _ _ _
 
 中文:
 引理 ι_map_tensorHom_hom_eq_tensorHom
@@ -1757,7 +2015,7 @@ lemma ι_map_tensorHom_hom_eq_tensorHom
   simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, tensor_obj,
     DayConvolution.corepresentableBy_homEquiv_apply_app,
     DayConvolution.unit_app_map_app]
-  e
+  exact convolutionExtensionUnit_comp_ι_map_tensorHom_app C V _ _ _ _
 
 Depends on / 依赖: D.hom, D.pullHom_hom, DayConvolution, DayConvolution.corepresentableBy, DayConvolution.corepresentableBy_homEquiv_apply_app, DayConvolution.unit_app_map_app, Functor, Functor.comp_obj, _eq_pullHom, cat_disch, comp_obj, corepresentableBy, corepresentableBy_homEquiv_apply_app, exists_lift, externalProductBifunctor_obj_obj, homEquiv, homEquiv.injective, injective, isPullback, isPullback.exists_lift
 -/
@@ -1790,7 +2048,10 @@ lemma ι_map_associator_hom_eq_associator_hom
   ext ⟨⟨x, y⟩, z⟩
   simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, Functor.prod_obj,
     tensor_obj, Functor.id_obj, Functor.homEquivOfIsLeftKanExtension_apply_app,
-
+    externalProductBifunctor_map_app, Functor.leftUnitor_inv_app, whiskerLeft_id,
+    Category.comp_id, corepresentableBy_homEquiv_apply_app,
+    DayConvolution.associator_hom_unit_unit]
+  exact associator_hom_unit_unit V _ _ _ _ _ _
 
 中文:
 引理 ι_map_associator_hom_eq_associator_hom
@@ -1802,7 +2063,10 @@ lemma ι_map_associator_hom_eq_associator_hom
   ext ⟨⟨x, y⟩, z⟩
   simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, Functor.prod_obj,
     tensor_obj, Functor.id_obj, Functor.homEquivOfIsLeftKanExtension_apply_app,
-
+    externalProductBifunctor_map_app, Functor.leftUnitor_inv_app, whiskerLeft_id,
+    Category.comp_id, corepresentableBy_homEquiv_apply_app,
+    DayConvolution.associator_hom_unit_unit]
+  exact associator_hom_unit_unit V _ _ _ _ _ _
 
 Depends on / 依赖: Category, Category.comp_id, DayConvolution, DayConvolution.associator_hom_unit_unit, Functor, Functor.comp_obj, Functor.homEquivOfIsLeftKanExtension_apply_app, Functor.id_obj, Functor.leftUnitor_inv_app, Functor.prod_obj, associator_hom_unit_unit, comp_id, comp_obj, corepresentableBy_homEquiv_apply_app, externalProductBifunctor_map_app, externalProductBifunctor_obj_obj, homEquiv, homEquiv.injective, homEquivOfIsLeftKanExtension_apply_app, id_obj
 -/
@@ -1967,7 +2231,95 @@ definition monoidalOfLawfulDayConvolutionMonoidalCategoryStruct
       apply Functor.Faithful.map_injective (F := ι C V D)
       simp only [ι_map_tensorHom_hom_eq_tensorHom, Functor.map_id]
       apply (DayConvolution.corepresentableBy
-        (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.inject
+        (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨_, _⟩
+      simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, tensor_obj,
+        corepresentableBy_homEquiv_apply_app, unit_app_map_app, NatTrans.id_app,
+        tensorHom_id, id_whiskerRight, Category.id_comp]
+      dsimp [DayConvolution.convolution]
+      simp)
+    (tensorHom_comp_tensorHom := fun _ _ _ _ => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [ι_map_tensorHom_hom_eq_tensorHom, Functor.map_comp]
+      apply (corepresentableBy (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨_, _⟩
+      simp)
+    (id_tensorHom := fun x {y₁ y₂} f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [ι_map_tensorHom_hom_eq_tensorHom]
+      apply (corepresentableBy (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨x, y⟩
+      dsimp
+      simp only [Functor.map_id, unit_app_map_app, Functor.comp_obj, tensor_obj,
+        NatTrans.id_app, id_tensorHom]
+      dsimp [unit]
+      rw [convolutionExtensionUnit_comp_ι_map_whiskerLeft_app])
+    (tensorHom_id := fun x {y₁ y₂} f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [ι_map_tensorHom_hom_eq_tensorHom]
+      apply (corepresentableBy (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨x, y⟩
+      dsimp
+      simp only [Functor.map_id, DayConvolution.unit_app_map_app, Functor.comp_obj,
+        tensor_obj, NatTrans.id_app, tensorHom_id]
+      dsimp [DayConvolution.unit]
+      rw [convolutionExtensionUnit_comp_ι_map_whiskerRight_app])
+    (associator_naturality := fun f₁ f₂ f₃ => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, ι_map_associator_hom_eq_associator_hom,
+        ι_map_tensorHom_hom_eq_tensorHom]
+      exact DayConvolution.associator_naturality
+        ((ι C V D).map f₁) ((ι C V D).map f₂) ((ι C V D).map f₃))
+    (leftUnitor_naturality := fun f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, ι_map_tensorHom_hom_eq_tensorHom, Functor.map_id]
+      rw [ι_map_leftUnitor_hom_eq_leftUnitor_hom]; rw [ι_map_leftUnitor_hom_eq_leftUnitor_hom]
+      exact DayConvolutionUnit.leftUnitor_naturality
+        (ι C V D |>.obj <| 𝟙_ D) (ι C V D |>.map f))
+    (rightUnitor_naturality := fun f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, ι_map_tensorHom_hom_eq_tensorHom, Functor.map_id]
+      rw [ι_map_rightUnitor_hom_eq_rightUnitor_hom]; rw [ι_map_rightUnitor_hom_eq_rightUnitor_hom]
+      exact DayConvolutionUnit.rightUnitor_naturality
+        (ι C V D |>.obj <| 𝟙_ D) (ι C V D |>.map f))
+    (pentagon := fun a b c d => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, Functor.map_id, ι_map_tensorHom_hom_eq_tensorHom,
+        ι_map_associator_hom_eq_associator_hom]
+      -- this is a bit painful...
+      let : DayConvolution
+          (((ι C V D |>.obj a) ⊛ (ι C V D |>.obj b)) ⊛ (ι C V D |>.obj c))
+          (ι C V D |>.obj d) :=
+        convolution C V D _ _
+      let : DayConvolution
+          ((ι C V D |>.obj a) ⊛ (ι C V D |>.obj b))
+          ((ι C V D |>.obj c) ⊛ (ι C V D |>.obj d)) :=
+        convolution C V D _ _
+      let : DayConvolution
+          ((ι C V D |>.obj a) ⊛ ((ι C V D |>.obj b) ⊛ (ι C V D |>.obj c)))
+          (ι C V D |>.obj d) :=
+        convolution C V D _ _
+      let : DayConvolution
+          (ι C V D |>.obj a)
+          ((ι C V D |>.obj b) ⊛ ((ι C V D |>.obj c) ⊛ (ι C V D |>.obj d))) :=
+        convolution C V D _ _
+      let : DayConvolution
+          (ι C V D |>.obj a)
+          (((ι C V D |>.obj b) ⊛ (ι C V D |>.obj c)) ⊛ (ι C V D |>.obj d)) :=
+        convolution C V D _ _
+      exact DayConvolution.pentagon
+        (ι C V D |>.obj a) (ι C V D |>.obj b) (ι C V D |>.obj c) (ι C V D |>.obj d))
+    (triangle := fun a b => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, Functor.map_id, ι_map_tensorHom_hom_eq_tensorHom,
+        ι_map_associator_hom_eq_associator_hom, ι_map_leftUnitor_hom_eq_leftUnitor_hom,
+        ι_map_rightUnitor_hom_eq_rightUnitor_hom]
+      exact DayConvolution.triangle
+        (ι C V D |>.obj a) (ι C V D |>.obj b) (ι C V D |>.obj <| 𝟙_ D))
 
 中文:
 定义 monoidalOfLawfulDayConvolutionMonoidalCategoryStruct
@@ -1976,7 +2328,95 @@ definition monoidalOfLawfulDayConvolutionMonoidalCategoryStruct
       apply Functor.Faithful.map_injective (F := ι C V D)
       simp only [ι_map_tensorHom_hom_eq_tensorHom, Functor.map_id]
       apply (DayConvolution.corepresentableBy
-        (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.inject
+        (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨_, _⟩
+      simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, tensor_obj,
+        corepresentableBy_homEquiv_apply_app, unit_app_map_app, NatTrans.id_app,
+        tensorHom_id, id_whiskerRight, Category.id_comp]
+      dsimp [DayConvolution.convolution]
+      simp)
+    (tensorHom_comp_tensorHom := fun _ _ _ _ => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [ι_map_tensorHom_hom_eq_tensorHom, Functor.map_comp]
+      apply (corepresentableBy (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨_, _⟩
+      simp)
+    (id_tensorHom := fun x {y₁ y₂} f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [ι_map_tensorHom_hom_eq_tensorHom]
+      apply (corepresentableBy (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨x, y⟩
+      dsimp
+      simp only [Functor.map_id, unit_app_map_app, Functor.comp_obj, tensor_obj,
+        NatTrans.id_app, id_tensorHom]
+      dsimp [unit]
+      rw [convolutionExtensionUnit_comp_ι_map_whiskerLeft_app])
+    (tensorHom_id := fun x {y₁ y₂} f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [ι_map_tensorHom_hom_eq_tensorHom]
+      apply (corepresentableBy (ι C V D |>.obj _) (ι C V D |>.obj _)).homEquiv.injective
+      dsimp
+      ext ⟨x, y⟩
+      dsimp
+      simp only [Functor.map_id, DayConvolution.unit_app_map_app, Functor.comp_obj,
+        tensor_obj, NatTrans.id_app, tensorHom_id]
+      dsimp [DayConvolution.unit]
+      rw [convolutionExtensionUnit_comp_ι_map_whiskerRight_app])
+    (associator_naturality := fun f₁ f₂ f₃ => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, ι_map_associator_hom_eq_associator_hom,
+        ι_map_tensorHom_hom_eq_tensorHom]
+      exact DayConvolution.associator_naturality
+        ((ι C V D).map f₁) ((ι C V D).map f₂) ((ι C V D).map f₃))
+    (leftUnitor_naturality := fun f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, ι_map_tensorHom_hom_eq_tensorHom, Functor.map_id]
+      rw [ι_map_leftUnitor_hom_eq_leftUnitor_hom]; rw [ι_map_leftUnitor_hom_eq_leftUnitor_hom]
+      exact DayConvolutionUnit.leftUnitor_naturality
+        (ι C V D |>.obj <| 𝟙_ D) (ι C V D |>.map f))
+    (rightUnitor_naturality := fun f => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, ι_map_tensorHom_hom_eq_tensorHom, Functor.map_id]
+      rw [ι_map_rightUnitor_hom_eq_rightUnitor_hom]; rw [ι_map_rightUnitor_hom_eq_rightUnitor_hom]
+      exact DayConvolutionUnit.rightUnitor_naturality
+        (ι C V D |>.obj <| 𝟙_ D) (ι C V D |>.map f))
+    (pentagon := fun a b c d => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, Functor.map_id, ι_map_tensorHom_hom_eq_tensorHom,
+        ι_map_associator_hom_eq_associator_hom]
+      -- this is a bit painful...
+      let : DayConvolution
+          (((ι C V D |>.obj a) ⊛ (ι C V D |>.obj b)) ⊛ (ι C V D |>.obj c))
+          (ι C V D |>.obj d) :=
+        convolution C V D _ _
+      let : DayConvolution
+          ((ι C V D |>.obj a) ⊛ (ι C V D |>.obj b))
+          ((ι C V D |>.obj c) ⊛ (ι C V D |>.obj d)) :=
+        convolution C V D _ _
+      let : DayConvolution
+          ((ι C V D |>.obj a) ⊛ ((ι C V D |>.obj b) ⊛ (ι C V D |>.obj c)))
+          (ι C V D |>.obj d) :=
+        convolution C V D _ _
+      let : DayConvolution
+          (ι C V D |>.obj a)
+          ((ι C V D |>.obj b) ⊛ ((ι C V D |>.obj c) ⊛ (ι C V D |>.obj d))) :=
+        convolution C V D _ _
+      let : DayConvolution
+          (ι C V D |>.obj a)
+          (((ι C V D |>.obj b) ⊛ (ι C V D |>.obj c)) ⊛ (ι C V D |>.obj d)) :=
+        convolution C V D _ _
+      exact DayConvolution.pentagon
+        (ι C V D |>.obj a) (ι C V D |>.obj b) (ι C V D |>.obj c) (ι C V D |>.obj d))
+    (triangle := fun a b => by
+      apply Functor.Faithful.map_injective (F := ι C V D)
+      simp only [Functor.map_comp, Functor.map_id, ι_map_tensorHom_hom_eq_tensorHom,
+        ι_map_associator_hom_eq_associator_hom, ι_map_leftUnitor_hom_eq_leftUnitor_hom,
+        ι_map_rightUnitor_hom_eq_rightUnitor_hom]
+      exact DayConvolution.triangle
+        (ι C V D |>.obj a) (ι C V D |>.obj b) (ι C V D |>.obj <| 𝟙_ D))
 
 Depends on / 依赖: Category, Category.id_comp, DayConvolution, DayConvolution.corepresentableBy, Faithful, Functor, Functor.Faithful.map_injective, Functor.comp_obj, Functor.map_id, MonoidalCategory, MonoidalCategory.ofTensorHom, NatTrans, NatTrans.id_app, comp_obj, corepresentableBy, corepresentableBy_homEquiv_apply_app, externalProductBifunctor_obj_obj, homEquiv, homEquiv.injective, id_app
 -/
@@ -2213,7 +2653,13 @@ definition convolutions
         simp only [convolutionUnitApp_eq, Category.assoc, NatTrans.naturality_assoc]
         simp }
   isPointwiseLeftKanExtensionUnit :=
-    Functor.LeftExtension.isPoi
+    Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfIso
+      (StructuredArrow.isoMk
+        (tensorObjIsoConvolution C V d d').symm
+        (by
+          ext ⟨x, y⟩
+          simp [convolutionUnitApp_eq V d d' x y]))
+      (convolutions' d d' |>.isPointwiseLeftKanExtensionUnit)
 
 中文:
 定义 convolutions
@@ -2226,7 +2672,13 @@ definition convolutions
         simp only [convolutionUnitApp_eq, Category.assoc, NatTrans.naturality_assoc]
         simp }
   isPointwiseLeftKanExtensionUnit :=
-    Functor.LeftExtension.isPoi
+    Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfIso
+      (StructuredArrow.isoMk
+        (tensorObjIsoConvolution C V d d').symm
+        (by
+          ext ⟨x, y⟩
+          simp [convolutionUnitApp_eq V d d' x y]))
+      (convolutions' d d' |>.isPointwiseLeftKanExtensionUnit)
 
 Depends on / 依赖: tensorObj
 -/
@@ -2275,7 +2727,22 @@ abbreviation mkMonoidalCategoryStruct
   whiskerRight f x := tensorHom f (𝟙 x)
   associator x y z :=
     -- To make this work we use the better instance `convolutions`
-    letI : DayConvolution (ι C V D |>.obj x) ((ι C V D
+    letI : DayConvolution (ι C V D |>.obj x) ((ι C V D |>.obj y) ⊛ (ι C V D |>.obj z)) :=
+      convolutions C V _ _
+    letI : DayConvolution ((ι C V D |>.obj x) ⊛ (ι C V D |>.obj y)) (ι C V D |>.obj z) :=
+      convolutions C V _ _
+fullyFaithulι.preimageIso
+      DayConvolution.associator (ι C V D |>.obj x) (ι C V D |>.obj y) (ι C V D |>.obj z)
+  leftUnitor x :=
+    letI : DayConvolution (ι C V D |>.obj <| tensorUnit C V D) (ι C V D |>.obj x) :=
+      convolutions C V _ _
+fullyFaithulι.preimageIso
+      DayConvolutionUnit.leftUnitor (ι C V D |>.obj <| tensorUnit C V D) (ι C V D |>.obj x)
+  rightUnitor x :=
+    letI : DayConvolution (ι C V D |>.obj x) (ι C V D |>.obj <| tensorUnit C V D) :=
+      convolutions C V _ _
+fullyFaithulι.preimageIso
+      DayConvolutionUnit.rightUnitor (ι C V D |>.obj <| tensorUnit C V D) (ι C V D |>.obj x)
 
 中文:
 缩写 mkMonoidalCategoryStruct
@@ -2287,7 +2754,22 @@ abbreviation mkMonoidalCategoryStruct
   whiskerRight f x := tensorHom f (𝟙 x)
   associator x y z :=
     -- To make this work we use the better instance `convolutions`
-    letI : DayConvolution (ι C V D |>.obj x) ((ι C V D
+    letI : DayConvolution (ι C V D |>.obj x) ((ι C V D |>.obj y) ⊛ (ι C V D |>.obj z)) :=
+      convolutions C V _ _
+    letI : DayConvolution ((ι C V D |>.obj x) ⊛ (ι C V D |>.obj y)) (ι C V D |>.obj z) :=
+      convolutions C V _ _
+fullyFaithulι.preimageIso
+      DayConvolution.associator (ι C V D |>.obj x) (ι C V D |>.obj y) (ι C V D |>.obj z)
+  leftUnitor x :=
+    letI : DayConvolution (ι C V D |>.obj <| tensorUnit C V D) (ι C V D |>.obj x) :=
+      convolutions C V _ _
+fullyFaithulι.preimageIso
+      DayConvolutionUnit.leftUnitor (ι C V D |>.obj <| tensorUnit C V D) (ι C V D |>.obj x)
+  rightUnitor x :=
+    letI : DayConvolution (ι C V D |>.obj x) (ι C V D |>.obj <| tensorUnit C V D) :=
+      convolutions C V _ _
+fullyFaithulι.preimageIso
+      DayConvolutionUnit.rightUnitor (ι C V D |>.obj <| tensorUnit C V D) (ι C V D |>.obj x)
 
 Depends on / 依赖: tensorObj
 -/
@@ -2380,7 +2862,8 @@ lemma ι_map_tensorHom_eq
   dsimp
   ext ⟨u₁, u₂⟩
   dsimp
-
+  simp only [DayConvolution.unit_app_map_app, Functor.comp_obj, tensor_obj]
+  simp +instances [convolutions, convolutionUnitApp_eq]
 
 中文:
 引理 ι_map_tensorHom_eq
@@ -2394,7 +2877,8 @@ lemma ι_map_tensorHom_eq
   dsimp
   ext ⟨u₁, u₂⟩
   dsimp
-
+  simp only [DayConvolution.unit_app_map_app, Functor.comp_obj, tensor_obj]
+  simp +instances [convolutions, convolutionUnitApp_eq]
 
 Depends on / 依赖: mkMonoidalCategoryStruct
 -/
@@ -2428,7 +2912,36 @@ definition mkLawfulDayConvolutionMonoidalCategoryStruct
     faithful_ι := fullyFaithulι.faithful
     convolutionExtensionUnit d d' :=
       (convolutions C V d d').unit
-    isPointwise
+    isPointwiseLeftKanExtensionConvolutionExtensionUnit d d' :=
+      (convolutions C V d d').isPointwiseLeftKanExtensionUnit
+    unitUnit := tensorUnitConvolutionUnit.can
+    isPointwiseLeftKanExtensionUnitUnit :=
+      tensorUnitConvolutionUnit.isPointwiseLeftKanExtensionCan
+    convolutionExtensionUnit_comp_ι_map_tensorHom_app := by
+      intros d₁ d₁' d₂ d₂' f f' x y
+      simp [ι_map_tensorHom_eq C V D f f']
+    convolutionExtensionUnit_comp_ι_map_whiskerLeft_app := by
+      intros d₁ d₂ d₂' f x y
+      simp [← id_tensorHom, ι_map_tensorHom_eq C V D]
+    convolutionExtensionUnit_comp_ι_map_whiskerRight_app := by
+      intros
+      simp [← tensorHom_id, ι_map_tensorHom_eq C V D]
+    associator_hom_unit_unit d₁ d₂ d₃ x₁ x₂ x₃ := by
+      simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, tensor_obj, associator,
+        Functor.FullyFaithful.preimageIso_hom, Functor.FullyFaithful.map_preimage]
+      let : DayConvolution (ι C V D |>.obj d₁) ((ι C V D |>.obj d₂) ⊛ (ι C V D |>.obj d₃)) :=
+        convolutions C V _ _
+      let : DayConvolution ((ι C V D |>.obj d₁) ⊛ (ι C V D |>.obj d₂)) (ι C V D |>.obj d₃) :=
+        convolutions C V _ _
+      apply DayConvolution.associator_hom_unit_unit
+    leftUnitor_hom_unit_app _ _ := by
+      simp only [Functor.comp_obj, tensor_obj, leftUnitor,
+        Functor.FullyFaithful.preimageIso_hom, Functor.FullyFaithful.map_preimage]
+      apply DayConvolutionUnit.leftUnitor_hom_unit_app
+    rightUnitor_hom_unit_app _ _ := by
+      simp only [Functor.comp_obj, tensor_obj, rightUnitor,
+        Functor.FullyFaithful.preimageIso_hom, Functor.FullyFaithful.map_preimage]
+      apply DayConvolutionUnit.rightUnitor_hom_unit_app }
 
 中文:
 定义 mkLawfulDayConvolutionMonoidalCategoryStruct
@@ -2440,7 +2953,36 @@ definition mkLawfulDayConvolutionMonoidalCategoryStruct
     faithful_ι := fullyFaithulι.faithful
     convolutionExtensionUnit d d' :=
       (convolutions C V d d').unit
-    isPointwise
+    isPointwiseLeftKanExtensionConvolutionExtensionUnit d d' :=
+      (convolutions C V d d').isPointwiseLeftKanExtensionUnit
+    unitUnit := tensorUnitConvolutionUnit.can
+    isPointwiseLeftKanExtensionUnitUnit :=
+      tensorUnitConvolutionUnit.isPointwiseLeftKanExtensionCan
+    convolutionExtensionUnit_comp_ι_map_tensorHom_app := by
+      intros d₁ d₁' d₂ d₂' f f' x y
+      simp [ι_map_tensorHom_eq C V D f f']
+    convolutionExtensionUnit_comp_ι_map_whiskerLeft_app := by
+      intros d₁ d₂ d₂' f x y
+      simp [← id_tensorHom, ι_map_tensorHom_eq C V D]
+    convolutionExtensionUnit_comp_ι_map_whiskerRight_app := by
+      intros
+      simp [← tensorHom_id, ι_map_tensorHom_eq C V D]
+    associator_hom_unit_unit d₁ d₂ d₃ x₁ x₂ x₃ := by
+      simp only [externalProductBifunctor_obj_obj, Functor.comp_obj, tensor_obj, associator,
+        Functor.FullyFaithful.preimageIso_hom, Functor.FullyFaithful.map_preimage]
+      let : DayConvolution (ι C V D |>.obj d₁) ((ι C V D |>.obj d₂) ⊛ (ι C V D |>.obj d₃)) :=
+        convolutions C V _ _
+      let : DayConvolution ((ι C V D |>.obj d₁) ⊛ (ι C V D |>.obj d₂)) (ι C V D |>.obj d₃) :=
+        convolutions C V _ _
+      apply DayConvolution.associator_hom_unit_unit
+    leftUnitor_hom_unit_app _ _ := by
+      simp only [Functor.comp_obj, tensor_obj, leftUnitor,
+        Functor.FullyFaithful.preimageIso_hom, Functor.FullyFaithful.map_preimage]
+      apply DayConvolutionUnit.leftUnitor_hom_unit_app
+    rightUnitor_hom_unit_app _ _ := by
+      simp only [Functor.comp_obj, tensor_obj, rightUnitor,
+        Functor.FullyFaithful.preimageIso_hom, Functor.FullyFaithful.map_preimage]
+      apply DayConvolutionUnit.rightUnitor_hom_unit_app }
 
 Depends on / 依赖: mkMonoidalCategoryStruct
 -/
@@ -2502,7 +3044,22 @@ definition ofHasDayConvolutions
   convolutions' := fun d d' =>
     { convolution := (tensor C).pointwiseLeftKanExtension (ι.obj d ⊠ ι.obj d')
       unit := (tensor C).pointwiseLeftKanExtensionUnit (ι.obj d ⊠ ι.obj d')
-      isPointwiseLeftKanExt
+      isPointwiseLeftKanExtensionUnit :=
+        (tensor C).pointwiseLeftKanExtensionIsPointwiseLeftKanExtension (ι.obj d ⊠ ι.obj d') }
+  tensorObjIsoConvolution := fun d d' => Functor.essImage.getIso _
+  tensorUnit := essImageDayConvolutionUnit.witness
+  tensorUnitConvolutionUnit :=
+    { can :=
+        ((Functor.fromPUnit.{0} <| 𝟙_ C).pointwiseLeftKanExtensionUnit
+            (Functor.fromPUnit.{0} <| 𝟙_ V)).app (.mk PUnit.unit) ≫
+          (essImageDayConvolutionUnit.getIso.inv.app (𝟙_ C))
+      isPointwiseLeftKanExtensionCan :=
+        Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfIso
+        (StructuredArrow.isoMk
+          (essImageDayConvolutionUnit.getIso).symm)
+        (Functor.pointwiseLeftKanExtensionIsPointwiseLeftKanExtension
+          (Functor.fromPUnit.{0} <| 𝟙_ C)
+          (Functor.fromPUnit.{0} <| 𝟙_ V)) }
 
 中文:
 定义 ofHasDayConvolutions
@@ -2512,7 +3069,22 @@ definition ofHasDayConvolutions
   convolutions' := fun d d' =>
     { convolution := (tensor C).pointwiseLeftKanExtension (ι.obj d ⊠ ι.obj d')
       unit := (tensor C).pointwiseLeftKanExtensionUnit (ι.obj d ⊠ ι.obj d')
-      isPointwiseLeftKanExt
+      isPointwiseLeftKanExtensionUnit :=
+        (tensor C).pointwiseLeftKanExtensionIsPointwiseLeftKanExtension (ι.obj d ⊠ ι.obj d') }
+  tensorObjIsoConvolution := fun d d' => Functor.essImage.getIso _
+  tensorUnit := essImageDayConvolutionUnit.witness
+  tensorUnitConvolutionUnit :=
+    { can :=
+        ((Functor.fromPUnit.{0} <| 𝟙_ C).pointwiseLeftKanExtensionUnit
+            (Functor.fromPUnit.{0} <| 𝟙_ V)).app (.mk PUnit.unit) ≫
+          (essImageDayConvolutionUnit.getIso.inv.app (𝟙_ C))
+      isPointwiseLeftKanExtensionCan :=
+        Functor.LeftExtension.isPointwiseLeftKanExtensionEquivOfIso
+        (StructuredArrow.isoMk
+          (essImageDayConvolutionUnit.getIso).symm)
+        (Functor.pointwiseLeftKanExtensionIsPointwiseLeftKanExtension
+          (Functor.fromPUnit.{0} <| 𝟙_ C)
+          (Functor.fromPUnit.{0} <| 𝟙_ V)) }
 -/
 noncomputable def ofHasDayConvolutions
     {D : Type u₃} [Category.{v₃} D]
@@ -2603,7 +3175,8 @@ definition monoidalOfHasDayConvolutions
     .ofHasDayConvolutions ι ffι essImageDayConvolution essImageDayConvolutionUnit
   letI := induced.mkMonoidalCategoryStruct
   letI : LawfulDayConvolutionMonoidalCategoryStruct C V D :=
-    induced.mkLawfulDayConvolutionMo
+    induced.mkLawfulDayConvolutionMonoidalCategoryStruct
+  monoidalOfLawfulDayConvolutionMonoidalCategoryStruct C V D
 
 中文:
 定义 monoidalOfHasDayConvolutions
@@ -2612,7 +3185,8 @@ definition monoidalOfHasDayConvolutions
     .ofHasDayConvolutions ι ffι essImageDayConvolution essImageDayConvolutionUnit
   letI := induced.mkMonoidalCategoryStruct
   letI : LawfulDayConvolutionMonoidalCategoryStruct C V D :=
-    induced.mkLawfulDayConvolutionMo
+    induced.mkLawfulDayConvolutionMonoidalCategoryStruct
+  monoidalOfLawfulDayConvolutionMonoidalCategoryStruct C V D
 
 Depends on / 依赖: InducedLawfulDayConvolutionMonoidalCategoryStructCore, LawfulDayConvolutionMonoidalCategoryStruct, essImageDayConvolution, essImageDayConvolutionUnit, induced, induced.mkLawfulDayConvolutionMonoidalCategoryStruct, induced.mkMonoidalCategoryStruct, mkLawfulDayConvolutionMonoidalCategoryStruct, mkMonoidalCategoryStruct, monoidalOfLawfulDayConvolutionMonoidalCategoryStruct, ofHasDayConvolutions
 -/
@@ -2639,6 +3213,9 @@ definition lawfulDayConvolutionMonoidalCategoryStructOfHasDayConvolutions
     LawfulDayConvolutionMonoidalCategoryStruct C V D :=
   letI : InducedLawfulDayConvolutionMonoidalCategoryStructCore C V D :=
     .ofHasDayConvolutions ι ffι essImageDayConvolution essImageDayConvolutionUnit
+  letI := monoidalOfHasDayConvolutions
+    ι ffι essImageDayConvolution essImageDayConvolutionUnit
+  mkLawfulDayConvolutionMonoidalCategoryStruct C V D
 
 中文:
 定义 lawfulDayConvolutionMonoidalCategoryStructOfHasDayConvolutions
@@ -2648,6 +3225,9 @@ definition lawfulDayConvolutionMonoidalCategoryStructOfHasDayConvolutions
     LawfulDayConvolutionMonoidalCategoryStruct C V D :=
   letI : InducedLawfulDayConvolutionMonoidalCategoryStructCore C V D :=
     .ofHasDayConvolutions ι ffι essImageDayConvolution essImageDayConvolutionUnit
+  letI := monoidalOfHasDayConvolutions
+    ι ffι essImageDayConvolution essImageDayConvolutionUnit
+  mkLawfulDayConvolutionMonoidalCategoryStruct C V D
 
 Depends on / 依赖: monoidalOfHasDayConvolutions
 -/

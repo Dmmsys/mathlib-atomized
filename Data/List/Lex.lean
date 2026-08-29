@@ -122,7 +122,11 @@ instance isOrderConnected
     | _, [], _ :: _, cons _ => Or.inr nil
     | _, _ :: _, _ :: _, nil => Or.inl nil
     | _ :: _, b :: _, _ :: _, rel h => (IsOrderConnected.conn _ b _ h).imp rel rel
-    | a :: l₁, b :: l₂, _ :: l₃, c
+    | a :: l₁, b :: l₂, _ :: l₃, cons h => by
+      rcases trichotomous_of r a b with (ab | rfl | ab)
+      · exact Or.inl (rel ab)
+      · exact (aux _ l₂ _ h).imp cons cons
+      · exact Or.inr (rel ab)
 
 中文:
 实例 isOrderConnected
@@ -134,7 +138,11 @@ instance isOrderConnected
     | _, [], _ :: _, cons _ => Or.inr nil
     | _, _ :: _, _ :: _, nil => Or.inl nil
     | _ :: _, b :: _, _ :: _, rel h => (IsOrderConnected.conn _ b _ h).imp rel rel
-    | a :: l₁, b :: l₂, _ :: l₃, c
+    | a :: l₁, b :: l₂, _ :: l₃, cons h => by
+      rcases trichotomous_of r a b with (ab | rfl | ab)
+      · exact Or.inl (rel ab)
+      · exact (aux _ l₂ _ h).imp cons cons
+      · exact Or.inr (rel ab)
 -/
 instance isOrderConnected (r : α -> α -> Prop) [IsOrderConnected α r] [Std.Trichotomous r] :
     IsOrderConnected (List α) (Lex r) where
@@ -344,7 +352,7 @@ theorem _root_.Decidable.List.Lex.ne_iff
       by_cases ab : a = b
       · subst b
 exact .cons IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
-  
+      · exact .rel ab ⟩
 
 中文:
 定理 _root_.可判定.列表.Lex.ne_iff
@@ -358,7 +366,7 @@ exact .cons IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
       by_cases ab : a = b
       · subst b
 exact .cons IH (le_of_succ_le_succ H) (mt (congr_arg _) h)
-  
+      · exact .rel ab ⟩
 
 Depends on / 依赖: congr_arg, cons.cons, generalizing, le_of_succ_le_succ, not_lt_of_ge, succ_pos, to_ne
 -/

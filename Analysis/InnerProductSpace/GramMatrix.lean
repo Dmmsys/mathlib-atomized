@@ -309,7 +309,7 @@ theorem posDef_gram_of_linearIndependent
   refine .of_dotProduct_mulVec_pos (isHermitian_gram _ _) fun x hx =>
     ((posSemidef_gram ..).dotProduct_mulVec_nonneg _).lt_of_ne' ?_
   rw [star_dotProduct_gram_mulVec]; rw [inner_self_eq_zero.ne]
-  exact mt (h_li x) (mt
+  exact mt (h_li x) (mt funext hx)
 
 中文:
 定理 posDef_gram_of_linearIndependent
@@ -319,7 +319,7 @@ theorem posDef_gram_of_linearIndependent
   refine .of_dotProduct_mulVec_pos (isHermitian_gram _ _) fun x hx =>
     ((posSemidef_gram ..).dotProduct_mulVec_nonneg _).lt_of_ne' ?_
   rw [star_dotProduct_gram_mulVec]; rw [inner_self_eq_zero.ne]
-  exact mt (h_li x) (mt
+  exact mt (h_li x) (mt funext hx)
 
 Depends on / 依赖: Fintype, Fintype.linearIndependent_iff, Fintype.ofFinite, dotProduct_mulVec_nonneg, h_li, inner_self_eq_zero, inner_self_eq_zero.ne, isHermitian_gram, linearIndependent_iff, lt_of_ne, ofFinite, of_dotProduct_mulVec_pos, posSemidef_gram, star_dotProduct_gram_mulVec
 -/
@@ -456,7 +456,17 @@ theorem posSemidef_opNorm_smul_gram_sub_gram
   simp_rw [Finsupp.sum, Matrix.sub_apply, Matrix.smul_apply, mul_sub, sub_mul,
     Finset.sum_sub_distrib, sub_nonneg]
   calc
-    ∑ x in c.support, ∑ y in 
+    ∑ x in c.support, ∑ y in c.support, star (c x) * gram 𝕜 (f ∘ v) x y * c y
+    _ = (‖f (∑ x in c.support, c x • v x)‖ : 𝕜) ^ 2 := ?h1
+    _ <= ‖f‖ ^ 2 • (‖∑ i in c.support, c i • v i‖ : 𝕜) ^ 2 := by
+      norm_cast
+      grw [f.le_opNorm _, smul_eq_mul, ← mul_pow]
+    _ = ∑ x in c.support, ∑ y in c.support, star (c x) * ‖f‖ ^ 2 • gram 𝕜 v x y * c y := ?h2
+  all_goals
+    rw [Finset.sum_comm]
+    simp [← inner_self_eq_norm_sq_to_K, inner_sum, sum_inner, inner_smul_left, inner_smul_right,
+      Finset.mul_sum, Finset.smul_sum, RCLike.real_smul_eq_coe_mul]
+    grind
 
 中文:
 定理 posSemidef_opNorm_smul_gram_sub_gram
@@ -467,7 +477,17 @@ theorem posSemidef_opNorm_smul_gram_sub_gram
   simp_rw [Finsupp.sum, Matrix.sub_apply, Matrix.smul_apply, mul_sub, sub_mul,
     Finset.sum_sub_distrib, sub_nonneg]
   calc
-    ∑ x in c.support, ∑ y in 
+    ∑ x in c.support, ∑ y in c.support, star (c x) * gram 𝕜 (f ∘ v) x y * c y
+    _ = (‖f (∑ x in c.support, c x • v x)‖ : 𝕜) ^ 2 := ?h1
+    _ <= ‖f‖ ^ 2 • (‖∑ i in c.support, c i • v i‖ : 𝕜) ^ 2 := by
+      norm_cast
+      grw [f.le_opNorm _, smul_eq_mul, ← mul_pow]
+    _ = ∑ x in c.support, ∑ y in c.support, star (c x) * ‖f‖ ^ 2 • gram 𝕜 v x y * c y := ?h2
+  all_goals
+    rw [Finset.sum_comm]
+    simp [← inner_self_eq_norm_sq_to_K, inner_sum, sum_inner, inner_smul_left, inner_smul_right,
+      Finset.mul_sum, Finset.smul_sum, RCLike.real_smul_eq_coe_mul]
+    grind
 
 Depends on / 依赖: Finset, Finset.sum_sub_distrib, Finsupp, Finsupp.sum, Matrix, Matrix.smul_apply, Matrix.sub_apply, Pi.isSelfAdjoint.mpr, c.support, f.le_opNorm, isHermitian_gram, isSelfAdjoint, le_opNorm, mul_, mul_sub, simp_rw, smul_apply, smul_eq_mul, sub_apply, sub_mul
 -/

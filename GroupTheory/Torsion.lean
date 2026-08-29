@@ -128,7 +128,7 @@ definition IsMulTorsion.group
       exact (tG g).orderOf_pos }
 
 @[deprecated (since := "2026-07-01")] alias IsTorsion.group := IsMulTorsion.group
-@[deprecated (since := "2026-07
+@[deprecated (since := "2026-07-01")] alias IsTorsion.addGroup := IsAddTorsion.addGroup
 
 中文:
 定义 IsMulTorsion.group
@@ -140,7 +140,7 @@ definition IsMulTorsion.group
       exact (tG g).orderOf_pos }
 
 @[deprecated (since := "2026-07-01")] alias IsTorsion.group := IsMulTorsion.group
-@[deprecated (since := "2026-07
+@[deprecated (since := "2026-07-01")] alias IsTorsion.addGroup := IsAddTorsion.addGroup
 
 Depends on / 依赖: Monoid, inv_mul_cancel, orderOf, orderOf_pos, pow_orderOf_eq_one, pow_succ, tsub_add_cancel_of_le
 -/
@@ -239,7 +239,13 @@ theorem IsMulTorsion.extension_closed
   have hmem := MonoidHom.mem_ker.mpr ((f.map_pow g ngn).trans hngn)
   lift g ^ ngn to N using hN.symm ▸ hmem with gn h
   obtain ⟨nn, nnpos, hnn⟩ := (tN gn).exists_pow_eq_one
-exact isOfFinOrder_iff_pow_eq_one.mpr ⟨ngn * nn, mul
+exact isOfFinOrder_iff_pow_eq_one.mpr ⟨ngn * nn, mul_pos ngnpos nnpos, by
+    rw [pow_mul]; rw [← h]; rw [← Subgroup.coe_pow]; rw [hnn]; rw [Subgroup.coe_one]⟩
+
+@[deprecated (since := "2026-06-30")] alias IsTorsion.extension_closed :=
+  IsMulTorsion.extension_closed
+@[deprecated (since := "2026-06-30")] alias AddIsTorsion.extension_closed :=
+  IsAddTorsion.extension_closed
 
 中文:
 定理 IsMulTorsion.extension_closed
@@ -249,7 +255,13 @@ exact isOfFinOrder_iff_pow_eq_one.mpr ⟨ngn * nn, mul
   have hmem := MonoidHom.mem_ker.mpr ((f.map_pow g ngn).trans hngn)
   lift g ^ ngn to N using hN.symm ▸ hmem with gn h
   obtain ⟨nn, nnpos, hnn⟩ := (tN gn).exists_pow_eq_one
-exact isOfFinOrder_iff_pow_eq_one.mpr ⟨ngn * nn, mul
+exact isOfFinOrder_iff_pow_eq_one.mpr ⟨ngn * nn, mul_pos ngnpos nnpos, by
+    rw [pow_mul]; rw [← h]; rw [← Subgroup.coe_pow]; rw [hnn]; rw [Subgroup.coe_one]⟩
+
+@[deprecated (since := "2026-06-30")] alias IsTorsion.extension_closed :=
+  IsMulTorsion.extension_closed
+@[deprecated (since := "2026-06-30")] alias AddIsTorsion.extension_closed :=
+  IsAddTorsion.extension_closed
 
 Depends on / 依赖: MonoidHom, MonoidHom.mem_ker.mpr, Subgroup, Subgroup.coe_one, Subgroup.coe_pow, coe_one, coe_pow, exists_pow_eq_one, f.map_pow, hN.symm, isOfFinOrder_iff_pow_eq_one, isOfFinOrder_iff_pow_eq_one.mpr, map_pow, mem_ker, mul_pos, ngnpos, pow_mul
 -/
@@ -314,7 +326,7 @@ theorem ExponentExists.isMulTorsion
 
 @[deprecated (since := "2026-06-30")] alias ExponentExists.isTorsion := ExponentExists.isMulTorsion
 @[deprecated (since := "2026-06-30")] alias ExponentExists.is_add_torsion :=
-  ExponentExists.isAddTors
+  ExponentExists.isAddTorsion
 
 中文:
 定理 ExponentExists.isMulTorsion
@@ -326,7 +338,7 @@ theorem ExponentExists.isMulTorsion
 
 @[deprecated (since := "2026-06-30")] alias ExponentExists.isTorsion := ExponentExists.isMulTorsion
 @[deprecated (since := "2026-06-30")] alias ExponentExists.is_add_torsion :=
-  ExponentExists.isAddTors
+  ExponentExists.isAddTorsion
 
 Depends on / 依赖: isOfFinOrder_iff_pow_eq_one, isOfFinOrder_iff_pow_eq_one.mpr
 -/
@@ -418,7 +430,7 @@ lemma not_isMulTorsionFree_of_isMulTorsion
 @[deprecated (since := "2026-07-01")] alias not_isMulTorsionFree_of_isTorsion :=
   not_isMulTorsionFree_of_isMulTorsion
 @[deprecated (since := "2026-07-01")] alias not_isAddTorsionFree_of_isTorsion :=
-  not_isAd
+  not_isAddTorsionFree_of_isAddTorsion
 
 中文:
 引理 not_isMulTorsionFree_of_isMulTorsion
@@ -428,7 +440,7 @@ lemma not_isMulTorsionFree_of_isMulTorsion
 @[deprecated (since := "2026-07-01")] alias not_isMulTorsionFree_of_isTorsion :=
   not_isMulTorsionFree_of_isMulTorsion
 @[deprecated (since := "2026-07-01")] alias not_isAddTorsionFree_of_isTorsion :=
-  not_isAd
+  not_isAddTorsionFree_of_isAddTorsion
 
 Depends on / 依赖: exists_ne, not_isMulTorsionFree_iff_isOfFinOrder
 -/
@@ -496,7 +508,7 @@ theorem IsAddTorsion.module_of_torsion
     exact ⟨n, npos, by simp only [← Nat.cast_smul_eq_nsmul R _ f, ← nsmul_one, hn, zero_smul]⟩
 
 @[deprecated (since := "2026-07-01")] alias AddMonoid.IsTorsion.module_of_torsion :=
-  IsAddTorsio
+  IsAddTorsion.module_of_torsion
 
 中文:
 定理 IsAddTorsion.module_of_torsion
@@ -506,7 +518,7 @@ theorem IsAddTorsion.module_of_torsion
     exact ⟨n, npos, by simp only [← Nat.cast_smul_eq_nsmul R _ f, ← nsmul_one, hn, zero_smul]⟩
 
 @[deprecated (since := "2026-07-01")] alias AddMonoid.IsTorsion.module_of_torsion :=
-  IsAddTorsio
+  IsAddTorsion.module_of_torsion
 
 Depends on / 依赖: Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, exists_nsmul_eq_zero, isOfFinAddOrder_iff_nsmul_eq_zero, isOfFinAddOrder_iff_nsmul_eq_zero.mpr, nsmul_one, zero_smul
 -/
@@ -653,7 +665,9 @@ Subtype.ext by
       change _ * 1 = 1
       rw [_root_.mul_one]; rw [SubmonoidClass.coe_pow]; rw [Subtype.coe_mk]; rw [(isPeriodicPt_mul_iff_pow_eq_one _).mp hn]⟩
 
-@[deprecated (since := "2026-07-01")] alias torsion.isTorsio
+@[deprecated (since := "2026-07-01")] alias torsion.isTorsion := torsion.isMulTorsion
+@[deprecated (since := "2026-07-01")] alias _root_.AddCommMonoid.addTorsion.isTorsion :=
+  AddCommMonoid.addTorsion.isAddTorsion
 
 中文:
 定理 torsion.isMulTorsion
@@ -666,7 +680,9 @@ Subtype.ext by
       change _ * 1 = 1
       rw [_root_.mul_one]; rw [SubmonoidClass.coe_pow]; rw [Subtype.coe_mk]; rw [(isPeriodicPt_mul_iff_pow_eq_one _).mp hn]⟩
 
-@[deprecated (since := "2026-07-01")] alias torsion.isTorsio
+@[deprecated (since := "2026-07-01")] alias torsion.isTorsion := torsion.isMulTorsion
+@[deprecated (since := "2026-07-01")] alias _root_.AddCommMonoid.addTorsion.isTorsion :=
+  AddCommMonoid.addTorsion.isAddTorsion
 -/
 theorem torsion.isMulTorsion : IsMulTorsion torsion G := fun ⟨x, n, npos, hn⟩ =>
   ⟨n, npos,
@@ -1233,7 +1249,10 @@ lemma isMulTorsion_quotient_range_powMonoidHom
   simp
 
 @[deprecated (since := "2026-07-01")] alias isTorsion_quotient_range_powMonoidHom :=
-  isMulTorsion_
+  isMulTorsion_quotient_range_powMonoidHom
+@[deprecated (since := "2026-07-01")] alias
+    _root_.AddCommGroup.isTorsion_quotient_range_nsmulAddMonoidHom :=
+  AddCommGroup.isAddTorsion_quotient_range_nsmulAddMonoidHom
 
 中文:
 引理 isMulTorsion_quotient_range_powMonoidHom
@@ -1245,7 +1264,10 @@ lemma isMulTorsion_quotient_range_powMonoidHom
   simp
 
 @[deprecated (since := "2026-07-01")] alias isTorsion_quotient_range_powMonoidHom :=
-  isMulTorsion_
+  isMulTorsion_quotient_range_powMonoidHom
+@[deprecated (since := "2026-07-01")] alias
+    _root_.AddCommGroup.isTorsion_quotient_range_nsmulAddMonoidHom :=
+  AddCommGroup.isAddTorsion_quotient_range_nsmulAddMonoidHom
 
 Depends on / 依赖: IsMulTorsion, QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.induction_on, QuotientGroup.mk_pow, eq_one_iff, hn.pos, induction_on, isOfFinOrder_iff_pow_eq_one, mk_pow
 -/
@@ -1544,7 +1566,7 @@ instance _root_.QuotientGroup.instIsMulTorsionFree
   obtain ⟨m, mpos, hm⟩ := hfin.exists_pow_eq_one
   obtain ⟨n, npos, hn⟩ := ((QuotientGroup.eq_one_iff _).mp hm).exists_pow_eq_one
   exact (QuotientGroup.eq_one_iff g).mpr
-    (isOfFinOrder_iff_pow_eq_one.mpr ⟨m * n, mul_pos 
+    (isOfFinOrder_iff_pow_eq_one.mpr ⟨m * n, mul_pos mpos npos, (pow_mul g m n).symm ▸ hn⟩)
 
 中文:
 实例 _root_.商群.instIsMulTorsionFree
@@ -1555,7 +1577,7 @@ instance _root_.QuotientGroup.instIsMulTorsionFree
   obtain ⟨m, mpos, hm⟩ := hfin.exists_pow_eq_one
   obtain ⟨n, npos, hn⟩ := ((QuotientGroup.eq_one_iff _).mp hm).exists_pow_eq_one
   exact (QuotientGroup.eq_one_iff g).mpr
-    (isOfFinOrder_iff_pow_eq_one.mpr ⟨m * n, mul_pos 
+    (isOfFinOrder_iff_pow_eq_one.mpr ⟨m * n, mul_pos mpos npos, (pow_mul g m n).symm ▸ hn⟩)
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.eq_one_iff, eq_one_iff, exists_pow_eq_one, hfin.exists_pow_eq_one, isOfFinOrder_iff_pow_eq_one, isOfFinOrder_iff_pow_eq_one.mpr, mul_pos, of_not_isOfFinOrder, pow_mul
 -/

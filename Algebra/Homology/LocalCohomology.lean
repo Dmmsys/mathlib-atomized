@@ -397,7 +397,14 @@ instance ideal_powers_initial
     · obtain ⟨k, hk⟩ := Ideal.exists_pow_le_of_le_radical_of_fg J'.2 (isNoetherian_def.mp hR _)
       exact ⟨CostructuredArrow.mk (⟨⟨⟨hk⟩⟩⟩ : (idealPowersToSelfLERadical J).obj (op k) ⟶ J')⟩
     · intro j1 j2
-      apply Relation.ReflTransGen.singl
+      apply Relation.ReflTransGen.single
+      -- The inclusions `J^n1 ≤ J'` and `J^n2 ≤ J'` always form a triangle, based on
+      -- which exponent is larger.
+      rcases le_total (unop j1.left) (unop j2.left) with h | h
+      · right; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
+      · left; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
+
+example : HasColimitsOfSize.{0, 0, u, u + 1} (ModuleCat.{u, u} R) := inferInstance
 
 中文:
 实例 ideal_powers_initial
@@ -407,7 +414,14 @@ instance ideal_powers_initial
     · obtain ⟨k, hk⟩ := Ideal.exists_pow_le_of_le_radical_of_fg J'.2 (isNoetherian_def.mp hR _)
       exact ⟨CostructuredArrow.mk (⟨⟨⟨hk⟩⟩⟩ : (idealPowersToSelfLERadical J).obj (op k) ⟶ J')⟩
     · intro j1 j2
-      apply Relation.ReflTransGen.singl
+      apply Relation.ReflTransGen.single
+      -- The inclusions `J^n1 ≤ J'` and `J^n2 ≤ J'` always form a triangle, based on
+      -- which exponent is larger.
+      rcases le_total (unop j1.left) (unop j2.left) with h | h
+      · right; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
+      · left; exact ⟨CostructuredArrow.homMk (homOfLE h).op rfl⟩
+
+example : HasColimitsOfSize.{0, 0, u, u + 1} (ModuleCat.{u, u} R) := inferInstance
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, Ideal.exists_pow_le_of_le_radical_of_fg, ReflTransGen, Relation, Relation.ReflTransGen.single, allowSynthFailures, exists_pow_le_of_le_radical_of_fg, idealPowersToSelfLERadical, isNoetherian_def, isNoetherian_def.mp, single, zigzag_isConnected
 -/

@@ -391,7 +391,7 @@ theorem xgcdAux_P
     intro s t s' t' p p'
     rw [xgcdAux_rec h]; refine IH ?_ p; dsimp [P] at *
     rw [Int.emod_def]; generalize (b / a : Int) = k
-    rw [p]; rw [p']; rw [Int.mul_sub]; rw [sub_add_eq_add_sub]; rw [Int.mul_sub]; rw [In
+    rw [p]; rw [p']; rw [Int.mul_sub]; rw [sub_add_eq_add_sub]; rw [Int.mul_sub]; rw [Int.add_mul]; rw [mul_comm k t]; rw [mul_comm k s]; rw [← mul_assoc]; rw [← mul_assoc]; rw [add_comm (x * s * k)]; rw [← add_sub_assoc]; rw [sub_sub]
 
 中文:
 定理 xgcdAux_P
@@ -403,7 +403,7 @@ theorem xgcdAux_P
     intro s t s' t' p p'
     rw [xgcdAux_rec h]; refine IH ?_ p; dsimp [P] at *
     rw [Int.emod_def]; generalize (b / a : Int) = k
-    rw [p]; rw [p']; rw [Int.mul_sub]; rw [sub_add_eq_add_sub]; rw [Int.mul_sub]; rw [In
+    rw [p]; rw [p']; rw [Int.mul_sub]; rw [sub_add_eq_add_sub]; rw [Int.mul_sub]; rw [Int.add_mul]; rw [mul_comm k t]; rw [mul_comm k s]; rw [← mul_assoc]; rw [← mul_assoc]; rw [add_comm (x * s * k)]; rw [← add_sub_assoc]; rw [sub_sub]
 -/
 private theorem xgcdAux_P {r r'} :
     forall {s t s' t'}, P x y (r, s, t) -> P x y (r', s', t') -> P x y (xgcdAux r s t r' s' t') := by
@@ -451,7 +451,10 @@ theorem exists_mul_mod_eq_gcd
   have hk' := Int.ofNat_ne_zero.2 (Nat.zero_lt_of_lt hk).ne'
   have key := congr(($(gcd_eq_gcd_ab n k) % k).toNat)
   rw [Int.add_mul_emod_self_left]; rw [← Int.natCast_mod]; rw [Int.toNat_natCast]; rw [mod_eq_of_lt hk] at key
-  refine ⟨(n.gcdA k % k).toNat, ?_, (Int.ofNat_inj.1 ?_).trans key.symm
+  refine ⟨(n.gcdA k % k).toNat, ?_, (Int.ofNat_inj.1 ?_).trans key.symm⟩
+  · rw [Int.toNat_lt (Int.emod_nonneg _ hk')]
+    exact Int.emod_lt _ hk'
+  rw [Int.natCast_mod]; rw [Int.natCast_mul]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ hk')]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ hk')]; rw [Int.mul_emod]; rw [Int.emod_emod]; rw [← Int.mul_emod]
 
 中文:
 定理 存在_mul_mod_eq_gcd
@@ -461,7 +464,10 @@ theorem exists_mul_mod_eq_gcd
   have hk' := Int.ofNat_ne_zero.2 (Nat.zero_lt_of_lt hk).ne'
   have key := congr(($(gcd_eq_gcd_ab n k) % k).toNat)
   rw [Int.add_mul_emod_self_left]; rw [← Int.natCast_mod]; rw [Int.toNat_natCast]; rw [mod_eq_of_lt hk] at key
-  refine ⟨(n.gcdA k % k).toNat, ?_, (Int.ofNat_inj.1 ?_).trans key.symm
+  refine ⟨(n.gcdA k % k).toNat, ?_, (Int.ofNat_inj.1 ?_).trans key.symm⟩
+  · rw [Int.toNat_lt (Int.emod_nonneg _ hk')]
+    exact Int.emod_lt _ hk'
+  rw [Int.natCast_mod]; rw [Int.natCast_mul]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ hk')]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ hk')]; rw [Int.mul_emod]; rw [Int.emod_emod]; rw [← Int.mul_emod]
 
 Depends on / 依赖: Int.add_mul_emod_self_left, Int.emod_lt, Int.emod_nonneg, Int.natCast_mod, Int.natCast_mul, Int.ofNat_inj, Int.ofNat_ne_zero, Int.toNat_lt, Int.toNat_natCast, Int.toNat_of_nonneg, Nat.zero_lt_of_lt, add_mul_emod_self_left, emod_lt, emod_nonneg, gcd_eq_gcd_ab, key.symm, mod_eq_of_lt, n.gcdA, natCast_mod, natCast_mul
 -/
@@ -752,7 +758,8 @@ theorem gcd_dvd_iff
     exact ⟨_, _, rfl⟩
   · rintro ⟨x, y, h⟩
     rw [← Int.natCast_dvd_natCast]; rw [h]
-    exact Int.dvd_add (dvd_mul_of_dvd_left (gcd_dvd_left ..)
+    exact Int.dvd_add (dvd_mul_of_dvd_left (gcd_dvd_left ..))
+      (dvd_mul_of_dvd_left (gcd_dvd_right ..))
 
 中文:
 定理 gcd_dvd_iff
@@ -765,7 +772,8 @@ theorem gcd_dvd_iff
     exact ⟨_, _, rfl⟩
   · rintro ⟨x, y, h⟩
     rw [← Int.natCast_dvd_natCast]; rw [h]
-    exact Int.dvd_add (dvd_mul_of_dvd_left (gcd_dvd_left ..)
+    exact Int.dvd_add (dvd_mul_of_dvd_left (gcd_dvd_left ..))
+      (dvd_mul_of_dvd_left (gcd_dvd_right ..))
 
 Depends on / 依赖: Int.add_mul, Int.dvd_add, Int.natCast_dvd_natCast, Int.natCast_mul, Nat.mul_div_cancel, add_mul, dvd_add, dvd_mul_of_dvd_left, gcd_dvd_left, gcd_dvd_right, gcd_eq_gcd_ab, mul_assoc, mul_div_cancel, natCast_dvd_natCast, natCast_mul
 -/
@@ -912,7 +920,10 @@ lemma pow_gcd_eq_one
     obtain _ | m := m
     · simpa
     obtain ⟨y, rfl⟩ := IsUnit.of_pow_eq_one hm m.succ_ne_zero
-    rw [←
+    rw [← Units.val_pow_eq_pow_val]; rw [← Units.val_one (α := M)]; rw [← zpow_natCast]; rw [← Units.ext_iff] at *
+    rw [Nat.gcd_eq_gcd_ab]; rw [zpow_add]; rw [zpow_mul]; rw [zpow_mul]; rw [hn]; rw [hm]; rw [one_zpow]; rw [one_zpow]; rw [one_mul]
+
+@[to_additive]
 
 中文:
 引理 pow_gcd_eq_one
@@ -926,7 +937,10 @@ lemma pow_gcd_eq_one
     obtain _ | m := m
     · simpa
     obtain ⟨y, rfl⟩ := IsUnit.of_pow_eq_one hm m.succ_ne_zero
-    rw [←
+    rw [← Units.val_pow_eq_pow_val]; rw [← Units.val_one (α := M)]; rw [← zpow_natCast]; rw [← Units.ext_iff] at *
+    rw [Nat.gcd_eq_gcd_ab]; rw [zpow_add]; rw [zpow_mul]; rw [zpow_mul]; rw [hn]; rw [hm]; rw [one_zpow]; rw [one_zpow]; rw [one_mul]
+
+@[to_additive]
 
 Depends on / 依赖: IsUnit, IsUnit.of_pow_eq_one, Nat.gcd_eq_gcd_ab, Nat.mul_div_cancel, Units.ext_iff, Units.val_one, Units.val_pow_eq_pow_val, ext_iff, gcd_dvd_left, gcd_dvd_right, gcd_eq_gcd_ab, m.gcd_dvd_left, m.gcd_dvd_right, m.succ_ne_zero, mul_div_cancel, of_pow_eq_one, one_m, one_pow, one_zpow, pow_mul
 -/
@@ -1009,7 +1023,13 @@ lemma Commute.pow_eq_pow_iff_of_coprime
   by_cases n = 0; · simp_all
   by_cases hb : b = 0; · exact ⟨0, by simp_all⟩
   by_cases ha : a = 0; · exact ⟨0, by have := h.symm; simp_all⟩
-  refine ⟨a ^ Nat.gcdB m n * b ^ Nat.gcdA m n, ?_, 
+  refine ⟨a ^ Nat.gcdB m n * b ^ Nat.gcdA m n, ?_, ?_⟩ <;>
+  · refine (pow_one _).symm.trans ?_
+    conv_lhs => rw [← zpow_natCast, ← hmn, Nat.gcd_eq_gcd_ab]
+    simp only [zpow_add₀ ha, zpow_add₀ hb, ← zpow_natCast, (hab.zpow_zpow₀ _ _).mul_zpow,
+      ← zpow_mul, mul_comm (Nat.gcdB m n), mul_comm (Nat.gcdA m n)]
+    simp only [zpow_mul, zpow_natCast, h]
+    exact ((Commute.pow_pow (by aesop) _ _).zpow_zpow₀ _ _).symm
 
 中文:
 引理 Commute.pow_eq_pow_iff_of_coprime
@@ -1020,7 +1040,13 @@ lemma Commute.pow_eq_pow_iff_of_coprime
   by_cases n = 0; · simp_all
   by_cases hb : b = 0; · exact ⟨0, by simp_all⟩
   by_cases ha : a = 0; · exact ⟨0, by have := h.symm; simp_all⟩
-  refine ⟨a ^ Nat.gcdB m n * b ^ Nat.gcdA m n, ?_, 
+  refine ⟨a ^ Nat.gcdB m n * b ^ Nat.gcdA m n, ?_, ?_⟩ <;>
+  · refine (pow_one _).symm.trans ?_
+    conv_lhs => rw [← zpow_natCast, ← hmn, Nat.gcd_eq_gcd_ab]
+    simp only [zpow_add₀ ha, zpow_add₀ hb, ← zpow_natCast, (hab.zpow_zpow₀ _ _).mul_zpow,
+      ← zpow_mul, mul_comm (Nat.gcdB m n), mul_comm (Nat.gcdA m n)]
+    simp only [zpow_mul, zpow_natCast, h]
+    exact ((Commute.pow_pow (by aesop) _ _).zpow_zpow₀ _ _).symm
 -/
 protected lemma Commute.pow_eq_pow_iff_of_coprime (hab : Commute a b) (hmn : m.Coprime n) :
     a ^ m = b ^ n ↔ exists c, a = c ^ n ∧ b = c ^ m := by

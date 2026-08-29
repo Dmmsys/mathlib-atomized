@@ -1306,7 +1306,13 @@ definition conePointsIsoOfEquivalence
     hom_inv_id := by
       apply hom_ext P; intro j
       dsimp [w']
-  
+      simp only [Limits.Cone.whisker_π, Limits.Cone.postcompose_obj_π, fac, whiskerLeft_app,
+        assoc, id_comp, invFunIdAssoc_hom_app, fac_assoc, NatTrans.comp_app]
+      rw [counit_app_functor]; rw [← Functor.comp_map]; rw [← w.inv.naturality_assoc]
+      simp
+    inv_hom_id := by
+      apply hom_ext Q
+      cat_disch }
 
 中文:
 定义 conePointsIsoOfEquivalence
@@ -1317,7 +1323,13 @@ definition conePointsIsoOfEquivalence
     hom_inv_id := by
       apply hom_ext P; intro j
       dsimp [w']
-  
+      simp only [Limits.Cone.whisker_π, Limits.Cone.postcompose_obj_π, fac, whiskerLeft_app,
+        assoc, id_comp, invFunIdAssoc_hom_app, fac_assoc, NatTrans.comp_app]
+      rw [counit_app_functor]; rw [← Functor.comp_map]; rw [← w.inv.naturality_assoc]
+      simp
+    inv_hom_id := by
+      apply hom_ext Q
+      cat_disch }
 
 Depends on / 依赖: Cone.equivalenceOfReindexing, Functor, Functor.comp_map, L.map, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s_assoc, Limits, Limits.Cone.postcompose_obj_, Limits.Cone.whisker_, MorphismProperty, MorphismProperty.LeftFraction.map_eq_iff, NatTrans, NatTrans.comp_app, P.lift, Q.lift, W.LeftFraction, cancel_mono, choose_spec, comp_app
 -/
@@ -2237,7 +2249,7 @@ definition ofCorepresentableBy
     rw [← homOfCocone_coconeOfHom h m]
     congr
     rw [coconeOfHom_fac]
-    dsimp [Cocone.extend]; cases s; congr with j; exa
+    dsimp [Cocone.extend]; cases s; congr with j; exact w j
 
 中文:
 定义 ofCorepresentableBy
@@ -2254,7 +2266,7 @@ definition ofCorepresentableBy
     rw [← homOfCocone_coconeOfHom h m]
     congr
     rw [coconeOfHom_fac]
-    dsimp [Cocone.extend]; cases s; congr with j; exa
+    dsimp [Cocone.extend]; cases s; congr with j; exact w j
 
 Depends on / 依赖: homOfCocone
 -/

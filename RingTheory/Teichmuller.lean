@@ -184,7 +184,8 @@ theorem teichmullerFun_spec'
   obtain hn | hn := le_total n N
   · obtain ⟨z, hz₁, hz₂⟩ := h N le_rfl
 exact ((teichmullerFun_sModEq hz₁).trans hz₂).mono Ideal.pow_le_pow_right (by omega)
-  · obtain ⟨z, hz₁
+  · obtain ⟨z, hz₁, hz₂⟩ := h n hn
+exact ((teichmullerFun_sModEq hz₁).trans hz₂).mono Ideal.pow_le_pow_right (by omega)
 
 中文:
 定理 teichmullerFun_spec'
@@ -196,7 +197,8 @@ exact ((teichmullerFun_sModEq hz₁).trans hz₂).mono Ideal.pow_le_pow_right (b
   obtain hn | hn := le_total n N
   · obtain ⟨z, hz₁, hz₂⟩ := h N le_rfl
 exact ((teichmullerFun_sModEq hz₁).trans hz₂).mono Ideal.pow_le_pow_right (by omega)
-  · obtain ⟨z, hz₁
+  · obtain ⟨z, hz₁, hz₂⟩ := h n hn
+exact ((teichmullerFun_sModEq hz₁).trans hz₂).mono Ideal.pow_le_pow_right (by omega)
 
 Depends on / 依赖: Ideal.mul_top, Ideal.pow_le_pow_right, IsHausdorff, IsHausdorff.eq_iff_smodEq, eq_iff_smodEq, le_rfl, le_total, mul_top, pow_le_pow_right, smul_eq_mul, teichmullerFun_sModEq
 -/
@@ -246,7 +248,7 @@ definition teichmuller
     refine teichmullerFun_spec fun n => ?_
     refine ⟨(coeff _ p n x).out * (coeff _ p n y).out, by simp, ?_⟩
     rw [mul_pow]
-    refine (teichmullerFun_sModEq ?_).symm.mul (teichmullerFun_sModEq ?_).symm <
+    refine (teichmullerFun_sModEq ?_).symm.mul (teichmullerFun_sModEq ?_).symm <;> simp
 
 中文:
 定义 teichmuller
@@ -257,7 +259,7 @@ definition teichmuller
     refine teichmullerFun_spec fun n => ?_
     refine ⟨(coeff _ p n x).out * (coeff _ p n y).out, by simp, ?_⟩
     rw [mul_pow]
-    refine (teichmullerFun_sModEq ?_).symm.mul (teichmullerFun_sModEq ?_).symm <
+    refine (teichmullerFun_sModEq ?_).symm.mul (teichmullerFun_sModEq ?_).symm <;> simp
 
 Depends on / 依赖: teichmullerFun
 -/

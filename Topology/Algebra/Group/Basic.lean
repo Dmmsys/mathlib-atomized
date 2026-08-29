@@ -1030,7 +1030,7 @@ theorem isClosed_setOfPred_map_inv
 alias isClosed_setOf_map_inv := isClosed_setOfPred_map_inv
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_map_neg := isClosed_
+alias isClosed_setOf_map_neg := isClosed_setOfPred_map_neg
 
 中文:
 定理 isClosed_setOfPred_map_inv
@@ -1043,7 +1043,7 @@ alias isClosed_setOf_map_neg := isClosed_
 alias isClosed_setOf_map_inv := isClosed_setOfPred_map_inv
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_map_neg := isClosed_
+alias isClosed_setOf_map_neg := isClosed_setOfPred_map_neg
 
 Depends on / 依赖: continuous_apply, isClosed_eq, isClosed_iInter, ofPred_forall
 -/
@@ -2880,7 +2880,9 @@ theorem mul_mem_connectedComponent_one
     apply Continuous.image_connectedComponent_subset (continuous_const_mul g)
     rw [← connectedComponent_eq hh]
     exact ⟨(1 : G), mem_connectedComponent, by simp only [mul_one]⟩
-  simpa [← connectedComponent_e
+  simpa [← connectedComponent_eq hmul] using mem_connectedComponent
+
+@[to_additive]
 
 中文:
 定理 mul_mem_connectedComponent_one
@@ -2891,7 +2893,9 @@ theorem mul_mem_connectedComponent_one
     apply Continuous.image_connectedComponent_subset (continuous_const_mul g)
     rw [← connectedComponent_eq hh]
     exact ⟨(1 : G), mem_connectedComponent, by simp only [mul_one]⟩
-  simpa [← connectedComponent_e
+  simpa [← connectedComponent_eq hmul] using mem_connectedComponent
+
+@[to_additive]
 
 Depends on / 依赖: Continuous, Continuous.image_connectedComponent_subset, connectedComponent, connectedComponent_eq, continuous_const_mul, image_connectedComponent_subset, mem_connectedComponent, mul_one
 -/
@@ -3337,7 +3341,10 @@ theorem continuous_of_continuousAt_one₂
   simp only [ContinuousAt, nhds_prod_eq, ← map_mul_left_nhds_one x, ← map_mul_left_nhds_one y,
     prod_map_map_eq, tendsto_map'_iff, Function.comp_def, map_mul, MonoidHom.mul_apply] at *
   refine ((tendsto_const_nhds.mul ((hr y).comp tendsto_fst)).mul
+    (((hl x).comp tendsto_snd).mul hf)).mono_right (le_of_eq ?_)
+  simp only [map_one, mul_one, MonoidHom.one_apply]
 
+@[to_additive]
 
 中文:
 定理 continuous_of_continuousAt_one₂
@@ -3346,7 +3353,10 @@ theorem continuous_of_continuousAt_one₂
   simp only [ContinuousAt, nhds_prod_eq, ← map_mul_left_nhds_one x, ← map_mul_left_nhds_one y,
     prod_map_map_eq, tendsto_map'_iff, Function.comp_def, map_mul, MonoidHom.mul_apply] at *
   refine ((tendsto_const_nhds.mul ((hr y).comp tendsto_fst)).mul
+    (((hl x).comp tendsto_snd).mul hf)).mono_right (le_of_eq ?_)
+  simp only [map_one, mul_one, MonoidHom.one_apply]
 
+@[to_additive]
 
 Depends on / 依赖: ContinuousAt, Function, Function.comp_def, MonoidHom, MonoidHom.mul_apply, MonoidHom.one_apply, _iff, comp_def, continuous_iff_continuousAt, le_of_eq, map_mul, map_mul_left_nhds_one, map_one, mono_right, mul_apply, mul_one, nhds_prod_eq, one_apply, prod_map_map_eq, tendsto_const_nhds
 -/
@@ -3410,7 +3420,9 @@ lemma IsTopologicalGroup.isOpenMap_iff_nhds_one
   have : Filter.map (f x * ·) (𝓝 1) = 𝓝 (f x) := by
     simpa [-Homeomorph.map_nhds_eq, Units.smul_def] using!
       (Homeomorph.smul ((toUnits x).map (MonoidHomClass.toMonoidHom f))).map_nhds_eq (1 : H)
-  rw [
+  rw [← map_mul_left_nhds_one x]; rw [Filter.map_map]; rw [Function.comp_def]; rw [← this]
+  refine (Filter.map_mono h).trans ?_
+  simp [Function.comp_def]
 
 中文:
 引理 是拓扑群.isOpenMap_iff_nhds_one
@@ -3419,7 +3431,9 @@ lemma IsTopologicalGroup.isOpenMap_iff_nhds_one
   have : Filter.map (f x * ·) (𝓝 1) = 𝓝 (f x) := by
     simpa [-Homeomorph.map_nhds_eq, Units.smul_def] using!
       (Homeomorph.smul ((toUnits x).map (MonoidHomClass.toMonoidHom f))).map_nhds_eq (1 : H)
-  rw [
+  rw [← map_mul_left_nhds_one x]; rw [Filter.map_map]; rw [Function.comp_def]; rw [← this]
+  refine (Filter.map_mono h).trans ?_
+  simp [Function.comp_def]
 
 Depends on / 依赖: Filter, Filter.map, Filter.map_map, Filter.map_mono, Function, Function.comp_def, H.nhds_le, Homeomorph, Homeomorph.map_nhds_eq, Homeomorph.smul, IsOpenMap, IsOpenMap.of_nhds_le, MonoidHomClass, MonoidHomClass.toMonoidHom, Units.smul_def, comp_def, map_map, map_mono, map_mul_left_nhds_one, map_nhds_eq
 -/
@@ -3456,7 +3470,22 @@ lemma MonoidHom.isOpenQuotientMap_of_isQuotientMap
       intro U hU
       rw [← hφ.isOpen_preimage]
       -- It suffices to show that `φ⁻¹ (φ U) = ⋃ (U * k⁻¹)` as `k` runs through the kernel of `φ`,
-      -- a
+      -- as `U * k⁻¹` is open because `x ↦ x * k` is continuous.
+      -- Remark: here is where we use that we have groups not monoids (you cannot avoid
+      -- using both `k` and `k⁻¹` at this point).
+      suffices ⇑φ ⁻¹' ⇑φ '' U = ⋃ k in ker (φ : A ->* B), (fun x => x * k) ⁻¹' U by
+        exact this ▸ isOpen_biUnion (fun k _ => Continuous.isOpen_preimage (by fun_prop) _ hU)
+      ext x
+      -- But this is an elementary calculation.
+      constructor
+      · rintro ⟨y, hyU, hyx⟩
+        apply Set.mem_iUnion_of_mem (x⁻¹ * y)
+        simp_all
+      · rintro ⟨_, ⟨k, rfl⟩, _, ⟨(hk : φ k = 1), rfl⟩, hx⟩
+        use x * k, hx
+        rw [map_mul]; rw [hk]; rw [mul_one]
+
+@[to_additive]
 
 中文:
 引理 幺半群态射.isOpenQuotientMap_of_isQuotientMap
@@ -3468,7 +3497,22 @@ lemma MonoidHom.isOpenQuotientMap_of_isQuotientMap
       intro U hU
       rw [← hφ.isOpen_preimage]
       -- It suffices to show that `φ⁻¹ (φ U) = ⋃ (U * k⁻¹)` as `k` runs through the kernel of `φ`,
-      -- a
+      -- as `U * k⁻¹` is open because `x ↦ x * k` is continuous.
+      -- Remark: here is where we use that we have groups not monoids (you cannot avoid
+      -- using both `k` and `k⁻¹` at this point).
+      suffices ⇑φ ⁻¹' ⇑φ '' U = ⋃ k in ker (φ : A ->* B), (fun x => x * k) ⁻¹' U by
+        exact this ▸ isOpen_biUnion (fun k _ => Continuous.isOpen_preimage (by fun_prop) _ hU)
+      ext x
+      -- But this is an elementary calculation.
+      constructor
+      · rintro ⟨y, hyU, hyx⟩
+        apply Set.mem_iUnion_of_mem (x⁻¹ * y)
+        simp_all
+      · rintro ⟨_, ⟨k, rfl⟩, _, ⟨(hk : φ k = 1), rfl⟩, hx⟩
+        use x * k, hx
+        rw [map_mul]; rw [hk]; rw [mul_one]
+
+@[to_additive]
 
 Depends on / 依赖: surjective
 -/
@@ -3589,7 +3633,9 @@ theorem ContinuousInv.of_nhds_one
   have : Tendsto (fun x => x₀⁻¹ * (x₀ * x⁻¹ * x₀⁻¹)) (𝓝 1) (map (x₀⁻¹ * ·) (𝓝 1)) :=
     (tendsto_map.comp <| hconj x₀).comp hinv
   simpa only [ContinuousAt, hleft x₀, hleft x₀⁻¹, tendsto_map'_iff, Function.comp_def, mul_assoc,
-    mul_inv_rev
+    mul_inv_rev, inv_mul_cancel_left] using this
+
+@[to_additive]
 
 中文:
 定理 连续取逆.of_nhds_one
@@ -3599,7 +3645,9 @@ theorem ContinuousInv.of_nhds_one
   have : Tendsto (fun x => x₀⁻¹ * (x₀ * x⁻¹ * x₀⁻¹)) (𝓝 1) (map (x₀⁻¹ * ·) (𝓝 1)) :=
     (tendsto_map.comp <| hconj x₀).comp hinv
   simpa only [ContinuousAt, hleft x₀, hleft x₀⁻¹, tendsto_map'_iff, Function.comp_def, mul_assoc,
-    mul_inv_rev
+    mul_inv_rev, inv_mul_cancel_left] using this
+
+@[to_additive]
 
 Depends on / 依赖: ContinuousAt, Function, Function.comp_def, Tendsto, _iff, comp_def, continuous_iff_continuousAt, inv_mul_cancel_left, mul_assoc, mul_inv_rev, tendsto_map, tendsto_map.comp
 -/
@@ -3626,7 +3674,10 @@ theorem IsTopologicalGroup.of_nhds_one'
         le_of_eq
           (by
             rw [show (fun x => x₀ * x * x₀⁻¹) = (fun x => x * x₀⁻¹) ∘ fun x => x₀ * x from rfl]; rw [←
-              map_map]; r
+              map_map]; rw [← hleft]; rw [hright]; rw [map_map]
+            simp) }
+
+@[to_additive]
 
 中文:
 定理 是拓扑群.of_nhds_one'
@@ -3637,7 +3688,10 @@ theorem IsTopologicalGroup.of_nhds_one'
         le_of_eq
           (by
             rw [show (fun x => x₀ * x * x₀⁻¹) = (fun x => x * x₀⁻¹) ∘ fun x => x₀ * x from rfl]; rw [←
-              map_map]; r
+              map_map]; rw [← hleft]; rw [hright]; rw [map_map]
+            simp) }
+
+@[to_additive]
 
 Depends on / 依赖: ContinuousInv, ContinuousInv.of_nhds_one, ContinuousMul, ContinuousMul.of_nhds_one, hright, le_of_eq, map_map, of_nhds_one, toContinuousInv, toContinuousMul
 -/
@@ -3669,6 +3723,7 @@ theorem IsTopologicalGroup.of_nhds_one
   rw [← hconj x₀]
   simpa [Function.comp_def] using hleft _
 
+@[to_additive]
 
 中文:
 定理 是拓扑群.of_nhds_one
@@ -3680,6 +3735,7 @@ theorem IsTopologicalGroup.of_nhds_one
   rw [← hconj x₀]
   simpa [Function.comp_def] using hleft _
 
+@[to_additive]
 
 Depends on / 依赖: Function, Function.comp_def, IsTopologicalGroup, IsTopologicalGroup.of_nhds_one, comp_def, map_eq_of_inverse, mul_assoc, of_nhds_one, replace
 -/
@@ -3738,7 +3794,14 @@ theorem IsTopologicalGroup.exists_antitone_basis_nhds_one
       (by simpa only [mul_one] using continuous_mul.tendsto ((1, 1) : G × G))
   simp only [and_self_iff, mem_prod, and_imp, Prod.forall, Prod.exists,
     forall_true_left] at this
- 
+  have event_mul : forall n : Nat, forallᶠ m in atTop, u m * u m subseteq u n := by
+    intro n
+    rcases this n with ⟨j, k, -, h⟩
+    refine atTop_basis.eventually_iff.mpr ⟨max j k, True.intro, fun m hm => ?_⟩
+    rintro - ⟨a, ha, b, hb, rfl⟩
+    exact h a b (u_anti ((le_max_left _ _).trans hm) ha) (u_anti ((le_max_right _ _).trans hm) hb)
+  obtain ⟨φ, -, hφ, φ_anti_basis⟩ := HasAntitoneBasis.subbasis_with_rel ⟨hu, u_anti⟩ event_mul
+  exact ⟨u ∘ φ, φ_anti_basis, fun n => hφ n.lt_succ_self⟩
 
 中文:
 定理 是拓扑群.存在_antitone_basis_nhds_one
@@ -3750,7 +3813,14 @@ theorem IsTopologicalGroup.exists_antitone_basis_nhds_one
       (by simpa only [mul_one] using continuous_mul.tendsto ((1, 1) : G × G))
   simp only [and_self_iff, mem_prod, and_imp, Prod.forall, Prod.exists,
     forall_true_left] at this
- 
+  have event_mul : forall n : Nat, forallᶠ m in atTop, u m * u m subseteq u n := by
+    intro n
+    rcases this n with ⟨j, k, -, h⟩
+    refine atTop_basis.eventually_iff.mpr ⟨max j k, True.intro, fun m hm => ?_⟩
+    rintro - ⟨a, ha, b, hb, rfl⟩
+    exact h a b (u_anti ((le_max_left _ _).trans hm) ha) (u_anti ((le_max_right _ _).trans hm) hb)
+  obtain ⟨φ, -, hφ, φ_anti_basis⟩ := HasAntitoneBasis.subbasis_with_rel ⟨hu, u_anti⟩ event_mul
+  exact ⟨u ∘ φ, φ_anti_basis, fun n => hφ n.lt_succ_self⟩
 
 Depends on / 依赖: Prod.exists, Prod.forall, True.intro, and_imp, and_self_iff, atTop_basis, atTop_basis.eventually_iff.mpr, continuous_mul, continuous_mul.tendsto, event_mul, eventually_iff, exists_antitone_basis, forall_true_left, hu.prod_nhds, mem_prod, mul_one, prod_nhds, subseteq, tendsto, tendsto_iff
 -/
@@ -4526,7 +4596,8 @@ theorem Subgroup.properlyDiscontinuousSMul_of_tendsto_cofinite
       rw [preimage_compl]; rw [compl_compl] at H
       convert! H
       ext x
-      simp only [image_smul, mem_ofPred_eq, coe_subtype, mem_preimage, me
+      simp only [image_smul, mem_ofPred_eq, coe_subtype, mem_preimage, mem_image, Prod.exists]
+      exact Set.smul_inter_nonempty_iff' }
 
 中文:
 定理 子群.properlyDiscontinuousSMul_of_tendsto_cofinite
@@ -4537,7 +4608,8 @@ theorem Subgroup.properlyDiscontinuousSMul_of_tendsto_cofinite
       rw [preimage_compl]; rw [compl_compl] at H
       convert! H
       ext x
-      simp only [image_smul, mem_ofPred_eq, coe_subtype, mem_preimage, me
+      simp only [image_smul, mem_ofPred_eq, coe_subtype, mem_preimage, mem_image, Prod.exists]
+      exact Set.smul_inter_nonempty_iff' }
 
 Depends on / 依赖: Finite, Prod.exists, Set.Finite, Set.smul_inter_nonempty_iff, coe_subtype, compl_compl, compl_mem_cocompact, continuous_div, convert, finite_disjoint_inter_image, hL.prod, image_smul, mem_image, mem_ofPred_eq, mem_preimage, preimage_compl, smul_inter_nonempty_iff
 -/
@@ -4576,7 +4648,12 @@ theorem Subgroup.properlyDiscontinuousSMul_opposite_of_tendsto_cofinite
       have : Continuous fun p : G × G => (p.1⁻¹, p.2) := continuous_inv.prodMap continuous_id
       have H : Set.Finite _ :=
         hS ((hK.prod hL).image (continuous_mul.comp this)).compl_mem_cocompact
-      simp only [preimage_compl, compl
+      simp only [preimage_compl, compl_compl, coe_subtype, comp_apply] at H
+      apply Finite.of_preimage _ (equivOp S).surjective
+      convert! H using 1
+      ext x
+      simp only [image_smul, mem_ofPred_eq, mem_preimage, mem_image, Prod.exists]
+      exact Set.op_smul_inter_nonempty_iff }
 
 中文:
 定理 子群.properlyDiscontinuousSMul_opposite_of_tendsto_cofinite
@@ -4586,7 +4663,12 @@ theorem Subgroup.properlyDiscontinuousSMul_opposite_of_tendsto_cofinite
       have : Continuous fun p : G × G => (p.1⁻¹, p.2) := continuous_inv.prodMap continuous_id
       have H : Set.Finite _ :=
         hS ((hK.prod hL).image (continuous_mul.comp this)).compl_mem_cocompact
-      simp only [preimage_compl, compl
+      simp only [preimage_compl, compl_compl, coe_subtype, comp_apply] at H
+      apply Finite.of_preimage _ (equivOp S).surjective
+      convert! H using 1
+      ext x
+      simp only [image_smul, mem_ofPred_eq, mem_preimage, mem_image, Prod.exists]
+      exact Set.op_smul_inter_nonempty_iff }
 
 Depends on / 依赖: Continuous, Finite, Finite.of_preimage, Prod.exists, Set.Finite, Set.op_smul_inter_nonempty_iff, coe_subtype, comp_apply, compl_compl, compl_mem_cocompact, continuous_id, continuous_inv, continuous_inv.prodMap, continuous_mul, continuous_mul.comp, convert, equivOp, finite_disjoint_inter_image, hK.prod, image_smul
 -/
@@ -4633,7 +4715,14 @@ theorem compact_open_separated_mul_right
     use V inter W, inter_mem V_in W_in
     rw [union_mul]
     exact
-      union_subset ((mul_subset_m
+      union_subset ((mul_subset_mul_left V.inter_subset_left).trans hV')
+        ((mul_subset_mul_left V.inter_subset_right).trans hW')
+  · intro x hx
+    have := tendsto_mul (show U in 𝓝 (x * 1) by simpa using hU.mem_nhds (hKU hx))
+    rw [nhds_prod_eq]; rw [mem_map]; rw [mem_prod_iff] at this
+    rcases this with ⟨t, ht, s, hs, h⟩
+    rw [← image_subset_iff]; rw [image_mul_prod] at h
+    exact ⟨t, mem_nhdsWithin_of_mem_nhds ht, s, hs, h⟩
 
 中文:
 定理 compact_open_separated_mul_right
@@ -4647,7 +4736,14 @@ theorem compact_open_separated_mul_right
     use V inter W, inter_mem V_in W_in
     rw [union_mul]
     exact
-      union_subset ((mul_subset_m
+      union_subset ((mul_subset_mul_left V.inter_subset_left).trans hV')
+        ((mul_subset_mul_left V.inter_subset_right).trans hW')
+  · intro x hx
+    have := tendsto_mul (show U in 𝓝 (x * 1) by simpa using hU.mem_nhds (hKU hx))
+    rw [nhds_prod_eq]; rw [mem_map]; rw [mem_prod_iff] at this
+    rcases this with ⟨t, ht, s, hs, h⟩
+    rw [← image_subset_iff]; rw [image_mul_prod] at h
+    exact ⟨t, mem_nhdsWithin_of_mem_nhds ht, s, hs, h⟩
 
 Depends on / 依赖: V.inter_subset_left, V.inter_subset_right, V_in, W_in, hK.induction_on, hU.mem_nhds, induction_on, inter_mem, inter_subset_left, inter_subset_right, mem_map, mem_nhds, mem_pro, mul_subset_mul_left, mul_subset_mul_right, nhds_prod_eq, tendsto_mul, union_mul, union_subset
 -/
@@ -4688,7 +4784,8 @@ theorem compact_open_separated_mul_left
       (image_mono hKU) with
     ⟨V, hV : V in 𝓝 (op (1 : G)), hV' : op '' K * V subseteq op '' U⟩
   refine ⟨op ⁻¹' V, continuous_op.continuousAt hV, ?_⟩
-  rwa [← image_preimage_eq V op_surjective, ← i
+  rwa [← image_preimage_eq V op_surjective, ← image_op_mul, image_subset_iff,
+    preimage_image_eq _ op_injective] at hV'
 
 中文:
 定理 compact_open_separated_mul_left
@@ -4698,7 +4795,8 @@ theorem compact_open_separated_mul_left
       (image_mono hKU) with
     ⟨V, hV : V in 𝓝 (op (1 : G)), hV' : op '' K * V subseteq op '' U⟩
   refine ⟨op ⁻¹' V, continuous_op.continuousAt hV, ?_⟩
-  rwa [← image_preimage_eq V op_surjective, ← i
+  rwa [← image_preimage_eq V op_surjective, ← image_op_mul, image_subset_iff,
+    preimage_image_eq _ op_injective] at hV'
 
 Depends on / 依赖: compact_open_separated_mul_right, continuousAt, continuous_op, continuous_op.continuousAt, hK.image, image_mono, image_op_mul, image_preimage_eq, image_subset_iff, isOpenMap, opHomeomorph, opHomeomorph.isOpenMap, op_injective, op_surjective, preimage_image_eq, subseteq
 -/
@@ -4734,7 +4832,9 @@ theorem compact_covered_by_mul_left_translates
       hK.elim_finite_subcover (fun x => interior <| (x * ·) ⁻¹' V) (fun x => isOpen_interior) ?_
     obtain ⟨g₀, hg₀⟩ := hV
     refine fun g _ => mem_iUnion.2 ⟨g₀ * g⁻¹, ?_⟩
-    refine preimage_
+    refine preimage_interior_subset_interior_preimage (by fun_prop) ?_
+    rwa [mem_preimage, inv_mul_cancel_right]
+exact ⟨t, Subset.trans ht iUnion₂_mono fun g _ => interior_subset⟩
 
 中文:
 定理 compact_covered_by_mul_left_translates
@@ -4745,7 +4845,9 @@ theorem compact_covered_by_mul_left_translates
       hK.elim_finite_subcover (fun x => interior <| (x * ·) ⁻¹' V) (fun x => isOpen_interior) ?_
     obtain ⟨g₀, hg₀⟩ := hV
     refine fun g _ => mem_iUnion.2 ⟨g₀ * g⁻¹, ?_⟩
-    refine preimage_
+    refine preimage_interior_subset_interior_preimage (by fun_prop) ?_
+    rwa [mem_preimage, inv_mul_cancel_right]
+exact ⟨t, Subset.trans ht iUnion₂_mono fun g _ => interior_subset⟩
 
 Depends on / 依赖: Finset, Subset, Subset.trans, elim_finite_subcover, fun_prop, hK.elim_finite_subcover, interior, interior_subset, inv_mul_cancel_right, isOpen_interior, mem_iUnion, mem_preimage, preimage_interior_subset_interior_preimage, subseteq
 -/
@@ -4797,7 +4899,8 @@ theorem exists_disjoint_smul_of_isCompact
   refine ⟨g, ?_⟩
   refine disjoint_left.2 fun a ha h'a => hg ?_
   rcases h'a with ⟨b, bL, rfl⟩
-  refine ⟨g * b, ha, b⁻¹, by simpa only [Set.mem_i
+  refine ⟨g * b, ha, b⁻¹, by simpa only [Set.mem_inv, inv_inv] using bL, ?_⟩
+  simp only [mul_inv_cancel_right]
 
 中文:
 定理 存在_disjoint_smul_of_isCompact
@@ -4810,7 +4913,8 @@ theorem exists_disjoint_smul_of_isCompact
   refine ⟨g, ?_⟩
   refine disjoint_left.2 fun a ha h'a => hg ?_
   rcases h'a with ⟨b, bL, rfl⟩
-  refine ⟨g * b, ha, b⁻¹, by simpa only [Set.mem_i
+  refine ⟨g * b, ha, b⁻¹, by simpa only [Set.mem_inv, inv_inv] using bL, ?_⟩
+  simp only [mul_inv_cancel_right]
 
 Depends on / 依赖: Set.mem_inv, contrapose, disjoint_left, eq_univ_iff_forall, hK.mul, hL.inv, inv_inv, mem_inv, mul_inv_cancel_right, ne_univ
 -/
@@ -4845,7 +4949,7 @@ theorem nhds_mul
     _ = map₂ (fun a b => x * (a * b * y)) (𝓝 1) (𝓝 1) := by rw [← map₂_mul, map_map₂, map_map₂]
     _ = map₂ (fun a b => x * a * (b * y)) (𝓝 1) (𝓝 1) := by simp only [mul_assoc]
     _ = 𝓝 x * 𝓝 y := by
-      rw [← map_mul_left_nhd
+      rw [← map_mul_left_nhds_one x]; rw [← map_mul_right_nhds_one y]; rw [← map₂_mul]; rw [map₂_map_left]; rw [map₂_map_right]
 
 中文:
 定理 nhds_mul
@@ -4856,7 +4960,7 @@ theorem nhds_mul
     _ = map₂ (fun a b => x * (a * b * y)) (𝓝 1) (𝓝 1) := by rw [← map₂_mul, map_map₂, map_map₂]
     _ = map₂ (fun a b => x * a * (b * y)) (𝓝 1) (𝓝 1) := by simp only [mul_assoc]
     _ = 𝓝 x * 𝓝 y := by
-      rw [← map_mul_left_nhd
+      rw [← map_mul_left_nhds_one x]; rw [← map_mul_right_nhds_one y]; rw [← map₂_mul]; rw [map₂_map_left]; rw [map₂_map_right]
 
 Depends on / 依赖: map_mul_left_nhds_one, map_mul_right_nhds_one, mul_assoc
 -/
@@ -5195,7 +5299,7 @@ definition _root_.Homeomorph.prodUnits
     Units.continuous_iff.2
       ⟨continuous_val.fst'.prodMk continuous_val.snd',
         continuous_coe_inv.fst'.prodMk continuous_coe_inv.snd'⟩
-  toEquiv := MulEquiv.pr
+  toEquiv := MulEquiv.prodUnits.toEquiv
 
 中文:
 定义 _root_.同胚.prodUnits
@@ -5206,7 +5310,7 @@ definition _root_.Homeomorph.prodUnits
     Units.continuous_iff.2
       ⟨continuous_val.fst'.prodMk continuous_val.snd',
         continuous_coe_inv.fst'.prodMk continuous_coe_inv.snd'⟩
-  toEquiv := MulEquiv.pr
+  toEquiv := MulEquiv.prodUnits.toEquiv
 
 Depends on / 依赖: MonoidHom, MonoidHom.fst, MonoidHom.snd, MulEquiv, MulEquiv.prodUnits.toEquiv, Units.continuous_iff, continuous_coe_inv, continuous_coe_inv.fst, continuous_coe_inv.snd, continuous_fst, continuous_fst.units_map, continuous_iff, continuous_invFun, continuous_snd, continuous_snd.units_map, continuous_val, continuous_val.fst, continuous_val.snd, prodMk, prodUnits
 -/

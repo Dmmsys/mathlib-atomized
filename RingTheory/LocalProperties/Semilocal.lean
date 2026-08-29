@@ -57,7 +57,13 @@ theorem Module.Finite.of_isLocalized_maximal
   have : Fintype (MaximalSpectrum R) := Fintype.ofFinite _
   choose s hs using fun P : MaximalSpectrum R => (H P.1).fg_top
   choose frac hfrac using fun P : MaximalSpectrum R => IsLocalizedModule.surj P.1.primeCompl (f P.1)
-  use Finset.biUnion Finset.univ fun P => Finset.image (frac 
+  use Finset.biUnion Finset.univ fun P => Finset.image (frac P · |>.1) (s P)
+  refine Submodule.eq_top_of_localization_maximal Rₚ Mₚ f _ fun P hP => ?_
+  rw [eq_top_iff]; rw [← hs ⟨P]; rw [hP⟩]; rw [Submodule.localized'_span]; rw [Submodule.span_le]
+  intro x hx
+  lift x to s ⟨P, hP⟩ using hx
+  rw [SetLike.mem_coe]; rw [← IsLocalization.smul_mem_iff (s := (frac ⟨P]; rw [hP⟩ x).2)]; rw [hfrac]
+  exact Submodule.subset_span ⟨_, by simpa using ⟨_, _, x.2, rfl⟩, rfl⟩
 
 中文:
 定理 模.有限.of_isLocalized_maximal
@@ -66,7 +72,13 @@ theorem Module.Finite.of_isLocalized_maximal
   have : Fintype (MaximalSpectrum R) := Fintype.ofFinite _
   choose s hs using fun P : MaximalSpectrum R => (H P.1).fg_top
   choose frac hfrac using fun P : MaximalSpectrum R => IsLocalizedModule.surj P.1.primeCompl (f P.1)
-  use Finset.biUnion Finset.univ fun P => Finset.image (frac 
+  use Finset.biUnion Finset.univ fun P => Finset.image (frac P · |>.1) (s P)
+  refine Submodule.eq_top_of_localization_maximal Rₚ Mₚ f _ fun P hP => ?_
+  rw [eq_top_iff]; rw [← hs ⟨P]; rw [hP⟩]; rw [Submodule.localized'_span]; rw [Submodule.span_le]
+  intro x hx
+  lift x to s ⟨P, hP⟩ using hx
+  rw [SetLike.mem_coe]; rw [← IsLocalization.smul_mem_iff (s := (frac ⟨P]; rw [hP⟩ x).2)]; rw [hfrac]
+  exact Submodule.subset_span ⟨_, by simpa using ⟨_, _, x.2, rfl⟩, rfl⟩
 
 Depends on / 依赖: Finset, Finset.biUnion, Finset.image, Finset.univ, Fintype, Fintype.ofFinite, IsLocalizedModule, IsLocalizedModule.surj, MaximalSpectrum, Submodule, Submodule.eq_top_of_localization_maximal, Submodule.localized, Submodule.span_le, _span, biUnion, classical, eq_top_iff, eq_top_of_localization_maximal, fg_top, localized
 -/
@@ -206,7 +218,15 @@ theorem isPrincipalIdealRing_of_isPrincipalIdealRing_isLocalization_maximal
   have : IsIntegrallyClosed R := by
     refine IsIntegrallyClosed.of_isLocalization_maximal Rₚ fun P hP => ?_
     have : IsDomain (Rₚ P) := IsLocalization.isDomain_of_atPrime (Rₚ P) P
-    inf
+    infer_instance
+  have : Ring.KrullDimLE 1 R :=
+    Ring.krullDimLE_of_isLocalization_maximal Rₚ fun P _ => inferInstance
+  rw [Ring.krullDimLE_one_iff_of_noZeroDivisors] at this
+  have dedekind : IsDedekindDomain R := { maximalOfPrime := this _ }
+  have hp_finite : {P : Ideal R | P.IsMaximal}.Finite := by
+    rw [← MaximalSpectrum.range_asIdeal]
+    exact Set.finite_range MaximalSpectrum.asIdeal
+  exact IsPrincipalIdealRing.of_finite_maximals hp_finite
 
 中文:
 定理 isPrincipalIdealRing_of_isPrincipalIdealRing_isLocalization_maximal
@@ -217,7 +237,15 @@ theorem isPrincipalIdealRing_of_isPrincipalIdealRing_isLocalization_maximal
   have : IsIntegrallyClosed R := by
     refine IsIntegrallyClosed.of_isLocalization_maximal Rₚ fun P hP => ?_
     have : IsDomain (Rₚ P) := IsLocalization.isDomain_of_atPrime (Rₚ P) P
-    inf
+    infer_instance
+  have : Ring.KrullDimLE 1 R :=
+    Ring.krullDimLE_of_isLocalization_maximal Rₚ fun P _ => inferInstance
+  rw [Ring.krullDimLE_one_iff_of_noZeroDivisors] at this
+  have dedekind : IsDedekindDomain R := { maximalOfPrime := this _ }
+  have hp_finite : {P : Ideal R | P.IsMaximal}.Finite := by
+    rw [← MaximalSpectrum.range_asIdeal]
+    exact Set.finite_range MaximalSpectrum.asIdeal
+  exact IsPrincipalIdealRing.of_finite_maximals hp_finite
 
 Depends on / 依赖: IsDedekindDomain, IsDomain, IsIntegrallyClosed, IsIntegrallyClosed.of_isLocalization_maximal, IsLocalization, IsLocalization.isDomain_of_atPrime, IsNoetherianRing, IsNoetherianRing.of_isLocalization_maximal, KrullDimLE, Ring.KrullDimLE, Ring.krullDimLE_of_isLocalization_maximal, Ring.krullDimLE_one_iff_of_noZeroDivisors, dedekind, infer_instance, isDomain_of_atPrime, krullDimLE_of_isLocalization_maximal, krullDimLE_one_iff_of_noZeroDivisors, maximalOfPrim, of_isLocalization_maximal
 -/

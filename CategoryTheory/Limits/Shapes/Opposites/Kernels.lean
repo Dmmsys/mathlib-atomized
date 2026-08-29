@@ -46,7 +46,7 @@ definition CokernelCofork.IsColimit.ofπOp
     (fun x hx => (h.desc (CokernelCofork.ofπ x.unop (Quiver.Hom.op_inj hx))).op)
     (fun _ _ => Quiver.Hom.unop_inj (Cofork.IsColimit.π_desc h))
     (fun x hx b hb => Quiver.Hom.unop_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimi
+      (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimit.π_desc] using! Quiver.Hom.op_inj hb)))
 
 中文:
 定义 余核余叉.是余极限.ofπOp
@@ -55,7 +55,7 @@ definition CokernelCofork.IsColimit.ofπOp
     (fun x hx => (h.desc (CokernelCofork.ofπ x.unop (Quiver.Hom.op_inj hx))).op)
     (fun _ _ => Quiver.Hom.unop_inj (Cofork.IsColimit.π_desc h))
     (fun x hx b hb => Quiver.Hom.unop_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimi
+      (by simpa only [Quiver.Hom.unop_op, Cofork.IsColimit.π_desc] using! Quiver.Hom.op_inj hb)))
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, Cofork.IsColimit.hom_ext, CokernelCofork, CokernelCofork.of, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, h.desc, hom_ext, op_inj, unop_inj, unop_op, x.unop
 -/
@@ -79,7 +79,7 @@ definition CokernelCofork.IsColimit.ofπUnop
     (fun x hx => (h.desc (CokernelCofork.ofπ x.op (Quiver.Hom.unop_inj hx))).unop)
     (fun _ _ => Quiver.Hom.op_inj (Cofork.IsColimit.π_desc h))
     (fun x hx b hb => Quiver.Hom.op_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.
+      (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.π_desc] using! Quiver.Hom.unop_inj hb)))
 
 中文:
 定义 余核余叉.是余极限.ofπUnop
@@ -88,7 +88,7 @@ definition CokernelCofork.IsColimit.ofπUnop
     (fun x hx => (h.desc (CokernelCofork.ofπ x.op (Quiver.Hom.unop_inj hx))).unop)
     (fun _ _ => Quiver.Hom.op_inj (Cofork.IsColimit.π_desc h))
     (fun x hx b hb => Quiver.Hom.op_inj (Cofork.IsColimit.hom_ext h
-      (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.
+      (by simpa only [Quiver.Hom.op_unop, Cofork.IsColimit.π_desc] using! Quiver.Hom.unop_inj hb)))
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, Cofork.IsColimit.hom_ext, CokernelCofork, CokernelCofork.of, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, h.desc, hom_ext, op_inj, op_unop, unop_inj, x.op
 -/
@@ -112,7 +112,7 @@ definition KernelFork.IsLimit.ofιOp
     (fun x hx => (h.lift (KernelFork.ofι x.unop (Quiver.Hom.op_inj hx))).op)
     (fun _ _ => Quiver.Hom.unop_inj (Fork.IsLimit.lift_ι h))
     (fun x hx b hb => Quiver.Hom.unop_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] 
+      simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] using! Quiver.Hom.op_inj hb)))
 
 中文:
 定义 核叉.是极限.ofιOp
@@ -121,7 +121,7 @@ definition KernelFork.IsLimit.ofιOp
     (fun x hx => (h.lift (KernelFork.ofι x.unop (Quiver.Hom.op_inj hx))).op)
     (fun _ _ => Quiver.Hom.unop_inj (Fork.IsLimit.lift_ι h))
     (fun x hx b hb => Quiver.Hom.unop_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] 
+      simpa only [Quiver.Hom.unop_op, Fork.IsLimit.lift_ι] using! Quiver.Hom.op_inj hb)))
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.of, Fork.IsLimit.hom_ext, Fork.IsLimit.lift_, IsColimit, IsLimit, KernelFork, KernelFork.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, h.lift, hom_ext, op_inj, unop_inj, unop_op, x.unop
 -/
@@ -146,7 +146,7 @@ definition KernelFork.IsLimit.ofιUnop
     (fun x hx => (h.lift (KernelFork.ofι x.op (Quiver.Hom.unop_inj hx))).unop)
     (fun _ _ => Quiver.Hom.op_inj (Fork.IsLimit.lift_ι h))
     (fun x hx b hb => Quiver.Hom.op_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.op_unop, Fork.IsLimit.lift_ι] us
+      simpa only [Quiver.Hom.op_unop, Fork.IsLimit.lift_ι] using! Quiver.Hom.unop_inj hb)))
 
 中文:
 定义 核叉.是极限.ofιUnop
@@ -155,7 +155,7 @@ definition KernelFork.IsLimit.ofιUnop
     (fun x hx => (h.lift (KernelFork.ofι x.op (Quiver.Hom.unop_inj hx))).unop)
     (fun _ _ => Quiver.Hom.op_inj (Fork.IsLimit.lift_ι h))
     (fun x hx b hb => Quiver.Hom.op_inj (Fork.IsLimit.hom_ext h (by
-      simpa only [Quiver.Hom.op_unop, Fork.IsLimit.lift_ι] us
+      simpa only [Quiver.Hom.op_unop, Fork.IsLimit.lift_ι] using! Quiver.Hom.unop_inj hb)))
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.of, Fork.IsLimit.hom_ext, Fork.IsLimit.lift_, IsColimit, IsLimit, KernelFork, KernelFork.of, Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, h.lift, hom_ext, op_inj, op_unop, unop_inj, x.op
 -/

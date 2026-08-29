@@ -357,6 +357,12 @@ theorem isLeftCancelMulZero_iff
       nontriviality R
       let trinomial (r : R) : R[X] := a • X ^ 2 + r • X + C a
       have ht r : (X + C 1) * trinomial r = a • X ^ 3 + (a + r) • X ^ 2 + (a + r) • X + C a := by
+        simp only [trinomial, mul_add, add_mul, ← C_mul', C_1, one_mul, ← mul_assoc, X_mul_C, C_add]
+        noncomm_ring
+simpa [trinomial] using congr_arg (coeff · 1)
+h.1 (a₁ := trinomial b) (a₂ := trinomial c) (X_add_C_ne_zero 1) by simp_rw [ht, eq]
+    AddCommMagma.IsLeftCancelAdd.toIsCancelAdd R
+  mpr := fun ⟨_, _⟩ => inferInstance
 
 中文:
 定理 isLeftCancelMulZero_iff
@@ -365,6 +371,12 @@ theorem isLeftCancelMulZero_iff
       nontriviality R
       let trinomial (r : R) : R[X] := a • X ^ 2 + r • X + C a
       have ht r : (X + C 1) * trinomial r = a • X ^ 3 + (a + r) • X ^ 2 + (a + r) • X + C a := by
+        simp only [trinomial, mul_add, add_mul, ← C_mul', C_1, one_mul, ← mul_assoc, X_mul_C, C_add]
+        noncomm_ring
+simpa [trinomial] using congr_arg (coeff · 1)
+h.1 (a₁ := trinomial b) (a₂ := trinomial c) (X_add_C_ne_zero 1) by simp_rw [ht, eq]
+    AddCommMagma.IsLeftCancelAdd.toIsCancelAdd R
+  mpr := fun ⟨_, _⟩ => inferInstance
 
 Depends on / 依赖: C_injective, C_injective.isLeftCancelMulZero, C_mul, isLeftCancelMulZero
 -/

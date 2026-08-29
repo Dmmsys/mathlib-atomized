@@ -71,7 +71,7 @@ theorem CharP.of_ringHom_of_ne_zero
   obtain ⟨k, e⟩ := dvd_of_ringHom f p q
   have := Nat.isUnit_iff.mp ((H.2 e).resolve_left (Nat.isUnit_iff.not.mpr (char_ne_one A q)))
   rw [this]; rw [mul_one] at e
-  ex
+  exact e ▸ hq
 
 中文:
 定理 特征p.of_ringHom_of_ne_zero
@@ -83,7 +83,7 @@ theorem CharP.of_ringHom_of_ne_zero
   obtain ⟨k, e⟩ := dvd_of_ringHom f p q
   have := Nat.isUnit_iff.mp ((H.2 e).resolve_left (Nat.isUnit_iff.not.mpr (char_ne_one A q)))
   rw [this]; rw [mul_one] at e
-  ex
+  exact e ▸ hq
 
 Depends on / 依赖: CharP.char_is_prime_or_zero, CharP.exists, Nat.isUnit_iff.mp, Nat.isUnit_iff.not.mpr, char_is_prime_or_zero, char_ne_one, domain_nontrivial, dvd_of_ringHom, f.domain_nontrivial, isUnit_iff, mul_one, resolve_left, resolve_right
 -/

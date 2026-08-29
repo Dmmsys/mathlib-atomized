@@ -82,7 +82,30 @@ definition fiberwiseColimit
     (associator _ _ _).hom) ≫ colimit.pre (Grothendieck.ι F Y ⋙ G) (F.map f).toFunctor
   map_id X := by
     ext d
-    simp only [Functor.comp_obj, Grothendieck.ιNatTrans, Grothendieck.ι_obj, ι_col
+    simp only [Functor.comp_obj, Grothendieck.ιNatTrans, Grothendieck.ι_obj, ι_colimMap_assoc,
+      NatTrans.comp_app, whiskerRight_app, Functor.associator_hom_app, Category.comp_id,
+      colimit.ι_pre]
+    conv_rhs => rw [← colimit.eqToHom_comp_ι (Grothendieck.ι F X ⋙ G)
+      (j := (F.map (𝟙 X)).toFunctor.obj d) (by simp)]
+    rw [← eqToHom_map G (by simp)]; rw [Grothendieck.eqToHom_eq]
+    rfl
+  map_comp {X Y Z} f g := by
+    ext d
+    simp only [Functor.comp_obj, Grothendieck.ιNatTrans, ι_colimMap_assoc, NatTrans.comp_app,
+      whiskerRight_app, Functor.associator_hom_app, Category.comp_id, colimit.ι_pre, Category.assoc,
+      colimit.ι_pre_assoc]
+    rw [← Category.assoc]; rw [← G.map_comp]
+    conv_rhs => rw [← colimit.eqToHom_comp_ι (Grothendieck.ι F Z ⋙ G)
+      (j := (F.map (f ≫ g)).toFunctor.obj d) (by simp)]
+    rw [← Category.assoc]; rw [← eqToHom_map G (by simp)]; rw [← G.map_comp]; rw [Grothendieck.eqToHom_eq]
+    congr 2
+    fapply Grothendieck.ext
+    · simp only [eqToHom_refl, Category.assoc, Grothendieck.comp_base,
+        Category.comp_id]
+    · simp only [Grothendieck.ι_obj, eqToHom_refl,
+        Grothendieck.comp_base, Category.comp_id, Grothendieck.comp_fiber, Functor.map_id]
+      conv_rhs => enter [2, 1]; rw [eqToHom_map (F.map (𝟙 Z)).toFunctor]
+      conv_rhs => rw [eqToHom_trans, eqToHom_trans]
 
 中文:
 定义 fiberwiseColimit
@@ -92,7 +115,30 @@ definition fiberwiseColimit
     (associator _ _ _).hom) ≫ colimit.pre (Grothendieck.ι F Y ⋙ G) (F.map f).toFunctor
   map_id X := by
     ext d
-    simp only [Functor.comp_obj, Grothendieck.ιNatTrans, Grothendieck.ι_obj, ι_col
+    simp only [Functor.comp_obj, Grothendieck.ιNatTrans, Grothendieck.ι_obj, ι_colimMap_assoc,
+      NatTrans.comp_app, whiskerRight_app, Functor.associator_hom_app, Category.comp_id,
+      colimit.ι_pre]
+    conv_rhs => rw [← colimit.eqToHom_comp_ι (Grothendieck.ι F X ⋙ G)
+      (j := (F.map (𝟙 X)).toFunctor.obj d) (by simp)]
+    rw [← eqToHom_map G (by simp)]; rw [Grothendieck.eqToHom_eq]
+    rfl
+  map_comp {X Y Z} f g := by
+    ext d
+    simp only [Functor.comp_obj, Grothendieck.ιNatTrans, ι_colimMap_assoc, NatTrans.comp_app,
+      whiskerRight_app, Functor.associator_hom_app, Category.comp_id, colimit.ι_pre, Category.assoc,
+      colimit.ι_pre_assoc]
+    rw [← Category.assoc]; rw [← G.map_comp]
+    conv_rhs => rw [← colimit.eqToHom_comp_ι (Grothendieck.ι F Z ⋙ G)
+      (j := (F.map (f ≫ g)).toFunctor.obj d) (by simp)]
+    rw [← Category.assoc]; rw [← eqToHom_map G (by simp)]; rw [← G.map_comp]; rw [Grothendieck.eqToHom_eq]
+    congr 2
+    fapply Grothendieck.ext
+    · simp only [eqToHom_refl, Category.assoc, Grothendieck.comp_base,
+        Category.comp_id]
+    · simp only [Grothendieck.ι_obj, eqToHom_refl,
+        Grothendieck.comp_base, Category.comp_id, Grothendieck.comp_fiber, Functor.map_id]
+      conv_rhs => enter [2, 1]; rw [eqToHom_map (F.map (𝟙 Z)).toFunctor]
+      conv_rhs => rw [eqToHom_trans, eqToHom_trans]
 
 Depends on / 依赖: Grothendieck, colimit
 -/
@@ -183,7 +229,12 @@ definition natTransIntoForgetCompFiberwiseColimit
   naturality _ _ f := by
     simp only [Functor.comp_obj, Grothendieck.forget_obj, fiberwiseColimit_obj, Functor.comp_map,
       Grothendieck.forget_map, fiberwiseColimit_map, ι_colimMap_assoc, Grothendieck.ι_obj,
-      NatTrans.comp_app, whiskerRight_
+      NatTrans.comp_app, whiskerRight_app, Functor.associator_hom_app, Category.comp_id,
+      colimit.ι_pre]
+    rw [← colimit.w (Grothendieck.ι F _ ⋙ G) f.fiber]
+    simp only [← Category.assoc, Functor.comp_obj, Functor.comp_map, ← G.map_comp]
+    congr 2
+    apply Grothendieck.ext <;> simp
 
 中文:
 定义 natTrans整数oForgetCompFiberwiseColimit
@@ -192,7 +243,12 @@ definition natTransIntoForgetCompFiberwiseColimit
   naturality _ _ f := by
     simp only [Functor.comp_obj, Grothendieck.forget_obj, fiberwiseColimit_obj, Functor.comp_map,
       Grothendieck.forget_map, fiberwiseColimit_map, ι_colimMap_assoc, Grothendieck.ι_obj,
-      NatTrans.comp_app, whiskerRight_
+      NatTrans.comp_app, whiskerRight_app, Functor.associator_hom_app, Category.comp_id,
+      colimit.ι_pre]
+    rw [← colimit.w (Grothendieck.ι F _ ⋙ G) f.fiber]
+    simp only [← Category.assoc, Functor.comp_obj, Functor.comp_map, ← G.map_comp]
+    congr 2
+    apply Grothendieck.ext <;> simp
 
 Depends on / 依赖: Grothendieck, X.base, X.fiber, colimit
 -/
@@ -254,7 +310,10 @@ definition isColimitCoconeFiberwiseColimitOfCocone
   uniq s m hm := hc.hom_ext fun X => by
     have := hm X.base
     simp only [Functor.const_obj_obj, IsColimit.fac, NatTrans.comp_app, Functor.comp_obj,
-     
+      Grothendieck.forget_obj, natTransIntoForgetCompFiberwiseColimit_app,
+      whiskerLeft_app]
+    simp only [coconeFiberwiseColimitOfCocone_pt, coconeFiberwiseColimitOfCocone_ι_app] at this
+    simp [← this]
 
 中文:
 定义 isColimitCoconeFiberwiseColimitOfCocone
@@ -265,7 +324,10 @@ definition isColimitCoconeFiberwiseColimitOfCocone
   uniq s m hm := hc.hom_ext fun X => by
     have := hm X.base
     simp only [Functor.const_obj_obj, IsColimit.fac, NatTrans.comp_app, Functor.comp_obj,
-     
+      Grothendieck.forget_obj, natTransIntoForgetCompFiberwiseColimit_app,
+      whiskerLeft_app]
+    simp only [coconeFiberwiseColimitOfCocone_pt, coconeFiberwiseColimitOfCocone_ι_app] at this
+    simp [← this]
 
 Depends on / 依赖: Cocone, Cocone.mk, hc.desc, natTransIntoForgetCompFiberwiseColimit, s.pt
 -/
@@ -320,7 +382,11 @@ definition coconeOfCoconeFiberwiseColimit
          naturality := fun {X Y} ⟨f, g⟩ => by
           simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id]
           rw [← Category.assoc]; rw [← c.w f]; rw [← Category.assoc]
-     
+          simp only [fiberwiseColimit_obj, fiberwiseColimit_map, ι_colimMap_assoc,
+            Functor.comp_obj, Grothendieck.ι_obj, NatTrans.comp_app, whiskerRight_app,
+            Functor.associator_hom_app, Category.comp_id, colimit.ι_pre]
+          rw [← colimit.w _ g]; rw [← Category.assoc]; rw [Functor.comp_map]; rw [← G.map_comp]
+          congr <;> simp }
 
 中文:
 定义 coconeOfCoconeFiberwiseColimit
@@ -330,7 +396,11 @@ definition coconeOfCoconeFiberwiseColimit
          naturality := fun {X Y} ⟨f, g⟩ => by
           simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id]
           rw [← Category.assoc]; rw [← c.w f]; rw [← Category.assoc]
-     
+          simp only [fiberwiseColimit_obj, fiberwiseColimit_map, ι_colimMap_assoc,
+            Functor.comp_obj, Grothendieck.ι_obj, NatTrans.comp_app, whiskerRight_app,
+            Functor.associator_hom_app, Category.comp_id, colimit.ι_pre]
+          rw [← colimit.w _ g]; rw [← Category.assoc]; rw [Functor.comp_map]; rw [← G.map_comp]
+          congr <;> simp }
 
 Depends on / 依赖: c.pt
 -/
@@ -359,7 +429,9 @@ definition isColimitCoconeOfFiberwiseCocone
 uniq s m hm := hc.hom_ext fun X => by
     simp only [fiberwiseColimit_obj, IsColimit.fac]
     simp only [coconeOfCoconeFiberwiseColimit_pt, Functor.const_obj_obj,
-      coconeOfCoconeFiberwiseColimit_ι
+      coconeOfCoconeFiberwiseColimit_ι_app, Category.assoc] at hm
+    ext d
+    simp [hm ⟨X, d⟩]
 
 中文:
 定义 isColimitCoconeOfFiberwiseCocone
@@ -369,7 +441,9 @@ uniq s m hm := hc.hom_ext fun X => by
 uniq s m hm := hc.hom_ext fun X => by
     simp only [fiberwiseColimit_obj, IsColimit.fac]
     simp only [coconeOfCoconeFiberwiseColimit_pt, Functor.const_obj_obj,
-      coconeOfCoconeFiberwiseColimit_ι
+      coconeOfCoconeFiberwiseColimit_ι_app, Category.assoc] at hm
+    ext d
+    simp [hm ⟨X, d⟩]
 
 Depends on / 依赖: Cocone, Cocone.mk, hc.desc, s.pt
 -/

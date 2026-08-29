@@ -85,7 +85,7 @@ lemma Subgroup.mem_closure_singleton_iff_existsUnique_zpow
     rcases ha.lt_or_gt with ha | ha
     · exact (zpow_right_strictAnti ha).injective
     · exact (zpow_right_strictMono ha).injective
-  
+  · exact fun h => h.exists
 
 中文:
 引理 子群.mem_closure_singleton_iff_存在Unique_zpow
@@ -99,7 +99,7 @@ lemma Subgroup.mem_closure_singleton_iff_existsUnique_zpow
     rcases ha.lt_or_gt with ha | ha
     · exact (zpow_right_strictAnti ha).injective
     · exact (zpow_right_strictMono ha).injective
-  
+  · exact fun h => h.exists
 
 Depends on / 依赖: Function, Function.Injective, Injective, h.exists, ha.lt_or_gt, injective, lt_or_gt, mem_closure_singleton, zpow_right_strictAnti, zpow_right_strictMono
 -/
@@ -128,7 +128,7 @@ lemma Int.addEquiv_eq_refl_or_neg
   have he : ¬IsOfFinAddOrder (e 1) :=
     not_isOfFinAddOrder_of_isAddTorsionFree ((AddEquiv.map_ne_zero_iff e).mpr Int.one_ne_zero)
   rw [← AddSubgroup.zmultiples_eq_zmultiples_iff he]
-  simpa [e.surjective, eq_comm
+  simpa [e.surjective, eq_comm] using (e : Int ->+ Int).map_zmultiples 1
 
 中文:
 引理 整数.addEquiv_eq_refl_or_neg
@@ -139,7 +139,7 @@ lemma Int.addEquiv_eq_refl_or_neg
   have he : ¬IsOfFinAddOrder (e 1) :=
     not_isOfFinAddOrder_of_isAddTorsionFree ((AddEquiv.map_ne_zero_iff e).mpr Int.one_ne_zero)
   rw [← AddSubgroup.zmultiples_eq_zmultiples_iff he]
-  simpa [e.surjective, eq_comm
+  simpa [e.surjective, eq_comm] using (e : Int ->+ Int).map_zmultiples 1
 
 Depends on / 依赖: AddEquiv, AddEquiv.ext_int_iff, AddEquiv.map_ne_zero_iff, AddSubgroup, AddSubgroup.zmultiples_eq_zmultiples_iff, Int.one_ne_zero, IsOfFinAddOrder, e.surjective, eq_comm, ext_int_iff, map_ne_zero_iff, map_zmultiples, neg_eq_iff_eq_neg, not_isOfFinAddOrder_of_isAddTorsionFree, one_ne_zero, surjective, zmultiples_eq_zmultiples_iff
 -/
@@ -261,7 +261,10 @@ uniq e := OrderAddMonoidIso.toAddEquiv_injective by
     refine Int.addEquiv_eq_refl_or_neg ((e : Int ≃+ Intᵒᵈ).trans ⟨toDual, toDual_add⟩)
 .resolve_left fun H => by
       replace H : e 1 = 1 := congr($H 1)
-      have h1 : 0 < e 1 
+      have h1 : 0 < e 1 := by
+        rw [← map_zero e]; rw [map_lt_map_iff]
+        simp
+      simp [H, ← ofDual_lt_ofDual] at h1
 
 中文:
 实例 :
@@ -272,7 +275,10 @@ uniq e := OrderAddMonoidIso.toAddEquiv_injective by
     refine Int.addEquiv_eq_refl_or_neg ((e : Int ≃+ Intᵒᵈ).trans ⟨toDual, toDual_add⟩)
 .resolve_left fun H => by
       replace H : e 1 = 1 := congr($H 1)
-      have h1 : 0 < e 1 
+      have h1 : 0 < e 1 := by
+        rw [← map_zero e]; rw [map_lt_map_iff]
+        simp
+      simp [H, ← ofDual_lt_ofDual] at h1
 
 Depends on / 依赖: AddEquiv, AddEquiv.neg
 -/
@@ -306,7 +312,34 @@ definition LinearOrderedCommGroup.closure_equiv_closure
     · intro ⟨a, ha⟩
       simpa [hxy.mp hx, closure_singleton_one, eq_comm] using ha
     · intros
-      s
+      simp
+    · intro ⟨a, ha⟩ ⟨b, hb⟩
+      simp only [hx, closure_singleton_one, mem_bot] at ha hb
+      simp [ha, hb]
+  else by
+    set x' := max x x⁻¹ with hx'
+    have xpos : 1 < x' := by
+      simp [hx', eq_comm, hx]
+    set y' := max y y⁻¹ with hy'
+    have ypos : 1 < y' := by
+      simp [hy', eq_comm, ← hxy, hx]
+    have hxc : closure {x} = closure {x'} := by rcases max_cases x x⁻¹ <;> simp_all
+    have hyc : closure {y} = closure {y'} := by rcases max_cases y y⁻¹ <;> simp_all
+    have Hx : forall (z : closure {x}), z in zpowers ⟨x', by simp [hxc]⟩ := by
+      simp_rw [Subtype.forall, hxc, ← zpowers_eq_closure, mem_zpowers_iff, Subtype.ext_iff,
+        SubgroupClass.coe_zpow, imp_self, implies_true]
+    have Hy : forall (z : closure {y}), z in zpowers ⟨y', by simp [hyc]⟩ := by
+      simp_rw [Subtype.forall, hyc, ← zpowers_eq_closure, mem_zpowers_iff, Subtype.ext_iff,
+        SubgroupClass.coe_zpow, imp_self, implies_true]
+    refine OrderMonoidIso.mk (mulEquivOfOrderOfEq Hx Hy ?_) ?_
+    · rw [orderOf_mk, orderOf_mk]
+      grind [orderOf_eq_one_iff, IsMulTorsionFree.orderOf_le_one]
+    · intro a b
+      obtain ⟨m, rfl⟩ := Hx a
+      obtain ⟨n, rfl⟩ := Hx b
+      simp only [MulEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe, EquivLike.coe_coe, map_zpow,
+        mulEquivOfOrderOfEq_apply_gen]
+      simp_all [zpow_le_zpow_iff_right, ← Subtype.coe_lt_coe]
 
 中文:
 定义 LinearOrderedCommGroup.closure_equiv_closure
@@ -318,7 +351,34 @@ definition LinearOrderedCommGroup.closure_equiv_closure
     · intro ⟨a, ha⟩
       simpa [hxy.mp hx, closure_singleton_one, eq_comm] using ha
     · intros
-      s
+      simp
+    · intro ⟨a, ha⟩ ⟨b, hb⟩
+      simp only [hx, closure_singleton_one, mem_bot] at ha hb
+      simp [ha, hb]
+  else by
+    set x' := max x x⁻¹ with hx'
+    have xpos : 1 < x' := by
+      simp [hx', eq_comm, hx]
+    set y' := max y y⁻¹ with hy'
+    have ypos : 1 < y' := by
+      simp [hy', eq_comm, ← hxy, hx]
+    have hxc : closure {x} = closure {x'} := by rcases max_cases x x⁻¹ <;> simp_all
+    have hyc : closure {y} = closure {y'} := by rcases max_cases y y⁻¹ <;> simp_all
+    have Hx : forall (z : closure {x}), z in zpowers ⟨x', by simp [hxc]⟩ := by
+      simp_rw [Subtype.forall, hxc, ← zpowers_eq_closure, mem_zpowers_iff, Subtype.ext_iff,
+        SubgroupClass.coe_zpow, imp_self, implies_true]
+    have Hy : forall (z : closure {y}), z in zpowers ⟨y', by simp [hyc]⟩ := by
+      simp_rw [Subtype.forall, hyc, ← zpowers_eq_closure, mem_zpowers_iff, Subtype.ext_iff,
+        SubgroupClass.coe_zpow, imp_self, implies_true]
+    refine OrderMonoidIso.mk (mulEquivOfOrderOfEq Hx Hy ?_) ?_
+    · rw [orderOf_mk, orderOf_mk]
+      grind [orderOf_eq_one_iff, IsMulTorsionFree.orderOf_le_one]
+    · intro a b
+      obtain ⟨m, rfl⟩ := Hx a
+      obtain ⟨n, rfl⟩ := Hx b
+      simp only [MulEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe, EquivLike.coe_coe, map_zpow,
+        mulEquivOfOrderOfEq_apply_gen]
+      simp_all [zpow_le_zpow_iff_right, ← Subtype.coe_lt_coe]
 
 Depends on / 依赖: closure_singleton_one, eq_comm, hxy.mp, intros, mem_bot
 -/
@@ -380,7 +440,28 @@ lemma Subgroup.isLeast_of_closure_iff_eq_mabs
     obtain ⟨n, rfl⟩ := ha
     have := h.left
     simp only [mem_closure_singleton, mem_ofPred_eq] at this
-    obtain ⟨m, hm⟩ := th
+    obtain ⟨m, hm⟩ := this.left
+    have key : m * n = 1 := by
+      rw [← zpow_right_inj this.right]; rw [zpow_mul']; rw [hm]; rw [zpow_one]
+    rw [Int.mul_eq_one_iff_eq_one_or_neg_one] at key
+    rw [eq_comm]
+    rcases key with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
+    simp [this.right.le, this.right, mabs]
+  · wlog ha : 1 <= a generalizing a
+    · convert! @this (a⁻¹) ?_ (by simpa using le_of_not_ge ha) using 4
+      · simp
+      · rwa [mabs_inv]
+    rw [mabs]; rw [sup_eq_left.mpr ((inv_le_one'.mpr ha).trans ha)] at h
+    rcases h with ⟨rfl, h⟩
+    refine ⟨?_, ?_⟩
+    · simp [h]
+    · intro x
+      simp only [mem_closure_singleton, mem_ofPred_eq, and_imp, forall_exists_index]
+      rintro k rfl hk
+      rw [← zpow_one b]; rw [← zpow_mul]; rw [one_mul]; rw [zpow_le_zpow_iff_right h]; rw [← zero_add 1]; rw [← Int.lt_iff_add_one_le]
+      contrapose! hk
+      rw [← Left.one_le_inv_iff]; rw [← zpow_neg]
+      exact one_le_zpow ha (by simp [hk])
 
 中文:
 引理 子群.isLeast_of_closure_iff_eq_mabs
@@ -394,7 +475,28 @@ lemma Subgroup.isLeast_of_closure_iff_eq_mabs
     obtain ⟨n, rfl⟩ := ha
     have := h.left
     simp only [mem_closure_singleton, mem_ofPred_eq] at this
-    obtain ⟨m, hm⟩ := th
+    obtain ⟨m, hm⟩ := this.left
+    have key : m * n = 1 := by
+      rw [← zpow_right_inj this.right]; rw [zpow_mul']; rw [hm]; rw [zpow_one]
+    rw [Int.mul_eq_one_iff_eq_one_or_neg_one] at key
+    rw [eq_comm]
+    rcases key with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
+    simp [this.right.le, this.right, mabs]
+  · wlog ha : 1 <= a generalizing a
+    · convert! @this (a⁻¹) ?_ (by simpa using le_of_not_ge ha) using 4
+      · simp
+      · rwa [mabs_inv]
+    rw [mabs]; rw [sup_eq_left.mpr ((inv_le_one'.mpr ha).trans ha)] at h
+    rcases h with ⟨rfl, h⟩
+    refine ⟨?_, ?_⟩
+    · simp [h]
+    · intro x
+      simp only [mem_closure_singleton, mem_ofPred_eq, and_imp, forall_exists_index]
+      rintro k rfl hk
+      rw [← zpow_one b]; rw [← zpow_mul]; rw [one_mul]; rw [zpow_le_zpow_iff_right h]; rw [← zero_add 1]; rw [← Int.lt_iff_add_one_le]
+      contrapose! hk
+      rw [← Left.one_le_inv_iff]; rw [← zpow_neg]
+      exact one_le_zpow ha (by simp [hk])
 
 Depends on / 依赖: Int.mul_eq_one_iff_eq_one_or_neg_one, Subgroup, Subgroup.cyclic_of_min, closure, cyclic_of_min, eq_comm, h.left, mem_closure_singleton, mem_ofPred_eq, mul_eq_one_iff_eq_one_or_neg_one, this.left, this.right, this.right.le, zpow_mul, zpow_one, zpow_right_inj
 -/
@@ -442,7 +544,16 @@ definition LinearOrderedAddCommGroup.int_orderAddMonoidIso_of_isLeast_pos
   replace this := AddSubgroup.cyclic_of_min this
   let e : G ≃+o (⊤ : AddSubgroup G) := ⟨AddSubsemigroup.topEquiv.symm,
     (AddEquiv.strictMono_symm AddSubsemigroup.strictMono_topEquiv).le_iff_le⟩
-  let e' : (⊤ : A
+  let e' : (⊤ : AddSubgroup G) ≃+o AddSubgroup.closure {x} :=
+    ⟨AddEquiv.subsemigroupCongr (by simp [this]),
+     (AddEquiv.strictMono_subsemigroupCongr _).le_iff_le⟩
+  let g : (⊤ : AddSubgroup Int) ≃+o Int := ⟨AddSubsemigroup.topEquiv,
+    (AddSubsemigroup.strictMono_topEquiv).le_iff_le⟩
+  let g' : AddSubgroup.closure ({1} : Set Int) ≃+o (⊤ : AddSubgroup Int) :=
+    ⟨(.subsemigroupCongr (by simp)),
+     (AddEquiv.strictMono_subsemigroupCongr _).le_iff_le⟩
+  let f := closure_equiv_closure x (1 : Int) (by simp [h.left.ne'])
+  exact ((((e.trans e').trans f).trans g').trans g : G ≃+o Int)
 
 中文:
 定义 LinearOrderedAddCommGroup.int_orderAddMonoidIso_of_isLeast_pos
@@ -452,7 +563,16 @@ definition LinearOrderedAddCommGroup.int_orderAddMonoidIso_of_isLeast_pos
   replace this := AddSubgroup.cyclic_of_min this
   let e : G ≃+o (⊤ : AddSubgroup G) := ⟨AddSubsemigroup.topEquiv.symm,
     (AddEquiv.strictMono_symm AddSubsemigroup.strictMono_topEquiv).le_iff_le⟩
-  let e' : (⊤ : A
+  let e' : (⊤ : AddSubgroup G) ≃+o AddSubgroup.closure {x} :=
+    ⟨AddEquiv.subsemigroupCongr (by simp [this]),
+     (AddEquiv.strictMono_subsemigroupCongr _).le_iff_le⟩
+  let g : (⊤ : AddSubgroup Int) ≃+o Int := ⟨AddSubsemigroup.topEquiv,
+    (AddSubsemigroup.strictMono_topEquiv).le_iff_le⟩
+  let g' : AddSubgroup.closure ({1} : Set Int) ≃+o (⊤ : AddSubgroup Int) :=
+    ⟨(.subsemigroupCongr (by simp)),
+     (AddEquiv.strictMono_subsemigroupCongr _).le_iff_le⟩
+  let f := closure_equiv_closure x (1 : Int) (by simp [h.left.ne'])
+  exact ((((e.trans e').trans f).trans g').trans g : G ≃+o Int)
 
 Depends on / 依赖: AddEquiv, AddEquiv.strictMono_subsemigroupCongr, AddEquiv.strictMono_symm, AddEquiv.subsemigroupCongr, AddSubgroup, AddSubgroup.closure, AddSubgroup.cyclic_of_min, AddSubsemigroup, AddSubsemigroup.strictMono_topEquiv, AddSubsemigroup.topEquiv, AddSubsemigroup.topEquiv.symm, IsLeast, closure, cyclic_of_min, le_iff_le, replace, strictMono_subsemigroupCongr, strictMono_symm, strictMono_topEquiv, subsemigroupCongr
 -/
@@ -560,7 +680,10 @@ lemma LinearOrderedAddCommGroup.discrete_or_denselyOrdered
     specialize H (y - x)
     obtain ⟨z, hz⟩ : exists z : G, 0 < z ∧ z < y - x := by
       contrapose! H
-      refine ⟨b
+      refine ⟨by simp [hxy], fun _ => H _⟩
+    refine ⟨x + z, ?_, ?_⟩
+    · simp [hz.left]
+    · simpa [lt_sub_iff_add_lt'] using hz.right
 
 中文:
 引理 LinearOrderedAddCommGroup.discrete_or_denselyOrdered
@@ -574,7 +697,10 @@ lemma LinearOrderedAddCommGroup.discrete_or_denselyOrdered
     specialize H (y - x)
     obtain ⟨z, hz⟩ : exists z : G, 0 < z ∧ z < y - x := by
       contrapose! H
-      refine ⟨b
+      refine ⟨by simp [hxy], fun _ => H _⟩
+    refine ⟨x + z, ?_, ?_⟩
+    · simp [hz.left]
+    · simpa [lt_sub_iff_add_lt'] using hz.right
 
 Depends on / 依赖: IsLeast, Or.inl, Or.inr, contrapose, hz.left, hz.right, int_orderAddMonoidIso_of_isLeast_pos, lt_sub_iff_add_lt, specialize
 -/
@@ -607,7 +733,9 @@ lemma LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered
     · simp only [h, not_true_eq_false, iff_false, not_nonempty_iff]
       exact ⟨fun H => (this H) h⟩
   intro e H
-  rw [denselyO
+  rw [denselyOrdered_iff_of_orderIsoClass e] at H
+  obtain ⟨_, _⟩ := exists_between (one_pos (α := Int))
+  lia
 
 中文:
 引理 LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered
@@ -619,7 +747,9 @@ lemma LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered
     · simp only [h, not_true_eq_false, iff_false, not_nonempty_iff]
       exact ⟨fun H => (this H) h⟩
   intro e H
-  rw [denselyO
+  rw [denselyOrdered_iff_of_orderIsoClass e] at H
+  obtain ⟨_, _⟩ := exists_between (one_pos (α := Int))
+  lia
 
 Depends on / 依赖: DenselyOrdered, LinearOrderedAddCommGroup, LinearOrderedAddCommGroup.discrete_or_denselyOrdered, denselyOrdered_iff_of_orderIsoClass, discrete_or_denselyOrdered, exists_between, iff_false, not_nonempty_iff, not_true_eq_false, one_pos
 -/
@@ -779,7 +909,17 @@ lemma LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered
   · refine ⟨MulEquiv.withZero.symm (withZeroUnitsEquiv.trans f), ?_⟩
     intros
     simp only [MulEquiv.withZero, withZeroUnitsEquiv, MulEquiv.trans_apply,
-  
+      MulEquiv.coe_mk, Equiv.coe_fn_mk, recZeroCoe_coe, OrderMonoidIso.coe_mulEquiv,
+      MulEquiv.symm_trans_apply, MulEquiv.symm_mk, Equiv.coe_fn_symm_mk, map_eq_zero, coe_ne_zero,
+      ↓reduceDIte, unzero_coe, MulEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe, EquivLike.coe_coe]
+    rw [← Units.val_le_val]; rw [← map_le_map_iff f]; rw [← coe_le_coe]; rw [coe_unzero]; rw [coe_unzero]
+  · refine ⟨withZeroUnitsEquiv.symm.trans (MulEquiv.withZero f), ?_⟩
+    intros
+    simp only [withZeroUnitsEquiv, MulEquiv.symm_mk, MulEquiv.withZero,
+      MulEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe, EquivLike.coe_coe,
+      MulEquiv.trans_apply, MulEquiv.coe_mk, Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk]
+    split_ifs <;>
+    simp_all [← Units.val_le_val]
 
 中文:
 引理 带零LinearOrderedComm群.discrete_iff_not_denselyOrdered
@@ -790,7 +930,17 @@ lemma LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered
   · refine ⟨MulEquiv.withZero.symm (withZeroUnitsEquiv.trans f), ?_⟩
     intros
     simp only [MulEquiv.withZero, withZeroUnitsEquiv, MulEquiv.trans_apply,
-  
+      MulEquiv.coe_mk, Equiv.coe_fn_mk, recZeroCoe_coe, OrderMonoidIso.coe_mulEquiv,
+      MulEquiv.symm_trans_apply, MulEquiv.symm_mk, Equiv.coe_fn_symm_mk, map_eq_zero, coe_ne_zero,
+      ↓reduceDIte, unzero_coe, MulEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe, EquivLike.coe_coe]
+    rw [← Units.val_le_val]; rw [← map_le_map_iff f]; rw [← coe_le_coe]; rw [coe_unzero]; rw [coe_unzero]
+  · refine ⟨withZeroUnitsEquiv.symm.trans (MulEquiv.withZero f), ?_⟩
+    intros
+    simp only [withZeroUnitsEquiv, MulEquiv.symm_mk, MulEquiv.withZero,
+      MulEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe, EquivLike.coe_coe,
+      MulEquiv.trans_apply, MulEquiv.coe_mk, Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk]
+    split_ifs <;>
+    simp_all [← Units.val_le_val]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, LinearOrderedCommGroup, LinearOrderedCommGroup.discrete_iff_not_denselyOrdered, MulEquiv, MulEquiv.coe_mk, MulEquiv.symm_mk, MulEquiv.symm_trans_apply, MulEquiv.toEquiv_eq, MulEquiv.trans_apply, MulEquiv.withZero, MulEquiv.withZero.symm, Nonempty, Nonempty.congr, OrderMonoidIso, OrderMonoidIso.coe_mulEquiv, coe_fn_mk, coe_fn_symm_mk, coe_mk, coe_mulEquiv
 -/
@@ -830,7 +980,33 @@ lemma LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discr
       simp [Function.onFun]
   constructor
   · intro h
-    replace h : WellFounded (α :=
+    replace h : WellFounded (α := {x : G | 0 <= x}) (· < ·) := h
+    rw [WellFounded.wellFounded_iff_has_min] at h
+    by_cases! H : forall (x : G) {y}, 0 < y -> exists n : Nat, x <= n • y -- Archimedean
+    · replace H : Archimedean G := ⟨H⟩
+      rw [LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered]
+      intro hd
+      obtain ⟨y, hy⟩ := exists_ne (0 : G)
+      wlog! hy' : 0 < y generalizing y
+      · refine this (-y) ?_ ?_
+        · simp [hy]
+        · simp [lt_of_le_of_ne hy' hy]
+      obtain ⟨⟨z, hz⟩, hz', hz''⟩ := h ({x | ⟨0, le_rfl⟩ < x}) ⟨⟨y, hy'.le⟩, hy'⟩
+      obtain ⟨w, hw, hw'⟩ := exists_between hz'
+      exact hz'' ⟨w, hw.le⟩ hw hw'
+    · exfalso
+      obtain ⟨x, y, hy0, H⟩ := H
+      obtain ⟨_, ⟨n, rfl⟩, hz⟩ :=
+        h (Set.range (fun n : Nat => ⟨x - n • y, sub_nonneg.mpr (H _).le⟩)) (range_nonempty _)
+      refine hz ⟨x - (n + 1) • y, sub_nonneg.mpr (H _).le⟩ ⟨_, rfl⟩ ?_
+      simp [add_smul, hy0]
+  · rintro ⟨f⟩
+    have : LocallyFiniteOrder G := LocallyFiniteOrder.ofOrderIsoClass f
+    exact BddBelow.wellFoundedOn_lt ⟨0, by simp [mem_lowerBounds]⟩
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedAddCommGroup.wellFoundedOn_setOf_le_lt_iff_nonempty_discrete :=
+  LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
 
 中文:
 引理 LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
@@ -842,7 +1018,33 @@ lemma LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discr
       simp [Function.onFun]
   constructor
   · intro h
-    replace h : WellFounded (α :=
+    replace h : WellFounded (α := {x : G | 0 <= x}) (· < ·) := h
+    rw [WellFounded.wellFounded_iff_has_min] at h
+    by_cases! H : forall (x : G) {y}, 0 < y -> exists n : Nat, x <= n • y -- Archimedean
+    · replace H : Archimedean G := ⟨H⟩
+      rw [LinearOrderedAddCommGroup.discrete_iff_not_denselyOrdered]
+      intro hd
+      obtain ⟨y, hy⟩ := exists_ne (0 : G)
+      wlog! hy' : 0 < y generalizing y
+      · refine this (-y) ?_ ?_
+        · simp [hy]
+        · simp [lt_of_le_of_ne hy' hy]
+      obtain ⟨⟨z, hz⟩, hz', hz''⟩ := h ({x | ⟨0, le_rfl⟩ < x}) ⟨⟨y, hy'.le⟩, hy'⟩
+      obtain ⟨w, hw, hw'⟩ := exists_between hz'
+      exact hz'' ⟨w, hw.le⟩ hw hw'
+    · exfalso
+      obtain ⟨x, y, hy0, H⟩ := H
+      obtain ⟨_, ⟨n, rfl⟩, hz⟩ :=
+        h (Set.range (fun n : Nat => ⟨x - n • y, sub_nonneg.mpr (H _).le⟩)) (range_nonempty _)
+      refine hz ⟨x - (n + 1) • y, sub_nonneg.mpr (H _).le⟩ ⟨_, rfl⟩ ?_
+      simp [add_smul, hy0]
+  · rintro ⟨f⟩
+    have : LocallyFiniteOrder G := LocallyFiniteOrder.ofOrderIsoClass f
+    exact BddBelow.wellFoundedOn_lt ⟨0, by simp [mem_lowerBounds]⟩
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedAddCommGroup.wellFoundedOn_setOf_le_lt_iff_nonempty_discrete :=
+  LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
 
 Depends on / 依赖: Archimedean, Function, Function.onFun, LinearOrderedAddCommGroup, Nonempty, Set.WellFoundedOn, WellFounded, WellFounded.wellFounded_iff_has_min, WellFoundedOn, h.mapsTo, mapsTo, replace, wellFounded_iff_has_min
 -/
@@ -896,7 +1098,8 @@ lemma LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discr
     simp [Function.onFun, neg_le]
 
 @[deprecated (since := "2026-07-09")]
-alias LinearOrderedAddCommGroup.wellFoundedOn_setOf
+alias LinearOrderedAddCommGroup.wellFoundedOn_setOf_ge_gt_iff_nonempty_discrete :=
+  LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete
 
 中文:
 引理 LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete
@@ -907,7 +1110,8 @@ alias LinearOrderedAddCommGroup.wellFoundedOn_setOf
     simp [Function.onFun, neg_le]
 
 @[deprecated (since := "2026-07-09")]
-alias LinearOrderedAddCommGroup.wellFoundedOn_setOf
+alias LinearOrderedAddCommGroup.wellFoundedOn_setOf_ge_gt_iff_nonempty_discrete :=
+  LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete
 
 Depends on / 依赖: Function, Function.onFun, h.mapsTo, mapsTo, neg_le, wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
 -/
@@ -932,14 +1136,28 @@ lemma LinearOrderedCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
   proof: by
   let e : G ≃o Additive G := OrderIso.refl G
   suffices Set.WellFoundedOn {x : G | g <= x} (· < ·) ↔ Set.WellFoundedOn {x | e g <= x} (· < ·) by
-    rw [this]; rw [LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete]; rw [OrderAddMonoidIso.toMultiplicativeRight.nonempty_
+    rw [this]; rw [LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete]; rw [OrderAddMonoidIso.toMultiplicativeRight.nonempty_congr]
+  refine ⟨fun h => (h.mapsTo e.symm fun _ => e.le_symm_apply.mpr).mono' ?_,
+    fun h => (h.mapsTo e fun _ => ?_).mono' ?_⟩ <;>
+  simp [Function.onFun]
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedCommGroup.wellFoundedOn_setOf_le_lt_iff_nonempty_discrete :=
+  LinearOrderedCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
 
 中文:
 引理 LinearOrderedCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
   证明: by
   let e : G ≃o Additive G := OrderIso.refl G
   suffices Set.WellFoundedOn {x : G | g <= x} (· < ·) ↔ Set.WellFoundedOn {x | e g <= x} (· < ·) by
-    rw [this]; rw [LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete]; rw [OrderAddMonoidIso.toMultiplicativeRight.nonempty_
+    rw [this]; rw [LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete]; rw [OrderAddMonoidIso.toMultiplicativeRight.nonempty_congr]
+  refine ⟨fun h => (h.mapsTo e.symm fun _ => e.le_symm_apply.mpr).mono' ?_,
+    fun h => (h.mapsTo e fun _ => ?_).mono' ?_⟩ <;>
+  simp [Function.onFun]
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedCommGroup.wellFoundedOn_setOf_le_lt_iff_nonempty_discrete :=
+  LinearOrderedCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
 
 Depends on / 依赖: Additive, Function, Function.onFun, LinearOrderedAddCommGroup, LinearOrderedAddCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete, OrderAddMonoidIso, OrderAddMonoidIso.toMultiplicativeRight.nonempty_congr, OrderIso, OrderIso.refl, Set.WellFoundedOn, WellFoundedOn, e.le_symm_apply.mpr, e.symm, h.mapsTo, le_symm_apply, mapsTo, nonempty_congr, toMultiplicativeRight, wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
 -/
@@ -969,7 +1187,8 @@ lemma LinearOrderedCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete
     simp [Function.onFun, inv_le']
 
 @[deprecated (since := "2026-07-09")]
-alias LinearOrderedCommGroup.wellFoundedOn_setOf_
+alias LinearOrderedCommGroup.wellFoundedOn_setOf_ge_gt_iff_nonempty_discrete :=
+  LinearOrderedCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete
 
 中文:
 引理 LinearOrderedCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete
@@ -980,7 +1199,8 @@ alias LinearOrderedCommGroup.wellFoundedOn_setOf_
     simp [Function.onFun, inv_le']
 
 @[deprecated (since := "2026-07-09")]
-alias LinearOrderedCommGroup.wellFoundedOn_setOf_
+alias LinearOrderedCommGroup.wellFoundedOn_setOf_ge_gt_iff_nonempty_discrete :=
+  LinearOrderedCommGroup.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete
 
 Depends on / 依赖: Function, Function.onFun, h.mapsTo, inv_le, mapsTo, wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete
 -/
@@ -1007,7 +1227,32 @@ lemma LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_le_lt_iff_nonempty_
     Set.WellFoundedOn {x : G₀ˣ | Units.mk0 g hg <= x} (· < ·) by
     rw [this]; rw [LinearOrderedCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete]
     refine Nonempty.congr (fun f => ⟨?_, ?_⟩) (fun f => ⟨?_, ?_⟩)
-    · exact Wi
+    · exact WithZero.withZeroUnitsEquiv.symm.trans f.withZero
+    · intro a b
+      rcases eq_or_ne a 0 with rfl | ha
+      · simp [WithZero.withZeroUnitsEquiv]
+      rcases eq_or_ne b 0 with rfl | hb
+      · simp [WithZero.withZeroUnitsEquiv]
+      simp [WithZero.withZeroUnitsEquiv, ha, hb, ← Units.val_le_val]
+    · exact MulEquiv.withZero.symm (WithZero.withZeroUnitsEquiv.trans f)
+    · intros
+      rw [← WithZero.coe_le_coe]
+      simp
+  rw [← Set.wellFoundedOn_sdiff_singleton (a := 0)]
+  refine ⟨fun h => (h.mapsTo Units.val ?_).mono' ?_,
+    fun h => (h.mapsTo ?_ ?_).mono' ?_⟩
+  · intro
+    simp [← Units.val_le_val]
+  · simp [Function.onFun]
+  · exact fun x => if h : x = 0 then 1 else Units.mk0 x h
+  · simp +contextual [← Units.val_le_val, MapsTo]
+  · simp only [mem_sdiff, mem_ofPred_eq, mem_singleton_iff, Function.onFun, and_imp]
+    intro _ _ ha0 _ _ hb0 h
+    simp [ha0, hb0, ← Units.val_lt_val, h]
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedCommGroupWithZero.wellFoundedOn_setOf_le_lt_iff_nonempty_discrete_of_ne_zero :=
+  LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero
 
 中文:
 引理 带零LinearOrderedComm群.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero
@@ -1016,7 +1261,32 @@ lemma LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_le_lt_iff_nonempty_
     Set.WellFoundedOn {x : G₀ˣ | Units.mk0 g hg <= x} (· < ·) by
     rw [this]; rw [LinearOrderedCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete]
     refine Nonempty.congr (fun f => ⟨?_, ?_⟩) (fun f => ⟨?_, ?_⟩)
-    · exact Wi
+    · exact WithZero.withZeroUnitsEquiv.symm.trans f.withZero
+    · intro a b
+      rcases eq_or_ne a 0 with rfl | ha
+      · simp [WithZero.withZeroUnitsEquiv]
+      rcases eq_or_ne b 0 with rfl | hb
+      · simp [WithZero.withZeroUnitsEquiv]
+      simp [WithZero.withZeroUnitsEquiv, ha, hb, ← Units.val_le_val]
+    · exact MulEquiv.withZero.symm (WithZero.withZeroUnitsEquiv.trans f)
+    · intros
+      rw [← WithZero.coe_le_coe]
+      simp
+  rw [← Set.wellFoundedOn_sdiff_singleton (a := 0)]
+  refine ⟨fun h => (h.mapsTo Units.val ?_).mono' ?_,
+    fun h => (h.mapsTo ?_ ?_).mono' ?_⟩
+  · intro
+    simp [← Units.val_le_val]
+  · simp [Function.onFun]
+  · exact fun x => if h : x = 0 then 1 else Units.mk0 x h
+  · simp +contextual [← Units.val_le_val, MapsTo]
+  · simp only [mem_sdiff, mem_ofPred_eq, mem_singleton_iff, Function.onFun, and_imp]
+    intro _ _ ha0 _ _ hb0 h
+    simp [ha0, hb0, ← Units.val_lt_val, h]
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedCommGroupWithZero.wellFoundedOn_setOf_le_lt_iff_nonempty_discrete_of_ne_zero :=
+  LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero
 
 Depends on / 依赖: LinearOrderedCommGroup, LinearOrderedCommGroup.wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete, Nonempty, Nonempty.congr, Set.WellFoundedOn, Units.mk0, WellFoundedOn, WithZero, WithZero.w, WithZero.withZeroUnitsEquiv, WithZero.withZeroUnitsEquiv.symm.trans, eq_or_ne, f.withZero, wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete, withZero, withZeroUnitsEquiv
 -/
@@ -1064,7 +1334,31 @@ lemma LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_
   rw [← wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero hg']; rw [← Set.wellFoundedOn_sdiff_singleton (a := 0)]
   refine ⟨fun h => (h.mapsTo (·⁻¹) ?_).mono' ?_, fun h => (h.mapsTo (·⁻¹) ?_).mono' ?_⟩
   · intro x
-    rcases eq_or_ne x 0 with rfl
+    rcases eq_or_ne x 0 with rfl | hx
+    · simp [hg]
+    simp only [mem_ofPred_eq, mem_sdiff, mem_singleton_iff, inv_eq_zero, hx, not_false_eq_true,
+      and_true]
+    refine (inv_le_comm₀ ?_ ?_).mp <;>
+    simp [zero_lt_iff, hg, hx]
+  · simp only [mem_ofPred_eq, Function.onFun, gt_iff_lt]
+    intro a ha b _
+    refine inv_strictAnti₀ ?_
+    contrapose! ha
+    simp only [le_zero_iff] at ha
+    simp [zero_lt_iff, ha, hg]
+  · intro x
+    simp only [mem_sdiff, mem_ofPred_eq, mem_singleton_iff, and_imp]
+    intro hxg hx
+    refine inv_anti₀ ?_ hxg
+    simp [zero_lt_iff, hx]
+  · simp only [mem_sdiff, mem_ofPred_eq, mem_singleton_iff, gt_iff_lt, Function.onFun, and_imp]
+    intro a _ _ b _ hb0
+    refine inv_strictAnti₀ ?_
+    simp [zero_lt_iff, hb0]
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedCommGroupWithZero.wellFoundedOn_setOf_ge_gt_iff_nonempty_discrete_of_ne_zero :=
+  LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero
 
 中文:
 引理 带零LinearOrderedComm群.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero
@@ -1073,7 +1367,31 @@ lemma LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_
   rw [← wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero hg']; rw [← Set.wellFoundedOn_sdiff_singleton (a := 0)]
   refine ⟨fun h => (h.mapsTo (·⁻¹) ?_).mono' ?_, fun h => (h.mapsTo (·⁻¹) ?_).mono' ?_⟩
   · intro x
-    rcases eq_or_ne x 0 with rfl
+    rcases eq_or_ne x 0 with rfl | hx
+    · simp [hg]
+    simp only [mem_ofPred_eq, mem_sdiff, mem_singleton_iff, inv_eq_zero, hx, not_false_eq_true,
+      and_true]
+    refine (inv_le_comm₀ ?_ ?_).mp <;>
+    simp [zero_lt_iff, hg, hx]
+  · simp only [mem_ofPred_eq, Function.onFun, gt_iff_lt]
+    intro a ha b _
+    refine inv_strictAnti₀ ?_
+    contrapose! ha
+    simp only [le_zero_iff] at ha
+    simp [zero_lt_iff, ha, hg]
+  · intro x
+    simp only [mem_sdiff, mem_ofPred_eq, mem_singleton_iff, and_imp]
+    intro hxg hx
+    refine inv_anti₀ ?_ hxg
+    simp [zero_lt_iff, hx]
+  · simp only [mem_sdiff, mem_ofPred_eq, mem_singleton_iff, gt_iff_lt, Function.onFun, and_imp]
+    intro a _ _ b _ hb0
+    refine inv_strictAnti₀ ?_
+    simp [zero_lt_iff, hb0]
+
+@[deprecated (since := "2026-07-09")]
+alias LinearOrderedCommGroupWithZero.wellFoundedOn_setOf_ge_gt_iff_nonempty_discrete_of_ne_zero :=
+  LinearOrderedCommGroupWithZero.wellFoundedOn_setOfPred_ge_gt_iff_nonempty_discrete_of_ne_zero
 
 Depends on / 依赖: Set.wellFoundedOn_sdiff_singleton, and_true, eq_or_ne, h.mapsTo, inv_eq_zero, mapsTo, mem_ofPred_eq, mem_sdiff, mem_singleton_iff, not_false_eq_true, wellFoundedOn_sdiff_singleton, wellFoundedOn_setOfPred_le_lt_iff_nonempty_discrete_of_ne_zero, zero_lt_iff
 -/

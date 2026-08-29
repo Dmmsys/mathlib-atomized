@@ -128,7 +128,9 @@ theorem totient_eq_card_lt_and_coprime
   let e : { m | m < n ∧ n.Coprime m } ≃ {x in range n | n.Coprime x} :=
     { toFun := fun m => ⟨m, by simpa only [Finset.mem_filter, Finset.mem_range] using! m.property⟩
       invFun := fun m => ⟨m, by simpa only [Finset.mem_filter, Finset.mem_range] using! m.property⟩
-      left_inv := fun m =>
+      left_inv := fun m => by simp only [Subtype.coe_eta]
+      right_inv := fun m => by simp only }
+  rw [totient_eq_card_coprime]; rw [card_congr e]; rw [card_eq_fintype_card]; rw [Fintype.card_coe]
 
 中文:
 定理 totient_eq_card_lt_and_coprime
@@ -138,7 +140,9 @@ theorem totient_eq_card_lt_and_coprime
   let e : { m | m < n ∧ n.Coprime m } ≃ {x in range n | n.Coprime x} :=
     { toFun := fun m => ⟨m, by simpa only [Finset.mem_filter, Finset.mem_range] using! m.property⟩
       invFun := fun m => ⟨m, by simpa only [Finset.mem_filter, Finset.mem_range] using! m.property⟩
-      left_inv := fun m =>
+      left_inv := fun m => by simp only [Subtype.coe_eta]
+      right_inv := fun m => by simp only }
+  rw [totient_eq_card_coprime]; rw [card_congr e]; rw [card_eq_fintype_card]; rw [Fintype.card_coe]
 
 Depends on / 依赖: Coprime, Finset, Finset.mem_filter, Finset.mem_range, Fintype, Fintype.card_coe, Subtype, Subtype.coe_eta, card_coe, card_congr, card_eq_fintype_card, coe_eta, invFun, left_inv, m.property, mem_filter, mem_range, n.Coprime, property, right_inv
 -/
@@ -287,7 +291,17 @@ theorem Ico_filter_coprime_le
     exact le_of_lt (mod_lt n (pos_iff_ne_zero.mpr a_ne_zero))
   | succ i ih => ?_
   simp only [mul_succ]
-  simp
+  simp_rw [← add_assoc] at ih ⊢
+  calc
+    #{x in Ico k (k + n % a + a * i + a) | a.Coprime x}
+      <= #{x in Ico k (k + n % a + a * i) union
+        Ico (k + n % a + a * i) (k + n % a + a * i + a) | a.Coprime x} := by
+      gcongr
+      apply Ico_subset_Ico_union_Ico
+    _ <= #{x in Ico k (k + n % a + a * i) | a.Coprime x} + a.totient := by
+      rw [filter_union]; rw [← filter_coprime_Ico_eq_totient a (k + n % a + a * i)]
+      apply card_union_le
+    _ <= a.totient * i + a.totient + a.totient := by grw [← mul_add_one, ih]
 
 中文:
 定理 Ico_filter_coprime_le
@@ -302,7 +316,17 @@ theorem Ico_filter_coprime_le
     exact le_of_lt (mod_lt n (pos_iff_ne_zero.mpr a_ne_zero))
   | succ i ih => ?_
   simp only [mul_succ]
-  simp
+  simp_rw [← add_assoc] at ih ⊢
+  calc
+    #{x in Ico k (k + n % a + a * i + a) | a.Coprime x}
+      <= #{x in Ico k (k + n % a + a * i) union
+        Ico (k + n % a + a * i) (k + n % a + a * i + a) | a.Coprime x} := by
+      gcongr
+      apply Ico_subset_Ico_union_Ico
+    _ <= #{x in Ico k (k + n % a + a * i) | a.Coprime x} + a.totient := by
+      rw [filter_union]; rw [← filter_coprime_Ico_eq_totient a (k + n % a + a * i)]
+      apply card_union_le
+    _ <= a.totient * i + a.totient + a.totient := by grw [← mul_add_one, ih]
 
 Depends on / 依赖: Coprime, Ico_subset_Ico_union_, Nat.mod_add_div, a.Coprime, a_ne_zero, add_assoc, add_zero, conv_lhs, filter_coprime_Ico_eq_totient, le_of_lt, mod_add_div, mod_lt, mul_one, mul_succ, mul_zero, pos_iff_ne_zero, pos_iff_ne_zero.mpr, simp_rw, zero_add
 -/
@@ -345,7 +369,9 @@ theorem _root_.ZMod.card_units_eq_totient
       Fintype.card_congr ZMod.unitsEquivCoprime
     _ = φ n := by
       obtain ⟨m, rfl⟩ : exists m, n = m + 1 := exists_eq_succ_of_ne_zero NeZero.out
-      simp only [totient, Finset.card_eq_sum_ones, Fintype.card_su
+      simp only [totient, Finset.card_eq_sum_ones, Fintype.card_subtype, Finset.sum_filter, ←
+        Fin.sum_univ_eq_sum_range, @Nat.coprime_comm (m + 1)]
+      rfl
 
 中文:
 定理 _root_.ZMod.card_units_eq_totient
@@ -355,7 +381,9 @@ theorem _root_.ZMod.card_units_eq_totient
       Fintype.card_congr ZMod.unitsEquivCoprime
     _ = φ n := by
       obtain ⟨m, rfl⟩ : exists m, n = m + 1 := exists_eq_succ_of_ne_zero NeZero.out
-      simp only [totient, Finset.card_eq_sum_ones, Fintype.card_su
+      simp only [totient, Finset.card_eq_sum_ones, Fintype.card_subtype, Finset.sum_filter, ←
+        Fin.sum_univ_eq_sum_range, @Nat.coprime_comm (m + 1)]
+      rfl
 
 Depends on / 依赖: Coprime, Fin.sum_univ_eq_sum_range, Finset, Finset.card_eq_sum_ones, Finset.sum_filter, Fintype, Fintype.card, Fintype.card_congr, Fintype.card_subtype, Nat.coprime_comm, NeZero, NeZero.out, ZMod.unitsEquivCoprime, card_congr, card_eq_sum_ones, card_subtype, coprime_comm, exists_eq_succ_of_ne_zero, sum_filter, sum_univ_eq_sum_range
 -/
@@ -383,7 +411,7 @@ theorem totient_even
   suffices 2 = orderOf (-1 : (ZMod n)ˣ) by
     rw [← ZMod.card_units_eq_totient]; rw [even_iff_two_dvd]; rw [this]
     exact orderOf_dvd_card
-  rw [← orderOf_units]; rw [Units.coe_neg_one]; rw [orderOf_neg_one]; r
+  rw [← orderOf_units]; rw [Units.coe_neg_one]; rw [orderOf_neg_one]; rw [ringChar.eq (ZMod n) n]; rw [if_neg hn.ne']
 
 中文:
 定理 totient_even
@@ -395,7 +423,7 @@ theorem totient_even
   suffices 2 = orderOf (-1 : (ZMod n)ˣ) by
     rw [← ZMod.card_units_eq_totient]; rw [even_iff_two_dvd]; rw [this]
     exact orderOf_dvd_card
-  rw [← orderOf_units]; rw [Units.coe_neg_one]; rw [orderOf_neg_one]; r
+  rw [← orderOf_units]; rw [Units.coe_neg_one]; rw [orderOf_neg_one]; rw [ringChar.eq (ZMod n) n]; rw [if_neg hn.ne']
 
 Depends on / 依赖: NeZero, NeZero.of_gt, Units.coe_neg_one, ZMod.card_units_eq_totient, card_units_eq_totient, coe_neg_one, even_iff_two_dvd, hn.ne, if_neg, of_gt, one_lt_two, one_lt_two.trans, orderOf, orderOf_dvd_card, orderOf_neg_one, orderOf_units, ringChar, ringChar.eq
 -/
@@ -421,7 +449,8 @@ theorem totient_mul
     have : NeZero (m * n) := ⟨hmn0⟩
     have : NeZero m := ⟨left_ne_zero_of_mul hmn0⟩
     have : NeZero n := ⟨right_ne_zero_of_mul hmn0⟩
-    simp only [← ZMod.
+    simp only [← ZMod.card_units_eq_totient]
+    rw [Fintype.card_congr (Units.mapEquiv (ZMod.chineseRemainder h).toMulEquiv).toEquiv]; rw [Fintype.card_congr (@MulEquiv.prodUnits (ZMod m) (ZMod n) _ _).toEquiv]; rw [Fintype.card_prod]
 
 中文:
 定理 totient_mul
@@ -434,7 +463,8 @@ theorem totient_mul
     have : NeZero (m * n) := ⟨hmn0⟩
     have : NeZero m := ⟨left_ne_zero_of_mul hmn0⟩
     have : NeZero n := ⟨right_ne_zero_of_mul hmn0⟩
-    simp only [← ZMod.
+    simp only [← ZMod.card_units_eq_totient]
+    rw [Fintype.card_congr (Units.mapEquiv (ZMod.chineseRemainder h).toMulEquiv).toEquiv]; rw [Fintype.card_congr (@MulEquiv.prodUnits (ZMod m) (ZMod n) _ _).toEquiv]; rw [Fintype.card_prod]
 
 Depends on / 依赖: Fintype, Fintype.card_congr, Fintype.card_prod, MulEquiv, MulEquiv.prodUnits, Nat.mul_eq_zero, NeZero, Units.mapEquiv, ZMod.card_units_eq_totient, ZMod.chineseRemainder, card_congr, card_prod, card_units_eq_totient, chineseRemainder, left_ne_zero_of_mul, mapEquiv, mul_eq_zero, mul_zero, prodUnits, right_ne_zero_of_mul
 -/
@@ -462,7 +492,16 @@ theorem totient_div_of_dvd
   apply Finset.card_bij fun k _ => d * k
   · simp only [mem_filter, mem_range, and_imp, Coprime]
     refine fun a ha1 ha2 => ⟨by gcongr, ?_⟩
-    rw [gcd_mul
+    rw [gcd_mul_left]; rw [ha2]; rw [mul_one]
+  · simp [hd0.ne']
+  · simp only [mem_filter, mem_range, exists_prop, and_imp]
+    intro b hb1 hb2
+    have : d ∣ b := by
+      rw [← hb2]
+      apply gcd_dvd_right
+    rcases this with ⟨q, rfl⟩
+    refine ⟨q, ⟨⟨(mul_lt_mul_iff_right₀ hd0).1 hb1, ?_⟩, rfl⟩⟩
+    rwa [gcd_mul_left, mul_eq_left hd0.ne'] at hb2
 
 中文:
 定理 totient_div_of_dvd
@@ -474,7 +513,16 @@ theorem totient_div_of_dvd
   apply Finset.card_bij fun k _ => d * k
   · simp only [mem_filter, mem_range, and_imp, Coprime]
     refine fun a ha1 ha2 => ⟨by gcongr, ?_⟩
-    rw [gcd_mul
+    rw [gcd_mul_left]; rw [ha2]; rw [mul_one]
+  · simp [hd0.ne']
+  · simp only [mem_filter, mem_range, exists_prop, and_imp]
+    intro b hb1 hb2
+    have : d ∣ b := by
+      rw [← hb2]
+      apply gcd_dvd_right
+    rcases this with ⟨q, rfl⟩
+    refine ⟨q, ⟨⟨(mul_lt_mul_iff_right₀ hd0).1 hb1, ?_⟩, rfl⟩⟩
+    rwa [gcd_mul_left, mul_eq_left hd0.ne'] at hb2
 
 Depends on / 依赖: Coprime, Finset, Finset.card_bij, Nat.mul_div_cancel_left, and_imp, card_bij, d.eq_zero_or_pos, eq_zero_of_zero_dvd, eq_zero_or_pos, exists_prop, gcd_dvd_right, gcd_mul_left, hd0.ne, mem_filter, mem_range, mul_div_cancel_left, mul_lt, mul_one
 -/
@@ -513,7 +561,7 @@ theorem sum_totient
     refine card_eq_sum_card_fiberwise fun x _ => mem_divisors.2 ⟨?_, hn.ne'⟩
     apply gcd_dvd_left
   nth_rw 3 [this]
-
+  exact sum_congr rfl fun x hx => totient_div_of_dvd (dvd_of_mem_divisors hx)
 
 中文:
 定理 sum_totient
@@ -528,7 +576,7 @@ theorem sum_totient
     refine card_eq_sum_card_fiberwise fun x _ => mem_divisors.2 ⟨?_, hn.ne'⟩
     apply gcd_dvd_left
   nth_rw 3 [this]
-
+  exact sum_congr rfl fun x hx => totient_div_of_dvd (dvd_of_mem_divisors hx)
 
 Depends on / 依赖: card_eq_sum_card_fiberwise, card_range, divisors, dvd_of_mem_divisors, eq_zero_or_pos, gcd_dvd_left, hn.ne, mem_divisors, n.divisors, n.eq_zero_or_pos, n.gcd, nth_rw, sum_congr, sum_div_divisors, totient_div_of_dvd
 -/
@@ -586,7 +634,24 @@ theorem totient_prime_pow_succ
         (by
           rw [sdiff_eq_filter]
           apply filter_congr
-          simp only [mem_
+          simp only [mem_range, coprime_pow_left_iff n.succ_pos, mem_image, not_exists,
+            hp.coprime_iff_not_dvd]
+          intro a ha
+          constructor
+          · intro hap b h; rcases h with ⟨_, rfl⟩
+            exact hap (dvd_mul_left _ _)
+          · rintro h ⟨b, rfl⟩
+            rw [pow_succ'] at ha
+            exact h b ⟨lt_of_mul_lt_mul_left ha (zero_le _), mul_comm _ _⟩)
+    _ = _ := by
+      have h1 : Function.Injective (· * p) := mul_left_injective₀ hp.ne_zero
+      have h2 : (range (p ^ n)).image (· * p) subseteq range (p ^ (n + 1)) := fun a => by
+        simp only [mem_image, mem_range, exists_imp]
+        rintro b ⟨h, rfl⟩
+        rw [Nat.pow_succ]
+        exact (mul_lt_mul_iff_left₀ hp.pos).2 h
+      rw [card_sdiff_of_subset h2]; rw [Finset.card_image_of_injective _ h1]; rw [card_range]; rw [card_range]; rw [←
+        one_mul (p ^ n)]; rw [pow_succ']; rw [← tsub_mul]; rw [one_mul]; rw [mul_comm]
 
 中文:
 定理 totient_prime_pow_succ
@@ -600,7 +665,24 @@ theorem totient_prime_pow_succ
         (by
           rw [sdiff_eq_filter]
           apply filter_congr
-          simp only [mem_
+          simp only [mem_range, coprime_pow_left_iff n.succ_pos, mem_image, not_exists,
+            hp.coprime_iff_not_dvd]
+          intro a ha
+          constructor
+          · intro hap b h; rcases h with ⟨_, rfl⟩
+            exact hap (dvd_mul_left _ _)
+          · rintro h ⟨b, rfl⟩
+            rw [pow_succ'] at ha
+            exact h b ⟨lt_of_mul_lt_mul_left ha (zero_le _), mul_comm _ _⟩)
+    _ = _ := by
+      have h1 : Function.Injective (· * p) := mul_left_injective₀ hp.ne_zero
+      have h2 : (range (p ^ n)).image (· * p) subseteq range (p ^ (n + 1)) := fun a => by
+        simp only [mem_image, mem_range, exists_imp]
+        rintro b ⟨h, rfl⟩
+        rw [Nat.pow_succ]
+        exact (mul_lt_mul_iff_left₀ hp.pos).2 h
+      rw [card_sdiff_of_subset h2]; rw [Finset.card_image_of_injective _ h1]; rw [card_range]; rw [card_range]; rw [←
+        one_mul (p ^ n)]; rw [pow_succ']; rw [← tsub_mul]; rw [one_mul]; rw [mul_comm]
 
 Depends on / 依赖: Coprime, congr_arg, coprime_iff_not_dvd, coprime_pow_left_iff, dvd_mul_left, filter_congr, hp.coprime_iff_not_dvd, lt_of_mul_lt_mul_left, mem_image, mem_range, n.succ_pos, not_exists, pow_succ, sdiff_eq_filter, succ_pos, totient_eq_card_coprime
 -/
@@ -693,7 +775,10 @@ theorem totient_eq_iff_prime
     · rintro rfl
       rw [totient_one]; rw [tsub_self] at h
       exact one_ne_zero h
-  rw [totient_eq_card_coprime]; rw [range_eq_Ico]; rw [← Finset.insert_Ico_add_one_left_eq_Ico h
+  rw [totient_eq_card_coprime]; rw [range_eq_Ico]; rw [← Finset.insert_Ico_add_one_left_eq_Ico hp.le]; rw [Finset.filter_insert]; rw [if_neg (not_coprime_of_dvd_of_dvd hp (dvd_refl p) (dvd_zero p))]; rw [← Nat.card_Ico 1 p] at h
+  refine
+p.prime_of_coprime hp fun n hn hnz => Finset.filter_card_eq h n Finset.mem_Ico.mpr ⟨?_, hn⟩
+  lia
 
 中文:
 定理 totient_eq_iff_prime
@@ -707,7 +792,10 @@ theorem totient_eq_iff_prime
     · rintro rfl
       rw [totient_one]; rw [tsub_self] at h
       exact one_ne_zero h
-  rw [totient_eq_card_coprime]; rw [range_eq_Ico]; rw [← Finset.insert_Ico_add_one_left_eq_Ico h
+  rw [totient_eq_card_coprime]; rw [range_eq_Ico]; rw [← Finset.insert_Ico_add_one_left_eq_Ico hp.le]; rw [Finset.filter_insert]; rw [if_neg (not_coprime_of_dvd_of_dvd hp (dvd_refl p) (dvd_zero p))]; rw [← Nat.card_Ico 1 p] at h
+  refine
+p.prime_of_coprime hp fun n hn hnz => Finset.filter_card_eq h n Finset.mem_Ico.mpr ⟨?_, hn⟩
+  lia
 
 Depends on / 依赖: Finset, Finset.filter_card_eq, Finset.filter_insert, Finset.insert_Ico_add_one_left_eq_Ico, Finset.mem_Ico.mpr, Nat.card_Ico, card_Ico, dvd_refl, dvd_zero, filter_card_eq, filter_insert, hp.le, if_neg, insert_Ico_add_one_left_eq_Ico, lt_of_le_of_ne, mem_Ico, not_coprime_of_dvd_of_dvd, one_ne_zero, p.prime_of_coprime, prime_of_coprime
 -/
@@ -907,7 +995,7 @@ theorem totient_coprime_totient_iff
     exact fun h => Nat.not_coprime_of_dvd_of_dvd one_lt_two h.1 h.2
   · simp_rw [← totient_eq_one_iff]
     rintro (h | h) <;> rw [h]
-    exacts [Nat.coprime_one_left _, Nat.coprime_one
+    exacts [Nat.coprime_one_left _, Nat.coprime_one_right _]
 
 中文:
 定理 totient_coprime_totient_iff
@@ -919,7 +1007,7 @@ theorem totient_coprime_totient_iff
     exact fun h => Nat.not_coprime_of_dvd_of_dvd one_lt_two h.1 h.2
   · simp_rw [← totient_eq_one_iff]
     rintro (h | h) <;> rw [h]
-    exacts [Nat.coprime_one_left _, Nat.coprime_one
+    exacts [Nat.coprime_one_left _, Nat.coprime_one_right _]
 
 Depends on / 依赖: Nat.coprime_one_left, Nat.coprime_one_right, Nat.not_coprime_of_dvd_of_dvd, coprime_one_left, coprime_one_right, even_iff_two_dvd, exacts, not_coprime_of_dvd_of_dvd, not_imp_not, not_odd_iff_even, not_or, odd_totient_iff, one_lt_two, simp_rw, totient_eq_one_iff
 -/
@@ -983,7 +1071,8 @@ theorem totient_mul_prod_primeFactors
   nth_rw 3 [← prod_factorization_pow_eq_self hn]
   simp only [prod_primeFactors_prod_factorization, ← Finsupp.prod_mul]
   refine Finsupp.prod_congr (M := Nat) (N := Nat) fun p hp => ?_
-  rw [Finsupp.mem_support_iff]; rw [←
+  rw [Finsupp.mem_support_iff]; rw [← zero_lt_iff] at hp
+  rw [mul_comm]; rw [← mul_assoc]; rw [← pow_succ']; rw [Nat.sub_one]; rw [Nat.succ_pred_eq_of_pos hp]
 
 中文:
 定理 totient_mul_prod_primeFactors
@@ -994,7 +1083,8 @@ theorem totient_mul_prod_primeFactors
   nth_rw 3 [← prod_factorization_pow_eq_self hn]
   simp only [prod_primeFactors_prod_factorization, ← Finsupp.prod_mul]
   refine Finsupp.prod_congr (M := Nat) (N := Nat) fun p hp => ?_
-  rw [Finsupp.mem_support_iff]; rw [←
+  rw [Finsupp.mem_support_iff]; rw [← zero_lt_iff] at hp
+  rw [mul_comm]; rw [← mul_assoc]; rw [← pow_succ']; rw [Nat.sub_one]; rw [Nat.succ_pred_eq_of_pos hp]
 
 Depends on / 依赖: Finsupp, Finsupp.mem_support_iff, Finsupp.prod_congr, Finsupp.prod_mul, Nat.sub_one, Nat.succ_pred_eq_of_pos, mem_support_iff, mul_assoc, mul_comm, nth_rw, pow_succ, prod_congr, prod_factorization_pow_eq_self, prod_mul, prod_primeFactors_prod_factorization, sub_one, succ_pred_eq_of_pos, totient_eq_prod_factorization, zero_lt_iff
 -/
@@ -1044,7 +1134,13 @@ theorem totient_eq_mul_prod_factors
   have hn' : (n : Rat) != 0 := by simp [hn]
   have hpQ : (∏ p in n.primeFactors, (p : Rat)) != 0 := by
     rw [← cast_prod]; rw [cast_ne_zero]; rw [← zero_lt_iff]; rw [prod_primeFactors_prod_factorization]
-    exact prod_pos fun p hp => pos_of_mem_primeFactors 
+    exact prod_pos fun p hp => pos_of_mem_primeFactors hp
+  simp only [totient_eq_div_primeFactors_mul n, prod_primeFactors_dvd n, cast_mul, cast_prod,
+    cast_div_charZero, mul_comm_div, mul_right_inj' hn', div_eq_iff hpQ, ← prod_mul_distrib]
+  refine prod_congr rfl fun p hp => ?_
+  have hp := pos_of_mem_primeFactorsList (List.mem_toFinset.mp hp)
+  have hp' : (p : Rat) != 0 := cast_ne_zero.mpr hp.ne.symm
+  rw [sub_mul]; rw [one_mul]; rw [mul_comm]; rw [mul_inv_cancel₀ hp']; rw [cast_pred hp]
 
 中文:
 定理 totient_eq_mul_prod_factors
@@ -1055,7 +1151,13 @@ theorem totient_eq_mul_prod_factors
   have hn' : (n : Rat) != 0 := by simp [hn]
   have hpQ : (∏ p in n.primeFactors, (p : Rat)) != 0 := by
     rw [← cast_prod]; rw [cast_ne_zero]; rw [← zero_lt_iff]; rw [prod_primeFactors_prod_factorization]
-    exact prod_pos fun p hp => pos_of_mem_primeFactors 
+    exact prod_pos fun p hp => pos_of_mem_primeFactors hp
+  simp only [totient_eq_div_primeFactors_mul n, prod_primeFactors_dvd n, cast_mul, cast_prod,
+    cast_div_charZero, mul_comm_div, mul_right_inj' hn', div_eq_iff hpQ, ← prod_mul_distrib]
+  refine prod_congr rfl fun p hp => ?_
+  have hp := pos_of_mem_primeFactorsList (List.mem_toFinset.mp hp)
+  have hp' : (p : Rat) != 0 := cast_ne_zero.mpr hp.ne.symm
+  rw [sub_mul]; rw [one_mul]; rw [mul_comm]; rw [mul_inv_cancel₀ hp']; rw [cast_pred hp]
 
 Depends on / 依赖: cast_div_charZero, cast_mul, cast_ne_zero, cast_prod, div_eq_iff, mul_comm_div, mul_right_inj, n.primeFactors, pos_of_mem_primeFactors, primeFactors, prod_congr, prod_mul_distrib, prod_pos, prod_primeFactors_dvd, prod_primeFactors_prod_factorization, totient_eq_div_primeFactors_mul, zero_lt_iff
 -/
@@ -1088,7 +1190,16 @@ theorem totient_gcd_mul_totient_mul
     intro a1 a2 b1 b2 c1 c2 h1 h2
     calc
       a1 / b1 * c1 * (a2 / b2 * c2) = a1 / b1 * (a2 / b2) * (c1 * c2) := by apply mul_mul_mul_comm
-    
+      _ = a1 * a2 / (b1 * b2) * (c1 * c2) := by
+        congr 1
+        exact div_mul_div_comm h1 h2
+  simp only [totient_eq_div_primeFactors_mul]
+  rw [shuffle]; rw [shuffle]
+  rotate_left
+  repeat' apply prod_primeFactors_dvd
+  simp only [prod_primeFactors_gcd_mul_prod_primeFactors_mul]
+  rw [eq_comm]; rw [mul_comm]; rw [← mul_assoc]; rw [← Nat.mul_div_assoc]
+  exact mul_dvd_mul (prod_primeFactors_dvd a) (prod_primeFactors_dvd b)
 
 中文:
 定理 totient_gcd_mul_totient_mul
@@ -1101,7 +1212,16 @@ theorem totient_gcd_mul_totient_mul
     intro a1 a2 b1 b2 c1 c2 h1 h2
     calc
       a1 / b1 * c1 * (a2 / b2 * c2) = a1 / b1 * (a2 / b2) * (c1 * c2) := by apply mul_mul_mul_comm
-    
+      _ = a1 * a2 / (b1 * b2) * (c1 * c2) := by
+        congr 1
+        exact div_mul_div_comm h1 h2
+  simp only [totient_eq_div_primeFactors_mul]
+  rw [shuffle]; rw [shuffle]
+  rotate_left
+  repeat' apply prod_primeFactors_dvd
+  simp only [prod_primeFactors_gcd_mul_prod_primeFactors_mul]
+  rw [eq_comm]; rw [mul_comm]; rw [← mul_assoc]; rw [← Nat.mul_div_assoc]
+  exact mul_dvd_mul (prod_primeFactors_dvd a) (prod_primeFactors_dvd b)
 
 Depends on / 依赖: div_mul_div_comm, mul_mul_mul_comm, prod_primeFactors_dvd, prod_primeFactors_gcd, repeat, rotate_left, shuffle, totient_eq_div_primeFactors_mul
 -/
@@ -1179,7 +1299,8 @@ theorem totient_dvd_of_dvd
   · simp
   have hab' := primeFactors_mono h hb0
   rw [totient_eq_prod_factorization ha0]; rw [totient_eq_prod_factorization hb0]
-  refine Finsupp.prod_dvd_prod_of_subset_of_dvd hab' fun p _ =
+  refine Finsupp.prod_dvd_prod_of_subset_of_dvd hab' fun p _ => mul_dvd_mul ?_ dvd_rfl
+  exact pow_dvd_pow p (tsub_le_tsub_right ((factorization_le_iff_dvd ha0 hb0).2 h p) 1)
 
 中文:
 定理 totient_dvd_of_dvd
@@ -1192,7 +1313,8 @@ theorem totient_dvd_of_dvd
   · simp
   have hab' := primeFactors_mono h hb0
   rw [totient_eq_prod_factorization ha0]; rw [totient_eq_prod_factorization hb0]
-  refine Finsupp.prod_dvd_prod_of_subset_of_dvd hab' fun p _ =
+  refine Finsupp.prod_dvd_prod_of_subset_of_dvd hab' fun p _ => mul_dvd_mul ?_ dvd_rfl
+  exact pow_dvd_pow p (tsub_le_tsub_right ((factorization_le_iff_dvd ha0 hb0).2 h p) 1)
 
 Depends on / 依赖: Finsupp, Finsupp.prod_dvd_prod_of_subset_of_dvd, dvd_rfl, eq_or_ne, factorization_le_iff_dvd, mul_dvd_mul, pow_dvd_pow, primeFactors_mono, prod_dvd_prod_of_subset_of_dvd, totient_eq_prod_factorization, tsub_le_tsub_right, zero_dvd_iff
 -/
@@ -1314,7 +1436,21 @@ theorem eq_or_eq_of_totient_eq_totient
     exact False.elim (ha h')
   obtain ⟨c, rfl⟩ := h
   suffices a.Coprime c by
-    rw [totient_mul this]; rw [eq_comm]; rw [mul_e
+    rw [totient_mul this]; rw [eq_comm]; rw [mul_eq_left (totient_eq_zero.not.mpr ha)]; rw [totient_eq_one_iff] at h'
+    obtain rfl | rfl := h'
+    · simp
+    · simp [mul_comm]
+  refine coprime_of_dvd fun p hp hap => ?_
+  rintro ⟨d, rfl⟩
+  suffices a.totient < (p * a * d).totient by
+    rw [← mul_assoc]; rw [mul_comm a] at h'
+    exact h'.not_lt this
+  rw [mul_comm p]
+  refine lt_of_lt_of_le ?_ (Nat.le_of_dvd ?_ (totient_dvd_of_dvd ⟨d, rfl⟩))
+  · rw [mul_comm, totient_mul_of_prime_of_dvd hp hap, Nat.lt_mul_iff_one_lt_left]
+    · exact hp.one_lt
+· exact totient_pos.mpr pos_of_ne_zero ha
+· exact totient_pos.mpr zero_lt_of_ne_zero (by rwa [mul_assoc])
 
 中文:
 定理 eq_or_eq_of_totient_eq_totient
@@ -1328,7 +1464,21 @@ theorem eq_or_eq_of_totient_eq_totient
     exact False.elim (ha h')
   obtain ⟨c, rfl⟩ := h
   suffices a.Coprime c by
-    rw [totient_mul this]; rw [eq_comm]; rw [mul_e
+    rw [totient_mul this]; rw [eq_comm]; rw [mul_eq_left (totient_eq_zero.not.mpr ha)]; rw [totient_eq_one_iff] at h'
+    obtain rfl | rfl := h'
+    · simp
+    · simp [mul_comm]
+  refine coprime_of_dvd fun p hp hap => ?_
+  rintro ⟨d, rfl⟩
+  suffices a.totient < (p * a * d).totient by
+    rw [← mul_assoc]; rw [mul_comm a] at h'
+    exact h'.not_lt this
+  rw [mul_comm p]
+  refine lt_of_lt_of_le ?_ (Nat.le_of_dvd ?_ (totient_dvd_of_dvd ⟨d, rfl⟩))
+  · rw [mul_comm, totient_mul_of_prime_of_dvd hp hap, Nat.lt_mul_iff_one_lt_left]
+    · exact hp.one_lt
+· exact totient_pos.mpr pos_of_ne_zero ha
+· exact totient_pos.mpr zero_lt_of_ne_zero (by rwa [mul_assoc])
 
 Depends on / 依赖: Coprime, False.elim, a.Coprime, a.totient, coprime_of_dvd, eq_comm, mul_comm, mul_eq_left, totient, totient_eq_one_iff, totient_eq_zero, totient_eq_zero.not.mpr, totient_mul, totient_zero
 -/
@@ -1369,7 +1519,8 @@ theorem _root_.Even.eq_of_totient_eq_totient
   · rw [ha', totient_zero, eq_comm, totient_eq_zero] at h'
     rw [h']; rw [ha']
   refine (eq_or_eq_of_totient_eq_totient h h').resolve_right fun h => ?_
-  rw [← h]; rw [totient_mul_of_prime_of_dvd (prime_two) (even_iff_two_dvd.mp ha)]; rw [eq_comm]; rw [mul_eq_right (totie
+  rw [← h]; rw [totient_mul_of_prime_of_dvd (prime_two) (even_iff_two_dvd.mp ha)]; rw [eq_comm]; rw [mul_eq_right (totient_eq_zero.not.mpr ha')] at h'
+  lia
 
 中文:
 定理 _root_.Even.eq_of_totient_eq_totient
@@ -1379,7 +1530,8 @@ theorem _root_.Even.eq_of_totient_eq_totient
   · rw [ha', totient_zero, eq_comm, totient_eq_zero] at h'
     rw [h']; rw [ha']
   refine (eq_or_eq_of_totient_eq_totient h h').resolve_right fun h => ?_
-  rw [← h]; rw [totient_mul_of_prime_of_dvd (prime_two) (even_iff_two_dvd.mp ha)]; rw [eq_comm]; rw [mul_eq_right (totie
+  rw [← h]; rw [totient_mul_of_prime_of_dvd (prime_two) (even_iff_two_dvd.mp ha)]; rw [eq_comm]; rw [mul_eq_right (totient_eq_zero.not.mpr ha')] at h'
+  lia
 
 Depends on / 依赖: eq_comm, eq_or_eq_of_totient_eq_totient, even_iff_two_dvd, even_iff_two_dvd.mp, mul_eq_right, prime_two, resolve_right, totient_eq_zero, totient_eq_zero.not.mpr, totient_mul_of_prime_of_dvd, totient_zero
 -/
@@ -1404,7 +1556,10 @@ theorem prime_pow_pow_totient_ediv_prod
     refine le_mul_of_one_le_right (Nat.zero_le _) ?_
 exact Right.one_le_mul hk Nat.le_sub_one_of_lt hp.one_lt
   simp_rw [Nat.totient_prime_pow hp hk, Nat.primeFactors_prime_pow hk.ne' hp, Finset.prod_singleton,
-   
+    Nat.mul_div_left _ (Nat.sub_pos_of_lt hp.one_lt), ← pow_mul]
+  rw [Nat.pow_div h hp.pos]
+  simp_rw [Nat.sub_mul, one_mul, Nat.mul_sub, mul_one]
+  ring_nf
 
 中文:
 定理 prime_pow_pow_totient_ediv_prod
@@ -1415,7 +1570,10 @@ exact Right.one_le_mul hk Nat.le_sub_one_of_lt hp.one_lt
     refine le_mul_of_one_le_right (Nat.zero_le _) ?_
 exact Right.one_le_mul hk Nat.le_sub_one_of_lt hp.one_lt
   simp_rw [Nat.totient_prime_pow hp hk, Nat.primeFactors_prime_pow hk.ne' hp, Finset.prod_singleton,
-   
+    Nat.mul_div_left _ (Nat.sub_pos_of_lt hp.one_lt), ← pow_mul]
+  rw [Nat.pow_div h hp.pos]
+  simp_rw [Nat.sub_mul, one_mul, Nat.mul_sub, mul_one]
+  ring_nf
 
 Depends on / 依赖: Finset, Finset.prod_singleton, Nat.le_sub_one_of_lt, Nat.mul_div_left, Nat.mul_sub, Nat.pow_div, Nat.primeFactors_prime_pow, Nat.sub_mul, Nat.sub_pos_of_lt, Nat.totient_prime_pow, Nat.zero_le, Right.one_le_mul, hk.ne, hp.one_lt, hp.pos, le_mul_of_one_le_right, le_sub_one_of_lt, mul_div_left, mul_left_comm, mul_one
 -/

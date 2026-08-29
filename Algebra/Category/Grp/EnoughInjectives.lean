@@ -50,7 +50,7 @@ instance enoughInjectives
       injective := injective_of_divisible _
       f := ofHom ⟨⟨fun a i => ULift.up (i a), by aesop⟩, by aesop⟩
 mono := (AddCommGrpCat.mono_iff_injective _).mpr (injective_iff_map_eq_zero _).mpr
-        fun _ h0 =
+        fun _ h0 => eq_zero_of_character_apply (congr_arg ULift.down <| congr_fun h0 ·) }
 
 中文:
 实例 enoughInjectives
@@ -60,7 +60,7 @@ mono := (AddCommGrpCat.mono_iff_injective _).mpr (injective_iff_map_eq_zero _).m
       injective := injective_of_divisible _
       f := ofHom ⟨⟨fun a i => ULift.up (i a), by aesop⟩, by aesop⟩
 mono := (AddCommGrpCat.mono_iff_injective _).mpr (injective_iff_map_eq_zero _).mpr
-        fun _ h0 =
+        fun _ h0 => eq_zero_of_character_apply (congr_arg ULift.down <| congr_fun h0 ·) }
 
 Depends on / 依赖: Nonempty, Nonempty.intro
 -/

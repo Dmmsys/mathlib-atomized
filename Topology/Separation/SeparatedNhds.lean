@@ -116,7 +116,41 @@ theorem hasSeparatingCovers_iff_separatedNhds
     have open_lemma : forall (u₀ a : Nat -> Set X), (forall n, IsOpen (u₀ n)) ->
       IsOpen (⋃ n, u₀ n \ closure (a n)) := fun _ _ u₀i_open =>
         isOpen_iUnion fun i => (u₀i_open i).sdiff isClosed_closure
-    have cover_le
+    have cover_lemma : forall (h₀ : Set X) (u₀ v₀ : Nat -> Set X),
+        (h₀ subseteq ⋃ n, u₀ n) -> (forall n, Disjoint (closure (v₀ n)) h₀) ->
+        (h₀ subseteq ⋃ n, u₀ n \ closure (⋃ m <= n, v₀ m)) :=
+        fun h₀ u₀ v₀ h₀_cov dis x xinh => by
+      rcases h₀_cov xinh with ⟨un, ⟨n, rfl⟩, xinun⟩
+      simp only [mem_iUnion]
+      refine ⟨n, xinun, ?_⟩
+      simp_all only [closure_iUnion₂_le_nat, disjoint_right, mem_iUnion,
+        exists_false, not_false_eq_true]
+    refine
+      ⟨⋃ n : Nat, u n \ (closure (⋃ m <= n, v m)),
+       ⋃ n : Nat, v n \ (closure (⋃ m <= n, u m)),
+       open_lemma u (fun n => ⋃ m <= n, v m) (fun n => (u_props n).1),
+       open_lemma v (fun n => ⋃ m <= n, u m) (fun n => (v_props n).1),
+       cover_lemma s u v u_cov (fun n => (v_props n).2),
+       cover_lemma t v u v_cov (fun n => (u_props n).2),
+       ?_⟩
+    rw [Set.disjoint_left]
+    rintro x ⟨un, ⟨n, rfl⟩, xinun⟩
+    suffices forall (m : Nat), x in v m -> x in closure (⋃ m' in {m' | m' <= m}, u m') by simpa
+    intro m xinvm
+    have n_le_m : n <= m := by
+      by_contra m_gt_n
+      exact xinun.2 (subset_closure (mem_biUnion (le_of_lt (not_le.mp m_gt_n)) xinvm))
+    exact subset_closure (mem_biUnion n_le_m xinun.1)
+  · rintro ⟨U, V, U_open, V_open, h_sub_U, k_sub_V, UV_dis⟩
+    exact
+      ⟨⟨fun _ => U,
+        h_sub_U.trans (iUnion_const U).symm.subset,
+        fun _ =>
+          ⟨U_open, disjoint_of_subset (fun ⦃a⦄ a => a) k_sub_V (UV_dis.closure_left V_open)⟩⟩,
+       ⟨fun _ => V,
+        k_sub_V.trans (iUnion_const V).symm.subset,
+        fun _ =>
+          ⟨V_open, disjoint_of_subset (fun ⦃a⦄ a => a) h_sub_U (UV_dis.closure_right U_open).symm⟩⟩⟩
 
 中文:
 定理 hasSeparatingCovers_iff_separatedNhds
@@ -127,7 +161,41 @@ theorem hasSeparatingCovers_iff_separatedNhds
     have open_lemma : forall (u₀ a : Nat -> Set X), (forall n, IsOpen (u₀ n)) ->
       IsOpen (⋃ n, u₀ n \ closure (a n)) := fun _ _ u₀i_open =>
         isOpen_iUnion fun i => (u₀i_open i).sdiff isClosed_closure
-    have cover_le
+    have cover_lemma : forall (h₀ : Set X) (u₀ v₀ : Nat -> Set X),
+        (h₀ subseteq ⋃ n, u₀ n) -> (forall n, Disjoint (closure (v₀ n)) h₀) ->
+        (h₀ subseteq ⋃ n, u₀ n \ closure (⋃ m <= n, v₀ m)) :=
+        fun h₀ u₀ v₀ h₀_cov dis x xinh => by
+      rcases h₀_cov xinh with ⟨un, ⟨n, rfl⟩, xinun⟩
+      simp only [mem_iUnion]
+      refine ⟨n, xinun, ?_⟩
+      simp_all only [closure_iUnion₂_le_nat, disjoint_right, mem_iUnion,
+        exists_false, not_false_eq_true]
+    refine
+      ⟨⋃ n : Nat, u n \ (closure (⋃ m <= n, v m)),
+       ⋃ n : Nat, v n \ (closure (⋃ m <= n, u m)),
+       open_lemma u (fun n => ⋃ m <= n, v m) (fun n => (u_props n).1),
+       open_lemma v (fun n => ⋃ m <= n, u m) (fun n => (v_props n).1),
+       cover_lemma s u v u_cov (fun n => (v_props n).2),
+       cover_lemma t v u v_cov (fun n => (u_props n).2),
+       ?_⟩
+    rw [Set.disjoint_left]
+    rintro x ⟨un, ⟨n, rfl⟩, xinun⟩
+    suffices forall (m : Nat), x in v m -> x in closure (⋃ m' in {m' | m' <= m}, u m') by simpa
+    intro m xinvm
+    have n_le_m : n <= m := by
+      by_contra m_gt_n
+      exact xinun.2 (subset_closure (mem_biUnion (le_of_lt (not_le.mp m_gt_n)) xinvm))
+    exact subset_closure (mem_biUnion n_le_m xinun.1)
+  · rintro ⟨U, V, U_open, V_open, h_sub_U, k_sub_V, UV_dis⟩
+    exact
+      ⟨⟨fun _ => U,
+        h_sub_U.trans (iUnion_const U).symm.subset,
+        fun _ =>
+          ⟨U_open, disjoint_of_subset (fun ⦃a⦄ a => a) k_sub_V (UV_dis.closure_left V_open)⟩⟩,
+       ⟨fun _ => V,
+        k_sub_V.trans (iUnion_const V).symm.subset,
+        fun _ =>
+          ⟨V_open, disjoint_of_subset (fun ⦃a⦄ a => a) h_sub_U (UV_dis.closure_right U_open).symm⟩⟩⟩
 
 Depends on / 依赖: Disjoint, IsOpen, closure, cover_lemma, isClosed_closure, isOpen_iUnion, open_lemma, subseteq, u_cov, u_props, v_cov, v_props
 -/
@@ -566,7 +634,8 @@ lemma isClosed_left_of_isClosed_union
   obtain ⟨u, v, hu, hv, hsu, htv, huv⟩ := hst
   rw [← isOpen_compl_iff] at hst' ⊢
   suffices sᶜ = (s union t)ᶜ union v from this ▸ hst'.union hv
-  rw [← compl_inj_iff]; rw [Set.compl_union]; rw [compl_compl]; rw [compl_compl]; rw [union_inter_distrib_right]; rw [(disjoint_compl_right.mono_left ht
+  rw [← compl_inj_iff]; rw [Set.compl_union]; rw [compl_compl]; rw [compl_compl]; rw [union_inter_distrib_right]; rw [(disjoint_compl_right.mono_left htv).inter_eq]; rw [union_empty]; rw [left_eq_inter]; rw [subset_compl_comm]
+  exact (huv.mono_left hsu).subset_compl_left
 
 中文:
 引理 isClosed_left_of_isClosed_union
@@ -575,7 +644,8 @@ lemma isClosed_left_of_isClosed_union
   obtain ⟨u, v, hu, hv, hsu, htv, huv⟩ := hst
   rw [← isOpen_compl_iff] at hst' ⊢
   suffices sᶜ = (s union t)ᶜ union v from this ▸ hst'.union hv
-  rw [← compl_inj_iff]; rw [Set.compl_union]; rw [compl_compl]; rw [compl_compl]; rw [union_inter_distrib_right]; rw [(disjoint_compl_right.mono_left ht
+  rw [← compl_inj_iff]; rw [Set.compl_union]; rw [compl_compl]; rw [compl_compl]; rw [union_inter_distrib_right]; rw [(disjoint_compl_right.mono_left htv).inter_eq]; rw [union_empty]; rw [left_eq_inter]; rw [subset_compl_comm]
+  exact (huv.mono_left hsu).subset_compl_left
 
 Depends on / 依赖: Set.compl_union, compl_compl, compl_inj_iff, compl_union, disjoint_compl_right, disjoint_compl_right.mono_left, huv.mono_left, inter_eq, isOpen_compl_iff, left_eq_inter, mono_left, subset_compl_comm, subset_compl_left, union_empty, union_inter_distrib_right
 -/

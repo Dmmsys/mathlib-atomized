@@ -185,7 +185,8 @@ lemma map'_eq_last_iff
   · intro h i hi
     by_contra!
     obtain ⟨i, rfl⟩ := Fin.eq_castSucc_of_ne_last this
-    simp only [castSucc_mem_f
+    simp only [castSucc_mem_finset_iff] at hi
+    exact hi.not_gt (h i)
 
 中文:
 引理 map'_eq_last_iff
@@ -199,7 +200,8 @@ lemma map'_eq_last_iff
   · intro h i hi
     by_contra!
     obtain ⟨i, rfl⟩ := Fin.eq_castSucc_of_ne_last this
-    simp only [castSucc_mem_f
+    simp only [castSucc_mem_finset_iff] at hi
+    exact hi.not_gt (h i)
 -/
 lemma map'_eq_last_iff (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2)) :
     map' f x = Fin.last _ ↔ forall (i : Fin (n + 1)), (f i).castSucc < x := by
@@ -229,7 +231,12 @@ lemma map'_eq_castSucc_iff
     exact hi.not_ge (by simpa using h' i.castSucc (by simpa))
   · intro h' i hi
     obtain ⟨i, rfl⟩ | rfl := i.eq_castSucc_or_eq_last
-    · simp only [Fin.
+    · simp only [Fin.castSucc_le_castSucc_iff]
+      by_contra!
+      exact (h' i this).not_ge (by simpa using hi)
+    · apply Fin.le_last
+
+@[simp]
 
 中文:
 引理 map'_eq_castSucc_iff
@@ -243,7 +250,12 @@ lemma map'_eq_castSucc_iff
     exact hi.not_ge (by simpa using h' i.castSucc (by simpa))
   · intro h' i hi
     obtain ⟨i, rfl⟩ | rfl := i.eq_castSucc_or_eq_last
-    · simp only [Fin.
+    · simp only [Fin.castSucc_le_castSucc_iff]
+      by_contra!
+      exact (h' i this).not_ge (by simpa using hi)
+    · apply Fin.le_last
+
+@[simp]
 -/
 lemma map'_eq_castSucc_iff (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2)) (y : Fin (n + 1)) :
     map' f x = y.castSucc ↔ x <= (f y).castSucc ∧
@@ -352,7 +364,24 @@ lemma map'_map'
       rw [map'_eq_castSucc_iff] at hy
       obtain ⟨z, hz⟩ | hz := Fin.eq_castSucc_or_eq_last (map' f y.castSucc)
       · rw [hz, Eq.comm]
-        rw [ma
+        rw [map'_eq_castSucc_iff] at hz ⊢
+        constructor
+        · refine hy.1.trans ?_
+          simp only [OrderHom.comp_coe, Function.comp_apply, Fin.castSucc_le_castSucc_iff]
+          exact g.monotone (by simpa using hz.1)
+        · intro i hi
+          exact hy.2 (f i) (by simpa using hz.2 i hi)
+      · rw [hz, Eq.comm]
+        rw [map'_eq_last_iff] at hz ⊢
+        intro i
+        exact hy.2 (f i) (by simpa using hz i)
+    · rw [Eq.comm, hx, map'_last]
+      rw [map'_eq_last_iff] at hx ⊢
+      intro i
+      apply hx
+  · simp
+
+@[simp]
 
 中文:
 引理 map'_map'
@@ -364,7 +393,24 @@ lemma map'_map'
       rw [map'_eq_castSucc_iff] at hy
       obtain ⟨z, hz⟩ | hz := Fin.eq_castSucc_or_eq_last (map' f y.castSucc)
       · rw [hz, Eq.comm]
-        rw [ma
+        rw [map'_eq_castSucc_iff] at hz ⊢
+        constructor
+        · refine hy.1.trans ?_
+          simp only [OrderHom.comp_coe, Function.comp_apply, Fin.castSucc_le_castSucc_iff]
+          exact g.monotone (by simpa using hz.1)
+        · intro i hi
+          exact hy.2 (f i) (by simpa using hz.2 i hi)
+      · rw [hz, Eq.comm]
+        rw [map'_eq_last_iff] at hz ⊢
+        intro i
+        exact hy.2 (f i) (by simpa using hz i)
+    · rw [Eq.comm, hx, map'_last]
+      rw [map'_eq_last_iff] at hx ⊢
+      intro i
+      apply hx
+  · simp
+
+@[simp]
 -/
 lemma map'_map' {p : Nat} (f : Fin (n + 1) ->o Fin (m + 1))
     (g : Fin (m + 1) ->o Fin (p + 1)) (x : Fin (p + 2)) :
@@ -405,7 +451,30 @@ lemma map'_succAboveOrderEmb
     · rw [Fin.predAbove_of_le_castSucc _ _ (by simpa), Fin.castPred_castSucc]
       obtain ⟨x, rfl⟩ | rfl := x.eq_castSucc_or_eq_last
       · simp only [map'_eq_castSucc_iff, OrderEmbedding.toOrderHom_coe,
-          Fin
+          Fin.succAboveOrderEmb_apply, Fin.castSucc_le_castSucc_iff,
+          Fin.castSucc_lt_castSucc_iff]
+        constructor
+        · obtain hx | rfl := hx.lt_or_eq
+          · rwa [Fin.succAbove_of_castSucc_lt]
+          · simpa only [Fin.succAbove_castSucc_self] using Fin.castSucc_le_succ x
+        · intro j hj
+          rwa [Fin.succAbove_of_castSucc_lt _ _ (lt_of_lt_of_le (by simpa) hx),
+            Fin.castSucc_lt_castSucc_iff]
+      · obtain rfl : i = Fin.last _ := Fin.last_le_iff.1 hx
+        simp [map'_eq_last_iff]
+    · obtain ⟨x, rfl⟩ := Fin.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hx)
+      rw [Fin.predAbove_of_castSucc_lt _ _ (by simpa [Fin.le_castSucc_iff]),
+        Fin.pred_castSucc_succ, map'_eq_castSucc_iff]
+      simp only [Fin.succAbove_of_lt_succ _ _ hx,
+        OrderEmbedding.toOrderHom_coe, Fin.succAboveOrderEmb_apply,
+        le_refl, Fin.castSucc_lt_castSucc_iff, true_and]
+      intro j hj
+      by_cases! h : j.castSucc < i
+      · simpa [Fin.succAbove_of_castSucc_lt _ _ h] using hj.le
+      · rwa [Fin.succAbove_of_le_castSucc _ _ h, Fin.succ_lt_succ_iff]
+  · simp
+
+@[simp]
 
 中文:
 引理 map'_succAboveOrderEmb
@@ -416,7 +485,30 @@ lemma map'_succAboveOrderEmb
     · rw [Fin.predAbove_of_le_castSucc _ _ (by simpa), Fin.castPred_castSucc]
       obtain ⟨x, rfl⟩ | rfl := x.eq_castSucc_or_eq_last
       · simp only [map'_eq_castSucc_iff, OrderEmbedding.toOrderHom_coe,
-          Fin
+          Fin.succAboveOrderEmb_apply, Fin.castSucc_le_castSucc_iff,
+          Fin.castSucc_lt_castSucc_iff]
+        constructor
+        · obtain hx | rfl := hx.lt_or_eq
+          · rwa [Fin.succAbove_of_castSucc_lt]
+          · simpa only [Fin.succAbove_castSucc_self] using Fin.castSucc_le_succ x
+        · intro j hj
+          rwa [Fin.succAbove_of_castSucc_lt _ _ (lt_of_lt_of_le (by simpa) hx),
+            Fin.castSucc_lt_castSucc_iff]
+      · obtain rfl : i = Fin.last _ := Fin.last_le_iff.1 hx
+        simp [map'_eq_last_iff]
+    · obtain ⟨x, rfl⟩ := Fin.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hx)
+      rw [Fin.predAbove_of_castSucc_lt _ _ (by simpa [Fin.le_castSucc_iff]),
+        Fin.pred_castSucc_succ, map'_eq_castSucc_iff]
+      simp only [Fin.succAbove_of_lt_succ _ _ hx,
+        OrderEmbedding.toOrderHom_coe, Fin.succAboveOrderEmb_apply,
+        le_refl, Fin.castSucc_lt_castSucc_iff, true_and]
+      intro j hj
+      by_cases! h : j.castSucc < i
+      · simpa [Fin.succAbove_of_castSucc_lt _ _ h] using hj.le
+      · rwa [Fin.succAbove_of_le_castSucc _ _ h, Fin.succ_lt_succ_iff]
+  · simp
+
+@[simp]
 -/
 lemma map'_succAboveOrderEmb {n : Nat} (i : Fin (n + 2)) (x : Fin (n + 3)) :
     map' i.succAboveOrderEmb.toOrderHom x = i.predAbove x := by
@@ -461,7 +553,27 @@ lemma map'_predAbove
     · rw [Fin.succAbove_of_le_castSucc _ _ (by simpa), Fin.succ_castSucc, map'_eq_castSucc_iff]
       simp only [OrderHom.coe_mk, Fin.castSucc_le_castSucc_iff, Fin.castSucc_lt_castSucc_iff]
       constructor
-      · rw [
+      · rw [Fin.predAbove_of_castSucc_lt _ _
+          (by simpa only [Fin.castSucc_lt_succ_iff] using hi.le), Fin.pred_succ]
+      · intro j hj
+        by_cases! h : i.castSucc < j
+        · rwa [Fin.predAbove_of_castSucc_lt _ _ h, ← Fin.succ_lt_succ_iff,
+            Fin.succ_pred]
+        · rw [Fin.predAbove_of_le_castSucc _ _ h, ← Fin.castSucc_lt_castSucc_iff,
+            Fin.castSucc_castPred]
+          exact lt_of_le_of_lt h hi
+    · rw [Fin.succAbove_of_castSucc_lt _ _ (by simpa), map'_eq_castSucc_iff]
+      simp only [OrderHom.coe_mk, Fin.castSucc_le_castSucc_iff, Fin.castSucc_lt_castSucc_iff]
+      constructor
+      · simp only [i.predAbove_of_le_castSucc x.castSucc (by simpa),
+          Fin.castPred_castSucc, le_refl]
+      · intro j hj
+        by_cases! h : i.castSucc < j
+        · rw [Fin.predAbove_of_castSucc_lt _ _ h, ← Fin.succ_lt_succ_iff, Fin.succ_pred]
+          exact hj.trans x.castSucc_lt_succ
+        · rwa [Fin.predAbove_of_le_castSucc _ _ h, ← Fin.castSucc_lt_castSucc_iff,
+            Fin.castSucc_castPred]
+  · simp [map'_last]
 
 中文:
 引理 map'_predAbove
@@ -472,7 +584,27 @@ lemma map'_predAbove
     · rw [Fin.succAbove_of_le_castSucc _ _ (by simpa), Fin.succ_castSucc, map'_eq_castSucc_iff]
       simp only [OrderHom.coe_mk, Fin.castSucc_le_castSucc_iff, Fin.castSucc_lt_castSucc_iff]
       constructor
-      · rw [
+      · rw [Fin.predAbove_of_castSucc_lt _ _
+          (by simpa only [Fin.castSucc_lt_succ_iff] using hi.le), Fin.pred_succ]
+      · intro j hj
+        by_cases! h : i.castSucc < j
+        · rwa [Fin.predAbove_of_castSucc_lt _ _ h, ← Fin.succ_lt_succ_iff,
+            Fin.succ_pred]
+        · rw [Fin.predAbove_of_le_castSucc _ _ h, ← Fin.castSucc_lt_castSucc_iff,
+            Fin.castSucc_castPred]
+          exact lt_of_le_of_lt h hi
+    · rw [Fin.succAbove_of_castSucc_lt _ _ (by simpa), map'_eq_castSucc_iff]
+      simp only [OrderHom.coe_mk, Fin.castSucc_le_castSucc_iff, Fin.castSucc_lt_castSucc_iff]
+      constructor
+      · simp only [i.predAbove_of_le_castSucc x.castSucc (by simpa),
+          Fin.castPred_castSucc, le_refl]
+      · intro j hj
+        by_cases! h : i.castSucc < j
+        · rw [Fin.predAbove_of_castSucc_lt _ _ h, ← Fin.succ_lt_succ_iff, Fin.succ_pred]
+          exact hj.trans x.castSucc_lt_succ
+        · rwa [Fin.predAbove_of_le_castSucc _ _ h, ← Fin.castSucc_lt_castSucc_iff,
+            Fin.castSucc_castPred]
+  · simp [map'_last]
 -/
 lemma map'_predAbove {n : Nat} (i : Fin (n + 1)) (x : Fin (n + 2)) :
     map' { toFun := i.predAbove, monotone' := Fin.predAbove_right_monotone i } x =

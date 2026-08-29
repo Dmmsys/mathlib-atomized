@@ -647,7 +647,16 @@ lemma Scheme.Hom.QuasiFiniteAt.quasiFiniteAt
   have H : (Y.presheaf.germ U _ (hVU hxV)).hom.QuasiFinite := by
     algebraize [(Y.presheaf.germ U _ (hVU hxV)).hom]
     have := hU.isLocalization_stalk ⟨f x, (hVU hxV)⟩
-    rw [← (Y.presheaf.germ U _ (hVU hxV)).hom.algebraMap_toAlgebra]; rw [RingHom.quasiFin
+    rw [← (Y.presheaf.germ U _ (hVU hxV)).hom.algebraMap_toAlgebra]; rw [RingHom.quasiFinite_algebraMap]
+    exact .of_isLocalization (hU.primeIdealOf ⟨_, hVU hxV⟩).asIdeal.primeCompl
+  algebraize [(X.presheaf.germ V x hxV).hom]
+  have := hV.isLocalization_stalk ⟨x, hxV⟩
+  let e := IsLocalization.algEquiv (hV.primeIdealOf ⟨x, hxV⟩).asIdeal.primeCompl
+    (X.presheaf.stalk (⟨x, hxV⟩ : V.1)) (Localization.AtPrime (hV.primeIdealOf ⟨x, hxV⟩).asIdeal)
+  rw [RingHom.QuasiFiniteAt]; rw [Algebra.QuasiFiniteAt]; rw [← RingHom.quasiFinite_algebraMap]
+  convert! (RingHom.QuasiFinite.of_finite e.finite).comp (hx.comp H)
+  rw [← CommRingCat.hom_comp]; rw [f.germ_stalkMap]; rw [← X.presheaf.germ_res (homOfLE hVU) _ hxV]; rw [Scheme.Hom.app_eq_appLE]; rw [Scheme.Hom.appLE_map_assoc]; rw [CommRingCat.hom_comp]; rw [← RingHom.comp_assoc]; rw [IsScalarTower.algebraMap_eq Γ(Y]; rw [U) Γ(X]; rw [V)]; rw [e.toAlgHom.comp_algebraMap.symm]
+  rfl
 
 中文:
 引理 概形.态射.QuasiFiniteAt.quasiFiniteAt
@@ -656,7 +665,16 @@ lemma Scheme.Hom.QuasiFiniteAt.quasiFiniteAt
   have H : (Y.presheaf.germ U _ (hVU hxV)).hom.QuasiFinite := by
     algebraize [(Y.presheaf.germ U _ (hVU hxV)).hom]
     have := hU.isLocalization_stalk ⟨f x, (hVU hxV)⟩
-    rw [← (Y.presheaf.germ U _ (hVU hxV)).hom.algebraMap_toAlgebra]; rw [RingHom.quasiFin
+    rw [← (Y.presheaf.germ U _ (hVU hxV)).hom.algebraMap_toAlgebra]; rw [RingHom.quasiFinite_algebraMap]
+    exact .of_isLocalization (hU.primeIdealOf ⟨_, hVU hxV⟩).asIdeal.primeCompl
+  algebraize [(X.presheaf.germ V x hxV).hom]
+  have := hV.isLocalization_stalk ⟨x, hxV⟩
+  let e := IsLocalization.algEquiv (hV.primeIdealOf ⟨x, hxV⟩).asIdeal.primeCompl
+    (X.presheaf.stalk (⟨x, hxV⟩ : V.1)) (Localization.AtPrime (hV.primeIdealOf ⟨x, hxV⟩).asIdeal)
+  rw [RingHom.QuasiFiniteAt]; rw [Algebra.QuasiFiniteAt]; rw [← RingHom.quasiFinite_algebraMap]
+  convert! (RingHom.QuasiFinite.of_finite e.finite).comp (hx.comp H)
+  rw [← CommRingCat.hom_comp]; rw [f.germ_stalkMap]; rw [← X.presheaf.germ_res (homOfLE hVU) _ hxV]; rw [Scheme.Hom.app_eq_appLE]; rw [Scheme.Hom.appLE_map_assoc]; rw [CommRingCat.hom_comp]; rw [← RingHom.comp_assoc]; rw [IsScalarTower.algebraMap_eq Γ(Y]; rw [U) Γ(X]; rw [V)]; rw [e.toAlgHom.comp_algebraMap.symm]
+  rfl
 
 Depends on / 依赖: IsLocalization, IsLocalization.algEquiv, QuasiFinite, RingHom, RingHom.quasiFinite_algebraMap, X.presheaf.germ, Y.presheaf.germ, algEquiv, algebraMap_toAlgebra, algebraize, asIdeal, asIdeal.primeCompl, f.appLE, hU.isLocalization_stalk, hU.primeIdealOf, hV.isLocalization_stalk, hV.prim, hom.QuasiFinite, hom.algebraMap_toAlgebra, isLocalization_stalk
 -/

@@ -110,7 +110,7 @@ theorem uniqueMDiffWithinAt_iff
 
 nonrec theorem UniqueMDiffWithinAt.mono_nhds {s t : Set M} {x : M} (hs : UniqueMDiffAt[s] x)
     (ht : 𝓝[s] x <= 𝓝[t] x) : UniqueMDiffAt[t] x :=
-hs.mono_nhds by simpa only [← map
+hs.mono_nhds by simpa only [← map_extChartAt_nhdsWithin] using Filter.map_mono ht
 
 中文:
 定理 uniqueMDiffWithinAt_iff
@@ -121,7 +121,7 @@ hs.mono_nhds by simpa only [← map
 
 nonrec theorem UniqueMDiffWithinAt.mono_nhds {s t : Set M} {x : M} (hs : UniqueMDiffAt[s] x)
     (ht : 𝓝[s] x <= 𝓝[t] x) : UniqueMDiffAt[t] x :=
-hs.mono_nhds by simpa only [← map
+hs.mono_nhds by simpa only [← map_extChartAt_nhdsWithin] using Filter.map_mono ht
 
 Depends on / 依赖: nhdsWithin_extChartAt_target_eq, nhdsWithin_inter, uniqueDiffWithinAt_congr
 -/
@@ -701,7 +701,11 @@ theorem mdifferentiableWithinAt_iff_target
     ContinuousWithinAt f s x ∧ ContinuousWithinAt (extChartAt I' (f x) ∘ f) s x ↔
         ContinuousWithinAt f s x :=
 and_iff_left_of_imp (continuousAt_extChartAt _).comp_continuousWithinAt
-  simp_rw [cont, Diff
+  simp_rw [cont, DifferentiableWithinAtProp, extChartAt, OpenPartialHomeomorph.extend,
+    PartialEquiv.coe_trans, ModelWithCorners.toPartialEquiv_coe,
+    OpenPartialHomeomorph.coe_toPartialEquiv, modelWithCornersSelf_coe, chartAt_self_eq,
+    OpenPartialHomeomorph.refl_apply]
+  rfl
 
 中文:
 定理 mdifferentiableWithinAt_iff_target
@@ -711,7 +715,11 @@ and_iff_left_of_imp (continuousAt_extChartAt _).comp_continuousWithinAt
     ContinuousWithinAt f s x ∧ ContinuousWithinAt (extChartAt I' (f x) ∘ f) s x ↔
         ContinuousWithinAt f s x :=
 and_iff_left_of_imp (continuousAt_extChartAt _).comp_continuousWithinAt
-  simp_rw [cont, Diff
+  simp_rw [cont, DifferentiableWithinAtProp, extChartAt, OpenPartialHomeomorph.extend,
+    PartialEquiv.coe_trans, ModelWithCorners.toPartialEquiv_coe,
+    OpenPartialHomeomorph.coe_toPartialEquiv, modelWithCornersSelf_coe, chartAt_self_eq,
+    OpenPartialHomeomorph.refl_apply]
+  rfl
 
 Depends on / 依赖: ContinuousWithinAt, DifferentiableWithinAtProp, MDifferentiableWithinAt, ModelWithCorners, ModelWithCorners.toPartialEquiv_coe, OpenPa, OpenPartialHomeomorph, OpenPartialHomeomorph.coe_toPartialEquiv, OpenPartialHomeomorph.extend, PartialEquiv, PartialEquiv.coe_trans, and_assoc, and_iff_left_of_imp, chartAt_self_eq, coe_toPartialEquiv, coe_trans, comp_continuousWithinAt, continuousAt_extChartAt, extChartAt, extend
 -/
@@ -766,7 +774,9 @@ theorem mdifferentiableWithinAt_iff_source_of_mem_maximalAtlas
   simp_rw [MDifferentiableWithinAt,
     differentiableWithinAt_localInvariantProp.liftPropWithinAt_indep_chart_source he hx,
     StructureGroupoid.liftPropWithinAt_self_source,
-    e.extend_symm_continuousWithinAt_comp_right_iff, differenti
+    e.extend_symm_continuousWithinAt_comp_right_iff, differentiableWithinAtProp_self_source,
+    DifferentiableWithinAtProp, Function.comp, e.left_inv hx, (e.extend I).left_inv h2x]
+  rfl
 
 中文:
 定理 mdifferentiableWithinAt_iff_source_of_mem_maximalAtlas
@@ -776,7 +786,9 @@ theorem mdifferentiableWithinAt_iff_source_of_mem_maximalAtlas
   simp_rw [MDifferentiableWithinAt,
     differentiableWithinAt_localInvariantProp.liftPropWithinAt_indep_chart_source he hx,
     StructureGroupoid.liftPropWithinAt_self_source,
-    e.extend_symm_continuousWithinAt_comp_right_iff, differenti
+    e.extend_symm_continuousWithinAt_comp_right_iff, differentiableWithinAtProp_self_source,
+    DifferentiableWithinAtProp, Function.comp, e.left_inv hx, (e.extend I).left_inv h2x]
+  rfl
 
 Depends on / 依赖: DifferentiableWithinAtProp, Function, Function.comp, MDifferentiableWithinAt, StructureGroupoid, StructureGroupoid.liftPropWithinAt_self_source, differentiableWithinAtProp_self_source, differentiableWithinAt_localInvariantProp, differentiableWithinAt_localInvariantProp.liftPropWithinAt_indep_chart_source, e.extend, e.extend_source, e.extend_symm_continuousWithinAt_comp_right_iff, e.left_inv, extend, extend_source, extend_symm_continuousWithinAt_comp_right_iff, left_inv, liftPropWithinAt_indep_chart_source, liftPropWithinAt_self_source, simp_rw
 -/
@@ -846,7 +858,10 @@ theorem mdifferentiableWithinAt_iff_target_of_mem_source
       (chart_mem_maximalAtlas y) hy]; rw [and_congr_right]
   intro hf
   simp_rw [StructureGroupoid.liftPropWithinAt_self_target]
-  simp_rw [((chartAt H' y).continuousAt hy).comp
+  simp_rw [((chartAt H' y).continuousAt hy).comp_continuousWithinAt hf]
+  rw [← extChartAt_source I'] at hy
+  simp_rw [(continuousAt_extChartAt' hy).comp_continuousWithinAt hf]
+  rfl
 
 中文:
 定理 mdifferentiableWithinAt_iff_target_of_mem_source
@@ -856,7 +871,10 @@ theorem mdifferentiableWithinAt_iff_target_of_mem_source
       (chart_mem_maximalAtlas y) hy]; rw [and_congr_right]
   intro hf
   simp_rw [StructureGroupoid.liftPropWithinAt_self_target]
-  simp_rw [((chartAt H' y).continuousAt hy).comp
+  simp_rw [((chartAt H' y).continuousAt hy).comp_continuousWithinAt hf]
+  rw [← extChartAt_source I'] at hy
+  simp_rw [(continuousAt_extChartAt' hy).comp_continuousWithinAt hf]
+  rfl
 
 Depends on / 依赖: MDifferentiableWithinAt, StructureGroupoid, StructureGroupoid.liftPropWithinAt_self_target, and_congr_right, chartAt, chart_mem_maximalAtlas, comp_continuousWithinAt, continuousAt, continuousAt_extChartAt, differentiableWithinAt_localInvariantProp, differentiableWithinAt_localInvariantProp.liftPropWithinAt_indep_chart_target, extChartAt_source, liftPropWithinAt_indep_chart_target, liftPropWithinAt_self_target, simp_rw
 -/
@@ -987,7 +1005,8 @@ theorem mdifferentiableWithinAt_iff_of_mem_source'
   rw [and_congr_right_iff]
   set e := extChartAt I x; set e' := extChartAt I' (f x)
   refine fun hc => differentiableWithinAt_congr_nhds ?_
-  rw [← e.image_so
+  rw [← e.image_source_inter_eq']; rw [← map_extChartAt_nhdsWithin_eq_image' hx]; rw [← map_extChartAt_nhdsWithin' hx]; rw [inter_comm]; rw [nhdsWithin_inter_of_mem]
+  exact hc (extChartAt_source_mem_nhds' hy)
 
 中文:
 定理 mdifferentiableWithinAt_iff_of_mem_source'
@@ -999,7 +1018,8 @@ theorem mdifferentiableWithinAt_iff_of_mem_source'
   rw [and_congr_right_iff]
   set e := extChartAt I x; set e' := extChartAt I' (f x)
   refine fun hc => differentiableWithinAt_congr_nhds ?_
-  rw [← e.image_so
+  rw [← e.image_source_inter_eq']; rw [← map_extChartAt_nhdsWithin_eq_image' hx]; rw [← map_extChartAt_nhdsWithin' hx]; rw [inter_comm]; rw [nhdsWithin_inter_of_mem]
+  exact hc (extChartAt_source_mem_nhds' hy)
 
 Depends on / 依赖: and_congr_right_iff, differentiableWithinAt_congr_nhds, e.image_source_inter_eq, extChartAt, extChartAt_source, extChartAt_source_mem_nhds, image_source_inter_eq, inter_comm, map_extChartAt_nhdsWithin, map_extChartAt_nhdsWithin_eq_image, mdifferentiableWithinAt_iff_of_mem_source, nhdsWithin_inter_of_mem
 -/
@@ -1162,7 +1182,17 @@ theorem mdifferentiableOn_iff
     let w := (extChartAt I x).symm z
     have : w in s := by simp only [w, hz, mfld_simps]
     specialize h w this
-    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfl
+    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfld_simps]
+    have w2 : f w in (chartAt H' y).source := by simp only [w, hz, mfld_simps]
+    convert! ((mdifferentiableWithinAt_iff_of_mem_source w1 w2).mp h).2.mono _
+    · simp only [w, hz, mfld_simps]
+    · mfld_set_tac
+  · rintro ⟨hcont, hdiff⟩ x hx
+    refine differentiableWithinAt_localInvariantProp.liftPropWithinAt_iff.mpr ?_
+    refine ⟨hcont x hx, ?_⟩
+    dsimp [DifferentiableWithinAtProp]
+    convert! hdiff x (f x) (extChartAt I x x) (by simp only [hx, mfld_simps]) using 1
+    mfld_set_tac
 
 中文:
 定理 mdifferentiableOn_iff
@@ -1174,7 +1204,17 @@ theorem mdifferentiableOn_iff
     let w := (extChartAt I x).symm z
     have : w in s := by simp only [w, hz, mfld_simps]
     specialize h w this
-    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfl
+    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfld_simps]
+    have w2 : f w in (chartAt H' y).source := by simp only [w, hz, mfld_simps]
+    convert! ((mdifferentiableWithinAt_iff_of_mem_source w1 w2).mp h).2.mono _
+    · simp only [w, hz, mfld_simps]
+    · mfld_set_tac
+  · rintro ⟨hcont, hdiff⟩ x hx
+    refine differentiableWithinAt_localInvariantProp.liftPropWithinAt_iff.mpr ?_
+    refine ⟨hcont x hx, ?_⟩
+    dsimp [DifferentiableWithinAtProp]
+    convert! hdiff x (f x) (extChartAt I x x) (by simp only [hx, mfld_simps]) using 1
+    mfld_set_tac
 
 Depends on / 依赖: chartAt, convert, extChartAt, mdifferentiableWithinAt_iff_of_mem_source, mfld_set_tac, mfld_simps, source, specialize
 -/
@@ -1215,7 +1255,11 @@ theorem mdifferentiableOn_iff_target
     OpenPartialHomeomorph.extend, Set.preimage_univ, Set.inter_univ, and_congr_right_iff]
   intro h
   constructor
-  · refine fun h' y 
+  · refine fun h' y => ⟨?_, fun x _ => h' x y⟩
+    have h'' : ContinuousOn _ univ := (ModelWithCorners.continuous I').continuousOn
+    convert! (h''.comp_inter (chartAt H' y).continuousOn_toFun).comp_inter h
+    simp
+  · exact fun h' x y => (h' y).2 x 0
 
 中文:
 定理 mdifferentiableOn_iff_target
@@ -1225,7 +1269,11 @@ theorem mdifferentiableOn_iff_target
     OpenPartialHomeomorph.extend, Set.preimage_univ, Set.inter_univ, and_congr_right_iff]
   intro h
   constructor
-  · refine fun h' y 
+  · refine fun h' y => ⟨?_, fun x _ => h' x y⟩
+    have h'' : ContinuousOn _ univ := (ModelWithCorners.continuous I').continuousOn
+    convert! (h''.comp_inter (chartAt H' y).continuousOn_toFun).comp_inter h
+    simp
+  · exact fun h' x y => (h' y).2 x 0
 
 Depends on / 依赖: ContinuousOn, ModelWithCorners, ModelWithCorners.continuous, ModelWithCorners.source_eq, OpenPartialHomeomorph, OpenPartialHomeomorph.extend, OpenPartialHomeomorph.refl_partialEquiv, PartialEquiv, PartialEquiv.refl_trans, Set.inter_univ, Set.preimage_univ, and_congr_right_iff, chartAt, chartAt_self_eq, comp_inter, continuous, continuousOn, continuousOn_toFun, convert, extChartAt
 -/
@@ -1310,7 +1358,7 @@ theorem ContMDiffWithinAt.mdifferentiableWithinAt
     apply hf.1.preimage_mem_nhdsWithin
     exact extChartAt_source_mem_nhds (f x)
   rw [mdifferentiableWithinAt_iff]
-  exact ⟨hf.1.mono inter_subset_left, (hf.2.differentiableWi
+  exact ⟨hf.1.mono inter_subset_left, (hf.2.differentiableWithinAt hn).mono (by mfld_set_tac)⟩
 
 中文:
 定理 ContMDiffWithinAt.mdifferentiableWithinAt
@@ -1321,7 +1369,7 @@ theorem ContMDiffWithinAt.mdifferentiableWithinAt
     apply hf.1.preimage_mem_nhdsWithin
     exact extChartAt_source_mem_nhds (f x)
   rw [mdifferentiableWithinAt_iff]
-  exact ⟨hf.1.mono inter_subset_left, (hf.2.differentiableWi
+  exact ⟨hf.1.mono inter_subset_left, (hf.2.differentiableWithinAt hn).mono (by mfld_set_tac)⟩
 
 Depends on / 依赖: MDiffAt, differentiableWithinAt, extChartAt, extChartAt_source_mem_nhds, inter_subset_left, mdifferentiableWithinAt_iff, mdifferentiableWithinAt_inter, mfld_set_tac, preimage_mem_nhdsWithin, source
 -/
@@ -1632,7 +1680,7 @@ theorem mdifferentiable_of_subsingleton
   simp only [mdifferentiableAt_iff, continuous_of_discreteTopology.continuousAt, true_and]
   exact (hasFDerivAt_of_subsingleton _ _).differentiableAt.differentiableWithinAt
 
-@[nontriv
+@[nontriviality]
 
 中文:
 定理 mdifferentiable_of_subsingleton
@@ -1645,7 +1693,7 @@ theorem mdifferentiable_of_subsingleton
   simp only [mdifferentiableAt_iff, continuous_of_discreteTopology.continuousAt, true_and]
   exact (hasFDerivAt_of_subsingleton _ _).differentiableAt.differentiableWithinAt
 
-@[nontriv
+@[nontriviality]
 
 Depends on / 依赖: DiscreteTopology, I.injective.subsingleton, Subsingleton, continuousAt, continuous_of_discreteTopology, continuous_of_discreteTopology.continuousAt, differentiableAt, differentiableAt.differentiableWithinAt, differentiableWithinAt, discreteTopology, hasFDerivAt_of_subsingleton, injective, mdifferentiableAt_iff, subsingleton, true_and
 -/
@@ -2398,7 +2446,21 @@ refine ⟨fun h => h.mono subset_insert y s, fun hf => ?_⟩
   · rw [HasMFDerivWithinAt] at hf ⊢
     refine ⟨hf.1.insert, ?_⟩
     have : (extChartAt I x).target in
-        𝓝[(extChartAt I x).symm ⁻¹' insert x s inter range I] (extCh
+        𝓝[(extChartAt I x).symm ⁻¹' insert x s inter range I] (extChartAt I x) x :=
+      nhdsWithin_mono _ inter_subset_right (extChartAt_target_mem_nhdsWithin x)
+    rw [← hasFDerivWithinAt_inter' this]
+    apply hf.2.insert.mono
+    rintro z ⟨⟨hz, h2z⟩, h'z⟩
+    simp only [mem_inter_iff, mem_preimage, mem_insert_iff, mem_range] at hz h2z ⊢
+    rcases hz with xz | h'z
+    · left
+      have : x in (extChartAt I x).source := mem_extChartAt_source x
+      exact (((extChartAt I x).eq_symm_apply this h'z).1 xz.symm).symm
+    · exact Or.inr ⟨h'z, h2z⟩
+  · apply hf.mono_of_mem_nhdsWithin ?_
+    simp_rw [nhdsWithin_insert_of_ne h, self_mem_nhdsWithin]
+
+alias ⟨HasMFDerivWithinAt.of_insert, HasMFDerivWithinAt.insert'⟩ := hasMFDerivWithinAt_insert
 
 中文:
 定理 hasMFDerivWithinAt_insert
@@ -2410,7 +2472,21 @@ refine ⟨fun h => h.mono subset_insert y s, fun hf => ?_⟩
   · rw [HasMFDerivWithinAt] at hf ⊢
     refine ⟨hf.1.insert, ?_⟩
     have : (extChartAt I x).target in
-        𝓝[(extChartAt I x).symm ⁻¹' insert x s inter range I] (extCh
+        𝓝[(extChartAt I x).symm ⁻¹' insert x s inter range I] (extChartAt I x) x :=
+      nhdsWithin_mono _ inter_subset_right (extChartAt_target_mem_nhdsWithin x)
+    rw [← hasFDerivWithinAt_inter' this]
+    apply hf.2.insert.mono
+    rintro z ⟨⟨hz, h2z⟩, h'z⟩
+    simp only [mem_inter_iff, mem_preimage, mem_insert_iff, mem_range] at hz h2z ⊢
+    rcases hz with xz | h'z
+    · left
+      have : x in (extChartAt I x).source := mem_extChartAt_source x
+      exact (((extChartAt I x).eq_symm_apply this h'z).1 xz.symm).symm
+    · exact Or.inr ⟨h'z, h2z⟩
+  · apply hf.mono_of_mem_nhdsWithin ?_
+    simp_rw [nhdsWithin_insert_of_ne h, self_mem_nhdsWithin]
+
+alias ⟨HasMFDerivWithinAt.of_insert, HasMFDerivWithinAt.insert'⟩ := hasMFDerivWithinAt_insert
 
 Depends on / 依赖: HasMFDerivWithinAt, I.t1Space, T1Space, eq_or_ne, extChartAt, extChartAt_target_mem_nhdsWithin, h.mono, hasFDerivWithinAt_inter, insert, insert.mono, inter_subset_right, mem_in, mem_inter_iff, mem_preimage, nhdsWithin_mono, subset_insert, t1Space, target
 -/
@@ -2542,7 +2618,7 @@ theorem mdifferentiableWithinAt_insert
   exact nhdsWithin_insert_of_ne h
 
 alias ⟨MDifferentiableWithinAt.of_insert, MDifferentiableWithinAt.insert'⟩ :=
-mdifferentiableWithinAt_
+mdifferentiableWithinAt_insert
 
 中文:
 定理 mdifferentiableWithinAt_insert
@@ -2556,7 +2632,7 @@ mdifferentiableWithinAt_
   exact nhdsWithin_insert_of_ne h
 
 alias ⟨MDifferentiableWithinAt.of_insert, MDifferentiableWithinAt.insert'⟩ :=
-mdifferentiableWithinAt_
+mdifferentiableWithinAt_insert
 
 Depends on / 依赖: I.t1Space, T1Space, eq_or_ne, mdifferentiableWithinAt_congr_nhds, mdifferentiableWithinAt_insert_self, nhdsWithin_insert_of_ne, t1Space
 -/
@@ -2947,7 +3023,23 @@ theorem preimage_extChartAt_eventuallyEq_compl_singleton
   obtain ⟨u, u_mem, hu⟩ : exists u in 𝓝 x, u inter {x}ᶜ subseteq {y | (y in s) = (y in t)} :=
     mem_nhdsWithin_iff_exists_mem_nhds_inter.1 (nhdsWithin_compl_singleton_le x y h)
   rw [← extChartAt_to_inv (I := I) x] at u_mem
-  have B : (extChartAt I x).target un
+  have B : (extChartAt I x).target union (range I)ᶜ in 𝓝 (extChartAt I x x) := by
+    rw [← nhdsWithin_univ]; rw [← union_compl_self (range I)]; rw [nhdsWithin_union]
+    apply Filter.union_mem_sup (extChartAt_target_mem_nhdsWithin x) self_mem_nhdsWithin
+  apply mem_nhdsWithin_iff_exists_mem_nhds_inter.2
+    ⟨_, Filter.inter_mem ((continuousAt_extChartAt_symm x).preimage_mem_nhds u_mem) B, ?_⟩
+  rintro z ⟨hz, h'z⟩
+  simp only [eq_iff_iff, mem_ofPred_eq]
+  change z in (extChartAt I x).symm ⁻¹' s inter range I ↔ z in (extChartAt I x).symm ⁻¹' t inter range I
+  by_cases hIz : z in range I
+  · simp only [mem_inter_iff, mem_preimage, mem_union, mem_compl_iff, hIz, not_true_eq_false,
+      or_false, and_true] at hz ⊢
+    rw [← eq_iff_iff]
+    apply hu ⟨hz.1, ?_⟩
+    push _ in _ at h'z ⊢
+    rw [eq_comm]; rw [(extChartAt I x).eq_symm_apply (by simp) hz.2]
+    exact Ne.symm h'z
+  · simp [hIz]
 
 中文:
 定理 preimage_extChartAt_eventuallyEq_compl_singleton
@@ -2957,7 +3049,23 @@ theorem preimage_extChartAt_eventuallyEq_compl_singleton
   obtain ⟨u, u_mem, hu⟩ : exists u in 𝓝 x, u inter {x}ᶜ subseteq {y | (y in s) = (y in t)} :=
     mem_nhdsWithin_iff_exists_mem_nhds_inter.1 (nhdsWithin_compl_singleton_le x y h)
   rw [← extChartAt_to_inv (I := I) x] at u_mem
-  have B : (extChartAt I x).target un
+  have B : (extChartAt I x).target union (range I)ᶜ in 𝓝 (extChartAt I x x) := by
+    rw [← nhdsWithin_univ]; rw [← union_compl_self (range I)]; rw [nhdsWithin_union]
+    apply Filter.union_mem_sup (extChartAt_target_mem_nhdsWithin x) self_mem_nhdsWithin
+  apply mem_nhdsWithin_iff_exists_mem_nhds_inter.2
+    ⟨_, Filter.inter_mem ((continuousAt_extChartAt_symm x).preimage_mem_nhds u_mem) B, ?_⟩
+  rintro z ⟨hz, h'z⟩
+  simp only [eq_iff_iff, mem_ofPred_eq]
+  change z in (extChartAt I x).symm ⁻¹' s inter range I ↔ z in (extChartAt I x).symm ⁻¹' t inter range I
+  by_cases hIz : z in range I
+  · simp only [mem_inter_iff, mem_preimage, mem_union, mem_compl_iff, hIz, not_true_eq_false,
+      or_false, and_true] at hz ⊢
+    rw [← eq_iff_iff]
+    apply hu ⟨hz.1, ?_⟩
+    push _ in _ at h'z ⊢
+    rw [eq_comm]; rw [(extChartAt I x).eq_symm_apply (by simp) hz.2]
+    exact Ne.symm h'z
+  · simp [hIz]
 
 Depends on / 依赖: Filter, Filter.union_mem_sup, I.t1Space, T1Space, extChartAt, extChartAt_target_mem_nhdsWithin, extChartAt_to_inv, mem_nhdsWithin_iff_exists_mem_nhds_inter, nhdsWithin_compl_singleton_le, nhdsWithin_union, nhdsWithin_univ, self_mem_nhdsWithin, subseteq, t1Space, target, u_mem, union_compl_self, union_mem_sup
 -/
@@ -3103,7 +3211,7 @@ theorem mfderivWithin_congr_set'
   · simp only [mfderivWithin, hx, (mdifferentiableWithinAt_congr_set' y h).1 hx, ↓reduceIte]
     apply fderivWithin_congr_set' (extChartAt I x x)
     exact preimage_extChartAt_eventuallyEq_compl_singleton y h
-  · simp [mfderivWithin, hx, ← mdifferentiableWithinAt_co
+  · simp [mfderivWithin, hx, ← mdifferentiableWithinAt_congr_set' y h]
 
 中文:
 定理 mfderivWithin_congr_set'
@@ -3113,7 +3221,7 @@ theorem mfderivWithin_congr_set'
   · simp only [mfderivWithin, hx, (mdifferentiableWithinAt_congr_set' y h).1 hx, ↓reduceIte]
     apply fderivWithin_congr_set' (extChartAt I x x)
     exact preimage_extChartAt_eventuallyEq_compl_singleton y h
-  · simp [mfderivWithin, hx, ← mdifferentiableWithinAt_co
+  · simp [mfderivWithin, hx, ← mdifferentiableWithinAt_congr_set' y h]
 
 Depends on / 依赖: MDiffAt, extChartAt, fderivWithin_congr_set, mdifferentiableWithinAt_congr_set, mfderivWithin, preimage_extChartAt_eventuallyEq_compl_singleton, reduceIte
 -/
@@ -3228,7 +3336,10 @@ theorem HasMFDerivWithinAt.congr_of_eventuallyEq
   · have :
       (extChartAt I x).symm ⁻¹' {y | f₁ y = f y} in
         𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I x) x :=
-      extChartAt_preimage_mem_nhdsWithin 
+      extChartAt_preimage_mem_nhdsWithin h₁
+    apply Filter.mem_of_superset this fun y => _
+    simp +contextual only [hx, mfld_simps]
+  · simp only [hx, mfld_simps]
 
 中文:
 定理 HasMFDerivWithinAt.congr_of_eventuallyEq
@@ -3238,7 +3349,10 @@ theorem HasMFDerivWithinAt.congr_of_eventuallyEq
   · have :
       (extChartAt I x).symm ⁻¹' {y | f₁ y = f y} in
         𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I x) x :=
-      extChartAt_preimage_mem_nhdsWithin 
+      extChartAt_preimage_mem_nhdsWithin h₁
+    apply Filter.mem_of_superset this fun y => _
+    simp +contextual only [hx, mfld_simps]
+  · simp only [hx, mfld_simps]
 
 Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.congr_of_eventuallyEq, Filter, Filter.mem_of_superset, HasFDerivWithinAt, HasFDerivWithinAt.congr_of_eventuallyEq, congr_of_eventuallyEq, contextual, extChartAt, extChartAt_preimage_mem_nhdsWithin, mem_of_superset, mfld_simps
 -/
@@ -3669,7 +3783,11 @@ theorem Filter.EventuallyEq.mfderivWithin_eq
     apply Filter.EventuallyEq.fderivWithin_eq; swap
     · simp [hx]
     filter_upwards [extChartAt_preimage_mem_nhdsWithin (I := I) hL] with y hy
-    
+    simp only [preimage_ofPred_eq, mem_ofPred_eq] at hy
+    simp [-extChartAt, hy, hx]
+  · unfold mfderivWithin
+    rw [if_neg h]; rw [if_neg]
+    rwa [← hL.mdifferentiableWithinAt_iff hx]
 
 中文:
 定理 滤子.EventuallyEq.mfderivWithin_eq
@@ -3681,7 +3799,11 @@ theorem Filter.EventuallyEq.mfderivWithin_eq
     apply Filter.EventuallyEq.fderivWithin_eq; swap
     · simp [hx]
     filter_upwards [extChartAt_preimage_mem_nhdsWithin (I := I) hL] with y hy
-    
+    simp only [preimage_ofPred_eq, mem_ofPred_eq] at hy
+    simp [-extChartAt, hy, hx]
+  · unfold mfderivWithin
+    rw [if_neg h]; rw [if_neg]
+    rwa [← hL.mdifferentiableWithinAt_iff hx]
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.fderivWithin_eq, MDiffAt, extChartAt, extChartAt_preimage_mem_nhdsWithin, fderivWithin_eq, filter_upwards, hL.mdifferentiableWithinAt_iff, if_neg, mdifferentiableWithinAt_iff, mem_ofPred_eq, mfderivWithin, preimage_ofPred_eq, reduceIte, writtenInExtChartAt
 -/
@@ -3861,7 +3983,22 @@ theorem HasMFDerivWithinAt.comp
       (ContinuousLinearMap.comp g' f' : E ->L[𝕜] E'') ((extChartAt I x).symm ⁻¹' s inter range I)
       ((extChartAt I x) x) := by
     have :
- 
+      (extChartAt I x).symm ⁻¹' f ⁻¹' (extChartAt I' (f x)).source in
+        𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I x) x :=
+      extChartAt_preimage_mem_nhdsWithin
+        (hf.1.preimage_mem_nhdsWithin (extChartAt_source_mem_nhds _))
+    unfold HasMFDerivWithinAt at *
+    rw [← hasFDerivWithinAt_inter' this]; rw [← extChartAt_preimage_inter_eq] at hf ⊢
+    have : writtenInExtChartAt I I' x f ((extChartAt I x) x) = (extChartAt I' (f x)) (f x) := by
+      simp only [mfld_simps]
+    rw [← this] at hg
+    apply HasFDerivWithinAt.comp ((extChartAt I x) x) hg.2 hf.2 _
+    intro y hy
+    simp only [mfld_simps] at hy
+    have : f (((chartAt H x).symm : H -> M) (I.symm y)) in u := hst hy.1.1
+    simp only [hy, this, mfld_simps]
+  apply A.congr_of_eventuallyEq (writtenInExtChartAt_comp hf.1)
+  simp only [mfld_simps]
 
 中文:
 定理 HasMFDerivWithinAt.comp
@@ -3873,7 +4010,22 @@ theorem HasMFDerivWithinAt.comp
       (ContinuousLinearMap.comp g' f' : E ->L[𝕜] E'') ((extChartAt I x).symm ⁻¹' s inter range I)
       ((extChartAt I x) x) := by
     have :
- 
+      (extChartAt I x).symm ⁻¹' f ⁻¹' (extChartAt I' (f x)).source in
+        𝓝[(extChartAt I x).symm ⁻¹' s inter range I] (extChartAt I x) x :=
+      extChartAt_preimage_mem_nhdsWithin
+        (hf.1.preimage_mem_nhdsWithin (extChartAt_source_mem_nhds _))
+    unfold HasMFDerivWithinAt at *
+    rw [← hasFDerivWithinAt_inter' this]; rw [← extChartAt_preimage_inter_eq] at hf ⊢
+    have : writtenInExtChartAt I I' x f ((extChartAt I x) x) = (extChartAt I' (f x)) (f x) := by
+      simp only [mfld_simps]
+    rw [← this] at hg
+    apply HasFDerivWithinAt.comp ((extChartAt I x) x) hg.2 hf.2 _
+    intro y hy
+    simp only [mfld_simps] at hy
+    have : f (((chartAt H x).symm : H -> M) (I.symm y)) in u := hst hy.1.1
+    simp only [hy, this, mfld_simps]
+  apply A.congr_of_eventuallyEq (writtenInExtChartAt_comp hf.1)
+  simp only [mfld_simps]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp, ContinuousWithinAt, ContinuousWithinAt.comp, HasFDerivWithinAt, extChartAt, extChartAt_preimage_mem_nhdsWithin, extChartAt_source_mem_nhds, preimage_mem_nhdsWithin, source, writtenInExtChartAt
 -/
@@ -4181,7 +4333,11 @@ theorem mfderivWithin_comp_of_preimage_mem_nhdsWithin
   have A : s inter f ⁻¹' u in 𝓝[s] x := Filter.inter_mem self_mem_nhdsWithin h
   have B : mfderiv[s] (g ∘ f) x = mfderiv[s inter f ⁻¹' u] (g ∘ f) x := by
     apply MDifferentiableWithinAt.mfderivWithin_mono_of_mem_nhdsWithin _ hxs A
-    exact hg.comp _ (hf.mono inter_subset_left) inter_subset_rig
+    exact hg.comp _ (hf.mono inter_subset_left) inter_subset_right
+  have C : mfderiv[s] f x = mfderiv[s inter f ⁻¹' u] f x :=
+    MDifferentiableWithinAt.mfderivWithin_mono_of_mem_nhdsWithin (hf.mono inter_subset_left) hxs A
+  rw [B]; rw [C]
+  exact mfderivWithin_comp _ hg (hf.mono inter_subset_left) inter_subset_right (hxs.inter' h)
 
 中文:
 定理 mfderivWithin_comp_of_preimage_mem_nhdsWithin
@@ -4190,7 +4346,11 @@ theorem mfderivWithin_comp_of_preimage_mem_nhdsWithin
   have A : s inter f ⁻¹' u in 𝓝[s] x := Filter.inter_mem self_mem_nhdsWithin h
   have B : mfderiv[s] (g ∘ f) x = mfderiv[s inter f ⁻¹' u] (g ∘ f) x := by
     apply MDifferentiableWithinAt.mfderivWithin_mono_of_mem_nhdsWithin _ hxs A
-    exact hg.comp _ (hf.mono inter_subset_left) inter_subset_rig
+    exact hg.comp _ (hf.mono inter_subset_left) inter_subset_right
+  have C : mfderiv[s] f x = mfderiv[s inter f ⁻¹' u] f x :=
+    MDifferentiableWithinAt.mfderivWithin_mono_of_mem_nhdsWithin (hf.mono inter_subset_left) hxs A
+  rw [B]; rw [C]
+  exact mfderivWithin_comp _ hg (hf.mono inter_subset_left) inter_subset_right (hxs.inter' h)
 
 Depends on / 依赖: Filter, Filter.inter_mem, MDifferentiableWithinAt, MDifferentiableWithinAt.mfderivWithin_mono_of_mem_nhdsWithin, hf.mono, hg.comp, inter_mem, inter_subset_left, inter_subset_right, mfderiv, mfderivWithin_comp, mfderivWithin_mono_of_mem_nhdsWithin, self_mem_nhdsWithin
 -/

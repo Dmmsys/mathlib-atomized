@@ -629,7 +629,8 @@ instance [Finite
     | zero => infer_instance
     | succ n ihn => exact Countable.of_equiv (Nat × (Fin n -> Nat)) (Fin.consEquiv fun _ => Nat)
   rcases Finite.exists_equiv_fin α with ⟨n, ⟨e⟩⟩
-  have f := fun a => (nonempty_embedding_nat (π a))
+  have f := fun a => (nonempty_embedding_nat (π a)).some
+  exact ((Embedding.piCongrRight f).trans (Equiv.piCongrLeft' _ e).toEmbedding).countable
 
 中文:
 实例 [有限
@@ -640,7 +641,8 @@ instance [Finite
     | zero => infer_instance
     | succ n ihn => exact Countable.of_equiv (Nat × (Fin n -> Nat)) (Fin.consEquiv fun _ => Nat)
   rcases Finite.exists_equiv_fin α with ⟨n, ⟨e⟩⟩
-  have f := fun a => (nonempty_embedding_nat (π a))
+  have f := fun a => (nonempty_embedding_nat (π a)).some
+  exact ((Embedding.piCongrRight f).trans (Equiv.piCongrLeft' _ e).toEmbedding).countable
 
 Depends on / 依赖: Countable, Countable.of_equiv, Embedding, Embedding.piCongrRight, Equiv.piCongrLeft, Fin.consEquiv, Finite, Finite.exists_equiv_fin, consEquiv, countable, exists_equiv_fin, infer_instance, nonempty_embedding_nat, of_equiv, piCongrLeft, piCongrRight, toEmbedding
 -/

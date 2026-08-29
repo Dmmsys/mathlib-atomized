@@ -46,7 +46,24 @@ lemma isMulticoequalizer_iff
   have (x : d.multispan.ColimitType) :
       exists (i : J.R) (a : d.right i), d.multispan.ιColimitType (.right i) a = x := by
     obtain ⟨(l | r), z, rfl⟩ := d.multispan.ιColimitType_jointly_surjective x
-    · exact ⟨J.fst l, d.multispan.map (WalkingMultispan.Hom.fst l) z, by rw [ιColimitType_ma
+    · exact ⟨J.fst l, d.multispan.map (WalkingMultispan.Hom.fst l) z, by rw [ιColimitType_map]⟩
+    · exact ⟨r, z, by simp⟩
+  constructor
+  · intro hc
+    refine ⟨fun i₁ i₂ x₁ x₂ h => ?_, ?_⟩
+    · simp only [← descColimitType_ιColimitType_apply] at h
+      exact hc.bijective.1 h
+    · intro x
+      obtain ⟨y, rfl⟩ := hc.bijective.2 x
+      obtain ⟨i, z, rfl⟩ := this y
+      exact ⟨i, z, by simp⟩
+  · rintro ⟨h₁, h₂⟩
+    refine ⟨fun x₁ x₂ h => ?_, fun x => ?_⟩
+    · obtain ⟨i₁, a₁, rfl⟩ := this x₁
+      obtain ⟨i₂, a₂, rfl⟩ := this x₂
+      exact h₁ _ _ _ _ h
+    · obtain ⟨i, y, rfl⟩ := h₂ x
+      exact ⟨d.multispan.ιColimitType (.right i) y, rfl⟩
 
 中文:
 引理 isMulticoequalizer_iff
@@ -55,7 +72,24 @@ lemma isMulticoequalizer_iff
   have (x : d.multispan.ColimitType) :
       exists (i : J.R) (a : d.right i), d.multispan.ιColimitType (.right i) a = x := by
     obtain ⟨(l | r), z, rfl⟩ := d.multispan.ιColimitType_jointly_surjective x
-    · exact ⟨J.fst l, d.multispan.map (WalkingMultispan.Hom.fst l) z, by rw [ιColimitType_ma
+    · exact ⟨J.fst l, d.multispan.map (WalkingMultispan.Hom.fst l) z, by rw [ιColimitType_map]⟩
+    · exact ⟨r, z, by simp⟩
+  constructor
+  · intro hc
+    refine ⟨fun i₁ i₂ x₁ x₂ h => ?_, ?_⟩
+    · simp only [← descColimitType_ιColimitType_apply] at h
+      exact hc.bijective.1 h
+    · intro x
+      obtain ⟨y, rfl⟩ := hc.bijective.2 x
+      obtain ⟨i, z, rfl⟩ := this y
+      exact ⟨i, z, by simp⟩
+  · rintro ⟨h₁, h₂⟩
+    refine ⟨fun x₁ x₂ h => ?_, fun x => ?_⟩
+    · obtain ⟨i₁, a₁, rfl⟩ := this x₁
+      obtain ⟨i₂, a₂, rfl⟩ := this x₂
+      exact h₁ _ _ _ _ h
+    · obtain ⟨i, y, rfl⟩ := h₂ x
+      exact ⟨d.multispan.ιColimitType (.right i) y, rfl⟩
 
 Depends on / 依赖: ColimitType, J.fst, WalkingMultispan, WalkingMultispan.Hom.fst, bijective, d.multispan, d.multispan.ColimitType, d.multispan.map, d.right, hc.bijective, multispan
 -/
@@ -109,7 +143,17 @@ definition isColimitOfMulticoequalizerDiagram
   rw [Types.isColimit_iff_coconeTypesIsColimit]; rw [Functor.CoconeTypes.isMulticoequalizer_iff]
   refine ⟨fun i₁ i₂ ⟨x₁, h₁⟩ ⟨x₂, h₂⟩ h => ?_, fun ⟨x, hx⟩ => ?_⟩
   · dsimp at i₁ i₂ h₁ h₂
-    obtain rfl : 
+    obtain rfl : x₁ = x₂ := by simpa using h
+    have eq₁ := e.ιColimitType_map (WalkingMultispan.Hom.fst (J := .prod ι) ⟨i₁, i₂⟩)
+      ⟨x₁, by dsimp; rw [c.eq_inf]; exact ⟨h₁, h₂⟩⟩
+    have eq₂ := e.ιColimitType_map (WalkingMultispan.Hom.snd (J := .prod ι) ⟨i₁, i₂⟩)
+      ⟨x₁, by dsimp; rw [c.eq_inf]; exact ⟨h₁, h₂⟩⟩
+    dsimp [e] at eq₁ eq₂
+    rw [eq₁]; rw [eq₂]
+  · simp only [MulticoequalizerDiagram.multicofork_pt, ← c.iSup_eq,
+      Set.iSup_eq_iUnion, Set.mem_iUnion] at hx
+    obtain ⟨i, hi⟩ := hx
+    exact ⟨i, ⟨x, hi⟩, rfl⟩
 
 中文:
 定义 isColimitOfMulticoequalizerDiagram
@@ -119,7 +163,17 @@ definition isColimitOfMulticoequalizerDiagram
   rw [Types.isColimit_iff_coconeTypesIsColimit]; rw [Functor.CoconeTypes.isMulticoequalizer_iff]
   refine ⟨fun i₁ i₂ ⟨x₁, h₁⟩ ⟨x₂, h₂⟩ h => ?_, fun ⟨x, hx⟩ => ?_⟩
   · dsimp at i₁ i₂ h₁ h₂
-    obtain rfl : 
+    obtain rfl : x₁ = x₂ := by simpa using h
+    have eq₁ := e.ιColimitType_map (WalkingMultispan.Hom.fst (J := .prod ι) ⟨i₁, i₂⟩)
+      ⟨x₁, by dsimp; rw [c.eq_inf]; exact ⟨h₁, h₂⟩⟩
+    have eq₂ := e.ιColimitType_map (WalkingMultispan.Hom.snd (J := .prod ι) ⟨i₁, i₂⟩)
+      ⟨x₁, by dsimp; rw [c.eq_inf]; exact ⟨h₁, h₂⟩⟩
+    dsimp [e] at eq₁ eq₂
+    rw [eq₁]; rw [eq₂]
+  · simp only [MulticoequalizerDiagram.multicofork_pt, ← c.iSup_eq,
+      Set.iSup_eq_iUnion, Set.mem_iUnion] at hx
+    obtain ⟨i, hi⟩ := hx
+    exact ⟨i, ⟨x, hi⟩, rfl⟩
 
 Depends on / 依赖: CoconeTypes, Functor, Functor.CoconeTypes.isMulticoequalizer_iff, Nonempty, Set.functorToTypes, Types.isColimit_iff_coconeTypesIsColimit, WalkingMultispan, WalkingMultispan.Hom.fst, WalkingMultispan.Hom.snd, _root_, _root_.Nonempty.some, c.eq_inf, c.multispanIndex.map, eq_inf, functorToTypes, isColimit_iff_coconeTypesIsColimit, isMulticoequalizer_iff, multispan, multispanIndex
 -/

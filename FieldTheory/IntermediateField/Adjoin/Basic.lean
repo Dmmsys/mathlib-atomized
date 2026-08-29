@@ -201,7 +201,7 @@ instance finiteDimensional_sup
     have h : FiniteDimensional K (Subalgebra.toSubmodule g.range) :=
       g.toLinearMap.finiteDimensional_range
     rwa [this] at h
-  rw [Algebra.TensorProduct.productMap_range]; rw [E1.range
+  rw [Algebra.TensorProduct.productMap_range]; rw [E1.range_val]; rw [E2.range_val]; rw [sup_toSubalgebra_of_left]
 
 中文:
 实例 finiteDimensional_sup
@@ -212,7 +212,7 @@ instance finiteDimensional_sup
     have h : FiniteDimensional K (Subalgebra.toSubmodule g.range) :=
       g.toLinearMap.finiteDimensional_range
     rwa [this] at h
-  rw [Algebra.TensorProduct.productMap_range]; rw [E1.range
+  rw [Algebra.TensorProduct.productMap_range]; rw [E1.range_val]; rw [E2.range_val]; rw [sup_toSubalgebra_of_left]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.productMap, Algebra.TensorProduct.productMap_range, E1.range_val, E1.val, E2.range_val, E2.val, FiniteDimensional, Subalgebra, Subalgebra.toSubmodule, TensorProduct, finiteDimensional_range, g.range, g.toLinearMap.finiteDimensional_range, productMap, productMap_range, range_val, sup_toSubalgebra_of_left, toLinearMap, toSubalgebra
 -/
@@ -259,7 +259,10 @@ theorem finrank_sup_le
     change _ <= finrank K E1 * finrank K E2 at this
     rwa [← sup_toSubalgebra_of_left] at this
   rw [FiniteDimensional]; rw [← rank_lt_aleph0_iff]; rw [not_lt] at h
-have := LinearMap.rank_le
+have := LinearMap.rank_le_of_injective _ Submodule.inclusion_injective
+    show Subalgebra.toSubmodule E1.toSubalgebra <= Subalgebra.toSubmodule (E1 ⊔ E2).toSubalgebra by
+      simp
+  rw [show finrank K E1 = 0 from Cardinal.toNat_apply_of_aleph0_le h]; rw [show finrank K ↥(E1 ⊔ E2) = 0 from Cardinal.toNat_apply_of_aleph0_le (h.trans this)]; rw [zero_mul]
 
 中文:
 定理 finrank_sup_le
@@ -269,7 +272,10 @@ have := LinearMap.rank_le
     change _ <= finrank K E1 * finrank K E2 at this
     rwa [← sup_toSubalgebra_of_left] at this
   rw [FiniteDimensional]; rw [← rank_lt_aleph0_iff]; rw [not_lt] at h
-have := LinearMap.rank_le
+have := LinearMap.rank_le_of_injective _ Submodule.inclusion_injective
+    show Subalgebra.toSubmodule E1.toSubalgebra <= Subalgebra.toSubmodule (E1 ⊔ E2).toSubalgebra by
+      simp
+  rw [show finrank K E1 = 0 from Cardinal.toNat_apply_of_aleph0_le h]; rw [show finrank K ↥(E1 ⊔ E2) = 0 from Cardinal.toNat_apply_of_aleph0_le (h.trans this)]; rw [zero_mul]
 
 Depends on / 依赖: Cardinal, Cardinal.toNat_apply_of_aleph0_le, E1.toSubalgebra, E1.toSubalgebra.finrank_sup_le_of_free, E2.toSubalgebra, FiniteDimensional, LinearMap, LinearMap.rank_le_of_injective, Subalgebra, Subalgebra.toSubmodule, Submodule, Submodule.inclusion_injective, finrank, finrank_sup_le_of_free, inclusion_injective, not_lt, rank_le_of_injective, rank_lt_aleph0_iff, sup_toSubalgebra_of_left, toNat_apply_of_aleph0_le
 -/
@@ -298,7 +304,8 @@ theorem coe_iSup_of_directed
       inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
         Set.mem_iUnion.mpr ⟨i, (t i).inv_mem hi⟩ }
   have : iSup t = M := le_antisymm
-    (iSup_le fun i => le_iSup (fun i =>
+    (iSup_le fun i => le_iSup (fun i => (t i : Set L)) i) (Set.iUnion_subset fun _ => le_iSup t _)
+  this.symm ▸ rfl
 
 中文:
 定理 coe_iSup_of_directed
@@ -308,7 +315,8 @@ theorem coe_iSup_of_directed
       inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
         Set.mem_iUnion.mpr ⟨i, (t i).inv_mem hi⟩ }
   have : iSup t = M := le_antisymm
-    (iSup_le fun i => le_iSup (fun i =>
+    (iSup_le fun i => le_iSup (fun i => (t i : Set L)) i) (Set.iUnion_subset fun _ => le_iSup t _)
+  this.symm ▸ rfl
 
 Depends on / 依赖: IntermediateField, Set.iUnion_subset, Set.mem_iUnion.mp, Set.mem_iUnion.mpr, Subalgebra, Subalgebra.coe_iSup_of_directed, Subalgebra.copy, coe_iSup_of_directed, iSup_le, iUnion_subset, inv_mem, le_antisymm, le_iSup, mem_iUnion, this.symm
 -/
@@ -441,7 +449,9 @@ theorem isSplittingField_iSup
   have hF : forall i in s, t i <= F := fun i hi => le_iSup_of_le i (le_iSup (fun _ => t i) hi)
   simp only [isSplittingField_iff, Polynomial.map_prod] at h ⊢
   refine ⟨Splits.prod fun i hi => by
-    simpa [Polynomial.map_map] using (h i hi).1.map (
+    simpa [Polynomial.map_map] using (h i hi).1.map (inclusion (hF i hi)).toRingHom, ?_⟩
+  simp only [rootSet_prod p s h0, ← Set.iSup_eq_iUnion, (@gc K _ L _ _).l_iSup₂]
+  exact iSup_congr fun i => iSup_congr fun hi => (h i hi).2
 
 中文:
 定理 isSplittingField_iSup
@@ -451,7 +461,9 @@ theorem isSplittingField_iSup
   have hF : forall i in s, t i <= F := fun i hi => le_iSup_of_le i (le_iSup (fun _ => t i) hi)
   simp only [isSplittingField_iff, Polynomial.map_prod] at h ⊢
   refine ⟨Splits.prod fun i hi => by
-    simpa [Polynomial.map_map] using (h i hi).1.map (
+    simpa [Polynomial.map_map] using (h i hi).1.map (inclusion (hF i hi)).toRingHom, ?_⟩
+  simp only [rootSet_prod p s h0, ← Set.iSup_eq_iUnion, (@gc K _ L _ _).l_iSup₂]
+  exact iSup_congr fun i => iSup_congr fun hi => (h i hi).2
 
 Depends on / 依赖: IntermediateField, Polynomial, Polynomial.map_map, Polynomial.map_prod, Set.iSup_eq_iUnion, Splits, Splits.prod, iSup_congr, iSup_eq_iUnion, inclusion, isSplittingField_iff, le_iSup, le_iSup_of_le, map_map, map_prod, rootSet_prod, toRingHom
 -/
@@ -725,7 +737,7 @@ theorem exists_finset_of_mem_supr''
     (subset_adjoin F (rootSet (minpoly F x1) E) ?_)
   · rw [IntermediateField.minpoly_eq, Subtype.coe_mk]
   · rw [mem_rootSet_of_ne, minpoly.aeval]
- 
+    exact minpoly.ne_zero (isIntegral_iff.mp (Algebra.IsIntegral.isIntegral (⟨x1, hx1⟩ : f i)))
 
 中文:
 定理 存在_finset_of_mem_supr''
@@ -736,7 +748,7 @@ theorem exists_finset_of_mem_supr''
     (subset_adjoin F (rootSet (minpoly F x1) E) ?_)
   · rw [IntermediateField.minpoly_eq, Subtype.coe_mk]
   · rw [mem_rootSet_of_ne, minpoly.aeval]
- 
+    exact minpoly.ne_zero (isIntegral_iff.mp (Algebra.IsIntegral.isIntegral (⟨x1, hx1⟩ : f i)))
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IntermediateField, IntermediateField.minpoly_eq, IsIntegral, SetLike, SetLike.le_def.mp, Subtype, Subtype.coe_mk, coe_mk, exists_finset_of_mem_iSup, iSup_le, isIntegral, isIntegral_iff, isIntegral_iff.mp, le_def, le_iSup_of_le, mem_rootSet_of_ne, minpoly, minpoly.aeval
 -/
@@ -763,7 +775,7 @@ theorem exists_finset_of_mem_adjoin
   refine ⟨s.image Subtype.val, by simp, SetLike.le_def.mp ?_ hx'⟩
   simp_rw [Finset.coe_image, iSup_le_iff, adjoin_le_iff]
   rintro _ h _ rfl
-  exact subset_adjoin F _ ⟨_, h, 
+  exact subset_adjoin F _ ⟨_, h, rfl⟩
 
 中文:
 定理 存在_finset_of_mem_adjoin
@@ -775,7 +787,7 @@ theorem exists_finset_of_mem_adjoin
   refine ⟨s.image Subtype.val, by simp, SetLike.le_def.mp ?_ hx'⟩
   simp_rw [Finset.coe_image, iSup_le_iff, adjoin_le_iff]
   rintro _ h _ rfl
-  exact subset_adjoin F _ ⟨_, h, 
+  exact subset_adjoin F _ ⟨_, h, rfl⟩
 
 Depends on / 依赖: Finset, Finset.coe_image, SetLike, SetLike.le_def.mp, Subtype, Subtype.val, adjoin_le_iff, biSup_adjoin_simple, classical, coe_image, exists_finset_of_mem_iSup, iSup_le_iff, iSup_subtype, le_def, s.image, simp_rw, subset_adjoin
 -/
@@ -1067,7 +1079,7 @@ theorem isSimpleOrder_of_finrank_prime
   · exact ⟨⊥, ⊤, fun h => Nat.prime_one_false (bot_eq_top_iff_finrank_eq_one.mp h ▸ hp)⟩
   · intro K
     simpa [← toSubalgebra_strictMono.apply_eq_bot_iff, ← toSubalgebra_strictMono.apply_eq_top_iff]
-      using (Subalgebra.isSimpleOrder_of_
+      using (Subalgebra.isSimpleOrder_of_finrank_prime _ _ hp).eq_bot_or_eq_top K.toSubalgebra
 
 中文:
 定理 isSimpleOrder_of_finrank_prime
@@ -1077,7 +1089,7 @@ theorem isSimpleOrder_of_finrank_prime
   · exact ⟨⊥, ⊤, fun h => Nat.prime_one_false (bot_eq_top_iff_finrank_eq_one.mp h ▸ hp)⟩
   · intro K
     simpa [← toSubalgebra_strictMono.apply_eq_bot_iff, ← toSubalgebra_strictMono.apply_eq_top_iff]
-      using (Subalgebra.isSimpleOrder_of_
+      using (Subalgebra.isSimpleOrder_of_finrank_prime _ _ hp).eq_bot_or_eq_top K.toSubalgebra
 
 Depends on / 依赖: K.toSubalgebra, Nat.prime_one_false, Subalgebra, Subalgebra.isSimpleOrder_of_finrank_prime, apply_eq_bot_iff, apply_eq_top_iff, bot_eq_top_iff_finrank_eq_one, bot_eq_top_iff_finrank_eq_one.mp, eq_bot_or_eq_top, isSimpleOrder_of_finrank_prime, prime_one_false, toNontrivial, toSubalgebra, toSubalgebra_strictMono, toSubalgebra_strictMono.apply_eq_bot_iff, toSubalgebra_strictMono.apply_eq_top_iff
 -/
@@ -1376,7 +1388,22 @@ definition adjoinRootEquivAdjoin
       have := Fact.mk (minpoly.irreducible h)
       constructor
       · exact RingHom.injective f
-      · suffices F⟮α⟯
+      · suffices F⟮α⟯.toSubfield <= RingHom.fieldRange (F⟮α⟯.toSubfield.subtype.comp f) by
+          intro x
+          obtain ⟨y, hy⟩ := this (Subtype.mem x)
+          exact ⟨y, Subtype.ext hy⟩
+        refine Subfield.closure_le.mpr (Set.union_subset (fun x hx => ?_) ?_)
+        · obtain ⟨y, hy⟩ := hx
+          refine ⟨y, ?_⟩
+          rw [RingHom.comp_apply]
+          dsimp only [coe_type_toSubfield]
+          rw [AdjoinRoot.lift_of (aeval_gen_minpoly F α)]
+          exact hy
+        · refine Set.singleton_subset_iff.mpr ⟨AdjoinRoot.root (minpoly F α), ?_⟩
+          rw [RingHom.comp_apply]
+          dsimp only [coe_type_toSubfield]
+          rw [AdjoinRoot.lift_root (aeval_gen_minpoly F α)]
+          rfl)
 
 中文:
 定义 adjoinRootEquivAdjoin
@@ -1388,7 +1415,22 @@ definition adjoinRootEquivAdjoin
       have := Fact.mk (minpoly.irreducible h)
       constructor
       · exact RingHom.injective f
-      · suffices F⟮α⟯
+      · suffices F⟮α⟯.toSubfield <= RingHom.fieldRange (F⟮α⟯.toSubfield.subtype.comp f) by
+          intro x
+          obtain ⟨y, hy⟩ := this (Subtype.mem x)
+          exact ⟨y, Subtype.ext hy⟩
+        refine Subfield.closure_le.mpr (Set.union_subset (fun x hx => ?_) ?_)
+        · obtain ⟨y, hy⟩ := hx
+          refine ⟨y, ?_⟩
+          rw [RingHom.comp_apply]
+          dsimp only [coe_type_toSubfield]
+          rw [AdjoinRoot.lift_of (aeval_gen_minpoly F α)]
+          exact hy
+        · refine Set.singleton_subset_iff.mpr ⟨AdjoinRoot.root (minpoly F α), ?_⟩
+          rw [RingHom.comp_apply]
+          dsimp only [coe_type_toSubfield]
+          rw [AdjoinRoot.lift_root (aeval_gen_minpoly F α)]
+          rfl)
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.lift, AdjoinRoot.liftAlgHom, AdjoinSimple, AdjoinSimple.gen, AlgEquiv, AlgEquiv.ofBijective, Fact.mk, RingHom, RingHom.fieldRange, RingHom.injective, Set.union_subset, Subfield, Subfield.closure_le.mpr, Subtype, Subtype.ext, Subtype.mem, aeval_gen_minpoly, closure_le, fieldRange
 -/
@@ -1526,7 +1568,7 @@ definition adjoin.powerBasis
   dim := (minpoly K x).natDegree
   basis := powerBasisAux hx
   basis_eq_pow i := by
-    rw [powerBasisAux]; rw [Basis.reindex_apply]; rw [Basis.map_apply]; rw [PowerBasis.basis_eq_pow]; rw [finCongr_symm]; rw [finCongr_apply]; rw [Fin.cast_eq_self]; rw [AlgEquiv.toLinearEquiv_ap
+    rw [powerBasisAux]; rw [Basis.reindex_apply]; rw [Basis.map_apply]; rw [PowerBasis.basis_eq_pow]; rw [finCongr_symm]; rw [finCongr_apply]; rw [Fin.cast_eq_self]; rw [AlgEquiv.toLinearEquiv_apply]; rw [map_pow]; rw [AdjoinRoot.powerBasis_gen]; rw [adjoinRootEquivAdjoin_apply_root]
 
 中文:
 定义 adjoin.powerBasis
@@ -1535,7 +1577,7 @@ definition adjoin.powerBasis
   dim := (minpoly K x).natDegree
   basis := powerBasisAux hx
   basis_eq_pow i := by
-    rw [powerBasisAux]; rw [Basis.reindex_apply]; rw [Basis.map_apply]; rw [PowerBasis.basis_eq_pow]; rw [finCongr_symm]; rw [finCongr_apply]; rw [Fin.cast_eq_self]; rw [AlgEquiv.toLinearEquiv_ap
+    rw [powerBasisAux]; rw [Basis.reindex_apply]; rw [Basis.map_apply]; rw [PowerBasis.basis_eq_pow]; rw [finCongr_symm]; rw [finCongr_apply]; rw [Fin.cast_eq_self]; rw [AlgEquiv.toLinearEquiv_apply]; rw [map_pow]; rw [AdjoinRoot.powerBasis_gen]; rw [adjoinRootEquivAdjoin_apply_root]
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.gen
 -/
@@ -1649,7 +1691,23 @@ theorem adjoin_minpoly_coeff_of_exists_primitive_element
     rintro ⟨n, -, rfl⟩
     rw [coeff_map]
     apply Subtype.mem
-  have dvd_g : minp
+  have dvd_g : minpoly K' α ∣ g.toSubring K'.toSubring (subset_adjoin F _) := by
+    apply minpoly.dvd
+    rw [aeval_def]; rw [eval₂_eq_eval_map]
+    erw [g.map_toSubring K'.toSubring]
+    rw [eval_map_algebraMap]
+    exact minpoly.aeval K α
+  have finrank_eq : forall K : IntermediateField F E, finrank K E = natDegree (minpoly K α) := by
+    intro K
+    have := adjoin.finrank (.of_finite K α)
+    rw [adjoin_eq_top_of_adjoin_eq_top F hprim] at this
+    simp_all
+  refine eq_of_le_of_finrank_le' hsub ?_
+  simp_rw [finrank_eq]
+  convert!
+    natDegree_le_of_dvd dvd_g
+      ((g.monic_toSubring _ _).mpr <| (minpoly.monic <| .of_finite K α).map _).ne_zero using 1
+  rw [natDegree_toSubring]; rw [natDegree_map]
 
 中文:
 定理 adjoin_minpoly_coeff_of_存在_primitive_element
@@ -1662,7 +1720,23 @@ theorem adjoin_minpoly_coeff_of_exists_primitive_element
     rintro ⟨n, -, rfl⟩
     rw [coeff_map]
     apply Subtype.mem
-  have dvd_g : minp
+  have dvd_g : minpoly K' α ∣ g.toSubring K'.toSubring (subset_adjoin F _) := by
+    apply minpoly.dvd
+    rw [aeval_def]; rw [eval₂_eq_eval_map]
+    erw [g.map_toSubring K'.toSubring]
+    rw [eval_map_algebraMap]
+    exact minpoly.aeval K α
+  have finrank_eq : forall K : IntermediateField F E, finrank K E = natDegree (minpoly K α) := by
+    intro K
+    have := adjoin.finrank (.of_finite K α)
+    rw [adjoin_eq_top_of_adjoin_eq_top F hprim] at this
+    simp_all
+  refine eq_of_le_of_finrank_le' hsub ?_
+  simp_rw [finrank_eq]
+  convert!
+    natDegree_le_of_dvd dvd_g
+      ((g.monic_toSubring _ _).mpr <| (minpoly.monic <| .of_finite K α).map _).ne_zero using 1
+  rw [natDegree_toSubring]; rw [natDegree_map]
 
 Depends on / 依赖: Finset, Finset.mem_coe, IntermediateField, Subtype, Subtype.mem, adjoin, adjoin_le_iff, adjoin_le_iff.mpr, aeval_def, algebraMap, coeff_map, coeffs, dvd_g, eval_map_algebraMap, finrank_eq, g.coeffs, g.map_toSubring, g.toSubring, map_toSubring, mem_coe
 -/
@@ -1726,7 +1800,13 @@ theorem exists_lt_finrank_of_infinite_dimensional
     obtain ⟨x, hx⟩ : exists x : E, x ∉ L := by
       contrapose! hnfd
       rw [show L = ⊤ from eq_top_iff.2 fun x _ => hnfd x] at fin
-      exact topEquiv.toLinearEquiv.fin
+      exact topEquiv.toLinearEquiv.finiteDimensional
+    let L' := L ⊔ F⟮x⟯
+    have := adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral (R := F) x)
+    refine ⟨L', inferInstance, by_contra fun h => ?_⟩
+    have h1 : L = L' := eq_of_le_of_finrank_le le_sup_left ((not_lt.1 h).trans hn)
+    have h2 : F⟮x⟯ <= L' := le_sup_right
+exact hx (h1.symm ▸ h2) mem_adjoin_simple_self F x
 
 中文:
 定理 存在_lt_finrank_of_infinite_dimensional
@@ -1738,7 +1818,13 @@ theorem exists_lt_finrank_of_infinite_dimensional
     obtain ⟨x, hx⟩ : exists x : E, x ∉ L := by
       contrapose! hnfd
       rw [show L = ⊤ from eq_top_iff.2 fun x _ => hnfd x] at fin
-      exact topEquiv.toLinearEquiv.fin
+      exact topEquiv.toLinearEquiv.finiteDimensional
+    let L' := L ⊔ F⟮x⟯
+    have := adjoin.finiteDimensional (Algebra.IsIntegral.isIntegral (R := F) x)
+    refine ⟨L', inferInstance, by_contra fun h => ?_⟩
+    have h1 : L = L' := eq_of_le_of_finrank_le le_sup_left ((not_lt.1 h).trans hn)
+    have h2 : F⟮x⟯ <= L' := le_sup_right
+exact hx (h1.symm ▸ h2) mem_adjoin_simple_self F x
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, Subalgebra, Subalgebra.finite_bot, adjoin, adjoin.finiteDimensional, contrapose, eq_of_le_of_finrank_le, eq_top_iff, finiteDimensional, finite_bot, finrank_pos, isIntegral, le_sup_left, not_lt, toLinearEquiv, topEquiv, topEquiv.toLinearEquiv.finiteDimensional
 -/
@@ -1801,7 +1887,10 @@ theorem _root_.Polynomial.Irreducible.natDegree_dvd_finrank
   have key := minpoly.Irreducible.eq_minpoly hi hx
   replace hi := hi.ne_zero
   rw [key]; rw [natDegree_C_mul (leadingCoeff_ne_zero.mpr hi)]
-
+  apply minpoly.degree_dvd
+  rw [← minpoly.ne_zero_iff]
+  contrapose hi
+  rwa [hi, mul_zero] at key
 
 中文:
 定理 _root_.多项式.不可约.natDegree_dvd_finrank
@@ -1814,7 +1903,10 @@ theorem _root_.Polynomial.Irreducible.natDegree_dvd_finrank
   have key := minpoly.Irreducible.eq_minpoly hi hx
   replace hi := hi.ne_zero
   rw [key]; rw [natDegree_C_mul (leadingCoeff_ne_zero.mpr hi)]
-
+  apply minpoly.degree_dvd
+  rw [← minpoly.ne_zero_iff]
+  contrapose hi
+  rwa [hi, mul_zero] at key
 
 Depends on / 依赖: Irreducible, algebraMap, contrapose, degree_dvd, degree_map, degree_pos, eq_minpoly, eval_map_algebraMap, exists_eval_eq_zero, f.degree_map, hi.degree_pos.ne, hi.ne_zero, hs.exists_eval_eq_zero, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, minpoly, minpoly.Irreducible.eq_minpoly, minpoly.degree_dvd, minpoly.ne_zero_iff, mul_zero
 -/
@@ -1899,7 +1991,8 @@ theorem isAlgebraic_iSup
   obtain ⟨s, hx⟩ := exists_finset_of_mem_supr' hx
   rw [isAlgebraic_iff]; rw [Subtype.coe_mk]; rw [← Subtype.coe_mk (p := (· in _)) x hx]; rw [← isAlgebraic_iff]
   have : forall i : Σ i, t i, FiniteDimensional K K⟮(i.2 : L)⟯ := fun ⟨i, x⟩ =>
-    adjoin.finiteDimensi
+    adjoin.finiteDimensional (isIntegral_iff.1 (Algebra.IsIntegral.isIntegral x))
+  apply IsAlgebraic.of_finite
 
 中文:
 定理 isAlgebraic_iSup
@@ -1910,7 +2003,8 @@ theorem isAlgebraic_iSup
   obtain ⟨s, hx⟩ := exists_finset_of_mem_supr' hx
   rw [isAlgebraic_iff]; rw [Subtype.coe_mk]; rw [← Subtype.coe_mk (p := (· in _)) x hx]; rw [← isAlgebraic_iff]
   have : forall i : Σ i, t i, FiniteDimensional K K⟮(i.2 : L)⟯ := fun ⟨i, x⟩ =>
-    adjoin.finiteDimensi
+    adjoin.finiteDimensional (isIntegral_iff.1 (Algebra.IsIntegral.isIntegral x))
+  apply IsAlgebraic.of_finite
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, FiniteDimensional, IsAlgebraic, IsAlgebraic.of_finite, IsIntegral, Subtype, Subtype.coe_mk, adjoin, adjoin.finiteDimensional, coe_mk, exists_finset_of_mem_supr, finiteDimensional, isAlgebraic_iff, isIntegral, isIntegral_iff, of_finite
 -/
@@ -2092,7 +2186,41 @@ theorem _root_.Polynomial.irreducible_comp
     have := Fact.mk hf
     intro e
     apply not_irreducible_C ((g.map (algebraMap _ _)).coeff 0 - AdjoinSimple.gen K (root f))
-    -- Needed to speci
+    -- Needed to specialize `map_sub` to avoid a timeout https://github.com/leanprover-community/mathlib4/pull/8386
+    rw [RingHom.map_sub]; rw [coeff_map]; rw [← map_C]; rw [← eq_C_of_natDegree_eq_zero e]
+    apply hg (AdjoinRoot f)
+    rw [AdjoinRoot.minpoly_root hf.ne_zero]; rw [hfm]; rw [inv_one]; rw [map_one]; rw [mul_one]
+  have H₁ : f.comp g != 0 := fun h => by simpa [hf', hg', natDegree_comp] using congr_arg natDegree h
+  have H₂ : ¬ IsUnit (f.comp g) := fun h =>
+    by simpa [hf', hg', natDegree_comp] using natDegree_eq_zero_of_isUnit h
+  have ⟨p, hp₁, hp₂⟩ := WfDvdMonoid.exists_irreducible_factor H₂ H₁
+  suffices natDegree p = natDegree f * natDegree g from (associated_of_dvd_of_natDegree_le hp₂ H₁
+    (this.trans natDegree_comp.symm).ge).irreducible hp₁
+  have := Fact.mk hp₁
+  let Kx := AdjoinRoot p
+  let := (AdjoinRoot.powerBasis hp₁.ne_zero).finite
+  have key₁ : f = minpoly K (aeval (root p) g) := by
+    refine minpoly.eq_of_irreducible_of_monic hf ?_ hfm
+    rw [← aeval_comp]
+    exact aeval_eq_zero_of_dvd_aeval_eq_zero hp₂ (AdjoinRoot.eval₂_root p)
+  have key₁' : finrank K K⟮aeval (root p) g⟯ = natDegree f := by
+    rw [adjoin.finrank]; rw [← key₁]
+    exact IsIntegral.of_finite _ _
+  have key₂ : g.map (algebraMap _ _) - C (AdjoinSimple.gen K (aeval (root p) g)) =
+      minpoly K⟮aeval (root p) g⟯ (root p) :=
+    minpoly.eq_of_irreducible_of_monic (hg _ _ key₁.symm) (by simp [AdjoinSimple.gen])
+      (Monic.sub_of_left (hgm.map _) (degree_lt_degree (by simpa [Nat.pos_iff_ne_zero] using hg')))
+  have key₂' : finrank K⟮aeval (root p) g⟯ Kx = natDegree g := by
+    trans natDegree (minpoly K⟮aeval (root p) g⟯ (root p))
+    · have : K⟮aeval (root p) g⟯⟮root p⟯ = ⊤ := by
+        apply restrictScalars_injective K
+        rw [restrictScalars_top]; rw [adjoin_adjoin_left]; rw [Set.union_comm]; rw [← adjoin_adjoin_left]; rw [adjoin_root_eq_top p]; rw [restrictScalars_adjoin]
+        simp
+      rw [← finrank_top']; rw [← this]; rw [adjoin.finrank]
+      exact IsIntegral.of_finite _ _
+    · simp [← key₂]
+  have := Module.finrank_mul_finrank K K⟮aeval (root p) g⟯ Kx
+  rwa [key₁', key₂', (AdjoinRoot.powerBasis hp₁.ne_zero).finrank, powerBasis_dim, eq_comm] at this
 
 中文:
 定理 _root_.多项式.irreducible_comp
@@ -2104,7 +2232,41 @@ theorem _root_.Polynomial.irreducible_comp
     have := Fact.mk hf
     intro e
     apply not_irreducible_C ((g.map (algebraMap _ _)).coeff 0 - AdjoinSimple.gen K (root f))
-    -- Needed to speci
+    -- Needed to specialize `map_sub` to avoid a timeout https://github.com/leanprover-community/mathlib4/pull/8386
+    rw [RingHom.map_sub]; rw [coeff_map]; rw [← map_C]; rw [← eq_C_of_natDegree_eq_zero e]
+    apply hg (AdjoinRoot f)
+    rw [AdjoinRoot.minpoly_root hf.ne_zero]; rw [hfm]; rw [inv_one]; rw [map_one]; rw [mul_one]
+  have H₁ : f.comp g != 0 := fun h => by simpa [hf', hg', natDegree_comp] using congr_arg natDegree h
+  have H₂ : ¬ IsUnit (f.comp g) := fun h =>
+    by simpa [hf', hg', natDegree_comp] using natDegree_eq_zero_of_isUnit h
+  have ⟨p, hp₁, hp₂⟩ := WfDvdMonoid.exists_irreducible_factor H₂ H₁
+  suffices natDegree p = natDegree f * natDegree g from (associated_of_dvd_of_natDegree_le hp₂ H₁
+    (this.trans natDegree_comp.symm).ge).irreducible hp₁
+  have := Fact.mk hp₁
+  let Kx := AdjoinRoot p
+  let := (AdjoinRoot.powerBasis hp₁.ne_zero).finite
+  have key₁ : f = minpoly K (aeval (root p) g) := by
+    refine minpoly.eq_of_irreducible_of_monic hf ?_ hfm
+    rw [← aeval_comp]
+    exact aeval_eq_zero_of_dvd_aeval_eq_zero hp₂ (AdjoinRoot.eval₂_root p)
+  have key₁' : finrank K K⟮aeval (root p) g⟯ = natDegree f := by
+    rw [adjoin.finrank]; rw [← key₁]
+    exact IsIntegral.of_finite _ _
+  have key₂ : g.map (algebraMap _ _) - C (AdjoinSimple.gen K (aeval (root p) g)) =
+      minpoly K⟮aeval (root p) g⟯ (root p) :=
+    minpoly.eq_of_irreducible_of_monic (hg _ _ key₁.symm) (by simp [AdjoinSimple.gen])
+      (Monic.sub_of_left (hgm.map _) (degree_lt_degree (by simpa [Nat.pos_iff_ne_zero] using hg')))
+  have key₂' : finrank K⟮aeval (root p) g⟯ Kx = natDegree g := by
+    trans natDegree (minpoly K⟮aeval (root p) g⟯ (root p))
+    · have : K⟮aeval (root p) g⟯⟮root p⟯ = ⊤ := by
+        apply restrictScalars_injective K
+        rw [restrictScalars_top]; rw [adjoin_adjoin_left]; rw [Set.union_comm]; rw [← adjoin_adjoin_left]; rw [adjoin_root_eq_top p]; rw [restrictScalars_adjoin]
+        simp
+      rw [← finrank_top']; rw [← this]; rw [adjoin.finrank]
+      exact IsIntegral.of_finite _ _
+    · simp [← key₂]
+  have := Module.finrank_mul_finrank K K⟮aeval (root p) g⟯ Kx
+  rwa [key₁', key₂', (AdjoinRoot.powerBasis hp₁.ne_zero).finrank, powerBasis_dim, eq_comm] at this
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.gen, Fact.mk, algebraMap, eq_C_of_natDegree_eq_zero, f.coeff, g.map, natDegree, not_irreducible_C
 -/
@@ -2218,14 +2380,14 @@ theorem algEquiv_apply
   given: {x y : L} (hx : IsAlgebraic K x) (h_mp : minpoly K x = minpoly K y)
   proof: by
   have hy : IsAlgebraic K y := ⟨minpoly K x, ne_zero hx.isIntegral, (h_mp ▸ aeval _ _)⟩
-  rw [algEquiv]; rw [trans_apply]; rw [← adjoinRootEquivAdjoin_apply_root K hx.isIntegral]; rw [symm_apply_apply]; rw [trans_apply]; rw [AdjoinRoot.algEquivOfEq_root]; rw [adjoinRootEquivAdjoin_apply_root K hy
+  rw [algEquiv]; rw [trans_apply]; rw [← adjoinRootEquivAdjoin_apply_root K hx.isIntegral]; rw [symm_apply_apply]; rw [trans_apply]; rw [AdjoinRoot.algEquivOfEq_root]; rw [adjoinRootEquivAdjoin_apply_root K hy.isIntegral]
 
 中文:
 定理 algEquiv_apply
   条件: {x y : L} (hx : 是代数 K x) (h_mp : minpoly K x = minpoly K y)
   证明: by
   have hy : IsAlgebraic K y := ⟨minpoly K x, ne_zero hx.isIntegral, (h_mp ▸ aeval _ _)⟩
-  rw [algEquiv]; rw [trans_apply]; rw [← adjoinRootEquivAdjoin_apply_root K hx.isIntegral]; rw [symm_apply_apply]; rw [trans_apply]; rw [AdjoinRoot.algEquivOfEq_root]; rw [adjoinRootEquivAdjoin_apply_root K hy
+  rw [algEquiv]; rw [trans_apply]; rw [← adjoinRootEquivAdjoin_apply_root K hx.isIntegral]; rw [symm_apply_apply]; rw [trans_apply]; rw [AdjoinRoot.algEquivOfEq_root]; rw [adjoinRootEquivAdjoin_apply_root K hy.isIntegral]
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.algEquivOfEq_root, IsAlgebraic, adjoinRootEquivAdjoin_apply_root, algEquiv, algEquivOfEq_root, h_mp, hx.isIntegral, hy.isIntegral, isIntegral, minpoly, ne_zero, symm_apply_apply, trans_apply
 -/
@@ -2383,7 +2545,9 @@ theorem lift_cardinalMk_adjoin_le
   rw [show ↥(adjoin F s) = (adjoin F s).toSubfield from rfl]; rw [adjoin_toSubfield]
   apply (Cardinal.lift_le.mpr (Subfield.cardinalMk_closure_le_max _)).trans
   rw [lift_max]; rw [sup_le_iff]; rw [lift_aleph0]
-  refine ⟨(Cardinal.lift_le.mpr ((mk_union_le _ _).trans <| add_le_max _ _)).trans ?_
+  refine ⟨(Cardinal.lift_le.mpr ((mk_union_le _ _).trans <| add_le_max _ _)).trans ?_, le_sup_right⟩
+  simp_rw [lift_max, lift_aleph0]
+  grw [mk_range_le_lift]
 
 中文:
 定理 lift_cardinalMk_adjoin_le
@@ -2392,7 +2556,9 @@ theorem lift_cardinalMk_adjoin_le
   rw [show ↥(adjoin F s) = (adjoin F s).toSubfield from rfl]; rw [adjoin_toSubfield]
   apply (Cardinal.lift_le.mpr (Subfield.cardinalMk_closure_le_max _)).trans
   rw [lift_max]; rw [sup_le_iff]; rw [lift_aleph0]
-  refine ⟨(Cardinal.lift_le.mpr ((mk_union_le _ _).trans <| add_le_max _ _)).trans ?_
+  refine ⟨(Cardinal.lift_le.mpr ((mk_union_le _ _).trans <| add_le_max _ _)).trans ?_, le_sup_right⟩
+  simp_rw [lift_max, lift_aleph0]
+  grw [mk_range_le_lift]
 
 Depends on / 依赖: Cardinal, Cardinal.lift_le.mpr, Subfield, Subfield.cardinalMk_closure_le_max, add_le_max, adjoin, adjoin_toSubfield, cardinalMk_closure_le_max, le_sup_right, lift_aleph0, lift_le, lift_max, mk_range_le_lift, mk_union_le, simp_rw, sup_le_iff, toSubfield
 -/

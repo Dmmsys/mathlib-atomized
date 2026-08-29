@@ -53,7 +53,37 @@ theorem midpoint_fixed
   set s := { e : PE ≃ᵢ PE | e x = x ∧ e y = y }
   have : Nonempty s := ⟨⟨IsometryEquiv.refl PE, rfl, rfl⟩⟩
   -- On the one hand, `e` cannot send the midpoint `z` of `[x, y]` too far
-  have h_bdd :
+  have h_bdd : BddAbove (range fun e : s => dist ((e : PE ≃ᵢ PE) z) z) := by
+refine ⟨dist x z + dist x z, forall_mem_range.2 Subtype.forall.2 ?_⟩
+    rintro e ⟨hx, _⟩
+    calc
+      dist (e z) z <= dist (e z) x + dist x z := dist_triangle (e z) x z
+      _ = dist (e x) (e z) + dist x z := by rw [hx, dist_comm]
+      _ = dist x z + dist x z := by rw [e.dist_eq x z]
+  -- On the other hand, consider the map `f : (E ≃ᵢ E) → (E ≃ᵢ E)`
+  -- sending each `e` to `R ∘ e⁻¹ ∘ R ∘ e`, where `R` is the point reflection in the
+  -- midpoint `z` of `[x, y]`.
+  set R : PE ≃ᵢ PE := (pointReflection Real z).toIsometryEquiv
+  set f : PE ≃ᵢ PE -> PE ≃ᵢ PE := fun e => ((e.trans R).trans e.symm).trans R
+  -- Note that `f` doubles the value of `dist (e z) z`
+  have hf_dist : forall e, dist (f e z) z = 2 * dist (e z) z := by
+    intro e
+    dsimp only [trans_apply, coe_toIsometryEquiv, f, R]
+    rw [dist_pointReflection_fixed]; rw [← e.dist_eq]; rw [e.apply_symm_apply]; rw [dist_pointReflection_self_real]; rw [dist_comm]
+  -- Also note that `f` maps `s` to itself
+  have hf_maps_to : MapsTo f s s := by
+    rintro e ⟨hx, hy⟩
+    constructor <;> simp [f, R, z, hx, hy, e.symm_apply_eq.2 hx.symm, e.symm_apply_eq.2 hy.symm]
+  -- Therefore, `dist (e z) z = 0` for all `e ∈ s`.
+  set c := ⨆ e : s, dist ((e : PE ≃ᵢ PE) z) z
+  have : c <= c / 2 := by
+    apply ciSup_le
+    rintro ⟨e, he⟩
+    simp only [le_div_iff₀' (zero_lt_two' Real), ← hf_dist]
+    exact le_ciSup h_bdd ⟨f e, hf_maps_to he⟩
+  replace : c <= 0 := by linarith
+  refine fun e hx hy => dist_le_zero.1 (le_trans ?_ this)
+  exact le_ciSup h_bdd ⟨e, hx, hy⟩
 
 中文:
 定理 midpoint_fixed
@@ -64,7 +94,37 @@ theorem midpoint_fixed
   set s := { e : PE ≃ᵢ PE | e x = x ∧ e y = y }
   have : Nonempty s := ⟨⟨IsometryEquiv.refl PE, rfl, rfl⟩⟩
   -- On the one hand, `e` cannot send the midpoint `z` of `[x, y]` too far
-  have h_bdd :
+  have h_bdd : BddAbove (range fun e : s => dist ((e : PE ≃ᵢ PE) z) z) := by
+refine ⟨dist x z + dist x z, forall_mem_range.2 Subtype.forall.2 ?_⟩
+    rintro e ⟨hx, _⟩
+    calc
+      dist (e z) z <= dist (e z) x + dist x z := dist_triangle (e z) x z
+      _ = dist (e x) (e z) + dist x z := by rw [hx, dist_comm]
+      _ = dist x z + dist x z := by rw [e.dist_eq x z]
+  -- On the other hand, consider the map `f : (E ≃ᵢ E) → (E ≃ᵢ E)`
+  -- sending each `e` to `R ∘ e⁻¹ ∘ R ∘ e`, where `R` is the point reflection in the
+  -- midpoint `z` of `[x, y]`.
+  set R : PE ≃ᵢ PE := (pointReflection Real z).toIsometryEquiv
+  set f : PE ≃ᵢ PE -> PE ≃ᵢ PE := fun e => ((e.trans R).trans e.symm).trans R
+  -- Note that `f` doubles the value of `dist (e z) z`
+  have hf_dist : forall e, dist (f e z) z = 2 * dist (e z) z := by
+    intro e
+    dsimp only [trans_apply, coe_toIsometryEquiv, f, R]
+    rw [dist_pointReflection_fixed]; rw [← e.dist_eq]; rw [e.apply_symm_apply]; rw [dist_pointReflection_self_real]; rw [dist_comm]
+  -- Also note that `f` maps `s` to itself
+  have hf_maps_to : MapsTo f s s := by
+    rintro e ⟨hx, hy⟩
+    constructor <;> simp [f, R, z, hx, hy, e.symm_apply_eq.2 hx.symm, e.symm_apply_eq.2 hy.symm]
+  -- Therefore, `dist (e z) z = 0` for all `e ∈ s`.
+  set c := ⨆ e : s, dist ((e : PE ≃ᵢ PE) z) z
+  have : c <= c / 2 := by
+    apply ciSup_le
+    rintro ⟨e, he⟩
+    simp only [le_div_iff₀' (zero_lt_two' Real), ← hf_dist]
+    exact le_ciSup h_bdd ⟨f e, hf_maps_to he⟩
+  replace : c <= 0 := by linarith
+  refine fun e hx hy => dist_le_zero.1 (le_trans ?_ this)
+  exact le_ciSup h_bdd ⟨e, hx, hy⟩
 
 Depends on / 依赖: midpoint
 -/
@@ -120,7 +180,10 @@ theorem map_midpoint
       (pointReflection Real <| midpoint Real x y).toIsometryEquiv
   have hx : e x = x := by simp [e]
   have hy : e y = y := by simp [e]
-  have hm := e.midpoint_fixed hx 
+  have hm := e.midpoint_fixed hx hy
+  simp only [e, trans_apply] at hm
+  rwa [← eq_symm_apply, ← toIsometryEquiv_symm, pointReflection_symm, coe_toIsometryEquiv,
+    coe_toIsometryEquiv, pointReflection_self, symm_apply_eq, @pointReflection_fixed_iff] at hm
 
 中文:
 定理 map_midpoint
@@ -132,7 +195,10 @@ theorem map_midpoint
       (pointReflection Real <| midpoint Real x y).toIsometryEquiv
   have hx : e x = x := by simp [e]
   have hy : e y = y := by simp [e]
-  have hm := e.midpoint_fixed hx 
+  have hm := e.midpoint_fixed hx hy
+  simp only [e, trans_apply] at hm
+  rwa [← eq_symm_apply, ← toIsometryEquiv_symm, pointReflection_symm, coe_toIsometryEquiv,
+    coe_toIsometryEquiv, pointReflection_self, symm_apply_eq, @pointReflection_fixed_iff] at hm
 
 Depends on / 依赖: coe_toIsometryEquiv, e.midpoint_fixed, eq_symm_apply, f.symm, f.trans, midpoint, midpoint_fixed, pointReflection, pointReflection_fixed_iff, pointReflection_self, pointReflection_symm, symm_apply_eq, toIsometryEquiv, toIsometryEquiv_symm, trans_apply
 -/

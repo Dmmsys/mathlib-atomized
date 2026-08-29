@@ -127,7 +127,10 @@ theorem W_eq_factorial_ratio
     unfold W at IH ⊢
     rw [prod_range_succ]; rw [IH]; rw [_root_.div_mul_div_comm]; rw [_root_.div_mul_div_comm]
     refine (div_eq_div_iff ?_ ?_).mpr ?_
-    a
+    any_goals exact ne_of_gt (by positivity)
+    simp_rw [Nat.mul_succ, Nat.factorial_succ, pow_succ]
+    push_cast
+    ring_nf
 
 中文:
 定理 W_eq_factorial_ratio
@@ -141,7 +144,10 @@ theorem W_eq_factorial_ratio
     unfold W at IH ⊢
     rw [prod_range_succ]; rw [IH]; rw [_root_.div_mul_div_comm]; rw [_root_.div_mul_div_comm]
     refine (div_eq_div_iff ?_ ?_).mpr ?_
-    a
+    any_goals exact ne_of_gt (by positivity)
+    simp_rw [Nat.mul_succ, Nat.factorial_succ, pow_succ]
+    push_cast
+    ring_nf
 
 Depends on / 依赖: Nat.factorial_succ, Nat.factorial_zero, Nat.mul_succ, _root_, _root_.div_mul_div_comm, any_goals, div_eq_div_iff, div_mul_div_comm, factorial_succ, factorial_zero, mul_succ, mul_zero, ne_of_gt, pow_succ, pow_zero, prod_range_succ, prod_range_zero, ring_nf, simp_rw
 -/
@@ -262,7 +268,15 @@ theorem tendsto_W_nhds_pi_div_two
   have : 𝓝 (π / 2) = 𝓝 ((1 - 0) * (π / 2)) := by rw [sub_zero, one_mul]
   rw [this]
   refine Tendsto.mul ?_ tendsto_const_nhds
-  have h : forall n : Nat, ((2 : Real) * n + 1) / (2 * n + 2) = 1 - 1 / (2 * n + 2) := 
+  have h : forall n : Nat, ((2 : Real) * n + 1) / (2 * n + 2) = 1 - 1 / (2 * n + 2) := by
+    intro n
+    rw [sub_div' (ne_of_gt (add_pos_of_nonneg_of_pos (mul_nonneg
+      (two_pos : 0 < (2 : Real)).le (Nat.cast_nonneg _)) two_pos))]; rw [one_mul]
+    congr 1; ring
+  simp_rw [h]
+  refine (tendsto_const_nhds.div_atTop ?_).const_sub _
+  refine Tendsto.atTop_add ?_ tendsto_const_nhds
+  exact tendsto_natCast_atTop_atTop.const_mul_atTop two_pos
 
 中文:
 定理 tendsto_W_nhds_pi_div_two
@@ -272,7 +286,15 @@ theorem tendsto_W_nhds_pi_div_two
   have : 𝓝 (π / 2) = 𝓝 ((1 - 0) * (π / 2)) := by rw [sub_zero, one_mul]
   rw [this]
   refine Tendsto.mul ?_ tendsto_const_nhds
-  have h : forall n : Nat, ((2 : Real) * n + 1) / (2 * n + 2) = 1 - 1 / (2 * n + 2) := 
+  have h : forall n : Nat, ((2 : Real) * n + 1) / (2 * n + 2) = 1 - 1 / (2 * n + 2) := by
+    intro n
+    rw [sub_div' (ne_of_gt (add_pos_of_nonneg_of_pos (mul_nonneg
+      (two_pos : 0 < (2 : Real)).le (Nat.cast_nonneg _)) two_pos))]; rw [one_mul]
+    congr 1; ring
+  simp_rw [h]
+  refine (tendsto_const_nhds.div_atTop ?_).const_sub _
+  refine Tendsto.atTop_add ?_ tendsto_const_nhds
+  exact tendsto_natCast_atTop_atTop.const_mul_atTop two_pos
 
 Depends on / 依赖: Nat.cast_nonneg, Tendsto, Tendsto.mul, W_le, add_pos_of_nonneg_of_pos, cast_nonneg, div_atTop, le_W, mul_nonneg, ne_of_gt, one_mul, simp_rw, sub_div, sub_zero, tendsto_const_nhds, tendsto_const_nhds.div_atTop, tendsto_of_tendsto_of_tendsto_of_le_of_le, two_pos
 -/

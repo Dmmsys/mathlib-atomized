@@ -53,7 +53,10 @@ theorem Submodule.mem_of_localization_maximal
   suffices I = ⊤ by simpa [I] using I.eq_top_iff_one.mp this
   refine Not.imp_symm I.exists_le_maximal fun ⟨P, hP, le⟩ => ?_
   obtain ⟨a, ha, s, e⟩ := h P
-  rw [← IsLocalizedModule.mk'_one P.primeCompl]; rw [IsLocalizedModule.mk'_eq_m
+  rw [← IsLocalizedModule.mk'_one P.primeCompl]; rw [IsLocalizedModule.mk'_eq_mk'_iff] at e
+  obtain ⟨t, ht⟩ := e
+  simp_rw [smul_smul] at ht
+  exact (t * s).2 (le <| by apply ht ▸ smul_mem _ _ ha)
 
 中文:
 定理 子模.mem_of_localization_maximal
@@ -63,7 +66,10 @@ theorem Submodule.mem_of_localization_maximal
   suffices I = ⊤ by simpa [I] using I.eq_top_iff_one.mp this
   refine Not.imp_symm I.exists_le_maximal fun ⟨P, hP, le⟩ => ?_
   obtain ⟨a, ha, s, e⟩ := h P
-  rw [← IsLocalizedModule.mk'_one P.primeCompl]; rw [IsLocalizedModule.mk'_eq_m
+  rw [← IsLocalizedModule.mk'_one P.primeCompl]; rw [IsLocalizedModule.mk'_eq_mk'_iff] at e
+  obtain ⟨t, ht⟩ := e
+  simp_rw [smul_smul] at ht
+  exact (t * s).2 (le <| by apply ht ▸ smul_mem _ _ ha)
 
 Depends on / 依赖: I.eq_top_iff_one.mp, I.exists_le_maximal, IsLocalizedModule, IsLocalizedModule.mk, LinearMap, LinearMap.toSpanSingleton, N.comap, Not.imp_symm, P.primeCompl, _eq_mk, _iff, _one, eq_top_iff_one, exists_le_maximal, imp_symm, primeCompl, simp_rw, smul_mem, smul_smul, toSpanSingleton
 -/
@@ -369,7 +375,8 @@ theorem Module.eq_of_isLocalized_span
   by_contra ne
   have ⟨r, hrs, disj⟩ := exists_disjoint_powers_of_span_eq_top s span_eq _ ne
   let r : s := ⟨r, hrs⟩
-  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalizedModule.eq_iff_exists (.powers r.1) _).mp (h r
+  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalizedModule.eq_iff_exists (.powers r.1) _).mp (h r)
+  exact Set.disjoint_left.mp disj eq ⟨n, rfl⟩
 
 中文:
 定理 模.eq_of_isLocalized_span
@@ -380,7 +387,8 @@ theorem Module.eq_of_isLocalized_span
   by_contra ne
   have ⟨r, hrs, disj⟩ := exists_disjoint_powers_of_span_eq_top s span_eq _ ne
   let r : s := ⟨r, hrs⟩
-  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalizedModule.eq_iff_exists (.powers r.1) _).mp (h r
+  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalizedModule.eq_iff_exists (.powers r.1) _).mp (h r)
+  exact Set.disjoint_left.mp disj eq ⟨n, rfl⟩
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.eq_iff_exists, Module, Module.eqIdeal, Set.disjoint_left.mp, disjoint_left, eqIdeal, eq_iff_exists, eq_top_iff_one, exists_disjoint_powers_of_span_eq_top, powers, span_eq
 -/
@@ -425,7 +433,10 @@ theorem Submodule.mem_of_isLocalized_span
   have ⟨r, hrs, disj⟩ := exists_disjoint_powers_of_span_eq_top s span_eq _ ne
   let r : s := ⟨r, hrs⟩
   obtain ⟨a, ha, t, e⟩ := h r
-  rw [← IsLocalizedModule
+  rw [← IsLocalizedModule.mk'_one (.powers r.1)]; rw [IsLocalizedModule.mk'_eq_mk'_iff] at e
+  have ⟨u, hu⟩ := e
+  simp_rw [smul_smul] at hu
+  exact Set.disjoint_right.mp disj (u * t).2 (by apply hu ▸ smul_mem _ _ ha)
 
 中文:
 定理 子模.mem_of_isLocalized_span
@@ -437,7 +448,10 @@ theorem Submodule.mem_of_isLocalized_span
   have ⟨r, hrs, disj⟩ := exists_disjoint_powers_of_span_eq_top s span_eq _ ne
   let r : s := ⟨r, hrs⟩
   obtain ⟨a, ha, t, e⟩ := h r
-  rw [← IsLocalizedModule
+  rw [← IsLocalizedModule.mk'_one (.powers r.1)]; rw [IsLocalizedModule.mk'_eq_mk'_iff] at e
+  have ⟨u, hu⟩ := e
+  simp_rw [smul_smul] at hu
+  exact Set.disjoint_right.mp disj (u * t).2 (by apply hu ▸ smul_mem _ _ ha)
 
 Depends on / 依赖: I.eq_top_iff_one.mp, IsLocalizedModule, IsLocalizedModule.mk, LinearMap, LinearMap.toSpanSingleton, N.comap, Set.disjoint_right.mp, _eq_mk, _iff, _one, disjoint_right, eq_top_iff_one, exists_disjoint_powers_of_span_eq_top, powers, simp_rw, smul_mem, smul_smul, span_eq, toSpanSingleton
 -/

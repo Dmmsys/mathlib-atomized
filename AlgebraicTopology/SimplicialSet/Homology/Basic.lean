@@ -109,7 +109,8 @@ definition chainComplexFunctorAdjunction
   right_triangle_components F := by dsimp; simp
 
 @[deprecated (since := "2026-04-05")]
-alias _root_.SSet.singularChainComplexFunctorA
+alias _root_.SSet.singularChainComplexFunctorAdjunction :=
+  SSet.chainComplexFunctorAdjunction
 
 中文:
 定义 chainComplexFunctorAdjunction
@@ -119,7 +120,8 @@ alias _root_.SSet.singularChainComplexFunctorA
   right_triangle_components F := by dsimp; simp
 
 @[deprecated (since := "2026-04-05")]
-alias _root_.SSet.singularChainComplexFunctorA
+alias _root_.SSet.singularChainComplexFunctorAdjunction :=
+  SSet.chainComplexFunctorAdjunction
 
 Depends on / 依赖: SSet.stdSimplex.objEquiv, objEquiv, stdSimplex
 -/

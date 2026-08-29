@@ -525,7 +525,11 @@ theorem Functor.isZero
   · refine
       { app := fun X => (hF _).from_ _
         naturality := ?_ }
-  
+    intros
+    exact (hF _).eq_of_tgt _ _
+  · intro f
+    ext
+    apply (hF _).eq_of_tgt _ _
 
 中文:
 定理 函子.isZero
@@ -544,7 +548,11 @@ theorem Functor.isZero
   · refine
       { app := fun X => (hF _).from_ _
         naturality := ?_ }
-  
+    intros
+    exact (hF _).eq_of_tgt _ _
+  · intro f
+    ext
+    apply (hF _).eq_of_tgt _ _
 
 Depends on / 依赖: eq_of_src, eq_of_tgt, from_, intros, naturality
 -/

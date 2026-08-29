@@ -1314,7 +1314,7 @@ theorem continuous_extend_one
   proof: continuous_of_mulTSupport fun x h => by
     rw [show x = ↑(⟨x]; rw [Subtype.coe_image_subset _ _
       (supp.mulTSupport_extend_one_subset continuous_subtype_val h)⟩ : U) by rfl]; rw [← (hU.isOpenEmbedding_subtypeVal).continuousAt_iff]; rw [extend_comp Subtype.val_injective]
-    exact cont.continuou
+    exact cont.continuousAt
 
 中文:
 定理 continuous_extend_one
@@ -1322,7 +1322,7 @@ theorem continuous_extend_one
   证明: continuous_of_mulTSupport fun x h => by
     rw [show x = ↑(⟨x]; rw [Subtype.coe_image_subset _ _
       (supp.mulTSupport_extend_one_subset continuous_subtype_val h)⟩ : U) by rfl]; rw [← (hU.isOpenEmbedding_subtypeVal).continuousAt_iff]; rw [extend_comp Subtype.val_injective]
-    exact cont.continuou
+    exact cont.continuousAt
 
 Depends on / 依赖: Subtype, Subtype.coe_image_subset, Subtype.val_injective, coe_image_subset, cont.continuousAt, continuousAt, continuousAt_iff, continuous_of_mulTSupport, continuous_subtype_val, extend_comp, hU.isOpenEmbedding_subtypeVal, isOpenEmbedding_subtypeVal, mulTSupport_extend_one_subset, supp.mulTSupport_extend_one_subset, val_injective
 -/
@@ -1808,7 +1808,25 @@ theorem LocallyFinite.exists_finset_nhds_mulSupport_subset
     refine
       ⟨is, (n inter ⋂ j in js, (mulTSupport (f j))ᶜ) inter ⋂ i in is, U i, inter_mem (inter_mem hn ?_) ?_,
         inter_subset_right, fun z hz => ?_⟩
-   
+    · exact (biInter_finset_mem js).mpr fun j hj => IsClosed.compl_mem_nhds (isClosed_mulTSupport _)
+        (Set.notMem_subset (hso j) (Finset.mem_filter.mp hj).2)
+    · exact (biInter_finset_mem is).mpr fun i hi => (ho i).mem_nhds (Finset.mem_filter.mp hi).2
+    · have hzn : z in n := by
+        rw [inter_assoc] at hz
+        exact mem_of_mem_inter_left hz
+      replace hz := mem_of_mem_inter_right (mem_of_mem_inter_left hz)
+      simp only [js, Finset.mem_filter, Finite.mem_toFinset, mem_ofPred_eq, mem_iInter,
+        and_imp] at hz
+      suffices (mulSupport fun i => f i z) subseteq hnf.toFinset by
+        refine hnf.toFinset.subset_coe_filter_of_subset_forall _ this fun i hi => ?_
+        specialize hz i ⟨z, ⟨hi, hzn⟩⟩
+        contrapose hz
+        simp [hz, subset_mulTSupport (f i) hi]
+      intro i hi
+      simp only [Finite.coe_toFinset, mem_ofPred_eq]
+      exact ⟨z, ⟨hi, hzn⟩⟩
+
+@[to_additive]
 
 中文:
 定理 局部有限.存在_finset_nhds_mulSupport_subset
@@ -1821,7 +1839,25 @@ theorem LocallyFinite.exists_finset_nhds_mulSupport_subset
     refine
       ⟨is, (n inter ⋂ j in js, (mulTSupport (f j))ᶜ) inter ⋂ i in is, U i, inter_mem (inter_mem hn ?_) ?_,
         inter_subset_right, fun z hz => ?_⟩
-   
+    · exact (biInter_finset_mem js).mpr fun j hj => IsClosed.compl_mem_nhds (isClosed_mulTSupport _)
+        (Set.notMem_subset (hso j) (Finset.mem_filter.mp hj).2)
+    · exact (biInter_finset_mem is).mpr fun i hi => (ho i).mem_nhds (Finset.mem_filter.mp hi).2
+    · have hzn : z in n := by
+        rw [inter_assoc] at hz
+        exact mem_of_mem_inter_left hz
+      replace hz := mem_of_mem_inter_right (mem_of_mem_inter_left hz)
+      simp only [js, Finset.mem_filter, Finite.mem_toFinset, mem_ofPred_eq, mem_iInter,
+        and_imp] at hz
+      suffices (mulSupport fun i => f i z) subseteq hnf.toFinset by
+        refine hnf.toFinset.subset_coe_filter_of_subset_forall _ this fun i hi => ?_
+        specialize hz i ⟨z, ⟨hi, hzn⟩⟩
+        contrapose hz
+        simp [hz, subset_mulTSupport (f i) hi]
+      intro i hi
+      simp only [Finite.coe_toFinset, mem_ofPred_eq]
+      exact ⟨z, ⟨hi, hzn⟩⟩
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.mem_filt, Finset.mem_filter.mp, IsClosed, IsClosed.compl_mem_nhds, Set.notMem_subset, biInter_finset_mem, classical, compl_mem_nhds, hnf.toFinset, inter_mem, inter_subset_right, isClosed_mulTSupport, mem_filt, mem_filter, mem_nhds, mulTSupport, notMem_subset, toFinset
 -/

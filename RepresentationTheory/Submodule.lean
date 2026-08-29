@@ -238,7 +238,23 @@ definition mapSubmodule
       smul_mem' := by
         simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
           AddSubmonoid.mem_map, Submodule.mem_toAddSubmonoid, forall_exists_index, and_imp,
-          forall_apply_eq
+          forall_apply_eq_imp_iff₂]
+        refine fun x v hv => ⟨ρ.asModuleEquiv (x • ρ.asModuleEquiv.symm v), ?_, rfl⟩
+        simpa using ρ.asAlgebraHom_mem_of_forall_mem p (ρ.mem_invtSubmodule.mp p.property) v hv x }
+  invFun q := ⟨(Submodule.orderIsoMapComap ρ.asModuleEquiv.symm).symm (q.restrictScalars k), by
+    rw [invtSubmodule]; rw [Sublattice.mem_iInf]
+    intro g v hv
+    simp only [Submodule.orderIsoMapComap_symm_apply, Submodule.mem_comap] at hv ⊢
+    convert! q.smul_mem (MonoidAlgebra.of k G g) hv using 1
+    rw [LinearEquiv.coe_coe]; rw [← asModuleEquiv_symm_map_rho]⟩
+  left_inv p := by ext; simp
+  right_inv q := by ext; aesop
+  map_rel_iff' {p q} :=
+    ⟨fun h x hx => by
+      suffices ρ.asModuleEquiv.symm x in
+        (q : Submodule k V).toAddSubmonoid.map ρ.asModuleEquiv.symm by simpa using this
+exact h by simpa using hx,
+    fun h x hx => by aesop⟩
 
 中文:
 定义 mapSubmodule
@@ -247,7 +263,23 @@ definition mapSubmodule
       smul_mem' := by
         simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
           AddSubmonoid.mem_map, Submodule.mem_toAddSubmonoid, forall_exists_index, and_imp,
-          forall_apply_eq
+          forall_apply_eq_imp_iff₂]
+        refine fun x v hv => ⟨ρ.asModuleEquiv (x • ρ.asModuleEquiv.symm v), ?_, rfl⟩
+        simpa using ρ.asAlgebraHom_mem_of_forall_mem p (ρ.mem_invtSubmodule.mp p.property) v hv x }
+  invFun q := ⟨(Submodule.orderIsoMapComap ρ.asModuleEquiv.symm).symm (q.restrictScalars k), by
+    rw [invtSubmodule]; rw [Sublattice.mem_iInf]
+    intro g v hv
+    simp only [Submodule.orderIsoMapComap_symm_apply, Submodule.mem_comap] at hv ⊢
+    convert! q.smul_mem (MonoidAlgebra.of k G g) hv using 1
+    rw [LinearEquiv.coe_coe]; rw [← asModuleEquiv_symm_map_rho]⟩
+  left_inv p := by ext; simp
+  right_inv q := by ext; aesop
+  map_rel_iff' {p q} :=
+    ⟨fun h x hx => by
+      suffices ρ.asModuleEquiv.symm x in
+        (q : Submodule k V).toAddSubmonoid.map ρ.asModuleEquiv.symm by simpa using this
+exact h by simpa using hx,
+    fun h x hx => by aesop⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_map, AddSubmonoid.mem_toSubsemigroup, AddSubsemigroup, AddSubsemigroup.mem_carrier, Submodule, Submodule.mem_toAddSubmonoid, Submodule.orderIsoMapComap, and_imp, asAlgebraHom_mem_of_forall_mem, asModuleEqu, asModuleEquiv, asModuleEquiv.symm, forall_exists_index, invFun, mem_carrier, mem_invtSubmodule, mem_invtSubmodule.mp, mem_map, mem_toAddSubmonoid
 -/

@@ -44,7 +44,7 @@ theorem injective_iff_preservesEpimorphisms_preadditiveYoneda_obj
   · exact
       Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveYoneda.obj J) (forget _)
   · intro
-    exact (inferIns
+    exact (inferInstance : (preadditiveYoneda.obj J ⋙ forget _).PreservesEpimorphisms)
 
 中文:
 定理 injective_iff_preservesEpimorphisms_preadditiveYoneda_obj
@@ -56,7 +56,7 @@ theorem injective_iff_preservesEpimorphisms_preadditiveYoneda_obj
   · exact
       Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveYoneda.obj J) (forget _)
   · intro
-    exact (inferIns
+    exact (inferInstance : (preadditiveYoneda.obj J ⋙ forget _).PreservesEpimorphisms)
 
 Depends on / 依赖: AddCommGrpCat, Functor, Functor.preservesEpimorphisms_of_preserves_of_reflects, PreservesEpimorphisms, forget, injective_iff_preservesEpimorphisms_yoneda_obj, preadditiveYoneda, preadditiveYoneda.obj, preservesEpimorphisms_of_preserves_of_reflects
 -/
@@ -83,7 +83,7 @@ theorem injective_iff_preservesEpimorphisms_preadditive_yoneda_obj'
   · exact
       Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveYonedaObj J) (forget _)
   · intro
-    exact (inf
+    exact (inferInstance : (preadditiveYonedaObj J ⋙ forget _).PreservesEpimorphisms)
 
 中文:
 定理 injective_iff_preservesEpimorphisms_preadditive_yoneda_obj'
@@ -95,7 +95,7 @@ theorem injective_iff_preservesEpimorphisms_preadditive_yoneda_obj'
   · exact
       Functor.preservesEpimorphisms_of_preserves_of_reflects (preadditiveYonedaObj J) (forget _)
   · intro
-    exact (inf
+    exact (inferInstance : (preadditiveYonedaObj J ⋙ forget _).PreservesEpimorphisms)
 
 Depends on / 依赖: Functor, Functor.preservesEpimorphisms_of_preserves_of_reflects, ModuleCat, PreservesEpimorphisms, forget, injective_iff_preservesEpimorphisms_yoneda_obj, preadditiveYonedaObj, preservesEpimorphisms_of_preserves_of_reflects
 -/

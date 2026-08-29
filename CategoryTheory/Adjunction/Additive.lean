@@ -352,6 +352,9 @@ definition compPreadditiveYonedaIso
       (fun g => by
         ext ⟨y⟩
         exact AddEquiv.ulift.injective (adj.homEquiv_naturality_left_symm g.unop y)))
+    (fun f => by
+      ext _ ⟨x⟩
+      exact AddEquiv.ulift.injective ((adj.homEquiv_naturality_right_symm x f)))
 
 中文:
 定义 compPreadditiveYonedaIso
@@ -363,6 +366,9 @@ definition compPreadditiveYonedaIso
       (fun g => by
         ext ⟨y⟩
         exact AddEquiv.ulift.injective (adj.homEquiv_naturality_left_symm g.unop y)))
+    (fun f => by
+      ext _ ⟨x⟩
+      exact AddEquiv.ulift.injective ((adj.homEquiv_naturality_right_symm x f)))
 
 Depends on / 依赖: AddEquiv, AddEquiv.ulift.injective, AddEquiv.ulift.symm, AddEquiv.ulift.trans, NatIso, NatIso.ofComponents, adj.homAddEquiv, adj.homEquiv_naturality_left_symm, adj.homEquiv_naturality_right_symm, g.unop, homAddEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right_symm, injective, ofComponents, symm.trans, toAddCommGrpIso
 -/

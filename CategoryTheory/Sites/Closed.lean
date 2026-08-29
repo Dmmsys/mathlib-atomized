@@ -465,7 +465,41 @@ theorem classifier_isSheaf
     ext Y f
     dsimp only [Subtype.coe_mk]
     rw [← J₁.covers_iff_mem_of_isClosed hM]; rw [← J₁.covers_iff_mem_of_isClosed hN]
-   
+    have q : forall ⦃Z : C⦄ (g : Z ⟶ X) (_ : S g), M.pullback g = N.pullback g :=
+      fun Z g hg => congr_arg Subtype.val ((hM₂ g hg).trans (hN₂ g hg).symm)
+    have MSNS : M ⊓ S = N ⊓ S := by
+      ext
+      grind [Sieve.inter_apply, Sieve.mem_iff_pullback_eq_top]
+    constructor
+    · intro hf
+      rw [J₁.covers_iff]
+      apply J₁.superset_covering (Sieve.pullback_monotone f inf_le_left)
+      rw [← MSNS]
+      apply J₁.arrow_intersect f M S hf (J₁.pullback_stable _ hS)
+    · intro hf
+      rw [J₁.covers_iff]
+      apply J₁.superset_covering (Sieve.pullback_monotone f inf_le_left)
+      rw [MSNS]
+      apply J₁.arrow_intersect f N S hf (J₁.pullback_stable _ hS)
+  · intro x hx
+    rw [Presieve.compatible_iff_sieveCompatible] at hx
+    let M := Sieve.bind S fun Y f hf => (x f hf).1
+    have : forall ⦃Y⦄ (f : Y ⟶ X) (hf : S f), M.pullback f = (x f hf).1 := by
+      intro Y f hf
+      apply le_antisymm
+      · rintro Z u ⟨W, g, f', hf', hg : (x f' hf').1.1 _, c⟩
+        rw [Sieve.mem_iff_pullback_eq_top]; rw [← show (x (u ≫ f) _).1 = (x f hf).1.pullback u from congr_arg Subtype.val (hx f u hf)]
+        conv_lhs => congr; congr; rw [← c] -- Porting note: Originally `simp_rw [← c]`
+        rw [show (x (g ≫ f') _).1 = _ from congr_arg Subtype.val (hx f' g hf')]
+        apply Sieve.pullback_eq_top_of_mem _ hg
+      · apply Sieve.le_pullback_bind S fun Y f hf => (x f hf).1
+    refine ⟨⟨_, J₁.close_isClosed M⟩, ?_⟩
+    intro Y f hf
+    dsimp
+    ext1
+    dsimp
+    rw [← J₁.pullback_close]; rw [this _ hf]
+    apply le_antisymm (J₁.le_close_of_isClosed le_rfl (x f hf).2) (J₁.le_close _)
 
 中文:
 定理 classifier_isSheaf
@@ -479,7 +513,41 @@ theorem classifier_isSheaf
     ext Y f
     dsimp only [Subtype.coe_mk]
     rw [← J₁.covers_iff_mem_of_isClosed hM]; rw [← J₁.covers_iff_mem_of_isClosed hN]
-   
+    have q : forall ⦃Z : C⦄ (g : Z ⟶ X) (_ : S g), M.pullback g = N.pullback g :=
+      fun Z g hg => congr_arg Subtype.val ((hM₂ g hg).trans (hN₂ g hg).symm)
+    have MSNS : M ⊓ S = N ⊓ S := by
+      ext
+      grind [Sieve.inter_apply, Sieve.mem_iff_pullback_eq_top]
+    constructor
+    · intro hf
+      rw [J₁.covers_iff]
+      apply J₁.superset_covering (Sieve.pullback_monotone f inf_le_left)
+      rw [← MSNS]
+      apply J₁.arrow_intersect f M S hf (J₁.pullback_stable _ hS)
+    · intro hf
+      rw [J₁.covers_iff]
+      apply J₁.superset_covering (Sieve.pullback_monotone f inf_le_left)
+      rw [MSNS]
+      apply J₁.arrow_intersect f N S hf (J₁.pullback_stable _ hS)
+  · intro x hx
+    rw [Presieve.compatible_iff_sieveCompatible] at hx
+    let M := Sieve.bind S fun Y f hf => (x f hf).1
+    have : forall ⦃Y⦄ (f : Y ⟶ X) (hf : S f), M.pullback f = (x f hf).1 := by
+      intro Y f hf
+      apply le_antisymm
+      · rintro Z u ⟨W, g, f', hf', hg : (x f' hf').1.1 _, c⟩
+        rw [Sieve.mem_iff_pullback_eq_top]; rw [← show (x (u ≫ f) _).1 = (x f hf).1.pullback u from congr_arg Subtype.val (hx f u hf)]
+        conv_lhs => congr; congr; rw [← c] -- Porting note: Originally `simp_rw [← c]`
+        rw [show (x (g ≫ f') _).1 = _ from congr_arg Subtype.val (hx f' g hf')]
+        apply Sieve.pullback_eq_top_of_mem _ hg
+      · apply Sieve.le_pullback_bind S fun Y f hf => (x f hf).1
+    refine ⟨⟨_, J₁.close_isClosed M⟩, ?_⟩
+    intro Y f hf
+    dsimp
+    ext1
+    dsimp
+    rw [← J₁.pullback_close]; rw [this _ hf]
+    apply le_antisymm (J₁.le_close_of_isClosed le_rfl (x f hf).2) (J₁.le_close _)
 
 Depends on / 依赖: M.pullback, N.pullback, Presieve, Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, Sieve.inter_apply, Sieve.mem_iff_pu, Subtype, Subtype.coe_mk, Subtype.val, coe_mk, congr_arg, covers_iff_mem_of_isClosed, inter_apply, isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, mem_iff_pu, pullback
 -/
@@ -544,7 +612,12 @@ lemma GrothendieckTopology.mem_iff_isSheafFor_closedSieves
   suffices (⟨J.close S, J.close_isClosed S⟩ : Subtype _) = ⟨⊤, this⟩ by
     rw [Subtype.ext_iff] at this
     exact this
-  refine H.isSepa
+  refine H.isSeparatedFor.ext fun Y f hf => ?_
+  simp only [Subfunctor.toFunctor_obj, Functor.sieves_obj, Functor.closedSieves_obj, Set.coe_ofPred]
+  ext1
+  dsimp
+  rw [Sieve.pullback_top]; rw [← J.pullback_close]; rw [S.pullback_eq_top_of_mem hf]; rw [J.close_eq_top_iff_mem]
+  apply J.top_mem
 
 中文:
 引理 Grothendieck拓扑.mem_iff_isSheafFor_closedSieves
@@ -557,7 +630,12 @@ lemma GrothendieckTopology.mem_iff_isSheafFor_closedSieves
   suffices (⟨J.close S, J.close_isClosed S⟩ : Subtype _) = ⟨⊤, this⟩ by
     rw [Subtype.ext_iff] at this
     exact this
-  refine H.isSepa
+  refine H.isSeparatedFor.ext fun Y f hf => ?_
+  simp only [Subfunctor.toFunctor_obj, Functor.sieves_obj, Functor.closedSieves_obj, Set.coe_ofPred]
+  ext1
+  dsimp
+  rw [Sieve.pullback_top]; rw [← J.pullback_close]; rw [S.pullback_eq_top_of_mem hf]; rw [J.close_eq_top_iff_mem]
+  apply J.top_mem
 
 Depends on / 依赖: Functor, Functor.closedSieves_obj, Functor.sieves_obj, H.isSeparatedFor.ext, IsClosed, J.IsClosed, J.close, J.close_eq_top_iff_mem, J.close_isClosed, J.pullback_close, S.pullback_eq_top_of_mem, Set.coe_ofPred, Sieve.pullback_top, Subfunctor, Subfunctor.toFunctor_obj, Subtype, Subtype.ext_iff, classifier_isSheaf, close_eq_top_iff_mem, close_isClosed
 -/
@@ -679,7 +757,11 @@ definition topologyOfClosureOperator
     rw [Set.mem_ofPred_eq]; rw [hc]; rw [hS]; rw [Sieve.pullback_top]
   transitive' X S hS R hR := by
     rw [Set.mem_ofPred_eq] at hS
-    rw [Set.mem_ofPred_eq]; rw
+    rw [Set.mem_ofPred_eq]; rw [← (c X).idempotent]; rw [eq_top_iff]; rw [← hS]
+    apply (c X).monotone fun Y f hf => _
+    intro Y f hf
+    rw [Sieve.mem_iff_pullback_eq_top]; rw [← hc]
+    apply hR hf
 
 中文:
 定义 topologyOfClosureOperator
@@ -691,7 +773,11 @@ definition topologyOfClosureOperator
     rw [Set.mem_ofPred_eq]; rw [hc]; rw [hS]; rw [Sieve.pullback_top]
   transitive' X S hS R hR := by
     rw [Set.mem_ofPred_eq] at hS
-    rw [Set.mem_ofPred_eq]; rw
+    rw [Set.mem_ofPred_eq]; rw [← (c X).idempotent]; rw [eq_top_iff]; rw [← hS]
+    apply (c X).monotone fun Y f hf => _
+    intro Y f hf
+    rw [Sieve.mem_iff_pullback_eq_top]; rw [← hc]
+    apply hR hf
 -/
 def topologyOfClosureOperator (c : forall X : C, ClosureOperator (Sieve X))
     (hc : forall ⦃X Y : C⦄ (f : Y ⟶ X) (S : Sieve X), c _ (S.pullback f) = (c _ S).pullback f) :

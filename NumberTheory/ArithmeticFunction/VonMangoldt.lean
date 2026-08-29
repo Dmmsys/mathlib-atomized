@@ -314,7 +314,9 @@ theorem vonMangoldt_sum
   · intro p k hp
     rw [sum_divisors_prime_pow hp]; rw [cast_pow]; rw [Real.log_pow]; rw [Finset.sum_range_succ']; rw [Nat.pow_zero]; rw [vonMangoldt_apply_one]
     simp [vonMangoldt_apply_pow (Nat.succ_ne_zero _), vonMangoldt_apply_prime hp]
-  intr
+  intro a b ha' hb' hab ha hb
+  simp only [vonMangoldt_apply, ← sum_filter] at ha hb ⊢
+  rw [mul_divisors_filter_prime_pow hab]; rw [filter_union]; rw [sum_union (disjoint_divisors_filter_isPrimePow hab)]; rw [ha]; rw [hb]; rw [Nat.cast_mul]; rw [Real.log_mul (cast_ne_zero.2 (pos_of_gt ha').ne') (cast_ne_zero.2 (pos_of_gt hb').ne')]
 
 中文:
 定理 vonMangoldt_sum
@@ -326,7 +328,9 @@ theorem vonMangoldt_sum
   · intro p k hp
     rw [sum_divisors_prime_pow hp]; rw [cast_pow]; rw [Real.log_pow]; rw [Finset.sum_range_succ']; rw [Nat.pow_zero]; rw [vonMangoldt_apply_one]
     simp [vonMangoldt_apply_pow (Nat.succ_ne_zero _), vonMangoldt_apply_prime hp]
-  intr
+  intro a b ha' hb' hab ha hb
+  simp only [vonMangoldt_apply, ← sum_filter] at ha hb ⊢
+  rw [mul_divisors_filter_prime_pow hab]; rw [filter_union]; rw [sum_union (disjoint_divisors_filter_isPrimePow hab)]; rw [ha]; rw [hb]; rw [Nat.cast_mul]; rw [Real.log_mul (cast_ne_zero.2 (pos_of_gt ha').ne') (cast_ne_zero.2 (pos_of_gt hb').ne')]
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, Nat.pow_zero, Nat.succ_ne_zero, Real.log_pow, cast_pow, disjoint_divisors_filter_isPrimePow, filter_union, log_pow, mul_divisors_filter_prime_pow, pow_zero, recOnPrimeCoprime, succ_ne_zero, sum_divisors_prime_pow, sum_filter, sum_range_succ, sum_union, vonMangoldt_apply, vonMangoldt_apply_one, vonMangoldt_apply_pow
 -/
@@ -448,7 +452,17 @@ theorem sum_moebius_mul_log_eq
     Finset.sum_neg_distrib, neg_mul_eq_mul_neg]
   rw [sum_divisorsAntidiagonal fun i j => (μ i : Real) * -Real.log j]
   have : (∑ i in n.divisors, (μ i : Real) * -Real.log (n / i : Nat)) =
-      ∑ i
+      ∑ i in n.divisors, ((μ i : Real) * Real.log i - μ i * Real.log n) := by
+    apply sum_congr rfl
+    simp only [and_imp, Ne, mem_divisors]
+    intro m mn hn
+    have : (m : Real) != 0 := by
+      rw [cast_ne_zero]
+      rintro rfl
+      exact hn (by simpa using mn)
+    rw [Nat.cast_div mn this]; rw [Real.log_div (cast_ne_zero.2 hn) this]; rw [neg_sub]; rw [mul_sub]
+  rw [this]; rw [sum_sub_distrib]; rw [← sum_mul]; rw [← Int.cast_sum]; rw [← coe_mul_zeta_apply]; rw [eq_comm]; rw [sub_eq_self]; rw [moebius_mul_coe_zeta]
+  rcases eq_or_ne n 1 with (hn | hn) <;> simp [hn]
 
 中文:
 定理 sum_moebius_mul_log_eq
@@ -459,7 +473,17 @@ theorem sum_moebius_mul_log_eq
     Finset.sum_neg_distrib, neg_mul_eq_mul_neg]
   rw [sum_divisorsAntidiagonal fun i j => (μ i : Real) * -Real.log j]
   have : (∑ i in n.divisors, (μ i : Real) * -Real.log (n / i : Nat)) =
-      ∑ i
+      ∑ i in n.divisors, ((μ i : Real) * Real.log i - μ i * Real.log n) := by
+    apply sum_congr rfl
+    simp only [and_imp, Ne, mem_divisors]
+    intro m mn hn
+    have : (m : Real) != 0 := by
+      rw [cast_ne_zero]
+      rintro rfl
+      exact hn (by simpa using mn)
+    rw [Nat.cast_div mn this]; rw [Real.log_div (cast_ne_zero.2 hn) this]; rw [neg_sub]; rw [mul_sub]
+  rw [this]; rw [sum_sub_distrib]; rw [← sum_mul]; rw [← Int.cast_sum]; rw [← coe_mul_zeta_apply]; rw [eq_comm]; rw [sub_eq_self]; rw [moebius_mul_coe_zeta]
+  rcases eq_or_ne n 1 with (hn | hn) <;> simp [hn]
 
 Depends on / 依赖: Finset, Finset.sum_neg_distrib, Real.log, and_imp, cast_ne_zero, divisors, intCoe_apply, log_apply, log_mul_moebius_eq_vonMangoldt, mem_divisors, mul_apply, mul_comm, n.divisors, neg_mul_eq_mul_neg, sum_congr, sum_divisorsAntidiagonal, sum_neg_distrib
 -/

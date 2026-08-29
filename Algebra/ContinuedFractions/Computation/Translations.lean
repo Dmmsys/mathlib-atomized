@@ -208,7 +208,7 @@ theorem exists_succ_nth_stream_of_fr_zero
   rcases succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq with
     ⟨ifp_n, seq_nth_eq, _, rfl⟩
   refine ⟨ifp_n, seq_nth_eq, ?_⟩
-  simpa only [IntFractPair.of, Int.fract, sub_eq_zero] usin
+  simpa only [IntFractPair.of, Int.fract, sub_eq_zero] using succ_nth_fr_eq_zero
 
 中文:
 定理 存在_succ_nth_stream_of_fr_zero
@@ -219,7 +219,7 @@ theorem exists_succ_nth_stream_of_fr_zero
   rcases succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq with
     ⟨ifp_n, seq_nth_eq, _, rfl⟩
   refine ⟨ifp_n, seq_nth_eq, ?_⟩
-  simpa only [IntFractPair.of, Int.fract, sub_eq_zero] usin
+  simpa only [IntFractPair.of, Int.fract, sub_eq_zero] using succ_nth_fr_eq_zero
 -/
 theorem exists_succ_nth_stream_of_fr_zero {ifp_succ_n : IntFractPair K}
     (stream_succ_nth_eq : IntFractPair.stream v (n + 1) = some ifp_succ_n)
@@ -244,7 +244,14 @@ theorem stream_succ
     have H : (IntFractPair.of v).fr = Int.fract v := by simp [IntFractPair.of]
     rw [stream_zero]; rw [stream_succ_of_some (stream_zero v) (ne_of_eq_of_ne H h)]; rw [H]
   | succ n ih =>
-    rcases eq_or_ne (IntFractPair.stream (Int.fract v)⁻¹ n) none with hnone | 
+    rcases eq_or_ne (IntFractPair.stream (Int.fract v)⁻¹ n) none with hnone | hsome
+    · rw [hnone] at ih
+      rw [succ_nth_stream_eq_none_iff.mpr (Or.inl hnone)]; rw [succ_nth_stream_eq_none_iff.mpr (Or.inl ih)]
+    · obtain ⟨p, hp⟩ := Option.ne_none_iff_exists'.mp hsome
+      rw [hp] at ih
+      rcases eq_or_ne p.fr 0 with hz | hnz
+      · rw [stream_eq_none_of_fr_eq_zero hp hz, stream_eq_none_of_fr_eq_zero ih hz]
+      · rw [stream_succ_of_some hp hnz, stream_succ_of_some ih hnz]
 
 中文:
 定理 stream_succ
@@ -255,7 +262,14 @@ theorem stream_succ
     have H : (IntFractPair.of v).fr = Int.fract v := by simp [IntFractPair.of]
     rw [stream_zero]; rw [stream_succ_of_some (stream_zero v) (ne_of_eq_of_ne H h)]; rw [H]
   | succ n ih =>
-    rcases eq_or_ne (IntFractPair.stream (Int.fract v)⁻¹ n) none with hnone | 
+    rcases eq_or_ne (IntFractPair.stream (Int.fract v)⁻¹ n) none with hnone | hsome
+    · rw [hnone] at ih
+      rw [succ_nth_stream_eq_none_iff.mpr (Or.inl hnone)]; rw [succ_nth_stream_eq_none_iff.mpr (Or.inl ih)]
+    · obtain ⟨p, hp⟩ := Option.ne_none_iff_exists'.mp hsome
+      rw [hp] at ih
+      rcases eq_or_ne p.fr 0 with hz | hnz
+      · rw [stream_eq_none_of_fr_eq_zero hp hz, stream_eq_none_of_fr_eq_zero ih hz]
+      · rw [stream_succ_of_some hp hnz, stream_succ_of_some ih hnz]
 
 Depends on / 依赖: Int.fract, IntFractPair, IntFractPair.of, IntFractPair.stream, Option.ne_none_iff_exists, Or.inl, eq_or_ne, ne_none_iff_exists, ne_of_eq_of_ne, p.fr, stream, stream_succ_of_some, stream_zero, succ_nth_stream_eq_none_iff, succ_nth_stream_eq_none_iff.mpr
 -/
@@ -616,7 +630,15 @@ theorem of_s_succ
   rcases eq_or_ne (fract v) 0 with h | h
   · obtain ⟨a, rfl⟩ : exists a : Int, v = a := ⟨⌊v⌋, eq_of_sub_eq_zero h⟩
     rw [fract_intCast]; rw [inv_zero]; rw [of_s_of_int]; rw [← cast_zero]; rw [of_s_of_int]; rw [Stream'.Seq.get?_nil]; rw [Stream'.Seq.get?_nil]
-  rcases eq_or_ne ((of (fract v)⁻¹).
+  rcases eq_or_ne ((of (fract v)⁻¹).s.get? n) none with h₁ | h₁
+  · rwa [h₁, ← terminatedAt_iff_s_none,
+      of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none, stream_succ h, ←
+      of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none, terminatedAt_iff_s_none]
+  · obtain ⟨p, hp⟩ := Option.ne_none_iff_exists'.mp h₁
+    obtain ⟨p', hp'₁, _⟩ := exists_succ_get?_stream_of_gcf_of_get?_eq_some hp
+    have Hp := get?_of_eq_some_of_succ_get?_intFractPair_stream hp'₁
+    rw [← stream_succ h] at hp'₁
+    rw [Hp]; rw [get?_of_eq_some_of_succ_get?_intFractPair_stream hp'₁]
 
 中文:
 定理 of_s_succ
@@ -626,7 +648,15 @@ theorem of_s_succ
   rcases eq_or_ne (fract v) 0 with h | h
   · obtain ⟨a, rfl⟩ : exists a : Int, v = a := ⟨⌊v⌋, eq_of_sub_eq_zero h⟩
     rw [fract_intCast]; rw [inv_zero]; rw [of_s_of_int]; rw [← cast_zero]; rw [of_s_of_int]; rw [Stream'.Seq.get?_nil]; rw [Stream'.Seq.get?_nil]
-  rcases eq_or_ne ((of (fract v)⁻¹).
+  rcases eq_or_ne ((of (fract v)⁻¹).s.get? n) none with h₁ | h₁
+  · rwa [h₁, ← terminatedAt_iff_s_none,
+      of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none, stream_succ h, ←
+      of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none, terminatedAt_iff_s_none]
+  · obtain ⟨p, hp⟩ := Option.ne_none_iff_exists'.mp h₁
+    obtain ⟨p', hp'₁, _⟩ := exists_succ_get?_stream_of_gcf_of_get?_eq_some hp
+    have Hp := get?_of_eq_some_of_succ_get?_intFractPair_stream hp'₁
+    rw [← stream_succ h] at hp'₁
+    rw [Hp]; rw [get?_of_eq_some_of_succ_get?_intFractPair_stream hp'₁]
 
 Depends on / 依赖: Seq.get, Stream, _nil, cast_zero, eq_of_sub_eq_zero, eq_or_ne, fract_intCast, inv_zero, of_s_of_int, of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none, s.get, stream_succ, termina, terminatedAt_iff_s_none
 -/
@@ -707,7 +737,8 @@ theorem convs'_succ
   rcases eq_or_ne (fract v) 0 with h | h
   · obtain ⟨a, rfl⟩ : exists a : Int, v = a := ⟨⌊v⌋, eq_of_sub_eq_zero h⟩
     rw [convs'_of_int]; rw [fract_intCast]; rw [inv_zero]; rw [← cast_zero]; rw [convs'_of_int]; rw [cast_zero]; rw [div_zero]; rw [add_zero]; rw [floor_intCast]
-  · rw [convs', of_h
+  · rw [convs', of_h_eq_floor, add_right_inj, convs'Aux_succ_some (of_s_head h)]
+    exact congr_arg (1 / ·) (by rw [convs', of_h_eq_floor, add_right_inj, of_s_tail])
 
 中文:
 定理 convs'_succ
@@ -715,7 +746,8 @@ theorem convs'_succ
   rcases eq_or_ne (fract v) 0 with h | h
   · obtain ⟨a, rfl⟩ : exists a : Int, v = a := ⟨⌊v⌋, eq_of_sub_eq_zero h⟩
     rw [convs'_of_int]; rw [fract_intCast]; rw [inv_zero]; rw [← cast_zero]; rw [convs'_of_int]; rw [cast_zero]; rw [div_zero]; rw [add_zero]; rw [floor_intCast]
-  · rw [convs', of_h
+  · rw [convs', of_h_eq_floor, add_right_inj, convs'Aux_succ_some (of_s_head h)]
+    exact congr_arg (1 / ·) (by rw [convs', of_h_eq_floor, add_right_inj, of_s_tail])
 -/
 theorem convs'_succ :
     (of v).convs' (n + 1) = ⌊v⌋ + 1 / (of (fract v)⁻¹).convs' n := by

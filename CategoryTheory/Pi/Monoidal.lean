@@ -45,6 +45,8 @@ instance monoidalCategoryStruct
   rightUnitor X := isoMk (fun i => ρ_ (X i))
   associator X Y Z := isoMk (fun i => α_ (X i) (Y i) (Z i))
 
+@[simp]
+
 中文:
 实例 monoidalCategoryStruct
   签名: : 幺半群范畴结构 (对任意 i, C i) where
@@ -56,6 +58,8 @@ instance monoidalCategoryStruct
   leftUnitor X := isoMk (fun i => fun_ (X i))
   rightUnitor X := isoMk (fun i => ρ_ (X i))
   associator X Y Z := isoMk (fun i => α_ (X i) (Y i) (Z i))
+
+@[simp]
 
 Depends on / 依赖: otimes
 -/

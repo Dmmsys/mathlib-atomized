@@ -74,7 +74,11 @@ theorem X_pow_dvd_iff
     | zero => simp [pow_zero]
     | succ n hn =>
       obtain ⟨g, hgf⟩ := hn fun d : Nat => fun H : d < n => hd _ (Nat.lt_succ_of_lt H)
-      h
+      have := coeff_X_pow_mul g n 0
+      rw [zero_add]; rw [← hgf]; rw [hd n (Nat.lt_succ_self n)] at this
+      obtain ⟨k, hgk⟩ := Polynomial.X_dvd_iff.mpr this.symm
+      use k
+      rwa [pow_succ, mul_assoc, ← hgk]⟩
 
 中文:
 定理 X_pow_dvd_iff
@@ -87,7 +91,11 @@ theorem X_pow_dvd_iff
     | zero => simp [pow_zero]
     | succ n hn =>
       obtain ⟨g, hgf⟩ := hn fun d : Nat => fun H : d < n => hd _ (Nat.lt_succ_of_lt H)
-      h
+      have := coeff_X_pow_mul g n 0
+      rw [zero_add]; rw [← hgf]; rw [hd n (Nat.lt_succ_self n)] at this
+      obtain ⟨k, hgk⟩ := Polynomial.X_dvd_iff.mpr this.symm
+      use k
+      rwa [pow_succ, mul_assoc, ← hgk]⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, Nat.lt_succ_of_lt, Nat.lt_succ_self, Polynomial, Polynomial.X_dvd_iff.mpr, X_dvd_iff, coeff_X_pow_mul, forall_iff, ite_eq_right_iff, lt_succ_of_lt, lt_succ_self, mul_assoc, not_le_of_gt, pow_succ, pow_zero, this.symm, zero_add
 -/
@@ -119,7 +127,20 @@ theorem finiteMultiplicity_of_degree_pos_of_monic
   ⟨natDegree q, fun ⟨r, hr⟩ => by
     have hp0 : p != 0 := fun hp0 => by simp [hp0] at hp
     have hr0 : r != 0 := fun hr0 => by subst hr0; simp [hq] at hr
-    have hpn1 : leadingCoeff p ^ (natDegree q + 1) = 1 :=
+    have hpn1 : leadingCoeff p ^ (natDegree q + 1) = 1 := by simp [show _ = _ from hmp]
+    have hpn0' : leadingCoeff p ^ (natDegree q + 1) != 0 := hpn1.symm ▸ zn0.symm
+    have hpnr0 : leadingCoeff (p ^ (natDegree q + 1)) * leadingCoeff r != 0 := by
+      simp only [leadingCoeff_pow' hpn0', leadingCoeff_eq_zero, hpn1, one_mul, Ne,
+          hr0, not_false_eq_true]
+have hnp : 0 < natDegree p := Nat.cast_lt.1 by
+      rw [← degree_eq_natDegree hp0]; exact hp
+    have := congr_arg natDegree hr
+    rw [natDegree_mul' hpnr0]; rw [natDegree_pow' hpn0']; rw [add_mul]; rw [add_assoc] at this
+    exact
+      ne_of_lt
+        (lt_add_of_le_of_pos (le_mul_of_one_le_right (Nat.zero_le _) hnp)
+          (add_pos_of_pos_of_nonneg (by rwa [one_mul]) (Nat.zero_le _)))
+        this⟩
 
 中文:
 定理 finiteMultiplicity_of_degree_pos_of_monic
@@ -130,7 +151,20 @@ theorem finiteMultiplicity_of_degree_pos_of_monic
   ⟨natDegree q, fun ⟨r, hr⟩ => by
     have hp0 : p != 0 := fun hp0 => by simp [hp0] at hp
     have hr0 : r != 0 := fun hr0 => by subst hr0; simp [hq] at hr
-    have hpn1 : leadingCoeff p ^ (natDegree q + 1) = 1 :=
+    have hpn1 : leadingCoeff p ^ (natDegree q + 1) = 1 := by simp [show _ = _ from hmp]
+    have hpn0' : leadingCoeff p ^ (natDegree q + 1) != 0 := hpn1.symm ▸ zn0.symm
+    have hpnr0 : leadingCoeff (p ^ (natDegree q + 1)) * leadingCoeff r != 0 := by
+      simp only [leadingCoeff_pow' hpn0', leadingCoeff_eq_zero, hpn1, one_mul, Ne,
+          hr0, not_false_eq_true]
+have hnp : 0 < natDegree p := Nat.cast_lt.1 by
+      rw [← degree_eq_natDegree hp0]; exact hp
+    have := congr_arg natDegree hr
+    rw [natDegree_mul' hpnr0]; rw [natDegree_pow' hpn0']; rw [add_mul]; rw [add_assoc] at this
+    exact
+      ne_of_lt
+        (lt_add_of_le_of_pos (le_mul_of_one_le_right (Nat.zero_le _) hnp)
+          (add_pos_of_pos_of_nonneg (by rwa [one_mul]) (Nat.zero_le _)))
+        this⟩
 
 Depends on / 依赖: Nontrivial, Nontrivial.of_polynomial_ne, hpn1.symm, leadingCoeff, leadingCoeff_pow, natDegree, of_polynomial_ne, zero_ne_one, zn0.symm
 -/
@@ -236,6 +270,9 @@ theorem div_wf_lemma
     (Nat.cast_le (α := WithBot Nat)).1
       (by rw [← degree_eq_natDegree h.2, ← degree_eq_natDegree hq0]; exact h.1)
   degree_sub_lt_left
+    (by
+      rw [hq.degree_mul_comm]; rw [hq.degree_mul]; rw [degree_C_mul_X_pow _ hp]; rw [degree_eq_natDegree h.2]; rw [degree_eq_natDegree hq0]; rw [← Nat.cast_add]; rw [tsub_add_cancel_of_le hlt])
+    h.2 (by rw [leadingCoeff_monic_mul hq, leadingCoeff_mul_X_pow, leadingCoeff_C])
 
 中文:
 定理 div_wf_lemma
@@ -246,6 +283,9 @@ theorem div_wf_lemma
     (Nat.cast_le (α := WithBot Nat)).1
       (by rw [← degree_eq_natDegree h.2, ← degree_eq_natDegree hq0]; exact h.1)
   degree_sub_lt_left
+    (by
+      rw [hq.degree_mul_comm]; rw [hq.degree_mul]; rw [degree_C_mul_X_pow _ hp]; rw [degree_eq_natDegree h.2]; rw [degree_eq_natDegree hq0]; rw [← Nat.cast_add]; rw [tsub_add_cancel_of_le hlt])
+    h.2 (by rw [leadingCoeff_monic_mul hq, leadingCoeff_mul_X_pow, leadingCoeff_C])
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_le, WithBot, cast_add, cast_le, degree_C_mul_X_pow, degree_eq_natDegree, degree_mul, degree_mul_comm, degree_sub_lt_left, hq.degree_mul, hq.degree_mul_comm, hq.ne_zero_of_polynomial_ne, leadingCoef, leadingCoeff, leadingCoeff_eq_zero, natDegree, ne_zero_of_polynomial_ne, tsub_add_cancel_of_le
 -/
@@ -374,7 +414,19 @@ theorem degree_modByMonic_lt
         degree_modByMonic_lt (p - q * (C (leadingCoeff p) * X ^ (natDegree p - natDegree q))) hq
       grind [divModByMonicAux, modByMonic]
     else
-      Or.casesOn (not_and
+      Or.casesOn (not_and_or.1 h)
+        (by
+          unfold modByMonic divModByMonicAux
+          dsimp
+          rw [dif_pos hq]; rw [if_neg h]
+          exact lt_of_not_ge)
+        (by
+          intro hp
+          unfold modByMonic divModByMonicAux
+          dsimp
+          rw [dif_pos hq]; rw [if_neg h]; rw [Classical.not_not.1 hp]
+          exact lt_of_le_of_ne bot_le (Ne.symm (mt degree_eq_bot.1 hq.ne_zero)))
+  termination_by p => p
 
 中文:
 定理 degree_modByMonic_lt
@@ -386,7 +438,19 @@ theorem degree_modByMonic_lt
         degree_modByMonic_lt (p - q * (C (leadingCoeff p) * X ^ (natDegree p - natDegree q))) hq
       grind [divModByMonicAux, modByMonic]
     else
-      Or.casesOn (not_and
+      Or.casesOn (not_and_or.1 h)
+        (by
+          unfold modByMonic divModByMonicAux
+          dsimp
+          rw [dif_pos hq]; rw [if_neg h]
+          exact lt_of_not_ge)
+        (by
+          intro hp
+          unfold modByMonic divModByMonicAux
+          dsimp
+          rw [dif_pos hq]; rw [if_neg h]; rw [Classical.not_not.1 hp]
+          exact lt_of_le_of_ne bot_le (Ne.symm (mt degree_eq_bot.1 hq.ne_zero)))
+  termination_by p => p
 
 Depends on / 依赖: Classical, Classical.decEq
 -/
@@ -772,7 +836,18 @@ theorem modByMonic_eq_sub_mul_div
         have _wf := div_wf_lemma h hq
         have ih := modByMonic_eq_sub_mul_div
           (p - q * (C (leadingCoeff p) * X ^ (natDegree p - natDegree q))) q
-        unfold modByMonic divByMonic divModByM
+        unfold modByMonic divByMonic divModByMonicAux
+        rw [dif_pos hq]; rw [dif_pos h]
+        rw [modByMonic]; rw [dif_pos hq] at ih
+        refine ih.trans ?_
+        rw [divByMonic]; rw [dif_pos hq]; rw [dif_pos hq]; rw [dif_pos h]; rw [mul_add]; rw [sub_add_eq_sub_sub]
+      else by
+        unfold modByMonic divByMonic divModByMonicAux
+        dsimp
+        rw [dif_pos hq]; rw [if_neg h]; rw [dif_pos hq]; rw [if_neg h]; rw [mul_zero]; rw [sub_zero]
+    else by
+      rw [modByMonic_eq_of_not_monic _ hq]; rw [divByMonic_eq_of_not_monic _ hq]; rw [mul_zero]; rw [sub_zero]
+  termination_by p => p
 
 中文:
 定理 modByMonic_eq_sub_mul_div
@@ -782,7 +857,18 @@ theorem modByMonic_eq_sub_mul_div
         have _wf := div_wf_lemma h hq
         have ih := modByMonic_eq_sub_mul_div
           (p - q * (C (leadingCoeff p) * X ^ (natDegree p - natDegree q))) q
-        unfold modByMonic divByMonic divModByM
+        unfold modByMonic divByMonic divModByMonicAux
+        rw [dif_pos hq]; rw [dif_pos h]
+        rw [modByMonic]; rw [dif_pos hq] at ih
+        refine ih.trans ?_
+        rw [divByMonic]; rw [dif_pos hq]; rw [dif_pos hq]; rw [dif_pos h]; rw [mul_add]; rw [sub_add_eq_sub_sub]
+      else by
+        unfold modByMonic divByMonic divModByMonicAux
+        dsimp
+        rw [dif_pos hq]; rw [if_neg h]; rw [dif_pos hq]; rw [if_neg h]; rw [mul_zero]; rw [sub_zero]
+    else by
+      rw [modByMonic_eq_of_not_monic _ hq]; rw [divByMonic_eq_of_not_monic _ hq]; rw [mul_zero]; rw [sub_zero]
+  termination_by p => p
 
 Depends on / 依赖: Classical, Classical.decEq
 -/
@@ -922,7 +1008,15 @@ theorem degree_add_divByMonic
     rwa [Monic.def.1 hq, one_mul, Ne, leadingCoeff_eq_zero]
   have hmod : degree (p %ₘ q) < degree (q * (p /ₘ q)) :=
     calc
-      degree 
+      degree (p %ₘ q) < degree q := degree_modByMonic_lt _ hq
+      _ <= _ := by
+        rw [degree_mul' hlc]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree hdiv0]; rw [←
+            Nat.cast_add]; rw [Nat.cast_le]
+        exact Nat.le_add_right _ _
+  calc
+    degree q + degree (p /ₘ q) = degree (q * (p /ₘ q)) := Eq.symm (degree_mul' hlc)
+    _ = degree (p %ₘ q + q * (p /ₘ q)) := (degree_add_eq_right_of_degree_lt hmod).symm
+    _ = _ := congr_arg _ (modByMonic_add_div _ _)
 
 中文:
 定理 degree_add_divByMonic
@@ -934,7 +1028,15 @@ theorem degree_add_divByMonic
     rwa [Monic.def.1 hq, one_mul, Ne, leadingCoeff_eq_zero]
   have hmod : degree (p %ₘ q) < degree (q * (p /ₘ q)) :=
     calc
-      degree 
+      degree (p %ₘ q) < degree q := degree_modByMonic_lt _ hq
+      _ <= _ := by
+        rw [degree_mul' hlc]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree hdiv0]; rw [←
+            Nat.cast_add]; rw [Nat.cast_le]
+        exact Nat.le_add_right _ _
+  calc
+    degree q + degree (p /ₘ q) = degree (q * (p /ₘ q)) := Eq.symm (degree_mul' hlc)
+    _ = degree (p %ₘ q + q * (p /ₘ q)) := (degree_add_eq_right_of_degree_lt hmod).symm
+    _ = _ := congr_arg _ (modByMonic_add_div _ _)
 
 Depends on / 依赖: Monic.def, Nat.cast_add, Nat.cast_le, Nat.le_add_right, cast_add, cast_le, degree, degree_eq_natDegree, degree_modByMonic_lt, degree_mul, divByMonic_eq_zero_iff, hq.ne_zero, le_add_right, leadingCoeff, leadingCoeff_eq_zero, ne_zero, nontriviality, not_lt, one_mul
 -/
@@ -969,7 +1071,12 @@ theorem degree_divByMonic_le
     if hq : Monic q then
       if h : degree q <= degree p then by
         have := Nontrivial.of_polynomial_ne hp0
-        rw [← degree_add_divByMonic hq h]; rw [degree_eq_natDegree hq.ne_zero]; rw [d
+        rw [← degree_add_divByMonic hq h]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree (mt (divByMonic_eq_zero_iff hq).1 (not_lt.2 h))]
+        exact WithBot.coe_le_coe.2 (Nat.le_add_left _ _)
+      else by
+        unfold divByMonic divModByMonicAux
+        simp [dif_pos hq, h, degree_zero, bot_le]
+    else (divByMonic_eq_of_not_monic p hq).symm ▸ bot_le
 
 中文:
 定理 degree_divByMonic_le
@@ -981,7 +1088,12 @@ theorem degree_divByMonic_le
     if hq : Monic q then
       if h : degree q <= degree p then by
         have := Nontrivial.of_polynomial_ne hp0
-        rw [← degree_add_divByMonic hq h]; rw [degree_eq_natDegree hq.ne_zero]; rw [d
+        rw [← degree_add_divByMonic hq h]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree (mt (divByMonic_eq_zero_iff hq).1 (not_lt.2 h))]
+        exact WithBot.coe_le_coe.2 (Nat.le_add_left _ _)
+      else by
+        unfold divByMonic divModByMonicAux
+        simp [dif_pos hq, h, degree_zero, bot_le]
+    else (divByMonic_eq_of_not_monic p hq).symm ▸ bot_le
 
 Depends on / 依赖: Classical, Classical.decEq, Nat.le_add_left, Nontrivial, Nontrivial.of_polynomial_ne, WithBot, WithBot.coe_le_coe, bot_le, coe_le_coe, degree, degree_add_divByMonic, degree_eq_natDegree, degree_zero, dif_pos, divByMonic, divByMonic_eq_of_not_m, divByMonic_eq_zero_iff, divModByMonicAux, hq.ne_zero, le_add_left
 -/
@@ -1012,7 +1124,14 @@ theorem degree_divByMonic_lt
       rw [(divByMonic_eq_zero_iff hq).2 hpq]; rw [degree_eq_natDegree hp0]
       exact WithBot.bot_lt_coe _
     else by
-      have := Nontrivial.of_polynomial_ne hp
+      have := Nontrivial.of_polynomial_ne hp0
+      rw [← degree_add_divByMonic hq (not_lt.1 hpq)]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree (mt (divByMonic_eq_zero_iff hq).1 hpq)]
+      exact
+        Nat.cast_lt.2
+          (Nat.lt_add_of_pos_left (Nat.cast_lt.1 <|
+            by simpa [degree_eq_natDegree hq.ne_zero] using! h0q))
+  else by
+    rwa [divByMonic_eq_of_not_monic _ hq, degree_zero, bot_lt_iff_ne_bot, degree_ne_bot]
 
 中文:
 定理 degree_divByMonic_lt
@@ -1024,7 +1143,14 @@ theorem degree_divByMonic_lt
       rw [(divByMonic_eq_zero_iff hq).2 hpq]; rw [degree_eq_natDegree hp0]
       exact WithBot.bot_lt_coe _
     else by
-      have := Nontrivial.of_polynomial_ne hp
+      have := Nontrivial.of_polynomial_ne hp0
+      rw [← degree_add_divByMonic hq (not_lt.1 hpq)]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree (mt (divByMonic_eq_zero_iff hq).1 hpq)]
+      exact
+        Nat.cast_lt.2
+          (Nat.lt_add_of_pos_left (Nat.cast_lt.1 <|
+            by simpa [degree_eq_natDegree hq.ne_zero] using! h0q))
+  else by
+    rwa [divByMonic_eq_of_not_monic _ hq, degree_zero, bot_lt_iff_ne_bot, degree_ne_bot]
 
 Depends on / 依赖: Classical, Classical.decEq, Nat.cast_lt, Nat.lt_add_of_pos_left, Nontrivial, Nontrivial.of_polynomial_ne, WithBot, WithBot.bot_lt_coe, bot_lt_coe, cast_lt, degree, degree_add_divByMonic, degree_eq_n, degree_eq_natDegree, divByMonic_eq_zero_iff, hq.ne_zero, lt_add_of_pos_left, ne_zero, not_lt, of_polynomial_ne
 -/
@@ -1061,7 +1187,13 @@ theorem natDegree_divByMonic
   have hgf := hfg
   rw [divByMonic_eq_zero_iff hg] at hgf
   push Not at hgf
-  have := degree_add_divByMoni
+  have := degree_add_divByMonic hg hgf
+  have hf : f != 0 := by
+    intro hf
+    apply hfg
+    rw [hf]; rw [zero_divByMonic]
+  rw [degree_eq_natDegree hf]; rw [degree_eq_natDegree hg.ne_zero]; rw [degree_eq_natDegree hfg]; rw [← Nat.cast_add]; rw [Nat.cast_inj] at this
+  rw [← this]; rw [add_tsub_cancel_left]
 
 中文:
 定理 natDegree_divByMonic
@@ -1075,7 +1207,13 @@ theorem natDegree_divByMonic
   have hgf := hfg
   rw [divByMonic_eq_zero_iff hg] at hgf
   push Not at hgf
-  have := degree_add_divByMoni
+  have := degree_add_divByMonic hg hgf
+  have hf : f != 0 := by
+    intro hf
+    apply hfg
+    rw [hf]; rw [zero_divByMonic]
+  rw [degree_eq_natDegree hf]; rw [degree_eq_natDegree hg.ne_zero]; rw [degree_eq_natDegree hfg]; rw [← Nat.cast_add]; rw [Nat.cast_inj] at this
+  rw [← this]; rw [add_tsub_cancel_left]
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_inj, cast_add, cast_inj, degree_add_divByMonic, degree_eq_natDegree, divByMonic_eq_zero_iff, hg.ne_zero, le_of_lt, natDegree_le_natDegree, natDegree_zero, ne_zero, nontriviality, tsub_eq_zero_iff_le, tsub_eq_zero_iff_le.mpr, zero_divByMonic
 -/
@@ -1110,7 +1248,21 @@ theorem div_modByMonic_unique
       (by
         rw [← sub_eq_zero_of_eq (h.1.trans (modByMonic_add_div f g).symm)]
         simp [mul_add, sub_eq_add_neg, add_comm, add_left_comm, add_assoc])
-  have h₂ : degree (r - f %ₘ g) = degree (g * (q -
+  have h₂ : degree (r - f %ₘ g) = degree (g * (q - f /ₘ g)) := by simp [h₁]
+  have h₄ : degree (r - f %ₘ g) < degree g :=
+    calc
+      degree (r - f %ₘ g) <= max (degree r) (degree (f %ₘ g)) := degree_sub_le _ _
+      _ < degree g := max_lt_iff.2 ⟨h.2, degree_modByMonic_lt _ hg⟩
+  have h₅ : q - f /ₘ g = 0 :=
+    _root_.by_contradiction fun hqf =>
+not_le_of_gt h₄
+        calc
+          degree g <= degree g + degree (q - f /ₘ g) := by
+            rw [degree_eq_natDegree hg.ne_zero]; rw [degree_eq_natDegree hqf]
+            norm_cast
+            exact Nat.le_add_right _ _
+          _ = degree (r - f %ₘ g) := by rw [h₂, degree_mul']; simpa [Monic.def.1 hg]
+exact ⟨Eq.symm eq_of_sub_eq_zero h₅, Eq.symm eq_of_sub_eq_zero by simpa [h₅] using h₁⟩
 
 中文:
 定理 div_modByMonic_unique
@@ -1122,7 +1274,21 @@ theorem div_modByMonic_unique
       (by
         rw [← sub_eq_zero_of_eq (h.1.trans (modByMonic_add_div f g).symm)]
         simp [mul_add, sub_eq_add_neg, add_comm, add_left_comm, add_assoc])
-  have h₂ : degree (r - f %ₘ g) = degree (g * (q -
+  have h₂ : degree (r - f %ₘ g) = degree (g * (q - f /ₘ g)) := by simp [h₁]
+  have h₄ : degree (r - f %ₘ g) < degree g :=
+    calc
+      degree (r - f %ₘ g) <= max (degree r) (degree (f %ₘ g)) := degree_sub_le _ _
+      _ < degree g := max_lt_iff.2 ⟨h.2, degree_modByMonic_lt _ hg⟩
+  have h₅ : q - f /ₘ g = 0 :=
+    _root_.by_contradiction fun hqf =>
+not_le_of_gt h₄
+        calc
+          degree g <= degree g + degree (q - f /ₘ g) := by
+            rw [degree_eq_natDegree hg.ne_zero]; rw [degree_eq_natDegree hqf]
+            norm_cast
+            exact Nat.le_add_right _ _
+          _ = degree (r - f %ₘ g) := by rw [h₂, degree_mul']; simpa [Monic.def.1 hg]
+exact ⟨Eq.symm eq_of_sub_eq_zero h₅, Eq.symm eq_of_sub_eq_zero by simpa [h₅] using h₁⟩
 
 Depends on / 依赖: add_assoc, add_comm, add_left_comm, degree, degree_modByMonic_lt, degree_sub_le, eq_of_sub_eq_zero, max_lt_iff, modByMonic_add_div, mul_add, nontriviality, sub_eq_add_neg, sub_eq_zero_of_eq
 -/
@@ -1162,7 +1328,14 @@ theorem map_mod_divByMonic
   have : map f p /ₘ map f q = map f (p /ₘ q) ∧ map f p %ₘ map f q = map f (p %ₘ q) :=
     div_modByMonic_unique ((p /ₘ q).map f) _ (hq.map f)
 ⟨Eq.symm by rw [← Polynomial.map_mul, ← Polynomial.map_add, modByMonic_add_div],
-        cal
+        calc
+          _ <= degree (p %ₘ q) := degree_map_le
+          _ < degree q := degree_modByMonic_lt _ hq
+          _ = _ :=
+Eq.symm
+              degree_map_eq_of_leadingCoeff_ne_zero _
+                (by rw [Monic.def.1 hq, f.map_one]; exact one_ne_zero)⟩
+  exact ⟨this.1.symm, this.2.symm⟩
 
 中文:
 定理 map_mod_divByMonic
@@ -1173,7 +1346,14 @@ theorem map_mod_divByMonic
   have : map f p /ₘ map f q = map f (p /ₘ q) ∧ map f p %ₘ map f q = map f (p %ₘ q) :=
     div_modByMonic_unique ((p /ₘ q).map f) _ (hq.map f)
 ⟨Eq.symm by rw [← Polynomial.map_mul, ← Polynomial.map_add, modByMonic_add_div],
-        cal
+        calc
+          _ <= degree (p %ₘ q) := degree_map_le
+          _ < degree q := degree_modByMonic_lt _ hq
+          _ = _ :=
+Eq.symm
+              degree_map_eq_of_leadingCoeff_ne_zero _
+                (by rw [Monic.def.1 hq, f.map_one]; exact one_ne_zero)⟩
+  exact ⟨this.1.symm, this.2.symm⟩
 
 Depends on / 依赖: Eq.symm, Monic.def, Nontrivial, Polynomial, Polynomial.map_add, Polynomial.map_mul, degree, degree_map_eq_of_leadingCoeff_ne_zero, degree_map_le, degree_modByMonic_lt, div_modByMonic_unique, domain_nontrivial, f.domain_nontrivial, f.map_one, hq.map, map_add, map_mul, map_one, modByMonic_add_div, nontriviality
 -/
@@ -1243,7 +1423,16 @@ theorem modByMonic_eq_zero_iff_dvd
     obtain ⟨r, hr⟩ := exists_eq_mul_right_of_dvd h
     by_contra hpq0
     have hmod : p %ₘ q = q * (r - p /ₘ q) := by rw [modByMonic_eq_sub_mul_div, mul_sub, ← hr]
-    have : degree (q *
+    have : degree (q * (r - p /ₘ q)) < degree q := hmod ▸ degree_modByMonic_lt _ hq
+    have hrpq0 : leadingCoeff (r - p /ₘ q) != 0 := fun h =>
+hpq0
+        leadingCoeff_eq_zero.1
+          (by rw [hmod, leadingCoeff_eq_zero.1 h, mul_zero, leadingCoeff_zero])
+    have hlc : leadingCoeff q * leadingCoeff (r - p /ₘ q) != 0 := by rwa [Monic.def.1 hq, one_mul]
+    rw [degree_mul' hlc]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree (mt leadingCoeff_eq_zero.2 hrpq0)] at this
+    exact not_lt_of_ge (Nat.le_add_right _ _) (WithBot.coe_lt_coe.1 this)⟩
+
+@[simp]
 
 中文:
 定理 modByMonic_eq_zero_iff_dvd
@@ -1254,7 +1443,16 @@ theorem modByMonic_eq_zero_iff_dvd
     obtain ⟨r, hr⟩ := exists_eq_mul_right_of_dvd h
     by_contra hpq0
     have hmod : p %ₘ q = q * (r - p /ₘ q) := by rw [modByMonic_eq_sub_mul_div, mul_sub, ← hr]
-    have : degree (q *
+    have : degree (q * (r - p /ₘ q)) < degree q := hmod ▸ degree_modByMonic_lt _ hq
+    have hrpq0 : leadingCoeff (r - p /ₘ q) != 0 := fun h =>
+hpq0
+        leadingCoeff_eq_zero.1
+          (by rw [hmod, leadingCoeff_eq_zero.1 h, mul_zero, leadingCoeff_zero])
+    have hlc : leadingCoeff q * leadingCoeff (r - p /ₘ q) != 0 := by rwa [Monic.def.1 hq, one_mul]
+    rw [degree_mul' hlc]; rw [degree_eq_natDegree hq.ne_zero]; rw [degree_eq_natDegree (mt leadingCoeff_eq_zero.2 hrpq0)] at this
+    exact not_lt_of_ge (Nat.le_add_right _ _) (WithBot.coe_lt_coe.1 this)⟩
+
+@[simp]
 
 Depends on / 依赖: degree, degree_modByMonic_lt, dvd_mul_right, exists_eq_mul_right_of_dvd, leadingCoeff, leadingCoeff_eq_zero, leadingCoeff_zero, modByMonic_add_div, modByMonic_eq_sub_mul_div, mul_sub, mul_zero, nontriviality, odd_mul, odd_mul.mp, zero_add
 -/
@@ -1479,7 +1677,7 @@ lemma coeff_divByMonic_X_sub_C_rec
   rw [← p.modByMonic_add_div (X - C a)]
   have : degree (p %ₘ (X - C a)) < ↑(n + 1) := degree_X_sub_C a ▸ p.degree_modByMonic_lt this
 .trans_le WithBot.coe_le_coe.mpr le_add_self
-  simp [q, sub_mul, add_sub, coeff_eq_zero_of_de
+  simp [q, sub_mul, add_sub, coeff_eq_zero_of_degree_lt this]
 
 中文:
 引理 coeff_divByMonic_X_sub_C_rec
@@ -1491,7 +1689,7 @@ lemma coeff_divByMonic_X_sub_C_rec
   rw [← p.modByMonic_add_div (X - C a)]
   have : degree (p %ₘ (X - C a)) < ↑(n + 1) := degree_X_sub_C a ▸ p.degree_modByMonic_lt this
 .trans_le WithBot.coe_le_coe.mpr le_add_self
-  simp [q, sub_mul, add_sub, coeff_eq_zero_of_de
+  simp [q, sub_mul, add_sub, coeff_eq_zero_of_degree_lt this]
 
 Depends on / 依赖: WithBot, WithBot.coe_le_coe.mpr, add_sub, coe_le_coe, coeff_eq_zero_of_degree_lt, degree, degree_X_sub_C, degree_modByMonic_lt, le_add_self, modByMonic_add_div, monic_X_sub_C, nontriviality, p.degree_modByMonic_lt, p.modByMonic_add_div, sub_mul, trans_le
 -/
@@ -1516,7 +1714,20 @@ theorem coeff_divByMonic_X_sub_C
   · refine Nat.decreasingInduction' (fun n hn _ ih => ?_) (le_of_not_ge h) ?_
     · rw [coeff_divByMonic_X_sub_C_rec, ih, eq_comm, Icc_eq_cons_Ioc (Nat.succ_le_iff.mpr hn),
           sum_cons, Nat.sub_self, pow_zero, one_mul, mul_sum]
-      congr 1; refi
+      congr 1; refine sum_congr ?_ fun i hi => ?_
+      · ext; simp
+      rw [← mul_assoc]; rw [← pow_succ']; rw [eq_comm]; rw [i.sub_succ']; rw [Nat.sub_add_cancel]
+      apply Nat.le_sub_of_add_le
+      rw [add_comm]; exact (mem_Icc.mp hi).1
+    · exact this _ le_rfl
+  rw [Icc_eq_empty (Nat.lt_succ_iff.mpr h).not_ge]; rw [sum_empty]
+  nontriviality R
+  by_cases hp : p.natDegree = 0
+  · rw [(divByMonic_eq_zero_iff <| monic_X_sub_C a).mpr, coeff_zero]
+    apply degree_lt_degree; rw [hp, natDegree_X_sub_C]; simp
+  · apply coeff_eq_zero_of_natDegree_lt
+    rw [natDegree_divByMonic p (monic_X_sub_C a)]; rw [natDegree_X_sub_C]
+    exact (Nat.pred_lt hp).trans_le h
 
 中文:
 定理 coeff_divByMonic_X_sub_C
@@ -1526,7 +1737,20 @@ theorem coeff_divByMonic_X_sub_C
   · refine Nat.decreasingInduction' (fun n hn _ ih => ?_) (le_of_not_ge h) ?_
     · rw [coeff_divByMonic_X_sub_C_rec, ih, eq_comm, Icc_eq_cons_Ioc (Nat.succ_le_iff.mpr hn),
           sum_cons, Nat.sub_self, pow_zero, one_mul, mul_sum]
-      congr 1; refi
+      congr 1; refine sum_congr ?_ fun i hi => ?_
+      · ext; simp
+      rw [← mul_assoc]; rw [← pow_succ']; rw [eq_comm]; rw [i.sub_succ']; rw [Nat.sub_add_cancel]
+      apply Nat.le_sub_of_add_le
+      rw [add_comm]; exact (mem_Icc.mp hi).1
+    · exact this _ le_rfl
+  rw [Icc_eq_empty (Nat.lt_succ_iff.mpr h).not_ge]; rw [sum_empty]
+  nontriviality R
+  by_cases hp : p.natDegree = 0
+  · rw [(divByMonic_eq_zero_iff <| monic_X_sub_C a).mpr, coeff_zero]
+    apply degree_lt_degree; rw [hp, natDegree_X_sub_C]; simp
+  · apply coeff_eq_zero_of_natDegree_lt
+    rw [natDegree_divByMonic p (monic_X_sub_C a)]; rw [natDegree_X_sub_C]
+    exact (Nat.pred_lt hp).trans_le h
 
 Depends on / 依赖: Icc_eq_cons_Ioc, Nat.decreasingInduction, Nat.le_sub_of_add_le, Nat.sub_add_cancel, Nat.sub_self, Nat.succ_le_iff.mpr, add_comm, coeff_divByMonic_X_sub_C_rec, decreasingInduction, eq_comm, generalizing, i.sub_succ, le_of_not_ge, le_rfl, le_sub_of_add_le, mem_Icc, mem_Icc.mp, mul_assoc, mul_sum, natDegree
 -/
@@ -1761,7 +1985,7 @@ theorem rootMultiplicity_C
   split_ifs with hr
   · rfl
   have h : natDegree (C r) < natDegree (X - C a) := by simp
-  simp_rw [multiplicity_eq_zero.mpr ((monic_X_sub_C a).not_dvd
+  simp_rw [multiplicity_eq_zero.mpr ((monic_X_sub_C a).not_dvd_of_natDegree_lt hr h)]
 
 中文:
 定理 rootMultiplicity_C
@@ -1775,7 +1999,7 @@ theorem rootMultiplicity_C
   split_ifs with hr
   · rfl
   have h : natDegree (C r) < natDegree (X - C a) := by simp
-  simp_rw [multiplicity_eq_zero.mpr ((monic_X_sub_C a).not_dvd
+  simp_rw [multiplicity_eq_zero.mpr ((monic_X_sub_C a).not_dvd_of_natDegree_lt hr h)]
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, classical, monic_X_sub_C, multiplicity_eq_zero, multiplicity_eq_zero.mpr, natDegree, not_dvd_of_natDegree_lt, rootMultiplicity_eq_multiplicity, rootMultiplicity_zero, simp_rw, split_ifs, subsingleton_or_nontrivial
 -/
@@ -1896,7 +2120,14 @@ theorem modByMonic_X_sub_C_eq_C_eval
   have h : (p %ₘ (X - C a)).eval a = p.eval a := by
     rw [modByMonic_eq_sub_mul_div]; rw [eval_sub]; rw [eval_mul]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_self]; rw [zero_mul]; rw [sub_zero]
   have : degree (p %ₘ (X - C a)) < 1 :=
-    degree_X_sub_C a ▸ degree_modByM
+    degree_X_sub_C a ▸ degree_modByMonic_lt p (monic_X_sub_C a)
+  have : degree (p %ₘ (X - C a)) <= 0 := by
+    revert this
+    cases degree (p %ₘ (X - C a))
+    · exact fun _ => bot_le
+    · exact fun h => WithBot.coe_le_coe.2 (Nat.le_of_lt_succ (WithBot.coe_lt_coe.1 h))
+  rw [eq_C_of_degree_le_zero this]; rw [eval_C] at h
+  rw [eq_C_of_degree_le_zero this]; rw [h]
 
 中文:
 定理 modByMonic_X_sub_C_eq_C_eval
@@ -1907,7 +2138,14 @@ theorem modByMonic_X_sub_C_eq_C_eval
   have h : (p %ₘ (X - C a)).eval a = p.eval a := by
     rw [modByMonic_eq_sub_mul_div]; rw [eval_sub]; rw [eval_mul]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_self]; rw [zero_mul]; rw [sub_zero]
   have : degree (p %ₘ (X - C a)) < 1 :=
-    degree_X_sub_C a ▸ degree_modByM
+    degree_X_sub_C a ▸ degree_modByMonic_lt p (monic_X_sub_C a)
+  have : degree (p %ₘ (X - C a)) <= 0 := by
+    revert this
+    cases degree (p %ₘ (X - C a))
+    · exact fun _ => bot_le
+    · exact fun h => WithBot.coe_le_coe.2 (Nat.le_of_lt_succ (WithBot.coe_lt_coe.1 h))
+  rw [eq_C_of_degree_le_zero this]; rw [eval_C] at h
+  rw [eq_C_of_degree_le_zero this]; rw [h]
 
 Depends on / 依赖: Nat.le_of_lt_succ, WithBot, WithBot.coe_le_coe, WithBot.coe_lt_coe, bot_le, coe_le_coe, coe_lt_coe, degree, degree_X_sub_C, degree_modByMonic_lt, eval_C, eval_X, eval_mul, eval_sub, le_of_lt_succ, modByMonic_eq_sub_mul_div, monic_X_sub_C, nontriviality, p.eval, revert
 -/
@@ -2209,7 +2447,11 @@ theorem eval_divByMonic_pow_rootMultiplicity_ne_zero
   rintro ⟨q, hq⟩
   have := pow_mul_divByMonic_rootMultiplicity_eq p a
   rw [hq]; rw [← mul_assoc]; rw [← pow_succ]; rw [rootMultiplicity_eq_multiplicity]; rw [if_neg hp] at this
-  e
+  exact
+    (finiteMultiplicity_of_degree_pos_of_monic
+      (show (0 : WithBot Nat) < degree (X - C a) by rw [degree_X_sub_C]; decide)
+      (monic_X_sub_C _) hp).not_pow_dvd_of_multiplicity_lt
+      (Nat.lt_succ_self _) (dvd_of_mul_right_eq _ this)
 
 中文:
 定理 eval_divByMonic_pow_rootMultiplicity_ne_zero
@@ -2221,7 +2463,11 @@ theorem eval_divByMonic_pow_rootMultiplicity_ne_zero
   rintro ⟨q, hq⟩
   have := pow_mul_divByMonic_rootMultiplicity_eq p a
   rw [hq]; rw [← mul_assoc]; rw [← pow_succ]; rw [rootMultiplicity_eq_multiplicity]; rw [if_neg hp] at this
-  e
+  exact
+    (finiteMultiplicity_of_degree_pos_of_monic
+      (show (0 : WithBot Nat) < degree (X - C a) by rw [degree_X_sub_C]; decide)
+      (monic_X_sub_C _) hp).not_pow_dvd_of_multiplicity_lt
+      (Nat.lt_succ_self _) (dvd_of_mul_right_eq _ this)
 
 Depends on / 依赖: IsRoot, Nat.lt_succ_self, Nontrivial, Nontrivial.of_polynomial_ne, WithBot, classical, degree, degree_X_sub_C, dvd_iff_isRoot, dvd_of_mul_right, finiteMultiplicity_of_degree_pos_of_monic, if_neg, lt_succ_self, monic_X_sub_C, mul_assoc, not_pow_dvd_of_multiplicity_lt, of_polynomial_ne, pow_mul_divByMonic_rootMultiplicity_eq, pow_succ, rootMultiplicity_eq_multiplicity
 -/
@@ -2312,7 +2558,10 @@ lemma add_modByMonic
     · exact
       (div_modByMonic_unique (p₁ /ₘ q + p₂ /ₘ q) _ hq
           ⟨by
-            rw [mul_add]; rw [add_left_comm]; rw [add_assoc]; rw [modByMonic_add_div]; rw [← a
+            rw [mul_add]; rw [add_left_comm]; rw [add_assoc]; rw [modByMonic_add_div]; rw [← add_assoc]; rw [add_comm (q * _)]; rw [modByMonic_add_div],
+            (degree_add_le _ _).trans_lt
+              (max_lt (degree_modByMonic_lt _ hq) (degree_modByMonic_lt _ hq))⟩).2
+  · simp_rw [modByMonic_eq_of_not_monic _ hq]
 
 中文:
 引理 add_modByMonic
@@ -2325,7 +2574,10 @@ lemma add_modByMonic
     · exact
       (div_modByMonic_unique (p₁ /ₘ q + p₂ /ₘ q) _ hq
           ⟨by
-            rw [mul_add]; rw [add_left_comm]; rw [add_assoc]; rw [modByMonic_add_div]; rw [← a
+            rw [mul_add]; rw [add_left_comm]; rw [add_assoc]; rw [modByMonic_add_div]; rw [← add_assoc]; rw [add_comm (q * _)]; rw [modByMonic_add_div],
+            (degree_add_le _ _).trans_lt
+              (max_lt (degree_modByMonic_lt _ hq) (degree_modByMonic_lt _ hq))⟩).2
+  · simp_rw [modByMonic_eq_of_not_monic _ hq]
 
 Depends on / 依赖: add_assoc, add_comm, add_left_comm, degree_add_le, degree_modByMonic_lt, div_modByMonic_unique, eq_iff_true_of_subsingleton, max_lt, modByMonic_add_div, modByMonic_eq_of_not_monic, mul_add, q.Monic, simp_rw, subsingleton_or_nontrivial, trans_lt
 -/
@@ -2401,7 +2653,7 @@ lemma mul_modByMonic
   apply dvd_add
   all_goals
   · apply dvd_mul_of_dvd_right
-
+    simp [Polynomial.modByMonic_eq_sub_mul_div]
 
 中文:
 引理 mul_modByMonic
@@ -2416,7 +2668,7 @@ lemma mul_modByMonic
   apply dvd_add
   all_goals
   · apply dvd_mul_of_dvd_right
-
+    simp [Polynomial.modByMonic_eq_sub_mul_div]
 
 Depends on / 依赖: Polynomial, Polynomial.modByMonic_eq_of_dvd_sub, Polynomial.modByMonic_eq_of_not_monic, Polynomial.modByMonic_eq_sub_mul_div, all_goals, dvd_add, dvd_mul_of_dvd_right, modByMonic_eq_of_dvd_sub, modByMonic_eq_of_not_monic, modByMonic_eq_sub_mul_div, q.Monic
 -/
@@ -2444,7 +2696,9 @@ lemma eval_divByMonic_eq_trailingCoeff_comp
   set m := p.rootMultiplicity t
   set g := p /ₘ (X - C t) ^ m
   have : (g.comp (X + C t)).coeff 0 = g.eval t := by
-    rw [coeff_zero_eq
+    rw [coeff_zero_eq_eval_zero]; rw [eval_comp]; rw [eval_add]; rw [eval_X]; rw [eval_C]; rw [zero_add]
+  rw [← congr_arg (comp · <| X + C t) mul_eq]; rw [mul_comp]; rw [pow_comp]; rw [sub_comp]; rw [X_comp]; rw [C_comp]; rw [add_sub_cancel_right]; rw [← reverse_leadingCoeff]; rw [reverse_X_pow_mul]; rw [reverse_leadingCoeff]; rw [trailingCoeff]; rw [Nat.le_zero.1 (natTrailingDegree_le_of_ne_zero <|
+      this ▸ eval_divByMonic_pow_rootMultiplicity_ne_zero t hp)]; rw [this]
 
 中文:
 引理 eval_divByMonic_eq_trailingCoeff_comp
@@ -2456,7 +2710,9 @@ lemma eval_divByMonic_eq_trailingCoeff_comp
   set m := p.rootMultiplicity t
   set g := p /ₘ (X - C t) ^ m
   have : (g.comp (X + C t)).coeff 0 = g.eval t := by
-    rw [coeff_zero_eq
+    rw [coeff_zero_eq_eval_zero]; rw [eval_comp]; rw [eval_add]; rw [eval_X]; rw [eval_C]; rw [zero_add]
+  rw [← congr_arg (comp · <| X + C t) mul_eq]; rw [mul_comp]; rw [pow_comp]; rw [sub_comp]; rw [X_comp]; rw [C_comp]; rw [add_sub_cancel_right]; rw [← reverse_leadingCoeff]; rw [reverse_X_pow_mul]; rw [reverse_leadingCoeff]; rw [trailingCoeff]; rw [Nat.le_zero.1 (natTrailingDegree_le_of_ne_zero <|
+      this ▸ eval_divByMonic_pow_rootMultiplicity_ne_zero t hp)]; rw [this]
 
 Depends on / 依赖: C_comp, X_comp, add_sub_canc, coeff_zero_eq_eval_zero, congr_arg, eq_or_ne, eval_C, eval_X, eval_add, eval_comp, eval_zero, g.comp, g.eval, mul_comp, mul_eq, p.pow_mul_divByMonic_rootMultiplicity_eq, p.rootMultiplicity, pow_comp, pow_mul_divByMonic_rootMultiplicity_eq, rootMultiplicity
 -/
@@ -2632,7 +2888,8 @@ lemma rootMultiplicity_eq_natTrailingDegree'
   · rw [rootMultiplicity_le_iff h, map_zero, sub_zero, X_pow_dvd_iff, not_forall]
     exact ⟨p.natTrailingDegree,
 fun h' => trailingCoeff_nonzero_iff_nonzero.2 h h' Nat.lt_add_one _⟩
- 
+  · rw [le_rootMultiplicity_iff h, map_zero, sub_zero, X_pow_dvd_iff]
+    exact fun _ => coeff_eq_zero_of_lt_natTrailingDegree
 
 中文:
 引理 rootMultiplicity_eq_natTrailingDegree'
@@ -2644,7 +2901,8 @@ fun h' => trailingCoeff_nonzero_iff_nonzero.2 h h' Nat.lt_add_one _⟩
   · rw [rootMultiplicity_le_iff h, map_zero, sub_zero, X_pow_dvd_iff, not_forall]
     exact ⟨p.natTrailingDegree,
 fun h' => trailingCoeff_nonzero_iff_nonzero.2 h h' Nat.lt_add_one _⟩
- 
+  · rw [le_rootMultiplicity_iff h, map_zero, sub_zero, X_pow_dvd_iff]
+    exact fun _ => coeff_eq_zero_of_lt_natTrailingDegree
 
 Depends on / 依赖: Nat.lt_add_one, X_pow_dvd_iff, coeff_eq_zero_of_lt_natTrailingDegree, le_antisymm, le_rootMultiplicity_iff, lt_add_one, map_zero, natTrailingDegree, natTrailingDegree_zero, not_forall, p.natTrailingDegree, rootMultiplicity_le_iff, rootMultiplicity_zero, sub_zero, trailingCoeff_nonzero_iff_nonzero
 -/
@@ -2670,7 +2928,9 @@ lemma leadingCoeff_divByMonic_of_monic
     simpa [divByMonic_eq_zero_iff hmonic, hmonic.leadingCoeff,
       Nat.WithBot.one_le_iff_zero_lt] using hdegree
   nth_rw 2 [← modByMonic_add_div p q]
-  rw [leadingCoeff_add_of_degree_lt]; rw [leadingCoeff_monic_mul hm
+  rw [leadingCoeff_add_of_degree_lt]; rw [leadingCoeff_monic_mul hmonic]
+  rw [degree_mul' h]; rw [degree_add_divByMonic hmonic hdegree]
+  exact (degree_modByMonic_lt p hmonic).trans_le hdegree
 
 中文:
 引理 leadingCoeff_divByMonic_of_monic
@@ -2681,7 +2941,9 @@ lemma leadingCoeff_divByMonic_of_monic
     simpa [divByMonic_eq_zero_iff hmonic, hmonic.leadingCoeff,
       Nat.WithBot.one_le_iff_zero_lt] using hdegree
   nth_rw 2 [← modByMonic_add_div p q]
-  rw [leadingCoeff_add_of_degree_lt]; rw [leadingCoeff_monic_mul hm
+  rw [leadingCoeff_add_of_degree_lt]; rw [leadingCoeff_monic_mul hmonic]
+  rw [degree_mul' h]; rw [degree_add_divByMonic hmonic hdegree]
+  exact (degree_modByMonic_lt p hmonic).trans_le hdegree
 
 Depends on / 依赖: Nat.WithBot.one_le_iff_zero_lt, WithBot, degree_add_divByMonic, degree_modByMonic_lt, degree_mul, divByMonic_eq_zero_iff, hdegree, hmonic, hmonic.leadingCoeff, leadingCoeff, leadingCoeff_add_of_degree_lt, leadingCoeff_monic_mul, modByMonic_add_div, nontriviality, nth_rw, one_le_iff_zero_lt, q.leadingCoeff, trans_le
 -/
@@ -2711,6 +2973,7 @@ lemma degree_eq_one_of_irreducible_of_root
       have h₁ : degree (X - C x) = 1 := degree_X_sub_C x
       have h₂ : degree (X - C x) = 0 := degree_eq_zero_of_isUnit h
       rw [h₁] at h₂; exact absurd h₂ (by decide))
+    fun hgu => by rw [hg, degree_mul, degree_X_sub_C, degree_eq_zero_of_isUnit hgu, add_zero]
 
 中文:
 引理 degree_eq_one_of_irreducible_of_root
@@ -2722,6 +2985,7 @@ lemma degree_eq_one_of_irreducible_of_root
       have h₁ : degree (X - C x) = 1 := degree_X_sub_C x
       have h₂ : degree (X - C x) = 0 := degree_eq_zero_of_isUnit h
       rw [h₁] at h₂; exact absurd h₂ (by decide))
+    fun hgu => by rw [hg, degree_mul, degree_X_sub_C, degree_eq_zero_of_isUnit hgu, add_zero]
 
 Depends on / 依赖: IsUnit, absurd, add_zero, degree, degree_X_sub_C, degree_eq_zero_of_isUnit, degree_mul, dvd_iff_isRoot, hi.isUnit_or_isUnit, isUnit_or_isUnit, this.elim
 -/
@@ -2836,7 +3100,8 @@ lemma eq_of_dvd_of_natDegree_le_of_leadingCoeff
   obtain ⟨u, rfl⟩ := hpq
   rw [mul_ne_zero_iff] at hq
   rw [natDegree_mul hq.1 hq.2]; rw [left_eq_add] at h₁
-  rw [eq_C_of_natDegree_eq_zero h₁]; rw [leadingCoeff_mul]; rw [leadingCoeff
+  rw [eq_C_of_natDegree_eq_zero h₁]; rw [leadingCoeff_mul]; rw [leadingCoeff_C]; rw [eq_comm]; rw [mul_eq_left₀ (leadingCoeff_ne_zero.mpr hq.1)] at h₂
+  rw [eq_C_of_natDegree_eq_zero h₁]; rw [h₂]; rw [map_one]; rw [mul_one]
 
 中文:
 引理 eq_of_dvd_of_natDegree_le_of_leadingCoeff
@@ -2848,7 +3113,8 @@ lemma eq_of_dvd_of_natDegree_le_of_leadingCoeff
   obtain ⟨u, rfl⟩ := hpq
   rw [mul_ne_zero_iff] at hq
   rw [natDegree_mul hq.1 hq.2]; rw [left_eq_add] at h₁
-  rw [eq_C_of_natDegree_eq_zero h₁]; rw [leadingCoeff_mul]; rw [leadingCoeff
+  rw [eq_C_of_natDegree_eq_zero h₁]; rw [leadingCoeff_mul]; rw [leadingCoeff_C]; rw [eq_comm]; rw [mul_eq_left₀ (leadingCoeff_ne_zero.mpr hq.1)] at h₂
+  rw [eq_C_of_natDegree_eq_zero h₁]; rw [h₂]; rw [map_one]; rw [mul_one]
 
 Depends on / 依赖: antisymm, eq_C_of_natDegree_eq_zero, eq_comm, eq_or_ne, leadingCoeff_C, leadingCoeff_mul, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, left_eq_add, map_one, mul_ne_zero_iff, mul_one, natDegree_le_of_dvd, natDegree_mul, replace
 -/

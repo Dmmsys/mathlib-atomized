@@ -75,7 +75,8 @@ definition log
     if n < b then
       (n, 0)
     else
-      let (
+      let (q, e) := go (b * b) fuel
+      if q < b then (q, 2 * e) else (q / b, 2 * e + 1)
 
 中文:
 定义 log
@@ -90,7 +91,8 @@ definition log
     if n < b then
       (n, 0)
     else
-      let (
+      let (q, e) := go (b * b) fuel
+      if q < b then (q, 2 * e) else (q / b, 2 * e + 1)
 -/
 def log (b n : Nat) : Nat :=
   if b <= 1 then 0 else (go b n).2 where
@@ -196,7 +198,11 @@ lemma log.go_spec
       simp [go, hnb, one_le_iff_ne_zero, hn]
     | inr hnb =>
       rcases ih (Nat.one_mul 1 ▸ Nat.mul_lt_mul_of_lt_of_lt hb hb) (go_aux hb hfuel hnb)
-        with ⟨ih₁, 
+        with ⟨ih₁, ih₂, ih₃⟩
+      simp_all only [go, if_neg (Nat.not_lt_of_le hnb), ← Nat.pow_two, ← Nat.pow_mul,
+        Nat.div_lt_iff_lt_mul, Nat.pow_pos (Nat.zero_lt_of_lt hb), Nat.div_div_eq_div_mul,
+        ← Nat.pow_add_one, ← Nat.pow_add_one', Nat.mul_add_one]
+      split <;> simp_all
 
 中文:
 引理 log.go_spec
@@ -210,7 +216,11 @@ lemma log.go_spec
       simp [go, hnb, one_le_iff_ne_zero, hn]
     | inr hnb =>
       rcases ih (Nat.one_mul 1 ▸ Nat.mul_lt_mul_of_lt_of_lt hb hb) (go_aux hb hfuel hnb)
-        with ⟨ih₁, 
+        with ⟨ih₁, ih₂, ih₃⟩
+      simp_all only [go, if_neg (Nat.not_lt_of_le hnb), ← Nat.pow_two, ← Nat.pow_mul,
+        Nat.div_lt_iff_lt_mul, Nat.pow_pos (Nat.zero_lt_of_lt hb), Nat.div_div_eq_div_mul,
+        ← Nat.pow_add_one, ← Nat.pow_add_one', Nat.mul_add_one]
+      split <;> simp_all
 
 Depends on / 依赖: Nat.div_div_eq_div_mul, Nat.div_lt_iff_lt_mul, Nat.lt_or_ge, Nat.mul_add_one, Nat.mul_lt_mul_of_lt_of_lt, Nat.not_lt_of_le, Nat.one_mul, Nat.pow_add_one, Nat.pow_mul, Nat.pow_pos, Nat.pow_two, Nat.zero_lt_of_lt, div_div_eq_div_mul, div_lt_iff_lt_mul, generalizing, go_aux, if_neg, lt_or_ge, mul_add_one, mul_lt_mul_of_lt_of_lt
 -/
@@ -244,7 +254,10 @@ theorem log_lt_iff_lt_pow
   | inl h =>
 exact iff_of_true h Nat.lt_of_lt_of_le H₂ Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) h
   | inr h =>
-refine iff_of_false (Nat.
+refine iff_of_false (Nat.not_lt_of_ge h) Nat.not_lt_of_ge Nat.le_trans ?_ H₁
+    exact Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) h
+
+@[simp]
 
 中文:
 定理 log_lt_iff_lt_pow
@@ -256,7 +269,10 @@ refine iff_of_false (Nat.
   | inl h =>
 exact iff_of_true h Nat.lt_of_lt_of_le H₂ Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) h
   | inr h =>
-refine iff_of_false (Nat.
+refine iff_of_false (Nat.not_lt_of_ge h) Nat.not_lt_of_ge Nat.le_trans ?_ H₁
+    exact Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) h
+
+@[simp]
 
 Depends on / 依赖: Nat.le_trans, Nat.lt_of_lt_of_le, Nat.lt_or_ge, Nat.lt_pow_self, Nat.not_le_of_lt, Nat.not_lt_of_ge, Nat.pow_le_pow_right, Nat.zero_lt_of_lt, go_spec, if_neg, iff_of_false, iff_of_true, le_trans, log.go, log.go_spec, lt_of_lt_of_le, lt_or_ge, lt_pow_self, not_le_of_lt, not_lt_of_ge
 -/
@@ -722,7 +738,9 @@ theorem log_eq_iff
   have hm : m != 0 := h.resolve_right hbn
   rw [not_and_or]; rw [not_lt]; rw [Ne]; rw [not_not] at hbn
   rcases hbn with (hb | rfl)
- 
+  · obtain rfl | rfl := le_one_iff_eq_zero_or_eq_one.1 hb <;>
+      simp only [log_zero_left, log_one_left] <;> lia
+  · simp [@eq_comm _ 0, hm]
 
 中文:
 定理 log_eq_iff
@@ -734,7 +752,9 @@ theorem log_eq_iff
   have hm : m != 0 := h.resolve_right hbn
   rw [not_and_or]; rw [not_lt]; rw [Ne]; rw [not_not] at hbn
   rcases hbn with (hb | rfl)
- 
+  · obtain rfl | rfl := le_one_iff_eq_zero_or_eq_one.1 hb <;>
+      simp only [log_zero_left, log_one_left] <;> lia
+  · simp [@eq_comm _ 0, hm]
 
 Depends on / 依赖: Nat.lt_succ_iff, and_comm, eq_comm, h.resolve_right, le_antisymm_iff, le_log_iff_pow_le, le_one_iff_eq_zero_or_eq_one, log_lt_iff_lt_pow, log_one_left, log_zero_left, lt_succ_iff, not_and_or, not_lt, not_not, resolve_right
 -/
@@ -1181,7 +1201,7 @@ theorem log_div_mul_self
   · rw [log_of_left_le_one hb, log_of_left_le_one hb]
   rcases lt_or_ge n b with h | h
   · rw [div_eq_of_lt h, Nat.zero_mul, log_zero_right, log_of_lt h]
-  rw [log_mul_base hb (Nat.div_pos h (by lia)).ne']; rw [log_div_base]; rw [Nat.sub_add_cancel (succ_le_iff.
+  rw [log_mul_base hb (Nat.div_pos h (by lia)).ne']; rw [log_div_base]; rw [Nat.sub_add_cancel (succ_le_iff.2 <| log_pos hb h)]
 
 中文:
 定理 log_div_mul_self
@@ -1192,7 +1212,7 @@ theorem log_div_mul_self
   · rw [log_of_left_le_one hb, log_of_left_le_one hb]
   rcases lt_or_ge n b with h | h
   · rw [div_eq_of_lt h, Nat.zero_mul, log_zero_right, log_of_lt h]
-  rw [log_mul_base hb (Nat.div_pos h (by lia)).ne']; rw [log_div_base]; rw [Nat.sub_add_cancel (succ_le_iff.
+  rw [log_mul_base hb (Nat.div_pos h (by lia)).ne']; rw [log_div_base]; rw [Nat.sub_add_cancel (succ_le_iff.2 <| log_pos hb h)]
 
 Depends on / 依赖: Nat.div_pos, Nat.sub_add_cancel, Nat.zero_mul, div_eq_of_lt, div_pos, le_or_gt, log_div_base, log_mul_base, log_of_left_le_one, log_of_lt, log_pos, log_zero_right, lt_or_ge, sub_add_cancel, succ_le_iff, zero_mul
 -/
@@ -1303,7 +1323,9 @@ lemma log_pow_left
     · simp
     · rcases Nat.lt_or_ge 1 b with hb | hb
       · refine eq_of_forall_le_iff fun c => ?_
-        rw [le_log_iff_pow_le (Nat.one_lt_pow (Nat.ne_of_gt hk) hb) hn]; rw [Nat.le_div_iff_mul_le hk]; rw [l
+        rw [le_log_iff_pow_le (Nat.one_lt_pow (Nat.ne_of_gt hk) hb) hn]; rw [Nat.le_div_iff_mul_le hk]; rw [le_log_iff_pow_le hb hn]; rw [Nat.pow_mul']
+      · rw [log_of_left_le_one hb, Nat.zero_div, log_of_left_le_one]
+        rwa [Nat.pow_le_one_iff (Nat.ne_of_gt hk)]
 
 中文:
 引理 log_pow_left
@@ -1316,7 +1338,9 @@ lemma log_pow_left
     · simp
     · rcases Nat.lt_or_ge 1 b with hb | hb
       · refine eq_of_forall_le_iff fun c => ?_
-        rw [le_log_iff_pow_le (Nat.one_lt_pow (Nat.ne_of_gt hk) hb) hn]; rw [Nat.le_div_iff_mul_le hk]; rw [l
+        rw [le_log_iff_pow_le (Nat.one_lt_pow (Nat.ne_of_gt hk) hb) hn]; rw [Nat.le_div_iff_mul_le hk]; rw [le_log_iff_pow_le hb hn]; rw [Nat.pow_mul']
+      · rw [log_of_left_le_one hb, Nat.zero_div, log_of_left_le_one]
+        rwa [Nat.pow_le_one_iff (Nat.ne_of_gt hk)]
 
 Depends on / 依赖: Nat.le_div_iff_mul_le, Nat.lt_or_ge, Nat.ne_of_gt, Nat.one_lt_pow, Nat.pow_le_one_iff, Nat.pow_mul, Nat.zero_div, eq_of_forall_le_iff, eq_or_ne, eq_zero_or_pos, k.eq_zero_or_pos, le_div_iff_mul_le, le_log_iff_pow_le, log_of_left_le_one, lt_or_ge, ne_of_gt, one_lt_pow, pow_le_one_iff, pow_mul, zero_div
 -/
@@ -1353,7 +1377,8 @@ definition clog
   | b, fuel + 1 =>
     if n <= b then (b / n, 0)
     else
-  
+      let (q, e) := go (b * b) fuel
+      if q < b then (q, 2 * e + 1) else (q / b, 2 * e)
 
 中文:
 定义 clog
@@ -1368,7 +1393,8 @@ definition clog
   | b, fuel + 1 =>
     if n <= b then (b / n, 0)
     else
-  
+      let (q, e) := go (b * b) fuel
+      if q < b then (q, 2 * e + 1) else (q / b, 2 * e)
 -/
 def clog (b n : Nat) : Nat :=
   if 1 < b ∧ 1 < n then (go b n).2 + 1 else 0 where
@@ -1523,7 +1549,11 @@ theorem clog.go_spec
     | inl hbn =>
       rcases ih (Nat.one_mul 1 ▸ Nat.mul_lt_mul_of_lt_of_lt hb hb)
         (log.go_aux hb hfuel (Nat.le_of_lt hbn)) with ⟨ih₁, ih₂, ih₃⟩
-  
+      simp_all only [go, if_neg (Nat.not_le_of_gt hbn), ← Nat.pow_two, ← Nat.pow_mul,
+        Nat.div_lt_iff_lt_mul (Nat.zero_lt_of_lt hbn), Nat.div_div_eq_div_mul,
+        Nat.mul_comm n b, Nat.mul_add_one, @Nat.pow_add_one' _ (2 * _ + 1),
+        Nat.mul_lt_mul_left, Nat.mul_div_mul_left, Nat.zero_lt_of_lt hb]
+      split <;> simp_all [Nat.mul_add_one, Nat.pow_add_one']
 
 中文:
 定理 clog.go_spec
@@ -1537,7 +1567,11 @@ theorem clog.go_spec
     | inl hbn =>
       rcases ih (Nat.one_mul 1 ▸ Nat.mul_lt_mul_of_lt_of_lt hb hb)
         (log.go_aux hb hfuel (Nat.le_of_lt hbn)) with ⟨ih₁, ih₂, ih₃⟩
-  
+      simp_all only [go, if_neg (Nat.not_le_of_gt hbn), ← Nat.pow_two, ← Nat.pow_mul,
+        Nat.div_lt_iff_lt_mul (Nat.zero_lt_of_lt hbn), Nat.div_div_eq_div_mul,
+        Nat.mul_comm n b, Nat.mul_add_one, @Nat.pow_add_one' _ (2 * _ + 1),
+        Nat.mul_lt_mul_left, Nat.mul_div_mul_left, Nat.zero_lt_of_lt hb]
+      split <;> simp_all [Nat.mul_add_one, Nat.pow_add_one']
 
 Depends on / 依赖: Nat.div_div_eq_div_mul, Nat.div_lt_iff_lt_mul, Nat.le_of_lt, Nat.lt_or_ge, Nat.mul_add_one, Nat.mul_comm, Nat.mul_lt_mul_, Nat.mul_lt_mul_of_lt_of_lt, Nat.not_le_of_gt, Nat.one_mul, Nat.pow_add_one, Nat.pow_mul, Nat.pow_two, Nat.zero_lt_of_lt, div_div_eq_div_mul, div_lt_iff_lt_mul, generalizing, go_aux, if_neg, le_of_lt
 -/
@@ -1573,7 +1607,10 @@ theorem clog_le_iff_le_pow
     | inl hy =>
       rw [← Nat.add_one_le_iff] at hy
 exact iff_of_true hy Nat.le_trans H₂ Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) hy
-    |
+    | inr hy =>
+      apply_rules [iff_of_false, Nat.not_le_of_gt, Nat.lt_add_one_of_le]
+      exact Nat.lt_of_le_of_lt (Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) hy) H₁
+  | case2 h => grind [Nat.one_le_pow]
 
 中文:
 定理 clog_le_iff_le_pow
@@ -1587,7 +1624,10 @@ exact iff_of_true hy Nat.le_trans H₂ Nat.pow_le_pow_right (Nat.zero_lt_of_lt h
     | inl hy =>
       rw [← Nat.add_one_le_iff] at hy
 exact iff_of_true hy Nat.le_trans H₂ Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) hy
-    |
+    | inr hy =>
+      apply_rules [iff_of_false, Nat.not_le_of_gt, Nat.lt_add_one_of_le]
+      exact Nat.lt_of_le_of_lt (Nat.pow_le_pow_right (Nat.zero_lt_of_lt hb) hy) H₁
+  | case2 h => grind [Nat.one_le_pow]
 
 Depends on / 依赖: Nat.add_one_le_iff, Nat.le_trans, Nat.lt_add_one_of_le, Nat.lt_of_le_of_lt, Nat.lt_or_ge, Nat.lt_pow_self, Nat.not_le_of_gt, Nat.one_le_pow, Nat.pow_le_pow_right, Nat.zero_lt_of_lt, add_one_le_iff, apply_rules, clog.go, clog.go_spec, fun_cases, go_spec, iff_of_false, iff_of_true, le_trans, lt_add_one_of_le
 -/
@@ -2108,7 +2148,10 @@ theorem clog_pow_left
   · simp
   · rcases Nat.lt_or_ge 1 b with hb | hb
     · refine eq_of_forall_lt_iff fun c => ?_
-      rw [lt_clog_iff_pow_lt (Nat.one_lt_pow (Nat.ne_of_gt hk) hb)]; rw [Nat.lt_div_iff_mul_lt hk]; rw [Nat.add_sub_cancel]; rw [lt_clog_iff_pow_lt hb]; rw [Nat.p
+      rw [lt_clog_iff_pow_lt (Nat.one_lt_pow (Nat.ne_of_gt hk) hb)]; rw [Nat.lt_div_iff_mul_lt hk]; rw [Nat.add_sub_cancel]; rw [lt_clog_iff_pow_lt hb]; rw [Nat.pow_mul']
+    · suffices (k - 1) / k = 0 by grind [clog_of_left_le_one, Nat.pow_le_one_iff]
+      apply Nat.div_eq_of_lt
+      grind
 
 中文:
 定理 clog_pow_left
@@ -2119,7 +2162,10 @@ theorem clog_pow_left
   · simp
   · rcases Nat.lt_or_ge 1 b with hb | hb
     · refine eq_of_forall_lt_iff fun c => ?_
-      rw [lt_clog_iff_pow_lt (Nat.one_lt_pow (Nat.ne_of_gt hk) hb)]; rw [Nat.lt_div_iff_mul_lt hk]; rw [Nat.add_sub_cancel]; rw [lt_clog_iff_pow_lt hb]; rw [Nat.p
+      rw [lt_clog_iff_pow_lt (Nat.one_lt_pow (Nat.ne_of_gt hk) hb)]; rw [Nat.lt_div_iff_mul_lt hk]; rw [Nat.add_sub_cancel]; rw [lt_clog_iff_pow_lt hb]; rw [Nat.pow_mul']
+    · suffices (k - 1) / k = 0 by grind [clog_of_left_le_one, Nat.pow_le_one_iff]
+      apply Nat.div_eq_of_lt
+      grind
 
 Depends on / 依赖: Nat.add_sub_cancel, Nat.div_eq_of_lt, Nat.lt_div_iff_mul_lt, Nat.lt_or_ge, Nat.ne_of_gt, Nat.one_lt_pow, Nat.pow_le_one_iff, Nat.pow_mul, add_sub_cancel, clog_of_left_le_one, div_eq_of_lt, eq_of_forall_lt_iff, eq_zero_or_pos, k.eq_zero_or_pos, lt_clog_iff_pow_lt, lt_div_iff_mul_lt, lt_or_ge, ne_of_gt, one_lt_pow, pow_le_one_iff
 -/

@@ -49,6 +49,8 @@ definition nullSubgroup
   one_mem' := norm_one'
   inv_mem' {x} (hx : ‖x‖ = 0) := by simpa only [Set.mem_ofPred_eq, norm_inv'] using hx
 
+@[to_additive]
+
 中文:
 定义 nullSubgroup
   签名: : 子群 M where
@@ -59,6 +61,8 @@ definition nullSubgroup
     rw [hx]; rw [hy]; rw [add_zero]
   one_mem' := norm_one'
   inv_mem' {x} (hx : ‖x‖ = 0) := by simpa only [Set.mem_ofPred_eq, norm_inv'] using hx
+
+@[to_additive]
 -/
 def nullSubgroup : Subgroup M where
   carrier := {x : M | ‖x‖ = 0}

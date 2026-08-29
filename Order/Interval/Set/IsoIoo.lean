@@ -37,6 +37,16 @@ definition orderIsoIooNegOneOne
     have H : 0 < 1 + |x| := (abs_nonneg x).trans_lt (lt_one_add _)
     calc
       |x / (1 + |x|)| = |x| / (1 + |x|) := by rw [abs_div, abs_of_pos H]
+      _ < 1 := (div_lt_one H).2 (lt_one_add _)
+  · refine (strictMono_of_odd_strictMonoOn_nonneg ?_ ?_).codRestrict _
+    · intro x
+      simp only [abs_neg, neg_div]
+    · rintro x (hx : 0 <= x) y (hy : 0 <= y) hxy
+      simp [abs_of_nonneg, mul_add, mul_comm x y, div_lt_div_iff₀, hx.trans_lt (lt_one_add _),
+        hy.trans_lt (lt_one_add _), *]
+  · refine fun x => Subtype.ext ?_
+    have : 0 < 1 - |(x : k)| := sub_pos.2 (abs_lt.2 x.2)
+    simp [field, abs_div, abs_of_pos this]
 
 中文:
 定义 orderIsoIooNegOneOne
@@ -47,6 +57,16 @@ definition orderIsoIooNegOneOne
     have H : 0 < 1 + |x| := (abs_nonneg x).trans_lt (lt_one_add _)
     calc
       |x / (1 + |x|)| = |x| / (1 + |x|) := by rw [abs_div, abs_of_pos H]
+      _ < 1 := (div_lt_one H).2 (lt_one_add _)
+  · refine (strictMono_of_odd_strictMonoOn_nonneg ?_ ?_).codRestrict _
+    · intro x
+      simp only [abs_neg, neg_div]
+    · rintro x (hx : 0 <= x) y (hy : 0 <= y) hxy
+      simp [abs_of_nonneg, mul_add, mul_comm x y, div_lt_div_iff₀, hx.trans_lt (lt_one_add _),
+        hy.trans_lt (lt_one_add _), *]
+  · refine fun x => Subtype.ext ?_
+    have : 0 < 1 - |(x : k)| := sub_pos.2 (abs_lt.2 x.2)
+    simp [field, abs_div, abs_of_pos this]
 
 Depends on / 依赖: StrictMono, StrictMono.orderIsoOfRightInverse, abs_div, abs_lt, abs_neg, abs_nonneg, abs_of_nonneg, abs_of_pos, codRestrict, div_lt_one, lt_one_add, neg_div, orderIsoOfRightInverse, strictMono_of_odd_strictMonoOn_nonneg, trans_lt
 -/

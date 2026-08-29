@@ -603,7 +603,9 @@ theorem scalar_product_char_eq_finrank_equivariant
   -- The scalar product is the character of `Hom(V, W).`
   rw [FDRep.average_char_eq_finrank_invariants]; rw [← LinearEquiv.finrank_eq
     (Representation.linHom.invariantsEquivFDRepHom V W)]; rw [of_ρ']
-  -- The av
+  -- The average over the group of the character of a representation equals the dimension of the
+  -- space of invariants, and the space of invariants of `Hom(V, W)` is the subspace of
+  -- `G`-equivariant linear maps, `Hom_G(V, W)`.
 
 中文:
 定理 scalar_product_char_eq_finrank_equivariant
@@ -613,7 +615,9 @@ theorem scalar_product_char_eq_finrank_equivariant
   -- The scalar product is the character of `Hom(V, W).`
   rw [FDRep.average_char_eq_finrank_invariants]; rw [← LinearEquiv.finrank_eq
     (Representation.linHom.invariantsEquivFDRepHom V W)]; rw [of_ρ']
-  -- The av
+  -- The average over the group of the character of a representation equals the dimension of the
+  -- space of invariants, and the space of invariants of `Hom(V, W)` is the subspace of
+  -- `G`-equivariant linear maps, `Hom_G(V, W)`.
 
 Depends on / 依赖: FDRep.char_linHom, char_linHom, conv_lhs, mul_comm
 -/
@@ -648,7 +652,7 @@ theorem char_orthonormal
   -- The scalar product of the characters is equal to the dimension of the space of
   -- equivariant maps `W ⟶ V`.
   rw_mod_cast [finrank_hom_simple_simple W V, Iso.nonempty_iso_symm]
-  -- By Schur's Lemma, the dimension of `Hom_G(W, V)` is `1` if
+  -- By Schur's Lemma, the dimension of `Hom_G(W, V)` is `1` if `V ≅ W` and `0` otherwise.
 
 中文:
 定理 char_orthonormal
@@ -658,7 +662,7 @@ theorem char_orthonormal
   -- The scalar product of the characters is equal to the dimension of the space of
   -- equivariant maps `W ⟶ V`.
   rw_mod_cast [finrank_hom_simple_simple W V, Iso.nonempty_iso_symm]
-  -- By Schur's Lemma, the dimension of `Hom_G(W, V)` is `1` if
+  -- By Schur's Lemma, the dimension of `Hom_G(W, V)` is `1` if `V ≅ W` and `0` otherwise.
 
 Depends on / 依赖: scalar_product_char_eq_finrank_equivariant
 -/

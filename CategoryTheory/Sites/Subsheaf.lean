@@ -152,7 +152,7 @@ theorem Subfunctor.eq_sheafify
     exact ((hG _ hs).amalgamate _ (G.family_of_elements_compatible s)).2
   apply (h _ hs).isSeparatedFor.ext
   intro V i hi
-  exact (congr_arg Subtype
+  exact (congr_arg Subtype.val ((hG _ hs).valid_glue (G.family_of_elements_compatible s) _ hi) :)
 
 中文:
 定理 子函子.eq_sheafify
@@ -165,7 +165,7 @@ theorem Subfunctor.eq_sheafify
     exact ((hG _ hs).amalgamate _ (G.family_of_elements_compatible s)).2
   apply (h _ hs).isSeparatedFor.ext
   intro V i hi
-  exact (congr_arg Subtype
+  exact (congr_arg Subtype.val ((hG _ hs).valid_glue (G.family_of_elements_compatible s) _ hi) :)
 
 Depends on / 依赖: G.family_of_elements_compatible, G.le_sheafify, Subtype, Subtype.val, amalgamate, antisymm, congr_arg, family_of_elements_compatible, isSeparatedFor, isSeparatedFor.ext, le_sheafify, valid_glue
 -/
@@ -193,7 +193,30 @@ theorem Subfunctor.sheafify_isSheaf
   have := fun (V) (i : V ⟶ U) (hi : S' i) => hi
   choose W i₁ i₂ hi₂ h₁ h₂ using this
   dsimp [-Sieve.bind_apply] at *
-  let x'' : Presieve.FamilyOfElements F S
+  let x'' : Presieve.FamilyOfElements F S' := fun V i hi => F.map (i₁ V i hi).op (x _ (hi₂ V i hi))
+  have H : forall s, x''.IsAmalgamation s.1 -> x.IsAmalgamation s := by
+    intro s H V i hi
+    refine Subtype.ext ?_
+    apply (hF _ (x i hi).2).isSeparatedFor.ext
+    intro V' i' hi'
+    have hi'' : S' (i' ≫ i) := ⟨_, _, _, hi, hi', rfl⟩
+    have := H _ hi''
+    rw [op_comp]; rw [F.map_comp] at this
+    exact this.trans (congr_arg Subtype.val (hx _ _ (hi₂ _ _ hi'') hi (h₂ _ _ hi'')))
+  have : x''.Compatible := by
+    intro V₁ V₂ V₃ g₁ g₂ g₃ g₄ S₁ S₂ e
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [Functor.map_comp]
+    simpa using!
+      congr_arg Subtype.val
+        (hx (g₁ ≫ i₁ _ _ S₁) (g₂ ≫ i₁ _ _ S₂) (hi₂ _ _ S₁) (hi₂ _ _ S₂)
+        (by simp only [Category.assoc, h₂, e]))
+  obtain ⟨t, ht, ht'⟩ := hF _ (J.bind_covering hS fun V i hi => (x i hi).2) _ this
+  refine ⟨⟨t, _⟩, H ⟨t, ?_⟩ ht⟩
+  refine J.superset_covering ?_ (J.bind_covering hS fun V i hi => (x i hi).2)
+  intro V i hi
+  dsimp
+  rw [ht _ hi]
+  exact h₁ _ _ hi
 
 中文:
 定理 子函子.sheafify_isSheaf
@@ -204,7 +227,30 @@ theorem Subfunctor.sheafify_isSheaf
   have := fun (V) (i : V ⟶ U) (hi : S' i) => hi
   choose W i₁ i₂ hi₂ h₁ h₂ using this
   dsimp [-Sieve.bind_apply] at *
-  let x'' : Presieve.FamilyOfElements F S
+  let x'' : Presieve.FamilyOfElements F S' := fun V i hi => F.map (i₁ V i hi).op (x _ (hi₂ V i hi))
+  have H : forall s, x''.IsAmalgamation s.1 -> x.IsAmalgamation s := by
+    intro s H V i hi
+    refine Subtype.ext ?_
+    apply (hF _ (x i hi).2).isSeparatedFor.ext
+    intro V' i' hi'
+    have hi'' : S' (i' ≫ i) := ⟨_, _, _, hi, hi', rfl⟩
+    have := H _ hi''
+    rw [op_comp]; rw [F.map_comp] at this
+    exact this.trans (congr_arg Subtype.val (hx _ _ (hi₂ _ _ hi'') hi (h₂ _ _ hi'')))
+  have : x''.Compatible := by
+    intro V₁ V₂ V₃ g₁ g₂ g₃ g₄ S₁ S₂ e
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [Functor.map_comp]
+    simpa using!
+      congr_arg Subtype.val
+        (hx (g₁ ≫ i₁ _ _ S₁) (g₂ ≫ i₁ _ _ S₂) (hi₂ _ _ S₁) (hi₂ _ _ S₂)
+        (by simp only [Category.assoc, h₂, e]))
+  obtain ⟨t, ht, ht'⟩ := hF _ (J.bind_covering hS fun V i hi => (x i hi).2) _ this
+  refine ⟨⟨t, _⟩, H ⟨t, ?_⟩ ht⟩
+  refine J.superset_covering ?_ (J.bind_covering hS fun V i hi => (x i hi).2)
+  intro V i hi
+  dsimp
+  rw [ht _ hi]
+  exact h₁ _ _ hi
 
 Depends on / 依赖: F.map, FamilyOfElements, G.sieveOfSection, IsAmalgamation, Presieve, Presieve.FamilyOfElements, Sieve.bind, Sieve.bind_apply, Subtype, Subtype.ext, bind_apply, hF.isSeparated, isSeparated, isSeparatedFor, isSeparatedFor.ext, isSheaf, sieveOfSection, x.IsAmalgamation
 -/
@@ -321,7 +367,17 @@ definition Subfunctor.sheafifyLift
     ext s
     apply (h _ ((Subfunctor.sheafify J G).toFunctor.map i s).prop).isSeparatedFor.ext
     intro W j hj
-    refine (Presieve.IsSheafFor.valid_glue 
+    refine (Presieve.IsSheafFor.valid_glue (h _ ((G.sheafify J).toFunctor.map i s).2)
+      ((G.family_of_elements_compatible _).map _) _ hj).trans ?_
+    dsimp
+    simp only [← comp_apply, ← Functor.map_comp]
+    change _ = F'.map (j ≫ i.unop).op _
+    refine Eq.trans ?_ (Presieve.IsSheafFor.valid_glue (h _ s.2)
+      ((G.family_of_elements_compatible s.1).map f) (j ≫ i.unop) ?_).symm
+    · simp [Presieve.FamilyOfElements.map, Subfunctor.familyOfElementsOfSection]
+      rfl
+    · dsimp [Presieve.FamilyOfElements.map] at hj ⊢
+      rwa [Functor.map_comp, comp_apply]
 
 中文:
 定义 子函子.sheafifyLift
@@ -333,7 +389,17 @@ definition Subfunctor.sheafifyLift
     ext s
     apply (h _ ((Subfunctor.sheafify J G).toFunctor.map i s).prop).isSeparatedFor.ext
     intro W j hj
-    refine (Presieve.IsSheafFor.valid_glue 
+    refine (Presieve.IsSheafFor.valid_glue (h _ ((G.sheafify J).toFunctor.map i s).2)
+      ((G.family_of_elements_compatible _).map _) _ hj).trans ?_
+    dsimp
+    simp only [← comp_apply, ← Functor.map_comp]
+    change _ = F'.map (j ≫ i.unop).op _
+    refine Eq.trans ?_ (Presieve.IsSheafFor.valid_glue (h _ s.2)
+      ((G.family_of_elements_compatible s.1).map f) (j ≫ i.unop) ?_).symm
+    · simp [Presieve.FamilyOfElements.map, Subfunctor.familyOfElementsOfSection]
+      rfl
+    · dsimp [Presieve.FamilyOfElements.map] at hj ⊢
+      rwa [Functor.map_comp, comp_apply]
 
 Depends on / 依赖: G.sieveOfSection, amalgamate, s.prop, sieveOfSection
 -/
@@ -371,7 +437,7 @@ theorem Subfunctor.to_sheafifyLift
   intro V i hi
   have := elementwise_of% f.naturality
   exact (Presieve.IsSheafFor.valid_glue (h _ ((homOfLe (_ : _ <= sheafify _ _)).app _ _).2)
-    ((G.family_of_elements_compatible _).map _) _ _).t
+    ((G.family_of_elements_compatible _).map _) _ _).trans (this _ _)
 
 中文:
 定理 子函子.to_sheafifyLift
@@ -382,7 +448,7 @@ theorem Subfunctor.to_sheafifyLift
   intro V i hi
   have := elementwise_of% f.naturality
   exact (Presieve.IsSheafFor.valid_glue (h _ ((homOfLe (_ : _ <= sheafify _ _)).app _ _).2)
-    ((G.family_of_elements_compatible _).map _) _ _).t
+    ((G.family_of_elements_compatible _).map _) _ _).trans (this _ _)
 
 Depends on / 依赖: G.family_of_elements_compatible, G.le_sheafify, IsSheafFor, Presieve, Presieve.IsSheafFor.valid_glue, Subfunctor, Subfunctor.homOfLe, elementwise_of, f.naturality, family_of_elements_compatible, homOfLe, isSeparatedFor, isSeparatedFor.ext, le_sheafify, naturality, sheafify, valid_glue
 -/
@@ -450,7 +516,9 @@ theorem Subfunctor.sheafify_le
   have :=
     congr_arg (fun f : G.toFunctor ⟶ G'.toFunctor => (NatTrans.app f (op V) ⟨_, hi⟩).1)
       (G.to_sheafifyLift (Subfunctor.homOfLe h) hG')
-  conv
+  convert! this.symm
+  rw [← Subfunctor.nat_trans_naturality]
+  rfl
 
 中文:
 定理 子函子.sheafify_le
@@ -463,7 +531,9 @@ theorem Subfunctor.sheafify_le
   have :=
     congr_arg (fun f : G.toFunctor ⟶ G'.toFunctor => (NatTrans.app f (op V) ⟨_, hi⟩).1)
       (G.to_sheafifyLift (Subfunctor.homOfLe h) hG')
-  conv
+  convert! this.symm
+  rw [← Subfunctor.nat_trans_naturality]
+  rfl
 
 Depends on / 依赖: G.sheafifyLift, G.toFunctor, G.to_sheafifyLift, NatTrans, NatTrans.app, Subfunctor, Subfunctor.homOfLe, Subfunctor.nat_trans_naturality, congr_arg, convert, homOfLe, isSeparatedFor, isSeparatedFor.ext, nat_trans_naturality, sheafifyLift, this.symm, toFunctor, to_sheafifyLift
 -/
@@ -665,7 +735,19 @@ definition imageFactorization
         refine ⟨Subfunctor.homOfLe ?_ ≫ inv (Subfunctor.toRange I.m.1)⟩
         apply Subfunctor.sheafify_le
         · conv_lhs => rw [← I.fac]
-     
+          apply Subfunctor.range_comp_le
+        · rw [← isSheaf_iff_isSheaf_of_type]
+          exact F'.2
+        · apply Presieve.isSheaf_iso J (asIso <| Subfunctor.toRange I.m.1)
+          rw [← isSheaf_iff_isSheaf_of_type]
+          exact I.I.2
+      lift_fac := fun I => by
+        ext1
+        dsimp [imageMonoFactorization]
+        generalize_proofs h
+        rw [← Subfunctor.homOfLe_ι h]; rw [Category.assoc]
+        congr 1
+        rw [IsIso.inv_comp_eq]; rw [Subfunctor.toRange_ι] }
 
 中文:
 定义 imageFactorization
@@ -677,7 +759,19 @@ definition imageFactorization
         refine ⟨Subfunctor.homOfLe ?_ ≫ inv (Subfunctor.toRange I.m.1)⟩
         apply Subfunctor.sheafify_le
         · conv_lhs => rw [← I.fac]
-     
+          apply Subfunctor.range_comp_le
+        · rw [← isSheaf_iff_isSheaf_of_type]
+          exact F'.2
+        · apply Presieve.isSheaf_iso J (asIso <| Subfunctor.toRange I.m.1)
+          rw [← isSheaf_iff_isSheaf_of_type]
+          exact I.I.2
+      lift_fac := fun I => by
+        ext1
+        dsimp [imageMonoFactorization]
+        generalize_proofs h
+        rw [← Subfunctor.homOfLe_ι h]; rw [Category.assoc]
+        congr 1
+        rw [IsIso.inv_comp_eq]; rw [Subfunctor.toRange_ι] }
 
 Depends on / 依赖: imageMonoFactorization
 -/

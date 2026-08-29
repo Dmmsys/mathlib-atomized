@@ -39,7 +39,8 @@ F.map_injective by
         Functor.Monoidal.map_whiskerRight]
   coevaluation_evaluation' :=
 F.map_injective by
-      simp [map_eval, map_coeval, Functor.Monoidal.map_whisk
+      simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
+        Functor.Monoidal.map_whiskerRight]
 
 中文:
 定义 ExactPairing.ofFaithful
@@ -52,7 +53,8 @@ F.map_injective by
         Functor.Monoidal.map_whiskerRight]
   coevaluation_evaluation' :=
 F.map_injective by
-      simp [map_eval, map_coeval, Functor.Monoidal.map_whisk
+      simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
+        Functor.Monoidal.map_whiskerRight]
 -/
 def ExactPairing.ofFaithful [F.Faithful] {X Y : C} (eval : Y otimes X ⟶ 𝟙_ C)
     (coeval : 𝟙_ C ⟶ X otimes Y) [ExactPairing (F.obj X) (F.obj Y)]

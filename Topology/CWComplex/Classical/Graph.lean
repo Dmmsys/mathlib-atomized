@@ -41,7 +41,12 @@ definition CWComplex.OneSkeletonGraph
   eq_or_eq_of_isLink_of_isLink e x y z w h1 h2 := by
     simp_rw [closedCell_zero_eq_singleton] at h1 h2
     rw [h1] at h2
-    simp only [(RelCWComplex.injective_map_z
+    simp only [(RelCWComplex.injective_map_zero C).eq_iff, union_singleton, pair_eq_pair_iff] at h2
+    tauto
+  left_mem_of_isLink _ _ _ _ := mem_univ _
+  edge_mem_iff_exists_isLink e := by
+    simp only [mem_univ, true_iff]
+    exact exists_cellFrontier_one_eq e
 
 中文:
 定义 CWComplex.OneSkeletonGraph
@@ -53,7 +58,12 @@ definition CWComplex.OneSkeletonGraph
   eq_or_eq_of_isLink_of_isLink e x y z w h1 h2 := by
     simp_rw [closedCell_zero_eq_singleton] at h1 h2
     rw [h1] at h2
-    simp only [(RelCWComplex.injective_map_z
+    simp only [(RelCWComplex.injective_map_zero C).eq_iff, union_singleton, pair_eq_pair_iff] at h2
+    tauto
+  left_mem_of_isLink _ _ _ _ := mem_univ _
+  edge_mem_iff_exists_isLink e := by
+    simp only [mem_univ, true_iff]
+    exact exists_cellFrontier_one_eq e
 -/
 def CWComplex.OneSkeletonGraph (C : Set X) [CWComplex C] : Graph (cell C 0) (cell C 1) where
   vertexSet := univ
@@ -135,7 +145,8 @@ lemma exists_isLoopAt_iff_subsingleton
   refine ⟨fun ⟨x, hx⟩ => by simp [closedCell_zero_eq_singleton, hx], fun h => ?_⟩
   obtain ⟨x, y, hxy⟩ := exists_cellFrontier_one_eq e
   simp only [closedCell_zero_eq_singleton, union_singleton] at hxy
-obtain rfl : x = y := RelCWComplex.injective_map_zero C (hxy ▸ h) (b
+obtain rfl : x = y := RelCWComplex.injective_map_zero C (hxy ▸ h) (by simp) (by simp)
+  exact ⟨x, by simp [hxy, closedCell_zero_eq_singleton]⟩
 
 中文:
 引理 存在_isLoopAt_iff_subsingleton
@@ -145,7 +156,8 @@ obtain rfl : x = y := RelCWComplex.injective_map_zero C (hxy ▸ h) (b
   refine ⟨fun ⟨x, hx⟩ => by simp [closedCell_zero_eq_singleton, hx], fun h => ?_⟩
   obtain ⟨x, y, hxy⟩ := exists_cellFrontier_one_eq e
   simp only [closedCell_zero_eq_singleton, union_singleton] at hxy
-obtain rfl : x = y := RelCWComplex.injective_map_zero C (hxy ▸ h) (b
+obtain rfl : x = y := RelCWComplex.injective_map_zero C (hxy ▸ h) (by simp) (by simp)
+  exact ⟨x, by simp [hxy, closedCell_zero_eq_singleton]⟩
 
 Depends on / 依赖: RelCWComplex, RelCWComplex.injective_map_zero, closedCell_zero_eq_singleton, exists_cellFrontier_one_eq, exists_isLoopAt_iff, injective_map_zero, union_singleton
 -/

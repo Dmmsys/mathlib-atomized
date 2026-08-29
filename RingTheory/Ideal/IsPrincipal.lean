@@ -150,7 +150,10 @@ definition associatesEquivIsPrincipal
     (fun _ _ _ => by simpa [span_singleton_eq_span_singleton])
   invFun I := .mk I.2.generator
   left_inv := Quotient.ind fun _ => by simpa [Quotient.eq] using!
-    Ideal.span_singleton_eq_span_singleton.mp (@Ideal.span_singleton_generator _ _ _ ⟨_,
+    Ideal.span_singleton_eq_span_singleton.mp (@Ideal.span_singleton_generator _ _ _ ⟨_, rfl⟩)
+  right_inv I := by simp only [_root_.Quotient.lift_mk, span_singleton_generator, Subtype.coe_eta]
+
+@[simp]
 
 中文:
 定义 associatesEquivIsPrincipal
@@ -159,7 +162,10 @@ definition associatesEquivIsPrincipal
     (fun _ _ _ => by simpa [span_singleton_eq_span_singleton])
   invFun I := .mk I.2.generator
   left_inv := Quotient.ind fun _ => by simpa [Quotient.eq] using!
-    Ideal.span_singleton_eq_span_singleton.mp (@Ideal.span_singleton_generator _ _ _ ⟨_,
+    Ideal.span_singleton_eq_span_singleton.mp (@Ideal.span_singleton_generator _ _ _ ⟨_, rfl⟩)
+  right_inv I := by simp only [_root_.Quotient.lift_mk, span_singleton_generator, Subtype.coe_eta]
+
+@[simp]
 
 Depends on / 依赖: Quotient, _root_, _root_.Quotient.lift
 -/
@@ -296,7 +302,9 @@ definition associatesMulEquivIsPrincipal
     rw [Subtype.ext_iff]
     -- This `erw` is needed to see through `{I // IsPrincipal I} = ↑(isPrincipalSubmonoid R)`:
     -- we can redefine `associatesEquivIsPrincipal` to get rid of this `erw` but then we'd need
-    -- to add one in `associatesNo
+    -- to add one in `associatesNonZeroDivisorsEquivIsPrincipal`.
+    erw [associatesEquivIsPrincipal_mul]
+    rfl
 
 中文:
 定义 associatesMulEquivIsPrincipal
@@ -306,7 +314,9 @@ definition associatesMulEquivIsPrincipal
     rw [Subtype.ext_iff]
     -- This `erw` is needed to see through `{I // IsPrincipal I} = ↑(isPrincipalSubmonoid R)`:
     -- we can redefine `associatesEquivIsPrincipal` to get rid of this `erw` but then we'd need
-    -- to add one in `associatesNo
+    -- to add one in `associatesNonZeroDivisorsEquivIsPrincipal`.
+    erw [associatesEquivIsPrincipal_mul]
+    rfl
 
 Depends on / 依赖: associatesEquivIsPrincipal
 -/
@@ -332,7 +342,14 @@ definition associatesNonZeroDivisorsEquivIsPrincipal
     _ ≃ {I : {I : Ideal R // IsPrincipal I} // I.1 in (Ideal R)⁰} :=
       Equiv.subtypeEquiv (associatesEquivIsPrincipal R)
         (fun x => by rw [← quot_out x, mk_mem_nonZeroDivisors_associates,
-          associa
+          associatesEquivIsPrincipal_apply, span_singleton_nonZeroDivisors])
+    _ ≃ {I : Ideal R // IsPrincipal I ∧ I in (Ideal R)⁰} :=
+      Equiv.subtypeSubtypeEquivSubtypeInter (fun I => IsPrincipal I) (fun I => I in (Ideal R)⁰)
+    _ ≃ {I : Ideal R // I in (Ideal R)⁰ ∧ IsPrincipal I} :=
+.subtypeEquivProp by simp_rw [and_comm]
+    _ ≃ {I : (Ideal R)⁰ // IsPrincipal I.1} := (Equiv.subtypeSubtypeEquivSubtypeInter _ _).symm
+
+@[simp]
 
 中文:
 定义 associatesNonZeroDivisorsEquivIsPrincipal
@@ -341,7 +358,14 @@ definition associatesNonZeroDivisorsEquivIsPrincipal
     _ ≃ {I : {I : Ideal R // IsPrincipal I} // I.1 in (Ideal R)⁰} :=
       Equiv.subtypeEquiv (associatesEquivIsPrincipal R)
         (fun x => by rw [← quot_out x, mk_mem_nonZeroDivisors_associates,
-          associa
+          associatesEquivIsPrincipal_apply, span_singleton_nonZeroDivisors])
+    _ ≃ {I : Ideal R // IsPrincipal I ∧ I in (Ideal R)⁰} :=
+      Equiv.subtypeSubtypeEquivSubtypeInter (fun I => IsPrincipal I) (fun I => I in (Ideal R)⁰)
+    _ ≃ {I : Ideal R // I in (Ideal R)⁰ ∧ IsPrincipal I} :=
+.subtypeEquivProp by simp_rw [and_comm]
+    _ ≃ {I : (Ideal R)⁰ // IsPrincipal I.1} := (Equiv.subtypeSubtypeEquivSubtypeInter _ _).symm
+
+@[simp]
 
 Depends on / 依赖: Associates, Equiv.subtypeEquiv, Equiv.subtypeSubtypeEquivSubtypeInter, IsPrincipal, associatesEquivIsPrincipal, associatesEquivIsPrincipal_apply, associatesNonZeroDivisorsEquiv, associatesNonZeroDivisorsEquiv.toEquiv.symm, mk_mem_nonZeroDivisors_associates, quot_out, span_singleton_nonZeroDivisors, subtypeEquiv, subtypeSubtypeEquivSubtypeInter, toEquiv
 -/

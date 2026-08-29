@@ -48,7 +48,34 @@ theorem MeromorphicOn.intervalIntegrable_log_norm
   · obtain ⟨g, h₁g, h₂g, h₃g⟩ := hf.extract_zeros_poles t₀
       ((MeromorphicOn.divisor f [[a, b]]).finiteSupport isCompact_uIcc)
     have h₄g := MeromorphicOn.extract_zeros_poles_log h₂g h₃g
-    rw [intervalIntegrable_congr_codisc
+    rw [intervalIntegrable_congr_codiscreteWithin
+      (h₄g.filter_mono (Filter.codiscreteWithin_mono Set.uIoc_subset_uIcc))]
+    apply IntervalIntegrable.add
+    · apply IntervalIntegrable.finsum
+      intro i
+      apply IntervalIntegrable.const_mul
+      rw [(by ring : a = ((a - i) + i))]; rw [(by ring : b = ((b - i) + i))]
+      apply IntervalIntegrable.comp_sub_right (f := (log ‖·‖)) _ i
+      simp [norm_eq_abs, log_abs]
+    · apply ContinuousOn.intervalIntegrable
+      apply h₁g.continuousOn.norm.log
+      simp_all
+  · rw [← hf.exists_meromorphicOrderAt_ne_top_iff_forall (isConnected_Icc inf_le_sup)] at t₀
+    push Not at t₀
+    have : (log ‖f ·‖) =ᶠ[Filter.codiscreteWithin (Ι a b)] 0 := by
+      apply Filter.EventuallyEq.filter_mono _ (Filter.codiscreteWithin_mono Set.uIoc_subset_uIcc)
+      filter_upwards [hf.meromorphicNFAt_mem_codiscreteWithin,
+        Filter.self_mem_codiscreteWithin [[a, b]]] with x h₁x h₂x
+      simp only [Pi.zero_apply, log_eq_zero, norm_eq_zero]
+      left
+      by_contra hCon
+      simp_all [← h₁x.meromorphicOrderAt_eq_zero_iff, t₀ ⟨x, h₂x⟩]
+    rw [intervalIntegrable_congr_codiscreteWithin this]
+    apply Iff.mpr _root_.intervalIntegrable_const_iff
+    tauto
+
+@[deprecated (since := "2026-03-28")]
+alias intervalIntegrable_log_norm_meromorphicOn := MeromorphicOn.intervalIntegrable_log_norm
 
 中文:
 定理 MeromorphicOn.interval整数egrable_log_norm
@@ -58,7 +85,34 @@ theorem MeromorphicOn.intervalIntegrable_log_norm
   · obtain ⟨g, h₁g, h₂g, h₃g⟩ := hf.extract_zeros_poles t₀
       ((MeromorphicOn.divisor f [[a, b]]).finiteSupport isCompact_uIcc)
     have h₄g := MeromorphicOn.extract_zeros_poles_log h₂g h₃g
-    rw [intervalIntegrable_congr_codisc
+    rw [intervalIntegrable_congr_codiscreteWithin
+      (h₄g.filter_mono (Filter.codiscreteWithin_mono Set.uIoc_subset_uIcc))]
+    apply IntervalIntegrable.add
+    · apply IntervalIntegrable.finsum
+      intro i
+      apply IntervalIntegrable.const_mul
+      rw [(by ring : a = ((a - i) + i))]; rw [(by ring : b = ((b - i) + i))]
+      apply IntervalIntegrable.comp_sub_right (f := (log ‖·‖)) _ i
+      simp [norm_eq_abs, log_abs]
+    · apply ContinuousOn.intervalIntegrable
+      apply h₁g.continuousOn.norm.log
+      simp_all
+  · rw [← hf.exists_meromorphicOrderAt_ne_top_iff_forall (isConnected_Icc inf_le_sup)] at t₀
+    push Not at t₀
+    have : (log ‖f ·‖) =ᶠ[Filter.codiscreteWithin (Ι a b)] 0 := by
+      apply Filter.EventuallyEq.filter_mono _ (Filter.codiscreteWithin_mono Set.uIoc_subset_uIcc)
+      filter_upwards [hf.meromorphicNFAt_mem_codiscreteWithin,
+        Filter.self_mem_codiscreteWithin [[a, b]]] with x h₁x h₂x
+      simp only [Pi.zero_apply, log_eq_zero, norm_eq_zero]
+      left
+      by_contra hCon
+      simp_all [← h₁x.meromorphicOrderAt_eq_zero_iff, t₀ ⟨x, h₂x⟩]
+    rw [intervalIntegrable_congr_codiscreteWithin this]
+    apply Iff.mpr _root_.intervalIntegrable_const_iff
+    tauto
+
+@[deprecated (since := "2026-03-28")]
+alias intervalIntegrable_log_norm_meromorphicOn := MeromorphicOn.intervalIntegrable_log_norm
 
 Depends on / 依赖: Filter, Filter.codiscreteWithin_mono, IntervalIntegrable, IntervalIntegrable.add, IntervalIntegrable.const_mul, IntervalIntegrable.finsum, MeromorphicOn, MeromorphicOn.divisor, MeromorphicOn.extract_zeros_poles_log, Set.uIoc_subset_uIcc, codiscreteWithin_mono, const_mul, divisor, extract_zeros_poles, extract_zeros_poles_log, filter_mono, finiteSupport, finsum, g.filter_mono, hf.extract_zeros_poles
 -/
@@ -110,7 +164,7 @@ theorem MeromorphicOn.intervalIntegrable_posLog_norm
   · apply hf.intervalIntegrable_log_norm.abs.const_mul
 
 @[deprecated (since := "2026-03-28")]
-alias MeromorphicOn.intervalIntegrable_posLog_norm_meromorphicOn := inter
+alias MeromorphicOn.intervalIntegrable_posLog_norm_meromorphicOn := intervalIntegrable_posLog_norm
 
 中文:
 定理 MeromorphicOn.interval整数egrable_posLog_norm
@@ -122,7 +176,7 @@ alias MeromorphicOn.intervalIntegrable_posLog_norm_meromorphicOn := inter
   · apply hf.intervalIntegrable_log_norm.abs.const_mul
 
 @[deprecated (since := "2026-03-28")]
-alias MeromorphicOn.intervalIntegrable_posLog_norm_meromorphicOn := inter
+alias MeromorphicOn.intervalIntegrable_posLog_norm_meromorphicOn := intervalIntegrable_posLog_norm
 
 Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.add, const_mul, half_mul_log_add_log_abs, hf.intervalIntegrable_log_norm.abs.const_mul, hf.intervalIntegrable_log_norm.const_mul, intervalIntegrable_log_norm, mul_add, simp_rw
 -/
@@ -219,7 +273,38 @@ theorem MeromorphicOn.circleIntegrable_log_norm
   · obtain ⟨g, h₁g, h₂g, h₃g⟩ := hf.extract_zeros_poles t₀
       ((divisor f (sphere c |R|)).finiteSupport (isCompact_sphere c |R|))
     have h₄g := MeromorphicOn.extract_zeros_poles_log h₂g h₃g
-    apply CircleIntegrable.cong
+    apply CircleIntegrable.congr_codiscreteWithin h₄g.symm
+    apply CircleIntegrable.add
+    · apply CircleIntegrable.finsum
+      intro i
+      apply IntervalIntegrable.const_mul
+      apply MeromorphicOn.intervalIntegrable_log_norm
+      apply AnalyticOnNhd.meromorphicOn
+      apply AnalyticOnNhd.sub _ analyticOnNhd_const
+      apply (analyticOnNhd_circleMap c R).mono (by tauto)
+    · apply ContinuousOn.intervalIntegrable
+      apply ContinuousOn.log
+      · apply ContinuousOn.norm
+        apply h₁g.continuousOn.comp (t := sphere c |R|) (continuous_circleMap c R).continuousOn
+        intro x hx
+        simp
+      · intro x hx
+        rw [ne_eq]; rw [norm_eq_zero]
+        apply h₂g ⟨circleMap c R x, circleMap_mem_sphere' c R x⟩
+  · rw [← hf.exists_meromorphicOrderAt_ne_top_iff_forall (isConnected_sphere (by simp) c
+      (abs_nonneg R))] at t₀
+    push Not at t₀
+    have : (log ‖f ·‖) =ᶠ[codiscreteWithin (sphere c |R|)] 0 := by
+      filter_upwards [hf.meromorphicNFAt_mem_codiscreteWithin,
+        self_mem_codiscreteWithin (sphere c |R|)] with x h₁x h₂x
+      simp only [Pi.zero_apply, log_eq_zero, norm_eq_zero]
+      left
+      by_contra hCon
+      simp_all [← h₁x.meromorphicOrderAt_eq_zero_iff, t₀ ⟨x, h₂x⟩]
+    apply CircleIntegrable.congr_codiscreteWithin this.symm (circleIntegrable_const 0 c R)
+
+@[deprecated (since := "2026-03-28")]
+alias circleIntegrable_log_norm_meromorphicOn := MeromorphicOn.circleIntegrable_log_norm
 
 中文:
 定理 MeromorphicOn.circle整数egrable_log_norm
@@ -229,7 +314,38 @@ theorem MeromorphicOn.circleIntegrable_log_norm
   · obtain ⟨g, h₁g, h₂g, h₃g⟩ := hf.extract_zeros_poles t₀
       ((divisor f (sphere c |R|)).finiteSupport (isCompact_sphere c |R|))
     have h₄g := MeromorphicOn.extract_zeros_poles_log h₂g h₃g
-    apply CircleIntegrable.cong
+    apply CircleIntegrable.congr_codiscreteWithin h₄g.symm
+    apply CircleIntegrable.add
+    · apply CircleIntegrable.finsum
+      intro i
+      apply IntervalIntegrable.const_mul
+      apply MeromorphicOn.intervalIntegrable_log_norm
+      apply AnalyticOnNhd.meromorphicOn
+      apply AnalyticOnNhd.sub _ analyticOnNhd_const
+      apply (analyticOnNhd_circleMap c R).mono (by tauto)
+    · apply ContinuousOn.intervalIntegrable
+      apply ContinuousOn.log
+      · apply ContinuousOn.norm
+        apply h₁g.continuousOn.comp (t := sphere c |R|) (continuous_circleMap c R).continuousOn
+        intro x hx
+        simp
+      · intro x hx
+        rw [ne_eq]; rw [norm_eq_zero]
+        apply h₂g ⟨circleMap c R x, circleMap_mem_sphere' c R x⟩
+  · rw [← hf.exists_meromorphicOrderAt_ne_top_iff_forall (isConnected_sphere (by simp) c
+      (abs_nonneg R))] at t₀
+    push Not at t₀
+    have : (log ‖f ·‖) =ᶠ[codiscreteWithin (sphere c |R|)] 0 := by
+      filter_upwards [hf.meromorphicNFAt_mem_codiscreteWithin,
+        self_mem_codiscreteWithin (sphere c |R|)] with x h₁x h₂x
+      simp only [Pi.zero_apply, log_eq_zero, norm_eq_zero]
+      left
+      by_contra hCon
+      simp_all [← h₁x.meromorphicOrderAt_eq_zero_iff, t₀ ⟨x, h₂x⟩]
+    apply CircleIntegrable.congr_codiscreteWithin this.symm (circleIntegrable_const 0 c R)
+
+@[deprecated (since := "2026-03-28")]
+alias circleIntegrable_log_norm_meromorphicOn := MeromorphicOn.circleIntegrable_log_norm
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.meromorphicOn, CircleIntegrable, CircleIntegrable.add, CircleIntegrable.congr_codiscreteWithin, CircleIntegrable.finsum, IntervalIntegrable, IntervalIntegrable.const_mul, MeromorphicOn, MeromorphicOn.extract_zeros_poles_log, MeromorphicOn.intervalIntegrable_log_norm, congr_codiscreteWithin, const_mul, divisor, extract_zeros_poles, extract_zeros_poles_log, finiteSupport, finsum, g.symm, hf.extract_zeros_poles
 -/
@@ -348,7 +464,7 @@ theorem MeromorphicOn.circleIntegrable_posLog_norm
   · apply hf.circleIntegrable_log_norm.abs.const_mul
 
 @[deprecated (since := "2026-03-28")]
-alias circleIntegrable_posLog_norm_meromorphicOn := MeromorphicOn.circleIntegra
+alias circleIntegrable_posLog_norm_meromorphicOn := MeromorphicOn.circleIntegrable_posLog_norm
 
 中文:
 定理 MeromorphicOn.circle整数egrable_posLog_norm
@@ -360,7 +476,7 @@ alias circleIntegrable_posLog_norm_meromorphicOn := MeromorphicOn.circleIntegra
   · apply hf.circleIntegrable_log_norm.abs.const_mul
 
 @[deprecated (since := "2026-03-28")]
-alias circleIntegrable_posLog_norm_meromorphicOn := MeromorphicOn.circleIntegra
+alias circleIntegrable_posLog_norm_meromorphicOn := MeromorphicOn.circleIntegrable_posLog_norm
 
 Depends on / 依赖: CircleIntegrable, CircleIntegrable.add, X.property, circleIntegrable_log_norm, const_mul, half_mul_log_add_log_abs, hf.circleIntegrable_log_norm.abs.const_mul, hf.circleIntegrable_log_norm.const_mul, mul_add, property, simp_rw
 -/

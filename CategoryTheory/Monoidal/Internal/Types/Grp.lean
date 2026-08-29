@@ -88,7 +88,7 @@ definition inverse
           right_inv := by
             ext x
             exact mul_inv_cancel (G := A) x } }
-
+  map f := Grp.homMk' (MonTypeEquivalenceMon.inverse.map ((forget₂ GrpCat MonCat).map f))
 
 中文:
 定义 inverse
@@ -102,7 +102,7 @@ definition inverse
           right_inv := by
             ext x
             exact mul_inv_cancel (G := A) x } }
-
+  map f := Grp.homMk' (MonTypeEquivalenceMon.inverse.map ((forget₂ GrpCat MonCat).map f))
 
 Depends on / 依赖: Grp.homMk, GrpCat, MonCat, MonTypeEquivalenceMon, MonTypeEquivalenceMon.inverse.map, MonTypeEquivalenceMon.inverse.obj, inv_mul_cancel, inverse, left_inv, mul_inv_cancel, right_inv
 -/

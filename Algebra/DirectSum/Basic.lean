@@ -945,7 +945,9 @@ definition id
     left_inv x :=
       DirectSum.induction_on x
         (by rw [map_zero, map_zero])
-        (fun p x => by rw [Unique.default_eq p, toAddMonoi
+        (fun p x => by rw [Unique.default_eq p, toAddMonoid_of, AddMonoidHom.id_apply])
+        (fun x y ihx ihy => by grind)
+    right_inv _ := toAddMonoid_of _ _ _ }
 
 中文:
 定义 id
@@ -956,7 +958,9 @@ definition id
     left_inv x :=
       DirectSum.induction_on x
         (by rw [map_zero, map_zero])
-        (fun p x => by rw [Unique.default_eq p, toAddMonoi
+        (fun p x => by rw [Unique.default_eq p, toAddMonoid_of, AddMonoidHom.id_apply])
+        (fun x y ihx ihy => by grind)
+    right_inv _ := toAddMonoid_of _ _ _ }
 -/
 protected def id (M : Type v) (ι : Type* := PUnit) [AddCommMonoid M] [Unique ι] :
     (⨁ _ : ι, M) ≃+ M :=
@@ -1331,7 +1335,8 @@ theorem sigmaFiberAddEquiv_of
   calc sigmaFiberAddEquiv f (of β (h k) x)
     _ = sigmaCurry (of (fun k : (j' : ι₂) × {i // f i = j'} => β k.2) k x) := by
       rw [sigmaFiberAddEquiv_apply]
-      exact congrArg sigmaCurry (equivCongrLe
+      exact congrArg sigmaCurry (equivCongrLeft_of (h := h.symm) _ _)
+    _ = of _ k.1 (of _ k.2 x) := by simp
 
 中文:
 定理 sigmaFiberAddEquiv_of
@@ -1341,7 +1346,8 @@ theorem sigmaFiberAddEquiv_of
   calc sigmaFiberAddEquiv f (of β (h k) x)
     _ = sigmaCurry (of (fun k : (j' : ι₂) × {i // f i = j'} => β k.2) k x) := by
       rw [sigmaFiberAddEquiv_apply]
-      exact congrArg sigmaCurry (equivCongrLe
+      exact congrArg sigmaCurry (equivCongrLeft_of (h := h.symm) _ _)
+    _ = of _ k.1 (of _ k.2 x) := by simp
 
 Depends on / 依赖: Equiv.sigmaFiberEquiv, equivCongrLeft_of, h.symm, sigmaCurry, sigmaFiberAddEquiv, sigmaFiberAddEquiv_apply, sigmaFiberEquiv
 -/

@@ -49,7 +49,12 @@ instance projective_ultrafilter
     let h : Ultrafilter X -> Y := Ultrafilter.extend t
     have hh : Continuous h := continuous_ultrafilter_extend _
     use CompHausLike.ofHom _ ⟨h, hh⟩
-    app
+    apply ConcreteCategory.coe_ext
+    simp only [h]
+    convert! denseRange_pure.equalizer (g.hom.hom.continuous.comp hh) f.hom.hom.continuous _
+    have : g.hom ∘ g' = id := hg'.comp_eq_id
+    rw [comp_assoc]; rw [ultrafilter_extend_extends]; rw [← comp_assoc]; rw [this]; rw [id_comp]
+    rfl
 
 中文:
 实例 projective_ultrafilter
@@ -61,7 +66,12 @@ instance projective_ultrafilter
     let h : Ultrafilter X -> Y := Ultrafilter.extend t
     have hh : Continuous h := continuous_ultrafilter_extend _
     use CompHausLike.ofHom _ ⟨h, hh⟩
-    app
+    apply ConcreteCategory.coe_ext
+    simp only [h]
+    convert! denseRange_pure.equalizer (g.hom.hom.continuous.comp hh) f.hom.hom.continuous _
+    have : g.hom ∘ g' = id := hg'.comp_eq_id
+    rw [comp_assoc]; rw [ultrafilter_extend_extends]; rw [← comp_assoc]; rw [this]; rw [id_comp]
+    rfl
 
 Depends on / 依赖: CompHausLike, CompHausLike.ofHom, ConcreteCategory, ConcreteCategory.coe_ext, Continuous, Ultrafilter, Ultrafilter.extend, coe_ext, comp_assoc, comp_eq_id, continuous, continuous_ultrafilter_extend, convert, denseRange_pure, denseRange_pure.equalizer, epi_iff_surjective, equalizer, extend, f.hom.hom.continuous, g.hom
 -/

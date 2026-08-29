@@ -80,7 +80,7 @@ lemma isStrongGenerator_iff
     rw [Subobject.mk_factors_iff]
     exact h G hG g
   · rw [← Subobject.isIso_arrow_iff_eq_top]
-    exact hS₂ A.arrow 
+    exact hS₂ A.arrow (fun G hG g => ⟨_, Subobject.factorThru_arrow _ _ (hA G hG g)⟩)
 
 中文:
 引理 isStrongGenerator_iff
@@ -92,7 +92,7 @@ lemma isStrongGenerator_iff
     rw [Subobject.mk_factors_iff]
     exact h G hG g
   · rw [← Subobject.isIso_arrow_iff_eq_top]
-    exact hS₂ A.arrow 
+    exact hS₂ A.arrow (fun G hG g => ⟨_, Subobject.factorThru_arrow _ _ (hA G hG g)⟩)
 
 Depends on / 依赖: A.arrow, Subobject, Subobject.factorThru_arrow, Subobject.isIso_arrow_iff_eq_top, Subobject.isIso_iff_mk_eq_top, Subobject.mk_factors_iff, factorThru_arrow, isIso_arrow_iff_eq_top, isIso_iff_mk_eq_top, mk_factors_iff
 -/
@@ -237,6 +237,9 @@ lemma mk_of_exists_extremalEpi
     exact ⟨ι, s, hs, c, hc, p, inferInstance⟩
   · obtain ⟨ι, s, hs, c, hc, p, _⟩ := hS Y
     replace hi (j : ι) := hi (s j) (hs j) (c.inj j ≫ p)
+    choose φ hφ using hi
+    exact ExtremalEpi.isIso p (Cofan.IsColimit.desc hc φ) _
+      (Cofan.IsColimit.hom_ext hc _ _ (by simp [hφ]))
 
 中文:
 引理 mk_of_存在_extremalEpi
@@ -247,6 +250,9 @@ lemma mk_of_exists_extremalEpi
     exact ⟨ι, s, hs, c, hc, p, inferInstance⟩
   · obtain ⟨ι, s, hs, c, hc, p, _⟩ := hS Y
     replace hi (j : ι) := hi (s j) (hs j) (c.inj j ≫ p)
+    choose φ hφ using hi
+    exact ExtremalEpi.isIso p (Cofan.IsColimit.desc hc φ) _
+      (Cofan.IsColimit.hom_ext hc _ _ (by simp [hφ]))
 
 Depends on / 依赖: Cofan.IsColimit.desc, Cofan.IsColimit.hom_ext, ExtremalEpi, ExtremalEpi.isIso, IsColimit, IsSeparating, IsSeparating.mk_of_exists_epi, c.inj, hom_ext, isStrongGenerator_iff, mk_of_exists_epi, replace
 -/
@@ -298,7 +304,10 @@ lemma isStrongGenerator_iff_exists_extremalEpi
   have := hasCoproductsOfShape_of_small.{w} C (CostructuredArrow P.ι X)
   have := (coproductIsCoproduct (P.coproductFromFamily X)).whiskerEquivalence
     (Discrete.equivalence (equivShrink.{w} _)).symm
-  refine ⟨_, fun j => ((equiv
+  refine ⟨_, fun j => ((equivShrink.{w} (CostructuredArrow P.ι X)).symm j).left.1,
+    fun j => ((equivShrink.{w} _).symm j).1.2, _,
+    (coproductIsCoproduct (P.coproductFromFamily X)).whiskerEquivalence
+    (Discrete.equivalence (equivShrink.{w} _)).symm, _, hP.extremalEpi_coproductFrom X⟩
 
 中文:
 引理 isStrongGenerator_iff_存在_extremalEpi
@@ -307,7 +316,10 @@ lemma isStrongGenerator_iff_exists_extremalEpi
   have := hasCoproductsOfShape_of_small.{w} C (CostructuredArrow P.ι X)
   have := (coproductIsCoproduct (P.coproductFromFamily X)).whiskerEquivalence
     (Discrete.equivalence (equivShrink.{w} _)).symm
-  refine ⟨_, fun j => ((equiv
+  refine ⟨_, fun j => ((equivShrink.{w} (CostructuredArrow P.ι X)).symm j).left.1,
+    fun j => ((equivShrink.{w} _).symm j).1.2, _,
+    (coproductIsCoproduct (P.coproductFromFamily X)).whiskerEquivalence
+    (Discrete.equivalence (equivShrink.{w} _)).symm, _, hP.extremalEpi_coproductFrom X⟩
 
 Depends on / 依赖: CostructuredArrow, Discrete, Discrete.equivalence, P.coproductFromFamily, coproductFromFamily, coproductIsCoproduct, equivShrink, equivalence, hasCoproductsOfShape_of_small, mk_of_exists_extremalEpi, whiskerEquivalence
 -/
@@ -339,7 +351,13 @@ lemma IsStrongGenerator.mk_of_exists_colimitsOfShape
     obtain ⟨r, fac⟩ := this
     exact ⟨r, by simp [← cancel_mono i, fac]⟩
   obtain ⟨J, _, ⟨p⟩⟩ := hP Y
-  choose φ hφ using fun j => hi _ (p.prop_diag_obj j) (p.ι.a
+  choose φ hφ using fun j => hi _ (p.prop_diag_obj j) (p.ι.app j)
+  let c : Cocone p.diag := Cocone.mk _
+    { app := φ
+      naturality j₁ j₂ f := by simp [← cancel_mono i, hφ] }
+  refine ⟨p.isColimit.desc c, p.isColimit.hom_ext (fun j => ?_)⟩
+  dsimp at hφ ⊢
+  rw [p.isColimit.fac_assoc]; rw [hφ]; rw [Category.comp_id]
 
 中文:
 引理 IsStrongGenerator.mk_of_存在_colimitsOfShape
@@ -350,7 +368,13 @@ lemma IsStrongGenerator.mk_of_exists_colimitsOfShape
     obtain ⟨r, fac⟩ := this
     exact ⟨r, by simp [← cancel_mono i, fac]⟩
   obtain ⟨J, _, ⟨p⟩⟩ := hP Y
-  choose φ hφ using fun j => hi _ (p.prop_diag_obj j) (p.ι.a
+  choose φ hφ using fun j => hi _ (p.prop_diag_obj j) (p.ι.app j)
+  let c : Cocone p.diag := Cocone.mk _
+    { app := φ
+      naturality j₁ j₂ f := by simp [← cancel_mono i, hφ] }
+  refine ⟨p.isColimit.desc c, p.isColimit.hom_ext (fun j => ?_)⟩
+  dsimp at hφ ⊢
+  rw [p.isColimit.fac_assoc]; rw [hφ]; rw [Category.comp_id]
 
 Depends on / 依赖: Cocone, Cocone.mk, IsSeparating, IsSeparating.mk_of_exists_colimitsOfShape, IsSplitEpi, cancel_mono, fac_assoc, hom_ext, isColimit, isStrongGenerator_iff, mk_of_exists_colimitsOfShape, naturality, p.diag, p.isColimit.desc, p.isColimit.fac_assoc, p.isColimit.hom_ext, p.prop_diag_obj, prop_diag_obj
 -/

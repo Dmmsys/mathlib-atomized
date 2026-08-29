@@ -83,7 +83,8 @@ definition Nat.unifyZeroOrSucc
     let n' : Q(Nat) ← mkFreshExprMVar q(Nat)
     let ⟨(_pf : $n =Q Nat.succ $n')⟩ ← assertDefEqQ n q(Nat.succ $n')
     let (.some (n'_val : Q(Nat))) ← getExprMVarAssignment? n'.mvarId! |
-      throwError "could no
+      throwError "could not figure out value of `?n` from `{n} =?= Nat.succ ?n`"
+    pure (.succ n'_val ⟨⟩)
 
 中文:
 定义 自然数.unifyZeroOrSucc
@@ -95,7 +96,8 @@ definition Nat.unifyZeroOrSucc
     let n' : Q(Nat) ← mkFreshExprMVar q(Nat)
     let ⟨(_pf : $n =Q Nat.succ $n')⟩ ← assertDefEqQ n q(Nat.succ $n')
     let (.some (n'_val : Q(Nat))) ← getExprMVarAssignment? n'.mvarId! |
-      throwError "could no
+      throwError "could not figure out value of `?n` from `{n} =?= Nat.succ ?n`"
+    pure (.succ n'_val ⟨⟩)
 -/
 def Nat.unifyZeroOrSucc (n : Q(Nat)) : MetaM (Nat.UnifyZeroOrSuccResult n) := do
   match ← isDefEqQ n q(0) with
@@ -215,7 +217,34 @@ definition List.proveNilOrCons
 | (_, ``EmptyCollection.emptyCollection, _) => haveI : s =Q {} := ⟨⟩; pure (.nil q(.refl []))
 | (_, ``List.nil, _) => haveI : s =Q [] := ⟨⟩; pure (.nil q(rfl))
   | (_, ``List.cons, #[_, (a : Q($α)), (s' : Q(List $α))]) =>
-haveI : s =Q a :: s' := 
+haveI : s =Q a :: s' := ⟨⟩; pure (.cons a s' q(rfl))
+  | (_, ``List.range, #[(n : Q(Nat))]) =>
+have s : Q(List Nat) := s; .uncheckedCast _ _ < > show MetaM (ProveNilOrConsResult s) from do
+    let ⟨nn, pn⟩ ← NormNum.deriveNat n _
+haveI' : s =Q .range n := ⟨⟩
+    let nnL := nn.natLit!
+    if nnL = 0 then
+haveI' : nn =Q 0 := ⟨⟩
+      return .nil q(List.range_zero' $pn)
+    else
+      have n' : Q(Nat) := mkRawNatLit (nnL - 1)
+have : nn =Q .succ n' := ⟨⟩
+      return .cons _ _ q(List.range_succ_eq_map' $pn (.refl $nn))
+  | (_, ``List.finRange, #[(n : Q(Nat))]) =>
+    have s : Q(List (Fin $n)) := s
+.uncheckedCast _ _ < > show MetaM (ProveNilOrConsResult s) from do
+haveI' : s =Q .finRange n := ⟨⟩
+    return match ← Nat.unifyZeroOrSucc n with -- We want definitional equality on `n`.
+    | .zero _pf => .nil q(List.finRange_zero)
+    | .succ n' _pf => .cons _ _ q(List.finRange_succ)
+  | (.const ``List.map [v, _], _, #[(β : Q(Type v)), _, (f : Q($β -> $α)), (xxs : Q(List $β))]) => do
+haveI' : s =Q ($xxs).map f := ⟨⟩
+    return match ← List.proveNilOrCons xxs with
+    | .nil pf => .nil q(($pf ▸ List.map_nil : List.map _ _ = _))
+    | .cons x xs pf => .cons q($f $x) q(($xs).map $f)
+      q(($pf ▸ List.map_cons : List.map _ _ = _))
+  | (_, fn, args) =>
+    throwError "List.proveNilOrCons: unsupported List expression {s} ({fn}, {args})"
 
 中文:
 定义 列表.proveNilOrCons
@@ -225,7 +254,34 @@ haveI : s =Q a :: s' :=
 | (_, ``EmptyCollection.emptyCollection, _) => haveI : s =Q {} := ⟨⟩; pure (.nil q(.refl []))
 | (_, ``List.nil, _) => haveI : s =Q [] := ⟨⟩; pure (.nil q(rfl))
   | (_, ``List.cons, #[_, (a : Q($α)), (s' : Q(List $α))]) =>
-haveI : s =Q a :: s' := 
+haveI : s =Q a :: s' := ⟨⟩; pure (.cons a s' q(rfl))
+  | (_, ``List.range, #[(n : Q(Nat))]) =>
+have s : Q(List Nat) := s; .uncheckedCast _ _ < > show MetaM (ProveNilOrConsResult s) from do
+    let ⟨nn, pn⟩ ← NormNum.deriveNat n _
+haveI' : s =Q .range n := ⟨⟩
+    let nnL := nn.natLit!
+    if nnL = 0 then
+haveI' : nn =Q 0 := ⟨⟩
+      return .nil q(List.range_zero' $pn)
+    else
+      have n' : Q(Nat) := mkRawNatLit (nnL - 1)
+have : nn =Q .succ n' := ⟨⟩
+      return .cons _ _ q(List.range_succ_eq_map' $pn (.refl $nn))
+  | (_, ``List.finRange, #[(n : Q(Nat))]) =>
+    have s : Q(List (Fin $n)) := s
+.uncheckedCast _ _ < > show MetaM (ProveNilOrConsResult s) from do
+haveI' : s =Q .finRange n := ⟨⟩
+    return match ← Nat.unifyZeroOrSucc n with -- We want definitional equality on `n`.
+    | .zero _pf => .nil q(List.finRange_zero)
+    | .succ n' _pf => .cons _ _ q(List.finRange_succ)
+  | (.const ``List.map [v, _], _, #[(β : Q(Type v)), _, (f : Q($β -> $α)), (xxs : Q(List $β))]) => do
+haveI' : s =Q ($xxs).map f := ⟨⟩
+    return match ← List.proveNilOrCons xxs with
+    | .nil pf => .nil q(($pf ▸ List.map_nil : List.map _ _ = _))
+    | .cons x xs pf => .cons q($f $x) q(($xs).map $f)
+      q(($pf ▸ List.map_cons : List.map _ _ = _))
+  | (_, fn, args) =>
+    throwError "List.proveNilOrCons: unsupported List expression {s} ({fn}, {args})"
 -/
 partial def List.proveNilOrCons {u : Level} {α : Q(Type u)} (s : Q(List $α)) :
     MetaM (List.ProveNilOrConsResult s) :=
@@ -387,7 +443,26 @@ definition Multiset.proveZeroOrCons
 | (``Zero.zero, _) => haveI : s =Q 0 := ⟨⟩; pure (.zero q(rfl))
   | (``Multiset.cons, #[_, (a : Q($α)), (s' : Q(Multiset $α))]) =>
 haveI : s =Q .cons a s' := ⟨⟩
-    pure (.cons a s' q(rfl
+    pure (.cons a s' q(rfl))
+  | (``Multiset.ofList, #[_, (val : Q(List $α))]) => do
+haveI : s =Q .ofList val := ⟨⟩
+    return match ← List.proveNilOrCons val with
+    | .nil pf => .zero q($pf ▸ Multiset.coe_nil : Multiset.ofList _ = _)
+    | .cons a s' pf => .cons a q($s') q($pf ▸ Multiset.cons_coe $a $s' : Multiset.ofList _ = _)
+  | (``Multiset.range, #[(n : Q(Nat))]) => do
+have s : Q(Multiset Nat) := s; .uncheckedCast _ _ < > show MetaM (ProveZeroOrConsResult s) from do
+    let ⟨nn, pn⟩ ← NormNum.deriveNat n _
+haveI' : s =Q .range n := ⟨⟩
+    let nnL := nn.natLit!
+    if nnL = 0 then
+haveI' : nn =Q 0 := ⟨⟩
+      return .zero q(Multiset.range_zero' $pn)
+    else
+      have n' : Q(Nat) := mkRawNatLit (nnL - 1)
+haveI' : nn =Q ($n').succ := ⟨⟩
+      return .cons _ _ q(Multiset.range_succ' $pn rfl)
+  | (fn, args) =>
+    throwError "Multiset.proveZeroOrCons: unsupported multiset expression {s} ({fn}, {args})"
 
 中文:
 定义 Multiset.proveZeroOrCons
@@ -397,7 +472,26 @@ haveI : s =Q .cons a s' := ⟨⟩
 | (``Zero.zero, _) => haveI : s =Q 0 := ⟨⟩; pure (.zero q(rfl))
   | (``Multiset.cons, #[_, (a : Q($α)), (s' : Q(Multiset $α))]) =>
 haveI : s =Q .cons a s' := ⟨⟩
-    pure (.cons a s' q(rfl
+    pure (.cons a s' q(rfl))
+  | (``Multiset.ofList, #[_, (val : Q(List $α))]) => do
+haveI : s =Q .ofList val := ⟨⟩
+    return match ← List.proveNilOrCons val with
+    | .nil pf => .zero q($pf ▸ Multiset.coe_nil : Multiset.ofList _ = _)
+    | .cons a s' pf => .cons a q($s') q($pf ▸ Multiset.cons_coe $a $s' : Multiset.ofList _ = _)
+  | (``Multiset.range, #[(n : Q(Nat))]) => do
+have s : Q(Multiset Nat) := s; .uncheckedCast _ _ < > show MetaM (ProveZeroOrConsResult s) from do
+    let ⟨nn, pn⟩ ← NormNum.deriveNat n _
+haveI' : s =Q .range n := ⟨⟩
+    let nnL := nn.natLit!
+    if nnL = 0 then
+haveI' : nn =Q 0 := ⟨⟩
+      return .zero q(Multiset.range_zero' $pn)
+    else
+      have n' : Q(Nat) := mkRawNatLit (nnL - 1)
+haveI' : nn =Q ($n').succ := ⟨⟩
+      return .cons _ _ q(Multiset.range_succ' $pn rfl)
+  | (fn, args) =>
+    throwError "Multiset.proveZeroOrCons: unsupported multiset expression {s} ({fn}, {args})"
 -/
 partial def Multiset.proveZeroOrCons {α : Q(Type u)} (s : Q(Multiset $α)) :
     MetaM (Multiset.ProveZeroOrConsResult s) :=
@@ -575,7 +669,37 @@ definition Finset.proveEmptyOrCons
   | (``Finset.cons, #[_, (a : Q($α)), (s' : Q(Finset $α)), (h : Q($a ∉ $s'))]) =>
 haveI : s =Q .cons a s' h := ⟨⟩
     pure (.cons a s' h q(.refl $s))
-  | (``Finset.mk, #[_, (val : Q(Mult
+  | (``Finset.mk, #[_, (val : Q(Multiset $α)), (nd : Q(Multiset.Nodup $val))]) => do
+    match ← Multiset.proveZeroOrCons val with
+| .zero pf => pure .empty (q($pf ▸ Finset.mk_zero) : Q(Finset.mk $val $nd = ∅))
+    | .cons a s' pf => do
+      let h : Q(Multiset.Nodup ($a ::ₘ $s')) := q($pf ▸ $nd)
+      let nd' : Q(Multiset.Nodup $s') := q((Multiset.nodup_cons.mp $h).2)
+      let h' : Q($a ∉ $s') := q((Multiset.nodup_cons.mp $h).1)
+      return (.cons a q(Finset.mk $s' $nd') h'
+        (q($pf ▸ Finset.mk_cons $h) : Q(Finset.mk $val $nd = Finset.cons $a ⟨$s', $nd'⟩ $h')))
+  | (``Finset.range, #[(n : Q(Nat))]) =>
+have s : Q(Finset Nat) := s; .uncheckedCast _ _ < > show MetaM (ProveEmptyOrConsResult s) from do
+    let ⟨nn, pn⟩ ← NormNum.deriveNat n _
+haveI' : s =Q .range n := ⟨⟩
+    let nnL := nn.natLit!
+    if nnL = 0 then
+haveI : nn =Q 0 := ⟨⟩
+      return .empty q(Finset.range_zero' $pn)
+    else
+      have n' : Q(Nat) := mkRawNatLit (nnL - 1)
+haveI' : nn =Q ($n').succ := ⟨⟩
+      return .cons n' _ _ q(Finset.range_succ' $pn (.refl $nn))
+  | (``Finset.univ, #[_, (instFT : Q(Fintype $α))]) => do
+haveI' : s =Q .univ := ⟨⟩
+    match (← whnfI instFT).getAppFnArgs with
+    | (``Fintype.mk, #[_, (elems : Q(Finset $α)), (complete : Q(forall x : $α, x in $elems))]) => do
+      let res ← Finset.proveEmptyOrCons elems
+pure res.eq_trans q(Finset.univ_eq_elems $elems $complete)
+    | e =>
+      throwError "Finset.proveEmptyOrCons: could not determine elements of Fintype instance {e}"
+  | (fn, args) =>
+    throwError "Finset.proveEmptyOrCons: unsupported finset expression {s} ({fn}, {args})"
 
 中文:
 定义 有限集.proveEmptyOrCons
@@ -585,7 +709,37 @@ haveI : s =Q .cons a s' h := ⟨⟩
   | (``Finset.cons, #[_, (a : Q($α)), (s' : Q(Finset $α)), (h : Q($a ∉ $s'))]) =>
 haveI : s =Q .cons a s' h := ⟨⟩
     pure (.cons a s' h q(.refl $s))
-  | (``Finset.mk, #[_, (val : Q(Mult
+  | (``Finset.mk, #[_, (val : Q(Multiset $α)), (nd : Q(Multiset.Nodup $val))]) => do
+    match ← Multiset.proveZeroOrCons val with
+| .zero pf => pure .empty (q($pf ▸ Finset.mk_zero) : Q(Finset.mk $val $nd = ∅))
+    | .cons a s' pf => do
+      let h : Q(Multiset.Nodup ($a ::ₘ $s')) := q($pf ▸ $nd)
+      let nd' : Q(Multiset.Nodup $s') := q((Multiset.nodup_cons.mp $h).2)
+      let h' : Q($a ∉ $s') := q((Multiset.nodup_cons.mp $h).1)
+      return (.cons a q(Finset.mk $s' $nd') h'
+        (q($pf ▸ Finset.mk_cons $h) : Q(Finset.mk $val $nd = Finset.cons $a ⟨$s', $nd'⟩ $h')))
+  | (``Finset.range, #[(n : Q(Nat))]) =>
+have s : Q(Finset Nat) := s; .uncheckedCast _ _ < > show MetaM (ProveEmptyOrConsResult s) from do
+    let ⟨nn, pn⟩ ← NormNum.deriveNat n _
+haveI' : s =Q .range n := ⟨⟩
+    let nnL := nn.natLit!
+    if nnL = 0 then
+haveI : nn =Q 0 := ⟨⟩
+      return .empty q(Finset.range_zero' $pn)
+    else
+      have n' : Q(Nat) := mkRawNatLit (nnL - 1)
+haveI' : nn =Q ($n').succ := ⟨⟩
+      return .cons n' _ _ q(Finset.range_succ' $pn (.refl $nn))
+  | (``Finset.univ, #[_, (instFT : Q(Fintype $α))]) => do
+haveI' : s =Q .univ := ⟨⟩
+    match (← whnfI instFT).getAppFnArgs with
+    | (``Fintype.mk, #[_, (elems : Q(Finset $α)), (complete : Q(forall x : $α, x in $elems))]) => do
+      let res ← Finset.proveEmptyOrCons elems
+pure res.eq_trans q(Finset.univ_eq_elems $elems $complete)
+    | e =>
+      throwError "Finset.proveEmptyOrCons: could not determine elements of Fintype instance {e}"
+  | (fn, args) =>
+    throwError "Finset.proveEmptyOrCons: unsupported finset expression {s} ({fn}, {args})"
 -/
 partial def Finset.proveEmptyOrCons {α : Q(Type u)} (s : Q(Finset $α)) :
     MetaM (ProveEmptyOrConsResult s) :=
@@ -644,7 +798,11 @@ definition Result.eq_trans
     have b : Q(Prop) := b
     have eq : Q($a = $b) := eq
     have proof : Q(¬ $b) := proof
-  Result.isFalse (x :=
+  Result.isFalse (x := a) q($eq ▸ $proof)
+  | .isNat inst lit proof => Result.isNat inst lit q($eq ▸ $proof)
+  | .isNegNat inst lit proof => Result.isNegNat inst lit q($eq ▸ $proof)
+  | .isNNRat inst q n d proof => Result.isNNRat inst q n d q($eq ▸ $proof)
+  | .isNegNNRat inst q n d proof => Result.isNegNNRat inst q n d q($eq ▸ $proof)
 
 中文:
 定义 Result.eq_trans
@@ -659,7 +817,11 @@ definition Result.eq_trans
     have b : Q(Prop) := b
     have eq : Q($a = $b) := eq
     have proof : Q(¬ $b) := proof
-  Result.isFalse (x :=
+  Result.isFalse (x := a) q($eq ▸ $proof)
+  | .isNat inst lit proof => Result.isNat inst lit q($eq ▸ $proof)
+  | .isNegNat inst lit proof => Result.isNegNat inst lit q($eq ▸ $proof)
+  | .isNNRat inst q n d proof => Result.isNNRat inst q n d q($eq ▸ $proof)
+  | .isNegNNRat inst q n d proof => Result.isNegNNRat inst q n d q($eq ▸ $proof)
 -/
 def Result.eq_trans {α : Q(Type u)} {a b : Q($α)} (eq : Q($a = $b)) : Result b -> Result a
   | .isBool true proof =>
@@ -724,7 +886,7 @@ definition evalFinsetBigop
       let res_op_s' : Result q($op $s' $f) ← evalFinsetBigop op f res_empty @res_cons s'
       let res ← res_cons res_fa res_op_s'
       let eq : Q($op $s $f = $op (Finset.cons $a $s' $h) $f) := q(congr_fun (congr_arg _ $pf) _)
-      pure (res.eq_tran
+      pure (res.eq_trans eq)
 
 中文:
 定义 evalFinsetBigop
@@ -734,7 +896,7 @@ definition evalFinsetBigop
       let res_op_s' : Result q($op $s' $f) ← evalFinsetBigop op f res_empty @res_cons s'
       let res ← res_cons res_fa res_op_s'
       let eq : Q($op $s $f = $op (Finset.cons $a $s' $h) $f) := q(congr_fun (congr_arg _ $pf) _)
-      pure (res.eq_tran
+      pure (res.eq_trans eq)
 -/
 partial def evalFinsetBigop {α : Q(Type u)} {β : Q(Type v)}
     (op : Q(Finset $α -> ($α -> $β) -> $β))
@@ -775,7 +937,20 @@ guard ← withNewMCtxDepth isDefEq β β'
   have s : Q(Finset $α) := s
   have f : Q($α -> $β) := f
 let instCS : Q(CommSemiring $β) ← synthInstanceQ q(CommSemiring $β) >
-  
+    throwError "not a commutative semiring: {β}"
+  let instS : Q(Semiring $β) := q(CommSemiring.toSemiring)
+  -- Have to construct this expression manually, `q(1)` doesn't parse correctly:
+  let n : Q(Nat) := .lit (.natVal 1)
+  let pf : Q(IsNat (Finset.prod ∅ $f) $n) := q(@Finset.prod_empty $β $α $instCS $f)
+  let res_empty := Result.isNat _ n pf
+
+  evalFinsetBigop q(Finset.prod) f res_empty (fun {a s' h} res_fa res_prod_s' => do
+      let fa : Q($β) := Expr.app f a
+      let res ← res_fa.mul res_prod_s'
+      let eq : Q(Finset.prod (Finset.cons $a $s' $h) $f = $fa * Finset.prod $s' $f) :=
+        q(Finset.prod_cons $h)
+pure res.eq_trans eq)
+    s
 
 中文:
 定义 evalFinsetProd
@@ -788,7 +963,20 @@ guard ← withNewMCtxDepth isDefEq β β'
   have s : Q(Finset $α) := s
   have f : Q($α -> $β) := f
 let instCS : Q(CommSemiring $β) ← synthInstanceQ q(CommSemiring $β) >
-  
+    throwError "not a commutative semiring: {β}"
+  let instS : Q(Semiring $β) := q(CommSemiring.toSemiring)
+  -- Have to construct this expression manually, `q(1)` doesn't parse correctly:
+  let n : Q(Nat) := .lit (.natVal 1)
+  let pf : Q(IsNat (Finset.prod ∅ $f) $n) := q(@Finset.prod_empty $β $α $instCS $f)
+  let res_empty := Result.isNat _ n pf
+
+  evalFinsetBigop q(Finset.prod) f res_empty (fun {a s' h} res_fa res_prod_s' => do
+      let fa : Q($β) := Expr.app f a
+      let res ← res_fa.mul res_prod_s'
+      let eq : Q(Finset.prod (Finset.cons $a $s' $h) $f = $fa * Finset.prod $s' $f) :=
+        q(Finset.prod_cons $h)
+pure res.eq_trans eq)
+    s
 
 Depends on / 依赖: induced
 -/
@@ -835,7 +1023,17 @@ guard ← withNewMCtxDepth isDefEq β β'
   have s : Q(Finset $α) := s
   have f : Q($α -> $β) := f
 let instCS : Q(CommSemiring $β) ← synthInstanceQ q(CommSemiring $β) >
-   
+    throwError "not a commutative semiring: {β}"
+  let pf : Q(IsNat (Finset.sum ∅ $f) (nat_lit 0)) := q(@Finset.sum_empty $β $α $instCS $f)
+  let res_empty := Result.isNat _ _ q($pf)
+
+  evalFinsetBigop q(Finset.sum) f res_empty (fun {a s' h} res_fa res_sum_s' => do
+      let fa : Q($β) := Expr.app f a
+      let res ← res_fa.add res_sum_s'
+      let eq : Q(Finset.sum (Finset.cons $a $s' $h) $f = $fa + Finset.sum $s' $f) :=
+        q(Finset.sum_cons $h)
+pure res.eq_trans eq)
+    s
 
 中文:
 定义 evalFinsetSum
@@ -848,7 +1046,17 @@ guard ← withNewMCtxDepth isDefEq β β'
   have s : Q(Finset $α) := s
   have f : Q($α -> $β) := f
 let instCS : Q(CommSemiring $β) ← synthInstanceQ q(CommSemiring $β) >
-   
+    throwError "not a commutative semiring: {β}"
+  let pf : Q(IsNat (Finset.sum ∅ $f) (nat_lit 0)) := q(@Finset.sum_empty $β $α $instCS $f)
+  let res_empty := Result.isNat _ _ q($pf)
+
+  evalFinsetBigop q(Finset.sum) f res_empty (fun {a s' h} res_fa res_sum_s' => do
+      let fa : Q($β) := Expr.app f a
+      let res ← res_fa.add res_sum_s'
+      let eq : Q(Finset.sum (Finset.cons $a $s' $h) $f = $fa + Finset.sum $s' $f) :=
+        q(Finset.sum_cons $h)
+pure res.eq_trans eq)
+    s
 -/
 partial def evalFinsetSum : NormNumExt where eval {u β} e := do
   let .app (.app (.app (.app (.app (.const ``Finset.sum [v, _]) α) β') _) s) f ←

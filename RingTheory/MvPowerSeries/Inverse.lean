@@ -214,7 +214,16 @@ theorem mul_invOfUnit
     else by
       classical
       have : ((0 : σ ->₀ Nat), n) in antidiagonal n := by rw [mem_antidiagonal, zero_add]
-      rw [coeff_one]; rw [if_neg H]; rw [coeff_mul]; rw [← Finset.insert_era
+      rw [coeff_one]; rw [if_neg H]; rw [coeff_mul]; rw [← Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [coeff_zero_eq_constantCoeff_apply]; rw [h]; rw [coeff_invOfUnit]; rw [if_neg H]; rw [neg_mul]; rw [mul_neg]; rw [Units.mul_inv_cancel_left]; rw [←
+        Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [Finset.insert_erase this]; rw [if_neg (not_lt_of_ge <| le_rfl)]; rw [zero_add]; rw [add_comm]; rw [←
+        sub_eq_add_neg]; rw [sub_eq_zero]; rw [Finset.sum_congr rfl]
+      rintro ⟨i, j⟩ hij
+      rw [Finset.mem_erase]; rw [mem_antidiagonal] at hij
+      obtain ⟨h₁, rfl⟩ := hij
+      rw [if_pos]
+refine lt_add_of_pos_left _ pos_iff_ne_zero.2 ?_
+      rintro rfl
+      simp at h₁
 
 中文:
 定理 mul_invOfUnit
@@ -227,7 +236,16 @@ theorem mul_invOfUnit
     else by
       classical
       have : ((0 : σ ->₀ Nat), n) in antidiagonal n := by rw [mem_antidiagonal, zero_add]
-      rw [coeff_one]; rw [if_neg H]; rw [coeff_mul]; rw [← Finset.insert_era
+      rw [coeff_one]; rw [if_neg H]; rw [coeff_mul]; rw [← Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [coeff_zero_eq_constantCoeff_apply]; rw [h]; rw [coeff_invOfUnit]; rw [if_neg H]; rw [neg_mul]; rw [mul_neg]; rw [Units.mul_inv_cancel_left]; rw [←
+        Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [Finset.insert_erase this]; rw [if_neg (not_lt_of_ge <| le_rfl)]; rw [zero_add]; rw [add_comm]; rw [←
+        sub_eq_add_neg]; rw [sub_eq_zero]; rw [Finset.sum_congr rfl]
+      rintro ⟨i, j⟩ hij
+      rw [Finset.mem_erase]; rw [mem_antidiagonal] at hij
+      obtain ⟨h₁, rfl⟩ := hij
+      rw [if_pos]
+refine lt_add_of_pos_left _ pos_iff_ne_zero.2 ?_
+      rintro rfl
+      simp at h₁
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.insert_erase, Finset.notMem_erase, Finset.sum_insert, Units.mul_inv_cancel_left, antidiagonal, classical, coeff_invOfUnit, coeff_mul, coeff_one, coeff_zero_eq_constantCoeff_apply, if_neg, insert_erase, mem_antidiagonal, mul_inv_cancel_left, mul_neg, neg_mul, notMem_erase
 -/
@@ -375,7 +393,7 @@ theorem map.isLocalHom
     have : IsUnit (constantCoeff ψ.val) := isUnit_constantCoeff _ ψ.isUnit
     rw [h] at this
     rcases isUnit_of_map_unit f _ this with ⟨c, hc⟩
-    exact .of_mul_eq_one (invOfUnit φ c) (mul_invOfUnit
+    exact .of_mul_eq_one (invOfUnit φ c) (mul_invOfUnit φ c hc.symm)⟩
 
 中文:
 定理 map.isLocalHom
@@ -387,7 +405,7 @@ theorem map.isLocalHom
     have : IsUnit (constantCoeff ψ.val) := isUnit_constantCoeff _ ψ.isUnit
     rw [h] at this
     rcases isUnit_of_map_unit f _ this with ⟨c, hc⟩
-    exact .of_mul_eq_one (invOfUnit φ c) (mul_invOfUnit
+    exact .of_mul_eq_one (invOfUnit φ c) (mul_invOfUnit φ c hc.symm)⟩
 -/
 theorem map.isLocalHom : IsLocalHom (map (σ := σ) f) :=
   ⟨by
@@ -722,7 +740,8 @@ theorem mul_inv_rev
     -- we don't have `NoZeroDivisors (MvPowerSeries σ k)` yet,
     rcases h with h | h <;> simp [inv_eq_zero.mpr h]
   · rw [MvPowerSeries.inv_eq_iff_mul_eq_one h]
-    simp only [not_or, m
+    simp only [not_or, map_mul, mul_eq_zero] at h
+    rw [← mul_assoc]; rw [mul_assoc _⁻¹]; rw [MvPowerSeries.inv_mul_cancel _ h.left]; rw [mul_one]; rw [MvPowerSeries.inv_mul_cancel _ h.right]
 
 中文:
 定理 mul_inv_rev
@@ -734,7 +753,8 @@ theorem mul_inv_rev
     -- we don't have `NoZeroDivisors (MvPowerSeries σ k)` yet,
     rcases h with h | h <;> simp [inv_eq_zero.mpr h]
   · rw [MvPowerSeries.inv_eq_iff_mul_eq_one h]
-    simp only [not_or, m
+    simp only [not_or, map_mul, mul_eq_zero] at h
+    rw [← mul_assoc]; rw [mul_assoc _⁻¹]; rw [MvPowerSeries.inv_mul_cancel _ h.left]; rw [mul_one]; rw [MvPowerSeries.inv_mul_cancel _ h.right]
 -/
 protected theorem mul_inv_rev (φ ψ : MvPowerSeries σ k) :
     (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹ := by

@@ -1072,7 +1072,9 @@ theorem contMDiffWithinAt_comp_diffeomorph_iff
     simpa only [Function.comp_def, h.apply_symm_apply] using
       Hfh.comp (h x) (h.symm.contMDiffWithinAt.of_le hm) (mapsTo_preimage _ _)
   · rw [← h.image_eq_preimage_symm]
-    exact fun hf => hf.comp x (h.contMDiffWithinAt.of_
+    exact fun hf => hf.comp x (h.contMDiffWithinAt.of_le hm) (mapsTo_image _ _)
+
+@[simp]
 
 中文:
 定理 contMDiffWithinAt_comp_diffeomorph_iff
@@ -1084,7 +1086,9 @@ theorem contMDiffWithinAt_comp_diffeomorph_iff
     simpa only [Function.comp_def, h.apply_symm_apply] using
       Hfh.comp (h x) (h.symm.contMDiffWithinAt.of_le hm) (mapsTo_preimage _ _)
   · rw [← h.image_eq_preimage_symm]
-    exact fun hf => hf.comp x (h.contMDiffWithinAt.of_
+    exact fun hf => hf.comp x (h.contMDiffWithinAt.of_le hm) (mapsTo_image _ _)
+
+@[simp]
 
 Depends on / 依赖: Function, Function.comp_def, Hfh.comp, apply_symm_apply, comp_def, contMDiffWithinAt, h.apply_symm_apply, h.contMDiffWithinAt.of_le, h.image_eq_preimage_symm, h.symm.contMDiffWithinAt.of_le, h.symm_apply_apply, hf.comp, image_eq_preimage_symm, mapsTo_image, mapsTo_preimage, of_le, symm_apply_apply
 -/
@@ -1534,7 +1538,24 @@ definition transContinuousLinearEquiv
     · simp only [PartialEquiv.coe_trans, Equiv.toPartialEquiv_apply, LinearEquiv.coe_toEquiv,
       ContinuousLinearEquiv.coe_toLinearEquiv, toPartialEquiv_coe]
       rw [range_comp]
-   
+      let := h.rclike
+      let := NormedSpace.restrictScalars Real 𝕜 E
+      let := NormedSpace.restrictScalars Real 𝕜 E'
+      let eR : E ->L[Real] E' := ContinuousLinearMap.restrictScalars Real (e : E ->L[𝕜] E')
+      change Convex Real (⇑eR '' range ↑I)
+      apply I.convex_range.linear_image
+    · simp [range_eq_univ_of_not_isRCLikeNormedField I h, range_comp]
+  nonempty_interior' := by
+    simp only [PartialEquiv.coe_trans, Equiv.toPartialEquiv_apply, LinearEquiv.coe_toEquiv,
+      ContinuousLinearEquiv.coe_toLinearEquiv, toPartialEquiv_coe, range_comp,
+      ContinuousLinearEquiv.image_eq_preimage_symm]
+    apply Nonempty.mono (preimage_interior_subset_interior_preimage e.symm.continuous)
+    rw [← ContinuousLinearEquiv.image_eq_preimage_symm]
+    simpa using I.nonempty_interior
+  continuous_toFun := e.continuous.comp I.continuous
+  continuous_invFun := I.continuous_symm.comp e.symm.continuous
+
+@[simp, mfld_simps]
 
 中文:
 定义 transContinuousLinearEquiv
@@ -1546,7 +1567,24 @@ definition transContinuousLinearEquiv
     · simp only [PartialEquiv.coe_trans, Equiv.toPartialEquiv_apply, LinearEquiv.coe_toEquiv,
       ContinuousLinearEquiv.coe_toLinearEquiv, toPartialEquiv_coe]
       rw [range_comp]
-   
+      let := h.rclike
+      let := NormedSpace.restrictScalars Real 𝕜 E
+      let := NormedSpace.restrictScalars Real 𝕜 E'
+      let eR : E ->L[Real] E' := ContinuousLinearMap.restrictScalars Real (e : E ->L[𝕜] E')
+      change Convex Real (⇑eR '' range ↑I)
+      apply I.convex_range.linear_image
+    · simp [range_eq_univ_of_not_isRCLikeNormedField I h, range_comp]
+  nonempty_interior' := by
+    simp only [PartialEquiv.coe_trans, Equiv.toPartialEquiv_apply, LinearEquiv.coe_toEquiv,
+      ContinuousLinearEquiv.coe_toLinearEquiv, toPartialEquiv_coe, range_comp,
+      ContinuousLinearEquiv.image_eq_preimage_symm]
+    apply Nonempty.mono (preimage_interior_subset_interior_preimage e.symm.continuous)
+    rw [← ContinuousLinearEquiv.image_eq_preimage_symm]
+    simpa using I.nonempty_interior
+  continuous_toFun := e.continuous.comp I.continuous
+  continuous_invFun := I.continuous_symm.comp e.symm.continuous
+
+@[simp, mfld_simps]
 
 Depends on / 依赖: I.toPartialEquiv.trans, e.toEquiv.toPartialEquiv, toEquiv, toPartialEquiv
 -/
@@ -1705,7 +1743,7 @@ instance instIsManifoldtransContinuousLinearEquiv
   refine e.contDiff.comp_contDiffOn
       (((contDiffGroupoid n I).compatible h₁ h₂).1.comp e.symm.contDiff.contDiffOn ?_)
   simp [preimage_comp, range_comp, mapsTo_iff_subset_preimage,
-    ContinuousLine
+    ContinuousLinearEquiv.image_eq_preimage_symm]
 
 中文:
 实例 instIsManifoldtransContinuousLinearEquiv
@@ -1715,7 +1753,7 @@ instance instIsManifoldtransContinuousLinearEquiv
   refine e.contDiff.comp_contDiffOn
       (((contDiffGroupoid n I).compatible h₁ h₂).1.comp e.symm.contDiff.contDiffOn ?_)
   simp [preimage_comp, range_comp, mapsTo_iff_subset_preimage,
-    ContinuousLine
+    ContinuousLinearEquiv.image_eq_preimage_symm]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.image_eq_preimage_symm, I.transContinuousLinearEquiv, comp_contDiffOn, compatible, contDiff, contDiffGroupoid, contDiffOn, e.contDiff.comp_contDiffOn, e.symm.contDiff.contDiffOn, image_eq_preimage_symm, isManifold_of_contDiffOn, mapsTo_iff_subset_preimage, preimage_comp, range_comp, transContinuousLinearEquiv
 -/
@@ -1740,7 +1778,17 @@ definition toTransContinuousLinearEquiv
     refine contMDiffWithinAt_iff'.2 ⟨continuousWithinAt_id, ?_⟩
     refine e.contDiff.contDiffWithinAt.congr_of_mem (fun y hy => ?_) ?_
     · simp only [Equiv.coe_refl, id, (· ∘ ·), I.coe_extChartAt_transContinuousLinearEquiv,
-        (extChartAt I x).right_inv
+        (extChartAt I x).right_inv hy.1]
+    · exact
+      ⟨(extChartAt I x).map_source (mem_extChartAt_source x), trivial, by simp only [mfld_simps]⟩
+  contMDiff_invFun x := by
+    refine contMDiffWithinAt_iff'.2 ⟨continuousWithinAt_id, ?_⟩
+    refine e.symm.contDiff.contDiffWithinAt.congr_of_mem (fun y hy => ?_) ?_
+    · simp only [mem_inter_iff, I.extChartAt_transContinuousLinearEquiv_target] at hy
+      simp only [Equiv.coe_refl, Equiv.refl_symm, id, (· ∘ ·),
+        I.coe_extChartAt_transContinuousLinearEquiv_symm, (extChartAt I x).right_inv hy.1]
+    exact ⟨(extChartAt _ x).map_source (mem_extChartAt_source x), trivial, by
+      simp only [e.symm_apply_apply, Equiv.refl_symm, Equiv.coe_refl, mfld_simps]⟩
 
 中文:
 定义 toTransContinuousLinearEquiv
@@ -1750,7 +1798,17 @@ definition toTransContinuousLinearEquiv
     refine contMDiffWithinAt_iff'.2 ⟨continuousWithinAt_id, ?_⟩
     refine e.contDiff.contDiffWithinAt.congr_of_mem (fun y hy => ?_) ?_
     · simp only [Equiv.coe_refl, id, (· ∘ ·), I.coe_extChartAt_transContinuousLinearEquiv,
-        (extChartAt I x).right_inv
+        (extChartAt I x).right_inv hy.1]
+    · exact
+      ⟨(extChartAt I x).map_source (mem_extChartAt_source x), trivial, by simp only [mfld_simps]⟩
+  contMDiff_invFun x := by
+    refine contMDiffWithinAt_iff'.2 ⟨continuousWithinAt_id, ?_⟩
+    refine e.symm.contDiff.contDiffWithinAt.congr_of_mem (fun y hy => ?_) ?_
+    · simp only [mem_inter_iff, I.extChartAt_transContinuousLinearEquiv_target] at hy
+      simp only [Equiv.coe_refl, Equiv.refl_symm, id, (· ∘ ·),
+        I.coe_extChartAt_transContinuousLinearEquiv_symm, (extChartAt I x).right_inv hy.1]
+    exact ⟨(extChartAt _ x).map_source (mem_extChartAt_source x), trivial, by
+      simp only [e.symm_apply_apply, Equiv.refl_symm, Equiv.coe_refl, mfld_simps]⟩
 
 Depends on / 依赖: Equiv.refl
 -/
@@ -2380,7 +2438,9 @@ definition sumAssoc
   contMDiff_invFun := by
     apply ContMDiff.sumElim
     · exact ContMDiff.inl.comp ContMDiff.inl
-    · exact ContMDiff.inr.sumMap co
+    · exact ContMDiff.inr.sumMap contMDiff_id
+
+@[simp]
 
 中文:
 定义 sumAssoc
@@ -2393,7 +2453,9 @@ definition sumAssoc
   contMDiff_invFun := by
     apply ContMDiff.sumElim
     · exact ContMDiff.inl.comp ContMDiff.inl
-    · exact ContMDiff.inr.sumMap co
+    · exact ContMDiff.inr.sumMap contMDiff_id
+
+@[simp]
 
 Depends on / 依赖: Equiv.sumAssoc, sumAssoc
 -/

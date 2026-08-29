@@ -114,7 +114,9 @@ lemma monotoneOn_deriv_descPochhammer_eval
     simp_rw [deriv_descPochhammer_eval_eq_sum_prod_range_erase]
     gcongr with i hi
     intro j hj
-    rw [Finset.mem_er
+    rw [Finset.mem_erase]; rw [Finset.mem_range] at hj
+    apply sub_nonneg_of_le
+    exact ha.le.trans' (mod_cast Nat.le_pred_of_lt hj.2)
 
 中文:
 引理 monotoneOn_deriv_descPochhammer_eval
@@ -128,7 +130,9 @@ lemma monotoneOn_deriv_descPochhammer_eval
     simp_rw [deriv_descPochhammer_eval_eq_sum_prod_range_erase]
     gcongr with i hi
     intro j hj
-    rw [Finset.mem_er
+    rw [Finset.mem_erase]; rw [Finset.mem_range] at hj
+    apply sub_nonneg_of_le
+    exact ha.le.trans' (mod_cast Nat.le_pred_of_lt hj.2)
 
 Depends on / 依赖: Finset, Finset.mem_erase, Finset.mem_range, Nat.cast_add_one, Nat.le_pred_of_lt, Set.mem_Ioi, add_sub_cancel_right, cast_add_one, deriv_descPochhammer_eval_eq_sum_prod_range_erase, ha.le.trans, le_pred_of_lt, mem_Ioi, mem_erase, mem_range, mod_cast, monotoneOn_const, simp_rw, sub_nonneg_of_le
 -/
@@ -159,7 +163,7 @@ theorem convexOn_descPochhammer_eval
       continuous_descPochhammer_eval.continuousOn
       differentiable_descPochhammer_eval.differentiableOn
     rw [interior_Ici]
-    exact monoto
+    exact monotoneOn_deriv_descPochhammer_eval n
 
 中文:
 定理 convexOn_descPochhammer_eval
@@ -171,7 +175,7 @@ theorem convexOn_descPochhammer_eval
       continuous_descPochhammer_eval.continuousOn
       differentiable_descPochhammer_eval.differentiableOn
     rw [interior_Ici]
-    exact monoto
+    exact monotoneOn_deriv_descPochhammer_eval n
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.convexOn_of_deriv, continuousOn, continuous_descPochhammer_eval, continuous_descPochhammer_eval.continuousOn, convexOn_const, convexOn_of_deriv, convex_Ici, differentiableOn, differentiable_descPochhammer_eval, differentiable_descPochhammer_eval.differentiableOn, eq_zero_or_pos, h_eq, interior_Ici, monotoneOn_deriv_descPochhammer_eval, n.eq_zero_or_pos
 -/
@@ -219,7 +223,7 @@ lemma convexOn_piecewise_Ici_descPochhammer_eval_zero
   apply convexOn_univ_piecewise_Ici_of_monotoneOn_Ici_antitoneOn_Iic
     (convexOn_descPochhammer_eval n) (convexOn_const 0 (convex_Iic (n - 1 : Real)))
     (monotoneOn_descPochhammer_eval n) antitoneOn_const
-  simpa [← Nat.cast_pred hn] using descPochhammer_eva
+  simpa [← Nat.cast_pred hn] using descPochhammer_eval_coe_nat_of_lt (Nat.sub_one_lt_of_lt hn)
 
 中文:
 引理 convexOn_piecewise_Ici_descPochhammer_eval_zero
@@ -229,7 +233,7 @@ lemma convexOn_piecewise_Ici_descPochhammer_eval_zero
   apply convexOn_univ_piecewise_Ici_of_monotoneOn_Ici_antitoneOn_Iic
     (convexOn_descPochhammer_eval n) (convexOn_const 0 (convex_Iic (n - 1 : Real)))
     (monotoneOn_descPochhammer_eval n) antitoneOn_const
-  simpa [← Nat.cast_pred hn] using descPochhammer_eva
+  simpa [← Nat.cast_pred hn] using descPochhammer_eval_coe_nat_of_lt (Nat.sub_one_lt_of_lt hn)
 -/
 private lemma convexOn_piecewise_Ici_descPochhammer_eval_zero (hn : n != 0) :
     ConvexOn Real Set.univ ((Set.Ici (n - 1 : Real)).piecewise (descPochhammer Real n).eval 0) := by
@@ -248,7 +252,8 @@ theorem descPochhammer_eval_le_sum_descFactorial
   let f : Real -> Real := (Set.Ici (n - 1 : Real)).piecewise (descPochhammer Real n).eval 0
   suffices h_jensen : f (∑ i in t, w i • p i) <= ∑ i in t, w i • f (p i) by
     simpa only [smul_eq_mul, f, Set.piecewise_eq_of_mem (Set.Ici (n - 1 : Real)) _ _ h_avg,
-      piecewise_Ici_descPochhammer_ev
+      piecewise_Ici_descPochhammer_eval_zero_eq_descFactorial] using h_jensen
+  exact ConvexOn.map_sum_le (convexOn_piecewise_Ici_descPochhammer_eval_zero hn) h₀ h₁ (by simp)
 
 中文:
 定理 descPochhammer_eval_le_sum_descFactorial
@@ -256,7 +261,8 @@ theorem descPochhammer_eval_le_sum_descFactorial
   let f : Real -> Real := (Set.Ici (n - 1 : Real)).piecewise (descPochhammer Real n).eval 0
   suffices h_jensen : f (∑ i in t, w i • p i) <= ∑ i in t, w i • f (p i) by
     simpa only [smul_eq_mul, f, Set.piecewise_eq_of_mem (Set.Ici (n - 1 : Real)) _ _ h_avg,
-      piecewise_Ici_descPochhammer_ev
+      piecewise_Ici_descPochhammer_eval_zero_eq_descFactorial] using h_jensen
+  exact ConvexOn.map_sum_le (convexOn_piecewise_Ici_descPochhammer_eval_zero hn) h₀ h₁ (by simp)
 
 Depends on / 依赖: ConvexOn, ConvexOn.map_sum_le, Set.Ici, Set.piecewise_eq_of_mem, convexOn_piecewise_Ici_descPochhammer_eval_zero, descPochhammer, h_avg, h_jensen, map_sum_le, piecewise, piecewise_Ici_descPochhammer_eval_zero_eq_descFactorial, piecewise_eq_of_mem, smul_eq_mul
 -/

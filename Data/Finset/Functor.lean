@@ -279,7 +279,36 @@ instance lawfulApplicative
         exact (sup_bot _).symm
       · ext a
         rw [if_neg ht.ne_empty]; rw [mem_sup]
-        re
+        refine ⟨fun ha => ⟨const _ a, mem_image_of_mem _ ha, mem_image_const_self.2 ht⟩, ?_⟩
+        rintro ⟨f, hf, ha⟩
+        rw [mem_image] at hf ha
+        obtain ⟨b, hb, rfl⟩ := hf
+        obtain ⟨_, _, rfl⟩ := ha
+        exact hb
+    seqRight_eq := fun s t => by
+      rw [seq_def]; rw [fmap_def]; rw [seqRight_def]
+      obtain rfl | hs := s.eq_empty_or_nonempty
+      · rw [if_pos rfl, image_empty, sup_empty, bot_eq_empty]
+      · ext a
+        rw [if_neg hs.ne_empty]; rw [mem_sup]
+        refine ⟨fun ha => ⟨id, mem_image_const_self.2 hs, by rwa [image_id]⟩, ?_⟩
+        rintro ⟨f, hf, ha⟩
+        rw [mem_image] at hf ha
+        obtain ⟨b, hb, rfl⟩ := ha
+        obtain ⟨_, _, rfl⟩ := hf
+        exact hb
+    pure_seq := fun f s => by simp only [pure_def, seq_def, sup_singleton, fmap_def]
+    map_pure := fun _ _ => image_singleton _ _
+    seq_pure := fun _ _ => sup_singleton_apply _ _
+    seq_assoc := fun s t u => by
+      ext a
+      simp_rw [seq_def, fmap_def]
+      simp only [mem_sup, mem_image]
+      constructor
+      · rintro ⟨g, hg, b, ⟨f, hf, a, ha, rfl⟩, rfl⟩
+        exact ⟨g ∘ f, ⟨comp g, ⟨g, hg, rfl⟩, f, hf, rfl⟩, a, ha, rfl⟩
+      · rintro ⟨c, ⟨_, ⟨g, hg, rfl⟩, f, hf, rfl⟩, a, ha, rfl⟩
+        exact ⟨g, hg, f a, ⟨f, hf, a, ha, rfl⟩, rfl⟩ }
 
 中文:
 实例 lawfulApplicative
@@ -292,7 +321,36 @@ instance lawfulApplicative
         exact (sup_bot _).symm
       · ext a
         rw [if_neg ht.ne_empty]; rw [mem_sup]
-        re
+        refine ⟨fun ha => ⟨const _ a, mem_image_of_mem _ ha, mem_image_const_self.2 ht⟩, ?_⟩
+        rintro ⟨f, hf, ha⟩
+        rw [mem_image] at hf ha
+        obtain ⟨b, hb, rfl⟩ := hf
+        obtain ⟨_, _, rfl⟩ := ha
+        exact hb
+    seqRight_eq := fun s t => by
+      rw [seq_def]; rw [fmap_def]; rw [seqRight_def]
+      obtain rfl | hs := s.eq_empty_or_nonempty
+      · rw [if_pos rfl, image_empty, sup_empty, bot_eq_empty]
+      · ext a
+        rw [if_neg hs.ne_empty]; rw [mem_sup]
+        refine ⟨fun ha => ⟨id, mem_image_const_self.2 hs, by rwa [image_id]⟩, ?_⟩
+        rintro ⟨f, hf, ha⟩
+        rw [mem_image] at hf ha
+        obtain ⟨b, hb, rfl⟩ := ha
+        obtain ⟨_, _, rfl⟩ := hf
+        exact hb
+    pure_seq := fun f s => by simp only [pure_def, seq_def, sup_singleton, fmap_def]
+    map_pure := fun _ _ => image_singleton _ _
+    seq_pure := fun _ _ => sup_singleton_apply _ _
+    seq_assoc := fun s t u => by
+      ext a
+      simp_rw [seq_def, fmap_def]
+      simp only [mem_sup, mem_image]
+      constructor
+      · rintro ⟨g, hg, b, ⟨f, hf, a, ha, rfl⟩, rfl⟩
+        exact ⟨g ∘ f, ⟨comp g, ⟨g, hg, rfl⟩, f, hf, rfl⟩, a, ha, rfl⟩
+      · rintro ⟨c, ⟨_, ⟨g, hg, rfl⟩, f, hf, rfl⟩, a, ha, rfl⟩
+        exact ⟨g, hg, f a, ⟨f, hf, a, ha, rfl⟩, rfl⟩ }
 
 Depends on / 依赖: Finset, Finset.lawfulFunctor, eq_empty_or_nonempty, fmap_def, ht.ne_empty, if_neg, if_true, image_empty, lawfulFunctor, mem_image, mem_image_const_self, mem_image_of_mem, mem_sup, ne_empty, seqLeft_def, seqLeft_eq, seqRight_eq, seq_def, simp_rw, sup_bot
 -/
@@ -347,7 +405,7 @@ instance commApplicative
       simp_rw [seq_def, fmap_def, sup_image, sup_eq_biUnion]
       change (s.biUnion fun a => t.image fun b => (a, b))
         = t.biUnion fun b => s.image fun a => (a, b)
-      trans s ×ˢ t <;> [rw [product_eq_biUnion]; rw [produ
+      trans s ×ˢ t <;> [rw [product_eq_biUnion]; rw [product_eq_biUnion_right]] }
 
 中文:
 实例 commApplicative
@@ -357,7 +415,7 @@ instance commApplicative
       simp_rw [seq_def, fmap_def, sup_image, sup_eq_biUnion]
       change (s.biUnion fun a => t.image fun b => (a, b))
         = t.biUnion fun b => s.image fun a => (a, b)
-      trans s ×ˢ t <;> [rw [product_eq_biUnion]; rw [produ
+      trans s ×ˢ t <;> [rw [product_eq_biUnion]; rw [product_eq_biUnion_right]] }
 
 Depends on / 依赖: Finset, Finset.lawfulApplicative, biUnion, commutative_prod, fmap_def, lawfulApplicative, product_eq_biUnion, product_eq_biUnion_right, s.biUnion, s.image, seq_def, simp_rw, sup_eq_biUnion, sup_image, t.biUnion, t.image
 -/

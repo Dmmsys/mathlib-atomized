@@ -140,7 +140,18 @@ theorem projective_lifting_property
     Recall that `X →₀ R` is Lean's way of talking about the free `R`-module
     on a type `X`. The universal property `Finsupp.linearCombination` says that to a map
     `X → N` from a type to an `R`-module, we get an associated R-module map
-    `(X →₀ 
+    `(X →₀ R) →ₗ N`. Apply this to a (noncomputable) map `P → M` coming from the map
+    `P →ₗ N` and a random splitting of the surjection `M →ₗ N`, and we get
+    a map `φ : (P →₀ R) →ₗ M`.
+    -/
+  let φ : (P ->₀ R) ->ₗ[R] M := Finsupp.linearCombination _ fun p => Function.surjInv hf (g p)
+  -- By projectivity we have a map `P →ₗ (P →₀ R)`;
+  obtain ⟨s, hs⟩ := h.out
+  -- Compose to get `P →ₗ M`. This works.
+  use φ.comp s
+  ext p
+  conv_rhs => rw [← hs p]
+  simp [φ, Finsupp.linearCombination_apply, Function.surjInv_eq hf, map_finsuppSum]
 
 中文:
 定理 projective_lifting_property
@@ -151,7 +162,18 @@ theorem projective_lifting_property
     Recall that `X →₀ R` is Lean's way of talking about the free `R`-module
     on a type `X`. The universal property `Finsupp.linearCombination` says that to a map
     `X → N` from a type to an `R`-module, we get an associated R-module map
-    `(X →₀ 
+    `(X →₀ R) →ₗ N`. Apply this to a (noncomputable) map `P → M` coming from the map
+    `P →ₗ N` and a random splitting of the surjection `M →ₗ N`, and we get
+    a map `φ : (P →₀ R) →ₗ M`.
+    -/
+  let φ : (P ->₀ R) ->ₗ[R] M := Finsupp.linearCombination _ fun p => Function.surjInv hf (g p)
+  -- By projectivity we have a map `P →ₗ (P →₀ R)`;
+  obtain ⟨s, hs⟩ := h.out
+  -- Compose to get `P →ₗ M`. This works.
+  use φ.comp s
+  ext p
+  conv_rhs => rw [← hs p]
+  simp [φ, Finsupp.linearCombination_apply, Function.surjInv_eq hf, map_finsuppSum]
 -/
 theorem projective_lifting_property [h : Projective R P] (f : M ->ₗ[R] N) (g : P ->ₗ[R] N)
     (hf : Function.Surjective f) : exists h : P ->ₗ[R] M, f ∘ₗ h = g := by
@@ -287,7 +309,7 @@ instance [h
       replace hg : forall i x, f (g i x) = DFinsupp.single i x := fun i => DFunLike.congr_fun (hg i)
       refine ⟨DFinsupp.coprodMap g, ?_⟩
       ext i x j
-    
+      simp only [comp_apply, id_apply, DFinsupp.lsingle_apply, DFinsupp.coprodMap_apply_single, hg]
 
 中文:
 实例 [h
@@ -298,7 +320,7 @@ instance [h
       replace hg : forall i x, f (g i x) = DFinsupp.single i x := fun i => DFunLike.congr_fun (hg i)
       refine ⟨DFinsupp.coprodMap g, ?_⟩
       ext i x j
-    
+      simp only [comp_apply, id_apply, DFinsupp.lsingle_apply, DFinsupp.coprodMap_apply_single, hg]
 
 Depends on / 依赖: DFinsupp, DFinsupp.coprodMap, DFinsupp.coprodMap_apply_single, DFinsupp.lsingle, DFinsupp.lsingle_apply, DFinsupp.single, DFunLike, DFunLike.congr_fun, classical, comp_apply, congr_fun, coprodMap, coprodMap_apply_single, id_apply, lsingle, lsingle_apply, of_lifting_property, projective_lifting_property, replace, single
 -/
@@ -325,7 +347,7 @@ theorem Projective.of_basis
   intro m
   simp only [b.constr_apply, mul_one, id, Finsupp.smul_single', Finsupp.linearCombination_single,
     map_finsuppSum]
-  exact b
+  exact b.linearCombination_repr m
 
 中文:
 定理 投射.of_basis
@@ -338,7 +360,7 @@ theorem Projective.of_basis
   intro m
   simp only [b.constr_apply, mul_one, id, Finsupp.smul_single', Finsupp.linearCombination_single,
     map_finsuppSum]
-  exact b
+  exact b.linearCombination_repr m
 -/
 theorem Projective.of_basis {ι : Type*} (b : Basis ι R P) : Projective R P := by
   -- need P →ₗ (P →₀ R) for definition of projective.
@@ -394,7 +416,10 @@ theorem Projective.of_equiv
   let g : N ->ₗ[S] N ->₀ S :=
   { toFun := fun x => (equivCongrLeft e₂ (f (e₂.symm x))).mapRange e₁ e₁.map_zero
     map_add' := fun x y => by ext; simp
-    map_smul' := fun r v => by ext i; simp [e₁, e₂.sym
+    map_smul' := fun r v => by ext i; simp [e₁, e₂.symm.map_smulₛₗ] }
+  refine ⟨⟨g, fun x => ?_⟩⟩
+  replace hf := congr(e₂ $(hf (e₂.symm x)))
+  simpa [linearCombination_apply, sum_mapRange_index, g, map_finsuppSum, e₂.map_smulₛₗ] using! hf
 
 中文:
 定理 投射.of_equiv
@@ -405,7 +430,10 @@ theorem Projective.of_equiv
   let g : N ->ₗ[S] N ->₀ S :=
   { toFun := fun x => (equivCongrLeft e₂ (f (e₂.symm x))).mapRange e₁ e₁.map_zero
     map_add' := fun x y => by ext; simp
-    map_smul' := fun r v => by ext i; simp [e₁, e₂.sym
+    map_smul' := fun r v => by ext i; simp [e₁, e₂.symm.map_smulₛₗ] }
+  refine ⟨⟨g, fun x => ?_⟩⟩
+  replace hf := congr(e₂ $(hf (e₂.symm x)))
+  simpa [linearCombination_apply, sum_mapRange_index, g, map_finsuppSum, e₂.map_smulₛₗ] using! hf
 
 Depends on / 依赖: Projective, RingHomInvPair, RingHomInvPair.toRingEquiv, equivCongrLeft, linearCombination_apply, mapRange, map_add, map_finsuppSum, map_smul, map_zero, replace, sum_mapRange_index, symm.map_smul, toRingEquiv
 -/
@@ -565,7 +593,11 @@ theorem Projective.iff_split'
     Finsupp.mapDomain.linearEquiv _ R (equivShrink P).symm ≪≫ₗ
       Finsupp.mapRange.linearEquiv (Shrink.linearEquiv R R)
   refine ⟨fun ⟨i, hi⟩ => ⟨(Shrink.{w} P) ->₀ (Shrink.{w} R), _, _, Free.of_basis ⟨e⟩,
-    e.symm.toLinearMap 
+    e.symm.toLinearMap ∘ₗ i, (linearCombination R id) ∘ₗ e.toLinearMap, ?_⟩,
+      fun ⟨_, _, _, _, i, s, H⟩ => Projective.of_split i s H⟩
+  apply LinearMap.ext
+  simp only [coe_comp, LinearEquiv.coe_coe, Function.comp_apply, e.apply_symm_apply]
+  exact hi
 
 中文:
 定理 投射.iff_split'
@@ -576,7 +608,11 @@ theorem Projective.iff_split'
     Finsupp.mapDomain.linearEquiv _ R (equivShrink P).symm ≪≫ₗ
       Finsupp.mapRange.linearEquiv (Shrink.linearEquiv R R)
   refine ⟨fun ⟨i, hi⟩ => ⟨(Shrink.{w} P) ->₀ (Shrink.{w} R), _, _, Free.of_basis ⟨e⟩,
-    e.symm.toLinearMap 
+    e.symm.toLinearMap ∘ₗ i, (linearCombination R id) ∘ₗ e.toLinearMap, ?_⟩,
+      fun ⟨_, _, _, _, i, s, H⟩ => Projective.of_split i s H⟩
+  apply LinearMap.ext
+  simp only [coe_comp, LinearEquiv.coe_coe, Function.comp_apply, e.apply_symm_apply]
+  exact hi
 
 Depends on / 依赖: Finsupp, Finsupp.mapDomain.linearEquiv, Finsupp.mapRange.linearEquiv, Free.of_basis, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.ext, Projective, Projective.of_split, Shrink, Shrink.linearEquiv, apply_symm_apply, coe_coe, coe_comp, comp_apply, e.apply_symm_apply, e.symm.toLinearMap
 -/
@@ -626,7 +662,13 @@ instance Projective.tensorProduct
   have : Module.Projective R (M otimes[R₀] (N ->₀ R₀)) := by
     fapply Projective.of_split (R := R) (M := ((M ->₀ R) otimes[R₀] (N ->₀ R₀)))
     · exact (AlgebraTensorModule.map sM (LinearMap.id (R := R₀) (M := N ->₀ R₀)))
-    · exact (AlgebraTen
+    · exact (AlgebraTensorModule.map
+        (Finsupp.linearCombination R id) (LinearMap.id (R := R₀) (M := N ->₀ R₀)))
+    · ext; simp [hsM _]
+  fapply Projective.of_split (R := R) (M := (M otimes[R₀] (N ->₀ R₀)))
+  · exact (AlgebraTensorModule.map (LinearMap.id (R := R) (M := M)) sN)
+  · exact (AlgebraTensorModule.map (LinearMap.id (R := R) (M := M)) (linearCombination R₀ id))
+  · ext; simp [hsN _]
 
 中文:
 实例 投射.tensorProduct
@@ -637,7 +679,13 @@ instance Projective.tensorProduct
   have : Module.Projective R (M otimes[R₀] (N ->₀ R₀)) := by
     fapply Projective.of_split (R := R) (M := ((M ->₀ R) otimes[R₀] (N ->₀ R₀)))
     · exact (AlgebraTensorModule.map sM (LinearMap.id (R := R₀) (M := N ->₀ R₀)))
-    · exact (AlgebraTen
+    · exact (AlgebraTensorModule.map
+        (Finsupp.linearCombination R id) (LinearMap.id (R := R₀) (M := N ->₀ R₀)))
+    · ext; simp [hsM _]
+  fapply Projective.of_split (R := R) (M := (M otimes[R₀] (N ->₀ R₀)))
+  · exact (AlgebraTensorModule.map (LinearMap.id (R := R) (M := M)) sN)
+  · exact (AlgebraTensorModule.map (LinearMap.id (R := R) (M := M)) (linearCombination R₀ id))
+  · ext; simp [hsN _]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, Finsupp, Finsupp.linearCombination, Linear, LinearMap, LinearMap.id, Module, Module.Projective, Projective, Projective.of_split, fapply, linearCombination, of_split, otimes
 -/

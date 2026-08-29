@@ -52,7 +52,19 @@ definition Γ₀NondegComplexIso
       simp only [id_comp, comp_id, AlternatingFaceMapComplex.obj_d_eq, Preadditive.sum_comp,
         Preadditive.comp_sum]
       rw [Fintype.sum_eq_single (0 : Fin (n + 2))]
-      · si
+      · simp only [Fin.val_zero, pow_zero, one_zsmul]
+        rw [δ]; rw [Γ₀.Obj.mapMono_on_summand_id_assoc]; rw [Γ₀.Obj.Termwise.mapMono_δ₀]; rw [Splitting.cofan_inj_πSummand_eq_id]
+        dsimp only [Γ₀.splitting, Splitting.summand.eq_1, Splitting.IndexSet.id_fst]
+        rw [comp_id]
+      · intro i hi
+        dsimp
+        simp only [Preadditive.zsmul_comp, Preadditive.comp_zsmul]
+        rw [δ]; rw [Γ₀.Obj.mapMono_on_summand_id_assoc]; rw [Γ₀.Obj.Termwise.mapMono_eq_zero]; rw [zero_comp]; rw [zsmul_zero]
+        · intro h
+          replace h := congr_arg SimplexCategory.len h
+          change n + 1 = n at h
+          lia
+        · simpa only [Isδ₀.iff] using hi)
 
 中文:
 定义 Γ₀NondegComplexIso
@@ -64,7 +76,19 @@ definition Γ₀NondegComplexIso
       simp only [id_comp, comp_id, AlternatingFaceMapComplex.obj_d_eq, Preadditive.sum_comp,
         Preadditive.comp_sum]
       rw [Fintype.sum_eq_single (0 : Fin (n + 2))]
-      · si
+      · simp only [Fin.val_zero, pow_zero, one_zsmul]
+        rw [δ]; rw [Γ₀.Obj.mapMono_on_summand_id_assoc]; rw [Γ₀.Obj.Termwise.mapMono_δ₀]; rw [Splitting.cofan_inj_πSummand_eq_id]
+        dsimp only [Γ₀.splitting, Splitting.summand.eq_1, Splitting.IndexSet.id_fst]
+        rw [comp_id]
+      · intro i hi
+        dsimp
+        simp only [Preadditive.zsmul_comp, Preadditive.comp_zsmul]
+        rw [δ]; rw [Γ₀.Obj.mapMono_on_summand_id_assoc]; rw [Γ₀.Obj.Termwise.mapMono_eq_zero]; rw [zero_comp]; rw [zsmul_zero]
+        · intro h
+          replace h := congr_arg SimplexCategory.len h
+          change n + 1 = n at h
+          lia
+        · simpa only [Isδ₀.iff] using hi)
 
 Depends on / 依赖: AlternatingFaceMapComplex, AlternatingFaceMapComplex.obj_d_eq, Fin.val_zero, Fintype, Fintype.sum_eq_single, HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, IndexSet, Iso.refl, Obj.Termwise.mapMono_, Obj.mapMono_on_summand_id_assoc, Preadditive, Preadditive.comp_sum, Preadditive.sum_comp, Splitting, Splitting.IndexSet.id_fst, Splitting.cofan_inj_, Splitting.summand.eq_1, Termwise, comp_id
 -/
@@ -119,7 +143,8 @@ definition N₁Γ₀
     _ ≅ Γ₀' ⋙ Split.nondegComplexFunctor ⋙ toKaroubi _ :=
       (isoWhiskerLeft Γ₀' Split.toKaroubiNondegComplexFunctorIsoN₁.symm)
     _ ≅ (Γ₀' ⋙ Split.nondegComplexFunctor) ⋙ toKaroubi _ := (Functor.associator _ _ _).symm
-    
+    _ ≅ 𝟭 _ ⋙ toKaroubi (ChainComplex C Nat) := isoWhiskerRight Γ₀'CompNondegComplexFunctor _
+    _ ≅ toKaroubi (ChainComplex C Nat) := Functor.leftUnitor _
 
 中文:
 定义 N₁Γ₀
@@ -129,7 +154,8 @@ definition N₁Γ₀
     _ ≅ Γ₀' ⋙ Split.nondegComplexFunctor ⋙ toKaroubi _ :=
       (isoWhiskerLeft Γ₀' Split.toKaroubiNondegComplexFunctorIsoN₁.symm)
     _ ≅ (Γ₀' ⋙ Split.nondegComplexFunctor) ⋙ toKaroubi _ := (Functor.associator _ _ _).symm
-    
+    _ ≅ 𝟭 _ ⋙ toKaroubi (ChainComplex C Nat) := isoWhiskerRight Γ₀'CompNondegComplexFunctor _
+    _ ≅ toKaroubi (ChainComplex C Nat) := Functor.leftUnitor _
 
 Depends on / 依赖: ChainComplex, CompNondegComplexFunctor, Functor, Functor.associator, Functor.leftUnitor, Split.forget, Split.nondegComplexFunctor, Split.toKaroubiNondegComplexFunctorIsoN, associator, forget, isoWhiskerLeft, isoWhiskerRight, leftUnitor, nondegComplexFunctor, toKaroubi
 -/
@@ -290,7 +316,9 @@ definition N₂Γ₂ToKaroubiIso
       toKaroubi (ChainComplex C Nat) ⋙ (Γ₂ ⋙ N₂) := (Functor.associator _ _ _).symm
     _ ≅ (Γ₀ ⋙ toKaroubi (SimplicialObject C)) ⋙ N₂ :=
         isoWhiskerRight ((functorExtension₂CompWhiskeringLeftToKaroubiIso _ _).app Γ₀) N₂
-    _ ≅ Γ₀ ⋙ toKarou
+    _ ≅ Γ₀ ⋙ toKaroubi (SimplicialObject C) ⋙ N₂ := Functor.associator _ _ _
+    _ ≅ Γ₀ ⋙ N₁ :=
+      isoWhiskerLeft Γ₀ ((functorExtension₁CompWhiskeringLeftToKaroubiIso _ _).app N₁)
 
 中文:
 定义 N₂Γ₂ToKaroubiIso
@@ -300,7 +328,9 @@ definition N₂Γ₂ToKaroubiIso
       toKaroubi (ChainComplex C Nat) ⋙ (Γ₂ ⋙ N₂) := (Functor.associator _ _ _).symm
     _ ≅ (Γ₀ ⋙ toKaroubi (SimplicialObject C)) ⋙ N₂ :=
         isoWhiskerRight ((functorExtension₂CompWhiskeringLeftToKaroubiIso _ _).app Γ₀) N₂
-    _ ≅ Γ₀ ⋙ toKarou
+    _ ≅ Γ₀ ⋙ toKaroubi (SimplicialObject C) ⋙ N₂ := Functor.associator _ _ _
+    _ ≅ Γ₀ ⋙ N₁ :=
+      isoWhiskerLeft Γ₀ ((functorExtension₁CompWhiskeringLeftToKaroubiIso _ _).app N₁)
 
 Depends on / 依赖: ChainComplex, Functor, Functor.associator, SimplicialObject, associator, isoWhiskerLeft, isoWhiskerRight, toKaroubi
 -/
@@ -445,7 +475,10 @@ theorem N₂Γ₂_inv_app_f_f
   simp only [whiskeringLeft_obj_preimage_app, NatTrans.comp_app, Functor.comp_map,
     Karoubi.comp_f, N₂Γ₂ToKaroubiIso_inv_app, HomologicalComplex.comp_f,
     N₁Γ₀_inv_app_f_f, toKaroubi_obj_X, Splitting.toKaroubiNondegComplexIsoN₁_hom_f_f,
-    PInfty_on_Γ₀_splitting_summand_eq_se
+    PInfty_on_Γ₀_splitting_summand_eq_self, N₂_map_f_f, Γ₂_map_f_app, unop_op, Karoubi.decompId_p_f,
+    PInfty_on_Γ₀_splitting_summand_eq_self_assoc, Splitting.IndexSet.id_fst, SimplexCategory.len_mk,
+    Splitting.ι_desc]
+  apply Karoubi.HomologicalComplex.p_idem_assoc
 
 中文:
 定理 N₂Γ₂_inv_app_f_f
@@ -455,7 +488,10 @@ theorem N₂Γ₂_inv_app_f_f
   simp only [whiskeringLeft_obj_preimage_app, NatTrans.comp_app, Functor.comp_map,
     Karoubi.comp_f, N₂Γ₂ToKaroubiIso_inv_app, HomologicalComplex.comp_f,
     N₁Γ₀_inv_app_f_f, toKaroubi_obj_X, Splitting.toKaroubiNondegComplexIsoN₁_hom_f_f,
-    PInfty_on_Γ₀_splitting_summand_eq_se
+    PInfty_on_Γ₀_splitting_summand_eq_self, N₂_map_f_f, Γ₂_map_f_app, unop_op, Karoubi.decompId_p_f,
+    PInfty_on_Γ₀_splitting_summand_eq_self_assoc, Splitting.IndexSet.id_fst, SimplexCategory.len_mk,
+    Splitting.ι_desc]
+  apply Karoubi.HomologicalComplex.p_idem_assoc
 
 Depends on / 依赖: Functor, Functor.comp_map, HomologicalComplex, HomologicalComplex.comp_f, IndexSet, Karoubi, Karoubi.HomologicalComplex.p_idem_, Karoubi.comp_f, Karoubi.decompId_p_f, NatTrans, NatTrans.comp_app, SimplexCategory, SimplexCategory.len_mk, Splitting, Splitting.IndexSet.id_fst, Splitting.toKaroubiNondegComplexIsoN, comp_app, comp_f, comp_map, decompId_p_f
 -/

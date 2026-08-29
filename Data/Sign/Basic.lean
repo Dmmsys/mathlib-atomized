@@ -544,7 +544,8 @@ theorem exists_signed_sum_aux
       fun a => sign (f a.1), fun a => a.1, fun a => a.1.2, ?_, ?_⟩
   · simp [sum_attach (f := fun a => (f a).natAbs)]
   · intro x hx
-    simp [sum_sigma, hx, ← Int.sign_eq_sign, Int.sign_mul_abs, mul_comm |
+    simp [sum_sigma, hx, ← Int.sign_eq_sign, Int.sign_mul_abs, mul_comm |f _|,
+      sum_attach (s := s) (f := fun y => if y = x then f y else 0)]
 
 中文:
 定理 存在_signed_sum_aux
@@ -555,7 +556,8 @@ theorem exists_signed_sum_aux
       fun a => sign (f a.1), fun a => a.1, fun a => a.1.2, ?_, ?_⟩
   · simp [sum_attach (f := fun a => (f a).natAbs)]
   · intro x hx
-    simp [sum_sigma, hx, ← Int.sign_eq_sign, Int.sign_mul_abs, mul_comm |
+    simp [sum_sigma, hx, ← Int.sign_eq_sign, Int.sign_mul_abs, mul_comm |f _|,
+      sum_attach (s := s) (f := fun y => if y = x then f y else 0)]
 -/
 private theorem exists_signed_sum_aux [DecidableEq α] (s : Finset α) (f : α -> Int) :
     exists (β : Type u) (t : Finset β) (sgn : β -> SignType) (g : β -> α),
@@ -610,7 +612,10 @@ theorem exists_signed_sum'
   refine
     ⟨β oplus (Fin (n - ∑ i in s, (f i).natAbs)), inferInstance, Sum.elim sgn 0,
       Sum.elim g (Classical.arbitrary (Fin (n - Finset.sum s fun i => Int.natAbs (f i)) -> α)),
-        ?_, by simp [hβ, h], fun a ha => by simp [h
+        ?_, by simp [hβ, h], fun a ha => by simp [hf _ ha]⟩
+  rintro (b | b) hb
+  · cases hb (hg _)
+  · rfl
 
 中文:
 定理 存在_signed_sum'
@@ -620,7 +625,10 @@ theorem exists_signed_sum'
   refine
     ⟨β oplus (Fin (n - ∑ i in s, (f i).natAbs)), inferInstance, Sum.elim sgn 0,
       Sum.elim g (Classical.arbitrary (Fin (n - Finset.sum s fun i => Int.natAbs (f i)) -> α)),
-        ?_, by simp [hβ, h], fun a ha => by simp [h
+        ?_, by simp [hβ, h], fun a ha => by simp [hf _ ha]⟩
+  rintro (b | b) hb
+  · cases hb (hg _)
+  · rfl
 
 Depends on / 依赖: Classical, Classical.arbitrary, Finset, Finset.sum, Int.natAbs, Sum.elim, arbitrary, exists_signed_sum, natAbs
 -/

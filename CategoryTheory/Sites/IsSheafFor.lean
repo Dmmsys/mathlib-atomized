@@ -339,7 +339,7 @@ theorem pullbackCompatible_iff
     apply pullback.condition
   · intro t Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ comm
     have := HasPairwisePullbacks.has_pullbacks hf₁ hf₂
-    rw [← pullback.lift_fst _ _ comm]; rw [op_comp]; rw
+    rw [← pullback.lift_fst _ _ comm]; rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [t hf₁ hf₂]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [pullback.lift_snd]
 
 中文:
 定理 pullbackCompatible_iff
@@ -352,7 +352,7 @@ theorem pullbackCompatible_iff
     apply pullback.condition
   · intro t Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ comm
     have := HasPairwisePullbacks.has_pullbacks hf₁ hf₂
-    rw [← pullback.lift_fst _ _ comm]; rw [op_comp]; rw
+    rw [← pullback.lift_fst _ _ comm]; rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [t hf₁ hf₂]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [pullback.lift_snd]
 
 Depends on / 依赖: Functor, Functor.map_comp, HasPairwisePullbacks, HasPairwisePullbacks.has_pullbacks, comp_apply, condition, has_pullbacks, lift_fst, lift_snd, map_comp, op_comp, pullback, pullback.condition, pullback.lift_fst, pullback.lift_snd
 -/
@@ -1172,7 +1172,7 @@ theorem isSeparatedFor_iff_generate
   · intro h x t₁ t₂ ht₁ ht₂
     apply h x.sieveExtend
     · exact isAmalgamation_sieveExtend x t₁ ht₁
-    · ex
+    · exact isAmalgamation_sieveExtend x t₂ ht₂
 
 中文:
 定理 isSeparatedFor_iff_generate
@@ -1185,7 +1185,7 @@ theorem isSeparatedFor_iff_generate
   · intro h x t₁ t₂ ht₁ ht₂
     apply h x.sieveExtend
     · exact isAmalgamation_sieveExtend x t₁ ht₁
-    · ex
+    · exact isAmalgamation_sieveExtend x t₂ ht₂
 
 Depends on / 依赖: isAmalgamation_restrict, isAmalgamation_sieveExtend, le_generate, restrict, sieveExtend, x.restrict, x.sieveExtend
 -/
@@ -1300,7 +1300,22 @@ definition shrinkFunctorHomEquiv
     rw! [shrinkYonedaObjObjEquiv_symm_comp]
     rfl⟩
   invFun t :=
-    { app X := ↾fun f => t.1 _
+    { app X := ↾fun f => t.1 _ f.mem
+      naturality Y Z g := by
+        ext ⟨f, hf⟩
+        dsimp
+        convert! t.2.to_sieveCompatible _ _ _
+        simp only [Opposite.op_unop, shrinkYonedaObjObjEquiv_obj_map]
+        rfl }
+  left_inv t := by cat_disch
+  right_inv x := by
+    ext
+    dsimp
+    rw! [Equiv.apply_symm_apply]
+    simp
+
+@[deprecated "In terms of `Sieve.shrinkFunctor`" (since := "2026-03-13")]
+alias natTransEquivCompatibleFamily := shrinkFunctorHomEquiv
 
 中文:
 定义 shrinkFunctorHomEquiv
@@ -1312,7 +1327,22 @@ definition shrinkFunctorHomEquiv
     rw! [shrinkYonedaObjObjEquiv_symm_comp]
     rfl⟩
   invFun t :=
-    { app X := ↾fun f => t.1 _
+    { app X := ↾fun f => t.1 _ f.mem
+      naturality Y Z g := by
+        ext ⟨f, hf⟩
+        dsimp
+        convert! t.2.to_sieveCompatible _ _ _
+        simp only [Opposite.op_unop, shrinkYonedaObjObjEquiv_obj_map]
+        rfl }
+  left_inv t := by cat_disch
+  right_inv x := by
+    ext
+    dsimp
+    rw! [Equiv.apply_symm_apply]
+    simp
+
+@[deprecated "In terms of `Sieve.shrinkFunctor`" (since := "2026-03-13")]
+alias natTransEquivCompatibleFamily := shrinkFunctorHomEquiv
 
 Depends on / 依赖: Equiv.apply_, NatTrans, NatTrans.naturality_apply, Opposite, Opposite.op_unop, Presieve, Presieve.compatible_iff_sieveCompatible, apply_, cat_disch, compatible_iff_sieveCompatible, convert, f.mem, invFun, left_inv, naturality, naturality_apply, op_unop, right_inv, shrinkFunctor_obj, shrinkYonedaObjObjEquiv
 -/
@@ -1357,7 +1387,13 @@ lemma shrinkFunctor_ι_comp_eq_iff_isAmalgamation
     simp [shrinkYonedaEquiv_naturality, shrinkYonedaEquiv_comp, shrinkYonedaEquiv_shrinkYoneda_map]
   · ext Y ⟨u, hu⟩
     convert! h (shrinkYonedaObjObjEquiv u) hu
-    · rw [shrinkYonedaEquiv_natur
+    · rw [shrinkYonedaEquiv_naturality, shrinkYonedaEquiv_comp, shrinkYonedaEquiv_shrinkYoneda_map]
+      simp
+    · rw! [Equiv.symm_apply_apply]
+      rfl
+
+@[deprecated "In terms of `Sieve.shrinkFunctor`" (since := "2026-03-13")]
+alias extension_iff_amalgamation := shrinkFunctor_ι_comp_eq_iff_isAmalgamation
 
 中文:
 引理 shrinkFunctor_ι_comp_eq_iff_isAmalgamation
@@ -1369,7 +1405,13 @@ lemma shrinkFunctor_ι_comp_eq_iff_isAmalgamation
     simp [shrinkYonedaEquiv_naturality, shrinkYonedaEquiv_comp, shrinkYonedaEquiv_shrinkYoneda_map]
   · ext Y ⟨u, hu⟩
     convert! h (shrinkYonedaObjObjEquiv u) hu
-    · rw [shrinkYonedaEquiv_natur
+    · rw [shrinkYonedaEquiv_naturality, shrinkYonedaEquiv_comp, shrinkYonedaEquiv_shrinkYoneda_map]
+      simp
+    · rw! [Equiv.symm_apply_apply]
+      rfl
+
+@[deprecated "In terms of `Sieve.shrinkFunctor`" (since := "2026-03-13")]
+alias extension_iff_amalgamation := shrinkFunctor_ι_comp_eq_iff_isAmalgamation
 
 Depends on / 依赖: Equiv.symm_apply_apply, FamilyOfElements, IsAmalgamation, Presieve, Presieve.FamilyOfElements.IsAmalgamation, convert, shrinkYonedaEquiv_comp, shrinkYonedaEquiv_naturality, shrinkYonedaEquiv_shrinkYoneda_map, shrinkYonedaObjObjEquiv, symm_apply_apply
 -/
@@ -1434,7 +1476,16 @@ theorem isSheafFor_iff_yonedaSheafCondition
   proof: by
   rw [isSheafFor_iff_bijective_shrinkFunctor_ι_comp]; rw [YonedaSheafCondition]; rw [Function.bijective_iff_existsUnique]; rw [Equiv.forall_congr_left S.shrinkFunctorIsoFunctor.homFromEquiv]
   refine forall_congr' fun a => ?_
-  rw [Equiv.existsUnique_congr_left (shrinkYonedaIsoYoneda.app X).homFr
+  rw [Equiv.existsUnique_congr_left (shrinkYonedaIsoYoneda.app X).homFromEquiv]
+  refine existsUnique_congr fun b => ?_
+  dsimp
+  rw [NatTrans.ext_iff]; rw [NatTrans.ext_iff]; rw [funext_iff]; rw [funext_iff]
+  congr!
+  rw [ConcreteCategory.hom_ext_iff]; rw [ConcreteCategory.hom_ext_iff]
+  dsimp [functor]
+  simp only [Subtype.forall, shrinkYonedaObjObjEquiv.forall_congr_left, Equiv.apply_symm_apply]
+  congr!
+  simp
 
 中文:
 定理 isSheafFor_iff_yonedaSheafCondition
@@ -1442,7 +1493,16 @@ theorem isSheafFor_iff_yonedaSheafCondition
   证明: by
   rw [isSheafFor_iff_bijective_shrinkFunctor_ι_comp]; rw [YonedaSheafCondition]; rw [Function.bijective_iff_existsUnique]; rw [Equiv.forall_congr_left S.shrinkFunctorIsoFunctor.homFromEquiv]
   refine forall_congr' fun a => ?_
-  rw [Equiv.existsUnique_congr_left (shrinkYonedaIsoYoneda.app X).homFr
+  rw [Equiv.existsUnique_congr_left (shrinkYonedaIsoYoneda.app X).homFromEquiv]
+  refine existsUnique_congr fun b => ?_
+  dsimp
+  rw [NatTrans.ext_iff]; rw [NatTrans.ext_iff]; rw [funext_iff]; rw [funext_iff]
+  congr!
+  rw [ConcreteCategory.hom_ext_iff]; rw [ConcreteCategory.hom_ext_iff]
+  dsimp [functor]
+  simp only [Subtype.forall, shrinkYonedaObjObjEquiv.forall_congr_left, Equiv.apply_symm_apply]
+  congr!
+  simp
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext_iff, Equiv.existsUnique_congr_left, Equiv.forall_congr_left, Function, Function.bijective_iff_existsUnique, NatTrans, NatTrans.ext_iff, S.shrinkFunctorIsoFunctor.homFromEquiv, YonedaSheafCondition, bijective_iff_existsUnique, existsUnique_congr, existsUnique_congr_left, ext_iff, forall_congr, forall_congr_left, funext_iff, homFromEquiv, hom_ext_iff, shrinkFunctorIsoFunctor
 -/
@@ -1566,7 +1626,7 @@ theorem isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor
     refine ⟨?_, ExistsUnique.exists ∘ h⟩
     intro t₁ t₂ ht₁ ht₂
     apply (h _).unique ht₁ ht₂
-    exact is_compatible_of_exis
+    exact is_compatible_of_exists_amalgamation x ⟨_, ht₂⟩
 
 中文:
 定理 isSeparatedFor_and_存在_isAmalgamation_iff_isSheafFor
@@ -1581,7 +1641,7 @@ theorem isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor
     refine ⟨?_, ExistsUnique.exists ∘ h⟩
     intro t₁ t₂ ht₁ ht₂
     apply (h _).unique ht₁ ht₂
-    exact is_compatible_of_exis
+    exact is_compatible_of_exists_amalgamation x ⟨_, ht₂⟩
 
 Depends on / 依赖: ExistsUnique, ExistsUnique.exists, IsSeparatedFor, existsUnique_of_exists_of_unique, forall_and, forall_congr, is_compatible_of_exists_amalgamation, unique
 -/
@@ -1718,7 +1778,12 @@ theorem isSheafFor_iff_generate
   constructor
   · intro q x hx
     apply Exists.imp _ (q _ (hx.restrict (le_generate R)))
-    intro
+    intro t ht
+    simpa [hx] using isAmalgamation_sieveExtend _ _ ht
+  · intro q x hx
+    apply Exists.imp _ (q _ hx.sieveExtend)
+    intro t ht
+    simpa [hx] using isAmalgamation_restrict (le_generate R) _ _ ht
 
 中文:
 定理 isSheafFor_iff_generate
@@ -1731,7 +1796,12 @@ theorem isSheafFor_iff_generate
   constructor
   · intro q x hx
     apply Exists.imp _ (q _ (hx.restrict (le_generate R)))
-    intro
+    intro t ht
+    simpa [hx] using isAmalgamation_sieveExtend _ _ ht
+  · intro q x hx
+    apply Exists.imp _ (q _ hx.sieveExtend)
+    intro t ht
+    simpa [hx] using isAmalgamation_restrict (le_generate R) _ _ ht
 
 Depends on / 依赖: Exists, Exists.imp, Iff.refl, and_congr, hx.restrict, hx.sieveExtend, isAmalgamation_restrict, isAmalgamation_sieveExtend, isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, isSeparatedFor_iff_generate, le_generate, restrict, sieveExtend
 -/
@@ -1835,7 +1905,21 @@ lemma isSheafFor_of_nat_equiv
     e.symm (P₂.map f.op x) = P₁.map f.op (e.symm x) := fun X Y f x =>
       e.injective (by simp only [Equiv.apply_symm_apply, he])
   let x₁ : FamilyOfElements P₁ R := fun Y f hf => e.symm (x₂ f hf)
-  have hx₁ : x₁.Compa
+  have hx₁ : x₁.Compatible := fun Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ fac => e.injective
+    (by simp only [he, Equiv.apply_symm_apply, hx₂ g₁ g₂ h₁ h₂ fac, x₁])
+  have : forall (t₂ : P₂.obj (op X)),
+      x₂.IsAmalgamation t₂ ↔ x₁.IsAmalgamation (e.symm t₂) := fun t₂ => by
+    simp only [FamilyOfElements.IsAmalgamation, x₁,
+      ← he', EmbeddingLike.apply_eq_iff_eq]
+  refine ⟨e (hP₁.amalgamate x₁ hx₁), ?_, ?_⟩
+  · dsimp
+    simp only [this, Equiv.symm_apply_apply]
+    exact IsSheafFor.isAmalgamation hP₁ hx₁
+  · intro t₂ ht₂
+    refine e.symm.injective ?_
+    simp only [Equiv.symm_apply_apply]
+    exact hP₁.isSeparatedFor x₁ _ _ (by simpa only [this] using ht₂)
+      (IsSheafFor.isAmalgamation hP₁ hx₁)
 
 中文:
 引理 isSheafFor_of_nat_equiv
@@ -1845,7 +1929,21 @@ lemma isSheafFor_of_nat_equiv
     e.symm (P₂.map f.op x) = P₁.map f.op (e.symm x) := fun X Y f x =>
       e.injective (by simp only [Equiv.apply_symm_apply, he])
   let x₁ : FamilyOfElements P₁ R := fun Y f hf => e.symm (x₂ f hf)
-  have hx₁ : x₁.Compa
+  have hx₁ : x₁.Compatible := fun Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ fac => e.injective
+    (by simp only [he, Equiv.apply_symm_apply, hx₂ g₁ g₂ h₁ h₂ fac, x₁])
+  have : forall (t₂ : P₂.obj (op X)),
+      x₂.IsAmalgamation t₂ ↔ x₁.IsAmalgamation (e.symm t₂) := fun t₂ => by
+    simp only [FamilyOfElements.IsAmalgamation, x₁,
+      ← he', EmbeddingLike.apply_eq_iff_eq]
+  refine ⟨e (hP₁.amalgamate x₁ hx₁), ?_, ?_⟩
+  · dsimp
+    simp only [this, Equiv.symm_apply_apply]
+    exact IsSheafFor.isAmalgamation hP₁ hx₁
+  · intro t₂ ht₂
+    refine e.symm.injective ?_
+    simp only [Equiv.symm_apply_apply]
+    exact hP₁.isSeparatedFor x₁ _ _ (by simpa only [this] using ht₂)
+      (IsSheafFor.isAmalgamation hP₁ hx₁)
 
 Depends on / 依赖: Compatible, Equiv.apply_symm_apply, FamilyOfElements, IsAmalgamation, apply_symm_apply, e.injective, e.symm, f.op, injective
 -/
@@ -2020,7 +2118,11 @@ theorem isSheafFor_subsieve_aux
         (isAmalgamation_restrict h x t₂ ht₂)
   · intro x hx
     use hS.amalgamate _ (hx.restrict h)
-    intro W j h
+    intro W j hj
+    apply (trans hj).ext
+    intro Y f hf
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [hS.valid_glue (hx.restrict h) _ hf]; rw [FamilyOfElements.restrict]; rw [← hx (𝟙 _) f (h _ _ hf) _ (id_comp _)]
+    simp
 
 中文:
 定理 isSheafFor_subsieve_aux
@@ -2034,7 +2136,11 @@ theorem isSheafFor_subsieve_aux
         (isAmalgamation_restrict h x t₂ ht₂)
   · intro x hx
     use hS.amalgamate _ (hx.restrict h)
-    intro W j h
+    intro W j hj
+    apply (trans hj).ext
+    intro Y f hf
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [hS.valid_glue (hx.restrict h) _ hf]; rw [FamilyOfElements.restrict]; rw [← hx (𝟙 _) f (h _ _ hf) _ (id_comp _)]
+    simp
 
 Depends on / 依赖: FamilyOfElements, FamilyOfElements.restrict, Functor, Functor.map_comp, amalgamate, comp_apply, hS.amalgamate, hS.isSeparatedFor, hS.valid_glue, hx.restrict, id_comp, isAmalgamation_restrict, isSeparatedFor, isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, map_comp, op_comp, restrict, valid_glue
 -/
@@ -2237,7 +2343,9 @@ theorem isSheafFor_arrows_iff
     refine ⟨t, fun i => ?_, fun t' ht' => ht₂ _ fun _ _ ⟨i⟩ => ?_⟩
     · rw [ht₁ _ (ofArrows.mk i), hx.familyOfElements_ofArrows_mk]
     · rw [ht', hx.familyOfElements_ofArrows_mk]
-  · obt
+  · obtain ⟨t, hA, ht⟩ := h (fun i => x (π i) (ofArrows.mk _))
+      (fun i j Z gi gj => hx gi gj (ofArrows.mk _) (ofArrows.mk _))
+    exact ⟨t, fun Y f ⟨i⟩ => hA i, fun y hy => ht y (fun i => hy (π i) (ofArrows.mk _))⟩
 
 中文:
 定理 isSheafFor_arrows_iff
@@ -2248,7 +2356,9 @@ theorem isSheafFor_arrows_iff
     refine ⟨t, fun i => ?_, fun t' ht' => ht₂ _ fun _ _ ⟨i⟩ => ?_⟩
     · rw [ht₁ _ (ofArrows.mk i), hx.familyOfElements_ofArrows_mk]
     · rw [ht', hx.familyOfElements_ofArrows_mk]
-  · obt
+  · obtain ⟨t, hA, ht⟩ := h (fun i => x (π i) (ofArrows.mk _))
+      (fun i j Z gi gj => hx gi gj (ofArrows.mk _) (ofArrows.mk _))
+    exact ⟨t, fun Y f ⟨i⟩ => hA i, fun y hy => ht y (fun i => hy (π i) (ofArrows.mk _))⟩
 
 Depends on / 依赖: familyOfElements_compatible, familyOfElements_ofArrows_mk, hx.familyOfElements_compatible, hx.familyOfElements_ofArrows_mk, ofArrows, ofArrows.mk
 -/
@@ -2306,6 +2416,11 @@ theorem isSheafFor_ofArrows_iff_bijective_toCompabible
       fun ⟨y, hy⟩ => ?_⟩, fun h x hx => ?_⟩
   · obtain ⟨x, hx, _⟩ := h y hy
     exact ⟨x, by ext; apply hx⟩
+  · obtain ⟨y, hy⟩ := h.2 ⟨x, hx⟩
+    rw [Subtype.ext_iff] at hy
+    dsimp at hy
+    subst hy
+    exact ⟨y, fun _ => rfl, fun y' hy' => h.1 (by ext; apply hy')⟩
 
 中文:
 定理 isSheafFor_ofArrows_iff_bijective_toCompabible
@@ -2317,6 +2432,11 @@ theorem isSheafFor_ofArrows_iff_bijective_toCompabible
       fun ⟨y, hy⟩ => ?_⟩, fun h x hx => ?_⟩
   · obtain ⟨x, hx, _⟩ := h y hy
     exact ⟨x, by ext; apply hx⟩
+  · obtain ⟨y, hy⟩ := h.2 ⟨x, hx⟩
+    rw [Subtype.ext_iff] at hy
+    dsimp at hy
+    subst hy
+    exact ⟨y, fun _ => rfl, fun y' hy' => h.1 (by ext; apply hy')⟩
 
 Depends on / 依赖: Arrows, Arrows.toCompatible, Subtype, Subtype.ext_iff, Subtype.val, congr_arg, congr_fun, ext_iff, hx.symm, isSheafFor_arrows_iff, property, toCompatible, unique
 -/
@@ -2351,7 +2471,18 @@ lemma isSheafFor_pullback_iff
   let e : Subtype (Arrows.Compatible P g) ≃
     Subtype (Arrows.Compatible P (fun i => g i ≫ inv f)) :=
     { toFun s := ⟨fun i => s.val i, fun i₁ i₂ W g₁ g₂ h => by
-        simp
+        simp only [← cancel_mono f, assoc, IsIso.inv_hom_id, comp_id] at h
+        exact s.property _ _ _ _ _ h⟩
+      invFun s := ⟨fun i => s.val i, fun i₁ i₂ W g₁ g₂ h => by
+        replace h := h =≫ inv f
+        simp only [Category.assoc] at h
+        exact s.property _ _ _ _ _ h⟩ }
+  simp only [this, ← isSheafFor_iff_generate,
+    isSheafFor_ofArrows_iff_bijective_toCompabible, ← e.bijective.of_comp_iff',
+    ← Function.Bijective.of_comp_iff _ (P.mapIso (asIso f).symm.op).toEquiv.bijective]
+  convert! Iff.rfl using 2
+  ext
+  simp [e]
 
 中文:
 引理 isSheafFor_pullback_iff
@@ -2363,7 +2494,18 @@ lemma isSheafFor_pullback_iff
   let e : Subtype (Arrows.Compatible P g) ≃
     Subtype (Arrows.Compatible P (fun i => g i ≫ inv f)) :=
     { toFun s := ⟨fun i => s.val i, fun i₁ i₂ W g₁ g₂ h => by
-        simp
+        simp only [← cancel_mono f, assoc, IsIso.inv_hom_id, comp_id] at h
+        exact s.property _ _ _ _ _ h⟩
+      invFun s := ⟨fun i => s.val i, fun i₁ i₂ W g₁ g₂ h => by
+        replace h := h =≫ inv f
+        simp only [Category.assoc] at h
+        exact s.property _ _ _ _ _ h⟩ }
+  simp only [this, ← isSheafFor_iff_generate,
+    isSheafFor_ofArrows_iff_bijective_toCompabible, ← e.bijective.of_comp_iff',
+    ← Function.Bijective.of_comp_iff _ (P.mapIso (asIso f).symm.op).toEquiv.bijective]
+  convert! Iff.rfl using 2
+  ext
+  simp [e]
 
 Depends on / 依赖: Arrows, Arrows.Compatible, Category, Category.assoc, Compatible, IsIso.inv_hom_id, R.exists_eq_ofArrows, Sieve.pullback_ofArrows_of_iso, Subtype, cancel_mono, comp_id, exists_eq_ofArrows, invFun, inv_hom_id, property, pullback_ofArrows_of_iso, replace, s.property, s.val
 -/
@@ -2402,7 +2544,23 @@ lemma isSheafFor_over_map_op_comp_ofArrows_iff
     { toFun s := ⟨fun i => s.val i, fun i₁ i₂ Z g₁ g₂ h => by
         replace h := (Over.forget _).congr_map h
         dsimp at h
-        have := s.property i₁ 
+        have := s.property i₁ i₂ (Over.mk (g₁.left ≫ (f i₁).left ≫ X.hom))
+          (Over.homMk g₁.left) (Over.homMk g₂.left (by
+            have := Over.w (f i₂)
+            dsimp at this ⊢
+            rw [reassoc_of% h]; rw [this])) (by cat_disch)
+        let φ : Z ⟶ (Over.map p).obj (Over.mk (g₁.left ≫ (f i₁).left ≫ X.hom)) :=
+          Over.homMk (𝟙 _) (by simpa using Over.w g₁)
+        replace this := congr_arg (P.map φ.op) this
+        dsimp at this
+        simp only [← comp_apply, ← Functor.map_comp, ← op_comp] at this
+        convert! this <;> cat_disch⟩
+      invFun s := ⟨fun i => s.val i, fun i₁ i₂ Z g₁ g₂ h =>
+        s.property i₁ i₂ _ ((Over.map p).map g₁) ((Over.map p).map g₂)
+          (by simp only [← Functor.map_comp, h])⟩ }
+  simp only [isSheafFor_ofArrows_iff_bijective_toCompabible,
+    ← e.bijective.of_comp_iff']
+  rfl
 
 中文:
 引理 isSheafFor_over_map_op_comp_ofArrows_iff
@@ -2412,7 +2570,23 @@ lemma isSheafFor_over_map_op_comp_ofArrows_iff
     { toFun s := ⟨fun i => s.val i, fun i₁ i₂ Z g₁ g₂ h => by
         replace h := (Over.forget _).congr_map h
         dsimp at h
-        have := s.property i₁ 
+        have := s.property i₁ i₂ (Over.mk (g₁.left ≫ (f i₁).left ≫ X.hom))
+          (Over.homMk g₁.left) (Over.homMk g₂.left (by
+            have := Over.w (f i₂)
+            dsimp at this ⊢
+            rw [reassoc_of% h]; rw [this])) (by cat_disch)
+        let φ : Z ⟶ (Over.map p).obj (Over.mk (g₁.left ≫ (f i₁).left ≫ X.hom)) :=
+          Over.homMk (𝟙 _) (by simpa using Over.w g₁)
+        replace this := congr_arg (P.map φ.op) this
+        dsimp at this
+        simp only [← comp_apply, ← Functor.map_comp, ← op_comp] at this
+        convert! this <;> cat_disch⟩
+      invFun s := ⟨fun i => s.val i, fun i₁ i₂ Z g₁ g₂ h =>
+        s.property i₁ i₂ _ ((Over.map p).map g₁) ((Over.map p).map g₂)
+          (by simp only [← Functor.map_comp, h])⟩ }
+  simp only [isSheafFor_ofArrows_iff_bijective_toCompabible,
+    ← e.bijective.of_comp_iff']
+  rfl
 
 Depends on / 依赖: Arrows, Arrows.Compatible, Compatible, Over.forget, Over.homMk, Over.map, Over.mk, Over.w, Subtype, X.hom, cat_disch, congr_map, forget, property, reassoc_of, replace, s.property, s.val
 -/
@@ -2456,7 +2630,11 @@ lemma isSheafFor_over_map_op_comp_iff
   convert! Iff.rfl
   refine le_antisymm ?_ ?_
   · rintro W _ ⟨T, _, a, ⟨_, b, _, ⟨i⟩, rfl⟩, rfl⟩
-    refine ⟨
+    refine ⟨(Over.map p).obj (Z i), Over.homMk (a.left ≫ b.left) ?_, _, ⟨i⟩, ?_⟩
+    · simpa [(Over.w_assoc b)] using Over.w a
+    · cat_disch
+  · rintro W _ ⟨_, a, _, ⟨i⟩, rfl⟩
+    exact ⟨_, _, _, Sieve.ofArrows_mk _ _ i, rfl⟩
 
 中文:
 引理 isSheafFor_over_map_op_comp_iff
@@ -2466,7 +2644,11 @@ lemma isSheafFor_over_map_op_comp_iff
   convert! Iff.rfl
   refine le_antisymm ?_ ?_
   · rintro W _ ⟨T, _, a, ⟨_, b, _, ⟨i⟩, rfl⟩, rfl⟩
-    refine ⟨
+    refine ⟨(Over.map p).obj (Z i), Over.homMk (a.left ≫ b.left) ?_, _, ⟨i⟩, ?_⟩
+    · simpa [(Over.w_assoc b)] using Over.w a
+    · cat_disch
+  · rintro W _ ⟨_, a, _, ⟨i⟩, rfl⟩
+    exact ⟨_, _, _, Sieve.ofArrows_mk _ _ i, rfl⟩
 
 Depends on / 依赖: Iff.rfl, Over.homMk, Over.map, Over.w, Over.w_assoc, R.exists_eq_ofArrows, Sieve.ofArrows_mk, a.left, b.left, cat_disch, convert, exists_eq_ofArrows, isSheafFor_iff_generate, isSheafFor_over_map_op_comp_ofArrows_iff, isSheafFor_pullback_iff, le_antisymm, ofArrows_mk, w_assoc
 -/
@@ -2641,7 +2823,38 @@ theorem isSheafFor_bind
     fun Y f hf Z g hg => s _ (Presieve.bind_comp _ _ hg)
   have hy : forall ⦃Y⦄ ⦃f : Y ⟶ X⦄ (hf : U f), (y hf).Compatible := by
     intro Y f H Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ comm
-    apply h
+    apply hs
+    apply reassoc_of% comm
+  let t : Presieve.FamilyOfElements P (U : Presieve X) :=
+    fun Y f hf => (hB hf).amalgamate (y hf) (hy hf)
+  have ht : forall ⦃Y⦄ ⦃f : Y ⟶ X⦄ (hf : U f), (y hf).IsAmalgamation (t f hf) := fun Y f hf =>
+    (hB hf).isAmalgamation _
+  have hT : t.Compatible := by
+    rw [Presieve.compatible_iff_sieveCompatible]
+    intro Z W f h hf
+    apply (hB (U.downward_closed hf h)).isSeparatedFor.ext
+    intro Y l hl
+    apply (hB' hf (l ≫ h)).ext
+    intro M m hm
+    have : Sieve.bind U B (m ≫ l ≫ h ≫ f) := by simpa using (bind_comp f hf hm : Sieve.bind U B _)
+    trans s (m ≫ l ≫ h ≫ f) this
+    · have := ht (U.downward_closed hf h) _ ((B _).downward_closed hl m)
+      simp only [op_comp, Functor.map_comp, comp_apply] at this
+      grind
+    · have h : s _ _ = _ := (ht hf _ hm).symm
+      -- Porting note: this was done by `simp only [assoc] at`
+      conv_lhs at h => congr; rw [assoc, assoc]
+      simp [h]
+  refine ⟨hU.amalgamate t hT, ?_, ?_⟩
+  · rintro Z _ ⟨Y, f, g, hg, hf, rfl⟩
+    rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [Presieve.IsSheafFor.valid_glue _ _ _ hg]
+    apply ht hg _ hf
+  · intro y hy
+    apply hU.isSeparatedFor.ext
+    intro Y f hf
+    apply (hB hf).isSeparatedFor.ext
+    intro Z g hg
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [hy _ (Presieve.bind_comp _ _ hg)]; rw [hU.valid_glue _ _ hf]; rw [ht hf _ hg]
 
 中文:
 定理 isSheafFor_bind
@@ -2652,7 +2865,38 @@ theorem isSheafFor_bind
     fun Y f hf Z g hg => s _ (Presieve.bind_comp _ _ hg)
   have hy : forall ⦃Y⦄ ⦃f : Y ⟶ X⦄ (hf : U f), (y hf).Compatible := by
     intro Y f H Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ comm
-    apply h
+    apply hs
+    apply reassoc_of% comm
+  let t : Presieve.FamilyOfElements P (U : Presieve X) :=
+    fun Y f hf => (hB hf).amalgamate (y hf) (hy hf)
+  have ht : forall ⦃Y⦄ ⦃f : Y ⟶ X⦄ (hf : U f), (y hf).IsAmalgamation (t f hf) := fun Y f hf =>
+    (hB hf).isAmalgamation _
+  have hT : t.Compatible := by
+    rw [Presieve.compatible_iff_sieveCompatible]
+    intro Z W f h hf
+    apply (hB (U.downward_closed hf h)).isSeparatedFor.ext
+    intro Y l hl
+    apply (hB' hf (l ≫ h)).ext
+    intro M m hm
+    have : Sieve.bind U B (m ≫ l ≫ h ≫ f) := by simpa using (bind_comp f hf hm : Sieve.bind U B _)
+    trans s (m ≫ l ≫ h ≫ f) this
+    · have := ht (U.downward_closed hf h) _ ((B _).downward_closed hl m)
+      simp only [op_comp, Functor.map_comp, comp_apply] at this
+      grind
+    · have h : s _ _ = _ := (ht hf _ hm).symm
+      -- Porting note: this was done by `simp only [assoc] at`
+      conv_lhs at h => congr; rw [assoc, assoc]
+      simp [h]
+  refine ⟨hU.amalgamate t hT, ?_, ?_⟩
+  · rintro Z _ ⟨Y, f, g, hg, hf, rfl⟩
+    rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [Presieve.IsSheafFor.valid_glue _ _ _ hg]
+    apply ht hg _ hf
+  · intro y hy
+    apply hU.isSeparatedFor.ext
+    intro Y f hf
+    apply (hB hf).isSeparatedFor.ext
+    intro Z g hg
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [hy _ (Presieve.bind_comp _ _ hg)]; rw [hU.valid_glue _ _ hf]; rw [ht hf _ hg]
 
 Depends on / 依赖: Compatible, FamilyOfElements, IsAmalgamation, Presieve, Presieve.FamilyOfElements, Presieve.bind_comp, amalgamate, bind_comp, reassoc_of
 -/
@@ -2715,7 +2959,20 @@ theorem isSheafFor_trans
   · apply isSheafFor_bind _ _ _ hR hS
     intro Y f hf Z g
     rw [← Sieve.pullback_comp]
-    apply (hS (R.downward_cl
+    apply (hS (R.downward_closed hf _)).isSeparatedFor
+  · intro Y f hf
+    have : Sieve.pullback f (Sieve.bind R fun T (k : T ⟶ X) (_ : R k) => Sieve.pullback k S) =
+        R.pullback f := by
+      ext Z g
+      constructor
+      · rintro ⟨W, k, l, hl, _, comm⟩
+        rw [pullback_apply]; rw [← comm]
+        simp [hl]
+      · intro a
+        refine ⟨Z, 𝟙 Z, _, a, ?_⟩
+        simp [hf]
+    rw [this]
+    apply hR' hf
 
 中文:
 定理 isSheafFor_trans
@@ -2728,7 +2985,20 @@ theorem isSheafFor_trans
   · apply isSheafFor_bind _ _ _ hR hS
     intro Y f hf Z g
     rw [← Sieve.pullback_comp]
-    apply (hS (R.downward_cl
+    apply (hS (R.downward_closed hf _)).isSeparatedFor
+  · intro Y f hf
+    have : Sieve.pullback f (Sieve.bind R fun T (k : T ⟶ X) (_ : R k) => Sieve.pullback k S) =
+        R.pullback f := by
+      ext Z g
+      constructor
+      · rintro ⟨W, k, l, hl, _, comm⟩
+        rw [pullback_apply]; rw [← comm]
+        simp [hl]
+      · intro a
+        refine ⟨Z, 𝟙 Z, _, a, ?_⟩
+        simp [hf]
+    rw [this]
+    apply hR' hf
 
 Depends on / 依赖: Presieve, Presieve.isSheafFor_subsieve_aux, R.downward_closed, R.pullback, S.pullback, Sieve.bind, Sieve.pullback, Sieve.pullback_comp, downward_closed, isSeparatedFor, isSheafFor_bind, isSheafFor_subsieve_aux, pullback, pullback_apply, pullback_comp
 -/

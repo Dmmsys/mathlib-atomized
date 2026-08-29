@@ -608,7 +608,14 @@ theorem get?_mem_take
   | succ k ih =>
     obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_lt h_mn
     have : exists y, s.get? 0 = some y := by
-      apply ge_stable _
+      apply ge_stable _ _ h_get
+      simp
+    obtain ⟨y, hy⟩ := this
+    rw [take]; rw [head_eq_some hy]
+    simp only [destruct_cons, List.mem_cons]
+    right
+    apply ih (by lia)
+    rwa [get?_tail]
 
 中文:
 定理 get?_mem_take
@@ -622,7 +629,14 @@ theorem get?_mem_take
   | succ k ih =>
     obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_lt h_mn
     have : exists y, s.get? 0 = some y := by
-      apply ge_stable _
+      apply ge_stable _ _ h_get
+      simp
+    obtain ⟨y, hy⟩ := this
+    rw [take]; rw [head_eq_some hy]
+    simp only [destruct_cons, List.mem_cons]
+    right
+    apply ih (by lia)
+    rwa [get?_tail]
 
 Depends on / 依赖: List.mem_cons, Nat.exists_add_one_eq.mpr, Nat.exists_eq_add_of_lt, _tail, destruct_cons, exists_add_one_eq, exists_eq_add_of_lt, ge_stable, generalizing, h_get, h_mn, head_eq_some, mem_cons, s.get
 -/
@@ -705,7 +719,14 @@ theorem length_take_of_le_length
       rw [take]; rw [destruct]
       let ⟨a, ha⟩ := lt_length_iff'.1 (fun ht => lt_of_lt_of_le (Nat.succ_pos _) (hle ht))
       simp only [Option.mem_def.1 ha, Option.map_eq_map, Option.map_some, List.length_cons,
-        
+        Nat.add_right_cancel_iff]
+      rw [ih]
+      intro h
+      simp only [length, tail, Nat.le_find_iff, TerminatedAt, get?_mk, Stream'.tail]
+      intro m hmn hs
+      have := lt_length_iff'.1 (fun ht => (Nat.lt_of_succ_le (hle ht)))
+      rw [le_stable s (Nat.succ_le_of_lt hmn) hs] at this
+      simp at this
 
 中文:
 定理 length_take_of_le_length
@@ -717,7 +738,14 @@ theorem length_take_of_le_length
       rw [take]; rw [destruct]
       let ⟨a, ha⟩ := lt_length_iff'.1 (fun ht => lt_of_lt_of_le (Nat.succ_pos _) (hle ht))
       simp only [Option.mem_def.1 ha, Option.map_eq_map, Option.map_some, List.length_cons,
-        
+        Nat.add_right_cancel_iff]
+      rw [ih]
+      intro h
+      simp only [length, tail, Nat.le_find_iff, TerminatedAt, get?_mk, Stream'.tail]
+      intro m hmn hs
+      have := lt_length_iff'.1 (fun ht => (Nat.lt_of_succ_le (hle ht)))
+      rw [le_stable s (Nat.succ_le_of_lt hmn) hs] at this
+      simp at this
 
 Depends on / 依赖: List.length_cons, Nat.add_right_cancel_iff, Nat.le_find_iff, Nat.lt_of_succ_le, Nat.succ_le_o, Nat.succ_pos, Option.map_eq_map, Option.map_some, Option.mem_def, Stream, TerminatedAt, add_right_cancel_iff, destruct, generalizing, le_find_iff, le_stable, length, length_cons, lt_length_iff, lt_of_lt_of_le
 -/
@@ -1043,7 +1071,10 @@ theorem append_assoc
       | nil =>
         cases u with
         | nil => simp
-        | cons _ u => simpa using ⟨nil, nil, u, by s
+        | cons _ u => simpa using ⟨nil, nil, u, by simp, by simp⟩
+      | cons _ t => simpa using ⟨nil, t, u, by simp, by simp⟩
+    | cons _ s => simpa using ⟨s, t, u, rfl, rfl⟩
+  · exact ⟨s, t, u, rfl, rfl⟩
 
 中文:
 定理 append_assoc
@@ -1058,7 +1089,10 @@ theorem append_assoc
       | nil =>
         cases u with
         | nil => simp
-        | cons _ u => simpa using ⟨nil, nil, u, by s
+        | cons _ u => simpa using ⟨nil, nil, u, by simp, by simp⟩
+      | cons _ t => simpa using ⟨nil, t, u, by simp, by simp⟩
+    | cons _ s => simpa using ⟨s, t, u, rfl, rfl⟩
+  · exact ⟨s, t, u, rfl, rfl⟩
 
 Depends on / 依赖: append, eq_of_bisim
 -/
@@ -1096,7 +1130,13 @@ theorem of_mem_append
   | cons c t₁ =>
     intro m e
     have := congr_arg destruct e
-    rcases show a = c ∨ a in append 
+    rcases show a = c ∨ a in append t₁ s₂ by simpa using m with e' | m
+    · rw [e']
+      exact Or.inl (mem_cons _ _)
+    · obtain ⟨i1, i2⟩ := show c = b ∧ append t₁ s₂ = s' by simpa using e
+      rcases o with e' | IH
+      · simp [i1, e']
+      · exact Or.imp_left (mem_cons_of_mem _) (IH m i2)
 
 中文:
 定理 of_mem_append
@@ -1115,7 +1155,13 @@ theorem of_mem_append
   | cons c t₁ =>
     intro m e
     have := congr_arg destruct e
-    rcases show a = c ∨ a in append 
+    rcases show a = c ∨ a in append t₁ s₂ by simpa using m with e' | m
+    · rw [e']
+      exact Or.inl (mem_cons _ _)
+    · obtain ⟨i1, i2⟩ := show c = b ∧ append t₁ s₂ = s' by simpa using e
+      rcases o with e' | IH
+      · simp [i1, e']
+      · exact Or.imp_left (mem_cons_of_mem _) (IH m i2)
 
 Depends on / 依赖: Or.imp_left, Or.inl, Or.inr, append, congr_arg, destruct, generalize, imp_left, mem_cons, mem_cons_of_mem, mem_rec_on, revert
 -/
@@ -1512,7 +1558,7 @@ theorem map_append
     cases t with
     | nil => simp
     | cons _ t => simpa using ⟨nil, t, by simp, by simp⟩
-  | cons _ s => s
+  | cons _ s => simpa using ⟨s, t, rfl, rfl⟩
 
 中文:
 定理 map_append
@@ -1527,7 +1573,7 @@ theorem map_append
     cases t with
     | nil => simp
     | cons _ t => simpa using ⟨nil, t, by simp, by simp⟩
-  | cons _ s => s
+  | cons _ s => simpa using ⟨s, t, rfl, rfl⟩
 
 Depends on / 依赖: append, eq_of_bisim
 -/
@@ -1632,6 +1678,12 @@ theorem join_cons
 | s, _, Or.inl Eq.refl s => by
       cases s; · trivial
       · rw [destruct_cons]
+        exact ⟨rfl, Or.inl rfl⟩
+    | _, _, Or.inr ⟨a, s, S, rfl, rfl⟩ => by
+      cases s
+      · simp [join_cons_nil]
+      · simpa only [BisimO, join_cons_cons, destruct_cons, cons_append, true_and] using
+          Or.inr ⟨_, _, S, rfl, rfl⟩
 
 中文:
 定理 join_cons
@@ -1648,6 +1700,12 @@ theorem join_cons
 | s, _, Or.inl Eq.refl s => by
       cases s; · trivial
       · rw [destruct_cons]
+        exact ⟨rfl, Or.inl rfl⟩
+    | _, _, Or.inr ⟨a, s, S, rfl, rfl⟩ => by
+      cases s
+      · simp [join_cons_nil]
+      · simpa only [BisimO, join_cons_cons, destruct_cons, cons_append, true_and] using
+          Or.inr ⟨_, _, S, rfl, rfl⟩
 
 Depends on / 依赖: BisimO, Eq.refl, Or.inl, Or.inr, append, cons_append, destruct_cons, eq_of_bisim, join_cons_cons, join_cons_nil, true_and
 -/
@@ -1689,7 +1747,14 @@ theorem join_append
       | nil =>
         cases T with
         | nil => simp
-        | cons s T 
+        | cons s T =>
+          obtain ⟨a, s⟩ := s
+          simpa using ⟨s, nil, T, by simp, by simp⟩
+      | cons s S =>
+        obtain ⟨a, s⟩ := s
+        simpa using ⟨s, S, T, rfl, rfl⟩
+    | cons _ s => simpa using ⟨s, S, T, rfl, rfl⟩
+  · exact ⟨nil, S, T, by simp, by simp⟩
 
 中文:
 定理 join_append
@@ -1706,7 +1771,14 @@ theorem join_append
       | nil =>
         cases T with
         | nil => simp
-        | cons s T 
+        | cons s T =>
+          obtain ⟨a, s⟩ := s
+          simpa using ⟨s, nil, T, by simp, by simp⟩
+      | cons s S =>
+        obtain ⟨a, s⟩ := s
+        simpa using ⟨s, S, T, rfl, rfl⟩
+    | cons _ s => simpa using ⟨s, S, T, rfl, rfl⟩
+  · exact ⟨nil, S, T, by simp, by simp⟩
 
 Depends on / 依赖: append, eq_of_bisim
 -/
@@ -3032,7 +3104,7 @@ theorem take_all
     | cons hd tl =>
       simp only [take_succ_cons, List.mem_cons, mem_cons_iff, forall_eq_or_imp] at hx h_all
       rcases hx with (rfl | hx)
-      exacts [h_all.left, ih h_
+      exacts [h_all.left, ih h_all.right hx]
 
 中文:
 定理 take_all
@@ -3046,7 +3118,7 @@ theorem take_all
     | cons hd tl =>
       simp only [take_succ_cons, List.mem_cons, mem_cons_iff, forall_eq_or_imp] at hx h_all
       rcases hx with (rfl | hx)
-      exacts [h_all.left, ih h_
+      exacts [h_all.left, ih h_all.right hx]
 
 Depends on / 依赖: List.mem_cons, exacts, forall_eq_or_imp, generalizing, h_all, h_all.left, h_all.right, mem_cons, mem_cons_iff, take_succ_cons
 -/
@@ -3076,7 +3148,8 @@ theorem set_all
   · by_cases h_term : s.TerminatedAt n
     · simp [get?_set_of_terminatedAt _ h_term] at hy
     · simp_all [get?_set_of_not_terminatedAt _ h_term]
-  · rw [get?_set_of_ne _ _ h_nm.sy
+  · rw [get?_set_of_ne _ _ h_nm.symm] at hy
+    apply h_all _ (get?_mem hy.symm)
 
 中文:
 定理 set_all
@@ -3089,7 +3162,8 @@ theorem set_all
   · by_cases h_term : s.TerminatedAt n
     · simp [get?_set_of_terminatedAt _ h_term] at hy
     · simp_all [get?_set_of_not_terminatedAt _ h_term]
-  · rw [get?_set_of_ne _ _ h_nm.sy
+  · rw [get?_set_of_ne _ _ h_nm.symm] at hy
+    apply h_all _ (get?_mem hy.symm)
 
 Depends on / 依赖: TerminatedAt, _mem, _set_of_ne, _set_of_not_terminatedAt, _set_of_terminatedAt, eq_or_ne, h_all, h_nm, h_nm.symm, h_term, hy.symm, mem_iff_exists_get, s.TerminatedAt
 -/
@@ -3149,7 +3223,7 @@ theorem Pairwise.cons
     | zero =>
       simp only [get?_cons_zero, Option.mem_def, Option.some.injEq] at hx
       exact hx ▸ all_get h_hd hy
-    | succ n 
+    | succ n => exact h_tl n k (by lia) x hx y hy
 
 中文:
 定理 两两.cons
@@ -3165,7 +3239,7 @@ theorem Pairwise.cons
     | zero =>
       simp only [get?_cons_zero, Option.mem_def, Option.some.injEq] at hx
       exact hx ▸ all_get h_hd hy
-    | succ n 
+    | succ n => exact h_tl n k (by lia) x hx y hy
 
 Depends on / 依赖: Option.mem_def, Option.some.injEq, Pairwise, _cons_succ, _cons_zero, all_get, h_hd, h_ij, h_tl, mem_def
 -/
@@ -3311,7 +3385,13 @@ theorem Pairwise.coind
   obtain ⟨k, hj⟩ := Nat.exists_eq_add_of_lt h_ij
   rw [← head_dropn] at hx
   rw [hj]; rw [← head_dropn]; rw [Nat.add_assoc]; rw [dropn_add]; rw [head_dropn] at hy
-  have := all_coind_drop_motive motive base (fun hd tl ih => (step hd tl ih).right) 
+  have := all_coind_drop_motive motive base (fun hd tl ih => (step hd tl ih).right) i
+  generalize s.drop i = s' at *
+  cases s' with
+  | nil => simp at hx
+  | cons hd tl =>
+    simp only [head_cons, Option.mem_def, Option.some.injEq, get?_cons_succ] at hx hy
+    exact hx ▸ all_get (step hd tl this).left hy
 
 中文:
 定理 两两.coind
@@ -3322,7 +3402,13 @@ theorem Pairwise.coind
   obtain ⟨k, hj⟩ := Nat.exists_eq_add_of_lt h_ij
   rw [← head_dropn] at hx
   rw [hj]; rw [← head_dropn]; rw [Nat.add_assoc]; rw [dropn_add]; rw [head_dropn] at hy
-  have := all_coind_drop_motive motive base (fun hd tl ih => (step hd tl ih).right) 
+  have := all_coind_drop_motive motive base (fun hd tl ih => (step hd tl ih).right) i
+  generalize s.drop i = s' at *
+  cases s' with
+  | nil => simp at hx
+  | cons hd tl =>
+    simp only [head_cons, Option.mem_def, Option.some.injEq, get?_cons_succ] at hx hy
+    exact hx ▸ all_get (step hd tl this).left hy
 
 Depends on / 依赖: Nat.add_assoc, Nat.exists_eq_add_of_lt, Option.mem_def, Option.some.injEq, Pairwise, _cons_succ, add_assoc, all_coind_drop_motive, all_get, dropn_add, exists_eq_add_of_lt, generalize, h_ij, head_cons, head_dropn, mem_def, motive, s.drop
 -/
@@ -3353,7 +3439,15 @@ theorem Pairwise.coind_trans
     rw [← head_dropn] at hx
     have := all_coind_drop_motive motive base (fun hd tl ih => (step hd tl ih).right)
     exact (step x (s.drop (n + 1)) (head_eq_some hx ▸ this n)).left _ (by simpa)
-  simp o
+  simp only [Pairwise]
+  intro i j h_ij x hx y hy
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_lt h_ij
+  clear h_ij
+  induction k generalizing y with
+  | zero => exact h_succ hx hy
+  | succ k ih =>
+    obtain ⟨z, hz⟩ := ge_stable (m := i + k + 1) _ (by lia) hy
+exact _root_.trans (ih z hz) h_succ hz hy
 
 中文:
 定理 两两.coind_trans
@@ -3363,7 +3457,15 @@ theorem Pairwise.coind_trans
     rw [← head_dropn] at hx
     have := all_coind_drop_motive motive base (fun hd tl ih => (step hd tl ih).right)
     exact (step x (s.drop (n + 1)) (head_eq_some hx ▸ this n)).left _ (by simpa)
-  simp o
+  simp only [Pairwise]
+  intro i j h_ij x hx y hy
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_lt h_ij
+  clear h_ij
+  induction k generalizing y with
+  | zero => exact h_succ hx hy
+  | succ k ih =>
+    obtain ⟨z, hz⟩ := ge_stable (m := i + k + 1) _ (by lia) hy
+exact _root_.trans (ih z hz) h_succ hz hy
 
 Depends on / 依赖: Nat.exists_eq_add_of_lt, Pairwise, all_coind_drop_motive, exists_eq_add_of_lt, ge_stable, generalizing, h_ij, h_succ, head_dropn, head_eq_some, motive, s.drop, s.get
 -/
@@ -3457,7 +3559,29 @@ theorem at_least_as_long_as_coind
       cases tb with
       | nil => simp at hb
       | cons tb_hd tb_tl =>
-        simp only [ne_eq
+        simp only [ne_eq, cons_ne_nil, not_false_eq_true, forall_const] at ih
+        obtain ⟨a_hd, a_tl, ha, h_tail⟩ := step (a.drop m) (.cons tb_hd tb_tl) ih _ _ rfl
+        simpa [ha]
+  by_cases ha : a.Terminates; swap
+  · simp [length'_of_not_terminates ha]
+  simp only [length'_of_terminates ha, length'_le_iff]
+  by_contra hb
+  have hb_cons : b.drop (a.length ha) != .nil := by
+    intro hb'
+    simp only [← length'_eq_zero_iff_nil, drop_length', tsub_eq_zero_iff_le, length'_le_iff] at hb'
+    contradiction
+  specialize this (a.length ha) hb_cons
+  generalize b.drop (a.length ha) = b' at *
+  cases b' with
+  | nil =>
+    contradiction
+  | cons b_hd b_tl =>
+    obtain ⟨a_hd, a_tl, ha', _⟩ := step _ _ this _ _ rfl
+    apply_fun length' at ha'
+    simp only [drop_length', length'_of_terminates ha, tsub_self, length'_cons] at ha'
+    generalize a_tl.length' = u at ha'
+    enat_to_nat
+    lia
 
 中文:
 定理 at_least_as_long_as_coind
@@ -3472,7 +3596,29 @@ theorem at_least_as_long_as_coind
       cases tb with
       | nil => simp at hb
       | cons tb_hd tb_tl =>
-        simp only [ne_eq
+        simp only [ne_eq, cons_ne_nil, not_false_eq_true, forall_const] at ih
+        obtain ⟨a_hd, a_tl, ha, h_tail⟩ := step (a.drop m) (.cons tb_hd tb_tl) ih _ _ rfl
+        simpa [ha]
+  by_cases ha : a.Terminates; swap
+  · simp [length'_of_not_terminates ha]
+  simp only [length'_of_terminates ha, length'_le_iff]
+  by_contra hb
+  have hb_cons : b.drop (a.length ha) != .nil := by
+    intro hb'
+    simp only [← length'_eq_zero_iff_nil, drop_length', tsub_eq_zero_iff_le, length'_le_iff] at hb'
+    contradiction
+  specialize this (a.length ha) hb_cons
+  generalize b.drop (a.length ha) = b' at *
+  cases b' with
+  | nil =>
+    contradiction
+  | cons b_hd b_tl =>
+    obtain ⟨a_hd, a_tl, ha', _⟩ := step _ _ this _ _ rfl
+    apply_fun length' at ha'
+    simp only [drop_length', length'_of_terminates ha, tsub_self, length'_cons] at ha'
+    generalize a_tl.length' = u at ha'
+    enat_to_nat
+    lia
 
 Depends on / 依赖: Terminates, _of_not_terminates, _of_terminates, a.Terminates, a.drop, a_hd, a_tl, b.drop, cons_ne_nil, forall_const, generalize, h_tail, length, motive, ne_eq, not_false_eq_true, tb_hd, tb_tl
 -/
@@ -3846,7 +3992,10 @@ theorem map_join'
       cases S with
       | nil => simp
       | cons x S =>
-        obtain ⟨a
+        obtain ⟨a, s⟩ := x
+        simpa [map] using ⟨_, _, rfl, rfl⟩
+    | cons _ s => simpa using ⟨s, S, rfl, rfl⟩
+  · simpa using ⟨nil, S, by simp, by simp⟩
 
 中文:
 定理 map_join'
@@ -3863,7 +4012,10 @@ theorem map_join'
       cases S with
       | nil => simp
       | cons x S =>
-        obtain ⟨a
+        obtain ⟨a, s⟩ := x
+        simpa [map] using ⟨_, _, rfl, rfl⟩
+    | cons _ s => simpa using ⟨s, S, rfl, rfl⟩
+  · simpa using ⟨nil, S, by simp, by simp⟩
 
 Depends on / 依赖: Seq.append, Seq.eq_of_bisim, Seq.join, Seq.map, append, eq_of_bisim
 -/
@@ -3920,7 +4072,12 @@ theorem join_join
       cases SS with
       | nil => simp
       | cons S SS =>
-        obt
+        obtain ⟨⟨x, s⟩, S⟩ := S
+        cases s with
+        | nil => simpa using ⟨_, _, rfl, rfl⟩
+        | cons x s => simpa using ⟨Seq.cons x (append s (Seq.join S)), SS, by simp, by simp⟩
+    | cons _ s => simpa using ⟨s, SS, rfl, rfl⟩
+  · simpa using ⟨nil, SS, by simp, by simp⟩
 
 中文:
 定理 join_join
@@ -3936,7 +4093,12 @@ theorem join_join
       cases SS with
       | nil => simp
       | cons S SS =>
-        obt
+        obtain ⟨⟨x, s⟩, S⟩ := S
+        cases s with
+        | nil => simpa using ⟨_, _, rfl, rfl⟩
+        | cons x s => simpa using ⟨Seq.cons x (append s (Seq.join S)), SS, by simp, by simp⟩
+    | cons _ s => simpa using ⟨s, SS, rfl, rfl⟩
+  · simpa using ⟨nil, SS, by simp, by simp⟩
 
 Depends on / 依赖: Seq.append, Seq.cons, Seq.eq_of_bisim, Seq.join, Seq.map, append, eq_of_bisim
 -/
@@ -3975,7 +4137,11 @@ theorem bind_assoc
   rw [map_comp _ join]
   generalize Seq.map (map g ∘ f) s = SS
   rcases map g (f a) with ⟨⟨a, s⟩, S⟩
-  induction s using recOn with | nil =>
+  induction s using recOn with | nil => ?_ | cons x s_1 => ?_ <;>
+  induction S using recOn with | nil => simp | cons x_1 s_2 => ?_
+  · obtain ⟨x, t⟩ := x_1
+    cases t <;> simp
+  · obtain ⟨y, t⟩ := x_1; simp
 
 中文:
 定理 bind_assoc
@@ -3988,7 +4154,11 @@ theorem bind_assoc
   rw [map_comp _ join]
   generalize Seq.map (map g ∘ f) s = SS
   rcases map g (f a) with ⟨⟨a, s⟩, S⟩
-  induction s using recOn with | nil =>
+  induction s using recOn with | nil => ?_ | cons x s_1 => ?_ <;>
+  induction S using recOn with | nil => simp | cons x_1 s_2 => ?_
+  · obtain ⟨x, t⟩ := x_1
+    cases t <;> simp
+  · obtain ⟨y, t⟩ := x_1; simp
 
 Depends on / 依赖: Seq.map, generalize, map_comp, map_join, map_pair
 -/

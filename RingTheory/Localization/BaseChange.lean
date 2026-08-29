@@ -40,7 +40,7 @@ theorem IsLocalizedModule.isBaseChange
     obtain ⟨ℓ, rfl, h₂⟩ := IsLocalizedModule.is_universal S f g fun s => by
       rw [← (Algebra.lsmul R (A := A) R Q).commutes]; exact (IsLocalization.map_units A s).map _
     refine ⟨ℓ.extendScalarsOfIsLocalization S A, by simp, fun g'' h => ?_⟩
-    cases h₂
+    cases h₂ (LinearMap.restrictScalars R g'') h; rfl
 
 中文:
 定理 是Localized模.isBaseChange
@@ -50,7 +50,7 @@ theorem IsLocalizedModule.isBaseChange
     obtain ⟨ℓ, rfl, h₂⟩ := IsLocalizedModule.is_universal S f g fun s => by
       rw [← (Algebra.lsmul R (A := A) R Q).commutes]; exact (IsLocalization.map_units A s).map _
     refine ⟨ℓ.extendScalarsOfIsLocalization S A, by simp, fun g'' h => ?_⟩
-    cases h₂
+    cases h₂ (LinearMap.restrictScalars R g'') h; rfl
 
 Depends on / 依赖: Algebra, Algebra.lsmul, IsLocalization, IsLocalization.map_units, IsLocalizedModule, IsLocalizedModule.is_universal, LinearMap, LinearMap.restrictScalars, commutes, extendScalarsOfIsLocalization, is_universal, map_units, of_lift_unique, restrictScalars
 -/
@@ -89,7 +89,10 @@ theorem isLocalizedModule_iff_isBaseChange
   refine ⟨fun _ => IsLocalizedModule.isBaseChange S A f, fun h => ?_⟩
   let : Module A (LocalizedModule S M) := LocalizedModule.moduleOfIsLocalization ..
   have : IsBaseChange A (LocalizedModule.mkLinearMap S M) := IsLocalizedModule.isBaseChange S A _
-  let e := (this.equiv.symm.trans h.equiv).re
+  let e := (this.equiv.symm.trans h.equiv).restrictScalars R
+  convert! IsLocalizedModule.of_linearEquiv S (LocalizedModule.mkLinearMap S M) e
+  ext
+  rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [Function.comp_apply]; rw [LinearEquiv.restrictScalars_apply]; rw [LinearEquiv.trans_apply]; rw [IsBaseChange.equiv_symm_apply]; rw [IsBaseChange.equiv_tmul]; rw [one_smul]
 
 中文:
 定理 isLocalizedModule_iff_isBaseChange
@@ -98,7 +101,10 @@ theorem isLocalizedModule_iff_isBaseChange
   refine ⟨fun _ => IsLocalizedModule.isBaseChange S A f, fun h => ?_⟩
   let : Module A (LocalizedModule S M) := LocalizedModule.moduleOfIsLocalization ..
   have : IsBaseChange A (LocalizedModule.mkLinearMap S M) := IsLocalizedModule.isBaseChange S A _
-  let e := (this.equiv.symm.trans h.equiv).re
+  let e := (this.equiv.symm.trans h.equiv).restrictScalars R
+  convert! IsLocalizedModule.of_linearEquiv S (LocalizedModule.mkLinearMap S M) e
+  ext
+  rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [Function.comp_apply]; rw [LinearEquiv.restrictScalars_apply]; rw [LinearEquiv.trans_apply]; rw [IsBaseChange.equiv_symm_apply]; rw [IsBaseChange.equiv_tmul]; rw [one_smul]
 
 Depends on / 依赖: Function, Function.comp_apply, IsBaseChange, IsLocalizedModule, IsLocalizedModule.isBaseChange, IsLocalizedModule.of_linearEquiv, LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.restrictScalars, LinearMap, LinearMap.coe_comp, LocalizedModule, LocalizedModule.mkLinearMap, LocalizedModule.moduleOfIsLocalization, Module, coe_coe, coe_comp, comp_apply, convert, h.equiv
 -/
@@ -643,7 +649,9 @@ instance IsLocalizedModule.rTensor
   let : Module Aₚ M' := (IsLocalizedModule.iso S g).symm.toAddEquiv.module Aₚ
   have : IsScalarTower A Aₚ M' := (IsLocalizedModule.iso S g).symm.isScalarTower Aₚ
   have : IsScalarTower R Aₚ M' :=
-IsScalarTower.of_algebraMap_smul fun r x => by simp [IsScalarTower.algebra
+IsScalarTower.of_algebraMap_smul fun r x => by simp [IsScalarTower.algebraMap_apply R A Aₚ]
+  rw [isLocalizedModule_iff_isBaseChange (S := S) (A := Aₚ)] at h ⊢
+  exact isBaseChange_tensorProduct_map _ h
 
 中文:
 实例 是Localized模.rTensor
@@ -653,7 +661,9 @@ IsScalarTower.of_algebraMap_smul fun r x => by simp [IsScalarTower.algebra
   let : Module Aₚ M' := (IsLocalizedModule.iso S g).symm.toAddEquiv.module Aₚ
   have : IsScalarTower A Aₚ M' := (IsLocalizedModule.iso S g).symm.isScalarTower Aₚ
   have : IsScalarTower R Aₚ M' :=
-IsScalarTower.of_algebraMap_smul fun r x => by simp [IsScalarTower.algebra
+IsScalarTower.of_algebraMap_smul fun r x => by simp [IsScalarTower.algebraMap_apply R A Aₚ]
+  rw [isLocalizedModule_iff_isBaseChange (S := S) (A := Aₚ)] at h ⊢
+  exact isBaseChange_tensorProduct_map _ h
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.iso, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.of_algebraMap_smul, Localization, Module, algebraMap_apply, isBaseChange_tensorProduct_map, isLocalizedModule_iff_isBaseChange, isScalarTower, module, of_algebraMap_smul, symm.isScalarTower, symm.toAddEquiv.module, toAddEquiv
 -/
@@ -767,13 +777,13 @@ English:
 lemma IsLocalization.tmul_mk'
   given: (M : Submonoid R) [IsLocalization M A] (s : S) (x : R) (y : M)
   proof: by
-  rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHomCompTriple.comp_apply]; rw [tmul_one_eq_one_tmul]; rw [tmul_mul_tmul]; rw [mul_one]; rw [mul_comm]; rw [IsLocalization.mk'_spec']; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [Ring
+  rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHomCompTriple.comp_apply]; rw [tmul_one_eq_one_tmul]; rw [tmul_mul_tmul]; rw [mul_one]; rw [mul_comm]; rw [IsLocalization.mk'_spec']; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHom.id_apply]; rw [← Algebra.smul_def]; rw [smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
 
 中文:
 引理 是Localization.tmul_mk'
   条件: (M : 子幺半群 R) [是Localization M A] (s : S) (x : R) (y : M)
   证明: by
-  rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHomCompTriple.comp_apply]; rw [tmul_one_eq_one_tmul]; rw [tmul_mul_tmul]; rw [mul_one]; rw [mul_comm]; rw [IsLocalization.mk'_spec']; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [Ring
+  rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHomCompTriple.comp_apply]; rw [tmul_one_eq_one_tmul]; rw [tmul_mul_tmul]; rw [mul_one]; rw [mul_comm]; rw [IsLocalization.mk'_spec']; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHom.id_apply]; rw [← Algebra.smul_def]; rw [smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self, Algebra.smul_def, IsLocalization, IsLocalization.eq_mk, IsLocalization.mk, RingHom, RingHom.id_apply, RingHomCompTriple, RingHomCompTriple.comp_apply, _iff_mul_eq, _spec, algebraMap_apply, algebraMap_self, comp_apply, eq_mk, id_apply, mul_comm, mul_one, smul_def
 -/
@@ -867,7 +877,13 @@ theorem tensorLeftAlgEquiv_apply_one_tmul
   let Sₘ := Localization (Algebra.algebraMapSubmonoid S M)
   obtain ⟨x, y, rfl⟩ := IsLocalization.exists_mk'_eq M x
   let : Algebra Rₘ (S otimes[R] Rₘ) := Algebra.TensorProduct.rightAlgebra
-  have h1 : (1 : S) otimesₜ[R] IsLocalization.mk' Rₘ x y = algebraMap _ _ (IsLoc
+  have h1 : (1 : S) otimesₜ[R] IsLocalization.mk' Rₘ x y = algebraMap _ _ (IsLocalization.mk' Rₘ x y) :=
+    rfl
+  rw [h1]; rw [tensorLeftAlgEquiv]; rw [algEquiv_symm_apply]; rw [IsLocalization.algebraMap_mk' S]; rw [IsLocalization.map_mk']; rw [IsLocalization.mk'_eq_iff_eq_mul]
+  simp_rw [RingHom.id_apply]
+  have h x : algebraMap S Sₘ ((algebraMap R S) x) = algebraMap Rₘ Sₘ ((algebraMap R Rₘ) x) := by
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]
+  rw [h]; rw [h]; rw [← map_mul]; rw [IsLocalization.mk'_spec]
 
 中文:
 定理 tensorLeftAlgEquiv_apply_one_tmul
@@ -877,7 +893,13 @@ theorem tensorLeftAlgEquiv_apply_one_tmul
   let Sₘ := Localization (Algebra.algebraMapSubmonoid S M)
   obtain ⟨x, y, rfl⟩ := IsLocalization.exists_mk'_eq M x
   let : Algebra Rₘ (S otimes[R] Rₘ) := Algebra.TensorProduct.rightAlgebra
-  have h1 : (1 : S) otimesₜ[R] IsLocalization.mk' Rₘ x y = algebraMap _ _ (IsLoc
+  have h1 : (1 : S) otimesₜ[R] IsLocalization.mk' Rₘ x y = algebraMap _ _ (IsLocalization.mk' Rₘ x y) :=
+    rfl
+  rw [h1]; rw [tensorLeftAlgEquiv]; rw [algEquiv_symm_apply]; rw [IsLocalization.algebraMap_mk' S]; rw [IsLocalization.map_mk']; rw [IsLocalization.mk'_eq_iff_eq_mul]
+  simp_rw [RingHom.id_apply]
+  have h x : algebraMap S Sₘ ((algebraMap R S) x) = algebraMap Rₘ Sₘ ((algebraMap R Rₘ) x) := by
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]
+  rw [h]; rw [h]; rw [← map_mul]; rw [IsLocalization.mk'_spec]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.rightAlgebra, Algebra.algebraMapSubmonoid, IsLocalization, IsLocalization.algebraMap_mk, IsLocalization.exists_mk, IsLocalization.map_mk, IsLocalization.mk, Localization, RingHom, TensorProduct, _eq_iff_eq_mul, algEquiv_symm_apply, algebraMap, algebraMapSubmonoid, algebraMap_mk, exists_mk, map_mk, otimes, rightAlgebra
 -/
@@ -1009,7 +1031,11 @@ lemma IsLocalization.tensorProduct_tensorProduct_right
   have : IsScalarTower A (S otimes[R] A) (S otimes[R] B) := .of_algebraMap_eq' H.symm
   have : IsScalarTower R A (S otimes[R] B) :=
 .of_algebraMap_eq' by
-    
+      rw [Algebra.compHom_algebraMap_eq]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R B]
+  have : IsScalarTower R (S otimes[R] A) (S otimes[R] B) := .to₁₃₄ _ A _ _
+  have : IsScalarTower A B (S otimes[R] B) := .of_algebraMap_eq' rfl
+  rw [Algebra.isLocalization_iff_isPushout _ B]; rw [Algebra.IsPushout.comm]; rw [← Algebra.IsPushout.comp_iff R _ S]
+  infer_instance
 
 中文:
 引理 是Localization.tensorProduct_tensorProduct_right
@@ -1020,7 +1046,11 @@ lemma IsLocalization.tensorProduct_tensorProduct_right
   have : IsScalarTower A (S otimes[R] A) (S otimes[R] B) := .of_algebraMap_eq' H.symm
   have : IsScalarTower R A (S otimes[R] B) :=
 .of_algebraMap_eq' by
-    
+      rw [Algebra.compHom_algebraMap_eq]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R B]
+  have : IsScalarTower R (S otimes[R] A) (S otimes[R] B) := .to₁₃₄ _ A _ _
+  have : IsScalarTower A B (S otimes[R] B) := .of_algebraMap_eq' rfl
+  rw [Algebra.isLocalization_iff_isPushout _ B]; rw [Algebra.IsPushout.comm]; rw [← Algebra.IsPushout.comp_iff R _ S]
+  infer_instance
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, Algebra.compHom_algebraMap_eq, H.symm, IsLocalization, IsScalarTower, IsScalarTower.algebraMap_eq, RingHom, RingHom.comp_assoc, algebraMap, algebraMapSubmonoid, algebraMap_eq, compHom, compHom_algebraMap_eq, comp_assoc, of_algebraMap_eq, otimes
 -/
@@ -1054,7 +1084,11 @@ definition IsLocalization.tensorProductEquivOfMapIncludeRight
   body: letI M' : Submonoid (S otimes[R] A) := M.map (Algebra.TensorProduct.includeRight (R := R) (A := S))
   letI : Algebra (S otimes[R] A) (S otimes[R] B) :=
     (Algebra.TensorProduct.map (AlgHom.id R S) (IsScalarTower.toAlgHom R _ _)).toAlgebra
-  haveI : IsScalarTower S (S otimes[R] A) (S otimes[R] B) :
+  haveI : IsScalarTower S (S otimes[R] A) (S otimes[R] B) :=
+.of_algebraMap_eq by intro; simp [RingHom.algebraMap_toAlgebra]
+  haveI := IsLocalization.tensorProduct_tensorProduct_right R S M B
+    (by ext; simp [RingHom.algebraMap_toAlgebra])
+  (IsLocalization.algEquiv M' _ _).restrictScalars S
 
 中文:
 定义 是Localization.tensorProductEquivOfMapIncludeRight
@@ -1062,7 +1096,11 @@ definition IsLocalization.tensorProductEquivOfMapIncludeRight
   定义体: letI M' : Submonoid (S otimes[R] A) := M.map (Algebra.TensorProduct.includeRight (R := R) (A := S))
   letI : Algebra (S otimes[R] A) (S otimes[R] B) :=
     (Algebra.TensorProduct.map (AlgHom.id R S) (IsScalarTower.toAlgHom R _ _)).toAlgebra
-  haveI : IsScalarTower S (S otimes[R] A) (S otimes[R] B) :
+  haveI : IsScalarTower S (S otimes[R] A) (S otimes[R] B) :=
+.of_algebraMap_eq by intro; simp [RingHom.algebraMap_toAlgebra]
+  haveI := IsLocalization.tensorProduct_tensorProduct_right R S M B
+    (by ext; simp [RingHom.algebraMap_toAlgebra])
+  (IsLocalization.algEquiv M' _ _).restrictScalars S
 -/
 def IsLocalization.tensorProductEquivOfMapIncludeRight (M : Submonoid A)
     (B : Type*) [CommSemiring B] [Algebra R B] [Algebra A B] [IsScalarTower R A B]
@@ -1129,7 +1167,9 @@ definition IsLocalization.Away.tensorProductEquivTMulRight
       (Localization.Away ((1 : S) otimesₜ[R] g)) := by
     simp only [Submonoid.map_powers, Algebra.TensorProduct.includeRight_apply]
     infer_instance
-  IsLocalization.tensorProductEquivO
+  IsLocalization.tensorProductEquivOfMapIncludeRight _ _ (.powers g) _ _
+
+@[simp]
 
 中文:
 定义 是Localization.Away.tensorProductEquivTMulRight
@@ -1139,7 +1179,9 @@ definition IsLocalization.Away.tensorProductEquivTMulRight
       (Localization.Away ((1 : S) otimesₜ[R] g)) := by
     simp only [Submonoid.map_powers, Algebra.TensorProduct.includeRight_apply]
     infer_instance
-  IsLocalization.tensorProductEquivO
+  IsLocalization.tensorProductEquivOfMapIncludeRight _ _ (.powers g) _ _
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.includeRight_apply, IsLocalization, IsLocalization.tensorProductEquivOfMapIncludeRight, Localization, Localization.Away, Submonoid, Submonoid.map_powers, Submonoid.powers, TensorProduct, includeRight, includeRight_apply, infer_instance, map_powers, powers, tensorProductEquivOfMapIncludeRight
 -/
@@ -1165,7 +1207,7 @@ lemma IsLocalization.Away.tensorProductEquivTMulRight_tmul
       (Localization.Away ((1 : S) otimesₜ[R] g)) := by
     simp only [Submonoid.map_powers, Algebra.TensorProduct.includeRight_apply]
     infer_instance
-  IsLocalization.tensorProductEquivO
+  IsLocalization.tensorProductEquivOfMapIncludeRight_tmul _ _ _ _ _ _
 
 中文:
 引理 是Localization.Away.tensorProductEquivTMulRight_tmul
@@ -1175,7 +1217,7 @@ lemma IsLocalization.Away.tensorProductEquivTMulRight_tmul
       (Localization.Away ((1 : S) otimesₜ[R] g)) := by
     simp only [Submonoid.map_powers, Algebra.TensorProduct.includeRight_apply]
     infer_instance
-  IsLocalization.tensorProductEquivO
+  IsLocalization.tensorProductEquivOfMapIncludeRight_tmul _ _ _ _ _ _
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.includeRight_apply, IsLocalization, IsLocalization.tensorProductEquivOfMapIncludeRight_tmul, Localization, Localization.Away, Submonoid, Submonoid.map_powers, Submonoid.powers, TensorProduct, includeRight, includeRight_apply, infer_instance, map_powers, powers, tensorProductEquivOfMapIncludeRight_tmul
 -/

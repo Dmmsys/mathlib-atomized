@@ -245,7 +245,10 @@ theorem mem_of_pi_mem_pi
   have : forall i, (t i).Nonempty := fun i => nonempty_of_mem (htf i)
   choose g hg using this
   have : update g i x in I'.pi t := fun j _ => by
-    rcases eq_or_ne j i with (rfl | hne) <;> s
+    rcases eq_or_ne j i with (rfl | hne) <;> simp [*]
+  simpa using hts this i hi
+
+@[simp]
 
 中文:
 定理 mem_of_pi_mem_pi
@@ -257,7 +260,10 @@ theorem mem_of_pi_mem_pi
   have : forall i, (t i).Nonempty := fun i => nonempty_of_mem (htf i)
   choose g hg using this
   have : update g i x in I'.pi t := fun j _ => by
-    rcases eq_or_ne j i with (rfl | hne) <;> s
+    rcases eq_or_ne j i with (rfl | hne) <;> simp [*]
+  simpa using hts this i hi
+
+@[simp]
 
 Depends on / 依赖: Nonempty, classical, eq_or_ne, mem_of_superset, mem_pi, nonempty_of_mem, update
 -/
@@ -592,7 +598,12 @@ theorem pi_inf_principal_univ_pi_eq_bot
     rintro (hsf : forall i, existsᶠ x in f i, x in s i) I - t htf hts
     have : forall i, (s i inter t i).Nonempty := fun i => ((hsf i).and_eventually (htf i)).exists
     choose x hxs hxt using this
-    exact hts (fun i _
+    exact hts (fun i _ => hxt i) (mem_univ_pi.2 hxs)
+  · simp only [inf_principal_eq_bot]
+    rintro ⟨i, hi⟩
+    filter_upwards [mem_pi_of_mem i hi] with x using mt fun h => h i trivial
+
+@[simp]
 
 中文:
 定理 pi_inf_principal_univ_pi_eq_bot
@@ -603,7 +614,12 @@ theorem pi_inf_principal_univ_pi_eq_bot
     rintro (hsf : forall i, existsᶠ x in f i, x in s i) I - t htf hts
     have : forall i, (s i inter t i).Nonempty := fun i => ((hsf i).and_eventually (htf i)).exists
     choose x hxs hxt using this
-    exact hts (fun i _
+    exact hts (fun i _ => hxt i) (mem_univ_pi.2 hxs)
+  · simp only [inf_principal_eq_bot]
+    rintro ⟨i, hi⟩
+    filter_upwards [mem_pi_of_mem i hi] with x using mt fun h => h i trivial
+
+@[simp]
 
 Depends on / 依赖: Nonempty, and_eventually, contrapose, filter_upwards, inf_principal_eq_bot, mem_pi, mem_pi_of_mem, mem_univ_pi
 -/

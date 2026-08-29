@@ -159,7 +159,13 @@ lemma isProperMap_iff_ultrafilter
   refine and_congr_right (fun _ => ?_)
   constructor <;> intro H
   · intro 𝒰 y (hY : (Ultrafilter.map f 𝒰 : Filter Y) <= _)
-    simp_rw [← Ultrafilter.clusterPt_iff] at 
+    simp_rw [← Ultrafilter.clusterPt_iff] at hY ⊢
+    exact H hY
+  · simp_rw [MapClusterPt, ClusterPt, ← Filter.push_pull', map_neBot_iff, ← exists_ultrafilter_iff,
+      forall_exists_index]
+    intro ℱ y 𝒰 hy
+    rcases H (tendsto_iff_comap.mpr <| hy.trans inf_le_left) with ⟨x, hxy, hx⟩
+    exact ⟨x, hxy, 𝒰, le_inf hx (hy.trans inf_le_right)⟩
 
 中文:
 引理 isProperMap_iff_ultrafilter
@@ -170,7 +176,13 @@ lemma isProperMap_iff_ultrafilter
   refine and_congr_right (fun _ => ?_)
   constructor <;> intro H
   · intro 𝒰 y (hY : (Ultrafilter.map f 𝒰 : Filter Y) <= _)
-    simp_rw [← Ultrafilter.clusterPt_iff] at 
+    simp_rw [← Ultrafilter.clusterPt_iff] at hY ⊢
+    exact H hY
+  · simp_rw [MapClusterPt, ClusterPt, ← Filter.push_pull', map_neBot_iff, ← exists_ultrafilter_iff,
+      forall_exists_index]
+    intro ℱ y 𝒰 hy
+    rcases H (tendsto_iff_comap.mpr <| hy.trans inf_le_left) with ⟨x, hxy, hx⟩
+    exact ⟨x, hxy, 𝒰, le_inf hx (hy.trans inf_le_right)⟩
 -/
 lemma isProperMap_iff_ultrafilter : IsProperMap f ↔ Continuous f ∧
     forall ⦃𝒰 : Ultrafilter X⦄, forall ⦃y : Y⦄, Tendsto f 𝒰 (𝓝 y) -> exists x, f x = y ∧ 𝒰 <= 𝓝 x := by
@@ -375,7 +387,19 @@ lemma IsProperMap.prodMap
   -- Let `𝒰 : Ultrafilter (X × Z)`, and assume that `f × g` tends to some `(y, w) : Y × W`
   -- along `𝒰`.
   · intro 𝒰 ⟨y, w⟩ hyw
-  -- That means that `f` tends to `y` along `map
+  -- That means that `f` tends to `y` along `map fst 𝒰` and `g` tends to `w` along `map snd 𝒰`.
+    simp_rw [nhds_prod_eq, tendsto_prod_iff'] at hyw
+  -- Thus, by properness of `f` and `g`, we get some `x : X` and `z : Z` such that `f x = y`,
+  -- `g z = w`, `map fst 𝒰` tends to `x`, and `map snd 𝒰` tends to `y`.
+    rcases hf.2 (show Tendsto f (Ultrafilter.map fst 𝒰) (𝓝 y) by simpa using! hyw.1) with
+      ⟨x, hxy, hx⟩
+    rcases hg.2 (show Tendsto g (Ultrafilter.map snd 𝒰) (𝓝 w) by simpa using! hyw.2) with
+      ⟨z, hzw, hz⟩
+  -- By the properties of the product topology, that means that `𝒰` tends to `(x, z)`,
+  -- which completes the proof since `(f × g)(x, z) = (y, w)`.
+    refine ⟨⟨x, z⟩, Prod.ext hxy hzw, ?_⟩
+    rw [nhds_prod_eq]; rw [le_prod]
+    exact ⟨hx, hz⟩
 
 中文:
 引理 是真映射.prodMap
@@ -388,7 +412,19 @@ lemma IsProperMap.prodMap
   -- Let `𝒰 : Ultrafilter (X × Z)`, and assume that `f × g` tends to some `(y, w) : Y × W`
   -- along `𝒰`.
   · intro 𝒰 ⟨y, w⟩ hyw
-  -- That means that `f` tends to `y` along `map
+  -- That means that `f` tends to `y` along `map fst 𝒰` and `g` tends to `w` along `map snd 𝒰`.
+    simp_rw [nhds_prod_eq, tendsto_prod_iff'] at hyw
+  -- Thus, by properness of `f` and `g`, we get some `x : X` and `z : Z` such that `f x = y`,
+  -- `g z = w`, `map fst 𝒰` tends to `x`, and `map snd 𝒰` tends to `y`.
+    rcases hf.2 (show Tendsto f (Ultrafilter.map fst 𝒰) (𝓝 y) by simpa using! hyw.1) with
+      ⟨x, hxy, hx⟩
+    rcases hg.2 (show Tendsto g (Ultrafilter.map snd 𝒰) (𝓝 w) by simpa using! hyw.2) with
+      ⟨z, hzw, hz⟩
+  -- By the properties of the product topology, that means that `𝒰` tends to `(x, z)`,
+  -- which completes the proof since `(f × g)(x, z) = (y, w)`.
+    refine ⟨⟨x, z⟩, Prod.ext hxy hzw, ?_⟩
+    rw [nhds_prod_eq]; rw [le_prod]
+    exact ⟨hx, hz⟩
 
 Depends on / 依赖: isProperMap_iff_ultrafilter, simp_rw
 -/
@@ -429,7 +465,16 @@ lemma IsProperMap.pi_map
   -- Let `𝒰 : Ultrafilter (Π i, X i)`, and assume that `Π i, f i` tends to some `y : Π i, Y i`
   -- along `𝒰`.
   · intro 𝒰 y hy
-  -- That means
+  -- That means that each `f i` tends to `y i` along `map (eval i) 𝒰`.
+    have : forall i, Tendsto (f i) (Ultrafilter.map (eval i) 𝒰) (𝓝 (y i)) := by
+      simpa [tendsto_pi_nhds] using! hy
+  -- Thus, by properness of all the `f i`s, we can choose some `x : Π i, X i` such that, for all
+  -- `i`, `f i (x i) = y i` and `map (eval i) 𝒰` tends to `x i`.
+    choose x hxy hx using fun i => (h i).2 (this i)
+  -- By the properties of the product topology, that means that `𝒰` tends to `x`,
+  -- which completes the proof since `(Π i, f i) x = y`.
+    refine ⟨x, funext hxy, ?_⟩
+    rwa [nhds_pi, le_pi]
 
 中文:
 引理 是真映射.pi_map
@@ -442,7 +487,16 @@ lemma IsProperMap.pi_map
   -- Let `𝒰 : Ultrafilter (Π i, X i)`, and assume that `Π i, f i` tends to some `y : Π i, Y i`
   -- along `𝒰`.
   · intro 𝒰 y hy
-  -- That means
+  -- That means that each `f i` tends to `y i` along `map (eval i) 𝒰`.
+    have : forall i, Tendsto (f i) (Ultrafilter.map (eval i) 𝒰) (𝓝 (y i)) := by
+      simpa [tendsto_pi_nhds] using! hy
+  -- Thus, by properness of all the `f i`s, we can choose some `x : Π i, X i` such that, for all
+  -- `i`, `f i (x i) = y i` and `map (eval i) 𝒰` tends to `x i`.
+    choose x hxy hx using fun i => (h i).2 (this i)
+  -- By the properties of the product topology, that means that `𝒰` tends to `x`,
+  -- which completes the proof since `(Π i, f i) x = y`.
+    refine ⟨x, funext hxy, ?_⟩
+    rwa [nhds_pi, le_pi]
 
 Depends on / 依赖: isProperMap_iff_ultrafilter, simp_rw
 -/
@@ -479,7 +533,12 @@ lemma IsProperMap.isCompact_preimage
   intro 𝒰 h𝒰
   -- In other words, we have `map f 𝒰 ≤ 𝓟 K`
   rw [← comap_principal]; rw [← map_le_iff_le_comap]; rw [← Ultrafilter.coe_map] at h𝒰
-  -- Thus, by compactness of `K`, the ultrafilter `map f 𝒰` tends to
+  -- Thus, by compactness of `K`, the ultrafilter `map f 𝒰` tends to some `y ∈ K`.
+  rcases hK.ultrafilter_le_nhds _ h𝒰 with ⟨y, hyK, hy⟩
+  -- Then, by properness of `f`, that means that `𝒰` tends to some `x ∈ f ⁻¹' {y} ⊆ f ⁻¹' K`,
+  -- which completes the proof.
+  rcases h.ultrafilter_le_nhds_of_tendsto hy with ⟨x, rfl, hx⟩
+  exact ⟨x, hyK, hx⟩
 
 中文:
 引理 是真映射.isCompact_preimage
@@ -490,7 +549,12 @@ lemma IsProperMap.isCompact_preimage
   intro 𝒰 h𝒰
   -- In other words, we have `map f 𝒰 ≤ 𝓟 K`
   rw [← comap_principal]; rw [← map_le_iff_le_comap]; rw [← Ultrafilter.coe_map] at h𝒰
-  -- Thus, by compactness of `K`, the ultrafilter `map f 𝒰` tends to
+  -- Thus, by compactness of `K`, the ultrafilter `map f 𝒰` tends to some `y ∈ K`.
+  rcases hK.ultrafilter_le_nhds _ h𝒰 with ⟨y, hyK, hy⟩
+  -- Then, by properness of `f`, that means that `𝒰` tends to some `x ∈ f ⁻¹' {y} ⊆ f ⁻¹' K`,
+  -- which completes the proof.
+  rcases h.ultrafilter_le_nhds_of_tendsto hy with ⟨x, rfl, hx⟩
+  exact ⟨x, hyK, hx⟩
 
 Depends on / 依赖: isCompact_iff_ultrafilter_le_nhds
 -/
@@ -518,7 +582,25 @@ theorem isProperMap_iff_isClosedMap_and_compact_fibers
   -- Note: In Bourbaki, the direct implication is proved by going through universally closed maps.
   -- We could do the same (using a `TFAE` cycle) but proving it directly from
   -- `IsProperMap.isCompact_preimage` is nice enough already so we don't bother with that.
-  ·
+  · exact ⟨H.continuous, H.isClosedMap, fun y => H.isCompact_preimage isCompact_singleton⟩
+  · rw [isProperMap_iff_clusterPt]
+  -- Let `ℱ : Filter X` and `y` some cluster point of `map f ℱ`.
+    refine ⟨H.1, fun ℱ y hy => ?_⟩
+  -- That means that the singleton `pure y` meets the "closure" of `map f ℱ`, by which we mean
+  -- `Filter.lift' (map f ℱ) closure`. But `f` is closed, so
+  -- `closure (map f ℱ) = map f (closure ℱ)` (see `IsClosedMap.lift'_closure_map_eq`).
+  -- Thus `map f (closure ℱ ⊓ 𝓟 (f ⁻¹' {y})) = map f (closure ℱ) ⊓ 𝓟 {y} ≠ ⊥`, hence
+  -- `closure ℱ ⊓ 𝓟 (f ⁻¹' {y}) ≠ ⊥`.
+    rw [H.2.1.mapClusterPt_iff_lift'_closure H.1] at hy
+  -- Now, applying the compactness of `f ⁻¹' {y}` to the nontrivial filter
+  -- `closure ℱ ⊓ 𝓟 (f ⁻¹' {y})`, we obtain that it has a cluster point `x ∈ f ⁻¹' {y}`.
+    rcases H.2.2 y (f := Filter.lift' ℱ closure ⊓ 𝓟 (f ⁻¹' {y})) inf_le_right with ⟨x, hxy, hx⟩
+    refine ⟨x, hxy, ?_⟩
+  -- In particular `x` is a cluster point of `closure ℱ`. Since cluster points of `closure ℱ`
+  -- are exactly cluster points of `ℱ` (see `clusterPt_lift'_closure_iff`), this completes
+  -- the proof.
+    rw [← clusterPt_lift'_closure_iff]
+    exact hx.mono inf_le_left
 
 中文:
 定理 isProperMap_iff_isClosedMap_and_compact_fibers
@@ -527,7 +609,25 @@ theorem isProperMap_iff_isClosedMap_and_compact_fibers
   -- Note: In Bourbaki, the direct implication is proved by going through universally closed maps.
   -- We could do the same (using a `TFAE` cycle) but proving it directly from
   -- `IsProperMap.isCompact_preimage` is nice enough already so we don't bother with that.
-  ·
+  · exact ⟨H.continuous, H.isClosedMap, fun y => H.isCompact_preimage isCompact_singleton⟩
+  · rw [isProperMap_iff_clusterPt]
+  -- Let `ℱ : Filter X` and `y` some cluster point of `map f ℱ`.
+    refine ⟨H.1, fun ℱ y hy => ?_⟩
+  -- That means that the singleton `pure y` meets the "closure" of `map f ℱ`, by which we mean
+  -- `Filter.lift' (map f ℱ) closure`. But `f` is closed, so
+  -- `closure (map f ℱ) = map f (closure ℱ)` (see `IsClosedMap.lift'_closure_map_eq`).
+  -- Thus `map f (closure ℱ ⊓ 𝓟 (f ⁻¹' {y})) = map f (closure ℱ) ⊓ 𝓟 {y} ≠ ⊥`, hence
+  -- `closure ℱ ⊓ 𝓟 (f ⁻¹' {y}) ≠ ⊥`.
+    rw [H.2.1.mapClusterPt_iff_lift'_closure H.1] at hy
+  -- Now, applying the compactness of `f ⁻¹' {y}` to the nontrivial filter
+  -- `closure ℱ ⊓ 𝓟 (f ⁻¹' {y})`, we obtain that it has a cluster point `x ∈ f ⁻¹' {y}`.
+    rcases H.2.2 y (f := Filter.lift' ℱ closure ⊓ 𝓟 (f ⁻¹' {y})) inf_le_right with ⟨x, hxy, hx⟩
+    refine ⟨x, hxy, ?_⟩
+  -- In particular `x` is a cluster point of `closure ℱ`. Since cluster points of `closure ℱ`
+  -- are exactly cluster points of `ℱ` (see `clusterPt_lift'_closure_iff`), this completes
+  -- the proof.
+    rw [← clusterPt_lift'_closure_iff]
+    exact hx.mono inf_le_left
 -/
 theorem isProperMap_iff_isClosedMap_and_compact_fibers :
     IsProperMap f ↔ Continuous f ∧ IsClosedMap f ∧ forall y, IsCompact (f ⁻¹' {y}) := by
@@ -741,7 +841,9 @@ lemma isProperMap_iff_isClosedMap_and_tendsto_cofinite
     le_cofinite_iff_compl_singleton_mem, mem_map, preimage_compl]
   refine and_congr_right fun f_cont => and_congr_right fun _ =>
     ⟨fun H y => (H y).compl_mem_cocompact, fun H y => ?_⟩
-  rcases mem_cocompact.mp (H y) with ⟨K, 
+  rcases mem_cocompact.mp (H y) with ⟨K, hK, hKy⟩
+  exact hK.of_isClosed_subset (isClosed_singleton.preimage f_cont)
+    (compl_le_compl_iff_le.mp hKy)
 
 中文:
 引理 isProperMap_iff_isClosedMap_and_tendsto_cofinite
@@ -751,7 +853,9 @@ lemma isProperMap_iff_isClosedMap_and_tendsto_cofinite
     le_cofinite_iff_compl_singleton_mem, mem_map, preimage_compl]
   refine and_congr_right fun f_cont => and_congr_right fun _ =>
     ⟨fun H y => (H y).compl_mem_cocompact, fun H y => ?_⟩
-  rcases mem_cocompact.mp (H y) with ⟨K, 
+  rcases mem_cocompact.mp (H y) with ⟨K, hK, hKy⟩
+  exact hK.of_isClosed_subset (isClosed_singleton.preimage f_cont)
+    (compl_le_compl_iff_le.mp hKy)
 
 Depends on / 依赖: Tendsto, and_congr_right, compl_le_compl_iff_le, compl_le_compl_iff_le.mp, compl_mem_cocompact, f_cont, hK.of_isClosed_subset, isClosed_singleton, isClosed_singleton.preimage, isProperMap_iff_isClosedMap_and_compact_fibers, le_cofinite_iff_compl_singleton_mem, mem_cocompact, mem_cocompact.mp, mem_map, of_isClosed_subset, preimage, preimage_compl, simp_rw
 -/

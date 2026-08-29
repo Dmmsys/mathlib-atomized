@@ -322,7 +322,7 @@ definition TransitiveRelation.map
   transitivity₁ :=
     (F.map_comp _ _).symm.trans ((congr(F.map $e.transitivity₁)).trans (F.map_comp _ _))
   transitivity₂ :=
-    (F.map_comp _ _).symm.trans ((congr(F.map $e.tran
+    (F.map_comp _ _).symm.trans ((congr(F.map $e.transitivity₂)).trans (F.map_comp _ _))
 
 中文:
 定义 TransitiveRelation.map
@@ -333,7 +333,7 @@ definition TransitiveRelation.map
   transitivity₁ :=
     (F.map_comp _ _).symm.trans ((congr(F.map $e.transitivity₁)).trans (F.map_comp _ _))
   transitivity₂ :=
-    (F.map_comp _ _).symm.trans ((congr(F.map $e.tran
+    (F.map_comp _ _).symm.trans ((congr(F.map $e.transitivity₂)).trans (F.map_comp _ _))
 
 Depends on / 依赖: F.map
 -/

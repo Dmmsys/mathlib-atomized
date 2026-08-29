@@ -269,7 +269,11 @@ theorem exists_mem_notMem
     rwa [← (Set.encard_add_encard_compl {b}).trans (Set.encard_univ α), Set.encard_singleton,
       add_comm, ENat.lt_add_one_iff' (ENat.natCast_ne_top n)] at hα
   obtain ⟨s, has, has', hs⟩ :=
-    Set.exists_superset_subset_encard_eq (s := {a}) (by simp [Ne
+    Set.exists_superset_subset_encard_eq (s := {a}) (by simp [Ne.symm hab]) (by simpa) ha'
+  have : Set.Finite s := Set.finite_of_encard_eq_coe hs
+  exact ⟨⟨Set.Finite.toFinset this, by
+    rwa [mem_iff, ← ENat.natCast_inj, ← this.encard_eq_coe_toFinset_card]⟩,
+      by simpa using has, by simpa using has'⟩
 
 中文:
 定理 存在_mem_notMem
@@ -279,7 +283,11 @@ theorem exists_mem_notMem
     rwa [← (Set.encard_add_encard_compl {b}).trans (Set.encard_univ α), Set.encard_singleton,
       add_comm, ENat.lt_add_one_iff' (ENat.natCast_ne_top n)] at hα
   obtain ⟨s, has, has', hs⟩ :=
-    Set.exists_superset_subset_encard_eq (s := {a}) (by simp [Ne
+    Set.exists_superset_subset_encard_eq (s := {a}) (by simp [Ne.symm hab]) (by simpa) ha'
+  have : Set.Finite s := Set.finite_of_encard_eq_coe hs
+  exact ⟨⟨Set.Finite.toFinset this, by
+    rwa [mem_iff, ← ENat.natCast_inj, ← this.encard_eq_coe_toFinset_card]⟩,
+      by simpa using has, by simpa using has'⟩
 
 Depends on / 依赖: ENat.lt_add_one_iff, ENat.natCast_inj, ENat.natCast_ne_top, Finite, Ne.symm, Set.Finite, Set.Finite.toFinset, Set.encard, Set.encard_add_encard_compl, Set.encard_singleton, Set.encard_univ, Set.exists_superset_subset_encard_eq, Set.finite_of_encard_eq_coe, add_comm, encard, encard_add_encard_compl, encard_eq_coe_toFinset_card, encard_singleton, encard_univ, exists_superset_subset_encard_eq
 -/
@@ -917,6 +925,8 @@ instance instInfinite
     aesop
   rw [sUnion_eq_univ_iff]
   intro a
+  obtain ⟨s, s_mem, mem_s⟩ := exist_mem_powersetCard_of_inf α n (Nat.pos_of_neZero n) a
+  exact ⟨↑s, mem_image_of_mem SetLike.coe s_mem, mem_coe.mpr mem_s⟩
 
 中文:
 实例 instInfinite
@@ -931,6 +941,8 @@ instance instInfinite
     aesop
   rw [sUnion_eq_univ_iff]
   intro a
+  obtain ⟨s, s_mem, mem_s⟩ := exist_mem_powersetCard_of_inf α n (Nat.pos_of_neZero n) a
+  exact ⟨↑s, mem_image_of_mem SetLike.coe s_mem, mem_coe.mpr mem_s⟩
 
 Depends on / 依赖: Finite, Finite.false, Finite.image, Nat.pos_of_neZero, Set.Finite.sUnion, Set.finite_univ_iff, Set.univ, SetLike, SetLike.coe, exist_mem_powersetCard_of_inf, finite, finite_univ_iff, mem_coe, mem_coe.mpr, mem_image_of_mem, mem_s, not_finite_iff_infinite, pos_of_neZero, powersetCard, sUnion
 -/
@@ -996,7 +1008,12 @@ theorem nontrivial
     rw [ENat.card_eq_coe_natCard] at h2
     norm_cast at h2
     rcases this with h | h
- 
+    · rw [Nat.choose_eq_zero_iff] at h
+      exact (lt_self_iff_false n).mp (lt_trans h2 h)
+    · rw [Nat.choose_eq_one_iff] at h
+      aesop
+  · have : NeZero n := NeZero.of_pos h1
+    infer_instance
 
 中文:
 定理 nontrivial
@@ -1010,7 +1027,12 @@ theorem nontrivial
     rw [ENat.card_eq_coe_natCard] at h2
     norm_cast at h2
     rcases this with h | h
- 
+    · rw [Nat.choose_eq_zero_iff] at h
+      exact (lt_self_iff_false n).mp (lt_trans h2 h)
+    · rw [Nat.choose_eq_one_iff] at h
+      aesop
+  · have : NeZero n := NeZero.of_pos h1
+    infer_instance
 
 Depends on / 依赖: ENat.card_eq_coe_natCard, Nat.card_coe_set_eq, Nat.choose_eq_one_iff, Nat.choose_eq_zero_iff, Nat.le_one_iff_eq_zero_or_eq_one, NeZero, NeZero.of_pos, Set.nontrivial_coe_sort, Set.one_lt_ncard_iff_nontrivial, card_coe_set_eq, card_eq_coe_natCard, choose_eq_one_iff, choose_eq_zero_iff, fintypeOrInfinite, infer_instance, le_one_iff_eq_zero_or_eq_one, lt_self_iff_false, lt_trans, nontrivial_coe_sort, of_pos
 -/

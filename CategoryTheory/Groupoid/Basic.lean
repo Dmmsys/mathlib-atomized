@@ -34,7 +34,8 @@ theorem isThin_iff
   calc
     f = f ≫ inv g ≫ g := by simp only [inv_eq_inv, IsIso.inv_hom_id, Category.comp_id]
     _ = f ≫ inv f ≫ g := by congr 1
-                            simp only [inv_eq_inv, IsIso.inv_hom_id, eq_iff_tr
+                            simp only [inv_eq_inv, IsIso.inv_hom_id, eq_iff_true_of_subsingleton]
+    _ = g := by simp only [inv_eq_inv, IsIso.hom_inv_id_assoc]
 
 中文:
 定理 isThin_iff
@@ -45,7 +46,8 @@ theorem isThin_iff
   calc
     f = f ≫ inv g ≫ g := by simp only [inv_eq_inv, IsIso.inv_hom_id, Category.comp_id]
     _ = f ≫ inv f ≫ g := by congr 1
-                            simp only [inv_eq_inv, IsIso.inv_hom_id, eq_iff_tr
+                            simp only [inv_eq_inv, IsIso.inv_hom_id, eq_iff_true_of_subsingleton]
+    _ = g := by simp only [inv_eq_inv, IsIso.hom_inv_id_assoc]
 
 Depends on / 依赖: Category, Category.comp_id, IsIso.hom_inv_id_assoc, IsIso.inv_hom_id, Subsingleton, Subsingleton.intro, comp_id, eq_iff_true_of_subsingleton, hom_inv_id_assoc, inv_eq_inv, inv_hom_id
 -/

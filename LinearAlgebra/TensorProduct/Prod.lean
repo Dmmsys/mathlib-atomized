@@ -48,7 +48,10 @@ definition prodRight
       LinearMap.prodMapLinear R M₂ M₃ (M₁ otimes[R] M₂) (M₁ otimes[R] M₃) S ∘ₗ
         LinearMap.prod (AlgebraTensorModule.mk R S M₁ M₂) (AlgebraTensorModule.mk R S M₁ M₃))
     (LinearMap.coprod
-      (AlgebraTensorModule.lTensor
+      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inl _ _ _)
+      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inr _ _ _))
+    (by ext <;> simp)
+    (by ext <;> simp)
 
 中文:
 定义 prodRight
@@ -58,7 +61,10 @@ definition prodRight
       LinearMap.prodMapLinear R M₂ M₃ (M₁ otimes[R] M₂) (M₁ otimes[R] M₃) S ∘ₗ
         LinearMap.prod (AlgebraTensorModule.mk R S M₁ M₂) (AlgebraTensorModule.mk R S M₁ M₃))
     (LinearMap.coprod
-      (AlgebraTensorModule.lTensor
+      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inl _ _ _)
+      (AlgebraTensorModule.lTensor _ _ <| LinearMap.inr _ _ _))
+    (by ext <;> simp)
+    (by ext <;> simp)
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lTensor, AlgebraTensorModule.mk, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.coprod, LinearMap.inl, LinearMap.inr, LinearMap.prod, LinearMap.prodMapLinear, TensorProduct, TensorProduct.AlgebraTensorModule.lift, coprod, lTensor, ofLinearMap, otimes, prodMapLinear
 -/

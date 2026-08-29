@@ -192,7 +192,16 @@ definition isoRestrict
       refine asIso (f.c.app (op (opensFunctor f |>.obj (unop U)))) ≪≫ X.presheaf.mapIso (eqToIso ?_)
       induction U with | op U => ?_
       cases U
-      dsimp only [IsOpenMap.functor, Functor.op
+      dsimp only [IsOpenMap.functor, Functor.op, Opens.map_def]
+      congr 2
+      erw [Set.preimage_image_eq _ H.base_open.injective]
+      rfl
+    · intro U V i
+      dsimp
+      simp only [NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_obj,
+        TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op, Category.assoc]
+      rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
+      congr 1
 
 中文:
 定义 isoRestrict
@@ -204,7 +213,16 @@ definition isoRestrict
       refine asIso (f.c.app (op (opensFunctor f |>.obj (unop U)))) ≪≫ X.presheaf.mapIso (eqToIso ?_)
       induction U with | op U => ?_
       cases U
-      dsimp only [IsOpenMap.functor, Functor.op
+      dsimp only [IsOpenMap.functor, Functor.op, Opens.map_def]
+      congr 2
+      erw [Set.preimage_image_eq _ H.base_open.injective]
+      rfl
+    · intro U V i
+      dsimp
+      simp only [NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_obj,
+        TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op, Category.assoc]
+      rw [← X.presheaf.map_comp]; rw [← X.presheaf.map_comp]
+      congr 1
 
 Depends on / 依赖: Functor, Functor.op, H.base_open.injective, IsOpenMap, IsOpenMap.functor, Iso.refl, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_assoc, Opens.map_def, Presheaf, PresheafedSpace, PresheafedSpace.isoOfComponents, Quiver, Quiver.Hom.unop_op, Set.preimage_image_eq, TopCat, TopCat.Presheaf.pushforward_obj_map, TopCat.Presheaf.pushforward_obj_obj
 -/
@@ -241,7 +259,12 @@ theorem isoRestrict_hom_ofRestrict
 refine PresheafedSpace.Hom.ext _ _ rfl NatTrans.ext funext fun x => ?_
   simp only [eqToHom_refl,
     Functor.whiskerRight_id']
-  erw [Category.comp_id, comp_c_app, f.c.naturali
+  erw [Category.comp_id, comp_c_app, f.c.naturality_assoc, ← X.presheaf.map_comp]
+  trans f.c.app x ≫ X.presheaf.map (𝟙 _)
+  · congr 1
+  · simp
+
+@[reassoc (attr := simp)]
 
 中文:
 定理 isoRestrict_hom_ofRestrict
@@ -251,7 +274,12 @@ refine PresheafedSpace.Hom.ext _ _ rfl NatTrans.ext funext fun x => ?_
 refine PresheafedSpace.Hom.ext _ _ rfl NatTrans.ext funext fun x => ?_
   simp only [eqToHom_refl,
     Functor.whiskerRight_id']
-  erw [Category.comp_id, comp_c_app, f.c.naturali
+  erw [Category.comp_id, comp_c_app, f.c.naturality_assoc, ← X.presheaf.map_comp]
+  trans f.c.app x ≫ X.presheaf.map (𝟙 _)
+  · congr 1
+  · simp
+
+@[reassoc (attr := simp)]
 -/
 theorem isoRestrict_hom_ofRestrict : (isoRestrict f).hom ≫ Y.ofRestrict _ = f := by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
@@ -342,7 +370,10 @@ instance comp
       Opens.map_comp_obj]
     apply IsIso.comp_isIso'
     · exact c_iso' g ((opensFunctor f).obj U) (by ext; simp)
-    · apply c_iso' f 
+    · apply c_iso' f U
+      ext1
+      dsimp only [Opens.map_coe, IsOpenMap.coe_functor_obj, comp_base, TopCat.coe_comp]
+      rw [Set.image_comp]; rw [Set.preimage_image_eq _ hg.base_open.injective]
 
 中文:
 实例 comp
@@ -354,7 +385,10 @@ instance comp
       Opens.map_comp_obj]
     apply IsIso.comp_isIso'
     · exact c_iso' g ((opensFunctor f).obj U) (by ext; simp)
-    · apply c_iso' f 
+    · apply c_iso' f U
+      ext1
+      dsimp only [Opens.map_coe, IsOpenMap.coe_functor_obj, comp_base, TopCat.coe_comp]
+      rw [Set.image_comp]; rw [Set.preimage_image_eq _ hg.base_open.injective]
 
 Depends on / 依赖: H.base_open, base_open, hg.base_open.comp
 -/
@@ -606,7 +640,13 @@ instance ofRestrict
     convert_to IsIso (Y.presheaf.map (𝟙 _))
     · congr
     · -- Porting note: was `apply Subsingleton.helim; rw [this]`
-      -- See https://github.com/
+      -- See https://github.com/leanprover/lean4/issues/2273
+      congr
+      · simp only
+        congr
+      apply Subsingleton.helim
+      rw [this]
+    · infer_instance
 
 中文:
 实例 ofRestrict
@@ -620,7 +660,13 @@ instance ofRestrict
     convert_to IsIso (Y.presheaf.map (𝟙 _))
     · congr
     · -- Porting note: was `apply Subsingleton.helim; rw [this]`
-      -- See https://github.com/
+      -- See https://github.com/leanprover/lean4/issues/2273
+      congr
+      · simp only
+        congr
+      apply Subsingleton.helim
+      rw [this]
+    · infer_instance
 
 Depends on / 依赖: IsStablyFiniteRing, OrzechProperty
 -/
@@ -691,7 +737,15 @@ theorem to_iso
       cases U
       dsimp only [Functor.op, Opens.map]
       congr
-      exact (Set.image_preimage_eq _ ((To
+      exact (Set.image_preimage_eq _ ((TopCat.epi_iff_surjective _).mp h')).symm
+    convert! H.c_iso (Opens.map f.base |>.obj <| unop U)
+  have : IsIso f.c := NatIso.isIso_of_isIso_app _
+  apply +allowSynthFailures isIso_of_components
+  let t : X ≃ₜ Y := H.base_open.isEmbedding.toHomeomorph.trans
+    { toFun := Subtype.val
+      invFun := fun x =>
+        ⟨x, by rw [Set.range_eq_univ.mpr ((TopCat.epi_iff_surjective _).mp h')]; trivial⟩ }
+  exact (TopCat.isoOfHomeo t).isIso_hom
 
 中文:
 定理 to_iso
@@ -705,7 +759,15 @@ theorem to_iso
       cases U
       dsimp only [Functor.op, Opens.map]
       congr
-      exact (Set.image_preimage_eq _ ((To
+      exact (Set.image_preimage_eq _ ((TopCat.epi_iff_surjective _).mp h')).symm
+    convert! H.c_iso (Opens.map f.base |>.obj <| unop U)
+  have : IsIso f.c := NatIso.isIso_of_isIso_app _
+  apply +allowSynthFailures isIso_of_components
+  let t : X ≃ₜ Y := H.base_open.isEmbedding.toHomeomorph.trans
+    { toFun := Subtype.val
+      invFun := fun x =>
+        ⟨x, by rw [Set.range_eq_univ.mpr ((TopCat.epi_iff_surjective _).mp h')]; trivial⟩ }
+  exact (TopCat.isoOfHomeo t).isIso_hom
 
 Depends on / 依赖: Functor, Functor.op, H.base_open.isEmbedding.toHomeomorp, H.c_iso, NatIso, NatIso.isIso_of_isIso_app, Opens.map, Set.image_preimage_eq, TopCat, TopCat.epi_iff_surjective, allowSynthFailures, base_open, c_iso, convert, epi_iff_surjective, f.base, f.c.app, image_preimage_eq, isEmbedding, isIso_of_components
 -/
@@ -774,7 +836,24 @@ definition pullbackConeOfLeftFst
               (eqToHom
                 (by
                   simp only [IsOpenMap.functor, op_inj_iff, Opens.map,
-                    F
+                    Functor.op_obj]
+                  apply LE.le.antisymm
+                  · rintro _ ⟨_, h₁, h₂⟩
+                    use (TopCat.pullbackIsoProdSubtype _ _).inv ⟨⟨_, _⟩, h₂⟩
+                    simpa [(TopCat.pullbackIsoProdSubtype_inv_fst_apply),
+                      (TopCat.pullbackIsoProdSubtype_inv_snd_apply)]
+                  · rintro _ ⟨x, h₁, rfl⟩
+                    exact ⟨_, h₁, CategoryTheory.congr_fun pullback.condition x⟩))
+      naturality := by
+        intro U V i
+        induction U
+        induction V
+        simp only [(inv_naturality_assoc), restrict_carrier, restrict_presheaf,
+          TopCat.Presheaf.pushforward_obj_obj, Functor.comp_obj, Functor.op_obj,
+          TopCat.Presheaf.pushforward_obj_map, Functor.comp_map, Functor.op_map, Quiver.Hom.unop_op,
+          NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op,
+          ← Functor.map_comp, Category.assoc]
+        rfl }
 
 中文:
 定义 pullbackConeOfLeftFst
@@ -788,7 +867,24 @@ definition pullbackConeOfLeftFst
               (eqToHom
                 (by
                   simp only [IsOpenMap.functor, op_inj_iff, Opens.map,
-                    F
+                    Functor.op_obj]
+                  apply LE.le.antisymm
+                  · rintro _ ⟨_, h₁, h₂⟩
+                    use (TopCat.pullbackIsoProdSubtype _ _).inv ⟨⟨_, _⟩, h₂⟩
+                    simpa [(TopCat.pullbackIsoProdSubtype_inv_fst_apply),
+                      (TopCat.pullbackIsoProdSubtype_inv_snd_apply)]
+                  · rintro _ ⟨x, h₁, rfl⟩
+                    exact ⟨_, h₁, CategoryTheory.congr_fun pullback.condition x⟩))
+      naturality := by
+        intro U V i
+        induction U
+        induction V
+        simp only [(inv_naturality_assoc), restrict_carrier, restrict_presheaf,
+          TopCat.Presheaf.pushforward_obj_obj, Functor.comp_obj, Functor.op_obj,
+          TopCat.Presheaf.pushforward_obj_map, Functor.comp_map, Functor.op_map, Quiver.Hom.unop_op,
+          NatTrans.naturality_assoc, TopCat.Presheaf.pushforward_obj_map, Quiver.Hom.unop_op,
+          ← Functor.map_comp, Category.assoc]
+        rfl }
 
 Depends on / 依赖: pullback, pullback.fst
 -/
@@ -835,7 +931,14 @@ theorem pullback_cone_of_left_condition
 refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun U => ?_
   · simpa using! pullback.condition
   · induction U
-    simp only [(NatTrans.comp_app), comp_c_app, unop_op
+    simp only [(NatTrans.comp_app), comp_c_app, unop_op, Functor.whiskerRight_app,
+      pullbackConeOfLeftFst, app_invApp_assoc, eqToHom_app, Category.assoc,
+      NatTrans.naturality_assoc, restrict_carrier, comp_base, ofRestrict_base, restrict_presheaf,
+      Functor.comp_obj, Functor.op_obj, Opens.map_comp_obj, TopCat.Presheaf.pushforward_obj_obj,
+      Opens.carrier_eq_coe, homOfLE_leOfHom, TopCat.Presheaf.pushforward_obj_map, Functor.comp_map,
+      Functor.op_map, eqToHom_unop, ofRestrict_c_app, Functor.id_obj]
+    rw [← Y.presheaf.map_comp]; rw [← Y.presheaf.map_comp]
+    congr 1
 
 中文:
 定理 pullback_cone_of_left_condition
@@ -845,7 +948,14 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun U => ?_
 refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun U => ?_
   · simpa using! pullback.condition
   · induction U
-    simp only [(NatTrans.comp_app), comp_c_app, unop_op
+    simp only [(NatTrans.comp_app), comp_c_app, unop_op, Functor.whiskerRight_app,
+      pullbackConeOfLeftFst, app_invApp_assoc, eqToHom_app, Category.assoc,
+      NatTrans.naturality_assoc, restrict_carrier, comp_base, ofRestrict_base, restrict_presheaf,
+      Functor.comp_obj, Functor.op_obj, Opens.map_comp_obj, TopCat.Presheaf.pushforward_obj_obj,
+      Opens.carrier_eq_coe, homOfLE_leOfHom, TopCat.Presheaf.pushforward_obj_map, Functor.comp_map,
+      Functor.op_map, eqToHom_unop, ofRestrict_c_app, Functor.id_obj]
+    rw [← Y.presheaf.map_comp]; rw [← Y.presheaf.map_comp]
+    congr 1
 -/
 theorem pullback_cone_of_left_condition : pullbackConeOfLeftFst f g ≫ f = Y.ofRestrict _ ≫ g := by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `NatTrans.ext`
@@ -901,7 +1011,22 @@ definition pullbackConeOfLeftLift
             (eqToHom
               (by
                 dsimp only [Opens.map_def, IsOpenMap.functor, Functor.op]
-  
+                congr 2
+                let s' : PullbackCone f.base g.base :=
+                  PullbackCone.mk s.fst.base s.snd.base (congr_arg Hom.base s.condition)
+                have : _ = s.snd.base := limit.lift_π s' WalkingCospan.right
+                conv_lhs =>
+                  rw [← this]
+                  dsimp [s']
+                  rw [Function.comp_def]; rw [← Set.preimage_preimage]
+                rw [Set.preimage_image_eq _
+                    (TopCat.snd_isOpenEmbedding_of_left hf.base_open g.base).injective]
+                rfl))
+      naturality := fun U V i => by
+        erw [s.snd.c.naturality_assoc]
+        rw [Category.assoc]
+        erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
+        congr 1 }
 
 中文:
 定义 pullbackConeOfLeftLift
@@ -915,7 +1040,22 @@ definition pullbackConeOfLeftLift
             (eqToHom
               (by
                 dsimp only [Opens.map_def, IsOpenMap.functor, Functor.op]
-  
+                congr 2
+                let s' : PullbackCone f.base g.base :=
+                  PullbackCone.mk s.fst.base s.snd.base (congr_arg Hom.base s.condition)
+                have : _ = s.snd.base := limit.lift_π s' WalkingCospan.right
+                conv_lhs =>
+                  rw [← this]
+                  dsimp [s']
+                  rw [Function.comp_def]; rw [← Set.preimage_preimage]
+                rw [Set.preimage_image_eq _
+                    (TopCat.snd_isOpenEmbedding_of_left hf.base_open g.base).injective]
+                rfl))
+      naturality := fun U V i => by
+        erw [s.snd.c.naturality_assoc]
+        rw [Category.assoc]
+        erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
+        congr 1 }
 
 Depends on / 依赖: Function, Function.comp_def, Functor, Functor.op, Hom.base, IsOpenMap, IsOpenMap.functor, Opens.map_def, PresheafedSpace, PresheafedSpace.Hom.base, PullbackCone, PullbackCone.mk, Set.preimage_preimage, WalkingCospan, WalkingCospan.right, comp_def, condition, congr_arg, conv_lhs, eqToHom
 -/
@@ -960,7 +1100,16 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
   · change pullback.lift _ _ _ ≫ pullback.fst _ _ = _
     simp
   · induction x with | op x => ?_
-    change
+    change ((_ ≫ _) ≫ _ ≫ _) ≫ _ = _
+    simp_rw [Category.assoc]
+    erw [← s.pt.presheaf.map_comp]
+    erw [s.snd.c.naturality_assoc]
+    have := congr_app s.condition (op (opensFunctor f |>.obj x))
+    dsimp only [comp_c_app, unop_op] at this
+    rw [← IsIso.comp_inv_eq] at this
+    replace this := reassoc_of% this
+    erw [← this, hf.invApp_app_assoc, s.fst.c.naturality_assoc]
+    simp [eqToHom_map]
 
 中文:
 定理 pullbackConeOfLeftLift_fst
@@ -970,7 +1119,16 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
   · change pullback.lift _ _ _ ≫ pullback.fst _ _ = _
     simp
   · induction x with | op x => ?_
-    change
+    change ((_ ≫ _) ≫ _ ≫ _) ≫ _ = _
+    simp_rw [Category.assoc]
+    erw [← s.pt.presheaf.map_comp]
+    erw [s.snd.c.naturality_assoc]
+    have := congr_app s.condition (op (opensFunctor f |>.obj x))
+    dsimp only [comp_c_app, unop_op] at this
+    rw [← IsIso.comp_inv_eq] at this
+    replace this := reassoc_of% this
+    erw [← this, hf.invApp_app_assoc, s.fst.c.naturality_assoc]
+    simp [eqToHom_map]
 
 Depends on / 依赖: rankCondition_of_nontrivial_of_commSemiring
 -/
@@ -1006,7 +1164,12 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
   · change pullback.lift _ _ _ ≫ pullback.snd _ _ = _
     simp
   · change (_ ≫ _ ≫ _) ≫ _ = _
-    simp_rw [
+    simp_rw [Category.assoc]
+    erw [s.snd.c.naturality_assoc]
+    erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
+    trans s.snd.c.app x ≫ s.pt.presheaf.map (𝟙 _)
+    · congr 1
+    · simp
 
 中文:
 定理 pullbackConeOfLeftLift_snd
@@ -1016,7 +1179,12 @@ refine PresheafedSpace.Hom.ext _ _ ?_ NatTrans.ext funext fun x => ?_
   · change pullback.lift _ _ _ ≫ pullback.snd _ _ = _
     simp
   · change (_ ≫ _ ≫ _) ≫ _ = _
-    simp_rw [
+    simp_rw [Category.assoc]
+    erw [s.snd.c.naturality_assoc]
+    erw [← s.pt.presheaf.map_comp, ← s.pt.presheaf.map_comp]
+    trans s.snd.c.app x ≫ s.pt.presheaf.map (𝟙 _)
+    · congr 1
+    · simp
 -/
 theorem pullbackConeOfLeftLift_snd :
     pullbackConeOfLeftLift f g s ≫ (pullbackConeOfLeft f g).snd = s.snd := by
@@ -1220,7 +1388,16 @@ instance forget_preservesLimitsOfLeft
       refine (IsLimit.equivIsoLimit ?_).toFun (limit.isLimit (cospan f.base g.base))
       fapply Cone.ext
       · exact Iso.refl _
-      change foral
+      change forall j, _ = 𝟙 _ ≫ _ ≫ _
+      simp_rw [Category.id_comp]
+      rintro (_ | _ | _) <;> symm
+      · simp only [limit.cone_x, cospan_one, Functor.mapCone_π_app, PullbackCone.condition_one,
+        forget_map,
+          comp_base, cospan_left, cospan_right, Functor.comp_map, cospan_map_inl, cospan_map_inr,
+          diagramIsoCospan_hom_app, PullbackCone.fst_limit_cone]
+        tauto
+      · exact Category.comp_id _
+      · exact Category.comp_id _)
 
 中文:
 实例 forget_preservesLimitsOfLeft
@@ -1231,7 +1408,16 @@ instance forget_preservesLimitsOfLeft
       refine (IsLimit.equivIsoLimit ?_).toFun (limit.isLimit (cospan f.base g.base))
       fapply Cone.ext
       · exact Iso.refl _
-      change foral
+      change forall j, _ = 𝟙 _ ≫ _ ≫ _
+      simp_rw [Category.id_comp]
+      rintro (_ | _ | _) <;> symm
+      · simp only [limit.cone_x, cospan_one, Functor.mapCone_π_app, PullbackCone.condition_one,
+        forget_map,
+          comp_base, cospan_left, cospan_right, Functor.comp_map, cospan_map_inl, cospan_map_inr,
+          diagramIsoCospan_hom_app, PullbackCone.fst_limit_cone]
+        tauto
+      · exact Category.comp_id _
+      · exact Category.comp_id _)
 
 Depends on / 依赖: Category, Category.id_comp, Cone.ext, Functor, Functor.comp_map, Functor.mapCone_, IsLimit, IsLimit.equivIsoLimit, IsLimit.postcomposeHomEquiv, Iso.refl, PullbackCone, PullbackCone.condition_one, comp_base, comp_map, condition_one, cone_x, cospan, cospan_left, cospan_one, cospan_right
 -/
@@ -1284,7 +1470,8 @@ theorem pullback_snd_isIso_of_range_subset
     delta pullback.snd
     rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
     change IsIso (_ ≫ pullback.snd _ _)
-   
+    infer_instance
+  apply to_iso
 
 中文:
 定理 pullback_snd_isIso_of_range_subset
@@ -1295,7 +1482,8 @@ theorem pullback_snd_isIso_of_range_subset
     delta pullback.snd
     rw [← limit.isoLimitCone_hom_π ⟨_]; rw [pullbackConeOfLeftIsLimit f g⟩ WalkingCospan.right]
     change IsIso (_ ≫ pullback.snd _ _)
-   
+    infer_instance
+  apply to_iso
 
 Depends on / 依赖: TopCat, TopCat.snd_iso_of_left_embedding_range_subset, WalkingCospan, WalkingCospan.right, base_open, g.base, hf.base_open.isEmbedding, infer_instance, isEmbedding, limit.isoLimitCone_hom_, pullback, pullback.snd, pullbackConeOfLeftIsLimit, snd_iso_of_left_embedding_range_subset, to_iso
 -/
@@ -1980,7 +2168,8 @@ inferInstance by
         (cospan ((cospan f g ⋙ forget).map Hom.inl)
           ((cospan f g ⋙ forget).map Hom.inr)) (PresheafedSpace.forget C) := by
         dsimp
-        infer_inst
+        infer_instance
+      apply preservesLimit_of_iso_diagram _ (diagramIsoCospan _).symm
 
 中文:
 实例 sheafedSpace_forgetPreserves_of_left
@@ -1991,7 +2180,8 @@ inferInstance by
         (cospan ((cospan f g ⋙ forget).map Hom.inl)
           ((cospan f g ⋙ forget).map Hom.inr)) (PresheafedSpace.forget C) := by
         dsimp
-        infer_inst
+        infer_instance
+      apply preservesLimit_of_iso_diagram _ (diagramIsoCospan _).symm
 
 Depends on / 依赖: Hom.inl, Hom.inr, Limits, Limits.comp_preservesLimit, PreservesLimit, PresheafedSpace, PresheafedSpace.forget, comp_preservesLimit, cospan, diagramIsoCospan, forget, infer_instance, preservesLimit_of_iso_diagram
 -/
@@ -2077,7 +2267,7 @@ instance sheafedSpace_pullback_snd_of_left
   dsimp at this
   rw [Category.comp_id] at this
   rw [← this]
-  in
+  infer_instance
 
 中文:
 实例 sheafedSpace_pullback_snd_of_left
@@ -2090,7 +2280,7 @@ instance sheafedSpace_pullback_snd_of_left
   dsimp at this
   rw [Category.comp_id] at this
   rw [← this]
-  in
+  infer_instance
 
 Depends on / 依赖: Category, Category.comp_id, HasLimit, HasLimit.isoOfNatIso_hom_, SheafedSpace, SheafedSpace.isOpenImmersion_iff_hom, comp_id, cospan, diagramIsoCospan, forget, infer_instance, isOpenImmersion_iff_hom, pullback, pullback.snd
 -/
@@ -2121,7 +2311,7 @@ instance sheafedSpace_pullback_fst_of_right
   dsimp at this
   rw [Category.comp_id] at this
   rw [← this]
-  infe
+  infer_instance
 
 中文:
 实例 sheafedSpace_pullback_fst_of_right
@@ -2134,7 +2324,7 @@ instance sheafedSpace_pullback_fst_of_right
   dsimp at this
   rw [Category.comp_id] at this
   rw [← this]
-  infe
+  infer_instance
 
 Depends on / 依赖: Category, Category.comp_id, HasLimit, HasLimit.isoOfNatIso_hom_, SheafedSpace, SheafedSpace.isOpenImmersion_iff_hom, comp_id, cospan, diagramIsoCospan, forget, infer_instance, isOpenImmersion_iff_hom, pullback, pullback.fst
 -/
@@ -2199,7 +2389,11 @@ theorem of_stalk_iso
           (show Y.sheaf ⟶ (TopCat.Sheaf.pushforward _ f.hom.base).obj X.sheaf from ⟨f.hom.c⟩)
       rintro ⟨_, y, hy, rfl⟩
       specialize H y
-      delta PresheafedSpace.Hom
+      delta PresheafedSpace.Hom.stalkMap at H
+      have H' := TopCat.Presheaf.stalkPushforward.stalkPushforward_iso_of_isInducing C
+        hf.toIsInducing X.presheaf y
+      have := IsIso.comp_isIso' H (@IsIso.inv_isIso _ _ _ _ _ H')
+      rwa [Category.assoc, IsIso.hom_inv_id, Category.comp_id] at this }
 
 中文:
 定理 of_stalk_iso
@@ -2210,7 +2404,11 @@ theorem of_stalk_iso
           (show Y.sheaf ⟶ (TopCat.Sheaf.pushforward _ f.hom.base).obj X.sheaf from ⟨f.hom.c⟩)
       rintro ⟨_, y, hy, rfl⟩
       specialize H y
-      delta PresheafedSpace.Hom
+      delta PresheafedSpace.Hom.stalkMap at H
+      have H' := TopCat.Presheaf.stalkPushforward.stalkPushforward_iso_of_isInducing C
+        hf.toIsInducing X.presheaf y
+      have := IsIso.comp_isIso' H (@IsIso.inv_isIso _ _ _ _ _ H')
+      rwa [Category.assoc, IsIso.hom_inv_id, Category.comp_id] at this }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_, IsIso.comp_isIso, IsIso.hom_inv_id, IsIso.inv_isIso, Presheaf, PresheafedSpace, PresheafedSpace.Hom.stalkMap, TopCat, TopCat.Presheaf.app_isIso_of_stalkFunctor_map_iso, TopCat.Presheaf.stalkPushforward.stalkPushforward_iso_of_isInducing, TopCat.Sheaf.pushforward, X.presheaf, X.sheaf, Y.sheaf, allowSynthFailures, app_isIso_of_stalkFunctor_map_iso, base_open, c_iso
 -/
@@ -2586,7 +2784,14 @@ theorem sigma_ι_isOpenEmbedding
   have : _ = _ ≫ colimit.ι (Discrete.functor ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk)) i :=
     HasColimit.isoOfNatIso_ι_hom Discrete.natIsoFunctor i
   rw [← Iso.eq_comp_inv] at this
- 
+  rw [this]
+  have : colimit.ι _ _ ≫ _ = _ :=
+    TopCat.sigmaIsoSigma_hom_ι.{v, v} ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk) i.as
+  rw [← Iso.eq_comp_inv] at this
+  cases i
+  rw [this]; rw [← Category.assoc]
+  simp_rw [TopCat.isOpenEmbedding_iff_comp_isIso, (TopCat.isOpenEmbedding_iff_isIso_comp)]
+  exact .sigmaMk
 
 中文:
 定理 sigma_ι_isOpenEmbedding
@@ -2597,7 +2802,14 @@ theorem sigma_ι_isOpenEmbedding
   have : _ = _ ≫ colimit.ι (Discrete.functor ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk)) i :=
     HasColimit.isoOfNatIso_ι_hom Discrete.natIsoFunctor i
   rw [← Iso.eq_comp_inv] at this
- 
+  rw [this]
+  have : colimit.ι _ _ ≫ _ = _ :=
+    TopCat.sigmaIsoSigma_hom_ι.{v, v} ((F ⋙ SheafedSpace.forget C).obj ∘ Discrete.mk) i.as
+  rw [← Iso.eq_comp_inv] at this
+  cases i
+  rw [this]; rw [← Category.assoc]
+  simp_rw [TopCat.isOpenEmbedding_iff_comp_isIso, (TopCat.isOpenEmbedding_iff_isIso_comp)]
+  exact .sigmaMk
 
 Depends on / 依赖: Category, Category.assoc, Discrete, Discrete.functor, Discrete.mk, Discrete.natIsoFunctor, HasColimit, HasColimit.isoOfNatIso_, Iso.eq_comp_inv, SheafedSpace, SheafedSpace.forget, TopCat, TopCat.sigmaIsoSigma_hom_, colimit, eq_comp_inv, forget, functor, hom.base, i.as, natIsoFunctor
 -/
@@ -2629,7 +2841,18 @@ theorem image_preimage_is_empty
   rintro ⟨y, hy, eq⟩
   replace eq := ConcreteCategory.congr_arg (preservesColimitIso (SheafedSpace.forget C) F ≪≫
     HasColimit.isoOfNatIso Discrete.natIsoFunctor ≪≫ TopCat.sigmaIsoSigma.{v, v} _).hom eq
-  simp_rw [CategoryTheory.Iso.trans_hom, ← TopCat.comp_app, 
+  simp_rw [CategoryTheory.Iso.trans_hom, ← TopCat.comp_app, ← PresheafedSpace.comp_base] at eq
+  rw [ι_preservesColimitIso_inv] at eq
+  change
+    ((SheafedSpace.forget C).map (colimit.ι F i) ≫ (preservesColimitIso (forget C) F).hom ≫
+          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
+            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) y =
+      ((SheafedSpace.forget C).map (colimit.ι F j) ≫ (preservesColimitIso (forget C) F).hom ≫
+          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
+            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) x at eq
+  cases i; cases j
+  rw [ι_preservesColimitIso_hom_assoc]; rw [ι_preservesColimitIso_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [TopCat.sigmaIsoSigma_hom_ι]; rw [TopCat.sigmaIsoSigma_hom_ι] at eq
+  convert! h (congr_arg Discrete.mk (congr_arg Sigma.fst eq))
 
 中文:
 定理 image_preimage_is_empty
@@ -2640,7 +2863,18 @@ theorem image_preimage_is_empty
   rintro ⟨y, hy, eq⟩
   replace eq := ConcreteCategory.congr_arg (preservesColimitIso (SheafedSpace.forget C) F ≪≫
     HasColimit.isoOfNatIso Discrete.natIsoFunctor ≪≫ TopCat.sigmaIsoSigma.{v, v} _).hom eq
-  simp_rw [CategoryTheory.Iso.trans_hom, ← TopCat.comp_app, 
+  simp_rw [CategoryTheory.Iso.trans_hom, ← TopCat.comp_app, ← PresheafedSpace.comp_base] at eq
+  rw [ι_preservesColimitIso_inv] at eq
+  change
+    ((SheafedSpace.forget C).map (colimit.ι F i) ≫ (preservesColimitIso (forget C) F).hom ≫
+          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
+            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) y =
+      ((SheafedSpace.forget C).map (colimit.ι F j) ≫ (preservesColimitIso (forget C) F).hom ≫
+          (HasColimit.isoOfNatIso Discrete.natIsoFunctor).hom ≫
+            (TopCat.sigmaIsoSigma ((F ⋙ forget C).obj ∘ Discrete.mk)).hom) x at eq
+  cases i; cases j
+  rw [ι_preservesColimitIso_hom_assoc]; rw [ι_preservesColimitIso_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [HasColimit.isoOfNatIso_ι_hom_assoc]; rw [TopCat.sigmaIsoSigma_hom_ι]; rw [TopCat.sigmaIsoSigma_hom_ι] at eq
+  convert! h (congr_arg Discrete.mk (congr_arg Sigma.fst eq))
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Iso.trans_hom, ConcreteCategory, ConcreteCategory.congr_arg, Discrete, Discrete.natIsoFunctor, HasColimit, HasColimit.isoOfNatIso, PresheafedSpace, PresheafedSpace.comp_base, SheafedSpace, SheafedSpace.forget, TopCat, TopCat.comp_app, TopCat.sigmaIsoSigma, colimit, comp_app, comp_base, congr_arg, forget
 -/
@@ -2682,7 +2916,29 @@ instance sigma_ι_isOpenImmersion_aux
       { hom := (colimit.ι (F ⋙ forgetToPresheafedSpace) i ≫
         (preservesColimitIso _ F).inv) } :=
       InducedCategory.hom_ext h₁.symm
-  
+    have H :
+      IsOpenEmbedding
+        (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
+            (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).base := by
+      have := h₁.symm
+      convert! sigma_ι_isOpenEmbedding F i
+suffices IsIso (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
+        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).c.app <|
+      op (H.functor.obj U) by
+      convert! this
+    rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
+    -- Porting note: this instance created manually to make the `inferInstance` below work
+    have : IsIso (preservesColimitIso forgetToPresheafedSpace F).inv.c := inferInstance
+    suffices IsIso (limit.π (PresheafedSpace.componentwiseDiagram
+      (F ⋙ SheafedSpace.forgetToPresheafedSpace) ((Opens.map
+        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv.base).obj
+          (H.functor.obj U))) (op i)) from inferInstance
+    apply limit_π_isIso_of_is_strict_terminal
+    rintro ⟨j⟩ hj
+    dsimp
+    convert! (F.obj j).sheaf.isTerminalOfEmpty using 3
+    convert! image_preimage_is_empty F i j (fun h => hj (congr_arg op h.symm)) U using 6
+    exact congr_arg PresheafedSpace.Hom.base h₁
 
 中文:
 实例 sigma_ι_isOpenImmersion_aux
@@ -2694,7 +2950,29 @@ instance sigma_ι_isOpenImmersion_aux
       { hom := (colimit.ι (F ⋙ forgetToPresheafedSpace) i ≫
         (preservesColimitIso _ F).inv) } :=
       InducedCategory.hom_ext h₁.symm
-  
+    have H :
+      IsOpenEmbedding
+        (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
+            (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).base := by
+      have := h₁.symm
+      convert! sigma_ι_isOpenEmbedding F i
+suffices IsIso (colimit.ι (F ⋙ SheafedSpace.forgetToPresheafedSpace) i ≫
+        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv).c.app <|
+      op (H.functor.obj U) by
+      convert! this
+    rw [PresheafedSpace.comp_c_app]; rw [← PresheafedSpace.colimitPresheafObjIsoComponentwiseLimit_hom_π]
+    -- Porting note: this instance created manually to make the `inferInstance` below work
+    have : IsIso (preservesColimitIso forgetToPresheafedSpace F).inv.c := inferInstance
+    suffices IsIso (limit.π (PresheafedSpace.componentwiseDiagram
+      (F ⋙ SheafedSpace.forgetToPresheafedSpace) ((Opens.map
+        (preservesColimitIso SheafedSpace.forgetToPresheafedSpace F).inv.base).obj
+          (H.functor.obj U))) (op i)) from inferInstance
+    apply limit_π_isIso_of_is_strict_terminal
+    rintro ⟨j⟩ hj
+    dsimp
+    convert! (F.obj j).sheaf.isTerminalOfEmpty using 3
+    convert! image_preimage_is_empty F i j (fun h => hj (congr_arg op h.symm)) U using 6
+    exact congr_arg PresheafedSpace.Hom.base h₁
 -/
 instance sigma_ι_isOpenImmersion_aux [HasStrictTerminalObjects C] :
     SheafedSpace.IsOpenImmersion (colimit.ι F i) where
@@ -2742,7 +3020,8 @@ instance sigma_ι_isOpenImmersion
   have : colimit.ι F i = (colimit.ι F i ≫ (HasColimit.isoOfEquivalence f (Iso.refl _)).inv) ≫
       (HasColimit.isoOfEquivalence f (Iso.refl _)).hom := by
     simp
-  rw [this]; rw [H
+  rw [this]; rw [HasColimit.ι_isoOfEquivalence_inv]
+  infer_instance
 
 中文:
 实例 sigma_ι_isOpenImmersion
@@ -2753,7 +3032,8 @@ instance sigma_ι_isOpenImmersion
   have : colimit.ι F i = (colimit.ι F i ≫ (HasColimit.isoOfEquivalence f (Iso.refl _)).inv) ≫
       (HasColimit.isoOfEquivalence f (Iso.refl _)).hom := by
     simp
-  rw [this]; rw [H
+  rw [this]; rw [HasColimit.ι_isoOfEquivalence_inv]
+  infer_instance
 
 Depends on / 依赖: Discrete, Discrete.equivalence, HasColimit, HasColimit.isoOfEquivalence, Iso.refl, Small.equiv_small, colimit, e.symm, equiv_small, equivalence, infer_instance, isoOfEquivalence
 -/
@@ -2853,7 +3133,14 @@ definition pullbackConeOfLeft
   · use PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftFst f.1 g.1
     intro x
     have := PresheafedSpace.stalkMap.congr_hom _ _
-        (PresheafedSpace.IsOpenImmersion.pullback_cone_o
+        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition f.1 g.1) x
+    rw [PresheafedSpace.stalkMap.comp]; rw [PresheafedSpace.stalkMap.comp] at this
+    rw [← IsIso.eq_inv_comp] at this
+    rw [this]
+    dsimp
+    apply RingHom.isLocalHom_comp
+  · exact LocallyRingedSpace.Hom.ext'
+        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition _ _)
 
 中文:
 定义 pullbackConeOfLeft
@@ -2864,7 +3151,14 @@ definition pullbackConeOfLeft
   · use PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftFst f.1 g.1
     intro x
     have := PresheafedSpace.stalkMap.congr_hom _ _
-        (PresheafedSpace.IsOpenImmersion.pullback_cone_o
+        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition f.1 g.1) x
+    rw [PresheafedSpace.stalkMap.comp]; rw [PresheafedSpace.stalkMap.comp] at this
+    rw [← IsIso.eq_inv_comp] at this
+    rw [this]
+    dsimp
+    apply RingHom.isLocalHom_comp
+  · exact LocallyRingedSpace.Hom.ext'
+        (PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition _ _)
 
 Depends on / 依赖: H.base_open, IsIso.eq_inv_comp, IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.Hom.ext, PresheafedSpace, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftFst, PresheafedSpace.IsOpenImmersion.pullback_cone_of_left_condition, PresheafedSpace.stalkMap.comp, PresheafedSpace.stalkMap.congr_hom, PullbackCone, PullbackCone.mk, RingHom, RingHom.isLocalHom_comp, TopCat, TopCat.snd_isOpenEmbedding_of_left, Y.ofRestrict, base_open, congr_hom, eq_inv_comp
 -/
@@ -2912,7 +3206,26 @@ definition pullbackConeOfLeftIsLimit
     refine ⟨LocallyRingedSpace.Hom.mk (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift
         f.1 g.1 (PullbackCone.mk _ _ (congr_arg LocallyRingedSpace.Hom.toHom s.condition))) ?_,
       LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmers
+        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_fst f.1 g.1 _),
+      LocallyRingedSpace.Hom.ext'
+          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 _), ?_⟩
+    · intro x
+      have :=
+        PresheafedSpace.stalkMap.congr_hom _ _
+          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1
+            (PullbackCone.mk s.fst.1 s.snd.1
+              (congr_arg LocallyRingedSpace.Hom.toHom s.condition)))
+          x
+      change _ = _ ≫ s.snd.1.stalkMap x at this
+      rw [PresheafedSpace.stalkMap.comp]; rw [← IsIso.eq_inv_comp] at this
+      rw [this]
+      infer_instance
+    · intro m _ h₂
+      rw [← cancel_mono (pullbackConeOfLeft f g).snd]
+exact h₂.trans LocallyRingedSpace.Hom.ext'
+        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 <|
+PullbackCone.mk s.fst.1 s.snd.1 congr_arg
+            LocallyRingedSpace.Hom.toHom s.condition).symm
 
 中文:
 定义 pullbackConeOfLeftIsLimit
@@ -2921,7 +3234,26 @@ definition pullbackConeOfLeftIsLimit
     refine ⟨LocallyRingedSpace.Hom.mk (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift
         f.1 g.1 (PullbackCone.mk _ _ (congr_arg LocallyRingedSpace.Hom.toHom s.condition))) ?_,
       LocallyRingedSpace.Hom.ext'
-        (PresheafedSpace.IsOpenImmers
+        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_fst f.1 g.1 _),
+      LocallyRingedSpace.Hom.ext'
+          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 _), ?_⟩
+    · intro x
+      have :=
+        PresheafedSpace.stalkMap.congr_hom _ _
+          (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1
+            (PullbackCone.mk s.fst.1 s.snd.1
+              (congr_arg LocallyRingedSpace.Hom.toHom s.condition)))
+          x
+      change _ = _ ≫ s.snd.1.stalkMap x at this
+      rw [PresheafedSpace.stalkMap.comp]; rw [← IsIso.eq_inv_comp] at this
+      rw [this]
+      infer_instance
+    · intro m _ h₂
+      rw [← cancel_mono (pullbackConeOfLeft f g).snd]
+exact h₂.trans LocallyRingedSpace.Hom.ext'
+        (PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd f.1 g.1 <|
+PullbackCone.mk s.fst.1 s.snd.1 congr_arg
+            LocallyRingedSpace.Hom.toHom s.condition).symm
 
 Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.Hom.ext, LocallyRingedSpace.Hom.mk, LocallyRingedSpace.Hom.toHom, PresheafedSpace, PresheafedSpace.IsOpe, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_fst, PresheafedSpace.IsOpenImmersion.pullbackConeOfLeftLift_snd, PresheafedSpace.stalkMap.congr_hom, PullbackCone, PullbackCone.isLimitAux, PullbackCone.mk, condition, congr_arg, congr_hom, isLimitAux, pullbackConeOfLeftLift, pullbackConeOfLeftLift_fst
 -/
@@ -3152,7 +3484,7 @@ change PreservesLimit _
   apply +allowSynthFailures preservesLimit_of_iso_diagram
   · exact (diagramIsoCospan _).symm
   dsimp
-
+  infer_instance
 
 中文:
 实例 forgetToTop_preservesPullback_of_left
@@ -3165,7 +3497,7 @@ change PreservesLimit _
   apply +allowSynthFailures preservesLimit_of_iso_diagram
   · exact (diagramIsoCospan _).symm
   dsimp
-
+  infer_instance
 
 Depends on / 依赖: Limits, Limits.comp_preservesLimit, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace, PreservesLimit, PresheafedSpace, PresheafedSpace.forget, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, allowSynthFailures, comp_preservesLimit, diagramIsoCospan, forget, forgetToPresheafedSpace, forgetToSheafedSpace, infer_instance, preservesLimit_of_iso_diagram
 -/
@@ -3310,7 +3642,10 @@ theorem pullback_snd_isIso_of_range_subset
   apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
     (F := SheafedSpace.forgetToPresheafedSpace)
   erw [← PreservesPullback.iso_hom_snd
-      (LocallyRingedSpace.f
+      (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) f g]
+  -- Porting note: was `inferInstance`
+exact IsIso.comp_isIso' inferInstance
+    PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_range_subset _ _ H'
 
 中文:
 定理 pullback_snd_isIso_of_range_subset
@@ -3321,7 +3656,10 @@ theorem pullback_snd_isIso_of_range_subset
   apply +allowSynthFailures Functor.ReflectsIsomorphisms.reflects
     (F := SheafedSpace.forgetToPresheafedSpace)
   erw [← PreservesPullback.iso_hom_snd
-      (LocallyRingedSpace.f
+      (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forgetToPresheafedSpace) f g]
+  -- Porting note: was `inferInstance`
+exact IsIso.comp_isIso' inferInstance
+    PresheafedSpace.IsOpenImmersion.pullback_snd_isIso_of_range_subset _ _ H'
 
 Depends on / 依赖: Functor, Functor.ReflectsIsomorphisms.reflects, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace, PreservesPullback, PreservesPullback.iso_hom_snd, ReflectsIsomorphisms, SheafedSpace, SheafedSpace.forgetToPresheafedSpace, allowSynthFailures, forgetToPresheafedSpace, forgetToSheafedSpace, iso_hom_snd, reflects
 -/
@@ -3416,7 +3754,15 @@ theorem lift_range
   have : _ = (pullback.fst f g).base :=
     PreservesPullback.iso_hom_fst
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _) f g
-  rw [LocallyRingedSpace.comp_base]; rw [← this]; rw [← Category.assoc]; rw
+  rw [LocallyRingedSpace.comp_base]; rw [← this]; rw [← Category.assoc]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [Set.image_univ]
+  · rw [TopCat.pullback_fst_range]
+    ext
+    constructor
+    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
+    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
+  · rw [← TopCat.epi_iff_surjective, show (inv (pullback.snd f g)).base = _ from
+        (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _).map_inv _]
+    infer_instance
 
 中文:
 定理 lift_range
@@ -3427,7 +3773,15 @@ theorem lift_range
   have : _ = (pullback.fst f g).base :=
     PreservesPullback.iso_hom_fst
       (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _) f g
-  rw [LocallyRingedSpace.comp_base]; rw [← this]; rw [← Category.assoc]; rw
+  rw [LocallyRingedSpace.comp_base]; rw [← this]; rw [← Category.assoc]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [Set.image_univ]
+  · rw [TopCat.pullback_fst_range]
+    ext
+    constructor
+    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
+    · rintro ⟨y, eq⟩; exact ⟨y, eq.symm⟩
+  · rw [← TopCat.epi_iff_surjective, show (inv (pullback.snd f g)).base = _ from
+        (LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget _).map_inv _]
+    infer_instance
 
 Depends on / 依赖: Category, Category.assoc, LocallyRingedSpace, LocallyRingedSpace.comp_base, LocallyRingedSpace.forgetToSheafedSpace, PreservesPullback, PreservesPullback.iso_hom_fst, Set.image_univ, Set.range_comp, Set.range_eq_univ.mpr, SheafedSpace, SheafedSpace.forget, TopCat, TopCat.coe_comp, TopCat.pullback_fst_range, coe_comp, comp_base, eq.symm, forget, forgetToSheafedSpace
 -/

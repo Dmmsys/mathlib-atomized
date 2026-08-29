@@ -108,7 +108,18 @@ lemma AnalyticAt.meromorphicTrailingCoeffAt_of_eq_nhdsNE
   by_cases h₃ : meromorphicOrderAt f x = ⊤
   · simp only [h₃, WithTop.untop₀_top, zpow_zero, one_smul,
       MeromorphicAt.meromorphicTrailingCoeffAt_of_order_eq_top] at ⊢ h
-    apply EventuallyEq.eq_of
+    apply EventuallyEq.eq_of_nhds (f := 0)
+    rw [← ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE (by fun_prop) (by fun_prop)]
+    apply (h.symm.trans (meromorphicOrderAt_eq_top_iff.1 h₃)).symm
+  · unfold meromorphicTrailingCoeffAt
+    simp only [h₁f, reduceDIte, h₃, ne_eq]
+    obtain ⟨h'₁, h'₂, h'₃⟩ := ((meromorphicOrderAt_ne_top_iff h₁f).1 h₃).choose_spec
+    apply Filter.EventuallyEq.eq_of_nhds
+    rw [← h'₁.continuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE h₁g.continuousAt]
+    filter_upwards [h, h'₃, self_mem_nhdsWithin] with y h₁y h₂y h₃y
+    rw [← sub_eq_zero]
+    rwa [h₂y, ← sub_eq_zero, ← smul_sub, smul_eq_zero_iff_right] at h₁y
+    simp_all [zpow_ne_zero, sub_ne_zero]
 
 中文:
 引理 AnalyticAt.meromorphicTrailingCoeffAt_of_eq_nhdsNE
@@ -120,7 +131,18 @@ lemma AnalyticAt.meromorphicTrailingCoeffAt_of_eq_nhdsNE
   by_cases h₃ : meromorphicOrderAt f x = ⊤
   · simp only [h₃, WithTop.untop₀_top, zpow_zero, one_smul,
       MeromorphicAt.meromorphicTrailingCoeffAt_of_order_eq_top] at ⊢ h
-    apply EventuallyEq.eq_of
+    apply EventuallyEq.eq_of_nhds (f := 0)
+    rw [← ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE (by fun_prop) (by fun_prop)]
+    apply (h.symm.trans (meromorphicOrderAt_eq_top_iff.1 h₃)).symm
+  · unfold meromorphicTrailingCoeffAt
+    simp only [h₁f, reduceDIte, h₃, ne_eq]
+    obtain ⟨h'₁, h'₂, h'₃⟩ := ((meromorphicOrderAt_ne_top_iff h₁f).1 h₃).choose_spec
+    apply Filter.EventuallyEq.eq_of_nhds
+    rw [← h'₁.continuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE h₁g.continuousAt]
+    filter_upwards [h, h'₃, self_mem_nhdsWithin] with y h₁y h₂y h₃y
+    rw [← sub_eq_zero]
+    rwa [h₂y, ← sub_eq_zero, ← smul_sub, smul_eq_zero_iff_right] at h₁y
+    simp_all [zpow_ne_zero, sub_ne_zero]
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE, EventuallyEq, EventuallyEq.eq_of_nhds, MeromorphicAt, MeromorphicAt.meromorphicAt_congr, MeromorphicAt.meromorphicTrailingCoeffAt_of_order_eq_top, WithTop, WithTop.untop, eq_of_nhds, eventuallyEq_nhds_iff_eventuallyEq_nhdsNE, fun_prop, h.symm.trans, meromorphicAt_congr, meromorphicOrderAt, meromorphicOrderAt_eq_top_iff, meromorphicTrailingCoeffAt, meromorphicTrailingCoeffAt_of_order_eq_top, one_smul, zpow_zero
 -/
@@ -233,7 +255,15 @@ lemma MeromorphicAt.tendsto_nhds_meromorphicTrailingCoeffAt
     apply Tendsto.congr' (f₁ := 0)
     · filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₂] with y hy
       simp_all
-    · apply Tend
+    · apply Tendsto.congr' (f₁ := 0) (by rfl) continuousWithinAt_const.tendsto
+  obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h).1 h₂
+  apply Tendsto.congr' (f₁ := g)
+  · filter_upwards [h₃g, self_mem_nhdsWithin] with y h₁y h₂y
+    rw [zpow_neg]; rw [Pi.smul_apply']; rw [Pi.inv_apply]; rw [Pi.pow_apply]; rw [h₁y]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [← zpow_neg]; rw [← zpow_add']; rw [neg_add_cancel]; rw [zpow_zero]; rw [one_smul]
+    left
+    simp_all [sub_ne_zero]
+  · rw [h₁g.meromorphicTrailingCoeffAt_of_eq_nhdsNE h₃g]
+    apply h₁g.continuousAt.continuousWithinAt
 
 中文:
 引理 MeromorphicAt.tendsto_nhds_meromorphicTrailingCoeffAt
@@ -245,7 +275,15 @@ lemma MeromorphicAt.tendsto_nhds_meromorphicTrailingCoeffAt
     apply Tendsto.congr' (f₁ := 0)
     · filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₂] with y hy
       simp_all
-    · apply Tend
+    · apply Tendsto.congr' (f₁ := 0) (by rfl) continuousWithinAt_const.tendsto
+  obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h).1 h₂
+  apply Tendsto.congr' (f₁ := g)
+  · filter_upwards [h₃g, self_mem_nhdsWithin] with y h₁y h₂y
+    rw [zpow_neg]; rw [Pi.smul_apply']; rw [Pi.inv_apply]; rw [Pi.pow_apply]; rw [h₁y]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [← zpow_neg]; rw [← zpow_add']; rw [neg_add_cancel]; rw [zpow_zero]; rw [one_smul]
+    left
+    simp_all [sub_ne_zero]
+  · rw [h₁g.meromorphicTrailingCoeffAt_of_eq_nhdsNE h₃g]
+    apply h₁g.continuousAt.continuousWithinAt
 
 Depends on / 依赖: Tendsto, Tendsto.congr, WithTop, WithTop.untop, continuousWithinAt_const, continuousWithinAt_const.tendsto, filter_upwards, meromorphicOrderAt, meromorphicOrderAt_eq_top_iff, meromorphicOrderAt_ne_top_iff, meromorphicTrailingCoeffAt_of_order_eq_top, neg_zero, one_smul, self_mem_nhdsWithin, tendsto, zpow_zero
 -/
@@ -351,7 +389,7 @@ theorem meromorphicTrailingCoeffAt_id_sub_const
     simp
   · simp_all only [ite_false]
     apply AnalyticAt.meromorphicTrailingCoeffAt_of_ne_zero (by fun_prop)
- 
+    simp_all [sub_ne_zero]
 
 中文:
 定理 meromorphicTrailingCoeffAt_id_sub_const
@@ -364,7 +402,7 @@ theorem meromorphicTrailingCoeffAt_id_sub_const
     simp
   · simp_all only [ite_false]
     apply AnalyticAt.meromorphicTrailingCoeffAt_of_ne_zero (by fun_prop)
- 
+    simp_all [sub_ne_zero]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.meromorphicTrailingCoeffAt_of_ne_zero, AnalyticAt.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, fun_prop, ite_false, ite_true, meromorphicTrailingCoeffAt_of_ne_zero, meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, one_ne_zero, sub_ne_zero, sub_self
 -/
@@ -396,7 +434,7 @@ lemma meromorphicTrailingCoeffAt_congr_nhdsNE
   by_cases h₂ : meromorphicOrderAt f₁ x = ⊤
   · simp_all [meromorphicOrderAt_congr h]
   obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h₁).1 h₂
-  rw [h₁g.meromorphic
+  rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g h₃g]; rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g (h.symm.trans h₃g)]
 
 中文:
 引理 meromorphicTrailingCoeffAt_congr_nhdsNE
@@ -408,7 +446,7 @@ lemma meromorphicTrailingCoeffAt_congr_nhdsNE
   by_cases h₂ : meromorphicOrderAt f₁ x = ⊤
   · simp_all [meromorphicOrderAt_congr h]
   obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h₁).1 h₂
-  rw [h₁g.meromorphic
+  rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g h₃g]; rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g (h.symm.trans h₃g)]
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.meromorphicAt_congr, g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, h.symm.trans, meromorphicAt_congr, meromorphicOrderAt, meromorphicOrderAt_congr, meromorphicOrderAt_ne_top_iff, meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, not_not
 -/
@@ -440,7 +478,11 @@ theorem meromorphicTrailingCoeffAt_neg
   · simp_all [← meromorphicOrderAt_neg]
   obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h₁).1 h₂
   rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g h₃g]
-  rw [
+  rw [AnalyticAt.meromorphicTrailingCoeffAt_of_eq_nhdsNE (g := -g)]
+  · simp
+  · fun_prop
+  · filter_upwards [h₃g] with a ha
+    simp [ha, ← meromorphicOrderAt_neg]
 
 中文:
 定理 meromorphicTrailingCoeffAt_neg
@@ -453,7 +495,11 @@ theorem meromorphicTrailingCoeffAt_neg
   · simp_all [← meromorphicOrderAt_neg]
   obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h₁).1 h₂
   rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g h₃g]
-  rw [
+  rw [AnalyticAt.meromorphicTrailingCoeffAt_of_eq_nhdsNE (g := -g)]
+  · simp
+  · fun_prop
+  · filter_upwards [h₃g] with a ha
+    simp [ha, ← meromorphicOrderAt_neg]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.meromorphicTrailingCoeffAt_of_eq_nhdsNE, MeromorphicAt, filter_upwards, fun_prop, g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, meromorphicOrderAt, meromorphicOrderAt_ne_top_iff, meromorphicOrderAt_neg, meromorphicTrailingCoeffAt_of_eq_nhdsNE, meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, not_not
 -/
@@ -505,7 +551,28 @@ theorem MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_left_of_lt
     simp_all
   -- Trivial case: f₂ vanishes locally around x
   by_cases h₁f₂ : meromorphicOrderAt f₂ x = ⊤
-  
+  · apply meromorphicTrailingCoeffAt_congr_nhdsNE
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₁f₂]
+    simp
+  -- General case
+  lift meromorphicOrderAt f₂ x to Int using h₁f₂ with n₂ hn₂
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  lift meromorphicOrderAt f₁ x to Int using (by aesop) with n₁ hn₁
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  rw [WithTop.coe_lt_coe] at h
+  have τ₀ : forallᶠ z in 𝓝[!=] x, (f₁ + f₂) z = (z - x) ^ n₁ • (g₁ + (z - x) ^ (n₂ - n₁) • g₂) z := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin] with z h₁z h₂z h₃z
+    simp only [Pi.add_apply, h₁z, h₂z, Pi.smul_apply, smul_add, ← smul_assoc, smul_eq_mul,
+      add_right_inj]
+    rw [← zpow_add₀]; rw [add_sub_cancel]
+    simp_all [sub_ne_zero]
+  have τ₁ : AnalyticAt 𝕜 (fun z => g₁ z + (z - x) ^ (n₂ - n₁) • g₂ z) x :=
+    h₁g₁.fun_add (AnalyticAt.fun_smul (AnalyticAt.fun_zpow_nonneg (by fun_prop)
+      (sub_nonneg_of_le h.le)) h₁g₂)
+  have τ₂ : g₁ x + (x - x) ^ (n₂ - n₁) • g₂ x != 0 := by
+    simp_all [zero_zpow _ (sub_ne_zero.2 (ne_of_lt h).symm)]
+  rw [h₁g₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₁ h₃g₁]; rw [τ₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE τ₂ τ₀]; rw [sub_self]; rw [add_eq_left]; rw [smul_eq_zero]; rw [zero_zpow _ (sub_ne_zero.2 (ne_of_lt h).symm)]
+  tauto
 
 中文:
 定理 MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_left_of_lt
@@ -518,7 +585,28 @@ theorem MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_left_of_lt
     simp_all
   -- Trivial case: f₂ vanishes locally around x
   by_cases h₁f₂ : meromorphicOrderAt f₂ x = ⊤
-  
+  · apply meromorphicTrailingCoeffAt_congr_nhdsNE
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₁f₂]
+    simp
+  -- General case
+  lift meromorphicOrderAt f₂ x to Int using h₁f₂ with n₂ hn₂
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  lift meromorphicOrderAt f₁ x to Int using (by aesop) with n₁ hn₁
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  rw [WithTop.coe_lt_coe] at h
+  have τ₀ : forallᶠ z in 𝓝[!=] x, (f₁ + f₂) z = (z - x) ^ n₁ • (g₁ + (z - x) ^ (n₂ - n₁) • g₂) z := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin] with z h₁z h₂z h₃z
+    simp only [Pi.add_apply, h₁z, h₂z, Pi.smul_apply, smul_add, ← smul_assoc, smul_eq_mul,
+      add_right_inj]
+    rw [← zpow_add₀]; rw [add_sub_cancel]
+    simp_all [sub_ne_zero]
+  have τ₁ : AnalyticAt 𝕜 (fun z => g₁ z + (z - x) ^ (n₂ - n₁) • g₂ z) x :=
+    h₁g₁.fun_add (AnalyticAt.fun_smul (AnalyticAt.fun_zpow_nonneg (by fun_prop)
+      (sub_nonneg_of_le h.le)) h₁g₂)
+  have τ₂ : g₁ x + (x - x) ^ (n₂ - n₁) • g₂ x != 0 := by
+    simp_all [zero_zpow _ (sub_ne_zero.2 (ne_of_lt h).symm)]
+  rw [h₁g₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₁ h₃g₁]; rw [τ₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE τ₂ τ₀]; rw [sub_self]; rw [add_eq_left]; rw [smul_eq_zero]; rw [zero_zpow _ (sub_ne_zero.2 (ne_of_lt h).symm)]
+  tauto
 -/
 theorem MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_left_of_lt {f₁ f₂ : 𝕜 -> E}
     (hf₂ : MeromorphicAt f₂ x) (h : meromorphicOrderAt f₁ x < meromorphicOrderAt f₂ x) :
@@ -635,7 +723,16 @@ theorem MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_add
     filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₁f₁]
     simp
   -- General case
- 
+  lift meromorphicOrderAt f₁ x to Int using (by lia) with n₁ hn₁
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  lift meromorphicOrderAt f₂ x to Int using (by lia) with n₂ hn₂
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  rw [WithTop.coe_eq_coe]; rw [h₁g₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₁ h₃g₁]; rw [h₁g₂.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₂ h₃g₂] at *
+  have τ₀ : forallᶠ z in 𝓝[!=] x, (f₁ + f₂) z = (z - x) ^ n₁ • (g₁ + g₂) z := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin] with z h₁z h₂z h₃z
+    simp_all
+  simp [AnalyticAt.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE (by fun_prop)
+    (by simp_all) τ₀]
 
 中文:
 定理 MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_add
@@ -648,7 +745,16 @@ theorem MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_add
     filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₁f₁]
     simp
   -- General case
- 
+  lift meromorphicOrderAt f₁ x to Int using (by lia) with n₁ hn₁
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  lift meromorphicOrderAt f₂ x to Int using (by lia) with n₂ hn₂
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  rw [WithTop.coe_eq_coe]; rw [h₁g₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₁ h₃g₁]; rw [h₁g₂.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₂ h₃g₂] at *
+  have τ₀ : forallᶠ z in 𝓝[!=] x, (f₁ + f₂) z = (z - x) ^ n₁ • (g₁ + g₂) z := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin] with z h₁z h₂z h₃z
+    simp_all
+  simp [AnalyticAt.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE (by fun_prop)
+    (by simp_all) τ₀]
 -/
 theorem MeromorphicAt.meromorphicTrailingCoeffAt_add_eq_add {f₁ f₂ : 𝕜 -> E}
     (hf₁ : MeromorphicAt f₁ x) (hf₂ : MeromorphicAt f₂ x)
@@ -766,7 +872,14 @@ lemma MeromorphicAt.meromorphicTrailingCoeffAt_smul
   by_cases h₁f₂ : meromorphicOrderAt f₂ x = ⊤
   · simp_all [meromorphicOrderAt_smul hf₁ hf₂]
   obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_ne_top_iff hf₁).1 h₁f₁
-  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ :
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_ne_top_iff hf₂).1 h₁f₂
+  have : f₁ • f₂ =ᶠ[𝓝[!=] x]
+      fun z => (z - x) ^ (meromorphicOrderAt (f₁ • f₂) x).untop₀ • (g₁ • g₂) z := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin] with y h₁y h₂y h₃y
+    simp_all [meromorphicOrderAt_smul hf₁ hf₂, zpow_add₀ (sub_ne_zero.2 h₃y)]
+    module
+  rw [h₁g₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₁ h₃g₁]; rw [h₁g₂.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₂ h₃g₂]; rw [(h₁g₁.smul h₁g₂).meromorphicTrailingCoeffAt_of_eq_nhdsNE this]
+  simp
 
 中文:
 引理 MeromorphicAt.meromorphicTrailingCoeffAt_smul
@@ -777,7 +890,14 @@ lemma MeromorphicAt.meromorphicTrailingCoeffAt_smul
   by_cases h₁f₂ : meromorphicOrderAt f₂ x = ⊤
   · simp_all [meromorphicOrderAt_smul hf₁ hf₂]
   obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_ne_top_iff hf₁).1 h₁f₁
-  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ :
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_ne_top_iff hf₂).1 h₁f₂
+  have : f₁ • f₂ =ᶠ[𝓝[!=] x]
+      fun z => (z - x) ^ (meromorphicOrderAt (f₁ • f₂) x).untop₀ • (g₁ • g₂) z := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin] with y h₁y h₂y h₃y
+    simp_all [meromorphicOrderAt_smul hf₁ hf₂, zpow_add₀ (sub_ne_zero.2 h₃y)]
+    module
+  rw [h₁g₁.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₁ h₃g₁]; rw [h₁g₂.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂g₂ h₃g₂]; rw [(h₁g₁.smul h₁g₂).meromorphicTrailingCoeffAt_of_eq_nhdsNE this]
+  simp
 
 Depends on / 依赖: filter_upwards, meromorphicOrderAt, meromorphicOrderAt_ne_top_iff, meromorphicOrderAt_smul, self_mem_nhdsWithin
 -/
@@ -877,7 +997,8 @@ theorem meromorphicTrailingCoeffAt_prod
     have : forall σ₀ in s₁, MeromorphicAt (f σ₀) x := by
       intro τ hτ
       apply h τ (Finset.mem_insert_of_mem hτ)
-    rw [Finset.prod_insert hσ]; rw [Fins
+    rw [Finset.prod_insert hσ]; rw [Finset.prod_insert hσ]; rw [(h σ (Finset.mem_insert_self σ s₁)).meromorphicTrailingCoeffAt_mul
+      (MeromorphicAt.prod this)]; rw [hind this]
 
 中文:
 定理 meromorphicTrailingCoeffAt_prod
@@ -891,7 +1012,8 @@ theorem meromorphicTrailingCoeffAt_prod
     have : forall σ₀ in s₁, MeromorphicAt (f σ₀) x := by
       intro τ hτ
       apply h τ (Finset.mem_insert_of_mem hτ)
-    rw [Finset.prod_insert hσ]; rw [Fins
+    rw [Finset.prod_insert hσ]; rw [Finset.prod_insert hσ]; rw [(h σ (Finset.mem_insert_self σ s₁)).meromorphicTrailingCoeffAt_mul
+      (MeromorphicAt.prod this)]; rw [hind this]
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_insert, MeromorphicAt, MeromorphicAt.prod, classical, insert, mem_insert_of_mem, mem_insert_self, meromorphicTrailingCoeffAt_const, meromorphicTrailingCoeffAt_mul, prod_insert
 -/
@@ -948,7 +1070,11 @@ lemma meromorphicTrailingCoeffAt_inv
     have : f⁻¹ * f =ᶠ[𝓝[!=] x] 1 := by
       filter_upwards [(meromorphicOrderAt_ne_top_iff_eventually_ne_zero h₁).1 h₂]
       simp_all
-    rw [← mul_eq_one_iff
+    rw [← mul_eq_one_iff_eq_inv₀ (h₁.meromorphicTrailingCoeffAt_ne_zero h₂)]; rw [← h₁.inv.meromorphicTrailingCoeffAt_mul h₁]; rw [meromorphicTrailingCoeffAt_congr_nhdsNE this]; rw [analyticAt_const.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE (n := 0)]
+    · simp
+    · simp only [zpow_zero, smul_eq_mul, mul_one]
+      exact eventuallyEq_nhdsWithin_of_eqOn fun _ => congrFun rfl
+  · simp_all
 
 中文:
 引理 meromorphicTrailingCoeffAt_inv
@@ -960,7 +1086,11 @@ lemma meromorphicTrailingCoeffAt_inv
     have : f⁻¹ * f =ᶠ[𝓝[!=] x] 1 := by
       filter_upwards [(meromorphicOrderAt_ne_top_iff_eventually_ne_zero h₁).1 h₂]
       simp_all
-    rw [← mul_eq_one_iff
+    rw [← mul_eq_one_iff_eq_inv₀ (h₁.meromorphicTrailingCoeffAt_ne_zero h₂)]; rw [← h₁.inv.meromorphicTrailingCoeffAt_mul h₁]; rw [meromorphicTrailingCoeffAt_congr_nhdsNE this]; rw [analyticAt_const.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE (n := 0)]
+    · simp
+    · simp only [zpow_zero, smul_eq_mul, mul_one]
+      exact eventuallyEq_nhdsWithin_of_eqOn fun _ => congrFun rfl
+  · simp_all
 
 Depends on / 依赖: MeromorphicAt, analyticAt_const, analyticAt_const.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, filter_upwards, inv.meromorphicTrailingCoeffAt_mul, meromorphicOrderAt, meromorphicOrderAt_inv, meromorphicOrderAt_ne_top_iff_eventually_ne_zero, meromorphicTrailingCoeffAt_congr_nhdsNE, meromorphicTrailingCoeffAt_mul, meromorphicTrailingCoeffAt_ne_zero, meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE
 -/
@@ -1009,7 +1139,14 @@ lemma MeromorphicAt.meromorphicTrailingCoeffAt_zpow
     · simp only [h₃, zpow_zero]
       apply analyticAt_const.meromorphicTrailingCoeffAt_of_ne_zero (ne_zero_of_eq_one rfl)
     · simp_all [meromorphicOrderAt_zpow h₁, zero_zpow n h₃]
-  · obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOr
+  · obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h₁).1 h₂
+    rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE
+        (n := (meromorphicOrderAt f x).untop₀) h₂g h₃g]; rw [(h₁g.zpow h₂g (n := n)).meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE
+        (n := (meromorphicOrderAt (f ^ n) x).untop₀)
+        (by simp_all [zpow_ne_zero])]
+    · simp only [Pi.pow_apply]
+    · filter_upwards [h₃g] with a ha
+      simp_all [mul_zpow, ← zpow_mul, meromorphicOrderAt_zpow h₁, mul_comm]
 
 中文:
 引理 MeromorphicAt.meromorphicTrailingCoeffAt_zpow
@@ -1020,7 +1157,14 @@ lemma MeromorphicAt.meromorphicTrailingCoeffAt_zpow
     · simp only [h₃, zpow_zero]
       apply analyticAt_const.meromorphicTrailingCoeffAt_of_ne_zero (ne_zero_of_eq_one rfl)
     · simp_all [meromorphicOrderAt_zpow h₁, zero_zpow n h₃]
-  · obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOr
+  · obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff h₁).1 h₂
+    rw [h₁g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE
+        (n := (meromorphicOrderAt f x).untop₀) h₂g h₃g]; rw [(h₁g.zpow h₂g (n := n)).meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE
+        (n := (meromorphicOrderAt (f ^ n) x).untop₀)
+        (by simp_all [zpow_ne_zero])]
+    · simp only [Pi.pow_apply]
+    · filter_upwards [h₃g] with a ha
+      simp_all [mul_zpow, ← zpow_mul, meromorphicOrderAt_zpow h₁, mul_comm]
 
 Depends on / 依赖: analyticAt_const, analyticAt_const.meromorphicTrailingCoeffAt_of_ne_zero, g.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, g.zpow, meromorphicOrderAt, meromorphicOrderAt_ne_top_iff, meromorphicOrderAt_zpow, meromorphicTrailingCoeffAt_of_ne_zero, meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE, ne_zero_of_eq_one, zero_zpow, zpow_zero
 -/
@@ -1119,7 +1263,15 @@ theorem MeromorphicAt.meromorphicTrailingCoeffAt_comp
       rw [meromorphicOrderAt_eq_top_iff] at *
       exact (hg.map_nhdsNE hg_nc) h
     aesop
-  · set r := (meromorphicOrderAt
+  · set r := (meromorphicOrderAt f (g x)).untop₀
+    obtain ⟨F, h₁F, h₂F, h₃F⟩ := (meromorphicOrderAt_ne_top_iff hf).1 h
+    have h₁ : meromorphicTrailingCoeffAt (f ∘ g) x
+        = meromorphicTrailingCoeffAt ((g · - g x) ^ r • (F ∘ g)) x := by
+      apply meromorphicTrailingCoeffAt_congr_nhdsNE
+      apply Filter.Tendsto.eventually (hg.map_nhdsNE hg_nc) h₃F
+    rw [h₁]; rw [MeromorphicAt.meromorphicTrailingCoeffAt_smul (by fun_prop) (by fun_prop)]; rw [(h₁F.comp hg).meromorphicTrailingCoeffAt_of_ne_zero h₂F]; rw [h₁F.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂F h₃F]
+    simp_all only [ne_eq, Function.comp_apply, not_false_eq_true, smul_left_inj]
+    apply MeromorphicAt.meromorphicTrailingCoeffAt_zpow (by fun_prop)
 
 中文:
 定理 MeromorphicAt.meromorphicTrailingCoeffAt_comp
@@ -1131,7 +1283,15 @@ theorem MeromorphicAt.meromorphicTrailingCoeffAt_comp
       rw [meromorphicOrderAt_eq_top_iff] at *
       exact (hg.map_nhdsNE hg_nc) h
     aesop
-  · set r := (meromorphicOrderAt
+  · set r := (meromorphicOrderAt f (g x)).untop₀
+    obtain ⟨F, h₁F, h₂F, h₃F⟩ := (meromorphicOrderAt_ne_top_iff hf).1 h
+    have h₁ : meromorphicTrailingCoeffAt (f ∘ g) x
+        = meromorphicTrailingCoeffAt ((g · - g x) ^ r • (F ∘ g)) x := by
+      apply meromorphicTrailingCoeffAt_congr_nhdsNE
+      apply Filter.Tendsto.eventually (hg.map_nhdsNE hg_nc) h₃F
+    rw [h₁]; rw [MeromorphicAt.meromorphicTrailingCoeffAt_smul (by fun_prop) (by fun_prop)]; rw [(h₁F.comp hg).meromorphicTrailingCoeffAt_of_ne_zero h₂F]; rw [h₁F.meromorphicTrailingCoeffAt_of_ne_zero_of_eq_nhdsNE h₂F h₃F]
+    simp_all only [ne_eq, Function.comp_apply, not_false_eq_true, smul_left_inj]
+    apply MeromorphicAt.meromorphicTrailingCoeffAt_zpow (by fun_prop)
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.meromorphicTrailingCoeffAt_of_order_eq_top, hg.map_nhdsNE, hg_nc, map_nhdsNE, meromorphicOrderAt, meromorphicOrderAt_eq_top_iff, meromorphicOrderAt_ne_top_iff, meromorphicTrailingCoeffA, meromorphicTrailingCoeffAt, meromorphicTrailingCoeffAt_of_order_eq_top
 -/
@@ -1170,7 +1330,7 @@ theorem meromorphicTrailingCoeffAt_comp_add_const_eq_meromorphicTrailingCoeffAt
   · simp_all [meromorphicAt_comp_add_const_iff_meromorphicAt.not.2 h]
   rw [MeromorphicAt.meromorphicTrailingCoeffAt_comp (by simp_all) (by fun_prop)
     (by simp [eventuallyConst_iff_analyticOrderAt_sub_eq_top])]
-  simp [meromorphicTrailingCoe
+  simp [meromorphicTrailingCoeffAt_id_sub_const]
 
 中文:
 定理 meromorphicTrailingCoeffAt_comp_add_const_eq_meromorphicTrailingCoeffAt
@@ -1181,7 +1341,7 @@ theorem meromorphicTrailingCoeffAt_comp_add_const_eq_meromorphicTrailingCoeffAt
   · simp_all [meromorphicAt_comp_add_const_iff_meromorphicAt.not.2 h]
   rw [MeromorphicAt.meromorphicTrailingCoeffAt_comp (by simp_all) (by fun_prop)
     (by simp [eventuallyConst_iff_analyticOrderAt_sub_eq_top])]
-  simp [meromorphicTrailingCoe
+  simp [meromorphicTrailingCoeffAt_id_sub_const]
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.meromorphicTrailingCoeffAt_comp, classical, eventuallyConst_iff_analyticOrderAt_sub_eq_top, fun_prop, meromorphicAt_comp_add_const_iff_meromorphicAt, meromorphicAt_comp_add_const_iff_meromorphicAt.not, meromorphicTrailingCoeffAt_comp, meromorphicTrailingCoeffAt_id_sub_const
 -/

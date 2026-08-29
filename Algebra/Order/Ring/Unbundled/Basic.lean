@@ -112,7 +112,7 @@ theorem mul_le_mul_of_nonpos_left
   calc
     _ = d * b := by rw [add_left_comm, ← add_mul, ← hcd, zero_mul, add_zero]
 _ <= d * a := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
-    _ = _ := by rw [← add_assoc, ← add_mul, ← h
+    _ = _ := by rw [← add_assoc, ← add_mul, ← hcd, zero_mul, zero_add]
 
 中文:
 定理 mul_le_mul_of_nonpos_left
@@ -123,7 +123,7 @@ _ <= d * a := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
   calc
     _ = d * b := by rw [add_left_comm, ← add_mul, ← hcd, zero_mul, add_zero]
 _ <= d * a := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
-    _ = _ := by rw [← add_assoc, ← add_mul, ← h
+    _ = _ := by rw [← add_assoc, ← add_mul, ← hcd, zero_mul, zero_add]
 
 Depends on / 依赖: add_assoc, add_le_of_nonpos_left, add_left_comm, add_mul, add_zero, exists_add_of_le, hcd.trans_le, le_of_add_le_add_right, trans_le, zero_add, zero_mul
 -/
@@ -149,7 +149,7 @@ theorem mul_le_mul_of_nonpos_right
   calc
     _ = b * d := by rw [add_left_comm, ← mul_add, ← hcd, mul_zero, add_zero]
 _ <= a * d := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
-    _ = _ := by rw [← add_assoc, ← mul_add, ← h
+    _ = _ := by rw [← add_assoc, ← mul_add, ← hcd, mul_zero, zero_add]
 
 中文:
 定理 mul_le_mul_of_nonpos_right
@@ -160,7 +160,7 @@ _ <= a * d := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
   calc
     _ = b * d := by rw [add_left_comm, ← mul_add, ← hcd, mul_zero, add_zero]
 _ <= a * d := by gcongr; exact hcd.trans_le add_le_of_nonpos_left hc
-    _ = _ := by rw [← add_assoc, ← mul_add, ← h
+    _ = _ := by rw [← add_assoc, ← mul_add, ← hcd, mul_zero, zero_add]
 
 Depends on / 依赖: add_assoc, add_le_of_nonpos_left, add_left_comm, add_zero, exists_add_of_le, hcd.trans_le, le_of_add_le_add_right, mul_add, mul_zero, trans_le, zero_add
 -/
@@ -634,7 +634,7 @@ theorem mul_lt_mul_of_neg_left
   calc
     _ = d * b := by rw [add_left_comm, ← add_mul, ← hcd, zero_mul, add_zero]
 _ < d * a := mul_lt_mul_of_pos_left h hcd.trans_lt add_lt_of_neg_left _ hc
-    _ = _ := by rw [← add_assoc, ← add_mu
+    _ = _ := by rw [← add_assoc, ← add_mul, ← hcd, zero_mul, zero_add]
 
 中文:
 定理 mul_lt_mul_of_neg_left
@@ -645,7 +645,7 @@ _ < d * a := mul_lt_mul_of_pos_left h hcd.trans_lt add_lt_of_neg_left _ hc
   calc
     _ = d * b := by rw [add_left_comm, ← add_mul, ← hcd, zero_mul, add_zero]
 _ < d * a := mul_lt_mul_of_pos_left h hcd.trans_lt add_lt_of_neg_left _ hc
-    _ = _ := by rw [← add_assoc, ← add_mu
+    _ = _ := by rw [← add_assoc, ← add_mul, ← hcd, zero_mul, zero_add]
 
 Depends on / 依赖: add_assoc, add_left_comm, add_lt_add_iff_right, add_lt_of_neg_left, add_mul, add_zero, exists_add_of_le, hc.le, hcd.trans_lt, mul_lt_mul_of_pos_left, trans_lt, zero_add, zero_mul
 -/
@@ -671,7 +671,7 @@ theorem mul_lt_mul_of_neg_right
   calc
     _ = b * d := by rw [add_left_comm, ← mul_add, ← hcd, mul_zero, add_zero]
 _ < a * d := mul_lt_mul_of_pos_right h hcd.trans_lt add_lt_of_neg_left _ hc
-    _ = _ := by rw [← add_assoc, ← mul_a
+    _ = _ := by rw [← add_assoc, ← mul_add, ← hcd, mul_zero, zero_add]
 
 中文:
 定理 mul_lt_mul_of_neg_right
@@ -682,7 +682,7 @@ _ < a * d := mul_lt_mul_of_pos_right h hcd.trans_lt add_lt_of_neg_left _ hc
   calc
     _ = b * d := by rw [add_left_comm, ← mul_add, ← hcd, mul_zero, add_zero]
 _ < a * d := mul_lt_mul_of_pos_right h hcd.trans_lt add_lt_of_neg_left _ hc
-    _ = _ := by rw [← add_assoc, ← mul_a
+    _ = _ := by rw [← add_assoc, ← mul_add, ← hcd, mul_zero, zero_add]
 
 Depends on / 依赖: add_assoc, add_left_comm, add_lt_add_iff_right, add_lt_of_neg_left, add_zero, exists_add_of_le, hc.le, hcd.trans_lt, mul_add, mul_lt_mul_of_pos_right, mul_zero, trans_lt, zero_add
 -/
@@ -1064,7 +1064,7 @@ theorem nonneg_and_nonneg_or_nonpos_and_nonpos_of_mul_nonneg
   rcases lt_trichotomy 0 a with (ha | rfl | ha)
   · exact mul_neg_of_pos_of_neg ha (ab ha.le)
   · exact ((ab le_rfl).asymm (nab le_rfl)).elim
-  · exact mul_neg_of_neg_of_pos ha (na
+  · exact mul_neg_of_neg_of_pos ha (nab ha.le)
 
 中文:
 定理 nonneg_and_nonneg_or_nonpos_and_nonpos_of_mul_nonneg
@@ -1074,7 +1074,7 @@ theorem nonneg_and_nonneg_or_nonpos_and_nonpos_of_mul_nonneg
   rcases lt_trichotomy 0 a with (ha | rfl | ha)
   · exact mul_neg_of_pos_of_neg ha (ab ha.le)
   · exact ((ab le_rfl).asymm (nab le_rfl)).elim
-  · exact mul_neg_of_neg_of_pos ha (na
+  · exact mul_neg_of_neg_of_pos ha (nab ha.le)
 
 Depends on / 依赖: Decidable, Decidable.or_iff_not_not_and_not, ha.le, le_rfl, lt_trichotomy, mul_neg_of_neg_of_pos, mul_neg_of_pos_of_neg, not_and, not_le, not_lt_of_ge, or_iff_not_not_and_not
 -/
@@ -2189,7 +2189,11 @@ lemma sq_nonneg
   have hb : 0 < b := not_le.1 fun hb => (add_neg_of_neg_of_nonpos ha hb).ne' hab
   calc
     0 <= b ^ 2 := pow_succ_nonneg hb.le _
-    _ = b ^ 2 + a * (a + b) := by rw [← hab, mul_zero, add_
+    _ = b ^ 2 + a * (a + b) := by rw [← hab, mul_zero, add_zero]
+    _ = a ^ 2 + (a + b) * b := by rw [add_mul, mul_add, sq, sq, add_comm, add_assoc]
+    _ = a ^ 2 := by rw [← hab, zero_mul, add_zero]
+
+@[simp]
 
 中文:
 引理 sq_nonneg
@@ -2201,7 +2205,11 @@ lemma sq_nonneg
   have hb : 0 < b := not_le.1 fun hb => (add_neg_of_neg_of_nonpos ha hb).ne' hab
   calc
     0 <= b ^ 2 := pow_succ_nonneg hb.le _
-    _ = b ^ 2 + a * (a + b) := by rw [← hab, mul_zero, add_
+    _ = b ^ 2 + a * (a + b) := by rw [← hab, mul_zero, add_zero]
+    _ = a ^ 2 + (a + b) * b := by rw [add_mul, mul_add, sq, sq, add_comm, add_assoc]
+    _ = a ^ 2 := by rw [← hab, zero_mul, add_zero]
+
+@[simp]
 
 Depends on / 依赖: add_assoc, add_comm, add_mul, add_neg_of_neg_of_nonpos, add_zero, exists_add_of_le, ha.le, hb.le, le_or_gt, mul_add, mul_zero, not_le, pow_succ_nonneg, zero_mul
 -/
@@ -2394,7 +2402,7 @@ lemma max_mul_mul_le_max_mul_max
     exacts [ha, hd.trans <| le_max_left d b, le_max_right d b, le_max_right c a]
   have cd : c * d <= max a c * max b d :=
     mul_le_mul (le_max_right a c) (le_max_right b d) hd (le_trans ha (le_max_left a c))
-  max_le (by simpa [mul_comm, max_c
+  max_le (by simpa [mul_comm, max_comm] using ba) (by simpa [mul_comm, max_comm] using cd)
 
 中文:
 引理 max_mul_mul_le_max_mul_max
@@ -2404,7 +2412,7 @@ lemma max_mul_mul_le_max_mul_max
     exacts [ha, hd.trans <| le_max_left d b, le_max_right d b, le_max_right c a]
   have cd : c * d <= max a c * max b d :=
     mul_le_mul (le_max_right a c) (le_max_right b d) hd (le_trans ha (le_max_left a c))
-  max_le (by simpa [mul_comm, max_c
+  max_le (by simpa [mul_comm, max_comm] using ba) (by simpa [mul_comm, max_comm] using cd)
 
 Depends on / 依赖: exacts, hd.trans, le_max_left, le_max_right, le_trans, max_comm, max_le, mul_comm, mul_le_mul
 -/
@@ -2461,7 +2469,7 @@ lemma four_mul_le_sq_add
     _ = a ^ 2 + 2 * a * b + b ^ 2 := by rw [add_right_comm]
     _ = (a + b) ^ 2 := (add_sq a b).symm
 
-alia
+alias four_mul_le_pow_two_add := four_mul_le_sq_add
 
 中文:
 引理 four_mul_le_sq_add
@@ -2473,7 +2481,7 @@ alia
     _ = a ^ 2 + 2 * a * b + b ^ 2 := by rw [add_right_comm]
     _ = (a + b) ^ 2 := (add_sq a b).symm
 
-alia
+alias four_mul_le_pow_two_add := four_mul_le_sq_add
 
 Depends on / 依赖: add_mul, add_right_comm, add_sq, mul_assoc, two_add_two_eq_four, two_add_two_eq_four.symm, two_mul_le_add_sq
 -/
@@ -2499,7 +2507,7 @@ lemma two_mul_le_add_of_sq_le_mul
   rw [mul_mul_mul_comm]; rw [← pow_two r]; rw [two_mul]; rw [two_add_two_eq_four]
   grw [mul_le_mul_of_nonneg_left ht zero_le_four, ← mul_assoc, four_mul_le_sq_add a b, sq]
 
-@[deprecated two_mul_le_add_of_sq_le_mul (since := "2026-04-20
+@[deprecated two_mul_le_add_of_sq_le_mul (since := "2026-04-20")]
 
 中文:
 引理 two_mul_le_add_of_sq_le_mul
@@ -2509,7 +2517,7 @@ lemma two_mul_le_add_of_sq_le_mul
   rw [mul_mul_mul_comm]; rw [← pow_two r]; rw [two_mul]; rw [two_add_two_eq_four]
   grw [mul_le_mul_of_nonneg_left ht zero_le_four, ← mul_assoc, four_mul_le_sq_add a b, sq]
 
-@[deprecated two_mul_le_add_of_sq_le_mul (since := "2026-04-20
+@[deprecated two_mul_le_add_of_sq_le_mul (since := "2026-04-20")]
 
 Depends on / 依赖: Left.add_nonneg, add_nonneg, four_mul_le_sq_add, mul_assoc, mul_le_mul_of_nonneg_left, mul_mul_mul_comm, nonneg_le_nonneg_of_sq_le_sq, pow_two, two_add_two_eq_four, two_mul, zero_le_four
 -/

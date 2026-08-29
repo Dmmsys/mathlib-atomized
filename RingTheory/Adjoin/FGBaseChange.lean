@@ -35,7 +35,7 @@ lemma exists_fg_and_mem_baseChange
   refine ⟨Algebra.adjoin R (S.image fun j => j.2), ?_, ?_⟩
   · exact Subalgebra.fg_adjoin_finset _
   · exact hS ▸ Subalgebra.sum_mem _ fun s hs => (Subalgebra.tmul_mem_baseChange
-      (Algebra.subset_adjoin (Finset.mem_image_of_mem _ 
+      (Algebra.subset_adjoin (Finset.mem_image_of_mem _ hs)) s.1)
 
 中文:
 引理 存在_fg_and_mem_baseChange
@@ -46,7 +46,7 @@ lemma exists_fg_and_mem_baseChange
   refine ⟨Algebra.adjoin R (S.image fun j => j.2), ?_, ?_⟩
   · exact Subalgebra.fg_adjoin_finset _
   · exact hS ▸ Subalgebra.sum_mem _ fun s hs => (Subalgebra.tmul_mem_baseChange
-      (Algebra.subset_adjoin (Finset.mem_image_of_mem _ 
+      (Algebra.subset_adjoin (Finset.mem_image_of_mem _ hs)) s.1)
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, Finset, Finset.mem_image_of_mem, S.image, Subalgebra, Subalgebra.fg_adjoin_finset, Subalgebra.sum_mem, Subalgebra.tmul_mem_baseChange, TensorProduct, TensorProduct.exists_finset, adjoin, classical, exists_finset, fg_adjoin_finset, mem_image_of_mem, subset_adjoin, sum_mem, tmul_mem_baseChange
 -/

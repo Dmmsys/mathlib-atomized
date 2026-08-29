@@ -86,7 +86,22 @@ abbreviation ofSurjective
     rw [← LinearMap.cancel_right (show Function.Surjective f.toLinearMap from hf)]
   · calc (toConv (antipode R) * toConv .id : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
           f.toCoalgHom.toLinearMap
-        = (toCon
+        = (toConv (f.toLinearMap ∘ₗ antipode R) * toConv f.toLinearMap).ofConv := by
+          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
+      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
+            (toConv (antipode R) * toConv .id : WithConv (A ->ₗ[R] A)).ofConv := by
+          rw [algHom_comp_convMul_distrib]; rfl
+      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
+          rw [antipode_mul_id]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
+  · calc (toConv .id * toConv (antipode R) : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
+          f.toCoalgHom.toLinearMap
+        = (toConv f.toLinearMap * toConv (f.toLinearMap ∘ₗ antipode R)).ofConv := by
+          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
+      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
+            (toConv .id * toConv (antipode R) : WithConv (A ->ₗ[R] A)).ofConv := by
+          rw [algHom_comp_convMul_distrib]; rfl
+      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
+          rw [id_mul_antipode]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
 
 中文:
 缩写 ofSurjective
@@ -96,7 +111,22 @@ abbreviation ofSurjective
     rw [← LinearMap.cancel_right (show Function.Surjective f.toLinearMap from hf)]
   · calc (toConv (antipode R) * toConv .id : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
           f.toCoalgHom.toLinearMap
-        = (toCon
+        = (toConv (f.toLinearMap ∘ₗ antipode R) * toConv f.toLinearMap).ofConv := by
+          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
+      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
+            (toConv (antipode R) * toConv .id : WithConv (A ->ₗ[R] A)).ofConv := by
+          rw [algHom_comp_convMul_distrib]; rfl
+      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
+          rw [antipode_mul_id]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
+  · calc (toConv .id * toConv (antipode R) : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
+          f.toCoalgHom.toLinearMap
+        = (toConv f.toLinearMap * toConv (f.toLinearMap ∘ₗ antipode R)).ofConv := by
+          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
+      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
+            (toConv .id * toConv (antipode R) : WithConv (A ->ₗ[R] A)).ofConv := by
+          rw [algHom_comp_convMul_distrib]; rfl
+      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
+          rw [id_mul_antipode]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.toAlgHom, Function, Function.Surjective, LinearMap, LinearMap.cancel_right, Surjective, WithConv, antipode, cancel_right, convMul_comp_coalgHom_distrib, f.toCoalgHom.toLinearMap, f.toLinearMap, ofConv, ofConvInverse, ofConv_injective, toAlgHom, toCoalgHom, toConv, toLinearMap
 -/

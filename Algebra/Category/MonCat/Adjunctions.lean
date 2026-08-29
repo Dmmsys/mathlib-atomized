@@ -172,7 +172,7 @@ definition adj
     -- The hint `(C := MonCat)` below speeds up the declaration by 10 times.
     { homEquiv X Y := (ConcreteCategory.homEquiv (C := MonCat)).trans (FreeMonoid.lift.symm.trans
         TypeCat.homEquiv.symm)
-      homEquiv_naturality_left_symm _ _ := ConcreteCategory.ext (FreeM
+      homEquiv_naturality_left_symm _ _ := ConcreteCategory.ext (FreeMonoid.hom_eq fun _ => by rfl) }
 
 中文:
 定义 adj
@@ -181,7 +181,7 @@ definition adj
     -- The hint `(C := MonCat)` below speeds up the declaration by 10 times.
     { homEquiv X Y := (ConcreteCategory.homEquiv (C := MonCat)).trans (FreeMonoid.lift.symm.trans
         TypeCat.homEquiv.symm)
-      homEquiv_naturality_left_symm _ _ := ConcreteCategory.ext (FreeM
+      homEquiv_naturality_left_symm _ _ := ConcreteCategory.ext (FreeMonoid.hom_eq fun _ => by rfl) }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, mkOfHomEquiv
 -/

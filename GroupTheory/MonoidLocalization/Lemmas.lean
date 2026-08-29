@@ -64,7 +64,8 @@ theorem pi
     choose x hx using fun i => (hf i).surj
     exact ⟨⟨fun i => (x i (z i)).1, ⟨_, fun i _ => (x i (z i)).2.2⟩⟩, funext fun i => hx i (z i)⟩
   exists_of_eq {x y} eq := by
-    choose c hc using fun i => (hf i).exists_of_eq congr
+    choose c hc using fun i => (hf i).exists_of_eq congr($eq i)
+    exact ⟨⟨_, fun i _ => (c i).2⟩, funext hc⟩
 
 中文:
 定理 pi
@@ -74,7 +75,8 @@ theorem pi
     choose x hx using fun i => (hf i).surj
     exact ⟨⟨fun i => (x i (z i)).1, ⟨_, fun i _ => (x i (z i)).2.2⟩⟩, funext fun i => hx i (z i)⟩
   exists_of_eq {x y} eq := by
-    choose c hc using fun i => (hf i).exists_of_eq congr
+    choose c hc using fun i => (hf i).exists_of_eq congr($eq i)
+    exact ⟨⟨_, fun i _ => (c i).2⟩, funext hc⟩
 -/
 @[to_additive] protected theorem pi {ι : Type*} {M N : ι -> Type*}
     [forall i, CommMonoid (M i)] [forall i, CommMonoid (N i)] (S : Π i, Submonoid (M i))

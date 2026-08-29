@@ -196,7 +196,24 @@ theorem rel_equiv
     exact ⟨D.t _ _ x, e₂, by rw [← e₁, D.t_inv_apply]⟩, by
     rintro ⟨i, a⟩ ⟨j, b⟩ ⟨k, c⟩ ⟨x, e₁, e₂⟩
     rintro ⟨y, e₃, e₄⟩
-    let z := 
+    let z := (pullbackIsoProdSubtype (D.f j i) (D.f j k)).inv ⟨⟨_, _⟩, e₂.trans e₃.symm⟩
+    have eq₁ : (D.t j i) ((pullback.fst _ _ : _ /-(D.f j k)-/ ⟶ D.V (j, i)) z) = x := by
+      dsimp only [coe_of, z]
+      rw [pullbackIsoProdSubtype_inv_fst_apply]; rw [D.t_inv_apply]
+    have eq₂ : (pullback.snd _ _ : _ ⟶ D.V _) z = y := pullbackIsoProdSubtype_inv_snd_apply _ _ _
+    clear_value z
+    use (pullback.fst _ _ : _ ⟶ D.V (i, k)) (D.t' _ _ _ z)
+    dsimp +instances only at *
+    subst eq₁ eq₂ e₁ e₃ e₄
+    have h₁ : D.t' j i k ≫ pullback.fst _ _ ≫ D.f i k = pullback.fst _ _ ≫ D.t j i ≫ D.f i j := by
+      rw [← 𝖣.t_fac_assoc]; congr 1; exact pullback.condition
+    have h₂ : D.t' j i k ≫ pullback.fst _ _ ≫ D.t i k ≫ D.f k i =
+        pullback.snd _ _ ≫ D.t j k ≫ D.f k j := by
+      rw [← 𝖣.t_fac_assoc]
+      apply @Epi.left_cancellation _ _ _ _ (D.t' k j i)
+      rw [𝖣.cocycle_assoc]; rw [𝖣.t_fac_assoc]; rw [𝖣.t_inv_assoc]
+      exact pullback.condition.symm
+    exact ⟨CategoryTheory.congr_fun h₁ z, CategoryTheory.congr_fun h₂ z⟩⟩
 
 中文:
 定理 rel_equiv
@@ -207,7 +224,24 @@ theorem rel_equiv
     exact ⟨D.t _ _ x, e₂, by rw [← e₁, D.t_inv_apply]⟩, by
     rintro ⟨i, a⟩ ⟨j, b⟩ ⟨k, c⟩ ⟨x, e₁, e₂⟩
     rintro ⟨y, e₃, e₄⟩
-    let z := 
+    let z := (pullbackIsoProdSubtype (D.f j i) (D.f j k)).inv ⟨⟨_, _⟩, e₂.trans e₃.symm⟩
+    have eq₁ : (D.t j i) ((pullback.fst _ _ : _ /-(D.f j k)-/ ⟶ D.V (j, i)) z) = x := by
+      dsimp only [coe_of, z]
+      rw [pullbackIsoProdSubtype_inv_fst_apply]; rw [D.t_inv_apply]
+    have eq₂ : (pullback.snd _ _ : _ ⟶ D.V _) z = y := pullbackIsoProdSubtype_inv_snd_apply _ _ _
+    clear_value z
+    use (pullback.fst _ _ : _ ⟶ D.V (i, k)) (D.t' _ _ _ z)
+    dsimp +instances only at *
+    subst eq₁ eq₂ e₁ e₃ e₄
+    have h₁ : D.t' j i k ≫ pullback.fst _ _ ≫ D.f i k = pullback.fst _ _ ≫ D.t j i ≫ D.f i j := by
+      rw [← 𝖣.t_fac_assoc]; congr 1; exact pullback.condition
+    have h₂ : D.t' j i k ≫ pullback.fst _ _ ≫ D.t i k ≫ D.f k i =
+        pullback.snd _ _ ≫ D.t j k ≫ D.f k j := by
+      rw [← 𝖣.t_fac_assoc]
+      apply @Epi.left_cancellation _ _ _ _ (D.t' k j i)
+      rw [𝖣.cocycle_assoc]; rw [𝖣.t_fac_assoc]; rw [𝖣.t_inv_assoc]
+      exact pullback.condition.symm
+    exact ⟨CategoryTheory.congr_fun h₁ z, CategoryTheory.congr_fun h₂ z⟩⟩
 
 Depends on / 依赖: D.t_inv_apply, IsIso.inv_hom_id_apply, coe_of, inv_hom_id_apply, pullback, pullback.fst, pullbackIsoProdSubtype, pullbackIsoProdSubtype_inv_fst_apply, t_inv_apply, x.fst
 -/
@@ -251,7 +285,22 @@ theorem eqvGen_of_π_eq
       coequalizer.π D.diagram.fstSigmaMap D.diagram.sndSigmaMap y :=
     (TopCat.mono_iff_injective (Multicoequalizer.isoCoequalizer 𝖣.diagram).inv).mp
     inferInstance h
- 
+  let diagram := parallelPair 𝖣.diagram.fstSigmaMap 𝖣.diagram.sndSigmaMap ⋙ forget _
+  have : colimit.ι diagram one x = colimit.ι diagram one y := by
+    dsimp only [coequalizer.π] at h
+    rw [← ι_preservesColimitIso_hom]; rw [ConcreteCategory.forget_map_eq_ofHom]; rw [types_comp_apply]
+    simp_all
+  have :
+    (colimit.ι diagram _ ≫ colim.map _ ≫ (colimit.isoColimitCocone _).hom) _ =
+      (colimit.ι diagram _ ≫ colim.map _ ≫ (colimit.isoColimitCocone _).hom) _ :=
+    (congr_arg
+        (colim.map (diagramIsoParallelPair diagram).hom ≫
+          (colimit.isoColimitCocone (Types.coequalizerColimit _ _)).hom)
+        this :
+      _)
+  simp only [eqToHom_refl, colimit.ι_map_assoc, diagramIsoParallelPair_hom_app,
+    colimit.isoColimitCocone_ι_hom, Category.id_comp] at this
+  exact Quot.eq.1 this
 
 中文:
 定理 eqvGen_of_π_eq
@@ -261,7 +310,22 @@ theorem eqvGen_of_π_eq
       coequalizer.π D.diagram.fstSigmaMap D.diagram.sndSigmaMap y :=
     (TopCat.mono_iff_injective (Multicoequalizer.isoCoequalizer 𝖣.diagram).inv).mp
     inferInstance h
- 
+  let diagram := parallelPair 𝖣.diagram.fstSigmaMap 𝖣.diagram.sndSigmaMap ⋙ forget _
+  have : colimit.ι diagram one x = colimit.ι diagram one y := by
+    dsimp only [coequalizer.π] at h
+    rw [← ι_preservesColimitIso_hom]; rw [ConcreteCategory.forget_map_eq_ofHom]; rw [types_comp_apply]
+    simp_all
+  have :
+    (colimit.ι diagram _ ≫ colim.map _ ≫ (colimit.isoColimitCocone _).hom) _ =
+      (colimit.ι diagram _ ≫ colim.map _ ≫ (colimit.isoColimitCocone _).hom) _ :=
+    (congr_arg
+        (colim.map (diagramIsoParallelPair diagram).hom ≫
+          (colimit.isoColimitCocone (Types.coequalizerColimit _ _)).hom)
+        this :
+      _)
+  simp only [eqToHom_refl, colimit.ι_map_assoc, diagramIsoParallelPair_hom_app,
+    colimit.isoColimitCocone_ι_hom, Category.id_comp] at this
+  exact Quot.eq.1 this
 
 Depends on / 依赖: D.diagram.fstSigmaMap, D.diagram.sndSigmaMap, GlueData, Multicoequalizer, Multicoequalizer.isoCoequalizer, Multicoequalizer.sigma, TopCat, TopCat.mono_iff_injective, coequalizer, colimit, diagram, diagram.fstSigmaMap, diagram.sndSigmaMap, forget, fstSigmaMap, isoCoequalizer, mono_iff_injective, parallelPair, replace, sndSigmaMap
 -/
@@ -306,7 +370,26 @@ theorem ι_eq_iff_rel
     rw [←
       show _ = Sigma.mk i x from ConcreteCategory.congr_hom (sigmaIsoSigma.{_]; rw [u} D.U).inv_hom_id _]
     rw [←
-      show _ = Sigma.mk j y from ConcreteCategory.congr_hom (sigmaIsoSigma.{_]; rw
+      show _ = Sigma.mk j y from ConcreteCategory.congr_hom (sigmaIsoSigma.{_]; rw [u} D.U).inv_hom_id _]
+    change InvImage D.Rel (sigmaIsoSigma.{_, u} D.U).hom _ _
+    rw [← (InvImage.equivalence _ _ D.rel_equiv).eqvGen_iff]
+    refine Relation.EqvGen.mono ?_ _ _ (D.eqvGen_of_π_eq h :)
+    rintro _ _ ⟨x⟩
+    obtain ⟨⟨⟨i, j⟩, y⟩, rfl⟩ :=
+      (ConcreteCategory.bijective_of_isIso (sigmaIsoSigma.{u, u} _).inv).2 x
+    unfold InvImage MultispanIndex.fstSigmaMap MultispanIndex.sndSigmaMap
+    rw [sigmaIsoSigma_inv_apply]
+    -- `rw [← ConcreteCategory.comp_apply]` succeeds but rewrites the wrong expression
+    erw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply, colimit.ι_desc_assoc,
+      ← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply, colimit.ι_desc_assoc]
+      -- previous line now `erw` after https://github.com/leanprover-community/mathlib4/pull/13170
+    erw [sigmaIsoSigma_hom_ι_apply, sigmaIsoSigma_hom_ι_apply]
+    exact ⟨y, ⟨rfl, rfl⟩⟩
+  · rintro ⟨z, e₁, e₂⟩
+    dsimp only at *
+    -- Porting note: there were `subst e₁` and `subst e₂`, instead of the `rw`
+    rw [← e₁]; rw [← e₂] at *
+    rw [D.glue_condition_apply]
 
 中文:
 定理 ι_eq_iff_rel
@@ -319,7 +402,26 @@ theorem ι_eq_iff_rel
     rw [←
       show _ = Sigma.mk i x from ConcreteCategory.congr_hom (sigmaIsoSigma.{_]; rw [u} D.U).inv_hom_id _]
     rw [←
-      show _ = Sigma.mk j y from ConcreteCategory.congr_hom (sigmaIsoSigma.{_]; rw
+      show _ = Sigma.mk j y from ConcreteCategory.congr_hom (sigmaIsoSigma.{_]; rw [u} D.U).inv_hom_id _]
+    change InvImage D.Rel (sigmaIsoSigma.{_, u} D.U).hom _ _
+    rw [← (InvImage.equivalence _ _ D.rel_equiv).eqvGen_iff]
+    refine Relation.EqvGen.mono ?_ _ _ (D.eqvGen_of_π_eq h :)
+    rintro _ _ ⟨x⟩
+    obtain ⟨⟨⟨i, j⟩, y⟩, rfl⟩ :=
+      (ConcreteCategory.bijective_of_isIso (sigmaIsoSigma.{u, u} _).inv).2 x
+    unfold InvImage MultispanIndex.fstSigmaMap MultispanIndex.sndSigmaMap
+    rw [sigmaIsoSigma_inv_apply]
+    -- `rw [← ConcreteCategory.comp_apply]` succeeds but rewrites the wrong expression
+    erw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply, colimit.ι_desc_assoc,
+      ← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply, colimit.ι_desc_assoc]
+      -- previous line now `erw` after https://github.com/leanprover-community/mathlib4/pull/13170
+    erw [sigmaIsoSigma_hom_ι_apply, sigmaIsoSigma_hom_ι_apply]
+    exact ⟨y, ⟨rfl, rfl⟩⟩
+  · rintro ⟨z, e₁, e₂⟩
+    dsimp only at *
+    -- Porting note: there were `subst e₁` and `subst e₂`, instead of the `rw`
+    rw [← e₁]; rw [← e₂] at *
+    rw [D.glue_condition_apply]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, D.Rel, D.eqvGen_of_, D.rel_equiv, EqvGen, GlueData, InvImage, InvImage.equivalence, Multicoequalizer, Relation, Relation.EqvGen.mono, Sigma.mk, congr_hom, equivalence, eqvGen_iff, inv_hom_id, rel_equiv, sigmaIsoSigma, simp_rw
 -/
@@ -494,7 +596,7 @@ theorem preimage_image_eq_image
   symm
   apply Set.inter_eq_self_of_subset_left
   rw [← D.preimage_range i j]
-  exa
+  exact Set.preimage_mono (Set.image_subset_range _ _)
 
 中文:
 定理 preimage_image_eq_image
@@ -508,7 +610,7 @@ theorem preimage_image_eq_image
   symm
   apply Set.inter_eq_self_of_subset_left
   rw [← D.preimage_range i j]
-  exa
+  exact Set.preimage_mono (Set.image_subset_range _ _)
 
 Depends on / 依赖: D.preimage_range, Set.image_preimage_eq_inter_range, Set.image_subset_range, Set.inter_eq_self_of_subset_left, Set.preimage_image_eq, Set.preimage_mono, conv_rhs, image_preimage_eq_inter_range, image_subset_range, inter_eq_self_of_subset_left, preimage_image_eq, preimage_mono, preimage_range
 -/
@@ -538,7 +640,7 @@ theorem preimage_image_eq_image'
   · change _ = (D.t i j ≫ D.t j i ≫ _) ⁻¹' _
     rw [𝖣.t_inv_assoc]
   rw [bijective_iff_isIso_ofHom]
-  apply (forget 
+  apply (forget TopCat).map_isIso
 
 中文:
 定理 preimage_image_eq_image'
@@ -551,7 +653,7 @@ theorem preimage_image_eq_image'
   · change _ = (D.t i j ≫ D.t j i ≫ _) ⁻¹' _
     rw [𝖣.t_inv_assoc]
   rw [bijective_iff_isIso_ofHom]
-  apply (forget 
+  apply (forget TopCat).map_isIso
 
 Depends on / 依赖: D.preimage_image_eq_image, Set.eq_preimage_iff_image_eq, Set.image_comp, Set.preimage_preimage, TopCat, bijective_iff_isIso_ofHom, coe_comp, convert, eq_preimage_iff_image_eq, forget, image_comp, map_isIso, preimage_image_eq_image, preimage_preimage, t_inv_assoc
 -/
@@ -762,6 +864,24 @@ definition mk'
   t_id i := by ext; rw [h.t_id]; rfl
   t' := h.t'
   t_fac i j k := by
+    delta MkCore.t'
+    rw [Category.assoc]; rw [Category.assoc]; rw [pullbackIsoProdSubtype_inv_snd]; rw [← Iso.eq_inv_comp]; rw [pullbackIsoProdSubtype_inv_fst_assoc]
+    ext ⟨⟨⟨x, hx⟩, ⟨x', hx'⟩⟩, rfl : x = x'⟩
+    rfl
+  cocycle i j k := by
+    delta MkCore.t'
+    simp_rw [← Category.assoc]
+    rw [Iso.comp_inv_eq]
+    simp only [Iso.inv_hom_id_assoc, Category.assoc, Category.id_comp]
+    rw [← Iso.eq_inv_comp]; rw [Iso.inv_hom_id]
+    ext1 ⟨⟨⟨x, hx⟩, ⟨x', hx'⟩⟩, rfl : x = x'⟩
+    dsimp only [Opens.coe_inclusion', hom_comp, hom_ofHom, ContinuousMap.comp_assoc,
+      ContinuousMap.comp_apply, ContinuousMap.coe_mk, hom_id, ContinuousMap.id_apply]
+    rw [Subtype.mk_eq_mk]; rw [Prod.mk_inj]; rw [Subtype.mk_eq_mk]; rw [Subtype.ext_iff]; rw [and_self_iff]
+    convert! congr_arg Subtype.val (h.t_inv k i ⟨x, hx'⟩) using 3
+    refine Subtype.ext ?_
+    exact h.cocycle i j k ⟨x, hx⟩ hx'
+  f_mono _ _ := (TopCat.mono_iff_injective _).mpr fun _ _ h => Subtype.ext h
 
 中文:
 定义 mk'
@@ -776,6 +896,24 @@ definition mk'
   t_id i := by ext; rw [h.t_id]; rfl
   t' := h.t'
   t_fac i j k := by
+    delta MkCore.t'
+    rw [Category.assoc]; rw [Category.assoc]; rw [pullbackIsoProdSubtype_inv_snd]; rw [← Iso.eq_inv_comp]; rw [pullbackIsoProdSubtype_inv_fst_assoc]
+    ext ⟨⟨⟨x, hx⟩, ⟨x', hx'⟩⟩, rfl : x = x'⟩
+    rfl
+  cocycle i j k := by
+    delta MkCore.t'
+    simp_rw [← Category.assoc]
+    rw [Iso.comp_inv_eq]
+    simp only [Iso.inv_hom_id_assoc, Category.assoc, Category.id_comp]
+    rw [← Iso.eq_inv_comp]; rw [Iso.inv_hom_id]
+    ext1 ⟨⟨⟨x, hx⟩, ⟨x', hx'⟩⟩, rfl : x = x'⟩
+    dsimp only [Opens.coe_inclusion', hom_comp, hom_ofHom, ContinuousMap.comp_assoc,
+      ContinuousMap.comp_apply, ContinuousMap.coe_mk, hom_id, ContinuousMap.id_apply]
+    rw [Subtype.mk_eq_mk]; rw [Prod.mk_inj]; rw [Subtype.mk_eq_mk]; rw [Subtype.ext_iff]; rw [and_self_iff]
+    convert! congr_arg Subtype.val (h.t_inv k i ⟨x, hx'⟩) using 3
+    refine Subtype.ext ?_
+    exact h.cocycle i j k ⟨x, hx⟩ hx'
+  f_mono _ _ := (TopCat.mono_iff_injective _).mpr fun _ _ h => Subtype.ext h
 -/
 def mk' (h : MkCore.{u}) : TopCat.GlueData where
   J := h.J
@@ -824,7 +962,8 @@ definition ofOpenSubsets
       t := fun i j => ofHom ⟨fun x => ⟨⟨x.1.1, x.2⟩, x.1.2⟩, by fun_prop⟩
       V_id := fun i => by simp
       t_id := fun i => by ext; rfl
-      t_inter :=
+      t_inter := fun _ _ _ _ hx => hx
+      cocycle := fun _ _ _ _ _ => rfl }
 
 中文:
 定义 ofOpenSubsets
@@ -836,7 +975,8 @@ definition ofOpenSubsets
       t := fun i j => ofHom ⟨fun x => ⟨⟨x.1.1, x.2⟩, x.1.2⟩, by fun_prop⟩
       V_id := fun i => by simp
       t_id := fun i => by ext; rfl
-      t_inter :=
+      t_inter := fun _ _ _ _ hx => hx
+      cocycle := fun _ _ _ _ _ => rfl }
 
 Depends on / 依赖: Opens.inclusion, Opens.map, Opens.toTopCat, TopCat, TopCat.of, V_id, cocycle, fun_prop, inclusion, t_id, t_inter, toTopCat
 -/
@@ -907,7 +1047,7 @@ theorem fromOpenSubsetsGlue_injective
   rw [ι_fromOpenSubsetsGlue_apply]; rw [ι_fromOpenSubsetsGlue_apply] at e
   subst e
   rw [(ofOpenSubsets U).ι_eq_iff_rel]
-  exact ⟨⟨⟨x, hx⟩, 
+  exact ⟨⟨⟨x, hx⟩, hy⟩, rfl, rfl⟩
 
 中文:
 定理 fromOpenSubsetsGlue_injective
@@ -919,7 +1059,7 @@ theorem fromOpenSubsetsGlue_injective
   rw [ι_fromOpenSubsetsGlue_apply]; rw [ι_fromOpenSubsetsGlue_apply] at e
   subst e
   rw [(ofOpenSubsets U).ι_eq_iff_rel]
-  exact ⟨⟨⟨x, hx⟩, 
+  exact ⟨⟨⟨x, hx⟩, hy⟩, rfl, rfl⟩
 
 Depends on / 依赖: ofOpenSubsets
 -/
@@ -946,7 +1086,17 @@ theorem fromOpenSubsetsGlue_isOpenMap
   rintro _ ⟨x, hx, rfl⟩
   obtain ⟨i, ⟨x, hx'⟩, rfl⟩ := (ofOpenSubsets U).ι_jointly_surjective x
   use fromOpenSubsetsGlue U '' s inter Set.range (@Opens.inclusion' (TopCat.of α) (U i))
-  use Set.inter_subset_
+  use Set.inter_subset_left
+  constructor
+  · rw [← Set.image_preimage_eq_inter_range]
+    apply (Opens.isOpenEmbedding (X := TopCat.of α) (U i)).isOpenMap
+    convert! hs i using 1
+    rw [← ι_fromOpenSubsetsGlue]; rw [coe_comp]; rw [Set.preimage_comp]
+    congr! 1
+    exact Set.preimage_image_eq _ (fromOpenSubsetsGlue_injective U)
+  · refine ⟨Set.mem_image_of_mem _ hx, ?_⟩
+    rw [ι_fromOpenSubsetsGlue_apply]
+    exact Set.mem_range_self (f := (Opens.inclusion' _).hom) ⟨x, hx'⟩
 
 中文:
 定理 fromOpenSubsetsGlue_isOpenMap
@@ -958,7 +1108,17 @@ theorem fromOpenSubsetsGlue_isOpenMap
   rintro _ ⟨x, hx, rfl⟩
   obtain ⟨i, ⟨x, hx'⟩, rfl⟩ := (ofOpenSubsets U).ι_jointly_surjective x
   use fromOpenSubsetsGlue U '' s inter Set.range (@Opens.inclusion' (TopCat.of α) (U i))
-  use Set.inter_subset_
+  use Set.inter_subset_left
+  constructor
+  · rw [← Set.image_preimage_eq_inter_range]
+    apply (Opens.isOpenEmbedding (X := TopCat.of α) (U i)).isOpenMap
+    convert! hs i using 1
+    rw [← ι_fromOpenSubsetsGlue]; rw [coe_comp]; rw [Set.preimage_comp]
+    congr! 1
+    exact Set.preimage_image_eq _ (fromOpenSubsetsGlue_injective U)
+  · refine ⟨Set.mem_image_of_mem _ hx, ?_⟩
+    rw [ι_fromOpenSubsetsGlue_apply]
+    exact Set.mem_range_self (f := (Opens.inclusion' _).hom) ⟨x, hx'⟩
 
 Depends on / 依赖: Opens.inclusion, Opens.isOpenEmbedding, Set.image_preimage_eq_inter_range, Set.inter_subset_left, Set.preimage_comp, Set.range, TopCat, TopCat.of, coe_comp, convert, fromOpenSubsetsGlue, image_preimage_eq_inter_range, inclusion, inter_subset_left, isOpenEmbedding, isOpenMap, isOpen_iff, isOpen_iff_forall_mem_open, ofOpenSubsets, preimage_comp
 -/
@@ -1018,7 +1178,7 @@ theorem range_fromOpenSubsetsGlue
     exact Set.subset_iUnion _ i hx'
   · rintro ⟨_, ⟨i, rfl⟩, hx⟩
     rename_i x
-    exact ⟨(ofOpenSubsets U).toGlueData.ι i ⟨x, hx⟩, ι_fromOpenSub
+    exact ⟨(ofOpenSubsets U).toGlueData.ι i ⟨x, hx⟩, ι_fromOpenSubsetsGlue_apply _ _ _⟩
 
 中文:
 定理 range_fromOpenSubsetsGlue
@@ -1032,7 +1192,7 @@ theorem range_fromOpenSubsetsGlue
     exact Set.subset_iUnion _ i hx'
   · rintro ⟨_, ⟨i, rfl⟩, hx⟩
     rename_i x
-    exact ⟨(ofOpenSubsets U).toGlueData.ι i ⟨x, hx⟩, ι_fromOpenSub
+    exact ⟨(ofOpenSubsets U).toGlueData.ι i ⟨x, hx⟩, ι_fromOpenSubsetsGlue_apply _ _ _⟩
 
 Depends on / 依赖: Set.subset_iUnion, ofOpenSubsets, rename_i, subset_iUnion, toGlueData
 -/

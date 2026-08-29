@@ -537,7 +537,10 @@ lemma factorsThrough_iff_ker_unitsMap
   refine ⟨fun ⟨_, ⟨χ₀, hχ₀⟩⟩ x hx => ?_, fun h => ?_⟩
   · rw [MonoidHom.mem_ker, hχ₀, changeLevel_toUnitHom, MonoidHom.comp_apply, hx, map_one]
   · let E := MonoidHom.liftOfSurjective _ (ZMod.unitsMap_surjective hd) ⟨_, h⟩
-    have hE : E.comp (ZMod.unitsMap hd) = χ.toUnitHom := MonoidHom.liftOfR
+    have hE : E.comp (ZMod.unitsMap hd) = χ.toUnitHom := MonoidHom.liftOfRightInverse_comp ..
+    refine ⟨hd, MulChar.ofUnitHom E, equivToUnitHom.injective (?_ : toUnitHom _ = toUnitHom _)⟩
+    simp_rw [changeLevel_toUnitHom, toUnitHom_eq, ofUnitHom_eq, Equiv.apply_symm_apply, hE,
+      toUnitHom_eq]
 
 中文:
 引理 factorsThrough_iff_ker_unitsMap
@@ -546,7 +549,10 @@ lemma factorsThrough_iff_ker_unitsMap
   refine ⟨fun ⟨_, ⟨χ₀, hχ₀⟩⟩ x hx => ?_, fun h => ?_⟩
   · rw [MonoidHom.mem_ker, hχ₀, changeLevel_toUnitHom, MonoidHom.comp_apply, hx, map_one]
   · let E := MonoidHom.liftOfSurjective _ (ZMod.unitsMap_surjective hd) ⟨_, h⟩
-    have hE : E.comp (ZMod.unitsMap hd) = χ.toUnitHom := MonoidHom.liftOfR
+    have hE : E.comp (ZMod.unitsMap hd) = χ.toUnitHom := MonoidHom.liftOfRightInverse_comp ..
+    refine ⟨hd, MulChar.ofUnitHom E, equivToUnitHom.injective (?_ : toUnitHom _ = toUnitHom _)⟩
+    simp_rw [changeLevel_toUnitHom, toUnitHom_eq, ofUnitHom_eq, Equiv.apply_symm_apply, hE,
+      toUnitHom_eq]
 
 Depends on / 依赖: E.comp, Equiv.apply_symm_apply, MonoidHom, MonoidHom.comp_apply, MonoidHom.liftOfRightInverse_comp, MonoidHom.liftOfSurjective, MonoidHom.mem_ker, MulChar, MulChar.ofUnitHom, ZMod.unitsMap, ZMod.unitsMap_surjective, apply_symm_apply, changeLevel_toUnitHom, comp_apply, equivToUnitHom, equivToUnitHom.injective, injective, liftOfRightInverse_comp, liftOfSurjective, map_one
 -/
@@ -603,7 +609,22 @@ theorem factorsThrough_gcd
   rw [Units.ext_iff]; rw [MulChar.coe_toUnitHom]; rw [Units.val_one]
   obtain ⟨z, hz₁, hz₂⟩ : exists z : Nat, z = x.val ∧ (z : ZMod m) = 1 := by
     suffices x.val.val ≡ 1 [MOD n.gcd m] by
- 
+      obtain ⟨z, hz₁, hz₂⟩ := Nat.chineseRemainder' this
+      refine ⟨z, ?_, ?_⟩
+      · simpa [← ZMod.natCast_eq_natCast_iff] using hz₁
+      · rwa [← ZMod.natCast_eq_natCast_iff, Nat.cast_one] at hz₂
+    rwa [MonoidHom.mem_ker, Units.ext_iff, ZMod.unitsMap_val, ← ZMod.natCast_val,
+      Units.val_one, ← Nat.cast_one, ZMod.natCast_eq_natCast_iff] at hx
+  have hz₀ : z.gcd (n * m) = 1 := by
+    refine Nat.Coprime.mul_right ?_ ?_
+· exact (ZMod.isUnit_iff_coprime _ _).mp hz₁ ▸ x.isUnit
+· exact (ZMod.isUnit_iff_coprime _ _).mp hz₂ ▸ isUnit_one
+  have := changeLevel_eq_cast_of_dvd χ (n.dvd_mul_right m) (ZMod.unitOfCoprime z hz₀)
+  simp only [ZMod.coe_unitOfCoprime, dvd_mul_right, ZMod.cast_natCast] at this
+  rw [← hz₁]; rw [← this]; rw [h]
+  have := changeLevel_eq_cast_of_dvd ψ (m.dvd_mul_left n) (ZMod.unitOfCoprime z hz₀)
+  simp only [ZMod.coe_unitOfCoprime, dvd_mul_left, ZMod.cast_natCast] at this
+  rw [this]; rw [hz₂]; rw [map_one]
 
 中文:
 定理 factorsThrough_gcd
@@ -614,7 +635,22 @@ theorem factorsThrough_gcd
   rw [Units.ext_iff]; rw [MulChar.coe_toUnitHom]; rw [Units.val_one]
   obtain ⟨z, hz₁, hz₂⟩ : exists z : Nat, z = x.val ∧ (z : ZMod m) = 1 := by
     suffices x.val.val ≡ 1 [MOD n.gcd m] by
- 
+      obtain ⟨z, hz₁, hz₂⟩ := Nat.chineseRemainder' this
+      refine ⟨z, ?_, ?_⟩
+      · simpa [← ZMod.natCast_eq_natCast_iff] using hz₁
+      · rwa [← ZMod.natCast_eq_natCast_iff, Nat.cast_one] at hz₂
+    rwa [MonoidHom.mem_ker, Units.ext_iff, ZMod.unitsMap_val, ← ZMod.natCast_val,
+      Units.val_one, ← Nat.cast_one, ZMod.natCast_eq_natCast_iff] at hx
+  have hz₀ : z.gcd (n * m) = 1 := by
+    refine Nat.Coprime.mul_right ?_ ?_
+· exact (ZMod.isUnit_iff_coprime _ _).mp hz₁ ▸ x.isUnit
+· exact (ZMod.isUnit_iff_coprime _ _).mp hz₂ ▸ isUnit_one
+  have := changeLevel_eq_cast_of_dvd χ (n.dvd_mul_right m) (ZMod.unitOfCoprime z hz₀)
+  simp only [ZMod.coe_unitOfCoprime, dvd_mul_right, ZMod.cast_natCast] at this
+  rw [← hz₁]; rw [← this]; rw [h]
+  have := changeLevel_eq_cast_of_dvd ψ (m.dvd_mul_left n) (ZMod.unitOfCoprime z hz₀)
+  simp only [ZMod.coe_unitOfCoprime, dvd_mul_left, ZMod.cast_natCast] at this
+  rw [this]; rw [hz₂]; rw [map_one]
 
 Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, MonoidHom.mem_ker.mpr, MulChar, MulChar.coe_toUnitHom, Nat.cast_one, Nat.chineseRemainder, Units.ext_if, Units.ext_iff, Units.val_one, ZMod.natCast_eq_natCast_iff, cast_one, chineseRemainder, coe_toUnitHom, ext_if, ext_iff, factorsThrough_iff_ker_unitsMap, gcd_dvd_left, mem_ker, n.gcd
 -/
@@ -1091,7 +1127,7 @@ refine Nat.sInf_le (mem_conductorSet_iff χ).mpr
     ⟨dvd_trans (conductor_dvd_level _) hd.1,
      (factorsThrough_conductor (Classical.choose hd.2)).2.choose, ?_⟩
   rw [changeLevel_trans _ (conductor_dvd_level _) hd.dvd]; rw [← (factorsThrough_conductor (Classical.choose hd.2)).2.choose_spec]
-  e
+  exact hd.eq_changeLevel
 
 中文:
 引理 conductor_le_conductor_mem_conductorSet
@@ -1101,7 +1137,7 @@ refine Nat.sInf_le (mem_conductorSet_iff χ).mpr
     ⟨dvd_trans (conductor_dvd_level _) hd.1,
      (factorsThrough_conductor (Classical.choose hd.2)).2.choose, ?_⟩
   rw [changeLevel_trans _ (conductor_dvd_level _) hd.dvd]; rw [← (factorsThrough_conductor (Classical.choose hd.2)).2.choose_spec]
-  e
+  exact hd.eq_changeLevel
 
 Depends on / 依赖: Classical, Classical.choose, Nat.sInf_le, changeLevel_trans, choose_spec, conductor_dvd_level, dvd_trans, eq_changeLevel, factorsThrough_conductor, hd.dvd, hd.eq_changeLevel, mem_conductorSet_iff, sInf_le
 -/
@@ -1340,7 +1376,17 @@ theorem conductor_dvd_of_mem_conductorSet
     have : χ.conductor <= d.gcd χ.conductor := Nat.sInf_le this
     contrapose! this
     refine Nat.lt_of_le_of_ne ?_ (Nat.gcd_eq_right_iff_dvd.not.mpr this)
-exa
+exact Nat.gcd_le_right _ Nat.pos_of_ne_zero conductor_ne_zero χ
+  obtain ⟨hd, χ₀, hχ₀⟩ := hd
+  suffices (changeLevel (d.dvd_mul_right χ.conductor)) χ₀ =
+      (changeLevel (χ.conductor.dvd_mul_left d)) χ.primitiveCharacter by
+    obtain ⟨_, χ₁, hχ₁⟩ := factorsThrough_gcd χ₀ χ.primitiveCharacter this
+    refine ⟨Nat.dvd_trans (d.gcd_dvd_left χ.conductor) hd, χ₁, ?_⟩
+    rw [changeLevel_trans _ (d.gcd_dvd_left χ.conductor)]; rw [← hχ₁]; rw [hχ₀]
+  have : NeZero (d * χ.conductor * n) :=
+    ⟨Nat.mul_ne_zero (Nat.mul_ne_zero (NeZero.ne d) χ.conductor_ne_zero) (NeZero.ne n)⟩
+apply changeLevel_injective Nat.dvd_mul_right (d * χ.conductor) n
+  rw [← changeLevel_trans]; rw [← changeLevel_trans]; rw [changeLevel_trans _ hd (n.dvd_mul_left (d * χ.conductor))]; rw [← hχ₀]; rw [changeLevel_trans χ.primitiveCharacter χ.conductor_dvd_level]; rw [changeLevel_primitiveCharacter]
 
 中文:
 定理 conductor_dvd_of_mem_conductorSet
@@ -1353,7 +1399,17 @@ exa
     have : χ.conductor <= d.gcd χ.conductor := Nat.sInf_le this
     contrapose! this
     refine Nat.lt_of_le_of_ne ?_ (Nat.gcd_eq_right_iff_dvd.not.mpr this)
-exa
+exact Nat.gcd_le_right _ Nat.pos_of_ne_zero conductor_ne_zero χ
+  obtain ⟨hd, χ₀, hχ₀⟩ := hd
+  suffices (changeLevel (d.dvd_mul_right χ.conductor)) χ₀ =
+      (changeLevel (χ.conductor.dvd_mul_left d)) χ.primitiveCharacter by
+    obtain ⟨_, χ₁, hχ₁⟩ := factorsThrough_gcd χ₀ χ.primitiveCharacter this
+    refine ⟨Nat.dvd_trans (d.gcd_dvd_left χ.conductor) hd, χ₁, ?_⟩
+    rw [changeLevel_trans _ (d.gcd_dvd_left χ.conductor)]; rw [← hχ₁]; rw [hχ₀]
+  have : NeZero (d * χ.conductor * n) :=
+    ⟨Nat.mul_ne_zero (Nat.mul_ne_zero (NeZero.ne d) χ.conductor_ne_zero) (NeZero.ne n)⟩
+apply changeLevel_injective Nat.dvd_mul_right (d * χ.conductor) n
+  rw [← changeLevel_trans]; rw [← changeLevel_trans]; rw [changeLevel_trans _ hd (n.dvd_mul_left (d * χ.conductor))]; rw [← hχ₀]; rw [changeLevel_trans χ.primitiveCharacter χ.conductor_dvd_level]; rw [changeLevel_primitiveCharacter]
 
 Depends on / 依赖: Nat.gcd_eq_right_iff_dvd.not.mpr, Nat.gcd_le_right, Nat.lt_of_le_of_ne, Nat.pos_of_ne_zero, Nat.sInf_le, NeZero, changeLevel, conductor, conductor.dvd_mul_left, conductorSet, conductor_ne_zero, contrapose, d.dvd_mul_right, d.gcd, dvd_mul_left, dvd_mul_right, gcd_eq_right_iff_dvd, gcd_le_right, lt_of_le_of_ne, pos_of_ne_zero
 -/
@@ -1409,7 +1465,10 @@ theorem conductor_changeLevel
     refine conductor_dvd_of_mem_conductorSet _
       ⟨χ.conductor_dvd_level.trans hm, χ.primitiveCharacter, ?_⟩
     rw [changeLevel_trans _ χ.conductor_dvd_level]; rw [changeLevel_primitiveCharacter]
-refin
+refine h.antisymm conductor_dvd_of_mem_conductorSet _
+    ⟨h.trans χ.conductor_dvd_level, (changeLevel hm χ).primitiveCharacter, ?_⟩
+  apply changeLevel_injective hm
+  rw [← changeLevel_trans]; rw [changeLevel_primitiveCharacter]
 
 中文:
 定理 conductor_changeLevel
@@ -1420,7 +1479,10 @@ refin
     refine conductor_dvd_of_mem_conductorSet _
       ⟨χ.conductor_dvd_level.trans hm, χ.primitiveCharacter, ?_⟩
     rw [changeLevel_trans _ χ.conductor_dvd_level]; rw [changeLevel_primitiveCharacter]
-refin
+refine h.antisymm conductor_dvd_of_mem_conductorSet _
+    ⟨h.trans χ.conductor_dvd_level, (changeLevel hm χ).primitiveCharacter, ?_⟩
+  apply changeLevel_injective hm
+  rw [← changeLevel_trans]; rw [changeLevel_primitiveCharacter]
 
 Depends on / 依赖: NeZero, antisymm, changeLevel, changeLevel_injective, changeLevel_primitiveCharacter, changeLevel_trans, conductor, conductor_dvd_level, conductor_dvd_level.trans, conductor_dvd_of_mem_conductorSet, h.antisymm, h.trans, primitiveCharacter
 -/
@@ -1448,7 +1510,9 @@ theorem primitiveCharacter_changeLevel_apply
         (changeLevel hm χ).primitiveCharacter = χ.primitiveCharacter by
       have := DFunLike.congr_fun this (a : ZMod _)
       rwa [changeLevel_eq_cast_of_dvd' _ _ ha] at this
-    apply chan
+    apply changeLevel_injective (χ.conductor_dvd_level.trans hm)
+    rw [← changeLevel_trans]; rw [changeLevel_primitiveCharacter]; rw [χ.primitiveCharacter.changeLevel_trans χ.conductor_dvd_level]; rw [changeLevel_primitiveCharacter]
+  · rw [(apply_eq_zero_iff ..).mpr ha, (apply_eq_zero_iff ..).mpr (by rwa [conductor_changeLevel])]
 
 中文:
 定理 primitiveCharacter_changeLevel_apply
@@ -1459,7 +1523,9 @@ theorem primitiveCharacter_changeLevel_apply
         (changeLevel hm χ).primitiveCharacter = χ.primitiveCharacter by
       have := DFunLike.congr_fun this (a : ZMod _)
       rwa [changeLevel_eq_cast_of_dvd' _ _ ha] at this
-    apply chan
+    apply changeLevel_injective (χ.conductor_dvd_level.trans hm)
+    rw [← changeLevel_trans]; rw [changeLevel_primitiveCharacter]; rw [χ.primitiveCharacter.changeLevel_trans χ.conductor_dvd_level]; rw [changeLevel_primitiveCharacter]
+  · rw [(apply_eq_zero_iff ..).mpr ha, (apply_eq_zero_iff ..).mpr (by rwa [conductor_changeLevel])]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, IsCoprime, changeLevel, changeLevel_eq_cast_of_dvd, changeLevel_injective, changeLevel_primitiveCharacter, changeLevel_trans, conductor, conductor_changeLevel, conductor_dvd_level, conductor_dvd_level.trans, congr_fun, dvd_of_eq, primitiveCharacter, primitiveCharacter.changeLevel_trans
 -/
@@ -1486,7 +1552,7 @@ lemma conductor_zpow_dvd
   · simp [conductor_eq_zero_iff_level_eq_zero.mpr]
   rw [← mem_conductorSet_iff_conductor_dvd _ χ.conductor_dvd_level]; rw [mem_conductorSet_iff]
   refine ⟨χ.conductor_dvd_level, χ.primitiveCharacter ^ m, ?_⟩
-  rw [MonoidHom.map_zpow]; rw [changeLevel_prim
+  rw [MonoidHom.map_zpow]; rw [changeLevel_primitiveCharacter]
 
 中文:
 引理 conductor_zpow_dvd
@@ -1496,7 +1562,7 @@ lemma conductor_zpow_dvd
   · simp [conductor_eq_zero_iff_level_eq_zero.mpr]
   rw [← mem_conductorSet_iff_conductor_dvd _ χ.conductor_dvd_level]; rw [mem_conductorSet_iff]
   refine ⟨χ.conductor_dvd_level, χ.primitiveCharacter ^ m, ?_⟩
-  rw [MonoidHom.map_zpow]; rw [changeLevel_prim
+  rw [MonoidHom.map_zpow]; rw [changeLevel_primitiveCharacter]
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_zpow, changeLevel_primitiveCharacter, conductor_dvd_level, conductor_eq_zero_iff_level_eq_zero, conductor_eq_zero_iff_level_eq_zero.mpr, eq_zero_or_neZero, map_zpow, mem_conductorSet_iff, mem_conductorSet_iff_conductor_dvd, primitiveCharacter
 -/
@@ -1642,7 +1708,8 @@ theorem conductor_mul_dvd_lcm_conductor
   · simp [conductor_eq_zero_iff_level_eq_zero.mpr]
   have h := Nat.lcm_dvd χ.conductor_dvd_level ψ.conductor_dvd_level
   rw [← mem_conductorSet_iff_conductor_dvd _ h]; rw [mem_conductorSet_iff]
-  refine ⟨h, χ.primitiveCharacter.mul ψ.primitiveCharacter, ?_
+  refine ⟨h, χ.primitiveCharacter.mul ψ.primitiveCharacter, ?_⟩
+  rw [mul]; rw [MonoidHom.map_mul]; rw [← changeLevel_trans]; rw [← changeLevel_trans]; rw [changeLevel_primitiveCharacter]; rw [changeLevel_primitiveCharacter]
 
 中文:
 定理 conductor_mul_dvd_lcm_conductor
@@ -1652,7 +1719,8 @@ theorem conductor_mul_dvd_lcm_conductor
   · simp [conductor_eq_zero_iff_level_eq_zero.mpr]
   have h := Nat.lcm_dvd χ.conductor_dvd_level ψ.conductor_dvd_level
   rw [← mem_conductorSet_iff_conductor_dvd _ h]; rw [mem_conductorSet_iff]
-  refine ⟨h, χ.primitiveCharacter.mul ψ.primitiveCharacter, ?_
+  refine ⟨h, χ.primitiveCharacter.mul ψ.primitiveCharacter, ?_⟩
+  rw [mul]; rw [MonoidHom.map_mul]; rw [← changeLevel_trans]; rw [← changeLevel_trans]; rw [changeLevel_primitiveCharacter]; rw [changeLevel_primitiveCharacter]
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_mul, Nat.lcm_dvd, changeLevel_primitiveCharacter, changeLevel_trans, conductor_dvd_level, conductor_eq_zero_iff_level_eq_zero, conductor_eq_zero_iff_level_eq_zero.mpr, eq_zero_or_neZero, lcm_dvd, map_mul, mem_conductorSet_iff, mem_conductorSet_iff_conductor_dvd, primitiveCharacter, primitiveCharacter.mul
 -/
@@ -1758,7 +1826,11 @@ theorem mem_annihilator_iff_mem_closure
   refine ⟨fun hχ x hx => ?_, fun h u => ?_⟩
 · exact hχ (Submonoid.unitsEquivUnitsType _)
       ⟨x, Submonoid.mem_units_of_val_mem_inv_val_mem _ ⟨x, hx, rfl⟩
-        ⟨x⁻¹, by simpa [← Sub
+        ⟨x⁻¹, by simpa [← Subgroup.closure_toSubmonoid_of_finite] using hx, rfl⟩⟩
+  · obtain ⟨y, hy, hyu⟩ := Submonoid.mem_map.mp u.val.prop
+    exact hyu ▸ h _ hy
+
+@[simp]
 
 中文:
 定理 mem_annihilator_iff_mem_closure
@@ -1769,7 +1841,11 @@ theorem mem_annihilator_iff_mem_closure
   refine ⟨fun hχ x hx => ?_, fun h u => ?_⟩
 · exact hχ (Submonoid.unitsEquivUnitsType _)
       ⟨x, Submonoid.mem_units_of_val_mem_inv_val_mem _ ⟨x, hx, rfl⟩
-        ⟨x⁻¹, by simpa [← Sub
+        ⟨x⁻¹, by simpa [← Subgroup.closure_toSubmonoid_of_finite] using hx, rfl⟩⟩
+  · obtain ⟨y, hy, hyu⟩ := Submonoid.mem_map.mp u.val.prop
+    exact hyu ▸ h _ hy
+
+@[simp]
 
 Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, MulChar, MulChar.domRestrictHom_apply, MulChar.domRestrict_eq_one_iff, Subgroup, Subgroup.closure_toSubmonoid_of_finite, Submonoid, Submonoid.mem_map.mp, Submonoid.mem_units_of_val_mem_inv_val_mem, Submonoid.unitsEquivUnitsType, annihilator, closure_toSubmonoid_of_finite, domRestrictHom_apply, domRestrict_eq_one_iff, mem_ker, mem_map, mem_units_of_val_mem_inv_val_mem, u.val.prop, unitsEquivUnitsType
 -/
@@ -1857,7 +1933,22 @@ theorem mem_subgroupOfPrimitiveMapToOne_iff
   have hcop := Nat.coprime_ordCompl hp.out (NeZero.ne n)
   simp only [subgroupOfPrimitiveMapToOne, Subgroup.mem_map, mem_annihilator_iff,
     Set.mem_singleton_iff, forall_eq, ZMod.coe_unitOfCoprime]
-  refine 
+  refine ⟨?_, fun h => ?_⟩
+  · rintro ⟨ψ, hψ, rfl⟩
+    rw [← Int.cast_natCast] at hψ ⊢
+    rw [primitiveCharacter_changeLevel_apply]; rw [primitiveCharacter_apply_of_isCoprime]; rw [hψ]
+    exact Nat.isCoprime_iff_coprime.mpr hcop
+  · have hdvd : χ.conductor ∣ n / p ^ n.factorization p := by
+      apply Nat.dvd_ordCompl_of_dvd_not_dvd χ.conductor_dvd_level
+      simp [← hp.out.coprime_iff_not_dvd, ← Nat.isCoprime_iff_coprime,
+        ← apply_ne_zero_iff (χ := χ.primitiveCharacter), h]
+    refine ⟨changeLevel hdvd χ.primitiveCharacter, ?_, ?_⟩
+    · rw [show (p : ZMod (n / p ^ n.factorization p))
+          = ((p : Int) : ZMod (n / p ^ n.factorization p)) from (Int.cast_natCast p).symm,
+        changeLevel_eq_cast_of_dvd' χ.primitiveCharacter hdvd (Nat.isCoprime_iff_coprime.mpr hcop),
+        Int.cast_natCast]
+      exact h
+    · rw [← changeLevel_trans, changeLevel_primitiveCharacter]
 
 中文:
 定理 mem_subgroupOfPrimitiveMapToOne_iff
@@ -1867,7 +1958,22 @@ theorem mem_subgroupOfPrimitiveMapToOne_iff
   have hcop := Nat.coprime_ordCompl hp.out (NeZero.ne n)
   simp only [subgroupOfPrimitiveMapToOne, Subgroup.mem_map, mem_annihilator_iff,
     Set.mem_singleton_iff, forall_eq, ZMod.coe_unitOfCoprime]
-  refine 
+  refine ⟨?_, fun h => ?_⟩
+  · rintro ⟨ψ, hψ, rfl⟩
+    rw [← Int.cast_natCast] at hψ ⊢
+    rw [primitiveCharacter_changeLevel_apply]; rw [primitiveCharacter_apply_of_isCoprime]; rw [hψ]
+    exact Nat.isCoprime_iff_coprime.mpr hcop
+  · have hdvd : χ.conductor ∣ n / p ^ n.factorization p := by
+      apply Nat.dvd_ordCompl_of_dvd_not_dvd χ.conductor_dvd_level
+      simp [← hp.out.coprime_iff_not_dvd, ← Nat.isCoprime_iff_coprime,
+        ← apply_ne_zero_iff (χ := χ.primitiveCharacter), h]
+    refine ⟨changeLevel hdvd χ.primitiveCharacter, ?_, ?_⟩
+    · rw [show (p : ZMod (n / p ^ n.factorization p))
+          = ((p : Int) : ZMod (n / p ^ n.factorization p)) from (Int.cast_natCast p).symm,
+        changeLevel_eq_cast_of_dvd' χ.primitiveCharacter hdvd (Nat.isCoprime_iff_coprime.mpr hcop),
+        Int.cast_natCast]
+      exact h
+    · rw [← changeLevel_trans, changeLevel_primitiveCharacter]
 
 Depends on / 依赖: Int.cast_natCast, Nat.coprime_ordCompl, Nat.isCoprime_iff_coprime.mpr, Nat.ordCompl_pos, NeZero, NeZero.ne, Set.mem_singleton_iff, Subgroup, Subgroup.mem_map, ZMod.coe_unitOfCoprime, cast_natCast, coe_unitOfCoprime, coprime_ordCompl, factorization, forall_eq, hp.out, isCoprime_iff_coprime, mem_annihilator_iff, mem_map, mem_singleton_iff
 -/

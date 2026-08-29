@@ -439,7 +439,9 @@ theorem IsAlgClosed.algebraicClosure_eq_bot_iff
   refine ⟨fun h => IsAlgClosed.of_exists_root _ fun p hmon hirr => ?_,
     fun _ => IntermediateField.eq_bot_of_isAlgClosed_of_isAlgebraic _⟩
   obtain ⟨x, hx⟩ := IsAlgClosed.exists_aeval_eq_zero E p (degree_pos_of_irreducible hirr).ne'
-  obtain ⟨x, rfl⟩ := h ▸ mem_algebraicClosure_iff'.2 (minpoly
+  obtain ⟨x, rfl⟩ := h ▸ mem_algebraicClosure_iff'.2 (minpoly.ne_zero_iff.1 <|
+    ne_zero_of_dvd_ne_zero hmon.ne_zero (minpoly.dvd _ x hx))
+  exact ⟨x, by simpa [Algebra.ofId_apply] using hx⟩
 
 中文:
 定理 是代数闭.algebraicClosure_eq_bot_iff
@@ -448,7 +450,9 @@ theorem IsAlgClosed.algebraicClosure_eq_bot_iff
   refine ⟨fun h => IsAlgClosed.of_exists_root _ fun p hmon hirr => ?_,
     fun _ => IntermediateField.eq_bot_of_isAlgClosed_of_isAlgebraic _⟩
   obtain ⟨x, hx⟩ := IsAlgClosed.exists_aeval_eq_zero E p (degree_pos_of_irreducible hirr).ne'
-  obtain ⟨x, rfl⟩ := h ▸ mem_algebraicClosure_iff'.2 (minpoly
+  obtain ⟨x, rfl⟩ := h ▸ mem_algebraicClosure_iff'.2 (minpoly.ne_zero_iff.1 <|
+    ne_zero_of_dvd_ne_zero hmon.ne_zero (minpoly.dvd _ x hx))
+  exact ⟨x, by simpa [Algebra.ofId_apply] using hx⟩
 
 Depends on / 依赖: Algebra, Algebra.ofId_apply, IntermediateField, IntermediateField.eq_bot_of_isAlgClosed_of_isAlgebraic, IsAlgClosed, IsAlgClosed.exists_aeval_eq_zero, IsAlgClosed.of_exists_root, degree_pos_of_irreducible, eq_bot_of_isAlgClosed_of_isAlgebraic, exists_aeval_eq_zero, hmon.ne_zero, mem_algebraicClosure_iff, minpoly, minpoly.dvd, minpoly.ne_zero_iff, ne_zero, ne_zero_iff, ne_zero_of_dvd_ne_zero, ofId_apply, of_exists_root
 -/

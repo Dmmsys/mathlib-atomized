@@ -50,7 +50,7 @@ definition domCoprodDep
   map_update_smul' := by
     rintro _ m (i₁ | i₂) p q
     · let := Classical.decEq ι₁; simp
-    · let := Classica
+    · let := Classical.decEq ι₂; simp
 
 中文:
 定义 domCoprodDep
@@ -63,7 +63,7 @@ definition domCoprodDep
   map_update_smul' := by
     rintro _ m (i₁ | i₂) p q
     · let := Classical.decEq ι₁; simp
-    · let := Classica
+    · let := Classical.decEq ι₂; simp
 -/
 def domCoprodDep (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
     (b : MultilinearMap R (fun i₂ => N (.inr i₂)) N₂) :

@@ -42,7 +42,14 @@ definition liftAdicCompletionAux
     letI T := S ⧸ I ^ (m + 1 + 1)
     letI J : Ideal T := (I ^ (m + 1)).map (Ideal.Quotient.mkₐ R (I ^ (m + 1 + 1)))
     letI q : A ->ₐ[R] T ⧸ J :=
-      (DoubleQuot.quotQuotEquivQuotOfL
+      (DoubleQuot.quotQuotEquivQuotOfLEₐ R
+        (Ideal.pow_le_pow_right (I := I) (m + 1).le_succ)).symm.toAlgHom.comp
+      (liftAdicCompletionAux (m + 1))
+    haveI : J ^ (m + 1 + 1) = 0 := by
+      rw [← Ideal.map_pow]; rw [Submodule.zero_eq_bot]; rw [← pow_mul]
+      exact eq_bot_mono (Ideal.map_mono <| Ideal.pow_le_pow_right (by simp))
+        (Ideal.map_quotient_self _)
+    FormallySmooth.lift J ⟨m + 1 + 1, this⟩ q
 
 中文:
 定义 liftAdicCompletionAux
@@ -54,7 +61,14 @@ definition liftAdicCompletionAux
     letI T := S ⧸ I ^ (m + 1 + 1)
     letI J : Ideal T := (I ^ (m + 1)).map (Ideal.Quotient.mkₐ R (I ^ (m + 1 + 1)))
     letI q : A ->ₐ[R] T ⧸ J :=
-      (DoubleQuot.quotQuotEquivQuotOfL
+      (DoubleQuot.quotQuotEquivQuotOfLEₐ R
+        (Ideal.pow_le_pow_right (I := I) (m + 1).le_succ)).symm.toAlgHom.comp
+      (liftAdicCompletionAux (m + 1))
+    haveI : J ^ (m + 1 + 1) = 0 := by
+      rw [← Ideal.map_pow]; rw [Submodule.zero_eq_bot]; rw [← pow_mul]
+      exact eq_bot_mono (Ideal.map_mono <| Ideal.pow_le_pow_right (by simp))
+        (Ideal.map_quotient_self _)
+    FormallySmooth.lift J ⟨m + 1 + 1, this⟩ q
 
 Depends on / 依赖: DoubleQuot, DoubleQuot.quotQuotEquivQuotOfLE, Ideal.Quotient.mk, Ideal.map_pow, Ideal.pow_le_pow_right, Ideal.quotientEquivAlgOfEq, Quotient, Submodule, Submodule.zero_eq_bot, eq_bot_mono, le_succ, liftAdicCompletionAux, map_pow, pow_le_pow_right, pow_mul, quotientEquivAlgOfEq, symm.toAlgHom.comp, toAlgHom, toAlgHom.comp, zero_eq_bot
 -/

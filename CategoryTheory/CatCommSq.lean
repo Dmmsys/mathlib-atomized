@@ -305,7 +305,10 @@ lemma hInv_hInv
   simp only [Equivalence.symm_functor]
   rw [hInv_iso_inv_app]
   dsimp
-  simp only [Functor.comp_obj, assoc, ← Functor.
+  simp only [Functor.comp_obj, assoc, ← Functor.map_comp, Iso.inv_hom_id_app,
+    Equivalence.counitInv_app_functor, Functor.map_id]
+  simp only [Functor.map_comp, Equivalence.fun_inv_map, assoc,
+    Equivalence.counitInv_functor_comp, comp_id, Iso.inv_hom_id_app_assoc]
 
 中文:
 引理 hInv_hInv
@@ -319,7 +322,10 @@ lemma hInv_hInv
   simp only [Equivalence.symm_functor]
   rw [hInv_iso_inv_app]
   dsimp
-  simp only [Functor.comp_obj, assoc, ← Functor.
+  simp only [Functor.comp_obj, assoc, ← Functor.map_comp, Iso.inv_hom_id_app,
+    Equivalence.counitInv_app_functor, Functor.map_id]
+  simp only [Functor.map_comp, Equivalence.fun_inv_map, assoc,
+    Equivalence.counitInv_functor_comp, comp_id, Iso.inv_hom_id_app_assoc]
 
 Depends on / 依赖: B.functor.map, Equivalence, Equivalence.counitInv_app_functor, Equivalence.counitInv_functor_comp, Equivalence.fun_inv_map, Equivalence.symm_functor, Functor, Functor.comp_map, Functor.comp_obj, Functor.map_comp, Functor.map_id, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, L.map, T.unitIso.hom.app, cancel_mono, comp_id, comp_map, comp_obj, counitInv_app_functor
 -/
@@ -381,7 +387,8 @@ definition vInv
       associator _ _ _ ≪≫
       isoWhiskerLeft L.inverse (iso T L.functor R.functor B).symm) R.inverse ≪≫
       associator _ _ _ ≪≫ isoWhiskerLeft _ (associator _ _ _) ≪≫
-      (associator _ _ _).symm ≪≫ isoWhiskerLeft _ R.u
+      (associator _ _ _).symm ≪≫ isoWhiskerLeft _ R.unitIso.symm ≪≫
+      rightUnitor _
 
 中文:
 定义 vInv
@@ -390,7 +397,8 @@ definition vInv
       associator _ _ _ ≪≫
       isoWhiskerLeft L.inverse (iso T L.functor R.functor B).symm) R.inverse ≪≫
       associator _ _ _ ≪≫ isoWhiskerLeft _ (associator _ _ _) ≪≫
-      (associator _ _ _).symm ≪≫ isoWhiskerLeft _ R.u
+      (associator _ _ _).symm ≪≫ isoWhiskerLeft _ R.unitIso.symm ≪≫
+      rightUnitor _
 
 Depends on / 依赖: B.leftUnitor.symm, L.counitIso.symm, counitIso, isoWhiskerRight, leftUnitor
 -/
@@ -418,7 +426,9 @@ lemma vInv_vInv
   rw [← Functor.comp_map]
   dsimp
   simp only [Functor.map_comp, Equivalence.fun_inv_map, Functor.comp_obj,
-    Functor.id_obj, assoc, Iso.inv_hom_id_app_ass
+    Functor.id_obj, assoc, Iso.inv_hom_id_app_assoc, Iso.inv_hom_id_app, comp_id]
+  rw [← B.map_comp]; rw [L.counit_app_functor]; rw [← L.functor.map_comp]; rw [← NatTrans.comp_app]; rw [Iso.inv_hom_id]; rw [NatTrans.id_app]; rw [L.functor.map_id]
+  simp
 
 中文:
 引理 vInv_vInv
@@ -432,7 +442,9 @@ lemma vInv_vInv
   rw [← Functor.comp_map]
   dsimp
   simp only [Functor.map_comp, Equivalence.fun_inv_map, Functor.comp_obj,
-    Functor.id_obj, assoc, Iso.inv_hom_id_app_ass
+    Functor.id_obj, assoc, Iso.inv_hom_id_app_assoc, Iso.inv_hom_id_app, comp_id]
+  rw [← B.map_comp]; rw [L.counit_app_functor]; rw [← L.functor.map_comp]; rw [← NatTrans.comp_app]; rw [Iso.inv_hom_id]; rw [NatTrans.id_app]; rw [L.functor.map_id]
+  simp
 
 Depends on / 依赖: B.map, B.map_comp, Equivalence, Equivalence.fun_inv_map, Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Iso.inv_hom_id, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, L.counit_app_functor, L.functor.map, L.functor.map_comp, L.functor.map_id, L.unitIso.hom, NatTrans, NatTrans.app, NatTrans.comp_app
 -/

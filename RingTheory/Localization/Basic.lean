@@ -118,7 +118,13 @@ theorem mapPiEvalRingHom_bijective
     simp_rw [map_mk'] at eq
     rw [IsLocalization.eq] at eq ⊢
     obtain ⟨s, hs⟩ := eq
-    refine ⟨⟨update 
+    refine ⟨⟨update 0 i s, by apply update_self i s.1 0 ▸ s.2⟩, funext fun j => ?_⟩
+    obtain rfl | ne := eq_or_ne j i
+    · simpa using hs
+    · simp [update_of_ne ne]
+  · obtain ⟨r, s, rfl⟩ := exists_mk'_eq S x
+    exact ⟨mk' (M := T) _ (update 0 i r) ⟨update 0 i s, by apply update_self i s.1 0 ▸ s.2⟩,
+      by simp [map_mk']⟩
 
 中文:
 定理 mapPiEvalRingHom_bijective
@@ -132,7 +138,13 @@ theorem mapPiEvalRingHom_bijective
     simp_rw [map_mk'] at eq
     rw [IsLocalization.eq] at eq ⊢
     obtain ⟨s, hs⟩ := eq
-    refine ⟨⟨update 
+    refine ⟨⟨update 0 i s, by apply update_self i s.1 0 ▸ s.2⟩, funext fun j => ?_⟩
+    obtain rfl | ne := eq_or_ne j i
+    · simpa using hs
+    · simp [update_of_ne ne]
+  · obtain ⟨r, s, rfl⟩ := exists_mk'_eq S x
+    exact ⟨mk' (M := T) _ (update 0 i r) ⟨update 0 i s, by apply update_self i s.1 0 ▸ s.2⟩,
+      by simp [map_mk']⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.eq, Pi.evalRingHom, S.comap, classical, eq_or_ne, evalRingHom, exists_mk, map_mk, simp_rw, update, update_of_ne, update_self
 -/
@@ -739,7 +751,11 @@ definition atUnits
     rwa [← hu, Units.mul_right_inj] at eq
   · intro y
     obtain ⟨⟨x, s⟩, eq⟩ := IsLocalization.surj M y
-    obtain ⟨u, hu⟩ :=
+    obtain ⟨u, hu⟩ := H s.prop
+    use x * u.inv
+    dsimp [Algebra.ofId, RingHom.toFun_eq_coe, AlgHom.coe_mks]
+    rw [map_mul]; rw [← eq]; rw [← hu]; rw [mul_assoc]; rw [← map_mul]
+    simp
 
 中文:
 定义 atUnits
@@ -752,7 +768,11 @@ definition atUnits
     rwa [← hu, Units.mul_right_inj] at eq
   · intro y
     obtain ⟨⟨x, s⟩, eq⟩ := IsLocalization.surj M y
-    obtain ⟨u, hu⟩ :=
+    obtain ⟨u, hu⟩ := H s.prop
+    use x * u.inv
+    dsimp [Algebra.ofId, RingHom.toFun_eq_coe, AlgHom.coe_mks]
+    rw [map_mul]; rw [← eq]; rw [← hu]; rw [mul_assoc]; rw [← map_mul]
+    simp
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, AlgHom, AlgHom.coe_mks, Algebra, Algebra.ofId, IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.surj, RingHom, RingHom.toFun_eq_coe, Units.mul_right_inj, c.prop, coe_mks, eq_iff_exists, map_mul, mul_assoc, mul_right_inj, ofBijective, s.prop
 -/
@@ -792,7 +812,12 @@ theorem isLocalization_of_algEquiv
   · intro y
     obtain ⟨⟨x, s⟩, e⟩ := IsLocalization.surj M (h.symm y)
     apply_fun (show S -> P from h) at e
-    simp only [map_mul, h.apply_symm
+    simp only [map_mul, h.apply_symm_apply, h.commutes] at e
+    exact ⟨⟨x, s⟩, e⟩
+  · intro x y
+    rw [← h.symm.toEquiv.injective.eq_iff]; rw [← IsLocalization.eq_iff_exists M S]; rw [← h.symm.commutes]; rw [←
+      h.symm.commutes]
+    exact id
 
 中文:
 定理 isLocalization_of_algEquiv
@@ -805,7 +830,12 @@ theorem isLocalization_of_algEquiv
   · intro y
     obtain ⟨⟨x, s⟩, e⟩ := IsLocalization.surj M (h.symm y)
     apply_fun (show S -> P from h) at e
-    simp only [map_mul, h.apply_symm
+    simp only [map_mul, h.apply_symm_apply, h.commutes] at e
+    exact ⟨⟨x, s⟩, e⟩
+  · intro x y
+    rw [← h.symm.toEquiv.injective.eq_iff]; rw [← IsLocalization.eq_iff_exists M S]; rw [← h.symm.commutes]; rw [←
+      h.symm.commutes]
+    exact id
 
 Depends on / 依赖: IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.map_units, IsLocalization.surj, apply_fun, apply_symm_apply, commutes, convert, eq_iff, eq_iff_exists, h.apply_symm_apply, h.commutes, h.symm, h.symm.commutes, h.symm.toEquiv.injective.eq_iff, h.toAlgHom.toRingHom.toMonoidHom, injective, map_mul, map_units, toAlgHom
 -/
@@ -949,7 +979,32 @@ lemma commutes
     exact IsUnit.map _ (IsLocalization.map_units _ ⟨a, ha⟩)
   surj a := by
     obtain ⟨⟨y, -, m, hm, rfl⟩, hy⟩ := surj (M := Algebra.algebraMapSubmonoid S₂ M₁) a
-    rw [← IsScalarTo
+    rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R S₁ T] at hy
+    obtain ⟨⟨z, n, hn⟩, hz⟩ := IsLocalization.surj (M := M₂) y
+    have hunit : IsUnit (algebraMap R S₁ m) := map_units _ ⟨m, hm⟩
+    use ⟨algebraMap R S₁ z * hunit.unit⁻¹, ⟨algebraMap R S₁ n, n, hn, rfl⟩⟩
+    rw [map_mul]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R S₂ T]
+    conv_rhs => rw [← IsScalarTower.algebraMap_apply]
+    rw [IsScalarTower.algebraMap_apply R S₂ T]; rw [← hz]; rw [map_mul]; rw [← hy]
+    convert_to _ = a * (algebraMap S₂ T) ((algebraMap R S₂) n) *
+        (algebraMap S₁ T) (((algebraMap R S₁) m) * hunit.unit⁻¹.val)
+    · rw [map_mul]
+      ring
+    simp
+  exists_of_eq {x y} hxy := by
+    obtain ⟨r, s, d, hr, hs⟩ := IsLocalization.surj₂ M₁ S₁ x y
+    apply_fun (· * algebraMap S₁ T (algebraMap R S₁ d)) at hxy
+    simp_rw [← map_mul, hr, hs, ← IsScalarTower.algebraMap_apply,
+      IsScalarTower.algebraMap_apply R S₂ T] at hxy
+    obtain ⟨⟨-, c, hmc, rfl⟩, hc⟩ := exists_of_eq (M := Algebra.algebraMapSubmonoid S₂ M₁) hxy
+    simp_rw [← map_mul] at hc
+    obtain ⟨a, ha⟩ := IsLocalization.exists_of_eq (M := M₂) hc
+    use ⟨algebraMap R S₁ a, a, a.property, rfl⟩
+    apply (map_units S₁ d).mul_right_cancel
+    rw [mul_assoc]; rw [hr]; rw [mul_assoc]; rw [hs]
+    apply (map_units S₁ ⟨c, hmc⟩).mul_right_cancel
+    rw [← map_mul]; rw [← map_mul]; rw [mul_assoc]; rw [mul_comm _ c]; rw [ha]; rw [map_mul]; rw [map_mul]
+    ring
 
 中文:
 引理 commutes
@@ -960,7 +1015,32 @@ lemma commutes
     exact IsUnit.map _ (IsLocalization.map_units _ ⟨a, ha⟩)
   surj a := by
     obtain ⟨⟨y, -, m, hm, rfl⟩, hy⟩ := surj (M := Algebra.algebraMapSubmonoid S₂ M₁) a
-    rw [← IsScalarTo
+    rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R S₁ T] at hy
+    obtain ⟨⟨z, n, hn⟩, hz⟩ := IsLocalization.surj (M := M₂) y
+    have hunit : IsUnit (algebraMap R S₁ m) := map_units _ ⟨m, hm⟩
+    use ⟨algebraMap R S₁ z * hunit.unit⁻¹, ⟨algebraMap R S₁ n, n, hn, rfl⟩⟩
+    rw [map_mul]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R S₂ T]
+    conv_rhs => rw [← IsScalarTower.algebraMap_apply]
+    rw [IsScalarTower.algebraMap_apply R S₂ T]; rw [← hz]; rw [map_mul]; rw [← hy]
+    convert_to _ = a * (algebraMap S₂ T) ((algebraMap R S₂) n) *
+        (algebraMap S₁ T) (((algebraMap R S₁) m) * hunit.unit⁻¹.val)
+    · rw [map_mul]
+      ring
+    simp
+  exists_of_eq {x y} hxy := by
+    obtain ⟨r, s, d, hr, hs⟩ := IsLocalization.surj₂ M₁ S₁ x y
+    apply_fun (· * algebraMap S₁ T (algebraMap R S₁ d)) at hxy
+    simp_rw [← map_mul, hr, hs, ← IsScalarTower.algebraMap_apply,
+      IsScalarTower.algebraMap_apply R S₂ T] at hxy
+    obtain ⟨⟨-, c, hmc, rfl⟩, hc⟩ := exists_of_eq (M := Algebra.algebraMapSubmonoid S₂ M₁) hxy
+    simp_rw [← map_mul] at hc
+    obtain ⟨a, ha⟩ := IsLocalization.exists_of_eq (M := M₂) hc
+    use ⟨algebraMap R S₁ a, a, a.property, rfl⟩
+    apply (map_units S₁ d).mul_right_cancel
+    rw [mul_assoc]; rw [hr]; rw [mul_assoc]; rw [hs]
+    apply (map_units S₁ ⟨c, hmc⟩).mul_right_cancel
+    rw [← map_mul]; rw [← map_mul]; rw [mul_assoc]; rw [mul_comm _ c]; rw [ha]; rw [map_mul]; rw [map_mul]
+    ring
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, IsLocalization, IsLocalization.map_units, IsLocalization.surj, IsScalarTower, IsScalarTower.algebraMap_apply, IsUnit, IsUnit.map, algebraMap, algebraMapSubmonoid, algebraMap_apply, map_units
 -/
@@ -1238,7 +1318,7 @@ theorem IsField.localization_map_bijective
   refine ⟨IsLocalization.injective _ hM, fun x => ?_⟩
   obtain ⟨r, ⟨m, hm⟩, rfl⟩ := exists_mk'_eq M x
   obtain ⟨n, hn⟩ := hR.mul_inv_cancel (nonZeroDivisors.ne_zero <| hM hm)
-  exact ⟨r * n, by rw [eq_mk'_iff_mul_eq, ← ma
+  exact ⟨r * n, by rw [eq_mk'_iff_mul_eq, ← map_mul, mul_assoc, _root_.mul_comm n, hn, mul_one]⟩
 
 中文:
 定理 是域.localization_map_bijective
@@ -1249,7 +1329,7 @@ theorem IsField.localization_map_bijective
   refine ⟨IsLocalization.injective _ hM, fun x => ?_⟩
   obtain ⟨r, ⟨m, hm⟩, rfl⟩ := exists_mk'_eq M x
   obtain ⟨n, hn⟩ := hR.mul_inv_cancel (nonZeroDivisors.ne_zero <| hM hm)
-  exact ⟨r * n, by rw [eq_mk'_iff_mul_eq, ← ma
+  exact ⟨r * n, by rw [eq_mk'_iff_mul_eq, ← map_mul, mul_assoc, _root_.mul_comm n, hn, mul_one]⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.injective, _iff_mul_eq, _root_, _root_.mul_comm, eq_mk, exists_mk, hR.mul_inv_cancel, hR.toField, injective, le_nonZeroDivisors_of_noZeroDivisors, map_mul, mul_assoc, mul_comm, mul_inv_cancel, mul_one, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, replace
 -/
@@ -1437,14 +1517,16 @@ theorem IsLocalization.algebraMap_mk'
   given: (x : R) (y : M)
   proof: by
   rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [Subtype.coe_mk]; rw [← IsScalarTower.algebraMap_apply]; rw [←
-    IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [← map_mul]; rw [mul_comm]; rw [IsLocalization.mul_mk'_eq_mk
+    IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [← map_mul]; rw [mul_comm]; rw [IsLocalization.mul_mk'_eq_mk'_of_mul]
+  exact congr_arg (algebraMap Rₘ Sₘ) (IsLocalization.mk'_mul_cancel_left x y)
 
 中文:
 定理 是Localization.algebraMap_mk'
   条件: (x : R) (y : M)
   证明: by
   rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [Subtype.coe_mk]; rw [← IsScalarTower.algebraMap_apply]; rw [←
-    IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [← map_mul]; rw [mul_comm]; rw [IsLocalization.mul_mk'_eq_mk
+    IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [IsScalarTower.algebraMap_apply R Rₘ Sₘ]; rw [← map_mul]; rw [mul_comm]; rw [IsLocalization.mul_mk'_eq_mk'_of_mul]
+  exact congr_arg (algebraMap Rₘ Sₘ) (IsLocalization.mk'_mul_cancel_left x y)
 
 Depends on / 依赖: IsLocalization, IsLocalization.eq_mk, IsLocalization.mk, IsLocalization.mul_mk, IsScalarTower, IsScalarTower.algebraMap_apply, Subtype, Subtype.coe_mk, _eq_mk, _iff_mul_eq, _mul_cancel_left, _of_mul, algebraMap, algebraMap_apply, coe_mk, congr_arg, eq_mk, map_mul, mul_comm, mul_mk
 -/
@@ -1659,7 +1741,10 @@ theorem Localization.r_iff_of_le_nonZeroDivisors
   refine ⟨fun ⟨u, hu, h⟩ => ?_,
     fun h => ⟨1, Submonoid.one_mem M, by simpa only [one_mul, mul_comm a] using h⟩⟩
   have hu' : u in nonZeroDivisors R := hM hu
-  simp only [mem_nonZeroDivisors_iff, mul_c
+  simp only [mem_nonZeroDivisors_iff, mul_comm, and_self] at hu'
+  rw [← sub_eq_zero]
+  apply hu'
+  rwa [mul_sub, sub_eq_zero, mul_comm a]
 
 中文:
 定理 Localization.r_iff_of_le_nonZeroDivisors
@@ -1669,7 +1754,10 @@ theorem Localization.r_iff_of_le_nonZeroDivisors
   refine ⟨fun ⟨u, hu, h⟩ => ?_,
     fun h => ⟨1, Submonoid.one_mem M, by simpa only [one_mul, mul_comm a] using h⟩⟩
   have hu' : u in nonZeroDivisors R := hM hu
-  simp only [mem_nonZeroDivisors_iff, mul_c
+  simp only [mem_nonZeroDivisors_iff, mul_comm, and_self] at hu'
+  rw [← sub_eq_zero]
+  apply hu'
+  rwa [mul_sub, sub_eq_zero, mul_comm a]
 
 Depends on / 依赖: Con.rel_mk, Localization, Localization.r, Localization.r_eq_r, Submonoid, Submonoid.one_mem, Subtype, Subtype.exists, and_self, exists_prop, mem_nonZeroDivisors_iff, mul_comm, mul_sub, nonZeroDivisors, one_mem, one_mul, r_eq_r, rel_mk, sub_eq_zero
 -/
@@ -1755,7 +1843,9 @@ definition AlgHom.extendScalarsOfIsLocalization
     have : f.toRingHom.comp (algebraMap R S) = g.toRingHom.comp (algebraMap R S) := by simp
     suffices f = g by rwa [DFunLike.ext_iff] at this
     apply IsLocalization.algHom_ext M
-    
+    rwa [DFunLike.ext_iff] at this ⊢
+
+@[simp]
 
 中文:
 定义 代数态射.extendScalarsOfIsLocalization
@@ -1767,7 +1857,9 @@ definition AlgHom.extendScalarsOfIsLocalization
     have : f.toRingHom.comp (algebraMap R S) = g.toRingHom.comp (algebraMap R S) := by simp
     suffices f = g by rwa [DFunLike.ext_iff] at this
     apply IsLocalization.algHom_ext M
-    
+    rwa [DFunLike.ext_iff] at this ⊢
+
+@[simp]
 -/
 def AlgHom.extendScalarsOfIsLocalization (f : A ->ₐ[R] B) : A ->ₐ[S] B where
   __ := f

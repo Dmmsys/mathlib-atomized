@@ -162,7 +162,7 @@ theorem ZMod.isSquare_neg_one_mul
     obtain ⟨y, hy⟩ := hn
     rw [hx]; rw [hy]
     exact ⟨(x, y), rfl⟩
-  simpa only [RingEquiv.map_neg_one] using this.map (ZMod.chineseRemain
+  simpa only [RingEquiv.map_neg_one] using this.map (ZMod.chineseRemainder hc).symm
 
 中文:
 定理 ZMod.isSquare_neg_one_mul
@@ -174,7 +174,7 @@ theorem ZMod.isSquare_neg_one_mul
     obtain ⟨y, hy⟩ := hn
     rw [hx]; rw [hy]
     exact ⟨(x, y), rfl⟩
-  simpa only [RingEquiv.map_neg_one] using this.map (ZMod.chineseRemain
+  simpa only [RingEquiv.map_neg_one] using this.map (ZMod.chineseRemainder hc).symm
 
 Depends on / 依赖: IsSquare, RingEquiv, RingEquiv.map_neg_one, ZMod.chineseRemainder, chineseRemainder, map_neg_one, this.map
 -/
@@ -230,7 +230,16 @@ theorem ZMod.isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three
   induction n using induction_on_primes with
   | zero => exact False.elim (hn.ne_zero rfl)
   | one => exact ⟨0, by simp only [mul_zero, eq_iff_true_of_subsingleton]⟩
-  | prime_mul p n hpp 
+  | prime_mul p n hpp ih =>
+    have : Fact p.Prime := ⟨hpp⟩
+    have hcp : p.Coprime n := by
+      by_contra hc
+      exact hpp.not_isUnit (hn p <| mul_dvd_mul_left p <| hpp.dvd_iff_not_coprime.mpr hc)
+have hp₁ := ZMod.exists_sq_eq_neg_one_iff.mpr H _
+      Nat.mem_primeFactors.mpr ⟨hpp, Nat.dvd_mul_right .., Squarefree.ne_zero hn⟩
+exact ZMod.isSquare_neg_one_mul hcp hp₁ ih hn.of_mul_right fun q hqp => H q
+        Nat.mem_primeFactors.mpr ⟨Nat.prime_of_mem_primeFactors hqp,
+          dvd_mul_of_dvd_right (Nat.dvd_of_mem_primeFactors hqp) _, Squarefree.ne_zero hn⟩
 
 中文:
 定理 ZMod.isSquare_neg_one_iff_对任意_mem_primeFactors_mod_four_ne_three
@@ -241,7 +250,16 @@ theorem ZMod.isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three
   induction n using induction_on_primes with
   | zero => exact False.elim (hn.ne_zero rfl)
   | one => exact ⟨0, by simp only [mul_zero, eq_iff_true_of_subsingleton]⟩
-  | prime_mul p n hpp 
+  | prime_mul p n hpp ih =>
+    have : Fact p.Prime := ⟨hpp⟩
+    have hcp : p.Coprime n := by
+      by_contra hc
+      exact hpp.not_isUnit (hn p <| mul_dvd_mul_left p <| hpp.dvd_iff_not_coprime.mpr hc)
+have hp₁ := ZMod.exists_sq_eq_neg_one_iff.mpr H _
+      Nat.mem_primeFactors.mpr ⟨hpp, Nat.dvd_mul_right .., Squarefree.ne_zero hn⟩
+exact ZMod.isSquare_neg_one_mul hcp hp₁ ih hn.of_mul_right fun q hqp => H q
+        Nat.mem_primeFactors.mpr ⟨Nat.prime_of_mem_primeFactors hqp,
+          dvd_mul_of_dvd_right (Nat.dvd_of_mem_primeFactors hqp) _, Squarefree.ne_zero hn⟩
 
 Depends on / 依赖: Coprime, False.elim, Nat.mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one, ZMod.exists_sq_eq_neg_one_iff.mpr, dvd_iff_not_coprime, eq_iff_true_of_subsingleton, exists_sq_eq_neg_one_iff, hn.ne_zero, hpp.dvd_iff_not_coprime.mpr, hpp.not_isUnit, induction_on_primes, mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one, mul_dvd_mul_left, mul_zero, ne_zero, not_isUnit, p.Coprime, p.Prime, prime_mul
 -/
@@ -275,7 +293,14 @@ theorem ZMod.isSquare_neg_one_iff'
 refine ⟨?_, fun H q hq => H Nat.dvd_of_mem_primeFactors hq⟩
   intro H
   refine @induction_on_primes _ ?_ ?_ (fun p q hp hq hpq => ?_)
-  · ex
+  · exact fun _ => by simp
+  · exact fun _ => by simp
+· replace hp := H _
+      Nat.mem_primeFactors.mpr ⟨hp, dvd_of_mul_right_dvd hpq, Squarefree.ne_zero hn⟩
+    replace hq := hq (dvd_of_mul_left_dvd hpq)
+    rw [show 3 = 3 % 4 by simp]; rw [Ne]; rw [← ZMod.natCast_eq_natCast_iff'] at hp hq ⊢
+    rw [Nat.cast_mul]
+    exact help p q hp hq
 
 中文:
 定理 ZMod.isSquare_neg_one_iff'
@@ -286,7 +311,14 @@ refine ⟨?_, fun H q hq => H Nat.dvd_of_mem_primeFactors hq⟩
 refine ⟨?_, fun H q hq => H Nat.dvd_of_mem_primeFactors hq⟩
   intro H
   refine @induction_on_primes _ ?_ ?_ (fun p q hp hq hpq => ?_)
-  · ex
+  · exact fun _ => by simp
+  · exact fun _ => by simp
+· replace hp := H _
+      Nat.mem_primeFactors.mpr ⟨hp, dvd_of_mul_right_dvd hpq, Squarefree.ne_zero hn⟩
+    replace hq := hq (dvd_of_mul_left_dvd hpq)
+    rw [show 3 = 3 % 4 by simp]; rw [Ne]; rw [← ZMod.natCast_eq_natCast_iff'] at hp hq ⊢
+    rw [Nat.cast_mul]
+    exact help p q hp hq
 
 Depends on / 依赖: Nat.dvd_of_mem_primeFactors, Nat.mem_primeFactors.mpr, Squarefree, Squarefree.ne_zero, ZMod.isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three, dvd_of_mem_primeFactors, dvd_of_mul_left_dvd, dvd_of_mul_right_dvd, induction_on_primes, isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three, mem_primeFactors, ne_zero, replace
 -/
@@ -324,7 +356,9 @@ theorem Nat.eq_sq_add_sq_of_isSquare_mod_neg_one
   | prime_mul p n hpp ih =>
     have : Fact p.Prime := ⟨hpp⟩
     have hp : IsSquare (-1 : ZMod p) := ZMod.isSquare_neg_one_of_dvd ⟨n, rfl⟩ h
-    obtain ⟨u, v, huv⟩ := Nat.Prime.sq_add_sq (ZMod.
+    obtain ⟨u, v, huv⟩ := Nat.Prime.sq_add_sq (ZMod.exists_sq_eq_neg_one_iff.mp hp)
+    obtain ⟨x, y, hxy⟩ := ih (ZMod.isSquare_neg_one_of_dvd ⟨p, mul_comm _ _⟩ h)
+    exact Nat.sq_add_sq_mul huv.symm hxy
 
 中文:
 定理 自然数.eq_sq_add_sq_of_isSquare_mod_neg_one
@@ -336,7 +370,9 @@ theorem Nat.eq_sq_add_sq_of_isSquare_mod_neg_one
   | prime_mul p n hpp ih =>
     have : Fact p.Prime := ⟨hpp⟩
     have hp : IsSquare (-1 : ZMod p) := ZMod.isSquare_neg_one_of_dvd ⟨n, rfl⟩ h
-    obtain ⟨u, v, huv⟩ := Nat.Prime.sq_add_sq (ZMod.
+    obtain ⟨u, v, huv⟩ := Nat.Prime.sq_add_sq (ZMod.exists_sq_eq_neg_one_iff.mp hp)
+    obtain ⟨x, y, hxy⟩ := ih (ZMod.isSquare_neg_one_of_dvd ⟨p, mul_comm _ _⟩ h)
+    exact Nat.sq_add_sq_mul huv.symm hxy
 
 Depends on / 依赖: IsSquare, Nat.Prime.sq_add_sq, Nat.sq_add_sq_mul, ZMod.exists_sq_eq_neg_one_iff.mp, ZMod.isSquare_neg_one_of_dvd, exists_sq_eq_neg_one_iff, huv.symm, induction_on_primes, isSquare_neg_one_of_dvd, mul_comm, p.Prime, prime_mul, sq_add_sq, sq_add_sq_mul
 -/
@@ -364,7 +400,11 @@ theorem ZMod.isSquare_neg_one_of_eq_sq_add_sq_of_isCoprime
     rw [show y ^ 2 = n + -1 * x ^ 2 by lia] at hc2
     exact (IsCoprime.pow_left_iff zero_lt_two).mp hc2.of_add_mul_right_right
   have H : u * y * (u * y) - -1 = n * (-v ^ 2 * n + u ^ 2 + 2 * v) := by
-  
+    linear_combination -u ^ 2 * h + (n * v - u * x - 1) * huv
+  refine ⟨u * y, ?_⟩
+  conv_rhs => tactic => norm_cast
+  rw [(by norm_cast : (-1 : ZMod n.natAbs) = (-1 : Int))]
+  exact (ZMod.intCast_eq_intCast_iff_dvd_sub _ _ _).mpr (Int.natAbs_dvd.mpr ⟨_, H⟩)
 
 中文:
 定理 ZMod.isSquare_neg_one_of_eq_sq_add_sq_of_isCoprime
@@ -375,7 +415,11 @@ theorem ZMod.isSquare_neg_one_of_eq_sq_add_sq_of_isCoprime
     rw [show y ^ 2 = n + -1 * x ^ 2 by lia] at hc2
     exact (IsCoprime.pow_left_iff zero_lt_two).mp hc2.of_add_mul_right_right
   have H : u * y * (u * y) - -1 = n * (-v ^ 2 * n + u ^ 2 + 2 * v) := by
-  
+    linear_combination -u ^ 2 * h + (n * v - u * x - 1) * huv
+  refine ⟨u * y, ?_⟩
+  conv_rhs => tactic => norm_cast
+  rw [(by norm_cast : (-1 : ZMod n.natAbs) = (-1 : Int))]
+  exact (ZMod.intCast_eq_intCast_iff_dvd_sub _ _ _).mpr (Int.natAbs_dvd.mpr ⟨_, H⟩)
 
 Depends on / 依赖: IsCoprime, IsCoprime.pow_left_iff, ZMod.intCast_eq_intCast_iff_dvd_sub, conv_rhs, hc.pow, hc2.of_add_mul_right_right, intCast_eq_intCast_iff_dvd_sub, linear_combination, n.natAbs, natAbs, of_add_mul_right_right, pow_left_iff, tactic, zero_lt_two
 -/
@@ -430,7 +474,12 @@ theorem Nat.eq_sq_add_sq_iff_eq_sq_mul
     · exact ⟨0, 1, by rw [h, hxy.1, hxy.2, zero_pow two_ne_zero, add_zero, zero_mul],
         ⟨0, by rw [zero_mul, neg_eq_zero, Fin.one_eq_zero_iff]⟩⟩
     · have hg := Nat.pos_of_ne_zero (mt Nat.gcd_eq_zero_iff.mp hxy)
-      obta
+      obtain ⟨g, x₁, y₁, _, h₂, h₃, h₄⟩ := Nat.exists_coprime' hg
+      exact ⟨g, x₁ ^ 2 + y₁ ^ 2, by rw [h, h₃, h₄]; ring,
+        ZMod.isSquare_neg_one_of_eq_sq_add_sq_of_coprime rfl h₂⟩
+  · rintro ⟨a, b, h₁, h₂⟩
+    obtain ⟨x', y', h⟩ := Nat.eq_sq_add_sq_of_isSquare_mod_neg_one h₂
+    exact ⟨a * x', a * y', by rw [h₁, h]; ring⟩
 
 中文:
 定理 自然数.eq_sq_add_sq_iff_eq_sq_mul
@@ -442,7 +491,12 @@ theorem Nat.eq_sq_add_sq_iff_eq_sq_mul
     · exact ⟨0, 1, by rw [h, hxy.1, hxy.2, zero_pow two_ne_zero, add_zero, zero_mul],
         ⟨0, by rw [zero_mul, neg_eq_zero, Fin.one_eq_zero_iff]⟩⟩
     · have hg := Nat.pos_of_ne_zero (mt Nat.gcd_eq_zero_iff.mp hxy)
-      obta
+      obtain ⟨g, x₁, y₁, _, h₂, h₃, h₄⟩ := Nat.exists_coprime' hg
+      exact ⟨g, x₁ ^ 2 + y₁ ^ 2, by rw [h, h₃, h₄]; ring,
+        ZMod.isSquare_neg_one_of_eq_sq_add_sq_of_coprime rfl h₂⟩
+  · rintro ⟨a, b, h₁, h₂⟩
+    obtain ⟨x', y', h⟩ := Nat.eq_sq_add_sq_of_isSquare_mod_neg_one h₂
+    exact ⟨a * x', a * y', by rw [h₁, h]; ring⟩
 
 Depends on / 依赖: Fin.one_eq_zero_iff, Nat.eq_sq_add_sq_of, Nat.exists_coprime, Nat.gcd_eq_zero_iff.mp, Nat.pos_of_ne_zero, ZMod.isSquare_neg_one_of_eq_sq_add_sq_of_coprime, add_zero, eq_sq_add_sq_of, exists_coprime, gcd_eq_zero_iff, isSquare_neg_one_of_eq_sq_add_sq_of_coprime, neg_eq_zero, one_eq_zero_iff, pos_of_ne_zero, two_ne_zero, zero_mul, zero_pow
 -/
@@ -481,7 +535,18 @@ theorem Nat.eq_sq_add_sq_iff
   · exact ⟨fun _ q _ _ => (padicValNat_zero_right _).symm ▸ Even.zero, fun _ => ⟨0, 0, rfl⟩⟩
   -- now `0 < n`
   refine eq_sq_add_sq_iff_eq_sq_mul.trans ⟨fun ⟨a, b, h₁, h₂⟩ q hq h => ?_, fun H => ?_⟩
-  · have : Fact q.Prime := ⟨prime_of_mem_primeFactors h
+  · have : Fact q.Prime := ⟨prime_of_mem_primeFactors hq⟩
+    have : q ∣ b -> q in b.primeFactors := by grind
+    grind (splits := 10) [padicValNat.mul, padicValNat.pow,
+      padicValNat.eq_zero_of_not_dvd, mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one]
+  · obtain ⟨b, a, hb₀, ha₀, hab, hb⟩ := sq_mul_squarefree_of_pos hn₀
+    refine ⟨a, b, hab.symm, ZMod.isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three hb
+.mpr fun q hq hq4 => ?_⟩
+    have : Fact q.Prime := ⟨prime_of_mem_primeFactors hq⟩
+have := Nat.primeFactors_mono Dvd.intro_left _ hab
+    have : b.factorization q = 1 := by grind [Squarefree.natFactorization_le_one,
+      Prime.dvd_iff_one_le_factorization, prime_of_mem_primeFactors, dvd_of_mem_primeFactors]
+    grind [factorization_def, prime_of_mem_primeFactors, padicValNat.mul, padicValNat.pow]
 
 中文:
 定理 自然数.eq_sq_add_sq_iff
@@ -491,7 +556,18 @@ theorem Nat.eq_sq_add_sq_iff
   · exact ⟨fun _ q _ _ => (padicValNat_zero_right _).symm ▸ Even.zero, fun _ => ⟨0, 0, rfl⟩⟩
   -- now `0 < n`
   refine eq_sq_add_sq_iff_eq_sq_mul.trans ⟨fun ⟨a, b, h₁, h₂⟩ q hq h => ?_, fun H => ?_⟩
-  · have : Fact q.Prime := ⟨prime_of_mem_primeFactors h
+  · have : Fact q.Prime := ⟨prime_of_mem_primeFactors hq⟩
+    have : q ∣ b -> q in b.primeFactors := by grind
+    grind (splits := 10) [padicValNat.mul, padicValNat.pow,
+      padicValNat.eq_zero_of_not_dvd, mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one]
+  · obtain ⟨b, a, hb₀, ha₀, hab, hb⟩ := sq_mul_squarefree_of_pos hn₀
+    refine ⟨a, b, hab.symm, ZMod.isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three hb
+.mpr fun q hq hq4 => ?_⟩
+    have : Fact q.Prime := ⟨prime_of_mem_primeFactors hq⟩
+have := Nat.primeFactors_mono Dvd.intro_left _ hab
+    have : b.factorization q = 1 := by grind [Squarefree.natFactorization_le_one,
+      Prime.dvd_iff_one_le_factorization, prime_of_mem_primeFactors, dvd_of_mem_primeFactors]
+    grind [factorization_def, prime_of_mem_primeFactors, padicValNat.mul, padicValNat.pow]
 
 Depends on / 依赖: Even.zero, eq_zero_or_pos, n.eq_zero_or_pos, padicValNat_zero_right
 -/

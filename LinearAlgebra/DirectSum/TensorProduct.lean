@@ -56,7 +56,15 @@ definition directSum
 · exact AlgebraTensorModule.lift
 toModule S _ _ fun i₁ => flip toModule R _ _ fun i₂ => flip AlgebraTensorModule.curry
       DirectSum.lof S (ι₁ × ι₂) (fun i => M₁ i.1 otimes[R] M₂ i.2) (i₁, i₂)
-  · exact toModule S _ _ fun i => Algebra
+  · exact toModule S _ _ fun i => AlgebraTensorModule.map (lof S _ M₁ i.1) (lof R _ M₂ i.2)
+  · ext ⟨i₁, i₂⟩ x₁ x₂ : 4
+    simp only [coe_comp, Function.comp_apply, toModule_lof, AlgebraTensorModule.map_tmul,
+      AlgebraTensorModule.lift_apply, lift.tmul, coe_restrictScalars, flip_apply,
+      AlgebraTensorModule.curry_apply, curry_apply, id_comp]
+  · ext i₁ i₂ x₁ x₂ : 5
+    simp only [coe_comp, Function.comp_apply, AlgebraTensorModule.curry_apply, curry_apply,
+      coe_restrictScalars, AlgebraTensorModule.lift_apply, lift.tmul, toModule_lof, flip_apply,
+      AlgebraTensorModule.map_tmul, id_coe, id_eq]
 
 中文:
 定义 directSum
@@ -66,7 +74,15 @@ toModule S _ _ fun i₁ => flip toModule R _ _ fun i₂ => flip AlgebraTensorMod
 · exact AlgebraTensorModule.lift
 toModule S _ _ fun i₁ => flip toModule R _ _ fun i₂ => flip AlgebraTensorModule.curry
       DirectSum.lof S (ι₁ × ι₂) (fun i => M₁ i.1 otimes[R] M₂ i.2) (i₁, i₂)
-  · exact toModule S _ _ fun i => Algebra
+  · exact toModule S _ _ fun i => AlgebraTensorModule.map (lof S _ M₁ i.1) (lof R _ M₂ i.2)
+  · ext ⟨i₁, i₂⟩ x₁ x₂ : 4
+    simp only [coe_comp, Function.comp_apply, toModule_lof, AlgebraTensorModule.map_tmul,
+      AlgebraTensorModule.lift_apply, lift.tmul, coe_restrictScalars, flip_apply,
+      AlgebraTensorModule.curry_apply, curry_apply, id_comp]
+  · ext i₁ i₂ x₁ x₂ : 5
+    simp only [coe_comp, Function.comp_apply, AlgebraTensorModule.curry_apply, curry_apply,
+      coe_restrictScalars, AlgebraTensorModule.lift_apply, lift.tmul, toModule_lof, flip_apply,
+      AlgebraTensorModule.map_tmul, id_coe, id_eq]
 -/
 protected def directSum :
     ((⨁ i₁, M₁ i₁) otimes[R] ⨁ i₂, M₂ i₂) ≃ₗ[S] ⨁ i : ι₁ × ι₂, M₁ i.1 otimes[R] M₂ i.2 := by
@@ -256,6 +272,9 @@ lemma directSumLeft_tmul
         ((AlgebraTensorModule.mk R S (M₁ i) M₂').flip n) ∘ₗ (DirectSum.component S ι₁ M₁ i) by
     simpa using! LinearMap.congr_fun this m
   ext j n
+  by_cases hj : j = i
+  · subst hj; simp
+  · simp [DirectSum.component.of, hj]
 
 中文:
 引理 directSumLeft_tmul
@@ -266,6 +285,9 @@ lemma directSumLeft_tmul
         ((AlgebraTensorModule.mk R S (M₁ i) M₂').flip n) ∘ₗ (DirectSum.component S ι₁ M₁ i) by
     simpa using! LinearMap.congr_fun this m
   ext j n
+  by_cases hj : j = i
+  · subst hj; simp
+  · simp [DirectSum.component.of, hj]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.mk, DirectSum, DirectSum.component, DirectSum.component.of, LinearMap, LinearMap.congr_fun, component, congr_fun, directSumLeft, toLinearMap
 -/
@@ -398,7 +420,11 @@ lemma directSumRight_tmul
       (directSumRight R S M₁' M₂).toLinearMap.restrictScalars R ∘ₗ
         (TensorProduct.mk R M₁' (⨁ i, M₂ i) m) =
           (TensorProduct.mk R M₁' (M₂ i) m) ∘ₗ (DirectSum.component R ι₂ M₂ i) by
-    simpa using! LinearMap.congr_fun
+    simpa using! LinearMap.congr_fun this n
+  ext j n
+  by_cases hj : j = i
+  · subst hj; simp
+  · simp [DirectSum.component.of, hj]
 
 中文:
 引理 directSumRight_tmul
@@ -408,7 +434,11 @@ lemma directSumRight_tmul
       (directSumRight R S M₁' M₂).toLinearMap.restrictScalars R ∘ₗ
         (TensorProduct.mk R M₁' (⨁ i, M₂ i) m) =
           (TensorProduct.mk R M₁' (M₂ i) m) ∘ₗ (DirectSum.component R ι₂ M₂ i) by
-    simpa using! LinearMap.congr_fun
+    simpa using! LinearMap.congr_fun this n
+  ext j n
+  by_cases hj : j = i
+  · subst hj; simp
+  · simp [DirectSum.component.of, hj]
 
 Depends on / 依赖: DirectSum, DirectSum.component, DirectSum.component.of, LinearMap, LinearMap.congr_fun, TensorProduct, TensorProduct.mk, component, congr_fun, directSumRight, restrictScalars, toLinearMap, toLinearMap.restrictScalars
 -/

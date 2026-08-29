@@ -46,7 +46,7 @@ theorem cast_descFactorial
   rw [pow_card_mul_prod]
   refine prod_congr rfl ?_
   intro x hx
-  rw [← tsub_add_eq_tsub_tsub_swap]; rw [Nat.cast_sub Nat.le_trans (Nat.add_one_le_iff.mpr (List.mem_range.
+  rw [← tsub_add_eq_tsub_tsub_swap]; rw [Nat.cast_sub Nat.le_trans (Nat.add_one_le_iff.mpr (List.mem_range.mp hx)) h]; rw [CharP.cast_eq_zero]; rw [zero_sub]; rw [cast_succ]; rw [neg_add_rev]; rw [mul_add]; rw [neg_mul]; rw [one_mul]; rw [mul_one]; rw [add_comm]
 
 中文:
 定理 cast_descFactorial
@@ -58,7 +58,7 @@ theorem cast_descFactorial
   rw [pow_card_mul_prod]
   refine prod_congr rfl ?_
   intro x hx
-  rw [← tsub_add_eq_tsub_tsub_swap]; rw [Nat.cast_sub Nat.le_trans (Nat.add_one_le_iff.mpr (List.mem_range.
+  rw [← tsub_add_eq_tsub_tsub_swap]; rw [Nat.cast_sub Nat.le_trans (Nat.add_one_le_iff.mpr (List.mem_range.mp hx)) h]; rw [CharP.cast_eq_zero]; rw [zero_sub]; rw [cast_succ]; rw [neg_add_rev]; rw [mul_add]; rw [neg_mul]; rw [one_mul]; rw [mul_one]; rw [add_comm]
 
 Depends on / 依赖: CharP.cast_eq_zero, List.mem_range.mp, Nat.add_one_le_iff.mpr, Nat.cast_sub, Nat.le_trans, add_comm, add_one_le_iff, card_range, cast_eq_zero, cast_prod, cast_sub, cast_succ, descFactorial_eq_prod_range, factorial_eq_prod_range_add_one, le_trans, mem_range, mul_add, mul_one, neg_add_rev, neg_mul
 -/

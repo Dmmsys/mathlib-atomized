@@ -305,7 +305,9 @@ definition PosSemidef.preInnerProductSpace
   body: (M *ᵥ y) ⬝ᵥ star x
   conj_inner_symm x y := by
     rw [dotProduct_comm]; rw [star_dotProduct]; rw [starRingEnd_apply]; rw [star_star]; rw [star_mulVec]; rw [dotProduct_comm (M *ᵥ y)]; rw [dotProduct_mulVec]; rw [hM.isHermitian.eq]
-  re_inner_nonneg x := dotProduct_comm _ (star x) ▸ hM.re_dotProduct_
+  re_inner_nonneg x := dotProduct_comm _ (star x) ▸ hM.re_dotProduct_nonneg x
+  add_left := by simp only [star_add, dotProduct_add, forall_const]
+  smul_left _ _ _ := by rw [← smul_eq_mul, ← dotProduct_smul, starRingEnd_apply, ← star_smul]
 
 中文:
 定义 PosSemidef.preInnerProductSpace
@@ -313,7 +315,9 @@ definition PosSemidef.preInnerProductSpace
   定义体: (M *ᵥ y) ⬝ᵥ star x
   conj_inner_symm x y := by
     rw [dotProduct_comm]; rw [star_dotProduct]; rw [starRingEnd_apply]; rw [star_star]; rw [star_mulVec]; rw [dotProduct_comm (M *ᵥ y)]; rw [dotProduct_mulVec]; rw [hM.isHermitian.eq]
-  re_inner_nonneg x := dotProduct_comm _ (star x) ▸ hM.re_dotProduct_
+  re_inner_nonneg x := dotProduct_comm _ (star x) ▸ hM.re_dotProduct_nonneg x
+  add_left := by simp only [star_add, dotProduct_add, forall_const]
+  smul_left _ _ _ := by rw [← smul_eq_mul, ← dotProduct_smul, starRingEnd_apply, ← star_smul]
 -/
 private def PosSemidef.preInnerProductSpace {M : Matrix n n 𝕜} (hM : M.PosSemidef) :
     PreInnerProductSpace.Core 𝕜 (n -> 𝕜) where

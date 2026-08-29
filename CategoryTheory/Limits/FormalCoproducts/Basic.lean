@@ -1007,7 +1007,10 @@ definition homPullbackEquiv
   invFun s := ⟨fun i => ⟨(s.1.1.f i, s.1.2.f i), congrFun (congrArg Hom.f s.2) i⟩,
     fun i => (hpb _).lift (PullbackCone.mk (s.1.1.φ i) (s.1.2.φ i)
       (by simpa using ((hom_ext_iff _ _).1 s.2).2 i))⟩
-  left_inv m := hom_e
+  left_inv m := hom_ext rfl (fun i => by
+    simp only [eqToHom_refl, Category.comp_id]
+    exact (hpb _).hom_ext ((pb _).equalizer_ext (by aesop) (by aesop)))
+  right_inv s := by ext <;> simp
 
 中文:
 定义 homPullbackEquiv
@@ -1016,7 +1019,10 @@ definition homPullbackEquiv
   invFun s := ⟨fun i => ⟨(s.1.1.f i, s.1.2.f i), congrFun (congrArg Hom.f s.2) i⟩,
     fun i => (hpb _).lift (PullbackCone.mk (s.1.1.φ i) (s.1.2.φ i)
       (by simpa using ((hom_ext_iff _ _).1 s.2).2 i))⟩
-  left_inv m := hom_e
+  left_inv m := hom_ext rfl (fun i => by
+    simp only [eqToHom_refl, Category.comp_id]
+    exact (hpb _).hom_ext ((pb _).equalizer_ext (by aesop) (by aesop)))
+  right_inv s := by ext <;> simp
 -/
 @[simps!] def homPullbackEquiv : (T ⟶ (pullbackCone f g pb).pt) ≃
     { p : (T ⟶ X) × (T ⟶ Y) // p.1 ≫ f = p.2 ≫ g } where
@@ -1040,7 +1046,12 @@ definition isLimitPullbackCone
     (fst := (pullbackCone f g pb).fst) (snd := (pullbackCone f g pb).snd) _
     (fun s => (homPullbackEquiv f g pb hpb s.pt).2 ⟨(s.fst, s.snd), s.condition⟩)
     (fun s => congrArg (·.1.fst)
-      ((homPullbackEquiv f g pb hpb s.pt).right_inv ⟨(s.fst, s.snd), s.co
+      ((homPullbackEquiv f g pb hpb s.pt).right_inv ⟨(s.fst, s.snd), s.condition⟩))
+    (fun s => congrArg (·.1.snd)
+      ((homPullbackEquiv f g pb hpb s.pt).right_inv ⟨(s.fst, s.snd), s.condition⟩))
+    (fun s m h₁ h₂ => ?_)
+  convert! ((homPullbackEquiv f g pb hpb s.pt).left_inv m).symm using 3
+  rw [← h₁]; rw [← h₂]; rfl
 
 中文:
 定义 isLimitPullbackCone
@@ -1050,7 +1061,12 @@ definition isLimitPullbackCone
     (fst := (pullbackCone f g pb).fst) (snd := (pullbackCone f g pb).snd) _
     (fun s => (homPullbackEquiv f g pb hpb s.pt).2 ⟨(s.fst, s.snd), s.condition⟩)
     (fun s => congrArg (·.1.fst)
-      ((homPullbackEquiv f g pb hpb s.pt).right_inv ⟨(s.fst, s.snd), s.co
+      ((homPullbackEquiv f g pb hpb s.pt).right_inv ⟨(s.fst, s.snd), s.condition⟩))
+    (fun s => congrArg (·.1.snd)
+      ((homPullbackEquiv f g pb hpb s.pt).right_inv ⟨(s.fst, s.snd), s.condition⟩))
+    (fun s m h₁ h₂ => ?_)
+  convert! ((homPullbackEquiv f g pb hpb s.pt).left_inv m).symm using 3
+  rw [← h₁]; rw [← h₂]; rfl
 
 Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.mk, condition, convert, homPullbackEquiv, left_inv, pullbackCone, right_inv, s.condition, s.fst, s.pt, s.snd
 -/

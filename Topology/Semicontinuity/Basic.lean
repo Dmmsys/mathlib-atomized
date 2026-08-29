@@ -87,7 +87,23 @@ theorem LowerSemicontinuousOn.exists_isMinOn
   let ℱ : Filter α := ⨅ a : s, φ (f a)
   have : ℱ.NeBot := by
     apply iInf_neBot_of_directed _ _
-    · change Dir
+    · change Directed GE.ge (fun x => (φ ∘ (fun (a : s) => f ↑a)) x)
+      exact Directed.mono_comp GE.ge (fun x y hxy =>
+        principal_mono.mpr (inter_subset_inter_right _ (preimage_mono <| Iic_subset_Iic.mpr hxy)))
+        (Std.Total.directed _)
+    · intro x
+      have : (pure x : Filter α) <= φ (f x) := le_principal_iff.mpr ⟨x.2, le_refl (f x)⟩
+      exact neBot_of_le this
+  have hℱs : ℱ <= 𝓟 s :=
+    iInf_le_of_le (Classical.choice inferInstance) (principal_mono.mpr <| inter_subset_left)
+  have hℱ (x) (hx : x in s) : forallᶠ y in ℱ, f y <= f x :=
+    mem_iInf_of_mem ⟨x, hx⟩ (by apply inter_subset_right)
+  obtain ⟨a, ha, h⟩ := hs hℱs
+  refine ⟨a, ha, fun x hx => le_of_not_gt fun hxa => ?_⟩
+  let _ : (𝓝 a ⊓ ℱ).NeBot := h
+  suffices forallᶠ _ in 𝓝 a ⊓ ℱ, False by rwa [eventually_const] at this
+  filter_upwards [(hf a ha (f x) hxa).filter_mono (inf_le_inf_left _ hℱs),
+    (hℱ x hx).filter_mono (inf_le_right : 𝓝 a ⊓ ℱ <= ℱ)] using fun y h₁ h₂ => not_le_of_gt h₁ h₂
 
 中文:
 定理 LowerSemicontinuousOn.存在_isMinOn
@@ -100,7 +116,23 @@ theorem LowerSemicontinuousOn.exists_isMinOn
   let ℱ : Filter α := ⨅ a : s, φ (f a)
   have : ℱ.NeBot := by
     apply iInf_neBot_of_directed _ _
-    · change Dir
+    · change Directed GE.ge (fun x => (φ ∘ (fun (a : s) => f ↑a)) x)
+      exact Directed.mono_comp GE.ge (fun x y hxy =>
+        principal_mono.mpr (inter_subset_inter_right _ (preimage_mono <| Iic_subset_Iic.mpr hxy)))
+        (Std.Total.directed _)
+    · intro x
+      have : (pure x : Filter α) <= φ (f x) := le_principal_iff.mpr ⟨x.2, le_refl (f x)⟩
+      exact neBot_of_le this
+  have hℱs : ℱ <= 𝓟 s :=
+    iInf_le_of_le (Classical.choice inferInstance) (principal_mono.mpr <| inter_subset_left)
+  have hℱ (x) (hx : x in s) : forallᶠ y in ℱ, f y <= f x :=
+    mem_iInf_of_mem ⟨x, hx⟩ (by apply inter_subset_right)
+  obtain ⟨a, ha, h⟩ := hs hℱs
+  refine ⟨a, ha, fun x hx => le_of_not_gt fun hxa => ?_⟩
+  let _ : (𝓝 a ⊓ ℱ).NeBot := h
+  suffices forallᶠ _ in 𝓝 a ⊓ ℱ, False by rwa [eventually_const] at this
+  filter_upwards [(hf a ha (f x) hxa).filter_mono (inf_le_inf_left _ hℱs),
+    (hℱ x hx).filter_mono (inf_le_right : 𝓝 a ⊓ ℱ <= ℱ)] using fun y h₁ h₂ => not_le_of_gt h₁ h₂
 
 Depends on / 依赖: Directed, Directed.mono_comp, Exists, Exists.nonempty, Filter, GE.ge, Iic_subset_Iic, Iic_subset_Iic.mpr, Nonempty, Nonempty.to_subtype, Std.Total.directed, directed, iInf_neBot_of_directed, inter_subset_inter_right, isMinOn_iff, mono_comp, ne_s, nonempty, preimage_mono, principal_mono
 -/
@@ -674,7 +706,9 @@ theorem lowerSemicontinuousWithinAt_iff_le_liminf
     exact ltz.not_ge
       (le_liminf_of_le (by isBoundedDefault) ((h y ylt).mono fun _ h₂ =>
         le_of_not_gt fun h₃ => (h₁ _ h₃ _ h₂).false))
-  
+  exact fun hf y ylt => eventually_lt_of_lt_liminf (ylt.trans_le hf)
+
+alias ⟨LowerSemicontinuousWithinAt.le_liminf, _⟩ := lowerSemicontinuousWithinAt_iff_le_liminf
 
 中文:
 定理 lowerSemicontinuousWithinAt_iff_le_liminf
@@ -687,7 +721,9 @@ theorem lowerSemicontinuousWithinAt_iff_le_liminf
     exact ltz.not_ge
       (le_liminf_of_le (by isBoundedDefault) ((h y ylt).mono fun _ h₂ =>
         le_of_not_gt fun h₃ => (h₁ _ h₃ _ h₂).false))
-  
+  exact fun hf y ylt => eventually_lt_of_lt_liminf (ylt.trans_le hf)
+
+alias ⟨LowerSemicontinuousWithinAt.le_liminf, _⟩ := lowerSemicontinuousWithinAt_iff_le_liminf
 
 Depends on / 依赖: LowerSemicontinuousWithinAt, eventually_lt_of_lt_liminf, exists_disjoint_Iio_Ioi, hf.exists_disjoint_Iio_Ioi, isBoundedDefault, le_liminf_of_le, le_of_not_gt, ltz.not_ge, not_ge, trans_le, ylt.trans_le
 -/
@@ -830,7 +866,11 @@ theorem LowerSemicontinuousOn.inter_biInter_preimage_Iic_eq_empty_iff_exists_fin
   · suffices forall i in I, IsClosed (s ↓inter (fun i => f i ⁻¹' Iic c) i) by
       simpa [Set.eq_empty_iff_forall_notMem] using
         ks.elim_finite_subfamily_isClosed_subtype _ this H
-.isClosed_preimage c exact fun i hi => lowerSemicontinuous_restrict
+.isClosed_preimage c exact fun i hi => lowerSemicontinuous_restrict_iff.mpr (hfi i hi)
+  · rw [Set.eq_empty_iff_forall_notMem]
+    simp only [mem_inter_iff, mem_iInter, mem_preimage, mem_Iic, not_and, not_forall,
+      exists_prop, not_le]
+    grind
 
 中文:
 定理 LowerSemicontinuousOn.inter_bi整数er_preimage_Iic_eq_empty_iff_存在_finset
@@ -839,7 +879,11 @@ theorem LowerSemicontinuousOn.inter_biInter_preimage_Iic_eq_empty_iff_exists_fin
   · suffices forall i in I, IsClosed (s ↓inter (fun i => f i ⁻¹' Iic c) i) by
       simpa [Set.eq_empty_iff_forall_notMem] using
         ks.elim_finite_subfamily_isClosed_subtype _ this H
-.isClosed_preimage c exact fun i hi => lowerSemicontinuous_restrict
+.isClosed_preimage c exact fun i hi => lowerSemicontinuous_restrict_iff.mpr (hfi i hi)
+  · rw [Set.eq_empty_iff_forall_notMem]
+    simp only [mem_inter_iff, mem_iInter, mem_preimage, mem_Iic, not_and, not_forall,
+      exists_prop, not_le]
+    grind
 
 Depends on / 依赖: IsClosed, Set.eq_empty_iff_forall_notMem, elim_finite_subfamily_isClosed_subtype, eq_empty_iff_forall_notMem, exists_prop, isClosed_preimage, ks.elim_finite_subfamily_isClosed_subtype, lowerSemicontinuous_restrict_iff, lowerSemicontinuous_restrict_iff.mpr, mem_Iic, mem_iInter, mem_inter_iff, mem_preimage, not_and, not_forall, not_le
 -/
@@ -872,7 +916,13 @@ theorem lowerSemicontinuousOn_iff_isClosed_epigraph
   constructor
   · intro hf ⟨x, y⟩ h
     by_cases hx : x in s
-    · have ⟨y', hy', z, hz, h₁⟩ := (h hx).ex
+    · have ⟨y', hy', z, hz, h₁⟩ := (h hx).exists_disjoint_Iio_Ioi
+      filter_upwards [(hf x hx z hz).prodMk_nhds (eventually_lt_nhds hy')]
+with _ ⟨h₂, h₃⟩ h₄ using h₁ _ h₃ _ h₂ h₄
+    · filter_upwards [(continuous_fst.tendsto _).eventually (hs.isOpen_compl.eventually_mem hx)]
+        with _ h₁ h₂ using (h₁ h₂).elim
+  · intro hf x _ y hy
+    exact ((Continuous.prodMk_left y).tendsto x).eventually (hf (x, y) (fun _ => hy))
 
 中文:
 定理 lowerSemicontinuousOn_iff_isClosed_epigraph
@@ -884,7 +934,13 @@ theorem lowerSemicontinuousOn_iff_isClosed_epigraph
   constructor
   · intro hf ⟨x, y⟩ h
     by_cases hx : x in s
-    · have ⟨y', hy', z, hz, h₁⟩ := (h hx).ex
+    · have ⟨y', hy', z, hz, h₁⟩ := (h hx).exists_disjoint_Iio_Ioi
+      filter_upwards [(hf x hx z hz).prodMk_nhds (eventually_lt_nhds hy')]
+with _ ⟨h₂, h₃⟩ h₄ using h₁ _ h₃ _ h₂ h₄
+    · filter_upwards [(continuous_fst.tendsto _).eventually (hs.isOpen_compl.eventually_mem hx)]
+        with _ h₁ h₂ using (h₁ h₂).elim
+  · intro hf x _ y hy
+    exact ((Continuous.prodMk_left y).tendsto x).eventually (hf (x, y) (fun _ => hy))
 
 Depends on / 依赖: compl_ofPred, continuous_fst, continuous_fst.tendsto, eventually, eventually_lt_nhds, eventually_mem, eventually_nhdsWithin_iff, exists_disjoint_Iio_Ioi, filter_upwards, hs.isOpen_compl.eventually_mem, isOpen_compl, isOpen_compl_iff, isOpen_iff_eventually, lowerSemicontinuousOn_iff, lowerSemicontinuousWithinAt_iff, mem_ofPred, not_and, not_le, prodMk_nhds, simp_rw
 -/
@@ -956,7 +1012,8 @@ theorem ContinuousAt.comp_lowerSemicontinuousWithinAt
     filter_upwards [hf z zlt] with a ha
     calc
       y < g (min (f x) (f a)) := hz (by simp [zlt, ha])
-      
+      _ <= g (f a) := gmon (min_le_right _ _)
+  · exact Filter.Eventually.of_forall fun a => hy.trans_le (gmon (h (f a)))
 
 中文:
 定理 ContinuousAt.comp_lowerSemicontinuousWithinAt
@@ -969,7 +1026,8 @@ theorem ContinuousAt.comp_lowerSemicontinuousWithinAt
     filter_upwards [hf z zlt] with a ha
     calc
       y < g (min (f x) (f a)) := hz (by simp [zlt, ha])
-      
+      _ <= g (f a) := gmon (min_le_right _ _)
+  · exact Filter.Eventually.of_forall fun a => hy.trans_le (gmon (h (f a)))
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.of_forall, Ioi_mem_nhds, exists_Ioc_subset_of_mem_nhds, filter_upwards, hy.trans_le, min_le_right, of_forall, subseteq, trans_le
 -/
@@ -1149,7 +1207,54 @@ theorem LowerSemicontinuousWithinAt.add'
       IsOpen u ∧ f x in u ∧ IsOpen v ∧ g x in v ∧ u ×ˢ v subseteq { p : γ × γ | y < p.fst + p.snd } :=
     mem_nhds_prod_iff'.1 (hcont (isOpen_Ioi.mem_nhds hy))
   by_cases hx₁ : exists l, l < f x
-  · obtain ⟨z₁, z₁l
+  · obtain ⟨z₁, z₁lt, h₁⟩ : exists z₁ < f x, Ioc z₁ (f x) subseteq u :=
+      exists_Ioc_subset_of_mem_nhds (u_open.mem_nhds xu) hx₁
+    by_cases hx₂ : exists l, l < g x
+    · obtain ⟨z₂, z₂lt, h₂⟩ : exists z₂ < g x, Ioc z₂ (g x) subseteq v :=
+        exists_Ioc_subset_of_mem_nhds (v_open.mem_nhds xv) hx₂
+      filter_upwards [hf z₁ z₁lt, hg z₂ z₂lt] with z h₁z h₂z
+      have A1 : min (f z) (f x) in u := by
+        by_cases! H : f z <= f x
+        · simpa [H] using h₁ ⟨h₁z, H⟩
+        · simpa [H.le]
+      have A2 : min (g z) (g x) in v := by
+        by_cases! H : g z <= g x
+        · simpa [H] using h₂ ⟨h₂z, H⟩
+        · simpa [H.le]
+      have : (min (f z) (f x), min (g z) (g x)) in u ×ˢ v := ⟨A1, A2⟩
+      calc
+        y < min (f z) (f x) + min (g z) (g x) := h this
+        _ <= f z + g z := add_le_add (min_le_left _ _) (min_le_left _ _)
+    · simp only [not_exists, not_lt] at hx₂
+      filter_upwards [hf z₁ z₁lt] with z h₁z
+      have A1 : min (f z) (f x) in u := by
+        by_cases! H : f z <= f x
+        · simpa [H] using h₁ ⟨h₁z, H⟩
+        · simpa [H.le]
+      have : (min (f z) (f x), g x) in u ×ˢ v := ⟨A1, xv⟩
+      calc
+        y < min (f z) (f x) + g x := h this
+        _ <= f z + g z := add_le_add (min_le_left _ _) (hx₂ (g z))
+  · simp only [not_exists, not_lt] at hx₁
+    by_cases hx₂ : exists l, l < g x
+    · obtain ⟨z₂, z₂lt, h₂⟩ : exists z₂ < g x, Ioc z₂ (g x) subseteq v :=
+        exists_Ioc_subset_of_mem_nhds (v_open.mem_nhds xv) hx₂
+      filter_upwards [hg z₂ z₂lt] with z h₂z
+      have A2 : min (g z) (g x) in v := by
+        by_cases! H : g z <= g x
+        · simpa [H] using h₂ ⟨h₂z, H⟩
+        · simpa [H.le] using h₂ ⟨z₂lt, le_rfl⟩
+      have : (f x, min (g z) (g x)) in u ×ˢ v := ⟨xu, A2⟩
+      calc
+        y < f x + min (g z) (g x) := h this
+        _ <= f z + g z := add_le_add (hx₁ (f z)) (min_le_left _ _)
+    · simp only [not_exists, not_lt] at hx₁ hx₂
+      apply Filter.Eventually.of_forall
+      intro z
+      have : (f x, g x) in u ×ˢ v := ⟨xu, xv⟩
+      calc
+        y < f x + g x := h this
+        _ <= f z + g z := add_le_add (hx₁ (f z)) (hx₂ (g z))
 
 中文:
 定理 LowerSemicontinuousWithinAt.add'
@@ -1161,7 +1266,54 @@ theorem LowerSemicontinuousWithinAt.add'
       IsOpen u ∧ f x in u ∧ IsOpen v ∧ g x in v ∧ u ×ˢ v subseteq { p : γ × γ | y < p.fst + p.snd } :=
     mem_nhds_prod_iff'.1 (hcont (isOpen_Ioi.mem_nhds hy))
   by_cases hx₁ : exists l, l < f x
-  · obtain ⟨z₁, z₁l
+  · obtain ⟨z₁, z₁lt, h₁⟩ : exists z₁ < f x, Ioc z₁ (f x) subseteq u :=
+      exists_Ioc_subset_of_mem_nhds (u_open.mem_nhds xu) hx₁
+    by_cases hx₂ : exists l, l < g x
+    · obtain ⟨z₂, z₂lt, h₂⟩ : exists z₂ < g x, Ioc z₂ (g x) subseteq v :=
+        exists_Ioc_subset_of_mem_nhds (v_open.mem_nhds xv) hx₂
+      filter_upwards [hf z₁ z₁lt, hg z₂ z₂lt] with z h₁z h₂z
+      have A1 : min (f z) (f x) in u := by
+        by_cases! H : f z <= f x
+        · simpa [H] using h₁ ⟨h₁z, H⟩
+        · simpa [H.le]
+      have A2 : min (g z) (g x) in v := by
+        by_cases! H : g z <= g x
+        · simpa [H] using h₂ ⟨h₂z, H⟩
+        · simpa [H.le]
+      have : (min (f z) (f x), min (g z) (g x)) in u ×ˢ v := ⟨A1, A2⟩
+      calc
+        y < min (f z) (f x) + min (g z) (g x) := h this
+        _ <= f z + g z := add_le_add (min_le_left _ _) (min_le_left _ _)
+    · simp only [not_exists, not_lt] at hx₂
+      filter_upwards [hf z₁ z₁lt] with z h₁z
+      have A1 : min (f z) (f x) in u := by
+        by_cases! H : f z <= f x
+        · simpa [H] using h₁ ⟨h₁z, H⟩
+        · simpa [H.le]
+      have : (min (f z) (f x), g x) in u ×ˢ v := ⟨A1, xv⟩
+      calc
+        y < min (f z) (f x) + g x := h this
+        _ <= f z + g z := add_le_add (min_le_left _ _) (hx₂ (g z))
+  · simp only [not_exists, not_lt] at hx₁
+    by_cases hx₂ : exists l, l < g x
+    · obtain ⟨z₂, z₂lt, h₂⟩ : exists z₂ < g x, Ioc z₂ (g x) subseteq v :=
+        exists_Ioc_subset_of_mem_nhds (v_open.mem_nhds xv) hx₂
+      filter_upwards [hg z₂ z₂lt] with z h₂z
+      have A2 : min (g z) (g x) in v := by
+        by_cases! H : g z <= g x
+        · simpa [H] using h₂ ⟨h₂z, H⟩
+        · simpa [H.le] using h₂ ⟨z₂lt, le_rfl⟩
+      have : (f x, min (g z) (g x)) in u ×ˢ v := ⟨xu, A2⟩
+      calc
+        y < f x + min (g z) (g x) := h this
+        _ <= f z + g z := add_le_add (hx₁ (f z)) (min_le_left _ _)
+    · simp only [not_exists, not_lt] at hx₁ hx₂
+      apply Filter.Eventually.of_forall
+      intro z
+      have : (f x, g x) in u ×ˢ v := ⟨xu, xv⟩
+      calc
+        y < f x + g x := h this
+        _ <= f z + g z := add_le_add (hx₁ (f z)) (hx₂ (g z))
 
 Depends on / 依赖: IsOpen, exists_Ioc_, exists_Ioc_subset_of_mem_nhds, isOpen_Ioi, isOpen_Ioi.mem_nhds, mem_nhds, mem_nhds_prod_iff, p.fst, p.snd, subseteq, u_open, u_open.mem_nhds, v_open
 -/
@@ -1385,7 +1537,7 @@ theorem lowerSemicontinuousWithinAt_sum
       simp only [ia, Finset.sum_insert, not_false_iff]
       exact
         LowerSemicontinuousWithinAt.add (ha _ (Finset.mem_insert_self ..))
-          (IH f
+          (IH fun j ja => ha j (Finset.mem_insert_of_mem ja))
 
 中文:
 定理 lowerSemicontinuousWithinAt_sum
@@ -1398,7 +1550,7 @@ theorem lowerSemicontinuousWithinAt_sum
       simp only [ia, Finset.sum_insert, not_false_iff]
       exact
         LowerSemicontinuousWithinAt.add (ha _ (Finset.mem_insert_self ..))
-          (IH f
+          (IH fun j ja => ha j (Finset.mem_insert_of_mem ja))
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_insert, LowerSemicontinuousWithinAt, LowerSemicontinuousWithinAt.add, classical, induction_on, insert, lowerSemicontinuousWithinAt_const, mem_insert_of_mem, mem_insert_self, not_false_iff, sum_insert
 -/
@@ -3770,7 +3922,22 @@ theorem continuousWithinAt_iff_lower_upperSemicontinuousWithinAt
   by_cases! Hl : exists l, l < f x
   · rcases exists_Ioc_subset_of_mem_nhds hv Hl with ⟨l, lfx, hl⟩
     by_cases! Hu : exists u, f x < u
-    · rcases 
+    · rcases exists_Ico_subset_of_mem_nhds hv Hu with ⟨u, fxu, hu⟩
+      filter_upwards [h₁ l lfx, h₂ u fxu] with a lfa fau
+      rcases le_or_gt (f a) (f x) with h | h
+      · exact hl ⟨lfa, h⟩
+      · exact hu ⟨le_of_lt h, fau⟩
+    · filter_upwards [h₁ l lfx] with a lfa using hl ⟨lfa, Hu (f a)⟩
+  · by_cases! Hu : exists u, f x < u
+    · rcases exists_Ico_subset_of_mem_nhds hv Hu with ⟨u, fxu, hu⟩
+      filter_upwards [h₂ u fxu] with a lfa
+      apply hu
+      exact ⟨Hl (f a), lfa⟩
+    · apply Filter.Eventually.of_forall
+      intro a
+      have : f a = f x := le_antisymm (Hu _) (Hl _)
+      rw [this]
+      exact mem_of_mem_nhds hv
 
 中文:
 定理 continuousWithinAt_iff_lower_upperSemicontinuousWithinAt
@@ -3783,7 +3950,22 @@ theorem continuousWithinAt_iff_lower_upperSemicontinuousWithinAt
   by_cases! Hl : exists l, l < f x
   · rcases exists_Ioc_subset_of_mem_nhds hv Hl with ⟨l, lfx, hl⟩
     by_cases! Hu : exists u, f x < u
-    · rcases 
+    · rcases exists_Ico_subset_of_mem_nhds hv Hu with ⟨u, fxu, hu⟩
+      filter_upwards [h₁ l lfx, h₂ u fxu] with a lfa fau
+      rcases le_or_gt (f a) (f x) with h | h
+      · exact hl ⟨lfa, h⟩
+      · exact hu ⟨le_of_lt h, fau⟩
+    · filter_upwards [h₁ l lfx] with a lfa using hl ⟨lfa, Hu (f a)⟩
+  · by_cases! Hu : exists u, f x < u
+    · rcases exists_Ico_subset_of_mem_nhds hv Hu with ⟨u, fxu, hu⟩
+      filter_upwards [h₂ u fxu] with a lfa
+      apply hu
+      exact ⟨Hl (f a), lfa⟩
+    · apply Filter.Eventually.of_forall
+      intro a
+      have : f a = f x := le_antisymm (Hu _) (Hl _)
+      rw [this]
+      exact mem_of_mem_nhds hv
 
 Depends on / 依赖: Filter, Filter.mem_map, exists_Ico_subset_of_mem_nhds, exists_Ioc_subset_of_mem_nhds, filter_upwards, h.lowerSemicontinuousWithinAt, h.upperSemicontinuousWithinAt, le_of_lt, le_or_gt, lowerSemicontinuousWithinAt, mem_map, upperSemicontinuousWithinAt
 -/

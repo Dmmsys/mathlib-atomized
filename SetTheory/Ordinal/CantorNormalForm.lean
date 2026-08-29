@@ -466,7 +466,15 @@ theorem sortedGT
       exact pairwise_singleton _ _
     · obtain hob | hbo := lt_or_ge o b
       · rw [CNF.of_lt ho hob]
-        exac
+        exact pairwise_singleton _ _
+      · rw [CNF.ne_zero ho, map_cons, pairwise_cons]
+        refine ⟨fun a H => ?_, IH⟩
+        rw [mem_map] at H
+        rcases H with ⟨⟨a, a'⟩, H, rfl⟩
+        exact (fst_le_log H).trans_lt (log_mod_opow_log_lt_log_self hb hbo)
+
+@[deprecated (since := "2026-01-11")]
+alias sorted := CNF.sortedGT
 
 中文:
 定理 sortedGT
@@ -482,7 +490,15 @@ theorem sortedGT
       exact pairwise_singleton _ _
     · obtain hob | hbo := lt_or_ge o b
       · rw [CNF.of_lt ho hob]
-        exac
+        exact pairwise_singleton _ _
+      · rw [CNF.ne_zero ho, map_cons, pairwise_cons]
+        refine ⟨fun a H => ?_, IH⟩
+        rw [mem_map] at H
+        rcases H with ⟨⟨a, a'⟩, H, rfl⟩
+        exact (fst_le_log H).trans_lt (log_mod_opow_log_lt_log_self hb hbo)
+
+@[deprecated (since := "2026-01-11")]
+alias sorted := CNF.sortedGT
 -/
 protected theorem sortedGT (b o : Ordinal) : ((CNF b o).map Prod.fst).SortedGT := by
   simp_rw [sortedGT_iff_pairwise]
@@ -853,7 +869,16 @@ theorem coeff_opow_mul_add
     exact mem_cons_self
   · rw [single_eq_of_ne' he, zero_add]
     by_cases h : e' in (CNF b y).map Prod.fst
-   
+    · rw [mem_map] at h
+      obtain ⟨⟨f, c⟩, hf, rfl⟩ := h
+      rw [coeff_of_mem_CNF hf]
+      apply coeff_of_mem_CNF
+      rw [CNF.opow_mul_add hb hx hxb hy]
+      exact mem_cons_of_mem _ hf
+    · rw [coeff_of_notMem_CNF h, coeff_of_notMem_CNF]
+      rw [mem_map] at h ⊢
+      rw [CNF.opow_mul_add hb hx hxb hy]
+      simp_all
 
 中文:
 定理 coeff_opow_mul_add
@@ -868,7 +893,16 @@ theorem coeff_opow_mul_add
     exact mem_cons_self
   · rw [single_eq_of_ne' he, zero_add]
     by_cases h : e' in (CNF b y).map Prod.fst
-   
+    · rw [mem_map] at h
+      obtain ⟨⟨f, c⟩, hf, rfl⟩ := h
+      rw [coeff_of_mem_CNF hf]
+      apply coeff_of_mem_CNF
+      rw [CNF.opow_mul_add hb hx hxb hy]
+      exact mem_cons_of_mem _ hf
+    · rw [coeff_of_notMem_CNF h, coeff_of_notMem_CNF]
+      rw [mem_map] at h ⊢
+      rw [CNF.opow_mul_add hb hx hxb hy]
+      simp_all
 
 Depends on / 依赖: CNF.opow_mul_add, Prod.fst, add_apply, add_zero, coeff_eq_zero_of_lt, coeff_of_mem_CNF, coeff_of_notMem_CNF, eq_or_ne, mem_cons_of_mem, mem_cons_self, mem_map, opow_mul_add, single_eq_of_ne, single_eq_same, zero_add
 -/
@@ -953,7 +987,14 @@ theorem eval_single_add'
     exact fun he => (h e he).false
   rw [eval]; rw [support_single_add (by simpa) hx]; rw [Finset.sort_cons]
   · simp only [add_apply, foldr_cons, single_eq_same, hf, add_zero, add_right_inj]
-    app
+    apply foldr_ext
+    intro e' he' _
+    congr
+    rw [single_eq_of_ne]; rw [zero_add]
+    aesop
+  · exact fun e' he' => (h e' he').le
+
+@[simp]
 
 中文:
 定理 eval_single_add'
@@ -965,7 +1006,14 @@ theorem eval_single_add'
     exact fun he => (h e he).false
   rw [eval]; rw [support_single_add (by simpa) hx]; rw [Finset.sort_cons]
   · simp only [add_apply, foldr_cons, single_eq_same, hf, add_zero, add_right_inj]
-    app
+    apply foldr_ext
+    intro e' he' _
+    congr
+    rw [single_eq_of_ne]; rw [zero_add]
+    aesop
+  · exact fun e' he' => (h e' he').le
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sort_cons, add_apply, add_right_inj, add_zero, eq_or_ne, foldr_cons, foldr_ext, notMem_support_iff, single_eq_of_ne, single_eq_same, sort_cons, support_single_add, zero_add
 -/
@@ -1020,7 +1068,10 @@ theorem eval_single_add
     obtain rfl | he' := (h e' (by simp [hy])).eq_or_lt
     · simp only [← add_assoc, ← single_add, eval_single_add' _ hf, mul_add]
     · rw [eval_single_add']
-      refine fun a ha => (h a ha).lt_of_ne ?
+      refine fun a ha => (h a ha).lt_of_ne ?_
+      rintro rfl
+      apply (hf a _).not_gt he'
+      simpa [he'.ne'] using ha
 
 中文:
 定理 eval_single_add
@@ -1032,7 +1083,10 @@ theorem eval_single_add
     obtain rfl | he' := (h e' (by simp [hy])).eq_or_lt
     · simp only [← add_assoc, ← single_add, eval_single_add' _ hf, mul_add]
     · rw [eval_single_add']
-      refine fun a ha => (h a ha).lt_of_ne ?
+      refine fun a ha => (h a ha).lt_of_ne ?_
+      rintro rfl
+      apply (hf a _).not_gt he'
+      simpa [he'.ne'] using ha
 
 Depends on / 依赖: Finsupp, Finsupp.induction_on_max, add_assoc, eq_or_lt, eval_single_add, induction_on_max, lt_of_ne, mul_add, not_gt, single_add
 -/
@@ -1063,7 +1117,9 @@ theorem eval_add
     · simp_all
     · intro e₂ he₂
 obtain he₂ | he₂ := Finset.mem_union.1 support_add he₂
-      · e
+      · exact (hf₁ _ he₂).le
+      · apply h _ _ _ he₂
+        simp_all
 
 中文:
 定理 eval_add
@@ -1076,7 +1132,9 @@ obtain he₂ | he₂ := Finset.mem_union.1 support_add he₂
     · simp_all
     · intro e₂ he₂
 obtain he₂ | he₂ := Finset.mem_union.1 support_add he₂
-      · e
+      · exact (hf₁ _ he₂).le
+      · apply h _ _ _ he₂
+        simp_all
 
 Depends on / 依赖: Finset, Finset.mem_union, Finsupp, Finsupp.induction_on_max, add_assoc, eval_single_add, induction_on_max, mem_union, single_add, support_add
 -/
@@ -1109,7 +1167,21 @@ theorem eval_lt
     have he' : e' ∉ f.support := fun h => (hf _ h).false
     rw [eval_single_add' _ hf]
     apply opow_mul_add_lt_opow _ (IH _ hf)
-  
+    · apply he e' _
+      simp [hx]
+    · apply (hb e').trans_eq'
+      rw [add_apply]; rw [single_eq_same]; rw [notMem_support_iff.1]; rw [add_zero]
+      exact fun h => (hf _ h).false
+    · intro a
+      by_cases ha : a in f.support
+      · apply (hb a).trans_eq'
+        rw [add_apply]; rw [single_eq_of_ne]; rw [zero_add]
+        rintro rfl
+        contradiction
+      · rw [notMem_support_iff.1 ha]
+        exact (hb 0).pos
+
+@[simp]
 
 中文:
 定理 eval_lt
@@ -1123,7 +1195,21 @@ theorem eval_lt
     have he' : e' ∉ f.support := fun h => (hf _ h).false
     rw [eval_single_add' _ hf]
     apply opow_mul_add_lt_opow _ (IH _ hf)
-  
+    · apply he e' _
+      simp [hx]
+    · apply (hb e').trans_eq'
+      rw [add_apply]; rw [single_eq_same]; rw [notMem_support_iff.1]; rw [add_zero]
+      exact fun h => (hf _ h).false
+    · intro a
+      by_cases ha : a in f.support
+      · apply (hb a).trans_eq'
+        rw [add_apply]; rw [single_eq_of_ne]; rw [zero_add]
+        rintro rfl
+        contradiction
+      · rw [notMem_support_iff.1 ha]
+        exact (hb 0).pos
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.induction_on_max, add_apply, add_zero, eval_single_add, eval_zero_right, f.support, generalizing, induction_on_max, notMem_support_iff, opow_mul_add_lt_opow, opow_pos, single_add, single_eq_same, support, trans_eq
 -/
@@ -1207,7 +1293,13 @@ theorem coeff_eval
       · apply (hf e').trans_eq'
         rw [add_apply]; rw [single_eq_of_ne]; rw [zero_add]
         exact (hf' _ he').ne
-   
+      · rw [notMem_support_iff.1 he']
+        exact hb.pos
+    rw [eval_single_add' _ hf']; rw [coeff_opow_mul_add hb hx]; rw [IH IH']
+    · apply (hf e).trans_eq'
+      rw [add_apply]; rw [single_eq_same]; rw [notMem_support_iff.1]; rw [add_zero]
+      exact fun h => (hf' _ h).false
+    · exact eval_lt IH' hf'
 
 中文:
 定理 coeff_eval
@@ -1221,7 +1313,13 @@ theorem coeff_eval
       · apply (hf e').trans_eq'
         rw [add_apply]; rw [single_eq_of_ne]; rw [zero_add]
         exact (hf' _ he').ne
-   
+      · rw [notMem_support_iff.1 he']
+        exact hb.pos
+    rw [eval_single_add' _ hf']; rw [coeff_opow_mul_add hb hx]; rw [IH IH']
+    · apply (hf e).trans_eq'
+      rw [add_apply]; rw [single_eq_same]; rw [notMem_support_iff.1]; rw [add_zero]
+      exact fun h => (hf' _ h).false
+    · exact eval_lt IH' hf'
 
 Depends on / 依赖: Finsupp, Finsupp.induction_on_max, add_apply, add_zero, coeff_opow_mul_add, eval_single_add, f.support, hb.pos, induction_on_max, notMem_support_iff, single_add, single_eq_of_ne, single_eq_same, support, trans_eq, zero_add
 -/

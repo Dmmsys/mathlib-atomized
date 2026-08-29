@@ -50,7 +50,9 @@ theorem summable_of_summable_hasFDerivAt_of_isPreconnected
   rw [summable_iff_cauchySeq_finset] at hf0 ⊢
   have A : UniformCauchySeqOn (fun t : Finset α => fun x => ∑ i in t, f' i x) atTop s :=
     (tendstoUniformlyOn_tsum hu hf').uniformCauchySeqOn
-  refine cauchy_map_of_uniformCauchySeqOn_fderiv (f := fun t x => ∑ i in t, f 
+  refine cauchy_map_of_uniformCauchySeqOn_fderiv (f := fun t x => ∑ i in t, f i x)
+    hs h's A (fun t y hy => ?_) hx₀ hx hf0
+  exact HasFDerivAt.fun_sum fun i _ => hf i y hy
 
 中文:
 定理 summable_of_summable_hasFDerivAt_of_isPreconnected
@@ -60,7 +62,9 @@ theorem summable_of_summable_hasFDerivAt_of_isPreconnected
   rw [summable_iff_cauchySeq_finset] at hf0 ⊢
   have A : UniformCauchySeqOn (fun t : Finset α => fun x => ∑ i in t, f' i x) atTop s :=
     (tendstoUniformlyOn_tsum hu hf').uniformCauchySeqOn
-  refine cauchy_map_of_uniformCauchySeqOn_fderiv (f := fun t x => ∑ i in t, f 
+  refine cauchy_map_of_uniformCauchySeqOn_fderiv (f := fun t x => ∑ i in t, f i x)
+    hs h's A (fun t y hy => ?_) hx₀ hx hf0
+  exact HasFDerivAt.fun_sum fun i _ => hf i y hy
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, HasFDerivAt, HasFDerivAt.fun_sum, UniformCauchySeqOn, cauchy_map_of_uniformCauchySeqOn_fderiv, fun_sum, summable_iff_cauchySeq_finset, tendstoUniformlyOn_tsum, uniformCauchySeqOn
 -/
@@ -117,7 +121,9 @@ theorem hasFDerivAt_tsum_of_isPreconnected
     intro y hy
     apply Summable.hasSum
     exact summable_of_summable_hasFDerivAt_of_isPreconnected hu hs h's hf hf' hx₀ hf0 hy
-  refine hasFDerivAt_of_tendstoUniformlyOn hs (tends
+  refine hasFDerivAt_of_tendstoUniformlyOn hs (tendstoUniformlyOn_tsum hu hf')
+    (fun t y hy => ?_) A hx
+  exact HasFDerivAt.fun_sum fun n _ => hf n y hy
 
 中文:
 定理 hasFDerivAt_tsum_of_isPreconnected
@@ -128,7 +134,9 @@ theorem hasFDerivAt_tsum_of_isPreconnected
     intro y hy
     apply Summable.hasSum
     exact summable_of_summable_hasFDerivAt_of_isPreconnected hu hs h's hf hf' hx₀ hf0 hy
-  refine hasFDerivAt_of_tendstoUniformlyOn hs (tends
+  refine hasFDerivAt_of_tendstoUniformlyOn hs (tendstoUniformlyOn_tsum hu hf')
+    (fun t y hy => ?_) A hx
+  exact HasFDerivAt.fun_sum fun n _ => hf n y hy
 
 Depends on / 依赖: Finset, HasFDerivAt, HasFDerivAt.fun_sum, Summable, Summable.hasSum, Tendsto, fun_sum, hasFDerivAt_of_tendstoUniformlyOn, hasSum, summable_of_summable_hasFDerivAt_of_isPreconnected, tendstoUniformlyOn_tsum
 -/
@@ -464,7 +472,17 @@ theorem iteratedFDeriv_tsum
     exact (continuousMultilinearCurryFin0 𝕜 E F).symm.toContinuousLinearEquiv.map_tsum
   | succ k IH =>
     have h'k : (k : Nat∞) < N := lt_of_lt_of_le (WithTop.coe_lt_coe.2 (Nat.lt_succ_self _)) hk
-    have A : S
+    have A : Summable fun n => iteratedFDeriv 𝕜 k (f n) 0 :=
+      .of_norm_bounded (hv k h'k.le) fun n => h'f k n 0 h'k.le
+    simp_rw [iteratedFDeriv_succ_eq_comp_left, IH h'k.le]
+    rw [fderiv_tsum (hv _ hk) (fun n => (hf n).differentiable_iteratedFDeriv
+        (mod_cast h'k)) _ A]
+    · ext1 x
+      exact (continuousMultilinearCurryLeftEquiv 𝕜
+        (fun _ : Fin (k + 1) => E) F).symm.toContinuousLinearEquiv.map_tsum
+    · intro n x
+      simpa only [iteratedFDeriv_succ_eq_comp_left, LinearIsometryEquiv.norm_map, comp_apply]
+        using h'f k.succ n x hk
 
 中文:
 定理 iteratedFDeriv_tsum
@@ -477,7 +495,17 @@ theorem iteratedFDeriv_tsum
     exact (continuousMultilinearCurryFin0 𝕜 E F).symm.toContinuousLinearEquiv.map_tsum
   | succ k IH =>
     have h'k : (k : Nat∞) < N := lt_of_lt_of_le (WithTop.coe_lt_coe.2 (Nat.lt_succ_self _)) hk
-    have A : S
+    have A : Summable fun n => iteratedFDeriv 𝕜 k (f n) 0 :=
+      .of_norm_bounded (hv k h'k.le) fun n => h'f k n 0 h'k.le
+    simp_rw [iteratedFDeriv_succ_eq_comp_left, IH h'k.le]
+    rw [fderiv_tsum (hv _ hk) (fun n => (hf n).differentiable_iteratedFDeriv
+        (mod_cast h'k)) _ A]
+    · ext1 x
+      exact (continuousMultilinearCurryLeftEquiv 𝕜
+        (fun _ : Fin (k + 1) => E) F).symm.toContinuousLinearEquiv.map_tsum
+    · intro n x
+      simpa only [iteratedFDeriv_succ_eq_comp_left, LinearIsometryEquiv.norm_map, comp_apply]
+        using h'f k.succ n x hk
 
 Depends on / 依赖: Nat.lt_succ_self, Summable, WithTop, WithTop.coe_lt_coe, coe_lt_coe, continuousMultilinearCurryFin0, differentiable_iteratedFD, fderiv_tsum, iteratedFDeriv, iteratedFDeriv_succ_eq_comp_left, iteratedFDeriv_zero_eq_comp, k.le, lt_of_lt_of_le, lt_succ_self, map_tsum, of_norm_bounded, simp_rw, symm.toContinuousLinearEquiv.map_tsum, toContinuousLinearEquiv
 -/
@@ -546,6 +574,15 @@ theorem contDiff_tsum
     · intro n x
       exact h'f _ _ _ hm
   · intro m hm
+    have h'm : ((m + 1 : Nat) : Nat∞) <= N := by
+      simpa only [ENat.natCast_add, ENat.natCast_one] using Order.add_one_le_of_lt hm
+    rw [iteratedFDeriv_tsum hf hv h'f hm.le]
+    have A n x : HasFDerivAt (iteratedFDeriv 𝕜 m (f n)) (fderiv 𝕜 (iteratedFDeriv 𝕜 m (f n)) x) x :=
+      (ContDiff.differentiable_iteratedFDeriv (mod_cast hm)
+        (hf n)).differentiableAt.hasFDerivAt
+    refine differentiable_tsum (hv _ h'm) A fun n x => ?_
+    rw [fderiv_iteratedFDeriv]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
+    exact h'f _ _ _ h'm
 
 中文:
 定理 contDiff_tsum
@@ -561,6 +598,15 @@ theorem contDiff_tsum
     · intro n x
       exact h'f _ _ _ hm
   · intro m hm
+    have h'm : ((m + 1 : Nat) : Nat∞) <= N := by
+      simpa only [ENat.natCast_add, ENat.natCast_one] using Order.add_one_le_of_lt hm
+    rw [iteratedFDeriv_tsum hf hv h'f hm.le]
+    have A n x : HasFDerivAt (iteratedFDeriv 𝕜 m (f n)) (fderiv 𝕜 (iteratedFDeriv 𝕜 m (f n)) x) x :=
+      (ContDiff.differentiable_iteratedFDeriv (mod_cast hm)
+        (hf n)).differentiableAt.hasFDerivAt
+    refine differentiable_tsum (hv _ h'm) A fun n x => ?_
+    rw [fderiv_iteratedFDeriv]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
+    exact h'f _ _ _ h'm
 
 Depends on / 依赖: ContDiff, ContDiff.continuous_iteratedFDeriv, ENat.natCast_add, ENat.natCast_one, HasFDerivAt, Order.add_one_le_of_lt, add_one_le_of_lt, contDiff_iff_continuous_differentiable, continuous_iteratedFDeriv, continuous_tsum, fderiv, hm.le, iterat, iteratedFDeriv, iteratedFDeriv_tsum, mod_cast, natCast_add, natCast_one
 -/
@@ -600,7 +646,30 @@ theorem contDiff_tsum_of_eventually
   have ht : Set.Finite t :=
     haveI A :
       forallᶠ i in (Filter.cofinite : Filter α),
-        forall k : Nat, 
+        forall k : Nat, k in Finset.range (m + 1) -> forall x : E, ‖iteratedFDeriv 𝕜 k (f i) x‖ <= v k i := by
+      rw [eventually_all_finset]
+      intro i hi
+      apply h'f
+      simp only [Finset.mem_range_succ_iff] at hi
+      exact (WithTop.coe_le_coe.2 hi).trans hm
+    eventually_cofinite.2 A
+  let T : Finset α := ht.toFinset
+  have : (fun x => ∑' i, f i x) = (fun x => ∑ i in T, f i x) +
+      fun x => ∑' i : { i // i ∉ T }, f i x := by
+    ext1 x
+    refine (Summable.sum_add_tsum_subtype_compl ?_ T).symm
+    refine .of_norm_bounded_eventually (hv 0 zero_le) ?_
+    filter_upwards [h'f 0 zero_le] with i hi
+    simpa only [norm_iteratedFDeriv_zero] using hi x
+  rw [this]
+  apply (ContDiff.sum fun i _ => (hf i).of_le (mod_cast hm)).add
+  have h'u : forall k : Nat, (k : Nat∞) <= m -> Summable (v k ∘ ((↑) : { i // i ∉ T } -> α)) := fun k hk =>
+    (hv k (hk.trans hm)).subtype _
+  refine contDiff_tsum (fun i => (hf i).of_le (mod_cast hm)) h'u ?_
+  rintro k ⟨i, hi⟩ x hk
+  simp only [t, T, Finite.mem_toFinset, mem_ofPred_eq, Finset.mem_range, not_forall, not_le,
+    exists_prop, not_exists, not_and, not_lt] at hi
+  exact hi k (Nat.lt_succ_iff.2 (WithTop.coe_le_coe.1 hk)) x
 
 中文:
 定理 contDiff_tsum_of_eventually
@@ -612,7 +681,30 @@ theorem contDiff_tsum_of_eventually
   have ht : Set.Finite t :=
     haveI A :
       forallᶠ i in (Filter.cofinite : Filter α),
-        forall k : Nat, 
+        forall k : Nat, k in Finset.range (m + 1) -> forall x : E, ‖iteratedFDeriv 𝕜 k (f i) x‖ <= v k i := by
+      rw [eventually_all_finset]
+      intro i hi
+      apply h'f
+      simp only [Finset.mem_range_succ_iff] at hi
+      exact (WithTop.coe_le_coe.2 hi).trans hm
+    eventually_cofinite.2 A
+  let T : Finset α := ht.toFinset
+  have : (fun x => ∑' i, f i x) = (fun x => ∑ i in T, f i x) +
+      fun x => ∑' i : { i // i ∉ T }, f i x := by
+    ext1 x
+    refine (Summable.sum_add_tsum_subtype_compl ?_ T).symm
+    refine .of_norm_bounded_eventually (hv 0 zero_le) ?_
+    filter_upwards [h'f 0 zero_le] with i hi
+    simpa only [norm_iteratedFDeriv_zero] using hi x
+  rw [this]
+  apply (ContDiff.sum fun i _ => (hf i).of_le (mod_cast hm)).add
+  have h'u : forall k : Nat, (k : Nat∞) <= m -> Summable (v k ∘ ((↑) : { i // i ∉ T } -> α)) := fun k hk =>
+    (hv k (hk.trans hm)).subtype _
+  refine contDiff_tsum (fun i => (hf i).of_le (mod_cast hm)) h'u ?_
+  rintro k ⟨i, hi⟩ x hk
+  simp only [t, T, Finite.mem_toFinset, mem_ofPred_eq, Finset.mem_range, not_forall, not_le,
+    exists_prop, not_exists, not_and, not_lt] at hi
+  exact hi k (Nat.lt_succ_iff.2 (WithTop.coe_le_coe.1 hk)) x
 
 Depends on / 依赖: Filter, Filter.cofinite, Finite, Finset, Finset.mem_range_succ_iff, Finset.range, Set.Finite, WithTop, WithTop.coe_le_coe, coe_le_coe, cofinite, contDiff_iff_forall_nat_le, eventual, eventually_all_finset, iteratedFDeriv, mem_range_succ_iff
 -/

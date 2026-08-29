@@ -104,7 +104,19 @@ lemma IsDynCoverOf.preimage
   rcases isEmpty_or_nonempty X with _ | _
   · exact ⟨∅, eq_empty_of_isEmpty F ▸ ⟨isDynCoverOf_empty, Finset.card_empty ▸ zero_le⟩⟩
   -- If `t` is a dynamical cover of `φ '' F`, then we want to choose one preimage by `φ` for each
-  -- element of `t`. This is complicated by the fact tha
+  -- element of `t`. This is complicated by the fact that `t` may not be a subset of `φ '' F`,
+  -- and may not even be in the range of `φ`. Hence, we first modify `t` to make it a subset
+  -- of `φ '' F`. This requires taking larger entourages.
+  obtain ⟨s, s_cover, s_card, s_inter⟩ := h'.nonempty_inter
+  choose! g g_rel g_mem using fun (x : Y) (h : x in s) => nonempty_def.1 (s_inter x h)
+  choose! f _ φ_f using fun (y : Y) (hy : y in φ '' F) => hy
+  refine ⟨s.image (f ∘ g), fun x hx => ?_, Finset.card_image_le.trans s_card⟩
+  simp only [Finset.coe_image, comp_apply, mem_image, SetLike.mem_coe, ← h.preimage_dynEntourage,
+    mem_preimage, map_apply, exists_exists_and_eq_and]
+  obtain ⟨y, hy, hxy⟩ := s_cover (Set.mem_image_of_mem _ hx)
+  refine ⟨y, hy, dynEntourage_comp_subset _ _ _ _ ⟨_, hxy, ?_⟩⟩
+  rw [φ_f _ (g_mem _ hy)]
+  exact g_rel _ hy
 
 中文:
 引理 IsDynCoverOf.原像
@@ -114,7 +126,19 @@ lemma IsDynCoverOf.preimage
   rcases isEmpty_or_nonempty X with _ | _
   · exact ⟨∅, eq_empty_of_isEmpty F ▸ ⟨isDynCoverOf_empty, Finset.card_empty ▸ zero_le⟩⟩
   -- If `t` is a dynamical cover of `φ '' F`, then we want to choose one preimage by `φ` for each
-  -- element of `t`. This is complicated by the fact tha
+  -- element of `t`. This is complicated by the fact that `t` may not be a subset of `φ '' F`,
+  -- and may not even be in the range of `φ`. Hence, we first modify `t` to make it a subset
+  -- of `φ '' F`. This requires taking larger entourages.
+  obtain ⟨s, s_cover, s_card, s_inter⟩ := h'.nonempty_inter
+  choose! g g_rel g_mem using fun (x : Y) (h : x in s) => nonempty_def.1 (s_inter x h)
+  choose! f _ φ_f using fun (y : Y) (hy : y in φ '' F) => hy
+  refine ⟨s.image (f ∘ g), fun x hx => ?_, Finset.card_image_le.trans s_card⟩
+  simp only [Finset.coe_image, comp_apply, mem_image, SetLike.mem_coe, ← h.preimage_dynEntourage,
+    mem_preimage, map_apply, exists_exists_and_eq_and]
+  obtain ⟨y, hy, hxy⟩ := s_cover (Set.mem_image_of_mem _ hx)
+  refine ⟨y, hy, dynEntourage_comp_subset _ _ _ _ ⟨_, hxy, ?_⟩⟩
+  rw [φ_f _ (g_mem _ hy)]
+  exact g_rel _ hy
 
 Depends on / 依赖: Finset, Finset.card_empty, card_empty, classical, eq_empty_of_isEmpty, isDynCoverOf_empty, isEmpty_or_nonempty, zero_le
 -/
@@ -151,7 +175,7 @@ lemma le_coverMincard_image
   obtain ⟨t, t_cover, t_card⟩ := (coverMincard_finite_iff T (φ '' F) V n).1 h'
   obtain ⟨s, s_cover, s_card⟩ := t_cover.preimage h
   rw [← t_card]
-  exact s_cover.coverMincard_le_card.trans (WithTop.coe_le_
+  exact s_cover.coverMincard_le_card.trans (WithTop.coe_le_coe.2 s_card)
 
 中文:
 引理 le_coverMincard_image
@@ -162,7 +186,7 @@ lemma le_coverMincard_image
   obtain ⟨t, t_cover, t_card⟩ := (coverMincard_finite_iff T (φ '' F) V n).1 h'
   obtain ⟨s, s_cover, s_card⟩ := t_cover.preimage h
   rw [← t_card]
-  exact s_cover.coverMincard_le_card.trans (WithTop.coe_le_
+  exact s_cover.coverMincard_le_card.trans (WithTop.coe_le_coe.2 s_card)
 
 Depends on / 依赖: WithTop, WithTop.coe_le_coe, coe_le_coe, coverMincard, coverMincard_finite_iff, coverMincard_le_card, eq_top_or_lt_top, le_top, preimage, s_card, s_cover, s_cover.coverMincard_le_card.trans, t_card, t_cover, t_cover.preimage
 -/
@@ -189,7 +213,7 @@ lemma coverMincard_image_le
   rw [← s_card]
   have := s_cover.image h
   rw [← s.coe_image] at this
-  exact this.coverMincard_
+  exact this.coverMincard_le_card.trans (WithTop.coe_le_coe.2 s.card_image_le)
 
 中文:
 引理 coverMincard_image_le
@@ -202,7 +226,7 @@ lemma coverMincard_image_le
   rw [← s_card]
   have := s_cover.image h
   rw [← s.coe_image] at this
-  exact this.coverMincard_
+  exact this.coverMincard_le_card.trans (WithTop.coe_le_coe.2 s.card_image_le)
 
 Depends on / 依赖: WithTop, WithTop.coe_le_coe, card_image_le, classical, coe_image, coe_le_coe, coverMincard, coverMincard_finite_iff, coverMincard_le_card, eq_top_or_lt_top, le_top, s.card_image_le, s.coe_image, s_card, s_cover, s_cover.image, this.coverMincard_le_card.trans
 -/
@@ -308,7 +332,15 @@ theorem coverEntropy_image_of_comap
 (coverEntropyEntourage_antitone _ _ SetRel.symmetrize_subset_self).trans
       (coverEntropyEntourage_image_le h F _).trans ?_
     apply coverEntropyEntourage_le_coverEntropy
-    rw [uniformity_comap φ]; rw
+    rw [uniformity_comap φ]; rw [mem_comap]
+    exact ⟨_, symmetrize_mem_uniformity V_uni, .rfl⟩
+  · refine iSup₂_le fun U U_uni => ?_
+    simp only [uniformity_comap φ, mem_comap] at U_uni
+    obtain ⟨V, V_uni, V_sub⟩ := U_uni
+    obtain ⟨W, W_uni, W_symm, W_V⟩ := comp_symm_mem_uniformity_sets V_uni
+    apply (coverEntropyEntourage_antitone S F ((preimage_mono W_V).trans V_sub)).trans
+    apply (le_coverEntropyEntourage_image h F).trans
+    exact coverEntropyEntourage_le_coverEntropy T (φ '' F) W_uni
 
 中文:
 定理 coverEntropy_image_of_comap
@@ -320,7 +352,15 @@ theorem coverEntropy_image_of_comap
 (coverEntropyEntourage_antitone _ _ SetRel.symmetrize_subset_self).trans
       (coverEntropyEntourage_image_le h F _).trans ?_
     apply coverEntropyEntourage_le_coverEntropy
-    rw [uniformity_comap φ]; rw
+    rw [uniformity_comap φ]; rw [mem_comap]
+    exact ⟨_, symmetrize_mem_uniformity V_uni, .rfl⟩
+  · refine iSup₂_le fun U U_uni => ?_
+    simp only [uniformity_comap φ, mem_comap] at U_uni
+    obtain ⟨V, V_uni, V_sub⟩ := U_uni
+    obtain ⟨W, W_uni, W_symm, W_V⟩ := comp_symm_mem_uniformity_sets V_uni
+    apply (coverEntropyEntourage_antitone S F ((preimage_mono W_V).trans V_sub)).trans
+    apply (le_coverEntropyEntourage_image h F).trans
+    exact coverEntropyEntourage_le_coverEntropy T (φ '' F) W_uni
 
 Depends on / 依赖: SetRel, SetRel.symmetrize_subset_self, U_uni, UniformSpace, V_sub, V_uni, W_symm, W_uni, coverEntropyEntourage_antitone, coverEntropyEntourage_image_le, coverEntropyEntourage_le_coverEntropy, le_antisymm, mem_comap, symmetrize_mem_uniformity, symmetrize_subset_self, uniformity_comap
 -/
@@ -356,7 +396,15 @@ theorem coverEntropyInf_image_of_comap
 (coverEntropyInfEntourage_antitone _ _ SetRel.symmetrize_subset_self).trans
       (coverEntropyInfEntourage_image_le h F _).trans ?_
     apply coverEntropyInfEntourage_le_coverEntropyInf
-    rw [uniformity_
+    rw [uniformity_comap φ]; rw [mem_comap]
+    exact ⟨_, symmetrize_mem_uniformity V_uni, .rfl⟩
+  · refine iSup₂_le fun U U_uni => ?_
+    simp only [uniformity_comap φ, mem_comap] at U_uni
+    obtain ⟨V, V_uni, V_sub⟩ := U_uni
+    obtain ⟨W, W_uni, W_symm, W_V⟩ := comp_symm_mem_uniformity_sets V_uni
+    apply (coverEntropyInfEntourage_antitone S F ((preimage_mono W_V).trans V_sub)).trans
+    apply (le_coverEntropyInfEntourage_image h F).trans
+    exact coverEntropyInfEntourage_le_coverEntropyInf T (φ '' F) W_uni
 
 中文:
 定理 coverEntropyInf_image_of_comap
@@ -368,7 +416,15 @@ theorem coverEntropyInf_image_of_comap
 (coverEntropyInfEntourage_antitone _ _ SetRel.symmetrize_subset_self).trans
       (coverEntropyInfEntourage_image_le h F _).trans ?_
     apply coverEntropyInfEntourage_le_coverEntropyInf
-    rw [uniformity_
+    rw [uniformity_comap φ]; rw [mem_comap]
+    exact ⟨_, symmetrize_mem_uniformity V_uni, .rfl⟩
+  · refine iSup₂_le fun U U_uni => ?_
+    simp only [uniformity_comap φ, mem_comap] at U_uni
+    obtain ⟨V, V_uni, V_sub⟩ := U_uni
+    obtain ⟨W, W_uni, W_symm, W_V⟩ := comp_symm_mem_uniformity_sets V_uni
+    apply (coverEntropyInfEntourage_antitone S F ((preimage_mono W_V).trans V_sub)).trans
+    apply (le_coverEntropyInfEntourage_image h F).trans
+    exact coverEntropyInfEntourage_le_coverEntropyInf T (φ '' F) W_uni
 
 Depends on / 依赖: SetRel, SetRel.symmetrize_subset_self, U_uni, UniformSpace, V_sub, V_uni, W_symm, W_uni, coverEntropyInfEntourage_antitone, coverEntropyInfEntourage_image_le, coverEntropyInfEntourage_le_coverEntropyInf, le_antisymm, mem_comap, symmetrize_mem_uniformity, symmetrize_subset_self, uniformity_comap
 -/
@@ -520,7 +576,8 @@ lemma coverEntropy_image_le_of_uniformContinuousOn_invariant
     intro x
     rw [G.domRestrict_apply]; rw [G.domRestrict_apply]; rw [hG.val_restrict_apply]; rw [h.eq x]
   apply (coverEntropy_image_le_of_uniformContinuous hφ
-    (uniformContinuousO
+    (uniformContinuousOn_iff_restrict.1 h') (val ⁻¹' F)).trans_eq'
+  rw [← image_image_val_eq_domRestrict_image]; rw [image_preimage_coe G F]; rw [inter_eq_right.2 hF]
 
 中文:
 引理 coverEntropy_image_le_of_uniformContinuousOn_invariant
@@ -531,7 +588,8 @@ lemma coverEntropy_image_le_of_uniformContinuousOn_invariant
     intro x
     rw [G.domRestrict_apply]; rw [G.domRestrict_apply]; rw [hG.val_restrict_apply]; rw [h.eq x]
   apply (coverEntropy_image_le_of_uniformContinuous hφ
-    (uniformContinuousO
+    (uniformContinuousOn_iff_restrict.1 h') (val ⁻¹' F)).trans_eq'
+  rw [← image_image_val_eq_domRestrict_image]; rw [image_preimage_coe G F]; rw [inter_eq_right.2 hF]
 
 Depends on / 依赖: G.domRestrict, G.domRestrict_apply, Semiconj, coverEntropy_image_le_of_uniformContinuous, coverEntropy_restrict_subset, domRestrict, domRestrict_apply, h.eq, hG.restrict, hG.val_restrict_apply, image_image_val_eq_domRestrict_image, image_preimage_coe, inter_eq_right, restrict, trans_eq, uniformContinuousOn_iff_restrict, val_restrict_apply
 -/
@@ -559,7 +617,8 @@ lemma coverEntropyInf_image_le_of_uniformContinuousOn_invariant
     intro a
     rw [G.domRestrict_apply]; rw [G.domRestrict_apply]; rw [hG.val_restrict_apply]; rw [h.eq a]
   apply (coverEntropyInf_image_le_of_uniformContinuous hφ
-    (uniformConti
+    (uniformContinuousOn_iff_restrict.1 h') (val ⁻¹' F)).trans_eq'
+  rw [← image_image_val_eq_domRestrict_image]; rw [image_preimage_coe G F]; rw [inter_eq_right.2 hF]
 
 中文:
 引理 coverEntropyInf_image_le_of_uniformContinuousOn_invariant
@@ -570,7 +629,8 @@ lemma coverEntropyInf_image_le_of_uniformContinuousOn_invariant
     intro a
     rw [G.domRestrict_apply]; rw [G.domRestrict_apply]; rw [hG.val_restrict_apply]; rw [h.eq a]
   apply (coverEntropyInf_image_le_of_uniformContinuous hφ
-    (uniformConti
+    (uniformContinuousOn_iff_restrict.1 h') (val ⁻¹' F)).trans_eq'
+  rw [← image_image_val_eq_domRestrict_image]; rw [image_preimage_coe G F]; rw [inter_eq_right.2 hF]
 
 Depends on / 依赖: G.domRestrict, G.domRestrict_apply, Semiconj, coverEntropyInf_image_le_of_uniformContinuous, coverEntropyInf_restrict_subset, domRestrict, domRestrict_apply, h.eq, hG.restrict, hG.val_restrict_apply, image_image_val_eq_domRestrict_image, image_preimage_coe, inter_eq_right, restrict, trans_eq, uniformContinuousOn_iff_restrict, val_restrict_apply
 -/

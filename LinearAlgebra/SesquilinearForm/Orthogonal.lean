@@ -140,7 +140,11 @@ theorem span_singleton_inf_orthogonal_eq_bot
   obtain ⟨μ, -, rfl⟩ := Submodule.mem_span_finset.1 h.1
   replace h := h.2 x (by simp [Submodule.mem_span] : x in Submodule.span K₁ ({x} : Finset V₁))
   rw [Finset.sum_singleton] at h ⊢
-  suffices hμzero : μ x = 0 by rw [hμzero, ze
+  suffices hμzero : μ x = 0 by rw [hμzero, zero_smul, Submodule.mem_bot]
+  rw [map_smulₛₗ] at h
+  exact Or.elim (smul_eq_zero.mp h)
+      (fun y => by simpa using y)
+      (fun hfalse => False.elim <| hx hfalse)
 
 中文:
 定理 span_singleton_inf_orthogonal_eq_bot
@@ -151,7 +155,11 @@ theorem span_singleton_inf_orthogonal_eq_bot
   obtain ⟨μ, -, rfl⟩ := Submodule.mem_span_finset.1 h.1
   replace h := h.2 x (by simp [Submodule.mem_span] : x in Submodule.span K₁ ({x} : Finset V₁))
   rw [Finset.sum_singleton] at h ⊢
-  suffices hμzero : μ x = 0 by rw [hμzero, ze
+  suffices hμzero : μ x = 0 by rw [hμzero, zero_smul, Submodule.mem_bot]
+  rw [map_smulₛₗ] at h
+  exact Or.elim (smul_eq_zero.mp h)
+      (fun y => by simpa using y)
+      (fun hfalse => False.elim <| hx hfalse)
 
 Depends on / 依赖: False.elim, Finset, Finset.coe_singleton, Finset.sum_singleton, Or.elim, Submodule, Submodule.mem_bot, Submodule.mem_span, Submodule.mem_span_finset, Submodule.span, coe_singleton, eq_bot_iff, hfalse, mem_bot, mem_span, mem_span_finset, replace, smul_eq_zero, smul_eq_zero.mp, sum_singleton
 -/

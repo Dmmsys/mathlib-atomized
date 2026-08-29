@@ -352,7 +352,17 @@ theorem mem_eval
     · rw [Part.mem_unique h
           (PFun.mem_fix_iff.2 <| Or.inl <| Part.mem_some_iff.2 <| by rw [e]; rfl)]
       exact ⟨ReflTransGen.refl, e⟩
-    · rcases PFun.mem_fix_iff.1 h
+    · rcases PFun.mem_fix_iff.1 h with (h | ⟨_, h, _⟩) <;> rw [e] at h <;>
+        cases Part.mem_some_iff.1 h
+      obtain ⟨h₁, h₂⟩ := IH a' e
+      exact ⟨ReflTransGen.head e h₁, h₂⟩
+  · refine ReflTransGen.head_induction_on h₁ ?_ fun h _ IH => ?_
+    · refine PFun.mem_fix_iff.2 (Or.inl ?_)
+      rw [h₂]
+      apply Part.mem_some
+    · refine PFun.mem_fix_iff.2 (Or.inr ⟨_, ?_, IH⟩)
+      rw [h]
+      apply Part.mem_some
 
 中文:
 定理 mem_eval
@@ -365,7 +375,17 @@ theorem mem_eval
     · rw [Part.mem_unique h
           (PFun.mem_fix_iff.2 <| Or.inl <| Part.mem_some_iff.2 <| by rw [e]; rfl)]
       exact ⟨ReflTransGen.refl, e⟩
-    · rcases PFun.mem_fix_iff.1 h
+    · rcases PFun.mem_fix_iff.1 h with (h | ⟨_, h, _⟩) <;> rw [e] at h <;>
+        cases Part.mem_some_iff.1 h
+      obtain ⟨h₁, h₂⟩ := IH a' e
+      exact ⟨ReflTransGen.head e h₁, h₂⟩
+  · refine ReflTransGen.head_induction_on h₁ ?_ fun h _ IH => ?_
+    · refine PFun.mem_fix_iff.2 (Or.inl ?_)
+      rw [h₂]
+      apply Part.mem_some
+    · refine PFun.mem_fix_iff.2 (Or.inr ⟨_, ?_, IH⟩)
+      rw [h]
+      apply Part.mem_some
 
 Depends on / 依赖: Or.inl, PFun.mem_fix_iff, Part.mem_some_iff, Part.mem_unique, ReflTransGen, ReflTransGen.head, ReflTransGen.head_induction_on, ReflTransGen.refl, evalInduction, head_induction_on, mem_fix_iff, mem_some_iff, mem_unique
 -/
@@ -589,7 +609,15 @@ theorem tr_reaches_rev
     rcases ReflTransGen.cases_head ce with (rfl | ⟨d', cd', de⟩)
     · have := H ee
       revert this
-      rcases eg : f₁ e₁ with - | g₁ <;> simp onl
+      rcases eg : f₁ e₁ with - | g₁ <;> simp only [and_imp, exists_imp]
+      · intro c0
+        cases cd.symm.trans c0
+      · intro g₂ gg cg
+        rcases TransGen.head'_iff.1 cg with ⟨d', cd', dg⟩
+        cases Option.mem_unique cd cd'
+        exact ⟨_, _, dg, gg, ae.tail eg⟩
+    · cases Option.mem_unique cd cd'
+      exact ⟨_, _, de, ee, ae⟩
 
 中文:
 定理 tr_reaches_rev
@@ -602,7 +630,15 @@ theorem tr_reaches_rev
     rcases ReflTransGen.cases_head ce with (rfl | ⟨d', cd', de⟩)
     · have := H ee
       revert this
-      rcases eg : f₁ e₁ with - | g₁ <;> simp onl
+      rcases eg : f₁ e₁ with - | g₁ <;> simp only [and_imp, exists_imp]
+      · intro c0
+        cases cd.symm.trans c0
+      · intro g₂ gg cg
+        rcases TransGen.head'_iff.1 cg with ⟨d', cd', dg⟩
+        cases Option.mem_unique cd cd'
+        exact ⟨_, _, dg, gg, ae.tail eg⟩
+    · cases Option.mem_unique cd cd'
+      exact ⟨_, _, de, ee, ae⟩
 
 Depends on / 依赖: Option.mem_unique, ReflTransGen, ReflTransGen.cases_head, ReflTransGen.refl, TransGen, TransGen.head, _iff, ae.tail, and_imp, cases_head, cd.symm.trans, exists_imp, mem_unique, revert
 -/
@@ -671,7 +707,9 @@ theorem tr_eval_rev
   rcases hfc : f₁ c₁ with - | d₁
   · rfl
   rw [hfc] at this
-  rcases this w
+  rcases this with ⟨d₂, _, bd⟩
+  rcases TransGen.head'_iff.1 bd with ⟨e, h, _⟩
+  cases b0.symm.trans h
 
 中文:
 定理 tr_eval_rev
@@ -685,7 +723,9 @@ theorem tr_eval_rev
   rcases hfc : f₁ c₁ with - | d₁
   · rfl
   rw [hfc] at this
-  rcases this w
+  rcases this with ⟨d₂, _, bd⟩
+  rcases TransGen.head'_iff.1 bd with ⟨e, h, _⟩
+  cases b0.symm.trans h
 
 Depends on / 依赖: Option.eq_none_iff_forall_not_mem, TransGen, TransGen.head, _iff, b0.symm.trans, eq_none_iff_forall_not_mem, mem_eval, reflTransGen_iff_eq, tr_reaches_rev
 -/

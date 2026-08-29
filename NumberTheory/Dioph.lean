@@ -669,7 +669,9 @@ instance :
   zsmul := @zsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩)
   add_zero _ := by ext; simp_rw [add_apply, zero_apply, add_zero]
   zero_add _ := by ext; simp_rw [add_apply, zero_apply, zero_add]
-  add_comm _ _ := by ext; simp_rw 
+  add_comm _ _ := by ext; simp_rw [add_apply, add_comm]
+  add_assoc _ _ _ := by ext; simp_rw [add_apply, ← add_assoc]
+  neg_add_cancel _ := by ext; simp_rw [add_apply, neg_apply, neg_add_cancel, zero_apply]
 
 中文:
 实例 :
@@ -678,7 +680,9 @@ instance :
   zsmul := @zsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩)
   add_zero _ := by ext; simp_rw [add_apply, zero_apply, add_zero]
   zero_add _ := by ext; simp_rw [add_apply, zero_apply, zero_add]
-  add_comm _ _ := by ext; simp_rw 
+  add_comm _ _ := by ext; simp_rw [add_apply, add_comm]
+  add_assoc _ _ _ := by ext; simp_rw [add_apply, ← add_assoc]
+  neg_add_cancel _ := by ext; simp_rw [add_apply, neg_apply, neg_add_cancel, zero_apply]
 
 Depends on / 依赖: nsmulRec
 -/
@@ -723,7 +727,12 @@ instance :
   npow := @npowRec _ ⟨(1 : Poly α)⟩ ⟨(· * ·)⟩
   mul_zero _ := by ext; rw [mul_apply, zero_apply, mul_zero]
   zero_mul _ := by ext; rw [mul_apply, zero_apply, zero_mul]
-  mul_one _ := by ext; rw [mul_apply, one
+  mul_one _ := by ext; rw [mul_apply, one_apply, mul_one]
+  one_mul _ := by ext; rw [mul_apply, one_apply, one_mul]
+  mul_comm _ _ := by ext; simp_rw [mul_apply, mul_comm]
+  mul_assoc _ _ _ := by ext; simp_rw [mul_apply, mul_assoc]
+  left_distrib _ _ _ := by ext; simp_rw [add_apply, mul_apply]; apply mul_add
+  right_distrib _ _ _ := by ext; simp only [add_apply, mul_apply]; apply add_mul
 
 中文:
 实例 :
@@ -733,7 +742,12 @@ instance :
   npow := @npowRec _ ⟨(1 : Poly α)⟩ ⟨(· * ·)⟩
   mul_zero _ := by ext; rw [mul_apply, zero_apply, mul_zero]
   zero_mul _ := by ext; rw [mul_apply, zero_apply, zero_mul]
-  mul_one _ := by ext; rw [mul_apply, one
+  mul_one _ := by ext; rw [mul_apply, one_apply, mul_one]
+  one_mul _ := by ext; rw [mul_apply, one_apply, one_mul]
+  mul_comm _ _ := by ext; simp_rw [mul_apply, mul_comm]
+  mul_assoc _ _ _ := by ext; simp_rw [mul_apply, mul_assoc]
+  left_distrib _ _ _ := by ext; simp_rw [add_apply, mul_apply]; apply mul_add
+  right_distrib _ _ _ := by ext; simp only [add_apply, mul_apply]; apply add_mul
 
 Depends on / 依赖: AddCommGroup
 -/
@@ -967,7 +981,8 @@ theorem inject_dummies_lem
   · have : (v otimes (0 ::ₒ t) ∘ g) ∘ (inl otimes inr ∘ f) = v otimes t :=
       funext fun s => by rcases s with a | b <;> dsimp [(· ∘ ·)]; try rw [inv]; rfl
     exact ⟨(0 ::ₒ t) ∘ g, by rwa [this]⟩
-  · have : v otimes t ∘ f = (v
+  · have : v otimes t ∘ f = (v otimes t) ∘ (inl otimes inr ∘ f) := funext fun s => by rcases s with a | b <;> rfl
+    exact ⟨t ∘ f, by rwa [this]⟩
 
 中文:
 定理 inject_dummies_lem
@@ -977,7 +992,8 @@ theorem inject_dummies_lem
   · have : (v otimes (0 ::ₒ t) ∘ g) ∘ (inl otimes inr ∘ f) = v otimes t :=
       funext fun s => by rcases s with a | b <;> dsimp [(· ∘ ·)]; try rw [inv]; rfl
     exact ⟨(0 ::ₒ t) ∘ g, by rwa [this]⟩
-  · have : v otimes t ∘ f = (v
+  · have : v otimes t ∘ f = (v otimes t) ∘ (inl otimes inr ∘ f) := funext fun s => by rcases s with a | b <;> rfl
+    exact ⟨t ∘ f, by rwa [this]⟩
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, otimes
 -/
@@ -1043,7 +1059,33 @@ theorem DiophList.forall
           exists t, List.Forall (fun p : Poly (α oplus β) => p (v otimes t) = 0) pl
     from
     let ⟨β, pl, h⟩ := this
-⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly
+⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly.sumsq_eq_zero _ _).symm⟩
+  induction l with | nil => exact ⟨ULift Empty, [], fun _ => by simp⟩ | cons S l IH =>
+  obtain ⟨⟨β, p, pe⟩, dl⟩ := (List.forall_cons _ _ _).mp d
+  exact
+    let ⟨γ, pl, ple⟩ := IH dl
+    ⟨β oplus γ, p.map (inl otimes inr ∘ inl)::pl.map fun q => q.map (inl otimes inr ∘ inr),
+      fun v => by
+      simpa using
+        Iff.trans (and_congr (pe v) (ple v))
+          ⟨fun ⟨⟨m, hm⟩, ⟨n, hn⟩⟩ =>
+            ⟨m otimes n, by
+              rw [show (v otimes m otimes n) ∘ (inl otimes inr ∘ inl) = v otimes m from
+                    funext fun s => by rcases s with a | b <;> rfl]; exact hm, by
+              refine List.Forall.imp (fun q hq => ?_) hn; dsimp [Function.comp_def]
+              rw [show
+                    (fun x : α oplus γ => (v otimes m otimes n) ((inl otimes fun x : γ => inr (inr x)) x)) = v otimes n
+                    from funext fun s => by rcases s with a | b <;> rfl]; exact hq⟩,
+            fun ⟨t, hl, hr⟩ =>
+            ⟨⟨t ∘ inl, by
+                rwa [show (v otimes t) ∘ (inl otimes inr ∘ inl) = v otimes t ∘ inl from
+                    funext fun s => by rcases s with a | b <;> rfl] at hl⟩,
+              ⟨t ∘ inr, by
+                refine List.Forall.imp (fun q hq => ?_) hr; dsimp [Function.comp_def] at hq
+                rwa [show
+                    (fun x : α oplus γ => (v otimes t) ((inl otimes fun x : γ => inr (inr x)) x)) =
+                      v otimes t ∘ inr
+                    from funext fun s => by rcases s with a | b <;> rfl] at hq ⟩⟩⟩⟩
 
 中文:
 定理 DiophList.对任意
@@ -1053,7 +1095,33 @@ theorem DiophList.forall
           exists t, List.Forall (fun p : Poly (α oplus β) => p (v otimes t) = 0) pl
     from
     let ⟨β, pl, h⟩ := this
-⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly
+⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly.sumsq_eq_zero _ _).symm⟩
+  induction l with | nil => exact ⟨ULift Empty, [], fun _ => by simp⟩ | cons S l IH =>
+  obtain ⟨⟨β, p, pe⟩, dl⟩ := (List.forall_cons _ _ _).mp d
+  exact
+    let ⟨γ, pl, ple⟩ := IH dl
+    ⟨β oplus γ, p.map (inl otimes inr ∘ inl)::pl.map fun q => q.map (inl otimes inr ∘ inr),
+      fun v => by
+      simpa using
+        Iff.trans (and_congr (pe v) (ple v))
+          ⟨fun ⟨⟨m, hm⟩, ⟨n, hn⟩⟩ =>
+            ⟨m otimes n, by
+              rw [show (v otimes m otimes n) ∘ (inl otimes inr ∘ inl) = v otimes m from
+                    funext fun s => by rcases s with a | b <;> rfl]; exact hm, by
+              refine List.Forall.imp (fun q hq => ?_) hn; dsimp [Function.comp_def]
+              rw [show
+                    (fun x : α oplus γ => (v otimes m otimes n) ((inl otimes fun x : γ => inr (inr x)) x)) = v otimes n
+                    from funext fun s => by rcases s with a | b <;> rfl]; exact hq⟩,
+            fun ⟨t, hl, hr⟩ =>
+            ⟨⟨t ∘ inl, by
+                rwa [show (v otimes t) ∘ (inl otimes inr ∘ inl) = v otimes t ∘ inl from
+                    funext fun s => by rcases s with a | b <;> rfl] at hl⟩,
+              ⟨t ∘ inr, by
+                refine List.Forall.imp (fun q hq => ?_) hr; dsimp [Function.comp_def] at hq
+                rwa [show
+                    (fun x : α oplus γ => (v otimes t) ((inl otimes fun x : γ => inr (inr x)) x)) =
+                      v otimes t ∘ inr
+                    from funext fun s => by rcases s with a | b <;> rfl] at hq ⟩⟩⟩⟩
 
 Depends on / 依赖: Forall, List.Forall, List.forall_cons, Poly.sumsq, Poly.sumsq_eq_zero, exists_congr, forall_cons, otimes, p.map, sumsq_eq_zero
 -/
@@ -1202,7 +1270,13 @@ theorem ex_dioph
           rw [show (v otimes x otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes x) otimes t from
             funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl]
           exact ht⟩,
-       
+        fun ⟨t, ht⟩ =>
+        ⟨t ∘ inl,
+          (pe _).2
+            ⟨t ∘ inr, by
+              simp only [Poly.map_apply] at ht
+              rwa [show (v otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes t ∘ inl) otimes t ∘ inr from
+                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht⟩⟩⟩⟩
 
 中文:
 定理 ex_dioph
@@ -1214,7 +1288,13 @@ theorem ex_dioph
           rw [show (v otimes x otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes x) otimes t from
             funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl]
           exact ht⟩,
-       
+        fun ⟨t, ht⟩ =>
+        ⟨t ∘ inl,
+          (pe _).2
+            ⟨t ∘ inr, by
+              simp only [Poly.map_apply] at ht
+              rwa [show (v otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes t ∘ inl) otimes t ∘ inr from
+                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht⟩⟩⟩⟩
 -/
 theorem ex_dioph {S : Set (α oplus β -> Nat)} : Dioph S -> Dioph {v | exists x, v otimes x in S}
   | ⟨γ, p, pe⟩ =>
@@ -1248,7 +1328,12 @@ theorem ex1_dioph
             funext fun s => by rcases s with a | b <;> try { cases a <;> rfl}; rfl]
           exact ht⟩,
         fun ⟨t, ht⟩ =>
- 
+        ⟨t none,
+          (pe _).2
+            ⟨t ∘ some, by
+              simp only [Poly.map_apply] at ht
+              rwa [show (v otimes t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = t none ::ₒ v otimes t ∘ some from
+                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht ⟩⟩⟩⟩
 
 中文:
 定理 ex1_dioph
@@ -1261,7 +1346,12 @@ theorem ex1_dioph
             funext fun s => by rcases s with a | b <;> try { cases a <;> rfl}; rfl]
           exact ht⟩,
         fun ⟨t, ht⟩ =>
- 
+        ⟨t none,
+          (pe _).2
+            ⟨t ∘ some, by
+              simp only [Poly.map_apply] at ht
+              rwa [show (v otimes t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = t none ::ₒ v otimes t ∘ some from
+                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht ⟩⟩⟩⟩
 -/
 theorem ex1_dioph {S : Set (Option α -> Nat)} : Dioph S -> Dioph {v | exists x, x ::ₒ v in S}
   | ⟨β, p, pe⟩ =>
@@ -1378,7 +1468,7 @@ theorem diophPFun_comp1
       obtain ⟨hf, h⟩ := h; refine ⟨hf, ?_⟩; rw [PFun.fn, h]; exact hS,
     fun ⟨x, hS⟩ =>
       ⟨f.fn v x, hS, show Exists _ by
-        rw [show (f.fn v x :
+        rw [show (f.fn v x ::ₒ v) ∘ some = v from funext fun s => rfl]; exact ⟨x, rfl⟩⟩⟩
 
 中文:
 定理 diophPFun_comp1
@@ -1389,7 +1479,7 @@ theorem diophPFun_comp1
       obtain ⟨hf, h⟩ := h; refine ⟨hf, ?_⟩; rw [PFun.fn, h]; exact hS,
     fun ⟨x, hS⟩ =>
       ⟨f.fn v x, hS, show Exists _ by
-        rw [show (f.fn v x :
+        rw [show (f.fn v x ::ₒ v) ∘ some = v from funext fun s => rfl]; exact ⟨x, rfl⟩⟩⟩
 
 Depends on / 依赖: Exists, PFun.fn, d.inter, ex1_dioph, f.fn
 -/
@@ -1554,6 +1644,19 @@ theorem diophFn_compn
         exact fun df dfl =>
           have : Dioph {v | (v ∘ inl otimes f (v ∘ inl)::v ∘ inr) in S} :=
             ext (diophFn_comp1 (reindex_dioph _ (some ∘ inl otimes none :: some ∘ inr) d) <|
+                reindex_diophFn inl df)
+              fun v => by
+                dsimp
+                -- TODO: `congr! 1; ext` should be equivalent to `congr! 1 with x`
+                -- but that does not work.
+                congr! 1
+                ext x; obtain _ | _ | _ := x <;> rfl
+          have : Dioph {v | (v otimes f v::fun i : Fin2 n => fl i v) in S} :=
+            @diophFn_compn n {v | (v ∘ inl otimes f (v ∘ inl) :: v ∘ inr) in S} this _ dfl
+          ext this fun v => by
+            dsimp
+            congr! 3 with x
+            obtain _ | _ | _ := x <;> rfl
 
 中文:
 定理 diophFn_compn
@@ -1564,6 +1667,19 @@ theorem diophFn_compn
         exact fun df dfl =>
           have : Dioph {v | (v ∘ inl otimes f (v ∘ inl)::v ∘ inr) in S} :=
             ext (diophFn_comp1 (reindex_dioph _ (some ∘ inl otimes none :: some ∘ inr) d) <|
+                reindex_diophFn inl df)
+              fun v => by
+                dsimp
+                -- TODO: `congr! 1; ext` should be equivalent to `congr! 1 with x`
+                -- but that does not work.
+                congr! 1
+                ext x; obtain _ | _ | _ := x <;> rfl
+          have : Dioph {v | (v otimes f v::fun i : Fin2 n => fl i v) in S} :=
+            @diophFn_compn n {v | (v ∘ inl otimes f (v ∘ inl) :: v ∘ inr) in S} this _ dfl
+          ext this fun v => by
+            dsimp
+            congr! 3 with x
+            obtain _ | _ | _ := x <;> rfl
 -/
 theorem diophFn_compn :
     forall {n} {S : Set (α oplus (Fin2 n) -> Nat)} (_ : Dioph S) {f : Vector3 ((α -> Nat) -> Nat) n}
@@ -1626,7 +1742,13 @@ theorem diophFn_comp
 reindex_diophFn _ (vectorAllP_iff_forall _ _).1 dg _⟩
 
 @[inherit_doc]
-scoped notation:35 x " D∧ " y => Dioph.inter 
+scoped notation:35 x " D∧ " y => Dioph.inter x y
+
+@[inherit_doc]
+scoped notation:35 x " D∨ " y => Dioph.union x y
+
+@[inherit_doc]
+scoped notation:30 "Dexists" => Dioph.vec_ex1_dioph
 
 中文:
 定理 diophFn_comp
@@ -1637,7 +1759,13 @@ scoped notation:35 x " D∧ " y => Dioph.inter
 reindex_diophFn _ (vectorAllP_iff_forall _ _).1 dg _⟩
 
 @[inherit_doc]
-scoped notation:35 x " D∧ " y => Dioph.inter 
+scoped notation:35 x " D∧ " y => Dioph.inter x y
+
+@[inherit_doc]
+scoped notation:35 x " D∨ " y => Dioph.union x y
+
+@[inherit_doc]
+scoped notation:30 "Dexists" => Dioph.vec_ex1_dioph
 
 Depends on / 依赖: diophFn_vec, dioph_comp, proj_dioph, reindex_diophFn, vectorAllP_cons, vectorAllP_iff_forall
 -/
@@ -1992,7 +2120,17 @@ diophFn_comp2 df dg
 (diophFn_vec _).2
 ext this
         (vectorAll_iff_forall _).1 fun z x y =>
-          show ((y = 0 ∨ z < y) ∧ 
+          show ((y = 0 ∨ z < y) ∧ exists c, z + y * c = x) ↔ x % y = z from
+            ⟨fun ⟨h, c, hc⟩ => by
+              rw [← hc]; simp only [add_mul_mod_self_left]; rcases h with x0 | hl
+              · rw [x0, mod_zero]
+              exact mod_eq_of_lt hl, fun e => by
+                rw [← e]
+                exact ⟨or_iff_not_imp_left.2 fun h => mod_lt _ (Nat.pos_of_ne_zero h), x / y,
+                  mod_add_div _ _⟩⟩
+
+@[inherit_doc]
+scoped infixl:80 " D% " => Dioph.mod_dioph
 
 中文:
 定理 mod_dioph
@@ -2003,7 +2141,17 @@ diophFn_comp2 df dg
 (diophFn_vec _).2
 ext this
         (vectorAll_iff_forall _).1 fun z x y =>
-          show ((y = 0 ∨ z < y) ∧ 
+          show ((y = 0 ∨ z < y) ∧ exists c, z + y * c = x) ↔ x % y = z from
+            ⟨fun ⟨h, c, hc⟩ => by
+              rw [← hc]; simp only [add_mul_mod_self_left]; rcases h with x0 | hl
+              · rw [x0, mod_zero]
+              exact mod_eq_of_lt hl, fun e => by
+                rw [← e]
+                exact ⟨or_iff_not_imp_left.2 fun h => mod_lt _ (Nat.pos_of_ne_zero h), x / y,
+                  mod_add_div _ _⟩⟩
+
+@[inherit_doc]
+scoped infixl:80 " D% " => Dioph.mod_dioph
 
 Depends on / 依赖: Dexists, Vector3, add_mul_mod_self_left, diophFn_comp2, diophFn_vec, mod_eq_of_lt, mod_zero, or_iff_not_imp_, vectorAll_iff_forall
 -/
@@ -2066,7 +2214,11 @@ diophFn_comp2 df dg
 (diophFn_vec _).2
 ext this
         (vectorAll_iff_forall _).1 fun z x y =>
-          s
+          show y = 0 ∧ z = 0 ∨ z * y <= x ∧ x < (z + 1) * y ↔ x / y = z by
+            rcases y.eq_zero_or_pos with rfl | hy
+            · simp [eq_comm]
+            · rw [Nat.div_eq_iff hy, Nat.succ_mul]
+              grind
 
 中文:
 定理 div_dioph
@@ -2078,7 +2230,11 @@ diophFn_comp2 df dg
 (diophFn_vec _).2
 ext this
         (vectorAll_iff_forall _).1 fun z x y =>
-          s
+          show y = 0 ∧ z = 0 ∨ z * y <= x ∧ x < (z + 1) * y ↔ x / y = z by
+            rcases y.eq_zero_or_pos with rfl | hy
+            · simp [eq_comm]
+            · rw [Nat.div_eq_iff hy, Nat.succ_mul]
+              grind
 
 Depends on / 依赖: Nat.div_eq_iff, Nat.succ_mul, Vector3, diophFn_comp2, diophFn_vec, div_eq_iff, eq_comm, eq_zero_or_pos, succ_mul, vectorAll_iff_forall, y.eq_zero_or_pos
 -/
@@ -2116,7 +2272,21 @@ theorem pell_dioph
       v &2 * v &2 - (v &0 * v &0 - 1) * v &3 * v &3 = 1 ∧
       u * u - (v &0 * v &0 - 1) * w * w = 1 ∧
       s * s - (b * b - 1) * t * t = 1 ∧
-      1 < b ∧ b ≡ 1 [MOD 4 * v &
+      1 < b ∧ b ≡ 1 [MOD 4 * v &3] ∧ b ≡ v &0 [MOD u] ∧
+      0 < w ∧ v &3 * v &3 ∣ w ∧
+      s ≡ v &2 [MOD u] ∧
+      t ≡ v &1 [MOD 4 * v &3])} :=
+  (D.1 D< D&0 D∧ D&1 D<= D&3 D∧
+    ((D&2 D= D.1 D∧ D&3 D= D.0) D∨
+    ((Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
+    D&7 D* D&7 D- (D&5 D* D&5 D- D.1) D* D&8 D* D&8 D= D.1 D∧
+    D&4 D* D&4 D- (D&5 D* D&5 D- D.1) D* D&3 D* D&3 D= D.1 D∧
+    D&2 D* D&2 D- (D&0 D* D&0 D- D.1) D* D&1 D* D&1 D= D.1 D∧
+    D.1 D< D&0 D∧ (D≡ (D&0) (D.1) (D.4 D* D&8)) D∧ (D≡ (D&0) (D&5) (D&4)) D∧
+    D.0 D< D&3 D∧ D&8 D* D&8 D∣ D&3 D∧
+    (D≡ (D&2) (D&7) (D&4)) D∧
+    (D≡ (D&1) (D&6) (D.4 D* (D&8))))) :)
+  exact Dioph.ext this fun v => matiyasevic.symm
 
 中文:
 定理 pell_dioph
@@ -2128,7 +2298,21 @@ theorem pell_dioph
       v &2 * v &2 - (v &0 * v &0 - 1) * v &3 * v &3 = 1 ∧
       u * u - (v &0 * v &0 - 1) * w * w = 1 ∧
       s * s - (b * b - 1) * t * t = 1 ∧
-      1 < b ∧ b ≡ 1 [MOD 4 * v &
+      1 < b ∧ b ≡ 1 [MOD 4 * v &3] ∧ b ≡ v &0 [MOD u] ∧
+      0 < w ∧ v &3 * v &3 ∣ w ∧
+      s ≡ v &2 [MOD u] ∧
+      t ≡ v &1 [MOD 4 * v &3])} :=
+  (D.1 D< D&0 D∧ D&1 D<= D&3 D∧
+    ((D&2 D= D.1 D∧ D&3 D= D.0) D∨
+    ((Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
+    D&7 D* D&7 D- (D&5 D* D&5 D- D.1) D* D&8 D* D&8 D= D.1 D∧
+    D&4 D* D&4 D- (D&5 D* D&5 D- D.1) D* D&3 D* D&3 D= D.1 D∧
+    D&2 D* D&2 D- (D&0 D* D&0 D- D.1) D* D&1 D* D&1 D= D.1 D∧
+    D.1 D< D&0 D∧ (D≡ (D&0) (D.1) (D.4 D* D&8)) D∧ (D≡ (D&0) (D&5) (D&4)) D∧
+    D.0 D< D&3 D∧ D&8 D* D&8 D∣ D&3 D∧
+    (D≡ (D&2) (D&7) (D&4)) D∧
+    (D≡ (D&1) (D&6) (D.4 D* (D&8))))) :)
+  exact Dioph.ext this fun v => matiyasevic.symm
 
 Depends on / 依赖: Dexists, Vector3
 -/
@@ -2167,7 +2351,7 @@ theorem xn_dioph
     let D_pell := pell_dioph.reindex_dioph (Fin2 4) [&2, &3, &1, &0]
     (Dexists) 3 D_pell
 (diophPFun_vec _).2
-    Dioph.ext this fun _ => ⟨fun ⟨_, h, xe, _⟩ => ⟨h, xe⟩, fun ⟨h, xe⟩ => ⟨_, h, x
+    Dioph.ext this fun _ => ⟨fun ⟨_, h, xe, _⟩ => ⟨h, xe⟩, fun ⟨h, xe⟩ => ⟨_, h, xe, rfl⟩⟩
 
 中文:
 定理 xn_dioph
@@ -2176,7 +2360,7 @@ theorem xn_dioph
     let D_pell := pell_dioph.reindex_dioph (Fin2 4) [&2, &3, &1, &0]
     (Dexists) 3 D_pell
 (diophPFun_vec _).2
-    Dioph.ext this fun _ => ⟨fun ⟨_, h, xe, _⟩ => ⟨h, xe⟩, fun ⟨h, xe⟩ => ⟨_, h, x
+    Dioph.ext this fun _ => ⟨fun ⟨_, h, xe, _⟩ => ⟨h, xe⟩, fun ⟨h, xe⟩ => ⟨_, h, xe, rfl⟩⟩
 
 Depends on / 依赖: D_pell, Dexists, Dioph.ext, Vector3, diophPFun_vec, pell_dioph, pell_dioph.reindex_dioph, reindex_dioph
 -/
@@ -2201,7 +2385,21 @@ theorem pow_dioph
       (exists a1 : 1 < a, xn a1 (v &2) = x ∧ yn a1 (v &2) = y) ∧
       x ≡ y * (a - v &1) + v &0 [MOD t] ∧
       2 * a * v &1 = t + (v &1 * v &1 + 1) ∧
-    
+      v &0 < t ∧ v &1 <= w ∧ v &2 <= w ∧
+      a * a - ((w + 1) * (w + 1) - 1) * (w * z) * (w * z) = 1)} :=
+  (D&2 D= D.0 D∧ D&0 D= D.1) D∨ (D.0 D< D&2 D∧
+    ((D&1 D= D.0 D∧ D&0 D= D.0) D∨ (D.0 D< D&1 D∧
+    ((Dexists) 3 <| (Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
+    pell_dioph.reindex_dioph (Fin2 9) [&4, &8, &1, &0] D∧
+    (D≡ (D&1) (D&0 D* (D&4 D- D&7) D+ D&6) (D&3)) D∧
+    D.2 D* D&4 D* D&7 D= D&3 D+ (D&7 D* D&7 D+ D.1) D∧
+    D&6 D< D&3 D∧ D&7 D<= D&5 D∧ D&8 D<= D&5 D∧
+    D&4 D* D&4 D- ((D&5 D+ D.1) D* (D&5 D+ D.1) D- D.1) D* (D&5 D* D&2) D* (D&5 D* D&2) D= D.1))) :)
+exact diophFn_comp2 df dg (diophFn_vec _).2 Dioph.ext this fun v => Iff.symm
+eq_pow_of_pell.trans or_congr Iff.rfl and_congr Iff.rfl or_congr Iff.rfl
+and_congr Iff.rfl
+        ⟨fun ⟨w, a, t, z, a1, h⟩ => ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩,
+        fun ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩ => ⟨w, a, t, z, a1, h⟩⟩
 
 中文:
 定理 pow_dioph
@@ -2214,7 +2412,21 @@ theorem pow_dioph
       (exists a1 : 1 < a, xn a1 (v &2) = x ∧ yn a1 (v &2) = y) ∧
       x ≡ y * (a - v &1) + v &0 [MOD t] ∧
       2 * a * v &1 = t + (v &1 * v &1 + 1) ∧
-    
+      v &0 < t ∧ v &1 <= w ∧ v &2 <= w ∧
+      a * a - ((w + 1) * (w + 1) - 1) * (w * z) * (w * z) = 1)} :=
+  (D&2 D= D.0 D∧ D&0 D= D.1) D∨ (D.0 D< D&2 D∧
+    ((D&1 D= D.0 D∧ D&0 D= D.0) D∨ (D.0 D< D&1 D∧
+    ((Dexists) 3 <| (Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
+    pell_dioph.reindex_dioph (Fin2 9) [&4, &8, &1, &0] D∧
+    (D≡ (D&1) (D&0 D* (D&4 D- D&7) D+ D&6) (D&3)) D∧
+    D.2 D* D&4 D* D&7 D= D&3 D+ (D&7 D* D&7 D+ D.1) D∧
+    D&6 D< D&3 D∧ D&7 D<= D&5 D∧ D&8 D<= D&5 D∧
+    D&4 D* D&4 D- ((D&5 D+ D.1) D* (D&5 D+ D.1) D- D.1) D* (D&5 D* D&2) D* (D&5 D* D&2) D= D.1))) :)
+exact diophFn_comp2 df dg (diophFn_vec _).2 Dioph.ext this fun v => Iff.symm
+eq_pow_of_pell.trans or_congr Iff.rfl and_congr Iff.rfl or_congr Iff.rfl
+and_congr Iff.rfl
+        ⟨fun ⟨w, a, t, z, a1, h⟩ => ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩,
+        fun ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩ => ⟨w, a, t, z, a1, h⟩⟩
 
 Depends on / 依赖: Dexists, Vector3
 -/

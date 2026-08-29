@@ -371,6 +371,14 @@ theorem mul_toFun
     | nil => simp at h_length
     | cons exp2 exps2 =>
     cases basis with
+    | nil => simp
+    | cons basis_hd basis_tl =>
+      simp only [List.zipWith_cons_cons, List.prod_cons] at ih ⊢
+      have h1 : exps1.length = exps2.length := by grind
+      have h2 : forall f in basis_tl, 0 < f x := by grind
+      have h3 : 0 < basis_hd x := h_pos _ (by simp)
+      rw [ih h_basis.tail h1 h2]; rw [Real.rpow_add h3]
+      grind
 
 中文:
 定理 mul_toFun
@@ -388,6 +396,14 @@ theorem mul_toFun
     | nil => simp at h_length
     | cons exp2 exps2 =>
     cases basis with
+    | nil => simp
+    | cons basis_hd basis_tl =>
+      simp only [List.zipWith_cons_cons, List.prod_cons] at ih ⊢
+      have h1 : exps1.length = exps2.length := by grind
+      have h2 : forall f in basis_tl, 0 < f x := by grind
+      have h3 : 0 < basis_hd x := h_pos _ (by simp)
+      rw [ih h_basis.tail h1 h2]; rw [Real.rpow_add h3]
+      grind
 
 Depends on / 依赖: List.prod_cons, List.zipWith_cons_cons, Pi.mul_apply, basis_hd, basis_tl, eventually_pos, exps1.length, exps2.length, generalizing, h_basis, h_basis.eventually_pos.mono, h_length, h_po, h_pos, length, mul_apply, prod_cons, zipWith_cons_cons
 -/
@@ -431,7 +447,9 @@ theorem inv_toFun
     | nil => simp
     | cons basis_hd basis_tl =>
       apply ((h_basis.head_eventually_pos).and (ih (h_basis.tail))).mono
-      intro x ⟨h_pos, i
+      intro x ⟨h_pos, ih⟩
+      simp only [List.map_cons, List.zipWith_cons_cons, List.prod_cons, mul_inv_rev]
+      grind [Real.rpow_neg h_pos.le]
 
 中文:
 定理 inv_toFun
@@ -446,7 +464,9 @@ theorem inv_toFun
     | nil => simp
     | cons basis_hd basis_tl =>
       apply ((h_basis.head_eventually_pos).and (ih (h_basis.tail))).mono
-      intro x ⟨h_pos, i
+      intro x ⟨h_pos, ih⟩
+      simp only [List.map_cons, List.zipWith_cons_cons, List.prod_cons, mul_inv_rev]
+      grind [Real.rpow_neg h_pos.le]
 
 Depends on / 依赖: List.map_cons, List.prod_cons, List.zipWith_cons_cons, Pi.inv_apply, Real.rpow_neg, basis_hd, basis_tl, eta_expand, generalizing, h_basis, h_basis.head_eventually_pos, h_basis.tail, h_pos, h_pos.le, head_eventually_pos, inv_apply, map_cons, mul_inv_rev, prod_cons, rpow_neg
 -/
@@ -480,7 +500,13 @@ theorem majorized_tail_toFun_head
     cases basis_tl with
     | nil => simp at h_length
     | cons basis_tl_hd basis_tl_tl =>
-      simp only [List.length_cons, Na
+      simp only [List.length_cons, Nat.add_right_cancel_iff, toFun_cons] at h_length ⊢
+      rw [← add_zero 0]
+      apply Majorized.mul (h_basis.tail_pow_majorized_head (by simp) _) _
+        h_basis.head_eventually_pos
+      exact fun exp h_exp =>
+(ih h_length h_basis.tail 1 (by simp)).trans
+        h_basis.tail_pow_majorized_head (by simp) 1 exp h_exp
 
 中文:
 定理 majorized_tail_toFun_head
@@ -494,7 +520,13 @@ theorem majorized_tail_toFun_head
     cases basis_tl with
     | nil => simp at h_length
     | cons basis_tl_hd basis_tl_tl =>
-      simp only [List.length_cons, Na
+      simp only [List.length_cons, Nat.add_right_cancel_iff, toFun_cons] at h_length ⊢
+      rw [← add_zero 0]
+      apply Majorized.mul (h_basis.tail_pow_majorized_head (by simp) _) _
+        h_basis.head_eventually_pos
+      exact fun exp h_exp =>
+(ih h_length h_basis.tail 1 (by simp)).trans
+        h_basis.tail_pow_majorized_head (by simp) 1 exp h_exp
 
 Depends on / 依赖: List.length_cons, Majorized, Majorized.const, Majorized.mul, Nat.add_right_cancel_iff, add_right_cancel_iff, add_zero, basis_hd, basis_tl, basis_tl_hd, basis_tl_tl, generalizing, h_basis, h_basis.head_eventually_pos, h_basis.tail, h_basis.tail_pow_majorized_head, h_basis.tendsto_atTop, h_exp, h_length, head_eventually_pos
 -/
@@ -534,7 +566,8 @@ theorem toFun_pos
     | nil => simp
     | cons basis_hd basis_tl =>
       simp only [toFun, List.zipWith_cons_cons, List.prod_cons]
-      apply mul_pos (Real.rpow_pos_
+      apply mul_pos (Real.rpow_pos_of_pos (hx basis_hd (by simp)) _)
+      exact ih h_basis.tail (hx · <| by simp [·])
 
 中文:
 定理 toFun_pos
@@ -549,7 +582,8 @@ theorem toFun_pos
     | nil => simp
     | cons basis_hd basis_tl =>
       simp only [toFun, List.zipWith_cons_cons, List.prod_cons]
-      apply mul_pos (Real.rpow_pos_
+      apply mul_pos (Real.rpow_pos_of_pos (hx basis_hd (by simp)) _)
+      exact ih h_basis.tail (hx · <| by simp [·])
 
 Depends on / 依赖: List.prod_cons, List.zipWith_cons_cons, Real.rpow_pos_of_pos, basis_hd, basis_tl, eventually_pos, generalizing, h_basis, h_basis.eventually_pos.mono, h_basis.tail, mul_pos, prod_cons, rpow_pos_of_pos, zipWith_cons_cons
 -/
@@ -630,7 +664,12 @@ theorem log_toFun_eq_toLogFun
     cases basis with
     | nil => simp
     | cons b bs =>
-      simp only [toFun_
+      simp only [toFun_cons, Pi.mul_apply, Pi.pow_apply, Function.comp_apply, toLogFun_cons,
+        Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      obtain ⟨hpos, heq⟩ := ih h_basis.tail (hx · <| by simp [·])
+      refine ⟨mul_pos (Real.rpow_pos_of_pos (hx b (by simp)) _) hpos, ?_⟩
+      rw [Real.log_mul (Real.rpow_pos_of_pos (hx b (by simp)) _).ne' hpos.ne']; rw [Real.log_rpow (hx b (by simp))]; rw [← heq]
+      rfl
 
 中文:
 定理 log_toFun_eq_toLogFun
@@ -645,7 +684,12 @@ theorem log_toFun_eq_toLogFun
     cases basis with
     | nil => simp
     | cons b bs =>
-      simp only [toFun_
+      simp only [toFun_cons, Pi.mul_apply, Pi.pow_apply, Function.comp_apply, toLogFun_cons,
+        Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      obtain ⟨hpos, heq⟩ := ih h_basis.tail (hx · <| by simp [·])
+      refine ⟨mul_pos (Real.rpow_pos_of_pos (hx b (by simp)) _) hpos, ?_⟩
+      rw [Real.log_mul (Real.rpow_pos_of_pos (hx b (by simp)) _).ne' hpos.ne']; rw [Real.log_rpow (hx b (by simp))]; rw [← heq]
+      rfl
 
 Depends on / 依赖: Function, Function.comp_apply, Pi.add_apply, Pi.mul_apply, Pi.pow_apply, Pi.smul_apply, Real.rpow_pos_of_pos, add_apply, comp_apply, eventually_pos, generalizing, h_basis, h_basis.eventually_pos.mono, h_basis.tail, m.toFun, m.toLogFun, mul_apply, mul_pos, pow_apply, rpow_pos_of_pos
 -/
@@ -680,7 +724,17 @@ theorem toLogFun_isEquivalent_of_nonzero_head
   have hlo : forall b in basis_tl, (Real.log ∘ b) =o[atTop] (Real.log ∘ basis_hd) :=
     fun b hb => h_basis.tail_isLittleO_head hb
   clear h_basis
-  induction
+  induction exps_tl generalizing basis_tl with
+  | nil =>
+    simp only [toLogFun_nil]
+    exact Asymptotics.isLittleO_zero _ _
+  | cons e es ih =>
+    cases basis_tl with
+    | nil =>
+      simp only [toLogFun_nil_basis]
+      exact Asymptotics.isLittleO_zero _ _
+    | cons b bs =>
+      exact (IsLittleO.const_mul_left (hlo b (by simp)) e).add (ih (by grind))
 
 中文:
 定理 toLogFun_isEquivalent_of_nonzero_head
@@ -692,7 +746,17 @@ theorem toLogFun_isEquivalent_of_nonzero_head
   have hlo : forall b in basis_tl, (Real.log ∘ b) =o[atTop] (Real.log ∘ basis_hd) :=
     fun b hb => h_basis.tail_isLittleO_head hb
   clear h_basis
-  induction
+  induction exps_tl generalizing basis_tl with
+  | nil =>
+    simp only [toLogFun_nil]
+    exact Asymptotics.isLittleO_zero _ _
+  | cons e es ih =>
+    cases basis_tl with
+    | nil =>
+      simp only [toLogFun_nil_basis]
+      exact Asymptotics.isLittleO_zero _ _
+    | cons b bs =>
+      exact (IsLittleO.const_mul_left (hlo b (by simp)) e).add (ih (by grind))
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_zer, Asymptotics.isLittleO_zero, IsEquivalent, IsEquivalent.refl.add_isLittleO, IsLittleO, IsLittleO.const_mul_right, Real.log, add_isLittleO, basis_hd, basis_tl, const_mul_right, exps_tl, generalizing, h_basis, h_basis.tail_isLittleO_head, h_nonzero, isLittleO_zer, isLittleO_zero, isUnit_iff_ne_zero
 -/
@@ -730,7 +794,17 @@ theorem toFun_tendsto_top_of_head_pos
       exps_hd • Real.log ∘ basis_hd :=
     (toLogFun_isEquivalent_of_nonzero_head h_basis h_nonzero.ne').congr_left
       (log_toFun_eq_toLogFun h_basis).symm
-  suffices h_log : Tendsto (Real.log ∘ toFun (exps_
+  suffices h_log : Tendsto (Real.log ∘ toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl))
+      atTop atTop by
+    apply Filter.Tendsto.congr' _ (Real.tendsto_exp_atTop.comp h_log)
+    apply (toFun_pos (m := (exps_hd :: exps_tl)) h_basis).mono
+    intro x hx
+    simp only [Function.comp_apply]
+    exact Real.exp_log hx
+  apply IsEquivalent.tendsto_atTop h_equiv.symm
+  apply Filter.Tendsto.const_mul_atTop h_nonzero
+  apply Tendsto.comp Real.tendsto_log_atTop
+  exact h_basis.tendsto_atTop (by simp)
 
 中文:
 定理 toFun_tendsto_top_of_head_pos
@@ -740,7 +814,17 @@ theorem toFun_tendsto_top_of_head_pos
       exps_hd • Real.log ∘ basis_hd :=
     (toLogFun_isEquivalent_of_nonzero_head h_basis h_nonzero.ne').congr_left
       (log_toFun_eq_toLogFun h_basis).symm
-  suffices h_log : Tendsto (Real.log ∘ toFun (exps_
+  suffices h_log : Tendsto (Real.log ∘ toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl))
+      atTop atTop by
+    apply Filter.Tendsto.congr' _ (Real.tendsto_exp_atTop.comp h_log)
+    apply (toFun_pos (m := (exps_hd :: exps_tl)) h_basis).mono
+    intro x hx
+    simp only [Function.comp_apply]
+    exact Real.exp_log hx
+  apply IsEquivalent.tendsto_atTop h_equiv.symm
+  apply Filter.Tendsto.const_mul_atTop h_nonzero
+  apply Tendsto.comp Real.tendsto_log_atTop
+  exact h_basis.tendsto_atTop (by simp)
 
 Depends on / 依赖: Filter, Filter.Tendsto.congr, Function, Function.comp_apply, Real.log, Real.tendsto_exp_atTop.comp, Tendsto, basis_hd, basis_tl, comp_apply, congr_left, exps_hd, exps_tl, h_basis, h_equiv, h_log, h_nonzero, h_nonzero.ne, log_toFun_eq_toLogFun, tendsto_exp_atTop
 -/
@@ -776,7 +860,18 @@ theorem toFun_tendsto_zero_of_head_neg
       exps_hd • Real.log ∘ basis_hd :=
     (toLogFun_isEquivalent_of_nonzero_head h_basis h_nonzero.ne).congr_left
       (log_toFun_eq_toLogFun h_basis).symm
-  suffices h_log : Tendsto (Real.log ∘ toFun (exps_h
+  suffices h_log : Tendsto (Real.log ∘ toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl))
+      atTop atBot by
+    have hmono := Real.tendsto_exp_atBot.comp h_log
+    apply Filter.Tendsto.congr' _ hmono
+    apply (toFun_pos (m := (exps_hd :: exps_tl)) h_basis).mono
+    intro x hx
+    simp only [Function.comp_apply]
+    exact Real.exp_log hx
+  apply IsEquivalent.tendsto_atBot h_equiv.symm
+  have h_log_atTop : Tendsto (Real.log ∘ basis_hd) atTop atTop :=
+    Tendsto.comp Real.tendsto_log_atTop (h_basis.tendsto_atTop (by simp))
+  exact Filter.Tendsto.const_mul_atTop_of_neg h_nonzero h_log_atTop
 
 中文:
 定理 toFun_tendsto_zero_of_head_neg
@@ -786,7 +881,18 @@ theorem toFun_tendsto_zero_of_head_neg
       exps_hd • Real.log ∘ basis_hd :=
     (toLogFun_isEquivalent_of_nonzero_head h_basis h_nonzero.ne).congr_left
       (log_toFun_eq_toLogFun h_basis).symm
-  suffices h_log : Tendsto (Real.log ∘ toFun (exps_h
+  suffices h_log : Tendsto (Real.log ∘ toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl))
+      atTop atBot by
+    have hmono := Real.tendsto_exp_atBot.comp h_log
+    apply Filter.Tendsto.congr' _ hmono
+    apply (toFun_pos (m := (exps_hd :: exps_tl)) h_basis).mono
+    intro x hx
+    simp only [Function.comp_apply]
+    exact Real.exp_log hx
+  apply IsEquivalent.tendsto_atBot h_equiv.symm
+  have h_log_atTop : Tendsto (Real.log ∘ basis_hd) atTop atTop :=
+    Tendsto.comp Real.tendsto_log_atTop (h_basis.tendsto_atTop (by simp))
+  exact Filter.Tendsto.const_mul_atTop_of_neg h_nonzero h_log_atTop
 
 Depends on / 依赖: Filter, Filter.Tendsto.congr, Real.log, Real.tendsto_exp_atBot.comp, Tendsto, basis_hd, basis_tl, congr_left, exps_hd, exps_tl, h_basis, h_equiv, h_log, h_nonzero, h_nonzero.ne, log_toFun_eq_toLogFun, tendsto_exp_atBot, toFun_pos, toLogFun_isEquivalent_of_nonzero_head
 -/
@@ -827,7 +933,12 @@ theorem toFun_tendsto_top_of_firstNonzeroIsPos
     | cons basis_hd basis_tl =>
       simp only [FirstNonzeroIsPos.cons_iff] at h_firstIsPos
       obtain h | h := h_firstIsPos
-      · exact toFun_tendsto_top_of_head_pos
+      · exact toFun_tendsto_top_of_head_pos h_basis h
+      · have h_eq : UnitMonomial.toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl) =
+                    UnitMonomial.toFun exps_tl basis_tl := by
+          ext x; simp [UnitMonomial.toFun, h.left]
+        rw [h_eq]
+        exact toFun_tendsto_top_of_firstNonzeroIsPos h_basis.tail (by simpa using h_length) h.right
 
 中文:
 定理 toFun_tendsto_top_of_firstNonzeroIsPos
@@ -841,7 +952,12 @@ theorem toFun_tendsto_top_of_firstNonzeroIsPos
     | cons basis_hd basis_tl =>
       simp only [FirstNonzeroIsPos.cons_iff] at h_firstIsPos
       obtain h | h := h_firstIsPos
-      · exact toFun_tendsto_top_of_head_pos
+      · exact toFun_tendsto_top_of_head_pos h_basis h
+      · have h_eq : UnitMonomial.toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl) =
+                    UnitMonomial.toFun exps_tl basis_tl := by
+          ext x; simp [UnitMonomial.toFun, h.left]
+        rw [h_eq]
+        exact toFun_tendsto_top_of_firstNonzeroIsPos h_basis.tail (by simpa using h_length) h.right
 
 Depends on / 依赖: FirstNonzeroIsPos, FirstNonzeroIsPos.cons_iff, UnitMonomial, UnitMonomial.toFun, basis_hd, basis_tl, cons_iff, exps_hd, exps_tl, h.left, h_basis, h_eq, h_firstIsPos, h_length, toFun_tendsto_top_of_firstNonzeroIsPos, toFun_tendsto_top_of_head_pos
 -/
@@ -879,7 +995,12 @@ theorem toFun_tendsto_zero_of_firstNonzeroIsNeg
     | cons basis_hd basis_tl =>
       simp only [FirstNonzeroIsNeg.cons_iff] at h_firstIsNeg
       obtain h | h := h_firstIsNeg
-      · exact toFun_tendsto_zero_of_head_ne
+      · exact toFun_tendsto_zero_of_head_neg h_basis h
+      · have h_eq : UnitMonomial.toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl) =
+                    UnitMonomial.toFun exps_tl basis_tl := by
+          ext x; simp [UnitMonomial.toFun, h.left]
+        rw [h_eq]
+        exact toFun_tendsto_zero_of_firstNonzeroIsNeg h_basis.tail (by simpa using h_length) h.right
 
 中文:
 定理 toFun_tendsto_zero_of_firstNonzeroIsNeg
@@ -893,7 +1014,12 @@ theorem toFun_tendsto_zero_of_firstNonzeroIsNeg
     | cons basis_hd basis_tl =>
       simp only [FirstNonzeroIsNeg.cons_iff] at h_firstIsNeg
       obtain h | h := h_firstIsNeg
-      · exact toFun_tendsto_zero_of_head_ne
+      · exact toFun_tendsto_zero_of_head_neg h_basis h
+      · have h_eq : UnitMonomial.toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl) =
+                    UnitMonomial.toFun exps_tl basis_tl := by
+          ext x; simp [UnitMonomial.toFun, h.left]
+        rw [h_eq]
+        exact toFun_tendsto_zero_of_firstNonzeroIsNeg h_basis.tail (by simpa using h_length) h.right
 
 Depends on / 依赖: FirstNonzeroIsNeg, FirstNonzeroIsNeg.cons_iff, UnitMonomial, UnitMonomial.toFun, basis_hd, basis_tl, cons_iff, exps_hd, exps_tl, h.left, h_basi, h_basis, h_eq, h_firstIsNeg, h_length, toFun_tendsto_zero_of_firstNonzeroIsNeg, toFun_tendsto_zero_of_head_neg
 -/
@@ -934,7 +1060,10 @@ theorem toFun_tendsto_one_of_allZero
     | cons basis_hd basis_tl =>
       simp at h_allZero
       have h_eq : UnitMonomial.toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl) =
-     
+                  UnitMonomial.toFun exps_tl basis_tl := by
+        ext x; simp [UnitMonomial.toFun, h_allZero.left]
+      rw [h_eq]
+      apply toFun_tendsto_one_of_allZero h_allZero.right
 
 中文:
 定理 toFun_tendsto_one_of_allZero
@@ -951,7 +1080,10 @@ theorem toFun_tendsto_one_of_allZero
     | cons basis_hd basis_tl =>
       simp at h_allZero
       have h_eq : UnitMonomial.toFun (exps_hd :: exps_tl) (basis_hd :: basis_tl) =
-     
+                  UnitMonomial.toFun exps_tl basis_tl := by
+        ext x; simp [UnitMonomial.toFun, h_allZero.left]
+      rw [h_eq]
+      apply toFun_tendsto_one_of_allZero h_allZero.right
 
 Depends on / 依赖: UnitMonomial, UnitMonomial.toFun, basis_hd, basis_tl, eta_expand, exps_hd, exps_tl, h_allZero, h_allZero.left, h_allZero.right, h_eq, tendsto_const_nhds, toFun_tendsto_one_of_allZero
 -/
@@ -991,7 +1123,23 @@ lemma isLittleO_of_lt
   cases h_lt with
   | cons h =>
     simp only [toFun_cons]
-    apply IsB
+    apply IsBigO.mul_isLittleO (isBigO_refl _ _)
+    exact isLittleO_of_lt h_basis.tail (by simpa using h1) (by simpa using h2) h
+  | rel h =>
+    simp only [List.length_cons, Nat.add_right_cancel_iff, toFun_cons] at h1 h2 ⊢
+    apply IsLittleO.of_tendsto_div_atTop
+    apply Filter.Tendsto.congr' (f₁ := UnitMonomial.toFun ((exp2 - exp1) ::
+      UnitMonomial.mul m2 (UnitMonomial.inv m1)) (basis_hd :: basis_tl))
+    · simp only [toFun_cons, Pi.mul_apply, Pi.pow_apply]
+      grw [mul_toFun h_basis.tail (by grind [inv_length]), inv_toFun h_basis.tail]
+      apply h_basis.head_eventually_pos.mono
+      intro x hx
+      simp only [Pi.mul_apply, Pi.pow_apply, Pi.inv_apply, Real.rpow_sub hx]
+      field
+    · apply toFun_tendsto_top_of_firstNonzeroIsPos h_basis
+      · grind [inv_length, mul_length]
+      · apply FirstNonzeroIsPos.of_head
+        grind
 
 中文:
 引理 isLittleO_of_lt
@@ -1007,7 +1155,23 @@ lemma isLittleO_of_lt
   cases h_lt with
   | cons h =>
     simp only [toFun_cons]
-    apply IsB
+    apply IsBigO.mul_isLittleO (isBigO_refl _ _)
+    exact isLittleO_of_lt h_basis.tail (by simpa using h1) (by simpa using h2) h
+  | rel h =>
+    simp only [List.length_cons, Nat.add_right_cancel_iff, toFun_cons] at h1 h2 ⊢
+    apply IsLittleO.of_tendsto_div_atTop
+    apply Filter.Tendsto.congr' (f₁ := UnitMonomial.toFun ((exp2 - exp1) ::
+      UnitMonomial.mul m2 (UnitMonomial.inv m1)) (basis_hd :: basis_tl))
+    · simp only [toFun_cons, Pi.mul_apply, Pi.pow_apply]
+      grw [mul_toFun h_basis.tail (by grind [inv_length]), inv_toFun h_basis.tail]
+      apply h_basis.head_eventually_pos.mono
+      intro x hx
+      simp only [Pi.mul_apply, Pi.pow_apply, Pi.inv_apply, Real.rpow_sub hx]
+      field
+    · apply toFun_tendsto_top_of_firstNonzeroIsPos h_basis
+      · grind [inv_length, mul_length]
+      · apply FirstNonzeroIsPos.of_head
+        grind
 
 Depends on / 依赖: IsBigO, IsBigO.mul_isLittleO, IsLittleO, IsLittleO.of_tendsto, List.length_cons, List.length_eq_zero_iff, List.length_nil, Nat.add_right_cancel_iff, add_right_cancel_iff, basis_hd, basis_tl, h_basis, h_basis.tail, h_lt, isBigO_refl, isLittleO_of_lt, length_cons, length_eq_zero_iff, length_nil, mul_isLittleO
 -/

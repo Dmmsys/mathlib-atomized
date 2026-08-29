@@ -90,7 +90,9 @@ theorem Finite.induction_to
   have : Finite {T : Set α // T subseteq S} := Finite.of_equiv (Set S) (Equiv.Set.powerset S).symm
   rw [← Subtype.coe_mk (p := (· subseteq S)) _ le_rfl]
   rw [← Subtype.coe_mk (p := (· subseteq S)) _ hS0] at H0
-  refine Finite.to_wellFoundedGT.wf.inductio
+  refine Finite.to_wellFoundedGT.wf.induction_bot' (fun s hs hs' => ?_) H0
+  obtain ⟨a, ⟨ha1, ha2⟩, ha'⟩ := H1 s (ssubset_of_ne_of_subset hs s.2) hs'
+  exact ⟨⟨insert a s.1, insert_subset ha1 s.2⟩, Set.ssubset_insert ha2, ha'⟩
 
 中文:
 定理 有限.induction_to
@@ -100,7 +102,9 @@ theorem Finite.induction_to
   have : Finite {T : Set α // T subseteq S} := Finite.of_equiv (Set S) (Equiv.Set.powerset S).symm
   rw [← Subtype.coe_mk (p := (· subseteq S)) _ le_rfl]
   rw [← Subtype.coe_mk (p := (· subseteq S)) _ hS0] at H0
-  refine Finite.to_wellFoundedGT.wf.inductio
+  refine Finite.to_wellFoundedGT.wf.induction_bot' (fun s hs hs' => ?_) H0
+  obtain ⟨a, ⟨ha1, ha2⟩, ha'⟩ := H1 s (ssubset_of_ne_of_subset hs s.2) hs'
+  exact ⟨⟨insert a s.1, insert_subset ha1 s.2⟩, Set.ssubset_insert ha2, ha'⟩
 
 Depends on / 依赖: Equiv.Set.powerset, Finite, Finite.of_equiv, Finite.to_subtype, Finite.to_wellFoundedGT.wf.induction_bot, Set.ssubset_insert, Subtype, Subtype.coe_mk, coe_mk, induction_bot, insert, insert_subset, le_rfl, of_equiv, powerset, ssubset_insert, ssubset_of_ne_of_subset, subseteq, to_subtype, to_wellFoundedGT
 -/

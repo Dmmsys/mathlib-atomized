@@ -42,7 +42,10 @@ definition binomial
       apply Finset.sum_congr rfl
       intro i hi
       rw [Finset.mem_range] at hi
-      rw [dif_po
+      rw [dif_pos hi]
+    · rw [add_tsub_cancel_of_le (mod_cast h), one_pow])
+
+@[deprecated ProbabilityTheory.binomial_real_singleton (since := "2026-04-07")]
 
 中文:
 定义 binomial
@@ -55,7 +58,10 @@ definition binomial
       apply Finset.sum_congr rfl
       intro i hi
       rw [Finset.mem_range] at hi
-      rw [dif_po
+      rw [dif_pos hi]
+    · rw [add_tsub_cancel_of_le (mod_cast h), one_pow])
+
+@[deprecated ProbabilityTheory.binomial_real_singleton (since := "2026-04-07")]
 
 Depends on / 依赖: Fin.last, Finset, Finset.mem_range, Finset.sum_congr, Finset.sum_fin_eq_sum_range, add_pow, add_tsub_cancel_of_le, convert, dif_pos, mem_range, mod_cast, n.choose, ofFintype, one_pow, sum_congr, sum_fin_eq_sum_range
 -/
@@ -207,7 +213,8 @@ theorem binomial_apply_of_le
   have eq1 : 1 - (x : Real>=0∞) = ENNReal.ofReal (1 - x : Real) := by norm_cast
   have : (1 - (x : Real)) >= 0 := by simpa
   rwa [Fin.ofNat_eq_cast, PMF.binomial_apply, Fin.val_natCast, Fin.val_last, eq0, eq1,
-    coe_nnre
+    coe_nnreal_eq x, mul_rotate, ofReal_mul, ofReal_mul, ofReal_pow, ofReal_pow, ofReal_natCast]
+  all_goals positivity
 
 中文:
 定理 binomial_apply_of_le
@@ -217,7 +224,8 @@ theorem binomial_apply_of_le
   have eq1 : 1 - (x : Real>=0∞) = ENNReal.ofReal (1 - x : Real) := by norm_cast
   have : (1 - (x : Real)) >= 0 := by simpa
   rwa [Fin.ofNat_eq_cast, PMF.binomial_apply, Fin.val_natCast, Fin.val_last, eq0, eq1,
-    coe_nnre
+    coe_nnreal_eq x, mul_rotate, ofReal_mul, ofReal_mul, ofReal_pow, ofReal_pow, ofReal_natCast]
+  all_goals positivity
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, Fin.ofNat_eq_cast, Fin.val_last, Fin.val_natCast, Order.lt_add_one_iff.mpr, PMF.binomial_apply, all_goals, binomial_apply, coe_nnreal_eq, lt_add_one_iff, mul_rotate, ofNat_eq_cast, ofReal, ofReal_mul, ofReal_natCast, ofReal_pow, val_last, val_natCast
 -/

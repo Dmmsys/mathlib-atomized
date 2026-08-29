@@ -39,7 +39,14 @@ theorem Filter.Tendsto.integral_sub_linear_isLittleO_ae
     (this.comp_tendsto hs).congr'
       (hsμ.mono fun a ha => by dsimp only [Function.comp_apply] at ha ⊢; rw [ha]) hsμ
   refine isLittleO_iff.2 fun ε ε₀ => ?_
-  have : forallᶠ s in l.smallSets, f
+  have : forallᶠ s in l.smallSets, forallᵐ x ∂μ, x in s -> f x in closedBall b ε :=
+    eventually_smallSets_eventually.2 (h.eventually <| closedBall_mem_nhds _ ε₀)
+  filter_upwards [hμ.eventually, (hμ.integrableAtFilter_of_tendsto_ae hfm h).eventually,
+    hfm.eventually, this]
+  simp only [mem_closedBall, dist_eq_norm]
+  intro s hμs h_integrable hfm h_norm
+  rw [← setIntegral_const]; rw [← integral_sub h_integrable (integrableOn_const hμs.ne)]; rw [Real.norm_eq_abs]; rw [abs_of_nonneg measureReal_nonneg]
+  exact norm_setIntegral_le_of_norm_le_const_ae' hμs h_norm
 
 中文:
 定理 滤子.收敛.integral_sub_linear_isLittleO_ae
@@ -49,7 +56,14 @@ theorem Filter.Tendsto.integral_sub_linear_isLittleO_ae
     (this.comp_tendsto hs).congr'
       (hsμ.mono fun a ha => by dsimp only [Function.comp_apply] at ha ⊢; rw [ha]) hsμ
   refine isLittleO_iff.2 fun ε ε₀ => ?_
-  have : forallᶠ s in l.smallSets, f
+  have : forallᶠ s in l.smallSets, forallᵐ x ∂μ, x in s -> f x in closedBall b ε :=
+    eventually_smallSets_eventually.2 (h.eventually <| closedBall_mem_nhds _ ε₀)
+  filter_upwards [hμ.eventually, (hμ.integrableAtFilter_of_tendsto_ae hfm h).eventually,
+    hfm.eventually, this]
+  simp only [mem_closedBall, dist_eq_norm]
+  intro s hμs h_integrable hfm h_norm
+  rw [← setIntegral_const]; rw [← integral_sub h_integrable (integrableOn_const hμs.ne)]; rw [Real.norm_eq_abs]; rw [abs_of_nonneg measureReal_nonneg]
+  exact norm_setIntegral_le_of_norm_le_const_ae' hμs h_norm
 -/
 theorem Filter.Tendsto.integral_sub_linear_isLittleO_ae
     {μ : Measure X} {l : Filter X} [l.IsMeasurablyGenerated] {f : X -> E} {b : E}

@@ -63,7 +63,21 @@ lemma integrable_exp_mul_of_le_of_le
       rw [← ha_eq_t]
       exact ha.1
     · refine AEMeasurable.aestronglyMeasurable ?_
-      refine measurable_exp.comp_aemeasurable (AEMeasurable.
+      refine measurable_exp.comp_aemeasurable (AEMeasurable.const_mul ?_ _)
+      by_cases ha_zero : a = 0
+      · refine aemeasurable_of_aemeasurable_exp_mul ?_ hb.1.aemeasurable
+        rw [ha_zero] at hab
+        exact Ne.symm hab
+      · exact aemeasurable_of_aemeasurable_exp_mul ha_zero ha.1.aemeasurable
+  · simp only [norm_eq_abs, abs_exp, Pi.add_apply]
+    conv_rhs => rw [abs_of_nonneg (by positivity)]
+    rcases le_total 0 (X ω) with h | h
+    · calc exp (t * X ω)
+      _ <= exp (b * X ω) := exp_le_exp.mpr (mul_le_mul_of_nonneg_right htb h)
+      _ <= exp (a * X ω) + exp (b * X ω) := le_add_of_nonneg_left (exp_nonneg _)
+    · calc exp (t * X ω)
+      _ <= exp (a * X ω) := exp_le_exp.mpr (mul_le_mul_of_nonpos_right hat h)
+      _ <= exp (a * X ω) + exp (b * X ω) := le_add_of_nonneg_right (exp_nonneg _)
 
 中文:
 引理 integrable_exp_mul_of_le_of_le
@@ -75,7 +89,21 @@ lemma integrable_exp_mul_of_le_of_le
       rw [← ha_eq_t]
       exact ha.1
     · refine AEMeasurable.aestronglyMeasurable ?_
-      refine measurable_exp.comp_aemeasurable (AEMeasurable.
+      refine measurable_exp.comp_aemeasurable (AEMeasurable.const_mul ?_ _)
+      by_cases ha_zero : a = 0
+      · refine aemeasurable_of_aemeasurable_exp_mul ?_ hb.1.aemeasurable
+        rw [ha_zero] at hab
+        exact Ne.symm hab
+      · exact aemeasurable_of_aemeasurable_exp_mul ha_zero ha.1.aemeasurable
+  · simp only [norm_eq_abs, abs_exp, Pi.add_apply]
+    conv_rhs => rw [abs_of_nonneg (by positivity)]
+    rcases le_total 0 (X ω) with h | h
+    · calc exp (t * X ω)
+      _ <= exp (b * X ω) := exp_le_exp.mpr (mul_le_mul_of_nonneg_right htb h)
+      _ <= exp (a * X ω) + exp (b * X ω) := le_add_of_nonneg_left (exp_nonneg _)
+    · calc exp (t * X ω)
+      _ <= exp (a * X ω) := exp_le_exp.mpr (mul_le_mul_of_nonpos_right hat h)
+      _ <= exp (a * X ω) + exp (b * X ω) := le_add_of_nonneg_right (exp_nonneg _)
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.aestronglyMeasurable, AEMeasurable.const_mul, Integrable, Integrable.mono, Ne.symm, ae_of_all, aemeasurable, aemeasurable_of_aemeasurable_exp_mul, aestronglyMeasurable, comp_aemeasurable, const_mul, ha.add, ha_eq_t, ha_zero, le_antisymm, measurable_exp, measurable_exp.comp_aemeasurable
 -/
@@ -119,7 +147,8 @@ lemma integrable_exp_mul_of_abs_le
     · rwa [abs_of_nonneg hu]
     · rwa [abs_of_nonpos hu]
   · rw [neg_le]
-    exact (neg
+    exact (neg_le_abs t).trans htu
+  · exact (le_abs_self t).trans htu
 
 中文:
 引理 integrable_exp_mul_of_abs_le
@@ -132,7 +161,8 @@ lemma integrable_exp_mul_of_abs_le
     · rwa [abs_of_nonneg hu]
     · rwa [abs_of_nonpos hu]
   · rw [neg_le]
-    exact (neg
+    exact (neg_le_abs t).trans htu
+  · exact (le_abs_self t).trans htu
 
 Depends on / 依赖: abs_of_nonneg, abs_of_nonpos, integrable_exp_mul_of_le_of_le, le_abs_self, le_total, neg_le, neg_le_abs
 -/
@@ -245,7 +275,11 @@ lemma convex_integrableExpSet
   · simp only [smul_eq_mul]
     calc t₁
     _ = a * t₁ + b * t₁ := by rw [← add_mul, hab, one_mul]
-    _ <= a * t₁
+    _ <= a * t₁ + b * t₂ := by gcongr
+  · simp only [smul_eq_mul]
+    calc a * t₁ + b * t₂
+    _ <= a * t₂ + b * t₂ := by gcongr
+    _ = t₂ := by rw [← add_mul, hab, one_mul]
 
 中文:
 引理 convex_integrableExpSet
@@ -259,7 +293,11 @@ lemma convex_integrableExpSet
   · simp only [smul_eq_mul]
     calc t₁
     _ = a * t₁ + b * t₁ := by rw [← add_mul, hab, one_mul]
-    _ <= a * t₁
+    _ <= a * t₁ + b * t₂ := by gcongr
+  · simp only [smul_eq_mul]
+    calc a * t₁ + b * t₂
+    _ <= a * t₂ + b * t₂ := by gcongr
+    _ = t₂ := by rw [← add_mul, hab, one_mul]
 
 Depends on / 依赖: add_comm, add_mul, h_le, h_le.le, integrable_exp_mul_of_le_of_le, one_mul, smul_eq_mul
 -/
@@ -326,7 +364,20 @@ ht_int_pos.add by simpa using ht_int_neg
   refine Integrable.mono h_int_add ?_ (ae_of_all _ fun ω => ?_)
   · by_cases ht : t = 0
     · simp only [ht, zero_mul, zero_add, add_zero] at ht_int_pos ⊢
-      exact h
+      exact ht_int_pos.1
+    have hX : AEMeasurable X μ := aemeasurable_of_integrable_exp_mul ?_ ht_int_pos ht_int_neg
+    · fun_prop
+    · rw [← sub_ne_zero]
+      simp [ht]
+  · simp only [norm_eq_abs, abs_exp]
+    conv_rhs => rw [abs_of_nonneg (by positivity)]
+    -- ⊢ exp (t * |X ω| + v * X ω) ≤ exp ((v + t) * X ω) + exp ((v - t) * X ω)
+    rcases le_total 0 (X ω) with h_nonneg | h_nonpos
+    · rw [abs_of_nonneg h_nonneg, ← add_mul, add_comm, le_add_iff_nonneg_right]
+      positivity
+    · rw [abs_of_nonpos h_nonpos, mul_neg, mul_comm, ← mul_neg, mul_comm, ← add_mul, add_comm,
+        ← sub_eq_add_neg, le_add_iff_nonneg_left]
+      positivity
 
 中文:
 引理 integrable_exp_mul_abs_add
@@ -337,7 +388,20 @@ ht_int_pos.add by simpa using ht_int_neg
   refine Integrable.mono h_int_add ?_ (ae_of_all _ fun ω => ?_)
   · by_cases ht : t = 0
     · simp only [ht, zero_mul, zero_add, add_zero] at ht_int_pos ⊢
-      exact h
+      exact ht_int_pos.1
+    have hX : AEMeasurable X μ := aemeasurable_of_integrable_exp_mul ?_ ht_int_pos ht_int_neg
+    · fun_prop
+    · rw [← sub_ne_zero]
+      simp [ht]
+  · simp only [norm_eq_abs, abs_exp]
+    conv_rhs => rw [abs_of_nonneg (by positivity)]
+    -- ⊢ exp (t * |X ω| + v * X ω) ≤ exp ((v + t) * X ω) + exp ((v - t) * X ω)
+    rcases le_total 0 (X ω) with h_nonneg | h_nonpos
+    · rw [abs_of_nonneg h_nonneg, ← add_mul, add_comm, le_add_iff_nonneg_right]
+      positivity
+    · rw [abs_of_nonpos h_nonpos, mul_neg, mul_comm, ← mul_neg, mul_comm, ← add_mul, add_comm,
+        ← sub_eq_add_neg, le_add_iff_nonneg_left]
+      positivity
 
 Depends on / 依赖: AEMeasurable, Integrable, Integrable.mono, IsStandardSmooth, Subsingleton, abs_exp, abs_of_nonneg, add_zero, ae_of_all, aemeasurable_of_integrable_exp_mul, conv_rhs, fun_prop, h_int_add, ht_int_neg, ht_int_pos, ht_int_pos.add, norm_eq_abs, sub_ne_zero, zero_add, zero_mul
 -/
@@ -475,7 +539,28 @@ lemma rpow_abs_le_mul_max_exp_of_pos
       Left.nonneg_neg_iff]
     exact le_total 0 (t * x)
   have h_x_le c (hc : 0 < c) : x <= c⁻¹ * exp (c * x) := le_inv_mul_exp x hc
-  have h_neg_x_le c (hc : 0 < c) : -x <= c⁻¹ *
+  have h_neg_x_le c (hc : 0 < c) : -x <= c⁻¹ * exp (-c * x) := by simpa using le_inv_mul_exp (-x) hc
+  have h_abs_le c (hc : 0 < c) : |x| <= c⁻¹ * max (exp (c * x)) (exp (-c * x)) := by
+    refine abs_le.mpr ⟨?_, ?_⟩
+    · rw [neg_le]
+      refine (h_neg_x_le c hc).trans ?_
+      gcongr
+      exact le_max_right _ _
+    · refine (h_x_le c hc).trans ?_
+      gcongr
+      exact le_max_left _ _
+  calc |x| ^ p
+  _ <= ((t / p)⁻¹ * max (exp (t / p * x)) (exp (-t / p * x))) ^ p := by
+    gcongr
+    convert! h_abs_le (t / p) (div_pos ht (hp.lt_of_ne' hp_zero)) using 5
+    rw [neg_div]
+  _ = (p / t) ^ p * max (exp (t * x)) (exp (-t * x)) := by
+    rw [mul_rpow (by positivity) (by positivity)]
+    congr
+    · simp
+    · rw [rpow_max (by positivity) (by positivity) hp, ← exp_mul, ← exp_mul]
+      ring_nf
+      congr <;> rw [mul_assoc, mul_inv_cancel₀ hp_zero, mul_one]
 
 中文:
 引理 rpow_abs_le_mul_max_exp_of_pos
@@ -486,7 +571,28 @@ lemma rpow_abs_le_mul_max_exp_of_pos
       Left.nonneg_neg_iff]
     exact le_total 0 (t * x)
   have h_x_le c (hc : 0 < c) : x <= c⁻¹ * exp (c * x) := le_inv_mul_exp x hc
-  have h_neg_x_le c (hc : 0 < c) : -x <= c⁻¹ *
+  have h_neg_x_le c (hc : 0 < c) : -x <= c⁻¹ * exp (-c * x) := by simpa using le_inv_mul_exp (-x) hc
+  have h_abs_le c (hc : 0 < c) : |x| <= c⁻¹ * max (exp (c * x)) (exp (-c * x)) := by
+    refine abs_le.mpr ⟨?_, ?_⟩
+    · rw [neg_le]
+      refine (h_neg_x_le c hc).trans ?_
+      gcongr
+      exact le_max_right _ _
+    · refine (h_x_le c hc).trans ?_
+      gcongr
+      exact le_max_left _ _
+  calc |x| ^ p
+  _ <= ((t / p)⁻¹ * max (exp (t / p * x)) (exp (-t / p * x))) ^ p := by
+    gcongr
+    convert! h_abs_le (t / p) (div_pos ht (hp.lt_of_ne' hp_zero)) using 5
+    rw [neg_div]
+  _ = (p / t) ^ p * max (exp (t * x)) (exp (-t * x)) := by
+    rw [mul_rpow (by positivity) (by positivity)]
+    congr
+    · simp
+    · rw [rpow_max (by positivity) (by positivity) hp, ← exp_mul, ← exp_mul]
+      ring_nf
+      congr <;> rw [mul_assoc, mul_inv_cancel₀ hp_zero, mul_one]
 
 Depends on / 依赖: Left.nonneg_neg_iff, abs_le, abs_le.mpr, h_abs_le, h_neg_x_le, h_x_le, hp_zero, le_inv_mul_exp, le_sup_iff, le_total, neg_le, neg_mul, nonneg_neg_iff, one_le_exp_iff, one_mul, rpow_zero, zero_div
 -/
@@ -571,7 +677,8 @@ lemma rpow_abs_le_mul_exp_abs
       simp only [neg_mul, sup_eq_left, exp_le_exp, neg_le_self_iff]
       positivity
     · rw [abs_of_nonpos hx]
-      simp only [neg_m
+      simp only [neg_mul, mul_neg, sup_eq_right, exp_le_exp, le_neg_self_iff]
+      exact mul_nonpos_of_nonneg_of_nonpos (abs_nonneg _) hx
 
 中文:
 引理 rpow_abs_le_mul_exp_abs
@@ -585,7 +692,8 @@ lemma rpow_abs_le_mul_exp_abs
       simp only [neg_mul, sup_eq_left, exp_le_exp, neg_le_self_iff]
       positivity
     · rw [abs_of_nonpos hx]
-      simp only [neg_m
+      simp only [neg_mul, mul_neg, sup_eq_right, exp_le_exp, le_neg_self_iff]
+      exact mul_nonpos_of_nonneg_of_nonpos (abs_nonneg _) hx
 
 Depends on / 依赖: abs_nonneg, abs_of_nonneg, abs_of_nonpos, exp_le_exp, le_neg_self_iff, le_total, mul_neg, mul_nonpos_of_nonneg_of_nonpos, neg_le_self_iff, neg_mul, rpow_abs_le_mul_max_exp_of_pos, sup_eq_left, sup_eq_right, trans_eq
 -/
@@ -616,7 +724,35 @@ lemma integrable_rpow_abs_mul_exp_add_of_integrable_exp_mul
   swap; · rw [← sub_ne_zero]; simp [ht]
   rw [← integrable_norm_iff]
   swap; · fun_prop
-  simp only [norm_mul, nor
+  simp only [norm_mul, norm_eq_abs, abs_exp]
+  have h_le a : |X a| ^ p * exp (v * X a + x * |X a|)
+      <= (p / (|t| - x)) ^ p * exp (v * X a + |t| * |X a|) := by
+    simp_rw [exp_add, mul_comm (exp (v * X a)), ← mul_assoc]
+    gcongr ?_ * _
+    have : |t| = |t| - x + x := by simp
+    nth_rw 2 [this]
+    rw [add_mul]; rw [exp_add]; rw [← mul_assoc]
+    gcongr ?_ * _
+    convert! rpow_abs_le_mul_exp_abs (X a) hp (t := |t| - x) _ using 4
+    · nth_rw 2 [abs_of_nonneg]
+      simp [hx.le]
+    · nth_rw 2 [abs_of_nonneg]
+      simp [hx.le]
+    · rw [sub_ne_zero]
+      exact hx.ne'
+  refine Integrable.mono (g := fun a => (p / (|t| - x)) ^ p * exp (v * X a + |t| * |X a|))
+?_ ?_ ae_of_all _ fun ω => ?_
+  · refine Integrable.const_mul ?_ _
+    simp_rw [add_comm (v * X _)]
+    exact integrable_exp_abs_mul_abs_add h_int_pos h_int_neg
+  · fun_prop
+  · simp only [norm_mul, norm_eq_abs, abs_exp]
+    simp_rw [abs_rpow_of_nonneg (abs_nonneg _), abs_abs]
+    refine (h_le ω).trans_eq ?_
+    congr
+    symm
+    simp only [abs_eq_self]
+    positivity [sub_nonneg_of_le hx.le]
 
 中文:
 引理 integrable_rpow_abs_mul_exp_add_of_integrable_exp_mul
@@ -629,7 +765,35 @@ lemma integrable_rpow_abs_mul_exp_add_of_integrable_exp_mul
   swap; · rw [← sub_ne_zero]; simp [ht]
   rw [← integrable_norm_iff]
   swap; · fun_prop
-  simp only [norm_mul, nor
+  simp only [norm_mul, norm_eq_abs, abs_exp]
+  have h_le a : |X a| ^ p * exp (v * X a + x * |X a|)
+      <= (p / (|t| - x)) ^ p * exp (v * X a + |t| * |X a|) := by
+    simp_rw [exp_add, mul_comm (exp (v * X a)), ← mul_assoc]
+    gcongr ?_ * _
+    have : |t| = |t| - x + x := by simp
+    nth_rw 2 [this]
+    rw [add_mul]; rw [exp_add]; rw [← mul_assoc]
+    gcongr ?_ * _
+    convert! rpow_abs_le_mul_exp_abs (X a) hp (t := |t| - x) _ using 4
+    · nth_rw 2 [abs_of_nonneg]
+      simp [hx.le]
+    · nth_rw 2 [abs_of_nonneg]
+      simp [hx.le]
+    · rw [sub_ne_zero]
+      exact hx.ne'
+  refine Integrable.mono (g := fun a => (p / (|t| - x)) ^ p * exp (v * X a + |t| * |X a|))
+?_ ?_ ae_of_all _ fun ω => ?_
+  · refine Integrable.const_mul ?_ _
+    simp_rw [add_comm (v * X _)]
+    exact integrable_exp_abs_mul_abs_add h_int_pos h_int_neg
+  · fun_prop
+  · simp only [norm_mul, norm_eq_abs, abs_exp]
+    simp_rw [abs_rpow_of_nonneg (abs_nonneg _), abs_abs]
+    refine (h_le ω).trans_eq ?_
+    congr
+    symm
+    simp only [abs_eq_self]
+    positivity [sub_nonneg_of_le hx.le]
 
 Depends on / 依赖: AEMeasurable, abs_exp, aemeasurable_of_integrable_exp_mul, exp_add, fun_prop, h_int_neg, h_int_pos, h_le, h_nonneg, h_nonneg.trans_lt, integrable_norm_iff, mul_assoc, mul_comm, norm_eq_abs, norm_mul, simp_rw, sub_ne_zero, trans_lt
 -/
@@ -787,7 +951,13 @@ lemma integrable_rpow_mul_exp_of_integrable_exp_mul
   rw [← integrable_norm_iff]
   · simp_rw [norm_eq_abs, abs_mul, abs_exp]
     have h := integrable_rpow_abs_mul_exp_of_integrable_exp_mul ht ht_int_pos ht_int_neg hp
-
+    refine h.mono' ?_ ?_
+    · fun_prop
+    · refine ae_of_all _ fun ω => ?_
+      simp only [norm_mul, norm_eq_abs, abs_abs, abs_exp]
+      gcongr
+      exact abs_rpow_le_abs_rpow _ _
+  · fun_prop
 
 中文:
 引理 integrable_rpow_mul_exp_of_integrable_exp_mul
@@ -798,7 +968,13 @@ lemma integrable_rpow_mul_exp_of_integrable_exp_mul
   rw [← integrable_norm_iff]
   · simp_rw [norm_eq_abs, abs_mul, abs_exp]
     have h := integrable_rpow_abs_mul_exp_of_integrable_exp_mul ht ht_int_pos ht_int_neg hp
-
+    refine h.mono' ?_ ?_
+    · fun_prop
+    · refine ae_of_all _ fun ω => ?_
+      simp only [norm_mul, norm_eq_abs, abs_abs, abs_exp]
+      gcongr
+      exact abs_rpow_le_abs_rpow _ _
+  · fun_prop
 
 Depends on / 依赖: AEMeasurable, abs_abs, abs_exp, abs_mul, abs_rpow_le_abs_rpow, ae_of_all, aemeasurable_of_integrable_exp_mul, fun_prop, h.mono, ht_int_neg, ht_int_pos, integrable_norm_iff, integrable_rpow_abs_mul_exp_of_integrable_exp_mul, norm_eq_abs, norm_mul, simp_rw, sub_ne_zero
 -/
@@ -1003,7 +1179,8 @@ lemma add_half_inf_sub_mem_Ioo
     _ <= v + ((v - l) ⊓ (u - v)) / 2 := le_add_of_nonneg_right (by positivity)
   · calc v + ((v - l) ⊓ (u - v)) / 2
     _ < v + ((v - l) ⊓ (u - v)) := by gcongr; exact half_lt_self (by positivity)
-  
+    _ <= v + (u - v) := by gcongr; exact inf_le_right
+    _ = u := by abel
 
 中文:
 引理 add_half_inf_sub_mem_Ioo
@@ -1015,7 +1192,8 @@ lemma add_half_inf_sub_mem_Ioo
     _ <= v + ((v - l) ⊓ (u - v)) / 2 := le_add_of_nonneg_right (by positivity)
   · calc v + ((v - l) ⊓ (u - v)) / 2
     _ < v + ((v - l) ⊓ (u - v)) := by gcongr; exact half_lt_self (by positivity)
-  
+    _ <= v + (u - v) := by gcongr; exact inf_le_right
+    _ = u := by abel
 
 Depends on / 依赖: h_pos, half_lt_self, inf_le_right, le_add_of_nonneg_right
 -/
@@ -1043,6 +1221,10 @@ lemma sub_half_inf_sub_mem_Ioo
     _ <= v - ((v - l) ⊓ (u - v)) := by gcongr; exact inf_le_left
     _ < v - ((v - l) ⊓ (u - v)) / 2 := by gcongr; exact half_lt_self (by positivity)
   · calc v - ((v - l) ⊓ (u - v)) / 2
+    _ <= v := by
+      rw [sub_le_iff_le_add]
+      exact le_add_of_nonneg_right (by positivity)
+    _ < u := hv.2
 
 中文:
 引理 sub_half_inf_sub_mem_Ioo
@@ -1054,6 +1236,10 @@ lemma sub_half_inf_sub_mem_Ioo
     _ <= v - ((v - l) ⊓ (u - v)) := by gcongr; exact inf_le_left
     _ < v - ((v - l) ⊓ (u - v)) / 2 := by gcongr; exact half_lt_self (by positivity)
   · calc v - ((v - l) ⊓ (u - v)) / 2
+    _ <= v := by
+      rw [sub_le_iff_le_add]
+      exact le_add_of_nonneg_right (by positivity)
+    _ < u := hv.2
 
 Depends on / 依赖: h_pos, half_lt_self, inf_le_left, le_add_of_nonneg_right, sub_le_iff_le_add
 -/
@@ -1083,7 +1269,14 @@ lemma aemeasurable_of_mem_interior_integrableExpSet
   have h_pos : 0 < (v - l) ⊓ (u - v) := by simp [hvlu.1, hvlu.2]
   have ht : 0 < t := half_pos h_pos
   by_cases hvt : v + t = 0
-  · have hvt' : v - 
+  · have hvt' : v - t != 0 := by
+      rw [sub_ne_zero]
+      refine fun h_eq => ht.ne' ?_
+      simpa [h_eq] using hvt
+    exact aemeasurable_of_aemeasurable_exp_mul hvt'
+      (h_subset (sub_half_inf_sub_mem_Ioo hvlu)).aemeasurable
+  · exact aemeasurable_of_aemeasurable_exp_mul hvt
+      (h_subset (add_half_inf_sub_mem_Ioo hvlu)).aemeasurable
 
 中文:
 引理 aemeasurable_of_mem_interior_integrableExpSet
@@ -1095,7 +1288,14 @@ lemma aemeasurable_of_mem_interior_integrableExpSet
   have h_pos : 0 < (v - l) ⊓ (u - v) := by simp [hvlu.1, hvlu.2]
   have ht : 0 < t := half_pos h_pos
   by_cases hvt : v + t = 0
-  · have hvt' : v - 
+  · have hvt' : v - t != 0 := by
+      rw [sub_ne_zero]
+      refine fun h_eq => ht.ne' ?_
+      simpa [h_eq] using hvt
+    exact aemeasurable_of_aemeasurable_exp_mul hvt'
+      (h_subset (sub_half_inf_sub_mem_Ioo hvlu)).aemeasurable
+  · exact aemeasurable_of_aemeasurable_exp_mul hvt
+      (h_subset (add_half_inf_sub_mem_Ioo hvlu)).aemeasurable
 
 Depends on / 依赖: aemeasurable, aemeasurable_of_aeme, aemeasurable_of_aemeasurable_exp_mul, h_eq, h_pos, h_subset, half_pos, ht.ne, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, sub_half_inf_sub_mem_Ioo, sub_ne_zero
 -/
@@ -1127,7 +1327,9 @@ lemma integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet
   have h_pos : 0 < (v - l) ⊓ (u - v) := by simp [hvlu.1, hvlu.2]
   refine integrable_rpow_abs_mul_exp_of_integrable_exp_mul
     (t := min (v - l) (u - v) / 2) ?_ ?_ ?_ hp
-  · positivi
+  · positivity
+  · exact h_subset (add_half_inf_sub_mem_Ioo hvlu)
+  · exact h_subset (sub_half_inf_sub_mem_Ioo hvlu)
 
 中文:
 引理 integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet
@@ -1137,7 +1339,9 @@ lemma integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet
   have h_pos : 0 < (v - l) ⊓ (u - v) := by simp [hvlu.1, hvlu.2]
   refine integrable_rpow_abs_mul_exp_of_integrable_exp_mul
     (t := min (v - l) (u - v) / 2) ?_ ?_ ?_ hp
-  · positivi
+  · positivity
+  · exact h_subset (add_half_inf_sub_mem_Ioo hvlu)
+  · exact h_subset (sub_half_inf_sub_mem_Ioo hvlu)
 
 Depends on / 依赖: add_half_inf_sub_mem_Ioo, h_pos, h_subset, integrable_rpow_abs_mul_exp_of_integrable_exp_mul, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, sub_half_inf_sub_mem_Ioo
 -/
@@ -1197,7 +1401,8 @@ lemma integrable_rpow_mul_exp_of_mem_interior_integrableExpSet
   refine integrable_rpow_mul_exp_of_integrable_exp_mul
     (t := min (v - l) (u - v) / 2) ?_ ?_ ?_ hp
   · positivity
- 
+  · exact h_subset (add_half_inf_sub_mem_Ioo hvlu)
+  · exact h_subset (sub_half_inf_sub_mem_Ioo hvlu)
 
 中文:
 引理 integrable_rpow_mul_exp_of_mem_interior_integrableExpSet
@@ -1208,7 +1413,8 @@ lemma integrable_rpow_mul_exp_of_mem_interior_integrableExpSet
   refine integrable_rpow_mul_exp_of_integrable_exp_mul
     (t := min (v - l) (u - v) / 2) ?_ ?_ ?_ hp
   · positivity
- 
+  · exact h_subset (add_half_inf_sub_mem_Ioo hvlu)
+  · exact h_subset (sub_half_inf_sub_mem_Ioo hvlu)
 
 Depends on / 依赖: add_half_inf_sub_mem_Ioo, h_pos, h_subset, integrable_rpow_mul_exp_of_integrable_exp_mul, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, sub_half_inf_sub_mem_Ioo
 -/
@@ -1353,7 +1559,9 @@ lemma memLp_of_mem_interior_integrableExpSet
   by_cases hp_zero : p = 0
   · simp only [hp_zero, ENNReal.coe_zero, memLp_zero_iff_aestronglyMeasurable]
     exact hX.aestronglyMeasurable
-  rw [← integrable_norm_rpow_iff hX.aestronglyMeasurable (mod_cast hp_zero) (
+  rw [← integrable_norm_rpow_iff hX.aestronglyMeasurable (mod_cast hp_zero) (by simp)]
+  simp only [norm_eq_abs, ENNReal.coe_toReal]
+  exact integrable_rpow_abs_of_mem_interior_integrableExpSet h p.2
 
 中文:
 引理 memLp_of_mem_interior_integrableExpSet
@@ -1363,7 +1571,9 @@ lemma memLp_of_mem_interior_integrableExpSet
   by_cases hp_zero : p = 0
   · simp only [hp_zero, ENNReal.coe_zero, memLp_zero_iff_aestronglyMeasurable]
     exact hX.aestronglyMeasurable
-  rw [← integrable_norm_rpow_iff hX.aestronglyMeasurable (mod_cast hp_zero) (
+  rw [← integrable_norm_rpow_iff hX.aestronglyMeasurable (mod_cast hp_zero) (by simp)]
+  simp only [norm_eq_abs, ENNReal.coe_toReal]
+  exact integrable_rpow_abs_of_mem_interior_integrableExpSet h p.2
 
 Depends on / 依赖: AEMeasurable, ENNReal, ENNReal.coe_toReal, ENNReal.coe_zero, aemeasurable_of_mem_interior_integrableExpSet, aestronglyMeasurable, coe_toReal, coe_zero, hX.aestronglyMeasurable, hp_zero, integrable_norm_rpow_iff, integrable_rpow_abs_of_mem_interior_integrableExpSet, memLp_zero_iff_aestronglyMeasurable, mod_cast, norm_eq_abs
 -/
@@ -1519,7 +1729,12 @@ lemma integrable_rpow_mul_cexp_of_re_mem_interior_integrableExpSet
   swap; · fun_prop
   simp only [norm_mul, norm_real, Complex.norm_exp, mul_re, ofReal_re,
     ofReal_im, mul_zero, sub_zero]
-  refine (integrable_rpow_abs_mul_exp_of_mem_interior_integrab
+  refine (integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet hz hp).mono ?_ ?_
+  · fun_prop
+  refine ae_of_all _ fun ω => ?_
+  simp only [norm_mul, Real.norm_eq_abs, Real.abs_exp]
+  gcongr
+  exact abs_rpow_le_abs_rpow _ _
 
 中文:
 引理 integrable_rpow_mul_cexp_of_re_mem_interior_integrableExpSet
@@ -1529,7 +1744,12 @@ lemma integrable_rpow_mul_cexp_of_re_mem_interior_integrableExpSet
   swap; · fun_prop
   simp only [norm_mul, norm_real, Complex.norm_exp, mul_re, ofReal_re,
     ofReal_im, mul_zero, sub_zero]
-  refine (integrable_rpow_abs_mul_exp_of_mem_interior_integrab
+  refine (integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet hz hp).mono ?_ ?_
+  · fun_prop
+  refine ae_of_all _ fun ω => ?_
+  simp only [norm_mul, Real.norm_eq_abs, Real.abs_exp]
+  gcongr
+  exact abs_rpow_le_abs_rpow _ _
 
 Depends on / 依赖: AEMeasurable, Complex.norm_exp, Real.abs_exp, Real.norm_eq_abs, abs_exp, abs_rpow_le_abs_rpow, ae_of_all, aemeasurable_of_mem_interior_integrableExpSet, fun_prop, integrable_norm_iff, integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet, mul_re, mul_zero, norm_eq_abs, norm_exp, norm_mul, norm_real, ofReal_im, ofReal_re, sub_zero
 -/

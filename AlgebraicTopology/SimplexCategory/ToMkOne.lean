@@ -115,7 +115,8 @@ lemma δ_comp_toMk₁_of_le
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   change toMk₁ i.castSucc (j.succAbove k) = _
   dsimp
-  rw
+  rw [Fin.eq_iff_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]
+  grind [Fin.succAbove]
 
 中文:
 引理 δ_comp_toMk₁_of_le
@@ -128,7 +129,8 @@ lemma δ_comp_toMk₁_of_le
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   change toMk₁ i.castSucc (j.succAbove k) = _
   dsimp
-  rw
+  rw [Fin.eq_iff_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]
+  grind [Fin.succAbove]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, Fin.castPred_castSucc, Fin.castSucc_le_castSucc_iff, Fin.eq_castSucc_of_ne_last, Fin.eq_iff_eq_zero_iff, Fin.ne_last_of_lt, Fin.succAbove, castPred_castSucc, castSucc, castSucc_le_castSucc_iff, castSucc_lt_succ, eq_castSucc_of_ne_last, eq_iff_eq_zero_iff, hom_ext, i.castSucc, j.castSucc_lt_succ, j.succAbove, lt_of_le_of_lt, ne_last_of_lt
 -/
@@ -158,7 +160,7 @@ lemma δ_comp_toMk₁_of_lt
   change toMk₁ i.succ (j.succAbove k) = _
   dsimp
   rw [Fin.eq_iff_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]
-  grind [Fin.succA
+  grind [Fin.succAbove]
 
 中文:
 引理 δ_comp_toMk₁_of_lt
@@ -170,7 +172,7 @@ lemma δ_comp_toMk₁_of_lt
   change toMk₁ i.succ (j.succAbove k) = _
   dsimp
   rw [Fin.eq_iff_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]; rw [toMk₁_apply_eq_zero_iff]
-  grind [Fin.succA
+  grind [Fin.succAbove]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, Fin.eq_iff_eq_zero_iff, Fin.eq_succ_of_ne_zero, Fin.ne_zero_of_lt, Fin.pred_succ, Fin.succAbove, eq_iff_eq_zero_iff, eq_succ_of_ne_zero, hom_ext, i.succ, j.succAbove, ne_zero_of_lt, pred_succ, succAbove
 -/
@@ -196,7 +198,15 @@ lemma σ_comp_toMk₁_of_le
   by_cases! hk : k < i
   · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-    It is
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was:
+    `grind [Fin.castPred, Fin.predAbove_of_le_castSucc, toMk₁_of_castSucc_lt]` -/
+    simp; grind [Fin.castPred, Fin.predAbove_of_le_castSucc, toMk₁_of_castSucc_lt]
+  · dsimp
+    rw [toMk₁_of_le_castSucc]; rw [toMk₁_of_le_castSucc _ _ (by simpa)]
+    by_cases hk' : k <= j.castSucc
+    · rwa [Fin.predAbove_of_le_castSucc _ _ hk', Fin.castSucc_castPred]
+    · grind [Fin.predAbove]
 
 中文:
 引理 σ_comp_toMk₁_of_le
@@ -207,7 +217,15 @@ lemma σ_comp_toMk₁_of_le
   by_cases! hk : k < i
   · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-    It is
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was:
+    `grind [Fin.castPred, Fin.predAbove_of_le_castSucc, toMk₁_of_castSucc_lt]` -/
+    simp; grind [Fin.castPred, Fin.predAbove_of_le_castSucc, toMk₁_of_castSucc_lt]
+  · dsimp
+    rw [toMk₁_of_le_castSucc]; rw [toMk₁_of_le_castSucc _ _ (by simpa)]
+    by_cases hk' : k <= j.castSucc
+    · rwa [Fin.predAbove_of_le_castSucc _ _ hk', Fin.castSucc_castPred]
+    · grind [Fin.predAbove]
 
 Depends on / 依赖: Before, ConcreteCategory, ConcreteCategory.hom_ext, Fin.castPred, Fin.predAbove_of_le_castSucc, Mathlib, adaptation_note, canonicalizer, castPred, closed, directed, github, github.com, hom_ext, j.predAbove, leanprover, minimization, normalizer, original, predAbove
 -/
@@ -240,7 +258,17 @@ lemma σ_comp_toMk₁_of_lt
   by_cases! hk : i < k
   · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-    It is
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was:
+    `grind [Fin.predAbove_of_castSucc_lt, toMk₁_of_le_castSucc]` -/
+    simp; grind [Fin.predAbove_of_castSucc_lt, toMk₁_of_le_castSucc]
+  · dsimp
+    rw [toMk₁_of_castSucc_lt i.succ k (by simpa)]; rw [toMk₁_of_castSucc_lt]
+    by_cases hk' : j.castSucc < k
+    · rwa [Fin.predAbove_of_castSucc_lt _ _ hk', Fin.castSucc_pred_lt_iff]
+    · simp only [not_lt] at hk'
+      rw [Fin.predAbove_of_le_castSucc _ _ hk']
+      exact lt_of_le_of_lt (by simpa) h
 
 中文:
 引理 σ_comp_toMk₁_of_lt
@@ -251,7 +279,17 @@ lemma σ_comp_toMk₁_of_lt
   by_cases! hk : i < k
   · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-    It is
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was:
+    `grind [Fin.predAbove_of_castSucc_lt, toMk₁_of_le_castSucc]` -/
+    simp; grind [Fin.predAbove_of_castSucc_lt, toMk₁_of_le_castSucc]
+  · dsimp
+    rw [toMk₁_of_castSucc_lt i.succ k (by simpa)]; rw [toMk₁_of_castSucc_lt]
+    by_cases hk' : j.castSucc < k
+    · rwa [Fin.predAbove_of_castSucc_lt _ _ hk', Fin.castSucc_pred_lt_iff]
+    · simp only [not_lt] at hk'
+      rw [Fin.predAbove_of_le_castSucc _ _ hk']
+      exact lt_of_le_of_lt (by simpa) h
 
 Depends on / 依赖: Before, ConcreteCategory, ConcreteCategory.hom_ext, Fin.predAbove_of_castSucc_lt, Mathlib, adaptation_note, canonicalizer, closed, directed, github, github.com, hom_ext, j.predAbove, leanprover, minimization, normalizer, original, predAbove, predAbove_of_castSucc_lt, problem
 -/
@@ -323,7 +361,33 @@ lemma toMk₁_surjective
     dsimp [toMk₁_apply]
     split_ifs with h
     · have hi : i ∉ S := fun hi => by have := S.min'_le _ hi; grind
-      #adaptation_no
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+      simp [S] at hi; grind
+    · simp only [Fin.castSucc_lt_castSucc_iff, Finset.lt_min'_iff, not_forall,
+        not_lt] at h
+      obtain ⟨j, hj, hij⟩ := h
+      have := f.toOrderHom.monotone hij
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was:
+      `grind [show f j ≤ f i from f.toOrderHom.monotone hij]` -/
+      simp_all [ConcreteCategory.hom, S]
+      grind
+  · refine ⟨Fin.last _, ConcreteCategory.hom_ext _ _ (fun i => ?_)⟩
+    dsimp [toMk₁_apply]
+    rw [if_pos (by simp)]
+    obtain ⟨j, hj⟩ : exists (j : Fin 2), f i = j := ⟨_, rfl⟩
+    fin_cases j
+    · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+      simp_all
+    · exact (hS ⟨i, by simpa [S]⟩).elim
 
 中文:
 引理 toMk₁_surjective
@@ -337,7 +401,33 @@ lemma toMk₁_surjective
     dsimp [toMk₁_apply]
     split_ifs with h
     · have hi : i ∉ S := fun hi => by have := S.min'_le _ hi; grind
-      #adaptation_no
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+      simp [S] at hi; grind
+    · simp only [Fin.castSucc_lt_castSucc_iff, Finset.lt_min'_iff, not_forall,
+        not_lt] at h
+      obtain ⟨j, hj, hij⟩ := h
+      have := f.toOrderHom.monotone hij
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was:
+      `grind [show f j ≤ f i from f.toOrderHom.monotone hij]` -/
+      simp_all [ConcreteCategory.hom, S]
+      grind
+  · refine ⟨Fin.last _, ConcreteCategory.hom_ext _ _ (fun i => ?_)⟩
+    dsimp [toMk₁_apply]
+    rw [if_pos (by simp)]
+    obtain ⟨j, hj⟩ : exists (j : Fin 2), f i = j := ⟨_, rfl⟩
+    fin_cases j
+    · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+      simp_all
+    · exact (hS ⟨i, by simpa [S]⟩).elim
 
 Depends on / 依赖: Before, ConcreteCategory, ConcreteCategory.hom_ext, Finset, Mathlib, Nonempty, S.Nonempty, S.min, adaptation_note, canonicalizer, castSucc, closed, directed, github, github.com, hom_ext, leanprover, normalizer, replacing, split_ifs
 -/

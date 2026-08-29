@@ -38,7 +38,10 @@ theorem mem_tangentConeAt_iff_exists_seq
     simp only [tangentConeAt_def, Set.mem_ofPred, ← map₂_smul, ← map_prod_eq_map₂, ClusterPt,
       ← neBot_inf_comap_iff_map'] at h
     rcases @exists_seq_tendsto _ _ _ h with ⟨cd, hcd⟩
-    simp only [tendsto_inf, tendsto_comap_iff, tendsto_prod_iff', tendsto_nhdsWithin
+    simp only [tendsto_inf, tendsto_comap_iff, tendsto_prod_iff', tendsto_nhdsWithin_iff] at hcd
+    exact ⟨Prod.fst ∘ cd, Prod.snd ∘ cd, hcd.2.2.1, hcd.2.2.2, hcd.1⟩
+  · rintro ⟨c, d, hd₀, hds, hcd⟩
+    exact mem_tangentConeAt_of_seq atTop c d hd₀ hds hcd
 
 中文:
 定理 mem_tangentConeAt_iff_存在_seq
@@ -49,7 +52,10 @@ theorem mem_tangentConeAt_iff_exists_seq
     simp only [tangentConeAt_def, Set.mem_ofPred, ← map₂_smul, ← map_prod_eq_map₂, ClusterPt,
       ← neBot_inf_comap_iff_map'] at h
     rcases @exists_seq_tendsto _ _ _ h with ⟨cd, hcd⟩
-    simp only [tendsto_inf, tendsto_comap_iff, tendsto_prod_iff', tendsto_nhdsWithin
+    simp only [tendsto_inf, tendsto_comap_iff, tendsto_prod_iff', tendsto_nhdsWithin_iff] at hcd
+    exact ⟨Prod.fst ∘ cd, Prod.snd ∘ cd, hcd.2.2.1, hcd.2.2.2, hcd.1⟩
+  · rintro ⟨c, d, hd₀, hds, hcd⟩
+    exact mem_tangentConeAt_of_seq atTop c d hd₀ hds hcd
 
 Depends on / 依赖: ClusterPt, Prod.fst, Prod.snd, Set.mem_ofPred, exists_seq_tendsto, mem_ofPred, mem_tangentConeAt_of_seq, neBot_inf_comap_iff_map, tangentConeAt_def, tendsto_comap_iff, tendsto_inf, tendsto_nhdsWithin_iff, tendsto_prod_iff
 -/
@@ -146,7 +152,37 @@ theorem mem_tangentConeAt_iff_exists_seq_norm_tendsto_atTop
       obtain ⟨c, hc⟩ := NormedField.exists_lt_norm 𝕜 1
       have (n : Nat) : exists d : E, x + d in s ∧ ‖d‖ < (1 / (2 * ‖c‖)) ^ n := by
         rw [Metric.mem_closure_iff] at hx
-        rcas
+        rcases hx ((1 / (2 * ‖c‖)) ^ n) (by positivity) with ⟨v, hvs, hv⟩
+        use v - x
+        simp_all [dist_eq_norm_sub']
+      choose d hds hd using this
+      refine ⟨(c ^ ·), d, ?tendsto_c, .of_forall hds, ?tendsto_cd⟩
+      case tendsto_c =>
+        simp only [norm_pow]
+        exact tendsto_pow_atTop_atTop_of_one_lt hc
+      case tendsto_cd =>
+        rw [atTop_basis.tendsto_iff (Metric.nhds_basis_ball_pow one_half_pos one_half_lt_one)]
+        refine fun N _ => ⟨N, trivial, fun n hn => ?_⟩
+        rw [Set.mem_Ici] at hn
+        suffices ‖c‖ ^ n * ‖d n‖ < 1 / (2 ^ N) by simpa [norm_smul]
+        rw [← lt_div_iff₀' (by positivity)]
+        refine (hd n).trans_le ?_
+        grw [hn]
+        · simp [mul_pow, div_eq_inv_mul]
+        · norm_num1
+    · rw [mem_tangentConeAt_iff_exists_seq]
+      rintro ⟨c, d, hd₀, hds, hcd⟩
+      refine ⟨c, d, ?_, hds, hcd⟩
+      replace hd₀ := hd₀.norm
+      have hd₀' : forallᶠ n in .atTop, d n != 0 :=
+.mono fun _ => right_ne_zero_of_smul hcd.eventually_ne hy₀
+      replace hcd := hcd.norm
+      simp only [norm_smul, norm_zero, ← div_inv_eq_mul] at hd₀ hcd
+      refine .num ?_ (by simpa) hcd
+      rw [← inv_nhdsGT_zero (𝕜 := Real)]; rw [← Filter.comap_inv]; rw [Filter.tendsto_comap_iff]
+      simpa [Function.comp_def, tendsto_nhdsWithin_iff, hd₀] using hd₀'
+  · rintro ⟨c, d, hc, hds, hcd⟩
+    exact mem_tangentConeAt_of_seq atTop c d (tangentConeAt.lim_zero atTop hc hcd) hds hcd
 
 中文:
 定理 mem_tangentConeAt_iff_存在_seq_norm_tendsto_atTop
@@ -159,7 +195,37 @@ theorem mem_tangentConeAt_iff_exists_seq_norm_tendsto_atTop
       obtain ⟨c, hc⟩ := NormedField.exists_lt_norm 𝕜 1
       have (n : Nat) : exists d : E, x + d in s ∧ ‖d‖ < (1 / (2 * ‖c‖)) ^ n := by
         rw [Metric.mem_closure_iff] at hx
-        rcas
+        rcases hx ((1 / (2 * ‖c‖)) ^ n) (by positivity) with ⟨v, hvs, hv⟩
+        use v - x
+        simp_all [dist_eq_norm_sub']
+      choose d hds hd using this
+      refine ⟨(c ^ ·), d, ?tendsto_c, .of_forall hds, ?tendsto_cd⟩
+      case tendsto_c =>
+        simp only [norm_pow]
+        exact tendsto_pow_atTop_atTop_of_one_lt hc
+      case tendsto_cd =>
+        rw [atTop_basis.tendsto_iff (Metric.nhds_basis_ball_pow one_half_pos one_half_lt_one)]
+        refine fun N _ => ⟨N, trivial, fun n hn => ?_⟩
+        rw [Set.mem_Ici] at hn
+        suffices ‖c‖ ^ n * ‖d n‖ < 1 / (2 ^ N) by simpa [norm_smul]
+        rw [← lt_div_iff₀' (by positivity)]
+        refine (hd n).trans_le ?_
+        grw [hn]
+        · simp [mul_pow, div_eq_inv_mul]
+        · norm_num1
+    · rw [mem_tangentConeAt_iff_exists_seq]
+      rintro ⟨c, d, hd₀, hds, hcd⟩
+      refine ⟨c, d, ?_, hds, hcd⟩
+      replace hd₀ := hd₀.norm
+      have hd₀' : forallᶠ n in .atTop, d n != 0 :=
+.mono fun _ => right_ne_zero_of_smul hcd.eventually_ne hy₀
+      replace hcd := hcd.norm
+      simp only [norm_smul, norm_zero, ← div_inv_eq_mul] at hd₀ hcd
+      refine .num ?_ (by simpa) hcd
+      rw [← inv_nhdsGT_zero (𝕜 := Real)]; rw [← Filter.comap_inv]; rw [Filter.tendsto_comap_iff]
+      simpa [Function.comp_def, tendsto_nhdsWithin_iff, hd₀] using hd₀'
+  · rintro ⟨c, d, hc, hds, hcd⟩
+    exact mem_tangentConeAt_of_seq atTop c d (tangentConeAt.lim_zero atTop hc hcd) hds hcd
 
 Depends on / 依赖: Metric, Metric.mem_closure_iff, NormedField, NormedField.exists_lt_norm, dist_eq_norm_sub, eq_or_ne, exists_lt_norm, mem_closure_iff, norm_pow, of_forall, tendsto_, tendsto_c, tendsto_cd, zero_mem_tangentConeAt_iff
 -/

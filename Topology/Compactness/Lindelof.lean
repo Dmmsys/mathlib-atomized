@@ -255,7 +255,11 @@ theorem IsLindelof.image_of_continuousOn
   obtain ⟨x, hxs, hx⟩ : exists x in s, ClusterPt x (l.comap f ⊓ 𝓟 s) := @hs _ this _ inf_le_right
   have := hx.neBot
   use f x, mem_image_of_mem f hxs
-  have : Tendsto f (
+  have : Tendsto f (𝓝 x ⊓ (comap f l ⊓ 𝓟 s)) (𝓝 (f x) ⊓ l) := by
+    convert! (hf x hxs).inf (@tendsto_comap _ _ f l) using 1
+    rw [nhdsWithin]
+    ac_rfl
+  exact this.neBot
 
 中文:
 定理 IsLindelof.image_of_continuousOn
@@ -267,7 +271,11 @@ theorem IsLindelof.image_of_continuousOn
   obtain ⟨x, hxs, hx⟩ : exists x in s, ClusterPt x (l.comap f ⊓ 𝓟 s) := @hs _ this _ inf_le_right
   have := hx.neBot
   use f x, mem_image_of_mem f hxs
-  have : Tendsto f (
+  have : Tendsto f (𝓝 x ⊓ (comap f l ⊓ 𝓟 s)) (𝓝 (f x) ⊓ l) := by
+    convert! (hf x hxs).inf (@tendsto_comap _ _ f l) using 1
+    rw [nhdsWithin]
+    ac_rfl
+  exact this.neBot
 
 Depends on / 依赖: ClusterPt, Tendsto, comap_inf_principal_neBot_of_image_mem, convert, hx.neBot, inf_le_right, l.comap, le_principal_iff, mem_image_of_mem, nhdsWithin, tendsto_comap, this.neBot
 -/
@@ -313,7 +321,9 @@ theorem IsLindelof.adherence_nhdset
 let ⟨x, hx, hfx⟩ := @hs (f ⊓ 𝓟 tᶜ) _ _ inf_le_of_left_le hf₂
     have : x in t := ht₂ x hx hfx.of_inf_left
     have : tᶜ inter t in 𝓝[tᶜ] x := inter_mem_nhdsWithin _ (ht₁.mem_nhds this)
-have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ th
+have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ this
+    have : 𝓝[tᶜ] x != ⊥ := hfx.of_inf_right.ne
+    absurd A this
 
 中文:
 定理 IsLindelof.adherence_nhdset
@@ -322,7 +332,9 @@ have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ th
 let ⟨x, hx, hfx⟩ := @hs (f ⊓ 𝓟 tᶜ) _ _ inf_le_of_left_le hf₂
     have : x in t := ht₂ x hx hfx.of_inf_left
     have : tᶜ inter t in 𝓝[tᶜ] x := inter_mem_nhdsWithin _ (ht₁.mem_nhds this)
-have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ th
+have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ this
+    have : 𝓝[tᶜ] x != ⊥ := hfx.of_inf_right.ne
+    absurd A this
 
 Depends on / 依赖: absurd, casesOn, compl_inter_self, empty_mem_iff_bot, eq_or_neBot, hfx.of_inf_left, hfx.of_inf_right.ne, inf_le_of_left_le, inter_mem_nhdsWithin, mem_nhds, mem_of_eq_bot, of_inf_left, of_inf_right
 -/
@@ -347,7 +359,22 @@ theorem IsLindelof.elim_countable_subcover
       -> (exists r : Set ι, r.Countable ∧ s subseteq ⋃ i in r, U i) := by
     intro _ _ hst ⟨r, ⟨hrcountable, hsub⟩⟩
     exact ⟨r, hrcountable, Subset.trans hst hsub⟩
-  have hcountable_
+  have hcountable_union : forall (S : Set (Set X)), S.Countable
+      -> (forall s in S, exists r : Set ι, r.Countable ∧ (s subseteq ⋃ i in r, U i))
+      -> exists r : Set ι, r.Countable ∧ (⋃₀ S subseteq ⋃ i in r, U i) := by
+    intro S hS hsr
+    choose! r hr using hsr
+    refine ⟨⋃ s in S, r s, hS.biUnion_iff.mpr (fun s hs => (hr s hs).1), ?_⟩
+    refine sUnion_subset ?h.right.h
+    simp only [mem_iUnion, exists_prop, iUnion_exists, biUnion_and']
+    exact fun i is x hx => mem_biUnion is ((hr i is).2 hx)
+  have h_nhds : forall x in s, exists t in 𝓝[s] x, exists r : Set ι, r.Countable ∧ (t subseteq ⋃ i in r, U i) := by
+    intro x hx
+    let ⟨i, hi⟩ := mem_iUnion.1 (hsU hx)
+    refine ⟨U i, mem_nhdsWithin_of_mem_nhds ((hUo i).mem_nhds hi), {i}, by simp, ?_⟩
+    simp only [mem_singleton_iff, iUnion_iUnion_eq_left]
+    exact Subset.refl _
+  exact hs.induction_on hmono hcountable_union h_nhds
 
 中文:
 定理 IsLindelof.elim_countable_subcover
@@ -357,7 +384,22 @@ theorem IsLindelof.elim_countable_subcover
       -> (exists r : Set ι, r.Countable ∧ s subseteq ⋃ i in r, U i) := by
     intro _ _ hst ⟨r, ⟨hrcountable, hsub⟩⟩
     exact ⟨r, hrcountable, Subset.trans hst hsub⟩
-  have hcountable_
+  have hcountable_union : forall (S : Set (Set X)), S.Countable
+      -> (forall s in S, exists r : Set ι, r.Countable ∧ (s subseteq ⋃ i in r, U i))
+      -> exists r : Set ι, r.Countable ∧ (⋃₀ S subseteq ⋃ i in r, U i) := by
+    intro S hS hsr
+    choose! r hr using hsr
+    refine ⟨⋃ s in S, r s, hS.biUnion_iff.mpr (fun s hs => (hr s hs).1), ?_⟩
+    refine sUnion_subset ?h.right.h
+    simp only [mem_iUnion, exists_prop, iUnion_exists, biUnion_and']
+    exact fun i is x hx => mem_biUnion is ((hr i is).2 hx)
+  have h_nhds : forall x in s, exists t in 𝓝[s] x, exists r : Set ι, r.Countable ∧ (t subseteq ⋃ i in r, U i) := by
+    intro x hx
+    let ⟨i, hi⟩ := mem_iUnion.1 (hsU hx)
+    refine ⟨U i, mem_nhdsWithin_of_mem_nhds ((hUo i).mem_nhds hi), {i}, by simp, ?_⟩
+    simp only [mem_singleton_iff, iUnion_iUnion_eq_left]
+    exact Subset.refl _
+  exact hs.induction_on hmono hcountable_union h_nhds
 
 Depends on / 依赖: Countable, S.Countable, Subset, Subset.trans, hcountable_union, hrcountable, r.Countable, subseteq
 -/
@@ -400,7 +442,8 @@ mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩
   apply Subset.trans hs
   apply iUnion₂_subset
   intro i hi
-  apply Subset.tran
+  apply Subset.trans interior_subset
+  exact subset_iUnion_of_subset i (subset_iUnion_of_subset hi (Subset.refl _))
 
 中文:
 定理 IsLindelof.elim_nhds_subcover'
@@ -414,7 +457,8 @@ mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩
   apply Subset.trans hs
   apply iUnion₂_subset
   intro i hi
-  apply Subset.tran
+  apply Subset.trans interior_subset
+  exact subset_iUnion_of_subset i (subset_iUnion_of_subset hi (Subset.refl _))
 
 Depends on / 依赖: Subset, Subset.refl, Subset.trans, elim_countable_subcover, hs.elim_countable_subcover, interior, interior_subset, isOpen_interior, mem_iUnion, mem_interior_iff_mem_nhds, subset_iUnion_of_subset
 -/
@@ -445,7 +489,8 @@ theorem IsLindelof.elim_nhds_subcover
   · intro _
     simp only [mem_image, Subtype.exists, exists_and_right, exists_eq_right, forall_exists_index]
     tauto
-  · have : ⋃ x in t, U ↑x = ⋃ x in Subtype
+  · have : ⋃ x in t, U ↑x = ⋃ x in Subtype.val '' t, U x := biUnion_image.symm
+    rwa [← this]
 
 中文:
 定理 IsLindelof.elim_nhds_subcover
@@ -457,7 +502,8 @@ theorem IsLindelof.elim_nhds_subcover
   · intro _
     simp only [mem_image, Subtype.exists, exists_and_right, exists_eq_right, forall_exists_index]
     tauto
-  · have : ⋃ x in t, U ↑x = ⋃ x in Subtype
+  · have : ⋃ x in t, U ↑x = ⋃ x in Subtype.val '' t, U x := biUnion_image.symm
+    rwa [← this]
 
 Depends on / 依赖: Countable, Countable.image, Subtype, Subtype.exists, Subtype.val, biUnion_image, biUnion_image.symm, elim_nhds_subcover, exists_and_right, exists_eq_right, forall_exists_index, hs.elim_nhds_subcover, mem_image
 -/
@@ -484,7 +530,11 @@ theorem IsLindelof.indexed_countable_subcover
   rcases c.eq_empty_or_nonempty with rfl | c_nonempty
   · simp only [mem_empty_iff_false, iUnion_of_empty, iUnion_empty] at c_cov
     simp only [subset_eq_empty c_cov rfl, empty_subset, exists_const]
-  obtain ⟨f, f_surj⟩ := (S
+  obtain ⟨f, f_surj⟩ := (Set.countable_iff_exists_surjective c_nonempty).mp c_count
+refine ⟨fun x => f x, c_cov.trans iUnion₂_subset_iff.mpr (?_ : forall i in c, U i subseteq ⋃ n, U (f n))⟩
+  intro x hx
+  obtain ⟨n, hn⟩ := f_surj ⟨x, hx⟩
+exact subset_iUnion_of_subset n subset_of_eq (by rw [hn])
 
 中文:
 定理 IsLindelof.indexed_countable_subcover
@@ -494,7 +544,11 @@ theorem IsLindelof.indexed_countable_subcover
   rcases c.eq_empty_or_nonempty with rfl | c_nonempty
   · simp only [mem_empty_iff_false, iUnion_of_empty, iUnion_empty] at c_cov
     simp only [subset_eq_empty c_cov rfl, empty_subset, exists_const]
-  obtain ⟨f, f_surj⟩ := (S
+  obtain ⟨f, f_surj⟩ := (Set.countable_iff_exists_surjective c_nonempty).mp c_count
+refine ⟨fun x => f x, c_cov.trans iUnion₂_subset_iff.mpr (?_ : forall i in c, U i subseteq ⋃ n, U (f n))⟩
+  intro x hx
+  obtain ⟨n, hn⟩ := f_surj ⟨x, hx⟩
+exact subset_iUnion_of_subset n subset_of_eq (by rw [hn])
 
 Depends on / 依赖: Set.countable_iff_exists_surjective, _subset_iff.mpr, c.eq_empty_or_nonempty, c_count, c_cov, c_cov.trans, c_nonempty, countable_iff_exists_surjective, elim_countable_subcover, empty_subset, eq_empty_or_nonempty, exists_const, f_surj, hs.elim_countable_subcover, iUnion_empty, iUnion_of_empty, mem_empty_iff_false, subset_eq_empty, subseteq
 -/
@@ -522,7 +576,10 @@ refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
   choose! U hxU hUl using fun x hx => (nhds_basis_opens x).disjoint_iff_left.1 (H x hx)
   choose hxU hUo using hxU
   rcases hs.elim_nhds_subcover U fun x hx => (hUo x hx).mem_nhds (hxU x hx) with ⟨t, htc, hts, hst⟩
-  refine (hasBa
+  refine (hasBasis_nhdsSet _).disjoint_iff_left.2
+    ⟨⋃ x in t, U x, ⟨isOpen_biUnion fun x hx => hUo x (hts x hx), hst⟩, ?_⟩
+  rw [compl_iUnion₂]
+  exact (countable_bInter_mem htc).mpr (fun i hi => hUl _ (hts _ hi))
 
 中文:
 定理 IsLindelof.disjoint_nhdsSet_left
@@ -532,7 +589,10 @@ refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
   choose! U hxU hUl using fun x hx => (nhds_basis_opens x).disjoint_iff_left.1 (H x hx)
   choose hxU hUo using hxU
   rcases hs.elim_nhds_subcover U fun x hx => (hUo x hx).mem_nhds (hxU x hx) with ⟨t, htc, hts, hst⟩
-  refine (hasBa
+  refine (hasBasis_nhdsSet _).disjoint_iff_left.2
+    ⟨⋃ x in t, U x, ⟨isOpen_biUnion fun x hx => hUo x (hts x hx), hst⟩, ?_⟩
+  rw [compl_iUnion₂]
+  exact (countable_bInter_mem htc).mpr (fun i hi => hUl _ (hts _ hi))
 
 Depends on / 依赖: countable_bInter_mem, disjoint_iff_left, elim_nhds_subcover, h.mono_left, hasBasis_nhdsSet, hs.elim_nhds_subcover, isOpen_biUnion, mem_nhds, mono_left, nhds_basis_opens, nhds_le_nhdsSet
 -/
@@ -582,7 +642,14 @@ theorem IsLindelof.elim_countable_subfamily_closed
     simp only [U, Pi.compl_apply]
     rw [← compl_iInter]
     apply disjoint_compl_left_iff_subset.mp
-    simp only [compl_iInter, compl_iUnion
+    simp only [compl_iInter, compl_iUnion, compl_compl]
+    apply Disjoint.symm
+    exact disjoint_iff_inter_eq_empty.mpr hst
+  rcases hs.elim_countable_subcover U hUo hsU with ⟨u, ⟨hucount, husub⟩⟩
+  use u, hucount
+  rw [← disjoint_compl_left_iff_subset] at husub
+  simp only [U, Pi.compl_apply, compl_iUnion, compl_compl] at husub
+  exact disjoint_iff_inter_eq_empty.mp (Disjoint.symm husub)
 
 中文:
 定理 IsLindelof.elim_countable_subfamily_closed
@@ -594,7 +661,14 @@ theorem IsLindelof.elim_countable_subfamily_closed
     simp only [U, Pi.compl_apply]
     rw [← compl_iInter]
     apply disjoint_compl_left_iff_subset.mp
-    simp only [compl_iInter, compl_iUnion
+    simp only [compl_iInter, compl_iUnion, compl_compl]
+    apply Disjoint.symm
+    exact disjoint_iff_inter_eq_empty.mpr hst
+  rcases hs.elim_countable_subcover U hUo hsU with ⟨u, ⟨hucount, husub⟩⟩
+  use u, hucount
+  rw [← disjoint_compl_left_iff_subset] at husub
+  simp only [U, Pi.compl_apply, compl_iUnion, compl_compl] at husub
+  exact disjoint_iff_inter_eq_empty.mp (Disjoint.symm husub)
 
 Depends on / 依赖: Disjoint, Disjoint.symm, IsOpen, Pi.compl_apply, compl_apply, compl_compl, compl_iInter, compl_iUnion, disjoint_compl_left_iff_subset, disjoint_compl_left_iff_subset.mp, disjoint_iff_inter_eq_empty, disjoint_iff_inter_eq_empty.mpr, elim_countable_subcover, hs.elim_countable_subcover, hucount, isOpen_compl_iff, subseteq
 -/
@@ -691,7 +765,12 @@ theorem isLindelof_of_countable_subcover
   choose fsub U hU hUf using h
   refine ⟨s, U, fun x => (hU x).2, fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, (hU _).1 ⟩, ?_⟩
   intro t ht h
-  have uinf := f.
+  have uinf := f.sets_of_superset (le_principal_iff.1 fsub) h
+  have uninf : ⋂ i in t, (U i)ᶜ in f := (countable_bInter_mem ht).mpr (fun _ _ => hUf _)
+  rw [← compl_iUnion₂] at uninf
+  have uninf := compl_notMem uninf
+  simp only [compl_compl] at uninf
+  contradiction
 
 中文:
 定理 isLindelof_of_countable_subcover
@@ -702,7 +781,12 @@ theorem isLindelof_of_countable_subcover
   choose fsub U hU hUf using h
   refine ⟨s, U, fun x => (hU x).2, fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, (hU _).1 ⟩, ?_⟩
   intro t ht h
-  have uinf := f.
+  have uinf := f.sets_of_superset (le_principal_iff.1 fsub) h
+  have uninf : ⋂ i in t, (U i)ᶜ in f := (countable_bInter_mem ht).mpr (fun _ _ => hUf _)
+  rw [← compl_iUnion₂] at uninf
+  have uninf := compl_notMem uninf
+  simp only [compl_compl] at uninf
+  contradiction
 
 Depends on / 依赖: ClusterPt, SetCoe, SetCoe.forall, compl_comp, compl_notMem, contrapose, countable_bInter_mem, disjoint_iff, disjoint_iff_left, f.sets_of_superset, le_principal_iff, mem_iUnion, nhds_basis_opens, not_neBot, sets_of_superset
 -/
@@ -732,7 +816,7 @@ theorem isLindelof_of_countable_subfamily_closed
     rw [← disjoint_compl_right_iff_subset]; rw [compl_iUnion]; rw [disjoint_iff] at hsU
     rcases h (fun i => (U i)ᶜ) (fun i => (hUo _).isClosed_compl) hsU with ⟨t, ht⟩
     refine ⟨t, ?_⟩
-    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂,
+    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂, disjoint_iff]
 
 中文:
 定理 isLindelof_of_countable_subfamily_closed
@@ -740,7 +824,7 @@ theorem isLindelof_of_countable_subfamily_closed
     rw [← disjoint_compl_right_iff_subset]; rw [compl_iUnion]; rw [disjoint_iff] at hsU
     rcases h (fun i => (U i)ᶜ) (fun i => (hUo _).isClosed_compl) hsU with ⟨t, ht⟩
     refine ⟨t, ?_⟩
-    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂,
+    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂, disjoint_iff]
 
 Depends on / 依赖: compl_iUnion, disjoint_compl_right_iff_subset, disjoint_iff, isClosed_compl, isLindelof_of_countable_subcover
 -/
@@ -870,7 +954,15 @@ theorem Set.Countable.isLindelof_biUnion
     fun _ is => _root_.subset_trans (subset_biUnion_of_mem is) hUcover
   have iSets := fun i is => (hf i is).elim_countable_subcover U hU (hiU i is)
   choose! r hr using iSets
-  us
+  use ⋃ i in s, r i
+  constructor
+  · refine (Countable.biUnion_iff hs).mpr ?h.left.a
+    exact fun s hs => (hr s hs).1
+  · refine iUnion₂_subset ?h.right.h
+    intro i is
+    simp only [mem_iUnion, exists_prop, iUnion_exists, biUnion_and']
+    intro x hx
+    exact mem_biUnion is ((hr i is).2 hx)
 
 中文:
 定理 集合.可数.isLindelof_biUnion
@@ -882,7 +974,15 @@ theorem Set.Countable.isLindelof_biUnion
     fun _ is => _root_.subset_trans (subset_biUnion_of_mem is) hUcover
   have iSets := fun i is => (hf i is).elim_countable_subcover U hU (hiU i is)
   choose! r hr using iSets
-  us
+  use ⋃ i in s, r i
+  constructor
+  · refine (Countable.biUnion_iff hs).mpr ?h.left.a
+    exact fun s hs => (hr s hs).1
+  · refine iUnion₂_subset ?h.right.h
+    intro i is
+    simp only [mem_iUnion, exists_prop, iUnion_exists, biUnion_and']
+    intro x hx
+    exact mem_biUnion is ((hr i is).2 hx)
 
 Depends on / 依赖: Countable, Countable.biUnion_iff, _root_, _root_.subset_trans, biUnion_and, biUnion_iff, elim_countable_subcover, exists_prop, h.left.a, h.right.h, hUcover, iUnion_exists, isLindelof_of_countable_subcover, mem_iUnion, subset_biUnion_of_mem, subset_trans, subseteq
 -/
@@ -1167,7 +1267,20 @@ theorem isLindelof_open_iff_eq_countable_iUnion_of_isTopologicalBasis
     subst this
     obtain ⟨t, ht⟩ :=
       h₁.elim_countable_subcover (b ∘ f') (fun i => hb.isOpen (Set.mem_range_self _)) Subset.rfl
-    refine ⟨t.i
+    refine ⟨t.image f', Countable.image (ht.1) f', le_antisymm ?_ ?_⟩
+    · refine Set.Subset.trans ht.2 ?_
+      simp only [Set.iUnion_subset_iff]
+      intro i hi
+      rw [← Set.iUnion_subtype (fun x : ι => x in t.image f') fun i => b i.1]
+      exact Set.subset_iUnion (fun i : t.image f' => b i) ⟨_, mem_image_of_mem _ hi⟩
+    · apply Set.iUnion₂_subset
+      rintro i hi
+      obtain ⟨j, -, rfl⟩ := (mem_image ..).mp hi
+      exact Set.subset_iUnion (b ∘ f') j
+  · rintro ⟨s, hs, rfl⟩
+    constructor
+    · exact hs.isLindelof_biUnion fun i _ => hb' i
+    · exact isOpen_biUnion fun i _ => hb.isOpen (Set.mem_range_self _)
 
 中文:
 定理 isLindelof_open_iff_eq_countable_iUnion_of_isTopologicalBasis
@@ -1181,7 +1294,20 @@ theorem isLindelof_open_iff_eq_countable_iUnion_of_isTopologicalBasis
     subst this
     obtain ⟨t, ht⟩ :=
       h₁.elim_countable_subcover (b ∘ f') (fun i => hb.isOpen (Set.mem_range_self _)) Subset.rfl
-    refine ⟨t.i
+    refine ⟨t.image f', Countable.image (ht.1) f', le_antisymm ?_ ?_⟩
+    · refine Set.Subset.trans ht.2 ?_
+      simp only [Set.iUnion_subset_iff]
+      intro i hi
+      rw [← Set.iUnion_subtype (fun x : ι => x in t.image f') fun i => b i.1]
+      exact Set.subset_iUnion (fun i : t.image f' => b i) ⟨_, mem_image_of_mem _ hi⟩
+    · apply Set.iUnion₂_subset
+      rintro i hi
+      obtain ⟨j, -, rfl⟩ := (mem_image ..).mp hi
+      exact Set.subset_iUnion (b ∘ f') j
+  · rintro ⟨s, hs, rfl⟩
+    constructor
+    · exact hs.isLindelof_biUnion fun i _ => hb' i
+    · exact isOpen_biUnion fun i _ => hb.isOpen (Set.mem_range_self _)
 
 Depends on / 依赖: Countable, Countable.image, Set.Subset.trans, Set.iUnion_subset_iff, Set.iUnion_subtype, Set.mem_range_self, Set.subset_iUnion, Subset, Subset.rfl, elim_countable_subcover, hb.isOpen, hb.open_eq_iUnion, iUnion_subset_iff, iUnion_subtype, isOpen, le_antisymm, mem_range_self, open_eq_iUnion, subset_iUnion, t.image
 -/
@@ -1348,6 +1474,12 @@ theorem Tendsto.isLindelof_insert_range_of_coLindelof
   rcases hy with ⟨s, hsy, t, htl, hd⟩
   rcases mem_coLindelof.1 (hf hsy) with ⟨K, hKc, hKs⟩
   have : f '' K in l := by
+    filter_upwards [htl, le_principal_iff.1 hle] with y hyt hyf
+    rcases hyf with (rfl | ⟨x, rfl⟩)
+    exacts [(hd.le_bot ⟨mem_of_mem_nhds hsy, hyt⟩).elim,
+      mem_image_of_mem _ (not_not.1 fun hxK => hd.le_bot ⟨hKs hxK, hyt⟩)]
+  rcases hKc.image hfc (le_principal_iff.2 this) with ⟨y, hy, hyl⟩
+exact ⟨y, Or.inr image_subset_range _ _ hy, hyl⟩
 
 中文:
 定理 收敛.isLindelof_insert_range_of_coLindelof
@@ -1360,6 +1492,12 @@ theorem Tendsto.isLindelof_insert_range_of_coLindelof
   rcases hy with ⟨s, hsy, t, htl, hd⟩
   rcases mem_coLindelof.1 (hf hsy) with ⟨K, hKc, hKs⟩
   have : f '' K in l := by
+    filter_upwards [htl, le_principal_iff.1 hle] with y hyt hyf
+    rcases hyf with (rfl | ⟨x, rfl⟩)
+    exacts [(hd.le_bot ⟨mem_of_mem_nhds hsy, hyt⟩).elim,
+      mem_image_of_mem _ (not_not.1 fun hxK => hd.le_bot ⟨hKs hxK, hyt⟩)]
+  rcases hKc.image hfc (le_principal_iff.2 this) with ⟨y, hy, hyl⟩
+exact ⟨y, Or.inr image_subset_range _ _ hy, hyl⟩
 
 Depends on / 依赖: ClusterPt, Or.inl, clusterPt_iff_nonempty, exacts, filter_upwards, hd.le_bot, le_bot, le_principal_iff, mem_coLindelof, mem_image_of_mem, mem_of_mem_nhds, not_disjoint_iff_nonempty_inter, not_forall, not_not
 -/
@@ -1409,7 +1547,7 @@ theorem hasBasis_coclosedLindelof
   refine hasBasis_biInf_principal' ?_ ⟨∅, isClosed_empty, isLindelof_empty⟩
   rintro s ⟨hs₁, hs₂⟩ t ⟨ht₁, ht₂⟩
   exact ⟨s union t, ⟨⟨hs₁.union ht₁, hs₂.union ht₂⟩, compl_subset_compl.2 subset_union_left,
-    compl_subset_compl.2 subset_union_right⟩
+    compl_subset_compl.2 subset_union_right⟩⟩
 
 中文:
 定理 hasBasis_coclosedLindelof
@@ -1418,7 +1556,7 @@ theorem hasBasis_coclosedLindelof
   refine hasBasis_biInf_principal' ?_ ⟨∅, isClosed_empty, isLindelof_empty⟩
   rintro s ⟨hs₁, hs₂⟩ t ⟨ht₁, ht₂⟩
   exact ⟨s union t, ⟨⟨hs₁.union ht₁, hs₂.union ht₂⟩, compl_subset_compl.2 subset_union_left,
-    compl_subset_compl.2 subset_union_right⟩
+    compl_subset_compl.2 subset_union_right⟩⟩
 
 Depends on / 依赖: Filter, Filter.coclosedLindelof, coclosedLindelof, compl_subset_compl, hasBasis_biInf_principal, iInf_and, isClosed_empty, isLindelof_empty, subset_union_left, subset_union_right
 -/
@@ -2621,7 +2759,7 @@ lemma eq_open_union_nat
     simp [htu]
   · obtain ⟨k, rfl⟩ := htc.exists_eq_range t_ne
     use k
-    rwa [biU
+    rwa [biUnion_range] at htu
 
 中文:
 引理 eq_open_union_nat
@@ -2634,7 +2772,7 @@ lemma eq_open_union_nat
     simp [htu]
   · obtain ⟨k, rfl⟩ := htc.exists_eq_range t_ne
     use k
-    rwa [biU
+    rwa [biUnion_range] at htu
 
 Depends on / 依赖: biUnion_range, eq_comm, eq_empty_or_nonempty, eq_open_union_countable, exists_eq_range, htc.exists_eq_range, iUnion_empty, iUnion_eq_empty, iUnion_false, mem_empty_iff_false, simp_rw, t_ne
 -/

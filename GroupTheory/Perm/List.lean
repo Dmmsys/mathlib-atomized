@@ -328,7 +328,8 @@ theorem formPerm_apply_mem_of_mem
       · simp
       · simp
       · simp [*]
-    · replace h : x = y := Or.
+    · replace h : x = y := Or.resolve_right (mem_cons.1 h) hx
+      simp [formPerm_apply_of_notMem hx, ← h]
 
 中文:
 定理 formPerm_apply_mem_of_mem
@@ -346,7 +347,8 @@ theorem formPerm_apply_mem_of_mem
       · simp
       · simp
       · simp [*]
-    · replace h : x = y := Or.
+    · replace h : x = y := Or.resolve_right (mem_cons.1 h) hx
+      simp [formPerm_apply_of_notMem hx, ← h]
 
 Depends on / 依赖: Or.resolve_right, formPerm_apply_of_notMem, formPerm_cons_cons, generalizing, mem_cons, mul_apply, replace, resolve_right, split_ifs, swap_apply_def
 -/
@@ -580,7 +582,13 @@ theorem formPerm_apply_lt_getElem
     · simp at hn
     · rw [formPerm_singleton, getElem_singleton, getElem_singleton, one_apply]
     · specialize IH (y :: l) h.of_cons _
-      · s
+      · simpa [Nat.succ_lt_succ_iff] using hn
+      simp only [swap_apply_eq_iff, coe_mul, formPerm_cons_cons, Function.comp]
+      simp only [getElem_cons_succ] at *
+      rw [← IH]; rw [swap_apply_of_ne_of_ne] <;>
+      · intro hx
+        rw [← hx]; rw [IH] at h
+        simp [getElem_mem] at h
 
 中文:
 定理 formPerm_apply_lt_getElem
@@ -593,7 +601,13 @@ theorem formPerm_apply_lt_getElem
     · simp at hn
     · rw [formPerm_singleton, getElem_singleton, getElem_singleton, one_apply]
     · specialize IH (y :: l) h.of_cons _
-      · s
+      · simpa [Nat.succ_lt_succ_iff] using hn
+      simp only [swap_apply_eq_iff, coe_mul, formPerm_cons_cons, Function.comp]
+      simp only [getElem_cons_succ] at *
+      rw [← IH]; rw [swap_apply_of_ne_of_ne] <;>
+      · intro hx
+        rw [← hx]; rw [IH] at h
+        simp [getElem_mem] at h
 
 Depends on / 依赖: Function, Function.comp, Nat.succ_lt_succ_iff, coe_mul, formPerm_apply_getElem_zero, formPerm_cons_cons, formPerm_singleton, generalizing, getElem_cons_succ, getElem_singleton, h.of_cons, of_cons, one_apply, specialize, succ_lt_succ_iff, swap_apply_eq_iff, swap_apply_of_ne_of_ne
 -/
@@ -630,7 +644,7 @@ theorem formPerm_apply_getElem
     · simp
     · rw [formPerm_apply_lt_getElem (x :: xs) w _ (Nat.succ_lt_succ hn')]
       congr
-      rw [Nat.mod_eq_of_lt]; 
+      rw [Nat.mod_eq_of_lt]; simpa [Nat.succ_eq_add_one]
 
 中文:
 定理 formPerm_apply_getElem
@@ -645,7 +659,7 @@ theorem formPerm_apply_getElem
     · simp
     · rw [formPerm_apply_lt_getElem (x :: xs) w _ (Nat.succ_lt_succ hn')]
       congr
-      rw [Nat.mod_eq_of_lt]; 
+      rw [Nat.mod_eq_of_lt]; simpa [Nat.succ_eq_add_one]
 
 Depends on / 依赖: Nat.le_of_lt_succ, Nat.mod_eq_of_lt, Nat.succ_eq_add_one, Nat.succ_lt_succ, eq_or_lt, formPerm_apply_lt_getElem, le_of_lt_succ, length, mod_eq_of_lt, succ_eq_add_one, succ_lt_succ, this.eq_or_lt, xs.length
 -/
@@ -677,7 +691,13 @@ theorem support_formPerm_of_nodup'
     obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
     rw [Set.mem_ofPred_eq]; rw [formPerm_apply_getElem _ h]
     intro H
-    rw [nodup_iff_injective_get]; rw [Function.Injecti
+    rw [nodup_iff_injective_get]; rw [Function.Injective] at h
+    specialize h H
+    rcases (Nat.succ_le_of_lt hn).eq_or_lt with hn' | hn'
+    · simp only [← hn', Nat.mod_self] at h
+      refine not_exists.mpr h' ?_
+      rw [← length_eq_one_iff]; rw [← hn']; rw [(Fin.mk.inj_iff.mp h).symm]
+    · simp [Nat.mod_eq_of_lt hn'] at h
 
 中文:
 定理 support_formPerm_of_nodup'
@@ -690,7 +710,13 @@ theorem support_formPerm_of_nodup'
     obtain ⟨n, hn, rfl⟩ := getElem_of_mem hx
     rw [Set.mem_ofPred_eq]; rw [formPerm_apply_getElem _ h]
     intro H
-    rw [nodup_iff_injective_get]; rw [Function.Injecti
+    rw [nodup_iff_injective_get]; rw [Function.Injective] at h
+    specialize h H
+    rcases (Nat.succ_le_of_lt hn).eq_or_lt with hn' | hn'
+    · simp only [← hn', Nat.mod_self] at h
+      refine not_exists.mpr h' ?_
+      rw [← length_eq_one_iff]; rw [← hn']; rw [(Fin.mk.inj_iff.mp h).symm]
+    · simp [Nat.mod_eq_of_lt hn'] at h
 
 Depends on / 依赖: Fin.mk.inj_iff.mp, Finset, Finset.mem_coe, Function, Function.Injective, Injective, Nat.mod_self, Nat.succ_le_of_lt, Set.mem_ofPred_eq, _root_, _root_.le_antisymm, eq_or_lt, formPerm_apply_getElem, getElem_of_mem, inj_iff, le_antisymm, length_eq_one_iff, mem_coe, mem_ofPred_eq, mem_toFinset
 -/
@@ -752,7 +778,8 @@ theorem formPerm_rotate_one
   · obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
     rw [formPerm_apply_getElem _ h']; rw [getElem_rotate l]; rw [getElem_rotate l]; rw [formPerm_apply_getElem _ h]
     simp
-  · rw [formPerm_apply_of_notMem hx,
+  · rw [formPerm_apply_of_notMem hx, formPerm_apply_of_notMem]
+    simpa using hx
 
 中文:
 定理 formPerm_rotate_one
@@ -765,7 +792,8 @@ theorem formPerm_rotate_one
   · obtain ⟨k, hk, rfl⟩ := getElem_of_mem hx
     rw [formPerm_apply_getElem _ h']; rw [getElem_rotate l]; rw [getElem_rotate l]; rw [formPerm_apply_getElem _ h]
     simp
-  · rw [formPerm_apply_of_notMem hx,
+  · rw [formPerm_apply_of_notMem hx, formPerm_apply_of_notMem]
+    simpa using hx
 
 Depends on / 依赖: formPerm_apply_getElem, formPerm_apply_of_notMem, getElem_of_mem, getElem_rotate, l.rotate, rotate
 -/
@@ -945,7 +973,33 @@ theorem formPerm_ext_iff
   have hx : x' in x :: y :: l := by
     have : x' in { z | formPerm (x :: y :: l) z != z } := by
       rw [Set.mem_ofPred_eq]; rw [h x']; rw [formPerm_apply_head _ _ _ hd']
-      simp only [mem_cons, n
+      simp only [mem_cons, nodup_cons] at hd'
+      push Not at hd'
+      exact hd'.left.left.symm
+    simpa using support_formPerm_le' _ this
+  obtain ⟨⟨n, hn⟩, hx'⟩ := get_of_mem hx
+  have hl : (x :: y :: l).length = (x' :: y' :: l').length := by
+    rw [← dedup_eq_self.mpr hd]; rw [← dedup_eq_self.mpr hd']; rw [← card_toFinset]; rw [← card_toFinset]
+    refine congr_arg Finset.card ?_
+    rw [← Finset.coe_inj]; rw [← support_formPerm_of_nodup' _ hd (by simp)]; rw [←
+      support_formPerm_of_nodup' _ hd' (by simp)]
+    simp only [h]
+  use n
+  apply List.ext_getElem
+  · rw [length_rotate, hl]
+  · intro k hk hk'
+    rw [getElem_rotate]
+    induction k with
+    | zero =>
+      refine Eq.trans ?_ hx'
+      congr
+      simpa using hn
+    | succ k IH =>
+      conv => congr <;> · arg 2; (rw [← Nat.mod_eq_of_lt hk'])
+      rw [← formPerm_apply_getElem _ hd' k (k.lt_succ_self.trans hk')]; rw [← IH (k.lt_succ_self.trans hk)]; rw [← h]; rw [formPerm_apply_getElem _ hd]
+      congr 1
+      rw [hl]; rw [Nat.mod_eq_of_lt hk']; rw [add_right_comm]
+      apply Nat.add_mod
 
 中文:
 定理 formPerm_ext_iff
@@ -956,7 +1010,33 @@ theorem formPerm_ext_iff
   have hx : x' in x :: y :: l := by
     have : x' in { z | formPerm (x :: y :: l) z != z } := by
       rw [Set.mem_ofPred_eq]; rw [h x']; rw [formPerm_apply_head _ _ _ hd']
-      simp only [mem_cons, n
+      simp only [mem_cons, nodup_cons] at hd'
+      push Not at hd'
+      exact hd'.left.left.symm
+    simpa using support_formPerm_le' _ this
+  obtain ⟨⟨n, hn⟩, hx'⟩ := get_of_mem hx
+  have hl : (x :: y :: l).length = (x' :: y' :: l').length := by
+    rw [← dedup_eq_self.mpr hd]; rw [← dedup_eq_self.mpr hd']; rw [← card_toFinset]; rw [← card_toFinset]
+    refine congr_arg Finset.card ?_
+    rw [← Finset.coe_inj]; rw [← support_formPerm_of_nodup' _ hd (by simp)]; rw [←
+      support_formPerm_of_nodup' _ hd' (by simp)]
+    simp only [h]
+  use n
+  apply List.ext_getElem
+  · rw [length_rotate, hl]
+  · intro k hk hk'
+    rw [getElem_rotate]
+    induction k with
+    | zero =>
+      refine Eq.trans ?_ hx'
+      congr
+      simpa using hn
+    | succ k IH =>
+      conv => congr <;> · arg 2; (rw [← Nat.mod_eq_of_lt hk'])
+      rw [← formPerm_apply_getElem _ hd' k (k.lt_succ_self.trans hk')]; rw [← IH (k.lt_succ_self.trans hk)]; rw [← h]; rw [formPerm_apply_getElem _ hd]
+      congr 1
+      rw [hl]; rw [Nat.mod_eq_of_lt hk']; rw [add_right_comm]
+      apply Nat.add_mod
 
 Depends on / 依赖: Equiv.Perm.ext_iff, Set.mem_ofPred_eq, dedup_eq_self, dedup_eq_self.m, ext_iff, formPerm, formPerm_apply_head, formPerm_eq_of_isRotated, get_of_mem, left.left.symm, length, mem_cons, mem_ofPred_eq, nodup_cons, support_formPerm_le
 -/
@@ -1010,7 +1090,8 @@ theorem formPerm_apply_mem_eq_self_iff
   · rw [hn] at hk
     rcases (Nat.le_of_lt_succ hk).eq_or_lt with hk' | hk'
     · simp [← hk', eq_comm]
-    · sim
+    · simpa [Nat.mod_eq_of_lt (Nat.succ_lt_succ hk'), Nat.succ_lt_succ_iff] using
+        (k.zero_le.trans_lt hk').ne.symm
 
 中文:
 定理 formPerm_apply_mem_eq_self_iff
@@ -1023,7 +1104,8 @@ theorem formPerm_apply_mem_eq_self_iff
   · rw [hn] at hk
     rcases (Nat.le_of_lt_succ hk).eq_or_lt with hk' | hk'
     · simp [← hk', eq_comm]
-    · sim
+    · simpa [Nat.mod_eq_of_lt (Nat.succ_lt_succ hk'), Nat.succ_lt_succ_iff] using
+        (k.zero_le.trans_lt hk').ne.symm
 
 Depends on / 依赖: Nat.le_of_lt_succ, Nat.mod_eq_of_lt, Nat.succ_lt_succ, Nat.succ_lt_succ_iff, absurd, eq_comm, eq_or_lt, formPerm_apply_getElem, getElem_inj_iff, getElem_of_mem, hk.trans_le, hl.getElem_inj_iff, hn.le, k.zero_le, k.zero_le.trans_lt, l.length, le_of_lt_succ, length, mod_eq_of_lt, ne.symm
 -/
@@ -1078,7 +1160,8 @@ theorem formPerm_eq_one_iff
     · simp +contextual
     · intro h
       simp only [(hd :: tl).formPerm_apply_mem_eq_self_iff hl hd mem_cons_self,
-        add_le_iff_nonpos_left, length, nonpos_iff_eq_zero, le
+        add_le_iff_nonpos_left, length, nonpos_iff_eq_zero, length_eq_zero_iff] at h
+      simp [h]
 
 中文:
 定理 formPerm_eq_one_iff
@@ -1092,7 +1175,8 @@ theorem formPerm_eq_one_iff
     · simp +contextual
     · intro h
       simp only [(hd :: tl).formPerm_apply_mem_eq_self_iff hl hd mem_cons_self,
-        add_le_iff_nonpos_left, length, nonpos_iff_eq_zero, le
+        add_le_iff_nonpos_left, length, nonpos_iff_eq_zero, length_eq_zero_iff] at h
+      simp [h]
 
 Depends on / 依赖: add_le_iff_nonpos_left, contextual, formPerm_apply_mem_eq_self_iff, length, length_eq_zero_iff, mem_cons_self, nonpos_iff_eq_zero
 -/
@@ -1121,7 +1205,16 @@ theorem formPerm_eq_formPerm_iff
     rintro (rfl | h)
     · simp
     · exact h
-  · suffices l'.length <= 1 ↔ [x] ~r l' ∨ l'.le
+  · suffices l'.length <= 1 ↔ [x] ~r l' ∨ l'.length <= 1 by
+      simpa [eq_comm, formPerm_eq_one_iff, hl, hl', length_eq_zero_iff, le_rfl]
+    refine ⟨fun h => Or.inr h, ?_⟩
+    rintro (h | h)
+    · simp [← h.perm.length_eq]
+    · exact h
+  · rcases l' with (_ | ⟨x', _ | ⟨y', l'⟩⟩)
+    · simp [formPerm_eq_one_iff _ hl, -formPerm_cons_cons]
+    · simp [formPerm_eq_one_iff _ hl, -formPerm_cons_cons]
+    · simp [-formPerm_cons_cons, formPerm_ext_iff hl hl']
 
 中文:
 定理 formPerm_eq_formPerm_iff
@@ -1134,7 +1227,16 @@ theorem formPerm_eq_formPerm_iff
     rintro (rfl | h)
     · simp
     · exact h
-  · suffices l'.length <= 1 ↔ [x] ~r l' ∨ l'.le
+  · suffices l'.length <= 1 ↔ [x] ~r l' ∨ l'.length <= 1 by
+      simpa [eq_comm, formPerm_eq_one_iff, hl, hl', length_eq_zero_iff, le_rfl]
+    refine ⟨fun h => Or.inr h, ?_⟩
+    rintro (h | h)
+    · simp [← h.perm.length_eq]
+    · exact h
+  · rcases l' with (_ | ⟨x', _ | ⟨y', l'⟩⟩)
+    · simp [formPerm_eq_one_iff _ hl, -formPerm_cons_cons]
+    · simp [formPerm_eq_one_iff _ hl, -formPerm_cons_cons]
+    · simp [-formPerm_cons_cons, formPerm_ext_iff hl hl']
 
 Depends on / 依赖: Or.inr, eq_comm, formPer, formPerm_eq_one_iff, h.perm.length_eq, le_rfl, length, length_eq, length_eq_zero_iff
 -/
@@ -1210,6 +1312,8 @@ theorem formPerm_pow_length_eq_one_of_nodup
       intro H
       refine hx ?_
       replace H := set_support_zpow_subset l.formPerm l.length H
+      simpa using support_formPerm_le' _ H
+    simpa using this
 
 中文:
 定理 formPerm_pow_length_eq_one_of_nodup
@@ -1224,6 +1328,8 @@ theorem formPerm_pow_length_eq_one_of_nodup
       intro H
       refine hx ?_
       replace H := set_support_zpow_subset l.formPerm l.length H
+      simpa using support_formPerm_le' _ H
+    simpa using this
 
 Depends on / 依赖: Nat.mod_eq_of_lt, formPerm, formPerm_pow_apply_getElem, getElem_of_mem, l.formPerm, l.length, length, mod_eq_of_lt, replace, set_support_zpow_subset, support_formPerm_le
 -/

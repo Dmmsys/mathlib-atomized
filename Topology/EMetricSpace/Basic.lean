@@ -44,7 +44,9 @@ theorem edist_le_Ico_sum_edist
   | succ n hle ihn =>
     calc
       edist (f m) (f (n + 1)) <= edist (f m) (f n) + edist (f n) (f (n + 1)) := edist_triangle _ _ _
-      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add i
+      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add ihn le_rfl
+      _ = ∑ i in Finset.Ico m (n + 1), _ := by
+        rw [← Finset.insert_Ico_right_eq_Ico_add_one hle]; rw [Finset.sum_insert]; rw [add_comm]; simp
 
 中文:
 定理 edist_le_Ico_sum_edist
@@ -55,7 +57,9 @@ theorem edist_le_Ico_sum_edist
   | succ n hle ihn =>
     calc
       edist (f m) (f (n + 1)) <= edist (f m) (f n) + edist (f n) (f (n + 1)) := edist_triangle _ _ _
-      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add i
+      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add ihn le_rfl
+      _ = ∑ i in Finset.Ico m (n + 1), _ := by
+        rw [← Finset.insert_Ico_right_eq_Ico_add_one hle]; rw [Finset.sum_insert]; rw [add_comm]; simp
 
 Depends on / 依赖: Finset, Finset.Ico, Finset.Ico_self, Finset.insert_Ico_right_eq_Ico_add_one, Finset.sum_empty, Finset.sum_insert, Ico_self, Nat.le_induction, add_comm, add_le_add, edist_self, edist_triangle, insert_Ico_right_eq_Ico_add_one, le_induction, le_rfl, sum_empty, sum_insert
 -/
@@ -589,7 +593,7 @@ theorem subset_countable_closure_of_almost_dense_set
   obtain ⟨ε, hε, hεU⟩ := uniformity_basis_edist_le.mem_iff.1 hU
   obtain ⟨t, tC, ht⟩ := hs ε hε
   refine ⟨t, tC, ht.trans (iUnion₂_mono fun x hx y hy => UniformSpace.ball_mono hεU x ?_)⟩
-  rwa [mem_closedEBall, edist_c
+  rwa [mem_closedEBall, edist_comm] at hy
 
 中文:
 定理 subset_countable_closure_of_almost_dense_set
@@ -600,7 +604,7 @@ theorem subset_countable_closure_of_almost_dense_set
   obtain ⟨ε, hε, hεU⟩ := uniformity_basis_edist_le.mem_iff.1 hU
   obtain ⟨t, tC, ht⟩ := hs ε hε
   refine ⟨t, tC, ht.trans (iUnion₂_mono fun x hx y hy => UniformSpace.ball_mono hεU x ?_)⟩
-  rwa [mem_closedEBall, edist_c
+  rwa [mem_closedEBall, edist_comm] at hy
 
 Depends on / 依赖: UniformSpace, UniformSpace.ball_mono, UniformSpace.subset_countable_closure_of_almost_dense_set, ball_mono, edist_comm, ht.trans, mem_closedEBall, mem_iff, subset_countable_closure_of_almost_dense_set, uniformity_basis_edist_le, uniformity_basis_edist_le.mem_iff
 -/
@@ -668,7 +672,8 @@ theorem secondCountable_of_almost_dense_set
   suffices SeparableSpace α from UniformSpace.secondCountable_of_separable α
   have : forall ε > 0, exists t : Set α, Set.Countable t ∧ univ subseteq ⋃ x in t, closedEBall x ε := by
     simpa only [univ_subset_iff] using hs
-  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this
+  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this with ⟨t, -, htc, ht⟩
+  exact ⟨⟨t, htc, fun x => ht (mem_univ x)⟩⟩
 
 中文:
 定理 secondCountable_of_almost_dense_set
@@ -676,7 +681,8 @@ theorem secondCountable_of_almost_dense_set
   suffices SeparableSpace α from UniformSpace.secondCountable_of_separable α
   have : forall ε > 0, exists t : Set α, Set.Countable t ∧ univ subseteq ⋃ x in t, closedEBall x ε := by
     simpa only [univ_subset_iff] using hs
-  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this
+  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this with ⟨t, -, htc, ht⟩
+  exact ⟨⟨t, htc, fun x => ht (mem_univ x)⟩⟩
 
 Depends on / 依赖: Countable, SeparableSpace, Set.Countable, UniformSpace, UniformSpace.secondCountable_of_separable, closedEBall, mem_univ, secondCountable_of_separable, subset_countable_closure_of_almost_dense_set, subseteq, univ_subset_iff
 -/
@@ -841,7 +847,8 @@ instance [PseudoEMetricSpace
       edist_comm := surjective_mk.forall₂.2 edist_comm,
       edist_triangle := surjective_mk.forall₃.2 edist_triangle,
       toUniformSpace := inferInstance,
-uniformity_edist := comap_
+uniformity_edist := comap_injective (surjective_mk.prodMap surjective_mk) by
+        simp [comap_mk_uniformity, PseudoEMetricSpace.uniformity_edist] } _
 
 中文:
 实例 [PseudoEMetric空间
@@ -851,7 +858,8 @@ uniformity_edist := comap_
       edist_comm := surjective_mk.forall₂.2 edist_comm,
       edist_triangle := surjective_mk.forall₃.2 edist_triangle,
       toUniformSpace := inferInstance,
-uniformity_edist := comap_
+uniformity_edist := comap_injective (surjective_mk.prodMap surjective_mk) by
+        simp [comap_mk_uniformity, PseudoEMetricSpace.uniformity_edist] } _
 
 Depends on / 依赖: EMetricSpace, EMetricSpace.ofT0PseudoEMetricSpace, PseudoEMetricSpace, PseudoEMetricSpace.uniformity_edist, SeparationQuotient, comap_injective, comap_mk_uniformity, edist_comm, edist_self, edist_triangle, ofT0PseudoEMetricSpace, prodMap, surjective_mk, surjective_mk.forall, surjective_mk.prodMap, toUniformSpace, uniformity_edist
 -/

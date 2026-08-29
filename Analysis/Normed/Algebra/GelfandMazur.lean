@@ -134,6 +134,13 @@ refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ nonemp
   rw [isOpen_iff_eventually]
   intro w hw
   filter_upwards [mem_map.mp <| hf.tendsto w (Metric.ball_mem_nhds (f w) hM)] with u hu
+  simp only [mem_preimage, Metric.mem_ball, dist_eq_norm, ← div_lt_one₀ hM] at hu
+  refine le_antisymm ?_ (hx ▸ isMinOn_univ_iff.mp h u)
+  suffices Tendsto (fun n : Nat => M * (1 + (‖f u - f w‖ / M) ^ n)) atTop (𝓝 (M * (1 + 0))) by
+    refine ge_of_tendsto (by simpa) ?_
+    filter_upwards [Ioi_mem_atTop 0] with n hn
+    exact H u hw n hn
+.const_mul M .const_add 1 exact tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) hu
 
 中文:
 引理 norm_eq_of_isMinOn_of_对任意_le
@@ -144,6 +151,13 @@ refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ nonemp
   rw [isOpen_iff_eventually]
   intro w hw
   filter_upwards [mem_map.mp <| hf.tendsto w (Metric.ball_mem_nhds (f w) hM)] with u hu
+  simp only [mem_preimage, Metric.mem_ball, dist_eq_norm, ← div_lt_one₀ hM] at hu
+  refine le_antisymm ?_ (hx ▸ isMinOn_univ_iff.mp h u)
+  suffices Tendsto (fun n : Nat => M * (1 + (‖f u - f w‖ / M) ^ n)) atTop (𝓝 (M * (1 + 0))) by
+    refine ge_of_tendsto (by simpa) ?_
+    filter_upwards [Ioi_mem_atTop 0] with n hn
+    exact H u hw n hn
+.const_mul M .const_add 1 exact tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) hu
 -/
 private lemma norm_eq_of_isMinOn_of_forall_le {X E : Type*} [TopologicalSpace X]
     [PreconnectedSpace X] [SeminormedAddCommGroup E] {f : X -> E} {M : Real} {x : X} (hM : 0 < M)
@@ -176,7 +190,7 @@ lemma exists_isMinOn_norm_sub_smul
   simp only [isMinOn_univ_iff]
   refine (show Continuous fun z : 𝕜 => ‖x - algebraMap 𝕜 F z‖ by fun_prop)
 .exists_forall_le_of_isBounded 0 ?_
-  
+  simpa [isBounded_def, compl_ofPred, Ioi] using this (Ioi_mem_atTop ‖x - (0 : 𝕜) • 1‖)
 
 中文:
 引理 存在_isMinOn_norm_sub_smul
@@ -187,7 +201,7 @@ lemma exists_isMinOn_norm_sub_smul
   simp only [isMinOn_univ_iff]
   refine (show Continuous fun z : 𝕜 => ‖x - algebraMap 𝕜 F z‖ by fun_prop)
 .exists_forall_le_of_isBounded 0 ?_
-  
+  simpa [isBounded_def, compl_ofPred, Ioi] using this (Ioi_mem_atTop ‖x - (0 : 𝕜) • 1‖)
 
 Depends on / 依赖: Continuous, Ioi_mem_atTop, Tendsto, algebraMap, cobounded, compl_ofPred, exists_forall_le_of_isBounded, fun_prop, isBounded_def, isMinOn_univ_iff, tendsto_const_sub_cobounded, tendsto_norm_cobounded_atTop
 -/
@@ -221,7 +235,9 @@ lemma le_aeval_of_isMonicOfDegree
   | succ n ih =>
     obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_one_mul_isMonicOfDegree
     obtain ⟨r, rfl⟩ := isMonicOfDegree_one_iff.mp hf₁
-    have H' (y : F) : aeval y (X + C r) = y + algebraMap Com
+    have H' (y : F) : aeval y (X + C r) = y + algebraMap Complex F r := by simp
+    simpa only [pow_succ, mul_comm, H, aeval_mul, H', sub_add, ← map_sub, norm_mul]
+      using mul_le_mul (ih hf₂) (h (c - r)) hM (norm_nonneg _)
 
 中文:
 引理 le_aeval_of_isMonicOfDegree
@@ -232,7 +248,9 @@ lemma le_aeval_of_isMonicOfDegree
   | succ n ih =>
     obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_one_mul_isMonicOfDegree
     obtain ⟨r, rfl⟩ := isMonicOfDegree_one_iff.mp hf₁
-    have H' (y : F) : aeval y (X + C r) = y + algebraMap Com
+    have H' (y : F) : aeval y (X + C r) = y + algebraMap Complex F r := by simp
+    simpa only [pow_succ, mul_comm, H, aeval_mul, H', sub_add, ← map_sub, norm_mul]
+      using mul_le_mul (ih hf₂) (h (c - r)) hM (norm_nonneg _)
 -/
 private lemma le_aeval_of_isMonicOfDegree (x : F) {M : Real} (hM : 0 <= M)
     (h : forall z' : Complex, M <= ‖x - algebraMap Complex F z'‖) {p : Complex[X]} {n : Nat} (hp : IsMonicOfDegree p n)
@@ -260,7 +278,20 @@ lemma norm_sub_eq_norm_sub_of_isMinOn
   refine norm_eq_of_isMinOn_of_forall_le (f := (x - algebraMap Complex F ·)) hM₀ hMdef.symm hz
     (by fun_prop) (fun {y} w hy n hn => ?_) c
   -- show
-  -- `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - 
+  -- `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - algebraMap ℂ F w - (x - algebraMap ℂ F y)‖ / M) ^ n)`
+  rw [sub_sub_sub_cancel_left]; rw [← map_sub]; rw [norm_algebraMap]; rw [norm_sub_rev y w]; rw [norm_one]; rw [mul_one]; rw [show M * (1 + (‖w - y‖ / M) ^ n) = (M ^ n + ‖w - y‖ ^ n) / M ^ (n - 1) by
+      simp only [field]; rw [div_pow]; rw [← pow_succ']; rw [Nat.sub_add_cancel hn],
+    le_div_iff₀ (by positivity)]
+  obtain ⟨p, hp, hrel⟩ :=
+    (isMonicOfDegree_X_pow Complex n).of_dvd_sub (by grind)
+(isMonicOfDegree_X_sub_one (w - y)) (by compute_degree!) sub_dvd_pow_sub_pow X _ n
+  grw [le_aeval_of_isMonicOfDegree x hM₀.le (isMinOn_univ_iff.mp hz) hp y]
+  rw [eq_comm]; rw [← eq_sub_iff_add_eq]; rw [mul_comm] at hrel
+  apply_fun (‖aeval (x - algebraMap Complex F y) ·‖) at hrel
+  simp only [map_sub, map_mul, aeval_X, aeval_C, sub_sub_sub_cancel_right, norm_mul, map_pow]
+    at hrel
+  rw [hrel]
+exact (norm_sub_le ..).trans by simp [hy, ← map_sub]
 
 中文:
 引理 norm_sub_eq_norm_sub_of_isMinOn
@@ -271,7 +302,20 @@ lemma norm_sub_eq_norm_sub_of_isMinOn
   refine norm_eq_of_isMinOn_of_forall_le (f := (x - algebraMap Complex F ·)) hM₀ hMdef.symm hz
     (by fun_prop) (fun {y} w hy n hn => ?_) c
   -- show
-  -- `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - 
+  -- `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - algebraMap ℂ F w - (x - algebraMap ℂ F y)‖ / M) ^ n)`
+  rw [sub_sub_sub_cancel_left]; rw [← map_sub]; rw [norm_algebraMap]; rw [norm_sub_rev y w]; rw [norm_one]; rw [mul_one]; rw [show M * (1 + (‖w - y‖ / M) ^ n) = (M ^ n + ‖w - y‖ ^ n) / M ^ (n - 1) by
+      simp only [field]; rw [div_pow]; rw [← pow_succ']; rw [Nat.sub_add_cancel hn],
+    le_div_iff₀ (by positivity)]
+  obtain ⟨p, hp, hrel⟩ :=
+    (isMonicOfDegree_X_pow Complex n).of_dvd_sub (by grind)
+(isMonicOfDegree_X_sub_one (w - y)) (by compute_degree!) sub_dvd_pow_sub_pow X _ n
+  grw [le_aeval_of_isMonicOfDegree x hM₀.le (isMinOn_univ_iff.mp hz) hp y]
+  rw [eq_comm]; rw [← eq_sub_iff_add_eq]; rw [mul_comm] at hrel
+  apply_fun (‖aeval (x - algebraMap Complex F y) ·‖) at hrel
+  simp only [map_sub, map_mul, aeval_X, aeval_C, sub_sub_sub_cancel_right, norm_mul, map_pow]
+    at hrel
+  rw [hrel]
+exact (norm_sub_le ..).trans by simp [hy, ← map_sub]
 -/
 private lemma norm_sub_eq_norm_sub_of_isMinOn {x : F} {z : Complex}
     (hz : IsMinOn (‖x - algebraMap Complex F ·‖) univ z) (H : forall z' : Complex, ‖x - algebraMap Complex F z'‖ != 0)
@@ -310,7 +354,16 @@ lemma exists_norm_sub_smul_one_eq_zero
   rcases eq_or_lt_of_le (show 0 <= M from norm_nonneg _) with hM₀ | hM₀
     -- minimum is zero: nothing to do
   · exact ⟨z, hM₀.symm⟩
-  -- otherwi
+  -- otherwise, use the result from above that `z ↦ ‖x - algebraMap ℂ F z‖` is constant
+  -- to derive a contradiction.
+  by_contra! H
+  have key := norm_sub_eq_norm_sub_of_isMinOn hz H (‖x‖ + M + 1)
+  rw [← hM]; rw [norm_sub_rev] at key
+  replace key := (norm_sub_norm_le ..).trans_eq key
+  rw [norm_algebraMap]; rw [norm_one]; rw [mul_one] at key
+  norm_cast at key
+  rw [Real.norm_eq_abs]; rw [abs_of_nonneg (by positivity)] at key
+  linarith only [key]
 
 中文:
 引理 存在_norm_sub_smul_one_eq_zero
@@ -322,7 +375,16 @@ lemma exists_norm_sub_smul_one_eq_zero
   rcases eq_or_lt_of_le (show 0 <= M from norm_nonneg _) with hM₀ | hM₀
     -- minimum is zero: nothing to do
   · exact ⟨z, hM₀.symm⟩
-  -- otherwi
+  -- otherwise, use the result from above that `z ↦ ‖x - algebraMap ℂ F z‖` is constant
+  -- to derive a contradiction.
+  by_contra! H
+  have key := norm_sub_eq_norm_sub_of_isMinOn hz H (‖x‖ + M + 1)
+  rw [← hM]; rw [norm_sub_rev] at key
+  replace key := (norm_sub_norm_le ..).trans_eq key
+  rw [norm_algebraMap]; rw [norm_one]; rw [mul_one] at key
+  norm_cast at key
+  rw [Real.norm_eq_abs]; rw [abs_of_nonneg (by positivity)] at key
+  linarith only [key]
 -/
 lemma exists_norm_sub_smul_one_eq_zero (x : F) :
     exists z : Complex, ‖x - algebraMap Complex F z‖ = 0 := by
@@ -476,7 +538,8 @@ lemma le_aeval_of_isMonicOfDegree
     rw [mul_add]; rw [mul_one] at hp
     obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_two_mul_isMonicOfDegree
     obtain ⟨a, b, hab⟩ := isMonicOfDegree_two_iff'.mp hf₁
-    rw [H]; rw [aeval_mul]; rw [norm_mul]; rw [m
+    rw [H]; rw [aeval_mul]; rw [norm_mul]; rw [mul_comm]; rw [pow_succ]; rw [hab]; rw [aeval_eq_φ x (a]; rw [b)]
+    exact mul_le_mul (ih hf₂) (h (a, b)) hM (norm_nonneg _)
 
 中文:
 引理 le_aeval_of_isMonicOfDegree
@@ -488,7 +551,8 @@ lemma le_aeval_of_isMonicOfDegree
     rw [mul_add]; rw [mul_one] at hp
     obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_two_mul_isMonicOfDegree
     obtain ⟨a, b, hab⟩ := isMonicOfDegree_two_iff'.mp hf₁
-    rw [H]; rw [aeval_mul]; rw [norm_mul]; rw [m
+    rw [H]; rw [aeval_mul]; rw [norm_mul]; rw [mul_comm]; rw [pow_succ]; rw [hab]; rw [aeval_eq_φ x (a]; rw [b)]
+    exact mul_le_mul (ih hf₂) (h (a, b)) hM (norm_nonneg _)
 -/
 private lemma le_aeval_of_isMonicOfDegree {x : F} {M : Real} (hM : 0 <= M)
     (h : forall z : Real × Real, M <= ‖φ x z‖) {p : Real[X]} {n : Nat} (hp : IsMonicOfDegree p (2 * n)) :
@@ -514,7 +578,31 @@ lemma norm_φ_eq_norm_φ_of_isMinOn
   -- we use the key result `norm_eq_of_isMinOn_of_forall_le`
   refine norm_eq_of_isMinOn_of_forall_le hM₀ hM.symm h (continuous_φ x) (fun {w} u hw n hn => ?_) w
   -- show `‖φ x u‖ ≤ M * (1 + (‖φ x u - φ x w‖ / M) ^ n)`
-  have H
+  have HH : M * (1 + (‖φ x u - φ x w‖ / M) ^ n) = (M ^ n + ‖φ x u - φ x w‖ ^ n) / M ^ (n - 1) := by
+    simp only [field, div_pow, ← pow_succ', Nat.sub_add_cancel hn]
+  rw [HH]; rw [le_div_iff₀ (by positivity)]; clear HH
+  -- show `‖φ x u‖ * M ^ (n - 1) ≤ M ^ n + ‖φ x u - φ x w‖ ^ n`
+  let q (y : Real × Real) : Real[X] := X ^ 2 - C y.1 * X + C y.2
+  have hq (y : Real × Real) : IsMonicOfDegree (q y) 2 := isMonicOfDegree_sub_add_two ..
+  have hsub : q w - q u = (C u.1 - C w.1) * X + C w.2 - C u.2 := by simp only [q]; ring
+  have hdvd : q u ∣ q w ^ n - (q w - q u) ^ n := by
+    nth_rewrite 1 [← sub_sub_self (q w) (q u)]
+    exact sub_dvd_pow_sub_pow ..
+  have H' : ((q w - q u) ^ n).natDegree < 2 * n := by rw [hsub]; compute_degree; grind
+  -- write `q w ^ n = p * q u + (q w - q u) ^ n` with a monic polynomial `p` of deg. `2 * (n - 1)`,
+  -- where `aeval x (q u) = φ x u` (*).
+  obtain ⟨p, hp, hrel⟩ := ((hq w).pow n).of_dvd_sub (by grind) (hq u) H' hdvd; clear H' hdvd hsub
+  rw [show 2 * n - 2 = 2 * (n - 1) by grind] at hp
+  -- use that `‖aeval p x‖ ≥ M ^ (n - 1)`.
+  grw [le_aeval_of_isMonicOfDegree hM₀.le (isMinOn_univ_iff.mp h) hp]
+  -- from (*) above, deduce
+  -- `‖φ x u‖ * ‖(aeval x) p‖ = ‖(aeval x) (q w ^ n) - (aeval x) ((q w - q u) ^ n)‖`
+  -- and use that.
+  rw [← sub_eq_iff_eq_add]; rw [eq_comm]; rw [mul_comm] at hrel
+  apply_fun (‖aeval x ·‖) at hrel
+  rw [map_mul]; rw [norm_mul]; rw [map_sub]; rw [aeval_eq_φ x u] at hrel
+  rw [hrel]; rw [norm_sub_rev (φ ..)]
+exact (norm_sub_le ..).trans by simp [q, aeval_eq_φ, hw]
 
 中文:
 引理 norm_φ_eq_norm_φ_of_isMinOn
@@ -525,7 +613,31 @@ lemma norm_φ_eq_norm_φ_of_isMinOn
   -- we use the key result `norm_eq_of_isMinOn_of_forall_le`
   refine norm_eq_of_isMinOn_of_forall_le hM₀ hM.symm h (continuous_φ x) (fun {w} u hw n hn => ?_) w
   -- show `‖φ x u‖ ≤ M * (1 + (‖φ x u - φ x w‖ / M) ^ n)`
-  have H
+  have HH : M * (1 + (‖φ x u - φ x w‖ / M) ^ n) = (M ^ n + ‖φ x u - φ x w‖ ^ n) / M ^ (n - 1) := by
+    simp only [field, div_pow, ← pow_succ', Nat.sub_add_cancel hn]
+  rw [HH]; rw [le_div_iff₀ (by positivity)]; clear HH
+  -- show `‖φ x u‖ * M ^ (n - 1) ≤ M ^ n + ‖φ x u - φ x w‖ ^ n`
+  let q (y : Real × Real) : Real[X] := X ^ 2 - C y.1 * X + C y.2
+  have hq (y : Real × Real) : IsMonicOfDegree (q y) 2 := isMonicOfDegree_sub_add_two ..
+  have hsub : q w - q u = (C u.1 - C w.1) * X + C w.2 - C u.2 := by simp only [q]; ring
+  have hdvd : q u ∣ q w ^ n - (q w - q u) ^ n := by
+    nth_rewrite 1 [← sub_sub_self (q w) (q u)]
+    exact sub_dvd_pow_sub_pow ..
+  have H' : ((q w - q u) ^ n).natDegree < 2 * n := by rw [hsub]; compute_degree; grind
+  -- write `q w ^ n = p * q u + (q w - q u) ^ n` with a monic polynomial `p` of deg. `2 * (n - 1)`,
+  -- where `aeval x (q u) = φ x u` (*).
+  obtain ⟨p, hp, hrel⟩ := ((hq w).pow n).of_dvd_sub (by grind) (hq u) H' hdvd; clear H' hdvd hsub
+  rw [show 2 * n - 2 = 2 * (n - 1) by grind] at hp
+  -- use that `‖aeval p x‖ ≥ M ^ (n - 1)`.
+  grw [le_aeval_of_isMonicOfDegree hM₀.le (isMinOn_univ_iff.mp h) hp]
+  -- from (*) above, deduce
+  -- `‖φ x u‖ * ‖(aeval x) p‖ = ‖(aeval x) (q w ^ n) - (aeval x) ((q w - q u) ^ n)‖`
+  -- and use that.
+  rw [← sub_eq_iff_eq_add]; rw [eq_comm]; rw [mul_comm] at hrel
+  apply_fun (‖aeval x ·‖) at hrel
+  rw [map_mul]; rw [norm_mul]; rw [map_sub]; rw [aeval_eq_φ x u] at hrel
+  rw [hrel]; rw [norm_sub_rev (φ ..)]
+exact (norm_sub_le ..).trans by simp [q, aeval_eq_φ, hw]
 -/
 private lemma norm_φ_eq_norm_φ_of_isMinOn {x : F} {z : Real × Real} (h : IsMinOn (‖φ x ·‖) Set.univ z)
     (H : ‖φ x z‖ != 0) (w : Real × Real) :
@@ -575,7 +687,30 @@ lemma tendsto_φ_cobounded
   rw [← tendsto_norm_atTop_iff_cobounded]
   -- split into statements involving each of the two components separately.
   refine Tendsto.coprod_of_prod_top_right (α := Real) (fun s hs => ?_) ?_
-    -- the first component is bounde
+    -- the first component is bounded and the second one is unbounded
+  · rw [← isCobounded_def, ← isBounded_compl_iff] at hs
+    obtain ⟨M, hM_pos, hM⟩ : exists M > 0, forall y in sᶜ, ‖y‖ <= M := hs.exists_pos_norm_le
+    suffices Tendsto (‖algebraMap Real F ·.2‖ - M * ‖x‖) (𝓟 sᶜ ×ˢ cobounded Real) atTop by
+      refine tendsto_atTop_mono' _ ?_ this
+      filter_upwards [prod_mem_prod (mem_principal_self sᶜ) univ_mem] with w hw
+      rw [norm_sub_rev]
+      refine le_trans ?_ (norm_sub_norm_le ..)
+      specialize hM _ (Set.mem_prod.mp hw).1
+      simp only [norm_algebraMap', norm_smul]
+      gcongr
+    simp only [norm_algebraMap', sub_eq_add_neg]
+exact tendsto_atTop_add_const_right _ _ tendsto_norm_atTop_iff_cobounded.mpr tendsto_snd
+    -- the first component is unbounded and the second one is arbitrary
+  · suffices Tendsto (fun y : Real × Real => ‖y.1‖ * c) (cobounded Real ×ˢ ⊤) atTop by
+      refine tendsto_atTop_mono' _ ?_ this
+      filter_upwards [prod_mem_prod (isBounded_singleton (x := 0)) univ_mem] with y hy
+      calc ‖y.1‖ * c
+        _ <= ‖y.1‖ * ‖x - algebraMap Real F (y.1⁻¹ * y.2)‖ := by gcongr; exact hbd _
+        _ = ‖y.1 • x - algebraMap Real F y.2‖ := by
+          simp only [← norm_smul, smul_sub, smul_smul, Algebra.algebraMap_eq_smul_one]
+          simp_all
+    rw [tendsto_mul_const_atTop_of_pos hc₀]; rw [tendsto_norm_atTop_iff_cobounded]
+    exact tendsto_fst
 
 中文:
 引理 tendsto_φ_cobounded
@@ -586,7 +721,30 @@ lemma tendsto_φ_cobounded
   rw [← tendsto_norm_atTop_iff_cobounded]
   -- split into statements involving each of the two components separately.
   refine Tendsto.coprod_of_prod_top_right (α := Real) (fun s hs => ?_) ?_
-    -- the first component is bounde
+    -- the first component is bounded and the second one is unbounded
+  · rw [← isCobounded_def, ← isBounded_compl_iff] at hs
+    obtain ⟨M, hM_pos, hM⟩ : exists M > 0, forall y in sᶜ, ‖y‖ <= M := hs.exists_pos_norm_le
+    suffices Tendsto (‖algebraMap Real F ·.2‖ - M * ‖x‖) (𝓟 sᶜ ×ˢ cobounded Real) atTop by
+      refine tendsto_atTop_mono' _ ?_ this
+      filter_upwards [prod_mem_prod (mem_principal_self sᶜ) univ_mem] with w hw
+      rw [norm_sub_rev]
+      refine le_trans ?_ (norm_sub_norm_le ..)
+      specialize hM _ (Set.mem_prod.mp hw).1
+      simp only [norm_algebraMap', norm_smul]
+      gcongr
+    simp only [norm_algebraMap', sub_eq_add_neg]
+exact tendsto_atTop_add_const_right _ _ tendsto_norm_atTop_iff_cobounded.mpr tendsto_snd
+    -- the first component is unbounded and the second one is arbitrary
+  · suffices Tendsto (fun y : Real × Real => ‖y.1‖ * c) (cobounded Real ×ˢ ⊤) atTop by
+      refine tendsto_atTop_mono' _ ?_ this
+      filter_upwards [prod_mem_prod (isBounded_singleton (x := 0)) univ_mem] with y hy
+      calc ‖y.1‖ * c
+        _ <= ‖y.1‖ * ‖x - algebraMap Real F (y.1⁻¹ * y.2)‖ := by gcongr; exact hbd _
+        _ = ‖y.1 • x - algebraMap Real F y.2‖ := by
+          simp only [← norm_smul, smul_sub, smul_smul, Algebra.algebraMap_eq_smul_one]
+          simp_all
+    rw [tendsto_mul_const_atTop_of_pos hc₀]; rw [tendsto_norm_atTop_iff_cobounded]
+    exact tendsto_fst
 -/
 private lemma tendsto_φ_cobounded {x : F} {c : Real} (hc₀ : 0 < c)
     (hbd : forall r : Real, c <= ‖x - algebraMap Real F r‖) :
@@ -636,7 +794,12 @@ lemma exists_isMinOn_norm_φ
   rcases eq_or_lt_of_le (norm_nonneg (x - algebraMap Real F u)) with hc₀ | hc₀
     -- if this minimum is zero, use `(u, 0)`.
   · rw [eq_comm, norm_eq_zero, sub_eq_zero] at hc₀
-    exact ⟨
+    exact ⟨(u, 0), fun _ => by simp [φ, hc₀, sq, Algebra.smul_def]⟩
+  -- otherwise, use `tendsto_φ_cobounded`.
+  simp only [isMinOn_univ_iff] at hu ⊢
+  refine (continuous_φ x).norm.exists_forall_le_of_isBounded (0, 0) ?_
+  simpa [isBounded_def, compl_ofPred, Ioi]
+    using tendsto_norm_cobounded_atTop.comp (tendsto_φ_cobounded hc₀ hu) (Ioi_mem_atTop _)
 
 中文:
 引理 存在_isMinOn_norm_φ
@@ -648,7 +811,12 @@ lemma exists_isMinOn_norm_φ
   rcases eq_or_lt_of_le (norm_nonneg (x - algebraMap Real F u)) with hc₀ | hc₀
     -- if this minimum is zero, use `(u, 0)`.
   · rw [eq_comm, norm_eq_zero, sub_eq_zero] at hc₀
-    exact ⟨
+    exact ⟨(u, 0), fun _ => by simp [φ, hc₀, sq, Algebra.smul_def]⟩
+  -- otherwise, use `tendsto_φ_cobounded`.
+  simp only [isMinOn_univ_iff] at hu ⊢
+  refine (continuous_φ x).norm.exists_forall_le_of_isBounded (0, 0) ?_
+  simpa [isBounded_def, compl_ofPred, Ioi]
+    using tendsto_norm_cobounded_atTop.comp (tendsto_φ_cobounded hc₀ hu) (Ioi_mem_atTop _)
 -/
 private lemma exists_isMinOn_norm_φ (x : F) : exists z : Real × Real, IsMinOn (‖φ x ·‖) univ z := by
   -- use that `‖x - algebraMap ℝ F ·‖` has a minimum.
@@ -677,7 +845,14 @@ lemma exists_isMonicOfDegree_two_and_aeval_eq_zero
   suffices φ x z = 0 from ⟨_, isMonicOfDegree_sub_add_two z.1 z.2, by rwa [aeval_eq_φ]⟩
   by_contra! H
   set M := ‖φ x z‖
-  -- use that `‖φ x ·‖` is constant *and* is un
+  -- use that `‖φ x ·‖` is constant *and* is unbounded to produce a contradiction.
+  have h' (r : Real) : √M <= ‖x - algebraMap Real F r‖ := by
+    rw [← sq_le_sq₀ M.sqrt_nonneg (norm_nonneg _)]; rw [Real.sq_sqrt (norm_nonneg _)]; rw [← norm_pow]; rw [Commute.sub_sq algebraMap_eq_smul_one (A := F) r ▸ commute_algebraMap_right r x]
+    convert! isMinOn_univ_iff.mp h (2 * r, r ^ 2) using 4 <;>
+      simp [two_mul, add_mul, ← commutes, smul_def, mul_add]
+have := tendsto_norm_atTop_iff_cobounded.mpr tendsto_φ_cobounded (by positivity) h'
+  simp only [norm_φ_eq_norm_φ_of_isMinOn h (norm_ne_zero_iff.mpr H)] at this
+  exact Filter.not_tendsto_const_atTop _ _ this
 
 中文:
 引理 存在_isMonicOfDegree_two_and_aeval_eq_zero
@@ -689,7 +864,14 @@ lemma exists_isMonicOfDegree_two_and_aeval_eq_zero
   suffices φ x z = 0 from ⟨_, isMonicOfDegree_sub_add_two z.1 z.2, by rwa [aeval_eq_φ]⟩
   by_contra! H
   set M := ‖φ x z‖
-  -- use that `‖φ x ·‖` is constant *and* is un
+  -- use that `‖φ x ·‖` is constant *and* is unbounded to produce a contradiction.
+  have h' (r : Real) : √M <= ‖x - algebraMap Real F r‖ := by
+    rw [← sq_le_sq₀ M.sqrt_nonneg (norm_nonneg _)]; rw [Real.sq_sqrt (norm_nonneg _)]; rw [← norm_pow]; rw [Commute.sub_sq algebraMap_eq_smul_one (A := F) r ▸ commute_algebraMap_right r x]
+    convert! isMinOn_univ_iff.mp h (2 * r, r ^ 2) using 4 <;>
+      simp [two_mul, add_mul, ← commutes, smul_def, mul_add]
+have := tendsto_norm_atTop_iff_cobounded.mpr tendsto_φ_cobounded (by positivity) h'
+  simp only [norm_φ_eq_norm_φ_of_isMinOn h (norm_ne_zero_iff.mpr H)] at this
+  exact Filter.not_tendsto_const_atTop _ _ this
 -/
 lemma exists_isMonicOfDegree_two_and_aeval_eq_zero (x : F) :
     exists p : Real[X], IsMonicOfDegree p 2 ∧ aeval x p = 0 := by

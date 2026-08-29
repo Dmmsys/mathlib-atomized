@@ -150,7 +150,7 @@ instance [K.HasPathObject]
     exact hasBinaryBiproduct_of_iso (Iso.refl _ : op (K.X j) ≅ K.op.X j)
       (show op ((K ⊞ K).X i) ≅ (K.op ⊞ K.op).X i from
         ((eval _ _ i).mapBiprod K K).op.symm ≪≫ biprod.opIso _ _ ≪≫
-          ((eval _ 
+          ((eval _ _ i).mapBiprod K.op K.op).symm)
 
 中文:
 实例 [K.HasPathObject]
@@ -160,7 +160,7 @@ instance [K.HasPathObject]
     exact hasBinaryBiproduct_of_iso (Iso.refl _ : op (K.X j) ≅ K.op.X j)
       (show op ((K ⊞ K).X i) ≅ (K.op ⊞ K.op).X i from
         ((eval _ _ i).mapBiprod K K).op.symm ≪≫ biprod.opIso _ _ ≪≫
-          ((eval _ 
+          ((eval _ _ i).mapBiprod K.op K.op).symm)
 
 Depends on / 依赖: HasHomotopyFiber, HasHomotopyFiber.hasBinaryBiproduct, Iso.refl, K.op, K.op.X, biprod, biprod.desc, biprod.opIso, hasBinaryBiproduct, hasBinaryBiproduct_of_iso, mapBiprod, op.symm
 -/

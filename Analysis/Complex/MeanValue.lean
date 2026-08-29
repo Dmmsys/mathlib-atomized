@@ -44,7 +44,18 @@ theorem circleAverage_sub_sub_inv_smul_of_differentiable_on_off_countable
   · simp_all [ball_eq_empty.2 hR]
   calc circleAverage (fun z => ((z - c) * (z - w)⁻¹) • f z) c |R|
   _ = (2 * π * I)⁻¹ • (∮ z in C(c, |R|), (z - w)⁻¹ • f z) := by
-    simp only [circleAverage_eq_circleIntegral hR.ne', mul_inv
+    simp only [circleAverage_eq_circleIntegral hR.ne', mul_inv_rev, inv_I, neg_mul, neg_smul,
+      neg_inj, ne_eq, mul_eq_zero, I_ne_zero, inv_eq_zero, ofReal_eq_zero, pi_ne_zero,
+      OfNat.ofNat_ne_zero, or_self, not_false_eq_true, smul_right_inj]
+    apply circleIntegral.integral_congr hR.le
+    intro z hz
+    match_scalars
+    have : z - c != 0 := by grind [ne_of_mem_sphere]
+    grind
+  _ = f w := by
+    rw [circleIntegral_sub_inv_smul_of_differentiable_on_off_countable hs hw h₁f h₂f]
+    match_scalars
+    simp [field]
 
 中文:
 定理 circleAverage_sub_sub_inv_smul_of_differentiable_on_off_countable
@@ -55,7 +66,18 @@ theorem circleAverage_sub_sub_inv_smul_of_differentiable_on_off_countable
   · simp_all [ball_eq_empty.2 hR]
   calc circleAverage (fun z => ((z - c) * (z - w)⁻¹) • f z) c |R|
   _ = (2 * π * I)⁻¹ • (∮ z in C(c, |R|), (z - w)⁻¹ • f z) := by
-    simp only [circleAverage_eq_circleIntegral hR.ne', mul_inv
+    simp only [circleAverage_eq_circleIntegral hR.ne', mul_inv_rev, inv_I, neg_mul, neg_smul,
+      neg_inj, ne_eq, mul_eq_zero, I_ne_zero, inv_eq_zero, ofReal_eq_zero, pi_ne_zero,
+      OfNat.ofNat_ne_zero, or_self, not_false_eq_true, smul_right_inj]
+    apply circleIntegral.integral_congr hR.le
+    intro z hz
+    match_scalars
+    have : z - c != 0 := by grind [ne_of_mem_sphere]
+    grind
+  _ = f w := by
+    rw [circleIntegral_sub_inv_smul_of_differentiable_on_off_countable hs hw h₁f h₂f]
+    match_scalars
+    simp [field]
 
 Depends on / 依赖: I_ne_zero, OfNat.ofNat_ne_zero, ball_eq_empty, circleAverage, circleAverage_abs_radius, circleAverage_eq_circleIntegral, circleIntegral, circleIntegral.integral_congr, hR.ne, integral_congr, inv_I, inv_eq_zero, le_or_gt, mul_eq_zero, mul_inv_rev, ne_eq, neg_inj, neg_mul, neg_smul, not_false_eq_true
 -/
@@ -94,7 +116,10 @@ theorem DiffContOnCl.circleAverage_smul_div
   · simpa [← closure_ball _ (ne_of_not_ge hR).symm] using hf.2
   · intro z hz
     rw [sdiff_empty] at hz
-    apply (hf.1 z hz).differentiable
+    apply (hf.1 z hz).differentiableAt (isOpen_ball.mem_nhds hz)
+
+@[deprecated (since := "2026-02-11")]
+alias circleAverage_sub_sub_inv_smul_of_differentiable_on := DiffContOnCl.circleAverage_smul_div
 
 中文:
 定理 DiffContOnCl.circleAverage_smul_div
@@ -106,7 +131,10 @@ theorem DiffContOnCl.circleAverage_smul_div
   · simpa [← closure_ball _ (ne_of_not_ge hR).symm] using hf.2
   · intro z hz
     rw [sdiff_empty] at hz
-    apply (hf.1 z hz).differentiable
+    apply (hf.1 z hz).differentiableAt (isOpen_ball.mem_nhds hz)
+
+@[deprecated (since := "2026-02-11")]
+alias circleAverage_sub_sub_inv_smul_of_differentiable_on := DiffContOnCl.circleAverage_smul_div
 
 Depends on / 依赖: ball_eq_empty, circleAverage_sub_sub_inv_smul_of_differentiable_on_off_countable, closure_ball, countable_empty, differentiableAt, isOpen_ball, isOpen_ball.mem_nhds, mem_nhds, ne_of_not_ge, sdiff_empty
 -/
@@ -184,7 +212,7 @@ theorem DiffContOnCl.circleAverage
     simp_all
 
 @[deprecated (since := "2026-02-11")]
-alias circleAverage_of_differentiable_on := DiffContOnCl
+alias circleAverage_of_differentiable_on := DiffContOnCl.circleAverage
 
 中文:
 定理 DiffContOnCl.circleAverage
@@ -198,7 +226,7 @@ alias circleAverage_of_differentiable_on := DiffContOnCl
     simp_all
 
 @[deprecated (since := "2026-02-11")]
-alias circleAverage_of_differentiable_on := DiffContOnCl
+alias circleAverage_of_differentiable_on := DiffContOnCl.circleAverage
 
 Depends on / 依赖: circleAverage_congr_sphere, circleAverage_smul_div, ne_of_mem_sphere
 -/

@@ -1025,7 +1025,7 @@ theorem clusterPt_principal
     simp_all only [not_false_eq_true, sdiff_singleton_eq_self, not_true_eq_false, hc.1]
   · rintro (h | h)
     · exact clusterPt_principal_iff.mpr fun _ mem => ⟨x, ⟨mem_of_mem_nhds mem, h⟩⟩
-    · exact h.clus
+    · exact h.clusterPt
 
 中文:
 定理 clusterPt_principal
@@ -1038,7 +1038,7 @@ theorem clusterPt_principal
     simp_all only [not_false_eq_true, sdiff_singleton_eq_self, not_true_eq_false, hc.1]
   · rintro (h | h)
     · exact clusterPt_principal_iff.mpr fun _ mem => ⟨x, ⟨mem_of_mem_nhds mem, h⟩⟩
-    · exact h.clus
+    · exact h.clusterPt
 
 Depends on / 依赖: accPt_principal_iff_clusterPt, clusterPt, clusterPt_principal_iff, clusterPt_principal_iff.mpr, h.clusterPt, mem_of_mem_nhds, not_false_eq_true, not_true_eq_false, sdiff_singleton_eq_self
 -/

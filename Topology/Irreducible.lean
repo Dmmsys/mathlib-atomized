@@ -265,7 +265,15 @@ theorem exists_preirreducible
           let ⟨p, hpc, hyp⟩ := mem_sUnion.1 hy
           let ⟨q, hqc, hxq⟩ := mem_sUnion.1 hx
           Or.casesOn (hcc.total hpc hqc)
-  
+            (fun hpq : p subseteq q =>
+              let ⟨x, hxp, hxuv⟩ := hc hqc u v hu hv ⟨y, hpq hyp, hyu⟩ ⟨x, hxq, hxv⟩
+              ⟨x, mem_sUnion_of_mem hxp hqc, hxuv⟩)
+            fun hqp : q subseteq p =>
+            let ⟨x, hxp, hxuv⟩ := hc hpc u v hu hv ⟨y, hyp, hyu⟩ ⟨x, hqp hxq, hxv⟩
+            ⟨x, mem_sUnion_of_mem hxp hpc, hxuv⟩,
+          fun _ hxc => subset_sUnion_of_mem hxc⟩)
+      s H
+  ⟨m, hm.prop, hsm, fun _u hu hmu => (hm.eq_of_subset hu hmu).symm⟩
 
 中文:
 定理 存在_preirreducible
@@ -277,7 +285,15 @@ theorem exists_preirreducible
           let ⟨p, hpc, hyp⟩ := mem_sUnion.1 hy
           let ⟨q, hqc, hxq⟩ := mem_sUnion.1 hx
           Or.casesOn (hcc.total hpc hqc)
-  
+            (fun hpq : p subseteq q =>
+              let ⟨x, hxp, hxuv⟩ := hc hqc u v hu hv ⟨y, hpq hyp, hyu⟩ ⟨x, hxq, hxv⟩
+              ⟨x, mem_sUnion_of_mem hxp hqc, hxuv⟩)
+            fun hqp : q subseteq p =>
+            let ⟨x, hxp, hxuv⟩ := hc hpc u v hu hv ⟨y, hyp, hyu⟩ ⟨x, hqp hxq, hxv⟩
+            ⟨x, mem_sUnion_of_mem hxp hpc, hxuv⟩,
+          fun _ hxc => subset_sUnion_of_mem hxc⟩)
+      s H
+  ⟨m, hm.prop, hsm, fun _u hu hmu => (hm.eq_of_subset hu hmu).symm⟩
 
 Depends on / 依赖: IsPreirreducible, Or.casesOn, casesOn, hcc.total, mem_sUnion, mem_sUnion_of, mem_sUnion_of_mem, subseteq, zorn_subset_nonempty
 -/
@@ -365,7 +381,7 @@ theorem irreducibleComponents_eq_maximals_closed
     have : closure x <= s := H.2 ⟨isClosed_closure, h.closure⟩ (e.trans subset_closure)
     exact le_trans subset_closure this
 
-@[
+@[stacks 004W "(3)"]
 
 中文:
 定理 irreducibleComponents_eq_maximals_closed
@@ -380,7 +396,7 @@ theorem irreducibleComponents_eq_maximals_closed
     have : closure x <= s := H.2 ⟨isClosed_closure, h.closure⟩ (e.trans subset_closure)
     exact le_trans subset_closure this
 
-@[
+@[stacks 004W "(3)"]
 
 Depends on / 依赖: closure, e.trans, h.closure, isClosed_closure, isClosed_of_mem_irreducibleComponents, le_trans, subset_closure
 -/
@@ -750,7 +766,16 @@ theorem IsPreirreducible.image
   rcases continuousOn_iff'.1 hf v hv with ⟨v', hv', v'_eq⟩
   have := H u' v' hu' hv'
   rw [inter_comm s u']; rw [← u'_eq] at this
-  rw [
+  rw [inter_comm s v']; rw [← v'_eq] at this
+  rcases this ⟨x, hxu, hx⟩ ⟨y, hyv, hy⟩ with ⟨x, hxs, hxu', hxv'⟩
+  refine ⟨f x, mem_image_of_mem f hxs, ?_, ?_⟩
+  all_goals
+    rw [← mem_preimage]
+    apply mem_of_mem_inter_left
+    show x in _ inter s
+    simp [*]
+
+@[stacks 0379]
 
 中文:
 定理 IsPreirreducible.像
@@ -762,7 +787,16 @@ theorem IsPreirreducible.image
   rcases continuousOn_iff'.1 hf v hv with ⟨v', hv', v'_eq⟩
   have := H u' v' hu' hv'
   rw [inter_comm s u']; rw [← u'_eq] at this
-  rw [
+  rw [inter_comm s v']; rw [← v'_eq] at this
+  rcases this ⟨x, hxu, hx⟩ ⟨y, hyv, hy⟩ with ⟨x, hxs, hxu', hxv'⟩
+  refine ⟨f x, mem_image_of_mem f hxs, ?_, ?_⟩
+  all_goals
+    rw [← mem_preimage]
+    apply mem_of_mem_inter_left
+    show x in _ inter s
+    simp [*]
+
+@[stacks 0379]
 
 Depends on / 依赖: all_goals, continuousOn_iff, inter_comm, mem_image_of_mem, mem_of_mem_inter_left, mem_preimage
 -/
@@ -990,7 +1024,10 @@ theorem isIrreducible_iff_sInter
     | insert u U _ IH =>
       rw [Finset.coe_insert]; rw [sInter_insert]
       rw [Finset.forall_mem_insert] at hu hU
-      exact h.2 _ _ hu.1 (U.finite_toSet.is
+      exact h.2 _ _ hu.1 (U.finite_toSet.isOpen_sInter hu.2) hU.1 (IH hu.2 hU.2)
+  · simpa using h ∅
+  · intro u v hu hv hu' hv'
+    simpa [*] using h {u, v}
 
 中文:
 定理 isIrreducible_iff_s整数er
@@ -1001,7 +1038,10 @@ theorem isIrreducible_iff_sInter
     | insert u U _ IH =>
       rw [Finset.coe_insert]; rw [sInter_insert]
       rw [Finset.forall_mem_insert] at hu hU
-      exact h.2 _ _ hu.1 (U.finite_toSet.is
+      exact h.2 _ _ hu.1 (U.finite_toSet.isOpen_sInter hu.2) hU.1 (IH hu.2 hU.2)
+  · simpa using h ∅
+  · intro u v hu hv hu' hv'
+    simpa [*] using h {u, v}
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.forall_mem_insert, Finset.induction_on, U.finite_toSet.isOpen_sInter, coe_insert, finite_toSet, forall_mem_insert, h.nonempty, induction_on, insert, isOpen_sInter, nonempty, sInter_insert
 -/
@@ -1061,7 +1101,11 @@ theorem isIrreducible_iff_sUnion_isClosed
   simp only [isIrreducible_iff_sInter]
   refine ((@compl_involutive (Set X) _).toPerm _).finsetCongr.forall_congr fun {t} => ?_
   simp_rw [Equiv.finsetCongr_apply, Finset.forall_mem_map, Finset.mem_map, Finset.coe_map,
-    sUnion_image, Equiv.coe_toEmbedding, Function.Involutive.coe_toPerm, isClo
+    sUnion_image, Equiv.coe_toEmbedding, Function.Involutive.coe_toPerm, isClosed_compl_iff,
+    exists_exists_and_eq_and]
+  refine forall_congr' fun _ => Iff.trans ?_ not_imp_not
+  simp only [not_exists, not_and, ← compl_iInter₂, ← sInter_eq_biInter,
+    subset_compl_iff_disjoint_right, not_disjoint_iff_nonempty_inter]
 
 中文:
 定理 isIrreducible_iff_sUnion_isClosed
@@ -1069,7 +1113,11 @@ theorem isIrreducible_iff_sUnion_isClosed
   simp only [isIrreducible_iff_sInter]
   refine ((@compl_involutive (Set X) _).toPerm _).finsetCongr.forall_congr fun {t} => ?_
   simp_rw [Equiv.finsetCongr_apply, Finset.forall_mem_map, Finset.mem_map, Finset.coe_map,
-    sUnion_image, Equiv.coe_toEmbedding, Function.Involutive.coe_toPerm, isClo
+    sUnion_image, Equiv.coe_toEmbedding, Function.Involutive.coe_toPerm, isClosed_compl_iff,
+    exists_exists_and_eq_and]
+  refine forall_congr' fun _ => Iff.trans ?_ not_imp_not
+  simp only [not_exists, not_and, ← compl_iInter₂, ← sInter_eq_biInter,
+    subset_compl_iff_disjoint_right, not_disjoint_iff_nonempty_inter]
 
 Depends on / 依赖: Equiv.coe_toEmbedding, Equiv.finsetCongr_apply, Finset, Finset.coe_map, Finset.forall_mem_map, Finset.mem_map, Function, Function.Involutive.coe_toPerm, Iff.trans, Involutive, coe_map, coe_toEmbedding, coe_toPerm, compl_involutive, exists_exists_and_eq_and, finsetCongr, finsetCongr.forall_congr, finsetCongr_apply, forall_congr, forall_mem_map
 -/
@@ -1128,7 +1176,8 @@ theorem isPreirreducible_iff_subset_closure_inter_open
     by_contra! h0
 suffices p ∉ closure (S inter b) from this (h b hb bS) pS
     simp only [closure, mem_sInter, mem_ofPred_eq, and_imp, not_forall, exists_prop]
-
+    use aᶜ
+    grind [isClosed_compl_iff, subset_compl_iff_disjoint_left, disjoint_iff_inter_eq_empty]
 
 中文:
 定理 isPreirreducible_iff_subset_closure_inter_open
@@ -1140,7 +1189,8 @@ suffices p ∉ closure (S inter b) from this (h b hb bS) pS
     by_contra! h0
 suffices p ∉ closure (S inter b) from this (h b hb bS) pS
     simp only [closure, mem_sInter, mem_ofPred_eq, and_imp, not_forall, exists_prop]
-
+    use aᶜ
+    grind [isClosed_compl_iff, subset_compl_iff_disjoint_left, disjoint_iff_inter_eq_empty]
 
 Depends on / 依赖: and_imp, closure, disjoint_iff_inter_eq_empty, exists_prop, isClosed_compl_iff, mem_ofPred_eq, mem_sInter, not_forall, subset_closure_inter_of_isPreirreducible_of_isOpen, subset_compl_iff_disjoint_left
 -/
@@ -1247,7 +1297,15 @@ theorem closure_sUnion_irreducibleComponents_sdiff_singleton
   have h : (⋃₀ (irreducibleComponents X \ {Z}))ᶜ subseteq Z := by
     rw [Set.compl_subset_iff_union]; rw [← Set.sUnion_singleton Z]; rw [← Set.sUnion_union]; rw [Set.sUnion_singleton]; rw [Set.sdiff_union_of_subset]; rw [sUnion_irreducibleComponents]
     rwa [Set.singleton_subset_iff]
-  apply Se
+  apply Set.Subset.antisymm
+  · rwa [(isClosed_of_mem_irreducibleComponents Z hZ).closure_subset_iff]
+  · rw [← Set.inter_eq_right.mpr h]
+    apply subset_closure_inter_of_isPreirreducible_of_isOpen hZ.1.2
+    · rw [Set.sUnion_eq_biUnion, isOpen_compl_iff]
+      exact hX.sdiff.isClosed_biUnion fun W hW => isClosed_of_mem_irreducibleComponents W hW.1
+    · rw [Set.inter_compl_nonempty_iff]
+      exact mt (mem_of_subset_sUnion_irreducibleComponents Z hZ _ hX.sdiff Set.sdiff_subset)
+        (Set.notMem_sdiff_of_mem (Set.mem_singleton Z))
 
 中文:
 定理 closure_sUnion_irreducibleComponents_sdiff_singleton
@@ -1255,7 +1313,15 @@ theorem closure_sUnion_irreducibleComponents_sdiff_singleton
   have h : (⋃₀ (irreducibleComponents X \ {Z}))ᶜ subseteq Z := by
     rw [Set.compl_subset_iff_union]; rw [← Set.sUnion_singleton Z]; rw [← Set.sUnion_union]; rw [Set.sUnion_singleton]; rw [Set.sdiff_union_of_subset]; rw [sUnion_irreducibleComponents]
     rwa [Set.singleton_subset_iff]
-  apply Se
+  apply Set.Subset.antisymm
+  · rwa [(isClosed_of_mem_irreducibleComponents Z hZ).closure_subset_iff]
+  · rw [← Set.inter_eq_right.mpr h]
+    apply subset_closure_inter_of_isPreirreducible_of_isOpen hZ.1.2
+    · rw [Set.sUnion_eq_biUnion, isOpen_compl_iff]
+      exact hX.sdiff.isClosed_biUnion fun W hW => isClosed_of_mem_irreducibleComponents W hW.1
+    · rw [Set.inter_compl_nonempty_iff]
+      exact mt (mem_of_subset_sUnion_irreducibleComponents Z hZ _ hX.sdiff Set.sdiff_subset)
+        (Set.notMem_sdiff_of_mem (Set.mem_singleton Z))
 
 Depends on / 依赖: Set.Subset.antisymm, Set.compl_subset_iff_union, Set.inter_eq_right.mpr, Set.sUnion_eq_biUn, Set.sUnion_singleton, Set.sUnion_union, Set.sdiff_union_of_subset, Set.singleton_subset_iff, Subset, antisymm, closure_subset_iff, compl_subset_iff_union, inter_eq_right, irreducibleComponents, isClosed_of_mem_irreducibleComponents, sUnion_eq_biUn, sUnion_irreducibleComponents, sUnion_singleton, sUnion_union, sdiff_union_of_subset
 -/
@@ -1288,7 +1354,13 @@ theorem IsPreirreducible.subset_irreducible
   rintro u v hu hv ⟨x, hx, hx'⟩ ⟨y, hy, hy'⟩
   obtain ⟨x, -, hx'⟩ : Set.Nonempty (t inter ⋂₀ ↑({U, u, v} : Finset (Set X))) := by
     refine isIrreducible_iff_sInter.mp ht {U, u, v} ?_ ?_
-    
+    · simp [*]
+    · intro U H
+      simp only [Finset.mem_insert, Finset.mem_singleton] at H
+      rcases H with (rfl | rfl | rfl)
+      exacts [⟨z, h₂ (h₁ hz), hz⟩, ⟨x, h₂ hx, hx'⟩, ⟨y, h₂ hy, hy'⟩]
+  replace hx' : x in U ∧ x in u ∧ x in v := by simpa using hx'
+  exact ⟨x, h₁ hx'.1, hx'.2⟩
 
 中文:
 定理 IsPreirreducible.subset_irreducible
@@ -1300,7 +1372,13 @@ theorem IsPreirreducible.subset_irreducible
   rintro u v hu hv ⟨x, hx, hx'⟩ ⟨y, hy, hy'⟩
   obtain ⟨x, -, hx'⟩ : Set.Nonempty (t inter ⋂₀ ↑({U, u, v} : Finset (Set X))) := by
     refine isIrreducible_iff_sInter.mp ht {U, u, v} ?_ ?_
-    
+    · simp [*]
+    · intro U H
+      simp only [Finset.mem_insert, Finset.mem_singleton] at H
+      rcases H with (rfl | rfl | rfl)
+      exacts [⟨z, h₂ (h₁ hz), hz⟩, ⟨x, h₂ hx, hx'⟩, ⟨y, h₂ hy, hy'⟩]
+  replace hx' : x in U ∧ x in u ∧ x in v := by simpa using hx'
+  exact ⟨x, h₁ hx'.1, hx'.2⟩
 
 Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, IsIrreducible, Nonempty, Set.Nonempty, exacts, isIrreducible_iff_sInter, isIrreducible_iff_sInter.mp, mem_insert, mem_singleton, replace
 -/
@@ -1377,7 +1455,9 @@ lemma IsPreirreducible.preimage_of_dense_isPreirreducible_fiber
   obtain ⟨z, hzV, hz₁, hz₂⟩ :=
     hV _ _ (hf' _ hU₁) (hf' _ hU₂) ⟨f x, hxV, x, hxU₁, rfl⟩ ⟨f y, hyV, y, hyU₂, rfl⟩
   obtain ⟨z, ⟨⟨z₁, hz₁, e₁⟩, ⟨z₂, hz₂, e₂⟩⟩, hzV, hz⟩ :=
-    mem_closure_iff.mp (hf'' hzV) _ ((hf' _ hU₁).inter (hf' _ hU₂)) ⟨hz
+    mem_closure_iff.mp (hf'' hzV) _ ((hf' _ hU₁).inter (hf' _ hU₂)) ⟨hz₁, hz₂⟩
+  obtain ⟨z₃, hz₃, hz₃'⟩ := hz _ _ hU₁ hU₂ ⟨z₁, e₁, hz₁⟩ ⟨z₂, e₂, hz₂⟩
+  refine ⟨z₃, show f z₃ in _ from (show f z₃ = z from hz₃) ▸ hzV, hz₃'⟩
 
 中文:
 引理 IsPreirreducible.preimage_of_dense_isPreirreducible_fiber
@@ -1386,7 +1466,9 @@ lemma IsPreirreducible.preimage_of_dense_isPreirreducible_fiber
   obtain ⟨z, hzV, hz₁, hz₂⟩ :=
     hV _ _ (hf' _ hU₁) (hf' _ hU₂) ⟨f x, hxV, x, hxU₁, rfl⟩ ⟨f y, hyV, y, hyU₂, rfl⟩
   obtain ⟨z, ⟨⟨z₁, hz₁, e₁⟩, ⟨z₂, hz₂, e₂⟩⟩, hzV, hz⟩ :=
-    mem_closure_iff.mp (hf'' hzV) _ ((hf' _ hU₁).inter (hf' _ hU₂)) ⟨hz
+    mem_closure_iff.mp (hf'' hzV) _ ((hf' _ hU₁).inter (hf' _ hU₂)) ⟨hz₁, hz₂⟩
+  obtain ⟨z₃, hz₃, hz₃'⟩ := hz _ _ hU₁ hU₂ ⟨z₁, e₁, hz₁⟩ ⟨z₂, e₂, hz₂⟩
+  refine ⟨z₃, show f z₃ in _ from (show f z₃ = z from hz₃) ▸ hzV, hz₃'⟩
 
 Depends on / 依赖: mem_closure_iff, mem_closure_iff.mp
 -/
@@ -1557,7 +1639,8 @@ lemma preimage_mem_irreducibleComponents_of_isPreirreducible_fiber
   refine ⟨ht.1.preimage_of_isPreirreducible_fiber f hf₂ hf₃ h, fun u hu htu => image_subset_iff.mp
     (subset_closure.trans (ht.2 (hu.image f hf₁.continuousOn).closure ?_))⟩
   suffices t <= closure (f '' f ⁻¹' t) from this.trans (closure_mono (image_mono htu))
-  rw [image_preimage_eq_inter_range
+  rw [image_preimage_eq_inter_range]
+  exact subset_closure_inter_of_isPreirreducible_of_isOpen ht.1.2 hf₂.isOpen_range h
 
 中文:
 引理 preimage_mem_irreducibleComponents_of_isPreirreducible_fiber
@@ -1565,7 +1648,8 @@ lemma preimage_mem_irreducibleComponents_of_isPreirreducible_fiber
   refine ⟨ht.1.preimage_of_isPreirreducible_fiber f hf₂ hf₃ h, fun u hu htu => image_subset_iff.mp
     (subset_closure.trans (ht.2 (hu.image f hf₁.continuousOn).closure ?_))⟩
   suffices t <= closure (f '' f ⁻¹' t) from this.trans (closure_mono (image_mono htu))
-  rw [image_preimage_eq_inter_range
+  rw [image_preimage_eq_inter_range]
+  exact subset_closure_inter_of_isPreirreducible_of_isOpen ht.1.2 hf₂.isOpen_range h
 
 Depends on / 依赖: closure, closure_mono, continuousOn, hu.image, image_mono, image_preimage_eq_inter_range, image_subset_iff, image_subset_iff.mp, isOpen_range, preimage_of_isPreirreducible_fiber, subset_closure, subset_closure.trans, subset_closure_inter_of_isPreirreducible_of_isOpen, this.trans
 -/
@@ -1689,7 +1773,14 @@ definition irreducibleComponentsEquivOfIsPreirreducibleFiber
     preimage_mem_irreducibleComponents_of_isPreirreducible_fiber W.2 hf₁ hf₂ hf₃
       (by simp [hf₄.range_eq, W.2.1.1])⟩
 right_inv W := Subtype.ext by
-    refine (Set.subset_prei
+    refine (Set.subset_preimage_image _ _).antisymm' (W.2.2 ?_ (Set.subset_preimage_image _ _))
+    refine ⟨?_, (W.2.1.image _ hf₁.continuousOn).2.preimage_of_isPreirreducible_fiber _ hf₂ hf₃⟩
+    obtain ⟨x, hx⟩ := W.2.1.1
+    exact ⟨_, x, hx, rfl⟩
+left_inv _ := Subtype.ext Set.image_preimage_eq _ hf₄
+  map_rel_iff' {W Z} := by
+    refine ⟨fun H => ?_, Set.preimage_mono⟩
+    simpa only [Equiv.coe_fn_mk, Set.image_preimage_eq _ hf₄] using! Set.image_mono (f := f) H
 
 中文:
 定义 irreducibleComponentsEquivOfIsPreirreducibleFiber
@@ -1700,7 +1791,14 @@ right_inv W := Subtype.ext by
     preimage_mem_irreducibleComponents_of_isPreirreducible_fiber W.2 hf₁ hf₂ hf₃
       (by simp [hf₄.range_eq, W.2.1.1])⟩
 right_inv W := Subtype.ext by
-    refine (Set.subset_prei
+    refine (Set.subset_preimage_image _ _).antisymm' (W.2.2 ?_ (Set.subset_preimage_image _ _))
+    refine ⟨?_, (W.2.1.image _ hf₁.continuousOn).2.preimage_of_isPreirreducible_fiber _ hf₂ hf₃⟩
+    obtain ⟨x, hx⟩ := W.2.1.1
+    exact ⟨_, x, hx, rfl⟩
+left_inv _ := Subtype.ext Set.image_preimage_eq _ hf₄
+  map_rel_iff' {W Z} := by
+    refine ⟨fun H => ?_, Set.preimage_mono⟩
+    simpa only [Equiv.coe_fn_mk, Set.image_preimage_eq _ hf₄] using! Set.image_mono (f := f) H
 -/
 def irreducibleComponentsEquivOfIsPreirreducibleFiber :
     irreducibleComponents Y ≃o irreducibleComponents X where
@@ -1732,7 +1830,7 @@ lemma IsDiscrete.subsingleton_of_isPreirreducible
   obtain ⟨U, hU, hUx⟩ := isDiscrete_iff_forall_mem_exists_isOpen.mp hs x hxs
   obtain ⟨V, hV, hVy⟩ := isDiscrete_iff_forall_mem_exists_isOpen.mp hs y hys
   obtain ⟨z, hz⟩ := hs' _ _ hU hV ⟨x, by grind⟩ ⟨y, by grind⟩
-  exact (hUx.le (by grind)).symm.trans (b := z) (hVy.le (by g
+  exact (hUx.le (by grind)).symm.trans (b := z) (hVy.le (by grind))
 
 中文:
 引理 是离散.subsingleton_of_isPreirreducible
@@ -1742,7 +1840,7 @@ lemma IsDiscrete.subsingleton_of_isPreirreducible
   obtain ⟨U, hU, hUx⟩ := isDiscrete_iff_forall_mem_exists_isOpen.mp hs x hxs
   obtain ⟨V, hV, hVy⟩ := isDiscrete_iff_forall_mem_exists_isOpen.mp hs y hys
   obtain ⟨z, hz⟩ := hs' _ _ hU hV ⟨x, by grind⟩ ⟨y, by grind⟩
-  exact (hUx.le (by grind)).symm.trans (b := z) (hVy.le (by g
+  exact (hUx.le (by grind)).symm.trans (b := z) (hVy.le (by grind))
 
 Depends on / 依赖: hUx.le, hVy.le, isDiscrete_iff_forall_mem_exists_isOpen, isDiscrete_iff_forall_mem_exists_isOpen.mp, symm.trans
 -/

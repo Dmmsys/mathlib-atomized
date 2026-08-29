@@ -884,7 +884,8 @@ theorem toNat_eq_of_forall_le_iff
   rcases iff_iff_and_or_not_and_not.mp h' with ⟨hc, hd⟩ | ⟨hc, hd⟩
   · simp [Cardinal.toNat_apply_of_aleph0_le, hc, hd]
   · apply eq_of_forall_le_iff
-    rw [← cast_toNat_of_lt_aleph0 (not_le.mp hc)]; rw [← 
+    rw [← cast_toNat_of_lt_aleph0 (not_le.mp hc)]; rw [← cast_toNat_of_lt_aleph0 (not_le.mp hd)] at h
+    simpa using h
 
 中文:
 定理 to自然数_eq_of_对任意_le_iff
@@ -895,7 +896,8 @@ theorem toNat_eq_of_forall_le_iff
   rcases iff_iff_and_or_not_and_not.mp h' with ⟨hc, hd⟩ | ⟨hc, hd⟩
   · simp [Cardinal.toNat_apply_of_aleph0_le, hc, hd]
   · apply eq_of_forall_le_iff
-    rw [← cast_toNat_of_lt_aleph0 (not_le.mp hc)]; rw [← 
+    rw [← cast_toNat_of_lt_aleph0 (not_le.mp hc)]; rw [← cast_toNat_of_lt_aleph0 (not_le.mp hd)] at h
+    simpa using h
 
 Depends on / 依赖: Cardinal, Cardinal.aleph0_le, Cardinal.toNat_apply_of_aleph0_le, aleph0_le, cast_toNat_of_lt_aleph0, eq_of_forall_le_iff, forall_congr, iff_iff_and_or_not_and_not, iff_iff_and_or_not_and_not.mp, not_le, not_le.mp, toNat_apply_of_aleph0_le
 -/

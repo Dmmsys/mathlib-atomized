@@ -75,7 +75,7 @@ instance :
     rw [OreLocalization.zero_def]; rw [oreDiv_mul_char 0 r 1 s 0 1 (by simp)]; rw [zero_mul]; rw [one_mul]
   mul_zero x := by
     induction x using OreLocalization.ind with | _ r s
-    rw [OreLocalization.zero_def]; rw [mul_div_one]; rw [mul_
+    rw [OreLocalization.zero_def]; rw [mul_div_one]; rw [mul_zero]; rw [zero_oreDiv']; rw [zero_oreDiv']
 
 中文:
 实例 :
@@ -85,7 +85,7 @@ instance :
     rw [OreLocalization.zero_def]; rw [oreDiv_mul_char 0 r 1 s 0 1 (by simp)]; rw [zero_mul]; rw [one_mul]
   mul_zero x := by
     induction x using OreLocalization.ind with | _ r s
-    rw [OreLocalization.zero_def]; rw [mul_div_one]; rw [mul_
+    rw [OreLocalization.zero_def]; rw [mul_div_one]; rw [mul_zero]; rw [zero_oreDiv']; rw [zero_oreDiv']
 
 Depends on / 依赖: OreLocalization, OreLocalization.ind, OreLocalization.zero_def, mul_div_one, mul_zero, one_mul, oreDiv_mul_char, zero_def, zero_mul, zero_oreDiv
 -/
@@ -202,7 +202,14 @@ theorem add''_char
   rw [oreDiv_eq_iff]
   rcases oreCondition sb sa with ⟨rc, sc, hc⟩
   have : sc * rb * s₂ = rc * ra * s₂ := by
-    rw [mul_assoc rc]; rw [← ha]; rw [← mul_assoc
+    rw [mul_assoc rc]; rw [← ha]; rw [← mul_assoc]; rw [← hc]; rw [mul_assoc]; rw [mul_assoc]; rw [hb]
+  rcases ore_right_cancel _ _ s₂ this with ⟨sd, hd⟩
+  use sd * sc
+  use sd * rc
+  simp only [smul_add, smul_smul, Submonoid.smul_def, Submonoid.coe_mul]
+  constructor
+  · rw [mul_assoc _ _ rb, hd, mul_assoc, hc, mul_assoc, mul_assoc]
+  · rw [mul_assoc, ← mul_assoc (sc : R), hc, mul_assoc, mul_assoc]
 
 中文:
 定理 add''_char
@@ -215,7 +222,14 @@ theorem add''_char
   rw [oreDiv_eq_iff]
   rcases oreCondition sb sa with ⟨rc, sc, hc⟩
   have : sc * rb * s₂ = rc * ra * s₂ := by
-    rw [mul_assoc rc]; rw [← ha]; rw [← mul_assoc
+    rw [mul_assoc rc]; rw [← ha]; rw [← mul_assoc]; rw [← hc]; rw [mul_assoc]; rw [mul_assoc]; rw [hb]
+  rcases ore_right_cancel _ _ s₂ this with ⟨sd, hd⟩
+  use sd * sc
+  use sd * rc
+  simp only [smul_add, smul_smul, Submonoid.smul_def, Submonoid.coe_mul]
+  constructor
+  · rw [mul_assoc _ _ rb, hd, mul_assoc, hc, mul_assoc, mul_assoc]
+  · rw [mul_assoc, ← mul_assoc (sc : R), hc, mul_assoc, mul_assoc]
 -/
 private theorem add''_char (r₁ : X) (s₁ : S) (r₂ : X) (s₂ : S) (rb : R) (sb : R)
     (hb : sb * s₁ = rb * s₂) (h : sb * s₁ in S) :
@@ -252,7 +266,18 @@ definition add'
     -- s*, r*
     rcases oreCondition (s₁' : R) s₂ with ⟨rc, sc, hc⟩
     --s~~, r~~
-    r
+    rcases oreCondition rb sc with ⟨rd, sd, hd⟩
+    -- s#, r#
+    dsimp at *
+    rw [add''_char _ _ _ _ rc sc hc (sc * s₁').2]
+    have : sd * sb * s₁ = rd * rc * s₂ := by
+      rw [mul_assoc]; rw [hb']; rw [← mul_assoc]; rw [hd]; rw [mul_assoc]; rw [hc]; rw [← mul_assoc]
+    rw [add''_char _ _ _ _ (rd * rc : R) (sd * sb) this (sd * sb * s₁).2]
+    rw [mul_smul]; rw [← Submonoid.smul_def sb]; rw [hb]; rw [smul_smul]; rw [hd]; rw [oreDiv_eq_iff]
+    use 1
+    use rd
+    simp only [mul_smul, smul_add, one_smul, OneMemClass.coe_one, one_mul, true_and]
+    rw [this]; rw [hc]; rw [mul_assoc]
 
 中文:
 定义 add'
@@ -265,7 +290,18 @@ definition add'
     -- s*, r*
     rcases oreCondition (s₁' : R) s₂ with ⟨rc, sc, hc⟩
     --s~~, r~~
-    r
+    rcases oreCondition rb sc with ⟨rd, sd, hd⟩
+    -- s#, r#
+    dsimp at *
+    rw [add''_char _ _ _ _ rc sc hc (sc * s₁').2]
+    have : sd * sb * s₁ = rd * rc * s₂ := by
+      rw [mul_assoc]; rw [hb']; rw [← mul_assoc]; rw [hd]; rw [mul_assoc]; rw [hc]; rw [← mul_assoc]
+    rw [add''_char _ _ _ _ (rd * rc : R) (sd * sb) this (sd * sb * s₁).2]
+    rw [mul_smul]; rw [← Submonoid.smul_def sb]; rw [hb]; rw [smul_smul]; rw [hd]; rw [oreDiv_eq_iff]
+    use 1
+    use rd
+    simp only [mul_smul, smul_add, one_smul, OneMemClass.coe_one, one_mul, true_and]
+    rw [this]; rw [hc]; rw [mul_assoc]
 -/
 private def add' (r₂ : X) (s₂ : S) : X[S⁻¹] -> X[S⁻¹] :=
   (--plus tilde
@@ -305,7 +341,18 @@ definition add
       change add'' _ _ _ _ = add'' _ _ _ _
       dsimp only at *
       rcases oreCondition (s₃ : R) s₂ with ⟨rc, sc, hc⟩
-      rcases oreCondition r
+      rcases oreCondition rc sb with ⟨rd, sd, hd⟩
+      have : rd * rb * s₁ = sd * sc * s₃ := by
+        rw [mul_assoc]; rw [← hb']; rw [← mul_assoc]; rw [← hd]; rw [mul_assoc]; rw [← hc]; rw [mul_assoc]
+      rw [add''_char _ _ _ _ rc sc hc (sc * s₃).2]
+      rw [add''_char _ _ _ _ _ _ this.symm (sd * sc * s₃).2]
+      refine oreDiv_eq_iff.mpr ?_
+      simp only [smul_add]
+      use sd, 1
+      simp only [one_smul, one_mul, mul_smul, ← hb, Submonoid.smul_def, ← mul_assoc, and_true]
+      simp only [smul_smul, hd])
+
+@[no_expose]
 
 中文:
 定义 add
@@ -318,7 +365,18 @@ definition add
       change add'' _ _ _ _ = add'' _ _ _ _
       dsimp only at *
       rcases oreCondition (s₃ : R) s₂ with ⟨rc, sc, hc⟩
-      rcases oreCondition r
+      rcases oreCondition rc sb with ⟨rd, sd, hd⟩
+      have : rd * rb * s₁ = sd * sc * s₃ := by
+        rw [mul_assoc]; rw [← hb']; rw [← mul_assoc]; rw [← hd]; rw [mul_assoc]; rw [← hc]; rw [mul_assoc]
+      rw [add''_char _ _ _ _ rc sc hc (sc * s₃).2]
+      rw [add''_char _ _ _ _ _ _ this.symm (sd * sc * s₃).2]
+      refine oreDiv_eq_iff.mpr ?_
+      simp only [smul_add]
+      use sd, 1
+      simp only [one_smul, one_mul, mul_smul, ← hb, Submonoid.smul_def, ← mul_assoc, and_true]
+      simp only [smul_smul, hd])
+
+@[no_expose]
 -/
 private def add : X[S⁻¹] -> X[S⁻¹] -> X[S⁻¹] := fun x =>
   Quotient.lift (fun rs : X × S => add' rs.1 rs.2 x)
@@ -479,7 +537,13 @@ theorem add_assoc
   induction z with | _ r₃ s₃
   rcases oreDivAddChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'
   rcases oreDivAddChar' (sa • r₁ + ra • r₂) r₃ (sa * s₁) s₃ with ⟨rc, sc, hc, q⟩; rw [q]; clear q
-  simp only [smul_add, add_assoc
+  simp only [smul_add, add_assoc]
+  simp_rw [← add_oreDiv, ← OreLocalization.expand']
+  congr 2
+  · rw [OreLocalization.expand r₂ s₂ ra (ha.symm ▸ (sa * s₁).2)]; congr; ext; exact ha
+  · rw [OreLocalization.expand r₃ s₃ rc (hc.symm ▸ (sc * (sa * s₁)).2)]; congr; ext; exact hc
+
+@[simp]
 
 中文:
 定理 add_assoc
@@ -491,7 +555,13 @@ theorem add_assoc
   induction z with | _ r₃ s₃
   rcases oreDivAddChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'
   rcases oreDivAddChar' (sa • r₁ + ra • r₂) r₃ (sa * s₁) s₃ with ⟨rc, sc, hc, q⟩; rw [q]; clear q
-  simp only [smul_add, add_assoc
+  simp only [smul_add, add_assoc]
+  simp_rw [← add_oreDiv, ← OreLocalization.expand']
+  congr 2
+  · rw [OreLocalization.expand r₂ s₂ ra (ha.symm ▸ (sa * s₁).2)]; congr; ext; exact ha
+  · rw [OreLocalization.expand r₃ s₃ rc (hc.symm ▸ (sc * (sa * s₁)).2)]; congr; ext; exact hc
+
+@[simp]
 -/
 protected theorem add_assoc (x y z : X[S⁻¹]) : x + y + z = x + (y + z) := by
   induction x with | _ r₁ s₁
@@ -664,7 +734,10 @@ theorem smul_add
   induction z with | _ r₃ s₃
   rcases oreDivAddChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'; norm_cast at ha
   rw [OreLocalization.expand' r₁ s₁ sa]
-  rw [OreLocalization.expand r₂ s₂ ra (by rw [← ha]; apply SetLike.coe_me
+  rw [OreLocalization.expand r₂ s₂ ra (by rw [← ha]; apply SetLike.coe_mem)]
+  rw [← Subtype.coe_eq_of_eq_mk ha]
+  repeat rw [oreDiv_smul_oreDiv]
+  simp only [smul_add, add_oreDiv]
 
 中文:
 定理 smul_add
@@ -675,7 +748,10 @@ theorem smul_add
   induction z with | _ r₃ s₃
   rcases oreDivAddChar' r₁ r₂ s₁ s₂ with ⟨ra, sa, ha, ha'⟩; rw [ha']; clear ha'; norm_cast at ha
   rw [OreLocalization.expand' r₁ s₁ sa]
-  rw [OreLocalization.expand r₂ s₂ ra (by rw [← ha]; apply SetLike.coe_me
+  rw [OreLocalization.expand r₂ s₂ ra (by rw [← ha]; apply SetLike.coe_mem)]
+  rw [← Subtype.coe_eq_of_eq_mk ha]
+  repeat rw [oreDiv_smul_oreDiv]
+  simp only [smul_add, add_oreDiv]
 -/
 protected theorem smul_add (z : R[S⁻¹]) (x y : X[S⁻¹]) :
     z • (x + y) = z • x + z • y := by

@@ -120,7 +120,15 @@ instance isIso_asLimitCone_lift
         apply_fun fun f : (limitCone.{u, u} X.diagram).pt => f.val S at h
         exact h
       · obtain ⟨b, hb⟩ :=
-          DiscreteQuotient.exists
+          DiscreteQuotient.exists_of_compat (fun S => a.val S) fun _ _ h => a.prop (homOfLE h)
+        use b
+        -- ext S : 3 -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` does not work, replaced with following
+        -- three lines.
+        apply Subtype.ext
+        apply funext
+        rintro S
+        -- Porting note: end replacement block
+        apply hb)
 
 中文:
 实例 isIso_asLimitCone_lift
@@ -132,7 +140,15 @@ instance isIso_asLimitCone_lift
         apply_fun fun f : (limitCone.{u, u} X.diagram).pt => f.val S at h
         exact h
       · obtain ⟨b, hb⟩ :=
-          DiscreteQuotient.exists
+          DiscreteQuotient.exists_of_compat (fun S => a.val S) fun _ _ h => a.prop (homOfLE h)
+        use b
+        -- ext S : 3 -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` does not work, replaced with following
+        -- three lines.
+        apply Subtype.ext
+        apply funext
+        rintro S
+        -- Porting note: end replacement block
+        apply hb)
 
 Depends on / 依赖: CompHausLike, CompHausLike.isIso_of_bijective, DiscreteQuotient, DiscreteQuotient.eq_of_forall_proj_eq, DiscreteQuotient.exists_of_compat, X.diagram, a.prop, a.val, apply_fun, diagram, eq_of_forall_proj_eq, exists_of_compat, f.val, homOfLE, isIso_of_bijective, limitCone
 -/

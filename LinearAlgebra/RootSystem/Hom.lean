@@ -213,7 +213,18 @@ definition comp
   indexEquiv := f.indexEquiv.trans g.indexEquiv
   weight_coweight_transpose := by
     ext φ x
-    rw [← LinearMap.dualMap_comp_dualMap]; rw [← LinearMap.comp_assoc _ f.coweightMap]; rw [← f.weight_coweight_transpose]; rw [Lin
+    rw [← LinearMap.dualMap_comp_dualMap]; rw [← LinearMap.comp_assoc _ f.coweightMap]; rw [← f.weight_coweight_transpose]; rw [LinearMap.comp_assoc g.coweightMap]; rw [← g.weight_coweight_transpose]; rw [← LinearMap.comp_assoc]
+  root_weightMap := by
+    ext i
+    simp only [LinearMap.coe_comp, Equiv.coe_trans]
+    rw [comp_assoc]; rw [f.root_weightMap]; rw [← comp_assoc]; rw [g.root_weightMap]; rw [comp_assoc]
+  coroot_coweightMap := by
+    ext i
+    simp only [LinearMap.coe_comp]
+    rw [comp_assoc]; rw [g.coroot_coweightMap]; rw [← comp_assoc]; rw [f.coroot_coweightMap]; rw [comp_assoc]
+    simp
+
+@[simp]
 
 中文:
 定义 comp
@@ -223,7 +234,18 @@ definition comp
   indexEquiv := f.indexEquiv.trans g.indexEquiv
   weight_coweight_transpose := by
     ext φ x
-    rw [← LinearMap.dualMap_comp_dualMap]; rw [← LinearMap.comp_assoc _ f.coweightMap]; rw [← f.weight_coweight_transpose]; rw [Lin
+    rw [← LinearMap.dualMap_comp_dualMap]; rw [← LinearMap.comp_assoc _ f.coweightMap]; rw [← f.weight_coweight_transpose]; rw [LinearMap.comp_assoc g.coweightMap]; rw [← g.weight_coweight_transpose]; rw [← LinearMap.comp_assoc]
+  root_weightMap := by
+    ext i
+    simp only [LinearMap.coe_comp, Equiv.coe_trans]
+    rw [comp_assoc]; rw [f.root_weightMap]; rw [← comp_assoc]; rw [g.root_weightMap]; rw [comp_assoc]
+  coroot_coweightMap := by
+    ext i
+    simp only [LinearMap.coe_comp]
+    rw [comp_assoc]; rw [g.coroot_coweightMap]; rw [← comp_assoc]; rw [f.coroot_coweightMap]; rw [comp_assoc]
+    simp
+
+@[simp]
 
 Depends on / 依赖: f.weightMap, g.weightMap, weightMap
 -/
@@ -520,7 +542,9 @@ lemma weightHom_injective
   · refine LinearEquiv.injective P.flip.toPerfPair ?_
     simp_rw [← weight_coweight_transpose_apply]
     exact congrFun (congrArg DFunLike.coe (congrArg LinearMap.dualMap hfg)) (P.flip.toPerfPair x)
-  · refine Embedding.injective P.root
+  · refine Embedding.injective P.root ?_
+    simp_rw [← root_weightMap_apply]
+    exact congrFun (congrArg DFunLike.coe hfg) (P.root x)
 
 中文:
 引理 weightHom_injective
@@ -533,7 +557,9 @@ lemma weightHom_injective
   · refine LinearEquiv.injective P.flip.toPerfPair ?_
     simp_rw [← weight_coweight_transpose_apply]
     exact congrFun (congrArg DFunLike.coe (congrArg LinearMap.dualMap hfg)) (P.flip.toPerfPair x)
-  · refine Embedding.injective P.root
+  · refine Embedding.injective P.root ?_
+    simp_rw [← root_weightMap_apply]
+    exact congrFun (congrArg DFunLike.coe hfg) (P.root x)
 
 Depends on / 依赖: DFunLike, DFunLike.coe, Embedding, Embedding.injective, LinearEquiv, LinearEquiv.injective, LinearMap, LinearMap.congr_fun, LinearMap.dualMap, P.flip.toPerfPair, P.root, congr_fun, dualMap, injective, root_weightMap_apply, simp_rw, toPerfPair, weight_coweight_transpose_apply
 -/
@@ -592,7 +618,21 @@ lemma coweightHom_injective
     rw [MulOpposite.op_inj] at hfg
     have h := congrArg (LinearMap.comp (M₃ := Module.Dual R M) (σ₂₃ := .id R) P.flip.toPerfPair) hfg
     rw [← f.weight_coweight_transpose]; rw [← g.weight_coweight_transpose] at h
-    have : f.weightMap = g
+    have : f.weightMap = g.weightMap := by
+      have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
+      refine (Module.dualMap_dualMap_eq_iff R M).mp (congrArg LinearMap.dualMap
+        ((LinearEquiv.eq_comp_toLinearMap_iff f.weightMap.dualMap g.weightMap.dualMap).mp h))
+    exact congrFun (congrArg DFunLike.coe this) x
+  · dsimp [coweightHom] at hfg
+    simp_all
+  · dsimp [coweightHom] at hfg
+    rw [MulOpposite.op_inj] at hfg
+    set y := f.indexEquiv x with hy
+    have : f.coweightMap (P.coroot y) = g.coweightMap (P.coroot y) := by
+      exact congrFun (congrArg DFunLike.coe hfg) (P.coroot y)
+    rw [coroot_coweightMap_apply]; rw [coroot_coweightMap_apply]; rw [Embedding.apply_eq_iff_eq]; rw [hy] at this
+    rw [Equiv.symm_apply_apply] at this
+    rw [this]; rw [Equiv.apply_symm_apply]
 
 中文:
 引理 coweightHom_injective
@@ -605,7 +645,21 @@ lemma coweightHom_injective
     rw [MulOpposite.op_inj] at hfg
     have h := congrArg (LinearMap.comp (M₃ := Module.Dual R M) (σ₂₃ := .id R) P.flip.toPerfPair) hfg
     rw [← f.weight_coweight_transpose]; rw [← g.weight_coweight_transpose] at h
-    have : f.weightMap = g
+    have : f.weightMap = g.weightMap := by
+      have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
+      refine (Module.dualMap_dualMap_eq_iff R M).mp (congrArg LinearMap.dualMap
+        ((LinearEquiv.eq_comp_toLinearMap_iff f.weightMap.dualMap g.weightMap.dualMap).mp h))
+    exact congrFun (congrArg DFunLike.coe this) x
+  · dsimp [coweightHom] at hfg
+    simp_all
+  · dsimp [coweightHom] at hfg
+    rw [MulOpposite.op_inj] at hfg
+    set y := f.indexEquiv x with hy
+    have : f.coweightMap (P.coroot y) = g.coweightMap (P.coroot y) := by
+      exact congrFun (congrArg DFunLike.coe hfg) (P.coroot y)
+    rw [coroot_coweightMap_apply]; rw [coroot_coweightMap_apply]; rw [Embedding.apply_eq_iff_eq]; rw [hy] at this
+    rw [Equiv.symm_apply_apply] at this
+    rw [this]; rw [Equiv.apply_symm_apply]
 
 Depends on / 依赖: IsReflexive, LinearEquiv, LinearEquiv.eq_comp_toLinearMap_iff, LinearMap, LinearMap.comp, LinearMap.dualMap, Module, Module.Dual, Module.IsReflexive, Module.dualMap_dualMap_eq_iff, MulOpposite, MulOpposite.op_inj, P.flip.toPerfPair, P.toLinearMap, coweightHom, dualMap, dualMap_dualMap_eq_iff, eq_comp_toLinearMap_iff, f.weightMap, f.weightMap.dualMap
 -/
@@ -921,7 +975,9 @@ definition comp
       exact Bijective.comp g.bijective_weightMap f.bijective_weightMap
     bijective_coweightMap := by
       simp only [Hom.comp, LinearMap.coe_comp]
-      exact Bijective.comp f.bijective_co
+      exact Bijective.comp f.bijective_coweightMap g.bijective_coweightMap }
+
+@[simp]
 
 中文:
 定义 comp
@@ -932,7 +988,9 @@ definition comp
       exact Bijective.comp g.bijective_weightMap f.bijective_weightMap
     bijective_coweightMap := by
       simp only [Hom.comp, LinearMap.coe_comp]
-      exact Bijective.comp f.bijective_co
+      exact Bijective.comp f.bijective_coweightMap g.bijective_coweightMap }
+
+@[simp]
 
 Depends on / 依赖: Bijective, Bijective.comp, Hom.comp, LinearMap, LinearMap.coe_comp, bijective_coweightMap, bijective_weightMap, coe_comp, f.bijective_coweightMap, f.bijective_weightMap, f.toHom, g.bijective_coweightMap, g.bijective_weightMap, g.toHom
 -/
@@ -1256,7 +1314,35 @@ definition symm
     ext n m
     nth_rw 2 [show m = (weightEquiv P Q f) ((weightEquiv P Q f).symm m) by
       exact (LinearEquiv.symm_apply_eq (weightEquiv P Q f)).mp rfl]
-    nth_
+    nth_rw 1 [show n = (coweightEquiv P Q f) ((coweightEquiv P Q f).symm n) by
+      exact (LinearEquiv.symm_apply_eq (coweightEquiv P Q f)).mp rfl]
+    have := f.weight_coweight_transpose
+    rw [LinearMap.ext_iff₂] at this
+    exact Eq.symm (this ((coweightEquiv P Q f).symm n) ((weightEquiv P Q f).symm m))
+  root_weightMap := by
+    ext i
+    simp only [LinearEquiv.coe_coe, comp_apply]
+    have := f.root_weightMap
+    rw [funext_iff] at this
+    specialize this (f.indexEquiv.symm i)
+    simp only [comp_apply, Equiv.apply_symm_apply] at this
+    simp [← this]
+  coroot_coweightMap := by
+    ext i
+    simp only [LinearEquiv.coe_coe, comp_apply, Equiv.symm_symm]
+    have := f.coroot_coweightMap
+    rw [funext_iff] at this
+    specialize this (f.indexEquiv i)
+    simp only [comp_apply, Equiv.symm_apply_apply] at this
+    simp [← this]
+  bijective_weightMap := by
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (weightEquiv P Q f).symm
+  bijective_coweightMap := by
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (coweightEquiv P Q f).symm
+
+@[simp]
 
 中文:
 定义 symm
@@ -1268,7 +1354,35 @@ definition symm
     ext n m
     nth_rw 2 [show m = (weightEquiv P Q f) ((weightEquiv P Q f).symm m) by
       exact (LinearEquiv.symm_apply_eq (weightEquiv P Q f)).mp rfl]
-    nth_
+    nth_rw 1 [show n = (coweightEquiv P Q f) ((coweightEquiv P Q f).symm n) by
+      exact (LinearEquiv.symm_apply_eq (coweightEquiv P Q f)).mp rfl]
+    have := f.weight_coweight_transpose
+    rw [LinearMap.ext_iff₂] at this
+    exact Eq.symm (this ((coweightEquiv P Q f).symm n) ((weightEquiv P Q f).symm m))
+  root_weightMap := by
+    ext i
+    simp only [LinearEquiv.coe_coe, comp_apply]
+    have := f.root_weightMap
+    rw [funext_iff] at this
+    specialize this (f.indexEquiv.symm i)
+    simp only [comp_apply, Equiv.apply_symm_apply] at this
+    simp [← this]
+  coroot_coweightMap := by
+    ext i
+    simp only [LinearEquiv.coe_coe, comp_apply, Equiv.symm_symm]
+    have := f.coroot_coweightMap
+    rw [funext_iff] at this
+    specialize this (f.indexEquiv i)
+    simp only [comp_apply, Equiv.symm_apply_apply] at this
+    simp [← this]
+  bijective_weightMap := by
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (weightEquiv P Q f).symm
+  bijective_coweightMap := by
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (coweightEquiv P Q f).symm
+
+@[simp]
 
 Depends on / 依赖: weightEquiv
 -/
@@ -1404,6 +1518,16 @@ definition mk'
   root_weightMap := by ext; simp [hf]
   coroot_coweightMap := by
 let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.toPerfPair.symm
+    suffices Q = P.map e f g by
+      ext i
+      rw [LinearEquiv.coe_coe]; rw [comp_apply]; rw [← LinearEquiv.eq_symm_apply]
+      conv_lhs => rw [this]
+      rfl
+    apply IsRootSystem.ext <;> ext
+    · simp [RootPairing.map, RootPairing.map, g]
+    · simp [hf, RootPairing.map, RootPairing.map]
+  bijective_weightMap := LinearEquiv.bijective _
+  bijective_coweightMap := LinearEquiv.bijective _
 
 中文:
 定义 mk'
@@ -1415,6 +1539,16 @@ let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.
   root_weightMap := by ext; simp [hf]
   coroot_coweightMap := by
 let g : N ≃ₗ[R] N₂ := P.flip.toPerfPair.trans f.symm.dualMap.trans Q.flip.toPerfPair.symm
+    suffices Q = P.map e f g by
+      ext i
+      rw [LinearEquiv.coe_coe]; rw [comp_apply]; rw [← LinearEquiv.eq_symm_apply]
+      conv_lhs => rw [this]
+      rfl
+    apply IsRootSystem.ext <;> ext
+    · simp [RootPairing.map, RootPairing.map, g]
+    · simp [hf, RootPairing.map, RootPairing.map]
+  bijective_weightMap := LinearEquiv.bijective _
+  bijective_coweightMap := LinearEquiv.bijective _
 
 Depends on / 依赖: SFinite, SigmaFinite, disjointed, disjointed_subset, infer_instance, measure_mono, measure_spanningSets_lt_top, restrict, spanningSets, sum_restrict_disjointed_spanningSets, trans_lt
 -/
@@ -1477,7 +1611,27 @@ definition toEndUnit
       refine bijective_iff_has_inverse.mpr ?_
       use f.inv.weightMap
       constructor
-      · refine leftInverse_iff_com
+      · refine leftInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.weightMap_mul]; rw [f.inv_val]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
+      · refine rightInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.weightMap_mul]; rw [f.val_inv]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
+    bijective_coweightMap := by
+      refine bijective_iff_has_inverse.mpr ?_
+      use f.inv.coweightMap
+      constructor
+      · refine leftInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.coweightMap_mul]; rw [f.val_inv]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe]
+      · refine rightInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.coweightMap_mul]; rw [f.inv_val]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe] }
+  left_inv f := by simp
+  right_inv f := by simp
+  map_mul' f g := by
+    simp only [Equiv.mul_eq_comp, Equiv.toHom_comp]
+    ext <;> simp
 
 中文:
 定义 toEndUnit
@@ -1492,7 +1646,27 @@ definition toEndUnit
       refine bijective_iff_has_inverse.mpr ?_
       use f.inv.weightMap
       constructor
-      · refine leftInverse_iff_com
+      · refine leftInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.weightMap_mul]; rw [f.inv_val]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
+      · refine rightInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.weightMap_mul]; rw [f.val_inv]; rw [Hom.weightMap_one]; rw [LinearMap.id_coe]
+    bijective_coweightMap := by
+      refine bijective_iff_has_inverse.mpr ?_
+      use f.inv.coweightMap
+      constructor
+      · refine leftInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.coweightMap_mul]; rw [f.val_inv]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe]
+      · refine rightInverse_iff_comp.mpr ?_
+        simp only [← @LinearMap.coe_comp]
+        rw [← Hom.coweightMap_mul]; rw [f.inv_val]; rw [Hom.coweightMap_one]; rw [LinearMap.id_coe] }
+  left_inv f := by simp
+  right_inv f := by simp
+  map_mul' f g := by
+    simp only [Equiv.mul_eq_comp, Equiv.toHom_comp]
+    ext <;> simp
 
 Depends on / 依赖: Equiv.symm, Hom.weightMap_mul, Hom.weightMap_one, LinearMap, LinearMap.coe_comp, LinearMap.id_coe, bijective_iff_has_inverse, bijective_iff_has_inverse.mpr, bijective_weightMap, coe_comp, f.inv.weightMap, f.inv_val, f.toHom, f.val, f.val_inv, id_coe, invFun, inv_val, leftInverse_iff_comp, leftInverse_iff_comp.mpr
 -/
@@ -1620,7 +1794,10 @@ lemma weightHom_injective
   let h : (weightHom P g).toLinearMap = (weightHom P g').toLinearMap := hgg' --`have` gets lint
   rw [weightHom_toLinearMap]; rw [weightHom_toLinearMap] at h
   suffices h' : g.toHom = g'.toHom by
-    exact Equiv.ext hgg
+    exact Equiv.ext hgg' (congrArg Hom.coweightMap h') (congrArg Hom.indexEquiv h')
+  exact Hom.weightHom_injective P hgg'
+
+@[simp]
 
 中文:
 引理 weightHom_injective
@@ -1631,7 +1808,10 @@ lemma weightHom_injective
   let h : (weightHom P g).toLinearMap = (weightHom P g').toLinearMap := hgg' --`have` gets lint
   rw [weightHom_toLinearMap]; rw [weightHom_toLinearMap] at h
   suffices h' : g.toHom = g'.toHom by
-    exact Equiv.ext hgg
+    exact Equiv.ext hgg' (congrArg Hom.coweightMap h') (congrArg Hom.indexEquiv h')
+  exact Hom.weightHom_injective P hgg'
+
+@[simp]
 
 Depends on / 依赖: Equiv.ext, Hom.coweightMap, Hom.indexEquiv, Hom.weightHom_injective, Injective, Injective.of_comp, LinearEquiv, LinearEquiv.toLinearMap, coweightMap, g.toHom, indexEquiv, of_comp, toLinearMap, weightHom, weightHom_injective, weightHom_toLinearMap
 -/
@@ -1732,7 +1912,10 @@ lemma coweightHom_injective
       (MulOpposite.unop (coweightHom P g')).toLinearMap := by
     simp_all
   rw [coweightHom_toLinearMap]; rw [coweightHom_toLinearMap] at h
-  suffices h' 
+  suffices h' : g.toHom = g'.toHom by
+    exact Equiv.ext (congrArg Hom.weightMap h') h (congrArg Hom.indexEquiv h')
+  apply Hom.coweightHom_injective P
+  exact MulOpposite.unop_inj.mp h
 
 中文:
 引理 coweightHom_injective
@@ -1744,7 +1927,10 @@ lemma coweightHom_injective
       (MulOpposite.unop (coweightHom P g')).toLinearMap := by
     simp_all
   rw [coweightHom_toLinearMap]; rw [coweightHom_toLinearMap] at h
-  suffices h' 
+  suffices h' : g.toHom = g'.toHom by
+    exact Equiv.ext (congrArg Hom.weightMap h') h (congrArg Hom.indexEquiv h')
+  apply Hom.coweightHom_injective P
+  exact MulOpposite.unop_inj.mp h
 
 Depends on / 依赖: Equiv.ext, Hom.coweightHom_injective, Hom.indexEquiv, Hom.weightMap, Injective, Injective.of_comp, MulOpposite, MulOpposite.op, MulOpposite.unop, MulOpposite.unop_inj.mp, coweightHom, coweightHom_injective, coweightHom_toLinearMap, g.toHom, indexEquiv, of_comp, toLinearMap, unop_inj, weightMap
 -/
@@ -1862,7 +2048,13 @@ definition reflection
   root_weightMap := by ext; simp
   coroot_coweightMap := by ext; simp
   bijective_weightMap := by
-    simp
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (P.reflection i)
+  bijective_coweightMap := by
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (P.coreflection i)
+
+@[simp]
 
 中文:
 定义 reflection
@@ -1875,7 +2067,13 @@ definition reflection
   root_weightMap := by ext; simp
   coroot_coweightMap := by ext; simp
   bijective_weightMap := by
-    simp
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (P.reflection i)
+  bijective_coweightMap := by
+    simp only [LinearEquiv.coe_coe]
+    exact LinearEquiv.bijective (P.coreflection i)
+
+@[simp]
 
 Depends on / 依赖: P.reflection, reflection
 -/

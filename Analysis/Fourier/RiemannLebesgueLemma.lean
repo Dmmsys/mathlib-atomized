@@ -72,7 +72,16 @@ theorem fourierIntegral_half_period_translate
     rwa [Ne, sq_eq_zero_iff, norm_eq_zero]
   have :
     (fun v : V => 𝐞 (-⟪v, w⟫) • f (v + i w)) =
-
+      fun v : V => (fun x : V => -(𝐞 (-⟪x, w⟫) • f x)) (v + i w) := by
+    ext1 v
+    simp_rw [inner_add_left, hiw, Circle.smul_def, Real.fourierChar_apply, neg_add, mul_add,
+      ofReal_add, add_mul, exp_add]
+    match_scalars
+    have H : exp (- (π * I)) = (-1)⁻¹ := by rw [exp_neg, exp_pi_mul_I]
+    linear_combination (norm := ring_nf) cexp (-2 * π * ⟪v, w⟫ * I) * H
+  rw [this]; rw [integral_add_right_eq_self (fun (x : V) => -(𝐞 (-⟪x]; rw [w⟫) • f x))
+        ((fun w => (1 / (2 * ‖w‖ ^ (2 : Nat))) • w) w)]
+  simp only [integral_neg]
 
 中文:
 定理 fourier整数egral_half_period_translate
@@ -83,7 +92,16 @@ theorem fourierIntegral_half_period_translate
     rwa [Ne, sq_eq_zero_iff, norm_eq_zero]
   have :
     (fun v : V => 𝐞 (-⟪v, w⟫) • f (v + i w)) =
-
+      fun v : V => (fun x : V => -(𝐞 (-⟪x, w⟫) • f x)) (v + i w) := by
+    ext1 v
+    simp_rw [inner_add_left, hiw, Circle.smul_def, Real.fourierChar_apply, neg_add, mul_add,
+      ofReal_add, add_mul, exp_add]
+    match_scalars
+    have H : exp (- (π * I)) = (-1)⁻¹ := by rw [exp_neg, exp_pi_mul_I]
+    linear_combination (norm := ring_nf) cexp (-2 * π * ⟪v, w⟫ * I) * H
+  rw [this]; rw [integral_add_right_eq_self (fun (x : V) => -(𝐞 (-⟪x]; rw [w⟫) • f x))
+        ((fun w => (1 / (2 * ‖w‖ ^ (2 : Nat))) • w) w)]
+  simp only [integral_neg]
 
 Depends on / 依赖: Circle, Circle.smul_def, RCLike, RCLike.conj_to_real, RCLike.ofReal_real_eq_id, Real.fourierChar_apply, add_mul, conj_to_real, div_div, exp_add, fourierChar_apply, inner_add_left, inner_self_eq_norm_sq_to_K, inner_smul_left, match_scalars, mul_add, neg_add, norm_eq_zero, ofReal_add, ofReal_real_eq_id
 -/
@@ -117,6 +135,7 @@ theorem fourierIntegral_eq_half_sub_half_period_translate
     two_smul Complex _]; rw [← @smul_assoc _ _ _ _ _ _ (IsScalarTower.left Complex)]; rw [smul_eq_mul]
   · simp
   exacts [(Real.fourierIntegral_convergent_iff w).2 hf,
+    (Real.fourierIntegral_convergent_iff w).2 (hf.comp_add_right _)]
 
 中文:
 定理 fourier整数egral_eq_half_sub_half_period_translate
@@ -127,6 +146,7 @@ theorem fourierIntegral_eq_half_sub_half_period_translate
     two_smul Complex _]; rw [← @smul_assoc _ _ _ _ _ _ (IsScalarTower.left Complex)]; rw [smul_eq_mul]
   · simp
   exacts [(Real.fourierIntegral_convergent_iff w).2 hf,
+    (Real.fourierIntegral_convergent_iff w).2 (hf.comp_add_right _)]
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.left, Real.fourierIntegral_convergent_iff, comp_add_right, exacts, fourierIntegral_convergent_iff, fourierIntegral_half_period_translate, hf.comp_add_right, integral_sub, neg_neg, simp_rw, smul_assoc, smul_eq_mul, smul_sub, sub_eq_add_neg, two_smul
 -/
@@ -152,7 +172,72 @@ theorem tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support
     simp_rw [← comap_dist_left_atTop_eq_cocompact (0 : V), eventually_comap, eventually_atTop,
       dist_eq_norm', sub_zero]
     exact
-      let 
+      let ⟨T, hT⟩ := this
+      ⟨T, fun b hb v hv => hT v (hv.symm ▸ hb)⟩
+  obtain ⟨R, -, hR_bd⟩ : exists R : Real, 0 < R ∧ forall x : V, R <= ‖x‖ -> f x = 0 := hf2.exists_pos_le_norm
+  let A := {v : V | ‖v‖ <= R + 1}
+  have mA : MeasurableSet A := by
+    suffices A = Metric.closedBall (0 : V) (R + 1) by
+      rw [this]
+      exact Metric.isClosed_closedBall.measurableSet
+    simp_rw [A, Metric.closedBall, dist_eq_norm, sub_zero]
+  obtain ⟨B, hB_pos, hB_vol⟩ : exists B : Real>=0, 0 < B ∧ volume A <= B := by
+    have hc : IsCompact A := by
+      simpa only [Metric.closedBall, dist_eq_norm, sub_zero] using isCompact_closedBall (0 : V) _
+    let B₀ := volume A
+    replace hc : B₀ < ⊤ := hc.measure_lt_top
+    refine ⟨B₀.toNNReal + 1, add_pos_of_nonneg_of_pos B₀.toNNReal.coe_nonneg one_pos, ?_⟩
+    rw [ENNReal.coe_add]; rw [ENNReal.coe_one]; rw [ENNReal.coe_toNNReal hc.ne]
+    exact le_self_add
+  --* Use uniform continuity to choose δ such that `‖x - y‖ < δ` implies `‖f x - f y‖ < ε / B`.
+  obtain ⟨δ, hδ1, hδ2⟩ :=
+    Metric.uniformContinuous_iff.mp (hf2.uniformContinuous_of_continuous hf1) (ε / B)
+      (div_pos hε hB_pos)
+  refine ⟨1 / 2 + 1 / (2 * δ), fun w hw_bd => ?_⟩
+  have hw_ne : w != 0 := by
+    contrapose! hw_bd; rw [hw_bd, norm_zero]
+    exact add_pos one_half_pos (one_div_pos.mpr <| mul_pos two_pos hδ1)
+  have hw'_nm : ‖i w‖ = 1 / (2 * ‖w‖) := by
+    rw [norm_smul]; rw [norm_div]; rw [Real.norm_of_nonneg (mul_nonneg two_pos.le <| sq_nonneg _)]; rw [norm_one]; rw [sq]; rw [← div_div]; rw [← div_div]; rw [← div_div]; rw [div_mul_cancel₀ _ (norm_eq_zero.not.mpr hw_ne)]
+  --* Rewrite integral in terms of `f v - f (v + w')`.
+  have : ‖(1 / 2 : Complex)‖ = 2⁻¹ := by simp
+  rw [fourierIntegral_eq_half_sub_half_period_translate hw_ne
+      (hf1.integrable_of_hasCompactSupport hf2)]; rw [norm_smul]; rw [this]; rw [inv_mul_eq_div]; rw [div_lt_iff₀' two_pos]
+  refine lt_of_le_of_lt (norm_integral_le_integral_norm _) ?_
+  simp_rw [Circle.norm_smul]
+  --* Show integral can be taken over A only.
+  have int_A : ∫ v : V, ‖f v - f (v + i w)‖ = ∫ v in A, ‖f v - f (v + i w)‖ := by
+    refine (setIntegral_eq_integral_of_forall_compl_eq_zero fun v hv => ?_).symm
+    dsimp only [A] at hv
+    simp only [mem_ofPred, not_le] at hv
+    rw [hR_bd v _]; rw [hR_bd (v + i w) _]; rw [sub_zero]; rw [norm_zero]
+    · rw [← sub_neg_eq_add]
+      refine le_trans ?_ (norm_sub_norm_le _ _)
+      rw [le_sub_iff_add_le]; rw [norm_neg]
+      refine le_trans ?_ hv.le
+      rw [add_le_add_iff_left]; rw [hw'_nm]; rw [← div_div]
+      refine (div_le_one <| norm_pos_iff.mpr hw_ne).mpr ?_
+      refine le_trans (le_add_of_nonneg_right <| one_div_nonneg.mpr <| ?_) hw_bd
+      exact (mul_pos (zero_lt_two' Real) hδ1).le
+    · exact (le_add_of_nonneg_right zero_le_one).trans hv.le
+  rw [int_A]; clear int_A
+  --* Bound integral using fact that `‖f v - f (v + w')‖` is small.
+  have bdA : forall v : V, v in A -> ‖‖f v - f (v + i w)‖‖ <= ε / B := by
+    simp_rw [norm_norm]
+    simp_rw [dist_eq_norm] at hδ2
+    refine fun x _ => (hδ2 ?_).le
+    rw [sub_add_cancel_left]; rw [norm_neg]; rw [hw'_nm]; rw [← div_div]; rw [div_lt_iff₀ (norm_pos_iff.mpr hw_ne)]; rw [←
+      div_lt_iff₀' hδ1]; rw [div_div]
+    exact (lt_add_of_pos_left _ one_half_pos).trans_le hw_bd
+  have bdA2 := norm_setIntegral_le_of_norm_le_const (hB_vol.trans_lt ENNReal.coe_lt_top) bdA
+  have : ‖_‖ = ∫ v : V in A, ‖f v - f (v + i w)‖ :=
+    Real.norm_of_nonneg (setIntegral_nonneg mA fun x _ => norm_nonneg _)
+  rw [this] at bdA2
+  refine bdA2.trans_lt ?_
+  rw [div_mul_eq_mul_div]; rw [div_lt_iff₀ (NNReal.coe_pos.mpr hB_pos)]; rw [mul_comm (2 : Real)]; rw [mul_assoc]; rw [mul_lt_mul_iff_right₀ hε]
+  refine (ENNReal.toReal_mono ENNReal.coe_ne_top hB_vol).trans_lt ?_
+  rw [ENNReal.coe_toReal]; rw [two_mul]
+  exact lt_add_of_pos_left _ hB_pos
 
 中文:
 定理 tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support
@@ -163,7 +248,72 @@ theorem tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support
     simp_rw [← comap_dist_left_atTop_eq_cocompact (0 : V), eventually_comap, eventually_atTop,
       dist_eq_norm', sub_zero]
     exact
-      let 
+      let ⟨T, hT⟩ := this
+      ⟨T, fun b hb v hv => hT v (hv.symm ▸ hb)⟩
+  obtain ⟨R, -, hR_bd⟩ : exists R : Real, 0 < R ∧ forall x : V, R <= ‖x‖ -> f x = 0 := hf2.exists_pos_le_norm
+  let A := {v : V | ‖v‖ <= R + 1}
+  have mA : MeasurableSet A := by
+    suffices A = Metric.closedBall (0 : V) (R + 1) by
+      rw [this]
+      exact Metric.isClosed_closedBall.measurableSet
+    simp_rw [A, Metric.closedBall, dist_eq_norm, sub_zero]
+  obtain ⟨B, hB_pos, hB_vol⟩ : exists B : Real>=0, 0 < B ∧ volume A <= B := by
+    have hc : IsCompact A := by
+      simpa only [Metric.closedBall, dist_eq_norm, sub_zero] using isCompact_closedBall (0 : V) _
+    let B₀ := volume A
+    replace hc : B₀ < ⊤ := hc.measure_lt_top
+    refine ⟨B₀.toNNReal + 1, add_pos_of_nonneg_of_pos B₀.toNNReal.coe_nonneg one_pos, ?_⟩
+    rw [ENNReal.coe_add]; rw [ENNReal.coe_one]; rw [ENNReal.coe_toNNReal hc.ne]
+    exact le_self_add
+  --* Use uniform continuity to choose δ such that `‖x - y‖ < δ` implies `‖f x - f y‖ < ε / B`.
+  obtain ⟨δ, hδ1, hδ2⟩ :=
+    Metric.uniformContinuous_iff.mp (hf2.uniformContinuous_of_continuous hf1) (ε / B)
+      (div_pos hε hB_pos)
+  refine ⟨1 / 2 + 1 / (2 * δ), fun w hw_bd => ?_⟩
+  have hw_ne : w != 0 := by
+    contrapose! hw_bd; rw [hw_bd, norm_zero]
+    exact add_pos one_half_pos (one_div_pos.mpr <| mul_pos two_pos hδ1)
+  have hw'_nm : ‖i w‖ = 1 / (2 * ‖w‖) := by
+    rw [norm_smul]; rw [norm_div]; rw [Real.norm_of_nonneg (mul_nonneg two_pos.le <| sq_nonneg _)]; rw [norm_one]; rw [sq]; rw [← div_div]; rw [← div_div]; rw [← div_div]; rw [div_mul_cancel₀ _ (norm_eq_zero.not.mpr hw_ne)]
+  --* Rewrite integral in terms of `f v - f (v + w')`.
+  have : ‖(1 / 2 : Complex)‖ = 2⁻¹ := by simp
+  rw [fourierIntegral_eq_half_sub_half_period_translate hw_ne
+      (hf1.integrable_of_hasCompactSupport hf2)]; rw [norm_smul]; rw [this]; rw [inv_mul_eq_div]; rw [div_lt_iff₀' two_pos]
+  refine lt_of_le_of_lt (norm_integral_le_integral_norm _) ?_
+  simp_rw [Circle.norm_smul]
+  --* Show integral can be taken over A only.
+  have int_A : ∫ v : V, ‖f v - f (v + i w)‖ = ∫ v in A, ‖f v - f (v + i w)‖ := by
+    refine (setIntegral_eq_integral_of_forall_compl_eq_zero fun v hv => ?_).symm
+    dsimp only [A] at hv
+    simp only [mem_ofPred, not_le] at hv
+    rw [hR_bd v _]; rw [hR_bd (v + i w) _]; rw [sub_zero]; rw [norm_zero]
+    · rw [← sub_neg_eq_add]
+      refine le_trans ?_ (norm_sub_norm_le _ _)
+      rw [le_sub_iff_add_le]; rw [norm_neg]
+      refine le_trans ?_ hv.le
+      rw [add_le_add_iff_left]; rw [hw'_nm]; rw [← div_div]
+      refine (div_le_one <| norm_pos_iff.mpr hw_ne).mpr ?_
+      refine le_trans (le_add_of_nonneg_right <| one_div_nonneg.mpr <| ?_) hw_bd
+      exact (mul_pos (zero_lt_two' Real) hδ1).le
+    · exact (le_add_of_nonneg_right zero_le_one).trans hv.le
+  rw [int_A]; clear int_A
+  --* Bound integral using fact that `‖f v - f (v + w')‖` is small.
+  have bdA : forall v : V, v in A -> ‖‖f v - f (v + i w)‖‖ <= ε / B := by
+    simp_rw [norm_norm]
+    simp_rw [dist_eq_norm] at hδ2
+    refine fun x _ => (hδ2 ?_).le
+    rw [sub_add_cancel_left]; rw [norm_neg]; rw [hw'_nm]; rw [← div_div]; rw [div_lt_iff₀ (norm_pos_iff.mpr hw_ne)]; rw [←
+      div_lt_iff₀' hδ1]; rw [div_div]
+    exact (lt_add_of_pos_left _ one_half_pos).trans_le hw_bd
+  have bdA2 := norm_setIntegral_le_of_norm_le_const (hB_vol.trans_lt ENNReal.coe_lt_top) bdA
+  have : ‖_‖ = ∫ v : V in A, ‖f v - f (v + i w)‖ :=
+    Real.norm_of_nonneg (setIntegral_nonneg mA fun x _ => norm_nonneg _)
+  rw [this] at bdA2
+  refine bdA2.trans_lt ?_
+  rw [div_mul_eq_mul_div]; rw [div_lt_iff₀ (NNReal.coe_pos.mpr hB_pos)]; rw [mul_comm (2 : Real)]; rw [mul_assoc]; rw [mul_lt_mul_iff_right₀ hε]
+  refine (ENNReal.toReal_mono ENNReal.coe_ne_top hB_vol).trans_lt ?_
+  rw [ENNReal.coe_toReal]; rw [two_mul]
+  exact lt_add_of_pos_left _ hB_pos
 
 Depends on / 依赖: MeasurableSet, NormedAddGroup, NormedAddGroup.tendsto_nhds_zero.mpr, comap_dist_left_atTop_eq_cocompact, dist_eq_norm, eventually_atTop, eventually_comap, exists_pos_le_norm, hR_bd, hf2.exists_pos_le_norm, hv.symm, simp_rw, sub_zero, tendsto_nhds_zero
 -/
@@ -256,7 +406,24 @@ theorem tendsto_integral_exp_inner_smul_cocompact
     rwa [Real.fourierIntegral_convergent_iff]
   refine Metric.tendsto_nhds.mpr fun ε hε => ?_
   obtain ⟨g, hg_supp, hfg, hg_cont, -⟩ :=
-    hfi.exists_hasCompactSupport_integral_sub_
+    hfi.exists_hasCompactSupport_integral_sub_le (div_pos hε two_pos)
+  refine
+    ((Metric.tendsto_nhds.mp
+            (tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support hg_cont
+              hg_supp))
+          _ (div_pos hε two_pos)).mp
+      (Eventually.of_forall fun w hI => ?_)
+  rw [dist_eq_norm] at hI ⊢
+  have : ‖(∫ v, 𝐞 (-⟪v, w⟫) • f v) - ∫ v, 𝐞 (-⟪v, w⟫) • g v‖ <= ε / 2 := by
+    refine le_trans ?_ hfg
+    simp_rw [← integral_sub ((Real.fourierIntegral_convergent_iff w).2 hfi)
+      ((Real.fourierIntegral_convergent_iff w).2 (hg_cont.integrable_of_hasCompactSupport hg_supp)),
+      ← smul_sub, ← Pi.sub_apply]
+    exact VectorFourier.norm_fourierIntegral_le_integral_norm 𝐞 _ (innerₗ V) (f - g) w
+  replace := add_lt_add_of_le_of_lt this hI
+  rw [add_halves] at this
+  refine ((le_of_eq ?_).trans (norm_add_le _ _)).trans_lt this
+  simp only [sub_zero, sub_add_cancel]
 
 中文:
 定理 tendsto_integral_exp_inner_smul_cocompact
@@ -267,7 +434,24 @@ theorem tendsto_integral_exp_inner_smul_cocompact
     rwa [Real.fourierIntegral_convergent_iff]
   refine Metric.tendsto_nhds.mpr fun ε hε => ?_
   obtain ⟨g, hg_supp, hfg, hg_cont, -⟩ :=
-    hfi.exists_hasCompactSupport_integral_sub_
+    hfi.exists_hasCompactSupport_integral_sub_le (div_pos hε two_pos)
+  refine
+    ((Metric.tendsto_nhds.mp
+            (tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support hg_cont
+              hg_supp))
+          _ (div_pos hε two_pos)).mp
+      (Eventually.of_forall fun w hI => ?_)
+  rw [dist_eq_norm] at hI ⊢
+  have : ‖(∫ v, 𝐞 (-⟪v, w⟫) • f v) - ∫ v, 𝐞 (-⟪v, w⟫) • g v‖ <= ε / 2 := by
+    refine le_trans ?_ hfg
+    simp_rw [← integral_sub ((Real.fourierIntegral_convergent_iff w).2 hfi)
+      ((Real.fourierIntegral_convergent_iff w).2 (hg_cont.integrable_of_hasCompactSupport hg_supp)),
+      ← smul_sub, ← Pi.sub_apply]
+    exact VectorFourier.norm_fourierIntegral_le_integral_norm 𝐞 _ (innerₗ V) (f - g) w
+  replace := add_lt_add_of_le_of_lt this hI
+  rw [add_halves] at this
+  refine ((le_of_eq ?_).trans (norm_add_le _ _)).trans_lt this
+  simp only [sub_zero, sub_add_cancel]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Integrable, Metric, Metric.tendsto_nhds.mp, Metric.tendsto_nhds.mpr, Real.fourierIntegral_convergent_iff, convert, div_pos, exists_hasCompactSupport_integral_sub_le, fourierIntegral_convergent_iff, hfi.exists_hasCompactSupport_integral_sub_le, hg_cont, hg_supp, integral_undef, of_forall, tendsto_const_nhds, tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support, tendsto_nhds, two_pos
 -/
@@ -354,7 +538,14 @@ theorem tendsto_integral_exp_smul_cocompact_of_inner_product
   rw [← (smul_zero _ : Measure.addHaarScalarFactor μ volume • (0 : E) = 0)]
   apply Tendsto.const_smul
   let A := (InnerProductSpace.toDual Real V).symm
-  have : (fun w : StrongDual Real V => ∫ v, 𝐞 (-w v) • f v) 
+  have : (fun w : StrongDual Real V => ∫ v, 𝐞 (-w v) • f v) =
+      (fun w : V => ∫ v, 𝐞 (-⟪v, w⟫) • f v) ∘ A := by
+    ext1 w
+    congr 1 with v : 1
+    rw [← inner_conj_symm]; rw [RCLike.conj_to_real]; rw [InnerProductSpace.toDual_symm_apply]
+  rw [this]
+  exact (tendsto_integral_exp_inner_smul_cocompact f).comp
+      A.toHomeomorph.toCocompactMap.cocompact_tendsto'
 
 中文:
 定理 tendsto_integral_exp_smul_cocompact_of_inner_product
@@ -365,7 +556,14 @@ theorem tendsto_integral_exp_smul_cocompact_of_inner_product
   rw [← (smul_zero _ : Measure.addHaarScalarFactor μ volume • (0 : E) = 0)]
   apply Tendsto.const_smul
   let A := (InnerProductSpace.toDual Real V).symm
-  have : (fun w : StrongDual Real V => ∫ v, 𝐞 (-w v) • f v) 
+  have : (fun w : StrongDual Real V => ∫ v, 𝐞 (-w v) • f v) =
+      (fun w : V => ∫ v, 𝐞 (-⟪v, w⟫) • f v) ∘ A := by
+    ext1 w
+    congr 1 with v : 1
+    rw [← inner_conj_symm]; rw [RCLike.conj_to_real]; rw [InnerProductSpace.toDual_symm_apply]
+  rw [this]
+  exact (tendsto_integral_exp_inner_smul_cocompact f).comp
+      A.toHomeomorph.toCocompactMap.cocompact_tendsto'
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.toDual, InnerProductSpace.toDual_symm_apply, Measure, Measure.addHaarScalarFactor, RCLike, RCLike.conj_to_real, StrongDual, Tendsto, Tendsto.const_smul, addHaarScalarFactor, conj_to_real, const_smul, inner_conj_symm, integral_smul_nnreal_measure, isAddLeftInvariant_eq_smul, simp_rw, smul_zero, tendsto_integral_exp_inner_s, toDual
 -/
@@ -404,7 +602,20 @@ theorem tendsto_integral_exp_smul_cocompact
   -- refer to the inner product. So we choose an arbitrary inner-product space isomorphic to V
   -- and port the result over from there.
   let V' := EuclideanSpace Real (Fin (finrank Real V))
-  have
+  have A : V ≃L[Real] V' := toEuclidean
+  borelize V'
+  -- various equivs derived from A
+  let Aₘ : MeasurableEquiv V V' := A.toHomeomorph.toMeasurableEquiv
+  -- isomorphism between duals derived from A
+  let Adual : StrongDual Real V ≃L[Real] StrongDual Real V' := A.arrowCongrSL (.refl _ _)
+  have : (μ.map Aₘ).IsAddHaarMeasure := A.isAddHaarMeasure_map _
+  convert!
+    (tendsto_integral_exp_smul_cocompact_of_inner_product (f ∘ A.symm) (μ.map Aₘ)).comp
+      Adual.toHomeomorph.toCocompactMap.cocompact_tendsto' with
+    w
+  suffices ∫ v, 𝐞 (-w v) • f v ∂μ = ∫ (x : V), 𝐞 (-w (A.symm (Aₘ x))) • f (A.symm (Aₘ x)) ∂μ by
+    simpa [Function.comp_apply, integral_map_equiv, Adual]
+  simp [Aₘ]
 
 中文:
 定理 tendsto_integral_exp_smul_cocompact
@@ -414,7 +625,20 @@ theorem tendsto_integral_exp_smul_cocompact
   -- refer to the inner product. So we choose an arbitrary inner-product space isomorphic to V
   -- and port the result over from there.
   let V' := EuclideanSpace Real (Fin (finrank Real V))
-  have
+  have A : V ≃L[Real] V' := toEuclidean
+  borelize V'
+  -- various equivs derived from A
+  let Aₘ : MeasurableEquiv V V' := A.toHomeomorph.toMeasurableEquiv
+  -- isomorphism between duals derived from A
+  let Adual : StrongDual Real V ≃L[Real] StrongDual Real V' := A.arrowCongrSL (.refl _ _)
+  have : (μ.map Aₘ).IsAddHaarMeasure := A.isAddHaarMeasure_map _
+  convert!
+    (tendsto_integral_exp_smul_cocompact_of_inner_product (f ∘ A.symm) (μ.map Aₘ)).comp
+      Adual.toHomeomorph.toCocompactMap.cocompact_tendsto' with
+    w
+  suffices ∫ v, 𝐞 (-w v) • f v ∂μ = ∫ (x : V), 𝐞 (-w (A.symm (Aₘ x))) • f (A.symm (Aₘ x)) ∂μ by
+    simpa [Function.comp_apply, integral_map_equiv, Adual]
+  simp [Aₘ]
 -/
 theorem tendsto_integral_exp_smul_cocompact (μ : Measure V) [μ.IsAddHaarMeasure] :
     Tendsto (fun w : StrongDual Real V => ∫ v, 𝐞 (-w v) • f v ∂μ) (cocompact (StrongDual Real V))

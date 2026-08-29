@@ -44,7 +44,8 @@ definition dualSubmodule
   zero_mem' y _ := by rw [B.zero_left]; exact zero_mem _
   smul_mem' r a ha y hy := by
     convert! (1 : Submodule R S).smul_mem r (ha y hy)
-    rw [← IsScalarTower.algebraMa
+    rw [← IsScalarTower.algebraMap_smul S r a]
+    simp only [algebraMap_smul, map_smul_of_tower, LinearMap.smul_apply]
 
 中文:
 定义 dualSubmodule
@@ -54,7 +55,8 @@ definition dualSubmodule
   zero_mem' y _ := by rw [B.zero_left]; exact zero_mem _
   smul_mem' r a ha y hy := by
     convert! (1 : Submodule R S).smul_mem r (ha y hy)
-    rw [← IsScalarTower.algebraMa
+    rw [← IsScalarTower.algebraMap_smul S r a]
+    simp only [algebraMap_smul, map_smul_of_tower, LinearMap.smul_apply]
 
 Depends on / 依赖: Submodule
 -/
@@ -172,7 +174,10 @@ definition dualSubmoduleToDual
       map_add' := fun x y => FaithfulSMul.algebraMap_injective R S (by simp)
       map_smul' := fun r m => FaithfulSMul.algebraMap_injective R S
         (by simp [← Algebra.smul_def]) }
-    map_add' := fun x y => LinearMap.ext fun z => Faith
+    map_add' := fun x y => LinearMap.ext fun z => FaithfulSMul.algebraMap_injective R S
+      (by simp)
+    map_smul' := fun r x => LinearMap.ext fun y => FaithfulSMul.algebraMap_injective R S
+      (by simp [← Algebra.smul_def]) }
 
 中文:
 定义 dualSubmoduleToDual
@@ -182,7 +187,10 @@ definition dualSubmoduleToDual
       map_add' := fun x y => FaithfulSMul.algebraMap_injective R S (by simp)
       map_smul' := fun r m => FaithfulSMul.algebraMap_injective R S
         (by simp [← Algebra.smul_def]) }
-    map_add' := fun x y => LinearMap.ext fun z => Faith
+    map_add' := fun x y => LinearMap.ext fun z => FaithfulSMul.algebraMap_injective R S
+      (by simp)
+    map_smul' := fun r x => LinearMap.ext fun y => FaithfulSMul.algebraMap_injective R S
+      (by simp [← Algebra.smul_def]) }
 
 Depends on / 依赖: Algebra, Algebra.smul_def, B.dualSubmoduleParing, FaithfulSMul, FaithfulSMul.algebraMap_injective, LinearMap, LinearMap.ext, algebraMap_injective, dualSubmoduleParing, map_add, map_smul, smul_def
 -/
@@ -250,7 +258,18 @@ lemma dualSubmodule_span_of_basis
     rintro i -
 obtain ⟨r, hr⟩ := Submodule.mem_one.mp hx (b i) (Submodule.subset_span ⟨_, rfl⟩)
     simp only [dualBasis_repr_apply, ← hr, algebraMap_smul]
-    apply Submodule.
+    apply Submodule.smul_mem
+    exact Submodule.subset_span ⟨_, rfl⟩
+  · rw [Submodule.span_le]
+    rintro _ ⟨i, rfl⟩ y hy
+    obtain ⟨f, rfl⟩ := (Submodule.mem_span_range_iff_exists_fun _).mp hy
+    simp only [map_sum]
+    apply sum_mem
+    rintro j -
+    rw [← IsScalarTower.algebraMap_smul S (f j)]; rw [map_smul]
+    simp_rw [apply_dualBasis_left]
+    rw [smul_eq_mul]; rw [mul_ite]; rw [mul_one]; rw [mul_zero]; rw [← (algebraMap R S).map_zero]; rw [← apply_ite]
+    exact Submodule.mem_one.mpr ⟨_, rfl⟩
 
 中文:
 引理 dualSubmodule_span_of_basis
@@ -264,7 +283,18 @@ obtain ⟨r, hr⟩ := Submodule.mem_one.mp hx (b i) (Submodule.subset_span ⟨_,
     rintro i -
 obtain ⟨r, hr⟩ := Submodule.mem_one.mp hx (b i) (Submodule.subset_span ⟨_, rfl⟩)
     simp only [dualBasis_repr_apply, ← hr, algebraMap_smul]
-    apply Submodule.
+    apply Submodule.smul_mem
+    exact Submodule.subset_span ⟨_, rfl⟩
+  · rw [Submodule.span_le]
+    rintro _ ⟨i, rfl⟩ y hy
+    obtain ⟨f, rfl⟩ := (Submodule.mem_span_range_iff_exists_fun _).mp hy
+    simp only [map_sum]
+    apply sum_mem
+    rintro j -
+    rw [← IsScalarTower.algebraMap_smul S (f j)]; rw [map_smul]
+    simp_rw [apply_dualBasis_left]
+    rw [smul_eq_mul]; rw [mul_ite]; rw [mul_one]; rw [mul_zero]; rw [← (algebraMap R S).map_zero]; rw [← apply_ite]
+    exact Submodule.mem_one.mpr ⟨_, rfl⟩
 
 Depends on / 依赖: B.dualBasis, IsScalarTowe, Submodule, Submodule.mem_one.mp, Submodule.mem_span_range_iff_exists_fun, Submodule.smul_mem, Submodule.span_le, Submodule.subset_span, algebraMap_smul, dualBasis, dualBasis_repr_apply, le_antisymm, map_sum, mem_one, mem_span_range_iff_exists_fun, nonempty_fintype, smul_mem, span_le, subset_span, sum_mem
 -/

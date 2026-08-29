@@ -47,7 +47,9 @@ lemma plus_cylinder
   dsimp [cylinder]
   refine homotopyCofiber.isZero_X _ _ ?_ (fun j hj => ?_)
   · refine IsZero.of_iso ?_ ((HomologicalComplex.eval C (.up Int) i).mapBiprod _ _)
-    simpa using K.isZero_of_isStrictlyGE
+    simpa using K.isZero_of_isStrictlyGE n i
+  · simp only [ComplexShape.up_Rel] at hj
+    exact K.isZero_of_isStrictlyGE n _ (by lia)
 
 中文:
 引理 plus_cylinder
@@ -60,7 +62,9 @@ lemma plus_cylinder
   dsimp [cylinder]
   refine homotopyCofiber.isZero_X _ _ ?_ (fun j hj => ?_)
   · refine IsZero.of_iso ?_ ((HomologicalComplex.eval C (.up Int) i).mapBiprod _ _)
-    simpa using K.isZero_of_isStrictlyGE
+    simpa using K.isZero_of_isStrictlyGE n i
+  · simp only [ComplexShape.up_Rel] at hj
+    exact K.isZero_of_isStrictlyGE n _ (by lia)
 
 Depends on / 依赖: CochainComplex, CochainComplex.isStrictlyGE_iff, ComplexShape, ComplexShape.up_Rel, HomologicalComplex, HomologicalComplex.eval, IsZero, IsZero.of_iso, K.isZero_of_isStrictlyGE, cylinder, homotopyCofiber, homotopyCofiber.isZero_X, isStrictlyGE_iff, isZero_X, isZero_of_isStrictlyGE, mapBiprod, of_iso, up_Rel
 -/
@@ -283,7 +287,7 @@ instance :
         simp only [plus_quotient_obj_iff] at hK
         obtain ⟨q, _⟩ := hK
         rw [ObjectProperty.prop_shift_iff]; rw [shift_quotient_obj]; rw [plus_quotient_obj_iff]
-        exact ⟨q - n, K.isStrict
+        exact ⟨q - n, K.isStrictlyGE_shift q n (q - n) (by lia)⟩ }
 
 中文:
 实例 :
@@ -293,7 +297,7 @@ instance :
         simp only [plus_quotient_obj_iff] at hK
         obtain ⟨q, _⟩ := hK
         rw [ObjectProperty.prop_shift_iff]; rw [shift_quotient_obj]; rw [plus_quotient_obj_iff]
-        exact ⟨q - n, K.isStrict
+        exact ⟨q - n, K.isStrictlyGE_shift q n (q - n) (by lia)⟩ }
 
 Depends on / 依赖: CochainComplex, K.isStrictlyGE_shift, K.quotient_obj_surjective, ObjectProperty, ObjectProperty.prop_shift_iff, isStrictlyGE_shift, le_shift, plus_quotient_obj_iff, prop_shift_iff, quotient_obj_surjective, shift_quotient_obj
 -/
@@ -321,7 +325,13 @@ instance [HasZeroObject
       rwa [← plus_quotient_obj_iff]
     obtain ⟨f : T.obj₁.as ⟶ T.obj₂.as, hf⟩ := (quotient _ _).map_surjective T.mor₁
     refine ⟨_, ?_,
- 
+      ⟨Triangle.π₃.mapIso (isoTriangleOfIso₁₂ T _ hT (mappingCone_triangleh_distinguished f)
+        (Iso.refl _) (Iso.refl _) ?_)⟩⟩
+    · dsimp
+      simp only [plus_quotient_obj_iff]
+      exact ⟨min (n₁ - 1) n₂, CochainComplex.isStrictlyGE_mappingCone f n₁ n₂ _
+        (by simp) (by simp)⟩
+    · simp [hf]
 
 中文:
 实例 [有ZeroObject
@@ -333,7 +343,13 @@ instance [HasZeroObject
       rwa [← plus_quotient_obj_iff]
     obtain ⟨f : T.obj₁.as ⟶ T.obj₂.as, hf⟩ := (quotient _ _).map_surjective T.mor₁
     refine ⟨_, ?_,
- 
+      ⟨Triangle.π₃.mapIso (isoTriangleOfIso₁₂ T _ hT (mappingCone_triangleh_distinguished f)
+        (Iso.refl _) (Iso.refl _) ?_)⟩⟩
+    · dsimp
+      simp only [plus_quotient_obj_iff]
+      exact ⟨min (n₁ - 1) n₂, CochainComplex.isStrictlyGE_mappingCone f n₁ n₂ _
+        (by simp) (by simp)⟩
+    · simp [hf]
 
 Depends on / 依赖: CochainComplex, CochainComplex.isStrictlyGE_mappingCone, CochainComplex.plus, Iso.refl, T.mor, T.obj, Triangle, isStrictlyGE_mappingCone, mapIso, map_surjective, mappingCone_triangleh_distinguished, plus_quotient_obj_iff, quotient
 -/
@@ -652,7 +668,11 @@ instance :
       simpa [← isIso_iff_of_reflects_iso _ (HomotopyCategory.Plus.ι C),
         ← inverseImage_quotient_isomorphisms] using! hf) (by
     rintro K L f₀ f₁ hf
-    obtain ⟨f₀, rfl⟩ := ObjectProperty.homMk_surjecti
+    obtain ⟨f₀, rfl⟩ := ObjectProperty.homMk_surjective f₀
+    obtain ⟨f₁, rfl⟩ := ObjectProperty.homMk_surjective f₁
+    replace hf := homotopyOfEq f₀ f₁ ((HomotopyCategory.Plus.ι _).congr_map hf)
+    exact ⟨K.precylinder, Precylinder.LeftHomotopy.fullSubcategoryEquiv.symm
+      { h := cylinder.desc _ _ hf }, ⟨cylinder.homotopyEquiv _ (fun n => ⟨n - 1, by simp⟩), rfl⟩⟩)
 
 中文:
 实例 :
@@ -661,7 +681,11 @@ instance :
       simpa [← isIso_iff_of_reflects_iso _ (HomotopyCategory.Plus.ι C),
         ← inverseImage_quotient_isomorphisms] using! hf) (by
     rintro K L f₀ f₁ hf
-    obtain ⟨f₀, rfl⟩ := ObjectProperty.homMk_surjecti
+    obtain ⟨f₀, rfl⟩ := ObjectProperty.homMk_surjective f₀
+    obtain ⟨f₁, rfl⟩ := ObjectProperty.homMk_surjective f₁
+    replace hf := homotopyOfEq f₀ f₁ ((HomotopyCategory.Plus.ι _).congr_map hf)
+    exact ⟨K.precylinder, Precylinder.LeftHomotopy.fullSubcategoryEquiv.symm
+      { h := cylinder.desc _ _ hf }, ⟨cylinder.homotopyEquiv _ (fun n => ⟨n - 1, by simp⟩), rfl⟩⟩)
 
 Depends on / 依赖: Functor, Functor.isLocalization_of_essSurj_of_full_of_exists_cylinders, HomotopyCategory, HomotopyCategory.Plus, K.precylinder, LeftHomotopy, ObjectProperty, ObjectProperty.homMk_surjective, Precylinder, Precylinder.LeftHomotopy.fullSubcategoryEquiv.symm, congr_map, cylinder, fullSubcategoryEquiv, homMk_surjective, homotopyOfEq, inverseImage_quotient_isomorphisms, isIso_iff_of_reflects_iso, isLocalization_of_essSurj_of_full_of_exists_cylinders, precylinder, replace
 -/
@@ -781,7 +805,9 @@ definition mapHomotopyCategoryPlus
       obtain ⟨K, rfl⟩ := HomotopyCategory.quotient_obj_surjective X
       dsimp
       simp only [HomotopyCategory.plus_quotient_obj_iff] at hX ⊢
-      obtain ⟨n, _⟩ :
+      obtain ⟨n, _⟩ := hX
+      exact ⟨n, inferInstanceAs (CochainComplex.IsStrictlyGE
+        ((F.mapHomologicalComplex _).obj K) n)⟩)
 
 中文:
 定义 mapHomotopyCategoryPlus
@@ -792,7 +818,9 @@ definition mapHomotopyCategoryPlus
       obtain ⟨K, rfl⟩ := HomotopyCategory.quotient_obj_surjective X
       dsimp
       simp only [HomotopyCategory.plus_quotient_obj_iff] at hX ⊢
-      obtain ⟨n, _⟩ :
+      obtain ⟨n, _⟩ := hX
+      exact ⟨n, inferInstanceAs (CochainComplex.IsStrictlyGE
+        ((F.mapHomologicalComplex _).obj K) n)⟩)
 
 Depends on / 依赖: CochainComplex, CochainComplex.IsStrictlyGE, ComplexShape, ComplexShape.up, F.mapHomologicalComplex, F.mapHomotopyCategory, HomotopyCategory, HomotopyCategory.Plus, HomotopyCategory.plus, HomotopyCategory.plus_quotient_obj_iff, HomotopyCategory.quotient_obj_surjective, IsStrictlyGE, mapHomologicalComplex, mapHomotopyCategory, plus_quotient_obj_iff, quotient_obj_surjective
 -/

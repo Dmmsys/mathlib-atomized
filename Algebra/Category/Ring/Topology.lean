@@ -190,7 +190,11 @@ lemma isClosedEmbedding_precomp_of_surjective
     isClosed_iInter fun x => (isClosed_singleton (x := 0)).preimage (continuous_apply (R := R) x.1)
   convert! this
   ext x
-  simp only [Set.mem_range, Set.mem_iInter, Set
+  simp only [Set.mem_range, Set.mem_iInter, Set.mem_ofPred_eq, Subtype.forall, RingHom.mem_ker]
+  constructor
+  · rintro ⟨g, rfl⟩ a ha; simp [ha]
+  · exact fun H => ⟨CommRingCat.ofHom (RingHom.liftOfSurjective f.hom hf ⟨x.hom, H⟩),
+      by ext; simp [RingHom.liftOfRightInverse_comp_apply]⟩
 
 中文:
 引理 isClosedEmbedding_precomp_of_surjective
@@ -200,7 +204,11 @@ lemma isClosedEmbedding_precomp_of_surjective
     isClosed_iInter fun x => (isClosed_singleton (x := 0)).preimage (continuous_apply (R := R) x.1)
   convert! this
   ext x
-  simp only [Set.mem_range, Set.mem_iInter, Set
+  simp only [Set.mem_range, Set.mem_iInter, Set.mem_ofPred_eq, Subtype.forall, RingHom.mem_ker]
+  constructor
+  · rintro ⟨g, rfl⟩ a ha; simp [ha]
+  · exact fun H => ⟨CommRingCat.ofHom (RingHom.liftOfSurjective f.hom hf ⟨x.hom, H⟩),
+      by ext; simp [RingHom.liftOfRightInverse_comp_apply]⟩
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsClosed, RingHom, RingHom.ker, RingHom.liftOfRightIn, RingHom.liftOfSurjective, RingHom.mem_ker, Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_range, Subtype, Subtype.forall, continuous_apply, convert, f.hom, isClosed_iInter, isClosed_singleton, isEmbedding_precomp_of_surjective, liftOfRightIn
 -/
@@ -234,7 +242,9 @@ definition mvPolynomialHomeomorph
   continuous_toFun := by fun_prop
   continuous_invFun := by
     refine continuous_induced_rng.mpr ?_
-    
+    refine continuous_pi fun p => ?_
+    simp only [Function.comp_apply, hom_ofHom, MvPolynomial.coe_eval₂Hom, MvPolynomial.eval₂_eq]
+    fun_prop
 
 中文:
 定义 mvPolynomialHomeomorph
@@ -246,7 +256,9 @@ definition mvPolynomialHomeomorph
   continuous_toFun := by fun_prop
   continuous_invFun := by
     refine continuous_induced_rng.mpr ?_
-    
+    refine continuous_pi fun p => ?_
+    simp only [Function.comp_apply, hom_ofHom, MvPolynomial.coe_eval₂Hom, MvPolynomial.eval₂_eq]
+    fun_prop
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, MvPolynomial, MvPolynomial.C
 -/
@@ -279,7 +291,11 @@ lemma isClosedEmbedding_hom
   have : Function.Surjective f := Function.LeftInverse.surjective (g := .X) fun x => by simp [f]
   convert!
     ((mvPolynomialHomeomorph A R (.of _)).trans
-       
+          (.uniqueProd (⊥_ CommRingCat ⟶ R) _)).isClosedEmbedding.comp
+      (isClosedEmbedding_precomp_of_surjective f this) using
+    2 with g
+  ext x
+  simp +instances [f]
 
 中文:
 引理 isClosedEmbedding_hom
@@ -290,7 +306,11 @@ lemma isClosedEmbedding_hom
   have : Function.Surjective f := Function.LeftInverse.surjective (g := .X) fun x => by simp [f]
   convert!
     ((mvPolynomialHomeomorph A R (.of _)).trans
-       
+          (.uniqueProd (⊥_ CommRingCat ⟶ R) _)).isClosedEmbedding.comp
+      (isClosedEmbedding_precomp_of_surjective f this) using
+    2 with g
+  ext x
+  simp +instances [f]
 
 Depends on / 依赖: CommRingCat, CommRingCat.of, CommRingCat.ofHom, Function, Function.LeftInverse.surjective, Function.Surjective, LeftInverse, MvPolynomial, MvPolynomial.eval, Surjective, convert, initial, initial.to, instances, isClosedEmbedding, isClosedEmbedding.comp, isClosedEmbedding_precomp_of_surjective, mvPolynomialHomeomorph, surjective, uniqueProd
 -/
@@ -357,7 +377,36 @@ lemma isEmbedding_pushout
   -- The key idea: Let `X = Spec B` and `Y = Spec C`.
   -- We want to show `(X × Y)(R)` has the subspace topology from `X(R) × Y(R)`.
   -- We already know that `X(R) × Y(R)` is a subspace of `𝔸ᴮ(R) × 𝔸ᶜ(R)` and by explicit calculation
-  -- this is isomorphic to `𝔸ᴮ⁺ᶜ(R)` which `(X × Y)(R)` embeds
+  -- this is isomorphic to `𝔸ᴮ⁺ᶜ(R)` which `(X × Y)(R)` embeds into.
+  let PB := CommRingCat.of (MvPolynomial B A)
+  let PC := CommRingCat.of (MvPolynomial C A)
+  let fB : PB ⟶ B := CommRingCat.ofHom (MvPolynomial.eval₂Hom φ.hom id)
+  have hfB : Function.Surjective fB.hom := fun x => ⟨.X x, by simp [PB, fB]⟩
+  let fC : PC ⟶ C := CommRingCat.ofHom (MvPolynomial.eval₂Hom ψ.hom id)
+  have hfC : Function.Surjective fC.hom := fun x => ⟨.X x, by simp [PC, fC]⟩
+  have := (isEmbedding_precomp_of_surjective (R := R) fB hfB).prodMap
+    (isEmbedding_precomp_of_surjective (R := R) fC hfC)
+  rw [← IsEmbedding.of_comp_iff this]
+  let PBC := CommRingCat.of (MvPolynomial (B oplus C) A)
+  let fBC : PBC ⟶ pushout φ ψ :=
+    CommRingCat.ofHom (MvPolynomial.eval₂Hom (φ ≫ pushout.inl φ ψ).hom
+      (Sum.elim (pushout.inl φ ψ).hom (pushout.inr φ ψ).hom))
+  have hfBC : Function.Surjective fBC := by
+    rw [← RingHom.range_eq_top]; rw [← top_le_iff]; rw [← closure_range_union_range_eq_top_of_isPushout (.of_hasPushout _ _)]; rw [Subring.closure_le]
+    simp only [Set.union_subset_iff, RingHom.coe_range, Set.range_subset_iff, Set.mem_range]
+    exact ⟨fun x => ⟨.X (.inl x), by simp [fBC, PBC]⟩, fun x => ⟨.X (.inr x), by simp [fBC, PBC]⟩⟩
+  let F : ((A ⟶ R) × ((B oplus C) -> R)) -> ((A ⟶ R) × (B -> R)) × ((A ⟶ R) × (C -> R)) :=
+    fun x => ⟨⟨x.1, x.2 ∘ Sum.inl⟩, ⟨x.1, x.2 ∘ Sum.inr⟩⟩
+  have hF : IsEmbedding F := (Homeomorph.prodProdProdComm _ _ _ _).isEmbedding.comp
+    ((isEmbedding_graph continuous_id).prodMap Homeomorph.sumArrowHomeomorphProdArrow.isEmbedding)
+  have H := (mvPolynomialHomeomorph B R A).symm.isEmbedding.prodMap
+    (mvPolynomialHomeomorph C R A).symm.isEmbedding
+  convert!
+    ((H.comp hF).comp (mvPolynomialHomeomorph _ R A).isEmbedding).comp
+      (isEmbedding_precomp_of_surjective (R := R) fBC hfBC)
+  have (s : _) : (pushout.inr φ ψ).hom (ψ.hom s) = (pushout.inl φ ψ).hom (φ.hom s) :=
+    congr($(pushout.condition (f := φ)).hom s).symm
+  ext f s <;> simp [fB, fC, fBC, PB, PC, PBC, F, this]
 
 中文:
 引理 isEmbedding_pushout
@@ -366,7 +415,36 @@ lemma isEmbedding_pushout
   -- The key idea: Let `X = Spec B` and `Y = Spec C`.
   -- We want to show `(X × Y)(R)` has the subspace topology from `X(R) × Y(R)`.
   -- We already know that `X(R) × Y(R)` is a subspace of `𝔸ᴮ(R) × 𝔸ᶜ(R)` and by explicit calculation
-  -- this is isomorphic to `𝔸ᴮ⁺ᶜ(R)` which `(X × Y)(R)` embeds
+  -- this is isomorphic to `𝔸ᴮ⁺ᶜ(R)` which `(X × Y)(R)` embeds into.
+  let PB := CommRingCat.of (MvPolynomial B A)
+  let PC := CommRingCat.of (MvPolynomial C A)
+  let fB : PB ⟶ B := CommRingCat.ofHom (MvPolynomial.eval₂Hom φ.hom id)
+  have hfB : Function.Surjective fB.hom := fun x => ⟨.X x, by simp [PB, fB]⟩
+  let fC : PC ⟶ C := CommRingCat.ofHom (MvPolynomial.eval₂Hom ψ.hom id)
+  have hfC : Function.Surjective fC.hom := fun x => ⟨.X x, by simp [PC, fC]⟩
+  have := (isEmbedding_precomp_of_surjective (R := R) fB hfB).prodMap
+    (isEmbedding_precomp_of_surjective (R := R) fC hfC)
+  rw [← IsEmbedding.of_comp_iff this]
+  let PBC := CommRingCat.of (MvPolynomial (B oplus C) A)
+  let fBC : PBC ⟶ pushout φ ψ :=
+    CommRingCat.ofHom (MvPolynomial.eval₂Hom (φ ≫ pushout.inl φ ψ).hom
+      (Sum.elim (pushout.inl φ ψ).hom (pushout.inr φ ψ).hom))
+  have hfBC : Function.Surjective fBC := by
+    rw [← RingHom.range_eq_top]; rw [← top_le_iff]; rw [← closure_range_union_range_eq_top_of_isPushout (.of_hasPushout _ _)]; rw [Subring.closure_le]
+    simp only [Set.union_subset_iff, RingHom.coe_range, Set.range_subset_iff, Set.mem_range]
+    exact ⟨fun x => ⟨.X (.inl x), by simp [fBC, PBC]⟩, fun x => ⟨.X (.inr x), by simp [fBC, PBC]⟩⟩
+  let F : ((A ⟶ R) × ((B oplus C) -> R)) -> ((A ⟶ R) × (B -> R)) × ((A ⟶ R) × (C -> R)) :=
+    fun x => ⟨⟨x.1, x.2 ∘ Sum.inl⟩, ⟨x.1, x.2 ∘ Sum.inr⟩⟩
+  have hF : IsEmbedding F := (Homeomorph.prodProdProdComm _ _ _ _).isEmbedding.comp
+    ((isEmbedding_graph continuous_id).prodMap Homeomorph.sumArrowHomeomorphProdArrow.isEmbedding)
+  have H := (mvPolynomialHomeomorph B R A).symm.isEmbedding.prodMap
+    (mvPolynomialHomeomorph C R A).symm.isEmbedding
+  convert!
+    ((H.comp hF).comp (mvPolynomialHomeomorph _ R A).isEmbedding).comp
+      (isEmbedding_precomp_of_surjective (R := R) fBC hfBC)
+  have (s : _) : (pushout.inr φ ψ).hom (ψ.hom s) = (pushout.inl φ ψ).hom (φ.hom s) :=
+    congr($(pushout.condition (f := φ)).hom s).symm
+  ext f s <;> simp [fB, fC, fBC, PB, PC, PBC, F, this]
 -/
 lemma isEmbedding_pushout [IsTopologicalRing R] (φ : A ⟶ B) (ψ : A ⟶ C) :
     IsEmbedding fun f : pushout φ ψ ⟶ R => (pushout.inl φ ψ ≫ f, pushout.inr φ ψ ≫ f) := by

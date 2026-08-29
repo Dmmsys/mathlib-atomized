@@ -150,7 +150,11 @@ definition prodLift
   have : forall (X₁ : W₁.Localization),
       IsIso (((Functor.flip (prodLift₁ F hF)).map f₂).app X₁) := fun X₁ => by
     obtain ⟨X₁, rfl⟩ := (Construction.objEquiv W₁).surjective X₁
-    exact ((MorphismProp
+    exact ((MorphismProperty.isomorphisms E).arrow_mk_iso_iff
+      (((Functor.mapArrowFunctor _ _).mapIso
+        (eqToIso (Functor.congr_obj (prod_fac₁ F hF) X₁))).app (Arrow.mk f₂))).2
+          (hF _ ⟨MorphismProperty.id_mem _ _, hf₂⟩)
+  apply NatIso.isIso_of_isIso_app
 
 中文:
 定义 prodLift
@@ -161,7 +165,11 @@ definition prodLift
   have : forall (X₁ : W₁.Localization),
       IsIso (((Functor.flip (prodLift₁ F hF)).map f₂).app X₁) := fun X₁ => by
     obtain ⟨X₁, rfl⟩ := (Construction.objEquiv W₁).surjective X₁
-    exact ((MorphismProp
+    exact ((MorphismProperty.isomorphisms E).arrow_mk_iso_iff
+      (((Functor.mapArrowFunctor _ _).mapIso
+        (eqToIso (Functor.congr_obj (prod_fac₁ F hF) X₁))).app (Arrow.mk f₂))).2
+          (hF _ ⟨MorphismProperty.id_mem _ _, hf₂⟩)
+  apply NatIso.isIso_of_isIso_app
 
 Depends on / 依赖: Arrow.mk, Construction, Construction.lift, Construction.objEquiv, Functor, Functor.congr_obj, Functor.flip, Functor.mapArrowFunctor, Localization, MorphismProperty, MorphismProperty.id_mem, MorphismProperty.isomorphisms, NatIso, NatIso.isIso_of_isIso_, arrow_mk_iso_iff, congr_obj, eqToIso, id_mem, isIso_of_isIso_, isomorphisms
 -/

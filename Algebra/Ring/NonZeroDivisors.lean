@@ -38,7 +38,11 @@ theorem IsLeftRegular.pow_injective
     rw [pow_add]; rw [eq_comm]; rw [IsLeftRegular.mul_left_eq_self_iff (hx.pow n)]; rw [pow_eq_one_iff_right hx']
       at h₂
     rw [h₂]; rw [Nat.add_zero]
-  obtai
+  obtain h | h := Nat.le_or_le n m
+  · exact main h hnm
+  · exact (main h hnm.symm).symm
+
+@[to_additive]
 
 中文:
 定理 IsLeftRegular.pow_injective
@@ -50,7 +54,11 @@ theorem IsLeftRegular.pow_injective
     rw [pow_add]; rw [eq_comm]; rw [IsLeftRegular.mul_left_eq_self_iff (hx.pow n)]; rw [pow_eq_one_iff_right hx']
       at h₂
     rw [h₂]; rw [Nat.add_zero]
-  obtai
+  obtain h | h := Nat.le_or_le n m
+  · exact main h hnm
+  · exact (main h hnm.symm).symm
+
+@[to_additive]
 
 Depends on / 依赖: IsLeftRegular, IsLeftRegular.mul_left_eq_self_iff, Nat.add_zero, Nat.exists_eq_add_of_le, Nat.le_or_le, add_zero, eq_comm, exists_eq_add_of_le, hnm.symm, hx.pow, le_or_le, mul_left_eq_self_iff, pow_add, pow_eq_one_iff_right
 -/

@@ -410,6 +410,8 @@ theorem sInf_isPrime_of_isChain
       obtain ⟨I, hI, hI'⟩ := hx
       intro J hJ
       rcases hs'.total hI hJ with h | h
+      · exact h (((H I hI).mem_or_mem (e hI)).resolve_left hI')
+· exact ((H J hJ).mem_or_mem (e hJ)).resolve_left fun x => hI' h x⟩
 
 中文:
 定理 sInf_isPrime_of_isChain
@@ -424,6 +426,8 @@ theorem sInf_isPrime_of_isChain
       obtain ⟨I, hI, hI'⟩ := hx
       intro J hJ
       rcases hs'.total hI hJ with h | h
+      · exact h (((H I hI).mem_or_mem (e hI)).resolve_left hI')
+· exact ((H J hJ).mem_or_mem (e hJ)).resolve_left fun x => hI' h x⟩
 
 Depends on / 依赖: Ideal.mem_sInf, e.symm.trans_le, eq_top_iff, eq_top_iff.mpr, mem_or_mem, mem_sInf, ne_top, or_iff_not_imp_left, or_iff_not_imp_left.mpr, resolve_left, sInf_le, trans_le
 -/
@@ -513,6 +517,12 @@ theorem IsMaximal.isPrime
       have IJ : I <= J := Set.Subset.trans (subset_insert _ _) subset_span
       have xJ : x in J := Ideal.subset_span (Set.mem_insert x I)
       obtain ⟨_, oJ⟩ := isMaximal_iff.1 H
+      specialize oJ J x IJ hx xJ
+      rcases Submodule.mem_span_insert.mp oJ with ⟨a, b, h, oe⟩
+      obtain F : y * 1 = y * (a • x + b) := congr_arg (fun g : α => y * g) oe
+      rw [← mul_one y]; rw [F]; rw [mul_add]; rw [mul_comm]; rw [smul_eq_mul]; rw [mul_assoc]
+      refine Submodule.add_mem I (I.mul_mem_left a hxy) (Submodule.smul_mem I y ?_)
+      rwa [Submodule.span_eq] at h⟩
 
 中文:
 定理 是极大.isPrime
@@ -524,6 +534,12 @@ theorem IsMaximal.isPrime
       have IJ : I <= J := Set.Subset.trans (subset_insert _ _) subset_span
       have xJ : x in J := Ideal.subset_span (Set.mem_insert x I)
       obtain ⟨_, oJ⟩ := isMaximal_iff.1 H
+      specialize oJ J x IJ hx xJ
+      rcases Submodule.mem_span_insert.mp oJ with ⟨a, b, h, oe⟩
+      obtain F : y * 1 = y * (a • x + b) := congr_arg (fun g : α => y * g) oe
+      rw [← mul_one y]; rw [F]; rw [mul_add]; rw [mul_comm]; rw [smul_eq_mul]; rw [mul_assoc]
+      refine Submodule.add_mem I (I.mul_mem_left a hxy) (Submodule.smul_mem I y ?_)
+      rwa [Submodule.span_eq] at h⟩
 
 Depends on / 依赖: Ideal.subset_span, Set.Subset.trans, Set.mem_insert, Submodule, Submodule.mem_span_insert.mp, Submodule.span, Subset, congr_arg, insert, isMaximal_iff, mem_insert, mem_span_insert, mul_add, mul_comm, mul_one, or_iff_not_imp_left, smul_eq_mul, specialize, subset_insert, subset_span
 -/
@@ -616,7 +632,16 @@ lemma isPrime_of_maximally_disjoint
     by_contra! rid
     have hx := maximally_disjoint (I ⊔ span {x}) (Submodule.lt_sup_iff_notMem.mpr rid.1)
     have hy := maximally_disjoint (I ⊔ span {y}) (Submodule.lt_sup_iff_notMem.mpr rid.2)
- 
+    simp only [Set.not_disjoint_iff, SetLike.mem_coe, Submodule.mem_sup,
+      mem_span_singleton] at hx hy
+    obtain ⟨s₁, ⟨i₁, hi₁, ⟨_, ⟨r₁, rfl⟩, hr₁⟩⟩, hs₁⟩ := hx
+    obtain ⟨s₂, ⟨i₂, hi₂, ⟨_, ⟨r₂, rfl⟩, hr₂⟩⟩, hs₂⟩ := hy
+    refine disjoint.ne_of_mem
+      (I.add_mem (I.mul_mem_left (i₁ + x * r₁) hi₂) <| I.add_mem (I.mul_mem_right (y * r₂) hi₁) <|
+        I.mul_mem_right (r₁ * r₂) hxy)
+      (S.mul_mem hs₁ hs₂) ?_
+    rw [← hr₁]; rw [← hr₂]
+    ring
 
 中文:
 引理 isPrime_of_maximally_disjoint
@@ -629,7 +654,16 @@ lemma isPrime_of_maximally_disjoint
     by_contra! rid
     have hx := maximally_disjoint (I ⊔ span {x}) (Submodule.lt_sup_iff_notMem.mpr rid.1)
     have hy := maximally_disjoint (I ⊔ span {y}) (Submodule.lt_sup_iff_notMem.mpr rid.2)
- 
+    simp only [Set.not_disjoint_iff, SetLike.mem_coe, Submodule.mem_sup,
+      mem_span_singleton] at hx hy
+    obtain ⟨s₁, ⟨i₁, hi₁, ⟨_, ⟨r₁, rfl⟩, hr₁⟩⟩, hs₁⟩ := hx
+    obtain ⟨s₂, ⟨i₂, hi₂, ⟨_, ⟨r₂, rfl⟩, hr₂⟩⟩, hs₂⟩ := hy
+    refine disjoint.ne_of_mem
+      (I.add_mem (I.mul_mem_left (i₁ + x * r₁) hi₂) <| I.add_mem (I.mul_mem_right (y * r₂) hi₁) <|
+        I.mul_mem_right (r₁ * r₂) hxy)
+      (S.mul_mem hs₁ hs₂) ?_
+    rw [← hr₁]; rw [← hr₂]
+    ring
 
 Depends on / 依赖: S.one_mem, Set.not_disjoint_iff, SetLike, SetLike.mem_coe, Submodule, Submodule.lt_sup_iff_notMem.mpr, Submodule.mem_sup, disjoint, disjoint.ne_, lt_sup_iff_notMem, maximally_disjoint, mem_coe, mem_or_mem, mem_span_singleton, mem_sup, not_disjoint_iff, one_mem
 -/
@@ -668,7 +702,10 @@ theorem exists_le_prime_disjoint
     (fun c hc hc' x hx => ?_) I disjoint
   · exact ⟨p, isPrime_of_maximally_disjoint _ _ hp.1 (fun _ => hp.not_prop_of_gt), hIp, hp.1⟩
   cases isEmpty_or_nonempty c
-  · exact ⟨I, disjoint, fun J hJ => isEmptyElim (⟨J,
+  · exact ⟨I, disjoint, fun J hJ => isEmptyElim (⟨J, hJ⟩ : c)⟩
+  refine ⟨sSup c, Set.disjoint_left.mpr fun x hx => ?_, fun _ => le_sSup⟩
+  have ⟨p, hp⟩ := (Submodule.mem_iSup_of_directed _ hc'.directed).mp (sSup_eq_iSup' c ▸ hx)
+  exact Set.disjoint_left.mp (hc p.2) hp
 
 中文:
 定理 存在_le_prime_disjoint
@@ -678,7 +715,10 @@ theorem exists_le_prime_disjoint
     (fun c hc hc' x hx => ?_) I disjoint
   · exact ⟨p, isPrime_of_maximally_disjoint _ _ hp.1 (fun _ => hp.not_prop_of_gt), hIp, hp.1⟩
   cases isEmpty_or_nonempty c
-  · exact ⟨I, disjoint, fun J hJ => isEmptyElim (⟨J,
+  · exact ⟨I, disjoint, fun J hJ => isEmptyElim (⟨J, hJ⟩ : c)⟩
+  refine ⟨sSup c, Set.disjoint_left.mpr fun x hx => ?_, fun _ => le_sSup⟩
+  have ⟨p, hp⟩ := (Submodule.mem_iSup_of_directed _ hc'.directed).mp (sSup_eq_iSup' c ▸ hx)
+  exact Set.disjoint_left.mp (hc p.2) hp
 
 Depends on / 依赖: Disjoint, Set.disjoint_left.mp, Set.disjoint_left.mpr, Submodule, Submodule.mem_iSup_of_directed, directed, disjoint, disjoint_left, hp.not_prop_of_gt, isEmptyElim, isEmpty_or_nonempty, isPrime_of_maximally_disjoint, le_sSup, mem_iSup_of_directed, not_prop_of_gt, sSup_eq_iSup
 -/
@@ -704,7 +744,7 @@ theorem exists_le_prime_notMem_of_isIdempotentElem
     rintro _ (rfl | rfl)
     exacts [I.ne_top_iff_one.mp (ne_of_mem_of_not_mem' Submodule.mem_top haI).symm, haI]
   have ⟨p, h1, h2, h3⟩ := exists_le_prime_disjoint _ _ this
-  ⟨p, h1, h2, Set.disjoin
+  ⟨p, h1, h2, Set.disjoint_right.mp h3 (Submonoid.mem_powers a)⟩
 
 中文:
 定理 存在_le_prime_notMem_of_isIdempotentElem
@@ -714,7 +754,7 @@ theorem exists_le_prime_notMem_of_isIdempotentElem
     rintro _ (rfl | rfl)
     exacts [I.ne_top_iff_one.mp (ne_of_mem_of_not_mem' Submodule.mem_top haI).symm, haI]
   have ⟨p, h1, h2, h3⟩ := exists_le_prime_disjoint _ _ this
-  ⟨p, h1, h2, Set.disjoin
+  ⟨p, h1, h2, Set.disjoint_right.mp h3 (Submonoid.mem_powers a)⟩
 
 Depends on / 依赖: Disjoint, I.ne_top_iff_one.mp, Set.disjoint_right.mp, Set.disjoint_right.mpr, Submodule, Submodule.mem_top, Submonoid, Submonoid.mem_powers, Submonoid.powers, coe_powers, disjoint_right, exacts, exists_le_prime_disjoint, ha.coe_powers, mem_powers, mem_top, ne_of_mem_of_not_mem, ne_top_iff_one, powers
 -/
@@ -743,7 +783,19 @@ theorem irreducible_of_isMaximal_of_eq_span_singleton_of_not_isIdempotentElem
     have hu : span {u} <= span {a} :=
       (max.eq_of_le (span_singleton_ne_top huv.1)
         (span_singleton_le_span_singleton.2 ((dvd_mul_right u v).trans ha.symm.dvd))).ge
-
+    have hv : span {v} <= span {a} :=
+      (max.eq_of_le (span_singleton_ne_top huv.2)
+        (span_singleton_le_span_singleton.2 ((dvd_mul_left v u).trans ha.symm.dvd))).ge
+    rw [span_singleton_le_span_singleton] at hu hv
+    obtain ⟨c, rfl⟩ := hu
+    obtain ⟨d, rfl⟩ := hv
+    refine idem (a * (c * d)) ?_ ?_
+    · apply le_antisymm <;> rw [span_singleton_le_span_singleton]
+      · exact (dvd_mul_right (a * (c * d)) a).trans (ha.trans (by ring)).symm.dvd
+      · apply dvd_mul_right
+    · rw [isIdempotentElem_iff]
+      refine Eq.trans ?_ (congrArg (· * (c * d)) ha.symm)
+      ring
 
 中文:
 定理 irreducible_of_isMaximal_of_eq_span_singleton_of_not_isIdempotentElem
@@ -758,7 +810,19 @@ theorem irreducible_of_isMaximal_of_eq_span_singleton_of_not_isIdempotentElem
     have hu : span {u} <= span {a} :=
       (max.eq_of_le (span_singleton_ne_top huv.1)
         (span_singleton_le_span_singleton.2 ((dvd_mul_right u v).trans ha.symm.dvd))).ge
-
+    have hv : span {v} <= span {a} :=
+      (max.eq_of_le (span_singleton_ne_top huv.2)
+        (span_singleton_le_span_singleton.2 ((dvd_mul_left v u).trans ha.symm.dvd))).ge
+    rw [span_singleton_le_span_singleton] at hu hv
+    obtain ⟨c, rfl⟩ := hu
+    obtain ⟨d, rfl⟩ := hv
+    refine idem (a * (c * d)) ?_ ?_
+    · apply le_antisymm <;> rw [span_singleton_le_span_singleton]
+      · exact (dvd_mul_right (a * (c * d)) a).trans (ha.trans (by ring)).symm.dvd
+      · apply dvd_mul_right
+    · rw [isIdempotentElem_iff]
+      refine Eq.trans ?_ (congrArg (· * (c * d)) ha.symm)
+      ring
 
 Depends on / 依赖: dvd_mul_left, dvd_mul_right, eq_of_le, ha.symm.dvd, max.eq_of_le, max.ne_top, ne_top, span_singleton_eq_top, span_singleton_le_span_singleton, span_singleton_ne_top
 -/

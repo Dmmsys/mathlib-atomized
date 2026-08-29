@@ -74,7 +74,9 @@ lemma _root_.LinearMap.BilinForm.lieInvariant_iff
   · ext y z
     rw [LieHom.lie_apply]; rw [LinearMap.sub_apply]; rw [Module.Dual.lie_apply]; rw [LinearMap.zero_apply]; rw [LinearMap.zero_apply]; rw [h]; rw [sub_self]
   · replace h := LinearMap.congr_fun₂ (h x) y z
-    simp only [LieHom.lie_apply, Lin
+    simp only [LieHom.lie_apply, LinearMap.sub_apply, Module.Dual.lie_apply,
+      LinearMap.zero_apply, sub_eq_zero] at h
+    simp [← h]
 
 中文:
 引理 _root_.线性映射.BilinForm.lieInvariant_iff
@@ -84,7 +86,9 @@ lemma _root_.LinearMap.BilinForm.lieInvariant_iff
   · ext y z
     rw [LieHom.lie_apply]; rw [LinearMap.sub_apply]; rw [Module.Dual.lie_apply]; rw [LinearMap.zero_apply]; rw [LinearMap.zero_apply]; rw [h]; rw [sub_self]
   · replace h := LinearMap.congr_fun₂ (h x) y z
-    simp only [LieHom.lie_apply, Lin
+    simp only [LieHom.lie_apply, LinearMap.sub_apply, Module.Dual.lie_apply,
+      LinearMap.zero_apply, sub_eq_zero] at h
+    simp [← h]
 
 Depends on / 依赖: LieHom, LieHom.lie_apply, LinearMap, LinearMap.congr_fun, LinearMap.sub_apply, LinearMap.zero_apply, Module, Module.Dual.lie_apply, lie_apply, replace, sub_apply, sub_eq_zero, sub_self, zero_apply
 -/
@@ -114,7 +118,10 @@ definition orthogonal
     suffices (forall n in N, Φ n y = 0) -> forall n in N, Φ n ⁅x, y⁆ = 0 by
       simpa only [
         AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup, Submodule.mem_toAddSubmonoid,
-        LinearMap.BilinForm.mem_orthogonal_iff, LieSubmodule.mem_toS
+        LinearMap.BilinForm.mem_orthogonal_iff, LieSubmodule.mem_toSubmodule]
+    intro H a ha
+    rw [← neg_eq_zero]; rw [← hΦ_inv]
+exact H _ N.lie_mem ha
 
 中文:
 定义 orthogonal
@@ -124,7 +131,10 @@ definition orthogonal
     suffices (forall n in N, Φ n y = 0) -> forall n in N, Φ n ⁅x, y⁆ = 0 by
       simpa only [
         AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup, Submodule.mem_toAddSubmonoid,
-        LinearMap.BilinForm.mem_orthogonal_iff, LieSubmodule.mem_toS
+        LinearMap.BilinForm.mem_orthogonal_iff, LieSubmodule.mem_toSubmodule]
+    intro H a ha
+    rw [← neg_eq_zero]; rw [← hΦ_inv]
+exact H _ N.lie_mem ha
 
 Depends on / 依赖: orthogonal
 -/
@@ -192,7 +202,13 @@ lemma orthogonal_disjoint
   intro contra
   apply hI.1
   rw [eq_bot_iff]; rw [← lie_eq_self_of_isAtom_of_nonabelian I hI (hL I hI)]; rw [LieSubmodule.lieIdeal_oper_eq_span]; rw [LieSubmodule.lieSpan_le]
-  rintro _ ⟨
+  rintro _ ⟨x, y, rfl⟩
+  simp only [LieSubmodule.bot_coe, Set.mem_singleton_iff]
+  apply hΦ_nondeg.1
+  intro z
+  rw [hΦ_inv]; rw [neg_eq_zero]
+  have hyz : ⁅(x : L), z⁆ in I := lie_mem_left _ _ _ _ _ x.2
+  exact contra hyz y y.2
 
 中文:
 引理 orthogonal_disjoint
@@ -202,7 +218,13 @@ lemma orthogonal_disjoint
   intro contra
   apply hI.1
   rw [eq_bot_iff]; rw [← lie_eq_self_of_isAtom_of_nonabelian I hI (hL I hI)]; rw [LieSubmodule.lieIdeal_oper_eq_span]; rw [LieSubmodule.lieSpan_le]
-  rintro _ ⟨
+  rintro _ ⟨x, y, rfl⟩
+  simp only [LieSubmodule.bot_coe, Set.mem_singleton_iff]
+  apply hΦ_nondeg.1
+  intro z
+  rw [hΦ_inv]; rw [neg_eq_zero]
+  have hyz : ⁅(x : L), z⁆ in I := lie_mem_left _ _ _ _ _ x.2
+  exact contra hyz y y.2
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.bot_coe, LieSubmodule.lieIdeal_oper_eq_span, LieSubmodule.lieSpan_le, Set.mem_singleton_iff, bot_coe, contra, disjoint_iff, eq_bot_iff, hI.lt_iff, lieIdeal_oper_eq_span, lieSpan_le, lie_eq_self_of_isAtom_of_nonabelian, lie_mem_left, lt_iff, lt_iff_le_and_ne, mem_singleton_iff, neg_eq_zero, orthogonal
 -/
@@ -330,7 +352,7 @@ lemma restrict_orthogonal_nondegenerate
   rw [LinearMap.BilinForm.restrict_nondegenerate_iff_isCompl_orthogonal hΦ_refl]
   simp only [LieIdeal.toLieSubalgebra_toSubmodule, orthogonal_toSubmodule,
     LinearMap.BilinForm.orthogonal_orthogonal hΦ_nondeg hΦ_refl]
-  exact (orthogonal_isCompl_toSubmodule Φ hΦ_nondeg hΦ_inv hΦ_refl hL I hI).
+  exact (orthogonal_isCompl_toSubmodule Φ hΦ_nondeg hΦ_inv hΦ_refl hL I hI).symm
 
 中文:
 引理 restrict_orthogonal_nondegenerate
@@ -339,7 +361,7 @@ lemma restrict_orthogonal_nondegenerate
   rw [LinearMap.BilinForm.restrict_nondegenerate_iff_isCompl_orthogonal hΦ_refl]
   simp only [LieIdeal.toLieSubalgebra_toSubmodule, orthogonal_toSubmodule,
     LinearMap.BilinForm.orthogonal_orthogonal hΦ_nondeg hΦ_refl]
-  exact (orthogonal_isCompl_toSubmodule Φ hΦ_nondeg hΦ_inv hΦ_refl hL I hI).
+  exact (orthogonal_isCompl_toSubmodule Φ hΦ_nondeg hΦ_inv hΦ_refl hL I hI).symm
 
 Depends on / 依赖: BilinForm, LieIdeal, LieIdeal.toLieSubalgebra_toSubmodule, LinearMap, LinearMap.BilinForm.orthogonal_orthogonal, LinearMap.BilinForm.restrict_nondegenerate_iff_isCompl_orthogonal, orthogonal_isCompl_toSubmodule, orthogonal_orthogonal, orthogonal_toSubmodule, restrict_nondegenerate_iff_isCompl_orthogonal, toLieSubalgebra_toSubmodule
 -/
@@ -369,7 +391,22 @@ lemma atomistic
   let J' := orthogonal Φ hΦ_inv J
   suffices I <= J ⊔ (J' ⊓ I) by
     refine this.trans ?_
- 
+    apply sup_le
+    · exact le_sSup ⟨hJ, hJI⟩
+    rw [← atomistic (J' ⊓ I)]
+    apply sSup_le_sSup
+    simp only [le_inf_iff, Set.ofPred_subset_ofPred, and_imp]
+    tauto
+  suffices J ⊔ J' = ⊤ by rw [← sup_inf_assoc_of_le _ hJI, this, top_inf_eq]
+  exact (orthogonal_isCompl Φ hΦ_nondeg hΦ_inv hΦ_refl hL J hJ).codisjoint.eq_top
+termination_by I => finrank K I
+decreasing_by
+  apply finrank_lt_finrank_of_lt
+  suffices ¬I <= J' by simpa
+  intro hIJ'
+  apply hJ.1
+  rw [eq_bot_iff]
+  exact orthogonal_disjoint Φ hΦ_nondeg hΦ_inv hL J hJ le_rfl (hJI.trans hIJ')
 
 中文:
 引理 atomistic
@@ -386,7 +423,22 @@ lemma atomistic
   let J' := orthogonal Φ hΦ_inv J
   suffices I <= J ⊔ (J' ⊓ I) by
     refine this.trans ?_
- 
+    apply sup_le
+    · exact le_sSup ⟨hJ, hJI⟩
+    rw [← atomistic (J' ⊓ I)]
+    apply sSup_le_sSup
+    simp only [le_inf_iff, Set.ofPred_subset_ofPred, and_imp]
+    tauto
+  suffices J ⊔ J' = ⊤ by rw [← sup_inf_assoc_of_le _ hJI, this, top_inf_eq]
+  exact (orthogonal_isCompl Φ hΦ_nondeg hΦ_inv hΦ_refl hL J hJ).codisjoint.eq_top
+termination_by I => finrank K I
+decreasing_by
+  apply finrank_lt_finrank_of_lt
+  suffices ¬I <= J' by simpa
+  intro hIJ'
+  apply hJ.1
+  rw [eq_bot_iff]
+  exact orthogonal_disjoint Φ hΦ_nondeg hΦ_inv hL J hJ le_rfl (hJI.trans hIJ')
 
 Depends on / 依赖: Set.ofPred_subset_ofPred, and_imp, atomistic, bot_le, eq_bot_or_exists_atom_le, hI.le.trans, le_antisymm, le_inf_iff, le_sSup, ofPred_subset_ofPred, orthogonal, resolve_left, sSup_le, sSup_le_sSup, sup_inf_assoc_of_le, sup_le, this.trans, top_inf_eq
 -/
@@ -434,7 +486,15 @@ theorem isSemisimple_of_nondegenerate
   apply sSup_le
   simp only [Set.mem_sdiff, Set.mem_ofPred_eq, Set.mem_singleton_iff, and_imp]
   intro J hJ hJI
-  rw [← lie_eq_self_of_i
+  rw [← lie_eq_self_of_isAtom_of_nonabelian J hJ (hL J hJ)]; rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
+  rintro _ ⟨x, y, rfl⟩
+  simp only [orthogonal_carrier, Set.mem_ofPred_eq]
+  intro z hz
+  rw [← neg_eq_zero]; rw [← hΦ_inv]
+  suffices ⁅(x : L), z⁆ = 0 by simp only [this, map_zero, LinearMap.zero_apply]
+  rw [← LieSubmodule.mem_bot (R := K) (L := L)]; rw [← (hJ.disjoint_of_ne hI hJI).eq_bot]
+  apply lie_le_inf
+  exact lie_mem_lie x.2 hz
 
 中文:
 定理 isSemisimple_of_nondegenerate
@@ -447,7 +507,15 @@ theorem isSemisimple_of_nondegenerate
   apply sSup_le
   simp only [Set.mem_sdiff, Set.mem_ofPred_eq, Set.mem_singleton_iff, and_imp]
   intro J hJ hJI
-  rw [← lie_eq_self_of_i
+  rw [← lie_eq_self_of_isAtom_of_nonabelian J hJ (hL J hJ)]; rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
+  rintro _ ⟨x, y, rfl⟩
+  simp only [orthogonal_carrier, Set.mem_ofPred_eq]
+  intro z hz
+  rw [← neg_eq_zero]; rw [← hΦ_inv]
+  suffices ⁅(x : L), z⁆ = 0 by simp only [this, map_zero, LinearMap.zero_apply]
+  rw [← LieSubmodule.mem_bot (R := K) (L := L)]; rw [← (hJ.disjoint_of_ne hI hJI).eq_bot]
+  apply lie_le_inf
+  exact lie_mem_lie x.2 hz
 
 Depends on / 依赖: Set.mem_ofPred_eq, Set.mem_sdiff, Set.mem_singleton_iff, and_imp, atomistic, lieIdeal_oper_eq_span, lieSpan_le, lie_eq_self_of_isAtom_of_nonabelian, mem_ofPred_eq, mem_sdiff, mem_singleton_iff, mono_right, neg_eq_zero, orthogonal_carrier, orthogonal_disjoint, sSup_le
 -/

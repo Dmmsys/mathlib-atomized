@@ -406,7 +406,7 @@ definition selfAdjointPart
     simp [add_add_add_comm]
   map_smul' r x := by
     ext
-    simp [← mul_smul, show ⅟2 * r = r * ⅟2 from Commute.invOf_left <| (
+    simp [← mul_smul, show ⅟2 * r = r * ⅟2 from Commute.invOf_left <| (2 : Nat).cast_commute r]
 
 中文:
 定义 selfAdjointPart
@@ -418,7 +418,7 @@ definition selfAdjointPart
     simp [add_add_add_comm]
   map_smul' r x := by
     ext
-    simp [← mul_smul, show ⅟2 * r = r * ⅟2 from Commute.invOf_left <| (
+    simp [← mul_smul, show ⅟2 * r = r * ⅟2 from Commute.invOf_left <| (2 : Nat).cast_commute r]
 
 Depends on / 依赖: Commute, Commute.invOf_left, add_add_add_comm, add_comm, cast_commute, invOf_left, map_add, map_smul, mem_iff, mul_smul, selfAdjoint, selfAdjoint.mem_iff, star_add, star_smul, star_star, star_trivial
 -/
@@ -449,7 +449,8 @@ definition skewAdjointPart
     simp only [sub_add, ← smul_add, sub_sub_eq_add_sub, star_add, AddSubgroup.coe_add]
   map_smul' r x := by
     ext
-    simp [←
+    simp [← mul_smul, ← smul_sub,
+show r * ⅟2 = ⅟2 * r from Commute.invOf_right (2 : Nat).commute_cast r]
 
 中文:
 定义 skewAdjointPart
@@ -462,7 +463,8 @@ definition skewAdjointPart
     simp only [sub_add, ← smul_add, sub_sub_eq_add_sub, star_add, AddSubgroup.coe_add]
   map_smul' r x := by
     ext
-    simp [←
+    simp [← mul_smul, ← smul_sub,
+show r * ⅟2 = ⅟2 * r from Commute.invOf_right (2 : Nat).commute_cast r]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.coe_add, Commute, Commute.invOf_right, coe_add, commute_cast, invOf_right, map_add, map_smul, mem_iff, mul_smul, neg_sub, skewAdjoint, skewAdjoint.mem_iff, smul_add, smul_neg, smul_sub, star_add, star_smul, star_star
 -/
@@ -674,7 +676,8 @@ definition StarModule.decomposeProdAdjoint
   refine LinearEquiv.ofLinearMap ((selfAdjointPart R).prod (skewAdjointPart R))
     (LinearMap.coprod ((selfAdjoint.submodule R A).subtype) (skewAdjoint.submodule R A).subtype)
     ?_ (LinearMap.ext <| StarModule.selfAdjointPart_add_skewAdjointPart R)
-  -- Note: with https://github.com/leanprover
+  -- Note: with https://github.com/leanprover-community/mathlib4/pull/6965 `Submodule.coe_subtype` doesn't fire in `dsimp` or `simp`
+  ext x <;> dsimp <;> erw [Submodule.coe_subtype, Submodule.coe_subtype] <;> simp
 
 中文:
 定义 对合模.decomposeProdAdjoint
@@ -683,7 +686,8 @@ definition StarModule.decomposeProdAdjoint
   refine LinearEquiv.ofLinearMap ((selfAdjointPart R).prod (skewAdjointPart R))
     (LinearMap.coprod ((selfAdjoint.submodule R A).subtype) (skewAdjoint.submodule R A).subtype)
     ?_ (LinearMap.ext <| StarModule.selfAdjointPart_add_skewAdjointPart R)
-  -- Note: with https://github.com/leanprover
+  -- Note: with https://github.com/leanprover-community/mathlib4/pull/6965 `Submodule.coe_subtype` doesn't fire in `dsimp` or `simp`
+  ext x <;> dsimp <;> erw [Submodule.coe_subtype, Submodule.coe_subtype] <;> simp
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.coprod, LinearMap.ext, StarModule, StarModule.selfAdjointPart_add_skewAdjointPart, coprod, ofLinearMap, selfAdjoint, selfAdjoint.submodule, selfAdjointPart, selfAdjointPart_add_skewAdjointPart, skewAdjoint, skewAdjoint.submodule, skewAdjointPart, submodule, subtype
 -/

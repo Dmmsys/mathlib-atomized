@@ -1161,7 +1161,14 @@ theorem support_bernoulli
       not_iff_not]
     constructor
     · intro h'
-      simp only [tsub_eq_zero_
+      simp only [tsub_eq_zero_iff_le, one_le_coe_iff] at h'
+      exact eq_of_le_of_ge h h'
+    · intro h'
+      simp only [h', ENNReal.coe_one, tsub_self]
+  · simp only [mem_support_iff, bernoulli_apply, Bool.cond_true, Set.mem_ofPred_eq, ne_eq,
+      ENNReal.coe_eq_zero]
+
+@[deprecated ProbabilityTheory.bernoulliMeasure_apply_of_notMem_of_notMem (since := "2026-05-29")]
 
 中文:
 定理 support_bernoulli
@@ -1174,7 +1181,14 @@ theorem support_bernoulli
       not_iff_not]
     constructor
     · intro h'
-      simp only [tsub_eq_zero_
+      simp only [tsub_eq_zero_iff_le, one_le_coe_iff] at h'
+      exact eq_of_le_of_ge h h'
+    · intro h'
+      simp only [h', ENNReal.coe_one, tsub_self]
+  · simp only [mem_support_iff, bernoulli_apply, Bool.cond_true, Set.mem_ofPred_eq, ne_eq,
+      ENNReal.coe_eq_zero]
+
+@[deprecated ProbabilityTheory.bernoulliMeasure_apply_of_notMem_of_notMem (since := "2026-05-29")]
 
 Depends on / 依赖: Bool.cond_false, Bool.cond_prop, Bool.cond_true, Bool.false_eq_true, ENNReal, ENNReal.coe_eq_zero, ENNReal.coe_one, ENNReal.coe_sub, Set.ext, Set.mem_ofPred_eq, bernoulli_apply, coe_eq_zero, coe_one, coe_sub, cond_false, cond_prop, cond_true, eq_of_le_of_ge, false_eq_true, ite_false
 -/

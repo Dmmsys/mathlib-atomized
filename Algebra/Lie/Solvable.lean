@@ -221,7 +221,9 @@ theorem derivedSeriesOfIdeal_le
   | succ k ih =>
     have h : l = k.succ ∨ l <= k := by rwa [le_iff_eq_or_lt, Nat.lt_succ_iff] at h₂
     rcases h with h | h
-    · rw [h, derivedSeriesOfIdeal_succ, derivedSeriesOfId
+    · rw [h, derivedSeriesOfIdeal_succ, derivedSeriesOfIdeal_succ]
+      exact LieSubmodule.mono_lie (ih (le_refl k)) (ih (le_refl k))
+    · rw [derivedSeriesOfIdeal_succ]; exact le_trans (LieSubmodule.lie_le_left _ _) (ih h)
 
 中文:
 定理 derivedSeriesOfIdeal_le
@@ -232,7 +234,9 @@ theorem derivedSeriesOfIdeal_le
   | succ k ih =>
     have h : l = k.succ ∨ l <= k := by rwa [le_iff_eq_or_lt, Nat.lt_succ_iff] at h₂
     rcases h with h | h
-    · rw [h, derivedSeriesOfIdeal_succ, derivedSeriesOfId
+    · rw [h, derivedSeriesOfIdeal_succ, derivedSeriesOfIdeal_succ]
+      exact LieSubmodule.mono_lie (ih (le_refl k)) (ih (le_refl k))
+    · rw [derivedSeriesOfIdeal_succ]; exact le_trans (LieSubmodule.lie_le_left _ _) (ih h)
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lie_le_left, LieSubmodule.mono_lie, Nat.lt_succ_iff, derivedSeriesOfIdeal_succ, derivedSeriesOfIdeal_zero, generalizing, k.succ, le_iff_eq_or_lt, le_refl, le_trans, le_zero_iff, lie_le_left, lt_succ_iff, mono_lie
 -/
@@ -340,7 +344,8 @@ theorem derivedSeriesOfIdeal_add_le_add
       monotone' := fun I J h => LieSubmodule.mono_lie h h }
   have h₁ : forall I J : LieIdeal R L, D₁ (I ⊔ J) <= D₁ I ⊔ J := by
     simp [D₁, LieSubmodule.lie_le_right, LieSubmodule.lie_le_left, le_sup_of_le_right]
-  rw [←
+  rw [← D₁.iterate_sup_le_sup_iff] at h₁
+  exact h₁ k l I J
 
 中文:
 定理 derivedSeriesOfIdeal_add_le_add
@@ -351,7 +356,8 @@ theorem derivedSeriesOfIdeal_add_le_add
       monotone' := fun I J h => LieSubmodule.mono_lie h h }
   have h₁ : forall I J : LieIdeal R L, D₁ (I ⊔ J) <= D₁ I ⊔ J := by
     simp [D₁, LieSubmodule.lie_le_right, LieSubmodule.lie_le_left, le_sup_of_le_right]
-  rw [←
+  rw [← D₁.iterate_sup_le_sup_iff] at h₁
+  exact h₁ k l I J
 
 Depends on / 依赖: LieIdeal, LieSubmodule, LieSubmodule.lie_le_left, LieSubmodule.lie_le_right, LieSubmodule.mono_lie, iterate_sup_le_sup_iff, le_sup_of_le_right, lie_le_left, lie_le_right, mono_lie, monotone
 -/
@@ -495,7 +501,7 @@ theorem derivedSeries_eq_derivedSeriesOfIdeal_comap
   | succ k ih =>
     simp only [derivedSeries_def, derivedSeriesOfIdeal_succ] at ih ⊢; rw [ih]
     exact comap_bracket_incl_of_le I (derivedSeriesOfIdeal_le_self I k)
-      (derivedSeriesOfIde
+      (derivedSeriesOfIdeal_le_self I k)
 
 中文:
 定理 derivedSeries_eq_derivedSeriesOfIdeal_comap
@@ -506,7 +512,7 @@ theorem derivedSeries_eq_derivedSeriesOfIdeal_comap
   | succ k ih =>
     simp only [derivedSeries_def, derivedSeriesOfIdeal_succ] at ih ⊢; rw [ih]
     exact comap_bracket_incl_of_le I (derivedSeriesOfIdeal_le_self I k)
-      (derivedSeriesOfIde
+      (derivedSeriesOfIdeal_le_self I k)
 
 Depends on / 依赖: comap_bracket_incl_of_le, comap_incl_self, derivedSeriesOfIdeal_le_self, derivedSeriesOfIdeal_succ, derivedSeriesOfIdeal_zero, derivedSeries_def
 -/
@@ -754,7 +760,13 @@ theorem coe_derivedSeries_eq_int_aux
   simp only [SetLike.mem_coe] at hx ⊢
   induction hx using Submodule.closure_induction with
   | zero => exact Submodule.zero_mem _
-  
+  | add y z hy₁ hz₁ hy₂ hz₂ => exact Submodule.add_mem _ hy₂ hz₂
+  | smul_mem c y hy =>
+      obtain ⟨a, ha, b, hb, rfl⟩ := hy
+      rw [← smul_lie]
+      refine Submodule.subset_span ⟨c • a, ?_, b, hb, rfl⟩
+      rw [← ih] at ha ⊢
+      exact Submodule.smul_mem _ _ ha
 
 中文:
 定理 coe_derivedSeries_eq_int_aux
@@ -765,7 +777,13 @@ theorem coe_derivedSeries_eq_int_aux
   simp only [SetLike.mem_coe] at hx ⊢
   induction hx using Submodule.closure_induction with
   | zero => exact Submodule.zero_mem _
-  
+  | add y z hy₁ hz₁ hy₂ hz₂ => exact Submodule.add_mem _ hy₂ hz₂
+  | smul_mem c y hy =>
+      obtain ⟨a, ha, b, hb, rfl⟩ := hy
+      rw [← smul_lie]
+      refine Submodule.subset_span ⟨c • a, ?_, b, hb, rfl⟩
+      rw [← ih] at ha ⊢
+      exact Submodule.smul_mem _ _ ha
 -/
 private theorem coe_derivedSeries_eq_int_aux (R₁ R₂ L : Type*) [CommRing R₁] [CommRing R₂]
     [LieRing L] [LieAlgebra R₁ L] [LieAlgebra R₂ L] (k : Nat)
@@ -796,7 +814,13 @@ theorem coe_derivedSeries_eq_int
   | zero => rfl
   | succ k ih =>
     rw [derivedSeriesOfIdeal_succ]; rw [derivedSeriesOfIdeal_succ]
-    rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw
+    rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw [LieSubmodule.lieIdeal_oper_eq_linear_span']
+    rw [Set.ext_iff] at ih
+    simp only [SetLike.mem_coe, LieSubmodule.mem_toSubmodule] at ih
+    simp only [ih]
+    apply le_antisymm
+    · exact coe_derivedSeries_eq_int_aux _ _ L k ih
+    · simp
 
 中文:
 定理 coe_derivedSeries_eq_int
@@ -807,7 +831,13 @@ theorem coe_derivedSeries_eq_int
   | zero => rfl
   | succ k ih =>
     rw [derivedSeriesOfIdeal_succ]; rw [derivedSeriesOfIdeal_succ]
-    rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw
+    rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw [LieSubmodule.lieIdeal_oper_eq_linear_span']
+    rw [Set.ext_iff] at ih
+    simp only [SetLike.mem_coe, LieSubmodule.mem_toSubmodule] at ih
+    simp only [ih]
+    apply le_antisymm
+    · exact coe_derivedSeries_eq_int_aux _ _ L k ih
+    · simp
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.coe_toSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, Set.ext_iff, SetLike, SetLike.mem_coe, coe_derivedSeries_eq_int_aux, coe_toSubmodule, derivedSeriesOfIdeal_succ, derivedSeries_def, ext_iff, le_antisymm, lieIdeal_oper_eq_linear_span, mem_coe, mem_toSubmodule
 -/
@@ -1017,7 +1047,7 @@ theorem isSolvable_tensorProduct_iff
   rw [derivedSeries_baseChange] at h
 specialize h Submodule.tmul_mem_baseChange_of_mem 1 hx
   rw [LieSubmodule.mem_bot] at h ⊢
-  rwa [Module.Faithfull
+  rwa [Module.FaithfullyFlat.one_tmul_eq_zero_iff] at h
 
 中文:
 定理 isSolvable_tensorProduct_iff
@@ -1032,7 +1062,7 @@ specialize h Submodule.tmul_mem_baseChange_of_mem 1 hx
   rw [derivedSeries_baseChange] at h
 specialize h Submodule.tmul_mem_baseChange_of_mem 1 hx
   rw [LieSubmodule.mem_bot] at h ⊢
-  rwa [Module.Faithfull
+  rwa [Module.FaithfullyFlat.one_tmul_eq_zero_iff] at h
 
 Depends on / 依赖: FaithfullyFlat, LieSubmodule, LieSubmodule.mem_bot, Module, Module.FaithfullyFlat.one_tmul_eq_zero_iff, Submodule, Submodule.tmul_mem_baseChange_of_mem, derivedSeries_baseChange, eq_bot_iff, isSolvable_iff, mem_bot, one_tmul_eq_zero_iff, specialize, tmul_mem_baseChange_of_mem
 -/
@@ -1230,7 +1260,7 @@ instance radicalIsSolvable
   refine hwf { I : LieIdeal R L | IsSolvable I } ⟨⊥, ?_⟩ fun I hI J hJ => ?_
   · exact LieAlgebra.isSolvableBot R L
   · rw [Set.mem_ofPred_eq] at hI hJ ⊢
-    apply Lie
+    apply LieAlgebra.isSolvableAdd R L
 
 中文:
 实例 radicalIsSolvable
@@ -1241,7 +1271,7 @@ instance radicalIsSolvable
   refine hwf { I : LieIdeal R L | IsSolvable I } ⟨⊥, ?_⟩ fun I hI J hJ => ?_
   · exact LieAlgebra.isSolvableBot R L
   · rw [Set.mem_ofPred_eq] at hI hJ ⊢
-    apply Lie
+    apply LieAlgebra.isSolvableAdd R L
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.isSupClosedCompact_iff_wellFoundedGT, IsSolvable, LieAlgebra, LieAlgebra.isSolvableAdd, LieAlgebra.isSolvableBot, LieIdeal, LieSubmodule, LieSubmodule.wellFoundedGT_of_noetherian, Set.mem_ofPred_eq, isSolvableAdd, isSolvableBot, isSupClosedCompact_iff_wellFoundedGT, mem_ofPred_eq, wellFoundedGT_of_noetherian
 -/
@@ -1386,7 +1416,10 @@ theorem derivedSeries_of_derivedLength_succ
   change sInf s = k + 1 ↔ k + 1 in s ∧ k ∉ s
   have hs : forall k₁ k₂ : Nat, k₁ <= k₂ -> k₁ in s -> k₂ in s := by
     intro k₁ k₂ h₁₂ h₁
-    suffices derivedSeriesOfIdeal R L k₂ I <= ⊥ by exact eq_bot_iff.m
+    suffices derivedSeriesOfIdeal R L k₂ I <= ⊥ by exact eq_bot_iff.mpr this
+    change derivedSeriesOfIdeal R L k₁ I = ⊥ at h₁; rw [← h₁]
+    exact derivedSeriesOfIdeal_antitone I h₁₂
+  exact Nat.sInf_upward_closed_eq_succ_iff hs k
 
 中文:
 定理 derivedSeries_of_derivedLength_succ
@@ -1397,7 +1430,10 @@ theorem derivedSeries_of_derivedLength_succ
   change sInf s = k + 1 ↔ k + 1 in s ∧ k ∉ s
   have hs : forall k₁ k₂ : Nat, k₁ <= k₂ -> k₁ in s -> k₂ in s := by
     intro k₁ k₂ h₁₂ h₁
-    suffices derivedSeriesOfIdeal R L k₂ I <= ⊥ by exact eq_bot_iff.m
+    suffices derivedSeriesOfIdeal R L k₂ I <= ⊥ by exact eq_bot_iff.mpr this
+    change derivedSeriesOfIdeal R L k₁ I = ⊥ at h₁; rw [← h₁]
+    exact derivedSeriesOfIdeal_antitone I h₁₂
+  exact Nat.sInf_upward_closed_eq_succ_iff hs k
 
 Depends on / 依赖: Nat.sInf_upward_closed_eq_succ_iff, abelian_iff_derived_succ_eq_bot, derivedSeriesOfIdeal, derivedSeriesOfIdeal_antitone, eq_bot_iff, eq_bot_iff.mpr, sInf_upward_closed_eq_succ_iff
 -/

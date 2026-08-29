@@ -154,7 +154,41 @@ lemma norm_toLpₗ_le
   · simp only [h_Lp, toLpₗ_apply, Lp.norm_toLp]
     simp [hp]
   by_cases hp_top : p = ∞
-  · simp only [hp_top, StrongDual.toLpₗ_apply h_Lp, Lp.norm_
+  · simp only [hp_top, StrongDual.toLpₗ_apply h_Lp, Lp.norm_toLp, eLpNorm_exponent_top] at h_Lp ⊢
+    simp only [eLpNormEssSup, id_eq]
+    suffices (essSup (fun x => ‖L x‖ₑ) μ).toReal <= (essSup (fun x => ‖L‖ₑ * ‖x‖ₑ) μ).toReal by
+      rwa [ENNReal.essSup_const_mul, ENNReal.toReal_mul, toReal_enorm] at this
+    gcongr
+    · rw [ENNReal.essSup_const_mul]
+      exact ENNReal.mul_ne_top (by simp) h_Lp.eLpNorm_ne_top
+· exact essSup_mono_ae ae_of_all _ L.le_opENorm
+  have h0 : 0 < p.toReal := by simp [ENNReal.toReal_pos_iff, pos_iff_ne_zero, hp, Ne.lt_top hp_top]
+  suffices ‖L.toLpₗ μ p‖
+      <= (‖L‖ₑ ^ p.toReal * ∫⁻ x, ‖x‖ₑ ^ p.toReal ∂μ).toReal ^ p.toReal⁻¹ by
+    refine this.trans_eq ?_
+    simp only [ENNReal.toReal_mul]
+    rw [← ENNReal.toReal_rpow]; rw [Real.mul_rpow (by positivity) (by positivity)]; rw [← Real.rpow_mul (by positivity)]; rw [mul_inv_cancel₀ h0.ne']; rw [Real.rpow_one]; rw [toReal_enorm]
+    rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simp [hp]) hp_top, ENNReal.toReal_rpow]
+    simp
+  rw [StrongDual.toLpₗ_apply h_Lp]; rw [Lp.norm_toLp]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simp [hp]) hp_top]
+  simp only [one_div]
+  refine ENNReal.toReal_le_of_le_ofReal (by positivity) ?_
+  suffices ∫⁻ x, ‖L x‖ₑ ^ p.toReal ∂μ <= ‖L‖ₑ ^ p.toReal * ∫⁻ x, ‖x‖ₑ ^ p.toReal ∂μ by
+    rw [← ENNReal.ofReal_rpow_of_nonneg (by positivity) (by positivity)]
+    gcongr
+    rwa [ENNReal.ofReal_toReal]
+    refine ENNReal.mul_ne_top (by simp) ?_
+    have h := h_Lp.eLpNorm_ne_top
+    rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simp [hp]) hp_top] at h
+    simpa [h0] using h
+  calc ∫⁻ x, ‖L x‖ₑ ^ p.toReal ∂μ
+  _ <= ∫⁻ x, ‖L‖ₑ ^ p.toReal * ‖x‖ₑ ^ p.toReal ∂μ := by
+    refine lintegral_mono fun x => ?_
+    rw [← ENNReal.mul_rpow_of_nonneg]
+    swap; · positivity
+    gcongr
+    exact L.le_opENorm x
+  _ = ‖L‖ₑ ^ p.toReal * ∫⁻ x, ‖x‖ₑ ^ p.toReal ∂μ := by rw [lintegral_const_mul]; fun_prop
 
 中文:
 引理 norm_toLpₗ_le
@@ -168,7 +202,41 @@ lemma norm_toLpₗ_le
   · simp only [h_Lp, toLpₗ_apply, Lp.norm_toLp]
     simp [hp]
   by_cases hp_top : p = ∞
-  · simp only [hp_top, StrongDual.toLpₗ_apply h_Lp, Lp.norm_
+  · simp only [hp_top, StrongDual.toLpₗ_apply h_Lp, Lp.norm_toLp, eLpNorm_exponent_top] at h_Lp ⊢
+    simp only [eLpNormEssSup, id_eq]
+    suffices (essSup (fun x => ‖L x‖ₑ) μ).toReal <= (essSup (fun x => ‖L‖ₑ * ‖x‖ₑ) μ).toReal by
+      rwa [ENNReal.essSup_const_mul, ENNReal.toReal_mul, toReal_enorm] at this
+    gcongr
+    · rw [ENNReal.essSup_const_mul]
+      exact ENNReal.mul_ne_top (by simp) h_Lp.eLpNorm_ne_top
+· exact essSup_mono_ae ae_of_all _ L.le_opENorm
+  have h0 : 0 < p.toReal := by simp [ENNReal.toReal_pos_iff, pos_iff_ne_zero, hp, Ne.lt_top hp_top]
+  suffices ‖L.toLpₗ μ p‖
+      <= (‖L‖ₑ ^ p.toReal * ∫⁻ x, ‖x‖ₑ ^ p.toReal ∂μ).toReal ^ p.toReal⁻¹ by
+    refine this.trans_eq ?_
+    simp only [ENNReal.toReal_mul]
+    rw [← ENNReal.toReal_rpow]; rw [Real.mul_rpow (by positivity) (by positivity)]; rw [← Real.rpow_mul (by positivity)]; rw [mul_inv_cancel₀ h0.ne']; rw [Real.rpow_one]; rw [toReal_enorm]
+    rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simp [hp]) hp_top, ENNReal.toReal_rpow]
+    simp
+  rw [StrongDual.toLpₗ_apply h_Lp]; rw [Lp.norm_toLp]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simp [hp]) hp_top]
+  simp only [one_div]
+  refine ENNReal.toReal_le_of_le_ofReal (by positivity) ?_
+  suffices ∫⁻ x, ‖L x‖ₑ ^ p.toReal ∂μ <= ‖L‖ₑ ^ p.toReal * ∫⁻ x, ‖x‖ₑ ^ p.toReal ∂μ by
+    rw [← ENNReal.ofReal_rpow_of_nonneg (by positivity) (by positivity)]
+    gcongr
+    rwa [ENNReal.ofReal_toReal]
+    refine ENNReal.mul_ne_top (by simp) ?_
+    have h := h_Lp.eLpNorm_ne_top
+    rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simp [hp]) hp_top] at h
+    simpa [h0] using h
+  calc ∫⁻ x, ‖L x‖ₑ ^ p.toReal ∂μ
+  _ <= ∫⁻ x, ‖L‖ₑ ^ p.toReal * ‖x‖ₑ ^ p.toReal ∂μ := by
+    refine lintegral_mono fun x => ?_
+    rw [← ENNReal.mul_rpow_of_nonneg]
+    swap; · positivity
+    gcongr
+    exact L.le_opENorm x
+  _ = ‖L‖ₑ ^ p.toReal * ∫⁻ x, ‖x‖ₑ ^ p.toReal ∂μ := by rw [lintegral_const_mul]; fun_prop
 
 Depends on / 依赖: ENNReal, ENNReal.essSup_const_mul, ENNReal.toReal_mul, Lp.norm_toLp, Lp.norm_zero, StrongDual, StrongDual.toLp, eLpNormEssSup, eLpNorm_exponent_top, essSup, essSup_const_mul, h_Lp, hp_top, id_eq, norm_toLp, norm_zero, not_false_eq_true, toReal, toReal_e, toReal_mul
 -/
@@ -241,7 +309,10 @@ definition toLp
     obtain ⟨r, hxr⟩ := hs
     refine ⟨r * (eLpNorm id p μ).toReal, fun L hLs => ?_⟩
     specialize hxr L hLs
-    refine (Stron
+    refine (StrongDual.norm_toLpₗ_le L).trans ?_
+    gcongr
+
+@[simp]
 
 中文:
 定义 toLp
@@ -254,7 +325,10 @@ definition toLp
     obtain ⟨r, hxr⟩ := hs
     refine ⟨r * (eLpNorm id p μ).toReal, fun L hLs => ?_⟩
     specialize hxr L hLs
-    refine (Stron
+    refine (StrongDual.norm_toLpₗ_le L).trans ?_
+    gcongr
+
+@[simp]
 
 Depends on / 依赖: StrongDual, StrongDual.toLp
 -/
@@ -364,7 +438,9 @@ lemma uncenteredCovarianceBilinDual_apply
     StrongDual.toLp_apply h, L2.inner_def, RCLike.inner_apply, conj_trivial]
   refine integral_congr_ae ?_
   filter_upwards [MemLp.coeFn_toLp (h.continuousLinearMap_comp L₁),
-    MemLp.coeFn_toLp (h.continuousLine
+    MemLp.coeFn_toLp (h.continuousLinearMap_comp L₂)] with x hxL₁ hxL₂
+  simp only [id_eq] at hxL₁ hxL₂
+  rw [hxL₁]; rw [hxL₂]; rw [mul_comm]
 
 中文:
 引理 uncenteredCovarianceBilinDual_apply
@@ -374,7 +450,9 @@ lemma uncenteredCovarianceBilinDual_apply
     StrongDual.toLp_apply h, L2.inner_def, RCLike.inner_apply, conj_trivial]
   refine integral_congr_ae ?_
   filter_upwards [MemLp.coeFn_toLp (h.continuousLinearMap_comp L₁),
-    MemLp.coeFn_toLp (h.continuousLine
+    MemLp.coeFn_toLp (h.continuousLinearMap_comp L₂)] with x hxL₁ hxL₂
+  simp only [id_eq] at hxL₁ hxL₂
+  rw [hxL₁]; rw [hxL₂]; rw [mul_comm]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.bilinearComp_apply, L2.inner_def, MemLp.coeFn_toLp, RCLike, RCLike.inner_apply, StrongDual, StrongDual.toLp_apply, bilinearComp_apply, coeFn_toLp, conj_trivial, continuousLinearMap_comp, filter_upwards, h.continuousLinearMap_comp, id_eq, inner_apply, inner_def, integral_congr_ae, mul_comm, toLp_apply
 -/
@@ -451,7 +529,26 @@ lemma norm_uncenteredCovarianceBilinDual_le
   swap; · simp only [uncenteredCovarianceBilinDual_of_not_memLp h, norm_zero]; positivity
   calc ‖uncenteredCovarianceBilinDual μ L₁ L₂‖
   _ = ‖∫ x, L₁ x * L₂ x ∂μ‖ := by rw [uncenteredCovarianceBilinDual_apply h]
-  _ <= ∫ x, ‖L₁ x‖ * ‖L₂ x‖ ∂μ := (norm_integral_le_int
+  _ <= ∫ x, ‖L₁ x‖ * ‖L₂ x‖ ∂μ := (norm_integral_le_integral_norm _).trans (by simp)
+  _ <= ∫ x, ‖L₁‖ * ‖x‖ * ‖L₂‖ * ‖x‖ ∂μ := by
+    refine integral_mono_ae ?_ ?_ (ae_of_all _ fun x => ?_)
+    · simp_rw [← norm_mul]
+      exact (MemLp.integrable_mul (h.continuousLinearMap_comp L₁)
+        (h.continuousLinearMap_comp L₂)).norm
+    · simp_rw [mul_assoc]
+      refine Integrable.const_mul ?_ _
+      simp_rw [← mul_assoc, mul_comm _ (‖L₂‖), mul_assoc, ← pow_two]
+      refine Integrable.const_mul ?_ _
+      exact h.integrable_norm_pow (by simp)
+    · simp only
+      rw [mul_assoc]
+      gcongr
+      · exact ContinuousLinearMap.le_opNorm L₁ x
+      · exact ContinuousLinearMap.le_opNorm L₂ x
+  _ = ‖L₁‖ * ‖L₂‖ * ∫ x, ‖x‖ ^ 2 ∂μ := by
+    rw [← integral_const_mul]
+    congr with x
+    ring
 
 中文:
 引理 norm_uncenteredCovarianceBilinDual_le
@@ -461,7 +558,26 @@ lemma norm_uncenteredCovarianceBilinDual_le
   swap; · simp only [uncenteredCovarianceBilinDual_of_not_memLp h, norm_zero]; positivity
   calc ‖uncenteredCovarianceBilinDual μ L₁ L₂‖
   _ = ‖∫ x, L₁ x * L₂ x ∂μ‖ := by rw [uncenteredCovarianceBilinDual_apply h]
-  _ <= ∫ x, ‖L₁ x‖ * ‖L₂ x‖ ∂μ := (norm_integral_le_int
+  _ <= ∫ x, ‖L₁ x‖ * ‖L₂ x‖ ∂μ := (norm_integral_le_integral_norm _).trans (by simp)
+  _ <= ∫ x, ‖L₁‖ * ‖x‖ * ‖L₂‖ * ‖x‖ ∂μ := by
+    refine integral_mono_ae ?_ ?_ (ae_of_all _ fun x => ?_)
+    · simp_rw [← norm_mul]
+      exact (MemLp.integrable_mul (h.continuousLinearMap_comp L₁)
+        (h.continuousLinearMap_comp L₂)).norm
+    · simp_rw [mul_assoc]
+      refine Integrable.const_mul ?_ _
+      simp_rw [← mul_assoc, mul_comm _ (‖L₂‖), mul_assoc, ← pow_two]
+      refine Integrable.const_mul ?_ _
+      exact h.integrable_norm_pow (by simp)
+    · simp only
+      rw [mul_assoc]
+      gcongr
+      · exact ContinuousLinearMap.le_opNorm L₁ x
+      · exact ContinuousLinearMap.le_opNorm L₂ x
+  _ = ‖L₁‖ * ‖L₂‖ * ∫ x, ‖x‖ ^ 2 ∂μ := by
+    rw [← integral_const_mul]
+    congr with x
+    ring
 
 Depends on / 依赖: MemLp.integrable_mul, ae_of_all, continuousLinearMap_comp, h.continuousLinearMap_comp, integrable_mul, integral_mono_ae, norm_integral_le_integral_norm, norm_mul, norm_zero, simp_rw, uncenteredCovarianceBilinDual, uncenteredCovarianceBilinDual_apply, uncenteredCovarianceBilinDual_of_not_memLp
 -/
@@ -536,7 +652,47 @@ lemma _root_.MeasureTheory.memLp_id_of_self_sub_integral
   apply h_Lp.add
   set c := ∫ x, x ∂μ
   /- We need to check that the constant `c = ∫ x, x ∂μ` is in `L^p`. Note that we don't assume
-  that `μ` is finite, so this requires an argument. If the constant is zero,
+  that `μ` is finite, so this requires an argument. If the constant is zero, it's obvious.
+  If it's nonzero, this means that `x` is integrable for `μ` (as otherwise the integral would be
+  `0` by our choice of junk value), so `‖x‖ ^ (1/p)` is in `L^p`.
+  The constant `c` is controlled by `2 ‖x - c‖` close to `0` (say when `‖x‖ ≤ ‖c‖ / 2`)
+  and by a multiple of `‖x‖ ^ (1/p)` away from `0`. Those two functions
+  are in `L^p` by assumptions, so the constant `c` also is. -/
+  by_cases hx : c = 0
+  · simp [hx]
+  rcases eq_or_ne p 0 with rfl | hp0
+  · simp [aestronglyMeasurable_const]
+  rcases eq_or_ne p ∞ with rfl | hptop
+  · exact memLp_top_const c
+  apply (integrable_norm_rpow_iff (by fun_prop) hp0 hptop).1
+  have I : Integrable (fun (x : E) => ‖x‖) μ := by
+    apply Integrable.norm
+    contrapose hx
+    exact integral_undef hx
+  have := (h_Lp.integrable_norm_rpow hp0 hptop).const_mul (2 ^ p.toReal)
+  apply (((I.const_mul (2 * ‖c‖ ^ (p.toReal - 1))).add this)).mono' (by fun_prop)
+  filter_upwards [] with y
+  lift p to Real>=0 using hptop
+  simp only [ENNReal.coe_toReal, Real.norm_eq_abs, Pi.add_apply]
+  rw [abs_of_nonneg (by positivity)]
+  rcases le_total ‖y‖ (‖c‖ / 2)
+  · have : ‖c‖ <= ‖y‖ + ‖y - c‖ := Eq.trans_le (by abel_nf) (norm_sub_le y (y - c))
+    calc ‖c‖ ^ (p : Real)
+    _ <= (2 * ‖y - c‖) ^ (p : Real) := by
+      gcongr
+      linarith
+    _ = 0 + 2 ^ (p : Real) * ‖y - c‖ ^ (p : Real) := by
+      rw [Real.mul_rpow (by simp) (by positivity)]
+      ring
+    _ <= 2 * ‖c‖ ^ (p - 1 : Real) * ‖y‖ + 2 ^ (p : Real) * ‖y - c‖ ^ (p : Real) := by
+      gcongr
+      positivity
+  · calc ‖c‖ ^ (p : Real)
+    _ = ‖c‖ ^ ((p - 1) + 1 : Real) := by abel_nf
+    _ = ‖c‖ ^ (p - 1 : Real) * ‖c‖ := by rw [Real.rpow_add (by positivity), Real.rpow_one]
+    _ <= ‖c‖ ^ (p - 1 : Real) * (2 * ‖y‖) := by gcongr; linarith
+    _ = 2 * ‖c‖ ^ (p - 1 : Real) * ‖y‖ + 0 := by ring
+    _ <= 2 * ‖c‖ ^ (p - 1 : Real) * ‖y‖ + 2 ^ (p : Real) * ‖y - c‖ ^ (p : Real) := by gcongr; positivity
 
 中文:
 引理 _root_.测度论.memLp_id_of_self_sub_integral
@@ -547,7 +703,47 @@ lemma _root_.MeasureTheory.memLp_id_of_self_sub_integral
   apply h_Lp.add
   set c := ∫ x, x ∂μ
   /- We need to check that the constant `c = ∫ x, x ∂μ` is in `L^p`. Note that we don't assume
-  that `μ` is finite, so this requires an argument. If the constant is zero,
+  that `μ` is finite, so this requires an argument. If the constant is zero, it's obvious.
+  If it's nonzero, this means that `x` is integrable for `μ` (as otherwise the integral would be
+  `0` by our choice of junk value), so `‖x‖ ^ (1/p)` is in `L^p`.
+  The constant `c` is controlled by `2 ‖x - c‖` close to `0` (say when `‖x‖ ≤ ‖c‖ / 2`)
+  and by a multiple of `‖x‖ ^ (1/p)` away from `0`. Those two functions
+  are in `L^p` by assumptions, so the constant `c` also is. -/
+  by_cases hx : c = 0
+  · simp [hx]
+  rcases eq_or_ne p 0 with rfl | hp0
+  · simp [aestronglyMeasurable_const]
+  rcases eq_or_ne p ∞ with rfl | hptop
+  · exact memLp_top_const c
+  apply (integrable_norm_rpow_iff (by fun_prop) hp0 hptop).1
+  have I : Integrable (fun (x : E) => ‖x‖) μ := by
+    apply Integrable.norm
+    contrapose hx
+    exact integral_undef hx
+  have := (h_Lp.integrable_norm_rpow hp0 hptop).const_mul (2 ^ p.toReal)
+  apply (((I.const_mul (2 * ‖c‖ ^ (p.toReal - 1))).add this)).mono' (by fun_prop)
+  filter_upwards [] with y
+  lift p to Real>=0 using hptop
+  simp only [ENNReal.coe_toReal, Real.norm_eq_abs, Pi.add_apply]
+  rw [abs_of_nonneg (by positivity)]
+  rcases le_total ‖y‖ (‖c‖ / 2)
+  · have : ‖c‖ <= ‖y‖ + ‖y - c‖ := Eq.trans_le (by abel_nf) (norm_sub_le y (y - c))
+    calc ‖c‖ ^ (p : Real)
+    _ <= (2 * ‖y - c‖) ^ (p : Real) := by
+      gcongr
+      linarith
+    _ = 0 + 2 ^ (p : Real) * ‖y - c‖ ^ (p : Real) := by
+      rw [Real.mul_rpow (by simp) (by positivity)]
+      ring
+    _ <= 2 * ‖c‖ ^ (p - 1 : Real) * ‖y‖ + 2 ^ (p : Real) * ‖y - c‖ ^ (p : Real) := by
+      gcongr
+      positivity
+  · calc ‖c‖ ^ (p : Real)
+    _ = ‖c‖ ^ ((p - 1) + 1 : Real) := by abel_nf
+    _ = ‖c‖ ^ (p - 1 : Real) * ‖c‖ := by rw [Real.rpow_add (by positivity), Real.rpow_one]
+    _ <= ‖c‖ ^ (p - 1 : Real) * (2 * ‖y‖) := by gcongr; linarith
+    _ = 2 * ‖c‖ ^ (p - 1 : Real) * ‖y‖ + 0 := by ring
+    _ <= 2 * ‖c‖ ^ (p - 1 : Real) * ‖y‖ + 2 ^ (p : Real) * ‖y - c‖ ^ (p : Real) := by gcongr; positivity
 
 Depends on / 依赖: h_Lp, h_Lp.add
 -/
@@ -696,7 +892,9 @@ lemma covarianceBilinDual_comm
   · have h' : MemLp id 2 (Measure.map (fun x => x - ∫ (x : E), x ∂μ) μ) :=
 (measurableEmbedding_subRight _).memLp_map_measure_iff.mpr h
     simp_rw [covarianceBilinDual, uncenteredCovarianceBilinDual_apply h', mul_comm (L₁ _)]
-  · simp [h, covaria
+  · simp [h, covarianceBilinDual_of_not_memLp']
+
+@[simp]
 
 中文:
 引理 covarianceBilinDual_comm
@@ -706,7 +904,9 @@ lemma covarianceBilinDual_comm
   · have h' : MemLp id 2 (Measure.map (fun x => x - ∫ (x : E), x ∂μ) μ) :=
 (measurableEmbedding_subRight _).memLp_map_measure_iff.mpr h
     simp_rw [covarianceBilinDual, uncenteredCovarianceBilinDual_apply h', mul_comm (L₁ _)]
-  · simp [h, covaria
+  · simp [h, covarianceBilinDual_of_not_memLp']
+
+@[simp]
 
 Depends on / 依赖: Measure, Measure.map, covarianceBilinDual, covarianceBilinDual_of_not_memLp, measurableEmbedding_subRight, memLp_map_measure_iff, memLp_map_measure_iff.mpr, mul_comm, simp_rw, uncenteredCovarianceBilinDual_apply
 -/
@@ -787,7 +987,7 @@ lemma covarianceBilinDual_apply
   · have hL (L : StrongDual Real E) : μ[L] = L (∫ x, x ∂μ) :=
       L.integral_comp_comm (h.integrable (by simp))
     simp [← hL]
-· exact (measurableEmbedding_subRight _).memLp_map_
+· exact (measurableEmbedding_subRight _).memLp_map_measure_iff.mpr h.sub (memLp_const _)
 
 中文:
 引理 covarianceBilinDual_apply
@@ -797,7 +997,7 @@ lemma covarianceBilinDual_apply
   · have hL (L : StrongDual Real E) : μ[L] = L (∫ x, x ∂μ) :=
       L.integral_comp_comm (h.integrable (by simp))
     simp [← hL]
-· exact (measurableEmbedding_subRight _).memLp_map_
+· exact (measurableEmbedding_subRight _).memLp_map_measure_iff.mpr h.sub (memLp_const _)
 
 Depends on / 依赖: H.out.choose_spec.choose_spec.choose_spec.choose, H.out.choose_spec.choose_spec.choose_spec.choose_spec.nonempty, L.integral_comp_comm, StrongDual, choose_spec, covarianceBilinDual, fun_prop, h.integrable, h.sub, integrable, integral_comp_comm, integral_map, measurableEmbedding_subRight, memLp_const, memLp_map_measure_iff, memLp_map_measure_iff.mpr, nonempty, uncenteredCovarianceBilinDual_apply
 -/

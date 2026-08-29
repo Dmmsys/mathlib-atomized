@@ -64,7 +64,7 @@ theorem Gamma_integrand_isLittleO
     ext1 x
     simp [field, ← exp_nsmul, exp_neg]
   rw [this]
-  exact (te
+  exact (tendsto_exp_mul_div_rpow_atTop s (1 / 2) one_half_pos).inv_tendsto_atTop
 
 中文:
 定理 Gamma_integrand_isLittleO
@@ -77,7 +77,7 @@ theorem Gamma_integrand_isLittleO
     ext1 x
     simp [field, ← exp_nsmul, exp_neg]
   rw [this]
-  exact (te
+  exact (tendsto_exp_mul_div_rpow_atTop s (1 / 2) one_half_pos).inv_tendsto_atTop
 
 Depends on / 依赖: exp_neg, exp_nsmul, exp_pos, inv_tendsto_atTop, isLittleO_of_tendsto, one_half_pos, tendsto_exp_mul_div_rpow_atTop
 -/
@@ -103,7 +103,10 @@ theorem GammaIntegral_convergent
   constructor
   · rw [← integrableOn_Icc_iff_integrableOn_Ioc]
     exact (intervalIntegrable_iff_integrableOn_Icc_of_le zero_le_one).mp
-      ((intervalIntegrable_rpow' (by linarith)).continuousOn_mul continuousOn_
+      ((intervalIntegrable_rpow' (by linarith)).continuousOn_mul continuousOn_id.neg.rexp)
+  · exact integrable_of_isBigO_exp_neg one_half_pos
+      (continuousOn_id.neg.rexp.mul (continuousOn_id.rpow_const (by grind)))
+      (Gamma_integrand_isLittleO _).isBigO
 
 中文:
 定理 Gamma整数egral_convergent
@@ -113,7 +116,10 @@ theorem GammaIntegral_convergent
   constructor
   · rw [← integrableOn_Icc_iff_integrableOn_Ioc]
     exact (intervalIntegrable_iff_integrableOn_Icc_of_le zero_le_one).mp
-      ((intervalIntegrable_rpow' (by linarith)).continuousOn_mul continuousOn_
+      ((intervalIntegrable_rpow' (by linarith)).continuousOn_mul continuousOn_id.neg.rexp)
+  · exact integrable_of_isBigO_exp_neg one_half_pos
+      (continuousOn_id.neg.rexp.mul (continuousOn_id.rpow_const (by grind)))
+      (Gamma_integrand_isLittleO _).isBigO
 
 Depends on / 依赖: Gamma_integrand_isLittleO, Ioc_union_Ioi_eq_Ioi, continuousOn_id, continuousOn_id.neg.rexp, continuousOn_id.neg.rexp.mul, continuousOn_id.rpow_const, continuousOn_mul, integrableOn_Icc_iff_integrableOn_Ioc, integrableOn_union, integrable_of_isBigO_exp_neg, intervalIntegrable_iff_integrableOn_Icc_of_le, intervalIntegrable_rpow, isBigO, one_half_pos, rpow_const, zero_le_one
 -/
@@ -148,7 +154,14 @@ theorem GammaIntegral_convergent
     apply continuousOn_of_forall_continuousAt
     intro x hx
     have : ContinuousAt (fun x : Complex => x ^ (s - 1)) ↑x :=
-continuousAt_cpow_con
+continuousAt_cpow_const ofReal_mem_slitPlane.2 hx
+    exact ContinuousAt.comp this continuous_ofReal.continuousAt
+  · rw [← hasFiniteIntegral_norm_iff]
+    refine HasFiniteIntegral.congr (Real.GammaIntegral_convergent hs).2 ?_
+    apply (ae_restrict_iff' measurableSet_Ioi).mpr
+    filter_upwards with x hx
+    rw [norm_mul]; rw [Complex.norm_of_nonneg <| le_of_lt <| exp_pos <| -x]; rw [norm_cpow_eq_rpow_re_of_pos hx _]
+    simp
 
 中文:
 定理 Gamma整数egral_convergent
@@ -160,7 +173,14 @@ continuousAt_cpow_con
     apply continuousOn_of_forall_continuousAt
     intro x hx
     have : ContinuousAt (fun x : Complex => x ^ (s - 1)) ↑x :=
-continuousAt_cpow_con
+continuousAt_cpow_const ofReal_mem_slitPlane.2 hx
+    exact ContinuousAt.comp this continuous_ofReal.continuousAt
+  · rw [← hasFiniteIntegral_norm_iff]
+    refine HasFiniteIntegral.congr (Real.GammaIntegral_convergent hs).2 ?_
+    apply (ae_restrict_iff' measurableSet_Ioi).mpr
+    filter_upwards with x hx
+    rw [norm_mul]; rw [Complex.norm_of_nonneg <| le_of_lt <| exp_pos <| -x]; rw [norm_cpow_eq_rpow_re_of_pos hx _]
+    simp
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.comp, ContinuousOn, ContinuousOn.aestronglyMeasurable, GammaIntegral_convergent, HasFiniteIntegral, HasFiniteIntegral.congr, Real.GammaIntegral_convergent, ae_restrict_iff, aestronglyMeasurable, continuousAt, continuousAt_cpow_const, continuousOn, continuousOn.mul, continuousOn_of_forall_continuousAt, continuous_neg, continuous_neg.rexp, continuous_ofReal, continuous_ofReal.comp, continuous_ofReal.continuousAt
 -/
@@ -207,7 +227,7 @@ theorem GammaIntegral_conj
   proof: by
   rw [GammaIntegral]; rw [GammaIntegral]; rw [← integral_conj]
   refine setIntegral_congr_fun measurableSet_Ioi fun x hx => ?_
-  rw [map_mul]; rw [conj_ofReal]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [← exp_conj
+  rw [map_mul]; rw [conj_ofReal]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [← exp_conj]; rw [map_mul]; rw [← ofReal_log (le_of_lt hx)]; rw [conj_ofReal]; rw [map_sub]; rw [map_one]
 
 中文:
 定理 Gamma整数egral_conj
@@ -216,7 +236,7 @@ theorem GammaIntegral_conj
   证明: by
   rw [GammaIntegral]; rw [GammaIntegral]; rw [← integral_conj]
   refine setIntegral_congr_fun measurableSet_Ioi fun x hx => ?_
-  rw [map_mul]; rw [conj_ofReal]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [← exp_conj
+  rw [map_mul]; rw [conj_ofReal]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [← exp_conj]; rw [map_mul]; rw [← ofReal_log (le_of_lt hx)]; rw [conj_ofReal]; rw [map_sub]; rw [map_one]
 
 Depends on / 依赖: GammaIntegral, conj_ofReal, cpow_def_of_ne_zero, exp_conj, integral_conj, le_of_lt, map_mul, map_one, map_sub, measurableSet_Ioi, ne_of_gt, ofReal_log, ofReal_ne_zero, ofReal_ne_zero.mpr, setIntegral_congr_fun
 -/
@@ -238,7 +258,10 @@ theorem GammaIntegral_ofReal
   refine setIntegral_congr_fun measurableSet_Ioi ?_
   intro x hx; dsimp only
   conv_rhs => rw [← this]
-  rw [ofReal_mul]; rw [ofReal_cpow 
+  rw [ofReal_mul]; rw [ofReal_cpow (mem_Ioi.mp hx).le]
+  simp
+
+@[simp]
 
 中文:
 定理 Gamma整数egral_of实数
@@ -250,7 +273,10 @@ theorem GammaIntegral_ofReal
   refine setIntegral_congr_fun measurableSet_Ioi ?_
   intro x hx; dsimp only
   conv_rhs => rw [← this]
-  rw [ofReal_mul]; rw [ofReal_cpow 
+  rw [ofReal_mul]; rw [ofReal_cpow (mem_Ioi.mp hx).le]
+  simp
+
+@[simp]
 
 Depends on / 依赖: Complex.ofReal, GammaIntegral, RCLike, RCLike.ofReal, _root_, _root_.integral_ofReal, conv_rhs, integral_ofReal, measurableSet_Ioi, mem_Ioi, mem_Ioi.mp, ofReal, ofReal_cpow, ofReal_mul, setIntegral_congr_fun
 -/
@@ -391,7 +417,21 @@ theorem Gamma_integrand_deriv_integrable_B
       (fun x => s * ((-x).exp * x ^ (s - 1)) : Real -> Complex) := by ext1; ring
   rw [this]; rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hY]
   constructor
-  · refine (continuousOn_const.mul ?_).aestronglyMeasurable measur
+  · refine (continuousOn_const.mul ?_).aestronglyMeasurable measurableSet_Ioc
+    apply (continuous_ofReal.comp continuous_neg.rexp).continuousOn.mul
+    apply continuousOn_of_forall_continuousAt
+    intro x hx
+    refine (?_ : ContinuousAt (fun x : Complex => x ^ (s - 1)) _).comp continuous_ofReal.continuousAt
+exact continuousAt_cpow_const ofReal_mem_slitPlane.2 hx.1
+  rw [← hasFiniteIntegral_norm_iff]
+  simp_rw [norm_mul]
+  refine (((Real.GammaIntegral_convergent hs).mono_set
+    Ioc_subset_Ioi_self).hasFiniteIntegral.congr ?_).const_mul _
+  rw [EventuallyEq]; rw [ae_restrict_iff']
+  · filter_upwards with x hx
+    rw [Complex.norm_of_nonneg (exp_pos _).le]; rw [norm_cpow_eq_rpow_re_of_pos hx.1]
+    simp
+  · exact measurableSet_Ioc
 
 中文:
 定理 Gamma_integrand_deriv_integrable_B
@@ -401,7 +441,21 @@ theorem Gamma_integrand_deriv_integrable_B
       (fun x => s * ((-x).exp * x ^ (s - 1)) : Real -> Complex) := by ext1; ring
   rw [this]; rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hY]
   constructor
-  · refine (continuousOn_const.mul ?_).aestronglyMeasurable measur
+  · refine (continuousOn_const.mul ?_).aestronglyMeasurable measurableSet_Ioc
+    apply (continuous_ofReal.comp continuous_neg.rexp).continuousOn.mul
+    apply continuousOn_of_forall_continuousAt
+    intro x hx
+    refine (?_ : ContinuousAt (fun x : Complex => x ^ (s - 1)) _).comp continuous_ofReal.continuousAt
+exact continuousAt_cpow_const ofReal_mem_slitPlane.2 hx.1
+  rw [← hasFiniteIntegral_norm_iff]
+  simp_rw [norm_mul]
+  refine (((Real.GammaIntegral_convergent hs).mono_set
+    Ioc_subset_Ioi_self).hasFiniteIntegral.congr ?_).const_mul _
+  rw [EventuallyEq]; rw [ae_restrict_iff']
+  · filter_upwards with x hx
+    rw [Complex.norm_of_nonneg (exp_pos _).le]; rw [norm_cpow_eq_rpow_re_of_pos hx.1]
+    simp
+  · exact measurableSet_Ioc
 -/
 private theorem Gamma_integrand_deriv_integrable_B {s : Complex} (hs : 0 < s.re) {Y : Real} (hY : 0 <= Y) :
     IntervalIntegrable (fun x : Real => (-x).exp * (s * x ^ (s - 1)) : Real -> Complex) volume 0 Y := by
@@ -436,7 +490,27 @@ theorem partialGamma_add_one
   have F_der_I : forall x : Real, x in Ioo 0 X -> HasDerivAt (fun x => (-x).exp * x ^ s : Real -> Complex)
       (-((-x).exp * x ^ s) + (-x).exp * (s * x ^ (s - 1))) x := by
     intro x hx
-    have d1 : HasDerivAt (fun y : Real => 
+    have d1 : HasDerivAt (fun y : Real => (-y).exp) (-(-x).exp) x := by
+      simpa using! (hasDerivAt_neg x).exp
+    have d2 : HasDerivAt (fun y : Real => (y : Complex) ^ s) (s * x ^ (s - 1)) x := by
+      have t := @HasDerivAt.cpow_const _ _ _ s (hasDerivAt_id ↑x) ?_
+      · simpa only [mul_one] using! t.comp_ofReal
+      · exact ofReal_mem_slitPlane.2 hx.1
+    simpa only [ofReal_neg, neg_mul] using! d1.ofReal_comp.mul d2
+  have cont := (continuous_ofReal.comp continuous_neg.rexp).mul (continuous_ofReal_cpow_const hs)
+  have der_ible :=
+    (Gamma_integrand_deriv_integrable_A hs hX).add (Gamma_integrand_deriv_integrable_B hs hX)
+  have int_eval := integral_eq_sub_of_hasDerivAt_of_le hX cont.continuousOn F_der_I der_ible
+  -- We are basically done here but manipulating the output into the right form is fiddly.
+  apply_fun fun x : Complex => -x at int_eval
+  rw [intervalIntegral.integral_add (Gamma_integrand_deriv_integrable_A hs hX)
+      (Gamma_integrand_deriv_integrable_B hs hX)]; rw [intervalIntegral.integral_neg]; rw [neg_add]; rw [neg_neg] at int_eval
+  rw [eq_sub_of_add_eq int_eval]; rw [sub_neg_eq_add]; rw [neg_sub]; rw [add_comm]; rw [add_sub]
+  have hn : s != 0 := by contrapose! hs; rw [hs, zero_re]
+  simp only [Pi.mul_apply, Function.comp_apply, ofReal_zero, zero_cpow hn, mul_zero, add_zero,
+    ← intervalIntegral.integral_const_mul]
+  congr with x
+  ring
 
 中文:
 定理 partialGamma_add_one
@@ -446,7 +520,27 @@ theorem partialGamma_add_one
   have F_der_I : forall x : Real, x in Ioo 0 X -> HasDerivAt (fun x => (-x).exp * x ^ s : Real -> Complex)
       (-((-x).exp * x ^ s) + (-x).exp * (s * x ^ (s - 1))) x := by
     intro x hx
-    have d1 : HasDerivAt (fun y : Real => 
+    have d1 : HasDerivAt (fun y : Real => (-y).exp) (-(-x).exp) x := by
+      simpa using! (hasDerivAt_neg x).exp
+    have d2 : HasDerivAt (fun y : Real => (y : Complex) ^ s) (s * x ^ (s - 1)) x := by
+      have t := @HasDerivAt.cpow_const _ _ _ s (hasDerivAt_id ↑x) ?_
+      · simpa only [mul_one] using! t.comp_ofReal
+      · exact ofReal_mem_slitPlane.2 hx.1
+    simpa only [ofReal_neg, neg_mul] using! d1.ofReal_comp.mul d2
+  have cont := (continuous_ofReal.comp continuous_neg.rexp).mul (continuous_ofReal_cpow_const hs)
+  have der_ible :=
+    (Gamma_integrand_deriv_integrable_A hs hX).add (Gamma_integrand_deriv_integrable_B hs hX)
+  have int_eval := integral_eq_sub_of_hasDerivAt_of_le hX cont.continuousOn F_der_I der_ible
+  -- We are basically done here but manipulating the output into the right form is fiddly.
+  apply_fun fun x : Complex => -x at int_eval
+  rw [intervalIntegral.integral_add (Gamma_integrand_deriv_integrable_A hs hX)
+      (Gamma_integrand_deriv_integrable_B hs hX)]; rw [intervalIntegral.integral_neg]; rw [neg_add]; rw [neg_neg] at int_eval
+  rw [eq_sub_of_add_eq int_eval]; rw [sub_neg_eq_add]; rw [neg_sub]; rw [add_comm]; rw [add_sub]
+  have hn : s != 0 := by contrapose! hs; rw [hs, zero_re]
+  simp only [Pi.mul_apply, Function.comp_apply, ofReal_zero, zero_cpow hn, mul_zero, add_zero,
+    ← intervalIntegral.integral_const_mul]
+  congr with x
+  ring
 
 Depends on / 依赖: F_der_I, HasDerivAt, HasDerivAt.cpow_const, add_sub_cancel_right, cpow_const, hasDerivAt_id, hasDerivAt_neg, partialGamma
 -/
@@ -490,7 +584,20 @@ theorem GammaIntegral_add_one
     apply tendsto_partialGamma; rw [add_re, one_re]; linarith
   have : (fun X : Real => s * partialGamma s X - X ^ s * (-X).exp) =ᶠ[atTop]
       (s + 1).partialGamma := by
-    apply 
+    apply eventuallyEq_of_mem (Ici_mem_atTop (0 : Real))
+    intro X hX
+    rw [partialGamma_add_one hs (mem_Ici.mp hX)]
+    ring_nf
+  refine Tendsto.congr' this ?_
+  suffices Tendsto (fun X => -X ^ s * (-X).exp : Real -> Complex) atTop (𝓝 0) by
+    simpa using! Tendsto.add (Tendsto.const_mul s (tendsto_partialGamma hs)) this
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  have :
+      (fun e : Real => ‖-(e : Complex) ^ s * (-e).exp‖) =ᶠ[atTop] fun e : Real => e ^ s.re * (-1 * e).exp := by
+    refine eventuallyEq_of_mem (Ioi_mem_atTop 0) ?_
+    intro x hx; dsimp only
+    rw [norm_mul]; rw [norm_neg]; rw [norm_cpow_eq_rpow_re_of_pos hx]; rw [Complex.norm_of_nonneg (exp_pos (-x)).le]; rw [neg_mul]; rw [one_mul]
+  exact (tendsto_congr' this).mpr (tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero _ _ zero_lt_one)
 
 中文:
 定理 Gamma整数egral_add_one
@@ -501,7 +608,20 @@ theorem GammaIntegral_add_one
     apply tendsto_partialGamma; rw [add_re, one_re]; linarith
   have : (fun X : Real => s * partialGamma s X - X ^ s * (-X).exp) =ᶠ[atTop]
       (s + 1).partialGamma := by
-    apply 
+    apply eventuallyEq_of_mem (Ici_mem_atTop (0 : Real))
+    intro X hX
+    rw [partialGamma_add_one hs (mem_Ici.mp hX)]
+    ring_nf
+  refine Tendsto.congr' this ?_
+  suffices Tendsto (fun X => -X ^ s * (-X).exp : Real -> Complex) atTop (𝓝 0) by
+    simpa using! Tendsto.add (Tendsto.const_mul s (tendsto_partialGamma hs)) this
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  have :
+      (fun e : Real => ‖-(e : Complex) ^ s * (-e).exp‖) =ᶠ[atTop] fun e : Real => e ^ s.re * (-1 * e).exp := by
+    refine eventuallyEq_of_mem (Ioi_mem_atTop 0) ?_
+    intro x hx; dsimp only
+    rw [norm_mul]; rw [norm_neg]; rw [norm_cpow_eq_rpow_re_of_pos hx]; rw [Complex.norm_of_nonneg (exp_pos (-x)).le]; rw [neg_mul]; rw [one_mul]
+  exact (tendsto_congr' this).mpr (tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero _ _ zero_lt_one)
 
 Depends on / 依赖: GammaIntegral, Ici_mem_atTop, Tendsto, Tendsto.congr, add_re, eventuallyEq_of_mem, mem_Ici, mem_Ici.mp, one_re, partialGamma, partialGamma_add_one, ring_nf, tendsto_nhds_unique, tendsto_partialGamma
 -/
@@ -564,7 +684,10 @@ theorem GammaAux_recurrence1
     simp
   | succ n hn =>
     dsimp only [GammaAux]
-    have hh1
+    have hh1 : -(s + 1).re < n := by
+      rw [Nat.cast_add]; rw [Nat.cast_one] at h1
+      rw [add_re]; rw [one_re]; linarith
+    rw [← hn (s + 1) hh1]
 
 中文:
 定理 GammaAux_recurrence1
@@ -578,7 +701,10 @@ theorem GammaAux_recurrence1
     simp
   | succ n hn =>
     dsimp only [GammaAux]
-    have hh1
+    have hh1 : -(s + 1).re < n := by
+      rw [Nat.cast_add]; rw [Nat.cast_one] at h1
+      rw [add_re]; rw [one_re]; linarith
+    rw [← hn (s + 1) hh1]
 
 Depends on / 依赖: isLeftAdjoint, ofIsRightAdjoint
 -/
@@ -612,7 +738,12 @@ theorem GammaAux_recurrence2
     rw [zero_re] at h1
     exact h1.false
   · dsimp only [GammaAux]
-    have : GammaAux n (s + 1 + 1) / (s + 1) = 
+    have : GammaAux n (s + 1 + 1) / (s + 1) = GammaAux n (s + 1) := by
+      have hh1 : -(s + 1).re < n := by
+        rw [Nat.cast_add]; rw [Nat.cast_one] at h1
+        rw [add_re]; rw [one_re]; linarith
+      rw [GammaAux_recurrence1 (s + 1) n hh1]
+    rw [this]
 
 中文:
 定理 GammaAux_recurrence2
@@ -626,7 +757,12 @@ theorem GammaAux_recurrence2
     rw [zero_re] at h1
     exact h1.false
   · dsimp only [GammaAux]
-    have : GammaAux n (s + 1 + 1) / (s + 1) = 
+    have : GammaAux n (s + 1 + 1) / (s + 1) = GammaAux n (s + 1) := by
+      have hh1 : -(s + 1).re < n := by
+        rw [Nat.cast_add]; rw [Nat.cast_one] at h1
+        rw [add_re]; rw [one_re]; linarith
+      rw [GammaAux_recurrence1 (s + 1) n hh1]
+    rw [this]
 -/
 private theorem GammaAux_recurrence2 (s : Complex) (n : Nat) (h1 : -s.re < ↑n) :
     GammaAux n s = GammaAux (n + 1) s := by
@@ -678,7 +814,17 @@ theorem Gamma_eq_GammaAux
       rw [← hk]; rw [← add_assoc]
       refine (GammaAux_recurrence2 s (⌊1 - s.re⌋₊ + k) ?_).symm
       rw [Nat.cast_add]
-      have i0 := Nat.sub_on
+      have i0 := Nat.sub_one_lt_floor (1 - s.re)
+      simp only [sub_sub_cancel_left] at i0
+      refine lt_add_of_lt_of_nonneg i0 ?_
+      rw [← Nat.cast_zero]; rw [Nat.cast_le]; exact Nat.zero_le k
+  convert! (u <| n - ⌊1 - s.re⌋₊).symm; rw [Nat.add_sub_of_le]
+  by_cases h : 0 <= 1 - s.re
+  · apply Nat.le_of_lt_succ
+    exact_mod_cast lt_of_le_of_lt (Nat.floor_le h) (by linarith : 1 - s.re < n + 1)
+  · rw [Nat.floor_of_nonpos]
+    · lia
+    · linarith
 
 中文:
 定理 Gamma_eq_GammaAux
@@ -692,7 +838,17 @@ theorem Gamma_eq_GammaAux
       rw [← hk]; rw [← add_assoc]
       refine (GammaAux_recurrence2 s (⌊1 - s.re⌋₊ + k) ?_).symm
       rw [Nat.cast_add]
-      have i0 := Nat.sub_on
+      have i0 := Nat.sub_one_lt_floor (1 - s.re)
+      simp only [sub_sub_cancel_left] at i0
+      refine lt_add_of_lt_of_nonneg i0 ?_
+      rw [← Nat.cast_zero]; rw [Nat.cast_le]; exact Nat.zero_le k
+  convert! (u <| n - ⌊1 - s.re⌋₊).symm; rw [Nat.add_sub_of_le]
+  by_cases h : 0 <= 1 - s.re
+  · apply Nat.le_of_lt_succ
+    exact_mod_cast lt_of_le_of_lt (Nat.floor_le h) (by linarith : 1 - s.re < n + 1)
+  · rw [Nat.floor_of_nonpos]
+    · lia
+    · linarith
 -/
 private theorem Gamma_eq_GammaAux (s : Complex) (n : Nat) (h1 : -s.re < ↑n) : Gamma s = GammaAux n s := by
   have u : forall k : Nat, GammaAux (⌊1 - s.re⌋₊ + k) s = Gamma s := fun k => by
@@ -890,7 +1046,9 @@ theorem Gamma_neg_nat_eq_zero
       rw [neg_ne_zero]; rw [Nat.cast_ne_zero]
       apply Nat.succ_ne_zero
     have : -(n : Complex) = -↑n.succ + 1 := by simp
-    rw [this]; rw [Gamma_add_one _ A]
+    rw [this]; rw [Gamma_add_one _ A] at IH
+    contrapose! IH
+    exact mul_ne_zero A IH
 
 中文:
 定理 Gamma_neg_nat_eq_zero
@@ -904,7 +1062,9 @@ theorem Gamma_neg_nat_eq_zero
       rw [neg_ne_zero]; rw [Nat.cast_ne_zero]
       apply Nat.succ_ne_zero
     have : -(n : Complex) = -↑n.succ + 1 := by simp
-    rw [this]; rw [Gamma_add_one _ A]
+    rw [this]; rw [Gamma_add_one _ A] at IH
+    contrapose! IH
+    exact mul_ne_zero A IH
 
 Depends on / 依赖: Gamma_add_one, Gamma_zero, Nat.cast_ne_zero, Nat.cast_zero, Nat.succ_ne_zero, cast_ne_zero, cast_zero, contrapose, mul_ne_zero, n.succ, neg_ne_zero, neg_zero, succ_ne_zero
 -/
@@ -937,7 +1097,9 @@ theorem Gamma_conj
     intro s
     rw [GammaAux]
     dsimp only
-    rw [div_eq_mul_inv _ s]; rw [map_mul]; 
+    rw [div_eq_mul_inv _ s]; rw [map_mul]; rw [conj_inv]; rw [← div_eq_mul_inv]
+    suffices conj s + 1 = conj (s + 1) by rw [this, IH]
+    rw [map_add]; rw [map_one]
 
 中文:
 定理 Gamma_conj
@@ -953,7 +1115,9 @@ theorem Gamma_conj
     intro s
     rw [GammaAux]
     dsimp only
-    rw [div_eq_mul_inv _ s]; rw [map_mul]; 
+    rw [div_eq_mul_inv _ s]; rw [map_mul]; rw [conj_inv]; rw [← div_eq_mul_inv]
+    suffices conj s + 1 = conj (s + 1) by rw [this, IH]
+    rw [map_add]; rw [map_one]
 
 Depends on / 依赖: GammaAux, GammaIntegral_conj, conj_inv, div_eq_mul_inv, map_add, map_mul, map_one
 -/
@@ -982,7 +1146,19 @@ lemma integral_cpow_mul_exp_neg_mul_Ioi
     nth_rewrite 2 [← cpow_one (1 / r : Complex)]
     rw [← cpow_add _ _ (one_div_ne_zero <| ofReal_ne_zero.mpr hr.ne')]; rw [add_sub_cancel]
   calc
-    _ = ∫ (t : Real) in Ioi 0, (1 / r) ^ (a - 1) * (r * t) ^ (a - 1) * exp (-(r 
+    _ = ∫ (t : Real) in Ioi 0, (1 / r) ^ (a - 1) * (r * t) ^ (a - 1) * exp (-(r * t)) := by
+      refine MeasureTheory.setIntegral_congr_fun measurableSet_Ioi (fun x hx => ?_)
+      rw [mem_Ioi] at hx
+      rw [mul_cpow_ofReal_nonneg hr.le hx.le]; rw [← mul_assoc]; rw [one_div]; rw [← ofReal_inv]; rw [← mul_cpow_ofReal_nonneg (inv_pos.mpr hr).le hr.le]; rw [← ofReal_mul r⁻¹]; rw [inv_mul_cancel₀ hr.ne']; rw [ofReal_one]; rw [one_cpow]; rw [one_mul]
+    _ = 1 / r * ∫ (t : Real) in Ioi 0, (1 / r) ^ (a - 1) * t ^ (a - 1) * exp (-t) := by
+      simp_rw [← ofReal_mul]
+      rw [integral_comp_mul_left_Ioi (fun x => _ * x ^ (a - 1) * exp (-x)) _ hr]; rw [mul_zero]; rw [real_smul]; rw [← one_div]; rw [ofReal_div]; rw [ofReal_one]
+    _ = 1 / r * (1 / r : Complex) ^ (a - 1) * (∫ (t : Real) in Ioi 0, t ^ (a - 1) * exp (-t)) := by
+      simp_rw [← MeasureTheory.integral_const_mul, mul_assoc]
+    _ = (1 / r) ^ a * Gamma a := by
+      rw [aux]; rw [Gamma_eq_integral ha]
+      congr 2 with x
+      rw [ofReal_exp]; rw [ofReal_neg]; rw [mul_comm]
 
 中文:
 引理 integral_cpow_mul_exp_neg_mul_Ioi
@@ -992,7 +1168,19 @@ lemma integral_cpow_mul_exp_neg_mul_Ioi
     nth_rewrite 2 [← cpow_one (1 / r : Complex)]
     rw [← cpow_add _ _ (one_div_ne_zero <| ofReal_ne_zero.mpr hr.ne')]; rw [add_sub_cancel]
   calc
-    _ = ∫ (t : Real) in Ioi 0, (1 / r) ^ (a - 1) * (r * t) ^ (a - 1) * exp (-(r 
+    _ = ∫ (t : Real) in Ioi 0, (1 / r) ^ (a - 1) * (r * t) ^ (a - 1) * exp (-(r * t)) := by
+      refine MeasureTheory.setIntegral_congr_fun measurableSet_Ioi (fun x hx => ?_)
+      rw [mem_Ioi] at hx
+      rw [mul_cpow_ofReal_nonneg hr.le hx.le]; rw [← mul_assoc]; rw [one_div]; rw [← ofReal_inv]; rw [← mul_cpow_ofReal_nonneg (inv_pos.mpr hr).le hr.le]; rw [← ofReal_mul r⁻¹]; rw [inv_mul_cancel₀ hr.ne']; rw [ofReal_one]; rw [one_cpow]; rw [one_mul]
+    _ = 1 / r * ∫ (t : Real) in Ioi 0, (1 / r) ^ (a - 1) * t ^ (a - 1) * exp (-t) := by
+      simp_rw [← ofReal_mul]
+      rw [integral_comp_mul_left_Ioi (fun x => _ * x ^ (a - 1) * exp (-x)) _ hr]; rw [mul_zero]; rw [real_smul]; rw [← one_div]; rw [ofReal_div]; rw [ofReal_one]
+    _ = 1 / r * (1 / r : Complex) ^ (a - 1) * (∫ (t : Real) in Ioi 0, t ^ (a - 1) * exp (-t)) := by
+      simp_rw [← MeasureTheory.integral_const_mul, mul_assoc]
+    _ = (1 / r) ^ a * Gamma a := by
+      rw [aux]; rw [Gamma_eq_integral ha]
+      congr 2 with x
+      rw [ofReal_exp]; rw [ofReal_neg]; rw [mul_comm]
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.setIntegral_congr_fun, add_sub_cancel, cpow_add, cpow_one, hr.le, hr.ne, hx.le, measurableSet_Ioi, mem_Ioi, mul_assoc, mul_cpow_, mul_cpow_ofReal_nonneg, nth_rewrite, ofReal_inv, ofReal_ne_zero, ofReal_ne_zero.mpr, one_div, one_div_ne_zero, setIntegral_congr_fun
 -/
@@ -1244,7 +1432,12 @@ theorem Gamma_pos_of_pos
     intro x hx
     rw [Function.mem_support]
     exact mul_ne_zero (exp_pos _).ne' (rpow_pos_of_pos hx _).ne'
-  rw [setIntegral_pos_iff_support_of_nonne
+  rw [setIntegral_pos_iff_support_of_nonneg_ae]
+  · rw [this, volume_Ioi, ← ENNReal.ofReal_zero]
+    exact ENNReal.ofReal_lt_top
+  · refine eventually_of_mem (self_mem_ae_restrict measurableSet_Ioi) ?_
+    exact fun x hx => (mul_pos (exp_pos _) (rpow_pos_of_pos hx _)).le
+  · exact GammaIntegral_convergent hs
 
 中文:
 定理 Gamma_pos_of_pos
@@ -1257,7 +1450,12 @@ theorem Gamma_pos_of_pos
     intro x hx
     rw [Function.mem_support]
     exact mul_ne_zero (exp_pos _).ne' (rpow_pos_of_pos hx _).ne'
-  rw [setIntegral_pos_iff_support_of_nonne
+  rw [setIntegral_pos_iff_support_of_nonneg_ae]
+  · rw [this, volume_Ioi, ← ENNReal.ofReal_zero]
+    exact ENNReal.ofReal_lt_top
+  · refine eventually_of_mem (self_mem_ae_restrict measurableSet_Ioi) ?_
+    exact fun x hx => (mul_pos (exp_pos _) (rpow_pos_of_pos hx _)).le
+  · exact GammaIntegral_convergent hs
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_lt_top, ENNReal.ofReal_zero, Function, Function.mem_support, Function.support, Gamma_eq_integral, eventually_of_mem, exp_pos, inter_eq_right, measurableSet_Ioi, mem_support, mul_ne_zero, mul_pos, ofReal_lt_top, ofReal_zero, rpow_pos_of_pos, self_mem_ae_restrict, setIntegral_pos_iff_support_of_nonneg_ae, support
 -/
@@ -1314,7 +1512,8 @@ lemma integral_rpow_mul_exp_neg_mul_Ioi
   rw [← ofReal_inj]; rw [ofReal_mul]; rw [← Gamma_ofReal]; rw [ofReal_cpow (by positivity)]; rw [ofReal_div]
   convert! integral_cpow_mul_exp_neg_mul_Ioi (by rwa [ofReal_re] : 0 < (a : Complex).re) hr
 refine integral_ofReal.symm.trans setIntegral_congr_fun measurableSet_Ioi (fun t ht => ?_)
-  nor
+  norm_cast
+  simp_rw [← ofReal_cpow ht.le, RCLike.ofReal_mul, coe_algebraMap]
 
 中文:
 引理 integral_rpow_mul_exp_neg_mul_Ioi
@@ -1323,7 +1522,8 @@ refine integral_ofReal.symm.trans setIntegral_congr_fun measurableSet_Ioi (fun t
   rw [← ofReal_inj]; rw [ofReal_mul]; rw [← Gamma_ofReal]; rw [ofReal_cpow (by positivity)]; rw [ofReal_div]
   convert! integral_cpow_mul_exp_neg_mul_Ioi (by rwa [ofReal_re] : 0 < (a : Complex).re) hr
 refine integral_ofReal.symm.trans setIntegral_congr_fun measurableSet_Ioi (fun t ht => ?_)
-  nor
+  norm_cast
+  simp_rw [← ofReal_cpow ht.le, RCLike.ofReal_mul, coe_algebraMap]
 
 Depends on / 依赖: Gamma_ofReal, RCLike, RCLike.ofReal_mul, coe_algebraMap, convert, ht.le, integral_cpow_mul_exp_neg_mul_Ioi, integral_ofReal, integral_ofReal.symm.trans, measurableSet_Ioi, ofReal_cpow, ofReal_div, ofReal_inj, ofReal_mul, ofReal_re, setIntegral_congr_fun, simp_rw
 -/
@@ -1370,7 +1570,24 @@ theorem Gamma_ne_zero
   induction n generalizing s with
   | zero =>
     intro hs
-    refine (Gamma_pos_of_pos ?_
+    refine (Gamma_pos_of_pos ?_).ne'
+    rwa [Nat.cast_zero, neg_zero] at hs
+  | succ _ n_ih =>
+    intro hs'
+    have : Gamma (s + 1) != 0 := by
+      apply n_ih
+      · intro m
+        specialize hs (1 + m)
+        contrapose hs
+        rw [← eq_sub_iff_add_eq] at hs
+        rw [hs]
+        push_cast
+        ring
+      · rw [Nat.cast_add, Nat.cast_one, neg_add] at hs'
+        linarith
+    rw [Gamma_add_one]; rw [mul_ne_zero_iff] at this
+    · exact this.2
+    · simpa using hs 0
 
 中文:
 定理 Gamma_ne_zero
@@ -1387,7 +1604,24 @@ theorem Gamma_ne_zero
   induction n generalizing s with
   | zero =>
     intro hs
-    refine (Gamma_pos_of_pos ?_
+    refine (Gamma_pos_of_pos ?_).ne'
+    rwa [Nat.cast_zero, neg_zero] at hs
+  | succ _ n_ih =>
+    intro hs'
+    have : Gamma (s + 1) != 0 := by
+      apply n_ih
+      · intro m
+        specialize hs (1 + m)
+        contrapose hs
+        rw [← eq_sub_iff_add_eq] at hs
+        rw [hs]
+        push_cast
+        ring
+      · rw [Nat.cast_add, Nat.cast_one, neg_add] at hs'
+        linarith
+    rw [Gamma_add_one]; rw [mul_ne_zero_iff] at this
+    · exact this.2
+    · simpa using hs 0
 
 Depends on / 依赖: Gamma_pos_of_pos, Nat.cast_add, Nat.cast_one, Nat.cast_zero, Nat.lt_floor_add_one, cast_add, cast_one, cast_zero, contrapose, eq_sub_iff_add_eq, generalizing, lt_floor_add_one, n_ih, neg_lt, neg_zero, specialize
 -/

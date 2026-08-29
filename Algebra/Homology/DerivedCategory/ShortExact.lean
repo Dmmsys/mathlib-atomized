@@ -92,7 +92,12 @@ lemma triangleOfSESδ_naturality
   proof: by
   simp only [triangleOfSESδ, Category.assoc,
     IsIso.inv_comp_eq]
-  rw [← Functor.comp_map]; rw [← (Q.commShiftIso (1 : Int)).hom.naturality]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Iso.app_hom]; rw [Iso.cancel_iso_hom_right]; rw [← Q.m
+  rw [← Functor.comp_map]; rw [← (Q.commShiftIso (1 : Int)).hom.naturality]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Iso.app_hom]; rw [Iso.cancel_iso_hom_right]; rw [← Q.map_comp]
+  simp only [Functor.comp_map, ← CochainComplex.mappingCone.descShortComplex_naturality f,
+    Functor.map_comp, Category.assoc, IsIso.hom_inv_id, Category.comp_id]
+  rw [← Q.map_comp]; rw [← Q.map_comp]
+  congr 1
+  exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
 
 中文:
 引理 triangleOfSESδ_naturality
@@ -100,7 +105,12 @@ lemma triangleOfSESδ_naturality
   证明: by
   simp only [triangleOfSESδ, Category.assoc,
     IsIso.inv_comp_eq]
-  rw [← Functor.comp_map]; rw [← (Q.commShiftIso (1 : Int)).hom.naturality]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Iso.app_hom]; rw [Iso.cancel_iso_hom_right]; rw [← Q.m
+  rw [← Functor.comp_map]; rw [← (Q.commShiftIso (1 : Int)).hom.naturality]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← Iso.app_hom]; rw [Iso.cancel_iso_hom_right]; rw [← Q.map_comp]
+  simp only [Functor.comp_map, ← CochainComplex.mappingCone.descShortComplex_naturality f,
+    Functor.map_comp, Category.assoc, IsIso.hom_inv_id, Category.comp_id]
+  rw [← Q.map_comp]; rw [← Q.map_comp]
+  congr 1
+  exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, CochainComplex, CochainComplex.mappingCone.descShortComplex_naturality, Functor, Functor.comp_map, Functor.map_comp, IsIso.hom_inv_id, IsIso.inv_comp_eq, Iso.app_hom, Iso.cancel_iso_hom_right, Q.commShiftIso, Q.map_comp, app_hom, cancel_iso_hom_right, commShiftIso, comp_id, comp_map, descShortComplex_naturality
 -/
@@ -152,7 +162,9 @@ definition triangleOfSESIso
   · dsimp [triangleOfSES]
     simp only [comp_id, id_comp]
   · dsimp
-    simp only [← Q.m
+    simp only [← Q.map_comp, CochainComplex.mappingCone.inr_descShortComplex, id_comp]
+  · dsimp [triangleOfSESδ]
+    rw [CategoryTheory.Functor.map_id]; rw [comp_id]; rw [IsIso.hom_inv_id_assoc]
 
 中文:
 定义 triangleOfSESIso
@@ -164,7 +176,9 @@ definition triangleOfSESIso
   · dsimp [triangleOfSES]
     simp only [comp_id, id_comp]
   · dsimp
-    simp only [← Q.m
+    simp only [← Q.map_comp, CochainComplex.mappingCone.inr_descShortComplex, id_comp]
+  · dsimp [triangleOfSESδ]
+    rw [CategoryTheory.Functor.map_id]; rw [comp_id]; rw [IsIso.hom_inv_id_assoc]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, CochainComplex, CochainComplex.mappingCone.descShortComplex, CochainComplex.mappingCone.inr_descShortComplex, CochainComplex.mappingCone.quasiIso_descShortComplex, Functor, IsIso.hom_inv_id_assoc, Iso.refl, Iso.symm, Q.map, Q.map_comp, Triangle, Triangle.isoMk, comp_id, descShortComplex, hom_inv_id_assoc, id_comp, inr_descShortComplex, map_comp
 -/
@@ -227,7 +241,9 @@ definition triangleOfSES.map
   comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
   comm₃ := by
     dsimp [triangleOfSES, triangleOfSESδ]
-    rw [assoc]; rw [assoc]; rw [IsIso.inv_comp_eq]; rw [← Functor.map_comp_assoc]; rw [← Co
+    rw [assoc]; rw [assoc]; rw [IsIso.inv_comp_eq]; rw [← Functor.map_comp_assoc]; rw [← CochainComplex.mappingCone.map_descShortComplex]; rw [Functor.map_comp_assoc]; rw [IsIso.hom_inv_id_assoc]; rw [← Functor.commShiftIso_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
+    congr 2
+    exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
 
 中文:
 定义 triangleOfSES.map
@@ -239,7 +255,9 @@ definition triangleOfSES.map
   comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
   comm₃ := by
     dsimp [triangleOfSES, triangleOfSESδ]
-    rw [assoc]; rw [assoc]; rw [IsIso.inv_comp_eq]; rw [← Functor.map_comp_assoc]; rw [← Co
+    rw [assoc]; rw [assoc]; rw [IsIso.inv_comp_eq]; rw [← Functor.map_comp_assoc]; rw [← CochainComplex.mappingCone.map_descShortComplex]; rw [Functor.map_comp_assoc]; rw [IsIso.hom_inv_id_assoc]; rw [← Functor.commShiftIso_hom_naturality]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
+    congr 2
+    exact (CochainComplex.mappingCone.triangleMap S₁.f S₂.f f.τ₁ f.τ₂ f.comm₁₂.symm).comm₃
 
 Depends on / 依赖: Q.map
 -/

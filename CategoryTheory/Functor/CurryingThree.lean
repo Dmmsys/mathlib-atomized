@@ -529,7 +529,7 @@ definition flip₂₃Functor
     naturality _ _ g := by
       ext
       simp only [flip₂₃_obj_obj_obj, NatTrans.comp_app, flip₂₃_map_app_app]
-      simp [← NatTra
+      simp [← NatTrans.comp_app] }
 
 中文:
 定义 flip₂₃Functor
@@ -544,7 +544,7 @@ definition flip₂₃Functor
     naturality _ _ g := by
       ext
       simp only [flip₂₃_obj_obj_obj, NatTrans.comp_app, flip₂₃_map_app_app]
-      simp [← NatTra
+      simp [← NatTrans.comp_app] }
 
 Depends on / 依赖: F.flip
 -/

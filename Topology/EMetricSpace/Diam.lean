@@ -362,7 +362,20 @@ theorem ediam_union_le_add_edist
       edist a b <= edist a x + edist x y + edist y b := edist_triangle4 _ _ _ _
       _ <= ediam s + edist x y + ediam t := by
         gcongr
-        exacts [edist_le_ediam_of_mem ha x
+        exacts [edist_le_ediam_of_mem ha xs, edist_le_ediam_of_mem yt hb]
+  refine ediam_le fun a ha b hb => ?_
+  rw [mem_union] at ha hb
+  rcases ha with h'a | h'a <;> rcases hb with h'b | h'b
+  · calc
+      edist a b <= ediam s := edist_le_ediam_of_mem h'a h'b
+      _ <= ediam s + (edist x y + ediam t) := le_self_add
+      _ = ediam s + edist x y + ediam t := (add_assoc _ _ _).symm
+  · exact A a h'a b h'b
+  · have Z := A b h'b a h'a
+    rwa [edist_comm] at Z
+  · calc
+      edist a b <= ediam t := edist_le_ediam_of_mem h'a h'b
+      _ <= ediam s + edist x y + ediam t := le_add_self
 
 中文:
 定理 ediam_union_le_add_edist
@@ -373,7 +386,20 @@ theorem ediam_union_le_add_edist
       edist a b <= edist a x + edist x y + edist y b := edist_triangle4 _ _ _ _
       _ <= ediam s + edist x y + ediam t := by
         gcongr
-        exacts [edist_le_ediam_of_mem ha x
+        exacts [edist_le_ediam_of_mem ha xs, edist_le_ediam_of_mem yt hb]
+  refine ediam_le fun a ha b hb => ?_
+  rw [mem_union] at ha hb
+  rcases ha with h'a | h'a <;> rcases hb with h'b | h'b
+  · calc
+      edist a b <= ediam s := edist_le_ediam_of_mem h'a h'b
+      _ <= ediam s + (edist x y + ediam t) := le_self_add
+      _ = ediam s + edist x y + ediam t := (add_assoc _ _ _).symm
+  · exact A a h'a b h'b
+  · have Z := A b h'b a h'a
+    rwa [edist_comm] at Z
+  · calc
+      edist a b <= ediam t := edist_le_ediam_of_mem h'a h'b
+      _ <= ediam s + edist x y + ediam t := le_add_self
 
 Depends on / 依赖: ediam_le, edist_le_ediam_of_mem, edist_triangle4, exacts, mem_union
 -/

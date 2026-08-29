@@ -231,13 +231,15 @@ English:
 lemma lintegral_betaPDF
   given: {α β : Real}
   proof: by
-  rw [← lintegral_add_compl _ measurableSet_Iic]; rw [setLIntegral_eq_zero measurableSet_Iic (fun x (hx : x <= 0) => betaPDF_eq_zero_of_nonpos hx)]; rw [zero_add]; rw [compl_Iic]; rw [← lintegral_add_compl _ measurableSet_Ici]; rw [setLIntegral_eq_zero measurableSet_Ici (fun x (hx : 1 <= x) => be
+  rw [← lintegral_add_compl _ measurableSet_Iic]; rw [setLIntegral_eq_zero measurableSet_Iic (fun x (hx : x <= 0) => betaPDF_eq_zero_of_nonpos hx)]; rw [zero_add]; rw [compl_Iic]; rw [← lintegral_add_compl _ measurableSet_Ici]; rw [setLIntegral_eq_zero measurableSet_Ici (fun x (hx : 1 <= x) => betaPDF_eq_zero_of_one_le hx)]; rw [zero_add]; rw [compl_Ici]; rw [Measure.restrict_restrict measurableSet_Iio]; rw [Iio_inter_Ioi]; rw [setLIntegral_congr_fun measurableSet_Ioo
+      (fun x ⟨hx_pos]; rw [hx_lt⟩ => betaPDF_of_pos_lt_one hx_pos hx_lt)]
 
 中文:
 引理 lintegral_betaPDF
   条件: {α β : 实数}
   证明: by
-  rw [← lintegral_add_compl _ measurableSet_Iic]; rw [setLIntegral_eq_zero measurableSet_Iic (fun x (hx : x <= 0) => betaPDF_eq_zero_of_nonpos hx)]; rw [zero_add]; rw [compl_Iic]; rw [← lintegral_add_compl _ measurableSet_Ici]; rw [setLIntegral_eq_zero measurableSet_Ici (fun x (hx : 1 <= x) => be
+  rw [← lintegral_add_compl _ measurableSet_Iic]; rw [setLIntegral_eq_zero measurableSet_Iic (fun x (hx : x <= 0) => betaPDF_eq_zero_of_nonpos hx)]; rw [zero_add]; rw [compl_Iic]; rw [← lintegral_add_compl _ measurableSet_Ici]; rw [setLIntegral_eq_zero measurableSet_Ici (fun x (hx : 1 <= x) => betaPDF_eq_zero_of_one_le hx)]; rw [zero_add]; rw [compl_Ici]; rw [Measure.restrict_restrict measurableSet_Iio]; rw [Iio_inter_Ioi]; rw [setLIntegral_congr_fun measurableSet_Ioo
+      (fun x ⟨hx_pos]; rw [hx_lt⟩ => betaPDF_of_pos_lt_one hx_pos hx_lt)]
 
 Depends on / 依赖: Iio_inter_Ioi, Measure, Measure.restrict_restrict, betaPDF_eq_zero_of_nonpos, betaPDF_eq_zero_of_one_le, compl_Ici, compl_Iic, hx_lt, hx_pos, lintegral_add_compl, measurableSet_Ici, measurableSet_Iic, measurableSet_Iio, measurableSet_Ioo, restrict_restrict, setLIntegral_congr_fun, setLIntegral_eq_zero, zero_add
 -/
@@ -328,7 +330,17 @@ lemma lintegral_betaPDF_eq_one
   rw [lintegral_betaPDF]; rw [← ENNReal.toReal_eq_one_iff]; rw [← integral_eq_lintegral_of_nonneg_ae]
   · simp_rw [mul_assoc, integral_const_mul]
     field_simp
-    rw [div_eq_one_iff_eq (ne_of_gt (beta_pos hα hβ))]; rw [beta_eq_betaIntegralReal α β hα hβ]; rw [betaIntegral]; rw [intervalIntegral
+    rw [div_eq_one_iff_eq (ne_of_gt (beta_pos hα hβ))]; rw [beta_eq_betaIntegralReal α β hα hβ]; rw [betaIntegral]; rw [intervalIntegral.integral_of_le (by norm_num)]; rw [← integral_Ioc_eq_integral_Ioo]; rw [← RCLike.re_to_complex]; rw [← integral_re]
+    · refine setIntegral_congr_fun measurableSet_Ioc fun x ⟨hx1, hx₂⟩ => ?_
+      norm_cast
+      rw [← Complex.ofReal_cpow]; rw [← Complex.ofReal_cpow]; rw [RCLike.re_to_complex]; rw [Complex.re_mul_ofReal]; rw [Complex.ofReal_re]
+      all_goals linarith
+    convert! betaIntegral_convergent (u := α) (v := β) (by simpa) (by simpa)
+    rw [intervalIntegrable_iff_integrableOn_Ioc_of_le (by simp)]; rw [IntegrableOn]
+  · refine ae_restrict_of_forall_mem measurableSet_Ioo (fun x hx => ?_)
+.le using 1 convert! betaPDFReal_pos hx.1 hx.2 hα hβ
+    rw [betaPDFReal]; rw [if_pos ⟨hx.1]; rw [hx.2⟩]
+  · exact Measurable.aestronglyMeasurable (by fun_prop)
 
 中文:
 引理 lintegral_betaPDF_eq_one
@@ -337,7 +349,17 @@ lemma lintegral_betaPDF_eq_one
   rw [lintegral_betaPDF]; rw [← ENNReal.toReal_eq_one_iff]; rw [← integral_eq_lintegral_of_nonneg_ae]
   · simp_rw [mul_assoc, integral_const_mul]
     field_simp
-    rw [div_eq_one_iff_eq (ne_of_gt (beta_pos hα hβ))]; rw [beta_eq_betaIntegralReal α β hα hβ]; rw [betaIntegral]; rw [intervalIntegral
+    rw [div_eq_one_iff_eq (ne_of_gt (beta_pos hα hβ))]; rw [beta_eq_betaIntegralReal α β hα hβ]; rw [betaIntegral]; rw [intervalIntegral.integral_of_le (by norm_num)]; rw [← integral_Ioc_eq_integral_Ioo]; rw [← RCLike.re_to_complex]; rw [← integral_re]
+    · refine setIntegral_congr_fun measurableSet_Ioc fun x ⟨hx1, hx₂⟩ => ?_
+      norm_cast
+      rw [← Complex.ofReal_cpow]; rw [← Complex.ofReal_cpow]; rw [RCLike.re_to_complex]; rw [Complex.re_mul_ofReal]; rw [Complex.ofReal_re]
+      all_goals linarith
+    convert! betaIntegral_convergent (u := α) (v := β) (by simpa) (by simpa)
+    rw [intervalIntegrable_iff_integrableOn_Ioc_of_le (by simp)]; rw [IntegrableOn]
+  · refine ae_restrict_of_forall_mem measurableSet_Ioo (fun x hx => ?_)
+.le using 1 convert! betaPDFReal_pos hx.1 hx.2 hα hβ
+    rw [betaPDFReal]; rw [if_pos ⟨hx.1]; rw [hx.2⟩]
+  · exact Measurable.aestronglyMeasurable (by fun_prop)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_eq_one_iff, RCLike, RCLike.re_to_complex, betaIntegral, beta_eq_betaIntegralReal, beta_pos, div_eq_one_iff_eq, integral_Ioc_eq_integral_Ioo, integral_const_mul, integral_eq_lintegral_of_nonneg_ae, integral_of_le, integral_re, intervalIntegral, intervalIntegral.integral_of_le, lintegral_betaPDF, measurableSet_Ioc, mul_assoc, ne_of_gt, re_to_complex
 -/

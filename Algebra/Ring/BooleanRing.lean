@@ -221,7 +221,9 @@ theorem mul_add_mul
       _ = a * a + a * b + (b * a + b * b) := by rw [add_mul, mul_add, mul_add]
       _ = a + a * b + (b * a + b) := by simp only [mul_self]
       _ = a + b + (a * b + b * a) := by abel
-  rwa [
+  rwa [left_eq_add] at this
+
+@[scoped simp]
 
 中文:
 定理 mul_add_mul
@@ -233,7 +235,9 @@ theorem mul_add_mul
       _ = a * a + a * b + (b * a + b * b) := by rw [add_mul, mul_add, mul_add]
       _ = a + a * b + (b * a + b) := by simp only [mul_self]
       _ = a + b + (a * b + b * a) := by abel
-  rwa [
+  rwa [left_eq_add] at this
+
+@[scoped simp]
 
 Depends on / 依赖: add_mul, left_eq_add, mul_add, mul_self
 -/
@@ -787,7 +791,17 @@ definition toBooleanAlgebra
     le_top := fun a => show a + 1 + a * 1 = 1 by rw [mul_one, add_comm a 1,
                                                      add_assoc, add_self, add_zero]
     bot := 0
-  
+    bot_le := fun a => show 0 + a + 0 * a = a by rw [zero_mul, zero_add, add_zero]
+    compl := fun a => 1 + a
+    inf_compl_le_bot := fun a =>
+      show a * (1 + a) + 0 + a * (1 + a) * 0 = 0 by simp [mul_add, mul_self, add_self]
+    top_le_sup_compl := fun a => by
+      change
+        1 + (a + (1 + a) + a * (1 + a)) + 1 * (a + (1 + a) + a * (1 + a)) =
+          a + (1 + a) + a * (1 + a)
+      simp [mul_add, mul_self, add_self, ← add_assoc 1 a] }
+
+scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.toBooleanAlgebra
 
 中文:
 定义 to布尔eanAlgebra
@@ -798,7 +812,17 @@ definition toBooleanAlgebra
     le_top := fun a => show a + 1 + a * 1 = 1 by rw [mul_one, add_comm a 1,
                                                      add_assoc, add_self, add_zero]
     bot := 0
-  
+    bot_le := fun a => show 0 + a + 0 * a = a by rw [zero_mul, zero_add, add_zero]
+    compl := fun a => 1 + a
+    inf_compl_le_bot := fun a =>
+      show a * (1 + a) + 0 + a * (1 + a) * 0 = 0 by simp [mul_add, mul_self, add_self]
+    top_le_sup_compl := fun a => by
+      change
+        1 + (a + (1 + a) + a * (1 + a)) + 1 * (a + (1 + a) + a * (1 + a)) =
+          a + (1 + a) + a * (1 + a)
+      simp [mul_add, mul_self, add_self, ← add_assoc 1 a] }
+
+scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.toBooleanAlgebra
 
 Depends on / 依赖: Lattice, Lattice.mk, add_assoc, add_comm, add_self, add_zero, bot_le, inf_assoc, inf_comm, inf_compl_le_bot, inf_sup_self, le_sup_inf, le_top, mul_add, mul_one, mul_self, sup_assoc, sup_comm, sup_inf_self, top_le_sup_compl
 -/
@@ -1470,7 +1494,10 @@ abbreviation GeneralizedBooleanAlgebra.toNonUnitalCommRing
   mul := (· ⊓ ·)
   mul_assoc := inf_assoc
   mul_comm := inf_comm
-  left_
+  left_distrib := inf_symmDiff_distrib_left
+  right_distrib := inf_symmDiff_distrib_right
+  nsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; nsmulRec
+  zsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; letI : Neg α := ⟨id⟩; zsmulRec
 
 中文:
 缩写 Generalized布尔ean代数.toNonUnitalCommRing
@@ -1488,7 +1515,10 @@ abbreviation GeneralizedBooleanAlgebra.toNonUnitalCommRing
   mul := (· ⊓ ·)
   mul_assoc := inf_assoc
   mul_comm := inf_comm
-  left_
+  left_distrib := inf_symmDiff_distrib_left
+  right_distrib := inf_symmDiff_distrib_right
+  nsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; nsmulRec
+  zsmul := letI : Zero α := ⟨⊥⟩; letI : Add α := ⟨(· ∆ ·)⟩; letI : Neg α := ⟨id⟩; zsmulRec
 -/
 abbrev GeneralizedBooleanAlgebra.toNonUnitalCommRing [GeneralizedBooleanAlgebra α] :
     NonUnitalCommRing α where
@@ -2073,7 +2103,11 @@ instance :
   mul_one := Bool.and_true
   left_distrib := and_xor_distrib_left
   right_distrib := and_xor_distrib_right
-  isIdempotentEl
+  isIdempotentElem := Bool.and_self
+  zero_mul _ := rfl
+  mul_zero a := by cases a <;> rfl
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 中文:
 实例 :
@@ -2088,7 +2122,11 @@ instance :
   mul_one := Bool.and_true
   left_distrib := and_xor_distrib_left
   right_distrib := and_xor_distrib_right
-  isIdempotentEl
+  isIdempotentElem := Bool.and_self
+  zero_mul _ := rfl
+  mul_zero a := by cases a <;> rfl
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 Depends on / 依赖: xor_assoc
 -/

@@ -87,7 +87,9 @@ lemma tendsto_choose_mul_pow_atTop
     _ ~[atTop] (fun n => (n ^ k / k.factorial) * (p n) ^ k) :=
       (isEquivalent_choose k).mul IsEquivalent.refl
     _ ~[atTop] (fun n => ((n * p n) ^ k) / k.factorial) :=
-      EventuallyEq
+      EventuallyEq.isEquivalent (.of_eq (by ext; field))
+  refine (IsEquivalent.tendsto_nhds_iff this).mpr ?_
+  simpa [div_eq_mul_inv] using (hr.pow k).mul_const ((k.factorial : Real)⁻¹)
 
 中文:
 引理 tendsto_choose_mul_pow_atTop
@@ -98,7 +100,9 @@ lemma tendsto_choose_mul_pow_atTop
     _ ~[atTop] (fun n => (n ^ k / k.factorial) * (p n) ^ k) :=
       (isEquivalent_choose k).mul IsEquivalent.refl
     _ ~[atTop] (fun n => ((n * p n) ^ k) / k.factorial) :=
-      EventuallyEq
+      EventuallyEq.isEquivalent (.of_eq (by ext; field))
+  refine (IsEquivalent.tendsto_nhds_iff this).mpr ?_
+  simpa [div_eq_mul_inv] using (hr.pow k).mul_const ((k.factorial : Real)⁻¹)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.isEquivalent, IsEquivalent, IsEquivalent.refl, IsEquivalent.tendsto_nhds_iff, div_eq_mul_inv, factorial, hr.pow, isEquivalent, isEquivalent_choose, k.factorial, mul_const, n.choose, of_eq, tendsto_nhds_iff
 -/
@@ -125,7 +129,16 @@ theorem tendsto_choose_mul_pow_of_tendsto_mul_atTop
   have hp_lt_half : forallᶠ n in atTop, p n < 1 / 2 :=
     (tendsto_zero_of_tendsto_mul_atTop hr).eventually (Iio_mem_nhds (by norm_num))
   have hEq : (fun n => (1 - p n) ^ (n - k)) =ᶠ[atTop]
-      (fun n => (
+      (fun n => (1 - p n) ^ n * ((1 - p n) ^ k)⁻¹) := by
+    filter_upwards [eventually_ge_atTop k, hp_lt_half] with n hn hne
+    rw [pow_sub₀ _ (by grind) hn]
+  refine Tendsto.congr' hEq.symm ?_
+  have : Real.exp (-r) = Real.exp (-r) * (1 ^ k)⁻¹ := by field
+  rw [this]
+  refine Tendsto.mul (Real.tendsto_one_add_pow_exp_of_tendsto ?_) ?_
+  · simpa using hr.neg
+  refine Tendsto.inv₀ (.pow ?_ k) (by simp)
+  · simpa using tendsto_const_nhds.sub (tendsto_zero_of_tendsto_mul_atTop hr)
 
 中文:
 定理 tendsto_choose_mul_pow_of_tendsto_mul_atTop
@@ -136,7 +149,16 @@ theorem tendsto_choose_mul_pow_of_tendsto_mul_atTop
   have hp_lt_half : forallᶠ n in atTop, p n < 1 / 2 :=
     (tendsto_zero_of_tendsto_mul_atTop hr).eventually (Iio_mem_nhds (by norm_num))
   have hEq : (fun n => (1 - p n) ^ (n - k)) =ᶠ[atTop]
-      (fun n => (
+      (fun n => (1 - p n) ^ n * ((1 - p n) ^ k)⁻¹) := by
+    filter_upwards [eventually_ge_atTop k, hp_lt_half] with n hn hne
+    rw [pow_sub₀ _ (by grind) hn]
+  refine Tendsto.congr' hEq.symm ?_
+  have : Real.exp (-r) = Real.exp (-r) * (1 ^ k)⁻¹ := by field
+  rw [this]
+  refine Tendsto.mul (Real.tendsto_one_add_pow_exp_of_tendsto ?_) ?_
+  · simpa using hr.neg
+  refine Tendsto.inv₀ (.pow ?_ k) (by simp)
+  · simpa using tendsto_const_nhds.sub (tendsto_zero_of_tendsto_mul_atTop hr)
 
 Depends on / 依赖: Iio_mem_nhds, Real.exp, Tendsto, Tendsto.congr, eventually, eventually_ge_atTop, filter_upwards, hEq.symm, hp_lt_half, mul_comm, mul_div_assoc, tendsto_choose_mul_pow_atTop, tendsto_zero_of_tendsto_mul_atTop
 -/
@@ -175,7 +197,9 @@ lemma binomial_tendsto_poissonPMFReal_atTop
       atTop (𝓝 (poissonMeasure r {k})) := by
     simp_rw [poissonMeasure_singleton]
     exact tendsto_ofReal (tendsto_choose_mul_pow_of_tendsto_mul_atTop k (by norm_cast))
-  refine Tendsto.congr'
+  refine Tendsto.congr' ?_ t1
+  simpa only [EventuallyEq, eventually_atTop, ge_iff_le] using
+    ⟨k, fun b hb => (binomial_singleton b k (p b)).symm⟩
 
 中文:
 引理 binomial_tendsto_poissonPMF实数_atTop
@@ -185,7 +209,9 @@ lemma binomial_tendsto_poissonPMFReal_atTop
       atTop (𝓝 (poissonMeasure r {k})) := by
     simp_rw [poissonMeasure_singleton]
     exact tendsto_ofReal (tendsto_choose_mul_pow_of_tendsto_mul_atTop k (by norm_cast))
-  refine Tendsto.congr'
+  refine Tendsto.congr' ?_ t1
+  simpa only [EventuallyEq, eventually_atTop, ge_iff_le] using
+    ⟨k, fun b hb => (binomial_singleton b k (p b)).symm⟩
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, EventuallyEq, Tendsto, Tendsto.congr, binomial_singleton, eventually_atTop, ge_iff_le, n.choose, ofReal, poissonMeasure, poissonMeasure_singleton, simp_rw, tendsto_choose_mul_pow_of_tendsto_mul_atTop, tendsto_ofReal
 -/

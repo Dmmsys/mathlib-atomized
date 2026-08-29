@@ -56,7 +56,9 @@ definition withSetOptionIn'
       withScope (fun scope => { scope with opts }) do
         withSetOptionIn' cmd stx[2]
     else
-      withSet
+      withSetOptionIn' cmd stx[2]
+  else
+    cmd stx
 
 中文:
 定义 withSetOptionIn'
@@ -68,7 +70,9 @@ definition withSetOptionIn'
       withScope (fun scope => { scope with opts }) do
         withSetOptionIn' cmd stx[2]
     else
-      withSet
+      withSetOptionIn' cmd stx[2]
+  else
+    cmd stx
 -/
 partial def withSetOptionIn' (cmd : CommandElab) : CommandElab := fun stx => do
   if stx.getKind == ``Lean.Parser.Command.in then
@@ -110,7 +114,11 @@ definition hashCommandLinter
   then
     if let some sa := stx.getHead? then
       let a := sa.getAtomVal
-      if (a.front == '#' && ! allowed_c
+      if (a.front == '#' && ! allowed_commands.contains a) then
+        let msg := m!"`#`-commands, such as '{a}', are not allowed in 'Mathlib'"
+        if warningAsError.get (← getOptions) then
+          logInfoAt sa (msg ++ " [linter.hashCommand]")
+        else Linter.logLint linter.hashCommand sa msg
 
 中文:
 定义 hashCommandLinter
@@ -121,7 +129,11 @@ definition hashCommandLinter
   then
     if let some sa := stx.getHead? then
       let a := sa.getAtomVal
-      if (a.front == '#' && ! allowed_c
+      if (a.front == '#' && ! allowed_commands.contains a) then
+        let msg := m!"`#`-commands, such as '{a}', are not allowed in 'Mathlib'"
+        if warningAsError.get (← getOptions) then
+          logInfoAt sa (msg ++ " [linter.hashCommand]")
+        else Linter.logLint linter.hashCommand sa msg
 
 Depends on / 依赖: withSetOptionIn
 -/

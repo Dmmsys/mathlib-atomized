@@ -275,7 +275,12 @@ lemma GrothendieckTopology.preservesSheafification_iff_of_adjunctions
     constructor
     intro P₁ P₂ f hf
     rw [J.W_iff_isIso_map_of_adjunction adj₁] at hf
-    dsimp [
+    dsimp [MorphismProperty.inverseImage]
+    rw [← (W _).postcomp_iff _ _ (h P₂)]; rw [← whiskerRight_comp]
+    erw [adj₁.unit.naturality f]
+    dsimp only [Functor.comp_map]
+    rw [whiskerRight_comp]; rw [(W _).precomp_iff _ _ (h P₁)]
+    apply ObjectProperty.isLocal_of_isIso
 
 中文:
 引理 Grothendieck拓扑.preservesSheafification_iff_of_adjunctions
@@ -290,7 +295,12 @@ lemma GrothendieckTopology.preservesSheafification_iff_of_adjunctions
     constructor
     intro P₁ P₂ f hf
     rw [J.W_iff_isIso_map_of_adjunction adj₁] at hf
-    dsimp [
+    dsimp [MorphismProperty.inverseImage]
+    rw [← (W _).postcomp_iff _ _ (h P₂)]; rw [← whiskerRight_comp]
+    erw [adj₁.unit.naturality f]
+    dsimp only [Functor.comp_map]
+    rw [whiskerRight_comp]; rw [(W _).precomp_iff _ _ (h P₁)]
+    apply ObjectProperty.isLocal_of_isIso
 
 Depends on / 依赖: Functor, Functor.comp_map, J.W_iff_isIso_map_of_adjunction, MorphismProperty, MorphismProperty.inverseImage, ObjectProperty, ObjectProperty.isLo, W_iff_isIso_map_of_adjunction, W_of_preservesSheafification, comp_map, infer_instance, inverseImage, naturality, postcomp_iff, precomp_iff, unit.naturality, whiskerRight_comp
 -/
@@ -440,7 +450,7 @@ lemma GrothendieckTopology.preservesSheafification_iff_of_adjunctions_of_hasShea
   rw [J.preservesSheafification_iff_of_adjunctions F adj₁ adj₂]; rw [NatTrans.isIso_iff_isIso_app]
   apply forall_congr'
   intro P
-  rw [← J.W_iff_isIso_map_of_adjunction adj₂]; rw [← J.W_sheafToPresheaf_map_iff_isIso]; rw [← sheafComposeNatTrans_fac J F adj₁ adj₂]; rw [(W _).precomp_iff _ _ (J.W
+  rw [← J.W_iff_isIso_map_of_adjunction adj₂]; rw [← J.W_sheafToPresheaf_map_iff_isIso]; rw [← sheafComposeNatTrans_fac J F adj₁ adj₂]; rw [(W _).precomp_iff _ _ (J.W_adj_unit_app adj₂ (P ⋙ F))]
 
 中文:
 引理 Grothendieck拓扑.preservesSheafification_iff_of_adjunctions_of_hasSheafCompose
@@ -448,7 +458,7 @@ lemma GrothendieckTopology.preservesSheafification_iff_of_adjunctions_of_hasShea
   rw [J.preservesSheafification_iff_of_adjunctions F adj₁ adj₂]; rw [NatTrans.isIso_iff_isIso_app]
   apply forall_congr'
   intro P
-  rw [← J.W_iff_isIso_map_of_adjunction adj₂]; rw [← J.W_sheafToPresheaf_map_iff_isIso]; rw [← sheafComposeNatTrans_fac J F adj₁ adj₂]; rw [(W _).precomp_iff _ _ (J.W
+  rw [← J.W_iff_isIso_map_of_adjunction adj₂]; rw [← J.W_sheafToPresheaf_map_iff_isIso]; rw [← sheafComposeNatTrans_fac J F adj₁ adj₂]; rw [(W _).precomp_iff _ _ (J.W_adj_unit_app adj₂ (P ⋙ F))]
 
 Depends on / 依赖: J.W_adj_unit_app, J.W_iff_isIso_map_of_adjunction, J.W_sheafToPresheaf_map_iff_isIso, J.preservesSheafification_iff_of_adjunctions, NatTrans, NatTrans.isIso_iff_isIso_app, W_adj_unit_app, W_iff_isIso_map_of_adjunction, W_sheafToPresheaf_map_iff_isIso, forall_congr, isIso_iff_isIso_app, precomp_iff, preservesSheafification_iff_of_adjunctions, sheafComposeNatTrans_fac
 -/
@@ -619,7 +629,9 @@ lemma sheafToPresheaf_map_sheafComposeNatTrans_eq_sheafifyCompIso_inv
     rw [this]
     rfl
   apply ((plusPlusAdjunction J E).homEquiv _ _).injective
-  convert! sheafComposeNatTrans_fac J F (plusPlusAdjunction J D) (plusPlusAdjunction
+  convert! sheafComposeNatTrans_fac J F (plusPlusAdjunction J D) (plusPlusAdjunction J E) P
+  dsimp [plusPlusAdjunction]
+  simp
 
 中文:
 引理 sheafToPresheaf_map_sheafCompose自然数Trans_eq_sheafifyCompIso_inv
@@ -630,7 +642,9 @@ lemma sheafToPresheaf_map_sheafComposeNatTrans_eq_sheafifyCompIso_inv
     rw [this]
     rfl
   apply ((plusPlusAdjunction J E).homEquiv _ _).injective
-  convert! sheafComposeNatTrans_fac J F (plusPlusAdjunction J D) (plusPlusAdjunction
+  convert! sheafComposeNatTrans_fac J F (plusPlusAdjunction J D) (plusPlusAdjunction J E) P
+  dsimp [plusPlusAdjunction]
+  simp
 
 Depends on / 依赖: convert, homEquiv, injective, plusPlusAdjunction, sheafComposeNatTrans, sheafComposeNatTrans_fac, sheafifyCompIso
 -/

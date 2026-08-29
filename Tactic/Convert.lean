@@ -204,6 +204,7 @@ definition Lean.MVarId.convertLocalDecl
   let pf ← if symm then mkEqSymm v else pure v
   let res ← g.replaceLocalDecl fvarId typeNew pf
   let gs ← v.mvarId!.congrN! depth config patterns
+  return (res.mvarId, gs)
 
 中文:
 定义 Lean.MVarId.convertLocalDecl
@@ -215,6 +216,7 @@ definition Lean.MVarId.convertLocalDecl
   let pf ← if symm then mkEqSymm v else pure v
   let res ← g.replaceLocalDecl fvarId typeNew pf
   let gs ← v.mvarId!.congrN! depth config patterns
+  return (res.mvarId, gs)
 
 Depends on / 依赖: Config, config
 -/
@@ -305,7 +307,21 @@ definition elabTermForConvert
       (allowNaturalHoles := true) do
     -- Allow typeclass inference failures since these will be inferred by unification
     -- or else become new goals
-    withTheReader Term.Context (fun ctx => { ctx with ignoreT
+    withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true }) do
+      let t ← elabTermEnsuringType (mayPostpone := true) term expectedType?
+      -- Process everything so that tactics get run, but again allow TC failures
+      Term.synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
+      return t
+
+elab_rules : tactic
+| `(tactic| convert $[!%$expensive]? $cfg $[←%$sym]? $term $[using $n]? $[with $ps?*]?) =>
+  withMainContext do
+    let config ← Convert.elabConfig expensive.isSome cfg
+    let patterns := (ps?.getD #[]).toList
+    let expectedType ← mkFreshExprMVar (mkSort (← getLevel (← getMainTarget)))
+    let (e, gs) ← elabTermForConvert term expectedType
+    liftMetaTactic fun g =>
+      return (← g.convert e sym.isSome (n.map (·.getNat)) config patterns) ++ gs
 
 中文:
 定义 elabTermForConvert
@@ -315,7 +331,21 @@ definition elabTermForConvert
       (allowNaturalHoles := true) do
     -- Allow typeclass inference failures since these will be inferred by unification
     -- or else become new goals
-    withTheReader Term.Context (fun ctx => { ctx with ignoreT
+    withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true }) do
+      let t ← elabTermEnsuringType (mayPostpone := true) term expectedType?
+      -- Process everything so that tactics get run, but again allow TC failures
+      Term.synthesizeSyntheticMVars (postpone := .no) (ignoreStuckTC := true)
+      return t
+
+elab_rules : tactic
+| `(tactic| convert $[!%$expensive]? $cfg $[←%$sym]? $term $[using $n]? $[with $ps?*]?) =>
+  withMainContext do
+    let config ← Convert.elabConfig expensive.isSome cfg
+    let patterns := (ps?.getD #[]).toList
+    let expectedType ← mkFreshExprMVar (mkSort (← getLevel (← getMainTarget)))
+    let (e, gs) ← elabTermForConvert term expectedType
+    liftMetaTactic fun g =>
+      return (← g.convert e sym.isSome (n.map (·.getNat)) config patterns) ++ gs
 -/
 def elabTermForConvert (term : Syntax) (expectedType? : Option Expr) :
     TacticM (Expr × List MVarId) := do

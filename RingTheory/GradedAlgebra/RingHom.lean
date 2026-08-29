@@ -1066,7 +1066,7 @@ lemma DirectSum.decompose_map
   rw [← DirectSum.sum_support_decompose 𝒜 x]; rw [map_sum]; rw [DirectSum.decompose_sum]; rw [DirectSum.decompose_sum]; rw [map_sum]
   congr 1
   simp [DirectSum.decompose_of_mem _ (map_mem f (Subtype.prop _)),
-    DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, Graded
+    DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, GradedRingHom.gradedAddHom]
 
 中文:
 引理 直和.decompose_map
@@ -1076,7 +1076,7 @@ lemma DirectSum.decompose_map
   rw [← DirectSum.sum_support_decompose 𝒜 x]; rw [map_sum]; rw [DirectSum.decompose_sum]; rw [DirectSum.decompose_sum]; rw [map_sum]
   congr 1
   simp [DirectSum.decompose_of_mem _ (map_mem f (Subtype.prop _)),
-    DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, Graded
+    DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, GradedRingHom.gradedAddHom]
 
 Depends on / 依赖: DirectSum, DirectSum.decompose_of_mem, DirectSum.decompose_sum, DirectSum.map_of, DirectSum.sum_support_decompose, GradedRingHom, GradedRingHom.gradedAddHom, Subtype, Subtype.prop, classical, decompose_of_mem, decompose_sum, gradedAddHom, map_mem, map_of, map_sum, sum_support_decompose
 -/

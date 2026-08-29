@@ -40,7 +40,8 @@ instance instMonoidalCategoryStruct
   tensorHom f g := ofHom (Bialgebra.TensorProduct.map f.1 g.1)
   tensorUnit := of R R
   associator X Y Z := (Bialgebra.TensorProduct.assoc R R X Y Z).toHopfAlgIso
-  leftUnitor X := (Bialge
+  leftUnitor X := (Bialgebra.TensorProduct.lid R X).toHopfAlgIso
+  rightUnitor X := (Bialgebra.TensorProduct.rid R R X).toHopfAlgIso
 
 中文:
 实例 instMonoidalCategoryStruct
@@ -51,7 +52,8 @@ instance instMonoidalCategoryStruct
   tensorHom f g := ofHom (Bialgebra.TensorProduct.map f.1 g.1)
   tensorUnit := of R R
   associator X Y Z := (Bialgebra.TensorProduct.assoc R R X Y Z).toHopfAlgIso
-  leftUnitor X := (Bialge
+  leftUnitor X := (Bialgebra.TensorProduct.lid R X).toHopfAlgIso
+  rightUnitor X := (Bialgebra.TensorProduct.rid R R X).toHopfAlgIso
 -/
 @[simps] noncomputable instance instMonoidalCategoryStruct :
     MonoidalCategoryStruct.{u} (HopfAlgCat R) where
@@ -80,7 +82,10 @@ definition MonoidalCategory.inducingFunctorData
   εIso := Iso.refl _
 associator_eq _ _ _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
 TensorProduct.ext TensorProduct.ext (by ext; rfl)
-leftUnitor_eq _ := BialgCat.Hom.ex
+leftUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
+    TensorProduct.ext (by ext; rfl)
+rightUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
+    TensorProduct.ext (by ext; rfl)
 
 中文:
 定义 幺半群范畴.inducingFunctorData
@@ -92,7 +97,10 @@ leftUnitor_eq _ := BialgCat.Hom.ex
   εIso := Iso.refl _
 associator_eq _ _ _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
 TensorProduct.ext TensorProduct.ext (by ext; rfl)
-leftUnitor_eq _ := BialgCat.Hom.ex
+leftUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
+    TensorProduct.ext (by ext; rfl)
+rightUnitor_eq _ := BialgCat.Hom.ext BialgHom.coe_linearMap_injective
+    TensorProduct.ext (by ext; rfl)
 -/
 noncomputable def MonoidalCategory.inducingFunctorData :
     Monoidal.InducingFunctorData (forget₂ (HopfAlgCat R) (BialgCat R)) where

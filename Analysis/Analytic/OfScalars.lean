@@ -772,7 +772,15 @@ theorem inv_le_ofScalars_radius_of_tendsto
   · simp [hrz]
   apply FormalMultilinearSeries.le_radius_of_summable_norm
   refine Summable.of_norm_bounded_eventually (g := fun n => ‖‖c n‖ * r' ^ n‖) ?_ ?_
-  · r
+  · refine summable_of_ratio_test_tendsto_lt_one hr' ?_ ?_
+    · refine (hc.eventually_ne (NNReal.coe_ne_zero.mpr hr)).mp (Eventually.of_forall ?_)
+      simp_all
+    · simp_rw [norm_norm]
+      exact tendsto_succ_norm_div_norm c hrz hc
+  · filter_upwards [eventually_cofinite_ne 0] with n hn
+    simp only [norm_mul, norm_norm, norm_pow, NNReal.norm_eq]
+    gcongr
+    exact ofScalars_norm_le E c n (Nat.pos_iff_ne_zero.mpr hn)
 
 中文:
 定理 inv_le_ofScalars_radius_of_tendsto
@@ -784,7 +792,15 @@ theorem inv_le_ofScalars_radius_of_tendsto
   · simp [hrz]
   apply FormalMultilinearSeries.le_radius_of_summable_norm
   refine Summable.of_norm_bounded_eventually (g := fun n => ‖‖c n‖ * r' ^ n‖) ?_ ?_
-  · r
+  · refine summable_of_ratio_test_tendsto_lt_one hr' ?_ ?_
+    · refine (hc.eventually_ne (NNReal.coe_ne_zero.mpr hr)).mp (Eventually.of_forall ?_)
+      simp_all
+    · simp_rw [norm_norm]
+      exact tendsto_succ_norm_div_norm c hrz hc
+  · filter_upwards [eventually_cofinite_ne 0] with n hn
+    simp only [norm_mul, norm_norm, norm_pow, NNReal.norm_eq]
+    gcongr
+    exact ofScalars_norm_le E c n (Nat.pos_iff_ne_zero.mpr hn)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, FormalMultilinearSeries, FormalMultilinearSeries.le_radius_of_summable_norm, NNReal, NNReal.coe_ne_zero.mpr, NNReal.lt_inv_iff_mul_lt, Summable, Summable.of_norm_bounded_eventually, coe_lt_coe, coe_ne_zero, eventually_ne, hc.eventually_ne, le_of_forall_nnreal_lt, le_radius_of_summable_norm, lt_inv_iff_mul_lt, norm_norm, of_forall, of_norm_bounded_eventually, simp_rw
 -/
@@ -819,7 +835,9 @@ theorem ofScalars_radius_eq_inv_of_tendsto
   rw [coe_le_coe]; rw [NNReal.le_inv_iff_mul_le hr]
   have := FormalMultilinearSeries.summable_norm_mul_pow _ hr'
   contrapose! this
-  apply not_summable_of_ratio_test_tendsto
+  apply not_summable_of_ratio_test_tendsto_gt_one this
+  simp_rw [ofScalars_norm]
+  exact tendsto_succ_norm_div_norm c (by aesop) hc
 
 中文:
 定理 ofScalars_radius_eq_inv_of_tendsto
@@ -830,7 +848,9 @@ theorem ofScalars_radius_eq_inv_of_tendsto
   rw [coe_le_coe]; rw [NNReal.le_inv_iff_mul_le hr]
   have := FormalMultilinearSeries.summable_norm_mul_pow _ hr'
   contrapose! this
-  apply not_summable_of_ratio_test_tendsto
+  apply not_summable_of_ratio_test_tendsto_gt_one this
+  simp_rw [ofScalars_norm]
+  exact tendsto_succ_norm_div_norm c (by aesop) hc
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.summable_norm_mul_pow, NNReal, NNReal.le_inv_iff_mul_le, coe_le_coe, contrapose, inv_le_ofScalars_radius_of_tendsto, le_antisymm, le_inv_iff_mul_le, le_of_forall_nnreal_lt, not_summable_of_ratio_test_tendsto_gt_one, ofScalars_norm, simp_rw, summable_norm_mul_pow, tendsto_succ_norm_div_norm
 -/
@@ -892,7 +912,14 @@ theorem ofScalars_radius_eq_top_of_tendsto
   · apply Summable.comp_nat_add (k := 1)
     simp [hrz]
   · refine Summable.of_norm_bounded_eventually (g := fun n => ‖‖c n‖ * r' ^ n‖) ?_ ?_
-    · apply summable_of_ratio_test_tendsto_lt_one zero_lt_one (hc.mp (Eventu
+    · apply summable_of_ratio_test_tendsto_lt_one zero_lt_one (hc.mp (Eventually.of_forall ?_))
+      · simp only [norm_norm]
+        exact mul_zero (_ : Real) ▸ tendsto_succ_norm_div_norm _ hrz (NNReal.coe_zero ▸ hc')
+      · simp_all
+    · filter_upwards [eventually_cofinite_ne 0] with n hn
+      simp only [norm_mul, norm_norm, norm_pow, NNReal.norm_eq]
+      gcongr
+      exact ofScalars_norm_le E c n (Nat.pos_iff_ne_zero.mpr hn)
 
 中文:
 定理 ofScalars_radius_eq_top_of_tendsto
@@ -903,7 +930,14 @@ theorem ofScalars_radius_eq_top_of_tendsto
   · apply Summable.comp_nat_add (k := 1)
     simp [hrz]
   · refine Summable.of_norm_bounded_eventually (g := fun n => ‖‖c n‖ * r' ^ n‖) ?_ ?_
-    · apply summable_of_ratio_test_tendsto_lt_one zero_lt_one (hc.mp (Eventu
+    · apply summable_of_ratio_test_tendsto_lt_one zero_lt_one (hc.mp (Eventually.of_forall ?_))
+      · simp only [norm_norm]
+        exact mul_zero (_ : Real) ▸ tendsto_succ_norm_div_norm _ hrz (NNReal.coe_zero ▸ hc')
+      · simp_all
+    · filter_upwards [eventually_cofinite_ne 0] with n hn
+      simp only [norm_mul, norm_norm, norm_pow, NNReal.norm_eq]
+      gcongr
+      exact ofScalars_norm_le E c n (Nat.pos_iff_ne_zero.mpr hn)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, NNReal, NNReal.coe_zero, Summable, Summable.comp_nat_add, Summable.of_norm_bounded_eventually, coe_zero, comp_nat_add, eventually_cofinite_ne, filter_upwards, hc.mp, mul_zero, norm_mul, norm_norm, of_forall, of_norm_bounded_eventually, radius_eq_top_of_summable_norm, summable_of_ratio_test_tendsto_lt_one, tendsto_succ_norm_div_norm
 -/
@@ -936,7 +970,22 @@ theorem ofScalars_radius_eq_zero_of_tendsto
   have := FormalMultilinearSeries.summable_norm_mul_pow _ hr
   contrapose! this
   refine not_summable_of_ratio_norm_eventually_ge (r := 2) (by simp) ?_ ?_
-  · con
+  · contrapose! hc
+    apply not_tendsto_atTop_of_tendsto_nhds (a := 0)
+    apply Tendsto.congr' ?_ tendsto_const_nhds
+    filter_upwards [hc] with n hc'
+    rw [ofScalars_norm]; rw [norm_mul]; rw [norm_norm]; rw [mul_eq_zero] at hc'
+    cases hc' <;> aesop
+  · filter_upwards [hc.eventually_ge_atTop (2 * r⁻¹), eventually_ne_atTop 0] with n hc hn
+    simp only [ofScalars_norm, norm_mul, norm_norm, norm_pow, NNReal.norm_eq]
+    rw [mul_comm ‖c n‖]; rw [← mul_assoc]; rw [← div_le_div_iff₀]; rw [mul_div_assoc]
+    · convert! hc
+      rw [pow_succ]; rw [div_mul_cancel_left₀]; rw [NNReal.coe_inv]
+      aesop
+    · simp_all
+    · refine Ne.lt_of_le (fun hr' => Not.elim ?_ hc) (norm_nonneg _)
+      rw [← hr']
+      simp [this]
 
 中文:
 定理 ofScalars_radius_eq_zero_of_tendsto
@@ -948,7 +997,22 @@ theorem ofScalars_radius_eq_zero_of_tendsto
   have := FormalMultilinearSeries.summable_norm_mul_pow _ hr
   contrapose! this
   refine not_summable_of_ratio_norm_eventually_ge (r := 2) (by simp) ?_ ?_
-  · con
+  · contrapose! hc
+    apply not_tendsto_atTop_of_tendsto_nhds (a := 0)
+    apply Tendsto.congr' ?_ tendsto_const_nhds
+    filter_upwards [hc] with n hc'
+    rw [ofScalars_norm]; rw [norm_mul]; rw [norm_norm]; rw [mul_eq_zero] at hc'
+    cases hc' <;> aesop
+  · filter_upwards [hc.eventually_ge_atTop (2 * r⁻¹), eventually_ne_atTop 0] with n hc hn
+    simp only [ofScalars_norm, norm_mul, norm_norm, norm_pow, NNReal.norm_eq]
+    rw [mul_comm ‖c n‖]; rw [← mul_assoc]; rw [← div_le_div_iff₀]; rw [mul_div_assoc]
+    · convert! hc
+      rw [pow_succ]; rw [div_mul_cancel_left₀]; rw [NNReal.coe_inv]
+      aesop
+    · simp_all
+    · refine Ne.lt_of_le (fun hr' => Not.elim ?_ hc) (norm_nonneg _)
+      rw [← hr']
+      simp [this]
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.summable_norm_mul_pow, Tendsto, Tendsto.congr, coe_le_coe, coe_zero, contrapose, filter_upwards, le_of_forall_nnreal_lt, mul_eq_zero, norm_mul, norm_norm, not_summable_of_ratio_norm_eventually_ge, not_tendsto_atTop_of_tendsto_nhds, ofScalars, ofScalars_norm, radius, summable_norm_mul_pow, tendsto_const_nhds
 -/
@@ -991,7 +1055,29 @@ theorem ofScalars_radius_eq_inv_of_tendsto_ENNReal
 refine Tendsto.congr' ?_ (tendsto_toReal zero_ne_top).comp hc'
       filter_upwards [h]
       simp
-
+    · apply (ofScalars E c).radius_eq_top_of_eventually_eq_zero
+      simp only [eventually_atTop, not_exists, not_forall, not_not] at h ⊢
+      obtain ⟨ti, hti⟩ := eventually_atTop.mp (hc'.eventually_ne zero_ne_top)
+      obtain ⟨zi, hzi, z⟩ := h ti
+      refine ⟨zi, Nat.le_induction (ofScalars_eq_zero_of_scalar_zero E z) fun n hmn a => ?_⟩
+      nontriviality E
+      simp only [ofScalars_eq_zero] at a ⊢
+      contrapose! hti
+      exact ⟨n, hzi.trans hmn, ENNReal.div_eq_top.mpr (by simp [a, hti])⟩
+  · simp_rw [hr, inv_top] at hc' ⊢
+    apply ofScalars_radius_eq_zero_of_tendsto E c ((tendsto_add_atTop_iff_nat 1).mp ?_)
+    refine tendsto_ofReal_nhds_top.mp (Tendsto.congr' ?_ ((tendsto_add_atTop_iff_nat 1).mpr hc'))
+    filter_upwards [hc'.eventually_ne top_ne_zero] with n hn
+    apply (ofReal_div_of_pos (Ne.lt_of_le (Ne.symm ?_) (norm_nonneg _))).symm
+    simp_all
+  · have hr' := toReal_ne_zero.mp hr.ne.symm
+    have hr'' := toNNReal_ne_zero.mpr hr' -- this result could go in ENNReal
+    convert! ofScalars_radius_eq_inv_of_tendsto E c hr'' ?_
+    · simp [ENNReal.coe_inv hr'', ENNReal.coe_toNNReal (toReal_ne_zero.mp hr.ne.symm).2]
+    · simp_rw [ENNReal.coe_toNNReal_eq_toReal]
+refine Tendsto.congr' ?_ (tendsto_toReal hr'.2).comp hc'
+      filter_upwards [hc'.eventually_ne hr'.1, hc'.eventually_ne hr'.2]
+      simp
 
 中文:
 定理 ofScalars_radius_eq_inv_of_tendsto_ENN实数
@@ -1004,7 +1090,29 @@ refine Tendsto.congr' ?_ (tendsto_toReal zero_ne_top).comp hc'
 refine Tendsto.congr' ?_ (tendsto_toReal zero_ne_top).comp hc'
       filter_upwards [h]
       simp
-
+    · apply (ofScalars E c).radius_eq_top_of_eventually_eq_zero
+      simp only [eventually_atTop, not_exists, not_forall, not_not] at h ⊢
+      obtain ⟨ti, hti⟩ := eventually_atTop.mp (hc'.eventually_ne zero_ne_top)
+      obtain ⟨zi, hzi, z⟩ := h ti
+      refine ⟨zi, Nat.le_induction (ofScalars_eq_zero_of_scalar_zero E z) fun n hmn a => ?_⟩
+      nontriviality E
+      simp only [ofScalars_eq_zero] at a ⊢
+      contrapose! hti
+      exact ⟨n, hzi.trans hmn, ENNReal.div_eq_top.mpr (by simp [a, hti])⟩
+  · simp_rw [hr, inv_top] at hc' ⊢
+    apply ofScalars_radius_eq_zero_of_tendsto E c ((tendsto_add_atTop_iff_nat 1).mp ?_)
+    refine tendsto_ofReal_nhds_top.mp (Tendsto.congr' ?_ ((tendsto_add_atTop_iff_nat 1).mpr hc'))
+    filter_upwards [hc'.eventually_ne top_ne_zero] with n hn
+    apply (ofReal_div_of_pos (Ne.lt_of_le (Ne.symm ?_) (norm_nonneg _))).symm
+    simp_all
+  · have hr' := toReal_ne_zero.mp hr.ne.symm
+    have hr'' := toNNReal_ne_zero.mpr hr' -- this result could go in ENNReal
+    convert! ofScalars_radius_eq_inv_of_tendsto E c hr'' ?_
+    · simp [ENNReal.coe_inv hr'', ENNReal.coe_toNNReal (toReal_ne_zero.mp hr.ne.symm).2]
+    · simp_rw [ENNReal.coe_toNNReal_eq_toReal]
+refine Tendsto.congr' ?_ (tendsto_toReal hr'.2).comp hc'
+      filter_upwards [hc'.eventually_ne hr'.1, hc'.eventually_ne hr'.2]
+      simp
 
 Depends on / 依赖: ENNReal, ENNReal.trichotomy, Tendsto, Tendsto.congr, eventually_atTop, eventually_atTop.mp, eventually_ne, filter_upwards, inv_zero, not_exists, not_forall, not_not, ofScalars, ofScalars_radius_eq_top_of_tendsto, radius_eq_top_of_eventually_eq_zero, simp_rw, tendsto_toReal, trichotomy, zero_ne_top
 -/

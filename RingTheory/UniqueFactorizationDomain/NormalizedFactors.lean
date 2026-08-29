@@ -91,7 +91,7 @@ theorem prod_normalizedFactors
   rw [← Associates.mk_eq_mk_iff_associated]; rw [← Associates.prod_mk]; rw [← Associates.prod_mk]; rw [Multiset.map_map]
   congr 2
   ext
-  rw [Function.co
+  rw [Function.comp_apply]; rw [Associates.mk_normalize]
 
 中文:
 定理 prod_normalizedFactors
@@ -102,7 +102,7 @@ theorem prod_normalizedFactors
   rw [← Associates.mk_eq_mk_iff_associated]; rw [← Associates.prod_mk]; rw [← Associates.prod_mk]; rw [Multiset.map_map]
   congr 2
   ext
-  rw [Function.co
+  rw [Function.comp_apply]; rw [Associates.mk_normalize]
 
 Depends on / 依赖: Associated, Associated.trans, Associates, Associates.mk_eq_mk_iff_associated, Associates.mk_normalize, Associates.prod_mk, Classical, Classical.choose_spec, Function, Function.comp_apply, Multiset, Multiset.map_map, choose_spec, comp_apply, dif_neg, exists_prime_factors, factors, map_map, mk_eq_mk_iff_associated, mk_normalize
 -/
@@ -245,7 +245,7 @@ theorem normalizedFactors_irreducible
     rw [hp]
     exact Multiset.mem_singleton_self _
   convert! hp
-  rwa [← normalize_normalized_factor p p_mem, normalize_eq_
+  rwa [← normalize_normalized_factor p p_mem, normalize_eq_normalize_iff, dvd_dvd_iff_associated]
 
 中文:
 定理 normalizedFactors_irreducible
@@ -257,7 +257,7 @@ theorem normalizedFactors_irreducible
     rw [hp]
     exact Multiset.mem_singleton_self _
   convert! hp
-  rwa [← normalize_normalized_factor p p_mem, normalize_eq_
+  rwa [← normalize_normalized_factor p p_mem, normalize_eq_normalize_iff, dvd_dvd_iff_associated]
 
 Depends on / 依赖: Multiset, Multiset.mem_singleton_self, a_assoc, convert, dvd_dvd_iff_associated, ha.ne_zero, mem_singleton_self, ne_zero, normalize_eq_normalize_iff, normalize_normalized_factor, normalizedFactors, p_mem, prime_factors_irreducible, prime_of_normalized_factor, prod_normalizedFactors
 -/
@@ -319,7 +319,15 @@ theorem exists_mem_normalizedFactors_of_dvd
     factors_unique
       (fun _ hx =>
         (Multiset.mem_cons.1 hx).elim (fun h => h.symm ▸ hp) (irreducible_of_normalized_factor _))
-      irreducibl
+      irreducible_of_normalized_factor
+      (Associated.symm <|
+        calc
+          Multiset.prod (normalizedFactors a) ~ᵤ a := prod_normalizedFactors ha0
+          _ = p * b := hb
+          _ ~ᵤ Multiset.prod (p ::ₘ normalizedFactors b) := by
+            rw [Multiset.prod_cons]
+            exact (prod_normalizedFactors hb0).symm.mul_left _)
+  Multiset.exists_mem_of_rel_of_mem this (by simp)
 
 中文:
 定理 存在_mem_normalizedFactors_of_dvd
@@ -330,7 +338,15 @@ theorem exists_mem_normalizedFactors_of_dvd
     factors_unique
       (fun _ hx =>
         (Multiset.mem_cons.1 hx).elim (fun h => h.symm ▸ hp) (irreducible_of_normalized_factor _))
-      irreducibl
+      irreducible_of_normalized_factor
+      (Associated.symm <|
+        calc
+          Multiset.prod (normalizedFactors a) ~ᵤ a := prod_normalizedFactors ha0
+          _ = p * b := hb
+          _ ~ᵤ Multiset.prod (p ::ₘ normalizedFactors b) := by
+            rw [Multiset.prod_cons]
+            exact (prod_normalizedFactors hb0).symm.mul_left _)
+  Multiset.exists_mem_of_rel_of_mem this (by simp)
 -/
 theorem exists_mem_normalizedFactors_of_dvd {a p : α} (ha0 : a != 0) (hp : Irreducible p) :
     p ∣ a -> exists q in normalizedFactors a, p ~ᵤ q := fun ⟨b, hb⟩ =>
@@ -421,7 +437,9 @@ theorem normalizedFactors_one
     · intro x hx
       exfalso
       apply Multiset.notMem_zero x hx
-    · ap
+    · apply prod_normalizedFactors one_ne_zero
+
+@[simp]
 
 中文:
 定理 normalizedFactors_one
@@ -435,7 +453,9 @@ theorem normalizedFactors_one
     · intro x hx
       exfalso
       apply Multiset.notMem_zero x hx
-    · ap
+    · apply prod_normalizedFactors one_ne_zero
+
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.notMem_zero, Multiset.rel_zero_right, Subsingleton, Subsingleton.elim, factors, factors_unique, irreducible_of_normalized_factor, normalizedFactors, notMem_zero, one_ne_zero, prod_normalizedFactors, rel_zero_right, subsingleton_or_nontrivial
 -/
@@ -462,7 +482,22 @@ theorem normalizedFactors_mul
     ext
     rw [Function.comp_apply]; rw [Associates.out_mk]
   rw [← Multiset.map_id' (normalizedFactors (x * y))]; rw [← Multiset.map_id' (normalizedFactors x)]; rw [←
-    Multiset.map_id' (normalizedFactors y)]; rw [← Multis
+    Multiset.map_id' (normalizedFactors y)]; rw [← Multiset.map_congr rfl normalize_normalized_factor]; rw [←
+    Multiset.map_congr rfl normalize_normalized_factor]; rw [←
+    Multiset.map_congr rfl normalize_normalized_factor]; rw [← Multiset.map_add]; rw [h]; rw [←
+    Multiset.map_map Associates.out]; rw [eq_comm]; rw [← Multiset.map_map Associates.out]
+  refine congr rfl ?_
+  apply Multiset.map_mk_eq_map_mk_of_rel
+  apply factors_unique
+  · intro x hx
+    rcases Multiset.mem_add.1 hx with (hx | hx) <;> exact irreducible_of_normalized_factor x hx
+  · exact irreducible_of_normalized_factor
+  · rw [Multiset.prod_add]
+    exact
+      ((prod_normalizedFactors hx).mul_mul (prod_normalizedFactors hy)).trans
+        (prod_normalizedFactors (mul_ne_zero hx hy)).symm
+
+@[simp]
 
 中文:
 定理 normalizedFactors_mul
@@ -472,7 +507,22 @@ theorem normalizedFactors_mul
     ext
     rw [Function.comp_apply]; rw [Associates.out_mk]
   rw [← Multiset.map_id' (normalizedFactors (x * y))]; rw [← Multiset.map_id' (normalizedFactors x)]; rw [←
-    Multiset.map_id' (normalizedFactors y)]; rw [← Multis
+    Multiset.map_id' (normalizedFactors y)]; rw [← Multiset.map_congr rfl normalize_normalized_factor]; rw [←
+    Multiset.map_congr rfl normalize_normalized_factor]; rw [←
+    Multiset.map_congr rfl normalize_normalized_factor]; rw [← Multiset.map_add]; rw [h]; rw [←
+    Multiset.map_map Associates.out]; rw [eq_comm]; rw [← Multiset.map_map Associates.out]
+  refine congr rfl ?_
+  apply Multiset.map_mk_eq_map_mk_of_rel
+  apply factors_unique
+  · intro x hx
+    rcases Multiset.mem_add.1 hx with (hx | hx) <;> exact irreducible_of_normalized_factor x hx
+  · exact irreducible_of_normalized_factor
+  · rw [Multiset.prod_add]
+    exact
+      ((prod_normalizedFactors hx).mul_mul (prod_normalizedFactors hy)).trans
+        (prod_normalizedFactors (mul_ne_zero hx hy)).symm
+
+@[simp]
 
 Depends on / 依赖: Associates, Associates.mk, Associates.out, Associates.out_mk, Function, Function.comp_apply, Multiset, Multiset.map, Multiset.map_add, Multiset.map_congr, Multiset.map_id, comp_apply, map_add, map_congr, map_id, normalize, normalize_normalized_factor, normalizedFactors, out_mk
 -/
@@ -567,7 +617,11 @@ theorem normalizedFactors_prod_eq
   | cons a s ih =>
     have ia := hs a (Multiset.mem_cons_self a _)
     have ib := fun b h => hs b (Multiset.mem_cons_of_mem h)
-    obtain rfl | ⟨b, hb⟩ := s.empty_or_exists_
+    obtain rfl | ⟨b, hb⟩ := s.empty_or_exists_mem
+    · rw [Multiset.cons_zero, Multiset.prod_singleton, Multiset.map_singleton,
+        normalizedFactors_irreducible ia]
+    have := nontrivial_of_ne b 0 (ib b hb).ne_zero
+    rw [Multiset.prod_cons]; rw [Multiset.map_cons]; rw [normalizedFactors_mul ia.ne_zero (Multiset.prod_ne_zero fun h => (ib 0 h).ne_zero rfl)]; rw [normalizedFactors_irreducible ia]; rw [ih ib]; rw [Multiset.singleton_add]
 
 中文:
 定理 normalizedFactors_prod_eq
@@ -578,7 +632,11 @@ theorem normalizedFactors_prod_eq
   | cons a s ih =>
     have ia := hs a (Multiset.mem_cons_self a _)
     have ib := fun b h => hs b (Multiset.mem_cons_of_mem h)
-    obtain rfl | ⟨b, hb⟩ := s.empty_or_exists_
+    obtain rfl | ⟨b, hb⟩ := s.empty_or_exists_mem
+    · rw [Multiset.cons_zero, Multiset.prod_singleton, Multiset.map_singleton,
+        normalizedFactors_irreducible ia]
+    have := nontrivial_of_ne b 0 (ib b hb).ne_zero
+    rw [Multiset.prod_cons]; rw [Multiset.map_cons]; rw [normalizedFactors_mul ia.ne_zero (Multiset.prod_ne_zero fun h => (ib 0 h).ne_zero rfl)]; rw [normalizedFactors_irreducible ia]; rw [ih ib]; rw [Multiset.singleton_add]
 
 Depends on / 依赖: Multiset, Multiset.cons_zero, Multiset.induction, Multiset.map_cons, Multiset.map_singleton, Multiset.map_zero, Multiset.mem_cons_of_mem, Multiset.mem_cons_self, Multiset.prod_cons, Multiset.prod_singleton, Multiset.prod_zero, cons_zero, empty_or_exists_mem, map_cons, map_singleton, map_zero, mem_cons_of_mem, mem_cons_self, ne_zero, nontrivial_of_ne
 -/
@@ -821,7 +879,7 @@ theorem mem_normalizedFactors_iff'
     dvd_of_mem_normalizedFactors h⟩, fun ⟨h₁, h₂, h₃⟩ => ?_⟩
   obtain ⟨y, hy₁, hy₂⟩ := exists_mem_factors_of_dvd h h₁ h₃
   exact Multiset.mem_map.mpr ⟨y, hy₁, by
-    rwa [← h₂, normalize_eq_normalize_iff_as
+    rwa [← h₂, normalize_eq_normalize_iff_associated, Associated.comm]⟩
 
 中文:
 定理 mem_normalizedFactors_iff'
@@ -831,7 +889,7 @@ theorem mem_normalizedFactors_iff'
     dvd_of_mem_normalizedFactors h⟩, fun ⟨h₁, h₂, h₃⟩ => ?_⟩
   obtain ⟨y, hy₁, hy₂⟩ := exists_mem_factors_of_dvd h h₁ h₃
   exact Multiset.mem_map.mpr ⟨y, hy₁, by
-    rwa [← h₂, normalize_eq_normalize_iff_as
+    rwa [← h₂, normalize_eq_normalize_iff_associated, Associated.comm]⟩
 
 Depends on / 依赖: Associated, Associated.comm, Multiset, Multiset.mem_map.mpr, dvd_of_mem_normalizedFactors, exists_mem_factors_of_dvd, irreducible_of_normalized_factor, mem_map, normalize_eq_normalize_iff_associated, normalize_normalized_factor
 -/
@@ -916,7 +974,8 @@ theorem normalizedFactors_prod_of_prime
       simpa [Subsingleton.elim x 0] using h x hx
     simp
   · simpa only [← Multiset.rel_eq, ← associated_eq_eq] using
-      prime_factors_unique prime_of_normalized_fac
+      prime_factors_unique prime_of_normalized_factor h
+        (prod_normalizedFactors (m.prod_ne_zero_of_prime h))
 
 中文:
 定理 normalizedFactors_prod_of_prime
@@ -928,7 +987,8 @@ theorem normalizedFactors_prod_of_prime
       simpa [Subsingleton.elim x 0] using h x hx
     simp
   · simpa only [← Multiset.rel_eq, ← associated_eq_eq] using
-      prime_factors_unique prime_of_normalized_fac
+      prime_factors_unique prime_of_normalized_factor h
+        (prod_normalizedFactors (m.prod_ne_zero_of_prime h))
 
 Depends on / 依赖: Multiset, Multiset.eq_zero_of_forall_notMem, Multiset.rel_eq, Subsingleton, Subsingleton.elim, associated_eq_eq, eq_zero_of_forall_notMem, m.prod_ne_zero_of_prime, prime_factors_unique, prime_of_normalized_factor, prod_ne_zero_of_prime, prod_normalizedFactors, rel_eq, subsingleton_or_nontrivial
 -/
@@ -989,7 +1049,8 @@ theorem normalizedFactors_pos
   · intro h
     obtain ⟨p, hp⟩ := exists_mem_normalizedFactors hx h
     exact
-    
+      bot_lt_iff_ne_bot.mpr
+        (mt Multiset.eq_zero_iff_forall_notMem.mp (not_forall.mpr ⟨p, not_not.mpr hp⟩))
 
 中文:
 定理 normalizedFactors_pos
@@ -1005,7 +1066,8 @@ theorem normalizedFactors_pos
   · intro h
     obtain ⟨p, hp⟩ := exists_mem_normalizedFactors hx h
     exact
-    
+      bot_lt_iff_ne_bot.mpr
+        (mt Multiset.eq_zero_iff_forall_notMem.mp (not_forall.mpr ⟨p, not_not.mpr hp⟩))
 
 Depends on / 依赖: Multiset, Multiset.eq_zero_iff_forall_notMem.mp, Multiset.exists_mem_of_ne_zero, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, dvd_of_mem_normalizedFactors, eq_zero_iff_forall_notMem, exists_mem_normalizedFactors, exists_mem_of_ne_zero, h.ne, isUnit_of_dvd_unit, not_forall, not_forall.mpr, not_isUnit, not_not, not_not.mpr, prime_of_normalized_factor
 -/
@@ -1084,7 +1146,8 @@ theorem dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors
   · intro h
     exact
       dvdNotUnit_of_dvd_of_not_dvd
-        ((dvd_iff_normalizedFactors_le_normalizedFactors h
+        ((dvd_iff_normalizedFactors_le_normalizedFactors hx hy).mpr h.le)
+        (mt (dvd_iff_normalizedFactors_le_normalizedFactors hy hx).mp h.not_ge)
 
 中文:
 定理 dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors
@@ -1097,7 +1160,8 @@ theorem dvdNotUnit_iff_normalizedFactors_lt_normalizedFactors
   · intro h
     exact
       dvdNotUnit_of_dvd_of_not_dvd
-        ((dvd_iff_normalizedFactors_le_normalizedFactors h
+        ((dvd_iff_normalizedFactors_le_normalizedFactors hx hy).mpr h.le)
+        (mt (dvd_iff_normalizedFactors_le_normalizedFactors hy hx).mp h.not_ge)
 
 Depends on / 依赖: dvdNotUnit_of_dvd_of_not_dvd, dvd_iff_normalizedFactors_le_normalizedFactors, h.le, h.not_ge, lt_add_iff_pos_right, normalizedFactors_mul, normalizedFactors_pos, not_false_iff, not_ge, right_ne_zero_of_mul
 -/
@@ -1129,7 +1193,11 @@ theorem normalizedFactors_multiset_prod
   induction s using Multiset.induction with
   | empty => simp
   | cons _ _ IH =>
-    rw [Multiset.prod_cons]; rw [Multiset.map_cons]; rw [Multis
+    rw [Multiset.prod_cons]; rw [Multiset.map_cons]; rw [Multiset.sum_cons]; rw [normalizedFactors_mul]; rw [IH]
+    · exact fun h => hs (Multiset.mem_cons_of_mem h)
+    · exact fun h => hs (h ▸ Multiset.mem_cons_self _ _)
+    · apply Multiset.prod_ne_zero
+      exact fun h => hs (Multiset.mem_cons_of_mem h)
 
 中文:
 定理 normalizedFactors_multiset_prod
@@ -1144,7 +1212,11 @@ theorem normalizedFactors_multiset_prod
   induction s using Multiset.induction with
   | empty => simp
   | cons _ _ IH =>
-    rw [Multiset.prod_cons]; rw [Multiset.map_cons]; rw [Multis
+    rw [Multiset.prod_cons]; rw [Multiset.map_cons]; rw [Multiset.sum_cons]; rw [normalizedFactors_mul]; rw [IH]
+    · exact fun h => hs (Multiset.mem_cons_of_mem h)
+    · exact fun h => hs (h ▸ Multiset.mem_cons_self _ _)
+    · apply Multiset.prod_ne_zero
+      exact fun h => hs (Multiset.mem_cons_of_mem h)
 
 Depends on / 依赖: Multiset, Multiset.eq_zero_of_forall_notMem, Multiset.induction, Multiset.map_cons, Multiset.mem_cons_of_mem, Multiset.mem_cons_self, Multiset.prod_cons, Multiset.prod_ne_zero, Multiset.sum_cons, convert, eq_zero_of_forall_notMem, map_cons, mem_cons_of_mem, mem_cons_self, normalizedFactors_mul, prod_cons, prod_ne_zero, subsingleton_or_nontrivial, sum_cons
 -/
@@ -1271,7 +1343,28 @@ definition noncomputable
           ((normalizedFactors a).map
               (Classical.choose mk_surjective.hasRightInverse : Associates α -> α)).prod
       map_one' := by nontriviality α; simp
-      
+      map_mul' := fun x y => by
+        by_cases hx : x = 0
+        · simp [hx]
+        by_cases hy : y = 0
+        · simp [hy]
+        simp [hx, hy] }
+    (by
+      intro x
+      dsimp
+      by_cases hx : x = 0
+      · simp [hx]
+      have h : Associates.mkMonoidHom ∘ Classical.choose mk_surjective.hasRightInverse =
+          (id : Associates α -> Associates α) := by
+        ext x
+        rw [Function.comp_apply]; rw [mkMonoidHom_apply]; rw [Classical.choose_spec mk_surjective.hasRightInverse x]
+        rfl
+      rw [if_neg hx]; rw [← mkMonoidHom_apply]; rw [MonoidHom.map_multiset_prod]; rw [map_map]; rw [h]; rw [map_id]; rw [←
+        associated_iff_eq]
+      apply prod_normalizedFactors hx)
+
+@[deprecated (since := "2026-07-08")]
+protected alias normalizationMonoid := UniqueFactorizationMonoid.strongNormalizationMonoid
 
 中文:
 定义 noncomputable
@@ -1283,7 +1376,28 @@ definition noncomputable
           ((normalizedFactors a).map
               (Classical.choose mk_surjective.hasRightInverse : Associates α -> α)).prod
       map_one' := by nontriviality α; simp
-      
+      map_mul' := fun x y => by
+        by_cases hx : x = 0
+        · simp [hx]
+        by_cases hy : y = 0
+        · simp [hy]
+        simp [hx, hy] }
+    (by
+      intro x
+      dsimp
+      by_cases hx : x = 0
+      · simp [hx]
+      have h : Associates.mkMonoidHom ∘ Classical.choose mk_surjective.hasRightInverse =
+          (id : Associates α -> Associates α) := by
+        ext x
+        rw [Function.comp_apply]; rw [mkMonoidHom_apply]; rw [Classical.choose_spec mk_surjective.hasRightInverse x]
+        rfl
+      rw [if_neg hx]; rw [← mkMonoidHom_apply]; rw [MonoidHom.map_multiset_prod]; rw [map_map]; rw [h]; rw [map_id]; rw [←
+        associated_iff_eq]
+      apply prod_normalizedFactors hx)
+
+@[deprecated (since := "2026-07-08")]
+protected alias normalizationMonoid := UniqueFactorizationMonoid.strongNormalizationMonoid
 -/
 protected noncomputable def strongNormalizationMonoid : StrongNormalizationMonoid α :=
   strongNormalizationMonoidOfMonoidHomRightInverse

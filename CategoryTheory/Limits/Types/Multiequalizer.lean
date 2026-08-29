@@ -72,7 +72,11 @@ definition MulticospanIndex.sectionsEquiv
         · exact (s.property r).symm }
   invFun s :=
     { val := fun i => s.val (.left i)
-      property := fun r => (s.
+      property := fun r => (s.property (.fst r)).trans (s.property (.snd r)).symm }
+  right_inv s := by
+    ext (_ | r)
+    · rfl
+    · exact s.property (.fst r)
 
 中文:
 定义 MulticospanIndex.sectionsEquiv
@@ -87,7 +91,11 @@ definition MulticospanIndex.sectionsEquiv
         · exact (s.property r).symm }
   invFun s :=
     { val := fun i => s.val (.left i)
-      property := fun r => (s.
+      property := fun r => (s.property (.fst r)).trans (s.property (.snd r)).symm }
+  right_inv s := by
+    ext (_ | r)
+    · rfl
+    · exact s.property (.fst r)
 
 Depends on / 依赖: I.fst, invFun, property, right_inv, s.property, s.val
 -/

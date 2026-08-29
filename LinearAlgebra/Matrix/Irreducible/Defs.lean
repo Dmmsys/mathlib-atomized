@@ -148,7 +148,11 @@ lemma IsIrreducible.exists_pos
   obtain ⟨j, hij⟩ := exists_pair_ne n
   obtain ⟨p, hp_pos⟩ := h_irr.connected i j
   have h_le : 1 <= p.length := Nat.succ_le_of_lt hp_pos
-  have ⟨v, p₁, p₂, 
+  have ⟨v, p₁, p₂, _hp_eq, hp₁_len⟩ := p.exists_eq_comp_of_le_length (n := 1) h_le
+  have hlen_ne : p₁.length != 0 := by simp [hp₁_len]
+  obtain ⟨c, p', e, rfl⟩ := (Quiver.Path.length_ne_zero_iff_eq_cons (p := p₁)).1 (by lia)
+  obtain ⟨rfl⟩ : i = c := Quiver.Path.eq_of_length_zero p' (by simp_all)
+  exact (no_out _).false e
 
 中文:
 引理 是不可约.存在_pos
@@ -161,7 +165,11 @@ lemma IsIrreducible.exists_pos
   obtain ⟨j, hij⟩ := exists_pair_ne n
   obtain ⟨p, hp_pos⟩ := h_irr.connected i j
   have h_le : 1 <= p.length := Nat.succ_le_of_lt hp_pos
-  have ⟨v, p₁, p₂, 
+  have ⟨v, p₁, p₂, _hp_eq, hp₁_len⟩ := p.exists_eq_comp_of_le_length (n := 1) h_le
+  have hlen_ne : p₁.length != 0 := by simp [hp₁_len]
+  obtain ⟨c, p', e, rfl⟩ := (Quiver.Path.length_ne_zero_iff_eq_cons (p := p₁)).1 (by lia)
+  obtain ⟨rfl⟩ : i = c := Quiver.Path.eq_of_length_zero p' (by simp_all)
+  exact (no_out _).false e
 
 Depends on / 依赖: IsEmpty, Nat.succ_le_of_lt, Quiver, Quiver.Path.length_ne_zero_iff_eq_cons, _hp_eq, connected, e.down, exists_eq_comp_of_le_length, exists_pair_ne, h_irr, h_irr.connected, h_le, h_row, hlen_ne, hp_pos, length, length_ne_zero_iff_eq_cons, no_out, p.exists_eq_comp_of_le_length, p.length
 -/
@@ -195,7 +203,34 @@ theorem pow_apply_pos_iff_nonempty_path
     · rcases eq_or_ne i j with rfl | h_eq
       · exact ⟨⟨Quiver.Path.nil, rfl⟩⟩
       · simp_all
-    · s
+    · simp [Quiver.Path.eq_of_length_zero p hp]
+  | succ m ih =>
+    rw [pow_succ]; rw [mul_apply]
+    constructor
+    · intro h_pos
+      obtain ⟨l, hl_mem, hl_pos⟩ :
+          exists l in (Finset.univ : Finset n), 0 < (A ^ m) i l * A l j := by
+        simpa [Finset.sum_pos_iff_of_nonneg
+                 (fun x _ => mul_nonneg (pow_apply_nonneg hA m i x) (hA x j))]
+          using h_pos
+      have hAm_nonneg : 0 <= (A ^ m) i l := pow_apply_nonneg hA m i l
+      have hA_nonneg' : 0 <= A l j := hA l j
+      have h_Am : 0 < (A ^ m) i l := by by_contra! h; simp [le_antisymm h hAm_nonneg] at hl_pos
+      have h_A : 0 < A l j := by by_contra! h; simp [le_antisymm h hA_nonneg'] at hl_pos
+      obtain ⟨⟨p, rfl⟩⟩ := (ih i l).mp h_Am
+      exact ⟨p.cons (PLift.up h_A), by simp⟩
+    · rintro ⟨p, hp_len⟩
+      cases p with
+      | nil => simp [Quiver.Path.length] at hp_len
+      | @cons b _ q e =>
+        simp only [Quiver.Path.length_cons, Nat.succ.injEq] at hp_len
+        have h_Am_pos : 0 < (A ^ m) i b := (ih i b).mpr ⟨q, hp_len⟩
+        let h_A_pos := e
+        have h_prod : 0 < (A ^ m) i b * A b j := mul_pos h_Am_pos h_A_pos.down
+        exact
+          (Finset.sum_pos_iff_of_nonneg
+            (fun x _ => mul_nonneg (pow_apply_nonneg hA m i x) (hA x j))).2
+            ⟨b, Finset.mem_univ b, h_prod⟩
 
 中文:
 定理 pow_apply_pos_iff_nonempty_path
@@ -208,7 +243,34 @@ theorem pow_apply_pos_iff_nonempty_path
     · rcases eq_or_ne i j with rfl | h_eq
       · exact ⟨⟨Quiver.Path.nil, rfl⟩⟩
       · simp_all
-    · s
+    · simp [Quiver.Path.eq_of_length_zero p hp]
+  | succ m ih =>
+    rw [pow_succ]; rw [mul_apply]
+    constructor
+    · intro h_pos
+      obtain ⟨l, hl_mem, hl_pos⟩ :
+          exists l in (Finset.univ : Finset n), 0 < (A ^ m) i l * A l j := by
+        simpa [Finset.sum_pos_iff_of_nonneg
+                 (fun x _ => mul_nonneg (pow_apply_nonneg hA m i x) (hA x j))]
+          using h_pos
+      have hAm_nonneg : 0 <= (A ^ m) i l := pow_apply_nonneg hA m i l
+      have hA_nonneg' : 0 <= A l j := hA l j
+      have h_Am : 0 < (A ^ m) i l := by by_contra! h; simp [le_antisymm h hAm_nonneg] at hl_pos
+      have h_A : 0 < A l j := by by_contra! h; simp [le_antisymm h hA_nonneg'] at hl_pos
+      obtain ⟨⟨p, rfl⟩⟩ := (ih i l).mp h_Am
+      exact ⟨p.cons (PLift.up h_A), by simp⟩
+    · rintro ⟨p, hp_len⟩
+      cases p with
+      | nil => simp [Quiver.Path.length] at hp_len
+      | @cons b _ q e =>
+        simp only [Quiver.Path.length_cons, Nat.succ.injEq] at hp_len
+        have h_Am_pos : 0 < (A ^ m) i b := (ih i b).mpr ⟨q, hp_len⟩
+        let h_A_pos := e
+        have h_prod : 0 < (A ^ m) i b * A b j := mul_pos h_Am_pos h_A_pos.down
+        exact
+          (Finset.sum_pos_iff_of_nonneg
+            (fun x _ => mul_nonneg (pow_apply_nonneg hA m i x) (hA x j))).2
+            ⟨b, Finset.mem_univ b, h_prod⟩
 
 Depends on / 依赖: toQuiver
 -/
@@ -267,6 +329,15 @@ theorem isIrreducible_iff_exists_pow_pos
     have : Nonempty {q : Path i j // q.length = p.length} := ⟨⟨p, rfl⟩⟩
     have hpos :=
       (pow_apply_pos_iff_nonempty_path (A := A) hA p.length i j).2 this
+    simpa using hpos
+  · intro h_exists
+    constructor
+    · exact hA
+    · intro i j
+      obtain ⟨k, hk_pos, hk_entry⟩ := h_exists i j
+      obtain ⟨⟨p, rfl⟩⟩ :=
+        (pow_apply_pos_iff_nonempty_path (A := A) hA k i j).mp hk_entry
+      exact ⟨p, hk_pos⟩
 
 中文:
 定理 isIrreducible_iff_存在_pow_pos
@@ -279,6 +350,15 @@ theorem isIrreducible_iff_exists_pow_pos
     have : Nonempty {q : Path i j // q.length = p.length} := ⟨⟨p, rfl⟩⟩
     have hpos :=
       (pow_apply_pos_iff_nonempty_path (A := A) hA p.length i j).2 this
+    simpa using hpos
+  · intro h_exists
+    constructor
+    · exact hA
+    · intro i j
+      obtain ⟨k, hk_pos, hk_entry⟩ := h_exists i j
+      obtain ⟨⟨p, rfl⟩⟩ :=
+        (pow_apply_pos_iff_nonempty_path (A := A) hA k i j).mp hk_entry
+      exact ⟨p, hk_pos⟩
 
 Depends on / 依赖: Nonempty, Quiver, h_exists, h_irr, hk_entry, hk_pos, hp_len, length, p.length, pow_apply_pos_iff_nonempty_path, q.length, toQuiver
 -/
@@ -346,7 +426,8 @@ definition transposePath
   | @cons b c q e ih =>
     have eT : 0 < (Aᵀ) c b := by
       simpa [Matrix.transpose_apply] using e.down
-    exact (@Quiver.Path.comp n (toQuiver Aᵀ) c b i (@Quiver.Hom.toPath n (toQuive
+    exact (@Quiver.Path.comp n (toQuiver Aᵀ) c b i (@Quiver.Hom.toPath n (toQuiver Aᵀ) c b
+      (PLift.up eT)) ih)
 
 中文:
 定义 transposePath
@@ -359,7 +440,8 @@ definition transposePath
   | @cons b c q e ih =>
     have eT : 0 < (Aᵀ) c b := by
       simpa [Matrix.transpose_apply] using e.down
-    exact (@Quiver.Path.comp n (toQuiver Aᵀ) c b i (@Quiver.Hom.toPath n (toQuive
+    exact (@Quiver.Path.comp n (toQuiver Aᵀ) c b i (@Quiver.Hom.toPath n (toQuiver Aᵀ) c b
+      (PLift.up eT)) ih)
 
 Depends on / 依赖: Matrix, Matrix.transpose_apply, PLift.up, Quiver, Quiver.Hom.toPath, Quiver.Path.comp, Quiver.Path.nil, e.down, toPath, toQuiver, transpose_apply
 -/
@@ -394,7 +476,12 @@ theorem IsIrreducible.transpose
   | nil =>
     simp at hp_pos
   | @cons b _ q e =>
-   
+    let qT := transposePath (A := A) (q.cons e)
+    let : Quiver n := toQuiver Aᵀ
+    use qT
+    simp [qT, transposePath, Quiver.Path.length_comp, Quiver.Path.length_toPath]
+
+@[simp]
 
 中文:
 定理 是不可约.transpose
@@ -411,7 +498,12 @@ theorem IsIrreducible.transpose
   | nil =>
     simp at hp_pos
   | @cons b _ q e =>
-   
+    let qT := transposePath (A := A) (q.cons e)
+    let : Quiver n := toQuiver Aᵀ
+    use qT
+    simp [qT, transposePath, Quiver.Path.length_comp, Quiver.Path.length_toPath]
+
+@[simp]
 
 Depends on / 依赖: Matrix, Matrix.transpose_apply, Quiver, Quiver.Path.length_comp, Quiver.Path.length_toPath, connected, hA.connected, hA.nonneg, hA_T_nonneg, hp_pos, length_comp, length_toPath, nonneg, q.cons, toQuiver, transposePath, transpose_apply
 -/
@@ -445,7 +537,14 @@ theorem isIrreducible_transpose_iff
     IsIrreducible.transpose h,
    fun h => IsIrreducible.transpose h⟩
   · have : ¬ Aᵀ.IsIrreducible := by
-   
+      rw [isIrreducible_iff]
+      simp only [transpose_apply, isSStronglyConnected_iff, not_and, not_forall, not_exists,
+        not_lt, nonpos_iff_eq_zero]
+      intro a; simp_all only [implies_true, not_true_eq_false]
+    have : ¬ A.IsIrreducible := by
+      rw [isIrreducible_iff]; simp_all only [not_forall, not_le, isSStronglyConnected_iff,
+      not_and, not_exists, not_lt, nonpos_iff_eq_zero, isEmpty_Prop, IsEmpty.forall_iff]
+    simp_all only [not_forall, not_le]
 
 中文:
 定理 isIrreducible_transpose_iff
@@ -457,7 +556,14 @@ theorem isIrreducible_transpose_iff
     IsIrreducible.transpose h,
    fun h => IsIrreducible.transpose h⟩
   · have : ¬ Aᵀ.IsIrreducible := by
-   
+      rw [isIrreducible_iff]
+      simp only [transpose_apply, isSStronglyConnected_iff, not_and, not_forall, not_exists,
+        not_lt, nonpos_iff_eq_zero]
+      intro a; simp_all only [implies_true, not_true_eq_false]
+    have : ¬ A.IsIrreducible := by
+      rw [isIrreducible_iff]; simp_all only [not_forall, not_le, isSStronglyConnected_iff,
+      not_and, not_exists, not_lt, nonpos_iff_eq_zero, isEmpty_Prop, IsEmpty.forall_iff]
+    simp_all only [not_forall, not_le]
 
 Depends on / 依赖: A.IsIrreducible, IsIrreducible, IsIrreducible.transpose, Matrix, Matrix.transpose_apply, hA_T_nonneg, hA_nonneg, implies_true, isIrreducible_iff, isSStronglyConnected_iff, nonpos_iff_eq_zero, not_and, not_exists, not_forall, not_lt, not_true_eq_false, transpose, transpose_apply
 -/

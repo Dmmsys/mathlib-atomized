@@ -52,7 +52,9 @@ definition Measure.withDensityᵥ
       not_measurable' := fun _ hs => if_neg hs
       m_iUnion' := fun s hs₁ hs₂ => by
         convert! hasSum_integral_iUnion hs₁ hs₂ hf.integrableOn with n
-        · rw [
+        · rw [if_pos (hs₁ n)]
+        · rw [if_pos (MeasurableSet.iUnion hs₁)] }
+  else 0
 
 中文:
 定义 测度.withDensityᵥ
@@ -63,7 +65,9 @@ definition Measure.withDensityᵥ
       not_measurable' := fun _ hs => if_neg hs
       m_iUnion' := fun s hs₁ hs₂ => by
         convert! hasSum_integral_iUnion hs₁ hs₂ hf.integrableOn with n
-        · rw [
+        · rw [if_pos (hs₁ n)]
+        · rw [if_pos (MeasurableSet.iUnion hs₁)] }
+  else 0
 
 Depends on / 依赖: Integrable, MeasurableSet, MeasurableSet.iUnion, convert, hasSum_integral_iUnion, hf.integrableOn, iUnion, if_neg, if_pos, integrableOn, m_iUnion, measureOf, not_measurable
 -/
@@ -307,7 +311,8 @@ theorem withDensityᵥ_smul
     simp only [Pi.smul_apply]
   · by_cases hr : r = 0
     · rw [hr, zero_smul, zero_smul, withDensityᵥ_zero]
-    · rw [wit
+    · rw [withDensityᵥ, withDensityᵥ, dif_neg hf, dif_neg, smul_zero]
+      rwa [integrable_smul_iff hr f]
 
 中文:
 定理 withDensityᵥ_smul
@@ -320,7 +325,8 @@ theorem withDensityᵥ_smul
     simp only [Pi.smul_apply]
   · by_cases hr : r = 0
     · rw [hr, zero_smul, zero_smul, withDensityᵥ_zero]
-    · rw [wit
+    · rw [withDensityᵥ, withDensityᵥ, dif_neg hf, dif_neg, smul_zero]
+      rwa [integrable_smul_iff hr f]
 
 Depends on / 依赖: Integrable, Pi.smul_apply, _root_, _root_.smul_apply, dif_neg, hf.smul, integrable_smul_iff, integral_smul, smul_apply, smul_zero, zero_smul
 -/
@@ -426,7 +432,7 @@ theorem Measure.withDensityᵥ_absolutelyContinuous
     rw [toENNRealVectorMeasure_apply_measurable hi₁] at hi₂
     rw [withDensityᵥ_apply hf hi₁]; rw [Measure.restrict_zero_set hi₂]; rw [integral_zero_measure]
   · rw [withDensityᵥ, dif_neg hf]
-    
+    exact VectorMeasure.AbsolutelyContinuous.zero _
 
 中文:
 定理 测度.withDensityᵥ_absolutelyContinuous
@@ -437,7 +443,7 @@ theorem Measure.withDensityᵥ_absolutelyContinuous
     rw [toENNRealVectorMeasure_apply_measurable hi₁] at hi₂
     rw [withDensityᵥ_apply hf hi₁]; rw [Measure.restrict_zero_set hi₂]; rw [integral_zero_measure]
   · rw [withDensityᵥ, dif_neg hf]
-    
+    exact VectorMeasure.AbsolutelyContinuous.zero _
 
 Depends on / 依赖: AbsolutelyContinuous, Integrable, Measure, Measure.restrict_zero_set, VectorMeasure, VectorMeasure.AbsolutelyContinuous.mk, VectorMeasure.AbsolutelyContinuous.zero, dif_neg, integral_zero_measure, restrict_zero_set, toENNRealVectorMeasure_apply_measurable
 -/
@@ -486,7 +492,7 @@ theorem WithDensityᵥEq.congr_ae
     rw [withDensityᵥ_apply hf hi]; rw [withDensityᵥ_apply (hf.congr h) hi]
     exact integral_congr_ae (ae_restrict_of_ae h)
   · have hg : ¬Integrable g μ := by intro hg; exact hf (hg.congr h.symm)
-    rw [withDensityᵥ]; rw [withDensityᵥ]; rw [dif_neg h
+    rw [withDensityᵥ]; rw [withDensityᵥ]; rw [dif_neg hf]; rw [dif_neg hg]
 
 中文:
 定理 WithDensityᵥEq.congr_ae
@@ -497,7 +503,7 @@ theorem WithDensityᵥEq.congr_ae
     rw [withDensityᵥ_apply hf hi]; rw [withDensityᵥ_apply (hf.congr h) hi]
     exact integral_congr_ae (ae_restrict_of_ae h)
   · have hg : ¬Integrable g μ := by intro hg; exact hf (hg.congr h.symm)
-    rw [withDensityᵥ]; rw [withDensityᵥ]; rw [dif_neg h
+    rw [withDensityᵥ]; rw [withDensityᵥ]; rw [dif_neg hf]; rw [dif_neg hg]
 
 Depends on / 依赖: Integrable, ae_restrict_of_ae, dif_neg, h.symm, hf.congr, hg.congr, integral_congr_ae
 -/
@@ -543,7 +549,9 @@ theorem withDensityᵥ_toReal
   have := isFiniteMeasure_withDensity hf
   ext i hi
   rw [withDensityᵥ_apply hfi hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_def]; rw [withDensity_apply _ hi]; rw [integral_toReal hfm.restrict]
-  refine ae_lt_top' hfm.r
+  refine ae_lt_top' hfm.restrict (ne_top_of_le_ne_top hf ?_)
+  conv_rhs => rw [← setLIntegral_univ]
+  exact lintegral_mono_set (Set.subset_univ _)
 
 中文:
 定理 withDensityᵥ_to实数
@@ -553,7 +561,9 @@ theorem withDensityᵥ_toReal
   have := isFiniteMeasure_withDensity hf
   ext i hi
   rw [withDensityᵥ_apply hfi hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_def]; rw [withDensity_apply _ hi]; rw [integral_toReal hfm.restrict]
-  refine ae_lt_top' hfm.r
+  refine ae_lt_top' hfm.restrict (ne_top_of_le_ne_top hf ?_)
+  conv_rhs => rw [← setLIntegral_univ]
+  exact lintegral_mono_set (Set.subset_univ _)
 
 Depends on / 依赖: Set.subset_univ, ae_lt_top, conv_rhs, hfm.restrict, integrable_toReal_of_lintegral_ne_top, integral_toReal, isFiniteMeasure_withDensity, lintegral_mono_set, measureReal_def, ne_top_of_le_ne_top, restrict, setLIntegral_univ, subset_univ, toSignedMeasure_apply_measurable, withDensity_apply
 -/
@@ -578,7 +588,7 @@ theorem withDensityᵥ_eq_withDensity_pos_part_sub_withDensity_neg_part
   have := isFiniteMeasure_withDensity_ofReal hfi.2
   have := isFiniteMeasure_withDensity_ofReal hfi.neg.2
   ext i hi
-  rw [withDensityᵥ_apply hfi hi]; rw [integral_eq_lintegral_pos_part_sub_lintegral_neg_part hfi.integrableOn]; rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [
+  rw [withDensityᵥ_apply hfi hi]; rw [integral_eq_lintegral_pos_part_sub_lintegral_neg_part hfi.integrableOn]; rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_def]; rw [measureReal_def]; rw [withDensity_apply _ hi]; rw [withDensity_apply _ hi]
 
 中文:
 定理 withDensityᵥ_eq_withDensity_pos_part_sub_withDensity_neg_part
@@ -587,7 +597,7 @@ theorem withDensityᵥ_eq_withDensity_pos_part_sub_withDensity_neg_part
   have := isFiniteMeasure_withDensity_ofReal hfi.2
   have := isFiniteMeasure_withDensity_ofReal hfi.neg.2
   ext i hi
-  rw [withDensityᵥ_apply hfi hi]; rw [integral_eq_lintegral_pos_part_sub_lintegral_neg_part hfi.integrableOn]; rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [
+  rw [withDensityᵥ_apply hfi hi]; rw [integral_eq_lintegral_pos_part_sub_lintegral_neg_part hfi.integrableOn]; rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_def]; rw [measureReal_def]; rw [withDensity_apply _ hi]; rw [withDensity_apply _ hi]
 
 Depends on / 依赖: _root_, _root_.sub_apply, hfi.integrableOn, hfi.neg, integrableOn, integral_eq_lintegral_pos_part_sub_lintegral_neg_part, isFiniteMeasure_withDensity_ofReal, measureReal_def, sub_apply, toSignedMeasure_apply_measurable, withDensity_apply
 -/
@@ -635,7 +645,7 @@ theorem Integrable.withDensityᵥ_trim_absolutelyContinuous
   refine VectorMeasure.AbsolutelyContinuous.mk fun j hj₁ hj₂ => ?_
   rw [Measure.toENNRealVectorMeasure_apply_measurable hj₁]; rw [trim_measurableSet_eq hm hj₁] at hj₂
   rw [VectorMeasure.trim_measurableSet_eq hm hj₁]; rw [withDensityᵥ_apply hfi (hm _ hj₁)]
-  simp only [Measure.restrict_eq_zero.m
+  simp only [Measure.restrict_eq_zero.mpr hj₂, integral_zero_measure]
 
 中文:
 定理 可积.withDensityᵥ_trim_absolutelyContinuous
@@ -644,7 +654,7 @@ theorem Integrable.withDensityᵥ_trim_absolutelyContinuous
   refine VectorMeasure.AbsolutelyContinuous.mk fun j hj₁ hj₂ => ?_
   rw [Measure.toENNRealVectorMeasure_apply_measurable hj₁]; rw [trim_measurableSet_eq hm hj₁] at hj₂
   rw [VectorMeasure.trim_measurableSet_eq hm hj₁]; rw [withDensityᵥ_apply hfi (hm _ hj₁)]
-  simp only [Measure.restrict_eq_zero.m
+  simp only [Measure.restrict_eq_zero.mpr hj₂, integral_zero_measure]
 
 Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.restrict_eq_zero.mpr, Measure.toENNRealVectorMeasure_apply_measurable, VectorMeasure, VectorMeasure.AbsolutelyContinuous.mk, VectorMeasure.trim_measurableSet_eq, integral_zero_measure, restrict_eq_zero, toENNRealVectorMeasure_apply_measurable, trim_measurableSet_eq
 -/

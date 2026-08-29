@@ -173,7 +173,12 @@ definition quotIdealMapEquivQuotTensor
       (Algebra.TensorProduct.comm A B (A ⧸ I)).toRingEquiv
     commutes' x := by
       suffices Algebra.TensorProduct.comm A B (A ⧸ I) (quotIdealMapEquivTensorQuot B I
-      
+        (Ideal.Quotient.mk (I.map (algebraMap A B)) (algebraMap A B x))) =
+          (algebraMap A (TensorProduct A (A ⧸ I) B)) x by simpa
+      rw [quotIdealMapEquivTensorQuot_mk]; rw [tmul_one_eq_one_tmul]
+      simp }
+
+@[simp]
 
 中文:
 定义 quotIdealMapEquivQuotTensor
@@ -183,7 +188,12 @@ definition quotIdealMapEquivQuotTensor
       (Algebra.TensorProduct.comm A B (A ⧸ I)).toRingEquiv
     commutes' x := by
       suffices Algebra.TensorProduct.comm A B (A ⧸ I) (quotIdealMapEquivTensorQuot B I
-      
+        (Ideal.Quotient.mk (I.map (algebraMap A B)) (algebraMap A B x))) =
+          (algebraMap A (TensorProduct A (A ⧸ I) B)) x by simpa
+      rw [quotIdealMapEquivTensorQuot_mk]; rw [tmul_one_eq_one_tmul]
+      simp }
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.extendScalarsOfSurjective, Algebra, Algebra.TensorProduct.comm, I.map, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Quotient, TensorProduct, algebraMap, commutes, extendScalarsOfSurjective, mk_surjective, quotIdealMapEquivTensorQuot, quotIdealMapEquivTensorQuot_mk, tmul_one_eq_one_tmul, toRingEquiv, toRingEquiv.trans
 -/
@@ -235,7 +245,17 @@ definition tensorQuotientEquiv
       (I.subtype.restrictScalars R))) ≃ₗ[S]
       A otimes[R] T ⧸ (I.map (includeRight (A := A) (R := R))).restrictScalars S :=
     Submodule.quotEquivOfEq _ _ (AlgebraTensorModule.range_lTensor_idealMap _ _ _)
-.ofLinearEquiv
+.ofLinearEquiv (AlgebraTensorModule.tensorQuotientEquiv (R := R) S T A I ≪≫ₗ g) rfl by
+    refine LinearMap.map_mul_of_map_mul_tmul fun a₁ a₂ b₁ b₂ => ?_
+    obtain ⟨b₁, rfl⟩ := Ideal.Quotient.mk_surjective b₁
+    obtain ⟨b₂, rfl⟩ := Ideal.Quotient.mk_surjective b₂
+    rw [← map_mul]
+    simp only [LinearEquiv.coe_coe, LinearEquiv.trans_apply, g,
+      AlgebraTensorModule.tensorQuotientEquiv_apply_tmul, ← Ideal.Quotient.mk_eq_mk,
+      ← Algebra.TensorProduct.tmul_mul_tmul]
+    rfl
+
+@[simp]
 
 中文:
 定义 tensorQuotientEquiv
@@ -244,7 +264,17 @@ definition tensorQuotientEquiv
       (I.subtype.restrictScalars R))) ≃ₗ[S]
       A otimes[R] T ⧸ (I.map (includeRight (A := A) (R := R))).restrictScalars S :=
     Submodule.quotEquivOfEq _ _ (AlgebraTensorModule.range_lTensor_idealMap _ _ _)
-.ofLinearEquiv
+.ofLinearEquiv (AlgebraTensorModule.tensorQuotientEquiv (R := R) S T A I ≪≫ₗ g) rfl by
+    refine LinearMap.map_mul_of_map_mul_tmul fun a₁ a₂ b₁ b₂ => ?_
+    obtain ⟨b₁, rfl⟩ := Ideal.Quotient.mk_surjective b₁
+    obtain ⟨b₂, rfl⟩ := Ideal.Quotient.mk_surjective b₂
+    rw [← map_mul]
+    simp only [LinearEquiv.coe_coe, LinearEquiv.trans_apply, g,
+      AlgebraTensorModule.tensorQuotientEquiv_apply_tmul, ← Ideal.Quotient.mk_eq_mk,
+      ← Algebra.TensorProduct.tmul_mul_tmul]
+    rfl
+
+@[simp]
 -/
 noncomputable def tensorQuotientEquiv (I : Ideal T) :
     A otimes[R] (T ⧸ I) ≃ₐ[S] (A otimes[R] T) ⧸ I.map (includeRight (A := A) (R := R)) :=
@@ -390,14 +420,14 @@ lemma Ideal.subtype_rTensor_range
   statement: {R : Type*} [CommRing R] (M : Type*) [AddCommGroup M] [Module R M]
   proof: by
   rw [← Submodule.ker_mkQ (I • (⊤ : Submodule R M))]; rw [LinearMap.range_comp]; rw [← Submodule.map_symm_eq_iff]; rw [← Submodule.comap_equiv_eq_map_symm]; rw [← LinearMap.ker_comp]; rw [← TensorProduct.quotTensorEquivQuotSMul_comp_mkQ_rTensor]; rw [LinearEquiv.ker_comp]
-  exact LinearMap.exact_
+  exact LinearMap.exact_iff.mp (rTensor_exact M (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective)
 
 中文:
 引理 理想.subtype_rTensor_range
   结论: {R : 类型} [交换环 R] (M : 类型) [加法交换群 M] [模 R M]
   证明: by
   rw [← Submodule.ker_mkQ (I • (⊤ : Submodule R M))]; rw [LinearMap.range_comp]; rw [← Submodule.map_symm_eq_iff]; rw [← Submodule.comap_equiv_eq_map_symm]; rw [← LinearMap.ker_comp]; rw [← TensorProduct.quotTensorEquivQuotSMul_comp_mkQ_rTensor]; rw [LinearEquiv.ker_comp]
-  exact LinearMap.exact_
+  exact LinearMap.exact_iff.mp (rTensor_exact M (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective)
 
 Depends on / 依赖: I.mkQ_surjective, LinearEquiv, LinearEquiv.ker_comp, LinearMap, LinearMap.exact_iff.mp, LinearMap.exact_subtype_mkQ, LinearMap.ker_comp, LinearMap.range_comp, Submodule, Submodule.comap_equiv_eq_map_symm, Submodule.ker_mkQ, Submodule.map_symm_eq_iff, TensorProduct, TensorProduct.quotTensorEquivQuotSMul_comp_mkQ_rTensor, comap_equiv_eq_map_symm, exact_iff, exact_subtype_mkQ, ker_comp, ker_mkQ, map_symm_eq_iff
 -/
@@ -428,7 +458,16 @@ definition Algebra.tensorQuotientTensorEquiv
   letI ψ : R'' otimes[R] S ->ₐ[R''] R'' otimes[R'] (R' otimes[R] S ⧸ Ideal.span {e}) :=
     Algebra.TensorProduct.lift (Algebra.ofId _ _)
       ((Algebra.TensorProduct.includeRight.restrictScalars R).comp
-      ((Ideal.Quotient.mkₐ _ _)
+      ((Ideal.Quotient.mkₐ _ _).comp Algebra.TensorProduct.includeRight)) fun _ _ => .all _ _
+  haveI hψφ : (ψ.restrictScalars R').comp φ =
+      (Algebra.TensorProduct.includeRight.restrictScalars R').comp (Ideal.Quotient.mkₐ _ _) := by
+    ext; simp [ψ, φ]
+  haveI heψ : Ideal.span {φ e} <= RingHom.ker ψ := by simpa [Ideal.span_le] using congr($hψφ e)
+  AlgEquiv.ofAlgHom (Algebra.TensorProduct.lift (Algebra.ofId _ _) (Ideal.quotientMapₐ _ φ
+    (Ideal.map_le_iff_le_comap.mp (by simp [Ideal.map_span, φ]))) fun _ _ => .all _ _)
+    (Ideal.Quotient.liftₐ _ ψ heψ) (by ext; simp [ψ, φ]) (by ext; simp [φ, ψ])
+
+@[simp]
 
 中文:
 定义 代数.tensorQuotientTensorEquiv
@@ -437,7 +476,16 @@ definition Algebra.tensorQuotientTensorEquiv
   letI ψ : R'' otimes[R] S ->ₐ[R''] R'' otimes[R'] (R' otimes[R] S ⧸ Ideal.span {e}) :=
     Algebra.TensorProduct.lift (Algebra.ofId _ _)
       ((Algebra.TensorProduct.includeRight.restrictScalars R).comp
-      ((Ideal.Quotient.mkₐ _ _)
+      ((Ideal.Quotient.mkₐ _ _).comp Algebra.TensorProduct.includeRight)) fun _ _ => .all _ _
+  haveI hψφ : (ψ.restrictScalars R').comp φ =
+      (Algebra.TensorProduct.includeRight.restrictScalars R').comp (Ideal.Quotient.mkₐ _ _) := by
+    ext; simp [ψ, φ]
+  haveI heψ : Ideal.span {φ e} <= RingHom.ker ψ := by simpa [Ideal.span_le] using congr($hψφ e)
+  AlgEquiv.ofAlgHom (Algebra.TensorProduct.lift (Algebra.ofId _ _) (Ideal.quotientMapₐ _ φ
+    (Ideal.map_le_iff_le_comap.mp (by simp [Ideal.map_span, φ]))) fun _ _ => .all _ _)
+    (Ideal.Quotient.liftₐ _ ψ heψ) (by ext; simp [ψ, φ]) (by ext; simp [φ, ψ])
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.includeRight.restrictScalars, Algebra.TensorProduct.lift, Algebra.TensorProduct.rTensor, Algebra.ofId, Ideal.Quotient.mk, Ideal.span, Quotient, TensorProduct, includeRight, otimes, rTensor, restrictScalars
 -/

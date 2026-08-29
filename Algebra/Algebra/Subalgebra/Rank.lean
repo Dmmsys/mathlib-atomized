@@ -43,7 +43,11 @@ theorem rank_sup_eq_rank_left_mul_rank_of_free
   nontriviality S using rank_subsingleton'
   let : Algebra A (Algebra.adjoin A (B : Set S)) := Subalgebra.algebra _
   let : SMul A (Algebra.adjoin A (B : Set S)) := Algebra.toSMul
-  have : IsScalarTower R A
+  have : IsScalarTower R A (Algebra.adjoin A (B : Set S)) :=
+    IsScalarTower.of_algebraMap_eq (congrFun rfl)
+  rw [rank_mul_rank R A (Algebra.adjoin A (B : Set S))]
+  change _ = Module.rank R ((Algebra.adjoin A (B : Set S)).restrictScalars R)
+  rw [Algebra.restrictScalars_adjoin]; rfl
 
 中文:
 定理 rank_sup_eq_rank_left_mul_rank_of_free
@@ -53,7 +57,11 @@ theorem rank_sup_eq_rank_left_mul_rank_of_free
   nontriviality S using rank_subsingleton'
   let : Algebra A (Algebra.adjoin A (B : Set S)) := Subalgebra.algebra _
   let : SMul A (Algebra.adjoin A (B : Set S)) := Algebra.toSMul
-  have : IsScalarTower R A
+  have : IsScalarTower R A (Algebra.adjoin A (B : Set S)) :=
+    IsScalarTower.of_algebraMap_eq (congrFun rfl)
+  rw [rank_mul_rank R A (Algebra.adjoin A (B : Set S))]
+  change _ = Module.rank R ((Algebra.adjoin A (B : Set S)).restrictScalars R)
+  rw [Algebra.restrictScalars_adjoin]; rfl
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.toSMul, IsScalarTower, IsScalarTower.of_algebraMap_eq, Module, Module.rank, Module.subsingleton, Subalgebra, Subalgebra.algebra, adjoin, algebra, nontriviality, of_algebraMap_eq, rank_mul_rank, rank_subsingleton, restrictScalars, subsingleton, subsingleton_or_nontrivial, toSMul
 -/

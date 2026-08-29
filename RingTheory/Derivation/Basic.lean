@@ -482,7 +482,8 @@ theorem leibniz_pow
     rcases eq_zero_or_pos n with (rfl | hpos)
     · simp
     · have : a * a ^ (n - 1) = a ^ n := by rw [← pow_succ', Nat.sub_add_cancel hpos]
-      simp only [pow_succ', leibniz, ihn, smul_comm a n (_ : M),
+      simp only [pow_succ', leibniz, ihn, smul_comm a n (_ : M), smul_smul a, add_smul, this,
+        Nat.add_succ_sub_one, add_zero, one_nsmul]
 
 中文:
 定理 leibniz_pow
@@ -495,7 +496,8 @@ theorem leibniz_pow
     rcases eq_zero_or_pos n with (rfl | hpos)
     · simp
     · have : a * a ^ (n - 1) = a ^ n := by rw [← pow_succ', Nat.sub_add_cancel hpos]
-      simp only [pow_succ', leibniz, ihn, smul_comm a n (_ : M),
+      simp only [pow_succ', leibniz, ihn, smul_comm a n (_ : M), smul_smul a, add_smul, this,
+        Nat.add_succ_sub_one, add_zero, one_nsmul]
 
 Depends on / 依赖: Nat.add_succ_sub_one, Nat.sub_add_cancel, add_smul, add_succ_sub_one, add_zero, eq_zero_or_pos, leibniz, map_one_eq_zero, one_nsmul, pow_succ, pow_zero, smul_comm, smul_smul, sub_add_cancel, zero_smul
 -/
@@ -1054,7 +1056,11 @@ definition _root_.LinearMap.compDer
       map_one_eq_zero' := by simp only [LinearMap.comp_apply, coeFn_coe, map_one_eq_zero, map_zero]
       leibniz' := fun a b => by
         simp only [coeFn_coe, LinearMap.comp_apply, map_add, leibniz,
-          LinearMap.coe_restrictScalars, L
+          LinearMap.coe_restrictScalars, LinearMap.map_smul] }
+  map_add' D₁ D₂ := by ext; exact LinearMap.map_add _ _ _
+  map_smul' r D := by ext; dsimp; simp only [_root_.map_smul]
+
+@[simp]
 
 中文:
 定义 _root_.线性映射.compDer
@@ -1063,7 +1069,11 @@ definition _root_.LinearMap.compDer
       map_one_eq_zero' := by simp only [LinearMap.comp_apply, coeFn_coe, map_one_eq_zero, map_zero]
       leibniz' := fun a b => by
         simp only [coeFn_coe, LinearMap.comp_apply, map_add, leibniz,
-          LinearMap.coe_restrictScalars, L
+          LinearMap.coe_restrictScalars, LinearMap.map_smul] }
+  map_add' D₁ D₂ := by ext; exact LinearMap.map_add _ _ _
+  map_smul' r D := by ext; dsimp; simp only [_root_.map_smul]
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.coe_restrictScalars, LinearMap.comp_apply, LinearMap.map_add, LinearMap.map_smul, _root_, _root_.map_smul, coeFn_coe, coe_restrictScalars, comp_apply, leibniz, map_add, map_one_eq_zero, map_smul, map_zero, toLinearMap
 -/
@@ -1363,7 +1373,16 @@ definition liftOfRightInverse
     suffices f (d (f_inv (x • y) - x • f_inv y)) = 0 by simpa [sub_eq_zero]
     apply hd
     simp [hf _]
-  map_one_eq_zero' := b
+  map_one_eq_zero' := by
+    suffices f (d (f_inv 1 - 1)) = 0 by simpa [sub_eq_zero]
+    apply hd
+    simp [hf _]
+  leibniz' x y := by
+    suffices f (d (f_inv (x * y) - f_inv x * f_inv y)) = 0 by simpa [sub_eq_zero, hf _]
+    apply hd
+    simp [hf _]
+
+@[simp]
 
 中文:
 定义 liftOfRightInverse
@@ -1377,7 +1396,16 @@ definition liftOfRightInverse
     suffices f (d (f_inv (x • y) - x • f_inv y)) = 0 by simpa [sub_eq_zero]
     apply hd
     simp [hf _]
-  map_one_eq_zero' := b
+  map_one_eq_zero' := by
+    suffices f (d (f_inv 1 - 1)) = 0 by simpa [sub_eq_zero]
+    apply hd
+    simp [hf _]
+  leibniz' x y := by
+    suffices f (d (f_inv (x * y) - f_inv x * f_inv y)) = 0 by simpa [sub_eq_zero, hf _]
+    apply hd
+    simp [hf _]
+
+@[simp]
 
 Depends on / 依赖: f_inv
 -/
@@ -1809,7 +1837,15 @@ lemma leibniz_zpow
     rw [← zpow_natCast]
     congr
     lia
-  · rw [h, zpow_neg, zpow_natCast, leibniz_inv, leibniz_pow, in
+  · rw [h, zpow_neg, zpow_natCast, leibniz_inv, leibniz_pow, inv_pow, ← pow_mul, ← zpow_natCast,
+      ← zpow_natCast, ← Nat.cast_smul_eq_nsmul K, ← Int.cast_smul_eq_zsmul K, smul_smul, smul_smul,
+      smul_smul]
+    trans (-n.natAbs * (a ^ ((n.natAbs - 1 : Nat) : Int) / (a ^ ((n.natAbs * 2 : Nat) : Int)))) • D a
+    · ring_nf
+    rw [← zpow_sub₀ ha]
+    congr 3
+    · norm_cast
+    lia
 
 中文:
 引理 leibniz_zpow
@@ -1826,7 +1862,15 @@ lemma leibniz_zpow
     rw [← zpow_natCast]
     congr
     lia
-  · rw [h, zpow_neg, zpow_natCast, leibniz_inv, leibniz_pow, in
+  · rw [h, zpow_neg, zpow_natCast, leibniz_inv, leibniz_pow, inv_pow, ← pow_mul, ← zpow_natCast,
+      ← zpow_natCast, ← Nat.cast_smul_eq_nsmul K, ← Int.cast_smul_eq_zsmul K, smul_smul, smul_smul,
+      smul_smul]
+    trans (-n.natAbs * (a ^ ((n.natAbs - 1 : Nat) : Int) / (a ^ ((n.natAbs * 2 : Nat) : Int)))) • D a
+    · ring_nf
+    rw [← zpow_sub₀ ha]
+    congr 3
+    · norm_cast
+    lia
 
 Depends on / 依赖: Int.cast_smul_eq_zsmul, Int.natAbs_eq, Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, cast_smul_eq_zsmul, inv_pow, leibniz_inv, leibniz_pow, n.natAbs, natAbs, natAbs_eq, natCast_zsmul, pow_mul, smul_smul, zero_zpow, zpow_natCast, zpow_neg
 -/

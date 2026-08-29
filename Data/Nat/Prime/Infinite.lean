@@ -41,7 +41,9 @@ have f1 : n ! + 1 != 1 := ne_of_gt succ_lt_succ factorial_pos _
   have np : n <= p :=
     le_of_not_ge fun h =>
       have h₁ : p ∣ n ! := dvd_factorial (minFac_pos _) h
-      have h₂ : p ∣ 1 := (Nat.dvd_add_iff_right h₁).2 (minFac_dvd
+      have h₂ : p ∣ 1 := (Nat.dvd_add_iff_right h₁).2 (minFac_dvd _)
+      pp.not_dvd_one h₂
+  ⟨p, np, pp⟩
 
 中文:
 定理 存在_infinite_primes
@@ -53,7 +55,9 @@ have f1 : n ! + 1 != 1 := ne_of_gt succ_lt_succ factorial_pos _
   have np : n <= p :=
     le_of_not_ge fun h =>
       have h₁ : p ∣ n ! := dvd_factorial (minFac_pos _) h
-      have h₂ : p ∣ 1 := (Nat.dvd_add_iff_right h₁).2 (minFac_dvd
+      have h₂ : p ∣ 1 := (Nat.dvd_add_iff_right h₁).2 (minFac_dvd _)
+      pp.not_dvd_one h₂
+  ⟨p, np, pp⟩
 
 Depends on / 依赖: Nat.dvd_add_iff_right, dvd_add_iff_right, dvd_factorial, factorial_pos, le_of_not_ge, minFac, minFac_dvd, minFac_pos, minFac_prime, ne_of_gt, not_dvd_one, pp.not_dvd_one, succ_lt_succ
 -/

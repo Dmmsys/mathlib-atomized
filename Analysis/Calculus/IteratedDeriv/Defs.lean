@@ -489,7 +489,12 @@ theorem iteratedDerivWithin_succ
   · rw [iteratedDerivWithin_eq_iteratedFDerivWithin, iteratedFDerivWithin_succ_apply_left,
       iteratedFDerivWithin_eq_equiv_comp,
       LinearIsometryEquiv.comp_fderivWithin _ hxs.uniqueDiffWithinAt, derivWithin]
-    change ((ContinuousMultilinearMap.mkPi
+    change ((ContinuousMultilinearMap.mkPiRing 𝕜 (Fin n) ((fderivWithin 𝕜
+      (iteratedDerivWithin n f s) s x : 𝕜 -> F) 1) : (Fin n -> 𝕜) -> F) fun _ : Fin n => 1) =
+      (fderivWithin 𝕜 (iteratedDerivWithin n f s) s x : 𝕜 -> F) 1
+    simp
+  · simp [derivWithin_zero_of_not_accPt hxs, iteratedDerivWithin, iteratedFDerivWithin,
+      fderivWithin_zero_of_not_accPt hxs]
 
 中文:
 定理 iteratedDerivWithin_succ
@@ -499,7 +504,12 @@ theorem iteratedDerivWithin_succ
   · rw [iteratedDerivWithin_eq_iteratedFDerivWithin, iteratedFDerivWithin_succ_apply_left,
       iteratedFDerivWithin_eq_equiv_comp,
       LinearIsometryEquiv.comp_fderivWithin _ hxs.uniqueDiffWithinAt, derivWithin]
-    change ((ContinuousMultilinearMap.mkPi
+    change ((ContinuousMultilinearMap.mkPiRing 𝕜 (Fin n) ((fderivWithin 𝕜
+      (iteratedDerivWithin n f s) s x : 𝕜 -> F) 1) : (Fin n -> 𝕜) -> F) fun _ : Fin n => 1) =
+      (fderivWithin 𝕜 (iteratedDerivWithin n f s) s x : 𝕜 -> F) 1
+    simp
+  · simp [derivWithin_zero_of_not_accPt hxs, iteratedDerivWithin, iteratedFDerivWithin,
+      fderivWithin_zero_of_not_accPt hxs]
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.mkPiRing, LinearIsometryEquiv, LinearIsometryEquiv.comp_fderivWithin, comp_fderivWithin, derivWithin, derivWithin_zero_of_not_accPt, fderivWithin, hxs.uniqueDiffWithinAt, iteratedDerivWithin, iteratedDerivWithin_eq_iteratedFDerivWithin, iteratedFDerivWithin_eq_equiv_comp, iteratedFDerivWithin_succ_apply_left, mkPiRing, uniqueDiffWithinAt
 -/
@@ -1061,7 +1071,12 @@ lemma AnalyticAt.hasFPowerSeriesAt
   have h_fact_smul := hpr.factorial_smul 1
   simp only [FormalMultilinearSeries.apply_eq_prod_smul_coeff, Finset.prod_const, Finset.card_univ,
     Fintype.card_fin, smul_eq_mul, nsmul_eq_mul, one_pow, one_mul] at h_fact_smul
-  si
+  simp only [FormalMultilinearSeries.apply_eq_prod_smul_coeff,
+    FormalMultilinearSeries.coeff_ofScalars, smul_eq_mul, mul_eq_mul_left_iff]
+  left
+  rw [div_eq_iff]; rw [mul_comm]; rw [h_fact_smul]; rw [← iteratedDeriv_eq_iteratedFDeriv]
+  norm_cast
+  positivity
 
 中文:
 引理 AnalyticAt.hasFPowerSeriesAt
@@ -1074,7 +1089,12 @@ lemma AnalyticAt.hasFPowerSeriesAt
   have h_fact_smul := hpr.factorial_smul 1
   simp only [FormalMultilinearSeries.apply_eq_prod_smul_coeff, Finset.prod_const, Finset.card_univ,
     Fintype.card_fin, smul_eq_mul, nsmul_eq_mul, one_pow, one_mul] at h_fact_smul
-  si
+  simp only [FormalMultilinearSeries.apply_eq_prod_smul_coeff,
+    FormalMultilinearSeries.coeff_ofScalars, smul_eq_mul, mul_eq_mul_left_iff]
+  left
+  rw [div_eq_iff]; rw [mul_comm]; rw [h_fact_smul]; rw [← iteratedDeriv_eq_iteratedFDeriv]
+  norm_cast
+  positivity
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.prod_const, Fintype, Fintype.card_fin, FormalMultilinearSeries, FormalMultilinearSeries.apply_eq_prod_smul_coeff, FormalMultilinearSeries.coeff_ofScalars, apply_eq_prod_smul_coeff, card_fin, card_univ, coeff_ofScalars, convert, div_eq_iff, factorial_smul, h_fact_smul, hpr.factorial_smul, iteratedDeriv_eq_iterat, mul_comm, mul_eq_mul_left_iff
 -/

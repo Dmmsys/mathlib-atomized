@@ -148,7 +148,8 @@ instance isLocalization_range_mapToFractionRing
     show B ≃ₐ[A] _ from AlgEquiv.ofBijective (mapToFractionRing K S B hS).rangeRestrict (by
       refine ⟨fun a b h => ?_, Set.rangeFactorization_surjective⟩
       refine (IsLocalization.lift_injective_iff _).2 (fun a b => ?_) (Subtype.ext_iff.1 h)
-      e
+      exact ⟨fun h => congr_arg _ (IsLocalization.injective _ hS h),
+        fun h => congr_arg _ (IsFractionRing.injective A K h)⟩)
 
 中文:
 实例 isLocalization_range_mapToFractionRing
@@ -157,7 +158,8 @@ instance isLocalization_range_mapToFractionRing
     show B ≃ₐ[A] _ from AlgEquiv.ofBijective (mapToFractionRing K S B hS).rangeRestrict (by
       refine ⟨fun a b h => ?_, Set.rangeFactorization_surjective⟩
       refine (IsLocalization.lift_injective_iff _).2 (fun a b => ?_) (Subtype.ext_iff.1 h)
-      e
+      exact ⟨fun h => congr_arg _ (IsLocalization.injective _ hS h),
+        fun h => congr_arg _ (IsFractionRing.injective A K h)⟩)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, IsFractionRing, IsFractionRing.injective, IsLocalization, IsLocalization.injective, IsLocalization.isLocalization_of_algEquiv, IsLocalization.lift_injective_iff, Set.rangeFactorization_surjective, Subtype, Subtype.ext_iff, congr_arg, ext_iff, injective, isLocalization_of_algEquiv, lift_injective_iff, mapToFractionRing, ofBijective, rangeFactorization_surjective, rangeRestrict
 -/

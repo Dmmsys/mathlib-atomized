@@ -55,7 +55,12 @@ definition rightHomotopy
   { h := P.i₁ ≫ sq.lift
     h₀ := by
       have := sq.fac_right =≫ prod.fst
-      rw [
+      rw [Category.assoc]; rw [Q.p_fst]; rw [prod.lift_fst] at this
+      simp [this]
+    h₁ := by
+      have := sq.fac_right =≫ prod.snd
+      rw [Category.assoc]; rw [Q.p_snd]; rw [prod.lift_snd] at this
+      simp [this] }
 
 中文:
 定义 rightHomotopy
@@ -67,7 +72,12 @@ definition rightHomotopy
   { h := P.i₁ ≫ sq.lift
     h₀ := by
       have := sq.fac_right =≫ prod.fst
-      rw [
+      rw [Category.assoc]; rw [Q.p_fst]; rw [prod.lift_fst] at this
+      simp [this]
+    h₁ := by
+      have := sq.fac_right =≫ prod.snd
+      rw [Category.assoc]; rw [Q.p_snd]; rw [prod.lift_snd] at this
+      simp [this] }
 
 Depends on / 依赖: Category, Category.assoc, CommSq, Q.p_fst, Q.p_snd, choose_spec, exists_good_cylinder, fac_right, h.exists_good_cylinder.choose, h.exists_good_cylinder.choose_spec, lift_fst, lift_snd, p_fst, p_snd, prod.fst, prod.lift, prod.lift_fst, prod.lift_snd, prod.snd, sq.fac_right
 -/
@@ -132,7 +142,12 @@ definition leftHomotopy
   { h := sq.lift ≫ P.p₁
     h₀ := by
       have := coprod.inl ≫= sq.fac_left
- 
+      rw [Q.inl_i_assoc]; rw [coprod.inl_desc] at this
+      simp [reassoc_of% this]
+    h₁ := by
+      have := coprod.inr ≫= sq.fac_left
+      rw [Q.inr_i_assoc]; rw [coprod.inr_desc] at this
+      simp [reassoc_of% this, P] }
 
 中文:
 定义 leftHomotopy
@@ -144,7 +159,12 @@ definition leftHomotopy
   { h := sq.lift ≫ P.p₁
     h₀ := by
       have := coprod.inl ≫= sq.fac_left
- 
+      rw [Q.inl_i_assoc]; rw [coprod.inl_desc] at this
+      simp [reassoc_of% this]
+    h₁ := by
+      have := coprod.inr ≫= sq.fac_left
+      rw [Q.inr_i_assoc]; rw [coprod.inr_desc] at this
+      simp [reassoc_of% this, P] }
 
 Depends on / 依赖: CommSq, Q.inl_i_assoc, Q.inr_i_assoc, choose_spec, coprod, coprod.desc, coprod.inl, coprod.inl_desc, coprod.inr, coprod.inr_desc, exists_good_pathObject, fac_left, h.exists_good_pathObject.choose, h.exists_good_pathObject.choose_spec, inl_desc, inl_i_assoc, inr_desc, inr_i_assoc, reassoc_of, sq.fac_left
 -/
@@ -269,7 +289,18 @@ lemma postcomp_bijective_of_fibration_of_weakEquivalence
     obtain ⟨P, _, ⟨h⟩⟩ := h.exists_good_cylinder
     have sq : CommSq (coprod.desc f₀ f₁) P.i g h.h := { }
     rw [mk_eq_mk_iff]
-    exa
+    exact ⟨P,
+      ⟨{h := sq.lift
+        h₀ := by
+          have := coprod.inl ≫= sq.fac_left
+          rwa [P.inl_i_assoc, coprod.inl_desc] at this
+        h₁ := by
+          have := coprod.inr ≫= sq.fac_left
+          rwa [P.inr_i_assoc, coprod.inr_desc] at this }⟩⟩
+  · intro φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    have sq : CommSq (initial.to Y) (initial.to X) g φ := { }
+    exact ⟨mk sq.lift, by simp⟩
 
 中文:
 引理 postcomp_bijective_of_fibration_of_weakEquivalence
@@ -282,7 +313,18 @@ lemma postcomp_bijective_of_fibration_of_weakEquivalence
     obtain ⟨P, _, ⟨h⟩⟩ := h.exists_good_cylinder
     have sq : CommSq (coprod.desc f₀ f₁) P.i g h.h := { }
     rw [mk_eq_mk_iff]
-    exa
+    exact ⟨P,
+      ⟨{h := sq.lift
+        h₀ := by
+          have := coprod.inl ≫= sq.fac_left
+          rwa [P.inl_i_assoc, coprod.inl_desc] at this
+        h₁ := by
+          have := coprod.inr ≫= sq.fac_left
+          rwa [P.inr_i_assoc, coprod.inr_desc] at this }⟩⟩
+  · intro φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    have sq : CommSq (initial.to Y) (initial.to X) g φ := { }
+    exact ⟨mk sq.lift, by simp⟩
 
 Depends on / 依赖: CommSq, P.inl_i_assoc, P.inr_i_assoc, coprod, coprod.desc, coprod.inl, coprod.inl_desc, coprod.inr, coprod.inr_desc, exists_good_cylinder, fac_left, h.exists_good_cylinder, inl_desc, inl_i_assoc, inr_desc, inr_i_assoc, mk_eq_mk_iff, mk_surjective, postcomp_mk, sq.fac_left
 -/
@@ -321,7 +363,13 @@ lemma postcomp_bijective_of_weakEquivalence
     rw [← Function.Bijective.of_comp_iff'
       (postcomp_bijective_of_fibration_of_weakEquivalence X h.r)]
     convert! Function.bijective_id
-  
+    ext φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    simp
+  convert! (postcomp_bijective_of_fibration_of_weakEquivalence X h.p).comp hi using 1
+  ext φ
+  obtain ⟨φ, rfl⟩ := φ.mk_surjective
+  simp
 
 中文:
 引理 postcomp_bijective_of_weakEquivalence
@@ -331,7 +379,13 @@ lemma postcomp_bijective_of_weakEquivalence
     rw [← Function.Bijective.of_comp_iff'
       (postcomp_bijective_of_fibration_of_weakEquivalence X h.r)]
     convert! Function.bijective_id
-  
+    ext φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    simp
+  convert! (postcomp_bijective_of_fibration_of_weakEquivalence X h.p).comp hi using 1
+  ext φ
+  obtain ⟨φ, rfl⟩ := φ.mk_surjective
+  simp
 
 Depends on / 依赖: Bijective, Classical, Classical.arbitrary, FibrantBrownFactorization, Function, Function.Bijective, Function.Bijective.of_comp_iff, Function.bijective_id, LeftHomotopyClass, arbitrary, bijective_id, convert, f.postcomp, mk_surjective, of_comp_iff, postcomp, postcomp_bijective_of_fibration_of_weakEquivalence
 -/
@@ -372,7 +426,18 @@ lemma precomp_bijective_of_cofibration_of_weakEquivalence
     obtain ⟨P, _, ⟨h⟩⟩ := h.exists_good_pathObject
     have sq : CommSq h.h f P.p (prod.lift f₀ f₁) := { }
     rw [mk_eq_mk_iff]
-    exac
+    exact ⟨P,
+      ⟨{h := sq.lift
+        h₀ := by
+          have := sq.fac_right =≫ prod.fst
+          rwa [Category.assoc, P.p_fst, prod.lift_fst] at this
+        h₁ := by
+          have := sq.fac_right =≫ prod.snd
+          rwa [Category.assoc, P.p_snd, prod.lift_snd] at this }⟩⟩
+  · intro φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    have sq : CommSq φ f (terminal.from _) (terminal.from _) := { }
+    exact ⟨mk sq.lift, by simp⟩
 
 中文:
 引理 precomp_bijective_of_cofibration_of_weakEquivalence
@@ -385,7 +450,18 @@ lemma precomp_bijective_of_cofibration_of_weakEquivalence
     obtain ⟨P, _, ⟨h⟩⟩ := h.exists_good_pathObject
     have sq : CommSq h.h f P.p (prod.lift f₀ f₁) := { }
     rw [mk_eq_mk_iff]
-    exac
+    exact ⟨P,
+      ⟨{h := sq.lift
+        h₀ := by
+          have := sq.fac_right =≫ prod.fst
+          rwa [Category.assoc, P.p_fst, prod.lift_fst] at this
+        h₁ := by
+          have := sq.fac_right =≫ prod.snd
+          rwa [Category.assoc, P.p_snd, prod.lift_snd] at this }⟩⟩
+  · intro φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    have sq : CommSq φ f (terminal.from _) (terminal.from _) := { }
+    exact ⟨mk sq.lift, by simp⟩
 
 Depends on / 依赖: Category, Category.assoc, CommSq, P.p_fst, P.p_snd, exists_good_pathObject, fac_right, h.exists_good_pathObject, lift_fst, lift_snd, mk_eq_mk_iff, mk_surjective, p_fst, p_snd, precomp_mk, prod.fst, prod.lift, prod.lift_fst, prod.lift_snd, prod.snd
 -/
@@ -424,6 +500,13 @@ lemma precomp_bijective_of_weakEquivalence
     rw [← Function.Bijective.of_comp_iff'
       (precomp_bijective_of_cofibration_of_weakEquivalence Z h.s)]
     convert! Function.bijective_id
+    ext φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    simp
+  convert! (precomp_bijective_of_cofibration_of_weakEquivalence Z h.i).comp hj using 1
+  ext φ
+  obtain ⟨φ, rfl⟩ := φ.mk_surjective
+  simp
 
 中文:
 引理 precomp_bijective_of_weakEquivalence
@@ -433,6 +516,13 @@ lemma precomp_bijective_of_weakEquivalence
     rw [← Function.Bijective.of_comp_iff'
       (precomp_bijective_of_cofibration_of_weakEquivalence Z h.s)]
     convert! Function.bijective_id
+    ext φ
+    obtain ⟨φ, rfl⟩ := φ.mk_surjective
+    simp
+  convert! (precomp_bijective_of_cofibration_of_weakEquivalence Z h.i).comp hj using 1
+  ext φ
+  obtain ⟨φ, rfl⟩ := φ.mk_surjective
+  simp
 
 Depends on / 依赖: Bijective, Classical, Classical.arbitrary, CofibrantBrownFactorization, Function, Function.Bijective, Function.Bijective.of_comp_iff, Function.bijective_id, RightHomotopyClass, arbitrary, bijective_id, convert, g.precomp, mk_surjective, of_comp_iff, precomp, precomp_bijective_of_cofibration_of_weakEquivalence
 -/
@@ -466,7 +556,8 @@ lemma whitehead
   rw [← mk_eq_mk_iff]
   apply (precomp_bijective_of_weakEquivalence Y f).1
   simp only [precomp_mk, Category.comp_id]
-  rw [mk_
+  rw [mk_eq_mk_iff]; rw [← leftHomotopyRel_iff_rightHomotopyRel] at hg ⊢
+  simpa using hg.postcomp f
 
 中文:
 引理 whitehead
@@ -479,7 +570,8 @@ lemma whitehead
   rw [← mk_eq_mk_iff]
   apply (precomp_bijective_of_weakEquivalence Y f).1
   simp only [precomp_mk, Category.comp_id]
-  rw [mk_
+  rw [mk_eq_mk_iff]; rw [← leftHomotopyRel_iff_rightHomotopyRel] at hg ⊢
+  simpa using hg.postcomp f
 
 Depends on / 依赖: Category, Category.comp_id, comp_id, g.mk_surjective, hg.postcomp, leftHomotopyRel_iff_rightHomotopyRel, mk_eq_mk_iff, mk_surjective, postcomp, precomp_bijective_of_weakEquivalence, precomp_mk
 -/
@@ -540,7 +632,9 @@ definition leftHomotopyClassEquivRightHomotopyClass
     rw [LeftHomotopyClass.mk_eq_mk_iff]
     exact h.leftHomotopyRel)
   left_inv := by rintro ⟨f⟩; rfl
-  right_inv := by rintro ⟨f
+  right_inv := by rintro ⟨f⟩; rfl
+
+@[simp]
 
 中文:
 定义 leftHomotopyClassEquivRightHomotopyClass
@@ -552,7 +646,9 @@ definition leftHomotopyClassEquivRightHomotopyClass
     rw [LeftHomotopyClass.mk_eq_mk_iff]
     exact h.leftHomotopyRel)
   left_inv := by rintro ⟨f⟩; rfl
-  right_inv := by rintro ⟨f
+  right_inv := by rintro ⟨f⟩; rfl
+
+@[simp]
 
 Depends on / 依赖: LeftHomotopyClass, LeftHomotopyClass.mk_eq_mk_iff, Quot.lift, RightHomotopyClass, RightHomotopyClass.mk_eq_mk_iff, h.leftHomotopyRel, h.rightHomotopyRel, invFun, leftHomotopyRel, left_inv, mk_eq_mk_iff, rightHomotopyRel, right_inv
 -/

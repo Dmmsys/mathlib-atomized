@@ -45,7 +45,11 @@ lemma rexp_neg_quadratic_isLittleO_rpow_atTop
     refine this.trans ?_
     simpa only [neg_one_mul] using isLittleO_exp_neg_mul_rpow_atTop zero_lt_one s
   rw [isLittleO_exp_comp_exp_comp]
-  have : (fun x => -x - (a * x ^ 2 + b * x)) = fun x => x * (-a * x - (b +
+  have : (fun x => -x - (a * x ^ 2 + b * x)) = fun x => x * (-a * x - (b + 1)) := by
+    ext1 x; ring_nf
+  rw [this]
+exact tendsto_id.atTop_mul_atTop₀ tendsto_atTop_add_const_right _ _
+    tendsto_id.const_mul_atTop (neg_pos.mpr ha)
 
 中文:
 引理 rexp_neg_quadratic_isLittleO_rpow_atTop
@@ -55,7 +59,11 @@ lemma rexp_neg_quadratic_isLittleO_rpow_atTop
     refine this.trans ?_
     simpa only [neg_one_mul] using isLittleO_exp_neg_mul_rpow_atTop zero_lt_one s
   rw [isLittleO_exp_comp_exp_comp]
-  have : (fun x => -x - (a * x ^ 2 + b * x)) = fun x => x * (-a * x - (b +
+  have : (fun x => -x - (a * x ^ 2 + b * x)) = fun x => x * (-a * x - (b + 1)) := by
+    ext1 x; ring_nf
+  rw [this]
+exact tendsto_id.atTop_mul_atTop₀ tendsto_atTop_add_const_right _ _
+    tendsto_id.const_mul_atTop (neg_pos.mpr ha)
 
 Depends on / 依赖: const_mul_atTop, isLittleO_exp_comp_exp_comp, isLittleO_exp_neg_mul_rpow_atTop, neg_one_mul, neg_pos, neg_pos.mpr, ring_nf, tendsto_atTop_add_const_right, tendsto_id, tendsto_id.atTop_mul_atTop, tendsto_id.const_mul_atTop, this.trans, zero_lt_one
 -/
@@ -112,7 +120,11 @@ lemma cexp_neg_quadratic_isLittleO_abs_rpow_cocompact
   constructor
   · refine ((cexp_neg_quadratic_isLittleO_rpow_atTop ha (-b) s).comp_tendsto
       Filter.tendsto_neg_atBot_atTop).congr' (Eventually.of_forall fun x => by simp) ?_
-    · refine (eventually_lt_atBot 0).mp (Eventually.of_forall fun 
+    · refine (eventually_lt_atBot 0).mp (Eventually.of_forall fun x hx => ?_)
+      simp only [Function.comp_apply, abs_of_neg hx]
+  · refine (cexp_neg_quadratic_isLittleO_rpow_atTop ha b s).congr' EventuallyEq.rfl ?_
+    refine (eventually_gt_atTop 0).mp (Eventually.of_forall fun x hx => ?_)
+    simp_rw [abs_of_pos hx]
 
 中文:
 引理 cexp_neg_quadratic_isLittleO_abs_rpow_cocompact
@@ -122,7 +134,11 @@ lemma cexp_neg_quadratic_isLittleO_abs_rpow_cocompact
   constructor
   · refine ((cexp_neg_quadratic_isLittleO_rpow_atTop ha (-b) s).comp_tendsto
       Filter.tendsto_neg_atBot_atTop).congr' (Eventually.of_forall fun x => by simp) ?_
-    · refine (eventually_lt_atBot 0).mp (Eventually.of_forall fun 
+    · refine (eventually_lt_atBot 0).mp (Eventually.of_forall fun x hx => ?_)
+      simp only [Function.comp_apply, abs_of_neg hx]
+  · refine (cexp_neg_quadratic_isLittleO_rpow_atTop ha b s).congr' EventuallyEq.rfl ?_
+    refine (eventually_gt_atTop 0).mp (Eventually.of_forall fun x hx => ?_)
+    simp_rw [abs_of_pos hx]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, EventuallyEq, EventuallyEq.rfl, Filter, Filter.tendsto_neg_atBot_atTop, Function, Function.comp_apply, abs_of_neg, cexp_neg_quadratic_isLittleO_rpow_atTop, cocompact_eq_atBot_atTop, comp_apply, comp_tendsto, eventually_gt_atTop, eventually_lt_atBot, isLittleO_sup, of_forall, tendsto_neg_atBot_atTop
 -/
@@ -150,7 +166,8 @@ theorem tendsto_rpow_abs_mul_exp_neg_mul_sq_cocompact
   erw [tendsto_comap'_iff (m := fun y => y ^ s * rexp (-a * y ^ 2))
       (mem_atTop_sets.mpr ⟨0, fun b hb => ⟨b, abs_of_nonneg hb⟩⟩)]
   exact
-    (rpow_mul_exp_neg_mul_sq_isLittleO_exp_neg ha s).tendsto_zer
+    (rpow_mul_exp_neg_mul_sq_isLittleO_exp_neg ha s).tendsto_zero_of_tendsto
+      (tendsto_exp_atBot.comp <| tendsto_id.const_mul_atTop_of_neg (neg_lt_zero.mpr one_half_pos))
 
 中文:
 定理 tendsto_rpow_abs_mul_exp_neg_mul_sq_cocompact
@@ -161,7 +178,8 @@ theorem tendsto_rpow_abs_mul_exp_neg_mul_sq_cocompact
   erw [tendsto_comap'_iff (m := fun y => y ^ s * rexp (-a * y ^ 2))
       (mem_atTop_sets.mpr ⟨0, fun b hb => ⟨b, abs_of_nonneg hb⟩⟩)]
   exact
-    (rpow_mul_exp_neg_mul_sq_isLittleO_exp_neg ha s).tendsto_zer
+    (rpow_mul_exp_neg_mul_sq_isLittleO_exp_neg ha s).tendsto_zero_of_tendsto
+      (tendsto_exp_atBot.comp <| tendsto_id.const_mul_atTop_of_neg (neg_lt_zero.mpr one_half_pos))
 
 Depends on / 依赖: _iff, abs_of_nonneg, cocompact_eq_atBot_atTop, comap_abs_atTop, const_mul_atTop_of_neg, mem_atTop_sets, mem_atTop_sets.mpr, neg_lt_zero, neg_lt_zero.mpr, one_half_pos, rpow_mul_exp_neg_mul_sq_isLittleO_exp_neg, sq_abs, tendsto_comap, tendsto_exp_atBot, tendsto_exp_atBot.comp, tendsto_id, tendsto_id.const_mul_atTop_of_neg, tendsto_zero_of_tendsto
 -/
@@ -215,7 +233,27 @@ theorem Complex.tsum_exp_neg_quadratic
   have h1 : 0 < (π * a).re := by
     rw [re_ofReal_mul]
     exact mul_pos pi_pos ha
-  have h2
+  have h2 : 0 < (π / a).re := by
+    rw [div_eq_mul_inv]; rw [re_ofReal_mul]; rw [inv_re]
+    refine mul_pos pi_pos (div_pos ha <| normSq_pos.mpr ?_)
+    contrapose! ha
+    rw [ha]; rw [zero_re]
+  have f_bd : f =O[cocompact Real] (fun x => |x| ^ (-2 : Real)) := by
+    convert! (cexp_neg_quadratic_isLittleO_abs_rpow_cocompact ?_ _ (-2)).isBigO
+    rwa [neg_mul, neg_re, neg_lt_zero]
+  have Ff_bd : (𝓕 f) =O[cocompact Real] (fun x => |x| ^ (-2 : Real)) := by
+    rw [hFf]
+    have : forall (x : Real), -π / a * (x + I * b) ^ 2 =
+        -π / a * x ^ 2 + (-2 * π * I * b) / a * x + π * b ^ 2 / a := by
+      intro x; ring_nf; rw [I_sq]; ring
+    simp_rw [this]
+    conv => enter [2, x]; rw [Complex.exp_add, ← mul_assoc _ _ (Complex.exp _), mul_comm]
+    refine ((cexp_neg_quadratic_isLittleO_abs_rpow_cocompact
+      ?_ (-2 * π * I * b / a) (-2)).isBigO.const_mul_left _).const_mul_left _
+    rwa [neg_div, neg_re, neg_lt_zero]
+  convert! Real.tsum_eq_tsum_fourier_of_rpow_decay (by fun_prop) one_lt_two f_bd Ff_bd 0 using 1
+  · simp only [f, zero_add, ofReal_intCast]
+  · simp [← tsum_mul_left, hFf]
 
 中文:
 定理 复形.tsum_exp_neg_quadratic
@@ -227,7 +265,27 @@ theorem Complex.tsum_exp_neg_quadratic
   have h1 : 0 < (π * a).re := by
     rw [re_ofReal_mul]
     exact mul_pos pi_pos ha
-  have h2
+  have h2 : 0 < (π / a).re := by
+    rw [div_eq_mul_inv]; rw [re_ofReal_mul]; rw [inv_re]
+    refine mul_pos pi_pos (div_pos ha <| normSq_pos.mpr ?_)
+    contrapose! ha
+    rw [ha]; rw [zero_re]
+  have f_bd : f =O[cocompact Real] (fun x => |x| ^ (-2 : Real)) := by
+    convert! (cexp_neg_quadratic_isLittleO_abs_rpow_cocompact ?_ _ (-2)).isBigO
+    rwa [neg_mul, neg_re, neg_lt_zero]
+  have Ff_bd : (𝓕 f) =O[cocompact Real] (fun x => |x| ^ (-2 : Real)) := by
+    rw [hFf]
+    have : forall (x : Real), -π / a * (x + I * b) ^ 2 =
+        -π / a * x ^ 2 + (-2 * π * I * b) / a * x + π * b ^ 2 / a := by
+      intro x; ring_nf; rw [I_sq]; ring
+    simp_rw [this]
+    conv => enter [2, x]; rw [Complex.exp_add, ← mul_assoc _ _ (Complex.exp _), mul_comm]
+    refine ((cexp_neg_quadratic_isLittleO_abs_rpow_cocompact
+      ?_ (-2 * π * I * b / a) (-2)).isBigO.const_mul_left _).const_mul_left _
+    rwa [neg_div, neg_re, neg_lt_zero]
+  convert! Real.tsum_eq_tsum_fourier_of_rpow_decay (by fun_prop) one_lt_two f_bd Ff_bd 0 using 1
+  · simp only [f, zero_add, ofReal_intCast]
+  · simp [← tsum_mul_left, hFf]
 
 Depends on / 依赖: cocompact, contrapose, div_eq_mul_inv, div_pos, f_bd, fourier_gaussian_pi, inv_re, mul_pos, normSq_pos, normSq_pos.mpr, pi_pos, re_ofReal_mul, zero_re
 -/

@@ -347,7 +347,10 @@ theorem continuous_gaugeRescale
   rcases eq_or_ne x 0 with rfl | hx
   · rw [ContinuousAt, gaugeRescale_zero]
     nth_rewrite 2 [← comap_gauge_nhds_zero htb ht₀]
-    simp only [tendsto_comap_iff, Function.comp_def, gauge_g
+    simp only [tendsto_comap_iff, Function.comp_def, gauge_gaugeRescale _ hta htb]
+    exact tendsto_gauge_nhds_zero hs₀
+  · exact ((continuousAt_gauge hs hs₀).div (continuousAt_gauge ht ht₀)
+      ((gauge_pos hta htb).2 hx).ne').smul continuousAt_id
 
 中文:
 定理 continuous_gaugeRescale
@@ -358,7 +361,10 @@ theorem continuous_gaugeRescale
   rcases eq_or_ne x 0 with rfl | hx
   · rw [ContinuousAt, gaugeRescale_zero]
     nth_rewrite 2 [← comap_gauge_nhds_zero htb ht₀]
-    simp only [tendsto_comap_iff, Function.comp_def, gauge_g
+    simp only [tendsto_comap_iff, Function.comp_def, gauge_gaugeRescale _ hta htb]
+    exact tendsto_gauge_nhds_zero hs₀
+  · exact ((continuousAt_gauge hs hs₀).div (continuousAt_gauge ht ht₀)
+      ((gauge_pos hta htb).2 hx).ne').smul continuousAt_id
 
 Depends on / 依赖: Absorbent, ContinuousAt, Function, Function.comp_def, absorbent_nhds_zero, comap_gauge_nhds_zero, comp_def, continuousAt_gauge, continuousAt_id, continuous_iff_continuousAt, eq_or_ne, gaugeRescale_zero, gauge_gaugeRescale, gauge_pos, nth_rewrite, tendsto_comap_iff, tendsto_gauge_nhds_zero
 -/
@@ -439,7 +445,7 @@ theorem image_gaugeRescaleHomeomorph_closure
     (mem_of_mem_nhds ht₀) (absorbent_nhds_zero ht₀)).image_subset ?_
   rw [← Homeomorph.preimage_symm]; rw [← image_subset_iff]
   exact (mapsTo_gaugeRescale_closure htc ht₀ hsc
-    (mem_of_mem_nhds hs₀) (absorbent_nhds_zero hs₀)).i
+    (mem_of_mem_nhds hs₀) (absorbent_nhds_zero hs₀)).image_subset
 
 中文:
 定理 image_gaugeRescaleHomeomorph_closure
@@ -449,7 +455,7 @@ theorem image_gaugeRescaleHomeomorph_closure
     (mem_of_mem_nhds ht₀) (absorbent_nhds_zero ht₀)).image_subset ?_
   rw [← Homeomorph.preimage_symm]; rw [← image_subset_iff]
   exact (mapsTo_gaugeRescale_closure htc ht₀ hsc
-    (mem_of_mem_nhds hs₀) (absorbent_nhds_zero hs₀)).i
+    (mem_of_mem_nhds hs₀) (absorbent_nhds_zero hs₀)).image_subset
 
 Depends on / 依赖: Homeomorph, Homeomorph.preimage_symm, Subset, Subset.antisymm, absorbent_nhds_zero, antisymm, image_subset, image_subset_iff, mapsTo_gaugeRescale_closure, mem_of_mem_nhds, preimage_symm
 -/
@@ -476,7 +482,17 @@ theorem exists_homeomorph_image_eq
   rcases hsne with ⟨x, hx⟩
   rcases htne with ⟨y, hy⟩
   set h : E ≃ₜ E := by
-    apply gaugeRes
+    apply gaugeRescaleHomeomorph (-x +ᵥ s) (-y +ᵥ t) <;>
+      simp [← mem_interior_iff_mem_nhds, interior_vadd, mem_vadd_set_iff_neg_vadd_mem, *]
+refine ⟨.trans (.addLeft (-x)) h.trans .addLeft y, ?_, ?_⟩
+  · calc
+      (fun a => y + h (-x + a)) '' interior s = y +ᵥ h '' interior (-x +ᵥ s) := by
+        simp_rw [interior_vadd, ← image_vadd, image_image, vadd_eq_add]
+      _ = _ := by rw [image_gaugeRescaleHomeomorph_interior, interior_vadd, vadd_neg_vadd]
+  · calc
+      (fun a => y + h (-x + a)) '' closure s = y +ᵥ h '' closure (-x +ᵥ s) := by
+        simp_rw [closure_vadd, ← image_vadd, image_image, vadd_eq_add]
+      _ = _ := by rw [image_gaugeRescaleHomeomorph_closure, closure_vadd, vadd_neg_vadd]
 
 中文:
 定理 存在_homeomorph_image_eq
@@ -488,7 +504,17 @@ theorem exists_homeomorph_image_eq
   rcases hsne with ⟨x, hx⟩
   rcases htne with ⟨y, hy⟩
   set h : E ≃ₜ E := by
-    apply gaugeRes
+    apply gaugeRescaleHomeomorph (-x +ᵥ s) (-y +ᵥ t) <;>
+      simp [← mem_interior_iff_mem_nhds, interior_vadd, mem_vadd_set_iff_neg_vadd_mem, *]
+refine ⟨.trans (.addLeft (-x)) h.trans .addLeft y, ?_, ?_⟩
+  · calc
+      (fun a => y + h (-x + a)) '' interior s = y +ᵥ h '' interior (-x +ᵥ s) := by
+        simp_rw [interior_vadd, ← image_vadd, image_image, vadd_eq_add]
+      _ = _ := by rw [image_gaugeRescaleHomeomorph_interior, interior_vadd, vadd_neg_vadd]
+  · calc
+      (fun a => y + h (-x + a)) '' closure s = y +ᵥ h '' closure (-x +ᵥ s) := by
+        simp_rw [closure_vadd, ← image_vadd, image_image, vadd_eq_add]
+      _ = _ := by rw [image_gaugeRescaleHomeomorph_closure, closure_vadd, vadd_neg_vadd]
 
 Depends on / 依赖: addLeft, closure, closure_sdiff_interior, e.injective, gaugeRescaleHomeomorph, h.trans, image_sdiff, injective, interior, interior_vadd, mem_interior_iff_mem_nhds, mem_vadd_set_iff_neg_vadd_mem, rsuffices, simp_rw
 -/

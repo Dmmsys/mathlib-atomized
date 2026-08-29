@@ -78,7 +78,9 @@ lemma isomorphisms_eq_stalkwise
   ext X Y f
   exact ⟨fun H => inferInstanceAs (IsIso (TopCat.isoOfHomeo
     (H.1.1.toHomeomorphOfSurjective H.2)).hom), fun (_ : IsIso f.base) =>
-   
+    let e := (TopCat.homeoOfIso <| asIso f.base); ⟨e.isOpenEmbedding, e.surjective⟩⟩
+
+example : IsZariskiLocalAtTarget (isomorphisms Scheme) := inferInstance
 
 中文:
 引理 isomorphisms_eq_stalkwise
@@ -88,7 +90,9 @@ lemma isomorphisms_eq_stalkwise
   ext X Y f
   exact ⟨fun H => inferInstanceAs (IsIso (TopCat.isoOfHomeo
     (H.1.1.toHomeomorphOfSurjective H.2)).hom), fun (_ : IsIso f.base) =>
-   
+    let e := (TopCat.homeoOfIso <| asIso f.base); ⟨e.isOpenEmbedding, e.surjective⟩⟩
+
+example : IsZariskiLocalAtTarget (isomorphisms Scheme) := inferInstance
 
 Depends on / 依赖: TopCat, TopCat.homeoOfIso, TopCat.isoOfHomeo, e.isOpenEmbedding, e.surjective, f.base, homeoOfIso, inf_right_comm, isOpenEmbedding, isOpenImmersion_eq_inf, isoOfHomeo, isomorphisms_eq_isOpenImmersion_inf_surjective, surjective, surjective_eq_topologically, toHomeomorphOfSurjective
 -/

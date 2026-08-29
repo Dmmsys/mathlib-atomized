@@ -429,7 +429,7 @@ theorem laverage_add_measure
   · rw [not_isFiniteMeasure_iff] at hν
     simp [laverage_eq, hν]
   simp only [← ENNReal.mul_div_right_comm, measure_mul_laverage, ← ENNReal.add_div,
- 
+    ← lintegral_add_measure, ← Measure.add_apply, ← laverage_eq]
 
 中文:
 定理 laverage_add_measure
@@ -441,7 +441,7 @@ theorem laverage_add_measure
   · rw [not_isFiniteMeasure_iff] at hν
     simp [laverage_eq, hν]
   simp only [← ENNReal.mul_div_right_comm, measure_mul_laverage, ← ENNReal.add_div,
- 
+    ← lintegral_add_measure, ← Measure.add_apply, ← laverage_eq]
 
 Depends on / 依赖: ENNReal, ENNReal.add_div, ENNReal.mul_div_right_comm, IsFiniteMeasure, Measure, Measure.add_apply, add_apply, add_div, laverage_eq, lintegral_add_measure, measure_mul_laverage, mul_div_right_comm, not_isFiniteMeasure_iff
 -/
@@ -548,7 +548,7 @@ theorem laverage_union_mem_segment
     exact right_mem_segment _ _ _
   · refine
       ⟨μ s / (μ s + μ t), μ t / (μ s + μ t), zero_le, zero_le, ?_, (laverage_union hd ht).symm⟩
-    rw [← ENNReal.add_div]
+    rw [← ENNReal.add_div]; rw [ENNReal.div_self (add_eq_zero.not.2 fun h => hs₀ h.1) (add_ne_top.2 ⟨hsμ]; rw [htμ⟩)]
 
 中文:
 定理 laverage_union_mem_segment
@@ -560,7 +560,7 @@ theorem laverage_union_mem_segment
     exact right_mem_segment _ _ _
   · refine
       ⟨μ s / (μ s + μ t), μ t / (μ s + μ t), zero_le, zero_le, ?_, (laverage_union hd ht).symm⟩
-    rw [← ENNReal.add_div]
+    rw [← ENNReal.add_div]; rw [ENNReal.div_self (add_eq_zero.not.2 fun h => hs₀ h.1) (add_ne_top.2 ⟨hsμ]; rw [htμ⟩)]
 
 Depends on / 依赖: ENNReal, ENNReal.add_div, ENNReal.div_self, EventuallyEq, EventuallyEq.rfl, add_div, add_eq_zero, add_eq_zero.not, add_ne_top, ae_eq_empty, div_self, empty_union, laverage_union, restrict_congr_set, right_mem_segment, zero_le
 -/
@@ -825,7 +825,11 @@ theorem setLAverage_le_essSup
   by_cases hμ0 : μ s = 0
   · rw [laverage, ← setLIntegral_univ]
     exact le_of_eq_of_le (setLIntegral_measure_zero univ f <| by simp [hμ0]) zero_le
-  apply le_of_le_of_eq (laverage_mono_ae <| 
+  apply le_of_le_of_eq (laverage_mono_ae <| Eventually.filter_mono ae_restrict_le ae_le_essSup)
+  have : NeZero (μ.restrict s) :=
+    have : NeZero (μ s) := { out := hμ0 }
+    restrict.neZero
+  exact laverage_const (μ.restrict s) _
 
 中文:
 定理 setLAverage_le_essSup
@@ -837,7 +841,11 @@ theorem setLAverage_le_essSup
   by_cases hμ0 : μ s = 0
   · rw [laverage, ← setLIntegral_univ]
     exact le_of_eq_of_le (setLIntegral_measure_zero univ f <| by simp [hμ0]) zero_le
-  apply le_of_le_of_eq (laverage_mono_ae <| 
+  apply le_of_le_of_eq (laverage_mono_ae <| Eventually.filter_mono ae_restrict_le ae_le_essSup)
+  have : NeZero (μ.restrict s) :=
+    have : NeZero (μ s) := { out := hμ0 }
+    restrict.neZero
+  exact laverage_const (μ.restrict s) _
 
 Depends on / 依赖: Eventually, Eventually.filter_mono, IsFiniteMeasure, NeZero, ae_le_essSup, ae_restrict_le, filter_mono, laverage, laverage_const, laverage_mono_ae, le_of_eq_of_le, le_of_le_of_eq, neZero, not_isFiniteMeasure_iff, not_isFiniteMeasure_iff.mp, restrict, restrict.neZero, setLIntegral_measure_zero, setLIntegral_univ, zero_le
 -/
@@ -1358,7 +1366,10 @@ theorem average_union_mem_segment
   · refine
       mem_segment_iff_div.mpr
         ⟨μ.real s, μ.real t, ENNReal.toReal_nonneg, ENNReal.toReal_nonneg, ?_,
-          (av
+          (average_union hd ht hsμ htμ hfs hft).symm⟩
+    calc
+      0 < μ.real s := ENNReal.toReal_pos hse hsμ
+      _ <= _ := le_add_of_nonneg_right ENNReal.toReal_nonneg
 
 中文:
 定理 average_union_mem_segment
@@ -1371,7 +1382,10 @@ theorem average_union_mem_segment
   · refine
       mem_segment_iff_div.mpr
         ⟨μ.real s, μ.real t, ENNReal.toReal_nonneg, ENNReal.toReal_nonneg, ?_,
-          (av
+          (average_union hd ht hsμ htμ hfs hft).symm⟩
+    calc
+      0 < μ.real s := ENNReal.toReal_pos hse hsμ
+      _ <= _ := le_add_of_nonneg_right ENNReal.toReal_nonneg
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, ENNReal.toReal_pos, EventuallyEq, EventuallyEq.rfl, ae_eq_empty, average_union, empty_union, hse.union, le_add_of_nonneg_right, mem_segment_iff_div, mem_segment_iff_div.mpr, restrict_congr_set, right_mem_segment, toReal_nonneg, toReal_pos
 -/
@@ -1714,7 +1728,16 @@ theorem measure_le_setAverage_pos
     rwa [restrict_apply₀, inter_comm]
     exact AEStronglyMeasurable.nullMeasurableSet_le hf.1 aestronglyMeasurable_const
   have := Fact.mk hμ₁.lt_top
-  refine (integral_sub_average (μ.rest
+  refine (integral_sub_average (μ.restrict s) f).not_gt ?_
+  refine (setIntegral_pos_iff_support_of_nonneg_ae ?_ ?_).2 ?_
+  · refine measure_mono_null (fun x hx => ?_) H
+    simp only [Pi.zero_apply, sub_nonneg, mem_compl_iff, mem_ofPred_eq, not_le] at hx
+    exact hx.le
+  · exact hf.sub (integrableOn_const hμ₁)
+  · rwa [pos_iff_ne_zero, inter_comm, ← sdiff_compl, ← sdiff_inter_self_eq_sdiff,
+      measure_sdiff_null]
+    refine measure_mono_null ?_ (measure_inter_eq_zero_of_restrict H)
+    exact inter_subset_inter_left _ fun a ha => (sub_eq_zero.1 <| of_not_not ha).le
 
 中文:
 定理 measure_le_setAverage_pos
@@ -1725,7 +1748,16 @@ theorem measure_le_setAverage_pos
     rwa [restrict_apply₀, inter_comm]
     exact AEStronglyMeasurable.nullMeasurableSet_le hf.1 aestronglyMeasurable_const
   have := Fact.mk hμ₁.lt_top
-  refine (integral_sub_average (μ.rest
+  refine (integral_sub_average (μ.restrict s) f).not_gt ?_
+  refine (setIntegral_pos_iff_support_of_nonneg_ae ?_ ?_).2 ?_
+  · refine measure_mono_null (fun x hx => ?_) H
+    simp only [Pi.zero_apply, sub_nonneg, mem_compl_iff, mem_ofPred_eq, not_le] at hx
+    exact hx.le
+  · exact hf.sub (integrableOn_const hμ₁)
+  · rwa [pos_iff_ne_zero, inter_comm, ← sdiff_compl, ← sdiff_inter_self_eq_sdiff,
+      measure_sdiff_null]
+    refine measure_mono_null ?_ (measure_inter_eq_zero_of_restrict H)
+    exact inter_subset_inter_left _ fun a ha => (sub_eq_zero.1 <| of_not_not ha).le
 
 Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.nullMeasurableSet_le, Fact.mk, Pi.zero_apply, aestronglyMeasurable_const, integral_sub_average, inter_comm, lt_top, measure_mono_null, mem_compl_iff, mem_ofPred_eq, not_gt, not_le, nullMeasurableSet_le, pos_iff_ne_zero, replace, restrict, setIntegral_pos_iff_support_of_nonneg_ae, sub_nonneg, zero_apply
 -/
@@ -2126,7 +2158,15 @@ theorem measure_le_setLAverage_pos
   · simpa [mul_top, hμ₁, laverage, h, top_div_of_ne_top hμ₁, pos_iff_ne_zero] using hμ
   have := measure_le_setAverage_pos hμ hμ₁ (integrable_toReal_of_lintegral_ne_top hf h)
   rw [← ofPred_inter_eq_sep]; rw [← Measure.restrict_apply₀
-    (hf.aestr
+    (hf.aestronglyMeasurable.nullMeasurableSet_le aestronglyMeasurable_const)]
+  rw [← ofPred_inter_eq_sep]; rw [← Measure.restrict_apply₀
+    (hf.ennreal_toReal.aestronglyMeasurable.nullMeasurableSet_le aestronglyMeasurable_const)]; rw [← measure_sdiff_null (measure_eq_top_of_lintegral_ne_top hf h)] at this
+  refine this.trans_le (measure_mono ?_)
+  rintro x ⟨hfx, hx⟩
+  dsimp at hfx
+  rwa [← toReal_laverage hf, toReal_le_toReal hx (setLAverage_lt_top h).ne] at hfx
+  simp_rw [ae_iff, not_ne_iff]
+  exact measure_eq_top_of_lintegral_ne_top hf h
 
 中文:
 定理 measure_le_setLAverage_pos
@@ -2136,7 +2176,15 @@ theorem measure_le_setLAverage_pos
   · simpa [mul_top, hμ₁, laverage, h, top_div_of_ne_top hμ₁, pos_iff_ne_zero] using hμ
   have := measure_le_setAverage_pos hμ hμ₁ (integrable_toReal_of_lintegral_ne_top hf h)
   rw [← ofPred_inter_eq_sep]; rw [← Measure.restrict_apply₀
-    (hf.aestr
+    (hf.aestronglyMeasurable.nullMeasurableSet_le aestronglyMeasurable_const)]
+  rw [← ofPred_inter_eq_sep]; rw [← Measure.restrict_apply₀
+    (hf.ennreal_toReal.aestronglyMeasurable.nullMeasurableSet_le aestronglyMeasurable_const)]; rw [← measure_sdiff_null (measure_eq_top_of_lintegral_ne_top hf h)] at this
+  refine this.trans_le (measure_mono ?_)
+  rintro x ⟨hfx, hx⟩
+  dsimp at hfx
+  rwa [← toReal_laverage hf, toReal_le_toReal hx (setLAverage_lt_top h).ne] at hfx
+  simp_rw [ae_iff, not_ne_iff]
+  exact measure_eq_top_of_lintegral_ne_top hf h
 
 Depends on / 依赖: Measure, Measure.restrict_apply, aestronglyMeasurable, aestronglyMeasurable_const, ennreal_toReal, eq_or_ne, hf.aestronglyMeasurable.nullMeasurableSet_le, hf.ennreal_toReal.aestronglyMeasurable.nullMeasurableSet_le, integrable_toReal_of_lintegral_ne_top, laverage, measure_le_setAverage_pos, mul_top, nullMeasurableSet_le, ofPred_inter_eq_sep, pos_iff_ne_zero, top_div_of_ne_top
 -/
@@ -2169,7 +2217,17 @@ theorem measure_setLAverage_le_pos
   have hfg' : ⨍⁻ a in s, f a ∂μ = ⨍⁻ a in s, g a ∂μ := by simp_rw [laverage_eq, hfg]
   rw [hfg] at hint
   have :=
-    measure_setAverage_le_pos hμ
+    measure_setAverage_le_pos hμ hμ₁ (integrable_toReal_of_lintegral_ne_top hg.aemeasurable hint)
+  simp_rw [← ofPred_inter_eq_sep, ← Measure.restrict_apply₀' hs, hfg']
+  rw [← ofPred_inter_eq_sep]; rw [← Measure.restrict_apply₀' hs]; rw [←
+    measure_sdiff_null (measure_eq_top_of_lintegral_ne_top hg.aemeasurable hint)] at this
+  refine this.trans_le (measure_mono ?_)
+  rintro x ⟨hfx, hx⟩
+  dsimp at hfx
+  rw [← toReal_laverage hg.aemeasurable]; rw [toReal_le_toReal (setLAverage_lt_top hint).ne hx] at hfx
+  · exact hfx.trans (hgf _)
+  · simp_rw [ae_iff, not_ne_iff]
+    exact measure_eq_top_of_lintegral_ne_top hg.aemeasurable hint
 
 中文:
 定理 measure_setLAverage_le_pos
@@ -2181,7 +2239,17 @@ theorem measure_setLAverage_le_pos
   have hfg' : ⨍⁻ a in s, f a ∂μ = ⨍⁻ a in s, g a ∂μ := by simp_rw [laverage_eq, hfg]
   rw [hfg] at hint
   have :=
-    measure_setAverage_le_pos hμ
+    measure_setAverage_le_pos hμ hμ₁ (integrable_toReal_of_lintegral_ne_top hg.aemeasurable hint)
+  simp_rw [← ofPred_inter_eq_sep, ← Measure.restrict_apply₀' hs, hfg']
+  rw [← ofPred_inter_eq_sep]; rw [← Measure.restrict_apply₀' hs]; rw [←
+    measure_sdiff_null (measure_eq_top_of_lintegral_ne_top hg.aemeasurable hint)] at this
+  refine this.trans_le (measure_mono ?_)
+  rintro x ⟨hfx, hx⟩
+  dsimp at hfx
+  rw [← toReal_laverage hg.aemeasurable]; rw [toReal_le_toReal (setLAverage_lt_top hint).ne hx] at hfx
+  · exact hfx.trans (hgf _)
+  · simp_rw [ae_iff, not_ne_iff]
+    exact measure_eq_top_of_lintegral_ne_top hg.aemeasurable hint
 
 Depends on / 依赖: Measure, Measure.restrict_apply, aemeasurable, eq_or_ne, exists_measurable_le_lintegral_eq, hg.aemeasurable, integrable_toReal_of_lintegral_ne_top, laverage_eq, measure_sdi, measure_setAverage_le_pos, ofPred_inter_eq_sep, restrict, setLAverage_eq, simp_rw
 -/
@@ -2570,7 +2638,49 @@ theorem tendsto_integral_smul_of_tendsto_average_norm_sub
     filter_upwards [(tendsto_order.1 hg).1 _ zero_lt_one] with i hi
     contrapose hi
     simp only [integral_undef hi, lt_self_iff_false, not_false_eq_true]
-  have I : forallᶠ i in l, ∫ y, g i y • (f y - c) ∂μ + (∫ y, g i y ∂μ) • c = ∫ y, g
+  have I : forallᶠ i in l, ∫ y, g i y • (f y - c) ∂μ + (∫ y, g i y ∂μ) • c = ∫ y, g i y • f y ∂μ := by
+    filter_upwards [f_int, g_int, g_supp, g_bound] with i hif hig hisupp hibound
+    rw [← integral_smul_const]; rw [← integral_add]
+    · simp only [smul_sub, sub_add_cancel]
+    · simp_rw [smul_sub]
+      apply Integrable.sub _ (hig.smul_const _)
+      have A : Function.support (fun y => g i y • f y) subseteq a i := by
+        apply Subset.trans _ hisupp
+        exact Function.support_smul_subset_left _ _
+      rw [← integrableOn_iff_integrable_of_support_subset A]
+      apply Integrable.smul_of_top_right hif
+      exact memLp_top_of_bound hig.aestronglyMeasurable.restrict
+        (K / μ.real (a i)) (Eventually.of_forall hibound)
+    · exact hig.smul_const _
+  have L0 : Tendsto (fun i => ∫ y, g i y • (f y - c) ∂μ) l (𝓝 0) := by
+    have := hf.const_mul K
+    simp only [mul_zero] at this
+    refine squeeze_zero_norm' ?_ this
+    filter_upwards [g_supp, g_bound, f_int, (tendsto_order.1 hg).1 _ zero_lt_one]
+      with i hi h'i h''i hi_int
+    have mu_ai : μ (a i) < ∞ := by
+      rw [lt_top_iff_ne_top]
+      intro h
+      simp only [h, ENNReal.toReal_top, _root_.div_zero, abs_nonpos_iff, measureReal_def] at h'i
+      have : ∫ (y : α), g i y ∂μ = ∫ (y : α), 0 ∂μ := by congr; ext y; exact h'i y
+      simp [this] at hi_int
+    apply (norm_integral_le_integral_norm _).trans
+    simp_rw [average_eq, smul_eq_mul, ← integral_const_mul, norm_smul, ← mul_assoc,
+      ← div_eq_mul_inv]
+    have : forall x, x ∉ a i -> ‖g i x‖ * ‖(f x - c)‖ = 0 := by
+      intro x hx
+      have : g i x = 0 := by rw [← Function.notMem_support]; exact fun h => hx (hi h)
+      simp [this]
+    rw [← setIntegral_eq_integral_of_forall_compl_eq_zero this (μ := μ)]
+    refine integral_mono_of_nonneg (Eventually.of_forall (fun x => by positivity)) ?_
+      (Eventually.of_forall (fun x => ?_))
+    · apply (Integrable.sub h''i _).norm.const_mul
+      change IntegrableOn (fun _ => c) (a i) μ
+      simp [mu_ai]
+    · dsimp; gcongr; simpa using h'i x
+  have := L0.add (hg.smul_const c)
+  simp only [one_smul, zero_add] at this
+  exact Tendsto.congr' I this
 
 中文:
 定理 tendsto_integral_smul_of_tendsto_average_norm_sub
@@ -2579,7 +2689,49 @@ theorem tendsto_integral_smul_of_tendsto_average_norm_sub
     filter_upwards [(tendsto_order.1 hg).1 _ zero_lt_one] with i hi
     contrapose hi
     simp only [integral_undef hi, lt_self_iff_false, not_false_eq_true]
-  have I : forallᶠ i in l, ∫ y, g i y • (f y - c) ∂μ + (∫ y, g i y ∂μ) • c = ∫ y, g
+  have I : forallᶠ i in l, ∫ y, g i y • (f y - c) ∂μ + (∫ y, g i y ∂μ) • c = ∫ y, g i y • f y ∂μ := by
+    filter_upwards [f_int, g_int, g_supp, g_bound] with i hif hig hisupp hibound
+    rw [← integral_smul_const]; rw [← integral_add]
+    · simp only [smul_sub, sub_add_cancel]
+    · simp_rw [smul_sub]
+      apply Integrable.sub _ (hig.smul_const _)
+      have A : Function.support (fun y => g i y • f y) subseteq a i := by
+        apply Subset.trans _ hisupp
+        exact Function.support_smul_subset_left _ _
+      rw [← integrableOn_iff_integrable_of_support_subset A]
+      apply Integrable.smul_of_top_right hif
+      exact memLp_top_of_bound hig.aestronglyMeasurable.restrict
+        (K / μ.real (a i)) (Eventually.of_forall hibound)
+    · exact hig.smul_const _
+  have L0 : Tendsto (fun i => ∫ y, g i y • (f y - c) ∂μ) l (𝓝 0) := by
+    have := hf.const_mul K
+    simp only [mul_zero] at this
+    refine squeeze_zero_norm' ?_ this
+    filter_upwards [g_supp, g_bound, f_int, (tendsto_order.1 hg).1 _ zero_lt_one]
+      with i hi h'i h''i hi_int
+    have mu_ai : μ (a i) < ∞ := by
+      rw [lt_top_iff_ne_top]
+      intro h
+      simp only [h, ENNReal.toReal_top, _root_.div_zero, abs_nonpos_iff, measureReal_def] at h'i
+      have : ∫ (y : α), g i y ∂μ = ∫ (y : α), 0 ∂μ := by congr; ext y; exact h'i y
+      simp [this] at hi_int
+    apply (norm_integral_le_integral_norm _).trans
+    simp_rw [average_eq, smul_eq_mul, ← integral_const_mul, norm_smul, ← mul_assoc,
+      ← div_eq_mul_inv]
+    have : forall x, x ∉ a i -> ‖g i x‖ * ‖(f x - c)‖ = 0 := by
+      intro x hx
+      have : g i x = 0 := by rw [← Function.notMem_support]; exact fun h => hx (hi h)
+      simp [this]
+    rw [← setIntegral_eq_integral_of_forall_compl_eq_zero this (μ := μ)]
+    refine integral_mono_of_nonneg (Eventually.of_forall (fun x => by positivity)) ?_
+      (Eventually.of_forall (fun x => ?_))
+    · apply (Integrable.sub h''i _).norm.const_mul
+      change IntegrableOn (fun _ => c) (a i) μ
+      simp [mu_ai]
+    · dsimp; gcongr; simpa using h'i x
+  have := L0.add (hg.smul_const c)
+  simp only [one_smul, zero_add] at this
+  exact Tendsto.congr' I this
 
 Depends on / 依赖: Integrable, contrapose, f_int, filter_upwards, g_bound, g_int, g_supp, hibound, hisupp, integral_add, integral_smul_const, integral_undef, lt_self_iff_false, not_false_eq_true, simp_rw, smul_sub, sub_add_cancel, tendsto_order, zero_lt_one
 -/
@@ -2651,7 +2803,10 @@ theorem exists_eq_setAverage
   let S₂ : Set α := {x | x in s ∧ ave <= f x}
   have hS₁ : 0 < μ S₁ := measure_le_setAverage_pos hμ0 hμfin hint
   have hS₂ : 0 < μ S₂ := measure_setAverage_le_pos hμ0 hμfin hint
-  rcases nonempty_of_measure_ne_zero hS₁.ne
+  rcases nonempty_of_measure_ne_zero hS₁.ne' with ⟨c₁, hc₁⟩
+  rcases nonempty_of_measure_ne_zero hS₂.ne' with ⟨c₂, hc₂⟩
+  apply hs.isPreconnected.intermediate_value hc₁.1 hc₂.1 hf
+  grind
 
 中文:
 定理 存在_eq_setAverage
@@ -2661,7 +2816,10 @@ theorem exists_eq_setAverage
   let S₂ : Set α := {x | x in s ∧ ave <= f x}
   have hS₁ : 0 < μ S₁ := measure_le_setAverage_pos hμ0 hμfin hint
   have hS₂ : 0 < μ S₂ := measure_setAverage_le_pos hμ0 hμfin hint
-  rcases nonempty_of_measure_ne_zero hS₁.ne
+  rcases nonempty_of_measure_ne_zero hS₁.ne' with ⟨c₁, hc₁⟩
+  rcases nonempty_of_measure_ne_zero hS₂.ne' with ⟨c₂, hc₂⟩
+  apply hs.isPreconnected.intermediate_value hc₁.1 hc₂.1 hf
+  grind
 
 Depends on / 依赖: hs.isPreconnected.intermediate_value, intermediate_value, isPreconnected, measure_le_setAverage_pos, measure_setAverage_le_pos, nonempty_of_measure_ne_zero
 -/

@@ -686,7 +686,8 @@ abbreviation ComonToMonOpOpObjMon
     rw [← op_whiskerLeft]; rw [← op_comp]; rw [comul_counit]
     rfl
   mul_assoc := by
-    rw [← op_inv_associator]; rw [← op_whiskerRight]; rw [← op_comp]; rw [← op_whi
+    rw [← op_inv_associator]; rw [← op_whiskerRight]; rw [← op_comp]; rw [← op_whiskerLeft]; rw [← op_comp]; rw [comul_assoc_flip]; rw [op_comp]; rw [op_comp_assoc]
+    rfl
 
 中文:
 缩写 ComonToMonOpOpObjMon
@@ -700,7 +701,8 @@ abbreviation ComonToMonOpOpObjMon
     rw [← op_whiskerLeft]; rw [← op_comp]; rw [comul_counit]
     rfl
   mul_assoc := by
-    rw [← op_inv_associator]; rw [← op_whiskerRight]; rw [← op_comp]; rw [← op_whi
+    rw [← op_inv_associator]; rw [← op_whiskerRight]; rw [← op_comp]; rw [← op_whiskerLeft]; rw [← op_comp]; rw [comul_assoc_flip]; rw [op_comp]; rw [op_comp_assoc]
+    rfl
 -/
 abbrev ComonToMonOpOpObjMon (A : Comon C) : MonObj (op A.X) where
   one := ε[A.X].op
@@ -775,7 +777,8 @@ abbreviation MonOpOpToComonObjComon
   counit_comul := by rw [← unop_whiskerRight, ← unop_comp, MonObj.one_mul]; rfl
   comul_counit := by rw [← unop_whiskerLeft, ← unop_comp, MonObj.mul_one]; rfl
   comul_assoc := by
-    rw [← unop_whiskerRight]; rw [← unop_whiskerLeft]; rw [← unop_comp_assoc]; rw [← u
+    rw [← unop_whiskerRight]; rw [← unop_whiskerLeft]; rw [← unop_comp_assoc]; rw [← unop_comp]; rw [MonObj.mul_assoc_flip]
+    rfl
 
 中文:
 缩写 MonOpOpToComonObjComon
@@ -785,7 +788,8 @@ abbreviation MonOpOpToComonObjComon
   counit_comul := by rw [← unop_whiskerRight, ← unop_comp, MonObj.one_mul]; rfl
   comul_counit := by rw [← unop_whiskerLeft, ← unop_comp, MonObj.mul_one]; rfl
   comul_assoc := by
-    rw [← unop_whiskerRight]; rw [← unop_whiskerLeft]; rw [← unop_comp_assoc]; rw [← u
+    rw [← unop_whiskerRight]; rw [← unop_whiskerLeft]; rw [← unop_comp_assoc]; rw [← unop_comp]; rw [MonObj.mul_assoc_flip]
+    rfl
 -/
 abbrev MonOpOpToComonObjComon (A : Mon Cᵒᵖ) : ComonObj (unop A.X) where
   counit := η[A.X].unop
@@ -870,7 +874,10 @@ definition Comon_EquivMon_OpOp
   counitIso := NatIso.ofComponents fun _ => .refl _
 
 #adaptation_note /-- After https://github.com/leanprover/lean4/pull/12179
-the simpNF linter complains about `monoidal_tensorObj_comon_counit` being `@
+the simpNF linter complains about `monoidal_tensorObj_comon_counit` being `@[simp]`.
+So we spell out all the other ones.
+-/
+#adaptation_note
 
 中文:
 定义 Comon_EquivMon_OpOp
@@ -881,7 +888,10 @@ the simpNF linter complains about `monoidal_tensorObj_comon_counit` being `@
   counitIso := NatIso.ofComponents fun _ => .refl _
 
 #adaptation_note /-- After https://github.com/leanprover/lean4/pull/12179
-the simpNF linter complains about `monoidal_tensorObj_comon_counit` being `@
+the simpNF linter complains about `monoidal_tensorObj_comon_counit` being `@[simp]`.
+So we spell out all the other ones.
+-/
+#adaptation_note
 
 Depends on / 依赖: ComonToMonOpOp
 -/
@@ -1125,7 +1135,12 @@ abbreviation obj.instComonObj
     simp_rw [comp_whiskerRight, Category.assoc, δ_natural_left_assoc, left_unitality,
       ← F.map_comp_assoc, counit_comul]
   comul_counit := by
-    simp_rw [MonoidalCategory.whiskerLeft_comp, Category.assoc, δ_natural_right_ass
+    simp_rw [MonoidalCategory.whiskerLeft_comp, Category.assoc, δ_natural_right_assoc,
+      right_unitality, ← F.map_comp_assoc, comul_counit]
+  comul_assoc := by
+    simp_rw [comp_whiskerRight, Category.assoc, δ_natural_left_assoc,
+      MonoidalCategory.whiskerLeft_comp, δ_natural_right_assoc,
+      ← F.map_comp_assoc, comul_assoc, F.map_comp, Category.assoc, associativity]
 
 中文:
 缩写 obj.instComonObj
@@ -1136,7 +1151,12 @@ abbreviation obj.instComonObj
     simp_rw [comp_whiskerRight, Category.assoc, δ_natural_left_assoc, left_unitality,
       ← F.map_comp_assoc, counit_comul]
   comul_counit := by
-    simp_rw [MonoidalCategory.whiskerLeft_comp, Category.assoc, δ_natural_right_ass
+    simp_rw [MonoidalCategory.whiskerLeft_comp, Category.assoc, δ_natural_right_assoc,
+      right_unitality, ← F.map_comp_assoc, comul_counit]
+  comul_assoc := by
+    simp_rw [comp_whiskerRight, Category.assoc, δ_natural_left_assoc,
+      MonoidalCategory.whiskerLeft_comp, δ_natural_right_assoc,
+      ← F.map_comp_assoc, comul_assoc, F.map_comp, Category.assoc, associativity]
 
 Depends on / 依赖: F.map
 -/

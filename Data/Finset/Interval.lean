@@ -46,7 +46,16 @@ instance instLocallyFiniteOrder
 disjoint_sdiff_self_left.mono_left mem_powerset.mp u.2, fun u₁ u₂ h => by
           simpa only [disjUnion_inj_left, Subtype.ext_iff] using h⟩
     else ∅) fun s t u => by
-      by_cases hst : s subsete
+      by_cases hst : s subseteq t
+      · suffices (exists a subseteq t, Disjoint a s ∧ a union s = u) ↔ s subseteq u ∧ u subseteq t by
+          simpa [hst, subset_sdiff, and_assoc]
+        constructor
+        · rintro ⟨u, hut, -, rfl⟩
+          exact ⟨subset_union_right, union_subset hut hst⟩
+        · rintro ⟨hsu, hut⟩
+          exact ⟨u \ s, sdiff_subset.trans hut, disjoint_sdiff_self_left, sdiff_union_of_subset hsu⟩
+      · suffices s subseteq u -> ¬u subseteq t by simpa [hst]
+        exact fun hsu hut => hst (hsu.trans hut)
 
 中文:
 实例 instLocallyFiniteOrder
@@ -57,7 +66,16 @@ disjoint_sdiff_self_left.mono_left mem_powerset.mp u.2, fun u₁ u₂ h => by
 disjoint_sdiff_self_left.mono_left mem_powerset.mp u.2, fun u₁ u₂ h => by
           simpa only [disjUnion_inj_left, Subtype.ext_iff] using h⟩
     else ∅) fun s t u => by
-      by_cases hst : s subsete
+      by_cases hst : s subseteq t
+      · suffices (exists a subseteq t, Disjoint a s ∧ a union s = u) ↔ s subseteq u ∧ u subseteq t by
+          simpa [hst, subset_sdiff, and_assoc]
+        constructor
+        · rintro ⟨u, hut, -, rfl⟩
+          exact ⟨subset_union_right, union_subset hut hst⟩
+        · rintro ⟨hsu, hut⟩
+          exact ⟨u \ s, sdiff_subset.trans hut, disjoint_sdiff_self_left, sdiff_union_of_subset hsu⟩
+      · suffices s subseteq u -> ¬u subseteq t by simpa [hst]
+        exact fun hsu hut => hst (hsu.trans hut)
 
 Depends on / 依赖: Disjoint, Subtype, Subtype.ext_iff, and_assoc, attach, disjUnion, disjUnion_inj_left, disjoint_sdiff_self_left, disjoint_sdiff_self_left.mono_left, ext_iff, mem_powerset, mem_powerset.mp, mono_left, powerset, powerset.attach.map, subset_sdiff, subset_union_right, subseteq, union_subset
 -/

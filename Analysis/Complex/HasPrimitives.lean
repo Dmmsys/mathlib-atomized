@@ -78,7 +78,10 @@ lemma mem_ball_re_aux
   set s := Ioo (z.re - r₁) (z.re + r₁)
   have s_ball₁ : s ×Complex {z.im} subseteq ball z r₁ := by
     rintro y ⟨yRe : y.re in s, yIm : y.im = z.im⟩
-    rw [mem_ball]; rw [dist_eq_re_im]; rw [yIm]; rw [sub_self]; rw [zero_pow two_ne_zero]; rw [add_zero]; rw [Real.sqrt_sq_
+    rw [mem_ball]; rw [dist_eq_re_im]; rw [yIm]; rw [sub_self]; rw [zero_pow two_ne_zero]; rw [add_zero]; rw [Real.sqrt_sq_eq_abs]
+    grind [abs_lt]
+suffices s ×Complex {z.im} subseteq ball c r from this by simp [mem_reProdIm, hx]
+exact s_ball₁.trans ball_subset_ball' by simp [r₁]
 
 中文:
 引理 mem_ball_re_aux
@@ -88,7 +91,10 @@ lemma mem_ball_re_aux
   set s := Ioo (z.re - r₁) (z.re + r₁)
   have s_ball₁ : s ×Complex {z.im} subseteq ball z r₁ := by
     rintro y ⟨yRe : y.re in s, yIm : y.im = z.im⟩
-    rw [mem_ball]; rw [dist_eq_re_im]; rw [yIm]; rw [sub_self]; rw [zero_pow two_ne_zero]; rw [add_zero]; rw [Real.sqrt_sq_
+    rw [mem_ball]; rw [dist_eq_re_im]; rw [yIm]; rw [sub_self]; rw [zero_pow two_ne_zero]; rw [add_zero]; rw [Real.sqrt_sq_eq_abs]
+    grind [abs_lt]
+suffices s ×Complex {z.im} subseteq ball c r from this by simp [mem_reProdIm, hx]
+exact s_ball₁.trans ball_subset_ball' by simp [r₁]
 -/
 private lemma mem_ball_re_aux (hx : x in Ioo (z.re - (r - dist z c)) (z.re + (r - dist z c))) :
     x + z.im * I in ball c r := by
@@ -407,7 +413,42 @@ lemma IsConservativeOn.eventually_nhds_wedgeIntegral_sub_wedgeIntegral
   set I₂ := I • ∫ y in c.im..w.im, f (w.re + y * I)
   set I₃ := ∫ x in c.re..z.re, f (x + c.im * I)
   set I₄ := I • ∫ y in c.im..z.im, f (z.re + y * I)
-
+  set I₅ := ∫ x in z.re..w.re, f (x + z.im * I)
+  set I₆ := I • ∫ y in z.im..w.im, f (w.re + y * I)
+  set I₇ := ∫ x in z.re..w.re, f (x + c.im * I)
+  set I₈ := I • ∫ y in c.im..z.im, f (w.re + y * I)
+  have z_ball : ball z (r - dist z c) subseteq ball c r := ball_subset_ball' (by simp)
+  have w_mem : w in ball c r := mem_of_subset_of_mem z_ball w_in_z_ball
+  have integrableHoriz (a₁ a₂ b : Real) (ha₁ : a₁ + b * I in ball c r) (ha₂ : a₂ + b * I in ball c r) :
+      IntervalIntegrable (fun x => f (x + b * I)) volume a₁ a₂ :=
+    ((f_cont.mono (mem_ball_of_map_re_aux ha₁ ha₂)).comp (by fun_prop)
+      (mapsTo_image _ _)).intervalIntegrable
+  have integrableVert (a b₁ b₂ : Real) (hb₁ : a + b₁ * I in ball c r) (hb₂ : a + b₂ * I in ball c r) :
+      IntervalIntegrable (fun y => f (a + y * I)) volume b₁ b₂ :=
+    ((f_cont.mono (mem_ball_of_map_im_aux₁ hb₁ hb₂)).comp (by fun_prop)
+      (mapsTo_image _ _)).intervalIntegrable
+  have hI₁ : I₁ = I₃ + I₇ := by
+    rw [intervalIntegral.integral_add_adjacent_intervals] <;> apply integrableHoriz
+· exact re_add_im_mul_mem_ball mem_ball_self (pos_of_mem_ball hz)
+    · exact re_add_im_mul_mem_ball hz
+    · exact re_add_im_mul_mem_ball hz
+    · exact re_add_im_mul_mem_ball w_mem
+  have hI₂ : I₂ = I₈ + I₆ := by
+    rw [← smul_add]; rw [intervalIntegral.integral_add_adjacent_intervals] <;> apply integrableVert
+    · exact re_add_im_mul_mem_ball w_mem
+    · exact mem_of_subset_of_mem z_ball (re_add_im_mul_mem_ball w_in_z_ball)
+    · exact mem_of_subset_of_mem z_ball (re_add_im_mul_mem_ball w_in_z_ball)
+    · simpa using w_mem
+  have hI₀ : I₇ - I₅ + I₈ - I₄ = 0 := by
+    have wzInBall : w.re + z.im * I in ball c r :=
+      mem_of_subset_of_mem z_ball (re_add_im_mul_mem_ball w_in_z_ball)
+    have wcInBall : w.re + c.im * I in ball c r := re_add_im_mul_mem_ball w_mem
+    have hU : Rectangle (z.re + c.im * I) (w.re + z.im * I) subseteq ball c r :=
+      (convex_ball c r).rectangle_subset (re_add_im_mul_mem_ball hz) wzInBall
+        (by simpa using hz) (by simpa using wcInBall)
+    simpa [← add_eq_zero_iff_eq_neg, wedgeIntegral_add_wedgeIntegral_eq] using
+      hf (z.re + c.im * I) (w.re + z.im * I) hU
+  grind [wedgeIntegral]
 
 中文:
 引理 IsConservativeOn.eventually_nhds_wedge整数egral_sub_wedge整数egral
@@ -417,7 +458,42 @@ lemma IsConservativeOn.eventually_nhds_wedgeIntegral_sub_wedgeIntegral
   set I₂ := I • ∫ y in c.im..w.im, f (w.re + y * I)
   set I₃ := ∫ x in c.re..z.re, f (x + c.im * I)
   set I₄ := I • ∫ y in c.im..z.im, f (z.re + y * I)
-
+  set I₅ := ∫ x in z.re..w.re, f (x + z.im * I)
+  set I₆ := I • ∫ y in z.im..w.im, f (w.re + y * I)
+  set I₇ := ∫ x in z.re..w.re, f (x + c.im * I)
+  set I₈ := I • ∫ y in c.im..z.im, f (w.re + y * I)
+  have z_ball : ball z (r - dist z c) subseteq ball c r := ball_subset_ball' (by simp)
+  have w_mem : w in ball c r := mem_of_subset_of_mem z_ball w_in_z_ball
+  have integrableHoriz (a₁ a₂ b : Real) (ha₁ : a₁ + b * I in ball c r) (ha₂ : a₂ + b * I in ball c r) :
+      IntervalIntegrable (fun x => f (x + b * I)) volume a₁ a₂ :=
+    ((f_cont.mono (mem_ball_of_map_re_aux ha₁ ha₂)).comp (by fun_prop)
+      (mapsTo_image _ _)).intervalIntegrable
+  have integrableVert (a b₁ b₂ : Real) (hb₁ : a + b₁ * I in ball c r) (hb₂ : a + b₂ * I in ball c r) :
+      IntervalIntegrable (fun y => f (a + y * I)) volume b₁ b₂ :=
+    ((f_cont.mono (mem_ball_of_map_im_aux₁ hb₁ hb₂)).comp (by fun_prop)
+      (mapsTo_image _ _)).intervalIntegrable
+  have hI₁ : I₁ = I₃ + I₇ := by
+    rw [intervalIntegral.integral_add_adjacent_intervals] <;> apply integrableHoriz
+· exact re_add_im_mul_mem_ball mem_ball_self (pos_of_mem_ball hz)
+    · exact re_add_im_mul_mem_ball hz
+    · exact re_add_im_mul_mem_ball hz
+    · exact re_add_im_mul_mem_ball w_mem
+  have hI₂ : I₂ = I₈ + I₆ := by
+    rw [← smul_add]; rw [intervalIntegral.integral_add_adjacent_intervals] <;> apply integrableVert
+    · exact re_add_im_mul_mem_ball w_mem
+    · exact mem_of_subset_of_mem z_ball (re_add_im_mul_mem_ball w_in_z_ball)
+    · exact mem_of_subset_of_mem z_ball (re_add_im_mul_mem_ball w_in_z_ball)
+    · simpa using w_mem
+  have hI₀ : I₇ - I₅ + I₈ - I₄ = 0 := by
+    have wzInBall : w.re + z.im * I in ball c r :=
+      mem_of_subset_of_mem z_ball (re_add_im_mul_mem_ball w_in_z_ball)
+    have wcInBall : w.re + c.im * I in ball c r := re_add_im_mul_mem_ball w_mem
+    have hU : Rectangle (z.re + c.im * I) (w.re + z.im * I) subseteq ball c r :=
+      (convex_ball c r).rectangle_subset (re_add_im_mul_mem_ball hz) wzInBall
+        (by simpa using hz) (by simpa using wcInBall)
+    simpa [← add_eq_zero_iff_eq_neg, wedgeIntegral_add_wedgeIntegral_eq] using
+      hf (z.re + c.im * I) (w.re + z.im * I) hU
+  grind [wedgeIntegral]
 
 Depends on / 依赖: c.im, c.re, eventually_nhds_iff_ball, eventually_nhds_iff_ball.mpr, w.im, w.re, w_in_z_ball, z.im, z.re, z_ball
 -/
@@ -477,7 +553,18 @@ lemma hasDerivAt_wedgeIntegral_re_aux
 .trans_isBigO isBigO_re_sub_re this.comp_tendsto (continuous_re.tendsto z)
   let r₁ := r - dist z c
   have r₁_pos : 0 < r₁ := by simpa only [mem_ball, sub_pos, r₁] using hz
-  let s 
+  let s : Set Real := Ioo (z.re - r₁) (z.re + r₁)
+  have zRe_mem_s : z.re in s := by simp [s, r₁_pos]
+  have f_contOn : ContinuousOn (fun (x : Real) => f (x + z.im * I)) s :=
+f_cont.comp ((continuous_add_const _).comp continuous_ofReal).continuousOn
+      fun _ => mem_ball_re_aux
+  have int1 : IntervalIntegrable (fun (x : Real) => f (x + z.im * I)) volume z.re z.re :=
+ContinuousOn.intervalIntegrable f_contOn.mono by simpa
+  have int2 : StronglyMeasurableAtFilter (fun (x : Real) => f (x + z.im * I)) (𝓝 z.re) :=
+    f_contOn.stronglyMeasurableAtFilter isOpen_Ioo _ zRe_mem_s
+  have int3 : ContinuousAt (fun (x : Real) => f (x + z.im * I)) z.re :=
+    isOpen_Ioo.continuousOn_iff.mp f_contOn zRe_mem_s
+.isLittleO simpa using intervalIntegral.integral_hasDerivAt_right int1 int2 int3
 
 中文:
 引理 hasDerivAt_wedge整数egral_re_aux
@@ -487,7 +574,18 @@ lemma hasDerivAt_wedgeIntegral_re_aux
 .trans_isBigO isBigO_re_sub_re this.comp_tendsto (continuous_re.tendsto z)
   let r₁ := r - dist z c
   have r₁_pos : 0 < r₁ := by simpa only [mem_ball, sub_pos, r₁] using hz
-  let s 
+  let s : Set Real := Ioo (z.re - r₁) (z.re + r₁)
+  have zRe_mem_s : z.re in s := by simp [s, r₁_pos]
+  have f_contOn : ContinuousOn (fun (x : Real) => f (x + z.im * I)) s :=
+f_cont.comp ((continuous_add_const _).comp continuous_ofReal).continuousOn
+      fun _ => mem_ball_re_aux
+  have int1 : IntervalIntegrable (fun (x : Real) => f (x + z.im * I)) volume z.re z.re :=
+ContinuousOn.intervalIntegrable f_contOn.mono by simpa
+  have int2 : StronglyMeasurableAtFilter (fun (x : Real) => f (x + z.im * I)) (𝓝 z.re) :=
+    f_contOn.stronglyMeasurableAtFilter isOpen_Ioo _ zRe_mem_s
+  have int3 : ContinuousAt (fun (x : Real) => f (x + z.im * I)) z.re :=
+    isOpen_Ioo.continuousOn_iff.mp f_contOn zRe_mem_s
+.isLittleO simpa using intervalIntegral.integral_hasDerivAt_right int1 int2 int3
 -/
 private lemma hasDerivAt_wedgeIntegral_re_aux :
     (fun w => (∫ x in z.re..w.re, f (x + z.im * I)) - (w - z).re • f z) =o[𝓝 z] fun w => w - z := by
@@ -519,7 +617,27 @@ lemma hasDerivAt_wedgeIntegral_im_aux
     calc
       _ = fun w => (∫ y in z.im..w.im, f (w.re + y * I)) - (∫ _ in z.im..w.im, f z) := by simp
       _ =ᶠ[𝓝 z] fun w => ∫ y in z.im..w.im, f (w.re + y * I) - f z := ?_
-      _ =o[𝓝 z] fun w => w - z
+      _ =o[𝓝 z] fun w => w - z := this
+    refine eventually_nhds_iff_ball.mpr ⟨r - dist z c, by simpa using hz, fun w hw => ?_⟩
+    exact (intervalIntegral.integral_sub
+      ((f_cont.mono (mem_ball_of_map_im_aux₂ hw)).comp (by fun_prop)
+        (mapsTo_image _ _)).intervalIntegrable intervalIntegrable_const).symm
+  have : (fun w => f w - f z) =o[𝓝 z] fun _ => (1 : Real) := by
+    rw [Asymptotics.isLittleO_one_iff]; rw [tendsto_sub_nhds_zero_iff]
+exact f_cont.continuousAt _root_.mem_nhds_iff.mpr ⟨ball c r, le_refl _, isOpen_ball, hz⟩
+  rw [Asymptotics.IsLittleO] at this ⊢
+  intro ε ε_pos
+  replace := this ε_pos
+  simp only [Asymptotics.isBigOWith_iff, norm_one, mul_one] at this ⊢
+  replace this : forallᶠ w in 𝓝 z, forall y in Ι z.im w.im, ‖f (w.re + y * I) - f z‖ <= ε := by
+    rw [Metric.nhds_basis_closedBall.eventually_iff] at this ⊢
+    obtain ⟨i, i_pos, hi⟩ := this
+    exact ⟨i, i_pos, fun w w_in_ball y y_in_I => hi (mem_closedBall_aux w_in_ball y_in_I)⟩
+  filter_upwards [this] with w hw
+  calc
+    _ <= ε * ‖w.im - z.im‖ := intervalIntegral.norm_integral_le_of_norm_le_const hw
+    _ = ε * ‖(w - z).im‖ := by simp
+    _ <= ε * ‖w - z‖ := (mul_le_mul_iff_of_pos_left ε_pos).mpr (abs_im_le_norm _)
 
 中文:
 引理 hasDerivAt_wedge整数egral_im_aux
@@ -528,7 +646,27 @@ lemma hasDerivAt_wedgeIntegral_im_aux
     calc
       _ = fun w => (∫ y in z.im..w.im, f (w.re + y * I)) - (∫ _ in z.im..w.im, f z) := by simp
       _ =ᶠ[𝓝 z] fun w => ∫ y in z.im..w.im, f (w.re + y * I) - f z := ?_
-      _ =o[𝓝 z] fun w => w - z
+      _ =o[𝓝 z] fun w => w - z := this
+    refine eventually_nhds_iff_ball.mpr ⟨r - dist z c, by simpa using hz, fun w hw => ?_⟩
+    exact (intervalIntegral.integral_sub
+      ((f_cont.mono (mem_ball_of_map_im_aux₂ hw)).comp (by fun_prop)
+        (mapsTo_image _ _)).intervalIntegrable intervalIntegrable_const).symm
+  have : (fun w => f w - f z) =o[𝓝 z] fun _ => (1 : Real) := by
+    rw [Asymptotics.isLittleO_one_iff]; rw [tendsto_sub_nhds_zero_iff]
+exact f_cont.continuousAt _root_.mem_nhds_iff.mpr ⟨ball c r, le_refl _, isOpen_ball, hz⟩
+  rw [Asymptotics.IsLittleO] at this ⊢
+  intro ε ε_pos
+  replace := this ε_pos
+  simp only [Asymptotics.isBigOWith_iff, norm_one, mul_one] at this ⊢
+  replace this : forallᶠ w in 𝓝 z, forall y in Ι z.im w.im, ‖f (w.re + y * I) - f z‖ <= ε := by
+    rw [Metric.nhds_basis_closedBall.eventually_iff] at this ⊢
+    obtain ⟨i, i_pos, hi⟩ := this
+    exact ⟨i, i_pos, fun w w_in_ball y y_in_I => hi (mem_closedBall_aux w_in_ball y_in_I)⟩
+  filter_upwards [this] with w hw
+  calc
+    _ <= ε * ‖w.im - z.im‖ := intervalIntegral.norm_integral_le_of_norm_le_const hw
+    _ = ε * ‖(w - z).im‖ := by simp
+    _ <= ε * ‖w - z‖ := (mul_le_mul_iff_of_pos_left ε_pos).mpr (abs_im_le_norm _)
 -/
 private lemma hasDerivAt_wedgeIntegral_im_aux :
     (fun w => (∫ y in z.im..w.im, f (w.re + y * I)) - (w - z).im • f z) =o[𝓝 z] fun w => w - z := by
@@ -570,7 +708,18 @@ theorem IsConservativeOn.hasDerivAt_wedgeIntegral
     _ =ᶠ[𝓝 z] (fun w => wedgeIntegral z w f - (w - z) • f z) := ?_
     _ = (fun w => (∫ x in z.re..w.re, f (x + z.im * I)) - (w - z).re • f z)
         + I • (fun w => (∫ y in z.im..w.im, f (w.re + y * I)) - (w - z).im • f z) := ?_
-    _ =o[𝓝 z] fun w => w - 
+    _ =o[𝓝 z] fun w => w - z := (hasDerivAt_wedgeIntegral_re_aux f_cont hz).add
+        ((hasDerivAt_wedgeIntegral_im_aux f_cont hz).const_smul_left I)
+· exact (h.eventually_nhds_wedgeIntegral_sub_wedgeIntegral f_cont hz).mono by simp
+  ext w
+  set I₁ := ∫ x in z.re..w.re, f (x + z.im * I)
+  set I₂ := ∫ y in z.im..w.im, f (w.re + y * I)
+  calc
+    _ = I₁ + I • I₂ - ((w - z).re + (w - z).im * I) • f z := by congr; rw [re_add_im]
+    _ = I₁ + I • I₂ - ((w.re - z.re : Complex) + (w.im - z.im) * I) • f z := by simp
+    _ = I₁ - (w.re - z.re : Complex) • f z + I • (I₂ - (w.im - z.im : Complex) • f z) := ?_
+  · rw [add_smul, smul_sub, smul_smul, mul_comm I]; abel
+  · congr <;> simp
 
 中文:
 定理 IsConservativeOn.hasDerivAt_wedge整数egral
@@ -581,7 +730,18 @@ theorem IsConservativeOn.hasDerivAt_wedgeIntegral
     _ =ᶠ[𝓝 z] (fun w => wedgeIntegral z w f - (w - z) • f z) := ?_
     _ = (fun w => (∫ x in z.re..w.re, f (x + z.im * I)) - (w - z).re • f z)
         + I • (fun w => (∫ y in z.im..w.im, f (w.re + y * I)) - (w - z).im • f z) := ?_
-    _ =o[𝓝 z] fun w => w - 
+    _ =o[𝓝 z] fun w => w - z := (hasDerivAt_wedgeIntegral_re_aux f_cont hz).add
+        ((hasDerivAt_wedgeIntegral_im_aux f_cont hz).const_smul_left I)
+· exact (h.eventually_nhds_wedgeIntegral_sub_wedgeIntegral f_cont hz).mono by simp
+  ext w
+  set I₁ := ∫ x in z.re..w.re, f (x + z.im * I)
+  set I₂ := ∫ y in z.im..w.im, f (w.re + y * I)
+  calc
+    _ = I₁ + I • I₂ - ((w - z).re + (w - z).im * I) • f z := by congr; rw [re_add_im]
+    _ = I₁ + I • I₂ - ((w.re - z.re : Complex) + (w.im - z.im) * I) • f z := by simp
+    _ = I₁ - (w.re - z.re : Complex) • f z + I • (I₂ - (w.im - z.im : Complex) • f z) := ?_
+  · rw [add_smul, smul_sub, smul_smul, mul_comm I]; abel
+  · congr <;> simp
 
 Depends on / 依赖: const_smul_left, eventually_nhds_wedgeIntegral_sub_wedgeIntegral, f_cont, h.eventually_nhds_wedgeIntegral_sub_wedgeIntegral, hasDerivAt_iff_isLittleO, hasDerivAt_wedgeIntegral_im_aux, hasDerivAt_wedgeIntegral_re_aux, w.im, w.re, wedgeIntegral, z.im, z.re
 -/
@@ -636,7 +796,9 @@ theorem isConservativeOn_and_continuousOn_iff_isDifferentiableOn
   refine ⟨fun ⟨hf, hf'⟩ z hz => ?_, fun hf => ⟨hf.isConservativeOn, hf.continuousOn⟩⟩
   obtain ⟨r, h₀, h₁⟩ : exists r > 0, ball z r subseteq U := Metric.isOpen_iff.mp hU z hz
   have : DifferentiableOn Complex f (ball z r) :=
-    (IsConservativeOn.isExactOn_ball (hf'.mono h₁) (hf.mono h₁)).differe
+    (IsConservativeOn.isExactOn_ball (hf'.mono h₁) (hf.mono h₁)).differentiableOn isOpen_ball
+  apply (this z (mem_ball_self h₀)).mono_of_mem_nhdsWithin
+  exact mem_nhdsWithin.mpr ⟨ball z r, isOpen_ball, mem_ball_self h₀, inter_subset_left⟩
 
 中文:
 定理 isConservativeOn_and_continuousOn_iff_isDifferentiableOn
@@ -644,7 +806,9 @@ theorem isConservativeOn_and_continuousOn_iff_isDifferentiableOn
   refine ⟨fun ⟨hf, hf'⟩ z hz => ?_, fun hf => ⟨hf.isConservativeOn, hf.continuousOn⟩⟩
   obtain ⟨r, h₀, h₁⟩ : exists r > 0, ball z r subseteq U := Metric.isOpen_iff.mp hU z hz
   have : DifferentiableOn Complex f (ball z r) :=
-    (IsConservativeOn.isExactOn_ball (hf'.mono h₁) (hf.mono h₁)).differe
+    (IsConservativeOn.isExactOn_ball (hf'.mono h₁) (hf.mono h₁)).differentiableOn isOpen_ball
+  apply (this z (mem_ball_self h₀)).mono_of_mem_nhdsWithin
+  exact mem_nhdsWithin.mpr ⟨ball z r, isOpen_ball, mem_ball_self h₀, inter_subset_left⟩
 
 Depends on / 依赖: DifferentiableOn, IsConservativeOn, IsConservativeOn.isExactOn_ball, Metric, Metric.isOpen_iff.mp, continuousOn, differentiableOn, hf.continuousOn, hf.isConservativeOn, hf.mono, inter_subset_left, isConservativeOn, isExactOn_ball, isOpen_ball, isOpen_iff, mem_ball_self, mem_nhdsWithin, mem_nhdsWithin.mpr, mono_of_mem_nhdsWithin, subseteq
 -/

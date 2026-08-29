@@ -1453,7 +1453,7 @@ lemma le_functorObj_iff
   · intro h x hx
     refine Opens.mem_sSup.mpr ⟨⟨_, V.2.union ht⟩, Opens.ext ?_, Set.mem_union_left t hx⟩
     dsimp
-    rwa [Set.u
+    rwa [Set.union_eq_right]
 
 中文:
 引理 le_functorObj_iff
@@ -1466,7 +1466,7 @@ lemma le_functorObj_iff
   · intro h x hx
     refine Opens.mem_sSup.mpr ⟨⟨_, V.2.union ht⟩, Opens.ext ?_, Set.mem_union_left t hx⟩
     dsimp
-    rwa [Set.u
+    rwa [Set.union_eq_right]
 
 Depends on / 依赖: Opens.ext, Opens.map, Opens.mem_sSup.mpr, Set.mem_union_left, Set.union_eq_right, hf.isOpen_iff.mp, hf.mem_functorObj_iff, isOpen_iff, mem_functorObj_iff, mem_sSup, mem_union_left, union_eq_right
 -/

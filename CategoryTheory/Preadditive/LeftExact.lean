@@ -58,7 +58,7 @@ definition isLimitMapConeBinaryFanOfPreservesKernels
   let hf : IsLimit bc.sndKernelFork := BinaryBicone.isLimitSndKernelFork i
   exact (isLimitMapConeBinaryFanEquiv F π₁ π₂).invFun
     (BinaryBicone.isBilimitOfKernelInl (F.mapBinaryBicone bc)
-
+    (isLimitMapConeForkEquiv' F bc.inl_snd (isLimitOfPreserves F hf))).isLimit
 
 中文:
 定义 isLimitMapConeBinaryFanOfPreservesKernels
@@ -69,7 +69,7 @@ definition isLimitMapConeBinaryFanOfPreservesKernels
   let hf : IsLimit bc.sndKernelFork := BinaryBicone.isLimitSndKernelFork i
   exact (isLimitMapConeBinaryFanEquiv F π₁ π₂).invFun
     (BinaryBicone.isBilimitOfKernelInl (F.mapBinaryBicone bc)
-
+    (isLimitMapConeForkEquiv' F bc.inl_snd (isLimitOfPreserves F hf))).isLimit
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.isBilimitOfKernelInl, BinaryBicone.isLimitSndKernelFork, BinaryBicone.ofLimitCone, F.mapBinaryBicone, IsLimit, PreservesLimit, bc.inl_snd, bc.snd, bc.sndKernelFork, inl_snd, invFun, isBilimitOfKernelInl, isLimit, isLimitMapConeBinaryFanEquiv, isLimitMapConeForkEquiv, isLimitOfPreserves, isLimitSndKernelFork, mapBinaryBicone, ofLimitCone
 -/
@@ -145,7 +145,15 @@ lemma preservesEqualizer_of_preservesKernels
   let c' := isLimitKernelForkOfFork (i.ofIsoLimit (Fork.isoForkOfι c))
   dsimp only [kernelForkOfFork_ofι] at c'
   let iFc := isLimitForkMapOfIsLimit' F _ c'
-
+  constructor
+  apply IsLimit.ofIsoLimit _ ((Cone.functoriality _ F).mapIso (Fork.isoForkOfι c).symm)
+  apply (isLimitMapConeForkEquiv F (Fork.condition c)).invFun
+  let p : parallelPair (F.map (f - g)) 0 ≅ parallelPair (F.map f - F.map g) 0 :=
+    parallelPair.eqOfHomEq F.map_sub rfl
+  exact
+    IsLimit.ofIsoLimit
+      (isLimitForkOfKernelFork ((IsLimit.postcomposeHomEquiv p _).symm iFc))
+      (Fork.ext (Iso.refl _) (by simp [p]))
 
 中文:
 引理 preservesEqualizer_of_preservesKernels
@@ -156,7 +164,15 @@ lemma preservesEqualizer_of_preservesKernels
   let c' := isLimitKernelForkOfFork (i.ofIsoLimit (Fork.isoForkOfι c))
   dsimp only [kernelForkOfFork_ofι] at c'
   let iFc := isLimitForkMapOfIsLimit' F _ c'
-
+  constructor
+  apply IsLimit.ofIsoLimit _ ((Cone.functoriality _ F).mapIso (Fork.isoForkOfι c).symm)
+  apply (isLimitMapConeForkEquiv F (Fork.condition c)).invFun
+  let p : parallelPair (F.map (f - g)) 0 ≅ parallelPair (F.map f - F.map g) 0 :=
+    parallelPair.eqOfHomEq F.map_sub rfl
+  exact
+    IsLimit.ofIsoLimit
+      (isLimitForkOfKernelFork ((IsLimit.postcomposeHomEquiv p _).symm iFc))
+      (Fork.ext (Iso.refl _) (by simp [p]))
 
 Depends on / 依赖: Cone.functoriality, F.map, Fork.condition, Fork.isoForkOf, IsLimit, IsLimit.ofIsoLimit, additive_of_preservesBinaryBiproducts, condition, functoriality, i.ofIsoLimit, invFun, isLimitForkMapOfIsLimit, isLimitKernelForkOfFork, isLimitMapConeForkEquiv, mapIso, ofIsoLimit, parallelPair, preservesBinaryBiproducts_of_preservesBinaryProducts
 -/
@@ -216,7 +232,7 @@ lemma preservesFiniteLimits_of_preservesKernels
   have := preservesTerminalObject_of_preservesZeroMorphisms F
   have := preservesLimitsOfShape_pempty_of_preservesTerminal F
   have : PreservesFiniteProducts F := .of_preserves_binary_and_terminal F
-  preservesFiniteLimits_of_preservesEqualizers_and_
+  preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts F
 
 中文:
 引理 preservesFiniteLimits_of_preservesKernels
@@ -225,7 +241,7 @@ lemma preservesFiniteLimits_of_preservesKernels
   have := preservesTerminalObject_of_preservesZeroMorphisms F
   have := preservesLimitsOfShape_pempty_of_preservesTerminal F
   have : PreservesFiniteProducts F := .of_preserves_binary_and_terminal F
-  preservesFiniteLimits_of_preservesEqualizers_and_
+  preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts F
 
 Depends on / 依赖: PreservesFiniteProducts, of_preserves_binary_and_terminal, preservesEqualizers_of_preservesKernels, preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts, preservesLimitsOfShape_pempty_of_preservesTerminal, preservesTerminalObject_of_preservesZeroMorphisms
 -/
@@ -254,7 +270,8 @@ definition isColimitMapCoconeBinaryCofanOfPreservesCokernels
   let hf : IsColimit bc.inrCokernelCofork := BinaryBicone.isColimitInrCokernelCofork i
   exact
     (isColimitMapCoconeBinaryCofanEquiv F ι₁ ι₂).invFun
-      (BinaryBicone.isBilimitOfCok
+      (BinaryBicone.isBilimitOfCokernelFst (F.mapBinaryBicone bc)
+          (isColimitMapCoconeCoforkEquiv' F bc.inr_fst (isColimitOfPreserves F hf))).isColimit
 
 中文:
 定义 isColimitMapCoconeBinaryCofanOfPreservesCokernels
@@ -265,7 +282,8 @@ definition isColimitMapCoconeBinaryCofanOfPreservesCokernels
   let hf : IsColimit bc.inrCokernelCofork := BinaryBicone.isColimitInrCokernelCofork i
   exact
     (isColimitMapCoconeBinaryCofanEquiv F ι₁ ι₂).invFun
-      (BinaryBicone.isBilimitOfCok
+      (BinaryBicone.isBilimitOfCokernelFst (F.mapBinaryBicone bc)
+          (isColimitMapCoconeCoforkEquiv' F bc.inr_fst (isColimitOfPreserves F hf))).isColimit
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.isBilimitOfCokernelFst, BinaryBicone.isColimitInrCokernelCofork, BinaryBicone.ofColimitCocone, F.mapBinaryBicone, IsColimit, PreservesColimit, bc.inr, bc.inrCokernelCofork, bc.inr_fst, inrCokernelCofork, inr_fst, invFun, isBilimitOfCokernelFst, isColimit, isColimitInrCokernelCofork, isColimitMapCoconeBinaryCofanEquiv, isColimitMapCoconeCoforkEquiv, isColimitOfPreserves, mapBinaryBicone
 -/
@@ -346,7 +364,17 @@ lemma preservesCoequalizer_of_preservesCokernels
   intro c i
   let c' := isColimitCokernelCoforkOfCofork (i.ofIsoColimit (Cofork.isoCoforkOfπ c))
   dsimp only [cokernelCoforkOfCofork_ofπ] at c'
-  let iFc := isColimit
+  let iFc := isColimitCoforkMapOfIsColimit' F _ c'
+  constructor
+  apply
+    IsColimit.ofIsoColimit _ ((Cocone.functoriality _ F).mapIso (Cofork.isoCoforkOfπ c).symm)
+  apply (isColimitMapCoconeCoforkEquiv F (Cofork.condition c)).invFun
+  let p : parallelPair (F.map (f - g)) 0 ≅ parallelPair (F.map f - F.map g) 0 :=
+    parallelPair.ext (Iso.refl _) (Iso.refl _) (by simp) (by simp)
+  exact
+    IsColimit.ofIsoColimit
+      (isColimitCoforkOfCokernelCofork ((IsColimit.precomposeHomEquiv p.symm _).symm iFc))
+      (Cofork.ext (Iso.refl _) (by simp [p]))
 
 中文:
 引理 preservesCoequalizer_of_preservesCokernels
@@ -357,7 +385,17 @@ lemma preservesCoequalizer_of_preservesCokernels
   intro c i
   let c' := isColimitCokernelCoforkOfCofork (i.ofIsoColimit (Cofork.isoCoforkOfπ c))
   dsimp only [cokernelCoforkOfCofork_ofπ] at c'
-  let iFc := isColimit
+  let iFc := isColimitCoforkMapOfIsColimit' F _ c'
+  constructor
+  apply
+    IsColimit.ofIsoColimit _ ((Cocone.functoriality _ F).mapIso (Cofork.isoCoforkOfπ c).symm)
+  apply (isColimitMapCoconeCoforkEquiv F (Cofork.condition c)).invFun
+  let p : parallelPair (F.map (f - g)) 0 ≅ parallelPair (F.map f - F.map g) 0 :=
+    parallelPair.ext (Iso.refl _) (Iso.refl _) (by simp) (by simp)
+  exact
+    IsColimit.ofIsoColimit
+      (isColimitCoforkOfCokernelCofork ((IsColimit.precomposeHomEquiv p.symm _).symm iFc))
+      (Cofork.ext (Iso.refl _) (by simp [p]))
 
 Depends on / 依赖: Cocone, Cocone.functoriality, Cofork, Cofork.condition, Cofork.isoCoforkOf, IsColimit, IsColimit.ofIsoColimit, additive_of_preservesBinaryBiproducts, condition, functoriality, i.ofIsoColimit, invFun, isColimitCoforkMapOfIsColimit, isColimitCokernelCoforkOfCofork, isColimitMapCoconeCoforkEquiv, mapIso, ofIsoColimit, preservesBinaryBiproducts_of_preservesBinaryCoproducts
 -/
@@ -421,7 +459,7 @@ lemma preservesFiniteColimits_of_preservesCokernels
   let := preservesColimitsOfShape_pempty_of_preservesInitial F
   let : PreservesFiniteCoproducts F :=
     ⟨fun _ => PreservesFiniteCoproducts.of_preserves_binary_and_initial F _⟩
-  e
+  exact preservesFiniteColimits_of_preservesCoequalizers_and_finiteCoproducts F
 
 中文:
 引理 preservesFiniteColimits_of_preservesCokernels
@@ -432,7 +470,7 @@ lemma preservesFiniteColimits_of_preservesCokernels
   let := preservesColimitsOfShape_pempty_of_preservesInitial F
   let : PreservesFiniteCoproducts F :=
     ⟨fun _ => PreservesFiniteCoproducts.of_preserves_binary_and_initial F _⟩
-  e
+  exact preservesFiniteColimits_of_preservesCoequalizers_and_finiteCoproducts F
 
 Depends on / 依赖: PreservesFiniteCoproducts, PreservesFiniteCoproducts.of_preserves_binary_and_initial, of_preserves_binary_and_initial, preservesCoequalizers_of_preservesCokernels, preservesColimitsOfShape_pempty_of_preservesInitial, preservesFiniteColimits_of_preservesCoequalizers_and_finiteCoproducts, preservesInitialObject_of_preservesZeroMorphisms
 -/

@@ -115,7 +115,7 @@ instance _root_.ULift.algebra
     { (ULift.ringEquiv : ULift A ≃+* A).symm.toRingHom.comp (algebraMap R A) with
       toFun := fun r => ULift.up (algebraMap R A r) }
 commutes' := fun r x => ULift.down_injective Algebra.commutes r x.down
-smul_def' := fun r x => ULift.down_injective Algebra.s
+smul_def' := fun r x => ULift.down_injective Algebra.smul_def' r x.down }
 
 中文:
 实例 _root_.类型层提升.algebra
@@ -125,7 +125,7 @@ smul_def' := fun r x => ULift.down_injective Algebra.s
     { (ULift.ringEquiv : ULift A ≃+* A).symm.toRingHom.comp (algebraMap R A) with
       toFun := fun r => ULift.up (algebraMap R A r) }
 commutes' := fun r x => ULift.down_injective Algebra.commutes r x.down
-smul_def' := fun r x => ULift.down_injective Algebra.s
+smul_def' := fun r x => ULift.down_injective Algebra.smul_def' r x.down }
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.smul_def, ULift.down_injective, ULift.module, ULift.ringEquiv, ULift.up, algebraMap, commutes, down_injective, module, ringEquiv, smul_def, symm.toRingHom.comp, toRingHom, x.down
 -/
@@ -1036,7 +1036,16 @@ definition mulSemiringActionOfSmulDistribClass
     rw [algebraMap.smul']; rw [map_zero]; rw [smul_zero]
   mul_smul _ _ _ := by
     apply FaithfulSMul.algebraMap_injective R A
-    rw [alge
+    rw [algebraMap.smul']; rw [algebraMap.smul']; rw [algebraMap.smul']; rw [mul_smul]
+  smul_add _ _ _ := by
+    apply FaithfulSMul.algebraMap_injective R A
+    rw [algebraMap.smul']; rw [map_add]; rw [smul_add]; rw [← algebraMap.smul']; rw [← algebraMap.smul']; rw [← map_add]
+  smul_one _ := by
+    apply FaithfulSMul.algebraMap_injective R A
+    rw [algebraMap.smul']; rw [map_one]; rw [smul_one]
+  smul_mul _ _ _ := by
+    apply FaithfulSMul.algebraMap_injective R A
+    rw [algebraMap.smul']; rw [map_mul]; rw [map_mul]; rw [algebraMap.smul']; rw [algebraMap.smul']; rw [MulSemiringAction.smul_mul]
 
 中文:
 定义 mulSemiringActionOfSmulDistribClass
@@ -1049,7 +1058,16 @@ definition mulSemiringActionOfSmulDistribClass
     rw [algebraMap.smul']; rw [map_zero]; rw [smul_zero]
   mul_smul _ _ _ := by
     apply FaithfulSMul.algebraMap_injective R A
-    rw [alge
+    rw [algebraMap.smul']; rw [algebraMap.smul']; rw [algebraMap.smul']; rw [mul_smul]
+  smul_add _ _ _ := by
+    apply FaithfulSMul.algebraMap_injective R A
+    rw [algebraMap.smul']; rw [map_add]; rw [smul_add]; rw [← algebraMap.smul']; rw [← algebraMap.smul']; rw [← map_add]
+  smul_one _ := by
+    apply FaithfulSMul.algebraMap_injective R A
+    rw [algebraMap.smul']; rw [map_one]; rw [smul_one]
+  smul_mul _ _ _ := by
+    apply FaithfulSMul.algebraMap_injective R A
+    rw [algebraMap.smul']; rw [map_mul]; rw [map_mul]; rw [algebraMap.smul']; rw [algebraMap.smul']; rw [MulSemiringAction.smul_mul]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap, algebraMap.smul, algebraMap_injective, map_add, map_zero, mul_smul, one_smul, smul_add, smul_zero
 -/
@@ -1558,7 +1576,8 @@ theorem surjective_algebraMap_of_linearMap
   obtain ⟨z, hz⟩ := hb 1
   apply_fun (x • z • ·) at hy
   rwa [← map_smul, smul_eq_mul, mul_comm, ← smul_mul_assoc, ← map_smul _ z, smul_eq_mul, mul_one,
-    ← smul_eq_mul, map_smul, hz, one_mul, ← map_smul,
+    ← smul_eq_mul, map_smul, hz, one_mul, ← map_smul, smul_eq_mul, mul_one, smul_smul,
+    ← Algebra.algebraMap_eq_smul_one] at hy
 
 中文:
 定理 surjective_algebraMap_of_linearMap
@@ -1570,7 +1589,8 @@ theorem surjective_algebraMap_of_linearMap
   obtain ⟨z, hz⟩ := hb 1
   apply_fun (x • z • ·) at hy
   rwa [← map_smul, smul_eq_mul, mul_comm, ← smul_mul_assoc, ← map_smul _ z, smul_eq_mul, mul_one,
-    ← smul_eq_mul, map_smul, hz, one_mul, ← map_smul,
+    ← smul_eq_mul, map_smul, hz, one_mul, ← map_smul, smul_eq_mul, mul_one, smul_smul,
+    ← Algebra.algebraMap_eq_smul_one] at hy
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, algebraMap_eq_smul_one, apply_fun, map_smul, mul_comm, mul_one, one_mul, smul_eq_mul, smul_mul_assoc, smul_smul
 -/

@@ -175,7 +175,15 @@ lemma ιMulti_span_fixedDegree_of_span_eq_top
   · rw [ExteriorAlgebra.exteriorPower, LinearMap.range_eq_map, ← hs, map_span, span_pow, span_le]
     rintro x hx
     obtain ⟨f, rfl⟩ := Set.mem_pow.mp hx
-    refine mem_span_of
+    refine mem_span_of_mem ⟨ExteriorAlgebra.ιInv ∘ Subtype.val ∘ f, ?_, ?_⟩
+    · rw [Set.mem_ofPred_eq, Set.range_comp, Set.image_subset_iff]
+      apply Subset.trans ?_ (s.image_subset_preimage_of_inverse ExteriorAlgebra.ι_leftInverse)
+      grind
+    · rw [ExteriorAlgebra.ιMulti_apply]
+      apply congrArg (List.prod ∘ List.ofFn)
+      ext i
+      obtain ⟨m, -, hm⟩ := (Set.mem_image _ _ _).mp (f i).2
+      rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← hm]; rw [ExteriorAlgebra.ι_leftInverse]
 
 中文:
 引理 ιMulti_span_fixedDegree_of_span_eq_top
@@ -189,7 +197,15 @@ lemma ιMulti_span_fixedDegree_of_span_eq_top
   · rw [ExteriorAlgebra.exteriorPower, LinearMap.range_eq_map, ← hs, map_span, span_pow, span_le]
     rintro x hx
     obtain ⟨f, rfl⟩ := Set.mem_pow.mp hx
-    refine mem_span_of
+    refine mem_span_of_mem ⟨ExteriorAlgebra.ιInv ∘ Subtype.val ∘ f, ?_, ?_⟩
+    · rw [Set.mem_ofPred_eq, Set.range_comp, Set.image_subset_iff]
+      apply Subset.trans ?_ (s.image_subset_preimage_of_inverse ExteriorAlgebra.ι_leftInverse)
+      grind
+    · rw [ExteriorAlgebra.ιMulti_apply]
+      apply congrArg (List.prod ∘ List.ofFn)
+      ext i
+      obtain ⟨m, -, hm⟩ := (Set.mem_image _ _ _).mp (f i).2
+      rw [Function.comp_apply]; rw [Function.comp_apply]; rw [← hm]; rw [ExteriorAlgebra.ι_leftInverse]
 
 Depends on / 依赖: ExteriorAlge, ExteriorAlgebra, ExteriorAlgebra.exteriorPower, LinearMap, LinearMap.range_eq_map, Set.image_subset_iff, Set.mem_ofPred_eq, Set.mem_pow.mp, Set.range_comp, Subset, Subset.trans, Subtype, Subtype.val, exteriorPower, image_subset_iff, image_subset_preimage_of_inverse, le_antisymm, map_span, mem_ofPred_eq, mem_pow
 -/
@@ -223,7 +239,7 @@ lemma ιMulti_span
   rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
   simp only [Submodule.coe_subtype, ιMulti_apply_coe, Set.image_univ, Submodule.map_top,
     Submodule.range_subtype]
-  exact ExteriorAlgebra.ιMulti_span_fixed
+  exact ExteriorAlgebra.ιMulti_span_fixedDegree R n
 
 中文:
 引理 ιMulti_span
@@ -232,7 +248,7 @@ lemma ιMulti_span
   rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
   simp only [Submodule.coe_subtype, ιMulti_apply_coe, Set.image_univ, Submodule.map_top,
     Submodule.range_subtype]
-  exact ExteriorAlgebra.ιMulti_span_fixed
+  exact ExteriorAlgebra.ιMulti_span_fixedDegree R n
 
 Depends on / 依赖: ExteriorAlgebra, LinearMap, LinearMap.map_injective, LinearMap.map_span, Set.image_image, Set.image_univ, Submodule, Submodule.coe_subtype, Submodule.ker_subtype, Submodule.map_top, Submodule.range_subtype, coe_subtype, image_image, image_univ, ker_subtype, map_injective, map_span, map_top, range_subtype
 -/
@@ -311,7 +327,7 @@ definition relations
         Finsupp.single (update m i (x + y)) 1
     | .smul m i r x => Finsupp.single (update m i (r • x)) 1 -
         r • Finsupp.single (update m i x) 1
-    | .alt m 
+    | .alt m _ _ _ _ => Finsupp.single m 1
 
 中文:
 定义 relations
@@ -324,7 +340,7 @@ definition relations
         Finsupp.single (update m i (x + y)) 1
     | .smul m i r x => Finsupp.single (update m i (r • x)) 1 -
         r • Finsupp.single (update m i x) 1
-    | .alt m 
+    | .alt m _ _ _ _ => Finsupp.single m 1
 -/
 noncomputable def relations (ι : Type*) [DecidableEq ι] (M : Type*)
     [AddCommGroup M] [Module R M] :
@@ -355,7 +371,22 @@ definition relationsSolutionEquiv
       map_update_add' := fun m i x y => by
         have := s.linearCombination_var_relation (.add m i x y)
         dsimp at this ⊢
-        rw [map_sub]; rw [map_add]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul
+        rw [map_sub]; rw [map_add]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [sub_eq_zero] at this
+        convert! this.symm -- `convert` is necessary due to the implementation of `MultilinearMap`
+      map_update_smul' := fun m i r x => by
+        have := s.linearCombination_var_relation (.smul m i r x)
+        dsimp at this ⊢
+        rw [Finsupp.smul_single]; rw [smul_eq_mul]; rw [mul_one]; rw [map_sub]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [sub_eq_zero] at this
+        convert! this
+      map_eq_zero_of_eq' := fun v i j hm hij =>
+        by simpa using s.linearCombination_var_relation (.alt v i j hm hij) }
+  invFun f :=
+    { var := fun m => f m
+      linearCombination_var_relation := by
+        rintro (⟨m, i, x, y⟩ | ⟨m, i, r, x⟩ | ⟨v, i, j, hm, hij⟩)
+        · simp
+        · simp
+        · simpa using f.map_eq_zero_of_eq v hm hij }
 
 中文:
 定义 relationsSolutionEquiv
@@ -364,7 +395,22 @@ definition relationsSolutionEquiv
       map_update_add' := fun m i x y => by
         have := s.linearCombination_var_relation (.add m i x y)
         dsimp at this ⊢
-        rw [map_sub]; rw [map_add]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul
+        rw [map_sub]; rw [map_add]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [sub_eq_zero] at this
+        convert! this.symm -- `convert` is necessary due to the implementation of `MultilinearMap`
+      map_update_smul' := fun m i r x => by
+        have := s.linearCombination_var_relation (.smul m i r x)
+        dsimp at this ⊢
+        rw [Finsupp.smul_single]; rw [smul_eq_mul]; rw [mul_one]; rw [map_sub]; rw [Finsupp.linearCombination_single]; rw [one_smul]; rw [Finsupp.linearCombination_single]; rw [sub_eq_zero] at this
+        convert! this
+      map_eq_zero_of_eq' := fun v i j hm hij =>
+        by simpa using s.linearCombination_var_relation (.alt v i j hm hij) }
+  invFun f :=
+    { var := fun m => f m
+      linearCombination_var_relation := by
+        rintro (⟨m, i, x, y⟩ | ⟨m, i, r, x⟩ | ⟨v, i, j, hm, hij⟩)
+        · simp
+        · simp
+        · simpa using f.map_eq_zero_of_eq v hm hij }
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination_single, MultilinearMap, convert, implementation, linearCom, linearCombination_single, linearCombination_var_relation, map_add, map_sub, map_update_add, map_update_smul, necessary, one_smul, s.linearCom, s.linearCombination_var_relation, s.var, sub_eq_zero, this.symm
 -/
@@ -406,7 +452,7 @@ definition isPresentationCore
   postcomp_injective {N _ _ f f' h} := by
     rw [Submodule.linearMap_eq_iff_of_span_eq_top _ _ (ιMulti_span R n M)]
     rintro ⟨_, ⟨f, rfl⟩⟩
-  
+    exact Module.Relations.Solution.congr_var h f
 
 中文:
 定义 isPresentationCore
@@ -417,7 +463,7 @@ definition isPresentationCore
   postcomp_injective {N _ _ f f' h} := by
     rw [Submodule.linearMap_eq_iff_of_span_eq_top _ _ (ιMulti_span R n M)]
     rintro ⟨_, ⟨f, rfl⟩⟩
-  
+    exact Module.Relations.Solution.congr_var h f
 
 Depends on / 依赖: IsPresentationCore
 -/
@@ -905,14 +951,20 @@ lemma map_surjective
   given: {f : M ->ₗ[R] N} (hf : Surjective f)
   proof: by
   rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [← ιMulti_span]; rw [← ιMulti_span]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← LinearMap.coe_compAlternatingMap]; rw [map_comp_ιMulti]; rw [AlternatingMap.coe_compLinearMap]; rw [Set.range_comp]
-  conv_rhs => rw [← Set.i
+  conv_rhs => rw [← Set.image_univ]
+  congr
+  rw [Set.range_eq_univ]
+  exact Surjective.comp_left hf
 
 中文:
 引理 map_surjective
   条件: {f : M ->ₗ[R] N} (hf : 满射 f)
   证明: by
   rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [← ιMulti_span]; rw [← ιMulti_span]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← LinearMap.coe_compAlternatingMap]; rw [map_comp_ιMulti]; rw [AlternatingMap.coe_compLinearMap]; rw [Set.range_comp]
-  conv_rhs => rw [← Set.i
+  conv_rhs => rw [← Set.image_univ]
+  congr
+  rw [Set.range_eq_univ]
+  exact Surjective.comp_left hf
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.coe_compLinearMap, LinearMap, LinearMap.coe_compAlternatingMap, LinearMap.range_eq_map, LinearMap.range_eq_top, Set.image_univ, Set.range_comp, Set.range_eq_univ, Submodule, Submodule.map_span, Surjective, Surjective.comp_left, coe_compAlternatingMap, coe_compLinearMap, comp_left, conv_rhs, image_univ, map_span, range_comp
 -/
@@ -939,7 +991,25 @@ lemma ιMulti_family_span_fixedDegree_aux
   · suffices ExteriorAlgebra.ιMulti R n (v ∘ α) = 0 by simp [this]
 exact AlternatingMap.map_eq_zero_of_not_injective _ _ fun h => α_inj (Injective.of_comp h)
   suffices exists σ : Equiv.Perm (Fin n), (ExteriorAlgebra.ιMulti R n ((v ∘ α) ∘ σ)) in
-      Submodul
+      Submodule.span R (Set.range (ExteriorAlgebra.ιMulti_family R n v)) by
+    obtain ⟨σ, hσ⟩ := this
+    rw [AlternatingMap.map_perm] at hσ
+    refine (Submodule.smul_mem_iff_of_isUnit _ (r := (σ.sign : R)) ?_).mp hσ
+    rw [isUnit_iff_exists_inv]
+    use (σ.sign : R)
+    norm_cast
+    simp only [Int.units_mul_self, Units.val_one, Int.cast_one]
+  have α_card : (Finset.image α Finset.univ).card = n :=
+    (Finset.card_image_of_injective Finset.univ α_inj).trans (Finset.card_fin n)
+  use (Finset.orderIsoOfFin (Finset.image α Finset.univ) α_card).toEquiv.trans
+    ((Equiv.setCongr Fintype.coe_image_univ).trans (Equiv.ofInjective α α_inj).symm)
+  apply Submodule.mem_span_of_mem
+  use ⟨(Finset.image α Finset.univ), α_card⟩
+  rw [ExteriorAlgebra.ιMulti_family]; rw [Function.comp_assoc]
+  congr
+  ext i
+  simp [Equiv.apply_ofInjective_symm]
+  rfl
 
 中文:
 引理 ιMulti_family_span_fixedDegree_aux
@@ -948,7 +1018,25 @@ exact AlternatingMap.map_eq_zero_of_not_injective _ _ fun h => α_inj (Injective
   · suffices ExteriorAlgebra.ιMulti R n (v ∘ α) = 0 by simp [this]
 exact AlternatingMap.map_eq_zero_of_not_injective _ _ fun h => α_inj (Injective.of_comp h)
   suffices exists σ : Equiv.Perm (Fin n), (ExteriorAlgebra.ιMulti R n ((v ∘ α) ∘ σ)) in
-      Submodul
+      Submodule.span R (Set.range (ExteriorAlgebra.ιMulti_family R n v)) by
+    obtain ⟨σ, hσ⟩ := this
+    rw [AlternatingMap.map_perm] at hσ
+    refine (Submodule.smul_mem_iff_of_isUnit _ (r := (σ.sign : R)) ?_).mp hσ
+    rw [isUnit_iff_exists_inv]
+    use (σ.sign : R)
+    norm_cast
+    simp only [Int.units_mul_self, Units.val_one, Int.cast_one]
+  have α_card : (Finset.image α Finset.univ).card = n :=
+    (Finset.card_image_of_injective Finset.univ α_inj).trans (Finset.card_fin n)
+  use (Finset.orderIsoOfFin (Finset.image α Finset.univ) α_card).toEquiv.trans
+    ((Equiv.setCongr Fintype.coe_image_univ).trans (Equiv.ofInjective α α_inj).symm)
+  apply Submodule.mem_span_of_mem
+  use ⟨(Finset.image α Finset.univ), α_card⟩
+  rw [ExteriorAlgebra.ιMulti_family]; rw [Function.comp_assoc]
+  congr
+  ext i
+  simp [Equiv.apply_ofInjective_symm]
+  rfl
 -/
 private lemma ιMulti_family_span_fixedDegree_aux
     {I : Type*} [LinearOrder I] (v : I -> M) (α : Fin n -> I) :
@@ -992,7 +1080,9 @@ lemma ιMulti_family_span_fixedDegree_of_span
     exact Submodule.coe_mem _
   · rw [← ιMulti_span_fixedDegree_of_span_eq_top R n M hv, Submodule.span_le]
     rintro - ⟨f, ⟨f_range, rfl⟩⟩
-   
+    rw [Set.mem_ofPred] at f_range
+    obtain ⟨α, rfl⟩ := Set.range_subset_range_iff_exists_comp.mp f_range
+    exact ιMulti_family_span_fixedDegree_aux R v α
 
 中文:
 引理 ιMulti_family_span_fixedDegree_of_span
@@ -1005,7 +1095,9 @@ lemma ιMulti_family_span_fixedDegree_of_span
     exact Submodule.coe_mem _
   · rw [← ιMulti_span_fixedDegree_of_span_eq_top R n M hv, Submodule.span_le]
     rintro - ⟨f, ⟨f_range, rfl⟩⟩
-   
+    rw [Set.mem_ofPred] at f_range
+    obtain ⟨α, rfl⟩ := Set.range_subset_range_iff_exists_comp.mp f_range
+    exact ιMulti_family_span_fixedDegree_aux R v α
 
 Depends on / 依赖: Set.mem_ofPred, Set.range_subset_iff, Set.range_subset_range_iff_exists_comp.mp, SetLike, SetLike.mem_coe, Submodule, Submodule.coe_mem, Submodule.span_le, coe_mem, comp_apply, f_range, le_antisymm, mem_coe, mem_ofPred, range_subset_iff, range_subset_range_iff_exists_comp, span_le
 -/
@@ -1063,7 +1155,10 @@ lemma ιMulti_family_span
     ⟨fun i => ⟨v i, Submodule.subset_span (Set.mem_range_self i)⟩, rfl⟩
   have htop : Submodule.span R (Set.range f) = ⊤ := by
     apply SetLike.coe_injective
-    apply Set.image_injective.mpr (Submodu
+    apply Set.image_injective.mpr (Submodule.span R (Set.range v)).injective_subtype
+    rw [← Submodule.map_coe]; rw [← Submodule.span_image]; rw [← Set.range_comp]; rw [hf]; rw [← Submodule.map_coe]; rw [← LinearMap.range_eq_map]; rw [Submodule.range_subtype]
+  rw [LinearMap.range_eq_map (M := ⋀[R]^n _), ← ιMulti_family_span_of_span _ htop,
+    Submodule.map_span, ← Set.range_comp, map_comp_ιMulti_family, hf]
 
 中文:
 引理 ιMulti_family_span
@@ -1073,7 +1168,10 @@ lemma ιMulti_family_span
     ⟨fun i => ⟨v i, Submodule.subset_span (Set.mem_range_self i)⟩, rfl⟩
   have htop : Submodule.span R (Set.range f) = ⊤ := by
     apply SetLike.coe_injective
-    apply Set.image_injective.mpr (Submodu
+    apply Set.image_injective.mpr (Submodule.span R (Set.range v)).injective_subtype
+    rw [← Submodule.map_coe]; rw [← Submodule.span_image]; rw [← Set.range_comp]; rw [hf]; rw [← Submodule.map_coe]; rw [← LinearMap.range_eq_map]; rw [Submodule.range_subtype]
+  rw [LinearMap.range_eq_map (M := ⋀[R]^n _), ← ιMulti_family_span_of_span _ htop,
+    Submodule.map_span, ← Set.range_comp, map_comp_ιMulti_family, hf]
 
 Depends on / 依赖: LinearMap, LinearMap.range_eq_map, Set.image_injective.mpr, Set.mem_range_self, Set.range, Set.range_comp, SetLike, SetLike.coe_injective, Submodule, Submodule.map_coe, Submodule.range_subtype, Submodule.span, Submodule.span_image, Submodule.subset_span, Submodule.subtype, coe_injective, image_injective, injective_subtype, map_coe, mem_range_self
 -/
@@ -1105,7 +1203,9 @@ definition zeroEquiv
     { toFun := fun r => r • (ιMulti _ _ (by rintro ⟨i, hi⟩; simp at hi))
       map_add' := by intros; simp only [add_smul]
       map_smul' := by intros; simp only [smul_eq_mul, mul_smul, RingHom.id_apply] }
-    (by aeso
+    (by aesop) (by aesop)
+
+@[simp]
 
 中文:
 定义 zeroEquiv
@@ -1114,7 +1214,9 @@ definition zeroEquiv
     { toFun := fun r => r • (ιMulti _ _ (by rintro ⟨i, hi⟩; simp at hi))
       map_add' := by intros; simp only [add_smul]
       map_smul' := by intros; simp only [smul_eq_mul, mul_smul, RingHom.id_apply] }
-    (by aeso
+    (by aesop) (by aesop)
+
+@[simp]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.constOfIsEmpty, RingHom, RingHom.id_apply, add_smul, alternatingMapLinearEquiv, constOfIsEmpty, id_apply, intros, map_add, map_smul, mul_smul, ofLinearMap, smul_eq_mul
 -/
@@ -1179,7 +1281,16 @@ definition oneEquiv
       rfl
     exact
       { toFun := fun m => ιMulti _ _ (fun _ => m)
-        map_add' := fun m
+        map_add' := fun m₁ m₂ => by
+          rw [h]; nth_rw 2 [h]; nth_rw 3 [h]
+          simp only [Fin.isValue, AlternatingMap.map_update_add]
+        map_smul' := fun r m => by
+          dsimp
+          rw [h]; nth_rw 2 [h]
+          simp only [Fin.isValue, AlternatingMap.map_update_smul] })
+  (by aesop) (by aesop)
+
+@[simp]
 
 中文:
 定义 oneEquiv
@@ -1191,7 +1302,16 @@ definition oneEquiv
       rfl
     exact
       { toFun := fun m => ιMulti _ _ (fun _ => m)
-        map_add' := fun m
+        map_add' := fun m₁ m₂ => by
+          rw [h]; nth_rw 2 [h]; nth_rw 3 [h]
+          simp only [Fin.isValue, AlternatingMap.map_update_add]
+        map_smul' := fun r m => by
+          dsimp
+          rw [h]; nth_rw 2 [h]
+          simp only [Fin.isValue, AlternatingMap.map_update_smul] })
+  (by aesop) (by aesop)
+
+@[simp]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.map_update_add, AlternatingMap.map_update_smul, AlternatingMap.ofSubsingleton, Fin.isValue, alternatingMapLinearEquiv, fin_cases, isValue, map_add, map_smul, map_update_add, map_update_smul, nth_rw, ofLinearMap, ofSubsingleton, update
 -/

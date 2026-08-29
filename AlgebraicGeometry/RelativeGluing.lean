@@ -35,7 +35,22 @@ lemma Scheme.isLocallyDirected_of_equifibered_of_injective
     simp only [Functor.comp_obj, Scheme.forget_obj, Functor.comp_map, Scheme.forget_map] at heq
     obtain ⟨l, fli, flj, x, hi, hj⟩ := (G ⋙ Scheme.forget).exists_map_eq_of_isLocallyDirected fi fj
 (s.app i xi) (s.app j xj) by
-      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_
+      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
+        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk]
+      dsimp at heq
+      rw [← Scheme.Hom.comp_apply]; rw [← s.naturality]; rw [Scheme.Hom.comp_apply]; rw [heq]; rw [← Scheme.Hom.comp_apply]; rw [s.naturality]
+      simp
+    use l, fli, flj
+    let e := (hs fli).isoPullback
+    obtain ⟨z, h1, h2⟩ := Scheme.Pullback.exists_preimage_pullback xi x hi.symm
+    refine ⟨e.inv z, ?_, ?_⟩
+    · simp [← h1, ← Scheme.Hom.comp_apply, e]
+    · apply H fj
+      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
+        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, ← Scheme.Hom.comp_apply,
+        Category.assoc, ← Functor.map_comp, show flj ≫ fj = fli ≫ fi by subsingleton]
+      dsimp at heq
+      simp [e, Functor.map_comp, ← heq, h1]
 
 中文:
 引理 概形.isLocallyDirected_of_equifibered_of_injective
@@ -44,7 +59,22 @@ lemma Scheme.isLocallyDirected_of_equifibered_of_injective
     simp only [Functor.comp_obj, Scheme.forget_obj, Functor.comp_map, Scheme.forget_map] at heq
     obtain ⟨l, fli, flj, x, hi, hj⟩ := (G ⋙ Scheme.forget).exists_map_eq_of_isLocallyDirected fi fj
 (s.app i xi) (s.app j xj) by
-      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_
+      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
+        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk]
+      dsimp at heq
+      rw [← Scheme.Hom.comp_apply]; rw [← s.naturality]; rw [Scheme.Hom.comp_apply]; rw [heq]; rw [← Scheme.Hom.comp_apply]; rw [s.naturality]
+      simp
+    use l, fli, flj
+    let e := (hs fli).isoPullback
+    obtain ⟨z, h1, h2⟩ := Scheme.Pullback.exists_preimage_pullback xi x hi.symm
+    refine ⟨e.inv z, ?_, ?_⟩
+    · simp [← h1, ← Scheme.Hom.comp_apply, e]
+    · apply H fj
+      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
+        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, ← Scheme.Hom.comp_apply,
+        Category.assoc, ← Functor.map_comp, show flj ≫ fj = fli ≫ fi by subsingleton]
+      dsimp at heq
+      simp [e, Functor.map_comp, ← heq, h1]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.comp_map, Functor.comp_obj, Scheme, Scheme.Hom.comp_apply, Scheme.forget, Scheme.forget_map, Scheme.forget_obj, TypeCat, TypeCat.Fun.coe_mk, coe_mk, comp_apply, comp_map, comp_obj, exists_map_eq_of_isLocallyDirected, forget, forget_map, forget_obj
 -/
@@ -286,7 +316,18 @@ instance :
     obtain ⟨k, fi, fj, uk, h1, h2⟩ :=
 𝒰.exists_of_f_eq_f (d.natTrans.app i xi) (d.natTrans.app j xj) by
       dsimp [functorOfLocallyDirected_obj, xi, xj]
-      rw [← 
+      rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]; rw [← ι_toBase]; rw [pullback.condition_assoc]
+      simp
+    use k, fi, fj
+obtain ⟨xk, h1, h2⟩ := exists_preimage_of_isPullback (d.equifibered fj) xj uk by
+      apply (𝒰.f j).injective
+      dsimp only [functorOfLocallyDirected_obj, functorOfLocallyDirected_map]
+      rw [← Scheme.Hom.comp_apply]
+      simp [xj, h2]
+    use xk
+    apply (pullback.snd (d.cover.f i) _).injective
+    rw [← Scheme.Hom.comp_apply]
+    simp [h1, xj]
 
 中文:
 实例 :
@@ -298,7 +339,18 @@ instance :
     obtain ⟨k, fi, fj, uk, h1, h2⟩ :=
 𝒰.exists_of_f_eq_f (d.natTrans.app i xi) (d.natTrans.app j xj) by
       dsimp [functorOfLocallyDirected_obj, xi, xj]
-      rw [← 
+      rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]; rw [← ι_toBase]; rw [pullback.condition_assoc]
+      simp
+    use k, fi, fj
+obtain ⟨xk, h1, h2⟩ := exists_preimage_of_isPullback (d.equifibered fj) xj uk by
+      apply (𝒰.f j).injective
+      dsimp only [functorOfLocallyDirected_obj, functorOfLocallyDirected_map]
+      rw [← Scheme.Hom.comp_apply]
+      simp [xj, h2]
+    use xk
+    apply (pullback.snd (d.cover.f i) _).injective
+    rw [← Scheme.Hom.comp_apply]
+    simp [h1, xj]
 
 Depends on / 依赖: d.functor.map, functor
 -/
@@ -337,7 +389,17 @@ lemma preimage_toBase_eq_range_ι
   · obtain ⟨j, xj, rfl⟩ := IsLocallyDirected.ι_jointly_surjective _ x
 obtain ⟨k, fi, fj, uk, rfl, h⟩ := 𝒰.exists_of_f_eq_f ui (d.natTrans.app j xj) by
       simp only [h, functorOfLocallyDirected_obj, ← Scheme.Hom.comp_apply, ι_toBase]
-obtain ⟨xk, rfl, h2⟩
+obtain ⟨xk, rfl, h2⟩ := exists_preimage_of_isPullback (d.equifibered fj) xj uk by
+      apply (𝒰.f j).injective
+      simp only [functorOfLocallyDirected_obj, functorOfLocallyDirected_map]
+      rw [← Scheme.Hom.comp_apply]; rw [← ι_toBase]; rw [Scheme.Hom.comp_apply]; rw [← h]
+      simp [← Scheme.Hom.comp_apply]
+    use d.functor.map fi xk
+    simp [← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply]
+  · rintro ⟨y, rfl⟩
+    use d.natTrans.app i y
+    rw [← Scheme.Hom.comp_apply]; rw [ι_toBase]
+    simp
 
 中文:
 引理 preimage_toBase_eq_range_ι
@@ -348,7 +410,17 @@ obtain ⟨xk, rfl, h2⟩
   · obtain ⟨j, xj, rfl⟩ := IsLocallyDirected.ι_jointly_surjective _ x
 obtain ⟨k, fi, fj, uk, rfl, h⟩ := 𝒰.exists_of_f_eq_f ui (d.natTrans.app j xj) by
       simp only [h, functorOfLocallyDirected_obj, ← Scheme.Hom.comp_apply, ι_toBase]
-obtain ⟨xk, rfl, h2⟩
+obtain ⟨xk, rfl, h2⟩ := exists_preimage_of_isPullback (d.equifibered fj) xj uk by
+      apply (𝒰.f j).injective
+      simp only [functorOfLocallyDirected_obj, functorOfLocallyDirected_map]
+      rw [← Scheme.Hom.comp_apply]; rw [← ι_toBase]; rw [Scheme.Hom.comp_apply]; rw [← h]
+      simp [← Scheme.Hom.comp_apply]
+    use d.functor.map fi xk
+    simp [← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply]
+  · rintro ⟨y, rfl⟩
+    use d.natTrans.app i y
+    rw [← Scheme.Hom.comp_apply]; rw [ι_toBase]
+    simp
 
 Depends on / 依赖: IsLocallyDirected, Scheme, Scheme.Hom.comp_apply, comp_apply, d.equifibered, d.natTrans.app, equifibered, exists_of_f_eq_f, exists_preimage_of_isPullback, functorOfLocallyDirected_map, functorOfLocallyDirected_obj, injective, natTrans
 -/
@@ -408,7 +480,10 @@ lemma isPullback_natTrans_ι_toBase
     rw [← Scheme.Hom.comp_apply]; rw [← s.condition]
     simp
   · intro s
-    rw [← canc
+    rw [← cancel_mono (𝒰.f i)]; rw [Category.assoc]; rw [← ι_toBase]; rw [IsOpenImmersion.lift_fac_assoc]; rw [s.condition]
+  · simp
+  · intro s m h1 h2
+    simpa [← cancel_mono (colimit.ι d.functor i)]
 
 中文:
 引理 isPullback_natTrans_ι_toBase
@@ -423,7 +498,10 @@ lemma isPullback_natTrans_ι_toBase
     rw [← Scheme.Hom.comp_apply]; rw [← s.condition]
     simp
   · intro s
-    rw [← canc
+    rw [← cancel_mono (𝒰.f i)]; rw [Category.assoc]; rw [← ι_toBase]; rw [IsOpenImmersion.lift_fac_assoc]; rw [s.condition]
+  · simp
+  · intro s m h1 h2
+    simpa [← cancel_mono (colimit.ι d.functor i)]
 
 Depends on / 依赖: Category, Category.assoc, IsLimit, IsOpenImmersion, IsOpenImmersion.lift, IsOpenImmersion.lift_fac_assoc, PullbackCone, PullbackCone.IsLimit.mk, Scheme, Scheme.Hom.comp_apply, cancel_mono, colimit, comp_apply, condition, d.functor, functor, lift_fac_assoc, s.condition, s.fst, s.snd
 -/

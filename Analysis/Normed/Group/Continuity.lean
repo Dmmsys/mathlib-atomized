@@ -1040,7 +1040,14 @@ theorem SeminormedGroup.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_on
     refine
       (hf { p : G × G | dist p.fst p.snd < ε } <| dist_mem_uniformity hε).mono fun x hx =>
         H 1 ((f x.fst.fst x.snd)⁻¹ * f x.fst.snd x.snd) ?_
-    simpa [dist_
+    simpa [dist_eq_norm_inv_mul, norm_div_rev] using hx
+  · obtain ⟨ε, hε, H⟩ := uniformity_basis_dist.mem_uniformity_iff.mp hu
+    refine
+      (hf { p : G × G | dist p.fst p.snd < ε } <| dist_mem_uniformity hε).mono fun x hx =>
+        H (f x.fst.fst x.snd) (f x.fst.snd x.snd) ?_
+    simpa [dist_eq_norm_inv_mul, norm_div_rev] using hx
+
+@[to_additive]
 
 中文:
 定理 半赋范群.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_one
@@ -1051,7 +1058,14 @@ theorem SeminormedGroup.uniformCauchySeqOnFilter_iff_tendstoUniformlyOnFilter_on
     refine
       (hf { p : G × G | dist p.fst p.snd < ε } <| dist_mem_uniformity hε).mono fun x hx =>
         H 1 ((f x.fst.fst x.snd)⁻¹ * f x.fst.snd x.snd) ?_
-    simpa [dist_
+    simpa [dist_eq_norm_inv_mul, norm_div_rev] using hx
+  · obtain ⟨ε, hε, H⟩ := uniformity_basis_dist.mem_uniformity_iff.mp hu
+    refine
+      (hf { p : G × G | dist p.fst p.snd < ε } <| dist_mem_uniformity hε).mono fun x hx =>
+        H (f x.fst.fst x.snd) (f x.fst.snd x.snd) ?_
+    simpa [dist_eq_norm_inv_mul, norm_div_rev] using hx
+
+@[to_additive]
 
 Depends on / 依赖: dist_eq_norm_inv_mul, dist_mem_uniformity, mem_uniformity_iff, norm_div_rev, p.fst, p.snd, uniformity_basis_dist, uniformity_basis_dist.mem_uniformity_iff.mp, x.fst.fst, x.fst.snd, x.snd
 -/
@@ -1245,7 +1259,37 @@ theorem controlled_prod_of_mem_closure
   obtain ⟨n₀, hn₀⟩ : exists n₀, forall n >= n₀, ‖(u n)⁻¹ * a‖ < b 0 :=
     haveI : { x | ‖x⁻¹ * a‖ < b 0 } in 𝓝 a := by
       simp_rw [← dist_eq_norm_inv_mul]
-      exact Metri
+      exact Metric.ball_mem_nhds _ (b_pos _)
+    Filter.tendsto_atTop'.mp lim_u _ this
+  set z : Nat -> E := fun n => u (n + n₀)
+  have lim_z : Tendsto z atTop (𝓝 a) := lim_u.comp (tendsto_add_atTop_nat n₀)
+  have mem_𝓤 : forall n, { p : E × E | ‖p.1⁻¹ * p.2‖ < b (n + 1) } in 𝓤 E := fun n => by
+    simpa [← dist_eq_norm_inv_mul] using Metric.dist_mem_uniformity (b_pos <| n + 1)
+  obtain ⟨φ : Nat -> Nat, φ_extr : StrictMono φ, hφ : forall n, ‖(z (φ (n + 1)))⁻¹ * z (φ n)‖ < b (n + 1)⟩ :=
+    lim_z.cauchySeq.subseq_mem mem_𝓤
+  set w : Nat -> E := z ∘ φ
+  have hw : Tendsto w atTop (𝓝 a) := lim_z.comp φ_extr.tendsto_atTop
+  set v : Nat -> E := fun i => if i = 0 then w 0 else (w (i - 1))⁻¹ * w i
+  refine ⟨v, ?_, ?_, hn₀ _ (n₀.le_add_left _), ?_⟩
+  · apply hw.congr (fun n => ?_)
+    rw [Finset.prod_range_succ']
+    have : ∏ k in range n, v (k + 1) = (v 0)⁻¹ * w n := by
+      apply prod_range_induction _ _ (by simp [v]) _ (fun k hk => ?_)
+      simp only [↓reduceIte, Nat.add_eq_zero_iff, one_ne_zero, and_false, add_tsub_cancel_right, v]
+      group
+    simp [this]
+  · rintro ⟨⟩
+    · change w 0 in s
+      apply u_in
+    · exact s.mul_mem (s.inv_mem (u_in _)) (u_in _)
+  · intro l hl
+    obtain ⟨k, rfl⟩ : exists k, l = k + 1 := Nat.exists_eq_succ_of_ne_zero hl.ne'
+    rw [← norm_inv']
+    simp only [Nat.add_eq_zero_iff, one_ne_zero, and_false, ↓reduceIte, add_tsub_cancel_right,
+      mul_inv_rev, inv_inv, v]
+    apply hφ
+
+@[to_additive]
 
 中文:
 定理 controlled_prod_of_mem_closure
@@ -1256,7 +1300,37 @@ theorem controlled_prod_of_mem_closure
   obtain ⟨n₀, hn₀⟩ : exists n₀, forall n >= n₀, ‖(u n)⁻¹ * a‖ < b 0 :=
     haveI : { x | ‖x⁻¹ * a‖ < b 0 } in 𝓝 a := by
       simp_rw [← dist_eq_norm_inv_mul]
-      exact Metri
+      exact Metric.ball_mem_nhds _ (b_pos _)
+    Filter.tendsto_atTop'.mp lim_u _ this
+  set z : Nat -> E := fun n => u (n + n₀)
+  have lim_z : Tendsto z atTop (𝓝 a) := lim_u.comp (tendsto_add_atTop_nat n₀)
+  have mem_𝓤 : forall n, { p : E × E | ‖p.1⁻¹ * p.2‖ < b (n + 1) } in 𝓤 E := fun n => by
+    simpa [← dist_eq_norm_inv_mul] using Metric.dist_mem_uniformity (b_pos <| n + 1)
+  obtain ⟨φ : Nat -> Nat, φ_extr : StrictMono φ, hφ : forall n, ‖(z (φ (n + 1)))⁻¹ * z (φ n)‖ < b (n + 1)⟩ :=
+    lim_z.cauchySeq.subseq_mem mem_𝓤
+  set w : Nat -> E := z ∘ φ
+  have hw : Tendsto w atTop (𝓝 a) := lim_z.comp φ_extr.tendsto_atTop
+  set v : Nat -> E := fun i => if i = 0 then w 0 else (w (i - 1))⁻¹ * w i
+  refine ⟨v, ?_, ?_, hn₀ _ (n₀.le_add_left _), ?_⟩
+  · apply hw.congr (fun n => ?_)
+    rw [Finset.prod_range_succ']
+    have : ∏ k in range n, v (k + 1) = (v 0)⁻¹ * w n := by
+      apply prod_range_induction _ _ (by simp [v]) _ (fun k hk => ?_)
+      simp only [↓reduceIte, Nat.add_eq_zero_iff, one_ne_zero, and_false, add_tsub_cancel_right, v]
+      group
+    simp [this]
+  · rintro ⟨⟩
+    · change w 0 in s
+      apply u_in
+    · exact s.mul_mem (s.inv_mem (u_in _)) (u_in _)
+  · intro l hl
+    obtain ⟨k, rfl⟩ : exists k, l = k + 1 := Nat.exists_eq_succ_of_ne_zero hl.ne'
+    rw [← norm_inv']
+    simp only [Nat.add_eq_zero_iff, one_ne_zero, and_false, ↓reduceIte, add_tsub_cancel_right,
+      mul_inv_rev, inv_inv, v]
+    apply hφ
+
+@[to_additive]
 
 Depends on / 依赖: Filter, Filter.tendsto_atTop, Metric, Metric.ball_mem_nhds, Tendsto, b_pos, ball_mem_nhds, dist_eq_norm_inv_mul, lim_u, lim_u.comp, lim_z, mem_closure_iff_seq_limit, mem_closure_iff_seq_limit.mp, simp_rw, tendsto_add_atTop_nat, tendsto_atTop, u_in
 -/

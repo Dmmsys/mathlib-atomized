@@ -80,6 +80,19 @@ definition mkOfSucc
     rw [Order.lt_succ_iff_of_not_isMax hj] at hi₁
     obtain hi₁ | rfl := hi₁.lt_or_eq
     · rw [arrowSucc_def, arrowMap_extendToSucc _ _ _ _ _ _ (Order.succ_le_of_lt hi₁),
+        ← arrowSucc_def _ _ hi₁, iter.arrowSucc_eq i hi₁,
+        extendToSucc_obj_eq hj iter.F (Φ.toSucc _) i hi₁.le]
+    · rw [arrowSucc_extendToSucc, toSuccArrow,
+        extendToSucc_obj_eq hj iter.F (Φ.toSucc _) i]
+  arrowMap_limit i hi hij k hk := by
+    have hij' := (Order.IsSuccLimit.le_succ_iff hi).1 hij
+    rw [arrowMap_extendToSucc _ _ _ _ _ _ hij']; rw [arrowMap_limit _ _ hi _ _ hk]
+    congr 1
+    apply Arrow.functor_ext
+    rintro ⟨k₁, h₁⟩ ⟨k₂, h₂⟩ f
+    dsimp
+    rw [← arrowMap]; rw [← arrowMap]; rw [arrowMap_extendToSucc]
+    rfl
 
 中文:
 定义 mkOfSucc
@@ -90,6 +103,19 @@ definition mkOfSucc
     rw [Order.lt_succ_iff_of_not_isMax hj] at hi₁
     obtain hi₁ | rfl := hi₁.lt_or_eq
     · rw [arrowSucc_def, arrowMap_extendToSucc _ _ _ _ _ _ (Order.succ_le_of_lt hi₁),
+        ← arrowSucc_def _ _ hi₁, iter.arrowSucc_eq i hi₁,
+        extendToSucc_obj_eq hj iter.F (Φ.toSucc _) i hi₁.le]
+    · rw [arrowSucc_extendToSucc, toSuccArrow,
+        extendToSucc_obj_eq hj iter.F (Φ.toSucc _) i]
+  arrowMap_limit i hi hij k hk := by
+    have hij' := (Order.IsSuccLimit.le_succ_iff hi).1 hij
+    rw [arrowMap_extendToSucc _ _ _ _ _ _ hij']; rw [arrowMap_limit _ _ hi _ _ hk]
+    congr 1
+    apply Arrow.functor_ext
+    rintro ⟨k₁, h₁⟩ ⟨k₂, h₂⟩ f
+    dsimp
+    rw [← arrowMap]; rw [← arrowMap]; rw [arrowMap_extendToSucc]
+    rfl
 
 Depends on / 依赖: extendToSucc, iter.F, toSucc
 -/
@@ -259,7 +285,25 @@ definition mkOfLimit
   obj_bot := functor_obj hj iter ⊥ (Order.IsSuccLimit.bot_lt hj) (mkOfBot Φ J) (by rfl)
   arrowSucc_eq i hi := by
     rw [arrowSucc_def]; rw [arrowMap_functor _ _ _ _ (Order.le_succ i)
-        ((Order.IsSuccLimit.succ_lt_iff hj).2 hi)]; rw [arrow_mk_mapObj]; rw [← arrowSucc_def _ _ (
+        ((Order.IsSuccLimit.succ_lt_iff hj).2 hi)]; rw [arrow_mk_mapObj]; rw [← arrowSucc_def _ _ ((Order.lt_succ_of_le_of_not_isMax (by rfl) (not_isMax_of_lt hi)))]; rw [arrowSucc_eq]; rw [functor_obj _ _ _ hi]
+  arrowMap_limit i hi hij k hk := by
+    obtain hij | rfl := hij.lt_or_eq
+    · rw [arrowMap_functor _ _ _ _ _ hij, arrow_mk_mapObj,
+        arrowMap_limit _ _ hi _ _ hk]
+      congr 1
+      apply Arrow.functor_ext
+      rintro ⟨l₁, hl₁⟩ ⟨l₂, hl₂⟩ f
+      dsimp
+      generalize_proofs
+      rw [← arrowMap]; rw [← arrowMap]; rw [arrowMap_functor hj iter l₁ l₂ _ (hl₂.trans hij)]; rw [arrow_mk_mapObj]
+      apply congr_arrowMap
+    · rw [arrowMap_functor_to_top _ _ _ hk, ← arrowι_def _ hi]
+      congr 1
+      apply Arrow.functor_ext
+      rintro ⟨l₁, hl₁⟩ ⟨l₂, hl₂⟩ f
+      dsimp
+      generalize_proofs
+      rw [← arrowMap]; rw [arrow_mk_mapObj]; rw [arrowMap_functor _ _ _ _ _ hl₂]; rw [arrow_mk_mapObj]
 
 中文:
 定义 mkOfLimit
@@ -268,7 +312,25 @@ definition mkOfLimit
   obj_bot := functor_obj hj iter ⊥ (Order.IsSuccLimit.bot_lt hj) (mkOfBot Φ J) (by rfl)
   arrowSucc_eq i hi := by
     rw [arrowSucc_def]; rw [arrowMap_functor _ _ _ _ (Order.le_succ i)
-        ((Order.IsSuccLimit.succ_lt_iff hj).2 hi)]; rw [arrow_mk_mapObj]; rw [← arrowSucc_def _ _ (
+        ((Order.IsSuccLimit.succ_lt_iff hj).2 hi)]; rw [arrow_mk_mapObj]; rw [← arrowSucc_def _ _ ((Order.lt_succ_of_le_of_not_isMax (by rfl) (not_isMax_of_lt hi)))]; rw [arrowSucc_eq]; rw [functor_obj _ _ _ hi]
+  arrowMap_limit i hi hij k hk := by
+    obtain hij | rfl := hij.lt_or_eq
+    · rw [arrowMap_functor _ _ _ _ _ hij, arrow_mk_mapObj,
+        arrowMap_limit _ _ hi _ _ hk]
+      congr 1
+      apply Arrow.functor_ext
+      rintro ⟨l₁, hl₁⟩ ⟨l₂, hl₂⟩ f
+      dsimp
+      generalize_proofs
+      rw [← arrowMap]; rw [← arrowMap]; rw [arrowMap_functor hj iter l₁ l₂ _ (hl₂.trans hij)]; rw [arrow_mk_mapObj]
+      apply congr_arrowMap
+    · rw [arrowMap_functor_to_top _ _ _ hk, ← arrowι_def _ hi]
+      congr 1
+      apply Arrow.functor_ext
+      rintro ⟨l₁, hl₁⟩ ⟨l₂, hl₂⟩ f
+      dsimp
+      generalize_proofs
+      rw [← arrowMap]; rw [arrow_mk_mapObj]; rw [arrowMap_functor _ _ _ _ _ hl₂]; rw [arrow_mk_mapObj]
 
 Depends on / 依赖: functor
 -/

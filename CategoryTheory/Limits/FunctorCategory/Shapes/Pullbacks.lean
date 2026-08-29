@@ -43,7 +43,8 @@ definition PullbackCone.combine
 map_id _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp
 map_comp _ _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp })
     { app X := (c X).fst }
-  
+    { app X := (c X).snd }
+    (by ext; simp [(c _).condition])
 
 中文:
 定义 PullbackCone.combine
@@ -54,7 +55,8 @@ map_comp _ _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp })
 map_id _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp
 map_comp _ _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp })
     { app X := (c X).fst }
-  
+    { app X := (c X).snd }
+    (by ext; simp [(c _).condition])
 
 Depends on / 依赖: F.map, G.map, H.map, PullbackCone, PullbackCone.mk, all_goals, condition, cospanHomMk, hom_ext, map_comp, map_id
 -/

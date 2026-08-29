@@ -1250,7 +1250,9 @@ definition subtypeDomain
       ⟨(Multiset.filter p xs.1).attach.map fun j => ⟨j.1, (Multiset.mem_filter.1 j.2).2⟩, fun i =>
         (xs.prop i).imp_left fun H =>
           Multiset.mem_map.2
-            ⟨⟨i, Multiset.mem_filter.2 ⟨H, i.2⟩⟩, Multiset.mem_attach _ _, Subtype.e
+            ⟨⟨i, Multiset.mem_filter.2 ⟨H, i.2⟩⟩, Multiset.mem_attach _ _, Subtype.eta _ _⟩⟩⟩
+
+@[simp]
 
 中文:
 定义 subtypeDomain
@@ -1260,7 +1262,9 @@ definition subtypeDomain
       ⟨(Multiset.filter p xs.1).attach.map fun j => ⟨j.1, (Multiset.mem_filter.1 j.2).2⟩, fun i =>
         (xs.prop i).imp_left fun H =>
           Multiset.mem_map.2
-            ⟨⟨i, Multiset.mem_filter.2 ⟨H, i.2⟩⟩, Multiset.mem_attach _ _, Subtype.e
+            ⟨⟨i, Multiset.mem_filter.2 ⟨H, i.2⟩⟩, Multiset.mem_attach _ _, Subtype.eta _ _⟩⟩⟩
+
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.filter, Multiset.mem_attach, Multiset.mem_filter, Multiset.mem_map, Subtype, Subtype.eta, attach, attach.map, filter, imp_left, mem_attach, mem_filter, mem_map, support, x.support, xs.prop
 -/
@@ -1811,7 +1815,13 @@ theorem single_eq_single_iff
     · have h_coe : ⇑(DFinsupp.single i xi) = DFinsupp.single j xj := congr_arg (⇑) h
       have hci := congr_fun h_coe i
       have hcj := congr_fun h_coe j
-      r
+      rw [DFinsupp.single_eq_same] at hci hcj
+      rw [DFinsupp.single_eq_of_ne hij] at hci
+      rw [DFinsupp.single_eq_of_ne (Ne.symm hij)] at hcj
+      exact Or.inr ⟨hci, hcj.symm⟩
+  · rintro (⟨rfl, hxi⟩ | ⟨hi, hj⟩)
+    · rw [eq_of_heq hxi]
+    · rw [hi, hj, DFinsupp.single_zero, DFinsupp.single_zero]
 
 中文:
 定理 single_eq_single_iff
@@ -1825,7 +1835,13 @@ theorem single_eq_single_iff
     · have h_coe : ⇑(DFinsupp.single i xi) = DFinsupp.single j xj := congr_arg (⇑) h
       have hci := congr_fun h_coe i
       have hcj := congr_fun h_coe j
-      r
+      rw [DFinsupp.single_eq_same] at hci hcj
+      rw [DFinsupp.single_eq_of_ne hij] at hci
+      rw [DFinsupp.single_eq_of_ne (Ne.symm hij)] at hcj
+      exact Or.inr ⟨hci, hcj.symm⟩
+  · rintro (⟨rfl, hxi⟩ | ⟨hi, hj⟩)
+    · rw [eq_of_heq hxi]
+    · rw [hi, hj, DFinsupp.single_zero, DFinsupp.single_zero]
 
 Depends on / 依赖: DFinsupp, DFinsupp.sin, DFinsupp.single, DFinsupp.single_eq_of_ne, DFinsupp.single_eq_same, DFinsupp.single_injective, Ne.symm, Or.inl, Or.inr, congr_arg, congr_fun, eq_of_heq, h_coe, hcj.symm, heq_of_eq, single, single_eq_of_ne, single_eq_same, single_injective
 -/
@@ -2444,7 +2460,7 @@ definition update
         · simp
         · obtain hj | (hj : f j = 0) := s.prop j
           · exact Or.inl (Multiset.mem_cons_of_mem hj)
-          · exact Or.inr ((Function.update_of_ne hi.sym
+          · exact Or.inr ((Function.update_of_ne hi.symm b _).trans hj)⟩⟩
 
 中文:
 定义 update
@@ -2456,7 +2472,7 @@ definition update
         · simp
         · obtain hj | (hj : f j = 0) := s.prop j
           · exact Or.inl (Multiset.mem_cons_of_mem hj)
-          · exact Or.inr ((Function.update_of_ne hi.sym
+          · exact Or.inr ((Function.update_of_ne hi.symm b _).trans hj)⟩⟩
 
 Depends on / 依赖: Function, Function.update, Function.update_of_ne, Multiset, Multiset.mem_cons_of_mem, Or.inl, Or.inr, eq_or_ne, f.support, hi.symm, mem_cons_of_mem, s.prop, support, update, update_of_ne
 -/
@@ -2911,7 +2927,22 @@ theorem induction
     subst this
     exact h0
   | cons i s ih => ?_
-
+  have H2 : p (erase i ⟨f, Trunc.mk ⟨i ::ₘ s, H⟩⟩) := by
+    dsimp only [erase, Trunc.map, Trunc.bind, Trunc.liftOn, Trunc.lift_mk,
+      Function.comp, Subtype.coe_mk]
+    have H2 : forall j, j in s ∨ ite (j = i) 0 (f j) = 0 := by grind
+    have H3 : forall aux, (⟨fun j : ι => ite (j = i) 0 (f j), Trunc.mk ⟨i ::ₘ s, aux⟩⟩ : Π₀ i, β i) =
+        ⟨fun j : ι => ite (j = i) 0 (f j), Trunc.mk ⟨s, H2⟩⟩ :=
+      fun _ => ext fun _ => rfl
+    rw [H3]
+    apply ih
+  have H3 : single i _ + _ = (⟨f, Trunc.mk ⟨i ::ₘ s, H⟩⟩ : Π₀ i, β i) := single_add_erase _ _
+  rw [← H3]
+  change p (single i (f i) + _)
+  rcases Classical.em (f i = 0) with h | h
+  · rw [h, single_zero, zero_add]
+    exact H2
+  grind
 
 中文:
 定理 induction
@@ -2926,7 +2957,22 @@ theorem induction
     subst this
     exact h0
   | cons i s ih => ?_
-
+  have H2 : p (erase i ⟨f, Trunc.mk ⟨i ::ₘ s, H⟩⟩) := by
+    dsimp only [erase, Trunc.map, Trunc.bind, Trunc.liftOn, Trunc.lift_mk,
+      Function.comp, Subtype.coe_mk]
+    have H2 : forall j, j in s ∨ ite (j = i) 0 (f j) = 0 := by grind
+    have H3 : forall aux, (⟨fun j : ι => ite (j = i) 0 (f j), Trunc.mk ⟨i ::ₘ s, aux⟩⟩ : Π₀ i, β i) =
+        ⟨fun j : ι => ite (j = i) 0 (f j), Trunc.mk ⟨s, H2⟩⟩ :=
+      fun _ => ext fun _ => rfl
+    rw [H3]
+    apply ih
+  have H3 : single i _ + _ = (⟨f, Trunc.mk ⟨i ::ₘ s, H⟩⟩ : Π₀ i, β i) := single_add_erase _ _
+  rw [← H3]
+  change p (single i (f i) + _)
+  rcases Classical.em (f i = 0) with h | h
+  · rw [h, single_zero, zero_add]
+    exact H2
+  grind
 -/
 protected theorem induction {p : (Π₀ i, β i) -> Prop} (f : Π₀ i, β i) (h0 : p 0)
     (ha : forall (i b) (f : Π₀ i, β i), f i = 0 -> b != 0 -> p f -> p (single i b + f)) : p f := by
@@ -3127,7 +3173,12 @@ definition support
     ext i; constructor
     · intro H
       rcases Finset.mem_filter.1 H with ⟨_, h⟩
-exact Finset.mem_filter.2 ⟨Multiset.mem_toFinset.2 (hy 
+exact Finset.mem_filter.2 ⟨Multiset.mem_toFinset.2 (hy i).resolve_right h, h⟩
+    · intro H
+      rcases Finset.mem_filter.1 H with ⟨_, h⟩
+exact Finset.mem_filter.2 ⟨Multiset.mem_toFinset.2 (hx i).resolve_right h, h⟩
+
+@[simp]
 
 中文:
 定义 support
@@ -3138,7 +3189,12 @@ exact Finset.mem_filter.2 ⟨Multiset.mem_toFinset.2 (hy
     ext i; constructor
     · intro H
       rcases Finset.mem_filter.1 H with ⟨_, h⟩
-exact Finset.mem_filter.2 ⟨Multiset.mem_toFinset.2 (hy 
+exact Finset.mem_filter.2 ⟨Multiset.mem_toFinset.2 (hy i).resolve_right h, h⟩
+    · intro H
+      rcases Finset.mem_filter.1 H with ⟨_, h⟩
+exact Finset.mem_filter.2 ⟨Multiset.mem_toFinset.2 (hx i).resolve_right h, h⟩
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.mem_filter, Multiset, Multiset.mem_toFinset, Multiset.toFinset, Subtype, Subtype.coe_mk, coe_mk, f.support, filter, mem_filter, mem_toFinset, resolve_right, support, toFinset, toFun_eq_coe
 -/
@@ -3269,7 +3325,17 @@ definition subtypeSupportEqEquiv
     calc
       i in support (mk s fun i => (f i).1) ↔ exists h : i in s, (f ⟨i, h⟩).1 != 0 := by simp
       _ ↔ exists _ : i in s, True := exists_congr fun h => (iff_true _).mpr (f _).2
-      _ 
+      _ ↔ i in s := by simp⟩
+  left_inv := by
+    rintro ⟨f, rfl⟩
+    ext i
+    simpa using Eq.symm
+  right_inv f := by
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was: `grind` -/
+    simp
 
 中文:
 定义 subtypeSupportEqEquiv
@@ -3279,7 +3345,17 @@ definition subtypeSupportEqEquiv
     calc
       i in support (mk s fun i => (f i).1) ↔ exists h : i in s, (f ⟨i, h⟩).1 != 0 := by simp
       _ ↔ exists _ : i in s, True := exists_congr fun h => (iff_true _).mpr (f _).2
-      _ 
+      _ ↔ i in s := by simp⟩
+  left_inv := by
+    rintro ⟨f, rfl⟩
+    ext i
+    simpa using Eq.symm
+  right_inv f := by
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was: `grind` -/
+    simp
 
 Depends on / 依赖: Finset, Finset.ext
 -/
@@ -3423,7 +3499,10 @@ decidable_of_iff (forall i in s.val, f i = 0) by
       case mp =>
         intro hs₁; ext i
         -- This instance prevent consuming `DecidableEq ι` in the next `by_cases`.
-        let := Classical.propDec
+        let := Classical.propDecidable
+        by_cases hs₂ : i in s.val
+        case pos => exact hs₁ _ hs₂
+        case neg => exact (s.prop i).resolve_left hs₂
 
 中文:
 实例 decidableZero
@@ -3435,7 +3514,10 @@ decidable_of_iff (forall i in s.val, f i = 0) by
       case mp =>
         intro hs₁; ext i
         -- This instance prevent consuming `DecidableEq ι` in the next `by_cases`.
-        let := Classical.propDec
+        let := Classical.propDecidable
+        by_cases hs₂ : i in s.val
+        case pos => exact hs₁ _ hs₂
+        case neg => exact (s.prop i).resolve_left hs₂
 
 Depends on / 依赖: decidable_of_iff, f.support, recOnSubsingleton, s.val, support
 -/
@@ -3633,7 +3715,14 @@ theorem mapRange_surjective
   · obtain ⟨x, s, hs⟩ := x
     have (i : ι) : exists u : β₁ i, f i u = x i ∧ (x i = 0 -> u = 0) :=
       (eq_or_ne (x i) 0).elim
-        (fun h => ⟨0, (hf i).tra
+        (fun h => ⟨0, (hf i).trans h.symm, fun _ => rfl⟩)
+        (fun h' => by
+          obtain ⟨u, hu⟩ := h i (x i)
+          exact ⟨u, hu, fun h'' => (h' h'').elim⟩)
+    choose y hy using this
+    refine ⟨⟨y, Trunc.mk ⟨s, fun i => ?_⟩⟩, ext fun i => ?_⟩
+    · exact (hs i).imp_right (hy i).2
+    · simp [(hy i).1]
 
 中文:
 定理 mapRange_surjective
@@ -3646,7 +3735,14 @@ theorem mapRange_surjective
   · obtain ⟨x, s, hs⟩ := x
     have (i : ι) : exists u : β₁ i, f i u = x i ∧ (x i = 0 -> u = 0) :=
       (eq_or_ne (x i) 0).elim
-        (fun h => ⟨0, (hf i).tra
+        (fun h => ⟨0, (hf i).trans h.symm, fun _ => rfl⟩)
+        (fun h' => by
+          obtain ⟨u, hu⟩ := h i (x i)
+          exact ⟨u, hu, fun h'' => (h' h'').elim⟩)
+    choose y hy using this
+    refine ⟨⟨y, Trunc.mk ⟨s, fun i => ?_⟩⟩, ext fun i => ?_⟩
+    · exact (hs i).imp_right (hy i).2
+    · simp [(hy i).1]
 
 Depends on / 依赖: Trunc.mk, classical, eq_or_ne, h.symm, imp_right, single
 -/
@@ -3992,6 +4088,8 @@ instance [forall
     ⟨fun ⟨h₁, h₂⟩ => ext fun i => if h : i in f.support then h₂ i h else by
       have hf : f i = 0 := by rwa [mem_support_iff, not_not] at h
       have hg : g i = 0 := by rwa [h₁, mem_support_iff, not_not] at h
+      rw [hf]; rw [hg],
+     by rintro rfl; simp⟩
 
 中文:
 实例 [对任意
@@ -4001,6 +4099,8 @@ instance [forall
     ⟨fun ⟨h₁, h₂⟩ => ext fun i => if h : i in f.support then h₂ i h else by
       have hf : f i = 0 := by rwa [mem_support_iff, not_not] at h
       have hg : g i = 0 := by rwa [h₁, mem_support_iff, not_not] at h
+      rw [hf]; rw [hg],
+     by rintro rfl; simp⟩
 -/
 instance [forall i, Zero (β i)] [forall i, DecidableEq (β i)] : DecidableEq (Π₀ i, β i) := fun f g =>
   decidable_of_iff (f.support = g.support ∧ forall i in f.support, f i = g i)
@@ -4315,7 +4415,10 @@ definition equivCongrLeft
       (@comapDomain' _ _ _ _ h _ h.left_inv f)
   left_inv f := by
     ext i
-    rw [mapRange_apply]
+    rw [mapRange_apply]; rw [comapDomain'_apply]; rw [comapDomain'_apply]; rw [Equiv.cast_eq_iff_heq]; rw [h.symm_apply_apply]
+  right_inv f := by
+    ext k
+    rw [comapDomain'_apply]; rw [mapRange_apply]; rw [comapDomain'_apply]; rw [Equiv.cast_eq_iff_heq]; rw [h.apply_symm_apply]
 
 中文:
 定义 equivCongrLeft
@@ -4327,7 +4430,10 @@ definition equivCongrLeft
       (@comapDomain' _ _ _ _ h _ h.left_inv f)
   left_inv f := by
     ext i
-    rw [mapRange_apply]
+    rw [mapRange_apply]; rw [comapDomain'_apply]; rw [comapDomain'_apply]; rw [Equiv.cast_eq_iff_heq]; rw [h.symm_apply_apply]
+  right_inv f := by
+    ext k
+    rw [comapDomain'_apply]; rw [mapRange_apply]; rw [comapDomain'_apply]; rw [Equiv.cast_eq_iff_heq]; rw [h.apply_symm_apply]
 
 Depends on / 依赖: comapDomain, h.right_inv, h.symm, right_inv
 -/
@@ -4359,6 +4465,9 @@ definition extendWith
         Option.rec (Or.inl <| Multiset.mem_cons_self _ _)
           (fun i =>
 (s.prop i).imp_left fun h => Multiset.mem_cons_of_mem Multiset.mem_map_of_mem _ h)
+          i⟩
+
+@[simp]
 
 中文:
 定义 extendWith
@@ -4370,6 +4479,9 @@ definition extendWith
         Option.rec (Or.inl <| Multiset.mem_cons_self _ _)
           (fun i =>
 (s.prop i).imp_left fun h => Multiset.mem_cons_of_mem Multiset.mem_map_of_mem _ h)
+          i⟩
+
+@[simp]
 -/
 def extendWith [forall i, Zero (α i)] (a : α none) (f : Π₀ i, α (some i)) : Π₀ i, α i where
   toFun := fun i => match i with | none => a | some _ => f _
@@ -4514,7 +4626,7 @@ definition equivProdDFinsupp
     dsimp only
     ext
     · exact extendWith_none x.snd _
-    · rw [co
+    · rw [comapDomain_apply, extendWith_some]
 
 中文:
 定义 equivProdDFinsupp
@@ -4529,7 +4641,7 @@ definition equivProdDFinsupp
     dsimp only
     ext
     · exact extendWith_none x.snd _
-    · rw [co
+    · rw [comapDomain_apply, extendWith_some]
 
 Depends on / 依赖: List.Lex, List.cons_head, Option.some_injective, _tail, comapDomain, cons_head, head_le_of_lt, replace, some_injective
 -/
@@ -4684,7 +4796,14 @@ definition mapRange.addEquiv
     invFun := mapRange (fun i x => (e i).symm x) fun i => (e i).symm.map_zero
     left_inv := fun x => by
       rw [← mapRange_comp] <;>
-        · simp_rw [AddEquiv.symm_
+        · simp_rw [AddEquiv.symm_comp_self]
+          simp
+    right_inv := fun x => by
+      rw [← mapRange_comp] <;>
+        · simp_rw [AddEquiv.self_comp_symm]
+          simp }
+
+@[simp]
 
 中文:
 定义 mapRange.addEquiv
@@ -4695,7 +4814,14 @@ definition mapRange.addEquiv
     invFun := mapRange (fun i x => (e i).symm x) fun i => (e i).symm.map_zero
     left_inv := fun x => by
       rw [← mapRange_comp] <;>
-        · simp_rw [AddEquiv.symm_
+        · simp_rw [AddEquiv.symm_comp_self]
+          simp
+    right_inv := fun x => by
+      rw [← mapRange_comp] <;>
+        · simp_rw [AddEquiv.self_comp_symm]
+          simp }
+
+@[simp]
 -/
 def mapRange.addEquiv (e : forall i, β₁ i ≃+ β₂ i) : (Π₀ i, β₁ i) ≃+ Π₀ i, β₂ i :=
   { mapRange.addMonoidHom fun i =>

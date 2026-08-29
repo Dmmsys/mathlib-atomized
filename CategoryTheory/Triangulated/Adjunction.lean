@@ -66,7 +66,66 @@ lemma isTriangulated_rightAdjoint
     obtain ⟨Z, f, g, mem⟩ := distinguished_cocone_triangle (G.map T.mor₁)
     obtain ⟨h, ⟨h₁, h₂⟩⟩ := complete_distinguished_triangle_morphism _ _
       (F.map_distinguished _ mem) hT (adj.counit.app T.obj₁) (adj.counit.app T.obj₂) (by simp)
-   
+    dsimp at h h₁ h₂ ⊢
+    have h₁' : f ≫ adj.unit.app Z ≫ G.map h = G.map T.mor₂ := by
+      simpa [homEquiv_apply] using DFunLike.congr_arg (adj.homEquiv _ _) h₁
+    have h₂' : g ≫ (G.commShiftIso (1 : Int)).inv.app T.obj₁ =
+        adj.homEquiv _ _ h ≫ G.map T.mor₃ := by
+      apply (adj.homEquiv _ _).symm.injective
+      simp only [Functor.comp_obj, homEquiv_counit, Functor.id_obj, Functor.map_comp, assoc,
+        homEquiv_unit, counit_naturality, counit_naturality_assoc, left_triangle_components_assoc,
+        ← h₂, adj.shift_counit_app, Iso.hom_inv_id_app_assoc]
+    rw [assoc] at h₂
+    have : Mono (adj.homEquiv _ _ h) := by
+      rw [mono_iff_cancel_zero]
+      intro _ φ hφ
+      obtain ⟨ψ, rfl⟩ := Triangle.coyoneda_exact₃ _ mem φ (by
+        dsimp
+        simp only [homEquiv_unit, Functor.comp_obj] at hφ
+        rw [← cancel_mono ((G.commShiftIso (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [h₂']; rw [zero_comp]; rw [homEquiv_unit]; rw [assoc]; rw [reassoc_of% hφ]; rw [zero_comp])
+      dsimp at ψ hφ ⊢
+      obtain ⟨α, hα⟩ := T.coyoneda_exact₂ hT ((adj.homEquiv _ _).symm ψ)
+        ((adj.homEquiv _ _).injective (by simpa [homEquiv_counit, homEquiv_unit, ← h₁'] using hφ))
+      have eq := DFunLike.congr_arg (adj.homEquiv _ _) hα
+      simp only [homEquiv_counit, homEquiv_unit, comp_id,
+        Functor.map_comp, unit_naturality_assoc, right_triangle_components] at eq
+      have eq' := comp_distTriang_mor_zero₁₂ _ mem
+      dsimp at eq eq'
+      rw [eq]; rw [assoc]; rw [assoc]; rw [eq']; rw [comp_zero]; rw [comp_zero]
+    have := isIso_of_yoneda_map_bijective (adj.homEquiv _ _ h) (fun Y => by
+      constructor
+      · intro φ₁ φ₂ hφ
+        rw [← cancel_mono (adj.homEquiv _ _ h)]
+        exact hφ
+      · intro φ
+        obtain ⟨ψ, hψ⟩ := Triangle.coyoneda_exact₁ _ mem (φ ≫ G.map T.mor₃ ≫
+          (G.commShiftIso (1 : Int)).hom.app T.obj₁) (by
+            dsimp
+            rw [assoc]; rw [assoc]; rw [← G.commShiftIso_hom_naturality]; rw [← G.map_comp_assoc]; rw [comp_distTriang_mor_zero₃₁ _ hT]; rw [G.map_zero]; rw [zero_comp]; rw [comp_zero])
+        dsimp at ψ hψ
+        obtain ⟨α, hα⟩ : exists α, α = φ - ψ ≫ adj.homEquiv _ _ h := ⟨_, rfl⟩
+        have hα₀ : α ≫ G.map T.mor₃ = 0 := by
+          rw [hα]; rw [sub_comp]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).hom.app T.obj₁)]; rw [assoc]; rw [sub_comp]; rw [assoc]; rw [assoc]; rw [hψ]; rw [zero_comp]; rw [sub_eq_zero]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [h₂']; rw [Iso.hom_inv_id_app]; rw [comp_id]
+        suffices exists (β : Y ⟶ Z), β ≫ adj.homEquiv _ _ h = α by
+          obtain ⟨β, hβ⟩ := this
+          refine ⟨ψ + β, ?_⟩
+          dsimp
+          rw [add_comp]; rw [hβ]; rw [hα]; rw [add_sub_cancel]
+        obtain ⟨β, hβ⟩ := T.coyoneda_exact₃ hT ((adj.homEquiv _ _).symm α)
+          ((adj.homEquiv _ _).injective (by simpa [homEquiv_unit, homEquiv_counit] using hα₀))
+        refine ⟨adj.homEquiv _ _ β ≫ f, ?_⟩
+        simpa [homEquiv_unit, h₁'] using congr_arg (adj.homEquiv _ _).toFun hβ.symm)
+    refine isomorphic_distinguished _ mem _ (Iso.symm ?_)
+    refine Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (asIso (adj.homEquiv Z T.obj₃ h)) ?_ ?_ ?_
+    · simp
+    · apply (adj.homEquiv _ _).symm.injective
+      dsimp
+      simp only [homEquiv_unit, homEquiv_counit, Functor.map_comp, assoc,
+        counit_naturality, left_triangle_components_assoc, h₁, id_comp]
+    · dsimp
+      rw [Functor.map_id]; rw [comp_id]; rw [homEquiv_unit]; rw [assoc]; rw [← G.map_comp_assoc]; rw [← h₂]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [unit_naturality_assoc]; rw [assoc]; rw [Functor.commShiftIso_hom_naturality]; rw [← adj.shift_unit_app_assoc]; rw [← Functor.map_comp]; rw [right_triangle_components]; rw [Functor.map_id]; rw [comp_id]
+
+include adj in
 
 中文:
 引理 isTriangulated_rightAdjoint
@@ -77,7 +136,66 @@ lemma isTriangulated_rightAdjoint
     obtain ⟨Z, f, g, mem⟩ := distinguished_cocone_triangle (G.map T.mor₁)
     obtain ⟨h, ⟨h₁, h₂⟩⟩ := complete_distinguished_triangle_morphism _ _
       (F.map_distinguished _ mem) hT (adj.counit.app T.obj₁) (adj.counit.app T.obj₂) (by simp)
-   
+    dsimp at h h₁ h₂ ⊢
+    have h₁' : f ≫ adj.unit.app Z ≫ G.map h = G.map T.mor₂ := by
+      simpa [homEquiv_apply] using DFunLike.congr_arg (adj.homEquiv _ _) h₁
+    have h₂' : g ≫ (G.commShiftIso (1 : Int)).inv.app T.obj₁ =
+        adj.homEquiv _ _ h ≫ G.map T.mor₃ := by
+      apply (adj.homEquiv _ _).symm.injective
+      simp only [Functor.comp_obj, homEquiv_counit, Functor.id_obj, Functor.map_comp, assoc,
+        homEquiv_unit, counit_naturality, counit_naturality_assoc, left_triangle_components_assoc,
+        ← h₂, adj.shift_counit_app, Iso.hom_inv_id_app_assoc]
+    rw [assoc] at h₂
+    have : Mono (adj.homEquiv _ _ h) := by
+      rw [mono_iff_cancel_zero]
+      intro _ φ hφ
+      obtain ⟨ψ, rfl⟩ := Triangle.coyoneda_exact₃ _ mem φ (by
+        dsimp
+        simp only [homEquiv_unit, Functor.comp_obj] at hφ
+        rw [← cancel_mono ((G.commShiftIso (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [h₂']; rw [zero_comp]; rw [homEquiv_unit]; rw [assoc]; rw [reassoc_of% hφ]; rw [zero_comp])
+      dsimp at ψ hφ ⊢
+      obtain ⟨α, hα⟩ := T.coyoneda_exact₂ hT ((adj.homEquiv _ _).symm ψ)
+        ((adj.homEquiv _ _).injective (by simpa [homEquiv_counit, homEquiv_unit, ← h₁'] using hφ))
+      have eq := DFunLike.congr_arg (adj.homEquiv _ _) hα
+      simp only [homEquiv_counit, homEquiv_unit, comp_id,
+        Functor.map_comp, unit_naturality_assoc, right_triangle_components] at eq
+      have eq' := comp_distTriang_mor_zero₁₂ _ mem
+      dsimp at eq eq'
+      rw [eq]; rw [assoc]; rw [assoc]; rw [eq']; rw [comp_zero]; rw [comp_zero]
+    have := isIso_of_yoneda_map_bijective (adj.homEquiv _ _ h) (fun Y => by
+      constructor
+      · intro φ₁ φ₂ hφ
+        rw [← cancel_mono (adj.homEquiv _ _ h)]
+        exact hφ
+      · intro φ
+        obtain ⟨ψ, hψ⟩ := Triangle.coyoneda_exact₁ _ mem (φ ≫ G.map T.mor₃ ≫
+          (G.commShiftIso (1 : Int)).hom.app T.obj₁) (by
+            dsimp
+            rw [assoc]; rw [assoc]; rw [← G.commShiftIso_hom_naturality]; rw [← G.map_comp_assoc]; rw [comp_distTriang_mor_zero₃₁ _ hT]; rw [G.map_zero]; rw [zero_comp]; rw [comp_zero])
+        dsimp at ψ hψ
+        obtain ⟨α, hα⟩ : exists α, α = φ - ψ ≫ adj.homEquiv _ _ h := ⟨_, rfl⟩
+        have hα₀ : α ≫ G.map T.mor₃ = 0 := by
+          rw [hα]; rw [sub_comp]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).hom.app T.obj₁)]; rw [assoc]; rw [sub_comp]; rw [assoc]; rw [assoc]; rw [hψ]; rw [zero_comp]; rw [sub_eq_zero]; rw [← cancel_mono ((Functor.commShiftIso G (1 : Int)).inv.app T.obj₁)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [h₂']; rw [Iso.hom_inv_id_app]; rw [comp_id]
+        suffices exists (β : Y ⟶ Z), β ≫ adj.homEquiv _ _ h = α by
+          obtain ⟨β, hβ⟩ := this
+          refine ⟨ψ + β, ?_⟩
+          dsimp
+          rw [add_comp]; rw [hβ]; rw [hα]; rw [add_sub_cancel]
+        obtain ⟨β, hβ⟩ := T.coyoneda_exact₃ hT ((adj.homEquiv _ _).symm α)
+          ((adj.homEquiv _ _).injective (by simpa [homEquiv_unit, homEquiv_counit] using hα₀))
+        refine ⟨adj.homEquiv _ _ β ≫ f, ?_⟩
+        simpa [homEquiv_unit, h₁'] using congr_arg (adj.homEquiv _ _).toFun hβ.symm)
+    refine isomorphic_distinguished _ mem _ (Iso.symm ?_)
+    refine Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (asIso (adj.homEquiv Z T.obj₃ h)) ?_ ?_ ?_
+    · simp
+    · apply (adj.homEquiv _ _).symm.injective
+      dsimp
+      simp only [homEquiv_unit, homEquiv_counit, Functor.map_comp, assoc,
+        counit_naturality, left_triangle_components_assoc, h₁, id_comp]
+    · dsimp
+      rw [Functor.map_id]; rw [comp_id]; rw [homEquiv_unit]; rw [assoc]; rw [← G.map_comp_assoc]; rw [← h₂]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [unit_naturality_assoc]; rw [assoc]; rw [Functor.commShiftIso_hom_naturality]; rw [← adj.shift_unit_app_assoc]; rw [← Functor.map_comp]; rw [right_triangle_components]; rw [Functor.map_id]; rw [comp_id]
+
+include adj in
 
 Depends on / 依赖: Additive, DFunLike, DFunLike.congr_arg, F.map_distinguished, G.Additive, G.commShiftIso, G.map, T.mor, T.obj, adj.counit.app, adj.homEquiv, adj.right_adjoint_additive, adj.unit.app, commShiftIso, complete_distinguished_triangle_morphism, congr_arg, counit, distinguished_cocone_triangle, homEquiv, homEquiv_apply
 -/

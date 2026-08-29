@@ -158,7 +158,7 @@ theorem _root_.Function.Injective.wSameSide_map_iff
   rcases hfp₂ with ⟨p₂, hp₂, rfl⟩
   refine ⟨p₁, hp₁, p₂, hp₂, ?_⟩
   simp_rw [← linearMap_vsub, (f.linear_injective_iff.2 hf).sameRay_map_iff] at h
-  exa
+  exact h
 
 中文:
 定理 _root_.函数.单射.wSameSide_map_iff
@@ -171,7 +171,7 @@ theorem _root_.Function.Injective.wSameSide_map_iff
   rcases hfp₂ with ⟨p₂, hp₂, rfl⟩
   refine ⟨p₁, hp₁, p₂, hp₂, ?_⟩
   simp_rw [← linearMap_vsub, (f.linear_injective_iff.2 hf).sameRay_map_iff] at h
-  exa
+  exact h
 
 Depends on / 依赖: f.linear_injective_iff, h.map, linearMap_vsub, linear_injective_iff, mem_map, sameRay_map_iff, simp_rw
 -/
@@ -301,7 +301,7 @@ theorem _root_.Function.Injective.wOppSide_map_iff
   rcases hfp₂ with ⟨p₂, hp₂, rfl⟩
   refine ⟨p₁, hp₁, p₂, hp₂, ?_⟩
   simp_rw [← linearMap_vsub, (f.linear_injective_iff.2 hf).sameRay_map_iff] at h
-  exa
+  exact h
 
 中文:
 定理 _root_.函数.单射.wOppSide_map_iff
@@ -314,7 +314,7 @@ theorem _root_.Function.Injective.wOppSide_map_iff
   rcases hfp₂ with ⟨p₂, hp₂, rfl⟩
   refine ⟨p₁, hp₁, p₂, hp₂, ?_⟩
   simp_rw [← linearMap_vsub, (f.linear_injective_iff.2 hf).sameRay_map_iff] at h
-  exa
+  exact h
 
 Depends on / 依赖: f.linear_injective_iff, h.map, linearMap_vsub, linear_injective_iff, mem_map, sameRay_map_iff, simp_rw
 -/
@@ -653,7 +653,9 @@ theorem wOppSide_comm
     rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
     refine ⟨p₂, hp₂, p₁, hp₁, ?_⟩
-    rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_v
+    rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
+
+alias ⟨WOppSide.symm, _⟩ := wOppSide_comm
 
 中文:
 定理 wOppSide_comm
@@ -666,7 +668,9 @@ theorem wOppSide_comm
     rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
     refine ⟨p₂, hp₂, p₁, hp₁, ?_⟩
-    rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_v
+    rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
+
+alias ⟨WOppSide.symm, _⟩ := wOppSide_comm
 
 Depends on / 依赖: SameRay, SameRay.sameRay_comm, neg_vsub_eq_vsub_rev, sameRay_comm, sameRay_neg_iff
 -/
@@ -937,7 +941,8 @@ theorem wSameSide_vadd_left_iff
       ⟨-v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction (Submodule.neg_mem _ hv) hp₁, p₂, hp₂, ?_⟩
     rwa [vsub_vadd_eq_vsub_sub, sub_neg_eq_add, add_comm, ← vadd_vsub_assoc]
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
-    refine ⟨v +ᵥ p₁, AffineS
+    refine ⟨v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction hv hp₁, p₂, hp₂, ?_⟩
+    rwa [vadd_vsub_vadd_cancel_left]
 
 中文:
 定理 wSameSide_vadd_left_iff
@@ -949,7 +954,8 @@ theorem wSameSide_vadd_left_iff
       ⟨-v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction (Submodule.neg_mem _ hv) hp₁, p₂, hp₂, ?_⟩
     rwa [vsub_vadd_eq_vsub_sub, sub_neg_eq_add, add_comm, ← vadd_vsub_assoc]
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
-    refine ⟨v +ᵥ p₁, AffineS
+    refine ⟨v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction hv hp₁, p₂, hp₂, ?_⟩
+    rwa [vadd_vsub_vadd_cancel_left]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.vadd_mem_of_mem_direction, Submodule, Submodule.neg_mem, add_comm, neg_mem, sub_neg_eq_add, vadd_mem_of_mem_direction, vadd_vsub_assoc, vadd_vsub_vadd_cancel_left, vsub_vadd_eq_vsub_sub
 -/
@@ -1040,7 +1046,8 @@ theorem wOppSide_vadd_left_iff
       ⟨-v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction (Submodule.neg_mem _ hv) hp₁, p₂, hp₂, ?_⟩
     rwa [vsub_vadd_eq_vsub_sub, sub_neg_eq_add, add_comm, ← vadd_vsub_assoc]
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
-    refine ⟨v +ᵥ p₁, AffineS
+    refine ⟨v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction hv hp₁, p₂, hp₂, ?_⟩
+    rwa [vadd_vsub_vadd_cancel_left]
 
 中文:
 定理 wOppSide_vadd_left_iff
@@ -1052,7 +1059,8 @@ theorem wOppSide_vadd_left_iff
       ⟨-v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction (Submodule.neg_mem _ hv) hp₁, p₂, hp₂, ?_⟩
     rwa [vsub_vadd_eq_vsub_sub, sub_neg_eq_add, add_comm, ← vadd_vsub_assoc]
   · rintro ⟨p₁, hp₁, p₂, hp₂, h⟩
-    refine ⟨v +ᵥ p₁, AffineS
+    refine ⟨v +ᵥ p₁, AffineSubspace.vadd_mem_of_mem_direction hv hp₁, p₂, hp₂, ?_⟩
+    rwa [vadd_vsub_vadd_cancel_left]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.vadd_mem_of_mem_direction, Submodule, Submodule.neg_mem, add_comm, neg_mem, sub_neg_eq_add, vadd_mem_of_mem_direction, vadd_vsub_assoc, vadd_vsub_vadd_cancel_left, vsub_vadd_eq_vsub_sub
 -/
@@ -1397,7 +1405,8 @@ theorem _root_.Wbtw.wOppSide₁₃
   rcases ht0.lt_or_eq with (ht0' | rfl); swap
   · simp
   refine Or.inr (Or.inr ⟨1 - t, t, sub_pos.2 ht1', ht0', ?_⟩)
-  rw [lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_vadd_eq
+  rw [lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_vadd_eq_vsub_sub]; rw [← neg_vsub_eq_vsub_rev z]; rw [vsub_self]
+  module
 
 中文:
 定理 _root_.Wbtw.wOppSide₁₃
@@ -1410,7 +1419,8 @@ theorem _root_.Wbtw.wOppSide₁₃
   rcases ht0.lt_or_eq with (ht0' | rfl); swap
   · simp
   refine Or.inr (Or.inr ⟨1 - t, t, sub_pos.2 ht1', ht0', ?_⟩)
-  rw [lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_vadd_eq
+  rw [lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_vadd_eq_vsub_sub]; rw [← neg_vsub_eq_vsub_rev z]; rw [vsub_self]
+  module
 
 Depends on / 依赖: Or.inr, ht0.lt_or_eq, ht1.lt_or_eq, lineMap_apply, lt_or_eq, module, neg_vsub_eq_vsub_rev, sub_pos, vadd_vsub_assoc, vsub_self, vsub_vadd_eq_vsub_sub
 -/
@@ -1639,7 +1649,12 @@ theorem wSameSide_iff_exists_left
     · refine Or.inr ⟨p₂', hp₂', ?_⟩
       rw [h0]
       exact SameRay.zero_right _
-    · refine Or.inr ⟨(r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.sm
+    · refine Or.inr ⟨(r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.smul_vsub_vadd_mem _ h hp₁' hp₂',
+        Or.inr (Or.inr ⟨r₁, r₂, hr₁, hr₂, ?_⟩)⟩
+      rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [← hr]; rw [smul_smul]; rw [mul_div_cancel₀ _ hr₂.ne.symm]; rw [← smul_sub]; rw [vsub_sub_vsub_cancel_right]
+  · rintro (h' | ⟨h₁, h₂, h₃⟩)
+    · exact wSameSide_of_left_mem y h'
+    · exact ⟨p₁, h, h₁, h₂, h₃⟩
 
 中文:
 定理 wSameSide_iff_存在_left
@@ -1653,7 +1668,12 @@ theorem wSameSide_iff_exists_left
     · refine Or.inr ⟨p₂', hp₂', ?_⟩
       rw [h0]
       exact SameRay.zero_right _
-    · refine Or.inr ⟨(r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.sm
+    · refine Or.inr ⟨(r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.smul_vsub_vadd_mem _ h hp₁' hp₂',
+        Or.inr (Or.inr ⟨r₁, r₂, hr₁, hr₂, ?_⟩)⟩
+      rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [← hr]; rw [smul_smul]; rw [mul_div_cancel₀ _ hr₂.ne.symm]; rw [← smul_sub]; rw [vsub_sub_vsub_cancel_right]
+  · rintro (h' | ⟨h₁, h₂, h₃⟩)
+    · exact wSameSide_of_left_mem y h'
+    · exact ⟨p₁, h, h₁, h₂, h₃⟩
 
 Depends on / 依赖: Or.inl, Or.inr, SameRay, SameRay.zero_right, ne.symm, s.smul_vsub_vadd_mem, smul_smul, smul_sub, smul_vsub_vadd_mem, vsub_eq_zero_iff_eq, vsub_sub_vsub_cancel_right, vsub_vadd_eq_vsub_sub, zero_right
 -/
@@ -1764,7 +1784,13 @@ theorem wOppSide_iff_exists_left
     · refine Or.inr ⟨p₂', hp₂', ?_⟩
       rw [h0]
       exact SameRay.zero_right _
-    · refine Or.inr ⟨(-r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.s
+    · refine Or.inr ⟨(-r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.smul_vsub_vadd_mem _ h hp₁' hp₂',
+        Or.inr (Or.inr ⟨r₁, r₂, hr₁, hr₂, ?_⟩)⟩
+      rw [vadd_vsub_assoc]; rw [← vsub_sub_vsub_cancel_right x p₁ p₁']
+      linear_combination (norm := match_scalars <;> field) hr
+  · rintro (h' | ⟨h₁, h₂, h₃⟩)
+    · exact wOppSide_of_left_mem y h'
+    · exact ⟨p₁, h, h₁, h₂, h₃⟩
 
 中文:
 定理 wOppSide_iff_存在_left
@@ -1778,7 +1804,13 @@ theorem wOppSide_iff_exists_left
     · refine Or.inr ⟨p₂', hp₂', ?_⟩
       rw [h0]
       exact SameRay.zero_right _
-    · refine Or.inr ⟨(-r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.s
+    · refine Or.inr ⟨(-r₁ / r₂) • (p₁ -ᵥ p₁') +ᵥ p₂', s.smul_vsub_vadd_mem _ h hp₁' hp₂',
+        Or.inr (Or.inr ⟨r₁, r₂, hr₁, hr₂, ?_⟩)⟩
+      rw [vadd_vsub_assoc]; rw [← vsub_sub_vsub_cancel_right x p₁ p₁']
+      linear_combination (norm := match_scalars <;> field) hr
+  · rintro (h' | ⟨h₁, h₂, h₃⟩)
+    · exact wOppSide_of_left_mem y h'
+    · exact ⟨p₁, h, h₁, h₂, h₃⟩
 
 Depends on / 依赖: Or.inl, Or.inr, SameRay, SameRay.zero_right, linear_combination, match_scalars, s.smul_vsub_vadd_mem, smul_vsub_vadd_mem, vadd_vsub_assoc, vsub_eq_zero_iff_eq, vsub_sub_vsub_cancel_right, wOppSide_, zero_right
 -/
@@ -1815,7 +1847,8 @@ theorem wOppSide_iff_exists_right
     rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
   · rintro (hy | ⟨p, hp, hr⟩)
     · exact Or.inl hy
- 
+    refine Or.inr ⟨p, hp, ?_⟩
+    rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
 
 中文:
 定理 wOppSide_iff_存在_right
@@ -1829,7 +1862,8 @@ theorem wOppSide_iff_exists_right
     rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
   · rintro (hy | ⟨p, hp, hr⟩)
     · exact Or.inl hy
- 
+    refine Or.inr ⟨p, hp, ?_⟩
+    rwa [SameRay.sameRay_comm, ← sameRay_neg_iff, neg_vsub_eq_vsub_rev, neg_vsub_eq_vsub_rev]
 
 Depends on / 依赖: Or.inl, Or.inr, SameRay, SameRay.sameRay_comm, neg_vsub_eq_vsub_rev, sameRay_comm, sameRay_neg_iff, wOppSide_comm, wOppSide_iff_exists_left
 -/
@@ -2142,7 +2176,9 @@ theorem WOppSide.trans
   rcases hyz with ⟨p₃, hp₃, hyz⟩
   rw [← sameRay_neg_iff]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev] at hyz
   refine ⟨p₁, hp₁, p₃, hp₃, hxy.trans hyz ?_⟩
-  refine fun h => False.e
+  refine fun h => False.elim ?_
+  rw [vsub_eq_zero_iff_eq] at h
+  exact hy (h ▸ hp₂)
 
 中文:
 定理 WOppSide.trans
@@ -2153,7 +2189,9 @@ theorem WOppSide.trans
   rcases hyz with ⟨p₃, hp₃, hyz⟩
   rw [← sameRay_neg_iff]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev] at hyz
   refine ⟨p₁, hp₁, p₃, hp₃, hxy.trans hyz ?_⟩
-  refine fun h => False.e
+  refine fun h => False.elim ?_
+  rw [vsub_eq_zero_iff_eq] at h
+  exact hy (h ▸ hp₂)
 
 Depends on / 依赖: False.elim, hxy.trans, neg_vsub_eq_vsub_rev, or_iff_right, sameRay_neg_iff, vsub_eq_zero_iff_eq, wOppSide_iff_exists_left
 -/
@@ -2278,7 +2316,7 @@ theorem wSameSide_and_wOppSide_iff
     exact h.1 (wOppSide_self_iff.1 (hs.trans_wOppSide ho h.2))
   · rintro (h | h)
     · exact ⟨wSameSide_of_left_mem y h, wOppSide_of_left_mem y h⟩
-    · exact ⟨wSameSide_of_right_mem x h, wOppSide
+    · exact ⟨wSameSide_of_right_mem x h, wOppSide_of_right_mem x h⟩
 
 中文:
 定理 wSameSide_and_wOppSide_iff
@@ -2292,7 +2330,7 @@ theorem wSameSide_and_wOppSide_iff
     exact h.1 (wOppSide_self_iff.1 (hs.trans_wOppSide ho h.2))
   · rintro (h | h)
     · exact ⟨wSameSide_of_left_mem y h, wOppSide_of_left_mem y h⟩
-    · exact ⟨wSameSide_of_right_mem x h, wOppSide
+    · exact ⟨wSameSide_of_right_mem x h, wOppSide_of_right_mem x h⟩
 
 Depends on / 依赖: hs.trans_wOppSide, not_or, trans_wOppSide, wOppSide_comm, wOppSide_of_left_mem, wOppSide_of_right_mem, wOppSide_self_iff, wSameSide_of_left_mem, wSameSide_of_right_mem
 -/
@@ -2465,7 +2503,17 @@ theorem wOppSide_iff_exists_wbtw
     exact ⟨p₁, hp₁, wbtw_self_left _ _ _⟩
   · rw [vsub_eq_zero_iff_eq] at h
     rw [← h]
-    exact ⟨p₂, hp₂, wbtw_self_right _ _
+    exact ⟨p₂, hp₂, wbtw_self_right _ _ _⟩
+  · refine ⟨lineMap x y (r₂ / (r₁ + r₂)), ?_, ?_⟩
+    · have : (r₂ / (r₁ + r₂)) • (y -ᵥ p₂ + (p₂ -ᵥ p₁) - (x -ᵥ p₁)) + (x -ᵥ p₁) =
+          (r₂ / (r₁ + r₂)) • (p₂ -ᵥ p₁) := by
+        rw [← neg_vsub_eq_vsub_rev p₂ y]
+        linear_combination (norm := match_scalars <;> field) (r₁ + r₂)⁻¹ • h
+      rw [lineMap_apply]; rw [← vsub_vadd x p₁]; rw [← vsub_vadd y p₂]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]; rw [← vadd_assoc]; rw [vadd_eq_add]; rw [this]
+      exact s.smul_vsub_vadd_mem (r₂ / (r₁ + r₂)) hp₂ hp₁ hp₁
+    · exact Set.mem_image_of_mem _
+        ⟨by positivity,
+          div_le_one_of_le₀ (le_add_of_nonneg_left hr₁.le) (Left.add_pos hr₁ hr₂).le⟩
 
 中文:
 定理 wOppSide_iff_存在_wbtw
@@ -2478,7 +2526,17 @@ theorem wOppSide_iff_exists_wbtw
     exact ⟨p₁, hp₁, wbtw_self_left _ _ _⟩
   · rw [vsub_eq_zero_iff_eq] at h
     rw [← h]
-    exact ⟨p₂, hp₂, wbtw_self_right _ _
+    exact ⟨p₂, hp₂, wbtw_self_right _ _ _⟩
+  · refine ⟨lineMap x y (r₂ / (r₁ + r₂)), ?_, ?_⟩
+    · have : (r₂ / (r₁ + r₂)) • (y -ᵥ p₂ + (p₂ -ᵥ p₁) - (x -ᵥ p₁)) + (x -ᵥ p₁) =
+          (r₂ / (r₁ + r₂)) • (p₂ -ᵥ p₁) := by
+        rw [← neg_vsub_eq_vsub_rev p₂ y]
+        linear_combination (norm := match_scalars <;> field) (r₁ + r₂)⁻¹ • h
+      rw [lineMap_apply]; rw [← vsub_vadd x p₁]; rw [← vsub_vadd y p₂]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]; rw [← vadd_assoc]; rw [vadd_eq_add]; rw [this]
+      exact s.smul_vsub_vadd_mem (r₂ / (r₁ + r₂)) hp₂ hp₁ hp₁
+    · exact Set.mem_image_of_mem _
+        ⟨by positivity,
+          div_le_one_of_le₀ (le_add_of_nonneg_left hr₁.le) (Left.add_pos hr₁ hr₂).le⟩
 
 Depends on / 依赖: h.wOppSide, lineMap, linear_combination, neg_vsub_eq_vsub_rev, vsub_eq_zero_iff_eq, wbtw_self_left, wbtw_self_right
 -/
@@ -2553,7 +2611,8 @@ theorem _root_.Sbtw.sOppSide_of_notMem_of_mem
     rintro rfl
     simp [lineMap_apply] at hyz
   have hy' := vsub_mem_direction hy hz
-  rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev z]; rw
+  rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev z]; rw [← neg_one_smul R (z -ᵥ x)]; rw [← add_smul]; rw [← sub_eq_add_neg]; rw [s.direction.smul_mem_iff (sub_ne_zero_of_ne ht)] at hy'
+  rwa [vadd_mem_iff_mem_of_mem_direction (Submodule.smul_mem _ _ hy')] at hy
 
 中文:
 定理 _root_.Sbtw.sOppSide_of_notMem_of_mem
@@ -2566,7 +2625,8 @@ theorem _root_.Sbtw.sOppSide_of_notMem_of_mem
     rintro rfl
     simp [lineMap_apply] at hyz
   have hy' := vsub_mem_direction hy hz
-  rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev z]; rw
+  rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev z]; rw [← neg_one_smul R (z -ᵥ x)]; rw [← add_smul]; rw [← sub_eq_add_neg]; rw [s.direction.smul_mem_iff (sub_ne_zero_of_ne ht)] at hy'
+  rwa [vadd_mem_iff_mem_of_mem_direction (Submodule.smul_mem _ _ hy')] at hy
 
 Depends on / 依赖: Submodule, Submodule.smul_mem, add_smul, direction, h.wbtw.wOppSide, lineMap_apply, neg_one_smul, neg_vsub_eq_vsub_rev, s.direction.smul_mem_iff, smul_mem, smul_mem_iff, sub_eq_add_neg, sub_ne_zero_of_ne, vadd_mem_iff_mem_of_mem_direction, vadd_vsub_assoc, vsub_mem_direction
 -/
@@ -2768,7 +2828,16 @@ theorem setOfPred_wSameSide_eq_image2
     rintro ⟨p₂, hp₂, h | h | ⟨r₁, r₂, hr₁, hr₂, h⟩⟩
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
-    · rw [vsub_eq_zero_iff_eq] at 
+    · rw [vsub_eq_zero_iff_eq] at h
+      refine ⟨0, le_rfl, p₂, hp₂, ?_⟩
+      simp [h]
+    · refine ⟨r₁ / r₂, (div_pos hr₁ hr₂).le, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [h]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact wSameSide_smul_vsub_vadd_right x hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_wSameSide_eq_image2 := setOfPred_wSameSide_eq_image2
 
 中文:
 定理 setOfPred_wSameSide_eq_image2
@@ -2781,7 +2850,16 @@ theorem setOfPred_wSameSide_eq_image2
     rintro ⟨p₂, hp₂, h | h | ⟨r₁, r₂, hr₁, hr₂, h⟩⟩
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
-    · rw [vsub_eq_zero_iff_eq] at 
+    · rw [vsub_eq_zero_iff_eq] at h
+      refine ⟨0, le_rfl, p₂, hp₂, ?_⟩
+      simp [h]
+    · refine ⟨r₁ / r₂, (div_pos hr₁ hr₂).le, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [h]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact wSameSide_smul_vsub_vadd_right x hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_wSameSide_eq_image2 := setOfPred_wSameSide_eq_image2
 
 Depends on / 依赖: False.elim, Set.mem_Ici, Set.mem_image2, Set.mem_ofPred, div_eq_inv_mul, div_pos, h.symm, le_rfl, mem_Ici, mem_image2, mem_ofPred, ne.symm, one_smul, or_iff_right, simp_rw, smul_smul, vsub_eq_zero_iff_eq, vsub_vadd, wSameSide_iff_exists_left
 -/
@@ -2820,7 +2898,14 @@ theorem setOfPred_sSameSide_eq_image2
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
     · rw [vsub_eq_zero_iff_eq] at h
-      ex
+      exact False.elim (hy (h.symm ▸ hp₂))
+    · refine ⟨r₁ / r₂, div_pos hr₁ hr₂, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [h]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact sSameSide_smul_vsub_vadd_right hx hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_sSameSide_eq_image2 := setOfPred_sSameSide_eq_image2
 
 中文:
 定理 setOfPred_sSameSide_eq_image2
@@ -2834,7 +2919,14 @@ theorem setOfPred_sSameSide_eq_image2
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
     · rw [vsub_eq_zero_iff_eq] at h
-      ex
+      exact False.elim (hy (h.symm ▸ hp₂))
+    · refine ⟨r₁ / r₂, div_pos hr₁ hr₂, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [h]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact sSameSide_smul_vsub_vadd_right hx hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_sSameSide_eq_image2 := setOfPred_sSameSide_eq_image2
 
 Depends on / 依赖: False.elim, Set.mem_Ioi, Set.mem_image2, Set.mem_ofPred, div_eq_inv_mul, div_pos, h.symm, mem_Ioi, mem_image2, mem_ofPred, ne.symm, one_smul, sSameSide_iff_exists_left, simp_rw, smul_smul, vsub_eq_zero_iff_eq, vsub_vadd
 -/
@@ -2872,6 +2964,15 @@ theorem setOfPred_wOppSide_eq_image2
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
     · rw [vsub_eq_zero_iff_eq] at h
+      refine ⟨0, le_rfl, p₂, hp₂, ?_⟩
+      simp [h]
+    · refine ⟨-r₁ / r₂, (div_neg_of_neg_of_pos (Left.neg_neg_iff.2 hr₁) hr₂).le, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [neg_smul]; rw [h]; rw [smul_neg]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [neg_vsub_eq_vsub_rev]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact wOppSide_smul_vsub_vadd_right x hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_wOppSide_eq_image2 := setOfPred_wOppSide_eq_image2
 
 中文:
 定理 setOfPred_wOppSide_eq_image2
@@ -2885,6 +2986,15 @@ theorem setOfPred_wOppSide_eq_image2
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
     · rw [vsub_eq_zero_iff_eq] at h
+      refine ⟨0, le_rfl, p₂, hp₂, ?_⟩
+      simp [h]
+    · refine ⟨-r₁ / r₂, (div_neg_of_neg_of_pos (Left.neg_neg_iff.2 hr₁) hr₂).le, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [neg_smul]; rw [h]; rw [smul_neg]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [neg_vsub_eq_vsub_rev]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact wOppSide_smul_vsub_vadd_right x hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_wOppSide_eq_image2 := setOfPred_wOppSide_eq_image2
 
 Depends on / 依赖: False.elim, Left.neg_neg_iff, Set.mem_Iic, Set.mem_image2, Set.mem_ofPred, div_eq_inv_mul, div_neg_of_neg_of_pos, h.symm, le_rfl, mem_Iic, mem_image2, mem_ofPred, neg_neg_iff, neg_smul, or_iff_right, simp_rw, smul_neg, smul_smul, vsub_eq_zero_iff_eq, wOppSide_iff_exists_left
 -/
@@ -2923,7 +3033,14 @@ theorem setOfPred_sOppSide_eq_image2
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
     · rw [vsub_eq_zero_iff_eq] at h
-      exa
+      exact False.elim (hy (h ▸ hp₂))
+    · refine ⟨-r₁ / r₂, div_neg_of_neg_of_pos (Left.neg_neg_iff.2 hr₁) hr₂, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [neg_smul]; rw [h]; rw [smul_neg]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [neg_vsub_eq_vsub_rev]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact sOppSide_smul_vsub_vadd_right hx hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_sOppSide_eq_image2 := setOfPred_sOppSide_eq_image2
 
 中文:
 定理 setOfPred_sOppSide_eq_image2
@@ -2937,7 +3054,14 @@ theorem setOfPred_sOppSide_eq_image2
     · rw [vsub_eq_zero_iff_eq] at h
       exact False.elim (hx (h.symm ▸ hp))
     · rw [vsub_eq_zero_iff_eq] at h
-      exa
+      exact False.elim (hy (h ▸ hp₂))
+    · refine ⟨-r₁ / r₂, div_neg_of_neg_of_pos (Left.neg_neg_iff.2 hr₁) hr₂, p₂, hp₂, ?_⟩
+      rw [div_eq_inv_mul]; rw [← smul_smul]; rw [neg_smul]; rw [h]; rw [smul_neg]; rw [smul_smul]; rw [inv_mul_cancel₀ hr₂.ne.symm]; rw [one_smul]; rw [neg_vsub_eq_vsub_rev]; rw [vsub_vadd]
+  · rintro ⟨t, ht, p', hp', rfl⟩
+    exact sOppSide_smul_vsub_vadd_right hx hp hp' ht
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_sOppSide_eq_image2 := setOfPred_sOppSide_eq_image2
 
 Depends on / 依赖: False.elim, Left.neg_neg_iff, Set.mem_Iio, Set.mem_image2, Set.mem_ofPred, div_eq_inv_mul, div_neg_of_neg_of_pos, h.symm, mem_Iio, mem_image2, mem_ofPred, neg_neg_iff, neg_smul, sOppSide_iff_exists_left, simp_rw, smul_neg, smul_smul, vsub_eq_zero_iff_eq
 -/
@@ -3024,7 +3148,12 @@ theorem isConnected_setOfPred_wSameSide
     have := AddTorsor.connectedSpace V P
     exact isConnected_univ
   · rw [setOfPred_wSameSide_eq_image2 hx hp, ← Set.image_prod]
-    refine (isConnected_Ici.prod (isConnected_
+    refine (isConnected_Ici.prod (isConnected_iff_connectedSpace.2 ?_)).image _
+      ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
+    convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_wSameSide := isConnected_setOfPred_wSameSide
 
 中文:
 定理 isConnected_setOfPred_wSameSide
@@ -3037,7 +3166,12 @@ theorem isConnected_setOfPred_wSameSide
     have := AddTorsor.connectedSpace V P
     exact isConnected_univ
   · rw [setOfPred_wSameSide_eq_image2 hx hp, ← Set.image_prod]
-    refine (isConnected_Ici.prod (isConnected_
+    refine (isConnected_Ici.prod (isConnected_iff_connectedSpace.2 ?_)).image _
+      ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
+    convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_wSameSide := isConnected_setOfPred_wSameSide
 
 Depends on / 依赖: AddTorsor, AddTorsor.connectedSpace, Nonempty, Set.image_prod, connectedSpace, continuousOn, continuous_const, continuous_fst, continuous_fst.smul, continuous_snd, convert, direction, image_prod, isConnected_Ici, isConnected_Ici.prod, isConnected_iff_connectedSpace, isConnected_univ, s.direction, setOfPred_wSameSide_eq_image2, wSameSide_of_left_mem
 -/
@@ -3072,7 +3206,7 @@ theorem isPreconnected_setOfPred_wSameSide
   · exact (isConnected_setOfPred_wSameSide x h).isPreconnected
 
 @[deprecated (since := "2026-07-09")]
-alias isPreconnected_setOf_wSameSide :=
+alias isPreconnected_setOf_wSameSide := isPreconnected_setOfPred_wSameSide
 
 中文:
 定理 isPreconnected_setOfPred_wSameSide
@@ -3085,7 +3219,7 @@ alias isPreconnected_setOf_wSameSide :=
   · exact (isConnected_setOfPred_wSameSide x h).isPreconnected
 
 @[deprecated (since := "2026-07-09")]
-alias isPreconnected_setOf_wSameSide :=
+alias isPreconnected_setOf_wSameSide := isPreconnected_setOfPred_wSameSide
 
 Depends on / 依赖: Set.eq_empty_or_nonempty, coe_eq_bot_iff, eq_empty_or_nonempty, isConnected_setOfPred_wSameSide, isPreconnected, isPreconnected_empty, not_wSameSide_bot
 -/
@@ -3112,7 +3246,10 @@ theorem isConnected_setOfPred_sSameSide
   rw [setOfPred_sSameSide_eq_image2 hx hp]; rw [← Set.image_prod]
   refine (isConnected_Ioi.prod (isConnected_iff_connectedSpace.2 ?_)).image _
     ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
-  convert! AddTorsor
+  convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_sSameSide := isConnected_setOfPred_sSameSide
 
 中文:
 定理 isConnected_setOfPred_sSameSide
@@ -3123,7 +3260,10 @@ theorem isConnected_setOfPred_sSameSide
   rw [setOfPred_sSameSide_eq_image2 hx hp]; rw [← Set.image_prod]
   refine (isConnected_Ioi.prod (isConnected_iff_connectedSpace.2 ?_)).image _
     ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
-  convert! AddTorsor
+  convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_sSameSide := isConnected_setOfPred_sSameSide
 
 Depends on / 依赖: AddTorsor, AddTorsor.connectedSpace, Nonempty, Set.image_prod, connectedSpace, continuousOn, continuous_const, continuous_fst, continuous_fst.smul, continuous_snd, convert, direction, image_prod, isConnected_Ioi, isConnected_Ioi.prod, isConnected_iff_connectedSpace, s.direction, setOfPred_sSameSide_eq_image2
 -/
@@ -3153,7 +3293,10 @@ theorem isPreconnected_setOfPred_sSameSide
   · by_cases hx : x in s
     · simp only [hx, SSameSide, not_true, false_and, and_false]
       exact isPreconnected_empty
-    · exact (isConn
+    · exact (isConnected_setOfPred_sSameSide hx h).isPreconnected
+
+@[deprecated (since := "2026-07-09")]
+alias isPreconnected_setOf_sSameSide := isPreconnected_setOfPred_sSameSide
 
 中文:
 定理 isPreconnected_setOfPred_sSameSide
@@ -3166,7 +3309,10 @@ theorem isPreconnected_setOfPred_sSameSide
   · by_cases hx : x in s
     · simp only [hx, SSameSide, not_true, false_and, and_false]
       exact isPreconnected_empty
-    · exact (isConn
+    · exact (isConnected_setOfPred_sSameSide hx h).isPreconnected
+
+@[deprecated (since := "2026-07-09")]
+alias isPreconnected_setOf_sSameSide := isPreconnected_setOfPred_sSameSide
 
 Depends on / 依赖: SSameSide, Set.eq_empty_or_nonempty, and_false, coe_eq_bot_iff, eq_empty_or_nonempty, false_and, isConnected_setOfPred_sSameSide, isPreconnected, isPreconnected_empty, not_sSameSide_bot, not_true
 -/
@@ -3198,7 +3344,12 @@ theorem isConnected_setOfPred_wOppSide
     have := AddTorsor.connectedSpace V P
     exact isConnected_univ
   · rw [setOfPred_wOppSide_eq_image2 hx hp, ← Set.image_prod]
-    refine (isConnected_Iic.prod (isConnected_if
+    refine (isConnected_Iic.prod (isConnected_iff_connectedSpace.2 ?_)).image _
+      ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
+    convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_wOppSide := isConnected_setOfPred_wOppSide
 
 中文:
 定理 isConnected_setOfPred_wOppSide
@@ -3211,7 +3362,12 @@ theorem isConnected_setOfPred_wOppSide
     have := AddTorsor.connectedSpace V P
     exact isConnected_univ
   · rw [setOfPred_wOppSide_eq_image2 hx hp, ← Set.image_prod]
-    refine (isConnected_Iic.prod (isConnected_if
+    refine (isConnected_Iic.prod (isConnected_iff_connectedSpace.2 ?_)).image _
+      ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
+    convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_wOppSide := isConnected_setOfPred_wOppSide
 
 Depends on / 依赖: AddTorsor, AddTorsor.connectedSpace, Nonempty, Set.image_prod, connectedSpace, continuousOn, continuous_const, continuous_fst, continuous_fst.smul, continuous_snd, convert, direction, image_prod, isConnected_Iic, isConnected_Iic.prod, isConnected_iff_connectedSpace, isConnected_univ, s.direction, setOfPred_wOppSide_eq_image2, wOppSide_of_left_mem
 -/
@@ -3245,7 +3401,7 @@ theorem isPreconnected_setOfPred_wOppSide
   · exact (isConnected_setOfPred_wOppSide x h).isPreconnected
 
 @[deprecated (since := "2026-07-09")]
-alias isPreconnected_setOf_wOppSide := is
+alias isPreconnected_setOf_wOppSide := isPreconnected_setOfPred_wOppSide
 
 中文:
 定理 isPreconnected_setOfPred_wOppSide
@@ -3258,7 +3414,7 @@ alias isPreconnected_setOf_wOppSide := is
   · exact (isConnected_setOfPred_wOppSide x h).isPreconnected
 
 @[deprecated (since := "2026-07-09")]
-alias isPreconnected_setOf_wOppSide := is
+alias isPreconnected_setOf_wOppSide := isPreconnected_setOfPred_wOppSide
 
 Depends on / 依赖: Set.eq_empty_or_nonempty, coe_eq_bot_iff, eq_empty_or_nonempty, isConnected_setOfPred_wOppSide, isPreconnected, isPreconnected_empty, not_wOppSide_bot
 -/
@@ -3285,7 +3441,10 @@ theorem isConnected_setOfPred_sOppSide
   rw [setOfPred_sOppSide_eq_image2 hx hp]; rw [← Set.image_prod]
   refine (isConnected_Iio.prod (isConnected_iff_connectedSpace.2 ?_)).image _
     ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
-  convert! AddTorsor.
+  convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_sOppSide := isConnected_setOfPred_sOppSide
 
 中文:
 定理 isConnected_setOfPred_sOppSide
@@ -3296,7 +3455,10 @@ theorem isConnected_setOfPred_sOppSide
   rw [setOfPred_sOppSide_eq_image2 hx hp]; rw [← Set.image_prod]
   refine (isConnected_Iio.prod (isConnected_iff_connectedSpace.2 ?_)).image _
     ((continuous_fst.smul continuous_const).vadd continuous_snd).continuousOn
-  convert! AddTorsor.
+  convert! AddTorsor.connectedSpace s.direction s
+
+@[deprecated (since := "2026-07-09")]
+alias isConnected_setOf_sOppSide := isConnected_setOfPred_sOppSide
 
 Depends on / 依赖: AddTorsor, AddTorsor.connectedSpace, Nonempty, Set.image_prod, connectedSpace, continuousOn, continuous_const, continuous_fst, continuous_fst.smul, continuous_snd, convert, direction, image_prod, isConnected_Iio, isConnected_Iio.prod, isConnected_iff_connectedSpace, s.direction, setOfPred_sOppSide_eq_image2
 -/
@@ -3326,7 +3488,10 @@ theorem isPreconnected_setOfPred_sOppSide
   · by_cases hx : x in s
     · simp only [hx, SOppSide, not_true, false_and, and_false]
       exact isPreconnected_empty
-    · exact (isConnec
+    · exact (isConnected_setOfPred_sOppSide hx h).isPreconnected
+
+@[deprecated (since := "2026-07-09")]
+alias isPreconnected_setOf_sOppSide := isPreconnected_setOfPred_sOppSide
 
 中文:
 定理 isPreconnected_setOfPred_sOppSide
@@ -3339,7 +3504,10 @@ theorem isPreconnected_setOfPred_sOppSide
   · by_cases hx : x in s
     · simp only [hx, SOppSide, not_true, false_and, and_false]
       exact isPreconnected_empty
-    · exact (isConnec
+    · exact (isConnected_setOfPred_sOppSide hx h).isPreconnected
+
+@[deprecated (since := "2026-07-09")]
+alias isPreconnected_setOf_sOppSide := isPreconnected_setOfPred_sOppSide
 
 Depends on / 依赖: SOppSide, Set.eq_empty_or_nonempty, and_false, coe_eq_bot_iff, eq_empty_or_nonempty, false_and, isConnected_setOfPred_sOppSide, isPreconnected, isPreconnected_empty, not_sOppSide_bot, not_true
 -/
@@ -3380,7 +3548,25 @@ lemma sSameSide_affineSpan_faceOpposite_of_sign_eq
   refine ⟨?_, (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 h0,
     (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.2 h0'⟩
   obtain ⟨j, hj⟩ : exists j, j != i := exists_ne _
-  have hj' : s.points j in affineSpan R (Set
+  have hj' : s.points j in affineSpan R (Set.range (s.faceOpposite i).points) := by
+    simpa using hj
+  refine (wSameSide_iff_exists_left hj').2 (.inr ?_)
+  rw [← Finset.univ.affineCombination_piSingle R s.points
+    (Finset.mem_univ j)]; rw [Finset.affineCombination_vsub]
+  let w₃ : Fin (n + 1) -> R :=
+    w₂ - w₂ i • (w₁ i)⁻¹ • (w₁ - Pi.single j 1)
+  have hw₃1 : ∑ k, w₃ k = 1 := by simp [w₃, hw₂, ← Finset.mul_sum, hw₁]
+  have hw₃i : w₃ i = 0 := by simp [w₃, hj.symm, h0]
+  refine ⟨Finset.univ.affineCombination R s.points w₃,
+    (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₃1).2 hw₃i, ?_⟩
+  simp only [w₃, Finset.affineCombination_vsub, sub_sub_cancel, smul_smul, map_smul,
+    sameRay_smul_right_iff]
+  left
+  rcases h0.lt_or_gt with h | h
+  · rw [sign_neg h, eq_comm, sign_eq_neg_one_iff] at hs
+    exact (mul_pos_of_neg_of_neg hs (inv_neg''.2 h)).le
+  · rw [sign_pos h, eq_comm, sign_eq_one_iff] at hs
+    positivity
 
 中文:
 引理 sSameSide_affineSpan_faceOpposite_of_sign_eq
@@ -3390,7 +3576,25 @@ lemma sSameSide_affineSpan_faceOpposite_of_sign_eq
   refine ⟨?_, (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 h0,
     (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.2 h0'⟩
   obtain ⟨j, hj⟩ : exists j, j != i := exists_ne _
-  have hj' : s.points j in affineSpan R (Set
+  have hj' : s.points j in affineSpan R (Set.range (s.faceOpposite i).points) := by
+    simpa using hj
+  refine (wSameSide_iff_exists_left hj').2 (.inr ?_)
+  rw [← Finset.univ.affineCombination_piSingle R s.points
+    (Finset.mem_univ j)]; rw [Finset.affineCombination_vsub]
+  let w₃ : Fin (n + 1) -> R :=
+    w₂ - w₂ i • (w₁ i)⁻¹ • (w₁ - Pi.single j 1)
+  have hw₃1 : ∑ k, w₃ k = 1 := by simp [w₃, hw₂, ← Finset.mul_sum, hw₁]
+  have hw₃i : w₃ i = 0 := by simp [w₃, hj.symm, h0]
+  refine ⟨Finset.univ.affineCombination R s.points w₃,
+    (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₃1).2 hw₃i, ?_⟩
+  simp only [w₃, Finset.affineCombination_vsub, sub_sub_cancel, smul_smul, map_smul,
+    sameRay_smul_right_iff]
+  left
+  rcases h0.lt_or_gt with h | h
+  · rw [sign_neg h, eq_comm, sign_eq_neg_one_iff] at hs
+    exact (mul_pos_of_neg_of_neg hs (inv_neg''.2 h)).le
+  · rw [sign_pos h, eq_comm, sign_eq_one_iff] at hs
+    positivity
 
 Depends on / 依赖: Finset, Finset.affineCombination, Finset.mem_univ, Finset.univ.affineCombination_piSingle, Set.range, affineCombination, affineCombination_mem_affineSpan_faceOpposite_iff, affineCombination_piSingle, affineSpan, exists_ne, faceOpposite, mem_univ, points, s.affineCombination_mem_affineSpan_faceOpposite_iff, s.faceOpposite, s.points, wSameSide_iff_exists_left
 -/
@@ -3437,7 +3641,20 @@ lemma sOppSide_affineSpan_faceOpposite_of_pos_of_neg
   have hw₃ : ∑ j, w₃ j = 1 := by
     simp [w₃, lineMap_apply, Finset.sum_add_distrib, ← Finset.mul_sum, hw₁, hw₂]
   have h : Sbtw R w₁ w₃ w₂ := sbtw_lineMap_iff.2
-    ⟨(by grind), div_pos h
+    ⟨(by grind), div_pos hs₁ hp, (div_lt_one hp).2 (by grind)⟩
+  have h' : Sbtw R (Finset.univ.affineCombination R s.points w₁)
+      (Finset.univ.affineCombination R s.points w₃)
+      (Finset.univ.affineCombination R s.points w₂) := by
+    rwa [s.independent.injOn_affineCombination_fintypeAffineCoords.sbtw_map_iff
+     (mem_fintypeAffineCoords_iff_sum.2 hw₁) (mem_fintypeAffineCoords_iff_sum.2 hw₃)
+     (mem_fintypeAffineCoords_iff_sum.2 hw₂)]
+  refine h'.sOppSide_of_notMem_of_mem
+    ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 hs₁.ne')
+    ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₃).2 ?_)
+  simp only [lineMap_apply, vsub_eq_sub, vadd_eq_add, Pi.add_apply, Pi.smul_apply, Pi.sub_apply,
+    smul_eq_mul, w₃]
+  rw [← neg_sub (w₁ i) (w₂ i)]; rw [mul_neg]; rw [div_mul_cancel₀ _ hp.ne']
+  simp
 
 中文:
 引理 sOppSide_affineSpan_faceOpposite_of_pos_of_neg
@@ -3448,7 +3665,20 @@ lemma sOppSide_affineSpan_faceOpposite_of_pos_of_neg
   have hw₃ : ∑ j, w₃ j = 1 := by
     simp [w₃, lineMap_apply, Finset.sum_add_distrib, ← Finset.mul_sum, hw₁, hw₂]
   have h : Sbtw R w₁ w₃ w₂ := sbtw_lineMap_iff.2
-    ⟨(by grind), div_pos h
+    ⟨(by grind), div_pos hs₁ hp, (div_lt_one hp).2 (by grind)⟩
+  have h' : Sbtw R (Finset.univ.affineCombination R s.points w₁)
+      (Finset.univ.affineCombination R s.points w₃)
+      (Finset.univ.affineCombination R s.points w₂) := by
+    rwa [s.independent.injOn_affineCombination_fintypeAffineCoords.sbtw_map_iff
+     (mem_fintypeAffineCoords_iff_sum.2 hw₁) (mem_fintypeAffineCoords_iff_sum.2 hw₃)
+     (mem_fintypeAffineCoords_iff_sum.2 hw₂)]
+  refine h'.sOppSide_of_notMem_of_mem
+    ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 hs₁.ne')
+    ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₃).2 ?_)
+  simp only [lineMap_apply, vsub_eq_sub, vadd_eq_add, Pi.add_apply, Pi.smul_apply, Pi.sub_apply,
+    smul_eq_mul, w₃]
+  rw [← neg_sub (w₁ i) (w₂ i)]; rw [mul_neg]; rw [div_mul_cancel₀ _ hp.ne']
+  simp
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_add_distrib, Finset.univ.affineCombination, affineCombination, div_lt_one, div_pos, independent, lineMap, lineMap_apply, mul_sum, points, s.independent, s.points, sbtw_lineMap_iff, sum_add_distrib
 -/
@@ -3490,7 +3720,17 @@ lemma sSameSide_affineSpan_faceOpposite_iff
     (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.1 h.left_notMem
   refine ⟨?_, h0⟩
   have h0' : w₂ i != 0 :=
-    (s.affineCombination_mem_affineSpan_faceO
+    (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.1 h.right_notMem
+  rcases sign_eq_sign_or_eq_neg h0 h0' with hs | hs
+  · exact hs
+  · exfalso
+    rcases Ne.lt_or_gt h0 with h' | h'
+    · rw [sign_neg h', neg_inj, eq_comm, sign_eq_one_iff] at hs
+      exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg
+        hw₂ hw₁ hs h').symm.wOppSide.not_sSameSide h
+    · rw [sign_pos h', eq_comm, neg_eq_iff_eq_neg, sign_eq_neg_one_iff] at hs
+      exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg
+        hw₁ hw₂ h' hs).wOppSide.not_sSameSide h
 
 中文:
 引理 sSameSide_affineSpan_faceOpposite_iff
@@ -3501,7 +3741,17 @@ lemma sSameSide_affineSpan_faceOpposite_iff
     (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.1 h.left_notMem
   refine ⟨?_, h0⟩
   have h0' : w₂ i != 0 :=
-    (s.affineCombination_mem_affineSpan_faceO
+    (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.1 h.right_notMem
+  rcases sign_eq_sign_or_eq_neg h0 h0' with hs | hs
+  · exact hs
+  · exfalso
+    rcases Ne.lt_or_gt h0 with h' | h'
+    · rw [sign_neg h', neg_inj, eq_comm, sign_eq_one_iff] at hs
+      exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg
+        hw₂ hw₁ hs h').symm.wOppSide.not_sSameSide h
+    · rw [sign_pos h', eq_comm, neg_eq_iff_eq_neg, sign_eq_neg_one_iff] at hs
+      exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg
+        hw₁ hw₂ h' hs).wOppSide.not_sSameSide h
 
 Depends on / 依赖: Ne.lt_or_gt, affineCombination_mem_affineSpan_faceOpposite_iff, eq_comm, h.left_notMem, h.right_notMem, left_notMem, lt_or_gt, neg_inj, right_notMem, s.affineCombination_mem_affineSpan_faceOpposite_iff, s.sOp, s.sSameSide_affineSpan_faceOpposite_of_sign_eq, sSameSide_affineSpan_faceOpposite_of_sign_eq, sign_eq_one_iff, sign_eq_sign_or_eq_neg, sign_neg
 -/
@@ -3541,7 +3791,15 @@ lemma sOppSide_affineSpan_faceOpposite_iff
     refine ⟨?_, h0⟩
     have h0' : w₂ i != 0 :=
       (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.1 h.right_notMem
-    rcases
+    rcases sign_eq_sign_or_eq_neg h0 h0' with hs | hs
+    · exfalso
+      exact (s.sSameSide_affineSpan_faceOpposite_of_sign_eq hw₁ hw₂ hs h0).wSameSide.not_sOppSide h
+    · exact hs
+  · rcases h0.lt_or_gt with h' | h'
+    · rw [sign_neg h', neg_inj, eq_comm, sign_eq_one_iff] at hs
+      exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₂ hw₁ hs h').symm
+    · rw [sign_pos h', eq_comm, neg_eq_iff_eq_neg, sign_eq_neg_one_iff] at hs
+      exact s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₁ hw₂ h' hs
 
 中文:
 引理 sOppSide_affineSpan_faceOpposite_iff
@@ -3553,7 +3811,15 @@ lemma sOppSide_affineSpan_faceOpposite_iff
     refine ⟨?_, h0⟩
     have h0' : w₂ i != 0 :=
       (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.1 h.right_notMem
-    rcases
+    rcases sign_eq_sign_or_eq_neg h0 h0' with hs | hs
+    · exfalso
+      exact (s.sSameSide_affineSpan_faceOpposite_of_sign_eq hw₁ hw₂ hs h0).wSameSide.not_sOppSide h
+    · exact hs
+  · rcases h0.lt_or_gt with h' | h'
+    · rw [sign_neg h', neg_inj, eq_comm, sign_eq_one_iff] at hs
+      exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₂ hw₁ hs h').symm
+    · rw [sign_pos h', eq_comm, neg_eq_iff_eq_neg, sign_eq_neg_one_iff] at hs
+      exact s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₁ hw₂ h' hs
 
 Depends on / 依赖: affineCombination_mem_affineSpan_faceOpposite_iff, eq_comm, h.left_notMem, h.right_notMem, h0.lt_or_gt, left_notMem, lt_or_gt, neg_inj, not_sOppSide, right_notMem, s.affineCombination_mem_affineSpan_faceOpposite_iff, s.sSameSide_affineSpan_faceOpposite_of_sign_eq, sSameSide_affineSpan_faceOpposite_of_sign_eq, sign_eq_sign_or_eq_neg, sign_neg, wSameSide, wSameSide.not_sOppSide
 -/
@@ -3593,7 +3859,14 @@ lemma wSameSide_affineSpan_faceOpposite_iff
     · simp [h0']
     exact .inl ((s.sSameSide_affineSpan_faceOpposite_iff hw₁ hw₂).1 ⟨h,
       (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 h0,
-      (s.affineCombination_
+      (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.2 h0'⟩).1
+  · by_cases h0 : w₁ i = 0
+    · exact wSameSide_of_left_mem _ ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).2 h0)
+    · by_cases h0' : w₂ i = 0
+      · exact wSameSide_of_right_mem _
+          ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).2 h0')
+      simp only [h0, h0', or_self, or_false] at h
+      exact (s.sSameSide_affineSpan_faceOpposite_of_sign_eq hw₁ hw₂ h h0).wSameSide
 
 中文:
 引理 wSameSide_affineSpan_faceOpposite_iff
@@ -3606,7 +3879,14 @@ lemma wSameSide_affineSpan_faceOpposite_iff
     · simp [h0']
     exact .inl ((s.sSameSide_affineSpan_faceOpposite_iff hw₁ hw₂).1 ⟨h,
       (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 h0,
-      (s.affineCombination_
+      (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.2 h0'⟩).1
+  · by_cases h0 : w₁ i = 0
+    · exact wSameSide_of_left_mem _ ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).2 h0)
+    · by_cases h0' : w₂ i = 0
+      · exact wSameSide_of_right_mem _
+          ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).2 h0')
+      simp only [h0, h0', or_self, or_false] at h
+      exact (s.sSameSide_affineSpan_faceOpposite_of_sign_eq hw₁ hw₂ h h0).wSameSide
 
 Depends on / 依赖: affineCombination_mem_affineSpan_faceOpposite_iff, s.affineCombination_mem_affineSpan_faceOpposite_iff, s.sSameSide_affineSpan_faceOpposite_iff, sSameSide_affineSpan_faceOpposite_iff, wSameSide_of_left_mem, wSameSide_of_right_mem
 -/
@@ -3646,7 +3926,18 @@ lemma wOppSide_affineSpan_faceOpposite_iff
     · simp [h0']
     exact .inl ((s.sOppSide_affineSpan_faceOpposite_iff hw₁ hw₂).1 ⟨h,
       (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 h0,
-      (s.affineCombination_m
+      (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.2 h0'⟩).1
+  · by_cases h0 : w₁ i = 0
+    · exact wOppSide_of_left_mem _ ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).2 h0)
+    · by_cases h0' : w₂ i = 0
+      · exact wOppSide_of_right_mem _
+          ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).2 h0')
+      simp only [h0, h0', or_self, or_false] at h
+      rcases Ne.lt_or_gt h0 with h' | h'
+      · rw [sign_neg h', neg_inj, eq_comm, sign_eq_one_iff] at h
+        exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₂ hw₁ h h').symm.wOppSide
+      · rw [sign_pos h', eq_comm, neg_eq_iff_eq_neg, sign_eq_neg_one_iff] at h
+        exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₁ hw₂ h' h).wOppSide
 
 中文:
 引理 wOppSide_affineSpan_faceOpposite_iff
@@ -3659,7 +3950,18 @@ lemma wOppSide_affineSpan_faceOpposite_iff
     · simp [h0']
     exact .inl ((s.sOppSide_affineSpan_faceOpposite_iff hw₁ hw₂).1 ⟨h,
       (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).not.2 h0,
-      (s.affineCombination_m
+      (s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).not.2 h0'⟩).1
+  · by_cases h0 : w₁ i = 0
+    · exact wOppSide_of_left_mem _ ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₁).2 h0)
+    · by_cases h0' : w₂ i = 0
+      · exact wOppSide_of_right_mem _
+          ((s.affineCombination_mem_affineSpan_faceOpposite_iff hw₂).2 h0')
+      simp only [h0, h0', or_self, or_false] at h
+      rcases Ne.lt_or_gt h0 with h' | h'
+      · rw [sign_neg h', neg_inj, eq_comm, sign_eq_one_iff] at h
+        exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₂ hw₁ h h').symm.wOppSide
+      · rw [sign_pos h', eq_comm, neg_eq_iff_eq_neg, sign_eq_neg_one_iff] at h
+        exact (s.sOppSide_affineSpan_faceOpposite_of_pos_of_neg hw₁ hw₂ h' h).wOppSide
 
 Depends on / 依赖: affineCombination_mem_affineSpan_faceOpposite_iff, s.affineCombination_mem_affineSpan_faceOpposite_iff, s.sOppSide_affineSpan_faceOpposite_iff, sOppSide_affineSpan_faceOpposite_iff, wOppSide_of_left_mem, wOppSide_of_right_mem
 -/

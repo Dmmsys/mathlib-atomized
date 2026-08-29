@@ -36,7 +36,11 @@ theorem rank_sup_le_of_free
   obtain ⟨ιA, bA⟩ := Free.exists_basis (R := R) (M := A)
   obtain ⟨ιB, bB⟩ := Free.exists_basis (R := R) (M := B)
   have h := Algebra.adjoin_union_coe_submodule R (A : Set S) (B : Set S)
-  rw [A.adjoin_eq_span_basis R bA]; rw [B.adjoin_eq_span_basis R bB]; rw [← Algebra.sup_def]; rw [Submodule.sp
+  rw [A.adjoin_eq_span_basis R bA]; rw [B.adjoin_eq_span_basis R bB]; rw [← Algebra.sup_def]; rw [Submodule.span_mul_span] at h
+  change Module.rank R ↥(toSubmodule (A ⊔ B)) <= _
+  rw [h]; rw [← bA.mk_eq_rank'']; rw [← bB.mk_eq_rank'']
+.trans ?_ refine (rank_span_le _).trans Cardinal.mk_mul_le
+  gcongr <;> exact Cardinal.mk_range_le
 
 中文:
 定理 rank_sup_le_of_free
@@ -45,7 +49,11 @@ theorem rank_sup_le_of_free
   obtain ⟨ιA, bA⟩ := Free.exists_basis (R := R) (M := A)
   obtain ⟨ιB, bB⟩ := Free.exists_basis (R := R) (M := B)
   have h := Algebra.adjoin_union_coe_submodule R (A : Set S) (B : Set S)
-  rw [A.adjoin_eq_span_basis R bA]; rw [B.adjoin_eq_span_basis R bB]; rw [← Algebra.sup_def]; rw [Submodule.sp
+  rw [A.adjoin_eq_span_basis R bA]; rw [B.adjoin_eq_span_basis R bB]; rw [← Algebra.sup_def]; rw [Submodule.span_mul_span] at h
+  change Module.rank R ↥(toSubmodule (A ⊔ B)) <= _
+  rw [h]; rw [← bA.mk_eq_rank'']; rw [← bB.mk_eq_rank'']
+.trans ?_ refine (rank_span_le _).trans Cardinal.mk_mul_le
+  gcongr <;> exact Cardinal.mk_range_le
 
 Depends on / 依赖: A.adjoin_eq_span_basis, Algebra, Algebra.adjoin_union_coe_submodule, Algebra.sup_def, B.adjoin_eq_span_basis, Cardinal, Cardinal.m, Cardinal.mk_mul_le, Free.exists_basis, Module, Module.rank, Submodule, Submodule.span_mul_span, adjoin_eq_span_basis, adjoin_union_coe_submodule, bA.mk_eq_rank, bB.mk_eq_rank, exists_basis, mk_eq_rank, mk_mul_le
 -/
@@ -71,7 +79,12 @@ theorem finrank_sup_le_of_free
     simpa only [map_mul] using! Cardinal.toNat_le_toNat (A.rank_sup_le_of_free B)
       (Cardinal.mul_lt_aleph0 (rank_lt_aleph0 R A) (rank_lt_aleph0 R B))
   wlog hA : ¬ Module.Finite R A generalizing A B
-  · have := this 
+  · have := this B A (fun h' => h h'.symm) (not_and.1 h (of_not_not hA))
+    rwa [sup_comm, mul_comm] at this
+  rw [← rank_lt_aleph0_iff]; rw [not_lt] at hA
+have := LinearMap.rank_le_of_injective _ Submodule.inclusion_injective
+    show toSubmodule A <= toSubmodule (A ⊔ B) by simp
+  rw [show finrank R A = 0 from Cardinal.toNat_apply_of_aleph0_le hA]; rw [show finrank R ↥(A ⊔ B) = 0 from Cardinal.toNat_apply_of_aleph0_le (hA.trans this)]; rw [zero_mul]
 
 中文:
 定理 finrank_sup_le_of_free
@@ -82,7 +95,12 @@ theorem finrank_sup_le_of_free
     simpa only [map_mul] using! Cardinal.toNat_le_toNat (A.rank_sup_le_of_free B)
       (Cardinal.mul_lt_aleph0 (rank_lt_aleph0 R A) (rank_lt_aleph0 R B))
   wlog hA : ¬ Module.Finite R A generalizing A B
-  · have := this 
+  · have := this B A (fun h' => h h'.symm) (not_and.1 h (of_not_not hA))
+    rwa [sup_comm, mul_comm] at this
+  rw [← rank_lt_aleph0_iff]; rw [not_lt] at hA
+have := LinearMap.rank_le_of_injective _ Submodule.inclusion_injective
+    show toSubmodule A <= toSubmodule (A ⊔ B) by simp
+  rw [show finrank R A = 0 from Cardinal.toNat_apply_of_aleph0_le hA]; rw [show finrank R ↥(A ⊔ B) = 0 from Cardinal.toNat_apply_of_aleph0_le (hA.trans this)]; rw [zero_mul]
 
 Depends on / 依赖: A.rank_sup_le_of_free, Cardinal, Cardinal.mul_lt_aleph0, Cardinal.toNat_le_toNat, Finite, LinearMap, LinearMap.rank_le_of_injective, Module, Module.Finite, Submodule, Submodule.inclusion_injective, generalizing, inclusion_injective, map_mul, mul_comm, mul_lt_aleph0, not_and, not_lt, of_not_not, rank_le_of_injective
 -/

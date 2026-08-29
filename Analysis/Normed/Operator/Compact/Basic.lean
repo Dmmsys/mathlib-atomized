@@ -118,7 +118,8 @@ theorem isCompactOperator_id_iff_locallyCompactSpace
 alias ⟨LocallyCompactSpace.of_isCompactOperator_id, _⟩ :=
   isCompactOperator_id_iff_locallyCompactSpace
 
-@[deprecated (since := "2026-03-04")] alias IsCompactOperator.locallyCompactSpac
+@[deprecated (since := "2026-03-04")] alias IsCompactOperator.locallyCompactSpace :=
+  LocallyCompactSpace.of_isCompactOperator_id
 
 中文:
 定理 isCompactOperator_id_iff_locallyCompactSpace
@@ -129,7 +130,8 @@ alias ⟨LocallyCompactSpace.of_isCompactOperator_id, _⟩ :=
 alias ⟨LocallyCompactSpace.of_isCompactOperator_id, _⟩ :=
   isCompactOperator_id_iff_locallyCompactSpace
 
-@[deprecated (since := "2026-03-04")] alias IsCompactOperator.locallyCompactSpac
+@[deprecated (since := "2026-03-04")] alias IsCompactOperator.locallyCompactSpace :=
+  LocallyCompactSpace.of_isCompactOperator_id
 
 Depends on / 依赖: exists_compact_mem_nhds, hK.locallyCompactSpace_of_mem_nhds_of_addGroup, locallyCompactSpace_of_mem_nhds_of_addGroup
 -/
@@ -242,7 +244,7 @@ theorem IsCompactOperator.image_subset_compact_of_isVonNBounded
   let ⟨c, hc⟩ := NormedField.exists_lt_norm 𝕜₁ r
   let := ne_zero_of_norm_ne_zero (hr.trans hc).ne.symm
 ⟨σ₁₂ c • K, hK.image continuous_id.const_smul (σ₁₂ c), by
-    rw [image_subset_iff]; rw [this.isUnit.preimage_smul_setₛₗ σ₁₂]; exac
+    rw [image_subset_iff]; rw [this.isUnit.preimage_smul_setₛₗ σ₁₂]; exact hrS c hc.le⟩
 
 中文:
 定理 IsCompactOperator.image_subset_compact_of_isVonNBounded
@@ -252,7 +254,7 @@ theorem IsCompactOperator.image_subset_compact_of_isVonNBounded
   let ⟨c, hc⟩ := NormedField.exists_lt_norm 𝕜₁ r
   let := ne_zero_of_norm_ne_zero (hr.trans hc).ne.symm
 ⟨σ₁₂ c • K, hK.image continuous_id.const_smul (σ₁₂ c), by
-    rw [image_subset_iff]; rw [this.isUnit.preimage_smul_setₛₗ σ₁₂]; exac
+    rw [image_subset_iff]; rw [this.isUnit.preimage_smul_setₛₗ σ₁₂]; exact hrS c hc.le⟩
 
 Depends on / 依赖: NormedField, NormedField.exists_lt_norm, const_smul, continuous_id, continuous_id.const_smul, exists_lt_norm, exists_pos, hK.image, hc.le, hr.trans, image_subset_iff, isUnit, ne.symm, ne_zero_of_norm_ne_zero, this.isUnit.preimage_smul_set
 -/
@@ -971,7 +973,27 @@ theorem IsCompactOperator.continuous
   refine continuous_of_continuousAt_zero f fun U hU => ?_
   rw [map_zero] at hU
   -- The compactness of `f` gives us a compact set `K : Set M₂` such that `f ⁻¹' K` is a
-  -
+  -- neighborhood of `0` in `M₁`.
+  rcases hf with ⟨K, hK, hKf⟩
+  -- But any compact set Von-Neumann bounded. Thus, `K` absorbs `U`.
+  -- This gives `r > 0` such that `∀ a : 𝕜₂, r ≤ ‖a‖ → K ⊆ a • U`.
+  rcases (hK.isVonNBounded 𝕜₂ hU).exists_pos with ⟨r, hr, hrU⟩
+  -- Choose `c : 𝕜₂` with `r < ‖c‖`.
+  rcases NormedField.exists_lt_norm 𝕜₁ r with ⟨c, hc⟩
+  have hcnz : c != 0 := ne_zero_of_norm_ne_zero (hr.trans hc).ne.symm
+  -- We have `f ⁻¹' ((σ₁₂ c⁻¹) • K) = c⁻¹ • f ⁻¹' K ∈ 𝓝 0`. Thus, showing that
+  -- `(σ₁₂ c⁻¹) • K ⊆ U` is enough to deduce that `f ⁻¹' U ∈ 𝓝 0`.
+  suffices (σ₁₂ <| c⁻¹) • K subseteq U by
+    grw [← this]
+    have : IsUnit c⁻¹ := hcnz.isUnit.inv
+    rwa [mem_map, this.preimage_smul_setₛₗ σ₁₂, set_smul_mem_nhds_zero_iff (inv_ne_zero hcnz)]
+  -- Since `σ₁₂ c⁻¹` = `(σ₁₂ c)⁻¹`, we have to prove that `K ⊆ σ₁₂ c • U`.
+  rw [map_inv₀]; rw [← subset_smul_set_iff₀ ((map_ne_zero σ₁₂).mpr hcnz)]
+  -- But `σ₁₂` is isometric, so `‖σ₁₂ c‖ = ‖c‖ > r`, which concludes the argument since
+  -- `∀ a : 𝕜₂, r ≤ ‖a‖ → K ⊆ a • U`.
+  refine hrU (σ₁₂ c) ?_
+  rw [RingHomIsometric.norm_map]
+  exact hc.le
 
 中文:
 定理 IsCompactOperator.continuous
@@ -982,7 +1004,27 @@ theorem IsCompactOperator.continuous
   refine continuous_of_continuousAt_zero f fun U hU => ?_
   rw [map_zero] at hU
   -- The compactness of `f` gives us a compact set `K : Set M₂` such that `f ⁻¹' K` is a
-  -
+  -- neighborhood of `0` in `M₁`.
+  rcases hf with ⟨K, hK, hKf⟩
+  -- But any compact set Von-Neumann bounded. Thus, `K` absorbs `U`.
+  -- This gives `r > 0` such that `∀ a : 𝕜₂, r ≤ ‖a‖ → K ⊆ a • U`.
+  rcases (hK.isVonNBounded 𝕜₂ hU).exists_pos with ⟨r, hr, hrU⟩
+  -- Choose `c : 𝕜₂` with `r < ‖c‖`.
+  rcases NormedField.exists_lt_norm 𝕜₁ r with ⟨c, hc⟩
+  have hcnz : c != 0 := ne_zero_of_norm_ne_zero (hr.trans hc).ne.symm
+  -- We have `f ⁻¹' ((σ₁₂ c⁻¹) • K) = c⁻¹ • f ⁻¹' K ∈ 𝓝 0`. Thus, showing that
+  -- `(σ₁₂ c⁻¹) • K ⊆ U` is enough to deduce that `f ⁻¹' U ∈ 𝓝 0`.
+  suffices (σ₁₂ <| c⁻¹) • K subseteq U by
+    grw [← this]
+    have : IsUnit c⁻¹ := hcnz.isUnit.inv
+    rwa [mem_map, this.preimage_smul_setₛₗ σ₁₂, set_smul_mem_nhds_zero_iff (inv_ne_zero hcnz)]
+  -- Since `σ₁₂ c⁻¹` = `(σ₁₂ c)⁻¹`, we have to prove that `K ⊆ σ₁₂ c • U`.
+  rw [map_inv₀]; rw [← subset_smul_set_iff₀ ((map_ne_zero σ₁₂).mpr hcnz)]
+  -- But `σ₁₂` is isometric, so `‖σ₁₂ c‖ = ‖c‖ > r`, which concludes the argument since
+  -- `∀ a : 𝕜₂, r ≤ ‖a‖ → K ⊆ a • U`.
+  refine hrU (σ₁₂ c) ?_
+  rw [RingHomIsometric.norm_map]
+  exact hc.le
 -/
 theorem IsCompactOperator.continuous {f : M₁ ->ₛₗ[σ₁₂] M₂} (hf : IsCompactOperator f) :
     Continuous f := by
@@ -1109,7 +1151,34 @@ theorem isClosed_setOfPred_isCompactOperator
   rw [mem_closure_iff_nhds_zero] at hu
   suffices TotallyBounded (u '' Metric.closedBall 0 1) by
     change IsCompactOperator (u : M₁ ->ₛₗ[σ₁₂] M₂)
-    rw [isCompactOperator_iff_isCompact_closure_image_closedBall (u : M₁ ->ₛₗ[σ₁₂] M₂) zero_lt_o
+    rw [isCompactOperator_iff_isCompact_closure_image_closedBall (u : M₁ ->ₛₗ[σ₁₂] M₂) zero_lt_one]
+    exact this.closure.isCompact_of_isClosed isClosed_closure
+  rw [totallyBounded_iff_subset_finite_iUnion_nhds_zero]
+  intro U hU
+  rcases exists_nhds_zero_half hU with ⟨V, hV, hVU⟩
+  let SV : Set M₁ × Set M₂ := ⟨closedBall 0 1, -V⟩
+  rcases hu { f | forall x in SV.1, f x in SV.2 }
+      (ContinuousLinearMap.hasBasis_nhds_zero.mem_of_mem
+        ⟨NormedSpace.isVonNBounded_closedBall _ _ _, neg_mem_nhds_zero M₂ hV⟩) with
+    ⟨v, hv, huv⟩
+  rcases totallyBounded_iff_subset_finite_iUnion_nhds_zero.mp
+      (hv.isCompact_closure_image_closedBall 1).totallyBounded V hV with
+    ⟨T, hT, hTv⟩
+  have hTv : v '' closedBall 0 1 subseteq _ := subset_closure.trans hTv
+  refine ⟨T, hT, ?_⟩
+  rw [image_subset_iff]; rw [preimage_iUnion₂] at hTv ⊢
+  intro x hx
+  specialize hTv hx
+  rw [mem_iUnion₂] at hTv ⊢
+  rcases hTv with ⟨t, ht, htx⟩
+  refine ⟨t, ht, ?_⟩
+  rw [mem_preimage]; rw [mem_vadd_set_iff_neg_vadd_mem]; rw [vadd_eq_add]; rw [neg_add_eq_sub] at htx ⊢
+  convert! hVU _ htx _ (huv x hx) using 1
+  rw [sub_apply]
+  abel
+
+@[deprecated (since := "2026-07-09")]
+alias isClosed_setOf_isCompactOperator := isClosed_setOfPred_isCompactOperator
 
 中文:
 定理 isClosed_setOfPred_isCompactOperator
@@ -1120,7 +1189,34 @@ theorem isClosed_setOfPred_isCompactOperator
   rw [mem_closure_iff_nhds_zero] at hu
   suffices TotallyBounded (u '' Metric.closedBall 0 1) by
     change IsCompactOperator (u : M₁ ->ₛₗ[σ₁₂] M₂)
-    rw [isCompactOperator_iff_isCompact_closure_image_closedBall (u : M₁ ->ₛₗ[σ₁₂] M₂) zero_lt_o
+    rw [isCompactOperator_iff_isCompact_closure_image_closedBall (u : M₁ ->ₛₗ[σ₁₂] M₂) zero_lt_one]
+    exact this.closure.isCompact_of_isClosed isClosed_closure
+  rw [totallyBounded_iff_subset_finite_iUnion_nhds_zero]
+  intro U hU
+  rcases exists_nhds_zero_half hU with ⟨V, hV, hVU⟩
+  let SV : Set M₁ × Set M₂ := ⟨closedBall 0 1, -V⟩
+  rcases hu { f | forall x in SV.1, f x in SV.2 }
+      (ContinuousLinearMap.hasBasis_nhds_zero.mem_of_mem
+        ⟨NormedSpace.isVonNBounded_closedBall _ _ _, neg_mem_nhds_zero M₂ hV⟩) with
+    ⟨v, hv, huv⟩
+  rcases totallyBounded_iff_subset_finite_iUnion_nhds_zero.mp
+      (hv.isCompact_closure_image_closedBall 1).totallyBounded V hV with
+    ⟨T, hT, hTv⟩
+  have hTv : v '' closedBall 0 1 subseteq _ := subset_closure.trans hTv
+  refine ⟨T, hT, ?_⟩
+  rw [image_subset_iff]; rw [preimage_iUnion₂] at hTv ⊢
+  intro x hx
+  specialize hTv hx
+  rw [mem_iUnion₂] at hTv ⊢
+  rcases hTv with ⟨t, ht, htx⟩
+  refine ⟨t, ht, ?_⟩
+  rw [mem_preimage]; rw [mem_vadd_set_iff_neg_vadd_mem]; rw [vadd_eq_add]; rw [neg_add_eq_sub] at htx ⊢
+  convert! hVU _ htx _ (huv x hx) using 1
+  rw [sub_apply]
+  abel
+
+@[deprecated (since := "2026-07-09")]
+alias isClosed_setOf_isCompactOperator := isClosed_setOfPred_isCompactOperator
 
 Depends on / 依赖: IsCompactOperator, Metric, Metric.closedBall, TotallyBounded, closedBal, closedBall, closure, exists_nhds_zero_half, isClosed_closure, isClosed_of_closure_subset, isCompactOperator_iff_isCompact_closure_image_closedBall, isCompact_of_isClosed, mem_closure_iff_nhds_zero, this.closure.isCompact_of_isClosed, totallyBounded_iff_subset_finite_iUnion_nhds_zero, zero_lt_one
 -/

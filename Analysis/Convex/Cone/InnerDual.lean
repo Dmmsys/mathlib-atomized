@@ -267,7 +267,8 @@ theorem hyperplane_separation'
   simpa [← real_inner_comm _ ((InnerProductSpace.toDual Real E).symm f), *]
 
 @[deprecated (since := "2026-03-23")] alias
-  _root_.ConvexCone.hyperplane_separation_of_nonempty_of_isCl
+  _root_.ConvexCone.hyperplane_separation_of_nonempty_of_isClosed_of_notMem :=
+  hyperplane_separation'
 
 中文:
 定理 hyperplane_separation'
@@ -278,7 +279,8 @@ theorem hyperplane_separation'
   simpa [← real_inner_comm _ ((InnerProductSpace.toDual Real E).symm f), *]
 
 @[deprecated (since := "2026-03-23")] alias
-  _root_.ConvexCone.hyperplane_separation_of_nonempty_of_isCl
+  _root_.ConvexCone.hyperplane_separation_of_nonempty_of_isClosed_of_notMem :=
+  hyperplane_separation'
 
 Depends on / 依赖: C.hyperplane_separation_point, InnerProductSpace, InnerProductSpace.toDual, hyperplane_separation_point, real_inner_comm, toDual
 -/
@@ -324,7 +326,24 @@ theorem relative_hyperplane_separation
     simp only [map, ClosedSubmodule.map, Submodule.closure, Submodule.topologicalClosure,
       AddSubmonoid.topologicalClosure, Submodule.coe_toAddSubmonoid, Submodule.map_coe,
       ContinuousLinearMap.coe_coe,
-      ContinuousLinearMap.coe_restrictScalars', ClosedS
+      ContinuousLinearMap.coe_restrictScalars', ClosedSubmodule.coe_toSubmodule,
+      ClosedSubmodule.mem_mk, Submodule.mem_mk, AddSubmonoid.mem_mk, AddSubsemigroup.mem_mk,
+      mem_closure_iff_seq_limit, mem_image, SetLike.mem_coe, Classical.skolem, forall_and,
+      mem_innerDual, ContinuousLinearMap.adjoint_inner_right, forall_exists_index, and_imp]
+          -- there is a sequence `seq : ℕ → F` in the image of `f` that converges to `b`
+    rintro x seq hmem hx htends y hinner
+    obtain rfl : f ∘ seq = x := funext hx
+    have h n : 0 <= ⟪f (seq n), y⟫_Real := by simpa [real_inner_comm] using hinner (hmem n)
+    exact ge_of_tendsto' ((continuous_id.inner continuous_const).seqContinuous htends) h
+  mpr h := by
+    -- By contradiction, suppose `b ∉ C.map f`.
+    contrapose! h
+    -- as `b ∉ C.map f`, there is a hyperplane `y` separating `b` from `C.map f`
+    obtain ⟨y, hxy, hyb⟩ := (C.map f).hyperplane_separation' h
+    -- the rest of the proof is a straightforward algebraic manipulation
+    refine ⟨y, fun x hx => ?_, hyb⟩
+    simpa [ContinuousLinearMap.adjoint_inner_right]
+      using hxy (f x) (subset_closure <| mem_image_of_mem _ hx)
 
 中文:
 定理 relative_hyperplane_separation
@@ -334,7 +353,24 @@ theorem relative_hyperplane_separation
     simp only [map, ClosedSubmodule.map, Submodule.closure, Submodule.topologicalClosure,
       AddSubmonoid.topologicalClosure, Submodule.coe_toAddSubmonoid, Submodule.map_coe,
       ContinuousLinearMap.coe_coe,
-      ContinuousLinearMap.coe_restrictScalars', ClosedS
+      ContinuousLinearMap.coe_restrictScalars', ClosedSubmodule.coe_toSubmodule,
+      ClosedSubmodule.mem_mk, Submodule.mem_mk, AddSubmonoid.mem_mk, AddSubsemigroup.mem_mk,
+      mem_closure_iff_seq_limit, mem_image, SetLike.mem_coe, Classical.skolem, forall_and,
+      mem_innerDual, ContinuousLinearMap.adjoint_inner_right, forall_exists_index, and_imp]
+          -- there is a sequence `seq : ℕ → F` in the image of `f` that converges to `b`
+    rintro x seq hmem hx htends y hinner
+    obtain rfl : f ∘ seq = x := funext hx
+    have h n : 0 <= ⟪f (seq n), y⟫_Real := by simpa [real_inner_comm] using hinner (hmem n)
+    exact ge_of_tendsto' ((continuous_id.inner continuous_const).seqContinuous htends) h
+  mpr h := by
+    -- By contradiction, suppose `b ∉ C.map f`.
+    contrapose! h
+    -- as `b ∉ C.map f`, there is a hyperplane `y` separating `b` from `C.map f`
+    obtain ⟨y, hxy, hyb⟩ := (C.map f).hyperplane_separation' h
+    -- the rest of the proof is a straightforward algebraic manipulation
+    refine ⟨y, fun x hx => ?_, hyb⟩
+    simpa [ContinuousLinearMap.adjoint_inner_right]
+      using hxy (f x) (subset_closure <| mem_image_of_mem _ hx)
 -/
 theorem relative_hyperplane_separation {C : ProperCone Real E} {f : E ->L[Real] F} {b : F} :
     b in C.map f ↔ forall y : F, f.adjoint y in innerDual C -> 0 <= ⟪b, y⟫_Real where

@@ -583,7 +583,7 @@ definition slice
       MonoOver.liftIso _ _ f.iteratedSliceEquiv.unitIso ≪≫ (MonoOver.liftComp _ _ _ _).symm
   counitIso :=
     MonoOver.liftComp _ _ _ _ ≪≫
-      MonoOver
+      MonoOver.liftIso _ _ f.iteratedSliceEquiv.counitIso ≪≫ MonoOver.liftId
 
 中文:
 定义 slice
@@ -595,7 +595,7 @@ definition slice
       MonoOver.liftIso _ _ f.iteratedSliceEquiv.unitIso ≪≫ (MonoOver.liftComp _ _ _ _).symm
   counitIso :=
     MonoOver.liftComp _ _ _ _ ≪≫
-      MonoOver
+      MonoOver.liftIso _ _ f.iteratedSliceEquiv.counitIso ≪≫ MonoOver.liftId
 
 Depends on / 依赖: MonoOver, MonoOver.lift, f.iteratedSliceEquiv.functor, functor, iteratedSliceEquiv
 -/
@@ -1186,7 +1186,7 @@ definition congr
         infer_instance) ⋙
       (mapIso (e.unitIso.symm.app X)).functor
   unitIso := NatIso.ofComponents fun Y => isoMk (e.unitIso.app Y)
-  counitIso := NatI
+  counitIso := NatIso.ofComponents fun Y => isoMk (e.counitIso.app Y)
 
 中文:
 定义 congr
@@ -1200,7 +1200,7 @@ definition congr
         infer_instance) ⋙
       (mapIso (e.unitIso.symm.app X)).functor
   unitIso := NatIso.ofComponents fun Y => isoMk (e.unitIso.app Y)
-  counitIso := NatI
+  counitIso := NatIso.ofComponents fun Y => isoMk (e.counitIso.app Y)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, Over.post, counitIso, e.counitIso.app, e.functor, e.inverse, e.unitIso.app, e.unitIso.symm.app, functor, infer_instance, inverse, mapIso, ofComponents, unitIso
 -/
@@ -1381,7 +1381,12 @@ definition imageForgetAdj
           invFun k :=
             homMk
               (image.lift
-            
+                { I := g.obj.left
+                  m := g.arrow
+                  e := k.left
+                  fac := Over.w k }) (image.lift_fac _)
+          left_inv _ := Subsingleton.elim _ _
+          right_inv k := by ext; simp } }
 
 中文:
 定义 imageForgetAdj
@@ -1395,7 +1400,12 @@ definition imageForgetAdj
           invFun k :=
             homMk
               (image.lift
-            
+                { I := g.obj.left
+                  m := g.arrow
+                  e := k.left
+                  fac := Over.w k }) (image.lift_fac _)
+          left_inv _ := Subsingleton.elim _ _
+          right_inv k := by ext; simp } }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Over.homMk, Over.w, Subsingleton, Subsingleton.elim, f.hom, factorThruImage, g.arrow, g.obj.left, homEquiv, image.fac, image.lift, image.lift_fac, invFun, k.hom, k.hom.left, k.left, left_inv, lift_fac
 -/

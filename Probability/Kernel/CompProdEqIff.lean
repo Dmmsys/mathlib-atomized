@@ -86,7 +86,17 @@ lemma ae_eq_of_compProd_eq
   have h_ac : forallᵐ a ∂μ, κ a ≪ η a := (Measure.absolutelyContinuous_of_eq h).kernel_of_compProd
   have hκ_eq : forallᵐ a ∂μ, κ a = η.withDensity (κ.rnDeriv η) a := by
     filter_upwards [h_ac] with a ha using (Kernel.withDensity_rnDeriv_eq ha).symm
-  suffices forallᵐ a ∂μ, forallᵐ b ∂(η a), κ.
+  suffices forallᵐ a ∂μ, forallᵐ b ∂(η a), κ.rnDeriv η a b = 1 by
+    filter_upwards [h_ac, this] with a h_ac h using (rnDeriv_eq_one_iff_eq h_ac).mp h
+  refine Measure.ae_ae_of_ae_compProd (p := fun x => κ.rnDeriv η x.1 x.2 = 1) ?_
+  refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite (by fun_prop) (by fun_prop) fun s hs _ => ?_
+  simp only [MeasureTheory.lintegral_const, MeasurableSet.univ, Measure.restrict_apply,
+    Set.univ_inter, one_mul]
+  calc ∫⁻ x in s, κ.rnDeriv η x.1 x.2 ∂μ otimesₘ η
+  _ = (μ otimesₘ κ) s := by
+    rw [Measure.compProd_congr hκ_eq]; rw [Measure.compProd_withDensity]; rw [withDensity_apply _ hs]
+    fun_prop
+  _ = (μ otimesₘ η) s := by rw [h]
 
 中文:
 引理 ae_eq_of_compProd_eq
@@ -95,7 +105,17 @@ lemma ae_eq_of_compProd_eq
   have h_ac : forallᵐ a ∂μ, κ a ≪ η a := (Measure.absolutelyContinuous_of_eq h).kernel_of_compProd
   have hκ_eq : forallᵐ a ∂μ, κ a = η.withDensity (κ.rnDeriv η) a := by
     filter_upwards [h_ac] with a ha using (Kernel.withDensity_rnDeriv_eq ha).symm
-  suffices forallᵐ a ∂μ, forallᵐ b ∂(η a), κ.
+  suffices forallᵐ a ∂μ, forallᵐ b ∂(η a), κ.rnDeriv η a b = 1 by
+    filter_upwards [h_ac, this] with a h_ac h using (rnDeriv_eq_one_iff_eq h_ac).mp h
+  refine Measure.ae_ae_of_ae_compProd (p := fun x => κ.rnDeriv η x.1 x.2 = 1) ?_
+  refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite (by fun_prop) (by fun_prop) fun s hs _ => ?_
+  simp only [MeasureTheory.lintegral_const, MeasurableSet.univ, Measure.restrict_apply,
+    Set.univ_inter, one_mul]
+  calc ∫⁻ x in s, κ.rnDeriv η x.1 x.2 ∂μ otimesₘ η
+  _ = (μ otimesₘ κ) s := by
+    rw [Measure.compProd_congr hκ_eq]; rw [Measure.compProd_withDensity]; rw [withDensity_apply _ hs]
+    fun_prop
+  _ = (μ otimesₘ η) s := by rw [h]
 
 Depends on / 依赖: Kernel, Kernel.withDensity_rnDeriv_eq, Measure, Measure.absolutelyContinuous_of_eq, Measure.ae_ae_of_ae_compProd, absolutelyContinuous_of_eq, ae_ae_of_ae_compProd, ae_eq_of_forall_setLI, filter_upwards, h_ac, kernel_of_compProd, rnDeriv, rnDeriv_eq_one_iff_eq, withDensity, withDensity_rnDeriv_eq
 -/

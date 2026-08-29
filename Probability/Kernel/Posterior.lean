@@ -176,7 +176,9 @@ lemma parallelProd_posterior_comp_copy_comp
   _ = (κ ∘ₘ μ) otimesₘ κ†μ := by rw [← Measure.compProd_eq_parallelComp_comp_copy_comp]
   _ = Kernel.swap _ _ ∘ₘ (μ otimesₘ κ) := by rw [compProd_posterior_eq_swap_comp]
   _ = Kernel.swap _ _ ∘ₘ (Kernel.id ∥ₖ κ) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
-    
+    rw [Measure.compProd_eq_parallelComp_comp_copy_comp]
+  _ = (κ ∥ₖ Kernel.id) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    rw [Measure.comp_assoc]; rw [Kernel.swap_parallelComp]; rw [Measure.comp_assoc]; rw [Kernel.comp_assoc]; rw [Kernel.swap_copy]; rw [Measure.comp_assoc]
 
 中文:
 引理 parallelProd_posterior_comp_copy_comp
@@ -185,7 +187,9 @@ lemma parallelProd_posterior_comp_copy_comp
   _ = (κ ∘ₘ μ) otimesₘ κ†μ := by rw [← Measure.compProd_eq_parallelComp_comp_copy_comp]
   _ = Kernel.swap _ _ ∘ₘ (μ otimesₘ κ) := by rw [compProd_posterior_eq_swap_comp]
   _ = Kernel.swap _ _ ∘ₘ (Kernel.id ∥ₖ κ) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
-    
+    rw [Measure.compProd_eq_parallelComp_comp_copy_comp]
+  _ = (κ ∥ₖ Kernel.id) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    rw [Measure.comp_assoc]; rw [Kernel.swap_parallelComp]; rw [Measure.comp_assoc]; rw [Kernel.comp_assoc]; rw [Kernel.swap_copy]; rw [Measure.comp_assoc]
 
 Depends on / 依赖: Kernel, Kernel.comp_assoc, Kernel.copy, Kernel.id, Kernel.swap, Kernel.swap_parallelComp, Measure, Measure.compProd_eq_parallelComp_comp_copy_comp, Measure.comp_assoc, compProd_eq_parallelComp_comp_copy_comp, compProd_posterior_eq_swap_comp, comp_assoc, swap_parallelComp
 -/
@@ -299,7 +303,7 @@ lemma posterior_id
     rw [Measure.id_comp] at this
     filter_upwards [this] with a ha using ha.symm
   refine ae_eq_posterior_of_compProd_eq_swap_comp Kernel.id ?_
-  rw [Measure.id_comp]; rw [Measure.compProd_id_eq_copy_comp]; rw [Measure.comp_a
+  rw [Measure.id_comp]; rw [Measure.compProd_id_eq_copy_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_copy]
 
 中文:
 引理 posterior_id
@@ -310,7 +314,7 @@ lemma posterior_id
     rw [Measure.id_comp] at this
     filter_upwards [this] with a ha using ha.symm
   refine ae_eq_posterior_of_compProd_eq_swap_comp Kernel.id ?_
-  rw [Measure.id_comp]; rw [Measure.compProd_id_eq_copy_comp]; rw [Measure.comp_a
+  rw [Measure.id_comp]; rw [Measure.compProd_id_eq_copy_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_copy]
 
 Depends on / 依赖: Kernel, Kernel.id, Kernel.swap_copy, Measure, Measure.compProd_id_eq_copy_comp, Measure.comp_assoc, Measure.id_comp, ae_eq_posterior_of_compProd_eq_swap_comp, compProd_id_eq_copy_comp, comp_assoc, filter_upwards, ha.symm, id_comp, swap_copy
 -/
@@ -333,7 +337,17 @@ lemma deterministic_comp_posterior
   _ = (Kernel.deterministic f hf ∘ₘ μ)
       otimesₘ (Kernel.deterministic f hf ∘ₖ (Kernel.deterministic f hf)†μ) := by
     rw [Measure.deterministic_comp_eq_map]
-  _ = (Ker
+  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (Kernel.id ∥ₖ (Kernel.deterministic f hf)†μ) ∘ₘ
+      Kernel.copy 𝓧 ∘ₘ Kernel.deterministic f hf ∘ₘ μ := by
+    rw [Measure.compProd_eq_parallelComp_comp_copy_comp]; rw [← Kernel.parallelComp_id_left_comp_parallelComp]; rw [← Measure.comp_assoc]
+  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (Kernel.deterministic f hf ∥ₖ Kernel.id) ∘ₘ
+      Kernel.copy Ω ∘ₘ μ := by rw [parallelProd_posterior_comp_copy_comp]
+  _ = (Kernel.deterministic f hf ∥ₖ Kernel.deterministic f hf) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    rw [Measure.comp_assoc]; rw [Kernel.parallelComp_comp_parallelComp]; rw [Kernel.id_comp]; rw [Kernel.comp_id]
+  _ = (Kernel.copy 𝓧 ∘ₖ Kernel.deterministic f hf) ∘ₘ μ := by -- `deterministic` is used here
+    rw [Measure.comp_assoc]; rw [Kernel.parallelComp_self_comp_copy]
+  _ = μ.map f otimesₘ Kernel.id := by
+    rw [Measure.compProd_id_eq_copy_comp]; rw [← Measure.comp_assoc]; rw [Measure.deterministic_comp_eq_map]
 
 中文:
 引理 deterministic_comp_posterior
@@ -344,7 +358,17 @@ lemma deterministic_comp_posterior
   _ = (Kernel.deterministic f hf ∘ₘ μ)
       otimesₘ (Kernel.deterministic f hf ∘ₖ (Kernel.deterministic f hf)†μ) := by
     rw [Measure.deterministic_comp_eq_map]
-  _ = (Ker
+  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (Kernel.id ∥ₖ (Kernel.deterministic f hf)†μ) ∘ₘ
+      Kernel.copy 𝓧 ∘ₘ Kernel.deterministic f hf ∘ₘ μ := by
+    rw [Measure.compProd_eq_parallelComp_comp_copy_comp]; rw [← Kernel.parallelComp_id_left_comp_parallelComp]; rw [← Measure.comp_assoc]
+  _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (Kernel.deterministic f hf ∥ₖ Kernel.id) ∘ₘ
+      Kernel.copy Ω ∘ₘ μ := by rw [parallelProd_posterior_comp_copy_comp]
+  _ = (Kernel.deterministic f hf ∥ₖ Kernel.deterministic f hf) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    rw [Measure.comp_assoc]; rw [Kernel.parallelComp_comp_parallelComp]; rw [Kernel.id_comp]; rw [Kernel.comp_id]
+  _ = (Kernel.copy 𝓧 ∘ₖ Kernel.deterministic f hf) ∘ₘ μ := by -- `deterministic` is used here
+    rw [Measure.comp_assoc]; rw [Kernel.parallelComp_self_comp_copy]
+  _ = μ.map f otimesₘ Kernel.id := by
+    rw [Measure.compProd_id_eq_copy_comp]; rw [← Measure.comp_assoc]; rw [Measure.deterministic_comp_eq_map]
 
 Depends on / 依赖: Kernel, Kernel.ae_eq_of_compProd_eq, Kernel.copy, Kernel.deterministic, Kernel.id, Kernel.parallelC, Measure, Measure.compProd_eq_parallelComp_comp_copy_comp, Measure.deterministic_comp_eq_map, ae_eq_of_compProd_eq, compProd_eq_parallelComp_comp_copy_comp, deterministic, deterministic_comp_eq_map, parallelC
 -/
@@ -381,7 +405,9 @@ lemma absolutelyContinuous_posterior
   suffices μ otimesₘ κ ≪ μ.prod ν by
     rw [compProd_posterior_eq_map_swap]; rw [← Measure.prod_swap]
     exact this.map measurable_swap
-  rw [← Measure.compProd_cons
+  rw [← Measure.compProd_const]
+  refine Measure.AbsolutelyContinuous.compProd_right ?_
+  simpa
 
 中文:
 引理 absolutelyContinuous_posterior
@@ -393,7 +419,9 @@ lemma absolutelyContinuous_posterior
   suffices μ otimesₘ κ ≪ μ.prod ν by
     rw [compProd_posterior_eq_map_swap]; rw [← Measure.prod_swap]
     exact this.map measurable_swap
-  rw [← Measure.compProd_cons
+  rw [← Measure.compProd_const]
+  refine Measure.AbsolutelyContinuous.compProd_right ?_
+  simpa
 
 Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.compProd_right, Measure.compProd_const, Measure.prod_swap, compProd_const, compProd_posterior_eq_map_swap, compProd_right, kernel_of_compProd, measurable_swap, prod_swap, this.kernel_of_compProd, this.map
 -/
@@ -425,7 +453,7 @@ lemma posterior_posterior
     rw [posterior_comp_self] at this
     filter_upwards [this] with a h using h.symm
   refine ae_eq_posterior_of_compProd_eq_swap_comp κ ?_
-  rw [posterior_comp_self]; rw [compProd_posterior_eq_swap_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_s
+  rw [posterior_comp_self]; rw [compProd_posterior_eq_swap_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_swap]; rw [Measure.id_comp]
 
 中文:
 引理 posterior_posterior
@@ -436,7 +464,7 @@ lemma posterior_posterior
     rw [posterior_comp_self] at this
     filter_upwards [this] with a h using h.symm
   refine ae_eq_posterior_of_compProd_eq_swap_comp κ ?_
-  rw [posterior_comp_self]; rw [compProd_posterior_eq_swap_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_s
+  rw [posterior_comp_self]; rw [compProd_posterior_eq_swap_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_swap]; rw [Measure.id_comp]
 
 Depends on / 依赖: Kernel, Kernel.swap_swap, Measure, Measure.comp_assoc, Measure.id_comp, ae_eq_posterior_of_compProd_eq_swap_comp, compProd_posterior_eq_swap_comp, comp_assoc, filter_upwards, h.symm, id_comp, posterior_comp_self, swap_swap
 -/
@@ -458,7 +486,17 @@ lemma posterior_comp
   refine (ae_eq_posterior_of_compProd_eq_swap_comp ((κ†μ) ∘ₖ η†(κ ∘ₘ μ)) ?_).symm
   simp_rw [Measure.compProd_eq_comp_prod, ← Kernel.parallelComp_comp_copy,
     ← Kernel.parallelComp_id_left_comp_parallelComp, ← Measure.comp_assoc]
-  calc (Kernel.id ∥ₖ κ†μ) ∘ₘ (Kernel.id
+  calc (Kernel.id ∥ₖ κ†μ) ∘ₘ (Kernel.id ∥ₖ η†(κ ∘ₘ μ)) ∘ₘ (Kernel.copy 𝓨) ∘ₘ η ∘ₘ κ ∘ₘ μ
+  _ = (Kernel.id ∥ₖ κ†μ) ∘ₘ (η ∥ₖ Kernel.id) ∘ₘ Kernel.copy 𝓧 ∘ₘ κ ∘ₘ μ := by
+    rw [parallelProd_posterior_comp_copy_comp]
+  _ = (η ∥ₖ Kernel.id) ∘ₘ (Kernel.id ∥ₖ κ†μ) ∘ₘ Kernel.copy 𝓧 ∘ₘ κ ∘ₘ μ := by
+    rw [Measure.comp_assoc]; rw [Kernel.parallelComp_comm]; rw [← Measure.comp_assoc]
+  _ = (η ∥ₖ Kernel.id) ∘ₘ (κ ∥ₖ Kernel.id) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    rw [parallelProd_posterior_comp_copy_comp]
+  _ = (Kernel.swap _ _) ∘ₘ (Kernel.id ∥ₖ η) ∘ₘ (Kernel.id ∥ₖ κ) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    simp_rw [Measure.comp_assoc]
+    conv_rhs => rw [← Kernel.comp_assoc]
+    rw [Kernel.swap_parallelComp]; rw [Kernel.comp_assoc]; rw [← Kernel.comp_assoc (Kernel.swap Ω 𝓧)]; rw [Kernel.swap_parallelComp]; rw [Kernel.comp_assoc]; rw [Kernel.swap_copy]
 
 中文:
 引理 posterior_comp
@@ -468,7 +506,17 @@ lemma posterior_comp
   refine (ae_eq_posterior_of_compProd_eq_swap_comp ((κ†μ) ∘ₖ η†(κ ∘ₘ μ)) ?_).symm
   simp_rw [Measure.compProd_eq_comp_prod, ← Kernel.parallelComp_comp_copy,
     ← Kernel.parallelComp_id_left_comp_parallelComp, ← Measure.comp_assoc]
-  calc (Kernel.id ∥ₖ κ†μ) ∘ₘ (Kernel.id
+  calc (Kernel.id ∥ₖ κ†μ) ∘ₘ (Kernel.id ∥ₖ η†(κ ∘ₘ μ)) ∘ₘ (Kernel.copy 𝓨) ∘ₘ η ∘ₘ κ ∘ₘ μ
+  _ = (Kernel.id ∥ₖ κ†μ) ∘ₘ (η ∥ₖ Kernel.id) ∘ₘ Kernel.copy 𝓧 ∘ₘ κ ∘ₘ μ := by
+    rw [parallelProd_posterior_comp_copy_comp]
+  _ = (η ∥ₖ Kernel.id) ∘ₘ (Kernel.id ∥ₖ κ†μ) ∘ₘ Kernel.copy 𝓧 ∘ₘ κ ∘ₘ μ := by
+    rw [Measure.comp_assoc]; rw [Kernel.parallelComp_comm]; rw [← Measure.comp_assoc]
+  _ = (η ∥ₖ Kernel.id) ∘ₘ (κ ∥ₖ Kernel.id) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    rw [parallelProd_posterior_comp_copy_comp]
+  _ = (Kernel.swap _ _) ∘ₘ (Kernel.id ∥ₖ η) ∘ₘ (Kernel.id ∥ₖ κ) ∘ₘ Kernel.copy Ω ∘ₘ μ := by
+    simp_rw [Measure.comp_assoc]
+    conv_rhs => rw [← Kernel.comp_assoc]
+    rw [Kernel.swap_parallelComp]; rw [Kernel.comp_assoc]; rw [← Kernel.comp_assoc (Kernel.swap Ω 𝓧)]; rw [Kernel.swap_parallelComp]; rw [Kernel.comp_assoc]; rw [Kernel.swap_copy]
 
 Depends on / 依赖: Kernel, Kernel.copy, Kernel.id, Kernel.parallelComp_comp_copy, Kernel.parallelComp_id_left_comp_parallelComp, Measure, Measure.compProd_eq_comp_prod, Measure.comp_assoc, ae_eq_posterior_of_compProd_eq_swap_comp, compProd_eq_comp_prod, comp_assoc, parallelComp_comp_copy, parallelComp_id_left_comp_parallelComp, parallelProd_posterior_comp_copy_comp, simp_rw
 -/
@@ -509,7 +557,10 @@ lemma absolutelyContinuous_of_posterior
     simpa using this.kernel_of_compProd
   suffices (κ ∘ₘ μ) otimesₘ κ†μ ≪ (κ ∘ₘ μ).prod μ by
     rw [← swap_compProd_posterior]; rw [← Measure.prod_swap]; rw [Measure.swap_comp]
-    exact this.map measurable_swa
+    exact this.map measurable_swap
+  rw [← Measure.compProd_const]
+  refine Measure.AbsolutelyContinuous.compProd_right ?_
+  simpa
 
 中文:
 引理 absolutelyContinuous_of_posterior
@@ -520,7 +571,10 @@ lemma absolutelyContinuous_of_posterior
     simpa using this.kernel_of_compProd
   suffices (κ ∘ₘ μ) otimesₘ κ†μ ≪ (κ ∘ₘ μ).prod μ by
     rw [← swap_compProd_posterior]; rw [← Measure.prod_swap]; rw [Measure.swap_comp]
-    exact this.map measurable_swa
+    exact this.map measurable_swap
+  rw [← Measure.compProd_const]
+  refine Measure.AbsolutelyContinuous.compProd_right ?_
+  simpa
 
 Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.compProd_right, Measure.compProd_const, Measure.prod_swap, Measure.swap_comp, compProd_const, compProd_right, kernel_of_compProd, measurable_swap, prod_swap, swap_comp, swap_compProd_posterior, this.kernel_of_compProd, this.map
 -/
@@ -589,7 +643,32 @@ lemma rnDeriv_posterior_ae_prod
   -- We prove the a.e. equality by showing that integrals on the π-system of rectangles are equal.
   -- First, the integral of the left-hand side on `s ×ˢ t` is `(μ ⊗ₘ κ) (s ×ˢ t)`, which we prove
   -- by showing that it's equal to `((κ ∘ₘ μ) ⊗ κ†μ) (t ×ˢ s)` and using the main property of the
-  
+  -- posterior.
+  have h1 {s : Set Ω} {t : Set 𝓧} (hs : MeasurableSet s) (ht : MeasurableSet t) :
+      ∫⁻ x in s ×ˢ t, (κ†μ).rnDeriv (Kernel.const _ μ) x.2 x.1 ∂μ.prod (⇑κ ∘ₘ μ)
+        = (μ otimesₘ κ) (s ×ˢ t) := by
+    rw [setLIntegral_prod_symm _ (by fun_prop)]; rw [← swap_compProd_posterior]; rw [Measure.swap_comp]; rw [Measure.map_apply measurable_swap (hs.prod ht)]; rw [Set.preimage_swap_prod]; rw [Measure.compProd_apply_prod ht hs]
+refine lintegral_congr_ae ae_restrict_of_ae ?_
+    filter_upwards [absolutelyContinuous_posterior h_ac] with x h_ac'
+    change ∫⁻ ω in s, (κ†μ).rnDeriv (Kernel.const 𝓧 μ) x ω ∂(Kernel.const 𝓧 μ x) = _
+    rw [Kernel.setLIntegral_rnDeriv h_ac' hs]
+  have h2 {s : Set Ω} {t : Set 𝓧} (hs : MeasurableSet s) (ht : MeasurableSet t) :
+  -- Second, the integral of the right-hand side on `s ×ˢ t` is `(μ ⊗ₘ κ) (s ×ˢ t)`.
+      ∫⁻ x in s ×ˢ t, κ.rnDeriv (Kernel.const _ (κ ∘ₘ μ)) x.1 x.2 ∂μ.prod (⇑κ ∘ₘ μ)
+        = (μ otimesₘ κ) (s ×ˢ t) := by
+    rw [setLIntegral_prod _ (by fun_prop)]; rw [Measure.compProd_apply_prod hs ht]
+refine lintegral_congr_ae ae_restrict_of_ae ?_
+    filter_upwards [h_ac] with ω h_ac
+    change ∫⁻ x in t, κ.rnDeriv (Kernel.const Ω (κ ∘ₘ μ)) ω x ∂(Kernel.const Ω (κ ∘ₘ μ) ω) = _
+    rw [Kernel.setLIntegral_rnDeriv h_ac ht]
+  -- We extend from the π-system to the σ-algebra.
+  refine ae_eq_of_setLIntegral_prod_eq (by fun_prop) (by fun_prop) ?_ ?_
+  · refine ne_of_lt ?_
+    calc ∫⁻ x, (κ†μ).rnDeriv (Kernel.const _ μ) x.2 x.1 ∂μ.prod (κ ∘ₘ μ)
+    _ = (μ otimesₘ κ) Set.univ := by rw [← setLIntegral_univ, ← Set.univ_prod_univ, h1 .univ .univ]
+    _ < ⊤ := measure_lt_top _ _
+  · intro s hs t ht
+    rw [h1 hs ht]; rw [h2 hs ht]
 
 中文:
 引理 rnDeriv_posterior_ae_prod
@@ -598,7 +677,32 @@ lemma rnDeriv_posterior_ae_prod
   -- We prove the a.e. equality by showing that integrals on the π-system of rectangles are equal.
   -- First, the integral of the left-hand side on `s ×ˢ t` is `(μ ⊗ₘ κ) (s ×ˢ t)`, which we prove
   -- by showing that it's equal to `((κ ∘ₘ μ) ⊗ κ†μ) (t ×ˢ s)` and using the main property of the
-  
+  -- posterior.
+  have h1 {s : Set Ω} {t : Set 𝓧} (hs : MeasurableSet s) (ht : MeasurableSet t) :
+      ∫⁻ x in s ×ˢ t, (κ†μ).rnDeriv (Kernel.const _ μ) x.2 x.1 ∂μ.prod (⇑κ ∘ₘ μ)
+        = (μ otimesₘ κ) (s ×ˢ t) := by
+    rw [setLIntegral_prod_symm _ (by fun_prop)]; rw [← swap_compProd_posterior]; rw [Measure.swap_comp]; rw [Measure.map_apply measurable_swap (hs.prod ht)]; rw [Set.preimage_swap_prod]; rw [Measure.compProd_apply_prod ht hs]
+refine lintegral_congr_ae ae_restrict_of_ae ?_
+    filter_upwards [absolutelyContinuous_posterior h_ac] with x h_ac'
+    change ∫⁻ ω in s, (κ†μ).rnDeriv (Kernel.const 𝓧 μ) x ω ∂(Kernel.const 𝓧 μ x) = _
+    rw [Kernel.setLIntegral_rnDeriv h_ac' hs]
+  have h2 {s : Set Ω} {t : Set 𝓧} (hs : MeasurableSet s) (ht : MeasurableSet t) :
+  -- Second, the integral of the right-hand side on `s ×ˢ t` is `(μ ⊗ₘ κ) (s ×ˢ t)`.
+      ∫⁻ x in s ×ˢ t, κ.rnDeriv (Kernel.const _ (κ ∘ₘ μ)) x.1 x.2 ∂μ.prod (⇑κ ∘ₘ μ)
+        = (μ otimesₘ κ) (s ×ˢ t) := by
+    rw [setLIntegral_prod _ (by fun_prop)]; rw [Measure.compProd_apply_prod hs ht]
+refine lintegral_congr_ae ae_restrict_of_ae ?_
+    filter_upwards [h_ac] with ω h_ac
+    change ∫⁻ x in t, κ.rnDeriv (Kernel.const Ω (κ ∘ₘ μ)) ω x ∂(Kernel.const Ω (κ ∘ₘ μ) ω) = _
+    rw [Kernel.setLIntegral_rnDeriv h_ac ht]
+  -- We extend from the π-system to the σ-algebra.
+  refine ae_eq_of_setLIntegral_prod_eq (by fun_prop) (by fun_prop) ?_ ?_
+  · refine ne_of_lt ?_
+    calc ∫⁻ x, (κ†μ).rnDeriv (Kernel.const _ μ) x.2 x.1 ∂μ.prod (κ ∘ₘ μ)
+    _ = (μ otimesₘ κ) Set.univ := by rw [← setLIntegral_univ, ← Set.univ_prod_univ, h1 .univ .univ]
+    _ < ⊤ := measure_lt_top _ _
+  · intro s hs t ht
+    rw [h1 hs ht]; rw [h2 hs ht]
 -/
 lemma rnDeriv_posterior_ae_prod (h_ac : forallᵐ ω ∂μ, κ ω ≪ κ ∘ₘ μ) :
     forallᵐ p ∂(μ.prod (κ ∘ₘ μ)),
@@ -703,7 +807,9 @@ lemma posterior_eq_withDensity
   ext s hs
   rw [← Measure.setLIntegral_rnDeriv h_ac']; rw [withDensity_apply _ hs]
   refine setLIntegral_congr_fun_ae hs ?_
-  filter_upwards [h, Kernel.rnDeriv_eq_rnDeriv_measure (κ := κ†μ) (η := K
+  filter_upwards [h, Kernel.rnDeriv_eq_rnDeriv_measure (κ := κ†μ) (η := Kernel.const 𝓧 μ) (a := x)]
+    with ω h h_eq hωs
+  rw [← h]; rw [h_eq]; rw [Kernel.const_apply]
 
 中文:
 引理 posterior_eq_withDensity
@@ -713,7 +819,9 @@ lemma posterior_eq_withDensity
   ext s hs
   rw [← Measure.setLIntegral_rnDeriv h_ac']; rw [withDensity_apply _ hs]
   refine setLIntegral_congr_fun_ae hs ?_
-  filter_upwards [h, Kernel.rnDeriv_eq_rnDeriv_measure (κ := κ†μ) (η := K
+  filter_upwards [h, Kernel.rnDeriv_eq_rnDeriv_measure (κ := κ†μ) (η := Kernel.const 𝓧 μ) (a := x)]
+    with ω h h_eq hωs
+  rw [← h]; rw [h_eq]; rw [Kernel.const_apply]
 
 Depends on / 依赖: Kernel, Kernel.const, Kernel.const_apply, Kernel.rnDeriv_eq_rnDeriv_measure, Measure, Measure.setLIntegral_rnDeriv, absolutelyContinuous_posterior, const_apply, filter_upwards, h_ac, h_eq, rnDeriv_eq_rnDeriv_measure, rnDeriv_posterior_symm, setLIntegral_congr_fun_ae, setLIntegral_rnDeriv, withDensity_apply
 -/
@@ -738,7 +846,9 @@ lemma posterior_eq_withDensity_of_countable
     (a := ω)
   simp only [Filter.EventuallyEq, Kernel.const_apply] at h_rnDeriv
   rw [← ae_all_iff] at h_rnDeriv
-  filter_upwards [posterior_eq_withDensity Measure.absolutelyContinuous_comp_of_countabl
+  filter_upwards [posterior_eq_withDensity Measure.absolutelyContinuous_comp_of_countable,
+    h_rnDeriv] with x hx hx_all
+  simp_rw [hx, hx_all]
 
 中文:
 引理 posterior_eq_withDensity_of_countable
@@ -748,7 +858,9 @@ lemma posterior_eq_withDensity_of_countable
     (a := ω)
   simp only [Filter.EventuallyEq, Kernel.const_apply] at h_rnDeriv
   rw [← ae_all_iff] at h_rnDeriv
-  filter_upwards [posterior_eq_withDensity Measure.absolutelyContinuous_comp_of_countabl
+  filter_upwards [posterior_eq_withDensity Measure.absolutelyContinuous_comp_of_countable,
+    h_rnDeriv] with x hx hx_all
+  simp_rw [hx, hx_all]
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, Kernel, Kernel.const, Kernel.const_apply, Kernel.rnDeriv_eq_rnDeriv_measure, Measure, Measure.absolutelyContinuous_comp_of_countable, absolutelyContinuous_comp_of_countable, ae_all_iff, const_apply, filter_upwards, h_rnDeriv, hx_all, posterior_eq_withDensity, rnDeriv_eq_rnDeriv_measure, simp_rw
 -/

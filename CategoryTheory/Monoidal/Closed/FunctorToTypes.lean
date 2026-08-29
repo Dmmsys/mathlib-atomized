@@ -70,7 +70,7 @@ definition rightAdj
       change (F.map g ≫ a.app _ (h ≫ g)) ≫ _ = _
       aesop }}
 
-@[deprecated "Use `(rightAdj F).map instead" (since := "2026-04-08")] alias rightAdj_map := rig
+@[deprecated "Use `(rightAdj F).map instead" (since := "2026-04-08")] alias rightAdj_map := rightAdj
 
 中文:
 定义 rightAdj
@@ -83,7 +83,7 @@ definition rightAdj
       change (F.map g ≫ a.app _ (h ≫ g)) ≫ _ = _
       aesop }}
 
-@[deprecated "Use `(rightAdj F).map instead" (since := "2026-04-08")] alias rightAdj_map := rig
+@[deprecated "Use `(rightAdj F).map instead" (since := "2026-04-08")] alias rightAdj_map := rightAdj
 
 Depends on / 依赖: F.functorHom, functorHom
 -/

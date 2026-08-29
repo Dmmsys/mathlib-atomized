@@ -148,7 +148,9 @@ theorem eval_monomial_one_add_sub
   have cast_succ : (d + 1 : S) = ((d.succ : Nat) : S) := by simp only [Nat.cast_succ]
   rw [cast_succ]; rw [eval_monomial]; rw [eval_monomial]; rw [add_comm]; rw [add_pow]
   simp only [one_pow, mul_one, mul_comm (y ^ _) (d.choose _)]
-  rw [sum_range_succ]; rw [mul_add]; rw [Nat.choose_self]; rw [
+  rw [sum_range_succ]; rw [mul_add]; rw [Nat.choose_self]; rw [Nat.cast_one]; rw [one_mul]; rw [add_sub_cancel_right]; rw [mul_sum]; rw [sum_range_succ']; rw [Nat.cast_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]
+  refine sum_congr rfl fun y _hy => ?_
+  rw [← mul_assoc]; rw [← mul_assoc]; rw [← Nat.cast_mul]; rw [Nat.add_one_mul_choose_eq]; rw [Nat.cast_mul]; rw [Nat.add_sub_cancel]
 
 中文:
 定理 eval_monomial_one_add_sub
@@ -157,7 +159,9 @@ theorem eval_monomial_one_add_sub
   have cast_succ : (d + 1 : S) = ((d.succ : Nat) : S) := by simp only [Nat.cast_succ]
   rw [cast_succ]; rw [eval_monomial]; rw [eval_monomial]; rw [add_comm]; rw [add_pow]
   simp only [one_pow, mul_one, mul_comm (y ^ _) (d.choose _)]
-  rw [sum_range_succ]; rw [mul_add]; rw [Nat.choose_self]; rw [
+  rw [sum_range_succ]; rw [mul_add]; rw [Nat.choose_self]; rw [Nat.cast_one]; rw [one_mul]; rw [add_sub_cancel_right]; rw [mul_sum]; rw [sum_range_succ']; rw [Nat.cast_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]
+  refine sum_congr rfl fun y _hy => ?_
+  rw [← mul_assoc]; rw [← mul_assoc]; rw [← Nat.cast_mul]; rw [Nat.add_one_mul_choose_eq]; rw [Nat.cast_mul]; rw [Nat.add_sub_cancel]
 
 Depends on / 依赖: Nat.cast_one, Nat.cast_succ, Nat.cast_zero, Nat.choose_self, add_comm, add_pow, add_sub_cancel_right, add_zero, cast_one, cast_succ, cast_zero, choose_self, d.choose, d.succ, eval_monomial, mul_add, mul_assoc, mul_comm, mul_one, mul_sum
 -/
@@ -189,7 +193,12 @@ theorem coeff_comp_degree_mul_degree
   case h₀ =>
     intro b hbs hbp
     refine coeff_eq_zero_of_natDegree_lt (natDegree_mul_le.trans_lt ?_)
-
+    rw [natDegree_C]; rw [zero_add]
+    refine natDegree_pow_le.trans_lt ?_
+    gcongr
+    exact lt_of_le_of_ne (le_natDegree_of_mem_supp _ hbs) hbp
+  case h₁ =>
+    simp +contextual
 
 中文:
 定理 coeff_comp_degree_mul_degree
@@ -202,7 +211,12 @@ theorem coeff_comp_degree_mul_degree
   case h₀ =>
     intro b hbs hbp
     refine coeff_eq_zero_of_natDegree_lt (natDegree_mul_le.trans_lt ?_)
-
+    rw [natDegree_C]; rw [zero_add]
+    refine natDegree_pow_le.trans_lt ?_
+    gcongr
+    exact lt_of_le_of_ne (le_natDegree_of_mem_supp _ hbs) hbp
+  case h₁ =>
+    simp +contextual
 
 Depends on / 依赖: Eq.trans, Finset, Finset.sum_eq_single, coeff_C_mul, coeff_eq_zero_of_natDegree_lt, coeff_natDegree, coeff_pow_mul_natDegree, coeff_sum, contextual, le_natDegree_of_mem_supp, lt_of_le_of_ne, natDegree, natDegree_C, natDegree_mul_le, natDegree_mul_le.trans_lt, natDegree_pow_le, natDegree_pow_le.trans_lt, p.natDegree, sum_eq_single, trans_lt
 -/
@@ -235,7 +249,7 @@ lemma comp_C_mul_X_coeff
   rw [Finset.sum_eq_single n _ fun h => ?_]; rw [if_pos rfl]; rw [mul_one]
   · intro b _ h; simp_rw [if_neg h.symm, mul_zero]
   · rw [coeff_eq_zero_of_natDegree_lt, zero_mul]
- 
+    rwa [Finset.mem_range_succ_iff, not_le] at h
 
 中文:
 引理 comp_C_mul_X_coeff
@@ -246,7 +260,7 @@ lemma comp_C_mul_X_coeff
   rw [Finset.sum_eq_single n _ fun h => ?_]; rw [if_pos rfl]; rw [mul_one]
   · intro b _ h; simp_rw [if_neg h.symm, mul_zero]
   · rw [coeff_eq_zero_of_natDegree_lt, zero_mul]
- 
+    rwa [Finset.mem_range_succ_iff, not_le] at h
 -/
 @[simp] lemma comp_C_mul_X_coeff {r : R} {n : Nat} :
     (p.comp <| C r * X).coeff n = p.coeff n * r ^ n := by
@@ -326,7 +340,7 @@ theorem map_monic_eq_zero_iff
       f x = f x * f p.leadingCoeff := by simp only [mul_one, hp.leadingCoeff, f.map_one]
       _ = f x * (p.map f).coeff p.natDegree := congr_arg _ (coeff_map _ _).symm
       _ = 0 := by simp only [hfp, mul_zero, coeff_zero],
-    fun h => ext fun n => by simp only [h, coeff_ma
+    fun h => ext fun n => by simp only [h, coeff_map, coeff_zero]⟩
 
 中文:
 定理 map_monic_eq_zero_iff
@@ -337,7 +351,7 @@ theorem map_monic_eq_zero_iff
       f x = f x * f p.leadingCoeff := by simp only [mul_one, hp.leadingCoeff, f.map_one]
       _ = f x * (p.map f).coeff p.natDegree := congr_arg _ (coeff_map _ _).symm
       _ = 0 := by simp only [hfp, mul_zero, coeff_zero],
-    fun h => ext fun n => by simp only [h, coeff_ma
+    fun h => ext fun n => by simp only [h, coeff_map, coeff_zero]⟩
 
 Depends on / 依赖: coeff_map, coeff_zero, congr_arg, f.map_one, hp.leadingCoeff, leadingCoeff, map_one, mul_one, mul_zero, natDegree, p.leadingCoeff, p.map, p.natDegree
 -/
@@ -706,6 +720,10 @@ lemma isUnit_of_isUnit_leadingCoeff_of_isUnit_map
     · rfl
     rintro rfl
     simp at H
+  · intro h
+    have u : IsUnit (φ f.leadingCoeff) := IsUnit.map φ hf
+    rw [h] at u
+    simp at u
 
 中文:
 引理 isUnit_of_isUnit_leadingCoeff_of_isUnit_map
@@ -721,6 +739,10 @@ lemma isUnit_of_isUnit_leadingCoeff_of_isUnit_map
     · rfl
     rintro rfl
     simp at H
+  · intro h
+    have u : IsUnit (φ f.leadingCoeff) := IsUnit.map φ hf
+    rw [h] at u
+    simp at u
 
 Depends on / 依赖: IsUnit, IsUnit.map, convert, degree_eq_iff_natDegree_eq, degree_eq_zero_of_isUnit, degree_map_eq_of_leadingCoeff_ne_zero, eq_C_of_degree_eq_zero, f.leadingCoeff, leadingCoeff, natDegree
 -/

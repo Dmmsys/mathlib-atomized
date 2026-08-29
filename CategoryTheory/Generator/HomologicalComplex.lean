@@ -111,7 +111,7 @@ lemma isSeparator_coproduct_separatingFamily
     (isSeparating_separatingFamily c (X := fun (_ : Unit) => X) (by simpa using! hX))
       (c := Cofan.mk (∐ φ) (fun ⟨_, i⟩ => Sigma.ι φ i)) ?_
   exact IsColimit.ofWhiskerEquivalence
-    (
+    (Discrete.equivalence (Equiv.punitProd.{0} ι).symm) (coproductIsCoproduct φ)
 
 中文:
 引理 isSeparator_coproduct_separatingFamily
@@ -122,7 +122,7 @@ lemma isSeparator_coproduct_separatingFamily
     (isSeparating_separatingFamily c (X := fun (_ : Unit) => X) (by simpa using! hX))
       (c := Cofan.mk (∐ φ) (fun ⟨_, i⟩ => Sigma.ι φ i)) ?_
   exact IsColimit.ofWhiskerEquivalence
-    (
+    (Discrete.equivalence (Equiv.punitProd.{0} ι).symm) (coproductIsCoproduct φ)
 
 Depends on / 依赖: Cofan.mk, Discrete, Discrete.equivalence, Equiv.punitProd, HasSplitCoequalizer, IsColimit, IsColimit.ofWhiskerEquivalence, coproductIsCoproduct, equivalence, hasCoequalizer_of_hasSplitCoequalizer, isSeparating_separatingFamily, isSeparator_of_isColimit_cofan, ofWhiskerEquivalence, punitProd, separatingFamily
 -/

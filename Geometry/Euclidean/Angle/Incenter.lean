@@ -91,7 +91,7 @@ lemma exists_excenterExists_and_eq_excenter_of_forall_angle_orthogonalProjection
   by_cases hi : i = i₁
   · rw [hi]
   obtain ⟨p', hp'₁, hp'₂, ha⟩ := h i hi
-  exact ((dist_orthogonalProjection_eq_iff_angle_eq hp'₁ hp'₂).
+  exact ((dist_orthogonalProjection_eq_iff_angle_eq hp'₁ hp'₂).2 ha).symm
 
 中文:
 引理 存在_excenterExists_and_eq_excenter_of_对任意_angle_orthogonalProjectionSpan_eq
@@ -103,7 +103,7 @@ lemma exists_excenterExists_and_eq_excenter_of_forall_angle_orthogonalProjection
   by_cases hi : i = i₁
   · rw [hi]
   obtain ⟨p', hp'₁, hp'₂, ha⟩ := h i hi
-  exact ((dist_orthogonalProjection_eq_iff_angle_eq hp'₁ hp'₂).
+  exact ((dist_orthogonalProjection_eq_iff_angle_eq hp'₁ hp'₂).2 ha).symm
 
 Depends on / 依赖: dist_orthogonalProjection_eq_iff_angle_eq, exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter, faceOpposite, orthogonalProjectionSpan, s.exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter, s.faceOpposite
 -/
@@ -150,7 +150,10 @@ lemma dist_orthogonalProjectionSpan_faceOpposite_eq_iff_two_zsmul_oangle_eq
           fin_cases i <;> fin_cases j <;> simp_all⟩
     ext i
     fin_cases i <;> rfl
-  rw [orthogonalProjectionSpan
+  rw [orthogonalProjectionSpan]; rw [orthogonalProjectionSpan]; rw [← dist_orthogonalProjection_line_eq_iff_two_zsmul_oangle_eq ha]
+  simp only [range_faceOpposite_points]
+  simp_rw [(by grind : ({i₃}ᶜ : Set (Fin 3)) = {i₁, i₂}),
+    (by grind : ({i₂}ᶜ : Set (Fin 3)) = {i₁, i₃}), Set.image_insert_eq, Set.image_singleton]
 
 中文:
 引理 dist_orthogonalProjectionSpan_faceOpposite_eq_iff_two_zsmul_oangle_eq
@@ -164,7 +167,10 @@ lemma dist_orthogonalProjectionSpan_faceOpposite_eq_iff_two_zsmul_oangle_eq
           fin_cases i <;> fin_cases j <;> simp_all⟩
     ext i
     fin_cases i <;> rfl
-  rw [orthogonalProjectionSpan
+  rw [orthogonalProjectionSpan]; rw [orthogonalProjectionSpan]; rw [← dist_orthogonalProjection_line_eq_iff_two_zsmul_oangle_eq ha]
+  simp only [range_faceOpposite_points]
+  simp_rw [(by grind : ({i₃}ᶜ : Set (Fin 3)) = {i₁, i₂}),
+    (by grind : ({i₂}ᶜ : Set (Fin 3)) = {i₁, i₃}), Set.image_insert_eq, Set.image_singleton]
 
 Depends on / 依赖: AffineIndependent, Set.ima, comp_embedding, convert, dist_orthogonalProjection_line_eq_iff_two_zsmul_oangle_eq, fin_cases, independent, orthogonalProjectionSpan, points, range_faceOpposite_points, simp_rw, t.independent.comp_embedding, t.points
 -/
@@ -216,7 +222,12 @@ lemma oangle_incenter_eq
   rw [← (t.sbtw_touchpoint_empty h₁₃ h₁₂ h₂₃.symm).oangle_eq_left]; rw [← (t.sbtw_touchpoint_empty h₁₂ h₁₃ h₂₃).oangle_eq_right]
   have hd := t.dist_incenter_eq_dist_incenter i₃ i₂
   simp_rw [touchpoint, orthogonalProjectionSpan] at hd ⊢
-  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_aff
+  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_affineSpan _ ?_) (mem_affineSpan _ ?_)
+    (t.touchpoint_empty_injective.ne h₂₃.symm) hd
+  · simp
+    grind
+  · simp
+    grind
 
 中文:
 引理 oangle_incenter_eq
@@ -224,7 +235,12 @@ lemma oangle_incenter_eq
   rw [← (t.sbtw_touchpoint_empty h₁₃ h₁₂ h₂₃.symm).oangle_eq_left]; rw [← (t.sbtw_touchpoint_empty h₁₂ h₁₃ h₂₃).oangle_eq_right]
   have hd := t.dist_incenter_eq_dist_incenter i₃ i₂
   simp_rw [touchpoint, orthogonalProjectionSpan] at hd ⊢
-  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_aff
+  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_affineSpan _ ?_) (mem_affineSpan _ ?_)
+    (t.touchpoint_empty_injective.ne h₂₃.symm) hd
+  · simp
+    grind
+  · simp
+    grind
 
 Depends on / 依赖: dist_incenter_eq_dist_incenter, mem_affineSpan, oangle_eq_left, oangle_eq_of_dist_orthogonalProjection_eq, oangle_eq_right, orthogonalProjectionSpan, sbtw_touchpoint_empty, simp_rw, t.dist_incenter_eq_dist_incenter, t.sbtw_touchpoint_empty, t.touchpoint_empty_injective.ne, touchpoint, touchpoint_empty_injective
 -/
@@ -249,7 +265,12 @@ lemma oangle_excenter_singleton_eq
   rw [(t.touchpoint_singleton_sbtw h₁₃ h₁₂ h₂₃.symm).symm.oangle_eq_left]; rw [(t.touchpoint_singleton_sbtw h₁₂ h₁₃ h₂₃).symm.oangle_eq_right]
   have hd := (t.excenterExists_singleton i₁).dist_excenter_eq_dist_excenter i₃ i₂
   simp_rw [touchpoint, orthogonalProjectionSpan] at hd ⊢
-  refine oangle
+  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_affineSpan _ ?_) (mem_affineSpan _ ?_)
+    ((t.excenterExists_singleton i₁).touchpoint_injective.ne h₂₃.symm) hd
+  · simp
+    grind
+  · simp
+    grind
 
 中文:
 引理 oangle_excenter_singleton_eq
@@ -257,7 +278,12 @@ lemma oangle_excenter_singleton_eq
   rw [(t.touchpoint_singleton_sbtw h₁₃ h₁₂ h₂₃.symm).symm.oangle_eq_left]; rw [(t.touchpoint_singleton_sbtw h₁₂ h₁₃ h₂₃).symm.oangle_eq_right]
   have hd := (t.excenterExists_singleton i₁).dist_excenter_eq_dist_excenter i₃ i₂
   simp_rw [touchpoint, orthogonalProjectionSpan] at hd ⊢
-  refine oangle
+  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_affineSpan _ ?_) (mem_affineSpan _ ?_)
+    ((t.excenterExists_singleton i₁).touchpoint_injective.ne h₂₃.symm) hd
+  · simp
+    grind
+  · simp
+    grind
 
 Depends on / 依赖: dist_excenter_eq_dist_excenter, excenterExists_singleton, mem_affineSpan, oangle_eq_left, oangle_eq_of_dist_orthogonalProjection_eq, oangle_eq_right, orthogonalProjectionSpan, simp_rw, symm.oangle_eq_left, symm.oangle_eq_right, t.excenterExists_singleton, t.touchpoint_singleton_sbtw, touchpoint, touchpoint_injective, touchpoint_injective.ne, touchpoint_singleton_sbtw
 -/
@@ -282,14 +308,28 @@ lemma oangle_excenter_singleton_eq_add_pi
   proof: by
   rw [(t.touchpoint_singleton_sbtw h₁₃ h₁₂ h₂₃.symm).symm.oangle_eq_add_pi_left
         ((t.excenterExists_singleton _).excenter_ne_point _)]; rw [← (t.sbtw_touchpoint_singleton h₁₂.symm h₂₃ h₁₃).oangle_eq_right]; rw [add_left_inj]
-  have hd := (t.excenterExists_singleton i₁).dist_excenter_eq_dis
+  have hd := (t.excenterExists_singleton i₁).dist_excenter_eq_dist_excenter i₃ i₁
+  simp_rw [touchpoint, orthogonalProjectionSpan] at hd ⊢
+  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_affineSpan _ ?_) (mem_affineSpan _ ?_)
+    ((t.excenterExists_singleton i₁).touchpoint_injective.ne h₁₃.symm) hd
+  · simp
+    grind
+  · simp
+    grind
 
 中文:
 引理 oangle_excenter_singleton_eq_add_pi
   证明: by
   rw [(t.touchpoint_singleton_sbtw h₁₃ h₁₂ h₂₃.symm).symm.oangle_eq_add_pi_left
         ((t.excenterExists_singleton _).excenter_ne_point _)]; rw [← (t.sbtw_touchpoint_singleton h₁₂.symm h₂₃ h₁₃).oangle_eq_right]; rw [add_left_inj]
-  have hd := (t.excenterExists_singleton i₁).dist_excenter_eq_dis
+  have hd := (t.excenterExists_singleton i₁).dist_excenter_eq_dist_excenter i₃ i₁
+  simp_rw [touchpoint, orthogonalProjectionSpan] at hd ⊢
+  refine oangle_eq_of_dist_orthogonalProjection_eq (mem_affineSpan _ ?_) (mem_affineSpan _ ?_)
+    ((t.excenterExists_singleton i₁).touchpoint_injective.ne h₁₃.symm) hd
+  · simp
+    grind
+  · simp
+    grind
 
 Depends on / 依赖: add_left_inj, dist_excenter_eq_dist_excenter, excenterExists_singleton, excenter_ne_point, mem_affineSpan, oangle_eq_add_pi_left, oangle_eq_of_dist_orthogonalProjection_eq, oangle_eq_right, orthogonalProjectionSpan, sbtw_touchpoint_singleton, simp_rw, symm.oangle_eq_add_pi_left, t.excenterExists_singleton, t.sbtw_touchpoint_singleton, t.touchpoint_singleton_sbtw, touchpoint, touchpoint_inj, touchpoint_singleton_sbtw
 -/
@@ -319,7 +359,17 @@ lemma eq_excenter_of_two_zsmul_oangle_eq
   rw [← dist_orthogonalProjectionSpan_faceOpposite_eq_iff_two_zsmul_oangle_eq h₂₃ h₁₂.symm h₁₃.symm]
     at h₂
   have hp : p in affineSpan Real (Set.range t.points) := by
-    convert! AffineSubspace.m
+    convert! AffineSubspace.mem_top Real V p
+    rw [t.independent.affineSpan_eq_top_iff_card_eq_finrank_add_one]
+    simp [hd2.out]
+  have hr : exists r : Real, forall i, dist p ((t.faceOpposite i).orthogonalProjectionSpan p) = r := by
+    refine ⟨dist p ((faceOpposite t i₃).orthogonalProjectionSpan p), ?_⟩
+    intro i
+    have h : i = i₁ ∨ i = i₂ ∨ i = i₃ := by clear! p t; decide +revert
+    rcases h with rfl | rfl | rfl <;> grind
+  obtain ⟨signs, -, hp⟩ :=
+    (t.exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter hp).1 hr
+  exact ⟨signs, hp⟩
 
 中文:
 引理 eq_excenter_of_two_zsmul_oangle_eq
@@ -329,7 +379,17 @@ lemma eq_excenter_of_two_zsmul_oangle_eq
   rw [← dist_orthogonalProjectionSpan_faceOpposite_eq_iff_two_zsmul_oangle_eq h₂₃ h₁₂.symm h₁₃.symm]
     at h₂
   have hp : p in affineSpan Real (Set.range t.points) := by
-    convert! AffineSubspace.m
+    convert! AffineSubspace.mem_top Real V p
+    rw [t.independent.affineSpan_eq_top_iff_card_eq_finrank_add_one]
+    simp [hd2.out]
+  have hr : exists r : Real, forall i, dist p ((t.faceOpposite i).orthogonalProjectionSpan p) = r := by
+    refine ⟨dist p ((faceOpposite t i₃).orthogonalProjectionSpan p), ?_⟩
+    intro i
+    have h : i = i₁ ∨ i = i₂ ∨ i = i₃ := by clear! p t; decide +revert
+    rcases h with rfl | rfl | rfl <;> grind
+  obtain ⟨signs, -, hp⟩ :=
+    (t.exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter hp).1 hr
+  exact ⟨signs, hp⟩
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.mem_top, Set.range, affineSpan, affineSpan_eq_top_iff_card_eq_finrank_add_one, convert, dist_orthogonalProjectionSpan_faceOpposite_eq_iff_two_zsmul_oangle_eq, faceOpposite, hd2.out, independent, mem_top, orthogonalProjectionSpan, points, t.faceOpposite, t.independent.affineSpan_eq_top_iff_card_eq_finrank_add_one, t.points
 -/
@@ -367,7 +427,9 @@ lemma eq_incenter_or_eq_excenter_singleton_of_oangle_eq
   · exact .inr hs
   · rw [hs, t.oangle_excenter_singleton_eq_add_pi h₁₂.symm h₂₃ h₁₃] at h
     simp [Real.Angle.pi_ne_zero] at h
-  · rw [hs, oangle_rev (t.points 
+  · rw [hs, oangle_rev (t.points i₃), t.oangle_excenter_singleton_eq_add_pi h₁₃.symm h₂₃.symm h₁₂,
+      oangle_rev] at h
+    simp [Real.Angle.pi_ne_zero] at h
 
 中文:
 引理 eq_incenter_or_eq_excenter_singleton_of_oangle_eq
@@ -379,7 +441,9 @@ lemma eq_incenter_or_eq_excenter_singleton_of_oangle_eq
   · exact .inr hs
   · rw [hs, t.oangle_excenter_singleton_eq_add_pi h₁₂.symm h₂₃ h₁₃] at h
     simp [Real.Angle.pi_ne_zero] at h
-  · rw [hs, oangle_rev (t.points 
+  · rw [hs, oangle_rev (t.points i₃), t.oangle_excenter_singleton_eq_add_pi h₁₃.symm h₂₃.symm h₁₂,
+      oangle_rev] at h
+    simp [Real.Angle.pi_ne_zero] at h
 
 Depends on / 依赖: Real.Angle.pi_ne_zero, excenter_eq_incenter_or_excenter_singleton_of_ne, oangle_excenter_singleton_eq_add_pi, oangle_rev, pi_ne_zero, points, t.excenter_eq_incenter_or_excenter_singleton_of_ne, t.oangle_excenter_singleton_eq_add_pi, t.points
 -/
@@ -410,7 +474,9 @@ lemma eq_excenter_singleton_of_oangle_eq_add_pi
   · rw [hs, t.oangle_incenter_eq h₁₂ h₁₃ h₂₃] at h
     simp [Real.Angle.pi_ne_zero] at h
   · rw [hs, t.oangle_excenter_singleton_eq h₁₂ h₁₃ h₂₃] at h
-    simp [Real.Angle.pi_ne_zer
+    simp [Real.Angle.pi_ne_zero] at h
+  · exact .inl hs
+  · exact .inr hs
 
 中文:
 引理 eq_excenter_singleton_of_oangle_eq_add_pi
@@ -421,7 +487,9 @@ lemma eq_excenter_singleton_of_oangle_eq_add_pi
   · rw [hs, t.oangle_incenter_eq h₁₂ h₁₃ h₂₃] at h
     simp [Real.Angle.pi_ne_zero] at h
   · rw [hs, t.oangle_excenter_singleton_eq h₁₂ h₁₃ h₂₃] at h
-    simp [Real.Angle.pi_ne_zer
+    simp [Real.Angle.pi_ne_zero] at h
+  · exact .inl hs
+  · exact .inr hs
 
 Depends on / 依赖: Real.Angle.pi_ne_zero, excenter_eq_incenter_or_excenter_singleton_of_ne, oangle_excenter_singleton_eq, oangle_incenter_eq, pi_ne_zero, t.excenter_eq_incenter_or_excenter_singleton_of_ne, t.oangle_excenter_singleton_eq, t.oangle_incenter_eq
 -/
@@ -449,7 +517,13 @@ lemma eq_incenter_of_oangle_eq
   obtain ⟨signs, rfl⟩ := t.eq_excenter_of_two_zsmul_oangle_eq h₁₂ h₁₃ h₂₃ (by rw [h₁]) (by rw [h₂])
   have h₁' := t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq h₁₂ h₁₃ h₂₃ h₁
   have h₂' := t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq h₂₃ h₁₂.symm h₁₃.symm h₂
-  rcases h₁' with h₁' | h
+  rcases h₁' with h₁' | h₁'
+  · exact h₁'
+  rcases h₂' with h₂' | h₂'
+  · exact h₂'
+  rw [h₁'] at h₂'
+  exfalso
+  exact t.excenter_singleton_injective.ne h₁₂ h₂'
 
 中文:
 引理 eq_incenter_of_oangle_eq
@@ -458,7 +532,13 @@ lemma eq_incenter_of_oangle_eq
   obtain ⟨signs, rfl⟩ := t.eq_excenter_of_two_zsmul_oangle_eq h₁₂ h₁₃ h₂₃ (by rw [h₁]) (by rw [h₂])
   have h₁' := t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq h₁₂ h₁₃ h₂₃ h₁
   have h₂' := t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq h₂₃ h₁₂.symm h₁₃.symm h₂
-  rcases h₁' with h₁' | h
+  rcases h₁' with h₁' | h₁'
+  · exact h₁'
+  rcases h₂' with h₂' | h₂'
+  · exact h₂'
+  rw [h₁'] at h₂'
+  exfalso
+  exact t.excenter_singleton_injective.ne h₁₂ h₂'
 
 Depends on / 依赖: eq_excenter_of_two_zsmul_oangle_eq, eq_incenter_or_eq_excenter_singleton_of_oangle_eq, excenter_singleton_injective, t.eq_excenter_of_two_zsmul_oangle_eq, t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq, t.excenter_singleton_injective.ne
 -/
@@ -489,7 +569,13 @@ lemma eq_excenter_singleton_of_oangle_eq_of_oangle_eq_add_pi
     (by rw [h₂]; simp)
   have h₁' := t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq h₁₂ h₁₃ h₂₃ h₁
   have h₂' := t.eq_excenter_singleton_of_oangle_eq_add_pi h₂₃ h₁₂.symm h₁₃.symm h₂
-  rcases h₁' with h₁' |
+  rcases h₁' with h₁' | h₁'
+  · rcases h₂' with h₂' | h₂'
+    · rw [h₁'] at h₂'
+      exfalso
+      exact (t.excenter_singleton_ne_incenter _).symm h₂'
+    · exact h₂'
+  · exact h₁'
 
 中文:
 引理 eq_excenter_singleton_of_oangle_eq_of_oangle_eq_add_pi
@@ -499,7 +585,13 @@ lemma eq_excenter_singleton_of_oangle_eq_of_oangle_eq_add_pi
     (by rw [h₂]; simp)
   have h₁' := t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq h₁₂ h₁₃ h₂₃ h₁
   have h₂' := t.eq_excenter_singleton_of_oangle_eq_add_pi h₂₃ h₁₂.symm h₁₃.symm h₂
-  rcases h₁' with h₁' |
+  rcases h₁' with h₁' | h₁'
+  · rcases h₂' with h₂' | h₂'
+    · rw [h₁'] at h₂'
+      exfalso
+      exact (t.excenter_singleton_ne_incenter _).symm h₂'
+    · exact h₂'
+  · exact h₁'
 
 Depends on / 依赖: eq_excenter_of_two_zsmul_oangle_eq, eq_excenter_singleton_of_oangle_eq_add_pi, eq_incenter_or_eq_excenter_singleton_of_oangle_eq, excenter_singleton_ne_incenter, t.eq_excenter_of_two_zsmul_oangle_eq, t.eq_excenter_singleton_of_oangle_eq_add_pi, t.eq_incenter_or_eq_excenter_singleton_of_oangle_eq, t.excenter_singleton_ne_incenter
 -/
@@ -531,7 +623,13 @@ lemma eq_excenter_singleton_of_oangle_eq_add_pi_of_oangle_eq_add_pi
     (by rw [h₂]; simp)
   have h₁' := t.eq_excenter_singleton_of_oangle_eq_add_pi h₁₂ h₁₃ h₂₃ h₁
   have h₂' := t.eq_excenter_singleton_of_oangle_eq_add_pi h₂₃ h₁₂.symm h₁₃.symm h₂
-  rcases h₁' with h₁' | h
+  rcases h₁' with h₁' | h₁'
+  · rcases h₂' with h₂' | h₂'
+    · exact h₂'
+    rw [h₂'] at h₁'
+    exfalso
+    exact t.excenter_singleton_injective.ne h₁₂ h₁'
+  · exact h₁'
 
 中文:
 引理 eq_excenter_singleton_of_oangle_eq_add_pi_of_oangle_eq_add_pi
@@ -541,7 +639,13 @@ lemma eq_excenter_singleton_of_oangle_eq_add_pi_of_oangle_eq_add_pi
     (by rw [h₂]; simp)
   have h₁' := t.eq_excenter_singleton_of_oangle_eq_add_pi h₁₂ h₁₃ h₂₃ h₁
   have h₂' := t.eq_excenter_singleton_of_oangle_eq_add_pi h₂₃ h₁₂.symm h₁₃.symm h₂
-  rcases h₁' with h₁' | h
+  rcases h₁' with h₁' | h₁'
+  · rcases h₂' with h₂' | h₂'
+    · exact h₂'
+    rw [h₂'] at h₁'
+    exfalso
+    exact t.excenter_singleton_injective.ne h₁₂ h₁'
+  · exact h₁'
 
 Depends on / 依赖: eq_excenter_of_two_zsmul_oangle_eq, eq_excenter_singleton_of_oangle_eq_add_pi, excenter_singleton_injective, t.eq_excenter_of_two_zsmul_oangle_eq, t.eq_excenter_singleton_of_oangle_eq_add_pi, t.excenter_singleton_injective.ne
 -/

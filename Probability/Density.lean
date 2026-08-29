@@ -621,7 +621,9 @@ nonrec theorem ae_lt_top [IsFiniteMeasure ℙ] {μ : Measure E} {X : Ω -> E} :
     forallᵐ x ∂μ, pdf X ℙ μ x < ∞ :=
   rnDeriv_lt_top (map X ℙ) μ
 
-nonrec theorem ofReal_toReal_ae_eq [IsFiniteMea
+nonrec theorem ofReal_toReal_ae_eq [IsFiniteMeasure ℙ] {X : Ω -> E} :
+    (fun x => ENNReal.ofReal (pdf X ℙ μ x).toReal) =ᵐ[μ] pdf X ℙ μ :=
+  ofReal_toReal_ae_eq ae_lt_top
 
 中文:
 定理 eq_of_map_eq_withDensity'
@@ -633,7 +635,9 @@ nonrec theorem ae_lt_top [IsFiniteMeasure ℙ] {μ : Measure E} {X : Ω -> E} :
     forallᵐ x ∂μ, pdf X ℙ μ x < ∞ :=
   rnDeriv_lt_top (map X ℙ) μ
 
-nonrec theorem ofReal_toReal_ae_eq [IsFiniteMea
+nonrec theorem ofReal_toReal_ae_eq [IsFiniteMeasure ℙ] {X : Ω -> E} :
+    (fun x => ENNReal.ofReal (pdf X ℙ μ x).toReal) =ᵐ[μ] pdf X ℙ μ :=
+  ofReal_toReal_ae_eq ae_lt_top
 
 Depends on / 依赖: aemeasurable, map_eq_withDensity_pdf, measurable_pdf, withDensity_eq_iff_of_sigmaFinite
 -/
@@ -683,14 +687,14 @@ theorem integrable_pdf_smul_iff
   statement: [IsFiniteMeasure ℙ] {X : Ω -> E} [HasPDF X ℙ μ] {f : E -> F}
   proof: by
   rw [← Function.comp_def]; rw [← integrable_map_measure (hf.mono_ac HasPDF.absolutelyContinuous) (HasPDF.aemeasurable X ℙ μ)]; rw [map_eq_withDensity_pdf X ℙ μ]; rw [pdf_def]; rw [integrable_rnDeriv_smul_iff HasPDF.absolutelyContinuous]
-  rw [withDensity_rnDeriv_eq _ _ HasPDF.absolutelyContinuou
+  rw [withDensity_rnDeriv_eq _ _ HasPDF.absolutelyContinuous]
 
 中文:
 定理 integrable_pdf_smul_iff
   结论: [是有限测度 ℙ] {X : Ω -> E} [有PDF X ℙ μ] {f : E -> F}
   证明: by
   rw [← Function.comp_def]; rw [← integrable_map_measure (hf.mono_ac HasPDF.absolutelyContinuous) (HasPDF.aemeasurable X ℙ μ)]; rw [map_eq_withDensity_pdf X ℙ μ]; rw [pdf_def]; rw [integrable_rnDeriv_smul_iff HasPDF.absolutelyContinuous]
-  rw [withDensity_rnDeriv_eq _ _ HasPDF.absolutelyContinuou
+  rw [withDensity_rnDeriv_eq _ _ HasPDF.absolutelyContinuous]
 
 Depends on / 依赖: Function, Function.comp_def, HasPDF, HasPDF.absolutelyContinuous, HasPDF.aemeasurable, absolutelyContinuous, aemeasurable, comp_def, hf.mono_ac, integrable_map_measure, integrable_rnDeriv_smul_iff, map_eq_withDensity_pdf, mono_ac, pdf_def, withDensity_rnDeriv_eq
 -/
@@ -737,7 +741,7 @@ theorem quasiMeasurePreserving_hasPDF
   have hgm : AEMeasurable g (map X ℙ) := hg.aemeasurable.mono_ac HasPDF.absolutelyContinuous
   rw [hasPDF_iff]; rw [← AEMeasurable.map_map_of_aemeasurable hgm (HasPDF.aemeasurable X ℙ μ)]
   refine ⟨hg.measurable.comp_aemeasurable (HasPDF.aemeasurable _ _ μ), hmap, ?_⟩
-  exact (HasPDF.absolutelyCo
+  exact (HasPDF.absolutelyContinuous.map hg.1).trans hg.2
 
 中文:
 定理 quasiMeasurePreserving_hasPDF
@@ -746,7 +750,7 @@ theorem quasiMeasurePreserving_hasPDF
   have hgm : AEMeasurable g (map X ℙ) := hg.aemeasurable.mono_ac HasPDF.absolutelyContinuous
   rw [hasPDF_iff]; rw [← AEMeasurable.map_map_of_aemeasurable hgm (HasPDF.aemeasurable X ℙ μ)]
   refine ⟨hg.measurable.comp_aemeasurable (HasPDF.aemeasurable _ _ μ), hmap, ?_⟩
-  exact (HasPDF.absolutelyCo
+  exact (HasPDF.absolutelyContinuous.map hg.1).trans hg.2
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, HasPDF, HasPDF.absolutelyContinuous, HasPDF.absolutelyContinuous.map, HasPDF.aemeasurable, absolutelyContinuous, aemeasurable, comp_aemeasurable, hasPDF_iff, hg.aemeasurable.mono_ac, hg.measurable.comp_aemeasurable, map_map_of_aemeasurable, measurable, mono_ac
 -/
@@ -831,7 +835,9 @@ theorem hasFiniteIntegral_mul
   have : (fun x => ‖f x‖ₑ * g x) =ᵐ[volume] fun x => ‖f x * (pdf X ℙ volume x).toReal‖ₑ := by
     refine ae_eq_trans ((ae_eq_refl _).fun_mul (ae_eq_trans hg.symm ofReal_toReal_ae_eq.symm)) ?_
     simp_rw [← smul_eq_mul, enorm_smul, smul_eq_mul]
-    refine .fun_m
+    refine .fun_mul (ae_eq_refl _) ?_
+    simp only [Real.enorm_eq_ofReal ENNReal.toReal_nonneg, ae_eq_refl]
+  rwa [lt_top_iff_ne_top, ← lintegral_congr_ae this]
 
 中文:
 定理 hasFinite整数egral_mul
@@ -841,7 +847,9 @@ theorem hasFiniteIntegral_mul
   have : (fun x => ‖f x‖ₑ * g x) =ᵐ[volume] fun x => ‖f x * (pdf X ℙ volume x).toReal‖ₑ := by
     refine ae_eq_trans ((ae_eq_refl _).fun_mul (ae_eq_trans hg.symm ofReal_toReal_ae_eq.symm)) ?_
     simp_rw [← smul_eq_mul, enorm_smul, smul_eq_mul]
-    refine .fun_m
+    refine .fun_mul (ae_eq_refl _) ?_
+    simp only [Real.enorm_eq_ofReal ENNReal.toReal_nonneg, ae_eq_refl]
+  rwa [lt_top_iff_ne_top, ← lintegral_congr_ae this]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, Real.enorm_eq_ofReal, ae_eq_refl, ae_eq_trans, enorm_eq_ofReal, enorm_smul, fun_mul, hasFiniteIntegral_iff_enorm, hg.symm, lintegral_congr_ae, lt_top_iff_ne_top, ofReal_toReal_ae_eq, ofReal_toReal_ae_eq.symm, simp_rw, smul_eq_mul, toReal, toReal_nonneg, volume
 -/
@@ -873,7 +881,13 @@ theorem indepFun_iff_pdf_prod_eq_pdf_mul_pdf
   have : HasPDF Y ℙ ν := quasiMeasurePreserving_hasPDF' (μ := μ.prod ν) (fun ω => (X ω, Y ω))
     quasiMeasurePreserving_snd
   have h₀ : (ℙ.map X).prod (ℙ.map Y) =
-      (μ
+      (μ.prod ν).withDensity fun z => pdf X ℙ μ z.1 * pdf Y ℙ ν z.2 :=
+    prod_eq fun s t hs ht => by rw [withDensity_apply _ (hs.prod ht), ← prod_restrict,
+      lintegral_prod_mul (measurable_pdf X ℙ μ).aemeasurable (measurable_pdf Y ℙ ν).aemeasurable,
+      map_eq_setLIntegral_pdf X ℙ μ hs, map_eq_setLIntegral_pdf Y ℙ ν ht]
+  rw [indepFun_iff_map_prod_eq_prod_map_map (HasPDF.aemeasurable X ℙ μ) (HasPDF.aemeasurable Y ℙ ν)]; rw [← eq_of_map_eq_withDensity]; rw [h₀]
+  exact (((measurable_pdf X ℙ μ).comp measurable_fst).mul
+    ((measurable_pdf Y ℙ ν).comp measurable_snd)).aemeasurable
 
 中文:
 定理 indepFun_iff_pdf_prod_eq_pdf_mul_pdf
@@ -883,7 +897,13 @@ theorem indepFun_iff_pdf_prod_eq_pdf_mul_pdf
   have : HasPDF Y ℙ ν := quasiMeasurePreserving_hasPDF' (μ := μ.prod ν) (fun ω => (X ω, Y ω))
     quasiMeasurePreserving_snd
   have h₀ : (ℙ.map X).prod (ℙ.map Y) =
-      (μ
+      (μ.prod ν).withDensity fun z => pdf X ℙ μ z.1 * pdf Y ℙ ν z.2 :=
+    prod_eq fun s t hs ht => by rw [withDensity_apply _ (hs.prod ht), ← prod_restrict,
+      lintegral_prod_mul (measurable_pdf X ℙ μ).aemeasurable (measurable_pdf Y ℙ ν).aemeasurable,
+      map_eq_setLIntegral_pdf X ℙ μ hs, map_eq_setLIntegral_pdf Y ℙ ν ht]
+  rw [indepFun_iff_map_prod_eq_prod_map_map (HasPDF.aemeasurable X ℙ μ) (HasPDF.aemeasurable Y ℙ ν)]; rw [← eq_of_map_eq_withDensity]; rw [h₀]
+  exact (((measurable_pdf X ℙ μ).comp measurable_fst).mul
+    ((measurable_pdf Y ℙ ν).comp measurable_snd)).aemeasurable
 
 Depends on / 依赖: HasPDF, aemeasurable, hs.prod, lintegral_prod_mul, measurable_pdf, prod_eq, prod_restrict, quasiMeasurePreserving_fst, quasiMeasurePreserving_hasPDF, quasiMeasurePreserving_snd, withDensity, withDensity_apply
 -/
@@ -929,7 +949,9 @@ theorem IndepFun.mul_hasPDF'
   have : AEMeasurable Y ℙ := HasPDF.aemeasurable' μ
   rw [hasPDF_iff_of_aemeasurable (by fun_prop)]; rw [hXY.map_mul_eq_map_mconv_map₀' (by fun_prop) (by fun_prop) σX σY]
   refine ⟨?_, mconv_absolutelyContinuous HasPDF.absolutelyContinuous⟩
-  ap
+  apply HaveLebesgueDecomposition.mconv <;> exact HasPDF.absolutelyContinuous
+
+@[to_additive]
 
 中文:
 定理 IndepFun.mul_hasPDF'
@@ -939,7 +961,9 @@ theorem IndepFun.mul_hasPDF'
   have : AEMeasurable Y ℙ := HasPDF.aemeasurable' μ
   rw [hasPDF_iff_of_aemeasurable (by fun_prop)]; rw [hXY.map_mul_eq_map_mconv_map₀' (by fun_prop) (by fun_prop) σX σY]
   refine ⟨?_, mconv_absolutelyContinuous HasPDF.absolutelyContinuous⟩
-  ap
+  apply HaveLebesgueDecomposition.mconv <;> exact HasPDF.absolutelyContinuous
+
+@[to_additive]
 
 Depends on / 依赖: AEMeasurable, HasPDF, HasPDF.absolutelyContinuous, HasPDF.aemeasurable, HaveLebesgueDecomposition, HaveLebesgueDecomposition.mconv, absolutelyContinuous, aemeasurable, fun_prop, hXY.map_mul_eq_map_mconv_map, hasPDF_iff_of_aemeasurable, mconv_absolutelyContinuous
 -/

@@ -73,7 +73,7 @@ definition wf_lbp
     intro m k kn
     induction m generalizing k with (refine ⟨_, fun y r => ?_⟩; rcases r with ⟨rfl, a⟩)
     | zero => injection mem_unique pn.1 (a _ kn)
-    | succ m IH => 
+    | succ m IH => exact IH _ (by rw [Nat.add_right_comm]; exact kn)⟩
 
 中文:
 定义 wf_lbp
@@ -84,7 +84,7 @@ definition wf_lbp
     intro m k kn
     induction m generalizing k with (refine ⟨_, fun y r => ?_⟩; rcases r with ⟨rfl, a⟩)
     | zero => injection mem_unique pn.1 (a _ kn)
-    | succ m IH => 
+    | succ m IH => exact IH _ (by rw [Nat.add_right_comm]; exact kn)⟩
 -/
 private def wf_lbp (H : exists n, true in p n ∧ forall k < n, (p k).Dom) : WellFounded (lbp p) :=
   ⟨by
@@ -112,7 +112,19 @@ definition rfindX
       intro m IH al
       have pm : (p m).Dom := by
         rcases H with ⟨n, h₁, h₂⟩
-        rca
+        rcases lt_trichotomy m n with (h₃ | h₃ | h₃)
+        · exact h₂ _ h₃
+        · rw [h₃]
+          exact h₁.fst
+        · injection mem_unique h₁ (al _ h₃)
+      cases e : (p m).get pm
+      · suffices forallᵉ k <= m, false in p k from IH _ ⟨rfl, this⟩ fun n h => this _ (le_of_lt_succ h)
+        intro n h
+        rcases h.lt_or_eq_dec with h | h
+        · exact al _ h
+        · rw [h]
+          exact ⟨_, e⟩
+      · exact ⟨m, ⟨_, e⟩, al⟩)
 
 中文:
 定义 rfindX
@@ -124,7 +136,19 @@ definition rfindX
       intro m IH al
       have pm : (p m).Dom := by
         rcases H with ⟨n, h₁, h₂⟩
-        rca
+        rcases lt_trichotomy m n with (h₃ | h₃ | h₃)
+        · exact h₂ _ h₃
+        · rw [h₃]
+          exact h₁.fst
+        · injection mem_unique h₁ (al _ h₃)
+      cases e : (p m).get pm
+      · suffices forallᵉ k <= m, false in p k from IH _ ⟨rfl, this⟩ fun n h => this _ (le_of_lt_succ h)
+        intro n h
+        rcases h.lt_or_eq_dec with h | h
+        · exact al _ h
+        · rw [h]
+          exact ⟨_, e⟩
+      · exact ⟨m, ⟨_, e⟩, al⟩)
 
 Depends on / 依赖: Nat.not_lt_zero, WellFounded, WellFounded.fix, injection, le_of_lt_succ, lt_trichotomy, mem_unique, not_lt_zero, wf_lbp
 -/
@@ -278,7 +302,7 @@ let ⟨m, hm⟩ := dom_iff_mem.1 (@rfind_dom p).2 ⟨_, h₁, fun {m} mn => (h�
     rcases lt_trichotomy m n with (h | h | h)
     · injection mem_unique (h₂ h) (rfind_spec hm)
     · rwa [← h]
-    · injection mem_unique h₁ (rfind_min hm 
+    · injection mem_unique h₁ (rfind_min hm h)⟩
 
 中文:
 定理 mem_rfind
@@ -288,7 +312,7 @@ let ⟨m, hm⟩ := dom_iff_mem.1 (@rfind_dom p).2 ⟨_, h₁, fun {m} mn => (h�
     rcases lt_trichotomy m n with (h | h | h)
     · injection mem_unique (h₂ h) (rfind_spec hm)
     · rwa [← h]
-    · injection mem_unique h₁ (rfind_min hm 
+    · injection mem_unique h₁ (rfind_min hm h)⟩
 
 Depends on / 依赖: dom_iff_mem, injection, lt_trichotomy, mem_unique, rfind_dom, rfind_min, rfind_spec
 -/
@@ -406,7 +430,9 @@ theorem rfindOpt_dom
     have s := Nat.find_spec h'
     have fd : (rfind fun n => (f n).isSome).Dom :=
       ⟨Nat.find h', by simpa using s.symm, fun _ _ => trivial⟩
-   
+    refine ⟨fd, ?_⟩
+    have := rfind_spec (get_mem fd)
+    simpa using this⟩
 
 中文:
 定理 rfindOpt_dom
@@ -417,7 +443,9 @@ theorem rfindOpt_dom
     have s := Nat.find_spec h'
     have fd : (rfind fun n => (f n).isSome).Dom :=
       ⟨Nat.find h', by simpa using s.symm, fun _ _ => trivial⟩
-   
+    refine ⟨fd, ?_⟩
+    have := rfind_spec (get_mem fd)
+    simpa using this⟩
 
 Depends on / 依赖: Nat.find, Nat.find_spec, Option.isSome_iff_exists, find_spec, get_mem, h.imp, isSome, isSome_iff_exists, rfindOpt_spec, rfind_spec, s.symm
 -/
@@ -554,6 +582,13 @@ theorem of_primrec
   | comp _ _ pf pg =>
     refine (pf.comp pg).of_eq_tot fun n => (by simp)
   | prec _ _ pf pg =>
+    refine (pf.prec pg).of_eq_tot fun n => ?_
+    simp only [unpaired, PFun.coe_val, bind_eq_bind]
+    induction n.unpair.2 with
+    | zero => simp
+    | succ m IH =>
+      simp only [mem_bind_iff, mem_some_iff]
+      exact ⟨_, IH, rfl⟩
 
 中文:
 定理 of_primrec
@@ -571,6 +606,13 @@ theorem of_primrec
   | comp _ _ pf pg =>
     refine (pf.comp pg).of_eq_tot fun n => (by simp)
   | prec _ _ pf pg =>
+    refine (pf.prec pg).of_eq_tot fun n => ?_
+    simp only [unpaired, PFun.coe_val, bind_eq_bind]
+    induction n.unpair.2 with
+    | zero => simp
+    | succ m IH =>
+      simp only [mem_bind_iff, mem_some_iff]
+      exact ⟨_, IH, rfl⟩
 
 Depends on / 依赖: PFun.coe_val, Seq.seq, bind_eq_bind, coe_val, mem_bind_iff, mem_some_iff, n.unpair, of_eq_tot, pf.comp, pf.pair, pf.prec, unpair, unpaired
 -/
@@ -667,7 +709,10 @@ theorem ppred
       (@PrimrecRel.comp _ _ _ _ _ _ _ _ _
         Primrec.eq Primrec.fst (_root_.Primrec.succ.comp Primrec.snd))
       (_root_.Primrec.const 0) (_root_.Primrec.const 1)).to₂
-  (of_primrec (Primrec₂.unpaired'.2 this)).rfin
+  (of_primrec (Primrec₂.unpaired'.2 this)).rfind.of_eq fun n => by
+    cases n
+    · exact eq_none_iff.2 (by simp)
+    · exact eq_some_iff.2 (by simp; lia)
 
 中文:
 定理 ppred
@@ -677,7 +722,10 @@ theorem ppred
       (@PrimrecRel.comp _ _ _ _ _ _ _ _ _
         Primrec.eq Primrec.fst (_root_.Primrec.succ.comp Primrec.snd))
       (_root_.Primrec.const 0) (_root_.Primrec.const 1)).to₂
-  (of_primrec (Primrec₂.unpaired'.2 this)).rfin
+  (of_primrec (Primrec₂.unpaired'.2 this)).rfind.of_eq fun n => by
+    cases n
+    · exact eq_none_iff.2 (by simp)
+    · exact eq_some_iff.2 (by simp; lia)
 
 Depends on / 依赖: Nat.succ, Primrec, Primrec.eq, Primrec.fst, Primrec.ite, Primrec.snd, PrimrecRel, PrimrecRel.comp, _root_, _root_.Primrec.const, _root_.Primrec.succ.comp, eq_none_iff, eq_some_iff, of_eq, of_primrec, rfind.of_eq, unpaired
 -/
@@ -1672,7 +1720,10 @@ theorem nat_rec
       induction f a <;> simp_all
 
 nonrec theorem comp {f : β ->. σ} {g : α -> β} (hf : Partrec f) (hg : Computable g) :
-    Partrec fun a => f (g 
+    Partrec fun a => f (g a) :=
+  (hf.comp hg).of_eq fun n => by
+    simp only [PFun.coe_val, map_some, bind_eq_bind]
+    rcases e : decode (α := α) n with - | a <;> simp [encodek]
 
 中文:
 定理 nat_rec
@@ -1684,7 +1735,10 @@ nonrec theorem comp {f : β ->. σ} {g : α -> β} (hf : Partrec f) (hg : Comput
       induction f a <;> simp_all
 
 nonrec theorem comp {f : β ->. σ} {g : α -> β} (hf : Partrec f) (hg : Computable g) :
-    Partrec fun a => f (g 
+    Partrec fun a => f (g a) :=
+  (hf.comp hg).of_eq fun n => by
+    simp only [PFun.coe_val, map_some, bind_eq_bind]
+    rcases e : decode (α := α) n with - | a <;> simp [encodek]
 
 Depends on / 依赖: Nat.Partrec.prec, PFun.coe_val, Partrec, bind_some, coe_some, coe_val, decode, of_eq
 -/
@@ -1977,7 +2031,11 @@ theorem nat_casesOn_right
     · refine ext fun b => ⟨fun H => ?_, fun H => ?_⟩
       · rcases mem_bind_iff.1 H with ⟨c, _, h₂⟩
         exact h₂
-      · have : f
+      · have : forall m, (Nat.rec (motive := fun _ => Part σ)
+            (Part.some (g a)) (fun y IH => IH.bind fun _ => h a n) m).Dom := by
+          intro m
+          induction m <;> simp [*, H.fst]
+        exact ⟨⟨this n, H.fst⟩, H.snd⟩
 
 中文:
 定理 nat_casesOn_right
@@ -1989,7 +2047,11 @@ theorem nat_casesOn_right
     · refine ext fun b => ⟨fun H => ?_, fun H => ?_⟩
       · rcases mem_bind_iff.1 H with ⟨c, _, h₂⟩
         exact h₂
-      · have : f
+      · have : forall m, (Nat.rec (motive := fun _ => Part σ)
+            (Part.some (g a)) (fun y IH => IH.bind fun _ => h a n) m).Dom := by
+          intro m
+          induction m <;> simp [*, H.fst]
+        exact ⟨⟨this n, H.fst⟩, H.snd⟩
 
 Depends on / 依赖: H.fst, H.snd, IH.bind, Nat.pred_eq_sub_one, Nat.rec, PFun.coe_val, Part.some, coe_val, hf.comp, hh.comp, mem_bind_iff, motive, nat_rec, of_eq, pred.comp, pred_eq_sub_one
 -/
@@ -2124,7 +2186,21 @@ theorem bind_decode_iff
             snd).bind
         (Computable.comp hf fst).to₂.partrec₂)
       fun n => by
-        simp only [decode_prod_val, decode_nat, Option.map_
+        simp only [decode_prod_val, decode_nat, Option.map_some, PFun.coe_val, bind_eq_bind,
+          bind_some, Part.map_bind, map_some]
+        cases decode (α := α) n.unpair.1 <;> simp
+        cases decode (α := β) n.unpair.2 <;> simp,
+    fun hf => by
+    have :
+      Partrec fun a : α × Nat =>
+        (encode (decode (α := β) a.2)).casesOn (some Option.none)
+          fun n => Part.map (f a.1) (decode (α := β) n) :=
+      Partrec.nat_casesOn_right
+        (h := fun (a : α × Nat) (n : Nat) => map (fun b => f a.1 b) (Part.ofOption (decode n)))
+        (Primrec.encdec.to_comp.comp snd) (const Option.none)
+        ((ofOption (Computable.decode.comp snd)).map (hf.comp (fst.comp <| fst.comp fst) snd).to₂)
+    refine this.of_eq fun a => ?_
+    simp; cases decode (α := β) a.2 <;> simp [encodek]⟩
 
 中文:
 定理 bind_decode_iff
@@ -2136,7 +2212,21 @@ theorem bind_decode_iff
             snd).bind
         (Computable.comp hf fst).to₂.partrec₂)
       fun n => by
-        simp only [decode_prod_val, decode_nat, Option.map_
+        simp only [decode_prod_val, decode_nat, Option.map_some, PFun.coe_val, bind_eq_bind,
+          bind_some, Part.map_bind, map_some]
+        cases decode (α := α) n.unpair.1 <;> simp
+        cases decode (α := β) n.unpair.2 <;> simp,
+    fun hf => by
+    have :
+      Partrec fun a : α × Nat =>
+        (encode (decode (α := β) a.2)).casesOn (some Option.none)
+          fun n => Part.map (f a.1) (decode (α := β) n) :=
+      Partrec.nat_casesOn_right
+        (h := fun (a : α × Nat) (n : Nat) => map (fun b => f a.1 b) (Part.ofOption (decode n)))
+        (Primrec.encdec.to_comp.comp snd) (const Option.none)
+        ((ofOption (Computable.decode.comp snd)).map (hf.comp (fst.comp <| fst.comp fst) snd).to₂)
+    refine this.of_eq fun a => ?_
+    simp; cases decode (α := β) a.2 <;> simp [encodek]⟩
 -/
 theorem bind_decode_iff {f : α -> β -> Option σ} :
     (Computable₂ fun a n => (decode (α := β) n).bind (f a)) ↔ Computable₂ f :=
@@ -2362,7 +2452,7 @@ theorem sumCasesOn
           (option_map (Computable.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hh)
           (option_map (Computable.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hg)).of_eq
       fun a => by
-        rcases f a with b | c <;> simp
+        rcases f a with b | c <;> simp [Nat.div2_val]
 
 中文:
 定理 sumCasesOn
@@ -2372,7 +2462,7 @@ theorem sumCasesOn
           (option_map (Computable.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hh)
           (option_map (Computable.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hg)).of_eq
       fun a => by
-        rcases f a with b | c <;> simp
+        rcases f a with b | c <;> simp [Nat.div2_val]
 
 Depends on / 依赖: Computable, Computable.decode.comp, Nat.div2_val, decode, div2_val, encode_iff, nat_bodd, nat_bodd.comp, nat_div2, nat_div2.comp, of_eq, option_map, option_some_iff
 -/
@@ -2401,7 +2491,12 @@ option_some_iff.1
           (to₂ <|
 option_bind (snd.comp snd)
 to₂
-             
+                option_map (hg.comp (fst.comp <| fst.comp fst) snd)
+                  (to₂ <| list_concat.comp (snd.comp fst) snd))).of_eq
+      fun a => by
+      induction a.2 with
+      | zero => rfl
+      | succ n IH => simp [IH, H, List.range_succ]
 
 中文:
 定理 nat_strong_rec
@@ -2415,7 +2510,12 @@ option_some_iff.1
           (to₂ <|
 option_bind (snd.comp snd)
 to₂
-             
+                option_map (hg.comp (fst.comp <| fst.comp fst) snd)
+                  (to₂ <| list_concat.comp (snd.comp fst) snd))).of_eq
+      fun a => by
+      induction a.2 with
+      | zero => rfl
+      | succ n IH => simp [IH, H, List.range_succ]
 
 Depends on / 依赖: List.range, List.range_succ, Option.some, fst.comp, hg.comp, list_concat, list_concat.comp, list_getElem, nat_rec, of_eq, option_bind, option_map, option_some_iff, range_succ, snd.comp, succ.comp, this.comp
 -/
@@ -2519,7 +2619,8 @@ theorem optionCasesOn_right
       Nat.casesOn (encode (o a)) (Part.some (f a)) (fun n => Part.bind (decode (α := β) n) (g a)) :=
     nat_casesOn_right (h := fun a n => Part.bind (ofOption (decode n)) fun b => g a b)
 (encode_iff.2 ho) hf.partrec
-        ((@Computable.decode β _).comp snd).ofOptio
+        ((@Computable.decode β _).comp snd).ofOption.bind (hg.comp (fst.comp fst) snd).to₂
+  this.of_eq fun a => by rcases o a with - | b <;> simp [encodek]
 
 中文:
 定理 optionCasesOn_right
@@ -2529,7 +2630,8 @@ theorem optionCasesOn_right
       Nat.casesOn (encode (o a)) (Part.some (f a)) (fun n => Part.bind (decode (α := β) n) (g a)) :=
     nat_casesOn_right (h := fun a n => Part.bind (ofOption (decode n)) fun b => g a b)
 (encode_iff.2 ho) hf.partrec
-        ((@Computable.decode β _).comp snd).ofOptio
+        ((@Computable.decode β _).comp snd).ofOption.bind (hg.comp (fst.comp fst) snd).to₂
+  this.of_eq fun a => by rcases o a with - | b <;> simp [encodek]
 
 Depends on / 依赖: Computable, Computable.decode, Nat.casesOn, Part.bind, Part.some, Partrec, casesOn, decode, encode, encode_iff, encodek, fst.comp, hf.partrec, hg.comp, nat_casesOn_right, ofOption, ofOption.bind, of_eq, partrec, this.of_eq
 -/
@@ -2556,7 +2658,12 @@ theorem sumCasesOn_right
           (some (Sum.casesOn (f a) (fun b => some (g a b)) fun _ => Option.none)) fun c =>
           (h a c).map Option.some :
         Part (Option σ)) :=
-    optionCasesOn_right (g :=
+    optionCasesOn_right (g := fun a n => Part.map Option.some (h a n))
+      (sumCasesOn hf (const Option.none).to₂ (option_some.comp snd).to₂)
+      (sumCasesOn (g := fun a n => Option.some (g a n)) hf (option_some.comp hg)
+        (const Option.none).to₂)
+      (option_some_iff.2 hh)
+option_some_iff.1 this.of_eq fun a => by cases f a <;> simp
 
 中文:
 定理 sumCasesOn_right
@@ -2567,7 +2674,12 @@ theorem sumCasesOn_right
           (some (Sum.casesOn (f a) (fun b => some (g a b)) fun _ => Option.none)) fun c =>
           (h a c).map Option.some :
         Part (Option σ)) :=
-    optionCasesOn_right (g :=
+    optionCasesOn_right (g := fun a n => Part.map Option.some (h a n))
+      (sumCasesOn hf (const Option.none).to₂ (option_some.comp snd).to₂)
+      (sumCasesOn (g := fun a n => Option.some (g a n)) hf (option_some.comp hg)
+        (const Option.none).to₂)
+      (option_some_iff.2 hh)
+option_some_iff.1 this.of_eq fun a => by cases f a <;> simp
 
 Depends on / 依赖: Option.casesOn, Option.none, Option.some, Part.map, Partrec, Sum.casesOn, casesOn, optionCasesOn_right, option_som, option_some, option_some.comp, option_some_iff, sumCasesOn
 -/
@@ -2621,7 +2733,47 @@ theorem fix_aux
     (exists n : Nat,
         ((exists b' : σ, Sum.inl b' in F a n) ∧ forall {m : Nat}, m < n -> exists b : α, Sum.inr b in F a m) ∧
           Sum.inl b in F a n) ↔
-      b in PFun.fix f a :=
+      b in PFun.fix f a := by
+  intro F; refine ⟨fun h => ?_, fun h => ?_⟩
+  · rcases h with ⟨n, ⟨_x, h₁⟩, h₂⟩
+    have : forall m a', Sum.inr a' in F a m -> b in PFun.fix f a' -> b in PFun.fix f a := by
+      intro m a' am ba
+      induction m generalizing a' with simp [F] at am
+      | zero => rwa [← am]
+      | succ m IH =>
+        rcases am with ⟨a₂, am₂, fa₂⟩
+        exact IH _ am₂ (PFun.mem_fix_iff.2 (Or.inr ⟨_, fa₂, ba⟩))
+    cases n <;> simp [F] at h₂
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
+    without the `obtain`/`specialize`. It is not yet clear whether this is due to defeq abuse
+    in Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+    proof was:
+    ```
+    have := h₁ (Nat.lt_succ_self _)
+    grind [mem_unique, PFun.mem_fix_iff]
+    ```
+    -/
+    obtain ⟨c, hc⟩ := h₁ (Nat.lt_succ_self _)
+    specialize this _ _ hc
+    grind [mem_unique, PFun.mem_fix_iff]
+  · suffices forall a', b in PFun.fix f a' -> forall k, Sum.inr a' in F a k ->
+        exists n, Sum.inl b in F a n ∧ forall m < n, k <= m -> exists a₂, Sum.inr a₂ in F a m by
+      rcases this _ h 0 (by simp [F]) with ⟨n, hn₁, hn₂⟩
+      exact ⟨_, ⟨⟨_, hn₁⟩, fun {m} mn => hn₂ m mn (Nat.zero_le _)⟩, hn₁⟩
+    intro a₁ h₁
+    apply @PFun.fixInduction _ _ _ _ _ _ h₁
+    intro a₂ h₂ IH k hk
+    rcases PFun.mem_fix_iff.1 h₂ with (h₂ | ⟨a₃, am₃, _⟩)
+    · refine ⟨k.succ, ?_, fun m mk km => ⟨a₂, ?_⟩⟩
+      · simpa [F] using Or.inr ⟨_, hk, h₂⟩
+      · rwa [le_antisymm (Nat.le_of_lt_succ mk) km]
+    · rcases IH _ am₃ k.succ (by simpa [F] using ⟨_, hk, am₃⟩) with ⟨n, hn₁, hn₂⟩
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer),
+      the `clear_value F` was not required here. -/
+      clear_value F
+      grind
 
 中文:
 定理 fix_aux
@@ -2631,7 +2783,47 @@ theorem fix_aux
     (exists n : Nat,
         ((exists b' : σ, Sum.inl b' in F a n) ∧ forall {m : Nat}, m < n -> exists b : α, Sum.inr b in F a m) ∧
           Sum.inl b in F a n) ↔
-      b in PFun.fix f a :=
+      b in PFun.fix f a := by
+  intro F; refine ⟨fun h => ?_, fun h => ?_⟩
+  · rcases h with ⟨n, ⟨_x, h₁⟩, h₂⟩
+    have : forall m a', Sum.inr a' in F a m -> b in PFun.fix f a' -> b in PFun.fix f a := by
+      intro m a' am ba
+      induction m generalizing a' with simp [F] at am
+      | zero => rwa [← am]
+      | succ m IH =>
+        rcases am with ⟨a₂, am₂, fa₂⟩
+        exact IH _ am₂ (PFun.mem_fix_iff.2 (Or.inr ⟨_, fa₂, ba⟩))
+    cases n <;> simp [F] at h₂
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
+    without the `obtain`/`specialize`. It is not yet clear whether this is due to defeq abuse
+    in Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+    proof was:
+    ```
+    have := h₁ (Nat.lt_succ_self _)
+    grind [mem_unique, PFun.mem_fix_iff]
+    ```
+    -/
+    obtain ⟨c, hc⟩ := h₁ (Nat.lt_succ_self _)
+    specialize this _ _ hc
+    grind [mem_unique, PFun.mem_fix_iff]
+  · suffices forall a', b in PFun.fix f a' -> forall k, Sum.inr a' in F a k ->
+        exists n, Sum.inl b in F a n ∧ forall m < n, k <= m -> exists a₂, Sum.inr a₂ in F a m by
+      rcases this _ h 0 (by simp [F]) with ⟨n, hn₁, hn₂⟩
+      exact ⟨_, ⟨⟨_, hn₁⟩, fun {m} mn => hn₂ m mn (Nat.zero_le _)⟩, hn₁⟩
+    intro a₁ h₁
+    apply @PFun.fixInduction _ _ _ _ _ _ h₁
+    intro a₂ h₂ IH k hk
+    rcases PFun.mem_fix_iff.1 h₂ with (h₂ | ⟨a₃, am₃, _⟩)
+    · refine ⟨k.succ, ?_, fun m mk km => ⟨a₂, ?_⟩⟩
+      · simpa [F] using Or.inr ⟨_, hk, h₂⟩
+      · rwa [le_antisymm (Nat.le_of_lt_succ mk) km]
+    · rcases IH _ am₃ k.succ (by simpa [F] using ⟨_, hk, am₃⟩) with ⟨n, hn₁, hn₂⟩
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer),
+      the `clear_value F` was not required here. -/
+      clear_value F
+      grind
 -/
 theorem fix_aux {α σ} (f : α ->. σ oplus α) (a : α) (b : σ) :
     let F : α -> Nat ->. σ oplus α := fun a n =>
@@ -2694,7 +2886,12 @@ theorem fix
     n.rec (some (Sum.inr a)) fun _ IH => IH.bind fun s => Sum.casesOn s (fun _ => Part.some s) f
   have hF : Partrec₂ F :=
     Partrec.nat_rec snd (sumInr.comp fst).partrec
-      (sumCasesOn_right (snd.comp snd) (snd.comp <| snd.comp fst).to₂ (hf.com
+      (sumCasesOn_right (snd.comp snd) (snd.comp <| snd.comp fst).to₂ (hf.comp snd).to₂).to₂
+  let p a n := @Part.map _ Bool (fun s => Sum.casesOn s (fun _ => true) fun _ => false) (F a n)
+  have hp : Partrec₂ p :=
+    hF.map ((sumCasesOn Computable.id (const true).to₂ (const false).to₂).comp snd).to₂
+  exact ((Partrec.rfind hp).bind (hF.bind (sumCasesOn_right snd snd.to₂ none.to₂).to₂).to₂).of_eq
+    fun a => ext fun b => by simpa [p] using fix_aux f _ _
 
 中文:
 定理 fix
@@ -2705,7 +2902,12 @@ theorem fix
     n.rec (some (Sum.inr a)) fun _ IH => IH.bind fun s => Sum.casesOn s (fun _ => Part.some s) f
   have hF : Partrec₂ F :=
     Partrec.nat_rec snd (sumInr.comp fst).partrec
-      (sumCasesOn_right (snd.comp snd) (snd.comp <| snd.comp fst).to₂ (hf.com
+      (sumCasesOn_right (snd.comp snd) (snd.comp <| snd.comp fst).to₂ (hf.comp snd).to₂).to₂
+  let p a n := @Part.map _ Bool (fun s => Sum.casesOn s (fun _ => true) fun _ => false) (F a n)
+  have hp : Partrec₂ p :=
+    hF.map ((sumCasesOn Computable.id (const true).to₂ (const false).to₂).comp snd).to₂
+  exact ((Partrec.rfind hp).bind (hF.bind (sumCasesOn_right snd snd.to₂ none.to₂).to₂).to₂).of_eq
+    fun a => ext fun b => by simpa [p] using fix_aux f _ _
 
 Depends on / 依赖: Computable, Computable.id, IH.bind, Part.map, Part.some, Partrec, Partrec.nat_rec, Sum.casesOn, Sum.inr, casesOn, hF.map, hf.comp, n.rec, nat_rec, partrec, snd.comp, sumCasesOn, sumCasesOn_right, sumInr, sumInr.comp
 -/

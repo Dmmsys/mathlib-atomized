@@ -575,7 +575,13 @@ definition curry
       dsimp
       ext1
       · ext b
-        exact F_map_eq.symm.trans (F.map_
+        exact F_map_eq.symm.trans (F.map_id b)
+      rfl
+    map_mul' := by
+      intro g h
+      ext b
+      · exact F_map_eq.symm.trans (F.map_comp (homOfPair (g⁻¹ • b) h) (homOfPair b g))
+      rfl }
 
 中文:
 定义 curry
@@ -589,7 +595,13 @@ definition curry
       dsimp
       ext1
       · ext b
-        exact F_map_eq.symm.trans (F.map_
+        exact F_map_eq.symm.trans (F.map_id b)
+      rfl
+    map_mul' := by
+      intro g h
+      ext b
+      · exact F_map_eq.symm.trans (F.map_comp (homOfPair (g⁻¹ • b) h) (homOfPair b g))
+      rfl }
 
 Depends on / 依赖: ActionCategory, ActionCategory.cases, F.map, F.map_comp, F.map_id, F_map_eq, F_map_eq.symm.trans, b.back, f.val, homOfPair, intros, map_comp, map_id, map_mul, map_one
 -/

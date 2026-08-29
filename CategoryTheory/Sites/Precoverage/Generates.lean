@@ -94,7 +94,10 @@ lemma Generates.isSheaf_of_forall_aux
   have he (X Y : C) (f : X ⟶ Y) (x : F.obj (.op Y)) :
       (e X) (F.map f.op x) = F'.map f.op (e Y x) := by
     simp [e, F']
-  rw [Presieve.isSheafFor_iff_of_
+  rw [Presieve.isSheafFor_iff_of_nat_equiv e he] at ⊢
+  refine h.isSheaf_of_forall_max F' (fun X R hR => ?_) _ hS
+  rw [← Presieve.isSheafFor_iff_of_nat_equiv e he]
+  exact H _ hR
 
 中文:
 引理 Generates.isSheaf_of_对任意_aux
@@ -106,7 +109,10 @@ lemma Generates.isSheaf_of_forall_aux
   have he (X Y : C) (f : X ⟶ Y) (x : F.obj (.op Y)) :
       (e X) (F.map f.op x) = F'.map f.op (e Y x) := by
     simp [e, F']
-  rw [Presieve.isSheafFor_iff_of_
+  rw [Presieve.isSheafFor_iff_of_nat_equiv e he] at ⊢
+  refine h.isSheaf_of_forall_max F' (fun X R hR => ?_) _ hS
+  rw [← Presieve.isSheafFor_iff_of_nat_equiv e he]
+  exact H _ hR
 -/
 private lemma Generates.isSheaf_of_forall_aux (h : K.Generates J) (F : Cᵒᵖ ⥤ Type w)
     (H : forall ⦃X : C⦄, forall R in K X, Presieve.IsSheafFor F R)
@@ -133,7 +139,41 @@ lemma Generates.isSheaf_of_forall
   /- By assumption, the statement holds for `w = max u v`. The idea of the proof is
   to construct a suitable `Type max u v` valued subsheaf of `F` for each covering sieve `S` in
   `J` and every family of sections over `S` to check the necessary conditions.
-  We explain existence below, uniquenes
+  We explain existence below, uniqueness works similarly. -/
+  intro X S hS
+  rw [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor]
+  refine ⟨?_, ?_⟩
+  · intro x t₁ t₂ ht₁ ht₂
+    let 𝒮 (Z : C) : Set (F.obj (.op Z)) :=
+      .range (fun (g : { g : Z ⟶ X | S.arrows g }) => x _ g.2) union
+      .range (fun (g : Z ⟶ X) => F.map g.op t₁) union .range (fun (g : Z ⟶ X) => F.map g.op t₂)
+    let Q : Subfunctor F := K.subsheafify 𝒮
+    have (Z : C) : _root_.Small.{max u v} (Q.toFunctor.obj (Opposite.op Z)) :=
+      small_subsheafify_of_small H _ inferInstance _
+    have hQ : Presieve.IsSheaf J Q.toFunctor :=
+      h.isSheaf_of_forall_aux _ fun X R hR => isSheafFor_subsheafify _ hR (H _ hR)
+    let x' : S.arrows.FamilyOfElements Q.toFunctor :=
+fun Z g hg => ⟨x g hg, .base .inl .inl ⟨⟨g, hg⟩, rfl⟩⟩
+    have ht₁' : t₁ in Q.obj (.op X) := .base (.inl <| .inr ⟨𝟙 _, by simp⟩)
+    have ht₂' : t₂ in Q.obj (.op X) := .base (.inr ⟨𝟙 _, by simp⟩)
+    have : (⟨t₁, ht₁'⟩ : Q.obj _) = ⟨t₂, ht₂'⟩ :=
+      (hQ _ hS).isSeparatedFor x' ⟨_, ht₁'⟩ ⟨_, ht₂'⟩ (.of_mono Q.ι ht₁) (.of_mono Q.ι ht₂)
+    simp_all
+  · -- Let `x` be a compatible family of elements over `S`. We need to show it glues.
+    intro x hx
+    -- Let `𝒮` be the family of subsets consisting of the family of elements `x`.
+    let 𝒮 (Z : C) := Set.range (fun (g : { g : Z ⟶ X | S.arrows g }) => x _ g.2)
+    /- Let `Q` be the smallest `K`-subsheaf of `K` containing `𝒮`. This is `max u v`-small, because
+    `𝒮` is `max u v`-small. -/
+    let Q : Subfunctor F := K.subsheafify 𝒮
+    have (Z : C) : _root_.Small.{max u v} (Q.toFunctor.obj (Opposite.op Z)) :=
+      small_subsheafify_of_small H _ inferInstance _
+    have hQ : Presieve.IsSheaf J Q.toFunctor :=
+      h.isSheaf_of_forall_aux _ fun X R hR => isSheafFor_subsheafify _ hR (H _ hR)
+    /- By assumption, `Q` is a `J`-sheaf, so the family of sections `x` glues and gives rise
+    to an amalgamation of `x` in `F`. -/
+    obtain ⟨t, ht, _⟩ := hQ _ hS (fun Z g hg => ⟨x g hg, .base ⟨⟨g, hg⟩, rfl⟩⟩) (.of_mono Q.ι hx)
+    exact ⟨t.val, ht.map Q.ι⟩
 
 中文:
 引理 Generates.isSheaf_of_对任意
@@ -142,7 +182,41 @@ lemma Generates.isSheaf_of_forall
   /- By assumption, the statement holds for `w = max u v`. The idea of the proof is
   to construct a suitable `Type max u v` valued subsheaf of `F` for each covering sieve `S` in
   `J` and every family of sections over `S` to check the necessary conditions.
-  We explain existence below, uniquenes
+  We explain existence below, uniqueness works similarly. -/
+  intro X S hS
+  rw [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor]
+  refine ⟨?_, ?_⟩
+  · intro x t₁ t₂ ht₁ ht₂
+    let 𝒮 (Z : C) : Set (F.obj (.op Z)) :=
+      .range (fun (g : { g : Z ⟶ X | S.arrows g }) => x _ g.2) union
+      .range (fun (g : Z ⟶ X) => F.map g.op t₁) union .range (fun (g : Z ⟶ X) => F.map g.op t₂)
+    let Q : Subfunctor F := K.subsheafify 𝒮
+    have (Z : C) : _root_.Small.{max u v} (Q.toFunctor.obj (Opposite.op Z)) :=
+      small_subsheafify_of_small H _ inferInstance _
+    have hQ : Presieve.IsSheaf J Q.toFunctor :=
+      h.isSheaf_of_forall_aux _ fun X R hR => isSheafFor_subsheafify _ hR (H _ hR)
+    let x' : S.arrows.FamilyOfElements Q.toFunctor :=
+fun Z g hg => ⟨x g hg, .base .inl .inl ⟨⟨g, hg⟩, rfl⟩⟩
+    have ht₁' : t₁ in Q.obj (.op X) := .base (.inl <| .inr ⟨𝟙 _, by simp⟩)
+    have ht₂' : t₂ in Q.obj (.op X) := .base (.inr ⟨𝟙 _, by simp⟩)
+    have : (⟨t₁, ht₁'⟩ : Q.obj _) = ⟨t₂, ht₂'⟩ :=
+      (hQ _ hS).isSeparatedFor x' ⟨_, ht₁'⟩ ⟨_, ht₂'⟩ (.of_mono Q.ι ht₁) (.of_mono Q.ι ht₂)
+    simp_all
+  · -- Let `x` be a compatible family of elements over `S`. We need to show it glues.
+    intro x hx
+    -- Let `𝒮` be the family of subsets consisting of the family of elements `x`.
+    let 𝒮 (Z : C) := Set.range (fun (g : { g : Z ⟶ X | S.arrows g }) => x _ g.2)
+    /- Let `Q` be the smallest `K`-subsheaf of `K` containing `𝒮`. This is `max u v`-small, because
+    `𝒮` is `max u v`-small. -/
+    let Q : Subfunctor F := K.subsheafify 𝒮
+    have (Z : C) : _root_.Small.{max u v} (Q.toFunctor.obj (Opposite.op Z)) :=
+      small_subsheafify_of_small H _ inferInstance _
+    have hQ : Presieve.IsSheaf J Q.toFunctor :=
+      h.isSheaf_of_forall_aux _ fun X R hR => isSheafFor_subsheafify _ hR (H _ hR)
+    /- By assumption, `Q` is a `J`-sheaf, so the family of sections `x` glues and gives rise
+    to an amalgamation of `x` in `F`. -/
+    obtain ⟨t, ht, _⟩ := hQ _ hS (fun Z g hg => ⟨x g hg, .base ⟨⟨g, hg⟩, rfl⟩⟩) (.of_mono Q.ι hx)
+    exact ⟨t.val, ht.map Q.ι⟩
 -/
 lemma Generates.isSheaf_of_forall (h : K.Generates J) (F : Cᵒᵖ ⥤ Type w)
     (H : forall ⦃X : C⦄, forall R in K X, Presieve.IsSheafFor F R) :
@@ -228,7 +302,7 @@ lemma Generates.toGrothendieck_eq
     rw [H.isSheaf_type_iff]
     intro X R hR
     rw [Presieve.isSheafFor_iff_generate]
-    exact classifier_isSheaf K.toGrothendieck
+    exact classifier_isSheaf K.toGrothendieck _ (K.generate_mem_toGrothendieck hR)
 
 中文:
 引理 Generates.toGrothendieck_eq
@@ -242,7 +316,7 @@ lemma Generates.toGrothendieck_eq
     rw [H.isSheaf_type_iff]
     intro X R hR
     rw [Presieve.isSheafFor_iff_generate]
-    exact classifier_isSheaf K.toGrothendieck
+    exact classifier_isSheaf K.toGrothendieck _ (K.generate_mem_toGrothendieck hR)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.le_topology_of_closedSieves_isSheaf, H.isSheaf_type_iff, H.le_toPrecoverage, K.generate_mem_toGrothendieck, K.toGrothendieck, Presieve, Presieve.isSheafFor_iff_generate, classifier_isSheaf, generate_mem_toGrothendieck, isSheafFor_iff_generate, isSheaf_type_iff, le_antisymm, le_toPrecoverage, le_topology_of_closedSieves_isSheaf, toGrothendieck, toGrothendieck_le_iff_le_toPrecoverage
 -/

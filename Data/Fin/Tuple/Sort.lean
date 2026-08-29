@@ -443,7 +443,7 @@ theorem eq_sort_iff'
     exact (graphEquiv₂ f).strictMono
   · have := Subsingleton.elim (graphEquiv₂ f) (h.orderIsoOfSurjective _ <| Equiv.surjective _)
     ext1 x
-    exact (graphEquiv₁ f).eq_symm_apply.2 (DFunLike.congr_fun this x)
+    exact (graphEquiv₁ f).eq_symm_apply.2 (DFunLike.congr_fun this x).symm
 
 中文:
 定理 eq_sort_iff'
@@ -454,7 +454,7 @@ theorem eq_sort_iff'
     exact (graphEquiv₂ f).strictMono
   · have := Subsingleton.elim (graphEquiv₂ f) (h.orderIsoOfSurjective _ <| Equiv.surjective _)
     ext1 x
-    exact (graphEquiv₁ f).eq_symm_apply.2 (DFunLike.congr_fun this x)
+    exact (graphEquiv₁ f).eq_symm_apply.2 (DFunLike.congr_fun this x).symm
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Equiv.surjective, Equiv.symm_trans_self, Equiv.trans_assoc, Subsingleton, Subsingleton.elim, congr_fun, eq_symm_apply, h.orderIsoOfSurjective, orderIsoOfSurjective, strictMono, surjective, symm_trans_self, trans_assoc
 -/
@@ -476,7 +476,7 @@ theorem eq_sort_iff
   refine ⟨fun h => ⟨(monotone_proj f).comp h.monotone, fun i j hij hfij => ?_⟩, fun h i j hij => ?_⟩
   · exact ((Prod.Lex.toLex_lt_toLex.1 <| h hij).resolve_left hfij.not_lt).2
   · obtain he | hl := (h.1 hij.le).eq_or_lt <;> apply Prod.Lex.toLex_lt_toLex.2
-    exacts [Or.inr ⟨
+    exacts [Or.inr ⟨he, h.2 i j hij he⟩, Or.inl hl]
 
 中文:
 定理 eq_sort_iff
@@ -485,7 +485,7 @@ theorem eq_sort_iff
   refine ⟨fun h => ⟨(monotone_proj f).comp h.monotone, fun i j hij hfij => ?_⟩, fun h i j hij => ?_⟩
   · exact ((Prod.Lex.toLex_lt_toLex.1 <| h hij).resolve_left hfij.not_lt).2
   · obtain he | hl := (h.1 hij.le).eq_or_lt <;> apply Prod.Lex.toLex_lt_toLex.2
-    exacts [Or.inr ⟨
+    exacts [Or.inr ⟨he, h.2 i j hij he⟩, Or.inl hl]
 
 Depends on / 依赖: Or.inl, Or.inr, Prod.Lex.toLex_lt_toLex, eq_or_lt, eq_sort_iff, exacts, h.monotone, hfij.not_lt, hij.le, monotone, monotone_proj, not_lt, resolve_left, toLex_lt_toLex
 -/

@@ -187,7 +187,7 @@ lemma card_bound
     _ <= card α / (2 * #P.parts : Real) := by gcongr
     _ <= ↑(card α / #P.parts) :=
 (div_le_iff₀' (by positivity)).2 mod_cast (aux ‹_› P.card_parts_le_card).le
-    _ <= (#s : Real) :=
+    _ <= (#s : Real) := mod_cast hP₁.average_le_card_part hX
 
 中文:
 引理 card_bound
@@ -200,7 +200,7 @@ lemma card_bound
     _ <= card α / (2 * #P.parts : Real) := by gcongr
     _ <= ↑(card α / #P.parts) :=
 (div_le_iff₀' (by positivity)).2 mod_cast (aux ‹_› P.card_parts_le_card).le
-    _ <= (#s : Real) :=
+    _ <= (#s : Real) := mod_cast hP₁.average_le_card_part hX
 -/
 private lemma card_bound (hP₁ : P.IsEquipartition) (hP₃ : #P.parts <= bound (ε / 8) ⌈4 / ε⌉₊)
     (hX : s in P.parts) : card α / (2 * bound (ε / 8) ⌈4 / ε⌉₊ : Real) <= #s := by
@@ -224,7 +224,25 @@ lemma triangle_removal_aux
   obtain ⟨x, y, z, ⟨-, s, hX, Y, hY, xX, yY, nXY, uXY, dXY⟩,
                    ⟨-, X', hX', Z, hZ, xX', zZ, nXZ, uXZ, dXZ⟩,
                    ⟨-, Y', hY', Z', hZ', yY', zZ', nYZ, uYZ, dYZ⟩, rfl⟩ := ht
-  cases P.disjoint.elim hX hX' (not_disj
+  cases P.disjoint.elim hX hX' (not_disjoint_iff.2 ⟨x, xX, xX'⟩)
+  cases P.disjoint.elim hY hY' (not_disjoint_iff.2 ⟨y, yY, yY'⟩)
+  cases P.disjoint.elim hZ hZ' (not_disjoint_iff.2 ⟨z, zZ, zZ'⟩)
+  have dXY := P.disjoint hX hY nXY
+  have dXZ := P.disjoint hX hZ nXZ
+  have dYZ := P.disjoint hY hZ nYZ
+  have that : 2 * (ε / 8) = ε / 4 := by ring
+  have : 0 <= 1 - 2 * (ε / 8) := by
+    have : ε / 4 <= 1 := ‹ε / 4 <= _›.trans (by exact mod_cast G.edgeDensity_le_one _ _); linarith
+  calc
+    _ <= (1 - ε / 4) * (ε / (16 * bound (ε / 8) ⌈4 / ε⌉₊)) ^ 3 * card α ^ 3 := by
+      gcongr; exact triangleRemovalBound_le hε₁
+    _ = (1 - 2 * (ε / 8)) * (ε / 8) ^ 3 * (card α / (2 * bound (ε / 8) ⌈4 / ε⌉₊)) *
+          (card α / (2 * bound (ε / 8) ⌈4 / ε⌉₊)) * (card α / (2 * bound (ε / 8) ⌈4 / ε⌉₊)) := by
+      ring
+    _ <= (1 - 2 * (ε / 8)) * (ε / 8) ^ 3 * #s * #Y * #Z := by
+      gcongr <;> exact card_bound hP₁ hP₃ ‹_›
+    _ <= _ :=
+      triangle_counting G (by rwa [that]) uXY dXY (by rwa [that]) uXZ dXZ (by rwa [that]) uYZ dYZ
 
 中文:
 引理 triangle_removal_aux
@@ -234,7 +252,25 @@ lemma triangle_removal_aux
   obtain ⟨x, y, z, ⟨-, s, hX, Y, hY, xX, yY, nXY, uXY, dXY⟩,
                    ⟨-, X', hX', Z, hZ, xX', zZ, nXZ, uXZ, dXZ⟩,
                    ⟨-, Y', hY', Z', hZ', yY', zZ', nYZ, uYZ, dYZ⟩, rfl⟩ := ht
-  cases P.disjoint.elim hX hX' (not_disj
+  cases P.disjoint.elim hX hX' (not_disjoint_iff.2 ⟨x, xX, xX'⟩)
+  cases P.disjoint.elim hY hY' (not_disjoint_iff.2 ⟨y, yY, yY'⟩)
+  cases P.disjoint.elim hZ hZ' (not_disjoint_iff.2 ⟨z, zZ, zZ'⟩)
+  have dXY := P.disjoint hX hY nXY
+  have dXZ := P.disjoint hX hZ nXZ
+  have dYZ := P.disjoint hY hZ nYZ
+  have that : 2 * (ε / 8) = ε / 4 := by ring
+  have : 0 <= 1 - 2 * (ε / 8) := by
+    have : ε / 4 <= 1 := ‹ε / 4 <= _›.trans (by exact mod_cast G.edgeDensity_le_one _ _); linarith
+  calc
+    _ <= (1 - ε / 4) * (ε / (16 * bound (ε / 8) ⌈4 / ε⌉₊)) ^ 3 * card α ^ 3 := by
+      gcongr; exact triangleRemovalBound_le hε₁
+    _ = (1 - 2 * (ε / 8)) * (ε / 8) ^ 3 * (card α / (2 * bound (ε / 8) ⌈4 / ε⌉₊)) *
+          (card α / (2 * bound (ε / 8) ⌈4 / ε⌉₊)) * (card α / (2 * bound (ε / 8) ⌈4 / ε⌉₊)) := by
+      ring
+    _ <= (1 - 2 * (ε / 8)) * (ε / 8) ^ 3 * #s * #Y * #Z := by
+      gcongr <;> exact card_bound hP₁ hP₃ ‹_›
+    _ <= _ :=
+      triangle_counting G (by rwa [that]) uXY dXY (by rwa [that]) uXZ dXZ (by rwa [that]) uYZ dYZ
 -/
 private lemma triangle_removal_aux (hε : 0 < ε) (hε₁ : ε <= 1) (hP₁ : P.IsEquipartition)
     (hP₃ : #P.parts <= bound (ε / 8) ⌈4 / ε⌉₊)
@@ -276,7 +312,22 @@ lemma regularityReduced_edges_card_aux
   let C := (P.sparsePairs G (ε / 4)).biUnion fun (U, V) => G.interedges U V
   calc
     _ = (#((univ ×ˢ univ).filter fun (x, y) =>
-          G.Adj x y ∧ ¬(G.regularityReduced P (ε / 8) (ε / 4)).Adj
+          G.Adj x y ∧ ¬(G.regularityReduced P (ε / 8) (ε / 4)).Adj x y) : Real) := by
+      rw [univ_product_univ]; rw [mul_sub]; rw [filter_and_not]; rw [cast_card_sdiff]
+      · norm_cast
+        rw [two_mul_card_edgeFinset]; rw [two_mul_card_edgeFinset]
+      · gcongr with xy _
+        exact fun hxy => regularityReduced_le hxy
+    _ <= #(A union B union C) := by gcongr; exact unreduced_edges_subset
+    _ <= #(A union B) + #C := mod_cast (card_union_le _ _)
+    _ <= #A + #B + #C := by gcongr; exact mod_cast card_union_le _ _
+    _ < 4 * (ε / 8) * card α ^ 2 + _ + _ := by
+      gcongr; exact hP.sum_nonUniforms_lt univ_nonempty (by positivity) hPε
+    _ <= _ + ε / 2 * card α ^ 2 + 4 * (ε / 4) * card α ^ 2 := by
+      gcongr
+      · exact hP.card_biUnion_offDiag_le hε hP'
+      · exact hP.card_interedges_sparsePairs_le (G := G) (ε := ε / 4) (by positivity)
+    _ = 2 * ε * (card α ^ 2 : Nat) := by norm_cast; ring
 
 中文:
 引理 regularityReduced_edges_card_aux
@@ -287,7 +338,22 @@ lemma regularityReduced_edges_card_aux
   let C := (P.sparsePairs G (ε / 4)).biUnion fun (U, V) => G.interedges U V
   calc
     _ = (#((univ ×ˢ univ).filter fun (x, y) =>
-          G.Adj x y ∧ ¬(G.regularityReduced P (ε / 8) (ε / 4)).Adj
+          G.Adj x y ∧ ¬(G.regularityReduced P (ε / 8) (ε / 4)).Adj x y) : Real) := by
+      rw [univ_product_univ]; rw [mul_sub]; rw [filter_and_not]; rw [cast_card_sdiff]
+      · norm_cast
+        rw [two_mul_card_edgeFinset]; rw [two_mul_card_edgeFinset]
+      · gcongr with xy _
+        exact fun hxy => regularityReduced_le hxy
+    _ <= #(A union B union C) := by gcongr; exact unreduced_edges_subset
+    _ <= #(A union B) + #C := mod_cast (card_union_le _ _)
+    _ <= #A + #B + #C := by gcongr; exact mod_cast card_union_le _ _
+    _ < 4 * (ε / 8) * card α ^ 2 + _ + _ := by
+      gcongr; exact hP.sum_nonUniforms_lt univ_nonempty (by positivity) hPε
+    _ <= _ + ε / 2 * card α ^ 2 + 4 * (ε / 4) * card α ^ 2 := by
+      gcongr
+      · exact hP.card_biUnion_offDiag_le hε hP'
+      · exact hP.card_interedges_sparsePairs_le (G := G) (ε := ε / 4) (by positivity)
+    _ = 2 * ε * (card α ^ 2 : Nat) := by norm_cast; ring
 
 Depends on / 依赖: G.Adj, G.interedges, G.regularityReduced, P.nonUniforms, P.parts.biUnion, P.sparsePairs, biUnion, cast_card_sdiff, filter, filter_and_not, interedges, mul_sub, nonUniforms, offDiag, regularityReduc, regularityReduced, sparsePairs, two_mul_card_edgeFinset, univ_product_univ
 -/
@@ -330,7 +396,19 @@ lemma FarFromTriangleFree.le_card_cliqueFinset
   · apply (mul_nonpos_of_nonpos_of_nonneg (triangleRemovalBound_nonpos hε) _).trans <;> positivity
   let l : Nat := ⌈4 / ε⌉₊
   have hl : 4 / ε <= l := le_ceil (4 / ε)
-  rcases le_total (card α) l with h
+  rcases le_total (card α) l with hl' | hl'
+  · calc
+      _ <= triangleRemovalBound ε * ↑l ^ 3 := by
+        gcongr; exact (triangleRemovalBound_pos hε).le
+      _ <= (1 : Real) := (triangleRemovalBound_mul_cube_lt hε).le
+      _ <= _ := by simpa [one_le_iff_ne_zero] using (hG.cliqueFinset_nonempty hε).card_pos.ne'
+  obtain ⟨P, hP₁, hP₂, hP₃, hP₄⟩ := szemeredi_regularity G (by positivity : 0 < ε / 8) hl'
+  have : 4 / ε <= #P.parts := hl.trans (cast_le.2 hP₂)
+  have k := regularityReduced_edges_card_aux hε hP₁ hP₄ this
+  rw [mul_assoc] at k
+  replace k := lt_of_mul_lt_mul_left k zero_le_two
+  obtain ⟨t, ht⟩ := hG.cliqueFinset_nonempty' regularityReduced_le k
+  exact triangle_removal_aux hε hG.lt_one.le hP₁ hP₃ ht
 
 中文:
 引理 FarFromTriangleFree.le_card_cliqueFinset
@@ -342,7 +420,19 @@ lemma FarFromTriangleFree.le_card_cliqueFinset
   · apply (mul_nonpos_of_nonpos_of_nonneg (triangleRemovalBound_nonpos hε) _).trans <;> positivity
   let l : Nat := ⌈4 / ε⌉₊
   have hl : 4 / ε <= l := le_ceil (4 / ε)
-  rcases le_total (card α) l with h
+  rcases le_total (card α) l with hl' | hl'
+  · calc
+      _ <= triangleRemovalBound ε * ↑l ^ 3 := by
+        gcongr; exact (triangleRemovalBound_pos hε).le
+      _ <= (1 : Real) := (triangleRemovalBound_mul_cube_lt hε).le
+      _ <= _ := by simpa [one_le_iff_ne_zero] using (hG.cliqueFinset_nonempty hε).card_pos.ne'
+  obtain ⟨P, hP₁, hP₂, hP₃, hP₄⟩ := szemeredi_regularity G (by positivity : 0 < ε / 8) hl'
+  have : 4 / ε <= #P.parts := hl.trans (cast_le.2 hP₂)
+  have k := regularityReduced_edges_card_aux hε hP₁ hP₄ this
+  rw [mul_assoc] at k
+  replace k := lt_of_mul_lt_mul_left k zero_le_two
+  obtain ⟨t, ht⟩ := hG.cliqueFinset_nonempty' regularityReduced_le k
+  exact triangle_removal_aux hε hG.lt_one.le hP₁ hP₃ ht
 
 Depends on / 依赖: Fintype, Fintype.card_eq_zero, card_eq_zero, isEmpty_or_nonempty, le_ceil, le_or_gt, le_total, mul_nonpos_of_nonpos_of_nonneg, one_le_iff_ne_zero, triangleRemovalBound, triangleRemovalBound_mul_cube_lt, triangleRemovalBound_nonpos, triangleRemovalBound_pos
 -/

@@ -299,7 +299,10 @@ lemma of_equiv
   obtain ⟨e₃ : M ≃ₗ[R] I ->₀ R⟩ := Module.Free.chooseBasis R M
   let e : M' ≃+ (I ->₀ R') :=
     (e₂.symm.trans e₃).toAddEquiv.trans (Finsupp.mapRange.addEquiv (ι := I) e₁.toAddEquiv)
-  have he (x) 
+  have he (x) : e x = Finsupp.mapRange.addEquiv (ι := I) e₁.toAddEquiv (e₃ (e₂.symm x)) := rfl
+  let e' : M' ≃ₗ[R'] (I ->₀ R') :=
+    { __ := e, map_smul' := fun m x => Finsupp.ext fun i => by simp [e₁, he, map_smulₛₗ] }
+  exact of_basis (.ofRepr e')
 
 中文:
 引理 of_equiv
@@ -310,7 +313,10 @@ lemma of_equiv
   obtain ⟨e₃ : M ≃ₗ[R] I ->₀ R⟩ := Module.Free.chooseBasis R M
   let e : M' ≃+ (I ->₀ R') :=
     (e₂.symm.trans e₃).toAddEquiv.trans (Finsupp.mapRange.addEquiv (ι := I) e₁.toAddEquiv)
-  have he (x) 
+  have he (x) : e x = Finsupp.mapRange.addEquiv (ι := I) e₁.toAddEquiv (e₃ (e₂.symm x)) := rfl
+  let e' : M' ≃ₗ[R'] (I ->₀ R') :=
+    { __ := e, map_smul' := fun m x => Finsupp.ext fun i => by simp [e₁, he, map_smulₛₗ] }
+  exact of_basis (.ofRepr e')
 
 Depends on / 依赖: ChooseBasisIndex, Finsupp, Finsupp.ext, Finsupp.mapRange.addEquiv, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, RingHomInvPair, RingHomInvPair.toRingEquiv, addEquiv, chooseBasis, mapRange, map_smul, of_basi, symm.trans, toAddEquiv, toAddEquiv.trans, toRingEquiv
 -/
@@ -516,7 +522,8 @@ theorem mem_center_iff
   · exact ⟨0, by simp, fun _ => Subsingleton.allEq _ _⟩
   let b := Free.chooseBasis R M
   let i := b.index_nonempty.some
-  have H x : f x = b.repr (f (b i)) i • x :=
+  have H x : f x = b.repr (f (b i)) i • x := by simpa using (h ((b.coord i).smulRight x) (b i)).symm
+exact ⟨b.coord i f b i, fun r => by simpa using congr(b.coord i $(H <| r • b i)), H⟩
 
 中文:
 定理 mem_center_iff
@@ -528,7 +535,8 @@ theorem mem_center_iff
   · exact ⟨0, by simp, fun _ => Subsingleton.allEq _ _⟩
   let b := Free.chooseBasis R M
   let i := b.index_nonempty.some
-  have H x : f x = b.repr (f (b i)) i • x :=
+  have H x : f x = b.repr (f (b i)) i • x := by simpa using (h ((b.coord i).smulRight x) (b i)).symm
+exact ⟨b.coord i f b i, fun r => by simpa using congr(b.coord i $(H <| r • b i)), H⟩
 
 Depends on / 依赖: Free.chooseBasis, LinearMap, LinearMap.ext_iff, Semigroup, Semigroup.mem_center_iff, Subsingleton, Subsingleton.allEq, b.coord, b.index_nonempty.some, b.repr, chooseBasis, ext_iff, index_nonempty, mem_center_iff, mul_apply, smulRight
 -/

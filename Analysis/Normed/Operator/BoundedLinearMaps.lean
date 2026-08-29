@@ -633,7 +633,8 @@ lemma isBoundedLinearMap_right
     -- Using `C * ‖x‖` is tempting but `x` might be 0 and the constant must be positive!
     refine ⟨C * max ‖x‖ 1, by positivity, fun y => (hC x y).trans ?_⟩
     rcases max_cases ‖x‖ 1 with hx | hx
-   
+    · grw [hx.1]
+    · grw [hx.1, hx.2.le]
 
 中文:
 引理 isBoundedLinearMap_right
@@ -645,7 +646,8 @@ lemma isBoundedLinearMap_right
     -- Using `C * ‖x‖` is tempting but `x` might be 0 and the constant must be positive!
     refine ⟨C * max ‖x‖ 1, by positivity, fun y => (hC x y).trans ?_⟩
     rcases max_cases ‖x‖ 1 with hx | hx
-   
+    · grw [hx.1]
+    · grw [hx.1, hx.2.le]
 
 Depends on / 依赖: add_right, h.add_right
 -/
@@ -796,7 +798,16 @@ theorem continuous
   suffices Tendsto (fun y : E × F => f (y.1 - x.1, y.2) + f (x.1, y.2 - x.2)) (𝓝 x) (𝓝 (0 + 0)) by
     simpa only [h.map_sub_left, h.map_sub_right, sub_add_sub_cancel, zero_add] using this
   apply Tendsto.add
-  · rw [←
+  · rw [← isLittleO_one_iff Real, ← one_mul 1]
+    refine h.isBigO_comp.trans_isLittleO ?_
+    refine (IsLittleO.norm_left ?_).mul_isBigO (IsBigO.norm_left ?_)
+    · exact (isLittleO_one_iff _).2 (tendsto_sub_nhds_zero_iff.2 (continuous_fst.tendsto _))
+    · exact (continuous_snd.tendsto _).isBigO_one Real
+  · rw [← isLittleO_one_iff Real]
+    refine h.isBigO_comp.trans_isLittleO ?_
+    apply IsLittleO.const_mul_left
+    rw [isLittleO_norm_left]; rw [isLittleO_one_iff]; rw [← sub_self x.2]
+    exact continuous_snd.continuousAt.sub tendsto_const_nhds
 
 中文:
 定理 continuous
@@ -807,7 +818,16 @@ theorem continuous
   suffices Tendsto (fun y : E × F => f (y.1 - x.1, y.2) + f (x.1, y.2 - x.2)) (𝓝 x) (𝓝 (0 + 0)) by
     simpa only [h.map_sub_left, h.map_sub_right, sub_add_sub_cancel, zero_add] using this
   apply Tendsto.add
-  · rw [←
+  · rw [← isLittleO_one_iff Real, ← one_mul 1]
+    refine h.isBigO_comp.trans_isLittleO ?_
+    refine (IsLittleO.norm_left ?_).mul_isBigO (IsBigO.norm_left ?_)
+    · exact (isLittleO_one_iff _).2 (tendsto_sub_nhds_zero_iff.2 (continuous_fst.tendsto _))
+    · exact (continuous_snd.tendsto _).isBigO_one Real
+  · rw [← isLittleO_one_iff Real]
+    refine h.isBigO_comp.trans_isLittleO ?_
+    apply IsLittleO.const_mul_left
+    rw [isLittleO_norm_left]; rw [isLittleO_one_iff]; rw [← sub_self x.2]
+    exact continuous_snd.continuousAt.sub tendsto_const_nhds
 
 Depends on / 依赖: IsBigO, IsBigO.norm_left, IsLittleO, IsLittleO.norm_left, Tendsto, Tendsto.add, continu, continuous_iff_continuousAt, h.isBigO_comp.trans_isLittleO, h.map_sub_left, h.map_sub_right, isBigO_comp, isLittleO_one_iff, map_sub_left, map_sub_right, mul_isBigO, norm_left, one_mul, sub_add_sub_cancel, tendsto_sub_nhds_zero_iff
 -/
@@ -1684,7 +1704,15 @@ theorem isOpen
   refine fun e => IsOpen.mem_nhds ?_ (mem_range_self _)
   let O : (E ->L[𝕜] F) -> E ->L[𝕜] E := fun f => (e.symm : F ->L[𝕜] E).comp f
   have h_O : Continuous O := (isBoundedBilinearMap_comp (𝕜 := 𝕜) (F := F) (G := E)).continuous_right
-  convert! s
+  convert! show IsOpen (O ⁻¹' {x | IsUnit x}) from Units.isOpen.preimage h_O using 1
+  ext f'
+  constructor
+  · rintro ⟨e', rfl⟩
+    exact ⟨(e'.trans e.symm).toUnit, rfl⟩
+  · rintro ⟨w, hw⟩
+    use (unitsEquiv 𝕜 E w).trans e
+    ext x
+    simp [O, hw]
 
 中文:
 定理 isOpen
@@ -1695,7 +1723,15 @@ theorem isOpen
   refine fun e => IsOpen.mem_nhds ?_ (mem_range_self _)
   let O : (E ->L[𝕜] F) -> E ->L[𝕜] E := fun f => (e.symm : F ->L[𝕜] E).comp f
   have h_O : Continuous O := (isBoundedBilinearMap_comp (𝕜 := 𝕜) (F := F) (G := E)).continuous_right
-  convert! s
+  convert! show IsOpen (O ⁻¹' {x | IsUnit x}) from Units.isOpen.preimage h_O using 1
+  ext f'
+  constructor
+  · rintro ⟨e', rfl⟩
+    exact ⟨(e'.trans e.symm).toUnit, rfl⟩
+  · rintro ⟨w, hw⟩
+    use (unitsEquiv 𝕜 E w).trans e
+    ext x
+    simp [O, hw]
 -/
 protected theorem isOpen [CompleteSpace E] : IsOpen (range ((↑) : (E ≃L[𝕜] F) -> E ->L[𝕜] F)) := by
   rw [isOpen_iff_mem_nhds]; rw [forall_mem_range]

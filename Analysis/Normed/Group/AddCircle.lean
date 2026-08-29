@@ -178,7 +178,19 @@ theorem norm_eq
     · simp
     have hx := norm_coe_mul p x p⁻¹
     rw [abs_inv]; rw [eq_inv_mul_iff_mul_eq₀ ((not_congr abs_eq_zero).mpr hp)] at hx
-    rw [← hx]; rw [inv_mul_cancel₀ hp]; rw [this]
+    rw [← hx]; rw [inv_mul_cancel₀ hp]; rw [this]; rw [← abs_mul]; rw [mul_sub]; rw [mul_inv_cancel_left₀ hp]; rw [mul_comm p]
+  clear! x p
+  intro x
+  simp only [le_antisymm_iff, le_norm_iff, Real.norm_eq_abs]
+  refine ⟨le_of_forall_le fun r hr => ?_, ?_⟩
+  · rw [abs_sub_round_eq_min, le_inf_iff]
+    rw [le_norm_iff] at hr
+    constructor
+    · simpa [abs_of_nonneg] using hr (fract x)
+    · simpa [abs_sub_comm (fract x)] using hr (fract x - 1) (by simp)
+  · simpa [zmultiples, QuotientAddGroup.eq, zsmul_eq_mul, mul_one, mem_mk, mem_range, and_imp,
+      forall_exists_index, eq_neg_add_iff_add_eq, ← eq_sub_iff_add_eq, forall_comm (α := Nat)]
+      using round_le _
 
 中文:
 定理 norm_eq
@@ -190,7 +202,19 @@ theorem norm_eq
     · simp
     have hx := norm_coe_mul p x p⁻¹
     rw [abs_inv]; rw [eq_inv_mul_iff_mul_eq₀ ((not_congr abs_eq_zero).mpr hp)] at hx
-    rw [← hx]; rw [inv_mul_cancel₀ hp]; rw [this]
+    rw [← hx]; rw [inv_mul_cancel₀ hp]; rw [this]; rw [← abs_mul]; rw [mul_sub]; rw [mul_inv_cancel_left₀ hp]; rw [mul_comm p]
+  clear! x p
+  intro x
+  simp only [le_antisymm_iff, le_norm_iff, Real.norm_eq_abs]
+  refine ⟨le_of_forall_le fun r hr => ?_, ?_⟩
+  · rw [abs_sub_round_eq_min, le_inf_iff]
+    rw [le_norm_iff] at hr
+    constructor
+    · simpa [abs_of_nonneg] using hr (fract x)
+    · simpa [abs_sub_comm (fract x)] using hr (fract x - 1) (by simp)
+  · simpa [zmultiples, QuotientAddGroup.eq, zsmul_eq_mul, mul_one, mem_mk, mem_range, and_imp,
+      forall_exists_index, eq_neg_add_iff_add_eq, ← eq_sub_iff_add_eq, forall_comm (α := Nat)]
+      using round_le _
 
 Depends on / 依赖: AddCircle, Real.norm_eq_abs, abs_eq_zero, abs_inv, abs_mul, abs_sub_round_eq, eq_or_ne, le_antisymm_iff, le_norm_iff, le_of_forall_le, mul_comm, mul_sub, norm_coe_mul, norm_eq_abs, not_congr
 -/
@@ -256,7 +280,9 @@ theorem norm_le_half_period
   obtain ⟨x⟩ := x
   change ‖(x : AddCircle p)‖ <= |p| / 2
   rw [norm_eq]; rw [← mul_le_mul_iff_right₀ (abs_pos.mpr (inv_ne_zero hp))]; rw [← abs_mul]; rw [mul_sub]; rw [mul_left_comm]; rw [← mul_div_assoc]; rw [← abs_mul]; rw [inv_mul_cancel₀ hp]; rw [mul_one]; rw [abs_one]
-  exact abs_sub_round 
+  exact abs_sub_round (p⁻¹ * x)
+
+@[simp]
 
 中文:
 定理 norm_le_half_period
@@ -266,7 +292,9 @@ theorem norm_le_half_period
   obtain ⟨x⟩ := x
   change ‖(x : AddCircle p)‖ <= |p| / 2
   rw [norm_eq]; rw [← mul_le_mul_iff_right₀ (abs_pos.mpr (inv_ne_zero hp))]; rw [← abs_mul]; rw [mul_sub]; rw [mul_left_comm]; rw [← mul_div_assoc]; rw [← abs_mul]; rw [inv_mul_cancel₀ hp]; rw [mul_one]; rw [abs_one]
-  exact abs_sub_round 
+  exact abs_sub_round (p⁻¹ * x)
+
+@[simp]
 
 Depends on / 依赖: AddCircle, abs_mul, abs_one, abs_pos, abs_pos.mpr, abs_sub_round, inv_ne_zero, mul_div_assoc, mul_left_comm, mul_one, mul_sub, norm_eq
 -/
@@ -314,7 +342,19 @@ theorem norm_coe_eq_abs_iff
     · rw [abs_eq_self.mpr hp.le] at hx
       exact this p hp hx
     · rw [← norm_neg_period]
-      rw [abs_
+      rw [abs_eq_neg_self.mpr hp.le] at hx
+      exact this (-p) (neg_pos.mpr hp) hx
+  clear hx
+  intro p hp hx
+  rcases eq_or_ne x (p / (2 : Real)) with (rfl | hx')
+  · simp [abs_div]
+  suffices round (p⁻¹ * x) = 0 by simp [norm_eq, this]
+  rw [round_eq_zero_iff]
+  obtain ⟨hx₁, hx₂⟩ := abs_le.mp hx
+  replace hx₂ := Ne.lt_of_le hx' hx₂
+  constructor
+  · rwa [le_inv_mul_iff₀ hp, mul_neg, ← mul_div_assoc, mul_one]
+  · rwa [inv_mul_lt_iff₀ hp, ← mul_div_assoc, mul_one]
 
 中文:
 定理 norm_coe_eq_abs_iff
@@ -327,7 +367,19 @@ theorem norm_coe_eq_abs_iff
     · rw [abs_eq_self.mpr hp.le] at hx
       exact this p hp hx
     · rw [← norm_neg_period]
-      rw [abs_
+      rw [abs_eq_neg_self.mpr hp.le] at hx
+      exact this (-p) (neg_pos.mpr hp) hx
+  clear hx
+  intro p hp hx
+  rcases eq_or_ne x (p / (2 : Real)) with (rfl | hx')
+  · simp [abs_div]
+  suffices round (p⁻¹ * x) = 0 by simp [norm_eq, this]
+  rw [round_eq_zero_iff]
+  obtain ⟨hx₁, hx₂⟩ := abs_le.mp hx
+  replace hx₂ := Ne.lt_of_le hx' hx₂
+  constructor
+  · rwa [le_inv_mul_iff₀ hp, mul_neg, ← mul_div_assoc, mul_one]
+  · rwa [inv_mul_lt_iff₀ hp, ← mul_div_assoc, mul_one]
 
 Depends on / 依赖: AddCircle, abs_div, abs_eq_neg_self, abs_eq_neg_self.mpr, abs_eq_self, abs_eq_self.mpr, eq_or_ne, hp.le, hp.symm.lt_or_gt, lt_or_gt, neg_pos, neg_pos.mpr, norm_eq, norm_le_half_period, norm_neg_period, round_eq_zero_
 -/
@@ -419,7 +471,8 @@ theorem coe_real_preimage_closedBall_eq_iUnion
     ← QuotientAddGroup.mk_sub, norm_eq, ← sub_sub]
   refine ⟨fun h => ⟨round (p⁻¹ * (y - x)), h⟩, ?_⟩
   rintro ⟨n, hn⟩
-  rw [←
+  rw [← mul_le_mul_iff_right₀ (abs_pos.mpr <| inv_ne_zero hp)]; rw [← abs_mul]; rw [mul_sub]; rw [mul_comm _ p]; rw [inv_mul_cancel_left₀ hp] at hn ⊢
+  exact (round_le (p⁻¹ * (y - x)) n).trans hn
 
 中文:
 定理 coe_real_preimage_closedBall_eq_iUnion
@@ -432,7 +485,8 @@ theorem coe_real_preimage_closedBall_eq_iUnion
     ← QuotientAddGroup.mk_sub, norm_eq, ← sub_sub]
   refine ⟨fun h => ⟨round (p⁻¹ * (y - x)), h⟩, ?_⟩
   rintro ⟨n, hn⟩
-  rw [←
+  rw [← mul_le_mul_iff_right₀ (abs_pos.mpr <| inv_ne_zero hp)]; rw [← abs_mul]; rw [mul_sub]; rw [mul_comm _ p]; rw [inv_mul_cancel_left₀ hp] at hn ⊢
+  exact (round_le (p⁻¹ * (y - x)) n).trans hn
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.mk_sub, Real.norm_eq_abs, abs_mul, abs_pos, abs_pos.mpr, dist_eq_norm, eq_or_ne, iUnion_const, inv_ne_zero, mem_closedBall, mem_iUnion, mem_preimage, mk_sub, mul_comm, mul_sub, norm_eq, norm_eq_abs, round_le, sub_sub
 -/
@@ -460,7 +514,31 @@ theorem coe_real_preimage_closedBall_inter_eq
     · simp only [abs_zero, zero_div] at hε
       simp only [not_lt.mpr hε, coe_real_preimage_closedBall_period_zero, abs_zero, zero_div,
         if_false, inter_eq_right]
-      exact hs.trans (closedBall_subset_clo
+      exact hs.trans (closedBall_subset_closedBall <| by simp [hε])
+    simp [closedBall_eq_univ_of_half_period_le p hp (↑x) hε, not_lt.mpr hε]
+  · suffices forall z : Int, closedBall (x + z • p) ε inter s = if z = 0 then closedBall x ε inter s else ∅ by
+      simp [-zsmul_eq_mul, coe_real_preimage_closedBall_eq_iUnion,
+        iUnion_inter, iUnion_ite, this, hε]
+    intro z
+    simp only [Real.closedBall_eq_Icc] at hs ⊢
+    rcases eq_or_ne z 0 with (rfl | hz)
+    · simp
+    simp only [hz, zsmul_eq_mul, if_false, eq_empty_iff_forall_notMem]
+    rintro y ⟨⟨hy₁, hy₂⟩, hy₀⟩
+    obtain ⟨hy₃, hy₄⟩ := hs hy₀
+    rcases lt_trichotomy 0 p with (hp | (rfl : 0 = p) | hp)
+    · rcases Int.cast_le_neg_one_or_one_le_cast_of_ne_zero Real hz with hz' | hz'
+      · have : ↑z * p <= -p := by nlinarith
+        linarith [abs_eq_self.mpr hp.le]
+      · have : p <= ↑z * p := by nlinarith
+        linarith [abs_eq_self.mpr hp.le]
+    · simp only [mul_zero, add_zero, abs_zero, zero_div] at hy₁ hy₂ hε
+      linarith
+    · rcases Int.cast_le_neg_one_or_one_le_cast_of_ne_zero Real hz with hz' | hz'
+      · have : -p <= ↑z * p := by nlinarith
+        linarith [abs_eq_neg_self.mpr hp.le]
+      · have : ↑z * p <= p := by nlinarith
+        linarith [abs_eq_neg_self.mpr hp.le]
 
 中文:
 定理 coe_real_preimage_closedBall_inter_eq
@@ -471,7 +549,31 @@ theorem coe_real_preimage_closedBall_inter_eq
     · simp only [abs_zero, zero_div] at hε
       simp only [not_lt.mpr hε, coe_real_preimage_closedBall_period_zero, abs_zero, zero_div,
         if_false, inter_eq_right]
-      exact hs.trans (closedBall_subset_clo
+      exact hs.trans (closedBall_subset_closedBall <| by simp [hε])
+    simp [closedBall_eq_univ_of_half_period_le p hp (↑x) hε, not_lt.mpr hε]
+  · suffices forall z : Int, closedBall (x + z • p) ε inter s = if z = 0 then closedBall x ε inter s else ∅ by
+      simp [-zsmul_eq_mul, coe_real_preimage_closedBall_eq_iUnion,
+        iUnion_inter, iUnion_ite, this, hε]
+    intro z
+    simp only [Real.closedBall_eq_Icc] at hs ⊢
+    rcases eq_or_ne z 0 with (rfl | hz)
+    · simp
+    simp only [hz, zsmul_eq_mul, if_false, eq_empty_iff_forall_notMem]
+    rintro y ⟨⟨hy₁, hy₂⟩, hy₀⟩
+    obtain ⟨hy₃, hy₄⟩ := hs hy₀
+    rcases lt_trichotomy 0 p with (hp | (rfl : 0 = p) | hp)
+    · rcases Int.cast_le_neg_one_or_one_le_cast_of_ne_zero Real hz with hz' | hz'
+      · have : ↑z * p <= -p := by nlinarith
+        linarith [abs_eq_self.mpr hp.le]
+      · have : p <= ↑z * p := by nlinarith
+        linarith [abs_eq_self.mpr hp.le]
+    · simp only [mul_zero, add_zero, abs_zero, zero_div] at hy₁ hy₂ hε
+      linarith
+    · rcases Int.cast_le_neg_one_or_one_le_cast_of_ne_zero Real hz with hz' | hz'
+      · have : -p <= ↑z * p := by nlinarith
+        linarith [abs_eq_neg_self.mpr hp.le]
+      · have : ↑z * p <= p := by nlinarith
+        linarith [abs_eq_neg_self.mpr hp.le]
 
 Depends on / 依赖: abs_zero, closedBall, closedBall_eq_univ_of_half_period_le, closedBall_subset_closedBall, coe_real_preimage_closedBall_period_zero, eq_or_ne, hs.trans, if_false, inter_eq_right, le_or_gt, not_lt, not_lt.mpr, zero_div, zsmul_eq_mul
 -/
@@ -582,7 +684,9 @@ theorem le_add_order_smul_norm_of_isOfFinAddOrder
     norm_cast
     exact (addOrderOf_pos_iff.mpr hu).ne'
   conv_lhs => rw [← mul_one p]
-  rw [hn]; rw [nsmul_eq_mul]; rw [← mul_assoc]; rw [mul_comm _ p]; rw [mul_assoc]; rw [mul_div_cancel₀ _ 
+  rw [hn]; rw [nsmul_eq_mul]; rw [← mul_assoc]; rw [mul_comm _ p]; rw [mul_assoc]; rw [mul_div_cancel₀ _ hu]; rw [mul_le_mul_iff_right₀ hp.out]; rw [Nat.one_le_cast]; rw [Nat.one_le_iff_ne_zero]
+  contrapose hu'
+  simpa only [hu', Nat.cast_zero, zero_div, mul_zero, norm_eq_zero] using hn
 
 中文:
 定理 le_add_order_smul_norm_of_isOfFinAddOrder
@@ -593,7 +697,9 @@ theorem le_add_order_smul_norm_of_isOfFinAddOrder
     norm_cast
     exact (addOrderOf_pos_iff.mpr hu).ne'
   conv_lhs => rw [← mul_one p]
-  rw [hn]; rw [nsmul_eq_mul]; rw [← mul_assoc]; rw [mul_comm _ p]; rw [mul_assoc]; rw [mul_div_cancel₀ _ 
+  rw [hn]; rw [nsmul_eq_mul]; rw [← mul_assoc]; rw [mul_comm _ p]; rw [mul_assoc]; rw [mul_div_cancel₀ _ hu]; rw [mul_le_mul_iff_right₀ hp.out]; rw [Nat.one_le_cast]; rw [Nat.one_le_iff_ne_zero]
+  contrapose hu'
+  simpa only [hu', Nat.cast_zero, zero_div, mul_zero, norm_eq_zero] using hn
 
 Depends on / 依赖: Nat.cast_zero, Nat.one_le_cast, Nat.one_le_iff_ne_zero, addOrderOf, addOrderOf_pos_iff, addOrderOf_pos_iff.mpr, cast_zero, contrapose, conv_lhs, exists_norm_eq_of_isOfFinAddOrder, hp.out, mul_assoc, mul_comm, mul_one, mul_zero, norm_eq_zero, nsmul_eq_mul, one_le_cast, one_le_iff_ne_zero, replace
 -/

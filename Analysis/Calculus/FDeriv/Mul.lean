@@ -1524,7 +1524,9 @@ theorem hasStrictFDerivAt_list_prod'
   | cons a l IH =>
     simp only [List.map_cons, List.prod_cons, ← proj_apply (R := 𝕜) (φ := fun _ : ι => 𝔸) a]
     exact .congr_fderiv (.mul' (ContinuousLinearMap.hasStrictFDerivAt _) IH)
-      (by ext; sim
+      (by ext; simp [Fin.sum_univ_succ, Finset.mul_sum, mul_assoc, add_comm])
+
+@[fun_prop]
 
 中文:
 定理 hasStrictFDerivAt_list_prod'
@@ -1536,7 +1538,9 @@ theorem hasStrictFDerivAt_list_prod'
   | cons a l IH =>
     simp only [List.map_cons, List.prod_cons, ← proj_apply (R := 𝕜) (φ := fun _ : ι => 𝔸) a]
     exact .congr_fderiv (.mul' (ContinuousLinearMap.hasStrictFDerivAt _) IH)
-      (by ext; sim
+      (by ext; simp [Fin.sum_univ_succ, Finset.mul_sum, mul_assoc, add_comm])
+
+@[fun_prop]
 
 Depends on / 依赖: l.map
 -/
@@ -1710,7 +1714,12 @@ theorem hasStrictFDerivAt_list_prod
   refine hasStrictFDerivAt_list_prod'.congr_fderiv ?_
   conv_rhs => arg 1; arg 2; rw [← List.map_get_finRange l]
   simp only [List.map_map, ← List.sum_toFinset _ (List.nodup_finRange _), List.toFinset_finRange,
-    Function.comp_def, ((List.erase_getElem _).map _).pro
+    Function.comp_def, ((List.erase_getElem _).map _).prod_eq, List.eraseIdx_eq_take_drop_succ,
+    List.map_append, List.prod_append, List.get_eq_getElem, Fin.getElem_fin, Nat.succ_eq_add_one]
+  exact Finset.sum_congr rfl fun i _ => by
+    ext; simp only [smul_apply, op_smul_eq_smul, smul_eq_mul]; ring
+
+@[fun_prop]
 
 中文:
 定理 hasStrictFDerivAt_list_prod
@@ -1720,7 +1729,12 @@ theorem hasStrictFDerivAt_list_prod
   refine hasStrictFDerivAt_list_prod'.congr_fderiv ?_
   conv_rhs => arg 1; arg 2; rw [← List.map_get_finRange l]
   simp only [List.map_map, ← List.sum_toFinset _ (List.nodup_finRange _), List.toFinset_finRange,
-    Function.comp_def, ((List.erase_getElem _).map _).pro
+    Function.comp_def, ((List.erase_getElem _).map _).prod_eq, List.eraseIdx_eq_take_drop_succ,
+    List.map_append, List.prod_append, List.get_eq_getElem, Fin.getElem_fin, Nat.succ_eq_add_one]
+  exact Finset.sum_congr rfl fun i _ => by
+    ext; simp only [smul_apply, op_smul_eq_smul, smul_eq_mul]; ring
+
+@[fun_prop]
 
 Depends on / 依赖: l.map
 -/
@@ -1862,7 +1876,11 @@ theorem HasStrictFDerivAt.list_prod'
   simp_rw [Fin.getElem_fin, ← l.get_eq_getElem, ← List.map_get_finRange l, List.map_map]
   -- After https://github.com/leanprover-community/mathlib4/issues/19108, we have to be optimistic with `:)`s; otherwise Lean decides it need to find
   -- `NormedAddCommGroup (List 𝔸)` which is nonsense.
-  re
+  refine .congr_fderiv (hasStrictFDerivAt_list_prod_finRange'.comp x
+    (hasStrictFDerivAt_pi.mpr fun i => h (l.get i) (List.getElem_mem ..)) :) ?_
+  ext m
+  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_apply, smul_apply,
+    proj_apply, pi_apply, Function.comp_def]
 
 中文:
 定理 HasStrictFDerivAt.list_prod'
@@ -1871,7 +1889,11 @@ theorem HasStrictFDerivAt.list_prod'
   simp_rw [Fin.getElem_fin, ← l.get_eq_getElem, ← List.map_get_finRange l, List.map_map]
   -- After https://github.com/leanprover-community/mathlib4/issues/19108, we have to be optimistic with `:)`s; otherwise Lean decides it need to find
   -- `NormedAddCommGroup (List 𝔸)` which is nonsense.
-  re
+  refine .congr_fderiv (hasStrictFDerivAt_list_prod_finRange'.comp x
+    (hasStrictFDerivAt_pi.mpr fun i => h (l.get i) (List.getElem_mem ..)) :) ?_
+  ext m
+  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_apply, smul_apply,
+    proj_apply, pi_apply, Function.comp_def]
 
 Depends on / 依赖: Fin.getElem_fin, List.map_get_finRange, List.map_map, getElem_fin, get_eq_getElem, l.get_eq_getElem, map_get_finRange, map_map, simp_rw
 -/
@@ -1904,7 +1926,10 @@ theorem HasFDerivAt.list_prod'
   refine .congr_fderiv (hasFDerivAt_list_prod_finRange'.comp x
     (hasFDerivAt_pi.mpr fun i => h (l.get i) (l.get_mem i)) :) ?_
   ext m
-  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_
+  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_apply, smul_apply,
+    proj_apply, pi_apply, Function.comp_def]
+
+@[fun_prop]
 
 中文:
 定理 在点处Fréchet可导.list_prod'
@@ -1914,7 +1939,10 @@ theorem HasFDerivAt.list_prod'
   refine .congr_fderiv (hasFDerivAt_list_prod_finRange'.comp x
     (hasFDerivAt_pi.mpr fun i => h (l.get i) (l.get_mem i)) :) ?_
   ext m
-  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_
+  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_apply, smul_apply,
+    proj_apply, pi_apply, Function.comp_def]
+
+@[fun_prop]
 
 Depends on / 依赖: Fin.getElem_fin, Function, Function.comp_def, List.map_drop, List.map_get_finRange, List.map_map, List.map_take, comp_apply, comp_def, congr_fderiv, getElem_fin, get_eq_getElem, get_mem, hasFDerivAt_list_prod_finRange, hasFDerivAt_pi, hasFDerivAt_pi.mpr, l.get, l.get_eq_getElem, l.get_mem, map_drop
 -/
@@ -1942,7 +1970,8 @@ theorem HasFDerivWithinAt.list_prod'
   refine .congr_fderiv (hasFDerivAt_list_prod_finRange'.comp_hasFDerivWithinAt x
     (hasFDerivWithinAt_pi.mpr fun i => h (l.get i) (l.get_mem i)) :) ?_
   ext m
-  simp_rw [List.map_take, List.map_drop, List.m
+  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_apply, smul_apply,
+    proj_apply, pi_apply, Function.comp_def]
 
 中文:
 定理 HasFDerivWithinAt.list_prod'
@@ -1952,7 +1981,8 @@ theorem HasFDerivWithinAt.list_prod'
   refine .congr_fderiv (hasFDerivAt_list_prod_finRange'.comp_hasFDerivWithinAt x
     (hasFDerivWithinAt_pi.mpr fun i => h (l.get i) (l.get_mem i)) :) ?_
   ext m
-  simp_rw [List.map_take, List.map_drop, List.m
+  simp_rw [List.map_take, List.map_drop, List.map_map, comp_apply, sum_apply, smul_apply,
+    proj_apply, pi_apply, Function.comp_def]
 
 Depends on / 依赖: Fin.getElem_fin, Function, Function.comp_def, List.map_drop, List.map_get_finRange, List.map_map, List.map_take, comp_apply, comp_def, comp_hasFDerivWithinAt, congr_fderiv, getElem_fin, get_eq_getElem, get_mem, hasFDerivAt_list_prod_finRange, hasFDerivWithinAt_pi, hasFDerivWithinAt_pi.mpr, l.get, l.get_eq_getElem, l.get_mem
 -/
@@ -2182,7 +2212,7 @@ theorem HasStrictFDerivAt.finsetProd
     (by ext; simp [Finset.prod_erase_attach (g · x), ← u.sum_attach])
 
 @[deprecated (since := "2026-04-08")]
-alias HasStrictFDerivAt.finset_prod := HasSt
+alias HasStrictFDerivAt.finset_prod := HasStrictFDerivAt.finsetProd
 
 中文:
 定理 HasStrictFDerivAt.finsetProd
@@ -2193,7 +2223,7 @@ alias HasStrictFDerivAt.finset_prod := HasSt
     (by ext; simp [Finset.prod_erase_attach (g · x), ← u.sum_attach])
 
 @[deprecated (since := "2026-04-08")]
-alias HasStrictFDerivAt.finset_prod := HasSt
+alias HasStrictFDerivAt.finset_prod := HasStrictFDerivAt.finsetProd
 
 Depends on / 依赖: Finset, Finset.prod_attach, Finset.prod_erase_attach, congr_fderiv, hasStrictFDerivAt_finsetProd, hasStrictFDerivAt_finsetProd.comp, hasStrictFDerivAt_pi, hasStrictFDerivAt_pi.mpr, i.prop, prod_attach, prod_erase_attach, sum_attach, u.sum_attach
 -/
@@ -2218,7 +2248,7 @@ theorem HasFDerivAt.finsetProd
     (hasFDerivAt_finsetProd.comp x <| hasFDerivAt_pi.mpr fun i => hg (Subtype.val i) i.prop :)
     (by ext; simp [Finset.prod_erase_attach (g · x), ← u.sum_attach])
 
-@[deprecated (since := "2026-04-08")] alias HasFDerivAt.finset_prod := HasFDer
+@[deprecated (since := "2026-04-08")] alias HasFDerivAt.finset_prod := HasFDerivAt.finsetProd
 
 中文:
 定理 在点处Fréchet可导.finsetProd
@@ -2228,7 +2258,7 @@ theorem HasFDerivAt.finsetProd
     (hasFDerivAt_finsetProd.comp x <| hasFDerivAt_pi.mpr fun i => hg (Subtype.val i) i.prop :)
     (by ext; simp [Finset.prod_erase_attach (g · x), ← u.sum_attach])
 
-@[deprecated (since := "2026-04-08")] alias HasFDerivAt.finset_prod := HasFDer
+@[deprecated (since := "2026-04-08")] alias HasFDerivAt.finset_prod := HasFDerivAt.finsetProd
 
 Depends on / 依赖: Finset, Finset.prod_attach, Finset.prod_erase_attach, Subtype, Subtype.val, congr_fderiv, hasFDerivAt_finsetProd, hasFDerivAt_finsetProd.comp, hasFDerivAt_pi, hasFDerivAt_pi.mpr, i.prop, prod_attach, prod_erase_attach, sum_attach, u.sum_attach
 -/
@@ -2254,7 +2284,7 @@ theorem HasFDerivWithinAt.finsetProd
     (by ext; simp [Finset.prod_erase_attach (g · x), ← u.sum_attach])
 
 @[deprecated (since := "2026-04-08")]
-alias HasF
+alias HasFDerivWithinAt.finset_prod := HasFDerivWithinAt.finsetProd
 
 中文:
 定理 HasFDerivWithinAt.finsetProd
@@ -2266,7 +2296,7 @@ alias HasF
     (by ext; simp [Finset.prod_erase_attach (g · x), ← u.sum_attach])
 
 @[deprecated (since := "2026-04-08")]
-alias HasF
+alias HasFDerivWithinAt.finset_prod := HasFDerivWithinAt.finsetProd
 
 Depends on / 依赖: Finset, Finset.prod_attach, Finset.prod_erase_attach, Subtype, Subtype.val, comp_hasFDerivWithinAt, congr_fderiv, hasFDerivAt_finsetProd, hasFDerivAt_finsetProd.comp_hasFDerivWithinAt, hasFDerivWithinAt_pi, hasFDerivWithinAt_pi.mpr, i.prop, prod_attach, prod_erase_attach, sum_attach, u.sum_attach
 -/

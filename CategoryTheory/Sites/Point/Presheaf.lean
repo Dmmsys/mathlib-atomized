@@ -200,7 +200,9 @@ lemma isConservative_pointsBot
     dsimp at b hb
     have : b ≫ a = 𝟙 _ :=
       shrinkYonedaObjObjEquiv.symm.injective (by
-        rw [← hb]; rw [shrinkYoneda_ma
+        rw [← hb]; rw [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm])
+    simpa only [bot_covering, ← Sieve.id_mem_iff_eq_top, this]
+      using S.downward_closed ha b)
 
 中文:
 引理 isConservative_pointsBot
@@ -210,7 +212,9 @@ lemma isConservative_pointsBot
     dsimp at b hb
     have : b ≫ a = 𝟙 _ :=
       shrinkYonedaObjObjEquiv.symm.injective (by
-        rw [← hb]; rw [shrinkYoneda_ma
+        rw [← hb]; rw [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm])
+    simpa only [bot_covering, ← Sieve.id_mem_iff_eq_top, this]
+      using S.downward_closed ha b)
 
 Depends on / 依赖: S.downward_closed, Sieve.id_mem_iff_eq_top, bot_covering, downward_closed, id_mem_iff_eq_top, injective, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, shrinkYonedaObjObjEquiv.symm.injective, shrinkYonedaObjObjEquiv.symm.surjective, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm, surjective
 -/

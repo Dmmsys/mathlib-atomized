@@ -163,7 +163,7 @@ lemma continuous_upperRightHom
     Units.embedProduct_apply, Units.inv_mk, continuous_prodMk, MulOpposite.unop_op]
   constructor <;>
   · refine continuous_matrix fun i j => ?_
-    fin_cases i <;> fin_cases j <;> simp [continuous_const, continuous_neg,
+    fin_cases i <;> fin_cases j <;> simp [continuous_const, continuous_neg, continuous_id']
 
 中文:
 引理 continuous_upperRightHom
@@ -173,7 +173,7 @@ lemma continuous_upperRightHom
     Units.embedProduct_apply, Units.inv_mk, continuous_prodMk, MulOpposite.unop_op]
   constructor <;>
   · refine continuous_matrix fun i j => ?_
-    fin_cases i <;> fin_cases j <;> simp [continuous_const, continuous_neg,
+    fin_cases i <;> fin_cases j <;> simp [continuous_const, continuous_neg, continuous_id']
 
 Depends on / 依赖: Function, Function.comp_def, MulOpposite, MulOpposite.unop_op, Units.embedProduct_apply, Units.inv_mk, comp_def, continuous_const, continuous_id, continuous_induced_rng, continuous_matrix, continuous_neg, continuous_prodMk, embedProduct_apply, fin_cases, inv_mk, unop_op, upperRightHom_apply
 -/

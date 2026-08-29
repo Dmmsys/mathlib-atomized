@@ -972,7 +972,7 @@ instance prod
       fun n => by
       simp only [Nat.unpaired, Nat.unpair_pair, decode_prod_val]
       cases @decode α _ n.unpair.1; · simp
-      cases @
+      cases @decode β _ n.unpair.2 <;> simp⟩
 
 中文:
 实例 乘积
@@ -982,7 +982,7 @@ instance prod
       fun n => by
       simp only [Nat.unpaired, Nat.unpair_pair, decode_prod_val]
       cases @decode α _ n.unpair.1; · simp
-      cases @
+      cases @decode β _ n.unpair.2 <;> simp⟩
 
 Depends on / 依赖: Nat.unpair_pair, Nat.unpaired, Primcodable, Primcodable.prim, casesOn, decode, decode_prod_val, n.unpair, of_eq, unpair, unpair_pair, unpaired
 -/
@@ -1015,7 +1015,8 @@ theorem fst
         (pair right ((Primcodable.prim α).comp left))).of_eq
     fun n => by
     simp only [Nat.unpaired, Nat.unpair_pair, decode_prod_val]
-    cases @dec
+    cases @decode α _ n.unpair.1 <;> simp
+    cases @decode β _ n.unpair.2 <;> simp
 
 中文:
 定理 fst
@@ -1027,7 +1028,8 @@ theorem fst
         (pair right ((Primcodable.prim α).comp left))).of_eq
     fun n => by
     simp only [Nat.unpaired, Nat.unpair_pair, decode_prod_val]
-    cases @dec
+    cases @decode α _ n.unpair.1 <;> simp
+    cases @decode β _ n.unpair.2 <;> simp
 
 Depends on / 依赖: Nat.Primrec.succ.comp, Nat.unpair_pair, Nat.unpaired, Primcodable, Primcodable.prim, Primrec, casesOn, decode, decode_prod_val, n.unpair, of_eq, unpair, unpair_pair, unpaired
 -/
@@ -1054,7 +1056,8 @@ theorem snd
         (pair right ((Primcodable.prim α).comp left))).of_eq
     fun n => by
     simp only [Nat.unpaired, Nat.unpair_pair, decode_prod_val]
-    cases @de
+    cases @decode α _ n.unpair.1 <;> simp
+    cases @decode β _ n.unpair.2 <;> simp
 
 中文:
 定理 snd
@@ -1066,7 +1069,8 @@ theorem snd
         (pair right ((Primcodable.prim α).comp left))).of_eq
     fun n => by
     simp only [Nat.unpaired, Nat.unpair_pair, decode_prod_val]
-    cases @de
+    cases @decode α _ n.unpair.1 <;> simp
+    cases @decode β _ n.unpair.2 <;> simp
 
 Depends on / 依赖: Nat.Primrec.succ.comp, Nat.unpair_pair, Nat.unpaired, Primcodable, Primcodable.prim, Primrec, casesOn, decode, decode_prod_val, n.unpair, of_eq, unpair, unpair_pair, unpaired
 -/
@@ -1802,7 +1806,7 @@ theorem nat_iff
           (Option.bind a fun a : α => Option.map (Prod.mk a) b) =
         Option.bind a fun a => Option.map (f a) b := fun a b => by
           cases a <;> cases b <;> rfl
-  simp [Primrec₂, Primrec, th
+  simp [Primrec₂, Primrec, this]
 
 中文:
 定理 nat_iff
@@ -1815,7 +1819,7 @@ theorem nat_iff
           (Option.bind a fun a : α => Option.map (Prod.mk a) b) =
         Option.bind a fun a => Option.map (f a) b := fun a b => by
           cases a <;> cases b <;> rfl
-  simp [Primrec₂, Primrec, th
+  simp [Primrec₂, Primrec, this]
 
 Depends on / 依赖: Option.bind, Option.map, Primrec, Prod.mk
 -/
@@ -1905,7 +1909,14 @@ Nat.Primrec.left.pair
 (Nat.Primrec.left.comp .right).pair
 Nat.Primrec.pred.comp Nat.Primrec.right.comp .right).comp <|
 Nat.Primrec.right.pair Nat.Primrec.right.comp Nat.Primrec.left).comp <|
-Nat.Pri
+Nat.Primrec.id.pair (Primcodable.prim α).comp Nat.Primrec.left).of_eq
+      fun n => by
+      simp only [Nat.unpaired, id_eq, Nat.unpair_pair, decode_prod_val, decode_nat,
+        Option.bind_some, Option.map_map, Option.map_some]
+      rcases @decode α _ n.unpair.1 with - | a; · rfl
+      simp only [Nat.pred_eq_sub_one, encode_some, Nat.succ_eq_add_one, encodek, Option.map_some,
+        Option.bind_some, Option.map_map]
+      induction n.unpair.2 <;> simp [*, encodek]
 
 中文:
 定理 nat_rec
@@ -1918,7 +1929,14 @@ Nat.Primrec.left.pair
 (Nat.Primrec.left.comp .right).pair
 Nat.Primrec.pred.comp Nat.Primrec.right.comp .right).comp <|
 Nat.Primrec.right.pair Nat.Primrec.right.comp Nat.Primrec.left).comp <|
-Nat.Pri
+Nat.Primrec.id.pair (Primcodable.prim α).comp Nat.Primrec.left).of_eq
+      fun n => by
+      simp only [Nat.unpaired, id_eq, Nat.unpair_pair, decode_prod_val, decode_nat,
+        Option.bind_some, Option.map_map, Option.map_some]
+      rcases @decode α _ n.unpair.1 with - | a; · rfl
+      simp only [Nat.pred_eq_sub_one, encode_some, Nat.succ_eq_add_one, encodek, Option.map_some,
+        Option.bind_some, Option.map_map]
+      induction n.unpair.2 <;> simp [*, encodek]
 -/
 theorem nat_rec {f : α -> β} {g : α -> Nat × β -> β} (hf : Primrec f) (hg : Primrec₂ g) :
     Primrec₂ fun a (n : Nat) => n.rec (motive := fun _ => β) (f a) fun n IH => g a (n, IH) :=
@@ -2869,7 +2887,17 @@ theorem nat_div
   have : PrimrecRel fun (a : Nat × Nat) (b : Nat) => (a.2 = 0 ∧ b = 0) ∨
       (0 < a.2 ∧ b * a.2 <= a.1 ∧ a.1 < (b + 1) * a.2) :=
     PrimrecPred.or
-      (.and (const 0 |> Primrec.eq.comp (fst |> snd.comp)) (const 0 |> Primrec.eq.comp 
+      (.and (const 0 |> Primrec.eq.comp (fst |> snd.comp)) (const 0 |> Primrec.eq.comp snd))
+      (.and (nat_lt.comp (const 0) (fst |> snd.comp)) <|
+          .and (nat_le.comp (nat_mul.comp snd (fst |> snd.comp)) (fst |> fst.comp))
+          (nat_lt.comp (fst.comp fst) (nat_mul.comp (Primrec.succ.comp snd) (snd.comp fst))))
+  refine this.of_eq ?_
+  rintro ⟨a, k⟩ q
+  if H : k = 0 then simp [H, eq_comm]
+  else
+    have : q * k <= a ∧ a < (q + 1) * k ↔ q = a / k := by
+      rw [le_antisymm_iff]; rw [← (@Nat.lt_succ_iff _ q)]; rw [Nat.le_div_iff_mul_le (Nat.pos_of_ne_zero H)]; rw [Nat.div_lt_iff_lt_mul (Nat.pos_of_ne_zero H)]
+    simpa [H, zero_lt_iff, eq_comm (b := q)]
 
 中文:
 定理 nat_div
@@ -2879,7 +2907,17 @@ theorem nat_div
   have : PrimrecRel fun (a : Nat × Nat) (b : Nat) => (a.2 = 0 ∧ b = 0) ∨
       (0 < a.2 ∧ b * a.2 <= a.1 ∧ a.1 < (b + 1) * a.2) :=
     PrimrecPred.or
-      (.and (const 0 |> Primrec.eq.comp (fst |> snd.comp)) (const 0 |> Primrec.eq.comp 
+      (.and (const 0 |> Primrec.eq.comp (fst |> snd.comp)) (const 0 |> Primrec.eq.comp snd))
+      (.and (nat_lt.comp (const 0) (fst |> snd.comp)) <|
+          .and (nat_le.comp (nat_mul.comp snd (fst |> snd.comp)) (fst |> fst.comp))
+          (nat_lt.comp (fst.comp fst) (nat_mul.comp (Primrec.succ.comp snd) (snd.comp fst))))
+  refine this.of_eq ?_
+  rintro ⟨a, k⟩ q
+  if H : k = 0 then simp [H, eq_comm]
+  else
+    have : q * k <= a ∧ a < (q + 1) * k ↔ q = a / k := by
+      rw [le_antisymm_iff]; rw [← (@Nat.lt_succ_iff _ q)]; rw [Nat.le_div_iff_mul_le (Nat.pos_of_ne_zero H)]; rw [Nat.div_lt_iff_lt_mul (Nat.pos_of_ne_zero H)]
+    simpa [H, zero_lt_iff, eq_comm (b := q)]
 
 Depends on / 依赖: Nat.div_le_self, Primrec, Primrec.eq.comp, Primrec.succ.comp, PrimrecPred, PrimrecPred.or, PrimrecRel, div_le_self, fst.comp, nat_le, nat_le.comp, nat_lt, nat_lt.comp, nat_mul, nat_mul.comp, of_graph, snd.comp
 -/
@@ -3020,7 +3058,13 @@ instance sum
               (((@Primrec.decode β _).comp nat_div2).option_map <|
 to₂ nat_double_succ.comp (Primrec.encode.comp snd))
               (((@Primrec.decode α _).comp nat_div2).option_map <|
-to₂ nat_double.comp (Primrec.encode.comp snd))))
+to₂ nat_double.comp (Primrec.encode.comp snd)))).of_eq
+        fun n =>
+        show _ = encode (decodeSum n) by
+          simp only [decodeSum]
+          cases Nat.bodd n <;> simp
+          · cases @decode α _ n.div2 <;> rfl
+          · cases @decode β _ n.div2 <;> rfl⟩
 
 中文:
 实例 求和
@@ -3031,7 +3075,13 @@ to₂ nat_double.comp (Primrec.encode.comp snd))))
               (((@Primrec.decode β _).comp nat_div2).option_map <|
 to₂ nat_double_succ.comp (Primrec.encode.comp snd))
               (((@Primrec.decode α _).comp nat_div2).option_map <|
-to₂ nat_double.comp (Primrec.encode.comp snd))))
+to₂ nat_double.comp (Primrec.encode.comp snd)))).of_eq
+        fun n =>
+        show _ = encode (decodeSum n) by
+          simp only [decodeSum]
+          cases Nat.bodd n <;> simp
+          · cases @decode α _ n.div2 <;> rfl
+          · cases @decode β _ n.div2 <;> rfl⟩
 
 Depends on / 依赖: Nat.bodd, Primrec, Primrec.decode, Primrec.encode.comp, Primrec.nat_iff, decode, decodeSum, encode, encode_iff, n.div2, nat_bodd, nat_div2, nat_double, nat_double.comp, nat_double_succ, nat_double_succ.comp, nat_iff, of_eq, option_map
 -/
@@ -3104,7 +3154,7 @@ theorem sumCasesOn
     (cond (nat_bodd.comp <| encode_iff.2 hf)
           (option_map (Primrec.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hh)
           (option_map (Primrec.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hg)).of_eq
-      fun a => by rcases f a with b | c <;> simp [Nat.div2_val
+      fun a => by rcases f a with b | c <;> simp [Nat.div2_val, encodek]
 
 中文:
 定理 sumCasesOn
@@ -3113,7 +3163,7 @@ theorem sumCasesOn
     (cond (nat_bodd.comp <| encode_iff.2 hf)
           (option_map (Primrec.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hh)
           (option_map (Primrec.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hg)).of_eq
-      fun a => by rcases f a with b | c <;> simp [Nat.div2_val
+      fun a => by rcases f a with b | c <;> simp [Nat.div2_val, encodek]
 
 Depends on / 依赖: Nat.div2_val, Primrec, Primrec.decode.comp, decode, div2_val, encode_iff, encodek, nat_bodd, nat_bodd.comp, nat_div2, nat_div2.comp, of_eq, option_map, option_some_iff
 -/
@@ -3173,7 +3223,8 @@ definition subtype
 nat_iff.1 (encode_iff.2 this).of_eq fun n =>
     show _ = encode ((@decode α _ n).bind fun _ => _) by
       rcases @decode α _ n with - | a; · rfl
-      dsim
+      dsimp [Option.guard]
+      by_cases h : p a <;> simp [h]; rfl⟩
 
 中文:
 定义 subtype
@@ -3183,7 +3234,8 @@ nat_iff.1 (encode_iff.2 this).of_eq fun n =>
 nat_iff.1 (encode_iff.2 this).of_eq fun n =>
     show _ = encode ((@decode α _ n).bind fun _ => _) by
       rcases @decode α _ n with - | a; · rfl
-      dsim
+      dsimp [Option.guard]
+      by_cases h : p a <;> simp [h]; rfl⟩
 
 Depends on / 依赖: Option.guard, Primrec, decode, encode, encode_iff, hp.comp, nat_iff, of_eq, option_bind, option_guard, primrecRel
 -/
@@ -3243,7 +3295,7 @@ theorem mem_range_encode
           (.ite (by simpa using Primrec.eq.comp (Primrec.encode.comp .snd) .fst)
             (Primrec.option_some.comp .snd) (.const _)))
         (.const _))
-  this.of_eq fun _ 
+  this.of_eq fun _ => decode₂_ne_none_iff
 
 中文:
 定理 mem_range_encode
@@ -3255,7 +3307,7 @@ theorem mem_range_encode
           (.ite (by simpa using Primrec.eq.comp (Primrec.encode.comp .snd) .fst)
             (Primrec.option_some.comp .snd) (.const _)))
         (.const _))
-  this.of_eq fun _ 
+  this.of_eq fun _ => decode₂_ne_none_iff
 
 Depends on / 依赖: Encodable, Encodable.decode, Primrec, Primrec.encode.comp, Primrec.eq.comp, Primrec.option_some.comp, PrimrecPred, decode, encode, of_eq, option_bind, option_some, this.of_eq
 -/

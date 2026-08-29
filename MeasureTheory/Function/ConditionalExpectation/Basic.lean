@@ -249,7 +249,9 @@ theorem condExp_ae_eq_condExpL1
     · rw [if_pos hfm]
       exact (condExpL1_of_aestronglyMeasurable' hfm.aestronglyMeasurable hfi).symm
     · rw [if_neg hfm]
-      exact aestronglyMeasurable_condExpL1
+      exact aestronglyMeasurable_condExpL1.ae_eq_mk.symm
+  rw [if_neg hfi]; rw [condExpL1_undef hfi]
+  exact (coeFn_zero _ _ _).symm
 
 中文:
 定理 condExp_ae_eq_condExpL1
@@ -262,7 +264,9 @@ theorem condExp_ae_eq_condExpL1
     · rw [if_pos hfm]
       exact (condExpL1_of_aestronglyMeasurable' hfm.aestronglyMeasurable hfi).symm
     · rw [if_neg hfm]
-      exact aestronglyMeasurable_condExpL1
+      exact aestronglyMeasurable_condExpL1.ae_eq_mk.symm
+  rw [if_neg hfi]; rw [condExpL1_undef hfi]
+  exact (coeFn_zero _ _ _).symm
 
 Depends on / 依赖: Integrable, StronglyMeasurable, ae_eq_mk, aestronglyMeasurable, aestronglyMeasurable_condExpL1, aestronglyMeasurable_condExpL1.ae_eq_mk.symm, coeFn_zero, condExpL1_of_aestronglyMeasurable, condExpL1_undef, condExp_of_sigmaFinite, hfm.aestronglyMeasurable, if_neg, if_pos
 -/
@@ -395,7 +399,8 @@ theorem stronglyMeasurable_condExp
   rw [condExp_of_sigmaFinite hm]
   split_ifs with hfi hfm
   · exact hfm
-  · exact aes
+  · exact aestronglyMeasurable_condExpL1.stronglyMeasurable_mk
+  · exact stronglyMeasurable_zero
 
 中文:
 定理 stronglyMeasurable_condExp
@@ -408,7 +413,8 @@ theorem stronglyMeasurable_condExp
   rw [condExp_of_sigmaFinite hm]
   split_ifs with hfi hfm
   · exact hfm
-  · exact aes
+  · exact aestronglyMeasurable_condExpL1.stronglyMeasurable_mk
+  · exact stronglyMeasurable_zero
 
 Depends on / 依赖: SigmaFinite, aestronglyMeasurable_condExpL1, aestronglyMeasurable_condExpL1.stronglyMeasurable_mk, condExp_of_not_le, condExp_of_not_sigmaFinite, condExp_of_sigmaFinite, split_ifs, stronglyMeasurable_mk, stronglyMeasurable_zero
 -/
@@ -440,7 +446,7 @@ theorem condExp_congr_ae
   swap; · simp_rw [condExp_of_not_sigmaFinite hm hμm]; rfl
   exact (condExp_ae_eq_condExpL1 hm f).trans
     (Filter.EventuallyEq.trans (by rw [condExpL1_congr_ae hm h])
-      (condExp_ae
+      (condExp_ae_eq_condExpL1 hm g).symm)
 
 中文:
 定理 condExp_congr_ae
@@ -453,7 +459,7 @@ theorem condExp_congr_ae
   swap; · simp_rw [condExp_of_not_sigmaFinite hm hμm]; rfl
   exact (condExp_ae_eq_condExpL1 hm f).trans
     (Filter.EventuallyEq.trans (by rw [condExpL1_congr_ae hm h])
-      (condExp_ae
+      (condExp_ae_eq_condExpL1 hm g).symm)
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, SigmaFinite, condExpL1_congr_ae, condExp_ae_eq_condExpL1, condExp_of_not_le, condExp_of_not_sigmaFinite, simp_rw
 -/
@@ -676,7 +682,16 @@ theorem condExp_bot'
   · have h : ¬SigmaFinite (μ.trim bot_le) := by rwa [sigmaFinite_trim_bot_iff]
     rw [not_isFiniteMeasure_iff] at hμ_finite
     rw [condExp_of_not_sigmaFinite bot_le h]
-    simp only [hμ_finite, ENNReal.toReal_top, inv_zero, zero_smul, measureReal_
+    simp only [hμ_finite, ENNReal.toReal_top, inv_zero, zero_smul, measureReal_def]
+    rfl
+  have h_meas : StronglyMeasurable[⊥] (μ[f | ⊥]) := stronglyMeasurable_condExp
+  obtain ⟨c, h_eq⟩ := stronglyMeasurable_bot_iff.mp h_meas
+  rw [h_eq]
+  have h_integral : ∫ x, (μ[f | ⊥]) x ∂μ = ∫ x, f x ∂μ := integral_condExp bot_le
+  simp_rw [h_eq, integral_const] at h_integral
+  rw [← h_integral]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [inv_mul_cancel₀]; rw [one_smul]
+  rw [Ne]; rw [measureReal_def]; rw [ENNReal.toReal_eq_zero_iff]; rw [not_or]
+  exact ⟨NeZero.ne _, measure_ne_top μ Set.univ⟩
 
 中文:
 定理 condExp_bot'
@@ -687,7 +702,16 @@ theorem condExp_bot'
   · have h : ¬SigmaFinite (μ.trim bot_le) := by rwa [sigmaFinite_trim_bot_iff]
     rw [not_isFiniteMeasure_iff] at hμ_finite
     rw [condExp_of_not_sigmaFinite bot_le h]
-    simp only [hμ_finite, ENNReal.toReal_top, inv_zero, zero_smul, measureReal_
+    simp only [hμ_finite, ENNReal.toReal_top, inv_zero, zero_smul, measureReal_def]
+    rfl
+  have h_meas : StronglyMeasurable[⊥] (μ[f | ⊥]) := stronglyMeasurable_condExp
+  obtain ⟨c, h_eq⟩ := stronglyMeasurable_bot_iff.mp h_meas
+  rw [h_eq]
+  have h_integral : ∫ x, (μ[f | ⊥]) x ∂μ = ∫ x, f x ∂μ := integral_condExp bot_le
+  simp_rw [h_eq, integral_const] at h_integral
+  rw [← h_integral]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [inv_mul_cancel₀]; rw [one_smul]
+  rw [Ne]; rw [measureReal_def]; rw [ENNReal.toReal_eq_zero_iff]; rw [not_or]
+  exact ⟨NeZero.ne _, measure_ne_top μ Set.univ⟩
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_top, IsFiniteMeasure, SigmaFinite, StronglyMeasurable, bot_le, condExp_of_not_sigmaFinite, h_eq, h_integral, h_meas, integral_, inv_zero, measureReal_def, not_isFiniteMeasure_iff, sigmaFinite_trim_bot_iff, stronglyMeasurable_bot_iff, stronglyMeasurable_bot_iff.mp, stronglyMeasurable_condExp, toReal_top, zero_smul
 -/
@@ -780,7 +804,7 @@ theorem condExp_add
   refine (condExp_ae_eq_condExpL1 hm _).trans ?_
   rw [condExpL1_add hf hg]
   exact (coeFn_add _ _).trans
-    ((condExp_ae_eq
+    ((condExp_ae_eq_condExpL1 hm _).symm.add (condExp_ae_eq_condExpL1 hm _).symm)
 
 中文:
 定理 condExp_add
@@ -793,7 +817,7 @@ theorem condExp_add
   refine (condExp_ae_eq_condExpL1 hm _).trans ?_
   rw [condExpL1_add hf hg]
   exact (coeFn_add _ _).trans
-    ((condExp_ae_eq
+    ((condExp_ae_eq_condExpL1 hm _).symm.add (condExp_ae_eq_condExpL1 hm _).symm)
 
 Depends on / 依赖: SigmaFinite, coeFn_add, condExpL1_add, condExp_ae_eq_condExpL1, condExp_of_not_le, condExp_of_not_sigmaFinite, simp_rw, symm.add
 -/
@@ -821,7 +845,10 @@ theorem condExp_finsetSum
   | insert i s his heq =>
     rw [Finset.sum_insert his]; rw [Finset.sum_insert his]
     exact (condExp_add (hf i <| Finset.mem_insert_self i s)
-      (integrable_finsetSum'
+      (integrable_finsetSum' _ <| Finset.forall_of_forall_insert hf) _).trans
+        ((EventuallyEq.refl _ _).add <| heq <| Finset.forall_of_forall_insert hf)
+
+@[deprecated (since := "2026-04-08")] alias condExp_finset_sum := condExp_finsetSum
 
 中文:
 定理 condExp_finsetSum
@@ -833,7 +860,10 @@ theorem condExp_finsetSum
   | insert i s his heq =>
     rw [Finset.sum_insert his]; rw [Finset.sum_insert his]
     exact (condExp_add (hf i <| Finset.mem_insert_self i s)
-      (integrable_finsetSum'
+      (integrable_finsetSum' _ <| Finset.forall_of_forall_insert hf) _).trans
+        ((EventuallyEq.refl _ _).add <| heq <| Finset.forall_of_forall_insert hf)
+
+@[deprecated (since := "2026-04-08")] alias condExp_finset_sum := condExp_finsetSum
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.refl, Finset, Finset.forall_of_forall_insert, Finset.induction_on, Finset.mem_insert_self, Finset.sum_empty, Finset.sum_insert, classical, condExp_add, condExp_zero, forall_of_forall_insert, induction_on, insert, integrable_finsetSum, mem_insert_self, sum_empty, sum_insert
 -/
@@ -865,7 +895,8 @@ theorem condExp_smul
   refine (condExp_ae_eq_condExpL1 hm _).trans ?_
   rw [condExpL1_smul c f]
   refine (condExp_ae_eq_condExpL1 hm f).mp ?_
-  re
+  refine (coeFn_smul c (condExpL1 hm μ f)).mono fun x hx1 hx2 => ?_
+  simp only [hx1, hx2, Pi.smul_apply]
 
 中文:
 定理 condExp_smul
@@ -878,7 +909,8 @@ theorem condExp_smul
   refine (condExp_ae_eq_condExpL1 hm _).trans ?_
   rw [condExpL1_smul c f]
   refine (condExp_ae_eq_condExpL1 hm f).mp ?_
-  re
+  refine (coeFn_smul c (condExpL1 hm μ f)).mono fun x hx1 hx2 => ?_
+  simp only [hx1, hx2, Pi.smul_apply]
 
 Depends on / 依赖: Pi.smul_apply, SigmaFinite, coeFn_smul, condExpL1, condExpL1_smul, condExp_ae_eq_condExpL1, condExp_of_not_le, condExp_of_not_sigmaFinite, simp_rw, smul_apply
 -/
@@ -960,7 +992,13 @@ theorem condExp_condExp_of_le
   swap; · simp_rw [condExp_of_not_sigmaFinite (hm₁₂.trans hm₂) hμm₁]; rfl
   by_cases hf : Integrable f μ
   swap; · simp_rw [condExp_of_not_integrable hf, condExp_zero]; rfl
-  refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' (hm₁₂.trans 
+  refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' (hm₁₂.trans hm₂)
+    (fun s _ _ => integrable_condExp.integrableOn) (fun s _ _ => integrable_condExp.integrableOn) ?_
+    stronglyMeasurable_condExp.aestronglyMeasurable
+    stronglyMeasurable_condExp.aestronglyMeasurable
+  intro s hs _
+  rw [setIntegral_condExp (hm₁₂.trans hm₂) integrable_condExp hs]
+  rw [setIntegral_condExp (hm₁₂.trans hm₂) hf hs]; rw [setIntegral_condExp hm₂ hf (hm₁₂ s hs)]
 
 中文:
 定理 condExp_condExp_of_le
@@ -970,7 +1008,13 @@ theorem condExp_condExp_of_le
   swap; · simp_rw [condExp_of_not_sigmaFinite (hm₁₂.trans hm₂) hμm₁]; rfl
   by_cases hf : Integrable f μ
   swap; · simp_rw [condExp_of_not_integrable hf, condExp_zero]; rfl
-  refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' (hm₁₂.trans 
+  refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' (hm₁₂.trans hm₂)
+    (fun s _ _ => integrable_condExp.integrableOn) (fun s _ _ => integrable_condExp.integrableOn) ?_
+    stronglyMeasurable_condExp.aestronglyMeasurable
+    stronglyMeasurable_condExp.aestronglyMeasurable
+  intro s hs _
+  rw [setIntegral_condExp (hm₁₂.trans hm₂) integrable_condExp hs]
+  rw [setIntegral_condExp (hm₁₂.trans hm₂) hf hs]; rw [setIntegral_condExp hm₂ hf (hm₁₂ s hs)]
 
 Depends on / 依赖: Integrable, SigmaFinite, ae_eq_of_forall_setIntegral_eq_of_sigmaFinite, aestronglyMeasurable, condExp_of_not_integrable, condExp_of_not_sigmaFinite, condExp_zero, integrableOn, integrable_condExp, integrable_condExp.integrableOn, simp_rw, stronglyMeasurable_condExp, stronglyMeasurable_condExp.aestronglyMeasurable
 -/
@@ -1001,7 +1045,13 @@ theorem _root_.ContinuousLinearMap.comp_condExp_comm
       · exact T.integrable_comp hf_int
       · exact (T.integrable_comp integrable_condExp).integrableOn
       · calc
-          ∫ 
+          ∫ x in s, (T ∘ μ[f | m]) x ∂μ = T (∫ x in s, μ[f | m] x ∂μ) :=
+            T.integral_comp_comm integrable_condExp.restrict
+          _ = T (∫ x in s, f x ∂μ) := congrArg T (setIntegral_condExp hm hf_int ms)
+          _ = ∫ x in s, (T ∘ f) x ∂μ := (T.integral_comp_comm hf_int.restrict).symm
+      · exact T.cont.comp_aestronglyMeasurable stronglyMeasurable_condExp.aestronglyMeasurable
+    · simp [condExp_of_not_sigmaFinite hm hμ]
+  · simp [condExp_of_not_le hm]
 
 中文:
 定理 _root_.连续线性映射.comp_condExp_comm
@@ -1013,7 +1063,13 @@ theorem _root_.ContinuousLinearMap.comp_condExp_comm
       · exact T.integrable_comp hf_int
       · exact (T.integrable_comp integrable_condExp).integrableOn
       · calc
-          ∫ 
+          ∫ x in s, (T ∘ μ[f | m]) x ∂μ = T (∫ x in s, μ[f | m] x ∂μ) :=
+            T.integral_comp_comm integrable_condExp.restrict
+          _ = T (∫ x in s, f x ∂μ) := congrArg T (setIntegral_condExp hm hf_int ms)
+          _ = ∫ x in s, (T ∘ f) x ∂μ := (T.integral_comp_comm hf_int.restrict).symm
+      · exact T.cont.comp_aestronglyMeasurable stronglyMeasurable_condExp.aestronglyMeasurable
+    · simp [condExp_of_not_sigmaFinite hm hμ]
+  · simp [condExp_of_not_le hm]
 
 Depends on / 依赖: CuspFormClass, FunLike, ModularFormClass, SigmaFinite, T.integrable_comp, T.integral_comp_comm, ae_eq_condExp_of_forall_setIntegral_eq, hf_int, integrableOn, integrable_comp, integrable_condExp, integrable_condExp.restrict, integral_comp_comm, restrict, setIntegral_condExp
 -/
@@ -1081,7 +1137,7 @@ lemma MemLp.condExpL2_ae_eq_condExp'
     (aestronglyMeasurable_condExpL2 hm _)
   rw [integral_condExpL2_eq hm (hf2.toLp _) hs htop.ne]
   refine setIntegral_congr_ae (hm _ hs) ?_
-  
+  filter_upwards [hf2.coeFn_toLp] with ω hω _ using hω
 
 中文:
 引理 MemLp.condExpL2_ae_eq_condExp'
@@ -1092,7 +1148,7 @@ lemma MemLp.condExpL2_ae_eq_condExp'
     (aestronglyMeasurable_condExpL2 hm _)
   rw [integral_condExpL2_eq hm (hf2.toLp _) hs htop.ne]
   refine setIntegral_congr_ae (hm _ hs) ?_
-  
+  filter_upwards [hf2.coeFn_toLp] with ω hω _ using hω
 
 Depends on / 依赖: ae_eq_condExp_of_forall_setIntegral_eq, aestronglyMeasurable_condExpL2, coeFn_toLp, filter_upwards, hf2.coeFn_toLp, hf2.toLp, htop.ne, integrableOn_condExpL2_of_measure_ne_top, integral_condExpL2_eq, setIntegral_congr_ae
 -/
@@ -1197,7 +1253,15 @@ theorem condExp_tsum
   · simp only [condExp_of_not_sigmaFinite hm hμm, Pi.zero_apply, tsum_zero]
     exact ae_eq_rfl
   grw [condExp_ae_eq_condExpL1 hm]
-  have
+  have A : forallᵐ a ∂μ, forall i, μ[f i | m] a = condExpL1 hm μ (f i) a :=
+    ae_all_iff.2 (fun i => condExp_ae_eq_condExpL1 hm _)
+  have B : ∑' (n : ι), ‖condExpL1 hm μ (f n)‖ₑ != ∞ := by
+    apply (lt_of_le_of_lt ?_ hf'.lt_top).ne
+    gcongr with i
+    exact (enorm_setToFun_le _ (by simp)).trans_eq (by simp)
+  have C := coeFn_tsum (f := fun i => condExpL1 hm μ (f i)) B
+  filter_upwards [A, C] with a ha h'a
+  simp_all [condExpL1, setToFun_tsum]
 
 中文:
 定理 condExp_tsum
@@ -1210,7 +1274,15 @@ theorem condExp_tsum
   · simp only [condExp_of_not_sigmaFinite hm hμm, Pi.zero_apply, tsum_zero]
     exact ae_eq_rfl
   grw [condExp_ae_eq_condExpL1 hm]
-  have
+  have A : forallᵐ a ∂μ, forall i, μ[f i | m] a = condExpL1 hm μ (f i) a :=
+    ae_all_iff.2 (fun i => condExp_ae_eq_condExpL1 hm _)
+  have B : ∑' (n : ι), ‖condExpL1 hm μ (f n)‖ₑ != ∞ := by
+    apply (lt_of_le_of_lt ?_ hf'.lt_top).ne
+    gcongr with i
+    exact (enorm_setToFun_le _ (by simp)).trans_eq (by simp)
+  have C := coeFn_tsum (f := fun i => condExpL1 hm μ (f i)) B
+  filter_upwards [A, C] with a ha h'a
+  simp_all [condExpL1, setToFun_tsum]
 
 Depends on / 依赖: Pi.zero_apply, SigmaFinite, ae_all_iff, ae_eq_rfl, condExpL1, condExp_ae_eq_condExpL1, condExp_of_not_le, condExp_of_not_sigmaFinite, lt_of_le_of_lt, lt_top, tsum_zero, zero_apply
 -/
@@ -1248,7 +1320,18 @@ theorem tendsto_condExp_unique
   by_cases hμm : SigmaFinite (μ.trim hm); swap; · simp_rw [condExp_of_not_sigmaFinite hm hμm]; rfl
   refine (condExp_ae_eq_condExpL1 hm f).trans ((condExp_ae_eq_condExpL1 hm g).trans ?_).symm
   rw [← Lp.ext_iff]
-  have hn_eq : f
+  have hn_eq : forall n, condExpL1 hm μ (gs n) = condExpL1 hm μ (fs n) := by
+    intro n
+    ext1
+    refine (condExp_ae_eq_condExpL1 hm (gs n)).symm.trans ((hfg n).symm.trans ?_)
+    exact condExp_ae_eq_condExpL1 hm (fs n)
+  have hcond_fs : Tendsto (fun n => condExpL1 hm μ (fs n)) atTop (𝓝 (condExpL1 hm μ f)) :=
+    tendsto_condExpL1_of_dominated_convergence hm _ (fun n => (hfs_int n).1) h_int_bound_fs
+      hfs_bound hfs
+  have hcond_gs : Tendsto (fun n => condExpL1 hm μ (gs n)) atTop (𝓝 (condExpL1 hm μ g)) :=
+    tendsto_condExpL1_of_dominated_convergence hm _ (fun n => (hgs_int n).1) h_int_bound_gs
+      hgs_bound hgs
+  exact tendsto_nhds_unique_of_eventuallyEq hcond_gs hcond_fs (Eventually.of_forall hn_eq)
 
 中文:
 定理 tendsto_condExp_unique
@@ -1258,7 +1341,18 @@ theorem tendsto_condExp_unique
   by_cases hμm : SigmaFinite (μ.trim hm); swap; · simp_rw [condExp_of_not_sigmaFinite hm hμm]; rfl
   refine (condExp_ae_eq_condExpL1 hm f).trans ((condExp_ae_eq_condExpL1 hm g).trans ?_).symm
   rw [← Lp.ext_iff]
-  have hn_eq : f
+  have hn_eq : forall n, condExpL1 hm μ (gs n) = condExpL1 hm μ (fs n) := by
+    intro n
+    ext1
+    refine (condExp_ae_eq_condExpL1 hm (gs n)).symm.trans ((hfg n).symm.trans ?_)
+    exact condExp_ae_eq_condExpL1 hm (fs n)
+  have hcond_fs : Tendsto (fun n => condExpL1 hm μ (fs n)) atTop (𝓝 (condExpL1 hm μ f)) :=
+    tendsto_condExpL1_of_dominated_convergence hm _ (fun n => (hfs_int n).1) h_int_bound_fs
+      hfs_bound hfs
+  have hcond_gs : Tendsto (fun n => condExpL1 hm μ (gs n)) atTop (𝓝 (condExpL1 hm μ g)) :=
+    tendsto_condExpL1_of_dominated_convergence hm _ (fun n => (hgs_int n).1) h_int_bound_gs
+      hgs_bound hgs
+  exact tendsto_nhds_unique_of_eventuallyEq hcond_gs hcond_fs (Eventually.of_forall hn_eq)
 
 Depends on / 依赖: Lp.ext_iff, SigmaFinite, condExpL1, condExp_ae_eq_condExpL1, condExp_of_not_le, condExp_of_not_sigmaFinite, ext_iff, hcond_fs, hn_eq, simp_rw, symm.trans
 -/

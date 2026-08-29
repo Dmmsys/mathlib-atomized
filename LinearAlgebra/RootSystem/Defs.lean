@@ -1506,7 +1506,8 @@ definition indexNeg
     apply P.root.injective
     simp only [root_reflectionPerm, reflection_apply, LinearMap.flip_apply, root_coroot_eq_pairing,
       pairing_same, map_sub, coroot_reflectionPerm, coreflection_apply_self, map_neg, neg_smul,
-      sub_neg_eq_add, map_smul, smul_a
+      sub_neg_eq_add, map_smul, smul_add]
+    module
 
 中文:
 定义 indexNeg
@@ -1516,7 +1517,8 @@ definition indexNeg
     apply P.root.injective
     simp only [root_reflectionPerm, reflection_apply, LinearMap.flip_apply, root_coroot_eq_pairing,
       pairing_same, map_sub, coroot_reflectionPerm, coreflection_apply_self, map_neg, neg_smul,
-      sub_neg_eq_add, map_smul, smul_a
+      sub_neg_eq_add, map_smul, smul_add]
+    module
 -/
 @[simps, instance_reducible] def indexNeg : InvolutiveNeg ι where
   neg i := P.reflectionPerm i i
@@ -1703,7 +1705,11 @@ lemma smul_coroot_eq_of_root_eq_smul
   have hij : t * P.pairing i j = 2 := by simpa using ((P.coroot' j).congr_arg h).symm
   refine Module.eq_of_mapsTo_reflection_of_mem (f := P.root' i) (g := P.root' i)
     (finite_range P.coroot) (by simp [hij]) (by simp) (by simp [hij]) (by simp) ?_
-    (P.mapsTo_coreflection_coroot i) (mem_range
+    (P.mapsTo_coreflection_coroot i) (mem_range_self i)
+  convert! P.mapsTo_coreflection_coroot j
+  ext x
+  replace h : P.root' j = t • P.root' i := by ext; simp [h, root']
+  simp [Module.preReflection_apply, coreflection_apply, h, smul_comm _ t, mul_smul]
 
 中文:
 引理 smul_coroot_eq_of_root_eq_smul
@@ -1712,7 +1718,11 @@ lemma smul_coroot_eq_of_root_eq_smul
   have hij : t * P.pairing i j = 2 := by simpa using ((P.coroot' j).congr_arg h).symm
   refine Module.eq_of_mapsTo_reflection_of_mem (f := P.root' i) (g := P.root' i)
     (finite_range P.coroot) (by simp [hij]) (by simp) (by simp [hij]) (by simp) ?_
-    (P.mapsTo_coreflection_coroot i) (mem_range
+    (P.mapsTo_coreflection_coroot i) (mem_range_self i)
+  convert! P.mapsTo_coreflection_coroot j
+  ext x
+  replace h : P.root' j = t • P.root' i := by ext; simp [h, root']
+  simp [Module.preReflection_apply, coreflection_apply, h, smul_comm _ t, mul_smul]
 
 Depends on / 依赖: Module, Module.eq_of_mapsTo_reflection_of_mem, Module.preReflection_apply, P.coroot, P.mapsTo_coreflection_coroot, P.pairing, P.root, congr_arg, convert, coreflection_apply, coroot, eq_of_mapsTo_reflection_of_mem, finite_range, mapsTo_coreflection_coroot, mem_range_self, mul_smul, pairing, preReflection_apply, replace, smul_comm
 -/
@@ -1869,7 +1879,15 @@ lemma two_nsmul_reflection_eq_of_perm_eq
     simpa [reflection_apply, smul_sub]
   calc 2 • P.toLinearMap x (P.coroot i) • P.root i
       = P.toLinearMap x (P.coroot i) • ((2 : R) • P.root i) := ?_
-    _ = P.toLinearMap x
+    _ = P.toLinearMap x (P.coroot i) • (P.pairing i j • P.root j) := ?_
+    _ = P.toLinearMap x (P.pairing i j • P.coroot i) • (P.root j) := ?_
+    _ = P.toLinearMap x ((2 : R) • P.coroot j) • (P.root j) := ?_
+    _ = 2 • P.toLinearMap x (P.coroot j) • P.root j := ?_
+  · rw [smul_comm, ← Nat.cast_smul_eq_nsmul R, Nat.cast_ofNat]
+  · rw [P.pairing_smul_root_eq j i i hij.symm, pairing_same]
+  · rw [← smul_comm, ← smul_assoc, map_smul]
+  · rw [← P.pairing_smul_coroot_eq j i j hij.symm, pairing_same]
+  · rw [map_smul, smul_assoc, ← Nat.cast_smul_eq_nsmul R, Nat.cast_ofNat]
 
 中文:
 引理 two_nsmul_reflection_eq_of_perm_eq
@@ -1881,7 +1899,15 @@ lemma two_nsmul_reflection_eq_of_perm_eq
     simpa [reflection_apply, smul_sub]
   calc 2 • P.toLinearMap x (P.coroot i) • P.root i
       = P.toLinearMap x (P.coroot i) • ((2 : R) • P.root i) := ?_
-    _ = P.toLinearMap x
+    _ = P.toLinearMap x (P.coroot i) • (P.pairing i j • P.root j) := ?_
+    _ = P.toLinearMap x (P.pairing i j • P.coroot i) • (P.root j) := ?_
+    _ = P.toLinearMap x ((2 : R) • P.coroot j) • (P.root j) := ?_
+    _ = 2 • P.toLinearMap x (P.coroot j) • P.root j := ?_
+  · rw [smul_comm, ← Nat.cast_smul_eq_nsmul R, Nat.cast_ofNat]
+  · rw [P.pairing_smul_root_eq j i i hij.symm, pairing_same]
+  · rw [← smul_comm, ← smul_assoc, map_smul]
+  · rw [← P.pairing_smul_coroot_eq j i j hij.symm, pairing_same]
+  · rw [map_smul, smul_assoc, ← Nat.cast_smul_eq_nsmul R, Nat.cast_ofNat]
 
 Depends on / 依赖: P.coroot, P.pairing, P.root, P.toLinearMap, coroot, pairing, reflection_apply, smul_sub, toLinearMap
 -/
@@ -1949,7 +1975,8 @@ lemma reflectionPerm_eq_reflectionPerm_iff_of_span
     | add x y _ _ hx hy => simp [hx, hy]
     | smul t x _ hx => simp [hx]
   · ext k
-    apply P
+    apply P.root.injective
+    simp [h (P.root k) (Submodule.subset_span <| mem_range_self k)]
 
 中文:
 引理 reflectionPerm_eq_reflectionPerm_iff_of_span
@@ -1963,7 +1990,8 @@ lemma reflectionPerm_eq_reflectionPerm_iff_of_span
     | add x y _ _ hx hy => simp [hx, hy]
     | smul t x _ hx => simp [hx]
   · ext k
-    apply P
+    apply P.root.injective
+    simp [h (P.root k) (Submodule.subset_span <| mem_range_self k)]
 
 Depends on / 依赖: P.root, P.root.injective, Submodule, Submodule.span_induction, Submodule.subset_span, injective, mem_range_self, root_reflectionPerm, span_induction, subset_span
 -/
@@ -2534,7 +2562,11 @@ definition map
     have : IsReflexive R N₂ := equiv g
     infer_instance
   root := (e.symm.toEmbedding.trans P.root).trans f.toEmbedding
-  coroot := (e.symm.toEmbedding.tr
+  coroot := (e.symm.toEmbedding.trans P.coroot).trans g.toEmbedding
+  root_coroot_two i := by simp
+reflectionPerm i := e.symm.trans (P.reflectionPerm (e.symm i)).trans e
+  reflectionPerm_root i j := by simp [reflection_apply]
+  reflectionPerm_coroot i j := by simp [coreflection_apply]
 
 中文:
 定义 map
@@ -2545,7 +2577,11 @@ definition map
     have : IsReflexive R N₂ := equiv g
     infer_instance
   root := (e.symm.toEmbedding.trans P.root).trans f.toEmbedding
-  coroot := (e.symm.toEmbedding.tr
+  coroot := (e.symm.toEmbedding.trans P.coroot).trans g.toEmbedding
+  root_coroot_two i := by simp
+reflectionPerm i := e.symm.trans (P.reflectionPerm (e.symm i)).trans e
+  reflectionPerm_root i j := by simp [reflection_apply]
+  reflectionPerm_coroot i j := by simp [coreflection_apply]
 -/
 protected def map (e : ι ≃ ι₂) (f : M ≃ₗ[R] M₂) (g : N ≃ₗ[R] N₂) :
     RootPairing ι₂ R M₂ N₂ where

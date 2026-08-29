@@ -141,7 +141,7 @@ theorem det_comm'
   -- Although `m` and `n` are different a priori, we will show they have the same cardinality.
   -- This turns the problem into one for square matrices, which is easy.
   let e := indexEquivOfInv hMM' hM'M
-  rw [← det_submatrix_equiv_self e]; rw [← submatrix_mul_equiv _ _ _ (Equi
+  rw [← det_submatrix_equiv_self e]; rw [← submatrix_mul_equiv _ _ _ (Equiv.refl n) _]; rw [det_comm]; rw [submatrix_mul_equiv]; rw [Equiv.coe_refl]; rw [submatrix_id_id]
 
 中文:
 定理 det_comm'
@@ -151,7 +151,7 @@ theorem det_comm'
   -- Although `m` and `n` are different a priori, we will show they have the same cardinality.
   -- This turns the problem into one for square matrices, which is easy.
   let e := indexEquivOfInv hMM' hM'M
-  rw [← det_submatrix_equiv_self e]; rw [← submatrix_mul_equiv _ _ _ (Equi
+  rw [← det_submatrix_equiv_self e]; rw [← submatrix_mul_equiv _ _ _ (Equiv.refl n) _]; rw [det_comm]; rw [submatrix_mul_equiv]; rw [Equiv.coe_refl]; rw [submatrix_id_id]
 
 Depends on / 依赖: nontriviality
 -/
@@ -246,7 +246,11 @@ theorem detAux_def'
   #adaptation_note /-- Proof repaired after leanprover/lean4#13492.
   The first line below was previously just `rw [detAux]`.
   The replacement proof is a short-term fix, and we request that the authors/maintainers of
-  this file review the proof, and either approve it by removing this note, revi
+  this file review the proof, and either approve it by removing this note, revise
+  the proof or the prerequisites appropriately, or minimize a problem in lean4 that still
+  needs addressing. -/
+  simp only [detAux_def, Trunc.lift_mk]
+  rfl
 
 中文:
 定理 detAux_def'
@@ -255,7 +259,11 @@ theorem detAux_def'
   #adaptation_note /-- Proof repaired after leanprover/lean4#13492.
   The first line below was previously just `rw [detAux]`.
   The replacement proof is a short-term fix, and we request that the authors/maintainers of
-  this file review the proof, and either approve it by removing this note, revi
+  this file review the proof, and either approve it by removing this note, revise
+  the proof or the prerequisites appropriately, or minimize a problem in lean4 that still
+  needs addressing. -/
+  simp only [detAux_def, Trunc.lift_mk]
+  rfl
 
 Depends on / 依赖: Trunc.lift_mk, adaptation_note, addressing, appropriately, approve, authors, detAux, detAux_def, either, leanprover, lift_mk, maintainers, minimize, prerequisites, previously, problem, removing, repaired, replacement, request
 -/
@@ -661,7 +669,8 @@ theorem det_smul
       exact Module.Finite.of_basis hs
     simp only [← det_toMatrix (Module.finBasis A M), map_smul, Fintype.card_fin, Matrix.det_smul]
   · classical
-     
+      have : Module.finrank A M = 0 := finrank_eq_zero_of_not_exists_basis H
+      simp [coe_det, H, this]
 
 中文:
 定理 det_smul
@@ -674,7 +683,8 @@ theorem det_smul
       exact Module.Finite.of_basis hs
     simp only [← det_toMatrix (Module.finBasis A M), map_smul, Fintype.card_fin, Matrix.det_smul]
   · classical
-     
+      have : Module.finrank A M = 0 := finrank_eq_zero_of_not_exists_basis H
+      simp [coe_det, H, this]
 
 Depends on / 依赖: Finite, Finset, Fintype, Fintype.card_fin, Matrix, Matrix.det_smul, Module, Module.Finite, Module.Finite.of_basis, Module.finBasis, Module.finrank, Nonempty, card_fin, classical, coe_det, det_smul, det_toMatrix, finBasis, finrank, finrank_eq_zero_of_not_exists_basis
 -/
@@ -851,7 +861,16 @@ theorem det_conj
   classical
     by_cases H : exists s : Finset M, Nonempty (Basis s A M)
     · rcases H with ⟨s, ⟨b⟩⟩
-      rw [← det_toMatrix b f]; rw [← det_toMatrix (b.map e)]; rw [toMatrix_comp (b.map e) b (b.map e)]; rw [toMatrix_comp (b.map e) b b]; rw [← Matrix.mul_assoc]; rw [Matrix.det_conj_of_mul_eq_on
+      rw [← det_toMatrix b f]; rw [← det_toMatrix (b.map e)]; rw [toMatrix_comp (b.map e) b (b.map e)]; rw [toMatrix_comp (b.map e) b b]; rw [← Matrix.mul_assoc]; rw [Matrix.det_conj_of_mul_eq_one]
+      · rw [← toMatrix_comp, LinearEquiv.comp_coe, e.symm_trans_self, LinearEquiv.refl_toLinearMap,
+          toMatrix_id]
+      · rw [← toMatrix_comp, LinearEquiv.comp_coe, e.self_trans_symm, LinearEquiv.refl_toLinearMap,
+          toMatrix_id]
+    · have H' : ¬exists t : Finset N, Nonempty (Basis t A N) := by
+        contrapose H
+        rcases H with ⟨s, ⟨b⟩⟩
+        exact ⟨_, ⟨(b.map e.symm).reindexFinsetRange⟩⟩
+      simp only [coe_det, H, H', MonoidHom.one_apply, dif_neg, not_false_eq_true]
 
 中文:
 定理 det_conj
@@ -860,7 +879,16 @@ theorem det_conj
   classical
     by_cases H : exists s : Finset M, Nonempty (Basis s A M)
     · rcases H with ⟨s, ⟨b⟩⟩
-      rw [← det_toMatrix b f]; rw [← det_toMatrix (b.map e)]; rw [toMatrix_comp (b.map e) b (b.map e)]; rw [toMatrix_comp (b.map e) b b]; rw [← Matrix.mul_assoc]; rw [Matrix.det_conj_of_mul_eq_on
+      rw [← det_toMatrix b f]; rw [← det_toMatrix (b.map e)]; rw [toMatrix_comp (b.map e) b (b.map e)]; rw [toMatrix_comp (b.map e) b b]; rw [← Matrix.mul_assoc]; rw [Matrix.det_conj_of_mul_eq_one]
+      · rw [← toMatrix_comp, LinearEquiv.comp_coe, e.symm_trans_self, LinearEquiv.refl_toLinearMap,
+          toMatrix_id]
+      · rw [← toMatrix_comp, LinearEquiv.comp_coe, e.self_trans_symm, LinearEquiv.refl_toLinearMap,
+          toMatrix_id]
+    · have H' : ¬exists t : Finset N, Nonempty (Basis t A N) := by
+        contrapose H
+        rcases H with ⟨s, ⟨b⟩⟩
+        exact ⟨_, ⟨(b.map e.symm).reindexFinsetRange⟩⟩
+      simp only [coe_det, H, H', MonoidHom.one_apply, dif_neg, not_false_eq_true]
 
 Depends on / 依赖: Finset, LinearEquiv, LinearEquiv.comp_coe, LinearEquiv.refl_toLinearMap, Matrix, Matrix.det_conj_of_mul_eq_one, Matrix.mul_assoc, Nonempty, b.map, classical, comp_coe, det_conj_of_mul_eq_one, det_toMatrix, e.self_trans_symm, e.symm_trans_self, mul_assoc, refl_toLinearMap, self_trans_symm, symm_trans_self, toMatrix_comp
 -/
@@ -996,7 +1024,9 @@ theorem bot_lt_ker_of_det_eq_zero
   let b := Module.finBasis R M
   suffices exists x, f x = 0 ∧ x != 0 by simpa [bot_lt_iff_ne_bot, ker_eq_bot']
   obtain ⟨v, hv_ne_zero, hv_zero⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr (det_toMatrix b f ▸ hf)
-  refine ⟨b.eq
+  refine ⟨b.equivFun.symm v, ?_, b.equivFun.symm.map_ne_zero_iff.mpr hv_ne_zero⟩
+  rw [← b.equivFun.injective.eq_iff]
+  simp_all [funext_iff, Matrix.mulVec, dotProduct, toMatrix_apply, mul_comm]
 
 中文:
 定理 bot_lt_ker_of_det_eq_zero
@@ -1006,7 +1036,9 @@ theorem bot_lt_ker_of_det_eq_zero
   let b := Module.finBasis R M
   suffices exists x, f x = 0 ∧ x != 0 by simpa [bot_lt_iff_ne_bot, ker_eq_bot']
   obtain ⟨v, hv_ne_zero, hv_zero⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr (det_toMatrix b f ▸ hf)
-  refine ⟨b.eq
+  refine ⟨b.equivFun.symm v, ?_, b.equivFun.symm.map_ne_zero_iff.mpr hv_ne_zero⟩
+  rw [← b.equivFun.injective.eq_iff]
+  simp_all [funext_iff, Matrix.mulVec, dotProduct, toMatrix_apply, mul_comm]
 
 Depends on / 依赖: Finite, Matrix, Matrix.exists_mulVec_eq_zero_iff.mpr, Matrix.mulVec, Module, Module.Finite, Module.finBasis, b.equivFun.injective.eq_iff, b.equivFun.symm, b.equivFun.symm.map_ne_zero_iff.mpr, bot_lt_iff_ne_bot, det_toMatrix, dotProduct, eq_iff, equivFun, exists_mulVec_eq_zero_iff, finBasis, finite_of_det_ne_one, funext_iff, hv_ne_zero
 -/
@@ -1032,7 +1064,7 @@ theorem det_eq_zero_iff_ker_ne_bot
   · let b := Module.finBasis R M
     obtain ⟨v, ⟨_, hv_ne_zero⟩⟩ := (ker f).ne_bot_iff.mp h
     rw [← det_toMatrix b]; rw [← Matrix.exists_mulVec_eq_zero_iff]
-    refine ⟨fun i => b.repr v i, by simpa, by simpa
+    refine ⟨fun i => b.repr v i, by simpa, by simpa [toMatrix_mulVec_repr]⟩
 
 中文:
 定理 det_eq_zero_iff_ker_ne_bot
@@ -1043,7 +1075,7 @@ theorem det_eq_zero_iff_ker_ne_bot
   · let b := Module.finBasis R M
     obtain ⟨v, ⟨_, hv_ne_zero⟩⟩ := (ker f).ne_bot_iff.mp h
     rw [← det_toMatrix b]; rw [← Matrix.exists_mulVec_eq_zero_iff]
-    refine ⟨fun i => b.repr v i, by simpa, by simpa
+    refine ⟨fun i => b.repr v i, by simpa, by simpa [toMatrix_mulVec_repr]⟩
 
 Depends on / 依赖: Matrix, Matrix.exists_mulVec_eq_zero_iff, Module, Module.finBasis, b.repr, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mp, bot_lt_ker_of_det_eq_zero, det_toMatrix, exists_mulVec_eq_zero_iff, finBasis, hv_ne_zero, ne_bot_iff, ne_bot_iff.mp, toMatrix_mulVec_repr
 -/
@@ -1184,7 +1216,19 @@ theorem det_pi
 let B := (Pi.basis (fun _ : ι => b)).reindex
     (Equiv.sigmaEquivProd _ _).trans (Equiv.prodComm _ _)
   simp_rw [← LinearMap.det_toMatrix B, ← LinearMap.det_toMatrix b]
-  have : ((LinearMap.toMatrix B B) (LinearMap.pi fun i => f i ∘ₗ LinearMap.p
+  have : ((LinearMap.toMatrix B B) (LinearMap.pi fun i => f i ∘ₗ LinearMap.proj i)) =
+      Matrix.blockDiagonal (fun i => LinearMap.toMatrix b b (f i)) := by
+    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+    unfold B
+    simp_rw [LinearMap.toMatrix_apply', Matrix.blockDiagonal_apply, Basis.coe_reindex,
+      Function.comp_apply, Basis.repr_reindex_apply, Equiv.symm_trans_apply, Equiv.prodComm_symm,
+      Equiv.prodComm_apply, Equiv.sigmaEquivProd_symm_apply, Prod.swap_prod_mk, Pi.basis_apply,
+      Pi.basis_repr, LinearMap.pi_apply, LinearMap.coe_comp, Function.comp_apply,
+      LinearMap.toMatrix_apply', LinearMap.coe_proj, Function.eval, Pi.single_apply]
+    split_ifs with h
+    · rw [h]
+    · simp only [map_zero, Finsupp.coe_zero, Pi.zero_apply]
+  rw [this]; rw [Matrix.det_blockDiagonal]
 
 中文:
 定理 det_pi
@@ -1195,7 +1239,19 @@ let B := (Pi.basis (fun _ : ι => b)).reindex
 let B := (Pi.basis (fun _ : ι => b)).reindex
     (Equiv.sigmaEquivProd _ _).trans (Equiv.prodComm _ _)
   simp_rw [← LinearMap.det_toMatrix B, ← LinearMap.det_toMatrix b]
-  have : ((LinearMap.toMatrix B B) (LinearMap.pi fun i => f i ∘ₗ LinearMap.p
+  have : ((LinearMap.toMatrix B B) (LinearMap.pi fun i => f i ∘ₗ LinearMap.proj i)) =
+      Matrix.blockDiagonal (fun i => LinearMap.toMatrix b b (f i)) := by
+    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+    unfold B
+    simp_rw [LinearMap.toMatrix_apply', Matrix.blockDiagonal_apply, Basis.coe_reindex,
+      Function.comp_apply, Basis.repr_reindex_apply, Equiv.symm_trans_apply, Equiv.prodComm_symm,
+      Equiv.prodComm_apply, Equiv.sigmaEquivProd_symm_apply, Prod.swap_prod_mk, Pi.basis_apply,
+      Pi.basis_repr, LinearMap.pi_apply, LinearMap.coe_comp, Function.comp_apply,
+      LinearMap.toMatrix_apply', LinearMap.coe_proj, Function.eval, Pi.single_apply]
+    split_ifs with h
+    · rw [h]
+    · simp only [map_zero, Finsupp.coe_zero, Pi.zero_apply]
+  rw [this]; rw [Matrix.det_blockDiagonal]
 
 Depends on / 依赖: Basis.coe_reindex, Equiv.prodComm, Equiv.sigmaEquivProd, Function, Function.comp_apply, LinearMap, LinearMap.det_toMatrix, LinearMap.pi, LinearMap.proj, LinearMap.toMatrix, LinearMap.toMatrix_apply, Matrix, Matrix.blockDiagonal, Matrix.blockDiagonal_apply, Module, Module.Free.chooseBasis, Pi.basis, blockDiagonal, blockDiagonal_apply, chooseBasis
 -/
@@ -1617,7 +1673,15 @@ definition LinearEquiv.ofIsUnitDet
   left_inv x :=
     calc toLin v' v (toMatrix v v' f)⁻¹ (f x)
       _ = toLin v v ((toMatrix v v' f)⁻¹ * toMatrix v v' f) x := by
-        rw [toLin_mul v v' v]; rw [toLin_toMatrix]; rw [LinearMap.comp_appl
+        rw [toLin_mul v v' v]; rw [toLin_toMatrix]; rw [LinearMap.comp_apply]
+      _ = x := by simp [h]
+  right_inv x :=
+    calc f (toLin v' v (toMatrix v v' f)⁻¹ x)
+      _ = toLin v' v' (toMatrix v v' f * (toMatrix v v' f)⁻¹) x := by
+        rw [toLin_mul v' v v']; rw [LinearMap.comp_apply]; rw [toLin_toMatrix v v']
+      _ = x := by simp [h]
+
+@[simp]
 
 中文:
 定义 线性等价.ofIsUnitDet
@@ -1629,7 +1693,15 @@ definition LinearEquiv.ofIsUnitDet
   left_inv x :=
     calc toLin v' v (toMatrix v v' f)⁻¹ (f x)
       _ = toLin v v ((toMatrix v v' f)⁻¹ * toMatrix v v' f) x := by
-        rw [toLin_mul v v' v]; rw [toLin_toMatrix]; rw [LinearMap.comp_appl
+        rw [toLin_mul v v' v]; rw [toLin_toMatrix]; rw [LinearMap.comp_apply]
+      _ = x := by simp [h]
+  right_inv x :=
+    calc f (toLin v' v (toMatrix v v' f)⁻¹ x)
+      _ = toLin v' v' (toMatrix v v' f * (toMatrix v v' f)⁻¹) x := by
+        rw [toLin_mul v' v v']; rw [LinearMap.comp_apply]; rw [toLin_toMatrix v v']
+      _ = x := by simp [h]
+
+@[simp]
 -/
 def LinearEquiv.ofIsUnitDet {f : M ->ₗ[R] M'} {v : Basis ι R M} {v' : Basis ι R M'}
     (h : IsUnit (LinearMap.toMatrix v v' f).det) : M ≃ₗ[R] M' where
@@ -1683,7 +1755,10 @@ definition LinearMap.equivOfIsUnitDet
     have : Finite ι := Module.Finite.finite_basis b
     have : Fintype ι := Fintype.ofFinite ι
     have : DecidableEq ι := Classical.typeDecidableEq ι
-    exact LinearEquiv.ofIsUnitDet (v := b) (v' := b) (f := f) (
+    exact LinearEquiv.ofIsUnitDet (v := b) (v' := b) (f := f) (by rwa [det_toMatrix b])
+  · exact 1
+
+@[simp]
 
 中文:
 定义 线性映射.equivOfIsUnitDet
@@ -1693,7 +1768,10 @@ definition LinearMap.equivOfIsUnitDet
     have : Finite ι := Module.Finite.finite_basis b
     have : Fintype ι := Fintype.ofFinite ι
     have : DecidableEq ι := Classical.typeDecidableEq ι
-    exact LinearEquiv.ofIsUnitDet (v := b) (v' := b) (f := f) (
+    exact LinearEquiv.ofIsUnitDet (v := b) (v' := b) (f := f) (by rwa [det_toMatrix b])
+  · exact 1
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.typeDecidableEq, DecidableEq, Finite, Fintype, Fintype.ofFinite, LinearEquiv, LinearEquiv.ofIsUnitDet, Module, Module.Finite.finite_basis, Module.Free.exists_basis, Nontrivial, det_toMatrix, exists_basis, finite_basis, ofFinite, ofIsUnitDet, typeDecidableEq
 -/
@@ -2004,7 +2082,12 @@ theorem is_basis_iff_det
     simp [v']
   · intro h
     rw [Basis.det_apply]; rw [Basis.toMatrix_eq_toMatrix_constr] at h
-    set v' := Basis.ma
+    set v' := Basis.map e (LinearEquiv.ofIsUnitDet h) with v'_def
+    have : ⇑v' = v := by
+      ext i
+      rw [v'_def]; rw [Basis.map_apply]; rw [LinearEquiv.ofIsUnitDet_apply]; rw [e.constr_basis]
+    rw [← this]
+    exact ⟨v'.linearIndependent, v'.span_eq⟩
 
 中文:
 定理 is_basis_iff_det
@@ -2019,7 +2102,12 @@ theorem is_basis_iff_det
     simp [v']
   · intro h
     rw [Basis.det_apply]; rw [Basis.toMatrix_eq_toMatrix_constr] at h
-    set v' := Basis.ma
+    set v' := Basis.map e (LinearEquiv.ofIsUnitDet h) with v'_def
+    have : ⇑v' = v := by
+      ext i
+      rw [v'_def]; rw [Basis.map_apply]; rw [LinearEquiv.ofIsUnitDet_apply]; rw [e.constr_basis]
+    rw [← this]
+    exact ⟨v'.linearIndependent, v'.span_eq⟩
 
 Depends on / 依赖: Basis.det_apply, Basis.map, Basis.map_apply, Basis.mk, Basis.toMatrix_eq_toMatrix_constr, LinearEquiv, LinearEquiv.isUnit_det, LinearEquiv.ofIsUnitDet, LinearEquiv.ofIsUnitDet_apply, LinearEquiv.refl, _def, constr_basis, convert, det_apply, e.constr_basis, e.det_apply, hspan.ge, isUnit_det, linearIndependent, map_apply
 -/
@@ -2459,7 +2547,7 @@ theorem det_smul_mk_coord_eq_det_update
   · rw [mk_coord_apply_eq, mul_one, update_eq_self]
     congr
   · rw [mk_coord_apply_ne hik, mul_zero, eq_comm]
-   
+    exact e.det.map_eq_zero_of_eq _ (by simp [hik]) hik
 
 中文:
 定理 det_smul_mk_coord_eq_det_update
@@ -2473,7 +2561,7 @@ theorem det_smul_mk_coord_eq_det_update
   · rw [mk_coord_apply_eq, mul_one, update_eq_self]
     congr
   · rw [mk_coord_apply_ne hik, mul_zero, eq_comm]
-   
+    exact e.det.map_eq_zero_of_eq _ (by simp [hik]) hik
 
 Depends on / 依赖: Basis.mk, LinearMap, LinearMap.smul_apply, MultilinearMap, MultilinearMap.toLinearMap_apply, coe_mk, e.det.map_eq_zero_of_eq, eq_comm, eq_or_ne, map_eq_zero_of_eq, mk_coord_apply_eq, mk_coord_apply_ne, mul_one, mul_zero, smul_apply, smul_eq_mul, toLinearMap_apply, update_eq_self
 -/
@@ -2631,7 +2719,31 @@ theorem LinearMap.det_eq_det_mul_det
   let n := Module.Free.ChooseBasisIndex R (V ⧸ W)
   let bQ : Basis n R (V ⧸ W) := Module.Free.chooseBasis R (V ⧸ W)
   let b := sumQuot bW bQ
-  let A : Matrix m m R := LinearMap.toMatrix bW bW (e.rest
+  let A : Matrix m m R := LinearMap.toMatrix bW bW (e.restrict he)
+  let B : Matrix m n R := Matrix.of fun i l =>
+    ((sumQuot bW bQ).repr (e ((sumQuot bW bQ) (Sum.inr l)))) (Sum.inl i)
+  let D : Matrix n n R := LinearMap.toMatrix bQ bQ (W.mapQ W e he)
+  suffices LinearMap.toMatrix b b e = Matrix.fromBlocks A B 0 D by
+    rw [← LinearMap.det_toMatrix b]; rw [this]; rw [← LinearMap.det_toMatrix bW]; rw [← LinearMap.det_toMatrix bQ]; rw [Matrix.det_fromBlocks_zero₂₁]
+  ext u v
+  cases u with
+  | inl i =>
+    cases v with
+    | inl k =>
+      simp only [b, sumQuot_inl, Matrix.fromBlocks_apply₁₁, A, LinearMap.toMatrix_apply]
+      apply sumQuot_repr_inl_of_mem
+    | inr l => simp [b, LinearMap.toMatrix_apply, Matrix.fromBlocks_apply₁₂, B]
+  | inr j =>
+    cases v with
+    | inl k =>
+      suffices W.mkQ (e (bW k)) = 0 by simp [LinearMap.toMatrix_apply, b, this]
+      rw [← LinearMap.mem_ker]; rw [Submodule.ker_mkQ]
+      exact he (Submodule.coe_mem (bW k))
+    | inr l =>
+      simp only [LinearMap.toMatrix_apply, sumQuot_repr_inr,
+        Matrix.fromBlocks_apply₂₂, b, D]
+      rw [← sumQuot_inr bW bQ l]; rw [W.mapQ_apply]
+      simp
 
 中文:
 定理 线性映射.det_eq_det_mul_det
@@ -2642,7 +2754,31 @@ theorem LinearMap.det_eq_det_mul_det
   let n := Module.Free.ChooseBasisIndex R (V ⧸ W)
   let bQ : Basis n R (V ⧸ W) := Module.Free.chooseBasis R (V ⧸ W)
   let b := sumQuot bW bQ
-  let A : Matrix m m R := LinearMap.toMatrix bW bW (e.rest
+  let A : Matrix m m R := LinearMap.toMatrix bW bW (e.restrict he)
+  let B : Matrix m n R := Matrix.of fun i l =>
+    ((sumQuot bW bQ).repr (e ((sumQuot bW bQ) (Sum.inr l)))) (Sum.inl i)
+  let D : Matrix n n R := LinearMap.toMatrix bQ bQ (W.mapQ W e he)
+  suffices LinearMap.toMatrix b b e = Matrix.fromBlocks A B 0 D by
+    rw [← LinearMap.det_toMatrix b]; rw [this]; rw [← LinearMap.det_toMatrix bW]; rw [← LinearMap.det_toMatrix bQ]; rw [Matrix.det_fromBlocks_zero₂₁]
+  ext u v
+  cases u with
+  | inl i =>
+    cases v with
+    | inl k =>
+      simp only [b, sumQuot_inl, Matrix.fromBlocks_apply₁₁, A, LinearMap.toMatrix_apply]
+      apply sumQuot_repr_inl_of_mem
+    | inr l => simp [b, LinearMap.toMatrix_apply, Matrix.fromBlocks_apply₁₂, B]
+  | inr j =>
+    cases v with
+    | inl k =>
+      suffices W.mkQ (e (bW k)) = 0 by simp [LinearMap.toMatrix_apply, b, this]
+      rw [← LinearMap.mem_ker]; rw [Submodule.ker_mkQ]
+      exact he (Submodule.coe_mem (bW k))
+    | inr l =>
+      simp only [LinearMap.toMatrix_apply, sumQuot_repr_inr,
+        Matrix.fromBlocks_apply₂₂, b, D]
+      rw [← sumQuot_inr bW bQ l]; rw [W.mapQ_apply]
+      simp
 
 Depends on / 依赖: ChooseBasisIndex, LinearMap, LinearMap.toMat, LinearMap.toMatrix, Matrix, Matrix.of, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Sum.inl, Sum.inr, W.mapQ, chooseBasis, e.restrict, restrict, sumQuot, toMatrix
 -/

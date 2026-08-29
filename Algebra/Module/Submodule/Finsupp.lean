@@ -52,7 +52,19 @@ lemma set_smul_eq_map
   · intro x hx
     obtain ⟨c, hc, rfl⟩ := hx
     simp only [LinearMap.coe_comp, coe_subtype, Finsupp.coe_lsum, Finsupp.sum, Function.comp_apply]
-    rw [AddSubmonoid.co
+    rw [AddSubmonoid.coe_finsetSum]
+    refine Submodule.sum_mem (p := sR • N) (t := c.support) ?_ _ ⟨sR • N, ?_⟩
+    · rintro r hr
+      rw [mem_set_smul_def]; rw [Submodule.mem_sInf]
+      rintro p hp
+      exact hp (hc hr) (c r).2
+    · ext x : 1
+      simp only [Set.mem_iInter, SetLike.mem_coe]
+      fconstructor
+      · refine fun h => h fun r n hr hn => ?_
+        rw [mem_set_smul_def]; rw [mem_sInf]
+        exact fun p hp => hp hr hn
+      · simp_all
 
 中文:
 引理 set_smul_eq_map
@@ -64,7 +76,19 @@ lemma set_smul_eq_map
   · intro x hx
     obtain ⟨c, hc, rfl⟩ := hx
     simp only [LinearMap.coe_comp, coe_subtype, Finsupp.coe_lsum, Finsupp.sum, Function.comp_apply]
-    rw [AddSubmonoid.co
+    rw [AddSubmonoid.coe_finsetSum]
+    refine Submodule.sum_mem (p := sR • N) (t := c.support) ?_ _ ⟨sR • N, ?_⟩
+    · rintro r hr
+      rw [mem_set_smul_def]; rw [Submodule.mem_sInf]
+      rintro p hp
+      exact hp (hc hr) (c r).2
+    · ext x : 1
+      simp only [Set.mem_iInter, SetLike.mem_coe]
+      fconstructor
+      · refine fun h => h fun r n hr hn => ?_
+        rw [mem_set_smul_def]; rw [mem_sInf]
+        exact fun p hp => hp hr hn
+      · simp_all
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.coe_finsetSum, Finsupp, Finsupp.coe_lsum, Finsupp.single, Finsupp.single_mem_supported, Finsupp.sum, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, Set.mem_iInter, Submodule, Submodule.mem_sInf, Submodule.sum_mem, c.support, coe_comp, coe_finsetSum, coe_lsum, coe_subtype
 -/
@@ -108,7 +132,7 @@ lemma mem_set_smul
   · rw [mem_set_smul_def, Submodule.mem_sInf]
     rintro ⟨c, hc1, rfl⟩ p hp
     rw [Finsupp.sum]; rw [AddSubmonoid.coe_finsetSum]
-    exact Submodule.sum_mem _ fun r hr => hp (hc1 hr) (c _
+    exact Submodule.sum_mem _ fun r hr => hp (hc1 hr) (c _).2
 
 中文:
 引理 mem_set_smul
@@ -122,7 +146,7 @@ lemma mem_set_smul
   · rw [mem_set_smul_def, Submodule.mem_sInf]
     rintro ⟨c, hc1, rfl⟩ p hp
     rw [Finsupp.sum]; rw [AddSubmonoid.coe_finsetSum]
-    exact Submodule.sum_mem _ fun r hr => hp (hc1 hr) (c _
+    exact Submodule.sum_mem _ fun r hr => hp (hc1 hr) (c _).2
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.coe_finsetSum, Finsupp, Finsupp.sum, Submodule, Submodule.mem_sInf, Submodule.sum_mem, coe_finsetSum, fconstructor, mem_sInf, mem_set_smul_def, set_smul_eq_map, sum_mem
 -/
@@ -155,7 +179,15 @@ definition noncomputable
       fun h => ⟨m, h, (one_smul _ _).symm⟩⟩
   mul_smul s t x := le_antisymm
     (set_smul_le _ _ _ <| by rintro _ _ ⟨_, _, _, _, rfl⟩ _; rw [mul_smul]; aesop)
-    (set_sm
+    (set_smul_le _ _ _ fun r m hr hm => by
+have : SMulCommClass R R x := ⟨fun r s m => Subtype.ext smul_comm _ _ _⟩
+.mp hm obtain ⟨c, hc1, rfl⟩ := mem_set_smul _ _ _
+      rw [Finsupp.sum]; rw [AddSubmonoid.coe_finsetSum]
+      simp only [SetLike.val_smul, Finset.smul_sum, smul_smul]
+      exact Submodule.sum_mem _ fun r' hr' =>
+        mem_set_smul_of_mem_mem (Set.mul_mem_mul hr (hc1 hr')) (c _).2)
+
+scoped[Pointwise] attribute [instance] Submodule.pointwiseSetMulAction
 
 中文:
 定义 noncomputable
@@ -165,7 +197,15 @@ definition noncomputable
       fun h => ⟨m, h, (one_smul _ _).symm⟩⟩
   mul_smul s t x := le_antisymm
     (set_smul_le _ _ _ <| by rintro _ _ ⟨_, _, _, _, rfl⟩ _; rw [mul_smul]; aesop)
-    (set_sm
+    (set_smul_le _ _ _ fun r m hr hm => by
+have : SMulCommClass R R x := ⟨fun r s m => Subtype.ext smul_comm _ _ _⟩
+.mp hm obtain ⟨c, hc1, rfl⟩ := mem_set_smul _ _ _
+      rw [Finsupp.sum]; rw [AddSubmonoid.coe_finsetSum]
+      simp only [SetLike.val_smul, Finset.smul_sum, smul_smul]
+      exact Submodule.sum_mem _ fun r' hr' =>
+        mem_set_smul_of_mem_mem (Set.mul_mem_mul hr (hc1 hr')) (c _).2)
+
+scoped[Pointwise] attribute [instance] Submodule.pointwiseSetMulAction
 -/
 protected noncomputable def pointwiseSetMulAction [SMulCommClass R R M] :
     MulAction (Set R) (Submodule R M) where
@@ -200,7 +240,11 @@ definition noncomputable
       rw [add_eq_sup]; rw [Submodule.mem_sup] at hm
       obtain ⟨a, ha, b, hb, rfl⟩ := hm
       rw [smul_add]; rw [add_eq_sup]; rw [Submodule.mem_sup]
-      exact ⟨r • a, mem_set_smul_of_mem_mem (mem1
+      exact ⟨r • a, mem_set_smul_of_mem_mem (mem1 := hr) (mem2 := ha),
+        r • b, mem_set_smul_of_mem_mem (mem1 := hr) (mem2 := hb), rfl⟩)
+    (sup_le_iff.mpr ⟨smul_mono_right _ le_sup_left, smul_mono_right _ le_sup_right⟩)
+
+scoped[Pointwise] attribute [instance] Submodule.pointwiseSetDistribMulAction
 
 中文:
 定义 noncomputable
@@ -212,7 +256,11 @@ definition noncomputable
       rw [add_eq_sup]; rw [Submodule.mem_sup] at hm
       obtain ⟨a, ha, b, hb, rfl⟩ := hm
       rw [smul_add]; rw [add_eq_sup]; rw [Submodule.mem_sup]
-      exact ⟨r • a, mem_set_smul_of_mem_mem (mem1
+      exact ⟨r • a, mem_set_smul_of_mem_mem (mem1 := hr) (mem2 := ha),
+        r • b, mem_set_smul_of_mem_mem (mem1 := hr) (mem2 := hb), rfl⟩)
+    (sup_le_iff.mpr ⟨smul_mono_right _ le_sup_left, smul_mono_right _ le_sup_right⟩)
+
+scoped[Pointwise] attribute [instance] Submodule.pointwiseSetDistribMulAction
 -/
 protected noncomputable def pointwiseSetDistribMulAction [SMulCommClass R R M] :
     DistribMulAction (Set R) (Submodule R M) where

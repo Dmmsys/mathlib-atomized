@@ -854,7 +854,12 @@ definition mkSubProof
     if k₁ < k₂ then
       let pf := mkSubProof iR iM iRM t₁ (((a₂, x₂), k₂) ::ᵣ t₂)
       (q(NF.sub_eq_eval₁ ($a₁, $x₁) $pf):)
-    el
+    else if k₁ = k₂ then
+      let pf := mkSubProof iR iM iRM t₁ t₂
+      (q(NF.sub_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
+    else
+      let pf := mkSubProof iR iM iRM (((a₁, x₁), k₁) ::ᵣ t₁) t₂
+      (q(NF.sub_eq_eval₃ ($a₂, $x₂) $pf):)
 
 中文:
 定义 mkSubProof
@@ -866,7 +871,12 @@ definition mkSubProof
     if k₁ < k₂ then
       let pf := mkSubProof iR iM iRM t₁ (((a₂, x₂), k₂) ::ᵣ t₂)
       (q(NF.sub_eq_eval₁ ($a₁, $x₁) $pf):)
-    el
+    else if k₁ = k₂ then
+      let pf := mkSubProof iR iM iRM t₁ t₂
+      (q(NF.sub_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
+    else
+      let pf := mkSubProof iR iM iRM (((a₁, x₁), k₁) ::ᵣ t₁) t₂
+      (q(NF.sub_eq_eval₃ ($a₂, $x₂) $pf):)
 
 Depends on / 依赖: NF.eval, NF.sub_eq_eval, NF.zero_sub_eq_eval, l.toNF, mkSubProof, sub_zero, zero_sub_eq_eval
 -/
@@ -902,7 +912,28 @@ if ← withReducible isDefEq R₁ R₂ then
   -- the case when `R₁ = R₂` is handled separately, so as not to require commutativity of that ring
     pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂, (q(@rfl _ (NF.eval $(l₂.toNF))):)⟩,
       r, (q(@rfl _ ($r • $x)):)⟩
-  -- otherwise the "smaller" of the two ri
+  -- otherwise the "smaller" of the two rings must be commutative
+  else try
+    -- first try to exhibit `R₂` as an `R₁`-algebra
+    let _i₁ ← synthInstanceQ q(CommSemiring $R₁)
+    let _i₃ ← synthInstanceQ q(Algebra $R₁ $R₂)
+    let _i₄ ← synthInstanceQ q(IsScalarTower $R₁ $R₂ $M)
+    assumeInstancesCommute
+    let l₁' : qNF R₂ M := l₁.onScalar q(algebraMap $R₁ $R₂)
+    pure ⟨u₂, R₂, iR₂, iRM₂, ⟨l₁', (q(NF.eval_algebraMap $R₂ $(l₁.toNF)):)⟩, ⟨l₂, q(rfl)⟩,
+      r, q(rfl)⟩
+  catch _ => try
+    -- then if that fails, try to exhibit `R₁` as an `R₂`-algebra
+    let _i₁ ← synthInstanceQ q(CommSemiring $R₂)
+    let _i₃ ← synthInstanceQ q(Algebra $R₂ $R₁)
+    let _i₄ ← synthInstanceQ q(IsScalarTower $R₂ $R₁ $M)
+    assumeInstancesCommute
+    let l₂' : qNF R₁ M := l₂.onScalar q(algebraMap $R₂ $R₁)
+    let r' : Q($R₁) := q(algebraMap $R₂ $R₁ $r)
+    pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂', (q(NF.eval_algebraMap $R₁ $(l₂.toNF)):)⟩,
+      r', (q(IsScalarTower.algebraMap_smul $R₁ $r $x):)⟩
+  catch _ =>
+    throwError "match_scalars failed: {R₁} is not an {R₂}-algebra and {R₂} is not an {R₁}-algebra"
 
 中文:
 定义 matchRings
@@ -912,7 +943,28 @@ if ← withReducible isDefEq R₁ R₂ then
   -- the case when `R₁ = R₂` is handled separately, so as not to require commutativity of that ring
     pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂, (q(@rfl _ (NF.eval $(l₂.toNF))):)⟩,
       r, (q(@rfl _ ($r • $x)):)⟩
-  -- otherwise the "smaller" of the two ri
+  -- otherwise the "smaller" of the two rings must be commutative
+  else try
+    -- first try to exhibit `R₂` as an `R₁`-algebra
+    let _i₁ ← synthInstanceQ q(CommSemiring $R₁)
+    let _i₃ ← synthInstanceQ q(Algebra $R₁ $R₂)
+    let _i₄ ← synthInstanceQ q(IsScalarTower $R₁ $R₂ $M)
+    assumeInstancesCommute
+    let l₁' : qNF R₂ M := l₁.onScalar q(algebraMap $R₁ $R₂)
+    pure ⟨u₂, R₂, iR₂, iRM₂, ⟨l₁', (q(NF.eval_algebraMap $R₂ $(l₁.toNF)):)⟩, ⟨l₂, q(rfl)⟩,
+      r, q(rfl)⟩
+  catch _ => try
+    -- then if that fails, try to exhibit `R₁` as an `R₂`-algebra
+    let _i₁ ← synthInstanceQ q(CommSemiring $R₂)
+    let _i₃ ← synthInstanceQ q(Algebra $R₂ $R₁)
+    let _i₄ ← synthInstanceQ q(IsScalarTower $R₂ $R₁ $M)
+    assumeInstancesCommute
+    let l₂' : qNF R₁ M := l₂.onScalar q(algebraMap $R₂ $R₁)
+    let r' : Q($R₁) := q(algebraMap $R₂ $R₁ $r)
+    pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂', (q(NF.eval_algebraMap $R₁ $(l₂.toNF)):)⟩,
+      r', (q(IsScalarTower.algebraMap_smul $R₁ $r $x):)⟩
+  catch _ =>
+    throwError "match_scalars failed: {R₁} is not an {R₂}-algebra and {R₂} is not an {R₁}-algebra"
 -/
 def matchRings (l₁ : qNF R₁ M) (l₂ : qNF R₂ M) (r : Q($R₂)) (x : Q($M)) :
 MetaM Σ u : Level, Σ R : Q(Type u), Σ iR : Q(Semiring $R), Σ _ : Q(@Module $R $M $iR $iM),
@@ -965,7 +1017,57 @@ definition parse
     let ⟨_, _, _, iRM₁, l₁', pf₁'⟩ ← parse iM x₁
     let ⟨_, _, _, iRM₂, l₂', pf₂'⟩ ← parse iM x₂
     -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂`
-    let ⟨u, R, iR, iRM, ⟨l₁, pf
+    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁' l₂' q(0) q(0)
+    -- build the new list and proof
+    let pf := qNF.mkAddProof iRM l₁ l₂
+    pure ⟨u, R, iR, iRM, qNF.add iR l₁ l₂, (q(NF.add_eq_eval $pf₁' $pf₂' $pf₁ $pf₂ $pf):)⟩
+  /- parse a subtraction: `x₁ - x₂` -/
+  | ~q(@HSub.hSub _ _ _ (@instHSub _ $iM') $x₁ $x₂) =>
+    let ⟨_, _, _, iRM₁, l₁'', pf₁''⟩ ← parse iM x₁
+    let ⟨_, _, _, iRM₂, l₂'', pf₂''⟩ ← parse iM x₂
+    -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂ ⊗ ℤ`
+    let iZ := q(Int.instSemiring)
+    let iMZ ← synthInstanceQ q(Module Int $M)
+    let ⟨_, _, _, iRM₁', ⟨l₁', pf₁'⟩, _, _⟩ ← qNF.matchRings iRM₁ iZ iMZ l₁'' [] q(0) q(0)
+    let ⟨_, _, _, iRM₂', ⟨l₂', pf₂'⟩, _, _⟩ ← qNF.matchRings iRM₂ iZ iMZ l₂'' [] q(0) q(0)
+    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁' _ iRM₂' l₁' l₂' q(0) q(0)
+    let iR' ← synthInstanceQ q(Ring $R)
+    let iM' ← synthInstanceQ q(AddCommGroup $M)
+    assumeInstancesCommute
+    -- build the new list and proof
+    let pf := qNF.mkSubProof iR' iM' iRM l₁ l₂
+    pure ⟨u, R, iR, iRM, qNF.sub iR' l₁ l₂,
+      q(NF.sub_eq_eval $pf₁'' $pf₂'' $pf₁' $pf₂' $pf₁ $pf₂ $pf)⟩
+  /- parse a negation: `-y` -/
+  | ~q(@Neg.neg _ $iM' $y) =>
+    let ⟨u₀, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
+    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ ℤ`
+    let _i ← synthInstanceQ q(AddCommGroup $M)
+    let iZ := q(Int.instSemiring)
+    let iMZ ← synthInstanceQ q(Module Int $M)
+    let ⟨u, R, iR, iRM, ⟨l, pf⟩, _, _⟩ ← qNF.matchRings iRM₀ iZ iMZ l₀ [] q(0) q(0)
+    let _i' ← synthInstanceQ q(Ring $R)
+    assumeInstancesCommute
+    -- build the new list and proof
+    pure ⟨u, R, iR, iRM, l.onScalar q(Neg.neg), (q(NF.neg_eq_eval $pf $pf₀):)⟩
+  /- parse a scalar multiplication: `(s₀ : S) • y` -/
+  | ~q(@HSMul.hSMul _ _ _ (@instHSMul $S _ $iS) $s₀ $y) =>
+    let ⟨_, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
+    let i₁ ← synthInstanceQ q(Semiring $S)
+    let i₂ ← synthInstanceQ q(Module $S $M)
+    assumeInstancesCommute
+    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ S`
+    let ⟨u, R, iR, iRM, ⟨l, pf_l⟩, _, ⟨s, pf_r⟩⟩ ← qNF.matchRings iRM₀ i₁ i₂ l₀ [] s₀ y
+    -- build the new list and proof
+    pure ⟨u, R, iR, iRM, l.onScalar q(HMul.hMul $s), (q(NF.smul_eq_eval $pf₀ $pf_l $pf_r) :)⟩
+  /- parse a `(0:M)` -/
+  | ~q(0) =>
+    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [], q(NF.zero_eq_eval $M)⟩
+  /- anything else should be treated as an atom -/
+  | _ =>
+    let (k, ⟨x', _⟩) ← AtomM.addAtomQ x
+    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [((q(1), x'), k)],
+      q(NF.atom_eq_eval $x')⟩
 
 中文:
 定义 parse
@@ -977,7 +1079,57 @@ definition parse
     let ⟨_, _, _, iRM₁, l₁', pf₁'⟩ ← parse iM x₁
     let ⟨_, _, _, iRM₂, l₂', pf₂'⟩ ← parse iM x₂
     -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂`
-    let ⟨u, R, iR, iRM, ⟨l₁, pf
+    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁' l₂' q(0) q(0)
+    -- build the new list and proof
+    let pf := qNF.mkAddProof iRM l₁ l₂
+    pure ⟨u, R, iR, iRM, qNF.add iR l₁ l₂, (q(NF.add_eq_eval $pf₁' $pf₂' $pf₁ $pf₂ $pf):)⟩
+  /- parse a subtraction: `x₁ - x₂` -/
+  | ~q(@HSub.hSub _ _ _ (@instHSub _ $iM') $x₁ $x₂) =>
+    let ⟨_, _, _, iRM₁, l₁'', pf₁''⟩ ← parse iM x₁
+    let ⟨_, _, _, iRM₂, l₂'', pf₂''⟩ ← parse iM x₂
+    -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂ ⊗ ℤ`
+    let iZ := q(Int.instSemiring)
+    let iMZ ← synthInstanceQ q(Module Int $M)
+    let ⟨_, _, _, iRM₁', ⟨l₁', pf₁'⟩, _, _⟩ ← qNF.matchRings iRM₁ iZ iMZ l₁'' [] q(0) q(0)
+    let ⟨_, _, _, iRM₂', ⟨l₂', pf₂'⟩, _, _⟩ ← qNF.matchRings iRM₂ iZ iMZ l₂'' [] q(0) q(0)
+    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁' _ iRM₂' l₁' l₂' q(0) q(0)
+    let iR' ← synthInstanceQ q(Ring $R)
+    let iM' ← synthInstanceQ q(AddCommGroup $M)
+    assumeInstancesCommute
+    -- build the new list and proof
+    let pf := qNF.mkSubProof iR' iM' iRM l₁ l₂
+    pure ⟨u, R, iR, iRM, qNF.sub iR' l₁ l₂,
+      q(NF.sub_eq_eval $pf₁'' $pf₂'' $pf₁' $pf₂' $pf₁ $pf₂ $pf)⟩
+  /- parse a negation: `-y` -/
+  | ~q(@Neg.neg _ $iM' $y) =>
+    let ⟨u₀, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
+    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ ℤ`
+    let _i ← synthInstanceQ q(AddCommGroup $M)
+    let iZ := q(Int.instSemiring)
+    let iMZ ← synthInstanceQ q(Module Int $M)
+    let ⟨u, R, iR, iRM, ⟨l, pf⟩, _, _⟩ ← qNF.matchRings iRM₀ iZ iMZ l₀ [] q(0) q(0)
+    let _i' ← synthInstanceQ q(Ring $R)
+    assumeInstancesCommute
+    -- build the new list and proof
+    pure ⟨u, R, iR, iRM, l.onScalar q(Neg.neg), (q(NF.neg_eq_eval $pf $pf₀):)⟩
+  /- parse a scalar multiplication: `(s₀ : S) • y` -/
+  | ~q(@HSMul.hSMul _ _ _ (@instHSMul $S _ $iS) $s₀ $y) =>
+    let ⟨_, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
+    let i₁ ← synthInstanceQ q(Semiring $S)
+    let i₂ ← synthInstanceQ q(Module $S $M)
+    assumeInstancesCommute
+    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ S`
+    let ⟨u, R, iR, iRM, ⟨l, pf_l⟩, _, ⟨s, pf_r⟩⟩ ← qNF.matchRings iRM₀ i₁ i₂ l₀ [] s₀ y
+    -- build the new list and proof
+    pure ⟨u, R, iR, iRM, l.onScalar q(HMul.hMul $s), (q(NF.smul_eq_eval $pf₀ $pf_l $pf_r) :)⟩
+  /- parse a `(0:M)` -/
+  | ~q(0) =>
+    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [], q(NF.zero_eq_eval $M)⟩
+  /- anything else should be treated as an atom -/
+  | _ =>
+    let (k, ⟨x', _⟩) ← AtomM.addAtomQ x
+    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [((q(1), x'), k)],
+      q(NF.atom_eq_eval $x')⟩
 -/
 partial def parse (iM : Q(AddCommMonoid $M)) (x : Q($M)) :
     AtomM (Σ u : Level, Σ R : Q(Type u), Σ iR : Q(Semiring $R), Σ _ : Q(@Module $R $M $iR $iM),
@@ -1053,7 +1205,32 @@ definition reduceCoefficientwise
     let pf : Q(NF.eval $(l₁.toNF) = NF.eval $(l₁.toNF)) := q(rfl)
     pure ([], pf)
   /- if one of the lists is empty and the other one is not, recurse down the nonempty one,
-    forming goals that each
+    forming goals that each of the listed coefficients is equal to
+    zero -/
+  | [], ((a, x), _) ::ᵣ L =>
+    let mvar : Q((0:$R) = $a) ← mkFreshExprMVar q((0:$R) = $a)
+    let (mvars, pf) ← reduceCoefficientwise iRM [] L
+    pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x $mvar $pf):))
+  | ((a, x), _) ::ᵣ L, [] =>
+    let mvar : Q($a = (0:$R)) ← mkFreshExprMVar q($a = (0:$R))
+    let (mvars, pf) ← reduceCoefficientwise iRM L []
+    pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x $mvar $pf):))
+  /- if both lists are nonempty, then deal with the numerically-smallest term in either list,
+    forming a goal that it is equal to zero (if it appears in only one list) or that its
+    coefficients in the two lists are the same (if it appears in both lists); then recurse -/
+  | ((a₁, x₁), k₁) ::ᵣ L₁, ((a₂, x₂), k₂) ::ᵣ L₂ =>
+    if k₁ < k₂ then
+      let mvar : Q($a₁ = (0:$R)) ← mkFreshExprMVar q($a₁ = (0:$R))
+      let (mvars, pf) ← reduceCoefficientwise iRM L₁ l₂
+      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x₁ $mvar $pf):))
+    else if k₁ = k₂ then
+      let mvar : Q($a₁ = $a₂) ← mkFreshExprMVar q($a₁ = $a₂)
+      let (mvars, pf) ← reduceCoefficientwise iRM L₁ L₂
+      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_cons $x₁ $mvar $pf):))
+    else
+      let mvar : Q((0:$R) = $a₂) ← mkFreshExprMVar q((0:$R) = $a₂)
+      let (mvars, pf) ← reduceCoefficientwise iRM l₁ L₂
+      pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x₂ $mvar $pf):))
 
 中文:
 定义 reduceCoefficientwise
@@ -1065,7 +1242,32 @@ definition reduceCoefficientwise
     let pf : Q(NF.eval $(l₁.toNF) = NF.eval $(l₁.toNF)) := q(rfl)
     pure ([], pf)
   /- if one of the lists is empty and the other one is not, recurse down the nonempty one,
-    forming goals that each
+    forming goals that each of the listed coefficients is equal to
+    zero -/
+  | [], ((a, x), _) ::ᵣ L =>
+    let mvar : Q((0:$R) = $a) ← mkFreshExprMVar q((0:$R) = $a)
+    let (mvars, pf) ← reduceCoefficientwise iRM [] L
+    pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x $mvar $pf):))
+  | ((a, x), _) ::ᵣ L, [] =>
+    let mvar : Q($a = (0:$R)) ← mkFreshExprMVar q($a = (0:$R))
+    let (mvars, pf) ← reduceCoefficientwise iRM L []
+    pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x $mvar $pf):))
+  /- if both lists are nonempty, then deal with the numerically-smallest term in either list,
+    forming a goal that it is equal to zero (if it appears in only one list) or that its
+    coefficients in the two lists are the same (if it appears in both lists); then recurse -/
+  | ((a₁, x₁), k₁) ::ᵣ L₁, ((a₂, x₂), k₂) ::ᵣ L₂ =>
+    if k₁ < k₂ then
+      let mvar : Q($a₁ = (0:$R)) ← mkFreshExprMVar q($a₁ = (0:$R))
+      let (mvars, pf) ← reduceCoefficientwise iRM L₁ l₂
+      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x₁ $mvar $pf):))
+    else if k₁ = k₂ then
+      let mvar : Q($a₁ = $a₂) ← mkFreshExprMVar q($a₁ = $a₂)
+      let (mvars, pf) ← reduceCoefficientwise iRM L₁ L₂
+      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_cons $x₁ $mvar $pf):))
+    else
+      let mvar : Q((0:$R) = $a₂) ← mkFreshExprMVar q((0:$R) = $a₂)
+      let (mvars, pf) ← reduceCoefficientwise iRM l₁ L₂
+      pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x₂ $mvar $pf):))
 -/
 partial def reduceCoefficientwise {R : Q(Type u)} {_ : Q(AddCommMonoid $M)} {_ : Q(Semiring $R)}
     (iRM : Q(Module $R $M)) (l₁ l₂ : qNF R M) :
@@ -1116,7 +1318,37 @@ definition matchScalarsAux
     match (← g.getType').eq? with
     | some e => pure e
     | none => throwError "goal {← g.getType} is not an equality"
-  let .sort v₀ ← whn
+  let .sort v₀ ← whnf (← inferType eqData.1) | unreachable!
+  let some v := v₀.dec | unreachable!
+  let ((M : Q(Type v)), (lhs : Q($M)), (rhs :Q($M))) := eqData
+  let iM ← synthInstanceQ q(AddCommMonoid.{v} $M)
+  /- Construct from the `lhs` expression a term `l₁` of type `qNF R₁ M` for some semiring `R₁` --
+  that is, a list of `(Q($R₁) × Q($M)) × ℕ`s (two `Expr`s and a natural number) -- together with a
+  proof that `lhs` is equal to the `R₁`-linear combination in `M` this represents. -/
+  let e₁ ← parse iM lhs
+  have u₁ : Level := e₁.fst
+  have R₁ : Q(Type u₁) := e₁.snd.fst
+  have _iR₁ : Q(Semiring.{u₁} $R₁) := e₁.snd.snd.fst
+  let iRM₁ ← synthInstanceQ q(Module $R₁ $M)
+  assumeInstancesCommute
+  have l₁ : qNF R₁ M := e₁.snd.snd.snd.snd.fst
+  let pf₁ : Q($lhs = NF.eval $(l₁.toNF)) := e₁.snd.snd.snd.snd.snd
+  /- Do the same for the `rhs` expression, obtaining a term `l₂` of type `qNF R₂ M` for some
+  semiring `R₂`. -/
+  let e₂ ← parse iM rhs
+  have u₂ : Level := e₂.fst
+  have R₂ : Q(Type u₂) := e₂.snd.fst
+  have _iR₂ : Q(Semiring.{u₂} $R₂) := e₂.snd.snd.fst
+  let iRM₂ ← synthInstanceQ q(Module $R₂ $M)
+  have l₂ : qNF R₂ M := e₂.snd.snd.snd.snd.fst
+  let pf₂ : Q($rhs = NF.eval $(l₂.toNF)) := e₂.snd.snd.snd.snd.snd
+  /- Lift everything to the same scalar ring, `R`. -/
+  let ⟨_, _, _, iRM, ⟨l₁', pf₁'⟩, ⟨l₂', pf₂'⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁ l₂ q(0) q(0)
+  /- Construct a list of goals for the coefficientwise equality of these formal linear combinations,
+  and resolve our original goal (modulo these new goals). -/
+  let (mvars, pf) ← reduceCoefficientwise iRM l₁' l₂'
+  g.assign q(NF.eq_of_eval_eq_eval $pf₁ $pf₂ $pf₁' $pf₂' $pf)
+  return mvars
 
 中文:
 定义 matchScalarsAux
@@ -1128,7 +1360,37 @@ definition matchScalarsAux
     match (← g.getType').eq? with
     | some e => pure e
     | none => throwError "goal {← g.getType} is not an equality"
-  let .sort v₀ ← whn
+  let .sort v₀ ← whnf (← inferType eqData.1) | unreachable!
+  let some v := v₀.dec | unreachable!
+  let ((M : Q(Type v)), (lhs : Q($M)), (rhs :Q($M))) := eqData
+  let iM ← synthInstanceQ q(AddCommMonoid.{v} $M)
+  /- Construct from the `lhs` expression a term `l₁` of type `qNF R₁ M` for some semiring `R₁` --
+  that is, a list of `(Q($R₁) × Q($M)) × ℕ`s (two `Expr`s and a natural number) -- together with a
+  proof that `lhs` is equal to the `R₁`-linear combination in `M` this represents. -/
+  let e₁ ← parse iM lhs
+  have u₁ : Level := e₁.fst
+  have R₁ : Q(Type u₁) := e₁.snd.fst
+  have _iR₁ : Q(Semiring.{u₁} $R₁) := e₁.snd.snd.fst
+  let iRM₁ ← synthInstanceQ q(Module $R₁ $M)
+  assumeInstancesCommute
+  have l₁ : qNF R₁ M := e₁.snd.snd.snd.snd.fst
+  let pf₁ : Q($lhs = NF.eval $(l₁.toNF)) := e₁.snd.snd.snd.snd.snd
+  /- Do the same for the `rhs` expression, obtaining a term `l₂` of type `qNF R₂ M` for some
+  semiring `R₂`. -/
+  let e₂ ← parse iM rhs
+  have u₂ : Level := e₂.fst
+  have R₂ : Q(Type u₂) := e₂.snd.fst
+  have _iR₂ : Q(Semiring.{u₂} $R₂) := e₂.snd.snd.fst
+  let iRM₂ ← synthInstanceQ q(Module $R₂ $M)
+  have l₂ : qNF R₂ M := e₂.snd.snd.snd.snd.fst
+  let pf₂ : Q($rhs = NF.eval $(l₂.toNF)) := e₂.snd.snd.snd.snd.snd
+  /- Lift everything to the same scalar ring, `R`. -/
+  let ⟨_, _, _, iRM, ⟨l₁', pf₁'⟩, ⟨l₂', pf₂'⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁ l₂ q(0) q(0)
+  /- Construct a list of goals for the coefficientwise equality of these formal linear combinations,
+  and resolve our original goal (modulo these new goals). -/
+  let (mvars, pf) ← reduceCoefficientwise iRM l₁' l₂'
+  g.assign q(NF.eq_of_eval_eq_eval $pf₁ $pf₂ $pf₁' $pf₂' $pf)
+  return mvars
 -/
 def matchScalarsAux (g : MVarId) : AtomM (List MVarId) := do
   /- Parse the goal as an equality in a type `M` of two expressions `lhs` and `rhs`, with `M`
@@ -1198,6 +1460,12 @@ definition postprocess
   -- augment this list with the `algebraMapThms` lemmas, which handle `algebraMap` operations
   for thm in algebraMapThms do
     let ⟨levelParams, _, proof⟩ ← abstractMVars (mkConst thm)
+    thms ← thms.add (.stx (← mkFreshId) Syntax.missing) levelParams proof
+  -- now run `simp` with these lemmas, and (importantly) *no* simprocs
+  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
+  let (some r, _) ← simpTarget mvarId ctx (simprocs := #[]) |
+    throwError "internal error in match_scalars tactic: postprocessing should not close goals"
+  return r
 
 中文:
 定义 postprocess
@@ -1208,6 +1476,12 @@ definition postprocess
   -- augment this list with the `algebraMapThms` lemmas, which handle `algebraMap` operations
   for thm in algebraMapThms do
     let ⟨levelParams, _, proof⟩ ← abstractMVars (mkConst thm)
+    thms ← thms.add (.stx (← mkFreshId) Syntax.missing) levelParams proof
+  -- now run `simp` with these lemmas, and (importantly) *no* simprocs
+  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
+  let (some r, _) ← simpTarget mvarId ctx (simprocs := #[]) |
+    throwError "internal error in match_scalars tactic: postprocessing should not close goals"
+  return r
 -/
 def postprocess (mvarId : MVarId) : MetaM MVarId := do
   -- collect the available `push_cast` lemmas

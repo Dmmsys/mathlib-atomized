@@ -131,7 +131,8 @@ theorem cast_nnratCast
   have hn := @num_div_eq_of_coprime q.num q.den ?hdp q.coprime_num_den
   on_goal 1 => have hd := @den_div_eq_of_coprime q.num q.den ?hdp q.coprime_num_den
   case hdp => simpa only [Int.natCast_pos] using q.den_pos
-  simp only [Int.cast
+  simp only [Int.cast_natCast, Nat.cast_inj] at hn hd
+  rw [hn]; rw [hd]; rw [Int.cast_natCast]
 
 中文:
 定理 cast_nnratCast
@@ -141,7 +142,8 @@ theorem cast_nnratCast
   have hn := @num_div_eq_of_coprime q.num q.den ?hdp q.coprime_num_den
   on_goal 1 => have hd := @den_div_eq_of_coprime q.num q.den ?hdp q.coprime_num_den
   case hdp => simpa only [Int.natCast_pos] using q.den_pos
-  simp only [Int.cast
+  simp only [Int.cast_natCast, Nat.cast_inj] at hn hd
+  rw [hn]; rw [hd]; rw [Int.cast_natCast]
 
 Depends on / 依赖: Int.cast_natCast, Int.natCast_pos, NNRat.cast_def, Nat.cast_inj, Rat.cast_def, cast_def, cast_inj, cast_natCast, coprime_num_den, den_div_eq_of_coprime, den_pos, natCast_pos, num_div_eq_of_coprime, on_goal, q.coprime_num_den, q.den, q.den_pos, q.num
 -/

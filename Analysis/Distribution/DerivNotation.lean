@@ -163,6 +163,14 @@ theorem iteratedLineDerivOp_succ_right
     have hmtail : tail m (last n) = m (last n.succ) := by
       simp only [tail_def, succ_last]
     calc
+      _ = ∂_{m 0} (∂^{tail m} f) := iteratedLineDerivOp_succ_left _ _
+      _ = ∂_{m 0} (∂^{init <| tail m} (∂_{tail m <| last n} f)) := by
+        congr 1
+        exact IH _
+      _ = _ := by
+        rw [hmtail]; rw [iteratedLineDerivOp_succ_left]; rw [hmzero]; rw [tail_init_eq_init_tail]
+
+@[simp]
 
 中文:
 定理 iteratedLineDerivOp_succ_right
@@ -176,6 +184,14 @@ theorem iteratedLineDerivOp_succ_right
     have hmtail : tail m (last n) = m (last n.succ) := by
       simp only [tail_def, succ_last]
     calc
+      _ = ∂_{m 0} (∂^{tail m} f) := iteratedLineDerivOp_succ_left _ _
+      _ = ∂_{m 0} (∂^{init <| tail m} (∂_{tail m <| last n} f)) := by
+        congr 1
+        exact IH _
+      _ = _ := by
+        rw [hmtail]; rw [iteratedLineDerivOp_succ_left]; rw [hmzero]; rw [tail_init_eq_init_tail]
+
+@[simp]
 -/
 theorem iteratedLineDerivOp_succ_right {n : Nat} (m : Fin (n + 1) -> V) (f : E) :
     ∂^{m} f = ∂^{init m} (∂_{m (last n)} f) := by

@@ -37,7 +37,8 @@ theorem exp_neg_integrableOn_Ioi
   have : Tendsto (fun x => -exp (-b * x) / b) atTop (𝓝 (-0 / b)) := by
     refine Tendsto.div_const (Tendsto.neg ?_) _
     exact tendsto_exp_atBot.comp (tendsto_id.const_mul_atTop_of_neg (neg_neg_iff_pos.2 h))
-  refine integrableOn_Ioi_deriv_of_nonneg' (fun x _ => ?_) (fun x _ => (exp_pos _).le) 
+  refine integrableOn_Ioi_deriv_of_nonneg' (fun x _ => ?_) (fun x _ => (exp_pos _).le) this
+  simpa [h.ne'] using ((hasDerivAt_id x).const_mul b).neg.exp.neg.div_const b
 
 中文:
 定理 exp_neg_integrableOn_Ioi
@@ -46,7 +47,8 @@ theorem exp_neg_integrableOn_Ioi
   have : Tendsto (fun x => -exp (-b * x) / b) atTop (𝓝 (-0 / b)) := by
     refine Tendsto.div_const (Tendsto.neg ?_) _
     exact tendsto_exp_atBot.comp (tendsto_id.const_mul_atTop_of_neg (neg_neg_iff_pos.2 h))
-  refine integrableOn_Ioi_deriv_of_nonneg' (fun x _ => ?_) (fun x _ => (exp_pos _).le) 
+  refine integrableOn_Ioi_deriv_of_nonneg' (fun x _ => ?_) (fun x _ => (exp_pos _).le) this
+  simpa [h.ne'] using ((hasDerivAt_id x).const_mul b).neg.exp.neg.div_const b
 
 Depends on / 依赖: Tendsto, Tendsto.div_const, Tendsto.neg, const_mul, const_mul_atTop_of_neg, div_const, exp_pos, h.ne, hasDerivAt_id, integrableOn_Ioi_deriv_of_nonneg, neg.exp.neg.div_const, neg_neg_iff_pos, tendsto_exp_atBot, tendsto_exp_atBot.comp, tendsto_id, tendsto_id.const_mul_atTop_of_neg
 -/

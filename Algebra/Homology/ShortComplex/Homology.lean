@@ -1401,7 +1401,8 @@ lemma homologyMap_eq
     rightHomologyIso, RightHomologyData.rightHomologyIso]
   have γ' : HomologyMapData φ S₁.homologyData S₂.homologyData := default
   simp only [← γ.rightHomologyMap'_eq, assoc, ← rightHomologyMap'_comp_assoc,
-    id_comp, comp_id,
+    id_comp, comp_id, γ'.left.leftHomologyMap'_eq, γ'.right.rightHomologyMap'_eq, ← γ'.comm_assoc,
+    Iso.hom_inv_id]
 
 中文:
 引理 homologyMap_eq
@@ -1410,7 +1411,8 @@ lemma homologyMap_eq
     rightHomologyIso, RightHomologyData.rightHomologyIso]
   have γ' : HomologyMapData φ S₁.homologyData S₂.homologyData := default
   simp only [← γ.rightHomologyMap'_eq, assoc, ← rightHomologyMap'_comp_assoc,
-    id_comp, comp_id,
+    id_comp, comp_id, γ'.left.leftHomologyMap'_eq, γ'.right.rightHomologyMap'_eq, ← γ'.comm_assoc,
+    Iso.hom_inv_id]
 
 Depends on / 依赖: HomologyMapData, Iso.hom_inv_id, RightHomologyData, RightHomologyData.homologyIso, RightHomologyData.rightHomologyIso, _comp_assoc, comm_assoc, comp_id, hom_inv_id, homologyData, homologyIso, homologyMap, id_comp, left.leftHomologyMap, leftHomologyMap, right.rightHomologyMap, rightHomologyIso, rightHomologyMap
 -/
@@ -2068,7 +2070,9 @@ lemma leftRightHomologyComparison'_fac
     S.homologyData h₁ h₂]
   dsimp only [LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso,
     Iso.symm, Iso.trans, Iso.refl, leftHomologyMapIso', leftHomologyIso,
-    RightHomologyData.homolog
+    RightHomologyData.homologyIso, RightHomologyData.rightHomologyIso,
+    rightHomologyMapIso', rightHomologyIso]
+  simp only [assoc, ← leftHomologyMap'_comp_assoc, id_comp, ← rightHomologyMap'_comp]
 
 中文:
 引理 leftRightHomologyComparison'_fac
@@ -2078,7 +2082,9 @@ lemma leftRightHomologyComparison'_fac
     S.homologyData h₁ h₂]
   dsimp only [LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso,
     Iso.symm, Iso.trans, Iso.refl, leftHomologyMapIso', leftHomologyIso,
-    RightHomologyData.homolog
+    RightHomologyData.homologyIso, RightHomologyData.rightHomologyIso,
+    rightHomologyMapIso', rightHomologyIso]
+  simp only [assoc, ← leftHomologyMap'_comp_assoc, id_comp, ← rightHomologyMap'_comp]
 -/
 lemma leftRightHomologyComparison'_fac (h₁ : S.LeftHomologyData) (h₂ : S.RightHomologyData)
     [S.HasHomology] :
@@ -2348,12 +2354,16 @@ lemma `RightHomologyData.rightHomologyIso_hom_naturality` / 引理 `RightHomolog
 English:
 lemma RightHomologyData.rightHomologyIso_hom_naturality
   proof: by
-  rw [← cancel_epi h₁.homologyIso.inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁)]; rw [← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂]; rw [← cancel_epi (S₁.leftHomologyData.homologyIso.hom)]; rw [
+  rw [← cancel_epi h₁.homologyIso.inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁)]; rw [← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂]; rw [← cancel_epi (S₁.leftHomologyData.homologyIso.hom)]; rw [LeftHomologyData.leftHomologyIso_hom_naturality_assoc]; rw [leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_fac]; rw [assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]
+
+@[reassoc]
 
 中文:
 引理 RightHomologyData.rightHomologyIso_hom_naturality
   证明: by
-  rw [← cancel_epi h₁.homologyIso.inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁)]; rw [← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂]; rw [← cancel_epi (S₁.leftHomologyData.homologyIso.hom)]; rw [
+  rw [← cancel_epi h₁.homologyIso.inv]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (leftRightHomologyComparison' S₁.leftHomologyData h₁)]; rw [← leftRightHomologyComparison'_naturality φ S₁.leftHomologyData h₁ S₂.leftHomologyData h₂]; rw [← cancel_epi (S₁.leftHomologyData.homologyIso.hom)]; rw [LeftHomologyData.leftHomologyIso_hom_naturality_assoc]; rw [leftRightHomologyComparison'_fac]; rw [leftRightHomologyComparison'_fac]; rw [assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.hom_inv_id_assoc]
+
+@[reassoc]
 
 Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc, LeftHomologyData, LeftHomologyData.leftHomologyIso_hom_naturality_assoc, _fac, _naturality, cancel_epi, hom_inv_id_assoc, homologyIso, homologyIso.inv, inv_hom_id_assoc, leftHomologyData, leftHomologyData.homologyIso.hom, leftHomologyIso_hom_naturality_assoc, leftRightHomologyComparison
 -/
@@ -3324,7 +3334,13 @@ lemma comp_homologyMap_comp
     Iso.symm, Iso.trans, Iso.refl, leftHomologyIso, rightHomologyIso,
     leftHomologyMapIso', rightHomologyMapIso',
     LeftHomologyData.cyclesIso, RightHomologyData.opcyclesIso,
-    LeftHomologyData.leftHomologyIso, Righ
+    LeftHomologyData.leftHomologyIso, RightHomologyData.rightHomologyIso,
+    homologyMap, homologyMap']
+  simp only [assoc, rightHomologyι_naturality', rightHomologyι_naturality'_assoc,
+    leftHomologyπ_naturality'_assoc, HomologyData.comm_assoc, p_opcyclesMap'_assoc,
+    id_τ₂, p_opcyclesMap', id_comp, cyclesMap'_i_assoc]
+
+@[reassoc]
 
 中文:
 引理 comp_homologyMap_comp
@@ -3334,7 +3350,13 @@ lemma comp_homologyMap_comp
     Iso.symm, Iso.trans, Iso.refl, leftHomologyIso, rightHomologyIso,
     leftHomologyMapIso', rightHomologyMapIso',
     LeftHomologyData.cyclesIso, RightHomologyData.opcyclesIso,
-    LeftHomologyData.leftHomologyIso, Righ
+    LeftHomologyData.leftHomologyIso, RightHomologyData.rightHomologyIso,
+    homologyMap, homologyMap']
+  simp only [assoc, rightHomologyι_naturality', rightHomologyι_naturality'_assoc,
+    leftHomologyπ_naturality'_assoc, HomologyData.comm_assoc, p_opcyclesMap'_assoc,
+    id_τ₂, p_opcyclesMap', id_comp, cyclesMap'_i_assoc]
+
+@[reassoc]
 
 Depends on / 依赖: HomologyData, HomologyData.comm_assoc, Iso.refl, Iso.symm, Iso.trans, LeftHomologyData, LeftHomologyData.cyclesIso, LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso, RightHomologyData, RightHomologyData.homologyIso, RightHomologyData.opcyclesIso, RightHomologyData.rightHomologyIso, _assoc, comm_assoc, cyclesIso, homologyIso, homologyMap, leftHomologyIso, leftHomologyMapIso
 -/
@@ -3445,7 +3467,10 @@ lemma homologyMap_op
   dsimp only [Iso.symm, Iso.trans, Iso.op, Iso.refl, rightHomologyIso, leftHomologyIso,
     leftHomologyOpIso, leftHomologyMapIso', rightHomologyMapIso',
     LeftHomologyData.leftHomologyIso, homologyMap']
-  simp only [assoc, rightH
+  simp only [assoc, rightHomologyMap'_op, op_comp, ← leftHomologyMap'_comp_assoc, id_comp,
+    opMap_id, comp_id, HomologyData.op_left]
+
+@[reassoc]
 
 中文:
 引理 homologyMap_op
@@ -3456,7 +3481,10 @@ lemma homologyMap_op
   dsimp only [Iso.symm, Iso.trans, Iso.op, Iso.refl, rightHomologyIso, leftHomologyIso,
     leftHomologyOpIso, leftHomologyMapIso', rightHomologyMapIso',
     LeftHomologyData.leftHomologyIso, homologyMap']
-  simp only [assoc, rightH
+  simp only [assoc, rightHomologyMap'_op, op_comp, ← leftHomologyMap'_comp_assoc, id_comp,
+    opMap_id, comp_id, HomologyData.op_left]
+
+@[reassoc]
 
 Depends on / 依赖: HomologyData, HomologyData.op_left, Iso.op, Iso.refl, Iso.symm, Iso.trans, LeftHomologyData, LeftHomologyData.leftHomologyIso, _comp_assoc, comp_id, homologyMap, homologyOpIso, id_comp, leftHomologyIso, leftHomologyMap, leftHomologyMapIso, leftHomologyOpIso, opMap_id, op_comp, op_left
 -/
@@ -3615,7 +3643,11 @@ lemma isIso_homologyMap_of_isIso_cyclesMap_of_epi
       IsIso.hom_inv_id_assoc, toCycles_comp_homologyπ, comp_zero]
   have ⟨z, hz⟩ := CokernelCofork.IsColimit.desc' S₂.homologyIsCokernel _ h
   dsimp at hz
-  refine ⟨⟨
+  refine ⟨⟨z, ?_, ?_⟩⟩
+  · rw [← cancel_epi S₁.homologyπ, homologyπ_naturality_assoc, hz,
+      IsIso.hom_inv_id_assoc, comp_id]
+  · rw [← cancel_epi S₂.homologyπ, reassoc_of% hz, homologyπ_naturality,
+      IsIso.inv_hom_id_assoc, comp_id]
 
 中文:
 引理 isIso_homologyMap_of_isIso_cyclesMap_of_epi
@@ -3626,7 +3658,11 @@ lemma isIso_homologyMap_of_isIso_cyclesMap_of_epi
       IsIso.hom_inv_id_assoc, toCycles_comp_homologyπ, comp_zero]
   have ⟨z, hz⟩ := CokernelCofork.IsColimit.desc' S₂.homologyIsCokernel _ h
   dsimp at hz
-  refine ⟨⟨
+  refine ⟨⟨z, ?_, ?_⟩⟩
+  · rw [← cancel_epi S₁.homologyπ, homologyπ_naturality_assoc, hz,
+      IsIso.hom_inv_id_assoc, comp_id]
+  · rw [← cancel_epi S₂.homologyπ, reassoc_of% hz, homologyπ_naturality,
+      IsIso.inv_hom_id_assoc, comp_id]
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, IsIso.hom_inv_id_assoc, IsIso.inv_hom_id_assoc, cancel_epi, comp_id, comp_zero, cyclesMap, hom_inv_id_assoc, homologyIsCokernel, inv_hom_id_assoc, reassoc_of, toCycles, toCycles_naturality_assoc
 -/
@@ -3657,7 +3693,11 @@ lemma isIso_homologyMap_of_isIso_opcyclesMap_of_mono
       IsIso.inv_hom_id_assoc, homologyι_comp_fromOpcycles]
   have ⟨z, hz⟩ := KernelFork.IsLimit.lift' S₁.homologyIsKernel _ h
   dsimp at hz
- 
+  refine ⟨⟨z, ?_, ?_⟩⟩
+  · rw [← cancel_mono S₁.homologyι, id_comp, assoc, hz, homologyι_naturality_assoc,
+      IsIso.hom_inv_id, comp_id]
+  · rw [← cancel_mono S₂.homologyι, assoc, homologyι_naturality, reassoc_of% hz,
+      IsIso.inv_hom_id, comp_id, id_comp]
 
 中文:
 引理 isIso_homologyMap_of_isIso_opcyclesMap_of_mono
@@ -3668,7 +3708,11 @@ lemma isIso_homologyMap_of_isIso_opcyclesMap_of_mono
       IsIso.inv_hom_id_assoc, homologyι_comp_fromOpcycles]
   have ⟨z, hz⟩ := KernelFork.IsLimit.lift' S₁.homologyIsKernel _ h
   dsimp at hz
- 
+  refine ⟨⟨z, ?_, ?_⟩⟩
+  · rw [← cancel_mono S₁.homologyι, id_comp, assoc, hz, homologyι_naturality_assoc,
+      IsIso.hom_inv_id, comp_id]
+  · rw [← cancel_mono S₂.homologyι, assoc, homologyι_naturality, reassoc_of% hz,
+      IsIso.inv_hom_id, comp_id, id_comp]
 
 Depends on / 依赖: IsIso.hom_inv_id, IsIso.in, IsIso.inv_hom_id_assoc, IsLimit, KernelFork, KernelFork.IsLimit.lift, cancel_mono, comp_id, fromOpcycles, fromOpcycles_naturality, hom_inv_id, homologyIsKernel, id_comp, inv_hom_id_assoc, opcyclesMap, reassoc_of, zero_comp
 -/

@@ -355,7 +355,7 @@ definition LinearMap.tensorEqLocusInv
       (AlgebraTensorModule.lTensor S M g)).subtype
     (AlgebraTensorModule.lTensor S M (eqLocus f g).subtype)
     (Module.Flat.lTensor_preserves_injective_linearMap (eqLocus f g).subtype
-      (eqLocus f g).
+      (eqLocus f g).injective_subtype) (by simp [Module.Flat.eqLocus_lTensor_eq])
 
 中文:
 定义 线性映射.tensorEqLocusInv
@@ -365,7 +365,7 @@ definition LinearMap.tensorEqLocusInv
       (AlgebraTensorModule.lTensor S M g)).subtype
     (AlgebraTensorModule.lTensor S M (eqLocus f g).subtype)
     (Module.Flat.lTensor_preserves_injective_linearMap (eqLocus f g).subtype
-      (eqLocus f g).
+      (eqLocus f g).injective_subtype) (by simp [Module.Flat.eqLocus_lTensor_eq])
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lTensor, LinearMap, LinearMap.codRestrictOfInjective, LinearMap.eqLocus, Module, Module.Flat.eqLocus_lTensor_eq, Module.Flat.lTensor_preserves_injective_linearMap, codRestrictOfInjective, eqLocus, eqLocus_lTensor_eq, injective_subtype, lTensor, lTensor_preserves_injective_linearMap, subtype
 -/
@@ -880,7 +880,35 @@ definition Algebra.kerTensorProductMapIdToAlgHomEquiv
     Algebra.TensorProduct.map (.id _ _) (IsScalarTower.toAlgHom _ _ _)
   let ePp : A otimes[R] S ≃ₐ[S] S otimes[R] A :=
     { __ := Algebra.TensorProduct.comm _ _ _, commutes' _ := rfl }
-  let e₃ : (RingHom.ker φ) ≃ₗ[R] A otimes[R] (RingHom.ker (alg
+  let e₃ : (RingHom.ker φ) ≃ₗ[R] A otimes[R] (RingHom.ker (algebraMap S T)) :=
+    (LinearMap.kerLTensorEquivOfSurjective (IsScalarTower.toAlgHom R S T).toLinearMap
+      h₁ A).restrictScalars R
+  let e₄' : (RingHom.ker φ) ≃ₗ[R] (A otimes[R] S) otimes[S] (RingHom.ker (algebraMap S T)) :=
+    e₃ ≪≫ₗ _root_.TensorProduct.comm _ _ _ ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange _ _ S _ _).symm.restrictScalars R ≪≫ₗ
+      (AlgebraTensorModule.congr (.refl S _) ePp.symm.toLinearEquiv).restrictScalars R ≪≫ₗ
+      (_root_.TensorProduct.comm _ _ _).restrictScalars R
+  let e₄ : (A otimes[R] S) otimes[S] (RingHom.ker (algebraMap S T)) ≃ₗ[A otimes[R] S] (RingHom.ker φ) :=
+    { __ := e₄'.symm, map_smul' r' x := by
+        dsimp
+        induction x with
+        | zero => simp only [smul_zero, LinearEquiv.map_zero]
+        | add x y _ _ => simp only [smul_add, LinearEquiv.map_add, *]
+        | tmul x y =>
+        induction x with
+        | zero => simp only [zero_tmul, smul_zero, LinearEquiv.map_zero]
+        | add x y _ _ => simp only [smul_add, add_tmul, LinearEquiv.map_add, *]
+        | tmul x z =>
+        induction r' with
+        | zero => simp only [zero_smul, LinearEquiv.map_zero]
+        | add x y _ _ => simp only [add_smul, LinearEquiv.map_add, *]
+        | tmul r s =>
+        rw [smul_tmul']
+        ext1
+        dsimp [e₄', ePp, φ]
+        change ((r * x) otimesₜ[R] ((s * z) * y.1)) = (r otimesₜ[R] s) * (x otimesₜ[R] (z * y.1))
+        rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_assoc] }
+  exact e₄.symm
 
 中文:
 定义 代数.kerTensorProductMapIdToAlgHomEquiv
@@ -889,7 +917,35 @@ definition Algebra.kerTensorProductMapIdToAlgHomEquiv
     Algebra.TensorProduct.map (.id _ _) (IsScalarTower.toAlgHom _ _ _)
   let ePp : A otimes[R] S ≃ₐ[S] S otimes[R] A :=
     { __ := Algebra.TensorProduct.comm _ _ _, commutes' _ := rfl }
-  let e₃ : (RingHom.ker φ) ≃ₗ[R] A otimes[R] (RingHom.ker (alg
+  let e₃ : (RingHom.ker φ) ≃ₗ[R] A otimes[R] (RingHom.ker (algebraMap S T)) :=
+    (LinearMap.kerLTensorEquivOfSurjective (IsScalarTower.toAlgHom R S T).toLinearMap
+      h₁ A).restrictScalars R
+  let e₄' : (RingHom.ker φ) ≃ₗ[R] (A otimes[R] S) otimes[S] (RingHom.ker (algebraMap S T)) :=
+    e₃ ≪≫ₗ _root_.TensorProduct.comm _ _ _ ≪≫ₗ
+      (AlgebraTensorModule.cancelBaseChange _ _ S _ _).symm.restrictScalars R ≪≫ₗ
+      (AlgebraTensorModule.congr (.refl S _) ePp.symm.toLinearEquiv).restrictScalars R ≪≫ₗ
+      (_root_.TensorProduct.comm _ _ _).restrictScalars R
+  let e₄ : (A otimes[R] S) otimes[S] (RingHom.ker (algebraMap S T)) ≃ₗ[A otimes[R] S] (RingHom.ker φ) :=
+    { __ := e₄'.symm, map_smul' r' x := by
+        dsimp
+        induction x with
+        | zero => simp only [smul_zero, LinearEquiv.map_zero]
+        | add x y _ _ => simp only [smul_add, LinearEquiv.map_add, *]
+        | tmul x y =>
+        induction x with
+        | zero => simp only [zero_tmul, smul_zero, LinearEquiv.map_zero]
+        | add x y _ _ => simp only [smul_add, add_tmul, LinearEquiv.map_add, *]
+        | tmul x z =>
+        induction r' with
+        | zero => simp only [zero_smul, LinearEquiv.map_zero]
+        | add x y _ _ => simp only [add_smul, LinearEquiv.map_add, *]
+        | tmul r s =>
+        rw [smul_tmul']
+        ext1
+        dsimp [e₄', ePp, φ]
+        change ((r * x) otimesₜ[R] ((s * z) * y.1)) = (r otimesₜ[R] s) * (x otimesₜ[R] (z * y.1))
+        rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_assoc] }
+  exact e₄.symm
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.comm, Algebra.TensorProduct.map, IsScalarTower, IsScalarTower.toAlgHom, LinearMap, LinearMap.kerLTensorEquivOfSurjective, RingHom, RingHom.ker, TensorProduct, algebraMap, commutes, kerLTensorEquivOfSurjective, otimes, restrictScalars, toAlgHom, toLinearMap
 -/

@@ -63,7 +63,7 @@ lemma IsBoundedAtImInfty.slash
   rw [IsBoundedAtImInfty]; rw [BoundedAtFilter]; rw [← Asymptotics.isBigO_norm_left] at hf ⊢
   suffices (fun x => (‖g.det.val ^ (k - 1)‖ * ‖g 1 1 ^ (-k)‖) * ‖f (g • x)‖) =O[atImInfty] 1 by
     simpa [ModularForm.slash_def, denom, hg, mul_assoc, mul_comm ‖f _‖]
-  apply (hf.comp_tendsto (tendsto_sm
+  apply (hf.comp_tendsto (tendsto_smul_atImInfty hg)).const_mul_left
 
 中文:
 引理 IsBoundedAtImInfty.slash
@@ -72,7 +72,7 @@ lemma IsBoundedAtImInfty.slash
   rw [IsBoundedAtImInfty]; rw [BoundedAtFilter]; rw [← Asymptotics.isBigO_norm_left] at hf ⊢
   suffices (fun x => (‖g.det.val ^ (k - 1)‖ * ‖g 1 1 ^ (-k)‖) * ‖f (g • x)‖) =O[atImInfty] 1 by
     simpa [ModularForm.slash_def, denom, hg, mul_assoc, mul_comm ‖f _‖]
-  apply (hf.comp_tendsto (tendsto_sm
+  apply (hf.comp_tendsto (tendsto_smul_atImInfty hg)).const_mul_left
 
 Depends on / 依赖: Asymptotics, Asymptotics.isBigO_norm_left, BoundedAtFilter, IsBoundedAtImInfty, ModularForm, ModularForm.slash_def, atImInfty, comp_tendsto, const_mul_left, g.det.val, hf.comp_tendsto, isBigO_norm_left, mul_assoc, mul_comm, slash_def, tendsto_smul_atImInfty
 -/

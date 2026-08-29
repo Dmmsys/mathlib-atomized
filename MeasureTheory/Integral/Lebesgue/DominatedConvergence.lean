@@ -35,7 +35,15 @@ theorem limsup_lintegral_le
       limsup_eq_iInf_iSup_of_nat
     _ <= ⨅ n : Nat, ∫⁻ a, ⨆ i >= n, f i a ∂μ := iInf_mono fun _ => iSup₂_lintegral_le _
     _ = ∫⁻ a, ⨅ n : Nat, ⨆ i >= n, f i a ∂μ := by
-      refine (lintegral_iInf ?_ ?_ ?_).s
+      refine (lintegral_iInf ?_ ?_ ?_).symm
+      · intro n
+        exact .biSup _ (Set.to_countable _) (fun i _ => hf_meas i)
+      · intro n m hnm a
+        exact iSup_le_iSup_of_subset fun i hi => le_trans hnm hi
+      · refine ne_top_of_le_ne_top h_fin (lintegral_mono_ae ?_)
+        refine (ae_all_iff.2 h_bound).mono fun n hn => ?_
+        exact iSup_le fun i => iSup_le fun _ => hn i
+    _ = ∫⁻ a, limsup (fun n => f n a) atTop ∂μ := by simp only [limsup_eq_iInf_iSup_of_nat]
 
 中文:
 定理 limsup_lintegral_le
@@ -45,7 +53,15 @@ theorem limsup_lintegral_le
       limsup_eq_iInf_iSup_of_nat
     _ <= ⨅ n : Nat, ∫⁻ a, ⨆ i >= n, f i a ∂μ := iInf_mono fun _ => iSup₂_lintegral_le _
     _ = ∫⁻ a, ⨅ n : Nat, ⨆ i >= n, f i a ∂μ := by
-      refine (lintegral_iInf ?_ ?_ ?_).s
+      refine (lintegral_iInf ?_ ?_ ?_).symm
+      · intro n
+        exact .biSup _ (Set.to_countable _) (fun i _ => hf_meas i)
+      · intro n m hnm a
+        exact iSup_le_iSup_of_subset fun i hi => le_trans hnm hi
+      · refine ne_top_of_le_ne_top h_fin (lintegral_mono_ae ?_)
+        refine (ae_all_iff.2 h_bound).mono fun n hn => ?_
+        exact iSup_le fun i => iSup_le fun _ => hn i
+    _ = ∫⁻ a, limsup (fun n => f n a) atTop ∂μ := by simp only [limsup_eq_iInf_iSup_of_nat]
 
 Depends on / 依赖: Set.to_countable, ae_all_iff, h_fin, hf_meas, iInf_mono, iSup_le_iSup_of_subset, le_trans, limsup, limsup_eq_iInf_iSup_of_nat, lintegral_iInf, lintegral_mono_ae, ne_top_of_le_ne_top, to_countable
 -/
@@ -79,7 +95,9 @@ theorem tendsto_lintegral_of_dominated_convergence
 lintegral_congr_ae h_lim.mono fun _ h => h.liminf_eq.symm
       _ <= liminf (fun n => ∫⁻ a, F n a ∂μ) atTop := lintegral_liminf_le hF_meas)
     (calc
-      limsup (fun n : Nat => ∫⁻ a, F 
+      limsup (fun n : Nat => ∫⁻ a, F n a ∂μ) atTop <= ∫⁻ a, limsup (fun n => F n a) atTop ∂μ :=
+        limsup_lintegral_le _ hF_meas h_bound h_fin
+_ = ∫⁻ a, f a ∂μ := lintegral_congr_ae h_lim.mono fun _ h => h.limsup_eq)
 
 中文:
 定理 tendsto_lintegral_of_dominated_convergence
@@ -90,7 +108,9 @@ lintegral_congr_ae h_lim.mono fun _ h => h.liminf_eq.symm
 lintegral_congr_ae h_lim.mono fun _ h => h.liminf_eq.symm
       _ <= liminf (fun n => ∫⁻ a, F n a ∂μ) atTop := lintegral_liminf_le hF_meas)
     (calc
-      limsup (fun n : Nat => ∫⁻ a, F 
+      limsup (fun n : Nat => ∫⁻ a, F n a ∂μ) atTop <= ∫⁻ a, limsup (fun n => F n a) atTop ∂μ :=
+        limsup_lintegral_le _ hF_meas h_bound h_fin
+_ = ∫⁻ a, f a ∂μ := lintegral_congr_ae h_lim.mono fun _ h => h.limsup_eq)
 
 Depends on / 依赖: h.liminf_eq.symm, h.limsup_eq, hF_meas, h_bound, h_fin, h_lim, h_lim.mono, liminf, liminf_eq, limsup, limsup_eq, limsup_lintegral_le, lintegral_congr_ae, lintegral_liminf_le, tendsto_of_le_liminf_of_limsup_le
 -/
@@ -120,7 +140,14 @@ theorem tendsto_lintegral_of_dominated_convergence'
   simp_rw [this]
   apply
     tendsto_lintegral_of_dominated_convergence bound (fun n => (hF_meas n).measurable_mk) _ h_fin
-  · have : forall n, forallᵐ a ∂μ, (hF_meas n).mk 
+  · have : forall n, forallᵐ a ∂μ, (hF_meas n).mk (F n) a = F n a := fun n => (hF_meas n).ae_eq_mk.symm
+    have : forallᵐ a ∂μ, forall n, (hF_meas n).mk (F n) a = F n a := ae_all_iff.mpr this
+    filter_upwards [this, h_lim] with a H H'
+    simp_rw [H]
+    exact H'
+  · intro n
+    filter_upwards [h_bound n, (hF_meas n).ae_eq_mk] with a H H'
+    rwa [H'] at H
 
 中文:
 定理 tendsto_lintegral_of_dominated_convergence'
@@ -131,7 +158,14 @@ theorem tendsto_lintegral_of_dominated_convergence'
   simp_rw [this]
   apply
     tendsto_lintegral_of_dominated_convergence bound (fun n => (hF_meas n).measurable_mk) _ h_fin
-  · have : forall n, forallᵐ a ∂μ, (hF_meas n).mk 
+  · have : forall n, forallᵐ a ∂μ, (hF_meas n).mk (F n) a = F n a := fun n => (hF_meas n).ae_eq_mk.symm
+    have : forallᵐ a ∂μ, forall n, (hF_meas n).mk (F n) a = F n a := ae_all_iff.mpr this
+    filter_upwards [this, h_lim] with a H H'
+    simp_rw [H]
+    exact H'
+  · intro n
+    filter_upwards [h_bound n, (hF_meas n).ae_eq_mk] with a H H'
+    rwa [H'] at H
 
 Depends on / 依赖: ae_all_iff, ae_all_iff.mpr, ae_eq_mk, ae_eq_mk.symm, filter_upwards, hF_meas, h_fin, h_lim, lintegral_congr_ae, measurable_mk, simp_rw, tendsto_lintegral_of_dominated_convergence
 -/
@@ -170,7 +204,19 @@ theorem tendsto_lintegral_filter_of_dominated_convergence'
   rcases h with ⟨k, h⟩
   rw [← tendsto_add_atTop_iff_nat k]
   refine tendsto_lintegral_of_dominated_convergence' ?_ ?_ ?_ ?_ ?_
-  · 
+  · exact bound
+  · intro
+    refine (h _ ?_).1
+    exact Nat.le_add_left _ _
+  · intro
+    refine (h _ ?_).2
+    exact Nat.le_add_left _ _
+  · assumption
+  · refine h_lim.mono fun a h_lim => ?_
+    apply @Tendsto.comp _ _ _ (fun n => x (n + k)) fun n => F n a
+    · assumption
+    rw [tendsto_add_atTop_iff_nat]
+    assumption
 
 中文:
 定理 tendsto_lintegral_filter_of_dominated_convergence'
@@ -186,7 +232,19 @@ theorem tendsto_lintegral_filter_of_dominated_convergence'
   rcases h with ⟨k, h⟩
   rw [← tendsto_add_atTop_iff_nat k]
   refine tendsto_lintegral_of_dominated_convergence' ?_ ?_ ?_ ?_ ?_
-  · 
+  · exact bound
+  · intro
+    refine (h _ ?_).1
+    exact Nat.le_add_left _ _
+  · intro
+    refine (h _ ?_).2
+    exact Nat.le_add_left _ _
+  · assumption
+  · refine h_lim.mono fun a h_lim => ?_
+    apply @Tendsto.comp _ _ _ (fun n => x (n + k)) fun n => F n a
+    · assumption
+    rw [tendsto_add_atTop_iff_nat]
+    assumption
 
 Depends on / 依赖: Nat.le_add_left, Tendsto, Tendsto.comp, hF_meas, h_bound, h_lim, h_lim.mono, inter_mem, le_add_left, replace, tendsto_add_atTop_iff_nat, tendsto_atTop, tendsto_iff_seq_tendsto, tendsto_lintegral_of_dominated_convergence
 -/
@@ -257,7 +315,30 @@ lemma tendsto_of_lintegral_tendsto_of_monotone_aux
     filter_upwards [ae_lt_top' hF_meas h_int_finite] with a ha using ha.ne
   have h_exists : forallᵐ a ∂μ, exists l, Tendsto (fun i => f i a) atTop (𝓝 l) := by
     filter_upwards [h_bound, h_bound_finite, hf_mono] with a h_le h_fin h_mono
-    h
+    have h_tendsto : Tendsto (fun i => f i a) atTop atTop ∨
+        exists l, Tendsto (fun i => f i a) atTop (𝓝 l) := tendsto_atTop_of_monotone h_mono
+    rcases h_tendsto with h_absurd | h_tendsto
+    · rw [tendsto_atTop_atTop_iff_of_monotone h_mono] at h_absurd
+      obtain ⟨i, hi⟩ := h_absurd (F a + 1)
+      refine absurd (hi.trans (h_le _)) (not_le.mpr ?_)
+      exact ENNReal.lt_add_right h_fin one_ne_zero
+    · exact h_tendsto
+  classical
+  let F' : α -> Real>=0∞ := fun a => if h : exists l, Tendsto (fun i => f i a) atTop (𝓝 l)
+    then h.choose else ∞
+  have hF'_tendsto : forallᵐ a ∂μ, Tendsto (fun i => f i a) atTop (𝓝 (F' a)) := by
+    filter_upwards [h_exists] with a ha
+    simp_rw [F', dif_pos ha]
+    exact ha.choose_spec
+  suffices F' =ᵐ[μ] F by
+    filter_upwards [this, hF'_tendsto] with a h_eq h_tendsto using h_eq ▸ h_tendsto
+  have hF'_le : F' <=ᵐ[μ] F := by
+    filter_upwards [h_bound, hF'_tendsto] with a h_le h_tendsto
+    exact le_of_tendsto' h_tendsto (fun m => h_le _)
+  suffices ∫⁻ a, F' a ∂μ = ∫⁻ a, F a ∂μ from
+    ae_eq_of_ae_le_of_lintegral_le hF'_le (this ▸ h_int_finite) hF_meas this.symm.le
+  refine tendsto_nhds_unique ?_ hf_tendsto
+  exact lintegral_tendsto_of_tendsto_of_monotone hf_meas hf_mono hF'_tendsto
 
 中文:
 引理 tendsto_of_lintegral_tendsto_of_monotone_aux
@@ -267,7 +348,30 @@ lemma tendsto_of_lintegral_tendsto_of_monotone_aux
     filter_upwards [ae_lt_top' hF_meas h_int_finite] with a ha using ha.ne
   have h_exists : forallᵐ a ∂μ, exists l, Tendsto (fun i => f i a) atTop (𝓝 l) := by
     filter_upwards [h_bound, h_bound_finite, hf_mono] with a h_le h_fin h_mono
-    h
+    have h_tendsto : Tendsto (fun i => f i a) atTop atTop ∨
+        exists l, Tendsto (fun i => f i a) atTop (𝓝 l) := tendsto_atTop_of_monotone h_mono
+    rcases h_tendsto with h_absurd | h_tendsto
+    · rw [tendsto_atTop_atTop_iff_of_monotone h_mono] at h_absurd
+      obtain ⟨i, hi⟩ := h_absurd (F a + 1)
+      refine absurd (hi.trans (h_le _)) (not_le.mpr ?_)
+      exact ENNReal.lt_add_right h_fin one_ne_zero
+    · exact h_tendsto
+  classical
+  let F' : α -> Real>=0∞ := fun a => if h : exists l, Tendsto (fun i => f i a) atTop (𝓝 l)
+    then h.choose else ∞
+  have hF'_tendsto : forallᵐ a ∂μ, Tendsto (fun i => f i a) atTop (𝓝 (F' a)) := by
+    filter_upwards [h_exists] with a ha
+    simp_rw [F', dif_pos ha]
+    exact ha.choose_spec
+  suffices F' =ᵐ[μ] F by
+    filter_upwards [this, hF'_tendsto] with a h_eq h_tendsto using h_eq ▸ h_tendsto
+  have hF'_le : F' <=ᵐ[μ] F := by
+    filter_upwards [h_bound, hF'_tendsto] with a h_le h_tendsto
+    exact le_of_tendsto' h_tendsto (fun m => h_le _)
+  suffices ∫⁻ a, F' a ∂μ = ∫⁻ a, F a ∂μ from
+    ae_eq_of_ae_le_of_lintegral_le hF'_le (this ▸ h_int_finite) hF_meas this.symm.le
+  refine tendsto_nhds_unique ?_ hf_tendsto
+  exact lintegral_tendsto_of_tendsto_of_monotone hf_meas hf_mono hF'_tendsto
 
 Depends on / 依赖: Tendsto, ae_lt_top, filter_upwards, hF_meas, h_absurd, h_bound, h_bound_finite, h_exists, h_fin, h_int_finite, h_le, h_mono, h_tendsto, ha.ne, hf_mono, tendsto_atTop_atTop_iff_of_mo, tendsto_atTop_of_monotone
 -/
@@ -318,7 +422,33 @@ lemma tendsto_of_lintegral_tendsto_of_monotone
     fun n => exists_measurable_le_lintegral_eq _ _
   choose g gmeas gf hg using this
   let g' : Nat -> α -> Real>=0∞ := Nat.rec (g 0) (fun n I x => max (g (n + 1) x) (I x))
-  have M n : Measura
+  have M n : Measurable (g' n) := by
+    induction n with
+    | zero => simp [g', gmeas 0]
+    | succ n ih => exact Measurable.max (gmeas (n + 1)) ih
+  have I : forall n x, g n x <= g' n x := by
+    intro n x
+    cases n with | zero | succ => simp [g']
+  have I' : forallᵐ x ∂μ, forall n, g' n x <= f n x := by
+    filter_upwards [hf_mono] with x hx n
+    induction n with
+    | zero => simpa [g'] using gf 0 x
+    | succ n ih => exact max_le (gf (n + 1) x) (ih.trans (hx (Nat.le_succ n)))
+  have Int_eq n : ∫⁻ x, g' n x ∂μ = ∫⁻ x, f n x ∂μ := by
+    apply le_antisymm
+    · apply lintegral_mono_ae
+      filter_upwards [I'] with x hx using hx n
+    · rw [hg n]
+      exact lintegral_mono (I n)
+  have : forallᵐ a ∂μ, Tendsto (fun i => g' i a) atTop (𝓝 (F a)) := by
+    apply tendsto_of_lintegral_tendsto_of_monotone_aux _ hF_meas _ _ _ h_int_finite
+    · exact fun n => (M n).aemeasurable
+    · simp_rw [Int_eq]
+      exact hf_tendsto
+    · exact Eventually.of_forall (fun x => monotone_nat_of_le_succ (fun n => le_max_right _ _))
+    · filter_upwards [h_bound, I'] with x h'x hx n using (hx n).trans (h'x n)
+  filter_upwards [this, I', h_bound] with x hx h'x h''x
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le hx tendsto_const_nhds h'x h''x
 
 中文:
 引理 tendsto_of_lintegral_tendsto_of_monotone
@@ -328,7 +458,33 @@ lemma tendsto_of_lintegral_tendsto_of_monotone
     fun n => exists_measurable_le_lintegral_eq _ _
   choose g gmeas gf hg using this
   let g' : Nat -> α -> Real>=0∞ := Nat.rec (g 0) (fun n I x => max (g (n + 1) x) (I x))
-  have M n : Measura
+  have M n : Measurable (g' n) := by
+    induction n with
+    | zero => simp [g', gmeas 0]
+    | succ n ih => exact Measurable.max (gmeas (n + 1)) ih
+  have I : forall n x, g n x <= g' n x := by
+    intro n x
+    cases n with | zero | succ => simp [g']
+  have I' : forallᵐ x ∂μ, forall n, g' n x <= f n x := by
+    filter_upwards [hf_mono] with x hx n
+    induction n with
+    | zero => simpa [g'] using gf 0 x
+    | succ n ih => exact max_le (gf (n + 1) x) (ih.trans (hx (Nat.le_succ n)))
+  have Int_eq n : ∫⁻ x, g' n x ∂μ = ∫⁻ x, f n x ∂μ := by
+    apply le_antisymm
+    · apply lintegral_mono_ae
+      filter_upwards [I'] with x hx using hx n
+    · rw [hg n]
+      exact lintegral_mono (I n)
+  have : forallᵐ a ∂μ, Tendsto (fun i => g' i a) atTop (𝓝 (F a)) := by
+    apply tendsto_of_lintegral_tendsto_of_monotone_aux _ hF_meas _ _ _ h_int_finite
+    · exact fun n => (M n).aemeasurable
+    · simp_rw [Int_eq]
+      exact hf_tendsto
+    · exact Eventually.of_forall (fun x => monotone_nat_of_le_succ (fun n => le_max_right _ _))
+    · filter_upwards [h_bound, I'] with x h'x hx n using (hx n).trans (h'x n)
+  filter_upwards [this, I', h_bound] with x hx h'x h''x
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le hx tendsto_const_nhds h'x h''x
 
 Depends on / 依赖: Measurable, Measurable.max, Nat.rec, exists_measurable_le_lintegral_eq
 -/
@@ -383,7 +539,28 @@ lemma tendsto_of_lintegral_tendsto_of_antitone
     filter_upwards [h_bound] with a ha using ha 0
   have h_exists : forallᵐ a ∂μ, exists l, Tendsto (fun i => f i a) atTop (𝓝 l) := by
     filter_upwards [hf_mono] with a h_mono
-    rcases _roo
+    rcases _root_.tendsto_atTop_of_antitone h_mono with h | h
+    · refine ⟨0, h.mono_right ?_⟩
+      rw [OrderBot.atBot_eq]
+      exact pure_le_nhds _
+    · exact h
+  classical
+  let F' : α -> Real>=0∞ := fun a => if h : exists l, Tendsto (fun i => f i a) atTop (𝓝 l)
+    then h.choose else ∞
+  have hF'_tendsto : forallᵐ a ∂μ, Tendsto (fun i => f i a) atTop (𝓝 (F' a)) := by
+    filter_upwards [h_exists] with a ha
+    simp_rw [F', dif_pos ha]
+    exact ha.choose_spec
+  suffices F' =ᵐ[μ] F by
+    filter_upwards [this, hF'_tendsto] with a h_eq h_tendsto using h_eq ▸ h_tendsto
+  have hF'_le : F <=ᵐ[μ] F' := by
+    filter_upwards [h_bound, hF'_tendsto] with a h_le h_tendsto
+    exact ge_of_tendsto' h_tendsto (fun m => h_le _)
+  suffices ∫⁻ a, F' a ∂μ = ∫⁻ a, F a ∂μ by
+    refine (ae_eq_of_ae_le_of_lintegral_le hF'_le h_int_finite ?_ this.le).symm
+    exact ENNReal.aemeasurable_of_tendsto hf_meas hF'_tendsto
+  refine tendsto_nhds_unique ?_ hf_tendsto
+  exact lintegral_tendsto_of_tendsto_of_antitone hf_meas hf_mono h0 hF'_tendsto
 
 中文:
 引理 tendsto_of_lintegral_tendsto_of_antitone
@@ -394,7 +571,28 @@ lemma tendsto_of_lintegral_tendsto_of_antitone
     filter_upwards [h_bound] with a ha using ha 0
   have h_exists : forallᵐ a ∂μ, exists l, Tendsto (fun i => f i a) atTop (𝓝 l) := by
     filter_upwards [hf_mono] with a h_mono
-    rcases _roo
+    rcases _root_.tendsto_atTop_of_antitone h_mono with h | h
+    · refine ⟨0, h.mono_right ?_⟩
+      rw [OrderBot.atBot_eq]
+      exact pure_le_nhds _
+    · exact h
+  classical
+  let F' : α -> Real>=0∞ := fun a => if h : exists l, Tendsto (fun i => f i a) atTop (𝓝 l)
+    then h.choose else ∞
+  have hF'_tendsto : forallᵐ a ∂μ, Tendsto (fun i => f i a) atTop (𝓝 (F' a)) := by
+    filter_upwards [h_exists] with a ha
+    simp_rw [F', dif_pos ha]
+    exact ha.choose_spec
+  suffices F' =ᵐ[μ] F by
+    filter_upwards [this, hF'_tendsto] with a h_eq h_tendsto using h_eq ▸ h_tendsto
+  have hF'_le : F <=ᵐ[μ] F' := by
+    filter_upwards [h_bound, hF'_tendsto] with a h_le h_tendsto
+    exact ge_of_tendsto' h_tendsto (fun m => h_le _)
+  suffices ∫⁻ a, F' a ∂μ = ∫⁻ a, F a ∂μ by
+    refine (ae_eq_of_ae_le_of_lintegral_le hF'_le h_int_finite ?_ this.le).symm
+    exact ENNReal.aemeasurable_of_tendsto hf_meas hF'_tendsto
+  refine tendsto_nhds_unique ?_ hf_tendsto
+  exact lintegral_tendsto_of_tendsto_of_antitone hf_meas hf_mono h0 hF'_tendsto
 
 Depends on / 依赖: OrderBot, OrderBot.atBot_eq, Tendsto, _root_, _root_.tendsto_atTop_of_antitone, atBot_eq, classical, filter_upwards, h.mono_right, h0.lt_top, h_bound, h_exists, h_int_finite, h_mono, hf_mono, lintegral_mono_ae, lt_top, mono_right, pure_le_nhds, tendsto_atTop_of_antitone
 -/

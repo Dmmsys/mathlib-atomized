@@ -141,7 +141,7 @@ theorem ofPowSMul_injective
   specialize hx (i + n)
   rw [ofPowSMul_val_apply I (by rw [add_comm]),
     LinearMap.map_eq_zero_iff _ (powSMulQuotInclusion_injective ..)] at hx
-  si
+  simp [hx]
 
 中文:
 定理 ofPowSMul_injective
@@ -154,7 +154,7 @@ theorem ofPowSMul_injective
   specialize hx (i + n)
   rw [ofPowSMul_val_apply I (by rw [add_comm]),
     LinearMap.map_eq_zero_iff _ (powSMulQuotInclusion_injective ..)] at hx
-  si
+  simp [hx]
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.ext_iff, LinearMap, LinearMap.ker_eq_bot, LinearMap.map_eq_zero_iff, Pi.zero_apply, add_comm, ext_iff, ker_eq_bot, map_eq_zero_iff, ofPowSMul_val_apply, powSMulQuotInclusion_injective, specialize, val_zero, zero_apply
 -/
@@ -235,7 +235,10 @@ definition ofValEqZero
   property {i j} h := by
     obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h
     rw [← (powSMulQuotInclusion_injective I rfl ⊤).eq_iff]; rw [ofValEqZeroAux_prop]; rw [← LinearMap.comp_apply]; rw [← factorPow_comp_powSMulQuotInclusion I rfl
-      (show i + k + n = 
+      (show i + k + n = k + (i + n) by ring)]; rw [LinearMap.comp_apply]; rw [ofValEqZeroAux_prop]
+    exact x.prop (by lia)
+
+@[simp]
 
 中文:
 定义 ofValEqZero
@@ -244,7 +247,10 @@ definition ofValEqZero
   property {i j} h := by
     obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h
     rw [← (powSMulQuotInclusion_injective I rfl ⊤).eq_iff]; rw [ofValEqZeroAux_prop]; rw [← LinearMap.comp_apply]; rw [← factorPow_comp_powSMulQuotInclusion I rfl
-      (show i + k + n = 
+      (show i + k + n = k + (i + n) by ring)]; rw [LinearMap.comp_apply]; rw [ofValEqZeroAux_prop]
+    exact x.prop (by lia)
+
+@[simp]
 
 Depends on / 依赖: Eq.refl, ofValEqZeroAux
 -/
@@ -332,7 +338,10 @@ lemma lsum_smul_comp_finsuppLEquivDirectSum_symm
   -- simp [-algebraMap_smul, algebraMap_apply, -smul_eq_mul]
   simp only [algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply, LinearMap.coe_comp,
     coe_lsum, LinearMap.coe_smul, LinearMap.id_coe, LinearEquiv.coe_coe, Function.comp_apply,
-    finsuppLEquivDirectSum_symm_lof, Pi.sm
+    finsuppLEquivDirectSum_symm_lof, Pi.smul_apply, id_eq, smul_zero, sum_single_index, smul_eval,
+    mapQ_eq_factor, factor_eq_factor, of_apply, mkQ_apply, Ideal.Quotient.mk_eq_mk, mk_apply_coe,
+    sumEquivOfFintype_apply, sum_lof, map_mk, AdicCauchySequence.map_apply_coe, map_smul]
+  rw [← Ideal.Quotient.algebraMap_eq]; rw [algebraMap_smul]
 
 中文:
 引理 lsum_smul_comp_finsuppLEquivDirectSum_symm
@@ -342,7 +351,10 @@ lemma lsum_smul_comp_finsuppLEquivDirectSum_symm
   -- simp [-algebraMap_smul, algebraMap_apply, -smul_eq_mul]
   simp only [algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply, LinearMap.coe_comp,
     coe_lsum, LinearMap.coe_smul, LinearMap.id_coe, LinearEquiv.coe_coe, Function.comp_apply,
-    finsuppLEquivDirectSum_symm_lof, Pi.sm
+    finsuppLEquivDirectSum_symm_lof, Pi.smul_apply, id_eq, smul_zero, sum_single_index, smul_eval,
+    mapQ_eq_factor, factor_eq_factor, of_apply, mkQ_apply, Ideal.Quotient.mk_eq_mk, mk_apply_coe,
+    sumEquivOfFintype_apply, sum_lof, map_mk, AdicCauchySequence.map_apply_coe, map_smul]
+  rw [← Ideal.Quotient.algebraMap_eq]; rw [algebraMap_smul]
 -/
 private lemma lsum_smul_comp_finsuppLEquivDirectSum_symm {ι : Type*} [DecidableEq ι] [Fintype ι]
     (f : ι -> R) : ((lsum (AdicCompletion I R))
@@ -376,7 +388,19 @@ theorem pow_smul_top_eq_ker_eval
   replace h := Ideal.FG.pow (n := n) h
   rcases h with ⟨s, hs⟩
   simp only [← hs, span_smul_eq]
-  rw [← restrictScalars_top R (AdicCompletion I R) (AdicCompletion I M)]; rw [← restrictScalars_image_smul_eq (R := AdicCompletion I R)
+  rw [← restrictScalars_top R (AdicCompletion I R) (AdicCompletion I M)]; rw [← restrictScalars_image_smul_eq (R := AdicCompletion I R)]; rw [← restrictScalars_range_ofPowSMul_eq_ker_eval]; rw [restrictScalars_le]; rw [image_smul_top_eq_range_lsum]
+  simp only [SetLike.coe_sort_coe]
+  rw [← LinearMap.range_comp_of_range_eq_top (f := (finsuppLEquivDirectSum ..).symm.toLinearMap)
+    _ (by simp)]; rw [lsum_smul_comp_finsuppLEquivDirectSum_symm]; rw [LinearMap.range_comp_of_range_eq_top _ (LinearEquiv.range _)]; rw [LinearMap.range_comp_of_range_eq_top _ (LinearMap.range_eq_top_of_surjective _ <|
+      Function.RightInverse.surjective (g := map I (finsuppLEquivDirectSum R M s)) (fun _ => by
+      simp [← LinearMap.comp_apply]; rw [map_comp]))]
+  rintro _ ⟨x, rfl⟩
+  have : Function.Surjective ((lsum R fun i : s => i.val • (LinearMap.id : M ->ₗ[R] M)).codRestrict
+    (I ^ n • ⊤) (fun _ => by simp [← hs, span_smul_eq, smul_top_eq_range_lsum])) := by
+    rw [← LinearMap.range_eq_top]; rw [LinearMap.range_codRestrict]; rw [← hs]; rw [span_smul_eq]; rw [smul_top_eq_range_lsum]
+    simp
+  rcases map_surjective I this x with ⟨x, rfl⟩
+  exact ⟨x, by rw [← LinearMap.comp_apply, map_comp, LinearMap.subtype_comp_codRestrict]⟩
 
 中文:
 定理 pow_smul_top_eq_ker_eval
@@ -388,7 +412,19 @@ theorem pow_smul_top_eq_ker_eval
   replace h := Ideal.FG.pow (n := n) h
   rcases h with ⟨s, hs⟩
   simp only [← hs, span_smul_eq]
-  rw [← restrictScalars_top R (AdicCompletion I R) (AdicCompletion I M)]; rw [← restrictScalars_image_smul_eq (R := AdicCompletion I R)
+  rw [← restrictScalars_top R (AdicCompletion I R) (AdicCompletion I M)]; rw [← restrictScalars_image_smul_eq (R := AdicCompletion I R)]; rw [← restrictScalars_range_ofPowSMul_eq_ker_eval]; rw [restrictScalars_le]; rw [image_smul_top_eq_range_lsum]
+  simp only [SetLike.coe_sort_coe]
+  rw [← LinearMap.range_comp_of_range_eq_top (f := (finsuppLEquivDirectSum ..).symm.toLinearMap)
+    _ (by simp)]; rw [lsum_smul_comp_finsuppLEquivDirectSum_symm]; rw [LinearMap.range_comp_of_range_eq_top _ (LinearEquiv.range _)]; rw [LinearMap.range_comp_of_range_eq_top _ (LinearMap.range_eq_top_of_surjective _ <|
+      Function.RightInverse.surjective (g := map I (finsuppLEquivDirectSum R M s)) (fun _ => by
+      simp [← LinearMap.comp_apply]; rw [map_comp]))]
+  rintro _ ⟨x, rfl⟩
+  have : Function.Surjective ((lsum R fun i : s => i.val • (LinearMap.id : M ->ₗ[R] M)).codRestrict
+    (I ^ n • ⊤) (fun _ => by simp [← hs, span_smul_eq, smul_top_eq_range_lsum])) := by
+    rw [← LinearMap.range_eq_top]; rw [LinearMap.range_codRestrict]; rw [← hs]; rw [span_smul_eq]; rw [smul_top_eq_range_lsum]
+    simp
+  rcases map_surjective I this x with ⟨x, rfl⟩
+  exact ⟨x, by rw [← LinearMap.comp_apply, map_comp, LinearMap.subtype_comp_codRestrict]⟩
 
 Depends on / 依赖: AdicCompletion, Ideal.FG.pow, LinearMap, LinearMap.range_comp_of_range_eq_top, SetLike, SetLike.coe_sort_coe, classical, coe_sort_coe, finsuppLEquivDi, image_smul_top_eq_range_lsum, le_antisymm, pow_smul_top_le_ker_eval, range_comp_of_range_eq_top, replace, restrictScalars_image_smul_eq, restrictScalars_le, restrictScalars_range_ofPowSMul_eq_ker_eval, restrictScalars_top, span_smul_eq
 -/
@@ -430,7 +466,11 @@ theorem isAdicComplete
         simp only [transitionMap_comp_eval_apply]
         specialize hx h'
         rwa [SModEq.sub_mem, pow_smul_top_eq_ker_eval h, LinearMap.mem_ker, _root_.map_sub,
-          sub_eq_zero, eval_apply, ev
+          sub_eq_zero, eval_apply, eval_apply, eq_comm] at hx
+    }
+    use L; intro i
+    rw [SModEq.sub_mem]; rw [pow_smul_top_eq_ker_eval h]
+    simp [L]
 
 中文:
 定理 isAdicComplete
@@ -443,7 +483,11 @@ theorem isAdicComplete
         simp only [transitionMap_comp_eval_apply]
         specialize hx h'
         rwa [SModEq.sub_mem, pow_smul_top_eq_ker_eval h, LinearMap.mem_ker, _root_.map_sub,
-          sub_eq_zero, eval_apply, ev
+          sub_eq_zero, eval_apply, eval_apply, eq_comm] at hx
+    }
+    use L; intro i
+    rw [SModEq.sub_mem]; rw [pow_smul_top_eq_ker_eval h]
+    simp [L]
 
 Depends on / 依赖: AdicCompletion, LinearMap, LinearMap.mem_ker, SModEq, SModEq.sub_mem, _root_, _root_.map_sub, eq_comm, eval_apply, map_sub, mem_ker, pow_smul_top_eq_ker_eval, property, specialize, sub_eq_zero, sub_mem, transitionMap_comp_eval_apply
 -/
@@ -473,7 +517,9 @@ lemma ker_evalOneₐ_eq_map
   · have eq : I ^ 1 * ⊤ = I := by simp
     have : Function.Injective (Ideal.Quotient.factor ((le_of_eq eq))) := by
       simpa [RingHom.injective_iff_ker_eq_bot, Ideal.Quotient.factor_ker]
-        using Ideal.map_mk_eq_bot_of_le (le_of_eq eq.sy
+        using Ideal.map_mk_eq_bot_of_le (le_of_eq eq.symm)
+    simpa [← factorₐ_evalₐ_one, ← factor_eval_eq_evalₐ] using map_eq_zero_iff _ this
+  · simp [← pow_smul_top_eq_ker_eval fg]
 
 中文:
 引理 ker_evalOneₐ_eq_map
@@ -484,7 +530,9 @@ lemma ker_evalOneₐ_eq_map
   · have eq : I ^ 1 * ⊤ = I := by simp
     have : Function.Injective (Ideal.Quotient.factor ((le_of_eq eq))) := by
       simpa [RingHom.injective_iff_ker_eq_bot, Ideal.Quotient.factor_ker]
-        using Ideal.map_mk_eq_bot_of_le (le_of_eq eq.sy
+        using Ideal.map_mk_eq_bot_of_le (le_of_eq eq.symm)
+    simpa [← factorₐ_evalₐ_one, ← factor_eval_eq_evalₐ] using map_eq_zero_iff _ this
+  · simp [← pow_smul_top_eq_ker_eval fg]
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.eval, Function, Function.Injective, Ideal.Quotient.factor, Ideal.Quotient.factor_ker, Ideal.map_mk_eq_bot_of_le, Injective, Quotient, RingHom, RingHom.injective_iff_ker_eq_bot, eq.symm, factor, factor_ker, injective_iff_ker_eq_bot, le_of_eq, map_eq_zero_iff, map_mk_eq_bot_of_le, pow_smul_top_eq_ker_eval
 -/

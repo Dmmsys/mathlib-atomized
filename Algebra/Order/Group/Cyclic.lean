@@ -48,7 +48,7 @@ lemma exists_generator_lt_one
   · rw [Subgroup.zpowers_one_eq_bot] at ha
 exact absurd ha.symm (H.nontrivial_iff_ne_bot).mp inferInstance
   · use a⁻¹, Left.inv_lt_one_iff.mpr ha1
-    rw [Subgroup.
+    rw [Subgroup.zpowers_inv]; rw [ha]
 
 中文:
 引理 存在_generator_lt_one
@@ -60,7 +60,7 @@ exact absurd ha.symm (H.nontrivial_iff_ne_bot).mp inferInstance
   · rw [Subgroup.zpowers_one_eq_bot] at ha
 exact absurd ha.symm (H.nontrivial_iff_ne_bot).mp inferInstance
   · use a⁻¹, Left.inv_lt_one_iff.mpr ha1
-    rw [Subgroup.
+    rw [Subgroup.zpowers_inv]; rw [ha]
 
 Depends on / 依赖: H.isCyclic_iff_exists_zpowers_eq_top.mp, H.nontrivial_iff_ne_bot, Left.inv_lt_one_iff.mpr, Subgroup, Subgroup.zpowers_inv, Subgroup.zpowers_one_eq_bot, absurd, ha.symm, inv_lt_one_iff, isCyclic_iff_exists_zpowers_eq_top, lt_trichotomy, nontrivial_iff_ne_bot, zpowers_inv, zpowers_one_eq_bot
 -/
@@ -174,7 +174,7 @@ lemma genLTOne_unique
   rcases (Subgroup.zpowers_eq_zpowers_iff hg').mp hH with _ | h
   · assumption
   rw [← one_lt_inv']; rw [h] at hg
-  exact (not_lt_of_gt hg <| Subgroup.genLTOne_lt_one _).el
+  exact (not_lt_of_gt hg <| Subgroup.genLTOne_lt_one _).elim
 
 中文:
 引理 genLTOne_unique
@@ -186,7 +186,7 @@ lemma genLTOne_unique
   rcases (Subgroup.zpowers_eq_zpowers_iff hg').mp hH with _ | h
   · assumption
   rw [← one_lt_inv']; rw [h] at hg
-  exact (not_lt_of_gt hg <| Subgroup.genLTOne_lt_one _).el
+  exact (not_lt_of_gt hg <| Subgroup.genLTOne_lt_one _).elim
 
 Depends on / 依赖: H.genLTOne_zpowers_eq_top, IsOfFinOrder, Subgroup, Subgroup.genLTOne_lt_one, Subgroup.zpowers_eq_zpowers_iff, genLTOne_lt_one, genLTOne_zpowers_eq_top, ne_of_lt, not_isOfFinOrder_of_isMulTorsionFree, not_lt_of_gt, one_lt_inv, zpowers_eq_zpowers_iff
 -/
@@ -210,7 +210,11 @@ lemma genLTOne_unique_of_zpowers_eq
     simp_all only [Subgroup.zpowers_eq_bot]
   · have h1 : IsCyclic ↥(Subgroup.zpowers g2) := by
       rw [Subgroup.isCyclic_iff_exists_zpowers_eq_top]; use g2
-    have h2 : Nontrivial ↥(Subgroup.zpowers g1) := by rw 
+    have h2 : Nontrivial ↥(Subgroup.zpowers g1) := by rw [h]; exact h'
+    have h3 : IsCyclic ↥(Subgroup.zpowers g1) := by rw [h]; exact h1
+    simp only [(Subgroup.zpowers g2).genLTOne_unique hg1 h]
+    simp only [← h]
+    simp only [(Subgroup.zpowers g1).genLTOne_unique hg2 h.symm]
 
 中文:
 引理 genLTOne_unique_of_zpowers_eq
@@ -221,7 +225,11 @@ lemma genLTOne_unique_of_zpowers_eq
     simp_all only [Subgroup.zpowers_eq_bot]
   · have h1 : IsCyclic ↥(Subgroup.zpowers g2) := by
       rw [Subgroup.isCyclic_iff_exists_zpowers_eq_top]; use g2
-    have h2 : Nontrivial ↥(Subgroup.zpowers g1) := by rw 
+    have h2 : Nontrivial ↥(Subgroup.zpowers g1) := by rw [h]; exact h'
+    have h3 : IsCyclic ↥(Subgroup.zpowers g1) := by rw [h]; exact h1
+    simp only [(Subgroup.zpowers g2).genLTOne_unique hg1 h]
+    simp only [← h]
+    simp only [(Subgroup.zpowers g1).genLTOne_unique hg2 h.symm]
 
 Depends on / 依赖: IsCyclic, Nontrivial, Subgroup, Subgroup.isCyclic_iff_exists_zpowers_eq_top, Subgroup.zpowers, Subgroup.zpowers_eq_bot, bot_or_nontrivial, genLTOne_unique, h.symm, isCyclic_iff_exists_zpowers_eq_top, zpowers, zpowers_eq_bot
 -/

@@ -159,7 +159,9 @@ instance repr
         (List.finRange m).map fun i =>
 Std.Format.fill -- wrap line in a single place rather than all at once
 (Std.Format.joinSep · ("," ++ Std.Format.line))
-            (List.finRange n).map fun j => _root_.repr (f i j
+            (List.finRange n).map fun j => _root_.repr (f i j)
+
+@[simp]
 
 中文:
 实例 repr
@@ -169,7 +171,9 @@ Std.Format.fill -- wrap line in a single place rather than all at once
         (List.finRange m).map fun i =>
 Std.Format.fill -- wrap line in a single place rather than all at once
 (Std.Format.joinSep · ("," ++ Std.Format.line))
-            (List.finRange n).map fun j => _root_.repr (f i j
+            (List.finRange n).map fun j => _root_.repr (f i j)
+
+@[simp]
 
 Depends on / 依赖: Format, List.finRange, Std.Format.bracket, Std.Format.fill, Std.Format.joinSep, Std.Format.line, _root_, _root_.repr, bracket, finRange, joinSep, rather, single
 -/

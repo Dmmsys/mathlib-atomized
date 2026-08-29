@@ -69,7 +69,9 @@ instance :
     have := (Associated.of_eq hxy).normalizedFactors_eq
     rwa [normalizedFactors_pow, normalizedFactors_pow, nsmul_right_inj hn,
       ← associated_iff_normalizedFactors_eq_normalizedFactors hx hy] at this
-  repl
+  replace hx : IsLeftRegular (x ^ n) := (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hx).pow n
+  rw [← hu]; rw [mul_pow]; rw [eq_comm]; rw [IsLeftRegular.mul_left_eq_self_iff hx]; rw [← Units.val_pow_eq_pow_val]; rw [Units.val_eq_one]; rw [pow_eq_one_iff_left hn] at hxy
+  rwa [hxy, Units.val_one, mul_one] at hu
 
 中文:
 实例 :
@@ -80,7 +82,9 @@ instance :
     have := (Associated.of_eq hxy).normalizedFactors_eq
     rwa [normalizedFactors_pow, normalizedFactors_pow, nsmul_right_inj hn,
       ← associated_iff_normalizedFactors_eq_normalizedFactors hx hy] at this
-  repl
+  replace hx : IsLeftRegular (x ^ n) := (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hx).pow n
+  rw [← hu]; rw [mul_pow]; rw [eq_comm]; rw [IsLeftRegular.mul_left_eq_self_iff hx]; rw [← Units.val_pow_eq_pow_val]; rw [Units.val_eq_one]; rw [pow_eq_one_iff_left hn] at hxy
+  rwa [hxy, Units.val_one, mul_one] at hu
 
 Depends on / 依赖: Associated, Associated.of_eq, IsLeftCancelMulZero, IsLeftCancelMulZero.mul_left_cancel_of_ne_zero, IsLeftRegular, IsLeftRegular.mul_left_eq_self_iff, Units.va, Units.val_pow_eq_pow_val, associated_iff_normalizedFactors_eq_normalizedFactors, eq_comm, mul_left_cancel_of_ne_zero, mul_left_eq_self_iff, mul_pow, normalizedFactors_eq, normalizedFactors_pow, nsmul_right_inj, of_eq, replace, val_pow_eq_pow_val
 -/

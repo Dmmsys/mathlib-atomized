@@ -33,14 +33,30 @@ lemma ScottContinuousOn.fromProd
   statement: [Preorder α] [Preorder β] [Preorder γ]
   proof: fun d hX hd₁ hd₂ ⟨p1, p2⟩ hdp => by
   rw [isLUB_congr ((monotone_prod_iff.mpr ⟨h₁']; rw [h₂'⟩).upperBounds_image_of_directedOn_prod hd₂)]; rw [← iUnion_of_singleton_coe (Prod.fst '' d)]; rw [iUnion_prod_const]; rw [image_iUnion]; rw [← isLUB_iUnion_iff_of_isLUB (fun a => by
-      rw [singleton_prod]
+      rw [singleton_prod]; rw [image_image f (fun b => (a]; rw [b))]
+      exact h₁ _ (mem_image_of_mem (fun d => Prod.snd '' d) hX) (Nonempty.image Prod.snd hd₁)
+        (DirectedOn.snd hd₂) (isLUB_prod.mp hdp).2) _, Set.range]
+  convert!
+    (h₂ _ (mem_image_of_mem (fun d => Prod.fst '' d) hX) (Nonempty.image Prod.fst hd₁)
+      (DirectedOn.fst hd₂) (isLUB_prod.mp hdp).1)
+  ext : 1
+  simp_all only [Subtype.exists, mem_image, Prod.exists,
+    exists_and_right, exists_eq_right, exists_prop, mem_ofPred_eq]
 
 中文:
 引理 ScottContinuousOn.fromProd
   结论: [预序 α] [预序 β] [预序 γ]
   证明: fun d hX hd₁ hd₂ ⟨p1, p2⟩ hdp => by
   rw [isLUB_congr ((monotone_prod_iff.mpr ⟨h₁']; rw [h₂'⟩).upperBounds_image_of_directedOn_prod hd₂)]; rw [← iUnion_of_singleton_coe (Prod.fst '' d)]; rw [iUnion_prod_const]; rw [image_iUnion]; rw [← isLUB_iUnion_iff_of_isLUB (fun a => by
-      rw [singleton_prod]
+      rw [singleton_prod]; rw [image_image f (fun b => (a]; rw [b))]
+      exact h₁ _ (mem_image_of_mem (fun d => Prod.snd '' d) hX) (Nonempty.image Prod.snd hd₁)
+        (DirectedOn.snd hd₂) (isLUB_prod.mp hdp).2) _, Set.range]
+  convert!
+    (h₂ _ (mem_image_of_mem (fun d => Prod.fst '' d) hX) (Nonempty.image Prod.fst hd₁)
+      (DirectedOn.fst hd₂) (isLUB_prod.mp hdp).1)
+  ext : 1
+  simp_all only [Subtype.exists, mem_image, Prod.exists,
+    exists_and_right, exists_eq_right, exists_prop, mem_ofPred_eq]
 
 Depends on / 依赖: DirectedOn, DirectedOn.snd, Nonempty, Nonempty.image, Prod.fst, Prod.snd, Set.range, convert, iUnion_of_singleton_coe, iUnion_prod_const, image_iUnion, image_image, isLUB_congr, isLUB_iUnion_iff_of_isLUB, isLUB_prod, isLUB_prod.mp, mem_image_of_mem, monotone_prod_iff, monotone_prod_iff.mpr, singleton_prod
 -/
@@ -100,7 +116,9 @@ lemma ScottContinuous.prod
   · have e1 : (fun b => (f a, g b)) '' d = {f a} ×ˢ (g '' d) := by aesop
     simp_rw [Prod.map_apply, e1]
     exact .prod (singleton_nonempty _) (hd₁.image _) isLUB_singleton (hg hd₁ hd₂ hdc)
-  · have e2 : ((fun a => (
+  · have e2 : ((fun a => (f a, g b)) '' d) = (f '' d) ×ˢ {g b} := by aesop
+    simp_rw [Prod.map_apply, e2]
+    exact .prod (hd₁.image _) (singleton_nonempty _) (hf hd₁ hd₂ hdc) isLUB_singleton
 
 中文:
 引理 ScottContinuous.乘积
@@ -110,7 +128,9 @@ lemma ScottContinuous.prod
   · have e1 : (fun b => (f a, g b)) '' d = {f a} ×ˢ (g '' d) := by aesop
     simp_rw [Prod.map_apply, e1]
     exact .prod (singleton_nonempty _) (hd₁.image _) isLUB_singleton (hg hd₁ hd₂ hdc)
-  · have e2 : ((fun a => (
+  · have e2 : ((fun a => (f a, g b)) '' d) = (f '' d) ×ˢ {g b} := by aesop
+    simp_rw [Prod.map_apply, e2]
+    exact .prod (hd₁.image _) (singleton_nonempty _) (hf hd₁ hd₂ hdc) isLUB_singleton
 
 Depends on / 依赖: Prod.map_apply, fromProd, isLUB_singleton, map_apply, simp_rw, singleton_nonempty
 -/

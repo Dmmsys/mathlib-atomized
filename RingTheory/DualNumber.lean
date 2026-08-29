@@ -43,7 +43,10 @@ lemma isNilpotent_iff_isNilpotent_fst
     rw [pow_mul]
     ext
     · rw [fst_pow, fst_pow, hn, zero_pow two_ne_zero, fst_zero]
-    · rw [pow_two, snd_mul, fst_pow, hn, MulOpposite.op_zero, zero_smul, zero_smul, zero_a
+    · rw [pow_two, snd_mul, fst_pow, hn, MulOpposite.op_zero, zero_smul, zero_smul, zero_add,
+        snd_zero]
+
+@[simp]
 
 中文:
 引理 isNilpotent_iff_isNilpotent_fst
@@ -56,7 +59,10 @@ lemma isNilpotent_iff_isNilpotent_fst
     rw [pow_mul]
     ext
     · rw [fst_pow, fst_pow, hn, zero_pow two_ne_zero, fst_zero]
-    · rw [pow_two, snd_mul, fst_pow, hn, MulOpposite.op_zero, zero_smul, zero_smul, zero_a
+    · rw [pow_two, snd_mul, fst_pow, hn, MulOpposite.op_zero, zero_smul, zero_smul, zero_add,
+        snd_zero]
+
+@[simp]
 
 Depends on / 依赖: MulOpposite, MulOpposite.op_zero, fst_pow, fst_zero, op_zero, pow_mul, pow_two, snd_mul, snd_zero, two_ne_zero, zero_add, zero_pow, zero_smul
 -/
@@ -307,7 +313,27 @@ lemma ideal_trichotomy
     intro x hxI
     rcases isUnit_or_isNilpotent x with hx | hx
     · exact absurd (Ideal.eq_top_of_isUnit_mem _ hxI hx) ht
-    · rwa [← isNilpotent_iff_eps_dvd
+    · rwa [← isNilpotent_iff_eps_dvd]
+  have hd' : forall x in I, x != 0 -> exists r, ε = r * x := by
+    intro x hxI hx0
+    obtain ⟨r, rfl⟩ := hd _ hxI
+    have : ε * r = (fst r) • ε := by ext <;> simp
+    rw [this] at hxI hx0 ⊢
+    have hr : fst r != 0 := by
+      contrapose hx0
+      simp [hx0]
+    refine ⟨r⁻¹, ?_⟩
+    simp [TrivSqZeroExt.ext_iff, inv_mul_cancel₀ hr]
+  refine le_antisymm ?_ ?_ <;> intro x <;>
+    simp_rw [Ideal.mem_span_singleton', (commute_eps_right _).eq, eq_comm, ← dvd_def]
+  · intro hx
+    simp_rw [hd _ hx]
+  · intro hx
+    obtain ⟨p, rfl⟩ := hx
+    obtain ⟨y, hyI, hy0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hb
+    obtain ⟨r, hr⟩ := hd' _ hyI hy0
+    rw [(commute_eps_left _).eq]; rw [hr]; rw [← mul_assoc]
+    exact Ideal.mul_mem_left _ _ hyI
 
 中文:
 引理 ideal_trichotomy
@@ -319,7 +345,27 @@ lemma ideal_trichotomy
     intro x hxI
     rcases isUnit_or_isNilpotent x with hx | hx
     · exact absurd (Ideal.eq_top_of_isUnit_mem _ hxI hx) ht
-    · rwa [← isNilpotent_iff_eps_dvd
+    · rwa [← isNilpotent_iff_eps_dvd]
+  have hd' : forall x in I, x != 0 -> exists r, ε = r * x := by
+    intro x hxI hx0
+    obtain ⟨r, rfl⟩ := hd _ hxI
+    have : ε * r = (fst r) • ε := by ext <;> simp
+    rw [this] at hxI hx0 ⊢
+    have hr : fst r != 0 := by
+      contrapose hx0
+      simp [hx0]
+    refine ⟨r⁻¹, ?_⟩
+    simp [TrivSqZeroExt.ext_iff, inv_mul_cancel₀ hr]
+  refine le_antisymm ?_ ?_ <;> intro x <;>
+    simp_rw [Ideal.mem_span_singleton', (commute_eps_right _).eq, eq_comm, ← dvd_def]
+  · intro hx
+    simp_rw [hd _ hx]
+  · intro hx
+    obtain ⟨p, rfl⟩ := hx
+    obtain ⟨y, hyI, hy0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hb
+    obtain ⟨r, hr⟩ := hd' _ hyI hy0
+    rw [(commute_eps_left _).eq]; rw [hr]; rw [← mul_assoc]
+    exact Ideal.mul_mem_left _ _ hyI
 
 Depends on / 依赖: Ideal.eq_top_of_isUnit_mem, absurd, contrapose, eq_or_ne, eq_top_of_isUnit_mem, imp_left, imp_right, isNilpotent_iff_eps_dvd, isUnit_or_isNilpotent, symm.imp_left
 -/
@@ -448,7 +494,13 @@ lemma exists_mul_left_or_mul_right
   rw [isNilpotent_iff_eps_dvd] at ha hb
   obtain ⟨x, rfl⟩ := ha
   obtain ⟨y, rfl⟩ := hb
- 
+  suffices exists c, fst x * fst c = fst y ∨ fst y * fst c = fst x by
+    simpa [TrivSqZeroExt.ext_iff] using this
+  rcases eq_or_ne (fst x) 0 with hx | hx
+  · refine ⟨ε, Or.inr ?_⟩
+    simp [hx]
+  refine ⟨inl ((fst x)⁻¹ * fst y), ?_⟩
+  simp [← mul_assoc, mul_inv_cancel₀ hx]
 
 中文:
 引理 存在_mul_left_or_mul_right
@@ -463,7 +515,13 @@ lemma exists_mul_left_or_mul_right
   rw [isNilpotent_iff_eps_dvd] at ha hb
   obtain ⟨x, rfl⟩ := ha
   obtain ⟨y, rfl⟩ := hb
- 
+  suffices exists c, fst x * fst c = fst y ∨ fst y * fst c = fst x by
+    simpa [TrivSqZeroExt.ext_iff] using this
+  rcases eq_or_ne (fst x) 0 with hx | hx
+  · refine ⟨ε, Or.inr ?_⟩
+    simp [hx]
+  refine ⟨inl ((fst x)⁻¹ * fst y), ?_⟩
+  simp [← mul_assoc, mul_inv_cancel₀ hx]
 
 Depends on / 依赖: Or.inr, TrivSqZeroExt, TrivSqZeroExt.ext_iff, eq_or_ne, ext_iff, isNilpotent_iff_eps_dvd, isUnit_or_isNilpotent
 -/

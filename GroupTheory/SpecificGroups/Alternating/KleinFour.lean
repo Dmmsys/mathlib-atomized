@@ -91,7 +91,21 @@ theorem mem_kleinFour_of_order_two_pow
     exact g.support.card_le_univ
   have h2 : forall k in g.cycleType, k = 2 := by
     intro k hk
-    have hk4 := (Multiset.le_sum_of_
+    have hk4 := (Multiset.le_sum_of_mem hk).trans h1
+    have hk1 := one_lt_of_mem_cycleType hk
+    interval_cases k
+    · rfl
+    · rw [← lcm_cycleType, Multiset.lcm_dvd] at hg
+      exact Nat.prime_eq_prime_of_dvd_pow Nat.prime_three Nat.prime_two (hg 3 hk)
+    · contrapose! hg0
+      obtain ⟨t, ht⟩ := Multiset.exists_cons_of_mem hk
+      rw [ht]; rw [Multiset.sum_cons]; rw [add_le_iff_nonpos_right]; rw [le_zero_iff]; rw [Multiset.sum_eq_zero_iff]; rw [← Multiset.eq_replicate_card] at h1
+      have h : 0 ∉ g.cycleType := Nat.not_succ_lt_self ∘ one_lt_of_mem_cycleType
+      replace h : t = 0 := by simpa [h1 ▸ ht, Multiset.mem_replicate] using h
+      simp [ht, h, Units.ext_iff]
+  rw [← Multiset.eq_replicate_card] at h2
+  rw [h2]; rw [Multiset.sum_replicate]; rw [smul_eq_mul]; rw [← Nat.le_div_iff_mul_le two_pos] at h1
+  interval_cases g.cycleType.card <;> simp [h2, Units.ext_iff] at hg0 ⊢
 
 中文:
 定理 mem_kleinFour_of_order_two_pow
@@ -103,7 +117,21 @@ theorem mem_kleinFour_of_order_two_pow
     exact g.support.card_le_univ
   have h2 : forall k in g.cycleType, k = 2 := by
     intro k hk
-    have hk4 := (Multiset.le_sum_of_
+    have hk4 := (Multiset.le_sum_of_mem hk).trans h1
+    have hk1 := one_lt_of_mem_cycleType hk
+    interval_cases k
+    · rfl
+    · rw [← lcm_cycleType, Multiset.lcm_dvd] at hg
+      exact Nat.prime_eq_prime_of_dvd_pow Nat.prime_three Nat.prime_two (hg 3 hk)
+    · contrapose! hg0
+      obtain ⟨t, ht⟩ := Multiset.exists_cons_of_mem hk
+      rw [ht]; rw [Multiset.sum_cons]; rw [add_le_iff_nonpos_right]; rw [le_zero_iff]; rw [Multiset.sum_eq_zero_iff]; rw [← Multiset.eq_replicate_card] at h1
+      have h : 0 ∉ g.cycleType := Nat.not_succ_lt_self ∘ one_lt_of_mem_cycleType
+      replace h : t = 0 := by simpa [h1 ▸ ht, Multiset.mem_replicate] using h
+      simp [ht, h, Units.ext_iff]
+  rw [← Multiset.eq_replicate_card] at h2
+  rw [h2]; rw [Multiset.sum_replicate]; rw [smul_eq_mul]; rw [← Nat.le_div_iff_mul_le two_pos] at h1
+  interval_cases g.cycleType.card <;> simp [h2, Units.ext_iff] at hg0 ⊢
 
 Depends on / 依赖: Multiset, Multiset.lcm_dvd, Multiset.le_sum_of_mem, Nat.card_eq_fintype_card, Nat.prime_eq_prime_of_dvd_pow, Nat.prime_three, Nat.prime_two, card_eq_fintype_card, card_le_univ, contrapose, cycleType, g.cycleType, g.cycleType.sum, g.support.card_le_univ, interval_cases, lcm_cycleType, lcm_dvd, le_sum_of_mem, mem_alternatingGroup, one_lt_of_mem_cycleType
 -/
@@ -174,7 +202,8 @@ theorem card_two_sylow_of_card_eq_four
   proof: by
   rw [Sylow.card_eq_multiplicity]; rw [card_of_card_eq_four hα4]
   have : 12 = 2 ^ 2 * 3 := by simp
-  rw [this]; rw [Nat.factorization_mul_apply_of_coprime (by decide)]; rw [Nat.factorization_pow]; rw [Finsupp.coe_smul]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [Nat.prime_two.factorization_self];
+  rw [this]; rw [Nat.factorization_mul_apply_of_coprime (by decide)]; rw [Nat.factorization_pow]; rw [Finsupp.coe_smul]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [Nat.prime_two.factorization_self]; rw [Nat.factorization_eq_zero_of_not_dvd (by decide)]
+  simp
 
 中文:
 定理 card_two_sylow_of_card_eq_four
@@ -182,7 +211,8 @@ theorem card_two_sylow_of_card_eq_four
   证明: by
   rw [Sylow.card_eq_multiplicity]; rw [card_of_card_eq_four hα4]
   have : 12 = 2 ^ 2 * 3 := by simp
-  rw [this]; rw [Nat.factorization_mul_apply_of_coprime (by decide)]; rw [Nat.factorization_pow]; rw [Finsupp.coe_smul]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [Nat.prime_two.factorization_self];
+  rw [this]; rw [Nat.factorization_mul_apply_of_coprime (by decide)]; rw [Nat.factorization_pow]; rw [Finsupp.coe_smul]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [Nat.prime_two.factorization_self]; rw [Nat.factorization_eq_zero_of_not_dvd (by decide)]
+  simp
 
 Depends on / 依赖: Finsupp, Finsupp.coe_smul, Nat.factorization_eq_zero_of_not_dvd, Nat.factorization_mul_apply_of_coprime, Nat.factorization_pow, Nat.prime_two.factorization_self, Pi.smul_apply, Sylow.card_eq_multiplicity, card_eq_multiplicity, card_of_card_eq_four, coe_smul, factorization_eq_zero_of_not_dvd, factorization_mul_apply_of_coprime, factorization_pow, factorization_self, prime_two, smul_apply, smul_eq_mul
 -/
@@ -204,7 +234,15 @@ theorem coe_two_sylow_of_card_eq_four
   · -- inclusion S ⊆ {1} ∪ {g | cycleType g = { 2, 2 }}
     obtain ⟨n, hn⟩ := (IsPGroup.iff_orderOf.mp S.isPGroup') ⟨k, hk⟩
     replace hn : (orderOf (k : Perm α)) = 2 ^ n := by simpa using hn
-    convert! mem_kleinFour_of_order
+    convert! mem_kleinFour_of_order_two_pow hα4 k.2 hn.dvd
+    simp
+  · -- card (kleinFour α) ≤ card S
+    simp_rw [← Nat.card_eq_fintype_card]
+    refine (card_two_sylow_of_card_eq_four hα4 S).trans_ge ?_
+    rw [Nat.card_eq_card_toFinset]; rw [Set.toFinset_union]; rw [Set.toFinset_singleton]; rw [Set.toFinset_ofPred]
+    apply (Finset.card_union_le _ _).trans
+    rw [Finset.card_singleton]; rw [AlternatingGroup.card_of_cycleType]; rw [← Nat.card_eq_fintype_card]; rw [hα4]
+    decide
 
 中文:
 定理 coe_two_sylow_of_card_eq_four
@@ -214,7 +252,15 @@ theorem coe_two_sylow_of_card_eq_four
   · -- inclusion S ⊆ {1} ∪ {g | cycleType g = { 2, 2 }}
     obtain ⟨n, hn⟩ := (IsPGroup.iff_orderOf.mp S.isPGroup') ⟨k, hk⟩
     replace hn : (orderOf (k : Perm α)) = 2 ^ n := by simpa using hn
-    convert! mem_kleinFour_of_order
+    convert! mem_kleinFour_of_order_two_pow hα4 k.2 hn.dvd
+    simp
+  · -- card (kleinFour α) ≤ card S
+    simp_rw [← Nat.card_eq_fintype_card]
+    refine (card_two_sylow_of_card_eq_four hα4 S).trans_ge ?_
+    rw [Nat.card_eq_card_toFinset]; rw [Set.toFinset_union]; rw [Set.toFinset_singleton]; rw [Set.toFinset_ofPred]
+    apply (Finset.card_union_le _ _).trans
+    rw [Finset.card_singleton]; rw [AlternatingGroup.card_of_cycleType]; rw [← Nat.card_eq_fintype_card]; rw [hα4]
+    decide
 
 Depends on / 依赖: IsPGroup, IsPGroup.iff_orderOf.mp, Nat.card_eq_card_toFinset, Nat.card_eq_fintype_card, S.isPGroup, Set.eq_of_subset_of_card_le, Set.toFinset_union, card_eq_card_toFinset, card_eq_fintype_card, card_two_sylow_of_card_eq_four, classical, convert, cycleType, eq_of_subset_of_card_le, hn.dvd, iff_orderOf, inclusion, isPGroup, kleinFour, mem_kleinFour_of_order_two_pow
 -/
@@ -405,7 +451,14 @@ theorem exponent_kleinFour_of_card_eq_four
     rw [← SetLike.mem_coe]; rw [coe_kleinFour_of_card_eq_four hα4] at hg'
     rcases hg' with hg' | hg'
     · convert! one_pow _
-
+      simpa only [Set.mem_singleton_iff, Subgroup.mk_eq_one] using hg'
+    · convert! pow_orderOf_eq_one g
+      rw [← Equiv.Perm.lcm_cycleType]; rw [hg']
+      simp
+  rw [Nat.dvd_prime Nat.prime_two] at this
+  apply Or.resolve_left this
+  rw [Monoid.exp_eq_one_iff]; rw [← Finite.card_le_one_iff_subsingleton]; rw [kleinFour_card_of_card_eq_four hα4]
+  decide
 
 中文:
 定理 exponent_kleinFour_of_card_eq_four
@@ -418,7 +471,14 @@ theorem exponent_kleinFour_of_card_eq_four
     rw [← SetLike.mem_coe]; rw [coe_kleinFour_of_card_eq_four hα4] at hg'
     rcases hg' with hg' | hg'
     · convert! one_pow _
-
+      simpa only [Set.mem_singleton_iff, Subgroup.mk_eq_one] using hg'
+    · convert! pow_orderOf_eq_one g
+      rw [← Equiv.Perm.lcm_cycleType]; rw [hg']
+      simp
+  rw [Nat.dvd_prime Nat.prime_two] at this
+  apply Or.resolve_left this
+  rw [Monoid.exp_eq_one_iff]; rw [← Finite.card_le_one_iff_subsingleton]; rw [kleinFour_card_of_card_eq_four hα4]
+  decide
 
 Depends on / 依赖: Equiv.Perm.lcm_cycleType, Monoid, Monoid.exp, Monoid.exponent, Monoid.exponent_dvd, Nat.dvd_prime, Nat.prime_two, Or.resolve_left, Set.mem_singleton_iff, SetLike, SetLike.mem_coe, Subgroup, Subgroup.mk_eq_one, Subgroup.orderOf_mk, coe_kleinFour_of_card_eq_four, convert, dvd_prime, exponent, exponent_dvd, kleinFour
 -/
@@ -473,7 +533,36 @@ theorem kleinFour_eq_commutator
   have : Nat.card (alternatingGroup α ⧸ kleinFour α) = 3 := by
     rw [← Nat.mul_left_inj (a := Nat.card (kleinFour α))]
     · rw [← Subgroup.card_eq_card_quotient_mul_card_subgroup]
-      rw [card_of_card_eq_four hα4]; rw [kleinFour_card_of
+      rw [card_of_card_eq_four hα4]; rw [kleinFour_card_of_card_eq_four hα4]
+    rw [kleinFour_card_of_card_eq_four hα4]; simp
+  have comm_le : commutator (alternatingGroup α) <= kleinFour α := by
+    rw [← Subgroup.Normal.quotient_commutative_iff_commutator_le]
+    exact (isCyclic_of_prime_card this).isMulCommutative
+  have comm_ne_bot : commutator (alternatingGroup α) != ⊥ := by
+    rw [ne_eq]; rw [commutator_eq_bot_iff_center_eq_top]; rw [center_eq_bot (le_of_eq hα4.symm)]
+    apply @bot_ne_top _ _ _ ?_
+    rw [Subgroup.nontrivial_iff]; rw [← Finite.one_lt_card_iff_nontrivial]; rw [card_of_card_eq_four hα4]
+    simp
+  obtain ⟨k, hk, hk'⟩ := Or.resolve_left (Subgroup.bot_or_exists_ne_one _) comm_ne_bot
+  suffices hk22 : (k : Equiv.Perm α).cycleType = {2, 2} by
+    refine le_antisymm ?_ comm_le
+    intro g hg
+    rw [← SetLike.mem_coe]; rw [coe_kleinFour_of_card_eq_four hα4]; rw [Set.mem_union]; rw [Set.mem_singleton_iff]; rw [Set.mem_ofPred_eq] at hg
+    rcases hg with ⟨rfl⟩ | hg
+    · exact Subgroup.one_mem _
+    · rw [← hg, ← Equiv.Perm.isConj_iff_cycleType_eq, isConj_iff] at hk22
+      obtain ⟨c, hc⟩ := hk22
+      rw [← MulAut.conjNormal_apply]; rw [Subtype.coe_inj] at hc
+      simp only [commutator, ← hc]
+      let fc : MulAut (alternatingGroup α) := MulAut.conjNormal c
+      suffices (⊤ : Subgroup (alternatingGroup α)) =
+        Subgroup.map fc.toMonoidHom (⊤ : Subgroup (alternatingGroup α)) by
+        rw [this]; rw [← Subgroup.map_commutator]
+        refine Subgroup.mem_map_of_mem _ hk
+      simp
+  have hk2 := comm_le hk
+  rw [← SetLike.mem_coe]; rw [coe_kleinFour_of_card_eq_four hα4]; rw [Set.mem_union]; rw [Set.mem_singleton_iff]; rw [Set.mem_ofPred_eq] at hk2
+  exact hk2.resolve_left hk'
 
 中文:
 定理 kleinFour_eq_commutator
@@ -483,7 +572,36 @@ theorem kleinFour_eq_commutator
   have : Nat.card (alternatingGroup α ⧸ kleinFour α) = 3 := by
     rw [← Nat.mul_left_inj (a := Nat.card (kleinFour α))]
     · rw [← Subgroup.card_eq_card_quotient_mul_card_subgroup]
-      rw [card_of_card_eq_four hα4]; rw [kleinFour_card_of
+      rw [card_of_card_eq_four hα4]; rw [kleinFour_card_of_card_eq_four hα4]
+    rw [kleinFour_card_of_card_eq_four hα4]; simp
+  have comm_le : commutator (alternatingGroup α) <= kleinFour α := by
+    rw [← Subgroup.Normal.quotient_commutative_iff_commutator_le]
+    exact (isCyclic_of_prime_card this).isMulCommutative
+  have comm_ne_bot : commutator (alternatingGroup α) != ⊥ := by
+    rw [ne_eq]; rw [commutator_eq_bot_iff_center_eq_top]; rw [center_eq_bot (le_of_eq hα4.symm)]
+    apply @bot_ne_top _ _ _ ?_
+    rw [Subgroup.nontrivial_iff]; rw [← Finite.one_lt_card_iff_nontrivial]; rw [card_of_card_eq_four hα4]
+    simp
+  obtain ⟨k, hk, hk'⟩ := Or.resolve_left (Subgroup.bot_or_exists_ne_one _) comm_ne_bot
+  suffices hk22 : (k : Equiv.Perm α).cycleType = {2, 2} by
+    refine le_antisymm ?_ comm_le
+    intro g hg
+    rw [← SetLike.mem_coe]; rw [coe_kleinFour_of_card_eq_four hα4]; rw [Set.mem_union]; rw [Set.mem_singleton_iff]; rw [Set.mem_ofPred_eq] at hg
+    rcases hg with ⟨rfl⟩ | hg
+    · exact Subgroup.one_mem _
+    · rw [← hg, ← Equiv.Perm.isConj_iff_cycleType_eq, isConj_iff] at hk22
+      obtain ⟨c, hc⟩ := hk22
+      rw [← MulAut.conjNormal_apply]; rw [Subtype.coe_inj] at hc
+      simp only [commutator, ← hc]
+      let fc : MulAut (alternatingGroup α) := MulAut.conjNormal c
+      suffices (⊤ : Subgroup (alternatingGroup α)) =
+        Subgroup.map fc.toMonoidHom (⊤ : Subgroup (alternatingGroup α)) by
+        rw [this]; rw [← Subgroup.map_commutator]
+        refine Subgroup.mem_map_of_mem _ hk
+      simp
+  have hk2 := comm_le hk
+  rw [← SetLike.mem_coe]; rw [coe_kleinFour_of_card_eq_four hα4]; rw [Set.mem_union]; rw [Set.mem_singleton_iff]; rw [Set.mem_ofPred_eq] at hk2
+  exact hk2.resolve_left hk'
 
 Depends on / 依赖: Nat.card, Nat.mul_left_inj, Normal, Subgroup, Subgroup.Normal.quotient_commutative_iff_commutator_le, Subgroup.card_eq_card_quotient_mul_card_subgroup, alternatingGroup, card_eq_card_quotient_mul_card_subgroup, card_of_card_eq_four, comm_le, commutator, isCyclic_of_prim, kleinFour, kleinFour_card_of_card_eq_four, mul_left_inj, normal_kleinFour, quotient_commutative_iff_commutator_le
 -/

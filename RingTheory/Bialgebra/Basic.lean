@@ -437,7 +437,7 @@ abbreviation ofAlgHom
     rTensor_counit_comp_comul := congr(($h_rTensor).toLinearMap)
     lTensor_counit_comp_comul := congr(($h_lTensor).toLinearMap)
   }
-  .mk' _ _ (map_one counit) (map_mul counit _ _) (map
+  .mk' _ _ (map_one counit) (map_mul counit _ _) (map_one comul) (map_mul comul _ _)
 
 中文:
 缩写 ofAlgHom
@@ -449,7 +449,7 @@ abbreviation ofAlgHom
     rTensor_counit_comp_comul := congr(($h_rTensor).toLinearMap)
     lTensor_counit_comp_comul := congr(($h_lTensor).toLinearMap)
   }
-  .mk' _ _ (map_one counit) (map_mul counit _ _) (map
+  .mk' _ _ (map_one counit) (map_mul counit _ _) (map_one comul) (map_mul comul _ _)
 
 Depends on / 依赖: Coalgebra, coassoc, counit, h_coassoc, h_lTensor, h_rTensor, lTensor_counit_comp_comul, map_mul, map_one, rTensor_counit_comp_comul, toLinearMap
 -/

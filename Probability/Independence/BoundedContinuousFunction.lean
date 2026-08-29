@@ -135,7 +135,10 @@ lemma pi_indepFun_pi_of_prod_bcf
   refine eq_prod_of_integral_prod_mul_prod_boundedContinuousFunction fun f g => ?_
   rw [integral_map]; rw [integral_map]; rw [integral_map]
   · convert! h f g <;> simp
-  any_goals fun_pro
+  any_goals fun_prop
+  all_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+
+omit [Fintype S] [Fintype T] in variable [Finite S] [Finite T] in
 
 中文:
 引理 pi_indepFun_pi_of_prod_bcf
@@ -146,7 +149,10 @@ lemma pi_indepFun_pi_of_prod_bcf
   refine eq_prod_of_integral_prod_mul_prod_boundedContinuousFunction fun f g => ?_
   rw [integral_map]; rw [integral_map]; rw [integral_map]
   · convert! h f g <;> simp
-  any_goals fun_pro
+  any_goals fun_prop
+  all_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+
+omit [Fintype S] [Fintype T] in variable [Finite S] [Finite T] in
 
 Depends on / 依赖: Measurable, Measurable.aestronglyMeasurable, aemeasurable_pi_lambda, aestronglyMeasurable, all_goals, any_goals, convert, eq_prod_of_integral_prod_mul_prod_boundedContinuousFunction, fun_prop, indepFun_iff_map_prod_eq_prod_map_map, integral_map
 -/
@@ -212,7 +218,9 @@ lemma indepFun_pi_of_prod_bcf
   rw [integral_map]; rw [integral_map]; rw [integral_map]
   · convert! h f g <;> simp
   any_goals fun_prop
-  all_goals exact Measurable.aestr
+  all_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+
+omit [Fintype T] in variable [Finite T] in
 
 中文:
 引理 indepFun_pi_of_prod_bcf
@@ -223,7 +231,9 @@ lemma indepFun_pi_of_prod_bcf
   rw [integral_map]; rw [integral_map]; rw [integral_map]
   · convert! h f g <;> simp
   any_goals fun_prop
-  all_goals exact Measurable.aestr
+  all_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+
+omit [Fintype T] in variable [Finite T] in
 
 Depends on / 依赖: Measurable, Measurable.aestronglyMeasurable, aemeasurable_pi_lambda, aestronglyMeasurable, all_goals, any_goals, convert, eq_prod_of_integral_mul_prod_boundedContinuousFunction, fun_prop, indepFun_iff_map_prod_eq_prod_map_map, integral_map
 -/
@@ -282,7 +292,9 @@ lemma pi_indepFun_of_prod_bcf
   rw [integral_map]; rw [integral_map]; rw [integral_map]
   · convert! h f g <;> simp
   any_goals fun_prop
-  all_goals exact Measurable.aestr
+  all_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+
+omit [Fintype S] in variable [Finite S] in
 
 中文:
 引理 pi_indepFun_of_prod_bcf
@@ -293,7 +305,9 @@ lemma pi_indepFun_of_prod_bcf
   rw [integral_map]; rw [integral_map]; rw [integral_map]
   · convert! h f g <;> simp
   any_goals fun_prop
-  all_goals exact Measurable.aestr
+  all_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+
+omit [Fintype S] in variable [Finite S] in
 
 Depends on / 依赖: Measurable, Measurable.aestronglyMeasurable, aemeasurable_pi_lambda, aestronglyMeasurable, all_goals, any_goals, convert, eq_prod_of_integral_prod_mul_boundedContinuousFunction, fun_prop, indepFun_iff_map_prod_eq_prod_map_map, integral_map
 -/
@@ -394,7 +408,33 @@ lemma indicator_indepFun_pi_of_prod_bcf
   have h1 ω : f (A.indicator 1 ω) * ∏ s, g s (X s ω) =
       A.indicator (fun ω => f 1 * ∏ s, g s (X s ω)) ω +
       f 0 * ∏ s, g s (X s ω) - A.indicator (fun ω => f 0 * ∏ s, g s (X s ω)) ω := by
-   
+    classical
+    rw [Set.indicator_apply]
+    split_ifs <;> simp_all
+  have h2 ω : f (A.indicator 1 ω) =
+      A.indicator (fun _ => f 1) ω + Aᶜ.indicator (fun _ => f 0) ω := by
+    classical
+    rw [Set.indicator_apply]
+    split_ifs <;> simp_all
+  have hg {c : Real} : Integrable (fun ω => c * ∏ s, g s (X s ω)) P := by
+    refine Integrable.of_bound ?_ (‖c‖ * ∏ s, ‖g s‖) (ae_of_all _ fun ω => ?_)
+    · exact (Finset.aestronglyMeasurable_fun_prod _ fun s _ =>
+        (g s).continuous.aestronglyMeasurable.comp_aemeasurable (mX s)).const_mul _
+    · rw [norm_mul, norm_prod]
+      gcongr with s
+      exact (g s).norm_coe_le_norm _
+  simp_rw [Pi.mul_apply, Finset.prod_apply, Function.comp_apply, h1, h2]
+  rw [integral_sub]; rw [integral_add]; rw [integral_indicator₀ mA]; rw [integral_indicator₀ mA]; rw [integral_const_mul]; rw [integral_const_mul]; rw [integral_const_mul]; rw [integral_add]; rw [integral_indicator₀ mA]; rw [integral_indicator₀ mA.compl]; rw [integral_const]; rw [integral_const]; rw [h]
+  · simp [measureReal_compl₀ mA]
+    ring
+  · exact (integrable_const _).indicator₀ mA
+  · exact (integrable_const _).indicator₀ mA.compl
+  · exact hg.indicator₀ mA
+  · exact hg
+  · exact (hg.indicator₀ mA).add hg
+  · exact hg.indicator₀ mA
+
+omit [Fintype S] in variable [Finite S] in
 
 中文:
 引理 indicator_indepFun_pi_of_prod_bcf
@@ -404,7 +444,33 @@ lemma indicator_indepFun_pi_of_prod_bcf
   have h1 ω : f (A.indicator 1 ω) * ∏ s, g s (X s ω) =
       A.indicator (fun ω => f 1 * ∏ s, g s (X s ω)) ω +
       f 0 * ∏ s, g s (X s ω) - A.indicator (fun ω => f 0 * ∏ s, g s (X s ω)) ω := by
-   
+    classical
+    rw [Set.indicator_apply]
+    split_ifs <;> simp_all
+  have h2 ω : f (A.indicator 1 ω) =
+      A.indicator (fun _ => f 1) ω + Aᶜ.indicator (fun _ => f 0) ω := by
+    classical
+    rw [Set.indicator_apply]
+    split_ifs <;> simp_all
+  have hg {c : Real} : Integrable (fun ω => c * ∏ s, g s (X s ω)) P := by
+    refine Integrable.of_bound ?_ (‖c‖ * ∏ s, ‖g s‖) (ae_of_all _ fun ω => ?_)
+    · exact (Finset.aestronglyMeasurable_fun_prod _ fun s _ =>
+        (g s).continuous.aestronglyMeasurable.comp_aemeasurable (mX s)).const_mul _
+    · rw [norm_mul, norm_prod]
+      gcongr with s
+      exact (g s).norm_coe_le_norm _
+  simp_rw [Pi.mul_apply, Finset.prod_apply, Function.comp_apply, h1, h2]
+  rw [integral_sub]; rw [integral_add]; rw [integral_indicator₀ mA]; rw [integral_indicator₀ mA]; rw [integral_const_mul]; rw [integral_const_mul]; rw [integral_const_mul]; rw [integral_add]; rw [integral_indicator₀ mA]; rw [integral_indicator₀ mA.compl]; rw [integral_const]; rw [integral_const]; rw [h]
+  · simp [measureReal_compl₀ mA]
+    ring
+  · exact (integrable_const _).indicator₀ mA
+  · exact (integrable_const _).indicator₀ mA.compl
+  · exact hg.indicator₀ mA
+  · exact hg
+  · exact (hg.indicator₀ mA).add hg
+  · exact hg.indicator₀ mA
+
+omit [Fintype S] in variable [Finite S] in
 
 Depends on / 依赖: A.indicator, Set.indicator_apply, aemeasurable_indicator_const_iff, classical, indepFun_pi_of_prod_bcf, indicator, indicator_apply, split_ifs
 -/

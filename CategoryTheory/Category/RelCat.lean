@@ -268,7 +268,22 @@ theorem rel_iso_iff
     have h1 := congr_fun₂ congr((· ~[($h.hom_inv_id).rel] ·))
     have h2 := congr_fun₂ congr((· ~[($h.inv_hom_id).rel] ·))
     simp only [RelCat.Hom.rel_comp_apply₂, RelCat.Hom.rel_id_apply₂, eq_iff_iff] at h1 h2
-    obtain ⟨f, hf⟩ := Classical.axiomOfChoice (fun a => (
+    obtain ⟨f, hf⟩ := Classical.axiomOfChoice (fun a => (h1 a a).mpr rfl)
+    obtain ⟨g, hg⟩ := Classical.axiomOfChoice (fun a => (h2 a a).mpr rfl)
+    suffices hif : IsIso (C := Type u) (↾f) by
+      use asIso (↾f)
+      ext ⟨x, y⟩
+      exact ⟨by aesop, fun hxy => (h2 (f x) y).1 ⟨x, (hf x).2, hxy⟩⟩
+    use ↾g
+    constructor
+    · ext x
+      apply (h1 _ _).mp
+      use f x, (hg _).2, (hf _).2
+    · ext y
+      apply (h2 _ _).mp
+      use g y, (hf (g y)).2, (hg y).2
+  · rintro ⟨f, rfl⟩
+    apply graphFunctor.map_isIso
 
 中文:
 定理 rel_iso_iff
@@ -279,7 +294,22 @@ theorem rel_iso_iff
     have h1 := congr_fun₂ congr((· ~[($h.hom_inv_id).rel] ·))
     have h2 := congr_fun₂ congr((· ~[($h.inv_hom_id).rel] ·))
     simp only [RelCat.Hom.rel_comp_apply₂, RelCat.Hom.rel_id_apply₂, eq_iff_iff] at h1 h2
-    obtain ⟨f, hf⟩ := Classical.axiomOfChoice (fun a => (
+    obtain ⟨f, hf⟩ := Classical.axiomOfChoice (fun a => (h1 a a).mpr rfl)
+    obtain ⟨g, hg⟩ := Classical.axiomOfChoice (fun a => (h2 a a).mpr rfl)
+    suffices hif : IsIso (C := Type u) (↾f) by
+      use asIso (↾f)
+      ext ⟨x, y⟩
+      exact ⟨by aesop, fun hxy => (h2 (f x) y).1 ⟨x, (hf x).2, hxy⟩⟩
+    use ↾g
+    constructor
+    · ext x
+      apply (h1 _ _).mp
+      use f x, (hg _).2, (hf _).2
+    · ext y
+      apply (h2 _ _).mp
+      use g y, (hf (g y)).2, (hg y).2
+  · rintro ⟨f, rfl⟩
+    apply graphFunctor.map_isIso
 
 Depends on / 依赖: Classical, Classical.axiomOfChoice, RelCat, RelCat.Hom.rel_comp_apply, RelCat.Hom.rel_id_apply, axiomOfChoice, eq_iff_iff, f.hom, graphFunctor, graphFunctor.map, h.hom_inv_id, h.inv_hom_id, hom_inv_id, inv_hom_id
 -/

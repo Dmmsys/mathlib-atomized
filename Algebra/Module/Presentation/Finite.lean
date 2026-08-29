@@ -87,7 +87,22 @@ lemma finitePresentation_iff_exists_presentation
         (finite_def.1 (inferInstance : Module.Finite A M))
     obtain ⟨R : Type w₁, _, relation, hR⟩ :=
       Submodule.fg_iff_exists_finite_generating_family.1
-        (Module
+        (Module.FinitePresentation.fg_ker (Finsupp.linearCombination A var) (by
+          rw [← LinearMap.range_eq_top]; rw [Finsupp.range_linearCombination]; rw [hG]))
+    exact
+     ⟨{ G := G
+        R := R
+        relation := relation
+        var := var
+        linearCombination_var_relation := fun r => by
+          rw [Submodule.ext_iff] at hR
+          exact (hR _).1 (Submodule.subset_span ⟨_, rfl⟩)
+        toIsPresentation := by
+          rw [Relations.Solution.isPresentation_iff]
+          exact ⟨hG, hR.symm⟩ },
+        inferInstance, inferInstance⟩
+  · rintro ⟨pres, _, _⟩
+    exact pres.finitePresentation
 
 中文:
 引理 finitePresentation_iff_存在_presentation
@@ -99,7 +114,22 @@ lemma finitePresentation_iff_exists_presentation
         (finite_def.1 (inferInstance : Module.Finite A M))
     obtain ⟨R : Type w₁, _, relation, hR⟩ :=
       Submodule.fg_iff_exists_finite_generating_family.1
-        (Module
+        (Module.FinitePresentation.fg_ker (Finsupp.linearCombination A var) (by
+          rw [← LinearMap.range_eq_top]; rw [Finsupp.range_linearCombination]; rw [hG]))
+    exact
+     ⟨{ G := G
+        R := R
+        relation := relation
+        var := var
+        linearCombination_var_relation := fun r => by
+          rw [Submodule.ext_iff] at hR
+          exact (hR _).1 (Submodule.subset_span ⟨_, rfl⟩)
+        toIsPresentation := by
+          rw [Relations.Solution.isPresentation_iff]
+          exact ⟨hG, hR.symm⟩ },
+        inferInstance, inferInstance⟩
+  · rintro ⟨pres, _, _⟩
+    exact pres.finitePresentation
 
 Depends on / 依赖: Finite, FinitePresentation, Finsupp, Finsupp.linearCombination, Finsupp.range_linearCombination, LinearMap, LinearMap.range_eq_top, Module, Module.Finite, Module.FinitePresentation.fg_ker, Submodule, Submodule.fg_iff_exists_finite_generating_family, fg_iff_exists_finite_generating_family, fg_ker, finite_def, linearCombination, linearCombination_var_relation, range_eq_top, range_linearCombination, relation
 -/

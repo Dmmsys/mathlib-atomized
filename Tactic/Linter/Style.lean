@@ -102,7 +102,21 @@ definition setOptionLinter
       return
     if let some head := stx.find? isSetOption then
       if let some name := parseSetOption head then
-        let forbidd
+        let forbidden := [`debug, `pp, `profiler, `trace]
+        if forbidden.contains name.getRoot then
+          Linter.logLint linter.style.setOption head
+            m!"Setting options starting with '{"', '".intercalate (forbidden.map (·.toString))}' \
+               is only intended for development and not for final code. \
+               If you intend to submit this contribution to the Mathlib project, \
+               please remove 'set_option {name}'."
+        else if name.components.contains `maxHeartbeats || name == `linter.flexible then
+          Linter.logLint linter.style.setOption head m!"Unscoped option {name} is not allowed:\n\
+          Please scope this to individual declarations, as in\n```\nset_option {name} in\n\
+          -- comment explaining why this is necessary\n\
+          example : ... := ...\n```"
+        else if name == `backward.inferInstanceAs.wrap.reuseSubInstances then
+          logWarningAt stx "The `backward.inferInstanceAs.wrap.reuseSubInstances` option \
+            marks the introduction of technical debt, so please don't use it."
 
 中文:
 定义 setOptionLinter
@@ -114,7 +128,21 @@ definition setOptionLinter
       return
     if let some head := stx.find? isSetOption then
       if let some name := parseSetOption head then
-        let forbidd
+        let forbidden := [`debug, `pp, `profiler, `trace]
+        if forbidden.contains name.getRoot then
+          Linter.logLint linter.style.setOption head
+            m!"Setting options starting with '{"', '".intercalate (forbidden.map (·.toString))}' \
+               is only intended for development and not for final code. \
+               If you intend to submit this contribution to the Mathlib project, \
+               please remove 'set_option {name}'."
+        else if name.components.contains `maxHeartbeats || name == `linter.flexible then
+          Linter.logLint linter.style.setOption head m!"Unscoped option {name} is not allowed:\n\
+          Please scope this to individual declarations, as in\n```\nset_option {name} in\n\
+          -- comment explaining why this is necessary\n\
+          example : ... := ...\n```"
+        else if name == `backward.inferInstanceAs.wrap.reuseSubInstances then
+          logWarningAt stx "The `backward.inferInstanceAs.wrap.reuseSubInstances` option \
+            marks the introduction of technical debt, so please don't use it."
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -177,7 +205,22 @@ definition missingEndLinter
     if getLinterValue linter.style.missingEnd (← getLinterOptions) &&
         !(← MonadState.get).messages.hasErrors then
       let sc ← getScopes
-      -- Th
+      -- The last scope is always the "base scope", corresponding to no active `section`s or
+      -- `namespace`s. We are interested in any *other* unclosed scopes.
+      if sc.length == 1 then return
+      let ends := sc.dropLast
+      -- If the outermost scope(s) correspond to `public/meta/noncomputable section`, we ignore
+      -- them.
+      let ends := ends.reverse
+.dropWhile (fun sc => sc.currNamespace.isAnonymous &&
+          (sc.isMeta || sc.isPublic || sc.isNoncomputable))
+.reverse
+      -- If there are any further un-closed scopes, we emit a warning.
+      if !ends.isEmpty then
+        let ending := (ends.map (·.header)).foldl (init := "") fun a b =>
+          a ++ s!"\n\nend{if b == "" then "" else " "}{b}"
+        Linter.logLint linter.style.missingEnd stx
+         m!"unclosed sections or namespaces; expected: '{ending}'"
 
 中文:
 定义 missingEndLinter
@@ -188,7 +231,22 @@ definition missingEndLinter
     if getLinterValue linter.style.missingEnd (← getLinterOptions) &&
         !(← MonadState.get).messages.hasErrors then
       let sc ← getScopes
-      -- Th
+      -- The last scope is always the "base scope", corresponding to no active `section`s or
+      -- `namespace`s. We are interested in any *other* unclosed scopes.
+      if sc.length == 1 then return
+      let ends := sc.dropLast
+      -- If the outermost scope(s) correspond to `public/meta/noncomputable section`, we ignore
+      -- them.
+      let ends := ends.reverse
+.dropWhile (fun sc => sc.currNamespace.isAnonymous &&
+          (sc.isMeta || sc.isPublic || sc.isNoncomputable))
+.reverse
+      -- If there are any further un-closed scopes, we emit a warning.
+      if !ends.isEmpty then
+        let ending := (ends.map (·.header)).foldl (init := "") fun a b =>
+          a ++ s!"\n\nend{if b == "" then "" else " "}{b}"
+        Linter.logLint linter.style.missingEnd stx
+         m!"unclosed sections or namespaces; expected: '{ending}'"
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -314,7 +372,17 @@ definition cdotLinter
       return
     for s in unwanted_cdot stx do
       Linter.logLint linter.style.cdot s
-        m!"Please, use '·' (typed as `\\.`) instead
+        m!"Please, use '·' (typed as `\\.`) instead of '.' as 'cdot'."
+    -- We also check for isolated cdot's, i.e. when the cdot is on its own line.
+    for cdot in Mathlib.Linter.findCDot stx do
+      -- Apply this only to cdot tactics
+      if cdot.isOfKind ``cdotTk then
+        match cdot.getTrailing? with
+        | some afterCDot =>
+          if (afterCDot.takeWhile (·.isWhitespace)).contains '\n' then
+            Linter.logLint linter.style.cdot cdot
+              m!"This central dot `·` is isolated; please merge it with the next line."
+        | _ => return
 
 中文:
 定义 cdotLinter
@@ -326,7 +394,17 @@ definition cdotLinter
       return
     for s in unwanted_cdot stx do
       Linter.logLint linter.style.cdot s
-        m!"Please, use '·' (typed as `\\.`) instead
+        m!"Please, use '·' (typed as `\\.`) instead of '.' as 'cdot'."
+    -- We also check for isolated cdot's, i.e. when the cdot is on its own line.
+    for cdot in Mathlib.Linter.findCDot stx do
+      -- Apply this only to cdot tactics
+      if cdot.isOfKind ``cdotTk then
+        match cdot.getTrailing? with
+        | some afterCDot =>
+          if (afterCDot.takeWhile (·.isWhitespace)).contains '\n' then
+            Linter.logLint linter.style.cdot cdot
+              m!"This central dot `·` is isolated; please merge it with the next line."
+        | _ => return
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -420,7 +498,7 @@ definition dollarSyntaxLinter
       return
     for s in findDollarSyntax stx do
       Linter.logLint linter.style.dollarSyntax s
-m!"Please use ' ' instead of ' '
+m!"Please use ' ' instead of ' ' for the pipe operator."
 
 中文:
 定义 dollarSyntaxLinter
@@ -432,7 +510,7 @@ m!"Please use ' ' instead of ' '
       return
     for s in findDollarSyntax stx do
       Linter.logLint linter.style.dollarSyntax s
-m!"Please use ' ' instead of ' '
+m!"Please use ' ' instead of ' ' for the pipe operator."
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -520,7 +598,9 @@ definition lambdaSyntaxLinter
       return
     for s in findLambdaSyntax stx do
       if let .atom _ "fun" := s[0] then
-        Linter.logLint linter.style.lambd
+        Linter.logLint linter.style.lambdaSyntax s[0] m!"\
+        Please use 'fun' and not 'fun' to define anonymous functions.\n\
+        The 'fun' syntax is deprecated in mathlib4."
 
 中文:
 定义 lambdaSyntaxLinter
@@ -532,7 +612,9 @@ definition lambdaSyntaxLinter
       return
     for s in findLambdaSyntax stx do
       if let .atom _ "fun" := s[0] then
-        Linter.logLint linter.style.lambd
+        Linter.logLint linter.style.lambdaSyntax s[0] m!"\
+        Please use 'fun' and not 'fun' to define anonymous functions.\n\
+        The 'fun' syntax is deprecated in mathlib4."
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -590,7 +672,54 @@ definition longFileLinter
     return
   let defValue := linter.style.longFileDefValue.get (← getOptions)
   let smallOption := match stx with
-      | `(set_option linter.style.longFile $x) => TSyntax.getNat ⟨x
+      | `(set_option linter.style.longFile $x) => TSyntax.getNat ⟨x.raw⟩ <= defValue
+      | _ => false
+  if smallOption then
+    logLint0Disable linter.style.longFile stx
+      m!"The default value of the `longFile` linter is {defValue}.\n\
+        The current value of {linterBound} does not exceed the allowed bound.\n\
+        Please, remove the `set_option linter.style.longFile {linterBound}`."
+  else
+  -- Thanks to the above check, the linter option is either not set (and hence equal
+  -- to the default) or set to some value *larger* than the default.
+  -- `Parser.isTerminalCommand` allows `stx` to be `#exit`: this is useful for tests.
+  unless Parser.isTerminalCommand stx do return
+  -- We exclude `Mathlib.lean` from the linter: it exceeds linter's default number of allowed
+  -- lines, and it is an auto-generated import-only file.
+  -- TODO: if there are more such files, revise the implementation.
+  if (← getMainModule) == `Mathlib then return
+  if let some init := stx.getTailPos? then
+    -- the last line: we subtract 1, since the last line is expected to be empty
+    let lastLine := ((← getFileMap).toPosition init).line
+    -- In this case, the file has an allowed length, and the linter option is unnecessarily set.
+    if lastLine <= defValue && defValue < linterBound then
+      logLint0Disable linter.style.longFile stx
+        m!"The default value of the `longFile` linter is {defValue}.\n\
+          This file is {lastLine} lines long which does not exceed the allowed bound.\n\
+          Please, remove the `set_option linter.style.longFile {linterBound}`."
+    else
+    -- `candidate` is divisible by `100` and satisfies `lastLine + 100 < candidate ≤ lastLine + 200`
+    -- note that either `lastLine ≤ defValue` and `defValue = linterBound` hold or
+    -- `candidate` is necessarily bigger than `lastLine` and hence bigger than `defValue`
+    let candidate := (lastLine / 100) * 100 + 200
+    let candidate := max candidate defValue
+    -- In this case, the file is longer than the default and also than what the option says.
+    if defValue <= linterBound && linterBound < lastLine then
+      logLint0Disable linter.style.longFile stx
+        m!"This file is {lastLine} lines long, but the limit is {linterBound}.\n\n\
+          You can extend the allowed length of the file using \
+          `set_option linter.style.longFile {candidate}`.\n\
+          You can completely disable this linter by setting the length limit to `0`."
+    else
+    -- Finally, the file exceeds the default value, but not the option: we only allow the value
+    -- of the option to be `candidate` or `candidate + 100`.
+    -- In particular, this flags any option that is set to an unnecessarily high value.
+    if linterBound == candidate || linterBound + 100 == candidate then return
+    else
+      logLint0Disable linter.style.longFile stx
+        m!"This file is {lastLine} lines long. \
+          The current limit is {linterBound}, but it is expected to be {candidate}:\n\
+          `set_option linter.style.longFile {candidate}`."
 
 中文:
 定义 longFileLinter
@@ -601,7 +730,54 @@ definition longFileLinter
     return
   let defValue := linter.style.longFileDefValue.get (← getOptions)
   let smallOption := match stx with
-      | `(set_option linter.style.longFile $x) => TSyntax.getNat ⟨x
+      | `(set_option linter.style.longFile $x) => TSyntax.getNat ⟨x.raw⟩ <= defValue
+      | _ => false
+  if smallOption then
+    logLint0Disable linter.style.longFile stx
+      m!"The default value of the `longFile` linter is {defValue}.\n\
+        The current value of {linterBound} does not exceed the allowed bound.\n\
+        Please, remove the `set_option linter.style.longFile {linterBound}`."
+  else
+  -- Thanks to the above check, the linter option is either not set (and hence equal
+  -- to the default) or set to some value *larger* than the default.
+  -- `Parser.isTerminalCommand` allows `stx` to be `#exit`: this is useful for tests.
+  unless Parser.isTerminalCommand stx do return
+  -- We exclude `Mathlib.lean` from the linter: it exceeds linter's default number of allowed
+  -- lines, and it is an auto-generated import-only file.
+  -- TODO: if there are more such files, revise the implementation.
+  if (← getMainModule) == `Mathlib then return
+  if let some init := stx.getTailPos? then
+    -- the last line: we subtract 1, since the last line is expected to be empty
+    let lastLine := ((← getFileMap).toPosition init).line
+    -- In this case, the file has an allowed length, and the linter option is unnecessarily set.
+    if lastLine <= defValue && defValue < linterBound then
+      logLint0Disable linter.style.longFile stx
+        m!"The default value of the `longFile` linter is {defValue}.\n\
+          This file is {lastLine} lines long which does not exceed the allowed bound.\n\
+          Please, remove the `set_option linter.style.longFile {linterBound}`."
+    else
+    -- `candidate` is divisible by `100` and satisfies `lastLine + 100 < candidate ≤ lastLine + 200`
+    -- note that either `lastLine ≤ defValue` and `defValue = linterBound` hold or
+    -- `candidate` is necessarily bigger than `lastLine` and hence bigger than `defValue`
+    let candidate := (lastLine / 100) * 100 + 200
+    let candidate := max candidate defValue
+    -- In this case, the file is longer than the default and also than what the option says.
+    if defValue <= linterBound && linterBound < lastLine then
+      logLint0Disable linter.style.longFile stx
+        m!"This file is {lastLine} lines long, but the limit is {linterBound}.\n\n\
+          You can extend the allowed length of the file using \
+          `set_option linter.style.longFile {candidate}`.\n\
+          You can completely disable this linter by setting the length limit to `0`."
+    else
+    -- Finally, the file exceeds the default value, but not the option: we only allow the value
+    -- of the option to be `candidate` or `candidate + 100`.
+    -- In particular, this flags any option that is set to an unnecessarily high value.
+    if linterBound == candidate || linterBound + 100 == candidate then return
+    else
+      logLint0Disable linter.style.longFile stx
+        m!"This file is {lastLine} lines long. \
+          The current limit is {linterBound}, but it is expected to be {candidate}:\n\
+          `set_option linter.style.longFile {candidate}`."
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -725,7 +901,34 @@ definition longLineLinter
     if (← MonadState.get).messages.hasErrors then
       return
     -- The linter ignores the `#guard_msgs` command, in particular its doc-string.
-    -- The linter still lints the messa
+    -- The linter still lints the message guarded by `#guard_msgs`.
+    if stx.isOfKind ``Lean.guardMsgsCmd then
+      return
+    if stx.isOfKind ``Lean.Parser.Module.header then return
+    -- if the linter reached the end of the file, then we scan the `import` syntax instead
+    let stx ← do
+      if stx.isOfKind ``Lean.Parser.Command.eoi then
+        let fileMap ← getFileMap
+        -- `impMods` is the syntax for the modules imported in the current file
+        let (impMods, _) ← Parser.parseHeader
+          { inputString := fileMap.source, fileName := ← getFileName, fileMap := fileMap }
+        pure impMods.raw
+      else pure stx
+    let sstr := stx.getSubstring?
+    let fm ← getFileMap
+    let maxLineLength := linter.style.longLine.maxLineLength.get (← getOptions)
+    let longLines := ((sstr.getD default).splitOn "\n").filter fun line =>
+      (maxLineLength < (fm.toPosition line.stopPos).column)
+    for line in longLines do
+      if (line.splitOn "http").length <= 1 && !(isImport line.toString) then
+        let stringMsg := if line.contains '"' then
+          "\nYou can use \"string gaps\" to format long strings: within a string quotation, \
+          using a '\\' at the end of a line allows you to continue the string on the following \
+          line, removing all intervening whitespace."
+        else ""
+        Linter.logLint linter.style.longLine
+          (.ofRange ⟨(line.drop maxLineLength).startPos, line.stopPos⟩)
+          m!"This line exceeds the {maxLineLength} character limit, please shorten it!{stringMsg}"
 
 中文:
 定义 longLineLinter
@@ -736,7 +939,34 @@ definition longLineLinter
     if (← MonadState.get).messages.hasErrors then
       return
     -- The linter ignores the `#guard_msgs` command, in particular its doc-string.
-    -- The linter still lints the messa
+    -- The linter still lints the message guarded by `#guard_msgs`.
+    if stx.isOfKind ``Lean.guardMsgsCmd then
+      return
+    if stx.isOfKind ``Lean.Parser.Module.header then return
+    -- if the linter reached the end of the file, then we scan the `import` syntax instead
+    let stx ← do
+      if stx.isOfKind ``Lean.Parser.Command.eoi then
+        let fileMap ← getFileMap
+        -- `impMods` is the syntax for the modules imported in the current file
+        let (impMods, _) ← Parser.parseHeader
+          { inputString := fileMap.source, fileName := ← getFileName, fileMap := fileMap }
+        pure impMods.raw
+      else pure stx
+    let sstr := stx.getSubstring?
+    let fm ← getFileMap
+    let maxLineLength := linter.style.longLine.maxLineLength.get (← getOptions)
+    let longLines := ((sstr.getD default).splitOn "\n").filter fun line =>
+      (maxLineLength < (fm.toPosition line.stopPos).column)
+    for line in longLines do
+      if (line.splitOn "http").length <= 1 && !(isImport line.toString) then
+        let stringMsg := if line.contains '"' then
+          "\nYou can use \"string gaps\" to format long strings: within a string quotation, \
+          using a '\\' at the end of a line allows you to continue the string on the following \
+          line, removing all intervening whitespace."
+        else ""
+        Linter.logLint linter.style.longLine
+          (.ofRange ⟨(line.drop maxLineLength).startPos, line.stopPos⟩)
+          m!"This line exceeds the {maxLineLength} character limit, please shorten it!{stringMsg}"
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -808,7 +1038,17 @@ definition doubleUnderscore
       return
     let mut aliases := #[]
     if let some exp := stx.find? (·.isOfKind `Lean.Parser.Command.export) then
-      aliases ← getAliasSy
+      aliases ← getAliasSyntax exp
+    for id in aliases.push ((stx.find? (·.isOfKind ``declId)).getD default)[0] do
+      let declName := id.getId
+      if id.getPos? == some default then continue
+      if declName.hasMacroScopes then continue
+      if id.getKind == `ident then
+        -- Check whether the declaration name contains "__".
+        if 1 < (declName.toString.splitOn "__").length then
+          Linter.logLint linter.style.nameCheck id
+            m!"The declaration '{id}' contains '__', which does not follow the mathlib naming \
+              conventions. Consider using single underscores instead."
 
 中文:
 定义 doubleUnderscore
@@ -820,7 +1060,17 @@ definition doubleUnderscore
       return
     let mut aliases := #[]
     if let some exp := stx.find? (·.isOfKind `Lean.Parser.Command.export) then
-      aliases ← getAliasSy
+      aliases ← getAliasSyntax exp
+    for id in aliases.push ((stx.find? (·.isOfKind ``declId)).getD default)[0] do
+      let declName := id.getId
+      if id.getPos? == some default then continue
+      if declName.hasMacroScopes then continue
+      if id.getKind == `ident then
+        -- Check whether the declaration name contains "__".
+        if 1 < (declName.toString.splitOn "__").length then
+          Linter.logLint linter.style.nameCheck id
+            m!"The declaration '{id}' contains '__', which does not follow the mathlib naming \
+              conventions. Consider using single underscores instead."
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -939,7 +1189,13 @@ definition openClassicalLinter
     if (← get).messages.hasErrors then
       return
     -- If `stx` describes an `open` command, extract the list of opened namespaces.
-    for stxN in (extractOpenNames stx).filter (·.getId == `Classical) d
+    for stxN in (extractOpenNames stx).filter (·.getId == `Classical) do
+      Linter.logLint linter.style.openClassical stxN "\
+      please avoid 'open (scoped) Classical' statements: this can hide theorem statements \
+      which would be better stated with explicit decidability statements.\n\
+      Instead, use `open Classical in` for definitions or instances, the `classical` tactic \
+      for proofs.\nFor theorem statements, \
+      either add missing decidability assumptions or use `open Classical in`."
 
 中文:
 定义 openClassicalLinter
@@ -950,7 +1206,13 @@ definition openClassicalLinter
     if (← get).messages.hasErrors then
       return
     -- If `stx` describes an `open` command, extract the list of opened namespaces.
-    for stxN in (extractOpenNames stx).filter (·.getId == `Classical) d
+    for stxN in (extractOpenNames stx).filter (·.getId == `Classical) do
+      Linter.logLint linter.style.openClassical stxN "\
+      please avoid 'open (scoped) Classical' statements: this can hide theorem statements \
+      which would be better stated with explicit decidability statements.\n\
+      Instead, use `open Classical in` for definitions or instances, the `classical` tactic \
+      for proofs.\nFor theorem statements, \
+      either add missing decidability assumptions or use `open Classical in`."
 -/
 def openClassicalLinter : Linter where run stx := do
     unless getLinterValue linter.style.openClassical (← getLinterOptions) do
@@ -998,7 +1260,13 @@ definition elabShow
   evalTactic (← `(tactic| show $newType))
   if getLinterValue linter.style.show (← getLinterOptions) then
     let goal' :: goals' ← getGoals | return
-    if goals != goals' then return -- `sho
+    if goals != goals' then return -- `show` didn't act on first goal -> can't replace with `change`
+    let after ← instantiateMVars (← goal'.getType)
+    if before != after then
+      logLint linter.style.show (← getRef) m!"\
+        The `show` tactic should only be used to indicate intermediate goal states for \
+        readability.\nHowever, this tactic invocation changed the goal. Please use `change` \
+        instead for these purposes."
 
 中文:
 定义 elabShow
@@ -1009,7 +1277,13 @@ definition elabShow
   evalTactic (← `(tactic| show $newType))
   if getLinterValue linter.style.show (← getLinterOptions) then
     let goal' :: goals' ← getGoals | return
-    if goals != goals' then return -- `sho
+    if goals != goals' then return -- `show` didn't act on first goal -> can't replace with `change`
+    let after ← instantiateMVars (← goal'.getType)
+    if before != after then
+      logLint linter.style.show (← getRef) m!"\
+        The `show` tactic should only be used to indicate intermediate goal states for \
+        readability.\nHowever, this tactic invocation changed the goal. Please use `change` \
+        instead for these purposes."
 -/
 def elabShow (newType : Term) : TacticM Unit := do
   let goal :: goals ← getGoals | throwNoGoalsToBeSolved

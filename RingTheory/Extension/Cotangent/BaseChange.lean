@@ -56,7 +56,19 @@ definition tensorCotangentSpace
   letI : Algebra P.Ring (T otimes[R] S) := Algebra.compHom _ (algebraMap P.Ring S)
   haveI : IsScalarTower R P.Ring (T otimes[R] S) :=
     .of_algebraMap_eq fun x => by
-      rw [TensorProduct.algebraMap_a
+      rw [TensorProduct.algebraMap_apply]; rw [RingHom.algebraMap_toAlgebra]; rw [Algebra.TensorProduct.tmul_one_eq_one_tmul]; rw [IsScalarTower.algebraMap_apply R P.Ring]
+      rfl
+  letI PT : Extension T (T otimes[R] S) := P.baseChange
+  haveI : IsPushout R T P.Ring PT.Ring := by
+    convert! TensorProduct.isPushout (R := R) (T := P.Ring) (S := T)
+    exact Algebra.algebra_ext _ _ fun _ => rfl
+  haveI : IsScalarTower P.Ring PT.Ring (T otimes[R] S) := .of_algebraMap_eq' rfl
+  (IsTensorProduct.assocOfMapSMul (TensorProduct.mk R T S) (isTensorProduct _ _ _)
+    (TensorProduct.mk _ _ _) (isTensorProduct _ _ _) (by simp [Algebra.smul_def])
+    (by simp [Algebra.smul_def, RingHom.algebraMap_toAlgebra])).symm ≪≫ₗ
+  (AlgebraTensorModule.cancelBaseChange _ PT.Ring PT.Ring _ _).symm.restrictScalars T ≪≫ₗ
+  (AlgebraTensorModule.congr (LinearEquiv.refl PT.Ring (T otimes[R] S))
+    (KaehlerDifferential.tensorKaehlerEquiv R T P.Ring PT.Ring)).restrictScalars T
 
 中文:
 定义 tensorCotangentSpace
@@ -66,7 +78,19 @@ definition tensorCotangentSpace
   letI : Algebra P.Ring (T otimes[R] S) := Algebra.compHom _ (algebraMap P.Ring S)
   haveI : IsScalarTower R P.Ring (T otimes[R] S) :=
     .of_algebraMap_eq fun x => by
-      rw [TensorProduct.algebraMap_a
+      rw [TensorProduct.algebraMap_apply]; rw [RingHom.algebraMap_toAlgebra]; rw [Algebra.TensorProduct.tmul_one_eq_one_tmul]; rw [IsScalarTower.algebraMap_apply R P.Ring]
+      rfl
+  letI PT : Extension T (T otimes[R] S) := P.baseChange
+  haveI : IsPushout R T P.Ring PT.Ring := by
+    convert! TensorProduct.isPushout (R := R) (T := P.Ring) (S := T)
+    exact Algebra.algebra_ext _ _ fun _ => rfl
+  haveI : IsScalarTower P.Ring PT.Ring (T otimes[R] S) := .of_algebraMap_eq' rfl
+  (IsTensorProduct.assocOfMapSMul (TensorProduct.mk R T S) (isTensorProduct _ _ _)
+    (TensorProduct.mk _ _ _) (isTensorProduct _ _ _) (by simp [Algebra.smul_def])
+    (by simp [Algebra.smul_def, RingHom.algebraMap_toAlgebra])).symm ≪≫ₗ
+  (AlgebraTensorModule.cancelBaseChange _ PT.Ring PT.Ring _ _).symm.restrictScalars T ≪≫ₗ
+  (AlgebraTensorModule.congr (LinearEquiv.refl PT.Ring (T otimes[R] S))
+    (KaehlerDifferential.tensorKaehlerEquiv R T P.Ring PT.Ring)).restrictScalars T
 
 Depends on / 依赖: CotangentSpace
 -/
@@ -104,7 +128,17 @@ lemma tensorCotangentSpace_tmul_tmul
     ← mk_apply s x, IsTensorProduct.assocOfMapSMul_symm_tmul]
   simp only [mk_apply, AlgebraTensorModule.cancelBaseChange_symm_tmul,
     AlgebraTensorModule.congr_tmul, LinearEquiv.refl_apply]
-  have : 
+  have : x in Submodule.span P.Ring (Set.range (KaehlerDifferential.D R P.Ring)) := by
+    rw [KaehlerDifferential.span_range_derivation]
+    trivial
+  induction this using Submodule.span_induction with
+  | zero => simp
+  | add x y _ _ hx hy => simp [tmul_add, hx, hy]
+  | mem y hy =>
+    obtain ⟨y, rfl⟩ := hy
+    simp
+  | smul a x _ hx =>
+    rw [tmul_smul]; rw [← algebraMap_smul (P.baseChange (T := T)).Ring a]; rw [LinearEquiv.map_smul]; rw [tmul_smul]; rw [hx]; rw [LinearMap.map_smul]; rw [← algebraMap_smul (P.baseChange (T := T)).Ring a]; rw [tmul_smul]
 
 中文:
 引理 tensorCotangentSpace_tmul_tmul
@@ -114,7 +148,17 @@ lemma tensorCotangentSpace_tmul_tmul
     ← mk_apply s x, IsTensorProduct.assocOfMapSMul_symm_tmul]
   simp only [mk_apply, AlgebraTensorModule.cancelBaseChange_symm_tmul,
     AlgebraTensorModule.congr_tmul, LinearEquiv.refl_apply]
-  have : 
+  have : x in Submodule.span P.Ring (Set.range (KaehlerDifferential.D R P.Ring)) := by
+    rw [KaehlerDifferential.span_range_derivation]
+    trivial
+  induction this using Submodule.span_induction with
+  | zero => simp
+  | add x y _ _ hx hy => simp [tmul_add, hx, hy]
+  | mem y hy =>
+    obtain ⟨y, rfl⟩ := hy
+    simp
+  | smul a x _ hx =>
+    rw [tmul_smul]; rw [← algebraMap_smul (P.baseChange (T := T)).Ring a]; rw [LinearEquiv.map_smul]; rw [tmul_smul]; rw [hx]; rw [LinearMap.map_smul]; rw [← algebraMap_smul (P.baseChange (T := T)).Ring a]; rw [tmul_smul]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange_symm_tmul, AlgebraTensorModule.congr_tmul, IsTensorProduct, IsTensorProduct.assocOfMapSMul_symm_tmul, KaehlerDifferential, KaehlerDifferential.D, KaehlerDifferential.span_range_derivation, LinearEquiv, LinearEquiv.refl_apply, LinearEquiv.restrictScalars_apply, LinearEquiv.trans_apply, P.Ring, Set.range, Submodule, Submodule.span, Submodule.span_induction, assocOfMapSMul_symm_tmul, cancelBaseChange_symm_tmul, congr_tmul
 -/
@@ -151,7 +195,8 @@ lemma tensorCotangentSpace_tmul
   | zero => rw [tmul_zero, LinearEquiv.map_zero, LinearMap.map_zero, smul_zero]
   | add x y hx hy => rw [tmul_add, LinearEquiv.map_add, LinearMap.map_add, smul_add, hx, hy]
   | tmul s y =>
-  simp [tensorCotangentSpace_tmul_tmul, CotangentSpace
+  simp [tensorCotangentSpace_tmul_tmul, CotangentSpace.map_tmul_eq_tmul_map,
+    smul_tmul', Algebra.smul_def, RingHom.algebraMap_toAlgebra]
 
 中文:
 引理 tensorCotangentSpace_tmul
@@ -162,7 +207,8 @@ lemma tensorCotangentSpace_tmul
   | zero => rw [tmul_zero, LinearEquiv.map_zero, LinearMap.map_zero, smul_zero]
   | add x y hx hy => rw [tmul_add, LinearEquiv.map_add, LinearMap.map_add, smul_add, hx, hy]
   | tmul s y =>
-  simp [tensorCotangentSpace_tmul_tmul, CotangentSpace
+  simp [tensorCotangentSpace_tmul_tmul, CotangentSpace.map_tmul_eq_tmul_map,
+    smul_tmul', Algebra.smul_def, RingHom.algebraMap_toAlgebra]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, CotangentSpace, CotangentSpace.map_tmul_eq_tmul_map, LinearEquiv, LinearEquiv.map_add, LinearEquiv.map_zero, LinearMap, LinearMap.map_add, LinearMap.map_zero, RingHom, RingHom.algebraMap_toAlgebra, algebraMap_toAlgebra, map_add, map_tmul_eq_tmul_map, map_zero, smul_add, smul_def, smul_tmul, smul_zero
 -/
@@ -218,7 +264,9 @@ lemma tensorCotangentOfFlat_tmul
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
   simp only [tensorCotangentOfFlat, LinearEquiv.trans_apply, AlgebraTensorModule.congr_tmul,
     LinearEquiv.refl_apply, LinearEquiv.restrictScalars_apply, cotangentEquivCotangentKer_apply,
-    Cotangent.val_mk, Ideal.tensorCotangentEquiv_tmul, map_s
+    Cotangent.val_mk, Ideal.tensorCotangentEquiv_tmul, map_smul, Cotangent.map_mk,
+    Hom.toAlgHom_apply, Ideal.Cotangent.equivOfEq_toCotangent]
+  rfl
 
 中文:
 引理 tensorCotangentOfFlat_tmul
@@ -227,7 +275,9 @@ lemma tensorCotangentOfFlat_tmul
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
   simp only [tensorCotangentOfFlat, LinearEquiv.trans_apply, AlgebraTensorModule.congr_tmul,
     LinearEquiv.refl_apply, LinearEquiv.restrictScalars_apply, cotangentEquivCotangentKer_apply,
-    Cotangent.val_mk, Ideal.tensorCotangentEquiv_tmul, map_s
+    Cotangent.val_mk, Ideal.tensorCotangentEquiv_tmul, map_smul, Cotangent.map_mk,
+    Hom.toAlgHom_apply, Ideal.Cotangent.equivOfEq_toCotangent]
+  rfl
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.congr_tmul, Cotangent, Cotangent.map_mk, Cotangent.mk_surjective, Cotangent.val_mk, Hom.toAlgHom_apply, Ideal.Cotangent.equivOfEq_toCotangent, Ideal.tensorCotangentEquiv_tmul, LinearEquiv, LinearEquiv.refl_apply, LinearEquiv.restrictScalars_apply, LinearEquiv.trans_apply, congr_tmul, cotangentEquivCotangentKer_apply, equivOfEq_toCotangent, map_mk, map_smul, mk_surjective, refl_apply
 -/
@@ -299,7 +349,38 @@ lemma tensorToH1Cotangent_bijective_of_flat
       (N₁ := Unit) (M₂ := Unit) (N₂ := Unit)
     -- The row `0 → 0 → T ⊗ H¹(P) → T ⊗ P.Cotangent → T ⊗ P.CotangentSpace`.
     0 0
-    ((P.h1Cotangentι.restrictScalars R).lTe
+    ((P.h1Cotangentι.restrictScalars R).lTensor T)
+    ((P.cotangentComplex.restrictScalars R).lTensor T)
+    -- The row `0 → 0 → H¹(T ⊗ P) → (T ⊗ P).Cotangent → (T ⊗ P).CotangentSpace`.
+    0 0
+    (h1Cotangentι.restrictScalars R)
+    ((P.baseChange (T := T)).cotangentComplex.restrictScalars R)
+    -- The vertical maps induced by base change.
+    0 0
+    ((P.tensorToH1Cotangent T).restrictScalars R)
+    ((P.tensorCotangentOfFlat T).restrictScalars R)
+    ((P.tensorCotangentSpace T).restrictScalars R)
+  · simp
+  · simp
+  · ext
+    simp
+  · ext
+    simp [CotangentSpace.map_cotangentComplex]
+  · tauto
+  · simp only [LinearMap.exact_zero_iff_injective]
+    apply Module.Flat.lTensor_preserves_injective_linearMap
+    exact h1Cotangentι_injective
+  · apply Module.Flat.lTensor_exact
+    exact P.exact_hCotangentι_cotangentComplex
+  · tauto
+  · rw [LinearMap.exact_zero_iff_injective]
+    simp only [LinearMap.coe_restrictScalars]
+    exact h1Cotangentι_injective
+  · apply exact_hCotangentι_cotangentComplex
+  · tauto
+  · simp
+  · exact (P.tensorCotangentOfFlat T).bijective
+  · exact (P.tensorCotangentSpace T).injective
 
 中文:
 引理 tensorToH1Cotangent_bijective_of_flat
@@ -310,7 +391,38 @@ lemma tensorToH1Cotangent_bijective_of_flat
       (N₁ := Unit) (M₂ := Unit) (N₂ := Unit)
     -- The row `0 → 0 → T ⊗ H¹(P) → T ⊗ P.Cotangent → T ⊗ P.CotangentSpace`.
     0 0
-    ((P.h1Cotangentι.restrictScalars R).lTe
+    ((P.h1Cotangentι.restrictScalars R).lTensor T)
+    ((P.cotangentComplex.restrictScalars R).lTensor T)
+    -- The row `0 → 0 → H¹(T ⊗ P) → (T ⊗ P).Cotangent → (T ⊗ P).CotangentSpace`.
+    0 0
+    (h1Cotangentι.restrictScalars R)
+    ((P.baseChange (T := T)).cotangentComplex.restrictScalars R)
+    -- The vertical maps induced by base change.
+    0 0
+    ((P.tensorToH1Cotangent T).restrictScalars R)
+    ((P.tensorCotangentOfFlat T).restrictScalars R)
+    ((P.tensorCotangentSpace T).restrictScalars R)
+  · simp
+  · simp
+  · ext
+    simp
+  · ext
+    simp [CotangentSpace.map_cotangentComplex]
+  · tauto
+  · simp only [LinearMap.exact_zero_iff_injective]
+    apply Module.Flat.lTensor_preserves_injective_linearMap
+    exact h1Cotangentι_injective
+  · apply Module.Flat.lTensor_exact
+    exact P.exact_hCotangentι_cotangentComplex
+  · tauto
+  · rw [LinearMap.exact_zero_iff_injective]
+    simp only [LinearMap.coe_restrictScalars]
+    exact h1Cotangentι_injective
+  · apply exact_hCotangentι_cotangentComplex
+  · tauto
+  · simp
+  · exact (P.tensorCotangentOfFlat T).bijective
+  · exact (P.tensorCotangentSpace T).injective
 -/
 lemma tensorToH1Cotangent_bijective_of_flat [Module.Flat R T] :
     Function.Bijective (P.tensorToH1Cotangent T) := by
@@ -407,7 +519,7 @@ definition tensorH1CotangentOfFlat
     (Extension.H1Cotangent.equiv
       ((Generators.self R S).baseChangeFromBaseChange T)
       ((Generators.self R S).baseChangeToBaseChange T)).restrictScalars T ≪≫ₗ
-    ((Generators.self R S).baseChange (T := T)).equivH1Cotangent.res
+    ((Generators.self R S).baseChange (T := T)).equivH1Cotangent.restrictScalars T
 
 中文:
 定义 tensorH1CotangentOfFlat
@@ -416,7 +528,7 @@ definition tensorH1CotangentOfFlat
     (Extension.H1Cotangent.equiv
       ((Generators.self R S).baseChangeFromBaseChange T)
       ((Generators.self R S).baseChangeToBaseChange T)).restrictScalars T ≪≫ₗ
-    ((Generators.self R S).baseChange (T := T)).equivH1Cotangent.res
+    ((Generators.self R S).baseChange (T := T)).equivH1Cotangent.restrictScalars T
 
 Depends on / 依赖: Extension, Extension.H1Cotangent.equiv, Generators, Generators.self, H1Cotangent, baseChange, baseChangeFromBaseChange, baseChangeToBaseChange, equivH1Cotangent, equivH1Cotangent.restrictScalars, restrictScalars, tensorH1CotangentOfFlat, toExtension, toExtension.tensorH1CotangentOfFlat
 -/
@@ -441,7 +553,7 @@ lemma tensorH1CotangentOfFlat_tmul
     Extension.tensorH1CotangentOfFlat_tmul, map_smul, LinearEquiv.restrictScalars_apply,
     Extension.H1Cotangent.equiv, LinearEquiv.coe_mk, Generators.equivH1Cotangent,
     Generators.H1Cotangent.equiv]
-  rw [← Extension.H1Cotangent
+  rw [← Extension.H1Cotangent.map_comp_apply]; rw [← Extension.H1Cotangent.map_comp_apply]; rw [H1Cotangent.map]; rw [Extension.H1Cotangent.map_eq]
 
 中文:
 引理 tensorH1CotangentOfFlat_tmul
@@ -451,7 +563,7 @@ lemma tensorH1CotangentOfFlat_tmul
     Extension.tensorH1CotangentOfFlat_tmul, map_smul, LinearEquiv.restrictScalars_apply,
     Extension.H1Cotangent.equiv, LinearEquiv.coe_mk, Generators.equivH1Cotangent,
     Generators.H1Cotangent.equiv]
-  rw [← Extension.H1Cotangent
+  rw [← Extension.H1Cotangent.map_comp_apply]; rw [← Extension.H1Cotangent.map_comp_apply]; rw [H1Cotangent.map]; rw [Extension.H1Cotangent.map_eq]
 
 Depends on / 依赖: Extension, Extension.H1Cotangent.equiv, Extension.H1Cotangent.map_comp_apply, Extension.H1Cotangent.map_eq, Extension.tensorH1CotangentOfFlat_tmul, Generators, Generators.H1Cotangent.equiv, Generators.equivH1Cotangent, H1Cotangent, H1Cotangent.map, LinearEquiv, LinearEquiv.coe_mk, LinearEquiv.restrictScalars_apply, LinearEquiv.trans_apply, coe_mk, equivH1Cotangent, map_comp_apply, map_eq, map_smul, restrictScalars_apply
 -/

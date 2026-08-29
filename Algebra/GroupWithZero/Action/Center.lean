@@ -32,7 +32,8 @@ definition Subgroup.centerUnitsEquivUnitsCenter
 · exact congrArg Units.val (u.2.comm <| Units.mk0 r hr).symm
       map_one' := rfl
       map_mul' _ _ := rfl }
-  inv
+  invFun u := unitsCenterToCenterUnits G₀ u
+  map_mul' := map_mul _
 
 中文:
 定义 子群.centerUnitsEquivUnitsCenter
@@ -45,7 +46,8 @@ definition Subgroup.centerUnitsEquivUnitsCenter
 · exact congrArg Units.val (u.2.comm <| Units.mk0 r hr).symm
       map_one' := rfl
       map_mul' _ _ := rfl }
-  inv
+  invFun u := unitsCenterToCenterUnits G₀ u
+  map_mul' := map_mul _
 
 Depends on / 依赖: MonoidHom, MonoidHom.toHomUnits, toHomUnits
 -/

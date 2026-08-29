@@ -32,7 +32,7 @@ Iff.symm
         ⟨fun h =>
           funext fun j =>
             show Pi.evalRingHom (fun _ => R) j (↑x : ι -> R) = 0 by rw [map_natCast, h],
-          fun h => by rw [← map_natCast (Pi.evalRingHom (fun _ : ι => R) i) x, h, 
+          fun h => by rw [← map_natCast (Pi.evalRingHom (fun _ : ι => R) i) x, h, map_zero]⟩⟩
 
 中文:
 实例 pi
@@ -44,7 +44,7 @@ Iff.symm
         ⟨fun h =>
           funext fun j =>
             show Pi.evalRingHom (fun _ => R) j (↑x : ι -> R) = 0 by rw [map_natCast, h],
-          fun h => by rw [← map_natCast (Pi.evalRingHom (fun _ : ι => R) i) x, h, 
+          fun h => by rw [← map_natCast (Pi.evalRingHom (fun _ : ι => R) i) x, h, map_zero]⟩⟩
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, Iff.symm, Pi.evalRingHom, cast_eq_zero_iff, evalRingHom, map_natCast, map_zero, symm.trans
 -/

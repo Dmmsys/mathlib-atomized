@@ -5294,7 +5294,22 @@ lemma transGen_wcovBy_of_le
   -- It's impossible for the cardinality to be zero since `x ≤ y`
 have : #(Ico x y) < #(Icc x y) := card_lt_card
     ⟨Ico_subset_Icc_self, not_subset.mpr ⟨y, ⟨right_mem_Icc.mpr hxy, right_notMem_Ico⟩⟩⟩
-  by_cases hxy' : y 
+  by_cases hxy' : y <= x
+  -- If `y ≤ x`, then `x ⩿ y`
+· exact .single wcovBy_of_le_of_le hxy hxy'
+  /- and if `¬ y ≤ x`, then `x < y`, not because it is a linear order, but because `x ≤ y`
+  already. In that case, since `z` is maximal in `Ico x y`, then `z ⩿ y` and we can use the
+  induction hypothesis to show that `Relation.TransGen (· ⩿ ·) x z`. -/
+  · obtain ⟨z, hxz, hz⟩ :=
+(Set.finite_Ico x y).exists_le_maximal Set.left_mem_Ico.2 hxy.lt_of_not_ge hxy'
+    have z_card := calc
+#(Icc x z) <= #(Ico x y) := card_le_card Icc_subset_Ico_right hz.1.2
+      _ < #(Icc x y) := this
+    have h₁ := transGen_wcovBy_of_le hz.1.1
+    have h₂ : z ⩿ y :=
+⟨hz.1.2.le, fun c hzc hcy => hzc.not_ge hz.2 ⟨hz.1.1.trans hzc.le, hcy⟩ hzc.le⟩
+    exact .tail h₁ h₂
+termination_by #(Icc x y)
 
 中文:
 引理 transGen_wcovBy_of_le
@@ -5304,7 +5319,22 @@ have : #(Ico x y) < #(Icc x y) := card_lt_card
   -- It's impossible for the cardinality to be zero since `x ≤ y`
 have : #(Ico x y) < #(Icc x y) := card_lt_card
     ⟨Ico_subset_Icc_self, not_subset.mpr ⟨y, ⟨right_mem_Icc.mpr hxy, right_notMem_Ico⟩⟩⟩
-  by_cases hxy' : y 
+  by_cases hxy' : y <= x
+  -- If `y ≤ x`, then `x ⩿ y`
+· exact .single wcovBy_of_le_of_le hxy hxy'
+  /- and if `¬ y ≤ x`, then `x < y`, not because it is a linear order, but because `x ≤ y`
+  already. In that case, since `z` is maximal in `Ico x y`, then `z ⩿ y` and we can use the
+  induction hypothesis to show that `Relation.TransGen (· ⩿ ·) x z`. -/
+  · obtain ⟨z, hxz, hz⟩ :=
+(Set.finite_Ico x y).exists_le_maximal Set.left_mem_Ico.2 hxy.lt_of_not_ge hxy'
+    have z_card := calc
+#(Icc x z) <= #(Ico x y) := card_le_card Icc_subset_Ico_right hz.1.2
+      _ < #(Icc x y) := this
+    have h₁ := transGen_wcovBy_of_le hz.1.1
+    have h₂ : z ⩿ y :=
+⟨hz.1.2.le, fun c hzc hcy => hzc.not_ge hz.2 ⟨hz.1.1.trans hzc.le, hcy⟩ hzc.le⟩
+    exact .tail h₁ h₂
+termination_by #(Icc x y)
 -/
 lemma transGen_wcovBy_of_le [Preorder α] [LocallyFiniteOrder α] {x y : α} (hxy : x <= y) :
     TransGen (· ⩿ ·) x y := by
@@ -5391,6 +5421,21 @@ lemma transGen_covBy_of_lt
   -- It's impossible for the cardinality to be zero since `x < y`
   -- `Ico x y` is a nonempty finset and so contains a maximal element `z` and
   -- `Ico x z` has cardinality strictly less than the cardinality of `Ico x y`
+obtain ⟨z, hxz, hz⟩ := (Set.finite_Ico x y).exists_le_maximal Set.left_mem_Ico.2 hxy
+have z_card : #(Ico x z) < #(Ico x y) := card_lt_card ssubset_iff_of_subset
+.mpr ⟨z, mem_Ico.2 hz.1, right_notMem_Ico⟩ (Ico_subset_Ico_right hz.1.2.le)
+  /- Since `z` is maximal in `Ico x y`, `z ⋖ y`. -/
+  have hzy : z ⋖ y :=
+⟨hz.1.2, fun c hc hcy => hc.not_ge hz.2 (⟨(hz.1.1.trans_lt hc).le, hcy⟩) hc.le⟩
+  by_cases hxz : x < z
+  /- when `x < z`, then we may use the induction hypothesis to get a chain
+  `Relation.TransGen (· ⋖ ·) x z`, which we can extend with `Relation.TransGen.tail`. -/
+  · exact .tail (transGen_covBy_of_lt hxz) hzy
+  /- when `¬ x < z`, then actually `z ≤ x` (not because it's a linear order, but because
+  `x ≤ z`), and since `z ⋖ y` we conclude that `x ⋖ y`, then `Relation.TransGen.single`. -/
+  · simp only [lt_iff_le_not_ge, not_and, not_not] at hxz
+    exact .single (hzy.of_le_of_lt (hxz hz.1.1) hxy)
+termination_by #(Ico x y)
 
 中文:
 引理 transGen_covBy_of_lt
@@ -5400,6 +5445,21 @@ lemma transGen_covBy_of_lt
   -- It's impossible for the cardinality to be zero since `x < y`
   -- `Ico x y` is a nonempty finset and so contains a maximal element `z` and
   -- `Ico x z` has cardinality strictly less than the cardinality of `Ico x y`
+obtain ⟨z, hxz, hz⟩ := (Set.finite_Ico x y).exists_le_maximal Set.left_mem_Ico.2 hxy
+have z_card : #(Ico x z) < #(Ico x y) := card_lt_card ssubset_iff_of_subset
+.mpr ⟨z, mem_Ico.2 hz.1, right_notMem_Ico⟩ (Ico_subset_Ico_right hz.1.2.le)
+  /- Since `z` is maximal in `Ico x y`, `z ⋖ y`. -/
+  have hzy : z ⋖ y :=
+⟨hz.1.2, fun c hc hcy => hc.not_ge hz.2 (⟨(hz.1.1.trans_lt hc).le, hcy⟩) hc.le⟩
+  by_cases hxz : x < z
+  /- when `x < z`, then we may use the induction hypothesis to get a chain
+  `Relation.TransGen (· ⋖ ·) x z`, which we can extend with `Relation.TransGen.tail`. -/
+  · exact .tail (transGen_covBy_of_lt hxz) hzy
+  /- when `¬ x < z`, then actually `z ≤ x` (not because it's a linear order, but because
+  `x ≤ z`), and since `z ⋖ y` we conclude that `x ⋖ y`, then `Relation.TransGen.single`. -/
+  · simp only [lt_iff_le_not_ge, not_and, not_not] at hxz
+    exact .single (hzy.of_le_of_lt (hxz hz.1.1) hxy)
+termination_by #(Ico x y)
 -/
 lemma transGen_covBy_of_lt [Preorder α] [LocallyFiniteOrder α] {x y : α} (hxy : x < y) :
     TransGen (· ⋖ ·) x y := by

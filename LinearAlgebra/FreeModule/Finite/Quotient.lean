@@ -42,7 +42,39 @@ definition quotientEquivPiSpan
   -- `f := ((Submodule.subtype N).comp e` into a diagonal matrix:
   -- there is an `a : ι → ℤ` such that `f (b' i) = a i • b' i`.
   let a := smithNormalFormCoeffs b h
-  let b' := smithNormalFormTopB
+  let b' := smithNormalFormTopBasis b h
+  let ab := smithNormalFormBotBasis b h
+  have ab_eq := smithNormalFormBotBasis_def b h
+  have mem_I_iff : forall x, x in N ↔ forall i, a i ∣ b'.repr x i := by
+    intro x
+    simp_rw [ab.mem_submodule_iff', ab, ab_eq]
+    have : forall (c : ι -> R) (i), b'.repr (∑ j : ι, c j • a j • b' j) i = a i * c i := by
+      intro c i
+      simp only [← mul_smul, b'.repr_sum_self, mul_comm]
+    constructor
+    · rintro ⟨c, rfl⟩ i
+      exact ⟨c i, this c i⟩
+    · rintro ha
+      choose c hc using ha
+      exact ⟨c, b'.ext_elem fun i => Eq.trans (hc i) (this c i).symm⟩
+  -- Now we map everything through the linear equiv `M ≃ₗ (ι → R)`,
+  -- which maps `N` to `N' := Π i, a i ℤ`.
+  let N' : Submodule R (ι -> R) := Submodule.pi Set.univ fun i => span R ({a i} : Set R)
+  have : Submodule.map (b'.equivFun : M ->ₗ[R] ι -> R) N = N' := by
+    ext x
+    simp only [N', Submodule.mem_map, Submodule.mem_pi, mem_span_singleton, Set.mem_univ,
+      mem_I_iff, smul_eq_mul, forall_true_left, LinearEquiv.coe_coe,
+      Basis.equivFun_apply, mul_comm _ (a _), eq_comm (b := (x _))]
+    constructor
+    · rintro ⟨y, hy, rfl⟩ i
+      exact hy i
+    · rintro hdvd
+      refine ⟨∑ i, x i • b' i, fun i => ?_, ?_⟩ <;> rw [b'.repr_sum_self]
+      · exact hdvd i
+  refine (Submodule.Quotient.equiv N N' b'.equivFun this).trans (re₂₃ := inferInstance)
+    (re₃₂ := inferInstance) ?_
+  classical
+  exact Submodule.quotientPi (show _ -> Submodule R R from fun i => span R ({a i} : Set R))
 
 中文:
 定义 quotientEquivPiSpan
@@ -53,7 +85,39 @@ definition quotientEquivPiSpan
   -- `f := ((Submodule.subtype N).comp e` into a diagonal matrix:
   -- there is an `a : ι → ℤ` such that `f (b' i) = a i • b' i`.
   let a := smithNormalFormCoeffs b h
-  let b' := smithNormalFormTopB
+  let b' := smithNormalFormTopBasis b h
+  let ab := smithNormalFormBotBasis b h
+  have ab_eq := smithNormalFormBotBasis_def b h
+  have mem_I_iff : forall x, x in N ↔ forall i, a i ∣ b'.repr x i := by
+    intro x
+    simp_rw [ab.mem_submodule_iff', ab, ab_eq]
+    have : forall (c : ι -> R) (i), b'.repr (∑ j : ι, c j • a j • b' j) i = a i * c i := by
+      intro c i
+      simp only [← mul_smul, b'.repr_sum_self, mul_comm]
+    constructor
+    · rintro ⟨c, rfl⟩ i
+      exact ⟨c i, this c i⟩
+    · rintro ha
+      choose c hc using ha
+      exact ⟨c, b'.ext_elem fun i => Eq.trans (hc i) (this c i).symm⟩
+  -- Now we map everything through the linear equiv `M ≃ₗ (ι → R)`,
+  -- which maps `N` to `N' := Π i, a i ℤ`.
+  let N' : Submodule R (ι -> R) := Submodule.pi Set.univ fun i => span R ({a i} : Set R)
+  have : Submodule.map (b'.equivFun : M ->ₗ[R] ι -> R) N = N' := by
+    ext x
+    simp only [N', Submodule.mem_map, Submodule.mem_pi, mem_span_singleton, Set.mem_univ,
+      mem_I_iff, smul_eq_mul, forall_true_left, LinearEquiv.coe_coe,
+      Basis.equivFun_apply, mul_comm _ (a _), eq_comm (b := (x _))]
+    constructor
+    · rintro ⟨y, hy, rfl⟩ i
+      exact hy i
+    · rintro hdvd
+      refine ⟨∑ i, x i • b' i, fun i => ?_, ?_⟩ <;> rw [b'.repr_sum_self]
+      · exact hdvd i
+  refine (Submodule.Quotient.equiv N N' b'.equivFun this).trans (re₂₃ := inferInstance)
+    (re₃₂ := inferInstance) ?_
+  classical
+  exact Submodule.quotientPi (show _ -> Submodule R R from fun i => span R ({a i} : Set R))
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, ofFinite
 -/
@@ -178,7 +242,9 @@ refine ⟨fun h => le_antisymm (finrank_le N)
     ((LinearMap.lsmul Int M (Nat.card (M ⧸ N))).codRestrict N
       fun x => ?_).finrank_le_finrank_of_injective ?_, fun h => finiteQuotientOfFreeOfRankEq N h⟩
   · simpa using! AddSubgroup.nsmul_index_mem N.toAddSubgroup x
-  · refine (LinearMap.lsmul_in
+  · refine (LinearMap.lsmul_injective ?_).codRestrict _
+exact Int.ofNat_ne_zero.mpr Nat.card_ne_zero.mpr
+      ⟨Set.nonempty_iff_univ_nonempty.mpr Set.univ_nonempty, h⟩
 
 中文:
 定理 finiteQuotient_iff
@@ -188,7 +254,9 @@ refine ⟨fun h => le_antisymm (finrank_le N)
     ((LinearMap.lsmul Int M (Nat.card (M ⧸ N))).codRestrict N
       fun x => ?_).finrank_le_finrank_of_injective ?_, fun h => finiteQuotientOfFreeOfRankEq N h⟩
   · simpa using! AddSubgroup.nsmul_index_mem N.toAddSubgroup x
-  · refine (LinearMap.lsmul_in
+  · refine (LinearMap.lsmul_injective ?_).codRestrict _
+exact Int.ofNat_ne_zero.mpr Nat.card_ne_zero.mpr
+      ⟨Set.nonempty_iff_univ_nonempty.mpr Set.univ_nonempty, h⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.nsmul_index_mem, Int.ofNat_ne_zero.mpr, LinearMap, LinearMap.lsmul, LinearMap.lsmul_injective, N.toAddSubgroup, Nat.card, Nat.card_ne_zero.mpr, Set.nonempty_iff_univ_nonempty.mpr, Set.univ_nonempty, card_ne_zero, codRestrict, finiteQuotientOfFreeOfRankEq, finrank_le, finrank_le_finrank_of_injective, le_antisymm, lsmul_injective, nonempty_iff_univ_nonempty, nsmul_index_mem
 -/

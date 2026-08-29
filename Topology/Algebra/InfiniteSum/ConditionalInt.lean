@@ -344,7 +344,10 @@ lemma symmetricIcc_eq_symmetricIoo_int
   simp only [← Nat.map_cast_int_atTop, Filter.map_map, Filter.mem_map, mem_atTop_sets,
     Set.mem_preimage, comp_apply]
   refine ⟨fun ⟨a, ha⟩ => ⟨a + 1, fun b hb => ?_⟩, fun ⟨a, ha⟩ => ⟨a - 1, fun b hb => ?_⟩⟩ <;>
-  [convert! ha (b - 1) 
+  [convert! ha (b - 1) (by grind) using 1; convert! ha (b + 1) (by grind) using 1] <;>
+  simp [Finset.ext_iff] <;> grind
+
+@[to_additive]
 
 中文:
 引理 symmetricIcc_eq_symmetricIoo_int
@@ -355,7 +358,10 @@ lemma symmetricIcc_eq_symmetricIoo_int
   simp only [← Nat.map_cast_int_atTop, Filter.map_map, Filter.mem_map, mem_atTop_sets,
     Set.mem_preimage, comp_apply]
   refine ⟨fun ⟨a, ha⟩ => ⟨a + 1, fun b hb => ?_⟩, fun ⟨a, ha⟩ => ⟨a - 1, fun b hb => ?_⟩⟩ <;>
-  [convert! ha (b - 1) 
+  [convert! ha (b - 1) (by grind) using 1; convert! ha (b + 1) (by grind) using 1] <;>
+  simp [Finset.ext_iff] <;> grind
+
+@[to_additive]
 
 Depends on / 依赖: Filter, Filter.map_map, Filter.mem_map, Finset, Finset.ext_iff, Nat.map_cast_int_atTop, Set.mem_preimage, comp_apply, convert, ext_iff, map_cast_int_atTop, map_map, mem_atTop_sets, mem_map, mem_preimage, mk.injEq, symmetricIcc, symmetricIoo
 -/
@@ -543,7 +549,16 @@ lemma _root_.Summable.tendsto_zero_of_even_summable_symmetricIcc
   obtain ⟨L, hL⟩ := hf
   rw [HasSum]; rw [symmetricIcc_filter]; rw [tendsto_map'_iff]; rw [Function.comp_def] at hL
   have := hL.sub (hL.comp (tendsto_atTop_add_const_right _ (-1) tendsto_id))
-  simp only [id_eq, Int.reduceNeg, Function.comp_apply, sub_se
+  simp only [id_eq, Int.reduceNeg, Function.comp_apply, sub_self, ← sub_eq_add_neg] at this
+  rw [tendsto_zero_iff_norm_tendsto_zero] at this
+  refine (mul_zero (_ : Real) ▸ this.const_mul 2⁻¹).congr' ?_
+  filter_upwards [eventually_ge_atTop 1] with x hx
+  have : Finset.Icc (-x) x = Icc (-(x - 1)) (x - 1) union {-x, x} := by
+    lift x to Nat using by positivity
+    convert! Finset.Icc_succ_succ (x - 1) (x - 1) <;> grind
+  rw [this]; rw [Finset.sum_union]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]; rw [hs x]; rw [add_comm]; rw [add_sub_cancel_right]; rw [← two_zsmul]; rw [norm_smul]; rw [Int.norm_eq_abs]; rw [Int.cast_two]; rw [abs_two]; rw [inv_mul_cancel_left₀ two_ne_zero] <;>
+  · simp only [disjoint_iff_ne, mem_insert, mem_singleton, mem_Icc]
+    omega
 
 中文:
 引理 _root_.Summable.tendsto_zero_of_even_summable_symmetricIcc
@@ -553,7 +568,16 @@ lemma _root_.Summable.tendsto_zero_of_even_summable_symmetricIcc
   obtain ⟨L, hL⟩ := hf
   rw [HasSum]; rw [symmetricIcc_filter]; rw [tendsto_map'_iff]; rw [Function.comp_def] at hL
   have := hL.sub (hL.comp (tendsto_atTop_add_const_right _ (-1) tendsto_id))
-  simp only [id_eq, Int.reduceNeg, Function.comp_apply, sub_se
+  simp only [id_eq, Int.reduceNeg, Function.comp_apply, sub_self, ← sub_eq_add_neg] at this
+  rw [tendsto_zero_iff_norm_tendsto_zero] at this
+  refine (mul_zero (_ : Real) ▸ this.const_mul 2⁻¹).congr' ?_
+  filter_upwards [eventually_ge_atTop 1] with x hx
+  have : Finset.Icc (-x) x = Icc (-(x - 1)) (x - 1) union {-x, x} := by
+    lift x to Nat using by positivity
+    convert! Finset.Icc_succ_succ (x - 1) (x - 1) <;> grind
+  rw [this]; rw [Finset.sum_union]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]; rw [hs x]; rw [add_comm]; rw [add_sub_cancel_right]; rw [← two_zsmul]; rw [norm_smul]; rw [Int.norm_eq_abs]; rw [Int.cast_two]; rw [abs_two]; rw [inv_mul_cancel_left₀ two_ne_zero] <;>
+  · simp only [disjoint_iff_ne, mem_insert, mem_singleton, mem_Icc]
+    omega
 
 Depends on / 依赖: Finset, Finset.Icc, Function, Function.comp_apply, Function.comp_def, HasSum, Int.reduceNeg, _iff, comp_apply, comp_def, const_mul, eventually_ge_atTop, filter_upwards, hL.comp, hL.sub, id_eq, mul_zero, reduceNeg, sub_eq_add_neg, sub_self
 -/

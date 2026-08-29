@@ -1025,7 +1025,9 @@ theorem mul_inv
   cases a
   case top =>
     simp_all only [Ne, top_ne_zero, not_false_eq_true, coe_ne_top, or_self, not_true_eq_false,
-      coe_eq_zero, false_or
+      coe_eq_zero, false_or, top_mul, inv_top, zero_mul]
+  grind [_=_ coe_mul, coe_zero, inv_zero, = mul_inv, coe_ne_top, ENNReal.inv_eq_zero,
+    =_ coe_inv, zero_mul, = mul_eq_zero, mul_top, mul_zero, top_mul]
 
 中文:
 定理 mul_inv
@@ -1038,7 +1040,9 @@ theorem mul_inv
   cases a
   case top =>
     simp_all only [Ne, top_ne_zero, not_false_eq_true, coe_ne_top, or_self, not_true_eq_false,
-      coe_eq_zero, false_or
+      coe_eq_zero, false_or, top_mul, inv_top, zero_mul]
+  grind [_=_ coe_mul, coe_zero, inv_zero, = mul_inv, coe_ne_top, ENNReal.inv_eq_zero,
+    =_ coe_inv, zero_mul, = mul_eq_zero, mul_top, mul_zero, top_mul]
 -/
 protected theorem mul_inv {a b : Real>=0∞} (ha : a != 0 ∨ b != ∞) (hb : a != ∞ ∨ b != 0) :
     (a * b)⁻¹ = a⁻¹ * b⁻¹ := by
@@ -1661,6 +1665,8 @@ theorem le_div_iff_mul_le
   rcases eq_or_ne b 0 with (rfl | hb)
   · have hc : c != 0 := h0.neg_resolve_left rfl
     simp [div_zero hc]
+  · rw [← coe_ne_zero] at hb
+    rw [← ENNReal.mul_le_mul_iff_left hb coe_ne_top]; rw [ENNReal.div_mul_cancel hb coe_ne_top]
 
 中文:
 定理 le_div_iff_mul_le
@@ -1675,6 +1681,8 @@ theorem le_div_iff_mul_le
   rcases eq_or_ne b 0 with (rfl | hb)
   · have hc : c != 0 := h0.neg_resolve_left rfl
     simp [div_zero hc]
+  · rw [← coe_ne_zero] at hb
+    rw [← ENNReal.mul_le_mul_iff_left hb coe_ne_top]; rw [ENNReal.div_mul_cancel hb coe_ne_top]
 -/
 protected theorem le_div_iff_mul_le (h0 : b != 0 ∨ c != 0) (ht : b != ∞ ∨ c != ∞) :
     a <= c / b ↔ a * b <= c := by
@@ -2992,7 +3000,10 @@ definition orderIsoIicOneBirational
     (fun x => ⟨(x⁻¹ + 1)⁻¹, ENNReal.inv_le_one.2 <| le_add_self⟩)
     (fun x y hxy => ?_) (fun x => (x.1⁻¹ - 1)⁻¹) fun x => Subtype.ext ?_
   · simpa only [Subtype.mk_lt_mk, ENNReal.inv_lt_inv, ENNReal.add_lt_add_iff_right one_ne_top]
-  · have : (1 : Real
+  · have : (1 : Real>=0∞) <= x.1⁻¹ := ENNReal.one_le_inv.2 x.2
+    simp only [inv_inv, tsub_add_cancel_of_le this]
+
+@[simp]
 
 中文:
 定义 orderIsoIicOneBirational
@@ -3002,7 +3013,10 @@ definition orderIsoIicOneBirational
     (fun x => ⟨(x⁻¹ + 1)⁻¹, ENNReal.inv_le_one.2 <| le_add_self⟩)
     (fun x y hxy => ?_) (fun x => (x.1⁻¹ - 1)⁻¹) fun x => Subtype.ext ?_
   · simpa only [Subtype.mk_lt_mk, ENNReal.inv_lt_inv, ENNReal.add_lt_add_iff_right one_ne_top]
-  · have : (1 : Real
+  · have : (1 : Real>=0∞) <= x.1⁻¹ := ENNReal.one_le_inv.2 x.2
+    simp only [inv_inv, tsub_add_cancel_of_le this]
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.add_lt_add_iff_right, ENNReal.inv_le_one, ENNReal.inv_lt_inv, ENNReal.one_le_inv, StrictMono, StrictMono.orderIsoOfRightInverse, Subtype, Subtype.ext, Subtype.mk_lt_mk, add_lt_add_iff_right, inv_inv, inv_le_one, inv_lt_inv, le_add_self, mk_lt_mk, one_le_inv, one_ne_top, orderIsoOfRightInverse, tsub_add_cancel_of_le
 -/
@@ -3046,7 +3060,10 @@ definition orderIsoIicCoe
 invFun := fun x => ⟨ENNReal.toNNReal x, coe_le_coe.1 coe_toNNReal_le_self.trans x.2⟩
 left_inv := fun _ => Subtype.ext toNNReal_coe _
 right_inv := fun x => Subtype.ext coe_toNNReal (ne_top_of_le_ne_top coe_ne_top x.2)
-      map_rel_iff' := f
+      map_rel_iff' := fun {_ _} => by
+        simp only [Equiv.coe_fn_mk, Subtype.mk_le_mk, coe_le_coe, Subtype.coe_le_coe] }
+
+@[simp]
 
 中文:
 定义 orderIsoIicCoe
@@ -3056,7 +3073,10 @@ right_inv := fun x => Subtype.ext coe_toNNReal (ne_top_of_le_ne_top coe_ne_top x
 invFun := fun x => ⟨ENNReal.toNNReal x, coe_le_coe.1 coe_toNNReal_le_self.trans x.2⟩
 left_inv := fun _ => Subtype.ext toNNReal_coe _
 right_inv := fun x => Subtype.ext coe_toNNReal (ne_top_of_le_ne_top coe_ne_top x.2)
-      map_rel_iff' := f
+      map_rel_iff' := fun {_ _} => by
+        simp only [Equiv.coe_fn_mk, Subtype.mk_le_mk, coe_le_coe, Subtype.coe_le_coe] }
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.toNNReal, Equiv.coe_fn_mk, OrderIso, OrderIso.symm, Subtype, Subtype.coe_le_coe, Subtype.ext, Subtype.mk_le_mk, coe_fn_mk, coe_le_coe, coe_ne_top, coe_toNNReal, coe_toNNReal_le_self, coe_toNNReal_le_self.trans, invFun, left_inv, map_rel_iff, mk_le_mk, ne_top_of_le_ne_top
 -/
@@ -3461,7 +3481,10 @@ theorem exists_mem_Ico_zpow
   have A : y != 0 := by simpa only [Ne, coe_eq_zero] using (zero_lt_one.trans hy).ne'
   obtain ⟨n, hn, h'n⟩ : exists n : Int, y ^ n <= x ∧ x < y ^ (n + 1) := by
     refine NNReal.exists_mem_Ico_zpow ?_ (one_lt_coe_iff.1 hy)
-    simpa onl
+    simpa only [Ne, coe_eq_zero] using hx
+  refine ⟨n, ?_, ?_⟩
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_le_coe]
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_lt_coe]
 
 中文:
 定理 存在_mem_Ico_zpow
@@ -3472,7 +3495,10 @@ theorem exists_mem_Ico_zpow
   have A : y != 0 := by simpa only [Ne, coe_eq_zero] using (zero_lt_one.trans hy).ne'
   obtain ⟨n, hn, h'n⟩ : exists n : Int, y ^ n <= x ∧ x < y ^ (n + 1) := by
     refine NNReal.exists_mem_Ico_zpow ?_ (one_lt_coe_iff.1 hy)
-    simpa onl
+    simpa only [Ne, coe_eq_zero] using hx
+  refine ⟨n, ?_, ?_⟩
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_le_coe]
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_lt_coe]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_lt_coe, ENNReal.coe_zpow, NNReal, NNReal.exists_mem_Ico_zpow, coe_eq_zero, coe_le_coe, coe_lt_coe, coe_zpow, exists_mem_Ico_zpow, one_lt_coe_iff, zero_lt_one, zero_lt_one.trans
 -/
@@ -3500,7 +3526,10 @@ theorem exists_mem_Ioc_zpow
   have A : y != 0 := by simpa only [Ne, coe_eq_zero] using (zero_lt_one.trans hy).ne'
   obtain ⟨n, hn, h'n⟩ : exists n : Int, y ^ n < x ∧ x <= y ^ (n + 1) := by
     refine NNReal.exists_mem_Ioc_zpow ?_ (one_lt_coe_iff.1 hy)
-    simpa onl
+    simpa only [Ne, coe_eq_zero] using hx
+  refine ⟨n, ?_, ?_⟩
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_lt_coe]
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_le_coe]
 
 中文:
 定理 存在_mem_Ioc_zpow
@@ -3511,7 +3540,10 @@ theorem exists_mem_Ioc_zpow
   have A : y != 0 := by simpa only [Ne, coe_eq_zero] using (zero_lt_one.trans hy).ne'
   obtain ⟨n, hn, h'n⟩ : exists n : Int, y ^ n < x ∧ x <= y ^ (n + 1) := by
     refine NNReal.exists_mem_Ioc_zpow ?_ (one_lt_coe_iff.1 hy)
-    simpa onl
+    simpa only [Ne, coe_eq_zero] using hx
+  refine ⟨n, ?_, ?_⟩
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_lt_coe]
+  · rwa [← ENNReal.coe_zpow A, ENNReal.coe_le_coe]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_lt_coe, ENNReal.coe_zpow, NNReal, NNReal.exists_mem_Ioc_zpow, coe_eq_zero, coe_le_coe, coe_lt_coe, coe_zpow, exists_mem_Ioc_zpow, one_lt_coe_iff, zero_lt_one, zero_lt_one.trans
 -/
@@ -3544,6 +3576,9 @@ theorem Ioo_zero_top_eq_iUnion_Ico_zpow
     · apply lt_of_lt_of_le _ hn
       exact ENNReal.zpow_pos (zero_lt_one.trans hy).ne' h'y _
     · apply lt_trans h'n _
+      exact ENNReal.zpow_lt_top (zero_lt_one.trans hy).ne' h'y _
+
+@[gcongr]
 
 中文:
 定理 Ioo_zero_top_eq_iUnion_Ico_zpow
@@ -3559,6 +3594,9 @@ theorem Ioo_zero_top_eq_iUnion_Ico_zpow
     · apply lt_of_lt_of_le _ hn
       exact ENNReal.zpow_pos (zero_lt_one.trans hy).ne' h'y _
     · apply lt_trans h'n _
+      exact ENNReal.zpow_lt_top (zero_lt_one.trans hy).ne' h'y _
+
+@[gcongr]
 
 Depends on / 依赖: ENNReal, ENNReal.zpow_lt_top, ENNReal.zpow_pos, exists_mem_Ico_zpow, hx.ne, lt_of_lt_of_le, lt_trans, mem_Ico, mem_Ioo, mem_iUnion, x.ne, zero_lt_one, zero_lt_one.trans, zpow_lt_top, zpow_pos
 -/
@@ -3590,7 +3628,11 @@ theorem zpow_le_of_le
     exact pow_right_mono₀ hx (Int.le_of_ofNat_le_ofNat h)
   · apply absurd h (not_le_of_gt _)
     exact lt_of_lt_of_le (Int.negSucc_lt_zero _) (Int.natCast_nonneg _)
-  · simp only [zpow_negSucc, Int.ofNat
+  · simp only [zpow_negSucc, Int.ofNat_eq_natCast, zpow_natCast]
+    refine (ENNReal.inv_le_one.2 ?_).trans ?_ <;> exact one_le_pow_of_one_le' hx _
+  · simp only [zpow_negSucc, ENNReal.inv_le_inv]
+    apply pow_right_mono₀ hx
+    simpa only [← Int.ofNat_le, neg_le_neg_iff, Int.natCast_add, Int.ofNat_one] using! h
 
 中文:
 定理 zpow_le_of_le
@@ -3602,7 +3644,11 @@ theorem zpow_le_of_le
     exact pow_right_mono₀ hx (Int.le_of_ofNat_le_ofNat h)
   · apply absurd h (not_le_of_gt _)
     exact lt_of_lt_of_le (Int.negSucc_lt_zero _) (Int.natCast_nonneg _)
-  · simp only [zpow_negSucc, Int.ofNat
+  · simp only [zpow_negSucc, Int.ofNat_eq_natCast, zpow_natCast]
+    refine (ENNReal.inv_le_one.2 ?_).trans ?_ <;> exact one_le_pow_of_one_le' hx _
+  · simp only [zpow_negSucc, ENNReal.inv_le_inv]
+    apply pow_right_mono₀ hx
+    simpa only [← Int.ofNat_le, neg_le_neg_iff, Int.natCast_add, Int.ofNat_one] using! h
 
 Depends on / 依赖: ENNReal, ENNReal.inv_le_inv, ENNReal.inv_le_one, Int.le_of_ofNat_le_ofNat, Int.natCast_nonneg, Int.negSucc_lt_zero, Int.ofNat_eq_natCast, Int.ofNat_le, absurd, inv_le_inv, inv_le_one, le_of_ofNat_le_ofNat, lt_of_lt_of_le, natCast_nonneg, negSucc_lt_zero, neg_le_neg, not_le_of_gt, ofNat_eq_natCast, ofNat_le, one_le_pow_of_one_le
 -/
@@ -3677,7 +3723,7 @@ theorem zpow_neg
   obtain hx | hx := eq_or_ne x ⊤
   · obtain hm | hm | hm := lt_trichotomy m 0 <;>
       simp_all [top_zpow_def, ne_of_lt, ne_of_gt, lt_asymm]
-  exact EN
+  exact ENNReal.eq_inv_of_mul_eq_one_left (by simp [← ENNReal.zpow_add hx₀ hx])
 
 中文:
 定理 zpow_neg
@@ -3690,7 +3736,7 @@ theorem zpow_neg
   obtain hx | hx := eq_or_ne x ⊤
   · obtain hm | hm | hm := lt_trichotomy m 0 <;>
       simp_all [top_zpow_def, ne_of_lt, ne_of_gt, lt_asymm]
-  exact EN
+  exact ENNReal.eq_inv_of_mul_eq_one_left (by simp [← ENNReal.zpow_add hx₀ hx])
 -/
 protected theorem zpow_neg (x : Real>=0∞) (m : Int) : x ^ (-m) = (x ^ m)⁻¹ := by
   obtain hx₀ | hx₀ := eq_or_ne x 0
@@ -3890,7 +3936,7 @@ lemma mul_iSup
   · obtain ⟨i, hi⟩ := not_forall.1 hf
     simpa [iSup_eq_zero.not.2 hf, eq_comm (a := ⊤)]
       using le_iSup_of_le (f := fun i => ⊤ * f i) i (top_mul hi).ge
-  · exact (mu
+  · exact (mulLeftOrderIso _ <| isUnit_iff.2 ⟨ha₀, ha⟩).map_iSup _
 
 中文:
 引理 mul_iSup
@@ -3905,7 +3951,7 @@ lemma mul_iSup
   · obtain ⟨i, hi⟩ := not_forall.1 hf
     simpa [iSup_eq_zero.not.2 hf, eq_comm (a := ⊤)]
       using le_iSup_of_le (f := fun i => ⊤ * f i) i (top_mul hi).ge
-  · exact (mu
+  · exact (mulLeftOrderIso _ <| isUnit_iff.2 ⟨ha₀, ha⟩).map_iSup _
 
 Depends on / 依赖: eq_comm, eq_or_ne, iSup_eq_zero, iSup_eq_zero.not, isUnit_iff, le_iSup_of_le, map_iSup, mulLeftOrderIso, not_forall, top_mul
 -/
@@ -4036,7 +4082,9 @@ lemma mul_iInf'
   · obtain ⟨i, hi⟩ | hf := em (exists i, f i = 0)
     · rw [iInf_eq_bot.2, iInf_eq_bot.2, bot_eq_zero, mul_zero] <;>
         exact fun _ _ => ⟨i, by simpa [hi]⟩
-    · rw [top_mul (mt (hinfty rfl) hf), eq_comm, 
+    · rw [top_mul (mt (hinfty rfl) hf), eq_comm, iInf_eq_top]
+      exact fun i => top_mul fun hi => hf ⟨i, hi⟩
+  · exact (mulLeftOrderIso _ <| isUnit_iff.2 ⟨ha₀, ha⟩).map_iInf _
 
 中文:
 引理 mul_iInf'
@@ -4048,7 +4096,9 @@ lemma mul_iInf'
   · obtain ⟨i, hi⟩ | hf := em (exists i, f i = 0)
     · rw [iInf_eq_bot.2, iInf_eq_bot.2, bot_eq_zero, mul_zero] <;>
         exact fun _ _ => ⟨i, by simpa [hi]⟩
-    · rw [top_mul (mt (hinfty rfl) hf), eq_comm, 
+    · rw [top_mul (mt (hinfty rfl) hf), eq_comm, iInf_eq_top]
+      exact fun i => top_mul fun hi => hf ⟨i, hi⟩
+  · exact (mulLeftOrderIso _ <| isUnit_iff.2 ⟨ha₀, ha⟩).map_iInf _
 
 Depends on / 依赖: bot_eq_zero, eq_comm, eq_or_ne, hinfty, iInf_eq_bot, iInf_eq_top, isUnit_iff, map_iInf, mulLeftOrderIso, mul_zero, top_mul
 -/

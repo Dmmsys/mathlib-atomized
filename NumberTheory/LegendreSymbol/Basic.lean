@@ -61,7 +61,8 @@ theorem euler_criterion_units
     have hs : (exists y : (ZMod p)ˣ, y ^ 2 = x) ↔ IsSquare x := by
       rw [isSquare_iff_exists_sq x]
       simp_rw [eq_comm]
-   
+    rw [hs]
+    rwa [card p] at h₀
 
 中文:
 定理 euler_criterion_units
@@ -75,7 +76,8 @@ theorem euler_criterion_units
     have hs : (exists y : (ZMod p)ˣ, y ^ 2 = x) ↔ IsSquare x := by
       rw [isSquare_iff_exists_sq x]
       simp_rw [eq_comm]
-   
+    rw [hs]
+    rwa [card p] at h₀
 
 Depends on / 依赖: FiniteField, FiniteField.unit_isSquare_iff, IsSquare, eq_comm, eq_iff_true_of_subsingleton, exists_const, isSquare_iff_exists_sq, ringChar_zmod_n, simp_rw, unit_isSquare_iff
 -/
@@ -105,7 +107,8 @@ theorem euler_criterion
   · rintro ⟨y, rfl⟩
     have hy : y != 0 := by
       rintro rfl
-      simp [mul_zero, ne
+      simp [mul_zero, ne_eq] at ha
+    refine ⟨Units.mk0 y hy, ?_⟩; simp
 
 中文:
 定理 euler_criterion
@@ -119,7 +122,8 @@ theorem euler_criterion
   · rintro ⟨y, rfl⟩
     have hy : y != 0 := by
       rintro rfl
-      simp [mul_zero, ne
+      simp [mul_zero, ne_eq] at ha
+    refine ⟨Units.mk0 y hy, ?_⟩; simp
 
 Depends on / 依赖: Units.ext_iff, Units.mk0, Units.val_mk0, Units.val_mul, euler_criterion_units, ext_iff, hy.symm, iff_congr, mul_zero, ne_eq, val_mk0, val_mul
 -/
@@ -222,7 +226,15 @@ theorem eq_pow
       norm_cast
     · have := (ringChar_zmod_n p).symm.trans hc
       -- p = 2
-      s
+      subst p
+      rw [legendreSym]; rw [quadraticChar_eq_one_of_char_two hc ha]
+      revert ha
+      push_cast
+      generalize (a : ZMod 2) = b; fin_cases b
+      · tauto
+      · simp
+  · convert! quadraticChar_eq_pow_of_char_ne_two' hc (a : ZMod p)
+    exact (card p).symm
 
 中文:
 定理 eq_pow
@@ -236,7 +248,15 @@ theorem eq_pow
       norm_cast
     · have := (ringChar_zmod_n p).symm.trans hc
       -- p = 2
-      s
+      subst p
+      rw [legendreSym]; rw [quadraticChar_eq_one_of_char_two hc ha]
+      revert ha
+      push_cast
+      generalize (a : ZMod 2) = b; fin_cases b
+      · tauto
+      · simp
+  · convert! quadraticChar_eq_pow_of_char_ne_two' hc (a : ZMod p)
+    exact (card p).symm
 
 Depends on / 依赖: Fact.out, Nat.div_pos, div_pos, eq_or_ne, legendreSym, p.Prime, quadraticChar_zero, ringChar, ringChar_zmod_n, succ_pos, symm.trans, two_le, zero_pow
 -/
@@ -676,7 +696,8 @@ theorem eq_zero_mod_of_eq_neg_one
   rcases imp_iff_or_not.mp (not_and'.mp hf) with hx | hy
   · rw [eq_one_of_sq_sub_mul_sq_eq_zero' ha hx hxy, CharZero.eq_neg_self_iff] at h
     exact one_ne_zero h
-  · rw [eq_one_o
+  · rw [eq_one_of_sq_sub_mul_sq_eq_zero ha hy hxy, CharZero.eq_neg_self_iff] at h
+    exact one_ne_zero h
 
 中文:
 定理 eq_zero_mod_of_eq_neg_one
@@ -690,7 +711,8 @@ theorem eq_zero_mod_of_eq_neg_one
   rcases imp_iff_or_not.mp (not_and'.mp hf) with hx | hy
   · rw [eq_one_of_sq_sub_mul_sq_eq_zero' ha hx hxy, CharZero.eq_neg_self_iff] at h
     exact one_ne_zero h
-  · rw [eq_one_o
+  · rw [eq_one_of_sq_sub_mul_sq_eq_zero ha hy hxy, CharZero.eq_neg_self_iff] at h
+    exact one_ne_zero h
 
 Depends on / 依赖: CharZero, CharZero.eq_neg_self_iff, eq_neg_self_iff, eq_one_of_sq_sub_mul_sq_eq_zero, eq_zero_iff, imp_iff_or_not, imp_iff_or_not.mp, not_and, one_ne_zero
 -/

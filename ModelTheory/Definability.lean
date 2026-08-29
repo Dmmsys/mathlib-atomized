@@ -112,7 +112,12 @@ theorem definable_iff_exists_formula_sum
   ext
   simp only [BoundedFormula.constantsVarsEquiv, constantsOn,
     mem_ofPred_eq, Formula.Realize]
-  refine BoundedFormula.realize_mapTermRel
+  refine BoundedFormula.realize_mapTermRel_id ?_ (fun _ _ _ => rfl)
+  intros
+  simp only [Term.constantsVarsEquivLeft_symm_apply, Term.realize_varsToConstants,
+    coe_con, Term.realize_relabel]
+  congr 1 with a
+  rcases a with (_ | _) | _ <;> rfl
 
 中文:
 定理 definable_iff_存在_formula_sum
@@ -122,7 +127,12 @@ theorem definable_iff_exists_formula_sum
   ext
   simp only [BoundedFormula.constantsVarsEquiv, constantsOn,
     mem_ofPred_eq, Formula.Realize]
-  refine BoundedFormula.realize_mapTermRel
+  refine BoundedFormula.realize_mapTermRel_id ?_ (fun _ _ _ => rfl)
+  intros
+  simp only [Term.constantsVarsEquivLeft_symm_apply, Term.realize_varsToConstants,
+    coe_con, Term.realize_relabel]
+  congr 1 with a
+  rcases a with (_ | _) | _ <;> rfl
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.constantsVarsEquiv, BoundedFormula.realize_mapTermRel_id, Definable, Equiv.exists_congr_left, Formula, Formula.Realize, Realize, Term.constantsVarsEquivLeft_symm_apply, Term.realize_relabel, Term.realize_varsToConstants, coe_con, congr_arg, constantsOn, constantsVarsEquiv, constantsVarsEquivLeft_symm_apply, exists_congr, exists_congr_left, iff_iff_eq, intros
 -/
@@ -655,7 +665,12 @@ theorem definable_iff_finitely_definable
     rintro ⟨φ, rfl⟩
     let A0 := (φ.freeVarFinset.toLeft).image Subtype.val
     refine ⟨A0, by simp [A0], (φ.restrictFreeVar <| fun x => Sum.casesOn x.1
-        (fun x hx => Sum.inl ⟨x, by simp [A0, hx]⟩) (fun x _ => Sum.
+        (fun x hx => Sum.inl ⟨x, by simp [A0, hx]⟩) (fun x _ => Sum.inr x) x.2), ?_⟩
+    ext
+    simp only [Formula.Realize, mem_ofPred_eq, Finset.coe_sort_coe]
+exact iff_comm.1 BoundedFormula.realize_restrictFreeVar _ (by simp)
+  · rintro ⟨A0, hA0, hd⟩
+    exact Definable.mono hd hA0
 
 中文:
 定理 definable_iff_finitely_definable
@@ -666,7 +681,12 @@ theorem definable_iff_finitely_definable
     rintro ⟨φ, rfl⟩
     let A0 := (φ.freeVarFinset.toLeft).image Subtype.val
     refine ⟨A0, by simp [A0], (φ.restrictFreeVar <| fun x => Sum.casesOn x.1
-        (fun x hx => Sum.inl ⟨x, by simp [A0, hx]⟩) (fun x _ => Sum.
+        (fun x hx => Sum.inl ⟨x, by simp [A0, hx]⟩) (fun x _ => Sum.inr x) x.2), ?_⟩
+    ext
+    simp only [Formula.Realize, mem_ofPred_eq, Finset.coe_sort_coe]
+exact iff_comm.1 BoundedFormula.realize_restrictFreeVar _ (by simp)
+  · rintro ⟨A0, hA0, hd⟩
+    exact Definable.mono hd hA0
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.realize_restrictFreeVar, Definable, Definable.mono, Finset, Finset.coe_sort_coe, Formula, Formula.Realize, Realize, Subtype, Subtype.val, Sum.casesOn, Sum.inl, Sum.inr, casesOn, classical, coe_sort_coe, definable_iff_exists_formula_sum, freeVarFinset, freeVarFinset.toLeft
 -/
@@ -701,7 +721,9 @@ theorem Definable.image_comp_sumInl_fin
   constructor
   · rintro ⟨y, hy, rfl⟩
     exact
-      ⟨y ∘ 
+      ⟨y ∘ Sum.inr, (congr (congr rfl (Sum.elim_comp_inl_inr y).symm) (funext finZeroElim)).mp hy⟩
+  · rintro ⟨y, hy⟩
+    exact ⟨Sum.elim x y, (congr rfl (funext finZeroElim)).mp hy, Sum.elim_comp_inl _ _⟩
 
 中文:
 定理 Definable.image_comp_sumInl_fin
@@ -715,7 +737,9 @@ theorem Definable.image_comp_sumInl_fin
   constructor
   · rintro ⟨y, hy, rfl⟩
     exact
-      ⟨y ∘ 
+      ⟨y ∘ Sum.inr, (congr (congr rfl (Sum.elim_comp_inl_inr y).symm) (funext finZeroElim)).mp hy⟩
+  · rintro ⟨y, hy⟩
+    exact ⟨Sum.elim x y, (congr rfl (funext finZeroElim)).mp hy, Sum.elim_comp_inl _ _⟩
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.realize_exs, BoundedFormula.realize_relabel, BoundedFormula.relabel, Fin.castAdd_zero, Fin.cast_refl, Function, Function.comp_id, Set.mem_image, Sum.elim, Sum.elim_comp_inl, Sum.elim_comp_inl_inr, Sum.inr, castAdd_zero, cast_refl, comp_id, elim_comp_inl, elim_comp_inl_inr, finZeroElim, mem_image
 -/
@@ -746,7 +770,11 @@ theorem Definable.image_comp_embedding
       (congr rfl (ext fun x => ?_)).mp
         (((h.image_comp_equiv (Equiv.Set.sumCompl (range f))).image_comp_equiv
               (Equiv.sumCongr (Equiv.ofInjective f f.injective)
-                (Fintype.equivFin (↥(range f)ᶜ)).symm)).image_c
+                (Fintype.equivFin (↥(range f)ᶜ)).symm)).image_comp_sumInl_fin
+          _)
+    simp only [mem_image, exists_exists_and_eq_and]
+    refine exists_congr fun y => and_congr_right fun _ => Eq.congr_left (funext fun a => ?_)
+    simp
 
 中文:
 定理 Definable.image_comp_embedding
@@ -758,7 +786,11 @@ theorem Definable.image_comp_embedding
       (congr rfl (ext fun x => ?_)).mp
         (((h.image_comp_equiv (Equiv.Set.sumCompl (range f))).image_comp_equiv
               (Equiv.sumCongr (Equiv.ofInjective f f.injective)
-                (Fintype.equivFin (↥(range f)ᶜ)).symm)).image_c
+                (Fintype.equivFin (↥(range f)ᶜ)).symm)).image_comp_sumInl_fin
+          _)
+    simp only [mem_image, exists_exists_and_eq_and]
+    refine exists_congr fun y => and_congr_right fun _ => Eq.congr_left (funext fun a => ?_)
+    simp
 
 Depends on / 依赖: Eq.congr_left, Equiv.Set.sumCompl, Equiv.ofInjective, Equiv.sumCongr, Fintype, Fintype.equivFin, and_congr_right, classical, congr_left, equivFin, exists_congr, exists_exists_and_eq_and, f.injective, h.image_comp_equiv, image_comp_equiv, image_comp_sumInl_fin, injective, mem_image, nonempty_fintype, ofInjective
 -/
@@ -790,7 +822,31 @@ theorem Definable.image_comp
       (((h.image_comp_equiv (Equiv.Set.sumCompl (range f))).image_comp_equiv
                 (Equiv.sumCongr (_root_.Equiv.refl _)
                   (Fintype.equivFin _).symm)).image_comp_sumInl_fin
-            _)
+            _).preimage_comp
+        (rangeSplitting f)
+    have h' :
+      A.Definable L { x : α -> M | forall a, x a = x (rangeSplitting f (rangeFactorization f a)) } := by
+      have h' : forall a,
+        A.Definable L { x : α -> M | x a = x (rangeSplitting f (rangeFactorization f a)) } := by
+          refine fun a => ⟨(var a).equal (var (rangeSplitting f (rangeFactorization f a))), ext ?_⟩
+          simp
+      refine (congr rfl (ext ?_)).mp (definable_biInter_finset h' Finset.univ)
+      simp
+    refine (congr rfl (ext fun x => ?_)).mp (h.inter h')
+    simp only [mem_inter_iff, mem_preimage, mem_image, exists_exists_and_eq_and,
+      mem_ofPred_eq]
+    constructor
+    · rintro ⟨⟨y, ys, hy⟩, hx⟩
+      refine ⟨y, ys, ?_⟩
+      ext a
+      rw [hx a]; rw [← Function.comp_apply (f := x)]; rw [← hy]
+      simp
+    · rintro ⟨y, ys, rfl⟩
+      refine ⟨⟨y, ys, ?_⟩, fun a => ?_⟩
+      · ext
+        simp [Set.apply_rangeSplitting f]
+      · rw [Function.comp_apply, Function.comp_apply, apply_rangeSplitting f,
+          rangeFactorization_coe]
 
 中文:
 定理 Definable.image_comp
@@ -803,7 +859,31 @@ theorem Definable.image_comp
       (((h.image_comp_equiv (Equiv.Set.sumCompl (range f))).image_comp_equiv
                 (Equiv.sumCongr (_root_.Equiv.refl _)
                   (Fintype.equivFin _).symm)).image_comp_sumInl_fin
-            _)
+            _).preimage_comp
+        (rangeSplitting f)
+    have h' :
+      A.Definable L { x : α -> M | forall a, x a = x (rangeSplitting f (rangeFactorization f a)) } := by
+      have h' : forall a,
+        A.Definable L { x : α -> M | x a = x (rangeSplitting f (rangeFactorization f a)) } := by
+          refine fun a => ⟨(var a).equal (var (rangeSplitting f (rangeFactorization f a))), ext ?_⟩
+          simp
+      refine (congr rfl (ext ?_)).mp (definable_biInter_finset h' Finset.univ)
+      simp
+    refine (congr rfl (ext fun x => ?_)).mp (h.inter h')
+    simp only [mem_inter_iff, mem_preimage, mem_image, exists_exists_and_eq_and,
+      mem_ofPred_eq]
+    constructor
+    · rintro ⟨⟨y, ys, hy⟩, hx⟩
+      refine ⟨y, ys, ?_⟩
+      ext a
+      rw [hx a]; rw [← Function.comp_apply (f := x)]; rw [← hy]
+      simp
+    · rintro ⟨y, ys, rfl⟩
+      refine ⟨⟨y, ys, ?_⟩, fun a => ?_⟩
+      · ext
+        simp [Set.apply_rangeSplitting f]
+      · rw [Function.comp_apply, Function.comp_apply, apply_rangeSplitting f,
+          rangeFactorization_coe]
 
 Depends on / 依赖: A.Definable, Definable, Equiv.Set.sumCompl, Equiv.sumCongr, Fintype, Fintype.equivFin, _root_, _root_.Equiv.refl, classical, equivFin, h.image_comp_equiv, image_comp_equiv, image_comp_sumInl_fin, nonempty_fintype, preimage_comp, rangeFactorization, rangeSplitting, sumCompl, sumCongr
 -/
@@ -1808,7 +1888,13 @@ lemma _root_.Set.Definable.preimage_map
     refine definable_iInter_of_finite fun i => ?_
     simpa [tupleGraph] using!
       (hF i).preimage_comp (fun | none => Sum.inr i | some j => Sum.inl j)
-  have h_cyl 
+  have h_cyl : A.Definable L { w : α oplus β -> M | w ∘ Sum.inr in S } :=
+    hS.preimage_comp Sum.inr
+  convert! Definable.exists_of_finite (Definable.inter h_graph h_cyl) using 1
+  ext v
+  simp [← funext_iff]
+
+@[fun_prop]
 
 中文:
 引理 _root_.集合.Definable.preimage_map
@@ -1818,7 +1904,13 @@ lemma _root_.Set.Definable.preimage_map
     refine definable_iInter_of_finite fun i => ?_
     simpa [tupleGraph] using!
       (hF i).preimage_comp (fun | none => Sum.inr i | some j => Sum.inl j)
-  have h_cyl 
+  have h_cyl : A.Definable L { w : α oplus β -> M | w ∘ Sum.inr in S } :=
+    hS.preimage_comp Sum.inr
+  convert! Definable.exists_of_finite (Definable.inter h_graph h_cyl) using 1
+  ext v
+  simp [← funext_iff]
+
+@[fun_prop]
 
 Depends on / 依赖: A.Definable, Definable, Definable.exists_of_finite, Definable.inter, Sum.inl, Sum.inr, convert, definable_iInter_of_finite, exists_of_finite, funext_iff, hS.preimage_comp, h_cyl, h_graph, ofPred_forall, preimage_comp, tupleGraph
 -/
@@ -1855,7 +1947,10 @@ theorem DefinableFun.comp
     | none => fun_prop
     | some j =>
       simpa [tupleGraph] using!
-        ((hg j).preimage_comp fun 
+        ((hg j).preimage_comp fun | none => none | some i => some (some i))
+  simpa [DefinableFun, G, tupleGraph] using! hf.preimage_map hG
+
+@[fun_prop]
 
 中文:
 定理 DefinableFun.comp
@@ -1871,7 +1966,10 @@ theorem DefinableFun.comp
     | none => fun_prop
     | some j =>
       simpa [tupleGraph] using!
-        ((hg j).preimage_comp fun 
+        ((hg j).preimage_comp fun | none => none | some i => some (some i))
+  simpa [DefinableFun, G, tupleGraph] using! hf.preimage_map hG
+
+@[fun_prop]
 
 Depends on / 依赖: A.DefinableMap, DefinableFun, DefinableMap, fun_prop, hf.preimage_map, preimage_comp, preimage_map, tupleGraph
 -/

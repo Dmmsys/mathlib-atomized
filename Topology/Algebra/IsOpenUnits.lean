@@ -85,7 +85,32 @@ lemma IsOpenUnits.of_isAdic
   refine (IsTopologicalGroup.isOpenMap_iff_nhds_one (f := Units.coeHom R)).mpr ?_
   rw [nhds_induced]; rw [nhds_prod_eq]
   simp only [Units.embedProduct_apply, Units.val_one, inv_one, MulOpposite.op_one]
-  i
+  intro s hs
+  have H := hR ▸ Ideal.hasBasis_nhds_adic I 1
+  have := (H.prod (H.comap MulOpposite.opHomeomorph.symm))
+  simp only [Homeomorph.comap_nhds_eq, Homeomorph.symm_symm, MulOpposite.opHomeomorph_apply,
+    MulOpposite.op_one, and_self, Set.image_add_left] at this
+  have : exists n₁ n₂, forall (u : Rˣ), (-1 + u : R) in I ^ n₁ -> (-1 + u⁻¹ : R) in I ^ n₂ -> ↑u in s := by
+    simpa [Set.subset_def, forall_comm (β := Rˣ), forall_comm (β := _ = _)] using
+      (((this.comap (Units.embedProduct R)).map (Units.coeHom R)).1 _).mp hs
+  obtain ⟨n, hn, hn'⟩ : exists n != 0, forall (u : Rˣ), (-1 + u : R) in I ^ n ->
+      (-1 + u⁻¹ : R) in I ^ n -> ↑u in s := by
+    obtain ⟨n₁, n₂, H⟩ := this
+    exact ⟨n₁ ⊔ n₂ ⊔ 1, by simp, fun u h₁ h₂ => H u
+      (Ideal.pow_le_pow_right (by simp) h₁)
+      (Ideal.pow_le_pow_right (by simp) h₂)⟩
+  rw [H.1]
+  refine ⟨n, trivial, ?_⟩
+  rintro _ ⟨x, hx, rfl⟩
+  have := Ideal.mem_jacobson_bot.mp (hI (Ideal.pow_le_self hn hx)) 1
+  rw [mul_one]; rw [add_comm] at this
+  refine hn' this.unit (by simpa using hx) ?_
+  have : -1 + ↑this.unit⁻¹ = -this.unit⁻¹ * x := by
+    trans this.unit⁻¹ * (-(1 + x) + 1)
+    · rw [mul_add, mul_neg, IsUnit.val_inv_mul, mul_one]
+    · simp
+  rw [this]
+  exact Ideal.mul_mem_left _ _ hx
 
 中文:
 引理 是OpenUnits.of_isAdic
@@ -95,7 +120,32 @@ lemma IsOpenUnits.of_isAdic
   refine (IsTopologicalGroup.isOpenMap_iff_nhds_one (f := Units.coeHom R)).mpr ?_
   rw [nhds_induced]; rw [nhds_prod_eq]
   simp only [Units.embedProduct_apply, Units.val_one, inv_one, MulOpposite.op_one]
-  i
+  intro s hs
+  have H := hR ▸ Ideal.hasBasis_nhds_adic I 1
+  have := (H.prod (H.comap MulOpposite.opHomeomorph.symm))
+  simp only [Homeomorph.comap_nhds_eq, Homeomorph.symm_symm, MulOpposite.opHomeomorph_apply,
+    MulOpposite.op_one, and_self, Set.image_add_left] at this
+  have : exists n₁ n₂, forall (u : Rˣ), (-1 + u : R) in I ^ n₁ -> (-1 + u⁻¹ : R) in I ^ n₂ -> ↑u in s := by
+    simpa [Set.subset_def, forall_comm (β := Rˣ), forall_comm (β := _ = _)] using
+      (((this.comap (Units.embedProduct R)).map (Units.coeHom R)).1 _).mp hs
+  obtain ⟨n, hn, hn'⟩ : exists n != 0, forall (u : Rˣ), (-1 + u : R) in I ^ n ->
+      (-1 + u⁻¹ : R) in I ^ n -> ↑u in s := by
+    obtain ⟨n₁, n₂, H⟩ := this
+    exact ⟨n₁ ⊔ n₂ ⊔ 1, by simp, fun u h₁ h₂ => H u
+      (Ideal.pow_le_pow_right (by simp) h₁)
+      (Ideal.pow_le_pow_right (by simp) h₂)⟩
+  rw [H.1]
+  refine ⟨n, trivial, ?_⟩
+  rintro _ ⟨x, hx, rfl⟩
+  have := Ideal.mem_jacobson_bot.mp (hI (Ideal.pow_le_self hn hx)) 1
+  rw [mul_one]; rw [add_comm] at this
+  refine hn' this.unit (by simpa using hx) ?_
+  have : -1 + ↑this.unit⁻¹ = -this.unit⁻¹ * x := by
+    trans this.unit⁻¹ * (-(1 + x) + 1)
+    · rw [mul_add, mul_neg, IsUnit.val_inv_mul, mul_one]
+    · simp
+  rw [this]
+  exact Ideal.mul_mem_left _ _ hx
 
 Depends on / 依赖: H.comap, H.prod, Homeomorph, Homeomorph.comap_nhds_eq, Homeomorph.symm_symm, Ideal.hasBasis_nhds_adic, IsTopologicalGroup, IsTopologicalGroup.isOpenMap_iff_nhds_one, MulOppos, MulOpposite, MulOpposite.opHomeomorph.symm, MulOpposite.opHomeomorph_apply, MulOpposite.op_one, Units.coeHom, Units.continuous_val, Units.embedProduct_apply, Units.val_injective, Units.val_one, coeHom, comap_nhds_eq
 -/

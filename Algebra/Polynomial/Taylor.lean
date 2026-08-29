@@ -245,7 +245,12 @@ theorem taylor_coeff
     congr 1; clear! f; ext i
     simp only [leval_apply, mul_one, one_mul, eval_monomial, LinearMap.comp_apply, map_sum,
       hasseDeriv_monomial, taylor_apply, monomial_comp, C_1, (commute_X (C r)).add_pow i]
-    simp only [l
+    simp only [lcoeff_apply, ← C_eq_natCast, mul_assoc, ← C_pow, ← C_mul, coeff_mul_C,
+      (Nat.cast_commute _ _).eq, coeff_X_pow, boole_mul, Finset.sum_ite_eq, Finset.mem_range]
+    split_ifs with h; · rfl
+    push Not at h; rw [Nat.choose_eq_zero_of_lt h, Nat.cast_zero, mul_zero]
+
+@[simp]
 
 中文:
 定理 taylor_coeff
@@ -255,7 +260,12 @@ theorem taylor_coeff
     congr 1; clear! f; ext i
     simp only [leval_apply, mul_one, one_mul, eval_monomial, LinearMap.comp_apply, map_sum,
       hasseDeriv_monomial, taylor_apply, monomial_comp, C_1, (commute_X (C r)).add_pow i]
-    simp only [l
+    simp only [lcoeff_apply, ← C_eq_natCast, mul_assoc, ← C_pow, ← C_mul, coeff_mul_C,
+      (Nat.cast_commute _ _).eq, coeff_X_pow, boole_mul, Finset.sum_ite_eq, Finset.mem_range]
+    split_ifs with h; · rfl
+    push Not at h; rw [Nat.choose_eq_zero_of_lt h, Nat.cast_zero, mul_zero]
+
+@[simp]
 
 Depends on / 依赖: C_eq_natCast, C_mul, C_pow, Finset, Finset.mem_range, Finset.sum_ite_eq, LinearMap, LinearMap.comp_apply, Nat.cast_commute, Nat.choose_eq_ze, add_pow, boole_mul, cast_commute, choose_eq_ze, coeff_X_pow, coeff_mul_C, commute_X, comp_apply, eval_monomial, hasseDeriv
 -/
@@ -698,7 +708,9 @@ theorem exists_mul_sq_add_linear_part_eq_eval_add
       (taylor x p).eval t =
       ∑ i in Finset.range ((taylor x p).natDegree + 2), (taylor x p).coeff i * t ^ i :=
     (taylor x p).eval_eq_sum_range' (n := (taylor x p).natDegree + 2) (by lia) t
-  rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; r
+  rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; rw [Finset.sum_range_succ']
+  use ∑ i in Finset.range p.natDegree, (taylor x p).coeff (i + 2) * y ^ i
+  simp [pow_succ, mul_assoc, Finset.sum_mul]
 
 中文:
 定理 存在_mul_sq_add_linear_part_eq_eval_add
@@ -708,7 +720,9 @@ theorem exists_mul_sq_add_linear_part_eq_eval_add
       (taylor x p).eval t =
       ∑ i in Finset.range ((taylor x p).natDegree + 2), (taylor x p).coeff i * t ^ i :=
     (taylor x p).eval_eq_sum_range' (n := (taylor x p).natDegree + 2) (by lia) t
-  rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; r
+  rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; rw [Finset.sum_range_succ']
+  use ∑ i in Finset.range p.natDegree, (taylor x p).coeff (i + 2) * y ^ i
+  simp [pow_succ, mul_assoc, Finset.sum_mul]
 
 Depends on / 依赖: Finset, Finset.range, Finset.sum_mul, Finset.sum_range_succ, add_comm, eval_eq_sum_range, mul_assoc, natDegree, p.natDegree, p.taylor_eval, pow_succ, sum_mul, sum_range_succ, taylor, taylor_eval
 -/

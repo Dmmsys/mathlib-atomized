@@ -161,7 +161,40 @@ definition ApplyAtLemma.try
   let mvars := mvars.pop
   let fvarId := (← read).hyp?.get!
   unless ← isDefEq mvar (.fvar fvarId) do
-    throwError "{← inferType mvar} does not unify with {← fvarId.
+    throwError "{← inferType mvar} does not unify with {← fvarId.getType}"
+  synthAppInstances `click_suggestions default mvars binderInfos false false
+  let mut newGoals := #[]
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      newGoals := newGoals.push (← instantiateMVars (← inferType mvar))
+
+  let replacement ← instantiateMVars replacement
+  let makesNewMVars :=
+    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
+    newGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let key := {
+    numGoals := newGoals.size
+    nameLength := lem.name.length
+    replacementSize := ← newGoals.foldlM (init := 0) fun s g =>
+      return (← ppExpr g).pretty.length + s
+    name := lem.name.toString
+    newGoals := (← newGoals.mapM (abstractMVars ·)).push (← abstractMVars replacement)
+  }
+  let tactic ← tacticSyntax lem
+  let mut htmls := #[← exprToHtml replacement]
+  for goal in newGoals do
+    htmls := htmls.push <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  let filtered ←
+    if makesNewMVars then
+      pure none
+    else
+some < > mkSuggestion tactic (.element "div" #[] htmls)
+  htmls := htmls.push <div> {← lem.name.toHtml} </div>
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls)
+  let pattern ← do
+    let (xs, _, _) ← forallMetaTelescopeReducing (← lem.name.getType)
+    exprToHtml (← inferType xs.back!)
+  return { filtered, unfiltered, key, pattern }
 
 中文:
 定义 ApplyAtLemma.try
@@ -172,7 +205,40 @@ definition ApplyAtLemma.try
   let mvars := mvars.pop
   let fvarId := (← read).hyp?.get!
   unless ← isDefEq mvar (.fvar fvarId) do
-    throwError "{← inferType mvar} does not unify with {← fvarId.
+    throwError "{← inferType mvar} does not unify with {← fvarId.getType}"
+  synthAppInstances `click_suggestions default mvars binderInfos false false
+  let mut newGoals := #[]
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      newGoals := newGoals.push (← instantiateMVars (← inferType mvar))
+
+  let replacement ← instantiateMVars replacement
+  let makesNewMVars :=
+    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
+    newGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let key := {
+    numGoals := newGoals.size
+    nameLength := lem.name.length
+    replacementSize := ← newGoals.foldlM (init := 0) fun s g =>
+      return (← ppExpr g).pretty.length + s
+    name := lem.name.toString
+    newGoals := (← newGoals.mapM (abstractMVars ·)).push (← abstractMVars replacement)
+  }
+  let tactic ← tacticSyntax lem
+  let mut htmls := #[← exprToHtml replacement]
+  for goal in newGoals do
+    htmls := htmls.push <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  let filtered ←
+    if makesNewMVars then
+      pure none
+    else
+some < > mkSuggestion tactic (.element "div" #[] htmls)
+  htmls := htmls.push <div> {← lem.name.toHtml} </div>
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls)
+  let pattern ← do
+    let (xs, _, _) ← forallMetaTelescopeReducing (← lem.name.getType)
+    exprToHtml (← inferType xs.back!)
+  return { filtered, unfiltered, key, pattern }
 
 Depends on / 依赖: _proof, binderInfos, click_suggestions, forallMetaTelescopeReducing, fvarId, fvarId.getType, getType, inferType, instantiateMVars, isAssigned, isDefEq, lem.name.forallMetaTelescopeReducing, mvar.mvarId, mvarId, mvars.back, mvars.pop, newGoals, newGoals.push, replacement, synthAppInstances
 -/

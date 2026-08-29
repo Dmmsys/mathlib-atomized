@@ -57,7 +57,7 @@ lemma regularTopology.isLocallySurjective_iff
     refine ⟨fun y => ?_⟩
     obtain ⟨X', π, h, h'⟩ := h _ y
     rw [regularTopology.mem_sieves_iff_hasEffectiveEpi]
- 
+    exact ⟨X', π, h, h'⟩
 
 中文:
 引理 regularTopology.isLocallySurjective_iff
@@ -73,7 +73,7 @@ lemma regularTopology.isLocallySurjective_iff
     refine ⟨fun y => ?_⟩
     obtain ⟨X', π, h, h'⟩ := h _ y
     rw [regularTopology.mem_sieves_iff_hasEffectiveEpi]
- 
+    exact ⟨X', π, h, h'⟩
 
 Depends on / 依赖: mem_sieves_iff_hasEffectiveEpi, regularTopology, regularTopology.mem_sieves_iff_hasEffectiveEpi, specialize
 -/
@@ -109,7 +109,22 @@ lemma extensiveTopology.surjective_of_isLocallySurjective_sheaf_of_types
   obtain ⟨α, _, Y, π, h, h'⟩ := h
   let y : (a : α) -> (F.obj ⟨Y a⟩) := fun a => (h' a).choose
   let ht := (Types.productLimitCone (fun a => F.obj ⟨Y a⟩)).isLimit
-  let ht' := (Functor.Initial.isLimitWhiskerEquiv (Di
+  let ht' := (Functor.Initial.isLimitWhiskerEquiv (Discrete.opposite α).inverse
+    (Cocone.op (Cofan.mk X π))).symm h.some.op
+  let i : ((a : α) -> (F.obj ⟨Y a⟩)) ≅ (F.obj ⟨X⟩) :=
+    ht.conePointsIsoOfNatIso (isLimitOfPreserves F ht')
+      (Discrete.natIso (fun _ => (Iso.refl (F.obj ⟨_⟩))))
+  refine ⟨i.hom y, ?_⟩
+  apply Concrete.isLimit_ext _ (isLimitOfPreserves G ht')
+  intro ⟨a⟩
+  simp only [Functor.comp_obj, Discrete.opposite_inverse_obj, Functor.op_obj, Discrete.functor_obj,
+    Functor.mapCone_pt, Cone.whisker_pt, Cocone.op_pt, Cofan.mk_pt, Functor.const_obj_obj,
+    Functor.mapCone_π_app, Cone.whisker_π, Cocone.op_π, Functor.whiskerLeft_app, NatTrans.op_app,
+    Cofan.mk_ι_app]
+  rw [← (h' a).choose_spec]; rw [← NatTrans.naturality_apply (φ := f)]
+  simp only [IsLimit.conePointsIsoOfNatIso_hom, ← comp_apply, i]
+  erw [IsLimit.map_π]
+  rfl
 
 中文:
 引理 extensiveTopology.surjective_of_isLocallySurjective_sheaf_of_types
@@ -121,7 +136,22 @@ lemma extensiveTopology.surjective_of_isLocallySurjective_sheaf_of_types
   obtain ⟨α, _, Y, π, h, h'⟩ := h
   let y : (a : α) -> (F.obj ⟨Y a⟩) := fun a => (h' a).choose
   let ht := (Types.productLimitCone (fun a => F.obj ⟨Y a⟩)).isLimit
-  let ht' := (Functor.Initial.isLimitWhiskerEquiv (Di
+  let ht' := (Functor.Initial.isLimitWhiskerEquiv (Discrete.opposite α).inverse
+    (Cocone.op (Cofan.mk X π))).symm h.some.op
+  let i : ((a : α) -> (F.obj ⟨Y a⟩)) ≅ (F.obj ⟨X⟩) :=
+    ht.conePointsIsoOfNatIso (isLimitOfPreserves F ht')
+      (Discrete.natIso (fun _ => (Iso.refl (F.obj ⟨_⟩))))
+  refine ⟨i.hom y, ?_⟩
+  apply Concrete.isLimit_ext _ (isLimitOfPreserves G ht')
+  intro ⟨a⟩
+  simp only [Functor.comp_obj, Discrete.opposite_inverse_obj, Functor.op_obj, Discrete.functor_obj,
+    Functor.mapCone_pt, Cone.whisker_pt, Cocone.op_pt, Cofan.mk_pt, Functor.const_obj_obj,
+    Functor.mapCone_π_app, Cone.whisker_π, Cocone.op_π, Functor.whiskerLeft_app, NatTrans.op_app,
+    Cofan.mk_ι_app]
+  rw [← (h' a).choose_spec]; rw [← NatTrans.naturality_apply (φ := f)]
+  simp only [IsLimit.conePointsIsoOfNatIso_hom, ← comp_apply, i]
+  erw [IsLimit.map_π]
+  rfl
 
 Depends on / 依赖: Cocone, Cocone.op, Cofan.mk, Discrete, Discrete.natIso, Discrete.opposite, F.obj, Functor, Functor.Initial.isLimitWhiskerEquiv, Initial, Iso.refl, Types.productLimitCone, conePointsIsoOfNatIso, h.some.op, ht.conePointsIsoOfNatIso, inverse, isLimit, isLimitOfPreserves, isLimitWhiskerEquiv, mem_sieves_iff_contains_colimit_cofan
 -/
@@ -164,7 +194,7 @@ lemma extensiveTopology.presheafIsLocallySurjective_iff
     exact fun h _ =>
       surjective_of_isLocallySurjective_sheaf_of_types (Functor.whiskerRight f (forget D)) h
   · exact fun a =>
-      Presheaf.isLocallySurjective_of_surjective _ _ (fun _ => a _
+      Presheaf.isLocallySurjective_of_surjective _ _ (fun _ => a _)
 
 中文:
 引理 extensiveTopology.presheafIsLocallySurjective_iff
@@ -175,7 +205,7 @@ lemma extensiveTopology.presheafIsLocallySurjective_iff
     exact fun h _ =>
       surjective_of_isLocallySurjective_sheaf_of_types (Functor.whiskerRight f (forget D)) h
   · exact fun a =>
-      Presheaf.isLocallySurjective_of_surjective _ _ (fun _ => a _
+      Presheaf.isLocallySurjective_of_surjective _ _ (fun _ => a _)
 
 Depends on / 依赖: Functor, Functor.whiskerRight, Presheaf, Presheaf.isLocallySurjective_iff_whisker_forget, Presheaf.isLocallySurjective_of_surjective, extensiveTopology, forget, isLocallySurjective_iff_whisker_forget, isLocallySurjective_of_surjective, surjective_of_isLocallySurjective_sheaf_of_types, whiskerRight
 -/
@@ -225,7 +255,25 @@ lemma regularTopology.isLocallySurjective_sheaf_of_types
     obtain ⟨α, _, Z, π, h, h'⟩ := h
     rw [mem_sieves_iff_hasEffectiveEpi]
     let x : (a : α) -> (F.obj ⟨Z a⟩) := fun a => (h' a).choose
-    let i' : ((a : α) -> (F.obj ⟨Z a⟩)) ≅ (F.obj ⟨∐ Z⟩) := (Types.p
+    let i' : ((a : α) -> (F.obj ⟨Z a⟩)) ≅ (F.obj ⟨∐ Z⟩) := (Types.productIso _).symm ≪≫
+      (PreservesProduct.iso F _).symm ≪≫ F.mapIso (opCoproductIsoProduct _).symm
+    refine ⟨∐ Z, Sigma.desc π, inferInstance, i'.hom x, ?_⟩
+    have := preservesLimitsOfShape_of_equiv (Discrete.opposite α).symm G
+    apply Concrete.isLimit_ext _ (isLimitOfPreserves G (coproductIsCoproduct Z).op)
+    intro ⟨⟨a⟩⟩
+    simp only [Functor.comp_obj, Functor.op_obj, Discrete.functor_obj_eq_as, Functor.mapCone_pt,
+      Cocone.op_pt, Cofan.mk_pt, Functor.const_obj_obj, Functor.mapCone_π_app, Cocone.op_π,
+      NatTrans.op_app, Cofan.mk_ι_app, Functor.mapIso_symm, Iso.trans_hom, Iso.symm_hom,
+      Functor.mapIso_inv, comp_apply, ← f.naturality_apply (Sigma.ι Z a).op, i']
+    have : f.app ⟨Z a⟩ (x a) = G.map (π a).op y := (h' a).choose_spec
+    convert! this
+    · rw [← Functor.map_comp_apply, opCoproductIsoProduct_inv_comp_ι, ← piComparison_comp_π]
+      change ((PreservesProduct.iso F _).hom ≫ _) _ = _
+      have := Types.productIso_hom_comp_eval (fun a => F.obj (op (Z a))) a
+      rw [← Iso.eq_inv_comp] at this
+      simp only [types_comp_apply, Iso.inv_hom_id_apply]
+      simp [← comp_apply]
+    · simp only [← Functor.map_comp_apply, ← op_comp, Sigma.ι_desc]
 
 中文:
 引理 regularTopology.isLocallySurjective_sheaf_of_types
@@ -236,7 +284,25 @@ lemma regularTopology.isLocallySurjective_sheaf_of_types
     obtain ⟨α, _, Z, π, h, h'⟩ := h
     rw [mem_sieves_iff_hasEffectiveEpi]
     let x : (a : α) -> (F.obj ⟨Z a⟩) := fun a => (h' a).choose
-    let i' : ((a : α) -> (F.obj ⟨Z a⟩)) ≅ (F.obj ⟨∐ Z⟩) := (Types.p
+    let i' : ((a : α) -> (F.obj ⟨Z a⟩)) ≅ (F.obj ⟨∐ Z⟩) := (Types.productIso _).symm ≪≫
+      (PreservesProduct.iso F _).symm ≪≫ F.mapIso (opCoproductIsoProduct _).symm
+    refine ⟨∐ Z, Sigma.desc π, inferInstance, i'.hom x, ?_⟩
+    have := preservesLimitsOfShape_of_equiv (Discrete.opposite α).symm G
+    apply Concrete.isLimit_ext _ (isLimitOfPreserves G (coproductIsCoproduct Z).op)
+    intro ⟨⟨a⟩⟩
+    simp only [Functor.comp_obj, Functor.op_obj, Discrete.functor_obj_eq_as, Functor.mapCone_pt,
+      Cocone.op_pt, Cofan.mk_pt, Functor.const_obj_obj, Functor.mapCone_π_app, Cocone.op_π,
+      NatTrans.op_app, Cofan.mk_ι_app, Functor.mapIso_symm, Iso.trans_hom, Iso.symm_hom,
+      Functor.mapIso_inv, comp_apply, ← f.naturality_apply (Sigma.ι Z a).op, i']
+    have : f.app ⟨Z a⟩ (x a) = G.map (π a).op y := (h' a).choose_spec
+    convert! this
+    · rw [← Functor.map_comp_apply, opCoproductIsoProduct_inv_comp_ι, ← piComparison_comp_π]
+      change ((PreservesProduct.iso F _).hom ≫ _) _ = _
+      have := Types.productIso_hom_comp_eval (fun a => F.obj (op (Z a))) a
+      rw [← Iso.eq_inv_comp] at this
+      simp only [types_comp_apply, Iso.inv_hom_id_apply]
+      simp [← comp_apply]
+    · simp only [← Functor.map_comp_apply, ← op_comp, Sigma.ι_desc]
 
 Depends on / 依赖: Discrete, Discrete.opposite, F.mapIso, F.obj, PreservesProduct, PreservesProduct.iso, Sigma.desc, Types.productIso, coherentTopology, coherentTopology.mem_sieves_iff_hasEffectiveEpiFamily, mapIso, mem_sieves_iff_hasEffectiveEpi, mem_sieves_iff_hasEffectiveEpiFamily, opCoproductIsoProduct, opposite, preservesLimitsOfShape_of_equiv, productIso, replace
 -/
@@ -282,7 +348,8 @@ lemma coherentTopology.presheafIsLocallySurjective_iff
       Presheaf.isLocallySurjective_iff_whisker_forget (J := regularTopology C)]
     exact regularTopology.isLocallySurjective_sheaf_of_types _
   · refine Presheaf.isLocallySurjective_of_le (J := regularTopology C) ?_ _
-    rw 
+    rw [← extensive_regular_generate_coherent]
+    exact (Coverage.gi _).gc.monotone_l le_sup_right
 
 中文:
 引理 coherentTopology.presheafIsLocallySurjective_iff
@@ -293,7 +360,8 @@ lemma coherentTopology.presheafIsLocallySurjective_iff
       Presheaf.isLocallySurjective_iff_whisker_forget (J := regularTopology C)]
     exact regularTopology.isLocallySurjective_sheaf_of_types _
   · refine Presheaf.isLocallySurjective_of_le (J := regularTopology C) ?_ _
-    rw 
+    rw [← extensive_regular_generate_coherent]
+    exact (Coverage.gi _).gc.monotone_l le_sup_right
 
 Depends on / 依赖: Coverage, Coverage.gi, Presheaf, Presheaf.isLocallySurjective_iff_whisker_forget, Presheaf.isLocallySurjective_of_le, extensive_regular_generate_coherent, gc.monotone_l, isLocallySurjective_iff_whisker_forget, isLocallySurjective_of_le, isLocallySurjective_sheaf_of_types, le_sup_right, monotone_l, regularTopology, regularTopology.isLocallySurjective_sheaf_of_types
 -/

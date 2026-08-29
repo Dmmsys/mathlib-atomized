@@ -993,7 +993,11 @@ instance :
     top := ⊤
     le_top := fun _S x _hx => mem_top x
     inf := (· ⊓ ·)
-    le_inf := fun _a _b _c ha hb _x hx => ⟨ha h
+    le_inf := fun _a _b _c ha hb _x hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _a _b _x => And.left
+    inf_le_right := fun _a _b _x => And.right }
+
+@[to_additive]
 
 中文:
 实例 :
@@ -1005,7 +1009,11 @@ instance :
     top := ⊤
     le_top := fun _S x _hx => mem_top x
     inf := (· ⊓ ·)
-    le_inf := fun _a _b _c ha hb _x hx => ⟨ha h
+    le_inf := fun _a _b _c ha hb _x hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _a _b _x => And.left
+    inf_le_right := fun _a _b _x => And.right }
+
+@[to_additive]
 
 Depends on / 依赖: And.left, And.right, IsGLB.of_image, S.one_mem, SetLike, SetLike.coe_subset_coe, Subgroup, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_bot, mem_top, of_image, one_mem
 -/
@@ -1530,7 +1538,11 @@ theorem closure_induction₂
     | one => exact one_left _ (subset_closure hz)
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | inv _ _ h => exact inv_left _ _ _ _ h
-  | o
+  | one => exact one_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ hx h₁ h₂
+  | inv _ _ h => exact inv_right _ _ _ _ h
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 closure_induction₂
@@ -1542,7 +1554,11 @@ theorem closure_induction₂
     | one => exact one_left _ (subset_closure hz)
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | inv _ _ h => exact inv_left _ _ _ _ h
-  | o
+  | one => exact one_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ hx h₁ h₂
+  | inv _ _ h => exact inv_right _ _ _ _ h
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: closure_induction, inv_left, inv_right, mul_left, mul_right, one_left, one_right, subset_closure
 -/
@@ -1853,7 +1869,11 @@ theorem mem_closure_singleton
     exact ⟨1, zpow_one x⟩
   · exact ⟨0, zpow_zero x⟩
   · rintro _ _ _ _ ⟨n, rfl⟩ ⟨m, rfl⟩
-    exact ⟨n + m, zpow_add x
+    exact ⟨n + m, zpow_add x n m⟩
+  rintro _ _ ⟨n, rfl⟩
+  exact ⟨-n, zpow_neg x n⟩
+
+@[to_additive]
 
 中文:
 定理 mem_closure_singleton
@@ -1868,7 +1888,11 @@ theorem mem_closure_singleton
     exact ⟨1, zpow_one x⟩
   · exact ⟨0, zpow_zero x⟩
   · rintro _ _ _ _ ⟨n, rfl⟩ ⟨m, rfl⟩
-    exact ⟨n + m, zpow_add x
+    exact ⟨n + m, zpow_add x n m⟩
+  rintro _ _ ⟨n, rfl⟩
+  exact ⟨-n, zpow_neg x n⟩
+
+@[to_additive]
 
 Depends on / 依赖: closure_induction, eq_of_mem_singleton, mem_singleton, subset_closure, zpow_add, zpow_mem, zpow_neg, zpow_one, zpow_zero
 -/
@@ -2174,7 +2198,18 @@ theorem mem_biSup_of_directedOn
   refine ⟨?_, fun ⟨i, hi', hi⟩ => ?_⟩
   · suffices x in closure (⋃ i, ⋃ (_ : p i), (K i : Set G)) -> exists i, p i ∧ x in K i by
       simpa only [closure_iUnion, closure_eq (K _)] using this
-    refine fun hx => closure_induct
+    refine fun hx => closure_induction (fun _ => ?_) ?_ ?_ ?_ hx
+    · simp
+    · exact ⟨i, hp, (K i).one_mem⟩
+    · rintro x y _ _ ⟨i, hip, hi⟩ ⟨j, hjp, hj⟩
+      rcases hK i hip j hjp with ⟨k, hk, hki, hkj⟩
+      exact ⟨k, hk, mul_mem (hki hi) (hkj hj)⟩
+    · rintro _ _ ⟨i, hi', hi⟩
+      exact ⟨i, hi', inv_mem hi⟩
+  · apply le_iSup (fun i => ⨆ (_ : p i), K i) i
+    simp [hi, hi']
+
+@[to_additive]
 
 中文:
 定理 mem_biSup_of_directedOn
@@ -2184,7 +2219,18 @@ theorem mem_biSup_of_directedOn
   refine ⟨?_, fun ⟨i, hi', hi⟩ => ?_⟩
   · suffices x in closure (⋃ i, ⋃ (_ : p i), (K i : Set G)) -> exists i, p i ∧ x in K i by
       simpa only [closure_iUnion, closure_eq (K _)] using this
-    refine fun hx => closure_induct
+    refine fun hx => closure_induction (fun _ => ?_) ?_ ?_ ?_ hx
+    · simp
+    · exact ⟨i, hp, (K i).one_mem⟩
+    · rintro x y _ _ ⟨i, hip, hi⟩ ⟨j, hjp, hj⟩
+      rcases hK i hip j hjp with ⟨k, hk, hki, hkj⟩
+      exact ⟨k, hk, mul_mem (hki hi) (hkj hj)⟩
+    · rintro _ _ ⟨i, hi', hi⟩
+      exact ⟨i, hi', inv_mem hi⟩
+  · apply le_iSup (fun i => ⨆ (_ : p i), K i) i
+    simp [hi, hi']
+
+@[to_additive]
 -/
 theorem mem_biSup_of_directedOn {ι} {p : ι -> Prop} {K : ι -> Subgroup G} {i : ι} (hp : p i)
     (hK : DirectedOn ((· <= ·) on K) {i | p i})
@@ -2217,7 +2263,15 @@ theorem mem_iSup_of_directed
   · simp
   · simp only [ofPred_true]
     rw [directedOn_onFun_iff]; rw [Set.image_univ]; rw [directedOn_range]
-    -- `Directed.mono_comp` and much of the Set API
+    -- `Directed.mono_comp` and much of the Set API requires `Type u` instead of `Sort u`
+    intro i
+    simp only [PLift.exists]
+    intro j
+    refine (hK i.down j.down).imp ?_
+    simp
+  · exact PLift.up hι.some
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 mem_iSup_of_directed
@@ -2228,7 +2282,15 @@ theorem mem_iSup_of_directed
   · simp
   · simp only [ofPred_true]
     rw [directedOn_onFun_iff]; rw [Set.image_univ]; rw [directedOn_range]
-    -- `Directed.mono_comp` and much of the Set API
+    -- `Directed.mono_comp` and much of the Set API requires `Type u` instead of `Sort u`
+    intro i
+    simp only [PLift.exists]
+    intro j
+    refine (hK i.down j.down).imp ?_
+    simp
+  · exact PLift.up hι.some
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Set.image_univ, directedOn_onFun_iff, directedOn_range, i.down, iSup_plift_down, image_univ, mem_biSup_of_directedOn, ofPred_true
 -/
@@ -2408,7 +2470,13 @@ theorem mem_sup
       · exact ⟨y, h, 1, t.one_mem, by simp⟩
       · exact ⟨1, s.one_mem, y, h, by simp⟩
     · exact ⟨1, s.one_mem, 1, ⟨t.one_mem, mul_one 1⟩⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, r
+    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨_, mul_mem hy₁ hy₂, _, mul_mem hz₁ hz₂, by simp [mul_assoc, mul_left_comm]⟩
+    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
+      exact ⟨_, inv_mem hy, _, inv_mem hz, mul_comm z y ▸ (mul_inv_rev z y).symm⟩, by
+    rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz⟩
+
+@[to_additive]
 
 中文:
 定理 mem_sup
@@ -2420,7 +2488,13 @@ theorem mem_sup
       · exact ⟨y, h, 1, t.one_mem, by simp⟩
       · exact ⟨1, s.one_mem, y, h, by simp⟩
     · exact ⟨1, s.one_mem, 1, ⟨t.one_mem, mul_one 1⟩⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, r
+    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨_, mul_mem hy₁ hy₂, _, mul_mem hz₁ hz₂, by simp [mul_assoc, mul_left_comm]⟩
+    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
+      exact ⟨_, inv_mem hy, _, inv_mem hz, mul_comm z y ▸ (mul_inv_rev z y).symm⟩, by
+    rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz⟩
+
+@[to_additive]
 
 Depends on / 依赖: Subgroup, Subgroup.closure_induction, closure_induction, inv_mem, mul_assoc, mul_comm, mul_inv_rev, mul_left_comm, mul_mem, mul_one, one_mem, s.one_mem, sup_eq_closure, t.one_mem
 -/
@@ -2522,7 +2596,15 @@ theorem mem_sup_of_normal_right
       · exact ⟨x, hx, 1, t.one_mem, by simp⟩
       · exact ⟨1, s.one_mem, x, hx, by simp⟩
     · exact ⟨1, s.one_mem, 1, t.one_mem, by simp⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁,
+    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨y₁ * y₂, s.mul_mem hy₁ hy₂,
+            (y₂⁻¹ * z₁ * y₂) * z₂, t.mul_mem (ht.conj_mem' z₁ hz₁ y₂) hz₂, by simp [mul_assoc]⟩
+    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
+      exact ⟨y⁻¹, s.inv_mem hy,
+            y * z⁻¹ * y⁻¹, ht.conj_mem z⁻¹ (t.inv_mem hz) y, by simp [mul_assoc]⟩
+  · rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz
+
+@[to_additive]
 
 中文:
 定理 mem_sup_of_normal_right
@@ -2535,7 +2617,15 @@ theorem mem_sup_of_normal_right
       · exact ⟨x, hx, 1, t.one_mem, by simp⟩
       · exact ⟨1, s.one_mem, x, hx, by simp⟩
     · exact ⟨1, s.one_mem, 1, t.one_mem, by simp⟩
-    · rintro _ _ _ _ ⟨y₁, hy₁, z₁,
+    · rintro _ _ _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨y₁ * y₂, s.mul_mem hy₁ hy₂,
+            (y₂⁻¹ * z₁ * y₂) * z₂, t.mul_mem (ht.conj_mem' z₁ hz₁ y₂) hz₂, by simp [mul_assoc]⟩
+    · rintro _ _ ⟨y, hy, z, hz, rfl⟩
+      exact ⟨y⁻¹, s.inv_mem hy,
+            y * z⁻¹ * y⁻¹, ht.conj_mem z⁻¹ (t.inv_mem hz) y, by simp [mul_assoc]⟩
+  · rintro ⟨y, hy, z, hz, rfl⟩; exact mul_mem_sup hy hz
+
+@[to_additive]
 
 Depends on / 依赖: closure_induction, conj_mem, ht.c, ht.conj_mem, inv_mem, mul_assoc, mul_mem, one_mem, s.inv_mem, s.mul_mem, s.one_mem, sup_eq_closure, t.mul_mem, t.one_mem
 -/
@@ -2717,7 +2807,7 @@ theorem mul_injective_of_disjoint
   rw [← inv_mul_eq_iff_eq_mul]; rw [← mul_assoc]; rw [← mul_inv_eq_one]; rw [mul_assoc] at hxy
   replace hxy := disjoint_iff_mul_eq_one.mp h (y.1⁻¹ * x.1).prop (x.2 * y.2⁻¹).prop hxy
   rwa [coe_mul, coe_mul, coe_inv, coe_inv, inv_mul_eq_one, mul_inv_eq_one, ← Subtype.ext_iff, ←
-  
+    Subtype.ext_iff, eq_comm, ← Prod.ext_iff] at hxy
 
 中文:
 定理 mul_injective_of_disjoint
@@ -2727,7 +2817,7 @@ theorem mul_injective_of_disjoint
   rw [← inv_mul_eq_iff_eq_mul]; rw [← mul_assoc]; rw [← mul_inv_eq_one]; rw [mul_assoc] at hxy
   replace hxy := disjoint_iff_mul_eq_one.mp h (y.1⁻¹ * x.1).prop (x.2 * y.2⁻¹).prop hxy
   rwa [coe_mul, coe_mul, coe_inv, coe_inv, inv_mul_eq_one, mul_inv_eq_one, ← Subtype.ext_iff, ←
-  
+    Subtype.ext_iff, eq_comm, ← Prod.ext_iff] at hxy
 
 Depends on / 依赖: Prod.ext_iff, Subtype, Subtype.ext_iff, coe_inv, coe_mul, disjoint_iff_mul_eq_one, disjoint_iff_mul_eq_one.mp, eq_comm, ext_iff, inv_mul_eq_iff_eq_mul, inv_mul_eq_one, mul_assoc, mul_inv_eq_one, replace
 -/

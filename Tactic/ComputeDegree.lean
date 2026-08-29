@@ -518,7 +518,26 @@ definition twoHeadsArgs
     | (na@``Eq, #[_, lhs, rhs]) => pure (na, lhs, rhs)
     | (na@``LE.le, #[_, _, lhs, rhs]) => pure (na, lhs, rhs)
     | (na@``LT.lt, #[_, _, lhs, rhs]) => pure (na, lhs, rhs)
-    | _ => return (.anonymous, .anonymous, .inl .anonymous
+    | _ => return (.anonymous, .anonymous, .inl .anonymous, [])
+  let (ndeg_or_deg_or_coeff, pol, and?) ← match lhs.getAppFnArgs with
+    | (na@``Polynomial.natDegree, #[_, _, pol]) => (na, pol, [rhs.isMVar])
+    | (na@``Polynomial.degree, #[_, _, pol]) => (na, pol, [rhs.isMVar])
+    | (na@``Polynomial.coeff, #[_, _, pol, c]) => (na, pol, [rhs.isMVar, c.isMVar])
+    | _ => return (.anonymous, eq_or_le, .inl .anonymous, [])
+  let head := match pol.numeral? with
+    -- can I avoid the tri-splitting `n = 0`, `n = 1`, and generic `n`?
+    | some 0 => .inl `zero
+    | some 1 => .inl `one
+    | some _ => .inl `many
+    | none => match pol.getAppFnArgs with
+      | (``DFunLike.coe, #[_, _, _, _, polFun, _]) =>
+        let na := polFun.getAppFn.constName
+        if na in [``Polynomial.monomial, ``Polynomial.C] then
+          .inr na
+        else
+          .inl .anonymous
+      | (na, _) => .inr na
+  (ndeg_or_deg_or_coeff, eq_or_le, head, and?)
 
 中文:
 定义 twoHeadsArgs
@@ -528,7 +547,26 @@ definition twoHeadsArgs
     | (na@``Eq, #[_, lhs, rhs]) => pure (na, lhs, rhs)
     | (na@``LE.le, #[_, _, lhs, rhs]) => pure (na, lhs, rhs)
     | (na@``LT.lt, #[_, _, lhs, rhs]) => pure (na, lhs, rhs)
-    | _ => return (.anonymous, .anonymous, .inl .anonymous
+    | _ => return (.anonymous, .anonymous, .inl .anonymous, [])
+  let (ndeg_or_deg_or_coeff, pol, and?) ← match lhs.getAppFnArgs with
+    | (na@``Polynomial.natDegree, #[_, _, pol]) => (na, pol, [rhs.isMVar])
+    | (na@``Polynomial.degree, #[_, _, pol]) => (na, pol, [rhs.isMVar])
+    | (na@``Polynomial.coeff, #[_, _, pol, c]) => (na, pol, [rhs.isMVar, c.isMVar])
+    | _ => return (.anonymous, eq_or_le, .inl .anonymous, [])
+  let head := match pol.numeral? with
+    -- can I avoid the tri-splitting `n = 0`, `n = 1`, and generic `n`?
+    | some 0 => .inl `zero
+    | some 1 => .inl `one
+    | some _ => .inl `many
+    | none => match pol.getAppFnArgs with
+      | (``DFunLike.coe, #[_, _, _, _, polFun, _]) =>
+        let na := polFun.getAppFn.constName
+        if na in [``Polynomial.monomial, ``Polynomial.C] then
+          .inr na
+        else
+          .inl .anonymous
+      | (na, _) => .inr na
+  (ndeg_or_deg_or_coeff, eq_or_le, head, and?)
 
 Depends on / 依赖: Id.run
 -/
@@ -568,7 +606,21 @@ definition getCongrLemma
     | (_, ``LE.le, [rhs]) => if rhs then ``id else ``le_trans
     | (_, ``LT.lt, [rhs]) => if rhs then ``id else ``lt_of_le_of_lt
     | (``natDegree, ``Eq, [rhs]) => if rhs then ``id else ``natDegree_eq_of_le_of_coeff_ne_zero'
-    | (``degree, ``Eq, [rhs]) => if rhs then `
+    | (``degree, ``Eq, [rhs]) => if rhs then ``id else ``degree_eq_of_le_of_coeff_ne_zero'
+    | (``coeff, ``Eq, [rhs, c]) =>
+      match rhs, c with
+      | false, false => ``coeff_congr
+      | false, true => ``Eq.trans
+      | true, false => ``coeff_congr_lhs
+      | true, true => ``id
+    | _ => ``id
+  if debug then
+    let last := nam.lastComponentAsString
+    let natr := if last == "trans" then nam.toString else last
+    dbg_trace f!"congr lemma: '{natr}'"
+    nam
+  else
+    nam
 
 中文:
 定义 getCongrLemma
@@ -577,7 +629,21 @@ definition getCongrLemma
     | (_, ``LE.le, [rhs]) => if rhs then ``id else ``le_trans
     | (_, ``LT.lt, [rhs]) => if rhs then ``id else ``lt_of_le_of_lt
     | (``natDegree, ``Eq, [rhs]) => if rhs then ``id else ``natDegree_eq_of_le_of_coeff_ne_zero'
-    | (``degree, ``Eq, [rhs]) => if rhs then `
+    | (``degree, ``Eq, [rhs]) => if rhs then ``id else ``degree_eq_of_le_of_coeff_ne_zero'
+    | (``coeff, ``Eq, [rhs, c]) =>
+      match rhs, c with
+      | false, false => ``coeff_congr
+      | false, true => ``Eq.trans
+      | true, false => ``coeff_congr_lhs
+      | true, true => ``id
+    | _ => ``id
+  if debug then
+    let last := nam.lastComponentAsString
+    let natr := if last == "trans" then nam.toString else last
+    dbg_trace f!"congr lemma: '{natr}'"
+    nam
+  else
+    nam
 -/
 def getCongrLemma (twoH : Name × Name × List Bool) (debug : Bool := false) : Name :=
   let nam := match twoH with
@@ -612,7 +678,52 @@ definition dispatchLemma
     | (_, .anonymous, _) => ``id -- `twoH` gave default value, so we do nothing
     | (na1, na2, head, bools) =>
       let msg := f!"\ndispatchLemma:\n {head}"
-      -- if there is some non-metavariable o
+      -- if there is some non-metavariable on the way, we "congr" it away
+      if false in bools then getCongrLemma (na1, na2, bools) debug
+      else
+      -- otherwise, we select either the first, second or third element of the triple in `nas` below
+      let π (natDegLE : Name) (degLE : Name) (coeff : Name) : Name := Id.run do
+        let lem := match na1, na2 with
+          | ``natDegree, ``LE.le => natDegLE
+          | ``degree, ``LE.le => degLE
+          | ``coeff, ``Eq => coeff
+          | _, ``LE.le => ``le_rfl
+          | _, _ => ``rfl
+        if debug then
+          dbg_trace f!"{lem.lastComponentAsString}\n{msg}"
+        lem
+      match head with
+        | .inl `zero => π ``natDegree_zero_le ``degree_zero_le ``coeff_zero
+        | .inl `one => π ``natDegree_one_le ``degree_one_le ``coeff_one
+        | .inl `many => π ``natDegree_natCast_le ``degree_natCast_le ``coeff_natCast_ite
+        | .inl .anonymous => π ``le_rfl ``le_rfl ``rfl
+        | .inr ``HAdd.hAdd =>
+          π ``natDegree_add_le_of_le ``degree_add_le_of_le ``coeff_add_of_eq
+        | .inr ``HSub.hSub =>
+          π ``natDegree_sub_le_of_le ``degree_sub_le_of_le ``coeff_sub_of_eq
+        | .inr ``HMul.hMul =>
+          π ``natDegree_mul_le_of_le ``degree_mul_le_of_le ``coeff_mul_add_of_le_natDegree_of_eq_ite
+        | .inr ``HPow.hPow =>
+          π ``natDegree_pow_le_of_le ``degree_pow_le_of_le ``coeff_pow_of_natDegree_le_of_eq_ite'
+        | .inr ``Neg.neg =>
+          π ``natDegree_neg_le_of_le ``degree_neg_le_of_le ``coeff_neg
+        | .inr ``Polynomial.X =>
+          π ``natDegree_X_le ``degree_X_le ``coeff_X
+        | .inr ``Nat.cast =>
+          π ``natDegree_natCast_le ``degree_natCast_le ``coeff_natCast_ite
+        | .inr ``NatCast.natCast =>
+          π ``natDegree_natCast_le ``degree_natCast_le ``coeff_natCast_ite
+        | .inr ``Int.cast =>
+          π ``natDegree_intCast_le ``degree_intCast_le ``coeff_intCast_ite
+        | .inr ``IntCast.intCast =>
+          π ``natDegree_intCast_le ``degree_intCast_le ``coeff_intCast_ite
+        | .inr ``Polynomial.monomial =>
+          π ``natDegree_monomial_le ``degree_monomial_le ``coeff_monomial
+        | .inr ``Polynomial.C =>
+          π ``natDegree_C_le ``degree_C_le ``coeff_C
+        | .inr ``HSMul.hSMul =>
+          π ``natDegree_smul_le_of_le ``degree_smul_le_of_le ``coeff_smul
+        | _ => π ``le_rfl ``le_rfl ``rfl
 
 中文:
 定义 dispatchLemma
@@ -621,7 +732,52 @@ definition dispatchLemma
     | (_, .anonymous, _) => ``id -- `twoH` gave default value, so we do nothing
     | (na1, na2, head, bools) =>
       let msg := f!"\ndispatchLemma:\n {head}"
-      -- if there is some non-metavariable o
+      -- if there is some non-metavariable on the way, we "congr" it away
+      if false in bools then getCongrLemma (na1, na2, bools) debug
+      else
+      -- otherwise, we select either the first, second or third element of the triple in `nas` below
+      let π (natDegLE : Name) (degLE : Name) (coeff : Name) : Name := Id.run do
+        let lem := match na1, na2 with
+          | ``natDegree, ``LE.le => natDegLE
+          | ``degree, ``LE.le => degLE
+          | ``coeff, ``Eq => coeff
+          | _, ``LE.le => ``le_rfl
+          | _, _ => ``rfl
+        if debug then
+          dbg_trace f!"{lem.lastComponentAsString}\n{msg}"
+        lem
+      match head with
+        | .inl `zero => π ``natDegree_zero_le ``degree_zero_le ``coeff_zero
+        | .inl `one => π ``natDegree_one_le ``degree_one_le ``coeff_one
+        | .inl `many => π ``natDegree_natCast_le ``degree_natCast_le ``coeff_natCast_ite
+        | .inl .anonymous => π ``le_rfl ``le_rfl ``rfl
+        | .inr ``HAdd.hAdd =>
+          π ``natDegree_add_le_of_le ``degree_add_le_of_le ``coeff_add_of_eq
+        | .inr ``HSub.hSub =>
+          π ``natDegree_sub_le_of_le ``degree_sub_le_of_le ``coeff_sub_of_eq
+        | .inr ``HMul.hMul =>
+          π ``natDegree_mul_le_of_le ``degree_mul_le_of_le ``coeff_mul_add_of_le_natDegree_of_eq_ite
+        | .inr ``HPow.hPow =>
+          π ``natDegree_pow_le_of_le ``degree_pow_le_of_le ``coeff_pow_of_natDegree_le_of_eq_ite'
+        | .inr ``Neg.neg =>
+          π ``natDegree_neg_le_of_le ``degree_neg_le_of_le ``coeff_neg
+        | .inr ``Polynomial.X =>
+          π ``natDegree_X_le ``degree_X_le ``coeff_X
+        | .inr ``Nat.cast =>
+          π ``natDegree_natCast_le ``degree_natCast_le ``coeff_natCast_ite
+        | .inr ``NatCast.natCast =>
+          π ``natDegree_natCast_le ``degree_natCast_le ``coeff_natCast_ite
+        | .inr ``Int.cast =>
+          π ``natDegree_intCast_le ``degree_intCast_le ``coeff_intCast_ite
+        | .inr ``IntCast.intCast =>
+          π ``natDegree_intCast_le ``degree_intCast_le ``coeff_intCast_ite
+        | .inr ``Polynomial.monomial =>
+          π ``natDegree_monomial_le ``degree_monomial_le ``coeff_monomial
+        | .inr ``Polynomial.C =>
+          π ``natDegree_C_le ``degree_C_le ``coeff_C
+        | .inr ``HSMul.hSMul =>
+          π ``natDegree_smul_le_of_le ``degree_smul_le_of_le ``coeff_smul
+        | _ => π ``le_rfl ``le_rfl ``rfl
 -/
 def dispatchLemma
     (twoH : Name × Name × (Name oplus Name) × List Bool) (debug : Bool := false) : Name :=
@@ -689,7 +845,17 @@ definition tryRfl
 let tried_rfl ← noMV.mapM fun g => g.applyConst ``rfl > return [g]
   let assignable ← yesMV.mapM fun g => do
     let tgt ← instantiateMVars (← g.getDecl).type
-    m
+    match tgt.eq? with
+      | some (_, lhs, rhs) =>
+        if (isMVar rhs && (! hasExprMVar lhs)) ||
+           (isMVar lhs && (! hasExprMVar rhs)) then
+           g.applyConst ``rfl
+        else pure [g]
+      | none =>
+        return [g]
+  return (assignable.flatten ++ tried_rfl.flatten)
+
+@[deprecated (since := "2026-05-27")] alias try_rfl := tryRfl
 
 中文:
 定义 tryRfl
@@ -700,7 +866,17 @@ let tried_rfl ← noMV.mapM fun g => g.applyConst ``rfl > return [g]
 let tried_rfl ← noMV.mapM fun g => g.applyConst ``rfl > return [g]
   let assignable ← yesMV.mapM fun g => do
     let tgt ← instantiateMVars (← g.getDecl).type
-    m
+    match tgt.eq? with
+      | some (_, lhs, rhs) =>
+        if (isMVar rhs && (! hasExprMVar lhs)) ||
+           (isMVar lhs && (! hasExprMVar rhs)) then
+           g.applyConst ``rfl
+        else pure [g]
+      | none =>
+        return [g]
+  return (assignable.flatten ++ tried_rfl.flatten)
+
+@[deprecated (since := "2026-05-27")] alias try_rfl := tryRfl
 -/
 def tryRfl (mvs : List MVarId) : MetaM (List MVarId) := do
   let (yesMV, noMV) ← mvs.partitionM fun mv =>
@@ -732,7 +908,7 @@ definition splitApply
   let progress ← can_progress.mapM fun mv => do
 let lem := dispatchLemma twoHeadsArgs (← mv.getType'')
 mv.applyConst lem
-  return (progress.flatten, static ++ curr_stat
+  return (progress.flatten, static ++ curr_static)
 
 中文:
 定义 splitApply
@@ -743,7 +919,7 @@ mv.applyConst lem
   let progress ← can_progress.mapM fun mv => do
 let lem := dispatchLemma twoHeadsArgs (← mv.getType'')
 mv.applyConst lem
-  return (progress.flatten, static ++ curr_stat
+  return (progress.flatten, static ++ curr_static)
 -/
 def splitApply (mvs static : List MVarId) : MetaM ((List MVarId) × (List MVarId)) := do
   let (can_progress, curr_static) ← mvs.partitionM fun mv => do
@@ -764,7 +940,10 @@ definition miscomputedDegree?
       m!"* the coefficient of degree {deg} may be zero" :: rest
     else if let some ((Expr.const ``Nat []), lhs, _) := tgt.le? then
       m!"* there is at least one term of naïve degree {lhs}" :: rest
-    else if let some (_, lhs, _) := tgt.eq?
+    else if let some (_, lhs, _) := tgt.eq? then
+      m!"* there may be a term of naïve degree {lhs}" :: rest
+    else rest
+  | [] => []
 
 中文:
 定义 miscomputedDegree?
@@ -774,7 +953,10 @@ definition miscomputedDegree?
       m!"* the coefficient of degree {deg} may be zero" :: rest
     else if let some ((Expr.const ``Nat []), lhs, _) := tgt.le? then
       m!"* there is at least one term of naïve degree {lhs}" :: rest
-    else if let some (_, lhs, _) := tgt.eq?
+    else if let some (_, lhs, _) := tgt.eq? then
+      m!"* there may be a term of naïve degree {lhs}" :: rest
+    else rest
+  | [] => []
 
 Depends on / 依赖: miscomputedDegree
 -/

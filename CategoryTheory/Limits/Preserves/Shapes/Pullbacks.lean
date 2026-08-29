@@ -223,7 +223,14 @@ lemma preservesPullback_symmetry
     apply PullbackCone.isLimitOfFlip
     apply (isLimitMapConePullbackConeEquiv _ _).toFun
     · refine @isLimitOfPreserves _ _ _ _ _ _ _ _ _ ?_ ?_
-      · apply P
+      · apply PullbackCone.isLimitOfFlip
+        apply IsLimit.ofIsoLimit _ (PullbackCone.isoMk _)
+        exact (IsLimit.postcomposeHomEquiv (diagramIsoCospan.{v₁} _) _).invFun hc
+      · dsimp
+        infer_instance
+    · exact
+        (c.π.naturality WalkingCospan.Hom.inr).symm.trans
+          (c.π.naturality WalkingCospan.Hom.inl :)⟩
 
 中文:
 引理 preservesPullback_symmetry
@@ -234,7 +241,14 @@ lemma preservesPullback_symmetry
     apply PullbackCone.isLimitOfFlip
     apply (isLimitMapConePullbackConeEquiv _ _).toFun
     · refine @isLimitOfPreserves _ _ _ _ _ _ _ _ _ ?_ ?_
-      · apply P
+      · apply PullbackCone.isLimitOfFlip
+        apply IsLimit.ofIsoLimit _ (PullbackCone.isoMk _)
+        exact (IsLimit.postcomposeHomEquiv (diagramIsoCospan.{v₁} _) _).invFun hc
+      · dsimp
+        infer_instance
+    · exact
+        (c.π.naturality WalkingCospan.Hom.inr).symm.trans
+          (c.π.naturality WalkingCospan.Hom.inl :)⟩
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeHomEquiv, PullbackCone, PullbackCone.isLimitOfFlip, PullbackCone.isoMk, WalkingCospan, WalkingCospan.Hom.inr, diagramIsoCospan, infer_instance, invFun, isLimitMapConePullbackConeEquiv, isLimitOfFlip, isLimitOfPreserves, naturality, ofIsoLimit, postcomposeHomEquiv, symm.t
 -/
@@ -607,7 +621,9 @@ lemma preservesPushout_symmetry
     apply IsColimit.ofIsoColimit _ (PushoutCocone.isoMk _).symm
     apply PushoutCocone.isColimitOfFlip
     apply (isColimitMapCoconePushoutCoconeEquiv _ _).toFun
-    · -- Need to unfold these to allow the `PreservesCo
+    · -- Need to unfold these to allow the `PreservesColimit` instance to be found.
+      dsimp only [span_map_fst, span_map_snd]
+      exact isColimitOfPreserves _ (PushoutCocone.flipIsColimit hc)⟩
 
 中文:
 引理 preservesPushout_symmetry
@@ -617,7 +633,9 @@ lemma preservesPushout_symmetry
     apply IsColimit.ofIsoColimit _ (PushoutCocone.isoMk _).symm
     apply PushoutCocone.isColimitOfFlip
     apply (isColimitMapCoconePushoutCoconeEquiv _ _).toFun
-    · -- Need to unfold these to allow the `PreservesCo
+    · -- Need to unfold these to allow the `PreservesColimit` instance to be found.
+      dsimp only [span_map_fst, span_map_snd]
+      exact isColimitOfPreserves _ (PushoutCocone.flipIsColimit hc)⟩
 
 Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeHomEquiv, PreservesColimit, PushoutCocone, PushoutCocone.flipIsColimit, PushoutCocone.isColimitOfFlip, PushoutCocone.isoMk, diagramIsoSpan, flipIsColimit, instance, isColimitMapCoconePushoutCoconeEquiv, isColimitOfFlip, isColimitOfPreserves, ofIsoColimit, precomposeHomEquiv, span_map_fst, span_map_snd
 -/
@@ -919,7 +937,9 @@ definition PushoutCocone.isColimitYonedaEquiv
       (IsLimit.whiskerEquivalenceEquiv walkingSpanOpEquiv.symm).trans
         ((IsLimit.postcomposeHomEquiv
           (isoWhiskerRight (cospanOp f g).symm (yoneda.obj X)) _).symm.trans
-            (Equiv.trans (IsLimit.eq
+            (Equiv.trans (IsLimit.equivIsoLimit
+              (by exact Cone.ext (Iso.refl _) (by rintro (_ | _ | _) <;> cat_disch)))
+                (c.op.isLimitMapConeEquiv (yoneda.obj X))))))
 
 中文:
 定义 PushoutCocone.isColimitYonedaEquiv
@@ -929,7 +949,9 @@ definition PushoutCocone.isColimitYonedaEquiv
       (IsLimit.whiskerEquivalenceEquiv walkingSpanOpEquiv.symm).trans
         ((IsLimit.postcomposeHomEquiv
           (isoWhiskerRight (cospanOp f g).symm (yoneda.obj X)) _).symm.trans
-            (Equiv.trans (IsLimit.eq
+            (Equiv.trans (IsLimit.equivIsoLimit
+              (by exact Cone.ext (Iso.refl _) (by rintro (_ | _ | _) <;> cat_disch)))
+                (c.op.isLimitMapConeEquiv (yoneda.obj X))))))
 
 Depends on / 依赖: Cocone, Cone.ext, Equiv.piCongrRight, Equiv.trans, IsLimit, IsLimit.equivIsoLimit, IsLimit.postcomposeHomEquiv, IsLimit.whiskerEquivalenceEquiv, Iso.refl, Limits, Limits.Cocone.isColimitYonedaEquiv, c.op.isLimitMapConeEquiv, cat_disch, cospanOp, equivIsoLimit, isColimitYonedaEquiv, isLimitMapConeEquiv, isoWhiskerRight, piCongrRight, postcomposeHomEquiv
 -/

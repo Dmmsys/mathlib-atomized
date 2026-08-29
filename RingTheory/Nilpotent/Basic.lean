@@ -536,7 +536,7 @@ theorem add_pow_eq_zero_of_add_le_succ_of_pow_eq_zero
   by_cases hi : m <= i
   · rw [pow_eq_zero_of_le hi hx, zero_mul]
   rw [pow_eq_zero_of_le ?_ hy]; rw [mul_zero]
-  linarith [Finset.mem_antidiagonal.mp hij
+  linarith [Finset.mem_antidiagonal.mp hij]
 
 中文:
 定理 add_pow_eq_zero_of_add_le_succ_of_pow_eq_zero
@@ -549,7 +549,7 @@ theorem add_pow_eq_zero_of_add_le_succ_of_pow_eq_zero
   by_cases hi : m <= i
   · rw [pow_eq_zero_of_le hi hx, zero_mul]
   rw [pow_eq_zero_of_le ?_ hy]; rw [mul_zero]
-  linarith [Finset.mem_antidiagonal.mp hij
+  linarith [Finset.mem_antidiagonal.mp hij]
 
 Depends on / 依赖: Finset, Finset.mem_antidiagonal.mp, Finset.sum_eq_zero, add_pow, h_comm, h_comm.add_pow, mem_antidiagonal, mul_zero, nsmul_eq_mul, pow_eq_zero_of_le, sum_eq_zero, zero_mul
 -/
@@ -627,7 +627,8 @@ lemma isNilpotent_sum
   apply Commute.isNilpotent_add
   · exact Commute.sum_right _ _ _ (fun i hi => h_comm _ _ (by simp) (by simp [hi]))
   · apply hnp; simp
-  · exact ih (fun i hi => hnp i (b
+  · exact ih (fun i hi => hnp i (by simp [hi]))
+      (fun i j hi hj => h_comm i j (by simp [hi]) (by simp [hj]))
 
 中文:
 引理 isNilpotent_sum
@@ -641,7 +642,8 @@ lemma isNilpotent_sum
   apply Commute.isNilpotent_add
   · exact Commute.sum_right _ _ _ (fun i hi => h_comm _ _ (by simp) (by simp [hi]))
   · apply hnp; simp
-  · exact ih (fun i hi => hnp i (b
+  · exact ih (fun i hi => hnp i (by simp [hi]))
+      (fun i j hi hj => h_comm i j (by simp [hi]) (by simp [hj]))
 -/
 protected lemma isNilpotent_sum {ι : Type*} {s : Finset ι} {f : ι -> R}
     (hnp : forall i in s, IsNilpotent (f i)) (h_comm : forall i j, i in s -> j in s -> Commute (f i) (f j)) :

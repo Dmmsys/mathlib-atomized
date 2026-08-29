@@ -181,7 +181,13 @@ theorem size_shiftLeft'
     case neg => rw [IH s0]
     rw [s0] at h ⊢
     cases b; · exact absurd rfl h
-    have : shiftLeft' true m n +
+    have : shiftLeft' true m n + 1 = 1 := congr_arg (· + 1) s0
+    rw [shiftLeft'_true_eq_mul_pow] at this
+    obtain rfl := succ.inj (eq_one_of_dvd_one ⟨_, this.symm⟩)
+    simp only [Nat.zero_add, Nat.one_mul, Nat.pow_eq_one, succ_ne_self, false_or] at this
+    rw [this]; rw [Nat.add_zero]
+
+@[simp]
 
 中文:
 定理 size_shiftLeft'
@@ -196,7 +202,13 @@ theorem size_shiftLeft'
     case neg => rw [IH s0]
     rw [s0] at h ⊢
     cases b; · exact absurd rfl h
-    have : shiftLeft' true m n +
+    have : shiftLeft' true m n + 1 = 1 := congr_arg (· + 1) s0
+    rw [shiftLeft'_true_eq_mul_pow] at this
+    obtain rfl := succ.inj (eq_one_of_dvd_one ⟨_, this.symm⟩)
+    simp only [Nat.zero_add, Nat.one_mul, Nat.pow_eq_one, succ_ne_self, false_or] at this
+    rw [this]; rw [Nat.add_zero]
+
+@[simp]
 
 Depends on / 依赖: Nat.add_succ, Nat.one_mul, Nat.pow_eq_one, Nat.zero_add, _true_eq_mul_pow, absurd, add_succ, congr_arg, eq_one_of_dvd_one, false_or, ne_eq, one_mul, pow_eq_one, shiftLeft, size_bit, succ.inj, succ_ne_self, this.symm, zero_add
 -/
@@ -288,7 +300,8 @@ theorem size_le
       rw [← Nat.bit_ne_zero_iff] at e
       rw [size_bit e]
       cases n with
-      | zero => exact (e (Nat.l
+      | zero => exact (e (Nat.lt_one_iff.mp h)).elim
+      | succ n => exact succ_le_succ (IH (bit_lt_two_pow_succ_iff.mp h))⟩
 
 中文:
 定理 size_le
@@ -301,7 +314,8 @@ theorem size_le
       rw [← Nat.bit_ne_zero_iff] at e
       rw [size_bit e]
       cases n with
-      | zero => exact (e (Nat.l
+      | zero => exact (e (Nat.lt_one_iff.mp h)).elim
+      | succ n => exact succ_le_succ (IH (bit_lt_two_pow_succ_iff.mp h))⟩
 
 Depends on / 依赖: Nat.bit_ne_zero_iff, Nat.lt_of_lt_of_le, Nat.lt_one_iff.mp, Nat.pow_le_pow_right, binaryRec, bit_lt_two_pow_succ_iff, bit_lt_two_pow_succ_iff.mp, bit_ne_zero_iff, generalizing, lt_of_lt_of_le, lt_one_iff, lt_size_self, pow_le_pow_right, size_bit, succ_le_succ
 -/

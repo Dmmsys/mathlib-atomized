@@ -53,7 +53,16 @@ lemma eqvGen_colimitTypeRel_iff_of_isFiltered
       obtain ⟨k, f, g, h⟩ := h
       exact ⟨k, g, f, h.symm⟩
     | trans x y z _ _ h h' =>
- 
+      obtain ⟨k, f, g, h⟩ := h
+      obtain ⟨k', f', g', h'⟩ := h'
+      obtain ⟨l, a, b, h''⟩ := span g f'
+      refine ⟨l, f ≫ a, g' ≫ b, ?_⟩
+      simp only [map_comp, comp_apply, h, ← h']
+      simp [← comp_apply, ← map_comp, h'']
+  · rintro ⟨k, f, f', h⟩
+    apply Relation.EqvGen.trans (y := ⟨k, F.map f' y.2⟩)
+    · exact .rel _ _ ⟨f, by rw [← h]⟩
+    · exact .symm _ _ (.rel _ _ ⟨f', rfl⟩)
 
 中文:
 引理 eqvGen_colimitTypeRel_iff_of_isFiltered
@@ -69,7 +78,16 @@ lemma eqvGen_colimitTypeRel_iff_of_isFiltered
       obtain ⟨k, f, g, h⟩ := h
       exact ⟨k, g, f, h.symm⟩
     | trans x y z _ _ h h' =>
- 
+      obtain ⟨k, f, g, h⟩ := h
+      obtain ⟨k', f', g', h'⟩ := h'
+      obtain ⟨l, a, b, h''⟩ := span g f'
+      refine ⟨l, f ≫ a, g' ≫ b, ?_⟩
+      simp only [map_comp, comp_apply, h, ← h']
+      simp [← comp_apply, ← map_comp, h'']
+  · rintro ⟨k, f, f', h⟩
+    apply Relation.EqvGen.trans (y := ⟨k, F.map f' y.2⟩)
+    · exact .rel _ _ ⟨f, by rw [← h]⟩
+    · exact .symm _ _ (.rel _ _ ⟨f', rfl⟩)
 
 Depends on / 依赖: EqvGen, Relation, Relation.EqvGen.trans, comp_apply, h.symm, map_comp
 -/
@@ -180,7 +198,10 @@ lemma descColimitType_injective_iff_of_isFiltered
     rwa [ιColimitType_eq_iff_of_isFiltered] at this
   · intro h x x' eq
     obtain ⟨i, x, rfl⟩ := F.ιColimitType_jointly_surjective x
-    obtain ⟨i', x', rfl⟩ := F.ιColimitType_jointly_surjective x
+    obtain ⟨i', x', rfl⟩ := F.ιColimitType_jointly_surjective x'
+    simp only [descColimitType_ιColimitType_apply] at eq
+    obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
+    rw [← F.ιColimitType_map f x]; rw [eq]; rw [F.ιColimitType_map]
 
 中文:
 引理 descColimitType_injective_iff_of_isFiltered
@@ -191,7 +212,10 @@ lemma descColimitType_injective_iff_of_isFiltered
     rwa [ιColimitType_eq_iff_of_isFiltered] at this
   · intro h x x' eq
     obtain ⟨i, x, rfl⟩ := F.ιColimitType_jointly_surjective x
-    obtain ⟨i', x', rfl⟩ := F.ιColimitType_jointly_surjective x
+    obtain ⟨i', x', rfl⟩ := F.ιColimitType_jointly_surjective x'
+    simp only [descColimitType_ιColimitType_apply] at eq
+    obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
+    rw [← F.ιColimitType_map f x]; rw [eq]; rw [F.ιColimitType_map]
 -/
 lemma descColimitType_injective_iff_of_isFiltered :
     Function.Injective (F.descColimitType c) ↔
@@ -222,7 +246,10 @@ lemma descColimitType_injective_iff_of_isFiltered'
     rw [map_comp]; rw [comp_apply]; rw [eq]
     simp only [← comp_apply, ← map_comp]
     rw [coeq_condition]
-  · intro h j 
+  · intro h j j' x x' eq
+    obtain ⟨k, g, eq⟩ := h (max j j') (F.map (leftToMax _ _) x)
+      (F.map (rightToMax _ _) x') (by simpa only [c.ι_naturality_apply])
+    exact ⟨k, leftToMax _ _ ≫ g, rightToMax _ _ ≫ g, by simp [eq]⟩
 
 中文:
 引理 descColimitType_injective_iff_of_isFiltered'
@@ -235,7 +262,10 @@ lemma descColimitType_injective_iff_of_isFiltered'
     rw [map_comp]; rw [comp_apply]; rw [eq]
     simp only [← comp_apply, ← map_comp]
     rw [coeq_condition]
-  · intro h j 
+  · intro h j j' x x' eq
+    obtain ⟨k, g, eq⟩ := h (max j j') (F.map (leftToMax _ _) x)
+      (F.map (rightToMax _ _) x') (by simpa only [c.ι_naturality_apply])
+    exact ⟨k, leftToMax _ _ ≫ g, rightToMax _ _ ≫ g, by simp [eq]⟩
 
 Depends on / 依赖: F.map, coeqHom, coeq_condition, comp_apply, descColimitType_injective_iff_of_isFiltered, leftToMax, map_comp, rightToMax
 -/

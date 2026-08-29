@@ -225,7 +225,12 @@ theorem slash_mul
   calc σ (A * B) (f ((A * B) • τ)) * |(A * B).det.val| ^ (k - 1) * denom (A * B) τ ^ (-k)
   _ = σ B (σ A (f (A • B • τ))) * (|A.det.val| ^ (k - 1) * |B.det.val| ^ (k - 1)) *
       (((σ B) (denom A ↑(B • τ) ^ (-k))) * denom B τ ^ (-k)) := by
-    rw [σ_mul_comm]; rw [σ_mul]; rw [denom_cocy
+    rw [σ_mul_comm]; rw [σ_mul]; rw [denom_cocycle_σ]; rw [mul_zpow]; rw [mul_smul]; rw [map_mul]; rw [Units.val_mul]; rw [abs_mul]; rw [ofReal_mul]; rw [mul_zpow]; rw [map_zpow₀]
+  _ = σ B (σ A (f (A • B • τ)) * |A.det.val| ^ (k - 1) * (denom A ↑(B • τ) ^ (-k)))
+        * |B.det.val| ^ (k - 1) * denom B τ ^ (-k) := by
+     rw [map_mul]; rw [map_zpow₀]; rw [map_mul]; rw [map_zpow₀]; rw [σ_ofReal]
+     ring
+  _ = ((f ∣[k] A) ∣[k] B) τ := rfl
 
 中文:
 定理 slash_mul
@@ -235,7 +240,12 @@ theorem slash_mul
   calc σ (A * B) (f ((A * B) • τ)) * |(A * B).det.val| ^ (k - 1) * denom (A * B) τ ^ (-k)
   _ = σ B (σ A (f (A • B • τ))) * (|A.det.val| ^ (k - 1) * |B.det.val| ^ (k - 1)) *
       (((σ B) (denom A ↑(B • τ) ^ (-k))) * denom B τ ^ (-k)) := by
-    rw [σ_mul_comm]; rw [σ_mul]; rw [denom_cocy
+    rw [σ_mul_comm]; rw [σ_mul]; rw [denom_cocycle_σ]; rw [mul_zpow]; rw [mul_smul]; rw [map_mul]; rw [Units.val_mul]; rw [abs_mul]; rw [ofReal_mul]; rw [mul_zpow]; rw [map_zpow₀]
+  _ = σ B (σ A (f (A • B • τ)) * |A.det.val| ^ (k - 1) * (denom A ↑(B • τ) ^ (-k)))
+        * |B.det.val| ^ (k - 1) * denom B τ ^ (-k) := by
+     rw [map_mul]; rw [map_zpow₀]; rw [map_mul]; rw [map_zpow₀]; rw [σ_ofReal]
+     ring
+  _ = ((f ∣[k] A) ∣[k] B) τ := rfl
 -/
 private theorem slash_mul (k : Int) (A B : GL (Fin 2) Real) (f : ℍ -> Complex) :
     f ∣[k] (A * B) = (f ∣[k] A) ∣[k] B := by
@@ -625,6 +635,10 @@ theorem mul_slash
   set d := (↑|A.det.val| : Complex)
   have h1 : d ^ (k1 + k2 - 1) = d * d ^ (k1 - 1) * d ^ (k2 - 1) := by
 have : d != 0 := ofReal_ne_zero.mpr abs_ne_zero.mpr NeZero.ne _
+    rw [← zpow_one_add₀ this]; rw [← zpow_add₀ this]
+    ring_nf
+  rw [h1]
+  ring
 
 中文:
 定理 mul_slash
@@ -636,6 +650,10 @@ have : d != 0 := ofReal_ne_zero.mpr abs_ne_zero.mpr NeZero.ne _
   set d := (↑|A.det.val| : Complex)
   have h1 : d ^ (k1 + k2 - 1) = d * d ^ (k1 - 1) * d ^ (k2 - 1) := by
 have : d != 0 := ofReal_ne_zero.mpr abs_ne_zero.mpr NeZero.ne _
+    rw [← zpow_one_add₀ this]; rw [← zpow_add₀ this]
+    ring_nf
+  rw [h1]
+  ring
 
 Depends on / 依赖: A.det.val, NeZero, NeZero.ne, Pi.mul_apply, Pi.smul_apply, abs_ne_zero, abs_ne_zero.mpr, denom_ne_zero, map_mul, mul_apply, neg_add, ofReal_ne_zero, ofReal_ne_zero.mpr, real_smul, ring_nf, slash_apply, smul_apply
 -/
@@ -717,7 +735,16 @@ lemma prod_slash_sum_weights
     ext _
     simp [slash_apply]
   | insert i t hi IH =>
-    rcas
+    rcases t.eq_empty_or_nonempty with rfl | ht
+    · simp
+    simp only [prod_insert hi, card_insert_of_notMem hi, Nat.cast_succ, add_sub_cancel_right,
+    show ∑ i in insert i t, k i = (k i) + ∑ i in t, k i by grind, mul_slash, IH, mul_smul_comm,
+      ← mul_smul]
+    congr 1
+    nth_rw 2 [show (#t : Int) = 1 + (#t - 1) by grind]
+    rw [zpow_add']; rw [zpow_one]
+    left
+    exact abs_ne_zero.mpr (Matrix.GeneralLinearGroup.det_ne_zero g)
 
 中文:
 引理 prod_slash_sum_weights
@@ -731,7 +758,16 @@ lemma prod_slash_sum_weights
     ext _
     simp [slash_apply]
   | insert i t hi IH =>
-    rcas
+    rcases t.eq_empty_or_nonempty with rfl | ht
+    · simp
+    simp only [prod_insert hi, card_insert_of_notMem hi, Nat.cast_succ, add_sub_cancel_right,
+    show ∑ i in insert i t, k i = (k i) + ∑ i in t, k i by grind, mul_slash, IH, mul_smul_comm,
+      ← mul_smul]
+    congr 1
+    nth_rw 2 [show (#t : Int) = 1 + (#t - 1) by grind]
+    rw [zpow_add']; rw [zpow_one]
+    left
+    exact abs_ne_zero.mpr (Matrix.GeneralLinearGroup.det_ne_zero g)
 
 Depends on / 依赖: CharP.cast_eq_zero, Finset, Finset.induction_on, GeneralLinearGroup, Int.reduceNeg, Matrix, Matrix.GeneralLinearGroup.val_det_apply, Nat.cast_succ, add_sub_cancel_right, card_empty, card_insert_of_notMem, cast_eq_zero, cast_succ, classical, eq_empty_or_nonempty, induction_on, insert, mul_slash, mul_smul_comm, prod_empty
 -/

@@ -201,7 +201,12 @@ theorem liftRel_destruct_iff
       Or.inr h, fun {s t} h => by
       have h : Computation.LiftRel (LiftRelO R (LiftRel R)) (destruct s) (destruct t) := by
         obtain h | h := h
-        · 
+        · exact liftRel_destruct h
+        · assumption
+      apply Computation.LiftRel.imp _ _ _ h
+      apply LiftRelO.imp_right
+      intro s t
+      apply Or.inl⟩⟩
 
 中文:
 定理 liftRel_destruct_iff
@@ -212,7 +217,12 @@ theorem liftRel_destruct_iff
       Or.inr h, fun {s t} h => by
       have h : Computation.LiftRel (LiftRelO R (LiftRel R)) (destruct s) (destruct t) := by
         obtain h | h := h
-        · 
+        · exact liftRel_destruct h
+        · assumption
+      apply Computation.LiftRel.imp _ _ _ h
+      apply LiftRelO.imp_right
+      intro s t
+      apply Or.inl⟩⟩
 
 Depends on / 依赖: Computation, Computation.LiftRel, Computation.LiftRel.imp, LiftRel, LiftRelO, LiftRelO.imp_right, Or.inl, Or.inr, destruct, imp_right, liftRel_destruct
 -/
@@ -366,7 +376,28 @@ instance LiftRel.trans
   have h2 := liftRel_destruct h2
   refine
     Computation.liftRel_def.2
-      ⟨(Computation.terminates_of_lif
+      ⟨(Computation.terminates_of_liftRel h1).trans (Computation.terminates_of_liftRel h2),
+        fun {a c} ha hc => ?_⟩
+  rcases h1.left ha with ⟨b, hb, t1⟩
+  have t2 := Computation.rel_of_liftRel h2 hb hc
+  obtain - | a := a <;> obtain - | c := c
+  · trivial
+  · cases b
+    · cases t2
+    · cases t1
+  · cases a
+    rcases b with - | b
+    · cases t1
+    · cases b
+      cases t2
+  · obtain ⟨a, s⟩ := a
+    rcases b with - | b
+    · cases t1
+    obtain ⟨b, t⟩ := b
+    obtain ⟨c, u⟩ := c
+    obtain ⟨ab, st⟩ := t1
+    obtain ⟨bc, tu⟩ := t2
+    exact ⟨trans_of R ab bc, t, st, tu⟩
 
 中文:
 实例 LiftRel.trans
@@ -379,7 +410,28 @@ instance LiftRel.trans
   have h2 := liftRel_destruct h2
   refine
     Computation.liftRel_def.2
-      ⟨(Computation.terminates_of_lif
+      ⟨(Computation.terminates_of_liftRel h1).trans (Computation.terminates_of_liftRel h2),
+        fun {a c} ha hc => ?_⟩
+  rcases h1.left ha with ⟨b, hb, t1⟩
+  have t2 := Computation.rel_of_liftRel h2 hb hc
+  obtain - | a := a <;> obtain - | c := c
+  · trivial
+  · cases b
+    · cases t2
+    · cases t1
+  · cases a
+    rcases b with - | b
+    · cases t1
+    · cases b
+      cases t2
+  · obtain ⟨a, s⟩ := a
+    rcases b with - | b
+    · cases t1
+    obtain ⟨b, t⟩ := b
+    obtain ⟨c, u⟩ := c
+    obtain ⟨ab, st⟩ := t1
+    obtain ⟨bc, tu⟩ := t2
+    exact ⟨trans_of R ab bc, t, st, tu⟩
 -/
 instance LiftRel.trans (R : α -> α -> Prop) [IsTrans α R] : IsTrans _ (LiftRel R) := by
   refine ⟨fun s t u h1 h2 => ?_⟩
@@ -829,7 +881,18 @@ theorem head_congr
   rcases @Computation.exists_of_mem_map _ _ _ _ (destruct s) ho with ⟨ds, dsm, dse⟩
   rw [← dse]
   obtain ⟨l, r⟩ := destruct_congr h
-  rcases l dsm w
+  rcases l dsm with ⟨dt, dtm, dst⟩
+  rcases ds with - | a <;> rcases dt with - | b
+  · apply Computation.mem_map _ dtm
+  · cases b
+    cases dst
+  · cases a
+    cases dst
+  · obtain ⟨a, s'⟩ := a
+    obtain ⟨b, t'⟩ := b
+    rw [dst.left]
+    exact @Computation.mem_map _ _ (@Functor.map _ _ (α × WSeq α) _ Prod.fst)
+      (some (b, t')) (destruct t) dtm
 
 中文:
 定理 head_congr
@@ -841,7 +904,18 @@ theorem head_congr
   rcases @Computation.exists_of_mem_map _ _ _ _ (destruct s) ho with ⟨ds, dsm, dse⟩
   rw [← dse]
   obtain ⟨l, r⟩ := destruct_congr h
-  rcases l dsm w
+  rcases l dsm with ⟨dt, dtm, dst⟩
+  rcases ds with - | a <;> rcases dt with - | b
+  · apply Computation.mem_map _ dtm
+  · cases b
+    cases dst
+  · cases a
+    cases dst
+  · obtain ⟨a, s'⟩ := a
+    obtain ⟨b, t'⟩ := b
+    rw [dst.left]
+    exact @Computation.mem_map _ _ (@Functor.map _ _ (α × WSeq α) _ Prod.fst)
+      (some (b, t')) (destruct t) dtm
 
 Depends on / 依赖: Computation, Computation.exists_of_mem_map, Computation.me, Computation.mem_map, destruct, destruct_congr, dst.left, exists_of_mem_map, h.symm, mem_map
 -/
@@ -910,7 +984,9 @@ theorem liftRel_flatten
     match s, t, h with
     | _, _, ⟨c1, c2, rfl, rfl, h⟩ => by
       simp only [destruct_flatten]; apply liftRel_bind _ _ h
-      intro a b ab; apply Computa
+      intro a b ab; apply Computation.LiftRel.imp _ _ _ (liftRel_destruct ab)
+      intro a b; apply LiftRelO.imp_right
+      intro s t h; refine ⟨Computation.pure s, Computation.pure t, ?_, ?_, ?_⟩ <;> simp [h]⟩
 
 中文:
 定理 liftRel_flatten
@@ -920,7 +996,9 @@ theorem liftRel_flatten
     match s, t, h with
     | _, _, ⟨c1, c2, rfl, rfl, h⟩ => by
       simp only [destruct_flatten]; apply liftRel_bind _ _ h
-      intro a b ab; apply Computa
+      intro a b ab; apply Computation.LiftRel.imp _ _ _ (liftRel_destruct ab)
+      intro a b; apply LiftRelO.imp_right
+      intro s t h; refine ⟨Computation.pure s, Computation.pure t, ?_, ?_, ?_⟩ <;> simp [h]⟩
 
 Depends on / 依赖: Computation, Computation.LiftRel, Computation.LiftRel.imp, Computation.pure, LiftRel, LiftRelO, LiftRelO.imp_right, destruct_flatten, flatten, imp_right, liftRel_bind, liftRel_destruct
 -/
@@ -971,7 +1049,9 @@ theorem tail_congr
   · cases h
   · cases a
     cases h
-  · o
+  · obtain ⟨a, s'⟩ := a
+    obtain ⟨b, t'⟩ := b
+    exact h.right
 
 中文:
 定理 tail_congr
@@ -987,7 +1067,9 @@ theorem tail_congr
   · cases h
   · cases a
     cases h
-  · o
+  · obtain ⟨a, s'⟩ := a
+    obtain ⟨b, t'⟩ := b
+    exact h.right
 
 Depends on / 依赖: Computation, Computation.bind_pure, bind_pure, comp_apply, destruct_congr, flatten_congr, h.right, liftRel_bind, liftRel_pure
 -/
@@ -1088,7 +1170,19 @@ theorem Equiv.ext
     · intro a b ma mb
       rcases a with - | a <;> rcases b with - | b
       · trivial
-      · injection mem_u
+      · injection mem_unique (Computation.mem_map _ ma) ((h 0 _).2 (Computation.mem_map _ mb))
+      · injection mem_unique (Computation.mem_map _ ma) ((h 0 _).2 (Computation.mem_map _ mb))
+      · obtain ⟨a, s'⟩ := a
+        obtain ⟨b, t'⟩ := b
+        injection mem_unique (Computation.mem_map _ ma) ((h 0 _).2 (Computation.mem_map _ mb)) with
+          ab
+        refine ⟨ab, fun n => ?_⟩
+        refine
+          (get?_congr (flatten_equiv (Computation.mem_map _ ma)) n).symm.trans
+            ((?_ : get? (tail s) n ~ get? (tail t) n).trans
+              (get?_congr (flatten_equiv (Computation.mem_map _ mb)) n))
+        rw [get?_tail]; rw [get?_tail]
+        apply h⟩
 
 中文:
 定理 等价.ext
@@ -1101,7 +1195,19 @@ theorem Equiv.ext
     · intro a b ma mb
       rcases a with - | a <;> rcases b with - | b
       · trivial
-      · injection mem_u
+      · injection mem_unique (Computation.mem_map _ ma) ((h 0 _).2 (Computation.mem_map _ mb))
+      · injection mem_unique (Computation.mem_map _ ma) ((h 0 _).2 (Computation.mem_map _ mb))
+      · obtain ⟨a, s'⟩ := a
+        obtain ⟨b, t'⟩ := b
+        injection mem_unique (Computation.mem_map _ ma) ((h 0 _).2 (Computation.mem_map _ mb)) with
+          ab
+        refine ⟨ab, fun n => ?_⟩
+        refine
+          (get?_congr (flatten_equiv (Computation.mem_map _ ma)) n).symm.trans
+            ((?_ : get? (tail s) n ~ get? (tail t) n).trans
+              (get?_congr (flatten_equiv (Computation.mem_map _ mb)) n))
+        rw [get?_tail]; rw [get?_tail]
+        apply h⟩
 
 Depends on / 依赖: Computation, Computation.mem_map, head_terminates_iff, injection, liftRel_def, mem_map, mem_unique, terminates_congr
 -/
@@ -1139,7 +1245,14 @@ theorem liftRel_map
     | _, _, ⟨s, t, rfl, rfl, h⟩ => by
       simp only [exists_and_left, destruct_map]
       apply Computation.liftRel_map _ _ (liftRel_destruct h)
-      intr
+      intro o p h
+      rcases o with - | a <;> rcases p with - | b
+      · simp
+      · cases b; cases h
+      · cases a; cases h
+      · obtain ⟨a, s⟩ := a; obtain ⟨b, t⟩ := b
+        obtain ⟨r, h⟩ := h
+        exact ⟨h2 r, s, rfl, t, rfl, h⟩⟩
 
 中文:
 定理 liftRel_map
@@ -1150,7 +1263,14 @@ theorem liftRel_map
     | _, _, ⟨s, t, rfl, rfl, h⟩ => by
       simp only [exists_and_left, destruct_map]
       apply Computation.liftRel_map _ _ (liftRel_destruct h)
-      intr
+      intro o p h
+      rcases o with - | a <;> rcases p with - | b
+      · simp
+      · cases b; cases h
+      · cases a; cases h
+      · obtain ⟨a, s⟩ := a; obtain ⟨b, t⟩ := b
+        obtain ⟨r, h⟩ := h
+        exact ⟨h2 r, s, rfl, t, rfl, h⟩⟩
 
 Depends on / 依赖: Computation, Computation.liftRel_map, LiftRel, destruct_map, exists_and_left, liftRel_destruct, liftRel_map
 -/
@@ -1203,7 +1323,24 @@ theorem liftRel_append
     match s, t, h with
     | s, t, Or.inl h => by
       apply Computation.LiftRel.imp _ _ _ (liftRel_destruct h)
-      intro a b; apply LiftRelO.imp_righ
+      intro a b; apply LiftRelO.imp_right
+      intro s t; apply Or.inl
+    | _, _, Or.inr ⟨s1, t1, rfl, rfl, h⟩ => by
+      simp only [exists_and_left, destruct_append]
+      apply Computation.liftRel_bind _ _ (liftRel_destruct h)
+      intro o p h
+      rcases o with - | a <;> rcases p with - | b
+      · simp only [destruct_append.aux]
+        apply Computation.LiftRel.imp _ _ _ (liftRel_destruct h2)
+        intro a b
+        apply LiftRelO.imp_right
+        intro s t
+        apply Or.inl
+      · cases b; cases h
+      · cases a; cases h
+      · obtain ⟨a, s⟩ := a; obtain ⟨b, t⟩ := b
+        obtain ⟨r, h⟩ := h
+        simpa using ⟨r, Or.inr ⟨s, rfl, t, rfl, h⟩⟩⟩
 
 中文:
 定理 liftRel_append
@@ -1213,7 +1350,24 @@ theorem liftRel_append
     match s, t, h with
     | s, t, Or.inl h => by
       apply Computation.LiftRel.imp _ _ _ (liftRel_destruct h)
-      intro a b; apply LiftRelO.imp_righ
+      intro a b; apply LiftRelO.imp_right
+      intro s t; apply Or.inl
+    | _, _, Or.inr ⟨s1, t1, rfl, rfl, h⟩ => by
+      simp only [exists_and_left, destruct_append]
+      apply Computation.liftRel_bind _ _ (liftRel_destruct h)
+      intro o p h
+      rcases o with - | a <;> rcases p with - | b
+      · simp only [destruct_append.aux]
+        apply Computation.LiftRel.imp _ _ _ (liftRel_destruct h2)
+        intro a b
+        apply LiftRelO.imp_right
+        intro s t
+        apply Or.inl
+      · cases b; cases h
+      · cases a; cases h
+      · obtain ⟨a, s⟩ := a; obtain ⟨b, t⟩ := b
+        obtain ⟨r, h⟩ := h
+        simpa using ⟨r, Or.inr ⟨s, rfl, t, rfl, h⟩⟩⟩
 
 Depends on / 依赖: Computation, Computation.LiftRel.imp, Computation.liftRel_bind, LiftRel, LiftRelO, LiftRelO.imp_right, Or.inl, Or.inr, append, destruct_append, exists_and_left, imp_right, liftRel_bind, liftRel_destruct
 -/
@@ -1255,7 +1409,42 @@ theorem liftRel_join.lem
   intro S T ST a ra; simp only [destruct_join] at ra
   exact
     let ⟨o, m, k, rs1, rs2, en⟩ := of_results_bind ra
-    let ⟨p, mT, rop⟩ := Computation.exists_of_liftRel_left (l
+    let ⟨p, mT, rop⟩ := Computation.exists_of_liftRel_left (liftRel_destruct ST) rs1.mem
+    match o, p, rop, rs1, rs2, mT with
+    | none, none, _, _, rs2, mT => by
+      simp only [destruct_join]
+      exact ⟨none, mem_bind mT (ret_mem _), by rw [eq_of_pure_mem rs2.mem]; trivial⟩
+    | some (s, S'), some (t, T'), ⟨st, ST'⟩, _, rs2, mT => by
+      simp? [destruct_append] at rs2 says simp only [destruct_join.aux, destruct_append] at rs2
+      exact
+        let ⟨k1, rs3, ek⟩ := of_results_think rs2
+        let ⟨o', m1, n1, rs4, rs5, ek1⟩ := of_results_bind rs3
+        let ⟨p', mt, rop'⟩ := Computation.exists_of_liftRel_left (liftRel_destruct st) rs4.mem
+        match o', p', rop', rs4, rs5, mt with
+        | none, none, _, _, rs5', mt => by
+          have : n1 < n := by
+            rw [en]; rw [ek]; rw [ek1]
+            apply lt_of_lt_of_le _ (Nat.le_add_right _ _)
+            apply Nat.lt_succ_of_le (Nat.le_add_right _ _)
+          let ⟨ob, mb, rob⟩ := IH _ this ST' rs5'
+          refine ⟨ob, ?_, rob⟩
+          · simp +unfoldPartialApp only [destruct_join, destruct_join.aux]
+            apply mem_bind mT
+            simp only [destruct_append]
+            apply think_mem
+            apply mem_bind mt
+            exact mb
+        | some (a, s'), some (b, t'), ⟨ab, st'⟩, _, rs5, mt => by
+          simp only [destruct_append.aux] at rs5
+          refine ⟨some (b, append t' (join T')), ?_, ?_⟩
+          · simp +unfoldPartialApp only [destruct_join, destruct_join.aux]
+            apply mem_bind mT
+            simp only [destruct_append]
+            apply think_mem
+            apply mem_bind mt
+            apply ret_mem
+          rw [eq_of_pure_mem rs5.mem]
+          exact ⟨ab, HU _ _ ⟨s', t', S', T', rfl, rfl, st', ST'⟩⟩
 
 中文:
 定理 liftRel_join.lem
@@ -1266,7 +1455,42 @@ theorem liftRel_join.lem
   intro S T ST a ra; simp only [destruct_join] at ra
   exact
     let ⟨o, m, k, rs1, rs2, en⟩ := of_results_bind ra
-    let ⟨p, mT, rop⟩ := Computation.exists_of_liftRel_left (l
+    let ⟨p, mT, rop⟩ := Computation.exists_of_liftRel_left (liftRel_destruct ST) rs1.mem
+    match o, p, rop, rs1, rs2, mT with
+    | none, none, _, _, rs2, mT => by
+      simp only [destruct_join]
+      exact ⟨none, mem_bind mT (ret_mem _), by rw [eq_of_pure_mem rs2.mem]; trivial⟩
+    | some (s, S'), some (t, T'), ⟨st, ST'⟩, _, rs2, mT => by
+      simp? [destruct_append] at rs2 says simp only [destruct_join.aux, destruct_append] at rs2
+      exact
+        let ⟨k1, rs3, ek⟩ := of_results_think rs2
+        let ⟨o', m1, n1, rs4, rs5, ek1⟩ := of_results_bind rs3
+        let ⟨p', mt, rop'⟩ := Computation.exists_of_liftRel_left (liftRel_destruct st) rs4.mem
+        match o', p', rop', rs4, rs5, mt with
+        | none, none, _, _, rs5', mt => by
+          have : n1 < n := by
+            rw [en]; rw [ek]; rw [ek1]
+            apply lt_of_lt_of_le _ (Nat.le_add_right _ _)
+            apply Nat.lt_succ_of_le (Nat.le_add_right _ _)
+          let ⟨ob, mb, rob⟩ := IH _ this ST' rs5'
+          refine ⟨ob, ?_, rob⟩
+          · simp +unfoldPartialApp only [destruct_join, destruct_join.aux]
+            apply mem_bind mT
+            simp only [destruct_append]
+            apply think_mem
+            apply mem_bind mt
+            exact mb
+        | some (a, s'), some (b, t'), ⟨ab, st'⟩, _, rs5, mt => by
+          simp only [destruct_append.aux] at rs5
+          refine ⟨some (b, append t' (join T')), ?_, ?_⟩
+          · simp +unfoldPartialApp only [destruct_join, destruct_join.aux]
+            apply mem_bind mT
+            simp only [destruct_append]
+            apply think_mem
+            apply mem_bind mt
+            apply ret_mem
+          rw [eq_of_pure_mem rs5.mem]
+          exact ⟨ab, HU _ _ ⟨s', t', S', T', rfl, rfl, st', ST'⟩⟩
 
 Depends on / 依赖: Computation, Computation.exists_of_liftRel_left, Nat.strongRecOn, destruct_join, eq_of_pure_mem, exists_of_liftRel_left, exists_results_of_mem, g.val, liftRel_destruct, mem_bind, of_results_bind, ret_mem, revert, rs1.mem, rs2.mem, strongRecOn
 -/
@@ -1332,7 +1556,24 @@ theorem liftRel_join
       s1 = append s (join S) ∧ s2 = append t (join T) ∧ LiftRel R s t ∧ LiftRel (LiftRel R) S T,
     ⟨nil, nil, S, T, by simp, by simp, by simp, h⟩, fun {s1 s2} ⟨s, t, S, T, h1, h2, st, ST⟩ => by
     rw [h1]; rw [h2]; rw [destruct_append, destruct_append]
-    apply 
+    apply Computation.liftRel_bind _ _ (liftRel_destruct st)
+    exact fun {o p} h =>
+      match o, p, h with
+      | some (a, s), some (b, t), ⟨h1, h2⟩ => by
+        simpa using ⟨h1, s, t, S, rfl, T, rfl, h2, ST⟩
+      | none, none, _ => by
+        -- We do not `dsimp` with `LiftRelO` since `liftRel_join.lem` uses `LiftRelO`.
+        dsimp only [destruct_append.aux, Computation.LiftRel]; constructor
+        · intro
+          apply liftRel_join.lem _ ST fun _ _ => id
+        · intro b mb
+          rw [← LiftRelO.swap]
+          apply liftRel_join.lem (swap R)
+          · rw [← LiftRel.swap R, ← LiftRel.swap]
+            apply ST
+          · rw [← LiftRel.swap R, ← LiftRel.swap (LiftRel R)]
+            exact fun s1 s2 ⟨s, t, S, T, h1, h2, st, ST⟩ => ⟨t, s, T, S, h2, h1, st, ST⟩
+          · exact mb⟩
 
 中文:
 定理 liftRel_join
@@ -1342,7 +1583,24 @@ theorem liftRel_join
       s1 = append s (join S) ∧ s2 = append t (join T) ∧ LiftRel R s t ∧ LiftRel (LiftRel R) S T,
     ⟨nil, nil, S, T, by simp, by simp, by simp, h⟩, fun {s1 s2} ⟨s, t, S, T, h1, h2, st, ST⟩ => by
     rw [h1]; rw [h2]; rw [destruct_append, destruct_append]
-    apply 
+    apply Computation.liftRel_bind _ _ (liftRel_destruct st)
+    exact fun {o p} h =>
+      match o, p, h with
+      | some (a, s), some (b, t), ⟨h1, h2⟩ => by
+        simpa using ⟨h1, s, t, S, rfl, T, rfl, h2, ST⟩
+      | none, none, _ => by
+        -- We do not `dsimp` with `LiftRelO` since `liftRel_join.lem` uses `LiftRelO`.
+        dsimp only [destruct_append.aux, Computation.LiftRel]; constructor
+        · intro
+          apply liftRel_join.lem _ ST fun _ _ => id
+        · intro b mb
+          rw [← LiftRelO.swap]
+          apply liftRel_join.lem (swap R)
+          · rw [← LiftRel.swap R, ← LiftRel.swap]
+            apply ST
+          · rw [← LiftRel.swap R, ← LiftRel.swap (LiftRel R)]
+            exact fun s1 s2 ⟨s, t, S, T, h1, h2, st, ST⟩ => ⟨t, s, T, S, h2, h1, st, ST⟩
+          · exact mb⟩
 
 Depends on / 依赖: Computation, Computation.liftRel_bind, LiftRel, append, destruct_append, liftRel_bind, liftRel_destruct
 -/
@@ -1475,7 +1733,13 @@ theorem join_map_ret
       match c1, c2, h with
       | _, _, ⟨s, rfl, rfl⟩ => by
         clear h
-        have (s : 
+        have (s : WSeq α) : exists s' : WSeq α,
+            (map ret s).join.destruct = (map ret s').join.destruct ∧ destruct s = s'.destruct :=
+          ⟨s, rfl, rfl⟩
+        induction s using WSeq.recOn <;> simp [ret, this]
+  · exact ⟨s, rfl, rfl⟩
+
+@[simp]
 
 中文:
 定理 join_map_ret
@@ -1489,7 +1753,13 @@ theorem join_map_ret
       match c1, c2, h with
       | _, _, ⟨s, rfl, rfl⟩ => by
         clear h
-        have (s : 
+        have (s : WSeq α) : exists s' : WSeq α,
+            (map ret s).join.destruct = (map ret s').join.destruct ∧ destruct s = s'.destruct :=
+          ⟨s, rfl, rfl⟩
+        induction s using WSeq.recOn <;> simp [ret, this]
+  · exact ⟨s, rfl, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: WSeq.recOn, destruct, join.destruct, liftRel_rec
 -/
@@ -1525,7 +1795,31 @@ theorem join_append
     liftRel_rec
       (fun c1 c2 =>
         exists (s : WSeq α) (S T : _),
-          c1 = destruct (append 
+          c1 = destruct (append s (join (append S T))) ∧
+            c2 = destruct (append s (append (join S) (join T))))
+      _ _ _
+      (let ⟨s, S, T, h1, h2⟩ := h
+      ⟨s, S, T, congr_arg destruct h1, congr_arg destruct h2⟩)
+  rintro c1 c2 ⟨s, S, T, rfl, rfl⟩
+  induction s using WSeq.recOn with
+  | nil =>
+    induction S using WSeq.recOn with
+    | nil =>
+      simp only [nil_append, join_nil]
+      induction T using WSeq.recOn with
+      | nil => simp
+      | cons s T =>
+        simp only [join_cons, destruct_think, Computation.destruct_think, liftRelAux_inr_inr]
+        refine ⟨s, nil, T, ?_, ?_⟩ <;> simp
+      | think T =>
+        simp only [join_think, destruct_think, Computation.destruct_think, liftRelAux_inr_inr]
+        refine ⟨nil, nil, T, ?_, ?_⟩ <;> simp
+    | cons s S => simpa using ⟨s, S, T, rfl, rfl⟩
+    | think S => refine ⟨nil, S, T, ?_, ?_⟩ <;> simp
+  | cons a s => simpa using ⟨s, S, T, rfl, rfl⟩
+  | think s => simpa using ⟨s, S, T, rfl, rfl⟩
+
+@[simp]
 
 中文:
 定理 join_append
@@ -1541,7 +1835,31 @@ theorem join_append
     liftRel_rec
       (fun c1 c2 =>
         exists (s : WSeq α) (S T : _),
-          c1 = destruct (append 
+          c1 = destruct (append s (join (append S T))) ∧
+            c2 = destruct (append s (append (join S) (join T))))
+      _ _ _
+      (let ⟨s, S, T, h1, h2⟩ := h
+      ⟨s, S, T, congr_arg destruct h1, congr_arg destruct h2⟩)
+  rintro c1 c2 ⟨s, S, T, rfl, rfl⟩
+  induction s using WSeq.recOn with
+  | nil =>
+    induction S using WSeq.recOn with
+    | nil =>
+      simp only [nil_append, join_nil]
+      induction T using WSeq.recOn with
+      | nil => simp
+      | cons s T =>
+        simp only [join_cons, destruct_think, Computation.destruct_think, liftRelAux_inr_inr]
+        refine ⟨s, nil, T, ?_, ?_⟩ <;> simp
+      | think T =>
+        simp only [join_think, destruct_think, Computation.destruct_think, liftRelAux_inr_inr]
+        refine ⟨nil, nil, T, ?_, ?_⟩ <;> simp
+    | cons s S => simpa using ⟨s, S, T, rfl, rfl⟩
+    | think S => refine ⟨nil, S, T, ?_, ?_⟩ <;> simp
+  | cons a s => simpa using ⟨s, S, T, rfl, rfl⟩
+  | think s => simpa using ⟨s, S, T, rfl, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: WSeq.recOn, append, congr_arg, destruct, liftRel_rec
 -/
@@ -1654,7 +1972,31 @@ theorem join_join
     liftRel_rec
       (fun c1 c2 =>
         exists s S SS,
-      
+          c1 = destruct (append s (join (append S (join SS)))) ∧
+            c2 = destruct (append s (append (join S) (join (map join SS)))))
+      _ (destruct s1) (destruct s2)
+      (let ⟨s, S, SS, h1, h2⟩ := h
+      ⟨s, S, SS, by simp [h1], by simp [h2]⟩)
+  intro c1 c2 h
+  exact
+    match c1, c2, h with
+    | _, _, ⟨s, S, SS, rfl, rfl⟩ => by
+      clear h
+      induction s using WSeq.recOn with
+      | nil =>
+        induction S using WSeq.recOn with
+        | nil =>
+          simp only [nil_append, join_nil]
+          induction SS using WSeq.recOn with
+          | nil => simp
+          | cons S SS => refine ⟨nil, S, SS, ?_, ?_⟩ <;> simp
+          | think SS => refine ⟨nil, nil, SS, ?_, ?_⟩ <;> simp
+        | cons s S => simpa using ⟨s, S, SS, rfl, rfl⟩
+        | think S => refine ⟨nil, S, SS, ?_, ?_⟩ <;> simp
+      | cons a s => simpa using ⟨s, S, SS, rfl, rfl⟩
+      | think s => simpa using ⟨s, S, SS, rfl, rfl⟩
+
+@[simp]
 
 中文:
 定理 join_join
@@ -1672,7 +2014,31 @@ theorem join_join
     liftRel_rec
       (fun c1 c2 =>
         exists s S SS,
-      
+          c1 = destruct (append s (join (append S (join SS)))) ∧
+            c2 = destruct (append s (append (join S) (join (map join SS)))))
+      _ (destruct s1) (destruct s2)
+      (let ⟨s, S, SS, h1, h2⟩ := h
+      ⟨s, S, SS, by simp [h1], by simp [h2]⟩)
+  intro c1 c2 h
+  exact
+    match c1, c2, h with
+    | _, _, ⟨s, S, SS, rfl, rfl⟩ => by
+      clear h
+      induction s using WSeq.recOn with
+      | nil =>
+        induction S using WSeq.recOn with
+        | nil =>
+          simp only [nil_append, join_nil]
+          induction SS using WSeq.recOn with
+          | nil => simp
+          | cons S SS => refine ⟨nil, S, SS, ?_, ?_⟩ <;> simp
+          | think SS => refine ⟨nil, nil, SS, ?_, ?_⟩ <;> simp
+        | cons s S => simpa using ⟨s, S, SS, rfl, rfl⟩
+        | think S => refine ⟨nil, S, SS, ?_, ?_⟩ <;> simp
+      | cons a s => simpa using ⟨s, S, SS, rfl, rfl⟩
+      | think s => simpa using ⟨s, S, SS, rfl, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: append, destruct, liftRel_rec
 -/

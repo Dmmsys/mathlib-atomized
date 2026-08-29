@@ -399,7 +399,8 @@ theorem isSquare_sign_iff
   | pred =>
     rw [sign_eq_neg_one_of_neg (by lia)]; rw [← neg_add']; rw [Int.neg_nonneg]
     norm_cast
-    simp only [reduceNeg, le_zero_eq, Nat.add_eq_zero_iff, succ_ne_self, and_false, i
+    simp only [reduceNeg, le_zero_eq, Nat.add_eq_zero_iff, succ_ne_self, and_false, iff_false]
+    rintro ⟨a | a, ⟨⟩⟩
 
 中文:
 定理 isSquare_sign_iff
@@ -412,7 +413,8 @@ theorem isSquare_sign_iff
   | pred =>
     rw [sign_eq_neg_one_of_neg (by lia)]; rw [← neg_add']; rw [Int.neg_nonneg]
     norm_cast
-    simp only [reduceNeg, le_zero_eq, Nat.add_eq_zero_iff, succ_ne_self, and_false, i
+    simp only [reduceNeg, le_zero_eq, Nat.add_eq_zero_iff, succ_ne_self, and_false, iff_false]
+    rintro ⟨a | a, ⟨⟩⟩
 
 Depends on / 依赖: Int.induction_on, Int.neg_nonneg, Nat.add_eq_zero_iff, add_eq_zero_iff, and_false, iff_false, induction_on, le_zero_eq, neg_add, neg_nonneg, reduceNeg, sign_eq_neg_one_of_neg, succ_ne_self
 -/

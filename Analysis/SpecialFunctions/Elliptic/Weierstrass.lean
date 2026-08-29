@@ -215,7 +215,10 @@ lemma mul_ω₁_add_mul_ω₂_mem_lattice
     norm_cast at this
     aesop
   · lift α to Int using h₁
-    lift β to 
+    lift β to Int using h₂
+    simp only [Rat.cast_intCast, ← zsmul_eq_mul]
+    exact add_mem (Submodule.smul_mem _ _ L.ω₁_mem_lattice)
+      (Submodule.smul_mem _ _ L.ω₂_mem_lattice)
 
 中文:
 引理 mul_ω₁_add_mul_ω₂_mem_lattice
@@ -229,7 +232,10 @@ lemma mul_ω₁_add_mul_ω₂_mem_lattice
     norm_cast at this
     aesop
   · lift α to Int using h₁
-    lift β to 
+    lift β to Int using h₂
+    simp only [Rat.cast_intCast, ← zsmul_eq_mul]
+    exact add_mem (Submodule.smul_mem _ _ L.ω₁_mem_lattice)
+      (Submodule.smul_mem _ _ L.ω₂_mem_lattice)
 
 Depends on / 依赖: L.indep, LinearIndependent, LinearIndependent.pair_iff.mp, Rat.cast_intCast, Submodule, Submodule.smul_mem, add_mem, cast_intCast, linear_combination, mem_lattice, mem_lattice.mp, pair_iff, smul_mem, sub_eq_zero, zsmul_eq_mul
 -/
@@ -600,7 +606,16 @@ lemma hasSumLocallyUniformly_aux
   intro x
   obtain ⟨r, hr, hr'⟩ : exists r, 0 < r ∧ 𝓝 x <= 𝓟 (Metric.ball 0 r) :=
     ⟨‖x‖ + 1, by positivity, Filter.le_principal_iff.mpr (Metric.isOpen_ball.mem_nhds (by simp))⟩
-  refine .mono_rig
+  refine .mono_right ?_ hr'
+  rw [← tendstoUniformlyOn_iff_tendstoUniformlyOnFilter]
+  refine tendstoUniformlyOn_tsum_of_cofinite_eventually (hu r hr) ?_
+  obtain ⟨R, hR⟩ := eventually_atTop.mp (hf r hr)
+  refine (isCompact_iff_finite.mp (isCompact_closedBall (0 : L.lattice) R)).subset ?_
+  intros l hl
+  obtain ⟨s, hs, hs'⟩ : exists x, ‖x‖ < r ∧ u r l < ‖f l x‖ := by simpa using hl
+  simp only [Metric.mem_closedBall, dist_zero_right]
+  contrapose! hs'
+  exact hR _ hs'.le _ hs _ rfl
 
 中文:
 引理 hasSumLocallyUniformly_aux
@@ -610,7 +625,16 @@ lemma hasSumLocallyUniformly_aux
   intro x
   obtain ⟨r, hr, hr'⟩ : exists r, 0 < r ∧ 𝓝 x <= 𝓟 (Metric.ball 0 r) :=
     ⟨‖x‖ + 1, by positivity, Filter.le_principal_iff.mpr (Metric.isOpen_ball.mem_nhds (by simp))⟩
-  refine .mono_rig
+  refine .mono_right ?_ hr'
+  rw [← tendstoUniformlyOn_iff_tendstoUniformlyOnFilter]
+  refine tendstoUniformlyOn_tsum_of_cofinite_eventually (hu r hr) ?_
+  obtain ⟨R, hR⟩ := eventually_atTop.mp (hf r hr)
+  refine (isCompact_iff_finite.mp (isCompact_closedBall (0 : L.lattice) R)).subset ?_
+  intros l hl
+  obtain ⟨s, hs, hs'⟩ : exists x, ‖x‖ < r ∧ u r l < ‖f l x‖ := by simpa using hl
+  simp only [Metric.mem_closedBall, dist_zero_right]
+  contrapose! hs'
+  exact hR _ hs'.le _ hs _ rfl
 
 Depends on / 依赖: Filter, Filter.le_principal_iff.mpr, Metric, Metric.ball, Metric.isOpen_ball.mem_nhds, eventually_atTop, eventually_atTop.mp, hasSumLocallyUniformly_iff_tendstoLocallyUniformly, isCompact_iff_finite, isCompact_iff_finite.mp, isOpen_ball, le_principal_iff, mem_nhds, mono_right, tendstoLocallyUniformly_iff_filter, tendstoUniformlyOn_iff_tendstoUniformlyOnFilter, tendstoUniformlyOn_tsum_of_cofinite_eventually
 -/
@@ -648,7 +672,24 @@ lemma weierstrassP_bound
       rw [div_sub_div]; rw [one_mul]; rw [mul_one]
       · simpa [sub_eq_zero]
       · simpa
-    _ = ‖l ^ 2 - (s - l) ^ 2‖ / (‖s - l‖ ^ 2 * ‖l‖ ^ 2)
+    _ = ‖l ^ 2 - (s - l) ^ 2‖ / (‖s - l‖ ^ 2 * ‖l‖ ^ 2) := by simp
+    _ <= ‖l ^ 2 - (s - l) ^ 2‖ / ((‖l‖ / 2) ^ 2 * ‖l‖ ^ 2) := by
+      gcongr
+      rw [norm_sub_rev]
+      exact .trans (by linarith) (norm_sub_norm_le l s)
+    _ = ‖s * (2 * l - s)‖ / (‖l‖ ^ 4 / 4) := by
+      congr 1
+      · rw [sq_sub_sq]; simp [← sub_add, two_mul, sub_add_eq_add_sub]
+      · ring
+    _ = (‖s‖ * ‖2 * l - s‖) / (‖l‖ ^ 4 / 4) := by simp
+    _ = (4 * ‖s‖ * ‖2 * l - s‖) / ‖l‖ ^ 4 := by field
+    _ <= (4 * r * (2.5 * ‖l‖)) / ‖l‖ ^ 4 := by
+      gcongr (4 * ?_ * ?_) / ‖l‖ ^ 4
+      refine (norm_sub_le _ _).trans ?_
+      simp only [Complex.norm_mul, Complex.norm_ofNat]
+      linarith
+    _ = 10 * r / ‖l‖ ^ 3 := by field
+    _ = _ := by norm_cast
 
 中文:
 引理 weierstrassP_bound
@@ -661,7 +702,24 @@ lemma weierstrassP_bound
       rw [div_sub_div]; rw [one_mul]; rw [mul_one]
       · simpa [sub_eq_zero]
       · simpa
-    _ = ‖l ^ 2 - (s - l) ^ 2‖ / (‖s - l‖ ^ 2 * ‖l‖ ^ 2)
+    _ = ‖l ^ 2 - (s - l) ^ 2‖ / (‖s - l‖ ^ 2 * ‖l‖ ^ 2) := by simp
+    _ <= ‖l ^ 2 - (s - l) ^ 2‖ / ((‖l‖ / 2) ^ 2 * ‖l‖ ^ 2) := by
+      gcongr
+      rw [norm_sub_rev]
+      exact .trans (by linarith) (norm_sub_norm_le l s)
+    _ = ‖s * (2 * l - s)‖ / (‖l‖ ^ 4 / 4) := by
+      congr 1
+      · rw [sq_sub_sq]; simp [← sub_add, two_mul, sub_add_eq_add_sub]
+      · ring
+    _ = (‖s‖ * ‖2 * l - s‖) / (‖l‖ ^ 4 / 4) := by simp
+    _ = (4 * ‖s‖ * ‖2 * l - s‖) / ‖l‖ ^ 4 := by field
+    _ <= (4 * r * (2.5 * ‖l‖)) / ‖l‖ ^ 4 := by
+      gcongr (4 * ?_ * ?_) / ‖l‖ ^ 4
+      refine (norm_sub_le _ _).trans ?_
+      simp only [Complex.norm_mul, Complex.norm_ofNat]
+      linarith
+    _ = 10 * r / ‖l‖ ^ 3 := by field
+    _ = _ := by norm_cast
 
 Depends on / 依赖: div_sub_div, mul_one, norm_sub_norm_le, norm_sub_rev, one_mul, sq_sub_sq, sub_ad, sub_eq_zero
 -/
@@ -734,7 +792,8 @@ lemma hasSumLocallyUniformly_weierstrassPExcept
     Filter.eventually_atTop.mpr ⟨2 * r, ?_⟩
   rintro _ h s hs l rfl
   split_ifs
-  · simpa using! show 0 <= 10 * r * (‖↑l‖ ^ 3)⁻
+  · simpa using! show 0 <= 10 * r * (‖↑l‖ ^ 3)⁻¹ by positivity
+  · exact weierstrassP_bound r hr s hs l h
 
 中文:
 引理 hasSumLocallyUniformly_weierstrassPExcept
@@ -745,7 +804,8 @@ lemma hasSumLocallyUniformly_weierstrassPExcept
     Filter.eventually_atTop.mpr ⟨2 * r, ?_⟩
   rintro _ h s hs l rfl
   split_ifs
-  · simpa using! show 0 <= 10 * r * (‖↑l‖ ^ 3)⁻
+  · simpa using! show 0 <= 10 * r * (‖↑l‖ ^ 3)⁻¹ by positivity
+  · exact weierstrassP_bound r hr s hs l h
 
 Depends on / 依赖: Filter, Filter.eventually_atTop.mpr, L.hasSumLocallyUniformly_aux, ZLattice, ZLattice.summable_norm_rpow, eventually_atTop, hasSumLocallyUniformly_aux, mul_left, split_ifs, summable_norm_rpow, weierstrassP_bound
 -/
@@ -905,7 +965,7 @@ lemma weierstrassPExcept_add
   rw [weierstrassPExcept]; rw [← Summable.tsum_add]
   · congr with w; split_ifs <;> simp only [zero_add, add_zero, *]
   · exact ⟨_, L.hasSum_weierstrassPExcept _ _⟩
-  · exact summable_of_h
+  · exact summable_of_hasFiniteSupport ((Set.finite_singleton l₀).subset (by simp))
 
 中文:
 引理 weierstrassPExcept_add
@@ -916,7 +976,7 @@ lemma weierstrassPExcept_add
   rw [weierstrassPExcept]; rw [← Summable.tsum_add]
   · congr with w; split_ifs <;> simp only [zero_add, add_zero, *]
   · exact ⟨_, L.hasSum_weierstrassPExcept _ _⟩
-  · exact summable_of_h
+  · exact summable_of_hasFiniteSupport ((Set.finite_singleton l₀).subset (by simp))
 
 Depends on / 依赖: L.hasSum_weierstrassPExcept, L.lattice, Set.finite_singleton, Summable, Summable.tsum_add, add_zero, finite_singleton, hasSum_weierstrassPExcept, lattice, split_ifs, subset, summable_of_hasFiniteSupport, tsum_add, weierstrassPExcept, zero_add
 -/
@@ -1105,7 +1165,9 @@ lemma not_continuousAt_weierstrassP
   apply (NormedField.continuousAt_zpow (n := -2) (x := (0 : Complex))).not.mpr (by simp)
   simpa [Function.comp_def] using!
     (((H.sub ((L.differentiableOn_weierstrassPExcept x).differentiableAt
-      (L.compl_lattice_sdiff_s
+      (L.compl_lattice_sdiff_singleton_mem_nhds x)).continuousAt).add
+      (continuous_const (y := 1 / x ^ 2)).continuousAt).comp_of_eq
+      (continuous_const_add x).continuousAt (add_zero _) :)
 
 中文:
 引理 not_continuousAt_weierstrassP
@@ -1118,7 +1180,9 @@ lemma not_continuousAt_weierstrassP
   apply (NormedField.continuousAt_zpow (n := -2) (x := (0 : Complex))).not.mpr (by simp)
   simpa [Function.comp_def] using!
     (((H.sub ((L.differentiableOn_weierstrassPExcept x).differentiableAt
-      (L.compl_lattice_sdiff_s
+      (L.compl_lattice_sdiff_singleton_mem_nhds x)).continuousAt).add
+      (continuous_const (y := 1 / x ^ 2)).continuousAt).comp_of_eq
+      (continuous_const_add x).continuousAt (add_zero _) :)
 
 Depends on / 依赖: Function, Function.comp_def, H.sub, L.compl_lattice_sdiff_singleton_mem_nhds, L.differentiableOn_weierstrassPExcept, L.weierstrassPExcept_add, NormedField, NormedField.continuousAt_zpow, add_zero, comp_def, comp_of_eq, compl_lattice_sdiff_singleton_mem_nhds, continuousAt, continuousAt_zpow, continuous_const, continuous_const_add, differentiableAt, differentiableOn_weierstrassPExcept, eta_expand, not.mpr
 -/
@@ -1177,7 +1241,18 @@ lemma hasSumLocallyUniformly_derivWeierstrassPExcept
   rintro _ h s hs l rfl
   split_ifs
   · simp
-  have : s != ↑l := by rintro rfl
+  have : s != ↑l := by rintro rfl; exfalso; linarith
+  have : l != 0 := by rintro rfl; simp_all; linarith
+  simp only [Complex.norm_div, norm_neg, Complex.norm_ofNat, norm_pow]
+  rw [Real.rpow_neg (by positivity)]; rw [← div_eq_mul_inv]; rw [div_le_div_iff₀]; rw [norm_sub_rev]
+  · refine LE.le.trans_eq (b := 2 * (2 * ‖l - s‖) ^ 3) ?_ (by ring)
+    norm_cast
+    gcongr
+    refine le_trans ?_ (mul_le_mul le_rfl (norm_sub_norm_le _ _) (by linarith) (by linarith))
+    norm_cast at *
+    linarith
+  · exact pow_pos (by simpa [sub_eq_zero]) _
+  · exact Real.rpow_pos_of_pos (by simpa) _
 
 中文:
 引理 hasSumLocallyUniformly_derivWeierstrassPExcept
@@ -1189,7 +1264,18 @@ lemma hasSumLocallyUniformly_derivWeierstrassPExcept
   rintro _ h s hs l rfl
   split_ifs
   · simp
-  have : s != ↑l := by rintro rfl
+  have : s != ↑l := by rintro rfl; exfalso; linarith
+  have : l != 0 := by rintro rfl; simp_all; linarith
+  simp only [Complex.norm_div, norm_neg, Complex.norm_ofNat, norm_pow]
+  rw [Real.rpow_neg (by positivity)]; rw [← div_eq_mul_inv]; rw [div_le_div_iff₀]; rw [norm_sub_rev]
+  · refine LE.le.trans_eq (b := 2 * (2 * ‖l - s‖) ^ 3) ?_ (by ring)
+    norm_cast
+    gcongr
+    refine le_trans ?_ (mul_le_mul le_rfl (norm_sub_norm_le _ _) (by linarith) (by linarith))
+    norm_cast at *
+    linarith
+  · exact pow_pos (by simpa [sub_eq_zero]) _
+  · exact Real.rpow_pos_of_pos (by simpa) _
 
 Depends on / 依赖: Complex.norm_div, Complex.norm_ofNat, Filter, Filter.eventually_atTop.mpr, L.hasSumLocallyUniformly_aux, Real.rpow_neg, ZLattice, ZLattice.summable_norm_rpow, div_eq_mul_inv, eventually_atTop, hasSumLocallyUniformly_aux, mul_left, norm_div, norm_neg, norm_ofNat, norm_pow, rpow_neg, split_ifs, summable_norm_rpow
 -/
@@ -1250,7 +1336,8 @@ lemma differentiableOn_derivWeierstrassPExcept
   split_ifs
   · simp
   refine .div (by fun_prop) (by fun_prop) fun x hx => ?_
-  have : x != i := by rintro rfl;
+  have : x != i := by rintro rfl; simp_all
+  simpa [sub_eq_zero]
 
 中文:
 引理 differentiableOn_derivWeierstrassPExcept
@@ -1262,7 +1349,8 @@ lemma differentiableOn_derivWeierstrassPExcept
   split_ifs
   · simp
   refine .div (by fun_prop) (by fun_prop) fun x hx => ?_
-  have : x != i := by rintro rfl;
+  have : x != i := by rintro rfl; simp_all
+  simpa [sub_eq_zero]
 
 Depends on / 依赖: L.hasSumLocallyUniformly_derivWeierstrassPExcept, L.isOpen_compl_lattice_sdiff, differentiableOn, fun_prop, fun_sum, hasSumLocallyUniformly_derivWeierstrassPExcept, isOpen_compl_lattice_sdiff, of_forall, split_ifs, sub_eq_zero, tendstoLocallyUniformlyOn, tendstoLocallyUniformlyOn.differentiableOn
 -/
@@ -1289,7 +1377,31 @@ lemma eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept
   · refine .fun_sum fun i hi => ?_
     split_ifs
     · simp
-    refine .sub (.div (by fun_prop) (by fun_prop) fun x hx => ?_) (by fun_pro
+    refine .sub (.div (by fun_prop) (by fun_prop) fun x hx => ?_) (by fun_prop)
+    have : x != i := by rintro rfl; simp_all
+    simpa [sub_eq_zero]
+  · refine (L.hasSumLocallyUniformly_derivWeierstrassPExcept l₀).tendstoLocallyUniformlyOn.congr ?_
+    intro s l hl
+    simp only [Function.comp_apply]
+    rw [deriv_fun_sum]
+    · congr with x
+      split_ifs with hl₁
+      · simp
+      have hl₁ : l - x != 0 := fun e => hl₁ (by
+        obtain rfl := sub_eq_zero.mp e
+        simpa using hl)
+      rw [deriv_fun_sub (.fun_div (by fun_prop) (by fun_prop) (by simpa)) (by fun_prop)]; rw [deriv_const]
+      simp_rw [← zpow_natCast, one_div, ← zpow_neg, Nat.cast_ofNat]
+      rw [deriv_comp_sub_const (f := (· ^ (-2 : Int)))]; rw [deriv_zpow]
+      simp
+      field_simp
+    · intros x hxs
+      split_ifs with hl₁
+      · simp
+      have hl₁ : l - x != 0 := fun e => hl₁ (by
+        obtain rfl := sub_eq_zero.mp e
+        simpa using hl)
+      exact .sub (.div (by fun_prop) (by fun_prop) (by simpa)) (by fun_prop)
 
 中文:
 引理 eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept
@@ -1300,7 +1412,31 @@ lemma eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept
   · refine .fun_sum fun i hi => ?_
     split_ifs
     · simp
-    refine .sub (.div (by fun_prop) (by fun_prop) fun x hx => ?_) (by fun_pro
+    refine .sub (.div (by fun_prop) (by fun_prop) fun x hx => ?_) (by fun_prop)
+    have : x != i := by rintro rfl; simp_all
+    simpa [sub_eq_zero]
+  · refine (L.hasSumLocallyUniformly_derivWeierstrassPExcept l₀).tendstoLocallyUniformlyOn.congr ?_
+    intro s l hl
+    simp only [Function.comp_apply]
+    rw [deriv_fun_sum]
+    · congr with x
+      split_ifs with hl₁
+      · simp
+      have hl₁ : l - x != 0 := fun e => hl₁ (by
+        obtain rfl := sub_eq_zero.mp e
+        simpa using hl)
+      rw [deriv_fun_sub (.fun_div (by fun_prop) (by fun_prop) (by simpa)) (by fun_prop)]; rw [deriv_const]
+      simp_rw [← zpow_natCast, one_div, ← zpow_neg, Nat.cast_ofNat]
+      rw [deriv_comp_sub_const (f := (· ^ (-2 : Int)))]; rw [deriv_zpow]
+      simp
+      field_simp
+    · intros x hxs
+      split_ifs with hl₁
+      · simp
+      have hl₁ : l - x != 0 := fun e => hl₁ (by
+        obtain rfl := sub_eq_zero.mp e
+        simpa using hl)
+      exact .sub (.div (by fun_prop) (by fun_prop) (by simpa)) (by fun_prop)
 
 Depends on / 依赖: Function, Function.comp_apply, L.hasSumLocallyUniformly_derivWeierstrassPExcept, L.hasSumLocallyUniformly_weierstrassPExcept, L.isOpen_compl_lattice_sdiff, comp_apply, deriv_fun, fun_prop, fun_sum, hasSumLocallyUniformly_derivWeierstrassPExcept, hasSumLocallyUniformly_weierstrassPExcept, isOpen_compl_lattice_sdiff, of_forall, split_ifs, sub_eq_zero, tendstoLocallyUniformlyOn, tendstoLocallyUniformlyOn.congr, tendstoLocallyUniformlyOn.deriv, unique
 -/
@@ -1454,7 +1590,21 @@ lemma weierstrassPExcept_add_coe_aux
     ?_ ?_ ?_ ?_ (x := -(l / 2)) ?_ ?_
   · refine (Set.Countable.isConnected_compl_of_one_lt_rank (by simp) ?_).2
     exact .mono sdiff_le (countable_of_Lindelof_of_discrete (X := L.lattice))
-  · refine (L.differentiableOn
+  · refine (L.differentiableOn_weierstrassPExcept l₀).comp (f := (· + l.1)) (by fun_prop) ?_
+    rintro x h₁ ⟨h₂ : x + l in _, h₃ : x + l != l₀⟩
+    exact h₁ ⟨by simpa using sub_mem h₂ l.2, by rintro rfl; simp at h₃⟩
+  · refine .add (L.differentiableOn_weierstrassPExcept _) (by simp)
+  · intro x hx
+    simp only [deriv_add_const', deriv_comp_add_const]
+    rw [L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept]; rw [L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept]; rw [L.derivWeierstrassPExcept_add_coe]
+    · simpa using hx
+    · simp only [Set.mem_compl_iff, Set.mem_sdiff, SetLike.mem_coe, Set.mem_singleton_iff, not_and,
+        Decidable.not_not, eq_sub_iff_add_eq] at hx ⊢
+      exact fun H => hx (by simpa using sub_mem H l.2)
+  · simp [hl]
+  · rw [L.weierstrassPExcept_neg, L.weierstrassPExcept_def ⟨l₀, hl₀⟩,
+      L.weierstrassPExcept_def ⟨_, neg_mem (sub_mem hl₀ l.2)⟩, add_assoc]
+    congr 2 <;> ring
 
 中文:
 引理 weierstrassPExcept_add_coe_aux
@@ -1463,7 +1613,21 @@ lemma weierstrassPExcept_add_coe_aux
     ?_ ?_ ?_ ?_ (x := -(l / 2)) ?_ ?_
   · refine (Set.Countable.isConnected_compl_of_one_lt_rank (by simp) ?_).2
     exact .mono sdiff_le (countable_of_Lindelof_of_discrete (X := L.lattice))
-  · refine (L.differentiableOn
+  · refine (L.differentiableOn_weierstrassPExcept l₀).comp (f := (· + l.1)) (by fun_prop) ?_
+    rintro x h₁ ⟨h₂ : x + l in _, h₃ : x + l != l₀⟩
+    exact h₁ ⟨by simpa using sub_mem h₂ l.2, by rintro rfl; simp at h₃⟩
+  · refine .add (L.differentiableOn_weierstrassPExcept _) (by simp)
+  · intro x hx
+    simp only [deriv_add_const', deriv_comp_add_const]
+    rw [L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept]; rw [L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept]; rw [L.derivWeierstrassPExcept_add_coe]
+    · simpa using hx
+    · simp only [Set.mem_compl_iff, Set.mem_sdiff, SetLike.mem_coe, Set.mem_singleton_iff, not_and,
+        Decidable.not_not, eq_sub_iff_add_eq] at hx ⊢
+      exact fun H => hx (by simpa using sub_mem H l.2)
+  · simp [hl]
+  · rw [L.weierstrassPExcept_neg, L.weierstrassPExcept_def ⟨l₀, hl₀⟩,
+      L.weierstrassPExcept_def ⟨_, neg_mem (sub_mem hl₀ l.2)⟩, add_assoc]
+    congr 2 <;> ring
 -/
 private lemma weierstrassPExcept_add_coe_aux
     (l₀ : Complex) (hl₀ : l₀ in L.lattice) (l : L.lattice) (hl : l.1 / 2 ∉ L.lattice) :
@@ -1501,7 +1665,17 @@ lemma weierstrassP_add_coe_aux
   by_cases hz : z in L.lattice
   · have := L.weierstrassPExcept_add_coe_aux (z + l) (add_mem hz l.2) l hl (x := z) (by simp)
     dsimp at this
-    rw [← L.weierstrassPExcept_add ⟨z + l]; rw [add_mem hz l.2⟩]; rw [this]; rw [← L.weierstrassPExcept_a
+    rw [← L.weierstrassPExcept_add ⟨z + l]; rw [add_mem hz l.2⟩]; rw [this]; rw [← L.weierstrassPExcept_add ⟨z]; rw [hz⟩]
+    simp
+    ring
+  · have := L.weierstrassPExcept_add_coe_aux 0 (zero_mem _) l hl (x := z) (by simp [hz])
+    simp only [zero_sub, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, div_zero,
+      even_two, Even.neg_pow, one_div] at this
+    rw [← L.weierstrassPExcept_add 0]; rw [Submodule.coe_zero]; rw [this]; rw [← L.weierstrassPExcept_add (-l)]
+    simp
+    ring
+
+@[simp]
 
 中文:
 引理 weierstrassP_add_coe_aux
@@ -1511,7 +1685,17 @@ lemma weierstrassP_add_coe_aux
   by_cases hz : z in L.lattice
   · have := L.weierstrassPExcept_add_coe_aux (z + l) (add_mem hz l.2) l hl (x := z) (by simp)
     dsimp at this
-    rw [← L.weierstrassPExcept_add ⟨z + l]; rw [add_mem hz l.2⟩]; rw [this]; rw [← L.weierstrassPExcept_a
+    rw [← L.weierstrassPExcept_add ⟨z + l]; rw [add_mem hz l.2⟩]; rw [this]; rw [← L.weierstrassPExcept_add ⟨z]; rw [hz⟩]
+    simp
+    ring
+  · have := L.weierstrassPExcept_add_coe_aux 0 (zero_mem _) l hl (x := z) (by simp [hz])
+    simp only [zero_sub, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, div_zero,
+      even_two, Even.neg_pow, one_div] at this
+    rw [← L.weierstrassPExcept_add 0]; rw [Submodule.coe_zero]; rw [this]; rw [← L.weierstrassPExcept_add (-l)]
+    simp
+    ring
+
+@[simp]
 -/
 private lemma weierstrassP_add_coe_aux (z : Complex) (l : L.lattice) (hl : l.1 / 2 ∉ L.lattice) :
     ℘[L] (z + l) = ℘[L] z := by
@@ -1544,7 +1728,13 @@ lemma weierstrassP_add_coe
       zero_mem' := by simp
       neg_mem' {z} hz := funext fun i => by conv_lhs => rw [← hz]; simp }
   have : L.lattice <= G.toIntSubmodule := by
-    rw [lattic
+    rw [lattice]; rw [Submodule.span_le]
+    rintro _ (rfl | rfl)
+    · ext i
+      exact L.weierstrassP_add_coe_aux _ ⟨_, L.ω₁_mem_lattice⟩ L.ω₁_div_two_notMem_lattice
+    · ext i
+      exact L.weierstrassP_add_coe_aux _ ⟨_, L.ω₂_mem_lattice⟩ L.ω₂_div_two_notMem_lattice
+  exact congr_fun (this l.2) _
 
 中文:
 引理 weierstrassP_add_coe
@@ -1557,7 +1747,13 @@ lemma weierstrassP_add_coe
       zero_mem' := by simp
       neg_mem' {z} hz := funext fun i => by conv_lhs => rw [← hz]; simp }
   have : L.lattice <= G.toIntSubmodule := by
-    rw [lattic
+    rw [lattice]; rw [Submodule.span_le]
+    rintro _ (rfl | rfl)
+    · ext i
+      exact L.weierstrassP_add_coe_aux _ ⟨_, L.ω₁_mem_lattice⟩ L.ω₁_div_two_notMem_lattice
+    · ext i
+      exact L.weierstrassP_add_coe_aux _ ⟨_, L.ω₂_mem_lattice⟩ L.ω₂_div_two_notMem_lattice
+  exact congr_fun (this l.2) _
 
 Depends on / 依赖: AddSubgroup, G.toIntSubmodule, L.lattice, L.weierstrassP_add_coe_aux, Submodule, Submodule.span_le, add_assoc, add_mem, carrier, conv_lhs, funext_iff, lattice, neg_mem, span_le, toIntSubmodule, weierstrassP_add_coe_aux, zero_mem
 -/
@@ -1710,7 +1906,8 @@ lemma derivWeierstrassPExcept_sub
   · simp [sub_eq_add_neg, neg_div]
   rw [derivWeierstrassP]; rw [derivWeierstrassPExcept]; rw [← Summable.tsum_add]; rw [← tsum_neg]
   · congr with w; split_ifs <;> simp only [zero_add, add_zero, *, neg_div]
- 
+  · exact ⟨_, L.hasSum_derivWeierstrassPExcept _ _⟩
+  · exact summable_of_hasFiniteSupport ((Set.finite_singleton l₀).subset (by simp))
 
 中文:
 引理 derivWeierstrassPExcept_sub
@@ -1720,7 +1917,8 @@ lemma derivWeierstrassPExcept_sub
   · simp [sub_eq_add_neg, neg_div]
   rw [derivWeierstrassP]; rw [derivWeierstrassPExcept]; rw [← Summable.tsum_add]; rw [← tsum_neg]
   · congr with w; split_ifs <;> simp only [zero_add, add_zero, *, neg_div]
- 
+  · exact ⟨_, L.hasSum_derivWeierstrassPExcept _ _⟩
+  · exact summable_of_hasFiniteSupport ((Set.finite_singleton l₀).subset (by simp))
 
 Depends on / 依赖: L.hasSum_derivWeierstrassPExcept, L.lattice, Set.finite_singleton, Summable, Summable.tsum_add, add_zero, derivWeierstrassP, derivWeierstrassPExcept, finite_singleton, hasSum_derivWeierstrassPExcept, lattice, neg_div, split_ifs, sub_eq_add_neg, subset, summable_of_hasFiniteSupport, tsum_add, tsum_neg, zero_add
 -/
@@ -2040,7 +2238,8 @@ lemma deriv_weierstrassP
   · rw [deriv_zero_of_not_differentiableAt, L.derivWeierstrassP_coe ⟨x, hx⟩]
     exact fun H => L.not_continuousAt_weierstrassP x hx H.continuousAt
   · rw [← L.weierstrassPExcept_of_notMem _ L.ω₁_div_two_notMem_lattice,
-      ← L.derivWeierstrassPExcept_of_n
+      ← L.derivWeierstrassPExcept_of_notMem _ L.ω₁_div_two_notMem_lattice,
+      L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept (L.ω₁ / 2) (x := x) (by simp [hx])]
 
 中文:
 引理 deriv_weierstrassP
@@ -2051,7 +2250,8 @@ lemma deriv_weierstrassP
   · rw [deriv_zero_of_not_differentiableAt, L.derivWeierstrassP_coe ⟨x, hx⟩]
     exact fun H => L.not_continuousAt_weierstrassP x hx H.continuousAt
   · rw [← L.weierstrassPExcept_of_notMem _ L.ω₁_div_two_notMem_lattice,
-      ← L.derivWeierstrassPExcept_of_n
+      ← L.derivWeierstrassPExcept_of_notMem _ L.ω₁_div_two_notMem_lattice,
+      L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept (L.ω₁ / 2) (x := x) (by simp [hx])]
 -/
 @[simp] lemma deriv_weierstrassP : deriv ℘[L] = ℘'[L] := by
   ext x
@@ -2165,7 +2365,19 @@ lemma coeff_weierstrassPExceptSeries
   | succ i =>
     split_ifs with hl₀
     · trans (i + 2) * (L.sumInvPow x (i + 3) -
-        ∑' l : L.lattice, if l = ⟨l₀, hl₀⟩ then (l₀ - x) ^ (-↑(i + 3) : In
+        ∑' l : L.lattice, if l = ⟨l₀, hl₀⟩ then (l₀ - x) ^ (-↑(i + 3) : Int) else 0)
+      · rw [FormalMultilinearSeries.coeff_ofScalars, tsum_ite_eq, zpow_neg, zpow_natCast]
+        simp [add_assoc, one_add_one_eq_two]
+      · rw [sumInvPow, ← (hasSum_sumInvPow _ _ (by linarith)).summable.tsum_sub, ← tsum_mul_left]
+        · simp_rw [Subtype.ext_iff, zpow_neg]
+          congr with l
+          split_ifs with e
+          · simp only [e, zpow_natCast, sub_self, mul_zero]
+          · dsimp; norm_cast; ring
+        · exact summable_of_hasFiniteSupport ((Set.finite_singleton ⟨l₀, hl₀⟩).subset (by simp))
+    · have h₁ (l : L.lattice) : l.1 != l₀ := fun e => hl₀ (e ▸ l.2)
+      simp [h₁, tsum_mul_left, sumInvPow, add_assoc,
+        one_add_one_eq_two, ← zpow_natCast, -neg_add_rev]
 
 中文:
 引理 coeff_weierstrassPExceptSeries
@@ -2177,7 +2389,19 @@ lemma coeff_weierstrassPExceptSeries
   | succ i =>
     split_ifs with hl₀
     · trans (i + 2) * (L.sumInvPow x (i + 3) -
-        ∑' l : L.lattice, if l = ⟨l₀, hl₀⟩ then (l₀ - x) ^ (-↑(i + 3) : In
+        ∑' l : L.lattice, if l = ⟨l₀, hl₀⟩ then (l₀ - x) ^ (-↑(i + 3) : Int) else 0)
+      · rw [FormalMultilinearSeries.coeff_ofScalars, tsum_ite_eq, zpow_neg, zpow_natCast]
+        simp [add_assoc, one_add_one_eq_two]
+      · rw [sumInvPow, ← (hasSum_sumInvPow _ _ (by linarith)).summable.tsum_sub, ← tsum_mul_left]
+        · simp_rw [Subtype.ext_iff, zpow_neg]
+          congr with l
+          split_ifs with e
+          · simp only [e, zpow_natCast, sub_self, mul_zero]
+          · dsimp; norm_cast; ring
+        · exact summable_of_hasFiniteSupport ((Set.finite_singleton ⟨l₀, hl₀⟩).subset (by simp))
+    · have h₁ (l : L.lattice) : l.1 != l₀ := fun e => hl₀ (e ▸ l.2)
+      simp [h₁, tsum_mul_left, sumInvPow, add_assoc,
+        one_add_one_eq_two, ← zpow_natCast, -neg_add_rev]
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.coeff_ofScalars, L.lattice, L.sumInvPow, add_assoc, coeff_ofScalars, hasSum_sumInvPow, lattice, one_add_one_eq_two, split_ifs, sub_sq_comm, sumInvPow, summable, summable.tsum_sub, tsum_ite_eq, tsum_mul_left, tsum_sub, weierstrassPExcept, weierstrassPExceptSeries, weierstrassPExceptSummand
 -/
@@ -2218,7 +2442,49 @@ lemma summable_weierstrassPExceptSummand
   -- We first find a `κ > 1`,
   -- such that the ball centered at `x` with radius `κ * ‖z - x‖` does not touch `L`.
   obtain ⟨κ, hκ, hκ'⟩ : exists κ : Real, 1 < κ ∧ forall l : L.lattice, l.1 != l₀ -> ‖z - x‖ * κ < ‖l - x‖ := by
-    obtain ⟨κ, hκ, hκ'⟩ := Metric.isOpen_iff.mp ((continuous_mul_cons
+    obtain ⟨κ, hκ, hκ'⟩ := Metric.isOpen_iff.mp ((continuous_mul_const ‖z - x‖).isOpen_preimage _
+      (isClosedMap_dist x _
+      (L.isClosed_of_subset_lattice (Set.sdiff_subset (t := {l₀})))).upperClosure.isOpen_compl) 1
+      (by simpa [Complex.dist_eq, @forall_comm Real, norm_sub_rev x] using hx)
+    refine ⟨κ / 2 + 1, by simpa, fun l hl => ?_⟩
+    have : forall l in L.lattice, l != l₀ -> (κ / 2 + 1) * ‖z - x‖ < dist x l := by
+      simpa using @hκ' (κ / 2 + 1) (by simp [div_lt_iff₀, abs_eq_self.mpr hκ.le, hκ])
+    simpa only [Complex.dist_eq, norm_sub_rev x, mul_comm] using this _ l.2 hl
+  -- We single out the degree zero term via this equiv.
+  let e : Nat × L.lattice ≃ L.lattice oplus (Nat × L.lattice) :=
+    (Equiv.prodCongrLeft fun _ => (Denumerable.eqv (Option Nat)).symm).trans optionProdEquiv
+  rw [← e.symm.summable_iff]
+  apply Summable.sum
+  · -- for the degree zero term, this is the usual summability of the definition of `℘`.
+    simpa [weierstrassPExceptSummand, e, Function.comp_def, Function.uncurry, sub_sq_comm x,
+      Denumerable.eqv] using! (L.hasSum_weierstrassPExcept l₀ x).summable
+  · -- for the remaining terms, we bound it by `(i + 2) κ⁻ⁱ * ‖l - x‖⁻³ * ‖z - x‖`.
+    dsimp [e, Function.comp_def, Function.uncurry_def, Denumerable.eqv, weierstrassPExceptSummand]
+    have H₁ : Summable fun i : Nat => ((i + 2) * κ ^ (-i : Int)) := by
+      have : |κ⁻¹| < 1 := by grind [abs_inv, inv_lt_one_iff₀]
+      simpa [mul_comm] using ((Real.hasFPowerSeriesOnBall_ofScalars_mul_add_zero 1 2).hasSum
+        (y := κ⁻¹) (by simpa [enorm_eq_nnnorm])).summable
+    have H₂ : Summable fun l : L.lattice => ‖l - x‖ ^ (-3 : Int) * ‖z - x‖ :=
+      (ZLattice.summable_norm_sub_zpow _ _ (by simp) _).mul_right _
+    refine (H₁.mul_of_nonneg H₂ (by intro; positivity) (by intro; positivity)).of_norm_bounded ?_
+    intro p
+    split_ifs with hp
+    · simp only [zero_mul, norm_zero, zpow_neg, zpow_natCast, Int.reduceNeg]; positivity
+    have hpx : ‖p.2 - x‖ != 0 := fun h => by
+      obtain rfl : p.2 = x := by simpa [sub_eq_zero] using h
+      simpa [(norm_nonneg _).not_gt] using hx p.2 hp
+    obtain rfl | hxz := eq_or_ne z x
+    · simp
+    calc
+      _ = ‖(p.1 + 2 : Complex)‖ * ‖p.2 - x‖ ^ (-3 - p.1 : Int) * ‖z - x‖ ^ (p.1 + 1) := by
+        norm_num; ring_nf; simp
+      _ = ‖(p.1 + 2 : Complex)‖ * ((‖↑p.2 - x‖ / ‖z - x‖) ^ p.1)⁻¹ * ((‖p.2 - x‖ ^ 3)⁻¹ * ‖z - x‖) := by
+        simp [hpx, zpow_sub₀, div_pow]; field
+      _ <= (p.1 + 2) * (κ ^ p.1)⁻¹ * ((‖p.2 - x‖ ^ 3)⁻¹ * ‖z - x‖) := by
+        gcongr
+        · norm_cast
+        · exact (le_div_iff₀ (by simpa [sub_eq_zero])).mpr ((mul_comm _ _).trans_le (hκ' p.2 hp).le)
+      _ = _ := by simp [zpow_ofNat]
 
 中文:
 引理 summable_weierstrassPExceptSummand
@@ -2227,7 +2493,49 @@ lemma summable_weierstrassPExceptSummand
   -- We first find a `κ > 1`,
   -- such that the ball centered at `x` with radius `κ * ‖z - x‖` does not touch `L`.
   obtain ⟨κ, hκ, hκ'⟩ : exists κ : Real, 1 < κ ∧ forall l : L.lattice, l.1 != l₀ -> ‖z - x‖ * κ < ‖l - x‖ := by
-    obtain ⟨κ, hκ, hκ'⟩ := Metric.isOpen_iff.mp ((continuous_mul_cons
+    obtain ⟨κ, hκ, hκ'⟩ := Metric.isOpen_iff.mp ((continuous_mul_const ‖z - x‖).isOpen_preimage _
+      (isClosedMap_dist x _
+      (L.isClosed_of_subset_lattice (Set.sdiff_subset (t := {l₀})))).upperClosure.isOpen_compl) 1
+      (by simpa [Complex.dist_eq, @forall_comm Real, norm_sub_rev x] using hx)
+    refine ⟨κ / 2 + 1, by simpa, fun l hl => ?_⟩
+    have : forall l in L.lattice, l != l₀ -> (κ / 2 + 1) * ‖z - x‖ < dist x l := by
+      simpa using @hκ' (κ / 2 + 1) (by simp [div_lt_iff₀, abs_eq_self.mpr hκ.le, hκ])
+    simpa only [Complex.dist_eq, norm_sub_rev x, mul_comm] using this _ l.2 hl
+  -- We single out the degree zero term via this equiv.
+  let e : Nat × L.lattice ≃ L.lattice oplus (Nat × L.lattice) :=
+    (Equiv.prodCongrLeft fun _ => (Denumerable.eqv (Option Nat)).symm).trans optionProdEquiv
+  rw [← e.symm.summable_iff]
+  apply Summable.sum
+  · -- for the degree zero term, this is the usual summability of the definition of `℘`.
+    simpa [weierstrassPExceptSummand, e, Function.comp_def, Function.uncurry, sub_sq_comm x,
+      Denumerable.eqv] using! (L.hasSum_weierstrassPExcept l₀ x).summable
+  · -- for the remaining terms, we bound it by `(i + 2) κ⁻ⁱ * ‖l - x‖⁻³ * ‖z - x‖`.
+    dsimp [e, Function.comp_def, Function.uncurry_def, Denumerable.eqv, weierstrassPExceptSummand]
+    have H₁ : Summable fun i : Nat => ((i + 2) * κ ^ (-i : Int)) := by
+      have : |κ⁻¹| < 1 := by grind [abs_inv, inv_lt_one_iff₀]
+      simpa [mul_comm] using ((Real.hasFPowerSeriesOnBall_ofScalars_mul_add_zero 1 2).hasSum
+        (y := κ⁻¹) (by simpa [enorm_eq_nnnorm])).summable
+    have H₂ : Summable fun l : L.lattice => ‖l - x‖ ^ (-3 : Int) * ‖z - x‖ :=
+      (ZLattice.summable_norm_sub_zpow _ _ (by simp) _).mul_right _
+    refine (H₁.mul_of_nonneg H₂ (by intro; positivity) (by intro; positivity)).of_norm_bounded ?_
+    intro p
+    split_ifs with hp
+    · simp only [zero_mul, norm_zero, zpow_neg, zpow_natCast, Int.reduceNeg]; positivity
+    have hpx : ‖p.2 - x‖ != 0 := fun h => by
+      obtain rfl : p.2 = x := by simpa [sub_eq_zero] using h
+      simpa [(norm_nonneg _).not_gt] using hx p.2 hp
+    obtain rfl | hxz := eq_or_ne z x
+    · simp
+    calc
+      _ = ‖(p.1 + 2 : Complex)‖ * ‖p.2 - x‖ ^ (-3 - p.1 : Int) * ‖z - x‖ ^ (p.1 + 1) := by
+        norm_num; ring_nf; simp
+      _ = ‖(p.1 + 2 : Complex)‖ * ((‖↑p.2 - x‖ / ‖z - x‖) ^ p.1)⁻¹ * ((‖p.2 - x‖ ^ 3)⁻¹ * ‖z - x‖) := by
+        simp [hpx, zpow_sub₀, div_pow]; field
+      _ <= (p.1 + 2) * (κ ^ p.1)⁻¹ * ((‖p.2 - x‖ ^ 3)⁻¹ * ‖z - x‖) := by
+        gcongr
+        · norm_cast
+        · exact (le_div_iff₀ (by simpa [sub_eq_zero])).mpr ((mul_comm _ _).trans_le (hκ' p.2 hp).le)
+      _ = _ := by simp [zpow_ofNat]
 -/
 lemma summable_weierstrassPExceptSummand (l₀ z x : Complex)
     (hx : forall l : L.lattice, l.1 != l₀ -> ‖z - x‖ < ‖l - x‖) :
@@ -2292,7 +2600,14 @@ lemma weierstrassPExcept_eq_tsum
     congr 1 with l
     split_ifs with h
     · simp
-    simpa [mul_comm] using ((Complex.one_div_sub_sq_sub_one
+    simpa [mul_comm] using ((Complex.one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero l x
+      (by simpa [sub_eq_zero] using (norm_nonneg _).trans_lt (hx l h))).hasSum (y := z - x)
+      (by simpa [enorm_eq_nnnorm] using hx _ h)).tsum_eq.symm
+  trans ∑' (l : ↥L.lattice) (i : Nat), L.weierstrassPExceptSummand l₀ x i l * (z - x) ^ i
+  · simp only [weierstrassPExceptSummand, ite_mul, zero_mul]
+  · simp_rw [coeff_weierstrassPExceptSeries, ← tsum_mul_right]
+    apply Summable.tsum_comm
+    exact L.summable_weierstrassPExceptSummand l₀ z x hx
 
 中文:
 引理 weierstrassPExcept_eq_tsum
@@ -2304,7 +2619,14 @@ lemma weierstrassPExcept_eq_tsum
     congr 1 with l
     split_ifs with h
     · simp
-    simpa [mul_comm] using ((Complex.one_div_sub_sq_sub_one
+    simpa [mul_comm] using ((Complex.one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero l x
+      (by simpa [sub_eq_zero] using (norm_nonneg _).trans_lt (hx l h))).hasSum (y := z - x)
+      (by simpa [enorm_eq_nnnorm] using hx _ h)).tsum_eq.symm
+  trans ∑' (l : ↥L.lattice) (i : Nat), L.weierstrassPExceptSummand l₀ x i l * (z - x) ^ i
+  · simp only [weierstrassPExceptSummand, ite_mul, zero_mul]
+  · simp_rw [coeff_weierstrassPExceptSeries, ← tsum_mul_right]
+    apply Summable.tsum_comm
+    exact L.summable_weierstrassPExceptSummand l₀ z x hx
 
 Depends on / 依赖: Complex.one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero, L.lattice, L.weiers, casesOn, enorm_eq_nnnorm, hasSum, i.casesOn, lattice, mul_comm, norm_nonneg, one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero, split_ifs, sub_eq_zero, trans_lt, tsum_eq, tsum_eq.symm, weiers, weierstrassPExcept
 -/
@@ -2370,7 +2692,18 @@ lemma hasFPowerSeriesOnBall_weierstrassPExcept
     · simp
     · simp
     · intro l hl
-      simpa [-Metric.mem_closedBal
+      simpa [-Metric.mem_closedBall, mem_closedBall_iff_norm]
+        using Set.subset_compl_comm.mp hr ⟨l.2, hl⟩
+  · exact ENNReal.coe_pos.mpr hr0
+  · intro z hz
+    replace hz : ‖z‖ < r := by simpa using hz
+    have := L.weierstrassPExceptSeries_hasSum l₀ (x + z) x
+    simp only [add_sub_cancel_left] at this
+    have A (l : ↥L.lattice) (hl : ↑l != l₀) : r < ‖↑l - x‖ := by
+      simpa [-Metric.mem_closedBall, mem_closedBall_iff_norm] using
+        Set.subset_compl_comm.mp hr ⟨l.2, hl⟩
+    convert! this (fun l hl => hz.trans (A l hl)) with i
+    rw [weierstrassPExceptSeries]; rw [FormalMultilinearSeries.ofScalars_apply_eq]; rw [FormalMultilinearSeries.coeff_ofScalars]; rw [smul_eq_mul]
 
 中文:
 引理 hasFPowerSeriesOnBall_weierstrassPExcept
@@ -2385,7 +2718,18 @@ lemma hasFPowerSeriesOnBall_weierstrassPExcept
     · simp
     · simp
     · intro l hl
-      simpa [-Metric.mem_closedBal
+      simpa [-Metric.mem_closedBall, mem_closedBall_iff_norm]
+        using Set.subset_compl_comm.mp hr ⟨l.2, hl⟩
+  · exact ENNReal.coe_pos.mpr hr0
+  · intro z hz
+    replace hz : ‖z‖ < r := by simpa using hz
+    have := L.weierstrassPExceptSeries_hasSum l₀ (x + z) x
+    simp only [add_sub_cancel_left] at this
+    have A (l : ↥L.lattice) (hl : ↑l != l₀) : r < ‖↑l - x‖ := by
+      simpa [-Metric.mem_closedBall, mem_closedBall_iff_norm] using
+        Set.subset_compl_comm.mp hr ⟨l.2, hl⟩
+    convert! this (fun l hl => hz.trans (A l hl)) with i
+    rw [weierstrassPExceptSeries]; rw [FormalMultilinearSeries.ofScalars_apply_eq]; rw [FormalMultilinearSeries.coeff_ofScalars]; rw [smul_eq_mul]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_pos.mpr, FormalMultilinearSeries, FormalMultilinearSeries.le_radius_of_tendsto, L.weierstrassPExceptSeries_hasSum, Metric, Metric.mem_closedBall, Set.subset_compl_comm.mp, add_sub_cancel_left, coe_pos, convert, le_radius_of_tendsto, mem_closedBall, mem_closedBall_iff_norm, replace, subset_compl_comm, summable, summable.tendsto_atTop_zero, tendsto_atTop_zero, tendsto_norm
 -/
@@ -2502,7 +2846,8 @@ lemma iteratedDeriv_weierstrassPExcept_self
   rw [← div_mul_cancel₀ (a := iteratedDeriv _ _ _) (b := ↑n !) (by simp)]; rw [← eq_div_iff_mul_eq (by simp)]
   trans if n = 0 then ℘[L - l] l else (n + 1) * L.sumInvPow l (n + 2)
   · simpa using congr($((L.analyticAt_weierstrassPExcept l).hasFPowerSeriesAt
-.eq_formalMultilinearSeries (L.hasFPowe
+.eq_formalMultilinearSeries (L.hasFPowerSeriesAt_weierstrassPExcept l)).coeff n)
+  · cases n <;> simp [Nat.factorial_succ]; field
 
 中文:
 引理 iteratedDeriv_weierstrassPExcept_self
@@ -2511,7 +2856,8 @@ lemma iteratedDeriv_weierstrassPExcept_self
   rw [← div_mul_cancel₀ (a := iteratedDeriv _ _ _) (b := ↑n !) (by simp)]; rw [← eq_div_iff_mul_eq (by simp)]
   trans if n = 0 then ℘[L - l] l else (n + 1) * L.sumInvPow l (n + 2)
   · simpa using congr($((L.analyticAt_weierstrassPExcept l).hasFPowerSeriesAt
-.eq_formalMultilinearSeries (L.hasFPowe
+.eq_formalMultilinearSeries (L.hasFPowerSeriesAt_weierstrassPExcept l)).coeff n)
+  · cases n <;> simp [Nat.factorial_succ]; field
 
 Depends on / 依赖: L.analyticAt_weierstrassPExcept, L.hasFPowerSeriesAt_weierstrassPExcept, L.sumInvPow, Nat.factorial_succ, analyticAt_weierstrassPExcept, eq_div_iff_mul_eq, eq_formalMultilinearSeries, factorial_succ, hasFPowerSeriesAt, hasFPowerSeriesAt_weierstrassPExcept, iteratedDeriv, sumInvPow
 -/
@@ -2564,7 +2910,9 @@ lemma hasFPowerSeriesOnBall_derivWeierstrassPExcept
   · have := (L.hasFPowerSeriesOnBall_weierstrassPExcept l₀ x r hr0 hr).fderiv
     convert! (ContinuousLinearMap.apply Complex Complex (1 : Complex)).comp_hasFPowerSeriesOnBall this
     ext n
-
+    simp [weierstrassPExceptSeries, derivWeierstrassPExceptSeries]
+    ring
+  · simpa using Metric.ball_subset_closedBall
 
 中文:
 引理 hasFPowerSeriesOnBall_derivWeierstrassPExcept
@@ -2575,7 +2923,9 @@ lemma hasFPowerSeriesOnBall_derivWeierstrassPExcept
   · have := (L.hasFPowerSeriesOnBall_weierstrassPExcept l₀ x r hr0 hr).fderiv
     convert! (ContinuousLinearMap.apply Complex Complex (1 : Complex)).comp_hasFPowerSeriesOnBall this
     ext n
-
+    simp [weierstrassPExceptSeries, derivWeierstrassPExceptSeries]
+    ring
+  · simpa using Metric.ball_subset_closedBall
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.apply, L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept, L.hasFPowerSeriesOnBall_weierstrassPExcept, Metric, Metric.ball_subset_closedBall, ball_subset_closedBall, comp_hasFPowerSeriesOnBall, convert, derivWeierstrassPExceptSeries, eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept, fderiv, hasFPowerSeriesOnBall_weierstrassPExcept, weierstrassPExceptSeries
 -/
@@ -2675,7 +3025,10 @@ lemma iteratedDeriv_derivWeierstrassPExcept_self
   have : iteratedDeriv n ℘'[L - l] l / n ! = (↑n + 1) * (↑n + 2) * L.sumInvPow l (n + 3) := by
     simpa using congr($((L.analyticAt_derivWeierstrassPExcept l).hasFPowerSeriesAt
 .eq_formalMultilinearSeries (L.hasFPowerSeriesAt_derivWeierstrassPExcept l)).coeff n)
-  simp [div_eq_iff, Nat.factorial
+  simp [div_eq_iff, Nat.factorial_ne_zero, Nat.factorial_succ] at this ⊢
+  grind
+
+@[simp]
 
 中文:
 引理 iteratedDeriv_derivWeierstrassPExcept_self
@@ -2684,7 +3037,10 @@ lemma iteratedDeriv_derivWeierstrassPExcept_self
   have : iteratedDeriv n ℘'[L - l] l / n ! = (↑n + 1) * (↑n + 2) * L.sumInvPow l (n + 3) := by
     simpa using congr($((L.analyticAt_derivWeierstrassPExcept l).hasFPowerSeriesAt
 .eq_formalMultilinearSeries (L.hasFPowerSeriesAt_derivWeierstrassPExcept l)).coeff n)
-  simp [div_eq_iff, Nat.factorial
+  simp [div_eq_iff, Nat.factorial_ne_zero, Nat.factorial_succ] at this ⊢
+  grind
+
+@[simp]
 
 Depends on / 依赖: L.analyticAt_derivWeierstrassPExcept, L.hasFPowerSeriesAt_derivWeierstrassPExcept, L.sumInvPow, Nat.factorial_ne_zero, Nat.factorial_succ, analyticAt_derivWeierstrassPExcept, div_eq_iff, eq_formalMultilinearSeries, factorial_ne_zero, factorial_succ, hasFPowerSeriesAt, hasFPowerSeriesAt_derivWeierstrassPExcept, iteratedDeriv, sumInvPow
 -/
@@ -3056,7 +3412,16 @@ lemma order_weierstrassP
   · rw [meromorphicOrderAt_eq_int_iff (L.meromorphic_weierstrassP l₀)]
     refine ⟨fun z => (z - l₀) ^ 2 * ℘[L - l₀] z + 1 - (z - l₀) ^ 2 / l₀ ^ 2, ?_, ?_, ?_⟩
     · have : AnalyticAt Complex ℘[L - l₀] l₀ := L.analyticOnNhd_weierstrassPExcept l₀ l₀ (by simp)
-      suffices Ana
+      suffices AnalyticAt Complex (fun z => (z - l₀) ^ 2 / l₀ ^ 2) l₀ by fun_prop
+      by_cases hl₀ : l₀ = 0
+      · simpa [hl₀] using analyticAt_const
+      · fun_prop (disch := simpa)
+    · simp
+    · filter_upwards [self_mem_nhdsWithin] with z (hz : _ != _)
+      have : (z - l₀) ^ 2 != 0 := by simpa [sub_eq_zero]
+      simp [← L.ite_eq_one_sub_sq_mul_weierstrassP l₀ h,
+        if_neg hz, inv_mul_cancel_left₀ this, zpow_ofNat]
+  · norm_num
 
 中文:
 引理 order_weierstrassP
@@ -3066,7 +3431,16 @@ lemma order_weierstrassP
   · rw [meromorphicOrderAt_eq_int_iff (L.meromorphic_weierstrassP l₀)]
     refine ⟨fun z => (z - l₀) ^ 2 * ℘[L - l₀] z + 1 - (z - l₀) ^ 2 / l₀ ^ 2, ?_, ?_, ?_⟩
     · have : AnalyticAt Complex ℘[L - l₀] l₀ := L.analyticOnNhd_weierstrassPExcept l₀ l₀ (by simp)
-      suffices Ana
+      suffices AnalyticAt Complex (fun z => (z - l₀) ^ 2 / l₀ ^ 2) l₀ by fun_prop
+      by_cases hl₀ : l₀ = 0
+      · simpa [hl₀] using analyticAt_const
+      · fun_prop (disch := simpa)
+    · simp
+    · filter_upwards [self_mem_nhdsWithin] with z (hz : _ != _)
+      have : (z - l₀) ^ 2 != 0 := by simpa [sub_eq_zero]
+      simp [← L.ite_eq_one_sub_sq_mul_weierstrassP l₀ h,
+        if_neg hz, inv_mul_cancel_left₀ this, zpow_ofNat]
+  · norm_num
 
 Depends on / 依赖: AnalyticAt, L.analyticOnNhd_weierstrassPExcept, L.meromorphic_weierstrassP, analyticAt_const, analyticOnNhd_weierstrassPExcept, filter_upwards, fun_prop, meromorphicOrderAt_eq_int_iff, meromorphic_weierstrassP, self_mem_nhdsWithin
 -/
@@ -3226,7 +3600,7 @@ lemma meromorphic_relation
   refine fun z => (this _).congr ?_
   filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds
     (L.compl_lattice_sdiff_singleton_mem_nhds _)] with w hw hw'
-  rw [relation]; rw [if_neg (by si
+  rw [relation]; rw [if_neg (by simp_all)]
 
 中文:
 引理 meromorphic_relation
@@ -3236,7 +3610,7 @@ lemma meromorphic_relation
   refine fun z => (this _).congr ?_
   filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds
     (L.compl_lattice_sdiff_singleton_mem_nhds _)] with w hw hw'
-  rw [relation]; rw [if_neg (by si
+  rw [relation]; rw [if_neg (by simp_all)]
 -/
 private lemma meromorphic_relation : Meromorphic L.relation := by
   have : Meromorphic fun z => ℘'[L] z ^ 2 - 4 * ℘[L] z ^ 3 + L.g₂ * ℘[L] z + L.g₃ := by fun_prop
@@ -3256,7 +3630,11 @@ lemma relation_mul_id_pow_six_eventuallyEq
   · simp [hz0, relation]; norm_num
   replace hz : z ∉ L.lattice := by simp_all
   simp only [Pi.mul_apply, Pi.pow_apply, relation, ↓reduceIte, hz,
-    ← ZeroMemClass.coe_zero L.lattice, L.derivWeierstras
+    ← ZeroMemClass.coe_zero L.lattice, L.derivWeierstrassPExcept_def, L.weierstrassPExcept_def]
+  simp
+  field
+
+@[local fun_prop]
 
 中文:
 引理 relation_mul_id_pow_six_eventuallyEq
@@ -3266,7 +3644,11 @@ lemma relation_mul_id_pow_six_eventuallyEq
   · simp [hz0, relation]; norm_num
   replace hz : z ∉ L.lattice := by simp_all
   simp only [Pi.mul_apply, Pi.pow_apply, relation, ↓reduceIte, hz,
-    ← ZeroMemClass.coe_zero L.lattice, L.derivWeierstras
+    ← ZeroMemClass.coe_zero L.lattice, L.derivWeierstrassPExcept_def, L.weierstrassPExcept_def]
+  simp
+  field
+
+@[local fun_prop]
 -/
 private lemma relation_mul_id_pow_six_eventuallyEq :
     (L.relation * id ^ 6) =ᶠ[nhds 0] fun z =>
@@ -3339,7 +3721,10 @@ lemma iteratedDeriv_six_relation_mul_id_pow_six
   simp_rw [pow_succ (_ + _), pow_succ (_ - _), pow_zero, one_mul]
   simp (discharger := fun_prop) only [iteratedDeriv_fun_add, iteratedDeriv_fun_sub,
     iteratedDeriv_fun_mul, iteratedDeriv_const, iteratedDeriv_fun_pow_zero,
-    iter
+    iteratedDeriv_derivWeierstrassPExcept_self, iteratedDeriv_weierstrassPExcept_self]
+  simp [Finset.sum_range_succ, L.G_eq_zero_of_odd 3 (by decide), g₃,
+    show Nat.choose 6 4 = 15 by rfl, show Nat.choose 6 3 = 20 by rfl]
+  ring
 
 中文:
 引理 iteratedDeriv_six_relation_mul_id_pow_six
@@ -3348,7 +3733,10 @@ lemma iteratedDeriv_six_relation_mul_id_pow_six
   simp_rw [pow_succ (_ + _), pow_succ (_ - _), pow_zero, one_mul]
   simp (discharger := fun_prop) only [iteratedDeriv_fun_add, iteratedDeriv_fun_sub,
     iteratedDeriv_fun_mul, iteratedDeriv_const, iteratedDeriv_fun_pow_zero,
-    iter
+    iteratedDeriv_derivWeierstrassPExcept_self, iteratedDeriv_weierstrassPExcept_self]
+  simp [Finset.sum_range_succ, L.G_eq_zero_of_odd 3 (by decide), g₃,
+    show Nat.choose 6 4 = 15 by rfl, show Nat.choose 6 3 = 20 by rfl]
+  ring
 -/
 private lemma iteratedDeriv_six_relation_mul_id_pow_six :
     iteratedDeriv 6 (L.relation * id ^ 6) 0 = 0 := by
@@ -3372,7 +3760,28 @@ lemma analyticAt_relation_zero
   refine .of_meromorphicOrderAt_pos (one_pos.trans_le ?_) (by simp [relation])
   suffices 7 <= meromorphicOrderAt (L.relation * id ^ 6) 0 by
     rw [meromorphicOrderAt_mul (by fun_prop) (by fun_prop)]; rw [meromorphicOrderAt_pow (by fun_prop)] at this
-    rw [← WithTop.add_le_add_iff_right (z := 
+    rw [← WithTop.add_le_add_iff_right (z := 6) (by simp)]
+    simpa [-add_le_add_iff_left_of_ne_top] using! this
+  rw [AnalyticAt.meromorphicOrderAt_eq (by fun_prop)]
+  refine ENat.monotone_map_iff.mpr Nat.mono_cast
+    ((natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero (by fun_prop)).mpr fun i hi₁ => ?_)
+  by_cases hi₂ : Odd i
+  · simpa [← CharZero.eq_neg_self_iff, hi₂, (show Even 6 by decide).neg_pow] using!
+      (iteratedDeriv_comp_neg i (L.relation * id ^ 6) 0 :)
+  by_cases hi₃ : i = 0
+  · simp [hi₃]
+  by_cases hi₄ : i = 6
+  · exact hi₄ ▸ L.iteratedDeriv_six_relation_mul_id_pow_six
+  rw [L.relation_mul_id_pow_six_eventuallyEq.iteratedDeriv_eq]
+  simp_rw [pow_succ (_ + _), pow_succ (_ - _), pow_zero, one_mul]
+  simp (discharger := fun_prop) only [iteratedDeriv_fun_add, iteratedDeriv_fun_sub,
+    iteratedDeriv_fun_mul, iteratedDeriv_const, iteratedDeriv_fun_pow_zero,
+    iteratedDeriv_derivWeierstrassPExcept_self, iteratedDeriv_weierstrassPExcept_self]
+  obtain rfl | rfl : i = 2 ∨ i = 4 := by grind
+  · simp [Finset.sum_range_succ]
+  · simp [Finset.sum_range_succ, show Nat.choose 4 2 = 6 by rfl, g₂]; ring
+
+@[local simp]
 
 中文:
 引理 analyticAt_relation_zero
@@ -3381,7 +3790,28 @@ lemma analyticAt_relation_zero
   refine .of_meromorphicOrderAt_pos (one_pos.trans_le ?_) (by simp [relation])
   suffices 7 <= meromorphicOrderAt (L.relation * id ^ 6) 0 by
     rw [meromorphicOrderAt_mul (by fun_prop) (by fun_prop)]; rw [meromorphicOrderAt_pow (by fun_prop)] at this
-    rw [← WithTop.add_le_add_iff_right (z := 
+    rw [← WithTop.add_le_add_iff_right (z := 6) (by simp)]
+    simpa [-add_le_add_iff_left_of_ne_top] using! this
+  rw [AnalyticAt.meromorphicOrderAt_eq (by fun_prop)]
+  refine ENat.monotone_map_iff.mpr Nat.mono_cast
+    ((natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero (by fun_prop)).mpr fun i hi₁ => ?_)
+  by_cases hi₂ : Odd i
+  · simpa [← CharZero.eq_neg_self_iff, hi₂, (show Even 6 by decide).neg_pow] using!
+      (iteratedDeriv_comp_neg i (L.relation * id ^ 6) 0 :)
+  by_cases hi₃ : i = 0
+  · simp [hi₃]
+  by_cases hi₄ : i = 6
+  · exact hi₄ ▸ L.iteratedDeriv_six_relation_mul_id_pow_six
+  rw [L.relation_mul_id_pow_six_eventuallyEq.iteratedDeriv_eq]
+  simp_rw [pow_succ (_ + _), pow_succ (_ - _), pow_zero, one_mul]
+  simp (discharger := fun_prop) only [iteratedDeriv_fun_add, iteratedDeriv_fun_sub,
+    iteratedDeriv_fun_mul, iteratedDeriv_const, iteratedDeriv_fun_pow_zero,
+    iteratedDeriv_derivWeierstrassPExcept_self, iteratedDeriv_weierstrassPExcept_self]
+  obtain rfl | rfl : i = 2 ∨ i = 4 := by grind
+  · simp [Finset.sum_range_succ]
+  · simp [Finset.sum_range_succ, show Nat.choose 4 2 = 6 by rfl, g₂]; ring
+
+@[local simp]
 -/
 private lemma analyticAt_relation_zero : AnalyticAt Complex L.relation 0 := by
   refine .of_meromorphicOrderAt_pos (one_pos.trans_le ?_) (by simp [relation])
@@ -3475,7 +3905,13 @@ lemma analyticAt_relation
     convert! this.comp (f := (· - x.1)) (by fun_prop)
     ext a
     simp
-  · have : AnalyticAt Complex (fun z => ℘'[L] z ^ 2 - 4 * ℘[L] z ^ 3 + L.g₂ * ℘[L] z + L.
+  · have : AnalyticAt Complex (fun z => ℘'[L] z ^ 2 - 4 * ℘[L] z ^ 3 + L.g₂ * ℘[L] z + L.g₃) x := by
+      have := L.analyticOnNhd_derivWeierstrassP _ hx
+      have := L.analyticOnNhd_weierstrassP _ hx
+      fun_prop
+    apply this.congr
+    filter_upwards [L.isClosed_lattice.isOpen_compl.mem_nhds hx] with x hx
+    simp_all [relation]
 
 中文:
 引理 analyticAt_relation
@@ -3489,7 +3925,13 @@ lemma analyticAt_relation
     convert! this.comp (f := (· - x.1)) (by fun_prop)
     ext a
     simp
-  · have : AnalyticAt Complex (fun z => ℘'[L] z ^ 2 - 4 * ℘[L] z ^ 3 + L.g₂ * ℘[L] z + L.
+  · have : AnalyticAt Complex (fun z => ℘'[L] z ^ 2 - 4 * ℘[L] z ^ 3 + L.g₂ * ℘[L] z + L.g₃) x := by
+      have := L.analyticOnNhd_derivWeierstrassP _ hx
+      have := L.analyticOnNhd_weierstrassP _ hx
+      fun_prop
+    apply this.congr
+    filter_upwards [L.isClosed_lattice.isOpen_compl.mem_nhds hx] with x hx
+    simp_all [relation]
 -/
 private lemma analyticAt_relation (x : Complex) : AnalyticAt Complex L.relation x := by
   by_cases hx : x in L.lattice
@@ -3518,7 +3960,7 @@ lemma relation_eq_zero
   have : Differentiable Complex L.relation := fun x => (L.analyticAt_relation x).differentiableAt
   exact (this.apply_eq_apply_of_bounded (IsZLattice.isCompact_range_of_periodic L.lattice _
     this.continuous fun z w hw => by lift w to L.lattice using hw; simp).isBounded x 0).trans
-    (
+    (if_pos (by simp))
 
 中文:
 引理 relation_eq_zero
@@ -3528,7 +3970,7 @@ lemma relation_eq_zero
   have : Differentiable Complex L.relation := fun x => (L.analyticAt_relation x).differentiableAt
   exact (this.apply_eq_apply_of_bounded (IsZLattice.isCompact_range_of_periodic L.lattice _
     this.continuous fun z w hw => by lift w to L.lattice using hw; simp).isBounded x 0).trans
-    (
+    (if_pos (by simp))
 
 Depends on / 依赖: f.inv.hom
 -/

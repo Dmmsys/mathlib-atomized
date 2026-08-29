@@ -57,7 +57,8 @@ definition structuredArrowEquiv
     rw [← homEquiv_symm_apply]; rw [Equiv.symm_apply_apply]
   right_inv f := by
     obtain ⟨Y, f, rfl⟩ := f.mk_surjective
-    dsi
+    dsimp
+    rw [← homEquiv_symm_apply]; rw [Equiv.symm_apply_apply]
 
 中文:
 定义 structuredArrowEquiv
@@ -70,7 +71,8 @@ definition structuredArrowEquiv
     rw [← homEquiv_symm_apply]; rw [Equiv.symm_apply_apply]
   right_inv f := by
     obtain ⟨Y, f, rfl⟩ := f.mk_surjective
-    dsi
+    dsimp
+    rw [← homEquiv_symm_apply]; rw [Equiv.symm_apply_apply]
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.mk, f.hom, homEquiv
 -/
@@ -106,7 +108,14 @@ lemma induction_structuredArrow'
       P (StructuredArrow.mk ((Quotient.functor (relations W)).map f)) by
     obtain ⟨Y, g, rfl⟩ := g.mk_surjective
     obtain ⟨g, rfl⟩ := (Quotient.functor (relations W)).map_surjective g
-    exact t
+    exact this g
+  intro Y₀ f
+  induction f with
+  | nil => exact hP₀
+  | cons f g hf =>
+      obtain (g | ⟨w, hw⟩) := g
+      · exact hP₁ g _ hf
+      · simpa only [← Construction.wInv_eq_isoOfHom_inv w hw] using! hP₂ w hw _ hf
 
 中文:
 引理 induction_structuredArrow'
@@ -116,7 +125,14 @@ lemma induction_structuredArrow'
       P (StructuredArrow.mk ((Quotient.functor (relations W)).map f)) by
     obtain ⟨Y, g, rfl⟩ := g.mk_surjective
     obtain ⟨g, rfl⟩ := (Quotient.functor (relations W)).map_surjective g
-    exact t
+    exact this g
+  intro Y₀ f
+  induction f with
+  | nil => exact hP₀
+  | cons f g hf =>
+      obtain (g | ⟨w, hw⟩) := g
+      · exact hP₁ g _ hf
+      · simpa only [← Construction.wInv_eq_isoOfHom_inv w hw] using! hP₂ w hw _ hf
 -/
 private lemma induction_structuredArrow'
     (hP₀ : P (StructuredArrow.mk (𝟙 (W.Q.obj X))))
@@ -163,7 +179,10 @@ lemma induction_structuredArrow
     simp
   · intro Y₁ Y₂ f φ hφ
     convert! hP₁ f (homEquiv W W.Q L φ) hφ
-    
+    simp [homEquiv_comp]
+  · intro Y₁ Y₂ w hw φ hφ
+    convert! hP₂ w hw (homEquiv W W.Q L φ) hφ
+    simp [homEquiv_comp, homEquiv_isoOfHom_inv]
 
 中文:
 引理 induction_structuredArrow
@@ -176,7 +195,10 @@ lemma induction_structuredArrow
     simp
   · intro Y₁ Y₂ f φ hφ
     convert! hP₁ f (homEquiv W W.Q L φ) hφ
-    
+    simp [homEquiv_comp]
+  · intro Y₁ Y₂ w hw φ hφ
+    convert! hP₂ w hw (homEquiv W W.Q L φ) hφ
+    simp [homEquiv_comp, homEquiv_isoOfHom_inv]
 
 Depends on / 依赖: StructuredArrow, W.Q.obj, apply_symm_apply, convert, homEquiv, homEquiv_comp, homEquiv_isoOfHom_inv, induction_structuredArrow, structuredArrowEquiv
 -/
@@ -219,7 +241,7 @@ lemma induction_costructuredArrow
   induction g' using induction_structuredArrow L.op W.op with
   | hP₀ => exact hP₀
   | hP₁ f φ hφ => exact hP₁ f.unop φ.unop hφ
-  | hP₂ w hw φ hφ => simpa [isoOfHom_op_inv L W w hw] 
+  | hP₂ w hw φ hφ => simpa [isoOfHom_op_inv L W w hw] using! hP₂ w.unop hw φ.unop hφ
 
 中文:
 引理 induction_costructuredArrow
@@ -229,7 +251,7 @@ lemma induction_costructuredArrow
   induction g' using induction_structuredArrow L.op W.op with
   | hP₀ => exact hP₀
   | hP₁ f φ hφ => exact hP₁ f.unop φ.unop hφ
-  | hP₂ w hw φ hφ => simpa [isoOfHom_op_inv L W w hw] 
+  | hP₂ w hw φ hφ => simpa [isoOfHom_op_inv L W w hw] using! hP₂ w.unop hw φ.unop hφ
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, L.op, StructuredArrow, StructuredArrow.mk, W.op, f.unop, g.hom.op, g.left, hom.unop, induction_structuredArrow, isoOfHom_op_inv, w.unop
 -/

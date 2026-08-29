@@ -97,7 +97,8 @@ definition d
       ext
       simp [Finset.sum_add_distrib, add_add_add_comm]
     map_smul' r f := by
-      ex
+      ext
+      simp [Finset.smul_sum, ← smul_assoc, mul_comm r] }
 
 中文:
 定义 d
@@ -110,7 +111,8 @@ definition d
       ext
       simp [Finset.sum_add_distrib, add_add_add_comm]
     map_smul' r f := by
-      ex
+      ext
+      simp [Finset.smul_sum, ← smul_assoc, mul_comm r] }
 
 Depends on / 依赖: Fin.contractNth, Finset, Finset.smul_sum, Finset.sum_add_distrib, Finset.univ.sum, ModuleCat, ModuleCat.ofHom, add_add_add_comm, contractNth, i.succ, map_add, map_smul, mul_comm, smul_assoc, smul_sum, sum_add_distrib
 -/

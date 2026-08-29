@@ -105,7 +105,12 @@ theorem isTopologicalBasis_of_subbasis
 refine ⟨?_, ?_, le_antisymm (le_generateFrom ?_) generateFrom_anti fun t ht => ?_⟩
   · rintro _ ⟨t₁, ⟨hft₁, ht₁b⟩, rfl⟩ _ ⟨t₂, ⟨hft₂, ht₂b⟩, rfl⟩ x h
     exact ⟨_, ⟨_, ⟨hft₁.union hft₂, union_subset ht₁b ht₂b⟩, sInter_union t₁ t₂⟩, h, Subset.rfl⟩
-  · rw [sUnion_im
+  · rw [sUnion_image, iUnion₂_eq_univ_iff]
+exact fun x => ⟨∅, ⟨finite_empty, empty_subset _⟩, sInter_empty.substr mem_univ x⟩
+  · rintro _ ⟨t, ⟨hft, htb⟩, rfl⟩
+exact hft.isOpen_sInter fun s hs => GenerateOpen.basic _ htb hs
+  · rw [← sInter_singleton t]
+    exact ⟨{t}, ⟨finite_singleton t, singleton_subset_iff.2 ht⟩, rfl⟩
 
 中文:
 定理 isTopologicalBasis_of_subbasis
@@ -115,7 +120,12 @@ refine ⟨?_, ?_, le_antisymm (le_generateFrom ?_) generateFrom_anti fun t ht =>
 refine ⟨?_, ?_, le_antisymm (le_generateFrom ?_) generateFrom_anti fun t ht => ?_⟩
   · rintro _ ⟨t₁, ⟨hft₁, ht₁b⟩, rfl⟩ _ ⟨t₂, ⟨hft₂, ht₂b⟩, rfl⟩ x h
     exact ⟨_, ⟨_, ⟨hft₁.union hft₂, union_subset ht₁b ht₂b⟩, sInter_union t₁ t₂⟩, h, Subset.rfl⟩
-  · rw [sUnion_im
+  · rw [sUnion_image, iUnion₂_eq_univ_iff]
+exact fun x => ⟨∅, ⟨finite_empty, empty_subset _⟩, sInter_empty.substr mem_univ x⟩
+  · rintro _ ⟨t, ⟨hft, htb⟩, rfl⟩
+exact hft.isOpen_sInter fun s hs => GenerateOpen.basic _ htb hs
+  · rw [← sInter_singleton t]
+    exact ⟨{t}, ⟨finite_singleton t, singleton_subset_iff.2 ht⟩, rfl⟩
 
 Depends on / 依赖: GenerateOpen, GenerateOpen.basic, Subset, Subset.rfl, empty_subset, finite_empty, generateFrom, generateFrom_anti, hft.isOpen_sInter, isOpen_sInter, le_antisymm, le_generateFrom, mem_univ, sInter_empty, sInter_empty.substr, sInter_union, sUnion_image, substr, union_subset
 -/
@@ -195,7 +205,7 @@ theorem IsTopologicalBasis.of_hasBasis_nhds
       using! (inter_mem ((h_nhds _).mem_of_mem ⟨ht₁, hx.1⟩) ((h_nhds _).mem_of_mem ⟨ht₂, hx.2⟩))
   sUnion_eq := sUnion_eq_univ_iff.2 fun x => (h_nhds x).ex_mem
   eq_generateFrom := ext_nhds fun x => by
-    simpa only [nhds_generateFrom, and_comm] usi
+    simpa only [nhds_generateFrom, and_comm] using! (h_nhds x).eq_biInf
 
 中文:
 定理 是TopologicalBasis.of_hasBasis_nhds
@@ -205,7 +215,7 @@ theorem IsTopologicalBasis.of_hasBasis_nhds
       using! (inter_mem ((h_nhds _).mem_of_mem ⟨ht₁, hx.1⟩) ((h_nhds _).mem_of_mem ⟨ht₂, hx.2⟩))
   sUnion_eq := sUnion_eq_univ_iff.2 fun x => (h_nhds x).ex_mem
   eq_generateFrom := ext_nhds fun x => by
-    simpa only [nhds_generateFrom, and_comm] usi
+    simpa only [nhds_generateFrom, and_comm] using! (h_nhds x).eq_biInf
 
 Depends on / 依赖: and_assoc, and_comm, eq_biInf, eq_generateFrom, ex_mem, ext_nhds, h_nhds, inter_mem, mem_iff, mem_of_mem, nhds_generateFrom, sUnion_eq, sUnion_eq_univ_iff
 -/
@@ -256,7 +266,10 @@ theorem IsTopologicalBasis.mem_nhds_iff
   · simp [and_assoc, and_left_comm]
   · rintro s ⟨hs₁, hs₂⟩ t ⟨ht₁, ht₂⟩
     let ⟨u, hu₁, hu₂, hu₃⟩ := hb.1 _ hs₂ _ ht₂ _ ⟨hs₁, ht₁⟩
-    exact ⟨u, ⟨hu₂, hu₁⟩, le_p
+    exact ⟨u, ⟨hu₂, hu₁⟩, le_principal_iff.2 (hu₃.trans inter_subset_left),
+      le_principal_iff.2 (hu₃.trans inter_subset_right)⟩
+  · rcases eq_univ_iff_forall.1 hb.sUnion_eq a with ⟨i, h1, h2⟩
+    exact ⟨i, h2, h1⟩
 
 中文:
 定理 是TopologicalBasis.mem_nhds_iff
@@ -267,7 +280,10 @@ theorem IsTopologicalBasis.mem_nhds_iff
   · simp [and_assoc, and_left_comm]
   · rintro s ⟨hs₁, hs₂⟩ t ⟨ht₁, ht₂⟩
     let ⟨u, hu₁, hu₂, hu₃⟩ := hb.1 _ hs₂ _ ht₂ _ ⟨hs₁, ht₁⟩
-    exact ⟨u, ⟨hu₂, hu₁⟩, le_p
+    exact ⟨u, ⟨hu₂, hu₁⟩, le_principal_iff.2 (hu₃.trans inter_subset_left),
+      le_principal_iff.2 (hu₃.trans inter_subset_right)⟩
+  · rcases eq_univ_iff_forall.1 hb.sUnion_eq a with ⟨i, h1, h2⟩
+    exact ⟨i, h2, h1⟩
 
 Depends on / 依赖: and_assoc, and_left_comm, biInf_sets_eq, eq_generateFrom, eq_univ_iff_forall, hb.eq_generateFrom, hb.sUnion_eq, inter_subset_left, inter_subset_right, le_principal_iff, nhds_generateFrom, sUnion_eq, subseteq
 -/
@@ -890,7 +906,11 @@ theorem isTopologicalBasis_of_cover
     exact (Uo i).isOpenMap_subtype_val _ ((hb i).isOpen sb)
   · intro a u ha uo
     rcases iUnion_eq_univ_iff.1 Uc a with ⟨i, hi⟩
-    lift a to ↥(U i) u
+    lift a to ↥(U i) using hi
+    rcases (hb i).exists_subset_of_mem_open ha (uo.preimage continuous_subtype_val) with
+      ⟨v, hvb, hav, hvu⟩
+    exact ⟨(↑) '' v, mem_iUnion.2 ⟨i, mem_image_of_mem _ hvb⟩, mem_image_of_mem _ hav,
+      image_subset_iff.2 hvu⟩
 
 中文:
 定理 isTopologicalBasis_of_cover
@@ -902,7 +922,11 @@ theorem isTopologicalBasis_of_cover
     exact (Uo i).isOpenMap_subtype_val _ ((hb i).isOpen sb)
   · intro a u ha uo
     rcases iUnion_eq_univ_iff.1 Uc a with ⟨i, hi⟩
-    lift a to ↥(U i) u
+    lift a to ↥(U i) using hi
+    rcases (hb i).exists_subset_of_mem_open ha (uo.preimage continuous_subtype_val) with
+      ⟨v, hvb, hav, hvu⟩
+    exact ⟨(↑) '' v, mem_iUnion.2 ⟨i, mem_image_of_mem _ hvb⟩, mem_image_of_mem _ hav,
+      image_subset_iff.2 hvu⟩
 
 Depends on / 依赖: continuous_subtype_val, exists_subset_of_mem_open, iUnion_eq_univ_iff, image_subset_iff, isOpen, isOpenMap_subtype_val, isTopologicalBasis_of_isOpen_of_nhds, mem_iUnion, mem_image, mem_image_of_mem, preimage, uo.preimage
 -/
@@ -1212,7 +1236,9 @@ theorem _root_.IsOpenMap.separableSpace_of_isInducing
   simp_rw [h'.dense_iff, mem_closure_iff]
   intro x U hU hx
   obtain ⟨-, ⟨hx'U, x', rfl⟩, hx's⟩ :=
-    s_dense.inter_open_nonempty (U inter range f
+    s_dense.inter_open_nonempty (U inter range f) (hU.inter h.isOpen_range) ⟨f x, hx, mem_range_self _⟩
+refine ⟨f f.invFun f x', ?_, mem_image_of_mem _ mem_image_of_mem _ hx's⟩
+  rwa [Function.apply_invFun_apply (f := f)]
 
 中文:
 定理 _root_.是开映射.separableSpace_of_isInducing
@@ -1225,7 +1251,9 @@ theorem _root_.IsOpenMap.separableSpace_of_isInducing
   simp_rw [h'.dense_iff, mem_closure_iff]
   intro x U hU hx
   obtain ⟨-, ⟨hx'U, x', rfl⟩, hx's⟩ :=
-    s_dense.inter_open_nonempty (U inter range f
+    s_dense.inter_open_nonempty (U inter range f) (hU.inter h.isOpen_range) ⟨f x, hx, mem_range_self _⟩
+refine ⟨f f.invFun f x', ?_, mem_image_of_mem _ mem_image_of_mem _ hx's⟩
+  rwa [Function.apply_invFun_apply (f := f)]
 
 Depends on / 依赖: Function, Function.apply_invFun_apply, apply_invFun_apply, dense_iff, exists_countable_dense, f.invFun, h.isOpen_range, hU.inter, infer_instance, inter_open_nonempty, invFun, isEmpty_or_nonempty, isOpen_range, mem_closure_iff, mem_image_of_mem, mem_range_self, s_cnt, s_cnt.image, s_dense, s_dense.inter_open_nonempty
 -/
@@ -1375,7 +1403,8 @@ instance [TopologicalSpace
   obtain ⟨t, htc, htd⟩ := exists_countable_dense β
   refine ⟨Sum.inl '' s union Sum.inr '' t, (hsc.image _).union (htc.image _), ?_⟩
   simp_rw [dense_iff_closure_eq, closure_union, IsClosedEmbedding.inl.closure_image_eq,
-    hsd.closure_eq, IsClo
+    hsd.closure_eq, IsClosedEmbedding.inr.closure_image_eq, htd.closure_eq, image_univ,
+    range_inl_union_range_inr]
 
 中文:
 实例 [拓扑空间
@@ -1385,7 +1414,8 @@ instance [TopologicalSpace
   obtain ⟨t, htc, htd⟩ := exists_countable_dense β
   refine ⟨Sum.inl '' s union Sum.inr '' t, (hsc.image _).union (htc.image _), ?_⟩
   simp_rw [dense_iff_closure_eq, closure_union, IsClosedEmbedding.inl.closure_image_eq,
-    hsd.closure_eq, IsClo
+    hsd.closure_eq, IsClosedEmbedding.inr.closure_image_eq, htd.closure_eq, image_univ,
+    range_inl_union_range_inr]
 
 Depends on / 依赖: IsClosedEmbedding, IsClosedEmbedding.inl.closure_image_eq, IsClosedEmbedding.inr.closure_image_eq, Sum.inl, Sum.inr, closure_eq, closure_image_eq, closure_union, dense_iff_closure_eq, exists_countable_dense, hsc.image, hsd.closure_eq, htc.image, htd.closure_eq, image_univ, range_inl_union_range_inr, simp_rw
 -/
@@ -1453,7 +1483,7 @@ theorem _root_.Pairwise.countable_of_isOpen_disjoint
   have f_inj : Injective f := fun i j hij =>
 hd.eq not_disjoint_iff.2 ⟨f i, hfs i, hij.symm ▸ hfs j⟩
   have := u_countable.to_subtype
-  exact (f_inj.codRestric
+  exact (f_inj.codRestrict hfu).countable
 
 中文:
 定理 _root_.两两.countable_of_isOpen_disjoint
@@ -1464,7 +1494,7 @@ hd.eq not_disjoint_iff.2 ⟨f i, hfs i, hij.symm ▸ hfs j⟩
   have f_inj : Injective f := fun i j hij =>
 hd.eq not_disjoint_iff.2 ⟨f i, hfs i, hij.symm ▸ hfs j⟩
   have := u_countable.to_subtype
-  exact (f_inj.codRestric
+  exact (f_inj.codRestrict hfu).countable
 
 Depends on / 依赖: Injective, codRestrict, countable, exists_countable_dense, exists_mem_open, f_inj, f_inj.codRestrict, hd.eq, hij.symm, not_disjoint_iff, to_subtype, u_countable, u_countable.to_subtype, u_dense, u_dense.exists_mem_open
 -/
@@ -1743,7 +1773,17 @@ theorem IsSeparable.univ_pi
   · choose c c_count hc using h
     have := fun i => (c_count i).to_subtype
     set g : (I : Finset ι) × ((i : I) -> c i) -> (i : ι) -> X i := fun ⟨I, f⟩ i =>
-      if hi : i 
+      if hi : i in I then f ⟨i, hi⟩ else f₀ i
+    refine ⟨range g, countable_range g, fun f hf => mem_closure_iff.2 fun o ho hfo => ?_⟩
+    rcases isOpen_pi_iff.1 ho f hfo with ⟨I, u, huo, hI⟩
+    rsuffices ⟨f, hf⟩ : exists f : (i : I) -> c i, g ⟨I, f⟩ in Set.pi I u
+    · exact ⟨g ⟨I, f⟩, hI hf, mem_range_self (f := g) ⟨I, f⟩⟩
+    suffices H : forall i in I, (u i inter c i).Nonempty by
+      choose f hfu hfc using H
+      refine ⟨fun i => ⟨f i i.2, hfc i i.2⟩, fun i (hi : i in I) => ?_⟩
+      simpa only [g, dif_pos hi] using hfu i hi
+    intro i hi
+    exact mem_closure_iff.1 (hc i <| hf _ trivial) _ (huo i hi).1 (huo i hi).2
 
 中文:
 定理 是可分.univ_pi
@@ -1756,7 +1796,17 @@ theorem IsSeparable.univ_pi
   · choose c c_count hc using h
     have := fun i => (c_count i).to_subtype
     set g : (I : Finset ι) × ((i : I) -> c i) -> (i : ι) -> X i := fun ⟨I, f⟩ i =>
-      if hi : i 
+      if hi : i in I then f ⟨i, hi⟩ else f₀ i
+    refine ⟨range g, countable_range g, fun f hf => mem_closure_iff.2 fun o ho hfo => ?_⟩
+    rcases isOpen_pi_iff.1 ho f hfo with ⟨I, u, huo, hI⟩
+    rsuffices ⟨f, hf⟩ : exists f : (i : I) -> c i, g ⟨I, f⟩ in Set.pi I u
+    · exact ⟨g ⟨I, f⟩, hI hf, mem_range_self (f := g) ⟨I, f⟩⟩
+    suffices H : forall i in I, (u i inter c i).Nonempty by
+      choose f hfu hfc using H
+      refine ⟨fun i => ⟨f i i.2, hfc i i.2⟩, fun i (hi : i in I) => ?_⟩
+      simpa only [g, dif_pos hi] using hfu i hi
+    intro i hi
+    exact mem_closure_iff.1 (hc i <| hf _ trivial) _ (huo i hi).1 (huo i hi).2
 
 Depends on / 依赖: Finset, c_count, classical, countable_empty, countable_empty.isSeparable, countable_range, eq_empty_or_nonempty, isOpen_pi_iff, isSeparable, mem_closure_iff, rsuffices, to_subtype, univ.pi
 -/
@@ -1989,7 +2039,12 @@ theorem IsTopologicalBasis.iInf
 .mono (iInf_le _ _) (h_basis i).isOpen (t := t i) (hU i hi)
   · intro a u ha hu
     rcases (nhds_iInf (t := t) (a := a)).symm ▸ HasBasis.iInf'
-.mem_iff
+.mem_iff.1 (hu.mem_nhds ha) (fun i => (h_basis i).nhds_hasBasis (t := t i))
+      with ⟨⟨F, U⟩, ⟨hF, hU⟩, hUu⟩
+    refine ⟨_, ⟨U, hF.toFinset, ?_, rfl⟩, ?_, ?_⟩ <;> simp only [Finite.mem_toFinset, mem_iInter]
+    · exact fun i hi => (hU i hi).1
+    · exact fun i hi => (hU i hi).2
+    · exact hUu
 
 中文:
 定理 是TopologicalBasis.iInf
@@ -2002,7 +2057,12 @@ theorem IsTopologicalBasis.iInf
 .mono (iInf_le _ _) (h_basis i).isOpen (t := t i) (hU i hi)
   · intro a u ha hu
     rcases (nhds_iInf (t := t) (a := a)).symm ▸ HasBasis.iInf'
-.mem_iff
+.mem_iff.1 (hu.mem_nhds ha) (fun i => (h_basis i).nhds_hasBasis (t := t i))
+      with ⟨⟨F, U⟩, ⟨hF, hU⟩, hUu⟩
+    refine ⟨_, ⟨U, hF.toFinset, ?_, rfl⟩, ?_, ?_⟩ <;> simp only [Finite.mem_toFinset, mem_iInter]
+    · exact fun i hi => (hU i hi).1
+    · exact fun i hi => (hU i hi).2
+    · exact hUu
 -/
 protected theorem IsTopologicalBasis.iInf {β : Type*} {ι : Type*} {t : ι -> TopologicalSpace β}
     {T : ι -> Set (Set β)} (h_basis : forall i, IsTopologicalBasis (t := t i) (T i)) :
@@ -2033,7 +2093,7 @@ theorem IsTopologicalBasis.iInf_induced
   constructor <;> rintro ⟨U, F, hUT, hSU⟩
   · exact ⟨fun i => (f i) ⁻¹' (U i), F, fun i hi => mem_image_of_mem _ (hUT i hi), hSU⟩
   · choose! U' hU' hUU' using hUT
-    exact ⟨U', F, hU', hSU ▸ (.symm <| iInter₂_congr hUU'
+    exact ⟨U', F, hU', hSU ▸ (.symm <| iInter₂_congr hUU')⟩
 
 中文:
 定理 是TopologicalBasis.iInf_induced
@@ -2043,7 +2103,7 @@ theorem IsTopologicalBasis.iInf_induced
   constructor <;> rintro ⟨U, F, hUT, hSU⟩
   · exact ⟨fun i => (f i) ⁻¹' (U i), F, fun i hi => mem_image_of_mem _ (hUT i hi), hSU⟩
   · choose! U' hU' hUU' using hUT
-    exact ⟨U', F, hU', hSU ▸ (.symm <| iInter₂_congr hUU'
+    exact ⟨U', F, hU', hSU ▸ (.symm <| iInter₂_congr hUU')⟩
 
 Depends on / 依赖: induced
 -/
@@ -2140,7 +2200,8 @@ lemma isOpenMap_eval
   by_cases hi : i in s
   · rw [eval_image_pi (mod_cast hi) h]
     exact hU _ hi
-  · rw [eval_image_pi
+  · rw [eval_image_pi_of_notMem (mod_cast hi), if_pos h]
+    exact isOpen_univ
 
 中文:
 引理 isOpenMap_eval
@@ -2155,7 +2216,8 @@ lemma isOpenMap_eval
   by_cases hi : i in s
   · rw [eval_image_pi (mod_cast hi) h]
     exact hU _ hi
-  · rw [eval_image_pi
+  · rw [eval_image_pi_of_notMem (mod_cast hi), if_pos h]
+    exact isOpen_univ
 
 Depends on / 依赖: classical, eq_empty_or_nonempty, eval_image_pi, eval_image_pi_of_notMem, if_pos, isOpenMap_iff, isOpen_univ, isTopologicalBasis_opens, isTopologicalBasis_pi, mod_cast
 -/
@@ -2209,7 +2271,8 @@ theorem Dense.exists_countable_dense_subset_bot_top
   refine ⟨(t union ({ x | IsBot x } union { x | IsTop x })) inter s, ?_, ?_, ?_, ?_, ?_⟩
   exacts [inter_subset_right,
     (htc.union ((countable_isBot α).union (countable_isTop α))).mono inter_subset_left,
-htd.mono (subset_inter s
+htd.mono (subset_inter subset_union_left hts), fun x hx hxs => ⟨Or.inr Or.inl hx, hxs⟩,
+fun x hx hxs => ⟨Or.inr Or.inr hx, hxs⟩]
 
 中文:
 定理 稠密.存在_countable_dense_subset_bot_top
@@ -2219,7 +2282,8 @@ htd.mono (subset_inter s
   refine ⟨(t union ({ x | IsBot x } union { x | IsTop x })) inter s, ?_, ?_, ?_, ?_, ?_⟩
   exacts [inter_subset_right,
     (htc.union ((countable_isBot α).union (countable_isTop α))).mono inter_subset_left,
-htd.mono (subset_inter s
+htd.mono (subset_inter subset_union_left hts), fun x hx hxs => ⟨Or.inr Or.inl hx, hxs⟩,
+fun x hx hxs => ⟨Or.inr Or.inr hx, hxs⟩]
 
 Depends on / 依赖: Or.inl, Or.inr, countable_isBot, countable_isTop, exacts, exists_countable_dense_subset, hs.exists_countable_dense_subset, htc.union, htd.mono, inter_subset_left, inter_subset_right, subset_inter, subset_union_left
 -/
@@ -2968,7 +3032,9 @@ theorem isOpen_iUnion_countable
   choose f hf using fun b : B => b.2.2
   have : Countable B := ((countable_countableBasis α).mono (sep_subset _ _)).to_subtype
   refine ⟨_, countable_range f, (iUnion₂_subset_iUnion _ _).antisymm (sUnion_subset ?_)⟩
-  rintro _ ⟨i, rf
+  rintro _ ⟨i, rfl⟩ x xs
+  rcases (isBasis_countableBasis α).exists_subset_of_mem_open xs (H _) with ⟨b, hb, xb, bs⟩
+  exact ⟨_, ⟨_, rfl⟩, _, ⟨⟨⟨_, hb, _, bs⟩, rfl⟩, rfl⟩, hf _ xb⟩
 
 中文:
 定理 isOpen_iUnion_countable
@@ -2978,7 +3044,9 @@ theorem isOpen_iUnion_countable
   choose f hf using fun b : B => b.2.2
   have : Countable B := ((countable_countableBasis α).mono (sep_subset _ _)).to_subtype
   refine ⟨_, countable_range f, (iUnion₂_subset_iUnion _ _).antisymm (sUnion_subset ?_)⟩
-  rintro _ ⟨i, rf
+  rintro _ ⟨i, rfl⟩ x xs
+  rcases (isBasis_countableBasis α).exists_subset_of_mem_open xs (H _) with ⟨b, hb, xb, bs⟩
+  exact ⟨_, ⟨_, rfl⟩, _, ⟨⟨⟨_, hb, _, bs⟩, rfl⟩, rfl⟩, hf _ xb⟩
 
 Depends on / 依赖: Countable, antisymm, countableBasis, countable_countableBasis, countable_range, exists_subset_of_mem_open, isBasis_countableBasis, sUnion_subset, sep_subset, subseteq, to_subtype
 -/
@@ -3052,7 +3120,7 @@ theorem countable_cover_nhds
   suffices ⋃ x in s, interior (f x) = univ from
 ⟨s, hsc, flip eq_univ_of_subset this iUnion₂_mono fun _ _ => interior_subset⟩
   simp only [hsU, eq_univ_iff_forall, mem_iUnion]
-  exact fun x 
+  exact fun x => ⟨x, mem_interior_iff_mem_nhds.2 (hf x)⟩
 
 中文:
 定理 countable_cover_nhds
@@ -3063,7 +3131,7 @@ theorem countable_cover_nhds
   suffices ⋃ x in s, interior (f x) = univ from
 ⟨s, hsc, flip eq_univ_of_subset this iUnion₂_mono fun _ _ => interior_subset⟩
   simp only [hsU, eq_univ_iff_forall, mem_iUnion]
-  exact fun x 
+  exact fun x => ⟨x, mem_interior_iff_mem_nhds.2 (hf x)⟩
 
 Depends on / 依赖: eq_univ_iff_forall, eq_univ_of_subset, interior, interior_subset, isOpen_iUnion_countable, isOpen_interior, mem_iUnion, mem_interior_iff_mem_nhds
 -/
@@ -3086,7 +3154,8 @@ theorem countable_cover_nhdsWithin
   have : forall x : s, (↑) ⁻¹' f x in 𝓝 x := fun x => preimage_coe_mem_nhds_subtype.2 (hf x x.2)
   rcases countable_cover_nhds this with ⟨t, htc, htU⟩
   refine ⟨(↑) '' t, Subtype.coe_image_subset _ _, htc.image _, fun x hx => ?_⟩
-  simp only [biUnion_image, eq_univ_iff_forall, ← preimage_iUnion, 
+  simp only [biUnion_image, eq_univ_iff_forall, ← preimage_iUnion, mem_preimage] at htU ⊢
+  exact htU ⟨x, hx⟩
 
 中文:
 定理 countable_cover_nhdsWithin
@@ -3095,7 +3164,8 @@ theorem countable_cover_nhdsWithin
   have : forall x : s, (↑) ⁻¹' f x in 𝓝 x := fun x => preimage_coe_mem_nhds_subtype.2 (hf x x.2)
   rcases countable_cover_nhds this with ⟨t, htc, htU⟩
   refine ⟨(↑) '' t, Subtype.coe_image_subset _ _, htc.image _, fun x hx => ?_⟩
-  simp only [biUnion_image, eq_univ_iff_forall, ← preimage_iUnion, 
+  simp only [biUnion_image, eq_univ_iff_forall, ← preimage_iUnion, mem_preimage] at htU ⊢
+  exact htU ⟨x, hx⟩
 
 Depends on / 依赖: Subtype, Subtype.coe_image_subset, biUnion_image, coe_image_subset, countable_cover_nhds, eq_univ_iff_forall, htc.image, mem_preimage, preimage_coe_mem_nhds_subtype, preimage_iUnion
 -/
@@ -3119,7 +3189,19 @@ lemma IsTopologicalBasis.exists_countable_biUnion_of_isOpen
   choose! a hat xa au using A
   obtain ⟨T, T_count, hT⟩ : exists T : Set u, T.Countable ∧ ⋃ i in T, a i = ⋃ (i : u), a i := by
     apply isOpen_iUnion_countable _
-    rintro ⟨x, hx
+    rintro ⟨x, hx⟩
+    exact ht.isOpen (hat x hx)
+  refine ⟨(fun (x : u) => a x) '' T, ?_, T_count.image _, ?_⟩
+  · simp only [image_subset_iff]
+    rintro ⟨x, xu⟩ -
+    exact hat x xu
+  rw [biUnion_image]; rw [hT]
+  apply Subset.antisymm
+  · intro x hx
+    simp
+    grind
+  · simp
+    grind
 
 中文:
 引理 是TopologicalBasis.存在_countable_biUnion_of_isOpen
@@ -3130,7 +3212,19 @@ lemma IsTopologicalBasis.exists_countable_biUnion_of_isOpen
   choose! a hat xa au using A
   obtain ⟨T, T_count, hT⟩ : exists T : Set u, T.Countable ∧ ⋃ i in T, a i = ⋃ (i : u), a i := by
     apply isOpen_iUnion_countable _
-    rintro ⟨x, hx
+    rintro ⟨x, hx⟩
+    exact ht.isOpen (hat x hx)
+  refine ⟨(fun (x : u) => a x) '' T, ?_, T_count.image _, ?_⟩
+  · simp only [image_subset_iff]
+    rintro ⟨x, xu⟩ -
+    exact hat x xu
+  rw [biUnion_image]; rw [hT]
+  apply Subset.antisymm
+  · intro x hx
+    simp
+    grind
+  · simp
+    grind
 
 Depends on / 依赖: Countable, Subset, Subset.antisymm, T.Countable, T_count, T_count.image, antisymm, biUnion_image, exists_subset_of_mem_open, ht.exists_subset_of_mem_open, ht.isOpen, image_subset_iff, isOpen, isOpen_iUnion_countable, subseteq
 -/
@@ -3166,7 +3260,22 @@ lemma IsTopologicalBasis.exists_countable
     fun u hu => ht.exists_countable_biUnion_of_isOpen ((isBasis_countableBasis α).isOpen hu)
   choose! s hst s_count hs using A
   refine ⟨⋃ u in countableBasis α, s u, by simpa using hst,
-    (countable
+    (countable_countableBasis α).biUnion s_count, ?_⟩
+  apply isTopologicalBasis_of_isOpen_of_nhds
+  · simp only [mem_iUnion, exists_prop, forall_exists_index, and_imp]
+    have := @ht.isOpen
+    grind
+  · intro x v hx hv
+    simp only [mem_iUnion, exists_prop]
+    obtain ⟨u, u_mem, xu, uv⟩ : exists u in countableBasis α, x in u ∧ u subseteq v :=
+      (isBasis_countableBasis α).isOpen_iff.1 hv _ hx
+    have : x in ⋃ a in s u, a := by
+      convert! xu
+      exact (hs u u_mem).symm
+    obtain ⟨w, ws, xw⟩ : exists w in s u, x in w := by simpa using this
+    refine ⟨w, ⟨u, u_mem, ws⟩, xw, ?_⟩
+    apply Subset.trans (Subset.trans _ (hs u u_mem).symm.subset) uv
+    exact subset_iUnion₂_of_subset w ws (Subset.refl _)
 
 中文:
 引理 是TopologicalBasis.存在_countable
@@ -3175,7 +3284,22 @@ lemma IsTopologicalBasis.exists_countable
     fun u hu => ht.exists_countable_biUnion_of_isOpen ((isBasis_countableBasis α).isOpen hu)
   choose! s hst s_count hs using A
   refine ⟨⋃ u in countableBasis α, s u, by simpa using hst,
-    (countable
+    (countable_countableBasis α).biUnion s_count, ?_⟩
+  apply isTopologicalBasis_of_isOpen_of_nhds
+  · simp only [mem_iUnion, exists_prop, forall_exists_index, and_imp]
+    have := @ht.isOpen
+    grind
+  · intro x v hx hv
+    simp only [mem_iUnion, exists_prop]
+    obtain ⟨u, u_mem, xu, uv⟩ : exists u in countableBasis α, x in u ∧ u subseteq v :=
+      (isBasis_countableBasis α).isOpen_iff.1 hv _ hx
+    have : x in ⋃ a in s u, a := by
+      convert! xu
+      exact (hs u u_mem).symm
+    obtain ⟨w, ws, xw⟩ : exists w in s u, x in w := by simpa using this
+    refine ⟨w, ⟨u, u_mem, ws⟩, xw, ?_⟩
+    apply Subset.trans (Subset.trans _ (hs u u_mem).symm.subset) uv
+    exact subset_iUnion₂_of_subset w ws (Subset.refl _)
 
 Depends on / 依赖: Countable, and_imp, biUnion, countableBasis, countable_countableBasis, exists_countable_biUnion_of_isOpen, exists_prop, forall_exists_index, ht.exists_countable_biUnion_of_isOpen, ht.isOpen, isBasis_countableBasis, isOpen, isTopologicalBasis_of_isOpen_of_nhds, mem_iUnio, mem_iUnion, s.Countable, s_count, subseteq
 -/
@@ -3213,7 +3337,31 @@ lemma exists_countable_of_generateFrom
   have : IsTopologicalBasis t' := TopologicalSpace.isTopologicalBasis_of_subbasis ht
   obtain ⟨s', s't', s'_count, hs'⟩ : exists s' subseteq t', s'.Countable ∧ IsTopologicalBasis s' :=
     this.exists_countable
-  have A 
+  have A : forall u in s', exists (f : Set (Set α)), f.Finite ∧ f subseteq t ∧ ⋂₀ f = u :=
+    fun u hu => by simpa [t', and_assoc] using s't' hu
+  choose! f f_fin ft hf using A
+  refine ⟨⋃ u in s', f u, by simpa using ft, ?_, ?_⟩
+  · apply s'_count.biUnion
+    intro u hu
+    exact Finite.countable (f_fin u hu)
+  · apply le_antisymm
+    · apply le_generateFrom_iff_subset_isOpen.2
+      simp only [iUnion_subset_iff]
+      intro u hu v hv
+      rw [ht]
+      apply isOpen_generateFrom_of_mem
+      exact ft u hu hv
+    · rw [hs'.eq_generateFrom]
+      apply le_generateFrom_iff_subset_isOpen.2
+      intro u hu
+      rw [← hf u hu]; rw [sInter_eq_biInter]
+      change IsOpen[generateFrom _] (⋂ i in f u, i)
+      apply @Finite.isOpen_biInter _ _ (generateFrom (⋃ u in s', f u)) _ _
+      · apply f_fin u hu
+      · intro i hi
+        apply isOpen_generateFrom_of_mem
+        simp
+        grind
 
 中文:
 引理 存在_countable_of_generateFrom
@@ -3222,7 +3370,31 @@ lemma exists_countable_of_generateFrom
   have : IsTopologicalBasis t' := TopologicalSpace.isTopologicalBasis_of_subbasis ht
   obtain ⟨s', s't', s'_count, hs'⟩ : exists s' subseteq t', s'.Countable ∧ IsTopologicalBasis s' :=
     this.exists_countable
-  have A 
+  have A : forall u in s', exists (f : Set (Set α)), f.Finite ∧ f subseteq t ∧ ⋂₀ f = u :=
+    fun u hu => by simpa [t', and_assoc] using s't' hu
+  choose! f f_fin ft hf using A
+  refine ⟨⋃ u in s', f u, by simpa using ft, ?_, ?_⟩
+  · apply s'_count.biUnion
+    intro u hu
+    exact Finite.countable (f_fin u hu)
+  · apply le_antisymm
+    · apply le_generateFrom_iff_subset_isOpen.2
+      simp only [iUnion_subset_iff]
+      intro u hu v hv
+      rw [ht]
+      apply isOpen_generateFrom_of_mem
+      exact ft u hu hv
+    · rw [hs'.eq_generateFrom]
+      apply le_generateFrom_iff_subset_isOpen.2
+      intro u hu
+      rw [← hf u hu]; rw [sInter_eq_biInter]
+      change IsOpen[generateFrom _] (⋂ i in f u, i)
+      apply @Finite.isOpen_biInter _ _ (generateFrom (⋃ u in s', f u)) _ _
+      · apply f_fin u hu
+      · intro i hi
+        apply isOpen_generateFrom_of_mem
+        simp
+        grind
 
 Depends on / 依赖: Countable, Finite, IsTopologicalBasis, TopologicalSpace, TopologicalSpace.isTopologicalBasis_of_subbasis, _count, and_assoc, exists_countable, f.Finite, f_fin, isTopologicalBasis_of_subbasis, subseteq, this.exists_countable
 -/
@@ -3305,7 +3477,7 @@ instance [Countable
   let b := ⋃ i : ι, (fun u => (Sigma.mk i '' u : Set (Σ i, E i))) '' countableBasis (E i)
   have A : IsTopologicalBasis b := IsTopologicalBasis.sigma fun i => isBasis_countableBasis _
   have B : b.Countable := countable_iUnion fun i => (countable_countableBasis _).image _
-  exact A.secondCountabl
+  exact A.secondCountableTopology B
 
 中文:
 实例 [可数
@@ -3314,7 +3486,7 @@ instance [Countable
   let b := ⋃ i : ι, (fun u => (Sigma.mk i '' u : Set (Σ i, E i))) '' countableBasis (E i)
   have A : IsTopologicalBasis b := IsTopologicalBasis.sigma fun i => isBasis_countableBasis _
   have B : b.Countable := countable_iUnion fun i => (countable_countableBasis _).image _
-  exact A.secondCountabl
+  exact A.secondCountableTopology B
 
 Depends on / 依赖: A.secondCountableTopology, Countable, IsTopologicalBasis, IsTopologicalBasis.sigma, Sigma.mk, b.Countable, countableBasis, countable_countableBasis, countable_iUnion, isBasis_countableBasis, secondCountableTopology
 -/
@@ -3343,7 +3515,14 @@ theorem IsTopologicalBasis.sum
     · exact IsOpenEmbedding.inl.isOpenMap w (hs.isOpen hw)
     · exact IsOpenEmbedding.inr.isOpenMap w (ht.isOpen hw)
   · rintro (x | x) u hxu u_open
-    · obtain ⟨v, vs, xv, vu⟩ : exists v in s, x in v ∧ v su
+    · obtain ⟨v, vs, xv, vu⟩ : exists v in s, x in v ∧ v subseteq Sum.inl ⁻¹' u :=
+        hs.exists_subset_of_mem_open hxu (isOpen_sum_iff.1 u_open).1
+      exact ⟨Sum.inl '' v, mem_union_left _ (mem_image_of_mem _ vs), mem_image_of_mem _ xv,
+        image_subset_iff.2 vu⟩
+    · obtain ⟨v, vs, xv, vu⟩ : exists v in t, x in v ∧ v subseteq Sum.inr ⁻¹' u :=
+        ht.exists_subset_of_mem_open hxu (isOpen_sum_iff.1 u_open).2
+      exact ⟨Sum.inr '' v, mem_union_right _ (mem_image_of_mem _ vs), mem_image_of_mem _ xv,
+        image_subset_iff.2 vu⟩
 
 中文:
 定理 是TopologicalBasis.求和
@@ -3354,7 +3533,14 @@ theorem IsTopologicalBasis.sum
     · exact IsOpenEmbedding.inl.isOpenMap w (hs.isOpen hw)
     · exact IsOpenEmbedding.inr.isOpenMap w (ht.isOpen hw)
   · rintro (x | x) u hxu u_open
-    · obtain ⟨v, vs, xv, vu⟩ : exists v in s, x in v ∧ v su
+    · obtain ⟨v, vs, xv, vu⟩ : exists v in s, x in v ∧ v subseteq Sum.inl ⁻¹' u :=
+        hs.exists_subset_of_mem_open hxu (isOpen_sum_iff.1 u_open).1
+      exact ⟨Sum.inl '' v, mem_union_left _ (mem_image_of_mem _ vs), mem_image_of_mem _ xv,
+        image_subset_iff.2 vu⟩
+    · obtain ⟨v, vs, xv, vu⟩ : exists v in t, x in v ∧ v subseteq Sum.inr ⁻¹' u :=
+        ht.exists_subset_of_mem_open hxu (isOpen_sum_iff.1 u_open).2
+      exact ⟨Sum.inr '' v, mem_union_right _ (mem_image_of_mem _ vs), mem_image_of_mem _ xv,
+        image_subset_iff.2 vu⟩
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.inl.isOpenMap, IsOpenEmbedding.inr.isOpenMap, Sum.inl, exists_subset_of_mem_open, hs.exists_subset_of_mem_open, hs.isOpen, ht.isOpen, image_subset_iff, isOpen, isOpenMap, isOpen_sum_iff, isTopologicalBasis_of_isOpen_of_nhds, mem_image_of_mem, mem_union_left, subseteq, u_open
 -/
@@ -3387,7 +3573,8 @@ instance [SecondCountableTopology
   have A : IsTopologicalBasis b := (isBasis_countableBasis α).sum (isBasis_countableBasis β)
   have B : b.Countable :=
     (Countable.image (countable_countableBasis _) _).union
-      (Cou
+      (Countable.image (countable_countableBasis _) _)
+  exact A.secondCountableTopology B
 
 中文:
 实例 [第二可数拓扑
@@ -3398,7 +3585,8 @@ instance [SecondCountableTopology
   have A : IsTopologicalBasis b := (isBasis_countableBasis α).sum (isBasis_countableBasis β)
   have B : b.Countable :=
     (Countable.image (countable_countableBasis _) _).union
-      (Cou
+      (Countable.image (countable_countableBasis _) _)
+  exact A.secondCountableTopology B
 
 Depends on / 依赖: A.secondCountableTopology, Countable, Countable.image, IsTopologicalBasis, Sum.inl, Sum.inr, b.Countable, countableBasis, countable_countableBasis, isBasis_countableBasis, secondCountableTopology
 -/
@@ -3433,7 +3621,9 @@ theorem IsTopologicalBasis.isQuotientMap
     let W := π ⁻¹' U
     have x_in_W : x in W := y_in_U
     have W_open : IsOpen W := U_open.preimage h'.continuous
-    ob
+    obtain ⟨Z, Z_in_V, x_in_Z, Z_in_W⟩ := hV.exists_subset_of_mem_open x_in_W W_open
+    have XZ_in_U : π '' Z subseteq U := (Set.image_mono Z_in_W).trans (image_preimage_subset π U)
+    exact ⟨π '' Z, ⟨Z, Z_in_V, rfl⟩, ⟨x, x_in_Z, rfl⟩, XZ_in_U⟩
 
 中文:
 定理 是TopologicalBasis.isQuotientMap
@@ -3447,7 +3637,9 @@ theorem IsTopologicalBasis.isQuotientMap
     let W := π ⁻¹' U
     have x_in_W : x in W := y_in_U
     have W_open : IsOpen W := U_open.preimage h'.continuous
-    ob
+    obtain ⟨Z, Z_in_V, x_in_Z, Z_in_W⟩ := hV.exists_subset_of_mem_open x_in_W W_open
+    have XZ_in_U : π '' Z subseteq U := (Set.image_mono Z_in_W).trans (image_preimage_subset π U)
+    exact ⟨π '' Z, ⟨Z, Z_in_V, rfl⟩, ⟨x, x_in_Z, rfl⟩, XZ_in_U⟩
 
 Depends on / 依赖: IsOpen, Set.image_mono, U_in_V, U_open, U_open.preimage, W_open, XZ_in_, XZ_in_U, Z_in_V, Z_in_W, continuous, exists_subset_of_mem_open, hV.exists_subset_of_mem_open, hV.isOpen, image_mono, image_preimage_subset, isOpen, isTopologicalBasis_of_isOpen_of_nhds, preimage, subseteq
 -/

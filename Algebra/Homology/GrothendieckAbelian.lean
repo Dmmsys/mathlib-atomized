@@ -45,7 +45,7 @@ instance locallySmall
       ext i
       obtain ⟨i, rfl⟩ := (equivShrink.{w} _).symm.surjective i
       simpa [emb] using congr_fun h i
-    apply small_of_injective 
+    apply small_of_injective hemb
 
 中文:
 实例 locallySmall
@@ -56,7 +56,7 @@ instance locallySmall
       ext i
       obtain ⟨i, rfl⟩ := (equivShrink.{w} _).symm.surjective i
       simpa [emb] using congr_fun h i
-    apply small_of_injective 
+    apply small_of_injective hemb
 
 Depends on / 依赖: Function, Function.Injective, Injective, Shrink, congr_fun, equivShrink, small_of_injective, surjective, symm.surjective
 -/
@@ -99,7 +99,8 @@ instance hasExactColimitsOfShape
       let e := preservesColimitNatIso (J := J) (eval C c i)
       exact (IsLimit.postcomposeHomEquiv (Functor.isoWhiskerLeft F e) _).1
         (IsLimit.ofIsoLimit
-          (isLimitOfPreserves ((Functor.whiskeringRight J _ _).obj (
+          (isLimitOfPreserves ((Functor.whiskeringRight J _ _).obj (eval C c i) ⋙ colim) hc)
+          (Cone.ext (e.symm.app _) (fun k => (NatIso.naturality_2 e.symm _).symm))))⟩⟩⟩⟩
 
 中文:
 实例 hasExactColimitsOfShape
@@ -108,7 +109,8 @@ instance hasExactColimitsOfShape
       let e := preservesColimitNatIso (J := J) (eval C c i)
       exact (IsLimit.postcomposeHomEquiv (Functor.isoWhiskerLeft F e) _).1
         (IsLimit.ofIsoLimit
-          (isLimitOfPreserves ((Functor.whiskeringRight J _ _).obj (
+          (isLimitOfPreserves ((Functor.whiskeringRight J _ _).obj (eval C c i) ⋙ colim) hc)
+          (Cone.ext (e.symm.app _) (fun k => (NatIso.naturality_2 e.symm _).symm))))⟩⟩⟩⟩
 
 Depends on / 依赖: Cone.ext, Functor, Functor.isoWhiskerLeft, Functor.whiskeringRight, IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeHomEquiv, NatIso, NatIso.naturality_2, e.symm, e.symm.app, isLimitOfEval, isLimitOfPreserves, isoWhiskerLeft, naturality_2, ofIsoLimit, postcomposeHomEquiv, preservesColimitNatIso, whiskeringRight
 -/

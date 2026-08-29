@@ -106,7 +106,28 @@ lemma FormallySmooth.comp_surjective
   have hP : Function.Injective P.toExtension.cotangentComplex := by
     rw [← LinearMap.ker_eq_bot]; rw [← Submodule.subsingleton_iff_eq_bot]
     exact FormallySmooth.subsingleton_h1Cotangent
-  obtain ⟨l, hl⟩ := ((P.toExtension.e
+  obtain ⟨l, hl⟩ := ((P.toExtension.exact_cotangentComplex_toKaehler.split_tfae'.out 0 1 rfl rfl).mp
+    ⟨P.toExtension.subsingleton_h1Cotangent.mp FormallySmooth.subsingleton_h1Cotangent,
+      Module.projective_lifting_property _ _ P.toExtension.toKaehler_surjective⟩).2
+  obtain ⟨g, hg⟩ := retractionKerCotangentToTensorEquivSection (R := R) P.algebraMap_surjective
+    ⟨⟨⟨Cotangent.val, by simp⟩, by simpa using! Cotangent.val_smul' (P := P.toExtension)⟩ ∘ₗ
+      l.restrictScalars P.toExtension.Ring, LinearMap.ext fun x => congr($hl x)⟩
+  let σ := Function.surjInv (f := algebraMap B (B ⧸ I)) Ideal.Quotient.mk_surjective
+  have H (x : P.Ring) : ↑(aeval (σ ∘ f) x) = f (algebraMap _ A x) := by
+    rw [← Ideal.Quotient.algebraMap_eq]; rw [← aeval_algebraMap_apply]; rw [P.algebraMap_eq]; rw [AlgHom.coe_toRingHom]; rw [comp_aeval_apply]; rw [← Function.comp_assoc]; rw [Function.comp_surjInv]
+    simp [P]
+  let l : P.Ring ⧸ (RingHom.ker (algebraMap P.Ring A)) ^ 2 ->ₐ[R] B :=
+Ideal.Quotient.liftₐ _ (aeval (σ ∘ f))
+      have : RingHom.ker (algebraMap P.Ring A) <= I.comap (aeval (σ ∘ f)).toRingHom := fun x hx => by
+        simp_all [← Ideal.Quotient.eq_zero_iff_mem (I := I), -map_aeval]
+      show RingHom.ker _ ^ 2 <= RingHom.ker _ from
+        (Ideal.pow_right_mono this 2).trans ((Ideal.le_comap_pow _ _).trans_eq (hI ▸ rfl))
+  have : f.comp (IsScalarTower.toAlgHom R P.Ring A).kerSquareLift =
+      (Ideal.Quotient.mkₐ R _).comp l := by
+    refine Ideal.Quotient.algHom_ext _ (MvPolynomial.algHom_ext fun i => ?_)
+    change f (algebraMap P.Ring A (.X i)) = algebraMap _ _ (MvPolynomial.aeval (σ ∘ f) (.X i))
+    simpa using! (Function.surjInv_eq _ _).symm
+  exact ⟨l.comp g, by rw [← AlgHom.comp_assoc, ← this, AlgHom.comp_assoc, hg, AlgHom.comp_id]⟩
 
 中文:
 引理 形式光滑.comp_surjective
@@ -117,7 +138,28 @@ lemma FormallySmooth.comp_surjective
   have hP : Function.Injective P.toExtension.cotangentComplex := by
     rw [← LinearMap.ker_eq_bot]; rw [← Submodule.subsingleton_iff_eq_bot]
     exact FormallySmooth.subsingleton_h1Cotangent
-  obtain ⟨l, hl⟩ := ((P.toExtension.e
+  obtain ⟨l, hl⟩ := ((P.toExtension.exact_cotangentComplex_toKaehler.split_tfae'.out 0 1 rfl rfl).mp
+    ⟨P.toExtension.subsingleton_h1Cotangent.mp FormallySmooth.subsingleton_h1Cotangent,
+      Module.projective_lifting_property _ _ P.toExtension.toKaehler_surjective⟩).2
+  obtain ⟨g, hg⟩ := retractionKerCotangentToTensorEquivSection (R := R) P.algebraMap_surjective
+    ⟨⟨⟨Cotangent.val, by simp⟩, by simpa using! Cotangent.val_smul' (P := P.toExtension)⟩ ∘ₗ
+      l.restrictScalars P.toExtension.Ring, LinearMap.ext fun x => congr($hl x)⟩
+  let σ := Function.surjInv (f := algebraMap B (B ⧸ I)) Ideal.Quotient.mk_surjective
+  have H (x : P.Ring) : ↑(aeval (σ ∘ f) x) = f (algebraMap _ A x) := by
+    rw [← Ideal.Quotient.algebraMap_eq]; rw [← aeval_algebraMap_apply]; rw [P.algebraMap_eq]; rw [AlgHom.coe_toRingHom]; rw [comp_aeval_apply]; rw [← Function.comp_assoc]; rw [Function.comp_surjInv]
+    simp [P]
+  let l : P.Ring ⧸ (RingHom.ker (algebraMap P.Ring A)) ^ 2 ->ₐ[R] B :=
+Ideal.Quotient.liftₐ _ (aeval (σ ∘ f))
+      have : RingHom.ker (algebraMap P.Ring A) <= I.comap (aeval (σ ∘ f)).toRingHom := fun x hx => by
+        simp_all [← Ideal.Quotient.eq_zero_iff_mem (I := I), -map_aeval]
+      show RingHom.ker _ ^ 2 <= RingHom.ker _ from
+        (Ideal.pow_right_mono this 2).trans ((Ideal.le_comap_pow _ _).trans_eq (hI ▸ rfl))
+  have : f.comp (IsScalarTower.toAlgHom R P.Ring A).kerSquareLift =
+      (Ideal.Quotient.mkₐ R _).comp l := by
+    refine Ideal.Quotient.algHom_ext _ (MvPolynomial.algHom_ext fun i => ?_)
+    change f (algebraMap P.Ring A (.X i)) = algebraMap _ _ (MvPolynomial.aeval (σ ∘ f) (.X i))
+    simpa using! (Function.surjInv_eq _ _).symm
+  exact ⟨l.comp g, by rw [← AlgHom.comp_assoc, ← this, AlgHom.comp_assoc, hg, AlgHom.comp_id]⟩
 
 Depends on / 依赖: Algebra, Algebra.Generators, FormallySmooth, FormallySmooth.subsingleton_h1Cotangent, Function, Function.Injective, Generators, Generators.self, Injective, LinearMap, LinearMap.ker_eq_bot, Module, Module.projective_lifting_property, P.toExtension.cotangentComplex, P.toExtension.exact_cotangentComplex_toKaehler.split_tfae, P.toExtension.subsingleton_h1Cotangent.mp, P.toExtension.toKaehler_surje, Submodule, Submodule.subsingleton_iff_eq_bot, cotangentComplex
 -/
@@ -163,7 +205,10 @@ instance instFormallySmoothMvPolynomial
   have : Subsingleton ↥P.toExtension.ker :=
     Submodule.subsingleton_iff_eq_bot.mpr Generators.ker_mvPolynomial
   have : Subsingleton P.toExtension.Cotangent := Cotangent.mk_surjective.subsingleton
-  have := P.toExtension.h1Cotangentι_injective.subsingleto
+  have := P.toExtension.h1Cotangentι_injective.subsingleton
+  exact ⟨inferInstance, P.equivH1Cotangent.symm.subsingleton⟩
+
+@[deprecated (since := "2026-05-22")] alias mvPolynomial := instFormallySmoothMvPolynomial
 
 中文:
 实例 instFormallySmoothMvPolynomial
@@ -173,7 +218,10 @@ instance instFormallySmoothMvPolynomial
   have : Subsingleton ↥P.toExtension.ker :=
     Submodule.subsingleton_iff_eq_bot.mpr Generators.ker_mvPolynomial
   have : Subsingleton P.toExtension.Cotangent := Cotangent.mk_surjective.subsingleton
-  have := P.toExtension.h1Cotangentι_injective.subsingleto
+  have := P.toExtension.h1Cotangentι_injective.subsingleton
+  exact ⟨inferInstance, P.equivH1Cotangent.symm.subsingleton⟩
+
+@[deprecated (since := "2026-05-22")] alias mvPolynomial := instFormallySmoothMvPolynomial
 
 Depends on / 依赖: Cotangent, Cotangent.mk_surjective.subsingleton, Generators, Generators.ker_mvPolynomial, Generators.mvPolynomial, P.equivH1Cotangent.symm.subsingleton, P.toExtension.Cotangent, P.toExtension.h1Cotangent, P.toExtension.ker, Submodule, Submodule.subsingleton_iff_eq_bot.mpr, Subsingleton, _injective.subsingleton, equivH1Cotangent, ker_mvPolynomial, mk_surjective, mvPolynomial, subsingleton, subsingleton_iff_eq_bot, toExtension
 -/
@@ -203,7 +251,16 @@ theorem exists_lift
   apply Ideal.IsNilpotent.induction_on (S := B) I hI
   · intro B _ I hI _; exact FormallySmooth.comp_surjective R A I hI
   · intro B _ I J hIJ h₁ h₂ _ g
-    let : ((B ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)) ≃
+    let : ((B ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)) ≃ₐ[R] B ⧸ J :=
+      { (DoubleQuot.quotQuotEquivQuotSup I J).trans
+          (Ideal.quotEquivOfEq (sup_eq_right.mpr hIJ)) with
+        commutes' := fun x => rfl }
+    obtain ⟨g', e⟩ := h₂ (this.symm.toAlgHom.comp g)
+    obtain ⟨g', rfl⟩ := h₁ g'
+    replace e := congr_arg this.toAlgHom.comp e
+    conv_rhs at e =>
+      rw [← AlgHom.comp_assoc]; rw [AlgEquiv.comp_symm]; rw [AlgHom.id_comp]
+    exact ⟨g', e⟩
 
 中文:
 定理 存在_lift
@@ -214,7 +271,16 @@ theorem exists_lift
   apply Ideal.IsNilpotent.induction_on (S := B) I hI
   · intro B _ I hI _; exact FormallySmooth.comp_surjective R A I hI
   · intro B _ I J hIJ h₁ h₂ _ g
-    let : ((B ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)) ≃
+    let : ((B ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)) ≃ₐ[R] B ⧸ J :=
+      { (DoubleQuot.quotQuotEquivQuotSup I J).trans
+          (Ideal.quotEquivOfEq (sup_eq_right.mpr hIJ)) with
+        commutes' := fun x => rfl }
+    obtain ⟨g', e⟩ := h₂ (this.symm.toAlgHom.comp g)
+    obtain ⟨g', rfl⟩ := h₁ g'
+    replace e := congr_arg this.toAlgHom.comp e
+    conv_rhs at e =>
+      rw [← AlgHom.comp_assoc]; rw [AlgEquiv.comp_symm]; rw [AlgHom.id_comp]
+    exact ⟨g', e⟩
 
 Depends on / 依赖: Algebra, DoubleQuot, DoubleQuot.quotQuotEquivQuotSup, FormallySmooth, FormallySmooth.comp_surjective, Function, Function.Surjective, Ideal.IsNilpotent.induction_on, Ideal.Quotient.mk, Ideal.quotEquivOfEq, IsNilpotent, J.map, Quotient, Surjective, commutes, comp_surjective, induction_on, quotEquivOfEq, quotQuotEquivQuotSup, revert
 -/
@@ -340,7 +406,10 @@ theorem liftOfSurjective_apply
   conv_rhs => rw [← AlgEquiv.coe_toAlgHom, ← AlgHom.comp_apply,
     ← FormallySmooth.mk_lift (A := A) _ hg']
   apply (Ideal.quotientKerAlgEquivOfSurjective hg).injective
-  rw [AlgEquiv.apply_symm_apply]; rw [Ideal.quotientKerAlgEqu
+  rw [AlgEquiv.apply_symm_apply]; rw [Ideal.quotientKerAlgEquivOfSurjective_apply]
+  simp only [liftOfSurjective, ← RingHom.ker_coe_toRingHom g, RingHom.kerLift_mk, RingHom.coe_coe]
+
+@[simp]
 
 中文:
 定理 liftOfSurjective_apply
@@ -350,7 +419,10 @@ theorem liftOfSurjective_apply
   conv_rhs => rw [← AlgEquiv.coe_toAlgHom, ← AlgHom.comp_apply,
     ← FormallySmooth.mk_lift (A := A) _ hg']
   apply (Ideal.quotientKerAlgEquivOfSurjective hg).injective
-  rw [AlgEquiv.apply_symm_apply]; rw [Ideal.quotientKerAlgEqu
+  rw [AlgEquiv.apply_symm_apply]; rw [Ideal.quotientKerAlgEquivOfSurjective_apply]
+  simp only [liftOfSurjective, ← RingHom.ker_coe_toRingHom g, RingHom.kerLift_mk, RingHom.coe_coe]
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.comp_apply, FormallySmooth, FormallySmooth.mk_lift, Ideal.quotientKerAlgEquivOfSurjective, Ideal.quotientKerAlgEquivOfSurjective_apply, RingHom, RingHom.coe_coe, RingHom.kerLift_mk, RingHom.ker_coe_toRingHom, SecondCountableTopology, SecondCountableTopology.toHereditarilyLindelof, apply_symm_apply, coe_coe, coe_toAlgHom, comp_apply, conv_rhs
 -/
@@ -424,7 +496,21 @@ definition homInfinitesimal
     (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A)
     P₂.infinitesimal.algebraMap_surjective
     ⟨2, show P₂.infinitesimal.ker ^ 2 = ⊥ by
-      rw [ker_infinitesimal]; ex
+      rw [ker_infinitesimal]; exact Ideal.cotangentIdeal_square _⟩
+  { toRingHom := (Ideal.Quotient.liftₐ (P₁.ker ^ 2) lift (by
+        change P₁.ker ^ 2 <= RingHom.ker lift
+        rw [pow_two]; rw [Ideal.mul_le]
+        have : forall r in P₁.ker, lift r in P₂.infinitesimal.ker :=
+          fun r hr => (FormallySmooth.liftOfSurjective_apply _
+            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ r).trans hr
+        intro r hr s hs
+        rw [RingHom.mem_ker]; rw [map_mul]; rw [← Ideal.mem_bot]; rw [← P₂.ker.cotangentIdeal_square]; rw [← ker_infinitesimal]; rw [pow_two]
+        exact Ideal.mul_mem_mul (this r hr) (this s hs))).toRingHom
+    toRingHom_algebraMap := by simp
+    algebraMap_toRingHom x := by
+      obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+      exact FormallySmooth.liftOfSurjective_apply _
+            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ x }
 
 中文:
 定义 homInfinitesimal
@@ -434,7 +520,21 @@ definition homInfinitesimal
     (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A)
     P₂.infinitesimal.algebraMap_surjective
     ⟨2, show P₂.infinitesimal.ker ^ 2 = ⊥ by
-      rw [ker_infinitesimal]; ex
+      rw [ker_infinitesimal]; exact Ideal.cotangentIdeal_square _⟩
+  { toRingHom := (Ideal.Quotient.liftₐ (P₁.ker ^ 2) lift (by
+        change P₁.ker ^ 2 <= RingHom.ker lift
+        rw [pow_two]; rw [Ideal.mul_le]
+        have : forall r in P₁.ker, lift r in P₂.infinitesimal.ker :=
+          fun r hr => (FormallySmooth.liftOfSurjective_apply _
+            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ r).trans hr
+        intro r hr s hs
+        rw [RingHom.mem_ker]; rw [map_mul]; rw [← Ideal.mem_bot]; rw [← P₂.ker.cotangentIdeal_square]; rw [← ker_infinitesimal]; rw [pow_two]
+        exact Ideal.mul_mem_mul (this r hr) (this s hs))).toRingHom
+    toRingHom_algebraMap := by simp
+    algebraMap_toRingHom x := by
+      obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+      exact FormallySmooth.liftOfSurjective_apply _
+            (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A) _ _ x }
 
 Depends on / 依赖: FormallySmooth, FormallySmooth.liftOfSurjective, Ideal.Quotient.lift, Ideal.cotangentIdeal_square, Ideal.mul_le, IsScalarTower, IsScalarTower.toAlgHom, Quotient, RingHom, RingHom.ker, algebraMap_surjective, cotangentIdeal_square, infinitesimal, infinitesimal.Ring, infinitesimal.algebraMap_surjective, infinitesimal.ker, ker_infinitesimal, liftOfSurjective, mul_le, pow_two
 -/
@@ -661,7 +761,12 @@ theorem iff_split_injection
   rw [formallySmooth_iff]; rw [and_comm]; rw [Module.Projective.iff_split_of_projective (KaehlerDifferential.mapBaseChange R P A)
       (mapBaseChange_surjective R P A hf)]; rw [← kerCotangentToTensor_injective_iff hf]
   convert!
-    (((exact_kerCotangentToTensor_mapBaseChange R _ _ hf).split_tfa
+    (((exact_kerCotangentToTensor_mapBaseChange R _ _ hf).split_tfae' (g :=
+          (KaehlerDifferential.mapBaseChange R P A).restrictScalars P)).out
+      0 1) using 2
+  · rw [← (LinearMap.extendScalarsOfSurjectiveEquiv hf).exists_congr_right]
+    simp [LinearMap.ext_iff]
+  · rw [and_iff_right (by exact mapBaseChange_surjective R P A hf)]
 
 中文:
 定理 iff_split_injection
@@ -669,7 +774,12 @@ theorem iff_split_injection
   rw [formallySmooth_iff]; rw [and_comm]; rw [Module.Projective.iff_split_of_projective (KaehlerDifferential.mapBaseChange R P A)
       (mapBaseChange_surjective R P A hf)]; rw [← kerCotangentToTensor_injective_iff hf]
   convert!
-    (((exact_kerCotangentToTensor_mapBaseChange R _ _ hf).split_tfa
+    (((exact_kerCotangentToTensor_mapBaseChange R _ _ hf).split_tfae' (g :=
+          (KaehlerDifferential.mapBaseChange R P A).restrictScalars P)).out
+      0 1) using 2
+  · rw [← (LinearMap.extendScalarsOfSurjectiveEquiv hf).exists_congr_right]
+    simp [LinearMap.ext_iff]
+  · rw [and_iff_right (by exact mapBaseChange_surjective R P A hf)]
 
 Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.mapBaseChange, LinearMap, LinearMap.ext_iff, LinearMap.extendScalarsOfSurjectiveEquiv, Module, Module.Projective.iff_split_of_projective, Projective, and_comm, and_iff_right, convert, exact_kerCotangentToTensor_mapBaseChange, exists_congr_right, ext_iff, extendScalarsOfSurjectiveEquiv, formallySmooth_iff, iff_split_of_projective, kerCotangentToTensor_injective_iff, mapBaseChange, mapBaseChange_surjective
 -/
@@ -704,7 +814,11 @@ theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
     { __ := AddEquiv.refl _, map_smul' r m := by ext1; simp; rfl }
   constructor
   · intro ⟨l, hl⟩
-    exact ⟨(e.comp l).extendScalarsOfSurjective P.algebraMa
+    exact ⟨(e.comp l).extendScalarsOfSurjective P.algebraMap_surjective,
+      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
+  · intro ⟨l, hl⟩
+    exact ⟨e.symm.toLinearMap ∘ₗ l.restrictScalars P.Ring,
+      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
 
 中文:
 定理 _root_.代数.扩张.formallySmooth_iff_split_injection
@@ -714,7 +828,11 @@ theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
     { __ := AddEquiv.refl _, map_smul' r m := by ext1; simp; rfl }
   constructor
   · intro ⟨l, hl⟩
-    exact ⟨(e.comp l).extendScalarsOfSurjective P.algebraMa
+    exact ⟨(e.comp l).extendScalarsOfSurjective P.algebraMap_surjective,
+      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
+  · intro ⟨l, hl⟩
+    exact ⟨e.symm.toLinearMap ∘ₗ l.restrictScalars P.Ring,
+      LinearMap.ext (DFunLike.congr_fun hl : _)⟩
 
 Depends on / 依赖: AddEquiv, AddEquiv.refl, Algebra, Algebra.FormallySmooth.iff_split_injection, Cotangent, DFunLike, DFunLike.congr_fun, FormallySmooth, LinearMap, LinearMap.ext, P.Cotangent, P.Ring, P.algebraMap_surjective, P.ker.Cotangent, algebraMap_surjective, congr_fun, e.comp, e.symm.toLinearMap, extendScalarsOfSurjective, iff_split_injection
 -/
@@ -799,7 +917,16 @@ theorem of_comp_surjective
   rw [iff_split_surjection f P.algebraMap_surjective]
   have surj : Function.Surjective f.kerSquareLift :=
     Ideal.Quotient.lift_surjective_of_surjective _ _ P.algebraMap_surjective
-  have sqz : RingHom.ker f.kerSquareL
+  have sqz : RingHom.ker f.kerSquareLift.toRingHom ^ 2 = ⊥ := by
+    rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIdeal_square]
+  dsimp only [AlgHom.toRingHom_eq_coe, RingHom.ker_coe_toRingHom] at sqz
+  obtain ⟨g, hg⟩ := H _ sqz (Ideal.quotientKerAlgEquivOfSurjective surj).symm.toAlgHom
+  refine ⟨g, AlgHom.ext fun x => congr(f.kerSquareLift.kerLift ($hg x)).trans ?_⟩
+  obtain ⟨x, rfl⟩ := (Ideal.quotientKerAlgEquivOfSurjective surj).surjective x
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  simp only [AlgHom.toRingHom_eq_coe, AlgEquiv.coe_toAlgHom, AlgEquiv.symm_apply_apply,
+    AlgHom.coe_id, id_eq]
+  simp only [Ideal.quotientKerAlgEquivOfSurjective_apply]
 
 中文:
 定理 of_comp_surjective
@@ -809,7 +936,16 @@ theorem of_comp_surjective
   rw [iff_split_surjection f P.algebraMap_surjective]
   have surj : Function.Surjective f.kerSquareLift :=
     Ideal.Quotient.lift_surjective_of_surjective _ _ P.algebraMap_surjective
-  have sqz : RingHom.ker f.kerSquareL
+  have sqz : RingHom.ker f.kerSquareLift.toRingHom ^ 2 = ⊥ := by
+    rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIdeal_square]
+  dsimp only [AlgHom.toRingHom_eq_coe, RingHom.ker_coe_toRingHom] at sqz
+  obtain ⟨g, hg⟩ := H _ sqz (Ideal.quotientKerAlgEquivOfSurjective surj).symm.toAlgHom
+  refine ⟨g, AlgHom.ext fun x => congr(f.kerSquareLift.kerLift ($hg x)).trans ?_⟩
+  obtain ⟨x, rfl⟩ := (Ideal.quotientKerAlgEquivOfSurjective surj).surjective x
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  simp only [AlgHom.toRingHom_eq_coe, AlgEquiv.coe_toAlgHom, AlgEquiv.symm_apply_apply,
+    AlgHom.coe_id, id_eq]
+  simp only [Ideal.quotientKerAlgEquivOfSurjective_apply]
 
 Depends on / 依赖: AlgHom, AlgHom.ker_kerSquareLift, AlgHom.toRingHom_eq_coe, Function, Function.Surjective, Generators, Generators.self, Ideal.Quotient.lift_surjective_of_surjective, Ideal.cotangentIdeal_square, Ideal.quotientKerAlgEqui, IsScalarTower, IsScalarTower.toAlgHom, P.Ring, P.algebraMap_surjective, Quotient, RingHom, RingHom.ker, RingHom.ker_coe_toRingHom, Surjective, algebraMap_surjective
 -/
@@ -961,7 +1097,8 @@ theorem comp
   obtain ⟨f', e⟩ := FormallySmooth.comp_surjective _ _ I hI (f.comp (IsScalarTower.toAlgHom R A B))
   let := f'.toRingHom.toAlgebra
   obtain ⟨f'', e'⟩ := comp_surjective _ _ I hI { f with commutes' := AlgHom.congr_fun e.symm }
-  apply_fun AlgHom
+  apply_fun AlgHom.restrictScalars R at e'
+  exact ⟨f''.restrictScalars _, e'.trans (AlgHom.ext fun _ => rfl)⟩
 
 中文:
 定理 comp
@@ -972,7 +1109,8 @@ theorem comp
   obtain ⟨f', e⟩ := FormallySmooth.comp_surjective _ _ I hI (f.comp (IsScalarTower.toAlgHom R A B))
   let := f'.toRingHom.toAlgebra
   obtain ⟨f'', e'⟩ := comp_surjective _ _ I hI { f with commutes' := AlgHom.congr_fun e.symm }
-  apply_fun AlgHom
+  apply_fun AlgHom.restrictScalars R at e'
+  exact ⟨f''.restrictScalars _, e'.trans (AlgHom.ext fun _ => rfl)⟩
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, AlgHom.ext, AlgHom.restrictScalars, FormallySmooth, FormallySmooth.comp_surjective, IsScalarTower, IsScalarTower.toAlgHom, LocallyCompactSpace, WeaklyLocallyCompactSpace, apply_fun, commutes, comp_surjective, congr_fun, e.symm, f.comp, of_comp_surjective, restrictScalars, toAlgHom, toAlgebra
 -/
@@ -995,7 +1133,10 @@ lemma of_restrictScalars
   algebraize [(algebraMap A C).comp (algebraMap R A)]
   obtain ⟨g, hg⟩ := Algebra.FormallySmooth.comp_surjective _ _ I hI (f.restrictScalars R)
   suffices g.comp (IsScalarTower.toAlgHom R A B) = IsScalarTower.toAlgHom R A C from
-    ⟨{ __ :=
+    ⟨{ __ := g, commutes' x := congr($this x) }, AlgHom.ext fun x => congr($hg x)⟩
+  apply Algebra.FormallyUnramified.comp_injective _ hI
+  rw [← AlgHom.comp_assoc]; rw [hg]
+  exact AlgHom.ext f.commutes
 
 中文:
 引理 of_restrictScalars
@@ -1005,7 +1146,10 @@ lemma of_restrictScalars
   algebraize [(algebraMap A C).comp (algebraMap R A)]
   obtain ⟨g, hg⟩ := Algebra.FormallySmooth.comp_surjective _ _ I hI (f.restrictScalars R)
   suffices g.comp (IsScalarTower.toAlgHom R A B) = IsScalarTower.toAlgHom R A C from
-    ⟨{ __ :=
+    ⟨{ __ := g, commutes' x := congr($this x) }, AlgHom.ext fun x => congr($hg x)⟩
+  apply Algebra.FormallyUnramified.comp_injective _ hI
+  rw [← AlgHom.comp_assoc]; rw [hg]
+  exact AlgHom.ext f.commutes
 
 Depends on / 依赖: AlgHom, AlgHom.comp_assoc, AlgHom.ext, Algebra, Algebra.FormallySmooth.comp_surjective, Algebra.FormallyUnramified.comp_injective, FormallySmooth, FormallyUnramified, IsScalarTower, IsScalarTower.toAlgHom, algebraMap, algebraize, commutes, comp_assoc, comp_injective, comp_surjective, f.commutes, f.restrictScalars, g.comp, iff_comp_surjective
 -/
@@ -1040,7 +1184,11 @@ lemma iff_of_surjective
   · intro ⟨g, hg⟩
     let e : A ≃ₐ[R] R ⧸ RingHom.ker (algebraMap R A) ^ 2 :=
       .ofAlgHom _ _ (Ideal.Quotient.algHom_ext _ (by ext)) hg
-    rw [IsIdempotentElem]; rw [← pow_two]; rw [← Ideal.mk_ker (I := _ ^
+    rw [IsIdempotentElem]; rw [← pow_two]; rw [← Ideal.mk_ker (I := _ ^ 2)]; rw [← Ideal.Quotient.algebraMap_eq]; rw [← e.toAlgHom.comp_algebraMap]; rw [RingHom.ker_comp_of_injective _ (by exact e.injective)]
+  · intro H
+    let e := (Ideal.quotientEquivAlgOfEq _ ((pow_two _).trans H)).trans
+      (Ideal.quotientKerAlgEquivOfSurjective (f := Algebra.ofId R A) h)
+exact ⟨e.symm.toAlgHom, AlgHom.ext h.forall.mpr fun x => by simp⟩
 
 中文:
 引理 iff_of_surjective
@@ -1051,7 +1199,11 @@ lemma iff_of_surjective
   · intro ⟨g, hg⟩
     let e : A ≃ₐ[R] R ⧸ RingHom.ker (algebraMap R A) ^ 2 :=
       .ofAlgHom _ _ (Ideal.Quotient.algHom_ext _ (by ext)) hg
-    rw [IsIdempotentElem]; rw [← pow_two]; rw [← Ideal.mk_ker (I := _ ^
+    rw [IsIdempotentElem]; rw [← pow_two]; rw [← Ideal.mk_ker (I := _ ^ 2)]; rw [← Ideal.Quotient.algebraMap_eq]; rw [← e.toAlgHom.comp_algebraMap]; rw [RingHom.ker_comp_of_injective _ (by exact e.injective)]
+  · intro H
+    let e := (Ideal.quotientEquivAlgOfEq _ ((pow_two _).trans H)).trans
+      (Ideal.quotientKerAlgEquivOfSurjective (f := Algebra.ofId R A) h)
+exact ⟨e.symm.toAlgHom, AlgHom.ext h.forall.mpr fun x => by simp⟩
 
 Depends on / 依赖: Algebra, Algebra.FormallySmooth.iff_split_surjection, Algebra.ofId, FormallySmooth, Ideal.Quotient.algHom_ext, Ideal.Quotient.algebraMap_eq, Ideal.mk_ker, Ideal.quotientEquivAlgOfEq, IsIdempotentElem, Quotient, RingHom, RingHom.ker, RingHom.ker_comp_of_injective, algHom_ext, algebraMap, algebraMap_eq, comp_algebraMap, e.injective, e.toAlgHom.comp_algebraMap, iff_split_surjection
 -/
@@ -1089,7 +1241,12 @@ instance [FormallySmooth
   let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
   have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
   refine ⟨TensorProduct.productLeftAlgHom (Algebra.ofId B C) ?_, ?_⟩
-  · exact FormallySmooth.lift I ⟨2, hI⟩ ((f.rest
+  · exact FormallySmooth.lift I ⟨2, hI⟩ ((f.restrictScalars R).comp TensorProduct.includeRight)
+  · apply AlgHom.restrictScalars_injective R
+    apply TensorProduct.ext'
+    intro b a
+    suffices algebraMap B _ b * f (1 otimesₜ[R] a) = f (b otimesₜ[R] a) by simpa [Algebra.ofId_apply]
+    rw [← Algebra.smul_def]; rw [← map_smul]; rw [TensorProduct.smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
 
 中文:
 实例 [形式光滑
@@ -1099,7 +1256,12 @@ instance [FormallySmooth
   let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
   have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
   refine ⟨TensorProduct.productLeftAlgHom (Algebra.ofId B C) ?_, ?_⟩
-  · exact FormallySmooth.lift I ⟨2, hI⟩ ((f.rest
+  · exact FormallySmooth.lift I ⟨2, hI⟩ ((f.restrictScalars R).comp TensorProduct.includeRight)
+  · apply AlgHom.restrictScalars_injective R
+    apply TensorProduct.ext'
+    intro b a
+    suffices algebraMap B _ b * f (1 otimesₜ[R] a) = f (b otimesₜ[R] a) by simpa [Algebra.ofId_apply]
+    rw [← Algebra.smul_def]; rw [← map_smul]; rw [TensorProduct.smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
 
 Depends on / 依赖: AlgHom, AlgHom.restrictScalars_injective, Algebr, Algebra, Algebra.ofId, FormallySmooth, FormallySmooth.lift, IsScalarTower, IsScalarTower.of_algebraMap_eq, TensorProduct, TensorProduct.ext, TensorProduct.includeRight, TensorProduct.productLeftAlgHom, algebraMap, f.restrictScalars, includeRight, of_algebraMap_eq, of_comp_surjective, productLeftAlgHom, restrictScalars
 -/
@@ -1139,7 +1301,13 @@ theorem of_isLocalization
     apply (IsNilpotent.isUnit_quotient_mk_iff ⟨2, e⟩).mp
     convert! (IsLocalization.map_units Rₘ x).map f
     simp only [Ideal.Quotient.mk_algebraMap, AlgHom.commutes]
-  let : R
+  let : Rₘ ->ₐ[R] Q :=
+    { IsLocalization.lift this with commutes' := IsLocalization.lift_eq this }
+  use this
+  apply AlgHom.coe_ringHom_injective
+  refine IsLocalization.ringHom_ext M ?_
+  ext
+  simp
 
 中文:
 定理 of_isLocalization
@@ -1151,7 +1319,13 @@ theorem of_isLocalization
     apply (IsNilpotent.isUnit_quotient_mk_iff ⟨2, e⟩).mp
     convert! (IsLocalization.map_units Rₘ x).map f
     simp only [Ideal.Quotient.mk_algebraMap, AlgHom.commutes]
-  let : R
+  let : Rₘ ->ₐ[R] Q :=
+    { IsLocalization.lift this with commutes' := IsLocalization.lift_eq this }
+  use this
+  apply AlgHom.coe_ringHom_injective
+  refine IsLocalization.ringHom_ext M ?_
+  ext
+  simp
 
 Depends on / 依赖: AlgHom, AlgHom.coe_ringHom_injective, AlgHom.commutes, Ideal.Quotient.mk_algebraMap, IsLocalization, IsLocalization.lift, IsLocalization.lift_eq, IsLocalization.map_units, IsLocalization.ringHom_ext, IsNilpotent, IsNilpotent.isUnit_quotient_mk_iff, IsUnit, Quotient, algebraMap, coe_ringHom_injective, commutes, convert, isUnit_quotient_mk_iff, lift_eq, map_units
 -/
@@ -1205,7 +1379,18 @@ theorem localization_base
   let : IsScalarTower R Rₘ Q := IsScalarTower.of_algebraMap_eq' rfl
   let f : Sₘ ->ₐ[Rₘ] Q := by
     refine { FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) with commutes' := ?_ }
-
+    intro r
+    change
+      (RingHom.comp (FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) : Sₘ ->+* Q)
+            (algebraMap _ _))
+          r =
+        algebraMap _ _ r
+    congr 1
+    refine IsLocalization.ringHom_ext M ?_
+    rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [AlgHom.comp_algebraMap]
+  use f
+  ext
+  simp [f]
 
 中文:
 定理 localization_base
@@ -1217,7 +1402,18 @@ theorem localization_base
   let : IsScalarTower R Rₘ Q := IsScalarTower.of_algebraMap_eq' rfl
   let f : Sₘ ->ₐ[Rₘ] Q := by
     refine { FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) with commutes' := ?_ }
-
+    intro r
+    change
+      (RingHom.comp (FormallySmooth.lift I ⟨2, e⟩ (f.restrictScalars R) : Sₘ ->+* Q)
+            (algebraMap _ _))
+          r =
+        algebraMap _ _ r
+    congr 1
+    refine IsLocalization.ringHom_ext M ?_
+    rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]; rw [AlgHom.comp_algebraMap]
+  use f
+  ext
+  simp [f]
 
 Depends on / 依赖: FormallySmooth, FormallySmooth.lift, IsLocalization, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.comp, RingHom.comp_assoc, algebraMap, commutes, comp_assoc, f.restrictScalars, of_algebraMap_eq, of_comp_surjective, restrictScalars, ringHom_ext, toAlgebra
 -/

@@ -501,14 +501,32 @@ definition liftMonoidHom
   signature: (p : Nat) (M : Type*) [CommMonoid M] [PerfectRing M p]
   body: { toFun r := ⟨fun n => f ((powMulEquiv M (p ^ n)).symm r), fun n => by
         rw [← map_pow]; rw [powMulEquiv_pow]; rw [pow_succ]; rw [MulAut.mul_def]; rw [MulEquiv.symm_trans_apply]; rw [powMulEquiv_symm_pow_p]; rw [← powMulEquiv_pow]⟩
-      map_one' := extMonoid fun _ => by simp_rw [coeffMonoidHo
+      map_one' := extMonoid fun _ => by simp_rw [coeffMonoidHom_mk, map_one]
+      map_mul' x y := extMonoid fun _ => by simp_rw [map_mul, coeffMonoidHom_mk] }
+  invFun := (coeffMonoidHom N p 0).comp
+  left_inv f := by ext; simp
+  right_inv f := by
+    ext m n
+    simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.coe_mk, OneHom.coe_mk,
+      coeffMonoidHom_mk]
+    rw [← coeffMonoidHom_pow_p_pow _ 0 n]; rw [← map_pow]; rw [powMulEquiv_symm_pow_p]; rw [zero_add]
+  map_mul' _ _ := by ext; simp
 
 中文:
 定义 liftMonoidHom
   签名: (p : 自然数) (M : 类型) [交换幺半群 M] [完美环 M p]
   定义体: { toFun r := ⟨fun n => f ((powMulEquiv M (p ^ n)).symm r), fun n => by
         rw [← map_pow]; rw [powMulEquiv_pow]; rw [pow_succ]; rw [MulAut.mul_def]; rw [MulEquiv.symm_trans_apply]; rw [powMulEquiv_symm_pow_p]; rw [← powMulEquiv_pow]⟩
-      map_one' := extMonoid fun _ => by simp_rw [coeffMonoidHo
+      map_one' := extMonoid fun _ => by simp_rw [coeffMonoidHom_mk, map_one]
+      map_mul' x y := extMonoid fun _ => by simp_rw [map_mul, coeffMonoidHom_mk] }
+  invFun := (coeffMonoidHom N p 0).comp
+  left_inv f := by ext; simp
+  right_inv f := by
+    ext m n
+    simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.coe_mk, OneHom.coe_mk,
+      coeffMonoidHom_mk]
+    rw [← coeffMonoidHom_pow_p_pow _ 0 n]; rw [← map_pow]; rw [powMulEquiv_symm_pow_p]; rw [zero_add]
+  map_mul' _ _ := by ext; simp
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_comp, MulAut, MulAut.mul_def, MulEquiv, MulEquiv.symm_trans_apply, coe_comp, coeffMonoidHom, coeffMonoidHom_mk, extMonoid, invFun, left_inv, map_mul, map_one, map_pow, mul_def, powMulEquiv, powMulEquiv_pow, powMulEquiv_symm_pow_p, pow_succ
 -/
@@ -1118,7 +1136,16 @@ theorem coeff_surjective
       choose x hx using h xk
       use x
   · intro m
-    obtain (h1 | h1 | h1) : n <= m ∨ n = m + 1 ∨ ¬ n <= m + 1 := b
+    obtain (h1 | h1 | h1) : n <= m ∨ n = m + 1 ∨ ¬ n <= m + 1 := by lia
+    · have h1' : n <= m + 1 := by lia
+      simp only [h1', ↓reduceDIte, h1, Nat.leRec_succ, ← frobenius_def]
+      exact Classical.choose_spec (h _)
+    · subst h1
+      simp [← frobenius_def]
+    · have h1' : ¬ n <= m := by lia
+      have : n - m = (n - (m + 1)) + 1 := by lia
+      simp [h1, h1', this, pow_succ, pow_mul]
+  · simp
 
 中文:
 定理 coeff_surjective
@@ -1133,7 +1160,16 @@ theorem coeff_surjective
       choose x hx using h xk
       use x
   · intro m
-    obtain (h1 | h1 | h1) : n <= m ∨ n = m + 1 ∨ ¬ n <= m + 1 := b
+    obtain (h1 | h1 | h1) : n <= m ∨ n = m + 1 ∨ ¬ n <= m + 1 := by lia
+    · have h1' : n <= m + 1 := by lia
+      simp only [h1', ↓reduceDIte, h1, Nat.leRec_succ, ← frobenius_def]
+      exact Classical.choose_spec (h _)
+    · subst h1
+      simp [← frobenius_def]
+    · have h1' : ¬ n <= m := by lia
+      have : n - m = (n - (m + 1)) + 1 := by lia
+      simp [h1, h1', this, pow_succ, pow_mul]
+  · simp
 
 Depends on / 依赖: Classical, Classical.choose_spec, Nat.leRec, Nat.leRec_succ, choose_spec, frobenius_def, leRec_succ, le_succ_of_le, reduceDIte
 -/
@@ -1174,7 +1210,15 @@ definition lift
         fun n => by rw [← f.map_pow, Function.iterate_succ_apply', RingHom.coe_coe,
           frobeniusEquiv_symm_pow_p]⟩
       map_one' := ext fun _ => (congr_arg f <| iterate_map_one _ _).trans f.map_one
-      map_mul'
+      map_mul' := fun _ _ =>
+ext fun _ => (congr_arg f <| iterate_map_mul _ _ _ _).trans f.map_mul _ _
+      map_zero' := ext fun _ => (congr_arg f <| iterate_map_zero _ _).trans f.map_zero
+      map_add' := fun _ _ =>
+ext fun _ => (congr_arg f <| iterate_map_add _ _ _ _).trans f.map_add _ _ }
+invFun := RingHom.comp coeff S p 0
+  right_inv f := RingHom.ext fun r => ext fun n =>
+    show coeff S p 0 (f (((frobeniusEquiv R p).symm)^[n] r)) = coeff S p n (f r) by
+      rw [← coeff_iterate_frobenius _ 0 n]; rw [zero_add]; rw [← RingHom.map_iterate_frobenius]; rw [Function.RightInverse.iterate (frobenius_apply_frobeniusEquiv_symm R p) n]
 
 中文:
 定义 lift
@@ -1183,7 +1227,15 @@ definition lift
         fun n => by rw [← f.map_pow, Function.iterate_succ_apply', RingHom.coe_coe,
           frobeniusEquiv_symm_pow_p]⟩
       map_one' := ext fun _ => (congr_arg f <| iterate_map_one _ _).trans f.map_one
-      map_mul'
+      map_mul' := fun _ _ =>
+ext fun _ => (congr_arg f <| iterate_map_mul _ _ _ _).trans f.map_mul _ _
+      map_zero' := ext fun _ => (congr_arg f <| iterate_map_zero _ _).trans f.map_zero
+      map_add' := fun _ _ =>
+ext fun _ => (congr_arg f <| iterate_map_add _ _ _ _).trans f.map_add _ _ }
+invFun := RingHom.comp coeff S p 0
+  right_inv f := RingHom.ext fun r => ext fun n =>
+    show coeff S p 0 (f (((frobeniusEquiv R p).symm)^[n] r)) = coeff S p n (f r) by
+      rw [← coeff_iterate_frobenius _ 0 n]; rw [zero_add]; rw [← RingHom.map_iterate_frobenius]; rw [Function.RightInverse.iterate (frobenius_apply_frobeniusEquiv_symm R p) n]
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, RingHom, RingHom.coe_coe, coe_coe, congr_arg, f.map_mul, f.map_one, f.map_pow, f.map_zero, frobeniusEquiv, frobeniusEquiv_symm_pow_p, iterate_, iterate_map_mul, iterate_map_one, iterate_map_zero, iterate_succ_apply, map_add, map_mul, map_one
 -/
@@ -1407,7 +1459,8 @@ Eq.symm (RingHom.ext_iff.1 hfg y).symm.trans Perfection.ext fun n => (hxy n).sym
     surjective := fun y hy =>
       let ⟨x, hx⟩ := g.surjective ⟨y, hy⟩
       ⟨x, fun n =>
-        show Perfection.coeff R p n (Perfection.
+        show Perfection.coeff R p n (Perfection.lift p P R f x) = Perfection.coeff R p n ⟨y, hy⟩ by
+          simp [hfg, hx]⟩ }
 
 中文:
 定理 mk'
@@ -1419,7 +1472,8 @@ Eq.symm (RingHom.ext_iff.1 hfg y).symm.trans Perfection.ext fun n => (hxy n).sym
     surjective := fun y hy =>
       let ⟨x, hx⟩ := g.surjective ⟨y, hy⟩
       ⟨x, fun n =>
-        show Perfection.coeff R p n (Perfection.
+        show Perfection.coeff R p n (Perfection.lift p P R f x) = Perfection.coeff R p n ⟨y, hy⟩ by
+          simp [hfg, hx]⟩ }
 
 Depends on / 依赖: Eq.symm, Perfection, Perfection.coeff, Perfection.ext, Perfection.lift, RingHom, RingHom.ext_iff, ext_iff, g.injective, g.surjective, injective, surjective, symm.trans
 -/
@@ -1627,7 +1681,8 @@ definition lift
     exact (Perfection.lift p R S).symm_apply_apply f
   right_inv f := by
 exact RingHom.ext fun x => m.equiv.injective (m.equiv.apply_symm_apply _).trans
- 
+ show Perfection.lift p R S (π.comp f) x = RingHom.comp (↑m.equiv) f x from
+        RingHom.ext_iff.1 (by rw [← Equiv.eq_symm_apply]; rfl) _
 
 中文:
 定义 lift
@@ -1639,7 +1694,8 @@ exact RingHom.ext fun x => m.equiv.injective (m.equiv.apply_symm_apply _).trans
     exact (Perfection.lift p R S).symm_apply_apply f
   right_inv f := by
 exact RingHom.ext fun x => m.equiv.injective (m.equiv.apply_symm_apply _).trans
- 
+ show Perfection.lift p R S (π.comp f) x = RingHom.comp (↑m.equiv) f x from
+        RingHom.ext_iff.1 (by rw [← Equiv.eq_symm_apply]; rfl) _
 
 Depends on / 依赖: Perfection, Perfection.lift, RingHom, RingHom.comp, m.equiv.symm
 -/
@@ -1891,7 +1947,8 @@ theorem preVal_mk
 Ideal.mem_span_singleton'.1 Ideal.Quotient.eq.1 Quotient.sound' Quotient.mk_out' _
   refine (if_neg hx).trans (v.map_eq_of_sub_lt <| lt_of_not_ge ?_)
   rw [← map_sub]; rw [← hr]; rw [hv.le_iff_dvd]
-  exact fun hpr
+  exact fun hprx =>
+    hx (Ideal.Quotient.eq_zero_iff_mem.2 <| Ideal.mem_span_singleton.2 <| dvd_of_mul_left_dvd hprx)
 
 中文:
 定理 preVal_mk
@@ -1901,7 +1958,8 @@ Ideal.mem_span_singleton'.1 Ideal.Quotient.eq.1 Quotient.sound' Quotient.mk_out'
 Ideal.mem_span_singleton'.1 Ideal.Quotient.eq.1 Quotient.sound' Quotient.mk_out' _
   refine (if_neg hx).trans (v.map_eq_of_sub_lt <| lt_of_not_ge ?_)
   rw [← map_sub]; rw [← hr]; rw [hv.le_iff_dvd]
-  exact fun hpr
+  exact fun hprx =>
+    hx (Ideal.Quotient.eq_zero_iff_mem.2 <| Ideal.mem_span_singleton.2 <| dvd_of_mul_left_dvd hprx)
 
 Depends on / 依赖: Ideal.Quotient.eq, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk, Ideal.mem_span_singleton, Quotient, Quotient.mk_out, Quotient.sound, dvd_of_mul_left_dvd, eq_zero_iff_mem, hv.le_iff_dvd, if_neg, le_iff_dvd, lt_of_not_ge, map_eq_of_sub_lt, map_sub, mem_span_singleton, mk_out, v.map_eq_of_sub_lt
 -/
@@ -1926,7 +1984,7 @@ theorem preVal_mul
   obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective y
   rw [← map_mul (Ideal.Quotient.mk (Ideal.span {↑p})) r s] at hxy0 ⊢
-
+  rw [preVal_mk hv hx0]; rw [preVal_mk hv hy0]; rw [preVal_mk hv hxy0]; rw [map_mul]; rw [v.map_mul]
 
 中文:
 定理 preVal_mul
@@ -1937,7 +1995,7 @@ theorem preVal_mul
   obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective y
   rw [← map_mul (Ideal.Quotient.mk (Ideal.span {↑p})) r s] at hxy0 ⊢
-
+  rw [preVal_mk hv hx0]; rw [preVal_mk hv hy0]; rw [preVal_mk hv hxy0]; rw [map_mul]; rw [v.map_mul]
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.span, Quotient, map_mul, mk_surjective, mul_zero, preVal_mk, v.map_mul, zero_mul
 -/
@@ -1965,7 +2023,8 @@ theorem preVal_add
   · simp [hxy0]
   obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective y
-  rw [← map_add (Ideal.Quotient.mk (Ideal.span {↑p})) r s] at
+  rw [← map_add (Ideal.Quotient.mk (Ideal.span {↑p})) r s] at hxy0 ⊢
+  rw [preVal_mk hv hx0]; rw [preVal_mk hv hy0]; rw [preVal_mk hv hxy0]; rw [map_add]; exact v.map_add _ _
 
 中文:
 定理 preVal_add
@@ -1979,7 +2038,8 @@ theorem preVal_add
   · simp [hxy0]
   obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective y
-  rw [← map_add (Ideal.Quotient.mk (Ideal.span {↑p})) r s] at
+  rw [← map_add (Ideal.Quotient.mk (Ideal.span {↑p})) r s] at hxy0 ⊢
+  rw [preVal_mk hv hx0]; rw [preVal_mk hv hy0]; rw [preVal_mk hv hxy0]; rw [map_add]; exact v.map_add _ _
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.span, Quotient, eq_or_ne, map_add, mk_surjective, preVal_mk, v.map_add
 -/
@@ -2092,7 +2152,17 @@ theorem mul_ne_zero_of_pow_p_ne_zero
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective y
   have h1p : (0 : Real) < 1 / p := one_div_pos.2 (Nat.cast_pos.2 hp.1.pos)
   rw [← (Ideal.Quotient.mk (Ideal.span {(p : O)})).map_mul]
-  rw [← (Ideal.Quotient.mk (Ideal.span {(p : O)})).map_pow
+  rw [← (Ideal.Quotient.mk (Ideal.span {(p : O)})).map_pow] at hx hy
+  rw [← v_p_lt_val hv] at hx hy ⊢
+  rw [map_pow]; rw [v.map_pow]; rw [← rpow_lt_rpow_iff h1p]; rw [← rpow_natCast]; rw [← rpow_mul]; rw [mul_one_div_cancel (Nat.cast_ne_zero.2 hp.1.ne_zero : (p : Real) != 0)]; rw [rpow_one] at hx hy
+  rw [map_mul]; rw [v.map_mul]; refine lt_of_le_of_lt ?_ (mul_lt_mul'' hx hy zero_le zero_le)
+  by_cases hvp : v p = 0
+  · rw [hvp]; exact zero_le
+  replace hvp := zero_lt_iff.2 hvp
+  conv_lhs => rw [← rpow_one (v p)]
+  rw [← rpow_add (ne_of_gt hvp)]
+  refine rpow_le_rpow_of_exponent_ge hvp (map_natCast (algebraMap O K) p ▸ hv.2 _) ?_
+  rw [← add_div]; rw [div_le_one (Nat.cast_pos.2 hp.1.pos : 0 < (p : Real))]; exact mod_cast hp.1.two_le
 
 中文:
 定理 mul_ne_zero_of_pow_p_ne_zero
@@ -2102,7 +2172,17 @@ theorem mul_ne_zero_of_pow_p_ne_zero
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective y
   have h1p : (0 : Real) < 1 / p := one_div_pos.2 (Nat.cast_pos.2 hp.1.pos)
   rw [← (Ideal.Quotient.mk (Ideal.span {(p : O)})).map_mul]
-  rw [← (Ideal.Quotient.mk (Ideal.span {(p : O)})).map_pow
+  rw [← (Ideal.Quotient.mk (Ideal.span {(p : O)})).map_pow] at hx hy
+  rw [← v_p_lt_val hv] at hx hy ⊢
+  rw [map_pow]; rw [v.map_pow]; rw [← rpow_lt_rpow_iff h1p]; rw [← rpow_natCast]; rw [← rpow_mul]; rw [mul_one_div_cancel (Nat.cast_ne_zero.2 hp.1.ne_zero : (p : Real) != 0)]; rw [rpow_one] at hx hy
+  rw [map_mul]; rw [v.map_mul]; refine lt_of_le_of_lt ?_ (mul_lt_mul'' hx hy zero_le zero_le)
+  by_cases hvp : v p = 0
+  · rw [hvp]; exact zero_le
+  replace hvp := zero_lt_iff.2 hvp
+  conv_lhs => rw [← rpow_one (v p)]
+  rw [← rpow_add (ne_of_gt hvp)]
+  refine rpow_le_rpow_of_exponent_ge hvp (map_natCast (algebraMap O K) p ▸ hv.2 _) ?_
+  rw [← add_div]; rw [div_le_one (Nat.cast_pos.2 hp.1.pos : 0 < (p : Real))]; exact mod_cast hp.1.two_le
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.span, Nat.cast_ne_zero, Nat.cast_pos, Quotient, cast_ne_zero, cast_pos, map_mul, map_pow, mk_surjective, mul_one_div_cancel, ne_zero, one_div_pos, rpow_lt_rpow_iff, rpow_mul, rpow_natCast, v.map_pow, v_p_lt_val
 -/
@@ -2474,7 +2554,11 @@ theorem valAux_eq
   | zero => rfl
   | succ k ih => ?_
   obtain ⟨x, hx⟩ := Ideal.Quotient.mk_surjective (coeff (Nat.find h + k + 1) f)
-  hav
+  have h1 : (Ideal.Quotient.mk _ x : ModP O p) != 0 := hx.symm ▸ hfn
+  have h2 : (Ideal.Quotient.mk _ (x ^ p) : ModP O p) != 0 := by
+    rw [map_pow]; rw [hx]; rw [coeff_pow_p]
+    exact coeff_nat_find_add_ne_zero k
+  rw [ih (coeff_nat_find_add_ne_zero k)]; rw [← add_assoc]; rw [← hx]; rw [← coeff_pow_p]; rw [← hx]; rw [← map_pow]; rw [ModP.preVal_mk hv h1]; rw [ModP.preVal_mk hv h2]; rw [map_pow]; rw [v.map_pow]; rw [← pow_mul]; rw [pow_succ']
 
 中文:
 定理 valAux_eq
@@ -2488,7 +2572,11 @@ theorem valAux_eq
   | zero => rfl
   | succ k ih => ?_
   obtain ⟨x, hx⟩ := Ideal.Quotient.mk_surjective (coeff (Nat.find h + k + 1) f)
-  hav
+  have h1 : (Ideal.Quotient.mk _ x : ModP O p) != 0 := hx.symm ▸ hfn
+  have h2 : (Ideal.Quotient.mk _ (x ^ p) : ModP O p) != 0 := by
+    rw [map_pow]; rw [hx]; rw [coeff_pow_p]
+    exact coeff_nat_find_add_ne_zero k
+  rw [ih (coeff_nat_find_add_ne_zero k)]; rw [← add_assoc]; rw [← hx]; rw [← coeff_pow_p]; rw [← hx]; rw [← map_pow]; rw [ModP.preVal_mk hv h1]; rw [ModP.preVal_mk hv h2]; rw [map_pow]; rw [v.map_pow]; rw [← pow_mul]; rw [pow_succ']
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Nat.exists_eq_add_of_le, Nat.find, Nat.find_min, Quotient, classical, coeff_nat, coeff_nat_find_add_ne_zero, coeff_pow_p, dif_pos, exists_eq_add_of_le, find_min, hx.symm, map_pow, mk_surjective, valAux
 -/
@@ -2548,7 +2636,15 @@ theorem valAux_mul
   · simp
 obtain ⟨m, hm⟩ : exists n, coeff n f != 0 := not_forall.1 fun h => hf Perfection.ext h
 obtain ⟨n, hn⟩ : exists n, coeff n g != 0 := not_forall.1 fun h => hg Perfection.ext h
-  replace hm := coeff_ne_zero_of_le h
+  replace hm := coeff_ne_zero_of_le hm (le_max_left m n)
+  replace hn := coeff_ne_zero_of_le hn (le_max_right m n)
+  have hfg : coeff (max m n + 1) (f * g) != 0 := by
+    rw [map_mul]
+    refine ModP.mul_ne_zero_of_pow_p_ne_zero (hv := hv) ?_ ?_
+    · rw [coeff_pow_p f]; assumption
+    · rw [coeff_pow_p g]; assumption
+  rw [valAux_eq hv (coeff_add_ne_zero hm 1)]; rw [valAux_eq hv (coeff_add_ne_zero hn 1)]; rw [valAux_eq hv hfg]
+  rw [map_mul] at hfg ⊢; rw [ModP.preVal_mul hv hfg, mul_pow]
 
 中文:
 定理 valAux_mul
@@ -2560,7 +2656,15 @@ obtain ⟨n, hn⟩ : exists n, coeff n g != 0 := not_forall.1 fun h => hg Perfec
   · simp
 obtain ⟨m, hm⟩ : exists n, coeff n f != 0 := not_forall.1 fun h => hf Perfection.ext h
 obtain ⟨n, hn⟩ : exists n, coeff n g != 0 := not_forall.1 fun h => hg Perfection.ext h
-  replace hm := coeff_ne_zero_of_le h
+  replace hm := coeff_ne_zero_of_le hm (le_max_left m n)
+  replace hn := coeff_ne_zero_of_le hn (le_max_right m n)
+  have hfg : coeff (max m n + 1) (f * g) != 0 := by
+    rw [map_mul]
+    refine ModP.mul_ne_zero_of_pow_p_ne_zero (hv := hv) ?_ ?_
+    · rw [coeff_pow_p f]; assumption
+    · rw [coeff_pow_p g]; assumption
+  rw [valAux_eq hv (coeff_add_ne_zero hm 1)]; rw [valAux_eq hv (coeff_add_ne_zero hn 1)]; rw [valAux_eq hv hfg]
+  rw [map_mul] at hfg ⊢; rw [ModP.preVal_mul hv hfg, mul_pow]
 
 Depends on / 依赖: ModP.mul_ne_zero_of_pow_p_ne_zero, Perfection, Perfection.ext, coeff_ne_zero_of_le, coeff_p, eq_or_ne, le_max_left, le_max_right, map_mul, mul_ne_zero_of_pow_p_ne_zero, not_forall, replace
 -/
@@ -2597,7 +2701,17 @@ theorem valAux_add
   · simp [hfg]
 replace hf : exists n, coeff n f != 0 := not_forall.1 fun h => hf Perfection.ext h
 replace hg : exists n, coeff n g != 0 := not_forall.1 fun h => hg Perfection.ext h
-rep
+replace hfg : exists n, coeff n (f + g) != 0 := not_forall.1 fun h => hfg Perfection.ext h
+  obtain ⟨m, hm⟩ := hf; obtain ⟨n, hn⟩ := hg; obtain ⟨k, hk⟩ := hfg
+  replace hm := coeff_ne_zero_of_le hm (le_trans (le_max_left m n) (le_max_left _ k))
+  replace hn := coeff_ne_zero_of_le hn (le_trans (le_max_right m n) (le_max_left _ k))
+  replace hk := coeff_ne_zero_of_le hk (le_max_right (max m n) k)
+  rw [valAux_eq hv hm]; rw [valAux_eq hv hn]; rw [valAux_eq hv hk]; rw [map_add]
+  rcases le_max_iff.1
+      (ModP.preVal_add hv (coeff (max (max m n) k) f)
+      (coeff (max (max m n) k) g)) with h | h
+  · exact le_max_of_le_left (pow_le_pow_left' h _)
+  · exact le_max_of_le_right (pow_le_pow_left' h _)
 
 中文:
 定理 valAux_add
@@ -2611,7 +2725,17 @@ rep
   · simp [hfg]
 replace hf : exists n, coeff n f != 0 := not_forall.1 fun h => hf Perfection.ext h
 replace hg : exists n, coeff n g != 0 := not_forall.1 fun h => hg Perfection.ext h
-rep
+replace hfg : exists n, coeff n (f + g) != 0 := not_forall.1 fun h => hfg Perfection.ext h
+  obtain ⟨m, hm⟩ := hf; obtain ⟨n, hn⟩ := hg; obtain ⟨k, hk⟩ := hfg
+  replace hm := coeff_ne_zero_of_le hm (le_trans (le_max_left m n) (le_max_left _ k))
+  replace hn := coeff_ne_zero_of_le hn (le_trans (le_max_right m n) (le_max_left _ k))
+  replace hk := coeff_ne_zero_of_le hk (le_max_right (max m n) k)
+  rw [valAux_eq hv hm]; rw [valAux_eq hv hn]; rw [valAux_eq hv hk]; rw [map_add]
+  rcases le_max_iff.1
+      (ModP.preVal_add hv (coeff (max (max m n) k) f)
+      (coeff (max (max m n) k) g)) with h | h
+  · exact le_max_of_le_left (pow_le_pow_left' h _)
+  · exact le_max_of_le_right (pow_le_pow_left' h _)
 
 Depends on / 依赖: Perfection, Perfection.ext, coeff_ne_zero_of_le, eq_or_ne, le_max_lef, le_trans, not_forall, replace
 -/
@@ -2684,7 +2808,8 @@ theorem map_eq_zero
 obtain ⟨n, hn⟩ : exists n, coeff n f != 0 := not_forall.1 fun h => hf0 Perfection.ext h
   change valAux K v O p f = 0 ↔ f = 0; refine iff_of_false (fun hvf => hn ?_) hf0
   rw [valAux_eq hv hn] at hvf
-  replace hvf :
+  replace hvf := eq_zero_of_pow_eq_zero hvf
+  rwa [ModP.preVal_eq_zero hv] at hvf
 
 中文:
 定理 map_eq_zero
@@ -2696,7 +2821,8 @@ obtain ⟨n, hn⟩ : exists n, coeff n f != 0 := not_forall.1 fun h => hf0 Perfe
 obtain ⟨n, hn⟩ : exists n, coeff n f != 0 := not_forall.1 fun h => hf0 Perfection.ext h
   change valAux K v O p f = 0 ↔ f = 0; refine iff_of_false (fun hvf => hn ?_) hf0
   rw [valAux_eq hv hn] at hvf
-  replace hvf :
+  replace hvf := eq_zero_of_pow_eq_zero hvf
+  rwa [ModP.preVal_eq_zero hv] at hvf
 
 Depends on / 依赖: ModP.preVal_eq_zero, Perfection, Perfection.ext, Valuation, Valuation.map_zero, eq_zero_of_pow_eq_zero, iff_of_false, iff_of_true, map_zero, not_forall, preVal_eq_zero, replace, valAux, valAux_eq
 -/
@@ -2725,7 +2851,8 @@ theorem isDomain
   have : NoZeroDivisors (PreTilt O p) :=
     ⟨fun hfg => by
       simp_rw [← map_eq_zero hv] at hfg ⊢; contrapose! hfg; rw [Valuation.map_mul]
-      exact mul_ne_zero hfg.1 hfg
+      exact mul_ne_zero hfg.1 hfg.2⟩
+  exact NoZeroDivisors.to_isDomain _
 
 中文:
 定理 isDomain
@@ -2736,7 +2863,8 @@ theorem isDomain
   have : NoZeroDivisors (PreTilt O p) :=
     ⟨fun hfg => by
       simp_rw [← map_eq_zero hv] at hfg ⊢; contrapose! hfg; rw [Valuation.map_mul]
-      exact mul_ne_zero hfg.1 hfg
+      exact mul_ne_zero hfg.1 hfg.2⟩
+  exact NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: CharP.nontrivial_of_char_ne_one, Fact.out, Nat.Prime, NoZeroDivisors, NoZeroDivisors.to_isDomain, Nontrivial, PreTilt, Valuation, Valuation.map_mul, contrapose, hp.ne_one, map_eq_zero, map_mul, mul_ne_zero, ne_one, nontrivial_of_char_ne_one, simp_rw, to_isDomain
 -/

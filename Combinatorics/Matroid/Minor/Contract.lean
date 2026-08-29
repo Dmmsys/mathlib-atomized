@@ -488,13 +488,17 @@ English:
 lemma Indep.contract_isBase_iff
   given: (hI : M.Indep I)
   proof: by
-  rw [← dual_delete_dual]; rw [dual_isBase_iff']; rw [delete_ground]; rw [dual_ground]; rw [delete_isBase_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_congr_left_iff]; rw [← dual_dual M]; rw [dual_isBase_iff']; rw [dual_dual]; rw [dual_dual]; rw [union_comm]; rw [dual_ground]; rw [union_sub
+  rw [← dual_delete_dual]; rw [dual_isBase_iff']; rw [delete_ground]; rw [dual_ground]; rw [delete_isBase_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_congr_left_iff]; rw [← dual_dual M]; rw [dual_isBase_iff']; rw [dual_dual]; rw [dual_dual]; rw [union_comm]; rw [dual_ground]; rw [union_subset_iff]; rw [and_iff_right hI.subset_ground]; rw [and_congr_left_iff]; rw [← isBase_restrict_iff]; rw [sdiff_sdiff]; rw [Spanning.isBase_restrict_iff]; rw [and_iff_left (sdiff_subset_sdiff_right subset_union_left)]
+  · simp
+  rwa [← dual_ground, ← coindep_iff_compl_spanning, dual_coindep_iff]
 
 中文:
 引理 Indep.contract_isBase_iff
   条件: (hI : M.Indep I)
   证明: by
-  rw [← dual_delete_dual]; rw [dual_isBase_iff']; rw [delete_ground]; rw [dual_ground]; rw [delete_isBase_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_congr_left_iff]; rw [← dual_dual M]; rw [dual_isBase_iff']; rw [dual_dual]; rw [dual_dual]; rw [union_comm]; rw [dual_ground]; rw [union_sub
+  rw [← dual_delete_dual]; rw [dual_isBase_iff']; rw [delete_ground]; rw [dual_ground]; rw [delete_isBase_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_congr_left_iff]; rw [← dual_dual M]; rw [dual_isBase_iff']; rw [dual_dual]; rw [dual_dual]; rw [union_comm]; rw [dual_ground]; rw [union_subset_iff]; rw [and_iff_right hI.subset_ground]; rw [and_congr_left_iff]; rw [← isBase_restrict_iff]; rw [sdiff_sdiff]; rw [Spanning.isBase_restrict_iff]; rw [and_iff_left (sdiff_subset_sdiff_right subset_union_left)]
+  · simp
+  rwa [← dual_ground, ← coindep_iff_compl_spanning, dual_coindep_iff]
 
 Depends on / 依赖: Spanning, Spanning.isBase_restrict_iff, and_assoc, and_congr_left_iff, and_iff_left, and_iff_right, delete_ground, delete_isBase_iff, dual_delete_dual, dual_dual, dual_ground, dual_isBase_iff, hI.subset_ground, isBase_restrict_iff, sdiff_sdiff, sdiff_subset_sdiff_right, subset, subset_ground, subset_sdiff, union_comm
 -/
@@ -515,7 +519,7 @@ lemma Indep.contract_indep_iff
   exact ⟨fun ⟨B, ⟨hBI, hdj⟩, hJB⟩ => ⟨disjoint_of_subset_left hJB hdj, _, hBI,
     hJB.trans subset_union_left, subset_union_right⟩,
     fun ⟨hdj, B, hB, hJB, hIB⟩ => ⟨B \ I,⟨by simpa [union_eq_self_of_subset_right hIB],
-      disjoi
+      disjoint_sdiff_left⟩, subset_sdiff.2 ⟨hJB, hdj⟩ ⟩⟩
 
 中文:
 引理 Indep.contract_indep_iff
@@ -525,7 +529,7 @@ lemma Indep.contract_indep_iff
   exact ⟨fun ⟨B, ⟨hBI, hdj⟩, hJB⟩ => ⟨disjoint_of_subset_left hJB hdj, _, hBI,
     hJB.trans subset_union_left, subset_union_right⟩,
     fun ⟨hdj, B, hB, hJB, hIB⟩ => ⟨B \ I,⟨by simpa [union_eq_self_of_subset_right hIB],
-      disjoi
+      disjoint_sdiff_left⟩, subset_sdiff.2 ⟨hJB, hdj⟩ ⟩⟩
 
 Depends on / 依赖: contract_isBase_iff, disjoint_of_subset_left, disjoint_sdiff_left, hI.contract_isBase_iff, hJB.trans, indep_iff, simp_rw, subset_sdiff, subset_union_left, subset_union_right, union_eq_self_of_subset_right, union_subset_iff
 -/
@@ -638,7 +642,9 @@ lemma IsBasis.contract_eq_contract_delete
     union_comm, ← delete_delete, ext_iff_indep]
   refine ⟨rfl, fun J hJ => ?_⟩
   have hss : X \ I subseteq (M✶ ＼ I).coloops := fun e he => by
-    rw [← dual_contract]; rw [dual_coloops]; rw [← IsLoop];
+    rw [← dual_contract]; rw [dual_coloops]; rw [← IsLoop]; rw [← singleton_dep]; rw [hI.indep.contract_dep_iff]; rw [singleton_union]; rw [and_iff_right (by simpa using he.2)]; rw [hI.indep.insert_dep_iff]; rw [hI.closure_eq_closure]
+    exact sdiff_subset_sdiff_left (M.subset_closure X) he
+  rw [((coloops_indep _).subset hss).contract_indep_iff]; rw [delete_indep_iff]; rw [union_indep_iff_indep_of_subset_coloops hss]; rw [and_comm]
 
 中文:
 引理 是基.contract_eq_contract_delete
@@ -649,7 +655,9 @@ lemma IsBasis.contract_eq_contract_delete
     union_comm, ← delete_delete, ext_iff_indep]
   refine ⟨rfl, fun J hJ => ?_⟩
   have hss : X \ I subseteq (M✶ ＼ I).coloops := fun e he => by
-    rw [← dual_contract]; rw [dual_coloops]; rw [← IsLoop];
+    rw [← dual_contract]; rw [dual_coloops]; rw [← IsLoop]; rw [← singleton_dep]; rw [hI.indep.contract_dep_iff]; rw [singleton_union]; rw [and_iff_right (by simpa using he.2)]; rw [hI.indep.insert_dep_iff]; rw [hI.closure_eq_closure]
+    exact sdiff_subset_sdiff_left (M.subset_closure X) he
+  rw [((coloops_indep _).subset hss).contract_indep_iff]; rw [delete_indep_iff]; rw [union_indep_iff_indep_of_subset_coloops hss]; rw [and_comm]
 
 Depends on / 依赖: IsLoop, M.subse, and_iff_right, closure_eq_closure, coloops, contract_dep_iff, delete_delete, dual_coloops, dual_contract, dual_contract_delete, dual_inj, ext_iff_indep, hI.closure_eq_closure, hI.indep.contract_dep_iff, hI.indep.insert_dep_iff, hI.subset, insert_dep_iff, nth_rw, sdiff_subset_sdiff_left, sdiff_union_of_subset
 -/
@@ -674,7 +682,9 @@ lemma Indep.union_isBasis_union_of_contract_isBasis
   refine hB.1.1.1.2.isBasis_of_maximal_subset (union_subset_union_left _ hB.1.1.2)
     fun K hK hKJ hKX => ?_
   rw [union_subset_iff] at hKJ
-  rw [hB.1.2 (t := K \ I) disjoint_sdiff_le
+  rw [hB.1.2 (t := K \ I) disjoint_sdiff_left (by simpa [sdiff_union_of_subset hKJ.2])
+    (sdiff_subset_iff.2 (by rwa [union_comm])) (subset_sdiff.2 ⟨hKJ.1, hB.1.1.1.1⟩),
+    sdiff_union_of_subset hKJ.2]
 
 中文:
 引理 Indep.union_isBasis_union_of_contract_isBasis
@@ -685,7 +695,9 @@ lemma Indep.union_isBasis_union_of_contract_isBasis
   refine hB.1.1.1.2.isBasis_of_maximal_subset (union_subset_union_left _ hB.1.1.2)
     fun K hK hKJ hKX => ?_
   rw [union_subset_iff] at hKJ
-  rw [hB.1.2 (t := K \ I) disjoint_sdiff_le
+  rw [hB.1.2 (t := K \ I) disjoint_sdiff_left (by simpa [sdiff_union_of_subset hKJ.2])
+    (sdiff_subset_iff.2 (by rwa [union_comm])) (subset_sdiff.2 ⟨hKJ.1, hB.1.1.1.1⟩),
+    sdiff_union_of_subset hKJ.2]
 
 Depends on / 依赖: IsBasis, and_imp, contract_ground, contract_indep_iff, disjoint_sdiff_left, hI.contract_indep_iff, isBasis_of_maximal_subset, maximal_subset_iff, sdiff_subset_iff, sdiff_union_of_subset, simp_rw, subset_sdiff, union_comm, union_subset_iff, union_subset_union_left
 -/
@@ -710,7 +722,14 @@ lemma IsBasis'.contract_isBasis'_sdiff_sdiff_of_subset
   suffices forall ⦃K⦄, Disjoint K J -> M.Indep (K union J) -> K subseteq X -> I subseteq K union J -> K subseteq I by
     simpa +contextual [IsBasis', (hIX.indep.subset hJI).contract_indep_iff,
       subset_sdiff, maximal_subset_iff, disjoint_sdiff_left,
-      union_eq_self_of_subset_right hJI, h
+      union_eq_self_of_subset_right hJI, hIX.indep, sdiff_subset.trans hIX.subset,
+      sdiff_subset_iff, subset_antisymm_iff, union_comm J]
+  exact fun K hJK hKJi hKX hIJK => by
+    simp [hIX.eq_of_subset_indep hKJi hIJK (union_subset hKX (hJI.trans hIX.subset))]
+
+@[deprecated (since := "2026-06-03")]
+alias IsBasis'.contract_isBasis'_diff_diff_of_subset :=
+  IsBasis'.contract_isBasis'_sdiff_sdiff_of_subset
 
 中文:
 引理 是基'.contract_isBasis'_sdiff_sdiff_of_subset
@@ -719,7 +738,14 @@ lemma IsBasis'.contract_isBasis'_sdiff_sdiff_of_subset
   suffices forall ⦃K⦄, Disjoint K J -> M.Indep (K union J) -> K subseteq X -> I subseteq K union J -> K subseteq I by
     simpa +contextual [IsBasis', (hIX.indep.subset hJI).contract_indep_iff,
       subset_sdiff, maximal_subset_iff, disjoint_sdiff_left,
-      union_eq_self_of_subset_right hJI, h
+      union_eq_self_of_subset_right hJI, hIX.indep, sdiff_subset.trans hIX.subset,
+      sdiff_subset_iff, subset_antisymm_iff, union_comm J]
+  exact fun K hJK hKJi hKX hIJK => by
+    simp [hIX.eq_of_subset_indep hKJi hIJK (union_subset hKX (hJI.trans hIX.subset))]
+
+@[deprecated (since := "2026-06-03")]
+alias IsBasis'.contract_isBasis'_diff_diff_of_subset :=
+  IsBasis'.contract_isBasis'_sdiff_sdiff_of_subset
 -/
 lemma IsBasis'.contract_isBasis'_sdiff_sdiff_of_subset (hIX : M.IsBasis' I X) (hJI : J subseteq I) :
     (M ／ J).IsBasis' (I \ J) (X \ J) := by
@@ -746,7 +772,7 @@ lemma IsBasis'.contract_isBasis'_sdiff_of_subset
     (hIX.contract_isBasis'_sdiff_sdiff_of_subset hJI).isBasis_inter_ground
 
 @[deprecated (since := "2026-06-03")]
-alias IsBasis'.contract_isBasis'_diff_of_subset := IsBasis'.contract_isBasis'_sdiff_o
+alias IsBasis'.contract_isBasis'_diff_of_subset := IsBasis'.contract_isBasis'_sdiff_of_subset
 
 中文:
 引理 是基'.contract_isBasis'_sdiff_of_subset
@@ -756,7 +782,7 @@ alias IsBasis'.contract_isBasis'_diff_of_subset := IsBasis'.contract_isBasis'_sd
     (hIX.contract_isBasis'_sdiff_sdiff_of_subset hJI).isBasis_inter_ground
 
 @[deprecated (since := "2026-06-03")]
-alias IsBasis'.contract_isBasis'_diff_of_subset := IsBasis'.contract_isBasis'_sdiff_o
+alias IsBasis'.contract_isBasis'_diff_of_subset := IsBasis'.contract_isBasis'_sdiff_of_subset
 -/
 lemma IsBasis'.contract_isBasis'_sdiff_of_subset (hIX : M.IsBasis' I X) (hJI : J subseteq I) :
     (M ／ J).IsBasis' (I \ J) X := by
@@ -777,7 +803,7 @@ lemma IsBasis.contract_isBasis_sdiff_sdiff_of_subset
   rwa [contract_ground, ← inter_sdiff_assoc, inter_eq_self_of_subset_left hIX.subset_ground] at h
 
 @[deprecated (since := "2026-06-03")]
-alias IsBasis.contract_isBasis_diff_diff_of_subset := IsBasis.contract_isB
+alias IsBasis.contract_isBasis_diff_diff_of_subset := IsBasis.contract_isBasis_sdiff_sdiff_of_subset
 
 中文:
 引理 是基.contract_isBasis_sdiff_sdiff_of_subset
@@ -787,7 +813,7 @@ alias IsBasis.contract_isBasis_diff_diff_of_subset := IsBasis.contract_isB
   rwa [contract_ground, ← inter_sdiff_assoc, inter_eq_self_of_subset_left hIX.subset_ground] at h
 
 @[deprecated (since := "2026-06-03")]
-alias IsBasis.contract_isBasis_diff_diff_of_subset := IsBasis.contract_isB
+alias IsBasis.contract_isBasis_diff_diff_of_subset := IsBasis.contract_isBasis_sdiff_sdiff_of_subset
 
 Depends on / 依赖: _sdiff_of_subset, contract_ground, contract_isBasis, hIX.isBasis, hIX.subset_ground, inter_eq_self_of_subset_left, inter_sdiff_assoc, isBasis, isBasis_inter_ground, subset_ground
 -/
@@ -810,7 +836,11 @@ lemma IsBasis.contract_sdiff_isBasis_sdiff
   · rw [subset_sdiff, and_iff_right (sdiff_subset.trans hJY.subset),
       hIX.eq_of_subset_indep (hJY.indep.inter_right X) (subset_inter hIJ hIX.subset)
       inter_subset_right, sdiff_self_inter]
-    exact disjoint_s
+    exact disjoint_sdiff_left
+  refine sdiff_subset_sdiff_right hIX.subset
+
+@[deprecated (since := "2026-06-03")]
+alias IsBasis.contract_diff_isBasis_diff := IsBasis.contract_sdiff_isBasis_sdiff
 
 中文:
 引理 是基.contract_sdiff_isBasis_sdiff
@@ -820,7 +850,11 @@ lemma IsBasis.contract_sdiff_isBasis_sdiff
   · rw [subset_sdiff, and_iff_right (sdiff_subset.trans hJY.subset),
       hIX.eq_of_subset_indep (hJY.indep.inter_right X) (subset_inter hIJ hIX.subset)
       inter_subset_right, sdiff_self_inter]
-    exact disjoint_s
+    exact disjoint_sdiff_left
+  refine sdiff_subset_sdiff_right hIX.subset
+
+@[deprecated (since := "2026-06-03")]
+alias IsBasis.contract_diff_isBasis_diff := IsBasis.contract_sdiff_isBasis_sdiff
 
 Depends on / 依赖: and_iff_right, contract_isBasis_sdiff_sdiff_of_subset, disjoint_sdiff_left, eq_of_subset_indep, hIX.eq_of_subset_indep, hIX.subset, hJY.contract_isBasis_sdiff_sdiff_of_subset, hJY.indep.inter_right, hJY.subset, inter_right, inter_subset_right, isBasis_subset, sdiff_self_inter, sdiff_subset, sdiff_subset.trans, sdiff_subset_sdiff_right, subset, subset_inter, subset_sdiff
 -/
@@ -1072,7 +1106,11 @@ lemma IsBasis.contract_isBasis_of_isBasis'
   rw [hJC.contract_eq_contract_delete]; rw [delete_isBasis_iff]
   refine ⟨contract_isBasis_union_union (h_ind.isBasis_of_subset_of_subset_closure ?_ ?_) ?_ ?_, ?_⟩
   rotate_left
-  · rw [closure_union_congr_right hJC.closure_eq_closure, sdiff_union
+  · rw [closure_union_congr_right hJC.closure_eq_closure, sdiff_union_self,
+      closure_union_congr_left h.closure_eq_closure]
+    exact subset_closure_of_subset' _ (by tauto_set)
+      (union_subset (sdiff_subset.trans h.subset_ground) hJC.indep.subset_ground)
+  all_goals tauto_set
 
 中文:
 引理 是基.contract_isBasis_of_isBasis'
@@ -1083,7 +1121,11 @@ lemma IsBasis.contract_isBasis_of_isBasis'
   rw [hJC.contract_eq_contract_delete]; rw [delete_isBasis_iff]
   refine ⟨contract_isBasis_union_union (h_ind.isBasis_of_subset_of_subset_closure ?_ ?_) ?_ ?_, ?_⟩
   rotate_left
-  · rw [closure_union_congr_right hJC.closure_eq_closure, sdiff_union
+  · rw [closure_union_congr_right hJC.closure_eq_closure, sdiff_union_self,
+      closure_union_congr_left h.closure_eq_closure]
+    exact subset_closure_of_subset' _ (by tauto_set)
+      (union_subset (sdiff_subset.trans h.subset_ground) hJC.indep.subset_ground)
+  all_goals tauto_set
 
 Depends on / 依赖: all_goals, closure_eq_closure, closure_union_congr_left, closure_union_congr_right, contract_eq_contract_delete, contract_isBasis_union_union, delete_isBasis_iff, h.closure_eq_closure, h.subset, h.subset_ground, hJC.closure_eq_closure, hJC.contract_eq_contract_delete, hJC.indep.subset_ground, hJC.subset, h_ind, h_ind.isBasis_of_subset_of_subset_closure, isBasis_of_subset_of_subset_closure, rotate_left, sdiff_subset, sdiff_subset.trans
 -/
@@ -1334,7 +1376,9 @@ instance contract_finitary
     infer_instance
   exact ⟨fun I hI => hJ.indep.contract_indep_iff.2 ⟨disjoint_left.2 fun e heI =>
     ((hI {e} (by simpa) (by simp)).subset_ground rfl).2,
-    indep_of_forall_finite_su
+    indep_of_forall_finite_subset_indep _ fun K hK hKfin =>
+      (hJ.indep.contract_indep_iff.1 <| hI (K inter I)
+      inter_subset_right (hKfin.inter_of_left _)).2.subset (by tauto_set)⟩⟩
 
 中文:
 实例 contract_finitary
@@ -1346,7 +1390,9 @@ instance contract_finitary
     infer_instance
   exact ⟨fun I hI => hJ.indep.contract_indep_iff.2 ⟨disjoint_left.2 fun e heI =>
     ((hI {e} (by simpa) (by simp)).subset_ground rfl).2,
-    indep_of_forall_finite_su
+    indep_of_forall_finite_subset_indep _ fun K hK hKfin =>
+      (hJ.indep.contract_indep_iff.1 <| hI (K inter I)
+      inter_subset_right (hKfin.inter_of_left _)).2.subset (by tauto_set)⟩⟩
 
 Depends on / 依赖: Finitary, M.exists_isBasis, contract_eq_contract_delete, contract_indep_iff, disjoint_left, exists_isBasis, hJ.contract_eq_contract_delete, hJ.indep.contract_indep_iff, hKfin.inter_of_left, indep_of_forall_finite_subset_indep, infer_instance, inter_of_left, inter_subset_right, subset, subset_ground, tauto_set
 -/
@@ -1422,7 +1468,9 @@ lemma contract_isLoop_iff_mem_closure
   rw [hI.contract_eq_contract_delete]; rw [delete_isLoop_iff]; rw [← singleton_dep]; rw [hI.indep.contract_dep_iff]; rw [singleton_union]; rw [hI.indep.insert_dep_iff]; rw [hI.closure_eq_closure]
   by_cases heI : e in I
   · simp [heI, hI.subset heI]
-  simp 
+  simp [heI, and_comm]
+
+@[simp]
 
 中文:
 引理 contract_isLoop_iff_mem_closure
@@ -1432,7 +1480,9 @@ lemma contract_isLoop_iff_mem_closure
   rw [hI.contract_eq_contract_delete]; rw [delete_isLoop_iff]; rw [← singleton_dep]; rw [hI.indep.contract_dep_iff]; rw [singleton_union]; rw [hI.indep.insert_dep_iff]; rw [hI.closure_eq_closure]
   by_cases heI : e in I
   · simp [heI, hI.subset heI]
-  simp 
+  simp [heI, and_comm]
+
+@[simp]
 
 Depends on / 依赖: M.exists_isBasis, and_comm, closure_eq_closure, contract_dep_iff, contract_eq_contract_delete, delete_isLoop_iff, exists_isBasis, hI.closure_eq_closure, hI.contract_eq_contract_delete, hI.indep.contract_dep_iff, hI.indep.insert_dep_iff, hI.subset, insert_dep_iff, singleton_dep, singleton_union, subset
 -/
@@ -1627,7 +1677,9 @@ lemma contract_closure_eq_contract_delete
   · rw [← M.contract_inter_ground_eq C, ← closure_inter_ground, aux _ _ inter_subset_right,
       sdiff_inter, sdiff_eq_empty.2 (M.closure_subset_ground _), union_empty]
   obtain ⟨I, hI⟩ := M.exists_isBasis C
-  rw [hI.isBasis_closure_right.contract_eq_contract
+  rw [hI.isBasis_closure_right.contract_eq_contract_delete]; rw [hI.contract_eq_contract_delete]; rw [delete_delete]; rw [union_comm]; rw [sdiff_union_sdiff_cancel (M.subset_closure C) hI.subset]
+
+@[simp]
 
 中文:
 引理 contract_closure_eq_contract_delete
@@ -1637,7 +1689,9 @@ lemma contract_closure_eq_contract_delete
   · rw [← M.contract_inter_ground_eq C, ← closure_inter_ground, aux _ _ inter_subset_right,
       sdiff_inter, sdiff_eq_empty.2 (M.closure_subset_ground _), union_empty]
   obtain ⟨I, hI⟩ := M.exists_isBasis C
-  rw [hI.isBasis_closure_right.contract_eq_contract
+  rw [hI.isBasis_closure_right.contract_eq_contract_delete]; rw [hI.contract_eq_contract_delete]; rw [delete_delete]; rw [union_comm]; rw [sdiff_union_sdiff_cancel (M.subset_closure C) hI.subset]
+
+@[simp]
 
 Depends on / 依赖: M.closure_subset_ground, M.contract_inter_ground_eq, M.exists_isBasis, M.subset_closure, closure_inter_ground, closure_subset_ground, contract_eq_contract_delete, contract_inter_ground_eq, delete_delete, exists_isBasis, hI.contract_eq_contract_delete, hI.isBasis_closure_right.contract_eq_contract_delete, hI.subset, inter_subset_right, isBasis_closure_right, sdiff_eq_empty, sdiff_inter, sdiff_union_sdiff_cancel, subset, subset_closure
 -/
@@ -1658,14 +1712,20 @@ lemma contract_closure_eq
   given: (M : Matroid α) (C X : Set α)
   proof: by
   rw [← sdiff_union_inter (M.closure (X union C) \ C) X]; rw [sdiff_sdiff]; rw [union_comm C]; rw [← contract_loops_eq]; rw [union_comm X]; rw [← contract_contract]; rw [contract_loops_eq]; rw [subset_antisymm_iff]; rw [union_subset_iff]; rw [and_iff_right sdiff_subset]; rw [← sdiff_subset_iff]
- 
+  simp only [sdiff_sdiff_right_self, subset_inter_iff, inter_subset_right, and_true]
+  refine ⟨fun e ⟨he, he'⟩ => ⟨mem_closure_of_mem' _ (.inr he') (mem_ground_of_mem_closure he).1,
+    (closure_subset_ground _ _ he).2⟩, fun e ⟨⟨he, heC⟩, he'⟩ =>
+    mem_closure_of_mem' _ he' ⟨M.closure_subset_ground _ he, heC⟩⟩
 
 中文:
 引理 contract_closure_eq
   条件: (M : 拟阵 α) (C X : 集合 α)
   证明: by
   rw [← sdiff_union_inter (M.closure (X union C) \ C) X]; rw [sdiff_sdiff]; rw [union_comm C]; rw [← contract_loops_eq]; rw [union_comm X]; rw [← contract_contract]; rw [contract_loops_eq]; rw [subset_antisymm_iff]; rw [union_subset_iff]; rw [and_iff_right sdiff_subset]; rw [← sdiff_subset_iff]
- 
+  simp only [sdiff_sdiff_right_self, subset_inter_iff, inter_subset_right, and_true]
+  refine ⟨fun e ⟨he, he'⟩ => ⟨mem_closure_of_mem' _ (.inr he') (mem_ground_of_mem_closure he).1,
+    (closure_subset_ground _ _ he).2⟩, fun e ⟨⟨he, heC⟩, he'⟩ =>
+    mem_closure_of_mem' _ he' ⟨M.closure_subset_ground _ he, heC⟩⟩
 
 Depends on / 依赖: M.closure, and_iff_right, and_true, closure, closure_subset_ground, contract_contract, contract_loops_eq, inter_subset_right, mem_closure_of_mem, mem_ground_of_mem_closure, sdiff_sdiff, sdiff_sdiff_right_self, sdiff_subset, sdiff_subset_iff, sdiff_union_inter, subset_antisymm_iff, subset_inter_iff, union_comm, union_subset_iff
 -/
@@ -1685,14 +1745,18 @@ lemma contract_spanning_iff
   given: (hC : C subseteq M.E := by aesop_mat)
   proof: by
   rw [spanning_iff]; rw [contract_closure_eq]; rw [contract_ground]; rw [spanning_iff]; rw [union_subset_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_congr_left_iff]; rw [and_comm (a := X subseteq _)]; rw [← and_assoc]; rw [and_congr_left_iff]
-  refine fun hdj hX => ⟨fun h => ⟨?_, hC⟩, fun 
+  refine fun hdj hX => ⟨fun h => ⟨?_, hC⟩, fun h => by simp [h]⟩
+  rwa [← union_sdiff_cancel (M.subset_closure_of_subset' subset_union_right hC), h,
+    union_sdiff_cancel]
 
 中文:
 引理 contract_spanning_iff
   条件: (hC : C subseteq M.E := by aesop_mat)
   证明: by
   rw [spanning_iff]; rw [contract_closure_eq]; rw [contract_ground]; rw [spanning_iff]; rw [union_subset_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_congr_left_iff]; rw [and_comm (a := X subseteq _)]; rw [← and_assoc]; rw [and_congr_left_iff]
-  refine fun hdj hX => ⟨fun h => ⟨?_, hC⟩, fun 
+  refine fun hdj hX => ⟨fun h => ⟨?_, hC⟩, fun h => by simp [h]⟩
+  rwa [← union_sdiff_cancel (M.subset_closure_of_subset' subset_union_right hC), h,
+    union_sdiff_cancel]
 
 Depends on / 依赖: Disjoint, M.Spanning, M.subset_closure_of_subset, Spanning, aesop_mat, and_assoc, and_comm, and_congr_left_iff, contract_closure_eq, contract_ground, spanning_iff, subset_closure_of_subset, subset_sdiff, subset_union_right, subseteq, union_sdiff_cancel, union_subset_iff
 -/
@@ -1713,7 +1777,7 @@ lemma contract_spanning_iff'
   rw [← contract_inter_ground_eq]; rw [contract_spanning_iff]; rw [and_congr_right_iff]
   refine fun h => ⟨fun hdj => ?_, Disjoint.mono_right inter_subset_left⟩
   rw [← sdiff_union_inter C M.E]; rw [disjoint_union_right]; rw [and_iff_left hdj]
-  exact disjoint_sdiff_right.mono_left (subset_union_
+  exact disjoint_sdiff_right.mono_left (subset_union_left.trans h.subset_ground)
 
 中文:
 引理 contract_spanning_iff'
@@ -1722,7 +1786,7 @@ lemma contract_spanning_iff'
   rw [← contract_inter_ground_eq]; rw [contract_spanning_iff]; rw [and_congr_right_iff]
   refine fun h => ⟨fun hdj => ?_, Disjoint.mono_right inter_subset_left⟩
   rw [← sdiff_union_inter C M.E]; rw [disjoint_union_right]; rw [and_iff_left hdj]
-  exact disjoint_sdiff_right.mono_left (subset_union_
+  exact disjoint_sdiff_right.mono_left (subset_union_left.trans h.subset_ground)
 
 Depends on / 依赖: Disjoint, Disjoint.mono_right, and_congr_right_iff, and_iff_left, contract_inter_ground_eq, contract_spanning_iff, disjoint_sdiff_right, disjoint_sdiff_right.mono_left, disjoint_union_right, h.subset_ground, inter_subset_left, mono_left, mono_right, sdiff_union_inter, subset_ground, subset_union_left, subset_union_left.trans
 -/
@@ -1796,7 +1860,9 @@ lemma IsCircuit.contract_isCircuit
   suffices forall e in K, e ∉ C -> M.Indep (K \ {e} union C) by
     simpa [isCircuit_iff_dep_forall_sdiff_singleton_indep, sdiff_sdiff_comm (s := K) (t := C),
     dep_iff, (hK.ssubset_indep hC).contract_indep_iff, sdiff_subset_sdiff_left hK.subset_ground,
-    disjoint_sdiff_left, sdiff_union_of_s
+    disjoint_sdiff_left, sdiff_union_of_subset hC.subset, hK.not_indep]
+exact fun e heK heC => (hK.sdiff_singleton_indep heK).subset by
+    simp [subset_sdiff_singleton hC.subset heC]
 
 中文:
 引理 是Circuit.contract_isCircuit
@@ -1805,7 +1871,9 @@ lemma IsCircuit.contract_isCircuit
   suffices forall e in K, e ∉ C -> M.Indep (K \ {e} union C) by
     simpa [isCircuit_iff_dep_forall_sdiff_singleton_indep, sdiff_sdiff_comm (s := K) (t := C),
     dep_iff, (hK.ssubset_indep hC).contract_indep_iff, sdiff_subset_sdiff_left hK.subset_ground,
-    disjoint_sdiff_left, sdiff_union_of_s
+    disjoint_sdiff_left, sdiff_union_of_subset hC.subset, hK.not_indep]
+exact fun e heK heC => (hK.sdiff_singleton_indep heK).subset by
+    simp [subset_sdiff_singleton hC.subset heC]
 
 Depends on / 依赖: M.Indep, contract_indep_iff, dep_iff, disjoint_sdiff_left, hC.subset, hK.not_indep, hK.sdiff_singleton_indep, hK.ssubset_indep, hK.subset_ground, isCircuit_iff_dep_forall_sdiff_singleton_indep, not_indep, sdiff_sdiff_comm, sdiff_singleton_indep, sdiff_subset_sdiff_left, sdiff_union_of_subset, ssubset_indep, subset, subset_ground, subset_sdiff_singleton
 -/
@@ -1846,7 +1914,8 @@ lemma IsCircuit.contract_dep
   statement: (M ／ C).Dep K
   proof: by
   obtain ⟨I, hI⟩ := M.exists_isBasis (C inter M.E)
-  rw [← contract_inter_ground_eq]; rw [Dep]; rw [hI.contract_indep_iff]; rw [and_iff_left (hCK.mono_left inter_subset_left)]; rw [contract_ground]; rw [subset_sdiff]; rw [and_iff_left (hCK.symm.mono_right inter_subset_left)]; rw [and_iff_left hK.
+  rw [← contract_inter_ground_eq]; rw [Dep]; rw [hI.contract_indep_iff]; rw [and_iff_left (hCK.mono_left inter_subset_left)]; rw [contract_ground]; rw [subset_sdiff]; rw [and_iff_left (hCK.symm.mono_right inter_subset_left)]; rw [and_iff_left hK.subset_ground]
+  exact fun hi => hK.dep.not_indep (hi.subset subset_union_left)
 
 中文:
 引理 是Circuit.contract_dep
@@ -1854,7 +1923,8 @@ lemma IsCircuit.contract_dep
   结论: (M ／ C).Dep K
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis (C inter M.E)
-  rw [← contract_inter_ground_eq]; rw [Dep]; rw [hI.contract_indep_iff]; rw [and_iff_left (hCK.mono_left inter_subset_left)]; rw [contract_ground]; rw [subset_sdiff]; rw [and_iff_left (hCK.symm.mono_right inter_subset_left)]; rw [and_iff_left hK.
+  rw [← contract_inter_ground_eq]; rw [Dep]; rw [hI.contract_indep_iff]; rw [and_iff_left (hCK.mono_left inter_subset_left)]; rw [contract_ground]; rw [subset_sdiff]; rw [and_iff_left (hCK.symm.mono_right inter_subset_left)]; rw [and_iff_left hK.subset_ground]
+  exact fun hi => hK.dep.not_indep (hi.subset subset_union_left)
 
 Depends on / 依赖: M.exists_isBasis, and_iff_left, contract_ground, contract_indep_iff, contract_inter_ground_eq, exists_isBasis, hCK.mono_left, hCK.symm.mono_right, hI.contract_indep_iff, hK.dep.not_indep, hK.subset_ground, hi.subset, inter_subset_left, mono_left, mono_right, not_indep, subset, subset_ground, subset_sdiff, subset_union_left
 -/
@@ -1938,7 +2008,14 @@ lemma IsCircuit.exists_subset_isCircuit_of_contract
     rw [hI.contract_eq_contract_delete]; rw [delete_isCircuit_iff] at hC
     obtain ⟨C', hC', hCC', hC'ss⟩ := aux hC.1 hI.indep
     exact ⟨C', hC', hCC', hC'ss.trans (union_subset_union_right _ hI.subset)⟩
-  
+  obtain ⟨hCE : C subseteq M.E, hCK : Disjoint C K⟩ := subset_sdiff.1 hC.subset_ground
+  obtain ⟨C', hC'ss, hC'⟩ := (hKi.contract_dep_iff.1 hC.dep).2.exists_isCircuit_subset
+  refine ⟨C', hC', ?_, hC'ss⟩
+  have hdep2 : (M ／ K).Dep (C' \ K) := by
+    rw [hKi.contract_dep_iff]; rw [and_iff_right disjoint_sdiff_left]
+    refine hC'.dep.superset (by simp)
+  rw [← (hC.eq_of_dep_subset hdep2 (sdiff_subset_iff.2 (union_comm _ _ ▸ hC'ss)))]
+  exact sdiff_subset
 
 中文:
 引理 是Circuit.存在_subset_isCircuit_of_contract
@@ -1949,7 +2026,14 @@ lemma IsCircuit.exists_subset_isCircuit_of_contract
     rw [hI.contract_eq_contract_delete]; rw [delete_isCircuit_iff] at hC
     obtain ⟨C', hC', hCC', hC'ss⟩ := aux hC.1 hI.indep
     exact ⟨C', hC', hCC', hC'ss.trans (union_subset_union_right _ hI.subset)⟩
-  
+  obtain ⟨hCE : C subseteq M.E, hCK : Disjoint C K⟩ := subset_sdiff.1 hC.subset_ground
+  obtain ⟨C', hC'ss, hC'⟩ := (hKi.contract_dep_iff.1 hC.dep).2.exists_isCircuit_subset
+  refine ⟨C', hC', ?_, hC'ss⟩
+  have hdep2 : (M ／ K).Dep (C' \ K) := by
+    rw [hKi.contract_dep_iff]; rw [and_iff_right disjoint_sdiff_left]
+    refine hC'.dep.superset (by simp)
+  rw [← (hC.eq_of_dep_subset hdep2 (sdiff_subset_iff.2 (union_comm _ _ ▸ hC'ss)))]
+  exact sdiff_subset
 
 Depends on / 依赖: Disjoint, M.Indep, M.exists_isBasis, contract_dep_iff, contract_eq_contract_delete, delete_isCircuit_iff, exists_isBasis, exists_isCircuit_subset, generalizing, hC.dep, hC.subset_ground, hI.contract_eq_contract_delete, hI.indep, hI.subset, hKi.contract_dep_iff, ss.trans, subset, subset_ground, subset_sdiff, subseteq
 -/
@@ -2091,7 +2175,9 @@ lemma contract_restrict_eq_restrict_contract
   obtain ⟨J, hJ⟩ := (M ↾ (R union C)).exists_isBasis' C
   have hJ' : M.IsBasis' J C := by
     simpa [inter_eq_self_of_subset_left subset_union_right] using (isBasis'_restrict_iff.1 hJ).1
-  rw [restrict_indep_iff]; rw 
+  rw [restrict_indep_iff]; rw [hJ.contract_indep_iff]; rw [hJ'.contract_indep_iff]; rw [restrict_indep_iff]
+  have hJC := hJ'.subset
+  tauto_set
 
 中文:
 引理 contract_restrict_eq_restrict_contract
@@ -2101,7 +2187,9 @@ lemma contract_restrict_eq_restrict_contract
   obtain ⟨J, hJ⟩ := (M ↾ (R union C)).exists_isBasis' C
   have hJ' : M.IsBasis' J C := by
     simpa [inter_eq_self_of_subset_left subset_union_right] using (isBasis'_restrict_iff.1 hJ).1
-  rw [restrict_indep_iff]; rw 
+  rw [restrict_indep_iff]; rw [hJ.contract_indep_iff]; rw [hJ'.contract_indep_iff]; rw [restrict_indep_iff]
+  have hJC := hJ'.subset
+  tauto_set
 
 Depends on / 依赖: IsBasis, M.IsBasis, _restrict_iff, contract_indep_iff, exists_isBasis, ext_indep, h.sdiff_eq_right, hJ.contract_indep_iff, inter_eq_self_of_subset_left, isBasis, restrict_indep_iff, sdiff_eq_right, subset, subset_union_right, subseteq, tauto_set
 -/
@@ -2151,7 +2239,7 @@ lemma contract_delete_comm
   · rw [← contract_inter_ground_eq, aux (hCD.mono_left inter_subset_left) inter_subset_right,
       contract_eq_contract_iff, inter_assoc, delete_ground,
       inter_eq_self_of_subset_right sdiff_subset]
-  rw [delete_eq_restrict]; rw [delete_eq_
+  rw [delete_eq_restrict]; rw [delete_eq_restrict]; rw [contract_ground]; rw [sdiff_sdiff_comm]; rw [restrict_contract_eq_contract_restrict _ (by simpa [hCE]; rw [subset_sdiff])]
 
 中文:
 引理 contract_delete_comm
@@ -2162,7 +2250,7 @@ lemma contract_delete_comm
   · rw [← contract_inter_ground_eq, aux (hCD.mono_left inter_subset_left) inter_subset_right,
       contract_eq_contract_iff, inter_assoc, delete_ground,
       inter_eq_self_of_subset_right sdiff_subset]
-  rw [delete_eq_restrict]; rw [delete_eq_
+  rw [delete_eq_restrict]; rw [delete_eq_restrict]; rw [contract_ground]; rw [sdiff_sdiff_comm]; rw [restrict_contract_eq_contract_restrict _ (by simpa [hCE]; rw [subset_sdiff])]
 
 Depends on / 依赖: contract_eq_contract_iff, contract_ground, contract_inter_ground_eq, delete_eq_restrict, delete_ground, generalizing, hCD.mono_left, inter_assoc, inter_eq_self_of_subset_right, inter_subset_left, inter_subset_right, mono_left, restrict_contract_eq_contract_restrict, sdiff_sdiff_comm, sdiff_subset, subset_sdiff, subseteq
 -/

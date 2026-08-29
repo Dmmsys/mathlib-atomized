@@ -729,7 +729,21 @@ instance commRing
   nsmul := @nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩
   zsmul := @zsmulRec Real ⟨0⟩ ⟨(· + ·)⟩ ⟨@Neg.neg Real _⟩ (@nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩)
   add_zero a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
-  zero_add a := by apply ext_cauchy; simp 
+  zero_add a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
+  add_comm a b := by apply ext_cauchy; simp only [cauchy_add, add_comm]
+  add_assoc a b c := by apply ext_cauchy; simp only [cauchy_add, add_assoc]
+  mul_zero a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
+  zero_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
+  mul_one a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
+  one_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
+  mul_comm a b := by apply ext_cauchy; simp only [cauchy_mul, mul_comm]
+  mul_assoc a b c := by apply ext_cauchy; simp only [cauchy_mul, mul_assoc]
+  left_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, mul_add]
+  right_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, add_mul]
+  neg_add_cancel a := by apply ext_cauchy; simp [cauchy_add, cauchy_neg, cauchy_zero]
+  natCast_zero := by apply ext_cauchy; simp [cauchy_zero]
+  natCast_succ n := by apply ext_cauchy; simp [cauchy_one, cauchy_add]
+  intCast_negSucc z := by apply ext_cauchy; simp [cauchy_neg, cauchy_natCast]
 
 中文:
 实例 commRing
@@ -740,7 +754,21 @@ instance commRing
   nsmul := @nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩
   zsmul := @zsmulRec Real ⟨0⟩ ⟨(· + ·)⟩ ⟨@Neg.neg Real _⟩ (@nsmulRec Real ⟨0⟩ ⟨(· + ·)⟩)
   add_zero a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
-  zero_add a := by apply ext_cauchy; simp 
+  zero_add a := by apply ext_cauchy; simp [cauchy_add, cauchy_zero]
+  add_comm a b := by apply ext_cauchy; simp only [cauchy_add, add_comm]
+  add_assoc a b c := by apply ext_cauchy; simp only [cauchy_add, add_assoc]
+  mul_zero a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
+  zero_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_zero]
+  mul_one a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
+  one_mul a := by apply ext_cauchy; simp [cauchy_mul, cauchy_one]
+  mul_comm a b := by apply ext_cauchy; simp only [cauchy_mul, mul_comm]
+  mul_assoc a b c := by apply ext_cauchy; simp only [cauchy_mul, mul_assoc]
+  left_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, mul_add]
+  right_distrib a b c := by apply ext_cauchy; simp only [cauchy_add, cauchy_mul, add_mul]
+  neg_add_cancel a := by apply ext_cauchy; simp [cauchy_add, cauchy_neg, cauchy_zero]
+  natCast_zero := by apply ext_cauchy; simp [cauchy_zero]
+  natCast_succ n := by apply ext_cauchy; simp [cauchy_one, cauchy_add]
+  intCast_negSucc z := by apply ext_cauchy; simp [cauchy_neg, cauchy_natCast]
 -/
 instance commRing : CommRing Real where
   natCast n := ⟨n⟩
@@ -1465,7 +1493,11 @@ instance partialOrder
     induction a using Real.ind_mk
     induction b using Real.ind_mk
     induction c using Real.ind_mk
-    
+    simpa using le_trans
+  le_antisymm a b := by
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    simpa [mk_eq] using CauSeq.le_antisymm
 
 中文:
 实例 partialOrder
@@ -1481,7 +1513,11 @@ instance partialOrder
     induction a using Real.ind_mk
     induction b using Real.ind_mk
     induction c using Real.ind_mk
-    
+    simpa using le_trans
+  le_antisymm a b := by
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    simpa [mk_eq] using CauSeq.le_antisymm
 
 Depends on / 依赖: CauSeq, CauSeq.le_antisymm, Real.ind_mk, ind_mk, le_antisymm, le_refl, le_trans, lt_iff_le_not_ge, mk_eq, mk_le
 -/
@@ -1613,6 +1649,9 @@ instance instIsOrderedAddMonoid
       induction a using Real.ind_mk with | _ a =>
       induction b using Real.ind_mk with | _ b =>
       induction c using Real.ind_mk with | _ c =>
+      simp only [mk_lt, ← mk_add] at *
+      change Pos _ at *
+      rwa [add_sub_add_right_eq_sub]
 
 中文:
 实例 instIsOrderedAddMonoid
@@ -1625,6 +1664,9 @@ instance instIsOrderedAddMonoid
       induction a using Real.ind_mk with | _ a =>
       induction b using Real.ind_mk with | _ b =>
       induction c using Real.ind_mk with | _ c =>
+      simp only [mk_lt, ← mk_add] at *
+      change Pos _ at *
+      rwa [add_sub_add_right_eq_sub]
 
 Depends on / 依赖: Or.inr, Real.ind_mk, add_sub_add_right_eq_sub, forall_const, ind_mk, le_iff_eq_or_lt, lt_self_iff_false, mk_add, mk_lt, or_false
 -/
@@ -1863,7 +1905,43 @@ instance :
     intro a b
     induction a using Real.ind_mk
     induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le
+    rw [← mk_sup]; rw [mk_le]
+    exact CauSeq.le_sup_right
+  sup_le := by
+    intro a b c
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    induction c using Real.ind_mk
+    simp_rw [← mk_sup, mk_le]
+    exact CauSeq.sup_le
+  inf := (· ⊓ ·)
+  inf_le_left := by
+    intro a b
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    rw [← mk_inf]; rw [mk_le]
+    exact CauSeq.inf_le_left
+  inf_le_right := by
+    intro a b
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    rw [← mk_inf]; rw [mk_le]
+    exact CauSeq.inf_le_right
+  le_inf := by
+    intro a b c
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    induction c using Real.ind_mk
+    simp_rw [← mk_inf, mk_le]
+    exact CauSeq.le_inf
+  le_sup_inf := by
+    intro a b c
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    induction c using Real.ind_mk
+    apply Eq.le
+    simp only [← mk_sup, ← mk_inf]
+    exact congr_arg mk (CauSeq.sup_inf_distrib_left ..).symm
 
 中文:
 实例 :
@@ -1879,7 +1957,43 @@ instance :
     intro a b
     induction a using Real.ind_mk
     induction b using Real.ind_mk
-    rw [← mk_sup]; rw [mk_le
+    rw [← mk_sup]; rw [mk_le]
+    exact CauSeq.le_sup_right
+  sup_le := by
+    intro a b c
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    induction c using Real.ind_mk
+    simp_rw [← mk_sup, mk_le]
+    exact CauSeq.sup_le
+  inf := (· ⊓ ·)
+  inf_le_left := by
+    intro a b
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    rw [← mk_inf]; rw [mk_le]
+    exact CauSeq.inf_le_left
+  inf_le_right := by
+    intro a b
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    rw [← mk_inf]; rw [mk_le]
+    exact CauSeq.inf_le_right
+  le_inf := by
+    intro a b c
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    induction c using Real.ind_mk
+    simp_rw [← mk_inf, mk_le]
+    exact CauSeq.le_inf
+  le_sup_inf := by
+    intro a b c
+    induction a using Real.ind_mk
+    induction b using Real.ind_mk
+    induction c using Real.ind_mk
+    apply Eq.le
+    simp only [← mk_sup, ← mk_inf]
+    exact congr_arg mk (CauSeq.sup_inf_distrib_left ..).symm
 -/
 instance : DistribLattice Real where
   sup := (· ⊔ ·)
@@ -2096,7 +2210,12 @@ instance instField
   inv_zero := by simp [← ofCauchy_zero, ← ofCauchy_inv]
   nnqsmul := _
   nnqsmul_def := fun _ _ => rfl
-  q
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
+  nnratCast_def q := by
+    rw [← ofCauchy_nnratCast]; rw [NNRat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_natCast]
+  ratCast_def q := by
+    rw [← ofCauchy_ratCast]; rw [Rat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_intCast]
 
 中文:
 实例 instField
@@ -2110,7 +2229,12 @@ instance instField
   inv_zero := by simp [← ofCauchy_zero, ← ofCauchy_inv]
   nnqsmul := _
   nnqsmul_def := fun _ _ => rfl
-  q
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
+  nnratCast_def q := by
+    rw [← ofCauchy_nnratCast]; rw [NNRat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_natCast]
+  ratCast_def q := by
+    rw [← ofCauchy_ratCast]; rw [Rat.cast_def]; rw [ofCauchy_div]; rw [ofCauchy_natCast]; rw [ofCauchy_intCast]
 
 Depends on / 依赖: CauSeq, CauSeq.Completion.inv_mul_cancel, Completion, NNRat.cast_def, Rat.cast_, cast_, cast_def, inv_mul_cancel, inv_zero, mul_comm, nnqsmul, nnqsmul_def, nnratCast_def, ofCauchy, ofCauchy.injEq, ofCauchy_div, ofCauchy_inv, ofCauchy_mul, ofCauchy_natCast, ofCauchy_nnratCast
 -/
@@ -2224,7 +2348,9 @@ theorem le_mk_of_forall_le
   obtain ⟨i, H⟩ := exists_forall_ge_and h (exists_forall_ge_and hK (f.cauchy₃ <| half_pos K0))
   apply not_lt_of_ge (H _ le_rfl).1
   rw [← mk_const]; rw [mk_lt]
-  refine ⟨_, half_pos K0, i, fun j ij =
+  refine ⟨_, half_pos K0, i, fun j ij => ?_⟩
+  have := add_le_add (H _ ij).2.1 (le_of_lt (abs_lt.1 <| (H _ le_rfl).2.2 _ ij).1)
+  rwa [← sub_eq_add_neg, sub_self_div_two, sub_apply, sub_add_sub_cancel] at this
 
 中文:
 定理 le_mk_of_对任意_le
@@ -2239,7 +2365,9 @@ theorem le_mk_of_forall_le
   obtain ⟨i, H⟩ := exists_forall_ge_and h (exists_forall_ge_and hK (f.cauchy₃ <| half_pos K0))
   apply not_lt_of_ge (H _ le_rfl).1
   rw [← mk_const]; rw [mk_lt]
-  refine ⟨_, half_pos K0, i, fun j ij =
+  refine ⟨_, half_pos K0, i, fun j ij => ?_⟩
+  have := add_le_add (H _ ij).2.1 (le_of_lt (abs_lt.1 <| (H _ le_rfl).2.2 _ ij).1)
+  rwa [← sub_eq_add_neg, sub_self_div_two, sub_apply, sub_add_sub_cancel] at this
 
 Depends on / 依赖: Real.ind_mk, abs_lt, add_le_add, exists_forall_ge_and, f.cauchy, half_pos, ind_mk, le_of_lt, le_of_not_gt, le_rfl, mk_const, mk_lt, not_lt_of_ge, sub_add_sub_cancel, sub_apply, sub_eq_add_neg, sub_self_div_two
 -/
@@ -2335,7 +2463,10 @@ lemma mul_add_one_le_add_one_pow
       a * ↑(b + 1) + 1 = (0 + 1) ^ b * a + (a * b + 1) := by
         simp [mul_add, add_assoc, add_left_comm]
       _ <= (a + 1) ^ b * a + (a + 1) ^ b := by
-       
+        gcongr
+        · norm_num
+        · exact hb ha'
+      _ = (a + 1) ^ (b + 1) := by simp [pow_succ, mul_add]
 
 中文:
 引理 mul_add_one_le_add_one_pow
@@ -2352,7 +2483,10 @@ lemma mul_add_one_le_add_one_pow
       a * ↑(b + 1) + 1 = (0 + 1) ^ b * a + (a * b + 1) := by
         simp [mul_add, add_assoc, add_left_comm]
       _ <= (a + 1) ^ b * a + (a + 1) ^ b := by
-       
+        gcongr
+        · norm_num
+        · exact hb ha'
+      _ = (a + 1) ^ (b + 1) := by simp [pow_succ, mul_add]
 
 Depends on / 依赖: add_assoc, add_left_comm, eq_or_lt, generalizing, ha.eq_or_lt, mul_add, pow_succ
 -/

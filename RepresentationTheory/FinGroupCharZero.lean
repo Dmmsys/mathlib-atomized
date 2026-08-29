@@ -113,7 +113,26 @@ lemma simple_iff_end_is_rank_one
     refine { mono_isIso_iff_nonzero {W} f _ := ⟨fun hf habs => ?_, fun hf => ?_⟩ }
     · rw [habs, isIsoZero_iff_source_target_isZero] at hf
       obtain ⟨g, hg⟩ : exists g : V ⟶ V, g != 0 :=
-        (Module.finrank_pos_iff_exists_ne_zero (R := k)
+        (Module.finrank_pos_iff_exists_ne_zero (R := k)).mp (by grind)
+      exact hg (hf.2.eq_zero_of_src g)
+    · suffices Epi f by exact isIso_of_mono_of_epi f
+      suffices Epi (Abelian.image.ι f) by
+        rw [← Abelian.image.fac f]
+        exact epi_comp _ _
+      rw [← Abelian.image.fac f] at hf
+      set ι := Abelian.image.ι f
+      set φ := Injective.factorThru (𝟙 _) ι
+      have hφι : φ ≫ ι != 0 := by
+        intro habs
+        have hιφ : 𝟙 _ = ι ≫ φ := (Injective.comp_factorThru (𝟙 _) ι).symm
+        apply_fun (· ≫ ι) at hιφ
+        simp_all
+      obtain ⟨c, hc⟩ : exists c : k, c • _ = 𝟙 V := (finrank_eq_one_iff_of_nonzero' _ hφι).mp h (𝟙 V)
+      refine Preadditive.epi_of_cancel_zero _ (fun g hg => ?_)
+      apply_fun (· ≫ g) at hc
+      simpa [hg] using hc.symm
+
+omit [Finite G] in
 
 中文:
 引理 simple_iff_end_is_rank_one
@@ -123,7 +142,26 @@ lemma simple_iff_end_is_rank_one
     refine { mono_isIso_iff_nonzero {W} f _ := ⟨fun hf habs => ?_, fun hf => ?_⟩ }
     · rw [habs, isIsoZero_iff_source_target_isZero] at hf
       obtain ⟨g, hg⟩ : exists g : V ⟶ V, g != 0 :=
-        (Module.finrank_pos_iff_exists_ne_zero (R := k)
+        (Module.finrank_pos_iff_exists_ne_zero (R := k)).mp (by grind)
+      exact hg (hf.2.eq_zero_of_src g)
+    · suffices Epi f by exact isIso_of_mono_of_epi f
+      suffices Epi (Abelian.image.ι f) by
+        rw [← Abelian.image.fac f]
+        exact epi_comp _ _
+      rw [← Abelian.image.fac f] at hf
+      set ι := Abelian.image.ι f
+      set φ := Injective.factorThru (𝟙 _) ι
+      have hφι : φ ≫ ι != 0 := by
+        intro habs
+        have hιφ : 𝟙 _ = ι ≫ φ := (Injective.comp_factorThru (𝟙 _) ι).symm
+        apply_fun (· ≫ ι) at hιφ
+        simp_all
+      obtain ⟨c, hc⟩ : exists c : k, c • _ = 𝟙 V := (finrank_eq_one_iff_of_nonzero' _ hφι).mp h (𝟙 V)
+      refine Preadditive.epi_of_cancel_zero _ (fun g hg => ?_)
+      apply_fun (· ≫ g) at hc
+      simpa [hg] using hc.symm
+
+omit [Finite G] in
 
 Depends on / 依赖: finrank_endomorphism_simple_eq_one
 -/
@@ -166,7 +204,7 @@ lemma simple_iff_char_is_norm_one
   · symm; simpa [Nonempty.intro (Iso.refl V), inv_mul_eq_one₀] using char_orthonormal V V
   · have eq := V.scalar_product_char_eq_finrank_equivariant V
     rw [h]; rw [inv_mul_cancel_of_invertible] at eq
-    rw [
+    rw [simple_iff_end_is_rank_one]; rw [← Nat.cast_inj (R := k)]; rw [← eq]; rw [Nat.cast_one]
 
 中文:
 引理 simple_iff_char_is_norm_one
@@ -177,7 +215,7 @@ lemma simple_iff_char_is_norm_one
   · symm; simpa [Nonempty.intro (Iso.refl V), inv_mul_eq_one₀] using char_orthonormal V V
   · have eq := V.scalar_product_char_eq_finrank_equivariant V
     rw [h]; rw [inv_mul_cancel_of_invertible] at eq
-    rw [
+    rw [simple_iff_end_is_rank_one]; rw [← Nat.cast_inj (R := k)]; rw [← eq]; rw [Nat.cast_one]
 
 Depends on / 依赖: Iso.refl, Nat.card, Nat.cast_inj, Nat.cast_one, NeZero, NeZero.ne, Nonempty, Nonempty.intro, V.scalar_product_char_eq_finrank_equivariant, cast_inj, cast_one, char_orthonormal, inv_mul_cancel_of_invertible, invertibleOfNonzero, scalar_product_char_eq_finrank_equivariant, simple_iff_end_is_rank_one
 -/

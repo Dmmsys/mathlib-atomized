@@ -88,7 +88,13 @@ definition scottHausdorff
     a in u -> exists b in d, Ici b inter d subseteq u
   isOpen_univ := fun d _ ⟨b, hb⟩ _ _ _ _ => ⟨b, hb, (Ici b inter d).subset_univ⟩
   isOpen_inter s t hs ht d hd₀ hd₁ hd₂ a hd₃ ha := by
-    obtain ⟨b
+    obtain ⟨b₁, hb₁d, hb₁ds⟩ := hs hd₀ hd₁ hd₂ hd₃ ha.1
+    obtain ⟨b₂, hb₂d, hb₂dt⟩ := ht hd₀ hd₁ hd₂ hd₃ ha.2
+    obtain ⟨c, hcd, hc⟩ := hd₂ b₁ hb₁d b₂ hb₂d
+    exact ⟨c, hcd, fun e ⟨hce, hed⟩ => ⟨hb₁ds ⟨hc.1.trans hce, hed⟩, hb₂dt ⟨hc.2.trans hce, hed⟩⟩⟩
+  isOpen_sUnion := fun s h d hd₀ hd₁ hd₂ a hd₃ ⟨s₀, hs₀s, has₀⟩ => by
+    obtain ⟨b, hbd, hbds₀⟩ := h s₀ hs₀s hd₀ hd₁ hd₂ hd₃ has₀
+    exact ⟨b, hbd, Set.subset_sUnion_of_subset s s₀ hbds₀ hs₀s⟩
 
 中文:
 定义 scottHausdorff
@@ -97,7 +103,13 @@ definition scottHausdorff
     a in u -> exists b in d, Ici b inter d subseteq u
   isOpen_univ := fun d _ ⟨b, hb⟩ _ _ _ _ => ⟨b, hb, (Ici b inter d).subset_univ⟩
   isOpen_inter s t hs ht d hd₀ hd₁ hd₂ a hd₃ ha := by
-    obtain ⟨b
+    obtain ⟨b₁, hb₁d, hb₁ds⟩ := hs hd₀ hd₁ hd₂ hd₃ ha.1
+    obtain ⟨b₂, hb₂d, hb₂dt⟩ := ht hd₀ hd₁ hd₂ hd₃ ha.2
+    obtain ⟨c, hcd, hc⟩ := hd₂ b₁ hb₁d b₂ hb₂d
+    exact ⟨c, hcd, fun e ⟨hce, hed⟩ => ⟨hb₁ds ⟨hc.1.trans hce, hed⟩, hb₂dt ⟨hc.2.trans hce, hed⟩⟩⟩
+  isOpen_sUnion := fun s h d hd₀ hd₁ hd₂ a hd₃ ⟨s₀, hs₀s, has₀⟩ => by
+    obtain ⟨b, hbd, hbds₀⟩ := h s₀ hs₀s hd₀ hd₁ hd₂ hd₃ has₀
+    exact ⟨b, hbd, Set.subset_sUnion_of_subset s s₀ hbds₀ hs₀s⟩
 
 Depends on / 依赖: DirectedOn, Nonempty, d.Nonempty
 -/
@@ -496,7 +508,7 @@ lemma isOpen_iff_isUpperSet_and_dirSupInaccOn
     ⟨IsScottHausdorff.dirSupInaccOn_of_isOpen (t := scottHausdorff α D),
       fun h' d d₀ d₁ d₂ _ d₃ ha => ?_⟩
   obtain ⟨b, hbd, hbu⟩ := h' d₀ d₁ d₂ d₃ ha
-  exact ⟨b, hbd, Subset.trans inter_subset_le
+  exact ⟨b, hbd, Subset.trans inter_subset_left (h.Ici_subset hbu)⟩
 
 中文:
 引理 isOpen_iff_isUpperSet_and_dirSupInaccOn
@@ -507,7 +519,7 @@ lemma isOpen_iff_isUpperSet_and_dirSupInaccOn
     ⟨IsScottHausdorff.dirSupInaccOn_of_isOpen (t := scottHausdorff α D),
       fun h' d d₀ d₁ d₂ _ d₃ ha => ?_⟩
   obtain ⟨b, hbd, hbu⟩ := h' d₀ d₁ d₂ d₃ ha
-  exact ⟨b, hbd, Subset.trans inter_subset_le
+  exact ⟨b, hbd, Subset.trans inter_subset_left (h.Ici_subset hbu)⟩
 
 Depends on / 依赖: Ici_subset, IsScottHausdorff, IsScottHausdorff.dirSupInaccOn_of_isOpen, Subset, Subset.trans, and_congr_right, dirSupInaccOn_of_isOpen, h.Ici_subset, inter_subset_left, isOpen_iff_isUpperSet_and_scottHausdorff_open, scottHausdorff
 -/
@@ -718,7 +730,19 @@ lemma scottContinuousOn_iff_continuous
   · rw [isOpen_iff_isUpperSet_and_dirSupInaccOn (D := D)]
     exact ⟨(isUpperSet_of_isOpen (D := univ) hu).preimage (h.monotone D hD),
 fun t h₀ hd₁ hd₂ a hd₃ ha => image_inter_nonempty_iff.mp
-        (isOpen_iff_isUpperSet_and_dirSupInaccOn 
+        (isOpen_iff_isUpperSet_and_dirSupInaccOn (D := univ).mp hu).2 trivial (Nonempty.image f hd₁)
+        (directedOn_image.mpr (hd₂.mono @(h.monotone D hD))) (h h₀ hd₁ hd₂ hd₃) ha⟩
+  · refine fun hf t h₀ d₁ d₂ a d₃ =>
+      ⟨(monotone_of_continuous (D := D) hf).mem_upperBounds_image d₃.1,
+      fun b hb => ?_⟩
+    by_contra h
+    let u := (Iic b)ᶜ
+    have hu : IsOpen (f ⁻¹' u) := isClosed_Iic.isOpen_compl.preimage hf
+    rw [isOpen_iff_isUpperSet_and_dirSupInaccOn (D := D)] at hu
+    obtain ⟨c, hcd, hfcb⟩ := hu.2 h₀ d₁ d₂ d₃ h
+    simp only [upperBounds, mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
+      mem_ofPred] at hb
+exact hfcb hb _ hcd
 
 中文:
 引理 scottContinuousOn_iff_continuous
@@ -728,7 +752,19 @@ fun t h₀ hd₁ hd₂ a hd₃ ha => image_inter_nonempty_iff.mp
   · rw [isOpen_iff_isUpperSet_and_dirSupInaccOn (D := D)]
     exact ⟨(isUpperSet_of_isOpen (D := univ) hu).preimage (h.monotone D hD),
 fun t h₀ hd₁ hd₂ a hd₃ ha => image_inter_nonempty_iff.mp
-        (isOpen_iff_isUpperSet_and_dirSupInaccOn 
+        (isOpen_iff_isUpperSet_and_dirSupInaccOn (D := univ).mp hu).2 trivial (Nonempty.image f hd₁)
+        (directedOn_image.mpr (hd₂.mono @(h.monotone D hD))) (h h₀ hd₁ hd₂ hd₃) ha⟩
+  · refine fun hf t h₀ d₁ d₂ a d₃ =>
+      ⟨(monotone_of_continuous (D := D) hf).mem_upperBounds_image d₃.1,
+      fun b hb => ?_⟩
+    by_contra h
+    let u := (Iic b)ᶜ
+    have hu : IsOpen (f ⁻¹' u) := isClosed_Iic.isOpen_compl.preimage hf
+    rw [isOpen_iff_isUpperSet_and_dirSupInaccOn (D := D)] at hu
+    obtain ⟨c, hcd, hfcb⟩ := hu.2 h₀ d₁ d₂ d₃ h
+    simp only [upperBounds, mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
+      mem_ofPred] at hb
+exact hfcb hb _ hcd
 -/
 @[simp] lemma scottContinuousOn_iff_continuous {D : Set (Set α)} [Topology.IsScott α D]
     (hD : forall a b : α, a <= b -> {a, b} in D) : ScottContinuousOn D f ↔ Continuous f := by
@@ -783,7 +819,12 @@ lemma isOpen_iff_Iic_compl_or_univ
     · apply Or.inr
       use sSup Uᶜ
       rw [compl_eq_comm]; rw [le_antisymm_iff]
-      refine ⟨fun _ ha => le_sSup ha, (isLowerSet_of_isClosed hU.isClosed_compl).Iic_subset
+      refine ⟨fun _ ha => le_sSup ha, (isLowerSet_of_isClosed hU.isClosed_compl).Iic_subset ?_⟩
+      exact dirSupClosed_iff_forall_sSup.mp (dirSupClosed_of_isClosed hU.isClosed_compl) le_rfl neUc
+        (isChain_of_trichotomous Uᶜ).directedOn
+  · rintro (rfl | ⟨a, rfl⟩)
+    · exact isOpen_univ
+    · exact isClosed_Iic.isOpen_compl
 
 中文:
 引理 isOpen_iff_Iic_compl_or_univ
@@ -796,7 +837,12 @@ lemma isOpen_iff_Iic_compl_or_univ
     · apply Or.inr
       use sSup Uᶜ
       rw [compl_eq_comm]; rw [le_antisymm_iff]
-      refine ⟨fun _ ha => le_sSup ha, (isLowerSet_of_isClosed hU.isClosed_compl).Iic_subset
+      refine ⟨fun _ ha => le_sSup ha, (isLowerSet_of_isClosed hU.isClosed_compl).Iic_subset ?_⟩
+      exact dirSupClosed_iff_forall_sSup.mp (dirSupClosed_of_isClosed hU.isClosed_compl) le_rfl neUc
+        (isChain_of_trichotomous Uᶜ).directedOn
+  · rintro (rfl | ⟨a, rfl⟩)
+    · exact isOpen_univ
+    · exact isClosed_Iic.isOpen_compl
 
 Depends on / 依赖: Iic_subset, Or.inl, Or.inr, compl_empty_iff, compl_empty_iff.mp, compl_eq_comm, dirSupClosed_iff_forall_sSup, dirSupClosed_iff_forall_sSup.mp, dirSupClosed_of_isClosed, directedOn, eq_empty_or_nonempty, hU.isClosed_compl, isChain_of_trichotomous, isClosed_Iic, isClosed_Iic.isOpen_compl, isClosed_compl, isLowerSet_of_isClosed, isOpen_compl, isOpen_univ, le_antisymm_iff
 -/

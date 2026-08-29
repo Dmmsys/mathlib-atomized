@@ -321,7 +321,10 @@ definition restrictSource
     have := Opens.isDominant_ι f.dense_target
 f.target.ι.denseRange.dense_image f.target.ι.continuous
 f.iso.hom.denseRange.dense_image f.iso.hom.continuous
-        hU.preimage f.source.ι.isOpenEmbeddin
+        hU.preimage f.source.ι.isOpenEmbedding.isOpenMap
+  iso := (Opens.isoOfLE hU').symm ≪≫
+    (f.iso.hom.isoImage (f.source.ι ⁻¹ᵁ U)) ≪≫
+    (f.target.ι.isoImage (f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U))
 
 中文:
 定义 restrictSource
@@ -333,7 +336,10 @@ f.iso.hom.denseRange.dense_image f.iso.hom.continuous
     have := Opens.isDominant_ι f.dense_target
 f.target.ι.denseRange.dense_image f.target.ι.continuous
 f.iso.hom.denseRange.dense_image f.iso.hom.continuous
-        hU.preimage f.source.ι.isOpenEmbeddin
+        hU.preimage f.source.ι.isOpenEmbedding.isOpenMap
+  iso := (Opens.isoOfLE hU').symm ≪≫
+    (f.iso.hom.isoImage (f.source.ι ⁻¹ᵁ U)) ≪≫
+    (f.target.ι.isoImage (f.iso.hom ''ᵁ f.source.ι ⁻¹ᵁ U))
 -/
 noncomputable def restrictSource (f : X.PartialIso Y) (U : Opens X) (hU : Dense (U : Set X))
     (hU' : U <= f.source) : X.PartialIso Y where

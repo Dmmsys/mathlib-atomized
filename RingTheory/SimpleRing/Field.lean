@@ -38,7 +38,23 @@ lemma isField_center
     rw [Subring.mem_center_iff] at hx1
     replace hx2 : x != 0 := by simpa [Subtype.ext_iff] using hx2
     -- Todo: golf the following `let` once `TwoSidedIdeal.span` is defined
-    let I := TwoSidedIdeal.mk' 
+    let I := TwoSidedIdeal.mk' (Set.range (x * ·)) ⟨0, by simp⟩
+      (by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨x + y, mul_add _ _ _⟩)
+      (by rintro _ ⟨x, rfl⟩; exact ⟨-x, by simp⟩)
+      (by rintro a _ ⟨c, rfl⟩; exact ⟨a * c, by dsimp; rw [← mul_assoc, ← hx1, mul_assoc]⟩)
+      (by rintro _ b ⟨a, rfl⟩; exact ⟨a * b, by dsimp; rw [← mul_assoc, ← hx1, mul_assoc]⟩)
+    have mem : 1 in I := one_mem_of_ne_zero_mem I hx2 (by simpa [I, mem_mk'] using ⟨1, by simp⟩)
+    simp only [TwoSidedIdeal.mem_mk', Set.mem_range, I] at mem
+    obtain ⟨y, hy⟩ := mem
+    refine ⟨⟨y, Subring.mem_center_iff.2 fun a => ?_⟩, by ext; exact hy⟩
+    calc a * y
+      _ = (x * y) * a * y := by rw [hy, one_mul]
+      _ = (y * x) * a * y := by rw [hx1]
+      _ = y * (x * a) * y := by rw [mul_assoc y x a]
+      _ = y * (a * x) * y := by rw [hx1]
+      _ = y * ((a * x) * y) := by rw [mul_assoc]
+      _ = y * (a * (x * y)) := by rw [mul_assoc a x y]
+      _ = y * a := by rw [hy, mul_one]
 
 中文:
 引理 isField_center
@@ -51,7 +67,23 @@ lemma isField_center
     rw [Subring.mem_center_iff] at hx1
     replace hx2 : x != 0 := by simpa [Subtype.ext_iff] using hx2
     -- Todo: golf the following `let` once `TwoSidedIdeal.span` is defined
-    let I := TwoSidedIdeal.mk' 
+    let I := TwoSidedIdeal.mk' (Set.range (x * ·)) ⟨0, by simp⟩
+      (by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨x + y, mul_add _ _ _⟩)
+      (by rintro _ ⟨x, rfl⟩; exact ⟨-x, by simp⟩)
+      (by rintro a _ ⟨c, rfl⟩; exact ⟨a * c, by dsimp; rw [← mul_assoc, ← hx1, mul_assoc]⟩)
+      (by rintro _ b ⟨a, rfl⟩; exact ⟨a * b, by dsimp; rw [← mul_assoc, ← hx1, mul_assoc]⟩)
+    have mem : 1 in I := one_mem_of_ne_zero_mem I hx2 (by simpa [I, mem_mk'] using ⟨1, by simp⟩)
+    simp only [TwoSidedIdeal.mem_mk', Set.mem_range, I] at mem
+    obtain ⟨y, hy⟩ := mem
+    refine ⟨⟨y, Subring.mem_center_iff.2 fun a => ?_⟩, by ext; exact hy⟩
+    calc a * y
+      _ = (x * y) * a * y := by rw [hy, one_mul]
+      _ = (y * x) * a * y := by rw [hx1]
+      _ = y * (x * a) * y := by rw [mul_assoc y x a]
+      _ = y * (a * x) * y := by rw [hx1]
+      _ = y * ((a * x) * y) := by rw [mul_assoc]
+      _ = y * (a * (x * y)) := by rw [mul_assoc a x y]
+      _ = y * a := by rw [hy, mul_one]
 
 Depends on / 依赖: zero_ne_one
 -/

@@ -71,7 +71,26 @@ theorem LinearIndependent.map_of_isPurelyInseparable_of_isSeparable
   refine linearIndependent_iff.mpr fun l hl => Finsupp.ext fun i => ?_
   choose f hf using fun i => (isPurelyInseparable_iff_pow_mem F q).1 ‹_› (l i)
   let n := l.support.sup f
-  have := (ex
+  have := (expChar_pow_pos F q n).ne'
+  replace hf (i : ι) : l i ^ q ^ n in (algebraMap F E).range := by
+    by_cases hs : i in l.support
+    · convert! pow_mem (hf i) (q ^ (n - f i)) using 1
+      rw [← pow_mul]; rw [← pow_add]; rw [Nat.add_sub_of_le (Finset.le_sup hs)]
+    exact ⟨0, by rw [map_zero, Finsupp.notMem_support_iff.1 hs, zero_pow this]⟩
+  choose lF hlF using hf
+  let lF₀ := Finsupp.onFinset l.support lF fun i => by
+    contrapose
+    refine fun hs => (injective_iff_map_eq_zero _).mp (algebraMap F E).injective _ ?_
+    rw [hlF]; rw [Finsupp.notMem_support_iff.1 hs]; rw [zero_pow this]
+replace h := linearIndependent_iff.1 (h.map_pow_expChar_pow_of_isSeparable' q n hsep :) lF₀ by
+    replace hl := congr($hl ^ q ^ n)
+    rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [sum_pow_char_pow]; rw [zero_pow this] at hl
+    rw [← hl]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.onFinset_sum _ (fun _ => by exact zero_smul _ _)]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    simp_rw [Algebra.smul_def, mul_pow, IsScalarTower.algebraMap_apply F E K, hlF, map_pow]
+  refine eq_zero_of_pow_eq_zero ((hlF _).symm.trans ?_)
+  convert! map_zero (algebraMap F E)
+  exact congr($h i)
 
 中文:
 定理 LinearIndependent.map_of_isPurelyInseparable_of_isSeparable
@@ -82,7 +101,26 @@ theorem LinearIndependent.map_of_isPurelyInseparable_of_isSeparable
   refine linearIndependent_iff.mpr fun l hl => Finsupp.ext fun i => ?_
   choose f hf using fun i => (isPurelyInseparable_iff_pow_mem F q).1 ‹_› (l i)
   let n := l.support.sup f
-  have := (ex
+  have := (expChar_pow_pos F q n).ne'
+  replace hf (i : ι) : l i ^ q ^ n in (algebraMap F E).range := by
+    by_cases hs : i in l.support
+    · convert! pow_mem (hf i) (q ^ (n - f i)) using 1
+      rw [← pow_mul]; rw [← pow_add]; rw [Nat.add_sub_of_le (Finset.le_sup hs)]
+    exact ⟨0, by rw [map_zero, Finsupp.notMem_support_iff.1 hs, zero_pow this]⟩
+  choose lF hlF using hf
+  let lF₀ := Finsupp.onFinset l.support lF fun i => by
+    contrapose
+    refine fun hs => (injective_iff_map_eq_zero _).mp (algebraMap F E).injective _ ?_
+    rw [hlF]; rw [Finsupp.notMem_support_iff.1 hs]; rw [zero_pow this]
+replace h := linearIndependent_iff.1 (h.map_pow_expChar_pow_of_isSeparable' q n hsep :) lF₀ by
+    replace hl := congr($hl ^ q ^ n)
+    rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [sum_pow_char_pow]; rw [zero_pow this] at hl
+    rw [← hl]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.onFinset_sum _ (fun _ => by exact zero_smul _ _)]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    simp_rw [Algebra.smul_def, mul_pow, IsScalarTower.algebraMap_apply F E K, hlF, map_pow]
+  refine eq_zero_of_pow_eq_zero ((hlF _).symm.trans ?_)
+  convert! map_zero (algebraMap F E)
+  exact congr($h i)
 
 Depends on / 依赖: ExpChar, ExpChar.exists, Finsupp, Finsupp.ext, Nat.add, algebraMap, convert, expChar_of_injective_algebraMap, expChar_pow_pos, injective, isPurelyInseparable_iff_pow_mem, l.support, l.support.sup, linearIndependent_iff, linearIndependent_iff.mpr, pow_add, pow_mem, pow_mul, replace, support
 -/
@@ -125,7 +163,7 @@ theorem IntermediateField.linearDisjoint_of_isPurelyInseparable_of_isSeparable
 .of_basis_left b b.linearIndependent.map' S.val.toLinearMap
     (LinearMap.ker_eq_bot_of_injective S.val.injective)
 .map_of_isPurelyInseparable_of_isSeparable E fun i => by
-      simpa only [IsSeparable, minpoly_eq] using! Algebra.IsSeparable.isSeparabl
+      simpa only [IsSeparable, minpoly_eq] using! Algebra.IsSeparable.isSeparable F (b i)
 
 中文:
 定理 中间域.linearDisjoint_of_isPurelyInseparable_of_isSeparable
@@ -133,7 +171,7 @@ theorem IntermediateField.linearDisjoint_of_isPurelyInseparable_of_isSeparable
 .of_basis_left b b.linearIndependent.map' S.val.toLinearMap
     (LinearMap.ker_eq_bot_of_injective S.val.injective)
 .map_of_isPurelyInseparable_of_isSeparable E fun i => by
-      simpa only [IsSeparable, minpoly_eq] using! Algebra.IsSeparable.isSeparabl
+      simpa only [IsSeparable, minpoly_eq] using! Algebra.IsSeparable.isSeparable F (b i)
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, LinearMap, LinearMap.ker_eq_bot_of_injective, Module, Module.Basis.exists_basis, S.val.injective, S.val.toLinearMap, b.linearIndependent.map, exists_basis, injective, isSeparable, ker_eq_bot_of_injective, linearIndependent, map_of_isPurelyInseparable_of_isSeparable, minpoly_eq, of_basis_left, toLinearMap
 -/
@@ -254,7 +292,9 @@ lemma sepDegree_eq_of_isPurelyInseparable
   convert! sepDegree_eq_of_isPurelyInseparable_of_isSeparable F E (separableClosure E K)
   have : IsScalarTower F (separableClosure E K) K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
   rw [sepDegree]; rw [← separableClosure.map_eq_of_separableClosure_eq_bot F
-    (separableClosure.separableC
+    (separableClosure.separableClosure_eq_bot E K)]
+  exact (separableClosure F (separableClosure E K)).equivMap
+.symm.toLinearEquiv.rank_eq (IsScalarTower.toAlgHom F (separableClosure E K) K)
 
 中文:
 引理 sepDegree_eq_of_isPurelyInseparable
@@ -263,7 +303,9 @@ lemma sepDegree_eq_of_isPurelyInseparable
   convert! sepDegree_eq_of_isPurelyInseparable_of_isSeparable F E (separableClosure E K)
   have : IsScalarTower F (separableClosure E K) K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
   rw [sepDegree]; rw [← separableClosure.map_eq_of_separableClosure_eq_bot F
-    (separableClosure.separableC
+    (separableClosure.separableClosure_eq_bot E K)]
+  exact (separableClosure F (separableClosure E K)).equivMap
+.symm.toLinearEquiv.rank_eq (IsScalarTower.toAlgHom F (separableClosure E K) K)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, IsScalarTower.toAlgHom, convert, equivMap, map_eq_of_separableClosure_eq_bot, of_algebraMap_eq, rank_eq, sepDegree, sepDegree_eq_of_isPurelyInseparable_of_isSeparable, separableClosure, separableClosure.map_eq_of_separableClosure_eq_bot, separableClosure.separableClosure_eq_bot, separableClosure_eq_bot, symm.toLinearEquiv.rank_eq, toAlgHom, toLinearEquiv
 -/
@@ -465,7 +507,26 @@ theorem IntermediateField.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInsepara
   let E' := (IsScalarTower.toAlgHom F E K).fieldRange
   let j : E ≃ₐ[F] E' := AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F E K)
   have hi : M <= L.restrictScalars F := by
-    rw [restrictScalars_adjoin_of_algEquiv (E := K) j rfl]; rw [restrictSca
+    rw [restrictScalars_adjoin_of_algEquiv (E := K) j rfl]; rw [restrictScalars_adjoin]
+    exact adjoin.mono _ _ _ Set.subset_union_right
+  let i : M ->+* L := Subsemiring.inclusion hi
+  let : Algebra M L := i.toAlgebra
+  let : SMul M L := Algebra.toSMul
+  have : IsScalarTower F M L := IsScalarTower.of_algebraMap_eq (congrFun rfl)
+  have : IsPurelyInseparable M L := by
+    change IsPurelyInseparable M (extendScalars hi)
+    obtain ⟨q, _⟩ := ExpChar.exists F
+have : extendScalars hi = adjoin M (E' : Set K) := restrictScalars_injective F by
+      conv_lhs => rw [extendScalars_restrictScalars, restrictScalars_adjoin_of_algEquiv
+        (E := K) j rfl, ← adjoin_self F E', adjoin_adjoin_comm]
+    rw [this]; rw [isPurelyInseparable_adjoin_iff_pow_mem _ _ q]
+    rintro x ⟨y, hy⟩
+    obtain ⟨n, z, hz⟩ := IsPurelyInseparable.pow_mem F q y
+    refine ⟨n, algebraMap F M z, ?_⟩
+    rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply F E K]; rw [hz]; rw [← hy]; rw [map_pow]; rw [AlgHom.toRingHom_eq_coe]; rw [IsScalarTower.coe_toAlgHom]
+  have h := lift_sepDegree_mul_lift_sepDegree_of_isAlgebraic F E L
+  rw [IsPurelyInseparable.sepDegree_eq_one F E]; rw [Cardinal.lift_one]; rw [one_mul] at h
+  rw [Cardinal.lift_injective h]; rw [← sepDegree_mul_sepDegree_of_isAlgebraic F M L]; rw [IsPurelyInseparable.sepDegree_eq_one M L]; rw [mul_one]
 
 中文:
 定理 中间域.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable
@@ -475,7 +536,26 @@ theorem IntermediateField.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInsepara
   let E' := (IsScalarTower.toAlgHom F E K).fieldRange
   let j : E ≃ₐ[F] E' := AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F E K)
   have hi : M <= L.restrictScalars F := by
-    rw [restrictScalars_adjoin_of_algEquiv (E := K) j rfl]; rw [restrictSca
+    rw [restrictScalars_adjoin_of_algEquiv (E := K) j rfl]; rw [restrictScalars_adjoin]
+    exact adjoin.mono _ _ _ Set.subset_union_right
+  let i : M ->+* L := Subsemiring.inclusion hi
+  let : Algebra M L := i.toAlgebra
+  let : SMul M L := Algebra.toSMul
+  have : IsScalarTower F M L := IsScalarTower.of_algebraMap_eq (congrFun rfl)
+  have : IsPurelyInseparable M L := by
+    change IsPurelyInseparable M (extendScalars hi)
+    obtain ⟨q, _⟩ := ExpChar.exists F
+have : extendScalars hi = adjoin M (E' : Set K) := restrictScalars_injective F by
+      conv_lhs => rw [extendScalars_restrictScalars, restrictScalars_adjoin_of_algEquiv
+        (E := K) j rfl, ← adjoin_self F E', adjoin_adjoin_comm]
+    rw [this]; rw [isPurelyInseparable_adjoin_iff_pow_mem _ _ q]
+    rintro x ⟨y, hy⟩
+    obtain ⟨n, z, hz⟩ := IsPurelyInseparable.pow_mem F q y
+    refine ⟨n, algebraMap F M z, ?_⟩
+    rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply F E K]; rw [hz]; rw [← hy]; rw [map_pow]; rw [AlgHom.toRingHom_eq_coe]; rw [IsScalarTower.coe_toAlgHom]
+  have h := lift_sepDegree_mul_lift_sepDegree_of_isAlgebraic F E L
+  rw [IsPurelyInseparable.sepDegree_eq_one F E]; rw [Cardinal.lift_one]; rw [one_mul] at h
+  rw [Cardinal.lift_injective h]; rw [← sepDegree_mul_sepDegree_of_isAlgebraic F M L]; rw [IsPurelyInseparable.sepDegree_eq_one M L]; rw [mul_one]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, Algebra, Algebra.toSMul, IsScalarTower, IsScalarTower.toAlgHom, L.restrictScalars, Set.subset_union_right, Subsemiring, Subsemiring.inclusion, adjoin, adjoin.mono, fieldRange, i.toAlgebra, inclusion, ofInjectiveField, restrictScalars, restrictScalars_adjoin, restrictScalars_adjoin_of_algEquiv, subset_union_right
 -/
@@ -548,7 +628,10 @@ theorem minpoly.map_eq_of_isSeparable_of_isPurelyInseparable
   refine eq_of_monic_of_dvd_of_natDegree_le (monic hi') ((monic hi).map (algebraMap F E))
     (dvd_map_of_isScalarTower F E x) (le_of_eq ?_)
   have hsep' := IsSeparable.tower_top E hsep
-  have := (isSe
+  have := (isSeparable_adjoin_simple_iff_isSeparable _ _).2 hsep
+  have := (isSeparable_adjoin_simple_iff_isSeparable _ _).2 hsep'
+  have := Algebra.IsSeparable.isAlgebraic F F⟮x⟯
+  rw [Polynomial.natDegree_map]; rw [← adjoin.finrank hi]; rw [← adjoin.finrank hi']; rw [← finSepDegree_eq_finrank_of_isSeparable F _]; rw [← finSepDegree_eq_finrank_of_isSeparable E _]; rw [finSepDegree_eq]; rw [finSepDegree_eq]; rw [sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable (F := F) E]
 
 中文:
 定理 minpoly.map_eq_of_isSeparable_of_isPurelyInseparable
@@ -559,7 +642,10 @@ theorem minpoly.map_eq_of_isSeparable_of_isPurelyInseparable
   refine eq_of_monic_of_dvd_of_natDegree_le (monic hi') ((monic hi).map (algebraMap F E))
     (dvd_map_of_isScalarTower F E x) (le_of_eq ?_)
   have hsep' := IsSeparable.tower_top E hsep
-  have := (isSe
+  have := (isSeparable_adjoin_simple_iff_isSeparable _ _).2 hsep
+  have := (isSeparable_adjoin_simple_iff_isSeparable _ _).2 hsep'
+  have := Algebra.IsSeparable.isAlgebraic F F⟮x⟯
+  rw [Polynomial.natDegree_map]; rw [← adjoin.finrank hi]; rw [← adjoin.finrank hi']; rw [← finSepDegree_eq_finrank_of_isSeparable F _]; rw [← finSepDegree_eq_finrank_of_isSeparable E _]; rw [finSepDegree_eq]; rw [finSepDegree_eq]; rw [sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable (F := F) E]
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isAlgebraic, IsIntegral, IsIntegral.tower_top, IsSeparable, IsSeparable.isIntegral, IsSeparable.tower_top, Polynomial, Polynomial.natDegree_map, adjoin, adjoin.finrank, algebraMap, dvd_map_of_isScalarTower, eq_of_monic_of_dvd_of_natDegree_le, finrank, isAlgebraic, isIntegral, isSeparable_adjoin_simple_iff_isSeparable, le_of_eq, natDegree_map
 -/
@@ -589,7 +675,12 @@ theorem Polynomial.Separable.map_irreducible_of_isPurelyInseparable
     (natDegree_pos_iff_degree_pos.1 hirr.natDegree_pos).ne'
   have ha : Associated f (minpoly F x) := by
     have := isUnit_C.2 (leadingCoeff_ne_zero.2 hirr.ne_zero).isUnit.inv
-    exact ⟨this.unit, by rw [IsUn
+    exact ⟨this.unit, by rw [IsUnit.unit_spec, minpoly.eq_of_irreducible hirr hx]⟩
+  have ha' : Associated (f.map (algebraMap F E)) ((minpoly F x).map (algebraMap F E)) :=
+    ha.map (mapRingHom (algebraMap F E)).toMonoidHom
+  have heq := minpoly.map_eq_of_isSeparable_of_isPurelyInseparable E x (ha.separable hsep)
+  rw [ha'.irreducible_iff]; rw [heq]
+  exact minpoly.irreducible (Algebra.IsIntegral.isIntegral x)
 
 中文:
 定理 多项式.可分.map_irreducible_of_isPurelyInseparable
@@ -600,7 +691,12 @@ theorem Polynomial.Separable.map_irreducible_of_isPurelyInseparable
     (natDegree_pos_iff_degree_pos.1 hirr.natDegree_pos).ne'
   have ha : Associated f (minpoly F x) := by
     have := isUnit_C.2 (leadingCoeff_ne_zero.2 hirr.ne_zero).isUnit.inv
-    exact ⟨this.unit, by rw [IsUn
+    exact ⟨this.unit, by rw [IsUnit.unit_spec, minpoly.eq_of_irreducible hirr hx]⟩
+  have ha' : Associated (f.map (algebraMap F E)) ((minpoly F x).map (algebraMap F E)) :=
+    ha.map (mapRingHom (algebraMap F E)).toMonoidHom
+  have heq := minpoly.map_eq_of_isSeparable_of_isPurelyInseparable E x (ha.separable hsep)
+  rw [ha'.irreducible_iff]; rw [heq]
+  exact minpoly.irreducible (Algebra.IsIntegral.isIntegral x)
 
 Depends on / 依赖: AlgebraicClosure, Associated, IsAlgClosed, IsAlgClosed.exists_aeval_eq_zero, IsUnit, IsUnit.unit_spec, algebraMap, eq_of_irreducible, exists_aeval_eq_zero, f.map, ha.map, hirr.natDegree_pos, hirr.ne_zero, isUnit, isUnit.inv, isUnit_C, leadingCoeff_ne_zero, mapRingHom, map_eq_of_is, minpoly
 -/

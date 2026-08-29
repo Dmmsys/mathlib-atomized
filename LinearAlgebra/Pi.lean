@@ -725,7 +725,11 @@ theorem iInf_ker_proj_le_iSup_range_single
     show (∑ i in I]; rw [Pi.single i (b i)) = b by
       ext i
       rw [Finset.sum_apply]; rw [← Pi.single_eq_same i (b i)]
-      refine Finset.sum_eq_single i (fun j _ ne => Pi.single_eq_of_ne n
+      refine Finset.sum_eq_single i (fun j _ ne => Pi.single_eq_of_ne ne.symm _) ?_
+      intro hiI
+      rw [Pi.single_eq_same]
+      exact hb _ ((hIJ.top_le trivial).resolve_left hiI)]
+  exact sum_mem_biSup fun i _ => mem_range_self (single R φ i) (b i)
 
 中文:
 定理 iInf_ker_proj_le_iSup_range_single
@@ -738,7 +742,11 @@ theorem iInf_ker_proj_le_iSup_range_single
     show (∑ i in I]; rw [Pi.single i (b i)) = b by
       ext i
       rw [Finset.sum_apply]; rw [← Pi.single_eq_same i (b i)]
-      refine Finset.sum_eq_single i (fun j _ ne => Pi.single_eq_of_ne n
+      refine Finset.sum_eq_single i (fun j _ ne => Pi.single_eq_of_ne ne.symm _) ?_
+      intro hiI
+      rw [Pi.single_eq_same]
+      exact hb _ ((hIJ.top_le trivial).resolve_left hiI)]
+  exact sum_mem_biSup fun i _ => mem_range_self (single R φ i) (b i)
 
 Depends on / 依赖: Finset, Finset.sum_apply, Finset.sum_eq_single, Pi.single, Pi.single_eq_of_ne, Pi.single_eq_same, hIJ.top_le, mem_iInf, mem_ker, mem_range_self, ne.symm, proj_apply, resolve_left, single, single_eq_of_ne, single_eq_same, sum_apply, sum_eq_single, sum_mem_biSup, top_le
 -/
@@ -813,7 +821,13 @@ theorem disjoint_single_single
       (iSup_range_single_le_iInf_ker_proj _ _ _ _ <| disjoint_compl_right) ?_
   simp only [disjoint_iff_inf_le, SetLike.le_def, mem_iInf, mem_inf, mem_ker, mem_bot, proj_apply,
     funext_iff]
-  rintro
+  rintro b ⟨hI, hJ⟩ i
+  classical
+    by_cases hiI : i in I
+    · by_cases hiJ : i in J
+      · exact (h.le_bot ⟨hiI, hiJ⟩).elim
+      · exact hJ i hiJ
+    · exact hI i hiI
 
 中文:
 定理 disjoint_single_single
@@ -824,7 +838,13 @@ theorem disjoint_single_single
       (iSup_range_single_le_iInf_ker_proj _ _ _ _ <| disjoint_compl_right) ?_
   simp only [disjoint_iff_inf_le, SetLike.le_def, mem_iInf, mem_inf, mem_ker, mem_bot, proj_apply,
     funext_iff]
-  rintro
+  rintro b ⟨hI, hJ⟩ i
+  classical
+    by_cases hiI : i in I
+    · by_cases hiJ : i in J
+      · exact (h.le_bot ⟨hiI, hiJ⟩).elim
+      · exact hJ i hiJ
+    · exact hI i hiI
 
 Depends on / 依赖: Disjoint, Disjoint.mono, SetLike, SetLike.le_def, classical, disjoint_compl_right, disjoint_iff_inf_le, funext_iff, h.le_bot, iSup_range_single_le_iInf_ker_proj, le_bot, le_def, mem_bot, mem_iInf, mem_inf, mem_ker, proj_apply
 -/
@@ -859,7 +879,12 @@ definition lsum
   left_inv f := by
     ext i x
     simp [apply_single]
-  ri
+  right_inv f := by
+    ext x
+    suffices f (∑ j, Pi.single j (x j)) = f x by simpa [apply_single]
+    rw [Finset.univ_sum_single]
+
+@[simp]
 
 中文:
 定义 lsum
@@ -871,7 +896,12 @@ definition lsum
   left_inv f := by
     ext i x
     simp [apply_single]
-  ri
+  right_inv f := by
+    ext x
+    suffices f (∑ j, Pi.single j (x j)) = f x by simpa [apply_single]
+    rw [Finset.univ_sum_single]
+
+@[simp]
 -/
 def lsum (S) [AddCommMonoid M] [Module R M] [Fintype ι] [Semiring S] [Module S M]
     [SMulCommClass R S M] : ((i : ι) -> φ i ->ₗ[R] M) ≃ₗ[S] ((i : ι) -> φ i) ->ₗ[R] M where
@@ -1043,7 +1073,22 @@ definition iInfKerProjEquiv
   · intro b
     simp only [mem_iInf, mem_ker, proj_apply, pi_apply]
     intro j hjJ
-    have : j ∉ I := fun hjI => 
+    have : j ∉ I := fun hjI => hd.le_bot ⟨hjI, hjJ⟩
+    rw [dif_neg this]; rw [zero_apply]
+  · simp only [pi_comp, comp_assoc, subtype_comp_codRestrict, proj_pi, Subtype.coe_prop]
+    ext b ⟨j, hj⟩
+    simp only [dif_pos,
+      LinearMap.coe_proj, LinearMap.pi_apply]
+    rfl
+  · ext1 ⟨b, hb⟩
+    apply Subtype.ext
+    ext j
+    have hb : forall i in J, b i = 0 := by
+      simpa only [mem_iInf, mem_ker, proj_apply] using (mem_iInf _).1 hb
+    simp only [comp_apply, pi_apply, id_apply, codRestrict_apply]
+    split_ifs with h
+    · rfl
+    · exact (hb _ <| (hu trivial).resolve_left h).symm
 
 中文:
 定义 iInfKerProjEquiv
@@ -1055,7 +1100,22 @@ definition iInfKerProjEquiv
   · intro b
     simp only [mem_iInf, mem_ker, proj_apply, pi_apply]
     intro j hjJ
-    have : j ∉ I := fun hjI => 
+    have : j ∉ I := fun hjI => hd.le_bot ⟨hjI, hjJ⟩
+    rw [dif_neg this]; rw [zero_apply]
+  · simp only [pi_comp, comp_assoc, subtype_comp_codRestrict, proj_pi, Subtype.coe_prop]
+    ext b ⟨j, hj⟩
+    simp only [dif_pos,
+      LinearMap.coe_proj, LinearMap.pi_apply]
+    rfl
+  · ext1 ⟨b, hb⟩
+    apply Subtype.ext
+    ext j
+    have hb : forall i in J, b i = 0 := by
+      simpa only [mem_iInf, mem_ker, proj_apply] using (mem_iInf _).1 hb
+    simp only [comp_apply, pi_apply, id_apply, codRestrict_apply]
+    split_ifs with h
+    · rfl
+    · exact (hb _ <| (hu trivial).resolve_left h).symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.coe_proj, LinearMap.pi_apply, Submodule, Submodule.subtype, Subtype, Subtype.coe_prop, codRestrict, coe_proj, coe_prop, comp_assoc, dif_neg, dif_pos, hd.le_bot, le_bot, mem_iInf, mem_ker, ofLinearMap
 -/
@@ -2167,7 +2227,12 @@ lemma Pi.mem_span_range_single_inl_iff
     | add u v _ _ hu hv => simp [hu, hv]
     | smul t u _ hu => simp [hu]
   · have := Fintype.ofFinite ι
-    suffices x = ∑ i : ι, x (Sum.inl i) • Pi.s
+    suffices x = ∑ i : ι, x (Sum.inl i) • Pi.single (M := fun _ => R) (Sum.inl i) (1 : R) by
+      rw [this]
+exact sum_mem fun i _ => SMulMemClass.smul_mem _ subset_span Set.mem_range_self i
+    ext (i | i)
+    · simp [single_apply]
+    · simp [hx i]
 
 中文:
 引理 依赖函数类型.mem_span_range_single_inl_iff
@@ -2179,7 +2244,12 @@ lemma Pi.mem_span_range_single_inl_iff
     | add u v _ _ hu hv => simp [hu, hv]
     | smul t u _ hu => simp [hu]
   · have := Fintype.ofFinite ι
-    suffices x = ∑ i : ι, x (Sum.inl i) • Pi.s
+    suffices x = ∑ i : ι, x (Sum.inl i) • Pi.single (M := fun _ => R) (Sum.inl i) (1 : R) by
+      rw [this]
+exact sum_mem fun i _ => SMulMemClass.smul_mem _ subset_span Set.mem_range_self i
+    ext (i | i)
+    · simp [single_apply]
+    · simp [hx i]
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, Pi.single, SMulMemClass, SMulMemClass.smul_mem, Set.mem_range_self, Sum.inl, mem_range_self, ofFinite, single, single_apply, smul_mem, span_induction, subset_span, sum_mem
 -/
@@ -2394,7 +2464,7 @@ lemma Module.pi_induction
   refine Fintype.induction_empty_option
     (fun α β _ e h M _ _ hM => equiv' (LinearEquiv.piCongrLeft R M e) <| h _ fun i => hM _)
     (fun M _ _ _ => equiv default unit) (fun α _ h M _ _ hn => ?_) ι
-exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
+exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (hn _) (h _ fun i => hn i)
 
 中文:
 引理 模.pi_induction
@@ -2405,7 +2475,7 @@ exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
   refine Fintype.induction_empty_option
     (fun α β _ e h M _ _ hM => equiv' (LinearEquiv.piCongrLeft R M e) <| h _ fun i => hM _)
     (fun M _ _ _ => equiv default unit) (fun α _ h M _ _ hn => ?_) ι
-exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
+exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (hn _) (h _ fun i => hn i)
 
 Depends on / 依赖: Fintype, Fintype.induction_empty_option, LinearEquiv, LinearEquiv.piCongrLeft, LinearEquiv.piOptionEquivProd, induction_empty_option, nonempty_fintype, piCongrLeft, piOptionEquivProd, revert
 -/
@@ -2513,7 +2583,7 @@ lemma Module.pi_induction'
   refine Fintype.induction_empty_option
     (fun α β _ e h M _ _ hM => equiv' (LinearEquiv.piCongrLeft R M e) <| h _ fun i => hM _)
     (fun M _ _ _ => equiv default unit) (fun α _ h M _ _ hn => ?_) ι
-exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
+exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (hn _) (h _ fun i => hn i)
 
 中文:
 引理 模.pi_induction'
@@ -2524,7 +2594,7 @@ exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
   refine Fintype.induction_empty_option
     (fun α β _ e h M _ _ hM => equiv' (LinearEquiv.piCongrLeft R M e) <| h _ fun i => hM _)
     (fun M _ _ _ => equiv default unit) (fun α _ h M _ _ hn => ?_) ι
-exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (
+exact equiv' (LinearEquiv.piOptionEquivProd R).symm prod (hn _) (h _ fun i => hn i)
 
 Depends on / 依赖: Fintype, Fintype.induction_empty_option, LinearEquiv, LinearEquiv.piCongrLeft, LinearEquiv.piOptionEquivProd, induction_empty_option, nonempty_fintype, piCongrLeft, piOptionEquivProd, revert
 -/

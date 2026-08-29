@@ -227,7 +227,8 @@ theorem Std.LawfulOrderCmp.compareOfLessAndEq
       have : DecidableLE α := fun _ _ => Classical.propDecidable _
       isLE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total)
     isGE_compare _ _ :=
-      have : DecidableLE α := fun _ _ =>
+      have : DecidableLE α := fun _ _ => Classical.propDecidable _
+      isGE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total) }
 
 中文:
 定理 Std.LawfulOrderCmp.compareOfLessAndEq
@@ -237,7 +238,8 @@ theorem Std.LawfulOrderCmp.compareOfLessAndEq
       have : DecidableLE α := fun _ _ => Classical.propDecidable _
       isLE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total)
     isGE_compare _ _ :=
-      have : DecidableLE α := fun _ _ =>
+      have : DecidableLE α := fun _ _ => Classical.propDecidable _
+      isGE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total) }
 
 Depends on / 依赖: Classical, Classical.propDecidable, DecidableLE, Std.le_antisymm, Std.le_total, Std.not_le, _root_, _root_.compareOfLessAndEq, compareOfLessAndEq, isGE_compare, isGE_compareOfLessAndEq, isLE_compare, isLE_compareOfLessAndEq, le_antisymm, le_total, not_le, propDecidable
 -/
@@ -401,7 +403,29 @@ definition LinearOrder.ofStd
   have := args.lawfulOrderLeftLeaningMax
   { toPartialOrder := .ofStd _ args.toPartialOrderArgs
     le_total := args.isLinearOrder.le_total
-   
+    toDecidableLE := args.decidableLE
+    toDecidableEq := args.decidableEq
+    toDecidableLT := args.decidableLT
+    toMin := args.min
+    toMax := args.max
+    min_def _ _ := Std.min_eq_if
+    max_def a b := by
+      rw [Std.max_eq_if]
+      split
+      · split
+        · exact Std.le_antisymm ‹_› ‹_›
+        · rfl
+      case _ h => rw [if_pos (Std.le_of_lt (Std.not_le.mp h))]
+    toOrd := args.ord
+    compare_eq_compareOfLessAndEq a b := by
+      let := args.ord
+      have := args.lawfulOrderOrd
+      rw [compareOfLessAndEq]
+      split_ifs
+      case _ => rwa [Std.compare_eq_lt]
+      case _ => rwa [Std.compare_eq_iff_eq]
+      case _ h h' =>
+exact Std.compare_eq_gt.mpr Std.lt_of_le_of_ne (Std.not_lt.mp h) (Ne.symm h') }
 
 中文:
 定义 线性序.ofStd
@@ -415,7 +439,29 @@ definition LinearOrder.ofStd
   have := args.lawfulOrderLeftLeaningMax
   { toPartialOrder := .ofStd _ args.toPartialOrderArgs
     le_total := args.isLinearOrder.le_total
-   
+    toDecidableLE := args.decidableLE
+    toDecidableEq := args.decidableEq
+    toDecidableLT := args.decidableLT
+    toMin := args.min
+    toMax := args.max
+    min_def _ _ := Std.min_eq_if
+    max_def a b := by
+      rw [Std.max_eq_if]
+      split
+      · split
+        · exact Std.le_antisymm ‹_› ‹_›
+        · rfl
+      case _ h => rw [if_pos (Std.le_of_lt (Std.not_le.mp h))]
+    toOrd := args.ord
+    compare_eq_compareOfLessAndEq a b := by
+      let := args.ord
+      have := args.lawfulOrderOrd
+      rw [compareOfLessAndEq]
+      split_ifs
+      case _ => rwa [Std.compare_eq_lt]
+      case _ => rwa [Std.compare_eq_iff_eq]
+      case _ h h' =>
+exact Std.compare_eq_gt.mpr Std.lt_of_le_of_ne (Std.not_lt.mp h) (Ne.symm h') }
 
 Depends on / 依赖: LinearOrder, Std.min_eq_if, args.decidableEq, args.decidableLE, args.decidableLT, args.isLinearOrder, args.isLinearOrder.le_total, args.lawfulOrderLT, args.lawfulOrderLeftLeaningMax, args.lawfulOrderLeftLeaningMin, args.le, args.lt, args.max, args.min, args.toPartialOrderArgs, decidableEq, decidableLE, decidableLT, isLinearOrder, lawfulOrderLT
 -/

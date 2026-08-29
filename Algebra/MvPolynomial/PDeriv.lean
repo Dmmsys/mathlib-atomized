@@ -117,7 +117,8 @@ theorem pderiv_monomial
     ← (monomial _).map_smul]
   refine (Finset.sum_eq_single i (fun j _ hne => ?_) fun hi => ?_).trans ?_
   · simp [Pi.single_eq_of_ne hne]
-  · rw [Finsupp.notMem_support_iff] at hi; simp [
+  · rw [Finsupp.notMem_support_iff] at hi; simp [hi]
+  · simp
 
 中文:
 定理 pderiv_monomial
@@ -128,7 +129,8 @@ theorem pderiv_monomial
     ← (monomial _).map_smul]
   refine (Finset.sum_eq_single i (fun j _ hne => ?_) fun hi => ?_).trans ?_
   · simp [Pi.single_eq_of_ne hne]
-  · rw [Finsupp.notMem_support_iff] at hi; simp [
+  · rw [Finsupp.notMem_support_iff] at hi; simp [hi]
+  · simp
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, Finsupp, Finsupp.notMem_support_iff, Finsupp.smul_sum, Pi.single_eq_of_ne, classical, map_smul, mkDerivation_monomial, monomial, notMem_support_iff, pderiv_def, single_eq_of_ne, smul_eq_mul, smul_mul_assoc, smul_sum, sum_eq_single
 -/
@@ -404,7 +406,10 @@ theorem coeff_pderiv
     by_cases h : n = m + single i 1
     · simp [h]
     simp only [h, ↓reduceIte, zero_mul]
-    by_case
+    by_cases hn : n i = 0
+    · simp [hn]
+    apply if_neg
+    rwa [tsub_eq_iff_eq_add_of_le (fun _ => by grind)]
 
 中文:
 定理 coeff_pderiv
@@ -418,7 +423,10 @@ theorem coeff_pderiv
     by_cases h : n = m + single i 1
     · simp [h]
     simp only [h, ↓reduceIte, zero_mul]
-    by_case
+    by_cases hn : n i = 0
+    · simp [hn]
+    apply if_neg
+    rwa [tsub_eq_iff_eq_add_of_le (fun _ => by grind)]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, add_mul, classical, coeff_monomial, if_neg, induction_on, monomial, pderiv_monomial, reduceIte, single, tsub_eq_iff_eq_add_of_le, zero_mul
 -/
@@ -480,7 +488,8 @@ lemma pderiv_rename
   | add p q hp hq => simp [hp, hq]
   | mul_X p a h =>
     simp only [map_mul, MvPolynomial.rename_X, Derivation.leibniz, MvPolynomial.pderiv_X,
-      Pi.single_apply, hf.eq_iff, smul_eq_mul, mul_ite, mul_one, mul_zero,
+      Pi.single_apply, hf.eq_iff, smul_eq_mul, mul_ite, mul_one, mul_zero, h, map_add]
+    split_ifs <;> simp
 
 中文:
 引理 pderiv_rename
@@ -492,7 +501,8 @@ lemma pderiv_rename
   | add p q hp hq => simp [hp, hq]
   | mul_X p a h =>
     simp only [map_mul, MvPolynomial.rename_X, Derivation.leibniz, MvPolynomial.pderiv_X,
-      Pi.single_apply, hf.eq_iff, smul_eq_mul, mul_ite, mul_one, mul_zero,
+      Pi.single_apply, hf.eq_iff, smul_eq_mul, mul_ite, mul_one, mul_zero, h, map_add]
+    split_ifs <;> simp
 
 Depends on / 依赖: Derivation, Derivation.leibniz, MvPolynomial, MvPolynomial.induction_on, MvPolynomial.pderiv_X, MvPolynomial.rename_X, Pi.single_apply, classical, eq_iff, hf.eq_iff, induction_on, leibniz, map_add, map_mul, mul_X, mul_ite, mul_one, mul_zero, pderiv_X, rename_X
 -/

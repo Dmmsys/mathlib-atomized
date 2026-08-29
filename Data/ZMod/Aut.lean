@@ -32,7 +32,11 @@ definition AddAutEquivUnits
   body: have h (f : AddAut (ZMod n)) (x : ZMod n) : f 1 * x = f x := by
     rw [mul_comm]; rw [← x.intCast_zmod_cast]; rw [← zsmul_eq_mul]; rw [← map_zsmul]; rw [zsmul_one]
   { toFun f := .ofMul <| Units.mkOfMulEqOne (f 1) ((-f) 1) ((h f _).trans (f.apply_neg_self _ _))
-    invFun x := AddAut.mulLeft x.toMu
+    invFun x := AddAut.mulLeft x.toMul
+    left_inv g := by simp [DFunLike.ext_iff, Units.smul_def, h]
+    right_inv x := by simp [← Additive.toMul_symm_eq, Equiv.symm_apply_eq,
+      Units.ext_iff, Units.smul_def, -toMul_smul]
+    map_add' f g := by simp [← Additive.toMul_symm_eq, Equiv.symm_apply_eq, Units.ext_iff, h] }
 
 中文:
 定义 AddAutEquivUnits
@@ -40,7 +44,11 @@ definition AddAutEquivUnits
   定义体: have h (f : AddAut (ZMod n)) (x : ZMod n) : f 1 * x = f x := by
     rw [mul_comm]; rw [← x.intCast_zmod_cast]; rw [← zsmul_eq_mul]; rw [← map_zsmul]; rw [zsmul_one]
   { toFun f := .ofMul <| Units.mkOfMulEqOne (f 1) ((-f) 1) ((h f _).trans (f.apply_neg_self _ _))
-    invFun x := AddAut.mulLeft x.toMu
+    invFun x := AddAut.mulLeft x.toMul
+    left_inv g := by simp [DFunLike.ext_iff, Units.smul_def, h]
+    right_inv x := by simp [← Additive.toMul_symm_eq, Equiv.symm_apply_eq,
+      Units.ext_iff, Units.smul_def, -toMul_smul]
+    map_add' f g := by simp [← Additive.toMul_symm_eq, Equiv.symm_apply_eq, Units.ext_iff, h] }
 
 Depends on / 依赖: AddAut, AddAut.mulLeft, Additi, Additive, Additive.toMul_symm_eq, DFunLike, DFunLike.ext_iff, Equiv.symm_apply_eq, Units.ext_iff, Units.mkOfMulEqOne, Units.smul_def, apply_neg_self, ext_iff, f.apply_neg_self, intCast_zmod_cast, invFun, left_inv, map_add, map_zsmul, mkOfMulEqOne
 -/

@@ -185,7 +185,16 @@ lemma measure_inter_eq_one
   rcases μ.zero_one s with (_ | hμs)
     <;> rcases μ.zero_one t with (_ | hμt)
     <;> rcases μ.zero_one (s inter t)
-  all_goals try simp_all only [zero_le, zero_ne_on
+  all_goals try simp_all only [zero_le, zero_ne_one]
+  suffices μ (s inter t)ᶜ <= 0 by
+    rw [measure_compl (hs.inter ht) (by simp)]; rw [measure_univ ‹_›] at this
+    simp_all
+  calc
+  _ = μ (sᶜ union tᶜ) := by simp [compl_inter]
+  _ <= μ sᶜ + μ tᶜ := measure_union_le _ _
+  _ <= 0 := by
+    rw [measure_compl hs (by simp)]; rw [measure_univ hμs]; rw [hμs]; rw [tsub_self]; rw [measure_compl ht (by simp)]; rw [measure_univ hμt]; rw [hμt]; rw [tsub_self]
+    simp
 
 中文:
 引理 measure_inter_eq_one
@@ -196,7 +205,16 @@ lemma measure_inter_eq_one
   rcases μ.zero_one s with (_ | hμs)
     <;> rcases μ.zero_one t with (_ | hμt)
     <;> rcases μ.zero_one (s inter t)
-  all_goals try simp_all only [zero_le, zero_ne_on
+  all_goals try simp_all only [zero_le, zero_ne_one]
+  suffices μ (s inter t)ᶜ <= 0 by
+    rw [measure_compl (hs.inter ht) (by simp)]; rw [measure_univ ‹_›] at this
+    simp_all
+  calc
+  _ = μ (sᶜ union tᶜ) := by simp [compl_inter]
+  _ <= μ sᶜ + μ tᶜ := measure_union_le _ _
+  _ <= 0 := by
+    rw [measure_compl hs (by simp)]; rw [measure_univ hμs]; rw [hμs]; rw [tsub_self]; rw [measure_compl ht (by simp)]; rw [measure_univ hμt]; rw [hμt]; rw [tsub_self]
+    simp
 
 Depends on / 依赖: all_goals, compl_inter, hs.inter, inter_subset_left, inter_subset_right, measure_compl, measure_mono, measure_union_le, measure_univ, zero_le, zero_ne_one, zero_one
 -/
@@ -262,7 +280,54 @@ theorem exists_eq_dirac
     · exact ⟨h⟩
   obtain ⟨A, hAm, hAsep⟩ := exists_seq_separating (α := α) MeasurableSet.univ univ
   let B := fun n => if h : μ (A n) = 1 then A n else (A n)ᶜ
-  have mBn :
+  have mBn : MeasurableSet (⋂ n, B n) := by
+    refine MeasurableSet.iInter fun n => ?_
+    simp only [dite_eq_ite, B]
+    split_ifs
+    · exact hAm n
+    · exact (hAm n).compl
+  have hBn : μ (⋂ n, B n) = 1 := by
+    refine (prob_compl_eq_zero_iff mBn).mp ?_
+    simp only [dite_eq_ite, compl_iInter, measure_iUnion_null_iff, B]
+    intro n
+    split_ifs with h
+    · simp_all
+    · rw [compl_compl]
+      rcases μ.zero_one (A n) with (h₀ | h₁)
+      · exact h₀
+      · simp_all
+  obtain ⟨x₀, hx₀⟩ : exists x₀, ⋂ n, B n = {x₀} := by
+    simp_rw [eq_singleton_iff_unique_mem]
+    have neBn : (⋂ n, B n).Nonempty := by
+      by_contra! h
+      rw [h] at hBn
+      simp_all
+    refine ⟨neBn.some, neBn.some_mem, fun y hy => ?_⟩
+    refine hAsep y (by trivial) neBn.some (by trivial) fun n => ?_
+    have hsome := neBn.some_mem
+    simp only [dite_eq_ite, mem_iInter, B] at hsome hy
+    specialize hsome n
+    specialize hy n
+    constructor
+    · intro h
+      split_ifs at hy with hμAn
+      · simpa [hμAn] using! hsome
+      · contradiction
+    · intro h
+      split_ifs at hsome with hμAn
+      · simpa [hμAn] using! hy
+      · contradiction
+  use x₀
+  ext s hs
+  by_cases h : x₀ in s
+  · simp [h]
+    have : μ {x₀} <= μ s := measure_mono (μ := μ) (by grind)
+    rw [← hx₀]; rw [hBn] at this
+    simp_all
+  · simp [h]
+    have : μ s <= μ {x₀}ᶜ := measure_mono (μ := μ) (by grind)
+    rw [← hx₀]; rw [measure_compl mBn (by simp)]; rw [MeasureTheory.measure_univ]; rw [hBn] at this
+    simp_all
 
 中文:
 定理 存在_eq_dirac
@@ -275,7 +340,54 @@ theorem exists_eq_dirac
     · exact ⟨h⟩
   obtain ⟨A, hAm, hAsep⟩ := exists_seq_separating (α := α) MeasurableSet.univ univ
   let B := fun n => if h : μ (A n) = 1 then A n else (A n)ᶜ
-  have mBn :
+  have mBn : MeasurableSet (⋂ n, B n) := by
+    refine MeasurableSet.iInter fun n => ?_
+    simp only [dite_eq_ite, B]
+    split_ifs
+    · exact hAm n
+    · exact (hAm n).compl
+  have hBn : μ (⋂ n, B n) = 1 := by
+    refine (prob_compl_eq_zero_iff mBn).mp ?_
+    simp only [dite_eq_ite, compl_iInter, measure_iUnion_null_iff, B]
+    intro n
+    split_ifs with h
+    · simp_all
+    · rw [compl_compl]
+      rcases μ.zero_one (A n) with (h₀ | h₁)
+      · exact h₀
+      · simp_all
+  obtain ⟨x₀, hx₀⟩ : exists x₀, ⋂ n, B n = {x₀} := by
+    simp_rw [eq_singleton_iff_unique_mem]
+    have neBn : (⋂ n, B n).Nonempty := by
+      by_contra! h
+      rw [h] at hBn
+      simp_all
+    refine ⟨neBn.some, neBn.some_mem, fun y hy => ?_⟩
+    refine hAsep y (by trivial) neBn.some (by trivial) fun n => ?_
+    have hsome := neBn.some_mem
+    simp only [dite_eq_ite, mem_iInter, B] at hsome hy
+    specialize hsome n
+    specialize hy n
+    constructor
+    · intro h
+      split_ifs at hy with hμAn
+      · simpa [hμAn] using! hsome
+      · contradiction
+    · intro h
+      split_ifs at hsome with hμAn
+      · simpa [hμAn] using! hy
+      · contradiction
+  use x₀
+  ext s hs
+  by_cases h : x₀ in s
+  · simp [h]
+    have : μ {x₀} <= μ s := measure_mono (μ := μ) (by grind)
+    rw [← hx₀]; rw [hBn] at this
+    simp_all
+  · simp [h]
+    have : μ s <= μ {x₀}ᶜ := measure_mono (μ := μ) (by grind)
+    rw [← hx₀]; rw [measure_compl mBn (by simp)]; rw [MeasureTheory.measure_univ]; rw [hBn] at this
+    simp_all
 
 Depends on / 依赖: IsProbabilityMeasure, IsZeroOrProbabilityMeasure, IsZeroOrProbabilityMeasure.measure_univ, MeasurableSet, MeasurableSet.iInter, MeasurableSet.univ, dite_eq_ite, exists_seq_separating, iInter, measure_univ, prob_compl_eq_zero_iff, split_ifs
 -/

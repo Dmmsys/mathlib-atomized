@@ -185,7 +185,7 @@ instance :
   le_sup_right := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_right
   sup_le := fun P Q R hPR hQR => by
     rw [← Subtype.coe_le_coe] at hPR hQR ⊢
-
+    exact sup_le hPR hQR
 
 中文:
 实例 :
@@ -195,7 +195,7 @@ instance :
   le_sup_right := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_right
   sup_le := fun P Q R hPR hQR => by
     rw [← Subtype.coe_le_coe] at hPR hQR ⊢
-
+    exact sup_le hPR hQR
 
 Depends on / 依赖: P.property, P.val, Q.property, Q.val, Submodule, Submodule.FG.sup, property
 -/
@@ -243,7 +243,7 @@ theorem fg_pi
     refine
       ⟨⋃ i, (LinearMap.single R _ i) '' t i, Set.finite_iUnion fun i => (htf i).image _, ?_⟩
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `span_image` into `span_image _`
-    sim
+    simp_rw [span_iUnion, span_image _, hts, iSup_map_single]
 
 中文:
 定理 fg_pi
@@ -255,7 +255,7 @@ theorem fg_pi
     refine
       ⟨⋃ i, (LinearMap.single R _ i) '' t i, Set.finite_iUnion fun i => (htf i).image _, ?_⟩
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `span_image` into `span_image _`
-    sim
+    simp_rw [span_iUnion, span_image _, hts, iSup_map_single]
 
 Depends on / 依赖: LinearMap, LinearMap.single, Set.finite_iUnion, classical, fg_def, finite_iUnion, simp_rw, single
 -/
@@ -326,7 +326,7 @@ theorem fg_of_fg_map_injective
 map_injective_of_injective hf by
       rw [map_span]; rw [Finset.coe_preimage]; rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_self_of_subset_left]; rw [ht]
       rw [← LinearMap.coe_range]; rw [← span_le]; rw [ht]; rw [← map_top]
- 
+      exact map_mono le_top⟩
 
 中文:
 定理 fg_of_fg_map_injective
@@ -336,7 +336,7 @@ map_injective_of_injective hf by
 map_injective_of_injective hf by
       rw [map_span]; rw [Finset.coe_preimage]; rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_self_of_subset_left]; rw [ht]
       rw [← LinearMap.coe_range]; rw [← span_le]; rw [ht]; rw [← map_top]
- 
+      exact map_mono le_top⟩
 
 Depends on / 依赖: Finset, Finset.coe_preimage, LinearMap, LinearMap.coe_range, Set.image_preimage_eq_inter_range, Set.inter_eq_self_of_subset_left, coe_preimage, coe_range, image_preimage_eq_inter_range, inter_eq_self_of_subset_left, le_top, map_injective_of_injective, map_mono, map_span, map_top, preimage, span_le, t.preimage
 -/
@@ -597,7 +597,9 @@ theorem FG.stabilizes_of_iSup_eq
   apply le_antisymm
   · rw [← hS, span_le]
     intro s hs
-    exact N.monotone' (Finset.le_sup <| S.mem_a
+    exact N.monotone' (Finset.le_sup <| S.mem_attach ⟨s, hs⟩) (hf _)
+  · rw [← H]
+    exact le_iSup ..
 
 中文:
 定理 FG.stabilizes_of_iSup_eq
@@ -611,7 +613,9 @@ theorem FG.stabilizes_of_iSup_eq
   apply le_antisymm
   · rw [← hS, span_le]
     intro s hs
-    exact N.monotone' (Finset.le_sup <| S.mem_a
+    exact N.monotone' (Finset.le_sup <| S.mem_attach ⟨s, hs⟩) (hf _)
+  · rw [← H]
+    exact le_iSup ..
 
 Depends on / 依赖: Finset, Finset.le_sup, N.monotone, S.attach.sup, S.mem_attach, attach, le_antisymm, le_iSup, le_sup, mem_attach, mem_iSup_of_chain, monotone, s.prop, span_le, subset_span
 -/
@@ -641,7 +645,25 @@ theorem fg_iff_compact
   let sp : M -> Submodule R M := fun a => span R {a}
   -- Trivial rewrite lemma; a small hack since simp (only) & rw can't accomplish this smoothly.
   have supr_rw : forall t : Finset M, ⨆ x in t, sp x = ⨆ x in (↑t : Set M), sp x := fun t => by rfl
-
+  constructor
+  · rintro ⟨t, rfl⟩
+    rw [span_eq_iSup_of_singleton_spans]; rw [← supr_rw]; rw [← t.sup_eq_iSup sp]
+    apply CompleteLattice.isCompactElement_finsetSup
+    exact fun n _ => singleton_span_isCompactElement n
+  · intro h
+    rw [CompleteLattice.isCompactElement_iff_exists_le_sSup_of_le_sSup] at h
+    -- s is the Sup of the spans of its elements.
+    have sSup' : s = sSup (sp '' ↑s) := by
+      rw [sSup_eq_iSup]; rw [iSup_image]; rw [← span_eq_iSup_of_singleton_spans]; rw [eq_comm]; rw [span_eq]
+    -- by h, s is then below (and equal to) the sup of the spans of finitely many elements.
+    obtain ⟨u, ⟨huspan, husup⟩⟩ := h (sp '' ↑s) (le_of_eq sSup')
+    have ssup : s = u.sup id := by
+      suffices u.sup id <= s from le_antisymm husup this
+      rw [sSup']; rw [Finset.sup_id_eq_sSup]
+      exact sSup_le_sSup huspan
+    obtain ⟨t, -, rfl⟩ := Finset.subset_set_image_iff.mp huspan
+    rw [Finset.sup_image]; rw [Function.id_comp]; rw [Finset.sup_eq_iSup]; rw [supr_rw]; rw [← span_eq_iSup_of_singleton_spans]; rw [eq_comm] at ssup
+    exact ⟨t, ssup⟩
 
 中文:
 定理 fg_iff_compact
@@ -652,7 +674,25 @@ theorem fg_iff_compact
   let sp : M -> Submodule R M := fun a => span R {a}
   -- Trivial rewrite lemma; a small hack since simp (only) & rw can't accomplish this smoothly.
   have supr_rw : forall t : Finset M, ⨆ x in t, sp x = ⨆ x in (↑t : Set M), sp x := fun t => by rfl
-
+  constructor
+  · rintro ⟨t, rfl⟩
+    rw [span_eq_iSup_of_singleton_spans]; rw [← supr_rw]; rw [← t.sup_eq_iSup sp]
+    apply CompleteLattice.isCompactElement_finsetSup
+    exact fun n _ => singleton_span_isCompactElement n
+  · intro h
+    rw [CompleteLattice.isCompactElement_iff_exists_le_sSup_of_le_sSup] at h
+    -- s is the Sup of the spans of its elements.
+    have sSup' : s = sSup (sp '' ↑s) := by
+      rw [sSup_eq_iSup]; rw [iSup_image]; rw [← span_eq_iSup_of_singleton_spans]; rw [eq_comm]; rw [span_eq]
+    -- by h, s is then below (and equal to) the sup of the spans of finitely many elements.
+    obtain ⟨u, ⟨huspan, husup⟩⟩ := h (sp '' ↑s) (le_of_eq sSup')
+    have ssup : s = u.sup id := by
+      suffices u.sup id <= s from le_antisymm husup this
+      rw [sSup']; rw [Finset.sup_id_eq_sSup]
+      exact sSup_le_sSup huspan
+    obtain ⟨t, -, rfl⟩ := Finset.subset_set_image_iff.mp huspan
+    rw [Finset.sup_image]; rw [Function.id_comp]; rw [Finset.sup_eq_iSup]; rw [supr_rw]; rw [← span_eq_iSup_of_singleton_spans]; rw [eq_comm] at ssup
+    exact ⟨t, ssup⟩
 -/
 theorem fg_iff_compact (s : Submodule R M) : s.FG ↔ IsCompactElement s := by
   -- Introduce shorthand for span of an element
@@ -1275,7 +1315,9 @@ lemma of_equiv_equiv
   let e : B₁ ≃ₐ[A₂] B₂ :=
     { e₂ with
       commutes' := fun r => by
-        sim
+        simpa [RingHom.algebraMap_toAlgebra] using DFunLike.congr_fun he.symm (e₁.symm r) }
+  have := of_restrictScalars_finite A₁ A₂ B₁
+  exact equiv e.toLinearEquiv
 
 中文:
 引理 of_equiv_equiv
@@ -1288,7 +1330,9 @@ lemma of_equiv_equiv
   let e : B₁ ≃ₐ[A₂] B₂ :=
     { e₂ with
       commutes' := fun r => by
-        sim
+        simpa [RingHom.algebraMap_toAlgebra] using DFunLike.congr_fun he.symm (e₁.symm r) }
+  have := of_restrictScalars_finite A₁ A₂ B₁
+  exact equiv e.toLinearEquiv
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_toAlgebra, commutes, congr_fun, e.toLinearEquiv, he.symm, of_algebraMap_eq, of_restrictScalars_finite, symm.toRingHom, toAlgebra, toLinearEquiv, toRingHom, toRingHom.toAlgebra
 -/
@@ -1700,7 +1744,8 @@ instance instModuleFiniteAux
   obtain hx | hx := le_total 0 x
   · simpa using Submodule.smul_mem (M := R) (.span R>=0 {1, -1}) ⟨x, hx⟩ (x := 1)
       (Submodule.subset_span <| by simp)
-  · simpa using Submodule.smu
+  · simpa using Submodule.smul_mem (M := R) (.span R>=0 {1, -1}) ⟨-x, neg_nonneg.mpr hx⟩ (x := -1)
+      (Submodule.subset_span <| by simp)
 
 中文:
 实例 instModuleFiniteAux
@@ -1711,7 +1756,8 @@ instance instModuleFiniteAux
   obtain hx | hx := le_total 0 x
   · simpa using Submodule.smul_mem (M := R) (.span R>=0 {1, -1}) ⟨x, hx⟩ (x := 1)
       (Submodule.subset_span <| by simp)
-  · simpa using Submodule.smu
+  · simpa using Submodule.smul_mem (M := R) (.span R>=0 {1, -1}) ⟨-x, neg_nonneg.mpr hx⟩ (x := -1)
+      (Submodule.subset_span <| by simp)
 -/
 private instance instModuleFiniteAux : Module.Finite R>=0 R := by
   simp_rw [Module.finite_def, Submodule.fg_def, Submodule.eq_top_iff']

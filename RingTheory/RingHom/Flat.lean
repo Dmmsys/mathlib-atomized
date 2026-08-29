@@ -304,7 +304,9 @@ lemma propertyIsLocal
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
     (stableUnderComposition.stableUnderCompositionWithLocalizationAway
       holdsForLocalizationAway).left
-  StableUnderCompo
+  StableUnderCompositionWithLocalizationAwayTarget :=
+    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      holdsForLocalizationAway).right
 
 中文:
 引理 propertyIsLocal
@@ -314,7 +316,9 @@ lemma propertyIsLocal
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
     (stableUnderComposition.stableUnderCompositionWithLocalizationAway
       holdsForLocalizationAway).left
-  StableUnderCompo
+  StableUnderCompositionWithLocalizationAwayTarget :=
+    (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      holdsForLocalizationAway).right
 
 Depends on / 依赖: isStableUnderBaseChange, isStableUnderBaseChange.localizationPreserves.away, localizationPreserves
 -/
@@ -342,7 +346,10 @@ lemma ofLocalizationPrime
     (fun P => Algebra.linearMap S _)
   intro P _
   algebraize_only [Localization.localRingHom (Ideal.comap f P) P f rfl]
-  have : IsScalarTower R (Localization.A
+  have : IsScalarTower R (Localization.AtPrime (Ideal.comap f P)) (Localization.AtPrime P) :=
+    .of_algebraMap_eq fun x => (Localization.localRingHom_to_map _ _ _ rfl x).symm
+  replace h : Module.Flat (Localization.AtPrime (Ideal.comap f P)) (Localization.AtPrime P) := h ..
+  exact Module.Flat.trans R (Localization.AtPrime <| Ideal.comap f P) (Localization.AtPrime P)
 
 中文:
 引理 ofLocalizationPrime
@@ -355,7 +362,10 @@ lemma ofLocalizationPrime
     (fun P => Algebra.linearMap S _)
   intro P _
   algebraize_only [Localization.localRingHom (Ideal.comap f P) P f rfl]
-  have : IsScalarTower R (Localization.A
+  have : IsScalarTower R (Localization.AtPrime (Ideal.comap f P)) (Localization.AtPrime P) :=
+    .of_algebraMap_eq fun x => (Localization.localRingHom_to_map _ _ _ rfl x).symm
+  replace h : Module.Flat (Localization.AtPrime (Ideal.comap f P)) (Localization.AtPrime P) := h ..
+  exact Module.Flat.trans R (Localization.AtPrime <| Ideal.comap f P) (Localization.AtPrime P)
 
 Depends on / 依赖: Algebra, Algebra.linearMap, AtPrim, AtPrime, Ideal.comap, IsScalarTower, Localization, Localization.AtPrim, Localization.AtPrime, Localization.localRingHom, Localization.localRingHom_to_map, Module, Module.Flat, Module.flat_of_isLocalized_maximal, RingHom, RingHom.Flat, algebraize_only, flat_of_isLocalized_maximal, introv, linearMap
 -/
@@ -383,7 +393,9 @@ lemma localRingHom
   algebraize [f, Localization.localRingHom (Ideal.comap f P) P f rfl]
   have : IsScalarTower R (Localization.AtPrime (Ideal.comap f P)) (Localization.AtPrime P) :=
     .of_algebraMap_eq fun x => (Localization.localRingHom_to_map _ _ _ rfl x).symm
-  rw [RingHom.Flat]; rw [Module.flat_i
+  rw [RingHom.Flat]; rw [Module.flat_iff_of_isLocalization
+    (S := (Localization.AtPrime (Ideal.comap f P))) (p := (Ideal.comap f P).primeCompl)]
+  exact Module.Flat.trans R S (Localization.AtPrime P)
 
 中文:
 引理 localRingHom
@@ -393,7 +405,9 @@ lemma localRingHom
   algebraize [f, Localization.localRingHom (Ideal.comap f P) P f rfl]
   have : IsScalarTower R (Localization.AtPrime (Ideal.comap f P)) (Localization.AtPrime P) :=
     .of_algebraMap_eq fun x => (Localization.localRingHom_to_map _ _ _ rfl x).symm
-  rw [RingHom.Flat]; rw [Module.flat_i
+  rw [RingHom.Flat]; rw [Module.flat_iff_of_isLocalization
+    (S := (Localization.AtPrime (Ideal.comap f P))) (p := (Ideal.comap f P).primeCompl)]
+  exact Module.Flat.trans R S (Localization.AtPrime P)
 
 Depends on / 依赖: AtPrime, Ideal.comap, IsScalarTower, Localization, Localization.AtPrime, Localization.localRingHom, Localization.localRingHom_to_map, Module, Module.Flat.trans, Module.flat_iff_of_isLocalization, RingHom, RingHom.Flat, algebraize, flat_iff_of_isLocalization, localRingHom, localRingHom_to_map, of_algebraMap_eq, primeCompl
 -/
@@ -490,7 +504,8 @@ lemma lTensor
   algebraize [f.toRingHom, (Algebra.TensorProduct.lTensor (S := A) A f).toRingHom]
   let e : A otimes[R] D ≃ₐ[A otimes[R] B] (A otimes[R] B) otimes[B] D :=
     { __ := (Algebra.IsPushout.cancelBaseChangeAlg _ _ _ _ _).symm,
-      commutes' x := congr($(Algebra.IsPushout.cancelBaseChange_symm_comp
+      commutes' x := congr($(Algebra.IsPushout.cancelBaseChange_symm_comp_lTensor R B D A) x) }
+  exact .of_linearEquiv e.toLinearEquiv
 
 中文:
 引理 lTensor
@@ -499,7 +514,8 @@ lemma lTensor
   algebraize [f.toRingHom, (Algebra.TensorProduct.lTensor (S := A) A f).toRingHom]
   let e : A otimes[R] D ≃ₐ[A otimes[R] B] (A otimes[R] B) otimes[B] D :=
     { __ := (Algebra.IsPushout.cancelBaseChangeAlg _ _ _ _ _).symm,
-      commutes' x := congr($(Algebra.IsPushout.cancelBaseChange_symm_comp
+      commutes' x := congr($(Algebra.IsPushout.cancelBaseChange_symm_comp_lTensor R B D A) x) }
+  exact .of_linearEquiv e.toLinearEquiv
 
 Depends on / 依赖: Algebra, Algebra.IsPushout.cancelBaseChangeAlg, Algebra.IsPushout.cancelBaseChange_symm_comp_lTensor, Algebra.TensorProduct.lTensor, IsPushout, TensorProduct, algebraize, cancelBaseChangeAlg, cancelBaseChange_symm_comp_lTensor, commutes, e.toLinearEquiv, f.toRingHom, lTensor, of_linearEquiv, otimes, toLinearEquiv, toRingHom
 -/
@@ -525,7 +541,17 @@ lemma tensorProductMap
   rw [heq]
   refine RingHom.Flat.comp ?_ ?_
   · exact hg.lTensor _
-  · have : (Algebra.TensorProduct.map f (AlgHom.id R D)).restrictScalar
+  · have : (Algebra.TensorProduct.map f (AlgHom.id R D)).restrictScalars R =
+        (Algebra.TensorProduct.comm _ _ _).toAlgHom.comp
+          ((Algebra.TensorProduct.lTensor _ (f.restrictScalars R)).comp
+            (Algebra.TensorProduct.comm _ _ _).toAlgHom) := by
+      ext <;> simp
+    change ((Algebra.TensorProduct.map f (AlgHom.id R D)).restrictScalars R).Flat
+    rw [this]
+    refine RingHom.Flat.comp ?_ (.of_bijective <| AlgEquiv.bijective _)
+    change RingHom.Flat (RingHom.comp (Algebra.TensorProduct.lTensor D
+      (AlgHom.restrictScalars R f)).toRingHom _)
+    exact RingHom.Flat.comp (.of_bijective <| (TensorProduct.comm R A D).bijective) (lTensor D hf)
 
 中文:
 引理 tensorProductMap
@@ -537,7 +563,17 @@ lemma tensorProductMap
   rw [heq]
   refine RingHom.Flat.comp ?_ ?_
   · exact hg.lTensor _
-  · have : (Algebra.TensorProduct.map f (AlgHom.id R D)).restrictScalar
+  · have : (Algebra.TensorProduct.map f (AlgHom.id R D)).restrictScalars R =
+        (Algebra.TensorProduct.comm _ _ _).toAlgHom.comp
+          ((Algebra.TensorProduct.lTensor _ (f.restrictScalars R)).comp
+            (Algebra.TensorProduct.comm _ _ _).toAlgHom) := by
+      ext <;> simp
+    change ((Algebra.TensorProduct.map f (AlgHom.id R D)).restrictScalars R).Flat
+    rw [this]
+    refine RingHom.Flat.comp ?_ (.of_bijective <| AlgEquiv.bijective _)
+    change RingHom.Flat (RingHom.comp (Algebra.TensorProduct.lTensor D
+      (AlgHom.restrictScalars R f)).toRingHom _)
+    exact RingHom.Flat.comp (.of_bijective <| (TensorProduct.comm R A D).bijective) (lTensor D hf)
 
 Depends on / 依赖: AlgHom, AlgHom.id, Algebra, Algebra.TensorProduct.comm, Algebra.TensorProduct.lTensor, Algebra.TensorProduct.map, RingHom, RingHom.Flat.comp, TensorProduct, f.restrictScalars, hg.lTensor, lTensor, restrictScalars, toAlgHom, toAlgHom.comp
 -/
@@ -686,7 +722,7 @@ lemma CommRingCat.inr_injective_of_flat
   have : _ = pushout.inr f g := (CommRingCat.isPushout_tensorProduct R S T).inr_isoPushout_hom
   rw [← this]
   exact (CommRingCat.isPushout_tensorProduct R S T).isoPushout.commRingCatIsoToRingEquiv
-.injective.comp (Algebra.TensorProduct.includeRight_injective (B := T) 
+.injective.comp (Algebra.TensorProduct.includeRight_injective (B := T) hf)
 
 中文:
 引理 交换环范畴.inr_injective_of_flat
@@ -695,7 +731,7 @@ lemma CommRingCat.inr_injective_of_flat
   have : _ = pushout.inr f g := (CommRingCat.isPushout_tensorProduct R S T).inr_isoPushout_hom
   rw [← this]
   exact (CommRingCat.isPushout_tensorProduct R S T).isoPushout.commRingCatIsoToRingEquiv
-.injective.comp (Algebra.TensorProduct.includeRight_injective (B := T) 
+.injective.comp (Algebra.TensorProduct.includeRight_injective (B := T) hf)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight_injective, CommRingCat, CommRingCat.isPushout_tensorProduct, TensorProduct, algebraize, commRingCatIsoToRingEquiv, f.hom, g.hom, includeRight_injective, injective, injective.comp, inr_isoPushout_hom, isPushout_tensorProduct, isoPushout, isoPushout.commRingCatIsoToRingEquiv, pushout, pushout.inr
 -/
@@ -717,7 +753,7 @@ lemma CommRingCat.inl_injective_of_flat
   have : _ = pushout.inl f g := (CommRingCat.isPushout_tensorProduct R S T).inl_isoPushout_hom
   rw [← this]
   exact (CommRingCat.isPushout_tensorProduct R S T).isoPushout.commRingCatIsoToRingEquiv
-.injective.comp (Algebra.TensorProduct.includeLeft_injective (S := R) (
+.injective.comp (Algebra.TensorProduct.includeLeft_injective (S := R) (A := S) hg)
 
 中文:
 引理 交换环范畴.inl_injective_of_flat
@@ -726,7 +762,7 @@ lemma CommRingCat.inl_injective_of_flat
   have : _ = pushout.inl f g := (CommRingCat.isPushout_tensorProduct R S T).inl_isoPushout_hom
   rw [← this]
   exact (CommRingCat.isPushout_tensorProduct R S T).isoPushout.commRingCatIsoToRingEquiv
-.injective.comp (Algebra.TensorProduct.includeLeft_injective (S := R) (
+.injective.comp (Algebra.TensorProduct.includeLeft_injective (S := R) (A := S) hg)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeLeft_injective, CommRingCat, CommRingCat.isPushout_tensorProduct, TensorProduct, algebraize, commRingCatIsoToRingEquiv, f.hom, g.hom, includeLeft_injective, injective, injective.comp, inl_isoPushout_hom, isPushout_tensorProduct, isoPushout, isoPushout.commRingCatIsoToRingEquiv, pushout, pushout.inl
 -/
@@ -842,7 +878,17 @@ lemma RingHom.Flat.mapOfCompatibleSMul
       (Algebra.TensorProduct.map (IsScalarTower.toAlgHom R S T)
       (IsScalarTower.toAlgHom R S A)).toRingHom
   · exact CommRingCat.ofHom
-      (RingHom.comp (Algebra.TensorProduct.i
+      (RingHom.comp (Algebra.TensorProduct.includeLeft (S := R)).toRingHom (algebraMap S T))
+  · refine .of_iso
+      (isPushout_map_codiagonal (CommRingCat.ofHom <| algebraMap S T)
+        (CommRingCat.ofHom <| algebraMap S A) (CommRingCat.ofHom <| algebraMap R S))
+      ?_ ?_ (.refl _) ?_ ?_ ?_ ?_ ?_
+    · exact (CommRingCat.isPushout_tensorProduct R S S).isoPushout.symm
+    · exact pushout.congrHom (by simp [IsScalarTower.algebraMap_eq R S T])
+          (by simp [IsScalarTower.algebraMap_eq R S A]) ≪≫
+        (CommRingCat.isPushout_tensorProduct R T A).isoPushout.symm
+    · exact (CommRingCat.isPushout_tensorProduct S T A).isoPushout.symm
+    all_goals ext <;> simp
 
 中文:
 引理 环态射.平坦.mapOfCompatibleSMul
@@ -854,7 +900,17 @@ lemma RingHom.Flat.mapOfCompatibleSMul
       (Algebra.TensorProduct.map (IsScalarTower.toAlgHom R S T)
       (IsScalarTower.toAlgHom R S A)).toRingHom
   · exact CommRingCat.ofHom
-      (RingHom.comp (Algebra.TensorProduct.i
+      (RingHom.comp (Algebra.TensorProduct.includeLeft (S := R)).toRingHom (algebraMap S T))
+  · refine .of_iso
+      (isPushout_map_codiagonal (CommRingCat.ofHom <| algebraMap S T)
+        (CommRingCat.ofHom <| algebraMap S A) (CommRingCat.ofHom <| algebraMap R S))
+      ?_ ?_ (.refl _) ?_ ?_ ?_ ?_ ?_
+    · exact (CommRingCat.isPushout_tensorProduct R S S).isoPushout.symm
+    · exact pushout.congrHom (by simp [IsScalarTower.algebraMap_eq R S T])
+          (by simp [IsScalarTower.algebraMap_eq R S A]) ≪≫
+        (CommRingCat.isPushout_tensorProduct R T A).isoPushout.symm
+    · exact (CommRingCat.isPushout_tensorProduct S T A).isoPushout.symm
+    all_goals ext <;> simp
 -/
 lemma RingHom.Flat.mapOfCompatibleSMul {R S : Type u} (T A : Type u)
     [CommRing R] [CommRing S] [CommRing T] [CommRing A] [Algebra R S]

@@ -1405,7 +1405,11 @@ instance :
         rw [HasCompactSupport]; rw [tsupport]
         have support_star : (Function.support fun (x : α) => star (f x)) = Function.support f := by
           ext x
-          simp only [Funct
+          simp only [Function.mem_support, ne_eq, star_eq_zero]
+        rw [support_star]
+        exact f.2 }
+
+@[simp]
 
 中文:
 实例 :
@@ -1416,7 +1420,11 @@ instance :
         rw [HasCompactSupport]; rw [tsupport]
         have support_star : (Function.support fun (x : α) => star (f x)) = Function.support f := by
           ext x
-          simp only [Funct
+          simp only [Function.mem_support, ne_eq, star_eq_zero]
+        rw [support_star]
+        exact f.2 }
+
+@[simp]
 
 Depends on / 依赖: Function, Function.mem_support, Function.support, HasCompactSupport, continuous_toFun, hasCompactSupport, map_continuous, mem_support, ne_eq, star_eq_zero, support, support_star, tsupport
 -/
@@ -2031,7 +2039,11 @@ definition comp
     intro x hx
     rw [tsupport]; rw [Set.mem_preimage]; rw [_root_.mem_closure_iff]
     intro o ho hgxo
-    rw [tsupp
+    rw [tsupport]; rw [_root_.mem_closure_iff] at hx
+    obtain ⟨y, hy⟩ := hx (g ⁻¹' o) (IsOpen.preimage g.1.2 ho) hgxo
+    exact ⟨g y, hy⟩
+
+@[simp]
 
 中文:
 定义 comp
@@ -2043,7 +2055,11 @@ definition comp
     intro x hx
     rw [tsupport]; rw [Set.mem_preimage]; rw [_root_.mem_closure_iff]
     intro o ho hgxo
-    rw [tsupp
+    rw [tsupport]; rw [_root_.mem_closure_iff] at hx
+    obtain ⟨y, hy⟩ := hx (g ⁻¹' o) (IsOpen.preimage g.1.2 ho) hgxo
+    exact ⟨g y, hy⟩
+
+@[simp]
 -/
 def comp (f : C_c(γ, δ)) (g : β ->co γ) : C_c(β, δ) where
   toContinuousMap := (f : C(γ, δ)).comp g
@@ -2391,7 +2407,11 @@ lemma exists_add_of_le
     apply closure_mono
     intro x hx
     contrapose hx
-    simp only [ContinuousMap.toFun_eq_coe, coe_toContin
+    simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, Set.mem_union, Function.mem_support,
+      ne_eq, not_or, Decidable.not_not, ContinuousMap.coe_sub, Pi.sub_apply] at hx ⊢
+    simp [hx.1, hx.2]
+  · ext x
+    simpa [← NNReal.coe_add] using add_tsub_cancel_of_le (h x)
 
 中文:
 引理 存在_add_of_le
@@ -2404,7 +2424,11 @@ lemma exists_add_of_le
     apply closure_mono
     intro x hx
     contrapose hx
-    simp only [ContinuousMap.toFun_eq_coe, coe_toContin
+    simp only [ContinuousMap.toFun_eq_coe, coe_toContinuousMap, Set.mem_union, Function.mem_support,
+      ne_eq, not_or, Decidable.not_not, ContinuousMap.coe_sub, Pi.sub_apply] at hx ⊢
+    simp [hx.1, hx.2]
+  · ext x
+    simpa [← NNReal.coe_add] using add_tsub_cancel_of_le (h x)
 -/
 protected lemma exists_add_of_le {f₁ f₂ : C_c(α, Real>=0)} (h : f₁ <= f₂) : exists (g : C_c(α, Real>=0)),
     f₁ + g = f₂ := by
@@ -2599,7 +2623,8 @@ lemma exists_add_nnrealPart_add_eq
   ext x
   have hhx := congr(($hh x : Real))
   simp only [coe_add, Pi.add_apply, nnrealPart_apply, coe_neg, Pi.neg_apply, NNReal.coe_add,
-    Real.coe_toNNReal'
+    Real.coe_toNNReal', ← neg_add, max_neg_zero] at hhx ⊢
+  linear_combination hhx
 
 中文:
 引理 存在_add_nnrealPart_add_eq
@@ -2613,7 +2638,8 @@ lemma exists_add_nnrealPart_add_eq
   ext x
   have hhx := congr(($hh x : Real))
   simp only [coe_add, Pi.add_apply, nnrealPart_apply, coe_neg, Pi.neg_apply, NNReal.coe_add,
-    Real.coe_toNNReal'
+    Real.coe_toNNReal', ← neg_add, max_neg_zero] at hhx ⊢
+  linear_combination hhx
 
 Depends on / 依赖: CompactlySupportedContinuousMap, CompactlySupportedContinuousMap.exists_add_of_le, NNReal, NNReal.coe_add, Pi.add_apply, Pi.neg_apply, Real.coe_toNNReal, add_apply, coe_add, coe_neg, coe_toNNReal, exists_add_of_le, linear_combination, max_neg_zero, neg_add, neg_apply, nnrealPart_add_le_add_nnrealPart, nnrealPart_apply
 -/
@@ -2960,7 +2986,19 @@ definition toRealPositiveLinear
       map_add' f g := by
         simp only [neg_add_rev]
         obtain ⟨h, hh⟩ := exists_add_nnrealPart_add_eq f g
-        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← s
+        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← sub_self (Λ h).toReal]; rw [sub_add_sub_comm]; rw [← NNReal.coe_add]; rw [← NNReal.coe_add]; rw [← map_add]; rw [← map_add]; rw [hh.1]; rw [add_comm (-g) (-f)]; rw [hh.2]
+        simp only [map_add, NNReal.coe_add]
+        ring
+      map_smul' a f := by
+        rcases le_total 0 a with ha | ha
+        · rw [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f), nnrealPart_smul_pos f ha,
+            nnrealPart_smul_pos (-f) ha]
+          simp [sup_of_le_left ha, mul_sub]
+        · simp only [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f),
+            nnrealPart_smul_neg f ha, nnrealPart_smul_neg (-f) ha, map_smul,
+            NNReal.coe_mul, Real.coe_toNNReal', neg_neg, sup_of_le_left (neg_nonneg.mpr ha)]
+          ring }
+    (fun g hg => by simp [nnrealPart_neg_eq_zero_of_nonneg hg])
 
 中文:
 定义 to实数PositiveLinear
@@ -2970,7 +3008,19 @@ definition toRealPositiveLinear
       map_add' f g := by
         simp only [neg_add_rev]
         obtain ⟨h, hh⟩ := exists_add_nnrealPart_add_eq f g
-        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← s
+        rw [← add_zero ((Λ (f + g).nnrealPart).toReal - (Λ (-g + -f).nnrealPart).toReal)]; rw [← sub_self (Λ h).toReal]; rw [sub_add_sub_comm]; rw [← NNReal.coe_add]; rw [← NNReal.coe_add]; rw [← map_add]; rw [← map_add]; rw [hh.1]; rw [add_comm (-g) (-f)]; rw [hh.2]
+        simp only [map_add, NNReal.coe_add]
+        ring
+      map_smul' a f := by
+        rcases le_total 0 a with ha | ha
+        · rw [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f), nnrealPart_smul_pos f ha,
+            nnrealPart_smul_pos (-f) ha]
+          simp [sup_of_le_left ha, mul_sub]
+        · simp only [RingHom.id_apply, smul_eq_mul, ← (smul_neg a f),
+            nnrealPart_smul_neg f ha, nnrealPart_smul_neg (-f) ha, map_smul,
+            NNReal.coe_mul, Real.coe_toNNReal', neg_neg, sup_of_le_left (neg_nonneg.mpr ha)]
+          ring }
+    (fun g hg => by simp [nnrealPart_neg_eq_zero_of_nonneg hg])
 
 Depends on / 依赖: NNReal, NNReal.coe_add, PositiveLinearMap, PositiveLinearMap.mk, add_comm, add_zero, coe_add, exists_add_nnrealPart_add_eq, map_add, map_smul, neg_add_rev, nnrealPart, sub_add_sub_comm, sub_self, toReal
 -/
@@ -3086,7 +3136,10 @@ definition pullback_monoidHom
     obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
     refine exists_compact_iff_hasCompactSupport.mp ⟨φ ⁻¹' (b⁻¹ • K),
       hφ.isCompact_preimage (hK.smul b⁻¹), fun x hx => hf _ ?_⟩
-    simpa [Set.mem_smul_set_iff_inv_smul_
+    simpa [Set.mem_smul_set_iff_inv_smul_mem] using hx
+  continuous_toFun := by fun_prop
+
+@[to_additive]
 
 中文:
 定义 pullback_monoidHom
@@ -3096,7 +3149,10 @@ definition pullback_monoidHom
     obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
     refine exists_compact_iff_hasCompactSupport.mp ⟨φ ⁻¹' (b⁻¹ • K),
       hφ.isCompact_preimage (hK.smul b⁻¹), fun x hx => hf _ ?_⟩
-    simpa [Set.mem_smul_set_iff_inv_smul_
+    simpa [Set.mem_smul_set_iff_inv_smul_mem] using hx
+  continuous_toFun := by fun_prop
+
+@[to_additive]
 -/
 noncomputable def pullback_monoidHom (f : CompactlySupportedContinuousMap β γ) (b : β) :
     CompactlySupportedContinuousMap α γ where

@@ -251,7 +251,12 @@ theorem mem_span_iff_continuous_of_finite
       (Set.forall_mem_range.mpr fun i => continuous_iInf_dom continuous_induced_dom) continuous_zero
       (fun _ _ _ _ => .add) (fun c _ _ h => h.const_smul c)
   · intro φ_cont
-    refine mem_span_of_iInf_ker_le_ke
+    refine mem_span_of_iInf_ker_le_ker fun x hx => ?_
+    simp_rw [Submodule.mem_iInf, LinearMap.mem_ker] at hx ⊢
+    have : Inseparable x 0 := by
+      -- Maybe missing lemmas about `Inseparable`?
+      simp_rw [Inseparable, nhds_iInf, nhds_induced, hx, map_zero]
+    simpa only [map_zero] using (this.map φ_cont).eq
 
 中文:
 定理 mem_span_iff_continuous_of_finite
@@ -263,7 +268,12 @@ theorem mem_span_iff_continuous_of_finite
       (Set.forall_mem_range.mpr fun i => continuous_iInf_dom continuous_induced_dom) continuous_zero
       (fun _ _ _ _ => .add) (fun c _ _ h => h.const_smul c)
   · intro φ_cont
-    refine mem_span_of_iInf_ker_le_ke
+    refine mem_span_of_iInf_ker_le_ker fun x hx => ?_
+    simp_rw [Submodule.mem_iInf, LinearMap.mem_ker] at hx ⊢
+    have : Inseparable x 0 := by
+      -- Maybe missing lemmas about `Inseparable`?
+      simp_rw [Inseparable, nhds_iInf, nhds_induced, hx, map_zero]
+    simpa only [map_zero] using (this.map φ_cont).eq
 
 Depends on / 依赖: Inseparable, LinearMap, LinearMap.mem_ker, Set.forall_mem_range.mpr, Submodule, Submodule.mem_iInf, Submodule.span_induction, const_smul, continuous_iInf_dom, continuous_induced_dom, continuous_zero, forall_mem_range, h.const_smul, induced, mem_iInf, mem_ker, mem_span_of_iInf_ker_le_ker, simp_rw, span_induction
 -/
@@ -300,7 +310,22 @@ theorem mem_span_iff_continuous
   let t₂ (s : Finset ι) : TopologicalSpace E := ⨅ i : s, induced (f i) t𝕜
   suffices
       Continuous[t₁, t𝕜] φ ↔ exists s : Finset ι, Continuous[t₂ s, t𝕜] φ by
-    simp_rw [this, ← mem_span_iff_
+    simp_rw [this, ← mem_span_iff_continuous_of_finite, Submodule.span_range_eq_iSup,
+      iSup_subtype]
+    rw [Submodule.mem_iSup_iff_exists_finset]
+  have t₁_group : @IsTopologicalAddGroup E t₁ _ :=
+    topologicalAddGroup_iInf fun _ => topologicalAddGroup_induced _
+  have t₂_group (s : Finset ι) : @IsTopologicalAddGroup E (t₂ s) _ :=
+    topologicalAddGroup_iInf fun _ => topologicalAddGroup_induced _
+  have t₁_smul : @ContinuousSMul 𝕜 E _ _ t₁ :=
+    continuousSMul_iInf fun _ => continuousSMul_induced _
+  have t₂_smul (s : Finset ι) : @ContinuousSMul 𝕜 E _ _ (t₂ s) :=
+    continuousSMul_iInf fun _ => continuousSMul_induced _
+  simp_rw [WithSeminorms.continuous_iff_continuous_comp (norm_withSeminorms 𝕜 𝕜), forall_const]
+  conv in Continuous _ => rw [Seminorm.continuous_iff one_pos, nhds_iInf]
+  conv in Continuous _ =>
+    rw [letI := t₂ s; Seminorm.continuous_iff one_pos]; rw [nhds_iInf]; rw [iInf_subtype]
+  rw [Filter.mem_iInf_finite]
 
 中文:
 定理 mem_span_iff_continuous
@@ -311,7 +336,22 @@ theorem mem_span_iff_continuous
   let t₂ (s : Finset ι) : TopologicalSpace E := ⨅ i : s, induced (f i) t𝕜
   suffices
       Continuous[t₁, t𝕜] φ ↔ exists s : Finset ι, Continuous[t₂ s, t𝕜] φ by
-    simp_rw [this, ← mem_span_iff_
+    simp_rw [this, ← mem_span_iff_continuous_of_finite, Submodule.span_range_eq_iSup,
+      iSup_subtype]
+    rw [Submodule.mem_iSup_iff_exists_finset]
+  have t₁_group : @IsTopologicalAddGroup E t₁ _ :=
+    topologicalAddGroup_iInf fun _ => topologicalAddGroup_induced _
+  have t₂_group (s : Finset ι) : @IsTopologicalAddGroup E (t₂ s) _ :=
+    topologicalAddGroup_iInf fun _ => topologicalAddGroup_induced _
+  have t₁_smul : @ContinuousSMul 𝕜 E _ _ t₁ :=
+    continuousSMul_iInf fun _ => continuousSMul_induced _
+  have t₂_smul (s : Finset ι) : @ContinuousSMul 𝕜 E _ _ (t₂ s) :=
+    continuousSMul_iInf fun _ => continuousSMul_induced _
+  simp_rw [WithSeminorms.continuous_iff_continuous_comp (norm_withSeminorms 𝕜 𝕜), forall_const]
+  conv in Continuous _ => rw [Seminorm.continuous_iff one_pos, nhds_iInf]
+  conv in Continuous _ =>
+    rw [letI := t₂ s; Seminorm.continuous_iff one_pos]; rw [nhds_iInf]; rw [iInf_subtype]
+  rw [Filter.mem_iInf_finite]
 
 Depends on / 依赖: Continuous, Finset, IsTopologicalAddGroup, Submodule, Submodule.mem_iSup_iff_exists_finset, Submodule.span_range_eq_iSup, TopologicalSpace, iSup_subtype, induced, mem_iSup_iff_exists_finset, mem_span_iff_continuous_of_finite, simp_rw, span_range_eq_iSup, topologicalAddGroup_iInf, topologicalAddGroup_induced
 -/
@@ -351,7 +391,15 @@ theorem mem_span_iff_bound
   let t := ⨅ i, induced (f i) t𝕜
   have : IsTopologicalAddGroup E := topologicalAddGroup_iInf fun _ => topologicalAddGroup_induced _
   have : WithSeminorms (fun i => (f i).toSeminorm) := by
-    simp_rw [SeminormFamily.withSeminorms_iff_nhds_eq_iInf, 
+    simp_rw [SeminormFamily.withSeminorms_iff_nhds_eq_iInf, nhds_iInf, nhds_induced, map_zero,
+      ← comap_norm_nhds_zero (E := 𝕜), Filter.comap_comap]
+    rfl
+  rw [LinearMap.mem_span_iff_continuous]
+  constructor <;> intro H
+  · rw [WithSeminorms.continuous_iff_continuous_comp (norm_withSeminorms 𝕜 𝕜), forall_const] at H
+    rcases Seminorm.bound_of_continuous this _ H with ⟨s, C, -, hC⟩
+    exact ⟨s, C, hC⟩
+  · exact WithSeminorms.continuous_normedSpace_rng _ this _ H
 
 中文:
 定理 mem_span_iff_bound
@@ -361,7 +409,15 @@ theorem mem_span_iff_bound
   let t := ⨅ i, induced (f i) t𝕜
   have : IsTopologicalAddGroup E := topologicalAddGroup_iInf fun _ => topologicalAddGroup_induced _
   have : WithSeminorms (fun i => (f i).toSeminorm) := by
-    simp_rw [SeminormFamily.withSeminorms_iff_nhds_eq_iInf, 
+    simp_rw [SeminormFamily.withSeminorms_iff_nhds_eq_iInf, nhds_iInf, nhds_induced, map_zero,
+      ← comap_norm_nhds_zero (E := 𝕜), Filter.comap_comap]
+    rfl
+  rw [LinearMap.mem_span_iff_continuous]
+  constructor <;> intro H
+  · rw [WithSeminorms.continuous_iff_continuous_comp (norm_withSeminorms 𝕜 𝕜), forall_const] at H
+    rcases Seminorm.bound_of_continuous this _ H with ⟨s, C, -, hC⟩
+    exact ⟨s, C, hC⟩
+  · exact WithSeminorms.continuous_normedSpace_rng _ this _ H
 
 Depends on / 依赖: Filter, Filter.comap_comap, IsTopologicalAddGroup, LinearMap, LinearMap.mem_span_iff_continuous, SeminormFamily, SeminormFamily.withSeminorms_iff_nhds_eq_iInf, TopologicalSpace, WithSeminorms, WithSeminorms.continuous_iff_continuous_comp, comap_comap, comap_norm_nhds_zero, continuous_iff_continuous_comp, induced, map_zero, mem_span_iff_continuous, nhds_iInf, nhds_induced, norm_, simp_rw
 -/

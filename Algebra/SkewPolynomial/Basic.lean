@@ -1143,7 +1143,10 @@ lemma X_pow_mul
   | zero => simp only [pow_zero, one_mul, Function.iterate_zero, id_eq, sum_monomial, mul_one]
   | succ n ih =>
     conv_lhs => rw [pow_succ]
-    rw [mul_assoc]; rw [X_mul]; rw [← mul_assoc]; rw [ih]; rw [mul_assoc]; rw [← pow_succ]; rw [sum_sum_index (by simp) (
+    rw [mul_assoc]; rw [X_mul]; rw [← mul_assoc]; rw [ih]; rw [mul_assoc]; rw [← pow_succ]; rw [sum_sum_index (by simp) (by simp)]
+    simp
+
+@[simp]
 
 中文:
 引理 X_pow_mul
@@ -1154,7 +1157,10 @@ lemma X_pow_mul
   | zero => simp only [pow_zero, one_mul, Function.iterate_zero, id_eq, sum_monomial, mul_one]
   | succ n ih =>
     conv_lhs => rw [pow_succ]
-    rw [mul_assoc]; rw [X_mul]; rw [← mul_assoc]; rw [ih]; rw [mul_assoc]; rw [← pow_succ]; rw [sum_sum_index (by simp) (
+    rw [mul_assoc]; rw [X_mul]; rw [← mul_assoc]; rw [ih]; rw [mul_assoc]; rw [← pow_succ]; rw [sum_sum_index (by simp) (by simp)]
+    simp
+
+@[simp]
 
 Depends on / 依赖: Function, Function.iterate_zero, X_mul, conv_lhs, generalizing, id_eq, iterate_zero, mul_assoc, mul_one, one_mul, pow_succ, pow_zero, sum_monomial, sum_sum_index
 -/
@@ -2039,7 +2045,9 @@ lemma support_trinomial_subset
           ((support_C_mul_X_pow_subset k x).trans
             (singleton_subset_iff.mpr (mem_insert_self k {m, n})))
           ((support_C_mul_X_pow_subset m y).trans
-            (singleton_subset_iff.mpr (mem_insert_
+            (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_self m {n}))))))
+      ((support_C_mul_X_pow_subset n z).trans
+        (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_of_mem (mem_singleton_self n))))))
 
 中文:
 引理 support_trinomial_subset
@@ -2051,7 +2059,9 @@ lemma support_trinomial_subset
           ((support_C_mul_X_pow_subset k x).trans
             (singleton_subset_iff.mpr (mem_insert_self k {m, n})))
           ((support_C_mul_X_pow_subset m y).trans
-            (singleton_subset_iff.mpr (mem_insert_
+            (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_self m {n}))))))
+      ((support_C_mul_X_pow_subset n z).trans
+        (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_of_mem (mem_singleton_self n))))))
 
 Depends on / 依赖: mem_insert_of_mem, mem_insert_self, mem_singleton_self, singleton_subset_iff, singleton_subset_iff.mpr, support_C_mul_X_pow_subset, support_add, support_add.trans, union_subset
 -/

@@ -462,7 +462,7 @@ instance monoidalCategoryStruct
   tensorUnit := unit
   associator X Y Z := (((associator L W ε).app X).app Y).app Z
   leftUnitor Y := (leftUnitor L W ε).app Y
-  rightUnito
+  rightUnitor X := (rightUnitor L W ε).app X
 
 中文:
 实例 monoidalCategoryStruct
@@ -473,7 +473,7 @@ instance monoidalCategoryStruct
   tensorUnit := unit
   associator X Y Z := (((associator L W ε).app X).app Y).app Z
   leftUnitor Y := (leftUnitor L W ε).app Y
-  rightUnito
+  rightUnitor X := (rightUnitor L W ε).app X
 
 Depends on / 依赖: tensorBifunctor
 -/
@@ -948,7 +948,11 @@ lemma associator_naturality
   have h₁ := (((associator L W ε).hom.app Y₁).app Y₂).naturality f₃
   have h₂ := NatTrans.congr_app (((associator L W ε).hom.app Y₁).naturality f₂) X₃
   have h₃ := NatTrans.congr_app (NatTrans.congr_app ((associator L W ε).hom.naturality f₁) X₂) X₃
-  simp +instances only [monoidalCategoryStruct, 
+  simp +instances only [monoidalCategoryStruct, Functor.map_comp, assoc]
+  dsimp at h₁ h₂ h₃ ⊢
+  rw [h₁]; rw [assoc]; rw [reassoc_of% h₂]; rw [reassoc_of% h₃]
+
+@[reassoc]
 
 中文:
 引理 associator_naturality
@@ -957,7 +961,11 @@ lemma associator_naturality
   have h₁ := (((associator L W ε).hom.app Y₁).app Y₂).naturality f₃
   have h₂ := NatTrans.congr_app (((associator L W ε).hom.app Y₁).naturality f₂) X₃
   have h₃ := NatTrans.congr_app (NatTrans.congr_app ((associator L W ε).hom.naturality f₁) X₂) X₃
-  simp +instances only [monoidalCategoryStruct, 
+  simp +instances only [monoidalCategoryStruct, Functor.map_comp, assoc]
+  dsimp at h₁ h₂ h₃ ⊢
+  rw [h₁]; rw [assoc]; rw [reassoc_of% h₂]; rw [reassoc_of% h₃]
+
+@[reassoc]
 
 Depends on / 依赖: Functor, Functor.map_comp, NatTrans, NatTrans.congr_app, associator, congr_app, hom.app, hom.naturality, instances, map_comp, monoidalCategoryStruct, naturality, reassoc_of
 -/
@@ -1145,7 +1153,37 @@ lemma pentagon
   obtain ⟨X₁, ⟨e₁⟩⟩ : exists X₁, Nonempty ((L').obj X₁ ≅ Y₁) := ⟨_, ⟨(L').objObjPreimageIso Y₁⟩⟩
   obtain ⟨X₂, ⟨e₂⟩⟩ : exists X₂, Nonempty ((L').obj X₂ ≅ Y₂) := ⟨_, ⟨(L').objObjPreimageIso Y₂⟩⟩
   obtain ⟨X₃, ⟨e₃⟩⟩ : exists X₃, Nonempty ((L').obj X₃ ≅ Y₃) := ⟨_, ⟨(L').objObjPreimageIso Y₃⟩⟩
-  obta
+  obtain ⟨X₄, ⟨e₄⟩⟩ : exists X₄, Nonempty ((L').obj X₄ ≅ Y₄) := ⟨_, ⟨(L').objObjPreimageIso Y₄⟩⟩
+  suffices Pentagon ((L').obj X₁) ((L').obj X₂) ((L').obj X₃) ((L').obj X₄) by
+    dsimp [Pentagon]
+    refine Eq.trans ?_ (((((e₁.inv otimesₘ e₂.inv) otimesₘ e₃.inv) otimesₘ e₄.inv) ≫= this =≫
+      (e₁.hom otimesₘ e₂.hom otimesₘ e₃.hom otimesₘ e₄.hom)).trans ?_)
+    · rw [← id_tensorHom, ← id_tensorHom, ← tensorHom_id, ← tensorHom_id, assoc, assoc,
+        ← tensor_comp, ← associator_naturality, id_comp, ← comp_id e₁.hom,
+        tensor_comp, ← associator_naturality_assoc, ← comp_id (𝟙 ((L').obj X₄)),
+        ← tensor_comp_assoc, associator_naturality, comp_id, comp_id,
+        ← tensor_comp_assoc, assoc, e₄.inv_hom_id, ← tensor_comp, e₁.inv_hom_id,
+        ← tensor_comp, e₂.inv_hom_id, e₃.inv_hom_id, id_tensorHom_id, id_tensorHom_id, comp_id]
+    · rw [assoc, associator_naturality_assoc, associator_naturality_assoc,
+        ← tensor_comp, e₁.inv_hom_id, ← tensor_comp, e₂.inv_hom_id, ← tensor_comp,
+        e₃.inv_hom_id, e₄.inv_hom_id, id_tensorHom_id, id_tensorHom_id, id_tensorHom_id, comp_id]
+  dsimp [Pentagon]
+  have : ((L').obj X₁ ◁ (μ L W ε X₂ X₃).inv) ▷ (L').obj X₄ ≫
+      (α_ ((L').obj X₁) ((L').obj X₂ otimes (L').obj X₃) ((L').obj X₄)).hom ≫
+        (L').obj X₁ ◁ (μ L W ε X₂ X₃).hom ▷ (L').obj X₄ =
+          (α_ ((L').obj X₁) ((L').obj (X₂ otimes X₃)) ((L').obj X₄)).hom :=
+    pentagon_aux₂ _ _ _ (μ L W ε X₂ X₃).symm
+  rw [associator_hom_app]; rw [tensorHom_id]; rw [id_tensorHom]; rw [associator_hom_app]; rw [tensorHom_id]; rw [whiskerLeft_comp]; rw [whiskerRight_comp]; rw [whiskerRight_comp]; rw [whiskerRight_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [whiskerRight_comp]; rw [assoc]; rw [reassoc_of% this]; rw [associator_hom_app]; rw [tensorHom_id]; rw [← pentagon_aux₁ (X₂ := (L').obj X₃) (X₃ := (L').obj X₄) (i := μ L W ε X₁ X₂)]; rw [← pentagon_aux₃ (X₁ := (L').obj X₁) (X₂ := (L').obj X₂) (i := μ L W ε X₃ X₄)]; rw [associator_hom_app]; rw [associator_hom_app]
+  simp only [assoc, ← whiskerRight_comp_assoc, Iso.inv_hom_id, comp_id, μ_natural_left_assoc,
+    id_tensorHom, ← whiskerLeft_comp, Iso.inv_hom_id_assoc]
+  rw [← (L').map_comp_assoc]; rw [whiskerLeft_comp]; rw [μ_inv_natural_right_assoc]; rw [← (L').map_comp_assoc]
+  simp only [assoc, MonoidalCategory.pentagon, Functor.map_comp, tensorHom_id,
+    whiskerRight_comp_assoc]
+  congr 3; simp only [← assoc]; congr
+  simp only [← cancel_mono (μ L W ε (X₁ otimes X₂) (X₃ otimes X₄)).inv, assoc, id_comp,
+    whisker_exchange_assoc, ← whiskerRight_comp_assoc,
+    Iso.inv_hom_id, whiskerRight_id, ← whiskerLeft_comp,
+    whiskerLeft_id]
 
 中文:
 引理 pentagon
@@ -1154,7 +1192,37 @@ lemma pentagon
   obtain ⟨X₁, ⟨e₁⟩⟩ : exists X₁, Nonempty ((L').obj X₁ ≅ Y₁) := ⟨_, ⟨(L').objObjPreimageIso Y₁⟩⟩
   obtain ⟨X₂, ⟨e₂⟩⟩ : exists X₂, Nonempty ((L').obj X₂ ≅ Y₂) := ⟨_, ⟨(L').objObjPreimageIso Y₂⟩⟩
   obtain ⟨X₃, ⟨e₃⟩⟩ : exists X₃, Nonempty ((L').obj X₃ ≅ Y₃) := ⟨_, ⟨(L').objObjPreimageIso Y₃⟩⟩
-  obta
+  obtain ⟨X₄, ⟨e₄⟩⟩ : exists X₄, Nonempty ((L').obj X₄ ≅ Y₄) := ⟨_, ⟨(L').objObjPreimageIso Y₄⟩⟩
+  suffices Pentagon ((L').obj X₁) ((L').obj X₂) ((L').obj X₃) ((L').obj X₄) by
+    dsimp [Pentagon]
+    refine Eq.trans ?_ (((((e₁.inv otimesₘ e₂.inv) otimesₘ e₃.inv) otimesₘ e₄.inv) ≫= this =≫
+      (e₁.hom otimesₘ e₂.hom otimesₘ e₃.hom otimesₘ e₄.hom)).trans ?_)
+    · rw [← id_tensorHom, ← id_tensorHom, ← tensorHom_id, ← tensorHom_id, assoc, assoc,
+        ← tensor_comp, ← associator_naturality, id_comp, ← comp_id e₁.hom,
+        tensor_comp, ← associator_naturality_assoc, ← comp_id (𝟙 ((L').obj X₄)),
+        ← tensor_comp_assoc, associator_naturality, comp_id, comp_id,
+        ← tensor_comp_assoc, assoc, e₄.inv_hom_id, ← tensor_comp, e₁.inv_hom_id,
+        ← tensor_comp, e₂.inv_hom_id, e₃.inv_hom_id, id_tensorHom_id, id_tensorHom_id, comp_id]
+    · rw [assoc, associator_naturality_assoc, associator_naturality_assoc,
+        ← tensor_comp, e₁.inv_hom_id, ← tensor_comp, e₂.inv_hom_id, ← tensor_comp,
+        e₃.inv_hom_id, e₄.inv_hom_id, id_tensorHom_id, id_tensorHom_id, id_tensorHom_id, comp_id]
+  dsimp [Pentagon]
+  have : ((L').obj X₁ ◁ (μ L W ε X₂ X₃).inv) ▷ (L').obj X₄ ≫
+      (α_ ((L').obj X₁) ((L').obj X₂ otimes (L').obj X₃) ((L').obj X₄)).hom ≫
+        (L').obj X₁ ◁ (μ L W ε X₂ X₃).hom ▷ (L').obj X₄ =
+          (α_ ((L').obj X₁) ((L').obj (X₂ otimes X₃)) ((L').obj X₄)).hom :=
+    pentagon_aux₂ _ _ _ (μ L W ε X₂ X₃).symm
+  rw [associator_hom_app]; rw [tensorHom_id]; rw [id_tensorHom]; rw [associator_hom_app]; rw [tensorHom_id]; rw [whiskerLeft_comp]; rw [whiskerRight_comp]; rw [whiskerRight_comp]; rw [whiskerRight_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [whiskerRight_comp]; rw [assoc]; rw [reassoc_of% this]; rw [associator_hom_app]; rw [tensorHom_id]; rw [← pentagon_aux₁ (X₂ := (L').obj X₃) (X₃ := (L').obj X₄) (i := μ L W ε X₁ X₂)]; rw [← pentagon_aux₃ (X₁ := (L').obj X₁) (X₂ := (L').obj X₂) (i := μ L W ε X₃ X₄)]; rw [associator_hom_app]; rw [associator_hom_app]
+  simp only [assoc, ← whiskerRight_comp_assoc, Iso.inv_hom_id, comp_id, μ_natural_left_assoc,
+    id_tensorHom, ← whiskerLeft_comp, Iso.inv_hom_id_assoc]
+  rw [← (L').map_comp_assoc]; rw [whiskerLeft_comp]; rw [μ_inv_natural_right_assoc]; rw [← (L').map_comp_assoc]
+  simp only [assoc, MonoidalCategory.pentagon, Functor.map_comp, tensorHom_id,
+    whiskerRight_comp_assoc]
+  congr 3; simp only [← assoc]; congr
+  simp only [← cancel_mono (μ L W ε (X₁ otimes X₂) (X₃ otimes X₄)).inv, assoc, id_comp,
+    whisker_exchange_assoc, ← whiskerRight_comp_assoc,
+    Iso.inv_hom_id, whiskerRight_id, ← whiskerLeft_comp,
+    whiskerLeft_id]
 
 Depends on / 依赖: Eq.trans, Nonempty, Pentagon, objObjPreimageIso
 -/
@@ -1311,7 +1379,7 @@ lemma triangle_aux₃
   simp only [← tensorHom_id, ← id_tensorHom, ← tensor_comp, assoc, comp_id,
     id_comp, Iso.inv_hom_id]
   congr
-  rw [← cancel_mono e₁.inv]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← rightUnitor_naturality]; rw [rightUnitor_hom_app]; rw [← tensorHom_id]; rw [← 
+  rw [← cancel_mono e₁.inv]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← rightUnitor_naturality]; rw [rightUnitor_hom_app]; rw [← tensorHom_id]; rw [← id_tensorHom]; rw [← tensor_comp_assoc]; rw [comp_id]; rw [id_comp]
 
 中文:
 引理 triangle_aux₃
@@ -1320,7 +1388,7 @@ lemma triangle_aux₃
   simp only [← tensorHom_id, ← id_tensorHom, ← tensor_comp, assoc, comp_id,
     id_comp, Iso.inv_hom_id]
   congr
-  rw [← cancel_mono e₁.inv]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← rightUnitor_naturality]; rw [rightUnitor_hom_app]; rw [← tensorHom_id]; rw [← 
+  rw [← cancel_mono e₁.inv]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← rightUnitor_naturality]; rw [rightUnitor_hom_app]; rw [← tensorHom_id]; rw [← id_tensorHom]; rw [← tensor_comp_assoc]; rw [comp_id]; rw [id_comp]
 
 Depends on / 依赖: Iso.hom_inv_id, Iso.inv_hom_id, cancel_mono, comp_id, hom_inv_id, id_comp, id_tensorHom, inv_hom_id, rightUnitor_hom_app, rightUnitor_naturality, tensorHom_id, tensor_comp, tensor_comp_assoc
 -/
@@ -1345,7 +1413,25 @@ lemma triangle
   obtain ⟨X', ⟨e₁⟩⟩ : exists X₁, Nonempty ((L').obj X₁ ≅ X) := ⟨_, ⟨(L').objObjPreimageIso X⟩⟩
   obtain ⟨Y', ⟨e₂⟩⟩ : exists X₂, Nonempty ((L').obj X₂ ≅ Y) := ⟨_, ⟨(L').objObjPreimageIso Y⟩⟩
   have h₁ := (associator_hom_app L W ε X' (𝟙_ _) Y' =≫
-    (𝟙 ((L').obj X') otimesₘ (μ L W ε (𝟙_ C) Y').hom
+    (𝟙 ((L').obj X') otimesₘ (μ L W ε (𝟙_ C) Y').hom))
+  simp only [assoc, id_tensorHom, ← whiskerLeft_comp,
+    Iso.inv_hom_id, whiskerLeft_id, comp_id, Iso.inv_hom_id,
+    ← cancel_mono (μ L W ε X' (𝟙_ C otimes Y')).hom] at h₁
+  have h₂ := (ε' L W ε).hom ▷ (L').obj Y' ≫= leftUnitor_hom_app L W ε Y'
+  simp only [← whiskerRight_comp_assoc, Iso.hom_inv_id, whiskerRight_id, id_comp] at h₂
+  have h₃ := (((μ L W ε _ _).hom otimesₘ 𝟙 _) ≫ (μ L W ε _ _).hom) ≫=
+    ((L').congr_map (MonoidalCategory.triangle X' Y'))
+  simp only [assoc, Functor.map_comp, ← reassoc_of% h₁] at h₃
+  rw [← μ_natural_left]; rw [tensorHom_id]; rw [← whiskerRight_comp_assoc]; rw [← μ_natural_right]; rw [← Iso.comp_inv_eq]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← whiskerLeft_comp]; rw [← h₂] at h₃
+  replace h₃ := ((e₁.inv otimesₘ ε.inv) otimesₘ e₂.inv) ≫= (h₃ =≫ (_ ◁ e₂.hom)) =≫ (e₁.hom ▷ _)
+  simp only [← whiskerLeft_comp, assoc, ← leftUnitor_naturality, ← whisker_exchange] at h₃
+  have : _ = (α_ X (𝟙_ (LocalizedMonoidal L W ε)) Y).hom :=
+    triangle_aux₁ _ _ _ e₁.symm ε.symm e₂.symm
+  simp only [← this, Iso.symm_hom, Iso.symm_inv, assoc,
+    ← id_tensorHom, ← tensor_comp, comp_id]
+  convert! h₃
+  · exact triangle_aux₂ _ _ _ e₁ e₂
+  · exact triangle_aux₃ _ _ _ e₁ e₂
 
 中文:
 引理 triangle
@@ -1354,7 +1440,25 @@ lemma triangle
   obtain ⟨X', ⟨e₁⟩⟩ : exists X₁, Nonempty ((L').obj X₁ ≅ X) := ⟨_, ⟨(L').objObjPreimageIso X⟩⟩
   obtain ⟨Y', ⟨e₂⟩⟩ : exists X₂, Nonempty ((L').obj X₂ ≅ Y) := ⟨_, ⟨(L').objObjPreimageIso Y⟩⟩
   have h₁ := (associator_hom_app L W ε X' (𝟙_ _) Y' =≫
-    (𝟙 ((L').obj X') otimesₘ (μ L W ε (𝟙_ C) Y').hom
+    (𝟙 ((L').obj X') otimesₘ (μ L W ε (𝟙_ C) Y').hom))
+  simp only [assoc, id_tensorHom, ← whiskerLeft_comp,
+    Iso.inv_hom_id, whiskerLeft_id, comp_id, Iso.inv_hom_id,
+    ← cancel_mono (μ L W ε X' (𝟙_ C otimes Y')).hom] at h₁
+  have h₂ := (ε' L W ε).hom ▷ (L').obj Y' ≫= leftUnitor_hom_app L W ε Y'
+  simp only [← whiskerRight_comp_assoc, Iso.hom_inv_id, whiskerRight_id, id_comp] at h₂
+  have h₃ := (((μ L W ε _ _).hom otimesₘ 𝟙 _) ≫ (μ L W ε _ _).hom) ≫=
+    ((L').congr_map (MonoidalCategory.triangle X' Y'))
+  simp only [assoc, Functor.map_comp, ← reassoc_of% h₁] at h₃
+  rw [← μ_natural_left]; rw [tensorHom_id]; rw [← whiskerRight_comp_assoc]; rw [← μ_natural_right]; rw [← Iso.comp_inv_eq]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← whiskerLeft_comp]; rw [← h₂] at h₃
+  replace h₃ := ((e₁.inv otimesₘ ε.inv) otimesₘ e₂.inv) ≫= (h₃ =≫ (_ ◁ e₂.hom)) =≫ (e₁.hom ▷ _)
+  simp only [← whiskerLeft_comp, assoc, ← leftUnitor_naturality, ← whisker_exchange] at h₃
+  have : _ = (α_ X (𝟙_ (LocalizedMonoidal L W ε)) Y).hom :=
+    triangle_aux₁ _ _ _ e₁.symm ε.symm e₂.symm
+  simp only [← this, Iso.symm_hom, Iso.symm_inv, assoc,
+    ← id_tensorHom, ← tensor_comp, comp_id]
+  convert! h₃
+  · exact triangle_aux₂ _ _ _ e₁ e₂
+  · exact triangle_aux₃ _ _ _ e₁ e₂
 
 Depends on / 依赖: Iso.inv_hom_id, Nonempty, associator_hom_app, cancel_mono, comp_id, id_tensorHom, inv_hom_id, objObjPreimageIso, otimes, whiskerLeft_comp, whiskerLeft_id
 -/
@@ -1396,7 +1500,14 @@ instance :
   whiskerLeft_id := by
     intros
     simp +instances [monoidalCategoryStruct]
-  id_wh
+  id_whiskerRight := by
+    intros
+    simp +instances [monoidalCategoryStruct]
+  associator_naturality {X₁ X₂ X₃ Y₁ Y₂ Y₃} f₁ f₂ f₃ := by apply associator_naturality
+  leftUnitor_naturality := by intros; simp +instances [monoidalCategoryStruct]
+  rightUnitor_naturality := fun f => (rightUnitor L W ε).hom.naturality f
+  pentagon := pentagon
+  triangle := triangle
 
 中文:
 实例 :
@@ -1408,7 +1519,14 @@ instance :
   whiskerLeft_id := by
     intros
     simp +instances [monoidalCategoryStruct]
-  id_wh
+  id_whiskerRight := by
+    intros
+    simp +instances [monoidalCategoryStruct]
+  associator_naturality {X₁ X₂ X₃ Y₁ Y₂ Y₃} f₁ f₂ f₃ := by apply associator_naturality
+  leftUnitor_naturality := by intros; simp +instances [monoidalCategoryStruct]
+  rightUnitor_naturality := fun f => (rightUnitor L W ε).hom.naturality f
+  pentagon := pentagon
+  triangle := triangle
 
 Depends on / 依赖: associator_naturality, id_tensorHom_id, id_whiskerRight, instances, intros, leftUnitor_naturality, monoidalCategoryStruc, monoidalCategoryStruct, tensorHom_comp_tensorHom, whiskerLeft_id
 -/
@@ -1450,7 +1568,7 @@ instance :
       left_unitality Y := leftUnitor_hom_app L W ε Y
       right_unitality X := rightUnitor_hom_app L W ε X }
 
-local notation "L'" => toMonoidalCat
+local notation "L'" => toMonoidalCategory L W ε
 
 中文:
 实例 :
@@ -1462,7 +1580,7 @@ local notation "L'" => toMonoidalCat
       left_unitality Y := leftUnitor_hom_app L W ε Y
       right_unitality X := rightUnitor_hom_app L W ε X }
 
-local notation "L'" => toMonoidalCat
+local notation "L'" => toMonoidalCategory L W ε
 
 Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal, associativity, associator_hom_app, leftUnitor_hom_app, left_unitality, rightUnitor_hom_app, right_unitality, toMonoidal
 -/

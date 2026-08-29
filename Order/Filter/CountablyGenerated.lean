@@ -180,7 +180,9 @@ theorem antitone_seq_of_seq
   apply le_antisymm <;> rw [le_iInf_iff] <;> intro i
   · rw [le_principal_iff]
     refine (biInter_mem (finite_le_nat _)).2 fun j _ => ?_
-    exact mem_iInf_of_mem j (mem_p
+    exact mem_iInf_of_mem j (mem_principal_self _)
+  · refine iInf_le_of_le i (principal_mono.2 <| iInter₂_subset i ?_)
+    rfl
 
 中文:
 定理 antitone_seq_of_seq
@@ -191,7 +193,9 @@ theorem antitone_seq_of_seq
   apply le_antisymm <;> rw [le_iInf_iff] <;> intro i
   · rw [le_principal_iff]
     refine (biInter_mem (finite_le_nat _)).2 fun j _ => ?_
-    exact mem_iInf_of_mem j (mem_p
+    exact mem_iInf_of_mem j (mem_principal_self _)
+  · refine iInf_le_of_le i (principal_mono.2 <| iInter₂_subset i ?_)
+    rfl
 
 Depends on / 依赖: Iic_subset_Iic, Subset, Subset.rfl, biInter_mem, biInter_mono, finite_le_nat, iInf_le_of_le, le_antisymm, le_iInf_iff, le_principal_iff, mem_iInf_of_mem, mem_principal_self, principal_mono
 -/
@@ -350,7 +354,21 @@ theorem HasBasis.exists_antitone_subbasis
     rw [generate_eq_biInf]
     exact countable_biInf_principal_eq_seq_iInf hsc
   have : forall i, x' i in f := fun i => hx'.symm ▸ (iInf_le (fun i => 𝓟 (x' i)) i) (mem_principal_self _)
-  let x : 
+  let x : Nat -> { i : ι' // p i } := fun n =>
+    Nat.recOn n (hs.index _ <| this 0) fun n xn =>
+hs.index _ inter_mem (this <| n + 1) (hs.mem_of_mem xn.2)
+  have x_anti : Antitone fun i => s (x i).1 :=
+    antitone_nat_of_succ_le fun i => (hs.set_index_subset _).trans inter_subset_right
+  have x_subset : forall i, s (x i).1 subseteq x' i := by
+    rintro (_ | i)
+    exacts [hs.set_index_subset _, (hs.set_index_subset _).trans inter_subset_left]
+  refine ⟨fun i => (x i).1, fun i => (x i).2, ?_⟩
+  have : (⨅ i, 𝓟 (s (x i).1)).HasAntitoneBasis fun i => s (x i).1 := .iInf_principal x_anti
+  convert! this
+  exact
+    le_antisymm (le_iInf fun i => le_principal_iff.2 <| by cases i <;> apply hs.set_index_mem)
+      (hx'.symm ▸
+le_iInf fun i => le_principal_iff.2 this.1.mem_iff.2 ⟨i, trivial, x_subset i⟩)
 
 中文:
 定理 有基.存在_antitone_subbasis
@@ -361,7 +379,21 @@ theorem HasBasis.exists_antitone_subbasis
     rw [generate_eq_biInf]
     exact countable_biInf_principal_eq_seq_iInf hsc
   have : forall i, x' i in f := fun i => hx'.symm ▸ (iInf_le (fun i => 𝓟 (x' i)) i) (mem_principal_self _)
-  let x : 
+  let x : Nat -> { i : ι' // p i } := fun n =>
+    Nat.recOn n (hs.index _ <| this 0) fun n xn =>
+hs.index _ inter_mem (this <| n + 1) (hs.mem_of_mem xn.2)
+  have x_anti : Antitone fun i => s (x i).1 :=
+    antitone_nat_of_succ_le fun i => (hs.set_index_subset _).trans inter_subset_right
+  have x_subset : forall i, s (x i).1 subseteq x' i := by
+    rintro (_ | i)
+    exacts [hs.set_index_subset _, (hs.set_index_subset _).trans inter_subset_left]
+  refine ⟨fun i => (x i).1, fun i => (x i).2, ?_⟩
+  have : (⨅ i, 𝓟 (s (x i).1)).HasAntitoneBasis fun i => s (x i).1 := .iInf_principal x_anti
+  convert! this
+  exact
+    le_antisymm (le_iInf fun i => le_principal_iff.2 <| by cases i <;> apply hs.set_index_mem)
+      (hx'.symm ▸
+le_iInf fun i => le_principal_iff.2 this.1.mem_iff.2 ⟨i, trivial, x_subset i⟩)
 
 Depends on / 依赖: Antitone, Nat.recOn, antitone_nat_of_succ_le, countable_biInf_principal_eq_seq_iInf, generate_eq_biInf, hs.index, hs.mem_of_mem, iInf_le, inter_mem, mem_of_mem, mem_principal_self, x_anti
 -/
@@ -786,7 +818,9 @@ instance iInf.isCountablyGenerated
   rw [← PLift.down_surjective.iInf_comp]
   refine HasCountableBasis.isCountablyGenerated ⟨.iInf fun n => (hs _).1, ?_⟩
   refine (countable_range <| Sigma.map ((↑) : Finset (PLift ι) -> Set (PLift ι)) fun _ => id).mono ?_
-  rintro ⟨I, f⟩ ⟨hI
+  rintro ⟨I, f⟩ ⟨hI, -⟩
+  lift I to Finset (PLift ι) using hI
+  exact ⟨⟨I, f⟩, rfl⟩
 
 中文:
 实例 iInf.isCountablyGenerated
@@ -796,7 +830,9 @@ instance iInf.isCountablyGenerated
   rw [← PLift.down_surjective.iInf_comp]
   refine HasCountableBasis.isCountablyGenerated ⟨.iInf fun n => (hs _).1, ?_⟩
   refine (countable_range <| Sigma.map ((↑) : Finset (PLift ι) -> Set (PLift ι)) fun _ => id).mono ?_
-  rintro ⟨I, f⟩ ⟨hI
+  rintro ⟨I, f⟩ ⟨hI, -⟩
+  lift I to Finset (PLift ι) using hI
+  exact ⟨⟨I, f⟩, rfl⟩
 
 Depends on / 依赖: Finset, HasCountableBasis, HasCountableBasis.isCountablyGenerated, PLift.down_surjective.iInf_comp, Sigma.map, countable_range, down_surjective, exists_antitone_basis, iInf_comp, isCountablyGenerated
 -/

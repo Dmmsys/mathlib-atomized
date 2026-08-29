@@ -358,7 +358,15 @@ theorem stmts₁_trans
     rcases h₁₂ with (rfl | h₁₂ | h₁₂)
     · unfold stmts₁ at h₀₁
       exact h₀₁
-    · exact Finset.
+    · exact Finset.mem_insert_of_mem (Finset.mem_union_left _ (IH₁ h₁₂))
+    · exact Finset.mem_insert_of_mem (Finset.mem_union_right _ (IH₂ h₁₂))
+  | goto l => subst h₁₂; exact h₀₁
+  | halt => subst h₁₂; exact h₀₁
+  | load _ q IH | _ _ _ q IH =>
+    rcases h₁₂ with (rfl | h₁₂)
+    · unfold stmts₁ at h₀₁
+      exact h₀₁
+    · exact Finset.mem_insert_of_mem (IH h₁₂)
 
 中文:
 定理 stmts₁_trans
@@ -374,7 +382,15 @@ theorem stmts₁_trans
     rcases h₁₂ with (rfl | h₁₂ | h₁₂)
     · unfold stmts₁ at h₀₁
       exact h₀₁
-    · exact Finset.
+    · exact Finset.mem_insert_of_mem (Finset.mem_union_left _ (IH₁ h₁₂))
+    · exact Finset.mem_insert_of_mem (Finset.mem_union_right _ (IH₂ h₁₂))
+  | goto l => subst h₁₂; exact h₀₁
+  | halt => subst h₁₂; exact h₀₁
+  | load _ q IH | _ _ _ q IH =>
+    rcases h₁₂ with (rfl | h₁₂)
+    · unfold stmts₁ at h₀₁
+      exact h₀₁
+    · exact Finset.mem_insert_of_mem (IH h₁₂)
 
 Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_insert_of_mem, Finset.mem_singleton, Finset.mem_union, Finset.mem_union_left, Finset.mem_union_right, branch, classical, mem_insert, mem_insert_of_mem, mem_singleton, mem_union, mem_union_left, mem_union_right
 -/
@@ -411,7 +427,7 @@ theorem stmts₁_supportsStmt_mono
   | branch f q₁ q₂ IH₁ IH₂ => rcases h with (rfl | h | h); exacts [hs, IH₁ h hs.1, IH₂ h hs.2]
   | goto l => subst h; exact hs
   | halt => subst h; trivial
-  | load _ 
+  | load _ _ IH | _ _ _ _ IH => rcases h with (rfl | h) <;> [exact hs; exact IH h hs]
 
 中文:
 定理 stmts₁_supportsStmt_mono
@@ -423,7 +439,7 @@ theorem stmts₁_supportsStmt_mono
   | branch f q₁ q₂ IH₁ IH₂ => rcases h with (rfl | h | h); exacts [hs, IH₁ h hs.1, IH₂ h hs.2]
   | goto l => subst h; exact hs
   | halt => subst h; trivial
-  | load _ 
+  | load _ _ IH | _ _ _ _ IH => rcases h with (rfl | h) <;> [exact hs; exact IH h hs]
 
 Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, Finset.mem_union, SupportsStmt, branch, exacts, mem_insert, mem_singleton, mem_union
 -/
@@ -547,7 +563,9 @@ theorem step_supports
       unfold stepAux; cases p v
       · exact IH₂ _ _ hs.2
       · exact IH₁ _ _ hs.1
-    | 
+    | goto => exact Finset.some_mem_insertNone.2 (hs _)
+    | halt => apply Multiset.mem_cons_self
+    | load _ _ IH | _ _ _ _ IH => exact IH _ _ hs
 
 中文:
 定理 step_supports
@@ -559,7 +577,9 @@ theorem step_supports
       unfold stepAux; cases p v
       · exact IH₂ _ _ hs.2
       · exact IH₁ _ _ hs.1
-    | 
+    | goto => exact Finset.some_mem_insertNone.2 (hs _)
+    | halt => apply Multiset.mem_cons_self
+    | load _ _ IH | _ _ _ _ IH => exact IH _ _ hs
 
 Depends on / 依赖: Finset, Finset.some_mem_insertNone, some_mem_insertNone
 -/
@@ -1234,7 +1254,77 @@ theorem tr_respects_aux₂
     exists L' : ListBlank (forall k, Option (Γ k)),
       (forall k, L'.map (proj k) = ListBlank.mk ((S' k).map some).reverse) ∧
         TM1.stepAux (trStAct q o) v
-            ((Tape.move Dir.right)^[(S k).length] (Tape.m
+            ((Tape.move Dir.right)^[(S k).length] (Tape.mk' ∅ (addBottom L))) =
+          TM1.stepAux q v' ((Tape.move Dir.right)^[(S' k).length] (Tape.mk' ∅ (addBottom L'))) := by
+  simp only [Function.update_self]; cases o with simp only [stWrite, stVar, trStAct, TM1.stepAux]
+  | push f =>
+    have := Tape.write_move_right_n fun a : Γ' K Γ => (a.1, update a.2 k (some (f v)))
+    refine
+      ⟨_, fun k' => ?_, by
+        -- Porting note: `rw [...]` to `erw [...]; rfl`.
+        -- https://github.com/leanprover-community/mathlib4/issues/5164
+        rw [Tape.move_right_n_head]; rw [List.length]; rw [Tape.mk'_nth_nat]; rw [this]
+        erw [addBottom_modifyNth fun a => update a k (some (f v))]
+        rw [Nat.add_one]; rw [iterate_succ']
+        rfl⟩
+    refine ListBlank.ext fun i => ?_
+    rw [ListBlank.nth_map]; rw [ListBlank.nth_modifyNth]; rw [proj]; rw [PointedMap.mk_val]
+    by_cases h' : k' = k
+    · subst k'
+      split_ifs with h
+        <;> simp only [List.reverse_cons, Function.update_self, ListBlank.nth_mk, List.map]
+      · rw [List.getI_eq_getElem _, List.getElem_append_right] <;>
+        simp only [List.length_append, List.length_reverse, List.length_map, ← h,
+          Nat.sub_self, List.length_singleton, List.getElem_singleton,
+          le_refl, Nat.lt_succ_self]
+      rw [← proj_map_nth]; rw [hL]; rw [ListBlank.nth_mk]
+      rcases lt_or_gt_of_ne h with h | h
+      · rw [List.getI_append]
+        simpa only [List.length_map, List.length_reverse] using h
+      · rw [List.getI_eq_default, List.getI_eq_default] <;>
+          simp only [Nat.add_one_le_iff, h, List.length, le_of_lt, List.length_reverse,
+            List.length_append, List.length_map]
+    · split_ifs <;> rw [Function.update_of_ne h', ← proj_map_nth, hL]
+      rw [Function.update_of_ne h']
+  | peek f =>
+    rw [Function.update_eq_self]
+    use L, hL; rw [Tape.move_left_right]; congr
+    cases e : S k; · rfl
+    rw [List.length_cons]; rw [iterate_succ']; rw [Function.comp]; rw [Tape.move_right_left]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_snd]; rw [stk_nth_val _ (hL k)]; rw [e]; rw [List.reverse_cons]; rw [← List.length_reverse]; rw [List.getElem?_concat_length]
+    rfl
+  | pop f =>
+    rcases e : S k with - | ⟨hd, tl⟩
+    · simp only [Tape.mk'_head, ListBlank.head_cons, Tape.move_left_mk', List.length,
+        List.head?, iterate_zero_apply, List.tail_nil]
+      rw [← e]; rw [Function.update_eq_self]
+      exact ⟨L, hL, by rw [addBottom_head_fst, cond]⟩
+    · refine
+        ⟨_, fun k' => ?_, by
+          erw [List.length_cons, Tape.move_right_n_head, Tape.mk'_nth_nat, addBottom_nth_succ_fst,
+            cond_false, iterate_succ', Function.comp, Tape.move_right_left, Tape.move_right_n_head,
+            Tape.mk'_nth_nat, Tape.write_move_right_n fun a : Γ' K Γ => (a.1, update a.2 k none),
+            addBottom_modifyNth fun a => update a k none, addBottom_nth_snd,
+            stk_nth_val _ (hL k), e,
+            show (List.cons hd tl).reverse[tl.length]? = some hd by
+              rw [List.reverse_cons]; rw [← List.length_reverse]; rw [List.getElem?_concat_length],
+            List.head?, List.tail]⟩
+      refine ListBlank.ext fun i => ?_
+      rw [ListBlank.nth_map]; rw [ListBlank.nth_modifyNth]; rw [proj]; rw [PointedMap.mk_val]
+      by_cases h' : k' = k
+      · subst k'
+        split_ifs with h <;> simp only [Function.update_self, ListBlank.nth_mk, List.tail]
+        · rw [List.getI_eq_default]
+          · rfl
+          rw [h]; rw [List.length_reverse]; rw [List.length_map]
+        rw [← proj_map_nth]; rw [hL]; rw [ListBlank.nth_mk]; rw [e]; rw [List.map]; rw [List.reverse_cons]
+        rcases lt_or_gt_of_ne h with h | h
+        · rw [List.getI_append]
+          simpa only [List.length_map, List.length_reverse] using h
+        · rw [List.getI_eq_default, List.getI_eq_default] <;>
+            simp only [Nat.add_one_le_iff, h, List.length, le_of_lt, List.length_reverse,
+              List.length_append, List.length_map]
+      · split_ifs <;> rw [Function.update_of_ne h', ← proj_map_nth, hL]
+        rw [Function.update_of_ne h']
 
 中文:
 定理 tr_respects_aux₂
@@ -1245,7 +1335,77 @@ theorem tr_respects_aux₂
     exists L' : ListBlank (forall k, Option (Γ k)),
       (forall k, L'.map (proj k) = ListBlank.mk ((S' k).map some).reverse) ∧
         TM1.stepAux (trStAct q o) v
-            ((Tape.move Dir.right)^[(S k).length] (Tape.m
+            ((Tape.move Dir.right)^[(S k).length] (Tape.mk' ∅ (addBottom L))) =
+          TM1.stepAux q v' ((Tape.move Dir.right)^[(S' k).length] (Tape.mk' ∅ (addBottom L'))) := by
+  simp only [Function.update_self]; cases o with simp only [stWrite, stVar, trStAct, TM1.stepAux]
+  | push f =>
+    have := Tape.write_move_right_n fun a : Γ' K Γ => (a.1, update a.2 k (some (f v)))
+    refine
+      ⟨_, fun k' => ?_, by
+        -- Porting note: `rw [...]` to `erw [...]; rfl`.
+        -- https://github.com/leanprover-community/mathlib4/issues/5164
+        rw [Tape.move_right_n_head]; rw [List.length]; rw [Tape.mk'_nth_nat]; rw [this]
+        erw [addBottom_modifyNth fun a => update a k (some (f v))]
+        rw [Nat.add_one]; rw [iterate_succ']
+        rfl⟩
+    refine ListBlank.ext fun i => ?_
+    rw [ListBlank.nth_map]; rw [ListBlank.nth_modifyNth]; rw [proj]; rw [PointedMap.mk_val]
+    by_cases h' : k' = k
+    · subst k'
+      split_ifs with h
+        <;> simp only [List.reverse_cons, Function.update_self, ListBlank.nth_mk, List.map]
+      · rw [List.getI_eq_getElem _, List.getElem_append_right] <;>
+        simp only [List.length_append, List.length_reverse, List.length_map, ← h,
+          Nat.sub_self, List.length_singleton, List.getElem_singleton,
+          le_refl, Nat.lt_succ_self]
+      rw [← proj_map_nth]; rw [hL]; rw [ListBlank.nth_mk]
+      rcases lt_or_gt_of_ne h with h | h
+      · rw [List.getI_append]
+        simpa only [List.length_map, List.length_reverse] using h
+      · rw [List.getI_eq_default, List.getI_eq_default] <;>
+          simp only [Nat.add_one_le_iff, h, List.length, le_of_lt, List.length_reverse,
+            List.length_append, List.length_map]
+    · split_ifs <;> rw [Function.update_of_ne h', ← proj_map_nth, hL]
+      rw [Function.update_of_ne h']
+  | peek f =>
+    rw [Function.update_eq_self]
+    use L, hL; rw [Tape.move_left_right]; congr
+    cases e : S k; · rfl
+    rw [List.length_cons]; rw [iterate_succ']; rw [Function.comp]; rw [Tape.move_right_left]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_snd]; rw [stk_nth_val _ (hL k)]; rw [e]; rw [List.reverse_cons]; rw [← List.length_reverse]; rw [List.getElem?_concat_length]
+    rfl
+  | pop f =>
+    rcases e : S k with - | ⟨hd, tl⟩
+    · simp only [Tape.mk'_head, ListBlank.head_cons, Tape.move_left_mk', List.length,
+        List.head?, iterate_zero_apply, List.tail_nil]
+      rw [← e]; rw [Function.update_eq_self]
+      exact ⟨L, hL, by rw [addBottom_head_fst, cond]⟩
+    · refine
+        ⟨_, fun k' => ?_, by
+          erw [List.length_cons, Tape.move_right_n_head, Tape.mk'_nth_nat, addBottom_nth_succ_fst,
+            cond_false, iterate_succ', Function.comp, Tape.move_right_left, Tape.move_right_n_head,
+            Tape.mk'_nth_nat, Tape.write_move_right_n fun a : Γ' K Γ => (a.1, update a.2 k none),
+            addBottom_modifyNth fun a => update a k none, addBottom_nth_snd,
+            stk_nth_val _ (hL k), e,
+            show (List.cons hd tl).reverse[tl.length]? = some hd by
+              rw [List.reverse_cons]; rw [← List.length_reverse]; rw [List.getElem?_concat_length],
+            List.head?, List.tail]⟩
+      refine ListBlank.ext fun i => ?_
+      rw [ListBlank.nth_map]; rw [ListBlank.nth_modifyNth]; rw [proj]; rw [PointedMap.mk_val]
+      by_cases h' : k' = k
+      · subst k'
+        split_ifs with h <;> simp only [Function.update_self, ListBlank.nth_mk, List.tail]
+        · rw [List.getI_eq_default]
+          · rfl
+          rw [h]; rw [List.length_reverse]; rw [List.length_map]
+        rw [← proj_map_nth]; rw [hL]; rw [ListBlank.nth_mk]; rw [e]; rw [List.map]; rw [List.reverse_cons]
+        rcases lt_or_gt_of_ne h with h | h
+        · rw [List.getI_append]
+          simpa only [List.length_map, List.length_reverse] using h
+        · rw [List.getI_eq_default, List.getI_eq_default] <;>
+            simp only [Nat.add_one_le_iff, h, List.length, le_of_lt, List.length_reverse,
+              List.length_append, List.length_map]
+      · split_ifs <;> rw [Function.update_of_ne h', ← proj_map_nth, hL]
+        rw [Function.update_of_ne h']
 -/
 theorem tr_respects_aux₂ [DecidableEq K] {k : K} {q : TM1.Stmt (Γ' K Γ) (Λ' K Γ Λ σ) σ} {v : σ}
     {S : forall k, List (Γ k)} {L : ListBlank (forall k, Option (Γ k))}
@@ -1388,7 +1548,8 @@ theorem tr_respects_aux₁
     simp only [TM1.step, TM1.stepAux, tr, Tape.mk'_nth_nat, Tape.move_right_n_head,
       addBottom_nth_snd, Option.mem_def]
     rw [stk_nth_val _ hL]; rw [List.getElem?_eq_getElem]
- 
+    · rfl
+    · rwa [List.length_reverse]
 
 中文:
 定理 tr_respects_aux₁
@@ -1402,7 +1563,8 @@ theorem tr_respects_aux₁
     simp only [TM1.step, TM1.stepAux, tr, Tape.mk'_nth_nat, Tape.move_right_n_head,
       addBottom_nth_snd, Option.mem_def]
     rw [stk_nth_val _ hL]; rw [List.getElem?_eq_getElem]
- 
+    · rfl
+    · rwa [List.length_reverse]
 
 Depends on / 依赖: List.getElem, List.length_reverse, Option.mem_def, TM1.step, TM1.stepAux, Tape.mk, Tape.move_right_n_head, _eq_getElem, _nth_nat, addBottom_nth_snd, getElem, iterate_succ_apply, le_of_lt, length_reverse, mem_def, move_right_n_head, stepAux, stk_nth_val
 -/
@@ -1434,7 +1596,8 @@ theorem tr_respects_aux₃
   | succ n IH =>
     refine Reaches₀.head ?_ IH
     simp only [Option.mem_def, TM1.step]
-    rw [Option.some_inj]; rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_succ_fst]; rw [TM1.stepAux]; rw [iterate_succ']; r
+    rw [Option.some_inj]; rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_succ_fst]; rw [TM1.stepAux]; rw [iterate_succ']; rw [Function.comp_apply]; rw [Tape.move_right_left]
+    rfl
 
 中文:
 定理 tr_respects_aux₃
@@ -1446,7 +1609,8 @@ theorem tr_respects_aux₃
   | succ n IH =>
     refine Reaches₀.head ?_ IH
     simp only [Option.mem_def, TM1.step]
-    rw [Option.some_inj]; rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_succ_fst]; rw [TM1.stepAux]; rw [iterate_succ']; r
+    rw [Option.some_inj]; rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_succ_fst]; rw [TM1.stepAux]; rw [iterate_succ']; rw [Function.comp_apply]; rw [Tape.move_right_left]
+    rfl
 
 Depends on / 依赖: Function, Function.comp_apply, Option.mem_def, Option.some_inj, TM1.step, TM1.stepAux, Tape.mk, Tape.move_right_left, Tape.move_right_n_head, _nth_nat, addBottom_nth_succ_fst, comp_apply, iterate_succ, mem_def, move_right_left, move_right_n_head, some_inj, stepAux
 -/
@@ -1472,7 +1636,11 @@ theorem tr_respects_aux
   have hgo := tr_respects_aux₁ M o q v (hT k) _ le_rfl
   obtain ⟨T', hT', hrun⟩ := tr_respects_aux₂ (Λ := Λ) hT o
   have := hgo.tail' rfl
-  rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_snd]; rw [stk_nth_val _
+  rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_snd]; rw [stk_nth_val _ (hT k)]; rw [List.getElem?_eq_none (le_of_eq List.length_reverse)]; rw [Option.isNone]; rw [cond]; rw [hrun]; rw [TM1.stepAux] at this
+  obtain ⟨c, gc, rc⟩ := IH hT'
+  refine ⟨c, gc, (this.to₀.trans (tr_respects_aux₃ M _) c (TransGen.head' rfl ?_)).to_reflTransGen⟩
+  rw [tr]; rw [TM1.stepAux]; rw [Tape.mk'_head]; rw [addBottom_head_fst]
+  exact rc
 
 中文:
 定理 tr_respects_aux
@@ -1482,7 +1650,11 @@ theorem tr_respects_aux
   have hgo := tr_respects_aux₁ M o q v (hT k) _ le_rfl
   obtain ⟨T', hT', hrun⟩ := tr_respects_aux₂ (Λ := Λ) hT o
   have := hgo.tail' rfl
-  rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_snd]; rw [stk_nth_val _
+  rw [tr]; rw [TM1.stepAux]; rw [Tape.move_right_n_head]; rw [Tape.mk'_nth_nat]; rw [addBottom_nth_snd]; rw [stk_nth_val _ (hT k)]; rw [List.getElem?_eq_none (le_of_eq List.length_reverse)]; rw [Option.isNone]; rw [cond]; rw [hrun]; rw [TM1.stepAux] at this
+  obtain ⟨c, gc, rc⟩ := IH hT'
+  refine ⟨c, gc, (this.to₀.trans (tr_respects_aux₃ M _) c (TransGen.head' rfl ?_)).to_reflTransGen⟩
+  rw [tr]; rw [TM1.stepAux]; rw [Tape.mk'_head]; rw [addBottom_head_fst]
+  exact rc
 
 Depends on / 依赖: List.getElem, List.length_reverse, Option.isNone, TM1.stepAux, Tape.mk, Tape.move_right_n_head, _eq_none, _nth_nat, addBottom_nth_snd, getElem, hgo.tail, isNone, le_of_eq, le_rfl, length_reverse, move_right_n_head, stepAux, step_run, stk_nth_val, this.to
 -/
@@ -1521,7 +1693,15 @@ theorem tr_respects
   simp only [tr]
   generalize M l = N
   induction N using stmtStRec generalizing v S L hT with
-  | run k s q IH => exact tr
+  | run k s q IH => exact tr_respects_aux M hT s @IH
+  | load a _ IH => exact IH _ hT
+  | branch p q₁ q₂ IH₁ IH₂ =>
+    unfold TM2.stepAux trNormal TM1.stepAux
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/12129): additional beta reduction needed
+    beta_reduce
+    cases p v <;> [exact IH₂ _ hT; exact IH₁ _ hT]
+  | goto => exact ⟨_, ⟨_, hT⟩, ReflTransGen.refl⟩
+  | halt => exact ⟨_, ⟨_, hT⟩, ReflTransGen.refl⟩
 
 中文:
 定理 tr_respects
@@ -1534,7 +1714,15 @@ theorem tr_respects
   simp only [tr]
   generalize M l = N
   induction N using stmtStRec generalizing v S L hT with
-  | run k s q IH => exact tr
+  | run k s q IH => exact tr_respects_aux M hT s @IH
+  | load a _ IH => exact IH _ hT
+  | branch p q₁ q₂ IH₁ IH₂ =>
+    unfold TM2.stepAux trNormal TM1.stepAux
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/12129): additional beta reduction needed
+    beta_reduce
+    cases p v <;> [exact IH₂ _ hT; exact IH₁ _ hT]
+  | goto => exact ⟨_, ⟨_, hT⟩, ReflTransGen.refl⟩
+  | halt => exact ⟨_, ⟨_, hT⟩, ReflTransGen.refl⟩
 
 Depends on / 依赖: Reaches, TM1.step, TM1.stepAux, TM2.stepAux, TransGen, TransGen.head, branch, generalize, generalizing, rsuffices, stepAux, stmtStRec, trNormal, tr_respects_aux
 -/
@@ -1572,7 +1760,20 @@ theorem trCfg_init
   · refine ⟨ListBlank.mk (L.reverse.map fun a => update default k (some a)), fun k' => ?_⟩
     refine ListBlank.ext fun i => ?_
     rw [ListBlank.map_mk]; rw [ListBlank.nth_mk]; rw [List.getI_eq_getElem?_getD]; rw [List.map_map]
-    have : ((proj k').f ∘ fun a => updat
+    have : ((proj k').f ∘ fun a => update (β := fun k => Option (Γ k)) default k (some a))
+      = fun a => (proj k').f (update (β := fun k => Option (Γ k)) default k (some a)) := rfl
+    rw [this]; rw [List.getElem?_map]; rw [proj]; rw [PointedMap.mk_val]
+    by_cases h : k' = k
+    · subst k'
+      simp only [Function.update_self]
+      rw [ListBlank.nth_mk]; rw [List.getI_eq_getElem?_getD]; rw [← List.map_reverse]; rw [List.getElem?_map]
+    · simp only [Function.update_of_ne h]
+      rw [ListBlank.nth_mk]; rw [List.getI_eq_getElem?_getD]; rw [List.map]; rw [List.reverse_nil]
+      cases L.reverse[i]? <;> rfl
+  · rw [trInit, TM1.init]
+    congr <;> cases L.reverse <;> try rfl
+    simp only [List.map_map, List.tail_cons, List.map]
+    rfl
 
 中文:
 定理 trCfg_init
@@ -1583,7 +1784,20 @@ theorem trCfg_init
   · refine ⟨ListBlank.mk (L.reverse.map fun a => update default k (some a)), fun k' => ?_⟩
     refine ListBlank.ext fun i => ?_
     rw [ListBlank.map_mk]; rw [ListBlank.nth_mk]; rw [List.getI_eq_getElem?_getD]; rw [List.map_map]
-    have : ((proj k').f ∘ fun a => updat
+    have : ((proj k').f ∘ fun a => update (β := fun k => Option (Γ k)) default k (some a))
+      = fun a => (proj k').f (update (β := fun k => Option (Γ k)) default k (some a)) := rfl
+    rw [this]; rw [List.getElem?_map]; rw [proj]; rw [PointedMap.mk_val]
+    by_cases h : k' = k
+    · subst k'
+      simp only [Function.update_self]
+      rw [ListBlank.nth_mk]; rw [List.getI_eq_getElem?_getD]; rw [← List.map_reverse]; rw [List.getElem?_map]
+    · simp only [Function.update_of_ne h]
+      rw [ListBlank.nth_mk]; rw [List.getI_eq_getElem?_getD]; rw [List.map]; rw [List.reverse_nil]
+      cases L.reverse[i]? <;> rfl
+  · rw [trInit, TM1.init]
+    congr <;> cases L.reverse <;> try rfl
+    simp only [List.map_map, List.tail_cons, List.map]
+    rfl
 
 Depends on / 依赖: L.reverse.map, List.getElem, List.getI_eq_getElem, List.map_map, ListBlank, ListBlank.ext, ListBlank.map_mk, ListBlank.mk, ListBlank.nth_mk, PointedMap, PointedMap.mk_val, TM1.init, _getD, _map, getElem, getI_eq_getElem, map_map, map_mk, mk_val, nth_mk
 -/
@@ -1699,7 +1913,48 @@ theorem tr_supports
   proof: ⟨Finset.mem_biUnion.2 ⟨_, ss.1, Finset.mem_insert.2 Or.inl rfl⟩, fun l' h => by
     suffices forall (q) (_ : TM2.SupportsStmt S q) (_ : forall x in trStmts₁ q, x in trSupp M S),
         TM1.SupportsStmt (trSupp M S) (trNormal q) ∧
-        forall l' in trStmts₁ q, TM1.SupportsStmt (trSupp M S) (tr M 
+        forall l' in trStmts₁ q, TM1.SupportsStmt (trSupp M S) (tr M l') by
+      rcases Finset.mem_biUnion.1 h with ⟨l, lS, h⟩
+      have :=
+        this _ (ss.2 l lS) fun x hx => Finset.mem_biUnion.2 ⟨_, lS, Finset.mem_insert_of_mem hx⟩
+      rcases Finset.mem_insert.1 h with (rfl | h) <;> [exact this.1; exact this.2 _ h]
+    clear h l'
+    refine stmtStRec ?_ ?_ ?_ ?_ ?_
+    · intro _ s _ IH ss' sub -- stack op
+      rw [TM2to1.supports_run] at ss'
+      simp only [TM2to1.trStmts₁_run, Finset.mem_union, Finset.mem_insert, Finset.mem_singleton]
+        at sub
+      have hgo := sub _ (Or.inl <| Or.inl rfl)
+      have hret := sub _ (Or.inl <| Or.inr rfl)
+obtain ⟨IH₁, IH₂⟩ := IH ss' fun x hx => sub x Or.inr hx
+      refine ⟨by simp only [trNormal_run, TM1.SupportsStmt]; intros; exact hgo, fun l h => ?_⟩
+      rw [trStmts₁_run] at h
+      simp only [Finset.mem_union, Finset.mem_insert, Finset.mem_singleton]
+        at h
+      rcases h with (⟨rfl | rfl⟩ | h)
+      · cases s
+        · exact ⟨fun _ _ => hret, fun _ _ => hgo⟩
+        · exact ⟨fun _ _ => hret, fun _ _ => hgo⟩
+        · exact ⟨⟨fun _ _ => hret, fun _ _ => hret⟩, fun _ _ => hgo⟩
+      · unfold TM1.SupportsStmt TM2to1.tr
+        exact ⟨IH₁, fun _ _ => hret⟩
+      · exact IH₂ _ h
+    · intro _ _ IH ss' sub -- load
+      unfold TM2to1.trStmts₁ at sub ⊢
+      exact IH ss' sub
+    · intro _ _ _ IH₁ IH₂ ss' sub -- branch
+      unfold TM2to1.trStmts₁ at sub
+obtain ⟨IH₁₁, IH₁₂⟩ := IH₁ ss'.1 fun x hx => sub x Finset.mem_union_left _ hx
+obtain ⟨IH₂₁, IH₂₂⟩ := IH₂ ss'.2 fun x hx => sub x Finset.mem_union_right _ hx
+      refine ⟨⟨IH₁₁, IH₂₁⟩, fun l h => ?_⟩
+      rw [trStmts₁] at h
+      rcases Finset.mem_union.1 h with (h | h) <;> [exact IH₁₂ _ h; exact IH₂₂ _ h]
+    · intro _ ss' _ -- goto
+      simp only [trStmts₁, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
+      exact fun _ v => Finset.mem_biUnion.2 ⟨_, ss' v, Finset.mem_insert_self _ _⟩
+    · intro _ _ -- halt
+      simp only [trStmts₁, Finset.notMem_empty]
+      exact ⟨trivial, fun _ => False.elim⟩⟩
 
 中文:
 定理 tr_supports
@@ -1708,7 +1963,48 @@ theorem tr_supports
   证明: ⟨Finset.mem_biUnion.2 ⟨_, ss.1, Finset.mem_insert.2 Or.inl rfl⟩, fun l' h => by
     suffices forall (q) (_ : TM2.SupportsStmt S q) (_ : forall x in trStmts₁ q, x in trSupp M S),
         TM1.SupportsStmt (trSupp M S) (trNormal q) ∧
-        forall l' in trStmts₁ q, TM1.SupportsStmt (trSupp M S) (tr M 
+        forall l' in trStmts₁ q, TM1.SupportsStmt (trSupp M S) (tr M l') by
+      rcases Finset.mem_biUnion.1 h with ⟨l, lS, h⟩
+      have :=
+        this _ (ss.2 l lS) fun x hx => Finset.mem_biUnion.2 ⟨_, lS, Finset.mem_insert_of_mem hx⟩
+      rcases Finset.mem_insert.1 h with (rfl | h) <;> [exact this.1; exact this.2 _ h]
+    clear h l'
+    refine stmtStRec ?_ ?_ ?_ ?_ ?_
+    · intro _ s _ IH ss' sub -- stack op
+      rw [TM2to1.supports_run] at ss'
+      simp only [TM2to1.trStmts₁_run, Finset.mem_union, Finset.mem_insert, Finset.mem_singleton]
+        at sub
+      have hgo := sub _ (Or.inl <| Or.inl rfl)
+      have hret := sub _ (Or.inl <| Or.inr rfl)
+obtain ⟨IH₁, IH₂⟩ := IH ss' fun x hx => sub x Or.inr hx
+      refine ⟨by simp only [trNormal_run, TM1.SupportsStmt]; intros; exact hgo, fun l h => ?_⟩
+      rw [trStmts₁_run] at h
+      simp only [Finset.mem_union, Finset.mem_insert, Finset.mem_singleton]
+        at h
+      rcases h with (⟨rfl | rfl⟩ | h)
+      · cases s
+        · exact ⟨fun _ _ => hret, fun _ _ => hgo⟩
+        · exact ⟨fun _ _ => hret, fun _ _ => hgo⟩
+        · exact ⟨⟨fun _ _ => hret, fun _ _ => hret⟩, fun _ _ => hgo⟩
+      · unfold TM1.SupportsStmt TM2to1.tr
+        exact ⟨IH₁, fun _ _ => hret⟩
+      · exact IH₂ _ h
+    · intro _ _ IH ss' sub -- load
+      unfold TM2to1.trStmts₁ at sub ⊢
+      exact IH ss' sub
+    · intro _ _ _ IH₁ IH₂ ss' sub -- branch
+      unfold TM2to1.trStmts₁ at sub
+obtain ⟨IH₁₁, IH₁₂⟩ := IH₁ ss'.1 fun x hx => sub x Finset.mem_union_left _ hx
+obtain ⟨IH₂₁, IH₂₂⟩ := IH₂ ss'.2 fun x hx => sub x Finset.mem_union_right _ hx
+      refine ⟨⟨IH₁₁, IH₂₁⟩, fun l h => ?_⟩
+      rw [trStmts₁] at h
+      rcases Finset.mem_union.1 h with (h | h) <;> [exact IH₁₂ _ h; exact IH₂₂ _ h]
+    · intro _ ss' _ -- goto
+      simp only [trStmts₁, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
+      exact fun _ v => Finset.mem_biUnion.2 ⟨_, ss' v, Finset.mem_insert_self _ _⟩
+    · intro _ _ -- halt
+      simp only [trStmts₁, Finset.notMem_empty]
+      exact ⟨trivial, fun _ => False.elim⟩⟩
 
 Depends on / 依赖: Finset, Finset.mem_biUnion, Finset.mem_insert, Finset.mem_insert_of_mem, Or.inl, SupportsStmt, TM1.SupportsStmt, TM2.SupportsStmt, mem_biUnion, mem_insert, mem_insert_of_mem, trNormal, trSupp
 -/

@@ -163,7 +163,16 @@ lemma weylGroup.induction
   let pred' : (g : Aut P) -> g in Submonoid.closure (range (Equiv.reflection P)) -> Prop :=
 fun g hg => pred g by change g in P.weylGroup.toSubmonoid; rwa [weylGroup_toSubmonoid]
   have hx' : x in Submonoid.closure (range (Equiv.reflection P)) := by rwa [← weylGroup_toSubmonoid]
-  suffices pred' 
+  suffices pred' x hx' from this
+  apply Submonoid.closure_induction
+  · rintro - ⟨i, rfl⟩
+    exact mem i
+  · exact one
+  · intro x y hx hy hx' hy'
+    rw [← weylGroup_toSubmonoid] at hx hy
+    exact mul x y hx hy hx' hy'
+
+@[elab_as_elim]
 
 中文:
 引理 weylGroup.induction
@@ -172,7 +181,16 @@ fun g hg => pred g by change g in P.weylGroup.toSubmonoid; rwa [weylGroup_toSubm
   let pred' : (g : Aut P) -> g in Submonoid.closure (range (Equiv.reflection P)) -> Prop :=
 fun g hg => pred g by change g in P.weylGroup.toSubmonoid; rwa [weylGroup_toSubmonoid]
   have hx' : x in Submonoid.closure (range (Equiv.reflection P)) := by rwa [← weylGroup_toSubmonoid]
-  suffices pred' 
+  suffices pred' x hx' from this
+  apply Submonoid.closure_induction
+  · rintro - ⟨i, rfl⟩
+    exact mem i
+  · exact one
+  · intro x y hx hy hx' hy'
+    rw [← weylGroup_toSubmonoid] at hx hy
+    exact mul x y hx hy hx' hy'
+
+@[elab_as_elim]
 
 Depends on / 依赖: Equiv.reflection, P.weylGroup.toSubmonoid, Submonoid, Submonoid.closure, Submonoid.closure_induction, closure, closure_induction, reflection, toSubmonoid, weylGroup, weylGroup_toSubmonoid
 -/
@@ -244,7 +262,22 @@ lemma range_weylGroup_weightHom
       SetLike.mem_coe]
     use Equiv.reflection P i
     exact ⟨reflection_mem_weylGroup P i, Equiv.reflection_weightEquiv P i⟩
-  
+  · rintro fg ⟨⟨w, hw⟩, rfl⟩
+    induction hw using Subgroup.closure_induction'' with
+    | one =>
+      change ((Equiv.weightHom P).domRestrict P.weylGroup) 1 in _
+      simp only [map_one, one_mem]
+    | mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [MonoidHom.domRestrict_apply, Equiv.weightHom_apply, Equiv.reflection_weightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | inv_mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [Equiv.reflection_inv, MonoidHom.domRestrict_apply, Equiv.weightHom_apply,
+        Equiv.reflection_weightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | mul w₁ w₂ hw₁ hw₂ h₁ h₂ =>
+      simpa only [← Submonoid.mk_mul_mk _ w₁ w₂ hw₁ hw₂, map_mul] using! Subgroup.mul_mem _ h₁ h₂
 
 中文:
 引理 range_weylGroup_weightHom
@@ -255,7 +288,22 @@ lemma range_weylGroup_weightHom
       SetLike.mem_coe]
     use Equiv.reflection P i
     exact ⟨reflection_mem_weylGroup P i, Equiv.reflection_weightEquiv P i⟩
-  
+  · rintro fg ⟨⟨w, hw⟩, rfl⟩
+    induction hw using Subgroup.closure_induction'' with
+    | one =>
+      change ((Equiv.weightHom P).domRestrict P.weylGroup) 1 in _
+      simp only [map_one, one_mem]
+    | mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [MonoidHom.domRestrict_apply, Equiv.weightHom_apply, Equiv.reflection_weightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | inv_mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [Equiv.reflection_inv, MonoidHom.domRestrict_apply, Equiv.weightHom_apply,
+        Equiv.reflection_weightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | mul w₁ w₂ hw₁ hw₂ h₁ h₂ =>
+      simpa only [← Submonoid.mk_mul_mk _ w₁ w₂ hw₁ hw₂, map_mul] using! Subgroup.mul_mem _ h₁ h₂
 
 Depends on / 依赖: Equiv.reflection, Equiv.reflection_weightEquiv, Equiv.weightHom, Equiv.weightHom_apply, MonoidHom, MonoidHom.domRestrict_range, P.weylGroup, SetLike, SetLike.mem_coe, Subgroup, Subgroup.closure_eq_of_le, Subgroup.closure_induction, Subgroup.coe_map, closure_eq_of_le, closure_induction, coe_map, domRestrict, domRestrict_range, map_one, mem_coe
 -/
@@ -299,7 +347,22 @@ lemma range_weylGroup_coweightHom
     use Equiv.reflection P i
     refine ⟨reflection_mem_weylGroup P i, by simp⟩
   · rintro fg ⟨⟨w, hw⟩, rfl⟩
-    induction hw usi
+    induction hw using Subgroup.closure_induction'' with
+    | one =>
+      change ((Equiv.coweightHom P).domRestrict P.weylGroup) 1 in _
+      simp only [map_one, one_mem]
+    | mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [MonoidHom.domRestrict_apply, Equiv.coweightHom_apply,
+        Equiv.reflection_coweightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | inv_mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [Equiv.reflection_inv, MonoidHom.domRestrict_apply, Equiv.coweightHom_apply,
+        Equiv.reflection_coweightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | mul w₁ w₂ hw₁ hw₂ h₁ h₂ =>
+      simpa only [← Submonoid.mk_mul_mk _ w₁ w₂ hw₁ hw₂, map_mul] using! Subgroup.mul_mem _ h₁ h₂
 
 中文:
 引理 range_weylGroup_coweightHom
@@ -311,7 +374,22 @@ lemma range_weylGroup_coweightHom
     use Equiv.reflection P i
     refine ⟨reflection_mem_weylGroup P i, by simp⟩
   · rintro fg ⟨⟨w, hw⟩, rfl⟩
-    induction hw usi
+    induction hw using Subgroup.closure_induction'' with
+    | one =>
+      change ((Equiv.coweightHom P).domRestrict P.weylGroup) 1 in _
+      simp only [map_one, one_mem]
+    | mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [MonoidHom.domRestrict_apply, Equiv.coweightHom_apply,
+        Equiv.reflection_coweightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | inv_mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [Equiv.reflection_inv, MonoidHom.domRestrict_apply, Equiv.coweightHom_apply,
+        Equiv.reflection_coweightEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | mul w₁ w₂ hw₁ hw₂ h₁ h₂ =>
+      simpa only [← Submonoid.mk_mul_mk _ w₁ w₂ hw₁ hw₂, map_mul] using! Subgroup.mul_mem _ h₁ h₂
 
 Depends on / 依赖: Equiv.coweig, Equiv.coweightHom, Equiv.reflection, MonoidHom, MonoidHom.domRestrict_apply, MonoidHom.domRestrict_range, P.weylGroup, SetLike, SetLike.mem_coe, Subgroup, Subgroup.closure_eq_of_le, Subgroup.closure_induction, Subgroup.coe_map, closure_eq_of_le, closure_induction, coe_map, coweig, coweightHom, domRestrict, domRestrict_apply
 -/
@@ -369,7 +447,21 @@ lemma range_weylGroupToPerm
     use Equiv.reflection P i
     refine ⟨reflection_mem_weylGroup P i, by simp⟩
   · rintro fg ⟨⟨w, hw⟩, rfl⟩
-    induction hw using Sub
+    induction hw using Subgroup.closure_induction'' with
+    | one =>
+      change ((Equiv.indexHom P).domRestrict P.weylGroup) 1 in _
+      simp only [map_one, one_mem]
+    | mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [MonoidHom.domRestrict_apply, Equiv.indexHom_apply, Equiv.reflection_indexEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | inv_mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [Equiv.reflection_inv, MonoidHom.domRestrict_apply, Equiv.indexHom_apply,
+        Equiv.reflection_indexEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | mul w₁ w₂ hw₁ hw₂ h₁ h₂ =>
+      simpa only [← Submonoid.mk_mul_mk _ w₁ w₂ hw₁ hw₂, map_mul] using! Subgroup.mul_mem _ h₁ h₂
 
 中文:
 引理 range_weylGroupToPerm
@@ -380,7 +472,21 @@ lemma range_weylGroupToPerm
     use Equiv.reflection P i
     refine ⟨reflection_mem_weylGroup P i, by simp⟩
   · rintro fg ⟨⟨w, hw⟩, rfl⟩
-    induction hw using Sub
+    induction hw using Subgroup.closure_induction'' with
+    | one =>
+      change ((Equiv.indexHom P).domRestrict P.weylGroup) 1 in _
+      simp only [map_one, one_mem]
+    | mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [MonoidHom.domRestrict_apply, Equiv.indexHom_apply, Equiv.reflection_indexEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | inv_mem w' hw' =>
+      obtain ⟨i, rfl⟩ := hw'
+      simp only [Equiv.reflection_inv, MonoidHom.domRestrict_apply, Equiv.indexHom_apply,
+        Equiv.reflection_indexEquiv]
+      simpa only [reflection_mem_weylGroup] using! Subgroup.subset_closure (mem_range_self i)
+    | mul w₁ w₂ hw₁ hw₂ h₁ h₂ =>
+      simpa only [← Submonoid.mk_mul_mk _ w₁ w₂ hw₁ hw₂, map_mul] using! Subgroup.mul_mem _ h₁ h₂
 
 Depends on / 依赖: Equiv.indexHom, Equiv.indexHom_, Equiv.reflection, MonoidHom, MonoidHom.domRestrict_apply, MonoidHom.domRestrict_range, P.weylGroup, SetLike, SetLike.mem_coe, Subgroup, Subgroup.closure_eq_of_le, Subgroup.closure_induction, Subgroup.coe_map, closure_eq_of_le, closure_induction, coe_map, domRestrict, domRestrict_apply, domRestrict_range, indexHom
 -/

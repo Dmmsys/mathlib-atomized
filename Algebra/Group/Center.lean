@@ -585,7 +585,8 @@ theorem center_pi
     commute_iff_eq, funext_iff, Pi.mul_def]
   refine ⟨fun ⟨h1, h2, h3⟩ i => ?_, by grind⟩
   exact ⟨fun a => by simpa using h1 (update x i a) i,
-    fun b c => by simpa using h2 (update x i b) (u
+    fun b c => by simpa using h2 (update x i b) (update x i c) i,
+    fun a b => by simpa using h3 (update x i a) (update x i b) i⟩
 
 中文:
 定理 center_pi
@@ -597,7 +598,8 @@ theorem center_pi
     commute_iff_eq, funext_iff, Pi.mul_def]
   refine ⟨fun ⟨h1, h2, h3⟩ i => ?_, by grind⟩
   exact ⟨fun a => by simpa using h1 (update x i a) i,
-    fun b c => by simpa using h2 (update x i b) (u
+    fun b c => by simpa using h2 (update x i b) (update x i c) i,
+    fun a b => by simpa using h3 (update x i a) (update x i b) i⟩
 -/
 protected theorem center_pi {ι : Type*} {A : ι -> Type*} [Π i, Mul (A i)] :
     center (Π i, A i) = univ.pi fun i => center (A i) := by

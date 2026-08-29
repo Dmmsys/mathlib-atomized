@@ -37,7 +37,9 @@ theorem Submodule.FG.exists_rTensor_fg_inclusion_eq
   apply_fun (Module.fgSystem.equiv R P).symm.toLinearMap.rTensor M at eq
   apply_fun directLimitLeft _ _ at eq
   simp_rw [← LinearMap.rTensor_comp_apply, ← (LinearEquiv.eq_toLinearMap_symm_comp _ _).mpr
-    (Module.fgSystem.equiv_comp_of N), direct
+    (Module.fgSystem.equiv_comp_of N), directLimitLeft_rTensor_of] at eq
+  have ⟨N', le, eq⟩ := Module.DirectLimit.exists_eq_of_of_eq eq
+  exact ⟨_, N'.2, le, eq⟩
 
 中文:
 定理 子模.FG.存在_rTensor_fg_inclusion_eq
@@ -47,7 +49,9 @@ theorem Submodule.FG.exists_rTensor_fg_inclusion_eq
   apply_fun (Module.fgSystem.equiv R P).symm.toLinearMap.rTensor M at eq
   apply_fun directLimitLeft _ _ at eq
   simp_rw [← LinearMap.rTensor_comp_apply, ← (LinearEquiv.eq_toLinearMap_symm_comp _ _).mpr
-    (Module.fgSystem.equiv_comp_of N), direct
+    (Module.fgSystem.equiv_comp_of N), directLimitLeft_rTensor_of] at eq
+  have ⟨N', le, eq⟩ := Module.DirectLimit.exists_eq_of_of_eq eq
+  exact ⟨_, N'.2, le, eq⟩
 
 Depends on / 依赖: DirectLimit, LinearEquiv, LinearEquiv.eq_toLinearMap_symm_comp, LinearMap, LinearMap.rTensor_comp_apply, Module, Module.DirectLimit.exists_eq_of_of_eq, Module.fgSystem.equiv, Module.fgSystem.equiv_comp_of, N.FG, Submodule, apply_fun, directLimitLeft, directLimitLeft_rTensor_of, eq_toLinearMap_symm_comp, equiv_comp_of, exists_eq_of_of_eq, fgSystem, rTensor, rTensor_comp_apply
 -/

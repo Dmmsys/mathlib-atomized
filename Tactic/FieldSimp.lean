@@ -95,7 +95,10 @@ definition evalPrettyMonomial
   | 1 => return ⟨x, q(zpow'_one $x)⟩
   | .ofNat r => do
     let pf ← mkDecideProofQ q($r != 0)
-    return ⟨q($x ^ $r), q(zpow'_ofNat $x $pf)
+    return ⟨q($x ^ $r), q(zpow'_ofNat $x $pf)⟩
+  | r => do
+    let pf ← mkDecideProofQ q($r != 0)
+    return ⟨q($x ^ $r), q(zpow'_of_ne_zero_right _ _ $pf)⟩
 
 中文:
 定义 evalPrettyMonomial
@@ -106,7 +109,10 @@ definition evalPrettyMonomial
   | 1 => return ⟨x, q(zpow'_one $x)⟩
   | .ofNat r => do
     let pf ← mkDecideProofQ q($r != 0)
-    return ⟨q($x ^ $r), q(zpow'_ofNat $x $pf)
+    return ⟨q($x ^ $r), q(zpow'_ofNat $x $pf)⟩
+  | r => do
+    let pf ← mkDecideProofQ q($r != 0)
+    return ⟨q($x ^ $r), q(zpow'_of_ne_zero_right _ _ $pf)⟩
 
 Depends on / 依赖: _ofNat, _of_ne_zero_right, _one, _zero_eq_div, exponent, mkDecideProofQ, nonzero, return
 -/
@@ -174,7 +180,9 @@ definition removeZeros
     let ⟨t', pf⟩ ← removeZeros disch iM t
     let ⟨l', pf'⟩ ← tryClearZero disch iM r x i t'
     let pf' : Q(NF.eval (($r, $x) ::ᵣ $(qNF.toNF t')) = NF.eval $(qNF.toNF l')) := pf'
-    let pf'' : Q(NF.eval (($r, $x) ::ᵣ $(qNF.toNF 
+    let pf'' : Q(NF.eval (($r, $x) ::ᵣ $(qNF.toNF t)) = NF.eval $(qNF.toNF l')) :=
+      q(NF.eval_cons_eq_eval_of_eq_of_eq $r $x $pf $pf')
+    return ⟨l', pf''⟩
 
 中文:
 定义 removeZeros
@@ -184,7 +192,9 @@ definition removeZeros
     let ⟨t', pf⟩ ← removeZeros disch iM t
     let ⟨l', pf'⟩ ← tryClearZero disch iM r x i t'
     let pf' : Q(NF.eval (($r, $x) ::ᵣ $(qNF.toNF t')) = NF.eval $(qNF.toNF l')) := pf'
-    let pf'' : Q(NF.eval (($r, $x) ::ᵣ $(qNF.toNF 
+    let pf'' : Q(NF.eval (($r, $x) ::ᵣ $(qNF.toNF t)) = NF.eval $(qNF.toNF l')) :=
+      q(NF.eval_cons_eq_eval_of_eq_of_eq $r $x $pf $pf')
+    return ⟨l', pf''⟩
 
 Depends on / 依赖: NF.eval, NF.eval_cons_eq_eval_of_eq_of_eq, eval_cons_eq_eval_of_eq_of_eq, qNF.toNF, removeZeros, return, tryClearZero
 -/
@@ -215,7 +225,10 @@ definition split
     if r > 0 then
       return ⟨((r, x), i) :: t_n, t_d, (q(NF.cons_eq_div_of_eq_div $r $x $pf):)⟩
     else if r = 0 then
-      return ⟨((1, x), i) :: t_n, ((1, x), i) :
+      return ⟨((1, x), i) :: t_n, ((1, x), i) :: t_d, (q(NF.cons_zero_eq_div_of_eq_div $x $pf):)⟩
+    else
+      let r' : Int := -r
+      return ⟨t_n, ((r', x), i) :: t_d, (q(NF.cons_eq_div_of_eq_div' $r' $x $pf):)⟩
 
 中文:
 定义 split
@@ -227,7 +240,10 @@ definition split
     if r > 0 then
       return ⟨((r, x), i) :: t_n, t_d, (q(NF.cons_eq_div_of_eq_div $r $x $pf):)⟩
     else if r = 0 then
-      return ⟨((1, x), i) :: t_n, ((1, x), i) :
+      return ⟨((1, x), i) :: t_n, ((1, x), i) :: t_d, (q(NF.cons_zero_eq_div_of_eq_div $x $pf):)⟩
+    else
+      let r' : Int := -r
+      return ⟨t_n, ((r', x), i) :: t_d, (q(NF.cons_eq_div_of_eq_div' $r' $x $pf):)⟩
 
 Depends on / 依赖: Eq.symm, NF.cons_eq_div_of_eq_div, NF.cons_zero_eq_div_of_eq_div, cons_eq_div_of_eq_div, cons_zero_eq_div_of_eq_div, div_one, return
 -/
@@ -260,7 +276,10 @@ definition evalPrettyAux
     return ⟨e, q(by rw [NF.eval_cons]; exact Eq.trans (one_mul _) $pf)⟩
   | ((r, x), k) :: t => do
     let ⟨e, pf_e⟩ ← evalPrettyMonomial q(inferInstance) r x
-    let ⟨t', p
+    let ⟨t', pf⟩ ← evalPrettyAux iM t
+    have pf'' : Q(NF.eval $(qNF.toNF (((r, x), k) :: t)) = (NF.eval $(qNF.toNF t)) * zpow' $x $r) :=
+      (q(NF.eval_cons ($r, $x) $(qNF.toNF t)):)
+    return ⟨q($t' * $e), q(Eq.trans $pf'' (congr_arg₂ HMul.hMul $pf $pf_e))⟩
 
 中文:
 定义 evalPrettyAux
@@ -272,7 +291,10 @@ definition evalPrettyAux
     return ⟨e, q(by rw [NF.eval_cons]; exact Eq.trans (one_mul _) $pf)⟩
   | ((r, x), k) :: t => do
     let ⟨e, pf_e⟩ ← evalPrettyMonomial q(inferInstance) r x
-    let ⟨t', p
+    let ⟨t', pf⟩ ← evalPrettyAux iM t
+    have pf'' : Q(NF.eval $(qNF.toNF (((r, x), k) :: t)) = (NF.eval $(qNF.toNF t)) * zpow' $x $r) :=
+      (q(NF.eval_cons ($r, $x) $(qNF.toNF t)):)
+    return ⟨q($t' * $e), q(Eq.trans $pf'' (congr_arg₂ HMul.hMul $pf $pf_e))⟩
 -/
 private def evalPrettyAux (iM : Q(CommGroupWithZero $M)) (l : qNF M) :
     MetaM (Σ e : Q($M), Q(NF.eval $(l.toNF) = $e)) :=
@@ -301,7 +323,11 @@ definition evalPretty
   match (dependent := true) l_d with
   | [] => return ⟨num, q(eq_div_of_eq_one_of_subst $pf $pf_n)⟩
   | _ =>
-    let pf_n : Q(NF.eval $(l_n.toNF) = $num)
+    let pf_n : Q(NF.eval $(l_n.toNF) = $num) := pf_n
+    let pf_d : Q(NF.eval $(l_d.toNF) = $den) := pf_d
+    let pf : Q(NF.eval $(l.toNF) = NF.eval $(l_n.toNF) / NF.eval $(l_d.toNF)) := pf
+    let pf_tot := q(eq_div_of_subst $pf $pf_n $pf_d)
+    return ⟨q($num / $den), pf_tot⟩
 
 中文:
 定义 evalPretty
@@ -313,7 +339,11 @@ definition evalPretty
   match (dependent := true) l_d with
   | [] => return ⟨num, q(eq_div_of_eq_one_of_subst $pf $pf_n)⟩
   | _ =>
-    let pf_n : Q(NF.eval $(l_n.toNF) = $num)
+    let pf_n : Q(NF.eval $(l_n.toNF) = $num) := pf_n
+    let pf_d : Q(NF.eval $(l_d.toNF) = $den) := pf_d
+    let pf : Q(NF.eval $(l.toNF) = NF.eval $(l_n.toNF) / NF.eval $(l_d.toNF)) := pf
+    let pf_tot := q(eq_div_of_subst $pf $pf_n $pf_d)
+    return ⟨q($num / $den), pf_tot⟩
 -/
 def evalPretty (iM : Q(CommGroupWithZero $M)) (l : qNF M) :
     MetaM (Σ e : Q($M), Q(NF.eval $(l.toNF) = $e)) := do
@@ -366,7 +396,12 @@ definition mkMulProof
     if k₁ > k₂ then
       let pf := mkMulProof iM t₁ (((a₂, x₂), k₂) :: t₂)
       (q(NF.mul_eq_eval₁ ($a₁, $x₁) $pf):)
-    else if k₁ = k₂
+    else if k₁ = k₂ then
+      let pf := mkMulProof iM t₁ t₂
+      (q(NF.mul_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
+    else
+      let pf := mkMulProof iM (((a₁, x₁), k₁) :: t₁) t₂
+      (q(NF.mul_eq_eval₃ ($a₂, $x₂) $pf):)
 
 中文:
 定义 mkMulProof
@@ -378,7 +413,12 @@ definition mkMulProof
     if k₁ > k₂ then
       let pf := mkMulProof iM t₁ (((a₂, x₂), k₂) :: t₂)
       (q(NF.mul_eq_eval₁ ($a₁, $x₁) $pf):)
-    else if k₁ = k₂
+    else if k₁ = k₂ then
+      let pf := mkMulProof iM t₁ t₂
+      (q(NF.mul_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
+    else
+      let pf := mkMulProof iM (((a₁, x₁), k₁) :: t₁) t₂
+      (q(NF.mul_eq_eval₃ ($a₂, $x₂) $pf):)
 
 Depends on / 依赖: NF.eval, NF.mul_eq_eval, l.toNF, mkMulProof, mul_one, one_mul
 -/
@@ -433,7 +473,12 @@ definition mkDivProof
     if k₁ > k₂ then
       let pf := mkDivProof iM t₁ (((a₂, x₂), k₂) :: t₂)
       (q(NF.div_eq_eval₁ ($a₁, $x₁) $pf):)
-    else if k₁ = k
+    else if k₁ = k₂ then
+      let pf := mkDivProof iM t₁ t₂
+      (q(NF.div_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
+    else
+      let pf := mkDivProof iM (((a₁, x₁), k₁) :: t₁) t₂
+      (q(NF.div_eq_eval₃ ($a₂, $x₂) $pf):)
 
 中文:
 定义 mkDivProof
@@ -445,7 +490,12 @@ definition mkDivProof
     if k₁ > k₂ then
       let pf := mkDivProof iM t₁ (((a₂, x₂), k₂) :: t₂)
       (q(NF.div_eq_eval₁ ($a₁, $x₁) $pf):)
-    else if k₁ = k
+    else if k₁ = k₂ then
+      let pf := mkDivProof iM t₁ t₂
+      (q(NF.div_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
+    else
+      let pf := mkDivProof iM (((a₁, x₁), k₁) :: t₁) t₂
+      (q(NF.div_eq_eval₃ ($a₂, $x₂) $pf):)
 
 Depends on / 依赖: NF.div_eq_eval, NF.eval, NF.one_div_eq_eval, div_one, l.toNF, mkDivProof, one_div_eq_eval
 -/
@@ -545,7 +595,9 @@ definition mkDenomConditionProofSucc
     return (pf, q(NF.cons_ne_zero $r $pf $pf₀))
   | .positive _ _ _ _ => do
     let pf ← disch q(0 < $e)
-    let pf₀ : Q(0 < NF.eval 
+    let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := hL
+    let pf' := q(NF.cons_pos $r (x := $e) $pf $pf₀)
+    return (q(LT.lt.ne' $pf), pf')
 
 中文:
 定义 mkDenomConditionProofSucc
@@ -558,7 +610,9 @@ definition mkDenomConditionProofSucc
     return (pf, q(NF.cons_ne_zero $r $pf $pf₀))
   | .positive _ _ _ _ => do
     let pf ← disch q(0 < $e)
-    let pf₀ : Q(0 < NF.eval 
+    let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := hL
+    let pf' := q(NF.cons_pos $r (x := $e) $pf $pf₀)
+    return (q(LT.lt.ne' $pf), pf')
 -/
 def mkDenomConditionProofSucc {iM : Q(CommGroupWithZero $M)}
     (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type))
@@ -592,7 +646,7 @@ definition mkDenomConditionProofSucc'
   | .positive _ _ _ _ => do
     let pf ← disch q(0 < $e)
     let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := hL
-    ret
+    return q(NF.cons_pos $r (x := $e) $pf $pf₀)
 
 中文:
 定义 mkDenomConditionProofSucc'
@@ -606,7 +660,7 @@ definition mkDenomConditionProofSucc'
   | .positive _ _ _ _ => do
     let pf ← disch q(0 < $e)
     let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := hL
-    ret
+    return q(NF.cons_pos $r (x := $e) $pf $pf₀)
 -/
 def mkDenomConditionProofSucc' {iM : Q(CommGroupWithZero $M)}
     (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type))
@@ -636,7 +690,76 @@ definition gcd
   let absent (l₁ l₂ : qNF M) (n : Int) (e : Q($M)) (i : Nat) :
 MetaM Σ (L l₁' l₂' : qNF M),
         Q((NF.eval $(L.toNF)) * NF.eval $(l₁'.toNF) = NF.eval $(qNF.toNF (((n, e), i) :: l₁))) ×
-        Q((NF.eval $(L.to
+        Q((NF.eval $(L.toNF)) * NF.eval $(l₂'.toNF) = NF.eval $(l₂.toNF)) ×
+        cond.proof L := do
+    let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← gcd iM l₁ l₂ disch cond
+    if 0 < n then
+      -- Don't pull anything out
+      return ⟨L, ((n, e), i) :: l₁', l₂', (q(NF.eval_mul_eval_cons $n $e $pf₁):), q($pf₂), pf₀⟩
+    else if n = 0 then
+      -- Don't pull anything out, but eliminate the term if it is a cancellable zero
+      let ⟨l₁'', pf''⟩ ← tryClearZero disch iM 0 e i l₁'
+      let pf'' : Q(NF.eval ((0, $e) ::ᵣ $(l₁'.toNF)) = NF.eval $(l₁''.toNF)) := pf''
+      return ⟨L, l₁'', l₂', (q(NF.eval_mul_eval_cons_zero $pf₁ $pf''):), q($pf₂), pf₀⟩
+    try
+      let (pf, b) ← mkDenomConditionProofSucc disch pf₀ e n i
+      -- if nonzeroness proof succeeds
+      return ⟨((n, e), i) :: L, l₁', ((-n, e), i) :: l₂', (q(NF.eval_cons_mul_eval $n $e $pf₁):),
+        (q(NF.eval_cons_mul_eval_cons_neg $n $pf $pf₂):), b⟩
+    catch _ =>
+      -- if we can't prove nonzeroness, don't pull out e.
+      return ⟨L, ((n, e), i) :: l₁', l₂', (q(NF.eval_mul_eval_cons $n $e $pf₁):), q($pf₂), pf₀⟩
+
+  /- Handle the case where atom `i` is present in both lists. -/
+  let bothPresent (t₁ t₂ : qNF M) (n₁ n₂ : Int) (e : Q($M)) (i : Nat) :
+MetaM Σ (L l₁' l₂' : qNF M),
+        Q((NF.eval $(L.toNF)) * NF.eval $(l₁'.toNF) = NF.eval $(qNF.toNF (((n₁, e), i) :: t₁))) ×
+        Q((NF.eval $(L.toNF)) * NF.eval $(l₂'.toNF) = NF.eval $(qNF.toNF (((n₂, e), i) :: t₂))) ×
+        cond.proof L := do
+    let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← gcd iM t₁ t₂ disch cond
+    if n₁ < n₂ then
+      let N : Int := n₂ - n₁
+      return ⟨((n₁, e), i) :: L, l₁', ((n₂ - n₁, e), i) :: l₂',
+        (q(NF.eval_cons_mul_eval $n₁ $e $pf₁):), (q(NF.mul_eq_eval₂ $n₁ $N $e $pf₂):),
+        ← mkDenomConditionProofSucc' disch pf₀ e n₁ i⟩
+    else if n₁ = n₂ then
+      return ⟨((n₁, e), i) :: L, l₁', l₂', (q(NF.eval_cons_mul_eval $n₁ $e $pf₁):),
+        (q(NF.eval_cons_mul_eval $n₂ $e $pf₂):), ← mkDenomConditionProofSucc' disch pf₀ e n₁ i⟩
+    else
+      let N : Int := n₁ - n₂
+      return ⟨((n₂, e), i) :: L, ((n₁ - n₂, e), i) :: l₁', l₂',
+        (q(NF.mul_eq_eval₂ $n₂ $N $e $pf₁):), (q(NF.eval_cons_mul_eval $n₂ $e $pf₂):),
+        ← mkDenomConditionProofSucc' disch pf₀ e n₂ i⟩
+
+  match l₁, l₂ with
+  | [], [] => pure ⟨[], [], [],
+    (q(one_mul (NF.eval $(qNF.toNF (M := M) []))):),
+    (q(one_mul (NF.eval $(qNF.toNF (M := M) []))):), cond.proofZero⟩
+  | ((n, e), i) :: t, [] => do
+    let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← absent t [] n e i
+    return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
+  | [], ((n, e), i) :: t => do
+    let ⟨L, l₂', l₁', pf₂, pf₁, pf₀⟩ ← absent t [] n e i
+    return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
+  | ((n₁, e₁), i₁) :: t₁, ((n₂, e₂), i₂) :: t₂ => do
+    if i₁ > i₂ then
+      let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← absent t₁ (((n₂, e₂), i₂) :: t₂) n₁ e₁ i₁
+      return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
+    else if i₁ == i₂ then
+      try
+        bothPresent t₁ t₂ n₁ n₂ e₁ i₁
+      catch _ =>
+        -- if `bothPresent` fails, don't pull out `e`
+        -- the failure case of `bothPresent` should be:
+        -- * `.none` case: never
+        -- * `.nonzero` case: if `e` can't be proved nonzero
+        -- * `.positive _` case: if `e` can't be proved positive
+        let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← gcd iM t₁ t₂ disch cond
+        return ⟨L, ((n₁, e₁), i₁) :: l₁', ((n₂, e₂), i₂) :: l₂',
+          (q(NF.eval_mul_eval_cons $n₁ $e₁ $pf₁):), (q(NF.eval_mul_eval_cons $n₂ $e₂ $pf₂):), pf₀⟩
+    else
+      let ⟨L, l₂', l₁', pf₂, pf₁, pf₀⟩ ← absent t₂ (((n₁, e₁), i₁) :: t₁) n₂ e₂ i₂
+      return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
 
 中文:
 定义 最大公约数
@@ -645,7 +768,76 @@ MetaM Σ (L l₁' l₂' : qNF M),
   let absent (l₁ l₂ : qNF M) (n : Int) (e : Q($M)) (i : Nat) :
 MetaM Σ (L l₁' l₂' : qNF M),
         Q((NF.eval $(L.toNF)) * NF.eval $(l₁'.toNF) = NF.eval $(qNF.toNF (((n, e), i) :: l₁))) ×
-        Q((NF.eval $(L.to
+        Q((NF.eval $(L.toNF)) * NF.eval $(l₂'.toNF) = NF.eval $(l₂.toNF)) ×
+        cond.proof L := do
+    let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← gcd iM l₁ l₂ disch cond
+    if 0 < n then
+      -- Don't pull anything out
+      return ⟨L, ((n, e), i) :: l₁', l₂', (q(NF.eval_mul_eval_cons $n $e $pf₁):), q($pf₂), pf₀⟩
+    else if n = 0 then
+      -- Don't pull anything out, but eliminate the term if it is a cancellable zero
+      let ⟨l₁'', pf''⟩ ← tryClearZero disch iM 0 e i l₁'
+      let pf'' : Q(NF.eval ((0, $e) ::ᵣ $(l₁'.toNF)) = NF.eval $(l₁''.toNF)) := pf''
+      return ⟨L, l₁'', l₂', (q(NF.eval_mul_eval_cons_zero $pf₁ $pf''):), q($pf₂), pf₀⟩
+    try
+      let (pf, b) ← mkDenomConditionProofSucc disch pf₀ e n i
+      -- if nonzeroness proof succeeds
+      return ⟨((n, e), i) :: L, l₁', ((-n, e), i) :: l₂', (q(NF.eval_cons_mul_eval $n $e $pf₁):),
+        (q(NF.eval_cons_mul_eval_cons_neg $n $pf $pf₂):), b⟩
+    catch _ =>
+      -- if we can't prove nonzeroness, don't pull out e.
+      return ⟨L, ((n, e), i) :: l₁', l₂', (q(NF.eval_mul_eval_cons $n $e $pf₁):), q($pf₂), pf₀⟩
+
+  /- Handle the case where atom `i` is present in both lists. -/
+  let bothPresent (t₁ t₂ : qNF M) (n₁ n₂ : Int) (e : Q($M)) (i : Nat) :
+MetaM Σ (L l₁' l₂' : qNF M),
+        Q((NF.eval $(L.toNF)) * NF.eval $(l₁'.toNF) = NF.eval $(qNF.toNF (((n₁, e), i) :: t₁))) ×
+        Q((NF.eval $(L.toNF)) * NF.eval $(l₂'.toNF) = NF.eval $(qNF.toNF (((n₂, e), i) :: t₂))) ×
+        cond.proof L := do
+    let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← gcd iM t₁ t₂ disch cond
+    if n₁ < n₂ then
+      let N : Int := n₂ - n₁
+      return ⟨((n₁, e), i) :: L, l₁', ((n₂ - n₁, e), i) :: l₂',
+        (q(NF.eval_cons_mul_eval $n₁ $e $pf₁):), (q(NF.mul_eq_eval₂ $n₁ $N $e $pf₂):),
+        ← mkDenomConditionProofSucc' disch pf₀ e n₁ i⟩
+    else if n₁ = n₂ then
+      return ⟨((n₁, e), i) :: L, l₁', l₂', (q(NF.eval_cons_mul_eval $n₁ $e $pf₁):),
+        (q(NF.eval_cons_mul_eval $n₂ $e $pf₂):), ← mkDenomConditionProofSucc' disch pf₀ e n₁ i⟩
+    else
+      let N : Int := n₁ - n₂
+      return ⟨((n₂, e), i) :: L, ((n₁ - n₂, e), i) :: l₁', l₂',
+        (q(NF.mul_eq_eval₂ $n₂ $N $e $pf₁):), (q(NF.eval_cons_mul_eval $n₂ $e $pf₂):),
+        ← mkDenomConditionProofSucc' disch pf₀ e n₂ i⟩
+
+  match l₁, l₂ with
+  | [], [] => pure ⟨[], [], [],
+    (q(one_mul (NF.eval $(qNF.toNF (M := M) []))):),
+    (q(one_mul (NF.eval $(qNF.toNF (M := M) []))):), cond.proofZero⟩
+  | ((n, e), i) :: t, [] => do
+    let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← absent t [] n e i
+    return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
+  | [], ((n, e), i) :: t => do
+    let ⟨L, l₂', l₁', pf₂, pf₁, pf₀⟩ ← absent t [] n e i
+    return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
+  | ((n₁, e₁), i₁) :: t₁, ((n₂, e₂), i₂) :: t₂ => do
+    if i₁ > i₂ then
+      let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← absent t₁ (((n₂, e₂), i₂) :: t₂) n₁ e₁ i₁
+      return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
+    else if i₁ == i₂ then
+      try
+        bothPresent t₁ t₂ n₁ n₂ e₁ i₁
+      catch _ =>
+        -- if `bothPresent` fails, don't pull out `e`
+        -- the failure case of `bothPresent` should be:
+        -- * `.none` case: never
+        -- * `.nonzero` case: if `e` can't be proved nonzero
+        -- * `.positive _` case: if `e` can't be proved positive
+        let ⟨L, l₁', l₂', pf₁, pf₂, pf₀⟩ ← gcd iM t₁ t₂ disch cond
+        return ⟨L, ((n₁, e₁), i₁) :: l₁', ((n₂, e₂), i₂) :: l₂',
+          (q(NF.eval_mul_eval_cons $n₁ $e₁ $pf₁):), (q(NF.eval_mul_eval_cons $n₂ $e₂ $pf₂):), pf₀⟩
+    else
+      let ⟨L, l₂', l₁', pf₂, pf₁, pf₀⟩ ← absent t₂ (((n₁, e₁), i₁) :: t₁) n₂ e₂ i₂
+      return ⟨L, l₁', l₂', q($pf₁), q($pf₂), pf₀⟩
 -/
 partial def gcd (iM : Q(CommGroupWithZero $M)) (l₁ l₂ : qNF M)
     (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type))
@@ -748,7 +940,110 @@ definition normalize
       have y' : Q($M) := r.expr
       have pf : Q($y = $y') := ← r.getProof
       let (k, ⟨x', _⟩) ← AtomM.addAtomQ y'
-      pure 
+      pure ⟨[((1, x'), k)], q(Eq.trans $pf (NF.atom_eq_eval $x'))⟩
+    else
+      let (k, ⟨x', _⟩) ← AtomM.addAtomQ y
+      pure ⟨[((1, x'), k)], q(NF.atom_eq_eval $x')⟩
+  match x with
+  /- normalize a multiplication: `x₁ * x₂` -/
+  | ~q($x₁ * $x₂) =>
+    let ⟨y₁, ⟨g₁, pf₁_sgn⟩, l₁, pf₁⟩ ← normalize disch iM x₁
+    let ⟨y₂, ⟨g₂, pf₂_sgn⟩, l₂, pf₂⟩ ← normalize disch iM x₂
+    -- build the new list and proof
+    have pf := qNF.mkMulProof iM l₁ l₂
+    let ⟨G, pf_y⟩ ← Sign.mul iM y₁ y₂ g₁ g₂
+    pure ⟨q($y₁ * $y₂), ⟨G, q(Eq.trans (congr_arg₂ HMul.hMul $pf₁_sgn $pf₂_sgn) $pf_y)⟩,
+      qNF.mul l₁ l₂, q(NF.mul_eq_eval $pf₁ $pf₂ $pf)⟩
+  /- normalize a division: `x₁ / x₂` -/
+  | ~q($x₁ / $x₂) =>
+    let ⟨y₁, ⟨g₁, pf₁_sgn⟩, l₁, pf₁⟩ ← normalize disch iM x₁
+    let ⟨y₂, ⟨g₂, pf₂_sgn⟩, l₂, pf₂⟩ ← normalize disch iM x₂
+    -- build the new list and proof
+    let pf := qNF.mkDivProof iM l₁ l₂
+    let ⟨G, pf_y⟩ ← Sign.div iM y₁ y₂ g₁ g₂
+    pure ⟨q($y₁ / $y₂), ⟨G, q(Eq.trans (congr_arg₂ HDiv.hDiv $pf₁_sgn $pf₂_sgn) $pf_y)⟩,
+      qNF.div l₁ l₂, q(NF.div_eq_eval $pf₁ $pf₂ $pf)⟩
+  /- normalize an inversion: `y⁻¹` -/
+  | ~q($y⁻¹) =>
+    let ⟨y', ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM y
+    let pf_y ← Sign.inv iM y' g
+    -- build the new list and proof, casing according to the sign of `x`
+    pure ⟨q($y'⁻¹), ⟨g, q(Eq.trans (congr_arg Inv.inv $pf_sgn) $pf_y)⟩,
+      l.onExponent Neg.neg, (q(NF.inv_eq_eval $pf):)⟩
+  /- normalize an integer exponentiation: `y ^ (s : ℤ)` -/
+  | ~q($y ^ ($s : Int)) =>
+    let some s := Expr.int? s | pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+    if s = 0 then
+      pure ⟨q(1), ⟨Sign.plus, (q(zpow_zero $y):)⟩, [], q(NF.one_eq_eval $M)⟩
+    else
+      let ⟨y', ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM y
+      let pf_s ← mkDecideProofQ q($s != 0)
+      let ⟨G, pf_y⟩ ← Sign.zpow iM y' g s
+      let pf_y' := q(Eq.trans (congr_arg (· ^ $s) $pf_sgn) $pf_y)
+      pure ⟨q($y' ^ $s), ⟨G, pf_y'⟩, l.onExponent (HMul.hMul s), (q(NF.zpow_eq_eval $pf_s $pf):)⟩
+  /- normalize a natural number exponentiation: `y ^ (s : ℕ)` -/
+  | ~q($y ^ ($s : Nat)) =>
+    let some s := Expr.nat? s | pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+    if s = 0 then
+      pure ⟨q(1), ⟨Sign.plus, (q(pow_zero $y):)⟩, [], q(NF.one_eq_eval $M)⟩
+    else
+      let ⟨y', ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM y
+      let pf_s ← mkDecideProofQ q($s != 0)
+      let ⟨G, pf_y⟩ ← Sign.pow iM y' g s
+      let pf_y' := q(Eq.trans (congr_arg (· ^ $s) $pf_sgn) $pf_y)
+      pure ⟨q($y' ^ $s), ⟨G, pf_y'⟩, l.onExponent (↑s * ·), (q(NF.pow_eq_eval $pf_s $pf):)⟩
+  /- normalize a `(1:M)` -/
+  | ~q(1) => pure ⟨q(1), ⟨Sign.plus, q(rfl)⟩, [], q(NF.one_eq_eval $M)⟩
+  /- normalize an addition: `a + b` -/
+  | ~q(HAdd.hAdd (self := @instHAdd _ $i) $a $b) =>
+    try
+      let _i ← synthInstanceQ q(Semifield $M)
+      assumeInstancesCommute
+      let ⟨_, ⟨g₁, pf_sgn₁⟩, l₁, pf₁⟩ ← normalize disch iM a
+      let ⟨_, ⟨g₂, pf_sgn₂⟩, l₂, pf₂⟩ ← normalize disch iM b
+      let ⟨L, l₁', l₂', pf₁', pf₂', _⟩ ← l₁.gcd iM l₂ disch .none
+      let ⟨e₁, pf₁''⟩ ← qNF.evalPretty iM l₁'
+      let ⟨e₂, pf₂''⟩ ← qNF.evalPretty iM l₂'
+      have pf_a := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf₁ (Eq.symm $pf₁')) pf₁''
+      have pf_b := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf₂ (Eq.symm $pf₂')) pf₂''
+      let e : Q($M) := q($(g₁.expr e₁) + $(g₂.expr e₂))
+      let ⟨sum, pf_atom⟩ ← baseCase e false
+      let L' := qNF.mul L sum
+      let pf_mul : Q((NF.eval $(L.toNF)) * NF.eval $(sum.toNF) = NF.eval $(L'.toNF)) :=
+        qNF.mkMulProof iM L sum
+      pure ⟨x, ⟨Sign.plus, q(rfl)⟩, L', q(subst_add $pf_a $pf_b $pf_atom $pf_mul)⟩
+    catch _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+  /- normalize a subtraction: `a - b` -/
+  | ~q(HSub.hSub (self := @instHSub _ $i) $a $b) =>
+    try
+      let _i ← synthInstanceQ q(Field $M)
+      assumeInstancesCommute
+      let ⟨_, ⟨g₁, pf_sgn₁⟩, l₁, pf₁⟩ ← normalize disch iM a
+      let ⟨_, ⟨g₂, pf_sgn₂⟩, l₂, pf₂⟩ ← normalize disch iM b
+      let ⟨L, l₁', l₂', pf₁', pf₂', _⟩ ← l₁.gcd iM l₂ disch .none
+      let ⟨e₁, pf₁''⟩ ← qNF.evalPretty iM l₁'
+      let ⟨e₂, pf₂''⟩ ← qNF.evalPretty iM l₂'
+      have pf_a := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf₁ (Eq.symm $pf₁')) pf₁''
+      have pf_b := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf₂ (Eq.symm $pf₂')) pf₂''
+      let e : Q($M) := q($(g₁.expr e₁) - $(g₂.expr e₂))
+      let ⟨sum, pf_atom⟩ ← baseCase e false
+      let L' := qNF.mul L sum
+      let pf_mul : Q((NF.eval $(L.toNF)) * NF.eval $(sum.toNF) = NF.eval $(L'.toNF)) :=
+        qNF.mkMulProof iM L sum
+      pure ⟨x, ⟨Sign.plus, q(rfl)⟩, L', q(subst_sub $pf_a $pf_b $pf_atom $pf_mul)⟩
+    catch _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+  /- normalize a negation: `-a` -/
+  | ~q(Neg.neg (self := $i) $a) =>
+    try
+      let iM' ← synthInstanceQ q(Field $M)
+      assumeInstancesCommute
+      let ⟨y, ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM a
+      let ⟨G, pf_y⟩ ← Sign.neg iM' y g
+      pure ⟨y, ⟨G, q(Eq.trans (congr_arg Neg.neg $pf_sgn) $pf_y)⟩, l, pf⟩
+    catch _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+  -- TODO special-case handling of zero? maybe not necessary
+  /- anything else should be treated as an atom -/
+  | _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
 
 中文:
 定义 normalize
@@ -761,7 +1056,110 @@ definition normalize
       have y' : Q($M) := r.expr
       have pf : Q($y = $y') := ← r.getProof
       let (k, ⟨x', _⟩) ← AtomM.addAtomQ y'
-      pure 
+      pure ⟨[((1, x'), k)], q(Eq.trans $pf (NF.atom_eq_eval $x'))⟩
+    else
+      let (k, ⟨x', _⟩) ← AtomM.addAtomQ y
+      pure ⟨[((1, x'), k)], q(NF.atom_eq_eval $x')⟩
+  match x with
+  /- normalize a multiplication: `x₁ * x₂` -/
+  | ~q($x₁ * $x₂) =>
+    let ⟨y₁, ⟨g₁, pf₁_sgn⟩, l₁, pf₁⟩ ← normalize disch iM x₁
+    let ⟨y₂, ⟨g₂, pf₂_sgn⟩, l₂, pf₂⟩ ← normalize disch iM x₂
+    -- build the new list and proof
+    have pf := qNF.mkMulProof iM l₁ l₂
+    let ⟨G, pf_y⟩ ← Sign.mul iM y₁ y₂ g₁ g₂
+    pure ⟨q($y₁ * $y₂), ⟨G, q(Eq.trans (congr_arg₂ HMul.hMul $pf₁_sgn $pf₂_sgn) $pf_y)⟩,
+      qNF.mul l₁ l₂, q(NF.mul_eq_eval $pf₁ $pf₂ $pf)⟩
+  /- normalize a division: `x₁ / x₂` -/
+  | ~q($x₁ / $x₂) =>
+    let ⟨y₁, ⟨g₁, pf₁_sgn⟩, l₁, pf₁⟩ ← normalize disch iM x₁
+    let ⟨y₂, ⟨g₂, pf₂_sgn⟩, l₂, pf₂⟩ ← normalize disch iM x₂
+    -- build the new list and proof
+    let pf := qNF.mkDivProof iM l₁ l₂
+    let ⟨G, pf_y⟩ ← Sign.div iM y₁ y₂ g₁ g₂
+    pure ⟨q($y₁ / $y₂), ⟨G, q(Eq.trans (congr_arg₂ HDiv.hDiv $pf₁_sgn $pf₂_sgn) $pf_y)⟩,
+      qNF.div l₁ l₂, q(NF.div_eq_eval $pf₁ $pf₂ $pf)⟩
+  /- normalize an inversion: `y⁻¹` -/
+  | ~q($y⁻¹) =>
+    let ⟨y', ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM y
+    let pf_y ← Sign.inv iM y' g
+    -- build the new list and proof, casing according to the sign of `x`
+    pure ⟨q($y'⁻¹), ⟨g, q(Eq.trans (congr_arg Inv.inv $pf_sgn) $pf_y)⟩,
+      l.onExponent Neg.neg, (q(NF.inv_eq_eval $pf):)⟩
+  /- normalize an integer exponentiation: `y ^ (s : ℤ)` -/
+  | ~q($y ^ ($s : Int)) =>
+    let some s := Expr.int? s | pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+    if s = 0 then
+      pure ⟨q(1), ⟨Sign.plus, (q(zpow_zero $y):)⟩, [], q(NF.one_eq_eval $M)⟩
+    else
+      let ⟨y', ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM y
+      let pf_s ← mkDecideProofQ q($s != 0)
+      let ⟨G, pf_y⟩ ← Sign.zpow iM y' g s
+      let pf_y' := q(Eq.trans (congr_arg (· ^ $s) $pf_sgn) $pf_y)
+      pure ⟨q($y' ^ $s), ⟨G, pf_y'⟩, l.onExponent (HMul.hMul s), (q(NF.zpow_eq_eval $pf_s $pf):)⟩
+  /- normalize a natural number exponentiation: `y ^ (s : ℕ)` -/
+  | ~q($y ^ ($s : Nat)) =>
+    let some s := Expr.nat? s | pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+    if s = 0 then
+      pure ⟨q(1), ⟨Sign.plus, (q(pow_zero $y):)⟩, [], q(NF.one_eq_eval $M)⟩
+    else
+      let ⟨y', ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM y
+      let pf_s ← mkDecideProofQ q($s != 0)
+      let ⟨G, pf_y⟩ ← Sign.pow iM y' g s
+      let pf_y' := q(Eq.trans (congr_arg (· ^ $s) $pf_sgn) $pf_y)
+      pure ⟨q($y' ^ $s), ⟨G, pf_y'⟩, l.onExponent (↑s * ·), (q(NF.pow_eq_eval $pf_s $pf):)⟩
+  /- normalize a `(1:M)` -/
+  | ~q(1) => pure ⟨q(1), ⟨Sign.plus, q(rfl)⟩, [], q(NF.one_eq_eval $M)⟩
+  /- normalize an addition: `a + b` -/
+  | ~q(HAdd.hAdd (self := @instHAdd _ $i) $a $b) =>
+    try
+      let _i ← synthInstanceQ q(Semifield $M)
+      assumeInstancesCommute
+      let ⟨_, ⟨g₁, pf_sgn₁⟩, l₁, pf₁⟩ ← normalize disch iM a
+      let ⟨_, ⟨g₂, pf_sgn₂⟩, l₂, pf₂⟩ ← normalize disch iM b
+      let ⟨L, l₁', l₂', pf₁', pf₂', _⟩ ← l₁.gcd iM l₂ disch .none
+      let ⟨e₁, pf₁''⟩ ← qNF.evalPretty iM l₁'
+      let ⟨e₂, pf₂''⟩ ← qNF.evalPretty iM l₂'
+      have pf_a := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf₁ (Eq.symm $pf₁')) pf₁''
+      have pf_b := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf₂ (Eq.symm $pf₂')) pf₂''
+      let e : Q($M) := q($(g₁.expr e₁) + $(g₂.expr e₂))
+      let ⟨sum, pf_atom⟩ ← baseCase e false
+      let L' := qNF.mul L sum
+      let pf_mul : Q((NF.eval $(L.toNF)) * NF.eval $(sum.toNF) = NF.eval $(L'.toNF)) :=
+        qNF.mkMulProof iM L sum
+      pure ⟨x, ⟨Sign.plus, q(rfl)⟩, L', q(subst_add $pf_a $pf_b $pf_atom $pf_mul)⟩
+    catch _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+  /- normalize a subtraction: `a - b` -/
+  | ~q(HSub.hSub (self := @instHSub _ $i) $a $b) =>
+    try
+      let _i ← synthInstanceQ q(Field $M)
+      assumeInstancesCommute
+      let ⟨_, ⟨g₁, pf_sgn₁⟩, l₁, pf₁⟩ ← normalize disch iM a
+      let ⟨_, ⟨g₂, pf_sgn₂⟩, l₂, pf₂⟩ ← normalize disch iM b
+      let ⟨L, l₁', l₂', pf₁', pf₂', _⟩ ← l₁.gcd iM l₂ disch .none
+      let ⟨e₁, pf₁''⟩ ← qNF.evalPretty iM l₁'
+      let ⟨e₂, pf₂''⟩ ← qNF.evalPretty iM l₂'
+      have pf_a := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf₁ (Eq.symm $pf₁')) pf₁''
+      have pf_b := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf₂ (Eq.symm $pf₂')) pf₂''
+      let e : Q($M) := q($(g₁.expr e₁) - $(g₂.expr e₂))
+      let ⟨sum, pf_atom⟩ ← baseCase e false
+      let L' := qNF.mul L sum
+      let pf_mul : Q((NF.eval $(L.toNF)) * NF.eval $(sum.toNF) = NF.eval $(L'.toNF)) :=
+        qNF.mkMulProof iM L sum
+      pure ⟨x, ⟨Sign.plus, q(rfl)⟩, L', q(subst_sub $pf_a $pf_b $pf_atom $pf_mul)⟩
+    catch _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+  /- normalize a negation: `-a` -/
+  | ~q(Neg.neg (self := $i) $a) =>
+    try
+      let iM' ← synthInstanceQ q(Field $M)
+      assumeInstancesCommute
+      let ⟨y, ⟨g, pf_sgn⟩, l, pf⟩ ← normalize disch iM a
+      let ⟨G, pf_y⟩ ← Sign.neg iM' y g
+      pure ⟨y, ⟨G, q(Eq.trans (congr_arg Neg.neg $pf_sgn) $pf_y)⟩, l, pf⟩
+    catch _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
+  -- TODO special-case handling of zero? maybe not necessary
+  /- anything else should be treated as an atom -/
+  | _ => pure ⟨x, ⟨.plus, q(rfl)⟩, ← baseCase x true⟩
 -/
 partial def normalize (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type))
     (iM : Q(CommGroupWithZero $M)) (x : Q($M)) :
@@ -922,7 +1320,10 @@ definition reduceEqQ
   let ⟨L, l₁', l₂', pf_lhs, pf_rhs, pf₀⟩ ← l₁.gcd iM l₂ disch .nonzero
   let pf₀ : Q(NF.eval $(qNF.toNF L) != 0) := pf₀
   let ⟨f₁', pf_l₁'⟩ ← l₁'.evalPretty iM
-  let ⟨f₂', pf_l₂
+  let ⟨f₂', pf_l₂'⟩ ← l₂'.evalPretty iM
+  have pf_ef₁ := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf_l₁ (Eq.symm $pf_lhs)) pf_l₁'
+  have pf_ef₂ := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf_l₂ (Eq.symm $pf_rhs)) pf_l₂'
+  return ⟨g₁.expr f₁', g₂.expr f₂', q(eq_eq_cancel_eq $pf_ef₁ $pf_ef₂ $pf₀)⟩
 
 中文:
 定义 reduceEqQ
@@ -933,7 +1334,10 @@ definition reduceEqQ
   let ⟨L, l₁', l₂', pf_lhs, pf_rhs, pf₀⟩ ← l₁.gcd iM l₂ disch .nonzero
   let pf₀ : Q(NF.eval $(qNF.toNF L) != 0) := pf₀
   let ⟨f₁', pf_l₁'⟩ ← l₁'.evalPretty iM
-  let ⟨f₂', pf_l₂
+  let ⟨f₂', pf_l₂'⟩ ← l₂'.evalPretty iM
+  have pf_ef₁ := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf_l₁ (Eq.symm $pf_lhs)) pf_l₁'
+  have pf_ef₂ := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf_l₂ (Eq.symm $pf_rhs)) pf_l₂'
+  return ⟨g₁.expr f₁', g₂.expr f₂', q(eq_eq_cancel_eq $pf_ef₁ $pf_ef₂ $pf₀)⟩
 -/
 def reduceEqQ (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type))
     (iM : Q(CommGroupWithZero $M)) (e₁ e₂ : Q($M)) :
@@ -960,7 +1364,11 @@ definition reduceLeQ
   let ⟨L, l₁', l₂', pf_lhs, pf_rhs, pf₀⟩
     ← l₁.gcd iM l₂ disch (.positive iM' iM'' q(inferInstance) iM'''')
   let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := pf₀
-  let ⟨f₁', pf_l₁'
+  let ⟨f₁', pf_l₁'⟩ ← l₁'.evalPretty iM
+  let ⟨f₂', pf_l₂'⟩ ← l₂'.evalPretty iM
+  have pf_ef₁ := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf_l₁ (Eq.symm $pf_lhs)) pf_l₁'
+  have pf_ef₂ := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf_l₂ (Eq.symm $pf_rhs)) pf_l₂'
+  return ⟨g₁.expr f₁', g₂.expr f₂', q(le_eq_cancel_le $pf_ef₁ $pf_ef₂ $pf₀)⟩
 
 中文:
 定义 reduceLeQ
@@ -971,7 +1379,11 @@ definition reduceLeQ
   let ⟨L, l₁', l₂', pf_lhs, pf_rhs, pf₀⟩
     ← l₁.gcd iM l₂ disch (.positive iM' iM'' q(inferInstance) iM'''')
   let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := pf₀
-  let ⟨f₁', pf_l₁'
+  let ⟨f₁', pf_l₁'⟩ ← l₁'.evalPretty iM
+  let ⟨f₂', pf_l₂'⟩ ← l₂'.evalPretty iM
+  have pf_ef₁ := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf_l₁ (Eq.symm $pf_lhs)) pf_l₁'
+  have pf_ef₂ := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf_l₂ (Eq.symm $pf_rhs)) pf_l₂'
+  return ⟨g₁.expr f₁', g₂.expr f₂', q(le_eq_cancel_le $pf_ef₁ $pf_ef₂ $pf₀)⟩
 -/
 def reduceLeQ (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type))
     (iM : Q(CommGroupWithZero $M)) (iM' : Q(PartialOrder $M))
@@ -1001,7 +1413,11 @@ definition reduceLtQ
   let ⟨L, l₁', l₂', pf_lhs, pf_rhs, pf₀⟩
     ← l₁.gcd iM l₂ disch (.positive iM' iM'' iM''' iM'''')
   let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := pf₀
-  let ⟨f₁', pf_l₁'⟩ ← l₁'.eva
+  let ⟨f₁', pf_l₁'⟩ ← l₁'.evalPretty iM
+  let ⟨f₂', pf_l₂'⟩ ← l₂'.evalPretty iM
+  have pf_ef₁ := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf_l₁ (Eq.symm $pf_lhs)) pf_l₁'
+  have pf_ef₂ := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf_l₂ (Eq.symm $pf_rhs)) pf_l₂'
+  return ⟨g₁.expr f₁', g₂.expr f₂', q(lt_eq_cancel_lt $pf_ef₁ $pf_ef₂ $pf₀)⟩
 
 中文:
 定义 reduceLtQ
@@ -1012,7 +1428,11 @@ definition reduceLtQ
   let ⟨L, l₁', l₂', pf_lhs, pf_rhs, pf₀⟩
     ← l₁.gcd iM l₂ disch (.positive iM' iM'' iM''' iM'''')
   let pf₀ : Q(0 < NF.eval $(qNF.toNF L)) := pf₀
-  let ⟨f₁', pf_l₁'⟩ ← l₁'.eva
+  let ⟨f₁', pf_l₁'⟩ ← l₁'.evalPretty iM
+  let ⟨f₂', pf_l₂'⟩ ← l₂'.evalPretty iM
+  have pf_ef₁ := ← Sign.mkEqMul iM pf_sgn₁ q(Eq.trans $pf_l₁ (Eq.symm $pf_lhs)) pf_l₁'
+  have pf_ef₂ := ← Sign.mkEqMul iM pf_sgn₂ q(Eq.trans $pf_l₂ (Eq.symm $pf_rhs)) pf_l₂'
+  return ⟨g₁.expr f₁', g₂.expr f₂', q(lt_eq_cancel_lt $pf_ef₁ $pf_ef₂ $pf₀)⟩
 -/
 def reduceLtQ (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type))
     (iM : Q(CommGroupWithZero $M)) (iM' : Q(PartialOrder $M))
@@ -1042,7 +1462,15 @@ definition reduceExpr
   guard x.isApp
   let ⟨f, _⟩ := x.getAppFnArgs
 guard
-    f in [``HMul.hMul, ``HDiv.hDiv, ``Inv.inv, ``HPow.hPow, ``HAdd.hAdd, ``HSub.hSub, ``Neg.neg
+    f in [``HMul.hMul, ``HDiv.hDiv, ``Inv.inv, ``HPow.hPow, ``HAdd.hAdd, ``HSub.hSub, ``Neg.neg]
+  -- infer `u` and `K : Q(Type u)` such that `x : Q($K)`
+  let ⟨u, K, _⟩ ← inferTypeQ' x
+  -- find a `CommGroupWithZero` instance on `K`
+  let iK : Q(CommGroupWithZero $K) ← synthInstanceQ q(CommGroupWithZero $K)
+  -- run the core normalization function `normalizePretty` on `x`
+  trace[Tactic.field_simp] "putting {x} in \"field_simp\"-normal-form"
+  let ⟨e, pf⟩ ← reduceExprQ disch iK x
+  return { expr := e, proof? := some pf }
 
 中文:
 定义 reduceExpr
@@ -1053,7 +1481,15 @@ guard
   guard x.isApp
   let ⟨f, _⟩ := x.getAppFnArgs
 guard
-    f in [``HMul.hMul, ``HDiv.hDiv, ``Inv.inv, ``HPow.hPow, ``HAdd.hAdd, ``HSub.hSub, ``Neg.neg
+    f in [``HMul.hMul, ``HDiv.hDiv, ``Inv.inv, ``HPow.hPow, ``HAdd.hAdd, ``HSub.hSub, ``Neg.neg]
+  -- infer `u` and `K : Q(Type u)` such that `x : Q($K)`
+  let ⟨u, K, _⟩ ← inferTypeQ' x
+  -- find a `CommGroupWithZero` instance on `K`
+  let iK : Q(CommGroupWithZero $K) ← synthInstanceQ q(CommGroupWithZero $K)
+  -- run the core normalization function `normalizePretty` on `x`
+  trace[Tactic.field_simp] "putting {x} in \"field_simp\"-normal-form"
+  let ⟨e, pf⟩ ← reduceExprQ disch iK x
+  return { expr := e, proof? := some pf }
 -/
 def reduceExpr (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type)) (x : Expr) :
     AtomM Simp.Result := do
@@ -1084,7 +1520,29 @@ definition reduceProp
   let ⟨u, K, a⟩ ← inferTypeQ' a
   -- find a `CommGroupWithZero` instance on `K`
   let iK : Q(CommGroupWithZero $K) ← synthInstanceQ q(CommGroupWithZero $K)
-  trace[Tactic.field_simp] "clearing denominators in {a
+  trace[Tactic.field_simp] "clearing denominators in {a} ~ {b}"
+  -- run the core (in)equality-transforming mechanism on `a =/≤/< b`
+  match i with
+  | .eq =>
+    let ⟨a', b', pf⟩ ← reduceEqQ disch iK a b
+    let t' ← mkAppM `Eq #[a', b']
+    return { expr := t', proof? := pf }
+  | .le =>
+    let iK' : Q(PartialOrder $K) ← synthInstanceQ q(PartialOrder $K)
+    let iK'' : Q(PosMulStrictMono $K) ← synthInstanceQ q(PosMulStrictMono $K)
+    let iK''' : Q(PosMulReflectLE $K) ← synthInstanceQ q(PosMulReflectLE $K)
+    let iK'''' : Q(ZeroLEOneClass $K) ← synthInstanceQ q(ZeroLEOneClass $K)
+    let ⟨a', b', pf⟩ ← reduceLeQ disch iK iK' iK'' iK''' iK'''' a b
+    let t' ← mkAppM `LE.le #[a', b']
+    return { expr := t', proof? := pf }
+  | _ =>
+    let iK' : Q(PartialOrder $K) ← synthInstanceQ q(PartialOrder $K)
+    let iK'' : Q(PosMulStrictMono $K) ← synthInstanceQ q(PosMulStrictMono $K)
+    let iK''' : Q(PosMulReflectLT $K) ← synthInstanceQ q(PosMulReflectLT $K)
+    let iK'''' : Q(ZeroLEOneClass $K) ← synthInstanceQ q(ZeroLEOneClass $K)
+    let ⟨a', b', pf⟩ ← reduceLtQ disch iK iK' iK'' iK''' iK'''' a b
+    let t' ← mkAppM `LT.lt #[a', b']
+    return { expr := t', proof? := pf }
 
 中文:
 定义 reduceProp
@@ -1095,7 +1553,29 @@ definition reduceProp
   let ⟨u, K, a⟩ ← inferTypeQ' a
   -- find a `CommGroupWithZero` instance on `K`
   let iK : Q(CommGroupWithZero $K) ← synthInstanceQ q(CommGroupWithZero $K)
-  trace[Tactic.field_simp] "clearing denominators in {a
+  trace[Tactic.field_simp] "clearing denominators in {a} ~ {b}"
+  -- run the core (in)equality-transforming mechanism on `a =/≤/< b`
+  match i with
+  | .eq =>
+    let ⟨a', b', pf⟩ ← reduceEqQ disch iK a b
+    let t' ← mkAppM `Eq #[a', b']
+    return { expr := t', proof? := pf }
+  | .le =>
+    let iK' : Q(PartialOrder $K) ← synthInstanceQ q(PartialOrder $K)
+    let iK'' : Q(PosMulStrictMono $K) ← synthInstanceQ q(PosMulStrictMono $K)
+    let iK''' : Q(PosMulReflectLE $K) ← synthInstanceQ q(PosMulReflectLE $K)
+    let iK'''' : Q(ZeroLEOneClass $K) ← synthInstanceQ q(ZeroLEOneClass $K)
+    let ⟨a', b', pf⟩ ← reduceLeQ disch iK iK' iK'' iK''' iK'''' a b
+    let t' ← mkAppM `LE.le #[a', b']
+    return { expr := t', proof? := pf }
+  | _ =>
+    let iK' : Q(PartialOrder $K) ← synthInstanceQ q(PartialOrder $K)
+    let iK'' : Q(PosMulStrictMono $K) ← synthInstanceQ q(PosMulStrictMono $K)
+    let iK''' : Q(PosMulReflectLT $K) ← synthInstanceQ q(PosMulReflectLT $K)
+    let iK'''' : Q(ZeroLEOneClass $K) ← synthInstanceQ q(ZeroLEOneClass $K)
+    let ⟨a', b', pf⟩ ← reduceLtQ disch iK iK' iK'' iK''' iK'''' a b
+    let t' ← mkAppM `LT.lt #[a', b']
+    return { expr := t', proof? := pf }
 -/
 def reduceProp (disch : forall {u : Level} (type : Q(Sort u)), MetaM Q($type)) (t : Expr) :
     AtomM Simp.Result := do
@@ -1146,7 +1626,12 @@ return fun e => Prod.fst < > (FieldSimp.discharge e).run ctx >>= Option.getM
   | some d =>
     if args.isSome then
       logWarningAt args.get!
-        "Custom `field_simp` dischargers do no
+        "Custom `field_simp` dischargers do not make use of the `field_simp` arguments list"
+    match d with
+    | `(discharger| (discharger := $tac)) =>
+      let tac := (evalTactic (← `(tactic| ($tac))) *> pruneSolvedGoals)
+      return (synthesizeUsing' · tac)
+    | _ => throwError "could not parse the provided discharger {d}"
 
 中文:
 定义 parseDischarger
@@ -1159,7 +1644,12 @@ return fun e => Prod.fst < > (FieldSimp.discharge e).run ctx >>= Option.getM
   | some d =>
     if args.isSome then
       logWarningAt args.get!
-        "Custom `field_simp` dischargers do no
+        "Custom `field_simp` dischargers do not make use of the `field_simp` arguments list"
+    match d with
+    | `(discharger| (discharger := $tac)) =>
+      let tac := (evalTactic (← `(tactic| ($tac))) *> pruneSolvedGoals)
+      return (synthesizeUsing' · tac)
+    | _ => throwError "could not parse the provided discharger {d}"
 -/
 def parseDischarger (d : Option (TSyntax ``discharger)) (args : Option (TSyntax ``simpArgs)) :
     TacticM (forall {u : Level} (type : Q(Sort u)), MetaM Q($type)) := do
@@ -1277,6 +1767,10 @@ let disch e : MetaM Expr := Prod.fst < > (FieldSimp.discharge e).run ctx >>= Opt
   try
 let r ← AtomM.run .reducible FieldSimp.reduceProp disch t
     -- the `field_simp`-normal form is in opposition to the `simp`-lemmas `one_div` and `mul_inv`,
+    -- so we need to undo any such lemma applications, otherwise we can get infinite loops
+return .visit ← r.mkEqTrans (← simpOnlyNames [``one_div, ``mul_inv] r.expr)
+  catch _ =>
+    return .continue
 
 中文:
 定义 proc
@@ -1287,6 +1781,10 @@ let disch e : MetaM Expr := Prod.fst < > (FieldSimp.discharge e).run ctx >>= Opt
   try
 let r ← AtomM.run .reducible FieldSimp.reduceProp disch t
     -- the `field_simp`-normal form is in opposition to the `simp`-lemmas `one_div` and `mul_inv`,
+    -- so we need to undo any such lemma applications, otherwise we can get infinite loops
+return .visit ← r.mkEqTrans (← simpOnlyNames [``one_div, ``mul_inv] r.expr)
+  catch _ =>
+    return .continue
 -/
 def proc : Simp.Simproc := fun (t : Expr) => do
   let ctx ← Simp.getContext

@@ -47,7 +47,50 @@ theorem smul_singleton_mem_nhds_of_sigmaCompact
   /- Consider a small closed neighborhood `V` of the identity. Then the group is covered by
   countably many translates of `V`, say `gᵢ V`. Let also `Kₙ` be a sequence of compact sets covering
   the space. Then the image of `Kₙ ∩ gᵢ V` in the orbit is compact, and their unions covers the
-  space.
+  space. By Baire, one of them has nonempty interior. Then `gᵢ V • x` has nonempty interior, and
+  so does `V • x`. Its interior contains a point `g' x` with `g' ∈ V`. Then `g'⁻¹ • V • x` contains
+  a neighborhood of `x`, and it is included in `V⁻¹ • V • x`, which is itself contained in `U • x`
+  if `V` is small enough. -/
+  obtain ⟨V, V_mem, V_closed, V_symm, VU⟩ : exists V in 𝓝 (1 : G), IsClosed V ∧ V⁻¹ = V ∧ V * V subseteq U :=
+    exists_closed_nhds_one_inv_eq_mul_subset hU
+  obtain ⟨s, s_count, hs⟩ : exists (s : Set G), s.Countable ∧ ⋃ g in s, g • V = univ :=
+    countable_cover_nhds_of_sigmaCompact fun _ => by simpa
+  let K : Nat -> Set G := compactCovering G
+  let F : Nat × s -> Set X := fun p => (K p.1 inter (p.2 : G) • V) • ({x} : Set X)
+  obtain ⟨⟨n, ⟨g, hg⟩⟩, hi⟩ : exists i, (interior (F i)).Nonempty := by
+    have : Nonempty X := ⟨x⟩
+    have : Encodable s := Countable.toEncodable s_count
+    apply nonempty_interior_of_iUnion_of_closed
+    · rintro ⟨n, ⟨g, hg⟩⟩
+      apply IsCompact.isClosed
+      suffices H : IsCompact ((fun (g : G) => g • x) '' (K n inter g • V)) by
+        simpa only [F, smul_singleton] using H
+      apply IsCompact.image ?_ (by fun_prop)
+      exact (isCompact_compactCovering G n).inter_right (V_closed.smul g)
+    · apply eq_univ_iff_forall.2 (fun y => ?_)
+      obtain ⟨h, rfl⟩ : exists h, h • x = y := exists_smul_eq G x y
+      obtain ⟨n, hn⟩ : exists n, h in K n := exists_mem_compactCovering h
+      obtain ⟨g, gs, hg⟩ : exists g in s, h in g • V := exists_set_mem_of_union_eq_top s _ hs _
+      simp only [F, smul_singleton, mem_iUnion, mem_image, mem_inter_iff, Prod.exists,
+        Subtype.exists, exists_prop]
+      exact ⟨n, g, gs, h, ⟨hn, hg⟩, rfl⟩
+  have I : (interior ((g • V) • {x})).Nonempty := by
+    apply hi.mono
+    apply interior_mono
+    exact smul_subset_smul_right inter_subset_right
+  obtain ⟨y, hy⟩ : (interior (V • ({x} : Set X))).Nonempty := by
+    rw [smul_assoc]; rw [interior_smul] at I
+    exact smul_set_nonempty.1 I
+  obtain ⟨g', hg', rfl⟩ : exists g' in V, g' • x = y := by simpa using interior_subset hy
+  have J : (g'⁻¹ • V) • {x} in 𝓝 x := by
+    apply mem_interior_iff_mem_nhds.1
+    rwa [smul_assoc, interior_smul, mem_inv_smul_set_iff]
+  have : (g'⁻¹ • V) • {x} subseteq U • ({x} : Set X) := by
+    apply smul_subset_smul_right
+    apply Subset.trans (smul_set_subset_smul (inv_mem_inv.2 hg')) ?_
+    rw [V_symm]
+    exact VU
+  exact Filter.mem_of_superset J this
 
 中文:
 定理 smul_singleton_mem_nhds_of_sigmaCompact
@@ -55,7 +98,50 @@ theorem smul_singleton_mem_nhds_of_sigmaCompact
   /- Consider a small closed neighborhood `V` of the identity. Then the group is covered by
   countably many translates of `V`, say `gᵢ V`. Let also `Kₙ` be a sequence of compact sets covering
   the space. Then the image of `Kₙ ∩ gᵢ V` in the orbit is compact, and their unions covers the
-  space.
+  space. By Baire, one of them has nonempty interior. Then `gᵢ V • x` has nonempty interior, and
+  so does `V • x`. Its interior contains a point `g' x` with `g' ∈ V`. Then `g'⁻¹ • V • x` contains
+  a neighborhood of `x`, and it is included in `V⁻¹ • V • x`, which is itself contained in `U • x`
+  if `V` is small enough. -/
+  obtain ⟨V, V_mem, V_closed, V_symm, VU⟩ : exists V in 𝓝 (1 : G), IsClosed V ∧ V⁻¹ = V ∧ V * V subseteq U :=
+    exists_closed_nhds_one_inv_eq_mul_subset hU
+  obtain ⟨s, s_count, hs⟩ : exists (s : Set G), s.Countable ∧ ⋃ g in s, g • V = univ :=
+    countable_cover_nhds_of_sigmaCompact fun _ => by simpa
+  let K : Nat -> Set G := compactCovering G
+  let F : Nat × s -> Set X := fun p => (K p.1 inter (p.2 : G) • V) • ({x} : Set X)
+  obtain ⟨⟨n, ⟨g, hg⟩⟩, hi⟩ : exists i, (interior (F i)).Nonempty := by
+    have : Nonempty X := ⟨x⟩
+    have : Encodable s := Countable.toEncodable s_count
+    apply nonempty_interior_of_iUnion_of_closed
+    · rintro ⟨n, ⟨g, hg⟩⟩
+      apply IsCompact.isClosed
+      suffices H : IsCompact ((fun (g : G) => g • x) '' (K n inter g • V)) by
+        simpa only [F, smul_singleton] using H
+      apply IsCompact.image ?_ (by fun_prop)
+      exact (isCompact_compactCovering G n).inter_right (V_closed.smul g)
+    · apply eq_univ_iff_forall.2 (fun y => ?_)
+      obtain ⟨h, rfl⟩ : exists h, h • x = y := exists_smul_eq G x y
+      obtain ⟨n, hn⟩ : exists n, h in K n := exists_mem_compactCovering h
+      obtain ⟨g, gs, hg⟩ : exists g in s, h in g • V := exists_set_mem_of_union_eq_top s _ hs _
+      simp only [F, smul_singleton, mem_iUnion, mem_image, mem_inter_iff, Prod.exists,
+        Subtype.exists, exists_prop]
+      exact ⟨n, g, gs, h, ⟨hn, hg⟩, rfl⟩
+  have I : (interior ((g • V) • {x})).Nonempty := by
+    apply hi.mono
+    apply interior_mono
+    exact smul_subset_smul_right inter_subset_right
+  obtain ⟨y, hy⟩ : (interior (V • ({x} : Set X))).Nonempty := by
+    rw [smul_assoc]; rw [interior_smul] at I
+    exact smul_set_nonempty.1 I
+  obtain ⟨g', hg', rfl⟩ : exists g' in V, g' • x = y := by simpa using interior_subset hy
+  have J : (g'⁻¹ • V) • {x} in 𝓝 x := by
+    apply mem_interior_iff_mem_nhds.1
+    rwa [smul_assoc, interior_smul, mem_inv_smul_set_iff]
+  have : (g'⁻¹ • V) • {x} subseteq U • ({x} : Set X) := by
+    apply smul_subset_smul_right
+    apply Subset.trans (smul_set_subset_smul (inv_mem_inv.2 hg')) ?_
+    rw [V_symm]
+    exact VU
+  exact Filter.mem_of_superset J this
 -/
 theorem smul_singleton_mem_nhds_of_sigmaCompact
     {U : Set G} (hU : U in 𝓝 1) (x : X) : U • {x} in 𝓝 x := by
@@ -126,7 +212,12 @@ theorem isOpenMap_smul_of_sigmaCompact
   point by changing basepoints. -/
   simp_rw [isOpenMap_iff_nhds_le, Filter.le_map_iff]
   intro g U hU
-  have : (· • x) = (·
+  have : (· • x) = (· • (g • x)) ∘ (· * g⁻¹) := by
+    ext g
+    simp [smul_smul]
+  rw [this]; rw [image_comp]; rw [← smul_singleton]
+  apply smul_singleton_mem_nhds_of_sigmaCompact
+.image_mem_nhds hU simpa using isOpenMap_mul_right g⁻¹
 
 中文:
 定理 isOpenMap_smul_of_sigmaCompact
@@ -138,7 +229,12 @@ theorem isOpenMap_smul_of_sigmaCompact
   point by changing basepoints. -/
   simp_rw [isOpenMap_iff_nhds_le, Filter.le_map_iff]
   intro g U hU
-  have : (· • x) = (·
+  have : (· • x) = (· • (g • x)) ∘ (· * g⁻¹) := by
+    ext g
+    simp [smul_smul]
+  rw [this]; rw [image_comp]; rw [← smul_singleton]
+  apply smul_singleton_mem_nhds_of_sigmaCompact
+.image_mem_nhds hU simpa using isOpenMap_mul_right g⁻¹
 -/
 theorem isOpenMap_smul_of_sigmaCompact (x : X) : IsOpenMap (fun (g : G) => g • x) := by
   /- We have already proved the theorem around the basepoint of the orbit, in
@@ -167,7 +263,7 @@ theorem MonoidHom.isOpenMap_of_sigmaCompact
   have : IsPretransitive G H := isPretransitive_compHom hf
   have : f = (fun (g : G) => g • (1 : H)) := by simp [A, MulAction.compHom_smul_def]
   rw [this]
-  exact isOpenMap_smul_of_sigmaCom
+  exact isOpenMap_smul_of_sigmaCompact _
 
 中文:
 定理 幺半群态射.isOpenMap_of_sigmaCompact
@@ -177,7 +273,7 @@ theorem MonoidHom.isOpenMap_of_sigmaCompact
   have : IsPretransitive G H := isPretransitive_compHom hf
   have : f = (fun (g : G) => g • (1 : H)) := by simp [A, MulAction.compHom_smul_def]
   rw [this]
-  exact isOpenMap_smul_of_sigmaCom
+  exact isOpenMap_smul_of_sigmaCompact _
 
 Depends on / 依赖: ContinuousSMul, IsPretransitive, MulAction, MulAction.compHom, MulAction.compHom_smul_def, compHom, compHom_smul_def, continuousSMul_compHom, isOpenMap_smul_of_sigmaCompact, isPretransitive_compHom
 -/

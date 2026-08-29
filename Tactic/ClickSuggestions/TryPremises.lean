@@ -71,6 +71,30 @@ definition getCandidatesAux
   We choose the order `grw` => `rw` => `apply(at)`. -/
   if !gpos.isEmpty then
     reportProgress "grw"
+    cands := cands ++ (← grw subExpr).elts.map fun _ => (·.map <|
+      .grw { rootExpr, subExpr, rwKind, gpos, rflTarget? })
+  reportProgress "rw"
+  let mut rwExpr := subExpr
+  let mut rwPos := (← read).pos
+  repeat
+    /- TODO: we are passing the same `rwKind` to each of these nested applications, but it is
+    certainly possible that the correct `rwKind` is not the same for all of these.
+    Though this edge case is probably very rare. -/
+    cands := cands ++ (← rw rwExpr).elts.map fun _ => (·.map (.rw <|
+      { rootExpr, subExpr := rwExpr, pos := rwPos, rwKind, rflTarget? }))
+    match rwExpr with
+    | .app f _ =>
+      rwExpr := f
+      rwPos := rwPos.pushAppFn
+    | _ => break
+  if (← read).pos == .root then
+    if (← read).hyp?.isSome then
+      reportProgress "apply at"
+      cands := cands ++ (← appAt rootExpr).elts.map fun _ => (·.map .appAt)
+    else
+      reportProgress "apply"
+      cands := cands ++ (← app rootExpr).elts.map fun _ => (·.map .app)
+  return cands.foldr (init := #[]) fun _ val acc => acc ++ val
 
 中文:
 定义 getCandidatesAux
@@ -82,6 +106,30 @@ definition getCandidatesAux
   We choose the order `grw` => `rw` => `apply(at)`. -/
   if !gpos.isEmpty then
     reportProgress "grw"
+    cands := cands ++ (← grw subExpr).elts.map fun _ => (·.map <|
+      .grw { rootExpr, subExpr, rwKind, gpos, rflTarget? })
+  reportProgress "rw"
+  let mut rwExpr := subExpr
+  let mut rwPos := (← read).pos
+  repeat
+    /- TODO: we are passing the same `rwKind` to each of these nested applications, but it is
+    certainly possible that the correct `rwKind` is not the same for all of these.
+    Though this edge case is probably very rare. -/
+    cands := cands ++ (← rw rwExpr).elts.map fun _ => (·.map (.rw <|
+      { rootExpr, subExpr := rwExpr, pos := rwPos, rwKind, rflTarget? }))
+    match rwExpr with
+    | .app f _ =>
+      rwExpr := f
+      rwPos := rwPos.pushAppFn
+    | _ => break
+  if (← read).pos == .root then
+    if (← read).hyp?.isSome then
+      reportProgress "apply at"
+      cands := cands ++ (← appAt rootExpr).elts.map fun _ => (·.map .appAt)
+    else
+      reportProgress "apply"
+      cands := cands ++ (← app rootExpr).elts.map fun _ => (·.map .app)
+  return cands.foldr (init := #[]) fun _ val acc => acc ++ val
 -/
 def getCandidatesAux (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : RwKind)
     (rflTarget? : Option Expr) (reportProgress : String -> BaseIO Unit)
@@ -191,7 +239,11 @@ definition foldTasksM
       if ← IO.hasFinished task then
         return (← f a task.get, tasks)
       else
-        return (a,
+        return (a, tasks.push task)
+    foldTasksM tasks a f
+  else
+    IO.sleep 10
+    foldTasksM tasks init f
 
 中文:
 定义 foldTasksM
@@ -204,7 +256,11 @@ definition foldTasksM
       if ← IO.hasFinished task then
         return (← f a task.get, tasks)
       else
-        return (a,
+        return (a, tasks.push task)
+    foldTasksM tasks a f
+  else
+    IO.sleep 10
+    foldTasksM tasks init f
 -/
 private partial def foldTasksM {α β} (tasks : Array (Task β)) (init : α) (f : α -> β -> MetaM α) :
     MetaM α := do
@@ -275,7 +331,13 @@ definition findRflTarget?
   -- which does not attempt to close the goal with `rfl`.
   if rwKind matches .hasBVars then return none
   let pos := (← read).pos
-  let subExpr' ← mkFreshExprMVar (← infer
+  let subExpr' ← mkFreshExprMVar (← inferType subExpr)
+  let root' ← replaceSubexpr (fun _ => pure subExpr') pos root
+  try
+    (← mkFreshExprMVar root').mvarId!.applyRfl
+    return some (← instantiateMVars subExpr')
+  catch _ =>
+    return none
 
 中文:
 定义 findRflTarget?
@@ -286,7 +348,13 @@ definition findRflTarget?
   -- which does not attempt to close the goal with `rfl`.
   if rwKind matches .hasBVars then return none
   let pos := (← read).pos
-  let subExpr' ← mkFreshExprMVar (← infer
+  let subExpr' ← mkFreshExprMVar (← inferType subExpr)
+  let root' ← replaceSubexpr (fun _ => pure subExpr') pos root
+  try
+    (← mkFreshExprMVar root').mvarId!.applyRfl
+    return some (← instantiateMVars subExpr')
+  catch _ =>
+    return none
 -/
 def findRflTarget? (root subExpr : Expr) (rwKind : RwKind) : ClickSuggestionsM (Option Expr) := do
   if (← read).hyp?.isSome then return none

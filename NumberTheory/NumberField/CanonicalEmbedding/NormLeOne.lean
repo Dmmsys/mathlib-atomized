@@ -314,7 +314,8 @@ theorem normAtAllPlaces_normLeOne
     · rwa [Set.mem_preimage, ← logMap_normAtAllPlaces] at h₁
     · exact fun w => normAtPlace_nonneg w y
     · rwa [Set.mem_ofPred_eq, ← norm_normAtAllPlaces] at h₂
-    · rwa 
+    · rwa [Set.mem_ofPred_eq, ← norm_normAtAllPlaces] at h₃
+  · exact ⟨mixedSpaceOfRealSpace x, ⟨⟨h₁, h₃⟩, h₄⟩, normAtAllPlaces_mixedSpaceOfRealSpace h₂⟩
 
 中文:
 定理 normAtAllPlaces_normLeOne
@@ -326,7 +327,8 @@ theorem normAtAllPlaces_normLeOne
     · rwa [Set.mem_preimage, ← logMap_normAtAllPlaces] at h₁
     · exact fun w => normAtPlace_nonneg w y
     · rwa [Set.mem_ofPred_eq, ← norm_normAtAllPlaces] at h₂
-    · rwa 
+    · rwa [Set.mem_ofPred_eq, ← norm_normAtAllPlaces] at h₃
+  · exact ⟨mixedSpaceOfRealSpace x, ⟨⟨h₁, h₃⟩, h₄⟩, normAtAllPlaces_mixedSpaceOfRealSpace h₂⟩
 
 Depends on / 依赖: Set.mem_ofPred_eq, Set.mem_preimage, logMap_normAtAllPlaces, mem_ofPred_eq, mem_preimage, mixedSpaceOfRealSpace, normAtAllPlaces_mixedSpaceOfRealSpace, normAtPlace_nonneg, norm_normAtAllPlaces
 -/
@@ -372,7 +374,10 @@ definition expMap_single
   open_target := isOpen_Ioi
   map_source' _ _ := Real.exp_pos _
   map_target' _ _ := trivial
-  left_inv' _ _ := by simp only [Real.log_exp, mul_i
+  left_inv' _ _ := by simp only [Real.log_exp, mul_inv_cancel_left₀ mult_coe_ne_zero]
+  right_inv' _ h := by simp only [inv_mul_cancel_left₀ mult_coe_ne_zero, Real.exp_log h]
+  continuousOn_toFun := (continuousOn_const.mul continuousOn_id).rexp
+  continuousOn_invFun := continuousOn_const.mul (Real.continuousOn_log.mono (by simp))
 
 中文:
 定义 expMap_single
@@ -385,7 +390,10 @@ definition expMap_single
   open_target := isOpen_Ioi
   map_source' _ _ := Real.exp_pos _
   map_target' _ _ := trivial
-  left_inv' _ _ := by simp only [Real.log_exp, mul_i
+  left_inv' _ _ := by simp only [Real.log_exp, mul_inv_cancel_left₀ mult_coe_ne_zero]
+  right_inv' _ h := by simp only [inv_mul_cancel_left₀ mult_coe_ne_zero, Real.exp_log h]
+  continuousOn_toFun := (continuousOn_const.mul continuousOn_id).rexp
+  continuousOn_invFun := continuousOn_const.mul (Real.continuousOn_log.mono (by simp))
 
 Depends on / 依赖: Real.exp, w.mult
 -/
@@ -959,7 +967,8 @@ theorem sum_eq_zero_of_mem_span_completeFamily
       simp_rw [completeFamily, dif_neg w.prop, sum_expMap_symm_apply (coe_ne_zero _),
         Units.norm, Rat.cast_one, Real.log_one]
   | zero => simp
-  | add _ _ _ _ hx hy => simp [sum_add_distrib, hx, h
+  | add _ _ _ _ hx hy => simp [sum_add_distrib, hx, hy]
+  | smul _ _ _ hx => simp [← mul_sum, hx]
 
 中文:
 定理 sum_eq_zero_of_mem_span_completeFamily
@@ -971,7 +980,8 @@ theorem sum_eq_zero_of_mem_span_completeFamily
       simp_rw [completeFamily, dif_neg w.prop, sum_expMap_symm_apply (coe_ne_zero _),
         Units.norm, Rat.cast_one, Real.log_one]
   | zero => simp
-  | add _ _ _ _ hx hy => simp [sum_add_distrib, hx, h
+  | add _ _ _ _ hx hy => simp [sum_add_distrib, hx, hy]
+  | smul _ _ _ hx => simp [← mul_sum, hx]
 
 Depends on / 依赖: Rat.cast_one, Real.log_one, Submodule, Submodule.span_induction, Units.norm, cast_one, coe_ne_zero, completeFamily, dif_neg, log_one, mul_sum, simp_rw, span_induction, sum_add_distrib, sum_expMap_symm_apply, w.prop
 -/
@@ -999,7 +1009,16 @@ theorem linearIndependent_completeFamily
   have h₁ : LinearIndependent Real (fun w : {w // w != w₀} => completeFamily K w.1) := by
     refine LinearIndependent.of_comp realSpaceToLogSpace ?_
     simp_rw [Function.comp_def, realSpaceToLogSpace_completeFamily_of_ne]
-    convert! (((basisUnitLattice K).ofZLatticeBasis Real _).r
+    convert! (((basisUnitLattice K).ofZLatticeBasis Real _).reindex equivFinRank).linearIndependent
+    simp
+  have h₂ : completeFamily K w₀ ∉ Submodule.span Real
+      (Set.range (fun w : {w // w != w₀} => completeFamily K w.1)) := by
+    intro h
+    have := sum_eq_zero_of_mem_span_completeFamily h
+    rw [completeFamily]; rw [dif_pos rfl]; rw [← Nat.cast_sum]; rw [sum_mult_eq]; rw [Nat.cast_eq_zero] at this
+    exact Module.finrank_pos.ne' this
+  rw [← linearIndependent_equiv (Equiv.optionSubtypeNe w₀)]; rw [linearIndependent_option]
+  exact ⟨h₁, h₂⟩
 
 中文:
 定理 linearIndependent_completeFamily
@@ -1008,7 +1027,16 @@ theorem linearIndependent_completeFamily
   have h₁ : LinearIndependent Real (fun w : {w // w != w₀} => completeFamily K w.1) := by
     refine LinearIndependent.of_comp realSpaceToLogSpace ?_
     simp_rw [Function.comp_def, realSpaceToLogSpace_completeFamily_of_ne]
-    convert! (((basisUnitLattice K).ofZLatticeBasis Real _).r
+    convert! (((basisUnitLattice K).ofZLatticeBasis Real _).reindex equivFinRank).linearIndependent
+    simp
+  have h₂ : completeFamily K w₀ ∉ Submodule.span Real
+      (Set.range (fun w : {w // w != w₀} => completeFamily K w.1)) := by
+    intro h
+    have := sum_eq_zero_of_mem_span_completeFamily h
+    rw [completeFamily]; rw [dif_pos rfl]; rw [← Nat.cast_sum]; rw [sum_mult_eq]; rw [Nat.cast_eq_zero] at this
+    exact Module.finrank_pos.ne' this
+  rw [← linearIndependent_equiv (Equiv.optionSubtypeNe w₀)]; rw [linearIndependent_option]
+  exact ⟨h₁, h₂⟩
 
 Depends on / 依赖: Function, Function.comp_def, LinearIndependent, LinearIndependent.of_comp, Set.range, Submodule, Submodule.span, basisUnitLattice, classical, comp_def, completeFamily, convert, equivFinRank, linearIndependent, ofZLatticeBasis, of_comp, realSpaceToLogSpace, realSpaceToLogSpace_completeFamily_of_ne, reindex, simp_rw
 -/
@@ -1144,7 +1172,10 @@ theorem abs_det_completeBasis_equivFunL_symm
   classical
   rw [ContinuousLinearMap.det]; rw [← LinearMap.det_toMatrix (completeBasis K)]; rw [← Matrix.det_transpose]; rw [regulator_eq_regOfFamily_fundSystem]; rw [finrank_mul_regOfFamily_eq_det _ w₀ equivFinRank.symm]
   congr 2 with w i
-  rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix_a
+  rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix_apply]; rw [Matrix.of_apply]; rw [← Basis.equivFunL_apply]; rw [ContinuousLinearMap.coe_coe]; rw [ContinuousLinearEquiv.coe_apply]; rw [(completeBasis K).equivFunL.apply_symm_apply]
+  split_ifs with hw
+  · rw [hw, completeBasis_apply_of_eq]
+  · simp_rw [completeBasis_apply_of_ne K ⟨w, hw⟩, expMap_symm_apply, normAtAllPlaces_mixedEmbedding]
 
 中文:
 定理 abs_det_completeBasis_equivFunL_symm
@@ -1152,7 +1183,10 @@ theorem abs_det_completeBasis_equivFunL_symm
   classical
   rw [ContinuousLinearMap.det]; rw [← LinearMap.det_toMatrix (completeBasis K)]; rw [← Matrix.det_transpose]; rw [regulator_eq_regOfFamily_fundSystem]; rw [finrank_mul_regOfFamily_eq_det _ w₀ equivFinRank.symm]
   congr 2 with w i
-  rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix_a
+  rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix_apply]; rw [Matrix.of_apply]; rw [← Basis.equivFunL_apply]; rw [ContinuousLinearMap.coe_coe]; rw [ContinuousLinearEquiv.coe_apply]; rw [(completeBasis K).equivFunL.apply_symm_apply]
+  split_ifs with hw
+  · rw [hw, completeBasis_apply_of_eq]
+  · simp_rw [completeBasis_apply_of_ne K ⟨w, hw⟩, expMap_symm_apply, normAtAllPlaces_mixedEmbedding]
 
 Depends on / 依赖: Basis.equivFunL_apply, ContinuousLinearEquiv, ContinuousLinearEquiv.coe_apply, ContinuousLinearMap, ContinuousLinearMap.coe_coe, ContinuousLinearMap.det, LinearMap, LinearMap.det_toMatrix, LinearMap.toMatrix_apply, Matrix, Matrix.det_transpose, Matrix.of_apply, Matrix.transpose_apply, apply_symm_apply, classical, coe_apply, coe_coe, completeBasis, det_toMatrix, det_transpose
 -/
@@ -1313,7 +1347,7 @@ theorem expMapBasis_apply'
   simp_rw [expMapBasis_apply, Basis.equivFun_symm_apply, Fintype.sum_eq_add_sum_subtype_ne _ w₀,
     expMap_add, expMap_smul, expMap_basis_of_eq, Pi.pow_def, Real.exp_one_rpow, Pi.mul_def,
     expMap_sum, expMap_smul, expMap_basis_of_ne, Pi.smul_def, smul_eq_mul, prod_apply, Pi.pow_apply,
-    nor
+    normAtAllPlaces_mixedEmbedding]
 
 中文:
 定理 expMapBasis_apply'
@@ -1322,7 +1356,7 @@ theorem expMapBasis_apply'
   simp_rw [expMapBasis_apply, Basis.equivFun_symm_apply, Fintype.sum_eq_add_sum_subtype_ne _ w₀,
     expMap_add, expMap_smul, expMap_basis_of_eq, Pi.pow_def, Real.exp_one_rpow, Pi.mul_def,
     expMap_sum, expMap_smul, expMap_basis_of_ne, Pi.smul_def, smul_eq_mul, prod_apply, Pi.pow_apply,
-    nor
+    normAtAllPlaces_mixedEmbedding]
 
 Depends on / 依赖: Basis.equivFun_symm_apply, Fintype, Fintype.sum_eq_add_sum_subtype_ne, Pi.mul_def, Pi.pow_apply, Pi.pow_def, Pi.smul_def, Real.exp_one_rpow, equivFun_symm_apply, expMapBasis_apply, expMap_add, expMap_basis_of_eq, expMap_basis_of_ne, expMap_smul, expMap_sum, exp_one_rpow, mul_def, normAtAllPlaces_mixedEmbedding, pow_apply, pow_def
 -/
@@ -1377,7 +1411,8 @@ theorem prod_expMapBasis_pow
     prod_pow_eq_pow_sum, sum_mult_eq, ← prod_pow]
   rw [prod_comm]
   simp_rw [Real.rpow_pow_comm (apply_nonneg _ _), Real.finsetProd_rpow _ _
-    fun _ _ => pow_nonneg (apply_nonneg _ _) _, prod_eq_abs_norm, Units
+    fun _ _ => pow_nonneg (apply_nonneg _ _) _, prod_eq_abs_norm, Units.norm, Rat.cast_one,
+    Real.one_rpow, prod_const_one, mul_one]
 
 中文:
 定理 prod_expMapBasis_pow
@@ -1387,7 +1422,8 @@ theorem prod_expMapBasis_pow
     prod_pow_eq_pow_sum, sum_mult_eq, ← prod_pow]
   rw [prod_comm]
   simp_rw [Real.rpow_pow_comm (apply_nonneg _ _), Real.finsetProd_rpow _ _
-    fun _ _ => pow_nonneg (apply_nonneg _ _) _, prod_eq_abs_norm, Units
+    fun _ _ => pow_nonneg (apply_nonneg _ _) _, prod_eq_abs_norm, Units.norm, Rat.cast_one,
+    Real.one_rpow, prod_const_one, mul_one]
 
 Depends on / 依赖: Pi.smul_def, Rat.cast_one, Real.finsetProd_rpow, Real.one_rpow, Real.rpow_pow_comm, Units.norm, apply_nonneg, cast_one, expMapBasis_apply, finsetProd_rpow, mul_one, mul_pow, one_rpow, pow_nonneg, prod_comm, prod_const_one, prod_eq_abs_norm, prod_mul_distrib, prod_pow, prod_pow_eq_pow_sum
 -/
@@ -1455,7 +1491,17 @@ theorem logMap_expMapBasis
   simp_rw [ZSpan.mem_fundamentalDomain, equivFinRank.forall_congr_left, Subtype.forall]
   refine forall₂_congr fun w hw => ?_
   rw [expMapBasis_apply'']; rw [map_smul]; rw [logMap_real_smul (norm_expMapBasis_ne_zero _)
-    (Real.exp_ne_zero _)]; rw [expMapBasis_apply]; rw [logMap_expMap (by rw [←
+    (Real.exp_ne_zero _)]; rw [expMapBasis_apply]; rw [logMap_expMap (by rw [← expMapBasis_apply]; rw [norm_expMapBasis]; rw [if_pos rfl]; rw [Real.exp_zero]; rw [one_pow]), Basis.equivFun_symm_apply,
+    Fintype.sum_eq_add_sum_subtype_ne _ w₀, if_pos rfl, zero_smul, zero_add]
+  conv_lhs =>
+    enter [2, 1, 2, w, 2, i]
+    rw [if_neg i.prop]
+  simp_rw [Finset.sum_apply, ← sum_fn, map_sum, Pi.smul_apply, ← Pi.smul_def, map_smul,
+    completeBasis_apply_of_ne, expMap_symm_apply, normAtAllPlaces_mixedEmbedding,
+    ← logEmbedding_component, logEmbedding_fundSystem, Finsupp.coe_finsetSum, Finsupp.coe_smul,
+    Finset.sum_apply, Pi.smul_apply, Basis.ofZLatticeBasis_repr_apply, Basis.repr_self,
+    Finsupp.single_apply, EmbeddingLike.apply_eq_iff_eq, Int.cast_ite, Int.cast_one, Int.cast_zero,
+    smul_ite, smul_eq_mul, mul_one, mul_zero, Fintype.sum_ite_eq']
 
 中文:
 定理 logMap_expMapBasis
@@ -1464,7 +1510,17 @@ theorem logMap_expMapBasis
   simp_rw [ZSpan.mem_fundamentalDomain, equivFinRank.forall_congr_left, Subtype.forall]
   refine forall₂_congr fun w hw => ?_
   rw [expMapBasis_apply'']; rw [map_smul]; rw [logMap_real_smul (norm_expMapBasis_ne_zero _)
-    (Real.exp_ne_zero _)]; rw [expMapBasis_apply]; rw [logMap_expMap (by rw [←
+    (Real.exp_ne_zero _)]; rw [expMapBasis_apply]; rw [logMap_expMap (by rw [← expMapBasis_apply]; rw [norm_expMapBasis]; rw [if_pos rfl]; rw [Real.exp_zero]; rw [one_pow]), Basis.equivFun_symm_apply,
+    Fintype.sum_eq_add_sum_subtype_ne _ w₀, if_pos rfl, zero_smul, zero_add]
+  conv_lhs =>
+    enter [2, 1, 2, w, 2, i]
+    rw [if_neg i.prop]
+  simp_rw [Finset.sum_apply, ← sum_fn, map_sum, Pi.smul_apply, ← Pi.smul_def, map_smul,
+    completeBasis_apply_of_ne, expMap_symm_apply, normAtAllPlaces_mixedEmbedding,
+    ← logEmbedding_component, logEmbedding_fundSystem, Finsupp.coe_finsetSum, Finsupp.coe_smul,
+    Finset.sum_apply, Pi.smul_apply, Basis.ofZLatticeBasis_repr_apply, Basis.repr_self,
+    Finsupp.single_apply, EmbeddingLike.apply_eq_iff_eq, Int.cast_ite, Int.cast_one, Int.cast_zero,
+    smul_ite, smul_eq_mul, mul_one, mul_zero, Fintype.sum_ite_eq']
 
 Depends on / 依赖: Basis.equivFun_symm_apply, Fintype, Fintype.sum_eq_add_sum_subtype_ne, Real.exp_ne_zero, Real.exp_zero, Subtype, Subtype.forall, ZSpan.mem_fundamentalDomain, conv_lhs, equivFinRank, equivFinRank.forall_congr_left, equivFun_symm_apply, expMapBasis_apply, exp_ne_zero, exp_zero, forall_congr_left, if_pos, logMap_expMap, logMap_real_smul, map_smul
 -/
@@ -1527,7 +1583,8 @@ theorem prod_deriv_expMap_single
   congr 1
   · simp_rw [← prod_expMapBasis_pow, prod_eq_prod_mul_prod, expMapBasis_apply, expMap_apply,
       mult_isReal, mult_isComplex, pow_one, Finset.prod_pow, pow_two, mul_assoc, mul_inv_cancel₀
-      (Fins
+      (Finset.prod_ne_zero_iff.mpr <| fun _ _ => Real.exp_ne_zero _), mul_one]
+  · simp [prod_eq_prod_mul_prod, mult_isReal, mult_isComplex]
 
 中文:
 定理 prod_deriv_expMap_single
@@ -1538,7 +1595,8 @@ theorem prod_deriv_expMap_single
   congr 1
   · simp_rw [← prod_expMapBasis_pow, prod_eq_prod_mul_prod, expMapBasis_apply, expMap_apply,
       mult_isReal, mult_isComplex, pow_one, Finset.prod_pow, pow_two, mul_assoc, mul_inv_cancel₀
-      (Fins
+      (Finset.prod_ne_zero_iff.mpr <| fun _ _ => Real.exp_ne_zero _), mul_one]
+  · simp [prod_eq_prod_mul_prod, mult_isReal, mult_isComplex]
 
 Depends on / 依赖: Finset, Finset.prod_mul_distrib, Finset.prod_ne_zero_iff.mpr, Finset.prod_pow, Real.exp_ne_zero, deriv_expMap_single, expMapBasis_apply, expMap_apply, expMap_single_apply, exp_ne_zero, mul_assoc, mul_one, mult_isComplex, mult_isReal, pow_one, pow_two, prod_eq_prod_mul_prod, prod_expMapBasis_pow, prod_mul_distrib, prod_ne_zero_iff
 -/
@@ -1612,7 +1670,10 @@ theorem abs_det_fderiv_expMapBasis
   simp_rw [fderiv_expMapBasis, det, toLinearMap_comp, LinearMap.det_comp, fderiv_expMap, coe_pi,
     toLinearMap_comp, coe_proj, LinearMap.det_pi, LinearMap.det_ring, ContinuousLinearMap.coe_coe,
     smulRight_apply, one_apply_eq_self, one_smul, abs_mul, abs_det_completeBasis_equivFunL_symm,
-    
+    prod_deriv_expMap_single]
+  simp_rw [abs_mul, Real.exp_mul, abs_pow, Real.rpow_natCast, abs_of_nonneg (Real.exp_nonneg _),
+    abs_inv, abs_prod, abs_of_nonneg (expMapBasis_nonneg _ _), Nat.abs_ofNat]
+  ring
 
 中文:
 定理 abs_det_fderiv_expMapBasis
@@ -1621,7 +1682,10 @@ theorem abs_det_fderiv_expMapBasis
   simp_rw [fderiv_expMapBasis, det, toLinearMap_comp, LinearMap.det_comp, fderiv_expMap, coe_pi,
     toLinearMap_comp, coe_proj, LinearMap.det_pi, LinearMap.det_ring, ContinuousLinearMap.coe_coe,
     smulRight_apply, one_apply_eq_self, one_smul, abs_mul, abs_det_completeBasis_equivFunL_symm,
-    
+    prod_deriv_expMap_single]
+  simp_rw [abs_mul, Real.exp_mul, abs_pow, Real.rpow_natCast, abs_of_nonneg (Real.exp_nonneg _),
+    abs_inv, abs_prod, abs_of_nonneg (expMapBasis_nonneg _ _), Nat.abs_ofNat]
+  ring
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_coe, LinearMap, LinearMap.det_comp, LinearMap.det_pi, LinearMap.det_ring, Nat.abs_ofNat, Real.exp_mul, Real.exp_nonneg, Real.rpow_natCast, abs_det_completeBasis_equivFunL_symm, abs_inv, abs_mul, abs_ofNat, abs_of_nonneg, abs_pow, abs_prod, coe_coe, coe_pi, coe_proj
 -/
@@ -1654,7 +1718,13 @@ theorem setLIntegral_expMapBasis_image
     (fun x _ => (hasFDerivAt_expMapBasis K x).hasFDerivWithinAt) (injective_expMapBasis K).injOn]
   simp_rw [abs_det_fderiv_expMapBasis]
   have : Measurable expMapBasis := (continuous_expMapBasis K).measurable
-  rw [← lintegral_const
+  rw [← lintegral_const_mul _ (by fun_prop)]
+  congr with x
+  have : 0 <= (∏ w : {w // IsComplex w}, expMapBasis x w.1)⁻¹ :=
+inv_nonneg.mpr Finset.prod_nonneg fun _ _ => (expMapBasis_pos _ _).le
+  rw [ofReal_mul (by positivity)]; rw [ofReal_mul (by positivity)]; rw [ofReal_mul (by positivity)]; rw [ofReal_mul (by positivity)]; rw [ofReal_pow (by positivity)]; rw [ofReal_inv_of_pos (Finset.prod_pos
+    fun _ _ => expMapBasis_pos _ _)]; rw [ofReal_inv_of_pos zero_lt_two]; rw [ofReal_ofNat]; rw [ofReal_natCast]; rw [ofReal_prod_of_nonneg (fun _ _ => (expMapBasis_pos _ _).le)]
+  ring
 
 中文:
 定理 setL整数egral_expMapBasis_image
@@ -1664,7 +1734,13 @@ theorem setLIntegral_expMapBasis_image
     (fun x _ => (hasFDerivAt_expMapBasis K x).hasFDerivWithinAt) (injective_expMapBasis K).injOn]
   simp_rw [abs_det_fderiv_expMapBasis]
   have : Measurable expMapBasis := (continuous_expMapBasis K).measurable
-  rw [← lintegral_const
+  rw [← lintegral_const_mul _ (by fun_prop)]
+  congr with x
+  have : 0 <= (∏ w : {w // IsComplex w}, expMapBasis x w.1)⁻¹ :=
+inv_nonneg.mpr Finset.prod_nonneg fun _ _ => (expMapBasis_pos _ _).le
+  rw [ofReal_mul (by positivity)]; rw [ofReal_mul (by positivity)]; rw [ofReal_mul (by positivity)]; rw [ofReal_mul (by positivity)]; rw [ofReal_pow (by positivity)]; rw [ofReal_inv_of_pos (Finset.prod_pos
+    fun _ _ => expMapBasis_pos _ _)]; rw [ofReal_inv_of_pos zero_lt_two]; rw [ofReal_ofNat]; rw [ofReal_natCast]; rw [ofReal_prod_of_nonneg (fun _ _ => (expMapBasis_pos _ _).le)]
+  ring
 
 Depends on / 依赖: Finset, Finset.prod_nonneg, IsComplex, Measurable, abs_det_fderiv_expMapBasis, continuous_expMapBasis, expMapBasis, expMapBasis_pos, fun_prop, hasFDerivAt_expMapBasis, hasFDerivWithinAt, injective_expMapBasis, inv_nonneg, inv_nonneg.mpr, lintegral_const_mul, lintegral_image_eq_lintegral_abs_det_fderiv_mul, measurable, ofReal_, ofReal_mul, prod_nonneg
 -/
@@ -1792,7 +1868,18 @@ theorem normAtAllPlaces_normLeOne_eq_image
   by_cases hx : forall w, 0 < x w
   · rw [← expMapBasis.right_inv (Set.mem_univ_pi.mpr hx), (injective_expMapBasis K).mem_set_image]
     simp only [normAtAllPlaces_normLeOne, Set.mem_inter_iff, Set.mem_ofPred_eq, expMapBasis_nonneg,
-      Set.mem_preimage, logMap_expMapBasis, implies_true
+      Set.mem_preimage, logMap_expMapBasis, implies_true, and_true, norm_expMapBasis,
+      pow_le_one_iff_of_nonneg (Real.exp_nonneg _) Module.finrank_pos.ne', Real.exp_le_one_iff,
+      ne_eq, pow_eq_zero_iff', Real.exp_ne_zero, false_and, not_false_eq_true, Set.mem_univ_pi]
+    refine ⟨fun ⟨h₁, h₂⟩ w => ?_, fun h => ⟨fun w hw => by simpa [hw] using h w, by simpa using h w₀⟩⟩
+    · split_ifs with hw
+      · exact hw ▸ h₂
+      · exact h₁ w hw
+  · refine ⟨?_, ?_⟩
+    · rintro ⟨a, ⟨ha, _⟩, rfl⟩
+      exact (hx fun w => fundamentalCone.normAtPlace_pos_of_mem ha w).elim
+    · rintro ⟨a, _, rfl⟩
+      exact (hx fun w => expMapBasis_pos a w).elim
 
 中文:
 定理 normAtAllPlaces_normLeOne_eq_image
@@ -1801,7 +1888,18 @@ theorem normAtAllPlaces_normLeOne_eq_image
   by_cases hx : forall w, 0 < x w
   · rw [← expMapBasis.right_inv (Set.mem_univ_pi.mpr hx), (injective_expMapBasis K).mem_set_image]
     simp only [normAtAllPlaces_normLeOne, Set.mem_inter_iff, Set.mem_ofPred_eq, expMapBasis_nonneg,
-      Set.mem_preimage, logMap_expMapBasis, implies_true
+      Set.mem_preimage, logMap_expMapBasis, implies_true, and_true, norm_expMapBasis,
+      pow_le_one_iff_of_nonneg (Real.exp_nonneg _) Module.finrank_pos.ne', Real.exp_le_one_iff,
+      ne_eq, pow_eq_zero_iff', Real.exp_ne_zero, false_and, not_false_eq_true, Set.mem_univ_pi]
+    refine ⟨fun ⟨h₁, h₂⟩ w => ?_, fun h => ⟨fun w hw => by simpa [hw] using h w, by simpa using h w₀⟩⟩
+    · split_ifs with hw
+      · exact hw ▸ h₂
+      · exact h₁ w hw
+  · refine ⟨?_, ?_⟩
+    · rintro ⟨a, ⟨ha, _⟩, rfl⟩
+      exact (hx fun w => fundamentalCone.normAtPlace_pos_of_mem ha w).elim
+    · rintro ⟨a, _, rfl⟩
+      exact (hx fun w => expMapBasis_pos a w).elim
 
 Depends on / 依赖: Module, Module.finrank_pos.ne, Real.exp_le_one_iff, Real.exp_ne_zero, Real.exp_nonneg, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_preimage, Set.mem_univ_pi, Set.mem_univ_pi.mpr, and_true, expMapBasis, expMapBasis.right_inv, expMapBasis_nonneg, exp_le_one_iff, exp_ne_zero, exp_nonneg, false_and, finrank_pos, implies_true
 -/
@@ -1853,7 +1951,8 @@ theorem subset_interior_normLeOne
 refine subset_trans (Set.preimage_mono ?_)
     preimage_interior_subset_interior_preimage (continuous_normAtAllPlaces K)
   have : IsOpen (expMapBasis '' (interior (paramSet K))) :=
-    expMapBasis.isOpen_image_of_subset_source isOpen_interior (by simp [expMapBasis_sou
+    expMapBasis.isOpen_image_of_subset_source isOpen_interior (by simp [expMapBasis_source])
+  exact interior_maximal (Set.image_mono interior_subset) this
 
 中文:
 定理 subset_interior_normLeOne
@@ -1862,7 +1961,8 @@ refine subset_trans (Set.preimage_mono ?_)
 refine subset_trans (Set.preimage_mono ?_)
     preimage_interior_subset_interior_preimage (continuous_normAtAllPlaces K)
   have : IsOpen (expMapBasis '' (interior (paramSet K))) :=
-    expMapBasis.isOpen_image_of_subset_source isOpen_interior (by simp [expMapBasis_sou
+    expMapBasis.isOpen_image_of_subset_source isOpen_interior (by simp [expMapBasis_source])
+  exact interior_maximal (Set.image_mono interior_subset) this
 
 Depends on / 依赖: IsOpen, Set.image_mono, Set.preimage_mono, continuous_normAtAllPlaces, expMapBasis, expMapBasis.isOpen_image_of_subset_source, expMapBasis_source, image_mono, interior, interior_maximal, interior_subset, isOpen_image_of_subset_source, isOpen_interior, normLeOne_eq_preimage, paramSet, preimage_interior_subset_interior_preimage, preimage_mono, subset_trans
 -/
@@ -1919,7 +2019,12 @@ theorem setLIntegral_paramSet_exp
   classical
   have hn : 0 < (n : Real) := Nat.cast_pos.mpr hn
   rw [volume_pi]; rw [paramSet]; rw [Measure.restrict_pi_pi]; rw [lintegral_eq_lmarginal_univ 0]; rw [lmarginal_erase' _ (by fun_prop) (Finset.mem_univ w₀)]; rw [if_pos rfl]
-  simp_rw [Function.update_self, lmarginal, lintegral_const, 
+  simp_rw [Function.update_self, lmarginal, lintegral_const, Measure.pi_univ, if_neg
+    (Finset.ne_of_mem_erase (Subtype.prop _)), Measure.restrict_apply_univ, Real.volume_Ico,
+    sub_zero, ofReal_one, prod_const_one, mul_one, mul_comm _ (n : Real)]
+  rw [← ofReal_integral_eq_lintegral_ofReal (integrableOn_exp_mul_Iic hn _)]; rw [integral_exp_mul_Iic
+    hn]; rw [mul_zero]; rw [Real.exp_zero]; rw [ofReal_div_of_pos hn]; rw [ofReal_one]; rw [ofReal_natCast]; rw [one_div]
+  filter_upwards with _ using Real.exp_nonneg _
 
 中文:
 定理 setL整数egral_paramSet_exp
@@ -1928,7 +2033,12 @@ theorem setLIntegral_paramSet_exp
   classical
   have hn : 0 < (n : Real) := Nat.cast_pos.mpr hn
   rw [volume_pi]; rw [paramSet]; rw [Measure.restrict_pi_pi]; rw [lintegral_eq_lmarginal_univ 0]; rw [lmarginal_erase' _ (by fun_prop) (Finset.mem_univ w₀)]; rw [if_pos rfl]
-  simp_rw [Function.update_self, lmarginal, lintegral_const, 
+  simp_rw [Function.update_self, lmarginal, lintegral_const, Measure.pi_univ, if_neg
+    (Finset.ne_of_mem_erase (Subtype.prop _)), Measure.restrict_apply_univ, Real.volume_Ico,
+    sub_zero, ofReal_one, prod_const_one, mul_one, mul_comm _ (n : Real)]
+  rw [← ofReal_integral_eq_lintegral_ofReal (integrableOn_exp_mul_Iic hn _)]; rw [integral_exp_mul_Iic
+    hn]; rw [mul_zero]; rw [Real.exp_zero]; rw [ofReal_div_of_pos hn]; rw [ofReal_one]; rw [ofReal_natCast]; rw [one_div]
+  filter_upwards with _ using Real.exp_nonneg _
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.ne_of_mem_erase, Function, Function.update_self, Measure, Measure.pi_univ, Measure.restrict_apply_univ, Measure.restrict_pi_pi, Nat.cast_pos.mpr, Real.volume_Ico, Subtype, Subtype.prop, cast_pos, classical, fun_prop, if_neg, if_pos, lintegral_const, lintegral_eq_lmarginal_univ
 -/
@@ -2066,7 +2176,14 @@ theorem compactSet_eq_union_aux₁
     split_ifs with h
     · refine Real.log_nonpos hc.1 hc.2
     · simpa [h] using hy w (Set.mem_univ _)
-  · have hc' : 
+  · have hc' : 0 < c := by
+      contrapose! hx₀
+      rw [le_antisymm hx₀ hc.1]; rw [zero_smul]
+    rw [expMapBasis_apply'']; rw [if_pos rfl]; rw [Real.exp_log hc']
+    congr with w
+    split_ifs with h
+    · simpa [h, eq_comm] using hy w₀
+    · rfl
 
 中文:
 定理 compactSet_eq_union_aux₁
@@ -2080,7 +2197,14 @@ theorem compactSet_eq_union_aux₁
     split_ifs with h
     · refine Real.log_nonpos hc.1 hc.2
     · simpa [h] using hy w (Set.mem_univ _)
-  · have hc' : 
+  · have hc' : 0 < c := by
+      contrapose! hx₀
+      rw [le_antisymm hx₀ hc.1]; rw [zero_smul]
+    rw [expMapBasis_apply'']; rw [if_pos rfl]; rw [Real.exp_log hc']
+    congr with w
+    split_ifs with h
+    · simpa [h, eq_comm] using hy w₀
+    · rfl
 
 Depends on / 依赖: Real.exp_log, Real.log, Real.log_nonpos, Set.mem_univ, Set.mem_univ_pi, classical, closure_paramSet, contrapose, eq_comm, expMapBasis_apply, exp_log, if_pos, le_antisymm, log_nonpos, mem_univ, mem_univ_pi, split_ifs, zero_smul
 -/
@@ -2117,7 +2241,11 @@ theorem compactSet_eq_union_aux₂
   obtain ⟨y, hy, rfl⟩ := hx₁
   refine ⟨Real.exp (y w₀), ⟨Real.exp_nonneg _, ?_⟩,
         fun i => if i = w₀ then 0 else y i, Set.mem_univ_pi.mpr fun w => ?_,
-        by rw [expMapBasis_apply
+        by rw [expMapBasis_apply'' y]⟩
+  · exact Real.exp_le_one_iff.mpr (by simpa using hy w₀ (Set.mem_univ _))
+  · split_ifs with h
+    · rfl
+    · simpa [h] using hy w (Set.mem_univ _)
 
 中文:
 定理 compactSet_eq_union_aux₂
@@ -2128,7 +2256,11 @@ theorem compactSet_eq_union_aux₂
   obtain ⟨y, hy, rfl⟩ := hx₁
   refine ⟨Real.exp (y w₀), ⟨Real.exp_nonneg _, ?_⟩,
         fun i => if i = w₀ then 0 else y i, Set.mem_univ_pi.mpr fun w => ?_,
-        by rw [expMapBasis_apply
+        by rw [expMapBasis_apply'' y]⟩
+  · exact Real.exp_le_one_iff.mpr (by simpa using hy w₀ (Set.mem_univ _))
+  · split_ifs with h
+    · rfl
+    · simpa [h] using hy w (Set.mem_univ _)
 
 Depends on / 依赖: Real.exp, Real.exp_le_one_iff.mpr, Real.exp_nonneg, Set.mem_image, Set.mem_smul, Set.mem_univ, Set.mem_univ_pi.mpr, classical, closure_paramSet, exists_exists_and_eq_and, expMapBasis_apply, exp_le_one_iff, exp_nonneg, mem_image, mem_smul, mem_univ, mem_univ_pi, split_ifs
 -/
@@ -2275,7 +2407,10 @@ theorem isBounded_normLeOne
     refine isBounded_iff_forall_norm_le.mpr ⟨C, fun x hx => ?_⟩
     rw [norm_eq_sup'_normAtPlace]
     refine sup'_le _ _ fun w _ => ?_
-    simpa 
+    simpa [normAtAllPlaces_apply, Real.norm_of_nonneg (normAtPlace_nonneg w x)]
+      using (pi_norm_le_iff_of_nonempty _).mp (hC _ hx) w
+  refine IsBounded.subset ?_ (Set.image_mono subset_closure)
+  exact (isCompact_compactSet K).isBounded.subset (expMapBasis_closure_subset_compactSet K)
 
 中文:
 定理 isBounded_normLeOne
@@ -2287,7 +2422,10 @@ theorem isBounded_normLeOne
     refine isBounded_iff_forall_norm_le.mpr ⟨C, fun x hx => ?_⟩
     rw [norm_eq_sup'_normAtPlace]
     refine sup'_le _ _ fun w _ => ?_
-    simpa 
+    simpa [normAtAllPlaces_apply, Real.norm_of_nonneg (normAtPlace_nonneg w x)]
+      using (pi_norm_le_iff_of_nonempty _).mp (hC _ hx) w
+  refine IsBounded.subset ?_ (Set.image_mono subset_closure)
+  exact (isCompact_compactSet K).isBounded.subset (expMapBasis_closure_subset_compactSet K)
 
 Depends on / 依赖: IsBounded, IsBounded.subset, Real.norm_of_nonneg, Set.image_mono, _normAtPlace, classical, expMapBasis, image_mono, isBounded, isBounded.subs, isBounded_iff_forall_norm_le, isBounded_iff_forall_norm_le.mp, isBounded_iff_forall_norm_le.mpr, isCompact_compactSet, normAtAllPlaces_apply, normAtPlace_nonneg, normLeOne_eq_preimage, norm_eq_sup, norm_of_nonneg, paramSet
 -/
@@ -2315,7 +2453,12 @@ theorem volume_normLeOne
   proof: by
   rw [volume_eq_two_pow_mul_two_pi_pow_mul_integral (normLeOne_eq_preimage_image K).symm
     (measurableSet_normLeOne K)]; rw [normLeOne_eq_preimage]; rw [normAtAllPlaces_image_preimage_expMapBasis]; rw [setLIntegral_expMapBasis_image (measurableSet_paramSet K) (by fun_prop)]
-  simp_rw [ENNReal.i
+  simp_rw [ENNReal.inv_mul_cancel_right
+    (Finset.prod_ne_zero_iff.mpr fun _ _ => ofReal_ne_zero_iff.mpr (expMapBasis_pos _ _))
+    (prod_ne_top fun _ _ => ofReal_ne_top)]
+  rw [setLIntegral_paramSet_exp K Module.finrank_pos]; rw [ofReal_mul zero_le_two]; rw [mul_pow]; rw [ofReal_ofNat]; rw [ENNReal.mul_inv_cancel_right (Nat.cast_ne_zero.mpr Module.finrank_pos.ne')
+    (natCast_ne_top _)]; rw [coe_nnreal_eq]; rw [NNReal.coe_real_pi]; rw [mul_mul_mul_comm]; rw [← ENNReal.inv_pow]; rw [← mul_assoc]; rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel_right (pow_ne_zero _ two_ne_zero)
+    (pow_ne_top ENNReal.ofNat_ne_top)]
 
 中文:
 定理 volume_normLeOne
@@ -2323,7 +2466,12 @@ theorem volume_normLeOne
   证明: by
   rw [volume_eq_two_pow_mul_two_pi_pow_mul_integral (normLeOne_eq_preimage_image K).symm
     (measurableSet_normLeOne K)]; rw [normLeOne_eq_preimage]; rw [normAtAllPlaces_image_preimage_expMapBasis]; rw [setLIntegral_expMapBasis_image (measurableSet_paramSet K) (by fun_prop)]
-  simp_rw [ENNReal.i
+  simp_rw [ENNReal.inv_mul_cancel_right
+    (Finset.prod_ne_zero_iff.mpr fun _ _ => ofReal_ne_zero_iff.mpr (expMapBasis_pos _ _))
+    (prod_ne_top fun _ _ => ofReal_ne_top)]
+  rw [setLIntegral_paramSet_exp K Module.finrank_pos]; rw [ofReal_mul zero_le_two]; rw [mul_pow]; rw [ofReal_ofNat]; rw [ENNReal.mul_inv_cancel_right (Nat.cast_ne_zero.mpr Module.finrank_pos.ne')
+    (natCast_ne_top _)]; rw [coe_nnreal_eq]; rw [NNReal.coe_real_pi]; rw [mul_mul_mul_comm]; rw [← ENNReal.inv_pow]; rw [← mul_assoc]; rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel_right (pow_ne_zero _ two_ne_zero)
+    (pow_ne_top ENNReal.ofNat_ne_top)]
 
 Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel_right, Finset, Finset.prod_ne_zero_iff.mpr, Module, Module.finrank_pos, expMapBasis_pos, finrank_pos, fun_prop, inv_mul_cancel_right, measurableSet_normLeOne, measurableSet_paramSet, normAtAllPlaces_image_preimage_expMapBasis, normLeOne_eq_preimage, normLeOne_eq_preimage_image, ofReal_ne_top, ofReal_ne_zero_iff, ofReal_ne_zero_iff.mpr, prod_ne_top, prod_ne_zero_iff
 -/
@@ -2348,7 +2496,14 @@ theorem volume_interior_eq_volume_closure
   have h₁ : MeasurableSet (normAtAllPlaces ⁻¹' compactSet K) :=
     (isCompact_compactSet K).measurableSet.preimage (continuous_normAtAllPlaces K).measurable
   have h₂ : MeasurableSet (normAtAllPlaces ⁻¹' expMapBasis '' interior (paramSet K)) := by
-    refine MeasurableSet.preimage ?_ (continuous
+    refine MeasurableSet.preimage ?_ (continuous_normAtAllPlaces K).measurable
+    refine MeasurableSet.image_of_continuousOn_injOn ?_ (continuous_expMapBasis K).continuousOn
+      (injective_expMapBasis K).injOn
+    exact measurableSet_interior
+  refine le_antisymm (measure_mono interior_subset_closure) ?_
+  refine (measure_mono (closure_normLeOne_subset K)).trans ?_
+  refine le_of_eq_of_le ?_ (measure_mono (subset_interior_normLeOne K))
+  rw [volume_eq_two_pow_mul_two_pi_pow_mul_integral Set.preimage_image_preimage h₁]; rw [normAtAllPlaces_image_preimage_of_nonneg (fun x a w => nonneg_of_mem_compactSet K a w)]; rw [volume_eq_two_pow_mul_two_pi_pow_mul_integral Set.preimage_image_preimage h₂]; rw [normAtAllPlaces_image_preimage_expMapBasis]; rw [setLIntegral_congr (compactSet_ae K)]; rw [setLIntegral_expMapBasis_image measurableSet_closure (by fun_prop)]; rw [setLIntegral_expMapBasis_image measurableSet_interior (by fun_prop)]; rw [setLIntegral_congr (closure_paramSet_ae_interior K)]
 
 中文:
 定理 volume_interior_eq_volume_closure
@@ -2356,7 +2511,14 @@ theorem volume_interior_eq_volume_closure
   have h₁ : MeasurableSet (normAtAllPlaces ⁻¹' compactSet K) :=
     (isCompact_compactSet K).measurableSet.preimage (continuous_normAtAllPlaces K).measurable
   have h₂ : MeasurableSet (normAtAllPlaces ⁻¹' expMapBasis '' interior (paramSet K)) := by
-    refine MeasurableSet.preimage ?_ (continuous
+    refine MeasurableSet.preimage ?_ (continuous_normAtAllPlaces K).measurable
+    refine MeasurableSet.image_of_continuousOn_injOn ?_ (continuous_expMapBasis K).continuousOn
+      (injective_expMapBasis K).injOn
+    exact measurableSet_interior
+  refine le_antisymm (measure_mono interior_subset_closure) ?_
+  refine (measure_mono (closure_normLeOne_subset K)).trans ?_
+  refine le_of_eq_of_le ?_ (measure_mono (subset_interior_normLeOne K))
+  rw [volume_eq_two_pow_mul_two_pi_pow_mul_integral Set.preimage_image_preimage h₁]; rw [normAtAllPlaces_image_preimage_of_nonneg (fun x a w => nonneg_of_mem_compactSet K a w)]; rw [volume_eq_two_pow_mul_two_pi_pow_mul_integral Set.preimage_image_preimage h₂]; rw [normAtAllPlaces_image_preimage_expMapBasis]; rw [setLIntegral_congr (compactSet_ae K)]; rw [setLIntegral_expMapBasis_image measurableSet_closure (by fun_prop)]; rw [setLIntegral_expMapBasis_image measurableSet_interior (by fun_prop)]; rw [setLIntegral_congr (closure_paramSet_ae_interior K)]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.image_of_continuousOn_injOn, MeasurableSet.preimage, compactSet, continuousOn, continuous_expMapBasis, continuous_normAtAllPlaces, expMapBasis, image_of_continuousOn_injOn, injective_expMapBasis, interior, isCompact_compactSet, le_antisymm, measurable, measurableSet, measurableSet.preimage, measurableSet_interior, measure_, normAtAllPlaces, paramSet
 -/
@@ -2386,7 +2548,7 @@ theorem volume_frontier_normLeOne
   · exact measurableSet_interior.nullMeasurableSet
 · refine lt_top_iff_ne_top.mp lt_of_le_of_lt (measure_mono interior_subset) ?_
     rw [volume_normLeOne]
-    exact Batte
+    exact Batteries.compareOfLessAndEq_eq_lt.mp rfl
 
 中文:
 定理 volume_frontier_normLeOne
@@ -2396,7 +2558,7 @@ theorem volume_frontier_normLeOne
   · exact measurableSet_interior.nullMeasurableSet
 · refine lt_top_iff_ne_top.mp lt_of_le_of_lt (measure_mono interior_subset) ?_
     rw [volume_normLeOne]
-    exact Batte
+    exact Batteries.compareOfLessAndEq_eq_lt.mp rfl
 
 Depends on / 依赖: Batteries, Batteries.compareOfLessAndEq_eq_lt.mp, compareOfLessAndEq_eq_lt, frontier, interior_subset, interior_subset_closure, lt_of_le_of_lt, lt_top_iff_ne_top, lt_top_iff_ne_top.mp, measurableSet_interior, measurableSet_interior.nullMeasurableSet, measure_mono, measure_sdiff, nullMeasurableSet, tsub_self, volume_interior_eq_volume_closure, volume_normLeOne
 -/

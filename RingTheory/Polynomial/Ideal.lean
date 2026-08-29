@@ -167,7 +167,24 @@ lemma mem_ideal_map_adjoin
       exact ⟨C a, fun i => by rw [coeff_C]; aesop, aeval_C _ _⟩
     | zero => exact ⟨0, by simp, aeval_zero _⟩
     | add a b ha hb ha' hb' =>
-      obtain ⟨a, ha, ha'⟩ :
+      obtain ⟨a, ha, ha'⟩ := ha'
+      obtain ⟨b, hb, hb'⟩ := hb'
+      exact ⟨a + b, fun i => by simpa using add_mem (ha i) (hb i), by simp [ha', hb']⟩
+    | smul a b hb hb' =>
+      obtain ⟨b', hb, hb'⟩ := hb'
+      have ⟨p, hp⟩ := adjoin_eq_exists_aeval R x a
+      refine ⟨p * b', fun i => ?_, by simp [hp, hb']⟩
+      rw [coeff_mul]
+      exact sum_mem fun i hi => Ideal.mul_mem_left _ _ (hb _)
+  · rintro ⟨p, hp, hp'⟩
+    have : y = ∑ i in p.support, p.coeff i • ⟨_, (X ^ i).aeval_mem_adjoin_singleton _ x⟩ := by
+      trans ∑ i in p.support, ⟨_, (C (p.coeff i) * X ^ i).aeval_mem_adjoin_singleton _ x⟩
+      · ext1
+        simp only [AddSubmonoidClass.coe_finsetSum, ← map_sum, ← hp', ← as_sum_support_C_mul_X_pow]
+      · congr with i
+        simp [Algebra.smul_def]
+    simp_rw [this, Algebra.smul_def]
+    exact sum_mem fun i _ => Ideal.mul_mem_right _ _ (Ideal.mem_map_of_mem _ (hp i))
 
 中文:
 引理 mem_ideal_map_adjoin
@@ -181,7 +198,24 @@ lemma mem_ideal_map_adjoin
       exact ⟨C a, fun i => by rw [coeff_C]; aesop, aeval_C _ _⟩
     | zero => exact ⟨0, by simp, aeval_zero _⟩
     | add a b ha hb ha' hb' =>
-      obtain ⟨a, ha, ha'⟩ :
+      obtain ⟨a, ha, ha'⟩ := ha'
+      obtain ⟨b, hb, hb'⟩ := hb'
+      exact ⟨a + b, fun i => by simpa using add_mem (ha i) (hb i), by simp [ha', hb']⟩
+    | smul a b hb hb' =>
+      obtain ⟨b', hb, hb'⟩ := hb'
+      have ⟨p, hp⟩ := adjoin_eq_exists_aeval R x a
+      refine ⟨p * b', fun i => ?_, by simp [hp, hb']⟩
+      rw [coeff_mul]
+      exact sum_mem fun i hi => Ideal.mul_mem_left _ _ (hb _)
+  · rintro ⟨p, hp, hp'⟩
+    have : y = ∑ i in p.support, p.coeff i • ⟨_, (X ^ i).aeval_mem_adjoin_singleton _ x⟩ := by
+      trans ∑ i in p.support, ⟨_, (C (p.coeff i) * X ^ i).aeval_mem_adjoin_singleton _ x⟩
+      · ext1
+        simp only [AddSubmonoidClass.coe_finsetSum, ← map_sum, ← hp', ← as_sum_support_C_mul_X_pow]
+      · congr with i
+        simp [Algebra.smul_def]
+    simp_rw [this, Algebra.smul_def]
+    exact sum_mem fun i _ => Ideal.mul_mem_right _ _ (Ideal.mem_map_of_mem _ (hp i))
 
 Depends on / 依赖: Submodule, Submodule.span_induction, add_mem, adjoin_eq_exists_aeval, aeval_C, aeval_zero, coeff_C, span_induction
 -/
@@ -229,7 +263,12 @@ lemma exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top
   have ⟨w, hw⟩ := Ideal.mem_span_singleton.mp hz
   have ⟨q, hq⟩ := adjoin_eq_exists_aeval R x w
   use (1 - p - X * q).reverse
-  have 
+  have : (1 - p - X * q).coeff 0 - 1 in I := by simpa using hp.1 0
+  apply_fun (·.1) at eq hw
+  dsimp at eq
+  rw [reverse_leadingCoeff]; rw [trailingCoeff_eq_coeff_zero]
+· exact ⟨this, (eval₂_reverse_eq_zero_iff ..).mpr by simp [← aeval_def, hp.2, hq, ← eq, hw]⟩
+· exact fun h => hI by simpa [h, Ideal.eq_top_iff_one]
 
 中文:
 引理 存在_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top
@@ -241,7 +280,12 @@ lemma exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top
   have ⟨w, hw⟩ := Ideal.mem_span_singleton.mp hz
   have ⟨q, hq⟩ := adjoin_eq_exists_aeval R x w
   use (1 - p - X * q).reverse
-  have 
+  have : (1 - p - X * q).coeff 0 - 1 in I := by simpa using hp.1 0
+  apply_fun (·.1) at eq hw
+  dsimp at eq
+  rw [reverse_leadingCoeff]; rw [trailingCoeff_eq_coeff_zero]
+· exact ⟨this, (eval₂_reverse_eq_zero_iff ..).mpr by simp [← aeval_def, hp.2, hq, ← eq, hw]⟩
+· exact fun h => hI by simpa [h, Ideal.eq_top_iff_one]
 
 Depends on / 依赖: Ideal.add_eq_one_iff, Ideal.add_eq_sup, Ideal.mem_span_singleton.mp, Ideal.one_eq_top, add_eq_one_iff, add_eq_sup, adjoin_eq_exists_aeval, apply_fun, mem_ideal_map_adjoin, mem_span_singleton, one_eq_top, reverse, reverse_leadingCoeff, trailingCoeff_eq_coeff_zero
 -/

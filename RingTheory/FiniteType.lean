@@ -95,7 +95,9 @@ theorem of_restrictScalars_finiteType
   refine ⟨⟨s, eq_top_iff.2 fun b => ?_⟩⟩
   have le : adjoin R (s : Set A) <= Subalgebra.restrictScalars R (adjoin S s) := by
     apply (Algebra.adjoin_le _ : adjoin R (s : Set A) <= Subalgebra.restrictScalars R (adjoin S ↑s))
-    simp only [Subalgebra.coe_restrictScalar
+    simp only [Subalgebra.coe_restrictScalars]
+    exact Algebra.subset_adjoin
+  exact le (eq_top_iff.1 hS b)
 
 中文:
 定理 of_restrictScalars_finiteType
@@ -105,7 +107,9 @@ theorem of_restrictScalars_finiteType
   refine ⟨⟨s, eq_top_iff.2 fun b => ?_⟩⟩
   have le : adjoin R (s : Set A) <= Subalgebra.restrictScalars R (adjoin S s) := by
     apply (Algebra.adjoin_le _ : adjoin R (s : Set A) <= Subalgebra.restrictScalars R (adjoin S ↑s))
-    simp only [Subalgebra.coe_restrictScalar
+    simp only [Subalgebra.coe_restrictScalars]
+    exact Algebra.subset_adjoin
+  exact le (eq_top_iff.1 hS b)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le, Algebra.subset_adjoin, Subalgebra, Subalgebra.coe_restrictScalars, Subalgebra.restrictScalars, adjoin, adjoin_le, coe_restrictScalars, eq_top_iff, hA.out, restrictScalars, subset_adjoin
 -/
@@ -256,7 +260,7 @@ theorem iff_quotient_freeAlgebra
     refine ⟨s, FreeAlgebra.lift _ (↑), ?_⟩
     rw [← Set.range_eq_univ]; rw [← AlgHom.coe_range]; rw [← adjoin_range_eq_range_freeAlgebra_lift]; rw [Subtype.range_coe_subtype]; rw [Finset.setOfPred_mem]; rw [hs]; rw [coe_top]
   · rintro ⟨s, f, hsur⟩
-    exact .of_
+    exact .of_surjective f hsur
 
 中文:
 定理 iff_quotient_freeAlgebra
@@ -266,7 +270,7 @@ theorem iff_quotient_freeAlgebra
     refine ⟨s, FreeAlgebra.lift _ (↑), ?_⟩
     rw [← Set.range_eq_univ]; rw [← AlgHom.coe_range]; rw [← adjoin_range_eq_range_freeAlgebra_lift]; rw [Subtype.range_coe_subtype]; rw [Finset.setOfPred_mem]; rw [hs]; rw [coe_top]
   · rintro ⟨s, f, hsur⟩
-    exact .of_
+    exact .of_surjective f hsur
 
 Depends on / 依赖: AlgHom, AlgHom.coe_range, Finset, Finset.setOfPred_mem, FreeAlgebra, FreeAlgebra.lift, Set.range_eq_univ, Subtype, Subtype.range_coe_subtype, adjoin_range_eq_range_freeAlgebra_lift, coe_range, coe_top, of_surjective, range_coe_subtype, range_eq_univ, setOfPred_mem
 -/
@@ -465,7 +469,8 @@ theorem isNoetherianRing
   apply
     isNoetherianRing_of_surjective (MvPolynomial s R) S
       (MvPolynomial.aeval (↑) : MvPolynomial s R ->ₐ[R] S).toRingHom
-  rw [← Set.range_eq_univ]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_range_eq_range
+  rw [← Set.range_eq_univ]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_range_eq_range_aeval]; rw [Subtype.range_coe_subtype]; rw [Finset.setOfPred_mem]; rw [hs]
+  rfl
 
 中文:
 定理 isNoetherianRing
@@ -475,7 +480,8 @@ theorem isNoetherianRing
   apply
     isNoetherianRing_of_surjective (MvPolynomial s R) S
       (MvPolynomial.aeval (↑) : MvPolynomial s R ->ₐ[R] S).toRingHom
-  rw [← Set.range_eq_univ]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_range_eq_range
+  rw [← Set.range_eq_univ]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_range_eq_range_aeval]; rw [Subtype.range_coe_subtype]; rw [Finset.setOfPred_mem]; rw [hs]
+  rfl
 
 Depends on / 依赖: AlgHom, AlgHom.coe_range, AlgHom.toRingHom_eq_coe, Algebra, Algebra.adjoin_range_eq_range_aeval, Finset, Finset.setOfPred_mem, MvPolynomial, MvPolynomial.aeval, RingHom, RingHom.coe_coe, Set.range_eq_univ, Subtype, Subtype.range_coe_subtype, adjoin_range_eq_range_aeval, coe_coe, coe_range, isNoetherianRing_of_surjective, range_coe_subtype, range_eq_univ
 -/
@@ -1043,7 +1049,7 @@ theorem exists_finset_adjoin_eq_top
   have : S.biUnion (fun f => f.coeff.support) = ⋃ f in S, (f.coeff.support : Set M) := by
     simp only [Finset.set_biUnion_coe, Finset.coe_biUnion]
   rw [this]
-  exact support_gen_of_
+  exact support_gen_of_gen' hS
 
 中文:
 定理 存在_finset_adjoin_eq_top
@@ -1055,7 +1061,7 @@ theorem exists_finset_adjoin_eq_top
   have : S.biUnion (fun f => f.coeff.support) = ⋃ f in S, (f.coeff.support : Set M) := by
     simp only [Finset.set_biUnion_coe, Finset.coe_biUnion]
   rw [this]
-  exact support_gen_of_
+  exact support_gen_of_gen' hS
 
 Depends on / 依赖: Classical, Classical.decEq, DecidableEq, Finset, Finset.biUnion, Finset.coe_biUnion, Finset.set_biUnion_coe, FriendlyOperation, S.biUnion, Seq.FriendlyOperation.coind_comp_friend_right, biUnion, coe_biUnion, coind_comp_friend_right, destruct_eq_destruct_map, f.coeff.support, h_base, h_op, h_step, motive, set_biUnion_coe
 -/
@@ -1087,7 +1093,17 @@ theorem mvPolynomial_aeval_of_surjective_of_closure
     refine AddSubmonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨MvPolynomial.X ⟨m, hm⟩, MvPolynomial.aeval_X _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ ⟨P₁, 
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]; rfl⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩
+    rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 中文:
 定理 mvPolynomial_aeval_of_surjective_of_closure
@@ -1100,7 +1116,17 @@ theorem mvPolynomial_aeval_of_surjective_of_closure
     refine AddSubmonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨MvPolynomial.X ⟨m, hm⟩, MvPolynomial.aeval_X _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ ⟨P₁, 
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]; rfl⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩
+    rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction, MvPolynomial, MvPolynomial.X, MvPolynomial.aeval_X, aeval_X, closure, closure_induction, hS.symm, induction_on, map_mul, map_one, mem_top, of_apply, one_mul, single_mul_single
 -/
@@ -1143,7 +1169,17 @@ theorem freeAlgebra_lift_of_surjective_of_closure
     refine AddSubmonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨FreeAlgebra.ι R ⟨m, hm⟩, FreeAlgebra.lift_ι_apply _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ 
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]; rfl⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩
+    rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 中文:
 定理 freeAlgebra_lift_of_surjective_of_closure
@@ -1156,7 +1192,17 @@ theorem freeAlgebra_lift_of_surjective_of_closure
     refine AddSubmonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨FreeAlgebra.ι R ⟨m, hm⟩, FreeAlgebra.lift_ι_apply _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ 
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]; rfl⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩
+    rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction, FreeAlgebra, FreeAlgebra.lift_, MultiseriesExpansion, basis_tl, closure, closure_induction, hS.symm, induction_on, map_mul, map_one, mem_top, of_apply, one_mul, single_mul_single
 -/
@@ -1228,7 +1274,9 @@ theorem finiteType_iff_fg
   obtain ⟨S, hS⟩ := @exists_finset_adjoin_eq_top R M _ _ h
   refine AddMonoid.fg_def.2 ⟨S, (eq_top_iff' _).2 fun m => ?_⟩
   have hm : of' R M m in Subalgebra.toSubmodule (adjoin R (of' R M '' ↑S)) := by
-    simp only [h
+    simp only [hS, top_toSubmodule, Submodule.mem_top]
+  rw [adjoin_eq_span] at hm
+  exact mem_closure_of_mem_span_closure hm
 
 中文:
 定理 finiteType_iff_fg
@@ -1238,7 +1286,9 @@ theorem finiteType_iff_fg
   obtain ⟨S, hS⟩ := @exists_finset_adjoin_eq_top R M _ _ h
   refine AddMonoid.fg_def.2 ⟨S, (eq_top_iff' _).2 fun m => ?_⟩
   have hm : of' R M m in Subalgebra.toSubmodule (adjoin R (of' R M '' ↑S)) := by
-    simp only [h
+    simp only [hS, top_toSubmodule, Submodule.mem_top]
+  rw [adjoin_eq_span] at hm
+  exact mem_closure_of_mem_span_closure hm
 
 Depends on / 依赖: AddMonoid, AddMonoid.fg_def, AddMonoidAlgebra, AddMonoidAlgebra.finiteType_of_fg, Subalgebra, Subalgebra.toSubmodule, Submodule, Submodule.mem_top, adjoin, adjoin_eq_span, eq_top_iff, exists_finset_adjoin_eq_top, fg_def, finiteType_of_fg, mem_closure_of_mem_span_closure, mem_top, toSubmodule, top_toSubmodule
 -/
@@ -1412,7 +1462,7 @@ theorem exists_finset_adjoin_eq_top
   have : S.biUnion (fun f => f.coeff.support) = ⋃ f in S, (f.coeff.support : Set M) := by
     simp only [Finset.set_biUnion_coe, Finset.coe_biUnion]
   rw [this]
-  exact support_gen_of_
+  exact support_gen_of_gen' hS
 
 中文:
 定理 存在_finset_adjoin_eq_top
@@ -1424,7 +1474,7 @@ theorem exists_finset_adjoin_eq_top
   have : S.biUnion (fun f => f.coeff.support) = ⋃ f in S, (f.coeff.support : Set M) := by
     simp only [Finset.set_biUnion_coe, Finset.coe_biUnion]
   rw [this]
-  exact support_gen_of_
+  exact support_gen_of_gen' hS
 
 Depends on / 依赖: Classical, Classical.decEq, DecidableEq, Finset, Finset.biUnion, Finset.coe_biUnion, Finset.set_biUnion_coe, FriendlyOperation, S.biUnion, Seq.FriendlyOperation.id, biUnion, coe_biUnion, f.coeff.support, set_biUnion_coe, support, support_gen_of_gen
 -/
@@ -1456,7 +1506,16 @@ theorem mvPolynomial_aeval_of_surjective_of_closure
     refine Submonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨MvPolynomial.X ⟨m, hm⟩, MvPolynomial.aeval_X _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ ⟨P₁, hP₁
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩; rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 中文:
 定理 mvPolynomial_aeval_of_surjective_of_closure
@@ -1469,7 +1528,16 @@ theorem mvPolynomial_aeval_of_surjective_of_closure
     refine Submonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨MvPolynomial.X ⟨m, hm⟩, MvPolynomial.aeval_X _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ ⟨P₁, hP₁
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩; rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 Depends on / 依赖: FriendlyOperation, MvPolynomial, MvPolynomial.X, MvPolynomial.aeval_X, Seq.FriendlyOperation.comp, Submonoid, Submonoid.closure_induction, aeval_X, closure, closure_induction, hS.symm, induction_on, map_mul, map_one, mem_top, of_apply, one_mul, single_mul_single
 -/
@@ -1512,7 +1580,17 @@ theorem freeAlgebra_lift_of_surjective_of_closure
     refine Submonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨FreeAlgebra.ι R ⟨m, hm⟩, FreeAlgebra.lift_ι_apply _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ ⟨P₁
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩
+    rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 中文:
 定理 freeAlgebra_lift_of_surjective_of_closure
@@ -1525,7 +1603,17 @@ theorem freeAlgebra_lift_of_surjective_of_closure
     refine Submonoid.closure_induction (fun m hm => ?_) ?_ ?_ this
     · exact ⟨FreeAlgebra.ι R ⟨m, hm⟩, FreeAlgebra.lift_ι_apply _ _⟩
     · exact ⟨1, map_one _⟩
-    · rintro m₁ m₂ _ _ ⟨P₁
+    · rintro m₁ m₂ _ _ ⟨P₁, hP₁⟩ ⟨P₂, hP₂⟩
+      exact
+        ⟨P₁ * P₂, by
+          rw [map_mul]; rw [hP₁]; rw [hP₂]; rw [of_apply]; rw [of_apply]; rw [of_apply]; rw [single_mul_single]; rw [one_mul]⟩
+  | add f g ihf ihg =>
+    rcases ihf with ⟨P, rfl⟩
+    rcases ihg with ⟨Q, rfl⟩
+    exact ⟨P + Q, map_add _ _ _⟩
+  | smul r f ih =>
+    rcases ih with ⟨P, rfl⟩
+    exact ⟨r • P, map_smul _ _ _⟩
 
 Depends on / 依赖: FreeAlgebra, FreeAlgebra.lift_, FriendlyOperation, Seq.FriendlyOperation.const, Submonoid, Submonoid.closure_induction, closure, closure_induction, hS.symm, induction_on, map_mul, map_one, mem_top, of_apply, one_mul, single_mul_single
 -/

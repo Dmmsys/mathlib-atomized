@@ -492,7 +492,16 @@ instance :
     ⟨∅, isOpen_empty⟩ rfl
     -- sup
     (fun U V => ⟨↑U union ↑V, U.2.union V.2⟩) rfl
-    -- in
+    -- inf
+    (fun U V => ⟨↑U inter ↑V, U.2.inter V.2⟩)
+    (funext₂ fun U V => ext (U.2.inter V.2).interior_eq.symm)
+    -- sSup
+    (fun S => ⟨⋃ s in S, ↑s, isOpen_biUnion fun s _ => s.2⟩)
+    (funext fun _ => ext sSup_image.symm)
+    -- sInf
+    _ rfl
+
+@[simp]
 
 中文:
 实例 :
@@ -506,7 +515,16 @@ instance :
     ⟨∅, isOpen_empty⟩ rfl
     -- sup
     (fun U V => ⟨↑U union ↑V, U.2.union V.2⟩) rfl
-    -- in
+    -- inf
+    (fun U V => ⟨↑U inter ↑V, U.2.inter V.2⟩)
+    (funext₂ fun U V => ext (U.2.inter V.2).interior_eq.symm)
+    -- sSup
+    (fun S => ⟨⋃ s in S, ↑s, isOpen_biUnion fun s _ => s.2⟩)
+    (funext fun _ => ext sSup_image.symm)
+    -- sInf
+    _ rfl
+
+@[simp]
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.copy, GaloisCoinsertion, GaloisCoinsertion.liftCompleteLattice, fast_instance, liftCompleteLattice
 -/
@@ -1172,7 +1190,7 @@ theorem himp_def
   simp_rw [BooleanAlgebra.himp_eq, sup_eq_union, coe_interior, _root_.mem_interior,
     SetLike.mem_coe, mem_himp, ← SetLike.coe_subset_coe, coe_inf, inter_subset]
   exact ⟨fun ⟨⟨W, hW⟩, hsub, hx⟩ => ⟨W, union_comm _ _ ▸ hsub, hW, hx⟩,
-    fun ⟨W, hsub, hW, hx⟩ => ⟨⟨W, hW⟩, union_comm _ _
+    fun ⟨W, hsub, hW, hx⟩ => ⟨⟨W, hW⟩, union_comm _ _ ▸ hsub, hx⟩⟩
 
 中文:
 定理 himp_def
@@ -1183,7 +1201,7 @@ theorem himp_def
   simp_rw [BooleanAlgebra.himp_eq, sup_eq_union, coe_interior, _root_.mem_interior,
     SetLike.mem_coe, mem_himp, ← SetLike.coe_subset_coe, coe_inf, inter_subset]
   exact ⟨fun ⟨⟨W, hW⟩, hsub, hx⟩ => ⟨W, union_comm _ _ ▸ hsub, hW, hx⟩,
-    fun ⟨W, hsub, hW, hx⟩ => ⟨⟨W, hW⟩, union_comm _ _
+    fun ⟨W, hsub, hW, hx⟩ => ⟨⟨W, hW⟩, union_comm _ _ ▸ hsub, hx⟩⟩
 
 Depends on / 依赖: BooleanAlgebra, BooleanAlgebra.himp_eq, SetLike, SetLike.coe_subset_coe, SetLike.mem_coe, _root_, _root_.mem_interior, coe_inf, coe_interior, coe_subset_coe, himp_eq, inter_subset, mem_coe, mem_himp, mem_interior, simp_rw, sup_eq_union, union_comm
 -/
@@ -1476,7 +1494,10 @@ theorem isBasis_iff_nbhd
     exact hsV
   · refine isTopologicalBasis_of_isOpen_of_nhds ?_ ?_
     · rintro sU ⟨U, -, rfl⟩
-   
+      exact U.2
+    · intro x sU hx hsU
+      rcases @h ⟨sU, hsU⟩ x hx with ⟨V, hV, H⟩
+      exact ⟨V, ⟨V, hV, rfl⟩, H⟩
 
 中文:
 定理 isBasis_iff_nbhd
@@ -1492,7 +1513,10 @@ theorem isBasis_iff_nbhd
     exact hsV
   · refine isTopologicalBasis_of_isOpen_of_nhds ?_ ?_
     · rintro sU ⟨U, -, rfl⟩
-   
+      exact U.2
+    · intro x sU hx hsU
+      rcases @h ⟨sU, hsU⟩ x hx with ⟨V, hV, H⟩
+      exact ⟨V, ⟨V, hV, rfl⟩, H⟩
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, h.mem_nhds_iff.mp, isTopologicalBasis_of_isOpen_of_nhds, mem_nhds, mem_nhds_iff
 -/
@@ -1529,7 +1553,9 @@ theorem isBasis_iff_cover
   · intro h
     rw [isBasis_iff_nbhd]
     intro U x hx
-
+    rcases h U with ⟨Us, hUs, rfl⟩
+    rcases mem_sSup.1 hx with ⟨U, Us, xU⟩
+    exact ⟨U, hUs Us, xU, le_sSup Us⟩
 
 中文:
 定理 isBasis_iff_cover
@@ -1544,7 +1570,9 @@ theorem isBasis_iff_cover
   · intro h
     rw [isBasis_iff_nbhd]
     intro U x hx
-
+    rcases h U with ⟨Us, hUs, rfl⟩
+    rcases mem_sSup.1 hx with ⟨U, Us, xU⟩
+    exact ⟨U, hUs Us, xU, le_sSup Us⟩
 
 Depends on / 依赖: U.isOpen, coe_sSup, hB.open_eq_sUnion, hU.left, iSup_and, iSup_image, iUnion, isBasis_iff_nbhd, isOpen, le_sSup, mem_ofPred_eq, mem_sSup, open_eq_sUnion, sUnion_eq_biUnion, simp_rw
 -/
@@ -1608,7 +1636,7 @@ lemma IsBasis.exists_iSup_eq_of_isCompact
   · simpa [← SetLike.coe_subset_coe, Set.iUnion_subtype]
   · rw [heq, iSup_le_iff]
     intro i
- 
+    exact le_iSup_of_le _ le_rfl
 
 中文:
 引理 是基.存在_iSup_eq_of_isCompact
@@ -1621,7 +1649,7 @@ lemma IsBasis.exists_iSup_eq_of_isCompact
   · simpa [← SetLike.coe_subset_coe, Set.iUnion_subtype]
   · rw [heq, iSup_le_iff]
     intro i
- 
+    exact le_iSup_of_le _ le_rfl
 
 Depends on / 依赖: Set.iUnion_subtype, SetLike, SetLike.coe_subset_coe, Subtype, Subtype.val, coe_subset_coe, elim_finite_subcover, exists_iSup_eq, finite_toSet, hU.exists_iSup_eq, hW.elim_finite_subcover, iSup_le_iff, iUnion_subtype, le_antisymm, le_iSup_of_le, le_rfl, s.finite_toSet
 -/
@@ -1683,7 +1711,8 @@ lemma IsBasis.exists_finite_of_isCompact
   obtain ⟨Us', hsub, hsup⟩ := isBasis_iff_cover.mp hB U
   obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun s : Us' => s.1) (fun s => s.1.2) (by simp [hsup])
   refine ⟨Finset.image Subtype.val t, subset_trans (by simp) hsub, Finset.finite_toSet _, ?_⟩
-  exact le_antisymm (subset_trans (a
+  exact le_antisymm (subset_trans (a := U.carrier) ht (by simp))
+    (le_trans (sSup_le_sSup (by simp)) hsup.ge)
 
 中文:
 引理 是基.存在_finite_of_isCompact
@@ -1693,7 +1722,8 @@ lemma IsBasis.exists_finite_of_isCompact
   obtain ⟨Us', hsub, hsup⟩ := isBasis_iff_cover.mp hB U
   obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun s : Us' => s.1) (fun s => s.1.2) (by simp [hsup])
   refine ⟨Finset.image Subtype.val t, subset_trans (by simp) hsub, Finset.finite_toSet _, ?_⟩
-  exact le_antisymm (subset_trans (a
+  exact le_antisymm (subset_trans (a := U.carrier) ht (by simp))
+    (le_trans (sSup_le_sSup (by simp)) hsup.ge)
 
 Depends on / 依赖: Finset, Finset.finite_toSet, Finset.image, Subtype, Subtype.val, U.carrier, carrier, classical, elim_finite_subcover, finite_toSet, hU.elim_finite_subcover, hsup.ge, isBasis_iff_cover, isBasis_iff_cover.mp, le_antisymm, le_trans, sSup_le_sSup, subset_trans
 -/
@@ -1803,7 +1833,14 @@ theorem isCompactElement_iff
   · introv H hU hU'
     obtain ⟨t, ht⟩ := H ι (fun i => ⟨U i, hU i⟩) (by simpa)
     refine ⟨t, Set.Subset.trans ht ?_⟩
-    rw [coe_finset_sup]; rw [Finset.su
+    rw [coe_finset_sup]; rw [Finset.sup_eq_iSup]
+    rfl
+  · obtain ⟨t, ht⟩ :=
+      H (fun i => U i) (fun i => (U i).isOpen) (by simpa using show (s : Set α) subseteq ↑(iSup U) from hU)
+    refine ⟨t, Set.Subset.trans ht ?_⟩
+    simp only [Set.iUnion_subset_iff]
+    change forall i in t, U i <= t.sup U
+    exact fun i => Finset.le_sup
 
 中文:
 定理 isCompactElement_iff
@@ -1814,7 +1851,14 @@ theorem isCompactElement_iff
   · introv H hU hU'
     obtain ⟨t, ht⟩ := H ι (fun i => ⟨U i, hU i⟩) (by simpa)
     refine ⟨t, Set.Subset.trans ht ?_⟩
-    rw [coe_finset_sup]; rw [Finset.su
+    rw [coe_finset_sup]; rw [Finset.sup_eq_iSup]
+    rfl
+  · obtain ⟨t, ht⟩ :=
+      H (fun i => U i) (fun i => (U i).isOpen) (by simpa using show (s : Set α) subseteq ↑(iSup U) from hU)
+    refine ⟨t, Set.Subset.trans ht ?_⟩
+    simp only [Set.iUnion_subset_iff]
+    change forall i in t, U i <= t.sup U
+    exact fun i => Finset.le_sup
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup, Finset, Finset.sup_eq_iSup, Set.Subset.trans, Set.iUnion_subset_iff, Subset, coe_finset_sup, iUnion_subset_iff, introv, isCompactElement_iff_exists_le_iSup_of_le_iSup, isCompact_iff_finite_subcover, isOpen, subseteq, sup_eq_iSup
 -/

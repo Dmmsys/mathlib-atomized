@@ -35,7 +35,10 @@ definition AddEquiv.toMultiplicative
     map_mul' := map_add f }
   invFun f :=
   { toFun := AddMonoidHom.toMultiplicative.symm f.toMonoidHom
-    invFun := Ad
+    invFun := AddMonoidHom.toMultiplicative.symm f.symm.toMonoidHom
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_add' := map_mul f }
 
 中文:
 定义 加法等价.toMultiplicative
@@ -47,7 +50,10 @@ definition AddEquiv.toMultiplicative
     map_mul' := map_add f }
   invFun f :=
   { toFun := AddMonoidHom.toMultiplicative.symm f.toMonoidHom
-    invFun := Ad
+    invFun := AddMonoidHom.toMultiplicative.symm f.symm.toMonoidHom
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_add' := map_mul f }
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicative, AddMonoidHom.toMultiplicative.symm, f.left_inv, f.right_inv, f.symm.toAddMonoidHom, f.symm.toMonoidHom, f.toAddMonoidHom, f.toMonoidHom, invFun, left_inv, map_add, map_mul, right_inv, toAddMonoidHom, toMonoidHom, toMultiplicative
 -/
@@ -81,7 +87,10 @@ definition MulEquiv.toAdditive
     map_add' := map_mul f }
   invFun f :=
   { toFun := MonoidHom.toAdditive.symm f.toAddMonoidHom
-    invFun := MonoidHom.toAdditive.symm f.symm
+    invFun := MonoidHom.toAdditive.symm f.symm.toAddMonoidHom
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_mul' := map_add f }
 
 中文:
 定义 乘法等价.toAdditive
@@ -93,7 +102,10 @@ definition MulEquiv.toAdditive
     map_add' := map_mul f }
   invFun f :=
   { toFun := MonoidHom.toAdditive.symm f.toAddMonoidHom
-    invFun := MonoidHom.toAdditive.symm f.symm
+    invFun := MonoidHom.toAdditive.symm f.symm.toAddMonoidHom
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_mul' := map_add f }
 
 Depends on / 依赖: MonoidHom, MonoidHom.toAdditive, MonoidHom.toAdditive.symm, f.left_inv, f.right_inv, f.symm.toAddMonoidHom, f.symm.toMonoidHom, f.toAddMonoidHom, f.toMonoidHom, invFun, left_inv, map_add, map_mul, right_inv, toAddMonoidHom, toAdditive, toMonoidHom
 -/
@@ -128,7 +140,9 @@ definition AddEquiv.toMultiplicativeRight
   invFun f :=
   { toFun := f.toMonoidHom.toAdditiveLeft
     invFun := f.symm.toMonoidHom.toAdditiveRight
-    
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_add' := map_mul f }
 
 中文:
 定义 加法等价.toMultiplicativeRight
@@ -141,7 +155,9 @@ definition AddEquiv.toMultiplicativeRight
   invFun f :=
   { toFun := f.toMonoidHom.toAdditiveLeft
     invFun := f.symm.toMonoidHom.toAdditiveRight
-    
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_add' := map_mul f }
 
 Depends on / 依赖: f.left_inv, f.right_inv, f.symm.toAddMonoidHom.toMultiplicativeLeft, f.symm.toMonoidHom.toAdditiveRight, f.toAddMonoidHom.toMultiplicativeRight, f.toMonoidHom.toAdditiveLeft, invFun, left_inv, map_add, map_mul, right_inv, toAddMonoidHom, toAdditiveLeft, toAdditiveRight, toMonoidHom, toMultiplicativeLeft, toMultiplicativeRight
 -/
@@ -195,7 +211,9 @@ definition AddEquiv.toMultiplicativeLeft
   invFun f :=
   { toFun := f.toMonoidHom.toAdditiveRight
     invFun := f.symm.toMonoidHom.toAdditiveLeft
-    
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_add' := map_mul f }
 
 中文:
 定义 加法等价.toMultiplicativeLeft
@@ -208,7 +226,9 @@ definition AddEquiv.toMultiplicativeLeft
   invFun f :=
   { toFun := f.toMonoidHom.toAdditiveRight
     invFun := f.symm.toMonoidHom.toAdditiveLeft
-    
+    left_inv := f.left_inv
+    right_inv := f.right_inv
+    map_add' := map_mul f }
 
 Depends on / 依赖: f.left_inv, f.right_inv, f.symm.toAddMonoidHom.toMultiplicativeRight, f.symm.toMonoidHom.toAdditiveLeft, f.toAddMonoidHom.toMultiplicativeLeft, f.toMonoidHom.toAdditiveRight, invFun, left_inv, map_add, map_mul, right_inv, toAddMonoidHom, toAdditiveLeft, toAdditiveRight, toMonoidHom, toMultiplicativeLeft, toMultiplicativeRight
 -/

@@ -258,7 +258,12 @@ theorem variance
   convert! congr(Polynomial.aeval (x : Real) $(bernsteinPolynomial.variance Real n) / n ^ 2) using 1
   · simp only [z, bernstein_apply, nsmul_eq_mul, bernsteinPolynomial, Finset.sum_range, map_sum,
       Polynomial.coe_aeval_eq_eval, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_sub,
-
+      Polynomial.eval_natCast, Polynomial.eval_X, Polynomial.eval_one]
+    field_simp
+    rw [← Finset.sum_div]
+    field
+  · simp
+    field
 
 中文:
 定理 variance
@@ -267,7 +272,12 @@ theorem variance
   convert! congr(Polynomial.aeval (x : Real) $(bernsteinPolynomial.variance Real n) / n ^ 2) using 1
   · simp only [z, bernstein_apply, nsmul_eq_mul, bernsteinPolynomial, Finset.sum_range, map_sum,
       Polynomial.coe_aeval_eq_eval, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_sub,
-
+      Polynomial.eval_natCast, Polynomial.eval_X, Polynomial.eval_one]
+    field_simp
+    rw [← Finset.sum_div]
+    field
+  · simp
+    field
 
 Depends on / 依赖: Finset, Finset.sum_div, Finset.sum_range, Polynomial, Polynomial.aeval, Polynomial.coe_aeval_eq_eval, Polynomial.eval_X, Polynomial.eval_mul, Polynomial.eval_natCast, Polynomial.eval_one, Polynomial.eval_pow, Polynomial.eval_sub, bernsteinPolynomial, bernsteinPolynomial.variance, bernstein_apply, coe_aeval_eq_eval, convert, eval_X, eval_mul, eval_natCast
 -/
@@ -415,7 +425,90 @@ theorem bernsteinApproximation_uniform
   let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   /- Topology on a locally convex TVS is given by a family of seminorms `‖x‖_U = gauge U x`,
-  where the open symmetric convex sets `U` form a basis of neighborhoo
+  where the open symmetric convex sets `U` form a basis of neighborhoods in this topology,
+  and are the open unit balls for the corresponding seminorms.
+  For technical reasons, we neither assume `U`s to be open, nor symmetric. -/
+  suffices forall U in 𝓝 (0 : E), Convex Real U ->
+      forallᶠ n in atTop, forall x : I, gauge U (bernsteinApproximation n f x - f x) < 1 by
+    rw [(LocallyConvexSpace.convex_basis_zero Real E).uniformity_of_nhds_zero_swapped
+.tendsto_right_iff] nhds_basis_uniformity .compactConvergenceUniformity_of_compact
+    rintro U ⟨hU₀, hcU⟩
+    filter_upwards [this U hU₀ hcU] with n hn x
+    exact setOfPred_gauge_lt_one_subset_self hcU (mem_of_mem_nhds hU₀) (absorbent_nhds_zero hU₀)
+      (hn x)
+  intro U hU₀ hUc
+  /- Choose a constant `C` such that `‖f x - f y‖_U ≤ C` for all `x`, `y`.
+  For a normed space, this would be twice the norm of `f`. -/
+  obtain ⟨C, hC⟩ : exists C, forall x y, gauge U (f x - f y) <= C := by
+    have : Continuous fun (x, y) => gauge U (f x - f y) := by fun_prop
+    simpa only [BddAbove, Set.Nonempty, mem_upperBounds, Set.forall_mem_range, Prod.forall]
+.bddAbove using isCompact_range this
+  have hC₀ : 0 <= C := le_trans (gauge_nonneg _) (hC 0 0)
+  /- Use uniform continuity of `f` to choose `δ > 0` such that `‖f x - f y‖_U < 1 / 2`
+  whenever `dist x y < δ`. -/
+  obtain ⟨δ, hδ₀, hδ⟩ : exists δ > 0, forall x y : I, dist x y < δ -> gauge U (f x - f y) < 1 / 2 := by
+    have := CompactSpace.uniformContinuous_of_continuous (map_continuous f)
+    rw [Metric.uniformity_basis_dist.uniformContinuous_iff
+      (basis_sets _).uniformity_of_nhds_zero_swapped] at this
+exact this {z | gauge U z < 1 / 2} tendsto_gauge_nhds_zero hU₀
+.eventually_lt_const by positivity
+  -- Take `n ≠ 0` such that `C / δ ^ 2 / n < 1 / 2`.
+  have nhds_zero := tendsto_const_div_atTop_nhds_zero_nat (C / δ ^ 2)
+  filter_upwards [nhds_zero.eventually_lt_const (half_pos one_pos), eventually_ne_atTop 0]
+    with n nh hn₀ x
+  -- The idea is to split up the sum over `k` into two sets,
+  -- `S`, where `x - k/n < δ`, and its complement.
+  set S : Finset (Fin (n + 1)) := {k : Fin (n + 1) | dist k/ₙ x < δ}
+  calc
+    gauge U (bernsteinApproximation n f x - f x)
+      = gauge U (∑ k : Fin (n + 1), bernstein n k x • (f k/ₙ - f x)) := by
+      simp [bernsteinApproximation.apply, smul_sub, ← Finset.sum_smul]
+    _ <= ∑ k : Fin (n + 1), gauge U (bernstein n k x • (f k/ₙ - f x)) :=
+      gauge_sum_le hUc (absorbent_nhds_zero hU₀) _ _
+    _ = ∑ k : Fin (n + 1), bernstein n k x * gauge U (f k/ₙ - f x) := by
+      simp only [gauge_smul_of_nonneg, bernstein_nonneg, smul_eq_mul]
+    _ = (∑ k in S, bernstein n k x * gauge U (f k/ₙ - f x)) +
+          ∑ k in Sᶜ, bernstein n k x * gauge U (f k/ₙ - f x) :=
+      (S.sum_add_sum_compl _).symm
+    -- We'll now deal with the terms in `S` and the terms in `Sᶜ` in separate calc blocks.
+    _ < 1 / 2 + 1 / 2 := add_lt_add_of_le_of_lt ?_ ?_
+    _ = 1 := add_halves 1
+  · -- We now work on the terms in `S`: uniform continuity and `bernstein.probability`
+    -- quickly give us a bound.
+    calc
+      ∑ k in S, bernstein n k x * gauge U (f k/ₙ - f x) <= ∑ k in S, bernstein n k x * (1 / 2) := by
+        gcongr with k hk
+        refine (hδ _ _ ?_).le
+        simpa [S] using hk
+      _ = 1 / 2 * ∑ k in S, bernstein n k x := by rw [mul_comm, Finset.sum_mul]
+      -- In this step we increase the sum over `S` back to a sum over all of `Fin (n+1)`,
+      -- so that we can use `bernstein.probability`.
+      _ <= 1 / 2 * ∑ k : Fin (n + 1), bernstein n k x := by gcongr; exact S.subset_univ
+      _ = 1 / 2 := by rw [bernstein.probability, mul_one]
+  · -- We now turn to working on `Sᶜ`: we control the difference term just using `C`,
+    -- and then insert a `(x - k/n)^2 / δ^2` factor
+    -- (which is at least one because we are not in `S`).
+    calc
+      ∑ k in Sᶜ, bernstein n k x * gauge U (f k/ₙ - f x) <= ∑ k in Sᶜ, C * bernstein n k x := by
+        simp only [mul_comm (bernstein n _ x)]
+        gcongr
+        apply hC
+      _ = C * ∑ k in Sᶜ, bernstein n k x := by rw [Finset.mul_sum]
+      _ <= C * ∑ k in Sᶜ, ((x : Real) - k/ₙ) ^ 2 / δ ^ 2 * bernstein n k x := by
+        gcongr with k hk
+        conv_lhs => rw [← one_mul (bernstein _ _ _)]
+        gcongr
+        simpa [one_le_div₀, hδ₀, sq_le_sq, S, abs_of_pos, ← Real.dist_eq, dist_comm (x : Real)]
+          using! hk
+      -- Again enlarging the sum from `Sᶜ` to all of `Fin (n+1)`
+      _ <= C * ∑ k : Fin (n + 1), ((x : Real) - k/ₙ) ^ 2 / δ ^ 2 * bernstein n k x := by
+        gcongr; exact Sᶜ.subset_univ
+      _ = C * (∑ k : Fin (n + 1), ((x : Real) - k/ₙ) ^ 2 * bernstein n k x) / δ ^ 2 := by
+        simp only [← mul_div_right_comm, ← mul_div_assoc, ← Finset.sum_div]
+      -- `bernstein.variance` and `x ∈ [0,1]` gives the uniform bound
+      _ = C / δ ^ 2 * x * (1 - x) / n := by rw [variance hn₀]; ring
+      _ <= C / δ ^ 2 * 1 * 1 / n := by gcongr <;> unit_interval
+      _ < 1 / 2 := by simpa only [mul_one]
 
 中文:
 定理 bernsteinApproximation_uniform
@@ -424,7 +517,90 @@ theorem bernsteinApproximation_uniform
   let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   /- Topology on a locally convex TVS is given by a family of seminorms `‖x‖_U = gauge U x`,
-  where the open symmetric convex sets `U` form a basis of neighborhoo
+  where the open symmetric convex sets `U` form a basis of neighborhoods in this topology,
+  and are the open unit balls for the corresponding seminorms.
+  For technical reasons, we neither assume `U`s to be open, nor symmetric. -/
+  suffices forall U in 𝓝 (0 : E), Convex Real U ->
+      forallᶠ n in atTop, forall x : I, gauge U (bernsteinApproximation n f x - f x) < 1 by
+    rw [(LocallyConvexSpace.convex_basis_zero Real E).uniformity_of_nhds_zero_swapped
+.tendsto_right_iff] nhds_basis_uniformity .compactConvergenceUniformity_of_compact
+    rintro U ⟨hU₀, hcU⟩
+    filter_upwards [this U hU₀ hcU] with n hn x
+    exact setOfPred_gauge_lt_one_subset_self hcU (mem_of_mem_nhds hU₀) (absorbent_nhds_zero hU₀)
+      (hn x)
+  intro U hU₀ hUc
+  /- Choose a constant `C` such that `‖f x - f y‖_U ≤ C` for all `x`, `y`.
+  For a normed space, this would be twice the norm of `f`. -/
+  obtain ⟨C, hC⟩ : exists C, forall x y, gauge U (f x - f y) <= C := by
+    have : Continuous fun (x, y) => gauge U (f x - f y) := by fun_prop
+    simpa only [BddAbove, Set.Nonempty, mem_upperBounds, Set.forall_mem_range, Prod.forall]
+.bddAbove using isCompact_range this
+  have hC₀ : 0 <= C := le_trans (gauge_nonneg _) (hC 0 0)
+  /- Use uniform continuity of `f` to choose `δ > 0` such that `‖f x - f y‖_U < 1 / 2`
+  whenever `dist x y < δ`. -/
+  obtain ⟨δ, hδ₀, hδ⟩ : exists δ > 0, forall x y : I, dist x y < δ -> gauge U (f x - f y) < 1 / 2 := by
+    have := CompactSpace.uniformContinuous_of_continuous (map_continuous f)
+    rw [Metric.uniformity_basis_dist.uniformContinuous_iff
+      (basis_sets _).uniformity_of_nhds_zero_swapped] at this
+exact this {z | gauge U z < 1 / 2} tendsto_gauge_nhds_zero hU₀
+.eventually_lt_const by positivity
+  -- Take `n ≠ 0` such that `C / δ ^ 2 / n < 1 / 2`.
+  have nhds_zero := tendsto_const_div_atTop_nhds_zero_nat (C / δ ^ 2)
+  filter_upwards [nhds_zero.eventually_lt_const (half_pos one_pos), eventually_ne_atTop 0]
+    with n nh hn₀ x
+  -- The idea is to split up the sum over `k` into two sets,
+  -- `S`, where `x - k/n < δ`, and its complement.
+  set S : Finset (Fin (n + 1)) := {k : Fin (n + 1) | dist k/ₙ x < δ}
+  calc
+    gauge U (bernsteinApproximation n f x - f x)
+      = gauge U (∑ k : Fin (n + 1), bernstein n k x • (f k/ₙ - f x)) := by
+      simp [bernsteinApproximation.apply, smul_sub, ← Finset.sum_smul]
+    _ <= ∑ k : Fin (n + 1), gauge U (bernstein n k x • (f k/ₙ - f x)) :=
+      gauge_sum_le hUc (absorbent_nhds_zero hU₀) _ _
+    _ = ∑ k : Fin (n + 1), bernstein n k x * gauge U (f k/ₙ - f x) := by
+      simp only [gauge_smul_of_nonneg, bernstein_nonneg, smul_eq_mul]
+    _ = (∑ k in S, bernstein n k x * gauge U (f k/ₙ - f x)) +
+          ∑ k in Sᶜ, bernstein n k x * gauge U (f k/ₙ - f x) :=
+      (S.sum_add_sum_compl _).symm
+    -- We'll now deal with the terms in `S` and the terms in `Sᶜ` in separate calc blocks.
+    _ < 1 / 2 + 1 / 2 := add_lt_add_of_le_of_lt ?_ ?_
+    _ = 1 := add_halves 1
+  · -- We now work on the terms in `S`: uniform continuity and `bernstein.probability`
+    -- quickly give us a bound.
+    calc
+      ∑ k in S, bernstein n k x * gauge U (f k/ₙ - f x) <= ∑ k in S, bernstein n k x * (1 / 2) := by
+        gcongr with k hk
+        refine (hδ _ _ ?_).le
+        simpa [S] using hk
+      _ = 1 / 2 * ∑ k in S, bernstein n k x := by rw [mul_comm, Finset.sum_mul]
+      -- In this step we increase the sum over `S` back to a sum over all of `Fin (n+1)`,
+      -- so that we can use `bernstein.probability`.
+      _ <= 1 / 2 * ∑ k : Fin (n + 1), bernstein n k x := by gcongr; exact S.subset_univ
+      _ = 1 / 2 := by rw [bernstein.probability, mul_one]
+  · -- We now turn to working on `Sᶜ`: we control the difference term just using `C`,
+    -- and then insert a `(x - k/n)^2 / δ^2` factor
+    -- (which is at least one because we are not in `S`).
+    calc
+      ∑ k in Sᶜ, bernstein n k x * gauge U (f k/ₙ - f x) <= ∑ k in Sᶜ, C * bernstein n k x := by
+        simp only [mul_comm (bernstein n _ x)]
+        gcongr
+        apply hC
+      _ = C * ∑ k in Sᶜ, bernstein n k x := by rw [Finset.mul_sum]
+      _ <= C * ∑ k in Sᶜ, ((x : Real) - k/ₙ) ^ 2 / δ ^ 2 * bernstein n k x := by
+        gcongr with k hk
+        conv_lhs => rw [← one_mul (bernstein _ _ _)]
+        gcongr
+        simpa [one_le_div₀, hδ₀, sq_le_sq, S, abs_of_pos, ← Real.dist_eq, dist_comm (x : Real)]
+          using! hk
+      -- Again enlarging the sum from `Sᶜ` to all of `Fin (n+1)`
+      _ <= C * ∑ k : Fin (n + 1), ((x : Real) - k/ₙ) ^ 2 / δ ^ 2 * bernstein n k x := by
+        gcongr; exact Sᶜ.subset_univ
+      _ = C * (∑ k : Fin (n + 1), ((x : Real) - k/ₙ) ^ 2 * bernstein n k x) / δ ^ 2 := by
+        simp only [← mul_div_right_comm, ← mul_div_assoc, ← Finset.sum_div]
+      -- `bernstein.variance` and `x ∈ [0,1]` gives the uniform bound
+      _ = C / δ ^ 2 * x * (1 - x) / n := by rw [variance hn₀]; ring
+      _ <= C / δ ^ 2 * 1 * 1 / n := by gcongr <;> unit_interval
+      _ < 1 / 2 := by simpa only [mul_one]
 
 Depends on / 依赖: IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, UniformSpace, isUniformAddGroup_of_addCommGroup, rightUniformSpace
 -/

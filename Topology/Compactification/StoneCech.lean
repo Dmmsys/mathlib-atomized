@@ -184,7 +184,8 @@ theorem ultrafilter_converges_iff
   constructor
   · intro h a ha
     exact h _ ⟨ha, a, rfl⟩
-  · 
+  · rintro h a ⟨xi, a, rfl⟩
+    exact h _ xi
 
 中文:
 定理 ultrafilter_converges_iff
@@ -197,7 +198,8 @@ theorem ultrafilter_converges_iff
   constructor
   · intro h a ha
     exact h _ ⟨ha, a, rfl⟩
-  · 
+  · rintro h a ⟨xi, a, rfl⟩
+    exact h _ xi
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.nhds_generateFrom, Ultrafilter, Ultrafilter.coe_le_coe, coe_le_coe, eq_comm, le_iInf_iff, le_principal_iff, mem_ofPred_eq, nhds_generateFrom, ultrafilterBasis
 -/
@@ -275,7 +277,9 @@ instance :
   rw [← Ultrafilter.coe_le_coe]
   intro s hs
   rw [connectedComponent_eq_iInter_isClopen]; rw [Set.mem_iInter] at hB
-  let Z := {
+  let Z := { F : Ultrafilter α | s in F }
+  have hZ : IsClopen Z := ⟨ultrafilter_isClosed_basic s, ultrafilter_isOpen_basic s⟩
+  exact hB ⟨Z, hZ, hs⟩
 
 中文:
 实例 :
@@ -288,7 +292,9 @@ instance :
   rw [← Ultrafilter.coe_le_coe]
   intro s hs
   rw [connectedComponent_eq_iInter_isClopen]; rw [Set.mem_iInter] at hB
-  let Z := {
+  let Z := { F : Ultrafilter α | s in F }
+  have hZ : IsClopen Z := ⟨ultrafilter_isClosed_basic s, ultrafilter_isOpen_basic s⟩
+  exact hB ⟨Z, hZ, hs⟩
 
 Depends on / 依赖: IsClopen, Set.eq_singleton_iff_unique_mem, Set.mem_iInter, Ultrafilter, Ultrafilter.coe_le_coe, coe_le_coe, connectedComponent_eq_iInter_isClopen, eq_singleton_iff_unique_mem, mem_connectedComponent, mem_iInter, totallyDisconnectedSpace_iff_connectedComponent_singleton, true_and, ultrafilter_isClosed_basic, ultrafilter_isOpen_basic
 -/
@@ -571,7 +577,9 @@ theorem continuous_ultrafilter_extend
     -- b.map f is an ultrafilter on γ, which is compact, so it converges to some c in γ.
     let ⟨c, _, h'⟩ :=
       isCompact_univ.ultrafilter_le_nhds (b.map f) (by rw [le_principal_iff]; exact univ_mem)
-    ⟨c, le_tr
+    ⟨c, le_trans (map_mono (ultrafilter_comap_pure_nhds _)) h'⟩
+  let _ : TopologicalSpace α := ⊥
+  exact isDenseInducing_pure.continuous_extend h
 
 中文:
 定理 continuous_ultrafilter_extend
@@ -582,7 +590,9 @@ theorem continuous_ultrafilter_extend
     -- b.map f is an ultrafilter on γ, which is compact, so it converges to some c in γ.
     let ⟨c, _, h'⟩ :=
       isCompact_univ.ultrafilter_le_nhds (b.map f) (by rw [le_principal_iff]; exact univ_mem)
-    ⟨c, le_tr
+    ⟨c, le_trans (map_mono (ultrafilter_comap_pure_nhds _)) h'⟩
+  let _ : TopologicalSpace α := ⊥
+  exact isDenseInducing_pure.continuous_extend h
 
 Depends on / 依赖: Tendsto, Ultrafilter
 -/
@@ -606,7 +616,16 @@ theorem ultrafilter_extend_eq_iff
      -- the facts that ultrafilter.extend is a continuous extension of f.
      let b' : Ultrafilter (Ultrafilter α) := b.map pure
      have t : ↑b' <= 𝓝 b := ultrafilter_converges_iff.mpr (bind_pure _).symm
-     rw [←
+     rw [← h]
+     have := (continuous_ultrafilter_extend f).tendsto b
+     refine le_trans ?_ (le_trans (map_mono t) this)
+     change _ <= map (Ultrafilter.extend f ∘ pure) ↑b
+     rw [ultrafilter_extend_extends]
+     exact le_rfl,
+   fun h =>
+    let _ : TopologicalSpace α := ⊥
+    isDenseInducing_pure.extend_eq_of_tendsto
+      (le_trans (map_mono (ultrafilter_comap_pure_nhds _)) h)⟩
 
 中文:
 定理 ultrafilter_extend_eq_iff
@@ -616,7 +635,16 @@ theorem ultrafilter_extend_eq_iff
      -- the facts that ultrafilter.extend is a continuous extension of f.
      let b' : Ultrafilter (Ultrafilter α) := b.map pure
      have t : ↑b' <= 𝓝 b := ultrafilter_converges_iff.mpr (bind_pure _).symm
-     rw [←
+     rw [← h]
+     have := (continuous_ultrafilter_extend f).tendsto b
+     refine le_trans ?_ (le_trans (map_mono t) this)
+     change _ <= map (Ultrafilter.extend f ∘ pure) ↑b
+     rw [ultrafilter_extend_extends]
+     exact le_rfl,
+   fun h =>
+    let _ : TopologicalSpace α := ⊥
+    isDenseInducing_pure.extend_eq_of_tendsto
+      (le_trans (map_mono (ultrafilter_comap_pure_nhds _)) h)⟩
 -/
 theorem ultrafilter_extend_eq_iff {f : α -> γ} {b : Ultrafilter α} {c : γ} :
     Ultrafilter.extend f b = c ↔ ↑(b.map f) <= 𝓝 c :=
@@ -748,7 +776,9 @@ theorem continuous_preStoneCechUnit
       rw [ultrafilter_converges_iff]; rw [← bind_pure g]
       rfl
     have : (map preStoneCechUnit g : Filter (PreStoneCech α)) <= 𝓝 (Quot.mk _ g) :=
-      (map_mono this).trans (continuous_quot_mk.tendsto
+      (map_mono this).trans (continuous_quot_mk.tendsto _)
+    convert! this
+    exact Quot.sound ⟨x, pure_le_nhds x, gx⟩
 
 中文:
 定理 continuous_preStoneCechUnit
@@ -758,7 +788,9 @@ theorem continuous_preStoneCechUnit
       rw [ultrafilter_converges_iff]; rw [← bind_pure g]
       rfl
     have : (map preStoneCechUnit g : Filter (PreStoneCech α)) <= 𝓝 (Quot.mk _ g) :=
-      (map_mono this).trans (continuous_quot_mk.tendsto
+      (map_mono this).trans (continuous_quot_mk.tendsto _)
+    convert! this
+    exact Quot.sound ⟨x, pure_le_nhds x, gx⟩
 
 Depends on / 依赖: Filter, PreStoneCech, Quot.mk, Quot.sound, bind_pure, continuous_iff_ultrafilter, continuous_iff_ultrafilter.mpr, continuous_quot_mk, continuous_quot_mk.tendsto, convert, g.map, map_mono, preStoneCechUnit, pure_le_nhds, tendsto, toFilter, ultrafilter_converges_iff
 -/
@@ -933,7 +965,11 @@ lemma eq_if_preStoneCechUnit_eq
   rw [preStoneCechUnit]; rw [preStoneCechUnit]; rw [Quot.eq] at h
   generalize (pure a : Ultrafilter α) = F at h
   generalize (pure b : Ultrafilter α) = G at h
- 
+  induction h with
+  | rel x y a => exact let ⟨a, hx, hy⟩ := a; preStoneCechCompat hg hx hy
+  | refl x => rfl
+  | symm x y _ h => rw [h]
+  | trans x y z _ _ h h' => exact h.trans h'
 
 中文:
 引理 eq_if_preStoneCechUnit_eq
@@ -944,7 +980,11 @@ lemma eq_if_preStoneCechUnit_eq
   rw [preStoneCechUnit]; rw [preStoneCechUnit]; rw [Quot.eq] at h
   generalize (pure a : Ultrafilter α) = F at h
   generalize (pure b : Ultrafilter α) = G at h
- 
+  induction h with
+  | rel x y a => exact let ⟨a, hx, hy⟩ := a; preStoneCechCompat hg hx hy
+  | refl x => rfl
+  | symm x y _ h => rw [h]
+  | trans x y z _ _ h h' => exact h.trans h'
 
 Depends on / 依赖: Function, Function.comp_apply, Quot.eq, Ultrafilter, comp_apply, generalize, h.trans, preStoneCechCompat, preStoneCechUnit, ultrafilter_extend_extends
 -/

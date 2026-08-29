@@ -113,7 +113,14 @@ instance :
   refine createsColimitOfFullyFaithfulOfIso
       { toComma := colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)
         prop := ?_ } (Iso.refl _)
-  let e : (colimit (F ⋙ MorphismProperty.Ov
+  let e : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left ≅
+      colimit ((F ⋙ MorphismProperty.Over.forget P ⊤ S) ⋙ Over.forget S) :=
+    preservesColimitIso (Over.forget S) _
+  let 𝒰 : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left.OpenCover :=
+    (Scheme.IsLocallyDirected.openCover _).pushforwardIso e.inv
+  rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) 𝒰]
+  intro i
+  simpa [𝒰, e] using! (F.obj i).prop
 
 中文:
 实例 :
@@ -124,7 +131,14 @@ instance :
   refine createsColimitOfFullyFaithfulOfIso
       { toComma := colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)
         prop := ?_ } (Iso.refl _)
-  let e : (colimit (F ⋙ MorphismProperty.Ov
+  let e : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left ≅
+      colimit ((F ⋙ MorphismProperty.Over.forget P ⊤ S) ⋙ Over.forget S) :=
+    preservesColimitIso (Over.forget S) _
+  let 𝒰 : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left.OpenCover :=
+    (Scheme.IsLocallyDirected.openCover _).pushforwardIso e.inv
+  rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) 𝒰]
+  intro i
+  simpa [𝒰, e] using! (F.obj i).prop
 
 Depends on / 依赖: HasColimit, IsLoca, Iso.refl, MorphismProperty, MorphismProperty.Over.forget, OpenCover, Over.forget, Scheme, Scheme.IsLoca, SimplicialObject, SimplicialObject.Truncated.sk.faithful, Truncated, colimit, createsColimitOfFullyFaithfulOfIso, faithful, forget, hasColimit_of_created, left.OpenCover, preservesColimitIso, toComma
 -/

@@ -147,7 +147,8 @@ theorem leadingCoeff_sum_of_degree_eq
 · replace hd k (hk : k in s) : (f k).natDegree = d := natDegree_eq_of_degree_eq_some hd k hk
     suffices (∑ k in s, f k).natDegree = d by simp_all [leadingCoeff]
     apply natDegree_eq_of_le_of_coeff_ne_zero
-    · aesop (add safe natDegree_s
+    · aesop (add safe natDegree_sum_le_of_forall_le)
+    · simp_all [leadingCoeff]
 
 中文:
 定理 leadingCoeff_sum_of_degree_eq
@@ -158,7 +159,8 @@ theorem leadingCoeff_sum_of_degree_eq
 · replace hd k (hk : k in s) : (f k).natDegree = d := natDegree_eq_of_degree_eq_some hd k hk
     suffices (∑ k in s, f k).natDegree = d by simp_all [leadingCoeff]
     apply natDegree_eq_of_le_of_coeff_ne_zero
-    · aesop (add safe natDegree_s
+    · aesop (add safe natDegree_sum_le_of_forall_le)
+    · simp_all [leadingCoeff]
 
 Depends on / 依赖: WithBot, WithBot.none_eq_bot, leadingCoeff, natDegree, natDegree_eq_of_degree_eq_some, natDegree_eq_of_le_of_coeff_ne_zero, natDegree_sum_le_of_forall_le, none_eq_bot, replace
 -/
@@ -315,7 +317,12 @@ theorem coeff_list_prod_of_natDegree_le
     have hl' : forall p in tl, natDegree p <= n := fun p hp => hl p (List.mem_cons_of_mem _ hp)
     simp only [List.prod_cons, List.map, List.length]
     rw [add_mul]; rw [one_mul]; rw [add_comm]; rw [← IH hl']; rw [mul_comm tl.length]
-    h
+    have h : natDegree tl.prod <= n * tl.length := by
+      refine (natDegree_list_prod_le _).trans ?_
+      rw [← tl.length_map natDegree]; rw [mul_comm]
+      refine List.sum_le_card_nsmul _ _ ?_
+      simpa using hl'
+    exact coeff_mul_add_eq_of_natDegree_le (hl _ List.mem_cons_self) h
 
 中文:
 定理 coeff_list_prod_of_natDegree_le
@@ -327,7 +334,12 @@ theorem coeff_list_prod_of_natDegree_le
     have hl' : forall p in tl, natDegree p <= n := fun p hp => hl p (List.mem_cons_of_mem _ hp)
     simp only [List.prod_cons, List.map, List.length]
     rw [add_mul]; rw [one_mul]; rw [add_comm]; rw [← IH hl']; rw [mul_comm tl.length]
-    h
+    have h : natDegree tl.prod <= n * tl.length := by
+      refine (natDegree_list_prod_le _).trans ?_
+      rw [← tl.length_map natDegree]; rw [mul_comm]
+      refine List.sum_le_card_nsmul _ _ ?_
+      simpa using hl'
+    exact coeff_mul_add_eq_of_natDegree_le (hl _ List.mem_cons_self) h
 
 Depends on / 依赖: List.length, List.map, List.mem_cons_of_mem, List.prod_cons, List.sum_le_card_nsmul, add_comm, add_mul, coeff_mul_add_eq_of_natDe, length, length_map, mem_cons_of_mem, mul_comm, natDegree, natDegree_list_prod_le, one_mul, prod_cons, sum_le_card_nsmul, tl.length, tl.length_map, tl.prod
 -/
@@ -444,7 +456,7 @@ theorem leadingCoeff_multiset_prod'
   · rw [ih]
     · exact h
     simp only [ne_eq]
-    
+    apply right_ne_zero_of_mul h
 
 中文:
 定理 leadingCoeff_multiset_prod'
@@ -459,7 +471,7 @@ theorem leadingCoeff_multiset_prod'
   · rw [ih]
     · exact h
     simp only [ne_eq]
-    
+    apply right_ne_zero_of_mul h
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.map_cons, Multiset.prod_cons, Polynomial, Polynomial.leadingCoeff_mul, induction_on, leadingCoeff_mul, map_cons, ne_eq, prod_cons, right_ne_zero_of_mul
 -/
@@ -510,7 +522,7 @@ theorem natDegree_multiset_prod'
   rw [Multiset.sum_cons]; rw [Polynomial.natDegree_mul']; rw [ih]
   · apply right_ne_zero_of_mul ht
   · rwa [Polynomial.leadingCoeff_multiset_prod']
-    apply right
+    apply right_ne_zero_of_mul ht
 
 中文:
 定理 natDegree_multiset_prod'
@@ -522,7 +534,7 @@ theorem natDegree_multiset_prod'
   rw [Multiset.sum_cons]; rw [Polynomial.natDegree_mul']; rw [ih]
   · apply right_ne_zero_of_mul ht
   · rwa [Polynomial.leadingCoeff_multiset_prod']
-    apply right
+    apply right_ne_zero_of_mul ht
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.map_cons, Multiset.prod_cons, Multiset.sum_cons, Polynomial, Polynomial.leadingCoeff_multiset_prod, Polynomial.natDegree_mul, induction_on, leadingCoeff_multiset_prod, map_cons, natDegree_mul, prod_cons, revert, right_ne_zero_of_mul, sum_cons
 -/
@@ -592,14 +604,14 @@ theorem degree_multiset_prod_of_monic
   given: [Nontrivial R] (h : forall f in t, Monic f)
   proof: by
 have : t.prod != 0 := Monic.ne_zero by simpa using monic_multiset_prod_of_monic _ _ h
-  rw [degree_eq_natDegree this]; rw [natDegree_multiset_prod_of_monic _ h]; rw [Nat.cast_multiset_sum]; rw [Multiset.map_map]; rw [Function.comp_def]; rw [Multiset.map_congr rfl (fun f hf => (degree_eq_natDegree
+  rw [degree_eq_natDegree this]; rw [natDegree_multiset_prod_of_monic _ h]; rw [Nat.cast_multiset_sum]; rw [Multiset.map_map]; rw [Function.comp_def]; rw [Multiset.map_congr rfl (fun f hf => (degree_eq_natDegree (h f hf).ne_zero).symm)]
 
 中文:
 定理 degree_multiset_prod_of_monic
   条件: [非平凡 R] (h : 对任意 f in t, Monic f)
   证明: by
 have : t.prod != 0 := Monic.ne_zero by simpa using monic_multiset_prod_of_monic _ _ h
-  rw [degree_eq_natDegree this]; rw [natDegree_multiset_prod_of_monic _ h]; rw [Nat.cast_multiset_sum]; rw [Multiset.map_map]; rw [Function.comp_def]; rw [Multiset.map_congr rfl (fun f hf => (degree_eq_natDegree
+  rw [degree_eq_natDegree this]; rw [natDegree_multiset_prod_of_monic _ h]; rw [Nat.cast_multiset_sum]; rw [Multiset.map_map]; rw [Function.comp_def]; rw [Multiset.map_congr rfl (fun f hf => (degree_eq_natDegree (h f hf).ne_zero).symm)]
 
 Depends on / 依赖: Function, Function.comp_def, Monic.ne_zero, Multiset, Multiset.map_congr, Multiset.map_map, Nat.cast_multiset_sum, cast_multiset_sum, comp_def, degree_eq_natDegree, e.symm, map_congr, map_map, monic_multiset_prod_of_monic, natDegree_multiset_prod_of_monic, ne_zero, t.prod
 -/
@@ -830,7 +842,10 @@ theorem multiset_prod_X_sub_C_coeff_card_pred
     · simp only [Multiset.mem_map]
       rintro _ ⟨_, _, rfl⟩
       apply monic_X_sub_C
-    simp_rw [Multiset.sum_eq_zero_iff, Multi
+    simp_rw [Multiset.sum_eq_zero_iff, Multiset.mem_map]
+    obtain ⟨x, hx⟩ := card_pos_iff_exists_mem.mp ht
+exact fun h => one_ne_zero h 1 ⟨_, ⟨x, hx, rfl⟩, natDegree_X_sub_C _⟩
+  congr; rw [natDegree_multiset_prod_of_monic] <;> · simp [monic_X_sub_C]
 
 中文:
 定理 multiset_prod_X_sub_C_coeff_card_pred
@@ -845,7 +860,10 @@ theorem multiset_prod_X_sub_C_coeff_card_pred
     · simp only [Multiset.mem_map]
       rintro _ ⟨_, _, rfl⟩
       apply monic_X_sub_C
-    simp_rw [Multiset.sum_eq_zero_iff, Multi
+    simp_rw [Multiset.sum_eq_zero_iff, Multiset.mem_map]
+    obtain ⟨x, hx⟩ := card_pos_iff_exists_mem.mp ht
+exact fun h => one_ne_zero h 1 ⟨_, ⟨x, hx, rfl⟩, natDegree_X_sub_C _⟩
+  congr; rw [natDegree_multiset_prod_of_monic] <;> · simp [monic_X_sub_C]
 
 Depends on / 依赖: Multiset, Multiset.mem_map, Multiset.sum_eq_zero_iff, card_pos_iff_exists_mem, card_pos_iff_exists_mem.mp, convert, if_neg, mem_map, monic_X_sub_C, multiset_prod_X_sub_C_nextCoeff, natDegree_X_sub_C, natDegree_multiset_prod_of_monic, nextCoeff, nontriviality, one_ne_zero, simp_rw, sum_eq_zero_iff
 -/
@@ -901,7 +919,13 @@ degree_map_le.trans Finset.le_sup (f := fun i => (f i).degree) hi
     by_cases hf : f i = 0
     · simp [hf]
     rw [degree_eq_natDegree hf]
-    apply l
+    apply le_degree_of_ne_zero
+    rw [finsetSum_coeff]
+    conv in (fun _ => _) =>
+      ext
+      rw [coeff_smul]; rw [smul_eq_mul]; rw [coeff_map]; rw [mul_comm]; rw [← Algebra.smul_def]
+    intro H
+    exact hf (leadingCoeff_eq_zero.mp (linearIndepOn_finset_iff.mp h _ H i hi))
 
 中文:
 引理 degree_sum_eq_of_linearIndepOn
@@ -915,7 +939,13 @@ degree_map_le.trans Finset.le_sup (f := fun i => (f i).degree) hi
     by_cases hf : f i = 0
     · simp [hf]
     rw [degree_eq_natDegree hf]
-    apply l
+    apply le_degree_of_ne_zero
+    rw [finsetSum_coeff]
+    conv in (fun _ => _) =>
+      ext
+      rw [coeff_smul]; rw [smul_eq_mul]; rw [coeff_map]; rw [mul_comm]; rw [← Algebra.smul_def]
+    intro H
+    exact hf (leadingCoeff_eq_zero.mp (linearIndepOn_finset_iff.mp h _ H i hi))
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Finset, Finset.le_sup, Finset.sup_le, coeff_map, coeff_smul, degree, degree_eq_natDegree, degree_map_le, degree_map_le.trans, degree_smul_le, degree_sum_le, finsetSum_coeff, le_antisymm, le_degree_of_ne_zero, le_sup, leadingCoeff_eq_zero, leadingCoeff_eq_zero.mp, linearIndepOn_finset_i
 -/
@@ -955,7 +985,12 @@ natDegree_map_le.trans Finset.le_sup (f := fun i => (f i).natDegree) hi
     by_cases hf : f i = 0
     · simp [hf]
     apply le_natDegree_of_ne_zero
-    rw
+    rw [finsetSum_coeff]
+    conv in (fun _ => _) =>
+      ext
+      rw [coeff_smul]; rw [smul_eq_mul]; rw [coeff_map]; rw [mul_comm]; rw [← Algebra.smul_def]
+    intro H
+    exact hf (leadingCoeff_eq_zero.mp (linearIndepOn_finset_iff.mp h _ H i hi))
 
 中文:
 引理 natDegree_sum_eq_of_linearIndepOn
@@ -969,7 +1004,12 @@ natDegree_map_le.trans Finset.le_sup (f := fun i => (f i).natDegree) hi
     by_cases hf : f i = 0
     · simp [hf]
     apply le_natDegree_of_ne_zero
-    rw
+    rw [finsetSum_coeff]
+    conv in (fun _ => _) =>
+      ext
+      rw [coeff_smul]; rw [smul_eq_mul]; rw [coeff_map]; rw [mul_comm]; rw [← Algebra.smul_def]
+    intro H
+    exact hf (leadingCoeff_eq_zero.mp (linearIndepOn_finset_iff.mp h _ H i hi))
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Finset, Finset.le_sup, Finset.sup_le, coeff_map, coeff_smul, finsetSum_coeff, le_antisymm, le_natDegree_of_ne_zero, le_sup, leadingCoeff_eq_zero, leadingCoeff_eq_zero.mp, linearIndepOn_finset_iff, linearIndepOn_finset_iff.mp, mul_comm, natDegree, natDegree_map_le, natDegree_map_le.trans, natDegree_smul_le
 -/

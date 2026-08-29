@@ -168,7 +168,9 @@ lemma IsStrictSegal.hom_ext
     simpa [← NatTrans.naturality_apply,
       ← Functor.map_comp_apply, ← op_comp,
       ← SimplexCategory.Truncated.Hom.tr_comp, fac] using
- 
+      congr_arg (Y.map (SimplexCategory.Truncated.Hom.tr (SimplexCategory.δ 0)).op)
+        (h (X.map (SimplexCategory.Truncated.Hom.tr (SimplexCategory.σ 0)).op x))
+  · exact IsStrictSegal.ext (fun i => by simp [← NatTrans.naturality_apply, h])
 
 中文:
 引理 是StrictSegal.hom_ext
@@ -182,7 +184,9 @@ lemma IsStrictSegal.hom_ext
     simpa [← NatTrans.naturality_apply,
       ← Functor.map_comp_apply, ← op_comp,
       ← SimplexCategory.Truncated.Hom.tr_comp, fac] using
- 
+      congr_arg (Y.map (SimplexCategory.Truncated.Hom.tr (SimplexCategory.δ 0)).op)
+        (h (X.map (SimplexCategory.Truncated.Hom.tr (SimplexCategory.σ 0)).op x))
+  · exact IsStrictSegal.ext (fun i => by simp [← NatTrans.naturality_apply, h])
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, IsStrictSegal, IsStrictSegal.ext, NatTrans, NatTrans.naturality_apply, SimplexCategory, SimplexCategory.Truncated.Hom.tr, SimplexCategory.Truncated.Hom.tr_comp, SimplexCategory.rec, Truncated, X.map, Y.map, congr_arg, map_comp_apply, naturality_apply, op_comp, tr_comp
 -/
@@ -539,7 +543,7 @@ lemma spine_δ_vertex_lt
   rw [spine_vertex]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [← tr_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   dsimp only [SimplexCategory.δ, len_mk, mkHom, Hom.toOrderHom_mk,
     Fin.succAboveOrderEmb_apply, OrderEmbedding.toOrderHom_coe]
-  rw [Fin.succAbove_of
+  rw [Fin.succAbove_of_castSucc_lt j i hij]
 
 中文:
 引理 spine_δ_vertex_lt
@@ -548,7 +552,7 @@ lemma spine_δ_vertex_lt
   rw [spine_vertex]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [← tr_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   dsimp only [SimplexCategory.δ, len_mk, mkHom, Hom.toOrderHom_mk,
     Fin.succAboveOrderEmb_apply, OrderEmbedding.toOrderHom_coe]
-  rw [Fin.succAbove_of
+  rw [Fin.succAbove_of_castSucc_lt j i hij]
 
 Depends on / 依赖: Fin.succAboveOrderEmb_apply, Fin.succAbove_of_castSucc_lt, Functor, Functor.map_comp_apply, Hom.toOrderHom_mk, OrderEmbedding, OrderEmbedding.toOrderHom_coe, SimplexCategory, SimplexCategory.const_comp, const_comp, len_mk, map_comp_apply, op_comp, spineToSimplex_vertex, spine_vertex, succAboveOrderEmb_apply, succAbove_of_castSucc_lt, toOrderHom_coe, toOrderHom_mk, tr_comp
 -/
@@ -571,7 +575,7 @@ lemma spine_δ_vertex_ge
   rw [spine_vertex]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [← tr_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   dsimp only [SimplexCategory.δ, len_mk, mkHom, Hom.toOrderHom_mk,
     Fin.succAboveOrderEmb_apply, OrderEmbedding.toOrderHom_coe]
-  rw [Fin.succAbove_of
+  rw [Fin.succAbove_of_le_castSucc j i hij]
 
 中文:
 引理 spine_δ_vertex_ge
@@ -580,7 +584,7 @@ lemma spine_δ_vertex_ge
   rw [spine_vertex]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [← tr_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   dsimp only [SimplexCategory.δ, len_mk, mkHom, Hom.toOrderHom_mk,
     Fin.succAboveOrderEmb_apply, OrderEmbedding.toOrderHom_coe]
-  rw [Fin.succAbove_of
+  rw [Fin.succAbove_of_le_castSucc j i hij]
 
 Depends on / 依赖: Fin.succAboveOrderEmb_apply, Fin.succAbove_of_le_castSucc, Functor, Functor.map_comp_apply, Hom.toOrderHom_mk, OrderEmbedding, OrderEmbedding.toOrderHom_coe, SimplexCategory, SimplexCategory.const_comp, const_comp, len_mk, map_comp_apply, op_comp, spineToSimplex_vertex, spine_vertex, succAboveOrderEmb_apply, succAbove_of_le_castSucc, toOrderHom_coe, toOrderHom_mk, tr_comp
 -/
@@ -1066,7 +1070,7 @@ lemma spine_δ_vertex_lt
   rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   simp only [SimplexCategory.δ, Hom.toOrderHom, len_mk, mkHom, Hom.mk,
     OrderEmbedding.toOrderHom_coe, Fin.succAboveOrderEmb_apply]
-  rw [
+  rw [Fin.succAbove_of_castSucc_lt j i h]
 
 中文:
 引理 spine_δ_vertex_lt
@@ -1076,7 +1080,7 @@ lemma spine_δ_vertex_lt
   rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   simp only [SimplexCategory.δ, Hom.toOrderHom, len_mk, mkHom, Hom.mk,
     OrderEmbedding.toOrderHom_coe, Fin.succAboveOrderEmb_apply]
-  rw [
+  rw [Fin.succAbove_of_castSucc_lt j i h]
 
 Depends on / 依赖: Fin.succAboveOrderEmb_apply, Fin.succAbove_of_castSucc_lt, Functor, Functor.map_comp_apply, Hom.mk, Hom.toOrderHom, OrderEmbedding, OrderEmbedding.toOrderHom_coe, SimplexCategory, SimplexCategory.const_comp, SimplicialObject, const_comp, len_mk, map_comp_apply, op_comp, spineToSimplex_vertex, spine_vertex, succAboveOrderEmb_apply, succAbove_of_castSucc_lt, toOrderHom
 -/
@@ -1100,7 +1104,7 @@ lemma spine_δ_vertex_ge
   rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   simp only [SimplexCategory.δ, Hom.toOrderHom, len_mk, mkHom, Hom.mk,
     OrderEmbedding.toOrderHom_coe, Fin.succAboveOrderEmb_apply]
-  rw [
+  rw [Fin.succAbove_of_le_castSucc j i h]
 
 中文:
 引理 spine_δ_vertex_ge
@@ -1110,7 +1114,7 @@ lemma spine_δ_vertex_ge
   rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [SimplexCategory.const_comp]; rw [spineToSimplex_vertex]
   simp only [SimplexCategory.δ, Hom.toOrderHom, len_mk, mkHom, Hom.mk,
     OrderEmbedding.toOrderHom_coe, Fin.succAboveOrderEmb_apply]
-  rw [
+  rw [Fin.succAbove_of_le_castSucc j i h]
 
 Depends on / 依赖: Fin.succAboveOrderEmb_apply, Fin.succAbove_of_le_castSucc, Functor, Functor.map_comp_apply, Hom.mk, Hom.toOrderHom, OrderEmbedding, OrderEmbedding.toOrderHom_coe, SimplexCategory, SimplexCategory.const_comp, SimplicialObject, const_comp, len_mk, map_comp_apply, op_comp, spineToSimplex_vertex, spine_vertex, succAboveOrderEmb_apply, succAbove_of_le_castSucc, toOrderHom
 -/
@@ -1257,7 +1261,13 @@ definition spineToSimplexAux
     · rw [p.arrow_tgt 0]
       exact Path.congr_vertex (hn (p.interval 1 n)).prop.symm 0
     · ext i
-      obtain rfl | ⟨i, rfl⟩ := i.eq_zero_or_eq_s
+      obtain rfl | ⟨i, rfl⟩ := i.eq_zero_or_eq_succ
+      · dsimp
+        rw [map_mkOfSucc_zero_concat]
+      · simpa [spine_arrow, ← SimplexCategory.mkOfSucc_δ_gt (j := 0) (i := i) (by simp),
+          op_comp, Functor.map_comp_apply, ← SimplicialObject.δ_def, δ₀_concat,
+          ← p.arrow_interval 1 n i i.succ (by grind) (by grind)] using
+            Path.congr_arrow (hn (p.interval 1 n)).prop i
 
 中文:
 定义 spineToSimplexAux
@@ -1270,7 +1280,13 @@ definition spineToSimplexAux
     · rw [p.arrow_tgt 0]
       exact Path.congr_vertex (hn (p.interval 1 n)).prop.symm 0
     · ext i
-      obtain rfl | ⟨i, rfl⟩ := i.eq_zero_or_eq_s
+      obtain rfl | ⟨i, rfl⟩ := i.eq_zero_or_eq_succ
+      · dsimp
+        rw [map_mkOfSucc_zero_concat]
+      · simpa [spine_arrow, ← SimplexCategory.mkOfSucc_δ_gt (j := 0) (i := i) (by simp),
+          op_comp, Functor.map_comp_apply, ← SimplicialObject.δ_def, δ₀_concat,
+          ← p.arrow_interval 1 n i i.succ (by grind) (by grind)] using
+            Path.congr_arrow (hn (p.interval 1 n)).prop i
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, Path.congr_vertex, SimplexCategory, SimplexCategory.mkOfSucc_, SimplicialObject, arrow_interval, arrow_tgt, concat, congr_vertex, eq_zero_or_eq_succ, i.eq_zero_or_eq_succ, i.succ, interval, map_comp_apply, map_mkOfSucc_zero_concat, op_comp, p.arrow, p.arrow_interval, p.arrow_tgt
 -/
@@ -1494,7 +1510,9 @@ definition strictSegal
         ComposableArrows.ext₁ rfl (Functor.congr_obj h 0).symm (by cat_disch)
       δ₀_concat f s h := rfl
       injective {f g} h h₀ :=
-        ComposableAr
+        ComposableArrows.ext_succ (Functor.congr_obj h 0) h₀
+          ((Arrow.mk_eq_mk_iff _ _).1
+            (DFunLike.congr_arg ComposableArrows.arrowEquiv h)).2.2 })
 
 中文:
 定义 strictSegal
@@ -1505,7 +1523,9 @@ definition strictSegal
         ComposableArrows.ext₁ rfl (Functor.congr_obj h 0).symm (by cat_disch)
       δ₀_concat f s h := rfl
       injective {f g} h h₀ :=
-        ComposableAr
+        ComposableArrows.ext_succ (Functor.congr_obj h 0) h₀
+          ((Arrow.mk_eq_mk_iff _ _).1
+            (DFunLike.congr_arg ComposableArrows.arrowEquiv h)).2.2 })
 
 Depends on / 依赖: Arrow.mk_eq_mk_iff, ComposableArrows, ComposableArrows.arrowEquiv, ComposableArrows.ext, ComposableArrows.ext_succ, DFunLike, DFunLike.congr_arg, Functor, Functor.congr_obj, StrictSegal, StrictSegal.ofCore, arrowEquiv, cat_disch, concat, congr_arg, congr_obj, eqToHom, ext_succ, f.hom, injective
 -/

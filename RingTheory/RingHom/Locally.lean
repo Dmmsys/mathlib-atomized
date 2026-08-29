@@ -162,7 +162,9 @@ lemma locally_of_exists
   let e : Localization.Away (s i) ≃+* Sₜ i :=
     (IsLocalization.algEquiv (Submonoid.powers (s i)) _ _).toRingEquiv
   have : algebraMap S (Localization.Away (s i)) = e.symm.toRingHom.comp (algebraMap S (Sₜ i)) :=
-    RingHom.ext (fun x => (AlgEquiv.co
+    RingHom.ext (fun x => (AlgEquiv.commutes (IsLocalization.algEquiv _ _ _).symm _).symm)
+  rw [this]; rw [RingHom.comp_assoc]
+  exact hP.left _ _ (hf i)
 
 中文:
 引理 locally_of_存在
@@ -173,7 +175,9 @@ lemma locally_of_exists
   let e : Localization.Away (s i) ≃+* Sₜ i :=
     (IsLocalization.algEquiv (Submonoid.powers (s i)) _ _).toRingEquiv
   have : algebraMap S (Localization.Away (s i)) = e.symm.toRingHom.comp (algebraMap S (Sₜ i)) :=
-    RingHom.ext (fun x => (AlgEquiv.co
+    RingHom.ext (fun x => (AlgEquiv.commutes (IsLocalization.algEquiv _ _ _).symm _).symm)
+  rw [this]; rw [RingHom.comp_assoc]
+  exact hP.left _ _ (hf i)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, IsLocalization, IsLocalization.algEquiv, Localization, Localization.Away, RingHom, RingHom.comp_assoc, RingHom.ext, Set.range, Submonoid, Submonoid.powers, algEquiv, algebraMap, commutes, comp_assoc, e.symm.toRingHom.comp, hP.left, powers, toRingEquiv
 -/
@@ -230,7 +234,11 @@ lemma locally_iff_isLocalization
   refine ⟨fun ⟨s, hsone, hs⟩ => ⟨s, hsone, fun t ht Sₜ _ _ _ => ?_⟩, fun ⟨s, hsone, hs⟩ => ?_⟩
   · let e : Localization.Away t ≃+* Sₜ :=
       (IsLocalization.algEquiv (Submonoid.powers t) _ _).toRingEquiv
-    have : algebraMap S Sₜ = e.toRingHom.comp (algebraMap S (
+    have : algebraMap S Sₜ = e.toRingHom.comp (algebraMap S (Localization.Away t)) :=
+      RingHom.ext (fun x => (AlgEquiv.commutes (IsLocalization.algEquiv _ _ _) _).symm)
+    rw [this]; rw [RingHom.comp_assoc]
+    exact hP.left _ _ (hs t ht)
+  · exact ⟨s, hsone, fun t ht => hs t ht _⟩
 
 中文:
 引理 locally_iff_isLocalization
@@ -240,7 +248,11 @@ lemma locally_iff_isLocalization
   refine ⟨fun ⟨s, hsone, hs⟩ => ⟨s, hsone, fun t ht Sₜ _ _ _ => ?_⟩, fun ⟨s, hsone, hs⟩ => ?_⟩
   · let e : Localization.Away t ≃+* Sₜ :=
       (IsLocalization.algEquiv (Submonoid.powers t) _ _).toRingEquiv
-    have : algebraMap S Sₜ = e.toRingHom.comp (algebraMap S (
+    have : algebraMap S Sₜ = e.toRingHom.comp (algebraMap S (Localization.Away t)) :=
+      RingHom.ext (fun x => (AlgEquiv.commutes (IsLocalization.algEquiv _ _ _) _).symm)
+    rw [this]; rw [RingHom.comp_assoc]
+    exact hP.left _ _ (hs t ht)
+  · exact ⟨s, hsone, fun t ht => hs t ht _⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, IsLocalization, IsLocalization.algEquiv, Localization, Localization.Away, RingHom, RingHom.comp_assoc, RingHom.ext, Submonoid, Submonoid.powers, algEquiv, algebraMap, commutes, comp_assoc, e.toRingHom.comp, hP.left, locally_iff_finite, powers, toRingEquiv
 -/
@@ -349,7 +361,18 @@ lemma locally_ofLocalizationSpanTarget
   rw [locally_iff_exists hP]
   refine ⟨(a : s) × t a, IsLocalization.Away.mulNumerator s t,
       IsLocalization.Away.span_range_mulNumerator_eq_top hsone htone,
-      fun ⟨a, b⟩ => Localization.Away b.val, inferInstance, inferInstance, fu
+      fun ⟨a, b⟩ => Localization.Away b.val, inferInstance, inferInstance, fun ⟨a, b⟩ => ?_, ?_⟩
+  · have : IsLocalization.Away ((algebraMap S (Localization.Away a.val))
+        (IsLocalization.Away.sec a.val b.val).1) (Localization.Away b.val) := by
+      apply IsLocalization.Away.of_associated (r := b.val)
+      rw [← IsLocalization.Away.sec_spec]
+      apply associated_mul_unit_right
+      rw [map_pow _ _]
+      exact IsUnit.pow _ (IsLocalization.Away.algebraMap_isUnit _)
+    apply IsLocalization.Away.mul' (Localization.Away a.val) (Localization.Away b.val)
+  · intro ⟨a, b⟩
+    rw [IsScalarTower.algebraMap_eq S (Localization.Away a.val) (Localization.Away b.val)]
+    apply ht _ _ b.property
 
 中文:
 引理 locally_ofLocalizationSpanTarget
@@ -360,7 +383,18 @@ lemma locally_ofLocalizationSpanTarget
   rw [locally_iff_exists hP]
   refine ⟨(a : s) × t a, IsLocalization.Away.mulNumerator s t,
       IsLocalization.Away.span_range_mulNumerator_eq_top hsone htone,
-      fun ⟨a, b⟩ => Localization.Away b.val, inferInstance, inferInstance, fu
+      fun ⟨a, b⟩ => Localization.Away b.val, inferInstance, inferInstance, fun ⟨a, b⟩ => ?_, ?_⟩
+  · have : IsLocalization.Away ((algebraMap S (Localization.Away a.val))
+        (IsLocalization.Away.sec a.val b.val).1) (Localization.Away b.val) := by
+      apply IsLocalization.Away.of_associated (r := b.val)
+      rw [← IsLocalization.Away.sec_spec]
+      apply associated_mul_unit_right
+      rw [map_pow _ _]
+      exact IsUnit.pow _ (IsLocalization.Away.algebraMap_isUnit _)
+    apply IsLocalization.Away.mul' (Localization.Away a.val) (Localization.Away b.val)
+  · intro ⟨a, b⟩
+    rw [IsScalarTower.algebraMap_eq S (Localization.Away a.val) (Localization.Away b.val)]
+    apply ht _ _ b.property
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away, IsLocalization.Away.mulNumerator, IsLocalization.Away.of_associated, IsLocalization.Away.sec, IsLocalization.Away.span_range_mulNumerator_eq_top, Localization, Localization.Away, a.val, algebraMap, b.val, locally_iff_exists, mulNumerator, of_associated, span_range_mulNumerator_eq_top
 -/
@@ -402,7 +436,15 @@ lemma locally_respectsIso
     · rintro - ⟨a, ha, rfl⟩
       let e' : Localization.Away a ≃+* Localization.Away (e a) :=
         IsLocalization.ringEquivOfRingEquiv _ _ e (Submonoid.map_powers e a)
-      have : (algebraMap T
+      have : (algebraMap T (Localization.Away (e a))).comp e.toRingHom =
+          e'.toRingHom.comp (algebraMap S (Localization.Away a)) := by
+        ext x
+        simp [e']
+      rw [← RingHom.comp_assoc]; rw [this]; rw [RingHom.comp_assoc]
+      apply hPi.left
+      exact hs a ha
+  right {R S T} _ _ _ f e := fun ⟨s, hsone, hs⟩ =>
+    ⟨s, hsone, fun a ha => (RingHom.comp_assoc _ _ _).symm ▸ hPi.right _ _ (hs a ha)⟩
 
 中文:
 引理 locally_respectsIso
@@ -414,7 +456,15 @@ lemma locally_respectsIso
     · rintro - ⟨a, ha, rfl⟩
       let e' : Localization.Away a ≃+* Localization.Away (e a) :=
         IsLocalization.ringEquivOfRingEquiv _ _ e (Submonoid.map_powers e a)
-      have : (algebraMap T
+      have : (algebraMap T (Localization.Away (e a))).comp e.toRingHom =
+          e'.toRingHom.comp (algebraMap S (Localization.Away a)) := by
+        ext x
+        simp [e']
+      rw [← RingHom.comp_assoc]; rw [this]; rw [RingHom.comp_assoc]
+      apply hPi.left
+      exact hs a ha
+  right {R S T} _ _ _ f e := fun ⟨s, hsone, hs⟩ =>
+    ⟨s, hsone, fun a ha => (RingHom.comp_assoc _ _ _).symm ▸ hPi.right _ _ (hs a ha)⟩
 
 Depends on / 依赖: Ideal.map_span, Ideal.map_top, IsLocalization, IsLocalization.ringEquivOfRingEquiv, Localization, Localization.Away, RingHom, RingHom.comp_assoc, Submonoid, Submonoid.map_powers, algebraMap, comp_assoc, e.toRingHom, hPi.left, map_powers, map_span, map_top, ringEquivOfRingEquiv, toRingHom, toRingHom.comp
 -/
@@ -447,7 +497,10 @@ lemma locally_holdsForLocalizationAway
   simp only [Set.mem_singleton_iff, forall_eq, Ideal.span_singleton_one, exists_const]
   let e : S ≃ₐ[R] (Localization.Away (1 : S)) :=
     (IsLocalization.atUnits S (Submonoid.powers 1) (by simp)).restrictScalars R
-  have : IsLocalization.Away r (Localization.Away (1 : S))
+  have : IsLocalization.Away r (Localization.Away (1 : S)) :=
+    IsLocalization.isLocalization_of_algEquiv (Submonoid.powers r) e
+  rw [← IsScalarTower.algebraMap_eq]
+  apply hPa _ r
 
 中文:
 引理 locally_holdsForLocalizationAway
@@ -458,7 +511,10 @@ lemma locally_holdsForLocalizationAway
   simp only [Set.mem_singleton_iff, forall_eq, Ideal.span_singleton_one, exists_const]
   let e : S ≃ₐ[R] (Localization.Away (1 : S)) :=
     (IsLocalization.atUnits S (Submonoid.powers 1) (by simp)).restrictScalars R
-  have : IsLocalization.Away r (Localization.Away (1 : S))
+  have : IsLocalization.Away r (Localization.Away (1 : S)) :=
+    IsLocalization.isLocalization_of_algEquiv (Submonoid.powers r) e
+  rw [← IsScalarTower.algebraMap_eq]
+  apply hPa _ r
 
 Depends on / 依赖: Ideal.span_singleton_one, IsLocalization, IsLocalization.Away, IsLocalization.atUnits, IsLocalization.isLocalization_of_algEquiv, IsScalarTower, IsScalarTower.algebraMap_eq, Localization, Localization.Away, Set.mem_singleton_iff, Submonoid, Submonoid.powers, algebraMap_eq, atUnits, exists_const, forall_eq, introv, isLocalization_of_algEquiv, mem_singleton_iff, powers
 -/
@@ -488,7 +544,31 @@ lemma locally_stableUnderComposition
   obtain ⟨sg, hsgone, hsg⟩ := hg
   rw [locally_iff_exists hPi]
   refine ⟨sf × sg, fun (a, b) => g a * b, ?_,
-      fun (a, b) => Localization.Away ((algebraMap T (Localization.Away b.val)
+      fun (a, b) => Localization.Away ((algebraMap T (Localization.Away b.val)) (g a.val)),
+      inferInstance, inferInstance, inferInstance, ?_⟩
+  · rw [eq_top_iff, ← hsgone, Ideal.span_le]
+    intro t ht
+    have : 1 in Ideal.span (Set.range <| fun a : sf => a.val) := by simp [hsfone]
+    simp only [Ideal.mem_span_range_iff_exists_fun, SetLike.mem_coe] at this ⊢
+    obtain ⟨cf, hcf⟩ := this
+    let cg : sg -> T := Pi.single ⟨t, ht⟩ 1
+    use fun (a, b) => g (cf a) * cg b
+    simp [cg, Pi.single_apply, Fintype.sum_prod_type, ← mul_assoc, ← Finset.sum_mul, ← map_mul,
+      ← map_sum, hcf] at hcf ⊢
+  · intro ⟨a, b⟩
+    let g' := (algebraMap T (Localization.Away b.val)).comp g
+    let a' := (algebraMap T (Localization.Away b.val)) (g a.val)
+    have : (algebraMap T <| Localization.Away a').comp (g.comp f) =
+        (Localization.awayMap g' a.val).comp ((algebraMap S (Localization.Away a.val)).comp f) := by
+      ext x
+      simp only [coe_comp, Function.comp_apply, a']
+      change _ = Localization.awayMap g' a.val (algebraMap S _ (f x))
+      simp only [Localization.awayMap, IsLocalization.Away.map, IsLocalization.map_eq]
+      rfl
+    simp only [this, a']
+    apply hPc _ _ (hsf a.val a.property)
+    apply @hPl _ _ _ _ g' _ _ _ _ _ _ _ _ ?_ (hsg b.val b.property)
+    exact IsLocalization.Away.instMapRingHomPowersOfCoe (Localization.Away (g' a.val)) a.val
 
 中文:
 引理 locally_stableUnderComposition
@@ -501,7 +581,31 @@ lemma locally_stableUnderComposition
   obtain ⟨sg, hsgone, hsg⟩ := hg
   rw [locally_iff_exists hPi]
   refine ⟨sf × sg, fun (a, b) => g a * b, ?_,
-      fun (a, b) => Localization.Away ((algebraMap T (Localization.Away b.val)
+      fun (a, b) => Localization.Away ((algebraMap T (Localization.Away b.val)) (g a.val)),
+      inferInstance, inferInstance, inferInstance, ?_⟩
+  · rw [eq_top_iff, ← hsgone, Ideal.span_le]
+    intro t ht
+    have : 1 in Ideal.span (Set.range <| fun a : sf => a.val) := by simp [hsfone]
+    simp only [Ideal.mem_span_range_iff_exists_fun, SetLike.mem_coe] at this ⊢
+    obtain ⟨cf, hcf⟩ := this
+    let cg : sg -> T := Pi.single ⟨t, ht⟩ 1
+    use fun (a, b) => g (cf a) * cg b
+    simp [cg, Pi.single_apply, Fintype.sum_prod_type, ← mul_assoc, ← Finset.sum_mul, ← map_mul,
+      ← map_sum, hcf] at hcf ⊢
+  · intro ⟨a, b⟩
+    let g' := (algebraMap T (Localization.Away b.val)).comp g
+    let a' := (algebraMap T (Localization.Away b.val)) (g a.val)
+    have : (algebraMap T <| Localization.Away a').comp (g.comp f) =
+        (Localization.awayMap g' a.val).comp ((algebraMap S (Localization.Away a.val)).comp f) := by
+      ext x
+      simp only [coe_comp, Function.comp_apply, a']
+      change _ = Localization.awayMap g' a.val (algebraMap S _ (f x))
+      simp only [Localization.awayMap, IsLocalization.Away.map, IsLocalization.map_eq]
+      rfl
+    simp only [this, a']
+    apply hPc _ _ (hsf a.val a.property)
+    apply @hPl _ _ _ _ g' _ _ _ _ _ _ _ _ ?_ (hsg b.val b.property)
+    exact IsLocalization.Away.instMapRingHomPowersOfCoe (Localization.Away (g' a.val)) a.val
 
 Depends on / 依赖: Ideal.mem_span, Ideal.span, Ideal.span_le, Localization, Localization.Away, Set.range, a.val, algebraMap, b.val, classical, eq_top_iff, hsfone, hsgone, locally_iff_exists, locally_iff_finite, mem_span, span_le
 -/
@@ -553,7 +657,25 @@ lemma locally_stableUnderCompositionWithLocalizationAwayTarget
   · rw [← Ideal.map_span, hsone, Ideal.map_top]
   · rintro - ⟨a, ha, rfl⟩
     let : Algebra (Localization.Away a) (Localization.Away (algebraMap S T a)) :=
-      (IsLocalization.Away.map _ _ (algeb
+      (IsLocalization.Away.map _ _ (algebraMap S T) a).toAlgebra
+    have : (algebraMap (Localization.Away a) (Localization.Away (algebraMap S T a))).comp
+        (algebraMap S (Localization.Away a)) =
+        (algebraMap T (Localization.Away (algebraMap S T a))).comp (algebraMap S T) := by
+      simp [algebraMap_toAlgebra, IsLocalization.Away.map]
+    rw [← comp_assoc]; rw [← this]; rw [comp_assoc]
+    have : IsScalarTower S (Localization.Away a) (Localization.Away ((algebraMap S T) a)) := by
+      apply IsScalarTower.of_algebraMap_eq
+      intro x
+      simp [algebraMap_toAlgebra, IsLocalization.Away.map, ← IsScalarTower.algebraMap_apply]
+    have : IsLocalization.Away (algebraMap S (Localization.Away a) t)
+        (Localization.Away (algebraMap S T a)) :=
+      IsLocalization.Away.commutes _ T ((Localization.Away (algebraMap S T a))) a t
+    apply hPa _ (algebraMap S (Localization.Away a) t)
+    apply hs a ha
+
+@[deprecated (since := "2026-02-11")]
+alias locally_StableUnderCompositionWithLocalizationAwayTarget :=
+  locally_stableUnderCompositionWithLocalizationAwayTarget
 
 中文:
 引理 locally_stableUnderCompositionWithLocalizationAwayTarget
@@ -564,7 +686,25 @@ lemma locally_stableUnderCompositionWithLocalizationAwayTarget
   · rw [← Ideal.map_span, hsone, Ideal.map_top]
   · rintro - ⟨a, ha, rfl⟩
     let : Algebra (Localization.Away a) (Localization.Away (algebraMap S T a)) :=
-      (IsLocalization.Away.map _ _ (algeb
+      (IsLocalization.Away.map _ _ (algebraMap S T) a).toAlgebra
+    have : (algebraMap (Localization.Away a) (Localization.Away (algebraMap S T a))).comp
+        (algebraMap S (Localization.Away a)) =
+        (algebraMap T (Localization.Away (algebraMap S T a))).comp (algebraMap S T) := by
+      simp [algebraMap_toAlgebra, IsLocalization.Away.map]
+    rw [← comp_assoc]; rw [← this]; rw [comp_assoc]
+    have : IsScalarTower S (Localization.Away a) (Localization.Away ((algebraMap S T) a)) := by
+      apply IsScalarTower.of_algebraMap_eq
+      intro x
+      simp [algebraMap_toAlgebra, IsLocalization.Away.map, ← IsScalarTower.algebraMap_apply]
+    have : IsLocalization.Away (algebraMap S (Localization.Away a) t)
+        (Localization.Away (algebraMap S T a)) :=
+      IsLocalization.Away.commutes _ T ((Localization.Away (algebraMap S T a))) a t
+    apply hPa _ (algebraMap S (Localization.Away a) t)
+    apply hs a ha
+
+@[deprecated (since := "2026-02-11")]
+alias locally_StableUnderCompositionWithLocalizationAwayTarget :=
+  locally_stableUnderCompositionWithLocalizationAwayTarget
 
 Depends on / 依赖: Algebra, Ideal.map_span, Ideal.map_top, IsLocalization, IsLocalization.Away.map, Localization, Localization.Away, algebraMap, map_span, map_top, toAlgebra
 -/
@@ -650,7 +790,11 @@ lemma locally_isStableUnderBaseChange
   rw [locally_iff_span_eq_top]; rw [eq_top_iff]; rw [← Ideal.map_top Algebra.TensorProduct.includeRight]; rw [← hf.span_eq_top]; rw [Ideal.map_le_iff_le_comap]; rw [Ideal.span_le]
   intro g hg
   apply Ideal.subset_span
-  sim
+  simp only [Set.mem_ofPred_eq, Algebra.TensorProduct.includeRight_apply,
+    ← IsScalarTower.algebraMap_eq] at hg ⊢
+  let e := IsLocalization.Away.tensorProductEquivTMulRight R S g (Localization.Away g)
+  rw [← e.toAlgHom.comp_algebraMap]
+  exact hPi.left _ _ (hPb.tensorProduct _ hg)
 
 中文:
 引理 locally_isStableUnderBaseChange
@@ -661,7 +805,11 @@ lemma locally_isStableUnderBaseChange
   rw [locally_iff_span_eq_top]; rw [eq_top_iff]; rw [← Ideal.map_top Algebra.TensorProduct.includeRight]; rw [← hf.span_eq_top]; rw [Ideal.map_le_iff_le_comap]; rw [Ideal.span_le]
   intro g hg
   apply Ideal.subset_span
-  sim
+  simp only [Set.mem_ofPred_eq, Algebra.TensorProduct.includeRight_apply,
+    ← IsScalarTower.algebraMap_eq] at hg ⊢
+  let e := IsLocalization.Away.tensorProductEquivTMulRight R S g (Localization.Away g)
+  rw [← e.toAlgHom.comp_algebraMap]
+  exact hPi.left _ _ (hPb.tensorProduct _ hg)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.includeRight_apply, Ideal.map_le_iff_le_comap, Ideal.map_top, Ideal.span_le, Ideal.subset_span, IsLocalization, IsLocalization.Away.tensorProductEquivTMulRight, IsScalarTower, IsScalarTower.algebraMap_eq, IsStableUnderBaseChange, IsStableUnderBaseChange.mk, Localization, Localization.Away, Set.mem_ofPred_eq, TensorProduct, algebraMap_eq, e.toAlgHom.co, eq_top_iff
 -/
@@ -691,7 +839,28 @@ lemma locally_localizationAwayPreserves
   let rₐ (a : s) : Localization.Away a.val := algebraMap _ _ (f r)
   let Sₐ (a : s) := Localization.Away (rₐ a)
   have (a : s) :
-      IsLocalization.Away (((algebraMap S (Localization.Away a.val)).comp f) r) (S
+      IsLocalization.Away (((algebraMap S (Localization.Away a.val)).comp f) r) (Sₐ a) :=
+    inferInstanceAs (IsLocalization.Away (rₐ a) (Sₐ a))
+  have (a : s) : IsLocalization (Algebra.algebraMapSubmonoid (Localization.Away a.val)
+    (Submonoid.map f (Submonoid.powers r))) (Sₐ a) := by
+    convert! (inferInstance : IsLocalization.Away (rₐ a) (Sₐ a))
+    simp [rₐ, Algebra.algebraMapSubmonoid]
+  have H (a : s) : Submonoid.powers (f r) <=
+      (Submonoid.powers (rₐ a)).comap (algebraMap S (Localization.Away a.val)) := by
+    simp [rₐ, Submonoid.powers_le]
+  let (a : s) : Algebra S' (Sₐ a) :=
+    (IsLocalization.map (Sₐ a) (algebraMap S (Localization.Away a.val)) (H a)).toAlgebra
+  have (a : s) : IsScalarTower S S' (Sₐ a) :=
+    IsScalarTower.of_algebraMap_eq' (IsLocalization.map_comp (H a)).symm
+  refine ⟨s, fun a => algebraMap S S' a.val, ?_, Sₐ,
+      inferInstance, inferInstance, fun a => ?_, fun a => ?_⟩
+  · rw [← Set.image_eq_range, ← Ideal.map_span, hsone, Ideal.map_top]
+  · convert!
+    IsLocalization.commutes (T := Sₐ a) (M₁ := (Submonoid.powers r).map f) (S₁ := S') (S₂ :=
+      Localization.Away a.val) (M₂ := Submonoid.powers a.val)
+    simp [Algebra.algebraMapSubmonoid]
+  · rw [algebraMap_toAlgebra, IsLocalization.Away.map, IsLocalization.map_comp_map]
+    exact hPl ((algebraMap _ (Localization.Away a.val)).comp f) r R' (Sₐ a) (hs _ a.2)
 
 中文:
 引理 locally_localizationAwayPreserves
@@ -703,7 +872,28 @@ lemma locally_localizationAwayPreserves
   let rₐ (a : s) : Localization.Away a.val := algebraMap _ _ (f r)
   let Sₐ (a : s) := Localization.Away (rₐ a)
   have (a : s) :
-      IsLocalization.Away (((algebraMap S (Localization.Away a.val)).comp f) r) (S
+      IsLocalization.Away (((algebraMap S (Localization.Away a.val)).comp f) r) (Sₐ a) :=
+    inferInstanceAs (IsLocalization.Away (rₐ a) (Sₐ a))
+  have (a : s) : IsLocalization (Algebra.algebraMapSubmonoid (Localization.Away a.val)
+    (Submonoid.map f (Submonoid.powers r))) (Sₐ a) := by
+    convert! (inferInstance : IsLocalization.Away (rₐ a) (Sₐ a))
+    simp [rₐ, Algebra.algebraMapSubmonoid]
+  have H (a : s) : Submonoid.powers (f r) <=
+      (Submonoid.powers (rₐ a)).comap (algebraMap S (Localization.Away a.val)) := by
+    simp [rₐ, Submonoid.powers_le]
+  let (a : s) : Algebra S' (Sₐ a) :=
+    (IsLocalization.map (Sₐ a) (algebraMap S (Localization.Away a.val)) (H a)).toAlgebra
+  have (a : s) : IsScalarTower S S' (Sₐ a) :=
+    IsScalarTower.of_algebraMap_eq' (IsLocalization.map_comp (H a)).symm
+  refine ⟨s, fun a => algebraMap S S' a.val, ?_, Sₐ,
+      inferInstance, inferInstance, fun a => ?_, fun a => ?_⟩
+  · rw [← Set.image_eq_range, ← Ideal.map_span, hsone, Ideal.map_top]
+  · convert!
+    IsLocalization.commutes (T := Sₐ a) (M₁ := (Submonoid.powers r).map f) (S₁ := S') (S₂ :=
+      Localization.Away a.val) (M₂ := Submonoid.powers a.val)
+    simp [Algebra.algebraMapSubmonoid]
+  · rw [algebraMap_toAlgebra, IsLocalization.Away.map, IsLocalization.map_comp_map]
+    exact hPl ((algebraMap _ (Localization.Away a.val)).comp f) r R' (Sₐ a) (hs _ a.2)
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, IsLocalization, IsLocalization.Away, Localization, Localization.Away, Submonoid, Submonoid.map, Submonoid.powers, a.val, algebraMap, algebraMapSubmonoid, convert, hPl.respectsIso, inferInsta, introv, locally_iff_exists, powers, respectsIso
 -/
@@ -751,7 +941,30 @@ lemma locally_localizationPreserves
   let Mₐ (a : s) : Submonoid (Localization.Away a.val) :=
     (M.map f).map (algebraMap S (Localization.Away a.val))
   let Sₐ (a : s) := Localization (Mₐ a)
-  have hM (a : s) : M.map ((algebraMap S (Localiz
+  have hM (a : s) : M.map ((algebraMap S (Localization.Away a.val)).comp f) = Mₐ a :=
+    (M.map_map _ _).symm
+  have (a : s) :
+      IsLocalization (M.map ((algebraMap S (Localization.Away a.val)).comp f)) (Sₐ a) := by
+    rw [hM]
+    infer_instance
+  have (a : s) :
+      IsLocalization (Algebra.algebraMapSubmonoid (Localization.Away a.val) (M.map f)) (Sₐ a) :=
+inferInstanceAs IsLocalization (Mₐ a) (Sₐ a)
+  let (a : s) : Algebra S' (Sₐ a) :=
+    (IsLocalization.map (Sₐ a) (algebraMap S (Localization.Away a.val))
+      (M.map f).le_comap_map).toAlgebra
+  have (a : s) : IsScalarTower S S' (Sₐ a) :=
+    IsScalarTower.of_algebraMap_eq' (IsLocalization.map_comp (M.map f).le_comap_map).symm
+  refine ⟨s, fun a => algebraMap S S' a.val, ?_, Sₐ,
+      inferInstance, inferInstance, fun a => ?_, fun a => ?_⟩
+  · rw [← Set.image_eq_range, ← Ideal.map_span, hsone, Ideal.map_top]
+  · convert!
+    IsLocalization.commutes (T := Sₐ a) (M₁ := M.map f) (S₁ := S') (S₂ := Localization.Away a.val)
+      (M₂ := Submonoid.powers a.val)
+    simp [Algebra.algebraMapSubmonoid]
+  · rw [algebraMap_toAlgebra, IsLocalization.map_comp_map]
+    apply hPl
+    exact hs a.val a.property
 
 中文:
 引理 locally_localizationPreserves
@@ -763,7 +976,30 @@ lemma locally_localizationPreserves
   let Mₐ (a : s) : Submonoid (Localization.Away a.val) :=
     (M.map f).map (algebraMap S (Localization.Away a.val))
   let Sₐ (a : s) := Localization (Mₐ a)
-  have hM (a : s) : M.map ((algebraMap S (Localiz
+  have hM (a : s) : M.map ((algebraMap S (Localization.Away a.val)).comp f) = Mₐ a :=
+    (M.map_map _ _).symm
+  have (a : s) :
+      IsLocalization (M.map ((algebraMap S (Localization.Away a.val)).comp f)) (Sₐ a) := by
+    rw [hM]
+    infer_instance
+  have (a : s) :
+      IsLocalization (Algebra.algebraMapSubmonoid (Localization.Away a.val) (M.map f)) (Sₐ a) :=
+inferInstanceAs IsLocalization (Mₐ a) (Sₐ a)
+  let (a : s) : Algebra S' (Sₐ a) :=
+    (IsLocalization.map (Sₐ a) (algebraMap S (Localization.Away a.val))
+      (M.map f).le_comap_map).toAlgebra
+  have (a : s) : IsScalarTower S S' (Sₐ a) :=
+    IsScalarTower.of_algebraMap_eq' (IsLocalization.map_comp (M.map f).le_comap_map).symm
+  refine ⟨s, fun a => algebraMap S S' a.val, ?_, Sₐ,
+      inferInstance, inferInstance, fun a => ?_, fun a => ?_⟩
+  · rw [← Set.image_eq_range, ← Ideal.map_span, hsone, Ideal.map_top]
+  · convert!
+    IsLocalization.commutes (T := Sₐ a) (M₁ := M.map f) (S₁ := S') (S₂ := Localization.Away a.val)
+      (M₂ := Submonoid.powers a.val)
+    simp [Algebra.algebraMapSubmonoid]
+  · rw [algebraMap_toAlgebra, IsLocalization.map_comp_map]
+    apply hPl
+    exact hs a.val a.property
 
 Depends on / 依赖: IsLocalization, Localization, Localization.Away, M.map, M.map_map, Submonoid, a.val, algebraMap, hPl.away.respectsIso, infer_instance, introv, locally_iff_exists, map_map, respectsIso
 -/
@@ -810,7 +1046,8 @@ lemma locally_propertyIsLocal
   StableUnderCompositionWithLocalizationAwayTarget :=
     locally_stableUnderCompositionWithLocalizationAwayTarget hPa.right
   ofLocalizationSpan := (locally_ofLocalizationSpanTarget hPl.respectsIso).ofLocalizationSpan
-    (locally_stableUnderCompositionWithLoca
+    (locally_stableUnderCompositionWithLocalizationAwaySource hPa.left)
+  ofLocalizationSpanTarget := locally_ofLocalizationSpanTarget hPl.respectsIso
 
 中文:
 引理 locally_propertyIsLocal
@@ -819,7 +1056,8 @@ lemma locally_propertyIsLocal
   StableUnderCompositionWithLocalizationAwayTarget :=
     locally_stableUnderCompositionWithLocalizationAwayTarget hPa.right
   ofLocalizationSpan := (locally_ofLocalizationSpanTarget hPl.respectsIso).ofLocalizationSpan
-    (locally_stableUnderCompositionWithLoca
+    (locally_stableUnderCompositionWithLocalizationAwaySource hPa.left)
+  ofLocalizationSpanTarget := locally_ofLocalizationSpanTarget hPl.respectsIso
 
 Depends on / 依赖: locally_localizationAwayPreserves
 -/

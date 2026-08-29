@@ -540,7 +540,22 @@ definition quotientEquivClasses
   have f_respects_relation (a b : α) (a_rel_b : r a b) : f a = f b := by
     rw [Subtype.mk.injEq]
     exact Setoid.eq_of_mem_classes (Setoid.mem_classes r a) (Setoid.symm a_rel_b)
-        (Setoid.mem_classes r b) (Seto
+        (Setoid.mem_classes r b) (Setoid.refl b)
+  apply Equiv.ofBijective (Quot.lift f f_respects_relation)
+  constructor
+  · intro (q_a : Quotient r) (q_b : Quotient r) h_eq
+    induction q_a using Quotient.ind with | _ a
+    induction q_b using Quotient.ind with | _ b
+    simp only [f, Quotient.lift_mk, Subtype.ext_iff] at h_eq
+    apply Quotient.sound
+    change a in { x | r x b }
+    rw [← h_eq]
+    exact Setoid.refl a
+  · rw [Quot.surjective_lift]
+    intro ⟨c, a, hc⟩
+    exact ⟨a, Subtype.ext hc.symm⟩
+
+@[simp]
 
 中文:
 定义 quotientEquivClasses
@@ -550,7 +565,22 @@ definition quotientEquivClasses
   have f_respects_relation (a b : α) (a_rel_b : r a b) : f a = f b := by
     rw [Subtype.mk.injEq]
     exact Setoid.eq_of_mem_classes (Setoid.mem_classes r a) (Setoid.symm a_rel_b)
-        (Setoid.mem_classes r b) (Seto
+        (Setoid.mem_classes r b) (Setoid.refl b)
+  apply Equiv.ofBijective (Quot.lift f f_respects_relation)
+  constructor
+  · intro (q_a : Quotient r) (q_b : Quotient r) h_eq
+    induction q_a using Quotient.ind with | _ a
+    induction q_b using Quotient.ind with | _ b
+    simp only [f, Quotient.lift_mk, Subtype.ext_iff] at h_eq
+    apply Quotient.sound
+    change a in { x | r x b }
+    rw [← h_eq]
+    exact Setoid.refl a
+  · rw [Quot.surjective_lift]
+    intro ⟨c, a, hc⟩
+    exact ⟨a, Subtype.ext hc.symm⟩
+
+@[simp]
 
 Depends on / 依赖: Equiv.ofBijective, Quot.lift, Quotient, Quotient.ind, Setoid, Setoid.classes, Setoid.eq_of_mem_classes, Setoid.mem_classes, Setoid.refl, Setoid.symm, Subtype, Subtype.mk.injEq, a_rel_b, classes, eq_of_mem_classes, f_respects_relation, h_eq, mem_classes, ofBijective
 -/
@@ -898,7 +928,7 @@ instance Partition.partialOrder
   lt_iff_le_not_ge _ _ := Iff.rfl
   le_antisymm x y hx hy := by
     let h := @le_antisymm (Setoid α) _ _ _ hx hy
-    rw [Partitions.ext_iff]; rw [← classes_mkClasses x.toSet x.isPartition]; rw [←
+    rw [Partitions.ext_iff]; rw [← classes_mkClasses x.toSet x.isPartition]; rw [← classes_mkClasses y.toSet y.isPartition]; rw [h]
 
 中文:
 实例 分拆.partialOrder
@@ -909,7 +939,7 @@ instance Partition.partialOrder
   lt_iff_le_not_ge _ _ := Iff.rfl
   le_antisymm x y hx hy := by
     let h := @le_antisymm (Setoid α) _ _ _ hx hy
-    rw [Partitions.ext_iff]; rw [← classes_mkClasses x.toSet x.isPartition]; rw [←
+    rw [Partitions.ext_iff]; rw [← classes_mkClasses x.toSet x.isPartition]; rw [← classes_mkClasses y.toSet y.isPartition]; rw [h]
 -/
 instance Partition.partialOrder : PartialOrder (Partitions α) where
   lt x y := x <= y ∧ ¬y <= x
@@ -935,7 +965,8 @@ definition Partition.orderIso
     rw [Partitions.ext_iff]; rw [← classes_mkClasses C.toSet C.isPartition]
     rfl
   map_rel_iff' {r s} := by
-    conv_rhs => rw [← mkClasses_classes r, ← mkC
+    conv_rhs => rw [← mkClasses_classes r, ← mkClasses_classes s]
+    rfl
 
 中文:
 定义 分拆.orderIso
@@ -947,7 +978,8 @@ definition Partition.orderIso
     rw [Partitions.ext_iff]; rw [← classes_mkClasses C.toSet C.isPartition]
     rfl
   map_rel_iff' {r s} := by
-    conv_rhs => rw [← mkClasses_classes r, ← mkC
+    conv_rhs => rw [← mkClasses_classes r, ← mkClasses_classes s]
+    rfl
 -/
 protected def Partition.orderIso : Setoid α ≃o Partitions α where
   toFun r := ⟨r.classes, empty_notMem_classes, classes_eqv_classes⟩
@@ -1683,7 +1715,7 @@ theorem piecewise_inj
     simpa only [piecewise_apply, this] using h
   apply h_disjoint.elim trivial trivial
   contrapose! h
-  exact h.ne_of_mem (mem_image_of_mem _ (hs.mem_index x)) (mem_image_o
+  exact h.ne_of_mem (mem_image_of_mem _ (hs.mem_index x)) (mem_image_of_mem _ (hs.mem_index y))
 
 中文:
 定理 piecewise_inj
@@ -1695,7 +1727,7 @@ theorem piecewise_inj
     simpa only [piecewise_apply, this] using h
   apply h_disjoint.elim trivial trivial
   contrapose! h
-  exact h.ne_of_mem (mem_image_of_mem _ (hs.mem_index x)) (mem_image_o
+  exact h.ne_of_mem (mem_image_of_mem _ (hs.mem_index x)) (mem_image_of_mem _ (hs.mem_index y))
 
 Depends on / 依赖: contrapose, h.ne_of_mem, h_disjoint, h_disjoint.elim, h_injOn, hs.index, hs.mem_index, mem_image_of_mem, mem_index, ne_of_mem, piecewise_apply
 -/
@@ -1722,7 +1754,12 @@ theorem piecewise_bij
     refine (hf i).congr fun x hx => ?_
     rw [hg]; rw [piecewise_apply]; rw [hs.mem_iff_index_eq.mp hx]
   have hg_inj : InjOn g (⋃ i, s i) := by
-    refine injOn_of_injective (piecewise_inj hs (fun i => BijOn.injOn (
+    refine injOn_of_injective (piecewise_inj hs (fun i => BijOn.injOn (hf i)) ?_)
+    simp only [fun i => BijOn.image_eq (hf i)]
+    rintro i - j - hij
+    exact ht.disjoint hij
+  rw [← bijOn_univ]; rw [← hs.iUnion]; rw [← ht.iUnion]
+  exact bijOn_iUnion hg_bij hg_inj
 
 中文:
 定理 piecewise_bij
@@ -1733,7 +1770,12 @@ theorem piecewise_bij
     refine (hf i).congr fun x hx => ?_
     rw [hg]; rw [piecewise_apply]; rw [hs.mem_iff_index_eq.mp hx]
   have hg_inj : InjOn g (⋃ i, s i) := by
-    refine injOn_of_injective (piecewise_inj hs (fun i => BijOn.injOn (
+    refine injOn_of_injective (piecewise_inj hs (fun i => BijOn.injOn (hf i)) ?_)
+    simp only [fun i => BijOn.image_eq (hf i)]
+    rintro i - j - hij
+    exact ht.disjoint hij
+  rw [← bijOn_univ]; rw [← hs.iUnion]; rw [← ht.iUnion]
+  exact bijOn_iUnion hg_bij hg_inj
 
 Depends on / 依赖: BijOn.image_eq, BijOn.injOn, bijOn_iUnion, bijOn_univ, disjoint, hg_bij, hg_inj, hs.iUnion, hs.mem_iff_index_eq.mp, ht.disjoint, ht.iUnion, iUnion, image_eq, injOn_of_injective, mem_iff_index_eq, piecewise, piecewise_apply, piecewise_inj
 -/
@@ -1800,7 +1842,7 @@ theorem range_piecewise
     obtain ⟨a, ha1, ha2⟩ := ht
     refine ⟨a, ?_⟩
     simp only [hs.mem_iff_index_eq] at ha1
-    simpa [hs.mem_iff_ind
+    simpa [hs.mem_iff_index_eq, ← ha1] using! ha2
 
 中文:
 定理 range_piecewise
@@ -1814,7 +1856,7 @@ theorem range_piecewise
     obtain ⟨a, ha1, ha2⟩ := ht
     refine ⟨a, ?_⟩
     simp only [hs.mem_iff_index_eq] at ha1
-    simpa [hs.mem_iff_ind
+    simpa [hs.mem_iff_index_eq, ← ha1] using! ha2
 
 Depends on / 依赖: hs.index, hs.mem_iff_index_eq, hs.mem_index, mem_iUnion_of_mem, mem_iff_index_eq, mem_image, mem_index
 -/
@@ -1864,7 +1906,14 @@ definition coarserPartition
       have : c = d := hs.eq_of_mem ha hb
       finish
   some k := hs.some ((singleton_nonempty k).preimage hg).some
-  some_mem k := b
+  some_mem k := by
+    refine mem_iUnion_of_mem ((singleton_nonempty k).preimage hg).some ?_
+    simp only [mem_preimage, mem_singleton_iff, mem_iUnion, exists_prop]
+    constructor
+    · simpa using ((singleton_nonempty k).preimage hg).some_mem
+    · exact hs.some_mem ((singleton_nonempty k).preimage hg).some
+  index x := g (hs.index x)
+  mem_index x := mem_iUnion_of_mem (hs.index x) (by simp [hs.mem_index])
 
 中文:
 定义 coarserPartition
@@ -1879,7 +1928,14 @@ definition coarserPartition
       have : c = d := hs.eq_of_mem ha hb
       finish
   some k := hs.some ((singleton_nonempty k).preimage hg).some
-  some_mem k := b
+  some_mem k := by
+    refine mem_iUnion_of_mem ((singleton_nonempty k).preimage hg).some ?_
+    simp only [mem_preimage, mem_singleton_iff, mem_iUnion, exists_prop]
+    constructor
+    · simpa using ((singleton_nonempty k).preimage hg).some_mem
+    · exact hs.some_mem ((singleton_nonempty k).preimage hg).some
+  index x := g (hs.index x)
+  mem_index x := mem_iUnion_of_mem (hs.index x) (by simp [hs.mem_index])
 
 Depends on / 依赖: eq_of_mem, exists_prop, finish, hs.eq_of_mem, hs.some, hs.some_mem, instantiate, mem_iUnion, mem_iUnion_of_mem, mem_preimage, mem_singleton_iff, preimage, singleton_n, singleton_nonempty, some_mem
 -/

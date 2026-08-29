@@ -175,7 +175,29 @@ definition findModelFiber?
     (fun _ => do return m!"Searching for a model fiber for {← ppExpr V}") do
   trace[Elab.DiffGeo.TotalSpaceMk] "Searching for relevant `FiberBundle` instance in context"
   let f? ← findSomeLocalInstanceOf? `FiberBundle fun _ declType => do
-    /- Note: 
+    /- Note: we do not use `match_expr` here since that would require importing
+    `Mathlib.Topology.FiberBundle.Basic` to resolve `FiberBundle`. -/
+    match declType with
+    | mkApp7 (.const `FiberBundle _) _ F _ _ E _ _ => do
+      if ← withReducible (pureIsDefEq E V) then
+        trace[Elab.DiffGeo.TotalSpaceMk] "found `FiberBundle` instance for model fiber {← ppExpr F}"
+        return some F
+      else return none
+    | _ => return none
+  if f?.isSome then
+    return f?
+  else
+    trace[Elab.DiffGeo.TotalSpaceMk] "Could not find a relevant `FiberBundle` instance in context"
+    trace[Elab.DiffGeo.TotalSpaceMk] "Searching for a relevant \
+      `TopologicalSpace (Bundle.TotalSpace _ _)` instance in context"
+    return ← findSomeLocalInstanceOf? `TopologicalSpace fun _ declType => do
+      match declType with
+      | mkApp (.const `TopologicalSpace _) (mkApp3 (.const `Bundle.TotalSpace _) _ F E) => do
+        if ← withReducible (pureIsDefEq E V) then
+          trace[Elab.DiffGeo.TotalSpaceMk] "It worked! model fiber is {← ppExpr F}"
+          return some F
+        else return none
+      | _ => return none
 
 中文:
 定义 findModelFiber?
@@ -185,7 +207,29 @@ definition findModelFiber?
     (fun _ => do return m!"Searching for a model fiber for {← ppExpr V}") do
   trace[Elab.DiffGeo.TotalSpaceMk] "Searching for relevant `FiberBundle` instance in context"
   let f? ← findSomeLocalInstanceOf? `FiberBundle fun _ declType => do
-    /- Note: 
+    /- Note: we do not use `match_expr` here since that would require importing
+    `Mathlib.Topology.FiberBundle.Basic` to resolve `FiberBundle`. -/
+    match declType with
+    | mkApp7 (.const `FiberBundle _) _ F _ _ E _ _ => do
+      if ← withReducible (pureIsDefEq E V) then
+        trace[Elab.DiffGeo.TotalSpaceMk] "found `FiberBundle` instance for model fiber {← ppExpr F}"
+        return some F
+      else return none
+    | _ => return none
+  if f?.isSome then
+    return f?
+  else
+    trace[Elab.DiffGeo.TotalSpaceMk] "Could not find a relevant `FiberBundle` instance in context"
+    trace[Elab.DiffGeo.TotalSpaceMk] "Searching for a relevant \
+      `TopologicalSpace (Bundle.TotalSpace _ _)` instance in context"
+    return ← findSomeLocalInstanceOf? `TopologicalSpace fun _ declType => do
+      match declType with
+      | mkApp (.const `TopologicalSpace _) (mkApp3 (.const `Bundle.TotalSpace _) _ F E) => do
+        if ← withReducible (pureIsDefEq E V) then
+          trace[Elab.DiffGeo.TotalSpaceMk] "It worked! model fiber is {← ppExpr F}"
+          return some F
+        else return none
+      | _ => return none
 -/
 private def findModelFiber? (V : Expr) : MetaM (Option Expr) := do
   withTraceNode `Elab.DiffGeo.TotalSpaceMk
@@ -229,7 +273,44 @@ let etype ← whnf ← instantiateMVars ← inferType e
     let tgtHasLooseBVars := tgt.hasLooseBVars
     let tgt := tgt.instantiate1 x
     -- Note: we do not run `whnfR` on `tgt` because `Bundle.Trivial` is reducible.
-  
+    match_expr tgt with
+    | Bundle.Trivial E E' _ =>
+      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a section of `Bundle.Trivial {E} {E'}`"
+      -- Note: we allow `isDefEq` here because any mvar assignments should persist.
+      if ← withReducible (isDefEq E base) then
+        let body ← mkAppM ``Bundle.TotalSpace.mk' #[E', x, (e.app x).headBeta]
+        mkLambdaFVars #[x] body
+      else return e
+    | TangentSpace _k _ E _ _ _H _ _I M _ _ _x =>
+      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a vector field on `{M}`"
+      let body ← mkAppM ``Bundle.TotalSpace.mk' #[E, x, (e.app x).headBeta]
+      mkLambdaFVars #[x] body
+    | _ => match (← instantiateMVars tgt).cleanupAnnotations with
+      | .app V _ =>
+        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a bundle as a dependent function"
+        match ← findModelFiber? V with
+        | some F =>
+              let body ← mkAppM ``Bundle.TotalSpace.mk' #[F, x, (e.app x).headBeta]
+              return (← mkLambdaFVars #[x] body).headBeta
+        | none =>
+          -- future: special-case `Bundle.TotalSpace` for V;
+          -- if so, say "there is no need to apply T% twice"
+          throwError "could not find a `FiberBundle` instance on `{V}`:\n\
+          `{e}` is a function into `{V}`\n\n\
+          hint: you may be missing suitable typeclass assumptions"
+      | tgt =>
+        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a trivial bundle as a non-dependent function"
+        -- TODO: can `tgt` depend on `x` in a way that is not a function application?
+        -- Check that `x` is not a bound variable in `tgt`!
+        if tgtHasLooseBVars then
+          throwError "Attempted to fall back to creating a section of the trivial bundle out of \
+            (`{e}` : `{etype}`) as a non-dependent function, but return type `{tgt}` depends on the
+            bound variable (`{x}` : `{base}`).\n\
+            Hint: applying the `T%` elaborator twice makes no sense."
+        let trivBundle ← mkAppOptM ``Bundle.Trivial #[base, tgt]
+        let body ← mkAppOptM ``Bundle.TotalSpace.mk' #[base, trivBundle, tgt, x, (e.app x).headBeta]
+        mkLambdaFVars #[x] body
+  | _ => return e.headBeta
 
 中文:
 定义 totalSpaceMk
@@ -241,7 +322,44 @@ let etype ← whnf ← instantiateMVars ← inferType e
     let tgtHasLooseBVars := tgt.hasLooseBVars
     let tgt := tgt.instantiate1 x
     -- Note: we do not run `whnfR` on `tgt` because `Bundle.Trivial` is reducible.
-  
+    match_expr tgt with
+    | Bundle.Trivial E E' _ =>
+      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a section of `Bundle.Trivial {E} {E'}`"
+      -- Note: we allow `isDefEq` here because any mvar assignments should persist.
+      if ← withReducible (isDefEq E base) then
+        let body ← mkAppM ``Bundle.TotalSpace.mk' #[E', x, (e.app x).headBeta]
+        mkLambdaFVars #[x] body
+      else return e
+    | TangentSpace _k _ E _ _ _H _ _I M _ _ _x =>
+      trace[Elab.DiffGeo.TotalSpaceMk] "`{e}` is a vector field on `{M}`"
+      let body ← mkAppM ``Bundle.TotalSpace.mk' #[E, x, (e.app x).headBeta]
+      mkLambdaFVars #[x] body
+    | _ => match (← instantiateMVars tgt).cleanupAnnotations with
+      | .app V _ =>
+        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a bundle as a dependent function"
+        match ← findModelFiber? V with
+        | some F =>
+              let body ← mkAppM ``Bundle.TotalSpace.mk' #[F, x, (e.app x).headBeta]
+              return (← mkLambdaFVars #[x] body).headBeta
+        | none =>
+          -- future: special-case `Bundle.TotalSpace` for V;
+          -- if so, say "there is no need to apply T% twice"
+          throwError "could not find a `FiberBundle` instance on `{V}`:\n\
+          `{e}` is a function into `{V}`\n\n\
+          hint: you may be missing suitable typeclass assumptions"
+      | tgt =>
+        trace[Elab.DiffGeo.TotalSpaceMk] "Section of a trivial bundle as a non-dependent function"
+        -- TODO: can `tgt` depend on `x` in a way that is not a function application?
+        -- Check that `x` is not a bound variable in `tgt`!
+        if tgtHasLooseBVars then
+          throwError "Attempted to fall back to creating a section of the trivial bundle out of \
+            (`{e}` : `{etype}`) as a non-dependent function, but return type `{tgt}` depends on the
+            bound variable (`{x}` : `{base}`).\n\
+            Hint: applying the `T%` elaborator twice makes no sense."
+        let trivBundle ← mkAppOptM ``Bundle.Trivial #[base, tgt]
+        let body ← mkAppOptM ``Bundle.TotalSpace.mk' #[base, trivBundle, tgt, x, (e.app x).headBeta]
+        mkLambdaFVars #[x] body
+  | _ => return e.headBeta
 -/
 def totalSpaceMk (e : Expr) : MetaM Expr := do
 let etype ← whnf ← instantiateMVars ← inferType e
@@ -321,7 +439,11 @@ definition isCLMReduciblyDefeqCoefficients
     trace[Elab.DiffGeo.MDiff] "`{e}` is a space of continuous (semi-)linear maps"
 unless ← withReducible pureIsDefEq k S do
       throwError "Coefficients `{k}` and `{S}` of `{e}` are not reducibly definitionally equal"
-    
+    match_expr ← whnfR σ with
+    | RingHom.id _ _ => return (k, E, F)
+    | _ => throwError "`{e}` is a space of continuous (semi-)linear maps over `{σ}`, \
+      which is not the identity"
+  | _ => throwError "`{e}` is not a space of continuous linear maps"
 
 中文:
 定义 isCLMReduciblyDefeqCoefficients
@@ -332,7 +454,11 @@ unless ← withReducible pureIsDefEq k S do
     trace[Elab.DiffGeo.MDiff] "`{e}` is a space of continuous (semi-)linear maps"
 unless ← withReducible pureIsDefEq k S do
       throwError "Coefficients `{k}` and `{S}` of `{e}` are not reducibly definitionally equal"
-    
+    match_expr ← whnfR σ with
+    | RingHom.id _ _ => return (k, E, F)
+    | _ => throwError "`{e}` is a space of continuous (semi-)linear maps over `{σ}`, \
+      which is not the identity"
+  | _ => throwError "`{e}` is not a space of continuous linear maps"
 -/
 private def isCLMReduciblyDefeqCoefficients (e : Expr) : TermElabM Expr × Expr × Expr := do
   match_expr e with
@@ -425,7 +551,20 @@ definition tryStrategy
         try
 Term.withoutErrToSorry Term.withSynthesize x
         /- Catch the exception so that we can trace it, then throw it again to inform
-        `withTraceNode` of the result
+        `withTraceNode` of the result. -/
+        catch ex =>
+          trace[Elab.DiffGeo.MDiff] "Failed with error:\n{ex.toMessageData}"
+          throw ex
+      trace[Elab.DiffGeo.MDiff] "Found model: `{e.model}`"
+      if let some { normedSpace, baseField } := e.normedSpaceInfo? then
+        trace[Elab.DiffGeo.MDiff] "This is the trivial model with corners for the normed space \
+          `{normedSpace}` over the base field `{baseField}`."
+      return e
+  catch _ =>
+    -- Restore infotrees to prevent any stale hovers, code actions, etc.
+    -- Note that this does not break tracing, which saves each trace message's context.
+    s.restore true
+    return none
 
 中文:
 定义 tryStrategy
@@ -438,7 +577,20 @@ Term.withoutErrToSorry Term.withSynthesize x
         try
 Term.withoutErrToSorry Term.withSynthesize x
         /- Catch the exception so that we can trace it, then throw it again to inform
-        `withTraceNode` of the result
+        `withTraceNode` of the result. -/
+        catch ex =>
+          trace[Elab.DiffGeo.MDiff] "Failed with error:\n{ex.toMessageData}"
+          throw ex
+      trace[Elab.DiffGeo.MDiff] "Found model: `{e.model}`"
+      if let some { normedSpace, baseField } := e.normedSpaceInfo? then
+        trace[Elab.DiffGeo.MDiff] "This is the trivial model with corners for the normed space \
+          `{normedSpace}` over the base field `{baseField}`."
+      return e
+  catch _ =>
+    -- Restore infotrees to prevent any stale hovers, code actions, etc.
+    -- Note that this does not break tracing, which saves each trace message's context.
+    s.restore true
+    return none
 -/
 private def tryStrategy (strategyDescr : MessageData) (x : TermElabM FindModelResult) :
     TermElabM (Option FindModelResult) := do
@@ -529,7 +681,19 @@ definition findModelInner
   if let some m ← tryStrategy "TotalSpace" fromTotalSpace then return some m
   if let some m ← tryStrategy "TangentBundle" fromTangentBundle then return some m
   if let some m ← tryStrategy "NormedSpace" fromNormedSpace then return some m
-  if let some m ← tryStrategy "Manifold" fromManifold then
+  if let some m ← tryStrategy "Manifold" fromManifold then return some m
+  if let some m ← tryStrategy "ContinuousLinearMap" fromCLM then return some m
+  if let some m ← tryStrategy "RealInterval" fromRealInterval then return some m
+  if let some m ← tryStrategy "EuclideanSpace" fromEuclideanSpace then return some m
+  if let some m ← tryStrategy "UpperHalfPlane" fromUpperHalfPlane then return some m
+  if let some m ← tryStrategy "Units of algebra" fromUnitsOfAlgebra then return some m
+  if let some m ← tryStrategy "Complex unit circle" fromCircle then return some m
+  if let some m ← tryStrategy "Sphere" fromSphere then return some m
+  if let some m ← tryStrategy "NormedField" fromNormedField then return some m
+  -- We run this strategy last, as it is the least likely to succeed.
+  -- More commonly, we have a normed space on the nose, and `fromNormedSpace` should succeed.
+  if let some m ← tryStrategy "InnerProductSpace" fromInnerProductSpace then return some m
+  return none
 
 中文:
 定义 findModelInner
@@ -538,7 +702,19 @@ definition findModelInner
   if let some m ← tryStrategy "TotalSpace" fromTotalSpace then return some m
   if let some m ← tryStrategy "TangentBundle" fromTangentBundle then return some m
   if let some m ← tryStrategy "NormedSpace" fromNormedSpace then return some m
-  if let some m ← tryStrategy "Manifold" fromManifold then
+  if let some m ← tryStrategy "Manifold" fromManifold then return some m
+  if let some m ← tryStrategy "ContinuousLinearMap" fromCLM then return some m
+  if let some m ← tryStrategy "RealInterval" fromRealInterval then return some m
+  if let some m ← tryStrategy "EuclideanSpace" fromEuclideanSpace then return some m
+  if let some m ← tryStrategy "UpperHalfPlane" fromUpperHalfPlane then return some m
+  if let some m ← tryStrategy "Units of algebra" fromUnitsOfAlgebra then return some m
+  if let some m ← tryStrategy "Complex unit circle" fromCircle then return some m
+  if let some m ← tryStrategy "Sphere" fromSphere then return some m
+  if let some m ← tryStrategy "NormedField" fromNormedField then return some m
+  -- We run this strategy last, as it is the least likely to succeed.
+  -- More commonly, we have a normed space on the nose, and `fromNormedSpace` should succeed.
+  if let some m ← tryStrategy "InnerProductSpace" fromInnerProductSpace then return some m
+  return none
 -/
 partial def findModelInner (e : Expr) : TermElabM (Option FindModelResult) := do
   if let some m ← tryStrategy "TotalSpace" fromTotalSpace then return some m
@@ -888,7 +1064,12 @@ definition findModel
   else
     let tracing := (← isTracingEnabledFor `Elab.DiffGeo.MDiff)
     let hint : MessageData := if e.hasExprMVar then
-      .hint' "the expected type contains metavari
+      .hint' "the expected type contains metavariables, \
+        maybe you need to provide an implicit argument"
+      else if tracing then m!""
+      else .hint' "failures to find a model with corners can be debugged with the \
+          command `set_option trace.Elab.DiffGeo.MDiff true`."
+    throwError "Could not find a model with corners for `{e}`.{hint}"
 
 中文:
 定义 findModel
@@ -900,7 +1081,12 @@ definition findModel
   else
     let tracing := (← isTracingEnabledFor `Elab.DiffGeo.MDiff)
     let hint : MessageData := if e.hasExprMVar then
-      .hint' "the expected type contains metavari
+      .hint' "the expected type contains metavariables, \
+        maybe you need to provide an implicit argument"
+      else if tracing then m!""
+      else .hint' "failures to find a model with corners can be debugged with the \
+          command `set_option trace.Elab.DiffGeo.MDiff true`."
+    throwError "Could not find a model with corners for `{e}`.{hint}"
 -/
 partial def findModel (e : Expr) : TermElabM Expr := do
   trace[Elab.DiffGeo.MDiff] "Finding a model with corners for: `{e}`"
@@ -974,7 +1160,20 @@ let etype ← whnf ← instantiateMVars ← inferType e
   | .forallE _ src tgt _ =>
     if tgt.hasLooseBVars then
       -- TODO: try `T%` here, and if it works, add an interactive suggestion to use it
-      throwError "Term `{e}` is a dependent function, of type `{etype}`\nHint: you 
+      throwError "Term `{e}` is a dependent function, of type `{etype}`\nHint: you can use \
+        the `T%` elaborator to convert a dependent function to a non-dependent one"
+    let srcI ← findModel src
+    if let some es := es then
+      let estype ← inferType es
+      /- Note: we use `isDefEq` here since persistent metavariable assignments in `src` and
+      `estype` are acceptable.
+      TODO: consider attempting to coerce `es` to a `Set`. -/
+      if !(← isDefEq estype <| ← mkAppM ``Set #[src]) then
+        throwError "The domain `{src}` of `{e}` is not definitionally equal to the carrier type of \
+          the set `{es}` : `{estype}`"
+    let tgtI ← findModel tgt
+    return (srcI, tgtI)
+  | _ => throwError "Expected{indentD e}\nof type{indentD etype}\nto be a function"
 
 中文:
 定义 findModels
@@ -985,7 +1184,20 @@ let etype ← whnf ← instantiateMVars ← inferType e
   | .forallE _ src tgt _ =>
     if tgt.hasLooseBVars then
       -- TODO: try `T%` here, and if it works, add an interactive suggestion to use it
-      throwError "Term `{e}` is a dependent function, of type `{etype}`\nHint: you 
+      throwError "Term `{e}` is a dependent function, of type `{etype}`\nHint: you can use \
+        the `T%` elaborator to convert a dependent function to a non-dependent one"
+    let srcI ← findModel src
+    if let some es := es then
+      let estype ← inferType es
+      /- Note: we use `isDefEq` here since persistent metavariable assignments in `src` and
+      `estype` are acceptable.
+      TODO: consider attempting to coerce `es` to a `Set`. -/
+      if !(← isDefEq estype <| ← mkAppM ``Set #[src]) then
+        throwError "The domain `{src}` of `{e}` is not definitionally equal to the carrier type of \
+          the set `{es}` : `{estype}`"
+    let tgtI ← findModel tgt
+    return (srcI, tgtI)
+  | _ => throwError "Expected{indentD e}\nof type{indentD etype}\nto be a function"
 -/
 def findModels (e : Expr) (es : Option Expr) : TermElabM (Expr × Expr) := do
 let etype ← whnf ← instantiateMVars ← inferType e

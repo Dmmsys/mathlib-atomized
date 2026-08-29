@@ -273,7 +273,12 @@ theorem iSupIndep.linearIndependent'
   simp only [iSup_subtype', ← Submodule.span_range_eq_iSup (ι := Subtype _), disjoint_iff] at hv
   have : r • v i in (⊥ : Submodule R M) := by
     rw [← hv]; rw [Submodule.mem_inf]
- 
+    refine ⟨Submodule.mem_span_singleton.mpr ⟨r, rfl⟩, ?_⟩
+    convert! hi
+    ext
+    simp
+  rw [← Submodule.mem_bot R]; rw [← h_ne_zero i]
+  simpa using this
 
 中文:
 定理 iSupIndep.linearIndependent'
@@ -284,7 +289,12 @@ theorem iSupIndep.linearIndependent'
   simp only [iSup_subtype', ← Submodule.span_range_eq_iSup (ι := Subtype _), disjoint_iff] at hv
   have : r • v i in (⊥ : Submodule R M) := by
     rw [← hv]; rw [Submodule.mem_inf]
- 
+    refine ⟨Submodule.mem_span_singleton.mpr ⟨r, rfl⟩, ?_⟩
+    convert! hi
+    ext
+    simp
+  rw [← Submodule.mem_bot R]; rw [← h_ne_zero i]
+  simpa using this
 
 Depends on / 依赖: Submodule, Submodule.mem_bot, Submodule.mem_inf, Submodule.mem_span_singleton.mpr, Submodule.span_range_eq_iSup, Subtype, convert, disjoint_iff, h_ne_zero, iSupIndep_def, iSupIndep_def.mp, iSup_subtype, linearIndependent_iff_eq_zero_of_smul_mem_span, linearIndependent_iff_eq_zero_of_smul_mem_span.mpr, mem_bot, mem_inf, mem_span_singleton, replace, span_range_eq_iSup
 -/
@@ -420,7 +430,7 @@ definition torsion'
     use b * a
     rw [smul_add]; rw [mul_smul]; rw [mul_comm]; rw [mul_smul]; rw [hx]; rw [hy]; rw [smul_zero]; rw [smul_zero]; rw [add_zero]
   zero_mem' := ⟨1, smul_zero 1⟩
-  smul_mem' := fun a x ⟨b, h⟩ => ⟨b, by rw [smul_
+  smul_mem' := fun a x ⟨b, h⟩ => ⟨b, by rw [smul_comm, h, smul_zero]⟩
 
 中文:
 定义 torsion'
@@ -431,7 +441,7 @@ definition torsion'
     use b * a
     rw [smul_add]; rw [mul_smul]; rw [mul_comm]; rw [mul_smul]; rw [hx]; rw [hy]; rw [smul_zero]; rw [smul_zero]; rw [add_zero]
   zero_mem' := ⟨1, smul_zero 1⟩
-  smul_mem' := fun a x ⟨b, h⟩ => ⟨b, by rw [smul_
+  smul_mem' := fun a x ⟨b, h⟩ => ⟨b, by rw [smul_comm, h, smul_zero]⟩
 -/
 def torsion' (S : Type*) [CommMonoid S] [DistribMulAction S M] [SMulCommClass S R M] :
     Submodule R M where
@@ -1306,7 +1316,26 @@ theorem iSup_torsionBySet_ideal_eq_torsionBySet_iInf
     apply torsionBySet_le_torsionBySet_of_subset
     exact (iInf_le (fun i => ⨅ _ : i in S, p i) i).trans (iInf_le _ is)
   · intro x hx
-    rw [mem_iSup_fin
+    rw [mem_iSup_finset_iff_exists_sum]
+    obtain ⟨μ, hμ⟩ :=
+      (mem_iSup_finset_iff_exists_sum _ _).mp
+        ((Ideal.eq_top_iff_one _).mp <| (Ideal.iSup_iInf_eq_top_iff_pairwise h _).mpr hp)
+    refine ⟨fun i => ⟨(μ i : R) • x, ?_⟩, ?_⟩
+    · rw [mem_torsionBySet_iff] at hx ⊢
+      rintro ⟨a, ha⟩
+      rw [smul_smul]
+      suffices a * μ i in ⨅ i in S, p i from hx ⟨_, this⟩
+      rw [mem_iInf]
+      intro j
+      rw [mem_iInf]
+      intro hj
+      by_cases ij : j = i
+      · rw [ij]
+        exact Ideal.mul_mem_right _ _ ha
+      · have := coe_mem (μ i)
+        simp only [mem_iInf] at this
+        exact Ideal.mul_mem_left _ _ (this j hj ij)
+    · rw [← Finset.sum_smul, hμ, one_smul]
 
 中文:
 定理 iSup_torsionBySet_ideal_eq_torsionBySet_iInf
@@ -1321,7 +1350,26 @@ theorem iSup_torsionBySet_ideal_eq_torsionBySet_iInf
     apply torsionBySet_le_torsionBySet_of_subset
     exact (iInf_le (fun i => ⨅ _ : i in S, p i) i).trans (iInf_le _ is)
   · intro x hx
-    rw [mem_iSup_fin
+    rw [mem_iSup_finset_iff_exists_sum]
+    obtain ⟨μ, hμ⟩ :=
+      (mem_iSup_finset_iff_exists_sum _ _).mp
+        ((Ideal.eq_top_iff_one _).mp <| (Ideal.iSup_iInf_eq_top_iff_pairwise h _).mpr hp)
+    refine ⟨fun i => ⟨(μ i : R) • x, ?_⟩, ?_⟩
+    · rw [mem_torsionBySet_iff] at hx ⊢
+      rintro ⟨a, ha⟩
+      rw [smul_smul]
+      suffices a * μ i in ⨅ i in S, p i from hx ⟨_, this⟩
+      rw [mem_iInf]
+      intro j
+      rw [mem_iInf]
+      intro hj
+      by_cases ij : j = i
+      · rw [ij]
+        exact Ideal.mul_mem_right _ _ ha
+      · have := coe_mem (μ i)
+        simp only [mem_iInf] at this
+        exact Ideal.mul_mem_left _ _ (this j hj ij)
+    · rw [← Finset.sum_smul, hμ, one_smul]
 
 Depends on / 依赖: Ideal.eq_top_iff_one, Ideal.iSup_iInf_eq_top_iff_pairwise, S.eq_empty_or_nonempty, eq_empty_or_nonempty, eq_top_iff_one, iInf_le, iSup_iInf_eq_top_iff_pairwise, iSup_le, le_antisymm, mem_iSup_finset_iff_exists_sum, mem_torsionBySet_iff, torsionBySet_le_torsionBySet_of_subset
 -/
@@ -1371,7 +1419,8 @@ theorem sup_torsionBySet_ideal_eq_torsionBySet_inf
     (p := map) (M := M) (S := ⊤) ?_
   · have : ⨆ i, ⨆ (_ : i = 0 ∨ i = 1), torsionBySet R M ↑(map i) =
         torsionBySet R M ↑(map 0) ⊔ torsionBySet R M ↑(map 1) := iSup_pair
-   
+    simpa [Finset.top_eq_univ, Fin.univ_succ, Fin.isValue, coe_iInf, this] using heq
+  · simp_all [Set.pairwise_pair, Fin.univ_succ, map, sup_comm]
 
 中文:
 定理 sup_torsionBySet_ideal_eq_torsionBySet_inf
@@ -1382,7 +1431,8 @@ theorem sup_torsionBySet_ideal_eq_torsionBySet_inf
     (p := map) (M := M) (S := ⊤) ?_
   · have : ⨆ i, ⨆ (_ : i = 0 ∨ i = 1), torsionBySet R M ↑(map i) =
         torsionBySet R M ↑(map 0) ⊔ torsionBySet R M ↑(map 1) := iSup_pair
-   
+    simpa [Finset.top_eq_univ, Fin.univ_succ, Fin.isValue, coe_iInf, this] using heq
+  · simp_all [Set.pairwise_pair, Fin.univ_succ, map, sup_comm]
 
 Depends on / 依赖: Fin.isValue, Fin.univ_succ, Finset, Finset.top_eq_univ, Set.pairwise_pair, Submodule, Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf, coe_iInf, iSup_pair, iSup_torsionBySet_ideal_eq_torsionBySet_iInf, isValue, pairwise_pair, sup_comm, top_eq_univ, torsionBySet, univ_succ
 -/
@@ -1407,7 +1457,9 @@ theorem supIndep_torsionBySet_ideal
   rw [disjoint_iff]; rw [Finset.sup_eq_iSup]; rw [iSup_torsionBySet_ideal_eq_torsionBySet_iInf fun i hi j hj ij => hp (hT hi) (hT hj) ij]
   have := GaloisConnection.u_inf
     (b₁ := OrderDual.toDual (p i)) (b₂ := OrderDual.toDual (⨅ i in T, p i)) (torsion_gc R M)
-  dsimp at t
+  dsimp at this ⊢
+  rw [← this]; rw [Ideal.sup_iInf_eq_top]; rw [top_coe]; rw [torsionBySet_univ]
+  intro j hj; apply hp hi (hT hj); rintro rfl; exact hiT hj
 
 中文:
 定理 supIndep_torsionBySet_ideal
@@ -1416,7 +1468,9 @@ theorem supIndep_torsionBySet_ideal
   rw [disjoint_iff]; rw [Finset.sup_eq_iSup]; rw [iSup_torsionBySet_ideal_eq_torsionBySet_iInf fun i hi j hj ij => hp (hT hi) (hT hj) ij]
   have := GaloisConnection.u_inf
     (b₁ := OrderDual.toDual (p i)) (b₂ := OrderDual.toDual (⨅ i in T, p i)) (torsion_gc R M)
-  dsimp at t
+  dsimp at this ⊢
+  rw [← this]; rw [Ideal.sup_iInf_eq_top]; rw [top_coe]; rw [torsionBySet_univ]
+  intro j hj; apply hp hi (hT hj); rintro rfl; exact hiT hj
 
 Depends on / 依赖: Finset, Finset.sup_eq_iSup, GaloisConnection, GaloisConnection.u_inf, Ideal.sup_iInf_eq_top, OrderDual, OrderDual.toDual, disjoint_iff, iSup_torsionBySet_ideal_eq_torsionBySet_iInf, sup_eq_iSup, sup_iInf_eq_top, toDual, top_coe, torsionBySet_univ, torsion_gc, u_inf
 -/
@@ -1479,7 +1533,7 @@ theorem iSup_torsionBy_eq_torsionBy_prod
     congr
     ext : 1
     exact (torsionBySet_span_singleton_eq _).symm
-
+  exact fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime _ _).mpr (hq hi hj ij)
 
 中文:
 定理 iSup_torsionBy_eq_torsionBy_prod
@@ -1493,7 +1547,7 @@ theorem iSup_torsionBy_eq_torsionBy_prod
     congr
     ext : 1
     exact (torsionBySet_span_singleton_eq _).symm
-
+  exact fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime _ _).mpr (hq hi hj ij)
 
 Depends on / 依赖: Finset, Finset.inf_eq_iInf, Ideal.finset_inf_span_singleton, Ideal.submodule_span_eq, Ideal.sup_eq_top_iff_isCoprime, finset_inf_span_singleton, iSup_torsionBySet_ideal_eq_torsionBySet_iInf, inf_eq_iInf, submodule_span_eq, sup_eq_top_iff_isCoprime, torsionBySet_span_singleton_eq
 -/
@@ -1563,7 +1617,8 @@ theorem torsionBySet_isInternal
     (by
       apply (iSup_subtype'' ↑S fun i => torsionBySet R M <| p i).trans
       -- Porting note: times out if we change apply below to <|
-apply (iSup_torsionByS
+apply (iSup_torsionBySet_ideal_eq_torsionBySet_iInf hp).trans
+        (Module.isTorsionBySet_iff_torsionBySet_eq_top _).mp hM)
 
 中文:
 定理 torsionBySet_is整数ernal
@@ -1573,7 +1628,8 @@ apply (iSup_torsionByS
     (by
       apply (iSup_subtype'' ↑S fun i => torsionBySet R M <| p i).trans
       -- Porting note: times out if we change apply below to <|
-apply (iSup_torsionByS
+apply (iSup_torsionBySet_ideal_eq_torsionBySet_iInf hp).trans
+        (Module.isTorsionBySet_iff_torsionBySet_eq_top _).mp hM)
 
 Depends on / 依赖: DirectSum, DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top, iSupIndep_comp_coe_iff_supIndep, iSupIndep_comp_coe_iff_supIndep.mpr, iSup_subtype, isInternal_submodule_of_iSupIndep_of_iSup_eq_top, supIndep_torsionBySet_ideal, torsionBySet
 -/
@@ -1602,7 +1658,7 @@ theorem torsionBy_isInternal
   convert!
     torsionBySet_isInternal
       (fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr <| hq hi hj ij) hM
-  exa
+  exact (torsionBySet_span_singleton_eq _ (R := R) (M := M)).symm
 
 中文:
 定理 torsionBy_is整数ernal
@@ -1613,7 +1669,7 @@ theorem torsionBy_isInternal
   convert!
     torsionBySet_isInternal
       (fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr <| hq hi hj ij) hM
-  exa
+  exact (torsionBySet_span_singleton_eq _ (R := R) (M := M)).symm
 
 Depends on / 依赖: Finset, Finset.inf_eq_iInf, Ideal.finset_inf_span_singleton, Ideal.submodule_span_eq, Ideal.sup_eq_top_iff_isCoprime, Module, Module.isTorsionBySet_span_singleton_iff, convert, finset_inf_span_singleton, inf_eq_iInf, isTorsionBySet_span_singleton_iff, submodule_span_eq, sup_eq_top_iff_isCoprime, torsionBySet_isInternal, torsionBySet_span_singleton_eq
 -/
@@ -2212,7 +2268,7 @@ definition submodule_torsionBy_orderIso
         zero_mem' := p.zero_mem
         smul_mem' := by rintro ⟨b⟩; exact p.smul_mem b }
     left_inv := by intro; ext; simp [restrictScalarsEmbedding]
-    right_in
+    right_inv := by intro; ext; simp [restrictScalarsEmbedding] }
 
 中文:
 定义 submodule_torsionBy_orderIso
@@ -2224,7 +2280,7 @@ definition submodule_torsionBy_orderIso
         zero_mem' := p.zero_mem
         smul_mem' := by rintro ⟨b⟩; exact p.smul_mem b }
     left_inv := by intro; ext; simp [restrictScalarsEmbedding]
-    right_in
+    right_inv := by intro; ext; simp [restrictScalarsEmbedding] }
 
 Depends on / 依赖: add_mem, carrier, invFun, left_inv, p.smul_mem, p.zero_mem, restrictScalarsEmbedding, right_inv, smul_mem, torsionBy, zero_mem
 -/
@@ -2509,7 +2565,7 @@ theorem _root_.Submodule.annihilator_top_inter_nonZeroDivisors
   rw [Submonoid.coe_finsetProd]; rw [SetLike.mem_coe]; rw [← hS]; rw [mem_annihilator_span]
   intro n
   let := Classical.decEq M
-  rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Su
+  rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Submonoid.smul_def]; rw [(@hM n).choose_spec]; rw [smul_zero]
 
 中文:
 定理 _root_.子模.annihilator_top_inter_nonZeroDivisors
@@ -2520,7 +2576,7 @@ theorem _root_.Submodule.annihilator_top_inter_nonZeroDivisors
   rw [Submonoid.coe_finsetProd]; rw [SetLike.mem_coe]; rw [← hS]; rw [mem_annihilator_span]
   intro n
   let := Classical.decEq M
-  rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Su
+  rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Submonoid.smul_def]; rw [(@hM n).choose_spec]; rw [smul_zero]
 
 Depends on / 依赖: Classical, Classical.decEq, Finite, Finset, Finset.prod_erase_mul, Module, Module.Finite, SetLike, SetLike.mem_coe, Submonoid, Submonoid.coe_finsetProd, Submonoid.smul_def, choose_spec, coe_finsetProd, fg_top, mem_annihilator_span, mem_coe, mul_smul, n.prop, prod_erase_mul
 -/
@@ -2546,7 +2602,7 @@ theorem coe_torsion_eq_annihilator_ne_bot
     ⟨fun ⟨a, hax⟩ =>
       ⟨a, fun _ ⟨b, hb⟩ => by rw [← hb, smul_comm, ← Submonoid.smul_def, hax, smul_zero],
         nonZeroDivisors.coe_ne_zero _⟩,
-      fun ⟨a, hax, ha⟩ => ⟨⟨_, mem_nonZeroDivisors_of_ne_zero
+      fun ⟨a, hax, ha⟩ => ⟨⟨_, mem_nonZeroDivisors_of_ne_zero ha⟩, hax x ⟨1, one_smul _ _⟩⟩⟩
 
 中文:
 定理 coe_torsion_eq_annihilator_ne_bot
@@ -2556,7 +2612,7 @@ theorem coe_torsion_eq_annihilator_ne_bot
     ⟨fun ⟨a, hax⟩ =>
       ⟨a, fun _ ⟨b, hb⟩ => by rw [← hb, smul_comm, ← Submonoid.smul_def, hax, smul_zero],
         nonZeroDivisors.coe_ne_zero _⟩,
-      fun ⟨a, hax, ha⟩ => ⟨⟨_, mem_nonZeroDivisors_of_ne_zero
+      fun ⟨a, hax, ha⟩ => ⟨⟨_, mem_nonZeroDivisors_of_ne_zero ha⟩, hax x ⟨1, one_smul _ _⟩⟩⟩
 
 Depends on / 依赖: Submodule, Submodule.ne_bot_iff, Submonoid, Submonoid.smul_def, coe_ne_zero, mem_annihilator, mem_nonZeroDivisors_of_ne_zero, mem_span_singleton, ne_bot_iff, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, one_smul, simp_rw, smul_comm, smul_def, smul_zero
 -/
@@ -2644,7 +2700,7 @@ theorem torsion_eq_bot
       rw [Quotient.mk''_eq_mk]; rw [← Quotient.mk_smul]; rw [Quotient.mk_eq_zero] at hax
       rw [mem_bot]; rw [Quotient.mk''_eq_mk]; rw [Quotient.mk_eq_zero]
       obtain ⟨b, h⟩ := hax
-      exact ⟨b * a, (mul_smul _ _ _).tra
+      exact ⟨b * a, (mul_smul _ _ _).trans h⟩
 
 中文:
 定理 torsion_eq_bot
@@ -2654,7 +2710,7 @@ theorem torsion_eq_bot
       rw [Quotient.mk''_eq_mk]; rw [← Quotient.mk_smul]; rw [Quotient.mk_eq_zero] at hax
       rw [mem_bot]; rw [Quotient.mk''_eq_mk]; rw [Quotient.mk_eq_zero]
       obtain ⟨b, h⟩ := hax
-      exact ⟨b * a, (mul_smul _ _ _).tra
+      exact ⟨b * a, (mul_smul _ _ _).trans h⟩
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.mk, Quotient.mk_eq_zero, Quotient.mk_smul, _eq_mk, eq_bot_iff, eq_bot_iff.mpr, inductionOn, mem_bot, mk_eq_zero, mk_smul, mul_smul
 -/
@@ -2799,7 +2855,11 @@ theorem exists_isTorsionBy
     Option.ne_none_iff_isSome.mp fun eq_none =>
 hd List.finRange_eq_nil_iff.mp List.argmax_eq_none.mp eq_none
   use Option.get _ hoj
-  rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs];
+  rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs]; rw [Submodule.span_le]; rw [Set.range_subset_iff]
+  intro i; change (p ^ pOrder hM (s (Option.get oj hoj))) • s i = 0
+  have : pOrder hM (s i) <= pOrder hM (s <| Option.get _ hoj) :=
+    List.le_of_mem_argmax (List.mem_finRange i) (Option.get_mem hoj)
+  rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [pow_pOrder_smul]; rw [smul_zero]
 
 中文:
 定理 存在_isTorsionBy
@@ -2810,7 +2870,11 @@ hd List.finRange_eq_nil_iff.mp List.argmax_eq_none.mp eq_none
     Option.ne_none_iff_isSome.mp fun eq_none =>
 hd List.finRange_eq_nil_iff.mp List.argmax_eq_none.mp eq_none
   use Option.get _ hoj
-  rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs];
+  rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs]; rw [Submodule.span_le]; rw [Set.range_subset_iff]
+  intro i; change (p ^ pOrder hM (s (Option.get oj hoj))) • s i = 0
+  have : pOrder hM (s i) <= pOrder hM (s <| Option.get _ hoj) :=
+    List.le_of_mem_argmax (List.mem_finRange i) (Option.get_mem hoj)
+  rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [pow_pOrder_smul]; rw [smul_zero]
 
 Depends on / 依赖: List.argmax, List.argmax_eq_none.mp, List.finRange, List.finRange_eq_nil_iff.mp, List.le_of_mem_argmax, List.mem_, Option.get, Option.ne_none_iff_isSome.mp, Set.range_subset_iff, Submodule, Submodule.span_le, argmax, argmax_eq_none, eq_none, eq_top_iff, finRange, finRange_eq_nil_iff, isSome, isTorsionBy_iff_torsionBy_eq_top, le_of_mem_argmax
 -/
@@ -2849,7 +2913,11 @@ theorem torsionBy_eq_span_singleton
   obtain ⟨x, rfl⟩ := mk_surjective x; constructor <;> intro h
   · rw [← mk_eq_mk, ← Quotient.mk_smul, Quotient.mk_eq_zero, Submodule.mem_span_singleton] at h
     obtain ⟨c, h⟩ := h
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm];
+    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_assoc]; rw [mul_cancel_left_mem_nonZeroDivisors ha]; rw [mul_comm] at h
+    use c
+    rw [← h]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [smul_eq_mul]; rw [mk_eq_mk]
+  · obtain ⟨c, h⟩ := h
+    rw [← h]; rw [smul_comm]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [(Quotient.mk_eq_zero _).mpr mem_span_singleton_self _]; rw [smul_zero]
 
 中文:
 定理 torsionBy_eq_span_singleton
@@ -2859,7 +2927,11 @@ theorem torsionBy_eq_span_singleton
   obtain ⟨x, rfl⟩ := mk_surjective x; constructor <;> intro h
   · rw [← mk_eq_mk, ← Quotient.mk_smul, Quotient.mk_eq_zero, Submodule.mem_span_singleton] at h
     obtain ⟨c, h⟩ := h
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm];
+    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_assoc]; rw [mul_cancel_left_mem_nonZeroDivisors ha]; rw [mul_comm] at h
+    use c
+    rw [← h]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [smul_eq_mul]; rw [mk_eq_mk]
+  · obtain ⟨c, h⟩ := h
+    rw [← h]; rw [smul_comm]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [(Quotient.mk_eq_zero _).mpr mem_span_singleton_self _]; rw [smul_zero]
 
 Depends on / 依赖: Quotient, Quotient.mk_eq_zero, Quotient.mk_smul, Submodule, Submodule.mem_span_singleton, mem_span_singleton, mem_torsionBy_iff, mk_eq_mk, mk_eq_zero, mk_smul, mk_surjective, mul_assoc, mul_cancel_left_mem_nonZeroDivisors, mul_comm, smul_com, smul_eq_mul
 -/
@@ -2891,7 +2963,8 @@ exact ⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt h0⟩, hn⟩
     obtain ⟨n, hn⟩ := @h x
     exact ⟨n, Nat.pos_of_ne_zero (nonZeroDivisors.coe_ne_zero _), hn⟩
 
-@[d
+@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_nat :=
+  isAddTorsion_iff_isTorsion_nat
 
 中文:
 定理 isAddTorsion_iff_isTorsion_nat
@@ -2904,7 +2977,8 @@ exact ⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt h0⟩, hn⟩
     obtain ⟨n, hn⟩ := @h x
     exact ⟨n, Nat.pos_of_ne_zero (nonZeroDivisors.coe_ne_zero _), hn⟩
 
-@[d
+@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_nat :=
+  isAddTorsion_iff_isTorsion_nat
 
 Depends on / 依赖: Nat.pos_of_ne_zero, coe_ne_zero, exists_nsmul_eq_zero, isOfFinAddOrder_iff_nsmul_eq_zero, mem_nonZeroDivisors_of_ne_zero, ne_of_gt, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, pos_of_ne_zero
 -/
@@ -2934,7 +3008,10 @@ theorem isAddTorsion_iff_isTorsion_int
         (natCast_zsmul _ _).trans hn⟩
   · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
     obtain ⟨n, hn⟩ := @h x
-    exact ⟨_, In
+    exact ⟨_, Int.natAbs_pos.2 (nonZeroDivisors.coe_ne_zero n), natAbs_nsmul_eq_zero.2 hn⟩
+
+@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_int :=
+  isAddTorsion_iff_isTorsion_int
 
 中文:
 定理 isAddTorsion_iff_isTorsion_int
@@ -2947,7 +3024,10 @@ theorem isAddTorsion_iff_isTorsion_int
         (natCast_zsmul _ _).trans hn⟩
   · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
     obtain ⟨n, hn⟩ := @h x
-    exact ⟨_, In
+    exact ⟨_, Int.natAbs_pos.2 (nonZeroDivisors.coe_ne_zero n), natAbs_nsmul_eq_zero.2 hn⟩
+
+@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_int :=
+  isAddTorsion_iff_isTorsion_int
 
 Depends on / 依赖: Int.natAbs_pos, Int.natCast_pos.mpr, coe_ne_zero, exists_nsmul_eq_zero, isOfFinAddOrder_iff_nsmul_eq_zero, mem_nonZeroDivisors_of_ne_zero, natAbs_nsmul_eq_zero, natAbs_pos, natCast_pos, natCast_zsmul, ne_of_gt, nonZeroDivisors, nonZeroDivisors.coe_ne_zero
 -/

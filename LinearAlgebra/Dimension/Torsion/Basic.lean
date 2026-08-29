@@ -36,7 +36,11 @@ theorem rank_quotient_eq_of_le_torsion
     rw [Module.rank]
     refine ciSup_le fun ⟨s, hs⟩ => LinearIndependent.cardinal_le_rank (v := (M'.mkQ ·)) ?_
     rw [LinearIndepOn]; rw [linearIndependent_iff'] at hs
-    simp_rw [linearIndependent_iff', ← map_smul, ← map_sum, mkQ_apply, Quoti
+    simp_rw [linearIndependent_iff', ← map_smul, ← map_sum, mkQ_apply, Quotient.mk_eq_zero]
+    intro t g hg i hi
+    obtain ⟨r, hg⟩ := hN hg
+    simp_rw [Finset.smul_sum, Submonoid.smul_def, smul_smul] at hg
+    exact r.prop.2 _ (mul_comm (g i) r ▸ hs t _ hg i hi)
 
 中文:
 定理 rank_quotient_eq_of_le_torsion
@@ -46,7 +50,11 @@ theorem rank_quotient_eq_of_le_torsion
     rw [Module.rank]
     refine ciSup_le fun ⟨s, hs⟩ => LinearIndependent.cardinal_le_rank (v := (M'.mkQ ·)) ?_
     rw [LinearIndepOn]; rw [linearIndependent_iff'] at hs
-    simp_rw [linearIndependent_iff', ← map_smul, ← map_sum, mkQ_apply, Quoti
+    simp_rw [linearIndependent_iff', ← map_smul, ← map_sum, mkQ_apply, Quotient.mk_eq_zero]
+    intro t g hg i hi
+    obtain ⟨r, hg⟩ := hN hg
+    simp_rw [Finset.smul_sum, Submonoid.smul_def, smul_smul] at hg
+    exact r.prop.2 _ (mul_comm (g i) r ▸ hs t _ hg i hi)
 
 Depends on / 依赖: Finset, Finset.smul_sum, LinearIndepOn, LinearIndependent, LinearIndependent.cardinal_le_rank, Module, Module.rank, NNReal, NNReal.eq, Quotient, Quotient.mk_eq_zero, Submonoid, Submonoid.smul_def, _congr_nnnorm_ae, antisymm, cardinal_le_rank, ciSup_le, eLpNorm, hfg.mono, linearIndependent_iff
 -/

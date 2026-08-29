@@ -45,7 +45,11 @@ theorem prime_pow_coprime_prod_of_coprime_insert
   apply hps
   replace hdp := hd.dvd_of_dvd_pow hdp
   obtain ⟨q, q_mem', hdq⟩ := hd.exists_mem_multiset_dvd hdprod
-  obtain ⟨q, q_mem, rfl⟩ := 
+  obtain ⟨q, q_mem, rfl⟩ := Multiset.mem_map.mp q_mem'
+  replace hdq := hd.dvd_of_dvd_pow hdq
+  have : p ∣ q := dvd_trans (hd.irreducible.dvd_symm hp.irreducible hdp) hdq
+  convert! q_mem using 0
+  rw [Finset.mem_val]; rw [is_coprime _ (Finset.mem_insert_self p s) _ (Finset.mem_insert_of_mem q_mem) this]
 
 中文:
 定理 prime_pow_coprime_prod_of_coprime_insert
@@ -57,7 +61,11 @@ theorem prime_pow_coprime_prod_of_coprime_insert
   apply hps
   replace hdp := hd.dvd_of_dvd_pow hdp
   obtain ⟨q, q_mem', hdq⟩ := hd.exists_mem_multiset_dvd hdprod
-  obtain ⟨q, q_mem, rfl⟩ := 
+  obtain ⟨q, q_mem, rfl⟩ := Multiset.mem_map.mp q_mem'
+  replace hdq := hd.dvd_of_dvd_pow hdq
+  have : p ∣ q := dvd_trans (hd.irreducible.dvd_symm hp.irreducible hdp) hdq
+  convert! q_mem using 0
+  rw [Finset.mem_val]; rw [is_coprime _ (Finset.mem_insert_self p s) _ (Finset.mem_insert_of_mem q_mem) this]
 
 Depends on / 依赖: Finset, Finset.mem_in, Finset.mem_insert_self, Finset.mem_val, Multiset, Multiset.mem_map.mp, convert, dvd_of_dvd_pow, dvd_symm, dvd_trans, exists_mem_multiset_dvd, hd.dvd_of_dvd_pow, hd.exists_mem_multiset_dvd, hd.irreducible.dvd_symm, hdprod, hp.irreducible, hp.ne_zero, irreducible, isRelPrime_iff_no_prime_factors, is_coprime
 -/
@@ -95,7 +103,9 @@ theorem induction_on_prime_power
     rw [Finset.prod_insert hpf']
     exact
       hcp (prime_pow_coprime_prod_of_coprime_insert i p hpf' is_prime is_coprime)
-        (hpr (i p) (is_prime _ (Fi
+        (hpr (i p) (is_prime _ (Finset.mem_insert_self _ _)))
+        (ih (fun q hq => is_prime _ (Finset.mem_insert_of_mem hq)) fun q hq q' hq' =>
+          is_coprime _ (Finset.mem_insert_of_mem hq) _ (Finset.mem_insert_of_mem hq'))
 
 中文:
 定理 induction_on_prime_power
@@ -108,7 +118,9 @@ theorem induction_on_prime_power
     rw [Finset.prod_insert hpf']
     exact
       hcp (prime_pow_coprime_prod_of_coprime_insert i p hpf' is_prime is_coprime)
-        (hpr (i p) (is_prime _ (Fi
+        (hpr (i p) (is_prime _ (Finset.mem_insert_self _ _)))
+        (ih (fun q hq => is_prime _ (Finset.mem_insert_of_mem hq)) fun q hq q' hq' =>
+          is_coprime _ (Finset.mem_insert_of_mem hq) _ (Finset.mem_insert_of_mem hq'))
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_insert, induction_on, insert, isUnit_one, is_coprime, is_prime, mem_insert_of_mem, mem_insert_self, prime_pow_coprime_prod_of_coprime_insert, prod_insert
 -/
@@ -146,7 +158,12 @@ theorem induction_on_coprime
   by_cases ha0 : a = 0
   · rwa [ha0]
   have : Nontrivial α := ⟨⟨_, _, ha0⟩⟩
-  let : Stron
+  let : StrongNormalizationMonoid α := UniqueFactorizationMonoid.strongNormalizationMonoid
+  refine P_of_associated (prod_normalizedFactors ha0) ?_
+  rw [← (normalizedFactors a).map_id]; rw [Finset.prod_multiset_map_count]
+  refine induction_on_prime_power _ _ ?_ ?_ @h1 @hpr @hcp <;> simp only [Multiset.mem_toFinset]
+  · apply prime_of_normalized_factor
+  · apply normalizedFactors_eq_of_dvd
 
 中文:
 定理 induction_on_coprime
@@ -159,7 +176,12 @@ theorem induction_on_coprime
   by_cases ha0 : a = 0
   · rwa [ha0]
   have : Nontrivial α := ⟨⟨_, _, ha0⟩⟩
-  let : Stron
+  let : StrongNormalizationMonoid α := UniqueFactorizationMonoid.strongNormalizationMonoid
+  refine P_of_associated (prod_normalizedFactors ha0) ?_
+  rw [← (normalizedFactors a).map_id]; rw [Finset.prod_multiset_map_count]
+  refine induction_on_prime_power _ _ ?_ ?_ @h1 @hpr @hcp <;> simp only [Multiset.mem_toFinset]
+  · apply prime_of_normalized_factor
+  · apply normalizedFactors_eq_of_dvd
 
 Depends on / 依赖: Associated, Classical, Classical.decEq, Finset, Finset.prod_multiset_map_count, Nontrivial, P_of_associated, StrongNormalizationMonoid, UniqueFactorizationMonoid, UniqueFactorizationMonoid.strongNormalizationMonoid, inducti, isUnit, isUnit_of_dvd_unit, map_id, normalizedFactors, prod_multiset_map_count, prod_normalizedFactors, strongNormalizationMonoid, u.isUnit
 -/
@@ -193,7 +215,10 @@ theorem multiplicative_prime_power
   | insert p s hps ih =>
     have hpr_p := is_prime _ (Finset.mem_insert_self _ _)
     have hpr_s : forall p in s, Prime p := fun p hp => is_prime _ (Finset.mem_insert_of_mem hp)
-    hav
+    have hcp_p := fun i => prime_pow_coprime_prod_of_coprime_insert i p hps is_prime is_coprime
+    have hcp_s : forallᵉ (p in s) (q in s), p ∣ q -> p = q := fun p hp q hq =>
+      is_coprime p (Finset.mem_insert_of_mem hp) q (Finset.mem_insert_of_mem hq)
+    rw [Finset.prod_insert hps]; rw [Finset.prod_insert hps]; rw [Finset.prod_insert hps]; rw [hcp (hcp_p _)]; rw [hpr _ hpr_p]; rw [hcp (hcp_p _)]; rw [hpr _ hpr_p]; rw [hcp (hcp_p (fun p => i p + j p))]; rw [hpr _ hpr_p]; rw [ih hpr_s hcp_s]; rw [pow_add]; rw [mul_assoc]; rw [mul_left_comm (f p ^ j p)]; rw [mul_assoc]
 
 中文:
 定理 multiplicative_prime_power
@@ -205,7 +230,10 @@ theorem multiplicative_prime_power
   | insert p s hps ih =>
     have hpr_p := is_prime _ (Finset.mem_insert_self _ _)
     have hpr_s : forall p in s, Prime p := fun p hp => is_prime _ (Finset.mem_insert_of_mem hp)
-    hav
+    have hcp_p := fun i => prime_pow_coprime_prod_of_coprime_insert i p hps is_prime is_coprime
+    have hcp_s : forallᵉ (p in s) (q in s), p ∣ q -> p = q := fun p hp q hq =>
+      is_coprime p (Finset.mem_insert_of_mem hp) q (Finset.mem_insert_of_mem hq)
+    rw [Finset.prod_insert hps]; rw [Finset.prod_insert hps]; rw [Finset.prod_insert hps]; rw [hcp (hcp_p _)]; rw [hpr _ hpr_p]; rw [hcp (hcp_p _)]; rw [hpr _ hpr_p]; rw [hcp (hcp_p (fun p => i p + j p))]; rw [hpr _ hpr_p]; rw [ih hpr_s hcp_s]; rw [pow_add]; rw [mul_assoc]; rw [mul_left_comm (f p ^ j p)]; rw [mul_assoc]
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.induction_on, Finset.mem, Finset.mem_insert_of_mem, Finset.mem_insert_self, hcp_p, hcp_s, hpr_p, hpr_s, induction_on, insert, isUnit_one, is_coprime, is_prime, mem_insert_of_mem, mem_insert_self, prime_pow_coprime_prod_of_coprime_insert
 -/
@@ -242,7 +270,40 @@ theorem multiplicative_of_coprime
   · calc
       f (a * b) = f (a * b * 1) := by rw [mul_one]
       _ = 0 := by simp only [h1 isUnit_one, hf1, mul_zero]
-      
+      _ = f a * f (b * 1) := by simp only [h1 isUnit_one, hf1, mul_zero]
+      _ = f a * f b := by rw [mul_one]
+  have : Nontrivial α := ⟨⟨_, _, ha0⟩⟩
+  let : StrongNormalizationMonoid α := UniqueFactorizationMonoid.strongNormalizationMonoid
+  suffices
+      f (∏ p in (normalizedFactors a).toFinset union (normalizedFactors b).toFinset,
+        p ^ ((normalizedFactors a).count p + (normalizedFactors b).count p)) =
+      f (∏ p in (normalizedFactors a).toFinset union (normalizedFactors b).toFinset,
+        p ^ (normalizedFactors a).count p) *
+      f (∏ p in (normalizedFactors a).toFinset union (normalizedFactors b).toFinset,
+        p ^ (normalizedFactors b).count p) by
+    obtain ⟨ua, a_eq⟩ := prod_normalizedFactors ha0
+    obtain ⟨ub, b_eq⟩ := prod_normalizedFactors hb0
+    rw [← a_eq]; rw [← b_eq]; rw [mul_right_comm (Multiset.prod (normalizedFactors a)) ua
+        (Multiset.prod (normalizedFactors b) * ub)]; rw [h1 ua.isUnit]; rw [h1 ub.isUnit]; rw [h1 ua.isUnit]; rw [←
+      mul_assoc]; rw [h1 ub.isUnit]; rw [mul_right_comm _ (f ua)]; rw [← mul_assoc]
+    congr
+    rw [← (normalizedFactors a).map_id]; rw [← (normalizedFactors b).map_id]; rw [Finset.prod_multiset_map_count]; rw [Finset.prod_multiset_map_count]; rw [Finset.prod_subset (Finset.subset_union_left (s₂ := (normalizedFactors b).toFinset))]; rw [Finset.prod_subset (Finset.subset_union_right (s₂ := (normalizedFactors b).toFinset))]; rw [←
+      Finset.prod_mul_distrib]
+    · simp_rw [id, ← pow_add, this]
+    all_goals simp only [Multiset.mem_toFinset]
+    · intro p _ hpb
+      simp [hpb]
+    · intro p _ hpa
+      simp [hpa]
+  refine multiplicative_prime_power _ _ _ ?_ ?_ @h1 @hpr @hcp
+  all_goals simp only [Multiset.mem_toFinset, Finset.mem_union]
+  · rintro p (hpa | hpb) <;> apply prime_of_normalized_factor <;> assumption
+  · rintro p (hp | hp) q (hq | hq) hdvd <;>
+      rw [← normalize_normalized_factor _ hp]; rw [← normalize_normalized_factor _ hq] <;>
+      exact
+        normalize_eq_normalize hdvd
+          ((prime_of_normalized_factor _ hp).irreducible.dvd_symm
+            (prime_of_normalized_factor _ hq).irreducible hdvd)
 
 中文:
 定理 multiplicative_of_coprime
@@ -257,7 +318,40 @@ theorem multiplicative_of_coprime
   · calc
       f (a * b) = f (a * b * 1) := by rw [mul_one]
       _ = 0 := by simp only [h1 isUnit_one, hf1, mul_zero]
-      
+      _ = f a * f (b * 1) := by simp only [h1 isUnit_one, hf1, mul_zero]
+      _ = f a * f b := by rw [mul_one]
+  have : Nontrivial α := ⟨⟨_, _, ha0⟩⟩
+  let : StrongNormalizationMonoid α := UniqueFactorizationMonoid.strongNormalizationMonoid
+  suffices
+      f (∏ p in (normalizedFactors a).toFinset union (normalizedFactors b).toFinset,
+        p ^ ((normalizedFactors a).count p + (normalizedFactors b).count p)) =
+      f (∏ p in (normalizedFactors a).toFinset union (normalizedFactors b).toFinset,
+        p ^ (normalizedFactors a).count p) *
+      f (∏ p in (normalizedFactors a).toFinset union (normalizedFactors b).toFinset,
+        p ^ (normalizedFactors b).count p) by
+    obtain ⟨ua, a_eq⟩ := prod_normalizedFactors ha0
+    obtain ⟨ub, b_eq⟩ := prod_normalizedFactors hb0
+    rw [← a_eq]; rw [← b_eq]; rw [mul_right_comm (Multiset.prod (normalizedFactors a)) ua
+        (Multiset.prod (normalizedFactors b) * ub)]; rw [h1 ua.isUnit]; rw [h1 ub.isUnit]; rw [h1 ua.isUnit]; rw [←
+      mul_assoc]; rw [h1 ub.isUnit]; rw [mul_right_comm _ (f ua)]; rw [← mul_assoc]
+    congr
+    rw [← (normalizedFactors a).map_id]; rw [← (normalizedFactors b).map_id]; rw [Finset.prod_multiset_map_count]; rw [Finset.prod_multiset_map_count]; rw [Finset.prod_subset (Finset.subset_union_left (s₂ := (normalizedFactors b).toFinset))]; rw [Finset.prod_subset (Finset.subset_union_right (s₂ := (normalizedFactors b).toFinset))]; rw [←
+      Finset.prod_mul_distrib]
+    · simp_rw [id, ← pow_add, this]
+    all_goals simp only [Multiset.mem_toFinset]
+    · intro p _ hpb
+      simp [hpb]
+    · intro p _ hpa
+      simp [hpa]
+  refine multiplicative_prime_power _ _ _ ?_ ?_ @h1 @hpr @hcp
+  all_goals simp only [Multiset.mem_toFinset, Finset.mem_union]
+  · rintro p (hpa | hpb) <;> apply prime_of_normalized_factor <;> assumption
+  · rintro p (hp | hp) q (hq | hq) hdvd <;>
+      rw [← normalize_normalized_factor _ hp]; rw [← normalize_normalized_factor _ hq] <;>
+      exact
+        normalize_eq_normalize hdvd
+          ((prime_of_normalized_factor _ hp).irreducible.dvd_symm
+            (prime_of_normalized_factor _ hq).irreducible hdvd)
 
 Depends on / 依赖: Classical, Classical.decEq, Nontrivial, StrongNormalizationMonoid, UniqueFactorizationMonoid, UniqueFactorizationMonoid.strongNormalizationMonoid, isUnit_one, mul_one, mul_zero, strongNormalizationMonoid, suffic, zero_mul
 -/

@@ -483,7 +483,10 @@ theorem le_nhds_of_cauchy_adhp_aux
   -- Take an entourage twice smaller than `s`
   rcases comp_mem_uniformity_sets (mem_nhds_uniformity_iff_right.1 hs) with ⟨U, U_mem, hU⟩
   -- Take a set `t ∈ f`, `t × t ⊆ U`, and a point `y ∈ t` such that `(x, y) ∈ U`
-  rcases adhs U U_mem with
+  rcases adhs U U_mem with ⟨t, t_mem, ht, y, hxy, hy⟩
+  apply mem_of_superset t_mem
+  -- Given a point `z ∈ t`, we have `(x, y) ∈ U` and `(y, z) ∈ t × t ⊆ U`, hence `z ∈ s`
+  exact fun z hz => hU (SetRel.prodMk_mem_comp hxy (ht <| mk_mem_prod hy hz)) rfl
 
 中文:
 定理 le_nhds_of_cauchy_adhp_aux
@@ -494,7 +497,10 @@ theorem le_nhds_of_cauchy_adhp_aux
   -- Take an entourage twice smaller than `s`
   rcases comp_mem_uniformity_sets (mem_nhds_uniformity_iff_right.1 hs) with ⟨U, U_mem, hU⟩
   -- Take a set `t ∈ f`, `t × t ⊆ U`, and a point `y ∈ t` such that `(x, y) ∈ U`
-  rcases adhs U U_mem with
+  rcases adhs U U_mem with ⟨t, t_mem, ht, y, hxy, hy⟩
+  apply mem_of_superset t_mem
+  -- Given a point `z ∈ t`, we have `(x, y) ∈ U` and `(y, z) ∈ t × t ⊆ U`, hence `z ∈ s`
+  exact fun z hz => hU (SetRel.prodMk_mem_comp hxy (ht <| mk_mem_prod hy hz)) rfl
 -/
 theorem le_nhds_of_cauchy_adhp_aux {f : Filter α} {x : α}
     (adhs : forall s in 𝓤 α, exists t in f, t ×ˢ t subseteq s ∧ exists y, (x, y) in s ∧ y in t) : f <= 𝓝 x := by
@@ -1035,7 +1041,9 @@ theorem CauchySeq.subseq_mem
     rw [cauchySeq_iff] at hu
     rcases hu _ (hV n) with ⟨N, H⟩
     exact ⟨N, fun k hk l hl => H _ (le_trans hk hl) _ hk⟩
-  obtain ⟨φ : Nat -> Nat, φ_extr : StrictMono φ, hφ : forall n, forall l >= φ n, (u
+  obtain ⟨φ : Nat -> Nat, φ_extr : StrictMono φ, hφ : forall n, forall l >= φ n, (u l, u <| φ n) in V n⟩ :=
+    extraction_forall_of_eventually' this
+  exact ⟨φ, φ_extr, fun n => hφ _ _ (φ_extr <| Nat.lt_add_one n).le⟩
 
 中文:
 定理 CauchySeq.subseq_mem
@@ -1045,7 +1053,9 @@ theorem CauchySeq.subseq_mem
     rw [cauchySeq_iff] at hu
     rcases hu _ (hV n) with ⟨N, H⟩
     exact ⟨N, fun k hk l hl => H _ (le_trans hk hl) _ hk⟩
-  obtain ⟨φ : Nat -> Nat, φ_extr : StrictMono φ, hφ : forall n, forall l >= φ n, (u
+  obtain ⟨φ : Nat -> Nat, φ_extr : StrictMono φ, hφ : forall n, forall l >= φ n, (u l, u <| φ n) in V n⟩ :=
+    extraction_forall_of_eventually' this
+  exact ⟨φ, φ_extr, fun n => hφ _ _ (φ_extr <| Nat.lt_add_one n).le⟩
 
 Depends on / 依赖: Nat.lt_add_one, StrictMono, cauchySeq_iff, extraction_forall_of_eventually, le_trans, lt_add_one
 -/
@@ -1195,7 +1205,8 @@ theorem Filter.HasBasis.cauchySeq_iff'
   · exact (h i hi).imp fun N hN n hn => hN n hn N le_rfl
   · rcases comp_symm_of_uniformity (H.mem_of_mem hi) with ⟨t, ht, ht', hts⟩
     rcases H.mem_iff.1 ht with ⟨j, hj, hjt⟩
-refine (h j hj).imp fun N hN m hm n hn => hts ⟨u N, 
+refine (h j hj).imp fun N hN m hm n hn => hts ⟨u N, hjt ?_, ht' hjt ?_⟩
+    exacts [hN m hm, hN n hn]
 
 中文:
 定理 滤子.有基.cauchySeq_iff'
@@ -1205,7 +1216,8 @@ refine (h j hj).imp fun N hN m hm n hn => hts ⟨u N,
   · exact (h i hi).imp fun N hN n hn => hN n hn N le_rfl
   · rcases comp_symm_of_uniformity (H.mem_of_mem hi) with ⟨t, ht, ht', hts⟩
     rcases H.mem_iff.1 ht with ⟨j, hj, hjt⟩
-refine (h j hj).imp fun N hN m hm n hn => hts ⟨u N, 
+refine (h j hj).imp fun N hN m hm n hn => hts ⟨u N, hjt ?_, ht' hjt ?_⟩
+    exacts [hN m hm, hN n hn]
 
 Depends on / 依赖: H.cauchySeq_iff.trans, H.mem_iff, H.mem_of_mem, cauchySeq_iff, comp_symm_of_uniformity, exacts, le_rfl, mem_iff, mem_of_mem
 -/
@@ -1372,7 +1384,16 @@ theorem isComplete_iUnion_separated
   obtain ⟨hl_ne, hl'⟩ := cauchy_iff.1 hl
   obtain ⟨t, htS, htl, htU⟩ : exists t, t subseteq S ∧ t in l ∧ t ×ˢ t subseteq U := by
     rcases hl' U hU with ⟨t, htl, htU⟩
-    refine ⟨t inter S, inter_subset_right, inter_mem htl hls,
+    refine ⟨t inter S, inter_subset_right, inter_mem htl hls, Subset.trans ?_ htU⟩
+    gcongr <;> apply inter_subset_left
+  obtain ⟨i, hi⟩ : exists i, t subseteq s i := by
+    rcases Filter.nonempty_of_mem htl with ⟨x, hx⟩
+    rcases mem_iUnion.1 (htS hx) with ⟨i, hi⟩
+    refine ⟨i, fun y hy => ?_⟩
+    rcases mem_iUnion.1 (htS hy) with ⟨j, hj⟩
+    rwa [hd i j x hi y hj (htU <| mk_mem_prod hx hy)]
+  rcases hs i l hl (le_principal_iff.2 <| mem_of_superset htl hi) with ⟨x, hxs, hlx⟩
+  exact ⟨x, mem_iUnion.2 ⟨i, hxs⟩, hlx⟩
 
 中文:
 定理 isComplete_iUnion_separated
@@ -1384,7 +1405,16 @@ theorem isComplete_iUnion_separated
   obtain ⟨hl_ne, hl'⟩ := cauchy_iff.1 hl
   obtain ⟨t, htS, htl, htU⟩ : exists t, t subseteq S ∧ t in l ∧ t ×ˢ t subseteq U := by
     rcases hl' U hU with ⟨t, htl, htU⟩
-    refine ⟨t inter S, inter_subset_right, inter_mem htl hls,
+    refine ⟨t inter S, inter_subset_right, inter_mem htl hls, Subset.trans ?_ htU⟩
+    gcongr <;> apply inter_subset_left
+  obtain ⟨i, hi⟩ : exists i, t subseteq s i := by
+    rcases Filter.nonempty_of_mem htl with ⟨x, hx⟩
+    rcases mem_iUnion.1 (htS hx) with ⟨i, hi⟩
+    refine ⟨i, fun y hy => ?_⟩
+    rcases mem_iUnion.1 (htS hy) with ⟨j, hj⟩
+    rwa [hd i j x hi y hj (htU <| mk_mem_prod hx hy)]
+  rcases hs i l hl (le_principal_iff.2 <| mem_of_superset htl hi) with ⟨x, hxs, hlx⟩
+  exact ⟨x, mem_iUnion.2 ⟨i, hxs⟩, hlx⟩
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, Subset, Subset.trans, cauchy_iff, hl_ne, inter_mem, inter_subset_left, inter_subset_right, le_principal_iff, mem_iUnion, nonempty_of_mem, subseteq
 -/
@@ -1807,7 +1837,8 @@ theorem eq_pure_of_cauchy
   simp only [DiscreteUniformity.eq_principal_setRelId, le_principal_iff, mem_prod_iff] at f_le
   obtain ⟨S, hS, T, hT, H⟩ := f_le
   obtain ⟨x, rfl, _, _, _⟩ := SetRel.exists_eq_singleton_of_prod_subset_id
-    (f_ne_bot.nonempty_of_mem hS) (f_ne_bot.nonempty_of_me
+    (f_ne_bot.nonempty_of_mem hS) (f_ne_bot.nonempty_of_mem hT) H
+exact ⟨x, f_ne_bot.le_pure_iff.mp le_pure_iff.mpr hS⟩
 
 中文:
 定理 eq_pure_of_cauchy
@@ -1818,7 +1849,8 @@ theorem eq_pure_of_cauchy
   simp only [DiscreteUniformity.eq_principal_setRelId, le_principal_iff, mem_prod_iff] at f_le
   obtain ⟨S, hS, T, hT, H⟩ := f_le
   obtain ⟨x, rfl, _, _, _⟩ := SetRel.exists_eq_singleton_of_prod_subset_id
-    (f_ne_bot.nonempty_of_mem hS) (f_ne_bot.nonempty_of_me
+    (f_ne_bot.nonempty_of_mem hS) (f_ne_bot.nonempty_of_mem hT) H
+exact ⟨x, f_ne_bot.le_pure_iff.mp le_pure_iff.mpr hS⟩
 
 Depends on / 依赖: DiscreteUniformity, DiscreteUniformity.eq_principal_setRelId, SetRel, SetRel.exists_eq_singleton_of_prod_subset_id, eq_principal_setRelId, exists_eq_singleton_of_prod_subset_id, f_le, f_ne_bot, f_ne_bot.le_pure_iff.mp, f_ne_bot.nonempty_of_mem, le_principal_iff, le_pure_iff, le_pure_iff.mpr, mem_prod_iff, nonempty_of_mem
 -/
@@ -1964,7 +1996,12 @@ theorem Filter.TotallyBounded.exists_subset_of_mem
   choose g hgs hgr using fun x : u => x.coe_prop.2
   refine ⟨range g, ?_, ?_, ?_⟩
   · exact range_subset_iff.2 hgs
-  · have : Fintype u := (fk.inter_of_
+  · have : Fintype u := (fk.inter_of_left _).fintype
+    exact finite_range g
+  · filter_upwards [hs, ks] with x xs ⟨y, hy, xy⟩
+    simp_rw [SetRel.preimage, exists_range_iff]
+    set z : ↥u := ⟨y, hy, ⟨x, xs, xy⟩⟩
+    exact ⟨z, rU ⟨y, xy, rs (hgr z)⟩⟩
 
 中文:
 定理 滤子.全有界.存在_subset_of_mem
@@ -1976,7 +2013,12 @@ theorem Filter.TotallyBounded.exists_subset_of_mem
   choose g hgs hgr using fun x : u => x.coe_prop.2
   refine ⟨range g, ?_, ?_, ?_⟩
   · exact range_subset_iff.2 hgs
-  · have : Fintype u := (fk.inter_of_
+  · have : Fintype u := (fk.inter_of_left _).fintype
+    exact finite_range g
+  · filter_upwards [hs, ks] with x xs ⟨y, hy, xy⟩
+    simp_rw [SetRel.preimage, exists_range_iff]
+    set z : ↥u := ⟨y, hy, ⟨x, xs, xy⟩⟩
+    exact ⟨z, rU ⟨y, xy, rs (hgr z)⟩⟩
 
 Depends on / 依赖: Fintype, SetRel, SetRel.preimage, coe_prop, comp_symm_of_uniformity, exists_range_iff, filter_upwards, finite_range, fintype, fk.inter_of_left, inter_of_left, preimage, range_subset_iff, simp_rw, x.coe_prop
 -/
@@ -2166,7 +2208,9 @@ theorem Filter.TotallyBounded.totallyBounded_setOfPred_clusterPt
   rw [← SetRel.preimage_eq_biUnion]; rw [id]; rw [← (hV.2.relPreimage_of_finite htf).closure_eq]
   exact hx.mem_closure_of_mem _ hst
 
-@[deprecated (since :=
+@[deprecated (since := "2026-07-09")]
+alias Filter.TotallyBounded.totallyBounded_setOf_clusterPt :=
+  Filter.TotallyBounded.totallyBounded_setOfPred_clusterPt
 
 中文:
 定理 滤子.全有界.totallyBounded_setOfPred_clusterPt
@@ -2178,7 +2222,9 @@ theorem Filter.TotallyBounded.totallyBounded_setOfPred_clusterPt
   rw [← SetRel.preimage_eq_biUnion]; rw [id]; rw [← (hV.2.relPreimage_of_finite htf).closure_eq]
   exact hx.mem_closure_of_mem _ hst
 
-@[deprecated (since :=
+@[deprecated (since := "2026-07-09")]
+alias Filter.TotallyBounded.totallyBounded_setOf_clusterPt :=
+  Filter.TotallyBounded.totallyBounded_setOfPred_clusterPt
 
 Depends on / 依赖: SetRel, SetRel.preimage_eq_biUnion, closure_eq, hx.mem_closure_of_mem, mem_closure_of_mem, preimage_eq_biUnion, relPreimage_of_finite, totallyBounded_iff, uniformity_hasBasis_closed, uniformity_hasBasis_closed.totallyBounded_iff
 -/
@@ -2694,7 +2740,9 @@ theorem Ultrafilter.cauchy_of_totallyBounded'
     let ⟨i, hi, ht'_f⟩ := hf t' ht'₁
     have : exists y in i, { x | (x, y) in t' } in f := (Ultrafilter.eventually_exists_mem_iff hi).1 ht'_f
     let ⟨y, _, hif⟩ := this
-    have : {x | (x, y) in t'} ×ˢ {x | (x
+    have : {x | (x, y) in t'} ×ˢ {x | (x, y) in t'} subseteq t' ○ t' :=
+      fun ⟨_, _⟩ ⟨(h₁ : (_, y) in t'), (h₂ : (_, y) in t')⟩ => ⟨y, h₁, ht'_symm h₂⟩
+    mem_of_superset (prod_mem_prod hif hif) (Subset.trans this ht'_t)⟩
 
 中文:
 定理 Ultrafilter.cauchy_of_totallyBounded'
@@ -2704,7 +2752,9 @@ theorem Ultrafilter.cauchy_of_totallyBounded'
     let ⟨i, hi, ht'_f⟩ := hf t' ht'₁
     have : exists y in i, { x | (x, y) in t' } in f := (Ultrafilter.eventually_exists_mem_iff hi).1 ht'_f
     let ⟨y, _, hif⟩ := this
-    have : {x | (x, y) in t'} ×ˢ {x | (x
+    have : {x | (x, y) in t'} ×ˢ {x | (x, y) in t'} subseteq t' ○ t' :=
+      fun ⟨_, _⟩ ⟨(h₁ : (_, y) in t'), (h₂ : (_, y) in t')⟩ => ⟨y, h₁, ht'_symm h₂⟩
+    mem_of_superset (prod_mem_prod hif hif) (Subset.trans this ht'_t)⟩
 
 Depends on / 依赖: Subset, Subset.trans, Ultrafilter, Ultrafilter.eventually_exists_mem_iff, _symm, comp_symm_of_uniformity, eventually_exists_mem_iff, f.neBot, mem_of_superset, prod_mem_prod, subseteq
 -/
@@ -2751,7 +2801,19 @@ theorem Filter.totallyBounded_iff_filter
   · intro H d hd
     contrapose! H with hd_cover
     set f := ⨅ t : Finset α, g ⊓ 𝓟 (d.preimage t)ᶜ
-    have hb : Antito
+    have hb : Antitone fun t : Finset α => g ⊓ 𝓟 (d.preimage t)ᶜ :=
+      fun s t (h : s subseteq t) => by beta_reduce; gcongr
+    have : Filter.NeBot f :=
+      (Filter.iInf_neBot_iff_of_directed' <| hb.directed_ge).mpr fun t =>
+Filter.notMem_iff_inf_principal_compl.mp hd_cover t t.finite_toSet
+    have : f <= g := iInf_le_of_le ∅ (by simp)
+    refine ⟨f, ‹_›, ‹_›, fun c hcf hc => ?_⟩
+    rcases mem_prod_same_iff.1 (hc.2 hd) with ⟨m, hm, hmd⟩
+    rcases hc.1.nonempty_of_mem hm with ⟨y, hym⟩
+    have : {x | (x, y) in d}ᶜ in c := by
+simpa [SetRel.preimage] using hcf.trans (iInf_le _ {y}).trans inf_le_right
+    rcases hc.1.nonempty_of_mem (inter_mem hm this) with ⟨z, hzm, hyz⟩
+    exact hyz (hmd ⟨hzm, hym⟩)
 
 中文:
 定理 滤子.totallyBounded_iff_filter
@@ -2763,7 +2825,19 @@ theorem Filter.totallyBounded_iff_filter
   · intro H d hd
     contrapose! H with hd_cover
     set f := ⨅ t : Finset α, g ⊓ 𝓟 (d.preimage t)ᶜ
-    have hb : Antito
+    have hb : Antitone fun t : Finset α => g ⊓ 𝓟 (d.preimage t)ᶜ :=
+      fun s t (h : s subseteq t) => by beta_reduce; gcongr
+    have : Filter.NeBot f :=
+      (Filter.iInf_neBot_iff_of_directed' <| hb.directed_ge).mpr fun t =>
+Filter.notMem_iff_inf_principal_compl.mp hd_cover t t.finite_toSet
+    have : f <= g := iInf_le_of_le ∅ (by simp)
+    refine ⟨f, ‹_›, ‹_›, fun c hcf hc => ?_⟩
+    rcases mem_prod_same_iff.1 (hc.2 hd) with ⟨m, hm, hmd⟩
+    rcases hc.1.nonempty_of_mem hm with ⟨y, hym⟩
+    have : {x | (x, y) in d}ᶜ in c := by
+simpa [SetRel.preimage] using hcf.trans (iInf_le _ {y}).trans inf_le_right
+    rcases hc.1.nonempty_of_mem (inter_mem hm this) with ⟨z, hzm, hyz⟩
+    exact hyz (hmd ⟨hzm, hym⟩)
 -/
 protected theorem Filter.totallyBounded_iff_filter {g : Filter α} :
     g.TotallyBounded ↔ forall f, NeBot f -> f <= g -> exists c <= f, Cauchy c := by
@@ -2871,7 +2945,8 @@ theorem isCompact_iff_totallyBounded_isComplete
       let ⟨a, as, fa⟩ := @hs f fc.1 fs
       ⟨a, as, le_nhds_of_cauchy_adhp fc fa⟩⟩,
     fun ⟨ht, hc⟩ =>
-    isCompact_
+    isCompact_iff_ultrafilter_le_nhds.2 fun f hf =>
+      hc _ (totallyBounded_iff_ultrafilter.1 ht f hf) hf⟩
 
 中文:
 定理 isCompact_iff_totallyBounded_isComplete
@@ -2884,7 +2959,8 @@ theorem isCompact_iff_totallyBounded_isComplete
       let ⟨a, as, fa⟩ := @hs f fc.1 fs
       ⟨a, as, le_nhds_of_cauchy_adhp fc fa⟩⟩,
     fun ⟨ht, hc⟩ =>
-    isCompact_
+    isCompact_iff_ultrafilter_le_nhds.2 fun f hf =>
+      hc _ (totallyBounded_iff_ultrafilter.1 ht f hf) hf⟩
 
 Depends on / 依赖: cauchy_nhds, cauchy_nhds.mono, isCompact_iff_ultrafilter_le_nhds, le_nhds_of_cauchy_adhp, totallyBounded_iff_ultrafilter
 -/
@@ -3055,7 +3131,7 @@ theorem CauchySeq.totallyBounded_range
   intro m
   rw [mem_iUnion₂]
   rcases le_total m n with hm | hm
-  exacts [⟨m, hm, refl_mem_uniformity ha⟩, ⟨n, le_refl n, hn m hm n le
+  exacts [⟨m, hm, refl_mem_uniformity ha⟩, ⟨n, le_refl n, hn m hm n le_rfl⟩]
 
 中文:
 定理 CauchySeq.totallyBounded_range
@@ -3068,7 +3144,7 @@ theorem CauchySeq.totallyBounded_range
   intro m
   rw [mem_iUnion₂]
   rcases le_total m n with hm | hm
-  exacts [⟨m, hm, refl_mem_uniformity ha⟩, ⟨n, le_refl n, hn m hm n le
+  exacts [⟨m, hm, refl_mem_uniformity ha⟩, ⟨n, le_refl n, hn m hm n le_rfl⟩]
 
 Depends on / 依赖: biUnion_image, cauchySeq_iff, exacts, finite_le_nat, le_refl, le_rfl, le_total, range_subset_iff, refl_mem_uniformity
 -/
@@ -3114,7 +3190,10 @@ lemma totallyBounded_interUnionBalls
       subseteq ⋃ m <= u i, UniformSpace.ball (xs m) (Prod.swap ⁻¹' U i) :=
     fun x hx => Set.mem_iInter.1 hx i
   classical
-  refine ⟨Finset.image xs (Finset.range (u i + 1)), Finset.finite_toSet _, 
+  refine ⟨Finset.image xs (Finset.range (u i + 1)), Finset.finite_toSet _, fun x hx => ?_⟩
+  simp only [Finset.coe_image, Finset.coe_range, mem_image, mem_Iio, iUnion_exists, biUnion_and',
+    iUnion_iUnion_eq_right, Nat.lt_succ_iff]
+  exact h_subset hx
 
 中文:
 引理 totallyBounded_interUnionBalls
@@ -3126,7 +3205,10 @@ lemma totallyBounded_interUnionBalls
       subseteq ⋃ m <= u i, UniformSpace.ball (xs m) (Prod.swap ⁻¹' U i) :=
     fun x hx => Set.mem_iInter.1 hx i
   classical
-  refine ⟨Finset.image xs (Finset.range (u i + 1)), Finset.finite_toSet _, 
+  refine ⟨Finset.image xs (Finset.range (u i + 1)), Finset.finite_toSet _, fun x hx => ?_⟩
+  simp only [Finset.coe_image, Finset.coe_range, mem_image, mem_Iio, iUnion_exists, biUnion_and',
+    iUnion_iUnion_eq_right, Nat.lt_succ_iff]
+  exact h_subset hx
 
 Depends on / 依赖: Filter, Filter.HasBasis.totallyBounded_iff, Finset, Finset.coe_image, Finset.coe_range, Finset.finite_toSet, Finset.image, Finset.range, HasBasis, Nat.lt_succ_iff, Prod.swap, Set.mem_iInter, UniformSpace, UniformSpace.ball, biUnion_and, classical, coe_image, coe_range, finite_toSet, h_subset
 -/
@@ -3409,7 +3491,9 @@ theorem le_nhds_of_seq_tendsto_nhds
       refine
         ⟨setSeq hf U_mem (max m n), setSeq_mem hf U_mem _, ?_, seq hf U_mem (max m n), ?_,
           seq_mem hf U_mem _⟩
-      ·
+      · have := le_max_left m n
+        exact Set.Subset.trans (setSeq_prod_subset hf U_mem this this) hm
+      · exact hm (hn _ <| le_max_right m n))
 
 中文:
 定理 le_nhds_of_seq_tendsto_nhds
@@ -3421,7 +3505,9 @@ theorem le_nhds_of_seq_tendsto_nhds
       refine
         ⟨setSeq hf U_mem (max m n), setSeq_mem hf U_mem _, ?_, seq hf U_mem (max m n), ?_,
           seq_mem hf U_mem _⟩
-      ·
+      · have := le_max_left m n
+        exact Set.Subset.trans (setSeq_prod_subset hf U_mem this this) hm
+      · exact hm (hn _ <| le_max_right m n))
 
 Depends on / 依赖: Set.Subset.trans, Subset, U_le, U_mem, le_max_left, le_max_right, le_nhds_of_cauchy_adhp_aux, mem_nhds_left, seq_mem, setSeq, setSeq_mem, setSeq_prod_subset, tendsto_atTop
 -/
@@ -3459,7 +3545,9 @@ theorem complete_of_convergent_controlled_sequences
   have Hmem : forall n, U n inter U' n in 𝓤 α := fun n => inter_mem (U_mem n) (hU'.2 ⟨n, Subset.refl _⟩)
 refine ⟨fun hf => (HU (seq hf Hmem) fun N m n hm hn => ?_).imp
     le_nhds_of_seq_tendsto_nhds _ _ fun s hs => ?_⟩
-  · exact inter_subset_lef
+  · exact inter_subset_left (seq_pair_mem hf Hmem hm hn)
+  · rcases hU'.1 hs with ⟨N, hN⟩
+    exact ⟨N, Subset.trans inter_subset_right hN⟩
 
 中文:
 定理 complete_of_convergent_controlled_sequences
@@ -3469,7 +3557,9 @@ refine ⟨fun hf => (HU (seq hf Hmem) fun N m n hm hn => ?_).imp
   have Hmem : forall n, U n inter U' n in 𝓤 α := fun n => inter_mem (U_mem n) (hU'.2 ⟨n, Subset.refl _⟩)
 refine ⟨fun hf => (HU (seq hf Hmem) fun N m n hm hn => ?_).imp
     le_nhds_of_seq_tendsto_nhds _ _ fun s hs => ?_⟩
-  · exact inter_subset_lef
+  · exact inter_subset_left (seq_pair_mem hf Hmem hm hn)
+  · rcases hU'.1 hs with ⟨N, hN⟩
+    exact ⟨N, Subset.trans inter_subset_right hN⟩
 
 Depends on / 依赖: Subset, Subset.refl, Subset.trans, U_mem, exists_antitone_seq, inter_mem, inter_subset_left, inter_subset_right, le_nhds_of_seq_tendsto_nhds, seq_pair_mem
 -/
@@ -3527,7 +3617,22 @@ instance secondCountable_of_separable
     ⟨t : Nat -> SetRel α α, hto : forall i : Nat, t i in (𝓤 α).sets ∧ IsOpen (t i) ∧ (t i).IsSymm,
       h_basis : (𝓤 α).HasAntitoneBasis t⟩ :=
     (@uniformity_hasBasis_open_symmetric α _).exists_antitone_subbasis
-  choose ht_mem hto 
+  choose ht_mem hto hts using hto
+  refine ⟨⟨⋃ x in s, range fun k => ball x (t k), hsc.biUnion fun x _ => countable_range _, ?_⟩⟩
+  refine (isTopologicalBasis_of_isOpen_of_nhds ?_ ?_).eq_generateFrom
+  · simp only [mem_iUnion₂, mem_range]
+    rintro _ ⟨x, _, k, rfl⟩
+    exact isOpen_ball x (hto k)
+  · intro x V hxV hVo
+    simp only [mem_iUnion₂, mem_range, exists_prop]
+    rcases UniformSpace.mem_nhds_iff.1 (IsOpen.mem_nhds hVo hxV) with ⟨U, hU, hUV⟩
+    rcases comp_symm_of_uniformity hU with ⟨U', hU', _, hUU'⟩
+    rcases h_basis.toHasBasis.mem_iff.1 hU' with ⟨k, -, hk⟩
+    rcases hsd.inter_open_nonempty (ball x <| t k) (isOpen_ball x (hto k))
+        ⟨x, UniformSpace.mem_ball_self _ (ht_mem k)⟩ with
+      ⟨y, hxy, hys⟩
+    refine ⟨_, ⟨y, hys, k, rfl⟩, (t k).symm hxy, fun z hz => ?_⟩
+    exact hUV (ball_subset_of_comp_subset (hk hxy) hUU' (hk hz))
 
 中文:
 实例 secondCountable_of_separable
@@ -3538,7 +3643,22 @@ instance secondCountable_of_separable
     ⟨t : Nat -> SetRel α α, hto : forall i : Nat, t i in (𝓤 α).sets ∧ IsOpen (t i) ∧ (t i).IsSymm,
       h_basis : (𝓤 α).HasAntitoneBasis t⟩ :=
     (@uniformity_hasBasis_open_symmetric α _).exists_antitone_subbasis
-  choose ht_mem hto 
+  choose ht_mem hto hts using hto
+  refine ⟨⟨⋃ x in s, range fun k => ball x (t k), hsc.biUnion fun x _ => countable_range _, ?_⟩⟩
+  refine (isTopologicalBasis_of_isOpen_of_nhds ?_ ?_).eq_generateFrom
+  · simp only [mem_iUnion₂, mem_range]
+    rintro _ ⟨x, _, k, rfl⟩
+    exact isOpen_ball x (hto k)
+  · intro x V hxV hVo
+    simp only [mem_iUnion₂, mem_range, exists_prop]
+    rcases UniformSpace.mem_nhds_iff.1 (IsOpen.mem_nhds hVo hxV) with ⟨U, hU, hUV⟩
+    rcases comp_symm_of_uniformity hU with ⟨U', hU', _, hUU'⟩
+    rcases h_basis.toHasBasis.mem_iff.1 hU' with ⟨k, -, hk⟩
+    rcases hsd.inter_open_nonempty (ball x <| t k) (isOpen_ball x (hto k))
+        ⟨x, UniformSpace.mem_ball_self _ (ht_mem k)⟩ with
+      ⟨y, hxy, hys⟩
+    refine ⟨_, ⟨y, hys, k, rfl⟩, (t k).symm hxy, fun z hz => ?_⟩
+    exact hUV (ball_subset_of_comp_subset (hk hxy) hUU' (hk hz))
 
 Depends on / 依赖: HasAntitoneBasis, IsOpen, IsSymm, SetRel, biUnion, countable_range, eq_generateFrom, exists_antitone_subbasis, exists_countable_dense, h_basis, hsc.biUnion, ht_mem, isTopologicalBasis_of_isOpen_of_nhds, mem_range, uniformity_hasBasis_open_symmetric
 -/
@@ -3579,7 +3699,19 @@ theorem subset_countable_closure_of_almost_dense_set
   choose t tC ht using hs
   have := fun n => (tC n).to_subtype
   choose o hox hos using fun (n : Nat) (x : t n) (hx : (ball x.1 (B n) inter s).Nonempty) => hx
-  refine ⟨⋃ (n) (x), range (o n x), iUnion₂_subset fu
+  refine ⟨⋃ (n) (x), range (o n x), iUnion₂_subset fun _ _ => range_subset_iff.2 (hos _ _),
+    countable_iUnion fun _ => countable_iUnion fun _ => countable_range _, fun x hx => ?_⟩
+  rw [mem_closure_iff_ball]
+  intro U hU
+  obtain ⟨V, hV, hVU⟩ := comp_mem_uniformity_sets hU
+  obtain ⟨n, hn⟩ := hB.mem_iff.1 hV
+  specialize ht n hx
+  rw [mem_iUnion₂] at ht
+  obtain ⟨y, hy, hyx⟩ := ht
+  refine ⟨o n ⟨y, hy⟩ ⟨x, hyx, hx⟩, ?_, ?_⟩
+  · apply ball_mono ((SetRel.comp_subset_comp hn hn).trans hVU)
+    exact mem_ball_comp (mem_ball_symmetry.2 hyx) (hox n ⟨y, hy⟩ ⟨x, hyx, hx⟩)
+  · exact mem_iUnion₂_of_mem ⟨y, hy⟩ (mem_range_self ⟨x, hyx, hx⟩)
 
 中文:
 定理 subset_countable_closure_of_almost_dense_set
@@ -3590,7 +3722,19 @@ theorem subset_countable_closure_of_almost_dense_set
   choose t tC ht using hs
   have := fun n => (tC n).to_subtype
   choose o hox hos using fun (n : Nat) (x : t n) (hx : (ball x.1 (B n) inter s).Nonempty) => hx
-  refine ⟨⋃ (n) (x), range (o n x), iUnion₂_subset fu
+  refine ⟨⋃ (n) (x), range (o n x), iUnion₂_subset fun _ _ => range_subset_iff.2 (hos _ _),
+    countable_iUnion fun _ => countable_iUnion fun _ => countable_range _, fun x hx => ?_⟩
+  rw [mem_closure_iff_ball]
+  intro U hU
+  obtain ⟨V, hV, hVU⟩ := comp_mem_uniformity_sets hU
+  obtain ⟨n, hn⟩ := hB.mem_iff.1 hV
+  specialize ht n hx
+  rw [mem_iUnion₂] at ht
+  obtain ⟨y, hy, hyx⟩ := ht
+  refine ⟨o n ⟨y, hy⟩ ⟨x, hyx, hx⟩, ?_, ?_⟩
+  · apply ball_mono ((SetRel.comp_subset_comp hn hn).trans hVU)
+    exact mem_ball_comp (mem_ball_symmetry.2 hyx) (hox n ⟨y, hy⟩ ⟨x, hyx, hx⟩)
+  · exact mem_iUnion₂_of_mem ⟨y, hy⟩ (mem_range_self ⟨x, hyx, hx⟩)
 
 Depends on / 依赖: Nonempty, comp_mem_uniformity_sets, countable_iUnion, countable_range, hB.mem, has_seq_basis, mem_closure_iff_ball, range_subset_iff, replace, to_subtype
 -/
@@ -3625,7 +3769,8 @@ theorem secondCountable_of_almost_dense_set
   suffices SeparableSpace α from UniformSpace.secondCountable_of_separable α
   have : forall U in 𝓤 α, exists t : Set α, Set.Countable t ∧ univ subseteq ⋃ x in t, ball x U := by
     simpa only [univ_subset_iff] using hs
-  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this wit
+  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this with ⟨t, -, htc, ht⟩
+  exact ⟨⟨t, htc, fun x => ht (mem_univ x)⟩⟩
 
 中文:
 定理 secondCountable_of_almost_dense_set
@@ -3633,7 +3778,8 @@ theorem secondCountable_of_almost_dense_set
   suffices SeparableSpace α from UniformSpace.secondCountable_of_separable α
   have : forall U in 𝓤 α, exists t : Set α, Set.Countable t ∧ univ subseteq ⋃ x in t, ball x U := by
     simpa only [univ_subset_iff] using hs
-  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this wit
+  rcases subset_countable_closure_of_almost_dense_set (univ : Set α) this with ⟨t, -, htc, ht⟩
+  exact ⟨⟨t, htc, fun x => ht (mem_univ x)⟩⟩
 
 Depends on / 依赖: Countable, SeparableSpace, Set.Countable, UniformSpace, UniformSpace.secondCountable_of_separable, mem_univ, secondCountable_of_separable, subset_countable_closure_of_almost_dense_set, subseteq, univ_subset_iff
 -/

@@ -744,7 +744,7 @@ subset_closure mem_univ_pi.mpr fun j => by
         by_cases H : j = i
         · subst H
           simpa
-
+        · simpa [H] using hs _)
 
 中文:
 定理 closure_pi
@@ -758,7 +758,7 @@ subset_closure mem_univ_pi.mpr fun j => by
         by_cases H : j = i
         · subst H
           simpa
-
+        · simpa [H] using hs _)
 
 Depends on / 依赖: classical, closure_le, gc_map_comap, l_le, le_antisymm, mem_univ_pi, mem_univ_pi.mpr, pi_le_iff, pi_le_iff.mpr, pi_subset_pi_iff, subset_closure
 -/
@@ -792,7 +792,9 @@ theorem mem_normalizer_fintype
       have heq : (fun n => x * n * x⁻¹) '' S = S :=
         Set.eq_of_subset_of_card_le (fun n ⟨y, hy⟩ => hy.2 ▸ h y hy.1)
           (by rw [Set.card_image_of_injective S conj_injective])
-      have :
+      have : x * n * x⁻¹ in (fun n => x * n * x⁻¹) '' S := heq.symm ▸ h₁
+      let ⟨y, hy⟩ := this
+      conj_injective hy.2 ▸ hy.1⟩
 
 中文:
 定理 mem_normalizer_fintype
@@ -804,7 +806,9 @@ theorem mem_normalizer_fintype
       have heq : (fun n => x * n * x⁻¹) '' S = S :=
         Set.eq_of_subset_of_card_le (fun n ⟨y, hy⟩ => hy.2 ▸ h y hy.1)
           (by rw [Set.card_image_of_injective S conj_injective])
-      have :
+      have : x * n * x⁻¹ in (fun n => x * n * x⁻¹) '' S := heq.symm ▸ h₁
+      let ⟨y, hy⟩ := this
+      conj_injective hy.2 ▸ hy.1⟩
 
 Depends on / 依赖: Classical, Classical.propDecidable, Set.card_image_of_injective, Set.eq_of_subset_of_card_le, card_image_of_injective, conj_injective, eq_of_subset_of_card_le, heq.symm, nonempty_fintype, propDecidable
 -/

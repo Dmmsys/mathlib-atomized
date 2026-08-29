@@ -582,7 +582,16 @@ definition certEntry
   let {dimension := dim, dimensionLit := dimLit, arrayExpr := A, arrayEntries, ..} := ctx
   let lhs : Q($α) := q(BirdDet.get $dimLit $A $i $j)
   -- The index of the matrix entry (i, j) in arrayEntries
-  let idx := d
+  let idx := dim * i + j
+  let entry := arrayEntries.getD idx q(0)
+  let ce ← certEval entry
+  let getD : Q($α) := q(Array.getD $A ($dimLit * $i + $j) 0)
+  let hGet : Q($lhs = $getD) := q(BirdDet.get_eq $dimLit $A $i $j)
+have : getD =Q entry := ⟨⟩
+  let hGetD : Q($getD = $entry) := q(rfl)
+  let cert := ce.chainProof q(Eq.trans $hGet $hGetD)
+  modify fun s => {s with entryCache := s.entryCache.insert (i, j) cert}
+  return cert
 
 中文:
 定义 certEntry
@@ -594,7 +603,16 @@ definition certEntry
   let {dimension := dim, dimensionLit := dimLit, arrayExpr := A, arrayEntries, ..} := ctx
   let lhs : Q($α) := q(BirdDet.get $dimLit $A $i $j)
   -- The index of the matrix entry (i, j) in arrayEntries
-  let idx := d
+  let idx := dim * i + j
+  let entry := arrayEntries.getD idx q(0)
+  let ce ← certEval entry
+  let getD : Q($α) := q(Array.getD $A ($dimLit * $i + $j) 0)
+  let hGet : Q($lhs = $getD) := q(BirdDet.get_eq $dimLit $A $i $j)
+have : getD =Q entry := ⟨⟩
+  let hGetD : Q($getD = $entry) := q(rfl)
+  let cert := ce.chainProof q(Eq.trans $hGet $hGetD)
+  modify fun s => {s with entryCache := s.entryCache.insert (i, j) cert}
+  return cert
 -/
 def certEntry (i j : Nat) : CertM rα (Cert rα) := do
   if let some c := (← get).entryCache[(i, j)]? then
@@ -626,7 +644,7 @@ definition certSumFromStop
     throwError "certSumFromStop called with {lo} such that {lo} < {ctx.dimension}"
   have dimLit : Q(Nat) := ctx.dimensionLit
   let hNot : Q(¬ $lo < $dimLit) ← mkDecideProofQ q(¬ $lo < $dimLit)
-  return zeroCertOfProof q(BirdDet.sumFrom_stop $dimLit $
+  return zeroCertOfProof q(BirdDet.sumFrom_stop $dimLit $lo $f $hNot)
 
 中文:
 定义 certSumFromStop
@@ -637,7 +655,7 @@ definition certSumFromStop
     throwError "certSumFromStop called with {lo} such that {lo} < {ctx.dimension}"
   have dimLit : Q(Nat) := ctx.dimensionLit
   let hNot : Q(¬ $lo < $dimLit) ← mkDecideProofQ q(¬ $lo < $dimLit)
-  return zeroCertOfProof q(BirdDet.sumFrom_stop $dimLit $
+  return zeroCertOfProof q(BirdDet.sumFrom_stop $dimLit $lo $f $hNot)
 -/
 def certSumFromStop (lo : Nat) (f : Q(Nat -> $α)) : CertM rα (Cert rα) := do
   let ctx ← read
@@ -659,7 +677,9 @@ definition certSumFromStep
   have dim : Q(Nat) := ctx.dimensionLit
   let hLt : Q($lo < $dim) ← mkDecideProofQ q($lo < $dim)
   let sumCert ← certAdd (← headCert) (← tailCert)
-  return sumCert.
+  return sumCert.chainProof q(BirdDet.sumFrom_step $dim $lo $f $hLt)
+
+mutual
 
 中文:
 定义 certSumFromStep
@@ -670,7 +690,9 @@ definition certSumFromStep
   have dim : Q(Nat) := ctx.dimensionLit
   let hLt : Q($lo < $dim) ← mkDecideProofQ q($lo < $dim)
   let sumCert ← certAdd (← headCert) (← tailCert)
-  return sumCert.
+  return sumCert.chainProof q(BirdDet.sumFrom_step $dim $lo $f $hLt)
+
+mutual
 -/
 def certSumFromStep
     (lo : Nat) (f : Q(Nat -> $α))
@@ -700,7 +722,39 @@ definition certIterStepEntry
     -- The `t = 0` branch of `Function.iterate`.
     | 0 => do
       let ce ← certEntry i j
-      let hIter := q(Functio
+      let hIter := q(Function.iterate_zero_apply
+        (BirdDet.stepEntry $dimLit $A) (BirdDet.get $dimLit $A))
+      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
+      pure (ce.chainProof h)
+    -- The `t = t' + 1` branch of `Function.iterate`.
+    | t' + 1 => do
+      -- First summand in one `BirdDet.stepEntry` application:
+      -- -(sumFrom n (i + 1) fun k => F_t k k) * get n A i j
+      let diagSummand := q(fun k => $(ctx.iterStepEntry t') k k)
+      let negDiagSum := q(-$(ctx.sumFrom (i + 1) diagSummand))
+      let entryCert ← certEntry i j
+      let diagProdCert ←
+        -- If `get n A i j = 0` then we can skip computation of
+        -- `-(sumFrom n (i + 1) fun k => F_t k k)`
+        if entryCert.isZero then
+          zeroProdCert negDiagSum entryCert
+        else do
+          let diagSumCert ← certDiag t' (i + 1)
+          let negDiagSumCert ← certNeg diagSumCert
+          certMul negDiagSumCert entryCert
+      -- Second summand in one `BirdDet.stepEntry` application:
+      -- sumFrom n (i + 1) fun k => F_t i k * get n A k j
+      let tailSumCert ← certTail t' i j (i + 1)
+      let rhsCert ← certAdd diagProdCert tailSumCert
+      let hStep := q(BirdDet.stepEntry_eq $dimLit $A $(ctx.iterStepEntry t') $i $j)
+      let stepCert := rhsCert.chainProof hStep
+      let hIter := q(Function.iterate_succ_apply'
+(BirdDet.stepEntry $dimLit $A) t' (BirdDet.get $dimLit $A))
+      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
+      pure (stepCert.chainProof h)
+  modify fun s =>
+    {s with iterStepEntryCache := s.iterStepEntryCache.insert (t, i, j) cert}
+  return cert
 
 中文:
 定义 certIterStepEntry
@@ -714,7 +768,39 @@ definition certIterStepEntry
     -- The `t = 0` branch of `Function.iterate`.
     | 0 => do
       let ce ← certEntry i j
-      let hIter := q(Functio
+      let hIter := q(Function.iterate_zero_apply
+        (BirdDet.stepEntry $dimLit $A) (BirdDet.get $dimLit $A))
+      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
+      pure (ce.chainProof h)
+    -- The `t = t' + 1` branch of `Function.iterate`.
+    | t' + 1 => do
+      -- First summand in one `BirdDet.stepEntry` application:
+      -- -(sumFrom n (i + 1) fun k => F_t k k) * get n A i j
+      let diagSummand := q(fun k => $(ctx.iterStepEntry t') k k)
+      let negDiagSum := q(-$(ctx.sumFrom (i + 1) diagSummand))
+      let entryCert ← certEntry i j
+      let diagProdCert ←
+        -- If `get n A i j = 0` then we can skip computation of
+        -- `-(sumFrom n (i + 1) fun k => F_t k k)`
+        if entryCert.isZero then
+          zeroProdCert negDiagSum entryCert
+        else do
+          let diagSumCert ← certDiag t' (i + 1)
+          let negDiagSumCert ← certNeg diagSumCert
+          certMul negDiagSumCert entryCert
+      -- Second summand in one `BirdDet.stepEntry` application:
+      -- sumFrom n (i + 1) fun k => F_t i k * get n A k j
+      let tailSumCert ← certTail t' i j (i + 1)
+      let rhsCert ← certAdd diagProdCert tailSumCert
+      let hStep := q(BirdDet.stepEntry_eq $dimLit $A $(ctx.iterStepEntry t') $i $j)
+      let stepCert := rhsCert.chainProof hStep
+      let hIter := q(Function.iterate_succ_apply'
+(BirdDet.stepEntry $dimLit $A) t' (BirdDet.get $dimLit $A))
+      let h := q(congrArg (fun F : Nat -> Nat -> $α => F $i $j) $hIter)
+      pure (stepCert.chainProof h)
+  modify fun s =>
+    {s with iterStepEntryCache := s.iterStepEntryCache.insert (t, i, j) cert}
+  return cert
 -/
 partial def certIterStepEntry (t i j : Nat) : CertM rα (Cert rα) := do
   if let some c := (← get).iterStepEntryCache[(t, i, j)]? then
@@ -776,7 +862,15 @@ definition certDiag
     then do
       let headCert := certIterStepEntry t lo lo
       let tailCert := certDiag t (lo + 1)
-      cert
+      certSumFromStep
+        lo
+        diagonalSummand
+        headCert
+        tailCert
+    else
+      certSumFromStop lo diagonalSummand
+  modify fun s => {s with diagCache := s.diagCache.insert (t, lo) cert}
+  return cert
 
 中文:
 定义 certDiag
@@ -791,7 +885,15 @@ definition certDiag
     then do
       let headCert := certIterStepEntry t lo lo
       let tailCert := certDiag t (lo + 1)
-      cert
+      certSumFromStep
+        lo
+        diagonalSummand
+        headCert
+        tailCert
+    else
+      certSumFromStop lo diagonalSummand
+  modify fun s => {s with diagCache := s.diagCache.insert (t, lo) cert}
+  return cert
 -/
 partial def certDiag (t lo : Nat) : CertM rα (Cert rα) := do
   if let some c := (← get).diagCache[(t, lo)]? then
@@ -830,7 +932,25 @@ BirdDet.get dimLit A k j)
   then do
     -- headCert certifies `(stepEntry n A)^[t] F i lo * get n A lo j`
     let headCert := do
-    
+      let entryCert ← certEntry lo j
+      -- If `get n A lo j = 0` then we can skip computation of
+      -- `(stepEntry n A)^[t] F i lo`
+      if entryCert.isZero
+      then
+        zeroProdCert
+          q($(ctx.iterStepEntry t) $i $lo)
+          entryCert
+      else do
+        let iterateCert ← certIterStepEntry t i lo
+        certMul iterateCert entryCert
+    let tailCert := certTail t i j (lo + 1)
+    certSumFromStep
+      lo
+      tailSummand
+      headCert
+      tailCert
+  else
+    certSumFromStop lo tailSummand
 
 中文:
 定义 certTail
@@ -846,7 +966,25 @@ BirdDet.get dimLit A k j)
   then do
     -- headCert certifies `(stepEntry n A)^[t] F i lo * get n A lo j`
     let headCert := do
-    
+      let entryCert ← certEntry lo j
+      -- If `get n A lo j = 0` then we can skip computation of
+      -- `(stepEntry n A)^[t] F i lo`
+      if entryCert.isZero
+      then
+        zeroProdCert
+          q($(ctx.iterStepEntry t) $i $lo)
+          entryCert
+      else do
+        let iterateCert ← certIterStepEntry t i lo
+        certMul iterateCert entryCert
+    let tailCert := certTail t i j (lo + 1)
+    certSumFromStep
+      lo
+      tailSummand
+      headCert
+      tailCert
+  else
+    certSumFromStop lo tailSummand
 -/
 partial def certTail (t i j lo : Nat) : CertM rα (Cert rα) := do
   let ctx ← read
@@ -898,7 +1036,17 @@ have : dimLit =Q 0 := ⟨⟩
     let h := q(BirdDet.birdDet_zero $A)
     return ce.chainProof h
   else
-    -- The non-zero
+    -- The non-zero `BirdDet.birdDet_eq` branch matches `k + 1`
+    -- so we set k := `ctx.dimension - 1`.
+    let k := dim - 1
+    let cs ← certBirdSign k
+    let ci ← certIterStepEntry k 0 0
+    let cm ← certMul cs ci
+    have kLit := mkNatLitQ k
+have : dimLit =Q kLit + 1 := ⟨⟩
+    let hn : Q($dimLit = $kLit + 1) := q(rfl)
+    let h := q(BirdDet.birdDet_eq $dimLit $kLit $arrayExpr $hn)
+    return cm.chainProof h
 
 中文:
 定义 certBirdDet
@@ -914,7 +1062,17 @@ have : dimLit =Q 0 := ⟨⟩
     let h := q(BirdDet.birdDet_zero $A)
     return ce.chainProof h
   else
-    -- The non-zero
+    -- The non-zero `BirdDet.birdDet_eq` branch matches `k + 1`
+    -- so we set k := `ctx.dimension - 1`.
+    let k := dim - 1
+    let cs ← certBirdSign k
+    let ci ← certIterStepEntry k 0 0
+    let cm ← certMul cs ci
+    have kLit := mkNatLitQ k
+have : dimLit =Q kLit + 1 := ⟨⟩
+    let hn : Q($dimLit = $kLit + 1) := q(rfl)
+    let h := q(BirdDet.birdDet_eq $dimLit $kLit $arrayExpr $hn)
+    return cm.chainProof h
 -/
 def certBirdDet : CertM rα (Cert rα) := do
   let ctx ← read

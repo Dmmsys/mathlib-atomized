@@ -44,7 +44,13 @@ theorem oangle_eq_two_zsmul_oangle_sub_of_norm_eq
   have hx : x != 0 := norm_ne_zero_iff.1 (hxy.symm ▸ norm_ne_zero_iff.2 hy)
   have hz : z != 0 := norm_ne_zero_iff.1 (hxz ▸ norm_ne_zero_iff.2 hx)
   calc
-    o.oangle y z = o.oangle x z - o.oa
+    o.oangle y z = o.oangle x z - o.oangle x y := (o.oangle_sub_left hx hy hz).symm
+    _ = π - (2 : Int) • o.oangle (x - z) x - (π - (2 : Int) • o.oangle (x - y) x) := by
+      rw [o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq hxzne.symm hxz.symm]; rw [o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq hxyne.symm hxy.symm]
+    _ = (2 : Int) • (o.oangle (x - y) x - o.oangle (x - z) x) := by abel
+    _ = (2 : Int) • o.oangle (x - y) (x - z) := by
+      rw [o.oangle_sub_right (sub_ne_zero_of_ne hxyne) (sub_ne_zero_of_ne hxzne) hx]
+    _ = (2 : Int) • o.oangle (y - x) (z - x) := by rw [← oangle_neg_neg, neg_sub, neg_sub]
 
 中文:
 定理 oangle_eq_two_zsmul_oangle_sub_of_norm_eq
@@ -57,7 +63,13 @@ theorem oangle_eq_two_zsmul_oangle_sub_of_norm_eq
   have hx : x != 0 := norm_ne_zero_iff.1 (hxy.symm ▸ norm_ne_zero_iff.2 hy)
   have hz : z != 0 := norm_ne_zero_iff.1 (hxz ▸ norm_ne_zero_iff.2 hx)
   calc
-    o.oangle y z = o.oangle x z - o.oa
+    o.oangle y z = o.oangle x z - o.oangle x y := (o.oangle_sub_left hx hy hz).symm
+    _ = π - (2 : Int) • o.oangle (x - z) x - (π - (2 : Int) • o.oangle (x - y) x) := by
+      rw [o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq hxzne.symm hxz.symm]; rw [o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq hxyne.symm hxy.symm]
+    _ = (2 : Int) • (o.oangle (x - y) x - o.oangle (x - z) x) := by abel
+    _ = (2 : Int) • o.oangle (x - y) (x - z) := by
+      rw [o.oangle_sub_right (sub_ne_zero_of_ne hxyne) (sub_ne_zero_of_ne hxzne) hx]
+    _ = (2 : Int) • o.oangle (y - x) (z - x) := by rw [← oangle_neg_neg, neg_sub, neg_sub]
 
 Depends on / 依赖: hxy.symm, hxz.symm, hxzne.symm, norm_eq_zero, norm_ne_zero_iff, norm_zero, o.oangle, o.oangle_eq_p, o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq, o.oangle_sub_left, oangle, oangle_eq_p, oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq, oangle_sub_left
 -/
@@ -143,7 +155,13 @@ theorem angle_eq_pi_div_two_iff_mem_sphere_of_isDiameter
   rw [mem_sphere']; rw [EuclideanGeometry.angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
   let o := s.center
   have h_center : o = midpoint Real p₁ p₃ := hd.midpoint_eq_center.symm
-  rw [← vsub_add_vsub_cancel p₁ o p₂]; rw [← vsub_add_vsub_cancel p₃ o p₂]; rw [inner_add
+  rw [← vsub_add_vsub_cancel p₁ o p₂]; rw [← vsub_add_vsub_cancel p₃ o p₂]; rw [inner_add_left]; rw [inner_add_right]; rw [inner_add_right]
+  have h_opp : p₁ -ᵥ o = -(p₃ -ᵥ o) := by
+    rw [h_center]; rw [left_vsub_midpoint]; rw [right_vsub_midpoint]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]
+  rw [h_opp]; rw [inner_neg_left]; rw [inner_neg_left]; rw [real_inner_comm (p₃ -ᵥ o) (o -ᵥ p₂)]
+  ring_nf
+  rw [neg_add_eq_zero]; rw [real_inner_self_eq_norm_sq]; rw [← dist_eq_norm_vsub]; rw [real_inner_self_eq_norm_sq]; rw [← dist_eq_norm_vsub]; rw [sq_eq_sq₀ dist_nonneg dist_nonneg]; rw [mem_sphere.mp hd.right_mem]
+  exact eq_comm
 
 中文:
 定理 angle_eq_pi_div_two_iff_mem_sphere_of_isDiameter
@@ -152,7 +170,13 @@ theorem angle_eq_pi_div_two_iff_mem_sphere_of_isDiameter
   rw [mem_sphere']; rw [EuclideanGeometry.angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
   let o := s.center
   have h_center : o = midpoint Real p₁ p₃ := hd.midpoint_eq_center.symm
-  rw [← vsub_add_vsub_cancel p₁ o p₂]; rw [← vsub_add_vsub_cancel p₃ o p₂]; rw [inner_add
+  rw [← vsub_add_vsub_cancel p₁ o p₂]; rw [← vsub_add_vsub_cancel p₃ o p₂]; rw [inner_add_left]; rw [inner_add_right]; rw [inner_add_right]
+  have h_opp : p₁ -ᵥ o = -(p₃ -ᵥ o) := by
+    rw [h_center]; rw [left_vsub_midpoint]; rw [right_vsub_midpoint]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]
+  rw [h_opp]; rw [inner_neg_left]; rw [inner_neg_left]; rw [real_inner_comm (p₃ -ᵥ o) (o -ᵥ p₂)]
+  ring_nf
+  rw [neg_add_eq_zero]; rw [real_inner_self_eq_norm_sq]; rw [← dist_eq_norm_vsub]; rw [real_inner_self_eq_norm_sq]; rw [← dist_eq_norm_vsub]; rw [sq_eq_sq₀ dist_nonneg dist_nonneg]; rw [mem_sphere.mp hd.right_mem]
+  exact eq_comm
 
 Depends on / 依赖: EuclideanGeometry, EuclideanGeometry.angle, InnerProductGeometry, InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two, center, h_center, h_op, h_opp, hd.midpoint_eq_center.symm, inner_add_left, inner_add_right, inner_eq_zero_iff_angle_eq_pi_div_two, left_vsub_midpoint, mem_sphere, midpoint, midpoint_eq_center, neg_vsub_eq_vsub_rev, right_vsub_midpoint, s.center, smul_neg
 -/
@@ -206,7 +230,13 @@ theorem isDiameter_of_angle_eq_pi_div_two
   have hne₁₃ : p₁ != p₃ := fun h => by
     rw [h]; rw [angle_self_of_ne hne₂₃.symm] at hangle; linarith [Real.pi_pos]
   have hd := Sphere.isDiameter_ofDiameter p₁ p₃
-  have h_eq : s = Sphere.ofDiameter p₁ p₃ 
+  have h_eq : s = Sphere.ofDiameter p₁ p₃ := by
+    by_contra hne
+    have := eq_of_mem_sphere_of_mem_sphere_of_finrank_eq_two
+      (Fact.out : finrank Real V = 2) hne hne₁₃ hp₁ hp₃ hp₂
+      hd.left_mem hd.right_mem (angle_eq_pi_div_two_iff_mem_sphere_ofDiameter.mp hangle)
+    exact this.elim hne₁₂.symm hne₂₃
+  exact h_eq ▸ hd
 
 中文:
 定理 isDiameter_of_angle_eq_pi_div_two
@@ -216,7 +246,13 @@ theorem isDiameter_of_angle_eq_pi_div_two
   have hne₁₃ : p₁ != p₃ := fun h => by
     rw [h]; rw [angle_self_of_ne hne₂₃.symm] at hangle; linarith [Real.pi_pos]
   have hd := Sphere.isDiameter_ofDiameter p₁ p₃
-  have h_eq : s = Sphere.ofDiameter p₁ p₃ 
+  have h_eq : s = Sphere.ofDiameter p₁ p₃ := by
+    by_contra hne
+    have := eq_of_mem_sphere_of_mem_sphere_of_finrank_eq_two
+      (Fact.out : finrank Real V = 2) hne hne₁₃ hp₁ hp₃ hp₂
+      hd.left_mem hd.right_mem (angle_eq_pi_div_two_iff_mem_sphere_ofDiameter.mp hangle)
+    exact this.elim hne₁₂.symm hne₂₃
+  exact h_eq ▸ hd
 
 Depends on / 依赖: Fact.out, FiniteDimensional, Real.pi_pos, Sphere, Sphere.isDiameter_ofDiameter, Sphere.ofDiameter, angle_eq_pi_div_two_iff_mem_sphere_ofDiameter, angle_eq_pi_div_two_iff_mem_sphere_ofDiameter.mp, angle_self_of_ne, eq_of_mem_sphere_of_mem_sphere_of_finrank_eq_two, finrank, h_eq, hangle, hd.left_mem, hd.right_mem, isDiameter_ofDiameter, left_mem, ofDiameter, of_finrank_eq_succ, pi_pos
 -/
@@ -343,7 +379,13 @@ theorem IsTangentAt_of_angle_eq_pi_div_two
   have h_ortho : ⟪q -ᵥ p, p -ᵥ s.center⟫ = 0 := by
     rwa [angle, ← inner_eq_zero_iff_angle_eq_pi_div_two, ← neg_vsub_eq_vsub_rev p s.center,
       inner_neg_right, neg_eq_zero] at h
-  have hq : q in s.orthRadius p := b
+  have hq : q in s.orthRadius p := by
+    simp [Sphere.mem_orthRadius_iff_inner_left, h_ortho]
+  rw [affineSpan_le]
+  have hp : p in s.orthRadius p := by
+    simp [Sphere.self_mem_orthRadius]
+  simp_rw [Set.insert_subset_iff, Set.singleton_subset_iff]
+  exact ⟨hp, hq⟩
 
 中文:
 定理 IsTangentAt_of_angle_eq_pi_div_two
@@ -354,7 +396,13 @@ theorem IsTangentAt_of_angle_eq_pi_div_two
   have h_ortho : ⟪q -ᵥ p, p -ᵥ s.center⟫ = 0 := by
     rwa [angle, ← inner_eq_zero_iff_angle_eq_pi_div_two, ← neg_vsub_eq_vsub_rev p s.center,
       inner_neg_right, neg_eq_zero] at h
-  have hq : q in s.orthRadius p := b
+  have hq : q in s.orthRadius p := by
+    simp [Sphere.mem_orthRadius_iff_inner_left, h_ortho]
+  rw [affineSpan_le]
+  have hp : p in s.orthRadius p := by
+    simp [Sphere.self_mem_orthRadius]
+  simp_rw [Set.insert_subset_iff, Set.singleton_subset_iff]
+  exact ⟨hp, hq⟩
 
 Depends on / 依赖: Set.insert_subset_iff, Set.singleton_subset_iff, Sphere, Sphere.mem_orthRadius_iff_inner_left, Sphere.self_mem_orthRadius, affineSpan_le, center, h_ortho, hp_mem, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_right, insert_subset_iff, left_mem_affineSpan_pair, mem_orthRadius_iff_inner_left, neg_eq_zero, neg_vsub_eq_vsub_rev, orthRadius, s.center, s.orthRadius, self_mem_orthRadius
 -/
@@ -445,7 +493,7 @@ theorem two_zsmul_oangle_eq
   rw [mem_sphere]; rw [@dist_eq_norm_vsub V] at hp₁ hp₂ hp₃ hp₄
   rw [oangle]; rw [oangle]; rw [← vsub_sub_vsub_cancel_right p₁ p₂ s.center]; rw [←
       vsub_sub_vsub_cancel_right p₄ p₂ s.center]; rw [o.two_zsmul_oangle_sub_eq_two_zsmul_oangle_sub_of_norm_eq _ _ _ _ hp₂ hp₃ hp₁ hp₄] <;>
-    simp
+    simp [hp₂p₁, hp₂p₄, hp₃p₁, hp₃p₄]
 
 中文:
 定理 two_zsmul_oangle_eq
@@ -454,7 +502,7 @@ theorem two_zsmul_oangle_eq
   rw [mem_sphere]; rw [@dist_eq_norm_vsub V] at hp₁ hp₂ hp₃ hp₄
   rw [oangle]; rw [oangle]; rw [← vsub_sub_vsub_cancel_right p₁ p₂ s.center]; rw [←
       vsub_sub_vsub_cancel_right p₄ p₂ s.center]; rw [o.two_zsmul_oangle_sub_eq_two_zsmul_oangle_sub_of_norm_eq _ _ _ _ hp₂ hp₃ hp₁ hp₄] <;>
-    simp
+    simp [hp₂p₁, hp₂p₄, hp₃p₁, hp₃p₄]
 
 Depends on / 依赖: center, dist_eq_norm_vsub, mem_sphere, o.two_zsmul_oangle_sub_eq_two_zsmul_oangle_sub_of_norm_eq, oangle, s.center, two_zsmul_oangle_sub_eq_two_zsmul_oangle_sub_of_norm_eq, vsub_sub_vsub_cancel_right
 -/
@@ -620,7 +668,8 @@ theorem tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center
     (dist_center_eq_dist_center_of_mem_sphere hp₁ hp₂)
   rw [← hr]; rw [← oangle_midpoint_rev_left]; rw [oangle]; rw [vadd_vsub_assoc]
   nth_rw 1 [show p₂ -ᵥ p₁ = (2 : Real) • (midpoint Real p₁ p₂ -ᵥ p₁) by simp]
-  rw
+  rw [map_smul]; rw [smul_smul]; rw [add_comm]; rw [o.tan_oangle_add_right_smul_rotation_pi_div_two]; rw [mul_div_cancel_right₀ _ (two_ne_zero' Real)]
+  simpa using h.symm
 
 中文:
 定理 tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center
@@ -630,7 +679,8 @@ theorem tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center
     (dist_center_eq_dist_center_of_mem_sphere hp₁ hp₂)
   rw [← hr]; rw [← oangle_midpoint_rev_left]; rw [oangle]; rw [vadd_vsub_assoc]
   nth_rw 1 [show p₂ -ᵥ p₁ = (2 : Real) • (midpoint Real p₁ p₂ -ᵥ p₁) by simp]
-  rw
+  rw [map_smul]; rw [smul_smul]; rw [add_comm]; rw [o.tan_oangle_add_right_smul_rotation_pi_div_two]; rw [mul_div_cancel_right₀ _ (two_ne_zero' Real)]
+  simpa using h.symm
 
 Depends on / 依赖: add_comm, dist_center_eq_dist_center_of_mem_sphere, dist_eq_iff_eq_smul_rotation_pi_div_two_vadd_midpoint, h.symm, map_smul, midpoint, nth_rw, o.tan_oangle_add_right_smul_rotation_pi_div_two, oangle, oangle_midpoint_rev_left, smul_smul, tan_oangle_add_right_smul_rotation_pi_div_two, two_ne_zero, vadd_vsub_assoc
 -/
@@ -684,7 +734,13 @@ theorem dist_div_cos_oangle_center_div_two_eq_radius
   proof: by
   rw [div_right_comm]; rw [div_eq_mul_inv _ (2 : Real)]; rw [mul_comm]; rw [show (2 : Real)⁻¹ * dist p₁ p₂ = dist p₁ (midpoint Real p₁ p₂) by simp]; rw [← mem_sphere.1 hp₁]; rw [←
     tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center hp₁ hp₂ h]; rw [←
-    oangle_midpoint_rev_left]; rw 
+    oangle_midpoint_rev_left]; rw [oangle]; rw [vadd_vsub_assoc]; rw [show p₂ -ᵥ p₁ = (2 : Real) • (midpoint Real p₁ p₂ -ᵥ p₁) by simp]; rw [map_smul]; rw [smul_smul]; rw [div_mul_cancel₀ _ (two_ne_zero' Real)]; rw [@dist_eq_norm_vsub' V]; rw [@dist_eq_norm_vsub' V]; rw [vadd_vsub_assoc]; rw [add_comm]; rw [o.oangle_add_right_smul_rotation_pi_div_two]; rw [Real.Angle.cos_coe]; rw [Real.cos_arctan]
+  · norm_cast
+    rw [one_div]; rw [div_inv_eq_mul]; rw [← mul_self_inj (by positivity) (by positivity)]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real (o.inner_smul_rotation_pi_div_two_right _ _)]; rw [← mul_assoc]; rw [mul_comm]; rw [mul_comm _ (√_)]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Real.mul_self_sqrt (by positivity)]; rw [norm_smul]; rw [LinearIsometryEquiv.norm_map]
+    conv_rhs =>
+      rw [← mul_assoc]; rw [mul_comm _ ‖Real.Angle.tan _‖]; rw [← mul_assoc]; rw [Real.norm_eq_abs]; rw [abs_mul_abs_self]
+    ring
+  · simpa using h.symm
 
 中文:
 定理 dist_div_cos_oangle_center_div_two_eq_radius
@@ -692,7 +748,13 @@ theorem dist_div_cos_oangle_center_div_two_eq_radius
   证明: by
   rw [div_right_comm]; rw [div_eq_mul_inv _ (2 : Real)]; rw [mul_comm]; rw [show (2 : Real)⁻¹ * dist p₁ p₂ = dist p₁ (midpoint Real p₁ p₂) by simp]; rw [← mem_sphere.1 hp₁]; rw [←
     tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center hp₁ hp₂ h]; rw [←
-    oangle_midpoint_rev_left]; rw 
+    oangle_midpoint_rev_left]; rw [oangle]; rw [vadd_vsub_assoc]; rw [show p₂ -ᵥ p₁ = (2 : Real) • (midpoint Real p₁ p₂ -ᵥ p₁) by simp]; rw [map_smul]; rw [smul_smul]; rw [div_mul_cancel₀ _ (two_ne_zero' Real)]; rw [@dist_eq_norm_vsub' V]; rw [@dist_eq_norm_vsub' V]; rw [vadd_vsub_assoc]; rw [add_comm]; rw [o.oangle_add_right_smul_rotation_pi_div_two]; rw [Real.Angle.cos_coe]; rw [Real.cos_arctan]
+  · norm_cast
+    rw [one_div]; rw [div_inv_eq_mul]; rw [← mul_self_inj (by positivity) (by positivity)]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real (o.inner_smul_rotation_pi_div_two_right _ _)]; rw [← mul_assoc]; rw [mul_comm]; rw [mul_comm _ (√_)]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Real.mul_self_sqrt (by positivity)]; rw [norm_smul]; rw [LinearIsometryEquiv.norm_map]
+    conv_rhs =>
+      rw [← mul_assoc]; rw [mul_comm _ ‖Real.Angle.tan _‖]; rw [← mul_assoc]; rw [Real.norm_eq_abs]; rw [abs_mul_abs_self]
+    ring
+  · simpa using h.symm
 
 Depends on / 依赖: dist_eq_norm_vsub, div_eq_mul_inv, div_right_comm, map_smul, mem_sphere, midpoint, mul_comm, oangle, oangle_midpoint_rev_left, smul_smul, tan_div_two_smul_rotation_pi_div_two_vadd_midpoint_eq_center, two_ne_zero, vadd_vsub_assoc
 -/
@@ -740,7 +802,8 @@ theorem dist_div_sin_oangle_div_two_eq_radius
   proof: by
   convert! dist_div_cos_oangle_center_div_two_eq_radius hp₁ hp₃ hp₁p₃
   rw [← Real.Angle.abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi
-    (two_zsmul_oangle_center_add_two_zsmul_oangle_eq_pi hp₁ hp₂ hp₃ hp₁p₂.symm hp₂p₃ hp₁p₃)]; rw [abs_of_nonneg (Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_
+    (two_zsmul_oangle_center_add_two_zsmul_oangle_eq_pi hp₁ hp₂ hp₃ hp₁p₂.symm hp₂p₃ hp₁p₃)]; rw [abs_of_nonneg (Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_div_two.2 _)]
+  exact (abs_oangle_center_right_toReal_lt_pi_div_two hp₁ hp₃).le
 
 中文:
 定理 dist_div_sin_oangle_div_two_eq_radius
@@ -748,7 +811,8 @@ theorem dist_div_sin_oangle_div_two_eq_radius
   证明: by
   convert! dist_div_cos_oangle_center_div_two_eq_radius hp₁ hp₃ hp₁p₃
   rw [← Real.Angle.abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi
-    (two_zsmul_oangle_center_add_two_zsmul_oangle_eq_pi hp₁ hp₂ hp₃ hp₁p₂.symm hp₂p₃ hp₁p₃)]; rw [abs_of_nonneg (Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_
+    (two_zsmul_oangle_center_add_two_zsmul_oangle_eq_pi hp₁ hp₂ hp₃ hp₁p₂.symm hp₂p₃ hp₁p₃)]; rw [abs_of_nonneg (Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_div_two.2 _)]
+  exact (abs_oangle_center_right_toReal_lt_pi_div_two hp₁ hp₃).le
 
 Depends on / 依赖: Real.Angle.abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi, Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_div_two, abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi, abs_oangle_center_right_toReal_lt_pi_div_two, abs_of_nonneg, convert, cos_nonneg_iff_abs_toReal_le_pi_div_two, dist_div_cos_oangle_center_div_two_eq_radius, two_zsmul_oangle_center_add_two_zsmul_oangle_eq_pi
 -/
@@ -947,7 +1011,18 @@ theorem mem_circumsphere_of_two_zsmul_oangle_eq
   have h₂ : t'p i₂ = p := by simp [t'p]
   have h₃ : t'p i₃ = t.points i₃ := by simp [t'p, h₂₃.symm]
   have ha : AffineIndependent Real t'p := by
-    rw [affineIndependent_iff_not_colline
+    rw [affineIndependent_iff_not_collinear_of_ne h₁₂ h₁₃ h₂₃]; rw [h₁]; rw [h₂]; rw [h₃]; rw [collinear_iff_of_two_zsmul_oangle_eq h]; rw [←
+      affineIndependent_iff_not_collinear_of_ne h₁₂ h₁₃ h₂₃]
+    exact t.independent
+  let t' : Triangle Real P := ⟨t'p, ha⟩
+  have h₁' : t'.points i₁ = t.points i₁ := h₁
+  have h₂' : t'.points i₂ = p := h₂
+  have h₃' : t'.points i₃ = t.points i₃ := h₃
+  have h' : (2 : Int) • ∡ (t'.points i₁) (t'.points i₂) (t'.points i₃) =
+      (2 : Int) • ∡ (t.points i₁) (t.points i₂) (t.points i₃) := by rwa [h₁', h₂', h₃']
+  rw [← circumsphere_eq_circumsphere_of_eq_of_eq_of_two_zsmul_oangle_eq h₁₂ h₁₃ h₂₃ h₁' h₃' h']; rw [←
+    h₂']
+  exact Simplex.mem_circumsphere _ _
 
 中文:
 定理 mem_circumsphere_of_two_zsmul_oangle_eq
@@ -958,7 +1033,18 @@ theorem mem_circumsphere_of_two_zsmul_oangle_eq
   have h₂ : t'p i₂ = p := by simp [t'p]
   have h₃ : t'p i₃ = t.points i₃ := by simp [t'p, h₂₃.symm]
   have ha : AffineIndependent Real t'p := by
-    rw [affineIndependent_iff_not_colline
+    rw [affineIndependent_iff_not_collinear_of_ne h₁₂ h₁₃ h₂₃]; rw [h₁]; rw [h₂]; rw [h₃]; rw [collinear_iff_of_two_zsmul_oangle_eq h]; rw [←
+      affineIndependent_iff_not_collinear_of_ne h₁₂ h₁₃ h₂₃]
+    exact t.independent
+  let t' : Triangle Real P := ⟨t'p, ha⟩
+  have h₁' : t'.points i₁ = t.points i₁ := h₁
+  have h₂' : t'.points i₂ = p := h₂
+  have h₃' : t'.points i₃ = t.points i₃ := h₃
+  have h' : (2 : Int) • ∡ (t'.points i₁) (t'.points i₂) (t'.points i₃) =
+      (2 : Int) • ∡ (t.points i₁) (t.points i₂) (t.points i₃) := by rwa [h₁', h₂', h₃']
+  rw [← circumsphere_eq_circumsphere_of_eq_of_eq_of_two_zsmul_oangle_eq h₁₂ h₁₃ h₂₃ h₁' h₃' h']; rw [←
+    h₂']
+  exact Simplex.mem_circumsphere _ _
 
 Depends on / 依赖: AffineIndependent, Function, Function.update, Triangle, affineIndependent_iff_not_collinear_of_ne, collinear_iff_of_two_zsmul_oangle_eq, independent, points, t.independent, t.points, update
 -/
@@ -998,7 +1084,15 @@ theorem dist_div_sin_angle_div_two_eq_circumradius
   have hf2 : Fact (finrank Real S.direction = 2) := ⟨by
     rw [hS]; rw [direction_affineSpan]; rw [t.independent.finrank_vectorSpan]
     simp⟩
-  have : Module.Oriente
+  have : Module.Oriented Real S.direction (Fin 2) :=
+    ⟨Basis.orientation (finBasisOfFinrankEq _ _ hf2.out)⟩
+  convert! t'.dist_div_sin_oangle_div_two_eq_circumradius h₁₂ h₁₃ h₂₃ using 3
+  · rw [← Real.Angle.sin_toReal,
+      Real.abs_sin_eq_sin_abs_of_abs_le_pi (Real.Angle.abs_toReal_le_pi _),
+      ← angle_eq_abs_oangle_toReal (t'.independent.injective.ne h₁₂)
+        (t'.independent.injective.ne h₂₃.symm)]
+    congr
+  · simp [t']
 
 中文:
 定理 dist_div_sin_angle_div_two_eq_circumradius
@@ -1009,7 +1103,15 @@ theorem dist_div_sin_angle_div_two_eq_circumradius
   have hf2 : Fact (finrank Real S.direction = 2) := ⟨by
     rw [hS]; rw [direction_affineSpan]; rw [t.independent.finrank_vectorSpan]
     simp⟩
-  have : Module.Oriente
+  have : Module.Oriented Real S.direction (Fin 2) :=
+    ⟨Basis.orientation (finBasisOfFinrankEq _ _ hf2.out)⟩
+  convert! t'.dist_div_sin_oangle_div_two_eq_circumradius h₁₂ h₁₃ h₂₃ using 3
+  · rw [← Real.Angle.sin_toReal,
+      Real.abs_sin_eq_sin_abs_of_abs_le_pi (Real.Angle.abs_toReal_le_pi _),
+      ← angle_eq_abs_oangle_toReal (t'.independent.injective.ne h₁₂)
+        (t'.independent.injective.ne h₂₃.symm)]
+    congr
+  · simp [t']
 
 Depends on / 依赖: AffineSubspace, Basis.orientation, Module, Module.Oriented, Oriented, Real.Angle.sin_toReal, Real.abs_sin_eq_sin_abs_o, S.direction, Set.range, Triangle, abs_sin_eq_sin_abs_o, affineSpan, convert, direction, direction_affineSpan, dist_div_sin_oangle_div_two_eq_circumradius, finBasisOfFinrankEq, finrank, finrank_vectorSpan, hf2.out
 -/
@@ -1078,7 +1180,15 @@ theorem cospherical_of_two_zsmul_oangle_eq_of_not_collinear
   have hn' : ¬Collinear Real ({p₁, p₃, p₄} : Set P) := by
     rwa [← collinear_iff_of_two_zsmul_oangle_eq h]
   let t₁ : Affine.Triangle Real P := ⟨![p₁, p₂, p₄], affineIndependent_iff_not_collinear_set.2 hn⟩
-  let t₂ : Affine.Triangle Real P := ⟨![p₁, p₃, p₄], affineIndependent_iff_not_collinear_
+  let t₂ : Affine.Triangle Real P := ⟨![p₁, p₃, p₄], affineIndependent_iff_not_collinear_set.2 hn'⟩
+  rw [cospherical_iff_exists_sphere]
+  refine ⟨t₂.circumsphere, ?_⟩
+  simp_rw [Set.insert_subset_iff, Set.singleton_subset_iff]
+  refine ⟨t₂.mem_circumsphere 0, ?_, t₂.mem_circumsphere 1, t₂.mem_circumsphere 2⟩
+  rw [Affine.Triangle.circumsphere_eq_circumsphere_of_eq_of_eq_of_two_zsmul_oangle_eq
+    (by decide : (0 : Fin 3) != 1) (by decide : (0 : Fin 3) != 2) (by decide)
+    (show t₂.points 0 = t₁.points 0 from rfl) rfl h.symm]
+  exact t₁.mem_circumsphere 1
 
 中文:
 定理 cospherical_of_two_zsmul_oangle_eq_of_not_collinear
@@ -1087,7 +1197,15 @@ theorem cospherical_of_two_zsmul_oangle_eq_of_not_collinear
   have hn' : ¬Collinear Real ({p₁, p₃, p₄} : Set P) := by
     rwa [← collinear_iff_of_two_zsmul_oangle_eq h]
   let t₁ : Affine.Triangle Real P := ⟨![p₁, p₂, p₄], affineIndependent_iff_not_collinear_set.2 hn⟩
-  let t₂ : Affine.Triangle Real P := ⟨![p₁, p₃, p₄], affineIndependent_iff_not_collinear_
+  let t₂ : Affine.Triangle Real P := ⟨![p₁, p₃, p₄], affineIndependent_iff_not_collinear_set.2 hn'⟩
+  rw [cospherical_iff_exists_sphere]
+  refine ⟨t₂.circumsphere, ?_⟩
+  simp_rw [Set.insert_subset_iff, Set.singleton_subset_iff]
+  refine ⟨t₂.mem_circumsphere 0, ?_, t₂.mem_circumsphere 1, t₂.mem_circumsphere 2⟩
+  rw [Affine.Triangle.circumsphere_eq_circumsphere_of_eq_of_eq_of_two_zsmul_oangle_eq
+    (by decide : (0 : Fin 3) != 1) (by decide : (0 : Fin 3) != 2) (by decide)
+    (show t₂.points 0 = t₁.points 0 from rfl) rfl h.symm]
+  exact t₁.mem_circumsphere 1
 
 Depends on / 依赖: Affine, Affine.Triangle, Collinear, Set.insert_subset_iff, Set.singleton_subset_iff, Triangle, affineIndependent_iff_not_collinear_set, circumsphere, collinear_iff_of_two_zsmul_oangle_eq, cospherical_iff_exists_sphere, insert_subset_iff, mem_circumsphere, simp_rw, singleton_subset_iff
 -/
@@ -1139,7 +1257,19 @@ theorem cospherical_or_collinear_of_two_zsmul_oangle_eq
     · rw [he, Set.insert_eq_self.2
         (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_singleton _)))]
       by_cases hl : Collinear Real ({p₂, p₃, p₄} : Set P); · exact Or.inr hl
-      rw [or_iff_left 
+      rw [or_iff_left hl]
+      let t : Affine.Triangle Real P := ⟨![p₂, p₃, p₄], affineIndependent_iff_not_collinear_set.2 hl⟩
+      rw [cospherical_iff_exists_sphere]
+      refine ⟨t.circumsphere, ?_⟩
+      simp_rw [Set.insert_subset_iff, Set.singleton_subset_iff]
+      exact ⟨t.mem_circumsphere 0, t.mem_circumsphere 1, t.mem_circumsphere 2⟩
+    have hc' : Collinear Real ({p₁, p₃, p₄} : Set P) := by
+      rwa [← collinear_iff_of_two_zsmul_oangle_eq h]
+    refine Or.inr ?_
+    rw [Set.insert_comm p₁ p₂] at hc
+    rwa [Set.insert_comm p₁ p₂, hc'.collinear_insert_iff_of_ne (Set.mem_insert _ _)
+      (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_singleton _))) he]
+  · exact Or.inl (cospherical_of_two_zsmul_oangle_eq_of_not_collinear h hc)
 
 中文:
 定理 cospherical_or_collinear_of_two_zsmul_oangle_eq
@@ -1150,7 +1280,19 @@ theorem cospherical_or_collinear_of_two_zsmul_oangle_eq
     · rw [he, Set.insert_eq_self.2
         (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_singleton _)))]
       by_cases hl : Collinear Real ({p₂, p₃, p₄} : Set P); · exact Or.inr hl
-      rw [or_iff_left 
+      rw [or_iff_left hl]
+      let t : Affine.Triangle Real P := ⟨![p₂, p₃, p₄], affineIndependent_iff_not_collinear_set.2 hl⟩
+      rw [cospherical_iff_exists_sphere]
+      refine ⟨t.circumsphere, ?_⟩
+      simp_rw [Set.insert_subset_iff, Set.singleton_subset_iff]
+      exact ⟨t.mem_circumsphere 0, t.mem_circumsphere 1, t.mem_circumsphere 2⟩
+    have hc' : Collinear Real ({p₁, p₃, p₄} : Set P) := by
+      rwa [← collinear_iff_of_two_zsmul_oangle_eq h]
+    refine Or.inr ?_
+    rw [Set.insert_comm p₁ p₂] at hc
+    rwa [Set.insert_comm p₁ p₂, hc'.collinear_insert_iff_of_ne (Set.mem_insert _ _)
+      (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_singleton _))) he]
+  · exact Or.inl (cospherical_of_two_zsmul_oangle_eq_of_not_collinear h hc)
 
 Depends on / 依赖: Affine, Affine.Triangle, Collinear, Or.inr, Set.insert_eq_self, Set.insert_subset_iff, Set.mem_insert_of_mem, Set.mem_singleton, Set.singleton_subset_iff, Triangle, affineIndependent_iff_not_collinear_set, circumsphere, cospherical_iff_exists_sphere, insert_eq_self, insert_subset_iff, mem_insert_of_mem, mem_singleton, or_iff_left, simp_rw, singleton_subset_iff
 -/

@@ -452,7 +452,11 @@ theorem upperCentralSeries_eq_center
   rw [← Subgroup.upperCentralSeries_one]; rw [eq_comm]
 apply Subgroup.upperCentralSeries.eq_ge_of_eq_succ by lia
 apply le_antisymm Subgroup.upperCentralSeries_mono G one_le_two
-  rw [Subgroup.upperCentralSeries_one]; rw [← commutator_top_right_eq_bot_iff_le_center]; rw [← commutator_eq_top]; rw [
+  rw [Subgroup.upperCentralSeries_one]; rw [← commutator_top_right_eq_bot_iff_le_center]; rw [← commutator_eq_top]; rw [commutator_comm]; rw [commutator_def]
+  suffices ⁅⁅Subgroup.upperCentralSeries G 2, ⊤⁆, ⊤⁆ = ⊥ from
+    commutator_commutator_eq_bot_of_rotate (by simpa [commutator_comm]) this
+  rw [commutator_top_right_eq_bot_iff_le_center]; rw [← Subgroup.upperCentralSeries_one]
+  apply commutator_upperCentralSeries_top_le
 
 中文:
 定理 upperCentralSeries_eq_center
@@ -461,7 +465,11 @@ apply le_antisymm Subgroup.upperCentralSeries_mono G one_le_two
   rw [← Subgroup.upperCentralSeries_one]; rw [eq_comm]
 apply Subgroup.upperCentralSeries.eq_ge_of_eq_succ by lia
 apply le_antisymm Subgroup.upperCentralSeries_mono G one_le_two
-  rw [Subgroup.upperCentralSeries_one]; rw [← commutator_top_right_eq_bot_iff_le_center]; rw [← commutator_eq_top]; rw [
+  rw [Subgroup.upperCentralSeries_one]; rw [← commutator_top_right_eq_bot_iff_le_center]; rw [← commutator_eq_top]; rw [commutator_comm]; rw [commutator_def]
+  suffices ⁅⁅Subgroup.upperCentralSeries G 2, ⊤⁆, ⊤⁆ = ⊥ from
+    commutator_commutator_eq_bot_of_rotate (by simpa [commutator_comm]) this
+  rw [commutator_top_right_eq_bot_iff_le_center]; rw [← Subgroup.upperCentralSeries_one]
+  apply commutator_upperCentralSeries_top_le
 
 Depends on / 依赖: Subgroup, Subgroup.upperCentralSeries, Subgroup.upperCentralSeries.eq_ge_of_eq_succ, Subgroup.upperCentralSeries_mono, Subgroup.upperCentralSeries_one, commutator_comm, commutator_commutator_eq_bot_of_rotate, commutator_def, commutator_eq_top, commutator_top_right_eq_bot_i, commutator_top_right_eq_bot_iff_le_center, eq_comm, eq_ge_of_eq_succ, le_antisymm, one_le_two, upperCentralSeries, upperCentralSeries_mono, upperCentralSeries_one
 -/

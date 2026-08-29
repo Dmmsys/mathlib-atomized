@@ -58,7 +58,19 @@ definition cfcAux
   map_zero' := by simp [Pi.zero_def, Function.comp_def]
   map_one' := by simp [Pi.one_def, Function.comp_def]
   map_mul' f g := by
-    simp only [ContinuousMap.
+    simp only [ContinuousMap.coe_mul, ← map_mul, diagonal_mul_diagonal, Function.comp_apply]
+    rfl
+  map_add' f g := by
+    simp only [ContinuousMap.coe_add, ← map_add, diagonal_add, Function.comp_apply]
+    rfl
+  commutes' r := by
+    simp only [Function.comp_def, algebraMap_apply, smul_eq_mul, mul_one]
+    rw [← mul_one (algebraMap _ _ _)]; rw [← coe_mul_star_self hA.eigenvectorUnitary]; rw [← Algebra.left_comm]; rw [coe_star]; rw [← mul_assoc]; rw [conjStarAlgAut_apply]
+    rfl
+  map_star' f := by
+    simp only [star_trivial, ← map_star, star_eq_conjTranspose, diagonal_conjTranspose, Pi.star_def,
+      Function.comp_apply, RCLike.star_def, RCLike.conj_ofReal]
+    rfl
 
 中文:
 定义 cfcAux
@@ -68,7 +80,19 @@ definition cfcAux
   map_zero' := by simp [Pi.zero_def, Function.comp_def]
   map_one' := by simp [Pi.one_def, Function.comp_def]
   map_mul' f g := by
-    simp only [ContinuousMap.
+    simp only [ContinuousMap.coe_mul, ← map_mul, diagonal_mul_diagonal, Function.comp_apply]
+    rfl
+  map_add' f g := by
+    simp only [ContinuousMap.coe_add, ← map_add, diagonal_add, Function.comp_apply]
+    rfl
+  commutes' r := by
+    simp only [Function.comp_def, algebraMap_apply, smul_eq_mul, mul_one]
+    rw [← mul_one (algebraMap _ _ _)]; rw [← coe_mul_star_self hA.eigenvectorUnitary]; rw [← Algebra.left_comm]; rw [coe_star]; rw [← mul_assoc]; rw [conjStarAlgAut_apply]
+    rfl
+  map_star' f := by
+    simp only [star_trivial, ← map_star, star_eq_conjTranspose, diagonal_conjTranspose, Pi.star_def,
+      Function.comp_apply, RCLike.star_def, RCLike.conj_ofReal]
+    rfl
 
 Depends on / 依赖: conjStarAlgAut, eigenvectorUnitary, hA.eigenvectorUnitary
 -/
@@ -102,7 +126,21 @@ lemma isClosedEmbedding_cfcAux
   have h0 : FiniteDimensional Real C(spectrum Real A, Real) :=
     FiniteDimensional.of_injective (ContinuousMap.coeFnLinearMap Real (M := Real)) DFunLike.coe_injective
   refine LinearMap.isClosedEmbedding_of_injective (𝕜 := Real) (E := C(spectrum Real A, Real))
-(F := Matrix n n 𝕜) (f := hA.cfcAu
+(F := Matrix n n 𝕜) (f := hA.cfcAux) LinearMap.ker_eq_bot'.mpr fun f hf => ?_
+  have h2 :
+      diagonal (RCLike.ofReal ∘ f ∘ fun i => ⟨hA.eigenvalues i, hA.eigenvalues_mem_spectrum_real i⟩)
+        = (0 : Matrix n n 𝕜) := by
+    simp only [LinearMap.coe_coe, cfcAux_apply, conjStarAlgAut_apply] at hf
+    replace hf := congr($hf * (hA.eigenvectorUnitary : Matrix n n 𝕜))
+    simp only [mul_assoc, SetLike.coe_mem, Unitary.star_mul_self_of_mem, mul_one, zero_mul] at hf
+    simpa [← mul_assoc] using congr((star hA.eigenvectorUnitary : Matrix n n 𝕜) * $hf)
+  ext x
+  simp only [ContinuousMap.zero_apply]
+  obtain ⟨x, hx⟩ := x
+  obtain ⟨i, rfl⟩ := hA.spectrum_real_eq_range_eigenvalues ▸ hx
+  rw [← diagonal_zero] at h2
+  have := diagonal_eq_diagonal_iff.mp h2
+  exact RCLike.ofReal_eq_zero.mp (this i)
 
 中文:
 引理 isClosedEmbedding_cfcAux
@@ -111,7 +149,21 @@ lemma isClosedEmbedding_cfcAux
   have h0 : FiniteDimensional Real C(spectrum Real A, Real) :=
     FiniteDimensional.of_injective (ContinuousMap.coeFnLinearMap Real (M := Real)) DFunLike.coe_injective
   refine LinearMap.isClosedEmbedding_of_injective (𝕜 := Real) (E := C(spectrum Real A, Real))
-(F := Matrix n n 𝕜) (f := hA.cfcAu
+(F := Matrix n n 𝕜) (f := hA.cfcAux) LinearMap.ker_eq_bot'.mpr fun f hf => ?_
+  have h2 :
+      diagonal (RCLike.ofReal ∘ f ∘ fun i => ⟨hA.eigenvalues i, hA.eigenvalues_mem_spectrum_real i⟩)
+        = (0 : Matrix n n 𝕜) := by
+    simp only [LinearMap.coe_coe, cfcAux_apply, conjStarAlgAut_apply] at hf
+    replace hf := congr($hf * (hA.eigenvectorUnitary : Matrix n n 𝕜))
+    simp only [mul_assoc, SetLike.coe_mem, Unitary.star_mul_self_of_mem, mul_one, zero_mul] at hf
+    simpa [← mul_assoc] using congr((star hA.eigenvectorUnitary : Matrix n n 𝕜) * $hf)
+  ext x
+  simp only [ContinuousMap.zero_apply]
+  obtain ⟨x, hx⟩ := x
+  obtain ⟨i, rfl⟩ := hA.spectrum_real_eq_range_eigenvalues ▸ hx
+  rw [← diagonal_zero] at h2
+  have := diagonal_eq_diagonal_iff.mp h2
+  exact RCLike.ofReal_eq_zero.mp (this i)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coeFnLinearMap, DFunLike, DFunLike.coe_injective, FiniteDimensional, FiniteDimensional.of_injective, LinearMap, LinearMap.coe_coe, LinearMap.isClosedEmbedding_of_injective, LinearMap.ker_eq_bot, Matrix, RCLike, RCLike.ofReal, cfcAux, coeFnLinearMap, coe_coe, coe_injective, diagonal, eigenvalues, eigenvalues_mem_spectrum_real
 -/
@@ -171,7 +223,26 @@ instance instContinuousFunctionalCalculus
       fun f => ?hermitian⟩
     case map_spec =>
       apply Set.eq_of_subset_of_subset
-      · rw [← ContinuousMap.spe
+      · rw [← ContinuousMap.spectrum_eq_range f]
+        apply AlgHom.spectrum_apply_subset
+      · rw [cfcAux_apply, conjStarAlgAut_apply, Unitary.spectrum_star_right_conjugate]
+        rintro - ⟨x, rfl⟩
+        apply spectrum.of_algebraMap_mem 𝕜
+        simp only [Function.comp_apply, Set.mem_range, spectrum_diagonal]
+        obtain ⟨x, hx⟩ := x
+        obtain ⟨i, rfl⟩ := ha.spectrum_real_eq_range_eigenvalues ▸ hx
+        exact ⟨i, rfl⟩
+    case hermitian =>
+      simp only [isSelfAdjoint_iff, cfcAux_apply, ← map_star]
+      rw [star_eq_conjTranspose]; rw [diagonal_conjTranspose]
+      congr!
+      simp [Pi.star_def, Function.comp_def]
+  spectrum_nonempty a ha := by
+    obtain (h | h) := isEmpty_or_nonempty n
+    · obtain ⟨x, y, hxy⟩ := exists_pair_ne (Matrix n n 𝕜)
+exact False.elim Matrix.of.symm.injective.ne hxy Subsingleton.elim _ _
+    · exact spectrum_real_eq_range_eigenvalues ha ▸ Set.range_nonempty _
+  predicate_zero := .zero _
 
 中文:
 实例 instContinuousFunctionalCalculus
@@ -183,7 +254,26 @@ instance instContinuousFunctionalCalculus
       fun f => ?hermitian⟩
     case map_spec =>
       apply Set.eq_of_subset_of_subset
-      · rw [← ContinuousMap.spe
+      · rw [← ContinuousMap.spectrum_eq_range f]
+        apply AlgHom.spectrum_apply_subset
+      · rw [cfcAux_apply, conjStarAlgAut_apply, Unitary.spectrum_star_right_conjugate]
+        rintro - ⟨x, rfl⟩
+        apply spectrum.of_algebraMap_mem 𝕜
+        simp only [Function.comp_apply, Set.mem_range, spectrum_diagonal]
+        obtain ⟨x, hx⟩ := x
+        obtain ⟨i, rfl⟩ := ha.spectrum_real_eq_range_eigenvalues ▸ hx
+        exact ⟨i, rfl⟩
+    case hermitian =>
+      simp only [isSelfAdjoint_iff, cfcAux_apply, ← map_star]
+      rw [star_eq_conjTranspose]; rw [diagonal_conjTranspose]
+      congr!
+      simp [Pi.star_def, Function.comp_def]
+  spectrum_nonempty a ha := by
+    obtain (h | h) := isEmpty_or_nonempty n
+    · obtain ⟨x, y, hxy⟩ := exists_pair_ne (Matrix n n 𝕜)
+exact False.elim Matrix.of.symm.injective.ne hxy Subsingleton.elim _ _
+    · exact spectrum_real_eq_range_eigenvalues ha ▸ Set.range_nonempty _
+  predicate_zero := .zero _
 
 Depends on / 依赖: AlgHom, AlgHom.spectrum_apply_subset, ContinuousMap, ContinuousMap.spectrum_eq_range, Function, Function.comp_apply, IsHermitian, Set.eq_of_subset_of_subset, Set.mem_range, Unitary, Unitary.spectrum_star_right_conjugate, cfcAux, cfcAux_apply, cfcAux_id, comp_apply, conjStarAlgAut_apply, continuous, eq_of_subset_of_subset, ha.cfcAux, ha.cfcAux_id
 -/
@@ -285,7 +375,8 @@ lemma cfc_eq
   have := cfcHom_eq_of_continuous_of_map_id hA' hA.cfcAux hA.isClosedEmbedding_cfcAux.continuous
     hA.cfcAux_id
   rw [cfc_apply f A hA' (by rw [continuousOn_iff_continuous_domRestrict]; fun_prop), this]
-  simp only [cfcAux_apply, ContinuousMap.coe_mk, Function
+  simp only [cfcAux_apply, ContinuousMap.coe_mk, Function.comp_def, Set.domRestrict_apply,
+    IsHermitian.cfc]
 
 中文:
 引理 cfc_eq
@@ -296,7 +387,8 @@ lemma cfc_eq
   have := cfcHom_eq_of_continuous_of_map_id hA' hA.cfcAux hA.isClosedEmbedding_cfcAux.continuous
     hA.cfcAux_id
   rw [cfc_apply f A hA' (by rw [continuousOn_iff_continuous_domRestrict]; fun_prop), this]
-  simp only [cfcAux_apply, ContinuousMap.coe_mk, Function
+  simp only [cfcAux_apply, ContinuousMap.coe_mk, Function.comp_def, Set.domRestrict_apply,
+    IsHermitian.cfc]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, Function, Function.comp_def, IsHermitian, IsHermitian.cfc, IsSelfAdjoint, Set.domRestrict_apply, cfcAux, cfcAux_apply, cfcAux_id, cfcHom_eq_of_continuous_of_map_id, cfc_apply, coe_mk, comp_def, continuous, continuousOn_iff_continuous_domRestrict, domRestrict_apply, fun_prop, hA.cfcAux
 -/

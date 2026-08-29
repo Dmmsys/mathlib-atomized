@@ -77,6 +77,7 @@ lemma IsRepresentedBy.iff_isIso_uliftYonedaEquiv
   rw [isRepresentedBy_iff]; rw [NatTrans.isIso_iff_isIso_app]; rw [Opposite.op_surjective.forall]
   refine forall_congr' fun Y => ?_
   rw [isIso_iff_bijective]; rw [← Function.Bijective.of_comp_iff _ Equiv.ulift.{w}.symm.bijective]; rw [← Function.Bijective.of_comp_iff' Equiv.ulift.{v}.bijective]
+  rfl
 
 中文:
 引理 是RepresentedBy.iff_isIso_uliftYonedaEquiv
@@ -84,6 +85,7 @@ lemma IsRepresentedBy.iff_isIso_uliftYonedaEquiv
   rw [isRepresentedBy_iff]; rw [NatTrans.isIso_iff_isIso_app]; rw [Opposite.op_surjective.forall]
   refine forall_congr' fun Y => ?_
   rw [isIso_iff_bijective]; rw [← Function.Bijective.of_comp_iff _ Equiv.ulift.{w}.symm.bijective]; rw [← Function.Bijective.of_comp_iff' Equiv.ulift.{v}.bijective]
+  rfl
 
 Depends on / 依赖: Bijective, Equiv.ulift, Function, Function.Bijective.of_comp_iff, NatTrans, NatTrans.isIso_iff_isIso_app, Opposite, Opposite.op_surjective.forall, bijective, forall_congr, isIso_iff_bijective, isIso_iff_isIso_app, isRepresentedBy_iff, of_comp_iff, op_surjective, symm.bijective, uliftFunctor
 -/

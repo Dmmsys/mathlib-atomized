@@ -143,14 +143,14 @@ theorem bernoulli'_spec
   given: (n : Nat)
   proof: by
   rw [sum_range_succ_comm]; rw [bernoulli'_def n]; rw [tsub_self]; rw [choose_zero_right]; rw [sub_self]; rw [zero_add]; rw [div_one]; rw [cast_one]; rw [one_mul]; rw [sub_add]; rw [← sum_sub_distrib]; rw [← sub_eq_zero]; rw [sub_sub_cancel_left]; rw [neg_eq_zero]
-  exact Finset.sum_eq_zero (fun 
+  exact Finset.sum_eq_zero (fun x hx => by rw [choose_symm (le_of_lt (mem_range.1 hx)), sub_self])
 
 中文:
 定理 bernoulli'_spec
   条件: (n : 自然数)
   证明: by
   rw [sum_range_succ_comm]; rw [bernoulli'_def n]; rw [tsub_self]; rw [choose_zero_right]; rw [sub_self]; rw [zero_add]; rw [div_one]; rw [cast_one]; rw [one_mul]; rw [sub_add]; rw [← sum_sub_distrib]; rw [← sub_eq_zero]; rw [sub_sub_cancel_left]; rw [neg_eq_zero]
-  exact Finset.sum_eq_zero (fun 
+  exact Finset.sum_eq_zero (fun x hx => by rw [choose_symm (le_of_lt (mem_range.1 hx)), sub_self])
 -/
 theorem bernoulli'_spec (n : Nat) :
     (∑ k in range n.succ, (n.choose (n - k) : Rat) / (n - k + 1) * bernoulli' k) = 1 := by
@@ -333,7 +333,12 @@ theorem sum_bernoulli'
       ∑ x in range n, ↑(n.succ.choose x) * bernoulli' x by
     rw_mod_cast [sum_range_succ, bernoulli'_def, ← this, choose_succ_self_right]
     ring
-  simp_rw [m
+  simp_rw [mul_sum, ← mul_assoc]
+  refine sum_congr rfl fun k hk => ?_
+  congr
+  have : ((n - k : Nat) : Rat) + 1 != 0 := by norm_cast
+  simp only [← cast_sub (mem_range.1 hk).le, succ_eq_add_one, field, mul_comm]
+  rw_mod_cast [tsub_add_eq_add_tsub (mem_range.1 hk).le, choose_mul_succ_eq]
 
 中文:
 定理 sum_bernoulli'
@@ -346,7 +351,12 @@ theorem sum_bernoulli'
       ∑ x in range n, ↑(n.succ.choose x) * bernoulli' x by
     rw_mod_cast [sum_range_succ, bernoulli'_def, ← this, choose_succ_self_right]
     ring
-  simp_rw [m
+  simp_rw [mul_sum, ← mul_assoc]
+  refine sum_congr rfl fun k hk => ?_
+  congr
+  have : ((n - k : Nat) : Rat) + 1 != 0 := by norm_cast
+  simp only [← cast_sub (mem_range.1 hk).le, succ_eq_add_one, field, mul_comm]
+  rw_mod_cast [tsub_add_eq_add_tsub (mem_range.1 hk).le, choose_mul_succ_eq]
 
 Depends on / 依赖: _def, bernoulli, cast_sub, choose_succ_self_right, mem_range, mul_assoc, mul_comm, mul_sum, n.choose, n.succ.choose, rw_mod_cast, simp_rw, succ_eq_add_one, sum_congr, sum_range_succ, tsub_add_eq_add_t
 -/
@@ -390,7 +400,15 @@ theorem bernoulli'PowerSeries_mul_exp_sub_one
   rw [bernoulli'PowerSeries]; rw [coeff_mul]; rw [mul_comm X]; rw [sum_antidiagonal_succ']
   suffices (∑ p in antidiagonal n,
       bernoulli' p.1 / p.1! * ((p.2 + 1) * p.2! : Rat)⁻¹) = (n ! : Rat)⁻¹ by
-
+    simpa [map_sum, Nat.factorial] using congr_arg (algebraMap Rat A) this
+  apply eq_inv_of_mul_eq_one_left
+  rw [sum_mul]
+  convert! bernoulli'_spec' n using 1
+  apply sum_congr rfl
+  simp_rw [mem_antidiagonal]
+  rintro ⟨i, j⟩ rfl
+  have := factorial_mul_factorial_dvd_factorial_add i j
+  simp [field, add_choose, *]
 
 中文:
 定理 bernoulli'PowerSeries_mul_exp_sub_one
@@ -401,7 +419,15 @@ theorem bernoulli'PowerSeries_mul_exp_sub_one
   rw [bernoulli'PowerSeries]; rw [coeff_mul]; rw [mul_comm X]; rw [sum_antidiagonal_succ']
   suffices (∑ p in antidiagonal n,
       bernoulli' p.1 / p.1! * ((p.2 + 1) * p.2! : Rat)⁻¹) = (n ! : Rat)⁻¹ by
-
+    simpa [map_sum, Nat.factorial] using congr_arg (algebraMap Rat A) this
+  apply eq_inv_of_mul_eq_one_left
+  rw [sum_mul]
+  convert! bernoulli'_spec' n using 1
+  apply sum_congr rfl
+  simp_rw [mem_antidiagonal]
+  rintro ⟨i, j⟩ rfl
+  have := factorial_mul_factorial_dvd_factorial_add i j
+  simp [field, add_choose, *]
 -/
 theorem bernoulli'PowerSeries_mul_exp_sub_one :
     bernoulli'PowerSeries A * (exp A - 1) = X * exp A := by
@@ -435,7 +461,14 @@ theorem bernoulli'_eq_zero_of_odd
       simp only [PowerSeries.ext_iff, evalNegHom, coeff_X] at h
     · apply eq_zero_of_neg_eq
       specialize h n
-      sp
+      split_ifs at h <;> simp_all [B, h_odd.neg_one_pow, factorial_ne_zero]
+    · simpa +decide [Nat.factorial] using h 1
+  have h : B * (exp Rat - 1) = X * exp Rat := by
+    simpa [bernoulli'PowerSeries] using bernoulli'PowerSeries_mul_exp_sub_one Rat
+  rw [sub_mul]; rw [h]; rw [mul_sub X]; rw [sub_right_inj]; rw [← neg_sub]; rw [mul_neg]; rw [neg_eq_iff_eq_neg]
+  suffices evalNegHom (B * (exp Rat - 1)) * exp Rat = evalNegHom (X * exp Rat) * exp Rat by
+    simpa [mul_assoc, sub_mul, mul_comm (evalNegHom (exp Rat)), exp_mul_exp_neg_eq_one]
+  congr
 
 中文:
 定理 bernoulli'_eq_zero_of_odd
@@ -448,7 +481,14 @@ theorem bernoulli'_eq_zero_of_odd
       simp only [PowerSeries.ext_iff, evalNegHom, coeff_X] at h
     · apply eq_zero_of_neg_eq
       specialize h n
-      sp
+      split_ifs at h <;> simp_all [B, h_odd.neg_one_pow, factorial_ne_zero]
+    · simpa +decide [Nat.factorial] using h 1
+  have h : B * (exp Rat - 1) = X * exp Rat := by
+    simpa [bernoulli'PowerSeries] using bernoulli'PowerSeries_mul_exp_sub_one Rat
+  rw [sub_mul]; rw [h]; rw [mul_sub X]; rw [sub_right_inj]; rw [← neg_sub]; rw [mul_neg]; rw [neg_eq_iff_eq_neg]
+  suffices evalNegHom (B * (exp Rat - 1)) * exp Rat = evalNegHom (X * exp Rat) * exp Rat by
+    simpa [mul_assoc, sub_mul, mul_comm (evalNegHom (exp Rat)), exp_mul_exp_neg_eq_one]
+  congr
 -/
 theorem bernoulli'_eq_zero_of_odd {n : Nat} (h_odd : Odd n) (hlt : 1 < n) : bernoulli' n = 0 := by
   let B := mk fun n => bernoulli' n / (n ! : Rat)
@@ -655,7 +695,17 @@ theorem sum_bernoulli
   | succ n =>
   suffices (∑ i in range n, ↑((n + 2).choose (i + 2)) * bernoulli (i + 2)) = n / 2 by
     simp only [this, sum_range_succ', cast_succ, bernoulli_one, bernoulli_zero, choose_one_right,
-      mul_one, choose_zer
+      mul_one, choose_zero_right, cast_zero, if_false, zero_add, succ_succ_ne_one]
+    ring
+  have f := sum_bernoulli' n.succ.succ
+  simp_rw [sum_range_succ', cast_succ, ← eq_sub_iff_add_eq] at f
+  refine Eq.trans ?_ (Eq.trans f ?_)
+  · congr
+    funext x
+    rw [bernoulli_eq_bernoulli'_of_ne_one (succ_ne_zero x ∘ succ.inj)]
+  · simp only [mul_one, bernoulli'_zero, choose_zero_right,
+      zero_add, choose_one_right, cast_succ, bernoulli'_one]
+    ring
 
 中文:
 定理 sum_bernoulli
@@ -667,7 +717,17 @@ theorem sum_bernoulli
   | succ n =>
   suffices (∑ i in range n, ↑((n + 2).choose (i + 2)) * bernoulli (i + 2)) = n / 2 by
     simp only [this, sum_range_succ', cast_succ, bernoulli_one, bernoulli_zero, choose_one_right,
-      mul_one, choose_zer
+      mul_one, choose_zero_right, cast_zero, if_false, zero_add, succ_succ_ne_one]
+    ring
+  have f := sum_bernoulli' n.succ.succ
+  simp_rw [sum_range_succ', cast_succ, ← eq_sub_iff_add_eq] at f
+  refine Eq.trans ?_ (Eq.trans f ?_)
+  · congr
+    funext x
+    rw [bernoulli_eq_bernoulli'_of_ne_one (succ_ne_zero x ∘ succ.inj)]
+  · simp only [mul_one, bernoulli'_zero, choose_zero_right,
+      zero_add, choose_one_right, cast_succ, bernoulli'_one]
+    ring
 
 Depends on / 依赖: Eq.trans, bernoulli, bernoulli_one, bernoulli_zero, cast_succ, cast_zero, choose_one_right, choose_zero_right, eq_sub_iff_add_eq, if_false, mul_one, n.succ.succ, simp_rw, succ_succ_ne_one, sum_bernoulli, sum_range_succ, zero_add
 -/
@@ -704,7 +764,17 @@ theorem bernoulli_spec'
   have h₁ : (1, n) in antidiagonal n.succ := by simp [mem_antidiagonal, add_comm]
   have h₃ : (1 + n).choose n = n + 1 := by simp [add_comm]
   -- key equation: the corresponding fact for `bernoulli'`
-  hav
+  have H := bernoulli'_spec' n.succ
+  -- massage it to match the structure of the goal, then convert piece by piece
+  rw [sum_eq_add_sum_sdiff_singleton_of_mem h₁] at H ⊢
+  apply add_eq_of_eq_sub'
+  convert! eq_sub_of_add_eq' H using 1
+  · refine sum_congr rfl fun p h => ?_
+    obtain ⟨h', h''⟩ : p in _ ∧ p != _ := by rwa [mem_sdiff, mem_singleton] at h
+    simp [bernoulli_eq_bernoulli'_of_ne_one
+      ((not_congr (HasAntidiagonal.antidiagonal_congr h' h₁)).mp h'')]
+  · simp [field, h₃]
+    norm_num
 
 中文:
 定理 bernoulli_spec'
@@ -716,7 +786,17 @@ theorem bernoulli_spec'
   have h₁ : (1, n) in antidiagonal n.succ := by simp [mem_antidiagonal, add_comm]
   have h₃ : (1 + n).choose n = n + 1 := by simp [add_comm]
   -- key equation: the corresponding fact for `bernoulli'`
-  hav
+  have H := bernoulli'_spec' n.succ
+  -- massage it to match the structure of the goal, then convert piece by piece
+  rw [sum_eq_add_sum_sdiff_singleton_of_mem h₁] at H ⊢
+  apply add_eq_of_eq_sub'
+  convert! eq_sub_of_add_eq' H using 1
+  · refine sum_congr rfl fun p h => ?_
+    obtain ⟨h', h''⟩ : p in _ ∧ p != _ := by rwa [mem_sdiff, mem_singleton] at h
+    simp [bernoulli_eq_bernoulli'_of_ne_one
+      ((not_congr (HasAntidiagonal.antidiagonal_congr h' h₁)).mp h'')]
+  · simp [field, h₃]
+    norm_num
 
 Depends on / 依赖: if_neg, succ_ne_zero
 -/
@@ -769,7 +849,17 @@ theorem bernoulliPowerSeries_mul_exp_sub_one
   cases n with | zero => simp | succ n =>
   simp only [bernoulliPowerSeries, coeff_mul, coeff_X, sum_antidiagonal_succ', one_div, coeff_mk,
     coeff_one, coeff_exp, map_sub, factorial, if_pos, cast_succ, cast_mul,
-    sub_zero, add_eq_zero, if_
+    sub_zero, add_eq_zero, if_false, one_ne_zero, and_false, ← map_mul, ← map_sum]
+  cases n with | zero => simp | succ n =>
+  rw [if_neg n.succ_succ_ne_one]
+  have hfact : forall m, (m ! : Rat) != 0 := fun m => mod_cast factorial_ne_zero m
+  have hite2 : ite (n.succ = 0) 1 0 = (0 : Rat) := if_neg n.succ_ne_zero
+  simp only [CharP.cast_eq_zero, zero_add, inv_one, map_one, sub_self, mul_zero]
+  rw [← map_zero (algebraMap Rat A)]; rw [← zero_div (n.succ ! : Rat)]; rw [← hite2]; rw [← bernoulli_spec']; rw [sum_div]
+  refine congr_arg (algebraMap Rat A) (sum_congr rfl fun x h => eq_div_of_mul_eq (hfact n.succ) ?_)
+  rw [mem_antidiagonal] at h
+  rw [← h]; rw [add_choose]; rw [cast_div_charZero (factorial_mul_factorial_dvd_factorial_add _ _)]
+  simp [field, mul_comm _ (bernoulli x.1), mul_assoc]
 
 中文:
 定理 bernoulliPowerSeries_mul_exp_sub_one
@@ -780,7 +870,17 @@ theorem bernoulliPowerSeries_mul_exp_sub_one
   cases n with | zero => simp | succ n =>
   simp only [bernoulliPowerSeries, coeff_mul, coeff_X, sum_antidiagonal_succ', one_div, coeff_mk,
     coeff_one, coeff_exp, map_sub, factorial, if_pos, cast_succ, cast_mul,
-    sub_zero, add_eq_zero, if_
+    sub_zero, add_eq_zero, if_false, one_ne_zero, and_false, ← map_mul, ← map_sum]
+  cases n with | zero => simp | succ n =>
+  rw [if_neg n.succ_succ_ne_one]
+  have hfact : forall m, (m ! : Rat) != 0 := fun m => mod_cast factorial_ne_zero m
+  have hite2 : ite (n.succ = 0) 1 0 = (0 : Rat) := if_neg n.succ_ne_zero
+  simp only [CharP.cast_eq_zero, zero_add, inv_one, map_one, sub_self, mul_zero]
+  rw [← map_zero (algebraMap Rat A)]; rw [← zero_div (n.succ ! : Rat)]; rw [← hite2]; rw [← bernoulli_spec']; rw [sum_div]
+  refine congr_arg (algebraMap Rat A) (sum_congr rfl fun x h => eq_div_of_mul_eq (hfact n.succ) ?_)
+  rw [mem_antidiagonal] at h
+  rw [← h]; rw [add_choose]; rw [cast_div_charZero (factorial_mul_factorial_dvd_factorial_add _ _)]
+  simp [field, mul_comm _ (bernoulli x.1), mul_assoc]
 -/
 theorem bernoulliPowerSeries_mul_exp_sub_one : bernoulliPowerSeries A * (exp A - 1) = X := by
   ext n
@@ -814,7 +914,55 @@ theorem sum_range_pow
   have h_cauchy :
     ((mk fun p => bernoulli p / p !) * mk fun q => coeff (q + 1) (exp Rat ^ n)) =
       mk fun p => ∑ i in range (p + 1),
-          bernoull
+          bernoulli i * (p + 1).choose i * (n : Rat) ^ (p + 1 - i) / (p + 1)! := by
+    ext q : 1
+    let f a b := bernoulli a / a ! * coeff (b + 1) (exp Rat ^ n)
+    -- key step: use `PowerSeries.coeff_mul` and then rewrite sums
+    simp only [f, coeff_mul, coeff_mk, sum_antidiagonal_eq_sum_range_succ f]
+    apply sum_congr rfl
+    intro m h
+    simp only [exp_pow_eq_rescale_exp, rescale, RingHom.coe_mk]
+    -- manipulate factorials and binomial coefficients
+    have h : m < q + 1 := by simpa using h
+    rw [choose_eq_factorial_div_factorial h.le]; rw [eq_comm]; rw [div_eq_iff (hne q.succ)]; rw [succ_eq_add_one]; rw [mul_assoc _ _ (q.succ ! : Rat)]; rw [mul_comm _ (q.succ ! : Rat)]; rw [← mul_assoc]; rw [div_mul_eq_mul_div]
+    simp only [MonoidHom.coe_mk, OneHom.coe_mk, coeff_exp, Algebra.algebraMap_self, one_div,
+      map_inv₀, map_natCast, coeff_mk]
+    rw [mul_comm ((n : Rat) ^ (q - m + 1))]; rw [← mul_assoc _ _ ((n : Rat) ^ (q - m + 1))]; rw [← one_div]; rw [mul_one_div]; rw [div_div]; rw [tsub_add_eq_add_tsub (le_of_lt_succ h)]; rw [cast_div]; rw [cast_mul]
+    · ring
+    · exact factorial_mul_factorial_dvd_factorial h.le
+    · simp [factorial_ne_zero]
+  -- same as our goal except we pull out `p!` for convenience
+  have hps :
+    (∑ k in range n, (k : Rat) ^ p) =
+      (∑ i in range (p + 1),
+          bernoulli i * (p + 1).choose i * (n : Rat) ^ (p + 1 - i) / (p + 1)!) * p ! := by
+    suffices
+      (mk fun p => ∑ k in range n, (k : Rat) ^ p * algebraMap Rat Rat p !⁻¹) =
+        mk fun p =>
+          ∑ i in range (p + 1), bernoulli i * (p + 1).choose i * (n : Rat) ^ (p + 1 - i) / (p + 1)! by
+      rw [← div_eq_iff (hne p)]; rw [div_eq_mul_inv]; rw [sum_mul]
+      rw [PowerSeries.ext_iff] at this
+      simpa using this p
+    -- the power series `exp ℚ - 1` is non-zero, a fact we need in order to use `mul_right_inj'`
+    have hexp : exp Rat - 1 != 0 := by
+      simp only [exp, PowerSeries.ext_iff, Ne, not_forall]
+      use 1
+      simp
+    have h_r : exp Rat ^ n - 1 = X * mk fun p => coeff (p + 1) (exp Rat ^ n) := by
+      have h_const : C (constantCoeff (exp Rat ^ n)) = 1 := by simp
+      rw [← h_const]; rw [sub_const_eq_X_mul_shift]
+    -- key step: a chain of equalities of power series
+    rw [← mul_right_inj' hexp]; rw [mul_comm]
+    rw [← exp_pow_sum]; rw [geom_sum_mul]; rw [h_r]; rw [← bernoulliPowerSeries_mul_exp_sub_one]; rw [bernoulliPowerSeries]; rw [mul_right_comm]
+    simp only [mul_comm, mul_eq_mul_left_iff, hexp, or_false]
+    refine Eq.trans (mul_eq_mul_right_iff.mpr ?_) (Eq.trans h_cauchy ?_)
+    · left
+      congr
+    · simp only [mul_comm, factorial]
+  -- massage `hps` into our goal
+  rw [hps]; rw [sum_mul]
+  refine sum_congr rfl fun x _ => ?_
+  simp [field, factorial]
 
 中文:
 定理 sum_range_pow
@@ -825,7 +973,55 @@ theorem sum_range_pow
   have h_cauchy :
     ((mk fun p => bernoulli p / p !) * mk fun q => coeff (q + 1) (exp Rat ^ n)) =
       mk fun p => ∑ i in range (p + 1),
-          bernoull
+          bernoulli i * (p + 1).choose i * (n : Rat) ^ (p + 1 - i) / (p + 1)! := by
+    ext q : 1
+    let f a b := bernoulli a / a ! * coeff (b + 1) (exp Rat ^ n)
+    -- key step: use `PowerSeries.coeff_mul` and then rewrite sums
+    simp only [f, coeff_mul, coeff_mk, sum_antidiagonal_eq_sum_range_succ f]
+    apply sum_congr rfl
+    intro m h
+    simp only [exp_pow_eq_rescale_exp, rescale, RingHom.coe_mk]
+    -- manipulate factorials and binomial coefficients
+    have h : m < q + 1 := by simpa using h
+    rw [choose_eq_factorial_div_factorial h.le]; rw [eq_comm]; rw [div_eq_iff (hne q.succ)]; rw [succ_eq_add_one]; rw [mul_assoc _ _ (q.succ ! : Rat)]; rw [mul_comm _ (q.succ ! : Rat)]; rw [← mul_assoc]; rw [div_mul_eq_mul_div]
+    simp only [MonoidHom.coe_mk, OneHom.coe_mk, coeff_exp, Algebra.algebraMap_self, one_div,
+      map_inv₀, map_natCast, coeff_mk]
+    rw [mul_comm ((n : Rat) ^ (q - m + 1))]; rw [← mul_assoc _ _ ((n : Rat) ^ (q - m + 1))]; rw [← one_div]; rw [mul_one_div]; rw [div_div]; rw [tsub_add_eq_add_tsub (le_of_lt_succ h)]; rw [cast_div]; rw [cast_mul]
+    · ring
+    · exact factorial_mul_factorial_dvd_factorial h.le
+    · simp [factorial_ne_zero]
+  -- same as our goal except we pull out `p!` for convenience
+  have hps :
+    (∑ k in range n, (k : Rat) ^ p) =
+      (∑ i in range (p + 1),
+          bernoulli i * (p + 1).choose i * (n : Rat) ^ (p + 1 - i) / (p + 1)!) * p ! := by
+    suffices
+      (mk fun p => ∑ k in range n, (k : Rat) ^ p * algebraMap Rat Rat p !⁻¹) =
+        mk fun p =>
+          ∑ i in range (p + 1), bernoulli i * (p + 1).choose i * (n : Rat) ^ (p + 1 - i) / (p + 1)! by
+      rw [← div_eq_iff (hne p)]; rw [div_eq_mul_inv]; rw [sum_mul]
+      rw [PowerSeries.ext_iff] at this
+      simpa using this p
+    -- the power series `exp ℚ - 1` is non-zero, a fact we need in order to use `mul_right_inj'`
+    have hexp : exp Rat - 1 != 0 := by
+      simp only [exp, PowerSeries.ext_iff, Ne, not_forall]
+      use 1
+      simp
+    have h_r : exp Rat ^ n - 1 = X * mk fun p => coeff (p + 1) (exp Rat ^ n) := by
+      have h_const : C (constantCoeff (exp Rat ^ n)) = 1 := by simp
+      rw [← h_const]; rw [sub_const_eq_X_mul_shift]
+    -- key step: a chain of equalities of power series
+    rw [← mul_right_inj' hexp]; rw [mul_comm]
+    rw [← exp_pow_sum]; rw [geom_sum_mul]; rw [h_r]; rw [← bernoulliPowerSeries_mul_exp_sub_one]; rw [bernoulliPowerSeries]; rw [mul_right_comm]
+    simp only [mul_comm, mul_eq_mul_left_iff, hexp, or_false]
+    refine Eq.trans (mul_eq_mul_right_iff.mpr ?_) (Eq.trans h_cauchy ?_)
+    · left
+      congr
+    · simp only [mul_comm, factorial]
+  -- massage `hps` into our goal
+  rw [hps]; rw [sum_mul]
+  refine sum_congr rfl fun x _ => ?_
+  simp [field, factorial]
 
 Depends on / 依赖: factorial_ne_zero, mod_cast
 -/
@@ -899,7 +1095,38 @@ theorem sum_Ico_pow
   cases p with | zero => simp | succ p =>
   let f i := bernoulli i * p.succ.succ.choose i * (n : Rat) ^ (p.succ.succ - i) / p.succ.succ
   let f' i := bernoulli' i * p.succ.succ.choose i * (n : Rat) ^ (p.succ.succ - i) / p.succ.succ
-  suffice
+  suffices (∑ k in Ico 1 n.succ, (k : Rat) ^ p.succ) = ∑ i in range p.succ.succ, f' i by convert!
+    this
+  -- prove some algebraic facts that will make things easier for us later on
+  have hle := Nat.le_add_left 1 n
+  have hne : (p + 1 + 1 : Rat) != 0 := by norm_cast
+  have h1 : forall r : Rat, r * (p + 1 + 1) * (n : Rat) ^ p.succ / (p + 1 + 1 : Rat) = r * (n : Rat) ^ p.succ :=
+      fun r => by rw [mul_div_right_comm, mul_div_cancel_right₀ _ hne]
+  have h2 : f 1 + (n : Rat) ^ p.succ = 1 / 2 * (n : Rat) ^ p.succ := by
+    simp_rw [f, bernoulli_one, choose_one_right, succ_sub_succ_eq_sub, cast_succ, tsub_zero, h1]
+    ring
+  have :
+    (∑ i in range p, bernoulli (i + 2) * (p + 2).choose (i + 2) * (n : Rat) ^ (p - i) / ↑(p + 2)) =
+      ∑ i in range p, bernoulli' (i + 2) * (p + 2).choose (i + 2) * (n : Rat) ^ (p - i) / ↑(p + 2) :=
+    sum_congr rfl fun i _ => by rw [bernoulli_eq_bernoulli'_of_ne_one (succ_succ_ne_one i)]
+  calc
+    (-- replace sum over `Ico` with sum over `range` and simplify
+        ∑ k in Ico 1 n.succ, (k : Rat) ^ p.succ)
+    _ = ∑ k in range n.succ, (k : Rat) ^ p.succ := by simp [sum_Ico_eq_sub _ hle]
+    -- extract the last term of the sum
+    _ = (∑ k in range n, (k : Rat) ^ p.succ) + (n : Rat) ^ p.succ := by rw [sum_range_succ]
+    -- apply the key lemma, `sum_range_pow`
+    _ = (∑ i in range p.succ.succ, f i) + (n : Rat) ^ p.succ := by simp [f, sum_range_pow]
+    -- extract the first two terms of the sum
+    _ = (∑ i in range p, f i.succ.succ) + f 1 + f 0 + (n : Rat) ^ p.succ := by
+      simp_rw [sum_range_succ']
+    _ = (∑ i in range p, f i.succ.succ) + (f 1 + (n : Rat) ^ p.succ) + f 0 := by ring
+    _ = (∑ i in range p, f i.succ.succ) + 1 / 2 * (n : Rat) ^ p.succ + f 0 := by rw [h2]
+    -- convert from `bernoulli` to `bernoulli'`
+    _ = (∑ i in range p, f' i.succ.succ) + f' 1 + f' 0 := by
+      simpa [f, f', h1, fun i => show i + 2 = i + 1 + 1 from rfl]
+    -- rejoin the first two terms of the sum
+    _ = ∑ i in range p.succ.succ, f' i := by simp_rw [sum_range_succ']
 
 中文:
 定理 sum_Ico_pow
@@ -910,7 +1137,38 @@ theorem sum_Ico_pow
   cases p with | zero => simp | succ p =>
   let f i := bernoulli i * p.succ.succ.choose i * (n : Rat) ^ (p.succ.succ - i) / p.succ.succ
   let f' i := bernoulli' i * p.succ.succ.choose i * (n : Rat) ^ (p.succ.succ - i) / p.succ.succ
-  suffice
+  suffices (∑ k in Ico 1 n.succ, (k : Rat) ^ p.succ) = ∑ i in range p.succ.succ, f' i by convert!
+    this
+  -- prove some algebraic facts that will make things easier for us later on
+  have hle := Nat.le_add_left 1 n
+  have hne : (p + 1 + 1 : Rat) != 0 := by norm_cast
+  have h1 : forall r : Rat, r * (p + 1 + 1) * (n : Rat) ^ p.succ / (p + 1 + 1 : Rat) = r * (n : Rat) ^ p.succ :=
+      fun r => by rw [mul_div_right_comm, mul_div_cancel_right₀ _ hne]
+  have h2 : f 1 + (n : Rat) ^ p.succ = 1 / 2 * (n : Rat) ^ p.succ := by
+    simp_rw [f, bernoulli_one, choose_one_right, succ_sub_succ_eq_sub, cast_succ, tsub_zero, h1]
+    ring
+  have :
+    (∑ i in range p, bernoulli (i + 2) * (p + 2).choose (i + 2) * (n : Rat) ^ (p - i) / ↑(p + 2)) =
+      ∑ i in range p, bernoulli' (i + 2) * (p + 2).choose (i + 2) * (n : Rat) ^ (p - i) / ↑(p + 2) :=
+    sum_congr rfl fun i _ => by rw [bernoulli_eq_bernoulli'_of_ne_one (succ_succ_ne_one i)]
+  calc
+    (-- replace sum over `Ico` with sum over `range` and simplify
+        ∑ k in Ico 1 n.succ, (k : Rat) ^ p.succ)
+    _ = ∑ k in range n.succ, (k : Rat) ^ p.succ := by simp [sum_Ico_eq_sub _ hle]
+    -- extract the last term of the sum
+    _ = (∑ k in range n, (k : Rat) ^ p.succ) + (n : Rat) ^ p.succ := by rw [sum_range_succ]
+    -- apply the key lemma, `sum_range_pow`
+    _ = (∑ i in range p.succ.succ, f i) + (n : Rat) ^ p.succ := by simp [f, sum_range_pow]
+    -- extract the first two terms of the sum
+    _ = (∑ i in range p, f i.succ.succ) + f 1 + f 0 + (n : Rat) ^ p.succ := by
+      simp_rw [sum_range_succ']
+    _ = (∑ i in range p, f i.succ.succ) + (f 1 + (n : Rat) ^ p.succ) + f 0 := by ring
+    _ = (∑ i in range p, f i.succ.succ) + 1 / 2 * (n : Rat) ^ p.succ + f 0 := by rw [h2]
+    -- convert from `bernoulli` to `bernoulli'`
+    _ = (∑ i in range p, f' i.succ.succ) + f' 1 + f' 0 := by
+      simpa [f, f', h1, fun i => show i + 2 = i + 1 + 1 from rfl]
+    -- rejoin the first two terms of the sum
+    _ = ∑ i in range p.succ.succ, f' i := by simp_rw [sum_range_succ']
 
 Depends on / 依赖: Nat.cast_succ, cast_succ
 -/
@@ -1013,7 +1271,13 @@ lemma sum_pow_add_indicator_eq_zero
       (fun v hv => Units.mk0 (v : ZMod p) (mt (ZMod.natCast_eq_zero_iff v p).mp (by
         grind [not_dvd_of_pos_of_lt])))
       (fun u _ => (u : ZMod p).val)
-      (fun _ _ => Finset.mem_
+      (fun _ _ => Finset.mem_univ _)
+      (fun u _ => by grind [u.ne_zero, ZMod.val_ne_zero, ZMod.val_lt])
+      (fun v hv => by simp [ZMod.val_cast_of_lt (Finset.mem_Ico.mp hv).2])
+      (fun u _ => Units.ext (ZMod.natCast_zmod_val _))
+      (fun _ _ => rfl)
+  rw [hbij]; rw [FiniteField.sum_pow_units]; rw [ZMod.card]
+  grind
 
 中文:
 引理 sum_pow_add_indicator_eq_zero
@@ -1024,7 +1288,13 @@ lemma sum_pow_add_indicator_eq_zero
       (fun v hv => Units.mk0 (v : ZMod p) (mt (ZMod.natCast_eq_zero_iff v p).mp (by
         grind [not_dvd_of_pos_of_lt])))
       (fun u _ => (u : ZMod p).val)
-      (fun _ _ => Finset.mem_
+      (fun _ _ => Finset.mem_univ _)
+      (fun u _ => by grind [u.ne_zero, ZMod.val_ne_zero, ZMod.val_lt])
+      (fun v hv => by simp [ZMod.val_cast_of_lt (Finset.mem_Ico.mp hv).2])
+      (fun u _ => Units.ext (ZMod.natCast_zmod_val _))
+      (fun _ _ => rfl)
+  rw [hbij]; rw [FiniteField.sum_pow_units]; rw [ZMod.card]
+  grind
 -/
 private lemma sum_pow_add_indicator_eq_zero {p : Nat} (l : Nat) [Fact p.Prime] :
     (∑ v in Ico 1 p, (v : ZMod p) ^ l) + (if (p - 1) ∣ l then (1 : ZMod p) else 0) = 0 := by
@@ -1115,7 +1385,10 @@ lemma sum_one_div_prime_eq_indicator_div_add
   by_cases hdvd : (p - 1) ∣ 2 * k
   · have hp_mem : p in vonStaudtPrimes k := Finset.mem_filter.mpr
       ⟨Finset.mem_range.mpr (by have := Nat.le_of_dvd (by lia) hdvd; lia), Fact.out, hdvd⟩
-    rw [← Finset.add_sum_
+    rw [← Finset.add_sum_erase _ _ hp_mem]
+    simp [vonStaudtIndicator, hdvd]
+  · rw [Finset.erase_eq_of_notMem fun h => hdvd (Finset.mem_filter.mp h).2.2]
+    simp [vonStaudtIndicator, hdvd]
 
 中文:
 引理 sum_one_div_prime_eq_indicator_div_add
@@ -1125,7 +1398,10 @@ lemma sum_one_div_prime_eq_indicator_div_add
   by_cases hdvd : (p - 1) ∣ 2 * k
   · have hp_mem : p in vonStaudtPrimes k := Finset.mem_filter.mpr
       ⟨Finset.mem_range.mpr (by have := Nat.le_of_dvd (by lia) hdvd; lia), Fact.out, hdvd⟩
-    rw [← Finset.add_sum_
+    rw [← Finset.add_sum_erase _ _ hp_mem]
+    simp [vonStaudtIndicator, hdvd]
+  · rw [Finset.erase_eq_of_notMem fun h => hdvd (Finset.mem_filter.mp h).2.2]
+    simp [vonStaudtIndicator, hdvd]
 -/
 private lemma sum_one_div_prime_eq_indicator_div_add {k p : Nat} (hk : k > 0) [Fact p.Prime] :
     (∑ q in vonStaudtPrimes k, (1 : Rat) / q) =
@@ -1151,7 +1427,19 @@ lemma pIntegral_pow_div
   have hM'_cop : M'.Coprime p := (Nat.coprime_ordCompl Fact.out hM).symm
   have hp_ne : (p : Rat) != 0 := Nat.cast_ne_zero.mpr (Nat.Prime.ne_zero Fact.out)
   -- Rewrite p^N / M as p^(N-e) / M' where M' = M / p^e is coprime to p
-  have hdecomp : p
+  have hdecomp : p ^ e * M' = M := Nat.ordProj_mul_ordCompl_eq_self M p
+  have hM_eq : (M : Rat) = ↑(p ^ e) * ↑M' := by rw [← hdecomp]; simp
+  have hrw : (p : Rat) ^ N / M = (p : Rat) ^ (N - e) / M' := by
+    rw [hM_eq]; rw [Nat.cast_pow]; rw [div_mul_eq_div_div]
+    congr 1
+    rw [div_eq_iff (pow_ne_zero e hp_ne)]; rw [← pow_add]; rw [Nat.sub_add_cancel hv]
+  have hM'_eq : ((p : Rat) ^ (N - e) / (M' : Rat)) = Rat.divInt (p ^ (N - e) : Int) (M' : Int) := by
+    norm_cast
+    simp
+  rw [hrw]
+  exact Rat.padicValuation_le_one_iff.2 ((Nat.Prime.coprime_iff_not_dvd Fact.out).1
+    (hM'_cop.coprime_dvd_left (by
+      rw [hM'_eq]; exact Int.natCast_dvd_natCast.mp (Rat.den_dvd _ _))).symm)
 
 中文:
 引理 p整数egral_pow_div
@@ -1162,7 +1450,19 @@ lemma pIntegral_pow_div
   have hM'_cop : M'.Coprime p := (Nat.coprime_ordCompl Fact.out hM).symm
   have hp_ne : (p : Rat) != 0 := Nat.cast_ne_zero.mpr (Nat.Prime.ne_zero Fact.out)
   -- Rewrite p^N / M as p^(N-e) / M' where M' = M / p^e is coprime to p
-  have hdecomp : p
+  have hdecomp : p ^ e * M' = M := Nat.ordProj_mul_ordCompl_eq_self M p
+  have hM_eq : (M : Rat) = ↑(p ^ e) * ↑M' := by rw [← hdecomp]; simp
+  have hrw : (p : Rat) ^ N / M = (p : Rat) ^ (N - e) / M' := by
+    rw [hM_eq]; rw [Nat.cast_pow]; rw [div_mul_eq_div_div]
+    congr 1
+    rw [div_eq_iff (pow_ne_zero e hp_ne)]; rw [← pow_add]; rw [Nat.sub_add_cancel hv]
+  have hM'_eq : ((p : Rat) ^ (N - e) / (M' : Rat)) = Rat.divInt (p ^ (N - e) : Int) (M' : Int) := by
+    norm_cast
+    simp
+  rw [hrw]
+  exact Rat.padicValuation_le_one_iff.2 ((Nat.Prime.coprime_iff_not_dvd Fact.out).1
+    (hM'_cop.coprime_dvd_left (by
+      rw [hM'_eq]; exact Int.natCast_dvd_natCast.mp (Rat.den_dvd _ _))).symm)
 -/
 private lemma pIntegral_pow_div {p M N : Nat} [Fact p.Prime] (hM : M != 0)
     (hv : M.factorization p <= N) : pIntegral p ((p : Rat) ^ N / M) := by
@@ -1197,7 +1497,16 @@ lemma factorization_succ_le_sub_one
     simp [Nat.factorization_eq_zero_of_not_dvd (by decide : ¬(2 ∣ 3))]
   · apply Nat.factorization_le_of_le_pow
     have hp2 := (Fact.out : p.Prime).two_le
-    suffices forall n : Nat, n >= 2 -> ¬(p = 2 ∧ n = 2) -> n + 1 <= p ^ (n - 
+    suffices forall n : Nat, n >= 2 -> ¬(p = 2 ∧ n = 2) -> n + 1 <= p ^ (n - 1) from this d hd hcase
+    intro n hn hne'
+    induction hn with
+    | refl => norm_num at hne' ⊢; lia
+    | @step m hm IH =>
+      by_cases hm2 : p = 2 ∧ m = 2
+      · obtain ⟨rfl, rfl⟩ := hm2; norm_num
+      · calc m + 1 + 1 <= p ^ (m - 1) + 1 := by linarith [IH hm2]
+          _ <= p ^ (m - 1) * p := by nlinarith [Nat.one_le_pow (m - 1) p (by lia)]
+          _ = p ^ m := by rw [show m = m - 1 + 1 by lia]; exact pow_succ ..
 
 中文:
 引理 factorization_succ_le_sub_one
@@ -1208,7 +1517,16 @@ lemma factorization_succ_le_sub_one
     simp [Nat.factorization_eq_zero_of_not_dvd (by decide : ¬(2 ∣ 3))]
   · apply Nat.factorization_le_of_le_pow
     have hp2 := (Fact.out : p.Prime).two_le
-    suffices forall n : Nat, n >= 2 -> ¬(p = 2 ∧ n = 2) -> n + 1 <= p ^ (n - 
+    suffices forall n : Nat, n >= 2 -> ¬(p = 2 ∧ n = 2) -> n + 1 <= p ^ (n - 1) from this d hd hcase
+    intro n hn hne'
+    induction hn with
+    | refl => norm_num at hne' ⊢; lia
+    | @step m hm IH =>
+      by_cases hm2 : p = 2 ∧ m = 2
+      · obtain ⟨rfl, rfl⟩ := hm2; norm_num
+      · calc m + 1 + 1 <= p ^ (m - 1) + 1 := by linarith [IH hm2]
+          _ <= p ^ (m - 1) * p := by nlinarith [Nat.one_le_pow (m - 1) p (by lia)]
+          _ = p ^ m := by rw [show m = m - 1 + 1 by lia]; exact pow_succ ..
 -/
 private lemma factorization_succ_le_sub_one {p d : Nat} [Fact p.Prime] (hd : d >= 2) :
     (d + 1).factorization p <= d - 1 := by
@@ -1269,7 +1587,9 @@ lemma pIntegral_choose_mul_pow_div
       d + 1 != 0 ∧ 2 * k - 2 * m - 1 = d - 1 ∧ 2 * m <= 2 * k := by lia
   have h_denom_rat : (2 * (k : Rat) - 2 * m + 1) = ((d + 1 : Nat) : Rat) := by
     simp only [hd_def]; push_cast [Nat.cast_sub hkm]; ring
-  rw [h
+  rw [h_exp]; rw [h_denom_rat]; rw [mul_div_assoc]
+  exact pIntegral_mul (mod_cast Int.padicValuation_le_one p ((2 * k).choose (2 * m)))
+    (pIntegral_pow_div hd_plus_one_ne_zero (factorization_succ_le_sub_one hd))
 
 中文:
 引理 p整数egral_choose_mul_pow_div
@@ -1280,7 +1600,9 @@ lemma pIntegral_choose_mul_pow_div
       d + 1 != 0 ∧ 2 * k - 2 * m - 1 = d - 1 ∧ 2 * m <= 2 * k := by lia
   have h_denom_rat : (2 * (k : Rat) - 2 * m + 1) = ((d + 1 : Nat) : Rat) := by
     simp only [hd_def]; push_cast [Nat.cast_sub hkm]; ring
-  rw [h
+  rw [h_exp]; rw [h_denom_rat]; rw [mul_div_assoc]
+  exact pIntegral_mul (mod_cast Int.padicValuation_le_one p ((2 * k).choose (2 * m)))
+    (pIntegral_pow_div hd_plus_one_ne_zero (factorization_succ_le_sub_one hd))
 -/
 private lemma pIntegral_choose_mul_pow_div {k m p : Nat} (hm_lt : m < k) [Fact p.Prime]
     (hd : 2 * k - 2 * m >= 2) :
@@ -1305,7 +1627,28 @@ lemma pIntegral_bernoulli_even_term
   set P := (p : Rat) ^ (2 * k - 2 * m - 1)
   have hpow : (p : Rat) ^ (2 * k - 2 * m) = P * p := by
     rw [show 2 * k - 2 * m = (2 * k - 2 * m - 1) + 1 by lia]; rw [pow_succ]
-  have hdecomp : bernoulli (2 * m) * ((2 * k + 1).c
+  have hdecomp : bernoulli (2 * m) * ((2 * k + 1).choose (2 * m)) *
+      (p : Rat) ^ (2 * k - 2 * m) / (2 * k + 1) =
+    (bernoulli (2 * m) + vonStaudtIndicator (2 * m) p / p) *
+      ((2 * k + 1).choose (2 * m)) * (p : Rat) ^ (2 * k - 2 * m) / (2 * k + 1) -
+    vonStaudtIndicator (2 * m) p * ((2 * k + 1).choose (2 * m)) *
+      P / (2 * k + 1) := by rw [hpow]; field_simp [hp_ne]; ring
+  rw [hdecomp]
+  have hcmp := pIntegral_choose_mul_pow_div (p := p) hm_lt (by lia)
+  have H x := choose_two_mul_succ_mul_div_eq x hm_lt
+  apply (Rat.padicValuation p).map_sub_le
+  · rw [mul_assoc, mul_div_assoc]
+    apply pIntegral_mul ih
+    have hpow_mul : ((2 * k).choose (2 * m) : Rat) * (p : Rat) ^ (2 * k - 2 * m) /
+        (2 * k - 2 * m + 1) =
+        (p : Rat) * (((2 * k).choose (2 * m) : Rat) * P / (2 * k - 2 * m + 1)) := by
+      rw [hpow]; ring
+    rw [H]; rw [hpow_mul]
+    exact pIntegral_mul (Int.padicValuation_le_one p p) hcmp
+  · unfold vonStaudtIndicator
+    split_ifs
+    · grind
+    · simp
 
 中文:
 引理 p整数egral_bernoulli_even_term
@@ -1315,7 +1658,28 @@ lemma pIntegral_bernoulli_even_term
   set P := (p : Rat) ^ (2 * k - 2 * m - 1)
   have hpow : (p : Rat) ^ (2 * k - 2 * m) = P * p := by
     rw [show 2 * k - 2 * m = (2 * k - 2 * m - 1) + 1 by lia]; rw [pow_succ]
-  have hdecomp : bernoulli (2 * m) * ((2 * k + 1).c
+  have hdecomp : bernoulli (2 * m) * ((2 * k + 1).choose (2 * m)) *
+      (p : Rat) ^ (2 * k - 2 * m) / (2 * k + 1) =
+    (bernoulli (2 * m) + vonStaudtIndicator (2 * m) p / p) *
+      ((2 * k + 1).choose (2 * m)) * (p : Rat) ^ (2 * k - 2 * m) / (2 * k + 1) -
+    vonStaudtIndicator (2 * m) p * ((2 * k + 1).choose (2 * m)) *
+      P / (2 * k + 1) := by rw [hpow]; field_simp [hp_ne]; ring
+  rw [hdecomp]
+  have hcmp := pIntegral_choose_mul_pow_div (p := p) hm_lt (by lia)
+  have H x := choose_two_mul_succ_mul_div_eq x hm_lt
+  apply (Rat.padicValuation p).map_sub_le
+  · rw [mul_assoc, mul_div_assoc]
+    apply pIntegral_mul ih
+    have hpow_mul : ((2 * k).choose (2 * m) : Rat) * (p : Rat) ^ (2 * k - 2 * m) /
+        (2 * k - 2 * m + 1) =
+        (p : Rat) * (((2 * k).choose (2 * m) : Rat) * P / (2 * k - 2 * m + 1)) := by
+      rw [hpow]; ring
+    rw [H]; rw [hpow_mul]
+    exact pIntegral_mul (Int.padicValuation_le_one p p) hcmp
+  · unfold vonStaudtIndicator
+    split_ifs
+    · grind
+    · simp
 -/
 private lemma pIntegral_bernoulli_even_term {k m p : Nat} (hm_lt : m < k) [Fact p.Prime]
     (ih : pIntegral p (bernoulli (2 * m) + vonStaudtIndicator (2 * m) p / p)) :
@@ -1360,7 +1724,23 @@ lemma pIntegral_faulhaber_sum
   rcases i with _ | _ | i
   · simp only [bernoulli_zero, one_mul, Nat.choose_zero_right, Nat.cast_one, Nat.sub_zero]
     exact_mod_cast pIntegral_pow_div (by lia)
-      (factorization_succ_le_sub_one (by lia) 
+      (factorization_succ_le_sub_one (by lia) |>.trans tsub_le_self)
+  · rw [zero_add, Nat.choose_one_right, bernoulli_one]
+    push_cast
+    field_simp
+    obtain rfl | hp2 := eq_or_ne p 2
+    · push_cast
+      rw [show 2 * k - 1 = (2 * k - 2) + 1 by lia]; rw [pow_succ]; rw [mul_div_cancel_right₀ _ two_ne_zero]
+      exact_mod_cast Int.padicValuation_le_one ..
+    · rw [Valuation.map_neg]
+refine pIntegral_pow_div two_ne_zero
+         (factorization_eq_zero_of_lt ?_).trans_le (by lia)
+exact (Prime.odd_iff Fact.out).mp Prime.odd_of_ne_two Fact.out hp2
+  · rcases Nat.even_or_odd (i + 2) with ⟨m, hm⟩ | hodd
+    · have ⟨hm_pos, hm_lt, hi_eq⟩ : 0 < m ∧ m < k ∧ i + 2 = 2 * m := by lia
+      simp only [hi_eq]
+      exact pIntegral_bernoulli_even_term hm_lt (ih m hm_pos hm_lt)
+    · simp [bernoulli_eq_zero_of_odd hodd (by lia)]
 
 中文:
 引理 p整数egral_faulhaber_sum
@@ -1371,7 +1751,23 @@ lemma pIntegral_faulhaber_sum
   rcases i with _ | _ | i
   · simp only [bernoulli_zero, one_mul, Nat.choose_zero_right, Nat.cast_one, Nat.sub_zero]
     exact_mod_cast pIntegral_pow_div (by lia)
-      (factorization_succ_le_sub_one (by lia) 
+      (factorization_succ_le_sub_one (by lia) |>.trans tsub_le_self)
+  · rw [zero_add, Nat.choose_one_right, bernoulli_one]
+    push_cast
+    field_simp
+    obtain rfl | hp2 := eq_or_ne p 2
+    · push_cast
+      rw [show 2 * k - 1 = (2 * k - 2) + 1 by lia]; rw [pow_succ]; rw [mul_div_cancel_right₀ _ two_ne_zero]
+      exact_mod_cast Int.padicValuation_le_one ..
+    · rw [Valuation.map_neg]
+refine pIntegral_pow_div two_ne_zero
+         (factorization_eq_zero_of_lt ?_).trans_le (by lia)
+exact (Prime.odd_iff Fact.out).mp Prime.odd_of_ne_two Fact.out hp2
+  · rcases Nat.even_or_odd (i + 2) with ⟨m, hm⟩ | hodd
+    · have ⟨hm_pos, hm_lt, hi_eq⟩ : 0 < m ∧ m < k ∧ i + 2 = 2 * m := by lia
+      simp only [hi_eq]
+      exact pIntegral_bernoulli_even_term hm_lt (ih m hm_pos hm_lt)
+    · simp [bernoulli_eq_zero_of_odd hodd (by lia)]
 -/
 private lemma pIntegral_faulhaber_sum {k p : Nat} (hk : k > 0) [Fact p.Prime]
     (ih : forall m, 0 < m -> m < k -> pIntegral p (bernoulli (2 * m) + vonStaudtIndicator (2 * m) p / p)) :
@@ -1409,7 +1805,9 @@ lemma sum_pow_filter_eq_faulhaber
   proof: by
   have hfilter : (∑ v in Ico 1 p, (v : Rat) ^ (2 * k)) = ∑ v in range p, (v : Rat) ^ (2 * k) := by
     cases p <;> simp [Finset.sum_range_eq_add_Ico, show 2 * k != 0 by lia]
-  rw [hfilter]; rw [sum_range_pow]; rw [Finset.sum_range_succ]; rw [Nat.choose_succ_self_right]; rw [show 2 * k + 1 - 2 * k
+  rw [hfilter]; rw [sum_range_pow]; rw [Finset.sum_range_succ]; rw [Nat.choose_succ_self_right]; rw [show 2 * k + 1 - 2 * k = 1 by lia]
+  push_cast
+  field_simp
 
 中文:
 引理 sum_pow_filter_eq_faulhaber
@@ -1417,7 +1815,9 @@ lemma sum_pow_filter_eq_faulhaber
   证明: by
   have hfilter : (∑ v in Ico 1 p, (v : Rat) ^ (2 * k)) = ∑ v in range p, (v : Rat) ^ (2 * k) := by
     cases p <;> simp [Finset.sum_range_eq_add_Ico, show 2 * k != 0 by lia]
-  rw [hfilter]; rw [sum_range_pow]; rw [Finset.sum_range_succ]; rw [Nat.choose_succ_self_right]; rw [show 2 * k + 1 - 2 * k
+  rw [hfilter]; rw [sum_range_pow]; rw [Finset.sum_range_succ]; rw [Nat.choose_succ_self_right]; rw [show 2 * k + 1 - 2 * k = 1 by lia]
+  push_cast
+  field_simp
 -/
 private lemma sum_pow_filter_eq_faulhaber {k : Nat} (p : Nat) (hk : 0 < k) :
     (∑ v in Ico 1 p, (v : Rat) ^ (2 * k)) =
@@ -1478,7 +1878,14 @@ lemma bernoulli_add_indicator_eq_sub
     mod_cast sum_pow_add_indicator_eq_zero (p := p) _
   obtain ⟨T, hT_int⟩ := (ZMod.intCast_zmod_eq_zero_iff_dvd _ _).mp hcast
   use T
-  have hT : (∑ v in Ico 1 p, (v : Rat) ^ (2 *
+  have hT : (∑ v in Ico 1 p, (v : Rat) ^ (2 * k)) + vonStaudtIndicator (2 * k) p =
+      p * T := by unfold vonStaudtIndicator; exact_mod_cast hT_int
+  have hp_ne : (p : Rat) != 0 := Nat.cast_ne_zero.mpr (Fact.out : p.Prime).ne_zero
+  have hAlg : bernoulli (2 * k) + vonStaudtIndicator (2 * k) p / p =
+      T - (∑ i in range (2 * k), bernoulli i * ((2 * k + 1).choose i) *
+        (p : Rat) ^ (2 * k + 1 - i) / (2 * k + 1)) / p := by
+    field_simp [hp_ne]; linarith [hT, sum_pow_filter_eq_faulhaber p hk]
+  rw [hAlg]; congr 1; simpa using faulhaber_sum_div_prime_eq
 
 中文:
 引理 bernoulli_add_indicator_eq_sub
@@ -1489,7 +1896,14 @@ lemma bernoulli_add_indicator_eq_sub
     mod_cast sum_pow_add_indicator_eq_zero (p := p) _
   obtain ⟨T, hT_int⟩ := (ZMod.intCast_zmod_eq_zero_iff_dvd _ _).mp hcast
   use T
-  have hT : (∑ v in Ico 1 p, (v : Rat) ^ (2 *
+  have hT : (∑ v in Ico 1 p, (v : Rat) ^ (2 * k)) + vonStaudtIndicator (2 * k) p =
+      p * T := by unfold vonStaudtIndicator; exact_mod_cast hT_int
+  have hp_ne : (p : Rat) != 0 := Nat.cast_ne_zero.mpr (Fact.out : p.Prime).ne_zero
+  have hAlg : bernoulli (2 * k) + vonStaudtIndicator (2 * k) p / p =
+      T - (∑ i in range (2 * k), bernoulli i * ((2 * k + 1).choose i) *
+        (p : Rat) ^ (2 * k + 1 - i) / (2 * k + 1)) / p := by
+    field_simp [hp_ne]; linarith [hT, sum_pow_filter_eq_faulhaber p hk]
+  rw [hAlg]; congr 1; simpa using faulhaber_sum_div_prime_eq
 -/
 private lemma bernoulli_add_indicator_eq_sub {k p : Nat} (hk : k > 0) [Fact p.Prime] :
     exists T : Int, bernoulli (2 * k) + vonStaudtIndicator (2 * k) p / p =
@@ -1522,7 +1936,8 @@ lemma not_dvd_den_bernoulli_add_indicator
     rw [hT]
     have hT_int : pIntegral p T := Int.padicValuation_le_one p T
     have hR := pIntegral_faulhaber_sum hk fun m hm_pos hm_lt =>
-      Rat.padicValuation_le_
+      Rat.padicValuation_le_one_iff.mpr (ih m hm_lt hm_pos)
+    exact Rat.padicValuation_le_one_iff.mp ((Rat.padicValuation p).map_sub_le hT_int hR)
 
 中文:
 引理 not_dvd_den_bernoulli_add_indicator
@@ -1534,7 +1949,8 @@ lemma not_dvd_den_bernoulli_add_indicator
     rw [hT]
     have hT_int : pIntegral p T := Int.padicValuation_le_one p T
     have hR := pIntegral_faulhaber_sum hk fun m hm_pos hm_lt =>
-      Rat.padicValuation_le_
+      Rat.padicValuation_le_one_iff.mpr (ih m hm_lt hm_pos)
+    exact Rat.padicValuation_le_one_iff.mp ((Rat.padicValuation p).map_sub_le hT_int hR)
 -/
 private lemma not_dvd_den_bernoulli_add_indicator {k p : Nat} (hk : k > 0) [Fact p.Prime] :
     ¬ p ∣ (bernoulli (2 * k) + vonStaudtIndicator (2 * k) p / p).den := by
@@ -1558,7 +1974,9 @@ lemma not_dvd_den_vonStaudt_sum
   have hcop_ind := ((Nat.Prime.coprime_iff_not_dvd Fact.out).mpr
     (not_dvd_den_bernoulli_add_indicator (p := p) hk)).symm
   have hcop_rest := Nat.Coprime.of_dvd_left (Rat.den_sum_dvd_prod_den _ _)
-    (prod_one_div_pri
+    (prod_one_div_prime_den_coprime k (p := p))
+  have hcop := (Nat.Coprime.of_dvd_left (Rat.add_den_dvd _ _) (hcop_ind.mul_left hcop_rest)).symm
+  exact (Nat.Prime.coprime_iff_not_dvd Fact.out).1 hcop
 
 中文:
 引理 not_dvd_den_vonStaudt_sum
@@ -1568,7 +1986,9 @@ lemma not_dvd_den_vonStaudt_sum
   have hcop_ind := ((Nat.Prime.coprime_iff_not_dvd Fact.out).mpr
     (not_dvd_den_bernoulli_add_indicator (p := p) hk)).symm
   have hcop_rest := Nat.Coprime.of_dvd_left (Rat.den_sum_dvd_prod_den _ _)
-    (prod_one_div_pri
+    (prod_one_div_prime_den_coprime k (p := p))
+  have hcop := (Nat.Coprime.of_dvd_left (Rat.add_den_dvd _ _) (hcop_ind.mul_left hcop_rest)).symm
+  exact (Nat.Prime.coprime_iff_not_dvd Fact.out).1 hcop
 -/
 private lemma not_dvd_den_vonStaudt_sum {k p : Nat} (hk : k > 0) [Fact p.Prime] :
     ¬ p ∣ (bernoulli (2 * k) + ∑ q in vonStaudtPrimes k, (1 : Rat) / q).den := by
@@ -1593,7 +2013,7 @@ theorem vonStaudt_clausen
     refine ⟨_, Rat.coe_int_num_of_den_eq_one ?_⟩
     by_contra h
     obtain ⟨p, hp, hdvd⟩ := ne_one_iff_exists_prime_dvd.mp h
-    exact (let : Fact p.Prime := ⟨hp⟩; not_dvd_den_vonStaudt_sum hk) hd
+    exact (let : Fact p.Prime := ⟨hp⟩; not_dvd_den_vonStaudt_sum hk) hdvd
 
 中文:
 定理 vonStaudt_clausen
@@ -1605,7 +2025,7 @@ theorem vonStaudt_clausen
     refine ⟨_, Rat.coe_int_num_of_den_eq_one ?_⟩
     by_contra h
     obtain ⟨p, hp, hdvd⟩ := ne_one_iff_exists_prime_dvd.mp h
-    exact (let : Fact p.Prime := ⟨hp⟩; not_dvd_den_vonStaudt_sum hk) hd
+    exact (let : Fact p.Prime := ⟨hp⟩; not_dvd_den_vonStaudt_sum hk) hdvd
 
 Depends on / 依赖: Nat.eq_zero_or_pos, Rat.coe_int_num_of_den_eq_one, Set.mem_range, coe_int_num_of_den_eq_one, eq_zero_or_pos, kernel, mem_range, ne_one_iff_exists_prime_dvd, ne_one_iff_exists_prime_dvd.mp, not_dvd_den_vonStaudt_sum, p.Prime
 -/

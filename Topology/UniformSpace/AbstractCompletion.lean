@@ -702,7 +702,10 @@ definition mapEquiv
   uniformContinuous_invFun := uniformContinuous_map ..
 left_inv := Function.leftInverse_iff_comp.2 by
     simp [map_comp _ _ _ e.symm.uniformContinuous e.uniformContinuous]
-right_inv := Function.righ
+right_inv := Function.rightInverse_iff_comp.2 by
+    simp [map_comp _ _ _ e.uniformContinuous e.symm.uniformContinuous]
+
+@[simp]
 
 中文:
 定义 mapEquiv
@@ -713,7 +716,10 @@ right_inv := Function.righ
   uniformContinuous_invFun := uniformContinuous_map ..
 left_inv := Function.leftInverse_iff_comp.2 by
     simp [map_comp _ _ _ e.symm.uniformContinuous e.uniformContinuous]
-right_inv := Function.righ
+right_inv := Function.rightInverse_iff_comp.2 by
+    simp [map_comp _ _ _ e.uniformContinuous e.symm.uniformContinuous]
+
+@[simp]
 
 Depends on / 依赖: pkg.map
 -/
@@ -965,6 +971,13 @@ theorem compare_comp_eq_compare
     (forall a : pkg.space,
       Filter.Tendsto f (Filter.comap pkg.coe (𝓝 a)) (𝓝 ((pkg.isDenseInducing.extend f) a))) ->
       pkg.isDenseInducing.extend f ∘ pkg'.compare pkg = pkg'.isDenseInducing.extend f := by
+  intro h
+  have (x : α) : (pkg.isDenseInducing.extend f ∘ pkg'.compare pkg) (pkg'.coe x) = f x := by
+    simp only [Function.comp_apply, compare_coe, IsDenseInducing.extend_eq _ cont_f]
+  apply (IsDenseInducing.extend_unique (AbstractCompletion.isDenseInducing _) this
+    (Continuous.comp _ (uniformContinuous_compare pkg' pkg).continuous)).symm
+  apply IsDenseInducing.continuous_extend
+  exact fun a => ⟨(pkg.isDenseInducing.extend f) a, h a⟩
 
 中文:
 定理 compare_comp_eq_compare
@@ -974,6 +987,13 @@ theorem compare_comp_eq_compare
     (forall a : pkg.space,
       Filter.Tendsto f (Filter.comap pkg.coe (𝓝 a)) (𝓝 ((pkg.isDenseInducing.extend f) a))) ->
       pkg.isDenseInducing.extend f ∘ pkg'.compare pkg = pkg'.isDenseInducing.extend f := by
+  intro h
+  have (x : α) : (pkg.isDenseInducing.extend f ∘ pkg'.compare pkg) (pkg'.coe x) = f x := by
+    simp only [Function.comp_apply, compare_coe, IsDenseInducing.extend_eq _ cont_f]
+  apply (IsDenseInducing.extend_unique (AbstractCompletion.isDenseInducing _) this
+    (Continuous.comp _ (uniformContinuous_compare pkg' pkg).continuous)).symm
+  apply IsDenseInducing.continuous_extend
+  exact fun a => ⟨(pkg.isDenseInducing.extend f) a, h a⟩
 
 Depends on / 依赖: pkg.uniformStruct.toTopologicalSpace, toTopologicalSpace, uniformStruct
 -/

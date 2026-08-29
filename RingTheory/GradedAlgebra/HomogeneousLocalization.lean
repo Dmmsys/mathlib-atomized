@@ -626,7 +626,9 @@ instance :
         add_mem (GradedMul.mul_mem c1.den.2 c2.num.2)
           (add_comm c2.deg c1.deg ▸ GradedMul.mul_mem c2.den.2 c1.num.2)⟩
       den := ⟨c1.den * c2.den, GradedMul.mul_mem c1.den.2 c2.den.2⟩
-      den_mem := Submonoid.mul
+      den_mem := Submonoid.mul_mem _ c1.den_mem c2.den_mem }
+
+@[simp]
 
 中文:
 实例 :
@@ -636,7 +638,9 @@ instance :
         add_mem (GradedMul.mul_mem c1.den.2 c2.num.2)
           (add_comm c2.deg c1.deg ▸ GradedMul.mul_mem c2.den.2 c1.num.2)⟩
       den := ⟨c1.den * c2.den, GradedMul.mul_mem c1.den.2 c2.den.2⟩
-      den_mem := Submonoid.mul
+      den_mem := Submonoid.mul_mem _ c1.den_mem c2.den_mem }
+
+@[simp]
 
 Depends on / 依赖: GradedMul, GradedMul.mul_mem, Submonoid, Submonoid.mul_mem, add_comm, add_mem, c1.deg, c1.den, c1.den_mem, c1.num, c2.deg, c2.den, c2.den_mem, c2.num, den_mem, mul_mem
 -/
@@ -750,7 +754,9 @@ instance :
       @GradedMonoid.GMonoid.gnpow _ (fun i => ↥(𝒜 i)) _ _ n _ c.den, by
         induction n with
         | zero => simp only [coe_gnpow, pow_zero, one_mem]
-        | succ n ih => simpa only [pow_succ, coe_gnpow] using x.mul_m
+        | succ n ih => simpa only [pow_succ, coe_gnpow] using x.mul_mem ih c.den_mem⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -759,7 +765,9 @@ instance :
       @GradedMonoid.GMonoid.gnpow _ (fun i => ↥(𝒜 i)) _ _ n _ c.den, by
         induction n with
         | zero => simp only [coe_gnpow, pow_zero, one_mem]
-        | succ n ih => simpa only [pow_succ, coe_gnpow] using x.mul_m
+        | succ n ih => simpa only [pow_succ, coe_gnpow] using x.mul_mem ih c.den_mem⟩
+
+@[simp]
 
 Depends on / 依赖: GMonoid, GradedMonoid, GradedMonoid.GMonoid.gnpow, c.deg, c.den, c.den_mem, c.num, coe_gnpow, den_mem, mul_mem, one_mem, pow_succ, pow_zero, x.mul_mem
 -/
@@ -1262,7 +1270,8 @@ instance hasPow
           change Localization.mk _ _ = Localization.mk _ _
           simp only [num_pow, den_pow]
           convert! congr_arg (fun z : at x => z ^ n) h <;> rw [Localization.mk_pow] <;> rfl :
-        HomogeneousLo
+        HomogeneousLocalization 𝒜 x -> HomogeneousLocalization 𝒜 x)
+      z
 
 中文:
 实例 hasPow
@@ -1271,7 +1280,8 @@ instance hasPow
           change Localization.mk _ _ = Localization.mk _ _
           simp only [num_pow, den_pow]
           convert! congr_arg (fun z : at x => z ^ n) h <;> rw [Localization.mk_pow] <;> rfl :
-        HomogeneousLo
+        HomogeneousLocalization 𝒜 x -> HomogeneousLocalization 𝒜 x)
+      z
 
 Depends on / 依赖: HomogeneousLocalization, Localization, Localization.mk, Localization.mk_pow, Quotient, Quotient.map, congr_arg, convert, den_pow, mk_pow, num_pow
 -/
@@ -1312,7 +1322,7 @@ instance :
         (h' : Localization.mk _ _ = Localization.mk _ _) => by
       change Localization.mk _ _ = Localization.mk _ _
       simp only [num_add, den_add]
-      convert! congr_arg₂ (· + ·) h h' <;> rw [Localiza
+      convert! congr_arg₂ (· + ·) h h' <;> rw [Localization.add_mk] <;> rfl
 
 中文:
 实例 :
@@ -1322,7 +1332,7 @@ instance :
         (h' : Localization.mk _ _ = Localization.mk _ _) => by
       change Localization.mk _ _ = Localization.mk _ _
       simp only [num_add, den_add]
-      convert! congr_arg₂ (· + ·) h h' <;> rw [Localiza
+      convert! congr_arg₂ (· + ·) h h' <;> rw [Localization.add_mk] <;> rfl
 
 Depends on / 依赖: Localization, Localization.add_mk, Localization.mk, Quotient, Quotient.map, add_mk, convert, den_add, num_add
 -/
@@ -1380,7 +1390,7 @@ instance :
         (h' : Localization.mk _ _ = Localization.mk _ _) => by
       change Localization.mk _ _ = Localization.mk _ _
       simp only [num_mul, den_mul]
-      convert! congr_arg₂ (· * ·) h h' <;> rw [Localiza
+      convert! congr_arg₂ (· * ·) h h' <;> rw [Localization.mk_mul] <;> rfl
 
 中文:
 实例 :
@@ -1390,7 +1400,7 @@ instance :
         (h' : Localization.mk _ _ = Localization.mk _ _) => by
       change Localization.mk _ _ = Localization.mk _ _
       simp only [num_mul, den_mul]
-      convert! congr_arg₂ (· * ·) h h' <;> rw [Localiza
+      convert! congr_arg₂ (· * ·) h h' <;> rw [Localization.mk_mul] <;> rfl
 
 Depends on / 依赖: Localization, Localization.mk, Localization.mk_mul, Quotient, Quotient.map, convert, den_mul, mk_mul, num_mul
 -/
@@ -2175,7 +2185,14 @@ theorem isUnit_iff_isUnit_val
   rcases h1 with ⟨⟨a, b, eq0, eq1⟩, rfl : a = f.val⟩
   obtain ⟨f, rfl⟩ := mk_surjective f
   obtain ⟨b, s, rfl⟩ := IsLocalization.exists_mk'_eq 𝔭.primeCompl b
-  rw [val_mk]; rw [Localization.mk_eq_mk']; rw [← IsLocalization.mk'_mul]; rw [IsLocal
+  rw [val_mk]; rw [Localization.mk_eq_mk']; rw [← IsLocalization.mk'_mul]; rw [IsLocalization.mk'_eq_iff_eq_mul]; rw [one_mul]; rw [IsLocalization.eq_iff_exists (M := 𝔭.primeCompl)] at eq0
+  obtain ⟨c, hc : _ = c.1 * (f.den.1 * s.1)⟩ := eq0
+  have : f.num.1 ∉ 𝔭 := by
+    exact fun h => mul_mem c.2 (mul_mem f.den_mem s.2)
+      (hc ▸ Ideal.mul_mem_left _ c.1 (Ideal.mul_mem_right b _ h))
+  refine .of_mul_eq_one (Quotient.mk'' ⟨f.1, f.3, f.2, this⟩) ?_
+  rw [← mk_mul]; rw [ext_iff_val]; rw [val_mk]
+  simp [mul_comm f.den.1]
 
 中文:
 定理 isUnit_iff_isUnit_val
@@ -2185,7 +2202,14 @@ theorem isUnit_iff_isUnit_val
   rcases h1 with ⟨⟨a, b, eq0, eq1⟩, rfl : a = f.val⟩
   obtain ⟨f, rfl⟩ := mk_surjective f
   obtain ⟨b, s, rfl⟩ := IsLocalization.exists_mk'_eq 𝔭.primeCompl b
-  rw [val_mk]; rw [Localization.mk_eq_mk']; rw [← IsLocalization.mk'_mul]; rw [IsLocal
+  rw [val_mk]; rw [Localization.mk_eq_mk']; rw [← IsLocalization.mk'_mul]; rw [IsLocalization.mk'_eq_iff_eq_mul]; rw [one_mul]; rw [IsLocalization.eq_iff_exists (M := 𝔭.primeCompl)] at eq0
+  obtain ⟨c, hc : _ = c.1 * (f.den.1 * s.1)⟩ := eq0
+  have : f.num.1 ∉ 𝔭 := by
+    exact fun h => mul_mem c.2 (mul_mem f.den_mem s.2)
+      (hc ▸ Ideal.mul_mem_left _ c.1 (Ideal.mul_mem_right b _ h))
+  refine .of_mul_eq_one (Quotient.mk'' ⟨f.1, f.3, f.2, this⟩) ?_
+  rw [← mk_mul]; rw [ext_iff_val]; rw [val_mk]
+  simp [mul_comm f.den.1]
 
 Depends on / 依赖: IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.exists_mk, IsLocalization.mk, IsUnit, IsUnit.map, Localization, Localization.mk_eq_mk, _eq_iff_eq_mul, _mul, algebraMap, eq_iff_exists, exists_mk, f.den, f.num, f.val, mk_eq_mk, mk_surjective, mul_, mul_mem
 -/
@@ -2325,7 +2349,8 @@ lemma Away.mk_surjective
   by_cases hfn : f ^ n = 0
   · have := HomogeneousLocalization.subsingleton 𝒜 (x := .powers f) ⟨n, hfn⟩
     exact ⟨0, 0, zero_mem _, Subsingleton.elim _ _⟩
-  obtain rfl := DirectSum.degree_eq_of_mem_mem 𝒜 hn (SetLike.pow
+  obtain rfl := DirectSum.degree_eq_of_mem_mem 𝒜 hn (SetLike.pow_mem_graded n hf) hfn
+  exact ⟨n, s, hs, by ext; simp⟩
 
 中文:
 引理 Away.mk_surjective
@@ -2335,7 +2360,8 @@ lemma Away.mk_surjective
   by_cases hfn : f ^ n = 0
   · have := HomogeneousLocalization.subsingleton 𝒜 (x := .powers f) ⟨n, hfn⟩
     exact ⟨0, 0, zero_mem _, Subsingleton.elim _ _⟩
-  obtain rfl := DirectSum.degree_eq_of_mem_mem 𝒜 hn (SetLike.pow
+  obtain rfl := DirectSum.degree_eq_of_mem_mem 𝒜 hn (SetLike.pow_mem_graded n hf) hfn
+  exact ⟨n, s, hs, by ext; simp⟩
 
 Depends on / 依赖: DirectSum, DirectSum.degree_eq_of_mem_mem, HomogeneousLocalization, HomogeneousLocalization.subsingleton, SetLike, SetLike.pow_mem_graded, Subsingleton, Subsingleton.elim, degree_eq_of_mem_mem, mk_surjective, pow_mem_graded, powers, subsingleton, zero_mem
 -/
@@ -2363,7 +2389,10 @@ theorem Away.eventually_smul_mem
   simp only [Set.mem_image, SetLike.mem_coe, Set.mem_ofPred_eq]
   by_cases hfk : f ^ k = 0
   · refine ⟨0, zero_mem _, ?_⟩
-    rw [← tsub_add_cancel_of_le hk']; rw [map_zer
+    rw [← tsub_add_cancel_of_le hk']; rw [map_zero]; rw [pow_add]; rw [hfk]; rw [mul_zero]; rw [zero_smul]
+  rw [← tsub_add_cancel_of_le hk']; rw [pow_add]; rw [mul_smul]; rw [hk]; rw [den_smul_val]; rw [Algebra.smul_def]; rw [← map_mul]
+  rw [← smul_eq_mul]; rw [add_smul]; rw [DirectSum.degree_eq_of_mem_mem 𝒜 (SetLike.pow_mem_graded _ hf) (hk.symm ▸ z.den_mem_deg) hfk]
+  exact ⟨_, SetLike.mul_mem_graded (SetLike.pow_mem_graded _ hf) z.num_mem_deg, rfl⟩
 
 中文:
 定理 Away.eventually_smul_mem
@@ -2375,7 +2404,10 @@ theorem Away.eventually_smul_mem
   simp only [Set.mem_image, SetLike.mem_coe, Set.mem_ofPred_eq]
   by_cases hfk : f ^ k = 0
   · refine ⟨0, zero_mem _, ?_⟩
-    rw [← tsub_add_cancel_of_le hk']; rw [map_zer
+    rw [← tsub_add_cancel_of_le hk']; rw [map_zero]; rw [pow_add]; rw [hfk]; rw [mul_zero]; rw [zero_smul]
+  rw [← tsub_add_cancel_of_le hk']; rw [pow_add]; rw [mul_smul]; rw [hk]; rw [den_smul_val]; rw [Algebra.smul_def]; rw [← map_mul]
+  rw [← smul_eq_mul]; rw [add_smul]; rw [DirectSum.degree_eq_of_mem_mem 𝒜 (SetLike.pow_mem_graded _ hf) (hk.symm ▸ z.den_mem_deg) hfk]
+  exact ⟨_, SetLike.mul_mem_graded (SetLike.pow_mem_graded _ hf) z.num_mem_deg, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Filter, Filter.Ici_mem_atTop, Filter.mem_of_superset, Ici_mem_atTop, Set.mem_image, Set.mem_ofPred_eq, SetLike, SetLike.mem_coe, add_s, den_mem, den_smul_val, map_mul, map_zero, mem_coe, mem_image, mem_ofPred_eq, mem_of_superset, mul_smul
 -/
@@ -2443,7 +2475,17 @@ definition map
     (fun x => ⟨x.1, ⟨_, map_mem g x.2.2⟩, ⟨_, map_mem g x.3.2⟩, comap_le x.4⟩)
     fun x y (e : x.embedding = y.embedding) => by
       apply_fun IsLocalization.map (Localization Q) g.toRingHom comap_le at e
-      simp_rw [HomogeneousLocalization.NumDenSameDeg.embedding, Localization.mk
+      simp_rw [HomogeneousLocalization.NumDenSameDeg.embedding, Localization.mk_eq_mk',
+        IsLocalization.map_mk', ← Localization.mk_eq_mk'] at e
+      exact e
+  map_add' := Quotient.ind₂' fun x y => by
+    simp only [← mk_add, Quotient.map'_mk'', num_add, map_add, map_mul, den_add]; rfl
+  map_mul' := Quotient.ind₂' fun x y => by
+    simp only [← mk_mul, Quotient.map'_mk'', num_mul, map_mul, den_mul]; rfl
+  map_zero' := by simp only [← mk_zero (𝒜 := 𝒜), Quotient.map'_mk'', deg_zero,
+    num_zero, ZeroMemClass.coe_zero, map_zero, den_zero, map_one]; rfl
+  map_one' := by simp only [← mk_one (𝒜 := 𝒜), Quotient.map'_mk'',
+    num_one, den_one, map_one]; rfl
 
 中文:
 定义 map
@@ -2452,7 +2494,17 @@ definition map
     (fun x => ⟨x.1, ⟨_, map_mem g x.2.2⟩, ⟨_, map_mem g x.3.2⟩, comap_le x.4⟩)
     fun x y (e : x.embedding = y.embedding) => by
       apply_fun IsLocalization.map (Localization Q) g.toRingHom comap_le at e
-      simp_rw [HomogeneousLocalization.NumDenSameDeg.embedding, Localization.mk
+      simp_rw [HomogeneousLocalization.NumDenSameDeg.embedding, Localization.mk_eq_mk',
+        IsLocalization.map_mk', ← Localization.mk_eq_mk'] at e
+      exact e
+  map_add' := Quotient.ind₂' fun x y => by
+    simp only [← mk_add, Quotient.map'_mk'', num_add, map_add, map_mul, den_add]; rfl
+  map_mul' := Quotient.ind₂' fun x y => by
+    simp only [← mk_mul, Quotient.map'_mk'', num_mul, map_mul, den_mul]; rfl
+  map_zero' := by simp only [← mk_zero (𝒜 := 𝒜), Quotient.map'_mk'', deg_zero,
+    num_zero, ZeroMemClass.coe_zero, map_zero, den_zero, map_one]; rfl
+  map_one' := by simp only [← mk_one (𝒜 := 𝒜), Quotient.map'_mk'',
+    num_one, den_one, map_one]; rfl
 
 Depends on / 依赖: Quotient, Quotient.map
 -/
@@ -2802,7 +2854,10 @@ lemma awayMapAux_mk
     (Localization.mk g ⟨f * g, (Submonoid.mem_powers_iff _ _).mpr ⟨1, by simp [hx]⟩⟩) = 1 := by
     rw [← Algebra.smul_def]; rw [Localization.smul_mk]
     exact Localization.mk_self ⟨f*g, _⟩
-  simp only [awayMapAux, RingHom.coe_comp, Function.comp_a
+  simp only [awayMapAux, RingHom.coe_comp, Function.comp_apply, algebraMap_apply, val_mk]
+  rw [Localization.awayLift_mk (hv := this)]; rw [← Algebra.smul_def]; rw [Localization.mk_pow]; rw [Localization.smul_mk]
+  subst hx
+  rfl
 
 中文:
 引理 awayMapAux_mk
@@ -2812,7 +2867,10 @@ lemma awayMapAux_mk
     (Localization.mk g ⟨f * g, (Submonoid.mem_powers_iff _ _).mpr ⟨1, by simp [hx]⟩⟩) = 1 := by
     rw [← Algebra.smul_def]; rw [Localization.smul_mk]
     exact Localization.mk_self ⟨f*g, _⟩
-  simp only [awayMapAux, RingHom.coe_comp, Function.comp_a
+  simp only [awayMapAux, RingHom.coe_comp, Function.comp_apply, algebraMap_apply, val_mk]
+  rw [Localization.awayLift_mk (hv := this)]; rw [← Algebra.smul_def]; rw [Localization.mk_pow]; rw [Localization.smul_mk]
+  subst hx
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Function, Function.comp_apply, Localization, Localization.Away, Localization.awayLift_mk, Localization.mk, Localization.mk_pow, Localization.mk_self, Localization.smul_mk, RingHom, RingHom.coe_comp, Submonoid, Submonoid.mem_powers_iff, algebraMap, algebraMap_apply, awayLift_mk, awayMapAux, coe_comp
 -/
@@ -2844,7 +2902,8 @@ lemma range_awayMapAux_subset
   · apply SetLike.mul_mem_graded ha
     exact SetLike.pow_mem_graded _ hg
   · rw [hx, mul_pow]
-    apply SetLike.mul_
+    apply SetLike.mul_mem_graded hb'
+    exact SetLike.pow_mem_graded _ hg
 
 中文:
 引理 range_awayMapAux_subset
@@ -2856,7 +2915,8 @@ lemma range_awayMapAux_subset
   · apply SetLike.mul_mem_graded ha
     exact SetLike.pow_mem_graded _ hg
   · rw [hx, mul_pow]
-    apply SetLike.mul_
+    apply SetLike.mul_mem_graded hb'
+    exact SetLike.pow_mem_graded _ hg
 
 Depends on / 依赖: Set.range, SetLike, SetLike.mul_mem_graded, SetLike.pow_mem_graded, awayMapAux_mk, mk_surjective, mul_mem_graded, mul_pow, pow_mem_graded, subseteq
 -/
@@ -2885,7 +2945,7 @@ definition awayMap
     (h := (val_injective _).hasLeftInverse.choose_spec)
   refine RingHom.comp (e.symm.toRingHom.comp (Subring.inclusion ?_))
     (awayMapAux 𝒜 (f := f) ⟨_, hx⟩).rangeRestrict
-  exact range_awayMapAux_subset 𝒜 hg
+  exact range_awayMapAux_subset 𝒜 hg hx
 
 中文:
 定义 awayMap
@@ -2895,7 +2955,7 @@ definition awayMap
     (h := (val_injective _).hasLeftInverse.choose_spec)
   refine RingHom.comp (e.symm.toRingHom.comp (Subring.inclusion ?_))
     (awayMapAux 𝒜 (f := f) ⟨_, hx⟩).rangeRestrict
-  exact range_awayMapAux_subset 𝒜 hg
+  exact range_awayMapAux_subset 𝒜 hg hx
 
 Depends on / 依赖: Localization, Localization.Away, RingEquiv, RingEquiv.ofLeftInverse, RingHom, RingHom.comp, Subring, Subring.inclusion, algebraMap, awayMapAux, choose_spec, e.symm.toRingHom.comp, hasLeftInverse, hasLeftInverse.choose_spec, inclusion, ofLeftInverse, rangeRestrict, range_awayMapAux_subset, toRingHom, val_injective
 -/
@@ -2921,7 +2981,7 @@ lemma val_awayMap_eq_aux
   dsimp [awayMap]
   convert_to! (e (e.symm ⟨awayMapAux 𝒜 (f := f) ⟨_, hx⟩ a,
     range_awayMapAux_subset 𝒜 hg hx ⟨_, rfl⟩⟩)).1 = _
-  rw [e.apply_symm_apply
+  rw [e.apply_symm_apply]
 
 中文:
 引理 val_awayMap_eq_aux
@@ -2933,7 +2993,7 @@ lemma val_awayMap_eq_aux
   dsimp [awayMap]
   convert_to! (e (e.symm ⟨awayMapAux 𝒜 (f := f) ⟨_, hx⟩ a,
     range_awayMapAux_subset 𝒜 hg hx ⟨_, rfl⟩⟩)).1 = _
-  rw [e.apply_symm_apply
+  rw [e.apply_symm_apply]
 
 Depends on / 依赖: Localization, Localization.Away, RingEquiv, RingEquiv.ofLeftInverse, algebraMap, apply_symm_apply, awayMap, awayMapAux, choose_spec, convert_to, e.apply_symm_apply, e.symm, hasLeftInverse, hasLeftInverse.choose_spec, ofLeftInverse, range_awayMapAux_subset, val_injective
 -/
@@ -3125,7 +3185,48 @@ theorem Away.isLocalization_mul
   constructor; constructor
   · rintro ⟨r, n, rfl⟩
     rw [map_pow]; rw [RingHom.algebraMap_toAlgebra]
-    let z : Away 𝒜 x := Away.mk 𝒜 (hx ▸ SetLike.mul_mem_graded hf
+    let z : Away 𝒜 x := Away.mk 𝒜 (hx ▸ SetLike.mul_mem_graded hf hg) (d + e)
+(g ^ e * f ^ (2 * e + d)) by
+      convert!
+        SetLike.mul_mem_graded (SetLike.pow_mem_graded e hg)
+          (SetLike.pow_mem_graded (2 * e + d) hf) using 2
+      ring
+    refine (isUnit_iff_exists_inv.mpr ⟨z, ?_⟩).pow _
+    ext
+    simp only [val_mul, val_one, awayMap_mk, Away.val_mk, z, Localization.mk_mul]
+    rw [← Localization.mk_one]; rw [Localization.mk_eq_mk_iff]; rw [Localization.r_iff_exists]
+    use 1
+    simp only [OneMemClass.coe_one, one_mul, Submonoid.coe_mul, mul_one, hx]
+    ring
+  · intro z
+    obtain ⟨n, s, hs, rfl⟩ := Away.mk_surjective 𝒜 (hx ▸ SetLike.mul_mem_graded hf hg) z
+    rcases d with - | d
+    · contradiction
+let t : Away 𝒜 f := Away.mk 𝒜 hf (n * (e + 1)) (s * g ^ (n * d)) by
+      convert! SetLike.mul_mem_graded hs (SetLike.pow_mem_graded _ hg) using 2; simp; ring
+    refine ⟨⟨t, ⟨_, ⟨n, rfl⟩⟩⟩, ?_⟩
+    ext
+    simp only [RingHom.algebraMap_toAlgebra, map_pow, awayMap_mk, val_mul, val_mk, val_pow,
+      Localization.mk_pow, Localization.mk_mul, t]
+    rw [Localization.mk_eq_mk_iff]; rw [Localization.r_iff_exists]
+    exact ⟨1, by simp; ring⟩
+  · intro a b e
+    obtain ⟨n, a, ha, rfl⟩ := Away.mk_surjective 𝒜 hf a
+    obtain ⟨m, b, hb, rfl⟩ := Away.mk_surjective 𝒜 hf b
+    replace e := congr_arg val e
+    simp only [RingHom.algebraMap_toAlgebra, awayMap_mk, val_mk,
+      Localization.mk_eq_mk_iff, Localization.r_iff_exists] at e
+    obtain ⟨⟨_, k, rfl⟩, hc⟩ := e
+    refine ⟨⟨_, k + m + n, rfl⟩, ?_⟩
+    ext
+    simp only [val_mul, val_pow, val_mk, Localization.mk_pow,
+      Localization.mk_eq_mk_iff, Localization.r_iff_exists, Submonoid.coe_mul, Localization.mk_mul,
+      SubmonoidClass.coe_pow, Subtype.exists, exists_prop]
+    refine ⟨_, ⟨k, rfl⟩, ?_⟩
+    rcases d with - | d
+    · contradiction
+    subst hx
+    convert! congr(f ^ (e * (k + m + n)) * g ^ (d * (k + m + n)) * $hc) using 1 <;> ring
 
 中文:
 定理 Away.isLocalization_mul
@@ -3136,7 +3237,48 @@ theorem Away.isLocalization_mul
   constructor; constructor
   · rintro ⟨r, n, rfl⟩
     rw [map_pow]; rw [RingHom.algebraMap_toAlgebra]
-    let z : Away 𝒜 x := Away.mk 𝒜 (hx ▸ SetLike.mul_mem_graded hf
+    let z : Away 𝒜 x := Away.mk 𝒜 (hx ▸ SetLike.mul_mem_graded hf hg) (d + e)
+(g ^ e * f ^ (2 * e + d)) by
+      convert!
+        SetLike.mul_mem_graded (SetLike.pow_mem_graded e hg)
+          (SetLike.pow_mem_graded (2 * e + d) hf) using 2
+      ring
+    refine (isUnit_iff_exists_inv.mpr ⟨z, ?_⟩).pow _
+    ext
+    simp only [val_mul, val_one, awayMap_mk, Away.val_mk, z, Localization.mk_mul]
+    rw [← Localization.mk_one]; rw [Localization.mk_eq_mk_iff]; rw [Localization.r_iff_exists]
+    use 1
+    simp only [OneMemClass.coe_one, one_mul, Submonoid.coe_mul, mul_one, hx]
+    ring
+  · intro z
+    obtain ⟨n, s, hs, rfl⟩ := Away.mk_surjective 𝒜 (hx ▸ SetLike.mul_mem_graded hf hg) z
+    rcases d with - | d
+    · contradiction
+let t : Away 𝒜 f := Away.mk 𝒜 hf (n * (e + 1)) (s * g ^ (n * d)) by
+      convert! SetLike.mul_mem_graded hs (SetLike.pow_mem_graded _ hg) using 2; simp; ring
+    refine ⟨⟨t, ⟨_, ⟨n, rfl⟩⟩⟩, ?_⟩
+    ext
+    simp only [RingHom.algebraMap_toAlgebra, map_pow, awayMap_mk, val_mul, val_mk, val_pow,
+      Localization.mk_pow, Localization.mk_mul, t]
+    rw [Localization.mk_eq_mk_iff]; rw [Localization.r_iff_exists]
+    exact ⟨1, by simp; ring⟩
+  · intro a b e
+    obtain ⟨n, a, ha, rfl⟩ := Away.mk_surjective 𝒜 hf a
+    obtain ⟨m, b, hb, rfl⟩ := Away.mk_surjective 𝒜 hf b
+    replace e := congr_arg val e
+    simp only [RingHom.algebraMap_toAlgebra, awayMap_mk, val_mk,
+      Localization.mk_eq_mk_iff, Localization.r_iff_exists] at e
+    obtain ⟨⟨_, k, rfl⟩, hc⟩ := e
+    refine ⟨⟨_, k + m + n, rfl⟩, ?_⟩
+    ext
+    simp only [val_mul, val_pow, val_mk, Localization.mk_pow,
+      Localization.mk_eq_mk_iff, Localization.r_iff_exists, Submonoid.coe_mul, Localization.mk_mul,
+      SubmonoidClass.coe_pow, Subtype.exists, exists_prop]
+    refine ⟨_, ⟨k, rfl⟩, ?_⟩
+    rcases d with - | d
+    · contradiction
+    subst hx
+    convert! congr(f ^ (e * (k + m + n)) * g ^ (d * (k + m + n)) * $hc) using 1 <;> ring
 
 Depends on / 依赖: awayMap, toAlgebra
 -/
@@ -3209,7 +3351,44 @@ theorem Away.span_mk_prod_pow_eq_top
   rintro x -
   obtain ⟨⟨n, ⟨a, ha⟩, ⟨b, hb'⟩, ⟨j, (rfl : _ = b)⟩⟩, rfl⟩ := mk_surjective x
   by_cases hfj : f ^ j = 0
-  · exact (HH (HomogeneousLocalization.subsingleton _ ⟨_, hfj⟩)
+  · exact (HH (HomogeneousLocalization.subsingleton _ ⟨_, hfj⟩)).elim
+  have : DirectSum.decompose 𝒜 a n = ⟨a, ha⟩ := Subtype.ext (DirectSum.decompose_of_mem_same 𝒜 ha)
+  simp_rw [← this]
+  clear this ha
+  have : a in Submodule.span (𝒜 0) (Submonoid.closure (Set.range v)) := by
+    rw [← Algebra.adjoin_eq_span]; rw [hx]
+    trivial
+  induction this using Submodule.span_induction with
+  | mem a ha' =>
+    obtain ⟨ai, rfl⟩ := Submonoid.exists_of_mem_closure_range _ _ ha'
+    clear ha'
+    by_cases H : ∑ i, ai i • dv i = n
+    · apply Submodule.subset_span
+      refine ⟨j, ai, H.trans ?_, ?_⟩
+      · exact DirectSum.degree_eq_of_mem_mem 𝒜 hb'
+          (SetLike.pow_mem_graded j hf) hfj
+      · ext
+        simp only [val_mk, Away.val_mk]
+        congr
+        refine (DirectSum.decompose_of_mem_same _ ?_).symm
+        exact H ▸ SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i
+    · convert! zero_mem (Submodule.span (𝒜 0) _)
+      ext
+      have : (DirectSum.decompose 𝒜 (∏ i : ι', v i ^ ai i) n).1 = 0 := by
+        refine DirectSum.decompose_of_mem_ne _ ?_ H
+        exact SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i
+      simp [this, Localization.mk_zero]
+  | zero =>
+    convert! zero_mem (Submodule.span (𝒜 0) _)
+    ext; simp [Localization.mk_zero]
+  | add s t hs ht hs' ht' =>
+    convert! add_mem hs' ht'
+    ext; simp [← Localization.add_mk_self]
+  | smul r x hx hx' =>
+    convert! Submodule.smul_mem _ r hx'
+    ext
+    simp [Algebra.smul_def, algebraMap_eq, fromZeroRingHom, Localization.mk_mul,
+      -decompose_mul, coe_decompose_mul_of_left_mem_zero 𝒜 r.2]
 
 中文:
 定理 Away.span_mk_prod_pow_eq_top
@@ -3221,7 +3400,44 @@ theorem Away.span_mk_prod_pow_eq_top
   rintro x -
   obtain ⟨⟨n, ⟨a, ha⟩, ⟨b, hb'⟩, ⟨j, (rfl : _ = b)⟩⟩, rfl⟩ := mk_surjective x
   by_cases hfj : f ^ j = 0
-  · exact (HH (HomogeneousLocalization.subsingleton _ ⟨_, hfj⟩)
+  · exact (HH (HomogeneousLocalization.subsingleton _ ⟨_, hfj⟩)).elim
+  have : DirectSum.decompose 𝒜 a n = ⟨a, ha⟩ := Subtype.ext (DirectSum.decompose_of_mem_same 𝒜 ha)
+  simp_rw [← this]
+  clear this ha
+  have : a in Submodule.span (𝒜 0) (Submonoid.closure (Set.range v)) := by
+    rw [← Algebra.adjoin_eq_span]; rw [hx]
+    trivial
+  induction this using Submodule.span_induction with
+  | mem a ha' =>
+    obtain ⟨ai, rfl⟩ := Submonoid.exists_of_mem_closure_range _ _ ha'
+    clear ha'
+    by_cases H : ∑ i, ai i • dv i = n
+    · apply Submodule.subset_span
+      refine ⟨j, ai, H.trans ?_, ?_⟩
+      · exact DirectSum.degree_eq_of_mem_mem 𝒜 hb'
+          (SetLike.pow_mem_graded j hf) hfj
+      · ext
+        simp only [val_mk, Away.val_mk]
+        congr
+        refine (DirectSum.decompose_of_mem_same _ ?_).symm
+        exact H ▸ SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i
+    · convert! zero_mem (Submodule.span (𝒜 0) _)
+      ext
+      have : (DirectSum.decompose 𝒜 (∏ i : ι', v i ^ ai i) n).1 = 0 := by
+        refine DirectSum.decompose_of_mem_ne _ ?_ H
+        exact SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i
+      simp [this, Localization.mk_zero]
+  | zero =>
+    convert! zero_mem (Submodule.span (𝒜 0) _)
+    ext; simp [Localization.mk_zero]
+  | add s t hs ht hs' ht' =>
+    convert! add_mem hs' ht'
+    ext; simp [← Localization.add_mk_self]
+  | smul r x hx hx' =>
+    convert! Submodule.smul_mem _ r hx'
+    ext
+    simp [Algebra.smul_def, algebraMap_eq, fromZeroRingHom, Localization.mk_mul,
+      -decompose_mul, coe_decompose_mul_of_left_mem_zero 𝒜 r.2]
 
 Depends on / 依赖: DirectSum, DirectSum.decompose, DirectSum.decompose_of_mem_same, HomogeneousLocalization, HomogeneousLocalization.Away, HomogeneousLocalization.subsingleton, Set.range, Submodule, Submodule.span, Submonoid, Submonoid.closure, Subsingleton, Subsingleton.elim, Subtype, Subtype.ext, closure, decompose, decompose_of_mem_same, mk_surjective, simp_rw
 -/
@@ -3291,7 +3507,53 @@ theorem Away.adjoin_mk_prod_pow_eq_top_of_pos
   rw [← HomogeneousLocalization.Away.span_mk_prod_pow_eq_top hf v hx dv hxd]; rw [Submodule.span_le]
   rintro _ ⟨a, ai, hai, rfl⟩
   have H₀ : (a - ∑ i : ι', dv i * (ai i / d)) • d = ∑ k : ι', (ai k % d) • dv k := by
-    rw [sm
+    rw [smul_eq_mul]; rw [tsub_mul]; rw [← smul_eq_mul]; rw [← hai]
+    conv => enter [1, 1, 2, i]; rw [← Nat.mod_add_div (ai i) d]
+    simp_rw [smul_eq_mul, add_mul, Finset.sum_add_distrib,
+      mul_assoc, ← Finset.mul_sum, mul_comm d, mul_comm (_ / _)]
+    simp only [add_tsub_cancel_right]
+  have H : Away.mk 𝒜 hf a (∏ i, v i ^ ai i)
+      (hai ▸ SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i) =
+      Away.mk 𝒜 hf (a - ∑ i : ι', dv i * (ai i / d)) (∏ i, v i ^ (ai i % d))
+      (H₀ ▸ SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i) *
+      ∏ i, Away.isLocalizationElem hf (hxd i) ^ (ai i / d) := by
+    apply (show Function.Injective (algebraMap (Away 𝒜 f) (Localization.Away f))
+      from val_injective _)
+    simp only [map_pow, map_prod, map_mul]
+    simp only [HomogeneousLocalization.algebraMap_apply, val_mk,
+      Localization.mk_pow, Localization.mk_prod, Localization.mk_mul,
+      ← Finset.prod_mul_distrib, ← pow_add, ← pow_mul]
+    congr
+    · ext i
+      congr
+      exact Eq.symm (Nat.mod_add_div (ai i) d)
+    · simp only [SubmonoidClass.coe_finsetProd, ← pow_add, ← pow_mul,
+        Finset.prod_pow_eq_pow_sum, SubmonoidClass.coe_pow]
+      rw [tsub_add_cancel_of_le]
+      rcases d.eq_zero_or_pos with hd | hd
+      · simp [hd]
+      rw [← mul_le_mul_iff_of_pos_right hd]; rw [← smul_eq_mul (a := a)]; rw [← hai]; rw [Finset.sum_mul]
+      simp_rw [smul_eq_mul, mul_comm (ai _), mul_assoc]
+      gcongr
+      exact Nat.div_mul_le_self (ai _) d
+  rw [H]; rw [SetLike.mem_coe]
+  apply (Algebra.adjoin (𝒜 0) _).mul_mem
+  · apply Algebra.subset_adjoin
+    refine ⟨a - ∑ i : ι', dv i * (ai i / d), (ai · % d), H₀.symm, ?_, rfl⟩
+    rcases d.eq_zero_or_pos with hd | hd
+    · have : forall (x : ι'), ai x = 0 := by simpa [hd, fun i => (hxd' i).ne'] using hai
+      simp [this]
+    exact fun i => (Nat.mod_lt _ hd).le
+  apply prod_mem
+  · classical
+    rintro j -
+    apply pow_mem
+    apply Algebra.subset_adjoin
+    refine ⟨dv j, Pi.single j d, ?_, ?_, ?_⟩
+    · simp [Pi.single_apply, mul_comm]
+    · aesop (add simp Pi.single_apply)
+    ext
+    simp [Pi.single_apply]
 
 中文:
 定理 Away.adjoin_mk_prod_pow_eq_top_of_pos
@@ -3302,7 +3564,53 @@ theorem Away.adjoin_mk_prod_pow_eq_top_of_pos
   rw [← HomogeneousLocalization.Away.span_mk_prod_pow_eq_top hf v hx dv hxd]; rw [Submodule.span_le]
   rintro _ ⟨a, ai, hai, rfl⟩
   have H₀ : (a - ∑ i : ι', dv i * (ai i / d)) • d = ∑ k : ι', (ai k % d) • dv k := by
-    rw [sm
+    rw [smul_eq_mul]; rw [tsub_mul]; rw [← smul_eq_mul]; rw [← hai]
+    conv => enter [1, 1, 2, i]; rw [← Nat.mod_add_div (ai i) d]
+    simp_rw [smul_eq_mul, add_mul, Finset.sum_add_distrib,
+      mul_assoc, ← Finset.mul_sum, mul_comm d, mul_comm (_ / _)]
+    simp only [add_tsub_cancel_right]
+  have H : Away.mk 𝒜 hf a (∏ i, v i ^ ai i)
+      (hai ▸ SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i) =
+      Away.mk 𝒜 hf (a - ∑ i : ι', dv i * (ai i / d)) (∏ i, v i ^ (ai i % d))
+      (H₀ ▸ SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i) *
+      ∏ i, Away.isLocalizationElem hf (hxd i) ^ (ai i / d) := by
+    apply (show Function.Injective (algebraMap (Away 𝒜 f) (Localization.Away f))
+      from val_injective _)
+    simp only [map_pow, map_prod, map_mul]
+    simp only [HomogeneousLocalization.algebraMap_apply, val_mk,
+      Localization.mk_pow, Localization.mk_prod, Localization.mk_mul,
+      ← Finset.prod_mul_distrib, ← pow_add, ← pow_mul]
+    congr
+    · ext i
+      congr
+      exact Eq.symm (Nat.mod_add_div (ai i) d)
+    · simp only [SubmonoidClass.coe_finsetProd, ← pow_add, ← pow_mul,
+        Finset.prod_pow_eq_pow_sum, SubmonoidClass.coe_pow]
+      rw [tsub_add_cancel_of_le]
+      rcases d.eq_zero_or_pos with hd | hd
+      · simp [hd]
+      rw [← mul_le_mul_iff_of_pos_right hd]; rw [← smul_eq_mul (a := a)]; rw [← hai]; rw [Finset.sum_mul]
+      simp_rw [smul_eq_mul, mul_comm (ai _), mul_assoc]
+      gcongr
+      exact Nat.div_mul_le_self (ai _) d
+  rw [H]; rw [SetLike.mem_coe]
+  apply (Algebra.adjoin (𝒜 0) _).mul_mem
+  · apply Algebra.subset_adjoin
+    refine ⟨a - ∑ i : ι', dv i * (ai i / d), (ai · % d), H₀.symm, ?_, rfl⟩
+    rcases d.eq_zero_or_pos with hd | hd
+    · have : forall (x : ι'), ai x = 0 := by simpa [hd, fun i => (hxd' i).ne'] using hai
+      simp [this]
+    exact fun i => (Nat.mod_lt _ hd).le
+  apply prod_mem
+  · classical
+    rintro j -
+    apply pow_mem
+    apply Algebra.subset_adjoin
+    refine ⟨dv j, Pi.single j d, ?_, ?_, ?_⟩
+    · simp [Pi.single_apply, mul_comm]
+    · aesop (add simp Pi.single_apply)
+    ext
+    simp [Pi.single_apply]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Finset, Finset.mul_sum, Finset.sum_add_distrib, HomogeneousLocalization, HomogeneousLocalization.Away.span_mk_prod_pow_eq_top, Nat.mod_add_div, Submodule, Submodule.span_le, add_mul, adjoin, mod_add_div, mul_assoc, mul_comm, mul_sum, simp_rw, smul_eq_mul, span_le, span_mk_prod_pow_eq_top
 -/
@@ -3381,7 +3689,18 @@ theorem Away.adjoin_mk_prod_pow_eq_top
   swap
   · rw [← top_le_iff, ← hx, Algebra.adjoin_le_iff, Set.range_subset_iff]
     intro i
-    rcases (dv i
+    rcases (dv i).eq_zero_or_pos with hi | hi
+    · exact algebraMap_mem (R := 𝒜 0) _ ⟨v i, hi ▸ hxd i⟩
+    exact Algebra.subset_adjoin ⟨⟨i, by simpa [s] using hi⟩, rfl⟩
+  rw [← top_le_iff]; rw [← this]
+  apply Algebra.adjoin_mono
+  rintro _ ⟨a, ai, hai : ∑ x in s.attach, _ = _, h, rfl⟩
+  refine ⟨a, fun i => if hi : i in s then ai ⟨i, hi⟩ else 0, ?_, ?_, ?_⟩
+  · simpa [Finset.sum_attach_eq_sum_dite] using hai
+  · simp [apply_dite, dite_apply, h]
+  · congr 1
+    change _ = ∏ x in s.attach, _
+    simp [Finset.prod_attach_eq_prod_dite]
 
 中文:
 定理 Away.adjoin_mk_prod_pow_eq_top
@@ -3394,7 +3713,18 @@ theorem Away.adjoin_mk_prod_pow_eq_top
   swap
   · rw [← top_le_iff, ← hx, Algebra.adjoin_le_iff, Set.range_subset_iff]
     intro i
-    rcases (dv i
+    rcases (dv i).eq_zero_or_pos with hi | hi
+    · exact algebraMap_mem (R := 𝒜 0) _ ⟨v i, hi ▸ hxd i⟩
+    exact Algebra.subset_adjoin ⟨⟨i, by simpa [s] using hi⟩, rfl⟩
+  rw [← top_le_iff]; rw [← this]
+  apply Algebra.adjoin_mono
+  rintro _ ⟨a, ai, hai : ∑ x in s.attach, _ = _, h, rfl⟩
+  refine ⟨a, fun i => if hi : i in s then ai ⟨i, hi⟩ else 0, ?_, ?_, ?_⟩
+  · simpa [Finset.sum_attach_eq_sum_dite] using hai
+  · simp [apply_dite, dite_apply, h]
+  · congr 1
+    change _ = ∏ x in s.attach, _
+    simp [Finset.prod_attach_eq_prod_dite]
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le_iff, Algebra.adjoin_mono, Algebra.subset_adjoin, Away.adjoin_mk_prod_pow_eq_top_of_pos, Finset, Finset.univ.filter, Set.range_subset_iff, Subtype, Subtype.val, adjoin_le_iff, adjoin_mk_prod_pow_eq_top_of_pos, adjoin_mono, algebraMap_mem, classical, eq_zero_or_pos, filter, range_subset_iff, subset_adjoin, top_le_iff
 -/
@@ -3437,7 +3767,28 @@ lemma Away.finiteType
   choose dx hdx hxd using Subtype.forall'.mp hs'
   simp_rw [Subalgebra.fg_def, ← top_le_iff,
     ← Away.adjoin_mk_prod_pow_eq_top hf (ι' := s) Subtype.val (by simpa) dx hxd]
-  rcases d.eq_ze
+  rcases d.eq_zero_or_pos with hd | hd
+  · let f' := Away.mk 𝒜 hf 1 1 (by simp [hd, GradedOne.one_mem])
+    refine ⟨{f'}, Set.finite_singleton f', ?_⟩
+    rw [Algebra.adjoin_le_iff]
+    rintro _ ⟨a, ai, hai, hai', rfl⟩
+obtain rfl : ai = 0 := funext by simpa [hd, hdx] using hai
+    simp only [Finset.univ_eq_attach, Pi.zero_apply, pow_zero, Finset.prod_const_one, mem_coe]
+    convert! pow_mem (Algebra.self_mem_adjoin_singleton (𝒜 0) f') a using 1
+    ext
+    simp [f', Localization.mk_pow]
+  refine ⟨_, ?_, le_rfl⟩
+  let b := ∑ i, dx i
+  let s' : Set ((Fin (b + 1)) × (s -> Fin (d + 1))) := { ai | ∑ i, (ai.2 i).1 * dx i = ai.1 * d }
+  let F : s' -> Away 𝒜 f := fun ai => Away.mk 𝒜 hf ai.1.1.1 (∏ i, i ^ (ai.1.2 i).1)
+    (by convert! SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i; exact ai.2.symm)
+  apply (Set.finite_range F).subset
+  rintro _ ⟨a, ai, hai, hai', rfl⟩
+  refine ⟨⟨⟨⟨a, ?_⟩, fun i => ⟨ai i, (hai' i).trans_lt d.lt_succ_self⟩⟩, hai⟩, rfl⟩
+  rw [Nat.lt_succ_iff]; rw [← mul_le_mul_iff_of_pos_right hd]; rw [← smul_eq_mul]; rw [← hai]; rw [Finset.sum_mul]
+  simp_rw [smul_eq_mul, mul_comm _ d]
+  gcongr
+  exact hai' _
 
 中文:
 引理 Away.finiteType
@@ -3448,7 +3799,28 @@ lemma Away.finiteType
   choose dx hdx hxd using Subtype.forall'.mp hs'
   simp_rw [Subalgebra.fg_def, ← top_le_iff,
     ← Away.adjoin_mk_prod_pow_eq_top hf (ι' := s) Subtype.val (by simpa) dx hxd]
-  rcases d.eq_ze
+  rcases d.eq_zero_or_pos with hd | hd
+  · let f' := Away.mk 𝒜 hf 1 1 (by simp [hd, GradedOne.one_mem])
+    refine ⟨{f'}, Set.finite_singleton f', ?_⟩
+    rw [Algebra.adjoin_le_iff]
+    rintro _ ⟨a, ai, hai, hai', rfl⟩
+obtain rfl : ai = 0 := funext by simpa [hd, hdx] using hai
+    simp only [Finset.univ_eq_attach, Pi.zero_apply, pow_zero, Finset.prod_const_one, mem_coe]
+    convert! pow_mem (Algebra.self_mem_adjoin_singleton (𝒜 0) f') a using 1
+    ext
+    simp [f', Localization.mk_pow]
+  refine ⟨_, ?_, le_rfl⟩
+  let b := ∑ i, dx i
+  let s' : Set ((Fin (b + 1)) × (s -> Fin (d + 1))) := { ai | ∑ i, (ai.2 i).1 * dx i = ai.1 * d }
+  let F : s' -> Away 𝒜 f := fun ai => Away.mk 𝒜 hf ai.1.1.1 (∏ i, i ^ (ai.1.2 i).1)
+    (by convert! SetLike.prod_pow_mem_graded _ _ _ _ fun i _ => hxd i; exact ai.2.symm)
+  apply (Set.finite_range F).subset
+  rintro _ ⟨a, ai, hai, hai', rfl⟩
+  refine ⟨⟨⟨⟨a, ?_⟩, fun i => ⟨ai i, (hai' i).trans_lt d.lt_succ_self⟩⟩, hai⟩, rfl⟩
+  rw [Nat.lt_succ_iff]; rw [← mul_le_mul_iff_of_pos_right hd]; rw [← smul_eq_mul]; rw [← hai]; rw [Finset.sum_mul]
+  simp_rw [smul_eq_mul, mul_comm _ d]
+  gcongr
+  exact hai' _
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le_iff, Away.adjoin_mk_prod_pow_eq_top, Away.mk, GradedAlgebra, GradedAlgebra.exists_finset_adjoin_eq_top_and_homogeneous_ne_zero, GradedOne, GradedOne.one_mem, Set.finite_singleton, Subalgebra, Subalgebra.fg_def, Subtype, Subtype.forall, Subtype.val, adjoin_le_iff, adjoin_mk_prod_pow_eq_top, d.eq_zero_or_pos, eq_zero_or_pos, exists_finset_adjoin_eq_top_and_homogeneous_ne_zero, fg_def
 -/

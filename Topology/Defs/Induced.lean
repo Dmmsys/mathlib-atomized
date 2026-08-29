@@ -74,7 +74,9 @@ definition induced
     exact ⟨s'₁ inter s'₂, hs₁.inter hs₂, preimage_inter⟩
   isOpen_sUnion S h := by
     choose! g hgo hfg using h
-refine ⟨⋃₀ (g '' S), isOpen_sUni
+refine ⟨⋃₀ (g '' S), isOpen_sUnion forall_mem_image.2 hgo, ?_⟩
+    rw [preimage_sUnion]; rw [biUnion_image]; rw [sUnion_eq_biUnion]
+    exact iUnion₂_congr hfg
 
 中文:
 定义 induced
@@ -86,7 +88,9 @@ refine ⟨⋃₀ (g '' S), isOpen_sUni
     exact ⟨s'₁ inter s'₂, hs₁.inter hs₂, preimage_inter⟩
   isOpen_sUnion S h := by
     choose! g hgo hfg using h
-refine ⟨⋃₀ (g '' S), isOpen_sUni
+refine ⟨⋃₀ (g '' S), isOpen_sUnion forall_mem_image.2 hgo, ?_⟩
+    rw [preimage_sUnion]; rw [biUnion_image]; rw [sUnion_eq_biUnion]
+    exact iUnion₂_congr hfg
 
 Depends on / 依赖: IsOpen
 -/

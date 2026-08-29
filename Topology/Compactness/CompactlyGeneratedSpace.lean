@@ -194,7 +194,10 @@ lemma uCompactlyGeneratedSpace_of_continuous_maps
     apply h (tY := compactlyGenerated.{u} X)
     intro S g
     let f : (Σ (i : (T : CompHaus.{u}) × C(T, X)), i.fst) -> X := fun ⟨⟨_, i⟩, s⟩ => i s
-    suffices forall (i : (T : CompHaus.{u}) 
+    suffices forall (i : (T : CompHaus.{u}) × C(T, X)),
+      Continuous[inferInstance, compactlyGenerated X] (fun (a : i.fst) => f ⟨i, a⟩) from this ⟨S, g⟩
+    rw [← @continuous_sigma_iff]
+    apply continuous_coinduced_rng
 
 中文:
 引理 uCompactlyGeneratedSpace_of_continuous_maps
@@ -205,7 +208,10 @@ lemma uCompactlyGeneratedSpace_of_continuous_maps
     apply h (tY := compactlyGenerated.{u} X)
     intro S g
     let f : (Σ (i : (T : CompHaus.{u}) × C(T, X)), i.fst) -> X := fun ⟨⟨_, i⟩, s⟩ => i s
-    suffices forall (i : (T : CompHaus.{u}) 
+    suffices forall (i : (T : CompHaus.{u}) × C(T, X)),
+      Continuous[inferInstance, compactlyGenerated X] (fun (a : i.fst) => f ⟨i, a⟩) from this ⟨S, g⟩
+    rw [← @continuous_sigma_iff]
+    apply continuous_coinduced_rng
 
 Depends on / 依赖: CompHaus, Continuous, compactlyGenerated, continuous_coinduced_rng, continuous_id_iff_le, continuous_sigma_iff, i.fst
 -/
@@ -382,7 +388,11 @@ instance [UCompactlyGeneratedSpace.{u}
   all_goals
     refine UCompactlyGeneratedSpace.isClosed fun S ⟨f, hf⟩ => ?_
   · let g : ULift.{v} S -> X oplus Y := Sum.inl ∘ f ∘ ULift.down
-have hg : Continuous g := continuous_inl.comp hf.comp continuous_ulift
+have hg : Continuous g := continuous_inl.comp hf.comp continuous_uliftDown
+    exact (h (CompHaus.of (ULift.{v} S)) ⟨g, hg⟩).preimage continuous_uliftUp
+  · let g : ULift.{u} S -> X oplus Y := Sum.inr ∘ f ∘ ULift.down
+have hg : Continuous g := continuous_inr.comp hf.comp continuous_uliftDown
+    exact (h (CompHaus.of (ULift.{u} S)) ⟨g, hg⟩).preimage continuous_uliftUp
 
 中文:
 实例 [UCompactlyGenerated空间.{u}
@@ -392,7 +402,11 @@ have hg : Continuous g := continuous_inl.comp hf.comp continuous_ulift
   all_goals
     refine UCompactlyGeneratedSpace.isClosed fun S ⟨f, hf⟩ => ?_
   · let g : ULift.{v} S -> X oplus Y := Sum.inl ∘ f ∘ ULift.down
-have hg : Continuous g := continuous_inl.comp hf.comp continuous_ulift
+have hg : Continuous g := continuous_inl.comp hf.comp continuous_uliftDown
+    exact (h (CompHaus.of (ULift.{v} S)) ⟨g, hg⟩).preimage continuous_uliftUp
+  · let g : ULift.{u} S -> X oplus Y := Sum.inr ∘ f ∘ ULift.down
+have hg : Continuous g := continuous_inr.comp hf.comp continuous_uliftDown
+    exact (h (CompHaus.of (ULift.{u} S)) ⟨g, hg⟩).preimage continuous_uliftUp
 
 Depends on / 依赖: CompHaus, CompHaus.of, Continuous, Sum.inl, Sum.inr, UCompactlyGeneratedSpace, UCompactlyGeneratedSpace.isClosed, ULift.down, all_goals, continuous_inl, continuous_inl.comp, continuous_inr, continuous_inr.comp, continuous_uli, continuous_uliftDown, continuous_uliftUp, hf.comp, isClosed, isClosed_sum_iff, preimage
 -/

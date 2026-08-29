@@ -103,6 +103,7 @@ instance instCommMonoid
   npow_zero _ := by ext; apply Nat.zero_mul
   npow_succ n a := by ext; apply Nat.succ_mul
 
+@[to_additive]
 
 中文:
 实例 instCommMonoid
@@ -117,6 +118,7 @@ instance instCommMonoid
   npow_zero _ := by ext; apply Nat.zero_mul
   npow_succ n a := by ext; apply Nat.succ_mul
 
+@[to_additive]
 -/
 instance instCommMonoid : CommMonoid (IterateMulAct f) where
   one := ⟨0⟩

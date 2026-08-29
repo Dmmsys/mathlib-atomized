@@ -259,7 +259,7 @@ instance instSemiring
   right_distrib := fun _ _ _ => add_comp _ _ _
   natCast := fun n => n • (1 : M ->ₗ[R] M)
   natCast_zero := zero_smul Nat (1 : M ->ₗ[R] M)
-  n
+  natCast_succ := fun n => AddMonoid.nsmul_succ n (1 : M ->ₗ[R] M)
 
 中文:
 实例 instSemiring
@@ -273,7 +273,7 @@ instance instSemiring
   right_distrib := fun _ _ _ => add_comp _ _ _
   natCast := fun n => n • (1 : M ->ₗ[R] M)
   natCast_zero := zero_smul Nat (1 : M ->ₗ[R] M)
-  n
+  natCast_succ := fun n => AddMonoid.nsmul_succ n (1 : M ->ₗ[R] M)
 
 Depends on / 依赖: AddMonoidWithOne, AddMonoidWithOne.unary
 -/

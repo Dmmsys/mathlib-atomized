@@ -171,7 +171,10 @@ lemma valMinAbs_mul_two_eq_iff
     rw [if_pos h]; rw [← Int.natCast_inj]; rw [Nat.cast_mul]; rw [Nat.cast_two]; rw [mul_comm]; rw [Int.natCast_add]; rw [Nat.cast_one]
   apply iff_of_false _ (mt _ h)
   · intro he
-    rw [← a.valMinAbs_nonneg
+    rw [← a.valMinAbs_nonneg_iff]; rw [← mul_nonneg_iff_left_nonneg_of_pos]; rw [he] at h
+    exacts [h (Nat.cast_nonneg _), zero_lt_two]
+  · rw [mul_comm]
+    exact fun h => (Nat.le_div_iff_mul_le zero_lt_two).2 h.le
 
 中文:
 引理 valMinAbs_mul_two_eq_iff
@@ -185,7 +188,10 @@ lemma valMinAbs_mul_two_eq_iff
     rw [if_pos h]; rw [← Int.natCast_inj]; rw [Nat.cast_mul]; rw [Nat.cast_two]; rw [mul_comm]; rw [Int.natCast_add]; rw [Nat.cast_one]
   apply iff_of_false _ (mt _ h)
   · intro he
-    rw [← a.valMinAbs_nonneg
+    rw [← a.valMinAbs_nonneg_iff]; rw [← mul_nonneg_iff_left_nonneg_of_pos]; rw [he] at h
+    exacts [h (Nat.cast_nonneg _), zero_lt_two]
+  · rw [mul_comm]
+    exact fun h => (Nat.le_div_iff_mul_le zero_lt_two).2 h.le
 
 Depends on / 依赖: Int.natCast_add, Int.natCast_inj, Nat.cast_mul, Nat.cast_nonneg, Nat.cast_one, Nat.cast_two, Nat.le_div_iff_mul_le, a.val, a.valMinAbs_nonneg_iff, cast_mul, cast_nonneg, cast_one, cast_two, exacts, h.le, if_pos, iff_of_false, le_div_iff_mul_le, mul_comm, mul_nonneg_iff_left_nonneg_of_pos
 -/
@@ -248,7 +254,9 @@ lemma valMinAbs_spec
     apply @Int.eq_zero_of_abs_lt_dvd n
     · rw [← intCast_zmod_eq_zero_iff_dvd, Int.cast_sub, coe_valMinAbs, h.1, sub_self]
     rw [← mul_lt_mul_iff_left₀ (@zero_lt_two Int _ _ _ _ _)]
-    nth_rw 1
+    nth_rw 1 [← abs_eq_self.2 (@zero_le_two Int _ _ _ _)]
+    rw [← abs_mul]; rw [sub_mul]; rw [abs_lt]
+    constructor <;> linarith only [x.valMinAbs_mem_Ioc.1, x.valMinAbs_mem_Ioc.2, h.2.1, h.2.2]
 
 中文:
 引理 valMinAbs_spec
@@ -259,7 +267,9 @@ lemma valMinAbs_spec
     apply @Int.eq_zero_of_abs_lt_dvd n
     · rw [← intCast_zmod_eq_zero_iff_dvd, Int.cast_sub, coe_valMinAbs, h.1, sub_self]
     rw [← mul_lt_mul_iff_left₀ (@zero_lt_two Int _ _ _ _ _)]
-    nth_rw 1
+    nth_rw 1 [← abs_eq_self.2 (@zero_le_two Int _ _ _ _)]
+    rw [← abs_mul]; rw [sub_mul]; rw [abs_lt]
+    constructor <;> linarith only [x.valMinAbs_mem_Ioc.1, x.valMinAbs_mem_Ioc.2, h.2.1, h.2.2]
 
 Depends on / 依赖: Int.cast_sub, Int.eq_zero_of_abs_lt_dvd, abs_eq_self, abs_lt, abs_mul, cast_sub, coe_valMinAbs, eq_zero_of_abs_lt_dvd, intCast_zmod_eq_zero_iff_dvd, nth_rw, sub_eq_zero, sub_mul, sub_self, valMinAbs_mem_Ioc, x.coe_valMinAbs.symm, x.valMinAbs_mem_Ioc, zero_le_two, zero_lt_two
 -/
@@ -387,7 +397,7 @@ lemma natCast_natAbs_valMinAbs
   split_ifs
   · rw [Int.natAbs_natCast, natCast_zmod_val]
   · rw [← Int.cast_natCast, Int.ofNat_natAbs_of_nonpos this, Int.cast_neg, Int.cast_sub,
-      Int.cast_natCast, Int.c
+      Int.cast_natCast, Int.cast_natCast, natCast_self, sub_zero, natCast_zmod_val]
 
 中文:
 引理 natCast_natAbs_valMinAbs
@@ -400,7 +410,7 @@ lemma natCast_natAbs_valMinAbs
   split_ifs
   · rw [Int.natAbs_natCast, natCast_zmod_val]
   · rw [← Int.cast_natCast, Int.ofNat_natAbs_of_nonpos this, Int.cast_neg, Int.cast_sub,
-      Int.cast_natCast, Int.c
+      Int.cast_natCast, Int.cast_natCast, natCast_self, sub_zero, natCast_zmod_val]
 
 Depends on / 依赖: Int.cast_natCast, Int.cast_neg, Int.cast_sub, Int.natAbs_natCast, Int.ofNat_le, Int.ofNat_natAbs_of_nonpos, a.val, a.val_le, cast_natCast, cast_neg, cast_sub, natAbs_natCast, natCast_self, natCast_zmod_val, ofNat_le, ofNat_natAbs_of_nonpos, split_ifs, sub_nonpos, sub_zero, valMinAbs_def_pos
 -/

@@ -150,7 +150,16 @@ theorem frattini_nilpotent
   rw [q]; clear q
   -- Consider each prime `p` and Sylow `p`-subgroup `P` of `frattini G`.
   intro p p_prime P
-  -- The Frattini ar
+  -- The Frattini argument shows that the normalizer of `P` in `G`
+  -- together with `frattini G` generates `G`.
+  have frattini_argument := Sylow.normalizer_sup_eq_top P
+  -- and hence by the nongenerating property of the Frattini subgroup that
+  -- the normalizer of `P` in `G` is `G`.
+  have normalizer_P := frattini_nongenerating frattini_argument
+  -- This means that `P` is normal as a subgroup of `G`
+  have P_normal_in_G : (map (frattini G).subtype P).Normal := normalizer_eq_top_iff.mp normalizer_P
+  -- and hence also as a subgroup of `frattini G`, which was the remaining goal.
+  exact P_normal_in_G.of_map_subtype
 
 中文:
 定理 frattini_nilpotent
@@ -162,7 +171,16 @@ theorem frattini_nilpotent
   rw [q]; clear q
   -- Consider each prime `p` and Sylow `p`-subgroup `P` of `frattini G`.
   intro p p_prime P
-  -- The Frattini ar
+  -- The Frattini argument shows that the normalizer of `P` in `G`
+  -- together with `frattini G` generates `G`.
+  have frattini_argument := Sylow.normalizer_sup_eq_top P
+  -- and hence by the nongenerating property of the Frattini subgroup that
+  -- the normalizer of `P` in `G` is `G`.
+  have normalizer_P := frattini_nongenerating frattini_argument
+  -- This means that `P` is normal as a subgroup of `G`
+  have P_normal_in_G : (map (frattini G).subtype P).Normal := normalizer_eq_top_iff.mp normalizer_P
+  -- and hence also as a subgroup of `frattini G`, which was the remaining goal.
+  exact P_normal_in_G.of_map_subtype
 -/
 theorem frattini_nilpotent [Finite G] : Group.IsNilpotent (frattini G) := by
   -- We use the characterisation of nilpotency in terms of all Sylow subgroups being normal.

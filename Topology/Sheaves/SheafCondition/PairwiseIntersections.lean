@@ -178,7 +178,91 @@ instance :
           ⟨[{ left := ⟨⟨⟩⟩
               right := pair i i'
               hom := ObjectProperty.homMk (homOfLE
-                (by simpa using le_
+                (by simpa using le_inf a.hom.le b.hom.le)) }, _], ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inr
+              ⟨{ left := 𝟙 _
+                  right := left i i' }⟩)
+            (List.IsChain.cons_cons
+              (Or.inl
+                ⟨{ left := 𝟙 _
+                    right := right i i' }⟩)
+              (List.IsChain.singleton _))
+      · refine
+          ⟨[{ left := ⟨⟨⟩⟩
+                right := pair i' i
+                hom := ObjectProperty.homMk (homOfLE
+                  (le_inf (b.hom.le.trans (by simp)) a.hom.le)) },
+              { left := ⟨⟨⟩⟩
+                right := single i'
+                hom := ObjectProperty.homMk (homOfLE (b.hom.le.trans (by simp))) }, _], ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inr
+              ⟨{ left := 𝟙 _
+                  right := right i' i }⟩)
+            (List.IsChain.cons_cons
+              (Or.inl
+                ⟨{ left := 𝟙 _
+                    right := left i' i }⟩)
+              (List.IsChain.cons_cons
+                (Or.inr
+                  ⟨{ left := 𝟙 _
+                      right := left i' j' }⟩)
+                (List.IsChain.singleton _)))
+      · refine
+          ⟨[{ left := ⟨⟨⟩⟩
+                right := single i
+                hom := ObjectProperty.homMk (homOfLE (a.hom.le.trans (by simp))) },
+              { left := ⟨⟨⟩⟩
+                right := pair i i'
+                hom := ObjectProperty.homMk (homOfLE
+                  (le_inf ((a.hom.le).trans (by simp)) b.hom.le)) }, _],
+                ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inl
+              ⟨{ left := 𝟙 _
+                  right := left i j }⟩)
+            (List.IsChain.cons_cons
+              (Or.inr
+                ⟨{ left := 𝟙 _
+                    right := left i i' }⟩)
+              (List.IsChain.cons_cons
+                (Or.inl
+                  ⟨{ left := 𝟙 _
+                      right := right i i' }⟩)
+                (List.IsChain.singleton _)))
+      · refine
+          ⟨[{ left := ⟨⟨⟩⟩
+                right := single i
+                hom := ObjectProperty.homMk (homOfLE (a.hom.le.trans (by simp))) },
+              { left := ⟨⟨⟩⟩
+                right := pair i i'
+                hom := ObjectProperty.homMk (homOfLE
+                  (le_inf (a.hom.le.trans (by simp)) (b.hom.le.trans (by simp)))) },
+              { left := ⟨⟨⟩⟩
+                right := single i'
+                hom := ObjectProperty.homMk (homOfLE (b.hom.le.trans (by simp))) }, _], ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inl
+              ⟨{ left := 𝟙 _
+                  right := left i j }⟩)
+            (List.IsChain.cons_cons
+              (Or.inr
+                ⟨{ left := 𝟙 _
+                    right := left i i' }⟩)
+              (List.IsChain.cons_cons
+                (Or.inl
+                  ⟨{ left := 𝟙 _
+                      right := right i i' }⟩)
+                (List.IsChain.cons_cons
+                  (Or.inr
+                    ⟨{ left := 𝟙 _
+                        right := left i' j' }⟩)
+                  (List.IsChain.singleton _))))⟩
 
 中文:
 实例 :
@@ -190,7 +274,91 @@ instance :
           ⟨[{ left := ⟨⟨⟩⟩
               right := pair i i'
               hom := ObjectProperty.homMk (homOfLE
-                (by simpa using le_
+                (by simpa using le_inf a.hom.le b.hom.le)) }, _], ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inr
+              ⟨{ left := 𝟙 _
+                  right := left i i' }⟩)
+            (List.IsChain.cons_cons
+              (Or.inl
+                ⟨{ left := 𝟙 _
+                    right := right i i' }⟩)
+              (List.IsChain.singleton _))
+      · refine
+          ⟨[{ left := ⟨⟨⟩⟩
+                right := pair i' i
+                hom := ObjectProperty.homMk (homOfLE
+                  (le_inf (b.hom.le.trans (by simp)) a.hom.le)) },
+              { left := ⟨⟨⟩⟩
+                right := single i'
+                hom := ObjectProperty.homMk (homOfLE (b.hom.le.trans (by simp))) }, _], ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inr
+              ⟨{ left := 𝟙 _
+                  right := right i' i }⟩)
+            (List.IsChain.cons_cons
+              (Or.inl
+                ⟨{ left := 𝟙 _
+                    right := left i' i }⟩)
+              (List.IsChain.cons_cons
+                (Or.inr
+                  ⟨{ left := 𝟙 _
+                      right := left i' j' }⟩)
+                (List.IsChain.singleton _)))
+      · refine
+          ⟨[{ left := ⟨⟨⟩⟩
+                right := single i
+                hom := ObjectProperty.homMk (homOfLE (a.hom.le.trans (by simp))) },
+              { left := ⟨⟨⟩⟩
+                right := pair i i'
+                hom := ObjectProperty.homMk (homOfLE
+                  (le_inf ((a.hom.le).trans (by simp)) b.hom.le)) }, _],
+                ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inl
+              ⟨{ left := 𝟙 _
+                  right := left i j }⟩)
+            (List.IsChain.cons_cons
+              (Or.inr
+                ⟨{ left := 𝟙 _
+                    right := left i i' }⟩)
+              (List.IsChain.cons_cons
+                (Or.inl
+                  ⟨{ left := 𝟙 _
+                      right := right i i' }⟩)
+                (List.IsChain.singleton _)))
+      · refine
+          ⟨[{ left := ⟨⟨⟩⟩
+                right := single i
+                hom := ObjectProperty.homMk (homOfLE (a.hom.le.trans (by simp))) },
+              { left := ⟨⟨⟩⟩
+                right := pair i i'
+                hom := ObjectProperty.homMk (homOfLE
+                  (le_inf (a.hom.le.trans (by simp)) (b.hom.le.trans (by simp)))) },
+              { left := ⟨⟨⟩⟩
+                right := single i'
+                hom := ObjectProperty.homMk (homOfLE (b.hom.le.trans (by simp))) }, _], ?_, rfl⟩
+        exact
+          List.IsChain.cons_cons
+            (Or.inl
+              ⟨{ left := 𝟙 _
+                  right := left i j }⟩)
+            (List.IsChain.cons_cons
+              (Or.inr
+                ⟨{ left := 𝟙 _
+                    right := left i i' }⟩)
+              (List.IsChain.cons_cons
+                (Or.inl
+                  ⟨{ left := 𝟙 _
+                      right := right i i' }⟩)
+                (List.IsChain.cons_cons
+                  (Or.inr
+                    ⟨{ left := 𝟙 _
+                        right := left i' j' }⟩)
+                  (List.IsChain.singleton _))))⟩
 
 Depends on / 依赖: IsChain, List.IsChain.cons_cons, List.IsChain.singleton, ObjectProperty, ObjectProperty.homMk, Or.inl, Or.inr, a.hom.le, b.hom.le, cons_cons, homOfLE, isConnected_of_zigzag, le_inf, singleton
 -/
@@ -345,7 +513,21 @@ definition isLimitOpensLeCoverEquivPairwise
     IsLimit (F.mapCone (opensLeCoverCocone U).op) ≃
         IsLimit ((F.mapCone (opensLeCoverCocone U).op).whisker (pairwiseToOpensLeCover U).op) :=
       (Functor.Initial.isLimitWhiskerEquiv (pairwiseToOpensLeCover U).op _).symm
-    _ ≃ IsLimit (F.mapCone ((opensLeCoverCocone U).op.whisker (pa
+    _ ≃ IsLimit (F.mapCone ((opensLeCoverCocone U).op.whisker (pairwiseToOpensLeCover U).op)) :=
+      (IsLimit.equivIsoLimit F.mapConeWhisker.symm)
+    _ ≃
+        IsLimit
+          ((Cone.postcomposeEquivalence _).functor.obj
+            (F.mapCone ((opensLeCoverCocone U).op.whisker (pairwiseToOpensLeCover U).op))) :=
+      (IsLimit.postcomposeHomEquiv _ _).symm
+    _ ≃
+        IsLimit
+          (F.mapCone
+            ((Cone.postcomposeEquivalence _).functor.obj
+              ((opensLeCoverCocone U).op.whisker (pairwiseToOpensLeCover U).op))) :=
+      (IsLimit.equivIsoLimit (Functor.mapConePostcomposeEquivalenceFunctor _).symm)
+    _ ≃ IsLimit (F.mapCone (Pairwise.cocone U).op) :=
+      IsLimit.equivIsoLimit ((Cone.functoriality _ _).mapIso (pairwiseCoconeIso U :).symm)
 
 中文:
 定义 isLimitOpensLeCoverEquivPairwise
@@ -354,7 +536,21 @@ definition isLimitOpensLeCoverEquivPairwise
     IsLimit (F.mapCone (opensLeCoverCocone U).op) ≃
         IsLimit ((F.mapCone (opensLeCoverCocone U).op).whisker (pairwiseToOpensLeCover U).op) :=
       (Functor.Initial.isLimitWhiskerEquiv (pairwiseToOpensLeCover U).op _).symm
-    _ ≃ IsLimit (F.mapCone ((opensLeCoverCocone U).op.whisker (pa
+    _ ≃ IsLimit (F.mapCone ((opensLeCoverCocone U).op.whisker (pairwiseToOpensLeCover U).op)) :=
+      (IsLimit.equivIsoLimit F.mapConeWhisker.symm)
+    _ ≃
+        IsLimit
+          ((Cone.postcomposeEquivalence _).functor.obj
+            (F.mapCone ((opensLeCoverCocone U).op.whisker (pairwiseToOpensLeCover U).op))) :=
+      (IsLimit.postcomposeHomEquiv _ _).symm
+    _ ≃
+        IsLimit
+          (F.mapCone
+            ((Cone.postcomposeEquivalence _).functor.obj
+              ((opensLeCoverCocone U).op.whisker (pairwiseToOpensLeCover U).op))) :=
+      (IsLimit.equivIsoLimit (Functor.mapConePostcomposeEquivalenceFunctor _).symm)
+    _ ≃ IsLimit (F.mapCone (Pairwise.cocone U).op) :=
+      IsLimit.equivIsoLimit ((Cone.functoriality _ _).mapIso (pairwiseCoconeIso U :).symm)
 
 Depends on / 依赖: Cone.postcomposeEquivalence, F.mapCone, F.mapConeWhisker.symm, Functor, Functor.Initial.isLimitWhiskerEquiv, Initial, IsLimit, IsLimit.equivIsoLimit, equivIsoLimit, functor, functor.obj, isLimitWhiskerEquiv, mapCone, mapConeWhisker, op.whisker, opensLeCoverCocone, pairwiseToOpensLeCover, postcomposeEquivalence, whisker
 -/
@@ -602,7 +798,29 @@ definition interUnionPullbackConeLift
     constructor
     · rintro (h | h)
       exacts [⟨⟨WalkingPair.left⟩, h⟩, ⟨⟨WalkingPair.right⟩, h⟩]
-    · rintro ⟨⟨_ | _⟩, 
+    · rintro ⟨⟨_ | _⟩, h⟩
+      exacts [Or.inl h, Or.inr h]
+  refine
+    (F.presheaf.isSheaf_iff_isSheafPairwiseIntersections.mp F.2 ι).some.lift
+        ⟨s.pt,
+          { app := ?_
+            naturality := ?_ }⟩ ≫
+      F.1.map (eqToHom hι).op
+  · rintro ((_ | _) | (_ | _))
+    exacts [s.fst, s.snd, s.fst ≫ F.1.map (homOfLE inf_le_left).op,
+      s.snd ≫ F.1.map (homOfLE inf_le_left).op]
+  rintro ⟨i⟩ ⟨j⟩ f
+  let g : j ⟶ i := f.unop
+  have : f = g.op := rfl
+  clear_value g
+  subst this
+  rcases i with (⟨⟨_ | _⟩⟩ | ⟨⟨_ | _⟩, ⟨_⟩⟩) <;>
+  rcases j with (⟨⟨_ | _⟩⟩ | ⟨⟨_ | _⟩, ⟨_⟩⟩) <;>
+  rcases g with ⟨⟩ <;>
+  dsimp [Pairwise.diagram] <;>
+  simp only [ι, Category.id_comp, s.condition, CategoryTheory.Functor.map_id, Category.comp_id]
+  rw [← cancel_mono (F.1.map (eqToHom <| inf_comm U V : U ⊓ V ⟶ _).op)]; rw [Category.assoc]; rw [Category.assoc]; rw [← F.1.map_comp]; rw [← F.1.map_comp]
+  exact s.condition.symm
 
 中文:
 定义 interUnionPullbackConeLift
@@ -615,7 +833,29 @@ definition interUnionPullbackConeLift
     constructor
     · rintro (h | h)
       exacts [⟨⟨WalkingPair.left⟩, h⟩, ⟨⟨WalkingPair.right⟩, h⟩]
-    · rintro ⟨⟨_ | _⟩, 
+    · rintro ⟨⟨_ | _⟩, h⟩
+      exacts [Or.inl h, Or.inr h]
+  refine
+    (F.presheaf.isSheaf_iff_isSheafPairwiseIntersections.mp F.2 ι).some.lift
+        ⟨s.pt,
+          { app := ?_
+            naturality := ?_ }⟩ ≫
+      F.1.map (eqToHom hι).op
+  · rintro ((_ | _) | (_ | _))
+    exacts [s.fst, s.snd, s.fst ≫ F.1.map (homOfLE inf_le_left).op,
+      s.snd ≫ F.1.map (homOfLE inf_le_left).op]
+  rintro ⟨i⟩ ⟨j⟩ f
+  let g : j ⟶ i := f.unop
+  have : f = g.op := rfl
+  clear_value g
+  subst this
+  rcases i with (⟨⟨_ | _⟩⟩ | ⟨⟨_ | _⟩, ⟨_⟩⟩) <;>
+  rcases j with (⟨⟨_ | _⟩⟩ | ⟨⟨_ | _⟩, ⟨_⟩⟩) <;>
+  rcases g with ⟨⟩ <;>
+  dsimp [Pairwise.diagram] <;>
+  simp only [ι, Category.id_comp, s.condition, CategoryTheory.Functor.map_id, Category.comp_id]
+  rw [← cancel_mono (F.1.map (eqToHom <| inf_comm U V : U ⊓ V ⟶ _).op)]; rw [Category.assoc]; rw [Category.assoc]; rw [← F.1.map_comp]; rw [← F.1.map_comp]
+  exact s.condition.symm
 
 Depends on / 依赖: F.presheaf.isSheaf_iff_isSheafPairwiseIntersections.mp, Opens.coe_iSup, Or.inl, Or.inr, Set.mem_iUnion, WalkingPair, WalkingPair.casesOn, WalkingPair.left, WalkingPair.right, casesOn, coe_iSup, eqToHom, exacts, isSheaf_iff_isSheafPairwiseIntersections, j.down, mem_iUnion, naturality, presheaf, s.fst, s.pt
 -/
@@ -726,7 +966,32 @@ definition isLimitPullbackCone
     · rintro (h | h)
       exacts [⟨⟨WalkingPair.left⟩, h⟩, ⟨⟨WalkingPair.right⟩, h⟩]
     · rintro ⟨⟨_ | _⟩, h⟩
-
+      exacts [Or.inl h, Or.inr h]
+  apply PullbackCone.isLimitAux'
+  intro s
+  use interUnionPullbackConeLift F U V s
+  refine ⟨?_, ?_, ?_⟩
+  · apply interUnionPullbackConeLift_left
+  · apply interUnionPullbackConeLift_right
+  · intro m h₁ h₂
+    rw [← cancel_mono (F.1.map (eqToHom hι.symm).op)]
+    apply (F.presheaf.isSheaf_iff_isSheafPairwiseIntersections.mp F.2 ι).some.hom_ext
+    rintro ((_ | _) | (_ | _)) <;>
+    rw [Category.assoc]; rw [Category.assoc]; rw [Functor.mapCone_π_app]; rw [← F.1.map_comp]
+    · convert! h₁
+      apply interUnionPullbackConeLift_left
+    · convert! h₂
+      apply interUnionPullbackConeLift_right
+    all_goals
+      dsimp only [Functor.op, Pairwise.cocone_ι_app, Functor.mapCone_π_app, Cocone.op,
+        Pairwise.coconeιApp, unop_op, op_comp, NatTrans.op]
+      simp_rw [F.1.map_comp, ← Category.assoc]
+      congr 1
+      simp_rw [Category.assoc, ← F.1.map_comp]
+    · convert! h₁
+      apply interUnionPullbackConeLift_left
+    · convert! h₂
+      apply interUnionPullbackConeLift_right
 
 中文:
 定义 isLimitPullbackCone
@@ -740,7 +1005,32 @@ definition isLimitPullbackCone
     · rintro (h | h)
       exacts [⟨⟨WalkingPair.left⟩, h⟩, ⟨⟨WalkingPair.right⟩, h⟩]
     · rintro ⟨⟨_ | _⟩, h⟩
-
+      exacts [Or.inl h, Or.inr h]
+  apply PullbackCone.isLimitAux'
+  intro s
+  use interUnionPullbackConeLift F U V s
+  refine ⟨?_, ?_, ?_⟩
+  · apply interUnionPullbackConeLift_left
+  · apply interUnionPullbackConeLift_right
+  · intro m h₁ h₂
+    rw [← cancel_mono (F.1.map (eqToHom hι.symm).op)]
+    apply (F.presheaf.isSheaf_iff_isSheafPairwiseIntersections.mp F.2 ι).some.hom_ext
+    rintro ((_ | _) | (_ | _)) <;>
+    rw [Category.assoc]; rw [Category.assoc]; rw [Functor.mapCone_π_app]; rw [← F.1.map_comp]
+    · convert! h₁
+      apply interUnionPullbackConeLift_left
+    · convert! h₂
+      apply interUnionPullbackConeLift_right
+    all_goals
+      dsimp only [Functor.op, Pairwise.cocone_ι_app, Functor.mapCone_π_app, Cocone.op,
+        Pairwise.coconeιApp, unop_op, op_comp, NatTrans.op]
+      simp_rw [F.1.map_comp, ← Category.assoc]
+      congr 1
+      simp_rw [Category.assoc, ← F.1.map_comp]
+    · convert! h₁
+      apply interUnionPullbackConeLift_left
+    · convert! h₂
+      apply interUnionPullbackConeLift_right
 
 Depends on / 依赖: Opens.coe_iSup, Or.inl, Or.inr, PullbackCone, PullbackCone.isLimitAux, Set.mem_iUnion, WalkingPair, WalkingPair.casesOn, WalkingPair.left, WalkingPair.right, casesOn, coe_iSup, exacts, interUnionPullbackConeLift, interUnionPullbackConeLift_left, interUnionPullbackConeLift_right, isLimitAux, mem_iUnion
 -/

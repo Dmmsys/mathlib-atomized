@@ -33,7 +33,11 @@ definition getNamesFrom
   let fm ← getFileMap
   let mut nms := #[]
   for (nm, rgs) in drs do
-    if pos <= fm.ofPosition rgs.range.pos th
+    if pos <= fm.ofPosition rgs.range.pos then
+      let ofPos1 := fm.ofPosition rgs.selectionRange.pos
+      let ofPos2 := fm.ofPosition rgs.selectionRange.endPos
+      nms := nms.push (mkIdentFrom (.ofRange ⟨ofPos1, ofPos2⟩) nm)
+  return nms
 
 中文:
 定义 getNamesFrom
@@ -44,7 +48,11 @@ definition getNamesFrom
   let fm ← getFileMap
   let mut nms := #[]
   for (nm, rgs) in drs do
-    if pos <= fm.ofPosition rgs.range.pos th
+    if pos <= fm.ofPosition rgs.range.pos then
+      let ofPos1 := fm.ofPosition rgs.selectionRange.pos
+      let ofPos2 := fm.ofPosition rgs.selectionRange.endPos
+      nms := nms.push (mkIdentFrom (.ofRange ⟨ofPos1, ofPos2⟩) nm)
+  return nms
 -/
 def getNamesFrom {m} [Monad m] [MonadEnv m] [MonadFileMap m] (pos : String.Pos.Raw) :
     m (Array Syntax) := do

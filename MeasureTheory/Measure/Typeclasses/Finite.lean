@@ -652,7 +652,7 @@ lemma Measure.eq_of_le_of_measure_univ_eq
   by_contra! h_lt
   have h_disj : Disjoint s sᶜ := disjoint_compl_right_iff_subset.mpr subset_rfl
   rw [← union_compl_self s]; rw [measure_union h_disj hs.compl]; rw [measure_union h_disj hs.compl] at h_univ
-.not_ge h_univ.symm.le exact ENNReal
+.not_ge h_univ.symm.le exact ENNReal.add_lt_add_of_lt_of_le (by finiteness) h_lt (hμν sᶜ)
 
 中文:
 引理 测度.eq_of_le_of_measure_univ_eq
@@ -662,7 +662,7 @@ lemma Measure.eq_of_le_of_measure_univ_eq
   by_contra! h_lt
   have h_disj : Disjoint s sᶜ := disjoint_compl_right_iff_subset.mpr subset_rfl
   rw [← union_compl_self s]; rw [measure_union h_disj hs.compl]; rw [measure_union h_disj hs.compl] at h_univ
-.not_ge h_univ.symm.le exact ENNReal
+.not_ge h_univ.symm.le exact ENNReal.add_lt_add_of_lt_of_le (by finiteness) h_lt (hμν sᶜ)
 
 Depends on / 依赖: Disjoint, ENNReal, ENNReal.add_lt_add_of_lt_of_le, add_lt_add_of_lt_of_le, disjoint_compl_right_iff_subset, disjoint_compl_right_iff_subset.mpr, finiteness, h_disj, h_lt, h_univ, h_univ.symm.le, hs.compl, le_antisymm, le_intro, measure_union, not_ge, subset_rfl, union_compl_self
 -/
@@ -772,7 +772,15 @@ lemma tendsto_measure_biUnion_Ici_zero_of_pairwise_disjoint
   have nothing : ⋂ n, ⋃ i >= n, Es i = ∅ := by
     apply subset_antisymm _ (empty_subset _)
     intro x hx
-    simp only [mem_iInter, mem_iUnion, exists_prop] at
+    simp only [mem_iInter, mem_iUnion, exists_prop] at hx
+    obtain ⟨j, _, x_in_Es_j⟩ := hx 0
+    obtain ⟨k, k_gt_j, x_in_Es_k⟩ := hx (j + 1)
+    have oops := (Es_disj (Nat.ne_of_lt k_gt_j)).ne_of_mem x_in_Es_j x_in_Es_k
+    contradiction
+  have key := tendsto_measure_iInter_atTop (μ := μ) (fun n => by measurability)
+    decr ⟨0, measure_ne_top _ _⟩
+  simp only [nothing, measure_empty] at key
+  convert! key
 
 中文:
 引理 tendsto_measure_biUnion_Ici_zero_of_pairwise_disjoint
@@ -782,7 +790,15 @@ lemma tendsto_measure_biUnion_Ici_zero_of_pairwise_disjoint
   have nothing : ⋂ n, ⋃ i >= n, Es i = ∅ := by
     apply subset_antisymm _ (empty_subset _)
     intro x hx
-    simp only [mem_iInter, mem_iUnion, exists_prop] at
+    simp only [mem_iInter, mem_iUnion, exists_prop] at hx
+    obtain ⟨j, _, x_in_Es_j⟩ := hx 0
+    obtain ⟨k, k_gt_j, x_in_Es_k⟩ := hx (j + 1)
+    have oops := (Es_disj (Nat.ne_of_lt k_gt_j)).ne_of_mem x_in_Es_j x_in_Es_k
+    contradiction
+  have key := tendsto_measure_iInter_atTop (μ := μ) (fun n => by measurability)
+    decr ⟨0, measure_ne_top _ _⟩
+  simp only [nothing, measure_empty] at key
+  convert! key
 
 Depends on / 依赖: Antitone, Es_disj, Nat.ne_of_lt, biUnion_mono, empty_subset, exists_prop, k_gt_j, le_trans, mem_iInter, mem_iUnion, ne_of_lt, ne_of_mem, nothing, subset_antisymm, subset_rfl, tendsto_measure_iInter_atTop, x_in_Es_j, x_in_Es_k
 -/
@@ -818,7 +834,10 @@ theorem abs_measureReal_sub_le_measureReal_symmDiff'
   have hst : μ (s \ t) != ∞ := (measure_lt_top_of_subset sdiff_subset hs').ne
   have hts : μ (t \ s) != ∞ := (measure_lt_top_of_subset sdiff_subset ht').ne
   suffices (μ s).toReal - (μ t).toReal = (μ (s \ t)).toReal - (μ (t \ s)).toReal by
-    rw [this]; rw [measure_sym
+    rw [this]; rw [measure_symmDiff_eq hs ht]; rw [ENNReal.toReal_add hst hts]
+    convert! abs_sub (μ (s \ t)).toReal (μ (t \ s)).toReal <;> simp
+  rw [measure_sdiff' s ht ht']; rw [measure_sdiff' t hs hs']; rw [ENNReal.toReal_sub_of_le measure_le_measure_union_right (by finiteness)]; rw [ENNReal.toReal_sub_of_le measure_le_measure_union_right (by finiteness)]; rw [union_comm t s]
+  abel
 
 中文:
 定理 abs_measure实数_sub_le_measure实数_symmDiff'
@@ -827,7 +846,10 @@ theorem abs_measureReal_sub_le_measureReal_symmDiff'
   have hst : μ (s \ t) != ∞ := (measure_lt_top_of_subset sdiff_subset hs').ne
   have hts : μ (t \ s) != ∞ := (measure_lt_top_of_subset sdiff_subset ht').ne
   suffices (μ s).toReal - (μ t).toReal = (μ (s \ t)).toReal - (μ (t \ s)).toReal by
-    rw [this]; rw [measure_sym
+    rw [this]; rw [measure_symmDiff_eq hs ht]; rw [ENNReal.toReal_add hst hts]
+    convert! abs_sub (μ (s \ t)).toReal (μ (t \ s)).toReal <;> simp
+  rw [measure_sdiff' s ht ht']; rw [measure_sdiff' t hs hs']; rw [ENNReal.toReal_sub_of_le measure_le_measure_union_right (by finiteness)]; rw [ENNReal.toReal_sub_of_le measure_le_measure_union_right (by finiteness)]; rw [union_comm t s]
+  abel
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_add, ENNReal.toReal_sub_of_le, Measure, Measure.real, abs_sub, convert, measure_le, measure_lt_top_of_subset, measure_sdiff, measure_symmDiff_eq, sdiff_subset, toReal, toReal_add, toReal_sub_of_le
 -/
@@ -1554,7 +1576,12 @@ theorem exists_ne_forall_mem_nhds_pos_measure_preimage
   set m : OuterMeasure β := OuterMeasure.map f μ.toOuterMeasure
   replace h : forall b : β, m {b}ᶜ != 0 := fun b => not_eventually.mpr (h b)
   inhabit β
-  have : m univ != 0 := ne_bot_of_le_ne_bot (h default) (measure_mo
+  have : m univ != 0 := ne_bot_of_le_ne_bot (h default) (measure_mono <| subset_univ _)
+  rcases exists_mem_forall_mem_nhdsWithin_pos_measure this with ⟨b, -, hb⟩
+  simp only [nhdsWithin_univ] at hb
+  rcases exists_mem_forall_mem_nhdsWithin_pos_measure (h b) with ⟨a, hab : a != b, ha⟩
+  simp only [isOpen_compl_singleton.nhdsWithin_eq hab] at ha
+  exact ⟨a, b, hab, ha, hb⟩
 
 中文:
 定理 存在_ne_对任意_mem_nhds_pos_measure_preimage
@@ -1564,7 +1591,12 @@ theorem exists_ne_forall_mem_nhds_pos_measure_preimage
   set m : OuterMeasure β := OuterMeasure.map f μ.toOuterMeasure
   replace h : forall b : β, m {b}ᶜ != 0 := fun b => not_eventually.mpr (h b)
   inhabit β
-  have : m univ != 0 := ne_bot_of_le_ne_bot (h default) (measure_mo
+  have : m univ != 0 := ne_bot_of_le_ne_bot (h default) (measure_mono <| subset_univ _)
+  rcases exists_mem_forall_mem_nhdsWithin_pos_measure this with ⟨b, -, hb⟩
+  simp only [nhdsWithin_univ] at hb
+  rcases exists_mem_forall_mem_nhdsWithin_pos_measure (h b) with ⟨a, hab : a != b, ha⟩
+  simp only [isOpen_compl_singleton.nhdsWithin_eq hab] at ha
+  exact ⟨a, b, hab, ha, hb⟩
 -/
 theorem exists_ne_forall_mem_nhds_pos_measure_preimage {β} [TopologicalSpace β] [T1Space β]
     [SecondCountableTopology β] [Nonempty β] {f : α -> β} (h : forall b, existsᵐ x ∂μ, f x != b) :
@@ -1595,7 +1627,9 @@ theorem ext_on_measurableSpace_of_generate_finite
   | empty => simp
   | basic t ht => exact hμν t ht
   | compl t htm iht =>
-    rw [measure_compl (h t htm) (by finiteness)]; rw [me
+    rw [measure_compl (h t htm) (by finiteness)]; rw [measure_compl (h t htm) (by finiteness)]; rw [iht]; rw [h_univ]
+  | iUnion f hfd hfm ihf =>
+    simp [measure_iUnion, hfd, h _ (hfm _), ihf]
 
 中文:
 定理 ext_on_measurableSpace_of_generate_finite
@@ -1609,7 +1643,9 @@ theorem ext_on_measurableSpace_of_generate_finite
   | empty => simp
   | basic t ht => exact hμν t ht
   | compl t htm iht =>
-    rw [measure_compl (h t htm) (by finiteness)]; rw [me
+    rw [measure_compl (h t htm) (by finiteness)]; rw [measure_compl (h t htm) (by finiteness)]; rw [iht]; rw [h_univ]
+  | iUnion f hfd hfm ihf =>
+    simp [measure_iUnion, hfd, h _ (hfm _), ihf]
 
 Depends on / 依赖: IsFiniteMeasure, IsFiniteMeasure.measure_univ_lt_top, finiteness, h_univ, iUnion, induction_on_inter, measure_compl, measure_iUnion, measure_univ_lt_top
 -/
@@ -1946,7 +1982,10 @@ theorem exists_open_superset_measure_lt_top'
   · rintro s t ⟨U, hsU, hUo, hU⟩ ⟨V, htV, hVo, hV⟩
     refine
       ⟨U union V, union_subset_union hsU htV, hUo.union hVo,
-(measure_union_le _ _).trans_lt EN
+(measure_union_le _ _).trans_lt ENNReal.add_lt_top.2 ⟨hU, hV⟩⟩
+  · intro x hx
+    rcases (hμ x hx).exists_mem_basis (nhds_basis_opens _) with ⟨U, ⟨hx, hUo⟩, hU⟩
+    exact ⟨U, nhdsWithin_le_nhds (hUo.mem_nhds hx), U, Subset.rfl, hUo, hU⟩
 
 中文:
 定理 存在_open_superset_measure_lt_top'
@@ -1960,7 +1999,10 @@ theorem exists_open_superset_measure_lt_top'
   · rintro s t ⟨U, hsU, hUo, hU⟩ ⟨V, htV, hVo, hV⟩
     refine
       ⟨U union V, union_subset_union hsU htV, hUo.union hVo,
-(measure_union_le _ _).trans_lt EN
+(measure_union_le _ _).trans_lt ENNReal.add_lt_top.2 ⟨hU, hV⟩⟩
+  · intro x hx
+    rcases (hμ x hx).exists_mem_basis (nhds_basis_opens _) with ⟨U, ⟨hx, hUo⟩, hU⟩
+    exact ⟨U, nhdsWithin_le_nhds (hUo.mem_nhds hx), U, Subset.rfl, hUo, hU⟩
 
 Depends on / 依赖: ENNReal, ENNReal.add_lt_top, IsCompact, IsCompact.induction_on, Subset, Subset.rfl, add_lt_top, exists_mem_basis, hUo.mem_nhds, hUo.union, hst.trans, induction_on, measure_union_le, mem_nhds, nhdsWithin_le_nhds, nhds_basis_opens, trans_lt, union_subset_union
 -/
@@ -2119,7 +2161,11 @@ definition MeasureTheory.Measure.finiteSpanningSetsInOpen
     ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose_spec.2.1
   finite n :=
     ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose_spec.2.2
-  spanni
+  spanning :=
+    eq_univ_of_subset
+      (iUnion_mono fun n =>
+        ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose_spec.1)
+      (iUnion_compactCovering α)
 
 中文:
 定义 测度论.测度.finiteSpanningSetsInOpen
@@ -2128,7 +2174,11 @@ definition MeasureTheory.Measure.finiteSpanningSetsInOpen
     ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose_spec.2.1
   finite n :=
     ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose_spec.2.2
-  spanni
+  spanning :=
+    eq_univ_of_subset
+      (iUnion_mono fun n =>
+        ((isCompact_compactCovering α n).exists_open_superset_measure_lt_top μ).choose_spec.1)
+      (iUnion_compactCovering α)
 
 Depends on / 依赖: exists_open_superset_measure_lt_top, isCompact_compactCovering
 -/

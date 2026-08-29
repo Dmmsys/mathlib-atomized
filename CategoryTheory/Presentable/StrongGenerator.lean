@@ -50,7 +50,10 @@ lemma IsCardinalFilteredGenerator.of_isDense
     let e := equivSmallModel.{w} (CostructuredArrow F X)
     exact ⟨SmallModel.{w} (CostructuredArrow F X), inferInstance,
       IsCardinalFiltered.of_equivalence κ e,
-
+      ⟨{ diag := _
+          ι := _
+          isColimit := (F.denseAt X).whiskerEquivalence e.symm
+          prop_diag_obj j := ⟨_, by simp, ⟨Iso.refl _⟩⟩ }⟩⟩
 
 中文:
 引理 是CardinalFilteredGenerator.of_isDense
@@ -62,7 +65,10 @@ lemma IsCardinalFilteredGenerator.of_isDense
     let e := equivSmallModel.{w} (CostructuredArrow F X)
     exact ⟨SmallModel.{w} (CostructuredArrow F X), inferInstance,
       IsCardinalFiltered.of_equivalence κ e,
-
+      ⟨{ diag := _
+          ι := _
+          isColimit := (F.denseAt X).whiskerEquivalence e.symm
+          prop_diag_obj j := ⟨_, by simp, ⟨Iso.refl _⟩⟩ }⟩⟩
 
 Depends on / 依赖: CostructuredArrow, F.denseAt, IsCardinalFiltered, IsCardinalFiltered.of_equivalence, Iso.refl, SmallModel, denseAt, e.symm, equivSmallModel, exists_colimitsOfShape, isCardinalPresentable_of_iso, isColimit, of_equivalence, prop_diag_obj, whiskerEquivalence
 -/
@@ -173,7 +179,47 @@ lemma ObjectProperty.IsStrongGenerator.isDense_colimitsCardinalClosure_ι
     let E := Functor.LeftExtension.mk _ (P.colimitsCardinalClosure κ).ι.rightUnitor.inv
     have : HasColimitsOfShape (CostructuredArrow (P.colimitsCardinalClosure κ).ι X) C :=
       hasColimitsOfShape_of_equivalence
-        (equivSmallModel.{w} (CostructuredArrow (P.colimitsCardinalClosure κ).ι 
+        (equivSmallModel.{w} (CostructuredArrow (P.colimitsCardinalClosure κ).ι X)).symm
+    have : Mono (colimit.desc _ (E.coconeAt X)) := by
+      let Φ := CostructuredArrow.proj (P.colimitsCardinalClosure κ).ι X ⋙
+        (P.colimitsCardinalClosure κ).ι
+      rw [hS₁.isSeparating.mono_iff]
+      intro G hG (g₁ : G ⟶ colimit Φ) (g₂ : G ⟶ colimit Φ)
+        (h : g₁ ≫ colimit.desc Φ (E.coconeAt X) = g₂ ≫ colimit.desc Φ (E.coconeAt X))
+      have : IsCardinalPresentable G κ := hS₂ _ hG
+      obtain ⟨j, φ₁, φ₂, rfl, rfl⟩ :
+          exists (j : CostructuredArrow (P.colimitsCardinalClosure κ).ι X)
+            (φ₁ φ₂ : G ⟶ Φ.obj j), φ₁ ≫ colimit.ι _ _ = g₁ ∧ φ₂ ≫ colimit.ι _ _ = g₂ := by
+        obtain ⟨j₁, f₁, hf₁⟩ :=
+          IsCardinalPresentable.exists_hom_of_isColimit κ (colimit.isColimit _) g₁
+        obtain ⟨j₂, f₂, hf₂⟩ :=
+          IsCardinalPresentable.exists_hom_of_isColimit κ (colimit.isColimit _) g₂
+        exact ⟨IsFiltered.max j₁ j₂, f₁ ≫ Φ.map (IsFiltered.leftToMax j₁ j₂),
+          f₂ ≫ Φ.map (IsFiltered.rightToMax j₁ j₂), by simpa, by simpa⟩
+      have : (P.colimitsCardinalClosure κ).IsClosedUnderColimitsOfShape WalkingParallelPair := by
+        apply ObjectProperty.isClosedUnderColimitsOfShape_colimitsCardinalClosure
+        refine .of_le ?_ (Cardinal.IsRegular.aleph0_le Fact.out)
+        simp only [hasCardinalLT_aleph0_iff]
+        infer_instance
+      let obj : (P.colimitsCardinalClosure κ).FullSubcategory :=
+        ⟨coequalizer φ₁ φ₂, by
+          apply ObjectProperty.prop_colimit
+          rintro (_ | _)
+          · exact P.le_colimitsCardinalClosure _ _ hG
+          · exact j.left.2⟩
+      let a : (P.colimitsCardinalClosure κ).ι.obj obj ⟶ X :=
+        coequalizer.desc ((E.coconeAt X).ι.app j) (by simpa using h)
+      let ψ : j ⟶ CostructuredArrow.mk a :=
+        CostructuredArrow.homMk (ObjectProperty.homMk (coequalizer.π _ _)) (by simp [E, a])
+      rw [← colimit.w Φ ψ]
+      apply coequalizer.condition_assoc
+    have : IsIso (colimit.desc _ (E.coconeAt X)) := hS₁.isIso_of_mono _ (fun Y hY g => by
+      let γ : CostructuredArrow (P.colimitsCardinalClosure κ).ι X :=
+        CostructuredArrow.mk (Y := ⟨Y, P.le_colimitsCardinalClosure _ _ hY⟩) (by exact g)
+      exact ⟨colimit.ι (CostructuredArrow.proj _ _ ⋙ (P.colimitsCardinalClosure κ).ι) γ,
+        by simp [γ, E]⟩)
+    exact ⟨IsColimit.ofIsoColimit (colimit.isColimit _) (Cocone.ext
+      (asIso (colimit.desc _ (E.coconeAt X))))⟩
 
 中文:
 引理 ObjectProperty.IsStrongGenerator.isDense_colimitsCardinalClosure_ι
@@ -181,7 +227,47 @@ lemma ObjectProperty.IsStrongGenerator.isDense_colimitsCardinalClosure_ι
     let E := Functor.LeftExtension.mk _ (P.colimitsCardinalClosure κ).ι.rightUnitor.inv
     have : HasColimitsOfShape (CostructuredArrow (P.colimitsCardinalClosure κ).ι X) C :=
       hasColimitsOfShape_of_equivalence
-        (equivSmallModel.{w} (CostructuredArrow (P.colimitsCardinalClosure κ).ι 
+        (equivSmallModel.{w} (CostructuredArrow (P.colimitsCardinalClosure κ).ι X)).symm
+    have : Mono (colimit.desc _ (E.coconeAt X)) := by
+      let Φ := CostructuredArrow.proj (P.colimitsCardinalClosure κ).ι X ⋙
+        (P.colimitsCardinalClosure κ).ι
+      rw [hS₁.isSeparating.mono_iff]
+      intro G hG (g₁ : G ⟶ colimit Φ) (g₂ : G ⟶ colimit Φ)
+        (h : g₁ ≫ colimit.desc Φ (E.coconeAt X) = g₂ ≫ colimit.desc Φ (E.coconeAt X))
+      have : IsCardinalPresentable G κ := hS₂ _ hG
+      obtain ⟨j, φ₁, φ₂, rfl, rfl⟩ :
+          exists (j : CostructuredArrow (P.colimitsCardinalClosure κ).ι X)
+            (φ₁ φ₂ : G ⟶ Φ.obj j), φ₁ ≫ colimit.ι _ _ = g₁ ∧ φ₂ ≫ colimit.ι _ _ = g₂ := by
+        obtain ⟨j₁, f₁, hf₁⟩ :=
+          IsCardinalPresentable.exists_hom_of_isColimit κ (colimit.isColimit _) g₁
+        obtain ⟨j₂, f₂, hf₂⟩ :=
+          IsCardinalPresentable.exists_hom_of_isColimit κ (colimit.isColimit _) g₂
+        exact ⟨IsFiltered.max j₁ j₂, f₁ ≫ Φ.map (IsFiltered.leftToMax j₁ j₂),
+          f₂ ≫ Φ.map (IsFiltered.rightToMax j₁ j₂), by simpa, by simpa⟩
+      have : (P.colimitsCardinalClosure κ).IsClosedUnderColimitsOfShape WalkingParallelPair := by
+        apply ObjectProperty.isClosedUnderColimitsOfShape_colimitsCardinalClosure
+        refine .of_le ?_ (Cardinal.IsRegular.aleph0_le Fact.out)
+        simp only [hasCardinalLT_aleph0_iff]
+        infer_instance
+      let obj : (P.colimitsCardinalClosure κ).FullSubcategory :=
+        ⟨coequalizer φ₁ φ₂, by
+          apply ObjectProperty.prop_colimit
+          rintro (_ | _)
+          · exact P.le_colimitsCardinalClosure _ _ hG
+          · exact j.left.2⟩
+      let a : (P.colimitsCardinalClosure κ).ι.obj obj ⟶ X :=
+        coequalizer.desc ((E.coconeAt X).ι.app j) (by simpa using h)
+      let ψ : j ⟶ CostructuredArrow.mk a :=
+        CostructuredArrow.homMk (ObjectProperty.homMk (coequalizer.π _ _)) (by simp [E, a])
+      rw [← colimit.w Φ ψ]
+      apply coequalizer.condition_assoc
+    have : IsIso (colimit.desc _ (E.coconeAt X)) := hS₁.isIso_of_mono _ (fun Y hY g => by
+      let γ : CostructuredArrow (P.colimitsCardinalClosure κ).ι X :=
+        CostructuredArrow.mk (Y := ⟨Y, P.le_colimitsCardinalClosure _ _ hY⟩) (by exact g)
+      exact ⟨colimit.ι (CostructuredArrow.proj _ _ ⋙ (P.colimitsCardinalClosure κ).ι) γ,
+        by simp [γ, E]⟩)
+    exact ⟨IsColimit.ofIsoColimit (colimit.isColimit _) (Cocone.ext
+      (asIso (colimit.desc _ (E.coconeAt X))))⟩
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj, E.coconeAt, Functor, Functor.LeftExtension.mk, HasColimitsOfShape, LeftExtension, P.colimitsCardinalClosure, coconeAt, colimit, colimit.desc, colimitsCardinalClosure, equivSmallModel, hasColimitsOfShape_of_equivalence, isSeparating, isSeparating.mono_iff, mono_iff, rightUnitor, rightUnitor.inv
 -/
@@ -268,7 +354,9 @@ lemma IsStrongGenerator.colimitsCardinalClosure_eq_isCardinalPresentable
   intro X hX
   rw [isCardinalPresentable_iff] at hX
   rw [← (P.colimitsCardinalClosure κ).retractClosure_eq_self]
-  obtain ⟨j, φ, hφ⟩ := IsCardinalPresentable.exist
+  obtain ⟨j, φ, hφ⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ
+    ((P.colimitsCardinalClosure κ).ι.denseAt X) (𝟙 X)
+  exact ⟨_, j.left.2, ⟨{ i := _, r := _, retract := hφ }⟩⟩
 
 中文:
 引理 IsStrongGenerator.colimitsCardinalClosure_eq_isCardinalPresentable
@@ -278,7 +366,9 @@ lemma IsStrongGenerator.colimitsCardinalClosure_eq_isCardinalPresentable
   intro X hX
   rw [isCardinalPresentable_iff] at hX
   rw [← (P.colimitsCardinalClosure κ).retractClosure_eq_self]
-  obtain ⟨j, φ, hφ⟩ := IsCardinalPresentable.exist
+  obtain ⟨j, φ, hφ⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ
+    ((P.colimitsCardinalClosure κ).ι.denseAt X) (𝟙 X)
+  exact ⟨_, j.left.2, ⟨{ i := _, r := _, retract := hφ }⟩⟩
 
 Depends on / 依赖: IsCardinalPresentable, IsCardinalPresentable.exists_hom_of_isColimit, P.colimitsCardinalClosure, P.colimitsCardinalClosure_le_isCardinalPresentable, colimitsCardinalClosure, colimitsCardinalClosure_le_isCardinalPresentable, denseAt, exists_hom_of_isColimit, isCardinalPresentable_iff, j.left, le_antisymm, retract, retractClosure_eq_self
 -/
@@ -310,7 +400,11 @@ lemma iff_exists_isStrongGenerator
   · obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_small_generator C κ
     exact ⟨_, inferInstance, hP.isStrongGenerator, hP.le_isCardinalPresentable⟩
   · have := hS₁.isDense_colimitsCardinalClosure_ι hS₂
-    have : HasCardinalFilteredG
+    have : HasCardinalFilteredGenerator C κ :=
+      { exists_generator := ⟨(P.colimitsCardinalClosure κ), inferInstance,
+            IsCardinalFilteredGenerator.of_isDense_ι _ _
+              (P.colimitsCardinalClosure_le_isCardinalPresentable hS₂)⟩ }
+    constructor
 
 中文:
 引理 iff_存在_isStrongGenerator
@@ -320,7 +414,11 @@ lemma iff_exists_isStrongGenerator
   · obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_small_generator C κ
     exact ⟨_, inferInstance, hP.isStrongGenerator, hP.le_isCardinalPresentable⟩
   · have := hS₁.isDense_colimitsCardinalClosure_ι hS₂
-    have : HasCardinalFilteredG
+    have : HasCardinalFilteredGenerator C κ :=
+      { exists_generator := ⟨(P.colimitsCardinalClosure κ), inferInstance,
+            IsCardinalFilteredGenerator.of_isDense_ι _ _
+              (P.colimitsCardinalClosure_le_isCardinalPresentable hS₂)⟩ }
+    constructor
 
 Depends on / 依赖: HasCardinalFilteredGenerator, HasCardinalFilteredGenerator.exists_small_generator, IsCardinalFilteredGenerator, IsCardinalFilteredGenerator.of_isDense_, P.colimitsCardinalClosure, P.colimitsCardinalClosure_le_isCardinalPresentable, colimitsCardinalClosure, colimitsCardinalClosure_le_isCardinalPresentable, exists_generator, exists_small_generator, hP.isStrongGenerator, hP.le_isCardinalPresentable, isStrongGenerator, le_isCardinalPresentable
 -/

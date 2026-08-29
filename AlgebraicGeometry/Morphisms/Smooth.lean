@@ -125,7 +125,10 @@ lemma Smooth.iff_forall_exists_isStandardSmooth
     rw [RingHom.smooth_iff_locally_isStandardSmooth]
   rw [HasRingHomProperty.iff_exists_appLE_locally (P := @Smooth)]
   · congr!
-    s
+    simp [Subtype.exists]
+    grind [Scheme.affineOpens]
+  · exact isStandardSmooth_stableUnderCompositionWithLocalizationAway.left
+  · exact isStandardSmooth_respectsIso
 
 中文:
 引理 光滑.iff_对任意_存在_isStandardSmooth
@@ -137,7 +140,10 @@ lemma Smooth.iff_forall_exists_isStandardSmooth
     rw [RingHom.smooth_iff_locally_isStandardSmooth]
   rw [HasRingHomProperty.iff_exists_appLE_locally (P := @Smooth)]
   · congr!
-    s
+    simp [Subtype.exists]
+    grind [Scheme.affineOpens]
+  · exact isStandardSmooth_stableUnderCompositionWithLocalizationAway.left
+  · exact isStandardSmooth_respectsIso
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.iff_exists_appLE_locally, IsStandardSmooth, Locally, RingHom, RingHom.Smooth, RingHom.smooth_iff_locally_isStandardSmooth, Scheme, Scheme.affineOpens, Smooth, Subtype, Subtype.exists, affineOpens, convert, iff_exists_appLE_locally, isStandardSmooth_respectsIso, isStandardSmooth_stableUnderCompositionWithLocalizationAway, isStandardSmooth_stableUnderCompositionWithLocalizationAway.left, smooth_iff_locally_isStandardSmooth
 -/
@@ -310,7 +316,7 @@ lemma SmoothOfRelativeDimension.smooth
   exact ⟨U, hU, V, hV, hx, e, hf.isStandardSmooth⟩
 
 @[deprecated (since := "2026-02-09")]
-alias IsSmoothOfRelativeDimension.isSmooth := S
+alias IsSmoothOfRelativeDimension.isSmooth := SmoothOfRelativeDimension.smooth
 
 中文:
 引理 SmoothOfRelativeDimension.smooth
@@ -323,7 +329,7 @@ alias IsSmoothOfRelativeDimension.isSmooth := S
   exact ⟨U, hU, V, hV, hx, e, hf.isStandardSmooth⟩
 
 @[deprecated (since := "2026-02-09")]
-alias IsSmoothOfRelativeDimension.isSmooth := S
+alias IsSmoothOfRelativeDimension.isSmooth := SmoothOfRelativeDimension.smooth
 
 Depends on / 依赖: Smooth, Smooth.iff_forall_exists_isStandardSmooth, exists_isStandardSmoothOfRelativeDimension, hf.isStandardSmooth, iff_forall_exists_isStandardSmooth, isStandardSmooth
 -/
@@ -349,7 +355,8 @@ instance :
   · intro X Y f
     rw [smoothOfRelativeDimension_iff]
     congr!
-    simp [Subtype.exi
+    simp [Subtype.exists]
+    grind [Scheme.affineOpens]
 
 中文:
 实例 :
@@ -361,7 +368,8 @@ instance :
   · intro X Y f
     rw [smoothOfRelativeDimension_iff]
     congr!
-    simp [Subtype.exi
+    simp [Subtype.exists]
+    grind [Scheme.affineOpens]
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.locally_of_iff, Scheme, Scheme.affineOpens, Subtype, Subtype.exists, affineOpens, isStandardSmoothOfRelativeDimension_localizationPreserves, isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalizationAway, locally_of_iff, smoothOfRelativeDimension_iff
 -/
@@ -387,7 +395,7 @@ lemma smoothOfRelativeDimension_isStableUnderBaseChange
 
 @[deprecated (since := "2026-02-09")]
 alias isSmoothOfRelativeDimension_isStableUnderBaseChange :=
-  smo
+  smoothOfRelativeDimension_isStableUnderBaseChange
 
 中文:
 引理 smoothOfRelativeDimension_isStableUnderBaseChange
@@ -397,7 +405,7 @@ alias isSmoothOfRelativeDimension_isStableUnderBaseChange :=
 
 @[deprecated (since := "2026-02-09")]
 alias isSmoothOfRelativeDimension_isStableUnderBaseChange :=
-  smo
+  smoothOfRelativeDimension_isStableUnderBaseChange
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.isStableUnderBaseChange, isStableUnderBaseChange, isStandardSmoothOfRelativeDimension_isStableUnderBaseChange, isStandardSmoothOfRelativeDimension_respectsIso, locally_isStableUnderBaseChange
 -/
@@ -450,7 +458,20 @@ instance smoothOfRelativeDimension_comp
     obtain ⟨U₁', hU₁', V₁', hV₁', hx₁', e₁', hf₁'⟩ :=
       hf.exists_isStandardSmoothOfRelativeDimension x
     obtain ⟨r, s, hx₁, e₁, hf₁⟩ := exists_basicOpen_le_appLE_of_appLE_of_isAffine
-      (
+      (isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalizationAway n).right
+      (isStandardSmoothOfRelativeDimension_localizationPreserves n).away
+      x ⟨V₂, hV₂⟩ ⟨U₁', hU₁'⟩ ⟨V₁', hV₁'⟩ ⟨V₁', hV₁'⟩ hx₁' hx₁' e₁' hf₁' hfx₂
+    have e : X.basicOpen s <= (f ≫ g) ⁻¹ᵁ U₂ :=
+le_trans e₁ f.preimage_mono le_trans (Y.basicOpen_le r) e₂
+    have heq : (f ≫ g).appLE U₂ (X.basicOpen s) e = g.appLE U₂ V₂ e₂ ≫
+        CommRingCat.ofHom (algebraMap Γ(Y, V₂) Γ(Y, Y.basicOpen r)) ≫
+          f.appLE (Y.basicOpen r) (X.basicOpen s) e₁ := by
+      rw [RingHom.algebraMap_toAlgebra]; rw [CommRingCat.ofHom_hom]; rw [g.appLE_map_assoc]; rw [Scheme.Hom.appLE_comp_appLE]
+    refine ⟨U₂, hU₂, X.basicOpen s, hV₁'.basicOpen s, hx₁, e, heq ▸ ?_⟩
+    apply IsStandardSmoothOfRelativeDimension.comp ?_ hf₂
+    have : IsLocalization.Away r Γ(Y, Y.basicOpen r) := hV₂.isLocalization_basicOpen r
+    exact (isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalizationAway n).left
+      _ r _ hf₁
 
 中文:
 实例 smoothOfRelativeDimension_comp
@@ -460,7 +481,20 @@ instance smoothOfRelativeDimension_comp
     obtain ⟨U₁', hU₁', V₁', hV₁', hx₁', e₁', hf₁'⟩ :=
       hf.exists_isStandardSmoothOfRelativeDimension x
     obtain ⟨r, s, hx₁, e₁, hf₁⟩ := exists_basicOpen_le_appLE_of_appLE_of_isAffine
-      (
+      (isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalizationAway n).right
+      (isStandardSmoothOfRelativeDimension_localizationPreserves n).away
+      x ⟨V₂, hV₂⟩ ⟨U₁', hU₁'⟩ ⟨V₁', hV₁'⟩ ⟨V₁', hV₁'⟩ hx₁' hx₁' e₁' hf₁' hfx₂
+    have e : X.basicOpen s <= (f ≫ g) ⁻¹ᵁ U₂ :=
+le_trans e₁ f.preimage_mono le_trans (Y.basicOpen_le r) e₂
+    have heq : (f ≫ g).appLE U₂ (X.basicOpen s) e = g.appLE U₂ V₂ e₂ ≫
+        CommRingCat.ofHom (algebraMap Γ(Y, V₂) Γ(Y, Y.basicOpen r)) ≫
+          f.appLE (Y.basicOpen r) (X.basicOpen s) e₁ := by
+      rw [RingHom.algebraMap_toAlgebra]; rw [CommRingCat.ofHom_hom]; rw [g.appLE_map_assoc]; rw [Scheme.Hom.appLE_comp_appLE]
+    refine ⟨U₂, hU₂, X.basicOpen s, hV₁'.basicOpen s, hx₁, e, heq ▸ ?_⟩
+    apply IsStandardSmoothOfRelativeDimension.comp ?_ hf₂
+    have : IsLocalization.Away r Γ(Y, Y.basicOpen r) := hV₂.isLocalization_basicOpen r
+    exact (isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalizationAway n).left
+      _ r _ hf₁
 
 Depends on / 依赖: exists_basicOpen_le_appLE_of_appLE_of_isAffine, exists_isStandardSmoothOfRelativeDimension, hf.exists_isStandardSmoothOfRelativeDimension, hg.exists_isStandardSmoothOfRelativeDimension, isStandardSmoothOfRelativeDimension_localizationPreserves, isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalizationAway
 -/
@@ -529,7 +563,14 @@ lemma formallySmooth_stalkMap_iff
   let := (f.appLE U V hVU).hom.toAlgebra
   let p := (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal
   let q := (hV.primeIdealOf ⟨x, hx⟩).asIdeal
-  have : q.LiesO
+  have : q.LiesOver p :=
+    ⟨congr($(IsAffineOpen.comap_primeIdealOf_appLE U hU V hV hVU hx).1).symm⟩
+  let := Localization.AtPrime.algebraOfLiesOver p q
+  trans Algebra.FormallySmooth (Localization.AtPrime p) (Localization.AtPrime q)
+  · rw [← formallySmooth_algebraMap]
+    exact RingHom.FormallySmooth.respectsIso.arrow_mk_iso_iff
+      (IsAffineOpen.arrowStalkMapIso f U hU V hV hVU hx)
+  · exact Algebra.FormallySmooth.iff_restrictScalars.symm
 
 中文:
 引理 formallySmooth_stalkMap_iff
@@ -540,7 +581,14 @@ lemma formallySmooth_stalkMap_iff
   let := (f.appLE U V hVU).hom.toAlgebra
   let p := (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal
   let q := (hV.primeIdealOf ⟨x, hx⟩).asIdeal
-  have : q.LiesO
+  have : q.LiesOver p :=
+    ⟨congr($(IsAffineOpen.comap_primeIdealOf_appLE U hU V hV hVU hx).1).symm⟩
+  let := Localization.AtPrime.algebraOfLiesOver p q
+  trans Algebra.FormallySmooth (Localization.AtPrime p) (Localization.AtPrime q)
+  · rw [← formallySmooth_algebraMap]
+    exact RingHom.FormallySmooth.respectsIso.arrow_mk_iso_iff
+      (IsAffineOpen.arrowStalkMapIso f U hU V hV hVU hx)
+  · exact Algebra.FormallySmooth.iff_restrictScalars.symm
 
 Depends on / 依赖: f.appLE, hom.toAlgebra, toAlgebra
 -/
@@ -575,7 +623,25 @@ lemma exists_smooth_of_formallySmooth_stalk
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ :=
     X.isBasis_affineOpens.exists_subset_of_mem_open hxU (U.2.preimage f.continuous)
   have := f.finitePresentation_appLE hU hV hVU
-  a
+  algebraize [(f.appLE U V hVU).hom]
+  have : Algebra.IsSmoothAt _ _ := (formallySmooth_stalkMap_iff U hU V hV hVU hxV).mp H
+  obtain ⟨r, hrx, hr⟩ := Algebra.IsSmoothAt.exists_notMem_smooth Γ(Y, U)
+    (hV.primeIdealOf ⟨x, hxV⟩).asIdeal
+  refine ⟨_, hU, _, hV.basicOpen r, (X.basicOpen_le r).trans hVU, ?_, ?_⟩
+  · rwa [← PrimeSpectrum.mem_basicOpen, IsAffineOpen.primeIdealOf,
+      ← hV.fromSpec_preimage_basicOpen, Scheme.Hom.mem_preimage, ← Scheme.Hom.comp_apply,
+      IsAffineOpen.isoSpec_hom, IsAffineOpen.toSpecΓ_fromSpec] at hrx
+  · have := hV.isLocalization_basicOpen r
+    rw [← RingHom.smooth_algebraMap] at hr
+    convert!
+      RingHom.Smooth.propertyIsLocal.respectsIso.1 _
+        (IsLocalization.algEquiv (.powers r) _ Γ(X, X.basicOpen r)).toRingEquiv hr
+    ext
+    dsimp
+    simp only [IsScalarTower.algebraMap_apply Γ(Y, U) Γ(X, V) (Localization _),
+      IsLocalization.map_eq]
+    simp only [algebraMap_toAlgebra, RingHomCompTriple.comp_apply, ← ConcreteCategory.comp_apply,
+      Scheme.Hom.appLE_map]
 
 中文:
 引理 存在_smooth_of_formallySmooth_stalk
@@ -585,7 +651,25 @@ lemma exists_smooth_of_formallySmooth_stalk
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ :=
     X.isBasis_affineOpens.exists_subset_of_mem_open hxU (U.2.preimage f.continuous)
   have := f.finitePresentation_appLE hU hV hVU
-  a
+  algebraize [(f.appLE U V hVU).hom]
+  have : Algebra.IsSmoothAt _ _ := (formallySmooth_stalkMap_iff U hU V hV hVU hxV).mp H
+  obtain ⟨r, hrx, hr⟩ := Algebra.IsSmoothAt.exists_notMem_smooth Γ(Y, U)
+    (hV.primeIdealOf ⟨x, hxV⟩).asIdeal
+  refine ⟨_, hU, _, hV.basicOpen r, (X.basicOpen_le r).trans hVU, ?_, ?_⟩
+  · rwa [← PrimeSpectrum.mem_basicOpen, IsAffineOpen.primeIdealOf,
+      ← hV.fromSpec_preimage_basicOpen, Scheme.Hom.mem_preimage, ← Scheme.Hom.comp_apply,
+      IsAffineOpen.isoSpec_hom, IsAffineOpen.toSpecΓ_fromSpec] at hrx
+  · have := hV.isLocalization_basicOpen r
+    rw [← RingHom.smooth_algebraMap] at hr
+    convert!
+      RingHom.Smooth.propertyIsLocal.respectsIso.1 _
+        (IsLocalization.algEquiv (.powers r) _ Γ(X, X.basicOpen r)).toRingEquiv hr
+    ext
+    dsimp
+    simp only [IsScalarTower.algebraMap_apply Γ(Y, U) Γ(X, V) (Localization _),
+      IsLocalization.map_eq]
+    simp only [algebraMap_toAlgebra, RingHomCompTriple.comp_apply, ← ConcreteCategory.comp_apply,
+      Scheme.Hom.appLE_map]
 
 Depends on / 依赖: Algebra, Algebra.IsSmoothAt, Algebra.IsSmoothAt.exists_notMem_smooth, IsSmoothAt, Set.mem_univ, X.isBasis_affineOpens.exists_subset_of_mem_open, Y.isBasis_affineOpens.exists_subset_of_mem_open, algebraize, continuous, exists_notMem_smooth, exists_subset_of_mem_open, f.appLE, f.continuous, f.finitePresentation_appLE, finitePresentation_appLE, formallySmooth_stalkMap_iff, hV.primeIdealOf, isBasis_affineOpens, isOpen_univ, mem_univ
 -/
@@ -630,7 +714,7 @@ lemma Scheme.Hom.isOpen_smoothLocus
   obtain ⟨U, hU, V, hV, hVU, hxV, H⟩ := exists_smooth_of_formallySmooth_stalk f x hx
   algebraize [(f.appLE U V hVU).hom]
   exact ⟨V, fun y hy => (formallySmooth_stalkMap_iff U hU V hV hVU hy).mpr
-    (inferInstanceAs (Algebra.IsSmoothAt _ _)
+    (inferInstanceAs (Algebra.IsSmoothAt _ _)), V.2, hxV⟩
 
 中文:
 引理 概形.态射.isOpen_smoothLocus
@@ -640,7 +724,7 @@ lemma Scheme.Hom.isOpen_smoothLocus
   obtain ⟨U, hU, V, hV, hVU, hxV, H⟩ := exists_smooth_of_formallySmooth_stalk f x hx
   algebraize [(f.appLE U V hVU).hom]
   exact ⟨V, fun y hy => (formallySmooth_stalkMap_iff U hU V hV hVU hy).mpr
-    (inferInstanceAs (Algebra.IsSmoothAt _ _)
+    (inferInstanceAs (Algebra.IsSmoothAt _ _)), V.2, hxV⟩
 
 Depends on / 依赖: Algebra, Algebra.IsSmoothAt, IsSmoothAt, algebraize, exists_smooth_of_formallySmooth_stalk, f.appLE, formallySmooth_stalkMap_iff, isOpen_iff_forall_mem_open, isOpen_iff_forall_mem_open.mpr
 -/
@@ -699,7 +783,10 @@ lemma Scheme.Hom.smoothLocus_eq_top
     Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ :=
     X.isBasis_affineOpens.exists_subset_of_mem_open hxU (U.2.preimage f.continuous)
-  have := f.smoot
+  have := f.smooth_appLE hU hV hVU
+  algebraize [(f.appLE U V hVU).hom]
+  rw [Scheme.Hom.mem_smoothLocus]; rw [formallySmooth_stalkMap_iff U hU V hV hVU hxV]
+  exact inferInstanceAs (Algebra.IsSmoothAt _ _)
 
 中文:
 引理 概形.态射.smoothLocus_eq_top
@@ -711,7 +798,10 @@ lemma Scheme.Hom.smoothLocus_eq_top
     Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ :=
     X.isBasis_affineOpens.exists_subset_of_mem_open hxU (U.2.preimage f.continuous)
-  have := f.smoot
+  have := f.smooth_appLE hU hV hVU
+  algebraize [(f.appLE U V hVU).hom]
+  rw [Scheme.Hom.mem_smoothLocus]; rw [formallySmooth_stalkMap_iff U hU V hV hVU hxV]
+  exact inferInstanceAs (Algebra.IsSmoothAt _ _)
 
 Depends on / 依赖: Algebra, Algebra.IsSmoothAt, IsSmoothAt, Scheme, Scheme.Hom.mem_smoothLocus, Set.mem_univ, X.isBasis_affineOpens.exists_subset_of_mem_open, Y.isBasis_affineOpens.exists_subset_of_mem_open, algebraize, continuous, exists_subset_of_mem_open, f.appLE, f.continuous, f.smooth_appLE, formallySmooth_stalkMap_iff, isBasis_affineOpens, isOpen_univ, mem_smoothLocus, mem_univ, preimage
 -/
@@ -742,7 +832,10 @@ lemma Scheme.Hom.smoothLocus_eq_top_iff
     exists_smooth_of_formallySmooth_stalk f _ (H.ge (Set.mem_univ x))
   refine ⟨U, V, hxV, hVU, ?_⟩
   have : IsAffine _ := hU
-  have : IsA
+  have : IsAffine _ := hV
+  rw [HasRingHomProperty.iff_of_isAffine (P := @Smooth)]
+  exact (RingHom.Smooth.propertyIsLocal.respectsIso.arrow_mk_iso_iff
+    (arrowResLEAppIso f U V hVU)).mpr H
 
 中文:
 引理 概形.态射.smoothLocus_eq_top_iff
@@ -754,7 +847,10 @@ lemma Scheme.Hom.smoothLocus_eq_top_iff
     exists_smooth_of_formallySmooth_stalk f _ (H.ge (Set.mem_univ x))
   refine ⟨U, V, hxV, hVU, ?_⟩
   have : IsAffine _ := hU
-  have : IsA
+  have : IsAffine _ := hV
+  rw [HasRingHomProperty.iff_of_isAffine (P := @Smooth)]
+  exact (RingHom.Smooth.propertyIsLocal.respectsIso.arrow_mk_iso_iff
+    (arrowResLEAppIso f U V hVU)).mpr H
 
 Depends on / 依赖: H.ge, HasRingHomProperty, HasRingHomProperty.iff_of_isAffine, IsAffine, IsZariskiLocalAtSource, IsZariskiLocalAtSource.iff_exists_resLE.mpr, RingHom, RingHom.Smooth.propertyIsLocal.respectsIso.arrow_mk_iso_iff, Set.mem_univ, Smooth, arrowResLEAppIso, arrow_mk_iso_iff, exists_smooth_of_formallySmooth_stalk, f.smoothLocus_eq_top, iff_exists_resLE, iff_of_isAffine, mem_univ, propertyIsLocal, respectsIso, smoothLocus_eq_top
 -/
@@ -813,7 +909,16 @@ lemma Scheme.Hom.genericPoint_mem_smoothLocus_of_perfectField
   rw [Scheme.Hom.mem_smoothLocus]
   algebraize [(f.stalkMap (genericPoint X)).hom]
   let K' := (Spec.structureSheaf K).presheaf.stalk (f (genericPoint X))
-  let e : K ≃ₐ[K] K' := IsLocalization.atUnits _ (f (genericPoint X)).asIdeal.primeC
+  let e : K ≃ₐ[K] K' := IsLocalization.atUnits _ (f (genericPoint X)).asIdeal.primeCompl
+      (fun x hx => by aesop (add simp IsUnit.mem_submonoid_iff))
+  have : Algebra.IsAlgebraic K K' :=
+    .of_injective e.symm.toAlgHom e.symm.injective
+  let : Field K' := (e.toRingEquiv.symm.isField (Field.toIsField K)).toField
+  let : Field ((Spec (.of K)).presheaf.stalk (f (genericPoint X))) := this
+  have : PerfectField ((Spec (.of K)).presheaf.stalk (f (genericPoint X))) :=
+    Algebra.IsAlgebraic.perfectField (K := K)
+      (L := (Spec.structureSheaf K).presheaf.stalk (f (genericPoint X)))
+  exact Algebra.FormallySmooth.of_perfectField
 
 中文:
 引理 概形.态射.genericPoint_mem_smoothLocus_of_perfectField
@@ -822,7 +927,16 @@ lemma Scheme.Hom.genericPoint_mem_smoothLocus_of_perfectField
   rw [Scheme.Hom.mem_smoothLocus]
   algebraize [(f.stalkMap (genericPoint X)).hom]
   let K' := (Spec.structureSheaf K).presheaf.stalk (f (genericPoint X))
-  let e : K ≃ₐ[K] K' := IsLocalization.atUnits _ (f (genericPoint X)).asIdeal.primeC
+  let e : K ≃ₐ[K] K' := IsLocalization.atUnits _ (f (genericPoint X)).asIdeal.primeCompl
+      (fun x hx => by aesop (add simp IsUnit.mem_submonoid_iff))
+  have : Algebra.IsAlgebraic K K' :=
+    .of_injective e.symm.toAlgHom e.symm.injective
+  let : Field K' := (e.toRingEquiv.symm.isField (Field.toIsField K)).toField
+  let : Field ((Spec (.of K)).presheaf.stalk (f (genericPoint X))) := this
+  have : PerfectField ((Spec (.of K)).presheaf.stalk (f (genericPoint X))) :=
+    Algebra.IsAlgebraic.perfectField (K := K)
+      (L := (Spec.structureSheaf K).presheaf.stalk (f (genericPoint X)))
+  exact Algebra.FormallySmooth.of_perfectField
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Field.toIsField, IsAlgebraic, IsLocalization, IsLocalization.atUnits, IsUnit, IsUnit.mem_submonoid_iff, LocallyOfFiniteType, LocallyOfFiniteType.stalkMap, Scheme, Scheme.Hom.mem_smoothLocus, Spec.structureSheaf, algebraize, asIdeal, asIdeal.primeCompl, atUnits, e.symm.injective, e.symm.toAlgHom, e.toRingEquiv.symm.isField
 -/
@@ -856,7 +970,32 @@ lemma Scheme.Hom.dense_smoothLocus_of_perfectField
     intro x
     obtain ⟨_, ⟨U : X.Opens, hU, rfl⟩, hxU, -⟩ :=
       X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
-    have := this (U.ι ≫ f) (isCompact_iff_compactSpace.mp
+    have := this (U.ι ≫ f) (isCompact_iff_compactSpace.mp hU.isCompact) ⟨x, hxU⟩
+    rwa [← preimage_smoothLocus_eq, Scheme.Hom.coe_preimage,
+      ← U.ι.isOpenEmbedding.isOpenMap.preimage_closure_eq_closure_preimage U.ι.continuous,
+      Set.mem_preimage, U.ι_apply] at this
+  have : IsNoetherian X := { __ := LocallyOfFiniteType.isLocallyNoetherian f }
+  rw [dense_iff_closure_eq]; rw [Set.eq_univ_iff_forall]
+  intro x
+  let U : X.Opens :=
+    ⟨(⋃₀ (irreducibleComponents X \ {irreducibleComponent x}))ᶜ, by
+      rw [Set.sUnion_eq_biUnion]; rw [isOpen_compl_iff]
+      exact TopologicalSpace.NoetherianSpace.finite_irreducibleComponents.sdiff.isClosed_biUnion
+        fun W hW => isClosed_of_mem_irreducibleComponents W hW.1⟩
+  have hU : closure U = irreducibleComponent x :=
+    closure_sUnion_irreducibleComponents_sdiff_singleton
+      TopologicalSpace.NoetherianSpace.finite_irreducibleComponents
+      _ (irreducibleComponent_mem_irreducibleComponents x)
+  have : AlgebraicGeometry.IsIntegral U :=
+    have : IrreducibleSpace U := isIrreducible_iff_irreducibleSpace.mp
+      (isIrreducible_iff_closure.mp (hU ▸ isIrreducible_irreducibleComponent))
+    isIntegral_of_irreducibleSpace_of_isReduced _
+  have : U.ι (genericPoint U) in f.smoothLocus := by
+    have := (U.ι ≫ f).genericPoint_mem_smoothLocus_of_perfectField
+    rwa [← preimage_smoothLocus_eq, Scheme.Hom.mem_preimage] at this
+  exact (((genericPoint_spec U).image U.ι.continuous).specializes (y := x)
+    (by rw [Set.image_univ, U.range_ι, hU]; exact mem_irreducibleComponent)).mem_closed
+    isClosed_closure (subset_closure this)
 
 中文:
 引理 概形.态射.dense_smoothLocus_of_perfectField
@@ -866,7 +1005,32 @@ lemma Scheme.Hom.dense_smoothLocus_of_perfectField
     intro x
     obtain ⟨_, ⟨U : X.Opens, hU, rfl⟩, hxU, -⟩ :=
       X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
-    have := this (U.ι ≫ f) (isCompact_iff_compactSpace.mp
+    have := this (U.ι ≫ f) (isCompact_iff_compactSpace.mp hU.isCompact) ⟨x, hxU⟩
+    rwa [← preimage_smoothLocus_eq, Scheme.Hom.coe_preimage,
+      ← U.ι.isOpenEmbedding.isOpenMap.preimage_closure_eq_closure_preimage U.ι.continuous,
+      Set.mem_preimage, U.ι_apply] at this
+  have : IsNoetherian X := { __ := LocallyOfFiniteType.isLocallyNoetherian f }
+  rw [dense_iff_closure_eq]; rw [Set.eq_univ_iff_forall]
+  intro x
+  let U : X.Opens :=
+    ⟨(⋃₀ (irreducibleComponents X \ {irreducibleComponent x}))ᶜ, by
+      rw [Set.sUnion_eq_biUnion]; rw [isOpen_compl_iff]
+      exact TopologicalSpace.NoetherianSpace.finite_irreducibleComponents.sdiff.isClosed_biUnion
+        fun W hW => isClosed_of_mem_irreducibleComponents W hW.1⟩
+  have hU : closure U = irreducibleComponent x :=
+    closure_sUnion_irreducibleComponents_sdiff_singleton
+      TopologicalSpace.NoetherianSpace.finite_irreducibleComponents
+      _ (irreducibleComponent_mem_irreducibleComponents x)
+  have : AlgebraicGeometry.IsIntegral U :=
+    have : IrreducibleSpace U := isIrreducible_iff_irreducibleSpace.mp
+      (isIrreducible_iff_closure.mp (hU ▸ isIrreducible_irreducibleComponent))
+    isIntegral_of_irreducibleSpace_of_isReduced _
+  have : U.ι (genericPoint U) in f.smoothLocus := by
+    have := (U.ι ≫ f).genericPoint_mem_smoothLocus_of_perfectField
+    rwa [← preimage_smoothLocus_eq, Scheme.Hom.mem_preimage] at this
+  exact (((genericPoint_spec U).image U.ι.continuous).specializes (y := x)
+    (by rw [Set.image_univ, U.range_ι, hU]; exact mem_irreducibleComponent)).mem_closed
+    isClosed_closure (subset_closure this)
 
 Depends on / 依赖: Cardinal, Cardinal.fact_isRegular_aleph0, CompactSpace, EffectiveEpi, EffectiveEpi.getStruct, IsNoetherian, IsPullback, IsPullback.of_hasPullback, IsRegularEpiCategory, IsRegularEpiCategory.regularEpiOfEpi, Scheme, Scheme.Hom.coe_preimage, Set.eq_univ_iff_forall, Set.mem_preimage, Set.mem_univ, X.Opens, X.isBasis_affineOpens.exists_subset_of_mem_open, allowSynthFailures, coe_preimage, continuous
 -/

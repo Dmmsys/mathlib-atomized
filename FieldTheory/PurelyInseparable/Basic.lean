@@ -436,7 +436,11 @@ theorem isPurelyInseparable_iff_pow_mem
   · obtain ⟨g, h1, n, h2⟩ := (minpoly.irreducible (h x).1).hasSeparableContraction q
 exact ⟨n, (h _).2 h1.of_dvd minpoly.dvd F _ by
       simpa only [expand_aeval, minpoly.aeval] using congr_arg (aeval x) h2⟩
-  have hdeg := (m
+  have hdeg := (minpoly.natSepDegree_eq_one_iff_pow_mem q).2 (h x)
+  have halg : IsIntegral F x := by_contra fun h' => by
+    simp only [minpoly.eq_zero h', natSepDegree_zero, zero_ne_one] at hdeg
+  refine ⟨halg, fun hsep => ?_⟩
+  rwa [hsep.natSepDegree_eq_natDegree, minpoly.natDegree_eq_one_iff] at hdeg
 
 中文:
 定理 isPurelyInseparable_iff_pow_mem
@@ -446,7 +450,11 @@ exact ⟨n, (h _).2 h1.of_dvd minpoly.dvd F _ by
   · obtain ⟨g, h1, n, h2⟩ := (minpoly.irreducible (h x).1).hasSeparableContraction q
 exact ⟨n, (h _).2 h1.of_dvd minpoly.dvd F _ by
       simpa only [expand_aeval, minpoly.aeval] using congr_arg (aeval x) h2⟩
-  have hdeg := (m
+  have hdeg := (minpoly.natSepDegree_eq_one_iff_pow_mem q).2 (h x)
+  have halg : IsIntegral F x := by_contra fun h' => by
+    simp only [minpoly.eq_zero h', natSepDegree_zero, zero_ne_one] at hdeg
+  refine ⟨halg, fun hsep => ?_⟩
+  rwa [hsep.natSepDegree_eq_natDegree, minpoly.natDegree_eq_one_iff] at hdeg
 
 Depends on / 依赖: IsIntegral, congr_arg, eq_zero, expand_aeval, h1.of_dvd, hasSeparableContraction, irreducible, isPurelyInseparable_iff, minpoly, minpoly.aeval, minpoly.dvd, minpoly.eq_zero, minpoly.irreducible, minpoly.natSepDegree_eq_one_iff_pow_mem, natSepDegree_eq_one_iff_pow_mem, natSepDegree_zero, of_dvd, zero_ne_one
 -/
@@ -501,7 +509,7 @@ theorem IsPurelyInseparable.tower_bot
   refine ⟨⟨fun x => (isIntegral' F (algebraMap E K x)).tower_bot_of_field⟩, fun x h => ?_⟩
   rw [IsSeparable]; rw [← minpoly.algebraMap_eq (algebraMap E K).injective] at h
   obtain ⟨y, h⟩ := inseparable F _ h
-  exact ⟨y, (algebraMap E K).injective (h.symm ▸ (IsScalarTower.algebraMap_apply F E K y
+  exact ⟨y, (algebraMap E K).injective (h.symm ▸ (IsScalarTower.algebraMap_apply F E K y).symm)⟩
 
 中文:
 定理 是纯不可分.tower_bot
@@ -510,7 +518,7 @@ theorem IsPurelyInseparable.tower_bot
   refine ⟨⟨fun x => (isIntegral' F (algebraMap E K x)).tower_bot_of_field⟩, fun x h => ?_⟩
   rw [IsSeparable]; rw [← minpoly.algebraMap_eq (algebraMap E K).injective] at h
   obtain ⟨y, h⟩ := inseparable F _ h
-  exact ⟨y, (algebraMap E K).injective (h.symm ▸ (IsScalarTower.algebraMap_apply F E K y
+  exact ⟨y, (algebraMap E K).injective (h.symm ▸ (IsScalarTower.algebraMap_apply F E K y).symm)⟩
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_apply, IsSeparable, algebraMap, algebraMap_apply, algebraMap_eq, h.symm, injective, inseparable, isIntegral, minpoly, minpoly.algebraMap_eq, tower_bot_of_field
 -/
@@ -574,7 +582,7 @@ theorem IsPurelyInseparable.trans
   obtain ⟨n, y, h2⟩ := h2 x
   obtain ⟨m, z, h1⟩ := h1 y
   refine ⟨n + m, z, ?_⟩
-  rw [IsScalarTower.algebraMap_apply F E K]; r
+  rw [IsScalarTower.algebraMap_apply F E K]; rw [h1]; rw [map_pow]; rw [h2]; rw [← pow_mul]; rw [← pow_add]
 
 中文:
 定理 是纯不可分.trans
@@ -587,7 +595,7 @@ theorem IsPurelyInseparable.trans
   obtain ⟨n, y, h2⟩ := h2 x
   obtain ⟨m, z, h1⟩ := h1 y
   refine ⟨n + m, z, ?_⟩
-  rw [IsScalarTower.algebraMap_apply F E K]; r
+  rw [IsScalarTower.algebraMap_apply F E K]; rw [h1]; rw [map_pow]; rw [h2]; rw [← pow_mul]; rw [← pow_add]
 
 Depends on / 依赖: ExpChar, ExpChar.exists, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap, algebraMap_apply, expChar_of_injective_algebraMap, injective, isPurelyInseparable_iff_pow_mem, map_pow, pow_add, pow_mul
 -/
@@ -786,7 +794,21 @@ lemma IsPurelyInseparable.finrank_eq_pow
     simpa using this (⊥ : IntermediateField F E) E q
   intro F E _ _ _ q _ _ _
   generalize hd : finrank F E = d
-  i
+  induction d using Nat.strongRecOn generalizing F with
+  | ind d IH =>
+    by_cases h : (⊥ : IntermediateField F E) = ⊤
+    · rw [← finrank_top', ← h, IntermediateField.finrank_bot] at hd
+      exact ⟨0, ((pow_zero q).trans hd).symm⟩
+    obtain ⟨x, -, hx⟩ := SetLike.exists_of_lt (lt_of_le_of_ne bot_le h :)
+    obtain ⟨m, y, e⟩ := IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x
+    have : finrank F F⟮x⟯ = q ^ m := by
+      rw [adjoin.finrank (Algebra.IsIntegral.isIntegral x)]; rw [e]; rw [natDegree_sub_C]; rw [natDegree_X_pow]
+    obtain ⟨n, hn⟩ := IH _ (by
+      rw [← hd]; rw [← finrank_mul_finrank F F⟮x⟯]; rw [Nat.lt_mul_iff_one_lt_left finrank_pos]; rw [this]
+      by_contra! H
+      refine hx (finrank_adjoin_simple_eq_one_iff.mp (le_antisymm (this ▸ H) ?_))
+      exact Nat.one_le_iff_ne_zero.mpr Module.finrank_pos.ne') (F⟮x⟯) rfl
+    exact ⟨m + n, by rw [← hd, ← finrank_mul_finrank F F⟮x⟯, hn, pow_add, this]⟩
 
 中文:
 引理 是纯不可分.finrank_eq_pow
@@ -796,7 +818,21 @@ lemma IsPurelyInseparable.finrank_eq_pow
     simpa using this (⊥ : IntermediateField F E) E q
   intro F E _ _ _ q _ _ _
   generalize hd : finrank F E = d
-  i
+  induction d using Nat.strongRecOn generalizing F with
+  | ind d IH =>
+    by_cases h : (⊥ : IntermediateField F E) = ⊤
+    · rw [← finrank_top', ← h, IntermediateField.finrank_bot] at hd
+      exact ⟨0, ((pow_zero q).trans hd).symm⟩
+    obtain ⟨x, -, hx⟩ := SetLike.exists_of_lt (lt_of_le_of_ne bot_le h :)
+    obtain ⟨m, y, e⟩ := IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x
+    have : finrank F F⟮x⟯ = q ^ m := by
+      rw [adjoin.finrank (Algebra.IsIntegral.isIntegral x)]; rw [e]; rw [natDegree_sub_C]; rw [natDegree_X_pow]
+    obtain ⟨n, hn⟩ := IH _ (by
+      rw [← hd]; rw [← finrank_mul_finrank F F⟮x⟯]; rw [Nat.lt_mul_iff_one_lt_left finrank_pos]; rw [this]
+      by_contra! H
+      refine hx (finrank_adjoin_simple_eq_one_iff.mp (le_antisymm (this ▸ H) ?_))
+      exact Nat.one_le_iff_ne_zero.mpr Module.finrank_pos.ne') (F⟮x⟯) rfl
+    exact ⟨m + n, by rw [← hd, ← finrank_mul_finrank F F⟮x⟯, hn, pow_add, this]⟩
 
 Depends on / 依赖: Algebra, ExpChar, FiniteDimensional, IntermediateField, IntermediateField.finrank_bot, IsPurelyInseparable, Nat.strongRecOn, finrank, finrank_bot, finrank_top, generalize, generalizing, pow_zero, strongRecOn
 -/
@@ -838,7 +874,10 @@ theorem isPurelyInseparable_of_finSepDegree_eq_one
     refine fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hsep => ?_⟩
     have := finSepDegree_mul_finSepDegree_of_isAlgebraic F F⟮x⟯ E
     rw [hdeg]; rw [mul_eq_one]; rw [(finSepDegree_adjoin_simple_eq_finrank_iff F E x
-    
+        (Algebra.IsAlgebraic.isAlgebraic x)).2 hsep]; rw [IntermediateField.finrank_eq_one_iff] at this
+    simpa only [this.1] using! mem_adjoin_simple_self F x
+  · rw [← Algebra.transcendental_iff_not_isAlgebraic] at H
+    simp [finSepDegree_eq_zero_of_transcendental F E] at hdeg
 
 中文:
 定理 isPurelyInseparable_of_finSepDegree_eq_one
@@ -848,7 +887,10 @@ theorem isPurelyInseparable_of_finSepDegree_eq_one
     refine fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hsep => ?_⟩
     have := finSepDegree_mul_finSepDegree_of_isAlgebraic F F⟮x⟯ E
     rw [hdeg]; rw [mul_eq_one]; rw [(finSepDegree_adjoin_simple_eq_finrank_iff F E x
-    
+        (Algebra.IsAlgebraic.isAlgebraic x)).2 hsep]; rw [IntermediateField.finrank_eq_one_iff] at this
+    simpa only [this.1] using! mem_adjoin_simple_self F x
+  · rw [← Algebra.transcendental_iff_not_isAlgebraic] at H
+    simp [finSepDegree_eq_zero_of_transcendental F E] at hdeg
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsAlgebraic.isAlgebraic, Algebra.IsIntegral.isIntegral, Algebra.transcendental_iff_not_isAlgebraic, IntermediateField, IntermediateField.finrank_eq_one_iff, IsAlgebraic, IsIntegral, finSepD, finSepDegree_adjoin_simple_eq_finrank_iff, finSepDegree_mul_finSepDegree_of_isAlgebraic, finrank_eq_one_iff, isAlgebraic, isIntegral, isPurelyInseparable_iff, mem_adjoin_simple_self, mul_eq_one, transcendental_iff_not_isAlgebraic
 -/
@@ -882,7 +924,7 @@ theorem injective_comp_algebraMap
   simp_rw [RingHom.comp_apply, h, map_pow] at heq
   nontriviality L
   have := expChar_of_injective_ringHom (f.comp (algebraMap F E)).injective q
-  exact iterateFr
+  exact iterateFrobenius_inj L q n heq
 
 中文:
 定理 injective_comp_algebraMap
@@ -895,7 +937,7 @@ theorem injective_comp_algebraMap
   simp_rw [RingHom.comp_apply, h, map_pow] at heq
   nontriviality L
   have := expChar_of_injective_ringHom (f.comp (algebraMap F E)).injective q
-  exact iterateFr
+  exact iterateFrobenius_inj L q n heq
 
 Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.pow_mem, RingHom, RingHom.comp_apply, algebraMap, comp_apply, expChar_of_injective_ringHom, f.comp, injective, iterateFrobenius_inj, map_pow, nontriviality, pow_mem, replace, ringExpChar, simp_rw
 -/
@@ -1217,7 +1259,8 @@ theorem isPurelyInseparable_iff_fd_isPurelyInseparable
   have hx : IsIntegral F x := Algebra.IsIntegral.isIntegral x
   refine ⟨hx, fun _ => ?_⟩
 obtain ⟨y, h⟩ := (h _ (adjoin.finiteDimensional hx)).inseparable' _
-    show Separable (minpoly 
+    show Separable (minpoly F (AdjoinSimple.gen F x)) by rwa [minpoly_eq]
+  exact ⟨y, congr_arg (algebraMap _ E) h⟩
 
 中文:
 定理 isPurelyInseparable_iff_fd_isPurelyInseparable
@@ -1228,7 +1271,8 @@ obtain ⟨y, h⟩ := (h _ (adjoin.finiteDimensional hx)).inseparable' _
   have hx : IsIntegral F x := Algebra.IsIntegral.isIntegral x
   refine ⟨hx, fun _ => ?_⟩
 obtain ⟨y, h⟩ := (h _ (adjoin.finiteDimensional hx)).inseparable' _
-    show Separable (minpoly 
+    show Separable (minpoly F (AdjoinSimple.gen F x)) by rwa [minpoly_eq]
+  exact ⟨y, congr_arg (algebraMap _ E) h⟩
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.gen, Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, IsPurelyInseparable, IsPurelyInseparable.tower_bot, Separable, adjoin, adjoin.finiteDimensional, algebraMap, congr_arg, finiteDimensional, inseparable, isIntegral, isPurelyInseparable_iff, minpoly, minpoly_eq, tower_bot
 -/
@@ -1287,7 +1331,9 @@ instance separableClosure.isPurelyInseparable
   refine ⟨(IsAlgebraic.tower_top L (Algebra.IsAlgebraic.isAlgebraic (R := F) x)).isIntegral,
     fun h => ?_⟩
   have := (isSeparable_adjoin_simple_iff_isSeparable L E).2 h
-  have : Algebra.IsSeparable F (restrictScalars F L⟮x⟯) :=
+  have : Algebra.IsSeparable F (restrictScalars F L⟮x⟯) := Algebra.IsSeparable.trans F L L⟮x⟯
+  have hx : x in L⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
+exact ⟨⟨x, mem_separableClosure_iff.2 isSeparable_of_mem_isSeparable F E hx⟩, rfl⟩
 
 中文:
 实例 separableClosure.isPurelyInseparable
@@ -1297,7 +1343,9 @@ instance separableClosure.isPurelyInseparable
   refine ⟨(IsAlgebraic.tower_top L (Algebra.IsAlgebraic.isAlgebraic (R := F) x)).isIntegral,
     fun h => ?_⟩
   have := (isSeparable_adjoin_simple_iff_isSeparable L E).2 h
-  have : Algebra.IsSeparable F (restrictScalars F L⟮x⟯) :=
+  have : Algebra.IsSeparable F (restrictScalars F L⟮x⟯) := Algebra.IsSeparable.trans F L L⟮x⟯
+  have hx : x in L⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
+exact ⟨⟨x, mem_separableClosure_iff.2 isSeparable_of_mem_isSeparable F E hx⟩, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, Algebra.IsSeparable, Algebra.IsSeparable.trans, IsAlgebraic, IsAlgebraic.tower_top, IsSeparable, isAlgebraic, isIntegral, isPurelyInseparable_iff, isSeparable_adjoin_simple_iff_isSeparable, isSeparable_of_mem_isSeparable, mem_adjoin_simple_self, mem_separableClosure_iff, restrictScalars, separableClosure, tower_top
 -/
@@ -1390,7 +1438,7 @@ theorem separableClosure_le_iff
   let := (inclusion h).toAlgebra
   let : SMul (separableClosure F E) L := Algebra.toSMul
   have : IsScalarTower (separableClosure F E) L E := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  exact IsPurelyInseparable.tower_top (separableCl
+  exact IsPurelyInseparable.tower_top (separableClosure F E) L E
 
 中文:
 定理 separableClosure_le_iff
@@ -1400,7 +1448,7 @@ theorem separableClosure_le_iff
   let := (inclusion h).toAlgebra
   let : SMul (separableClosure F E) L := Algebra.toSMul
   have : IsScalarTower (separableClosure F E) L E := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  exact IsPurelyInseparable.tower_top (separableCl
+  exact IsPurelyInseparable.tower_top (separableClosure F E) L E
 
 Depends on / 依赖: Algebra, Algebra.toSMul, IsPurelyInseparable, IsPurelyInseparable.tower_top, IsScalarTower, IsScalarTower.of_algebraMap_eq, inclusion, of_algebraMap_eq, separableClosure, separableClosure_le, toAlgebra, toSMul, tower_top
 -/
@@ -1465,7 +1513,7 @@ theorem IsPurelyInseparable.of_injective_comp_algebraMap
   let := (Classical.arbitrary (E ->+* L)).toAlgebra
   let j : AlgebraicClosure E ->ₐ[E] L := IsAlgClosed.lift
 exact ⟨⟨fun f g => DFunLike.ext' j.injective.comp_left (congr_arg (⇑) <|
-    @h (j.t
+    @h (j.toRingHom.comp f) (j.toRingHom.comp g) (by ext; simp))⟩, inferInstance⟩
 
 中文:
 定理 是纯不可分.of_injective_comp_algebraMap
@@ -1475,7 +1523,7 @@ exact ⟨⟨fun f g => DFunLike.ext' j.injective.comp_left (congr_arg (⇑) <|
   let := (Classical.arbitrary (E ->+* L)).toAlgebra
   let j : AlgebraicClosure E ->ₐ[E] L := IsAlgClosed.lift
 exact ⟨⟨fun f g => DFunLike.ext' j.injective.comp_left (congr_arg (⇑) <|
-    @h (j.t
+    @h (j.toRingHom.comp f) (j.toRingHom.comp g) (by ext; simp))⟩, inferInstance⟩
 
 Depends on / 依赖: AlgebraicClosure, Classical, Classical.arbitrary, DFunLike, DFunLike.ext, IsAlgClosed, IsAlgClosed.lift, Nat.card_eq_one_iff_unique, arbitrary, card_eq_one_iff_unique, comp_left, congr_arg, finSepDegree, injective, isPurelyInseparable_iff_finSepDegree_eq_one, j.injective.comp_left, j.toRingHom.comp, toAlgebra, toRingHom
 -/
@@ -1608,7 +1656,8 @@ theorem finSepDegree_mul_finInsepDegree
   · have := congr_arg Cardinal.toNat (sepDegree_mul_insepDegree F E)
     rwa [Cardinal.toNat_mul, ← finSepDegree_eq F E] at this
   rw [finInsepDegree]; rw [finrank_of_infinite_dimensional (K := F) (V := E) fun _ =>
-      halg (Algebra.IsAlgebraic.of_finit
+      halg (Algebra.IsAlgebraic.of_finite F E)]; rw [finrank_of_infinite_dimensional (K := separableClosure F E) (V := E) fun _ =>
+      halg (.trans _ (separableClosure F E) _)]; rw [mul_zero]
 
 中文:
 定理 finSepDegree_mul_finInsepDegree
@@ -1618,7 +1667,8 @@ theorem finSepDegree_mul_finInsepDegree
   · have := congr_arg Cardinal.toNat (sepDegree_mul_insepDegree F E)
     rwa [Cardinal.toNat_mul, ← finSepDegree_eq F E] at this
   rw [finInsepDegree]; rw [finrank_of_infinite_dimensional (K := F) (V := E) fun _ =>
-      halg (Algebra.IsAlgebraic.of_finit
+      halg (Algebra.IsAlgebraic.of_finite F E)]; rw [finrank_of_infinite_dimensional (K := separableClosure F E) (V := E) fun _ =>
+      halg (.trans _ (separableClosure F E) _)]; rw [mul_zero]
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsAlgebraic.of_finite, Cardinal, Cardinal.toNat, Cardinal.toNat_mul, IsAlgebraic, congr_arg, finInsepDegree, finSepDegree_eq, finrank_of_infinite_dimensional, mul_zero, of_finite, sepDegree_mul_insepDegree, separableClosure, toNat_mul
 -/
@@ -1648,7 +1698,12 @@ lemma adjoin_eq_of_isAlgebraic_of_isSeparable
     have := Algebra.isSeparable_tower_top_of_isSeparable E L K
     let i : S ->+* L := Subsemiring.inclusion fun x hx => subset_adjoin E (S : Set K) hx
     let _ : Algebra S L := i.toAlgebra
-    have : IsSca
+    have : IsScalarTower S L K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
+    have := Algebra.IsAlgebraic.trans F E K
+    have : IsPurelyInseparable S K := separableClosure.isPurelyInseparable F K
+    have := IsPurelyInseparable.tower_top S L K
+    obtain ⟨y, rfl⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable L K x
+    exact y.2
 
 中文:
 引理 adjoin_eq_of_isAlgebraic_of_isSeparable
@@ -1659,7 +1714,12 @@ lemma adjoin_eq_of_isAlgebraic_of_isSeparable
     have := Algebra.isSeparable_tower_top_of_isSeparable E L K
     let i : S ->+* L := Subsemiring.inclusion fun x hx => subset_adjoin E (S : Set K) hx
     let _ : Algebra S L := i.toAlgebra
-    have : IsSca
+    have : IsScalarTower S L K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
+    have := Algebra.IsAlgebraic.trans F E K
+    have : IsPurelyInseparable S K := separableClosure.isPurelyInseparable F K
+    have := IsPurelyInseparable.tower_top S L K
+    obtain ⟨y, rfl⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable L K x
+    exact y.2
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.trans, Algebra.isSeparable_tower_top_of_isSeparable, IsAlgebraic, IsPurelyInseparable, IsPurelyInseparable.tower_top, IsScalarTower, IsScalarTower.of_algebraMap_eq, Subsemiring, Subsemiring.inclusion, adjoin, i.toAlgebra, inclusion, isPurelyInseparable, isSeparable_tower_top_of_isSeparable, of_algebraMap_eq, separableClosure, separableClosure.isPurelyInseparable, subset_adjoin, toAlgebra
 -/
@@ -1690,7 +1750,8 @@ theorem adjoin_eq_of_isAlgebraic
   have h := congr_arg lift (adjoin_eq_of_isAlgebraic_of_isSeparable (F := F) S)
   rw [lift_top]; rw [lift_adjoin] at h
   have : IsScalarTower F S K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  rw [← h]; rw [← map_eq_of_separableClosure_eq_bot F (separableClos
+  rw [← h]; rw [← map_eq_of_separableClosure_eq_bot F (separableClosure_eq_bot E K)]
+  simp only [S, coe_map, IsScalarTower.coe_toAlgHom', IntermediateField.algebraMap_apply]
 
 中文:
 定理 adjoin_eq_of_isAlgebraic
@@ -1700,7 +1761,8 @@ theorem adjoin_eq_of_isAlgebraic
   have h := congr_arg lift (adjoin_eq_of_isAlgebraic_of_isSeparable (F := F) S)
   rw [lift_top]; rw [lift_adjoin] at h
   have : IsScalarTower F S K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  rw [← h]; rw [← map_eq_of_separableClosure_eq_bot F (separableClos
+  rw [← h]; rw [← map_eq_of_separableClosure_eq_bot F (separableClosure_eq_bot E K)]
+  simp only [S, coe_map, IsScalarTower.coe_toAlgHom', IntermediateField.algebraMap_apply]
 
 Depends on / 依赖: IntermediateField, IntermediateField.algebraMap_apply, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.of_algebraMap_eq, adjoin_eq_of_isAlgebraic_of_isSeparable, algebraMap_apply, coe_map, coe_toAlgHom, congr_arg, lift_adjoin, lift_top, map_eq_of_separableClosure_eq_bot, of_algebraMap_eq, separableClosure, separableClosure_eq_bot
 -/
@@ -1736,7 +1798,11 @@ definition Subalgebra.perfectClosure
     rw [add_pow_expChar_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
     exact add_mem (pow_mem hx _) (pow_mem hy _)
   mul_mem' := by
-    rintro x y ⟨
+    rintro x y ⟨n, hx⟩ ⟨m, hy⟩
+    use n + m
+    rw [mul_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
+    exact mul_mem (pow_mem hx _) (pow_mem hy _)
+  algebraMap_mem' := fun x => ⟨0, by rw [pow_zero, pow_one]; exact ⟨x, rfl⟩⟩
 
 中文:
 定义 子代数.perfectClosure
@@ -1748,7 +1814,11 @@ definition Subalgebra.perfectClosure
     rw [add_pow_expChar_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
     exact add_mem (pow_mem hx _) (pow_mem hy _)
   mul_mem' := by
-    rintro x y ⟨
+    rintro x y ⟨n, hx⟩ ⟨m, hy⟩
+    use n + m
+    rw [mul_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
+    exact mul_mem (pow_mem hx _) (pow_mem hy _)
+  algebraMap_mem' := fun x => ⟨0, by rw [pow_zero, pow_one]; exact ⟨x, rfl⟩⟩
 
 Depends on / 依赖: algebraMap, rangeS
 -/
@@ -1802,7 +1872,21 @@ lemma IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar
   | zero => exact ⟨0, 0, by simp⟩
   | add x y h h' =>
     have : ExpChar (R otimes[k] K) q := expChar_of_injective_ringHom (algebraMap k _).injective q
-    simp_rw [RingHom.mem_range, ← RingHom.me
+    simp_rw [RingHom.mem_range, ← RingHom.mem_rangeS, ← Subalgebra.mem_perfectClosure_iff] at h h' ⊢
+    exact add_mem h h'
+  | tmul x y =>
+    obtain ⟨n, a, ha⟩ := IsPurelyInseparable.pow_mem k q y
+    use n
+    have : (x ^ q ^ n) otimesₜ[k] (y ^ q ^ n) =
+        (x ^ q ^ n) otimesₜ[k] (1 : K) * (1 : R) otimesₜ[k] (y ^ q ^ n) := by
+      rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]
+    rw [Algebra.TensorProduct.tmul_pow]; rw [this]
+    refine Subring.mul_mem _ ⟨x ^ q ^ n, rfl⟩ ⟨algebraMap k R a, ?_⟩
+    rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.TensorProduct.algebraMap_apply]; rw [Algebra.TensorProduct.tmul_one_eq_one_tmul]; rw [ha]
+  · subst hq
+    have : CharZero k := charZero_of_expChar_one' k
+    exact ⟨0, (Algebra.TensorProduct.includeLeft_surjective R _ <|
+      IsPurelyInseparable.surjective_algebraMap_of_isSeparable k K) _⟩
 
 中文:
 引理 是纯不可分.存在_pow_pow_mem_range_tensorProduct_of_expChar
@@ -1813,7 +1897,21 @@ lemma IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar
   | zero => exact ⟨0, 0, by simp⟩
   | add x y h h' =>
     have : ExpChar (R otimes[k] K) q := expChar_of_injective_ringHom (algebraMap k _).injective q
-    simp_rw [RingHom.mem_range, ← RingHom.me
+    simp_rw [RingHom.mem_range, ← RingHom.mem_rangeS, ← Subalgebra.mem_perfectClosure_iff] at h h' ⊢
+    exact add_mem h h'
+  | tmul x y =>
+    obtain ⟨n, a, ha⟩ := IsPurelyInseparable.pow_mem k q y
+    use n
+    have : (x ^ q ^ n) otimesₜ[k] (y ^ q ^ n) =
+        (x ^ q ^ n) otimesₜ[k] (1 : K) * (1 : R) otimesₜ[k] (y ^ q ^ n) := by
+      rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]
+    rw [Algebra.TensorProduct.tmul_pow]; rw [this]
+    refine Subring.mul_mem _ ⟨x ^ q ^ n, rfl⟩ ⟨algebraMap k R a, ?_⟩
+    rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.TensorProduct.algebraMap_apply]; rw [Algebra.TensorProduct.tmul_one_eq_one_tmul]; rw [ha]
+  · subst hq
+    have : CharZero k := charZero_of_expChar_one' k
+    exact ⟨0, (Algebra.TensorProduct.includeLeft_surjective R _ <|
+      IsPurelyInseparable.surjective_algebraMap_of_isSeparable k K) _⟩
 
 Depends on / 依赖: ExpChar, IsPurelyInseparable, IsPurelyInseparable.pow_mem, RingHom, RingHom.mem_range, RingHom.mem_rangeS, Subalgebra, Subalgebra.mem_perfectClosure_iff, add_mem, algebraMap, expChar_is_prime_or_one, expChar_of_injective_ringHom, injective, mem_perfectClosure_iff, mem_range, mem_rangeS, nontriviality, otimes, pow_mem, simp_rw
 -/

@@ -335,7 +335,8 @@ lemma zpow_eq_zpow_iff_of_ne_zero₀
     exact pow_eq_pow_iff_of_ne_zero hn
   | Int.negSucc m => by
     simp only [← neg_ofNat_succ, ne_eq, neg_eq_zero, Nat.cast_eq_zero, zpow_neg, zpow_natCast,
-      in
+      inv_inj, even_neg, Int.even_coe_nat] at *
+    exact pow_eq_pow_iff_of_ne_zero hn
 
 中文:
 引理 zpow_eq_zpow_iff_of_ne_zero₀
@@ -347,7 +348,8 @@ lemma zpow_eq_zpow_iff_of_ne_zero₀
     exact pow_eq_pow_iff_of_ne_zero hn
   | Int.negSucc m => by
     simp only [← neg_ofNat_succ, ne_eq, neg_eq_zero, Nat.cast_eq_zero, zpow_neg, zpow_natCast,
-      in
+      inv_inj, even_neg, Int.even_coe_nat] at *
+    exact pow_eq_pow_iff_of_ne_zero hn
 
 Depends on / 依赖: Int.even_coe_nat, Int.negSucc, Int.ofNat, Int.ofNat_eq_natCast, Nat.cast_eq_zero, cast_eq_zero, even_coe_nat, even_neg, inv_inj, ne_eq, negSucc, neg_eq_zero, neg_ofNat_succ, ofNat_eq_natCast, pow_eq_pow_iff_of_ne_zero, zpow_natCast, zpow_neg
 -/

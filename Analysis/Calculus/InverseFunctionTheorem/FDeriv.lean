@@ -82,7 +82,7 @@ theorem approximates_deriv_on_nhds
   have := hf.isLittleO.def hc
   rw [nhds_prod_eq]; rw [Filter.Eventually]; rw [mem_prod_same_iff] at this
   rcases this with ⟨s, has, hs⟩
-  exact ⟨s, has, fun 
+  exact ⟨s, has, fun x hx y hy => hs (mk_mem_prod hx hy)⟩
 
 中文:
 定理 approximates_deriv_on_nhds
@@ -94,7 +94,7 @@ theorem approximates_deriv_on_nhds
   have := hf.isLittleO.def hc
   rw [nhds_prod_eq]; rw [Filter.Eventually]; rw [mem_prod_same_iff] at this
   rcases this with ⟨s, has, hs⟩
-  exact ⟨s, has, fun 
+  exact ⟨s, has, fun x hx y hy => hs (mk_mem_prod hx hy)⟩
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually, IsOpen, IsOpen.mem_nhds, Subsingleton, Subsingleton.elim, hf.isLittleO.def, isLittleO, isOpen_univ, mem_nhds, mem_prod_same_iff, mk_mem_prod, nhds_prod_eq
 -/
@@ -120,7 +120,10 @@ theorem map_nhds_eq_of_surj
   set c : Real>=0 := f'symm.nnnorm⁻¹ / 2 with hc
   have f'symm_pos : 0 < f'symm.nnnorm := f'.nonlinearRightInverseOfSurjective_nnnorm_pos h
   have cpos : 0 < c := by simp [hc, inv_pos, f'symm_pos]
-  obtain ⟨s, s_nhds, hs⟩ : exists s in 𝓝 a, A
+  obtain ⟨s, s_nhds, hs⟩ : exists s in 𝓝 a, ApproximatesLinearOn f f' s c :=
+    hf.approximates_deriv_on_nhds (Or.inr cpos)
+  apply hs.map_nhds_eq f'symm s_nhds (Or.inr (NNReal.half_lt_self _))
+  simp [ne_of_gt f'symm_pos]
 
 中文:
 定理 map_nhds_eq_of_surj
@@ -130,7 +133,10 @@ theorem map_nhds_eq_of_surj
   set c : Real>=0 := f'symm.nnnorm⁻¹ / 2 with hc
   have f'symm_pos : 0 < f'symm.nnnorm := f'.nonlinearRightInverseOfSurjective_nnnorm_pos h
   have cpos : 0 < c := by simp [hc, inv_pos, f'symm_pos]
-  obtain ⟨s, s_nhds, hs⟩ : exists s in 𝓝 a, A
+  obtain ⟨s, s_nhds, hs⟩ : exists s in 𝓝 a, ApproximatesLinearOn f f' s c :=
+    hf.approximates_deriv_on_nhds (Or.inr cpos)
+  apply hs.map_nhds_eq f'symm s_nhds (Or.inr (NNReal.half_lt_self _))
+  simp [ne_of_gt f'symm_pos]
 
 Depends on / 依赖: ApproximatesLinearOn, NNReal, NNReal.half_lt_self, Or.inr, approximates_deriv_on_nhds, half_lt_self, hf.approximates_deriv_on_nhds, hs.map_nhds_eq, inv_pos, map_nhds_eq, ne_of_gt, nnnorm, nonlinearRightInverseOfSurjective, nonlinearRightInverseOfSurjective_nnnorm_pos, s_nhds, symm.nnnorm, symm_pos
 -/
@@ -196,7 +202,7 @@ definition toOpenPartialHomeomorph
     (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.2
     (f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' =>
 NNReal.half_lt_self ne_of_gt inv_pos.2 hf')
-    (Classical.choose_spec
+    (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.1
 
 中文:
 定义 toOpenPartialHomeomorph
@@ -206,7 +212,7 @@ NNReal.half_lt_self ne_of_gt inv_pos.2 hf')
     (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.2
     (f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' =>
 NNReal.half_lt_self ne_of_gt inv_pos.2 hf')
-    (Classical.choose_spec
+    (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.1
 
 Depends on / 依赖: ApproximatesLinearOn, ApproximatesLinearOn.toOpenPartialHomeomorph, Classical, Classical.choose, Classical.choose_spec, NNReal, NNReal.half_lt_self, approximates_deriv_on_open_nhds, choose_spec, half_lt_self, hf.approximates_deriv_on_open_nhds, inv_pos, ne_of_gt, subsingleton_or_nnnorm_symm_pos, subsingleton_or_nnnorm_symm_pos.imp, toOpenPartialHomeomorph
 -/

@@ -370,7 +370,9 @@ theorem linearIndependent_of_iIsOrtho
   have hsum : (s.sum fun j : n => w j * B (v j) (v i)) = w i * B (v i) (v i) := by
     apply Finset.sum_eq_single_of_mem i hi
     intro j _ hij
-    rw [iIsOrtho_def.1 hv₁
+    rw [iIsOrtho_def.1 hv₁ _ _ hij]; rw [mul_zero]
+  simp_rw [sum_left, smul_left, hsum] at this
+  exact eq_zero_of_ne_zero_of_mul_right_eq_zero (hv₂ i) this
 
 中文:
 定理 linearIndependent_of_iIsOrtho
@@ -382,7 +384,9 @@ theorem linearIndependent_of_iIsOrtho
   have hsum : (s.sum fun j : n => w j * B (v j) (v i)) = w i * B (v i) (v i) := by
     apply Finset.sum_eq_single_of_mem i hi
     intro j _ hij
-    rw [iIsOrtho_def.1 hv₁
+    rw [iIsOrtho_def.1 hv₁ _ _ hij]; rw [mul_zero]
+  simp_rw [sum_left, smul_left, hsum] at this
+  exact eq_zero_of_ne_zero_of_mul_right_eq_zero (hv₂ i) this
 
 Depends on / 依赖: Finset, Finset.sum_eq_single_of_mem, eq_zero_of_ne_zero_of_mul_right_eq_zero, iIsOrtho_def, linearIndependent_iff, mul_zero, s.sum, simp_rw, smul_left, sum_eq_single_of_mem, sum_left, zero_left
 -/
@@ -792,7 +796,7 @@ lemma ker_restrict_eq_of_codisjoint
     obtain ⟨x, y, hx, hy, rfl⟩ := Submodule.codisjoint_iff_exists_add_eq.mp hpq w
     simpa [hB z hz y hy] using LinearMap.congr_fun h ⟨x, hx⟩
   · ext ⟨x, hx⟩
-  
+    simpa using LinearMap.congr_fun h x
 
 中文:
 引理 ker_restrict_eq_of_codisjoint
@@ -805,7 +809,7 @@ lemma ker_restrict_eq_of_codisjoint
     obtain ⟨x, y, hx, hy, rfl⟩ := Submodule.codisjoint_iff_exists_add_eq.mp hpq w
     simpa [hB z hz y hy] using LinearMap.congr_fun h ⟨x, hx⟩
   · ext ⟨x, hx⟩
-  
+    simpa using LinearMap.congr_fun h x
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, LinearMap.mem_ker, Submodule, Submodule.codisjoint_iff_exists_add_eq.mp, Submodule.coe_subtype, Submodule.mem_comap, codisjoint_iff_exists_add_eq, coe_subtype, congr_fun, mem_comap, mem_ker
 -/
@@ -874,7 +878,7 @@ theorem finrank_add_finrank_orthogonal'
     toLin_restrict_range_dualCoannihilator_eq_orthogonal _ _]; rw [finrank_map_subtype_eq]
   conv_rhs =>
     rw [← @Subspace.finrank_add_finrank_dualCoannihilator_eq K V _ _ _ _
-        (LinearMap.range (B.domRestrict W))]; rw [add_comm]; rw [← ad
+        (LinearMap.range (B.domRestrict W))]; rw [add_comm]; rw [← add_assoc]; rw [add_comm (finrank K (LinearMap.ker (B.domRestrict W)))]; rw [LinearMap.finrank_range_add_finrank_ker]
 
 中文:
 定理 finrank_add_finrank_orthogonal'
@@ -884,7 +888,7 @@ theorem finrank_add_finrank_orthogonal'
     toLin_restrict_range_dualCoannihilator_eq_orthogonal _ _]; rw [finrank_map_subtype_eq]
   conv_rhs =>
     rw [← @Subspace.finrank_add_finrank_dualCoannihilator_eq K V _ _ _ _
-        (LinearMap.range (B.domRestrict W))]; rw [add_comm]; rw [← ad
+        (LinearMap.range (B.domRestrict W))]; rw [add_comm]; rw [← add_assoc]; rw [add_comm (finrank K (LinearMap.ker (B.domRestrict W)))]; rw [LinearMap.finrank_range_add_finrank_ker]
 
 Depends on / 依赖: B.domRestrict, LinearMap, LinearMap.finrank_range_add_finrank_ker, LinearMap.ker, LinearMap.range, Subspace, Subspace.finrank_add_finrank_dualCoannihilator_eq, add_assoc, add_comm, conv_rhs, domRestrict, finrank, finrank_add_finrank_dualCoannihilator_eq, finrank_map_subtype_eq, finrank_range_add_finrank_ker, toLin_restrict_ker_eq_inf_ker, toLin_restrict_range_dualCoannihilator_eq_orthogonal
 -/
@@ -991,7 +995,8 @@ lemma isCompl_orthogonal_iff_disjoint
   calc
     finrank K V <= finrank K V + finrank K ↥(W ⊓ B.orthogonal ⊤) := le_self_add
     _ <= finrank K ↥(W ⊔ B.orthogonal W) + finrank K ↥(W ⊓ B.orthogonal W) := ?_
- 
+    _ <= finrank K ↥(W ⊔ B.orthogonal W) := by simp [h.eq_bot]
+  rw [finrank_sup_add_finrank_inf_eq]; rw [finrank_add_finrank_orthogonal hB₀ W]
 
 中文:
 引理 isCompl_orthogonal_iff_disjoint
@@ -1003,7 +1008,8 @@ lemma isCompl_orthogonal_iff_disjoint
   calc
     finrank K V <= finrank K V + finrank K ↥(W ⊓ B.orthogonal ⊤) := le_self_add
     _ <= finrank K ↥(W ⊔ B.orthogonal W) + finrank K ↥(W ⊓ B.orthogonal W) := ?_
- 
+    _ <= finrank K ↥(W ⊔ B.orthogonal W) := by simp [h.eq_bot]
+  rw [finrank_sup_add_finrank_inf_eq]; rw [finrank_add_finrank_orthogonal hB₀ W]
 
 Depends on / 依赖: B.orthogonal, IsCompl, IsCompl.disjoint, antisymm, codisjoint_iff, disjoint, eq_bot, eq_top_of_finrank_eq, finrank, finrank_add_finrank_orthogonal, finrank_le, finrank_sup_add_finrank_inf_eq, h.eq_bot, le_self_add, orthogonal
 -/
@@ -1032,7 +1038,10 @@ theorem isCompl_orthogonal_of_restrict_nondegenerate
     rintro ⟨n, hn⟩
     simp only [restrict_apply, domRestrict_apply]
     exact b₁ n x (b₁ x n (b₁ n x (hx₂ n hn)))
-  refine IsCompl.of_eq
+  refine IsCompl.of_eq this (eq_top_of_finrank_eq <| (finrank_le _).antisymm ?_)
+  conv_rhs => rw [← add_zero (finrank K _)]
+  rw [← finrank_bot K V]; rw [← this]; rw [finrank_sup_add_finrank_inf_eq]; rw [finrank_add_finrank_orthogonal b₁]
+  exact le_self_add
 
 中文:
 定理 isCompl_orthogonal_of_restrict_nondegenerate
@@ -1045,7 +1054,10 @@ theorem isCompl_orthogonal_of_restrict_nondegenerate
     rintro ⟨n, hn⟩
     simp only [restrict_apply, domRestrict_apply]
     exact b₁ n x (b₁ x n (b₁ n x (hx₂ n hn)))
-  refine IsCompl.of_eq
+  refine IsCompl.of_eq this (eq_top_of_finrank_eq <| (finrank_le _).antisymm ?_)
+  conv_rhs => rw [← add_zero (finrank K _)]
+  rw [← finrank_bot K V]; rw [← this]; rw [finrank_sup_add_finrank_inf_eq]; rw [finrank_add_finrank_orthogonal b₁]
+  exact le_self_add
 
 Depends on / 依赖: B.orthogonal, IsCompl, IsCompl.of_eq, Subtype, Subtype.mk_eq_mk, add_zero, antisymm, conv_rhs, domRestrict_apply, eq_bot_iff, eq_top_of_finrank_eq, finrank, finrank_add_finrank_orthogonal, finrank_bot, finrank_le, finrank_sup_add_finrank_inf_eq, le_self_add, mem_inf, mk_eq_mk, of_eq
 -/
@@ -1179,7 +1191,9 @@ theorem restrict_nondegenerate_orthogonal_spanSingleton
     (span_singleton_sup_orthogonal_eq_top hx).symm ▸ Submodule.mem_top
   refine ⟨fun m hm => Submodule.coe_eq_zero.1 (b₁.1 m fun n => ?_),
     fun m hm => Submodule.coe_eq_zero.1 (b₁.2 m fun n => ?_)⟩ <;>
-obtain ⟨y, hy, z, hz, rfl⟩ := Submodul
+obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.1 this n
+  · rw [add_right, b₂ y m <| m.2 y hy, show B m z = 0 from hm ⟨z, hz⟩, add_zero]
+  · rw [add_left, m.2 y hy, show B z m = 0 from hm ⟨z, hz⟩, add_zero]
 
 中文:
 定理 restrict_nondegenerate_orthogonal_spanSingleton
@@ -1189,7 +1203,9 @@ obtain ⟨y, hy, z, hz, rfl⟩ := Submodul
     (span_singleton_sup_orthogonal_eq_top hx).symm ▸ Submodule.mem_top
   refine ⟨fun m hm => Submodule.coe_eq_zero.1 (b₁.1 m fun n => ?_),
     fun m hm => Submodule.coe_eq_zero.1 (b₁.2 m fun n => ?_)⟩ <;>
-obtain ⟨y, hy, z, hz, rfl⟩ := Submodul
+obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.1 this n
+  · rw [add_right, b₂ y m <| m.2 y hy, show B m z = 0 from hm ⟨z, hz⟩, add_zero]
+  · rw [add_left, m.2 y hy, show B z m = 0 from hm ⟨z, hz⟩, add_zero]
 
 Depends on / 依赖: B.orthogonal, Submodule, Submodule.coe_eq_zero, Submodule.mem_sup, Submodule.mem_top, add_left, add_right, add_zero, coe_eq_zero, mem_sup, mem_top, orthogonal, span_singleton_sup_orthogonal_eq_top
 -/

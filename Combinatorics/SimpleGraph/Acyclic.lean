@@ -277,7 +277,7 @@ lemma Walk.exists_mem_contains_edges_of_directed
     obtain ⟨H₁, hH₁, ih⟩ := ih
     obtain ⟨H₂, hH₂, h_adj⟩ : exists H₂ in Hs, H₂.Adj u v := h_adj
     obtain ⟨H, hH, h₁, h₂⟩ := h_dir H₁ hH₁ H₂ hH₂
-    simpa using ⟨H, hH, (le_iff_adj.mp h₂) _ _ h_
+    simpa using ⟨H, hH, (le_iff_adj.mp h₂) _ _ h_adj, fun a ha => edgeSet_mono h₁ (ih a ha)⟩
 
 中文:
 引理 途径.存在_mem_contains_edges_of_directed
@@ -289,7 +289,7 @@ lemma Walk.exists_mem_contains_edges_of_directed
     obtain ⟨H₁, hH₁, ih⟩ := ih
     obtain ⟨H₂, hH₂, h_adj⟩ : exists H₂ in Hs, H₂.Adj u v := h_adj
     obtain ⟨H, hH, h₁, h₂⟩ := h_dir H₁ hH₁ H₂ hH₂
-    simpa using ⟨H, hH, (le_iff_adj.mp h₂) _ _ h_
+    simpa using ⟨H, hH, (le_iff_adj.mp h₂) _ _ h_adj, fun a ha => edgeSet_mono h₁ (ih a ha)⟩
 -/
 private lemma Walk.exists_mem_contains_edges_of_directed (Hs : Set <| SimpleGraph V)
     (hHs : Hs.Nonempty) (h_dir : DirectedOn (· <= ·) Hs) {u v : V} (p : (sSup Hs).Walk u v) :
@@ -581,7 +581,11 @@ theorem isAcyclic_iff_subsingleton_path
   · have := p.isPath.exists_isCycle_of_ne q.isPath
     grind [IsAcyclic, Subtype.coe_inj]
 .elim ⟨_, hc.isPath_tail⟩ ⟨_, .of_adj .symm⟩ c.adj_snd hc.not_nil · have := h _ v
-    grind [length_cons, length_nil, hc.three_le_length, c.length_
+    grind [length_cons, length_nil, hc.three_le_length, c.length_tail_add_one hc.not_nil]
+
+alias ⟨IsAcyclic.subsingleton_path, _⟩ := isAcyclic_iff_subsingleton_path
+
+@[deprecated IsAcyclic.subsingleton_path (since := "2026-06-30")]
 
 中文:
 定理 isAcyclic_iff_subsingleton_path
@@ -591,7 +595,11 @@ theorem isAcyclic_iff_subsingleton_path
   · have := p.isPath.exists_isCycle_of_ne q.isPath
     grind [IsAcyclic, Subtype.coe_inj]
 .elim ⟨_, hc.isPath_tail⟩ ⟨_, .of_adj .symm⟩ c.adj_snd hc.not_nil · have := h _ v
-    grind [length_cons, length_nil, hc.three_le_length, c.length_
+    grind [length_cons, length_nil, hc.three_le_length, c.length_tail_add_one hc.not_nil]
+
+alias ⟨IsAcyclic.subsingleton_path, _⟩ := isAcyclic_iff_subsingleton_path
+
+@[deprecated IsAcyclic.subsingleton_path (since := "2026-06-30")]
 
 Depends on / 依赖: IsAcyclic, Subtype, Subtype.coe_inj, adj_snd, c.adj_snd, c.length_tail_add_one, coe_inj, exists_isCycle_of_ne, hc.isPath_tail, hc.not_nil, hc.three_le_length, isPath, isPath_tail, length_cons, length_nil, length_tail_add_one, not_nil, of_adj, p.isPath.exists_isCycle_of_ne, q.isPath
 -/
@@ -824,7 +832,14 @@ theorem isTree_iff_existsUnique_path
     simp only [true_and, Path.isPath]
     intro p hp
     specialize hu v w ⟨p, hp⟩ q
-    e
+    exact Subtype.ext_iff.mp hu
+  · rintro ⟨hV, h⟩
+    refine ⟨Connected.mk ?_, ?_⟩
+    · intro v w
+      obtain ⟨p, _⟩ := h v w
+      exact p.reachable
+    · rintro v w ⟨p, hp⟩ ⟨q, hq⟩
+      simp only [ExistsUnique.unique (h v w) hp hq]
 
 中文:
 定理 isTree_iff_存在Unique_path
@@ -840,7 +855,14 @@ theorem isTree_iff_existsUnique_path
     simp only [true_and, Path.isPath]
     intro p hp
     specialize hu v w ⟨p, hp⟩ q
-    e
+    exact Subtype.ext_iff.mp hu
+  · rintro ⟨hV, h⟩
+    refine ⟨Connected.mk ?_, ?_⟩
+    · intro v w
+      obtain ⟨p, _⟩ := h v w
+      exact p.reachable
+    · rintro v w ⟨p, hp⟩ ⟨q, hq⟩
+      simp only [ExistsUnique.unique (h v w) hp hq]
 
 Depends on / 依赖: Connected, Connected.mk, ExistsUnique, ExistsUnique.unique, Path.isPath, Subtype, Subtype.ext_iff.mp, classical, ext_iff, hc.nonempty, isAcyclic_iff_subsingleton_path, isPath, isTree_iff, nonempty, p.reachable, reachable, simp_rw, some.toPath, specialize, subsingleton_iff
 -/
@@ -900,7 +922,21 @@ theorem IsAcyclic.isPath_iff_isChain
   | @cons u' v' _ head tail ih =>
     have hcc := List.isChain_cons.mp (edges_cons _ _ ▸ h)
 .mpr ⟨ih hcc.2, ?_⟩ refine cons_isPath_iff head tail
-    rcases t
+    rcases tail.length.eq_zero_or_pos with h' | h'
+    · simp [nil_iff_support_eq.mp (length_eq_zero_iff.mp h'), head.ne]
+    · by_contra hh
+apply hG cons head (tail.takeUntil u' hh)
+      simp only [isCycle_def, isTrail_def, edges_cons, List.nodup_cons, ne_eq, reduceCtorEq,
+        not_false_eq_true, support_cons, List.tail_cons, true_and]
+.support.tail.Nodup := have : cons head (tail.takeUntil u' hh)
+.sublist List.IsInfix.sublist tail.isPath_def.mp (ih hcc.2)
+          ⟨[], (tail.dropUntil u' hh).support.tail, by simp [← support_append]⟩
+      refine ⟨⟨?_, edges_nodup_of_support_nodup this⟩, this⟩
+      by_contra hhh
+      refine hcc.1 s(u', v') ?_ rfl
+      rw [← tail.cons_tail_eq (by simp [not_nil_iff_lt_length]; rw [h'])]
+.eq_snd_of_mem_edges (Sym2.eq_swap ▸ hhh) have := IsPath.mk' this
+      simp [this, snd_takeUntil head.ne]
 
 中文:
 定理 IsAcyclic.isPath_iff_isChain
@@ -913,7 +949,21 @@ theorem IsAcyclic.isPath_iff_isChain
   | @cons u' v' _ head tail ih =>
     have hcc := List.isChain_cons.mp (edges_cons _ _ ▸ h)
 .mpr ⟨ih hcc.2, ?_⟩ refine cons_isPath_iff head tail
-    rcases t
+    rcases tail.length.eq_zero_or_pos with h' | h'
+    · simp [nil_iff_support_eq.mp (length_eq_zero_iff.mp h'), head.ne]
+    · by_contra hh
+apply hG cons head (tail.takeUntil u' hh)
+      simp only [isCycle_def, isTrail_def, edges_cons, List.nodup_cons, ne_eq, reduceCtorEq,
+        not_false_eq_true, support_cons, List.tail_cons, true_and]
+.support.tail.Nodup := have : cons head (tail.takeUntil u' hh)
+.sublist List.IsInfix.sublist tail.isPath_def.mp (ih hcc.2)
+          ⟨[], (tail.dropUntil u' hh).support.tail, by simp [← support_append]⟩
+      refine ⟨⟨?_, edges_nodup_of_support_nodup this⟩, this⟩
+      by_contra hhh
+      refine hcc.1 s(u', v') ?_ rfl
+      rw [← tail.cons_tail_eq (by simp [not_nil_iff_lt_length]; rw [h'])]
+.eq_snd_of_mem_edges (Sym2.eq_swap ▸ hhh) have := IsPath.mk' this
+      simp [this, snd_takeUntil head.ne]
 
 Depends on / 依赖: List.isChain_cons.mp, List.n, classical, cons_isPath_iff, edges_cons, edges_nodup_of_support_nodup, eq_zero_or_pos, head.ne, isChain, isChain_cons, isCycle_def, isPath_def, isTrail_def, length, length_eq_zero_iff, length_eq_zero_iff.mp, nil_iff_support_eq, nil_iff_support_eq.mp, p.isPath_def.mp, tail.length.eq_zero_or_pos
 -/
@@ -975,7 +1025,45 @@ lemma IsTree.card_edgeFinset
   have : Finset.card ({default} : Finset V)ᶜ + 1 = Fintype.card V := by
     rw [Finset.card_compl]; rw [Finset.card_singleton]; rw [Nat.sub_add_cancel Fintype.card_pos]
   rw [← this]; rw [add_left_inj]
-  choose f hf hf' using (hG.existsUniqu
+  choose f hf hf' using (hG.existsUnique_path · default)
+refine Eq.symm Finset.card_bij
+          (fun w hw => ((f w).firstDart <| ?notNil).edge)
+          (fun a ha => ?memEdges) ?inj ?surj
+  case notNil => exact not_nil_of_ne (by simpa using hw)
+  case memEdges => simp
+  case inj =>
+    intro a ha b hb h
+    wlog h' : (f a).length <= (f b).length generalizing a b
+    · exact Eq.symm (this _ hb _ ha h.symm (le_of_not_ge h'))
+    rw [dart_edge_eq_iff] at h
+    obtain (h | h) := h
+    · exact (congrArg (·.fst) h)
+    · have h1 : ((f a).firstDart <| not_nil_of_ne (by simpa using ha)).snd = b :=
+        congrArg (·.snd) h
+      have h3 := congrArg length (hf' _ ((f _).tail.copy h1 rfl) ?_)
+      · rw [length_copy, ← add_left_inj 1,
+          length_tail_add_one (not_nil_of_ne (by simpa using ha))] at h3
+        lia
+      · simp only [isPath_copy]
+        exact (hf _).tail
+  case surj =>
+    simp only [mem_edgeFinset, Finset.mem_compl, Finset.mem_singleton, Sym2.forall, mem_edgeSet]
+    intro x y h
+    wlog h' : (f x).length <= (f y).length generalizing x y
+    · rw [Sym2.eq_swap]
+      exact this y x h.symm (le_of_not_ge h')
+refine ⟨y, ?_, dart_edge_eq_mk'_iff.2 Or.inr ?_⟩
+    · rintro rfl
+      rw [← hf' _ nil IsPath.nil]; rw [length_nil]; rw [← hf' _ (.cons h .nil) (IsPath.nil.cons <| by simpa using h.ne)]; rw [length_cons]; rw [length_nil] at h'
+      simp at h'
+    rw [← hf' _ (.cons h.symm (f x)) ((cons_isPath_iff _ _).2 ⟨hf _]; rw [fun hy => ?contra⟩)]
+    · simp
+    case contra =>
+      suffices (f x).takeUntil y hy = .cons h .nil by
+        rw [← take_spec _ hy] at h'
+        simp [this, hf' _ _ ((hf _).dropUntil hy)] at h'
+      refine (hG.existsUnique_path _ _).unique ((hf _).takeUntil _) ?_
+      simp [h.ne]
 
 中文:
 引理 是树.card_edgeFinset
@@ -987,7 +1075,45 @@ lemma IsTree.card_edgeFinset
   have : Finset.card ({default} : Finset V)ᶜ + 1 = Fintype.card V := by
     rw [Finset.card_compl]; rw [Finset.card_singleton]; rw [Nat.sub_add_cancel Fintype.card_pos]
   rw [← this]; rw [add_left_inj]
-  choose f hf hf' using (hG.existsUniqu
+  choose f hf hf' using (hG.existsUnique_path · default)
+refine Eq.symm Finset.card_bij
+          (fun w hw => ((f w).firstDart <| ?notNil).edge)
+          (fun a ha => ?memEdges) ?inj ?surj
+  case notNil => exact not_nil_of_ne (by simpa using hw)
+  case memEdges => simp
+  case inj =>
+    intro a ha b hb h
+    wlog h' : (f a).length <= (f b).length generalizing a b
+    · exact Eq.symm (this _ hb _ ha h.symm (le_of_not_ge h'))
+    rw [dart_edge_eq_iff] at h
+    obtain (h | h) := h
+    · exact (congrArg (·.fst) h)
+    · have h1 : ((f a).firstDart <| not_nil_of_ne (by simpa using ha)).snd = b :=
+        congrArg (·.snd) h
+      have h3 := congrArg length (hf' _ ((f _).tail.copy h1 rfl) ?_)
+      · rw [length_copy, ← add_left_inj 1,
+          length_tail_add_one (not_nil_of_ne (by simpa using ha))] at h3
+        lia
+      · simp only [isPath_copy]
+        exact (hf _).tail
+  case surj =>
+    simp only [mem_edgeFinset, Finset.mem_compl, Finset.mem_singleton, Sym2.forall, mem_edgeSet]
+    intro x y h
+    wlog h' : (f x).length <= (f y).length generalizing x y
+    · rw [Sym2.eq_swap]
+      exact this y x h.symm (le_of_not_ge h')
+refine ⟨y, ?_, dart_edge_eq_mk'_iff.2 Or.inr ?_⟩
+    · rintro rfl
+      rw [← hf' _ nil IsPath.nil]; rw [length_nil]; rw [← hf' _ (.cons h .nil) (IsPath.nil.cons <| by simpa using h.ne)]; rw [length_cons]; rw [length_nil] at h'
+      simp at h'
+    rw [← hf' _ (.cons h.symm (f x)) ((cons_isPath_iff _ _).2 ⟨hf _]; rw [fun hy => ?contra⟩)]
+    · simp
+    case contra =>
+      suffices (f x).takeUntil y hy = .cons h .nil by
+        rw [← take_spec _ hy] at h'
+        simp [this, hf' _ _ ((hf _).dropUntil hy)] at h'
+      refine (hG.existsUnique_path _ _).unique ((hf _).takeUntil _) ?_
+      simp [h.ne]
 
 Depends on / 依赖: Eq.symm, Finset, Finset.card, Finset.card_bij, Finset.card_compl, Finset.card_singleton, Fintype, Fintype.card, Fintype.card_pos, Nat.sub_add_cancel, add_left_inj, card_bij, card_compl, card_pos, card_singleton, classical, connected, existsUnique_path, firstDart, hG.connected.nonempty
 -/
@@ -1082,7 +1208,8 @@ lemma isTree_iff_minimal_connected
   have ⟨p, hp⟩ := h'.exists_isPath u v
 have := congrArg Walk.edges congrArg Subtype.val
 .elim ⟨p.mapLe hle, hp.mapLe hle⟩ Path.singleton hadj htree.isAcyclic.subsingleton_path u v
-  simp only [edg
+  simp only [edges_map, Hom.coe_ofLE, Sym2.map_id, List.map_id_fun, id_eq] at this
+  simp [this, p.adj_of_mem_edges]
 
 中文:
 引理 isTree_iff_minimal_connected
@@ -1092,7 +1219,8 @@ have := congrArg Walk.edges congrArg Subtype.val
   have ⟨p, hp⟩ := h'.exists_isPath u v
 have := congrArg Walk.edges congrArg Subtype.val
 .elim ⟨p.mapLe hle, hp.mapLe hle⟩ Path.singleton hadj htree.isAcyclic.subsingleton_path u v
-  simp only [edg
+  simp only [edges_map, Hom.coe_ofLE, Sym2.map_id, List.map_id_fun, id_eq] at this
+  simp [this, p.adj_of_mem_edges]
 
 Depends on / 依赖: Hom.coe_ofLE, List.map_id_fun, Path.singleton, Subtype, Subtype.val, Sym2.map_id, Walk.edges, adj_of_mem_edges, coe_ofLE, connected, edges_map, exists_isPath, hp.mapLe, htree.connected, htree.isAcyclic.subsingleton_path, id_eq, isAcyclic, isTree_of_minimal_connected, map_id, map_id_fun
 -/
@@ -1115,7 +1243,7 @@ theorem IsAcyclic.sup_edge_of_not_reachable
     edgeSet_sup, edgeSet_edge, IsBridge.of_not_reachable, isBridge_sup_edge]
 
 @[deprecated (since := "2026-03-18")]
-alias IsAcyclic.isAcyclic_sup_fromEdgeSet_of_not_reachable := IsAcyclic.sup_edge_of_not_reach
+alias IsAcyclic.isAcyclic_sup_fromEdgeSet_of_not_reachable := IsAcyclic.sup_edge_of_not_reachable
 
 中文:
 定理 IsAcyclic.sup_edge_of_not_reachable
@@ -1125,7 +1253,7 @@ alias IsAcyclic.isAcyclic_sup_fromEdgeSet_of_not_reachable := IsAcyclic.sup_edge
     edgeSet_sup, edgeSet_edge, IsBridge.of_not_reachable, isBridge_sup_edge]
 
 @[deprecated (since := "2026-03-18")]
-alias IsAcyclic.isAcyclic_sup_fromEdgeSet_of_not_reachable := IsAcyclic.sup_edge_of_not_reach
+alias IsAcyclic.isAcyclic_sup_fromEdgeSet_of_not_reachable := IsAcyclic.sup_edge_of_not_reachable
 
 Depends on / 依赖: IsBridge, IsBridge.of_not_reachable, IsBridge.sup_edge_of_not_reachable_of_isBridge, edgeSet_edge, edgeSet_sup, isAcyclic_iff_forall_isBridge, isBridge_sup_edge, of_not_reachable, sup_edge_of_not_reachable_of_isBridge
 -/
@@ -1168,7 +1296,10 @@ theorem isAcyclic_sup_fromEdgeSet_iff
   by_cases hadj : G.Adj u v
   · grind [sup_eq_left, edge_le, mem_edgeSet]
 refine ⟨?_, fun ⟨hacyc, hreach⟩ => hacyc.sup_edge_of_not_reachable by grind⟩
-  refine fun hacyc => ⟨hacyc.anti le_sup_left, fun h
+  refine fun hacyc => ⟨hacyc.anti le_sup_left, fun hreach => False.elim ?_⟩
+  refine isAcyclic_iff_forall_isBridge.mp (e := s(u, v)) hacyc (by simp [huv]) ?_
+  convert! hreach
+  simp [deleteEdges_sup, hadj]
 
 中文:
 定理 isAcyclic_sup_fromEdgeSet_iff
@@ -1179,7 +1310,10 @@ refine ⟨?_, fun ⟨hacyc, hreach⟩ => hacyc.sup_edge_of_not_reachable by grin
   by_cases hadj : G.Adj u v
   · grind [sup_eq_left, edge_le, mem_edgeSet]
 refine ⟨?_, fun ⟨hacyc, hreach⟩ => hacyc.sup_edge_of_not_reachable by grind⟩
-  refine fun hacyc => ⟨hacyc.anti le_sup_left, fun h
+  refine fun hacyc => ⟨hacyc.anti le_sup_left, fun hreach => False.elim ?_⟩
+  refine isAcyclic_iff_forall_isBridge.mp (e := s(u, v)) hacyc (by simp [huv]) ?_
+  convert! hreach
+  simp [deleteEdges_sup, hadj]
 
 Depends on / 依赖: False.elim, G.Adj, Sym2.mem_diagSet, Sym2.mk_isDiag_iff, convert, deleteEdges_sup, edge_le, hacyc.anti, hacyc.sup_edge_of_not_reachable, hreach, isAcyclic_iff_forall_isBridge, isAcyclic_iff_forall_isBridge.mp, le_sup_left, mem_diagSet, mem_edgeSet, mk_isDiag_iff, sup_edge_of_not_reachable, sup_eq_left
 -/
@@ -1209,7 +1343,11 @@ lemma reachable_eq_of_maximal_isAcyclic
   let s : F.ConnectedComponent := .mk _ u
   have : v ∉ s := this ∘ s.reachable_of_mem_supp rfl
   have : exists d in p.darts, d.fst in s ∧ d.snd ∉ s := p.exists_boundary_dart s rfl this
-  rcases this with ⟨⟨⟨u', v'⟩, huv⟩, _, hu, hv
+  rcases this with ⟨⟨⟨u', v'⟩, huv⟩, _, hu, hv⟩
+have : ¬F.Reachable v' u' := mt ConnectedComponent.sound .mp hu ▸ hv s.mem_supp_iff u'
+  suffices F ⊔ edge v' u' <= F by grind [Adj.reachable, sup_le_iff, le_iff_adj]
+  refine h.le_of_ge ⟨?_, h.prop.right.sup_edge_of_not_reachable this⟩ le_sup_left
+  grind [Maximal, sup_le, le_iff_adj, huv.symm]
 
 中文:
 引理 reachable_eq_of_maximal_isAcyclic
@@ -1221,7 +1359,11 @@ lemma reachable_eq_of_maximal_isAcyclic
   let s : F.ConnectedComponent := .mk _ u
   have : v ∉ s := this ∘ s.reachable_of_mem_supp rfl
   have : exists d in p.darts, d.fst in s ∧ d.snd ∉ s := p.exists_boundary_dart s rfl this
-  rcases this with ⟨⟨⟨u', v'⟩, huv⟩, _, hu, hv
+  rcases this with ⟨⟨⟨u', v'⟩, huv⟩, _, hu, hv⟩
+have : ¬F.Reachable v' u' := mt ConnectedComponent.sound .mp hu ▸ hv s.mem_supp_iff u'
+  suffices F ⊔ edge v' u' <= F by grind [Adj.reachable, sup_le_iff, le_iff_adj]
+  refine h.le_of_ge ⟨?_, h.prop.right.sup_edge_of_not_reachable this⟩ le_sup_left
+  grind [Maximal, sup_le, le_iff_adj, huv.symm]
 
 Depends on / 依赖: Adj.reachable, ConnectedComponent, ConnectedComponent.sound, F.ConnectedComponent, F.Reachable, Reachable, d.fst, d.snd, exists_boundary_dart, h.le_of_ge, h.prop.left, h.prop.right.sup_edge_of, le_iff_adj, le_of_ge, mem_supp_iff, p.darts, p.exists_boundary_dart, reachable, reachable_of_mem_supp, s.mem_supp_iff
 -/
@@ -1251,7 +1393,12 @@ theorem maximal_isAcyclic_iff_reachable_eq
   have ⟨H, hFH, hHG, hH⟩ := exists_gt_of_not_maximal ⟨hle, hF⟩ this
 have ⟨e, heH, heF⟩ := Set.exists_of_ssubset edgeSet_strict_mono hFH
   have h_bridge : (F ⊔ fromEdgeSet {e}).IsBridge e := by
-refine isAcyclic_iff_forall_isBr
+refine isAcyclic_iff_forall_isBridge.mp ?_ by simp [H.not_isDiag_of_mem_edgeSet heH]
+exact hH.anti sup_le_iff.mpr ⟨hFH.le, H.fromEdgeSet_le.mpr by grind⟩
+  have : (F ⊔ fromEdgeSet {e}).deleteEdges {e} = F := by simpa using heF
+  cases e
+  rw [isBridge_iff]; rw [this]; rw [h] at h_bridge
+exact h_bridge .reachable hHG heH
 
 中文:
 定理 maximal_isAcyclic_iff_reachable_eq
@@ -1262,7 +1409,12 @@ refine isAcyclic_iff_forall_isBr
   have ⟨H, hFH, hHG, hH⟩ := exists_gt_of_not_maximal ⟨hle, hF⟩ this
 have ⟨e, heH, heF⟩ := Set.exists_of_ssubset edgeSet_strict_mono hFH
   have h_bridge : (F ⊔ fromEdgeSet {e}).IsBridge e := by
-refine isAcyclic_iff_forall_isBr
+refine isAcyclic_iff_forall_isBridge.mp ?_ by simp [H.not_isDiag_of_mem_edgeSet heH]
+exact hH.anti sup_le_iff.mpr ⟨hFH.le, H.fromEdgeSet_le.mpr by grind⟩
+  have : (F ⊔ fromEdgeSet {e}).deleteEdges {e} = F := by simpa using heF
+  cases e
+  rw [isBridge_iff]; rw [this]; rw [h] at h_bridge
+exact h_bridge .reachable hHG heH
 
 Depends on / 依赖: H.fromEdgeSet_le.mpr, H.not_isDiag_of_mem_edgeSet, IsBridge, Set.exists_of_ssubset, deleteEdges, edgeSet_strict_mono, exists_gt_of_not_maximal, exists_of_ssubset, fromEdgeSet, fromEdgeSet_le, hFH.le, hH.anti, h_bridge, isAcyclic_iff_forall_isBridge, isAcyclic_iff_forall_isBridge.mp, not_isDiag_of_mem_edgeSet, reachable_eq_of_maximal_isAcyclic, sup_le_iff, sup_le_iff.mpr
 -/
@@ -1292,7 +1444,9 @@ theorem Connected.maximal_le_isAcyclic_iff_isTree
   · exact G.reachable_eq_of_maximal_isAcyclic T h ▸ hG.preconnected u v
   · rw [maximal_isAcyclic_iff_reachable_eq hT hT'.isAcyclic,
       T.preconnected_iff_reachable_eq_top.mp hT'.preconnected,
-      G.preconnecte
+      G.preconnected_iff_reachable_eq_top.mp hG.preconnected]
+
+@[simp]
 
 中文:
 定理 连通.maximal_le_isAcyclic_iff_isTree
@@ -1303,7 +1457,9 @@ theorem Connected.maximal_le_isAcyclic_iff_isTree
   · exact G.reachable_eq_of_maximal_isAcyclic T h ▸ hG.preconnected u v
   · rw [maximal_isAcyclic_iff_reachable_eq hT hT'.isAcyclic,
       T.preconnected_iff_reachable_eq_top.mp hT'.preconnected,
-      G.preconnecte
+      G.preconnected_iff_reachable_eq_top.mp hG.preconnected]
+
+@[simp]
 
 Depends on / 依赖: G.preconnected_iff_reachable_eq_top.mp, G.reachable_eq_of_maximal_isAcyclic, T.preconnected_iff_reachable_eq_top.mp, hG.nonempty, hG.preconnected, isAcyclic, maximal_isAcyclic_iff_reachable_eq, nonempty, preconnected, preconnected_iff_reachable_eq_top, reachable_eq_of_maximal_isAcyclic
 -/
@@ -1473,7 +1629,7 @@ lemma Connected.card_vert_le_card_edgeSet_add_one
   have := Fintype.ofFinite
   obtain ⟨T, hle, hT⟩ := h.exists_isTree_le
   rw [Nat.card_eq_fintype_card]; rw [← hT.card_edgeFinset]; rw [add_le_add_iff_right]; rw [Nat.card_eq_fintype_card]; rw [← edgeFinset_card]
-exact Finset.card_mono by si
+exact Finset.card_mono by simpa
 
 中文:
 引理 连通.card_vert_le_card_edgeSet_add_one
@@ -1484,7 +1640,7 @@ exact Finset.card_mono by si
   have := Fintype.ofFinite
   obtain ⟨T, hle, hT⟩ := h.exists_isTree_le
   rw [Nat.card_eq_fintype_card]; rw [← hT.card_edgeFinset]; rw [add_le_add_iff_right]; rw [Nat.card_eq_fintype_card]; rw [← edgeFinset_card]
-exact Finset.card_mono by si
+exact Finset.card_mono by simpa
 
 Depends on / 依赖: Finset, Finset.card_mono, Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, add_le_add_iff_right, card_edgeFinset, card_eq_fintype_card, card_mono, edgeFinset_card, exists_isTree_le, finite_or_infinite, h.exists_isTree_le, hT.card_edgeFinset, ofFinite
 -/
@@ -1511,7 +1667,9 @@ lemma isTree_iff_connected_and_card
     fun ⟨h₁, h₂⟩ => ⟨h₁, ?_⟩⟩
   simp_rw [isAcyclic_iff_forall_adj_isBridge]
   refine fun x y h => by_contra fun hbr =>
-    (h₁.connected_delete_edge_of_not_isBridge hbr).card_
+    (h₁.connected_delete_edge_of_not_isBridge hbr).card_vert_le_card_edgeSet_add_one.not_gt ?_
+  rw [Nat.card_eq_fintype_card]; rw [← edgeFinset_card]; rw [← h₂]; rw [Nat.card_eq_fintype_card]; rw [← edgeFinset_card]; rw [add_lt_add_iff_right]
+exact Finset.card_lt_card by simpa [deleteEdges, edgeFinset]
 
 中文:
 引理 isTree_iff_connected_and_card
@@ -1523,7 +1681,9 @@ lemma isTree_iff_connected_and_card
     fun ⟨h₁, h₂⟩ => ⟨h₁, ?_⟩⟩
   simp_rw [isAcyclic_iff_forall_adj_isBridge]
   refine fun x y h => by_contra fun hbr =>
-    (h₁.connected_delete_edge_of_not_isBridge hbr).card_
+    (h₁.connected_delete_edge_of_not_isBridge hbr).card_vert_le_card_edgeSet_add_one.not_gt ?_
+  rw [Nat.card_eq_fintype_card]; rw [← edgeFinset_card]; rw [← h₂]; rw [Nat.card_eq_fintype_card]; rw [← edgeFinset_card]; rw [add_lt_add_iff_right]
+exact Finset.card_lt_card by simpa [deleteEdges, edgeFinset]
 
 Depends on / 依赖: Finset, Finset.card_lt_card, Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, add_lt_add_iff_right, card_edgeFinset, card_eq_fintype_card, card_lt_card, card_vert_le_card_edgeSet_add_one, card_vert_le_card_edgeSet_add_one.not_gt, classical, connected, connected_delete_edge_of_not_isBridge, edgeFinset, edgeFinset_card, h.card_edgeFinset, h.connected, isAcyclic_iff_forall_adj_isBridge, not_gt
 -/
@@ -1553,7 +1713,9 @@ lemma IsTree.minDegree_eq_one_of_nontrivial
       gcongr
       exact le_trans q (G.minDegree_le_degree _)
     rw [Finset.sum_const]; rw [Finset.card_univ]; rw [smul_eq_mul] at hle
-  
+    lia
+  · have := h.preconnected.minDegree_pos_of_nontrivial
+    lia
 
 中文:
 引理 是树.minDegree_eq_one_of_nontrivial
@@ -1566,7 +1728,9 @@ lemma IsTree.minDegree_eq_one_of_nontrivial
       gcongr
       exact le_trans q (G.minDegree_le_degree _)
     rw [Finset.sum_const]; rw [Finset.card_univ]; rw [smul_eq_mul] at hle
-  
+    lia
+  · have := h.preconnected.minDegree_pos_of_nontrivial
+    lia
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.sum_const, G.degree, G.minDegree, G.minDegree_le_degree, G.sum_degrees_eq_twice_card_edges, card_edgeFinset, card_univ, degree, h.card_edgeFinset, h.preconnected.minDegree_pos_of_nontrivial, le_trans, minDegree, minDegree_le_degree, minDegree_pos_of_nontrivial, preconnected, smul_eq_mul, sum_const, sum_degrees_eq_twice_card_edges
 -/
@@ -1616,7 +1780,15 @@ theorem IsTree.exists_ne_and_degree_eq_one
   have ⟨p', hp'⟩ := h.connected.exists_isPath u' v'
   have hnil : ¬p.Nil := by grind
   refine ⟨u, v, hp.nil_iff_eq.not.mp hnil, ?_, ?_⟩ <;>
-    rw [degree_eq_one_iff_existsUnique_
+    rw [degree_eq_one_iff_existsUnique_adj]
+  · refine ⟨_, p.adj_snd hnil, fun w hadj => ?_⟩
+    apply h.isAcyclic.eq_snd_of_adj_start hp hadj
+    have : ¬(p.cons hadj.symm).IsPath := by grind [length_cons]
+    grind [hp.cons]
+.symm, fun w hadj => ?_⟩ · refine ⟨_, p.adj_penultimate hnil
+    apply h.isAcyclic.eq_penultimate_of_adj_end hp hadj
+    have : ¬(p.concat hadj).IsPath := by grind [length_concat]
+    grind [hp.concat]
 
 中文:
 定理 是树.存在_ne_and_degree_eq_one
@@ -1627,7 +1799,15 @@ theorem IsTree.exists_ne_and_degree_eq_one
   have ⟨p', hp'⟩ := h.connected.exists_isPath u' v'
   have hnil : ¬p.Nil := by grind
   refine ⟨u, v, hp.nil_iff_eq.not.mp hnil, ?_, ?_⟩ <;>
-    rw [degree_eq_one_iff_existsUnique_
+    rw [degree_eq_one_iff_existsUnique_adj]
+  · refine ⟨_, p.adj_snd hnil, fun w hadj => ?_⟩
+    apply h.isAcyclic.eq_snd_of_adj_start hp hadj
+    have : ¬(p.cons hadj.symm).IsPath := by grind [length_cons]
+    grind [hp.cons]
+.symm, fun w hadj => ?_⟩ · refine ⟨_, p.adj_penultimate hnil
+    apply h.isAcyclic.eq_penultimate_of_adj_end hp hadj
+    have : ¬(p.concat hadj).IsPath := by grind [length_concat]
+    grind [hp.concat]
 
 Depends on / 依赖: IsPath, adj_snd, connected, degree_eq_one_iff_existsUnique_adj, eq_snd_of_adj_start, exists_isPath, exists_isPath_forall_isPath_length_le_length, exists_pair_ne, h.connected.exists_isPath, h.isAcyclic.eq_snd_of_adj_start, hadj.symm, hp.cons, hp.nil_iff_eq.not.mp, isAcyclic, length_cons, nil_iff_eq, p.Nil, p.adj_snd, p.cons
 -/
@@ -1660,7 +1840,27 @@ lemma Connected.induce_compl_singleton_of_degree_eq_one
   /- There exists a walk between any two vertices w and x in G.induce {v}ᶜ
   via the unique vertex u adjacent to vertex v. -/
   intro w x
-  obtain ⟨pwu, hpwu⟩ := hconn.exists_is
+  obtain ⟨pwu, hpwu⟩ := hconn.exists_isPath w u
+  obtain ⟨pux, hpux⟩ := hconn.exists_isPath u x
+  rw [Reachable]; rw [← exists_true_iff_nonempty]
+  classical
+  use ((pwu.append pux).toPath.val.induce {v}ᶜ ?_).copy (SetCoe.ext rfl) (SetCoe.ext rfl)
+  /- Each path between vertex u and another vertex in G.induce {v}ᶜ
+  is contained in G.induce {v}ᶜ. -/
+  intro z hz
+  rw [Set.mem_compl_iff]; rw [Set.mem_singleton_iff]
+  obtain ⟨pwz, pzx, p_eq_pwzx⟩ := mem_support_iff_exists_append.mp hz
+  /- Prove vertex v is not in the path formed from the concatenated walks
+  by showing that vertex u must then be passed twice. -/
+  by_contra
+  subst_vars
+  refine List.nodup_iff_forall_not_duplicate.mp (pwu.append pux).toPath.nodup_support u ?_
+  rw [p_eq_pwzx]; rw [support_append]; rw [List.duplicate_iff_two_le_count]; rw [List.count_append]
+  have := List.one_le_count_iff.mpr (pwz.getVert_mem_support (pwz.length - 1))
+  simp only [hu _ (pwz.adj_penultimate (not_nil_of_ne (by aesop))).symm] at this
+  have := List.one_le_count_iff.mpr (pzx.snd_mem_tail_support (not_nil_of_ne (by aesop)))
+  rw [hu _ (pzx.adj_snd (not_nil_of_ne (by aesop)))] at this
+  lia
 
 中文:
 引理 连通.induce_compl_singleton_of_degree_eq_one
@@ -1671,7 +1871,27 @@ lemma Connected.induce_compl_singleton_of_degree_eq_one
   /- There exists a walk between any two vertices w and x in G.induce {v}ᶜ
   via the unique vertex u adjacent to vertex v. -/
   intro w x
-  obtain ⟨pwu, hpwu⟩ := hconn.exists_is
+  obtain ⟨pwu, hpwu⟩ := hconn.exists_isPath w u
+  obtain ⟨pux, hpux⟩ := hconn.exists_isPath u x
+  rw [Reachable]; rw [← exists_true_iff_nonempty]
+  classical
+  use ((pwu.append pux).toPath.val.induce {v}ᶜ ?_).copy (SetCoe.ext rfl) (SetCoe.ext rfl)
+  /- Each path between vertex u and another vertex in G.induce {v}ᶜ
+  is contained in G.induce {v}ᶜ. -/
+  intro z hz
+  rw [Set.mem_compl_iff]; rw [Set.mem_singleton_iff]
+  obtain ⟨pwz, pzx, p_eq_pwzx⟩ := mem_support_iff_exists_append.mp hz
+  /- Prove vertex v is not in the path formed from the concatenated walks
+  by showing that vertex u must then be passed twice. -/
+  by_contra
+  subst_vars
+  refine List.nodup_iff_forall_not_duplicate.mp (pwu.append pux).toPath.nodup_support u ?_
+  rw [p_eq_pwzx]; rw [support_append]; rw [List.duplicate_iff_two_le_count]; rw [List.count_append]
+  have := List.one_le_count_iff.mpr (pwz.getVert_mem_support (pwz.length - 1))
+  simp only [hu _ (pwz.adj_penultimate (not_nil_of_ne (by aesop))).symm] at this
+  have := List.one_le_count_iff.mpr (pzx.snd_mem_tail_support (not_nil_of_ne (by aesop)))
+  rw [hu _ (pzx.adj_snd (not_nil_of_ne (by aesop)))] at this
+  lia
 
 Depends on / 依赖: adj_vu, connected_iff, degree_eq_one_iff_existsUnique_adj, degree_eq_one_iff_existsUnique_adj.mp
 -/
@@ -1778,7 +1998,10 @@ lemma IsAcyclic.dist_ne_of_adj
   by_cases hw : w in p.support
   · rw [hG.path_concat hq hp hadj.symm hw, q.length_concat]
     exact q.length.ne_add_one.symm
-  · have hv : v in q.s
+  · have hv : v in q.support := hG.mem_support_of_ne_mem_support_of_adj_of_isPath hq hp
+      hadj.symm hw
+    rw [hG.path_concat hp hq hadj hv]; rw [p.length_concat]
+    exact p.length.ne_add_one
 
 中文:
 引理 IsAcyclic.dist_ne_of_adj
@@ -1790,7 +2013,10 @@ lemma IsAcyclic.dist_ne_of_adj
   by_cases hw : w in p.support
   · rw [hG.path_concat hq hp hadj.symm hw, q.length_concat]
     exact q.length.ne_add_one.symm
-  · have hv : v in q.s
+  · have hv : v in q.support := hG.mem_support_of_ne_mem_support_of_adj_of_isPath hq hp
+      hadj.symm hw
+    rw [hG.path_concat hp hq hadj hv]; rw [p.length_concat]
+    exact p.length.ne_add_one
 
 Depends on / 依赖: exists_path_of_dist, hG.mem_support_of_ne_mem_support_of_adj_of_isPath, hG.path_concat, hadj.reachable, hadj.symm, hreach, hreach.exists_path_of_dist, hreach.trans, length, length_concat, mem_support_of_ne_mem_support_of_adj_of_isPath, ne_add_one, p.length.ne_add_one, p.length_concat, p.support, path_concat, q.length.ne_add_one.symm, q.length_concat, q.support, reachable
 -/

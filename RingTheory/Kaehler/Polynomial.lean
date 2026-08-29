@@ -37,7 +37,25 @@ definition KaehlerDifferential.mvPolynomialEquiv
   right_inv := by
     intro x
     induction x using Finsupp.induction_linear with
-    | zero => simp only [AddHom.toFun_eq_coe, LinearMap.co
+    | zero => simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]; rw [map_zero, map_zero]
+    | add => simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, map_add] at *; simp only [*]
+    | single a b => simp [-map_smul]
+  left_inv := by
+    intro x
+    obtain ⟨x, rfl⟩ := linearCombination_surjective _ _ x
+    induction x using Finsupp.induction_linear with
+    | zero =>
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]
+      rw [map_zero]; rw [map_zero]; rw [map_zero]
+    | add => simp only [map_add, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom] at *; simp only [*]
+    | single a b =>
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, Finsupp.linearCombination_single,
+        map_smul, Derivation.liftKaehlerDifferential_comp_D]
+      congr 1
+      induction a using MvPolynomial.induction_on
+      · simp only [MvPolynomial.derivation_C, map_zero]
+      · simp only [map_add, *]
+      · simp [*]
 
 中文:
 定义 KaehlerDifferential.mvPolynomialEquiv
@@ -47,7 +65,25 @@ definition KaehlerDifferential.mvPolynomialEquiv
   right_inv := by
     intro x
     induction x using Finsupp.induction_linear with
-    | zero => simp only [AddHom.toFun_eq_coe, LinearMap.co
+    | zero => simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]; rw [map_zero, map_zero]
+    | add => simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, map_add] at *; simp only [*]
+    | single a b => simp [-map_smul]
+  left_inv := by
+    intro x
+    obtain ⟨x, rfl⟩ := linearCombination_surjective _ _ x
+    induction x using Finsupp.induction_linear with
+    | zero =>
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]
+      rw [map_zero]; rw [map_zero]; rw [map_zero]
+    | add => simp only [map_add, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom] at *; simp only [*]
+    | single a b =>
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, Finsupp.linearCombination_single,
+        map_smul, Derivation.liftKaehlerDifferential_comp_D]
+      congr 1
+      induction a using MvPolynomial.induction_on
+      · simp only [MvPolynomial.derivation_C, map_zero]
+      · simp only [map_add, *]
+      · simp [*]
 
 Depends on / 依赖: Finsupp, Finsupp.single, MvPolynomial, MvPolynomial.mkDerivation, liftKaehlerDifferential, mkDerivation, single
 -/
@@ -293,7 +329,10 @@ definition KaehlerDifferential.polynomialEquiv
     induction x using Finsupp.induction_linear with
     | zero => simp
     | add x y hx hy =>
-      simp only [ma
+      simp only [map_add, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.flip_apply,
+        AlgHom.toLinearMap_apply, lsmul_coe] at *; simp only [*]
+    | single x y => simp [polynomial_D_apply _ x]
+  right_inv x := by simp
 
 中文:
 定义 KaehlerDifferential.polynomialEquiv
@@ -306,7 +345,10 @@ definition KaehlerDifferential.polynomialEquiv
     induction x using Finsupp.induction_linear with
     | zero => simp
     | add x y hx hy =>
-      simp only [ma
+      simp only [map_add, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearMap.flip_apply,
+        AlgHom.toLinearMap_apply, lsmul_coe] at *; simp only [*]
+    | single x y => simp [polynomial_D_apply _ x]
+  right_inv x := by simp
 
 Depends on / 依赖: derivative, liftKaehlerDifferential
 -/

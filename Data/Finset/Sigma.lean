@@ -558,7 +558,13 @@ theorem mem_sigmaLift
         and_imp]
       rintro x hx rfl
       exact ⟨rfl, rfl, hx⟩
-    · rintro ⟨⟨⟩, ⟨
+    · rintro ⟨⟨⟩, ⟨⟩, hx⟩
+      rw [sigmaLift]; rw [dif_pos rfl]; rw [mem_map]
+      exact ⟨_, hx, by simp⟩
+  · rw [sigmaLift, dif_neg h]
+    refine iff_of_false (notMem_empty _) ?_
+    rintro ⟨⟨⟩, ⟨⟩, _⟩
+    exact h rfl
 
 中文:
 定理 mem_sigmaLift
@@ -572,7 +578,13 @@ theorem mem_sigmaLift
         and_imp]
       rintro x hx rfl
       exact ⟨rfl, rfl, hx⟩
-    · rintro ⟨⟨⟩, ⟨
+    · rintro ⟨⟨⟩, ⟨⟩, hx⟩
+      rw [sigmaLift]; rw [dif_pos rfl]; rw [mem_map]
+      exact ⟨_, hx, by simp⟩
+  · rw [sigmaLift, dif_neg h]
+    refine iff_of_false (notMem_empty _) ?_
+    rintro ⟨⟨⟩, ⟨⟩, _⟩
+    exact h rfl
 
 Depends on / 依赖: Decidable, Decidable.eq_or_ne, Embedding, Embedding.sigmaMk_apply, and_imp, dif_neg, dif_pos, dite_eq_ite, eq_or_ne, forall_exists_index, iff_of_false, ite_true, mem_map, notMem_empty, sigmaLift, sigmaMk_apply, simp_rw
 -/

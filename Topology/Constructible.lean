@@ -457,7 +457,9 @@ lemma IsRetrocompact_iff_isSpectralMap_subtypeVal
   · rw [IsEmbedding.subtypeVal.isCompact_iff, image_preimage_eq_inter_range,
       Subtype.range_coe_subtype, ofPred_mem_eq, inter_comm]
     exact hs htcomp htopen
-  · simpa using (hs.isCompact_
+  · simpa using (hs.isCompact_preimage_of_isOpen htopen htcomp).image continuous_subtype_val
+
+@[stacks 005B]
 
 中文:
 引理 IsRetrocompact_iff_isSpectralMap_subtypeVal
@@ -466,7 +468,9 @@ lemma IsRetrocompact_iff_isSpectralMap_subtypeVal
   · rw [IsEmbedding.subtypeVal.isCompact_iff, image_preimage_eq_inter_range,
       Subtype.range_coe_subtype, ofPred_mem_eq, inter_comm]
     exact hs htcomp htopen
-  · simpa using (hs.isCompact_
+  · simpa using (hs.isCompact_preimage_of_isOpen htopen htcomp).image continuous_subtype_val
+
+@[stacks 005B]
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isCompact_iff, Subtype, Subtype.range_coe_subtype, continuous_subtype_val, hs.isCompact_preimage_of_isOpen, htcomp, htopen, image_preimage_eq_inter_range, inter_comm, isCompact_iff, isCompact_preimage_of_isOpen, ofPred_mem_eq, range_coe_subtype, subtypeVal
 -/
@@ -560,7 +564,9 @@ lemma IsRetrocompact.preimage_of_isClosedEmbedding
   have hfUopen : IsOpen (f '' U union (range f)ᶜ) := by
     simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
       using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-  have hfUcomp : IsCompact (f '' U union (range f)ᶜ) := (hUcomp.image 
+  have hfUcomp : IsCompact (f '' U union (range f)ᶜ) := (hUcomp.image hf.continuous).union hf'
+  simpa [inter_union_distrib_left, inter_left_comm, inter_eq_right.2 (image_subset_range ..),
+    hf.isCompact_iff, image_preimage_inter] using (hs hfUcomp hfUopen).inter_left hf.isClosed_range
 
 中文:
 引理 IsRetrocompact.preimage_of_isClosedEmbedding
@@ -570,7 +576,9 @@ lemma IsRetrocompact.preimage_of_isClosedEmbedding
   have hfUopen : IsOpen (f '' U union (range f)ᶜ) := by
     simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
       using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-  have hfUcomp : IsCompact (f '' U union (range f)ᶜ) := (hUcomp.image 
+  have hfUcomp : IsCompact (f '' U union (range f)ᶜ) := (hUcomp.image hf.continuous).union hf'
+  simpa [inter_union_distrib_left, inter_left_comm, inter_eq_right.2 (image_subset_range ..),
+    hf.isCompact_iff, image_preimage_inter] using (hs hfUcomp hfUopen).inter_left hf.isClosed_range
 
 Depends on / 依赖: IsCompact, IsOpen, compl_inter, continuous, hUcomp, hUcomp.image, hUopen, hUopen.isClosed_compl, hf.continuous, hf.injective, hf.isClosedMap, hf.isClosed_range, hf.isCompact_iff, hfUcomp, hfUopen, image_preimage_inter, image_subset_range, injective, inter_eq_right, inter_left
 -/
@@ -921,7 +929,9 @@ lemma IsConstructible.preimage
   | open_retrocompact U hUopen hUcomp =>
 exact (hf _ hUopen hUcomp).isConstructible hUopen.preimage hfcont
   | union s hs t ht hs' ht' => rw [preimage_union]; exact hs'.union ht'
-  | compl s hs hs' => rw [preimage_compl]; exact hs'.c
+  | compl s hs hs' => rw [preimage_compl]; exact hs'.compl
+
+@[stacks 005J]
 
 中文:
 引理 IsConstructible.原像
@@ -931,7 +941,9 @@ exact (hf _ hUopen hUcomp).isConstructible hUopen.preimage hfcont
   | open_retrocompact U hUopen hUcomp =>
 exact (hf _ hUopen hUcomp).isConstructible hUopen.preimage hfcont
   | union s hs t ht hs' ht' => rw [preimage_union]; exact hs'.union ht'
-  | compl s hs hs' => rw [preimage_compl]; exact hs'.c
+  | compl s hs hs' => rw [preimage_compl]; exact hs'.compl
+
+@[stacks 005J]
 
 Depends on / 依赖: IsConstructible, IsConstructible.empty_union_induction, empty_union_induction, hUcomp, hUopen, hUopen.preimage, hfcont, isConstructible, open_retrocompact, preimage, preimage_compl, preimage_union
 -/
@@ -1005,7 +1017,11 @@ lemma IsConstructible.image_of_isOpenEmbedding
 exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
       hfopen.isOpenMap _ hUopen
   | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
-  | compl s h
+  | compl s hs hs' =>
+    rw [← range_sdiff_image hfopen.injective]
+    exact (hfcomp.isConstructible hfopen.isOpen_range).sdiff hs'
+
+@[stacks 09YG]
 
 中文:
 引理 IsConstructible.image_of_isOpenEmbedding
@@ -1016,7 +1032,11 @@ exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
 exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
       hfopen.isOpenMap _ hUopen
   | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
-  | compl s h
+  | compl s hs hs' =>
+    rw [← range_sdiff_image hfopen.injective]
+    exact (hfcomp.isConstructible hfopen.isOpen_range).sdiff hs'
+
+@[stacks 09YG]
 
 Depends on / 依赖: IsConstructible, IsConstructible.empty_union_induction, empty_union_induction, hUcomp, hUcomp.image_of_isEmbedding, hUopen, hfcomp, hfcomp.isConstructible, hfopen, hfopen.injective, hfopen.isEmbedding, hfopen.isOpenMap, hfopen.isOpen_range, image_of_isEmbedding, image_union, injective, isConstructible, isEmbedding, isOpenMap, isOpen_range
 -/
@@ -1043,7 +1063,18 @@ lemma IsConstructible.image_of_isClosedEmbedding
   | open_retrocompact U hUopen hUcomp =>
     have hfU : IsOpen (f '' U union (range f)ᶜ) := by
       simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
-        using (hf.isClosedMap _ hUopen.isClosed_compl).i
+        using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
+    suffices h : IsRetrocompact (f '' U union (range f)ᶜ) by
+      simpa [union_inter_distrib_right, inter_eq_left.2 (image_subset_range ..)]
+        using (h.isConstructible hfU).sdiff (hfcomp.isConstructible hf.isClosed_range.isOpen_compl)
+    rintro V hVcomp hVopen
+    rw [union_inter_distrib_right]; rw [← image_inter_preimage]
+    exact ((hUcomp (hf.isCompact_preimage hVcomp) (hVopen.preimage hf.continuous)).image
+      hf.continuous).union <| hfcomp hVcomp hVopen
+  | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
+  | compl s hs hs' =>
+    rw [← range_sdiff_image hf.injective]
+    exact (hfcomp.isConstructible hf.isClosed_range.isOpen_compl).of_compl.sdiff hs'
 
 中文:
 引理 IsConstructible.image_of_isClosedEmbedding
@@ -1053,7 +1084,18 @@ lemma IsConstructible.image_of_isClosedEmbedding
   | open_retrocompact U hUopen hUcomp =>
     have hfU : IsOpen (f '' U union (range f)ᶜ) := by
       simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
-        using (hf.isClosedMap _ hUopen.isClosed_compl).i
+        using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
+    suffices h : IsRetrocompact (f '' U union (range f)ᶜ) by
+      simpa [union_inter_distrib_right, inter_eq_left.2 (image_subset_range ..)]
+        using (h.isConstructible hfU).sdiff (hfcomp.isConstructible hf.isClosed_range.isOpen_compl)
+    rintro V hVcomp hVopen
+    rw [union_inter_distrib_right]; rw [← image_inter_preimage]
+    exact ((hUcomp (hf.isCompact_preimage hVcomp) (hVopen.preimage hf.continuous)).image
+      hf.continuous).union <| hfcomp hVcomp hVopen
+  | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
+  | compl s hs hs' =>
+    rw [← range_sdiff_image hf.injective]
+    exact (hfcomp.isConstructible hf.isClosed_range.isOpen_compl).of_compl.sdiff hs'
 
 Depends on / 依赖: IsConstructible, IsConstructible.empty_union_induction, IsOpen, IsRetrocompact, compl_inter, empty_union_induction, h.isConstructible, hUcomp, hUopen, hUopen.isClosed_compl, hf.injective, hf.isClosedMap, hf.isClosed_range, hfcomp, hfcomp.isConstructible, image_subset_range, injective, inter_eq_left, isClosedMap, isClosed_compl
 -/
@@ -1114,7 +1156,11 @@ lemma _root_.QuasiSeparatedSpace.of_isOpenCover
       t.isCompact_biUnion fun i _ =>
         h₂ i _ _ Set.inter_subset_left ((U i).2.inter ho₁) (h₁ i hc₁ ho₁) Set.inter_subset_left
           ((U i).2.inter ho₂) (h₁ i hc₂ ho₂)
-    ap
+    apply subset_antisymm
+    · rintro x ⟨hx₁, hx₂⟩
+      obtain ⟨i, hi, hxi⟩ := Set.mem_iUnion₂.mp (ht hx₁)
+      exact Set.mem_iUnion₂.mpr ⟨i, hi, by simpa [*]⟩
+    · aesop (add simp Set.subset_def)
 
 中文:
 引理 _root_.拟分离空间.of_isOpenCover
@@ -1125,7 +1171,11 @@ lemma _root_.QuasiSeparatedSpace.of_isOpenCover
       t.isCompact_biUnion fun i _ =>
         h₂ i _ _ Set.inter_subset_left ((U i).2.inter ho₁) (h₁ i hc₁ ho₁) Set.inter_subset_left
           ((U i).2.inter ho₂) (h₁ i hc₂ ho₂)
-    ap
+    apply subset_antisymm
+    · rintro x ⟨hx₁, hx₂⟩
+      obtain ⟨i, hi, hxi⟩ := Set.mem_iUnion₂.mp (ht hx₁)
+      exact Set.mem_iUnion₂.mpr ⟨i, hi, by simpa [*]⟩
+    · aesop (add simp Set.subset_def)
 
 Depends on / 依赖: IsQuasiSeparated
 -/
@@ -1258,7 +1308,23 @@ lemma IsConstructible.induction_of_isTopologicalBasis
     exact ⟨fun s hs t ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩,
       fun s hs t ht => ⟨hs.1.inter ht.1, hs.2.inter_isOpen ht.2 ht.1⟩⟩
   | bot_mem => exact ⟨isOpen_empty, .empty⟩
-  | top_mem => exact ⟨i
+  | top_mem => exact ⟨isOpen_univ, .univ⟩
+  | sdiff U hU V hV =>
+    have := isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis _ basis isCompact_basis
+    obtain ⟨s, hs, rfl⟩ := (this _).1 ⟨hU.2.isCompact, hU.1⟩
+    obtain ⟨t, ht, rfl⟩ := (this _).1 ⟨hV.2.isCompact, hV.1⟩
+    simp_rw [iUnion_sdiff]
+    induction s, hs using Set.Finite.induction_on with
+    | empty => simpa using sdiff (Classical.arbitrary _) {Classical.arbitrary _}
+    | @insert i s hi hs ih =>
+      simp_rw [biUnion_insert]
+      exact union _ _ _
+        (.biUnion hs fun i _ => ((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff
+ .biUnion ht fun j _ => (isCompact_basis _).isConstructible (basis.isOpen ⟨_, rfl⟩))
+        (sdiff _ _ ht)
+        (ih ⟨isOpen_biUnion fun _ _ => basis.isOpen ⟨_, rfl⟩, .biUnion hs
+          fun i _ => (isCompact_basis _).isRetrocompact (basis.isOpen ⟨i, rfl⟩)⟩)
+  | sup s _ t _ hs' ht' => exact union _ _ _ _ hs' ht'
 
 中文:
 引理 IsConstructible.induction_of_isTopologicalBasis
@@ -1269,7 +1335,23 @@ lemma IsConstructible.induction_of_isTopologicalBasis
     exact ⟨fun s hs t ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩,
       fun s hs t ht => ⟨hs.1.inter ht.1, hs.2.inter_isOpen ht.2 ht.1⟩⟩
   | bot_mem => exact ⟨isOpen_empty, .empty⟩
-  | top_mem => exact ⟨i
+  | top_mem => exact ⟨isOpen_univ, .univ⟩
+  | sdiff U hU V hV =>
+    have := isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis _ basis isCompact_basis
+    obtain ⟨s, hs, rfl⟩ := (this _).1 ⟨hU.2.isCompact, hU.1⟩
+    obtain ⟨t, ht, rfl⟩ := (this _).1 ⟨hV.2.isCompact, hV.1⟩
+    simp_rw [iUnion_sdiff]
+    induction s, hs using Set.Finite.induction_on with
+    | empty => simpa using sdiff (Classical.arbitrary _) {Classical.arbitrary _}
+    | @insert i s hi hs ih =>
+      simp_rw [biUnion_insert]
+      exact union _ _ _
+        (.biUnion hs fun i _ => ((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff
+ .biUnion ht fun j _ => (isCompact_basis _).isConstructible (basis.isOpen ⟨_, rfl⟩))
+        (sdiff _ _ ht)
+        (ih ⟨isOpen_biUnion fun _ _ => basis.isOpen ⟨_, rfl⟩, .biUnion hs
+          fun i _ => (isCompact_basis _).isRetrocompact (basis.isOpen ⟨i, rfl⟩)⟩)
+  | sup s _ t _ hs' ht' => exact union _ _ _ _ hs' ht'
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.closure_sdiff_sup_induction, bot_mem, closure_sdiff_sup_induction, inter_isOpen, isCompact, isCompact_basis, isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis, isOpen_empty, isOpen_univ, isSublattice, top_mem
 -/
@@ -1416,7 +1498,10 @@ lemma IsLocallyConstructible.inter
   refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
   change IsConstructible
     (inclusion inter_subset_left ⁻¹' (U ↓inter s) inter inclusion inter_subset_right ⁻¹' (V ↓inter t))
-  exact .inter (hsU.prei
+  exact .inter (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
+    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
 
 中文:
 引理 IsLocallyConstructible.inter
@@ -1428,7 +1513,10 @@ lemma IsLocallyConstructible.inter
   refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
   change IsConstructible
     (inclusion inter_subset_left ⁻¹' (U ↓inter s) inter inclusion inter_subset_right ⁻¹' (V ↓inter t))
-  exact .inter (hsU.prei
+  exact .inter (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
+    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
 
 Depends on / 依赖: Filter, Filter.inter_mem, IsConstructible, continuous_subtype_val, hU.inter, hsU.preimage_of_isOpenEmbedding, htV.preimage_of_isOpenEmbedding, inclusion, inter_mem, inter_subset_left, inter_subset_right, preimage, preimage_of_isOpenEmbedding
 -/
@@ -1567,7 +1655,12 @@ lemma IsLocallyConstructible.union
   refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
   have : (U inter V) ↓inter (s union t) =
       inclusion inter_subset_left ⁻¹' (U ↓inter s) union inclusion inter_subset_right ⁻¹' (V ↓inter t) := by
- 
+    ext; simp
+  rw [this]
+  exact .union (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
+    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
 
 中文:
 引理 IsLocallyConstructible.union
@@ -1579,7 +1672,12 @@ lemma IsLocallyConstructible.union
   refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
   have : (U inter V) ↓inter (s union t) =
       inclusion inter_subset_left ⁻¹' (U ↓inter s) union inclusion inter_subset_right ⁻¹' (V ↓inter t) := by
- 
+    ext; simp
+  rw [this]
+  exact .union (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
+    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
+.preimage continuous_subtype_val hU.inter hV)
 
 Depends on / 依赖: Filter, Filter.inter_mem, continuous_subtype_val, hU.inter, hsU.preimage_of_isOpenEmbedding, htV.preimage_of_isOpenEmbedding, inclusion, inter_mem, inter_subset_left, inter_subset_right, preimage, preimage_of_isOpenEmbedding
 -/
@@ -1696,7 +1794,19 @@ lemma IsLocallyConstructible.isConstructible_of_subset_of_isCompact
     have ⟨U, hxU, hU, hUs⟩ := hs x
     have ⟨V, ⟨hV₁, hV₂⟩, hxV, hVU⟩ := PrespectralSpace.isTopologicalBasis.mem_nhds_iff.mp hxU
     have : IsConstructible (V ↓inter s) :=
-      (hUs.preimage_of_isOpenEmbe
+      (hUs.preimage_of_isOpenEmbedding (IsOpenEmbedding.id.restrict hVU hV₁) :)
+    have : IsConstructible (V inter s) := by
+      have := this.image_of_isOpenEmbedding hV₁.isOpenEmbedding_subtypeVal
+        (by simpa using hV₂.isRetrocompact hV₁)
+      rwa [Subtype.image_preimage_coe] at this
+    ⟨V, hV₁, hV₂, hxV, this⟩
+  choose U hU hU' hxU hUs using this
+  obtain ⟨σ, hσ, htσ⟩ := ht.elim_nhds_subcover U (fun x _ => (hU x).mem_nhds (hxU x))
+  convert! IsConstructible.biUnion σ.finite_toSet (fun x _ => hUs x)
+  apply subset_antisymm
+  · rw [← Set.iUnion₂_inter, Set.subset_inter_iff]
+    exact ⟨hst.trans htσ, subset_rfl⟩
+  · exact Set.iUnion₂_subset fun _ _ => Set.inter_subset_right
 
 中文:
 引理 IsLocallyConstructible.isConstructible_of_subset_of_isCompact
@@ -1705,7 +1815,19 @@ lemma IsLocallyConstructible.isConstructible_of_subset_of_isCompact
     have ⟨U, hxU, hU, hUs⟩ := hs x
     have ⟨V, ⟨hV₁, hV₂⟩, hxV, hVU⟩ := PrespectralSpace.isTopologicalBasis.mem_nhds_iff.mp hxU
     have : IsConstructible (V ↓inter s) :=
-      (hUs.preimage_of_isOpenEmbe
+      (hUs.preimage_of_isOpenEmbedding (IsOpenEmbedding.id.restrict hVU hV₁) :)
+    have : IsConstructible (V inter s) := by
+      have := this.image_of_isOpenEmbedding hV₁.isOpenEmbedding_subtypeVal
+        (by simpa using hV₂.isRetrocompact hV₁)
+      rwa [Subtype.image_preimage_coe] at this
+    ⟨V, hV₁, hV₂, hxV, this⟩
+  choose U hU hU' hxU hUs using this
+  obtain ⟨σ, hσ, htσ⟩ := ht.elim_nhds_subcover U (fun x _ => (hU x).mem_nhds (hxU x))
+  convert! IsConstructible.biUnion σ.finite_toSet (fun x _ => hUs x)
+  apply subset_antisymm
+  · rw [← Set.iUnion₂_inter, Set.subset_inter_iff]
+    exact ⟨hst.trans htσ, subset_rfl⟩
+  · exact Set.iUnion₂_subset fun _ _ => Set.inter_subset_right
 
 Depends on / 依赖: IsCompact, IsConstructible, IsOpen, IsOpenEmbedding, IsOpenEmbedding.id.restrict, PrespectralSpace, PrespectralSpace.isTopologicalBasis.mem_nhds_iff.mp, Subtype, Subtype.image_prei, hUs.preimage_of_isOpenEmbedding, image_of_isOpenEmbedding, image_prei, isOpenEmbedding_subtypeVal, isRetrocompact, isTopologicalBasis, mem_nhds_iff, preimage_of_isOpenEmbedding, restrict, this.image_of_isOpenEmbedding
 -/
@@ -1787,7 +1909,11 @@ lemma IsLocallyConstructible.of_isOpenCover
   refine ⟨_, (U i).2.isOpenEmbedding_subtypeVal.image_mem_nhds.mpr hVx,
       (U i).2.isOpenMap_subtype_val _ hV, ?_⟩
   let e : V ≃ₜ Subtype.val '' V :=
-    (Equiv.Set.image _ V Subtype.val_injective).toHomeomorph
+    (Equiv.Set.image _ V Subtype.val_injective).toHomeomorphOfIsInducing
+      ((U i).2.isOpenEmbedding_subtypeVal.restrict (by simp [MapsTo]) hV).isInducing
+  convert! hV'.preimage_of_isOpenEmbedding e.symm.isOpenEmbedding
+  ext ⟨_, x, hx, rfl⟩
+  simp [e, Equiv.toHomeomorphOfIsInducing]
 
 中文:
 引理 IsLocallyConstructible.of_isOpenCover
@@ -1798,7 +1924,11 @@ lemma IsLocallyConstructible.of_isOpenCover
   refine ⟨_, (U i).2.isOpenEmbedding_subtypeVal.image_mem_nhds.mpr hVx,
       (U i).2.isOpenMap_subtype_val _ hV, ?_⟩
   let e : V ≃ₜ Subtype.val '' V :=
-    (Equiv.Set.image _ V Subtype.val_injective).toHomeomorph
+    (Equiv.Set.image _ V Subtype.val_injective).toHomeomorphOfIsInducing
+      ((U i).2.isOpenEmbedding_subtypeVal.restrict (by simp [MapsTo]) hV).isInducing
+  convert! hV'.preimage_of_isOpenEmbedding e.symm.isOpenEmbedding
+  ext ⟨_, x, hx, rfl⟩
+  simp [e, Equiv.toHomeomorphOfIsInducing]
 
 Depends on / 依赖: Equiv.Set.image, Equiv.toHomeomorphOfIsInducing, MapsTo, Subtype, Subtype.val, Subtype.val_injective, convert, e.symm.isOpenEmbedding, exists_mem, hU.exists_mem, image_mem_nhds, isInducing, isOpenEmbedding, isOpenEmbedding_subtypeVal, isOpenEmbedding_subtypeVal.image_mem_nhds.mpr, isOpenEmbedding_subtypeVal.restrict, isOpenMap_subtype_val, preimage_of_isOpenEmbedding, restrict, toHomeomorphOfIsInducing
 -/

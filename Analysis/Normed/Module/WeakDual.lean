@@ -345,7 +345,11 @@ theorem isBounded_iff_isVonNBounded
       Dual.dual_norm_topology_le_weak_dual_topology
   · intro h_vN
     have h_ptwise := (withSeminorms 𝕜 E).isVonNBounded_iff_seminorm_bounded.mp h_vN
-    obtain ⟨C, hC⟩ := banach_steinhaus (g := fun
+    obtain ⟨C, hC⟩ := banach_steinhaus (g := fun i : s => WeakDual.toStrongDual i.val) fun x =>
+      let ⟨M, _, hM⟩ := h_ptwise x
+      ⟨M, fun i => le_of_lt (hM i.val i.property)⟩
+    rw [← isBounded_toWeakDual_preimage_iff_isBounded]; rw [isBounded_iff_forall_norm_le]
+    exact ⟨C, fun f hf => hC ⟨StrongDual.toWeakDual f, hf⟩⟩
 
 中文:
 定理 isBounded_iff_isVonNBounded
@@ -356,7 +360,11 @@ theorem isBounded_iff_isVonNBounded
       Dual.dual_norm_topology_le_weak_dual_topology
   · intro h_vN
     have h_ptwise := (withSeminorms 𝕜 E).isVonNBounded_iff_seminorm_bounded.mp h_vN
-    obtain ⟨C, hC⟩ := banach_steinhaus (g := fun
+    obtain ⟨C, hC⟩ := banach_steinhaus (g := fun i : s => WeakDual.toStrongDual i.val) fun x =>
+      let ⟨M, _, hM⟩ := h_ptwise x
+      ⟨M, fun i => le_of_lt (hM i.val i.property)⟩
+    rw [← isBounded_toWeakDual_preimage_iff_isBounded]; rw [isBounded_iff_forall_norm_le]
+    exact ⟨C, fun f hf => hC ⟨StrongDual.toWeakDual f, hf⟩⟩
 
 Depends on / 依赖: Dual.dual_norm_topology_le_weak_dual_topology, NormedSpace, NormedSpace.isVonNBounded_iff, WeakDual, WeakDual.toStrongDual, banach_steinhaus, dual_norm_topology_le_weak_dual_topology, h_ptwise, h_vN, i.property, i.val, isBounded_iff_forall_norm_le, isBounded_toWeakDual_preimage_iff_isBounded, isVonNBounded_iff, isVonNBounded_iff_seminorm_bounded, isVonNBounded_iff_seminorm_bounded.mp, le_of_lt, of_topologicalSpace_le, property, toStrongDual
 -/
@@ -722,7 +730,7 @@ lemma metrizable_of_isCompact
   obtain ⟨gs, gs_cont, gs_sep⟩ := exists_countable_separating 𝕜 E
   exact Metric.PiNatEmbed.TopologicalSpace.MetrizableSpace.of_countable_separating
     (fun n k => gs n k) (fun n => (gs_cont n).comp continuous_subtype_val)
-fun x y hx
+fun x y hxy => gs_sep Subtype.val_injective.ne hxy
 
 中文:
 引理 metrizable_of_isCompact
@@ -733,7 +741,7 @@ fun x y hx
   obtain ⟨gs, gs_cont, gs_sep⟩ := exists_countable_separating 𝕜 E
   exact Metric.PiNatEmbed.TopologicalSpace.MetrizableSpace.of_countable_separating
     (fun n k => gs n k) (fun n => (gs_cont n).comp continuous_subtype_val)
-fun x y hx
+fun x y hxy => gs_sep Subtype.val_injective.ne hxy
 
 Depends on / 依赖: CompactSpace, K_cpt, Metric, Metric.PiNatEmbed.TopologicalSpace.MetrizableSpace.of_countable_separating, MetrizableSpace, PiNatEmbed, Subtype, Subtype.val_injective.ne, TopologicalSpace, continuous_subtype_val, exists_countable_separating, gs_cont, gs_sep, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, of_countable_separating, val_injective
 -/
@@ -757,7 +765,9 @@ theorem isSeqCompact_of_isBounded_of_isClosed
 isCompact_iff_compactSpace.mp isCompact_of_bounded_of_closed hb hc
   have b_isMetrizable : TopologicalSpace.MetrizableSpace s :=
 metrizable_of_isCompact 𝕜 E s isCompact_of_bounded_of_closed hb hc
-  have seq_cont_phi : SeqContinuous (fun φ : s => (φ : WeakDu
+  have seq_cont_phi : SeqContinuous (fun φ : s => (φ : WeakDual 𝕜 E)) :=
+    continuous_iff_seqContinuous.mp continuous_subtype_val
+  simpa using IsSeqCompact.range seq_cont_phi
 
 中文:
 定理 isSeqCompact_of_isBounded_of_isClosed
@@ -767,7 +777,9 @@ metrizable_of_isCompact 𝕜 E s isCompact_of_bounded_of_closed hb hc
 isCompact_iff_compactSpace.mp isCompact_of_bounded_of_closed hb hc
   have b_isMetrizable : TopologicalSpace.MetrizableSpace s :=
 metrizable_of_isCompact 𝕜 E s isCompact_of_bounded_of_closed hb hc
-  have seq_cont_phi : SeqContinuous (fun φ : s => (φ : WeakDu
+  have seq_cont_phi : SeqContinuous (fun φ : s => (φ : WeakDual 𝕜 E)) :=
+    continuous_iff_seqContinuous.mp continuous_subtype_val
+  simpa using IsSeqCompact.range seq_cont_phi
 
 Depends on / 依赖: CompactSpace, IsSeqCompact, IsSeqCompact.range, MetrizableSpace, SeqContinuous, TopologicalSpace, TopologicalSpace.MetrizableSpace, WeakDual, b_isCompact, b_isMetrizable, continuous_iff_seqContinuous, continuous_iff_seqContinuous.mp, continuous_subtype_val, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isCompact_of_bounded_of_closed, metrizable_of_isCompact, seq_cont_phi
 -/
@@ -900,7 +912,9 @@ definition extendRCLikeL
   continuous_toFun := continuous_of_continuous_eval_re fun x => by
     simpa [extendRCLikeₗ_apply] using eval_continuous x
   continuous_invFun :=
-    continuous_of_continuous_eval fun x => RCLike.continuous_re.comp (eval_continuous x
+    continuous_of_continuous_eval fun x => RCLike.continuous_re.comp (eval_continuous x)
+
+@[simp]
 
 中文:
 定义 extendRCLikeL
@@ -909,7 +923,9 @@ definition extendRCLikeL
   continuous_toFun := continuous_of_continuous_eval_re fun x => by
     simpa [extendRCLikeₗ_apply] using eval_continuous x
   continuous_invFun :=
-    continuous_of_continuous_eval fun x => RCLike.continuous_re.comp (eval_continuous x
+    continuous_of_continuous_eval fun x => RCLike.continuous_re.comp (eval_continuous x)
+
+@[simp]
 
 Depends on / 依赖: restrictScalars, toStrongDual, toWeakDual, toWeakDual.restrictScalars
 -/

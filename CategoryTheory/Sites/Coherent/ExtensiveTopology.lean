@@ -43,6 +43,27 @@ lemma extensiveTopology.mem_sieves_iff_contains_colimit_cofan
       refine ⟨α, inferInstance, Y, π, ?_, fun a => ?_⟩
       · have : IsIso (Sigma.desc (Cofan.mk X π).inj) := by simpa using! h'
         exact ⟨Cofan.isColimitOfIsIsoSigmaDesc (Cofan.mk X π)⟩
+      · obtain ⟨rfl, _⟩ := h
+        exact ⟨Y a, 𝟙 Y a, π a, Presieve.ofArrows.mk a, by simp⟩
+    | top X =>
+      refine ⟨Unit, inferInstance, fun _ => X, fun _ => (𝟙 X), ⟨?_⟩, by simp⟩
+      have : IsIso (Sigma.desc (Cofan.mk X fun (_ : Unit) => 𝟙 X).inj) := by
+        have : IsIso (coproductUniqueIso (fun () => X)).hom := inferInstance
+        exact this
+      exact Cofan.isColimitOfIsIsoSigmaDesc (Cofan.mk X _)
+    | transitive X R S _ _ a b =>
+      obtain ⟨α, w, Y₁, π, h, h'⟩ := a
+      choose β _ Y_n π_n H using fun a => b (h' a)
+      exact ⟨(Σ a, β a), inferInstance, fun ⟨a,b⟩ => Y_n a b, fun ⟨a, b⟩ => (π_n a b) ≫ (π a),
+        ⟨Limits.Cofan.isColimitTrans _ h.some _ (fun a => (H a).1.some)⟩,
+        fun c => (H c.fst).2 c.snd⟩
+  · intro ⟨α, _, Y, π, h, h'⟩
+    apply (extensiveCoverage C).mem_toGrothendieck_sieves_of_superset (R := Presieve.ofArrows Y π)
+    · exact fun _ _ hh => by cases hh; exact h' _
+    · refine ⟨α, inferInstance, Y, π, rfl, ?_⟩
+      rw [← show _ ↔ IsIso (Sigma.desc π) from
+        Limits.Cofan.nonempty_isColimit_iff_isIso_sigmaDesc (c := Cofan.mk X π)]
+      exact h
 
 中文:
 引理 extensiveTopology.mem_sieves_iff_contains_colimit_cofan
@@ -56,6 +77,27 @@ lemma extensiveTopology.mem_sieves_iff_contains_colimit_cofan
       refine ⟨α, inferInstance, Y, π, ?_, fun a => ?_⟩
       · have : IsIso (Sigma.desc (Cofan.mk X π).inj) := by simpa using! h'
         exact ⟨Cofan.isColimitOfIsIsoSigmaDesc (Cofan.mk X π)⟩
+      · obtain ⟨rfl, _⟩ := h
+        exact ⟨Y a, 𝟙 Y a, π a, Presieve.ofArrows.mk a, by simp⟩
+    | top X =>
+      refine ⟨Unit, inferInstance, fun _ => X, fun _ => (𝟙 X), ⟨?_⟩, by simp⟩
+      have : IsIso (Sigma.desc (Cofan.mk X fun (_ : Unit) => 𝟙 X).inj) := by
+        have : IsIso (coproductUniqueIso (fun () => X)).hom := inferInstance
+        exact this
+      exact Cofan.isColimitOfIsIsoSigmaDesc (Cofan.mk X _)
+    | transitive X R S _ _ a b =>
+      obtain ⟨α, w, Y₁, π, h, h'⟩ := a
+      choose β _ Y_n π_n H using fun a => b (h' a)
+      exact ⟨(Σ a, β a), inferInstance, fun ⟨a,b⟩ => Y_n a b, fun ⟨a, b⟩ => (π_n a b) ≫ (π a),
+        ⟨Limits.Cofan.isColimitTrans _ h.some _ (fun a => (H a).1.some)⟩,
+        fun c => (H c.fst).2 c.snd⟩
+  · intro ⟨α, _, Y, π, h, h'⟩
+    apply (extensiveCoverage C).mem_toGrothendieck_sieves_of_superset (R := Presieve.ofArrows Y π)
+    · exact fun _ _ hh => by cases hh; exact h' _
+    · refine ⟨α, inferInstance, Y, π, rfl, ?_⟩
+      rw [← show _ ↔ IsIso (Sigma.desc π) from
+        Limits.Cofan.nonempty_isColimit_iff_isIso_sigmaDesc (c := Cofan.mk X π)]
+      exact h
 
 Depends on / 依赖: Cofan.isColimitOfIsIsoSigmaDesc, Cofan.mk, Presieve, Presieve.ofArrows.mk, Sigma.desc, isColimitOfIsIsoSigmaDesc, ofArrows
 -/

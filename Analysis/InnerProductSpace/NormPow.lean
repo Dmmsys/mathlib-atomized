@@ -42,7 +42,20 @@ theorem hasFDerivAt_norm_rpow
     refine .of_isLittleO ?_
     calc (fun x : E => ‖x‖ ^ p - ‖(0 : E)‖ ^ p - 0)
         = (fun x : E => ‖x‖ ^ p) := by simp [zero_lt_one.trans hp |>.ne']
-      _ = (fun x : E => ‖x‖
+      _ = (fun x : E => ‖x‖ * ‖x‖ ^ (p - 1)) := by
+          ext x
+          rw [← rpow_one_add' (norm_nonneg x) (by positivity)]
+          ring_nf
+      _ =o[𝓝 0] (fun x : E => ‖x‖ * 1) := by
+refine (isBigO_refl _ _).mul_isLittleO (isLittleO_const_iff <| by simp).mpr ?_
+.tendsto convert! continuousAt_id.norm.rpow_const (.inr h2p.le)
+        simp [h2p.ne']
+      _ =O[𝓝 0] (fun (x : E) => x - 0) := by
+        simp_rw [mul_one, isBigO_norm_left (f' := fun x => x), sub_zero, isBigO_refl]
+  · apply HasStrictFDerivAt.hasFDerivAt
+    convert! (hasStrictFDerivAt_norm_sq x).rpow_const (p := p / 2) (by simp [hx]) using 0
+    simp_rw [← Real.rpow_natCast_mul (norm_nonneg _), ← Nat.cast_smul_eq_nsmul Real, smul_smul]
+    ring_nf
 
 中文:
 定理 hasFDerivAt_norm_rpow
@@ -54,7 +67,20 @@ theorem hasFDerivAt_norm_rpow
     refine .of_isLittleO ?_
     calc (fun x : E => ‖x‖ ^ p - ‖(0 : E)‖ ^ p - 0)
         = (fun x : E => ‖x‖ ^ p) := by simp [zero_lt_one.trans hp |>.ne']
-      _ = (fun x : E => ‖x‖
+      _ = (fun x : E => ‖x‖ * ‖x‖ ^ (p - 1)) := by
+          ext x
+          rw [← rpow_one_add' (norm_nonneg x) (by positivity)]
+          ring_nf
+      _ =o[𝓝 0] (fun x : E => ‖x‖ * 1) := by
+refine (isBigO_refl _ _).mul_isLittleO (isLittleO_const_iff <| by simp).mpr ?_
+.tendsto convert! continuousAt_id.norm.rpow_const (.inr h2p.le)
+        simp [h2p.ne']
+      _ =O[𝓝 0] (fun (x : E) => x - 0) := by
+        simp_rw [mul_one, isBigO_norm_left (f' := fun x => x), sub_zero, isBigO_refl]
+  · apply HasStrictFDerivAt.hasFDerivAt
+    convert! (hasStrictFDerivAt_norm_sq x).rpow_const (p := p / 2) (by simp [hx]) using 0
+    simp_rw [← Real.rpow_natCast_mul (norm_nonneg _), ← Nat.cast_smul_eq_nsmul Real, smul_smul]
+    ring_nf
 
 Depends on / 依赖: convert, isBigO_refl, isLittleO_const_iff, map_zero, mul_isLittleO, norm_nonneg, norm_zero, of_isLittleO, ring_nf, rpow_one_add, smul_zero, sub_pos, sub_pos.mpr, tendsto, zero_lt_one, zero_lt_one.trans
 -/
@@ -194,7 +220,9 @@ theorem norm_fderiv_norm_rpow_le
 abs_eq_self.mpr zero_le_one.trans hp.le, mul_assoc]
   gcongr _ * ?_
   refine mul_le_mul_of_nonneg_left (ContinuousLinearMap.opNorm_comp_le ..) (by positivity)
-.tran
+.trans_eq ?_
+  rw [innerSL_apply_norm]; rw [← mul_assoc]; rw [← Real.rpow_add_one' (by positivity) (by linarith)]
+  ring_nf
 
 中文:
 定理 norm_fderiv_norm_rpow_le
@@ -205,7 +233,9 @@ abs_eq_self.mpr zero_le_one.trans hp.le, mul_assoc]
 abs_eq_self.mpr zero_le_one.trans hp.le, mul_assoc]
   gcongr _ * ?_
   refine mul_le_mul_of_nonneg_left (ContinuousLinearMap.opNorm_comp_le ..) (by positivity)
-.tran
+.trans_eq ?_
+  rw [innerSL_apply_norm]; rw [← mul_assoc]; rw [← Real.rpow_add_one' (by positivity) (by linarith)]
+  ring_nf
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_comp_le, Real.rpow_add_one, abs_eq_self, abs_eq_self.mpr, fderiv_norm_rpow, hf.fderiv_norm_rpow, hp.le, innerSL_apply_norm, mul_assoc, mul_le_mul_of_nonneg_left, norm_eq_abs, norm_mul, norm_nonneg, norm_norm, norm_rpow_of_nonneg, norm_smul, opNorm_comp_le, ring_nf, rpow_add_one
 -/
@@ -313,7 +343,14 @@ theorem contDiff_norm_rpow
   intro x
   by_cases hx : x = 0
   · simp_rw [hx, ContinuousAt, fderiv_norm_rpow (0 : E) hp, norm_zero, map_zero, smul_zero]
-    rw [tendsto_zero_iff_norm_tends
+    rw [tendsto_zero_iff_norm_tendsto_zero]
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le (tendsto_const_nhds) ?_
+      (fun _ => norm_nonneg _) (fun _ => norm_fderiv_norm_id_rpow _ hp |>.le)
+    suffices ContinuousAt (fun x : E => p * ‖x‖ ^ (p - 1)) 0 by
+      simpa [ContinuousAt, sub_ne_zero_of_ne hp.ne'] using this
+    fun_prop (discharger := simp [hp.le])
+  · simp_rw [funext fun x => fderiv_norm_rpow (E := E) (x := x) hp]
+    fun_prop (discharger := simp [hx])
 
 中文:
 定理 contDiff_norm_rpow
@@ -326,7 +363,14 @@ theorem contDiff_norm_rpow
   intro x
   by_cases hx : x = 0
   · simp_rw [hx, ContinuousAt, fderiv_norm_rpow (0 : E) hp, norm_zero, map_zero, smul_zero]
-    rw [tendsto_zero_iff_norm_tends
+    rw [tendsto_zero_iff_norm_tendsto_zero]
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le (tendsto_const_nhds) ?_
+      (fun _ => norm_nonneg _) (fun _ => norm_fderiv_norm_id_rpow _ hp |>.le)
+    suffices ContinuousAt (fun x : E => p * ‖x‖ ^ (p - 1)) 0 by
+      simpa [ContinuousAt, sub_ne_zero_of_ne hp.ne'] using this
+    fun_prop (discharger := simp [hp.le])
+  · simp_rw [funext fun x => fderiv_norm_rpow (E := E) (x := x) hp]
+    fun_prop (discharger := simp [hx])
 
 Depends on / 依赖: ContinuousAt, contDiff_one_iff_fderiv, continuous_iff_continuousAt, differentiableAt, fderiv_norm_rpow, hasFDerivAt_norm_rpow, map_zero, norm_fderiv_norm_id_rpow, norm_nonneg, norm_zero, simp_rw, smul_zero, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_zero_iff_norm_tendsto_zero
 -/

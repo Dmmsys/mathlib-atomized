@@ -797,7 +797,14 @@ instance :
     refine ⟨?_, hs.inter ht⟩
     rintro ⟨hms', hmt'⟩
     simpa [compl_inter] using (hms hms').union (hmt hmt')
-  isOpen
+  isOpen_sUnion S ho := by
+    suffices IsOpen ((↑) ⁻¹' ⋃₀ S : Set X) by
+      refine ⟨?_, this⟩
+      rintro ⟨s, hsS : s in S, hs : ∞ in s⟩
+      refine IsCompact.of_isClosed_subset ((ho s hsS).1 hs) this.isClosed_compl ?_
+      exact compl_subset_compl.mpr (preimage_mono <| subset_sUnion_of_mem hsS)
+    rw [preimage_sUnion]
+    exact isOpen_biUnion fun s hs => (ho s hs).2
 
 中文:
 实例 :
@@ -810,7 +817,14 @@ instance :
     refine ⟨?_, hs.inter ht⟩
     rintro ⟨hms', hmt'⟩
     simpa [compl_inter] using (hms hms').union (hmt hmt')
-  isOpen
+  isOpen_sUnion S ho := by
+    suffices IsOpen ((↑) ⁻¹' ⋃₀ S : Set X) by
+      refine ⟨?_, this⟩
+      rintro ⟨s, hsS : s in S, hs : ∞ in s⟩
+      refine IsCompact.of_isClosed_subset ((ho s hsS).1 hs) this.isClosed_compl ?_
+      exact compl_subset_compl.mpr (preimage_mono <| subset_sUnion_of_mem hsS)
+    rw [preimage_sUnion]
+    exact isOpen_biUnion fun s hs => (ho s hs).2
 
 Depends on / 依赖: IsCompact, OnePoint
 -/
@@ -1287,7 +1301,7 @@ theorem nhdsNE_infty_eq
     simp
   · rintro s ⟨h₁, h₂⟩
     refine ⟨_, ⟨mem_compl infty_notMem_image_coe, isOpen_compl_image_coe.2 ⟨h₁, h₂⟩⟩, ?_⟩
-    simp [compl_image_c
+    simp [compl_image_coe, ← sdiff_eq]
 
 中文:
 定理 nhdsNE_infty_eq
@@ -1299,7 +1313,7 @@ theorem nhdsNE_infty_eq
     simp
   · rintro s ⟨h₁, h₂⟩
     refine ⟨_, ⟨mem_compl infty_notMem_image_coe, isOpen_compl_image_coe.2 ⟨h₁, h₂⟩⟩, ?_⟩
-    simp [compl_image_c
+    simp [compl_image_coe, ← sdiff_eq]
 
 Depends on / 依赖: compl_image_coe, hasBasis_coclosedCompact, hasBasis_coclosedCompact.map, infty_notMem_image_coe, isOpen_compl_image_coe, isOpen_iff_of_mem, mem_compl, nhdsWithin_basis_open, sdiff_eq
 -/
@@ -1693,7 +1707,12 @@ definition continuousMapDiscreteEquiv
 .mpr Classical.choose_spec f.2 } continuous_toFun := continuous_iff_from_discrete _
   left_inv f := by
     ext x
-    refine OnePoint.rec ?_ ?_
+    refine OnePoint.rec ?_ ?_ x
+    · refine tendsto_nhds_unique ?_ (continuous_iff_from_discrete _ |>.mp <| map_continuous f)
+      let f' : { f : X -> Y // exists L, Tendsto (fun x : X => f x) cofinite (𝓝 L) } :=
+.mp map_continuous f⟩⟩ ⟨fun x => f x, ⟨f ∞, continuous_iff_from_discrete f
+      exact Classical.choose_spec f'.property
+    · simp
 
 中文:
 定义 continuousMapDiscreteEquiv
@@ -1706,7 +1725,12 @@ definition continuousMapDiscreteEquiv
 .mpr Classical.choose_spec f.2 } continuous_toFun := continuous_iff_from_discrete _
   left_inv f := by
     ext x
-    refine OnePoint.rec ?_ ?_
+    refine OnePoint.rec ?_ ?_ x
+    · refine tendsto_nhds_unique ?_ (continuous_iff_from_discrete _ |>.mp <| map_continuous f)
+      let f' : { f : X -> Y // exists L, Tendsto (fun x : X => f x) cofinite (𝓝 L) } :=
+.mp map_continuous f⟩⟩ ⟨fun x => f x, ⟨f ∞, continuous_iff_from_discrete f
+      exact Classical.choose_spec f'.property
+    · simp
 
 Depends on / 依赖: continuous_iff_from_discrete
 -/
@@ -2133,7 +2157,15 @@ instance [WeaklyLocallyCompactSpace
   body: by
   suffices R1Space (OnePoint X) by infer_instance
   have key : forall z : X, Disjoint (𝓝 (some z)) (𝓝 ∞) := fun z => by
-    rw [nhds_infty_eq]; rw [disjoint_sup_right]; rw [nhds_coe_eq]; rw [coclosedCompact_eq_cocompact]; rw [disjoint_map coe_injective]; rw [← principal_singleton]; rw [disjoint_p
+    rw [nhds_infty_eq]; rw [disjoint_sup_right]; rw [nhds_coe_eq]; rw [coclosedCompact_eq_cocompact]; rw [disjoint_map coe_injective]; rw [← principal_singleton]; rw [disjoint_principal_right]; rw [compl_infty]
+    exact ⟨disjoint_nhds_cocompact z, range_mem_map⟩
+  refine ⟨fun x y => ?_⟩
+  induction x using OnePoint.rec <;> induction y using OnePoint.rec
+  · exact .inl le_rfl
+  · exact .inr (key _).symm
+  · exact .inr (key _)
+  · rw [nhds_coe_eq, nhds_coe_eq, disjoint_map coe_injective, specializes_coe]
+    apply specializes_or_disjoint_nhds
 
 中文:
 实例 [WeaklyLocallyCompact空间
@@ -2141,7 +2173,15 @@ instance [WeaklyLocallyCompactSpace
   定义体: by
   suffices R1Space (OnePoint X) by infer_instance
   have key : forall z : X, Disjoint (𝓝 (some z)) (𝓝 ∞) := fun z => by
-    rw [nhds_infty_eq]; rw [disjoint_sup_right]; rw [nhds_coe_eq]; rw [coclosedCompact_eq_cocompact]; rw [disjoint_map coe_injective]; rw [← principal_singleton]; rw [disjoint_p
+    rw [nhds_infty_eq]; rw [disjoint_sup_right]; rw [nhds_coe_eq]; rw [coclosedCompact_eq_cocompact]; rw [disjoint_map coe_injective]; rw [← principal_singleton]; rw [disjoint_principal_right]; rw [compl_infty]
+    exact ⟨disjoint_nhds_cocompact z, range_mem_map⟩
+  refine ⟨fun x y => ?_⟩
+  induction x using OnePoint.rec <;> induction y using OnePoint.rec
+  · exact .inl le_rfl
+  · exact .inr (key _).symm
+  · exact .inr (key _)
+  · rw [nhds_coe_eq, nhds_coe_eq, disjoint_map coe_injective, specializes_coe]
+    apply specializes_or_disjoint_nhds
 
 Depends on / 依赖: Disjoint, OnePoint, OnePoint.rec, R1Space, coclosedCompact_eq_cocompact, coe_injective, compl_infty, disjoint_map, disjoint_nhds_cocompact, disjoint_principal_right, disjoint_sup_right, infer_instance, le_rfl, nhds_coe_eq, nhds_infty_eq, principal_singleton, range_mem_map
 -/
@@ -2249,7 +2289,25 @@ definition equivOfIsEmbeddingOfRangeEq
     intro N hN
     obtain ⟨U, hU₁, hU₂, hU₃⟩ := mem_nhds_iff.mp hN
     refine ⟨f⁻¹' Uᶜ, ?_, by simpa using (mapsTo_preimage f U).mono_right hU₁⟩
-  
+    rw [hf.isCompact_iff]; rw [image_preimage_eq_iff.mpr (by simpa [hy])]
+    exact (isClosed_compl_iff.mpr hU₂).isCompact
+  let e : OnePoint X ≃ Y :=
+    { toFun := fun p => p.elim y f
+      invFun := fun q => if hq : q = y then ∞ else ↑(show q in range f by simpa [hy]).choose
+      left_inv := fun p => by
+        induction p using OnePoint.rec with
+        | infty => simp
+        | coe p =>
+          have hp : f p != y := by simpa [hy] using mem_range_self (f := f) p
+          simpa [hp] using hf.injective (mem_range_self p).choose_spec
+      right_inv := fun q => by
+        rcases eq_or_ne q y with rfl | hq
+        · simp
+        · have hq' : q in range f := by simpa [hy]
+          simpa [hq] using hq'.choose_spec }
+Continuous.homeoOfEquivCompactToT2 (continuous_iff e).mpr ⟨this, hf.continuous⟩
+
+@[simp]
 
 中文:
 定义 equivOfIsEmbeddingOfRangeEq
@@ -2260,7 +2318,25 @@ definition equivOfIsEmbeddingOfRangeEq
     intro N hN
     obtain ⟨U, hU₁, hU₂, hU₃⟩ := mem_nhds_iff.mp hN
     refine ⟨f⁻¹' Uᶜ, ?_, by simpa using (mapsTo_preimage f U).mono_right hU₁⟩
-  
+    rw [hf.isCompact_iff]; rw [image_preimage_eq_iff.mpr (by simpa [hy])]
+    exact (isClosed_compl_iff.mpr hU₂).isCompact
+  let e : OnePoint X ≃ Y :=
+    { toFun := fun p => p.elim y f
+      invFun := fun q => if hq : q = y then ∞ else ↑(show q in range f by simpa [hy]).choose
+      left_inv := fun p => by
+        induction p using OnePoint.rec with
+        | infty => simp
+        | coe p =>
+          have hp : f p != y := by simpa [hy] using mem_range_self (f := f) p
+          simpa [hp] using hf.injective (mem_range_self p).choose_spec
+      right_inv := fun q => by
+        rcases eq_or_ne q y with rfl | hq
+        · simp
+        · have hq' : q in range f := by simpa [hy]
+          simpa [hq] using hq'.choose_spec }
+Continuous.homeoOfEquivCompactToT2 (continuous_iff e).mpr ⟨this, hf.continuous⟩
+
+@[simp]
 
 Depends on / 依赖: OnePoint, Tendsto, coclosedCompact, coclosedCompact_eq_cocompact, hasBasis_cocompact, hasBasis_cocompact.tendsto_left_iff, hf.isCompact_iff, hf.t2Space, image_preimage_eq_iff, image_preimage_eq_iff.mpr, invFun, isClosed_compl_iff, isClosed_compl_iff.mpr, isCompact, isCompact_iff, mapsTo_preimage, mem_nhds_iff, mem_nhds_iff.mp, mono_right, p.elim
 -/

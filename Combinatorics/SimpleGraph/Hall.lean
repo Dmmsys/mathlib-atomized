@@ -101,7 +101,18 @@ theorem exists_isMatching_of_forall_ncard_le
 .mp fun s => by (fun (x : p₁) => G.neighborFinset x)
     have := h₂ (s.image Subtype.val) (by simp)
     rw [Set.ncard_coe_finset]; rw [Finset.card_image_of_injective _ Subtype.val_injective] at this
-    sim
+    simpa [← Set.ncard_coe_finset, neighborFinset_def]
+.notMem_of_mem_right have (x : p₁) : f x ∉ p₁ := h₁.disjoint
+isBipartiteWith_neighborSet_subset h₁ x.2 Set.mem_toFinset.mp hf₂ x
+  use hall_subgraph f this (fun v => G.mem_neighborFinset _ _ |>.mp <| hf₂ v)
+  refine ⟨by simp, fun v hv => ?_⟩
+  simp only [Set.mem_union, Set.mem_range, Subtype.exists] at hv ⊢
+  rcases hv with h' | ⟨x, hx₁, hx₂⟩
+  · exact ⟨f ⟨v, h'⟩, by simp_all⟩
+  · use x
+    have := hx₂ ▸ this ⟨x, hx₁⟩
+    simp only [this, ↓reduceDIte, hx₁, hx₂, dite_else_false, forall_exists_index, true_and]
+exact fun _ _ k => Subtype.ext_iff.mp hf₁ (hx₂ ▸ k)
 
 中文:
 定理 存在_isMatching_of_对任意_ncard_le
@@ -112,7 +123,18 @@ theorem exists_isMatching_of_forall_ncard_le
 .mp fun s => by (fun (x : p₁) => G.neighborFinset x)
     have := h₂ (s.image Subtype.val) (by simp)
     rw [Set.ncard_coe_finset]; rw [Finset.card_image_of_injective _ Subtype.val_injective] at this
-    sim
+    simpa [← Set.ncard_coe_finset, neighborFinset_def]
+.notMem_of_mem_right have (x : p₁) : f x ∉ p₁ := h₁.disjoint
+isBipartiteWith_neighborSet_subset h₁ x.2 Set.mem_toFinset.mp hf₂ x
+  use hall_subgraph f this (fun v => G.mem_neighborFinset _ _ |>.mp <| hf₂ v)
+  refine ⟨by simp, fun v hv => ?_⟩
+  simp only [Set.mem_union, Set.mem_range, Subtype.exists] at hv ⊢
+  rcases hv with h' | ⟨x, hx₁, hx₂⟩
+  · exact ⟨f ⟨v, h'⟩, by simp_all⟩
+  · use x
+    have := hx₂ ▸ this ⟨x, hx₁⟩
+    simp only [this, ↓reduceDIte, hx₁, hx₂, dite_else_false, forall_exists_index, true_and]
+exact fun _ _ k => Subtype.ext_iff.mp hf₁ (hx₂ ▸ k)
 
 Depends on / 依赖: Finset, Finset.all_card_le_biUnion_card_iff_exists_injective, Finset.card_image_of_injective, G.me, G.neighborFinset, Set.mem_toFinset.mp, Set.ncard_coe_finset, Subtype, Subtype.val, Subtype.val_injective, all_card_le_biUnion_card_iff_exists_injective, card_image_of_injective, classical, disjoint, hall_subgraph, isBipartiteWith_neighborSet_subset, mem_toFinset, ncard_coe_finset, neighborFinset, neighborFinset_def
 -/
@@ -150,7 +172,8 @@ lemma union_eq_univ_of_forall_ncard_le
     have := h₂ s
     simpa [← Set.ncard_coe_finset, neighborFinset_def]
   refine Set.eq_univ_iff_forall.mpr fun x => ?_
-have := h₁.mem_of_adj .mp (hf₂ x) G.mem_ne
+have := h₁.mem_of_adj .mp (hf₂ x) G.mem_neighborFinset _ _
+  grind
 
 中文:
 引理 union_eq_univ_of_对任意_ncard_le
@@ -162,7 +185,8 @@ have := h₁.mem_of_adj .mp (hf₂ x) G.mem_ne
     have := h₂ s
     simpa [← Set.ncard_coe_finset, neighborFinset_def]
   refine Set.eq_univ_iff_forall.mpr fun x => ?_
-have := h₁.mem_of_adj .mp (hf₂ x) G.mem_ne
+have := h₁.mem_of_adj .mp (hf₂ x) G.mem_neighborFinset _ _
+  grind
 
 Depends on / 依赖: Finset, Finset.all_card_le_biUnion_card_iff_exists_injective, G.mem_neighborFinset, G.neighborFinset, Set.eq_univ_iff_forall.mpr, Set.ncard_coe_finset, all_card_le_biUnion_card_iff_exists_injective, classical, eq_univ_iff_forall, mem_neighborFinset, mem_of_adj, ncard_coe_finset, neighborFinset, neighborFinset_def
 -/
@@ -190,7 +214,18 @@ lemma exists_bijective_of_forall_ncard_le
     have := h₂ s
     simpa [← Set.ncard_coe_finset, neighborFinset_def]
 .notMem_of_mem_right have (x : V) (h : x in p₁) : f x ∉ p₁ := h₁.disjoint
-isBipartiteWit
+isBipartiteWith_neighborSet_subset h₁ h Set.mem_toFinset.mp hf₂ x
+.notMem_of_mem_left have (x : V) (h : x in p₂) : f x ∉ p₂ := h₁.disjoint
+isBipartiteWith_neighborSet_subset h₁.symm h Set.mem_toFinset.mp hf₂ x
+  have (x : V) : f x in p₁ ∨ f x in p₂ := by
+    simp [union_eq_univ_of_forall_ncard_le h₁ h₂, p₁.mem_union (f x) p₂ |>.mp]
+  let f' (x : p₁) : p₂ := ⟨f x, by grind⟩
+  let g' (x : p₂) : p₁ := ⟨f x, by grind⟩
+  refine Embedding.schroeder_bernstein_of_rel (f := f') (g := g') ?_ ?_ (fun x y => G.Adj x y) ?_ ?_
+· exact Injective.of_comp (f := Subtype.val) hf₁.comp Subtype.val_injective
+· exact Injective.of_comp (f := Subtype.val) hf₁.comp Subtype.val_injective
+.mp (hf₂ v) · exact fun v => mem_neighborFinset _ _ _
+.symm .mp (hf₂ v) · exact fun v => mem_neighborFinset _ _ _
 
 中文:
 引理 存在_bijective_of_对任意_ncard_le
@@ -202,7 +237,18 @@ isBipartiteWit
     have := h₂ s
     simpa [← Set.ncard_coe_finset, neighborFinset_def]
 .notMem_of_mem_right have (x : V) (h : x in p₁) : f x ∉ p₁ := h₁.disjoint
-isBipartiteWit
+isBipartiteWith_neighborSet_subset h₁ h Set.mem_toFinset.mp hf₂ x
+.notMem_of_mem_left have (x : V) (h : x in p₂) : f x ∉ p₂ := h₁.disjoint
+isBipartiteWith_neighborSet_subset h₁.symm h Set.mem_toFinset.mp hf₂ x
+  have (x : V) : f x in p₁ ∨ f x in p₂ := by
+    simp [union_eq_univ_of_forall_ncard_le h₁ h₂, p₁.mem_union (f x) p₂ |>.mp]
+  let f' (x : p₁) : p₂ := ⟨f x, by grind⟩
+  let g' (x : p₂) : p₁ := ⟨f x, by grind⟩
+  refine Embedding.schroeder_bernstein_of_rel (f := f') (g := g') ?_ ?_ (fun x y => G.Adj x y) ?_ ?_
+· exact Injective.of_comp (f := Subtype.val) hf₁.comp Subtype.val_injective
+· exact Injective.of_comp (f := Subtype.val) hf₁.comp Subtype.val_injective
+.mp (hf₂ v) · exact fun v => mem_neighborFinset _ _ _
+.symm .mp (hf₂ v) · exact fun v => mem_neighborFinset _ _ _
 
 Depends on / 依赖: Finset, Finset.all_card_le_biUnion_card_iff_exists_injective, G.neighborFinset, Set.mem_toFinset.mp, Set.ncard_coe_finset, all_card_le_biUnion_card_iff_exists_injective, classical, disjoint, isBipartiteWith_neighborSet_subset, mem_toFinset, ncard_coe_finset, neighborFinset, neighborFinset_def, notMem_of_mem_left, notMem_of_mem_right
 -/
@@ -238,7 +284,14 @@ theorem exists_isPerfectMatching_of_forall_ncard_le
   obtain ⟨b, hb₁, hb₂⟩ := exists_bijective_of_forall_ncard_le h₁ h₂
   use hall_subgraph (fun v => b v) (fun v => h₁.disjoint.notMem_of_mem_right (b v).property) hb₂
   have : p₁ union Set.range (fun v => (b v).1) = Set.univ := by
-    rw [Set.range_comp']; rw [hb₁.surjective.range_eq]; 
+    rw [Set.range_comp']; rw [hb₁.surjective.range_eq]; rw [Subtype.coe_image_univ]
+    exact union_eq_univ_of_forall_ncard_le h₁ h₂
+  refine ⟨fun v _ => ?_, Subgraph.isSpanning_iff.mpr this⟩
+  simp only [dite_else_false]
+  split
+  · exact existsUnique_eq'
+  · obtain ⟨x, _⟩ := hb₁.existsUnique ⟨v, by grind⟩
+    exact ⟨x, by grind⟩
 
 中文:
 定理 存在_isPerfectMatching_of_对任意_ncard_le
@@ -247,7 +300,14 @@ theorem exists_isPerfectMatching_of_forall_ncard_le
   obtain ⟨b, hb₁, hb₂⟩ := exists_bijective_of_forall_ncard_le h₁ h₂
   use hall_subgraph (fun v => b v) (fun v => h₁.disjoint.notMem_of_mem_right (b v).property) hb₂
   have : p₁ union Set.range (fun v => (b v).1) = Set.univ := by
-    rw [Set.range_comp']; rw [hb₁.surjective.range_eq]; 
+    rw [Set.range_comp']; rw [hb₁.surjective.range_eq]; rw [Subtype.coe_image_univ]
+    exact union_eq_univ_of_forall_ncard_le h₁ h₂
+  refine ⟨fun v _ => ?_, Subgraph.isSpanning_iff.mpr this⟩
+  simp only [dite_else_false]
+  split
+  · exact existsUnique_eq'
+  · obtain ⟨x, _⟩ := hb₁.existsUnique ⟨v, by grind⟩
+    exact ⟨x, by grind⟩
 
 Depends on / 依赖: Set.range, Set.range_comp, Set.univ, Subgraph, Subgraph.isSpanning_iff.mpr, Subtype, Subtype.coe_image_univ, classical, coe_image_univ, disjoint, disjoint.notMem_of_mem_right, dite_else_false, existsUnique_eq, exists_bijective_of_forall_ncard_le, hall_subgraph, isSpanning_iff, notMem_of_mem_right, property, range_comp, range_eq
 -/

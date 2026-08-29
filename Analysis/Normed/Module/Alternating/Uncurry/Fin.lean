@@ -169,7 +169,10 @@ definition alternatizeUncurryFinCLM
     ‖alternatizeUncurryFinCLM.aux f v‖ <= ∑ i : Fin (n + 1), ‖f‖ * ∏ i, ‖v i‖ := by
       rw [alternatizeUncurryFinCLM.aux_apply]
       refine norm_sum_le_of_le _ fun i hi => ?_
-      rw [norm_isUnit_zsmul _ (.pow
+      rw [norm_isUnit_zsmul _ (.pow _ isUnit_one.neg)]; rw [i.prod_univ_succAbove]; rw [← mul_assoc]
+      apply (f (v i)).le_of_opNorm_le
+      apply f.le_opNorm
+    _ = (n + 1) * ‖f‖ * ∏ i, ‖v i‖ := by simp [mul_assoc]
 
 中文:
 定义 alternatizeUncurryFinCLM
@@ -178,7 +181,10 @@ definition alternatizeUncurryFinCLM
     ‖alternatizeUncurryFinCLM.aux f v‖ <= ∑ i : Fin (n + 1), ‖f‖ * ∏ i, ‖v i‖ := by
       rw [alternatizeUncurryFinCLM.aux_apply]
       refine norm_sum_le_of_le _ fun i hi => ?_
-      rw [norm_isUnit_zsmul _ (.pow
+      rw [norm_isUnit_zsmul _ (.pow _ isUnit_one.neg)]; rw [i.prod_univ_succAbove]; rw [← mul_assoc]
+      apply (f (v i)).le_of_opNorm_le
+      apply f.le_opNorm
+    _ = (n + 1) * ‖f‖ * ∏ i, ‖v i‖ := by simp [mul_assoc]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.mkContinuousLinear, alternatizeUncurryFinCLM, alternatizeUncurryFinCLM.aux, alternatizeUncurryFinCLM.aux_apply, aux_apply, f.le_opNorm, i.prod_univ_succAbove, isUnit_one, isUnit_one.neg, le_of_opNorm_le, le_opNorm, mkContinuousLinear, mul_assoc, norm_isUnit_zsmul, norm_sum_le_of_le, prod_univ_succAbove
 -/
@@ -505,7 +511,8 @@ theorem fderivCompContinuousLinearMap_eq_alternatizeUncurryFin
       i.insertNth (α := fun _ => E ->L[𝕜] F) dg (fun _ => g) j (v j) =
         i.insertNth (α := fun _ => F) (dg (v i)) (g ∘ i.removeNth v) j := by
     cases j using i.succAboveCases <;> simp [Fin.removeNth]
-  simp [alternatizeUncurryFin_apply, ← Fin.insert
+  simp [alternatizeUncurryFin_apply, ← Fin.insertNth_removeNth, Fin.removeNth_fun_const,
+    ← map_insertNth, this]
 
 中文:
 定理 fderivCompContinuousLinearMap_eq_alternatizeUncurryFin
@@ -516,7 +523,8 @@ theorem fderivCompContinuousLinearMap_eq_alternatizeUncurryFin
       i.insertNth (α := fun _ => E ->L[𝕜] F) dg (fun _ => g) j (v j) =
         i.insertNth (α := fun _ => F) (dg (v i)) (g ∘ i.removeNth v) j := by
     cases j using i.succAboveCases <;> simp [Fin.removeNth]
-  simp [alternatizeUncurryFin_apply, ← Fin.insert
+  simp [alternatizeUncurryFin_apply, ← Fin.insertNth_removeNth, Fin.removeNth_fun_const,
+    ← map_insertNth, this]
 
 Depends on / 依赖: Fin.insertNth_removeNth, Fin.removeNth, Fin.removeNth_fun_const, alternatizeUncurryFin_apply, i.insertNth, i.removeNth, i.succAboveCases, insertNth, insertNth_removeNth, map_insertNth, removeNth, removeNth_fun_const, succAboveCases
 -/
@@ -543,7 +551,10 @@ theorem alternatizeUncurryFin_fderivCompContinuousLinearMap_eq_zero
   | zero =>
     simp [fderivCompContinuousLinearMap_of_isEmpty, ← alternatizeUncurryFinCLM_apply]
   | succ n =>
-    rw [fderivCompContinuousLinearMap_eq_alternatizeUncurryFin]; rw [ContinuousLinearMap.comp_assoc]; rw [alternatizeUncurryFin_alternatizeUncurryFinCLM_comp_of_symmetric
+    rw [fderivCompContinuousLinearMap_eq_alternatizeUncurryFin]; rw [ContinuousLinearMap.comp_assoc]; rw [alternatizeUncurryFin_alternatizeUncurryFinCLM_comp_of_symmetric]
+    intro x y
+    ext v
+    simp [hsymm]
 
 中文:
 定理 alternatizeUncurryFin_fderivCompContinuousLinearMap_eq_zero
@@ -553,7 +564,10 @@ theorem alternatizeUncurryFin_fderivCompContinuousLinearMap_eq_zero
   | zero =>
     simp [fderivCompContinuousLinearMap_of_isEmpty, ← alternatizeUncurryFinCLM_apply]
   | succ n =>
-    rw [fderivCompContinuousLinearMap_eq_alternatizeUncurryFin]; rw [ContinuousLinearMap.comp_assoc]; rw [alternatizeUncurryFin_alternatizeUncurryFinCLM_comp_of_symmetric
+    rw [fderivCompContinuousLinearMap_eq_alternatizeUncurryFin]; rw [ContinuousLinearMap.comp_assoc]; rw [alternatizeUncurryFin_alternatizeUncurryFinCLM_comp_of_symmetric]
+    intro x y
+    ext v
+    simp [hsymm]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_assoc, alternatizeUncurryFinCLM_apply, alternatizeUncurryFin_alternatizeUncurryFinCLM_comp_of_symmetric, comp_assoc, fderivCompContinuousLinearMap_eq_alternatizeUncurryFin, fderivCompContinuousLinearMap_of_isEmpty
 -/

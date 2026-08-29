@@ -374,7 +374,11 @@ theorem IsPrincipal.sSup
     simp only [IsPrincipal, lt_csSup_iff hs hs', forall_exists_index, and_imp]
     intro x y a has ha b hbs hb
     have h : max a b in s := max_rec' _ has hbs
-   
+    exact ⟨_, h, H (max a b) h (lt_max_of_lt_left ha) (lt_max_of_lt_right hb)⟩
+  · rwa [csSup_of_not_bddAbove hs]
+
+@[deprecated (since := "2026-03-17")]
+protected alias Principal.sSup := IsPrincipal.sSup
 
 中文:
 定理 是Principal.sSup
@@ -387,7 +391,11 @@ theorem IsPrincipal.sSup
     simp only [IsPrincipal, lt_csSup_iff hs hs', forall_exists_index, and_imp]
     intro x y a has ha b hbs hb
     have h : max a b in s := max_rec' _ has hbs
-   
+    exact ⟨_, h, H (max a b) h (lt_max_of_lt_left ha) (lt_max_of_lt_right hb)⟩
+  · rwa [csSup_of_not_bddAbove hs]
+
+@[deprecated (since := "2026-03-17")]
+protected alias Principal.sSup := IsPrincipal.sSup
 -/
 protected theorem IsPrincipal.sSup {s : Set Ordinal} (H : forall x in s, IsPrincipal op x) :
     IsPrincipal op (sSup s) := by
@@ -446,7 +454,15 @@ theorem isPrincipal_nfp_iSup
     ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[m] o)
     ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[n] o)
   · use n + 1
-    rw [Function.it
+    rw [Function.iterate_succ']
+    apply (lt_succ _).trans_le
+    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
+      ⟨_, Set.mk_mem_prod (ha.trans_le h) hb⟩
+  · use m + 1
+    rw [Function.iterate_succ']
+    apply (lt_succ _).trans_le
+    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
+      ⟨_, Set.mk_mem_prod ha (hb.trans_le h)⟩
 
 中文:
 定理 isPrincipal_nfp_iSup
@@ -460,7 +476,15 @@ theorem isPrincipal_nfp_iSup
     ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[m] o)
     ((fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2))^[n] o)
   · use n + 1
-    rw [Function.it
+    rw [Function.iterate_succ']
+    apply (lt_succ _).trans_le
+    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
+      ⟨_, Set.mk_mem_prod (ha.trans_le h) hb⟩
+  · use m + 1
+    rw [Function.iterate_succ']
+    apply (lt_succ _).trans_le
+    exact Ordinal.le_iSup (fun y : Set.Iio _ ×ˢ Set.Iio _ => succ (op y.1.1 y.1.2))
+      ⟨_, Set.mk_mem_prod ha (hb.trans_le h)⟩
 -/
 private theorem isPrincipal_nfp_iSup (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal) :
     IsPrincipal op (nfp (fun x => ⨆ y : Set.Iio x ×ˢ Set.Iio x, succ (op y.1.1 y.1.2)) o) := by
@@ -496,7 +520,7 @@ theorem not_bddAbove_setOfPred_isPrincipal
 alias not_bddAbove_setOf_isPrincipal := not_bddAbove_setOfPred_isPrincipal
 
 @[deprecated (since := "2026-03-17")]
-alias not_bddAbove_principal := not_bdd
+alias not_bddAbove_principal := not_bddAbove_setOfPred_isPrincipal
 
 中文:
 定理 not_bddAbove_setOfPred_isPrincipal
@@ -509,7 +533,7 @@ alias not_bddAbove_principal := not_bdd
 alias not_bddAbove_setOf_isPrincipal := not_bddAbove_setOfPred_isPrincipal
 
 @[deprecated (since := "2026-03-17")]
-alias not_bddAbove_principal := not_bdd
+alias not_bddAbove_principal := not_bddAbove_setOfPred_isPrincipal
 
 Depends on / 依赖: isPrincipal_nfp_iSup, le_nfp, lt_succ, not_gt
 -/
@@ -686,7 +710,10 @@ theorem isPrincipal_add_iff_add_left_eq_self
         (isSuccLimit_of_isPrincipal_add ho₁ ho)
     · cases le_one_iff.1 ho₁ <;> simp_all
   · rw [← h a hao]
-    exact (isNormal_add_ri
+    exact (isNormal_add_right a).strictMono hbo
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_iff_add_left_eq_self := isPrincipal_add_iff_add_left_eq_self
 
 中文:
 定理 isPrincipal_add_iff_add_left_eq_self
@@ -698,7 +725,10 @@ theorem isPrincipal_add_iff_add_left_eq_self
         (isSuccLimit_of_isPrincipal_add ho₁ ho)
     · cases le_one_iff.1 ho₁ <;> simp_all
   · rw [← h a hao]
-    exact (isNormal_add_ri
+    exact (isNormal_add_right a).strictMono hbo
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_iff_add_left_eq_self := isPrincipal_add_iff_add_left_eq_self
 
 Depends on / 依赖: isNormal_add_right, isSuccLimit_of_isPrincipal_add, le_one_iff, lt_or_ge, op_eq_self_of_isPrincipal, strictMono
 -/
@@ -770,7 +800,7 @@ theorem exists_lt_add_of_not_isPrincipal_add
   exact H.not_gt hc
 
 @[deprecated (since := "2026-03-17")]
-alias exists_lt_add_of_not_prin
+alias exists_lt_add_of_not_principal_add := exists_lt_add_of_not_isPrincipal_add
 
 中文:
 定理 存在_lt_add_of_not_isPrincipal_add
@@ -784,7 +814,7 @@ alias exists_lt_add_of_not_prin
   exact H.not_gt hc
 
 @[deprecated (since := "2026-03-17")]
-alias exists_lt_add_of_not_prin
+alias exists_lt_add_of_not_principal_add := exists_lt_add_of_not_isPrincipal_add
 
 Depends on / 依赖: H.not_gt, Ordinal, Ordinal.add_sub_cancel_of_le, add_sub_cancel_of_le, hb.le, lt_of_le_of_ne, not_gt, not_isPrincipal_iff, sub_le, sub_le_self
 -/
@@ -898,7 +928,10 @@ theorem isPrincipal_add_omega0_opow
     obtain ⟨c, hc, m, hm⟩ := (lt_omega0_opow ha').1 ha
     apply (add_lt_add_of_le_of_lt hm.le hm).trans_le
     rw [← mul_add]; rw [← Nat.cast_add]
-    exac
+    exact (opow_mul_lt_opow (natCast_lt_omega0 _) hc).le
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_omega0_opow := isPrincipal_add_omega0_opow
 
 中文:
 定理 isPrincipal_add_omega0_opow
@@ -912,7 +945,10 @@ theorem isPrincipal_add_omega0_opow
     obtain ⟨c, hc, m, hm⟩ := (lt_omega0_opow ha').1 ha
     apply (add_lt_add_of_le_of_lt hm.le hm).trans_le
     rw [← mul_add]; rw [← Nat.cast_add]
-    exac
+    exact (opow_mul_lt_opow (natCast_lt_omega0 _) hc).le
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_omega0_opow := isPrincipal_add_omega0_opow
 
 Depends on / 依赖: Nat.cast_add, add_lt_add_of_le_of_lt, add_zero, cast_add, eq_or_ne, hm.le, isPrincipal_add_iff_add_self_lt, isPrincipal_one_iff, lt_omega0_opow, mul_add, natCast_lt_omega0, opow_mul_lt_opow, opow_zero, trans_le
 -/
@@ -1018,7 +1054,10 @@ theorem isPrincipal_add_iff_zero_or_omega0_opow
     obtain ⟨n, hn⟩ := lt_omega0_opow_succ.1 (lt_opow_succ_log_self one_lt_omega0 o)
 exact fun h => hn.not_gt H.mul_natCast_lt h n
   · rintro (rfl | ⟨a, rfl⟩)
-    exacts [isPrincipa
+    exacts [isPrincipal_zero, isPrincipal_add_omega0_opow a]
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_iff_zero_or_omega0_opow := isPrincipal_add_iff_zero_or_omega0_opow
 
 中文:
 定理 isPrincipal_add_iff_zero_or_omega0_opow
@@ -1029,7 +1068,10 @@ exact fun h => hn.not_gt H.mul_natCast_lt h n
     obtain ⟨n, hn⟩ := lt_omega0_opow_succ.1 (lt_opow_succ_log_self one_lt_omega0 o)
 exact fun h => hn.not_gt H.mul_natCast_lt h n
   · rintro (rfl | ⟨a, rfl⟩)
-    exacts [isPrincipa
+    exacts [isPrincipal_zero, isPrincipal_add_omega0_opow a]
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_iff_zero_or_omega0_opow := isPrincipal_add_iff_zero_or_omega0_opow
 
 Depends on / 依赖: H.mul_natCast_lt, eq_of_not_lt, exacts, hn.not_gt, isPrincipal_add_omega0_opow, isPrincipal_zero, lt_omega0_opow_succ, lt_opow_succ_log_self, mul_natCast_lt, not_gt, one_lt_omega0, opow_log_le_self, or_iff_not_imp_left
 -/
@@ -1062,7 +1104,7 @@ theorem isPrincipal_add_opow_of_isPrincipal_add
     exact isPrincipal_add_omega0_opow _
 
 @[deprecated (since := "2026-03-17")]
-alia
+alias principal_add_opow_of_principal_add := isPrincipal_add_opow_of_isPrincipal_add
 
 中文:
 定理 isPrincipal_add_opow_of_isPrincipal_add
@@ -1077,7 +1119,7 @@ alia
     exact isPrincipal_add_omega0_opow _
 
 @[deprecated (since := "2026-03-17")]
-alia
+alias principal_add_opow_of_principal_add := isPrincipal_add_opow_of_isPrincipal_add
 
 Depends on / 依赖: eq_or_ne, isPrincipal_add_iff_zero_or_omega0_opow, isPrincipal_add_omega0_opow, isPrincipal_add_one, opow_mul, opow_zero, zero_opow
 -/
@@ -1110,7 +1152,15 @@ theorem isPrincipal_add_mul_of_isPrincipal_add
     · rw [← one_le_iff_pos] at hb₁'
       intro c d hc hd
       rw [lt_mul_iff_of_isSuccLimit
-        (isSuccLimit_o
+        (isSuccLimit_of_isPrincipal_add (lt_of_le_of_ne hb₁' hb₁.symm) hb)] at *
+      rcases hc with ⟨x, hx, hx'⟩
+      rcases hd with ⟨y, hy, hy'⟩
+      use x + y, hb hx hy
+      rw [mul_add]
+      exact Left.add_lt_add hx' hy'
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_mul_of_principal_add := isPrincipal_add_mul_of_isPrincipal_add
 
 中文:
 定理 isPrincipal_add_mul_of_isPrincipal_add
@@ -1125,7 +1175,15 @@ theorem isPrincipal_add_mul_of_isPrincipal_add
     · rw [← one_le_iff_pos] at hb₁'
       intro c d hc hd
       rw [lt_mul_iff_of_isSuccLimit
-        (isSuccLimit_o
+        (isSuccLimit_of_isPrincipal_add (lt_of_le_of_ne hb₁' hb₁.symm) hb)] at *
+      rcases hc with ⟨x, hx, hx'⟩
+      rcases hd with ⟨y, hy, hy'⟩
+      use x + y, hb hx hy
+      rw [mul_add]
+      exact Left.add_lt_add hx' hy'
+
+@[deprecated (since := "2026-03-17")]
+alias principal_add_mul_of_principal_add := isPrincipal_add_mul_of_isPrincipal_add
 
 Depends on / 依赖: Left.add_lt_add, add_lt_add, eq_zero_or_pos, isPrincipal_zero, isSuccLimit_of_isPrincipal_add, lt_mul_iff_of_isSuccLimit, lt_of_le_of_ne, mul_add, mul_zero, one_le_iff_pos, zero_mul
 -/
@@ -1257,7 +1315,7 @@ theorem isPrincipal_add_of_isPrincipal_mul
     exact fun a ha => ho ha ho₂
 
 @[deprecated (since := "2026-03-17")]
-alias principal_add_of_principal_mul := isPrincipal_add_of_isPrinc
+alias principal_add_of_principal_mul := isPrincipal_add_of_isPrincipal_mul
 
 中文:
 定理 isPrincipal_add_of_isPrincipal_mul
@@ -1269,7 +1327,7 @@ alias principal_add_of_principal_mul := isPrincipal_add_of_isPrinc
     exact fun a ha => ho ha ho₂
 
 @[deprecated (since := "2026-03-17")]
-alias principal_add_of_principal_mul := isPrincipal_add_of_isPrinc
+alias principal_add_of_principal_mul := isPrincipal_add_of_isPrincipal_mul
 
 Depends on / 依赖: Ordinal, Ordinal.mul_two, isPrincipal_add_iff_add_self_lt, isPrincipal_add_of_le_one, lt_or_gt_of_ne, lt_two_iff, lt_two_iff.mp, mul_two, simp_rw
 -/
@@ -1328,7 +1386,16 @@ theorem isPrincipal_mul_iff_mul_left_eq
       · rw [← lt_add_one_iff, one_add_one_eq_two]
         exact hao.trans_le ho
       · rwa [one_le_iff_pos]
-    · exact op_eq_self_of_isPrincipal hao (i
+    · exact op_eq_self_of_isPrincipal hao (isNormal_mul_right ha₀) h
+        (isSuccLimit_of_isPrincipal_mul ho h)
+  · rcases eq_or_ne a 0 with (rfl | ha)
+    · dsimp only; rwa [zero_mul]
+    rw [← pos_iff_ne_zero] at ha
+    rw [← h a ha hao]
+    exact (isNormal_mul_right ha).strictMono hbo
+
+@[deprecated (since := "2026-03-17")]
+alias principal_mul_iff_mul_left_eq := isPrincipal_mul_iff_mul_left_eq
 
 中文:
 定理 isPrincipal_mul_iff_mul_left_eq
@@ -1340,7 +1407,16 @@ theorem isPrincipal_mul_iff_mul_left_eq
       · rw [← lt_add_one_iff, one_add_one_eq_two]
         exact hao.trans_le ho
       · rwa [one_le_iff_pos]
-    · exact op_eq_self_of_isPrincipal hao (i
+    · exact op_eq_self_of_isPrincipal hao (isNormal_mul_right ha₀) h
+        (isSuccLimit_of_isPrincipal_mul ho h)
+  · rcases eq_or_ne a 0 with (rfl | ha)
+    · dsimp only; rwa [zero_mul]
+    rw [← pos_iff_ne_zero] at ha
+    rw [← h a ha hao]
+    exact (isNormal_mul_right ha).strictMono hbo
+
+@[deprecated (since := "2026-03-17")]
+alias principal_mul_iff_mul_left_eq := isPrincipal_mul_iff_mul_left_eq
 
 Depends on / 依赖: convert, eq_or_ne, hao.trans_le, isNormal_mul_right, isSuccLimit_of_isPrincipal_mul, le_antisymm, le_or_gt, lt_add_one_iff, one_add_one_eq_two, one_le_iff_pos, one_mul, op_eq_self_of_isPrincipal, pos_iff_ne_zero, strictMono, trans_le, zero_mul
 -/
@@ -1455,7 +1531,11 @@ theorem mul_lt_omega0_opow
       ((isNormal_mul_right <| opow_pos _ omega0_pos).lt_iff_exists_lt isSuccLimit_omega0).1 ha
     grw [an, opow_succ, mul_assoc]
     gcongr
-    exac
+    exacts [opow_pos _ omega0_pos, isPrincipal_mul_omega0 hn hb]
+  · rcases ((isNormal_opow one_lt_omega0).lt_iff_exists_lt l).1 ha with ⟨x, hx, ax⟩
+    refine (mul_le_mul' (le_of_lt ax) (le_of_lt hb)).trans_lt ?_
+    rw [← opow_succ]; rw [opow_lt_opow_iff_right one_lt_omega0]
+    exact l.succ_lt hx
 
 中文:
 定理 mul_lt_omega0_opow
@@ -1469,7 +1549,11 @@ theorem mul_lt_omega0_opow
       ((isNormal_mul_right <| opow_pos _ omega0_pos).lt_iff_exists_lt isSuccLimit_omega0).1 ha
     grw [an, opow_succ, mul_assoc]
     gcongr
-    exac
+    exacts [opow_pos _ omega0_pos, isPrincipal_mul_omega0 hn hb]
+  · rcases ((isNormal_opow one_lt_omega0).lt_iff_exists_lt l).1 ha with ⟨x, hx, ax⟩
+    refine (mul_le_mul' (le_of_lt ax) (le_of_lt hb)).trans_lt ?_
+    rw [← opow_succ]; rw [opow_lt_opow_iff_right one_lt_omega0]
+    exact l.succ_lt hx
 
 Depends on / 依赖: exacts, isNormal_mul_right, isNormal_opow, isPrincipal_mul_omega0, isSuccLimit_omega0, le_of_lt, lt_iff_exists_lt, lt_irrefl, mul_assoc, mul_le_mul, omega0_pos, one_lt_omega0, opow_l, opow_pos, opow_succ, trans_lt, zero_or_succ_or_isSuccLimit
 -/
@@ -1502,7 +1586,8 @@ theorem mul_omega0_opow_opow
     · obtain ⟨x, xb, ax⟩ :=
         (lt_opow_of_isSuccLimit omega0_ne_zero (isSuccLimit_opow_left isSuccLimit_omega0 b0)).1 h
       grw [ax, ← opow_add, add_omega0_opow xb]
-    · 
+    · conv_lhs => rw [← one_mul (ω ^ _)]
+      grw [one_le_iff_pos.2 a0]
 
 中文:
 定理 mul_omega0_opow_opow
@@ -1516,7 +1601,8 @@ theorem mul_omega0_opow_opow
     · obtain ⟨x, xb, ax⟩ :=
         (lt_opow_of_isSuccLimit omega0_ne_zero (isSuccLimit_opow_left isSuccLimit_omega0 b0)).1 h
       grw [ax, ← opow_add, add_omega0_opow xb]
-    · 
+    · conv_lhs => rw [← one_mul (ω ^ _)]
+      grw [one_le_iff_pos.2 a0]
 
 Depends on / 依赖: add_omega0_opow, conv_lhs, eq_or_ne, isSuccLimit_omega0, isSuccLimit_opow_left, le_antisymm, lt_opow_of_isSuccLimit, mul_omega0, omega0_ne_zero, one_le_iff_pos, one_mul, opow_add, opow_one, opow_zero
 -/
@@ -1611,7 +1697,16 @@ theorem isPrincipal_mul_iff_le_two_or_omega0_opow_opow
     · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
         (isPrincipal_add_of_isPrincipal_mul ho ho₂.ne') with (rfl | ⟨a, rfl⟩)
       · exact (not_lt_zero ho₂).elim
-      · rcases isPrincipal_add_iff_ze
+      · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
+          (isPrincipal_add_of_isPrincipal_mul_opow one_lt_omega0 ho) with (rfl | ⟨b, rfl⟩)
+        · simp
+        · exact Or.inr ⟨b, rfl⟩
+  · rintro (ho₂ | ⟨a, rfl⟩)
+    · exact isPrincipal_mul_of_le_two ho₂
+    · exact isPrincipal_mul_omega0_opow_opow a
+
+@[deprecated (since := "2026-03-17")]
+alias principal_mul_iff_le_two_or_omega0_opow_opow := isPrincipal_mul_iff_le_two_or_omega0_opow_opow
 
 中文:
 定理 isPrincipal_mul_iff_le_two_or_omega0_opow_opow
@@ -1622,7 +1717,16 @@ theorem isPrincipal_mul_iff_le_two_or_omega0_opow_opow
     · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
         (isPrincipal_add_of_isPrincipal_mul ho ho₂.ne') with (rfl | ⟨a, rfl⟩)
       · exact (not_lt_zero ho₂).elim
-      · rcases isPrincipal_add_iff_ze
+      · rcases isPrincipal_add_iff_zero_or_omega0_opow.1
+          (isPrincipal_add_of_isPrincipal_mul_opow one_lt_omega0 ho) with (rfl | ⟨b, rfl⟩)
+        · simp
+        · exact Or.inr ⟨b, rfl⟩
+  · rintro (ho₂ | ⟨a, rfl⟩)
+    · exact isPrincipal_mul_of_le_two ho₂
+    · exact isPrincipal_mul_omega0_opow_opow a
+
+@[deprecated (since := "2026-03-17")]
+alias principal_mul_iff_le_two_or_omega0_opow_opow := isPrincipal_mul_iff_le_two_or_omega0_opow_opow
 
 Depends on / 依赖: Or.inl, Or.inr, isPrincipal_add_iff_zero_or_omega0_opow, isPrincipal_add_of_isPrincipal_mul, isPrincipal_add_of_isPrincipal_mul_opow, isPrincipal_mul_of_le_two, isPrincipal_mul_omega0_opow_, le_or_gt, not_lt_zero, one_lt_omega0
 -/
@@ -1673,7 +1777,14 @@ theorem mul_eq_opow_log_succ
     rw [(isNormal_mul_right (pos_iff_ne_zero.2 ha)).apply_of_isSuccLimit hbl]; rw [Ordinal.iSup_le_iff]
     intro ⟨c, hcb⟩
     have hb₁ : 1 < b := one_lt_two.trans hb₂
-    have hbo₀ : b ^ log b a != 0 := pos_iff_ne_zero.1 (
+    have hbo₀ : b ^ log b a != 0 := pos_iff_ne_zero.1 (opow_pos _ (zero_lt_one.trans hb₁))
+    apply (mul_le_mul_left (le_of_lt (lt_mul_succ_div a hbo₀)) c).trans
+    rw [mul_assoc]; rw [opow_succ]
+    gcongr
+    refine (hb (hbl.succ_lt ?_) hcb).le
+    rw [← lt_mul_iff_div_lt hbo₀]; rw [← opow_succ]
+    exact lt_opow_succ_log_self hb₁ _
+  · grw [opow_succ, opow_log_le_self b ha]
 
 中文:
 定理 mul_eq_opow_log_succ
@@ -1684,7 +1795,14 @@ theorem mul_eq_opow_log_succ
     rw [(isNormal_mul_right (pos_iff_ne_zero.2 ha)).apply_of_isSuccLimit hbl]; rw [Ordinal.iSup_le_iff]
     intro ⟨c, hcb⟩
     have hb₁ : 1 < b := one_lt_two.trans hb₂
-    have hbo₀ : b ^ log b a != 0 := pos_iff_ne_zero.1 (
+    have hbo₀ : b ^ log b a != 0 := pos_iff_ne_zero.1 (opow_pos _ (zero_lt_one.trans hb₁))
+    apply (mul_le_mul_left (le_of_lt (lt_mul_succ_div a hbo₀)) c).trans
+    rw [mul_assoc]; rw [opow_succ]
+    gcongr
+    refine (hb (hbl.succ_lt ?_) hcb).le
+    rw [← lt_mul_iff_div_lt hbo₀]; rw [← opow_succ]
+    exact lt_opow_succ_log_self hb₁ _
+  · grw [opow_succ, opow_log_le_self b ha]
 
 Depends on / 依赖: Ordinal, Ordinal.iSup_le_iff, apply_of_isSuccLimit, hbl.succ_lt, iSup_le_iff, isNormal_mul_right, isSuccLimit_of_isPrincipal_mul, le_antisymm, le_of_lt, lt_mul_iff_div_lt, lt_mul_succ_div, mul_assoc, mul_le_mul_left, one_lt_two, one_lt_two.trans, opow_, opow_pos, opow_succ, pos_iff_ne_zero, succ_lt
 -/

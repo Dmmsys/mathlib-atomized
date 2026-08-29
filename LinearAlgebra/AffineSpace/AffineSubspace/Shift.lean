@@ -169,7 +169,13 @@ theorem shift_eq
   simp only [mem_map, AffineEquiv.coe_toAffineMap, AffineEquiv.constVAdd_apply]
   constructor <;> intro ⟨x, hx, heq⟩ <;> rw [← heq]
   · refine ⟨(1 - r) • (p.val -ᵥ h.some.val) +ᵥ x, ?_, ?_⟩
-    · exact vadd_mem_of_mem_direct
+    · exact vadd_mem_of_mem_direction (smul_mem _ _ (vsub_mem_direction p.prop h.some.prop)) hx
+    · rw [vadd_vadd, ← smul_add, vsub_add_vsub_cancel]
+  · refine ⟨(1 - r) • (h.some.val -ᵥ p.val) +ᵥ x, ?_, ?_⟩
+    · exact vadd_mem_of_mem_direction (smul_mem _ _ (vsub_mem_direction h.some.prop p.prop)) hx
+    · rw [vadd_vadd, ← smul_add, vsub_add_vsub_cancel]
+
+@[simp]
 
 中文:
 定理 shift_eq
@@ -181,7 +187,13 @@ theorem shift_eq
   simp only [mem_map, AffineEquiv.coe_toAffineMap, AffineEquiv.constVAdd_apply]
   constructor <;> intro ⟨x, hx, heq⟩ <;> rw [← heq]
   · refine ⟨(1 - r) • (p.val -ᵥ h.some.val) +ᵥ x, ?_, ?_⟩
-    · exact vadd_mem_of_mem_direct
+    · exact vadd_mem_of_mem_direction (smul_mem _ _ (vsub_mem_direction p.prop h.some.prop)) hx
+    · rw [vadd_vadd, ← smul_add, vsub_add_vsub_cancel]
+  · refine ⟨(1 - r) • (h.some.val -ᵥ p.val) +ᵥ x, ?_, ?_⟩
+    · exact vadd_mem_of_mem_direction (smul_mem _ _ (vsub_mem_direction h.some.prop p.prop)) hx
+    · rw [vadd_vadd, ← smul_add, vsub_add_vsub_cancel]
+
+@[simp]
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.coe_toAffineMap, AffineEquiv.constVAdd_apply, Nonempty, coe_toAffineMap, constVAdd_apply, h.some.prop, h.some.val, mem_map, p.prop, p.val, reduceDIte, smul_add, smul_mem, vadd_mem_of_mem_direction, vadd_vadd, vsub_add_vsub_cancel, vsub_mem_direction
 -/
@@ -276,7 +288,13 @@ have : Subsingleton P := (AddTorsor.subsingleton_iff V P).mp Module.subsingleton
     simp
   classical
   obtain ⟨j, hj⟩ := exists_ne i
-  rw [shift_eq ⟨p j]; rw [mem_affineSpan k <| Set.mem_image_of
+  rw [shift_eq ⟨p j]; rw [mem_affineSpan k <| Set.mem_image_of_mem _ hj⟩]
+  suffices exists q in affineSpan k (p '' {i}ᶜ), w i • (p i -ᵥ p j) +ᵥ q = affineCombination k univ p w by
+    simpa
+  refine ⟨-(w i • (p i -ᵥ p j)) +ᵥ affineCombination k univ p w, ?_, by simp⟩
+  rw [← affineCombination_piSingle k _ p (mem_univ i)]; rw [← affineCombination_piSingle k _ p (mem_univ j)]; rw [affineCombination_vsub]; rw [← map_smul]; rw [← map_neg]; rw [weightedVSub_vadd_affineCombination]
+  refine affineCombination_mem_affineSpan_image ?_ (fun i' _ hi => by aesop) _
+  simp [sum_add_distrib, ← mul_sum, hw]
 
 中文:
 定理 affineCombination_mem_shift
@@ -288,7 +306,13 @@ have : Subsingleton P := (AddTorsor.subsingleton_iff V P).mp Module.subsingleton
     simp
   classical
   obtain ⟨j, hj⟩ := exists_ne i
-  rw [shift_eq ⟨p j]; rw [mem_affineSpan k <| Set.mem_image_of
+  rw [shift_eq ⟨p j]; rw [mem_affineSpan k <| Set.mem_image_of_mem _ hj⟩]
+  suffices exists q in affineSpan k (p '' {i}ᶜ), w i • (p i -ᵥ p j) +ᵥ q = affineCombination k univ p w by
+    simpa
+  refine ⟨-(w i • (p i -ᵥ p j)) +ᵥ affineCombination k univ p w, ?_, by simp⟩
+  rw [← affineCombination_piSingle k _ p (mem_univ i)]; rw [← affineCombination_piSingle k _ p (mem_univ j)]; rw [affineCombination_vsub]; rw [← map_smul]; rw [← map_neg]; rw [weightedVSub_vadd_affineCombination]
+  refine affineCombination_mem_affineSpan_image ?_ (fun i' _ hi => by aesop) _
+  simp [sum_add_distrib, ← mul_sum, hw]
 
 Depends on / 依赖: AddTorsor, AddTorsor.subsingleton_iff, Module, Module.subsingleton, Set.mem_image_of_mem, Subsingleton, affineCom, affineCombination, affineSpan, classical, exists_ne, mem_affineSpan, mem_image_of_mem, shift_eq, subsingleton, subsingleton_iff, subsingleton_or_nontrivial
 -/
@@ -320,7 +344,13 @@ theorem _root_.AffineIndependent.affineCombination_mem_shift_iff
   obtain ⟨j, hj⟩ := exists_ne i
   rw [shift_eq ⟨p j]; rw [mem_affineSpan k <| Set.mem_image_of_mem _ hj⟩]
   suffices forall q in affineSpan k (p '' {i}ᶜ),
-    (1 - c) • (p i -ᵥ p j) +ᵥ q = affineCombination 
+    (1 - c) • (p i -ᵥ p j) +ᵥ q = affineCombination k univ p w -> w i = 1 - c by simpa
+  intro q hqmem heq
+  obtain ⟨t, w', ht, hw', rfl⟩ := eq_affineCombination_of_mem_affineSpan_image hqmem
+  have ht : (t : Set ι).indicator w' i = 0 := Set.indicator_of_notMem (by simpa using ht) w'
+  rw [affineCombination_indicator_subset _ _ t.subset_univ]; rw [← affineCombination_piSingle k _ p (mem_univ i)]; rw [← affineCombination_piSingle k _ p (mem_univ j)]; rw [affineCombination_vsub]; rw [← map_smul]; rw [weightedVSub_vadd_affineCombination]; rw [h.affineCombination_eq_iff_eq ?_ hw] at heq
+  · simpa [hj.symm, ht] using (heq i (mem_univ i)).symm
+  · simp [sum_add_distrib, sum_indicator_subset, ← mul_sum, hw']
 
 中文:
 定理 _root_.AffineIndependent.affineCombination_mem_shift_iff
@@ -330,7 +360,13 @@ theorem _root_.AffineIndependent.affineCombination_mem_shift_iff
   obtain ⟨j, hj⟩ := exists_ne i
   rw [shift_eq ⟨p j]; rw [mem_affineSpan k <| Set.mem_image_of_mem _ hj⟩]
   suffices forall q in affineSpan k (p '' {i}ᶜ),
-    (1 - c) • (p i -ᵥ p j) +ᵥ q = affineCombination 
+    (1 - c) • (p i -ᵥ p j) +ᵥ q = affineCombination k univ p w -> w i = 1 - c by simpa
+  intro q hqmem heq
+  obtain ⟨t, w', ht, hw', rfl⟩ := eq_affineCombination_of_mem_affineSpan_image hqmem
+  have ht : (t : Set ι).indicator w' i = 0 := Set.indicator_of_notMem (by simpa using ht) w'
+  rw [affineCombination_indicator_subset _ _ t.subset_univ]; rw [← affineCombination_piSingle k _ p (mem_univ i)]; rw [← affineCombination_piSingle k _ p (mem_univ j)]; rw [affineCombination_vsub]; rw [← map_smul]; rw [weightedVSub_vadd_affineCombination]; rw [h.affineCombination_eq_iff_eq ?_ hw] at heq
+  · simpa [hj.symm, ht] using (heq i (mem_univ i)).symm
+  · simp [sum_add_distrib, sum_indicator_subset, ← mul_sum, hw']
 
 Depends on / 依赖: Set.indicator_of_notMem, Set.mem_image_of_mem, affineCombination, affineCombination_mem_shift, affineSpan, classical, eq_affineCombination_of_mem_affineSpan_image, exists_ne, indicator, indicator_of_notMem, mem_affineSpan, mem_image_of_mem, shift_eq
 -/
@@ -371,7 +407,20 @@ theorem shift_eq_map_homothety
   rw [s.shift_eq h.some]
   ext p
   suffices (exists y in s, (1 - r) • (c -ᵥ h.some) +ᵥ y = p) ↔ exists y in s, r • (y -ᵥ c) +ᵥ c = p by
-    simpa [homothety_def
+    simpa [homothety_def]
+  constructor <;> intro ⟨x, hmem, heq⟩ <;> rw [← heq]
+  · refine ⟨t • (x -ᵥ h.some.val) +ᵥ h.some.val, ?_, ?_⟩
+    · refine vadd_mem_of_mem_direction ?_ h.some.prop
+exact smul_mem _ _ vsub_mem_direction hmem h.some.prop
+    · rw [vadd_vsub_assoc, smul_add, smul_smul, ht, sub_eq_add_neg, add_smul, one_smul, one_smul,
+        neg_smul, ← smul_neg, neg_vsub_eq_vsub_rev]
+      simp_rw [add_comm _ (r • (h.some.val -ᵥ c)), ← vadd_vadd, vsub_vadd_comm x h.some.val c]
+  · refine ⟨r • (x -ᵥ h.some.val) +ᵥ h.some.val, ?_, ?_⟩
+    · refine vadd_mem_of_mem_direction ?_ h.some.prop
+exact smul_mem _ _ vsub_mem_direction hmem h.some.prop
+    · rw [sub_eq_add_neg, add_smul, one_smul, neg_smul, ← smul_neg, neg_vsub_eq_vsub_rev,
+        ← vadd_vadd, vadd_vadd _ _ h.some.val, ← smul_add, add_comm, vsub_add_vsub_cancel,
+        vadd_vadd, add_comm, ← vadd_vadd, vsub_vadd]
 
 中文:
 定理 shift_eq_map_homothety
@@ -384,7 +433,20 @@ theorem shift_eq_map_homothety
   rw [s.shift_eq h.some]
   ext p
   suffices (exists y in s, (1 - r) • (c -ᵥ h.some) +ᵥ y = p) ↔ exists y in s, r • (y -ᵥ c) +ᵥ c = p by
-    simpa [homothety_def
+    simpa [homothety_def]
+  constructor <;> intro ⟨x, hmem, heq⟩ <;> rw [← heq]
+  · refine ⟨t • (x -ᵥ h.some.val) +ᵥ h.some.val, ?_, ?_⟩
+    · refine vadd_mem_of_mem_direction ?_ h.some.prop
+exact smul_mem _ _ vsub_mem_direction hmem h.some.prop
+    · rw [vadd_vsub_assoc, smul_add, smul_smul, ht, sub_eq_add_neg, add_smul, one_smul, one_smul,
+        neg_smul, ← smul_neg, neg_vsub_eq_vsub_rev]
+      simp_rw [add_comm _ (r • (h.some.val -ᵥ c)), ← vadd_vadd, vsub_vadd_comm x h.some.val c]
+  · refine ⟨r • (x -ᵥ h.some.val) +ᵥ h.some.val, ?_, ?_⟩
+    · refine vadd_mem_of_mem_direction ?_ h.some.prop
+exact smul_mem _ _ vsub_mem_direction hmem h.some.prop
+    · rw [sub_eq_add_neg, add_smul, one_smul, neg_smul, ← smul_neg, neg_vsub_eq_vsub_rev,
+        ← vadd_vadd, vadd_vadd _ _ h.some.val, ← smul_add, add_comm, vsub_add_vsub_cancel,
+        vadd_vadd, add_comm, ← vadd_vadd, vsub_vadd]
 
 Depends on / 依赖: Nonempty, eq_bot_or_nonempty, equivShrink, exists_right_inv, h.some, h.some.prop, h.some.val, homothety_def, hr.exists_right_inv, nontrivial, s.eq_bot_or_nonempty, s.shift_eq, shift_eq, smul_mem, symm.nontrivial, vadd_mem_of_mem_direction, vsub_mem_direction
 -/
@@ -433,7 +495,13 @@ theorem closedInterior_inter_shift_zero
 obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
     s.closedInterior_subset_affineSpan hp
   suffices w = Pi.single i 1 by simp [this]
-  rw [affineCombination_mem_closedInterior_if
+  rw [affineCombination_mem_closedInterior_iff hw] at hp
+  rw [SetLike.mem_coe]; rw [s.independent.affineCombination_mem_shift_iff i hw]; rw [sub_zero] at hshift
+  ext j
+  by_cases hj : j = i
+  · aesop
+  rw [← univ.sum_erase_add w (mem_univ i)]; rw [hshift]; rw [add_eq_right]; rw [sum_eq_zero_iff_of_nonneg fun j _ => (hp j).1] at hw
+  simp [hw j (by simpa using hj), hj]
 
 中文:
 定理 closed整数erior_inter_shift_zero
@@ -443,7 +511,13 @@ obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
 obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
     s.closedInterior_subset_affineSpan hp
   suffices w = Pi.single i 1 by simp [this]
-  rw [affineCombination_mem_closedInterior_if
+  rw [affineCombination_mem_closedInterior_iff hw] at hp
+  rw [SetLike.mem_coe]; rw [s.independent.affineCombination_mem_shift_iff i hw]; rw [sub_zero] at hshift
+  ext j
+  by_cases hj : j = i
+  · aesop
+  rw [← univ.sum_erase_add w (mem_univ i)]; rw [hshift]; rw [add_eq_right]; rw [sum_eq_zero_iff_of_nonneg fun j _ => (hp j).1] at hw
+  simp [hw j (by simpa using hj), hj]
 
 Depends on / 依赖: Pi.single, SetLike, SetLike.mem_coe, affineCombination_mem_closedInterior_iff, affineCombination_mem_shift_iff, closedInterior_subset_affineSpan, eq_affineCombination_of_mem_affineSpan_of_fintype, hshift, independent, mem_coe, mem_univ, point_mem_closedInterior, s.closedInterior_subset_affineSpan, s.independent.affineCombination_mem_shift_iff, s.point_mem_closedInterior, single, sub_zero, subset_antisymm, sum_erase_add, univ.sum_erase_add
 -/
@@ -473,7 +547,8 @@ theorem disjoint_closedInterior_shift
 obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
     s.closedInterior_subset_affineSpan hleft
   rw [SetLike.mem_coe]; rw [s.independent.affineCombination_mem_shift_iff i hw] at hright
-  rw [affineCombination_mem_close
+  rw [affineCombination_mem_closedInterior_iff hw] at hleft
+  grind
 
 中文:
 定理 disjoint_closed整数erior_shift
@@ -483,7 +558,8 @@ obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
 obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
     s.closedInterior_subset_affineSpan hleft
   rw [SetLike.mem_coe]; rw [s.independent.affineCombination_mem_shift_iff i hw] at hright
-  rw [affineCombination_mem_close
+  rw [affineCombination_mem_closedInterior_iff hw] at hleft
+  grind
 
 Depends on / 依赖: Set.disjoint_left.mpr, SetLike, SetLike.mem_coe, affineCombination_mem_closedInterior_iff, affineCombination_mem_shift_iff, closedInterior_subset_affineSpan, disjoint_left, eq_affineCombination_of_mem_affineSpan_of_fintype, hright, independent, mem_coe, s.closedInterior_subset_affineSpan, s.independent.affineCombination_mem_shift_iff
 -/
@@ -512,7 +588,12 @@ theorem closedInterior_inter_shift_aux
   refine and_congr_left fun hi => ⟨fun hj j hji => ⟨?_, ?_⟩, fun hj => ?_⟩
   · exact mul_nonneg (by simpa using hxpos.le) (hj j).1
   · rw [eq_sub_iff_add_eq, add_comm, ← eq_sub_iff_add_eq] at hi
-    rw [inv_mul_le_one₀ hxpos]; rw [hi]; rw
+    rw [inv_mul_le_one₀ hxpos]; rw [hi]; rw [le_sub_iff_add_le]; rw [← hw]
+    exact add_le_sum (fun i _ => (hj i).1) (mem_univ j) (mem_univ i) hji
+  · suffices forall j, 0 <= w j from
+      fun j => ⟨this j, hw ▸ Finset.single_le_sum (fun j _ => this j) (mem_univ j)⟩
+    intro j
+    by_cases hji : j = i <;> aesop
 
 中文:
 定理 closed整数erior_inter_shift_aux
@@ -522,7 +603,12 @@ theorem closedInterior_inter_shift_aux
   refine and_congr_left fun hi => ⟨fun hj j hji => ⟨?_, ?_⟩, fun hj => ?_⟩
   · exact mul_nonneg (by simpa using hxpos.le) (hj j).1
   · rw [eq_sub_iff_add_eq, add_comm, ← eq_sub_iff_add_eq] at hi
-    rw [inv_mul_le_one₀ hxpos]; rw [hi]; rw
+    rw [inv_mul_le_one₀ hxpos]; rw [hi]; rw [le_sub_iff_add_le]; rw [← hw]
+    exact add_le_sum (fun i _ => (hj i).1) (mem_univ j) (mem_univ i) hji
+  · suffices forall j, 0 <= w j from
+      fun j => ⟨this j, hw ▸ Finset.single_le_sum (fun j _ => this j) (mem_univ j)⟩
+    intro j
+    by_cases hji : j = i <;> aesop
 -/
 private theorem closedInterior_inter_shift_aux {n : Nat} (i : Fin n) {x : k} (hxpos : 0 < x)
     (hx1 : x <= 1) {w : Fin n -> k} (hw : ∑ i, w i = 1) :
@@ -552,7 +638,19 @@ theorem closedInterior_inter_shift_eq_homothety
   ext p
   by_cases hp : p in affineSpan k (.range s.points)
   · obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp
-    rw [Set.mem_inter_iff]; r
+    rw [Set.mem_inter_iff]; rw [SetLike.mem_coe]; rw [s.independent.affineCombination_mem_shift_iff i hw]; rw [affineCombination_mem_closedInterior_iff hw]; rw [Set.mem_image]
+    simp_rw [AffineMap.homothety_eq_iff_of_mul_eq_one (mul_inv_cancel₀ hxpos.ne.symm),
+      univ.homothety_affineCombination _ _ (mem_univ i)]
+    simp only [↓existsAndEq, and_true]
+    rw [faceOpposite]; rw [affineCombination_mem_closedInterior_face_iff_mem_Icc]; rw [closedInterior_inter_shift_aux i hxpos hx.2 hw]
+    · simp only [mem_compl, mem_singleton, not_not, forall_eq]
+congrm (forall j, (hj : _) -> $(by simp [lineMap_apply, hj])) ∧ (by simp [lineMap_apply])
+    · simp [AffineMap.lineMap_apply, Finset.sum_add_distrib, ← Finset.mul_sum,
+        Finset.sum_sub_distrib, hw]
+  · apply iff_of_false (hp <| s.closedInterior_subset_affineSpan ·.1)
+    rintro ⟨q, hq, rfl⟩
+exact hp homothety_mem (mem_affineSpan _ (by simp)) _
+      affineSpan_mono _ (by simp) ((s.faceOpposite i).closedInterior_subset_affineSpan hq)
 
 中文:
 定理 closed整数erior_inter_shift_eq_homothety
@@ -563,7 +661,19 @@ theorem closedInterior_inter_shift_eq_homothety
   ext p
   by_cases hp : p in affineSpan k (.range s.points)
   · obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp
-    rw [Set.mem_inter_iff]; r
+    rw [Set.mem_inter_iff]; rw [SetLike.mem_coe]; rw [s.independent.affineCombination_mem_shift_iff i hw]; rw [affineCombination_mem_closedInterior_iff hw]; rw [Set.mem_image]
+    simp_rw [AffineMap.homothety_eq_iff_of_mul_eq_one (mul_inv_cancel₀ hxpos.ne.symm),
+      univ.homothety_affineCombination _ _ (mem_univ i)]
+    simp only [↓existsAndEq, and_true]
+    rw [faceOpposite]; rw [affineCombination_mem_closedInterior_face_iff_mem_Icc]; rw [closedInterior_inter_shift_aux i hxpos hx.2 hw]
+    · simp only [mem_compl, mem_singleton, not_not, forall_eq]
+congrm (forall j, (hj : _) -> $(by simp [lineMap_apply, hj])) ∧ (by simp [lineMap_apply])
+    · simp [AffineMap.lineMap_apply, Finset.sum_add_distrib, ← Finset.mul_sum,
+        Finset.sum_sub_distrib, hw]
+  · apply iff_of_false (hp <| s.closedInterior_subset_affineSpan ·.1)
+    rintro ⟨q, hq, rfl⟩
+exact hp homothety_mem (mem_affineSpan _ (by simp)) _
+      affineSpan_mono _ (by simp) ((s.faceOpposite i).closedInterior_subset_affineSpan hq)
 
 Depends on / 依赖: AffineMap, AffineMap.homothety_eq_iff_of_mul_eq_one, Set.mem_image, Set.mem_inter_iff, SetLike, SetLike.mem_coe, affineCombination_mem_closedInterior_iff, affineCombination_mem_shift_iff, affineSpan, closedInterior_inter_shift_zero, eq_affineCombination_of_mem_affineSpan_of_fintype, eq_or_lt, homothety_eq_iff_of_mul_eq_one, hx0.symm, independent, mem_coe, mem_image, mem_inter_iff, nonempty_closedInterior, points
 -/

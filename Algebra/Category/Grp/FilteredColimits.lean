@@ -329,7 +329,7 @@ instance colimitGroup
       change (G.mk _ _)⁻¹ * G.mk _ _ = _
       obtain ⟨j, x⟩ := x
       simp [colimit_inv_mk_eq, colimit_mul_mk_eq F ⟨j, _⟩ ⟨j, _⟩ j (𝟙 j) (𝟙 j),
-        colimit_one_eq
+        colimit_one_eq F j] }
 
 中文:
 实例 colimitGroup
@@ -340,7 +340,7 @@ instance colimitGroup
       change (G.mk _ _)⁻¹ * G.mk _ _ = _
       obtain ⟨j, x⟩ := x
       simp [colimit_inv_mk_eq, colimit_mul_mk_eq F ⟨j, _⟩ ⟨j, _⟩ j (𝟙 j) (𝟙 j),
-        colimit_one_eq
+        colimit_one_eq F j] }
 
 Depends on / 依赖: G.mk, Quot.inductionOn, colimitInv, colimit_inv_mk_eq, colimit_mul_mk_eq, colimit_one_eq, inductionOn, inv_mul_cancel
 -/

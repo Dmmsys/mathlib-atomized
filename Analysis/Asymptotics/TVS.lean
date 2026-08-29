@@ -195,7 +195,7 @@ theorem isLittleOTVS_iff_tendsto_div
     (nhds_bot_basis_Iic.map _).tendsto_right_iff]
   simp +contextual [ENNReal.div_le_iff_le_mul, pos_iff_ne_zero, EventuallyLE]
 
-alias ⟨IsLittleOTVS.tendsto_div, IsLittleOTVS.of_tendsto_div⟩ := isLittleOTVS
+alias ⟨IsLittleOTVS.tendsto_div, IsLittleOTVS.of_tendsto_div⟩ := isLittleOTVS_iff_tendsto_div
 
 中文:
 定理 isLittleOTVS_iff_tendsto_div
@@ -204,7 +204,7 @@ alias ⟨IsLittleOTVS.tendsto_div, IsLittleOTVS.of_tendsto_div⟩ := isLittleOTV
     (nhds_bot_basis_Iic.map _).tendsto_right_iff]
   simp +contextual [ENNReal.div_le_iff_le_mul, pos_iff_ne_zero, EventuallyLE]
 
-alias ⟨IsLittleOTVS.tendsto_div, IsLittleOTVS.of_tendsto_div⟩ := isLittleOTVS
+alias ⟨IsLittleOTVS.tendsto_div, IsLittleOTVS.of_tendsto_div⟩ := isLittleOTVS_iff_tendsto_div
 
 Depends on / 依赖: ENNReal, ENNReal.coe_zero, ENNReal.div_le_iff_le_mul, ENNReal.nhds_coe, EventuallyLE, NNReal, NNReal.bot_eq_zero, bot_eq_zero, coe_zero, contextual, div_le_iff_le_mul, isLittleOTVS_iff, nhds_bot_basis_Iic, nhds_bot_basis_Iic.map, nhds_coe, pos_iff_ne_zero, tendsto_right_iff
 -/
@@ -1043,7 +1043,8 @@ refine (hE.forall_iff ?_).trans forall₂_congr fun _ _ => hF.exists_iff ?_
   · rintro s t hsub ⟨V, hV₀, hV⟩
 exact ⟨V, hV₀, fun ε hε => (hV ε hε).mono fun x => le_trans egauge_anti _ hsub _⟩
   · refine fun s t hsub h ε hε => (h ε hε).mono fun x hx => hx.trans ?_
-    simp onl
+    simp only
+    gcongr
 
 中文:
 定理 _root_.滤子.有基.isLittleOTVS_iff
@@ -1053,7 +1054,8 @@ refine (hE.forall_iff ?_).trans forall₂_congr fun _ _ => hF.exists_iff ?_
   · rintro s t hsub ⟨V, hV₀, hV⟩
 exact ⟨V, hV₀, fun ε hε => (hV ε hε).mono fun x => le_trans egauge_anti _ hsub _⟩
   · refine fun s t hsub h ε hε => (h ε hε).mono fun x hx => hx.trans ?_
-    simp onl
+    simp only
+    gcongr
 -/
 protected theorem _root_.Filter.HasBasis.isLittleOTVS_iff
     {ιE ιF : Sort*} {pE : ιE -> Prop} {pF : ιF -> Prop}
@@ -1115,7 +1117,10 @@ theorem IsBigOTVS.of_egauge_le_mul
   rcases NormedField.exists_lt_nnnorm 𝕜 C with ⟨c, hc⟩
   have hc₀ : c != 0 := by rintro rfl; simp at hc
   refine ⟨c⁻¹ • V, (set_smul_mem_nhds_zero_iff <| inv_ne_zero hc₀).mpr hV₀, ?_⟩
-refine hV.trans .of_fora
+refine hV.trans .of_forall fun x => ?_
+  simp only
+  grw [hc]
+  simp [egauge_smul_left, hc₀, enorm_eq_nnnorm, ENNReal.div_eq_inv_mul]
 
 中文:
 定理 是BigOTVS.of_egauge_le_mul
@@ -1127,7 +1132,10 @@ refine hV.trans .of_fora
   rcases NormedField.exists_lt_nnnorm 𝕜 C with ⟨c, hc⟩
   have hc₀ : c != 0 := by rintro rfl; simp at hc
   refine ⟨c⁻¹ • V, (set_smul_mem_nhds_zero_iff <| inv_ne_zero hc₀).mpr hV₀, ?_⟩
-refine hV.trans .of_fora
+refine hV.trans .of_forall fun x => ?_
+  simp only
+  grw [hc]
+  simp [egauge_smul_left, hc₀, enorm_eq_nnnorm, ENNReal.div_eq_inv_mul]
 
 Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, NormedField, NormedField.exists_lt_nnnorm, basis_sets, div_eq_inv_mul, egauge_smul_left, enorm_eq_nnnorm, exists_lt_nnnorm, hV.trans, hb.isBigOTVS_iff, inv_ne_zero, isBigOTVS_iff, of_forall, set_smul_mem_nhds_zero_iff
 -/
@@ -1610,7 +1618,9 @@ theorem IsLittleOTVS.prodMk
   rintro ⟨U, V⟩ ⟨⟨hU, hUb⟩, hV, hVb⟩
   rcases ((hf.eventually_smallSets U hU).and (hg.eventually_smallSets V hV)).exists_mem_of_smallSets
     with ⟨W, hW, hWf, hWg⟩
-  refine ⟨W, hW, fun ε hε
+  refine ⟨W, hW, fun ε hε => ?_⟩
+  filter_upwards [hWf ε hε, hWg ε hε] with x hfx hgx
+  simp [egauge_prod_mk, *]
 
 中文:
 定理 是LittleOTVS.prodMk
@@ -1621,7 +1631,9 @@ theorem IsLittleOTVS.prodMk
   rintro ⟨U, V⟩ ⟨⟨hU, hUb⟩, hV, hVb⟩
   rcases ((hf.eventually_smallSets U hU).and (hg.eventually_smallSets V hV)).exists_mem_of_smallSets
     with ⟨W, hW, hWf, hWg⟩
-  refine ⟨W, hW, fun ε hε
+  refine ⟨W, hW, fun ε hε => ?_⟩
+  filter_upwards [hWf ε hε, hWg ε hε] with x hfx hgx
+  simp [egauge_prod_mk, *]
 
 Depends on / 依赖: basis_sets, egauge_prod_mk, eventually_smallSets, exists_mem_of_smallSets, filter_upwards, hf.eventually_smallSets, hg.eventually_smallSets, isLittleOTVS_iff, nhds_basis_balanced, prod_nhds
 -/
@@ -1706,7 +1718,8 @@ theorem IsBigOTVS.prodMk
   rcases ((hf.eventually_smallSets U hU).and (hg.eventually_smallSets V hV)).exists_mem_of_smallSets
     with ⟨W, hW, hWf, hWg⟩
   refine ⟨W, hW, ?_⟩
-  filter_up
+  filter_upwards [hWf, hWg] with x hfx hgx
+  simp [egauge_prod_mk, *]
 
 中文:
 定理 是BigOTVS.prodMk
@@ -1717,7 +1730,8 @@ theorem IsBigOTVS.prodMk
   rcases ((hf.eventually_smallSets U hU).and (hg.eventually_smallSets V hV)).exists_mem_of_smallSets
     with ⟨W, hW, hWf, hWg⟩
   refine ⟨W, hW, ?_⟩
-  filter_up
+  filter_upwards [hWf, hWg] with x hfx hgx
+  simp [egauge_prod_mk, *]
 
 Depends on / 依赖: basis_sets, egauge_prod_mk, eventually_smallSets, exists_mem_of_smallSets, filter_upwards, hf.eventually_smallSets, hg.eventually_smallSets, isBigOTVS_iff, nhds_basis_balanced, prod_nhds
 -/
@@ -2293,7 +2307,10 @@ theorem IsLittleOTVS.pi
   simp only [this.isLittleOTVS_iff (basis_sets _), forall_and, Prod.forall, id]
   rintro I U ⟨hIf, hU, Ub⟩
   have := fun i hi => (h i).eventually_smallSets (U i) (hU i hi)
-  rcases (hIf.eventua
+  rcases (hIf.eventually_all.mpr this).exists_mem_of_smallSets with ⟨V, hV₀, hV⟩
+  refine ⟨V, hV₀, fun ε hε => ?_⟩
+  refine (hIf.eventually_all.mpr (hV · · ε hε)).mono fun x hx => ?_
+  simpa only [id, egauge_pi hIf Ub, iSup₂_le_iff]
 
 中文:
 定理 是LittleOTVS.pi
@@ -2304,7 +2321,10 @@ theorem IsLittleOTVS.pi
   simp only [this.isLittleOTVS_iff (basis_sets _), forall_and, Prod.forall, id]
   rintro I U ⟨hIf, hU, Ub⟩
   have := fun i hi => (h i).eventually_smallSets (U i) (hU i hi)
-  rcases (hIf.eventua
+  rcases (hIf.eventually_all.mpr this).exists_mem_of_smallSets with ⟨V, hV₀, hV⟩
+  refine ⟨V, hV₀, fun ε hε => ?_⟩
+  refine (hIf.eventually_all.mpr (hV · · ε hε)).mono fun x hx => ?_
+  simpa only [id, egauge_pi hIf Ub, iSup₂_le_iff]
 -/
 protected theorem IsLittleOTVS.pi {ι : Type*} {E : ι -> Type*} [forall i, AddCommGroup (E i)]
     [forall i, Module 𝕜 (E i)] [forall i, TopologicalSpace (E i)] [forall i, ContinuousSMul 𝕜 (E i)]
@@ -2369,7 +2389,10 @@ theorem IsBigOTVS.pi
   simp only [this.isBigOTVS_iff (basis_sets _), forall_and, Prod.forall, id]
   rintro I U ⟨hIf, hU, Ub⟩
   have := fun i hi => (h i).eventually_smallSets (U i) (hU i hi)
-  rcases (hIf.eventually
+  rcases (hIf.eventually_all.mpr this).exists_mem_of_smallSets with ⟨V, hV₀, hV⟩
+  use V, hV₀
+  refine (hIf.eventually_all.mpr hV).mono fun x hx => ?_
+  simpa only [id, egauge_pi hIf Ub, iSup₂_le_iff]
 
 中文:
 定理 是BigOTVS.pi
@@ -2380,7 +2403,10 @@ theorem IsBigOTVS.pi
   simp only [this.isBigOTVS_iff (basis_sets _), forall_and, Prod.forall, id]
   rintro I U ⟨hIf, hU, Ub⟩
   have := fun i hi => (h i).eventually_smallSets (U i) (hU i hi)
-  rcases (hIf.eventually
+  rcases (hIf.eventually_all.mpr this).exists_mem_of_smallSets with ⟨V, hV₀, hV⟩
+  use V, hV₀
+  refine (hIf.eventually_all.mpr hV).mono fun x hx => ?_
+  simpa only [id, egauge_pi hIf Ub, iSup₂_le_iff]
 -/
 protected theorem IsBigOTVS.pi {ι : Type*} {E : ι -> Type*} [forall i, AddCommGroup (E i)]
     [forall i, Module 𝕜 (E i)] [forall i, TopologicalSpace (E i)] [forall i, ContinuousSMul 𝕜 (E i)]
@@ -2483,7 +2509,31 @@ lemma isLittleOTVS_one
     rcases hf U hU with ⟨r, hr₀, hr⟩
     lift r to Real>=0 using hr₀.le
     norm_cast at hr₀
-    rcases NormedField.exists_one_lt_n
+    rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
+    obtain ⟨ε, hε₀, hε⟩ : exists ε : Real>=0, 0 < ε ∧ (ε * ‖c‖₊ / r : Real>=0∞) < 1 := by
+      apply Eventually.exists_gt
+.eventually_lt_const zero_lt_one refine Continuous.tendsto' ?_ _ _ (by simp)
+      fun_prop (disch := intros; first | apply ENNReal.coe_ne_top | positivity)
+    filter_upwards [hr ε hε₀.ne'] with x hx
+    refine mem_of_egauge_lt_one hUb (hx.trans_lt ?_)
+    calc
+      (ε : Real>=0∞) * egauge 𝕜 (ball (0 : 𝕜) r) 1 <= (ε * ‖c‖₊ / r : Real>=0∞) := by
+        rw [mul_div_assoc]
+        gcongr
+        simpa using! egauge_ball_le_of_one_lt_norm (r := r) (x := (1 : 𝕜)) hc (by simp)
+      _ < 1 := ‹_›
+  · simp only [isLittleOTVS_iff]
+    intro hf U hU
+    refine ⟨ball 0 1, ball_mem_nhds _ one_pos, fun ε hε => ?_⟩
+    rcases NormedField.exists_norm_lt 𝕜 hε.bot_lt with ⟨c, hc₀, hcε⟩
+    replace hc₀ : c != 0 := by simpa using! hc₀
+    filter_upwards [hf ((set_smul_mem_nhds_zero_iff hc₀).2 hU)] with a ha
+    calc
+      egauge 𝕜 U (f a) <= ‖c‖₊ := egauge_le_of_mem_smul ha
+      _ <= ε := mod_cast hcε.le
+      _ <= ε * egauge 𝕜 (ball (0 : 𝕜) 1) 1 := by
+        apply le_mul_of_one_le_right'
+        simpa using! le_egauge_ball_one 𝕜 (1 : 𝕜)
 
 中文:
 引理 isLittleOTVS_one
@@ -2498,7 +2548,31 @@ lemma isLittleOTVS_one
     rcases hf U hU with ⟨r, hr₀, hr⟩
     lift r to Real>=0 using hr₀.le
     norm_cast at hr₀
-    rcases NormedField.exists_one_lt_n
+    rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
+    obtain ⟨ε, hε₀, hε⟩ : exists ε : Real>=0, 0 < ε ∧ (ε * ‖c‖₊ / r : Real>=0∞) < 1 := by
+      apply Eventually.exists_gt
+.eventually_lt_const zero_lt_one refine Continuous.tendsto' ?_ _ _ (by simp)
+      fun_prop (disch := intros; first | apply ENNReal.coe_ne_top | positivity)
+    filter_upwards [hr ε hε₀.ne'] with x hx
+    refine mem_of_egauge_lt_one hUb (hx.trans_lt ?_)
+    calc
+      (ε : Real>=0∞) * egauge 𝕜 (ball (0 : 𝕜) r) 1 <= (ε * ‖c‖₊ / r : Real>=0∞) := by
+        rw [mul_div_assoc]
+        gcongr
+        simpa using! egauge_ball_le_of_one_lt_norm (r := r) (x := (1 : 𝕜)) hc (by simp)
+      _ < 1 := ‹_›
+  · simp only [isLittleOTVS_iff]
+    intro hf U hU
+    refine ⟨ball 0 1, ball_mem_nhds _ one_pos, fun ε hε => ?_⟩
+    rcases NormedField.exists_norm_lt 𝕜 hε.bot_lt with ⟨c, hc₀, hcε⟩
+    replace hc₀ : c != 0 := by simpa using! hc₀
+    filter_upwards [hf ((set_smul_mem_nhds_zero_iff hc₀).2 hU)] with a ha
+    calc
+      egauge 𝕜 U (f a) <= ‖c‖₊ := egauge_le_of_mem_smul ha
+      _ <= ε := mod_cast hcε.le
+      _ <= ε * egauge 𝕜 (ball (0 : 𝕜) 1) 1 := by
+        apply le_mul_of_one_le_right'
+        simpa using! le_egauge_ball_one 𝕜 (1 : 𝕜)
 
 Depends on / 依赖: Continuous, Continuous.tendsto, Eventually, Eventually.exists_gt, NormedField, NormedField.exists_one_lt_norm, basis_sets, eventually_lt_const, exists_gt, exists_one_lt_norm, fun_prop, isLittleOTVS_iff, nhds_basis_balanced, nhds_basis_ball, tendsto, tendsto_right_iff, zero_lt_one
 -/
@@ -2610,7 +2684,23 @@ lemma Filter.Tendsto.isBigOTVS_one
     simpa [sub_eq_add_neg] using h.add (tendsto_const_nhds (x := -x))
   rw [(nhds_basis_balanced 𝕜 E).add_self.isBigOTVS_iff nhds_basis_ball]
   rintro U ⟨hU₀, hUb⟩
-  obtain ⟨r, hr₀, hr₁, hr⟩ : exists r : Real>=0, 0 < r ∧ r <= 1 ∧ (r : Real>=0∞) <= (eg
+  obtain ⟨r, hr₀, hr₁, hr⟩ : exists r : Real>=0, 0 < r ∧ r <= 1 ∧ (r : Real>=0∞) <= (egauge 𝕜 U x)⁻¹ := by
+    apply Eventually.exists_gt
+    refine .and (eventually_le_nhds one_pos) ?_
+    refine (ENNReal.tendsto_coe.mpr tendsto_id).eventually_le_const ?_
+    suffices exists c : 𝕜, x in c • U by simpa [egauge_eq_top]
+    simpa using (absorbent_nhds_zero (𝕜 := 𝕜) hU₀ x).exists
+  use r, by positivity
+  filter_upwards [h.eventually_mem hU₀] with a ha
+  calc
+    egauge 𝕜 (U + U) (f a) <= max (egauge 𝕜 U (f a - x)) (egauge 𝕜 U x) := by
+      simpa using egauge_add_add_le hUb hUb (f a - x) x
+    _ <= (r : Real>=0∞)⁻¹ := by
+      apply max_le
+      · refine (egauge_le_one _ ha).trans ?_
+        simp [hr₁]
+      · rwa [ENNReal.le_inv_iff_le_inv]
+    _ <= egauge 𝕜 (ball (0 : 𝕜) _) 1 := by simpa using div_le_egauge_ball 𝕜 r (1 : 𝕜)
 
 中文:
 引理 滤子.收敛.isBigOTVS_one
@@ -2620,7 +2710,23 @@ lemma Filter.Tendsto.isBigOTVS_one
     simpa [sub_eq_add_neg] using h.add (tendsto_const_nhds (x := -x))
   rw [(nhds_basis_balanced 𝕜 E).add_self.isBigOTVS_iff nhds_basis_ball]
   rintro U ⟨hU₀, hUb⟩
-  obtain ⟨r, hr₀, hr₁, hr⟩ : exists r : Real>=0, 0 < r ∧ r <= 1 ∧ (r : Real>=0∞) <= (eg
+  obtain ⟨r, hr₀, hr₁, hr⟩ : exists r : Real>=0, 0 < r ∧ r <= 1 ∧ (r : Real>=0∞) <= (egauge 𝕜 U x)⁻¹ := by
+    apply Eventually.exists_gt
+    refine .and (eventually_le_nhds one_pos) ?_
+    refine (ENNReal.tendsto_coe.mpr tendsto_id).eventually_le_const ?_
+    suffices exists c : 𝕜, x in c • U by simpa [egauge_eq_top]
+    simpa using (absorbent_nhds_zero (𝕜 := 𝕜) hU₀ x).exists
+  use r, by positivity
+  filter_upwards [h.eventually_mem hU₀] with a ha
+  calc
+    egauge 𝕜 (U + U) (f a) <= max (egauge 𝕜 U (f a - x)) (egauge 𝕜 U x) := by
+      simpa using egauge_add_add_le hUb hUb (f a - x) x
+    _ <= (r : Real>=0∞)⁻¹ := by
+      apply max_le
+      · refine (egauge_le_one _ ha).trans ?_
+        simp [hr₁]
+      · rwa [ENNReal.le_inv_iff_le_inv]
+    _ <= egauge 𝕜 (ball (0 : 𝕜) _) 1 := by simpa using div_le_egauge_ball 𝕜 r (1 : 𝕜)
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_coe.mpr, Eventually, Eventually.exists_gt, Tendsto, add_self, add_self.isBigOTVS_iff, egauge, egauge_eq_, eventually_le_const, eventually_le_nhds, exists_gt, h.add, isBigOTVS_iff, nhds_basis_balanced, nhds_basis_ball, one_pos, replace, sub_eq_add_neg, tendsto_coe
 -/
@@ -2668,7 +2774,34 @@ lemma isLittleOTVS_iff_isLittleO
   simp only [isLittleO_iff, nhds_basis_ball.isLittleOTVS_iff nhds_basis_ball]
   refine ⟨fun h ε hε => ?_, fun h ε hε => ⟨1, one_pos, fun δ hδ => ?_⟩⟩
   · rcases h ε hε with ⟨δ, hδ₀, hδ⟩
-   
+    lift ε to Real>=0 using hε.le; lift δ to Real>=0 using hδ₀.le; norm_cast at hε hδ₀
+    filter_upwards [hδ (δ / ‖c‖₊) (div_pos hδ₀ hc₀).ne'] with x hx
+    suffices (‖f x‖₊ / ε : Real>=0∞) <= ‖g x‖₊ by
+      rw [← ENNReal.coe_div hε.ne'] at this
+      rw [← div_le_iff₀' (NNReal.coe_pos.2 hε)]
+      exact_mod_cast this
+    calc
+      (‖f x‖₊ / ε : Real>=0∞) <= egauge 𝕜 (ball 0 ε) (f x) := div_le_egauge_ball 𝕜 _ _
+      _ <= ↑(δ / ‖c‖₊) * egauge 𝕜 (ball 0 ↑δ) (g x) := hx
+      _ <= (δ / ‖c‖₊) * (‖c‖₊ * ‖g x‖₊ / δ) := by
+        gcongr
+        exacts [ENNReal.coe_div_le, egauge_ball_le_of_one_lt_norm hc (.inl <| ne_of_gt hδ₀)]
+      _ = (δ / δ) * (‖c‖₊ / ‖c‖₊) * ‖g x‖₊ := by simp only [div_eq_mul_inv]; ring
+      _ <= 1 * 1 * ‖g x‖₊ := by gcongr <;> exact ENNReal.div_self_le_one
+      _ = ‖g x‖₊ := by simp
+  · filter_upwards [@h ↑(ε * δ / ‖c‖₊) (by positivity)] with x (hx : ‖f x‖₊ <= ε * δ / ‖c‖₊ * ‖g x‖₊)
+    lift ε to Real>=0 using hε.le
+    calc
+      egauge 𝕜 (ball 0 ε) (f x) <= ‖c‖₊ * ‖f x‖₊ / ε :=
+        egauge_ball_le_of_one_lt_norm hc (.inl <| ne_of_gt hε)
+      _ <= ‖c‖₊ * (↑(ε * δ / ‖c‖₊) * ‖g x‖₊) / ε := by gcongr; exact_mod_cast hx
+      _ = (‖c‖₊ / ‖c‖₊) * (ε / ε) * δ * ‖g x‖₊ := by
+        simp only [div_eq_mul_inv, ENNReal.coe_inv hc₀.ne', ENNReal.coe_mul]; ring
+      _ <= 1 * 1 * δ * ‖g x‖₊ := by gcongr <;> exact ENNReal.div_self_le_one
+      _ = δ * ‖g x‖₊ := by simp
+      _ <= δ * egauge 𝕜 (ball 0 1) (g x) := by gcongr; apply le_egauge_ball_one
+
+alias ⟨isLittleOTVS.isLittleO, IsLittleO.isLittleOTVS⟩ := isLittleOTVS_iff_isLittleO
 
 中文:
 引理 isLittleOTVS_iff_isLittleO
@@ -2679,7 +2812,34 @@ lemma isLittleOTVS_iff_isLittleO
   simp only [isLittleO_iff, nhds_basis_ball.isLittleOTVS_iff nhds_basis_ball]
   refine ⟨fun h ε hε => ?_, fun h ε hε => ⟨1, one_pos, fun δ hδ => ?_⟩⟩
   · rcases h ε hε with ⟨δ, hδ₀, hδ⟩
-   
+    lift ε to Real>=0 using hε.le; lift δ to Real>=0 using hδ₀.le; norm_cast at hε hδ₀
+    filter_upwards [hδ (δ / ‖c‖₊) (div_pos hδ₀ hc₀).ne'] with x hx
+    suffices (‖f x‖₊ / ε : Real>=0∞) <= ‖g x‖₊ by
+      rw [← ENNReal.coe_div hε.ne'] at this
+      rw [← div_le_iff₀' (NNReal.coe_pos.2 hε)]
+      exact_mod_cast this
+    calc
+      (‖f x‖₊ / ε : Real>=0∞) <= egauge 𝕜 (ball 0 ε) (f x) := div_le_egauge_ball 𝕜 _ _
+      _ <= ↑(δ / ‖c‖₊) * egauge 𝕜 (ball 0 ↑δ) (g x) := hx
+      _ <= (δ / ‖c‖₊) * (‖c‖₊ * ‖g x‖₊ / δ) := by
+        gcongr
+        exacts [ENNReal.coe_div_le, egauge_ball_le_of_one_lt_norm hc (.inl <| ne_of_gt hδ₀)]
+      _ = (δ / δ) * (‖c‖₊ / ‖c‖₊) * ‖g x‖₊ := by simp only [div_eq_mul_inv]; ring
+      _ <= 1 * 1 * ‖g x‖₊ := by gcongr <;> exact ENNReal.div_self_le_one
+      _ = ‖g x‖₊ := by simp
+  · filter_upwards [@h ↑(ε * δ / ‖c‖₊) (by positivity)] with x (hx : ‖f x‖₊ <= ε * δ / ‖c‖₊ * ‖g x‖₊)
+    lift ε to Real>=0 using hε.le
+    calc
+      egauge 𝕜 (ball 0 ε) (f x) <= ‖c‖₊ * ‖f x‖₊ / ε :=
+        egauge_ball_le_of_one_lt_norm hc (.inl <| ne_of_gt hε)
+      _ <= ‖c‖₊ * (↑(ε * δ / ‖c‖₊) * ‖g x‖₊) / ε := by gcongr; exact_mod_cast hx
+      _ = (‖c‖₊ / ‖c‖₊) * (ε / ε) * δ * ‖g x‖₊ := by
+        simp only [div_eq_mul_inv, ENNReal.coe_inv hc₀.ne', ENNReal.coe_mul]; ring
+      _ <= 1 * 1 * δ * ‖g x‖₊ := by gcongr <;> exact ENNReal.div_self_le_one
+      _ = δ * ‖g x‖₊ := by simp
+      _ <= δ * egauge 𝕜 (ball 0 1) (g x) := by gcongr; apply le_egauge_ball_one
+
+alias ⟨isLittleOTVS.isLittleO, IsLittleO.isLittleOTVS⟩ := isLittleOTVS_iff_isLittleO
 
 Depends on / 依赖: ENNReal, ENNReal.coe_div, NormedField, NormedField.exists_one_lt_norm, coe_div, div_pos, exists_one_lt_norm, filter_upwards, isLittleOTVS_iff, isLittleO_iff, nhds_basis_ball, nhds_basis_ball.isLittleOTVS_iff, one_pos, one_pos.trans
 -/
@@ -2732,7 +2892,39 @@ lemma isBigOTVS_iff_isBigO
     rcases h 1 one_pos with ⟨r, hr₀, hr⟩
     lift r to Real>=0 using hr₀.le
     norm_cast at hr₀
-    refine ⟨(‖c‖₊ / r : Real>=0), hr.mono
+    refine ⟨(‖c‖₊ / r : Real>=0), hr.mono fun x hx => ?_⟩
+    suffices ‖f x‖ₑ <= (‖c‖₊ / r : Real>=0) * ‖g x‖ₑ by
+      simp only [enorm_eq_nnnorm, ← coe_nnnorm] at this ⊢
+      exact mod_cast this
+    calc
+      ‖f x‖ₑ <= egauge 𝕜 (ball 0 1) (f x) := le_egauge_ball_one ..
+      _ <= egauge 𝕜 (ball 0 r) (g x) := hx
+      _ <= ‖c‖ₑ * ‖g x‖ₑ / ↑r :=
+egauge_ball_le_of_one_lt_norm hc .inl hr₀.ne'
+      _ = (‖c‖₊ / r : Real>=0) * ‖g x‖ₑ := by
+        simp [hr₀.ne', ENNReal.mul_div_right_comm, enorm_eq_nnnorm]
+  · rw [nhds_basis_ball.isBigOTVS_iff nhds_basis_ball, isBigO_iff']
+    have hc₀ : 0 < ‖c‖₊ := one_pos.trans hc
+    rintro ⟨C, hC₀, hC⟩ r hr₀
+    lift C to Real>=0 using hC₀.le; norm_cast at hC₀
+    lift r to Real>=0 using hr₀.le; norm_cast at hr₀
+    refine ⟨r / (C * ‖c‖₊), by positivity, hC.mono fun x hx => ?_⟩
+    calc
+      egauge 𝕜 (ball 0 r) (f x) <= ‖c‖ₑ * ‖f x‖ₑ / r :=
+egauge_ball_le_of_one_lt_norm hc .inl hr₀.ne'
+      _ <= ‖c‖ₑ * (C * ‖g x‖ₑ) / r := by
+        gcongr
+        simp only [enorm_eq_nnnorm, ← coe_nnnorm] at hx ⊢
+        exact mod_cast hx
+      _ = ‖g x‖ₑ / (r / (C * ‖c‖₊) : Real>=0) := by
+        simp_all [pos_iff_ne_zero, ENNReal.div_eq_inv_mul, ENNReal.mul_inv]
+        ac_rfl
+      _ <= _ := div_le_egauge_ball _ _ _
+
+alias ⟨IsBigOTVS.isBigO, IsBigO.isBigOTVS⟩ := isBigOTVS_iff_isBigO
+
+@[deprecated (since := "2026-02-03")]
+alias isBigOTVS.isBigO := IsBigOTVS.isBigO
 
 中文:
 引理 isBigOTVS_iff_isBigO
@@ -2745,7 +2937,39 @@ lemma isBigOTVS_iff_isBigO
     rcases h 1 one_pos with ⟨r, hr₀, hr⟩
     lift r to Real>=0 using hr₀.le
     norm_cast at hr₀
-    refine ⟨(‖c‖₊ / r : Real>=0), hr.mono
+    refine ⟨(‖c‖₊ / r : Real>=0), hr.mono fun x hx => ?_⟩
+    suffices ‖f x‖ₑ <= (‖c‖₊ / r : Real>=0) * ‖g x‖ₑ by
+      simp only [enorm_eq_nnnorm, ← coe_nnnorm] at this ⊢
+      exact mod_cast this
+    calc
+      ‖f x‖ₑ <= egauge 𝕜 (ball 0 1) (f x) := le_egauge_ball_one ..
+      _ <= egauge 𝕜 (ball 0 r) (g x) := hx
+      _ <= ‖c‖ₑ * ‖g x‖ₑ / ↑r :=
+egauge_ball_le_of_one_lt_norm hc .inl hr₀.ne'
+      _ = (‖c‖₊ / r : Real>=0) * ‖g x‖ₑ := by
+        simp [hr₀.ne', ENNReal.mul_div_right_comm, enorm_eq_nnnorm]
+  · rw [nhds_basis_ball.isBigOTVS_iff nhds_basis_ball, isBigO_iff']
+    have hc₀ : 0 < ‖c‖₊ := one_pos.trans hc
+    rintro ⟨C, hC₀, hC⟩ r hr₀
+    lift C to Real>=0 using hC₀.le; norm_cast at hC₀
+    lift r to Real>=0 using hr₀.le; norm_cast at hr₀
+    refine ⟨r / (C * ‖c‖₊), by positivity, hC.mono fun x hx => ?_⟩
+    calc
+      egauge 𝕜 (ball 0 r) (f x) <= ‖c‖ₑ * ‖f x‖ₑ / r :=
+egauge_ball_le_of_one_lt_norm hc .inl hr₀.ne'
+      _ <= ‖c‖ₑ * (C * ‖g x‖ₑ) / r := by
+        gcongr
+        simp only [enorm_eq_nnnorm, ← coe_nnnorm] at hx ⊢
+        exact mod_cast hx
+      _ = ‖g x‖ₑ / (r / (C * ‖c‖₊) : Real>=0) := by
+        simp_all [pos_iff_ne_zero, ENNReal.div_eq_inv_mul, ENNReal.mul_inv]
+        ac_rfl
+      _ <= _ := div_le_egauge_ball _ _ _
+
+alias ⟨IsBigOTVS.isBigO, IsBigO.isBigOTVS⟩ := isBigOTVS_iff_isBigO
+
+@[deprecated (since := "2026-02-03")]
+alias isBigOTVS.isBigO := IsBigOTVS.isBigO
 
 Depends on / 依赖: NormedField, NormedField.exists_one_lt_norm, coe_nnnorm, egauge, enorm_eq_nnnorm, exists_one_lt_norm, hr.mono, isBigOTVS_iff, isBigO_iff, le_egauge_ball_one, mod_cast, nhds_basis_ball, nhds_basis_ball.isBigOTVS_iff, one_pos
 -/

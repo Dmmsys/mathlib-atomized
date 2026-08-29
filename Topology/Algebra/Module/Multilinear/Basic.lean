@@ -850,7 +850,7 @@ definition ofSubsingleton
   invFun f := ⟨(MultilinearMap.ofSubsingleton R M₂ M₃ i).symm f.toMultilinearMap,
 (map_continuous f).comp continuous_pi fun _ => continuous_id⟩
 right_inv f := toMultilinearMap_injective
-    (MultilinearMap.
+    (MultilinearMap.ofSubsingleton R M₂ M₃ i).apply_symm_apply f.toMultilinearMap
 
 中文:
 定义 ofSubsingleton
@@ -860,7 +860,7 @@ right_inv f := toMultilinearMap_injective
   invFun f := ⟨(MultilinearMap.ofSubsingleton R M₂ M₃ i).symm f.toMultilinearMap,
 (map_continuous f).comp continuous_pi fun _ => continuous_id⟩
 right_inv f := toMultilinearMap_injective
-    (MultilinearMap.
+    (MultilinearMap.ofSubsingleton R M₂ M₃ i).apply_symm_apply f.toMultilinearMap
 
 Depends on / 依赖: MultilinearMap, MultilinearMap.ofSubsingleton, ofSubsingleton
 -/

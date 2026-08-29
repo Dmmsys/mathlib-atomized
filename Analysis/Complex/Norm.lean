@@ -155,7 +155,9 @@ theorem norm_add_le'
   statement: ‖z + w‖ <= ‖z‖ + ‖w‖
   proof: (mul_self_le_mul_self_iff (Complex.norm_nonneg (z + w)) (add_nonneg (Complex.norm_nonneg z)
     (Complex.norm_nonneg w))).2 <| by
-    rw [norm_mul_self_eq_normSq]; rw [add_mul_self_eq]; rw [norm_mul_self_eq_normSq]; rw [norm_mul_self_eq_normSq]; rw [add_right_comm]; rw [normSq_add]; rw [mul_assoc]; 
+    rw [norm_mul_self_eq_normSq]; rw [add_mul_self_eq]; rw [norm_mul_self_eq_normSq]; rw [norm_mul_self_eq_normSq]; rw [add_right_comm]; rw [normSq_add]; rw [mul_assoc]; rw [norm_def]; rw [norm_def]; rw [← Real.sqrt_mul normSq_nonneg z]; rw [← normSq_conj w]; rw [← map_mul]
+    gcongr
+    exact re_le_norm (z * conj w)
 
 中文:
 定理 norm_add_le'
@@ -163,7 +165,9 @@ theorem norm_add_le'
   结论: ‖z + w‖ <= ‖z‖ + ‖w‖
   证明: (mul_self_le_mul_self_iff (Complex.norm_nonneg (z + w)) (add_nonneg (Complex.norm_nonneg z)
     (Complex.norm_nonneg w))).2 <| by
-    rw [norm_mul_self_eq_normSq]; rw [add_mul_self_eq]; rw [norm_mul_self_eq_normSq]; rw [norm_mul_self_eq_normSq]; rw [add_right_comm]; rw [normSq_add]; rw [mul_assoc]; 
+    rw [norm_mul_self_eq_normSq]; rw [add_mul_self_eq]; rw [norm_mul_self_eq_normSq]; rw [norm_mul_self_eq_normSq]; rw [add_right_comm]; rw [normSq_add]; rw [mul_assoc]; rw [norm_def]; rw [norm_def]; rw [← Real.sqrt_mul normSq_nonneg z]; rw [← normSq_conj w]; rw [← map_mul]
+    gcongr
+    exact re_le_norm (z * conj w)
 -/
 protected theorem norm_add_le' (z w : Complex) : ‖z + w‖ <= ‖z‖ + ‖w‖ :=
   (mul_self_le_mul_self_iff (Complex.norm_nonneg (z + w)) (add_nonneg (Complex.norm_nonneg z)
@@ -1182,7 +1186,8 @@ theorem norm_le_sqrt_two_mul_max
     √(x ^ 2 + y ^ 2) <= √(m ^ 2 + m ^ 2) := by
       gcongr √(?_ + ?_) <;> rw [sq_le_sq, abs_of_nonneg hm₀]
       exacts [le_max_left _ _, le_max_right _ _]
-  
+    _ = √2 * m := by
+      rw [← two_mul]; rw [Real.sqrt_mul]; rw [Real.sqrt_sq] <;> positivity
 
 中文:
 定理 norm_le_sqrt_two_mul_max
@@ -1197,7 +1202,8 @@ theorem norm_le_sqrt_two_mul_max
     √(x ^ 2 + y ^ 2) <= √(m ^ 2 + m ^ 2) := by
       gcongr √(?_ + ?_) <;> rw [sq_le_sq, abs_of_nonneg hm₀]
       exacts [le_max_left _ _, le_max_right _ _]
-  
+    _ = √2 * m := by
+      rw [← two_mul]; rw [Real.sqrt_mul]; rw [Real.sqrt_sq] <;> positivity
 
 Depends on / 依赖: Real.sqrt_mul, Real.sqrt_sq, abs_of_nonneg, exacts, le_max_left, le_max_right, normSq_mk, norm_def, sq_le_sq, sqrt_mul, sqrt_sq, two_mul
 -/
@@ -1736,7 +1742,7 @@ theorem lim_eq_lim_im_add_lim_re
       f ≈ _ := equiv_limAux f
       _ = CauSeq.const (‖·‖) (↑(lim (cauSeqRe f)) + ↑(lim (cauSeqIm f)) * I) :=
         CauSeq.ext fun _ =>
-          Complex.ext (by simp [limAux, cauSeqRe, ofReal]) (by 
+          Complex.ext (by simp [limAux, cauSeqRe, ofReal]) (by simp [limAux, cauSeqIm, ofReal])
 
 中文:
 定理 lim_eq_lim_im_add_lim_re
@@ -1747,7 +1753,7 @@ theorem lim_eq_lim_im_add_lim_re
       f ≈ _ := equiv_limAux f
       _ = CauSeq.const (‖·‖) (↑(lim (cauSeqRe f)) + ↑(lim (cauSeqIm f)) * I) :=
         CauSeq.ext fun _ =>
-          Complex.ext (by simp [limAux, cauSeqRe, ofReal]) (by 
+          Complex.ext (by simp [limAux, cauSeqRe, ofReal]) (by simp [limAux, cauSeqIm, ofReal])
 
 Depends on / 依赖: CauSeq, CauSeq.const, CauSeq.ext, Complex.ext, IsAbsoluteValue, cauSeqIm, cauSeqRe, equiv_limAux, limAux, lim_eq_of_equiv_const, ofReal
 -/

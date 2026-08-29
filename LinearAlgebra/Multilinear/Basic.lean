@@ -661,7 +661,7 @@ instance addCommMonoid
 
 @[deprecated (since := "2026-06-10")] alias coe_sum := FunLike.coe_sum
 
-
+@[deprecated (since := "2026-06-10")] protected alias sum_apply := _root_.sum_apply
 
 中文:
 实例 addCommMonoid
@@ -675,7 +675,7 @@ instance addCommMonoid
 
 @[deprecated (since := "2026-06-10")] alias coe_sum := FunLike.coe_sum
 
-
+@[deprecated (since := "2026-06-10")] protected alias sum_apply := _root_.sum_apply
 
 Depends on / 依赖: fast_instance
 -/
@@ -786,7 +786,10 @@ definition ofSubsingleton
   invFun f :=
     { toFun := fun x => f fun _ => x
       map_add' := fun x y => by
-        simpa [update_eq_const_of_su
+        simpa [update_eq_const_of_subsingleton] using! f.map_update_add 0 i x y
+      map_smul' := fun c x => by
+        simpa [update_eq_const_of_subsingleton] using! f.map_update_smul 0 i c x }
+  right_inv f := by ext x; refine congr_arg f ?_; exact (eq_const_of_subsingleton _ _).symm
 
 中文:
 定义 ofSubsingleton
@@ -797,7 +800,10 @@ definition ofSubsingleton
   invFun f :=
     { toFun := fun x => f fun _ => x
       map_add' := fun x y => by
-        simpa [update_eq_const_of_su
+        simpa [update_eq_const_of_subsingleton] using! f.map_update_add 0 i x y
+      map_smul' := fun c x => by
+        simpa [update_eq_const_of_subsingleton] using! f.map_update_smul 0 i c x }
+  right_inv f := by ext x; refine congr_arg f ?_; exact (eq_const_of_subsingleton _ _).symm
 
 Depends on / 依赖: congr_arg, eq_const_of_subsingleton, f.map_update_add, f.map_update_smul, intros, invFun, map_add, map_smul, map_update_add, map_update_smul, right_inv, update_eq_const_of_subsingleton
 -/
@@ -1021,7 +1027,11 @@ definition compLinearMap
       Function.apply_update (fun k => f k) _ _ _ _
     simp [this]
   map_update_smul' m i c x := by
-    have : forall j z, f j (update m i z j) = u
+    have : forall j z, f j (update m i z j) = update (fun k => f k (m k)) i (f i z) j := fun j z =>
+      Function.apply_update (fun k => f k) _ _ _ _
+    simp [this]
+
+@[simp]
 
 中文:
 定义 compLinearMap
@@ -1032,7 +1042,11 @@ definition compLinearMap
       Function.apply_update (fun k => f k) _ _ _ _
     simp [this]
   map_update_smul' m i c x := by
-    have : forall j z, f j (update m i z j) = u
+    have : forall j z, f j (update m i z j) = update (fun k => f k (m k)) i (f i z) j := fun j z =>
+      Function.apply_update (fun k => f k) _ _ _ _
+    simp [this]
+
+@[simp]
 -/
 def compLinearMap (g : MultilinearMap R M₁' M₂) (f : forall i, M₁ i ->ₗ[R] M₁' i) :
     MultilinearMap R M₁ M₂ where
@@ -1215,7 +1229,8 @@ definition compMultilinearMap
       Sigma.curry_update, Function.apply_update (fun i => f i)]
   map_update_smul' {hDecEqSigma} := by
     classical
-    simp +instances
+    simp +instances [Subsingleton.elim hDecEqSigma Sigma.instDecidableEqSigma,
+      Sigma.curry_update, Function.apply_update (fun i => f i)]
 
 中文:
 定义 compMultilinearMap
@@ -1227,7 +1242,8 @@ definition compMultilinearMap
       Sigma.curry_update, Function.apply_update (fun i => f i)]
   map_update_smul' {hDecEqSigma} := by
     classical
-    simp +instances
+    simp +instances [Subsingleton.elim hDecEqSigma Sigma.instDecidableEqSigma,
+      Sigma.curry_update, Function.apply_update (fun i => f i)]
 
 Depends on / 依赖: Sigma.curry
 -/
@@ -1260,7 +1276,28 @@ theorem map_piecewise_add
   have A : (insert i t).piecewise (m + m') m' = update (t.piecewise (m + m') m') i (m i + m' i) :=
     t.piecewise_insert _ _ _
   have B : update (t.piecewise (m + m') m') i (m' i) = t.piecewise (m + m') m' := by
-    
+    ext j
+    by_cases h : j = i
+    · rw [h]
+      simp [hit]
+    · simp [h]
+  let m'' := update m' i (m i)
+  have C : update (t.piecewise (m + m') m') i (m i) = t.piecewise (m + m'') m'' := by
+    ext j
+    by_cases h : j = i
+    · rw [h]
+      simp [m'', hit]
+    · by_cases h' : j in t <;> simp [m'', h, h']
+  rw [A]; rw [f.map_update_add]; rw [B]; rw [C]; rw [Finset.sum_powerset_insert hit]; rw [Hrec]; rw [Hrec]; rw [add_comm (_ : M₂)]
+  congr 1
+  refine Finset.sum_congr rfl fun s hs => ?_
+  have : (insert i s).piecewise m m' = s.piecewise m m'' := by
+    ext j
+    by_cases h : j = i
+    · rw [h]
+      simp [m'', Finset.notMem_of_mem_powerset_of_notMem hs hit]
+    · by_cases h' : j in s <;> simp [m'', h, h']
+  rw [this]
 
 中文:
 定理 map_piecewise_add
@@ -1272,7 +1309,28 @@ theorem map_piecewise_add
   have A : (insert i t).piecewise (m + m') m' = update (t.piecewise (m + m') m') i (m i + m' i) :=
     t.piecewise_insert _ _ _
   have B : update (t.piecewise (m + m') m') i (m' i) = t.piecewise (m + m') m' := by
-    
+    ext j
+    by_cases h : j = i
+    · rw [h]
+      simp [hit]
+    · simp [h]
+  let m'' := update m' i (m i)
+  have C : update (t.piecewise (m + m') m') i (m i) = t.piecewise (m + m'') m'' := by
+    ext j
+    by_cases h : j = i
+    · rw [h]
+      simp [m'', hit]
+    · by_cases h' : j in t <;> simp [m'', h, h']
+  rw [A]; rw [f.map_update_add]; rw [B]; rw [C]; rw [Finset.sum_powerset_insert hit]; rw [Hrec]; rw [Hrec]; rw [add_comm (_ : M₂)]
+  congr 1
+  refine Finset.sum_congr rfl fun s hs => ?_
+  have : (insert i s).piecewise m m' = s.piecewise m m'' := by
+    ext j
+    by_cases h : j = i
+    · rw [h]
+      simp [m'', Finset.notMem_of_mem_powerset_of_notMem hs hit]
+    · by_cases h' : j in s <;> simp [m'', h, h']
+  rw [this]
 
 Depends on / 依赖: Finset, Finset.induction_on, induction_on, insert, piecewise, piecewise_insert, revert, t.piecewise, t.piecewise_insert, update
 -/
@@ -1345,7 +1403,127 @@ theorem map_sum_finset_aux
   induction n using Nat.strong_induction_on generalizing A with | h n IH =>
   -- If one of the sets is empty, then all the sums are zero
   by_cases! Ai_empty : exists i, A i = ∅
-  · obtain ⟨i, hi⟩ : exists i, ∑ j in A i, g i j = 0 := Ai_empty.imp fun i hi =
+  · obtain ⟨i, hi⟩ : exists i, ∑ j in A i, g i j = 0 := Ai_empty.imp fun i hi => by simp [hi]
+    have hpi : piFinset A = ∅ := by simpa
+    rw [f.map_coord_zero i hi]; rw [hpi]; rw [Finset.sum_empty]
+  -- Otherwise, if all sets are at most singletons, then they are exactly singletons and the result
+  -- is again straightforward
+  by_cases! Ai_singleton : forall i, #(A i) <= 1
+  · have Ai_card : forall i, #(A i) = 1 := by
+      intro i
+      have pos : #(A i) != 0 := by rw [Finset.card_ne_zero]; exact Ai_empty i
+      have : #(A i) <= 1 := Ai_singleton i
+      exact le_antisymm this (Nat.succ_le_of_lt (_root_.pos_iff_ne_zero.mpr pos))
+    have :
+      forall r : forall i, α i, r in piFinset A -> (f fun i => g i (r i)) = f fun i => ∑ j in A i, g i j := by
+      intro r hr
+      congr with i
+      have : forall j in A i, g i j = g i (r i) := by
+        intro j hj
+        congr
+        apply Finset.card_le_one_iff.1 (Ai_singleton i) hj
+        exact mem_piFinset.mp hr i
+      simp only [Finset.sum_congr rfl this, Finset.sum_const, Ai_card i, one_nsmul]
+    simp only [Finset.sum_congr rfl this, Ai_card, card_piFinset, prod_const_one, one_nsmul,
+      Finset.sum_const]
+  -- Remains the interesting case where one of the `A i`, say `A i₀`, has cardinality at least 2.
+  -- We will split into two parts `B i₀` and `C i₀` of smaller cardinality, let `B i = C i = A i`
+  -- for `i ≠ i₀`, apply the inductive assumption to `B` and `C`, and add up the corresponding
+  -- parts to get the sum for `A`.
+  obtain ⟨i₀, hi₀⟩ : exists i, 1 < #(A i) := Ai_singleton
+  obtain ⟨j₁, j₂, _, hj₂, _⟩ : exists j₁ j₂, j₁ in A i₀ ∧ j₂ in A i₀ ∧ j₁ != j₂ :=
+    Finset.one_lt_card_iff.1 hi₀
+  let B := Function.update A i₀ (A i₀ \ {j₂})
+  let C := Function.update A i₀ {j₂}
+  have B_subset_A : forall i, B i subseteq A i := by
+    intro i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [B, Finset.sdiff_subset, update_self]
+    · simp only [B, hi, update_of_ne, Ne, not_false_iff, Finset.Subset.refl]
+  have C_subset_A : forall i, C i subseteq A i := by
+    intro i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [C, hj₂, Finset.singleton_subset_iff, update_self]
+    · simp only [C, hi, update_of_ne, Ne, not_false_iff, Finset.Subset.refl]
+  -- split the sum at `i₀` as the sum over `B i₀` plus the sum over `C i₀`, to use additivity.
+  have A_eq_BC :
+    (fun i => ∑ j in A i, g i j) =
+      Function.update (fun i => ∑ j in A i, g i j) i₀
+        ((∑ j in B i₀, g i₀ j) + ∑ j in C i₀, g i₀ j) := by
+    ext i
+    by_cases hi : i = i₀
+    · rw [hi, update_self]
+      have : A i₀ = B i₀ union C i₀ := by
+        simp only [B, C, Function.update_self, Finset.sdiff_union_self_eq_union]
+        symm
+        simp only [hj₂, Finset.singleton_subset_iff, Finset.union_eq_left]
+      rw [this]
+refine Finset.sum_union Finset.disjoint_right.2 fun j hj => ?_
+      have : j = j₂ := by
+        simpa [C] using hj
+      rw [this]
+      simp only [B, Finset.mem_sdiff, not_true, not_false_iff, Finset.mem_singleton,
+        update_self, and_false]
+    · simp [hi]
+  have Beq :
+    Function.update (fun i => ∑ j in A i, g i j) i₀ (∑ j in B i₀, g i₀ j) = fun i =>
+      ∑ j in B i, g i j := by
+    ext i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [update_self]
+    · simp only [B, hi, update_of_ne, Ne, not_false_iff]
+  have Ceq :
+    Function.update (fun i => ∑ j in A i, g i j) i₀ (∑ j in C i₀, g i₀ j) = fun i =>
+      ∑ j in C i, g i j := by
+    ext i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [update_self]
+    · simp only [C, hi, update_of_ne, Ne, not_false_iff]
+  -- Express the inductive assumption for `B`
+  have Brec : (f fun i => ∑ j in B i, g i j) = ∑ r in piFinset B, f fun i => g i (r i) := by
+    have : ∑ i, #(B i) < ∑ i, #(A i) := by
+      refine sum_lt_sum (fun i _ => card_le_card (B_subset_A i)) ⟨i₀, mem_univ _, ?_⟩
+      have : {j₂} subseteq A i₀ := by simp [hj₂]
+      simp only [B, Finset.card_sdiff_of_subset this, Function.update_self, Finset.card_singleton]
+      exact Nat.pred_lt (ne_of_gt (lt_trans Nat.zero_lt_one hi₀))
+    rw [h] at this
+    exact IH _ this B rfl
+  -- Express the inductive assumption for `C`
+  have Crec : (f fun i => ∑ j in C i, g i j) = ∑ r in piFinset C, f fun i => g i (r i) := by
+    have : (∑ i, #(C i)) < ∑ i, #(A i) :=
+      Finset.sum_lt_sum (fun i _ => Finset.card_le_card (C_subset_A i))
+        ⟨i₀, Finset.mem_univ _, by simp [C, hi₀]⟩
+    rw [h] at this
+    exact IH _ this C rfl
+  have D : Disjoint (piFinset B) (piFinset C) :=
+    haveI : Disjoint (B i₀) (C i₀) := by simp [B, C]
+    piFinset_disjoint_of_disjoint B C this
+  have pi_BC : piFinset A = piFinset B union piFinset C := by
+    apply Finset.Subset.antisymm
+    · intro r hr
+      by_cases hri₀ : r i₀ = j₂
+      · apply Finset.mem_union_right
+        refine mem_piFinset.2 fun i => ?_
+        by_cases hi : i = i₀
+        · have : r i₀ in C i₀ := by simp [C, hri₀]
+          rwa [hi]
+        · simp [C, hi, mem_piFinset.1 hr i]
+      · apply Finset.mem_union_left
+        refine mem_piFinset.2 fun i => ?_
+        by_cases hi : i = i₀
+        · have : r i₀ in B i₀ := by simp [B, hri₀, mem_piFinset.1 hr i₀]
+          rwa [hi]
+        · simp [B, hi, mem_piFinset.1 hr i]
+    · exact
+        Finset.union_subset (piFinset_subset _ _ fun i => B_subset_A i)
+          (piFinset_subset _ _ fun i => C_subset_A i)
+  rw [A_eq_BC]
+  simp only [MultilinearMap.map_update_add, Beq, Ceq, Brec, Crec, pi_BC]
+  rw [← Finset.sum_union D]
 
 中文:
 定理 map_sum_finset_aux
@@ -1355,7 +1533,127 @@ theorem map_sum_finset_aux
   induction n using Nat.strong_induction_on generalizing A with | h n IH =>
   -- If one of the sets is empty, then all the sums are zero
   by_cases! Ai_empty : exists i, A i = ∅
-  · obtain ⟨i, hi⟩ : exists i, ∑ j in A i, g i j = 0 := Ai_empty.imp fun i hi =
+  · obtain ⟨i, hi⟩ : exists i, ∑ j in A i, g i j = 0 := Ai_empty.imp fun i hi => by simp [hi]
+    have hpi : piFinset A = ∅ := by simpa
+    rw [f.map_coord_zero i hi]; rw [hpi]; rw [Finset.sum_empty]
+  -- Otherwise, if all sets are at most singletons, then they are exactly singletons and the result
+  -- is again straightforward
+  by_cases! Ai_singleton : forall i, #(A i) <= 1
+  · have Ai_card : forall i, #(A i) = 1 := by
+      intro i
+      have pos : #(A i) != 0 := by rw [Finset.card_ne_zero]; exact Ai_empty i
+      have : #(A i) <= 1 := Ai_singleton i
+      exact le_antisymm this (Nat.succ_le_of_lt (_root_.pos_iff_ne_zero.mpr pos))
+    have :
+      forall r : forall i, α i, r in piFinset A -> (f fun i => g i (r i)) = f fun i => ∑ j in A i, g i j := by
+      intro r hr
+      congr with i
+      have : forall j in A i, g i j = g i (r i) := by
+        intro j hj
+        congr
+        apply Finset.card_le_one_iff.1 (Ai_singleton i) hj
+        exact mem_piFinset.mp hr i
+      simp only [Finset.sum_congr rfl this, Finset.sum_const, Ai_card i, one_nsmul]
+    simp only [Finset.sum_congr rfl this, Ai_card, card_piFinset, prod_const_one, one_nsmul,
+      Finset.sum_const]
+  -- Remains the interesting case where one of the `A i`, say `A i₀`, has cardinality at least 2.
+  -- We will split into two parts `B i₀` and `C i₀` of smaller cardinality, let `B i = C i = A i`
+  -- for `i ≠ i₀`, apply the inductive assumption to `B` and `C`, and add up the corresponding
+  -- parts to get the sum for `A`.
+  obtain ⟨i₀, hi₀⟩ : exists i, 1 < #(A i) := Ai_singleton
+  obtain ⟨j₁, j₂, _, hj₂, _⟩ : exists j₁ j₂, j₁ in A i₀ ∧ j₂ in A i₀ ∧ j₁ != j₂ :=
+    Finset.one_lt_card_iff.1 hi₀
+  let B := Function.update A i₀ (A i₀ \ {j₂})
+  let C := Function.update A i₀ {j₂}
+  have B_subset_A : forall i, B i subseteq A i := by
+    intro i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [B, Finset.sdiff_subset, update_self]
+    · simp only [B, hi, update_of_ne, Ne, not_false_iff, Finset.Subset.refl]
+  have C_subset_A : forall i, C i subseteq A i := by
+    intro i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [C, hj₂, Finset.singleton_subset_iff, update_self]
+    · simp only [C, hi, update_of_ne, Ne, not_false_iff, Finset.Subset.refl]
+  -- split the sum at `i₀` as the sum over `B i₀` plus the sum over `C i₀`, to use additivity.
+  have A_eq_BC :
+    (fun i => ∑ j in A i, g i j) =
+      Function.update (fun i => ∑ j in A i, g i j) i₀
+        ((∑ j in B i₀, g i₀ j) + ∑ j in C i₀, g i₀ j) := by
+    ext i
+    by_cases hi : i = i₀
+    · rw [hi, update_self]
+      have : A i₀ = B i₀ union C i₀ := by
+        simp only [B, C, Function.update_self, Finset.sdiff_union_self_eq_union]
+        symm
+        simp only [hj₂, Finset.singleton_subset_iff, Finset.union_eq_left]
+      rw [this]
+refine Finset.sum_union Finset.disjoint_right.2 fun j hj => ?_
+      have : j = j₂ := by
+        simpa [C] using hj
+      rw [this]
+      simp only [B, Finset.mem_sdiff, not_true, not_false_iff, Finset.mem_singleton,
+        update_self, and_false]
+    · simp [hi]
+  have Beq :
+    Function.update (fun i => ∑ j in A i, g i j) i₀ (∑ j in B i₀, g i₀ j) = fun i =>
+      ∑ j in B i, g i j := by
+    ext i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [update_self]
+    · simp only [B, hi, update_of_ne, Ne, not_false_iff]
+  have Ceq :
+    Function.update (fun i => ∑ j in A i, g i j) i₀ (∑ j in C i₀, g i₀ j) = fun i =>
+      ∑ j in C i, g i j := by
+    ext i
+    by_cases hi : i = i₀
+    · rw [hi]
+      simp only [update_self]
+    · simp only [C, hi, update_of_ne, Ne, not_false_iff]
+  -- Express the inductive assumption for `B`
+  have Brec : (f fun i => ∑ j in B i, g i j) = ∑ r in piFinset B, f fun i => g i (r i) := by
+    have : ∑ i, #(B i) < ∑ i, #(A i) := by
+      refine sum_lt_sum (fun i _ => card_le_card (B_subset_A i)) ⟨i₀, mem_univ _, ?_⟩
+      have : {j₂} subseteq A i₀ := by simp [hj₂]
+      simp only [B, Finset.card_sdiff_of_subset this, Function.update_self, Finset.card_singleton]
+      exact Nat.pred_lt (ne_of_gt (lt_trans Nat.zero_lt_one hi₀))
+    rw [h] at this
+    exact IH _ this B rfl
+  -- Express the inductive assumption for `C`
+  have Crec : (f fun i => ∑ j in C i, g i j) = ∑ r in piFinset C, f fun i => g i (r i) := by
+    have : (∑ i, #(C i)) < ∑ i, #(A i) :=
+      Finset.sum_lt_sum (fun i _ => Finset.card_le_card (C_subset_A i))
+        ⟨i₀, Finset.mem_univ _, by simp [C, hi₀]⟩
+    rw [h] at this
+    exact IH _ this C rfl
+  have D : Disjoint (piFinset B) (piFinset C) :=
+    haveI : Disjoint (B i₀) (C i₀) := by simp [B, C]
+    piFinset_disjoint_of_disjoint B C this
+  have pi_BC : piFinset A = piFinset B union piFinset C := by
+    apply Finset.Subset.antisymm
+    · intro r hr
+      by_cases hri₀ : r i₀ = j₂
+      · apply Finset.mem_union_right
+        refine mem_piFinset.2 fun i => ?_
+        by_cases hi : i = i₀
+        · have : r i₀ in C i₀ := by simp [C, hri₀]
+          rwa [hi]
+        · simp [C, hi, mem_piFinset.1 hr i]
+      · apply Finset.mem_union_left
+        refine mem_piFinset.2 fun i => ?_
+        by_cases hi : i = i₀
+        · have : r i₀ in B i₀ := by simp [B, hri₀, mem_piFinset.1 hr i₀]
+          rwa [hi]
+        · simp [B, hi, mem_piFinset.1 hr i]
+    · exact
+        Finset.union_subset (piFinset_subset _ _ fun i => B_subset_A i)
+          (piFinset_subset _ _ fun i => C_subset_A i)
+  rw [A_eq_BC]
+  simp only [MultilinearMap.map_update_add, Beq, Ceq, Brec, Crec, pi_BC]
+  rw [← Finset.sum_union D]
 
 Depends on / 依赖: Classical, Classical.decEq, Nat.strong_induction_on, generalizing, strong_induction_on
 -/
@@ -1660,7 +1958,7 @@ definition domDomCongr
   map_update_smul' v i a b := by
     let := σ.injective.decidableEq
     simp_rw [Function.update_apply_equiv_apply v]
-    rw [m.map_update
+    rw [m.map_update_smul]
 
 中文:
 定义 domDomCongr
@@ -1673,7 +1971,7 @@ definition domDomCongr
   map_update_smul' v i a b := by
     let := σ.injective.decidableEq
     simp_rw [Function.update_apply_equiv_apply v]
-    rw [m.map_update
+    rw [m.map_update_smul]
 -/
 def domDomCongr (σ : ι₁ ≃ ι₂) (m : MultilinearMap R (fun _ : ι₁ => M₂) M₃) :
     MultilinearMap R (fun _ : ι₂ => M₂) M₃ where
@@ -1858,7 +2156,9 @@ definition domDomRestrict
   map_update_smul' z i c a := by
     classical
     repeat (rw [domDomRestrict_aux])
-    simp only [MultilinearMap.map_u
+    simp only [MultilinearMap.map_update_smul]
+
+@[simp]
 
 中文:
 定义 domDomRestrict
@@ -1871,7 +2171,9 @@ definition domDomRestrict
   map_update_smul' z i c a := by
     classical
     repeat (rw [domDomRestrict_aux])
-    simp only [MultilinearMap.map_u
+    simp only [MultilinearMap.map_update_smul]
+
+@[simp]
 -/
 def domDomRestrict (f : MultilinearMap R M₁ M₂) (P : ι -> Prop) [DecidablePred P]
     (z : (i : {a : ι // ¬ P a}) -> M₁ i) :
@@ -2474,7 +2776,34 @@ definition domDomCongrLinearEquiv'
         intro x y
         simp only [comp_apply, piCongrLeft'_symm_update, f.map_update_add]
       map_update_smul' := fun m i c => by
-        let := σ.deci
+        let := σ.decidableEq
+        rw [← σ.apply_symm_apply i]
+        intro x
+        simp only [Function.comp, piCongrLeft'_symm_update, f.map_update_smul] }
+  invFun f :=
+    { toFun := f ∘ σ.piCongrLeft' M₁
+      map_update_add' := fun m i => by
+        let := σ.symm.decidableEq
+        rw [← σ.symm_apply_apply i]
+        intro x y
+        simp only [comp_apply, piCongrLeft'_update, f.map_update_add]
+      map_update_smul' := fun m i c => by
+        let := σ.symm.decidableEq
+        rw [← σ.symm_apply_apply i]
+        intro x
+        simp only [Function.comp, piCongrLeft'_update, f.map_update_smul] }
+  map_add' f₁ f₂ := by
+    ext
+    simp only [Function.comp, coe_mk, add_apply]
+  map_smul' c f := by
+    ext
+    simp only [Function.comp, coe_mk, smul_apply, RingHom.id_apply]
+  left_inv f := by
+    ext
+    simp only [coe_mk, comp_apply, Equiv.symm_apply_apply]
+  right_inv f := by
+    ext
+    simp only [coe_mk, comp_apply, Equiv.apply_symm_apply]
 
 中文:
 定义 domDomCongrLinearEquiv'
@@ -2486,7 +2815,34 @@ definition domDomCongrLinearEquiv'
         intro x y
         simp only [comp_apply, piCongrLeft'_symm_update, f.map_update_add]
       map_update_smul' := fun m i c => by
-        let := σ.deci
+        let := σ.decidableEq
+        rw [← σ.apply_symm_apply i]
+        intro x
+        simp only [Function.comp, piCongrLeft'_symm_update, f.map_update_smul] }
+  invFun f :=
+    { toFun := f ∘ σ.piCongrLeft' M₁
+      map_update_add' := fun m i => by
+        let := σ.symm.decidableEq
+        rw [← σ.symm_apply_apply i]
+        intro x y
+        simp only [comp_apply, piCongrLeft'_update, f.map_update_add]
+      map_update_smul' := fun m i c => by
+        let := σ.symm.decidableEq
+        rw [← σ.symm_apply_apply i]
+        intro x
+        simp only [Function.comp, piCongrLeft'_update, f.map_update_smul] }
+  map_add' f₁ f₂ := by
+    ext
+    simp only [Function.comp, coe_mk, add_apply]
+  map_smul' c f := by
+    ext
+    simp only [Function.comp, coe_mk, smul_apply, RingHom.id_apply]
+  left_inv f := by
+    ext
+    simp only [coe_mk, comp_apply, Equiv.symm_apply_apply]
+  right_inv f := by
+    ext
+    simp only [coe_mk, comp_apply, Equiv.apply_symm_apply]
 
 Depends on / 依赖: Function, Function.comp, _symm_update, apply_symm_apply, comp_apply, decidableEq, f.map_update_add, f.map_update_smul, invFun, map_update_add, map_update_smul, piCongrLeft, symm.decidableEq, symm_apply_apply
 -/
@@ -2701,7 +3057,7 @@ definition iteratedFDerivComponent
       map_update_add' := by classical simp [iteratedFDeriv_aux]
       map_update_smul' := by classical simp [iteratedFDeriv_aux] }
   map_update_add' := by intros; ext; simp
-  map_update_smul' := by intro
+  map_update_smul' := by intros; ext; simp
 
 中文:
 定义 iteratedFDerivComponent
@@ -2711,7 +3067,7 @@ definition iteratedFDerivComponent
       map_update_add' := by classical simp [iteratedFDeriv_aux]
       map_update_smul' := by classical simp [iteratedFDeriv_aux] }
   map_update_add' := by intros; ext; simp
-  map_update_smul' := by intro
+  map_update_smul' := by intros; ext; simp
 -/
 noncomputable def iteratedFDerivComponent {α : Type*}
     (f : MultilinearMap R M₁ M₂) {s : Set ι} (e : α ≃ s) [DecidablePred (· in s)] :
@@ -2812,7 +3168,18 @@ definition compLinearMapMultilinear
     change (g fun j => update f i (f₁ + f₂) j <| x j) =
         (g fun j => update f i f₁ j <| x j) + g fun j => update f i f₂ j (x j)
     let c : Π (i : ι), (M₁ i ->ₗ[R] M₁' i) -> M₁' i := fun i f => f (x i)
-   
+    convert! g.map_update_add (fun j => f j (x j)) i (f₁ (x i)) (f₂ (x i)) with j j j
+    · exact Function.apply_update c f i (f₁ + f₂) j
+    · exact Function.apply_update c f i f₁ j
+    · exact Function.apply_update c f i f₂ j
+  map_update_smul' := by
+    intro _ f i a f₀
+    ext g x
+    change (g fun j => update f i (a • f₀) j <| x j) = a • g fun j => update f i f₀ j (x j)
+    let c : Π (i : ι), (M₁ i ->ₗ[R] M₁' i) -> M₁' i := fun i f => f (x i)
+    convert! g.map_update_smul (fun j => f j (x j)) i a (f₀ (x i)) with j j j
+    · exact Function.apply_update c f i (a • f₀) j
+    · exact Function.apply_update c f i f₀ j
 
 中文:
 定义 compLinearMapMultilinear
@@ -2824,7 +3191,18 @@ definition compLinearMapMultilinear
     change (g fun j => update f i (f₁ + f₂) j <| x j) =
         (g fun j => update f i f₁ j <| x j) + g fun j => update f i f₂ j (x j)
     let c : Π (i : ι), (M₁ i ->ₗ[R] M₁' i) -> M₁' i := fun i f => f (x i)
-   
+    convert! g.map_update_add (fun j => f j (x j)) i (f₁ (x i)) (f₂ (x i)) with j j j
+    · exact Function.apply_update c f i (f₁ + f₂) j
+    · exact Function.apply_update c f i f₁ j
+    · exact Function.apply_update c f i f₂ j
+  map_update_smul' := by
+    intro _ f i a f₀
+    ext g x
+    change (g fun j => update f i (a • f₀) j <| x j) = a • g fun j => update f i f₀ j (x j)
+    let c : Π (i : ι), (M₁ i ->ₗ[R] M₁' i) -> M₁' i := fun i f => f (x i)
+    convert! g.map_update_smul (fun j => f j (x j)) i a (f₀ (x i)) with j j j
+    · exact Function.apply_update c f i (a • f₀) j
+    · exact Function.apply_update c f i f₀ j
 -/
 @[simps] def compLinearMapMultilinear :
     @MultilinearMap R ι (fun i => M₁ i ->ₗ[R] M₁' i)
@@ -2893,7 +3271,8 @@ theorem map_piecewise_smul
     · rw [h]
       simp [j_notMem_s]
     · simp [h]
-  rw [s.piecewise_inse
+  rw [s.piecewise_insert]; rw [f.map_update_smul]; rw [A]; rw [Hrec]
+  simp [j_notMem_s, mul_smul]
 
 中文:
 定理 map_piecewise_smul
@@ -2909,7 +3288,8 @@ theorem map_piecewise_smul
     · rw [h]
       simp [j_notMem_s]
     · simp [h]
-  rw [s.piecewise_inse
+  rw [s.piecewise_insert]; rw [f.map_update_smul]; rw [A]; rw [Hrec]
+  simp [j_notMem_s, mul_smul]
 
 Depends on / 依赖: Function, Function.update, f.map_update_smul, induction_on, j_notMem_s, map_update_smul, mul_smul, piecewise, piecewise_insert, s.induction_on, s.piecewise, s.piecewise_insert, update
 -/
@@ -3528,7 +3908,16 @@ lemma map_sub_map_piecewise
   rw [Finset.piecewise_insert]; rw [map_update]; rw [← sub_add]; rw [ih]; rw [add_comm]; rw [sum_insert (lt_irrefl _ <| hk k ·)]
   simp_rw [s.mem_insert]
   congr 1
-  
+  · congr; ext i; split_ifs with h₁ h₂
+    · rw [update_of_ne, Finset.piecewise_eq_of_notMem]
+      · exact fun h => (hk i h).not_gt (h₁ <| .inr h)
+      · exact fun h => (h₁ <| .inl h).ne h
+    · cases h₂
+      rw [update_self]; rw [s.piecewise_eq_of_notMem _ _ (lt_irrefl _ <| hk k ·)]
+    · push Not at h₁
+      rw [update_of_ne (Ne.symm h₂)]; rw [s.piecewise_eq_of_mem _ _ (h₁.1.resolve_left <| Ne.symm h₂)]
+  · apply sum_congr rfl
+    grind
 
 中文:
 引理 map_sub_map_piecewise
@@ -3540,7 +3929,16 @@ lemma map_sub_map_piecewise
   rw [Finset.piecewise_insert]; rw [map_update]; rw [← sub_add]; rw [ih]; rw [add_comm]; rw [sum_insert (lt_irrefl _ <| hk k ·)]
   simp_rw [s.mem_insert]
   congr 1
-  
+  · congr; ext i; split_ifs with h₁ h₂
+    · rw [update_of_ne, Finset.piecewise_eq_of_notMem]
+      · exact fun h => (hk i h).not_gt (h₁ <| .inr h)
+      · exact fun h => (h₁ <| .inl h).ne h
+    · cases h₂
+      rw [update_self]; rw [s.piecewise_eq_of_notMem _ _ (lt_irrefl _ <| hk k ·)]
+    · push Not at h₁
+      rw [update_of_ne (Ne.symm h₂)]; rw [s.piecewise_eq_of_mem _ _ (h₁.1.resolve_left <| Ne.symm h₂)]
+  · apply sum_congr rfl
+    grind
 
 Depends on / 依赖: Finset, Finset.piecewise_empty, Finset.piecewise_eq_of_notMem, Finset.piecewise_insert, add_comm, induction_on_min, insert, lt_irrefl, map_update, mem_insert, not_gt, piecew, piecewise_empty, piecewise_eq_of_notMem, piecewise_insert, s.mem_insert, s.piecew, simp_rw, split_ifs, sub_add
 -/
@@ -3576,7 +3974,11 @@ refine Finset.sum_congr rfl fun i hi => congr_arg f funext fun j => ?_
   by_cases hjs : j in s
   · rw [if_pos hjs]; by_cases hji : j < i
     · rw [if_pos fun _ => hji, if_pos hji, s.piecewise_eq_of_mem _ _ hjs]
-    rw [if_neg (Classi
+    rw [if_neg (Classical.not_imp.mpr ⟨hjs]; rw [hji⟩)]; rw [if_neg hji]
+    obtain rfl | hij := eq_or_ne i j
+    · rw [if_pos rfl, if_pos rfl, s.piecewise_eq_of_mem _ _ hi]
+    · rw [if_neg hij, if_neg hij.symm]
+  · rw [if_neg hjs, if_pos fun h => (hjs h).elim, s.piecewise_eq_of_notMem _ _ hjs]
 
 中文:
 引理 map_piecewise_sub_map_piecewise
@@ -3587,7 +3989,11 @@ refine Finset.sum_congr rfl fun i hi => congr_arg f funext fun j => ?_
   by_cases hjs : j in s
   · rw [if_pos hjs]; by_cases hji : j < i
     · rw [if_pos fun _ => hji, if_pos hji, s.piecewise_eq_of_mem _ _ hjs]
-    rw [if_neg (Classi
+    rw [if_neg (Classical.not_imp.mpr ⟨hjs]; rw [hji⟩)]; rw [if_neg hji]
+    obtain rfl | hij := eq_or_ne i j
+    · rw [if_pos rfl, if_pos rfl, s.piecewise_eq_of_mem _ _ hi]
+    · rw [if_neg hij, if_neg hij.symm]
+  · rw [if_neg hjs, if_pos fun h => (hjs h).elim, s.piecewise_eq_of_notMem _ _ hjs]
 
 Depends on / 依赖: Classical, Classical.not_imp.mpr, Finset, Finset.sum_congr, congr_arg, eq_or_ne, hij.symm, if_neg, if_pos, map_sub_map_piecewise, not_imp, piecewise_eq_of_mem, piecewise_idem_right, s.piecewise_eq_of_mem, s.piecewise_idem_right, sInf_caratheodory, sum_congr, toMeasure, toOuterMeasure
 -/
@@ -3616,7 +4022,8 @@ lemma map_add_eq_map_add_linearDeriv_add
   rw [add_comm]; rw [map_add_univ]; rw [← Finset.powerset_univ]; rw [← sum_filter_add_sum_filter_not _ (2 <= #·)]
   simp_rw [not_le, Nat.lt_succ_iff, le_iff_lt_or_eq (b := 1), Nat.lt_one_iff, filter_or,
     ← powersetCard_eq_filter, sum_union (univ.pairwise_disjoint_powersetCard zero_ne_one),
-   
+    powersetCard_zero, powersetCard_one, sum_singleton, Finset.piecewise_empty, sum_map,
+    Function.Embedding.coeFn_mk, Finset.piecewise_singleton, linearDeriv_apply, add_comm]
 
 中文:
 引理 map_add_eq_map_add_linearDeriv_add
@@ -3625,7 +4032,8 @@ lemma map_add_eq_map_add_linearDeriv_add
   rw [add_comm]; rw [map_add_univ]; rw [← Finset.powerset_univ]; rw [← sum_filter_add_sum_filter_not _ (2 <= #·)]
   simp_rw [not_le, Nat.lt_succ_iff, le_iff_lt_or_eq (b := 1), Nat.lt_one_iff, filter_or,
     ← powersetCard_eq_filter, sum_union (univ.pairwise_disjoint_powersetCard zero_ne_one),
-   
+    powersetCard_zero, powersetCard_one, sum_singleton, Finset.piecewise_empty, sum_map,
+    Function.Embedding.coeFn_mk, Finset.piecewise_singleton, linearDeriv_apply, add_comm]
 
 Depends on / 依赖: Embedding, Finset, Finset.piecewise_empty, Finset.piecewise_singleton, Finset.powerset_univ, Function, Function.Embedding.coeFn_mk, Nat.lt_one_iff, Nat.lt_succ_iff, add_comm, coeFn_mk, filter_or, le_iff_lt_or_eq, linearDeriv_apply, lt_one_iff, lt_succ_iff, map_add_univ, not_le, pairwise_disjoint_powersetCard, piecewise_empty
 -/
@@ -3733,7 +4141,9 @@ definition map
     refine ⟨update x i (c • x i), fun j => if hij : j = i then ?_ else ?_, hf ▸ ?_⟩
     · rw [hij, update_self]
       exact (p i).smul_mem _ (hx i)
-    · rw [update_of_
+    · rw [update_of_ne hij]
+      exact hx j
+    · rw [f.map_update_smul, update_eq_self]
 
 中文:
 定义 map
@@ -3745,7 +4155,9 @@ definition map
     refine ⟨update x i (c • x i), fun j => if hij : j = i then ?_ else ?_, hf ▸ ?_⟩
     · rw [hij, update_self]
       exact (p i).smul_mem _ (hx i)
-    · rw [update_of_
+    · rw [update_of_ne hij]
+      exact hx j
+    · rw [f.map_update_smul, update_eq_self]
 -/
 def map [Nonempty ι] (f : MultilinearMap R M₁ M₂) (p : forall i, Submodule R (M₁ i)) :
     SubMulAction R M₂ where

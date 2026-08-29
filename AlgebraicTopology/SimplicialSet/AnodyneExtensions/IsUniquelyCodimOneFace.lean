@@ -66,7 +66,9 @@ lemma iff
     exact ⟨i, h₁, fun j hj => SimplexCategory.δ_injective (h₂ _ ⟨inferInstance, hj⟩)⟩
   · rintro ⟨i, h₁, h₂⟩
     refine ⟨rfl, SimplexCategory.δ i, ⟨inferInstance, h₁⟩, fun f ⟨h₃, h₄⟩ => ?_⟩
-    ob
+    obtain ⟨j, rfl⟩ := SimplexCategory.eq_δ_of_mono f
+    obtain rfl : j = i := h₂ _ h₄
+    rfl
 
 中文:
 引理 iff
@@ -78,7 +80,9 @@ lemma iff
     exact ⟨i, h₁, fun j hj => SimplexCategory.δ_injective (h₂ _ ⟨inferInstance, hj⟩)⟩
   · rintro ⟨i, h₁, h₂⟩
     refine ⟨rfl, SimplexCategory.δ i, ⟨inferInstance, h₁⟩, fun f ⟨h₃, h₄⟩ => ?_⟩
-    ob
+    obtain ⟨j, rfl⟩ := SimplexCategory.eq_δ_of_mono f
+    obtain rfl : j = i := h₂ _ h₄
+    rfl
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.eq_
 -/
@@ -296,7 +300,7 @@ lemma op
   simp only [opEquiv_symm_apply, iff]
   refine ⟨(hxy.index rfl).rev, by simpa using hxy.δ_index rfl, fun i hi => ?_⟩
   obtain ⟨i, rfl⟩ := i.rev_surjective
-  simpa [← hxy.δ_eq_i
+  simpa [← hxy.δ_eq_iff rfl] using hi
 
 中文:
 引理 op
@@ -308,7 +312,7 @@ lemma op
   simp only [opEquiv_symm_apply, iff]
   refine ⟨(hxy.index rfl).rev, by simpa using hxy.δ_index rfl, fun i hi => ?_⟩
   obtain ⟨i, rfl⟩ := i.rev_surjective
-  simpa [← hxy.δ_eq_i
+  simpa [← hxy.δ_eq_iff rfl] using hi
 
 Depends on / 依赖: dim_eq, hxy.dim_eq, hxy.index, i.rev_surjective, mk_surjective, opEquiv_symm_apply, rev_surjective, x.mk_surjective, y.mk_surjective
 -/

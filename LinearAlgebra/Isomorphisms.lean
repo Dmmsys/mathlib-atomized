@@ -43,7 +43,8 @@ definition quotKerEquivRange
   body: -- TODO: We should fix this definition so that `fₗ.quotKerEquivRange.toAddEquiv` is definitionally
   -- equal to `QuotientAddGroup.quotientKerEquivRange f.toAddMonoidHom`.
   (LinearEquiv.ofInjective ((LinearMap.ker f).liftQ f <| le_rfl) <|
-ker_eq_bot.mp Submodule.ker_liftQ_eq_bot _ _ _ (le_refl (Lin
+ker_eq_bot.mp Submodule.ker_liftQ_eq_bot _ _ _ (le_refl (LinearMap.ker f))).trans
+    (LinearEquiv.ofEq _ _ <| Submodule.range_liftQ _ _ _)
 
 中文:
 定义 quotKerEquivRange
@@ -51,7 +52,8 @@ ker_eq_bot.mp Submodule.ker_liftQ_eq_bot _ _ _ (le_refl (Lin
   定义体: -- TODO: We should fix this definition so that `fₗ.quotKerEquivRange.toAddEquiv` is definitionally
   -- equal to `QuotientAddGroup.quotientKerEquivRange f.toAddMonoidHom`.
   (LinearEquiv.ofInjective ((LinearMap.ker f).liftQ f <| le_rfl) <|
-ker_eq_bot.mp Submodule.ker_liftQ_eq_bot _ _ _ (le_refl (Lin
+ker_eq_bot.mp Submodule.ker_liftQ_eq_bot _ _ _ (le_refl (LinearMap.ker f))).trans
+    (LinearEquiv.ofEq _ _ <| Submodule.range_liftQ _ _ _)
 -/
 noncomputable def quotKerEquivRange : (M ⧸ LinearMap.ker f) ≃ₗ[R] LinearMap.range f :=
   -- TODO: We should fix this definition so that `fₗ.quotKerEquivRange.toAddEquiv` is definitionally
@@ -275,7 +277,7 @@ theorem quotientInfEquivSupQuotient_surjective
   rw [← range_eq_top]; rw [quotientInfToSupQuotient]; rw [range_liftQ]; rw [eq_top_iff']
   rintro ⟨x, hx⟩; rcases mem_sup.1 hx with ⟨y, hy, z, hz, rfl⟩
   use ⟨y, hy⟩; apply (Submodule.Quotient.eq _).2
-  simp only [mem_comap, map_sub, coe_subtype, coe_inclusion, sub_add_cancel_left, neg_mem_iff, h
+  simp only [mem_comap, map_sub, coe_subtype, coe_inclusion, sub_add_cancel_left, neg_mem_iff, hz]
 
 中文:
 定理 quotientInfEquivSupQuotient_surjective
@@ -284,7 +286,7 @@ theorem quotientInfEquivSupQuotient_surjective
   rw [← range_eq_top]; rw [quotientInfToSupQuotient]; rw [range_liftQ]; rw [eq_top_iff']
   rintro ⟨x, hx⟩; rcases mem_sup.1 hx with ⟨y, hy, z, hz, rfl⟩
   use ⟨y, hy⟩; apply (Submodule.Quotient.eq _).2
-  simp only [mem_comap, map_sub, coe_subtype, coe_inclusion, sub_add_cancel_left, neg_mem_iff, h
+  simp only [mem_comap, map_sub, coe_subtype, coe_inclusion, sub_add_cancel_left, neg_mem_iff, hz]
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.eq, coe_inclusion, coe_subtype, eq_top_iff, map_sub, mem_comap, mem_sup, neg_mem_iff, quotientInfToSupQuotient, range_eq_top, range_liftQ, sub_add_cancel_left
 -/
@@ -471,7 +473,8 @@ definition quotientQuotientEquivQuotient
     left_inv := fun x => Submodule.Quotient.induction_on _
      x fun x => Submodule.Quotient.induction_on _ x fun x =>
       by simp
-    right_inv := f
+    right_inv := fun x => Submodule.Quotient.induction_on _ x
+      fun x => by simp }
 
 中文:
 定义 quotientQuotientEquivQuotient
@@ -482,7 +485,8 @@ definition quotientQuotientEquivQuotient
     left_inv := fun x => Submodule.Quotient.induction_on _
      x fun x => Submodule.Quotient.induction_on _ x fun x =>
       by simp
-    right_inv := f
+    right_inv := fun x => Submodule.Quotient.induction_on _ x
+      fun x => by simp }
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.induction_on, induction_on, invFun, le_comap_map, left_inv, quotientQuotientEquivQuotientAux, right_inv
 -/

@@ -117,14 +117,14 @@ theorem orthogonalProjection_apply_mem
   statement: (s : AffineSubspace 𝕜 P) [Nonempty s]
   proof: by
   rw [orthogonalProjection_apply]; rw [coe_vadd]; rw [vadd_eq_vadd_iff_sub_eq_vsub]; rw [← Submodule.coe_sub]; rw [← map_sub]; rw [vsub_sub_vsub_cancel_left]; rw [Submodule.coe_orthogonalProjectionOnto_apply]; rw [Submodule.starProjection_eq_self_iff]
-  exact s.vsub_mem_direction (SetLike.coe_mem
+  exact s.vsub_mem_direction (SetLike.coe_mem _) hx
 
 中文:
 定理 orthogonalProjection_apply_mem
   结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [orthogonalProjection_apply]; rw [coe_vadd]; rw [vadd_eq_vadd_iff_sub_eq_vsub]; rw [← Submodule.coe_sub]; rw [← map_sub]; rw [vsub_sub_vsub_cancel_left]; rw [Submodule.coe_orthogonalProjectionOnto_apply]; rw [Submodule.starProjection_eq_self_iff]
-  exact s.vsub_mem_direction (SetLike.coe_mem
+  exact s.vsub_mem_direction (SetLike.coe_mem _) hx
 
 Depends on / 依赖: SetLike, SetLike.coe_mem, Submodule, Submodule.coe_orthogonalProjectionOnto_apply, Submodule.coe_sub, Submodule.starProjection_eq_self_iff, coe_mem, coe_orthogonalProjectionOnto_apply, coe_sub, coe_vadd, map_sub, orthogonalProjection_apply, s.vsub_mem_direction, starProjection_eq_self_iff, vadd_eq_vadd_iff_sub_eq_vsub, vsub_mem_direction, vsub_sub_vsub_cancel_left
 -/
@@ -266,7 +266,7 @@ theorem inter_eq_singleton_orthogonalProjection
       rw [direction_mk' p s.directionᗮ]
       exact s.direction.isCompl_orthogonal)
   rwa [Set.eq_singleton_iff_nonempty_unique_mem.1 hq |>.2 _
-    ⟨orthogonalProjecti
+    ⟨orthogonalProjection_mem _, orthogonalProjection_mem_orthogonal _ _⟩]
 
 中文:
 定理 inter_eq_singleton_orthogonalProjection
@@ -278,7 +278,7 @@ theorem inter_eq_singleton_orthogonalProjection
       rw [direction_mk' p s.directionᗮ]
       exact s.direction.isCompl_orthogonal)
   rwa [Set.eq_singleton_iff_nonempty_unique_mem.1 hq |>.2 _
-    ⟨orthogonalProjecti
+    ⟨orthogonalProjection_mem _, orthogonalProjection_mem_orthogonal _ _⟩]
 
 Depends on / 依赖: Set.eq_singleton_iff_nonempty_unique_mem, _nonempty, direction, direction_mk, eq_singleton_iff_nonempty_unique_mem, inter_eq_singleton_of_nonempty_of_isCompl, isCompl_orthogonal, nonempty_subtype, nonempty_subtype.mp, orthogonalProjection_mem, orthogonalProjection_mem_orthogonal, s.direction, s.direction.isCompl_orthogonal
 -/
@@ -593,7 +593,11 @@ lemma coe_orthogonalProjection_eq_iff_mem
   · rintro ⟨hqs, hpq⟩
     have hq : q in mk' p s.directionᗮ := by
       rwa [mem_mk', ← neg_mem_iff, neg_vsub_eq_vsub_rev]
-    suffices q in ({(orthogonalProjection s p : P)
+    suffices q in ({(orthogonalProjection s p : P)} : Set P) by
+      simpa [eq_comm] using this
+    rw [← inter_eq_singleton_orthogonalProjection]
+    simp only [Set.mem_inter_iff, SetLike.mem_coe]
+    exact ⟨hqs, hq⟩
 
 中文:
 引理 coe_orthogonalProjection_eq_iff_mem
@@ -605,7 +609,11 @@ lemma coe_orthogonalProjection_eq_iff_mem
   · rintro ⟨hqs, hpq⟩
     have hq : q in mk' p s.directionᗮ := by
       rwa [mem_mk', ← neg_mem_iff, neg_vsub_eq_vsub_rev]
-    suffices q in ({(orthogonalProjection s p : P)
+    suffices q in ({(orthogonalProjection s p : P)} : Set P) by
+      simpa [eq_comm] using this
+    rw [← inter_eq_singleton_orthogonalProjection]
+    simp only [Set.mem_inter_iff, SetLike.mem_coe]
+    exact ⟨hqs, hq⟩
 
 Depends on / 依赖: Set.mem_inter_iff, SetLike, SetLike.mem_coe, eq_comm, inter_eq_singleton_orthogonalProjection, mem_coe, mem_inter_iff, mem_mk, neg_mem_iff, neg_vsub_eq_vsub_rev, orthogonalProjection, orthogonalProjection_mem, s.direction, vsub_orthogonalProjection_mem_direction_orthogonal
 -/
@@ -684,7 +692,8 @@ lemma orthogonalProjection_sup_of_orthogonalProjection_eq
   rw [coe_orthogonalProjection_eq_iff_mem]
   refine ⟨SetLike.le_def.1 le_sup_left (orthogonalProjection_mem _), ?_⟩
   rw [direction_sup_eq_sup_direction (orthogonalProjection_mem p) (h ▸ orthogonalProjection_mem p)]; rw [← Submodule.inf_orthogonal]
-  exact ⟨vsub_orthogonalProjection_mem_direction
+  exact ⟨vsub_orthogonalProjection_mem_direction_orthogonal _ _,
+    h ▸ vsub_orthogonalProjection_mem_direction_orthogonal _ _⟩
 
 中文:
 引理 orthogonalProjection_sup_of_orthogonalProjection_eq
@@ -693,7 +702,8 @@ lemma orthogonalProjection_sup_of_orthogonalProjection_eq
   rw [coe_orthogonalProjection_eq_iff_mem]
   refine ⟨SetLike.le_def.1 le_sup_left (orthogonalProjection_mem _), ?_⟩
   rw [direction_sup_eq_sup_direction (orthogonalProjection_mem p) (h ▸ orthogonalProjection_mem p)]; rw [← Submodule.inf_orthogonal]
-  exact ⟨vsub_orthogonalProjection_mem_direction
+  exact ⟨vsub_orthogonalProjection_mem_direction_orthogonal _ _,
+    h ▸ vsub_orthogonalProjection_mem_direction_orthogonal _ _⟩
 
 Depends on / 依赖: SetLike, SetLike.le_def, Submodule, Submodule.inf_orthogonal, coe_orthogonalProjection_eq_iff_mem, direction_sup_eq_sup_direction, inf_orthogonal, le_def, le_sup_left, orthogonalProjection_mem, vsub_orthogonalProjection_mem_direction_orthogonal
 -/
@@ -792,13 +802,15 @@ English:
 theorem dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq
   proof: by
   rw [dist_comm p₂ _]; rw [dist_eq_norm_vsub V p₁ _]; rw [dist_eq_norm_vsub V p₁ _]; rw [dist_eq_norm_vsub V _ p₂]; rw [← vsub_add_vsub_cancel p₁ (orthogonalProjection s p₂) p₂]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (𝕜 := 𝕜)]
-  exact Submodule.inner_right_of_mem_orthogonal (vsu
+  exact Submodule.inner_right_of_mem_orthogonal (vsub_orthogonalProjection_mem_direction p₂ hp₁)
+    (orthogonalProjection_vsub_mem_direction_orthogonal s p₂)
 
 中文:
 定理 dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq
   证明: by
   rw [dist_comm p₂ _]; rw [dist_eq_norm_vsub V p₁ _]; rw [dist_eq_norm_vsub V p₁ _]; rw [dist_eq_norm_vsub V _ p₂]; rw [← vsub_add_vsub_cancel p₁ (orthogonalProjection s p₂) p₂]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (𝕜 := 𝕜)]
-  exact Submodule.inner_right_of_mem_orthogonal (vsu
+  exact Submodule.inner_right_of_mem_orthogonal (vsub_orthogonalProjection_mem_direction p₂ hp₁)
+    (orthogonalProjection_vsub_mem_direction_orthogonal s p₂)
 
 Depends on / 依赖: Submodule, Submodule.inner_right_of_mem_orthogonal, dist_comm, dist_eq_norm_vsub, inner_right_of_mem_orthogonal, norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero, orthogonalProjection, orthogonalProjection_vsub_mem_direction_orthogonal, vsub_add_vsub_cancel, vsub_orthogonalProjection_mem_direction
 -/
@@ -824,7 +836,10 @@ lemma dist_orthogonalProjection_eq_dist_iff_eq_of_mem
   constructor
   · intro h
     rwa [← sq_eq_sq₀ dist_nonneg dist_nonneg, pow_two, pow_two, dist_comm _ p₂,
-      dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orth
+      dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq _ hp₂,
+      right_eq_add, mul_eq_zero, dist_eq_zero, or_self, eq_comm] at h
+  · intro h
+    nth_rw 4 [← h]
 
 中文:
 引理 dist_orthogonalProjection_eq_dist_iff_eq_of_mem
@@ -835,7 +850,10 @@ lemma dist_orthogonalProjection_eq_dist_iff_eq_of_mem
   constructor
   · intro h
     rwa [← sq_eq_sq₀ dist_nonneg dist_nonneg, pow_two, pow_two, dist_comm _ p₂,
-      dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orth
+      dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq _ hp₂,
+      right_eq_add, mul_eq_zero, dist_eq_zero, or_self, eq_comm] at h
+  · intro h
+    nth_rw 4 [← h]
 -/
 lemma dist_orthogonalProjection_eq_dist_iff_eq_of_mem {s : AffineSubspace 𝕜 P}
     [s.direction.HasOrthogonalProjection] {p₁ p₂ : P} (hp₂ : p₂ in s) :
@@ -862,7 +880,8 @@ lemma dist_orthogonalProjection_eq_infDist
   refine le_ciInf fun x => le_of_sq_le_sq ?_ dist_nonneg
   rw [dist_comm _ (x : P)]
   simp_rw [pow_two,
-    dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq p
+    dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq p x.property]
+  simp [mul_self_nonneg]
 
 中文:
 引理 dist_orthogonalProjection_eq_infDist
@@ -873,7 +892,8 @@ lemma dist_orthogonalProjection_eq_infDist
   refine le_ciInf fun x => le_of_sq_le_sq ?_ dist_nonneg
   rw [dist_comm _ (x : P)]
   simp_rw [pow_two,
-    dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq p
+    dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq p x.property]
+  simp [mul_self_nonneg]
 
 Depends on / 依赖: Metric, Metric.infDist_eq_iInf, Metric.infDist_le_dist_of_mem, dist_comm, dist_nonneg, dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq, infDist_eq_iInf, infDist_le_dist_of_mem, le_antisymm, le_ciInf, le_of_sq_le_sq, mul_self_nonneg, orthogonalProjection_mem, pow_two, property, simp_rw, x.property
 -/
@@ -923,7 +943,13 @@ theorem dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd
     dist (r₁ • v +ᵥ p₁) (r₂ • v +ᵥ p₂) * dist (r₁ • v +ᵥ p₁) (r₂ • v +ᵥ p₂) =
         ‖p₁ -ᵥ p₂ + (r₁ - r₂) • v‖ * ‖p₁ -ᵥ p₂ + (r₁ - r₂) • v‖ := by
       rw [dist_eq_norm_vsub V (r₁ • v +ᵥ p₁)]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]; rw [sub_smul]; rw [add_comm]; rw [add_sub_assoc]
- 
+    _ = ‖p₁ -ᵥ p₂‖ * ‖p₁ -ᵥ p₂‖ + ‖(r₁ - r₂) • v‖ * ‖(r₁ - r₂) • v‖ :=
+      norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _
+        (Submodule.inner_right_of_mem_orthogonal (vsub_mem_direction hp₁ hp₂)
+          (Submodule.smul_mem _ _ hv))
+    _ = dist p₁ p₂ * dist p₁ p₂ + ‖r₁ - r₂‖ * ‖r₁ - r₂‖ * (‖v‖ * ‖v‖) := by
+      rw [norm_smul]; rw [dist_eq_norm_vsub V p₁]
+      ring
 
 中文:
 定理 dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd
@@ -932,7 +958,13 @@ theorem dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd
     dist (r₁ • v +ᵥ p₁) (r₂ • v +ᵥ p₂) * dist (r₁ • v +ᵥ p₁) (r₂ • v +ᵥ p₂) =
         ‖p₁ -ᵥ p₂ + (r₁ - r₂) • v‖ * ‖p₁ -ᵥ p₂ + (r₁ - r₂) • v‖ := by
       rw [dist_eq_norm_vsub V (r₁ • v +ᵥ p₁)]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]; rw [sub_smul]; rw [add_comm]; rw [add_sub_assoc]
- 
+    _ = ‖p₁ -ᵥ p₂‖ * ‖p₁ -ᵥ p₂‖ + ‖(r₁ - r₂) • v‖ * ‖(r₁ - r₂) • v‖ :=
+      norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _
+        (Submodule.inner_right_of_mem_orthogonal (vsub_mem_direction hp₁ hp₂)
+          (Submodule.smul_mem _ _ hv))
+    _ = dist p₁ p₂ * dist p₁ p₂ + ‖r₁ - r₂‖ * ‖r₁ - r₂‖ * (‖v‖ * ‖v‖) := by
+      rw [norm_smul]; rw [dist_eq_norm_vsub V p₁]
+      ring
 
 Depends on / 依赖: Submodule, Submodule.inner_right_of_mem_orthogonal, Submodule.smul_mem, add_comm, add_sub_assoc, dist_eq_norm_vsub, inner_right_of_mem_orthogonal, norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero, smul_mem, sub_smul, vadd_vsub_assoc, vsub_mem_direction, vsub_vadd_eq_vsub_sub
 -/
@@ -1122,7 +1154,7 @@ theorem reflection_apply'
   rw [reflection_apply]; rw [orthogonalProjection_apply']; rw [Submodule.coe_orthogonalProjectionOnto_apply]
   set x : P := ↑(Classical.arbitrary s)
   set v : V := s.direction.starProjection (p -ᵥ x)
-  rw [Submodule.reflection_apply]; rw [two_smul]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev];
+  rw [Submodule.reflection_apply]; rw [two_smul]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev]; rw [add_assoc]; rw [add_comm v]; rw [add_vadd]; rw [vadd_vsub_assoc]
 
 中文:
 定理 reflection_apply'
@@ -1131,7 +1163,7 @@ theorem reflection_apply'
   rw [reflection_apply]; rw [orthogonalProjection_apply']; rw [Submodule.coe_orthogonalProjectionOnto_apply]
   set x : P := ↑(Classical.arbitrary s)
   set v : V := s.direction.starProjection (p -ᵥ x)
-  rw [Submodule.reflection_apply]; rw [two_smul]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev];
+  rw [Submodule.reflection_apply]; rw [two_smul]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev]; rw [add_assoc]; rw [add_comm v]; rw [add_vadd]; rw [vadd_vsub_assoc]
 
 Depends on / 依赖: Classical, Classical.arbitrary, Submodule, Submodule.coe_orthogonalProjectionOnto_apply, Submodule.reflection_apply, add_assoc, add_comm, add_vadd, arbitrary, coe_orthogonalProjectionOnto_apply, direction, neg_vsub_eq_vsub_rev, orthogonalProjection_apply, reflection_apply, s.direction.starProjection, starProjection, sub_eq_add_neg, two_smul, vadd_vsub_assoc
 -/
@@ -1272,7 +1304,10 @@ theorem reflection_eq_iff_orthogonalProjection_eq
   constructor
   · intro h
     rw [← @vsub_eq_zero_iff_eq V]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]; rw [add_comm]; rw [add_sub_assoc]; rw [vsub_sub_vsub_cancel_right]; rw [←
-      two_smul 𝕜 ((orthogonalProjection s₁ p : P) -ᵥ orthogonal
+      two_smul 𝕜 ((orthogonalProjection s₁ p : P) -ᵥ orthogonalProjection s₂ p)]; rw [smul_eq_zero] at h
+    simpa using h
+  · intro h
+    rw [h]
 
 中文:
 定理 reflection_eq_iff_orthogonalProjection_eq
@@ -1282,7 +1317,10 @@ theorem reflection_eq_iff_orthogonalProjection_eq
   constructor
   · intro h
     rw [← @vsub_eq_zero_iff_eq V]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]; rw [add_comm]; rw [add_sub_assoc]; rw [vsub_sub_vsub_cancel_right]; rw [←
-      two_smul 𝕜 ((orthogonalProjection s₁ p : P) -ᵥ orthogonal
+      two_smul 𝕜 ((orthogonalProjection s₁ p : P) -ᵥ orthogonalProjection s₂ p)]; rw [smul_eq_zero] at h
+    simpa using h
+  · intro h
+    rw [h]
 
 Depends on / 依赖: add_comm, add_sub_assoc, orthogonalProjection, reflection_apply, smul_eq_zero, two_smul, vadd_vsub_assoc, vsub_eq_zero_iff_eq, vsub_sub_vsub_cancel_right, vsub_vadd_eq_vsub_sub
 -/
@@ -1441,7 +1479,12 @@ lemma orthogonalProjection_map
   rw [coe_orthogonalProjection_eq_iff_mem]
   simp only [mem_map, AffineIsometry.coe_toAffineMap, AffineIsometry.map_eq_iff, exists_eq_right,
     SetLike.coe_mem, map_direction, AffineIsometry.linear_eq_linearIsometry, true_and]
-  rw [← AffineIsometry.coe_toAffineMap]; rw [← AffineMap.linearMap_vs
+  rw [← AffineIsometry.coe_toAffineMap]; rw [← AffineMap.linearMap_vsub]; rw [Submodule.mem_orthogonal]
+  intro u hu
+  rw [Submodule.mem_map] at hu
+  obtain ⟨v, hv, rfl⟩ := hu
+  rw [AffineIsometry.linear_eq_linearIsometry]; rw [LinearIsometry.coe_toLinearMap]; rw [LinearIsometry.inner_map_map]; rw [Submodule.inner_right_of_mem_orthogonal hv
+      (vsub_orthogonalProjection_mem_direction_orthogonal _ _)]
 
 中文:
 引理 orthogonalProjection_map
@@ -1450,7 +1493,12 @@ lemma orthogonalProjection_map
   rw [coe_orthogonalProjection_eq_iff_mem]
   simp only [mem_map, AffineIsometry.coe_toAffineMap, AffineIsometry.map_eq_iff, exists_eq_right,
     SetLike.coe_mem, map_direction, AffineIsometry.linear_eq_linearIsometry, true_and]
-  rw [← AffineIsometry.coe_toAffineMap]; rw [← AffineMap.linearMap_vs
+  rw [← AffineIsometry.coe_toAffineMap]; rw [← AffineMap.linearMap_vsub]; rw [Submodule.mem_orthogonal]
+  intro u hu
+  rw [Submodule.mem_map] at hu
+  obtain ⟨v, hv, rfl⟩ := hu
+  rw [AffineIsometry.linear_eq_linearIsometry]; rw [LinearIsometry.coe_toLinearMap]; rw [LinearIsometry.inner_map_map]; rw [Submodule.inner_right_of_mem_orthogonal hv
+      (vsub_orthogonalProjection_mem_direction_orthogonal _ _)]
 -/
 @[simp] lemma orthogonalProjection_map (s : AffineSubspace 𝕜 P) [Nonempty s]
     [s.direction.HasOrthogonalProjection] (f : P ->ᵃⁱ[𝕜] P₂)

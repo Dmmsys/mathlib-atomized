@@ -41,7 +41,13 @@ lemma completeSpace_of_completeSpace_continuousLinearMap
   obtain ⟨v, hv⟩ : exists (v : E), v != 0 := exists_ne 0
   obtain ⟨φ, hφ⟩ : exists φ : StrongDual 𝕜 E, φ v = 1 := exists_eq_one hv
   let g : Nat -> (E ->L[𝕜] F) := fun n => ContinuousLinearMap.smulRightL 𝕜 E F φ (f n)
-  have : CauchySeq
+  have : CauchySeq g := (ContinuousLinearMap.smulRightL 𝕜 E F φ).lipschitz.cauchySeq_comp hf
+  obtain ⟨a, ha⟩ : exists a, Tendsto g atTop (𝓝 a) := cauchy_iff_exists_le_nhds.mp this
+  refine ⟨a v, ?_⟩
+  have : Tendsto (fun n => g n v) atTop (𝓝 (a v)) := by
+    have : Continuous (fun (i : E ->L[𝕜] F) => i v) := by fun_prop
+    exact (this.tendsto _).comp ha
+  simpa [g, ContinuousLinearMap.smulRightL, hφ]
 
 中文:
 引理 completeSpace_of_completeSpace_continuousLinearMap
@@ -51,7 +57,13 @@ lemma completeSpace_of_completeSpace_continuousLinearMap
   obtain ⟨v, hv⟩ : exists (v : E), v != 0 := exists_ne 0
   obtain ⟨φ, hφ⟩ : exists φ : StrongDual 𝕜 E, φ v = 1 := exists_eq_one hv
   let g : Nat -> (E ->L[𝕜] F) := fun n => ContinuousLinearMap.smulRightL 𝕜 E F φ (f n)
-  have : CauchySeq
+  have : CauchySeq g := (ContinuousLinearMap.smulRightL 𝕜 E F φ).lipschitz.cauchySeq_comp hf
+  obtain ⟨a, ha⟩ : exists a, Tendsto g atTop (𝓝 a) := cauchy_iff_exists_le_nhds.mp this
+  refine ⟨a v, ?_⟩
+  have : Tendsto (fun n => g n v) atTop (𝓝 (a v)) := by
+    have : Continuous (fun (i : E ->L[𝕜] F) => i v) := by fun_prop
+    exact (this.tendsto _).comp ha
+  simpa [g, ContinuousLinearMap.smulRightL, hφ]
 
 Depends on / 依赖: CauchySeq, ContinuousLinearMap, ContinuousLinearMap.smulRightL, Metric, Metric.complete_of_cauchySeq_tendsto, StrongDual, Tendsto, cauchySeq_comp, cauchy_iff_exists_le_nhds, cauchy_iff_exists_le_nhds.mp, complete_of_cauchySeq_tendsto, exists_eq_one, exists_ne, lipschitz, lipschitz.cauchySeq_comp, smulRightL
 -/
@@ -102,7 +114,15 @@ lemma completeSpace_of_completeSpace_continuousMultilinearMap
   choose φ hφ using this
   cases nonempty_fintype ι
   let g : Nat -> (ContinuousMultilinearMap 𝕜 M F) := fun n =>
-    compContinuousLinearMap
+    compContinuousLinearMapL φ
+    (ContinuousMultilinearMap.smulRightL 𝕜 _ F ((ContinuousMultilinearMap.mkPiAlgebra 𝕜 ι 𝕜)) (f n))
+  have : CauchySeq g := by
+    refine (ContinuousLinearMap.lipschitz _).cauchySeq_comp ?_
+    exact (ContinuousLinearMap.lipschitz _).cauchySeq_comp hf
+  obtain ⟨a, ha⟩ : exists a, Tendsto g atTop (𝓝 a) := cauchy_iff_exists_le_nhds.mp this
+  refine ⟨a m, ?_⟩
+  have : Tendsto (fun n => g n m) atTop (𝓝 (a m)) := ((continuous_eval_const _).tendsto _).comp ha
+  simpa [g, hφ]
 
 中文:
 引理 completeSpace_of_completeSpace_continuousMultilinearMap
@@ -112,7 +132,15 @@ lemma completeSpace_of_completeSpace_continuousMultilinearMap
   choose φ hφ using this
   cases nonempty_fintype ι
   let g : Nat -> (ContinuousMultilinearMap 𝕜 M F) := fun n =>
-    compContinuousLinearMap
+    compContinuousLinearMapL φ
+    (ContinuousMultilinearMap.smulRightL 𝕜 _ F ((ContinuousMultilinearMap.mkPiAlgebra 𝕜 ι 𝕜)) (f n))
+  have : CauchySeq g := by
+    refine (ContinuousLinearMap.lipschitz _).cauchySeq_comp ?_
+    exact (ContinuousLinearMap.lipschitz _).cauchySeq_comp hf
+  obtain ⟨a, ha⟩ : exists a, Tendsto g atTop (𝓝 a) := cauchy_iff_exists_le_nhds.mp this
+  refine ⟨a m, ?_⟩
+  have : Tendsto (fun n => g n m) atTop (𝓝 (a m)) := ((continuous_eval_const _).tendsto _).comp ha
+  simpa [g, hφ]
 
 Depends on / 依赖: CauchySeq, ContinuousLinearMap, ContinuousLinearMap.li, ContinuousLinearMap.lipschitz, ContinuousMultilinearMap, ContinuousMultilinearMap.mkPiAlgebra, ContinuousMultilinearMap.smulRightL, Metric, Metric.complete_of_cauchySeq_tendsto, StrongDual, cauchySeq_comp, compContinuousLinearMapL, complete_of_cauchySeq_tendsto, exists_eq_one, lipschitz, mkPiAlgebra, nonempty_fintype, smulRightL
 -/

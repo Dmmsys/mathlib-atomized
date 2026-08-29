@@ -443,6 +443,11 @@ definition comap
       suffices ⁅f x, f y⁆ in J by
         simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
           Submodule.mem_toAddSubmonoid, Submodule.mem_comap, LieHom.coe_toLinearMap, LieHom.map_lie,
+          LieSubalgebra.mem_toSubmodule]
+        exact this
+      apply J.lie_mem h }
+
+@[simp]
 
 中文:
 定义 comap
@@ -452,6 +457,11 @@ definition comap
       suffices ⁅f x, f y⁆ in J by
         simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
           Submodule.mem_toAddSubmonoid, Submodule.mem_comap, LieHom.coe_toLinearMap, LieHom.map_lie,
+          LieSubalgebra.mem_toSubmodule]
+        exact this
+      apply J.lie_mem h }
+
+@[simp]
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_toSubsemigroup, AddSubsemigroup, AddSubsemigroup.mem_carrier, J.lie_mem, LieHom, LieHom.coe_toLinearMap, LieHom.map_lie, LieSubalgebra, LieSubalgebra.mem_toSubmodule, Submodule, Submodule.mem_comap, Submodule.mem_toAddSubmonoid, coe_toLinearMap, lie_mem, map_lie, mem_carrier, mem_comap, mem_toAddSubmonoid, mem_toSubmodule
 -/
@@ -751,7 +761,10 @@ theorem map_of_image
     rw [this]
     simp [h]
     ```
-    works, but still feels awkward. There are missing `
+    works, but still feels awkward. There are missing `simp` lemmas here.`
+    -/
+    erw [h]
+  · rw [← SetLike.coe_subset_coe, ← h]; exact LieSubmodule.subset_lieSpan
 
 中文:
 定理 map_of_image
@@ -766,7 +779,10 @@ theorem map_of_image
     rw [this]
     simp [h]
     ```
-    works, but still feels awkward. There are missing `
+    works, but still feels awkward. There are missing `simp` lemmas here.`
+    -/
+    erw [h]
+  · rw [← SetLike.coe_subset_coe, ← h]; exact LieSubmodule.subset_lieSpan
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lieSpan_le, Submodule, Submodule.map_coe, le_antisymm, lieSpan_le, map_coe
 -/
@@ -956,7 +972,10 @@ theorem isIdealMorphism_iff
     LieSubalgebra.toSubmodule_inj, ← f.range.coe_toSubmodule,
     LieIdeal.toLieSubalgebra_toSubmodule, LieSubmodule.coe_lieSpan_submodule_eq_iff,
     LieSubalgebra.mem_toSubmodule, mem_range, exists_imp,
-    Submodule.exists_lieSub
+    Submodule.exists_lieSubmodule_coe_eq_iff]
+  constructor
+  · intro h x y; obtain ⟨z, hz⟩ := h x (f y) y rfl; use z; exact hz.symm
+  · intro h x y z hz; obtain ⟨w, hw⟩ := h x z; use w; rw [← hw, hz]
 
 中文:
 定理 isIdealMorphism_iff
@@ -966,7 +985,10 @@ theorem isIdealMorphism_iff
     LieSubalgebra.toSubmodule_inj, ← f.range.coe_toSubmodule,
     LieIdeal.toLieSubalgebra_toSubmodule, LieSubmodule.coe_lieSpan_submodule_eq_iff,
     LieSubalgebra.mem_toSubmodule, mem_range, exists_imp,
-    Submodule.exists_lieSub
+    Submodule.exists_lieSubmodule_coe_eq_iff]
+  constructor
+  · intro h x y; obtain ⟨z, hz⟩ := h x (f y) y rfl; use z; exact hz.symm
+  · intro h x y z hz; obtain ⟨w, hw⟩ := h x z; use w; rw [← hw, hz]
 
 Depends on / 依赖: LieIdeal, LieIdeal.toLieSubalgebra_toSubmodule, LieSubalgebra, LieSubalgebra.mem_toSubmodule, LieSubalgebra.toSubmodule_inj, LieSubmodule, LieSubmodule.coe_lieSpan_submodule_eq_iff, Submodule, Submodule.exists_lieSubmodule_coe_eq_iff, coe_lieSpan_submodule_eq_iff, coe_toSubmodule, exists_imp, exists_lieSubmodule_coe_eq_iff, f.range.coe_toSubmodule, hz.symm, idealRange_eq_lieSpan_range, isIdealMorphism_def, mem_range, mem_toSubmodule, toLieSubalgebra_toSubmodule
 -/
@@ -1246,7 +1268,7 @@ theorem idealRange_eq_top_of_surjective
   rw [idealRange_eq_lieSpan_range]; rw [h]; rw [← LieSubalgebra.coe_toSubmodule]; rw [←
     LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.top_toSubmodule]; rw [LieSubalgebra.top_toSubmodule]; rw [LieSubmodule.coe_lieSpan_submodule_eq_iff]
   use ⊤
-  exact LieSubmodul
+  exact LieSubmodule.top_toSubmodule
 
 中文:
 定理 idealRange_eq_top_of_surjective
@@ -1257,7 +1279,7 @@ theorem idealRange_eq_top_of_surjective
   rw [idealRange_eq_lieSpan_range]; rw [h]; rw [← LieSubalgebra.coe_toSubmodule]; rw [←
     LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.top_toSubmodule]; rw [LieSubalgebra.top_toSubmodule]; rw [LieSubmodule.coe_lieSpan_submodule_eq_iff]
   use ⊤
-  exact LieSubmodul
+  exact LieSubmodule.top_toSubmodule
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.coe_toSubmodule, LieSubalgebra.top_toSubmodule, LieSubmodule, LieSubmodule.coe_lieSpan_submodule_eq_iff, LieSubmodule.toSubmodule_inj, LieSubmodule.top_toSubmodule, coe_lieSpan_submodule_eq_iff, coe_toSubmodule, f.range_eq_top, idealRange_eq_lieSpan_range, range_eq_top, toSubmodule_inj, top_toSubmodule
 -/
@@ -1333,7 +1355,12 @@ theorem coe_map_of_surjective
         have hy' : exists x : L, x in I ∧ f x = y := by simpa [hy]
         obtain ⟨z₂, hz₂, rfl⟩ := hy'
         obtain ⟨z₁, rfl⟩ := h x
-        simp only [LieHom.coe_toLinearMap, Se
+        simp only [LieHom.coe_toLinearMap, SetLike.mem_coe, Set.mem_image, Submodule.mem_carrier,
+          Submodule.map_coe]
+        use ⁅z₁, z₂⁆
+        exact ⟨I.lie_mem hz₂, f.map_lie z₁ z₂⟩ }
+  rw [map]; rw [toLieSubalgebra_toSubmodule]; rw [LieSubmodule.coe_lieSpan_submodule_eq_iff]
+  exact ⟨J, rfl⟩
 
 中文:
 定理 coe_map_of_surjective
@@ -1345,7 +1372,12 @@ theorem coe_map_of_surjective
         have hy' : exists x : L, x in I ∧ f x = y := by simpa [hy]
         obtain ⟨z₂, hz₂, rfl⟩ := hy'
         obtain ⟨z₁, rfl⟩ := h x
-        simp only [LieHom.coe_toLinearMap, Se
+        simp only [LieHom.coe_toLinearMap, SetLike.mem_coe, Set.mem_image, Submodule.mem_carrier,
+          Submodule.map_coe]
+        use ⁅z₁, z₂⁆
+        exact ⟨I.lie_mem hz₂, f.map_lie z₁ z₂⟩ }
+  rw [map]; rw [toLieSubalgebra_toSubmodule]; rw [LieSubmodule.coe_lieSpan_submodule_eq_iff]
+  exact ⟨J, rfl⟩
 
 Depends on / 依赖: I.lie_mem, LieHom, LieHom.coe_toLinearMap, LieIdeal, LieSubmodule, LieSubmodule.coe_lieSpan_submodule_eq_iff, Set.mem_image, SetLike, SetLike.mem_coe, Submodule, Submodule.map_coe, Submodule.mem_carrier, coe_lieSpan_submodule_eq_iff, coe_toLinearMap, f.map_lie, lie_mem, map_coe, map_lie, mem_carrier, mem_coe
 -/
@@ -1518,7 +1550,9 @@ theorem map_sup_ker_eq_map
   erw [LieSubmodule.mem_sup] at hy₁
   obtain ⟨z₁, hz₁, z₂, hz₂, hy⟩ := hy₁
   rw [← hy]
-  rw [map_add]; rw [f.coe_toLinearMap]; rw [LieHom.mem_ker.mp hz₂]; rw [add_zero];
+  rw [map_add]; rw [f.coe_toLinearMap]; rw [LieHom.mem_ker.mp hz₂]; rw [add_zero]; exact ⟨z₁, hz₁, rfl⟩
+
+@[simp]
 
 中文:
 定理 map_sup_ker_eq_map
@@ -1531,7 +1565,9 @@ theorem map_sup_ker_eq_map
   erw [LieSubmodule.mem_sup] at hy₁
   obtain ⟨z₁, hz₁, z₂, hz₂, hy⟩ := hy₁
   rw [← hy]
-  rw [map_add]; rw [f.coe_toLinearMap]; rw [LieHom.mem_ker.mp hz₂]; rw [add_zero];
+  rw [map_add]; rw [f.coe_toLinearMap]; rw [LieHom.mem_ker.mp hz₂]; rw [add_zero]; exact ⟨z₁, hz₁, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: LieHom, LieHom.mem_ker.mp, LieIdeal, LieIdeal.map_mono, LieSubmodule, LieSubmodule.lieSpan_mono, LieSubmodule.mem_sup, add_zero, coe_toLinearMap, f.coe_toLinearMap, le_antisymm, le_sup_left, lieSpan_mono, map_add, map_mono, mem_ker, mem_sup
 -/
@@ -1867,7 +1903,7 @@ theorem comap_incl_eq_bot
   proof: by
   rw [disjoint_iff]; rw [← LieSubmodule.toSubmodule_inj]; rw [LieIdeal.comap_toSubmodule]; rw [LieSubmodule.bot_toSubmodule]; rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.inf_toSubmodule]; rw [LieSubmodule.bot_toSubmodule]; rw [incl_coe]
   simp_rw [toLieSubalgebra_toSubmodule]
-  rw [← Su
+  rw [← Submodule.disjoint_iff_comap_eq_bot]; rw [disjoint_iff]
 
 中文:
 定理 comap_incl_eq_bot
@@ -1875,7 +1911,7 @@ theorem comap_incl_eq_bot
   证明: by
   rw [disjoint_iff]; rw [← LieSubmodule.toSubmodule_inj]; rw [LieIdeal.comap_toSubmodule]; rw [LieSubmodule.bot_toSubmodule]; rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.inf_toSubmodule]; rw [LieSubmodule.bot_toSubmodule]; rw [incl_coe]
   simp_rw [toLieSubalgebra_toSubmodule]
-  rw [← Su
+  rw [← Submodule.disjoint_iff_comap_eq_bot]; rw [disjoint_iff]
 -/
 @[simp] theorem comap_incl_eq_bot : I₂.comap I.incl = ⊥ ↔ Disjoint I I₂ := by
   rw [disjoint_iff]; rw [← LieSubmodule.toSubmodule_inj]; rw [LieIdeal.comap_toSubmodule]; rw [LieSubmodule.bot_toSubmodule]; rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.inf_toSubmodule]; rw [LieSubmodule.bot_toSubmodule]; rw [incl_coe]

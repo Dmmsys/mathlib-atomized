@@ -95,7 +95,9 @@ theorem leftRel_apply
       s.equivOp.symm.exists_congr_left
     _ ↔ exists a : s, x⁻¹ * y = a⁻¹ := by
       simp only [inv_mul_eq_iff_eq_mul, Subgroup.coe_inv, eq_mul_inv_iff_mul_eq]
-    _ ↔ x⁻¹ * y in s := by simp [exists_inv_mem_iff_ex
+    _ ↔ x⁻¹ * y in s := by simp [exists_inv_mem_iff_exists_mem]
+
+@[to_additive]
 
 中文:
 定理 leftRel_apply
@@ -106,7 +108,9 @@ theorem leftRel_apply
       s.equivOp.symm.exists_congr_left
     _ ↔ exists a : s, x⁻¹ * y = a⁻¹ := by
       simp only [inv_mul_eq_iff_eq_mul, Subgroup.coe_inv, eq_mul_inv_iff_mul_eq]
-    _ ↔ x⁻¹ * y in s := by simp [exists_inv_mem_iff_ex
+    _ ↔ x⁻¹ * y in s := by simp [exists_inv_mem_iff_exists_mem]
+
+@[to_additive]
 
 Depends on / 依赖: MulOpposite, MulOpposite.unop, Subgroup, Subgroup.coe_inv, coe_inv, eq_mul_inv_iff_mul_eq, equivOp, exists_congr_left, exists_inv_mem_iff_exists_mem, inv_mul_eq_iff_eq_mul, s.equivOp.symm.exists_congr_left, s.op
 -/
@@ -341,7 +345,19 @@ definition quotientRightRelEquivQuotientLeftRel
   invFun :=
     Quotient.map' (fun g => g⁻¹) fun a b => by
       rw [leftRel_apply]; rw [rightRel_apply]
-      exact fun h => (congr_arg (· in
+      exact fun h => (congr_arg (· in s) (by simp)).mp (s.inv_mem h)
+  left_inv g :=
+    Quotient.inductionOn' g fun g =>
+      Quotient.sound'
+        (by
+          simp only [inv_inv]
+          exact Quotient.exact' rfl)
+  right_inv g :=
+    Quotient.inductionOn' g fun g =>
+      Quotient.sound'
+        (by
+          simp only [inv_inv]
+          exact Quotient.exact' rfl)
 
 中文:
 定义 quotientRightRelEquivQuotientLeftRel
@@ -352,7 +368,19 @@ definition quotientRightRelEquivQuotientLeftRel
   invFun :=
     Quotient.map' (fun g => g⁻¹) fun a b => by
       rw [leftRel_apply]; rw [rightRel_apply]
-      exact fun h => (congr_arg (· in
+      exact fun h => (congr_arg (· in s) (by simp)).mp (s.inv_mem h)
+  left_inv g :=
+    Quotient.inductionOn' g fun g =>
+      Quotient.sound'
+        (by
+          simp only [inv_inv]
+          exact Quotient.exact' rfl)
+  right_inv g :=
+    Quotient.inductionOn' g fun g =>
+      Quotient.sound'
+        (by
+          simp only [inv_inv]
+          exact Quotient.exact' rfl)
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.inductionOn, Quotient.map, Quotient.sound, congr_arg, inductionOn, invFun, inv_i, inv_inv, inv_mem, leftRel_apply, left_inv, rightRel_apply, right_inv, s.inv_mem
 -/

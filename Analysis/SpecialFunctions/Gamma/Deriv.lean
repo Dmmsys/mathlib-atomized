@@ -70,7 +70,15 @@ theorem hasDerivAt_GammaIntegral
   convert! (mellin_hasDerivAt_of_isBigO_rpow (E := Complex) _ _ (lt_add_one _) _ hs).2
   · refine (Continuous.continuousOn ?_).locallyIntegrableOn measurableSet_Ioi
     exact continuous_ofReal.comp (Real.continuous_exp.comp continuous_neg)
-  · rw [← isBigO_norm_left
+  · rw [← isBigO_norm_left]
+    simp_rw [norm_real, isBigO_norm_left]
+    simpa only [neg_one_mul] using (isLittleO_exp_neg_mul_rpow_atTop zero_lt_one _).isBigO
+  · simp_rw [neg_zero, rpow_zero]
+    refine isBigO_const_of_tendsto (?_ : Tendsto _ _ (𝓝 (1 : Complex))) one_ne_zero
+    rw [(by simp : (1 : Complex) = Real.exp (-0))]
+    exact (continuous_ofReal.comp (Real.continuous_exp.comp continuous_neg)).continuousWithinAt
+
+@[fun_prop]
 
 中文:
 定理 hasDerivAt_Gamma整数egral
@@ -80,7 +88,15 @@ theorem hasDerivAt_GammaIntegral
   convert! (mellin_hasDerivAt_of_isBigO_rpow (E := Complex) _ _ (lt_add_one _) _ hs).2
   · refine (Continuous.continuousOn ?_).locallyIntegrableOn measurableSet_Ioi
     exact continuous_ofReal.comp (Real.continuous_exp.comp continuous_neg)
-  · rw [← isBigO_norm_left
+  · rw [← isBigO_norm_left]
+    simp_rw [norm_real, isBigO_norm_left]
+    simpa only [neg_one_mul] using (isLittleO_exp_neg_mul_rpow_atTop zero_lt_one _).isBigO
+  · simp_rw [neg_zero, rpow_zero]
+    refine isBigO_const_of_tendsto (?_ : Tendsto _ _ (𝓝 (1 : Complex))) one_ne_zero
+    rw [(by simp : (1 : Complex) = Real.exp (-0))]
+    exact (continuous_ofReal.comp (Real.continuous_exp.comp continuous_neg)).continuousWithinAt
+
+@[fun_prop]
 
 Depends on / 依赖: Continuous, Continuous.continuousOn, GammaIntegral_eq_mellin, Real.continuous_exp.comp, Tendsto, continuousOn, continuous_exp, continuous_neg, continuous_ofReal, continuous_ofReal.comp, convert, isBigO, isBigO_const_of_tendsto, isBigO_norm_left, isLittleO_exp_neg_mul_rpow_atTop, locallyIntegrableOn, lt_add_one, measurableSet_Ioi, mellin_hasDerivAt_of_isBigO_rpow, neg_one_mul
 -/
@@ -110,7 +126,21 @@ theorem differentiableAt_Gamma
   -- We will show, by induction on `n`, that `Gamma` is differentiable on `-n < Re s`.
   suffices forall (n : Nat) (s : Complex) (hsre : -n < s.re) (hs : forall m : Nat, s != -m), DifferentiableAt Complex _ s from
     this (⌊-s.re⌋₊ + 1) s (by grind [Nat.lt_floor_add_one (-s.re)]) hs
-  intro n s 
+  intro n s hsre hs
+  induction n generalizing s with
+  | zero =>
+    -- Case `n = 0`: use relation to `gammaIntegral`
+    replace hsre : 0 < s.re := by simpa using hsre
+    have : IsOpen {s : Complex | 0 < s.re} := continuous_re.isOpen_preimage _ isOpen_Ioi
+    apply (hasDerivAt_GammaIntegral (by simpa using hsre)).differentiableAt.congr_of_eventuallyEq
+    filter_upwards [this.mem_nhds hsre] with a using Gamma_eq_integral
+  | succ n IH =>
+    -- Induction step: use recurrence relation
+    have hsne : s != 0 := by grind [hs 0]
+    specialize IH (s + 1) (by grind [add_re, one_re]) (fun m => by grind [hs (m + 1)])
+    have := IH.comp s (show DifferentiableAt Complex (fun s => s + 1) s by fun_prop)
+    apply (this.fun_div differentiableAt_id hsne).congr_of_eventuallyEq
+    filter_upwards [isOpen_ne.mem_nhds hsne] using by grind
 
 中文:
 定理 differentiableAt_Gamma
@@ -120,7 +150,21 @@ theorem differentiableAt_Gamma
   -- We will show, by induction on `n`, that `Gamma` is differentiable on `-n < Re s`.
   suffices forall (n : Nat) (s : Complex) (hsre : -n < s.re) (hs : forall m : Nat, s != -m), DifferentiableAt Complex _ s from
     this (⌊-s.re⌋₊ + 1) s (by grind [Nat.lt_floor_add_one (-s.re)]) hs
-  intro n s 
+  intro n s hsre hs
+  induction n generalizing s with
+  | zero =>
+    -- Case `n = 0`: use relation to `gammaIntegral`
+    replace hsre : 0 < s.re := by simpa using hsre
+    have : IsOpen {s : Complex | 0 < s.re} := continuous_re.isOpen_preimage _ isOpen_Ioi
+    apply (hasDerivAt_GammaIntegral (by simpa using hsre)).differentiableAt.congr_of_eventuallyEq
+    filter_upwards [this.mem_nhds hsre] with a using Gamma_eq_integral
+  | succ n IH =>
+    -- Induction step: use recurrence relation
+    have hsne : s != 0 := by grind [hs 0]
+    specialize IH (s + 1) (by grind [add_re, one_re]) (fun m => by grind [hs (m + 1)])
+    have := IH.comp s (show DifferentiableAt Complex (fun s => s + 1) s by fun_prop)
+    apply (this.fun_div differentiableAt_id hsne).congr_of_eventuallyEq
+    filter_upwards [isOpen_ne.mem_nhds hsne] using by grind
 -/
 theorem differentiableAt_Gamma (s : Complex) (hs : forall m : Nat, s != -m) : DifferentiableAt Complex Gamma s := by
   -- We will show, by induction on `n`, that `Gamma` is differentiable on `-n < Re s`.
@@ -279,7 +323,12 @@ theorem not_continuousAt_Gamma_neg_nat
     contrapose ih
     rw [Nat.cast_add]; rw [Nat.cast_one] at ih
     suffices ContinuousAt (fun s => Gamma (s - 1 + 1)) (-n) by simpa using this
-    suffices ContinuousAt (
+    suffices ContinuousAt (fun s => Gamma (s + 1)) (-n - 1) from
+      this.comp' (f := fun s => s - 1) (continuous_sub_right 1).continuousAt
+    rw [← neg_add']
+    have h0 : -(n + 1) != (0 : Complex) := neg_ne_zero.mpr n.cast_add_one_ne_zero
+    exact ((continuousAt_id.mul ih).continuousWithinAt.congr Gamma_add_one
+      (Gamma_add_one (-(n + 1)) h0)).continuousAt (compl_singleton_mem_nhds h0)
 
 中文:
 定理 not_continuousAt_Gamma_neg_nat
@@ -294,7 +343,12 @@ theorem not_continuousAt_Gamma_neg_nat
     contrapose ih
     rw [Nat.cast_add]; rw [Nat.cast_one] at ih
     suffices ContinuousAt (fun s => Gamma (s - 1 + 1)) (-n) by simpa using this
-    suffices ContinuousAt (
+    suffices ContinuousAt (fun s => Gamma (s + 1)) (-n - 1) from
+      this.comp' (f := fun s => s - 1) (continuous_sub_right 1).continuousAt
+    rw [← neg_add']
+    have h0 : -(n + 1) != (0 : Complex) := neg_ne_zero.mpr n.cast_add_one_ne_zero
+    exact ((continuousAt_id.mul ih).continuousWithinAt.congr Gamma_add_one
+      (Gamma_add_one (-(n + 1)) h0)).continuousAt (compl_singleton_mem_nhds h0)
 
 Depends on / 依赖: ContinuousAt, Nat.cast_add, Nat.cast_one, Nat.cast_zero, cast_add, cast_add_one_ne_zero, cast_one, cast_zero, continuousAt, continuousAt_id, continuousAt_id.mul, continuous_sub_right, contrapose, n.cast_add_one_ne_zero, neg_add, neg_ne_zero, neg_ne_zero.mpr, neg_zero, not_continuousAt_Gamma_zero, this.comp
 -/
@@ -343,7 +397,14 @@ theorem deriv_Gamma_add_one
   proof: by
   by_cases! h : exists m : Nat, s = -m
   · obtain ⟨m, rfl⟩ := h
-    rw [← sub_neg_eq_add]; rw [← neg_sub']; rw [← Nat.cast_one]; rw [← Nat.cast_sub]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_neg_nat m)]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_
+    rw [← sub_neg_eq_add]; rw [← neg_sub']; rw [← Nat.cast_one]; rw [← Nat.cast_sub]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_neg_nat m)]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_neg_nat (m - 1))]; rw [Gamma_neg_nat_eq_zero]; rw [zero_add]; rw [mul_zero]
+    rwa [neg_ne_zero, Nat.cast_ne_zero, ← Nat.one_le_iff_ne_zero] at hs
+  · suffices HasDerivWithinAt (fun s => Gamma (s + 1)) (Gamma s + s * deriv Gamma s) {0}ᶜ s by
+      rw [← deriv_comp_add_const]
+      exact (this.hasDerivAt (compl_singleton_mem_nhds hs)).deriv
+    refine HasDerivWithinAt.congr ?_ Gamma_add_one (Gamma_add_one s hs)
+    simpa using! HasDerivWithinAt.mul (hasDerivWithinAt_id s {0}ᶜ)
+      (differentiableAt_Gamma s h).hasDerivAt.hasDerivWithinAt
 
 中文:
 定理 deriv_Gamma_add_one
@@ -351,7 +412,14 @@ theorem deriv_Gamma_add_one
   证明: by
   by_cases! h : exists m : Nat, s = -m
   · obtain ⟨m, rfl⟩ := h
-    rw [← sub_neg_eq_add]; rw [← neg_sub']; rw [← Nat.cast_one]; rw [← Nat.cast_sub]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_neg_nat m)]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_
+    rw [← sub_neg_eq_add]; rw [← neg_sub']; rw [← Nat.cast_one]; rw [← Nat.cast_sub]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_neg_nat m)]; rw [deriv_zero_of_not_differentiableAt (not_differentiableAt_Gamma_neg_nat (m - 1))]; rw [Gamma_neg_nat_eq_zero]; rw [zero_add]; rw [mul_zero]
+    rwa [neg_ne_zero, Nat.cast_ne_zero, ← Nat.one_le_iff_ne_zero] at hs
+  · suffices HasDerivWithinAt (fun s => Gamma (s + 1)) (Gamma s + s * deriv Gamma s) {0}ᶜ s by
+      rw [← deriv_comp_add_const]
+      exact (this.hasDerivAt (compl_singleton_mem_nhds hs)).deriv
+    refine HasDerivWithinAt.congr ?_ Gamma_add_one (Gamma_add_one s hs)
+    simpa using! HasDerivWithinAt.mul (hasDerivWithinAt_id s {0}ᶜ)
+      (differentiableAt_Gamma s h).hasDerivAt.hasDerivWithinAt
 
 Depends on / 依赖: Gamma_neg_nat_eq_zero, HasDerivWithinAt, Nat.cast_ne_zero, Nat.cast_one, Nat.cast_sub, Nat.one_le_iff_ne_zero, cast_ne_zero, cast_one, cast_sub, deriv_zero_of_not_differentiableAt, mul_zero, neg_ne_zero, neg_sub, not_differentiableAt_Gamma_neg_nat, one_le_iff_ne_zero, sub_neg_eq_add, zero_add
 -/

@@ -97,7 +97,11 @@ theorem le_rank_iff_exists_linearIndependent
       convert! t.linearIndependent.linearIndepOn_id
       ext
       simp [t]
-  
+    rw [← t.mk_eq_rank'']; rw [le_mk_iff_exists_subset] at h
+    rcases h with ⟨s, hst, hsc⟩
+    exact ⟨s, hsc, this.mono hst⟩
+  · rintro ⟨s, rfl, si⟩
+    exact si.cardinal_le_rank
 
 中文:
 定理 le_rank_iff_存在_linearIndependent
@@ -112,7 +116,11 @@ theorem le_rank_iff_exists_linearIndependent
       convert! t.linearIndependent.linearIndepOn_id
       ext
       simp [t]
-  
+    rw [← t.mk_eq_rank'']; rw [le_mk_iff_exists_subset] at h
+    rcases h with ⟨s, hst, hsc⟩
+    exact ⟨s, hsc, this.mono hst⟩
+  · rintro ⟨s, rfl, si⟩
+    exact si.cardinal_le_rank
 
 Depends on / 依赖: LinearIndepOn, Module, Module.Free.exists_basis, Set.range, cardinal_le_rank, convert, exists_basis, le_mk_iff_exists_subset, linearIndepOn_id, linearIndependent, mk_eq_rank, nontrivial_of_invariantBasisNumber, reindexRange, si.cardinal_le_rank, t.linearIndependent.linearIndepOn_id, t.mk_eq_rank, this.mono
 -/
@@ -182,7 +190,22 @@ theorem rank_le_one_iff
     rcases isEmpty_or_nonempty κ with hb | ⟨⟨i⟩⟩
     · use 0
       have h' : forall v : V, v = 0 := by
-        simpa [range_eq_empty, Submodule.eq
+        simpa [range_eq_empty, Submodule.eq_bot_iff] using b.span_eq.symm
+      intro v
+      simp [h' v]
+    · use b i
+      have h' : K ∙ b i = ⊤ :=
+        (subsingleton_range b).eq_singleton_of_mem (mem_range_self i) ▸ b.span_eq
+      intro v
+      have hv : v in (⊤ : Submodule K V) := mem_top
+      rwa [← h', mem_span_singleton] at hv
+  · rintro ⟨v₀, hv₀⟩
+    have h : K ∙ v₀ = ⊤ := by
+      ext
+      simp [mem_span_singleton, hv₀]
+    rw [← rank_top]; rw [← h]
+    refine (rank_span_le _).trans_eq ?_
+    simp
 
 中文:
 定理 rank_le_one_iff
@@ -195,7 +218,22 @@ theorem rank_le_one_iff
     rcases isEmpty_or_nonempty κ with hb | ⟨⟨i⟩⟩
     · use 0
       have h' : forall v : V, v = 0 := by
-        simpa [range_eq_empty, Submodule.eq
+        simpa [range_eq_empty, Submodule.eq_bot_iff] using b.span_eq.symm
+      intro v
+      simp [h' v]
+    · use b i
+      have h' : K ∙ b i = ⊤ :=
+        (subsingleton_range b).eq_singleton_of_mem (mem_range_self i) ▸ b.span_eq
+      intro v
+      have hv : v in (⊤ : Submodule K V) := mem_top
+      rwa [← h', mem_span_singleton] at hv
+  · rintro ⟨v₀, hv₀⟩
+    have h : K ∙ v₀ = ⊤ := by
+      ext
+      simp [mem_span_singleton, hv₀]
+    rw [← rank_top]; rw [← h]
+    refine (rank_span_le _).trans_eq ?_
+    simp
 
 Depends on / 依赖: Module, Module.Free.exists_basis, Submodule, Submodule.eq_bot_iff, b.mk_eq_rank, b.span_eq, b.span_eq.symm, eq_bot_iff, eq_singleton_of_mem, exists_basis, isEmpty_or_nonempty, le_one_iff_subsingleton, mem_range_self, mem_spa, mem_top, mk_eq_rank, range_eq_empty, span_eq, subsingleton_range
 -/
@@ -237,7 +275,14 @@ theorem rank_eq_one_iff
   · obtain ⟨v₀, hv⟩ := rank_le_one_iff.1 h.le
     refine ⟨v₀, fun hzero => ?_, hv⟩
     simp_rw [hzero, smul_zero, exists_const] at hv
-    have : Subsingleton V := .in
+    have : Subsingleton V := .intro fun _ _ => by simp_rw [← hv]
+    exact one_ne_zero (h ▸ rank_subsingleton' K V)
+  · by_contra H
+    rw [not_le]; rw [Cardinal.lt_one_iff] at H
+    obtain ⟨κ, b⟩ := Module.Free.exists_basis (R := K) (M := V)
+    have := mk_eq_zero_iff.1 (H ▸ b.mk_eq_rank'')
+    have := b.repr.toEquiv.subsingleton
+    exact h (Subsingleton.elim _ _)
 
 中文:
 定理 rank_eq_one_iff
@@ -248,7 +293,14 @@ theorem rank_eq_one_iff
   · obtain ⟨v₀, hv⟩ := rank_le_one_iff.1 h.le
     refine ⟨v₀, fun hzero => ?_, hv⟩
     simp_rw [hzero, smul_zero, exists_const] at hv
-    have : Subsingleton V := .in
+    have : Subsingleton V := .intro fun _ _ => by simp_rw [← hv]
+    exact one_ne_zero (h ▸ rank_subsingleton' K V)
+  · by_contra H
+    rw [not_le]; rw [Cardinal.lt_one_iff] at H
+    obtain ⟨κ, b⟩ := Module.Free.exists_basis (R := K) (M := V)
+    have := mk_eq_zero_iff.1 (H ▸ b.mk_eq_rank'')
+    have := b.repr.toEquiv.subsingleton
+    exact h (Subsingleton.elim _ _)
 
 Depends on / 依赖: Cardinal, Cardinal.lt_one_iff, Module, Module.Free.exists_basis, Subsingleton, antisymm, exists_basis, exists_const, h.le, lt_one_iff, mk_eq_zero_if, nontrivial_of_invariantBasisNumber, not_le, one_ne_zero, rank_le_one_iff, rank_subsingleton, simp_rw, smul_zero
 -/
@@ -304,7 +356,10 @@ theorem rank_submodule_eq_one_iff
     simp only [h', ne_eq] at H; exact H rfl, fun v hv => ?_⟩,
     fun ⟨v₀, hv₀, H, h⟩ => ⟨⟨v₀, hv₀⟩,
       fun h' => H (by rwa [AddSubmonoid.mk_eq_zero] at h'), fun ⟨v, hv⟩ => ?_⟩⟩
-  · obt
+  · obtain ⟨r, hr⟩ := h ⟨v, hv⟩
+    exact ⟨r, by rwa [Subtype.ext_iff, coe_smul] at hr⟩
+  · obtain ⟨r, hr⟩ := h v hv
+    exact ⟨r, by rwa [Subtype.ext_iff, coe_smul]⟩
 
 中文:
 定理 rank_submodule_eq_one_iff
@@ -315,7 +370,10 @@ theorem rank_submodule_eq_one_iff
     simp only [h', ne_eq] at H; exact H rfl, fun v hv => ?_⟩,
     fun ⟨v₀, hv₀, H, h⟩ => ⟨⟨v₀, hv₀⟩,
       fun h' => H (by rwa [AddSubmonoid.mk_eq_zero] at h'), fun ⟨v, hv⟩ => ?_⟩⟩
-  · obt
+  · obtain ⟨r, hr⟩ := h ⟨v, hv⟩
+    exact ⟨r, by rwa [Subtype.ext_iff, coe_smul] at hr⟩
+  · obtain ⟨r, hr⟩ := h v hv
+    exact ⟨r, by rwa [Subtype.ext_iff, coe_smul]⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mk_eq_zero, Subtype, Subtype.ext_iff, coe_smul, ext_iff, le_span_singleton_iff, mk_eq_zero, ne_eq, rank_eq_one_iff, simp_rw
 -/
@@ -345,7 +403,8 @@ theorem rank_submodule_le_one_iff'
     exact ⟨v₀, h⟩
   · rintro ⟨v₀, h⟩
     obtain ⟨κ, b⟩ := Module.Free.exists_basis (R := K) (M := s)
-    simpa [b.mk_eq_rank''] using b.linearIndependent.map' _ (ker_inclusion _ _
+    simpa [b.mk_eq_rank''] using b.linearIndependent.map' _ (ker_inclusion _ _ h)
+.cardinal_le_rank.trans (rank_span_le {v₀})
 
 中文:
 定理 rank_submodule_le_one_iff'
@@ -358,7 +417,8 @@ theorem rank_submodule_le_one_iff'
     exact ⟨v₀, h⟩
   · rintro ⟨v₀, h⟩
     obtain ⟨κ, b⟩ := Module.Free.exists_basis (R := K) (M := s)
-    simpa [b.mk_eq_rank''] using b.linearIndependent.map' _ (ker_inclusion _ _
+    simpa [b.mk_eq_rank''] using b.linearIndependent.map' _ (ker_inclusion _ _ h)
+.cardinal_le_rank.trans (rank_span_le {v₀})
 
 Depends on / 依赖: Module, Module.Free.exists_basis, b.linearIndependent.map, b.mk_eq_rank, cardinal_le_rank, cardinal_le_rank.trans, exists_basis, ker_inclusion, linearIndependent, mk_eq_rank, nontrivial_of_invariantBasisNumber, rank_span_le, rank_submodule_le_one_iff
 -/
@@ -387,7 +447,9 @@ theorem Submodule.rank_le_one_iff_isPrincipal
   · rintro ⟨⟨m, hm⟩, hm'⟩
     choose f hf using hm'
     exact ⟨m, ⟨fun v hv => ⟨f ⟨v, hv⟩, congr_arg ((↑) : W -> V) (hf ⟨v, hv⟩)⟩, hm⟩⟩
-  · rintro ⟨a, ⟨h, 
+  · rintro ⟨a, ⟨h, ha⟩⟩
+    choose f hf using h
+    exact ⟨⟨a, ha⟩, fun v => ⟨f v.1 v.2, Subtype.ext (hf v.1 v.2)⟩⟩
 
 中文:
 定理 子模.rank_le_one_iff_isPrincipal
@@ -399,7 +461,9 @@ theorem Submodule.rank_le_one_iff_isPrincipal
   · rintro ⟨⟨m, hm⟩, hm'⟩
     choose f hf using hm'
     exact ⟨m, ⟨fun v hv => ⟨f ⟨v, hv⟩, congr_arg ((↑) : W -> V) (hf ⟨v, hv⟩)⟩, hm⟩⟩
-  · rintro ⟨a, ⟨h, 
+  · rintro ⟨a, ⟨h, ha⟩⟩
+    choose f hf using h
+    exact ⟨⟨a, ha⟩, fun v => ⟨f v.1 v.2, Subtype.ext (hf v.1 v.2)⟩⟩
 
 Depends on / 依赖: Submodule, Submodule.isPrincipal_iff, Subtype, Subtype.ext, congr_arg, isPrincipal_iff, le_antisymm_iff, le_span_singleton_iff, rank_le_one_iff, span_singleton_le_iff_mem
 -/
@@ -571,7 +635,10 @@ theorem lift_cardinalMk_eq_lift_cardinalMk_field_pow_lift_rank
   -- `Module.Finite.finite_basis` is in a much later file, so we copy its proof to here
   have : Finite s := by
     obtain ⟨t, ht⟩ := ‹Module.Finite K V›
-    exact basis_finite_of_finite_
+    exact basis_finite_of_finite_spans t.finite_toSet ht hs
+  have := lift_mk_eq'.2 ⟨hs.repr.toEquiv⟩
+  rwa [Finsupp.equivFunOnFinite.cardinal_eq, mk_arrow, hs.mk_eq_rank'', lift_power, lift_lift,
+    lift_lift, lift_umax] at this
 
 中文:
 定理 lift_cardinalMk_eq_lift_cardinalMk_field_pow_lift_rank
@@ -582,7 +649,10 @@ theorem lift_cardinalMk_eq_lift_cardinalMk_field_pow_lift_rank
   -- `Module.Finite.finite_basis` is in a much later file, so we copy its proof to here
   have : Finite s := by
     obtain ⟨t, ht⟩ := ‹Module.Finite K V›
-    exact basis_finite_of_finite_
+    exact basis_finite_of_finite_spans t.finite_toSet ht hs
+  have := lift_mk_eq'.2 ⟨hs.repr.toEquiv⟩
+  rwa [Finsupp.equivFunOnFinite.cardinal_eq, mk_arrow, hs.mk_eq_rank'', lift_power, lift_lift,
+    lift_lift, lift_umax] at this
 
 Depends on / 依赖: Module, Module.Free.exists_basis, aestronglyMeasurable, exists_basis, hf.add, hf.aestronglyMeasurable.add, hg.aestronglyMeasurable, nontrivial_of_invariantBasisNumber
 -/
@@ -669,7 +739,12 @@ theorem eq_bot_of_rank_le_one
   · refine bot_unique fun x hx => Algebra.mem_bot.2 ?_
     rw [← b.mk_eq_rank'']; rw [eq_one_iff_unique]; rw [← unique_iff_subsingleton_and_nonempty] at h1
     obtain ⟨h1⟩ := h1
-   
+    obtain ⟨y, hy⟩ := (bijective_algebraMap_of_linearEquiv (b.repr ≪≫ₗ
+      Finsupp.uniqueLinearEquiv _ _ default).symm).surjective ⟨x, hx⟩
+    exact ⟨y, congr(Subtype.val $(hy))⟩
+  have := mk_eq_zero_iff.1 (b.mk_eq_rank''.symm ▸ Cardinal.lt_one_iff.1 (h.lt_of_ne h1))
+  have := b.repr.toEquiv.subsingleton
+exact False.elim one_ne_zero congr(S.val $(Subsingleton.elim 1 0))
 
 中文:
 定理 eq_bot_of_rank_le_one
@@ -682,7 +757,12 @@ theorem eq_bot_of_rank_le_one
   · refine bot_unique fun x hx => Algebra.mem_bot.2 ?_
     rw [← b.mk_eq_rank'']; rw [eq_one_iff_unique]; rw [← unique_iff_subsingleton_and_nonempty] at h1
     obtain ⟨h1⟩ := h1
-   
+    obtain ⟨y, hy⟩ := (bijective_algebraMap_of_linearEquiv (b.repr ≪≫ₗ
+      Finsupp.uniqueLinearEquiv _ _ default).symm).surjective ⟨x, hx⟩
+    exact ⟨y, congr(Subtype.val $(hy))⟩
+  have := mk_eq_zero_iff.1 (b.mk_eq_rank''.symm ▸ Cardinal.lt_one_iff.1 (h.lt_of_ne h1))
+  have := b.repr.toEquiv.subsingleton
+exact False.elim one_ne_zero congr(S.val $(Subsingleton.elim 1 0))
 
 Depends on / 依赖: Algebra, Algebra.mem_bot, Finsupp, Finsupp.uniqueLinearEquiv, Module, Module.Free.exists_basis, Module.rank, Subtype, Subtype.val, b.mk_eq_rank, b.repr, bijective_algebraMap_of_linearEquiv, bot_unique, eq_one_iff_unique, exists_basis, mem_bot, mk_eq_rank, mk_eq_zero_iff, nontriviality, surjective
 -/
@@ -746,7 +826,15 @@ theorem rank_eq_one_iff
   obtain ⟨κ, b⟩ := Module.Free.exists_basis (R := F) (M := (⊥ : Subalgebra F E))
   refine le_antisymm ?_ ?_
   · have := lift_rank_range_le (Algebra.linearMap F E)
-    rwa [← one_eq_range, rank_self, lift_one, lift_le_one_i
+    rwa [← one_eq_range, rank_self, lift_one, lift_le_one_iff,
+      ← Algebra.toSubmodule_bot, rank_toSubmodule] at this
+  · by_contra H
+    rw [not_le]; rw [Cardinal.lt_one_iff] at H
+    have := mk_eq_zero_iff.1 (H ▸ b.mk_eq_rank'')
+    have := b.repr.toEquiv.subsingleton
+    exact one_ne_zero congr((⊥ : Subalgebra F E).val $(Subsingleton.elim 1 0))
+
+@[simp]
 
 中文:
 定理 rank_eq_one_iff
@@ -758,7 +846,15 @@ theorem rank_eq_one_iff
   obtain ⟨κ, b⟩ := Module.Free.exists_basis (R := F) (M := (⊥ : Subalgebra F E))
   refine le_antisymm ?_ ?_
   · have := lift_rank_range_le (Algebra.linearMap F E)
-    rwa [← one_eq_range, rank_self, lift_one, lift_le_one_i
+    rwa [← one_eq_range, rank_self, lift_one, lift_le_one_iff,
+      ← Algebra.toSubmodule_bot, rank_toSubmodule] at this
+  · by_contra H
+    rw [not_le]; rw [Cardinal.lt_one_iff] at H
+    have := mk_eq_zero_iff.1 (H ▸ b.mk_eq_rank'')
+    have := b.repr.toEquiv.subsingleton
+    exact one_ne_zero congr((⊥ : Subalgebra F E).val $(Subsingleton.elim 1 0))
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Algebra.toSubmodule_bot, Cardinal, Cardinal.lt_one_iff, Module, Module.Free.exists_basis, Subalgebra, Subalgebra.eq_bot_of_rank_le_one, b.mk_eq_rank, b.repr.toEquiv.subsingleton, eq_bot_of_rank_le_one, exists_basis, h.le, le_antisymm, lift_le_one_iff, lift_one, lift_rank_range_le, linearMap, lt_one_iff
 -/
@@ -838,7 +934,7 @@ theorem bot_eq_top_iff_finrank_eq_one
 
 alias ⟨_, bot_eq_top_of_rank_eq_one⟩ := bot_eq_top_iff_rank_eq_one
 
-alias ⟨_, b
+alias ⟨_, bot_eq_top_of_finrank_eq_one⟩ := bot_eq_top_iff_finrank_eq_one
 
 中文:
 定理 bot_eq_top_iff_finrank_eq_one
@@ -849,7 +945,7 @@ alias ⟨_, b
 
 alias ⟨_, bot_eq_top_of_rank_eq_one⟩ := bot_eq_top_iff_rank_eq_one
 
-alias ⟨_, b
+alias ⟨_, bot_eq_top_of_finrank_eq_one⟩ := bot_eq_top_iff_finrank_eq_one
 
 Depends on / 依赖: Module, Module.Free.of_equiv, Subalgebra, Subalgebra.finrank_eq_one_iff, Subalgebra.topEquiv, eq_comm, finrank_eq_one_iff, finrank_top, of_equiv, subalgebra_top_finrank_eq_submodule_top_finrank, toLinearEquiv, toLinearEquiv.symm, topEquiv
 -/

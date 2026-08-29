@@ -334,7 +334,7 @@ theorem normalizeAux_congr
   | vcomp _ _ _ _ => apply Eq.trans <;> assumption
   | whisker_left _ _ ih => funext; apply congr_fun ih
   | whisker_right _ _ ih => funext; apply congr_arg₂ _ (congr_fun ih _) rfl
-  | _ => funex
+  | _ => funext; rfl
 
 中文:
 定理 normalizeAux_congr
@@ -347,7 +347,7 @@ theorem normalizeAux_congr
   | vcomp _ _ _ _ => apply Eq.trans <;> assumption
   | whisker_left _ _ ih => funext; apply congr_fun ih
   | whisker_right _ _ ih => funext; apply congr_arg₂ _ (congr_fun ih _) rfl
-  | _ => funex
+  | _ => funext; rfl
 
 Depends on / 依赖: Eq.trans, congr_fun, normalizeAux, whisker_left, whisker_right
 -/
@@ -381,7 +381,15 @@ theorem normalize_naturality
     simp
   -- p ≠ nil required! See the docstring of `normalizeAux`.
   | whisker_left _ _ ih =>
-    dsim
+    dsimp
+    rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [ih]
+    simp
+  | whisker_right h η' ih =>
+    dsimp
+    rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [ih]; rw [comp_whiskerRight]
+    have := dcongr_arg (fun x => (normalizeIso x h).hom) (normalizeAux_congr p (Quot.mk _ η'))
+    dsimp at this; simp [this]
+  | _ => simp
 
 中文:
 定理 normalize_naturality
@@ -397,7 +405,15 @@ theorem normalize_naturality
     simp
   -- p ≠ nil required! See the docstring of `normalizeAux`.
   | whisker_left _ _ ih =>
-    dsim
+    dsimp
+    rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [ih]
+    simp
+  | whisker_right h η' ih =>
+    dsimp
+    rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [ih]; rw [comp_whiskerRight]
+    have := dcongr_arg (fun x => (normalizeIso x h).hom) (normalizeAux_congr p (Quot.mk _ η'))
+    dsimp at this; simp [this]
+  | _ => simp
 
 Depends on / 依赖: mk_vcomp, slice_lhs, whiskerLeft_comp
 -/
@@ -533,7 +549,10 @@ definition normalizeEquiv
       induction f with
       | nil => rfl
       | cons _ _ ih =>
-        ext1 -- Porting note: `tidy` closes the goal in mathlib3 but `aesop` doesn
+        ext1 -- Porting note: `tidy` closes the goal in mathlib3 but `aesop` doesn't here.
+        injection ih with ih
+        conv_rhs => rw [← ih]
+        rfl))
 
 中文:
 定义 normalizeEquiv
@@ -544,7 +563,10 @@ definition normalizeEquiv
       induction f with
       | nil => rfl
       | cons _ _ ih =>
-        ext1 -- Porting note: `tidy` closes the goal in mathlib3 but `aesop` doesn
+        ext1 -- Porting note: `tidy` closes the goal in mathlib3 but `aesop` doesn't here.
+        injection ih with ih
+        conv_rhs => rw [← ih]
+        rfl))
 
 Depends on / 依赖: Discrete, Discrete.natIso, Equivalence, Equivalence.mk, Porting, closes, conv_rhs, eqToIso, inclusionPath, injection, mapFunctor, mathlib3, natIso, normalize, normalizeUnitIso
 -/

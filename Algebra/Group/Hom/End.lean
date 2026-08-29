@@ -98,7 +98,8 @@ instance instSemiring
     AddMonoid.End.instAddMonoidWithOne M with
     zero_mul := fun _ => AddMonoidHom.ext fun _ => rfl,
     mul_zero := fun _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_zero _,
-    left_distrib := fun _ _ _ => AddMonoi
+    left_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_add _ _ _,
+    right_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => rfl }
 
 中文:
 实例 instSemiring
@@ -108,7 +109,8 @@ instance instSemiring
     AddMonoid.End.instAddMonoidWithOne M with
     zero_mul := fun _ => AddMonoidHom.ext fun _ => rfl,
     mul_zero := fun _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_zero _,
-    left_distrib := fun _ _ _ => AddMonoi
+    left_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_add _ _ _,
+    right_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => rfl }
 
 Depends on / 依赖: AddMonoid, AddMonoid.End.instAddMonoidWithOne, AddMonoid.End.instMonoid, AddMonoidHom, AddMonoidHom.ext, AddMonoidHom.instAddCommMonoid, AddMonoidHom.map_add, AddMonoidHom.map_zero, fast_instance, instAddCommMonoid, instAddMonoidWithOne, instMonoid, left_distrib, map_add, map_zero, mul_zero, right_distrib, zero_mul
 -/
@@ -133,7 +135,9 @@ instance instRing
     intCast_negSucc := negSucc_zsmul _ }
 
 example [AddCommGroup M] :
-    (AddMonoid.End.instRing (M := M)).toAddCommGroup.toAddGro
+    (AddMonoid.End.instRing (M := M)).toAddCommGroup.toAddGroup.toSubNegMonoid =
+    (AddMonoid.End.instRing (M := M)).toAddGroupWithOne.toAddGroup.toSubNegMonoid := by
+  with_reducible_and_instances rfl
 
 中文:
 实例 instRing
@@ -144,7 +148,9 @@ example [AddCommGroup M] :
     intCast_negSucc := negSucc_zsmul _ }
 
 example [AddCommGroup M] :
-    (AddMonoid.End.instRing (M := M)).toAddCommGroup.toAddGro
+    (AddMonoid.End.instRing (M := M)).toAddCommGroup.toAddGroup.toSubNegMonoid =
+    (AddMonoid.End.instRing (M := M)).toAddGroupWithOne.toAddGroup.toSubNegMonoid := by
+  with_reducible_and_instances rfl
 
 Depends on / 依赖: AddMonoid, AddMonoid.End, AddMonoid.End.instAddCommGroup, AddMonoid.End.instSemiring, fast_instance, instAddCommGroup, instSemiring, intCast, intCast_negSucc, intCast_ofNat, natCast_zsmul, negSucc_zsmul
 -/

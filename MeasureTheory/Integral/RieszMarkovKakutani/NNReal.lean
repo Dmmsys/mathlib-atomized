@@ -84,7 +84,8 @@ theorem lintegral_rieszMeasure
        NNReal.eq_iff, NNReal.coe_mk]
     exact integral_rieszMeasure Λ f
   rw [rieszMeasure]
-  exact Continuous.integrable_of_has
+  exact Continuous.integrable_of_hasCompactSupport (by fun_prop)
+    (HasCompactSupport.comp_left f.hasCompactSupport rfl)
 
 中文:
 定理 lintegral_rieszMeasure
@@ -96,7 +97,8 @@ theorem lintegral_rieszMeasure
        NNReal.eq_iff, NNReal.coe_mk]
     exact integral_rieszMeasure Λ f
   rw [rieszMeasure]
-  exact Continuous.integrable_of_has
+  exact Continuous.integrable_of_hasCompactSupport (by fun_prop)
+    (HasCompactSupport.comp_left f.hasCompactSupport rfl)
 
 Depends on / 依赖: Continuous, Continuous.integrable_of_hasCompactSupport, ENNReal, ENNReal.coe_inj, ENNReal.ofNNReal_toNNReal, HasCompactSupport, HasCompactSupport.comp_left, MeasureTheory, MeasureTheory.integral_nonneg, NNReal, NNReal.coe_mk, NNReal.eq_iff, Real.toNNReal_of_nonneg, coe_inj, coe_mk, comp_left, eq_iff, f.hasCompactSupport, fun_prop, hasCompactSupport
 -/

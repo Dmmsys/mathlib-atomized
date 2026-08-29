@@ -44,7 +44,15 @@ definition divisor
     simp [h₂z] at hz
   supportLocallyFiniteWithinDomain' := by
     simp_all only [Function.support_subset_iff, ne_eq, ite_eq_right_iff, WithTop.untop₀_eq_zero,
-     
+      and_imp, Classical.not_imp, not_or, implies_true,
+      ← supportDiscreteWithin_iff_locallyFiniteWithin]
+    by_cases hf : MeromorphicOn f U
+    · filter_upwards [mem_codiscrete_subtype_iff_mem_codiscreteWithin.1
+        hf.codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top]
+      simp only [Set.mem_image, Set.mem_ofPred_eq, Subtype.exists, exists_and_left, exists_prop,
+        exists_eq_right_right, Pi.ofNat_apply, ite_eq_right_iff, WithTop.untop₀_eq_zero, and_imp]
+      tauto
+    · simp [hf, Pi.zero_def]
 
 中文:
 定义 divisor
@@ -55,7 +63,15 @@ definition divisor
     simp [h₂z] at hz
   supportLocallyFiniteWithinDomain' := by
     simp_all only [Function.support_subset_iff, ne_eq, ite_eq_right_iff, WithTop.untop₀_eq_zero,
-     
+      and_imp, Classical.not_imp, not_or, implies_true,
+      ← supportDiscreteWithin_iff_locallyFiniteWithin]
+    by_cases hf : MeromorphicOn f U
+    · filter_upwards [mem_codiscrete_subtype_iff_mem_codiscreteWithin.1
+        hf.codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top]
+      simp only [Set.mem_image, Set.mem_ofPred_eq, Subtype.exists, exists_and_left, exists_prop,
+        exists_eq_right_right, Pi.ofNat_apply, ite_eq_right_iff, WithTop.untop₀_eq_zero, and_imp]
+      tauto
+    · simp [hf, Pi.zero_def]
 
 Depends on / 依赖: MeromorphicOn, meromorphicOrderAt
 -/
@@ -255,7 +271,10 @@ theorem divisor_congr_codiscreteWithin_of_eqOn_compl
     congr 1
     apply meromorphicOrderAt_congr
     simp_rw [EventuallyEq, Filter.Eventually, mem_codiscreteWithin, disjoint_principal_right] at h₁
-    filter_upwards [h₁ x hx] wit
+    filter_upwards [h₁ x hx] with a ha
+    simp at ha
+    tauto
+  · simp [hx]
 
 中文:
 定理 divisor_congr_codiscreteWithin_of_eqOn_compl
@@ -267,7 +286,10 @@ theorem divisor_congr_codiscreteWithin_of_eqOn_compl
     congr 1
     apply meromorphicOrderAt_congr
     simp_rw [EventuallyEq, Filter.Eventually, mem_codiscreteWithin, disjoint_principal_right] at h₁
-    filter_upwards [h₁ x hx] wit
+    filter_upwards [h₁ x hx] with a ha
+    simp at ha
+    tauto
+  · simp [hx]
 
 Depends on / 依赖: Eventually, EventuallyEq, Filter, Filter.Eventually, congr_codiscreteWithin_of_eqOn_compl, disjoint_principal_right, divisor_apply, filter_upwards, mem_codiscreteWithin, meromorphicOrderAt_congr, simp_rw
 -/
@@ -346,7 +368,15 @@ theorem divisor_congr_codiscreteWithin
       congr 1
       apply meromorphicOrderAt_congr
       simp_rw [EventuallyEq, Filter.Eventually, mem_codiscreteWithin,
-        disjoint_principal_rig
+        disjoint_principal_right] at h₁
+      have : U in 𝓝[!=] x := by
+        apply mem_nhdsWithin.mpr
+        use U, h₂, hx, Set.inter_subset_left
+      filter_upwards [this, h₁ x hx] with a h₁a h₂a
+      simp only [Set.mem_compl_iff, Set.mem_sdiff, Set.mem_ofPred_eq, not_and] at h₂a
+      tauto
+    · simp [hx]
+  · simp [divisor, hf₁, (meromorphicOn_congr_codiscreteWithin h₁ h₂).not.1 hf₁]
 
 中文:
 定理 divisor_congr_codiscreteWithin
@@ -359,7 +389,15 @@ theorem divisor_congr_codiscreteWithin
       congr 1
       apply meromorphicOrderAt_congr
       simp_rw [EventuallyEq, Filter.Eventually, mem_codiscreteWithin,
-        disjoint_principal_rig
+        disjoint_principal_right] at h₁
+      have : U in 𝓝[!=] x := by
+        apply mem_nhdsWithin.mpr
+        use U, h₂, hx, Set.inter_subset_left
+      filter_upwards [this, h₁ x hx] with a h₁a h₂a
+      simp only [Set.mem_compl_iff, Set.mem_sdiff, Set.mem_ofPred_eq, not_and] at h₂a
+      tauto
+    · simp [hx]
+  · simp [divisor, hf₁, (meromorphicOn_congr_codiscreteWithin h₁ h₂).not.1 hf₁]
 
 Depends on / 依赖: Eventually, EventuallyEq, Filter, Filter.Eventually, MeromorphicOn, Set.inter_subset_left, Set.mem_compl_iff, Set.mem_ofPred_eq, Set.mem_sdiff, congr_codiscreteWithin, disjoint_principal_right, divisor_apply, filter_upwards, inter_subset_left, mem_codiscreteWithin, mem_compl_iff, mem_nhdsWithin, mem_nhdsWithin.mpr, mem_ofPred_eq, mem_sdiff
 -/
@@ -433,7 +471,8 @@ theorem divisor_const
   simp only [divisor_def, meromorphicOrderAt_const, Function.locallyFinsuppWithin.coe_zero,
     Pi.zero_apply, ite_eq_right_iff, WithTop.untop₀_eq_zero,
     LinearOrderedAddCommGroupWithTop.top_ne_zero, imp_false, ite_eq_left_iff, WithTop.zero_ne_top,
-    Decidable.not_not, an
+    Decidable.not_not, and_imp]
+  tauto
 
 中文:
 定理 divisor_const
@@ -444,7 +483,8 @@ theorem divisor_const
   simp only [divisor_def, meromorphicOrderAt_const, Function.locallyFinsuppWithin.coe_zero,
     Pi.zero_apply, ite_eq_right_iff, WithTop.untop₀_eq_zero,
     LinearOrderedAddCommGroupWithTop.top_ne_zero, imp_false, ite_eq_left_iff, WithTop.zero_ne_top,
-    Decidable.not_not, an
+    Decidable.not_not, and_imp]
+  tauto
 
 Depends on / 依赖: CStarRing, Decidable, Decidable.not_not, Function, Function.locallyFinsuppWithin.coe_zero, LinearOrderedAddCommGroupWithTop, LinearOrderedAddCommGroupWithTop.top_ne_zero, Pi.zero_apply, WithTop, WithTop.untop, WithTop.zero_ne_top, and_imp, classical, coe_zero, divisor_def, imp_false, ite_eq_left_iff, ite_eq_right_iff, locallyFinsuppWithin, meromorphicOrderAt_const
 -/
@@ -543,7 +583,8 @@ theorem min_divisor_le_divisor_add
   by_cases h₂ : meromorphicOrderAt f₂ z = ⊤
   · simp_all
   rw [← WithTop.untop₀_min h₁ h₂]
-  apply WithTop.untop
+  apply WithTop.untop₀_le_untop₀ h₃
+  exact meromorphicOrderAt_add (hf₁ z hz) (hf₂ z hz)
 
 中文:
 定理 min_divisor_le_divisor_add
@@ -557,7 +598,8 @@ theorem min_divisor_le_divisor_add
   by_cases h₂ : meromorphicOrderAt f₂ z = ⊤
   · simp_all
   rw [← WithTop.untop₀_min h₁ h₂]
-  apply WithTop.untop
+  apply WithTop.untop₀_le_untop₀ h₃
+  exact meromorphicOrderAt_add (hf₁ z hz) (hf₂ z hz)
 
 Depends on / 依赖: WithTop, WithTop.untop, divisor_apply, meromorphicOrderAt, meromorphicOrderAt_add
 -/
@@ -589,7 +631,7 @@ theorem negPart_divisor_add_le_max
   by_cases hf₁₂ : meromorphicOrderAt (f₁ + f₂) z = ⊤
   · simp [divisor_apply (hf₁.add hf₂) hz, hf₁₂, negPart_nonneg]
   rw [← negPart_min]
-  apply ((le_
+  apply ((le_iff_posPart_negPart _ _).1 (min_divisor_le_divisor_add hf₁ hf₂ hz hf₁₂)).2
 
 中文:
 定理 negPart_divisor_add_le_max
@@ -602,7 +644,7 @@ theorem negPart_divisor_add_le_max
   by_cases hf₁₂ : meromorphicOrderAt (f₁ + f₂) z = ⊤
   · simp [divisor_apply (hf₁.add hf₂) hz, hf₁₂, negPart_nonneg]
   rw [← negPart_min]
-  apply ((le_
+  apply ((le_iff_posPart_negPart _ _).1 (min_divisor_le_divisor_add hf₁ hf₂ hz hf₁₂)).2
 
 Depends on / 依赖: Function, Function.locallyFinsuppWithin.max_apply, Function.locallyFinsuppWithin.negPart_apply, divisor_apply, le_iff_posPart_negPart, locallyFinsuppWithin, max_apply, meromorphicOrderAt, min_divisor_le_divisor_add, negPart_apply, negPart_min, negPart_nonneg
 -/
@@ -667,7 +709,8 @@ theorem divisor_smul
   · lift meromorphicOrderAt f₁ z to Int using (h₂f₁ z hz) with a₁ ha₁
     lift meromorphicOrderAt f₂ z to Int using (h₂f₂ z hz) with a₂ ha₂
     simp [h₁f₁, h₁f₂, h₁f₁.smul h₁f₂, hz, meromorphicOrderAt_smul (h₁f₁ z hz) (h₁f₂ z hz),
-      ← ha₁, ← ha₂, ← WithTop.coe_a
+      ← ha₁, ← ha₂, ← WithTop.coe_add]
+  · simp [hz]
 
 中文:
 定理 divisor_smul
@@ -678,7 +721,8 @@ theorem divisor_smul
   · lift meromorphicOrderAt f₁ z to Int using (h₂f₁ z hz) with a₁ ha₁
     lift meromorphicOrderAt f₂ z to Int using (h₂f₂ z hz) with a₂ ha₂
     simp [h₁f₁, h₁f₂, h₁f₁.smul h₁f₂, hz, meromorphicOrderAt_smul (h₁f₁ z hz) (h₁f₂ z hz),
-      ← ha₁, ← ha₂, ← WithTop.coe_a
+      ← ha₁, ← ha₂, ← WithTop.coe_add]
+  · simp [hz]
 
 Depends on / 依赖: WithTop, WithTop.coe_add, coe_add, meromorphicOrderAt, meromorphicOrderAt_smul
 -/
@@ -771,7 +815,12 @@ theorem divisor_prod
     exact divisor_ofNat 1
   | insert a s ha hs =>
     have (z) (hz : z in U) : meromorphicOrderAt (∏ i in s, f i) z != ⊤ := by
-      simpa [meromorphicOrderAt_prod (fun i hi => h₁f i (mem_insert
+      simpa [meromorphicOrderAt_prod (fun i hi => h₁f i (mem_insert_of_mem hi) z hz)]
+        using fun i hi => h₂f i (mem_insert_of_mem hi) z hz
+    rw [prod_insert ha]; rw [sum_insert ha]; rw [divisor_mul (by aesop)
+        (prod (fun i hi => h₁f i (mem_insert_of_mem hi)))
+        (h₂f a (mem_insert_self a s)) this]; rw [hs (fun i hi => h₁f i (mem_insert_of_mem hi))
+        (fun i hi => h₂f i (mem_insert_of_mem hi))]
 
 中文:
 定理 divisor_prod
@@ -784,7 +833,12 @@ theorem divisor_prod
     exact divisor_ofNat 1
   | insert a s ha hs =>
     have (z) (hz : z in U) : meromorphicOrderAt (∏ i in s, f i) z != ⊤ := by
-      simpa [meromorphicOrderAt_prod (fun i hi => h₁f i (mem_insert
+      simpa [meromorphicOrderAt_prod (fun i hi => h₁f i (mem_insert_of_mem hi) z hz)]
+        using fun i hi => h₂f i (mem_insert_of_mem hi) z hz
+    rw [prod_insert ha]; rw [sum_insert ha]; rw [divisor_mul (by aesop)
+        (prod (fun i hi => h₁f i (mem_insert_of_mem hi)))
+        (h₂f a (mem_insert_self a s)) this]; rw [hs (fun i hi => h₁f i (mem_insert_of_mem hi))
+        (fun i hi => h₂f i (mem_insert_of_mem hi))]
 
 Depends on / 依赖: Finset, Finset.induction, classical, divisor_mul, divisor_ofNat, insert, mem_insert_of_mem, mem_insert_self, meromorphicOrderAt, meromorphicOrderAt_prod, prod_empty, prod_insert, sum_empty, sum_insert
 -/
@@ -1042,7 +1096,18 @@ theorem negPart_divisor_add_of_analyticNhdOn_right
   · suffices -(meromorphicOrderAt (f₁ + f₂) x).untop₀ ⊔ 0 = -(meromorphicOrderAt f₁ x).untop₀ ⊔ 0 by
       simpa [negPart_def, hx, hf₁, hf₁.add hf₂.meromorphicOn]
     by_cases h : 0 <= meromorphicOrderAt f₁ x
-    · suffices 0 <= meromorphicOrderAt (f₁ + f₂) x by sim
+    · suffices 0 <= meromorphicOrderAt (f₁ + f₂) x by simp_all
+      calc 0
+      _ <= min (meromorphicOrderAt f₁ x) (meromorphicOrderAt f₂ x) :=
+        le_inf h (hf₂ x hx).meromorphicOrderAt_nonneg
+      _ <= meromorphicOrderAt (f₁ + f₂) x :=
+        meromorphicOrderAt_add (hf₁ x hx) (hf₂ x hx).meromorphicAt
+    · suffices meromorphicOrderAt f₁ x < meromorphicOrderAt f₂ x by
+        rwa [meromorphicOrderAt_add_eq_left_of_lt (hf₂.meromorphicOn x hx)]
+      calc meromorphicOrderAt f₁ x
+      _ < 0 := by simpa using h
+      _ <= meromorphicOrderAt f₂ x := (hf₂ x hx).meromorphicOrderAt_nonneg
+  simp [hx]
 
 中文:
 定理 negPart_divisor_add_of_analyticNhdOn_right
@@ -1053,7 +1118,18 @@ theorem negPart_divisor_add_of_analyticNhdOn_right
   · suffices -(meromorphicOrderAt (f₁ + f₂) x).untop₀ ⊔ 0 = -(meromorphicOrderAt f₁ x).untop₀ ⊔ 0 by
       simpa [negPart_def, hx, hf₁, hf₁.add hf₂.meromorphicOn]
     by_cases h : 0 <= meromorphicOrderAt f₁ x
-    · suffices 0 <= meromorphicOrderAt (f₁ + f₂) x by sim
+    · suffices 0 <= meromorphicOrderAt (f₁ + f₂) x by simp_all
+      calc 0
+      _ <= min (meromorphicOrderAt f₁ x) (meromorphicOrderAt f₂ x) :=
+        le_inf h (hf₂ x hx).meromorphicOrderAt_nonneg
+      _ <= meromorphicOrderAt (f₁ + f₂) x :=
+        meromorphicOrderAt_add (hf₁ x hx) (hf₂ x hx).meromorphicAt
+    · suffices meromorphicOrderAt f₁ x < meromorphicOrderAt f₂ x by
+        rwa [meromorphicOrderAt_add_eq_left_of_lt (hf₂.meromorphicOn x hx)]
+      calc meromorphicOrderAt f₁ x
+      _ < 0 := by simpa using h
+      _ <= meromorphicOrderAt f₂ x := (hf₂ x hx).meromorphicOrderAt_nonneg
+  simp [hx]
 
 Depends on / 依赖: le_inf, meromorphicAt, meromorphicOn, meromorphicOrderAt, meromorphicOrderAt_add, meromorphicOrderAt_nonneg, negPart_def
 -/
@@ -1118,7 +1194,7 @@ lemma divisor_sub_const_of_ne
     congr
     exact (meromorphicOrderAt_eq_int_iff (by fun_prop)).mpr
       ⟨(· - z₀), analyticAt_id.fun_sub analyticAt_const, by simp [sub_ne_zero_of_ne hx]⟩
-  · exa
+  · exact Function.locallyFinsuppWithin.apply_eq_zero_of_notMem _ hu
 
 中文:
 引理 divisor_sub_const_of_ne
@@ -1131,7 +1207,7 @@ lemma divisor_sub_const_of_ne
     congr
     exact (meromorphicOrderAt_eq_int_iff (by fun_prop)).mpr
       ⟨(· - z₀), analyticAt_id.fun_sub analyticAt_const, by simp [sub_ne_zero_of_ne hx]⟩
-  · exa
+  · exact Function.locallyFinsuppWithin.apply_eq_zero_of_notMem _ hu
 
 Depends on / 依赖: Function, Function.locallyFinsuppWithin.apply_eq_zero_of_notMem, MeromorphicOn, analyticAt_const, analyticAt_id, analyticAt_id.fun_sub, apply_eq_zero_of_notMem, divisor_apply, fun_prop, fun_sub, locallyFinsuppWithin, meromorphicOrderAt_eq_int_iff, sub_ne_zero_of_ne
 -/
@@ -1190,7 +1266,11 @@ theorem divisor_comp_add_const_eq_divisor
   rw [not_not] at h
   have := meromorphicOn_comp_add_const_iff_meromorphicOn.2 h
   by_cases h₁ : ¬ x in (U + {c})
-  · rw [Function.locallyFinsuppWithin.apply_eq_zero_of_notMe
+  · rw [Function.locallyFinsuppWithin.apply_eq_zero_of_notMem,
+      Function.locallyFinsuppWithin.apply_eq_zero_of_notMem]
+    <;> simp_all [← sub_eq_add_neg]
+  rw [divisor_apply]; rw [divisor_apply]
+  <;> simp_all [← sub_eq_add_neg, meromorphicOrderAt_comp_add_const_eq_meromorphicOrderAt]
 
 中文:
 定理 divisor_comp_add_const_eq_divisor
@@ -1202,7 +1282,11 @@ theorem divisor_comp_add_const_eq_divisor
   rw [not_not] at h
   have := meromorphicOn_comp_add_const_iff_meromorphicOn.2 h
   by_cases h₁ : ¬ x in (U + {c})
-  · rw [Function.locallyFinsuppWithin.apply_eq_zero_of_notMe
+  · rw [Function.locallyFinsuppWithin.apply_eq_zero_of_notMem,
+      Function.locallyFinsuppWithin.apply_eq_zero_of_notMem]
+    <;> simp_all [← sub_eq_add_neg]
+  rw [divisor_apply]; rw [divisor_apply]
+  <;> simp_all [← sub_eq_add_neg, meromorphicOrderAt_comp_add_const_eq_meromorphicOrderAt]
 
 Depends on / 依赖: Function, Function.locallyFinsuppWithin.apply_eq_zero_of_notMem, MeromorphicOn, apply_eq_zero_of_notMem, divisor_apply, locallyFinsuppWithin, meromorphicOn_comp_add_const_iff_meromorphicOn, meromorphicOn_comp_add_const_iff_meromorphicOn.not, meromorphicOrderAt_comp_add_const_eq_meromorphicOrderAt, not_not, sub_eq_add_neg
 -/

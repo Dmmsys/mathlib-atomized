@@ -77,7 +77,9 @@ lemma equivPiTensorComplSingletonTensor_tprod
   have : (reindex R M (Equiv.subtypeNeSumPUnit.{0} i₀).symm) (⨂ₜ[R] (i : ι), m i) =
       ⨂ₜ[R] j, m ((Equiv.subtypeNeSumPUnit.{0} i₀) j) := by
     simp_rw [reindex_tprod (R := R) (s := M), Equiv.symm_symm]
-  rw [dsimp% this]; rw [dsimp% tmulEquivDep_sy
+  rw [dsimp% this]; rw [dsimp% tmulEquivDep_symm_apply R
+    (fun i => M ((Equiv.subtypeNeSumPUnit.{0} i₀) i))]
+  exact (LinearEquiv.lTensor_tmul _ _ _ _).trans (by congr; simp)
 
 中文:
 引理 equivPiTensorComplSingletonTensor_tprod
@@ -87,7 +89,9 @@ lemma equivPiTensorComplSingletonTensor_tprod
   have : (reindex R M (Equiv.subtypeNeSumPUnit.{0} i₀).symm) (⨂ₜ[R] (i : ι), m i) =
       ⨂ₜ[R] j, m ((Equiv.subtypeNeSumPUnit.{0} i₀) j) := by
     simp_rw [reindex_tprod (R := R) (s := M), Equiv.symm_symm]
-  rw [dsimp% this]; rw [dsimp% tmulEquivDep_sy
+  rw [dsimp% this]; rw [dsimp% tmulEquivDep_symm_apply R
+    (fun i => M ((Equiv.subtypeNeSumPUnit.{0} i₀) i))]
+  exact (LinearEquiv.lTensor_tmul _ _ _ _).trans (by congr; simp)
 
 Depends on / 依赖: Equiv.subtypeNeSumPUnit, Equiv.symm_symm, LinearEquiv, LinearEquiv.lTensor_tmul, equivPiTensorComplSingletonTensor, lTensor_tmul, reindex, reindex_tprod, simp_rw, subtypeNeSumPUnit, symm_symm, tmulEquivDep_symm_apply
 -/
@@ -169,7 +173,35 @@ lemma ext_of_span_eq_top
 have : IsEmpty ι := (Nat.card_eq_zero.1 hι).resolve_right Finite.not_infinite ‹_›
     obtain rfl : x = fun i => @g i (isEmptyElim i) := Subsingleton.elim _ _
     apply h
-  | suc
+  | succ n hn =>
+    classical
+    have : Nonempty ι := ((Nat.card_pos_iff (α := ι)).1 (by omega)).1
+    have i₀ : ι := Classical.arbitrary _
+    let e := (equivPiTensorComplSingletonTensor R M i₀).trans (TensorProduct.comm _ _ _)
+    obtain ⟨ψ, rfl⟩ : exists ψ, φ = LinearMap.comp ψ e.toLinearMap :=
+      ⟨φ.comp e.symm.toLinearMap, by ext; simp⟩
+    obtain ⟨ψ', rfl⟩ : exists ψ', φ' = LinearMap.comp ψ' e.toLinearMap :=
+      ⟨φ'.comp e.symm.toLinearMap, by ext; simp⟩
+    dsimp [e] at h
+    congr 1
+    apply (TensorProduct.lift.equiv _ _ _ _).symm.injective
+    rw [Submodule.linearMap_eq_iff_of_span_eq_top _ _ (hg i₀)]
+    rintro ⟨_, ⟨g₀, rfl⟩⟩
+    apply hn (g := fun i (j : γ i.1) => by exact g j)
+    · intro
+      exact hg _
+    · intro j
+      have : (g g₀ otimesₜ[R] (tprod R) fun i => g (j i)) =
+          TensorProduct.comm R _ _ ((equivPiTensorComplSingletonTensor R M i₀)
+            (⨂ₜ[R] (i : ι), g (Function.subtypeNeLift i₀ j g₀ i))) := by
+        simp only [equivPiTensorComplSingletonTensor_tprod, Function.subtypeNeLift_self]
+        congr
+        ext ⟨x, hx⟩
+        congr
+        rw [Function.subtypeNeLift_of_neq _ _ _ _ (by assumption)]
+        rfl
+      simpa only [lift.equiv_symm_apply, this] using h (Function.subtypeNeLift i₀ j g₀)
+    · exact Set.ncard_compl_of_ncard_eq_add _ (by simpa)
 
 中文:
 引理 ext_of_span_eq_top
@@ -181,7 +213,35 @@ have : IsEmpty ι := (Nat.card_eq_zero.1 hι).resolve_right Finite.not_infinite 
 have : IsEmpty ι := (Nat.card_eq_zero.1 hι).resolve_right Finite.not_infinite ‹_›
     obtain rfl : x = fun i => @g i (isEmptyElim i) := Subsingleton.elim _ _
     apply h
-  | suc
+  | succ n hn =>
+    classical
+    have : Nonempty ι := ((Nat.card_pos_iff (α := ι)).1 (by omega)).1
+    have i₀ : ι := Classical.arbitrary _
+    let e := (equivPiTensorComplSingletonTensor R M i₀).trans (TensorProduct.comm _ _ _)
+    obtain ⟨ψ, rfl⟩ : exists ψ, φ = LinearMap.comp ψ e.toLinearMap :=
+      ⟨φ.comp e.symm.toLinearMap, by ext; simp⟩
+    obtain ⟨ψ', rfl⟩ : exists ψ', φ' = LinearMap.comp ψ' e.toLinearMap :=
+      ⟨φ'.comp e.symm.toLinearMap, by ext; simp⟩
+    dsimp [e] at h
+    congr 1
+    apply (TensorProduct.lift.equiv _ _ _ _).symm.injective
+    rw [Submodule.linearMap_eq_iff_of_span_eq_top _ _ (hg i₀)]
+    rintro ⟨_, ⟨g₀, rfl⟩⟩
+    apply hn (g := fun i (j : γ i.1) => by exact g j)
+    · intro
+      exact hg _
+    · intro j
+      have : (g g₀ otimesₜ[R] (tprod R) fun i => g (j i)) =
+          TensorProduct.comm R _ _ ((equivPiTensorComplSingletonTensor R M i₀)
+            (⨂ₜ[R] (i : ι), g (Function.subtypeNeLift i₀ j g₀ i))) := by
+        simp only [equivPiTensorComplSingletonTensor_tprod, Function.subtypeNeLift_self]
+        congr
+        ext ⟨x, hx⟩
+        congr
+        rw [Function.subtypeNeLift_of_neq _ _ _ _ (by assumption)]
+        rfl
+      simpa only [lift.equiv_symm_apply, this] using h (Function.subtypeNeLift i₀ j g₀)
+    · exact Set.ncard_compl_of_ncard_eq_add _ (by simpa)
 
 Depends on / 依赖: Classical, Classical.arbitrary, Finite, Finite.not_infinite, IsEmpty, Nat.card, Nat.card_eq_zero, Nat.card_pos_iff, Nonempty, Subsingleton, Subsingleton.elim, TensorProduct, TensorProduct.comm, arbitrary, card_eq_zero, card_pos_iff, classical, equivPiTensorComplSingletonTensor, generalizing, isEmptyElim
 -/

@@ -98,7 +98,12 @@ lemma auxDFT_auxDFT
   simp only [← sum_smul, ← neg_mul]
   have h1 (t : ZMod N) : ∑ i, stdAddChar (t * i) = if t = 0 then ↑N else 0 := by
     split_ifs with h
-    · simp only [h
+    · simp only [h, zero_mul, map_zero_eq_one, sum_const, card_univ, card,
+        nsmul_eq_mul, mul_one]
+    · exact sum_eq_zero_of_ne_one (isPrimitive_stdAddChar N h)
+  have h2 (x j : ZMod N) : -(j + x) = 0 ↔ x = -j := by
+    rw [neg_add]; rw [add_comm]; rw [add_eq_zero_iff_neg_eq]; rw [neg_neg]
+  simp only [h1, h2, ite_smul, zero_smul, sum_ite_eq', mem_univ, ite_true]
 
 中文:
 引理 auxDFT_auxDFT
@@ -112,7 +117,12 @@ lemma auxDFT_auxDFT
   simp only [← sum_smul, ← neg_mul]
   have h1 (t : ZMod N) : ∑ i, stdAddChar (t * i) = if t = 0 then ↑N else 0 := by
     split_ifs with h
-    · simp only [h
+    · simp only [h, zero_mul, map_zero_eq_one, sum_const, card_univ, card,
+        nsmul_eq_mul, mul_one]
+    · exact sum_eq_zero_of_ne_one (isPrimitive_stdAddChar N h)
+  have h2 (x j : ZMod N) : -(j + x) = 0 ↔ x = -j := by
+    rw [neg_add]; rw [add_comm]; rw [add_eq_zero_iff_neg_eq]; rw [neg_neg]
+  simp only [h1, h2, ite_smul, zero_smul, sum_ite_eq', mem_univ, ite_true]
 -/
 private lemma auxDFT_auxDFT (Φ : ZMod N -> E) : auxDFT (auxDFT Φ) = fun j => (N : Complex) • Φ (-j) := by
   ext1 j
@@ -167,7 +177,13 @@ definition dft
     ext; simp only [auxDFT, Pi.smul_apply, RingHom.id_apply, smul_sum, smul_comm c]
   invFun Φ k := (N : Complex)⁻¹ • auxDFT Φ (-k)
   left_inv Φ := by
-    simp only [auxDFT_auxDFT, 
+    simp only [auxDFT_auxDFT, neg_neg, ← mul_smul, inv_mul_cancel₀ (NeZero.ne _), one_smul]
+  right_inv Φ := by
+    ext1 j
+    simp only [← Pi.smul_def, auxDFT_smul, auxDFT_neg, auxDFT_auxDFT, neg_neg, ← mul_smul,
+      inv_mul_cancel₀ (NeZero.ne _), one_smul]
+
+@[inherit_doc] scoped notation "𝓕" => dft
 
 中文:
 定义 dft
@@ -179,7 +195,13 @@ definition dft
     ext; simp only [auxDFT, Pi.smul_apply, RingHom.id_apply, smul_sum, smul_comm c]
   invFun Φ k := (N : Complex)⁻¹ • auxDFT Φ (-k)
   left_inv Φ := by
-    simp only [auxDFT_auxDFT, 
+    simp only [auxDFT_auxDFT, neg_neg, ← mul_smul, inv_mul_cancel₀ (NeZero.ne _), one_smul]
+  right_inv Φ := by
+    ext1 j
+    simp only [← Pi.smul_def, auxDFT_smul, auxDFT_neg, auxDFT_auxDFT, neg_neg, ← mul_smul,
+      inv_mul_cancel₀ (NeZero.ne _), one_smul]
+
+@[inherit_doc] scoped notation "𝓕" => dft
 
 Depends on / 依赖: auxDFT
 -/
@@ -559,7 +581,7 @@ lemma dft_odd_iff
     simp only [Function.Odd, ← congr_fun (dft_comp_neg f), funext hf, ← Pi.neg_apply, map_neg,
       implies_true]
   refine ⟨fun hΦ x => ?_, h⟩
-  simpa only [neg_neg, dft_dft, ← smul_neg, smul_right_inj (NeZero.ne (N : Complex))] usi
+  simpa only [neg_neg, dft_dft, ← smul_neg, smul_right_inj (NeZero.ne (N : Complex))] using h hΦ (-x)
 
 中文:
 引理 dft_odd_iff
@@ -570,7 +592,7 @@ lemma dft_odd_iff
     simp only [Function.Odd, ← congr_fun (dft_comp_neg f), funext hf, ← Pi.neg_apply, map_neg,
       implies_true]
   refine ⟨fun hΦ x => ?_, h⟩
-  simpa only [neg_neg, dft_dft, ← smul_neg, smul_right_inj (NeZero.ne (N : Complex))] usi
+  simpa only [neg_neg, dft_dft, ← smul_neg, smul_right_inj (NeZero.ne (N : Complex))] using h hΦ (-x)
 
 Depends on / 依赖: Function, Function.Odd, NeZero, NeZero.ne, Pi.neg_apply, congr_fun, dft_comp_neg, dft_dft, f.Odd, implies_true, map_neg, neg_apply, neg_neg, smul_neg, smul_right_inj
 -/

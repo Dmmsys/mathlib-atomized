@@ -45,7 +45,18 @@ definition evaluationJointlyReflectsColimits
         rw [(hc X).fac_assoc ((evaluation R X).mapCocone s) j]
         have h₁ := (c.ι.app j).naturality f
         have h₂ := (hc Y).fac ((evaluation R Y).mapCocone s)
-        
+        dsimp at h₁ h₂ ⊢
+        simp only [← reassoc_of% h₁, ← Functor.map_comp, h₂, Hom.naturality]) }
+  fac s j := by
+    ext1 X
+    exact (hc X).fac ((evaluation R X).mapCocone s) j
+  uniq s m hm := by
+    ext1 X
+    apply (hc X).uniq ((evaluation R X).mapCocone s)
+    intro j
+    dsimp
+    rw [← hm]
+    rfl
 
 中文:
 定义 evaluationJointlyReflectsColimits
@@ -55,7 +66,18 @@ definition evaluationJointlyReflectsColimits
         rw [(hc X).fac_assoc ((evaluation R X).mapCocone s) j]
         have h₁ := (c.ι.app j).naturality f
         have h₂ := (hc Y).fac ((evaluation R Y).mapCocone s)
-        
+        dsimp at h₁ h₂ ⊢
+        simp only [← reassoc_of% h₁, ← Functor.map_comp, h₂, Hom.naturality]) }
+  fac s j := by
+    ext1 X
+    exact (hc X).fac ((evaluation R X).mapCocone s) j
+  uniq s m hm := by
+    ext1 X
+    apply (hc X).uniq ((evaluation R X).mapCocone s)
+    intro j
+    dsimp
+    rw [← hm]
+    rfl
 
 Depends on / 依赖: Functor, Functor.map_comp, Hom.naturality, evaluation, fac_assoc, hom_ext, mapCocone, map_comp, naturality, reassoc_of
 -/
@@ -103,7 +125,22 @@ definition colimitPresheafOfModules
     (preservesColimitIso (ModuleCat.restrictScalars (R.map f).hom) (F ⋙ evaluation R Y)).inv
   map_id X := colimit.hom_ext (fun j => by
     dsimp
-    rw [ι_colimMap_assoc]; rw [Functor.whiskerLeft_app]
+    rw [ι_colimMap_assoc]; rw [Functor.whiskerLeft_app]; rw [restriction_app]
+    -- Here we should rewrite using `Functor.assoc` but that gives a "motive is type-incorrect"
+    erw [ι_preservesColimitIso_inv (G := ModuleCat.restrictScalars (R.map (𝟙 X)).hom)]
+    rw [ModuleCat.restrictScalarsId'App_inv_naturality]; rw [map_id]
+    dsimp)
+  map_comp {X Y Z} f g := colimit.hom_ext (fun j => by
+    dsimp
+    rw [ι_colimMap_assoc]; rw [Functor.whiskerLeft_app]; rw [restriction_app]; rw [assoc]; rw [ι_colimMap_assoc]
+    -- Here we should rewrite using `Functor.assoc` but that gives a "motive is type-incorrect"
+    erw [ι_preservesColimitIso_inv (G := ModuleCat.restrictScalars (R.map (f ≫ g)).hom),
+      ι_preservesColimitIso_inv_assoc (G := ModuleCat.restrictScalars (R.map f).hom)]
+    rw [← Functor.map_comp_assoc]; rw [ι_colimMap_assoc]
+    erw [ι_preservesColimitIso_inv (G := ModuleCat.restrictScalars (R.map g).hom)]
+    rw [map_comp]; rw [ModuleCat.restrictScalarsComp'_inv_app]; rw [assoc]; rw [assoc]; rw [Functor.whiskerLeft_app]; rw [Functor.whiskerLeft_app]; rw [restriction_app]; rw [restriction_app]
+    simp only [Functor.map_comp, assoc]
+    rfl)
 
 中文:
 定义 colimitPresheafOfModules
@@ -113,7 +150,22 @@ definition colimitPresheafOfModules
     (preservesColimitIso (ModuleCat.restrictScalars (R.map f).hom) (F ⋙ evaluation R Y)).inv
   map_id X := colimit.hom_ext (fun j => by
     dsimp
-    rw [ι_colimMap_assoc]; rw [Functor.whiskerLeft_app]
+    rw [ι_colimMap_assoc]; rw [Functor.whiskerLeft_app]; rw [restriction_app]
+    -- Here we should rewrite using `Functor.assoc` but that gives a "motive is type-incorrect"
+    erw [ι_preservesColimitIso_inv (G := ModuleCat.restrictScalars (R.map (𝟙 X)).hom)]
+    rw [ModuleCat.restrictScalarsId'App_inv_naturality]; rw [map_id]
+    dsimp)
+  map_comp {X Y Z} f g := colimit.hom_ext (fun j => by
+    dsimp
+    rw [ι_colimMap_assoc]; rw [Functor.whiskerLeft_app]; rw [restriction_app]; rw [assoc]; rw [ι_colimMap_assoc]
+    -- Here we should rewrite using `Functor.assoc` but that gives a "motive is type-incorrect"
+    erw [ι_preservesColimitIso_inv (G := ModuleCat.restrictScalars (R.map (f ≫ g)).hom),
+      ι_preservesColimitIso_inv_assoc (G := ModuleCat.restrictScalars (R.map f).hom)]
+    rw [← Functor.map_comp_assoc]; rw [ι_colimMap_assoc]
+    erw [ι_preservesColimitIso_inv (G := ModuleCat.restrictScalars (R.map g).hom)]
+    rw [map_comp]; rw [ModuleCat.restrictScalarsComp'_inv_app]; rw [assoc]; rw [assoc]; rw [Functor.whiskerLeft_app]; rw [Functor.whiskerLeft_app]; rw [restriction_app]; rw [restriction_app]
+    simp only [Functor.map_comp, assoc]
+    rfl)
 
 Depends on / 依赖: colimit, evaluation
 -/
@@ -158,7 +210,9 @@ definition colimitCocone
             dsimp
             erw [colimit.ι_desc_assoc, assoc, ← ι_preservesColimitIso_inv]
             rfl }
-      naturality := fun {X Y} f 
+      naturality := fun {X Y} f => by
+        ext1 X
+        simpa using colimit.w (F ⋙ evaluation R X) f }
 
 中文:
 定义 colimitCocone
@@ -171,7 +225,9 @@ definition colimitCocone
             dsimp
             erw [colimit.ι_desc_assoc, assoc, ← ι_preservesColimitIso_inv]
             rfl }
-      naturality := fun {X Y} f 
+      naturality := fun {X Y} f => by
+        ext1 X
+        simpa using colimit.w (F ⋙ evaluation R X) f }
 
 Depends on / 依赖: colimitPresheafOfModules
 -/

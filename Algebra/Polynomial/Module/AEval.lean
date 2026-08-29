@@ -306,7 +306,8 @@ definition _root_.LinearMap.ofAEval
   map_smul' p := p.induction_on (fun k m => by simp [C_eq_algebraMap])
     (fun p q hp hq m => by simp_all [add_smul]) fun n k h m => by
       simp_rw [RingHom.id_apply, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom,
-        LinearMap.comp_apply, LinearEquiv.coe_toLinearMap] at h 
+        LinearMap.comp_apply, LinearEquiv.coe_toLinearMap] at h ⊢
+      simp_rw [pow_succ, ← mul_assoc, mul_smul _ X, ← hf, ← of_symm_X_smul, ← h]
 
 中文:
 定义 _root_.线性映射.ofAEval
@@ -315,7 +316,8 @@ definition _root_.LinearMap.ofAEval
   map_smul' p := p.induction_on (fun k m => by simp [C_eq_algebraMap])
     (fun p q hp hq m => by simp_all [add_smul]) fun n k h m => by
       simp_rw [RingHom.id_apply, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom,
-        LinearMap.comp_apply, LinearEquiv.coe_toLinearMap] at h 
+        LinearMap.comp_apply, LinearEquiv.coe_toLinearMap] at h ⊢
+      simp_rw [pow_succ, ← mul_assoc, mul_smul _ X, ← hf, ← of_symm_X_smul, ← h]
 -/
 def _root_.LinearMap.ofAEval {N} [AddCommMonoid N] [Module R N] [Module R[X] N]
     [IsScalarTower R R[X] N] (f : M ->ₗ[R] N) (hf : forall m : M, f (a • m) = (X : R[X]) • f m) :
@@ -437,7 +439,12 @@ definition mapSubmodule
         rintro f - ⟨m : M, h : m in (p : Submodule R M), rfl⟩
         simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
           AddSubmonoid.mem_map, Submodule.mem_toAddSubmonoid]
-   
+        exact ⟨aeval a f • m, aeval_apply_smul_mem_of_le_comap' h f a p.2, of_aeval_smul a f m⟩ }
+  invFun q := ⟨(Submodule.orderIsoMapComap (of R M a)).symm (q.restrictScalars R), fun m hm => by
+    simpa [← X_smul_of] using! q.smul_mem (X : R[X]) hm⟩
+  left_inv p := by ext; simp
+  right_inv q := by ext; aesop
+  map_rel_iff' {p p'} := ⟨fun h x hx => by aesop (rule_sets := [SetLike!]), fun h x hx => by aesop⟩
 
 中文:
 定义 mapSubmodule
@@ -447,7 +454,12 @@ definition mapSubmodule
         rintro f - ⟨m : M, h : m in (p : Submodule R M), rfl⟩
         simp only [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup,
           AddSubmonoid.mem_map, Submodule.mem_toAddSubmonoid]
-   
+        exact ⟨aeval a f • m, aeval_apply_smul_mem_of_le_comap' h f a p.2, of_aeval_smul a f m⟩ }
+  invFun q := ⟨(Submodule.orderIsoMapComap (of R M a)).symm (q.restrictScalars R), fun m hm => by
+    simpa [← X_smul_of] using! q.smul_mem (X : R[X]) hm⟩
+  left_inv p := by ext; simp
+  right_inv q := by ext; aesop
+  map_rel_iff' {p p'} := ⟨fun h x hx => by aesop (rule_sets := [SetLike!]), fun h x hx => by aesop⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_map, AddSubmonoid.mem_toSubsemigroup, AddSubsemigroup, AddSubsemigroup.mem_carrier, Submodule, Submodule.mem_toAddSubmonoid, Submodule.orderIsoMapComap, X_smul_of, aeval_apply_smul_mem_of_le_comap, invFun, mem_carrier, mem_map, mem_toAddSubmonoid, mem_toSubsemigroup, of_aeval_smul, orderIsoMapComap, q.restrictScalars, q.smul_mem, restrictScalars
 -/

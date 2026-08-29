@@ -50,7 +50,13 @@ theorem hasStrictDerivAt_inv
       (p.1 - p.2) * 1 by
 refine .of_isLittleO this.congr' ?_ (Eventually.of_forall fun _ => mul_one _)
     refine Eventually.mono ((isOpen_ne.prod isOpen_ne).mem_nhds ⟨hx, hx⟩) ?_
-    rintro ⟨y, z⟩ ⟨
+    rintro ⟨y, z⟩ ⟨hy, hz⟩
+    simp only [mem_ofPred_eq] at hy hz
+    simp [field]
+    ring
+  refine (isBigO_refl (fun p : 𝕜 × 𝕜 => p.1 - p.2) _).mul_isLittleO ((isLittleO_one_iff 𝕜).2 ?_)
+  rw [← sub_self (x * x)⁻¹]
+  exact tendsto_const_nhds.sub ((continuous_mul.tendsto (x, x)).inv₀ <| mul_ne_zero hx hx)
 
 中文:
 定理 hasStrictDerivAt_inv
@@ -62,7 +68,13 @@ refine .of_isLittleO this.congr' ?_ (Eventually.of_forall fun _ => mul_one _)
       (p.1 - p.2) * 1 by
 refine .of_isLittleO this.congr' ?_ (Eventually.of_forall fun _ => mul_one _)
     refine Eventually.mono ((isOpen_ne.prod isOpen_ne).mem_nhds ⟨hx, hx⟩) ?_
-    rintro ⟨y, z⟩ ⟨
+    rintro ⟨y, z⟩ ⟨hy, hz⟩
+    simp only [mem_ofPred_eq] at hy hz
+    simp [field]
+    ring
+  refine (isBigO_refl (fun p : 𝕜 × 𝕜 => p.1 - p.2) _).mul_isLittleO ((isLittleO_one_iff 𝕜).2 ?_)
+  rw [← sub_self (x * x)⁻¹]
+  exact tendsto_const_nhds.sub ((continuous_mul.tendsto (x, x)).inv₀ <| mul_ne_zero hx hx)
 
 Depends on / 依赖: Eventually, Eventually.mono, Eventually.of_forall, continu, isBigO_refl, isLittleO_one_iff, isOpen_ne, isOpen_ne.prod, mem_nhds, mem_ofPred_eq, mul_isLittleO, mul_one, of_forall, of_isLittleO, sub_self, tendsto_const_nhds, tendsto_const_nhds.sub, this.congr
 -/

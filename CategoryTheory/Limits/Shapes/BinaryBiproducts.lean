@@ -255,7 +255,13 @@ definition functoriality
       inl_fst := by rw [← F.map_comp, A.inl_fst, F.map_id]
       inl_snd := by rw [← F.map_comp, A.inl_snd, F.map_zero]
       inr_fst := by rw [← F.map_comp, A.inr_fst, F.map_zero]
-
+      inr_snd := by rw [← F.map_comp, A.inr_snd, F.map_id] }
+  map f :=
+    { hom := F.map f.hom
+      wfst := by simp [-BinaryBiconeMorphism.wfst, ← f.wfst]
+      wsnd := by simp [-BinaryBiconeMorphism.wsnd, ← f.wsnd]
+      winl := by simp [-BinaryBiconeMorphism.winl, ← f.winl]
+      winr := by simp [-BinaryBiconeMorphism.winr, ← f.winr] }
 
 中文:
 定义 functoriality
@@ -268,7 +274,13 @@ definition functoriality
       inl_fst := by rw [← F.map_comp, A.inl_fst, F.map_id]
       inl_snd := by rw [← F.map_comp, A.inl_snd, F.map_zero]
       inr_fst := by rw [← F.map_comp, A.inr_fst, F.map_zero]
-
+      inr_snd := by rw [← F.map_comp, A.inr_snd, F.map_id] }
+  map f :=
+    { hom := F.map f.hom
+      wfst := by simp [-BinaryBiconeMorphism.wfst, ← f.wfst]
+      wsnd := by simp [-BinaryBiconeMorphism.wsnd, ← f.wsnd]
+      winl := by simp [-BinaryBiconeMorphism.winl, ← f.winl]
+      winr := by simp [-BinaryBiconeMorphism.winr, ← f.winr] }
 
 Depends on / 依赖: A.fst, A.inl, A.inl_fst, A.inl_snd, A.inr, A.inr_fst, A.inr_snd, A.pt, A.snd, BinaryBiconeMorphism, BinaryBiconeMorphism.wfst, BinaryBiconeMorphism.winl, BinaryBiconeMorphism.wsnd, F.map, F.map_comp, F.map_id, F.map_zero, F.obj, f.hom, f.wfst
 -/
@@ -673,7 +685,7 @@ definition toBiconeFunctor
   map f := {
     hom := f.hom
     wπ := fun i => WalkingPair.casesOn i f.wfst f.wsnd
-    wι :
+    wι := fun i => WalkingPair.casesOn i f.winl f.winr }
 
 中文:
 定义 toBiconeFunctor
@@ -686,7 +698,7 @@ definition toBiconeFunctor
   map f := {
     hom := f.hom
     wπ := fun i => WalkingPair.casesOn i f.wfst f.wsnd
-    wι :
+    wι := fun i => WalkingPair.casesOn i f.winl f.winr }
 
 Depends on / 依赖: WalkingPair, WalkingPair.casesOn, b.fst, b.inl, b.inr, b.pt, b.snd, casesOn, f.hom, f.wfst, f.winl, f.winr, f.wsnd
 -/
@@ -981,7 +993,8 @@ definition BinaryBicone.IsBilimit.ofIso
       (by simp [BinaryFan.snd])
   isColimit := by
     refine (IsColimit.equivOfNatIsoOfIso (mapPairIso eP eQ) _ _ ?_).1 hb.isColimit
-    exact BinaryCofan.
+    exact BinaryCofan.ext (Iso.refl _) (by simp [BinaryCofan.inl])
+      (by simp [BinaryCofan.inr])
 
 中文:
 定义 BinaryBicone.是Bilimit.ofIso
@@ -992,7 +1005,8 @@ definition BinaryBicone.IsBilimit.ofIso
       (by simp [BinaryFan.snd])
   isColimit := by
     refine (IsColimit.equivOfNatIsoOfIso (mapPairIso eP eQ) _ _ ?_).1 hb.isColimit
-    exact BinaryCofan.
+    exact BinaryCofan.ext (Iso.refl _) (by simp [BinaryCofan.inl])
+      (by simp [BinaryCofan.inr])
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.ext, BinaryCofan.inl, BinaryCofan.inr, BinaryFan, BinaryFan.ext, BinaryFan.fst, BinaryFan.snd, IsColimit, IsColimit.equivOfNatIsoOfIso, IsLimit, IsLimit.equivOfNatIsoOfIso, Iso.refl, equivOfNatIsoOfIso, hb.isColimit, hb.isLimit, isColimit, isLimit, mapPairIso
 -/
@@ -2153,7 +2167,16 @@ theorem biprod.map_eq_map'
     simp
   · simp only [mapPair_left, IsColimit.ι_map, IsLimit.map_π,
       Category.assoc, ← BinaryBicone.toCone_π_app_right, ←
-   
+      BinaryBicone.toCocone_ι_app_left]
+    simp
+  · simp only [mapPair_right, IsColimit.ι_map, IsLimit.map_π,
+      Category.assoc, ← BinaryBicone.toCone_π_app_left, ←
+      BinaryBicone.toCocone_ι_app_right]
+    simp
+  · simp only [mapPair_right, IsColimit.ι_map, IsLimit.map_π,
+      Category.assoc, ← BinaryBicone.toCone_π_app_right, ←
+      BinaryBicone.toCocone_ι_app_right]
+    simp
 
 中文:
 定理 biprod.map_eq_map'
@@ -2166,7 +2189,16 @@ theorem biprod.map_eq_map'
     simp
   · simp only [mapPair_left, IsColimit.ι_map, IsLimit.map_π,
       Category.assoc, ← BinaryBicone.toCone_π_app_right, ←
-   
+      BinaryBicone.toCocone_ι_app_left]
+    simp
+  · simp only [mapPair_right, IsColimit.ι_map, IsLimit.map_π,
+      Category.assoc, ← BinaryBicone.toCone_π_app_left, ←
+      BinaryBicone.toCocone_ι_app_right]
+    simp
+  · simp only [mapPair_right, IsColimit.ι_map, IsLimit.map_π,
+      Category.assoc, ← BinaryBicone.toCone_π_app_right, ←
+      BinaryBicone.toCocone_ι_app_right]
+    simp
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.toCocone_, BinaryBicone.toCone_, Category, Category.assoc, IsColimit, IsLimit, IsLimit.map_, mapPair_left, mapPair_right
 -/
@@ -2466,7 +2498,7 @@ definition biprod.uniqueUpToIso
       biprod.conePointUniqueUpToIso_inv X Y hb]; rw [Iso.hom_inv_id]
   inv_hom_id := by
     rw [← biprod.conePointUniqueUpToIso_hom X Y hb]; rw [←
-      biprod.coneP
+      biprod.conePointUniqueUpToIso_inv X Y hb]; rw [Iso.inv_hom_id]
 
 中文:
 定义 biprod.uniqueUpToIso
@@ -2478,7 +2510,7 @@ definition biprod.uniqueUpToIso
       biprod.conePointUniqueUpToIso_inv X Y hb]; rw [Iso.hom_inv_id]
   inv_hom_id := by
     rw [← biprod.conePointUniqueUpToIso_hom X Y hb]; rw [←
-      biprod.coneP
+      biprod.conePointUniqueUpToIso_inv X Y hb]; rw [Iso.inv_hom_id]
 
 Depends on / 依赖: b.fst, b.snd, biprod, biprod.lift
 -/
@@ -3601,7 +3633,9 @@ lemma biprod_isZero_iff
       and_self]
   · rintro ⟨hA, hB⟩
     rw [IsZero.iff_id_eq_zero]
- 
+    apply biprod.hom_ext
+    · apply hA.eq_of_tgt
+    · apply hB.eq_of_tgt
 
 中文:
 引理 biprod_isZero_iff
@@ -3615,7 +3649,9 @@ lemma biprod_isZero_iff
       and_self]
   · rintro ⟨hA, hB⟩
     rw [IsZero.iff_id_eq_zero]
- 
+    apply biprod.hom_ext
+    · apply hA.eq_of_tgt
+    · apply hB.eq_of_tgt
 
 Depends on / 依赖: IsZero, IsZero.iff_id_eq_zero, and_self, biprod, biprod.fst, biprod.hom_ext, biprod.inl, biprod.inr, biprod.snd, comp_zero, eq_of_tgt, hA.eq_of_tgt, hB.eq_of_tgt, hom_ext, iff_id_eq_zero, zero_comp
 -/
@@ -3913,7 +3949,11 @@ theorem isIso_left_of_isIso_biprod_map
           (IsIso.hom_inv_id (biprod.map f g))
         simp only [Category.id_comp, Category.assoc, biprod.inl_map_assoc] at t
         simp [t], by
-        hav
+        have t := congrArg (fun p : Y ⊞ Z ⟶ Y ⊞ Z => biprod.inl ≫ p ≫ biprod.fst)
+          (IsIso.inv_hom_id (biprod.map f g))
+        simp only [Category.id_comp, Category.assoc, biprod.map_fst] at t
+        simp only [Category.assoc]
+        simp [t]⟩⟩⟩
 
 中文:
 定理 isIso_left_of_isIso_biprod_map
@@ -3924,7 +3964,11 @@ theorem isIso_left_of_isIso_biprod_map
           (IsIso.hom_inv_id (biprod.map f g))
         simp only [Category.id_comp, Category.assoc, biprod.inl_map_assoc] at t
         simp [t], by
-        hav
+        have t := congrArg (fun p : Y ⊞ Z ⟶ Y ⊞ Z => biprod.inl ≫ p ≫ biprod.fst)
+          (IsIso.inv_hom_id (biprod.map f g))
+        simp only [Category.id_comp, Category.assoc, biprod.map_fst] at t
+        simp only [Category.assoc]
+        simp [t]⟩⟩⟩
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, IsIso.hom_inv_id, IsIso.inv_hom_id, biprod, biprod.fst, biprod.inl, biprod.inl_map_assoc, biprod.map, biprod.map_fst, hom_inv_id, id_comp, inl_map_assoc, inv_hom_id, map_fst
 -/

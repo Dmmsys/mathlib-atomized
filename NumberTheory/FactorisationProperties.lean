@@ -596,7 +596,9 @@ theorem Prime.deficient_pow
     calc
       ∑ x in Finset.map ⟨(n ^ ·), Nat.pow_right_injective h.two_le⟩ (range m), x
         = ∑ i in range m, n ^ i := by simp
-      _ = (n ^ m - 1) / (n - 1) := (Nat.ge
+      _ = (n ^ m - 1) / (n - 1) := (Nat.geomSum_eq (Prime.two_le h) _)
+      _ <= (n ^ m - 1) := Nat.div_le_self (n ^ m - 1) (n - 1)
+      _ < n ^ m := sub_lt (pow_pos (Prime.pos h) m) (Nat.one_pos)
 
 中文:
 定理 素.deficient_pow
@@ -609,7 +611,9 @@ theorem Prime.deficient_pow
     calc
       ∑ x in Finset.map ⟨(n ^ ·), Nat.pow_right_injective h.two_le⟩ (range m), x
         = ∑ i in range m, n ^ i := by simp
-      _ = (n ^ m - 1) / (n - 1) := (Nat.ge
+      _ = (n ^ m - 1) / (n - 1) := (Nat.geomSum_eq (Prime.two_le h) _)
+      _ <= (n ^ m - 1) := Nat.div_le_self (n ^ m - 1) (n - 1)
+      _ < n ^ m := sub_lt (pow_pos (Prime.pos h) m) (Nat.one_pos)
 
 Depends on / 依赖: Deficient, Finset, Finset.map, LatticeHomClass, Nat.div_le_self, Nat.eq_zero_or_pos, Nat.geomSum_eq, Nat.one_pos, Nat.pow_right_injective, Prime.pos, Prime.two_le, deficient_one, div_le_self, eq_zero_or_pos, geomSum_eq, h.two_le, one_pos, pow_pos, pow_right_injective, properDivisors_prime_pow
 -/
@@ -832,7 +836,8 @@ theorem abundancyIndex_le_of_dvd
   rw [abundancyIndex]; rw [abundancyIndex]; rw [hk]; rw [cast_mul]; rw [div_mul_eq_div_div_swap]
   refine div_le_div_of_nonneg_right ?_ m.cast_nonneg
   rw [le_div_iff₀ (by grind [cast_pos]), ← cast_mul, cast_le, sum_mul]
-  exact (sum_image (f
+  exact (sum_image (f := fun i => i) (mul_left_injective₀ hk0).injOn).symm.trans_le
+    (sum_le_sum_of_subset (by grind [mul_dvd_mul_iff_right hk0]))
 
 中文:
 定理 abundancyIndex_le_of_dvd
@@ -843,7 +848,8 @@ theorem abundancyIndex_le_of_dvd
   rw [abundancyIndex]; rw [abundancyIndex]; rw [hk]; rw [cast_mul]; rw [div_mul_eq_div_div_swap]
   refine div_le_div_of_nonneg_right ?_ m.cast_nonneg
   rw [le_div_iff₀ (by grind [cast_pos]), ← cast_mul, cast_le, sum_mul]
-  exact (sum_image (f
+  exact (sum_image (f := fun i => i) (mul_left_injective₀ hk0).injOn).symm.trans_le
+    (sum_le_sum_of_subset (by grind [mul_dvd_mul_iff_right hk0]))
 
 Depends on / 依赖: abundancyIndex, cast_le, cast_mul, cast_nonneg, cast_pos, div_le_div_of_nonneg_right, div_mul_eq_div_div_swap, m.cast_nonneg, mul_dvd_mul_iff_right, sum_image, sum_le_sum_of_subset, sum_mul, symm.trans_le, trans_le
 -/

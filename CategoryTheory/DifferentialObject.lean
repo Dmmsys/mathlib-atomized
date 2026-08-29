@@ -493,7 +493,16 @@ definition mapDifferentialObject
         slice_lhs 2 3 => rw [← η.naturality X.d]
         rw [Functor.comp_map]
         slice_lhs 1 2 => rw [← F.map_comp, X.d_squared, hF]
- 
+        rw [zero_comp]; rw [zero_comp] }
+  map f :=
+    { f := F.map f.f
+      comm := by
+        dsimp
+        slice_lhs 2 3 => rw [← Functor.comp_map F (shiftFunctor D (1 : S)), ← η.naturality f.f]
+        slice_lhs 1 2 => rw [Functor.comp_map, ← F.map_comp, f.comm, F.map_comp]
+        rw [Category.assoc] }
+  map_id := by intros; ext; simp
+  map_comp := by intros; ext; simp
 
 中文:
 定义 mapDifferentialObject
@@ -505,7 +514,16 @@ definition mapDifferentialObject
         slice_lhs 2 3 => rw [← η.naturality X.d]
         rw [Functor.comp_map]
         slice_lhs 1 2 => rw [← F.map_comp, X.d_squared, hF]
- 
+        rw [zero_comp]; rw [zero_comp] }
+  map f :=
+    { f := F.map f.f
+      comm := by
+        dsimp
+        slice_lhs 2 3 => rw [← Functor.comp_map F (shiftFunctor D (1 : S)), ← η.naturality f.f]
+        slice_lhs 1 2 => rw [Functor.comp_map, ← F.map_comp, f.comm, F.map_comp]
+        rw [Category.assoc] }
+  map_id := by intros; ext; simp
+  map_comp := by intros; ext; simp
 
 Depends on / 依赖: F.map, F.map_comp, F.obj, Functor, Functor.comp_map, Functor.map_comp, X.d_squared, X.obj, comp_map, d_squared, f.comm, map_comp, naturality, shiftFunctor, slice_lhs, zero_comp
 -/
@@ -611,7 +629,8 @@ instance concreteCategoryOfDifferentialObjects
   ofHom f := ⟨ConcreteCategory.ofHom (C := C) f, by simpa [ConcreteCategory.hom_ofHom] using f.2⟩
   hom_ofHom _ := by dsimp; ext; simp [ConcreteCategory.hom_ofHom]
   ofHom_hom _ := by ext; simp [ConcreteCategory.ofHom_hom]
-  i
+  id_apply := ConcreteCategory.id_apply (C := C)
+  comp_apply _ _ := ConcreteCategory.comp_apply (C := C) _ _
 
 中文:
 实例 concreteCategoryOfDifferentialObjects
@@ -620,7 +639,8 @@ instance concreteCategoryOfDifferentialObjects
   ofHom f := ⟨ConcreteCategory.ofHom (C := C) f, by simpa [ConcreteCategory.hom_ofHom] using f.2⟩
   hom_ofHom _ := by dsimp; ext; simp [ConcreteCategory.hom_ofHom]
   ofHom_hom _ := by ext; simp [ConcreteCategory.ofHom_hom]
-  i
+  id_apply := ConcreteCategory.id_apply (C := C)
+  comp_apply _ _ := ConcreteCategory.comp_apply (C := C) _ _
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, ConcreteCategory.ofHom_hom, ofHom_hom
 -/
@@ -680,7 +700,14 @@ definition shiftFunctor
         rw [Functor.map_comp]; rw [Category.assoc]; rw [shiftComm_hom_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [X.d_squared]; rw [Functor.map_zero]; rw [zero_comp] }
   map f :=
     { f := f.f⟦n⟧'
-      comm := b
+      comm := by
+        dsimp
+        rw [Category.assoc]
+        erw [shiftComm_hom_comp]
+        rw [← Functor.map_comp_assoc]; rw [f.comm]; rw [Functor.map_comp_assoc]
+        rfl }
+  map_id X := by ext1; dsimp; rw [Functor.map_id]
+  map_comp f g := by ext1; dsimp; rw [Functor.map_comp]
 
 中文:
 定义 shiftFunctor
@@ -691,7 +718,14 @@ definition shiftFunctor
         rw [Functor.map_comp]; rw [Category.assoc]; rw [shiftComm_hom_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [X.d_squared]; rw [Functor.map_zero]; rw [zero_comp] }
   map f :=
     { f := f.f⟦n⟧'
-      comm := b
+      comm := by
+        dsimp
+        rw [Category.assoc]
+        erw [shiftComm_hom_comp]
+        rw [← Functor.map_comp_assoc]; rw [f.comm]; rw [Functor.map_comp_assoc]
+        rfl }
+  map_id X := by ext1; dsimp; rw [Functor.map_id]
+  map_comp f g := by ext1; dsimp; rw [Functor.map_comp]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, Functor.map_comp_assoc, Functor.map_id, Functor.map_zero, X.d_squared, X.obj, d_squared, f.comm, map_comp, map_comp_assoc, map_id, map_zero, shiftComm, shiftComm_hom_comp, shiftComm_hom_comp_assoc, zero_comp
 -/
@@ -784,7 +818,14 @@ instance :
         convert! shiftFunctorAdd_assoc_hom_app m₁ m₂ m₃ X.obj
         dsimp [shiftFunctorAdd']
         simp
-      zero_add_hom_app := fun n X => 
+      zero_add_hom_app := fun n X => by
+        ext1
+        convert! shiftFunctorAdd_zero_add_hom_app n X.obj
+        simp
+      add_zero_hom_app := fun n X => by
+        ext1
+        convert! shiftFunctorAdd_add_zero_hom_app n X.obj
+        simp }
 
 中文:
 实例 :
@@ -798,7 +839,14 @@ instance :
         convert! shiftFunctorAdd_assoc_hom_app m₁ m₂ m₃ X.obj
         dsimp [shiftFunctorAdd']
         simp
-      zero_add_hom_app := fun n X => 
+      zero_add_hom_app := fun n X => by
+        ext1
+        convert! shiftFunctorAdd_zero_add_hom_app n X.obj
+        simp
+      add_zero_hom_app := fun n X => by
+        ext1
+        convert! shiftFunctorAdd_add_zero_hom_app n X.obj
+        simp }
 
 Depends on / 依赖: X.obj, add_zero_hom_app, assoc_hom_app, convert, hasShiftMk, shiftFunctor, shiftFunctorAdd, shiftFunctorAdd_add_zero_hom_app, shiftFunctorAdd_assoc_hom_app, shiftFunctorAdd_zero_add_hom_app, shiftZero, zero_add_hom_app
 -/

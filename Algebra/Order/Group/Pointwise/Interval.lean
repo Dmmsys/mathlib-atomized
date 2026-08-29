@@ -436,7 +436,7 @@ lemma smul_Icc
     refine ⟨b * y, ⟨le_mul_of_one_le_right' hy, ?_⟩, (mul_assoc ..).symm⟩
     rwa [mul_assoc, mul_le_mul_iff_left] at hxac
 
-@[
+@[to_additive]
 
 中文:
 引理 smul_Icc
@@ -453,7 +453,7 @@ lemma smul_Icc
     refine ⟨b * y, ⟨le_mul_of_one_le_right' hy, ?_⟩, (mul_assoc ..).symm⟩
     rwa [mul_assoc, mul_le_mul_iff_left] at hxac
 
-@[
+@[to_additive]
 
 Depends on / 依赖: exists_one_le_mul_of_le, le_mul_of_one_le_right, mul_assoc, mul_le_mul_iff_left
 -/
@@ -481,7 +481,10 @@ lemma Icc_mul_Icc
   obtain hxbc | hbcx := le_total x (b * c)
   · obtain ⟨y, hy, rfl⟩ := exists_one_le_mul_of_le hacx
     refine ⟨a * y, ⟨le_mul_of_one_le_right' hy, ?_⟩, c, left_mem_Icc.2 hcd, mul_right_comm ..⟩
-    rwa [mul_right_comm, mul_l
+    rwa [mul_right_comm, mul_le_mul_iff_right] at hxbc
+  · obtain ⟨y, hy, rfl⟩ := exists_one_le_mul_of_le hbcx
+    refine ⟨b, right_mem_Icc.2 hab, c * y, ⟨le_mul_of_one_le_right' hy, ?_⟩, (mul_assoc ..).symm⟩
+    rwa [mul_assoc, mul_le_mul_iff_left] at hxbd
 
 中文:
 引理 Icc_mul_Icc
@@ -492,7 +495,10 @@ lemma Icc_mul_Icc
   obtain hxbc | hbcx := le_total x (b * c)
   · obtain ⟨y, hy, rfl⟩ := exists_one_le_mul_of_le hacx
     refine ⟨a * y, ⟨le_mul_of_one_le_right' hy, ?_⟩, c, left_mem_Icc.2 hcd, mul_right_comm ..⟩
-    rwa [mul_right_comm, mul_l
+    rwa [mul_right_comm, mul_le_mul_iff_right] at hxbc
+  · obtain ⟨y, hy, rfl⟩ := exists_one_le_mul_of_le hbcx
+    refine ⟨b, right_mem_Icc.2 hab, c * y, ⟨le_mul_of_one_le_right' hy, ?_⟩, (mul_assoc ..).symm⟩
+    rwa [mul_assoc, mul_le_mul_iff_left] at hxbd
 
 Depends on / 依赖: Icc_mul_Icc_subset, antisymm, exists_one_le_mul_of_le, le_mul_of_one_le_right, le_total, left_mem_Icc, mul_assoc, mul_le_mul_iff_left, mul_le_mul_iff_right, mul_right_comm, right_mem_Icc
 -/
@@ -3874,7 +3880,10 @@ lemma preimage_const_mul_Ioi_or_Iio
   rcases lt_or_gt_of_ne hb with (hb | hb)
   · right; rw [Set.preimage_const_mul_Ioi_of_neg _ hb, div_eq_inv_mul]
   · left; rw [Set.preimage_const_mul_Ioi₀ _ hb, div_eq_inv_mul]
-  · left; rw [Set.preim
+  · left; rw [Set.preimage_const_mul_Iio_of_neg _ hb, div_eq_inv_mul]
+  · right; rw [Set.preimage_const_mul_Iio₀ _ hb, div_eq_inv_mul]
+
+@[simp]
 
 中文:
 引理 preimage_const_mul_Ioi_or_Iio
@@ -3886,7 +3895,10 @@ lemma preimage_const_mul_Ioi_or_Iio
   rcases lt_or_gt_of_ne hb with (hb | hb)
   · right; rw [Set.preimage_const_mul_Ioi_of_neg _ hb, div_eq_inv_mul]
   · left; rw [Set.preimage_const_mul_Ioi₀ _ hb, div_eq_inv_mul]
-  · left; rw [Set.preim
+  · left; rw [Set.preimage_const_mul_Iio_of_neg _ hb, div_eq_inv_mul]
+  · right; rw [Set.preimage_const_mul_Iio₀ _ hb, div_eq_inv_mul]
+
+@[simp]
 
 Depends on / 依赖: Set.preimage_const_mul_Iio, Set.preimage_const_mul_Iio_of_neg, Set.preimage_const_mul_Ioi, Set.preimage_const_mul_Ioi_of_neg, div_eq_inv_mul, lt_or_gt_of_ne, mem_ofPred_eq, preimage_const_mul_Iio_of_neg, preimage_const_mul_Ioi_of_neg
 -/

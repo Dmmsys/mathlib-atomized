@@ -183,7 +183,10 @@ lemma gaussNorm_eq_zero_iff
   obtain ⟨n, hn⟩ := (MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero f).mp hf
   calc
   0 < v (f.coeff n) * ∏ i in n.support, (c i) ^ (n i) := by
-    apply mul_pos _ (by exact Finset.prod_pos fun i a => (fun i =>
+    apply mul_pos _ (by exact Finset.prod_pos fun i a => (fun i => pow_pos (hc i) (n i)) i)
+    specialize h_eq_zero (f.coeff n)
+    grind
+  _ <= _ := le_gaussNorm v c f hbd n
 
 中文:
 引理 gaussNorm_eq_zero_iff
@@ -196,7 +199,10 @@ lemma gaussNorm_eq_zero_iff
   obtain ⟨n, hn⟩ := (MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero f).mp hf
   calc
   0 < v (f.coeff n) * ∏ i in n.support, (c i) ^ (n i) := by
-    apply mul_pos _ (by exact Finset.prod_pos fun i a => (fun i =>
+    apply mul_pos _ (by exact Finset.prod_pos fun i a => (fun i => pow_pos (hc i) (n i)) i)
+    specialize h_eq_zero (f.coeff n)
+    grind
+  _ <= _ := le_gaussNorm v c f hbd n
 
 Depends on / 依赖: Finset, Finset.prod_pos, MvPowerSeries, MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero, contrapose, f.coeff, h_eq_zero, le_gaussNorm, mul_pos, n.support, ne_of_gt, ne_zero_iff_exists_coeff_ne_zero, pow_pos, prod_pos, specialize, support
 -/
@@ -226,7 +232,37 @@ lemma gaussNorm_add_le_max
     Finset.prod_nonneg (fun i hi => pow_nonneg (hc i) (t i))
   have Final (t : σ ->₀ Nat) : v ((coeff t) (f + g)) * ∏ i in t.support, c ↑i ^ t ↑i <=
       max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-      (v ((coeff t) g) * 
+      (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+    specialize hv (coeff t f) (coeff t g)
+    rcases max_choice (v ((coeff t) f)) (v ((coeff t) g)) with h | h
+    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
+          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
+          (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+        simp only [sup_eq_left]
+        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+      simp_rw [this]
+      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
+          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
+          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+        simp only [sup_eq_right]
+        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+      simp_rw [this]
+      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+  refine Real.iSup_le ?_ ?_
+  · refine fun t => calc
+    _ <= _ := Final t
+    _ <= max (gaussNorm v c f) (gaussNorm v c g) := by
+      simp only [le_sup_iff]
+      rcases max_choice (v ((coeff t) f) * ∏ i in t.support, c i ^ t i)
+        (v ((coeff t) g) * ∏ i in t.support, c i ^ t i) with h | h
+      · left
+        simpa [h] using! le_gaussNorm v c f hbfd t
+      · right
+        simpa [h] using! le_gaussNorm v c g hbgd t
+  · simp only [le_sup_iff]
+    left
+    exact gaussNorm_nonneg v c f vNonneg
 
 中文:
 引理 gaussNorm_add_le_max
@@ -236,7 +272,37 @@ lemma gaussNorm_add_le_max
     Finset.prod_nonneg (fun i hi => pow_nonneg (hc i) (t i))
   have Final (t : σ ->₀ Nat) : v ((coeff t) (f + g)) * ∏ i in t.support, c ↑i ^ t ↑i <=
       max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-      (v ((coeff t) g) * 
+      (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+    specialize hv (coeff t f) (coeff t g)
+    rcases max_choice (v ((coeff t) f)) (v ((coeff t) g)) with h | h
+    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
+          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
+          (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+        simp only [sup_eq_left]
+        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+      simp_rw [this]
+      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
+          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
+          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+        simp only [sup_eq_right]
+        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+      simp_rw [this]
+      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
+  refine Real.iSup_le ?_ ?_
+  · refine fun t => calc
+    _ <= _ := Final t
+    _ <= max (gaussNorm v c f) (gaussNorm v c g) := by
+      simp only [le_sup_iff]
+      rcases max_choice (v ((coeff t) f) * ∏ i in t.support, c i ^ t i)
+        (v ((coeff t) g) * ∏ i in t.support, c i ^ t i) with h | h
+      · left
+        simpa [h] using! le_gaussNorm v c f hbfd t
+      · right
+        simpa [h] using! le_gaussNorm v c g hbgd t
+  · simp only [le_sup_iff]
+    left
+    exact gaussNorm_nonneg v c f vNonneg
 
 Depends on / 依赖: Finset, Finset.prod_nonneg, max_choice, pow_nonneg, prod_nonneg, specialize, support, t.support
 -/
@@ -311,7 +377,22 @@ lemma gaussNorm_mul_le
     obtain ⟨k, hk, hsum⟩ := IsNonarchimedean.finset_image_add vZero vNonneg vna
       (fun a => coeff a.1 f * coeff a.2 g) (Finset.antidiagonal t)
     have hk' : k.1 + k.2 = t := by
-      simpa [Finset.mem_antidiagonal] using hk (Finset.nonempty
+      simpa [Finset.mem_antidiagonal] using hk (Finset.nonempty_def.mpr ⟨(t, 0), by simp⟩)
+    have hprod : t.prod (c · ^ ·) = k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·) := by
+      simp [← hk', Finsupp.prod_add_index' (h := (c · ^ ·)) (by grind) (by grind)]
+    rw [hprod]
+    refine (mul_le_mul hsum (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1) (c_prod_nonneg c hc k.2))
+      (vNonneg _)).trans ?_
+    have : v ((coeff k.1) f * (coeff k.2) g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) <=
+        (v (coeff k.1 f) * k.1.prod (c · ^ ·)) * (v (coeff k.2 g) * k.2.prod (c · ^ ·)) := by
+      calc
+      _ <= v (coeff k.1 f) * v (coeff k.2 g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) :=
+        mul_le_mul (vMul _ _) (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1)
+          (c_prod_nonneg c hc k.2)) (mul_nonneg (vNonneg _) (vNonneg _))
+      _ = _ := by ring
+    exact this.trans (mul_le_mul (le_gaussNorm v c f hbfd k.1) (le_gaussNorm v c g hbgd k.2)
+      (mul_nonneg (vNonneg _) (c_prod_nonneg c hc k.2)) (gaussNorm_nonneg v c f vNonneg))
+  · exact mul_nonneg (gaussNorm_nonneg v c f vNonneg) (gaussNorm_nonneg v c g vNonneg)
 
 中文:
 引理 gaussNorm_mul_le
@@ -323,7 +404,22 @@ lemma gaussNorm_mul_le
     obtain ⟨k, hk, hsum⟩ := IsNonarchimedean.finset_image_add vZero vNonneg vna
       (fun a => coeff a.1 f * coeff a.2 g) (Finset.antidiagonal t)
     have hk' : k.1 + k.2 = t := by
-      simpa [Finset.mem_antidiagonal] using hk (Finset.nonempty
+      simpa [Finset.mem_antidiagonal] using hk (Finset.nonempty_def.mpr ⟨(t, 0), by simp⟩)
+    have hprod : t.prod (c · ^ ·) = k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·) := by
+      simp [← hk', Finsupp.prod_add_index' (h := (c · ^ ·)) (by grind) (by grind)]
+    rw [hprod]
+    refine (mul_le_mul hsum (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1) (c_prod_nonneg c hc k.2))
+      (vNonneg _)).trans ?_
+    have : v ((coeff k.1) f * (coeff k.2) g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) <=
+        (v (coeff k.1 f) * k.1.prod (c · ^ ·)) * (v (coeff k.2 g) * k.2.prod (c · ^ ·)) := by
+      calc
+      _ <= v (coeff k.1 f) * v (coeff k.2 g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) :=
+        mul_le_mul (vMul _ _) (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1)
+          (c_prod_nonneg c hc k.2)) (mul_nonneg (vNonneg _) (vNonneg _))
+      _ = _ := by ring
+    exact this.trans (mul_le_mul (le_gaussNorm v c f hbfd k.1) (le_gaussNorm v c g hbgd k.2)
+      (mul_nonneg (vNonneg _) (c_prod_nonneg c hc k.2)) (gaussNorm_nonneg v c f vNonneg))
+  · exact mul_nonneg (gaussNorm_nonneg v c f vNonneg) (gaussNorm_nonneg v c g vNonneg)
 
 Depends on / 依赖: Finset, Finset.antidiagonal, Finset.mem_antidiagonal, Finset.nonempty_def.mpr, Finsupp, Finsupp.prod_add_index, IsNonarchimedean, IsNonarchimedean.finset_image_add, Real.iSup_le, antidiagonal, classical, finset_image_add, iSup_le, mem_antidiagonal, mul_le_mul, nonempty_def, prod_add_index, t.prod, vNonneg
 -/
@@ -419,7 +515,7 @@ lemma ultrametric_strict
   apply le_antisymm (na a b)
   rcases le_max_iff.mp (na (a + b) (-b)) with h | h
   · simpa [max_eq_left (le_of_lt hab)] using h
-  · exact absurd h (not_le.mpr (by simpa 
+  · exact absurd h (not_le.mpr (by simpa [Neg b] using hab))
 
 中文:
 引理 ultrametric_strict
@@ -430,7 +526,7 @@ lemma ultrametric_strict
   apply le_antisymm (na a b)
   rcases le_max_iff.mp (na (a + b) (-b)) with h | h
   · simpa [max_eq_left (le_of_lt hab)] using h
-  · exact absurd h (not_le.mpr (by simpa 
+  · exact absurd h (not_le.mpr (by simpa [Neg b] using hab))
 
 Depends on / 依赖: absurd, add_comm, generalizing, hne.symm, le_antisymm, le_max_iff, le_max_iff.mp, le_of_lt, lt_of_ne, max_comm, max_eq_left, not_le, not_le.mpr, not_lt, not_lt.mp
 -/
@@ -456,7 +552,10 @@ lemma Finset.Nonempty.map_sum_le_sup'_map
   | singleton j => simp only [Finset.mem_singleton, Finset.sum_singleton, exists_eq_left, le_refl]
   | cons j s hj _ IH =>
       simp only [Finset.sum_cons, Finset.mem_cons, exists_eq_or_imp]
-      refine (l
+      refine (le_total (g (∑ i in s, f i)) (g (f j))).imp ?_ ?_ <;> intro h
+      · exact (na _ _).trans (max_eq_left h).le
+· exact ⟨_, IH.choose_spec.left, (na _ _).trans
+          ((max_eq_right h).le.trans IH.choose_spec.right)⟩
 
 中文:
 引理 有限集.非空.map_sum_le_sup'_map
@@ -466,7 +565,10 @@ lemma Finset.Nonempty.map_sum_le_sup'_map
   | singleton j => simp only [Finset.mem_singleton, Finset.sum_singleton, exists_eq_left, le_refl]
   | cons j s hj _ IH =>
       simp only [Finset.sum_cons, Finset.mem_cons, exists_eq_or_imp]
-      refine (l
+      refine (le_total (g (∑ i in s, f i)) (g (f j))).imp ?_ ?_ <;> intro h
+      · exact (na _ _).trans (max_eq_left h).le
+· exact ⟨_, IH.choose_spec.left, (na _ _).trans
+          ((max_eq_right h).le.trans IH.choose_spec.right)⟩
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.le_sup, Finset.mem_cons, Finset.mem_singleton, Finset.sum_cons, Finset.sum_singleton, IH.choose_spec.left, IH.choose_spec.right, Nonempty, _iff, choose_spec, cons_induction, exists_eq_left, exists_eq_or_imp, le.trans, le_refl, le_sup, le_total, max_eq_left
 -/
@@ -530,7 +632,13 @@ lemma gaussNorm_le_mul
     _ = (v (coeff i₀ f) * i₀.prod (c · ^ ·)) * (v (coeff j₀ g) * j₀.prod (c · ^ ·)) := by
           rw [← hi₀]; rw [← hj₀]
     _ = v (coeff i₀ f) * v (coeff j₀ g) * ((i₀ + j₀).prod (c · ^ ·)) := by
-          h
+          have hprod : (i₀ + j₀).prod (c · ^ ·) = i₀.prod (c · ^ ·) * j₀.prod (c · ^ ·) := by
+            simp [Finsupp.prod_add_index', pow_add]
+          rw [hprod]; ring
+    _ = v (coeff i₀ f * coeff j₀ g) * (i₀ + j₀).prod (c · ^ ·) := by rw [vMulEq]
+    _ = v (coeff (i₀ + j₀) (f * g)) * (i₀ + j₀).prod (c · ^ ·) := by
+      rw [antidiagonal_dominant v f g i₀ j₀ vna vMulEq vNeg hdom']
+    _ <= gaussNorm v c (f * g) := le_gaussNorm v c (f * g) hbfg (i₀ + j₀)
 
 中文:
 引理 gaussNorm_le_mul
@@ -542,7 +650,13 @@ lemma gaussNorm_le_mul
     _ = (v (coeff i₀ f) * i₀.prod (c · ^ ·)) * (v (coeff j₀ g) * j₀.prod (c · ^ ·)) := by
           rw [← hi₀]; rw [← hj₀]
     _ = v (coeff i₀ f) * v (coeff j₀ g) * ((i₀ + j₀).prod (c · ^ ·)) := by
-          h
+          have hprod : (i₀ + j₀).prod (c · ^ ·) = i₀.prod (c · ^ ·) * j₀.prod (c · ^ ·) := by
+            simp [Finsupp.prod_add_index', pow_add]
+          rw [hprod]; ring
+    _ = v (coeff i₀ f * coeff j₀ g) * (i₀ + j₀).prod (c · ^ ·) := by rw [vMulEq]
+    _ = v (coeff (i₀ + j₀) (f * g)) * (i₀ + j₀).prod (c · ^ ·) := by
+      rw [antidiagonal_dominant v f g i₀ j₀ vna vMulEq vNeg hdom']
+    _ <= gaussNorm v c (f * g) := le_gaussNorm v c (f * g) hbfg (i₀ + j₀)
 
 Depends on / 依赖: AchievesGaussNorm, Finsupp, Finsupp.prod_add_index, pow_add, prod_add_index, vMulEq
 -/
@@ -582,7 +696,12 @@ lemma gaussNorm_mul_eq_mul
     convert gaussNorm_eq_zero_iff v c f vZero vNonneg h_eq_zero hc hf
     grind
   have hg1 : gaussNorm v c g != 0 := by
-    conve
+    convert gaussNorm_eq_zero_iff v c g vZero vNonneg h_eq_zero hc hg
+    grind
+  apply ge_antisymm_iff.mpr
+  constructor
+  · exact gaussNorm_le_mul v c f g vMulEq vNA (by grind) hfg hdom
+  · exact gaussNorm_mul_le v c f g (StrongLT.le hc) vNonneg (by grind) vNA vZero hf hg
 
 中文:
 引理 gaussNorm_mul_eq_mul
@@ -596,7 +715,12 @@ lemma gaussNorm_mul_eq_mul
     convert gaussNorm_eq_zero_iff v c f vZero vNonneg h_eq_zero hc hf
     grind
   have hg1 : gaussNorm v c g != 0 := by
-    conve
+    convert gaussNorm_eq_zero_iff v c g vZero vNonneg h_eq_zero hc hg
+    grind
+  apply ge_antisymm_iff.mpr
+  constructor
+  · exact gaussNorm_le_mul v c f g vMulEq vNA (by grind) hfg hdom
+  · exact gaussNorm_mul_le v c f g (StrongLT.le hc) vNonneg (by grind) vNA vZero hf hg
 
 Depends on / 依赖: StrongLT, StrongLT.le, convert, gaussNorm, gaussNorm_eq_zero_iff, gaussNorm_le_mul, gaussNorm_mul_le, gaussNorm_zero, ge_antisymm_iff, ge_antisymm_iff.mpr, h_eq_zero, vMulEq, vNonneg
 -/

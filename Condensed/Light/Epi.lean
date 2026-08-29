@@ -185,7 +185,12 @@ lemma factorsThru_lightProfinite_epi_of_epi
   rw [LightCondSet.epi_iff_locallySurjective_on_lightProfinite] at this
 obtain ⟨T, π, hπ, x, hx⟩ := this S (coherentTopology LightProfinite).yonedaEquiv
     (LightCondensed.freeForgetAdjunction R).homEquiv S.toCondensed Y p
-  refine 
+  refine ⟨T, π, ((LightCondensed.freeForgetAdjunction R).homEquiv T.toCondensed X).symm
+    ((coherentTopology LightProfinite).yonedaEquiv.symm x),
+    (LightProfinite.epi_iff_surjective π).mpr hπ, ?_⟩
+  rw [Functor.comp_map]; rw [← Adjunction.homEquiv_naturality_left_square_iff
+    (LightCondensed.freeForgetAdjunction R)]; rw [Sheaf.hom_ext_iff]; rw [Equiv.apply_symm_apply]; rw [GrothendieckTopology.yonedaEquiv_symm_naturality_right]; rw [hx]; rw [GrothendieckTopology.map_yonedaEquiv']; rw [← GrothendieckTopology.yonedaEquiv_symm_naturality_right]
+  rfl
 
 中文:
 引理 factorsThru_lightProfinite_epi_of_epi
@@ -195,7 +200,12 @@ obtain ⟨T, π, hπ, x, hx⟩ := this S (coherentTopology LightProfinite).yoned
   rw [LightCondSet.epi_iff_locallySurjective_on_lightProfinite] at this
 obtain ⟨T, π, hπ, x, hx⟩ := this S (coherentTopology LightProfinite).yonedaEquiv
     (LightCondensed.freeForgetAdjunction R).homEquiv S.toCondensed Y p
-  refine 
+  refine ⟨T, π, ((LightCondensed.freeForgetAdjunction R).homEquiv T.toCondensed X).symm
+    ((coherentTopology LightProfinite).yonedaEquiv.symm x),
+    (LightProfinite.epi_iff_surjective π).mpr hπ, ?_⟩
+  rw [Functor.comp_map]; rw [← Adjunction.homEquiv_naturality_left_square_iff
+    (LightCondensed.freeForgetAdjunction R)]; rw [Sheaf.hom_ext_iff]; rw [Equiv.apply_symm_apply]; rw [GrothendieckTopology.yonedaEquiv_symm_naturality_right]; rw [hx]; rw [GrothendieckTopology.map_yonedaEquiv']; rw [← GrothendieckTopology.yonedaEquiv_symm_naturality_right]
+  rfl
 
 Depends on / 依赖: Functor, Functor.comp_map, LightCondSet, LightCondSet.epi_iff_locallySurjective_on_lightProfinite, LightCondensed, LightCondensed.forget, LightCondensed.freeForgetAdjunction, LightProfinite, LightProfinite.epi_iff_surjective, S.toCondensed, T.toCondensed, coherentTopology, comp_map, epi_iff_locallySurjective_on_lightProfinite, epi_iff_surjective, forget, freeForgetAdjunction, homEquiv, toCondensed, yonedaEquiv
 -/
@@ -235,7 +245,9 @@ lemma epi_π_app_zero_of_epi
   apply coherentTopology.epi_π_app_zero_of_epi
   · simp only [LightProfinite.effectiveEpi_iff_surjective]
     exact fun x h => Concrete.surjective_π_app_zero_of_surjective_map (limit.isLimit x) h
-  · have :=
+  · have := (freeForgetAdjunction R).isRightAdjoint
+    exact isLimitOfPreserves _ hc
+  · exact fun _ => (forget R).map_epi _
 
 中文:
 引理 epi_π_app_zero_of_epi
@@ -246,7 +258,9 @@ lemma epi_π_app_zero_of_epi
   apply coherentTopology.epi_π_app_zero_of_epi
   · simp only [LightProfinite.effectiveEpi_iff_surjective]
     exact fun x h => Concrete.surjective_π_app_zero_of_surjective_map (limit.isLimit x) h
-  · have :=
+  · have := (freeForgetAdjunction R).isRightAdjoint
+    exact isLimitOfPreserves _ hc
+  · exact fun _ => (forget R).map_epi _
 
 Depends on / 依赖: Concrete, Concrete.surjective_, Functor, Functor.epi_of_epi_map, LightProfinite, LightProfinite.effectiveEpi_iff_surjective, coherentTopology, coherentTopology.epi_, effectiveEpi_iff_surjective, epi_of_epi_map, forget, freeForgetAdjunction, isLimit, isLimitOfPreserves, isRightAdjoint, limit.isLimit, mapCone, map_epi
 -/

@@ -277,7 +277,82 @@ instance ExactPairing.tensor
     calc
       _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
           (Y₂ otimes Y₁) ◁ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ ot
+          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ otimes Y₁) otimes≫
+          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
+      -- Group η₂ and ε₁ so they compose with ≫ (both act on the Y₁ ⊗ X₁ factor):
+      --
+      -- Y₂ Y₁ ╭── X₁ ────────────╮
+      -- │ │ │ ╭── X₂ ───╮ │
+      -- │ │ │ │ │ │
+      -- │ ╰──ε₁──╯ │ │ │
+      -- │ │ │ │
+      -- ╰────── ε₂ ──────╯ │ │
+      -- Y₂ Y₁
+      --
+      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
+          Y₂ ◁ ((Y₁ otimes X₁) ◁ η_ X₂ Y₂ ≫ ε_ X₁ Y₁ ▷ (X₂ otimes Y₂)) ▷ Y₁ otimes≫
+          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
+      -- Slide the η₂ cup past the ε₁ cap (whisker_exchange), separating the
+      -- two zigzags into independent snakes:
+      --
+      -- Y₂ Y₁
+      -- │ │ ╭─X₁──╮
+      -- │ │ │ │
+      -- │ ╰───╯ │ ← snake for (X₁, Y₁)
+      -- │ │
+      -- │ ╭─X₂──╮ │
+      -- │ │ │ │
+      -- ╰──╯ │ │ ← snake for (X₂, Y₂)
+      -- Y₂ Y₁
+      --
+      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
+          Y₂ ◁ (ε_ X₁ Y₁ ▷ (𝟙_ C) ≫ (𝟙_ C) ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
+          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by
+        rw [whisker_exchange]
+      -- Separate into two snakes and cancel each.
+      _ = 𝟙 _ otimes≫ Y₂ ◁ (Y₁ ◁ η_ X₁ Y₁ otimes≫ ε_ X₁ Y₁ ▷ Y₁) otimes≫
+          (Y₂ ◁ η_ X₂ Y₂ otimes≫ ε_ X₂ Y₂ ▷ Y₂) ▷ Y₁ otimes≫ 𝟙 _ := by monoidal
+      _ = _ := by rw [coevaluation_evaluation'', coevaluation_evaluation'']; monoidal
+  evaluation_coevaluation' := by
+    calc
+      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
+          (X₁ ◁ η_ X₂ Y₂) ▷ (Y₁ otimes X₁ otimes X₂) otimes≫
+          (X₁ otimes X₂) ◁ (Y₂ ◁ ε_ X₁ Y₁ ▷ X₂) otimes≫
+          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
+      -- Group η₂ and ε₁ so they compose with ≫:
+      --
+      -- ╭── Y₁ ────────────╮ X₁ X₂
+      -- │ ╭── Y₂ ───╮ │ │ │
+      -- │ │ │ │ │ │
+      -- │ │ │ ╰──ε₁───╯ │
+      -- │ │ │ │
+      -- │ │ ╰──────── ε₂ ────╯
+      -- X₁ X₂
+      --
+      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
+          X₁ ◁ (η_ X₂ Y₂ ▷ (Y₁ otimes X₁) ≫ (X₂ otimes Y₂) ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
+          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
+      -- Slide the ε₁ cap past the η₂ cup (← whisker_exchange), separating the
+      -- two zigzags into independent snakes:
+      --
+      -- X₁ X₂
+      -- ╭──Y₁──╮ │ │
+      -- │ │ │ │
+      -- │ ╰──────╯ │ ← snake for (X₁, Y₁)
+      -- │ │
+      -- │ ╭──Y₂──╮ │
+      -- │ │ │ │
+      -- │ │ ╰───────╯ ← snake for (X₂, Y₂)
+      -- X₁ X₂
+      --
+      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
+          X₁ ◁ ((𝟙_ C) ◁ ε_ X₁ Y₁ ≫ η_ X₂ Y₂ ▷ (𝟙_ C)) ▷ X₂ otimes≫
+          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by
+        rw [← whisker_exchange]
+      -- Separate into two snakes and cancel each.
+      _ = 𝟙 _ otimes≫ (η_ X₁ Y₁ ▷ X₁ otimes≫ X₁ ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
+          X₁ ◁ (η_ X₂ Y₂ ▷ X₂ otimes≫ X₂ ◁ ε_ X₂ Y₂) otimes≫ 𝟙 _ := by monoidal
+      _ = _ := by rw [evaluation_coevaluation'', evaluation_coevaluation'']; monoidal
 
 中文:
 实例 ExactPairing.tensor
@@ -288,7 +363,82 @@ instance ExactPairing.tensor
     calc
       _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
           (Y₂ otimes Y₁) ◁ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ ot
+          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ otimes Y₁) otimes≫
+          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
+      -- Group η₂ and ε₁ so they compose with ≫ (both act on the Y₁ ⊗ X₁ factor):
+      --
+      -- Y₂ Y₁ ╭── X₁ ────────────╮
+      -- │ │ │ ╭── X₂ ───╮ │
+      -- │ │ │ │ │ │
+      -- │ ╰──ε₁──╯ │ │ │
+      -- │ │ │ │
+      -- ╰────── ε₂ ──────╯ │ │
+      -- Y₂ Y₁
+      --
+      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
+          Y₂ ◁ ((Y₁ otimes X₁) ◁ η_ X₂ Y₂ ≫ ε_ X₁ Y₁ ▷ (X₂ otimes Y₂)) ▷ Y₁ otimes≫
+          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
+      -- Slide the η₂ cup past the ε₁ cap (whisker_exchange), separating the
+      -- two zigzags into independent snakes:
+      --
+      -- Y₂ Y₁
+      -- │ │ ╭─X₁──╮
+      -- │ │ │ │
+      -- │ ╰───╯ │ ← snake for (X₁, Y₁)
+      -- │ │
+      -- │ ╭─X₂──╮ │
+      -- │ │ │ │
+      -- ╰──╯ │ │ ← snake for (X₂, Y₂)
+      -- Y₂ Y₁
+      --
+      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
+          Y₂ ◁ (ε_ X₁ Y₁ ▷ (𝟙_ C) ≫ (𝟙_ C) ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
+          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by
+        rw [whisker_exchange]
+      -- Separate into two snakes and cancel each.
+      _ = 𝟙 _ otimes≫ Y₂ ◁ (Y₁ ◁ η_ X₁ Y₁ otimes≫ ε_ X₁ Y₁ ▷ Y₁) otimes≫
+          (Y₂ ◁ η_ X₂ Y₂ otimes≫ ε_ X₂ Y₂ ▷ Y₂) ▷ Y₁ otimes≫ 𝟙 _ := by monoidal
+      _ = _ := by rw [coevaluation_evaluation'', coevaluation_evaluation'']; monoidal
+  evaluation_coevaluation' := by
+    calc
+      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
+          (X₁ ◁ η_ X₂ Y₂) ▷ (Y₁ otimes X₁ otimes X₂) otimes≫
+          (X₁ otimes X₂) ◁ (Y₂ ◁ ε_ X₁ Y₁ ▷ X₂) otimes≫
+          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
+      -- Group η₂ and ε₁ so they compose with ≫:
+      --
+      -- ╭── Y₁ ────────────╮ X₁ X₂
+      -- │ ╭── Y₂ ───╮ │ │ │
+      -- │ │ │ │ │ │
+      -- │ │ │ ╰──ε₁───╯ │
+      -- │ │ │ │
+      -- │ │ ╰──────── ε₂ ────╯
+      -- X₁ X₂
+      --
+      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
+          X₁ ◁ (η_ X₂ Y₂ ▷ (Y₁ otimes X₁) ≫ (X₂ otimes Y₂) ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
+          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
+      -- Slide the ε₁ cap past the η₂ cup (← whisker_exchange), separating the
+      -- two zigzags into independent snakes:
+      --
+      -- X₁ X₂
+      -- ╭──Y₁──╮ │ │
+      -- │ │ │ │
+      -- │ ╰──────╯ │ ← snake for (X₁, Y₁)
+      -- │ │
+      -- │ ╭──Y₂──╮ │
+      -- │ │ │ │
+      -- │ │ ╰───────╯ ← snake for (X₂, Y₂)
+      -- X₁ X₂
+      --
+      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
+          X₁ ◁ ((𝟙_ C) ◁ ε_ X₁ Y₁ ≫ η_ X₂ Y₂ ▷ (𝟙_ C)) ▷ X₂ otimes≫
+          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by
+        rw [← whisker_exchange]
+      -- Separate into two snakes and cancel each.
+      _ = 𝟙 _ otimes≫ (η_ X₁ Y₁ ▷ X₁ otimes≫ X₁ ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
+          X₁ ◁ (η_ X₂ Y₂ ▷ X₂ otimes≫ X₂ ◁ ε_ X₂ Y₂) otimes≫ 𝟙 _ := by monoidal
+      _ = _ := by rw [evaluation_coevaluation'', evaluation_coevaluation'']; monoidal
 
 Depends on / 依赖: otimes
 -/
@@ -806,7 +956,16 @@ theorem comp_rightAdjointMate
   simp only [← MonoidalCategory.whiskerLeft_comp]; congr 2
   symm
   calc
-    _ = 𝟙 _ otimes≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y otimes Yᘁ) ◁ η_ X Xᘁ) otimes≫ Y ◁ Yᘁ
+    _ = 𝟙 _ otimes≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y otimes Yᘁ) ◁ η_ X Xᘁ) otimes≫ Y ◁ Yᘁ ◁ f ▷ Xᘁ otimes≫
+        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+      rw [tensorHom_def']; monoidal
+    _ = η_ X Xᘁ otimes≫ (η_ Y Yᘁ ▷ (X otimes Xᘁ) ≫ (Y otimes Yᘁ) ◁ f ▷ Xᘁ) otimes≫
+        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; monoidal
+    _ = η_ X Xᘁ otimes≫ f ▷ Xᘁ otimes≫ (η_ Y Yᘁ ▷ Y otimes≫ Y ◁ ε_ Y Yᘁ) ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; monoidal
+    _ = η_ X Xᘁ ≫ f ▷ Xᘁ ≫ g ▷ Xᘁ := by
+      rw [evaluation_coevaluation'']; monoidal
 
 中文:
 定理 comp_rightAdjointMate
@@ -818,7 +977,16 @@ theorem comp_rightAdjointMate
   simp only [← MonoidalCategory.whiskerLeft_comp]; congr 2
   symm
   calc
-    _ = 𝟙 _ otimes≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y otimes Yᘁ) ◁ η_ X Xᘁ) otimes≫ Y ◁ Yᘁ
+    _ = 𝟙 _ otimes≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y otimes Yᘁ) ◁ η_ X Xᘁ) otimes≫ Y ◁ Yᘁ ◁ f ▷ Xᘁ otimes≫
+        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+      rw [tensorHom_def']; monoidal
+    _ = η_ X Xᘁ otimes≫ (η_ Y Yᘁ ▷ (X otimes Xᘁ) ≫ (Y otimes Yᘁ) ◁ f ▷ Xᘁ) otimes≫
+        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; monoidal
+    _ = η_ X Xᘁ otimes≫ f ▷ Xᘁ otimes≫ (η_ Y Yᘁ ▷ Y otimes≫ Y ◁ ε_ Y Yᘁ) ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; monoidal
+    _ = η_ X Xᘁ ≫ f ▷ Xᘁ ≫ g ▷ Xᘁ := by
+      rw [evaluation_coevaluation'']; monoidal
 
 Depends on / 依赖: Category, Category.assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp, comp_whiskerRight, monoidal, otimes, rightAdjointMate, rightAdjointMate_comp, tensorHom_def, whiskerLeft_comp
 -/
@@ -856,7 +1024,16 @@ theorem comp_leftAdjointMate
   simp only [← comp_whiskerRight]; congr 2
   symm
   calc
-    _ = 𝟙 _ otimes≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) otimes Y)) otimes≫ 
+    _ = 𝟙 _ otimes≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) otimes Y)) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) ▷ Y otimes≫
+        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
+      rw [tensorHom_def]; monoidal
+    _ = η_ (ᘁX) X otimes≫ (((ᘁX) otimes X) ◁ η_ (ᘁY) Y ≫ ((ᘁX) ◁ f) ▷ ((ᘁY) otimes Y)) otimes≫
+        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
+      rw [whisker_exchange]; monoidal
+    _ = η_ (ᘁX) X otimes≫ ((ᘁX) ◁ f) otimes≫ (ᘁX) ◁ (Y ◁ η_ (ᘁY) Y otimes≫ ε_ (ᘁY) Y ▷ Y) otimes≫ (ᘁX) ◁ g := by
+      rw [whisker_exchange]; monoidal
+    _ = η_ (ᘁX) X ≫ (ᘁX) ◁ f ≫ (ᘁX) ◁ g := by
+      rw [coevaluation_evaluation'']; monoidal
 
 中文:
 定理 comp_leftAdjointMate
@@ -868,7 +1045,16 @@ theorem comp_leftAdjointMate
   simp only [← comp_whiskerRight]; congr 2
   symm
   calc
-    _ = 𝟙 _ otimes≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) otimes Y)) otimes≫ 
+    _ = 𝟙 _ otimes≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) otimes Y)) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) ▷ Y otimes≫
+        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
+      rw [tensorHom_def]; monoidal
+    _ = η_ (ᘁX) X otimes≫ (((ᘁX) otimes X) ◁ η_ (ᘁY) Y ≫ ((ᘁX) ◁ f) ▷ ((ᘁY) otimes Y)) otimes≫
+        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
+      rw [whisker_exchange]; monoidal
+    _ = η_ (ᘁX) X otimes≫ ((ᘁX) ◁ f) otimes≫ (ᘁX) ◁ (Y ◁ η_ (ᘁY) Y otimes≫ ε_ (ᘁY) Y ▷ Y) otimes≫ (ᘁX) ◁ g := by
+      rw [whisker_exchange]; monoidal
+    _ = η_ (ᘁX) X ≫ (ᘁX) ◁ f ≫ (ᘁX) ◁ g := by
+      rw [coevaluation_evaluation'']; monoidal
 
 Depends on / 依赖: Category, Category.assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp, comp_whiskerRight, leftAdjointMate, leftAdjointMate_comp, monoidal, otimes, tensorHom_def, whiskerLeft_comp
 -/
@@ -903,7 +1089,18 @@ definition tensorLeftHomEquiv
     calc
       _ = 𝟙 _ otimes≫ Y' ◁ η_ Y Y' ▷ X otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
         monoidal
-      _ = 𝟙 _ otimes≫ (Y' ◁ η_ Y Y' oti
+      _ = 𝟙 _ otimes≫ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') ▷ X otimes≫ f := by
+        rw [whisker_exchange]; monoidal
+      _ = f := by
+        rw [coevaluation_evaluation'']; monoidal
+  right_inv f := by
+    calc
+      _ = 𝟙 _ otimes≫ (η_ Y Y' ▷ X ≫ (Y otimes Y') ◁ f) otimes≫ Y ◁ ε_ Y Y' ▷ Z otimes≫ 𝟙 _ := by
+        monoidal
+      _ = f otimes≫ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') ▷ Z otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]; monoidal
+      _ = f := by
+        rw [evaluation_coevaluation'']; monoidal
 
 中文:
 定义 tensorLeftHomEquiv
@@ -914,7 +1111,18 @@ definition tensorLeftHomEquiv
     calc
       _ = 𝟙 _ otimes≫ Y' ◁ η_ Y Y' ▷ X otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
         monoidal
-      _ = 𝟙 _ otimes≫ (Y' ◁ η_ Y Y' oti
+      _ = 𝟙 _ otimes≫ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') ▷ X otimes≫ f := by
+        rw [whisker_exchange]; monoidal
+      _ = f := by
+        rw [coevaluation_evaluation'']; monoidal
+  right_inv f := by
+    calc
+      _ = 𝟙 _ otimes≫ (η_ Y Y' ▷ X ≫ (Y otimes Y') ◁ f) otimes≫ Y ◁ ε_ Y Y' ▷ Z otimes≫ 𝟙 _ := by
+        monoidal
+      _ = f otimes≫ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') ▷ Z otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]; monoidal
+      _ = f := by
+        rw [evaluation_coevaluation'']; monoidal
 
 Depends on / 依赖: fun_
 -/
@@ -950,7 +1158,18 @@ definition tensorRightHomEquiv
     calc
       _ = 𝟙 _ otimes≫ X ◁ η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
         monoidal
-      _ = 𝟙 _ otimes≫ X ◁ (η_ Y Y' ▷ Y otimes
+      _ = 𝟙 _ otimes≫ X ◁ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
+        rw [← whisker_exchange]; monoidal
+      _ = f := by
+        rw [evaluation_coevaluation'']; monoidal
+  right_inv f := by
+    calc
+      _ = 𝟙 _ otimes≫ (X ◁ η_ Y Y' ≫ f ▷ (Y otimes Y')) otimes≫ Z ◁ ε_ Y Y' ▷ Y' otimes≫ 𝟙 _ := by
+        monoidal
+      _ = f otimes≫ Z ◁ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]; monoidal
+      _ = f := by
+        rw [coevaluation_evaluation'']; monoidal
 
 中文:
 定义 tensorRightHomEquiv
@@ -961,7 +1180,18 @@ definition tensorRightHomEquiv
     calc
       _ = 𝟙 _ otimes≫ X ◁ η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
         monoidal
-      _ = 𝟙 _ otimes≫ X ◁ (η_ Y Y' ▷ Y otimes
+      _ = 𝟙 _ otimes≫ X ◁ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
+        rw [← whisker_exchange]; monoidal
+      _ = f := by
+        rw [evaluation_coevaluation'']; monoidal
+  right_inv f := by
+    calc
+      _ = 𝟙 _ otimes≫ (X ◁ η_ Y Y' ≫ f ▷ (Y otimes Y')) otimes≫ Z ◁ ε_ Y Y' ▷ Y' otimes≫ 𝟙 _ := by
+        monoidal
+      _ = f otimes≫ Z ◁ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]; monoidal
+      _ = f := by
+        rw [coevaluation_evaluation'']; monoidal
 -/
 def tensorRightHomEquiv (X Y Y' Z : C) [ExactPairing Y Y'] : (X otimes Y ⟶ Z) ≃ (X ⟶ Z otimes Y') where
   toFun f := (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ f ▷ _
@@ -1357,7 +1587,9 @@ theorem tensorLeftHomEquiv_whiskerLeft_comp_evaluation
     _ = f otimes≫ (η_ (ᘁZ) Z ▷ (ᘁZ) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z) := by
       rw [← whisker_exchange]; monoidal
     _ = _ := by
-      rw [evaluation_coevaluation''
+      rw [evaluation_coevaluation'']; monoidal
+
+@[simp]
 
 中文:
 定理 tensorLeftHomEquiv_whiskerLeft_comp_evaluation
@@ -1368,7 +1600,9 @@ theorem tensorLeftHomEquiv_whiskerLeft_comp_evaluation
     _ = f otimes≫ (η_ (ᘁZ) Z ▷ (ᘁZ) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z) := by
       rw [← whisker_exchange]; monoidal
     _ = _ := by
-      rw [evaluation_coevaluation''
+      rw [evaluation_coevaluation'']; monoidal
+
+@[simp]
 
 Depends on / 依赖: evaluation_coevaluation, monoidal, otimes, tensorLeftHomEquiv, whisker_exchange
 -/
@@ -1603,7 +1837,24 @@ definition exactPairingCongrLeft
       _ = η_ X' Y ▷ X otimes≫ (i.inv ▷ (Y otimes X) ≫ X ◁ (Y ◁ i.hom)) otimes≫ X ◁ ε_ X' Y := by
         monoidal
       _ = 𝟙 _ otimes≫ (η_ X' Y ▷ X ≫ (X' otimes Y) ◁ i.hom) otimes≫
-          (i.inv ▷ (Y 
+          (i.inv ▷ (Y otimes X') ≫ X ◁ ε_ X' Y) otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ i.hom otimes≫ (η_ X' Y ▷ X' otimes≫ X' ◁ ε_ X' Y) otimes≫ i.inv otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]; rw [← whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
+        rw [evaluation_coevaluation'']; monoidal
+      _ = (fun_ X).hom ≫ (ρ_ X).inv := by
+        rw [Iso.hom_inv_id]
+        monoidal
+  coevaluation_evaluation' := by
+    calc
+      _ = Y ◁ η_ X' Y ≫ Y ◁ (i.inv ≫ i.hom) ▷ Y otimes≫ ε_ X' Y ▷ Y := by
+        monoidal
+      _ = Y ◁ η_ X' Y otimes≫ ε_ X' Y ▷ Y := by
+        rw [Iso.inv_hom_id]; monoidal
+      _ = _ := by
+        rw [coevaluation_evaluation'']
+        simp
 
 中文:
 定义 exactPairingCongrLeft
@@ -1615,7 +1866,24 @@ definition exactPairingCongrLeft
       _ = η_ X' Y ▷ X otimes≫ (i.inv ▷ (Y otimes X) ≫ X ◁ (Y ◁ i.hom)) otimes≫ X ◁ ε_ X' Y := by
         monoidal
       _ = 𝟙 _ otimes≫ (η_ X' Y ▷ X ≫ (X' otimes Y) ◁ i.hom) otimes≫
-          (i.inv ▷ (Y 
+          (i.inv ▷ (Y otimes X') ≫ X ◁ ε_ X' Y) otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ i.hom otimes≫ (η_ X' Y ▷ X' otimes≫ X' ◁ ε_ X' Y) otimes≫ i.inv otimes≫ 𝟙 _ := by
+        rw [← whisker_exchange]; rw [← whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
+        rw [evaluation_coevaluation'']; monoidal
+      _ = (fun_ X).hom ≫ (ρ_ X).inv := by
+        rw [Iso.hom_inv_id]
+        monoidal
+  coevaluation_evaluation' := by
+    calc
+      _ = Y ◁ η_ X' Y ≫ Y ◁ (i.inv ≫ i.hom) ▷ Y otimes≫ ε_ X' Y ▷ Y := by
+        monoidal
+      _ = Y ◁ η_ X' Y otimes≫ ε_ X' Y ▷ Y := by
+        rw [Iso.inv_hom_id]; monoidal
+      _ = _ := by
+        rw [coevaluation_evaluation'']
+        simp
 
 Depends on / 依赖: i.hom
 -/
@@ -1663,7 +1931,22 @@ definition exactPairingCongrRight
       _ = η_ X Y' ▷ X otimes≫ X ◁ ε_ X Y' := by
         rw [Iso.inv_hom_id]; monoidal
       _ = _ := by
-      
+        rw [evaluation_coevaluation'']
+        simp
+  coevaluation_evaluation' :=
+    calc
+      _ = Y ◁ η_ X Y' otimes≫ (Y ◁ (X ◁ i.inv) ≫ i.hom ▷ (X otimes Y)) otimes≫ ε_ X Y' ▷ Y := by
+        monoidal
+      _ = 𝟙 _ otimes≫ (Y ◁ η_ X Y' ≫ i.hom ▷ (X otimes Y')) otimes≫
+          ((Y' otimes X) ◁ i.inv ≫ ε_ X Y' ▷ Y) otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ i.hom otimes≫ (Y' ◁ η_ X Y' otimes≫ ε_ X Y' ▷ Y') otimes≫ i.inv otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]; rw [whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
+        rw [coevaluation_evaluation'']; monoidal
+      _ = (ρ_ Y).hom ≫ (fun_ Y).inv := by
+        rw [Iso.hom_inv_id]
+        monoidal
 
 中文:
 定义 exactPairingCongrRight
@@ -1677,7 +1960,22 @@ definition exactPairingCongrRight
       _ = η_ X Y' ▷ X otimes≫ X ◁ ε_ X Y' := by
         rw [Iso.inv_hom_id]; monoidal
       _ = _ := by
-      
+        rw [evaluation_coevaluation'']
+        simp
+  coevaluation_evaluation' :=
+    calc
+      _ = Y ◁ η_ X Y' otimes≫ (Y ◁ (X ◁ i.inv) ≫ i.hom ▷ (X otimes Y)) otimes≫ ε_ X Y' ▷ Y := by
+        monoidal
+      _ = 𝟙 _ otimes≫ (Y ◁ η_ X Y' ≫ i.hom ▷ (X otimes Y')) otimes≫
+          ((Y' otimes X) ◁ i.inv ≫ ε_ X Y' ▷ Y) otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ i.hom otimes≫ (Y' ◁ η_ X Y' otimes≫ ε_ X Y' ▷ Y') otimes≫ i.inv otimes≫ 𝟙 _ := by
+        rw [whisker_exchange]; rw [whisker_exchange]; monoidal
+      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
+        rw [coevaluation_evaluation'']; monoidal
+      _ = (ρ_ Y).hom ≫ (fun_ Y).inv := by
+        rw [Iso.hom_inv_id]
+        monoidal
 
 Depends on / 依赖: i.hom
 -/
@@ -1743,7 +2041,10 @@ definition rightDualIso
   hom_inv_id := by
     -- Make all arguments explicit, because we want to find them by unification not synthesis.
     rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
-    r
+    rfl
+  inv_hom_id := by
+    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
+    rfl
 
 中文:
 定义 rightDualIso
@@ -1753,7 +2054,10 @@ definition rightDualIso
   hom_inv_id := by
     -- Make all arguments explicit, because we want to find them by unification not synthesis.
     rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
-    r
+    rfl
+  inv_hom_id := by
+    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
+    rfl
 
 Depends on / 依赖: rightAdjointMate
 -/
@@ -1780,6 +2084,11 @@ definition leftDualIso
     -- Make all arguments explicit, because we want to find them by unification not synthesis.
     rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
     rfl
+  inv_hom_id := by
+    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
+    rfl
+
+@[simp]
 
 中文:
 定义 leftDualIso
@@ -1790,6 +2099,11 @@ definition leftDualIso
     -- Make all arguments explicit, because we want to find them by unification not synthesis.
     rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
     rfl
+  inv_hom_id := by
+    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
+    rfl
+
+@[simp]
 
 Depends on / 依赖: leftAdjointMate
 -/

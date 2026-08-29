@@ -157,7 +157,11 @@ theorem continuousOn_continuousAlternatingMapCoordChange
   simp +unfoldPartialApp only [continuousAlternatingMapCoordChange,
     ContinuousLinearEquiv.coe_continuousAlternatingMapCongr, ContinuousLinearEquiv.symm_symm]
   refine .clm_comp ?_ ?_
-  · refine map_continuous (ContinuousLinearMap.compContinuousAlternatingMapCLM (ι :
+  · refine map_continuous (ContinuousLinearMap.compContinuousAlternatingMapCLM (ι := ι) 𝕜 F₁ F₂ F₂)
+.comp_continuousOn ((continuousOn_coordChange 𝕜 e₂ e₂').mono ?_)
+    mfld_set_tac
+  · refine ContinuousAlternatingMap.continuous_compContinuousLinearMapCLM.comp_continuousOn ?_
+.mono (by mfld_set_tac) exact continuousOn_coordChange 𝕜 e₁' e₁
 
 中文:
 定理 continuousOn_continuousAlternatingMapCoordChange
@@ -166,7 +170,11 @@ theorem continuousOn_continuousAlternatingMapCoordChange
   simp +unfoldPartialApp only [continuousAlternatingMapCoordChange,
     ContinuousLinearEquiv.coe_continuousAlternatingMapCongr, ContinuousLinearEquiv.symm_symm]
   refine .clm_comp ?_ ?_
-  · refine map_continuous (ContinuousLinearMap.compContinuousAlternatingMapCLM (ι :
+  · refine map_continuous (ContinuousLinearMap.compContinuousAlternatingMapCLM (ι := ι) 𝕜 F₁ F₂ F₂)
+.comp_continuousOn ((continuousOn_coordChange 𝕜 e₂ e₂').mono ?_)
+    mfld_set_tac
+  · refine ContinuousAlternatingMap.continuous_compContinuousLinearMapCLM.comp_continuousOn ?_
+.mono (by mfld_set_tac) exact continuousOn_coordChange 𝕜 e₁' e₁
 
 Depends on / 依赖: ContinuousAlternatingMap, ContinuousAlternatingMap.continuous_compContinuousLinearMapCLM.comp_continuousOn, ContinuousLinearEquiv, ContinuousLinearEquiv.coe_continuousAlternatingMapCongr, ContinuousLinearEquiv.symm_symm, ContinuousLinearMap, ContinuousLinearMap.compContinuousAlternatingMapCLM, clm_comp, coe_continuousAlternatingMapCongr, compContinuousAlternatingMapCLM, comp_continuousOn, continuousAlternatingMapCoordChange, continuousOn_coordChange, continuous_compContinuousLinearMapCLM, map_continuous, mfld_set_tac, nonempty_fintype, symm_symm, unfoldPartialApp
 -/
@@ -200,7 +208,26 @@ definition continuousAlternatingMap
 p.2.compContinuousLinearMap e₁.symmL 𝕜 p.1⟩
 invFun p := ⟨p.1, (e₂.symmL 𝕜 p.1).compContinuousAlternatingMap
 p.2.compContinuousLinearMap e₁.continuousLinearMapAt 𝕜 p.1⟩
-  source := Bundle.TotalSpace.proj ⁻¹' (e₁.baseSet inter e₂.base
+  source := Bundle.TotalSpace.proj ⁻¹' (e₁.baseSet inter e₂.baseSet)
+  target := (e₁.baseSet inter e₂.baseSet) ×ˢ Set.univ
+  map_source' := fun ⟨_, _⟩ h => ⟨h, Set.mem_univ _⟩
+  map_target' := fun ⟨_, _⟩ h => h.1
+  left_inv' := by
+    rintro ⟨x, L⟩ ⟨h₁, h₂⟩
+    simp only [TotalSpace.mk_inj]
+    ext v
+    simp [Function.comp_def, h₁, h₂]
+  right_inv' := by
+    rintro ⟨x, f⟩ ⟨⟨h₁, h₂⟩, -⟩
+    simp only [Prod.mk_right_inj]
+    ext v
+    simp [Function.comp_def, h₁, h₂]
+  open_target := (e₁.open_baseSet.inter e₂.open_baseSet).prod isOpen_univ
+  baseSet := e₁.baseSet inter e₂.baseSet
+  open_baseSet := e₁.open_baseSet.inter e₂.open_baseSet
+  source_eq := rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
 
 中文:
 定义 continuousAlternatingMap
@@ -209,7 +236,26 @@ p.2.compContinuousLinearMap e₁.continuousLinearMapAt 𝕜 p.1⟩
 p.2.compContinuousLinearMap e₁.symmL 𝕜 p.1⟩
 invFun p := ⟨p.1, (e₂.symmL 𝕜 p.1).compContinuousAlternatingMap
 p.2.compContinuousLinearMap e₁.continuousLinearMapAt 𝕜 p.1⟩
-  source := Bundle.TotalSpace.proj ⁻¹' (e₁.baseSet inter e₂.base
+  source := Bundle.TotalSpace.proj ⁻¹' (e₁.baseSet inter e₂.baseSet)
+  target := (e₁.baseSet inter e₂.baseSet) ×ˢ Set.univ
+  map_source' := fun ⟨_, _⟩ h => ⟨h, Set.mem_univ _⟩
+  map_target' := fun ⟨_, _⟩ h => h.1
+  left_inv' := by
+    rintro ⟨x, L⟩ ⟨h₁, h₂⟩
+    simp only [TotalSpace.mk_inj]
+    ext v
+    simp [Function.comp_def, h₁, h₂]
+  right_inv' := by
+    rintro ⟨x, f⟩ ⟨⟨h₁, h₂⟩, -⟩
+    simp only [Prod.mk_right_inj]
+    ext v
+    simp [Function.comp_def, h₁, h₂]
+  open_target := (e₁.open_baseSet.inter e₂.open_baseSet).prod isOpen_univ
+  baseSet := e₁.baseSet inter e₂.baseSet
+  open_baseSet := e₁.open_baseSet.inter e₂.open_baseSet
+  source_eq := rfl
+  target_eq := rfl
+  proj_toFun _ _ := rfl
 
 Depends on / 依赖: compContinuousAlternatingMap, continuousLinearMapAt
 -/
@@ -401,7 +447,30 @@ definition vectorPrebundle
         e = Pretrivialization.continuousAlternatingMap 𝕜 ι e₁ e₂}
   pretrivialization_linear' := by
     rintro _ ⟨e₁, he₁, e₂, he₂, rfl⟩
-    infer_
+    infer_instance
+  pretrivializationAt x := Pretrivialization.continuousAlternatingMap 𝕜 ι
+    (trivializationAt F₁ E₁ x) (trivializationAt F₂ E₂ x)
+  mem_base_pretrivializationAt x :=
+    ⟨mem_baseSet_trivializationAt F₁ E₁ x, mem_baseSet_trivializationAt F₂ E₂ x⟩
+  pretrivialization_mem_atlas x :=
+    ⟨trivializationAt F₁ E₁ x, trivializationAt F₂ E₂ x, inferInstance, inferInstance, rfl⟩
+  exists_coordChange := by
+    rintro _ ⟨e₁, e₂, he₁, he₂, rfl⟩ _ ⟨e₁', e₂', he₁', he₂', rfl⟩
+    exact ⟨continuousAlternatingMapCoordChange 𝕜 ι e₁ e₁' e₂ e₂',
+      continuousOn_continuousAlternatingMapCoordChange,
+      continuousAlternatingMapCoordChange_apply⟩
+  totalSpaceMk_isInducing b := by
+    simp only [Function.comp_def, continuousAlternatingMap_apply, isInducing_const_prod]
+    let L₁ : E₁ b ≃L[𝕜] F₁ :=
+      (trivializationAt F₁ E₁ b).continuousLinearEquivAt 𝕜 b
+        (mem_baseSet_trivializationAt _ _ _)
+    let L₂ : E₂ b ≃L[𝕜] F₂ :=
+      (trivializationAt F₂ E₂ b).continuousLinearEquivAt 𝕜 b
+        (mem_baseSet_trivializationAt _ _ _)
+    convert! (L₁.continuousAlternatingMapCongr L₂).toHomeomorph.isInducing
+    ext f
+    simp [Trivialization.linearMapAt_def_of_mem _ (mem_baseSet_trivializationAt _ _ _), L₁, L₂,
+      Function.comp_def, mem_baseSet_trivializationAt]
 
 中文:
 定义 vectorPrebundle
@@ -411,7 +480,30 @@ definition vectorPrebundle
         e = Pretrivialization.continuousAlternatingMap 𝕜 ι e₁ e₂}
   pretrivialization_linear' := by
     rintro _ ⟨e₁, he₁, e₂, he₂, rfl⟩
-    infer_
+    infer_instance
+  pretrivializationAt x := Pretrivialization.continuousAlternatingMap 𝕜 ι
+    (trivializationAt F₁ E₁ x) (trivializationAt F₂ E₂ x)
+  mem_base_pretrivializationAt x :=
+    ⟨mem_baseSet_trivializationAt F₁ E₁ x, mem_baseSet_trivializationAt F₂ E₂ x⟩
+  pretrivialization_mem_atlas x :=
+    ⟨trivializationAt F₁ E₁ x, trivializationAt F₂ E₂ x, inferInstance, inferInstance, rfl⟩
+  exists_coordChange := by
+    rintro _ ⟨e₁, e₂, he₁, he₂, rfl⟩ _ ⟨e₁', e₂', he₁', he₂', rfl⟩
+    exact ⟨continuousAlternatingMapCoordChange 𝕜 ι e₁ e₁' e₂ e₂',
+      continuousOn_continuousAlternatingMapCoordChange,
+      continuousAlternatingMapCoordChange_apply⟩
+  totalSpaceMk_isInducing b := by
+    simp only [Function.comp_def, continuousAlternatingMap_apply, isInducing_const_prod]
+    let L₁ : E₁ b ≃L[𝕜] F₁ :=
+      (trivializationAt F₁ E₁ b).continuousLinearEquivAt 𝕜 b
+        (mem_baseSet_trivializationAt _ _ _)
+    let L₂ : E₂ b ≃L[𝕜] F₂ :=
+      (trivializationAt F₂ E₂ b).continuousLinearEquivAt 𝕜 b
+        (mem_baseSet_trivializationAt _ _ _)
+    convert! (L₁.continuousAlternatingMapCongr L₂).toHomeomorph.isInducing
+    ext f
+    simp [Trivialization.linearMapAt_def_of_mem _ (mem_baseSet_trivializationAt _ _ _), L₁, L₂,
+      Function.comp_def, mem_baseSet_trivializationAt]
 
 Depends on / 依赖: MemTrivializationAtlas, Pretrivialization, Pretrivialization.continuousAlternatingMap, Trivialization, continuousAlternatingMap, infer_instance, mem_baseSet_triv, mem_baseSet_trivializationAt, mem_base_pretrivializationAt, pretrivializationAt, pretrivialization_linear, trivializationAt
 -/

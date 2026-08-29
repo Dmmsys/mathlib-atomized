@@ -260,7 +260,8 @@ theorem Matrix.represents_iff'
   · intro h
     ext
     simp_rw [LinearMap.comp_apply, LinearMap.coe_single, PiToModule.fromEnd_apply_single_one,
-      PiToM
+      PiToModule.fromMatrix_apply_single_one]
+    apply h
 
 中文:
 定理 矩阵.represents_iff'
@@ -273,7 +274,8 @@ theorem Matrix.represents_iff'
   · intro h
     ext
     simp_rw [LinearMap.comp_apply, LinearMap.coe_single, PiToModule.fromEnd_apply_single_one,
-      PiToM
+      PiToModule.fromMatrix_apply_single_one]
+    apply h
 
 Depends on / 依赖: LinearMap, LinearMap.coe_single, LinearMap.comp_apply, LinearMap.congr_fun, Pi.single, PiToModule, PiToModule.fromEnd_apply_single_one, PiToModule.fromMatrix_apply_single_one, coe_single, comp_apply, congr_fun, fromEnd_apply_single_one, fromMatrix_apply_single_one, simp_rw, single
 -/
@@ -476,7 +478,7 @@ definition Matrix.isRepresentation
   one_mem' := ⟨1, Matrix.Represents.one⟩
   add_mem' := fun ⟨f₁, e₁⟩ ⟨f₂, e₂⟩ => ⟨f₁ + f₂, e₁.add e₂⟩
   zero_mem' := ⟨0, Matrix.Represents.zero⟩
-  algebraMap_mem' r := ⟨algebraMap _ _ r, .a
+  algebraMap_mem' r := ⟨algebraMap _ _ r, .algebraMap _⟩
 
 中文:
 定义 矩阵.isRepresentation
@@ -486,7 +488,7 @@ definition Matrix.isRepresentation
   one_mem' := ⟨1, Matrix.Represents.one⟩
   add_mem' := fun ⟨f₁, e₁⟩ ⟨f₂, e₂⟩ => ⟨f₁ + f₂, e₁.add e₂⟩
   zero_mem' := ⟨0, Matrix.Represents.zero⟩
-  algebraMap_mem' r := ⟨algebraMap _ _ r, .a
+  algebraMap_mem' r := ⟨algebraMap _ _ r, .algebraMap _⟩
 
 Depends on / 依赖: A.Represents, Module, Module.End, Represents
 -/
@@ -511,7 +513,9 @@ definition Matrix.isRepresentation.toEnd
   map_one' := (1 : Matrix.isRepresentation R b).2.choose_spec.eq hb Matrix.Represents.one
   map_mul' A₁ A₂ := (A₁ * A₂).2.choose_spec.eq hb (A₁.2.choose_spec.mul A₂.2.choose_spec)
   map_zero' := (0 : Matrix.isRepresentation R b).2.choose_spec.eq hb Matrix.Represents.zero
-  map_add' A₁ A₂ 
+  map_add' A₁ A₂ := (A₁ + A₂).2.choose_spec.eq hb (A₁.2.choose_spec.add A₂.2.choose_spec)
+  commutes' r :=
+    (algebraMap _ (Matrix.isRepresentation R b) r).2.choose_spec.eq hb (.algebraMap r)
 
 中文:
 定义 矩阵.isRepresentation.toEnd
@@ -520,7 +524,9 @@ definition Matrix.isRepresentation.toEnd
   map_one' := (1 : Matrix.isRepresentation R b).2.choose_spec.eq hb Matrix.Represents.one
   map_mul' A₁ A₂ := (A₁ * A₂).2.choose_spec.eq hb (A₁.2.choose_spec.mul A₂.2.choose_spec)
   map_zero' := (0 : Matrix.isRepresentation R b).2.choose_spec.eq hb Matrix.Represents.zero
-  map_add' A₁ A₂ 
+  map_add' A₁ A₂ := (A₁ + A₂).2.choose_spec.eq hb (A₁.2.choose_spec.add A₂.2.choose_spec)
+  commutes' r :=
+    (algebraMap _ (Matrix.isRepresentation R b) r).2.choose_spec.eq hb (.algebraMap r)
 -/
 noncomputable def Matrix.isRepresentation.toEnd :
     Matrix.isRepresentation R b ->ₐ[R] Module.End R M where
@@ -584,7 +590,14 @@ theorem Matrix.isRepresentation.toEnd_exists_mem_ideal
   choose bM' hbM' using this
   let A : Matrix ι ι R := fun i j => bM' (b j) i
   have : A.Represents b f := by
-    rw [Matrix
+    rw [Matrix.represents_iff']
+    dsimp [A]
+    intro j
+    specialize hbM' (b j)
+    rwa [Ideal.finsuppTotal_apply_eq_of_fintype] at hbM'
+  exact
+    ⟨⟨A, f, this⟩, Matrix.isRepresentation.eq_toEnd_of_represents R b hb ⟨A, f, this⟩ this,
+      fun i j => (bM' (b j) i).prop⟩
 
 中文:
 定理 矩阵.isRepresentation.toEnd_存在_mem_ideal
@@ -596,7 +609,14 @@ theorem Matrix.isRepresentation.toEnd_exists_mem_ideal
   choose bM' hbM' using this
   let A : Matrix ι ι R := fun i j => bM' (b j) i
   have : A.Represents b f := by
-    rw [Matrix
+    rw [Matrix.represents_iff']
+    dsimp [A]
+    intro j
+    specialize hbM' (b j)
+    rwa [Ideal.finsuppTotal_apply_eq_of_fintype] at hbM'
+  exact
+    ⟨⟨A, f, this⟩, Matrix.isRepresentation.eq_toEnd_of_represents R b hb ⟨A, f, this⟩ this,
+      fun i j => (bM' (b j) i).prop⟩
 
 Depends on / 依赖: A.Represents, Ideal.finsuppTotal, Ideal.finsuppTotal_apply_eq_of_fintype, Ideal.range_finsuppTotal, LinearMap, LinearMap.mem_range_self, LinearMap.range, Matrix, Matrix.isRepresentation.eq_toEnd_of_represents, Matrix.represents_iff, Represents, eq_toEnd_of_represents, finsuppTotal, finsuppTotal_apply_eq_of_fintype, isRepresentation, mem_range_self, range_finsuppTotal, represents_iff, specialize
 -/
@@ -656,7 +676,21 @@ theorem LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_z
     · exact ⟨0, by simp [nontriviality]⟩
     obtain ⟨s, hs_card, hs_span⟩ :=
       Submodule.FG.exists_span_finset_card_eq_spanFinrank (R := R) (M := M) Module.Finite.fg_top
-    have : Submodule.span R (Set.range ((↑) : s -> M)) = ⊤ := by simp [h
+    have : Submodule.span R (Set.range ((↑) : s -> M)) = ⊤ := by simp [hs_span]
+    obtain ⟨A, rfl, h⟩ := Matrix.isRepresentation.toEnd_exists_mem_ideal R ((↑) : s -> M) this f I hI
+    refine ⟨A.1.charpoly, A.1.charpoly_monic, by simp [hs_card],
+            by simpa using coeff_charpoly_mem_ideal_pow h, ?_⟩
+    rw [Polynomial.aeval_algHom_apply]; rw [← map_zero (Matrix.isRepresentation.toEnd R ((↑) : s -> M) this)]
+    congr 1
+    ext1
+    rw [Polynomial.aeval_subalgebra_coe]; rw [Matrix.aeval_self_charpoly]; rw [Subalgebra.coe_zero]
+
+@[deprecated
+"strengthened conclusion to
+`LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero`"
+(since := "2026-04-10")] alias
+LinearMap.exists_monic_and_coeff_mem_pow_and_aeval_eq_zero_of_range_le_smul :=
+  LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero
 
 中文:
 定理 线性映射.存在_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero
@@ -666,7 +700,21 @@ theorem LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_z
     · exact ⟨0, by simp [nontriviality]⟩
     obtain ⟨s, hs_card, hs_span⟩ :=
       Submodule.FG.exists_span_finset_card_eq_spanFinrank (R := R) (M := M) Module.Finite.fg_top
-    have : Submodule.span R (Set.range ((↑) : s -> M)) = ⊤ := by simp [h
+    have : Submodule.span R (Set.range ((↑) : s -> M)) = ⊤ := by simp [hs_span]
+    obtain ⟨A, rfl, h⟩ := Matrix.isRepresentation.toEnd_exists_mem_ideal R ((↑) : s -> M) this f I hI
+    refine ⟨A.1.charpoly, A.1.charpoly_monic, by simp [hs_card],
+            by simpa using coeff_charpoly_mem_ideal_pow h, ?_⟩
+    rw [Polynomial.aeval_algHom_apply]; rw [← map_zero (Matrix.isRepresentation.toEnd R ((↑) : s -> M) this)]
+    congr 1
+    ext1
+    rw [Polynomial.aeval_subalgebra_coe]; rw [Matrix.aeval_self_charpoly]; rw [Subalgebra.coe_zero]
+
+@[deprecated
+"strengthened conclusion to
+`LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero`"
+(since := "2026-04-10")] alias
+LinearMap.exists_monic_and_coeff_mem_pow_and_aeval_eq_zero_of_range_le_smul :=
+  LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero
 
 Depends on / 依赖: Finite, Matrix, Matrix.isRepresentation.toEnd_exists_mem_ideal, Module, Module.Finite.fg_top, Set.range, Submodule, Submodule.FG.exists_span_finset_card_eq_spanFinrank, Submodule.span, charpoly, charpoly_monic, classical, coeff_charpoly_mem_ideal_pow, exists_span_finset_card_eq_spanFinrank, fg_top, hs_card, hs_span, isRepresentation, nontriviality, subsingleton_or_nontrivial
 -/

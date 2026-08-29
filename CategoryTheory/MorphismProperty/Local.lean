@@ -668,7 +668,9 @@ lemma eq_of_zeroHypercover_target
   rw [(MorphismProperty.isomorphisms C).iff_of_zeroHypercover_target (𝒰.pullback₁ s)]
   intro i
   have : pullback.snd (equalizer.ι f g) (pullback.fst s (𝒰.f i)) =
-      (equalizerPullback
+      (equalizerPullbackMapIso hf hg _).inv ≫ equalizer.ι _ _ := by
+    ext <;> simp [pullback.condition]
+  simpa [this] using equalizer.ι_of_eq (H i)
 
 中文:
 引理 eq_of_zeroHypercover_target
@@ -679,7 +681,9 @@ lemma eq_of_zeroHypercover_target
   rw [(MorphismProperty.isomorphisms C).iff_of_zeroHypercover_target (𝒰.pullback₁ s)]
   intro i
   have : pullback.snd (equalizer.ι f g) (pullback.fst s (𝒰.f i)) =
-      (equalizerPullback
+      (equalizerPullbackMapIso hf hg _).inv ≫ equalizer.ι _ _ := by
+    ext <;> simp [pullback.condition]
+  simpa [this] using equalizer.ι_of_eq (H i)
 
 Depends on / 依赖: Limits, Limits.eq_of_epi_equalizer, MorphismProperty, MorphismProperty.isomorphisms, condition, eq_of_epi_equalizer, equalizer, equalizerPullbackMapIso, iff_of_zeroHypercover_target, isomorphisms, pullback, pullback.condition, pullback.fst, pullback.snd
 -/

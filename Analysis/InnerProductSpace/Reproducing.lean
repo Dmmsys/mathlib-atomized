@@ -592,7 +592,7 @@ theorem tendstoUniformlyOn_of_norm_kerFun_le
   rw [zero_mul] at hnorm
   filter_upwards [hnorm.eventually (gt_mem_nhds hε)] with n hn x hx
   rw [dist_eq_norm']; rw [← Pi.sub_apply]; rw [← coe_sub]
-  grw [norm_apply_le, ← nor
+  grw [norm_apply_le, ← norm_kerFun_eq_sqrt_norm_kernel, hC x hx, hn]
 
 中文:
 定理 tendstoUniformlyOn_of_norm_kerFun_le
@@ -604,7 +604,7 @@ theorem tendstoUniformlyOn_of_norm_kerFun_le
   rw [zero_mul] at hnorm
   filter_upwards [hnorm.eventually (gt_mem_nhds hε)] with n hn x hx
   rw [dist_eq_norm']; rw [← Pi.sub_apply]; rw [← coe_sub]
-  grw [norm_apply_le, ← nor
+  grw [norm_apply_le, ← norm_kerFun_eq_sqrt_norm_kernel, hC x hx, hn]
 
 Depends on / 依赖: Metric, Metric.tendstoUniformlyOn_iff, Pi.sub_apply, coe_sub, dist_eq_norm, eventually, filter_upwards, gt_mem_nhds, hnorm.eventually, mul_const, norm_apply_le, norm_kerFun_eq_sqrt_norm_kernel, sub_apply, tendstoUniformlyOn_iff, tendsto_iff_norm_sub_tendsto_zero, tendsto_iff_norm_sub_tendsto_zero.mp, zero_mul
 -/
@@ -658,7 +658,7 @@ theorem kerFun_dense
   refine fun x => ext_inner_left 𝕜 fun v => ?_
   simp only [← kerFun_inner, coe_zero, Pi.zero_apply, inner_zero_right]
   refine inner_right_of_mem_orthogonal (subset_closure ?_) fin
-  simp [mem_spa
+  simp [mem_span_of_mem]
 
 中文:
 定理 kerFun_dense
@@ -668,7 +668,7 @@ theorem kerFun_dense
   refine fun x => ext_inner_left 𝕜 fun v => ?_
   simp only [← kerFun_inner, coe_zero, Pi.zero_apply, inner_zero_right]
   refine inner_right_of_mem_orthogonal (subset_closure ?_) fin
-  simp [mem_spa
+  simp [mem_span_of_mem]
 
 Depends on / 依赖: DFunLike, DFunLike.ext, Pi.zero_apply, Submodule, Submodule.eq_bot_iff, coe_zero, eq_bot_iff, ext_inner_left, inner_right_of_mem_orthogonal, inner_zero_right, kerFun_inner, mem_span_of_mem, orthogonal_eq_bot_iff, orthogonal_eq_bot_iff.mp, subset_closure, zero_apply
 -/
@@ -719,7 +719,9 @@ theorem posSemidef_kernel
   refine ⟨isHermitian_kernel H, fun s => (ContinuousLinearMap.isPositive_iff' _).2 ⟨?_, fun v => ?_⟩⟩
   · rw [IsSelfAdjoint, sub_zero, star_finsuppSum, Finsupp.sum_comm]
     simp [← mul_assoc, (isHermitian_kernel H).apply]
-  · simp [Finsupp.sum_apply'', Finsupp.sum_inner, star, adjoint_inner_left
+  · simp [Finsupp.sum_apply'', Finsupp.sum_inner, star, adjoint_inner_left,
+      kernel_inner, -inner_kerFun, -kerFun_inner]
+    simp [← Finsupp.sum_inner, ← Finsupp.inner_sum, -kerFun_inner, -inner_kerFun]
 
 中文:
 定理 posSemidef_kernel
@@ -728,7 +730,9 @@ theorem posSemidef_kernel
   refine ⟨isHermitian_kernel H, fun s => (ContinuousLinearMap.isPositive_iff' _).2 ⟨?_, fun v => ?_⟩⟩
   · rw [IsSelfAdjoint, sub_zero, star_finsuppSum, Finsupp.sum_comm]
     simp [← mul_assoc, (isHermitian_kernel H).apply]
-  · simp [Finsupp.sum_apply'', Finsupp.sum_inner, star, adjoint_inner_left
+  · simp [Finsupp.sum_apply'', Finsupp.sum_inner, star, adjoint_inner_left,
+      kernel_inner, -inner_kerFun, -kerFun_inner]
+    simp [← Finsupp.sum_inner, ← Finsupp.inner_sum, -kerFun_inner, -inner_kerFun]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.isPositive_iff, Finsupp, Finsupp.inner_sum, Finsupp.sum_apply, Finsupp.sum_comm, Finsupp.sum_inner, IsSelfAdjoint, adjoint_inner_left, inner_kerFun, inner_sum, isHermitian_kernel, isPositive_iff, kerFun_inner, kernel_inner, mul_assoc, star_finsuppSum, sub_zero, sum_apply, sum_comm
 -/
@@ -782,7 +786,30 @@ theorem posSemidef_tfae
       List.TFAE [h ∧ p1, h ∧ p2, h ∧ p3] := by
     tfae_have 1 -> 2 := fun ⟨h, t⟩ => ⟨h, ((htfae h).out 0 1).mp t⟩
     tfae_have 2 -> 3 := fun ⟨h, t⟩ => ⟨h, ((htfae h).out 1 2).mp t⟩
-    tfae_have 3 -> 1 := fun ⟨h, t⟩ => ⟨h, ((htf
+    tfae_have 3 -> 1 := fun ⟨h, t⟩ => ⟨h, ((htfae h).out 2 0).mp t⟩
+    tfae_finish
+  refine this fun hHerm => ?_
+  simp only [nonneg_iff_isPositive, isPositive_def', isSelfAdjoint_finsuppSum hHerm,
+    reApplyInnerSelf_apply, true_and]
+  simp only [star_eq_adjoint, zero_apply, add_apply, implies_true, Finsupp.sum_apply'',
+    FunLike.coe_mul_eq_comp, Function.comp_apply, Finsupp.sum_inner, adjoint_inner_left]
+  -- FIXME: nontriviality should work here
+  refine (subsingleton_or_nontrivial V).elim (fun h => ?_) fun _ => ?_
+  · have : forall v : V, v = 0 := fun v => Subsingleton.elim v 0
+    simp [this]
+  obtain ⟨v, hv⟩ := exists_ne (0 : V)
+  tfae_have 1 -> 2 := fun h ff => by
+    rw [Finsupp.sum_comm]
+    convert! h (ff.sum fun xv z => .single xv.1 ((z / ‖v‖ ^ 2) • (innerSL 𝕜 v).smulRight xv.2)) v
+    simp [Finsupp.sum_sum_index, inner_add_right, inner_add_left, ← smul_assoc, hv]
+    simp [inner_smul_left, inner_smul_right, ← mul_assoc, mul_comm]
+  tfae_have 2 -> 3 := fun h vv => by
+    simpa [add_mul, Finsupp.sum_sum_index] using (h (vv.sum fun x v => .single ⟨x, v⟩ 1))
+  tfae_have 3 -> 1 := fun h ff v => by
+    rw [Finsupp.sum_comm]
+    simpa [Finsupp.sum_sum_index, inner_add_right, inner_add_left] using
+      h (ff.sum fun x T => .single x (T v))
+  tfae_finish
 
 中文:
 定理 posSemidef_tfae
@@ -792,7 +819,30 @@ theorem posSemidef_tfae
       List.TFAE [h ∧ p1, h ∧ p2, h ∧ p3] := by
     tfae_have 1 -> 2 := fun ⟨h, t⟩ => ⟨h, ((htfae h).out 0 1).mp t⟩
     tfae_have 2 -> 3 := fun ⟨h, t⟩ => ⟨h, ((htfae h).out 1 2).mp t⟩
-    tfae_have 3 -> 1 := fun ⟨h, t⟩ => ⟨h, ((htf
+    tfae_have 3 -> 1 := fun ⟨h, t⟩ => ⟨h, ((htfae h).out 2 0).mp t⟩
+    tfae_finish
+  refine this fun hHerm => ?_
+  simp only [nonneg_iff_isPositive, isPositive_def', isSelfAdjoint_finsuppSum hHerm,
+    reApplyInnerSelf_apply, true_and]
+  simp only [star_eq_adjoint, zero_apply, add_apply, implies_true, Finsupp.sum_apply'',
+    FunLike.coe_mul_eq_comp, Function.comp_apply, Finsupp.sum_inner, adjoint_inner_left]
+  -- FIXME: nontriviality should work here
+  refine (subsingleton_or_nontrivial V).elim (fun h => ?_) fun _ => ?_
+  · have : forall v : V, v = 0 := fun v => Subsingleton.elim v 0
+    simp [this]
+  obtain ⟨v, hv⟩ := exists_ne (0 : V)
+  tfae_have 1 -> 2 := fun h ff => by
+    rw [Finsupp.sum_comm]
+    convert! h (ff.sum fun xv z => .single xv.1 ((z / ‖v‖ ^ 2) • (innerSL 𝕜 v).smulRight xv.2)) v
+    simp [Finsupp.sum_sum_index, inner_add_right, inner_add_left, ← smul_assoc, hv]
+    simp [inner_smul_left, inner_smul_right, ← mul_assoc, mul_comm]
+  tfae_have 2 -> 3 := fun h vv => by
+    simpa [add_mul, Finsupp.sum_sum_index] using (h (vv.sum fun x v => .single ⟨x, v⟩ 1))
+  tfae_have 3 -> 1 := fun h ff v => by
+    rw [Finsupp.sum_comm]
+    simpa [Finsupp.sum_sum_index, inner_add_right, inner_add_left] using
+      h (ff.sum fun x T => .single x (T v))
+  tfae_finish
 
 Depends on / 依赖: List.TFAE, isPositive_def, isSelfAdjoint_finsuppSum, nonneg_iff_isPositive, reApplyInnerSelf_apply, star_eq_adjoint, tfae_finish, tfae_have, true_and, zero_apply
 -/
@@ -864,7 +914,12 @@ instance instPreInnerProductSpaceCoreH₀
     rw [← (Fact.out : K.PosSemidef).isHermitian.apply]
     simp [star, adjoint_inner_right, mul_comm]
   add_left _ _ _ := by
-    r
+    rw [Finsupp.sum_add_index'] <;> simp [← Finsupp.sum_add, add_mul]
+  smul_left _ _ _ := by
+    rw [Finsupp.sum_smul_index] <;> simp [Finsupp.mul_sum, ← mul_assoc]
+  re_inner_nonneg := by
+    have := (posSemidef_tfae.out 0 1).mp (Fact.out : K.PosSemidef)
+    exact this.2
 
 中文:
 实例 instPreInnerProductSpaceCoreH₀
@@ -877,7 +932,12 @@ instance instPreInnerProductSpaceCoreH₀
     rw [← (Fact.out : K.PosSemidef).isHermitian.apply]
     simp [star, adjoint_inner_right, mul_comm]
   add_left _ _ _ := by
-    r
+    rw [Finsupp.sum_add_index'] <;> simp [← Finsupp.sum_add, add_mul]
+  smul_left _ _ _ := by
+    rw [Finsupp.sum_smul_index] <;> simp [Finsupp.mul_sum, ← mul_assoc]
+  re_inner_nonneg := by
+    have := (posSemidef_tfae.out 0 1).mp (Fact.out : K.PosSemidef)
+    exact this.2
 
 Depends on / 依赖: f.sum, g.sum
 -/
@@ -979,7 +1039,7 @@ abbreviation kerFunAux
     simp [inner_add_left, inner_H₀_def, ← Finsupp.sum_add, ← mul_add]
   map_smul' _ _ := by
     refine UniformSpace.Completion.denseRange_coe.eq_of_inner_left 𝕜 fun f => ?_
-
+    simp [inner_smul_left, inner_H₀_def, Finsupp.mul_sum, ← mul_assoc, mul_comm]
 
 中文:
 缩写 kerFunAux
@@ -990,7 +1050,7 @@ abbreviation kerFunAux
     simp [inner_add_left, inner_H₀_def, ← Finsupp.sum_add, ← mul_add]
   map_smul' _ _ := by
     refine UniformSpace.Completion.denseRange_coe.eq_of_inner_left 𝕜 fun f => ?_
-
+    simp [inner_smul_left, inner_H₀_def, Finsupp.mul_sum, ← mul_assoc, mul_comm]
 -/
 private abbrev kerFunAux (x : X) : V ->ₗ[𝕜] UniformSpace.Completion (H₀ K) where
   toFun v := .coe' (.single ⟨x, v⟩ 1)
@@ -1012,7 +1072,14 @@ abbreviation kerFun
   refine (sq_le_sq₀ (by simp) (by simp [mul_nonneg])).mp ?_
   simp only [LinearMap.coe_mk, AddHom.coe_mk, UniformSpace.Completion.norm_coe,
     ← inner_self_eq_norm_sq (𝕜 := 𝕜), inner_self_re_eq_norm]
-  simp only [inner_H₀_def, RCLike.star_def, mul_zer
+  simp only [inner_H₀_def, RCLike.star_def, mul_zero, zero_mul,
+    Finsupp.sum_single_index, mul_one, map_zero, map_one, one_mul]
+  calc
+    _ <= ‖K x x v‖ * ‖v‖ := by simp [norm_inner_le_norm]
+    _ <= ‖K x x‖ * ‖v‖ * ‖v‖ := by simp [mul_le_mul_of_nonneg_right, le_opNorm]
+    _ <= _ := by simp [mul_pow, mul_assoc, ← sq]
+
+@[no_expose]
 
 中文:
 缩写 kerFun
@@ -1021,7 +1088,14 @@ abbreviation kerFun
   refine (sq_le_sq₀ (by simp) (by simp [mul_nonneg])).mp ?_
   simp only [LinearMap.coe_mk, AddHom.coe_mk, UniformSpace.Completion.norm_coe,
     ← inner_self_eq_norm_sq (𝕜 := 𝕜), inner_self_re_eq_norm]
-  simp only [inner_H₀_def, RCLike.star_def, mul_zer
+  simp only [inner_H₀_def, RCLike.star_def, mul_zero, zero_mul,
+    Finsupp.sum_single_index, mul_one, map_zero, map_one, one_mul]
+  calc
+    _ <= ‖K x x v‖ * ‖v‖ := by simp [norm_inner_le_norm]
+    _ <= ‖K x x‖ * ‖v‖ * ‖v‖ := by simp [mul_le_mul_of_nonneg_right, le_opNorm]
+    _ <= _ := by simp [mul_pow, mul_assoc, ← sq]
+
+@[no_expose]
 -/
 private abbrev kerFun (x : X) :
     V ->L[𝕜] UniformSpace.Completion (H₀ K) := (kerFunAux x).mkContinuous √‖K x x‖ fun v => by
@@ -1048,7 +1122,17 @@ instance instRKHS
     refine UniformSpace.Completion.denseRange_coe.eq_zero_of_inner_right 𝕜 fun ff => ?_
     induction ff using Finsupp.induction with
     | zero =>
-      have : @UniformSpac
+      have : @UniformSpace.Completion.coe' (H₀ K) PseudoMetricSpace.toUniformSpace 0 = 0 := rfl
+      simp [this]
+    | single_add i a =>
+    simp only [UniformSpace.Completion.coe_add, inner_add_left, *, add_zero]
+    rw [← UniformSpace.Completion.coe_toComplL (𝕜 := 𝕜)]
+    have := (ext_iff_inner_left 𝕜).mp (congrFun h i.1) i.2
+    have := by simpa [OfKernel.kerFun, adjoint_inner_right] using this
+    rw [← mul_zero (conj a)]; rw [← this]; rw [← inner_smul_left]
+    refine (ext_iff_inner_right 𝕜).mp ?_ f
+    simp [← UniformSpace.Completion.coe_toComplL (𝕜 := 𝕜),
+      ← map_smul, -SeparationQuotient.mkCLM_apply, -UniformSpace.Completion.coe_toComplL]
 
 中文:
 实例 instRKHS
@@ -1059,7 +1143,17 @@ instance instRKHS
     refine UniformSpace.Completion.denseRange_coe.eq_zero_of_inner_right 𝕜 fun ff => ?_
     induction ff using Finsupp.induction with
     | zero =>
-      have : @UniformSpac
+      have : @UniformSpace.Completion.coe' (H₀ K) PseudoMetricSpace.toUniformSpace 0 = 0 := rfl
+      simp [this]
+    | single_add i a =>
+    simp only [UniformSpace.Completion.coe_add, inner_add_left, *, add_zero]
+    rw [← UniformSpace.Completion.coe_toComplL (𝕜 := 𝕜)]
+    have := (ext_iff_inner_left 𝕜).mp (congrFun h i.1) i.2
+    have := by simpa [OfKernel.kerFun, adjoint_inner_right] using this
+    rw [← mul_zero (conj a)]; rw [← this]; rw [← inner_smul_left]
+    refine (ext_iff_inner_right 𝕜).mp ?_ f
+    simp [← UniformSpace.Completion.coe_toComplL (𝕜 := 𝕜),
+      ← map_smul, -SeparationQuotient.mkCLM_apply, -UniformSpace.Completion.coe_toComplL]
 
 Depends on / 依赖: OfKernel, OfKernel.kerFun, adjoint, kerFun
 -/

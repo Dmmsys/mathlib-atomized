@@ -202,7 +202,34 @@ definition homeomorph
     rintro ⟨⟨base, s⟩, hs⟩
     simp only
     congr 2
-    rw [leftInverse_surjInv (hF_
+    rw [leftInverse_surjInv (hF_bij _ _)]; rw [surjInv_eq (hF_bij _ _).surjective]
+  right_inv := by
+    rintro ⟨⟨y, hy⟩, ⟨g⟩⟩
+    simp only
+    congr
+    rw [leftInverse_surjInv (hF_bij _ _)]; rw [surjInv_eq (hF_bij _ _).surjective]
+  continuous_toFun := by
+    refine .prodMk (by fun_prop) ?_
+    simp_rw [continuous_iff_continuousAt, ContinuousAt, nhds_discrete, tendsto_pure, nhds_subtype,
+      eventually_comap]
+    rintro ⟨g, hg⟩
+.surjective g.germ with ⟨f, hf⟩ rcases hF_bij _ hg
+    filter_upwards [g.eventually_nhds hg f hf]
+    rintro _ ⟨hgU, hgf⟩ g' rfl
+    congr 1
+    rw [hgf]; rw [← hf]; rw [leftInverse_surjInv (hF_bij _ _)]; rw [leftInverse_surjInv (hF_bij _ _)]
+  continuous_invFun := by
+    simp_rw [continuous_iff_continuousAt, continuousAt_prod_of_discrete_right]
+    rintro ⟨y, ⟨g⟩⟩
+    simp only [ContinuousAt, nhds_subtype_eq_comap, tendsto_comap_iff, comp_def,
+      nhds_generateFrom, tendsto_iInf, mem_ofPred_eq, tendsto_principal]
+    rintro _ ⟨hmem, V, f, rfl⟩
+    simp only [mem_ofPred_eq] at hmem
+    rcases hmem with ⟨hyV, hgf⟩
+    rcases F.germ_eq _ _ _ _ _ hgf with ⟨W, hyW, ιWU, ιWV, hW⟩
+    filter_upwards [W.isOpen.preimage continuous_subtype_val |>.mem_nhds hyW] with z hz
+    use ιWV.le hz
+    rw [← F.germ_res_apply ιWU z hz]; rw [hW]; rw [F.germ_res_apply]
 
 中文:
 定义 homeomorph
@@ -215,7 +242,34 @@ definition homeomorph
     rintro ⟨⟨base, s⟩, hs⟩
     simp only
     congr 2
-    rw [leftInverse_surjInv (hF_
+    rw [leftInverse_surjInv (hF_bij _ _)]; rw [surjInv_eq (hF_bij _ _).surjective]
+  right_inv := by
+    rintro ⟨⟨y, hy⟩, ⟨g⟩⟩
+    simp only
+    congr
+    rw [leftInverse_surjInv (hF_bij _ _)]; rw [surjInv_eq (hF_bij _ _).surjective]
+  continuous_toFun := by
+    refine .prodMk (by fun_prop) ?_
+    simp_rw [continuous_iff_continuousAt, ContinuousAt, nhds_discrete, tendsto_pure, nhds_subtype,
+      eventually_comap]
+    rintro ⟨g, hg⟩
+.surjective g.germ with ⟨f, hf⟩ rcases hF_bij _ hg
+    filter_upwards [g.eventually_nhds hg f hf]
+    rintro _ ⟨hgU, hgf⟩ g' rfl
+    congr 1
+    rw [hgf]; rw [← hf]; rw [leftInverse_surjInv (hF_bij _ _)]; rw [leftInverse_surjInv (hF_bij _ _)]
+  continuous_invFun := by
+    simp_rw [continuous_iff_continuousAt, continuousAt_prod_of_discrete_right]
+    rintro ⟨y, ⟨g⟩⟩
+    simp only [ContinuousAt, nhds_subtype_eq_comap, tendsto_comap_iff, comp_def,
+      nhds_generateFrom, tendsto_iInf, mem_ofPred_eq, tendsto_principal]
+    rintro _ ⟨hmem, V, f, rfl⟩
+    simp only [mem_ofPred_eq] at hmem
+    rcases hmem with ⟨hyV, hgf⟩
+    rcases F.germ_eq _ _ _ _ _ hgf with ⟨W, hyW, ιWU, ιWV, hW⟩
+    filter_upwards [W.isOpen.preimage continuous_subtype_val |>.mem_nhds hyW] with z hz
+    use ιWV.le hz
+    rw [← F.germ_res_apply ιWU z hz]; rw [hW]; rw [F.germ_res_apply]
 
 Depends on / 依赖: F.stalk, ToType, WithDiscreteTopology
 -/

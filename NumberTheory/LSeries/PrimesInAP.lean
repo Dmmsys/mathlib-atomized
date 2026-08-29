@@ -182,7 +182,10 @@ have := LSeriesSummable_vonMangoldt show 1 < (y : Complex).re by simp only [ofRe
   convert! this.indicator {n : Nat | (n : ZMod q) = a}
   ext1 n
   by_cases hn : (n : ZMod q) = a
-  · simp +
+  · simp +contextual only [term, Set.indicator, Set.mem_ofPred_eq, hn, ↓reduceIte, apply_ite,
+      ite_self]
+  · simp +contextual only [term, Set.mem_ofPred_eq, hn, not_false_eq_true, Set.indicator_of_notMem,
+      ofReal_zero, zero_div, ite_self]
 
 中文:
 引理 abscissaOfAbsConv_residueClass_le_one
@@ -193,7 +196,10 @@ have := LSeriesSummable_vonMangoldt show 1 < (y : Complex).re by simp only [ofRe
   convert! this.indicator {n : Nat | (n : ZMod q) = a}
   ext1 n
   by_cases hn : (n : ZMod q) = a
-  · simp +
+  · simp +contextual only [term, Set.indicator, Set.mem_ofPred_eq, hn, ↓reduceIte, apply_ite,
+      ite_self]
+  · simp +contextual only [term, Set.mem_ofPred_eq, hn, not_false_eq_true, Set.indicator_of_notMem,
+      ofReal_zero, zero_div, ite_self]
 
 Depends on / 依赖: LSeriesSummable, LSeriesSummable_vonMangoldt, Set.indicator, Set.indicator_of_notMem, Set.mem_ofPred_eq, abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable, apply_ite, contextual, convert, indicator, indicator_of_notMem, ite_self, mem_ofPred_eq, not_false_eq_true, ofReal_re, ofReal_zero, reduceIte, this.indicator, zero_di
 -/
@@ -221,7 +227,7 @@ lemma support_residueClass_prime_div
   ext1 p
   simp only [Set.mem_ofPred_eq]
   exact ⟨fun H => ⟨H.1.1, H.1.2.1⟩,
-    fun H => ⟨⟨H.1, H.2, vonMangoldt_ne_zero_iff.m
+    fun H => ⟨⟨H.1, H.2, vonMangoldt_ne_zero_iff.mpr H.1.isPrimePow⟩, H.1.ne_zero⟩⟩
 
 中文:
 引理 support_residueClass_prime_div
@@ -231,7 +237,7 @@ lemma support_residueClass_prime_div
   ext1 p
   simp only [Set.mem_ofPred_eq]
   exact ⟨fun H => ⟨H.1.1, H.1.2.1⟩,
-    fun H => ⟨⟨H.1, H.2, vonMangoldt_ne_zero_iff.m
+    fun H => ⟨⟨H.1, H.2, vonMangoldt_ne_zero_iff.mpr H.1.isPrimePow⟩, H.1.ne_zero⟩⟩
 
 Depends on / 依赖: Classical, Classical.not_imp, Function, Function.support, Nat.cast_eq_zero, Set.indicator_apply_eq_zero, Set.mem_ofPred_eq, cast_eq_zero, div_eq_zero_iff, indicator_apply_eq_zero, isPrimePow, ite_eq_right_iff, mem_ofPred_eq, ne_eq, ne_zero, not_imp, not_or, support, vonMangoldt_ne_zero_iff, vonMangoldt_ne_zero_iff.mpr
 -/
@@ -301,7 +307,17 @@ lemma F''_le
     _ = Real.log p * (p : Real)⁻¹ ^ (k + 2) := by
       simp only [F'', Function.comp_apply, F', F₀, Prod.map_apply, id_eq, le_add_iff_nonneg_left,
         zero_le, Nat.Prime.not_prime_pow, ↓reduceIte, vonMangoldt_apply_prime p.prop,
-        vonMangoldt_apply_pow (Nat.zero_ne_add_one _).symm,
+        vonMangoldt_apply_pow (Nat.zero_ne_add_one _).symm, Nat.cast_pow, div_eq_mul_inv,
+        inv_pow (p : Real) (k + 2)]
+    _ <= (p : Real) ^ (1 / 2 : Real) / (1 / 2) * (p : Real)⁻¹ ^ (k + 2) :=
+        mul_le_mul_of_nonneg_right (Real.log_le_rpow_div p.val.cast_nonneg one_half_pos)
+          (pow_nonneg (inv_nonneg_of_nonneg (Nat.cast_nonneg ↑p)) (k + 2))
+    _ = 2 * (p : Real)⁻¹ ^ (-1 / 2 : Real) * (p : Real)⁻¹ ^ (k + 2) := by
+      simp only [← div_mul, div_one, mul_comm, neg_div, Real.inv_rpow p.val.cast_nonneg,
+        ← Real.rpow_neg p.val.cast_nonneg, neg_neg]
+    _ = _ := by
+      rw [mul_assoc]; rw [← Real.rpow_natCast]; rw [← Real.rpow_add by have := p.prop.pos; positivity]; rw [Nat.cast_add]; rw [Nat.cast_two]; rw [add_comm]; rw [add_assoc]
+      norm_num
 
 中文:
 引理 F''_le
@@ -311,7 +327,17 @@ lemma F''_le
     _ = Real.log p * (p : Real)⁻¹ ^ (k + 2) := by
       simp only [F'', Function.comp_apply, F', F₀, Prod.map_apply, id_eq, le_add_iff_nonneg_left,
         zero_le, Nat.Prime.not_prime_pow, ↓reduceIte, vonMangoldt_apply_prime p.prop,
-        vonMangoldt_apply_pow (Nat.zero_ne_add_one _).symm,
+        vonMangoldt_apply_pow (Nat.zero_ne_add_one _).symm, Nat.cast_pow, div_eq_mul_inv,
+        inv_pow (p : Real) (k + 2)]
+    _ <= (p : Real) ^ (1 / 2 : Real) / (1 / 2) * (p : Real)⁻¹ ^ (k + 2) :=
+        mul_le_mul_of_nonneg_right (Real.log_le_rpow_div p.val.cast_nonneg one_half_pos)
+          (pow_nonneg (inv_nonneg_of_nonneg (Nat.cast_nonneg ↑p)) (k + 2))
+    _ = 2 * (p : Real)⁻¹ ^ (-1 / 2 : Real) * (p : Real)⁻¹ ^ (k + 2) := by
+      simp only [← div_mul, div_one, mul_comm, neg_div, Real.inv_rpow p.val.cast_nonneg,
+        ← Real.rpow_neg p.val.cast_nonneg, neg_neg]
+    _ = _ := by
+      rw [mul_assoc]; rw [← Real.rpow_natCast]; rw [← Real.rpow_add by have := p.prop.pos; positivity]; rw [Nat.cast_add]; rw [Nat.cast_two]; rw [add_comm]; rw [add_assoc]
+      norm_num
 -/
 private lemma F''_le (p : Nat.Primes) (k : Nat) : F'' (p, k) <= 2 * (p : Real)⁻¹ ^ (k + 3 / 2 : Real) :=
   calc _
@@ -342,7 +368,23 @@ lemma summable_F''
   have hp₀ (p : Nat.Primes) : 0 < (p : Real)⁻¹ := inv_pos_of_pos (Nat.cast_pos.mpr p.prop.pos)
   have hp₁ (p : Nat.Primes) : (p : Real)⁻¹ < 1 :=
 (inv_lt_one₀ <| mod_cast p.prop.pos).mpr Nat.one_lt_cast.mpr p.prop.one_lt
-  suffices Summable fun (pk : Nat.Primes × Nat) => (pk.1 : Real)⁻¹ ^ (pk.2 + 
+  suffices Summable fun (pk : Nat.Primes × Nat) => (pk.1 : Real)⁻¹ ^ (pk.2 + 3 / 2 : Real) by
+    refine (Summable.mul_left 2 this).of_nonneg_of_le (fun pk => ?_) (fun pk => F''_le pk.1 pk.2)
+    simp only [F'', Function.comp_apply, F', F₀, Prod.map_fst, id_eq, Prod.map_snd, Nat.cast_pow]
+    positivity [vonMangoldt_nonneg (n := (pk.1 : Nat) ^ (pk.2 + 2))]
+  conv => enter [1, pk]; rw [Real.rpow_add <| hp₀ pk.1, Real.rpow_natCast]
+  refine (summable_prod_of_nonneg (fun _ => by positivity)).mpr ⟨(fun p => ?_), ?_⟩
+  · dsimp only -- otherwise the `exact` below times out
+exact Summable.mul_right _ summable_geometric_of_lt_one (hp₀ p).le (hp₁ p)
+  · dsimp only
+    conv => enter [1, p]; rw [tsum_mul_right, tsum_geometric_of_lt_one (hp₀ p).le (hp₁ p)]
+    refine (summable_rpow.mpr (by norm_num : -(3 / 2 : Real) < -1)).mul_left 2
+.of_nonneg_of_le (fun p => ?_) (fun p => ?_)
+    · positivity [sub_pos.mpr (hp₁ p)]
+    · rw [Real.inv_rpow p.val.cast_nonneg, Real.rpow_neg p.val.cast_nonneg]
+      gcongr
+      rw [inv_le_comm₀ (sub_pos.mpr (hp₁ p)) zero_lt_two]; rw [le_sub_comm]; rw [show (1 : Real) - 2⁻¹ = 2⁻¹ by norm_num]; rw [inv_le_inv₀ (mod_cast p.prop.pos) zero_lt_two]
+      exact Nat.ofNat_le_cast.mpr p.prop.two_le
 
 中文:
 引理 summable_F''
@@ -351,7 +393,23 @@ lemma summable_F''
   have hp₀ (p : Nat.Primes) : 0 < (p : Real)⁻¹ := inv_pos_of_pos (Nat.cast_pos.mpr p.prop.pos)
   have hp₁ (p : Nat.Primes) : (p : Real)⁻¹ < 1 :=
 (inv_lt_one₀ <| mod_cast p.prop.pos).mpr Nat.one_lt_cast.mpr p.prop.one_lt
-  suffices Summable fun (pk : Nat.Primes × Nat) => (pk.1 : Real)⁻¹ ^ (pk.2 + 
+  suffices Summable fun (pk : Nat.Primes × Nat) => (pk.1 : Real)⁻¹ ^ (pk.2 + 3 / 2 : Real) by
+    refine (Summable.mul_left 2 this).of_nonneg_of_le (fun pk => ?_) (fun pk => F''_le pk.1 pk.2)
+    simp only [F'', Function.comp_apply, F', F₀, Prod.map_fst, id_eq, Prod.map_snd, Nat.cast_pow]
+    positivity [vonMangoldt_nonneg (n := (pk.1 : Nat) ^ (pk.2 + 2))]
+  conv => enter [1, pk]; rw [Real.rpow_add <| hp₀ pk.1, Real.rpow_natCast]
+  refine (summable_prod_of_nonneg (fun _ => by positivity)).mpr ⟨(fun p => ?_), ?_⟩
+  · dsimp only -- otherwise the `exact` below times out
+exact Summable.mul_right _ summable_geometric_of_lt_one (hp₀ p).le (hp₁ p)
+  · dsimp only
+    conv => enter [1, p]; rw [tsum_mul_right, tsum_geometric_of_lt_one (hp₀ p).le (hp₁ p)]
+    refine (summable_rpow.mpr (by norm_num : -(3 / 2 : Real) < -1)).mul_left 2
+.of_nonneg_of_le (fun p => ?_) (fun p => ?_)
+    · positivity [sub_pos.mpr (hp₁ p)]
+    · rw [Real.inv_rpow p.val.cast_nonneg, Real.rpow_neg p.val.cast_nonneg]
+      gcongr
+      rw [inv_le_comm₀ (sub_pos.mpr (hp₁ p)) zero_lt_two]; rw [le_sub_comm]; rw [show (1 : Real) - 2⁻¹ = 2⁻¹ by norm_num]; rw [inv_le_inv₀ (mod_cast p.prop.pos) zero_lt_two]
+      exact Nat.ofNat_le_cast.mpr p.prop.two_le
 -/
 private lemma summable_F'' : Summable F'' := by
   have hp₀ (p : Nat.Primes) : 0 < (p : Real)⁻¹ := inv_pos_of_pos (Nat.cast_pos.mpr p.prop.pos)
@@ -385,7 +443,32 @@ lemma summable_residueClass_non_primes_div
     positivity [residueClass_nonneg a n]
   have hleF₀ (n : Nat) : (if n.Prime then 0 else residueClass a n) / n <= F₀ n := by
     refine div_le_div_of_nonneg_right ?_ n.cast_nonneg
-    split_ifs; exacts [le_rfl, residu
+    split_ifs; exacts [le_rfl, residueClass_le a n]
+  refine Summable.of_nonneg_of_le h₀ hleF₀ ?_
+  have hF₀ (p : Nat.Primes) : F₀ p.val = 0 := by
+    simp only [p.prop, ↓reduceIte, zero_div, F₀]
+  refine (summable_subtype_iff_indicator (s := {n | IsPrimePow n}).mp ?_).congr
+      fun n => Set.indicator_apply_eq_self.mpr fun (hn : ¬ IsPrimePow n) => ?_
+  swap
+  · simp +contextual only [div_eq_zero_iff, ite_eq_left_iff, vonMangoldt_eq_zero_iff, hn,
+      not_false_eq_true, implies_true, Nat.cast_eq_zero, true_or, F₀]
+  have hFF' :
+      F₀ ∘ Subtype.val (p := fun n => n in {n | IsPrimePow n}) = F' ∘ ⇑prodNatEquiv.symm := by
+    refine (Equiv.eq_comp_symm prodNatEquiv (F₀ ∘ Subtype.val) F').mpr ?_
+    ext1 n
+    simp only [Function.comp_apply, F']
+    congr
+  rw [hFF']
+  refine (Nat.Primes.prodNatEquiv.symm.summable_iff (f := F')).mpr ?_
+  have hF'₀ (p : Nat.Primes) : F' (p, 0) = 0 := by simp only [zero_add, pow_one, hF₀, F']
+  have hF'₁ : F'' = F' ∘ (Prod.map _root_.id (· + 1)) := by
+    ext1
+    simp only [Function.comp_apply, Prod.map_fst, id_eq, Prod.map_snd, F'', F']
+refine (Function.Injective.summable_iff ?_ fun u hu => ?_).mp hF'₁ ▸ summable_F''
+· exact Function.Injective.prodMap (fun ⦃a₁ a₂⦄ a => a) add_left_injective 1
+  · simp only [Set.range_prodMap, Set.range_id, Set.mem_prod, Set.mem_univ, Set.mem_range,
+      Nat.exists_add_one_eq, true_and, not_lt, nonpos_iff_eq_zero] at hu
+    rw [← hF'₀ u.1]; rw [← hu]
 
 中文:
 引理 summable_residueClass_non_primes_div
@@ -394,7 +477,32 @@ lemma summable_residueClass_non_primes_div
     positivity [residueClass_nonneg a n]
   have hleF₀ (n : Nat) : (if n.Prime then 0 else residueClass a n) / n <= F₀ n := by
     refine div_le_div_of_nonneg_right ?_ n.cast_nonneg
-    split_ifs; exacts [le_rfl, residu
+    split_ifs; exacts [le_rfl, residueClass_le a n]
+  refine Summable.of_nonneg_of_le h₀ hleF₀ ?_
+  have hF₀ (p : Nat.Primes) : F₀ p.val = 0 := by
+    simp only [p.prop, ↓reduceIte, zero_div, F₀]
+  refine (summable_subtype_iff_indicator (s := {n | IsPrimePow n}).mp ?_).congr
+      fun n => Set.indicator_apply_eq_self.mpr fun (hn : ¬ IsPrimePow n) => ?_
+  swap
+  · simp +contextual only [div_eq_zero_iff, ite_eq_left_iff, vonMangoldt_eq_zero_iff, hn,
+      not_false_eq_true, implies_true, Nat.cast_eq_zero, true_or, F₀]
+  have hFF' :
+      F₀ ∘ Subtype.val (p := fun n => n in {n | IsPrimePow n}) = F' ∘ ⇑prodNatEquiv.symm := by
+    refine (Equiv.eq_comp_symm prodNatEquiv (F₀ ∘ Subtype.val) F').mpr ?_
+    ext1 n
+    simp only [Function.comp_apply, F']
+    congr
+  rw [hFF']
+  refine (Nat.Primes.prodNatEquiv.symm.summable_iff (f := F')).mpr ?_
+  have hF'₀ (p : Nat.Primes) : F' (p, 0) = 0 := by simp only [zero_add, pow_one, hF₀, F']
+  have hF'₁ : F'' = F' ∘ (Prod.map _root_.id (· + 1)) := by
+    ext1
+    simp only [Function.comp_apply, Prod.map_fst, id_eq, Prod.map_snd, F'', F']
+refine (Function.Injective.summable_iff ?_ fun u hu => ?_).mp hF'₁ ▸ summable_F''
+· exact Function.Injective.prodMap (fun ⦃a₁ a₂⦄ a => a) add_left_injective 1
+  · simp only [Set.range_prodMap, Set.range_id, Set.mem_prod, Set.mem_univ, Set.mem_range,
+      Nat.exists_add_one_eq, true_and, not_lt, nonpos_iff_eq_zero] at hu
+    rw [← hF'₀ u.1]; rw [← hu]
 
 Depends on / 依赖: IsPrimePow, Nat.Primes, Primes, Summable, Summable.of_nonneg_of_le, cast_nonneg, div_le_div_of_nonneg_right, exacts, le_rfl, n.Prime, n.cast_nonneg, of_nonneg_of_le, p.prop, p.val, reduceIte, residueClass, residueClass_le, residueClass_nonneg, split_ifs, summable_subtype_iff_indicator
 -/
@@ -443,7 +551,7 @@ lemma residueClass_apply
   rw [eq_inv_mul_iff_mul_eq₀ <| mod_cast (Nat.totient_pos.mpr q.pos_of_neZero).ne']
   simp +contextual only [residueClass, Set.indicator_apply, Set.mem_ofPred_eq, apply_ite,
     ofReal_zero, mul_zero, ← Finset.sum_mul, sum_char_inv_mul_char_eq Complex ha n, eq_comm (a := a),
-    ite_mul, zero_mul
+    ite_mul, zero_mul, ↓reduceIte, ite_self]
 
 中文:
 引理 residueClass_apply
@@ -452,7 +560,7 @@ lemma residueClass_apply
   rw [eq_inv_mul_iff_mul_eq₀ <| mod_cast (Nat.totient_pos.mpr q.pos_of_neZero).ne']
   simp +contextual only [residueClass, Set.indicator_apply, Set.mem_ofPred_eq, apply_ite,
     ofReal_zero, mul_zero, ← Finset.sum_mul, sum_char_inv_mul_char_eq Complex ha n, eq_comm (a := a),
-    ite_mul, zero_mul
+    ite_mul, zero_mul, ↓reduceIte, ite_self]
 
 Depends on / 依赖: Finset, Finset.sum_mul, Nat.totient_pos.mpr, Set.indicator_apply, Set.mem_ofPred_eq, apply_ite, contextual, eq_comm, indicator_apply, ite_mul, ite_self, mem_ofPred_eq, mod_cast, mul_zero, ofReal_zero, pos_of_neZero, q.pos_of_neZero, reduceIte, residueClass, sum_char_inv_mul_char_eq
 -/
@@ -503,7 +611,10 @@ lemma LSeries_residueClass_eq
     ← Finset.sum_neg_distrib, ← neg_div, ← LSeries_twist_vonMangoldt_eq _ hs]
   rw [eq_inv_mul_iff_mul_eq₀ <| mod_cast (Nat.totient_pos.mpr q.pos_of_neZero).ne']
   simp_rw [← LSeries_smul,
-← LSeries
+← LSeries_sum fun χ _ => (LSeriesSummable_twist_vonMangoldt χ hs).smul _]
+  refine LSeries_congr (fun {n} _ => ?_) s
+  simp only [Pi.smul_apply, residueClass_apply ha, smul_eq_mul, ← mul_assoc,
+    mul_inv_cancel_of_invertible, one_mul, Finset.sum_apply, Pi.mul_apply]
 
 中文:
 引理 LSeries_residueClass_eq
@@ -513,7 +624,10 @@ lemma LSeries_residueClass_eq
     ← Finset.sum_neg_distrib, ← neg_div, ← LSeries_twist_vonMangoldt_eq _ hs]
   rw [eq_inv_mul_iff_mul_eq₀ <| mod_cast (Nat.totient_pos.mpr q.pos_of_neZero).ne']
   simp_rw [← LSeries_smul,
-← LSeries
+← LSeries_sum fun χ _ => (LSeriesSummable_twist_vonMangoldt χ hs).smul _]
+  refine LSeries_congr (fun {n} _ => ?_) s
+  simp only [Pi.smul_apply, residueClass_apply ha, smul_eq_mul, ← mul_assoc,
+    mul_inv_cancel_of_invertible, one_mul, Finset.sum_apply, Pi.mul_apply]
 
 Depends on / 依赖: Finset, Finset.sum_neg_distrib, LFunction_eq_LSeries, LSeriesSummable_twist_vonMangoldt, LSeries_congr, LSeries_smul, LSeries_sum, LSeries_twist_vonMangoldt_eq, Nat.totient_pos.mpr, Pi.smul_apply, deriv_LFunction_eq_deriv_LSeries, mod_cast, mul_assoc, mul_inv_cancel_of_invertible, mul_neg, neg_div, neg_mul, pos_of_neZero, q.pos_of_neZero, residueClass_apply
 -/
@@ -571,7 +685,16 @@ lemma continuousOn_LFunctionResidueClassAux'
 refine continuousOn_const.mul ContinuousOn.add ?_ ?_
   · refine (continuousOn_neg_logDeriv_LFunctionTrivChar₁ q).mono fun s hs => ?_
     simp only [ne_eq, Set.mem_ofPred_eq] at hs
- 
+    tauto
+  · simp only [← Finset.sum_neg_distrib, mul_div_assoc, ← mul_neg, ← neg_div]
+    refine continuousOn_finsetSum _ fun χ hχ => continuousOn_const.mul ?_
+    replace hχ : χ != 1 := by simpa only [ne_eq, Finset.mem_compl, Finset.mem_singleton] using hχ
+    refine (continuousOn_neg_logDeriv_LFunction_of_nontriv hχ).mono fun s hs => ?_
+    simp only [ne_eq, Set.mem_ofPred_eq] at hs
+    rcases hs with rfl | hs
+    · simp only [ne_eq, Set.mem_ofPred_eq, one_re, le_refl,
+        LFunction_ne_zero_of_one_le_re χ (.inl hχ), not_false_eq_true]
+    · exact hs χ
 
 中文:
 引理 continuousOn_LFunctionResidueClassAux'
@@ -581,7 +704,16 @@ refine continuousOn_const.mul ContinuousOn.add ?_ ?_
 refine continuousOn_const.mul ContinuousOn.add ?_ ?_
   · refine (continuousOn_neg_logDeriv_LFunctionTrivChar₁ q).mono fun s hs => ?_
     simp only [ne_eq, Set.mem_ofPred_eq] at hs
- 
+    tauto
+  · simp only [← Finset.sum_neg_distrib, mul_div_assoc, ← mul_neg, ← neg_div]
+    refine continuousOn_finsetSum _ fun χ hχ => continuousOn_const.mul ?_
+    replace hχ : χ != 1 := by simpa only [ne_eq, Finset.mem_compl, Finset.mem_singleton] using hχ
+    refine (continuousOn_neg_logDeriv_LFunction_of_nontriv hχ).mono fun s hs => ?_
+    simp only [ne_eq, Set.mem_ofPred_eq] at hs
+    rcases hs with rfl | hs
+    · simp only [ne_eq, Set.mem_ofPred_eq, one_re, le_refl,
+        LFunction_ne_zero_of_one_le_re χ (.inl hχ), not_false_eq_true]
+    · exact hs χ
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.add, Finset, Finset.mem_com, Finset.sum_neg_distrib, LFunctionResidueClassAux, Set.mem_ofPred_eq, continuousOn_const, continuousOn_const.mul, continuousOn_finsetSum, mem_com, mem_ofPred_eq, mul_div_assoc, mul_neg, ne_eq, neg_div, replace, sub_eq_add_neg, sum_neg_distrib
 -/
@@ -650,7 +782,17 @@ lemma eqOn_LFunctionResidueClassAux
   replace hs := Set.mem_ofPred.mp hs
   simp only [LSeries_residueClass_eq ha hs, LFunctionResidueClassAux]
   rw [neg_div]; rw [← neg_add']; rw [mul_neg]; rw [← neg_mul]; rw [div_eq_mul_one_div (q.totient : Complex)⁻¹]; rw [sub_eq_add_neg]; rw [← neg_mul]; rw [← mul_add]
-  congrm (_ *
+  congrm (_ * ?_)
+  -- this should be easier, but `IsUnit.inv ha` does not work here
+  have ha' : IsUnit a⁻¹ := isUnit_of_dvd_one ⟨a, (ZMod.inv_mul_of_unit a ha).symm⟩
+  classical -- for `Fintype.sum_eq_add_sum_compl`
+  rw [Fintype.sum_eq_add_sum_compl 1]; rw [MulChar.one_apply ha']; rw [one_mul]; rw [add_right_comm]
+  simp only [mul_div_assoc]
+  congrm (?_ + _)
+  have hs₁ : s != 1 := fun h => ((h ▸ hs).trans_eq one_re).false
+  rw [deriv_LFunctionTrivChar₁_apply_of_ne_one _ hs₁]; rw [LFunctionTrivChar₁]; rw [Function.update_of_ne hs₁]; rw [LFunctionTrivChar]; rw [add_div]; rw [mul_div_mul_left _ _ (sub_ne_zero_of_ne hs₁)]
+  conv_lhs => enter [2, 1]; rw [← mul_one (LFunction ..)]
+  rw [mul_comm _ 1]; rw [mul_div_mul_right _ _ <| LFunction_ne_zero_of_one_le_re 1 (.inr hs₁) hs.le]
 
 中文:
 引理 eqOn_LFunctionResidueClassAux
@@ -660,7 +802,17 @@ lemma eqOn_LFunctionResidueClassAux
   replace hs := Set.mem_ofPred.mp hs
   simp only [LSeries_residueClass_eq ha hs, LFunctionResidueClassAux]
   rw [neg_div]; rw [← neg_add']; rw [mul_neg]; rw [← neg_mul]; rw [div_eq_mul_one_div (q.totient : Complex)⁻¹]; rw [sub_eq_add_neg]; rw [← neg_mul]; rw [← mul_add]
-  congrm (_ *
+  congrm (_ * ?_)
+  -- this should be easier, but `IsUnit.inv ha` does not work here
+  have ha' : IsUnit a⁻¹ := isUnit_of_dvd_one ⟨a, (ZMod.inv_mul_of_unit a ha).symm⟩
+  classical -- for `Fintype.sum_eq_add_sum_compl`
+  rw [Fintype.sum_eq_add_sum_compl 1]; rw [MulChar.one_apply ha']; rw [one_mul]; rw [add_right_comm]
+  simp only [mul_div_assoc]
+  congrm (?_ + _)
+  have hs₁ : s != 1 := fun h => ((h ▸ hs).trans_eq one_re).false
+  rw [deriv_LFunctionTrivChar₁_apply_of_ne_one _ hs₁]; rw [LFunctionTrivChar₁]; rw [Function.update_of_ne hs₁]; rw [LFunctionTrivChar]; rw [add_div]; rw [mul_div_mul_left _ _ (sub_ne_zero_of_ne hs₁)]
+  conv_lhs => enter [2, 1]; rw [← mul_one (LFunction ..)]
+  rw [mul_comm _ 1]; rw [mul_div_mul_right _ _ <| LFunction_ne_zero_of_one_le_re 1 (.inr hs₁) hs.le]
 
 Depends on / 依赖: LFunctionResidueClassAux, LSeries_residueClass_eq, Set.mem_ofPred.mp, congrm, div_eq_mul_one_div, mem_ofPred, mul_add, mul_neg, neg_add, neg_div, neg_mul, q.totient, replace, sub_eq_add_neg, totient
 -/
@@ -698,7 +850,12 @@ lemma LFunctionResidueClassAux_real
 (abscissaOfAbsConv_residueClass_le_one a).trans_lt by norm_cast]
     push_cast
     refine tsum_congr fun n => ?_
-    rcases eq_or_ne n 0 
+    rcases eq_or_ne n 0 with rfl | hn
+    · simp only [term_zero, zero_re, ofReal_zero]
+    · simp only [term_of_ne_zero hn, ← ofReal_natCast n, ← ofReal_cpow n.cast_nonneg, ← ofReal_div,
+        ofReal_re]
+  · rw [← ofReal_natCast, ← ofReal_one, ← ofReal_sub, ← ofReal_inv,
+      ← ofReal_div, ofReal_re]
 
 中文:
 引理 LFunctionResidueClassAux_real
@@ -711,7 +868,12 @@ lemma LFunctionResidueClassAux_real
 (abscissaOfAbsConv_residueClass_le_one a).trans_lt by norm_cast]
     push_cast
     refine tsum_congr fun n => ?_
-    rcases eq_or_ne n 0 
+    rcases eq_or_ne n 0 with rfl | hn
+    · simp only [term_zero, zero_re, ofReal_zero]
+    · simp only [term_of_ne_zero hn, ← ofReal_natCast n, ← ofReal_cpow n.cast_nonneg, ← ofReal_div,
+        ofReal_re]
+  · rw [← ofReal_natCast, ← ofReal_one, ← ofReal_sub, ← ofReal_inv,
+      ← ofReal_div, ofReal_re]
 
 Depends on / 依赖: LSeries, LSeriesSummable_of_abscissaOfAbsConv_lt_re, abscissaOfAbsConv_residueClass_le_one, cast_nonneg, eqOn_LFunctionResidueClassAux, eq_or_ne, n.cast_nonneg, ofReal_cpow, ofReal_div, ofReal_natCast, ofReal_one, ofReal_re, ofReal_sub, ofReal_zero, re_tsum, sub_re, term_of_ne_zero, term_zero, trans_lt, tsum_congr
 -/
@@ -745,7 +907,25 @@ lemma LSeries_residueClass_lower_bound
         (LFunctionResidueClassAux a x).re + (q.totient : Real)⁻¹ / (x - 1) := by
     refine ofReal_injective ?_
     simp only [ofReal_tsum, ofReal_div, ofReal_cpow (Nat.cast_nonneg _), ofReal_natCast,
-      ofReal_
+      ofReal_add, ofReal_inv, ofReal_sub, ofReal_one]
+    simp_rw [← LFunctionResidueClassAux_real ha hx,
+eqOn_LFunctionResidueClassAux ha Set.mem_ofPred.mpr (ofReal_re x ▸ hx), sub_add_cancel,
+      LSeries, term]
+    refine tsum_congr fun n => ?_
+    split_ifs with hn
+    · simp only [hn, residueClass_apply_zero, ofReal_zero, zero_div]
+    · rfl
+  have : ContinuousOn (fun x : Real => (LFunctionResidueClassAux a x).re) (Set.Icc 1 2) :=
+    continuous_re.continuousOn.comp (t := Set.univ) (continuousOn_LFunctionResidueClassAux a)
+.comp continuous_ofReal.continuousOn fun x hx => by (fun ⦃x⦄ a => trivial)
+        simpa only [Set.mem_ofPred_eq, ofReal_re] using hx.1
+obtain ⟨C, hC⟩ := bddBelow_def.mp IsCompact.bddBelow_image isCompact_Icc this
+  replace hC {x : Real} (hx : x in Set.Icc 1 2) : C <= (LFunctionResidueClassAux a x).re :=
+hC (LFunctionResidueClassAux a x).re
+      Set.mem_image_of_mem (fun x : Real => (LFunctionResidueClassAux a x).re) hx
+  refine ⟨-C, fun {x} hx => ?_⟩
+  rw [H hx.1]; rw [add_comm]; rw [sub_neg_eq_add]; rw [add_le_add_iff_left]
+exact hC Set.mem_Icc_of_Ioc hx
 
 中文:
 引理 LSeries_residueClass_lower_bound
@@ -756,7 +936,25 @@ lemma LSeries_residueClass_lower_bound
         (LFunctionResidueClassAux a x).re + (q.totient : Real)⁻¹ / (x - 1) := by
     refine ofReal_injective ?_
     simp only [ofReal_tsum, ofReal_div, ofReal_cpow (Nat.cast_nonneg _), ofReal_natCast,
-      ofReal_
+      ofReal_add, ofReal_inv, ofReal_sub, ofReal_one]
+    simp_rw [← LFunctionResidueClassAux_real ha hx,
+eqOn_LFunctionResidueClassAux ha Set.mem_ofPred.mpr (ofReal_re x ▸ hx), sub_add_cancel,
+      LSeries, term]
+    refine tsum_congr fun n => ?_
+    split_ifs with hn
+    · simp only [hn, residueClass_apply_zero, ofReal_zero, zero_div]
+    · rfl
+  have : ContinuousOn (fun x : Real => (LFunctionResidueClassAux a x).re) (Set.Icc 1 2) :=
+    continuous_re.continuousOn.comp (t := Set.univ) (continuousOn_LFunctionResidueClassAux a)
+.comp continuous_ofReal.continuousOn fun x hx => by (fun ⦃x⦄ a => trivial)
+        simpa only [Set.mem_ofPred_eq, ofReal_re] using hx.1
+obtain ⟨C, hC⟩ := bddBelow_def.mp IsCompact.bddBelow_image isCompact_Icc this
+  replace hC {x : Real} (hx : x in Set.Icc 1 2) : C <= (LFunctionResidueClassAux a x).re :=
+hC (LFunctionResidueClassAux a x).re
+      Set.mem_image_of_mem (fun x : Real => (LFunctionResidueClassAux a x).re) hx
+  refine ⟨-C, fun {x} hx => ?_⟩
+  rw [H hx.1]; rw [add_comm]; rw [sub_neg_eq_add]; rw [add_le_add_iff_left]
+exact hC Set.mem_Icc_of_Ioc hx
 
 Depends on / 依赖: LFunctionResidueClassAux, LFunctionResidueClassAux_real, LSeries, Nat.cast_nonneg, Set.mem_ofPred.mpr, cast_nonneg, eqOn_LFunctionResidueClassAux, mem_ofPred, ofReal_add, ofReal_cpow, ofReal_div, ofReal_injective, ofReal_inv, ofReal_natCast, ofReal_one, ofReal_re, ofReal_sub, ofReal_tsum, q.totient, residueClass
 -/
@@ -801,7 +999,31 @@ lemma not_summable_residueClass_prime_div
     convert! (summable_residueClass_non_primes_div a).add H using 2 with n
     simp only [← add_div, ite_add_ite, zero_add, add_zero, ite_self]
   let C := ∑' n, residueClass a n / n
-  have H₁ {x : Real} (hx : 1 < x) : ∑' n,
+  have H₁ {x : Real} (hx : 1 < x) : ∑' n, residueClass a n / (n : Real) ^ x <= C := by
+    refine Summable.tsum_le_tsum (fun n => ?_) ?_ key
+    · rcases n.eq_zero_or_pos with rfl | hn
+      · simp
+      · refine div_le_div_of_nonneg_left (residueClass_nonneg a _) (mod_cast hn) ?_
+        conv_lhs => rw [← Real.rpow_one n]
+        exact Real.rpow_le_rpow_of_exponent_le (by norm_cast) hx.le
+· exact summable_real_of_abscissaOfAbsConv_lt
+(abscissaOfAbsConv_residueClass_le_one a).trans_lt mod_cast hx
+  obtain ⟨C', hC'⟩ := LSeries_residueClass_lower_bound ha
+  have H₁ {x} (hx : x in Set.Ioc 1 2) : (q.totient : Real)⁻¹ <= (C + C') * (x - 1) :=
+(div_le_iff₀ <| sub_pos.mpr hx.1).mp
+sub_le_iff_le_add.mp (hC' hx).trans (H₁ hx.1)
+  have hq : 0 < (q.totient : Real)⁻¹ := inv_pos.mpr (mod_cast q.totient.pos_of_neZero)
+  rcases le_or_gt (C + C') 0 with h₀ | h₀
+  · have := hq.trans_le (H₁ (Set.right_mem_Ioc.mpr one_lt_two))
+    rw [show (2 : Real) - 1 = 1 by norm_num]; rw [mul_one] at this
+    exact (this.trans_le h₀).false
+  · obtain ⟨ξ, hξ₁, hξ₂⟩ : exists ξ in Set.Ioc 1 2, (C + C') * (ξ - 1) < (q.totient : Real)⁻¹ := by
+      refine ⟨min (1 + (q.totient : Real)⁻¹ / (C + C') / 2) 2, ⟨?_, min_le_right ..⟩, ?_⟩
+      · simpa only [lt_inf_iff, lt_add_iff_pos_right, Nat.ofNat_pos, div_pos_iff_of_pos_right,
+          Nat.one_lt_ofNat, and_true] using div_pos hq h₀
+      · rw [← min_sub_sub_right, add_sub_cancel_left, ← lt_div_iff₀' h₀]
+exact (min_le_left ..).trans_lt div_lt_self (div_pos hq h₀) one_lt_two
+    exact ((H₁ hξ₁).trans_lt hξ₂).false
 
 中文:
 引理 not_summable_residueClass_prime_div
@@ -812,7 +1034,31 @@ lemma not_summable_residueClass_prime_div
     convert! (summable_residueClass_non_primes_div a).add H using 2 with n
     simp only [← add_div, ite_add_ite, zero_add, add_zero, ite_self]
   let C := ∑' n, residueClass a n / n
-  have H₁ {x : Real} (hx : 1 < x) : ∑' n,
+  have H₁ {x : Real} (hx : 1 < x) : ∑' n, residueClass a n / (n : Real) ^ x <= C := by
+    refine Summable.tsum_le_tsum (fun n => ?_) ?_ key
+    · rcases n.eq_zero_or_pos with rfl | hn
+      · simp
+      · refine div_le_div_of_nonneg_left (residueClass_nonneg a _) (mod_cast hn) ?_
+        conv_lhs => rw [← Real.rpow_one n]
+        exact Real.rpow_le_rpow_of_exponent_le (by norm_cast) hx.le
+· exact summable_real_of_abscissaOfAbsConv_lt
+(abscissaOfAbsConv_residueClass_le_one a).trans_lt mod_cast hx
+  obtain ⟨C', hC'⟩ := LSeries_residueClass_lower_bound ha
+  have H₁ {x} (hx : x in Set.Ioc 1 2) : (q.totient : Real)⁻¹ <= (C + C') * (x - 1) :=
+(div_le_iff₀ <| sub_pos.mpr hx.1).mp
+sub_le_iff_le_add.mp (hC' hx).trans (H₁ hx.1)
+  have hq : 0 < (q.totient : Real)⁻¹ := inv_pos.mpr (mod_cast q.totient.pos_of_neZero)
+  rcases le_or_gt (C + C') 0 with h₀ | h₀
+  · have := hq.trans_le (H₁ (Set.right_mem_Ioc.mpr one_lt_two))
+    rw [show (2 : Real) - 1 = 1 by norm_num]; rw [mul_one] at this
+    exact (this.trans_le h₀).false
+  · obtain ⟨ξ, hξ₁, hξ₂⟩ : exists ξ in Set.Ioc 1 2, (C + C') * (ξ - 1) < (q.totient : Real)⁻¹ := by
+      refine ⟨min (1 + (q.totient : Real)⁻¹ / (C + C') / 2) 2, ⟨?_, min_le_right ..⟩, ?_⟩
+      · simpa only [lt_inf_iff, lt_add_iff_pos_right, Nat.ofNat_pos, div_pos_iff_of_pos_right,
+          Nat.one_lt_ofNat, and_true] using div_pos hq h₀
+      · rw [← min_sub_sub_right, add_sub_cancel_left, ← lt_div_iff₀' h₀]
+exact (min_le_left ..).trans_lt div_lt_self (div_pos hq h₀) one_lt_two
+    exact ((H₁ hξ₁).trans_lt hξ₂).false
 
 Depends on / 依赖: Summable, Summable.tsum_le_tsum, add_div, add_zero, convert, div_le_div_of_nonneg_left, eq_zero_or_pos, ite_add_ite, ite_self, mod_cast, n.eq_zero_or_pos, residueClass, residueClass_nonneg, summable_residueClass_non_primes_div, tsum_le_tsum, zero_add
 -/

@@ -467,7 +467,13 @@ theorem ContinuousLinearMap.continuous_det
   · rcases h with ⟨s, ⟨b⟩⟩
     have : FiniteDimensional 𝕜 E := b.finiteDimensional_of_finite
     classical
-    si
+    simp_rw [LinearMap.det_eq_det_toMatrix_of_finset b]
+    refine Continuous.matrix_det ?_
+    exact
+      ((LinearMap.toMatrix b b).toLinearMap.comp
+          (ContinuousLinearMap.coeLM 𝕜)).continuous_of_finiteDimensional
+  · rw [LinearMap.det]
+    simpa only [h, MonoidHom.one_apply, dif_neg, not_false_iff] using continuous_const
 
 中文:
 定理 连续线性映射.continuous_det
@@ -479,7 +485,13 @@ theorem ContinuousLinearMap.continuous_det
   · rcases h with ⟨s, ⟨b⟩⟩
     have : FiniteDimensional 𝕜 E := b.finiteDimensional_of_finite
     classical
-    si
+    simp_rw [LinearMap.det_eq_det_toMatrix_of_finset b]
+    refine Continuous.matrix_det ?_
+    exact
+      ((LinearMap.toMatrix b b).toLinearMap.comp
+          (ContinuousLinearMap.coeLM 𝕜)).continuous_of_finiteDimensional
+  · rw [LinearMap.det]
+    simpa only [h, MonoidHom.one_apply, dif_neg, not_false_iff] using continuous_const
 
 Depends on / 依赖: Continuous, LinearMap, LinearMap.det
 -/
@@ -542,7 +554,21 @@ theorem LipschitzOnWith.extend_finite_dimension
     `E'` and such a space to transfer the result to `E'`. -/
   let ι : Type _ := Basis.ofVectorSpaceIndex Real E'
   let A := (Basis.ofVectorSpace Real E').equivFun.toContinuousLinearEquiv
-  have LA : Li
+  have LA : LipschitzWith ‖A.toContinuousLinearMap‖₊ A := by apply A.lipschitz
+  have L : LipschitzOnWith (‖A.toContinuousLinearMap‖₊ * K) (A ∘ f) s :=
+    LA.comp_lipschitzOnWith hf
+  obtain ⟨g, hg, gs⟩ :
+    exists g : α -> ι -> Real, LipschitzWith (‖A.toContinuousLinearMap‖₊ * K) g ∧ EqOn (A ∘ f) g s :=
+    L.extend_pi
+  refine ⟨A.symm ∘ g, ?_, ?_⟩
+  · have LAsymm : LipschitzWith ‖A.symm.toContinuousLinearMap‖₊ A.symm := by
+      apply A.symm.lipschitz
+    apply (LAsymm.comp hg).weaken
+    rw [lipschitzExtensionConstant]; rw [← mul_assoc]
+    exact mul_le_mul' (le_max_left _ _) le_rfl
+  · intro x hx
+    have : A (f x) = g x := gs hx
+    simp only [(· ∘ ·), ← this, A.symm_apply_apply]
 
 中文:
 定理 LipschitzOnWith.extend_finite_dimension
@@ -552,7 +578,21 @@ theorem LipschitzOnWith.extend_finite_dimension
     `E'` and such a space to transfer the result to `E'`. -/
   let ι : Type _ := Basis.ofVectorSpaceIndex Real E'
   let A := (Basis.ofVectorSpace Real E').equivFun.toContinuousLinearEquiv
-  have LA : Li
+  have LA : LipschitzWith ‖A.toContinuousLinearMap‖₊ A := by apply A.lipschitz
+  have L : LipschitzOnWith (‖A.toContinuousLinearMap‖₊ * K) (A ∘ f) s :=
+    LA.comp_lipschitzOnWith hf
+  obtain ⟨g, hg, gs⟩ :
+    exists g : α -> ι -> Real, LipschitzWith (‖A.toContinuousLinearMap‖₊ * K) g ∧ EqOn (A ∘ f) g s :=
+    L.extend_pi
+  refine ⟨A.symm ∘ g, ?_, ?_⟩
+  · have LAsymm : LipschitzWith ‖A.symm.toContinuousLinearMap‖₊ A.symm := by
+      apply A.symm.lipschitz
+    apply (LAsymm.comp hg).weaken
+    rw [lipschitzExtensionConstant]; rw [← mul_assoc]
+    exact mul_le_mul' (le_max_left _ _) le_rfl
+  · intro x hx
+    have : A (f x) = g x := gs hx
+    simp only [(· ∘ ·), ← this, A.symm_apply_apply]
 -/
 theorem LipschitzOnWith.extend_finite_dimension {α : Type*} [PseudoMetricSpace α] {E' : Type*}
     [NormedAddCommGroup E'] [NormedSpace Real E'] [FiniteDimensional Real E'] {s : Set α} {f : α -> E'}
@@ -655,7 +695,7 @@ theorem AffineMap.antilipschitzWith_of_finiteDimensional
   obtain ⟨K, -, hK⟩ := f.linear.injective_iff_antilipschitz.mp (f.linear_injective_iff.mpr hf)
   refine ⟨K, AntilipschitzWith.of_le_mul_dist fun x y => ?_⟩
   rw [dist_eq_norm_vsub E]; rw [dist_eq_norm_vsub F]; rw [← f.linearMap_vsub]
-  exact ZeroHomClass.bound_of_antilipschitz f.linear hK (x -ᵥ y
+  exact ZeroHomClass.bound_of_antilipschitz f.linear hK (x -ᵥ y)
 
 中文:
 定理 仿射映射.antilipschitzWith_of_finiteDimensional
@@ -664,7 +704,7 @@ theorem AffineMap.antilipschitzWith_of_finiteDimensional
   obtain ⟨K, -, hK⟩ := f.linear.injective_iff_antilipschitz.mp (f.linear_injective_iff.mpr hf)
   refine ⟨K, AntilipschitzWith.of_le_mul_dist fun x y => ?_⟩
   rw [dist_eq_norm_vsub E]; rw [dist_eq_norm_vsub F]; rw [← f.linearMap_vsub]
-  exact ZeroHomClass.bound_of_antilipschitz f.linear hK (x -ᵥ y
+  exact ZeroHomClass.bound_of_antilipschitz f.linear hK (x -ᵥ y)
 
 Depends on / 依赖: AntilipschitzWith, AntilipschitzWith.of_le_mul_dist, ZeroHomClass, ZeroHomClass.bound_of_antilipschitz, bound_of_antilipschitz, dist_eq_norm_vsub, f.linear, f.linear.injective_iff_antilipschitz.mp, f.linearMap_vsub, f.linear_injective_iff.mpr, injective_iff_antilipschitz, linear, linearMap_vsub, linear_injective_iff, of_le_mul_dist
 -/
@@ -691,7 +731,8 @@ theorem ContinuousLinearMap.isOpen_injective
 have : forallᶠ φ in 𝓝 φ₀, ‖φ - φ₀‖₊ < K⁻¹ := eventually_nnnorm_sub_lt _ inv_pos_of_pos K_pos
   filter_upwards [this] with φ hφ
   apply φ.injective_iff_antilipschitz.mpr
-  exact ⟨(K⁻¹ - ‖
+  exact ⟨(K⁻¹ - ‖φ - φ₀‖₊)⁻¹, inv_pos_of_pos (tsub_pos_of_lt hφ),
+    H.add_sub_lipschitzWith (φ - φ₀).lipschitz hφ⟩
 
 中文:
 定理 连续线性映射.isOpen_injective
@@ -703,7 +744,8 @@ have : forallᶠ φ in 𝓝 φ₀, ‖φ - φ₀‖₊ < K⁻¹ := eventually_nn
 have : forallᶠ φ in 𝓝 φ₀, ‖φ - φ₀‖₊ < K⁻¹ := eventually_nnnorm_sub_lt _ inv_pos_of_pos K_pos
   filter_upwards [this] with φ hφ
   apply φ.injective_iff_antilipschitz.mpr
-  exact ⟨(K⁻¹ - ‖
+  exact ⟨(K⁻¹ - ‖φ - φ₀‖₊)⁻¹, inv_pos_of_pos (tsub_pos_of_lt hφ),
+    H.add_sub_lipschitzWith (φ - φ₀).lipschitz hφ⟩
 
 Depends on / 依赖: H.add_sub_lipschitzWith, K_pos, add_sub_lipschitzWith, eventually_nnnorm_sub_lt, filter_upwards, injective_iff_antilipschitz, injective_iff_antilipschitz.mp, injective_iff_antilipschitz.mpr, inv_pos_of_pos, isOpen_iff_eventually, lipschitz, tsub_pos_of_lt
 -/
@@ -730,7 +772,18 @@ definition ContinuousLinearEquiv.piRing
     continuous_invFun := by
       simp_rw [LinearEquiv.invFun_eq_symm, LinearEquiv.trans_symm, LinearEquiv.symm_symm]
       refine AddMonoidHomClass.continuous_of_bound
-        (LinearMap.toContinuousLinearMap.toLinearMap
+        (LinearMap.toContinuousLinearMap.toLinearMap.comp
+            (LinearEquiv.piRing 𝕜 E ι 𝕜).symm.toLinearMap)
+        (Fintype.card ι : Real) fun g => ?_
+      rw [← nsmul_eq_mul]
+      refine opNorm_le_bound _ (nsmul_nonneg (norm_nonneg g) (Fintype.card ι)) fun t => ?_
+      simp_rw [LinearMap.coe_comp, LinearEquiv.coe_toLinearMap, Function.comp_apply,
+        LinearMap.coe_toContinuousLinearMap', LinearEquiv.piRing_symm_apply]
+      apply le_trans (norm_sum_le _ _)
+      rw [smul_mul_assoc]
+      refine Finset.sum_le_card_nsmul _ _ _ fun i _ => ?_
+      rw [norm_smul]; rw [mul_comm]
+      gcongr <;> apply norm_le_pi_norm }
 
 中文:
 定义 连续线性等价.piRing
@@ -739,7 +792,18 @@ definition ContinuousLinearEquiv.piRing
     continuous_invFun := by
       simp_rw [LinearEquiv.invFun_eq_symm, LinearEquiv.trans_symm, LinearEquiv.symm_symm]
       refine AddMonoidHomClass.continuous_of_bound
-        (LinearMap.toContinuousLinearMap.toLinearMap
+        (LinearMap.toContinuousLinearMap.toLinearMap.comp
+            (LinearEquiv.piRing 𝕜 E ι 𝕜).symm.toLinearMap)
+        (Fintype.card ι : Real) fun g => ?_
+      rw [← nsmul_eq_mul]
+      refine opNorm_le_bound _ (nsmul_nonneg (norm_nonneg g) (Fintype.card ι)) fun t => ?_
+      simp_rw [LinearMap.coe_comp, LinearEquiv.coe_toLinearMap, Function.comp_apply,
+        LinearMap.coe_toContinuousLinearMap', LinearEquiv.piRing_symm_apply]
+      apply le_trans (norm_sum_le _ _)
+      rw [smul_mul_assoc]
+      refine Finset.sum_le_card_nsmul _ _ _ fun i _ => ?_
+      rw [norm_smul]; rw [mul_comm]
+      gcongr <;> apply norm_le_pi_norm }
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.continuous_of_bound, Fintype, Fintype.card, LinearEquiv, LinearEquiv.invFun_eq_symm, LinearEquiv.piRing, LinearEquiv.symm_symm, LinearEquiv.trans_symm, LinearMap, LinearMap.coe_comp, LinearMap.toContinuousLinearMap.symm.trans, LinearMap.toContinuousLinearMap.toLinearMap.comp, coe_comp, continuous_invFun, continuous_of_bound, invFun_eq_symm, norm_nonneg, nsmul_eq_mul, nsmul_nonneg
 -/
@@ -775,7 +839,22 @@ theorem LinearIndependent.eventually
   rcases LinearMap.exists_antilipschitzWith _ hf with ⟨K, K0, hK⟩
   have : Tendsto (fun g : ι -> E => ∑ i, ‖g i - f i‖) (𝓝 f) (𝓝 <| ∑ i, ‖f i - f i‖) :=
     tendsto_finsetSum _ fun i _ =>
-Tendsto.norm ((co
+Tendsto.norm ((continuous_apply i).tendsto _).sub tendsto_const_nhds
+  simp only [sub_self, norm_zero, Finset.sum_const_zero] at this
+  refine (this.eventually (gt_mem_nhds <| inv_pos.2 K0)).mono fun g hg => ?_
+  replace hg : ∑ i, ‖g i - f i‖₊ < K⁻¹ := by
+    rw [← NNReal.coe_lt_coe]
+    push_cast
+    exact hg
+  rw [LinearMap.ker_eq_bot]
+  refine (hK.add_sub_lipschitzWith (LipschitzWith.of_dist_le_mul fun v u => ?_) hg).injective
+  simp only [dist_eq_norm, LinearMap.lsum_apply, Pi.sub_apply, LinearMap.sum_apply,
+    LinearMap.comp_apply, LinearMap.proj_apply, LinearMap.smulRight_apply, LinearMap.id_apply, ←
+    Finset.sum_sub_distrib, ← smul_sub, ← sub_smul, NNReal.coe_sum, coe_nnnorm, Finset.sum_mul]
+  refine norm_sum_le_of_le _ fun i _ => ?_
+  rw [norm_smul]; rw [mul_comm]
+  gcongr
+  exact norm_le_pi_norm (v - u) i
 
 中文:
 定理 LinearIndependent.eventually
@@ -787,7 +866,22 @@ Tendsto.norm ((co
   rcases LinearMap.exists_antilipschitzWith _ hf with ⟨K, K0, hK⟩
   have : Tendsto (fun g : ι -> E => ∑ i, ‖g i - f i‖) (𝓝 f) (𝓝 <| ∑ i, ‖f i - f i‖) :=
     tendsto_finsetSum _ fun i _ =>
-Tendsto.norm ((co
+Tendsto.norm ((continuous_apply i).tendsto _).sub tendsto_const_nhds
+  simp only [sub_self, norm_zero, Finset.sum_const_zero] at this
+  refine (this.eventually (gt_mem_nhds <| inv_pos.2 K0)).mono fun g hg => ?_
+  replace hg : ∑ i, ‖g i - f i‖₊ < K⁻¹ := by
+    rw [← NNReal.coe_lt_coe]
+    push_cast
+    exact hg
+  rw [LinearMap.ker_eq_bot]
+  refine (hK.add_sub_lipschitzWith (LipschitzWith.of_dist_le_mul fun v u => ?_) hg).injective
+  simp only [dist_eq_norm, LinearMap.lsum_apply, Pi.sub_apply, LinearMap.sum_apply,
+    LinearMap.comp_apply, LinearMap.proj_apply, LinearMap.smulRight_apply, LinearMap.id_apply, ←
+    Finset.sum_sub_distrib, ← smul_sub, ← sub_smul, NNReal.coe_sum, coe_nnnorm, Finset.sum_mul]
+  refine norm_sum_le_of_le _ fun i _ => ?_
+  rw [norm_smul]; rw [mul_comm]
+  gcongr
+  exact norm_le_pi_norm (v - u) i
 -/
 protected theorem LinearIndependent.eventually {ι} [Finite ι] {f : ι -> E}
     (hf : LinearIndependent 𝕜 f) : forallᶠ g in 𝓝 f, LinearIndependent 𝕜 g := by
@@ -853,7 +947,10 @@ theorem isOpen_setOfPred_nat_le_rank
   refine isOpen_biUnion fun t _ => ?_
   have : Continuous fun f : E ->L[𝕜] F => fun x : (t : Set E) => f x :=
     continuous_pi fun x => (ContinuousLinearMap.apply 𝕜 F (x : E)).continuous
-  exact isO
+  exact isOpen_setOfPred_linearIndependent.preimage this
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_nat_le_rank := isOpen_setOfPred_nat_le_rank
 
 中文:
 定理 isOpen_setOfPred_nat_le_rank
@@ -863,7 +960,10 @@ theorem isOpen_setOfPred_nat_le_rank
   refine isOpen_biUnion fun t _ => ?_
   have : Continuous fun f : E ->L[𝕜] F => fun x : (t : Set E) => f x :=
     continuous_pi fun x => (ContinuousLinearMap.apply 𝕜 F (x : E)).continuous
-  exact isO
+  exact isOpen_setOfPred_linearIndependent.preimage this
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_nat_le_rank := isOpen_setOfPred_nat_le_rank
 
 Depends on / 依赖: Continuous, ContinuousLinearMap, ContinuousLinearMap.apply, LinearMap, LinearMap.le_rank_iff_exists_linearIndependent_finset, continuous, continuous_pi, exists_prop, isOpen_biUnion, isOpen_setOfPred_linearIndependent, isOpen_setOfPred_linearIndependent.preimage, le_rank_iff_exists_linearIndependent_finset, ofPred_exists, preimage
 -/
@@ -893,7 +993,11 @@ theorem isOpen_setOfPred_affineIndependent
     cases nonempty_fintype ι
     have : Fintype ι' := Subtype.fintype _
     convert_to!
-      IsOpen ((fun (p : ι
+      IsOpen ((fun (p : ι -> E) (i : ι') => p i -ᵥ p i₀) ⁻¹' {p : ι' -> E | LinearIndependent 𝕜 p})
+    exact isOpen_setOfPred_linearIndependent.preimage (by fun_prop)
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_affineIndependent := isOpen_setOfPred_affineIndependent
 
 中文:
 定理 isOpen_setOfPred_affineIndependent
@@ -907,7 +1011,11 @@ theorem isOpen_setOfPred_affineIndependent
     cases nonempty_fintype ι
     have : Fintype ι' := Subtype.fintype _
     convert_to!
-      IsOpen ((fun (p : ι
+      IsOpen ((fun (p : ι -> E) (i : ι') => p i -ᵥ p i₀) ⁻¹' {p : ι' -> E | LinearIndependent 𝕜 p})
+    exact isOpen_setOfPred_linearIndependent.preimage (by fun_prop)
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_affineIndependent := isOpen_setOfPred_affineIndependent
 
 Depends on / 依赖: Fintype, IsOpen, LinearIndependent, Subtype, Subtype.fintype, affineIndependent_iff_linearIndependent_vsub, classical, convert_to, fintype, fun_prop, isEmpty_or_nonempty, isOpen_discrete, isOpen_setOfPred_linearIndependent, isOpen_setOfPred_linearIndependent.preimage, nonempty_fintype, preimage, simp_rw
 -/
@@ -941,7 +1049,16 @@ theorem opNNNorm_le
     calc
       ‖u e‖₊ = ‖u (∑ i, v.equivFun e i • v i)‖₊ := by rw [v.sum_equivFun]
       _ = ‖∑ i, v.equivFun e i • (u <| v i)‖₊ := by simp only [equivFun_apply, map_sum, map_smul]
-      _ <= ∑ i, ‖v.equivFun e i • (u <
+      _ <= ∑ i, ‖v.equivFun e i • (u <| v i)‖₊ := nnnorm_sum_le _ _
+      _ = ∑ i, ‖v.equivFun e i‖₊ * ‖u (v i)‖₊ := by simp only [nnnorm_smul]
+      _ <= ∑ i, ‖v.equivFun e i‖₊ * M := by gcongr; apply hu
+      _ = (∑ i, ‖v.equivFun e i‖₊) * M := by rw [Finset.sum_mul]
+      _ <= Fintype.card ι • (‖φ‖₊ * ‖e‖₊) * M := by
+        gcongr
+        calc
+          ∑ i, ‖v.equivFun e i‖₊ <= Fintype.card ι • ‖φ e‖₊ := Pi.sum_nnnorm_apply_le_nnnorm _
+          _ <= Fintype.card ι • (‖φ‖₊ * ‖e‖₊) := nsmul_le_nsmul_right (φ.le_opNNNorm e) _
+      _ = Fintype.card ι • ‖φ‖₊ * M * ‖e‖₊ := by simp only [smul_mul_assoc, mul_right_comm]
 
 中文:
 定理 opNNNorm_le
@@ -951,7 +1068,16 @@ theorem opNNNorm_le
     calc
       ‖u e‖₊ = ‖u (∑ i, v.equivFun e i • v i)‖₊ := by rw [v.sum_equivFun]
       _ = ‖∑ i, v.equivFun e i • (u <| v i)‖₊ := by simp only [equivFun_apply, map_sum, map_smul]
-      _ <= ∑ i, ‖v.equivFun e i • (u <
+      _ <= ∑ i, ‖v.equivFun e i • (u <| v i)‖₊ := nnnorm_sum_le _ _
+      _ = ∑ i, ‖v.equivFun e i‖₊ * ‖u (v i)‖₊ := by simp only [nnnorm_smul]
+      _ <= ∑ i, ‖v.equivFun e i‖₊ * M := by gcongr; apply hu
+      _ = (∑ i, ‖v.equivFun e i‖₊) * M := by rw [Finset.sum_mul]
+      _ <= Fintype.card ι • (‖φ‖₊ * ‖e‖₊) * M := by
+        gcongr
+        calc
+          ∑ i, ‖v.equivFun e i‖₊ <= Fintype.card ι • ‖φ e‖₊ := Pi.sum_nnnorm_apply_le_nnnorm _
+          _ <= Fintype.card ι • (‖φ‖₊ * ‖e‖₊) := nsmul_le_nsmul_right (φ.le_opNNNorm e) _
+      _ = Fintype.card ι • ‖φ‖₊ * M * ‖e‖₊ := by simp only [smul_mul_assoc, mul_right_comm]
 
 Depends on / 依赖: Finset, Finset.sum_mul, Fintype, equivFun, equivFunL, equivFun_apply, map_smul, map_sum, nnnorm_smul, nnnorm_sum_le, opNNNorm_le_bound, sum_equivFun, sum_mul, toContinuousLinearMap, u.opNNNorm_le_bound, v.equivFun, v.equivFunL.toContinuousLinearMap, v.sum_equivFun
 -/
@@ -1072,7 +1198,7 @@ instance [FiniteDimensional
     ContinuousLinearEquiv.ofFinrankEq (finrank_fin_fun 𝕜).symm
   let e₂ : (E ->L[𝕜] F) ≃L[𝕜] Fin d -> F :=
     (e₁.arrowCongr (1 : F ≃L[𝕜] F)).trans (ContinuousLinearEquiv.piRing (Fin d))
-  exact e₂.toHomeomorph.secondCountableTopolog
+  exact e₂.toHomeomorph.secondCountableTopology
 
 中文:
 实例 [有限维
@@ -1083,7 +1209,7 @@ instance [FiniteDimensional
     ContinuousLinearEquiv.ofFinrankEq (finrank_fin_fun 𝕜).symm
   let e₂ : (E ->L[𝕜] F) ≃L[𝕜] Fin d -> F :=
     (e₁.arrowCongr (1 : F ≃L[𝕜] F)).trans (ContinuousLinearEquiv.piRing (Fin d))
-  exact e₂.toHomeomorph.secondCountableTopolog
+  exact e₂.toHomeomorph.secondCountableTopology
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ofFinrankEq, ContinuousLinearEquiv.piRing, Module, Module.finrank, arrowCongr, finrank, finrank_fin_fun, ofFinrankEq, piRing, secondCountableTopology, toHomeomorph, toHomeomorph.secondCountableTopology
 -/
@@ -1133,7 +1259,16 @@ theorem exists_norm_le_le_norm_sub_of_finset
     contrapose! h
     have : (⊤ : Submodule 𝕜 E) = F := by
       ext x
- 
+      simp [h]
+    rw [← this] at hF
+    exact .of_fg_top hF
+  obtain ⟨x, xR, hx⟩ : exists x : E, ‖x‖ <= R ∧ forall y : E, y in F -> 1 <= ‖x - y‖ :=
+    riesz_lemma_of_norm_lt hc hR Fclosed this
+  have hx' : forall y : E, y in F -> 1 <= ‖y - x‖ := by
+    intro y hy
+    rw [← norm_neg]
+    simpa using hx y hy
+  exact ⟨x, xR, fun y hy => hx' _ (Submodule.subset_span hy)⟩
 
 中文:
 定理 存在_norm_le_le_norm_sub_of_finset
@@ -1147,7 +1282,16 @@ theorem exists_norm_le_le_norm_sub_of_finset
     contrapose! h
     have : (⊤ : Submodule 𝕜 E) = F := by
       ext x
- 
+      simp [h]
+    rw [← this] at hF
+    exact .of_fg_top hF
+  obtain ⟨x, xR, hx⟩ : exists x : E, ‖x‖ <= R ∧ forall y : E, y in F -> 1 <= ‖x - y‖ :=
+    riesz_lemma_of_norm_lt hc hR Fclosed this
+  have hx' : forall y : E, y in F -> 1 <= ‖y - x‖ := by
+    intro y hy
+    rw [← norm_neg]
+    simpa using hx y hy
+  exact ⟨x, xR, fun y hy => hx' _ (Submodule.subset_span hy)⟩
 
 Depends on / 依赖: F.FG, Fclosed, FiniteDimensional, IsClosed, Submodule, Submodule.closed_of_finiteDimensional, Submodule.span, closed_of_finiteDimensional, contrapose, of_fg, of_fg_top, riesz_lemma_of_norm_lt
 -/
@@ -1301,7 +1445,10 @@ lemma ProperSpace.of_locallyCompactSpace
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
   have hC : forall n, IsCompact (closedBall (0 : E) (‖c‖ ^ n * r)) := fun n => by
 have : c ^ n != 0 := pow_ne_zero _ fun h => by simp [h, zero_le_one.not_gt] at hc
-    simpa [_ro
+    simpa [_root_.smul_closedBall' this] using hr.smul (c ^ n)
+  have hTop : Tendsto (fun n => ‖c‖ ^ n * r) atTop atTop :=
+    Tendsto.atTop_mul_const rpos (tendsto_pow_atTop_atTop_of_one_lt hc)
+  exact .of_seq_closedBall hTop (Eventually.of_forall hC)
 
 中文:
 引理 真空间.of_locallyCompactSpace
@@ -1311,7 +1458,10 @@ have : c ^ n != 0 := pow_ne_zero _ fun h => by simp [h, zero_le_one.not_gt] at h
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
   have hC : forall n, IsCompact (closedBall (0 : E) (‖c‖ ^ n * r)) := fun n => by
 have : c ^ n != 0 := pow_ne_zero _ fun h => by simp [h, zero_le_one.not_gt] at hc
-    simpa [_ro
+    simpa [_root_.smul_closedBall' this] using hr.smul (c ^ n)
+  have hTop : Tendsto (fun n => ‖c‖ ^ n * r) atTop atTop :=
+    Tendsto.atTop_mul_const rpos (tendsto_pow_atTop_atTop_of_one_lt hc)
+  exact .of_seq_closedBall hTop (Eventually.of_forall hC)
 
 Depends on / 依赖: IsCompact, NormedField, NormedField.exists_one_lt_norm, Tendsto, Tendsto.atTop_mul_const, _root_, _root_.smul_closedBall, atTop_mul_const, closedBall, exists_isCompact_closedBall, exists_one_lt_norm, hr.smul, not_gt, of_seq_closedBall, pow_ne_zero, smul_closedBall, tendsto_pow_atTop_atTop_of_one_lt, zero_le_one, zero_le_one.not_gt
 -/
@@ -1376,7 +1526,8 @@ theorem continuousWithinAt_clm_apply
   let e : (E ->L[𝕜] F) ≃L[𝕜] Fin (finrank 𝕜 E) -> F :=
     ((ContinuousLinearEquiv.ofFinrankEq (finrank_fin_fun 𝕜).symm).arrowCongr
       (1 : F ≃L[𝕜] F)).trans (ContinuousLinearEquiv.piRing _)
-  rw
+  rw [e.toHomeomorph.isInducing.continuousWithinAt_iff]
+  exact continuousWithinAt_pi.mpr fun i => h _
 
 中文:
 定理 continuousWithinAt_clm_apply
@@ -1386,7 +1537,8 @@ theorem continuousWithinAt_clm_apply
   let e : (E ->L[𝕜] F) ≃L[𝕜] Fin (finrank 𝕜 E) -> F :=
     ((ContinuousLinearEquiv.ofFinrankEq (finrank_fin_fun 𝕜).symm).arrowCongr
       (1 : F ≃L[𝕜] F)).trans (ContinuousLinearEquiv.piRing _)
-  rw
+  rw [e.toHomeomorph.isInducing.continuousWithinAt_iff]
+  exact continuousWithinAt_pi.mpr fun i => h _
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ofFinrankEq, ContinuousLinearEquiv.piRing, arrowCongr, comp_continuousWithinAt, continuous, continuous.continuousAt.comp_continuousWithinAt, continuousAt, continuousWithinAt_iff, continuousWithinAt_pi, continuousWithinAt_pi.mpr, e.toHomeomorph.isInducing.continuousWithinAt_iff, finrank, finrank_fin_fun, isInducing, ofFinrankEq, piRing, toHomeomorph
 -/
@@ -1587,7 +1739,20 @@ theorem summable_norm_iff
   suffices forall {N : Nat} {g : α -> Fin N -> Real}, Summable g -> Summable fun x => ‖g x‖ by
     obtain v := Module.finBasis Real E
     set e := v.equivFunL
-    have H : 
+    have H : Summable fun x => ‖e (f x)‖ := this (e.summable.2 hf)
+    refine .of_norm_bounded (H.mul_left ↑‖(e.symm : (Fin (finrank Real E) -> Real) ->L[Real] E)‖₊) fun i => ?_
+    simpa using (e.symm : (Fin (finrank Real E) -> Real) ->L[Real] E).le_opNorm (e <| f i)
+  clear! E
+  -- Now we deal with `g : α → Fin N → ℝ`
+  intro N g hg
+  have : forall i, Summable fun x => ‖g x i‖ := fun i => (Pi.summable.1 hg i).abs
+  refine .of_norm_bounded (summable_sum fun i (_ : i in Finset.univ) => this i) fun x => ?_
+  rw [norm_norm]; rw [pi_norm_le_iff_of_nonneg]
+  · refine fun i => Finset.single_le_sum (f := fun i => ‖g x i‖) (fun i _ => ?_) (Finset.mem_univ i)
+    exact norm_nonneg (g x i)
+  · exact Finset.sum_nonneg fun _ _ => norm_nonneg _
+
+alias ⟨_, Summable.norm⟩ := summable_norm_iff
 
 中文:
 定理 summable_norm_iff
@@ -1598,7 +1763,20 @@ theorem summable_norm_iff
   suffices forall {N : Nat} {g : α -> Fin N -> Real}, Summable g -> Summable fun x => ‖g x‖ by
     obtain v := Module.finBasis Real E
     set e := v.equivFunL
-    have H : 
+    have H : Summable fun x => ‖e (f x)‖ := this (e.summable.2 hf)
+    refine .of_norm_bounded (H.mul_left ↑‖(e.symm : (Fin (finrank Real E) -> Real) ->L[Real] E)‖₊) fun i => ?_
+    simpa using (e.symm : (Fin (finrank Real E) -> Real) ->L[Real] E).le_opNorm (e <| f i)
+  clear! E
+  -- Now we deal with `g : α → Fin N → ℝ`
+  intro N g hg
+  have : forall i, Summable fun x => ‖g x i‖ := fun i => (Pi.summable.1 hg i).abs
+  refine .of_norm_bounded (summable_sum fun i (_ : i in Finset.univ) => this i) fun x => ?_
+  rw [norm_norm]; rw [pi_norm_le_iff_of_nonneg]
+  · refine fun i => Finset.single_le_sum (f := fun i => ‖g x i‖) (fun i _ => ?_) (Finset.mem_univ i)
+    exact norm_nonneg (g x i)
+  · exact Finset.sum_nonneg fun _ _ => norm_nonneg _
+
+alias ⟨_, Summable.norm⟩ := summable_norm_iff
 
 Depends on / 依赖: Summable, Summable.of_norm, of_norm
 -/
@@ -1720,7 +1898,17 @@ theorem summable_norm_mul_geometric_of_norm_lt_one'
   fun n => ‖(u n) * r ^ n‖
   _ =O[atTop] fun n => ‖u n‖ * ‖r‖ ^ n := by
       apply (IsBigOWith.of_bound (c := ‖(1 : Real)‖) ?_).isBigO
-      f
+      filter_upwards [eventually_norm_pow_le r] with n hn
+      simp
+  _ =O[atTop] fun n => ‖((n : F) ^ k)‖ * ‖r‖ ^ n := by
+      simpa [Nat.cast_pow] using
+      (isBigO_norm_left.mpr (isBigO_norm_right.mpr hu)).mul (isBigO_refl (fun n => (‖r‖ ^ n)) atTop)
+  _ =O[atTop] fun n => ‖r' ^ n‖ := by
+      convert!
+        isBigO_norm_right.mpr
+          (isBigO_norm_left.mpr
+            (isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt k hrr').isBigO)
+      simp only [norm_pow, norm_mul]
 
 中文:
 定理 summable_norm_mul_geometric_of_norm_lt_one'
@@ -1732,7 +1920,17 @@ theorem summable_norm_mul_geometric_of_norm_lt_one'
   fun n => ‖(u n) * r ^ n‖
   _ =O[atTop] fun n => ‖u n‖ * ‖r‖ ^ n := by
       apply (IsBigOWith.of_bound (c := ‖(1 : Real)‖) ?_).isBigO
-      f
+      filter_upwards [eventually_norm_pow_le r] with n hn
+      simp
+  _ =O[atTop] fun n => ‖((n : F) ^ k)‖ * ‖r‖ ^ n := by
+      simpa [Nat.cast_pow] using
+      (isBigO_norm_left.mpr (isBigO_norm_right.mpr hu)).mul (isBigO_refl (fun n => (‖r‖ ^ n)) atTop)
+  _ =O[atTop] fun n => ‖r' ^ n‖ := by
+      convert!
+        isBigO_norm_right.mpr
+          (isBigO_norm_left.mpr
+            (isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt k hrr').isBigO)
+      simp only [norm_pow, norm_mul]
 
 Depends on / 依赖: IsBigOWith, IsBigOWith.of_bound, Nat.cast_pow, cast_pow, eventually_norm_pow_le, exists_between, filter_upwards, isBigO, isBigO_norm_left, isBigO_norm_left.mpr, isBigO_norm_right, isBigO_norm_right.mpr, isBigO_refl, norm_nonneg, of_bound, summable_geometric_of_lt_one, summable_of_isBigO_nat
 -/

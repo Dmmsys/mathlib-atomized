@@ -122,7 +122,11 @@ theorem injective_of_surjective_of_injective
   let := Equiv.module R (equivShrink M).symm
   let j : Shrink.{u} M ≃ₗ[R] M := Equiv.linearEquiv R (equivShrink M).symm
   have := Module.Finite.equiv j.symm
-  le
+  let i' := j.symm.toLinearMap ∘ₗ i
+  replace hi : Injective i' := by simpa [i'] using hi
+  let f' := j.symm.toLinearMap ∘ₗ f ∘ₗ (LinearEquiv.ofInjective i' hi).symm.toLinearMap
+  replace hf : Surjective f' := by simpa [f'] using hf
+  simpa [f'] using injective_of_surjective_of_submodule' f' hf
 
 中文:
 定理 injective_of_surjective_of_injective
@@ -133,7 +137,11 @@ theorem injective_of_surjective_of_injective
   let := Equiv.module R (equivShrink M).symm
   let j : Shrink.{u} M ≃ₗ[R] M := Equiv.linearEquiv R (equivShrink M).symm
   have := Module.Finite.equiv j.symm
-  le
+  let i' := j.symm.toLinearMap ∘ₗ i
+  replace hi : Injective i' := by simpa [i'] using hi
+  let f' := j.symm.toLinearMap ∘ₗ f ∘ₗ (LinearEquiv.ofInjective i' hi).symm.toLinearMap
+  replace hf : Surjective f' := by simpa [f'] using hf
+  simpa [f'] using injective_of_surjective_of_submodule' f' hf
 
 Depends on / 依赖: Equiv.addCommMonoid, Equiv.linearEquiv, Equiv.module, Finite, Injective, LinearEquiv, LinearEquiv.ofInjective, Module, Module.Finite.equiv, Module.Finite.exists_fin, Shrink, Surjective, addCommMonoid, equivShrink, exists_fin, j.symm, j.symm.toLinearMap, linearEquiv, module, ofInjective
 -/

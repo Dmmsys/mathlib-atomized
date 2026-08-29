@@ -50,7 +50,20 @@ theorem induction_on_pi_of_choice
   · convert! h0 using 1
     simpa [funext_iff] using he
   · rcases sigma_nonempty.1 hne with ⟨i, -, hi⟩
-    rc
+    rcases H_ex i (f i) hi with ⟨x, x_mem, hr⟩
+    set g := update f i ((f i).erase x) with hg
+    clear_value g
+    have hx' : x ∉ g i := by
+      rw [hg]; rw [update_self]
+      apply notMem_erase
+    rw [show f = update g i (insert x (g i)) by
+      rw [hg]; rw [update_idem]; rw [update_self]; rw [insert_erase x_mem]; rw [update_eq_self]] at hr ihs ⊢
+    clear hg
+    rw [update_self]; rw [erase_insert hx'] at hr
+    refine step _ _ _ hr (ihs (univ.sigma g) ?_ _ rfl)
+    rw [ssubset_iff_of_subset (sigma_mono (Subset.refl _) _)]
+    exacts [⟨⟨i, x⟩, mem_sigma.2 ⟨mem_univ _, by simp⟩, by simp [hx']⟩,
+      (@le_update_iff _ _ _ _ g g i _).2 ⟨subset_insert _ _, fun _ _ => le_rfl⟩]
 
 中文:
 定理 induction_on_pi_of_choice
@@ -63,7 +76,20 @@ theorem induction_on_pi_of_choice
   · convert! h0 using 1
     simpa [funext_iff] using he
   · rcases sigma_nonempty.1 hne with ⟨i, -, hi⟩
-    rc
+    rcases H_ex i (f i) hi with ⟨x, x_mem, hr⟩
+    set g := update f i ((f i).erase x) with hg
+    clear_value g
+    have hx' : x ∉ g i := by
+      rw [hg]; rw [update_self]
+      apply notMem_erase
+    rw [show f = update g i (insert x (g i)) by
+      rw [hg]; rw [update_idem]; rw [update_self]; rw [insert_erase x_mem]; rw [update_eq_self]] at hr ihs ⊢
+    clear hg
+    rw [update_self]; rw [erase_insert hx'] at hr
+    refine step _ _ _ hr (ihs (univ.sigma g) ?_ _ rfl)
+    rw [ssubset_iff_of_subset (sigma_mono (Subset.refl _) _)]
+    exacts [⟨⟨i, x⟩, mem_sigma.2 ⟨mem_univ _, by simp⟩, by simp [hx']⟩,
+      (@le_update_iff _ _ _ _ g g i _).2 ⟨subset_insert _ _, fun _ _ => le_rfl⟩]
 
 Depends on / 依赖: Finset, Finset.strongInductionOn, H_ex, clear_value, convert, eq_empty_or_nonempty, funext_iff, generalizing, insert, nonempty_fintype, notMem_erase, sigma_nonempty, strongInductionOn, univ.sigma, update, update_self, x_mem
 -/

@@ -133,7 +133,7 @@ theorem normalizedTraceAux_eq_of_finiteDimensional
   proof: by
 have h := (Nat.cast_ne_zero (R := F)).mpr
 Nat.pos_iff_ne_zero.mp Module.finrank_pos (R := F⟮a⟯) (M := K)
-  rw [smul_eq_mul]; rw [mul_comm]; rw [← div_eq_mul_inv]; rw [trace_eq_trace_adjoin F a]; rw [← Module.finrank_mul_finrank F F⟮a⟯ K]; rw [nsmul_eq_mul]; rw [Nat.cast_mul]; rw [mul_comm]; rw [m
+  rw [smul_eq_mul]; rw [mul_comm]; rw [← div_eq_mul_inv]; rw [trace_eq_trace_adjoin F a]; rw [← Module.finrank_mul_finrank F F⟮a⟯ K]; rw [nsmul_eq_mul]; rw [Nat.cast_mul]; rw [mul_comm]; rw [mul_div_mul_right _ _ h]; rw [div_eq_mul_inv]; rw [mul_comm]; rw [← smul_eq_mul]; rw [normalizedTraceAux_def]
 
 中文:
 定理 normalizedTraceAux_eq_of_finiteDimensional
@@ -141,7 +141,7 @@ Nat.pos_iff_ne_zero.mp Module.finrank_pos (R := F⟮a⟯) (M := K)
   证明: by
 have h := (Nat.cast_ne_zero (R := F)).mpr
 Nat.pos_iff_ne_zero.mp Module.finrank_pos (R := F⟮a⟯) (M := K)
-  rw [smul_eq_mul]; rw [mul_comm]; rw [← div_eq_mul_inv]; rw [trace_eq_trace_adjoin F a]; rw [← Module.finrank_mul_finrank F F⟮a⟯ K]; rw [nsmul_eq_mul]; rw [Nat.cast_mul]; rw [mul_comm]; rw [m
+  rw [smul_eq_mul]; rw [mul_comm]; rw [← div_eq_mul_inv]; rw [trace_eq_trace_adjoin F a]; rw [← Module.finrank_mul_finrank F F⟮a⟯ K]; rw [nsmul_eq_mul]; rw [Nat.cast_mul]; rw [mul_comm]; rw [mul_div_mul_right _ _ h]; rw [div_eq_mul_inv]; rw [mul_comm]; rw [← smul_eq_mul]; rw [normalizedTraceAux_def]
 -/
 private theorem normalizedTraceAux_eq_of_finiteDimensional [FiniteDimensional F K] (a : K) :
     normalizedTraceAux F K a = (Module.finrank F K : F)⁻¹ • trace F K a := by
@@ -164,7 +164,22 @@ definition normalizedTrace
     let E := F⟮a⟯ ⊔ F⟮b⟯
     have : FiniteDimensional F F⟮a⟯ := adjoin.finiteDimensional (IsIntegral.isIntegral a)
     have : FiniteDimensional F F⟮b⟯ := adjoin.finiteDimensional (IsIntegral.isIntegral b)
-have ha : a in E := (le_sup_left : F⟮a⟯ <= E) mem_a
+have ha : a in E := (le_sup_left : F⟮a⟯ <= E) mem_adjoin_simple_self F a
+have hb : b in E := (le_sup_right : F⟮b⟯ <= E) mem_adjoin_simple_self F b
+    have hab : a + b in E := IntermediateField.add_mem E ha hb
+    let a' : E := ⟨a, ha⟩
+    let b' : E := ⟨b, hb⟩
+    let ab' : E := ⟨a + b, hab⟩
+    rw [normalizedTraceAux_intermediateField F K a']; rw [normalizedTraceAux_intermediateField F K b']; rw [normalizedTraceAux_intermediateField F K ab']; rw [normalizedTraceAux_eq_of_finiteDimensional F a']; rw [normalizedTraceAux_eq_of_finiteDimensional F b']; rw [normalizedTraceAux_eq_of_finiteDimensional F ab']; rw [← smul_add]; rw [← map_add]; rw [AddMemClass.mk_add_mk]
+  map_smul' m a := by
+    dsimp only [AddHom.toFun_eq_coe, AddHom.coe_mk, RingHom.id_apply]
+    let E := F⟮a⟯
+    have : FiniteDimensional F F⟮a⟯ := adjoin.finiteDimensional (IsIntegral.isIntegral a)
+    have ha : a in E := mem_adjoin_simple_self F a
+    have hma : m • a in E := smul_mem E ha
+    let a' : E := ⟨a, ha⟩
+    let ma' : E := ⟨m • a, hma⟩
+    rw [normalizedTraceAux_intermediateField F K a']; rw [normalizedTraceAux_intermediateField F K ma']; rw [normalizedTraceAux_eq_of_finiteDimensional F a']; rw [normalizedTraceAux_eq_of_finiteDimensional F ma']; rw [smul_comm]; rw [← map_smul _ m]; rw [SetLike.mk_smul_mk]
 
 中文:
 定义 normalizedTrace
@@ -174,7 +189,22 @@ have ha : a in E := (le_sup_left : F⟮a⟯ <= E) mem_a
     let E := F⟮a⟯ ⊔ F⟮b⟯
     have : FiniteDimensional F F⟮a⟯ := adjoin.finiteDimensional (IsIntegral.isIntegral a)
     have : FiniteDimensional F F⟮b⟯ := adjoin.finiteDimensional (IsIntegral.isIntegral b)
-have ha : a in E := (le_sup_left : F⟮a⟯ <= E) mem_a
+have ha : a in E := (le_sup_left : F⟮a⟯ <= E) mem_adjoin_simple_self F a
+have hb : b in E := (le_sup_right : F⟮b⟯ <= E) mem_adjoin_simple_self F b
+    have hab : a + b in E := IntermediateField.add_mem E ha hb
+    let a' : E := ⟨a, ha⟩
+    let b' : E := ⟨b, hb⟩
+    let ab' : E := ⟨a + b, hab⟩
+    rw [normalizedTraceAux_intermediateField F K a']; rw [normalizedTraceAux_intermediateField F K b']; rw [normalizedTraceAux_intermediateField F K ab']; rw [normalizedTraceAux_eq_of_finiteDimensional F a']; rw [normalizedTraceAux_eq_of_finiteDimensional F b']; rw [normalizedTraceAux_eq_of_finiteDimensional F ab']; rw [← smul_add]; rw [← map_add]; rw [AddMemClass.mk_add_mk]
+  map_smul' m a := by
+    dsimp only [AddHom.toFun_eq_coe, AddHom.coe_mk, RingHom.id_apply]
+    let E := F⟮a⟯
+    have : FiniteDimensional F F⟮a⟯ := adjoin.finiteDimensional (IsIntegral.isIntegral a)
+    have ha : a in E := mem_adjoin_simple_self F a
+    have hma : m • a in E := smul_mem E ha
+    let a' : E := ⟨a, ha⟩
+    let ma' : E := ⟨m • a, hma⟩
+    rw [normalizedTraceAux_intermediateField F K a']; rw [normalizedTraceAux_intermediateField F K ma']; rw [normalizedTraceAux_eq_of_finiteDimensional F a']; rw [normalizedTraceAux_eq_of_finiteDimensional F ma']; rw [smul_comm]; rw [← map_smul _ m]; rw [SetLike.mk_smul_mk]
 
 Depends on / 依赖: normalizedTraceAux
 -/
@@ -465,7 +495,15 @@ theorem normalizedTrace_trans_apply_aux
   proof: by
   have : FiniteDimensional E E⟮a⟯ :=
     IntermediateField.adjoin.finiteDimensional (IsIntegral.isIntegral a)
-  rw [normalizedTrace_def E K]; rw [inv_natCast_smul_eq (R := E) (S := F)]; rw [map_smul]; rw [normalizedTrace_eq_of_finiteDimensional F E]; rw [LinearMap.smul_apply]; rw [← smul_assoc]; 
+  rw [normalizedTrace_def E K]; rw [inv_natCast_smul_eq (R := E) (S := F)]; rw [map_smul]; rw [normalizedTrace_eq_of_finiteDimensional F E]; rw [LinearMap.smul_apply]; rw [← smul_assoc]; rw [smul_eq_mul (a := _⁻¹)]; rw [← mul_inv]; rw [trace_trace]; rw [mul_comm]; rw [← Nat.cast_mul]; rw [Module.finrank_mul_finrank]; rw [eq_comm]
+  let E' := E⟮a⟯.restrictScalars F
+  have : FiniteDimensional F E' := Module.Finite.trans E E⟮a⟯
+  have h_finrank_eq : Module.finrank F E⟮a⟯ = Module.finrank F E' := rfl
+  have h_trace_eq : trace F E⟮a⟯ (AdjoinSimple.gen E a) = trace F E' (AdjoinSimple.gen E a : E') :=
+    rfl
+  let a' : E' := AdjoinSimple.gen E a
+  rw [h_finrank_eq]; rw [h_trace_eq]; rw [← normalizedTrace_eq_of_finiteDimensional_apply F]; rw [← normalizedTrace_intermediateField F K a']
+  congr
 
 中文:
 定理 normalizedTrace_trans_apply_aux
@@ -473,7 +511,15 @@ theorem normalizedTrace_trans_apply_aux
   证明: by
   have : FiniteDimensional E E⟮a⟯ :=
     IntermediateField.adjoin.finiteDimensional (IsIntegral.isIntegral a)
-  rw [normalizedTrace_def E K]; rw [inv_natCast_smul_eq (R := E) (S := F)]; rw [map_smul]; rw [normalizedTrace_eq_of_finiteDimensional F E]; rw [LinearMap.smul_apply]; rw [← smul_assoc]; 
+  rw [normalizedTrace_def E K]; rw [inv_natCast_smul_eq (R := E) (S := F)]; rw [map_smul]; rw [normalizedTrace_eq_of_finiteDimensional F E]; rw [LinearMap.smul_apply]; rw [← smul_assoc]; rw [smul_eq_mul (a := _⁻¹)]; rw [← mul_inv]; rw [trace_trace]; rw [mul_comm]; rw [← Nat.cast_mul]; rw [Module.finrank_mul_finrank]; rw [eq_comm]
+  let E' := E⟮a⟯.restrictScalars F
+  have : FiniteDimensional F E' := Module.Finite.trans E E⟮a⟯
+  have h_finrank_eq : Module.finrank F E⟮a⟯ = Module.finrank F E' := rfl
+  have h_trace_eq : trace F E⟮a⟯ (AdjoinSimple.gen E a) = trace F E' (AdjoinSimple.gen E a : E') :=
+    rfl
+  let a' : E' := AdjoinSimple.gen E a
+  rw [h_finrank_eq]; rw [h_trace_eq]; rw [← normalizedTrace_eq_of_finiteDimensional_apply F]; rw [← normalizedTrace_intermediateField F K a']
+  congr
 -/
 private theorem normalizedTrace_trans_apply_aux [FiniteDimensional F E] [Algebra.IsIntegral E K]
     [CharZero E] (a : K) :
@@ -501,7 +547,15 @@ theorem normalizedTrace_trans_apply
   have : FiniteDimensional F E₀ := IntermediateField.finiteDimensional_adjoin
     fun x _ => Algebra.IsIntegral.isIntegral x
   have : Algebra.IsIntegral E₀ E := IsIntegral.tower_top F
-  have : Algebra.IsIntegral E₀ K := I
+  have : Algebra.IsIntegral E₀ K := IsIntegral.trans E
+  have hsub : S subseteq (algebraMap E₀ E).range :=
+    Subalgebra.range_algebraMap E₀.toSubalgebra ▸ IntermediateField.subset_adjoin F S
+  have hlifts := (Polynomial.lifts_iff_coeffs_subset_range _).mpr hsub
+  (normalizedTrace_trans_apply_aux F E₀ K _ ▸
+    normalizedTrace_algebraMap_apply F E₀ E _ ▸
+    congrArg (normalizedTrace F E) (normalizedTrace_algebraMap_of_lifts E₀ E K a hlifts)).symm
+
+@[simp]
 
 中文:
 定理 normalizedTrace_trans_apply
@@ -511,7 +565,15 @@ theorem normalizedTrace_trans_apply
   have : FiniteDimensional F E₀ := IntermediateField.finiteDimensional_adjoin
     fun x _ => Algebra.IsIntegral.isIntegral x
   have : Algebra.IsIntegral E₀ E := IsIntegral.tower_top F
-  have : Algebra.IsIntegral E₀ K := I
+  have : Algebra.IsIntegral E₀ K := IsIntegral.trans E
+  have hsub : S subseteq (algebraMap E₀ E).range :=
+    Subalgebra.range_algebraMap E₀.toSubalgebra ▸ IntermediateField.subset_adjoin F S
+  have hlifts := (Polynomial.lifts_iff_coeffs_subset_range _).mpr hsub
+  (normalizedTrace_trans_apply_aux F E₀ K _ ▸
+    normalizedTrace_algebraMap_apply F E₀ E _ ▸
+    congrArg (normalizedTrace F E) (normalizedTrace_algebraMap_of_lifts E₀ E K a hlifts)).symm
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, Algebra.IsIntegral.isIntegral, FiniteDimensional, IntermediateField, IntermediateField.adjoin, IntermediateField.finiteDimensional_adjoin, IntermediateField.subset_adjoin, IsIntegral, IsIntegral.tower_top, IsIntegral.trans, Polynomial, Polynomial.lifts_iff_coeffs_subset_range, Subalgebra, Subalgebra.range_algebraMap, adjoin, algebraMap, coeffs, finiteDimensional_adjoin, hlifts
 -/

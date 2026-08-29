@@ -232,7 +232,13 @@ instance :
             rw [← Set.iUnion_union_distrib]
             exact Set.iUnion_mono fun a => support_add_subset ..)
       finite_co_support' := fun g =>
-        
+        ((x.finite_co_support g).union (y.finite_co_support g)).subset
+          (by
+            intro a ha
+            change (x a).coeff g + (y a).coeff g != 0 at ha
+            rw [Set.mem_union]; rw [Function.mem_support]; rw [Function.mem_support]
+            contrapose! ha
+            rw [ha.1]; rw [ha.2]; rw [add_zero]) }⟩
 
 中文:
 实例 :
@@ -245,7 +251,13 @@ instance :
             rw [← Set.iUnion_union_distrib]
             exact Set.iUnion_mono fun a => support_add_subset ..)
       finite_co_support' := fun g =>
-        
+        ((x.finite_co_support g).union (y.finite_co_support g)).subset
+          (by
+            intro a ha
+            change (x a).coeff g + (y a).coeff g != 0 at ha
+            rw [Set.mem_union]; rw [Function.mem_support]; rw [Function.mem_support]
+            contrapose! ha
+            rw [ha.1]; rw [ha.2]; rw [add_zero]) }⟩
 
 Depends on / 依赖: Function, Function.mem_support, Set.iUnion_mono, Set.iUnion_union_distrib, Set.mem_union, add_zero, contrapose, finite_co_support, iUnion_mono, iUnion_union_distrib, isPWO_iUnion_support, mem_support, mem_union, subset, support_add_subset, x.finite_co_support, x.isPWO_iUnion_support.union, y.finite_co_support, y.isPWO_iUnion_support
 -/
@@ -396,7 +408,12 @@ instance :
       finite_co_support' := by
         intro g
         refine (t.finite_co_support g).subset ?_
-        intro i 
+        intro i hi
+        simp only [Pi.smul_apply, coeff_smul, ne_eq, Set.mem_ofPred_eq] at hi
+        simp only [Function.mem_support, ne_eq]
+        exact right_ne_zero_of_smul hi } ⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -408,7 +425,12 @@ instance :
       finite_co_support' := by
         intro g
         refine (t.finite_co_support g).subset ?_
-        intro i 
+        intro i hi
+        simp only [Pi.smul_apply, coeff_smul, ne_eq, Set.mem_ofPred_eq] at hi
+        simp only [Function.mem_support, ne_eq]
+        exact right_ne_zero_of_smul hi } ⟩
+
+@[simp]
 
 Depends on / 依赖: Function, Function.mem_support, Function.support_const_smul_subset, Pi.smul_apply, Set.iUnion_mono, Set.mem_ofPred_eq, coeff_smul, finite_co_support, iUnion_mono, isPWO_iUnion_support, mem_ofPred_eq, mem_support, ne_eq, right_ne_zero_of_smul, smul_apply, subset, support_const_smul_subset, t.finite_co_support, t.isPWO_iUnion_support.mono
 -/
@@ -549,6 +571,7 @@ definition hsum
       intro h
       rw [finsum_congr h]; rw [finsum_zero]
 
+@[simp]
 
 中文:
 定义 hsum
@@ -562,6 +585,7 @@ definition hsum
       intro h
       rw [finsum_congr h]; rw [finsum_zero]
 
+@[simp]
 -/
 def hsum (s : SummableFamily Γ R α) : R⟦Γ⟧ where
   coeff g := ∑ᶠ i, (s i).coeff g
@@ -745,7 +769,9 @@ refine this.mono Set.iUnion_subset fun a => ?_
     · rfl
     · simp [ha]
   finite_co_support' g := (Set.finite_singleton i).subset fun j => by
-  
+    obtain rfl | ha := eq_or_ne j i <;> simp [*]
+
+@[simp]
 
 中文:
 定义 single
@@ -758,7 +784,9 @@ refine this.mono Set.iUnion_subset fun a => ?_
     · rfl
     · simp [ha]
   finite_co_support' g := (Set.finite_singleton i).subset fun j => by
-  
+    obtain rfl | ha := eq_or_ne j i <;> simp [*]
+
+@[simp]
 
 Depends on / 依赖: Pi.single, single
 -/
@@ -879,7 +907,9 @@ definition Equiv
     simp only [Set.mem_iUnion, mem_support, ne_eq, forall_exists_index]
     exact fun b hg => Exists.intro (e.symm b) hg
   finite_co_support' g :=
-(Equiv.set_finite_iff e.subtypeEquivOfSubtype').m
+(Equiv.set_finite_iff e.subtypeEquivOfSubtype').mp s.finite_co_support' g
+
+@[simp]
 
 中文:
 定义 等价
@@ -890,7 +920,9 @@ definition Equiv
     simp only [Set.mem_iUnion, mem_support, ne_eq, forall_exists_index]
     exact fun b hg => Exists.intro (e.symm b) hg
   finite_co_support' g :=
-(Equiv.set_finite_iff e.subtypeEquivOfSubtype').m
+(Equiv.set_finite_iff e.subtypeEquivOfSubtype').mp s.finite_co_support' g
+
+@[simp]
 
 Depends on / 依赖: e.symm
 -/
@@ -947,7 +979,9 @@ definition smulFamily
     obtain ⟨i, hi⟩ := hg
 exact Exists.intro i right_ne_zero_of_smul hi
   finite_co_support' g := by
-    refine Set.Finite.subse
+    refine Set.Finite.subset (s.finite_co_support g) fun i hi => ?_
+    simp_all only [coeff_smul, ne_eq, Set.mem_ofPred_eq, Function.mem_support]
+    exact right_ne_zero_of_smul hi
 
 中文:
 定义 smulFamily
@@ -959,7 +993,9 @@ exact Exists.intro i right_ne_zero_of_smul hi
     obtain ⟨i, hi⟩ := hg
 exact Exists.intro i right_ne_zero_of_smul hi
   finite_co_support' g := by
-    refine Set.Finite.subse
+    refine Set.Finite.subset (s.finite_co_support g) fun i hi => ?_
+    simp_all only [coeff_smul, ne_eq, Set.mem_ofPred_eq, Function.mem_support]
+    exact right_ne_zero_of_smul hi
 -/
 def smulFamily [AddCommMonoid V] [SMulWithZero R V] (f : α -> R) (s : SummableFamily Γ V α) :
     SummableFamily Γ V α where
@@ -1056,7 +1092,7 @@ theorem hsum_leadingCoeff_of_le
     simp [h] at this
   simp only [hs, ↓reduceDIte, WithTop.coe_eq_coe] at this
   simp only [leadingCoeff_of_ne_zero hs, coeff_hsum, untop_orderTop_of_ne_zero hs, this]
-  rw [finsum_eq_sin
+  rw [finsum_eq_single (fun i => (s i).coeff g) a hna]
 
 中文:
 定理 hsum_leadingCoeff_of_le
@@ -1069,7 +1105,7 @@ theorem hsum_leadingCoeff_of_le
     simp [h] at this
   simp only [hs, ↓reduceDIte, WithTop.coe_eq_coe] at this
   simp only [leadingCoeff_of_ne_zero hs, coeff_hsum, untop_orderTop_of_ne_zero hs, this]
-  rw [finsum_eq_sin
+  rw [finsum_eq_single (fun i => (s i).coeff g) a hna]
 
 Depends on / 依赖: WithTop, WithTop.coe_eq_coe, coe_eq_coe, coeff_hsum, finsum_eq_single, hsum_orderTop_of_le, leadingCoeff_of_ne_zero, orderTop, reduceDIte, s.hsum, untop_orderTop_of_ne_zero
 -/
@@ -1353,7 +1389,14 @@ theorem isPWO_iUnion_support_prod_smul
       (s ab.1).support +ᵥ (t ab.2).support := by
     intro ab
     refine Set.Subset.trans (fun x hx => ?_) (support_vaddAntidiagonal_subset_vadd fun a =>
-      Set.
+      Set.VAddAntidiagonal.finite_of_isPWO (s ab.1).isPWO_support (t ab.2).isPWO_support a)
+    simp only [Set.mem_ofPred_eq]
+    contrapose! hx
+    rw [mem_support]; rw [not_not]; rw [HahnModule.coeff_smul]; rw [hx]; rw [sum_empty]
+  refine Set.Subset.trans (Set.iUnion_mono fun a => (hsupp a)) ?_
+  simp_all only [Set.iUnion_subset_iff, Prod.forall]
+  exact fun a b => Set.vadd_subset_vadd (Set.subset_iUnion_of_subset a fun x y => y)
+    (Set.subset_iUnion_of_subset b fun x y => y)
 
 中文:
 定理 isPWO_iUnion_support_prod_smul
@@ -1364,7 +1407,14 @@ theorem isPWO_iUnion_support_prod_smul
       (s ab.1).support +ᵥ (t ab.2).support := by
     intro ab
     refine Set.Subset.trans (fun x hx => ?_) (support_vaddAntidiagonal_subset_vadd fun a =>
-      Set.
+      Set.VAddAntidiagonal.finite_of_isPWO (s ab.1).isPWO_support (t ab.2).isPWO_support a)
+    simp only [Set.mem_ofPred_eq]
+    contrapose! hx
+    rw [mem_support]; rw [not_not]; rw [HahnModule.coeff_smul]; rw [hx]; rw [sum_empty]
+  refine Set.Subset.trans (Set.iUnion_mono fun a => (hsupp a)) ?_
+  simp_all only [Set.iUnion_subset_iff, Prod.forall]
+  exact fun a b => Set.vadd_subset_vadd (Set.subset_iUnion_of_subset a fun x y => y)
+    (Set.subset_iUnion_of_subset b fun x y => y)
 
 Depends on / 依赖: HahnModule, HahnModule.coeff_smul, Set.Su, Set.Subset.trans, Set.VAddAntidiagonal.finite_of_isPWO, Set.mem_ofPred_eq, Subset, VAddAntidiagonal, coeff_smul, contrapose, finite_of_isPWO, hs.vadd, isPWO_support, mem_ofPred_eq, mem_support, not_not, subseteq, sum_empty, support, support_vaddAntidiagonal_subset_vadd
 -/
@@ -1398,7 +1448,11 @@ theorem finite_co_support_prod_smul
     (fun gh _ => hasFiniteSupport_smul s t gh)).subset _
   exact fun ab hab => by
     simp only [ne_eq, Set.mem_ofPred_eq] at hab
-    obtain ⟨ij, hij⟩ := 
+    obtain ⟨ij, hij⟩ := Finset.exists_ne_zero_of_sum_ne_zero hab
+    simp only [mem_coe, mem_vaddAntidiagonal, Set.mem_iUnion, mem_support, ne_eq,
+      Function.mem_support, exists_prop, Prod.exists]
+    exact ⟨ij.1, ij.2, ⟨⟨ab.1, left_ne_zero_of_smul hij.2⟩, ⟨ab.2, right_ne_zero_of_smul hij.2⟩,
+      ((mem_vaddAntidiagonal _ _).mp hij.1).2.2⟩, hij.2⟩
 
 中文:
 定理 finite_co_support_prod_smul
@@ -1409,7 +1463,11 @@ theorem finite_co_support_prod_smul
     (fun gh _ => hasFiniteSupport_smul s t gh)).subset _
   exact fun ab hab => by
     simp only [ne_eq, Set.mem_ofPred_eq] at hab
-    obtain ⟨ij, hij⟩ := 
+    obtain ⟨ij, hij⟩ := Finset.exists_ne_zero_of_sum_ne_zero hab
+    simp only [mem_coe, mem_vaddAntidiagonal, Set.mem_iUnion, mem_support, ne_eq,
+      Function.mem_support, exists_prop, Prod.exists]
+    exact ⟨ij.1, ij.2, ⟨⟨ab.1, left_ne_zero_of_smul hij.2⟩, ⟨ab.2, right_ne_zero_of_smul hij.2⟩,
+      ((mem_vaddAntidiagonal _ _).mp hij.1).2.2⟩, hij.2⟩
 
 Depends on / 依赖: Finset, Finset.exists_ne_zero_of_sum_ne_zero, Function, Function.mem_support, Prod.exists, Set.VAddAntidiagonal.finite_of_isPWO, Set.mem_iUnion, Set.mem_ofPred_eq, VAddAntidiagonal, biUnion, exists_ne_zero_of_sum_ne_zero, exists_prop, finite_of_isPWO, finite_toSet, finite_toSet.biUnion, hasFiniteSupport_smul, isPWO_iUnion_support, left_ne_zero_of_smul, mem_coe, mem_iUnion
 -/
@@ -1466,7 +1524,8 @@ theorem sum_vAddAntidiagonal_eq
   · simp_all only [mem_vaddAntidiagonal, Function.mem_support, Set.mem_iUnion, mem_support]
     exact ⟨Exists.intro a.1 hgh.1, Exists.intro a.2 hgh.2.1, trivial⟩
   · by_cases hs : (s a.1).coeff gh.1 = 0
-    · exact smul_eq_zero_of_left hs 
+    · exact smul_eq_zero_of_left hs ((t a.2).coeff gh.2)
+    · simp_all
 
 中文:
 定理 sum_vAddAntidiagonal_eq
@@ -1476,7 +1535,8 @@ theorem sum_vAddAntidiagonal_eq
   · simp_all only [mem_vaddAntidiagonal, Function.mem_support, Set.mem_iUnion, mem_support]
     exact ⟨Exists.intro a.1 hgh.1, Exists.intro a.2 hgh.2.1, trivial⟩
   · by_cases hs : (s a.1).coeff gh.1 = 0
-    · exact smul_eq_zero_of_left hs 
+    · exact smul_eq_zero_of_left hs ((t a.2).coeff gh.2)
+    · simp_all
 
 Depends on / 依赖: Exists, Exists.intro, Function, Function.mem_support, Set.mem_iUnion, mem_iUnion, mem_support, mem_vaddAntidiagonal, smul_eq_zero_of_left, sum_subset
 -/
@@ -1506,7 +1566,13 @@ theorem coeff_smul
   simp_rw [sum_vAddAntidiagonal_eq, Finset.smul_sum, Finset.sum_smul]
   rw [← sum_finsum_comm _ _ <| fun gh _ => hasFiniteSupport_smul s t gh]
   refine sum_congr rfl fun gh _ => ?_
-  rw [f
+  rw [finsum_eq_sum _ (hasFiniteSupport_smul s t gh)]; rw [← sum_product_right']
+  refine sum_subset (fun ab hab => ?_) (fun ab _ hab => by simp_all)
+  have hsupp := smul_support_subset_prod s t gh
+  simp_all only [mem_vaddAntidiagonal, Set.mem_iUnion, mem_support, ne_eq, Set.Finite.mem_toFinset,
+    Function.mem_support, Set.Finite.coe_toFinset, support_subset_iff, Set.mem_prod,
+    Set.mem_ofPred_eq, Prod.forall, coeff_support, mem_product]
+  exact hsupp ab.1 ab.2 hab
 
 中文:
 定理 coeff_smul
@@ -1517,7 +1583,13 @@ theorem coeff_smul
   simp_rw [sum_vAddAntidiagonal_eq, Finset.smul_sum, Finset.sum_smul]
   rw [← sum_finsum_comm _ _ <| fun gh _ => hasFiniteSupport_smul s t gh]
   refine sum_congr rfl fun gh _ => ?_
-  rw [f
+  rw [finsum_eq_sum _ (hasFiniteSupport_smul s t gh)]; rw [← sum_product_right']
+  refine sum_subset (fun ab hab => ?_) (fun ab _ hab => by simp_all)
+  have hsupp := smul_support_subset_prod s t gh
+  simp_all only [mem_vaddAntidiagonal, Set.mem_iUnion, mem_support, ne_eq, Set.Finite.mem_toFinset,
+    Function.mem_support, Set.Finite.coe_toFinset, support_subset_iff, Set.mem_prod,
+    Set.mem_ofPred_eq, Prod.forall, coeff_support, mem_product]
+  exact hsupp ab.1 ab.2 hab
 
 Depends on / 依赖: Equiv.symm_apply_apply, Finset, Finset.smul_sum, Finset.sum_smul, HahnModule, HahnModule.coeff_smul, coeff_hsum, coeff_hsum_eq_sum, coeff_smul, finsum_eq_sum, hasFiniteSupport_smul, mem_vaddAn, simp_rw, smul_sum, smul_support_subset_prod, smul_toFun, sum_congr, sum_finsum_comm, sum_product_right, sum_smul
 -/
@@ -1551,7 +1623,17 @@ theorem smul_hsum
   rw [coeff_smul s t g]; rw [HahnModule.coeff_smul]; rw [Equiv.symm_apply_apply]
   refine Eq.symm (sum_of_injOn (fun a => a) (fun _ _ _ _ h => h) (fun _ hgh => ?_)
     (fun gh _ hgh => ?_) fun _ _ => by simp)
-  · simp_all only [mem_coe, mem_vaddAntidiagonal, mem_support, ne_eq, Set.mem_iU
+  · simp_all only [mem_coe, mem_vaddAntidiagonal, mem_support, ne_eq, Set.mem_iUnion, and_true]
+    constructor
+    · rw [coeff_hsum_eq_sum] at hgh
+      have h' := Finset.exists_ne_zero_of_sum_ne_zero hgh.1
+      simpa using h'
+    · by_contra hi
+      simp_all
+  · simp only [Set.image_id', mem_coe, mem_vaddAntidiagonal, mem_support, ne_eq, not_and] at hgh
+    by_cases h : s.hsum.coeff gh.1 = 0
+    · exact smul_eq_zero_of_left h (t.hsum.coeff gh.2)
+    · simp_all
 
 中文:
 定理 smul_hsum
@@ -1561,7 +1643,17 @@ theorem smul_hsum
   rw [coeff_smul s t g]; rw [HahnModule.coeff_smul]; rw [Equiv.symm_apply_apply]
   refine Eq.symm (sum_of_injOn (fun a => a) (fun _ _ _ _ h => h) (fun _ hgh => ?_)
     (fun gh _ hgh => ?_) fun _ _ => by simp)
-  · simp_all only [mem_coe, mem_vaddAntidiagonal, mem_support, ne_eq, Set.mem_iU
+  · simp_all only [mem_coe, mem_vaddAntidiagonal, mem_support, ne_eq, Set.mem_iUnion, and_true]
+    constructor
+    · rw [coeff_hsum_eq_sum] at hgh
+      have h' := Finset.exists_ne_zero_of_sum_ne_zero hgh.1
+      simpa using h'
+    · by_contra hi
+      simp_all
+  · simp only [Set.image_id', mem_coe, mem_vaddAntidiagonal, mem_support, ne_eq, not_and] at hgh
+    by_cases h : s.hsum.coeff gh.1 = 0
+    · exact smul_eq_zero_of_left h (t.hsum.coeff gh.2)
+    · simp_all
 
 Depends on / 依赖: Eq.symm, Equiv.symm_apply_apply, Finset, Finset.exists_ne_zero_of_sum_ne_zero, HahnModule, HahnModule.coeff_smul, Set.image_id, Set.mem_iUnion, and_true, coeff_hsum_eq_sum, coeff_smul, exists_ne_zero_of_sum_ne_zero, image_id, mem_coe, mem_iUnion, mem_support, mem_vaddAntidiagonal, ne_eq, sum_of_injOn, symm_apply_apply
 -/
@@ -1686,7 +1778,7 @@ instance [AddCommMonoid
   one_smul _ := ext fun _ => by rw [smul_apply, HahnModule.one_smul', Equiv.symm_apply_apply]
   add_smul _ _ _ := ext fun _ => by simp [add_smul]
   smul_add _ _ _ := ext fun _ => by simp
-  mul_smul _ _ _ := ext fun _ => by simp [HahnModule.i
+  mul_smul _ _ _ := ext fun _ => by simp [HahnModule.instModule.mul_smul]
 
 中文:
 实例 [加法交换幺半群
@@ -1696,7 +1788,7 @@ instance [AddCommMonoid
   one_smul _ := ext fun _ => by rw [smul_apply, HahnModule.one_smul', Equiv.symm_apply_apply]
   add_smul _ _ _ := ext fun _ => by simp [add_smul]
   smul_add _ _ _ := ext fun _ => by simp
-  mul_smul _ _ _ := ext fun _ => by simp [HahnModule.i
+  mul_smul _ _ _ := ext fun _ => by simp [HahnModule.instModule.mul_smul]
 -/
 instance [AddCommMonoid V] [Module R V] : Module R⟦Γ⟧ (SummableFamily Γ' V α) where
   smul_zero _ := ext fun _ => by simp
@@ -1930,7 +2022,14 @@ definition ofFinsupp
     have haf : a in f.support := by
       rw [Finsupp.mem_support_iff]; rw [← support_nonempty_iff]
       exact ⟨g, hg⟩
-    exact Set.mem_biUni
+    exact Set.mem_biUnion haf hg
+  finite_co_support' g := by
+    refine f.support.finite_toSet.subset fun a ha => ?_
+    simp only [mem_coe, Finsupp.mem_support_iff, Ne]
+    contrapose ha
+    simp [ha]
+
+@[simp]
 
 中文:
 定义 ofFinsupp
@@ -1942,7 +2041,14 @@ definition ofFinsupp
     have haf : a in f.support := by
       rw [Finsupp.mem_support_iff]; rw [← support_nonempty_iff]
       exact ⟨g, hg⟩
-    exact Set.mem_biUni
+    exact Set.mem_biUnion haf hg
+  finite_co_support' g := by
+    refine f.support.finite_toSet.subset fun a ha => ?_
+    simp only [mem_coe, Finsupp.mem_support_iff, Ne]
+    contrapose ha
+    simp [ha]
+
+@[simp]
 -/
 def ofFinsupp (f : α ->₀ R⟦Γ⟧) : SummableFamily Γ R α where
   toFun := f
@@ -2045,7 +2151,15 @@ definition embDomain
     by_cases hb : b in Set.range f
     · rw [dif_pos hb] at h
       exact Set.mem_iUnion.2 ⟨Classical.choose hb, h⟩
-    · simp [-Set.mem
+    · simp [-Set.mem_range, dif_neg hb] at h
+  finite_co_support' g :=
+    ((s.finite_co_support g).image f).subset
+      (by
+        intro b h
+        by_cases hb : b in Set.range f
+        · simp only [Ne, Set.mem_ofPred_eq, dif_pos hb] at h
+          exact ⟨Classical.choose hb, h, Classical.choose_spec hb⟩
+        · simp only [Ne, Set.mem_ofPred_eq, dif_neg hb, coeff_zero, not_true_eq_false] at h)
 
 中文:
 定义 embDomain
@@ -2056,7 +2170,15 @@ definition embDomain
     by_cases hb : b in Set.range f
     · rw [dif_pos hb] at h
       exact Set.mem_iUnion.2 ⟨Classical.choose hb, h⟩
-    · simp [-Set.mem
+    · simp [-Set.mem_range, dif_neg hb] at h
+  finite_co_support' g :=
+    ((s.finite_co_support g).image f).subset
+      (by
+        intro b h
+        by_cases hb : b in Set.range f
+        · simp only [Ne, Set.mem_ofPred_eq, dif_pos hb] at h
+          exact ⟨Classical.choose hb, h, Classical.choose_spec hb⟩
+        · simp only [Ne, Set.mem_ofPred_eq, dif_neg hb, coeff_zero, not_true_eq_false] at h)
 
 Depends on / 依赖: Classical, Classical.choose, Set.range
 -/
@@ -2208,7 +2330,8 @@ theorem support_pow_subset_closure
     simp only [hn, SetLike.mem_coe]
     exact AddSubmonoid.zero_mem _
   | succ n ih =>
-    obtain ⟨i, hi, j, hj, rfl⟩ := support_mul_subset
+    obtain ⟨i, hi, j, hj, rfl⟩ := support_mul_subset hn
+    exact SetLike.mem_coe.2 (AddSubmonoid.add_mem _ (ih hi) (AddSubmonoid.subset_closure hj))
 
 中文:
 定理 support_pow_subset_closure
@@ -2221,7 +2344,8 @@ theorem support_pow_subset_closure
     simp only [hn, SetLike.mem_coe]
     exact AddSubmonoid.zero_mem _
   | succ n ih =>
-    obtain ⟨i, hi, j, hj, rfl⟩ := support_mul_subset
+    obtain ⟨i, hi, j, hj, rfl⟩ := support_mul_subset hn
+    exact SetLike.mem_coe.2 (AddSubmonoid.add_mem _ (ih hi) (AddSubmonoid.subset_closure hj))
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.add_mem, AddSubmonoid.subset_closure, AddSubmonoid.zero_mem, Classical, Classical.not_imp, SetLike, SetLike.mem_coe, add_mem, coeff_one, generalizing, ite_eq_right_iff, mem_coe, mem_support, ne_eq, not_imp, pow_zero, subset_closure, support_mul_subset, zero_mem
 -/
@@ -2309,7 +2433,21 @@ theorem pow_finite_co_support
     isPWO_iUnion_support_powers (zero_le_orderTop_iff.mp <| le_of_lt hx)
   by_cases h0 : x = 0; · exact h0 ▸ Set.Finite.subset (Set.finite_singleton 0) (co_support_zero g)
   by_cases hg : g in ⋃ n : Nat, { g | (x ^ n).coeff g != 0 }
-  swap; · exac
+  swap; · exact Set.finite_empty.subset fun n hn => hg (Set.mem_iUnion.2 ⟨n, hn⟩)
+  apply hpwo.isWF.induction hg
+  intro y ys hy
+  refine ((((antidiagonal x.isPWO_support hpwo y).finite_toSet.biUnion
+    fun ij hij => hy ij.snd (mem_antidiagonal.1 (mem_coe.1 hij)).2.1 ?_).image Nat.succ).union
+      (Set.finite_singleton 0)).subset ?_
+  · obtain ⟨hi, _, rfl⟩ := mem_antidiagonal.1 (mem_coe.1 hij)
+exact lt_add_of_pos_left ij.2 lt_of_lt_of_le ((zero_lt_orderTop_iff h0).mp hx)
+order_le_of_coeff_ne_zero Function.mem_support.mp hi
+  · rintro (_ | n) hn
+    · exact Set.mem_union_right _ (Set.mem_singleton 0)
+    · obtain ⟨i, hi, j, hj, rfl⟩ := support_mul_subset hn
+      refine Set.mem_union_left _ ⟨n, Set.mem_iUnion.2 ⟨⟨j, i⟩, Set.mem_iUnion.2 ⟨?_, hi⟩⟩, rfl⟩
+      simp only [mem_coe, mem_antidiagonal, mem_support, ne_eq, Set.mem_iUnion]
+      exact ⟨hj, ⟨n, hi⟩, add_comm j i⟩
 
 中文:
 定理 pow_finite_co_support
@@ -2319,7 +2457,21 @@ theorem pow_finite_co_support
     isPWO_iUnion_support_powers (zero_le_orderTop_iff.mp <| le_of_lt hx)
   by_cases h0 : x = 0; · exact h0 ▸ Set.Finite.subset (Set.finite_singleton 0) (co_support_zero g)
   by_cases hg : g in ⋃ n : Nat, { g | (x ^ n).coeff g != 0 }
-  swap; · exac
+  swap; · exact Set.finite_empty.subset fun n hn => hg (Set.mem_iUnion.2 ⟨n, hn⟩)
+  apply hpwo.isWF.induction hg
+  intro y ys hy
+  refine ((((antidiagonal x.isPWO_support hpwo y).finite_toSet.biUnion
+    fun ij hij => hy ij.snd (mem_antidiagonal.1 (mem_coe.1 hij)).2.1 ?_).image Nat.succ).union
+      (Set.finite_singleton 0)).subset ?_
+  · obtain ⟨hi, _, rfl⟩ := mem_antidiagonal.1 (mem_coe.1 hij)
+exact lt_add_of_pos_left ij.2 lt_of_lt_of_le ((zero_lt_orderTop_iff h0).mp hx)
+order_le_of_coeff_ne_zero Function.mem_support.mp hi
+  · rintro (_ | n) hn
+    · exact Set.mem_union_right _ (Set.mem_singleton 0)
+    · obtain ⟨i, hi, j, hj, rfl⟩ := support_mul_subset hn
+      refine Set.mem_union_left _ ⟨n, Set.mem_iUnion.2 ⟨⟨j, i⟩, Set.mem_iUnion.2 ⟨?_, hi⟩⟩, rfl⟩
+      simp only [mem_coe, mem_antidiagonal, mem_support, ne_eq, Set.mem_iUnion]
+      exact ⟨hj, ⟨n, hi⟩, add_comm j i⟩
 
 Depends on / 依赖: Finite, Set.Finite.subset, Set.IsPWO, Set.finite_empty.subset, Set.finite_singleton, Set.mem_iUnion, antidiagonal, biUnion, co_support_zero, finite_empty, finite_singleton, finite_toSet, finite_toSet.biUnion, hpwo.isWF.induction, ij.snd, isPWO_iUnion_support_powers, isPWO_support, le_of_lt, mem_ant, mem_iUnion
 -/
@@ -2361,7 +2513,13 @@ definition powers
       exact isPWO_iUnion_support_powers (zero_le_orderTop_iff.mp <| le_of_lt h)
     · simp only [h, ↓reduceIte]
       apply isPWO_iUnion_support_powers
-      rw [order_
+      rw [order_zero]
+  finite_co_support' g := by
+    by_cases h : 0 < x.orderTop
+    · simp only [h, ↓reduceIte]
+      exact pow_finite_co_support h g
+    · simp only [h, ↓reduceIte]
+      exact pow_finite_co_support (orderTop_zero (R := R) (Γ := Γ) ▸ WithTop.top_pos) g
 
 中文:
 定义 powers
@@ -2373,7 +2531,13 @@ definition powers
       exact isPWO_iUnion_support_powers (zero_le_orderTop_iff.mp <| le_of_lt h)
     · simp only [h, ↓reduceIte]
       apply isPWO_iUnion_support_powers
-      rw [order_
+      rw [order_zero]
+  finite_co_support' g := by
+    by_cases h : 0 < x.orderTop
+    · simp only [h, ↓reduceIte]
+      exact pow_finite_co_support h g
+    · simp only [h, ↓reduceIte]
+      exact pow_finite_co_support (orderTop_zero (R := R) (Γ := Γ) ▸ WithTop.top_pos) g
 
 Depends on / 依赖: orderTop, x.orderTop
 -/
@@ -2610,7 +2774,14 @@ theorem unit_aux
   · have hrx : (single oinv) r * x = 1 := by
       rw [eq_of_sub_eq_zero hy]; rw [single_mul_single]; rw [hxo]; rw [hr]; rw [single_zero_one]
     simp only [hrx, sub_self, orderTop_zero, WithTop.top_pos]
-· have hr' : IsRegular r
+· have hr' : IsRegular r := IsUnit.isRegular .of_mul_eq_one x.leadingCoeff hr
+    have hy' : 0 < (single oinv r * y).order := by
+      rw [(order_single_mul_of_isRegular hr' hy)]
+      refine pos_of_lt_add_right (a := x.order) ?_
+      rw [← add_assoc]; rw [add_comm x.order]; rw [hxo]; rw [zero_add]
+      exact order_lt_order_of_eq_add_single (sub_add_cancel x _).symm hy
+    rw [one_minus_single_neg_mul hr (sub_add_cancel x _).symm _ hxo]; rw [orderTop_neg]
+    exact zero_lt_orderTop_of_order hy'
 
 中文:
 定理 unit_aux
@@ -2621,7 +2792,14 @@ theorem unit_aux
   · have hrx : (single oinv) r * x = 1 := by
       rw [eq_of_sub_eq_zero hy]; rw [single_mul_single]; rw [hxo]; rw [hr]; rw [single_zero_one]
     simp only [hrx, sub_self, orderTop_zero, WithTop.top_pos]
-· have hr' : IsRegular r
+· have hr' : IsRegular r := IsUnit.isRegular .of_mul_eq_one x.leadingCoeff hr
+    have hy' : 0 < (single oinv r * y).order := by
+      rw [(order_single_mul_of_isRegular hr' hy)]
+      refine pos_of_lt_add_right (a := x.order) ?_
+      rw [← add_assoc]; rw [add_comm x.order]; rw [hxo]; rw [zero_add]
+      exact order_lt_order_of_eq_add_single (sub_add_cancel x _).symm hy
+    rw [one_minus_single_neg_mul hr (sub_add_cancel x _).symm _ hxo]; rw [orderTop_neg]
+    exact zero_lt_orderTop_of_order hy'
 
 Depends on / 依赖: IsRegular, IsUnit, IsUnit.isRegular, WithTop, WithTop.top_pos, add_, add_assoc, eq_of_sub_eq_zero, isRegular, leadingCoeff, of_mul_eq_one, orderTop_zero, order_single_mul_of_isRegular, pos_of_lt_add_right, single, single_mul_single, single_zero_one, sub_self, top_pos, x.leadingCoeff
 -/
@@ -2691,7 +2869,10 @@ theorem isUnit_of_orderTop_pos
     · rw [(x.orderTop_self_sub_one_pos_iff.mp h).2]
       exact isUnit_one
     · have := (x.orderTop_self_sub_one_pos_iff.mp h).1
-      rw [← order_eq_orde
+      rw [← order_eq_orderTop_of_ne_zero
+        (fun h => WithTop.top_ne_zero (orderTop_eq_top.mpr h ▸ this))]; rw [WithTop.coe_eq_zero] at this
+      rw [this]
+      exact isAddUnit_zero
 
 中文:
 定理 isUnit_of_orderTop_pos
@@ -2703,7 +2884,10 @@ theorem isUnit_of_orderTop_pos
     · rw [(x.orderTop_self_sub_one_pos_iff.mp h).2]
       exact isUnit_one
     · have := (x.orderTop_self_sub_one_pos_iff.mp h).1
-      rw [← order_eq_orde
+      rw [← order_eq_orderTop_of_ne_zero
+        (fun h => WithTop.top_ne_zero (orderTop_eq_top.mpr h ▸ this))]; rw [WithTop.coe_eq_zero] at this
+      rw [this]
+      exact isAddUnit_zero
 
 Depends on / 依赖: WithTop, WithTop.coe_eq_zero, WithTop.top_ne_zero, coe_eq_zero, isAddUnit_zero, isUnit_of_isUnit_leadingCoeff_AddUnitOrder, isUnit_of_subsingleton, isUnit_one, orderTop_eq_top, orderTop_eq_top.mpr, orderTop_self_sub_one_pos_iff, order_eq_orderTop_of_ne_zero, subsingleton_or_nontrivial, top_ne_zero, x.orderTop_self_sub_one_pos_iff.mp
 -/
@@ -2767,7 +2951,14 @@ theorem isUnit_iff
       .of_mul_eq_one (i.leadingCoeff)
         ((coeff_mul_order_add_order u i).symm.trans ?_)
     rw [ui]; rw [coeff_one]; rw [if_pos]
-    rw [← order_mul (left_ne_zero_of_mul_eq_one ui) (right_ne_zero_of_mul_eq_one ui)]; rw [ui]; rw [orde
+    rw [← order_mul (left_ne_zero_of_mul_eq_one ui) (right_ne_zero_of_mul_eq_one ui)]; rw [ui]; rw [order_one]
+  · rintro ⟨⟨u, i, ui, iu⟩, hx⟩
+    rw [Units.val_mk] at hx
+    rw [hx] at iu
+    have h :=
+      SummableFamily.one_sub_self_mul_hsum_powers (unit_aux x iu _ (neg_add_cancel x.order))
+    rw [sub_sub_cancel] at h
+    exact isUnit_of_mul_isUnit_right (.of_mul_eq_one _ h)
 
 中文:
 定理 isUnit_iff
@@ -2780,7 +2971,14 @@ theorem isUnit_iff
       .of_mul_eq_one (i.leadingCoeff)
         ((coeff_mul_order_add_order u i).symm.trans ?_)
     rw [ui]; rw [coeff_one]; rw [if_pos]
-    rw [← order_mul (left_ne_zero_of_mul_eq_one ui) (right_ne_zero_of_mul_eq_one ui)]; rw [ui]; rw [orde
+    rw [← order_mul (left_ne_zero_of_mul_eq_one ui) (right_ne_zero_of_mul_eq_one ui)]; rw [ui]; rw [order_one]
+  · rintro ⟨⟨u, i, ui, iu⟩, hx⟩
+    rw [Units.val_mk] at hx
+    rw [hx] at iu
+    have h :=
+      SummableFamily.one_sub_self_mul_hsum_powers (unit_aux x iu _ (neg_add_cancel x.order))
+    rw [sub_sub_cancel] at h
+    exact isUnit_of_mul_isUnit_right (.of_mul_eq_one _ h)
 
 Depends on / 依赖: InjectiveFunction, InjectiveFunction.repr, SummableFamily, SummableFamily.one_sub_self_mul_hsum_powers, Units.val_mk, coeff_mul_order_add_order, coeff_one, i.leadingCoeff, if_pos, isUnit_of_mul_isUnit_right, leadingCoeff, left_ne_zero_of_mul_eq_one, neg_add_cancel, of_mul_eq_one, one_sub_self_mul_hsum_powers, order_mul, order_one, right_ne_zero_of_mul_eq_one, sub_sub_cancel, symm.trans
 -/
@@ -2901,7 +3099,17 @@ instance instField
         (unit_aux x (inv_mul_cancel₀ (leadingCoeff_ne_zero.mpr x0)) _ (neg_add_cancel x.order))
     rw [sub_sub_cancel] at h
     rw [inv_def]; rw [← mul_assoc]; rw [mul_comm x]; rw [h]
-  nnq
+  nnqsmul := (· • ·)
+  qsmul := (· • ·)
+  nnqsmul_def q x := by ext; simp [← single_zero_nnratCast, NNRat.smul_def]
+  qsmul_def q x := by ext; simp [← single_zero_ratCast, Rat.smul_def]
+  nnratCast_def q := by
+    simp [← single_zero_nnratCast, ← single_zero_natCast, NNRat.cast_def]
+  ratCast_def q := by
+    simp [← single_zero_ratCast, ← single_zero_intCast, ← single_zero_natCast, Rat.cast_def]
+
+example : (instSMul : SMul NNRat R⟦Γ⟧) = NNRat.smulDivisionSemiring := rfl
+example : (instSMul : SMul Rat R⟦Γ⟧) = Rat.smulDivisionRing := rfl
 
 中文:
 实例 instField
@@ -2913,7 +3121,17 @@ instance instField
         (unit_aux x (inv_mul_cancel₀ (leadingCoeff_ne_zero.mpr x0)) _ (neg_add_cancel x.order))
     rw [sub_sub_cancel] at h
     rw [inv_def]; rw [← mul_assoc]; rw [mul_comm x]; rw [h]
-  nnq
+  nnqsmul := (· • ·)
+  qsmul := (· • ·)
+  nnqsmul_def q x := by ext; simp [← single_zero_nnratCast, NNRat.smul_def]
+  qsmul_def q x := by ext; simp [← single_zero_ratCast, Rat.smul_def]
+  nnratCast_def q := by
+    simp [← single_zero_nnratCast, ← single_zero_natCast, NNRat.cast_def]
+  ratCast_def q := by
+    simp [← single_zero_ratCast, ← single_zero_intCast, ← single_zero_natCast, Rat.cast_def]
+
+example : (instSMul : SMul NNRat R⟦Γ⟧) = NNRat.smulDivisionSemiring := rfl
+example : (instSMul : SMul Rat R⟦Γ⟧) = Rat.smulDivisionRing := rfl
 
 Depends on / 依赖: NNRat.smul_def, Rat.smul_def, SummableFamily, SummableFamily.one_sub_self_mul_hsum_powers, inv_def, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, mul_assoc, mul_comm, mul_inv_cancel, neg_add_cancel, nnqsmul, nnqsmul_def, nnratCast_def, one_sub_self_mul_hsum_powers, qsmul_def, single_zero_nnratCast, single_zero_ratCast, smul_def, sub_sub_cancel
 -/

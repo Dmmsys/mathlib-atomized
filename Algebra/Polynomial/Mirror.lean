@@ -221,7 +221,15 @@ theorem coeff_mirror
     by_cases h1 : n <= p.natDegree + p.natTrailingDegree
     · rw [revAt_le h1, coeff_eq_zero_of_lt_natTrailingDegree]
       grw [h2, add_tsub_cancel_left]
-    · rw [← revAtFun_eq, revAtFun, if_neg 
+    · rw [← revAtFun_eq, revAtFun, if_neg h1, coeff_eq_zero_of_natDegree_lt h2]
+  rw [not_lt] at h2
+  rw [revAt_le (h2.trans (Nat.le_add_right _ _))]
+  by_cases h3 : p.natTrailingDegree <= n
+  · rw [← tsub_add_eq_add_tsub h2, ← tsub_tsub_assoc h2 h3, mirror, coeff_mul_X_pow', if_pos h3,
+      coeff_reverse, revAt_le (tsub_le_self.trans h2)]
+  rw [not_le] at h3
+  rw [coeff_eq_zero_of_natDegree_lt (lt_tsub_iff_right.mpr (Nat.add_lt_add_left h3 _))]
+  exact coeff_eq_zero_of_lt_natTrailingDegree (by rwa [mirror_natTrailingDegree])
 
 中文:
 定理 coeff_mirror
@@ -232,7 +240,15 @@ theorem coeff_mirror
     by_cases h1 : n <= p.natDegree + p.natTrailingDegree
     · rw [revAt_le h1, coeff_eq_zero_of_lt_natTrailingDegree]
       grw [h2, add_tsub_cancel_left]
-    · rw [← revAtFun_eq, revAtFun, if_neg 
+    · rw [← revAtFun_eq, revAtFun, if_neg h1, coeff_eq_zero_of_natDegree_lt h2]
+  rw [not_lt] at h2
+  rw [revAt_le (h2.trans (Nat.le_add_right _ _))]
+  by_cases h3 : p.natTrailingDegree <= n
+  · rw [← tsub_add_eq_add_tsub h2, ← tsub_tsub_assoc h2 h3, mirror, coeff_mul_X_pow', if_pos h3,
+      coeff_reverse, revAt_le (tsub_le_self.trans h2)]
+  rw [not_le] at h3
+  rw [coeff_eq_zero_of_natDegree_lt (lt_tsub_iff_right.mpr (Nat.add_lt_add_left h3 _))]
+  exact coeff_eq_zero_of_lt_natTrailingDegree (by rwa [mirror_natTrailingDegree])
 
 Depends on / 依赖: Nat.le_add_right, add_tsub_cancel_left, coeff_eq_zero_of_lt_natTrailingDegree, coeff_eq_zero_of_natDegree_lt, coeff_mul_X_p, h2.trans, if_neg, le_add_right, mirror, mirror_natDegree, natDegree, natTrailingDegree, not_lt, p.natDegree, p.natTrailingDegree, revAtFun, revAtFun_eq, revAt_le, tsub_add_eq_add_tsub, tsub_tsub_assoc
 -/
@@ -267,7 +283,19 @@ theorem mirror_eval_one
   · intro n hn hp
     rw [Finset.mem_range_succ_iff] at *
     rw [revAt_le (hn.trans (Nat.le_add_right _ _))]
-    rw 
+    rw [tsub_le_iff_tsub_le]; rw [add_comm]; rw [add_tsub_cancel_right]; rw [← mirror_natTrailingDegree]
+    exact natTrailingDegree_le_of_ne_zero hp
+  · exact fun n₁ _ _ _ _ _ h => by rw [← @revAt_invol _ n₁, h, revAt_invol]
+  · intro n hn hp
+    use revAt (p.natDegree + p.natTrailingDegree) n
+    refine ⟨?_, ?_, revAt_invol⟩
+    · rw [Finset.mem_range_succ_iff] at *
+      rw [revAt_le (hn.trans (Nat.le_add_right _ _))]
+      rw [tsub_le_iff_tsub_le]; rw [add_comm]; rw [add_tsub_cancel_right]
+      exact natTrailingDegree_le_of_ne_zero hp
+    · change p.mirror.coeff _ != 0
+      rwa [coeff_mirror, revAt_invol]
+  · exact fun n _ _ => p.coeff_mirror n
 
 中文:
 定理 mirror_eval_one
@@ -279,7 +307,19 @@ theorem mirror_eval_one
   · intro n hn hp
     rw [Finset.mem_range_succ_iff] at *
     rw [revAt_le (hn.trans (Nat.le_add_right _ _))]
-    rw 
+    rw [tsub_le_iff_tsub_le]; rw [add_comm]; rw [add_tsub_cancel_right]; rw [← mirror_natTrailingDegree]
+    exact natTrailingDegree_le_of_ne_zero hp
+  · exact fun n₁ _ _ _ _ _ h => by rw [← @revAt_invol _ n₁, h, revAt_invol]
+  · intro n hn hp
+    use revAt (p.natDegree + p.natTrailingDegree) n
+    refine ⟨?_, ?_, revAt_invol⟩
+    · rw [Finset.mem_range_succ_iff] at *
+      rw [revAt_le (hn.trans (Nat.le_add_right _ _))]
+      rw [tsub_le_iff_tsub_le]; rw [add_comm]; rw [add_tsub_cancel_right]
+      exact natTrailingDegree_le_of_ne_zero hp
+    · change p.mirror.coeff _ != 0
+      rwa [coeff_mirror, revAt_invol]
+  · exact fun n _ _ => p.coeff_mirror n
 
 Depends on / 依赖: Finset, Finset.mem_range_succ_iff, Finset.sum_bij_ne_zero, Nat.le_add_right, add_comm, add_tsub_cancel_right, eval_eq_sum_range, hn.trans, le_add_right, mem_range_succ_iff, mirror_natDegree, mirror_natTrailingDegree, mul_one, natDegree, natTrailingDegree, natTrailingDegree_le_of_ne_zero, one_pow, p.natDegree, p.natTrailingDegree, revAt_invol
 -/
@@ -468,7 +508,8 @@ theorem coeff_mul_mirror
     (Finset.sum_congr rfl fun n hn => ?_).trans
       (p.sum_eq_of_subset (fun _ => (· ^ 2)) (fun _ => zero_pow two_ne_zero) fun n hn =>
           Finset.mem_range_succ_iff.mpr
-            ((le_natDegree_of_mem_supp 
+            ((le_natDegree_of_mem_supp n hn).trans (Nat.le_add_right _ _))).symm
+  rw [coeff_mirror]; rw [← revAt_le (Finset.mem_range_succ_iff.mp hn)]; rw [revAt_invol]; rw [← sq]
 
 中文:
 定理 coeff_mul_mirror
@@ -478,7 +519,8 @@ theorem coeff_mul_mirror
     (Finset.sum_congr rfl fun n hn => ?_).trans
       (p.sum_eq_of_subset (fun _ => (· ^ 2)) (fun _ => zero_pow two_ne_zero) fun n hn =>
           Finset.mem_range_succ_iff.mpr
-            ((le_natDegree_of_mem_supp 
+            ((le_natDegree_of_mem_supp n hn).trans (Nat.le_add_right _ _))).symm
+  rw [coeff_mirror]; rw [← revAt_le (Finset.mem_range_succ_iff.mp hn)]; rw [revAt_invol]; rw [← sq]
 
 Depends on / 依赖: Finset, Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Finset.mem_range_succ_iff.mp, Finset.mem_range_succ_iff.mpr, Finset.sum_congr, Nat.le_add_right, coeff_mirror, coeff_mul, le_add_right, le_natDegree_of_mem_supp, mem_range_succ_iff, p.sum_eq_of_subset, revAt_invol, revAt_le, sum_antidiagonal_eq_sum_range_succ_mk, sum_congr, sum_eq_of_subset, two_ne_zero, zero_pow
 -/
@@ -557,7 +599,8 @@ theorem mirror_mul_of_domain
   by_cases hq : q = 0
   · rw [hq, mul_zero, mirror_zero, mul_zero]
   rw [mirror]; rw [mirror]; rw [mirror]; rw [reverse_mul_of_domain]; rw [natTrailingDegree_mul hp hq]; rw [pow_add]
-  rw [mul_assoc]; rw [← mul_assoc q.reverse]; r
+  rw [mul_assoc]; rw [← mul_assoc q.reverse]; rw [← X_pow_mul (p := reverse q)]
+  repeat' rw [mul_assoc]
 
 中文:
 定理 mirror_mul_of_domain
@@ -568,7 +611,8 @@ theorem mirror_mul_of_domain
   by_cases hq : q = 0
   · rw [hq, mul_zero, mirror_zero, mul_zero]
   rw [mirror]; rw [mirror]; rw [mirror]; rw [reverse_mul_of_domain]; rw [natTrailingDegree_mul hp hq]; rw [pow_add]
-  rw [mul_assoc]; rw [← mul_assoc q.reverse]; r
+  rw [mul_assoc]; rw [← mul_assoc q.reverse]; rw [← X_pow_mul (p := reverse q)]
+  repeat' rw [mul_assoc]
 
 Depends on / 依赖: X_pow_mul, mirror, mirror_zero, mul_assoc, mul_zero, natTrailingDegree_mul, pow_add, q.reverse, repeat, reverse, reverse_mul_of_domain, zero_mul
 -/
@@ -647,7 +691,23 @@ theorem irreducible_of_mirror
   · intro g h fgh
     let k := g * h.mirror
     have key : f * f.mirror = k * k.mirror := by
-      rw [fgh]; rw [mirror_mul_of_domain]; rw [mirror_mul_of_domain]; rw [mirror_mirror]; rw [mul_assoc]; rw [mul_comm h]; rw [mul_comm g.mirror]; rw [mul_assoc]; rw [← mul_asso
+      rw [fgh]; rw [mirror_mul_of_domain]; rw [mirror_mul_of_domain]; rw [mirror_mirror]; rw [mul_assoc]; rw [mul_comm h]; rw [mul_comm g.mirror]; rw [mul_assoc]; rw [← mul_assoc]
+    have g_dvd_f : g ∣ f := by
+      rw [fgh]
+      exact dvd_mul_right g h
+    have h_dvd_f : h ∣ f := by
+      rw [fgh]
+      exact dvd_mul_left h g
+    have g_dvd_k : g ∣ k := dvd_mul_right g h.mirror
+    have h_dvd_k_rev : h ∣ k.mirror := by
+      rw [mirror_mul_of_domain]; rw [mirror_mirror]
+      exact dvd_mul_left h g.mirror
+    have hk := h2 k key
+    rcases hk with (hk | hk | hk | hk)
+    · exact Or.inr (h3 h_dvd_f (by rwa [← hk]))
+    · exact Or.inr (h3 h_dvd_f (by rwa [← neg_eq_iff_eq_neg.mpr hk, mirror_neg, dvd_neg]))
+    · exact Or.inl (h3 g_dvd_f (by rwa [← hk]))
+    · exact Or.inl (h3 g_dvd_f (by rwa [← neg_eq_iff_eq_neg.mpr hk, dvd_neg]))
 
 中文:
 定理 irreducible_of_mirror
@@ -658,7 +718,23 @@ theorem irreducible_of_mirror
   · intro g h fgh
     let k := g * h.mirror
     have key : f * f.mirror = k * k.mirror := by
-      rw [fgh]; rw [mirror_mul_of_domain]; rw [mirror_mul_of_domain]; rw [mirror_mirror]; rw [mul_assoc]; rw [mul_comm h]; rw [mul_comm g.mirror]; rw [mul_assoc]; rw [← mul_asso
+      rw [fgh]; rw [mirror_mul_of_domain]; rw [mirror_mul_of_domain]; rw [mirror_mirror]; rw [mul_assoc]; rw [mul_comm h]; rw [mul_comm g.mirror]; rw [mul_assoc]; rw [← mul_assoc]
+    have g_dvd_f : g ∣ f := by
+      rw [fgh]
+      exact dvd_mul_right g h
+    have h_dvd_f : h ∣ f := by
+      rw [fgh]
+      exact dvd_mul_left h g
+    have g_dvd_k : g ∣ k := dvd_mul_right g h.mirror
+    have h_dvd_k_rev : h ∣ k.mirror := by
+      rw [mirror_mul_of_domain]; rw [mirror_mirror]
+      exact dvd_mul_left h g.mirror
+    have hk := h2 k key
+    rcases hk with (hk | hk | hk | hk)
+    · exact Or.inr (h3 h_dvd_f (by rwa [← hk]))
+    · exact Or.inr (h3 h_dvd_f (by rwa [← neg_eq_iff_eq_neg.mpr hk, mirror_neg, dvd_neg]))
+    · exact Or.inl (h3 g_dvd_f (by rwa [← hk]))
+    · exact Or.inl (h3 g_dvd_f (by rwa [← neg_eq_iff_eq_neg.mpr hk, dvd_neg]))
 
 Depends on / 依赖: dvd_mul_left, dvd_mul_right, f.mirror, g.mirror, g_dvd_f, g_dvd_k, h.mirror, h_dvd_f, h_dvd_k_rev, k.mirror, mirror, mirror_, mirror_mirror, mirror_mul_of_domain, mul_assoc, mul_comm
 -/

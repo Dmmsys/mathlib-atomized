@@ -159,7 +159,16 @@ theorem log_stirlingSeq_sdiff_hasSum
   convert! (hasSum_log_one_add_inv m.cast_add_one_pos).mul_left ((↑(m + 1) : Real) + 1 / 2) using 1
   · ext k
     dsimp only [f]
-    rw [← pow_mul]; 
+    rw [← pow_mul]; rw [pow_add]
+    push_cast
+    field
+  · have h (x) (hx : x != (0 : Real)) : 1 + x⁻¹ = (x + 1) / x := by field
+    simp (disch := positivity) only [log_stirlingSeq_formula, log_div, log_mul, log_exp,
+      factorial_succ, cast_mul, cast_succ, range_one, sum_singleton, h]
+    ring
+
+@[deprecated (since := "2026-06-03")]
+alias log_stirlingSeq_diff_hasSum := log_stirlingSeq_sdiff_hasSum
 
 中文:
 定理 log_stirlingSeq_sdiff_hasSum
@@ -171,7 +180,16 @@ theorem log_stirlingSeq_sdiff_hasSum
   convert! (hasSum_log_one_add_inv m.cast_add_one_pos).mul_left ((↑(m + 1) : Real) + 1 / 2) using 1
   · ext k
     dsimp only [f]
-    rw [← pow_mul]; 
+    rw [← pow_mul]; rw [pow_add]
+    push_cast
+    field
+  · have h (x) (hx : x != (0 : Real)) : 1 + x⁻¹ = (x + 1) / x := by field
+    simp (disch := positivity) only [log_stirlingSeq_formula, log_div, log_mul, log_exp,
+      factorial_succ, cast_mul, cast_succ, range_one, sum_singleton, h]
+    ring
+
+@[deprecated (since := "2026-06-03")]
+alias log_stirlingSeq_diff_hasSum := log_stirlingSeq_sdiff_hasSum
 
 Depends on / 依赖: HasSum, cast_add_one_pos, cast_mul, cast_s, convert, factorial_succ, hasSum_log_one_add_inv, hasSum_nat_add_iff, log_div, log_exp, log_mul, log_stirlingSeq_formula, m.cast_add_one_pos, mul_left, pow_add, pow_mul
 -/
@@ -228,7 +246,20 @@ theorem log_stirlingSeq_sdiff_le_geo_sum
   have h_nonneg : (0 : Real) <= ((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2 := sq_nonneg _
   have g : HasSum (fun k : Nat => (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2) ^ ↑(k + 1))
       (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2 / (1 - ((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2)) := by
-    have := (hasSum_geometri
+    have := (hasSum_geometric_of_lt_one h_nonneg ?_).mul_left (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2)
+    · simp_rw [← _root_.pow_succ'] at this
+      exact this
+    rw [one_div]; rw [inv_pow]
+    exact inv_lt_one_of_one_lt₀ (one_lt_pow₀ (lt_add_of_pos_left _ <| by positivity) two_ne_zero)
+  have hab (k : Nat) : (1 : Real) / (2 * ↑(k + 1) + 1) * ((1 / (2 * ↑(n + 1) + 1)) ^ 2) ^ ↑(k + 1) <=
+      (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2) ^ ↑(k + 1) := by
+    refine mul_le_of_le_one_left (pow_nonneg h_nonneg ↑(k + 1)) ?_
+    rw [one_div]
+    exact inv_le_one_of_one_le₀ (le_add_of_nonneg_left <| by positivity)
+  exact hasSum_le hab (log_stirlingSeq_sdiff_hasSum n) g
+
+@[deprecated (since := "2026-06-03")]
+alias log_stirlingSeq_diff_le_geo_sum := log_stirlingSeq_sdiff_le_geo_sum
 
 中文:
 定理 log_stirlingSeq_sdiff_le_geo_sum
@@ -237,7 +268,20 @@ theorem log_stirlingSeq_sdiff_le_geo_sum
   have h_nonneg : (0 : Real) <= ((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2 := sq_nonneg _
   have g : HasSum (fun k : Nat => (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2) ^ ↑(k + 1))
       (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2 / (1 - ((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2)) := by
-    have := (hasSum_geometri
+    have := (hasSum_geometric_of_lt_one h_nonneg ?_).mul_left (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2)
+    · simp_rw [← _root_.pow_succ'] at this
+      exact this
+    rw [one_div]; rw [inv_pow]
+    exact inv_lt_one_of_one_lt₀ (one_lt_pow₀ (lt_add_of_pos_left _ <| by positivity) two_ne_zero)
+  have hab (k : Nat) : (1 : Real) / (2 * ↑(k + 1) + 1) * ((1 / (2 * ↑(n + 1) + 1)) ^ 2) ^ ↑(k + 1) <=
+      (((1 : Real) / (2 * ↑(n + 1) + 1)) ^ 2) ^ ↑(k + 1) := by
+    refine mul_le_of_le_one_left (pow_nonneg h_nonneg ↑(k + 1)) ?_
+    rw [one_div]
+    exact inv_le_one_of_one_le₀ (le_add_of_nonneg_left <| by positivity)
+  exact hasSum_le hab (log_stirlingSeq_sdiff_hasSum n) g
+
+@[deprecated (since := "2026-06-03")]
+alias log_stirlingSeq_diff_le_geo_sum := log_stirlingSeq_sdiff_le_geo_sum
 
 Depends on / 依赖: Category, Category.assoc, HasSum, _root_, _root_.pow_succ, e.hom, e.inv, h_nonneg, hasSum_geometric_of_lt_one, hom_inv_id, inv_hom_id, inv_pow, lt_add_of_pos_left, mul_app_assoc, mul_left, one_div, pow_succ, simp_rw, smul_eq, sq_nonneg
 -/
@@ -275,7 +319,13 @@ theorem log_stirlingSeq_sdiff_le
     grw [one_le_div (by positivity), Real.sqrt_le_left (by positivity), ← Real.add_one_le_exp]
     norm_num
   set r := ((1 : Real) / (2 * (n + 1) + 1)) ^ 2 with hr
-  have hr1 : r < 1 :
+  have hr1 : r < 1 := by grw [hr, ← n.zero_le]; norm_num
+  suffices HasSum (fun j => r ^ (j + 1) / 3) ((1 : Real) / (12 * (n + 1 : Nat) * ((n + 1 : Nat) + 1))) by
+    refine hasSum_le (fun j => ?_) (log_stirlingSeq_sdiff_hasSum n) this
+    simpa [hr, field] using show (3 : Real) <= 2 * (j + 1) + 1 by norm_cast; grind
+  grind [((hasSum_geometric_of_lt_one (by positivity) hr1).mul_right r).div_const 3]
+
+@[deprecated (since := "2026-06-03")] alias log_stirlingSeq_diff_le := log_stirlingSeq_sdiff_le
 
 中文:
 定理 log_stirlingSeq_sdiff_le
@@ -287,7 +337,13 @@ theorem log_stirlingSeq_sdiff_le
     grw [one_le_div (by positivity), Real.sqrt_le_left (by positivity), ← Real.add_one_le_exp]
     norm_num
   set r := ((1 : Real) / (2 * (n + 1) + 1)) ^ 2 with hr
-  have hr1 : r < 1 :
+  have hr1 : r < 1 := by grw [hr, ← n.zero_le]; norm_num
+  suffices HasSum (fun j => r ^ (j + 1) / 3) ((1 : Real) / (12 * (n + 1 : Nat) * ((n + 1 : Nat) + 1))) by
+    refine hasSum_le (fun j => ?_) (log_stirlingSeq_sdiff_hasSum n) this
+    simpa [hr, field] using show (3 : Real) <= 2 * (j + 1) + 1 by norm_cast; grind
+  grind [((hasSum_geometric_of_lt_one (by positivity) hr1).mul_right r).div_const 3]
+
+@[deprecated (since := "2026-06-03")] alias log_stirlingSeq_diff_le := log_stirlingSeq_sdiff_le
 
 Depends on / 依赖: HasSum, Real.add_one_le_exp, Real.exp, Real.log, Real.log_nonneg, Real.sqrt, Real.sqrt_le_left, add_one_le_exp, hasSum_le, log_nonneg, log_stirlingSeq_sdiff_hasSum, n.zero_le, one_le_div, sqrt_le_left, zero_le
 -/
@@ -346,7 +402,11 @@ theorem log_stirlingSeq_bounded_aux
     grw [log_stirlingSeq_sdiff_le]
     simp [field]
   replace hf := Finset.sum_le_sum hf
-  rw [Finset.sum_range_sub']; 
+  rw [Finset.sum_range_sub']; rw [Finset.sum_range_sub'] at hf
+  simp only [f, g, zero_add] at hf
+  grw [hf]
+  simp
+  grind
 
 中文:
 定理 log_stirlingSeq_bounded_aux
@@ -358,7 +418,11 @@ theorem log_stirlingSeq_bounded_aux
     grw [log_stirlingSeq_sdiff_le]
     simp [field]
   replace hf := Finset.sum_le_sum hf
-  rw [Finset.sum_range_sub']; 
+  rw [Finset.sum_range_sub']; rw [Finset.sum_range_sub'] at hf
+  simp only [f, g, zero_add] at hf
+  grw [hf]
+  simp
+  grind
 
 Depends on / 依赖: Finset, Finset.sum_le_sum, Finset.sum_range_sub, log_stirlingSeq_sdiff_le, replace, stirlingSeq, sum_le_sum, sum_range_sub, zero_add
 -/
@@ -478,7 +542,7 @@ theorem stirlingSeq_has_pos_limit_a
   have hx' : x in lowerBounds (Set.range (stirlingSeq ∘ succ)) := by simpa [lowerBounds] using hx
   refine ⟨_, lt_of_lt_of_le x_pos (le_csInf (Set.range_nonempty _) hx'), ?_⟩
   rw [← Filter.tendsto_add_atTop_iff_nat 1]
-  exact tendst
+  exact tendsto_atTop_ciInf stirlingSeq'_antitone ⟨x, hx'⟩
 
 中文:
 定理 stirlingSeq_has_pos_limit_a
@@ -488,7 +552,7 @@ theorem stirlingSeq_has_pos_limit_a
   have hx' : x in lowerBounds (Set.range (stirlingSeq ∘ succ)) := by simpa [lowerBounds] using hx
   refine ⟨_, lt_of_lt_of_le x_pos (le_csInf (Set.range_nonempty _) hx'), ?_⟩
   rw [← Filter.tendsto_add_atTop_iff_nat 1]
-  exact tendst
+  exact tendsto_atTop_ciInf stirlingSeq'_antitone ⟨x, hx'⟩
 
 Depends on / 依赖: Filter, Filter.tendsto_add_atTop_iff_nat, Set.range, Set.range_nonempty, _antitone, _bounded_by_pos_constant, le_csInf, lowerBounds, lt_of_lt_of_le, range_nonempty, stirlingSeq, tendsto_add_atTop_iff_nat, tendsto_atTop_ciInf, x_pos
 -/
@@ -518,7 +582,7 @@ theorem tendsto_self_div_two_mul_self_add_one
     rw [one_div]; rw [← add_zero (2 : Real)]
   refine (((tendsto_const_div_atTop_nhds_zero_nat 1).const_add (2 : Real)).inv₀
     ((add_zero (2 : Real)).symm ▸ two_ne_zero)).congr' (eventually_atTop.mpr ⟨1, fun n hn => ?_⟩)
-  rw [add_div' (1 : Real) 2 n (c
+  rw [add_div' (1 : Real) 2 n (cast_ne_zero.mpr (one_le_iff_ne_zero.mp hn))]; rw [inv_div]
 
 中文:
 定理 tendsto_self_div_two_mul_self_add_one
@@ -530,7 +594,7 @@ theorem tendsto_self_div_two_mul_self_add_one
     rw [one_div]; rw [← add_zero (2 : Real)]
   refine (((tendsto_const_div_atTop_nhds_zero_nat 1).const_add (2 : Real)).inv₀
     ((add_zero (2 : Real)).symm ▸ two_ne_zero)).congr' (eventually_atTop.mpr ⟨1, fun n hn => ?_⟩)
-  rw [add_div' (1 : Real) 2 n (c
+  rw [add_div' (1 : Real) 2 n (cast_ne_zero.mpr (one_le_iff_ne_zero.mp hn))]; rw [inv_div]
 
 Depends on / 依赖: add_div, add_zero, cast_ne_zero, cast_ne_zero.mpr, const_add, eventually_atTop, eventually_atTop.mpr, inv_div, one_div, one_le_iff_ne_zero, one_le_iff_ne_zero.mp, tendsto_const_div_atTop_nhds_zero_nat, two_ne_zero
 -/
@@ -595,7 +659,10 @@ theorem second_wallis_limit
     stirlingSeq_pow_four_div_stirlingSeq_pow_two_eq n (one_le_iff_ne_zero.mp hn)⟩) ?_
   have h : a ^ 2 / 2 = a ^ 4 / a ^ 2 * (1 / 2) := by
     rw [mul_one_div]; rw [← mul_one_div (a ^ 4) (a ^ 2)]; rw [one_div]; rw [← pow_sub_of_lt a]
- 
+    simp
+  rw [h]
+  exact ((ha.pow 4).div ((ha.comp (tendsto_id.const_mul_atTop' two_pos)).pow 2)
+    (pow_ne_zero 2 hane)).mul tendsto_self_div_two_mul_self_add_one
 
 中文:
 定理 second_wallis_limit
@@ -605,7 +672,10 @@ theorem second_wallis_limit
     stirlingSeq_pow_four_div_stirlingSeq_pow_two_eq n (one_le_iff_ne_zero.mp hn)⟩) ?_
   have h : a ^ 2 / 2 = a ^ 4 / a ^ 2 * (1 / 2) := by
     rw [mul_one_div]; rw [← mul_one_div (a ^ 4) (a ^ 2)]; rw [one_div]; rw [← pow_sub_of_lt a]
- 
+    simp
+  rw [h]
+  exact ((ha.pow 4).div ((ha.comp (tendsto_id.const_mul_atTop' two_pos)).pow 2)
+    (pow_ne_zero 2 hane)).mul tendsto_self_div_two_mul_self_add_one
 
 Depends on / 依赖: Tendsto, Tendsto.congr, const_mul_atTop, eventually_atTop, eventually_atTop.mpr, ha.comp, ha.pow, mul_one_div, one_div, one_le_iff_ne_zero, one_le_iff_ne_zero.mp, pow_ne_zero, pow_sub_of_lt, stirlingSeq_pow_four_div_stirlingSeq_pow_two_eq, tendsto_id, tendsto_id.const_mul_atTop, tendsto_self_div_two_mul_self_add_one, two_pos
 -/
@@ -763,7 +833,7 @@ theorem le_log_factorial_stirling
     _ = log (√(2 * π * n) * (n / rexp 1) ^ n) := by
       rw [log_mul (x := √_)]; rw [log_sqrt]; rw [log_mul (x := 2 * π)]; rw [log_pow]; rw [log_div]; rw [log_exp] <;>
       positivity
-    _ <= _ := log_le_log (by positivity) 
+    _ <= _ := log_le_log (by positivity) (le_factorial_stirling n)
 
 中文:
 定理 le_log_factorial_stirling
@@ -774,7 +844,7 @@ theorem le_log_factorial_stirling
     _ = log (√(2 * π * n) * (n / rexp 1) ^ n) := by
       rw [log_mul (x := √_)]; rw [log_sqrt]; rw [log_mul (x := 2 * π)]; rw [log_pow]; rw [log_div]; rw [log_exp] <;>
       positivity
-    _ <= _ := log_le_log (by positivity) 
+    _ <= _ := log_le_log (by positivity) (le_factorial_stirling n)
 
 Depends on / 依赖: le_factorial_stirling, log_div, log_exp, log_le_log, log_mul, log_pow, log_sqrt
 -/

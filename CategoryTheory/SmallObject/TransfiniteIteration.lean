@@ -215,7 +215,13 @@ instance :
       NatIso.ofComponents (fun _ => eqToIso (Φ.iterationFunctor_obj _ _ _)) (by
         rintro ⟨k₁, h₁⟩ ⟨k₂, h₂⟩ f
         apply Arrow.mk_injective
-        simpa using! Φ
+        simpa using! Φ.arrowMk_iterationFunctor_map k₁ k₂ (leOfHom f) (Φ.iter i) h₂.le)
+    refine (IsColimit.precomposeInvEquiv e _).1 ?_
+    refine IsColimit.ofIsoColimit ((Φ.iter i).isColimit i hi (by simp)) ?_
+    refine Cocone.ext (eqToIso (Φ.iterationFunctor_obj i (Φ.iter i) (by simp)).symm) ?_
+    rintro ⟨k, hk⟩
+    apply Arrow.mk_injective
+    simp [Φ.arrowMk_iterationFunctor_map k i hk.le (Φ.iter i) (by simp), e]⟩
 
 中文:
 实例 :
@@ -226,7 +232,13 @@ instance :
       NatIso.ofComponents (fun _ => eqToIso (Φ.iterationFunctor_obj _ _ _)) (by
         rintro ⟨k₁, h₁⟩ ⟨k₂, h₂⟩ f
         apply Arrow.mk_injective
-        simpa using! Φ
+        simpa using! Φ.arrowMk_iterationFunctor_map k₁ k₂ (leOfHom f) (Φ.iter i) h₂.le)
+    refine (IsColimit.precomposeInvEquiv e _).1 ?_
+    refine IsColimit.ofIsoColimit ((Φ.iter i).isColimit i hi (by simp)) ?_
+    refine Cocone.ext (eqToIso (Φ.iterationFunctor_obj i (Φ.iter i) (by simp)).symm) ?_
+    rintro ⟨k, hk⟩
+    apply Arrow.mk_injective
+    simp [Φ.arrowMk_iterationFunctor_map k i hk.le (Φ.iter i) (by simp), e]⟩
 
 Depends on / 依赖: Arrow.mk_injective, Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeInvEquiv, NatIso, NatIso.ofComponents, Set.principalSegIio, arrowMk_iterationFunctor_map, eqToIso, functor, isColimit, iterationFunctor, iterationFunctor_obj, leOfHom, mk_injective, monotone, monotone.functor, ofComponents
 -/
@@ -331,7 +343,11 @@ definition transfiniteCompositionOfShapeιIteration
     have := (Φ.iter (Order.succ j)).prop_map_succ j (Order.lt_succ_of_not_isMax hj)
     rw [prop_iff] at this ⊢
     simp only [Φ.iterationFunctor_obj j (Φ.iter (Order.succ j)) (Order.le_succ j),
-      Φ.arrowMk_iterationFunctor_map _ _ (Order.le_suc
+      Φ.arrowMk_iterationFunctor_map _ _ (Order.le_succ j) (Φ.iter (Order.succ j)) (by simp),
+      this]
+  F := Φ.iterationFunctor J
+  incl := (Φ.iterationCocone J).ι
+  isColimit := Φ.isColimitIterationCocone J
 
 中文:
 定义 transfiniteCompositionOfShapeιIteration
@@ -341,7 +357,11 @@ definition transfiniteCompositionOfShapeιIteration
     have := (Φ.iter (Order.succ j)).prop_map_succ j (Order.lt_succ_of_not_isMax hj)
     rw [prop_iff] at this ⊢
     simp only [Φ.iterationFunctor_obj j (Φ.iter (Order.succ j)) (Order.le_succ j),
-      Φ.arrowMk_iterationFunctor_map _ _ (Order.le_suc
+      Φ.arrowMk_iterationFunctor_map _ _ (Order.le_succ j) (Φ.iter (Order.succ j)) (by simp),
+      this]
+  F := Φ.iterationFunctor J
+  incl := (Φ.iterationCocone J).ι
+  isColimit := Φ.isColimitIterationCocone J
 
 Depends on / 依赖: iterationFunctorObjBotIso
 -/

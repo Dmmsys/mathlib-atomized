@@ -137,7 +137,9 @@ definition reflTransSymm
     cases le_or_gt (x : Real) 2⁻¹ with
     | inl hx => simp [hx, ← extend_apply]
     | inr hx =>
-      
+      have : p.extend (2 - 2 * ↑x) = p.extend (1 - (2 * ↑x - 1)) := by ring_nf
+      simpa [hx.not_ge, ← extend_apply]
+  prop' t := by norm_num [reflTransSymmAux]
 
 中文:
 定义 reflTransSymm
@@ -150,7 +152,9 @@ definition reflTransSymm
     cases le_or_gt (x : Real) 2⁻¹ with
     | inl hx => simp [hx, ← extend_apply]
     | inr hx =>
-      
+      have : p.extend (2 - 2 * ↑x) = p.extend (1 - (2 * ↑x - 1)) := by ring_nf
+      simpa [hx.not_ge, ← extend_apply]
+  prop' t := by norm_num [reflTransSymmAux]
 
 Depends on / 依赖: reflTransSymmAux, reflTransSymmAux_mem_I
 -/
@@ -956,7 +960,10 @@ instance :
   comp := Path.Homotopic.Quotient.trans
   id_comp := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨Path.Homotopy.reflTrans f⟩
   comp_id := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨Path.Homotopy.transRefl f⟩
-  assoc := by rintro _ _ _ _ ⟨f⟩ ⟨g⟩ 
+  assoc := by rintro _ _ _ _ ⟨f⟩ ⟨g⟩ ⟨h⟩; exact Quotient.sound ⟨Path.Homotopy.transAssoc f g h⟩
+  inv := Quotient.lift (fun f => ⟦f.symm⟧) (by rintro a b ⟨h⟩; exact Quotient.sound ⟨h.symm₂⟩)
+  inv_comp := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨(Path.Homotopy.reflSymmTrans f).symm⟩
+  comp_inv := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨(Path.Homotopy.reflTransSymm f).symm⟩
 
 中文:
 实例 :
@@ -966,7 +973,10 @@ instance :
   comp := Path.Homotopic.Quotient.trans
   id_comp := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨Path.Homotopy.reflTrans f⟩
   comp_id := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨Path.Homotopy.transRefl f⟩
-  assoc := by rintro _ _ _ _ ⟨f⟩ ⟨g⟩ 
+  assoc := by rintro _ _ _ _ ⟨f⟩ ⟨g⟩ ⟨h⟩; exact Quotient.sound ⟨Path.Homotopy.transAssoc f g h⟩
+  inv := Quotient.lift (fun f => ⟦f.symm⟧) (by rintro a b ⟨h⟩; exact Quotient.sound ⟨h.symm₂⟩)
+  inv_comp := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨(Path.Homotopy.reflSymmTrans f).symm⟩
+  comp_inv := by rintro _ _ ⟨f⟩; exact Quotient.sound ⟨(Path.Homotopy.reflTransSymm f).symm⟩
 
 Depends on / 依赖: Homotopic, Path.Homotopic.Quotient, Quotient, x.as, y.as
 -/

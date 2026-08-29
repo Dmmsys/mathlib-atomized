@@ -97,7 +97,14 @@ theorem AffineBasis.interior_convexHull
       AffineSubspace.eq_univ_of_subsingleton_span_eq_top (subsingleton_range _) b.tot
     simp [this]
   · -- The positive-dimensional case.
-    have : FiniteDimensional Real E := b.finiteDimensiona
+    have : FiniteDimensional Real E := b.finiteDimensional
+    have : convexHull Real (range b) = ⋂ i, b.coord i ⁻¹' Ici 0 := by
+      rw [b.convexHull_eq_nonneg_coord]; rw [ofPred_forall]; rfl
+    ext
+    simp only [this, interior_iInter_of_finite, ←
+      IsOpenMap.preimage_interior_eq_interior_preimage (isOpenMap_barycentric_coord b _)
+        (continuous_barycentric_coord b _),
+      interior_Ici, mem_iInter, mem_ofPred_eq, mem_Ioi, mem_preimage]
 
 中文:
 定理 仿射基.interior_convexHull
@@ -109,7 +116,14 @@ theorem AffineBasis.interior_convexHull
       AffineSubspace.eq_univ_of_subsingleton_span_eq_top (subsingleton_range _) b.tot
     simp [this]
   · -- The positive-dimensional case.
-    have : FiniteDimensional Real E := b.finiteDimensiona
+    have : FiniteDimensional Real E := b.finiteDimensional
+    have : convexHull Real (range b) = ⋂ i, b.coord i ⁻¹' Ici 0 := by
+      rw [b.convexHull_eq_nonneg_coord]; rw [ofPred_forall]; rfl
+    ext
+    simp only [this, interior_iInter_of_finite, ←
+      IsOpenMap.preimage_interior_eq_interior_preimage (isOpenMap_barycentric_coord b _)
+        (continuous_barycentric_coord b _),
+      interior_Ici, mem_iInter, mem_ofPred_eq, mem_Ioi, mem_preimage]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.eq_univ_of_subsingleton_span_eq_top, FiniteDimensional, IsOpenMap, IsOpenMap.preimage_interior_eq_interior_preimag, b.convexHull_eq_nonneg_coord, b.coord, b.finiteDimensional, b.tot, convexHull, convexHull_eq_nonneg_coord, dimensional, eq_univ_of_subsingleton_span_eq_top, finiteDimensional, interior_iInter_of_finite, ofPred_forall, positive, preimage_interior_eq_interior_preimag, subsingleton_or_nontrivial, subsingleton_range
 -/
@@ -149,7 +163,23 @@ theorem IsOpen.exists_between_affineIndependent_span_eq_top
   obtain ⟨t, ht₁, ht₂, ht₃⟩ := exists_subset_affineIndependent_affineSpan_eq_top h
   let f : P -> P := fun y => lineMap q y (ε / dist y q)
   have hf : forall y, f y in u := by
-    refin
+    refine fun y => hεu ?_
+    simp only [f]
+    rw [Metric.mem_closedBall]; rw [lineMap_apply]; rw [dist_vadd_left]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [dist_eq_norm_vsub V y q]; rw [abs_div]; rw [abs_of_pos ε0]; rw [abs_of_nonneg (norm_nonneg _)]; rw [div_mul_comm]
+    exact mul_le_of_le_one_left ε0.le (div_self_le_one _)
+  have hεyq : forall y ∉ s, ε / dist y q != 0 := fun y hy =>
+    div_ne_zero ε0.ne' (dist_ne_zero.2 (ne_of_mem_of_not_mem hq hy).symm)
+  classical
+  let w : t -> Realˣ := fun p => if hp : (p : P) in s then 1 else Units.mk0 _ (hεyq (↑p) hp)
+  refine ⟨Set.range fun p : t => lineMap q p (w p : Real), ?_, ?_, ?_, ?_⟩
+  · intro p hp; use ⟨p, ht₁ hp⟩; simp [w, hp]
+  · rintro y ⟨⟨p, hp⟩, rfl⟩
+    by_cases hps : p in s <;>
+    simp only [w, hps, lineMap_apply_one, Units.val_mk0, dif_neg, dif_pos, not_false_iff,
+      Units.val_one] <;>
+    [exact hsu hps; exact hf p]
+  · exact (ht₂.units_lineMap ⟨q, ht₁ hq⟩ w).range
+  · rw [affineSpan_eq_affineSpan_lineMap_units (ht₁ hq) w, ht₃]
 
 中文:
 定理 是开集.存在_between_affineIndependent_span_eq_top
@@ -160,7 +190,23 @@ theorem IsOpen.exists_between_affineIndependent_span_eq_top
   obtain ⟨t, ht₁, ht₂, ht₃⟩ := exists_subset_affineIndependent_affineSpan_eq_top h
   let f : P -> P := fun y => lineMap q y (ε / dist y q)
   have hf : forall y, f y in u := by
-    refin
+    refine fun y => hεu ?_
+    simp only [f]
+    rw [Metric.mem_closedBall]; rw [lineMap_apply]; rw [dist_vadd_left]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [dist_eq_norm_vsub V y q]; rw [abs_div]; rw [abs_of_pos ε0]; rw [abs_of_nonneg (norm_nonneg _)]; rw [div_mul_comm]
+    exact mul_le_of_le_one_left ε0.le (div_self_le_one _)
+  have hεyq : forall y ∉ s, ε / dist y q != 0 := fun y hy =>
+    div_ne_zero ε0.ne' (dist_ne_zero.2 (ne_of_mem_of_not_mem hq hy).symm)
+  classical
+  let w : t -> Realˣ := fun p => if hp : (p : P) in s then 1 else Units.mk0 _ (hεyq (↑p) hp)
+  refine ⟨Set.range fun p : t => lineMap q p (w p : Real), ?_, ?_, ?_, ?_⟩
+  · intro p hp; use ⟨p, ht₁ hp⟩; simp [w, hp]
+  · rintro y ⟨⟨p, hp⟩, rfl⟩
+    by_cases hps : p in s <;>
+    simp only [w, hps, lineMap_apply_one, Units.val_mk0, dif_neg, dif_pos, not_false_iff,
+      Units.val_one] <;>
+    [exact hsu hps; exact hf p]
+  · exact (ht₂.units_lineMap ⟨q, ht₁ hq⟩ w).range
+  · rw [affineSpan_eq_affineSpan_lineMap_units (ht₁ hq) w, ht₃]
 
 Depends on / 依赖: Metric, Metric.mem_closedBall, Metric.nhds_basis_closedBall.mem_iff, Real.norm_eq_abs, abs_div, abs_of, abs_of_pos, dist_eq_norm_vsub, dist_vadd_left, exists_subset_affineIndependent_affineSpan_eq_top, hu.mem_nhds, lineMap, lineMap_apply, mem_closedBall, mem_iff, mem_nhds, nhds_basis_closedBall, norm_eq_abs, norm_smul
 -/
@@ -303,7 +349,8 @@ theorem interior_convexHull_nonempty_iff_affineSpan_eq_top
   suffices (interior (convexHull Real (range b))).Nonempty by
     rw [hb]; rw [Subtype.range_coe_subtype]; rw [ofPred_mem_eq] at this
     refine this.mono (by gcongr)
-  
+  lift t to Finset V using b.finite_set
+  exact ⟨_, b.centroid_mem_interior_convexHull⟩
 
 中文:
 定理 interior_convexHull_nonempty_iff_affineSpan_eq_top
@@ -314,7 +361,8 @@ theorem interior_convexHull_nonempty_iff_affineSpan_eq_top
   suffices (interior (convexHull Real (range b))).Nonempty by
     rw [hb]; rw [Subtype.range_coe_subtype]; rw [ofPred_mem_eq] at this
     refine this.mono (by gcongr)
-  
+  lift t to Finset V using b.finite_set
+  exact ⟨_, b.centroid_mem_interior_convexHull⟩
 
 Depends on / 依赖: AffineBasis, AffineBasis.exists_affine_subbasis, Finset, Nonempty, Subtype, Subtype.range_coe_subtype, affineSpan_eq_top_of_nonempty_interior, b.centroid_mem_interior_convexHull, b.finite_set, centroid_mem_interior_convexHull, convexHull, exists_affine_subbasis, finite_set, interior, ofPred_mem_eq, range_coe_subtype, this.mono
 -/

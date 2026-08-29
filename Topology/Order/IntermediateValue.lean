@@ -218,7 +218,7 @@ theorem IsPreconnected.intermediate_value₂_eventually₂
     @intermediate_value_univ₂_eventually₂ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) _ _
       (comap_coe_neBot_of_le_principal hl₁) (comap_coe_neBot_of_le_principal hl₂) _ _ hf hg
       (he₁.comap _) (he₂.comap _)
-  exact
+  exact ⟨b, b.prop, h⟩
 
 中文:
 定理 是预连通.intermediate_value₂_eventually₂
@@ -229,7 +229,7 @@ theorem IsPreconnected.intermediate_value₂_eventually₂
     @intermediate_value_univ₂_eventually₂ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) _ _
       (comap_coe_neBot_of_le_principal hl₁) (comap_coe_neBot_of_le_principal hl₂) _ _ hf hg
       (he₁.comap _) (he₂.comap _)
-  exact
+  exact ⟨b, b.prop, h⟩
 
 Depends on / 依赖: Subtype, Subtype.preconnectedSpace, b.prop, comap_coe_neBot_of_le_principal, continuousOn_iff_continuous_domRestrict, preconnectedSpace
 -/
@@ -725,7 +725,21 @@ theorem IsPreconnected.mem_intervals
   have hs' : IsConnected s := ⟨hne, hs⟩
   by_cases hb : BddBelow s <;> by_cases ha : BddAbove s
 · refine mem_of_subset_of_mem ?_ mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
-      (hs'.Ioo_csInf_csSup_subset hb ha
+      (hs'.Ioo_csInf_csSup_subset hb ha) (subset_Icc_csInf_csSup hb ha)
+    simp only [insert_subset_iff, mem_insert_iff, mem_singleton_iff, true_or, or_true,
+      singleton_subset_iff, and_self]
+· refine Or.inr Or.inr Or.inr Or.inr ?_
+    rcases mem_Ici_Ioi_of_subset_of_subset (hs.Ioi_csInf_subset hb ha) fun x hx =>
+      csInf_le hb hx with hs | hs
+    · exact Or.inl hs
+    · exact Or.inr (Or.inl hs)
+  · iterate 6 apply Or.inr
+    rcases mem_Iic_Iio_of_subset_of_subset (hs.Iio_csSup_subset hb ha) fun x hx =>
+      le_csSup ha hx with hs | hs
+    · exact Or.inl hs
+    · exact Or.inr (Or.inl hs)
+  · iterate 8 apply Or.inr
+    exact Or.inl (hs.eq_univ_of_unbounded hb ha)
 
 中文:
 定理 是预连通.mem_intervals
@@ -736,7 +750,21 @@ theorem IsPreconnected.mem_intervals
   have hs' : IsConnected s := ⟨hne, hs⟩
   by_cases hb : BddBelow s <;> by_cases ha : BddAbove s
 · refine mem_of_subset_of_mem ?_ mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
-      (hs'.Ioo_csInf_csSup_subset hb ha
+      (hs'.Ioo_csInf_csSup_subset hb ha) (subset_Icc_csInf_csSup hb ha)
+    simp only [insert_subset_iff, mem_insert_iff, mem_singleton_iff, true_or, or_true,
+      singleton_subset_iff, and_self]
+· refine Or.inr Or.inr Or.inr Or.inr ?_
+    rcases mem_Ici_Ioi_of_subset_of_subset (hs.Ioi_csInf_subset hb ha) fun x hx =>
+      csInf_le hb hx with hs | hs
+    · exact Or.inl hs
+    · exact Or.inr (Or.inl hs)
+  · iterate 6 apply Or.inr
+    rcases mem_Iic_Iio_of_subset_of_subset (hs.Iio_csSup_subset hb ha) fun x hx =>
+      le_csSup ha hx with hs | hs
+    · exact Or.inl hs
+    · exact Or.inr (Or.inl hs)
+  · iterate 8 apply Or.inr
+    exact Or.inl (hs.eq_univ_of_unbounded hb ha)
 
 Depends on / 依赖: BddAbove, BddBelow, Ioo_csInf_csSup_subset, IsConnected, Or.inr, and_self, apply_rules, eq_empty_or_nonempty, insert_subset_iff, mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset, mem_Ici_Ioi_of_subs, mem_insert_iff, mem_of_subset_of_mem, mem_singleton, mem_singleton_iff, or_true, s.eq_empty_or_nonempty, singleton_subset_iff, subset_Icc_csInf_csSup, true_or
 -/
@@ -776,6 +804,9 @@ theorem setOfPred_isPreconnected_subset_of_ordered
     simp only [union_insert, union_singleton, mem_insert_iff, mem_union, mem_range, Prod.exists,
       uncurry_apply_pair, exists_apply_eq_apply, true_or, or_true, exists_apply_eq_apply2]
 
+@[deprecated (since := "2026-07-09")]
+alias setOf_isPreconnected_subset_of_ordered := setOfPred_isPreconnected_subset_of_ordered
+
 中文:
 定理 setOfPred_isPreconnected_subset_of_ordered
   证明: by
@@ -783,6 +814,9 @@ theorem setOfPred_isPreconnected_subset_of_ordered
   rcases hs.mem_intervals with (hs | hs | hs | hs | hs | hs | hs | hs | hs | hs) <;> rw [hs] <;>
     simp only [union_insert, union_singleton, mem_insert_iff, mem_union, mem_range, Prod.exists,
       uncurry_apply_pair, exists_apply_eq_apply, true_or, or_true, exists_apply_eq_apply2]
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_isPreconnected_subset_of_ordered := setOfPred_isPreconnected_subset_of_ordered
 
 Depends on / 依赖: Prod.exists, exists_apply_eq_apply, exists_apply_eq_apply2, hs.mem_intervals, mem_insert_iff, mem_intervals, mem_range, mem_union, or_true, true_or, uncurry_apply_pair, union_insert, union_singleton
 -/
@@ -821,7 +855,11 @@ theorem IsClosed.mem_of_ge_of_forall_exists_gt
   let c := sSup (s inter Icc a b)
   have c_mem : c in S := hs.csSup_mem ⟨_, ha⟩ Sbd
   have c_le : c <= b := csSup_le ⟨_, ha⟩ fun x hx => hx.2.2
-  rcases eq_or_lt_of_le c
+  rcases eq_or_lt_of_le c_le with hc | hc
+  · exact hc ▸ c_mem.1
+  exfalso
+  rcases hgt c ⟨c_mem.1, c_mem.2.1, hc⟩ with ⟨x, xs, cx, xb⟩
+  exact not_lt_of_ge (le_csSup Sbd ⟨xs, le_trans (le_csSup Sbd ha) (le_of_lt cx), xb⟩) cx
 
 中文:
 定理 是闭集.mem_of_ge_of_对任意_存在_gt
@@ -833,7 +871,11 @@ theorem IsClosed.mem_of_ge_of_forall_exists_gt
   let c := sSup (s inter Icc a b)
   have c_mem : c in S := hs.csSup_mem ⟨_, ha⟩ Sbd
   have c_le : c <= b := csSup_le ⟨_, ha⟩ fun x hx => hx.2.2
-  rcases eq_or_lt_of_le c
+  rcases eq_or_lt_of_le c_le with hc | hc
+  · exact hc ▸ c_mem.1
+  exfalso
+  rcases hgt c ⟨c_mem.1, c_mem.2.1, hc⟩ with ⟨x, xs, cx, xb⟩
+  exact not_lt_of_ge (le_csSup Sbd ⟨xs, le_trans (le_csSup Sbd ha) (le_of_lt cx), xb⟩) cx
 
 Depends on / 依赖: BddAbove, c_le, c_mem, csSup_le, csSup_mem, eq_or_lt_of_le, hs.csSup_mem, le_csSup, le_of_lt, le_trans, left_mem_Icc, not_lt_of_ge, replace
 -/
@@ -862,7 +904,8 @@ theorem IsClosed.Icc_subset_of_forall_exists_gt
   have : IsClosed (s inter Icc a y) := by
     suffices s inter Icc a y = s inter Icc a b inter Icc a y from this ▸ hs.inter isClosed_Icc
     grind [inter_assoc, inter_eq_self_of_subset_right, Icc_subset_Icc_right]
-  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =
+  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =>
+    hgt x ⟨hx.1, Ico_subset_Ico_right hy.2 hx.2⟩ y hx.2.2
 
 中文:
 定理 是闭集.Icc_subset_of_对任意_存在_gt
@@ -872,7 +915,8 @@ theorem IsClosed.Icc_subset_of_forall_exists_gt
   have : IsClosed (s inter Icc a y) := by
     suffices s inter Icc a y = s inter Icc a b inter Icc a y from this ▸ hs.inter isClosed_Icc
     grind [inter_assoc, inter_eq_self_of_subset_right, Icc_subset_Icc_right]
-  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =
+  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =>
+    hgt x ⟨hx.1, Ico_subset_Ico_right hy.2 hx.2⟩ y hx.2.2
 
 Depends on / 依赖: Icc_subset_Icc_right, Ico_subset_Ico_right, IsClosed, IsClosed.mem_of_ge_of_forall_exists_gt, hs.inter, inter_assoc, inter_eq_self_of_subset_right, isClosed_Icc, mem_of_ge_of_forall_exists_gt
 -/
@@ -896,7 +940,8 @@ theorem IsClosed.mem_of_ge_of_forall_exists_lt
   have : IsClosed (OrderDual.ofDual ⁻¹' (s inter Icc a b)) := hs
   rw [preimage_inter]; rw [← Icc_toDual] at this
   apply this.mem_of_ge_of_forall_exists_gt (by simp_all) (by simp_all) (fun x hx => ?_)
-  rw [Ico_toDual]; rw [← preimage_inter]
+  rw [Ico_toDual]; rw [← preimage_inter]; rw [← Equiv.image_symm_eq_preimage]; rw [mem_image] at hx
+  aesop
 
 中文:
 定理 是闭集.mem_of_ge_of_对任意_存在_lt
@@ -906,7 +951,8 @@ theorem IsClosed.mem_of_ge_of_forall_exists_lt
   have : IsClosed (OrderDual.ofDual ⁻¹' (s inter Icc a b)) := hs
   rw [preimage_inter]; rw [← Icc_toDual] at this
   apply this.mem_of_ge_of_forall_exists_gt (by simp_all) (by simp_all) (fun x hx => ?_)
-  rw [Ico_toDual]; rw [← preimage_inter]
+  rw [Ico_toDual]; rw [← preimage_inter]; rw [← Equiv.image_symm_eq_preimage]; rw [mem_image] at hx
+  aesop
 
 Depends on / 依赖: Equiv.image_symm_eq_preimage, Icc_toDual, Ico_toDual, IsClosed, OrderDual, OrderDual.ofDual, OrderDual.toDual, image_symm_eq_preimage, mem_image, mem_of_ge_of_forall_exists_gt, ofDual, preimage_inter, this.mem_of_ge_of_forall_exists_gt, toDual
 -/
@@ -931,6 +977,7 @@ theorem IsClosed.Icc_subset_of_forall_exists_lt
     suffices s inter Icc y b = s inter Icc a b inter Icc y b from this ▸ hs.inter isClosed_Icc
     grind [Icc_subset_Icc_left, inter_eq_self_of_subset_right, inter_assoc]
   exact IsClosed.mem_of_ge_of_forall_exists_lt this hb hy.2 fun x hx =>
+    hgt x ⟨hx.1, Ioc_subset_Ioc_left hy.1 hx.2⟩ y hx.2.1
 
 中文:
 定理 是闭集.Icc_subset_of_对任意_存在_lt
@@ -941,6 +988,7 @@ theorem IsClosed.Icc_subset_of_forall_exists_lt
     suffices s inter Icc y b = s inter Icc a b inter Icc y b from this ▸ hs.inter isClosed_Icc
     grind [Icc_subset_Icc_left, inter_eq_self_of_subset_right, inter_assoc]
   exact IsClosed.mem_of_ge_of_forall_exists_lt this hb hy.2 fun x hx =>
+    hgt x ⟨hx.1, Ioc_subset_Ioc_left hy.1 hx.2⟩ y hx.2.1
 
 Depends on / 依赖: Icc_subset_Icc_left, Ioc_subset_Ioc_left, IsClosed, IsClosed.mem_of_ge_of_forall_exists_lt, hs.inter, inter_assoc, inter_eq_self_of_subset_right, isClosed_Icc, mem_of_ge_of_forall_exists_lt
 -/
@@ -968,7 +1016,31 @@ lemma IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset
   have a_mem : a in A := ⟨left_mem_Icc.mpr hab, by simp [ha]⟩
   have bdd_A : BddAbove A := ⟨b, fun t ht => ht.1.2⟩
   set t₁ := sSup A
-  have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨
+  have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨a, a_mem⟩ (fun t ht => ht.1.2)⟩
+  obtain ⟨⟨t₁a, t₁b⟩, ht₁⟩ : t₁ in A := by
+    refine ⟨t₁_mem, fun t ht => ?_⟩
+    rcases ht.2.eq_or_lt with rfl | h
+    · have : closure A subseteq s inter Icc a b := by
+        apply (closure_subset_iff hs).2 (fun t ht => ⟨?_, ht.1⟩)
+        have : t in Icc a t := ⟨ht.1.1, le_rfl⟩
+        exact ht.2 this
+      apply this.trans inter_subset_left
+      exact csSup_mem_closure ⟨a, a_mem⟩ bdd_A
+    · obtain ⟨c, cA, tc⟩ : exists c in A, t < c := (lt_csSup_iff bdd_A ⟨a, a_mem⟩).1 h
+      apply cA.2
+      exact ⟨ht.1, tc.le⟩
+  suffices t₁ = b by simpa [this] using ht₁
+  apply eq_of_le_of_not_lt t₁b fun t₁b' => ?_
+  obtain ⟨m, t₁m, H⟩ : exists m > t₁, Ioo t₁ m subseteq s :=
+    (mem_nhdsGT_iff_exists_Ioo_subset' t₁b').mp (h t₁ ⟨t₁a, t₁b'⟩ (fun s hs => ht₁ hs))
+  obtain ⟨t, hat, ht⟩ : exists t, t₁ < t ∧ t < min m b := exists_between (lt_min t₁m t₁b')
+  have : t in A := by
+    refine ⟨⟨by order, ht.le.trans (min_le_right _ _)⟩, fun t' ht' => ?_⟩
+    rcases le_or_gt t' t₁ with h't' | h't'
+    · exact ht₁ ⟨ht'.1, h't'⟩
+· exact H ⟨h't', ht'.2.trans_lt ht.trans_le min_le_left ..⟩
+  have : t <= t₁ := le_csSup bdd_A this
+  order
 
 中文:
 引理 是闭集.Icc_subset_of_对任意_mem_nhdsGT_of_Icc_subset
@@ -980,7 +1052,31 @@ lemma IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset
   have a_mem : a in A := ⟨left_mem_Icc.mpr hab, by simp [ha]⟩
   have bdd_A : BddAbove A := ⟨b, fun t ht => ht.1.2⟩
   set t₁ := sSup A
-  have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨
+  have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨a, a_mem⟩ (fun t ht => ht.1.2)⟩
+  obtain ⟨⟨t₁a, t₁b⟩, ht₁⟩ : t₁ in A := by
+    refine ⟨t₁_mem, fun t ht => ?_⟩
+    rcases ht.2.eq_or_lt with rfl | h
+    · have : closure A subseteq s inter Icc a b := by
+        apply (closure_subset_iff hs).2 (fun t ht => ⟨?_, ht.1⟩)
+        have : t in Icc a t := ⟨ht.1.1, le_rfl⟩
+        exact ht.2 this
+      apply this.trans inter_subset_left
+      exact csSup_mem_closure ⟨a, a_mem⟩ bdd_A
+    · obtain ⟨c, cA, tc⟩ : exists c in A, t < c := (lt_csSup_iff bdd_A ⟨a, a_mem⟩).1 h
+      apply cA.2
+      exact ⟨ht.1, tc.le⟩
+  suffices t₁ = b by simpa [this] using ht₁
+  apply eq_of_le_of_not_lt t₁b fun t₁b' => ?_
+  obtain ⟨m, t₁m, H⟩ : exists m > t₁, Ioo t₁ m subseteq s :=
+    (mem_nhdsGT_iff_exists_Ioo_subset' t₁b').mp (h t₁ ⟨t₁a, t₁b'⟩ (fun s hs => ht₁ hs))
+  obtain ⟨t, hat, ht⟩ : exists t, t₁ < t ∧ t < min m b := exists_between (lt_min t₁m t₁b')
+  have : t in A := by
+    refine ⟨⟨by order, ht.le.trans (min_le_right _ _)⟩, fun t' ht' => ?_⟩
+    rcases le_or_gt t' t₁ with h't' | h't'
+    · exact ht₁ ⟨ht'.1, h't'⟩
+· exact H ⟨h't', ht'.2.trans_lt ht.trans_le min_le_left ..⟩
+  have : t <= t₁ := le_csSup bdd_A this
+  order
 
 Depends on / 依赖: BddAbove, a_mem, bdd_A, closure, closure_subset_iff, csSup_le, eq_or_lt, le_csSup, left_mem_Icc, left_mem_Icc.mpr, lt_or_ge, subseteq
 -/
@@ -1056,7 +1152,13 @@ theorem isPreconnected_Icc_aux
 hst ⟨y, xyab right_mem_Icc.2 hxy, this right_mem_Icc.2 hxy, hy.2⟩
   apply (IsClosed.inter hs isClosed_Icc).Icc_subset_of_forall_mem_nhdsWithin hx.2
   rintro z ⟨zs, hz⟩
-have zt
+have zt : z in tᶜ := fun zt => hst ⟨z, xyab Ico_subset_Icc_self hz, zs, zt⟩
+  have : tᶜ inter Ioc z y in 𝓝[>] z := by
+    rw [← nhdsWithin_Ioc_eq_nhdsGT hz.2]
+    exact mem_nhdsWithin.2 ⟨tᶜ, ht.isOpen_compl, zt, Subset.rfl⟩
+  apply mem_of_superset this
+  have : Ioc z y subseteq s union t := fun w hw => hab (xyab ⟨le_trans hz.1 (le_of_lt hw.1), hw.2⟩)
+  exact fun w ⟨wt, wzy⟩ => (this wzy).elim id fun h => (wt h).elim
 
 中文:
 定理 isPreconnected_Icc_aux
@@ -1068,7 +1170,13 @@ have zt
 hst ⟨y, xyab right_mem_Icc.2 hxy, this right_mem_Icc.2 hxy, hy.2⟩
   apply (IsClosed.inter hs isClosed_Icc).Icc_subset_of_forall_mem_nhdsWithin hx.2
   rintro z ⟨zs, hz⟩
-have zt
+have zt : z in tᶜ := fun zt => hst ⟨z, xyab Ico_subset_Icc_self hz, zs, zt⟩
+  have : tᶜ inter Ioc z y in 𝓝[>] z := by
+    rw [← nhdsWithin_Ioc_eq_nhdsGT hz.2]
+    exact mem_nhdsWithin.2 ⟨tᶜ, ht.isOpen_compl, zt, Subset.rfl⟩
+  apply mem_of_superset this
+  have : Ioc z y subseteq s union t := fun w hw => hab (xyab ⟨le_trans hz.1 (le_of_lt hw.1), hw.2⟩)
+  exact fun w ⟨wt, wzy⟩ => (this wzy).elim id fun h => (wt h).elim
 
 Depends on / 依赖: Icc_subset_Icc, Icc_subset_of_forall_mem_nhdsWithin, Ico_subset_Icc_self, IsClosed, IsClosed.inter, Subset, Subset.rfl, ht.isOpen_compl, isClosed_Icc, isOpen_compl, mem_nhdsWithin, nhdsWithin_Ioc_eq_nhdsGT, right_mem_Icc, subseteq
 -/
@@ -1102,7 +1210,8 @@ theorem isPreconnected_Icc
       rcases le_total x y with h | h
       · exact isPreconnected_Icc_aux x y s t h hs ht hab hx hy
       · rw [inter_comm s t]
-        rw [union_comm s t] at
+        rw [union_comm s t] at hab
+        exact isPreconnected_Icc_aux y x t s h ht hs hab hy hx)
 
 中文:
 定理 isPreconnected_Icc
@@ -1114,7 +1223,8 @@ theorem isPreconnected_Icc
       rcases le_total x y with h | h
       · exact isPreconnected_Icc_aux x y s t h hs ht hab hx hy
       · rw [inter_comm s t]
-        rw [union_comm s t] at
+        rw [union_comm s t] at hab
+        exact isPreconnected_Icc_aux y x t s h ht hs hab hy hx)
 
 Depends on / 依赖: isPreconnected_closed_iff
 -/
@@ -1560,7 +1670,12 @@ theorem setOfPred_isPreconnected_eq_of_ordered
   refine Subset.antisymm setOfPred_isPreconnected_subset_of_ordered ?_
   simp only [subset_def, forall_mem_range, uncurry, or_imp, forall_and, mem_union,
     mem_ofPred_eq, insert_eq, mem_singleton_iff, forall_eq, forall_true_iff, and_true,
-    isPreconnected_Icc, isPreconnected_Ico, isPreconnect
+    isPreconnected_Icc, isPreconnected_Ico, isPreconnected_Ioc, isPreconnected_Ioo,
+    isPreconnected_Ioi, isPreconnected_Iio, isPreconnected_Ici, isPreconnected_Iic,
+    isPreconnected_univ, isPreconnected_empty]
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_isPreconnected_eq_of_ordered := setOfPred_isPreconnected_eq_of_ordered
 
 中文:
 定理 setOfPred_isPreconnected_eq_of_ordered
@@ -1568,7 +1683,12 @@ theorem setOfPred_isPreconnected_eq_of_ordered
   refine Subset.antisymm setOfPred_isPreconnected_subset_of_ordered ?_
   simp only [subset_def, forall_mem_range, uncurry, or_imp, forall_and, mem_union,
     mem_ofPred_eq, insert_eq, mem_singleton_iff, forall_eq, forall_true_iff, and_true,
-    isPreconnected_Icc, isPreconnected_Ico, isPreconnect
+    isPreconnected_Icc, isPreconnected_Ico, isPreconnected_Ioc, isPreconnected_Ioo,
+    isPreconnected_Ioi, isPreconnected_Iio, isPreconnected_Ici, isPreconnected_Iic,
+    isPreconnected_univ, isPreconnected_empty]
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_isPreconnected_eq_of_ordered := setOfPred_isPreconnected_eq_of_ordered
 
 Depends on / 依赖: Subset, Subset.antisymm, and_true, antisymm, forall_and, forall_eq, forall_mem_range, forall_true_iff, insert_eq, isPreconnected_Icc, isPreconnected_Ici, isPreconnected_Ico, isPreconnected_Iic, isPreconnected_Iio, isPreconnected_Ioc, isPreconnected_Ioi, isPreconnected_Ioo, isPreconnected_empty, isPreconnected_univ, mem_ofPred_eq
 -/
@@ -1599,7 +1719,9 @@ lemma isTotallyDisconnected_iff_lt
     nontrivial_iff_exists_lt, not_exists, not_and]
   refine ⟨fun h x hx y hy hxy => ?_, fun h t hts ht x hx y hy hxy => ?_⟩
   · simp_rw [← not_ordConnected_inter_Icc_iff hx hy]
-    exact fun hs => h _ inter
+    exact fun hs => h _ inter_subset_left hs _ ⟨hx, le_rfl, hxy.le⟩ _ ⟨hy, hxy.le, le_rfl⟩ hxy
+  · obtain ⟨z, h1z, h2z⟩ := h x (hts hx) y (hts hy) hxy
+exact h1z hts ht.1 hx hy ⟨h2z.1.le, h2z.2.le⟩
 
 中文:
 引理 isTotallyDisconnected_iff_lt
@@ -1609,7 +1731,9 @@ lemma isTotallyDisconnected_iff_lt
     nontrivial_iff_exists_lt, not_exists, not_and]
   refine ⟨fun h x hx y hy hxy => ?_, fun h t hts ht x hx y hy hxy => ?_⟩
   · simp_rw [← not_ordConnected_inter_Icc_iff hx hy]
-    exact fun hs => h _ inter
+    exact fun hs => h _ inter_subset_left hs _ ⟨hx, le_rfl, hxy.le⟩ _ ⟨hy, hxy.le, le_rfl⟩ hxy
+  · obtain ⟨z, h1z, h2z⟩ := h x (hts hx) y (hts hy) hxy
+exact h1z hts ht.1 hx hy ⟨h2z.1.le, h2z.2.le⟩
 
 Depends on / 依赖: IsTotallyDisconnected, hxy.le, inter_subset_left, isPreconnected_iff_ordConnected, le_rfl, nontrivial_iff_exists_lt, not_and, not_exists, not_nontrivial_iff, not_ordConnected_inter_Icc_iff, simp_rw
 -/
@@ -1830,7 +1954,7 @@ theorem intermediate_value_Ico
   proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_ge (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
       (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithin
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
 
 中文:
 定理 intermediate_value_Ico
@@ -1838,7 +1962,7 @@ theorem intermediate_value_Ico
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_ge (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
       (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithin
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
 
 Depends on / 依赖: Ico_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ico, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ico, isPreconnected_Ico, not_lt_of_ge, right_nhdsWithin_Ico_neBot
 -/
@@ -1858,7 +1982,7 @@ theorem intermediate_value_Ico'
   proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_ge (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
       (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithin
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
 
 中文:
 定理 intermediate_value_Ico'
@@ -1866,7 +1990,7 @@ theorem intermediate_value_Ico'
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_ge (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
       (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithin
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
 
 Depends on / 依赖: Ico_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioc, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioc, isPreconnected_Ico, not_lt_of_ge, right_nhdsWithin_Ico_neBot
 -/
@@ -1886,7 +2010,7 @@ theorem intermediate_value_Ioc
   proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_le_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
       (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinA
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
 
 中文:
 定理 intermediate_value_Ioc
@@ -1894,7 +2018,7 @@ theorem intermediate_value_Ioc
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_le_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
       (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinA
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
 
 Depends on / 依赖: Ioc_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioc, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioc, isPreconnected_Ioc, left_nhdsWithin_Ioc_neBot, not_le_of_gt
 -/
@@ -1914,7 +2038,7 @@ theorem intermediate_value_Ioc'
   proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_le_of_gt (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
       (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinA
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
 
 中文:
 定理 intermediate_value_Ioc'
@@ -1922,7 +2046,7 @@ theorem intermediate_value_Ioc'
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_le_of_gt (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
       (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinA
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
 
 Depends on / 依赖: Ioc_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ico, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ico, isPreconnected_Ioc, left_nhdsWithin_Ioc_neBot, not_le_of_gt
 -/
@@ -1942,7 +2066,9 @@ theorem intermediate_value_Ioo
   proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
       (left_nhdsWithin_Ioo_neBot hlt) (right_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Ic
+      (hf.mono Ioo_subset_Icc_self) _ _
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
 
 中文:
 定理 intermediate_value_Ioo
@@ -1950,7 +2076,9 @@ theorem intermediate_value_Ioo
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
       (left_nhdsWithin_Ioo_neBot hlt) (right_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Ic
+      (hf.mono Ioo_subset_Icc_self) _ _
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
 
 Depends on / 依赖: Ioo_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioo, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioo, isPreconnected_Ioo, left_nhdsWithin_Ioo_neBot, not_lt_of_gt, right_nhdsWithin_Ioo_neBot
 -/
@@ -1972,7 +2100,9 @@ theorem intermediate_value_Ioo'
   proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_gt (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
       (right_nhdsWithin_Ioo_neBot hlt) (left_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Ic
+      (hf.mono Ioo_subset_Icc_self) _ _
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
 
 中文:
 定理 intermediate_value_Ioo'
@@ -1980,7 +2110,9 @@ theorem intermediate_value_Ioo'
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_gt (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
       (right_nhdsWithin_Ioo_neBot hlt) (left_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Ic
+      (hf.mono Ioo_subset_Icc_self) _ _
+      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
+      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
 
 Depends on / 依赖: Ioo_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioo, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioo, isPreconnected_Ioo, left_nhdsWithin_Ioo_neBot, not_lt_of_gt, right_nhdsWithin_Ioo_neBot
 -/
@@ -2330,7 +2462,13 @@ have H : f b < f a := lt_of_le_of_ne h hf_i.ne hab.ne'
     have : u = ⊥ := hf_i hu.2
     simp_all
   · by_cases! hb : f ⊥ < f b
-    · obtain ⟨u, hu⟩ 
+    · obtain ⟨u, hu⟩ := intermediate_value_Ioo bot_le hf_c.continuousOn ⟨hb, H⟩
+      rw [hf_i hu.2] at hu
+      exact (hab.trans hu.1.2).false
+· replace hb : f b < f ⊥ := lt_of_le_of_ne hb hf_i.ne (lt_of_lt_of_le' hab bot_le).ne'
+      obtain ⟨u, hu⟩ := intermediate_value_Ioo' hab.le hf_c.continuousOn ⟨hb, ha⟩
+      have : u = ⊥ := hf_i hu.2
+      simp_all
 
 中文:
 定理 连续.strictMono_of_inj_boundedOrder
@@ -2344,7 +2482,13 @@ have H : f b < f a := lt_of_le_of_ne h hf_i.ne hab.ne'
     have : u = ⊥ := hf_i hu.2
     simp_all
   · by_cases! hb : f ⊥ < f b
-    · obtain ⟨u, hu⟩ 
+    · obtain ⟨u, hu⟩ := intermediate_value_Ioo bot_le hf_c.continuousOn ⟨hb, H⟩
+      rw [hf_i hu.2] at hu
+      exact (hab.trans hu.1.2).false
+· replace hb : f b < f ⊥ := lt_of_le_of_ne hb hf_i.ne (lt_of_lt_of_le' hab bot_le).ne'
+      obtain ⟨u, hu⟩ := intermediate_value_Ioo' hab.le hf_c.continuousOn ⟨hb, ha⟩
+      have : u = ⊥ := hf_i hu.2
+      simp_all
 
 Depends on / 依赖: H.trans_le, bot_le, continuousOn, hab.ne, hab.trans, hf_c, hf_c.continuousOn, hf_i, hf_i.ne, interm, intermediate_value_Ioc, intermediate_value_Ioo, le_top, lt_of_le_of_ne, lt_of_lt_of_le, replace, trans_le
 -/
@@ -2424,7 +2568,21 @@ theorem Continuous.strictMonoOn_of_inj_rigidity
   have hbt : b <= t := le_max_left b y
   have hf_mono_st : StrictMonoOn f (Icc s t) ∨ StrictAntiOn f (Icc s t) := by
 have : Fact (s <= t) := ⟨hsa.trans hbt.trans' hab.le⟩
-    have := Continuous.strictMono
+    have := Continuous.strictMono_of_inj_boundedOrder' (f := Set.domRestrict (Icc s t) f)
+      hf_c.continuousOn.domRestrict hf_i.injOn.injective
+    exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
+  have (h : StrictAntiOn f (Icc s t)) : False := by
+    have : Icc a b subseteq Icc s t := Icc_subset_Icc hsa hbt
+    replace : StrictAntiOn f (Icc a b) := StrictAntiOn.mono h this
+    replace : IsAntichain (· <= ·) (Icc a b) :=
+      IsAntichain.of_strictMonoOn_antitoneOn hf_mono this.antitoneOn
+    exact this.not_lt (left_mem_Icc.mpr (le_of_lt hab)) (right_mem_Icc.mpr (le_of_lt hab)) hab
+  replace hf_mono_st : StrictMonoOn f (Icc s t) := hf_mono_st.resolve_right this
+  have hsx : s <= x := min_le_right a x
+  have hyt : y <= t := le_max_right b y
+  replace : Icc x y subseteq Icc s t := Icc_subset_Icc hsx hyt
+  replace : StrictMonoOn f (Icc x y) := StrictMonoOn.mono hf_mono_st this
+  exact this (left_mem_Icc.mpr (le_of_lt hxy)) (right_mem_Icc.mpr (le_of_lt hxy)) hxy
 
 中文:
 定理 连续.strictMonoOn_of_inj_rigidity
@@ -2437,7 +2595,21 @@ have : Fact (s <= t) := ⟨hsa.trans hbt.trans' hab.le⟩
   have hbt : b <= t := le_max_left b y
   have hf_mono_st : StrictMonoOn f (Icc s t) ∨ StrictAntiOn f (Icc s t) := by
 have : Fact (s <= t) := ⟨hsa.trans hbt.trans' hab.le⟩
-    have := Continuous.strictMono
+    have := Continuous.strictMono_of_inj_boundedOrder' (f := Set.domRestrict (Icc s t) f)
+      hf_c.continuousOn.domRestrict hf_i.injOn.injective
+    exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
+  have (h : StrictAntiOn f (Icc s t)) : False := by
+    have : Icc a b subseteq Icc s t := Icc_subset_Icc hsa hbt
+    replace : StrictAntiOn f (Icc a b) := StrictAntiOn.mono h this
+    replace : IsAntichain (· <= ·) (Icc a b) :=
+      IsAntichain.of_strictMonoOn_antitoneOn hf_mono this.antitoneOn
+    exact this.not_lt (left_mem_Icc.mpr (le_of_lt hab)) (right_mem_Icc.mpr (le_of_lt hab)) hab
+  replace hf_mono_st : StrictMonoOn f (Icc s t) := hf_mono_st.resolve_right this
+  have hsx : s <= x := min_le_right a x
+  have hyt : y <= t := le_max_right b y
+  replace : Icc x y subseteq Icc s t := Icc_subset_Icc hsx hyt
+  replace : StrictMonoOn f (Icc x y) := StrictMonoOn.mono hf_mono_st this
+  exact this (left_mem_Icc.mpr (le_of_lt hxy)) (right_mem_Icc.mpr (le_of_lt hxy)) hxy
 
 Depends on / 依赖: Continuous, Continuous.strictMono_of_inj_boundedOrder, Set.domRestrict, StrictAntiOn, StrictMonoOn, continuousOn, domRestrict, hab.le, hbt.trans, hf_c, hf_c.continuousOn.domRestrict, hf_i, hf_i.injOn.injective, hf_mono_st, hsa.trans, injective, le_max_left, min_le_left, strictAntiOn_iff_strictAnti, strictAntiOn_iff_strictAnti.mpr
 -/
@@ -2560,7 +2732,10 @@ theorem Continuous.strictMono_of_inj
       (hf_c.strictMonoOn_of_inj_rigidity hf_i hcd)
       (hf_c.strictMonoOn_of_inj_rigidity (δ := δᵒᵈ) hf_i hcd)
   cases subsingleton_or_nontrivial α with
-| i
+| inl h => exact Or.inl Subsingleton.strictMono f
+  | inr h =>
+    obtain ⟨a, b, hab⟩ := exists_pair_lt α
+    exact H hab
 
 中文:
 定理 连续.strictMono_of_inj
@@ -2571,7 +2746,10 @@ theorem Continuous.strictMono_of_inj
       (hf_c.strictMonoOn_of_inj_rigidity hf_i hcd)
       (hf_c.strictMonoOn_of_inj_rigidity (δ := δᵒᵈ) hf_i hcd)
   cases subsingleton_or_nontrivial α with
-| i
+| inl h => exact Or.inl Subsingleton.strictMono f
+  | inr h =>
+    obtain ⟨a, b, hab⟩ := exists_pair_lt α
+    exact H hab
 
 Depends on / 依赖: Or.inl, StrictAnti, StrictMono, Subsingleton, Subsingleton.strictMono, continuousOn, exists_pair_lt, hcd.le, hf_c, hf_c.continuousOn.strictMonoOn_of_injOn_Icc, hf_c.strictMonoOn_of_inj_rigidity, hf_i, hf_i.injOn, strictMono, strictMonoOn_of_injOn_Icc, strictMonoOn_of_inj_rigidity, subsingleton_or_nontrivial
 -/
@@ -2598,7 +2776,7 @@ theorem ContinuousOn.strictMonoOn_of_injOn_Ioo
   let g : Ioo a b -> δ := Set.domRestrict (Ioo a b) f
   have : StrictMono g ∨ StrictAnti g :=
     Continuous.strictMono_of_inj hf_c.domRestrict hf_i.injective
-  exact this.imp strictMono_domRestrict.mp stri
+  exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
 
 中文:
 定理 ContinuousOn.strictMonoOn_of_injOn_Ioo
@@ -2608,7 +2786,7 @@ theorem ContinuousOn.strictMonoOn_of_injOn_Ioo
   let g : Ioo a b -> δ := Set.domRestrict (Ioo a b) f
   have : StrictMono g ∨ StrictAnti g :=
     Continuous.strictMono_of_inj hf_c.domRestrict hf_i.injective
-  exact this.imp strictMono_domRestrict.mp stri
+  exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
 
 Depends on / 依赖: Classical, Classical.inhabited_of_nonempty, Continuous, Continuous.strictMono_of_inj, Inhabited, Set.domRestrict, StrictAnti, StrictMono, domRestrict, hf_c, hf_c.domRestrict, hf_i, hf_i.injective, inhabited_of_nonempty, injective, nonempty_Ioo_subtype, strictAntiOn_iff_strictAnti, strictAntiOn_iff_strictAnti.mpr, strictMono_domRestrict, strictMono_domRestrict.mp
 -/

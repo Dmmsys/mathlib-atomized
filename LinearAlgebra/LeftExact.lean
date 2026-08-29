@@ -43,7 +43,7 @@ lemma exact_lcomp_of_exact_of_surjective
       (exac.linearEquivOfSurjective surj).symm.toLinearMap
     ext x
     simp
-  · rw [← hy, LinearMap.comp_assoc,
+  · rw [← hy, LinearMap.comp_assoc, exac.linearMap_comp_eq_zero, LinearMap.comp_zero y]
 
 中文:
 引理 exact_lcomp_of_exact_of_surjective
@@ -56,7 +56,7 @@ lemma exact_lcomp_of_exact_of_surjective
       (exac.linearEquivOfSurjective surj).symm.toLinearMap
     ext x
     simp
-  · rw [← hy, LinearMap.comp_assoc,
+  · rw [← hy, LinearMap.comp_assoc, exac.linearMap_comp_eq_zero, LinearMap.comp_zero y]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_assoc, LinearMap.comp_zero, LinearMap.lcomp_apply, LinearMap.range, LinearMap.range_le_ker_iff.mpr, Set.mem_range, comp_assoc, comp_zero, exac.linearEquivOfSurjective, exac.linearMap_comp_eq_zero, lcomp_apply, linearEquivOfSurjective, linearMap_comp_eq_zero, mem_range, range_le_ker_iff, symm.toLinearMap, toLinearMap
 -/

@@ -1059,7 +1059,9 @@ theorem of_inf_eq_bot_aux
     Module.finrank_pos.ne']
   have : IsGalois B E := IsGalois.sup_right A B h₁
   rw [← IsGalois.card_aut_eq_finrank]; rw [← IsGalois.card_aut_eq_finrank]
-e
+exact Nat.card_congr Equiv.ofBijective (restrictRestrictAlgEquivMapHom _ _ _ _)
+    ⟨restrictRestrictAlgEquivMapHom_injective _ _ h₁,
+      restrictRestrictAlgEquivMapHom_surjective _ _ h₂⟩
 
 中文:
 定理 of_inf_eq_bot_aux
@@ -1070,7 +1072,9 @@ e
     Module.finrank_pos.ne']
   have : IsGalois B E := IsGalois.sup_right A B h₁
   rw [← IsGalois.card_aut_eq_finrank]; rw [← IsGalois.card_aut_eq_finrank]
-e
+exact Nat.card_congr Equiv.ofBijective (restrictRestrictAlgEquivMapHom _ _ _ _)
+    ⟨restrictRestrictAlgEquivMapHom_injective _ _ h₁,
+      restrictRestrictAlgEquivMapHom_surjective _ _ h₂⟩
 -/
 private theorem of_inf_eq_bot_aux [IsGalois F A] [FiniteDimensional F E] (h₁ : A ⊔ B = ⊤)
     (h₂ : A ⊓ B = ⊥) : A.LinearDisjoint B := by
@@ -1094,7 +1098,16 @@ theorem of_inf_eq_bot
   let A' : IntermediateField F C := A.restrict le_sup_left
   let B' : IntermediateField F C := B.restrict le_sup_right
   have hA : IntermediateField.map C.val A' = A := lift_restrict le_sup_left
-  have hB : IntermediateField.map C.val B' = B := lift_restri
+  have hB : IntermediateField.map C.val B' = B := lift_restrict le_sup_right
+  suffices A'.LinearDisjoint B' from hA ▸ hB ▸ LinearDisjoint.map this C.val
+  have h₁ : A' ⊔ B' = ⊤ := by
+    rw [← lift_inj]; rw [lift_top]; rw [lift_sup]; rw [lift_restrict le_sup_left]; rw [lift_restrict le_sup_right]
+  have h₂ : A' ⊓ B' = ⊥ := by
+    rw [← lift_inj]; rw [lift_bot]; rw [lift_inf]; rw [lift_restrict le_sup_left]; rw [lift_restrict le_sup_right]; rw [h]
+have : IsGalois F A' := IsGalois.of_algEquiv restrictAlgEquiv ..
+  exact of_inf_eq_bot_aux h₁ h₂
+
+@[simp]
 
 中文:
 定理 of_inf_eq_bot
@@ -1104,7 +1117,16 @@ theorem of_inf_eq_bot
   let A' : IntermediateField F C := A.restrict le_sup_left
   let B' : IntermediateField F C := B.restrict le_sup_right
   have hA : IntermediateField.map C.val A' = A := lift_restrict le_sup_left
-  have hB : IntermediateField.map C.val B' = B := lift_restri
+  have hB : IntermediateField.map C.val B' = B := lift_restrict le_sup_right
+  suffices A'.LinearDisjoint B' from hA ▸ hB ▸ LinearDisjoint.map this C.val
+  have h₁ : A' ⊔ B' = ⊤ := by
+    rw [← lift_inj]; rw [lift_top]; rw [lift_sup]; rw [lift_restrict le_sup_left]; rw [lift_restrict le_sup_right]
+  have h₂ : A' ⊓ B' = ⊥ := by
+    rw [← lift_inj]; rw [lift_bot]; rw [lift_inf]; rw [lift_restrict le_sup_left]; rw [lift_restrict le_sup_right]; rw [h]
+have : IsGalois F A' := IsGalois.of_algEquiv restrictAlgEquiv ..
+  exact of_inf_eq_bot_aux h₁ h₂
+
+@[simp]
 
 Depends on / 依赖: A.restrict, B.restrict, C.val, IntermediateField, IntermediateField.map, LinearDisjoint, LinearDisjoint.map, le_sup_left, le_sup_right, lift_inj, lift_res, lift_restrict, lift_sup, lift_top, restrict
 -/
@@ -1154,7 +1176,17 @@ theorem adjoin_rank_eq_rank_left_of_isAlgebraic
   set L' := (IsScalarTower.toAlgHom F L E).range
   let i : L ≃ₐ[F] L' := AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)
   have heq : (adjoin L (A : Set E)).toSubalgebra.toSubsemiring =
-      (Algebra.adjoin L' (
+      (Algebra.adjoin L' (A : Set E)).toSubsemiring := by
+    rw [adjoin_intermediateField_toSubalgebra_of_isAlgebraic _ _ halg.symm]; rw [Algebra.adjoin_toSubsemiring]; rw [Algebra.adjoin_toSubsemiring]
+    congr 2
+    ext x
+    simp only [Set.mem_range, Subtype.exists]
+    exact ⟨fun ⟨y, h⟩ => ⟨x, ⟨y, h⟩, rfl⟩, fun ⟨a, ⟨y, h1⟩, h2⟩ => ⟨y, h1.trans h2⟩⟩
+  refine rank_eq_of_equiv_equiv i (RingEquiv.subsemiringCongr heq).toAddEquiv
+    i.bijective fun a ⟨x, hx⟩ => ?_
+  ext
+  simp_rw [Algebra.smul_def]
+  rfl
 
 中文:
 定理 adjoin_rank_eq_rank_left_of_isAlgebraic
@@ -1164,7 +1196,17 @@ theorem adjoin_rank_eq_rank_left_of_isAlgebraic
   set L' := (IsScalarTower.toAlgHom F L E).range
   let i : L ≃ₐ[F] L' := AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)
   have heq : (adjoin L (A : Set E)).toSubalgebra.toSubsemiring =
-      (Algebra.adjoin L' (
+      (Algebra.adjoin L' (A : Set E)).toSubsemiring := by
+    rw [adjoin_intermediateField_toSubalgebra_of_isAlgebraic _ _ halg.symm]; rw [Algebra.adjoin_toSubsemiring]; rw [Algebra.adjoin_toSubsemiring]
+    congr 2
+    ext x
+    simp only [Set.mem_range, Subtype.exists]
+    exact ⟨fun ⟨y, h⟩ => ⟨x, ⟨y, h⟩, rfl⟩, fun ⟨a, ⟨y, h1⟩, h2⟩ => ⟨y, h1.trans h2⟩⟩
+  refine rank_eq_of_equiv_equiv i (RingEquiv.subsemiringCongr heq).toAddEquiv
+    i.bijective fun a ⟨x, hx⟩ => ?_
+  ext
+  simp_rw [Algebra.smul_def]
+  rfl
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, Algebra, Algebra.adjoin, Algebra.adjoin_toSubsemiring, Eq.trans, IsScalarTower, IsScalarTower.toAlgHom, LinearDisjoint, Set.mem_range, Subalgebra, Subalgebra.LinearDisjoint.adjoin_rank_eq_rank_left, adjoin, adjoin_intermediateField_toSubalgebra_of_isAlgebraic, adjoin_rank_eq_rank_left, adjoin_toSubsemiring, halg.symm, mem_range, ofInjectiveField, toAlgHom
 -/
@@ -1235,7 +1277,16 @@ theorem lift_adjoin_rank_eq_lift_rank_right_of_isAlgebraic
   rw [(AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)).toLinearEquiv.lift_rank_eq]; rw [Cardinal.lift_inj]; rw [← Subalgebra.LinearDisjoint.adjoin_rank_eq_rank_right H]
   set L' := (IsScalarTower.toAlgHom F L E).range
   have heq : (adjoin L (A : Set E)).toSubalgebra.toSubsemiring =
-    
+      (Algebra.adjoin A (L' : Set E)).toSubsemiring := by
+    rw [adjoin_intermediateField_toSubalgebra_of_isAlgebraic _ _ halg.symm]; rw [Algebra.adjoin_toSubsemiring]; rw [Algebra.adjoin_toSubsemiring]; rw [Set.union_comm]
+    congr 2
+    ext x
+    simp
+  refine rank_eq_of_equiv_equiv (RingHom.id A) (RingEquiv.subsemiringCongr heq).toAddEquiv
+    Function.bijective_id fun ⟨a, ha⟩ ⟨x, hx⟩ => ?_
+  ext
+  simp_rw [Algebra.smul_def]
+  rfl
 
 中文:
 定理 lift_adjoin_rank_eq_lift_rank_right_of_isAlgebraic
@@ -1244,7 +1295,16 @@ theorem lift_adjoin_rank_eq_lift_rank_right_of_isAlgebraic
   rw [(AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)).toLinearEquiv.lift_rank_eq]; rw [Cardinal.lift_inj]; rw [← Subalgebra.LinearDisjoint.adjoin_rank_eq_rank_right H]
   set L' := (IsScalarTower.toAlgHom F L E).range
   have heq : (adjoin L (A : Set E)).toSubalgebra.toSubsemiring =
-    
+      (Algebra.adjoin A (L' : Set E)).toSubsemiring := by
+    rw [adjoin_intermediateField_toSubalgebra_of_isAlgebraic _ _ halg.symm]; rw [Algebra.adjoin_toSubsemiring]; rw [Algebra.adjoin_toSubsemiring]; rw [Set.union_comm]
+    congr 2
+    ext x
+    simp
+  refine rank_eq_of_equiv_equiv (RingHom.id A) (RingEquiv.subsemiringCongr heq).toAddEquiv
+    Function.bijective_id fun ⟨a, ha⟩ ⟨x, hx⟩ => ?_
+  ext
+  simp_rw [Algebra.smul_def]
+  rfl
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, Algebra, Algebra.adjoin, Algebra.adjoin_toSubsemiring, Cardinal, Cardinal.lift_inj, IsScalarTower, IsScalarTower.toAlgHom, LinearDisjoint, Set.union_c, Subalgebra, Subalgebra.LinearDisjoint.adjoin_rank_eq_rank_right, adjoin, adjoin_intermediateField_toSubalgebra_of_isAlgebraic, adjoin_rank_eq_rank_right, adjoin_toSubsemiring, halg.symm, lift_inj, lift_rank_eq
 -/
@@ -1526,7 +1586,7 @@ theorem of_finrank_coprime
 inferInstanceAs Field (AlgHom.fieldRange (IsScalarTower.toAlgHom F L E))
 letI : Field A.toSubalgebra := inferInstanceAs Field A
 Subalgebra.LinearDisjoint.of_finrank_coprime_of_free by
-    rwa [(AlgEquiv.ofInjectiveField (IsScalarTower.toA
+    rwa [(AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)).toLinearEquiv.finrank_eq] at H
 
 中文:
 定理 of_finrank_coprime
@@ -1536,7 +1596,7 @@ Subalgebra.LinearDisjoint.of_finrank_coprime_of_free by
 inferInstanceAs Field (AlgHom.fieldRange (IsScalarTower.toAlgHom F L E))
 letI : Field A.toSubalgebra := inferInstanceAs Field A
 Subalgebra.LinearDisjoint.of_finrank_coprime_of_free by
-    rwa [(AlgEquiv.ofInjectiveField (IsScalarTower.toA
+    rwa [(AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)).toLinearEquiv.finrank_eq] at H
 
 Depends on / 依赖: A.toSubalgebra, AlgEquiv, AlgEquiv.ofInjectiveField, AlgHom, AlgHom.fieldRange, AlgHom.range, IsScalarTower, IsScalarTower.toAlgHom, LinearDisjoint, Subalgebra, Subalgebra.LinearDisjoint.of_finrank_coprime_of_free, fieldRange, finrank_eq, ofInjectiveField, of_finrank_coprime_of_free, toAlgHom, toLinearEquiv, toLinearEquiv.finrank_eq, toSubalgebra
 -/
@@ -1610,7 +1670,12 @@ theorem of_isField
   -- need these otherwise the `exact` will stuck at typeclass
   have : SMulCommClass F A A := SMulCommClass.of_commMonoid F A A
   have : SMulCommClass F A.toSubalgebra A.toSubalgebra := ‹SMulCommClass F A A›
-  let : Mul (A otimes[F] L) := Algebra.Tenso
+  let : Mul (A otimes[F] L) := Algebra.TensorProduct.instMul
+  let : Mul (A.toSubalgebra otimes[F] (IsScalarTower.toAlgHom F L E).range) :=
+    Algebra.TensorProduct.instMul
+  exact Algebra.TensorProduct.congr (AlgEquiv.refl : A ≃ₐ[F] A)
+    (AlgEquiv.ofInjective (IsScalarTower.toAlgHom F L E) (RingHom.injective _))
+.symm.toMulEquiv.isField H
 
 中文:
 定理 of_isField
@@ -1621,7 +1686,12 @@ theorem of_isField
   -- need these otherwise the `exact` will stuck at typeclass
   have : SMulCommClass F A A := SMulCommClass.of_commMonoid F A A
   have : SMulCommClass F A.toSubalgebra A.toSubalgebra := ‹SMulCommClass F A A›
-  let : Mul (A otimes[F] L) := Algebra.Tenso
+  let : Mul (A otimes[F] L) := Algebra.TensorProduct.instMul
+  let : Mul (A.toSubalgebra otimes[F] (IsScalarTower.toAlgHom F L E).range) :=
+    Algebra.TensorProduct.instMul
+  exact Algebra.TensorProduct.congr (AlgEquiv.refl : A ≃ₐ[F] A)
+    (AlgEquiv.ofInjective (IsScalarTower.toAlgHom F L E) (RingHom.injective _))
+.symm.toMulEquiv.isField H
 
 Depends on / 依赖: LinearDisjoint, Subalgebra, Subalgebra.LinearDisjoint.of_isField, of_isField
 -/
@@ -1713,7 +1783,18 @@ theorem isField_of_forall
   let K : Type (max v w) := A otimes[F] B ⧸ M
   let : Field K := Ideal.Quotient.field _
   let i := IsScalarTower.toAlgHom F (A otimes[F] B) K
-  let fa := i.comp (Algebra.Ten
+  let fa := i.comp (Algebra.TensorProduct.includeLeft : A ->ₐ[F] _)
+  let fb := i.comp (Algebra.TensorProduct.includeRight : B ->ₐ[F] _)
+  replace H := H K fa fb
+  simp_rw [linearDisjoint_iff', AlgHom.fieldRange_toSubalgebra,
+    Subalgebra.linearDisjoint_iff_injective] at H
+  have hi : i = (fa.range.mulMap fb.range).comp (Algebra.TensorProduct.congr
+      (AlgEquiv.ofInjective fa fa.injective) (AlgEquiv.ofInjective fb fb.injective)) := by
+    ext <;> simp [fa, fb]
+  replace H : Function.Injective i := by simpa only
+    [hi, AlgHom.coe_comp, AlgEquiv.coe_toAlgHom, EquivLike.injective_comp, fa, this, K, fb]
+  change Function.Injective (Ideal.Quotient.mk M) at H
+  rwa [RingHom.injective_iff_ker_eq_bot, Ideal.mk_ker] at H
 
 中文:
 定理 isField_of_对任意
@@ -1724,7 +1805,18 @@ theorem isField_of_forall
   let K : Type (max v w) := A otimes[F] B ⧸ M
   let : Field K := Ideal.Quotient.field _
   let i := IsScalarTower.toAlgHom F (A otimes[F] B) K
-  let fa := i.comp (Algebra.Ten
+  let fa := i.comp (Algebra.TensorProduct.includeLeft : A ->ₐ[F] _)
+  let fb := i.comp (Algebra.TensorProduct.includeRight : B ->ₐ[F] _)
+  replace H := H K fa fb
+  simp_rw [linearDisjoint_iff', AlgHom.fieldRange_toSubalgebra,
+    Subalgebra.linearDisjoint_iff_injective] at H
+  have hi : i = (fa.range.mulMap fb.range).comp (Algebra.TensorProduct.congr
+      (AlgEquiv.ofInjective fa fa.injective) (AlgEquiv.ofInjective fb fb.injective)) := by
+    ext <;> simp [fa, fb]
+  replace H : Function.Injective i := by simpa only
+    [hi, AlgHom.coe_comp, AlgEquiv.coe_toAlgHom, EquivLike.injective_comp, fa, this, K, fb]
+  change Function.Injective (Ideal.Quotient.mk M) at H
+  rwa [RingHom.injective_iff_ker_eq_bot, Ideal.mk_ker] at H
 
 Depends on / 依赖: AlgHom, AlgHom.fieldRange_toSubalgebra, Algebra, Algebra.TensorProduct.includeLeft, Algebra.TensorProduct.includeRight, Ideal.Quotient.field, Ideal.exists_maximal, IsScalarTower, IsScalarTower.toAlgHom, Quotient, Ring.ne_bot_of_isMaximal_of_not_isField, Subalgebra, Subalgebra.linearDisjoi, TensorProduct, exists_maximal, fieldRange_toSubalgebra, i.comp, includeLeft, includeRight, linearDisjoi
 -/
@@ -1761,7 +1853,13 @@ theorem _root_.Algebra.TensorProduct.isField_of_isAlgebraic
     Subalgebra.LinearDisjoint.exists_field_of_isDomain_of_injective F E K
       (RingHom.injective _) (RingHom.injective _)
   let f : E otimes[F] K ≃ₐ[F] ↥(fa.fieldRange ⊔ fb.fieldRange) :=
-    Algebra.TensorProduct.congr (AlgEquiv.ofInjective fa hfa) (AlgEquiv
+    Algebra.TensorProduct.congr (AlgEquiv.ofInjective fa hfa) (AlgEquiv.ofInjective fb hfb)
+.trans (Subalgebra.LinearDisjoint.mulMap H)
+.trans (Subalgebra.equivOfEq _ _
+      (sup_toSubalgebra_of_isAlgebraic fa.fieldRange fb.fieldRange <| by
+        rwa [(AlgEquiv.ofInjective fa hfa).isAlgebraic_iff,
+          (AlgEquiv.ofInjective fb hfb).isAlgebraic_iff] at halg).symm)
+  f.toMulEquiv.isField (Field.toIsField _)
 
 中文:
 定理 _root_.代数.张量积.isField_of_isAlgebraic
@@ -1769,7 +1867,13 @@ theorem _root_.Algebra.TensorProduct.isField_of_isAlgebraic
     Subalgebra.LinearDisjoint.exists_field_of_isDomain_of_injective F E K
       (RingHom.injective _) (RingHom.injective _)
   let f : E otimes[F] K ≃ₐ[F] ↥(fa.fieldRange ⊔ fb.fieldRange) :=
-    Algebra.TensorProduct.congr (AlgEquiv.ofInjective fa hfa) (AlgEquiv
+    Algebra.TensorProduct.congr (AlgEquiv.ofInjective fa hfa) (AlgEquiv.ofInjective fb hfb)
+.trans (Subalgebra.LinearDisjoint.mulMap H)
+.trans (Subalgebra.equivOfEq _ _
+      (sup_toSubalgebra_of_isAlgebraic fa.fieldRange fb.fieldRange <| by
+        rwa [(AlgEquiv.ofInjective fa hfa).isAlgebraic_iff,
+          (AlgEquiv.ofInjective fb hfb).isAlgebraic_iff] at halg).symm)
+  f.toMulEquiv.isField (Field.toIsField _)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjective, Algebra, Algebra.TensorProduct.congr, LinearDisjoint, RingHom, RingHom.injective, Subalgebra, Subalgebra.LinearDisjoint.exists_field_of_isDomain_of_injective, Subalgebra.LinearDisjoint.mulMap, Subalgebra.equivOfEq, TensorProduct, equivOfEq, exists_field_of_isDomain_of_injective, fa.fieldRange, fb.fieldRange, fieldRange, injective, isAlgebraic_iff, mulMap
 -/

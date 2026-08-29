@@ -141,7 +141,13 @@ instance instAddLeftReflectLE
       simpa using ((InitialSeg.leAdd t r).trans f).eq (InitialSeg.leAdd t s) a
     have H₂ a : exists b, f (Sum.inr a) = Sum.inr b := by
       generalize hx : f (Sum.inr a) = x
-      obta
+      obtain x | x := x
+      · rw [← H₁, f.inj] at hx
+        contradiction
+      · exact ⟨x, rfl⟩
+    choose g hg using H₂
+    refine (RelEmbedding.ofMonotone g fun _ _ h => ?_).ordinal_type_le
+    rwa [← @Sum.lex_inr_inr _ t _ s, ← hg, ← hg, f.map_rel_iff, Sum.lex_inr_inr]
 
 中文:
 实例 instAddLeftReflectLE
@@ -152,7 +158,13 @@ instance instAddLeftReflectLE
       simpa using ((InitialSeg.leAdd t r).trans f).eq (InitialSeg.leAdd t s) a
     have H₂ a : exists b, f (Sum.inr a) = Sum.inr b := by
       generalize hx : f (Sum.inr a) = x
-      obta
+      obtain x | x := x
+      · rw [← H₁, f.inj] at hx
+        contradiction
+      · exact ⟨x, rfl⟩
+    choose g hg using H₂
+    refine (RelEmbedding.ofMonotone g fun _ _ h => ?_).ordinal_type_le
+    rwa [← @Sum.lex_inr_inr _ t _ s, ← hg, ← hg, f.map_rel_iff, Sum.lex_inr_inr]
 
 Depends on / 依赖: InitialSeg, InitialSeg.leAdd, RelEmbedding, RelEmbedding.ofMonotone, Sum.inl, Sum.inr, Sum.lex_inr_, Sum.lex_inr_inr, f.inj, f.map_rel_iff, generalize, lex_inr_, lex_inr_inr, map_rel_iff, ofMonotone, ordinal_type_le
 -/
@@ -1845,7 +1857,10 @@ instance monoid
   mul_assoc a b c :=
     Quotient.inductionOn₃ a b c fun _ _ _ =>
 .symm Quotient.sound ⟨⟨prodAssoc .., by grind [Prod.mk.injEq]⟩⟩
-  mul_one a := 
+  mul_one a := inductionOn a fun α _ _ => Quotient.sound ⟨⟨punitProd α, by simp [Prod.lex_def]⟩⟩
+  one_mul a := inductionOn a fun α _ _ => Quotient.sound ⟨⟨prodPUnit α, by simp [Prod.lex_def]⟩⟩
+
+@[simp]
 
 中文:
 实例 monoid
@@ -1855,7 +1870,10 @@ instance monoid
   mul_assoc a b c :=
     Quotient.inductionOn₃ a b c fun _ _ _ =>
 .symm Quotient.sound ⟨⟨prodAssoc .., by grind [Prod.mk.injEq]⟩⟩
-  mul_one a := 
+  mul_one a := inductionOn a fun α _ _ => Quotient.sound ⟨⟨punitProd α, by simp [Prod.lex_def]⟩⟩
+  one_mul a := inductionOn a fun α _ _ => Quotient.sound ⟨⟨prodPUnit α, by simp [Prod.lex_def]⟩⟩
+
+@[simp]
 
 Depends on / 依赖: Prod.Lex, Prod.lex_def, Prod.mk.injEq, Quot.sound, Quotient, Quotient.inductionOn, Quotient.liftOn, Quotient.sound, RelIso, RelIso.prodLexCongr, inductionOn, lex_def, mul_assoc, mul_one, one_mul, prodAssoc, prodLexCongr, prodPUnit, punitProd
 -/
@@ -2063,7 +2081,8 @@ instance mulLeftMono
       refine
         (RelEmbedding.ofMonotone (fun a : α × γ => (f a.1, a.2)) fun a b h => ?_).ordinal_type_le
       obtain ⟨-, -, h'⟩ | ⟨-, h'⟩ := h
-      · exact Prod.Lex.left _ _ (f.toRelEmbedding.map_rel_if
+      · exact Prod.Lex.left _ _ (f.toRelEmbedding.map_rel_iff.2 h')
+      · exact Prod.Lex.right _ h'⟩
 
 中文:
 实例 mulLeftMono
@@ -2073,7 +2092,8 @@ instance mulLeftMono
       refine
         (RelEmbedding.ofMonotone (fun a : α × γ => (f a.1, a.2)) fun a b h => ?_).ordinal_type_le
       obtain ⟨-, -, h'⟩ | ⟨-, h'⟩ := h
-      · exact Prod.Lex.left _ _ (f.toRelEmbedding.map_rel_if
+      · exact Prod.Lex.left _ _ (f.toRelEmbedding.map_rel_iff.2 h')
+      · exact Prod.Lex.right _ h'⟩
 
 Depends on / 依赖: Prod.Lex.left, Prod.Lex.right, Quotient, Quotient.inductionOn, RelEmbedding, RelEmbedding.ofMonotone, f.toRelEmbedding.map_rel_iff, map_rel_iff, ofMonotone, ordinal_type_le, toRelEmbedding
 -/
@@ -2098,7 +2118,7 @@ instance mulRightMono
         (RelEmbedding.ofMonotone (fun a : γ × α => (a.1, f a.2)) fun a b h => ?_).ordinal_type_le
       obtain ⟨-, -, h'⟩ | ⟨-, h'⟩ := h
       · exact Prod.Lex.left _ _ h'
-      · exact Prod.Lex.ri
+      · exact Prod.Lex.right _ (f.toRelEmbedding.map_rel_iff.2 h')⟩
 
 中文:
 实例 mulRightMono
@@ -2109,7 +2129,7 @@ instance mulRightMono
         (RelEmbedding.ofMonotone (fun a : γ × α => (a.1, f a.2)) fun a b h => ?_).ordinal_type_le
       obtain ⟨-, -, h'⟩ | ⟨-, h'⟩ := h
       · exact Prod.Lex.left _ _ h'
-      · exact Prod.Lex.ri
+      · exact Prod.Lex.right _ (f.toRelEmbedding.map_rel_iff.2 h')⟩
 
 Depends on / 依赖: Prod.Lex.left, Prod.Lex.right, Quotient, Quotient.inductionOn, RelEmbedding, RelEmbedding.ofMonotone, f.toRelEmbedding.map_rel_iff, map_rel_iff, ofMonotone, ordinal_type_le, toRelEmbedding
 -/
@@ -2185,7 +2205,13 @@ theorem mul_le_of_limit_aux
   rw [← typein_lt_typein (Prod.Lex s r)]; rw [typein_enum]
   have := H _ (h.succ_lt (typein_lt_type s b))
   rw [mul_succ] at this
-  have := ((add_lt_add_iff_left _).2 (typein_lt_type _ a)).trans_le thi
+  have := ((add_lt_add_iff_left _).2 (typein_lt_type _ a)).trans_le this
+  refine (RelEmbedding.ofMonotone (fun a => ?_) fun a b => ?_).ordinal_type_le.trans_lt this
+  · rcases a with ⟨⟨b', a'⟩, h⟩
+    by_cases e : b = b'
+    · exact .inr ⟨a', by grind [asymm_of s]⟩
+    · exact .inl (⟨b', by grind⟩, a')
+  · grind [subrel_val, Sum.Lex.sep, asymm_of s]
 
 中文:
 定理 mul_le_of_limit_aux
@@ -2196,7 +2222,13 @@ theorem mul_le_of_limit_aux
   rw [← typein_lt_typein (Prod.Lex s r)]; rw [typein_enum]
   have := H _ (h.succ_lt (typein_lt_type s b))
   rw [mul_succ] at this
-  have := ((add_lt_add_iff_left _).2 (typein_lt_type _ a)).trans_le thi
+  have := ((add_lt_add_iff_left _).2 (typein_lt_type _ a)).trans_le this
+  refine (RelEmbedding.ofMonotone (fun a => ?_) fun a b => ?_).ordinal_type_le.trans_lt this
+  · rcases a with ⟨⟨b', a'⟩, h⟩
+    by_cases e : b = b'
+    · exact .inr ⟨a', by grind [asymm_of s]⟩
+    · exact .inl (⟨b', by grind⟩, a')
+  · grind [subrel_val, Sum.Lex.sep, asymm_of s]
 -/
 private theorem mul_le_of_limit_aux {α β r s} [IsWellOrder α r] [IsWellOrder β s] {c}
     (h : IsSuccLimit (type s)) (H : forall b' < type s, type r * b' <= c) (l : c < type r * type s) :
@@ -3113,7 +3145,7 @@ theorem mul_add_div_mul
         gcongr
         rw [succ_le_iff]
         exact lt_mul_succ_div b hd
-
+    · grw [← mul_le_iff_le_div H, mul_assoc, mul_div_le b d, ← le_self_add]
 
 中文:
 定理 mul_add_div_mul
@@ -3128,7 +3160,7 @@ theorem mul_add_div_mul
         gcongr
         rw [succ_le_iff]
         exact lt_mul_succ_div b hd
-
+    · grw [← mul_le_iff_le_div H, mul_assoc, mul_div_le b d, ← le_self_add]
 
 Depends on / 依赖: div_zero, eq_or_ne, hc.ne_zero, le_antisymm, le_self_add, lt_mul_iff_div_lt, lt_mul_succ_div, lt_succ_iff, mul_assoc, mul_div_le, mul_le_iff_le_div, mul_ne_zero, mul_succ, mul_zero, ne_zero, succ_le_iff
 -/
@@ -4212,7 +4244,11 @@ theorem natCast_div
     apply le_antisymm
     · rw [← mul_le_iff_le_div hn', ← natCast_mul, Nat.cast_le, mul_comm]
       apply Nat.div_mul_le_self
-    · rw [div_le hn', succ_eq_add_one, ← Nat.cast_succ, ← natCas
+    · rw [div_le hn', succ_eq_add_one, ← Nat.cast_succ, ← natCast_mul, Nat.cast_lt, mul_comm,
+        ← Nat.div_lt_iff_lt_mul (Nat.pos_of_ne_zero hn)]
+      apply Nat.lt_succ_self
+
+@[simp, norm_cast]
 
 中文:
 定理 natCast_div
@@ -4225,7 +4261,11 @@ theorem natCast_div
     apply le_antisymm
     · rw [← mul_le_iff_le_div hn', ← natCast_mul, Nat.cast_le, mul_comm]
       apply Nat.div_mul_le_self
-    · rw [div_le hn', succ_eq_add_one, ← Nat.cast_succ, ← natCas
+    · rw [div_le hn', succ_eq_add_one, ← Nat.cast_succ, ← natCast_mul, Nat.cast_lt, mul_comm,
+        ← Nat.div_lt_iff_lt_mul (Nat.pos_of_ne_zero hn)]
+      apply Nat.lt_succ_self
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Nat.cast_le, Nat.cast_lt, Nat.cast_ne_zero, Nat.cast_succ, Nat.div_lt_iff_lt_mul, Nat.div_mul_le_self, Nat.lt_succ_self, Nat.pos_of_ne_zero, Ordinal, cast_le, cast_lt, cast_ne_zero, cast_succ, div_le, div_lt_iff_lt_mul, div_mul_le_self, eq_or_ne, le_antisymm, lt_succ_self, mul_comm
 -/
@@ -4850,7 +4890,15 @@ theorem isSuccPrelimit_iff_omega0_dvd
   proof: by
   refine ⟨fun l => ⟨a / ω, le_antisymm ?_ (mul_div_le _ _)⟩, fun h => ?_⟩
   · refine l.le_iff_forall_le.2 fun x hx => le_of_lt ?_
-    rw [lt_mul_iff_div_lt omega0_ne_zero]; rw [← succ_le_iff]; rw [← mul_le_iff_le_div omega0_ne_zero]; rw [mul_succ]; rw [add_le_iff_of_isSuccLimit isSuccLimit_omega0
+    rw [lt_mul_iff_div_lt omega0_ne_zero]; rw [← succ_le_iff]; rw [← mul_le_iff_le_div omega0_ne_zero]; rw [mul_succ]; rw [add_le_iff_of_isSuccLimit isSuccLimit_omega0]
+    intro b hb
+    rcases lt_omega0.1 hb with ⟨n, rfl⟩
+    grw [mul_div_le]
+    exact (lt_sub.1 <| natCast_lt_of_isSuccLimit (isSuccLimit_sub l hx) _).le
+  · rcases h with ⟨a0, b, rfl⟩
+    exact isSuccPrelimit_mul_left isSuccLimit_omega0
+
+@[deprecated isSuccPrelimit_iff_omega0_dvd (since := "2026-02-01")]
 
 中文:
 定理 isSuccPrelimit_iff_omega0_dvd
@@ -4859,7 +4907,15 @@ theorem isSuccPrelimit_iff_omega0_dvd
   证明: by
   refine ⟨fun l => ⟨a / ω, le_antisymm ?_ (mul_div_le _ _)⟩, fun h => ?_⟩
   · refine l.le_iff_forall_le.2 fun x hx => le_of_lt ?_
-    rw [lt_mul_iff_div_lt omega0_ne_zero]; rw [← succ_le_iff]; rw [← mul_le_iff_le_div omega0_ne_zero]; rw [mul_succ]; rw [add_le_iff_of_isSuccLimit isSuccLimit_omega0
+    rw [lt_mul_iff_div_lt omega0_ne_zero]; rw [← succ_le_iff]; rw [← mul_le_iff_le_div omega0_ne_zero]; rw [mul_succ]; rw [add_le_iff_of_isSuccLimit isSuccLimit_omega0]
+    intro b hb
+    rcases lt_omega0.1 hb with ⟨n, rfl⟩
+    grw [mul_div_le]
+    exact (lt_sub.1 <| natCast_lt_of_isSuccLimit (isSuccLimit_sub l hx) _).le
+  · rcases h with ⟨a0, b, rfl⟩
+    exact isSuccPrelimit_mul_left isSuccLimit_omega0
+
+@[deprecated isSuccPrelimit_iff_omega0_dvd (since := "2026-02-01")]
 
 Depends on / 依赖: MetricSpace, add_le_iff_of_isSuccLimit, isSuccLim, isSuccLimit_omega0, isSuccLimit_sub, isSuccPrelimit_mul_left, l.le_iff_forall_le, le_antisymm, le_iff_forall_le, le_of_lt, lt_mul_iff_div_lt, lt_omega0, lt_sub, mul_div_le, mul_le_iff_le_div, mul_succ, natCast_lt_of_isSuccLimit, omega0_ne_zero, succ_le_iff
 -/
@@ -4968,7 +5024,9 @@ theorem isSuccLimit_ord
     refine fun a ha => ?_
     contrapose! ha
     rwa [add_one_of_aleph0_le] at ha
-    rw [← ord_le]; rw [← IsSuccLimit.le_succ_iff]; rw [succ_eq_add_one]; rw 
+    rw [← ord_le]; rw [← IsSuccLimit.le_succ_iff]; rw [succ_eq_add_one]; rw [ord_le]; rw [card_add_one]
+    · exact hc.trans ha
+    · simp
 
 中文:
 定理 isSuccLimit_ord
@@ -4981,7 +5039,9 @@ theorem isSuccLimit_ord
     refine fun a ha => ?_
     contrapose! ha
     rwa [add_one_of_aleph0_le] at ha
-    rw [← ord_le]; rw [← IsSuccLimit.le_succ_iff]; rw [succ_eq_add_one]; rw 
+    rw [← ord_le]; rw [← IsSuccLimit.le_succ_iff]; rw [succ_eq_add_one]; rw [ord_le]; rw [card_add_one]
+    · exact hc.trans ha
+    · simp
 
 Depends on / 依赖: IsSuccLimit, IsSuccLimit.le_succ_iff, add_one_of_aleph0_le, aleph0_pos, aleph0_pos.trans_le, card_add_one, contrapose, hc.trans, isSuccPrelimit_iff_succ_lt, le_succ_iff, lt_ord, ord_le, simp_rw, succ_eq_add_one, trans_le
 -/

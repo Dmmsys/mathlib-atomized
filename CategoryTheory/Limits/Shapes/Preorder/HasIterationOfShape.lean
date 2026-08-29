@@ -176,7 +176,22 @@ lemma hasColimitsOfShape_of_initialSeg
       (OrderIso.ofRelIsoLT (RelIso.ofSurjective f.toRelEmbedding hf)).equivalence.symm
   · let s := f.toPrincipalSeg hf
     obtain ⟨i, hi₀⟩ : exists i, i = s.top := ⟨_, rfl⟩
-    induction i using SuccOrder.limitRecO
+    induction i using SuccOrder.limitRecOn with
+    | isMin i hi =>
+      subst hi₀
+      exact (hi.not_lt (s.lt_top (Classical.arbitrary _))).elim
+    | succ i hi _ =>
+      obtain ⟨a, rfl⟩ := (s.mem_range_iff_rel (b := i)).2 (by
+        simpa only [← hi₀] using Order.lt_succ_of_not_isMax hi)
+      have : OrderTop α :=
+        { top := a
+          le_top b := by
+            rw [← s.le_iff_le]
+            exact Order.le_of_lt_succ (by simpa only [hi₀] using s.lt_top b) }
+      infer_instance
+    | isSuccLimit i hi =>
+      subst hi₀
+      exact hasColimitsOfShape_of_isSuccLimit' C s hi
 
 中文:
 引理 hasColimitsOfShape_of_initialSeg
@@ -186,7 +201,22 @@ lemma hasColimitsOfShape_of_initialSeg
       (OrderIso.ofRelIsoLT (RelIso.ofSurjective f.toRelEmbedding hf)).equivalence.symm
   · let s := f.toPrincipalSeg hf
     obtain ⟨i, hi₀⟩ : exists i, i = s.top := ⟨_, rfl⟩
-    induction i using SuccOrder.limitRecO
+    induction i using SuccOrder.limitRecOn with
+    | isMin i hi =>
+      subst hi₀
+      exact (hi.not_lt (s.lt_top (Classical.arbitrary _))).elim
+    | succ i hi _ =>
+      obtain ⟨a, rfl⟩ := (s.mem_range_iff_rel (b := i)).2 (by
+        simpa only [← hi₀] using Order.lt_succ_of_not_isMax hi)
+      have : OrderTop α :=
+        { top := a
+          le_top b := by
+            rw [← s.le_iff_le]
+            exact Order.le_of_lt_succ (by simpa only [hi₀] using s.lt_top b) }
+      infer_instance
+    | isSuccLimit i hi =>
+      subst hi₀
+      exact hasColimitsOfShape_of_isSuccLimit' C s hi
 
 Depends on / 依赖: Classical, Classical.arbitrary, Function, Function.Surjective, Order.lt_succ_of_not_isMax, OrderIso, OrderIso.ofRelIsoLT, RelIso, RelIso.ofSurjective, SuccOrder, SuccOrder.limitRecOn, Surjective, arbitrary, equivalence, equivalence.symm, f.toPrincipalSeg, f.toRelEmbedding, hasColimitsOfShape_of_equivalence, hi.not_lt, limitRecOn
 -/

@@ -50,7 +50,11 @@ lemma tendsto_measure_of_ae_tendsto_indicator
            ← MeasureTheory.lintegral_indicator_one (As_mble _)]
   refine tendsto_lintegral_filter_of_dominated_convergence (B.indicator (1 : α -> Real>=0∞))
           (Eventually.of_forall ?_) ?_ ?_ ?_
-  · exact fun i => Measurable.indica
+  · exact fun i => Measurable.indicator measurable_const (As_mble i)
+  · filter_upwards [As_le_B] with i hi
+    exact Eventually.of_forall fun x => by grw [hi]
+  · rwa [← lintegral_indicator_one B_mble] at B_finmeas
+  · simpa only [Pi.one_def, tendsto_indicator_const_apply_iff_eventually] using h_lim
 
 中文:
 引理 tendsto_measure_of_ae_tendsto_indicator
@@ -60,7 +64,11 @@ lemma tendsto_measure_of_ae_tendsto_indicator
            ← MeasureTheory.lintegral_indicator_one (As_mble _)]
   refine tendsto_lintegral_filter_of_dominated_convergence (B.indicator (1 : α -> Real>=0∞))
           (Eventually.of_forall ?_) ?_ ?_ ?_
-  · exact fun i => Measurable.indica
+  · exact fun i => Measurable.indicator measurable_const (As_mble i)
+  · filter_upwards [As_le_B] with i hi
+    exact Eventually.of_forall fun x => by grw [hi]
+  · rwa [← lintegral_indicator_one B_mble] at B_finmeas
+  · simpa only [Pi.one_def, tendsto_indicator_const_apply_iff_eventually] using h_lim
 
 Depends on / 依赖: A_mble, As_le_B, As_mble, B.indicator, B_finmeas, B_mble, Eventually, Eventually.of_forall, Measurable, Measurable.indicator, MeasureTheory, MeasureTheory.lintegral_indicator_one, Pi.one_def, filter_upwards, indicator, lintegral_indicator_one, measurable_const, of_forall, one_def, simp_rw
 -/

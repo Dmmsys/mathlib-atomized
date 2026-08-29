@@ -155,7 +155,7 @@ theorem ghostComponent_verschiebungFun
   simp only [ghostComponent_apply, aeval_wittPolynomial]
   rw [Finset.sum_range_succ']; rw [verschiebungFun_coeff]; rw [if_pos rfl]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]; rw [add_zero]; rw [Finset.mul_sum]; rw [Finset.sum_congr rfl]
   rintro i -
-  simp only [pow_succ', versch
+  simp only [pow_succ', verschiebungFun_coeff_succ, Nat.succ_sub_succ_eq_sub, mul_assoc]
 
 中文:
 定理 ghostComponent_verschiebungFun
@@ -164,7 +164,7 @@ theorem ghostComponent_verschiebungFun
   simp only [ghostComponent_apply, aeval_wittPolynomial]
   rw [Finset.sum_range_succ']; rw [verschiebungFun_coeff]; rw [if_pos rfl]; rw [zero_pow (pow_ne_zero _ hp.1.ne_zero)]; rw [mul_zero]; rw [add_zero]; rw [Finset.mul_sum]; rw [Finset.sum_congr rfl]
   rintro i -
-  simp only [pow_succ', versch
+  simp only [pow_succ', verschiebungFun_coeff_succ, Nat.succ_sub_succ_eq_sub, mul_assoc]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_congr, Finset.sum_range_succ, Nat.succ_sub_succ_eq_sub, add_zero, aeval_wittPolynomial, ghostComponent_apply, if_pos, mul_assoc, mul_sum, mul_zero, ne_zero, pow_ne_zero, pow_succ, succ_sub_succ_eq_sub, sum_congr, sum_range_succ, verschiebungFun_coeff, verschiebungFun_coeff_succ
 -/
@@ -543,7 +543,14 @@ theorem bind₁_verschiebungPoly_wittPolynomial
   · obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hn
     rw [Nat.succ_eq_add_one]; rw [add_tsub_cancel_right]
     simp only [map_mul]
-    rw [map_na
+    rw [map_natCast]; rw [hom_bind₁]
+    calc
+      _ = ghostComponent (n + 1) (verschiebung <| mk p x) := by
+       apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+       funext k
+       simp only [← aeval_verschiebungPoly]
+       exact eval₂Hom_congr (RingHom.ext_int _ _) rfl rfl
+      _ = _ := by rw [ghostComponent_verschiebung]; rfl
 
 中文:
 定理 bind₁_verschiebungPoly_wittPolynomial
@@ -556,7 +563,14 @@ theorem bind₁_verschiebungPoly_wittPolynomial
   · obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hn
     rw [Nat.succ_eq_add_one]; rw [add_tsub_cancel_right]
     simp only [map_mul]
-    rw [map_na
+    rw [map_natCast]; rw [hom_bind₁]
+    calc
+      _ = ghostComponent (n + 1) (verschiebung <| mk p x) := by
+       apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+       funext k
+       simp only [← aeval_verschiebungPoly]
+       exact eval₂Hom_congr (RingHom.ext_int _ _) rfl rfl
+      _ = _ := by rw [ghostComponent_verschiebung]; rfl
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.funext, Nat.exists_eq_succ_of_ne_zero, Nat.succ_eq_add_one, RingHom, RingHom.ext_int, add_tsub_cancel_right, aeval_verschiebungPoly, exists_eq_succ_of_ne_zero, ext_int, ghostComponent, map_mul, map_natCast, map_zero, split_ifs, succ_eq_add_one, verschiebung, verschiebungPoly_zero, wittPolynomial_zero
 -/

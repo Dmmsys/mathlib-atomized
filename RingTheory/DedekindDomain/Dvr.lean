@@ -83,7 +83,8 @@ theorem Ring.DimensionLEOne.localization
   refine Ideal.isMaximal_def.mpr ⟨hpp.ne_top, Ideal.maximal_of_no_maximal fun P hpP hPm => ?_⟩
   have hpP' : (⟨p, hpp⟩ : { p : Ideal Rₘ // p.IsPrime }) < ⟨P, hPm.isPrime⟩ := hpP
   rw [← (IsLocalization.orderIsoOfPrime M Rₘ).lt_iff_lt] at hpP'
-  refine h.not_lt_lt ⊥ (p.under R) 
+  refine h.not_lt_lt ⊥ (p.under R) (P.under R) ⟨?_, hpP'⟩
+  exact IsLocalization.bot_lt_under_prime _ _ hM _ hp0⟩
 
 中文:
 定理 环.维数不超过一.localization
@@ -93,7 +94,8 @@ theorem Ring.DimensionLEOne.localization
   refine Ideal.isMaximal_def.mpr ⟨hpp.ne_top, Ideal.maximal_of_no_maximal fun P hpP hPm => ?_⟩
   have hpP' : (⟨p, hpp⟩ : { p : Ideal Rₘ // p.IsPrime }) < ⟨P, hPm.isPrime⟩ := hpP
   rw [← (IsLocalization.orderIsoOfPrime M Rₘ).lt_iff_lt] at hpP'
-  refine h.not_lt_lt ⊥ (p.under R) 
+  refine h.not_lt_lt ⊥ (p.under R) (P.under R) ⟨?_, hpP'⟩
+  exact IsLocalization.bot_lt_under_prime _ _ hM _ hp0⟩
 
 Depends on / 依赖: Ideal.isMaximal_def.mpr, Ideal.maximal_of_no_maximal, IsLocalization, IsLocalization.bot_lt_under_prime, IsLocalization.orderIsoOfPrime, IsPrime, P.under, bot_lt_under_prime, h.not_lt_lt, hPm.isPrime, hpp.ne_top, isMaximal_def, isPrime, lt_iff_lt, maximal_of_no_maximal, ne_top, not_lt_lt, orderIsoOfPrime, p.IsPrime, p.under
 -/
@@ -120,7 +122,20 @@ theorem IsLocalization.isDedekindDomain
     rintro ⟨y, hy⟩
     exact IsUnit.mk0 _ (mt IsFractionRing.to_map_eq_zero_iff.mp (nonZeroDivisors.ne_zero (hM hy)))
   let : Algebra Aₘ (FractionRing A) := RingHom.toAlgebra (IsLocalization.lift h)
-  have : IsScalarTower A A
+  have : IsScalarTower A Aₘ (FractionRing A) :=
+    IsScalarTower.of_algebraMap_eq fun x => (IsLocalization.lift_eq h x).symm
+  have : IsFractionRing Aₘ (FractionRing A) :=
+    IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M _ _
+  refine (isDedekindDomain_iff _ (FractionRing A)).mpr ⟨?_, ?_, ?_, ?_⟩
+  · infer_instance
+  · exact IsLocalization.isNoetherianRing M _ inferInstance
+  · exact Ring.DimensionLEOne.localization Aₘ hM
+  · intro x hx
+    obtain ⟨⟨y, y_mem⟩, hy⟩ := hx.exists_multiple_integral_of_isLocalization M _
+    obtain ⟨z, hz⟩ := (isIntegrallyClosed_iff _).mp IsDedekindRing.toIsIntegralClosure hy
+    refine ⟨IsLocalization.mk' Aₘ z ⟨y, y_mem⟩, (IsLocalization.lift_mk'_spec _ _ _ _).mpr ?_⟩
+    rw [hz]; rw [← Algebra.smul_def]
+    rfl
 
 中文:
 定理 是Localization.isDedekindDomain
@@ -130,7 +145,20 @@ theorem IsLocalization.isDedekindDomain
     rintro ⟨y, hy⟩
     exact IsUnit.mk0 _ (mt IsFractionRing.to_map_eq_zero_iff.mp (nonZeroDivisors.ne_zero (hM hy)))
   let : Algebra Aₘ (FractionRing A) := RingHom.toAlgebra (IsLocalization.lift h)
-  have : IsScalarTower A A
+  have : IsScalarTower A Aₘ (FractionRing A) :=
+    IsScalarTower.of_algebraMap_eq fun x => (IsLocalization.lift_eq h x).symm
+  have : IsFractionRing Aₘ (FractionRing A) :=
+    IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M _ _
+  refine (isDedekindDomain_iff _ (FractionRing A)).mpr ⟨?_, ?_, ?_, ?_⟩
+  · infer_instance
+  · exact IsLocalization.isNoetherianRing M _ inferInstance
+  · exact Ring.DimensionLEOne.localization Aₘ hM
+  · intro x hx
+    obtain ⟨⟨y, y_mem⟩, hy⟩ := hx.exists_multiple_integral_of_isLocalization M _
+    obtain ⟨z, hz⟩ := (isIntegrallyClosed_iff _).mp IsDedekindRing.toIsIntegralClosure hy
+    refine ⟨IsLocalization.mk' Aₘ z ⟨y, y_mem⟩, (IsLocalization.lift_mk'_spec _ _ _ _).mpr ?_⟩
+    rw [hz]; rw [← Algebra.smul_def]
+    rfl
 
 Depends on / 依赖: Algebra, FractionRing, IsFractionRing, IsFractionRing.isFractionRing_of_isDomain_of_isLocalization, IsFractionRing.to_map_eq_zero_iff.mp, IsLocalization, IsLocalization.lift, IsLocalization.lift_eq, IsScalarTower, IsScalarTower.of_algebraMap_eq, IsUnit, IsUnit.mk0, RingHom, RingHom.toAlgebra, algebraMap, isFractionRing_of_isDomain_of_isLocalization, lift_eq, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero
 -/
@@ -210,7 +238,9 @@ theorem IsLocalization.AtPrime.not_isField
       (Ideal.eq_top_of_isUnit_mem _
         ((IsLocalization.AtPrime.to_map_mem_maximal_iff Aₘ P _).mpr x_mem)
         (isUnit_iff_ne_zero.mpr
-          ((map_ne_
+          ((map_ne_zero_iff (algebraMap A Aₘ)
+                (IsLocalization.injective Aₘ P.primeCompl_le_nonZeroDivisors)).mpr
+            x_ne)))
 
 中文:
 定理 是Localization.AtPrime.not_isField
@@ -224,7 +254,9 @@ theorem IsLocalization.AtPrime.not_isField
       (Ideal.eq_top_of_isUnit_mem _
         ((IsLocalization.AtPrime.to_map_mem_maximal_iff Aₘ P _).mpr x_mem)
         (isUnit_iff_ne_zero.mpr
-          ((map_ne_
+          ((map_ne_zero_iff (algebraMap A Aₘ)
+                (IsLocalization.injective Aₘ P.primeCompl_le_nonZeroDivisors)).mpr
+            x_ne)))
 
 Depends on / 依赖: AtPrime, Ideal.eq_top_of_isUnit_mem, IsLocalRing, IsLocalRing.maximalIdeal.isMaximal, IsLocalization, IsLocalization.AtPrime.to_map_mem_maximal_iff, IsLocalization.injective, P.ne_bot_iff.mp, P.primeCompl_le_nonZeroDivisors, algebraMap, eq_top_of_isUnit_mem, h.toField, injective, isMaximal, isUnit_iff_ne_zero, isUnit_iff_ne_zero.mpr, map_ne_zero_iff, maximalIdeal, ne_bot_iff, ne_top
 -/
@@ -254,7 +286,8 @@ theorem IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
   let : IsLocalRing Aₘ := IsLocalization.AtPrime.isLocalRing Aₘ P
   have hnf := IsLocalization.AtPrime.not_isField A hP Aₘ
   exact
-    ((IsDiscreteValuationRing.TFAE Aₘ hnf).out 0 2).mp
+    ((IsDiscreteValuationRing.TFAE Aₘ hnf).out 0 2).mpr
+      (IsLocalization.AtPrime.isDedekindDomain A P _)
 
 中文:
 定理 是Localization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
@@ -265,7 +298,8 @@ theorem IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain
   let : IsLocalRing Aₘ := IsLocalization.AtPrime.isLocalRing Aₘ P
   have hnf := IsLocalization.AtPrime.not_isField A hP Aₘ
   exact
-    ((IsDiscreteValuationRing.TFAE Aₘ hnf).out 0 2).mp
+    ((IsDiscreteValuationRing.TFAE Aₘ hnf).out 0 2).mpr
+      (IsLocalization.AtPrime.isDedekindDomain A P _)
 
 Depends on / 依赖: AtPrime, IsDedekindRing, IsDedekindRing.toIsNoetherian, IsDiscreteValuationRing, IsDiscreteValuationRing.TFAE, IsLocalRing, IsLocalization, IsLocalization.AtPrime.isDedekindDomain, IsLocalization.AtPrime.isLocalRing, IsLocalization.AtPrime.not_isField, IsLocalization.isNoetherianRing, IsNoetherianRing, P.primeCompl, isDedekindDomain, isLocalRing, isNoetherianRing, not_isField, primeCompl, toIsNoetherian
 -/
@@ -310,7 +344,17 @@ instance IsDedekindDomainDvr.ring_dimensionLEOne
     rcases p.exists_le_maximal (Ideal.IsPrime.ne_top hpp) with ⟨q, hq, hpq⟩
     let f := (IsLocalization.orderIsoOfPrime q.primeCompl (Localization.AtPrime q)).symm
     let P := f ⟨p, hpp, hpq.disjoint_compl_left⟩
-    let Q := f ⟨q, hq.isPrime, Set.disjoint_left.mpr fun _ a => 
+    let Q := f ⟨q, hq.isPrime, Set.disjoint_left.mpr fun _ a => a⟩
+    have hinj : Function.Injective (algebraMap A (Localization.AtPrime q)) :=
+      IsLocalization.injective (Localization.AtPrime q) q.primeCompl_le_nonZeroDivisors
+    have hp1 : P.1 != ⊥ := fun x => hp ((p.map_eq_bot_iff_of_injective hinj).mp x)
+    have hq1 : Q.1 != ⊥ :=
+      fun x => (ne_bot_of_le_ne_bot hp hpq) ((q.map_eq_bot_iff_of_injective hinj).mp x)
+    rcases (IsDiscreteValuationRing.iff_pid_with_one_nonzero_prime (Localization.AtPrime q)).mp
+      (h.is_dvr_at_nonzero_prime q (ne_bot_of_le_ne_bot hp hpq) hq.isPrime) with ⟨_, huq⟩
+    rw [show p = q from Subtype.val_inj.mpr <| f.injective <|
+      Subtype.val_inj.mp (huq.unique ⟨hp1]; rw [P.2⟩ ⟨hq1]; rw [Q.2⟩)]
+    exact hq
 
 中文:
 实例 是DedekindDomainDvr.ring_dimensionLEOne
@@ -320,7 +364,17 @@ instance IsDedekindDomainDvr.ring_dimensionLEOne
     rcases p.exists_le_maximal (Ideal.IsPrime.ne_top hpp) with ⟨q, hq, hpq⟩
     let f := (IsLocalization.orderIsoOfPrime q.primeCompl (Localization.AtPrime q)).symm
     let P := f ⟨p, hpp, hpq.disjoint_compl_left⟩
-    let Q := f ⟨q, hq.isPrime, Set.disjoint_left.mpr fun _ a => 
+    let Q := f ⟨q, hq.isPrime, Set.disjoint_left.mpr fun _ a => a⟩
+    have hinj : Function.Injective (algebraMap A (Localization.AtPrime q)) :=
+      IsLocalization.injective (Localization.AtPrime q) q.primeCompl_le_nonZeroDivisors
+    have hp1 : P.1 != ⊥ := fun x => hp ((p.map_eq_bot_iff_of_injective hinj).mp x)
+    have hq1 : Q.1 != ⊥ :=
+      fun x => (ne_bot_of_le_ne_bot hp hpq) ((q.map_eq_bot_iff_of_injective hinj).mp x)
+    rcases (IsDiscreteValuationRing.iff_pid_with_one_nonzero_prime (Localization.AtPrime q)).mp
+      (h.is_dvr_at_nonzero_prime q (ne_bot_of_le_ne_bot hp hpq) hq.isPrime) with ⟨_, huq⟩
+    rw [show p = q from Subtype.val_inj.mpr <| f.injective <|
+      Subtype.val_inj.mp (huq.unique ⟨hp1]; rw [P.2⟩ ⟨hq1]; rw [Q.2⟩)]
+    exact hq
 
 Depends on / 依赖: AtPrime, Function, Function.Injective, Ideal.IsPrime.ne_top, Injective, IsLocalization, IsLocalization.injective, IsLocalization.orderIsoOfPrime, IsPrime, Localization, Localization.AtPrime, Set.disjoint_left.mpr, algebraMap, disjoint_compl_left, disjoint_left, exists_le_maximal, hpq.disjoint_compl_left, hq.isPrime, injective, isPrime
 -/

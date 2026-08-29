@@ -285,7 +285,7 @@ lemma tprod_bot
   · rw [eq_true_intro hf, if_pos]
     simp only [and_true]
     infer_instance
-  
+  · rwa [if_neg (by tauto), if_pos (hasProd_bot hL _ _), finprod_of_infinite_mulSupport]
 
 中文:
 引理 tprod_bot
@@ -299,7 +299,7 @@ lemma tprod_bot
   · rw [eq_true_intro hf, if_pos]
     simp only [and_true]
     infer_instance
-  
+  · rwa [if_neg (by tauto), if_pos (hasProd_bot hL _ _), finprod_of_infinite_mulSupport]
 
 Depends on / 依赖: Finite, L.LeAtTop, L.leAtTop_of_not_NeBot, L.support_eq_univ, LeAtTop, Set.inter_univ, Set.mulIndicator_univ, and_true, dif_pos, eq_true_intro, finprod_of_infinite_mulSupport, hasProd_bot, if_neg, if_pos, infer_instance, inter_univ, leAtTop_of_not_NeBot, mulIndicator_univ, mulSupport, multipliable_bot
 -/
@@ -562,7 +562,13 @@ theorem hasProd_fintype_support
     (L.filter.biInter_mem L.support.toFinite).mpr (by tauto)
   have h2 : ⋂ b in L.supportᶜ, {s | b ∉ s} in L.filter :=
     (L.filter.biInter_mem L.supportᶜ.toFinite).mpr
-      (fun b hb => (L.eventuall
+      (fun b hb => (L.eventually_mem_or_not_mem b).resolve_left hb)
+  filter_upwards [h1, h2] with s hs hs'
+  congr 1
+  simp only [Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_compl_iff] at hs hs'
+  grind
+
+@[to_additive]
 
 中文:
 定理 hasProd_fintype_support
@@ -573,7 +579,13 @@ theorem hasProd_fintype_support
     (L.filter.biInter_mem L.support.toFinite).mpr (by tauto)
   have h2 : ⋂ b in L.supportᶜ, {s | b ∉ s} in L.filter :=
     (L.filter.biInter_mem L.supportᶜ.toFinite).mpr
-      (fun b hb => (L.eventuall
+      (fun b hb => (L.eventually_mem_or_not_mem b).resolve_left hb)
+  filter_upwards [h1, h2] with s hs hs'
+  congr 1
+  simp only [Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_compl_iff] at hs hs'
+  grind
+
+@[to_additive]
 
 Depends on / 依赖: L.eventually_mem_or_not_mem, L.filter, L.filter.biInter_mem, L.support, L.support.toFinite, Set.mem_compl_iff, Set.mem_iInter, Set.mem_ofPred_eq, biInter_mem, eventually_mem_or_not_mem, filter, filter_upwards, mem_compl_iff, mem_iInter, mem_ofPred_eq, resolve_left, support, tendsto_nhds_of_eventually_eq, toFinite
 -/
@@ -678,7 +690,7 @@ theorem hasProd_prod_support_of_ne_finset_one
     (L.filter.biInter_mem (Set.toFinite _)).mpr (fun b hb => hb.2)
   filter_upwards [h1, L.eventually_le_support] with t ht ht'
   simp only [Set.mem_iInter] at ht
-  apply Finset.prod_congr_o
+  apply Finset.prod_congr_of_eq_on_inter <;> grind
 
 中文:
 定理 hasProd_prod_support_of_ne_finset_one
@@ -689,7 +701,7 @@ theorem hasProd_prod_support_of_ne_finset_one
     (L.filter.biInter_mem (Set.toFinite _)).mpr (fun b hb => hb.2)
   filter_upwards [h1, L.eventually_le_support] with t ht ht'
   simp only [Set.mem_iInter] at ht
-  apply Finset.prod_congr_o
+  apply Finset.prod_congr_of_eq_on_inter <;> grind
 
 Depends on / 依赖: Finset, Finset.prod_congr_of_eq_on_inter, L.eventually_le_support, L.filter, L.filter.biInter_mem, L.support, Set.mem_iInter, Set.toFinite, biInter_mem, eventually_le_support, filter, filter_upwards, mem_iInter, prod_congr_of_eq_on_inter, support, tendsto_nhds_of_eventually_eq, toFinite
 -/
@@ -775,7 +787,15 @@ theorem Multipliable.hasProd
   rw [tprod_def]; rw [dif_pos ha]
   split_ifs with h h'
   · convert! hasProd_prod_support_of_ne_finset_one (s := h.2.toFinset) (L := L) _ using 2
-    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toF
+    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toFinset subseteq L.support by simp)]
+      simp only [Set.Finite.coe_toFinset, Finset.toFinset_coe]
+      rw [finprod_eq_prod_of_mulSupport_subset (s := h.2.toFinset)]
+      · exact Finset.prod_congr rfl (by simp_all)
+      · simp
+    · grind [Set.Finite.mem_toFinset, mem_mulSupport]
+    · exact h.1
+  · exact h'
+  · exact ha.choose_spec
 
 中文:
 定理 Multipliable.hasProd
@@ -787,7 +807,15 @@ theorem Multipliable.hasProd
   rw [tprod_def]; rw [dif_pos ha]
   split_ifs with h h'
   · convert! hasProd_prod_support_of_ne_finset_one (s := h.2.toFinset) (L := L) _ using 2
-    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toF
+    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toFinset subseteq L.support by simp)]
+      simp only [Set.Finite.coe_toFinset, Finset.toFinset_coe]
+      rw [finprod_eq_prod_of_mulSupport_subset (s := h.2.toFinset)]
+      · exact Finset.prod_congr rfl (by simp_all)
+      · simp
+    · grind [Set.Finite.mem_toFinset, mem_mulSupport]
+    · exact h.1
+  · exact h'
+  · exact ha.choose_spec
 -/
 theorem Multipliable.hasProd (ha : Multipliable f L) : HasProd f (∏'[L] b, f b) L := by
   -- This is quite delicate because of the fiddly special-casing for finite products.

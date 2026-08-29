@@ -39,7 +39,65 @@ theorem exists_eq_colon_of_mem_minimalPrimes
   -- `I` is a minimal prime over `ann = colon N {x}`
   set ann := colon N {x}
   -- there exists an integer `n ≠ 0` and an ideal `J` satisfying `I ^ n * J ≤ ann` and `¬ J ≠ I`
-  have key : 
+  have key : exists n != 0, exists J : Ideal R, I ^ n * J <= ann ∧ ¬ J <= I := by
+    -- let `n` be large enough so that `ann.radical ^ n ≤ ann` (uses Noetherian)
+    obtain ⟨n, hn⟩ := ann.exists_radical_pow_le_of_fg ann.radical.fg_of_isNoetherianRing
+    have hn0 : n != 0 := by contrapose hn; simpa [hn, ann]
+    -- then take `J` to be the product of the other minimal primes raised to the `n`th power
+    have h := ann.finite_minimalPrimes_of_isNoetherianRing R
+    rw [← ann.sInf_minimalPrimes]; rw [← h.coe_toFinset]; rw [← h.toFinset.inf_id_eq_sInf]; rw [← Finset.insert_erase (h.mem_toFinset.mpr hI)]; rw [Finset.inf_insert]; rw [id_eq] at hn
+    grw [← Ideal.mul_le_inf, mul_pow] at hn
+    refine ⟨n, hn0, ((h.toFinset.erase I).inf id) ^ n, hn, ?_⟩
+    have (K : Ideal R) (hKI : K <= I) (hK : K in ann.minimalPrimes) : K = I :=
+      le_antisymm hKI (hI.2 hK.1 hKI)
+    simpa [hI.isPrime.pow_le_iff hn0, hI.isPrime.inf_le', imp_not_comm, not_imp_not]
+  obtain ⟨hn0, J, hJ, hJI⟩ := Nat.find_spec key
+  -- let `n` be minimal such that there exists an ideal `J` with `I ^ n * J ≤ ann` and `¬ J ≠ I`
+  set n := Nat.find key
+  -- the minimality of `n` will allow us to pick `x'` from the ideal `K = I ^ (n - 1) * J`
+  let K := I ^ (n - 1) * J
+  -- we want `I = colon N {x'}`, and we have `I ≤ colon N {y • x}` for every `y ∈ K` (uses `n ≠ 0`)
+  have step1 : forall y in K, I <= colon N {y • x} := by
+    intro y hy p hp
+    rw [mem_colon_singleton]; rw [smul_smul]; rw [← mem_colon_singleton]
+    apply hJ
+    simpa [K, ← mul_assoc, mul_pow_sub_one hn0] using mul_mem_mul hp hy
+  clear hn0
+  -- so it suffices to find a single `y ∈ K` with `colon N {y • x} ≤ I`
+  suffices step2 : exists y : K, colon N {y • x} <= I by
+    obtain ⟨y, hyI⟩ := step2
+    exact ⟨y • x, le_antisymm (step1 y y.2) hyI⟩
+  -- if not, then for every `y ∈ K`, there exists an `f y ∈ colon N {y • x}` with `f y ∉ I`
+  by_contra! h'
+  simp only [SetLike.not_le_iff_exists] at h'
+  choose f g h using h'
+  -- let `s` be a finite generating set for `K`
+  obtain ⟨s, hs⟩ : (⊤ : Submodule R K).FG := Module.Finite.fg_top
+  -- let `z` be the product of these finitely many `f y`'s
+  let z := ∏ y in s, f y
+  -- then `z ∉ I`
+  have hz : z ∉ I := by simp [z, hI.isPrime.prod_mem_iff, h]
+  -- and `K ≤ colon N {z • x}`
+  have hz' : K <= colon N {z • x} := by
+    rw [← (map_injective_of_injective K.subtype_injective).eq_iff]; rw [map_subtype_top] at hs
+    rw [← hs]; rw [map_span]; rw [span_le]; rw [Set.image_subset_iff]
+    intro i hi
+    rw [Set.mem_preimage]; rw [SetLike.mem_coe]; rw [mem_colon_singleton]; rw [smul_comm]; rw [← mem_colon_singleton]
+    obtain ⟨y, hy : z = f i * y⟩ := Finset.dvd_prod_of_mem f hi
+    exact hy ▸ Ideal.mul_mem_right y _ (g i)
+  -- or equivalently `K * Ideal.span {z} ≤ ann`
+  replace hz' : K * Ideal.span {z} <= ann := by
+    rw [mul_comm]; rw [Ideal.span_singleton_mul_le_iff]
+    intro i hi
+    simpa only [ann, mem_colon_singleton, mul_comm, mul_smul] using hz' hi
+  -- but now `K = I ^ (n - 1) * J` contradicts the minimality of `n`
+  have hK : I ^ (n - 1) * (J * Ideal.span {z}) <= ann ∧ ¬ J * Ideal.span {z} <= I := by
+    rw [← mul_assoc]; rw [hI.isPrime.mul_le]; rw [not_or]; rw [Ideal.span_singleton_le_iff_mem]
+    exact ⟨hz', hJI, hz⟩
+  by_cases hn' : n - 1 = 0
+  · simp [K, show n = 1 by grind] at hz'
+    exact (hK.2 (hz'.trans hI.le)).elim
+  · grind [Nat.find_min' key ⟨hn', J * Ideal.span {z}, hK⟩]
 
 中文:
 定理 存在_eq_colon_of_mem_minimalPrimes
@@ -51,7 +109,65 @@ theorem exists_eq_colon_of_mem_minimalPrimes
   -- `I` is a minimal prime over `ann = colon N {x}`
   set ann := colon N {x}
   -- there exists an integer `n ≠ 0` and an ideal `J` satisfying `I ^ n * J ≤ ann` and `¬ J ≠ I`
-  have key : 
+  have key : exists n != 0, exists J : Ideal R, I ^ n * J <= ann ∧ ¬ J <= I := by
+    -- let `n` be large enough so that `ann.radical ^ n ≤ ann` (uses Noetherian)
+    obtain ⟨n, hn⟩ := ann.exists_radical_pow_le_of_fg ann.radical.fg_of_isNoetherianRing
+    have hn0 : n != 0 := by contrapose hn; simpa [hn, ann]
+    -- then take `J` to be the product of the other minimal primes raised to the `n`th power
+    have h := ann.finite_minimalPrimes_of_isNoetherianRing R
+    rw [← ann.sInf_minimalPrimes]; rw [← h.coe_toFinset]; rw [← h.toFinset.inf_id_eq_sInf]; rw [← Finset.insert_erase (h.mem_toFinset.mpr hI)]; rw [Finset.inf_insert]; rw [id_eq] at hn
+    grw [← Ideal.mul_le_inf, mul_pow] at hn
+    refine ⟨n, hn0, ((h.toFinset.erase I).inf id) ^ n, hn, ?_⟩
+    have (K : Ideal R) (hKI : K <= I) (hK : K in ann.minimalPrimes) : K = I :=
+      le_antisymm hKI (hI.2 hK.1 hKI)
+    simpa [hI.isPrime.pow_le_iff hn0, hI.isPrime.inf_le', imp_not_comm, not_imp_not]
+  obtain ⟨hn0, J, hJ, hJI⟩ := Nat.find_spec key
+  -- let `n` be minimal such that there exists an ideal `J` with `I ^ n * J ≤ ann` and `¬ J ≠ I`
+  set n := Nat.find key
+  -- the minimality of `n` will allow us to pick `x'` from the ideal `K = I ^ (n - 1) * J`
+  let K := I ^ (n - 1) * J
+  -- we want `I = colon N {x'}`, and we have `I ≤ colon N {y • x}` for every `y ∈ K` (uses `n ≠ 0`)
+  have step1 : forall y in K, I <= colon N {y • x} := by
+    intro y hy p hp
+    rw [mem_colon_singleton]; rw [smul_smul]; rw [← mem_colon_singleton]
+    apply hJ
+    simpa [K, ← mul_assoc, mul_pow_sub_one hn0] using mul_mem_mul hp hy
+  clear hn0
+  -- so it suffices to find a single `y ∈ K` with `colon N {y • x} ≤ I`
+  suffices step2 : exists y : K, colon N {y • x} <= I by
+    obtain ⟨y, hyI⟩ := step2
+    exact ⟨y • x, le_antisymm (step1 y y.2) hyI⟩
+  -- if not, then for every `y ∈ K`, there exists an `f y ∈ colon N {y • x}` with `f y ∉ I`
+  by_contra! h'
+  simp only [SetLike.not_le_iff_exists] at h'
+  choose f g h using h'
+  -- let `s` be a finite generating set for `K`
+  obtain ⟨s, hs⟩ : (⊤ : Submodule R K).FG := Module.Finite.fg_top
+  -- let `z` be the product of these finitely many `f y`'s
+  let z := ∏ y in s, f y
+  -- then `z ∉ I`
+  have hz : z ∉ I := by simp [z, hI.isPrime.prod_mem_iff, h]
+  -- and `K ≤ colon N {z • x}`
+  have hz' : K <= colon N {z • x} := by
+    rw [← (map_injective_of_injective K.subtype_injective).eq_iff]; rw [map_subtype_top] at hs
+    rw [← hs]; rw [map_span]; rw [span_le]; rw [Set.image_subset_iff]
+    intro i hi
+    rw [Set.mem_preimage]; rw [SetLike.mem_coe]; rw [mem_colon_singleton]; rw [smul_comm]; rw [← mem_colon_singleton]
+    obtain ⟨y, hy : z = f i * y⟩ := Finset.dvd_prod_of_mem f hi
+    exact hy ▸ Ideal.mul_mem_right y _ (g i)
+  -- or equivalently `K * Ideal.span {z} ≤ ann`
+  replace hz' : K * Ideal.span {z} <= ann := by
+    rw [mul_comm]; rw [Ideal.span_singleton_mul_le_iff]
+    intro i hi
+    simpa only [ann, mem_colon_singleton, mul_comm, mul_smul] using hz' hi
+  -- but now `K = I ^ (n - 1) * J` contradicts the minimality of `n`
+  have hK : I ^ (n - 1) * (J * Ideal.span {z}) <= ann ∧ ¬ J * Ideal.span {z} <= I := by
+    rw [← mul_assoc]; rw [hI.isPrime.mul_le]; rw [not_or]; rw [Ideal.span_singleton_le_iff_mem]
+    exact ⟨hz', hJI, hz⟩
+  by_cases hn' : n - 1 = 0
+  · simp [K, show n = 1 by grind] at hz'
+    exact (hK.2 (hz'.trans hI.le)).elim
+  · grind [Nat.find_min' key ⟨hn', J * Ideal.span {z}, hK⟩]
 
 Depends on / 依赖: Ideal.minimalPrimes_top, classical, minimalPrimes_top
 -/

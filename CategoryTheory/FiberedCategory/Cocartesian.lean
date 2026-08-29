@@ -261,7 +261,7 @@ definition codomainUniqueUpToIso
   inv_hom_id := by
     subst_hom_lift p f φ'
     apply IsCocartesian.ext p (p.map φ') φ'
-    simp only [fac_ass
+    simp only [fac_assoc, fac, comp_id]
 
 中文:
 定义 codomainUniqueUpToIso
@@ -275,7 +275,7 @@ definition codomainUniqueUpToIso
   inv_hom_id := by
     subst_hom_lift p f φ'
     apply IsCocartesian.ext p (p.map φ') φ'
-    simp only [fac_ass
+    simp only [fac_assoc, fac, comp_id]
 
 Depends on / 依赖: IsCocartesian, IsCocartesian.map
 -/
@@ -674,7 +674,13 @@ lemma of_comp
     of `φ ≫ ψ`. This will be the morphism induced by `φ`. -/
     use map p (f ≫ g) (φ ≫ ψ) (f' := f ≫ g ≫ h) (assoc f g h).symm (φ ≫ τ)
     refine ⟨⟨inferInstance, ?_⟩, ?_⟩
-    /-
+    /- The fact that `ψ ≫ π = τ` follows from `φ ≫ ψ ≫ π = φ ≫ τ` and the universal property of
+    `φ`. -/
+· apply IsStronglyCocartesian.ext p f φ (g ≫ h) by simp only [← assoc, fac]
+    -- Finally, uniqueness of `π` comes from the universal property of `φ ≫ ψ`.
+    · intro π' ⟨hπ'₁, hπ'₂⟩
+      apply map_uniq
+      simp [hπ'₂.symm]
 
 中文:
 引理 of_comp
@@ -685,7 +691,13 @@ lemma of_comp
     of `φ ≫ ψ`. This will be the morphism induced by `φ`. -/
     use map p (f ≫ g) (φ ≫ ψ) (f' := f ≫ g ≫ h) (assoc f g h).symm (φ ≫ τ)
     refine ⟨⟨inferInstance, ?_⟩, ?_⟩
-    /-
+    /- The fact that `ψ ≫ π = τ` follows from `φ ≫ ψ ≫ π = φ ≫ τ` and the universal property of
+    `φ`. -/
+· apply IsStronglyCocartesian.ext p f φ (g ≫ h) by simp only [← assoc, fac]
+    -- Finally, uniqueness of `π` comes from the universal property of `φ ≫ ψ`.
+    · intro π' ⟨hπ'₁, hπ'₂⟩
+      apply map_uniq
+      simp [hπ'₂.symm]
 -/
 protected lemma of_comp [IsStronglyCocartesian p f φ] [IsStronglyCocartesian p (f ≫ g) (φ ≫ ψ)]
     [IsHomLift p g ψ] : IsStronglyCocartesian p g ψ where
@@ -770,7 +782,14 @@ lemma isIso_of_base_isIso
   let φ' := map p (p.map φ) φ (IsIso.hom_inv_id (p.map φ)).symm (𝟙 a)
   use φ'
   -- `φ ≫ φ' = 𝟙 a` follows immediately from the universal property.
-  have inv_
+  have inv_hom : φ ≫ φ' = 𝟙 a := fac p (p.map φ) φ _ (𝟙 a)
+  refine ⟨inv_hom, ?_⟩
+  -- We will now show that `φ' ≫ φ = 𝟙 b` by showing that `φ ≫ (φ' ≫ φ) = φ ≫ 𝟙 b`.
+  have h₁ : IsHomLift p (𝟙 (p.obj b)) (φ' ≫ φ) := by
+    rw [← IsIso.inv_hom_id (p.map φ)]
+    apply IsHomLift.comp
+  apply IsStronglyCocartesian.ext p (p.map φ) φ (𝟙 (p.obj b))
+  simp only [← assoc, inv_hom, comp_id, id_comp]
 
 中文:
 引理 isIso_of_base_isIso
@@ -782,7 +801,14 @@ lemma isIso_of_base_isIso
   let φ' := map p (p.map φ) φ (IsIso.hom_inv_id (p.map φ)).symm (𝟙 a)
   use φ'
   -- `φ ≫ φ' = 𝟙 a` follows immediately from the universal property.
-  have inv_
+  have inv_hom : φ ≫ φ' = 𝟙 a := fac p (p.map φ) φ _ (𝟙 a)
+  refine ⟨inv_hom, ?_⟩
+  -- We will now show that `φ' ≫ φ = 𝟙 b` by showing that `φ ≫ (φ' ≫ φ) = φ ≫ 𝟙 b`.
+  have h₁ : IsHomLift p (𝟙 (p.obj b)) (φ' ≫ φ) := by
+    rw [← IsIso.inv_hom_id (p.map φ)]
+    apply IsHomLift.comp
+  apply IsStronglyCocartesian.ext p (p.map φ) φ (𝟙 (p.obj b))
+  simp only [← assoc, inv_hom, comp_id, id_comp]
 
 Depends on / 依赖: subst_hom_lift
 -/

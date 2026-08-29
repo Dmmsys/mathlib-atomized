@@ -54,7 +54,8 @@ definition liftLinear
     simp only [map_add, coe_add, Pi.add_apply, toMeasure_apply, add_toOuterMeasure,
       FunLike.coe_add, hs]
   map_smul' c μ := ext fun s hs => by
-    simp only [map_smulₛₗ, Pi.smul_apply, toMeasure_apply, smul_toOuterMea
+    simp only [map_smulₛₗ, Pi.smul_apply, toMeasure_apply, smul_toOuterMeasure (R := Real>=0∞),
+      FunLike.coe_smul, smul_apply, hs]
 
 中文:
 定义 liftLinear
@@ -64,7 +65,8 @@ definition liftLinear
     simp only [map_add, coe_add, Pi.add_apply, toMeasure_apply, add_toOuterMeasure,
       FunLike.coe_add, hs]
   map_smul' c μ := ext fun s hs => by
-    simp only [map_smulₛₗ, Pi.smul_apply, toMeasure_apply, smul_toOuterMea
+    simp only [map_smulₛₗ, Pi.smul_apply, toMeasure_apply, smul_toOuterMeasure (R := Real>=0∞),
+      FunLike.coe_smul, smul_apply, hs]
 
 Depends on / 依赖: toMeasure, toOuterMeasure
 -/
@@ -344,7 +346,10 @@ theorem map_congr
     simp only [← mapₗ_mk_apply_of_aemeasurable hf, ← mapₗ_mk_apply_of_aemeasurable hg]
     exact
       mapₗ_congr hf.measurable_mk hg.measurable_mk (hf.ae_eq_mk.symm.trans (h.trans hg.ae_eq_mk))
-  · have hg : ¬AEMeasura
+  · have hg : ¬AEMeasurable g μ := by simpa [← aemeasurable_congr h] using hf
+    simp [map_of_not_aemeasurable, hf, hg]
+
+@[simp]
 
 中文:
 定理 map_congr
@@ -356,7 +361,10 @@ theorem map_congr
     simp only [← mapₗ_mk_apply_of_aemeasurable hf, ← mapₗ_mk_apply_of_aemeasurable hg]
     exact
       mapₗ_congr hf.measurable_mk hg.measurable_mk (hf.ae_eq_mk.symm.trans (h.trans hg.ae_eq_mk))
-  · have hg : ¬AEMeasura
+  · have hg : ¬AEMeasurable g μ := by simpa [← aemeasurable_congr h] using hf
+    simp [map_of_not_aemeasurable, hf, hg]
+
+@[simp]
 
 Depends on / 依赖: AEMeasurable, ae_eq_mk, aemeasurable_congr, h.trans, hf.ae_eq_mk.symm.trans, hf.congr, hf.measurable_mk, hg.ae_eq_mk, hg.measurable_mk, map_of_not_aemeasurable, measurable_mk
 -/
@@ -382,7 +390,16 @@ theorem map_smul
   rcases eq_or_ne c 0 with (rfl | hc); · simp
   by_cases hf : AEMeasurable f μ
   · have hfc : AEMeasurable f (c • μ) :=
-      ⟨hf.mk f, hf.measurable_mk, (ae_ennreal_smul_measure_iff hc).2 h
+      ⟨hf.mk f, hf.measurable_mk, (ae_ennreal_smul_measure_iff hc).2 hf.ae_eq_mk⟩
+    simp only [← mapₗ_mk_apply_of_aemeasurable hf, ← mapₗ_mk_apply_of_aemeasurable hfc, map_smulₛₗ,
+      RingHom.id_apply]
+    congr 1
+    apply mapₗ_congr hfc.measurable_mk hf.measurable_mk
+    exact .trans ((ae_ennreal_smul_measure_iff hc).1 hfc.ae_eq_mk.symm) hf.ae_eq_mk
+  · have hfc : ¬AEMeasurable f (c • μ) := by
+      intro hfc
+      exact hf ⟨hfc.mk f, hfc.measurable_mk, (ae_ennreal_smul_measure_iff hc).1 hfc.ae_eq_mk⟩
+    simp [map_of_not_aemeasurable hf, map_of_not_aemeasurable hfc]
 
 中文:
 定理 map_smul
@@ -393,7 +410,16 @@ theorem map_smul
   rcases eq_or_ne c 0 with (rfl | hc); · simp
   by_cases hf : AEMeasurable f μ
   · have hfc : AEMeasurable f (c • μ) :=
-      ⟨hf.mk f, hf.measurable_mk, (ae_ennreal_smul_measure_iff hc).2 h
+      ⟨hf.mk f, hf.measurable_mk, (ae_ennreal_smul_measure_iff hc).2 hf.ae_eq_mk⟩
+    simp only [← mapₗ_mk_apply_of_aemeasurable hf, ← mapₗ_mk_apply_of_aemeasurable hfc, map_smulₛₗ,
+      RingHom.id_apply]
+    congr 1
+    apply mapₗ_congr hfc.measurable_mk hf.measurable_mk
+    exact .trans ((ae_ennreal_smul_measure_iff hc).1 hfc.ae_eq_mk.symm) hf.ae_eq_mk
+  · have hfc : ¬AEMeasurable f (c • μ) := by
+      intro hfc
+      exact hf ⟨hfc.mk f, hfc.measurable_mk, (ae_ennreal_smul_measure_iff hc).1 hfc.ae_eq_mk⟩
+    simp [map_of_not_aemeasurable hf, map_of_not_aemeasurable hfc]
 -/
 protected theorem map_smul {R : Type*} [SMul R Real>=0∞] [IsScalarTower R Real>=0∞ Real>=0∞]
     (c : R) (μ : Measure α) (f : α -> β) : (c • μ).map f = c • μ.map f := by

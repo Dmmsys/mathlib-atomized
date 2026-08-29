@@ -267,7 +267,12 @@ theorem tendsto_abv_eval₂_atTop
     simpa [abv_mul abv] using hz.const_mul_atTop ((abv_pos abv).2 hc)
   · intro _ _ ihp hf
     rw [leadingCoeff_mul_X] at hf
-    simpa [abv_mul abv] us
+    simpa [abv_mul abv] using (ihp hf).atTop_mul_atTop₀ hz
+  · intro _ a hd ihp hf
+    rw [add_comm]; rw [leadingCoeff_add_of_degree_lt (degree_C_le.trans_lt hd)] at hf
+    refine .atTop_of_add_const (abv (-f a)) ?_
+    refine tendsto_atTop_mono (fun _ => abv_add abv _ _) ?_
+    simpa using ihp hf
 
 中文:
 定理 tendsto_abv_eval₂_atTop
@@ -279,7 +284,12 @@ theorem tendsto_abv_eval₂_atTop
     simpa [abv_mul abv] using hz.const_mul_atTop ((abv_pos abv).2 hc)
   · intro _ _ ihp hf
     rw [leadingCoeff_mul_X] at hf
-    simpa [abv_mul abv] us
+    simpa [abv_mul abv] using (ihp hf).atTop_mul_atTop₀ hz
+  · intro _ a hd ihp hf
+    rw [add_comm]; rw [leadingCoeff_add_of_degree_lt (degree_C_le.trans_lt hd)] at hf
+    refine .atTop_of_add_const (abv (-f a)) ?_
+    refine tendsto_atTop_mono (fun _ => abv_add abv _ _) ?_
+    simpa using ihp hf
 
 Depends on / 依赖: abv_ad, abv_mul, abv_pos, add_comm, atTop_of_add_const, const_mul_atTop, degree_C_le, degree_C_le.trans_lt, degree_pos_induction_on, hz.const_mul_atTop, leadingCoeff_C, leadingCoeff_add_of_degree_lt, leadingCoeff_mul_X, revert, tendsto_atTop_mono, trans_lt
 -/
@@ -526,7 +536,21 @@ theorem coeff_le_of_roots_le
     split_ifs with h <;> simp [h]
   rw [← h1.natDegree_map f]
   obtain hi | hi := lt_or_ge (map f p).natDegree i
-  · rw [coeff_eq_zero_of_natD
+  · rw [coeff_eq_zero_of_natDegree_lt hi, norm_zero]
+    positivity
+  rw [coeff_eq_esymm_roots_of_splits h2 hi]; rw [(h1.map _).leadingCoeff]; rw [one_mul]; rw [norm_mul]; rw [norm_pow]; rw [norm_neg]; rw [norm_one]; rw [one_pow]; rw [one_mul]
+  apply ((norm_multiset_sum_le _).trans <| sum_le_card_nsmul _ _ fun r hr => _).trans
+  · rw [Multiset.map_map, card_map, card_powersetCard, ← Splits.natDegree_eq_card_roots h2,
+      Nat.choose_symm hi, mul_comm, nsmul_eq_mul]
+  intro r hr
+  simp_rw [Multiset.mem_map] at hr
+  obtain ⟨_, ⟨s, hs, rfl⟩, rfl⟩ := hr
+  rw [mem_powersetCard] at hs
+  lift B to Real>=0 using hB
+  rw [← coe_nnnorm]; rw [← NNReal.coe_pow]; rw [NNReal.coe_le_coe]; rw [← nnnormHom_apply]; rw [← MonoidHom.coe_coe]; rw [MonoidHom.map_multiset_prod]
+  refine (prod_le_pow_card _ B fun x hx => ?_).trans_eq (by rw [card_map, hs.2])
+  obtain ⟨z, hz, rfl⟩ := Multiset.mem_map.1 hx
+  exact h3 z (mem_of_le hs.1 hz)
 
 中文:
 定理 coeff_le_of_roots_le
@@ -538,7 +562,21 @@ theorem coeff_le_of_roots_le
     split_ifs with h <;> simp [h]
   rw [← h1.natDegree_map f]
   obtain hi | hi := lt_or_ge (map f p).natDegree i
-  · rw [coeff_eq_zero_of_natD
+  · rw [coeff_eq_zero_of_natDegree_lt hi, norm_zero]
+    positivity
+  rw [coeff_eq_esymm_roots_of_splits h2 hi]; rw [(h1.map _).leadingCoeff]; rw [one_mul]; rw [norm_mul]; rw [norm_pow]; rw [norm_neg]; rw [norm_one]; rw [one_pow]; rw [one_mul]
+  apply ((norm_multiset_sum_le _).trans <| sum_le_card_nsmul _ _ fun r hr => _).trans
+  · rw [Multiset.map_map, card_map, card_powersetCard, ← Splits.natDegree_eq_card_roots h2,
+      Nat.choose_symm hi, mul_comm, nsmul_eq_mul]
+  intro r hr
+  simp_rw [Multiset.mem_map] at hr
+  obtain ⟨_, ⟨s, hs, rfl⟩, rfl⟩ := hr
+  rw [mem_powersetCard] at hs
+  lift B to Real>=0 using hB
+  rw [← coe_nnnorm]; rw [← NNReal.coe_pow]; rw [NNReal.coe_le_coe]; rw [← nnnormHom_apply]; rw [← MonoidHom.coe_coe]; rw [MonoidHom.map_multiset_prod]
+  refine (prod_le_pow_card _ B fun x hx => ?_).trans_eq (by rw [card_map, hs.2])
+  obtain ⟨z, hz, rfl⟩ := Multiset.mem_map.1 hx
+  exact h3 z (mem_of_le hs.1 hz)
 
 Depends on / 依赖: Polynomial, Polynomial.map_one, coeff_eq_esymm_roots_of_splits, coeff_eq_zero_of_natDegree_lt, coeff_one, eq_one_of_roots_le, h1.map, h1.natDegree_map, leadingCoeff, lt_or_ge, map_one, natDegree, natDegree_map, natDegree_one, norm_mul, norm_neg, norm_one, norm_pow, norm_zero, one_mul
 -/
@@ -581,7 +619,13 @@ theorem coeff_bdd_of_roots_le
       _ <= max B 1 ^ d * p.natDegree.choose i := by
         gcongr
         · apply le_max_right
-        · exact
+        · exact le_trans (Nat.sub_le _ _) h3
+      _ <= max B 1 ^ d * d.choose (d / 2) := by
+        gcongr; exact (i.choose_mono h3).trans (i.choose_le_middle d)
+  · rw [eq_one_of_roots_le hB h1 h2 h4, Polynomial.map_one, coeff_one]
+    refine le_trans ?_ (one_le_mul_of_one_le_of_one_le (one_le_pow₀ (le_max_right B 1)) ?_)
+    · split_ifs <;> norm_num
+    · exact mod_cast Nat.succ_le_iff.mpr (Nat.choose_pos (d.div_le_self 2))
 
 中文:
 定理 coeff_bdd_of_roots_le
@@ -594,7 +638,13 @@ theorem coeff_bdd_of_roots_le
       _ <= max B 1 ^ d * p.natDegree.choose i := by
         gcongr
         · apply le_max_right
-        · exact
+        · exact le_trans (Nat.sub_le _ _) h3
+      _ <= max B 1 ^ d * d.choose (d / 2) := by
+        gcongr; exact (i.choose_mono h3).trans (i.choose_le_middle d)
+  · rw [eq_one_of_roots_le hB h1 h2 h4, Polynomial.map_one, coeff_one]
+    refine le_trans ?_ (one_le_mul_of_one_le_of_one_le (one_le_pow₀ (le_max_right B 1)) ?_)
+    · split_ifs <;> norm_num
+    · exact mod_cast Nat.succ_le_iff.mpr (Nat.choose_pos (d.div_le_self 2))
 
 Depends on / 依赖: Nat.sub_le, Polynomial, Polynomial.map_one, choose_le_middle, choose_mono, coeff_le_of_roots_le, coeff_one, d.choose, eq_one_of_roots_le, i.choose_le_middle, i.choose_mono, le_max_left, le_max_right, le_or_gt, le_trans, map_one, natDegree, one_le_mul_of_one_le_, p.natDegree, p.natDegree.choose
 -/

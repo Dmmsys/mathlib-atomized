@@ -508,7 +508,8 @@ theorem sorted_zero_eq_min'_aux
     obtain ⟨i, hi⟩ : exists i, l.get i = s.min' H := List.mem_iff_get.1 this
     rw [← hi]
     exact (s.pairwise_sort (· <= ·)).rel_get_of_le (Nat.zero_le i)
-  · have : l.get ⟨0, h⟩ in s := 
+  · have : l.get ⟨0, h⟩ in s := (Finset.mem_sort (α := α) (· <= ·)).1 (List.get_mem l _)
+    exact s.min'_le _ this
 
 中文:
 定理 sorted_zero_eq_min'_aux
@@ -520,7 +521,8 @@ theorem sorted_zero_eq_min'_aux
     obtain ⟨i, hi⟩ : exists i, l.get i = s.min' H := List.mem_iff_get.1 this
     rw [← hi]
     exact (s.pairwise_sort (· <= ·)).rel_get_of_le (Nat.zero_le i)
-  · have : l.get ⟨0, h⟩ in s := 
+  · have : l.get ⟨0, h⟩ in s := (Finset.mem_sort (α := α) (· <= ·)).1 (List.get_mem l _)
+    exact s.min'_le _ this
 
 Depends on / 依赖: Finset, Finset.mem_sort, List.get_mem, List.mem_iff_get, Nat.zero_le, _mem, get_mem, l.get, le_antisymm, mem_iff_get, mem_sort, pairwise_sort, rel_get_of_le, s.mem_sort, s.min, s.pairwise_sort, s.sort, zero_le
 -/
@@ -582,7 +584,9 @@ theorem sorted_last_eq_max'_aux
       (s.mem_sort (· <= ·)).1 (List.get_mem l _)
     exact s.le_max' _ this
   · have : s.max' H in l := (s.mem_sort (· <= ·)).mpr (s.max'_mem H)
-    obtain ⟨i, hi⟩ : exists i, l.get i = s.max' H := List.mem_iff_
+    obtain ⟨i, hi⟩ : exists i, l.get i = s.max' H := List.mem_iff_get.1 this
+    rw [← hi]
+    exact (s.pairwise_sort (· <= ·)).rel_get_of_le (Nat.le_sub_one_of_lt i.prop)
 
 中文:
 定理 sorted_last_eq_max'_aux
@@ -594,7 +598,9 @@ theorem sorted_last_eq_max'_aux
       (s.mem_sort (· <= ·)).1 (List.get_mem l _)
     exact s.le_max' _ this
   · have : s.max' H in l := (s.mem_sort (· <= ·)).mpr (s.max'_mem H)
-    obtain ⟨i, hi⟩ : exists i, l.get i = s.max' H := List.mem_iff_
+    obtain ⟨i, hi⟩ : exists i, l.get i = s.max' H := List.mem_iff_get.1 this
+    rw [← hi]
+    exact (s.pairwise_sort (· <= ·)).rel_get_of_le (Nat.le_sub_one_of_lt i.prop)
 
 Depends on / 依赖: List.get_mem, List.mem_iff_get, Nat.le_sub_one_of_lt, _mem, get_mem, i.prop, l.get, le_antisymm, le_max, le_sub_one_of_lt, length, mem_iff_get, mem_sort, pairwise_sort, rel_get_of_le, s.le_max, s.max, s.mem_sort, s.pairwise_sort, s.sort
 -/
@@ -964,7 +970,7 @@ theorem orderEmbOfFin_unique
   refine eq_of_subset_of_card_le (fun x hx => ?_) ?_
   · rcases mem_image.1 hx with ⟨x, _, rfl⟩
     exact hfs x
-  · rw [h, card_image_of_inject
+  · rw [h, card_image_of_injective _ hmono.injective, card_univ, Fintype.card_fin]
 
 中文:
 定理 orderEmbOfFin_unique
@@ -974,7 +980,7 @@ theorem orderEmbOfFin_unique
   refine eq_of_subset_of_card_le (fun x hx => ?_) ?_
   · rcases mem_image.1 hx with ⟨x, _, rfl⟩
     exact hfs x
-  · rw [h, card_image_of_inject
+  · rw [h, card_image_of_injective _ hmono.injective, card_univ, Fintype.card_fin]
 
 Depends on / 依赖: Fintype, Fintype.card_fin, Set.image_univ, card_fin, card_image_of_injective, card_univ, coe_image, coe_inj, coe_univ, eq_of_subset_of_card_le, hmono.injective, hmono.range_inj, image_univ, injective, mem_image, orderEmbOfFin, range_inj, range_orderEmbOfFin, s.orderEmbOfFin, strictMono
 -/

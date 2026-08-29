@@ -240,7 +240,10 @@ definition mapComposableArrows₅
     (naturality' (mapComposableArrows₂ φ i) 0 1)
     (naturality' (mapComposableArrows₂ φ i) 1 2)
     (δ_naturality φ hS₁ hS₂ i j hij)
-    (naturality' (mapComposa
+    (naturality' (mapComposableArrows₂ φ j) 0 1)
+    (naturality' (mapComposableArrows₂ φ j) 1 2)
+
+include hS₁ hS₂
 
 中文:
 定义 mapComposableArrows₅
@@ -250,7 +253,10 @@ definition mapComposableArrows₅
     (naturality' (mapComposableArrows₂ φ i) 0 1)
     (naturality' (mapComposableArrows₂ φ i) 1 2)
     (δ_naturality φ hS₁ hS₂ i j hij)
-    (naturality' (mapComposa
+    (naturality' (mapComposableArrows₂ φ j) 0 1)
+    (naturality' (mapComposableArrows₂ φ j) 1 2)
+
+include hS₁ hS₂
 
 Depends on / 依赖: Or.inr, homologyMap, lifting, naturality
 -/
@@ -278,7 +284,15 @@ lemma mono_homologyMap_τ₃
     apply mono_of_epi_of_mono_of_mono
       ((δlastFunctor ⋙ δlastFunctor).map (mapComposableArrows₅ φ hS₁ hS₂ i j hij))
     · exact (composableArrows₅_exact hS₁ i j hij).δlast.δlast
-    · exact (composableArrows₅_exact hS₂ i j hij).δl
+    · exact (composableArrows₅_exact hS₂ i j hij).δlast.δlast
+    · exact h₁
+    · exact h₂
+    · exact h₃ _ hij
+  · refine mono_of_epi_of_epi_of_mono (mapComposableArrows₂ φ i)
+      (composableArrows₂_exact hS₁ i) (composableArrows₂_exact hS₂ i) ?_ h₁ h₂
+    have := hS₁.epi_g
+    apply epi_homologyMap_of_epi_of_not_rel
+    simpa using hi
 
 中文:
 引理 mono_homologyMap_τ₃
@@ -289,7 +303,15 @@ lemma mono_homologyMap_τ₃
     apply mono_of_epi_of_mono_of_mono
       ((δlastFunctor ⋙ δlastFunctor).map (mapComposableArrows₅ φ hS₁ hS₂ i j hij))
     · exact (composableArrows₅_exact hS₁ i j hij).δlast.δlast
-    · exact (composableArrows₅_exact hS₂ i j hij).δl
+    · exact (composableArrows₅_exact hS₂ i j hij).δlast.δlast
+    · exact h₁
+    · exact h₂
+    · exact h₃ _ hij
+  · refine mono_of_epi_of_epi_of_mono (mapComposableArrows₂ φ i)
+      (composableArrows₂_exact hS₁ i) (composableArrows₂_exact hS₂ i) ?_ h₁ h₂
+    have := hS₁.epi_g
+    apply epi_homologyMap_of_epi_of_not_rel
+    simpa using hi
 
 Depends on / 依赖: c.Rel, epi_g, epi_homologyM, mono_of_epi_of_epi_of_mono, mono_of_epi_of_mono_of_mono
 -/
@@ -327,7 +349,15 @@ lemma epi_homologyMap_τ₃
       ((δ₀Functor ⋙ δlastFunctor).map (mapComposableArrows₅ φ hS₁ hS₂ i j hij))
     · exact (composableArrows₅_exact hS₁ i j hij).δ₀.δlast
     · exact (composableArrows₅_exact hS₂ i j hij).δ₀.δlast
- 
+    · exact h₁
+    · exact h₂ j hij
+    · exact h₃ j hij
+  · have := hS₂.epi_g
+    have eq := (homologyFunctor C _ i).congr_map φ.comm₂₃
+    dsimp at eq
+    simp only [homologyMap_comp] at eq
+    have := epi_homologyMap_of_epi_of_not_rel S₂.g i (by simpa using hi)
+    exact epi_of_epi_fac eq.symm
 
 中文:
 引理 epi_homologyMap_τ₃
@@ -339,7 +369,15 @@ lemma epi_homologyMap_τ₃
       ((δ₀Functor ⋙ δlastFunctor).map (mapComposableArrows₅ φ hS₁ hS₂ i j hij))
     · exact (composableArrows₅_exact hS₁ i j hij).δ₀.δlast
     · exact (composableArrows₅_exact hS₂ i j hij).δ₀.δlast
- 
+    · exact h₁
+    · exact h₂ j hij
+    · exact h₃ j hij
+  · have := hS₂.epi_g
+    have eq := (homologyFunctor C _ i).congr_map φ.comm₂₃
+    dsimp at eq
+    simp only [homologyMap_comp] at eq
+    have := epi_homologyMap_of_epi_of_not_rel S₂.g i (by simpa using hi)
+    exact epi_of_epi_fac eq.symm
 
 Depends on / 依赖: c.Rel, congr_map, epi_g, epi_homologyMap_of_epi_of_not_rel, epi_of_epi_of_epi_of_mono, homologyFunctor, homologyMap_comp
 -/
@@ -461,7 +499,12 @@ lemma exactAt_X₁
     have := h₂ i hij
     apply (hS.homology_exact₁ i j hij).isZero_X₂
     · simp [← cancel_epi (HomologicalComplex.homologyMap S.g i)]
-    · simp [← cancel_mono (HomologicalComplex.homologyMap S.g j)
+    · simp [← cancel_mono (HomologicalComplex.homologyMap S.g j),
+        ← HomologicalComplex.homologyMap_comp]
+  · have := hS.mono_f
+    have := HomologicalComplex.mono_homologyMap_of_mono_of_not_rel S.f j hj
+    rw [IsZero.iff_id_eq_zero]; rw [← cancel_mono (HomologicalComplex.homologyMap S.f j)]; rw [← cancel_mono (HomologicalComplex.homologyMap S.g j)]
+    simp [← HomologicalComplex.homologyMap_comp]
 
 中文:
 引理 exactAt_X₁
@@ -473,7 +516,12 @@ lemma exactAt_X₁
     have := h₂ i hij
     apply (hS.homology_exact₁ i j hij).isZero_X₂
     · simp [← cancel_epi (HomologicalComplex.homologyMap S.g i)]
-    · simp [← cancel_mono (HomologicalComplex.homologyMap S.g j)
+    · simp [← cancel_mono (HomologicalComplex.homologyMap S.g j),
+        ← HomologicalComplex.homologyMap_comp]
+  · have := hS.mono_f
+    have := HomologicalComplex.mono_homologyMap_of_mono_of_not_rel S.f j hj
+    rw [IsZero.iff_id_eq_zero]; rw [← cancel_mono (HomologicalComplex.homologyMap S.f j)]; rw [← cancel_mono (HomologicalComplex.homologyMap S.g j)]
+    simp [← HomologicalComplex.homologyMap_comp]
 
 Depends on / 依赖: ExactAt, HomologicalCom, HomologicalComplex, HomologicalComplex.homologyMap, HomologicalComplex.homologyMap_comp, c.Rel, cancel_epi, cancel_mono, exactAt_iff_isZero_homology, hS.homology_exact, hS.mono_f, homologyMap, homologyMap_comp, infer_instance, mono_f
 -/
@@ -532,7 +580,11 @@ lemma exactAt_X₃
     apply (hS.homology_exact₃ i j hij).isZero_X₂
     · simp [← cancel_epi (HomologicalComplex.homologyMap S.f i),
         ← HomologicalComplex.homologyMap_comp]
-    · simp [← can
+    · simp [← cancel_mono (HomologicalComplex.homologyMap S.f j)]
+  · have := hS.epi_g
+    have := HomologicalComplex.epi_homologyMap_of_epi_of_not_rel S.g i hi
+    rw [IsZero.iff_id_eq_zero]; rw [← cancel_epi (HomologicalComplex.homologyMap S.g i)]; rw [← cancel_epi (HomologicalComplex.homologyMap S.f i)]
+    simp [← HomologicalComplex.homologyMap_comp]
 
 中文:
 引理 exactAt_X₃
@@ -545,7 +597,11 @@ lemma exactAt_X₃
     apply (hS.homology_exact₃ i j hij).isZero_X₂
     · simp [← cancel_epi (HomologicalComplex.homologyMap S.f i),
         ← HomologicalComplex.homologyMap_comp]
-    · simp [← can
+    · simp [← cancel_mono (HomologicalComplex.homologyMap S.f j)]
+  · have := hS.epi_g
+    have := HomologicalComplex.epi_homologyMap_of_epi_of_not_rel S.g i hi
+    rw [IsZero.iff_id_eq_zero]; rw [← cancel_epi (HomologicalComplex.homologyMap S.g i)]; rw [← cancel_epi (HomologicalComplex.homologyMap S.f i)]
+    simp [← HomologicalComplex.homologyMap_comp]
 
 Depends on / 依赖: ExactAt, HomologicalCom, HomologicalComplex, HomologicalComplex.homologyMap, HomologicalComplex.homologyMap_comp, c.Rel, cancel_epi, cancel_mono, epi_g, exactAt_iff_isZero_homology, hS.epi_g, hS.homology_exact, homologyMap, homologyMap_comp, infer_instance
 -/

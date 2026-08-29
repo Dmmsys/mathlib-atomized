@@ -135,7 +135,7 @@ definition d
       (XIso K e (e.not_boundaryGE_next hij)).inv
   else 0
 
-@[reassoc
+@[reassoc (attr := simp)]
 
 中文:
 定义 d
@@ -149,7 +149,7 @@ definition d
       (XIso K e (e.not_boundaryGE_next hij)).inv
   else 0
 
-@[reassoc
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: BoundaryGE, K.fromOpcycles, XIsoOpcycles, c.Rel, e.BoundaryGE, e.not_boundaryGE_next, fromOpcycles, not_boundaryGE_next, truncGE
 -/
@@ -405,7 +405,13 @@ definition truncGE'Map
     else
       (K.truncGE'XIso e rfl hi).hom ≫ φ.f (e.f i) ≫ (L.truncGE'XIso e rfl hi).inv
   comm' i j hij := by
-    rw [dif_neg (e.not_boundaryGE_next 
+    rw [dif_neg (e.not_boundaryGE_next hij)]
+    by_cases hi : e.BoundaryGE i
+    · rw [dif_pos hi]
+      simp [truncGE'_d_eq_fromOpcycles _ e hij rfl rfl hi,
+        ← cancel_epi (K.pOpcycles (e.f i))]
+    · rw [dif_neg hi]
+      simp [truncGE'_d_eq _ e hij rfl rfl hi]
 
 中文:
 定义 truncGE'Map
@@ -417,7 +423,13 @@ definition truncGE'Map
     else
       (K.truncGE'XIso e rfl hi).hom ≫ φ.f (e.f i) ≫ (L.truncGE'XIso e rfl hi).inv
   comm' i j hij := by
-    rw [dif_neg (e.not_boundaryGE_next 
+    rw [dif_neg (e.not_boundaryGE_next hij)]
+    by_cases hi : e.BoundaryGE i
+    · rw [dif_pos hi]
+      simp [truncGE'_d_eq_fromOpcycles _ e hij rfl rfl hi,
+        ← cancel_epi (K.pOpcycles (e.f i))]
+    · rw [dif_neg hi]
+      simp [truncGE'_d_eq _ e hij rfl rfl hi]
 -/
 noncomputable def truncGE'Map : K.truncGE' e ⟶ L.truncGE' e where
   f i :=
@@ -723,7 +735,11 @@ lemma comm
         f_eq_iso_hom_iso_inv K e rfl (e.not_boundaryGE_next hij),
         K.truncGE'_d_eq_fromOpcycles e hij rfl rfl hi]
       simp [restrictionXIso]
-    · rw [f_eq_iso_hom_iso_inv K e
+    · rw [f_eq_iso_hom_iso_inv K e rfl hi,
+        f_eq_iso_hom_iso_inv K e rfl (e.not_boundaryGE_next hij),
+        K.truncGE'_d_eq e hij rfl rfl hi]
+      simp [restrictionXIso]
+  · simp [HomologicalComplex.shape _ _ _ hij]
 
 中文:
 引理 comm
@@ -735,7 +751,11 @@ lemma comm
         f_eq_iso_hom_iso_inv K e rfl (e.not_boundaryGE_next hij),
         K.truncGE'_d_eq_fromOpcycles e hij rfl rfl hi]
       simp [restrictionXIso]
-    · rw [f_eq_iso_hom_iso_inv K e
+    · rw [f_eq_iso_hom_iso_inv K e rfl hi,
+        f_eq_iso_hom_iso_inv K e rfl (e.not_boundaryGE_next hij),
+        K.truncGE'_d_eq e hij rfl rfl hi]
+      simp [restrictionXIso]
+  · simp [HomologicalComplex.shape _ _ _ hij]
 
 Depends on / 依赖: BoundaryGE, HomologicalComplex, HomologicalComplex.shape, K.truncGE, _d_eq, _d_eq_fromOpcycles, c.Rel, e.BoundaryGE, e.not_boundaryGE_next, f_eq_iso_hom_iso_inv, f_eq_iso_hom_pOpcycles_iso_inv, not_boundaryGE_next, restrictionXIso, truncGE
 -/
@@ -923,7 +943,10 @@ instance [K.IsStrictlySupported
     have : IsIso (K.pOpcycles (e.f i)) := K.isIso_pOpcycles _ _ rfl (by
       obtain ⟨hi₁, hi₂⟩ := hi
       apply IsZero.eq_of_src (K.isZero_X_of_isStrictlySupported e _
-        (fun j hj => hi
+        (fun j hj => hi₂ j (by simpa only [hj] using hi₁))))
+    infer_instance
+  · rw [K.restrictionToTruncGE'_f_eq_iso_hom_iso_inv e rfl hi]
+    infer_instance
 
 中文:
 实例 [K.是StrictlySupported
@@ -934,7 +957,10 @@ instance [K.IsStrictlySupported
     have : IsIso (K.pOpcycles (e.f i)) := K.isIso_pOpcycles _ _ rfl (by
       obtain ⟨hi₁, hi₂⟩ := hi
       apply IsZero.eq_of_src (K.isZero_X_of_isStrictlySupported e _
-        (fun j hj => hi
+        (fun j hj => hi₂ j (by simpa only [hj] using hi₁))))
+    infer_instance
+  · rw [K.restrictionToTruncGE'_f_eq_iso_hom_iso_inv e rfl hi]
+    infer_instance
 
 Depends on / 依赖: BoundaryGE, IsZero, IsZero.eq_of_src, K.isIso_pOpcycles, K.isZero_X_of_isStrictlySupported, K.pOpcycles, K.restrictionToTruncGE, _f_eq_iso_hom_iso_inv, _f_eq_iso_hom_pOpcycles_iso_inv, e.BoundaryGE, eq_of_src, infer_instance, isIso_pOpcycles, isZero_X_of_isStrictlySupported, pOpcycles, restrictionToTruncGE
 -/
@@ -1087,7 +1113,7 @@ instance [K.IsStrictlySupported
     infer_instance
   · refine ⟨0, ?_, ?_⟩
     all_goals
-      apply
+      apply (isZero_X_of_isStrictlySupported _ e i' hn).eq_of_src
 
 中文:
 实例 [K.是StrictlySupported
@@ -1103,7 +1129,7 @@ instance [K.IsStrictlySupported
     infer_instance
   · refine ⟨0, ?_, ?_⟩
     all_goals
-      apply
+      apply (isZero_X_of_isStrictlySupported _ e i' hn).eq_of_src
 
 Depends on / 依赖: Hom.isIso_of_components, all_goals, e.isIso_liftExtend_f_iff, eq_of_src, infer_instance, isIso_liftExtend_f_iff, isIso_of_components, isZero_X_of_isStrictlySupported
 -/

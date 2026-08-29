@@ -108,7 +108,10 @@ lemma continuous_valuation
   by_cases hx : v x = 0
   · simpa [hx, ((valuation R).hasBasis_nhds _).tendsto_iff WithZeroTopology.hasBasis_nhds_zero]
       using fun i hi => ⟨(Units.mk0 i hi).mapEquiv (ValueGroupWithZero.orderMonoidIso (valuation R)),
-        
+        fun y => by simp [Valuation.map_sub_of_right_eq_zero _ hx]⟩
+  · simpa [((valuation R).hasBasis_nhds _).tendsto_iff (hasBasis_nhds_of_ne_zero hx)]
+      using ⟨(Units.mk0 (v x) hx).mapEquiv (ValueGroupWithZero.orderMonoidIso (valuation R)),
+        fun _ => by simpa [← (valuation R).restrict_def] using Valuation.map_eq_of_sub_lt _⟩
 
 中文:
 引理 continuous_valuation
@@ -119,7 +122,10 @@ lemma continuous_valuation
   by_cases hx : v x = 0
   · simpa [hx, ((valuation R).hasBasis_nhds _).tendsto_iff WithZeroTopology.hasBasis_nhds_zero]
       using fun i hi => ⟨(Units.mk0 i hi).mapEquiv (ValueGroupWithZero.orderMonoidIso (valuation R)),
-        
+        fun y => by simp [Valuation.map_sub_of_right_eq_zero _ hx]⟩
+  · simpa [((valuation R).hasBasis_nhds _).tendsto_iff (hasBasis_nhds_of_ne_zero hx)]
+      using ⟨(Units.mk0 (v x) hx).mapEquiv (ValueGroupWithZero.orderMonoidIso (valuation R)),
+        fun _ => by simpa [← (valuation R).restrict_def] using Valuation.map_eq_of_sub_lt _⟩
 
 Depends on / 依赖: ContinuousAt, Units.mk0, Valuation, Valuation.map_sub_of_right_eq_zero, ValueGroupWithZero, ValueGroupWithZero.orderMonoidIso, WithZeroTopology, WithZeroTopology.hasBasis_nhds_zero, continuous_iff_continuousAt, hasBasis_nhds, hasBasis_nhds_of_ne_zero, hasBasis_nhds_zero, mapEquiv, map_sub_of_right_eq_zero, orderMonoidIso, tendsto_iff, valuation
 -/

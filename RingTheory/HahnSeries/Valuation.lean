@@ -49,7 +49,7 @@ definition addVal
   fun x y => by
     by_cases hx : x = 0; · simp [hx]
     by_cases hy : y = 0; · simp [hy]
-    rw [← order_eq_orderTop_of_ne_zero hx]; rw [← order_eq_orderTop_of_ne_zero hy]; rw [← order_eq_orderTop_of_ne_
+    rw [← order_eq_orderTop_of_ne_zero hx]; rw [← order_eq_orderTop_of_ne_zero hy]; rw [← order_eq_orderTop_of_ne_zero (mul_ne_zero hx hy)]; rw [← WithTop.coe_add]; rw [WithTop.coe_eq_coe]; rw [order_mul hx hy]
 
 中文:
 定义 addVal
@@ -58,7 +58,7 @@ definition addVal
   fun x y => by
     by_cases hx : x = 0; · simp [hx]
     by_cases hy : y = 0; · simp [hy]
-    rw [← order_eq_orderTop_of_ne_zero hx]; rw [← order_eq_orderTop_of_ne_zero hy]; rw [← order_eq_orderTop_of_ne_
+    rw [← order_eq_orderTop_of_ne_zero hx]; rw [← order_eq_orderTop_of_ne_zero hy]; rw [← order_eq_orderTop_of_ne_zero (mul_ne_zero hx hy)]; rw [← WithTop.coe_add]; rw [WithTop.coe_eq_coe]; rw [order_mul hx hy]
 
 Depends on / 依赖: AddValuation, AddValuation.of, WithTop, WithTop.coe_add, WithTop.coe_eq_coe, coe_add, coe_eq_coe, min_orderTop_le_orderTop_add, mul_ne_zero, orderTop, orderTop_one, orderTop_zero, order_eq_orderTop_of_ne_zero, order_mul
 -/

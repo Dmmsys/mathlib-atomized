@@ -69,7 +69,7 @@ abbreviation divisionRing
   let ratCast := e.ratCast
   let nnqsmul := e.smul Rat>=0
   let qsmul := e.smul Rat
-  apply e.injective.divisionRin
+  apply e.injective.divisionRing _ <;> intros <;> exact e.apply_symm_apply _
 
 中文:
 缩写 divisionRing
@@ -85,7 +85,7 @@ abbreviation divisionRing
   let ratCast := e.ratCast
   let nnqsmul := e.smul Rat>=0
   let qsmul := e.smul Rat
-  apply e.injective.divisionRin
+  apply e.injective.divisionRing _ <;> intros <;> exact e.apply_symm_apply _
 -/
 protected abbrev divisionRing [DivisionRing β] : DivisionRing α := by
   let add_group_with_one := e.addGroupWithOne
@@ -118,7 +118,7 @@ abbreviation field
   let ratCast := e.ratCast
   let nnqsmul := e.smul Rat>=0
   let qsmul := e.smul Rat
-  apply e.in
+  apply e.injective.field _ <;> intros <;> exact e.apply_symm_apply _
 
 中文:
 缩写 field
@@ -135,7 +135,7 @@ abbreviation field
   let ratCast := e.ratCast
   let nnqsmul := e.smul Rat>=0
   let qsmul := e.smul Rat
-  apply e.in
+  apply e.injective.field _ <;> intros <;> exact e.apply_symm_apply _
 -/
 protected abbrev field [Field β] : Field α := by
   let add_group_with_one := e.addGroupWithOne

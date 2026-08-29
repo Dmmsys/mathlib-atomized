@@ -143,7 +143,17 @@ theorem P_le_aux
   gcongr
   rw [intervalIntegral.integral_of_le zero_le_one]; rw [← mul_one (_ * _)]
   convert! MeasureTheory.norm_setIntegral_le_of_norm_le_const _ _
- 
+  · rw [Real.volume_real_Ioc_of_le zero_le_one, sub_zero]
+  · rw [Real.volume_Ioc, sub_zero]; exact ENNReal.ofReal_lt_top
+  intro x hx
+  rw [norm_mul]; rw [norm_exp]
+  gcongr
+  · simp only [Set.mem_Ioc] at hx
+    apply (re_le_norm _).trans
+    rw [norm_neg]; rw [norm_smul]; rw [Real.norm_of_nonneg hx.1.le]
+    exact mul_le_of_le_one_left (norm_nonneg _) hx.2
+  · rw [← abs_pow]
+    exact (hc p x hx).trans (le_abs_self _)
 
 中文:
 定理 P_le_aux
@@ -154,7 +164,17 @@ theorem P_le_aux
   gcongr
   rw [intervalIntegral.integral_of_le zero_le_one]; rw [← mul_one (_ * _)]
   convert! MeasureTheory.norm_setIntegral_le_of_norm_le_const _ _
- 
+  · rw [Real.volume_real_Ioc_of_le zero_le_one, sub_zero]
+  · rw [Real.volume_Ioc, sub_zero]; exact ENNReal.ofReal_lt_top
+  intro x hx
+  rw [norm_mul]; rw [norm_exp]
+  gcongr
+  · simp only [Set.mem_Ioc] at hx
+    apply (re_le_norm _).trans
+    rw [norm_neg]; rw [norm_smul]; rw [Real.norm_of_nonneg hx.1.le]
+    exact mul_le_of_le_one_left (norm_nonneg _) hx.2
+  · rw [← abs_pow]
+    exact (hc p x hx).trans (le_abs_self _)
 -/
 private theorem P_le_aux (f : Nat -> Complex[X]) (s : Complex) (c : Real)
     (hc : forall p : Nat, forall x in Set.Ioc (0 : Real) 1, ‖(f p).eval (x • s)‖ <= c ^ p) :
@@ -193,7 +213,10 @@ theorem P_le
   intro p hp
   refine (h' p).trans ?_
   simp_rw [mul_pow]
-  have le_max_one_pow {x : Real} : x <= max x 1 ^ p :
+  have le_max_one_pow {x : Real} : x <= max x 1 ^ p :=
+    (max_cases x 1).elim (fun h => h.1.symm ▸ le_self_pow₀ h.2 hp)
+      fun h => by rw [h.1, one_pow]; exact h.2.le
+  gcongr <;> exact le_max_one_pow
 
 中文:
 定理 P_le
@@ -207,7 +230,10 @@ theorem P_le
   intro p hp
   refine (h' p).trans ?_
   simp_rw [mul_pow]
-  have le_max_one_pow {x : Real} : x <= max x 1 ^ p :
+  have le_max_one_pow {x : Real} : x <= max x 1 ^ p :=
+    (max_cases x 1).elim (fun h => h.1.symm ▸ le_self_pow₀ h.2 hp)
+      fun h => by rw [h.1, one_pow]; exact h.2.le
+  gcongr <;> exact le_max_one_pow
 -/
 private theorem P_le (f : Nat -> Complex[X]) (s : Complex) (c : Real)
     (hc : forall p : Nat, forall x in Set.Ioc (0 : Real) 1, ‖(f p).eval (x • s)‖ <= c ^ p) :
@@ -237,7 +263,24 @@ theorem exp_polynomial_approx_aux
     have h :
       (fun x : Real => max (x * ‖s‖) 1 * ‖aeval (x * s) f‖) '' Set.Ioc 0 1 subseteq
         (fun x : Real => max (x * ‖s‖) 1 * ‖aeval (x * s) f‖) '' Set.Icc 0 1 :=
-      Se
+      Set.image_mono Set.Ioc_subset_Icc_self
+    refine (IsCompact.image isCompact_Icc ?_).isBounded.subset h
+    fun_prop
+  obtain ⟨c, h⟩ := this.exists_norm_le
+  simp_rw [Real.norm_eq_abs] at h
+  refine P_le _ s c (fun p x hx => ?_)
+  specialize h (max (x * ‖s‖) 1 * ‖aeval (x * s) f‖) (Set.mem_image_of_mem _ hx)
+  grw [← h]
+  simp_rw [Polynomial.map_mul, Polynomial.map_pow, map_X, eval_mul, eval_pow, eval_X, norm_mul,
+    Complex.norm_pow, real_smul, norm_mul, norm_real, ← eval₂_eq_eval_map, ← aeval_def, abs_mul,
+    abs_norm, mul_pow, Real.norm_of_nonneg hx.1.le]
+  refine mul_le_mul_of_nonneg_right ?_ (pow_nonneg (norm_nonneg _) _)
+  rw [← mul_pow]; rw [abs_of_nonneg (by positivity)]; rw [max_def]
+  split_ifs with hx1
+  · rw [one_pow]
+    exact pow_le_one₀ (mul_nonneg hx.1.le (norm_nonneg _)) hx1
+  · push Not at hx1
+    exact pow_le_pow_right₀ hx1.le (Nat.sub_le _ _)
 
 中文:
 定理 exp_polynomial_approx_aux
@@ -248,7 +291,24 @@ theorem exp_polynomial_approx_aux
     have h :
       (fun x : Real => max (x * ‖s‖) 1 * ‖aeval (x * s) f‖) '' Set.Ioc 0 1 subseteq
         (fun x : Real => max (x * ‖s‖) 1 * ‖aeval (x * s) f‖) '' Set.Icc 0 1 :=
-      Se
+      Set.image_mono Set.Ioc_subset_Icc_self
+    refine (IsCompact.image isCompact_Icc ?_).isBounded.subset h
+    fun_prop
+  obtain ⟨c, h⟩ := this.exists_norm_le
+  simp_rw [Real.norm_eq_abs] at h
+  refine P_le _ s c (fun p x hx => ?_)
+  specialize h (max (x * ‖s‖) 1 * ‖aeval (x * s) f‖) (Set.mem_image_of_mem _ hx)
+  grw [← h]
+  simp_rw [Polynomial.map_mul, Polynomial.map_pow, map_X, eval_mul, eval_pow, eval_X, norm_mul,
+    Complex.norm_pow, real_smul, norm_mul, norm_real, ← eval₂_eq_eval_map, ← aeval_def, abs_mul,
+    abs_norm, mul_pow, Real.norm_of_nonneg hx.1.le]
+  refine mul_le_mul_of_nonneg_right ?_ (pow_nonneg (norm_nonneg _) _)
+  rw [← mul_pow]; rw [abs_of_nonneg (by positivity)]; rw [max_def]
+  split_ifs with hx1
+  · rw [one_pow]
+    exact pow_le_one₀ (mul_nonneg hx.1.le (norm_nonneg _)) hx1
+  · push Not at hx1
+    exact pow_le_pow_right₀ hx1.le (Nat.sub_le _ _)
 -/
 private theorem exp_polynomial_approx_aux (f : Int[X]) (s : Complex) :
     exists c >= 0,
@@ -289,7 +349,41 @@ theorem exp_polynomial_approx
   use
     if h : ((f.aroots Complex).map c').toFinset.Nonempty then ((f.aroots Complex).map c').toFinset.max' h else 0
   intro p p_gt prime_p
-  obtain ⟨gp', -, h'⟩ := eval_sumIDeriv_of_pos (X ^ (p - 1)
+  obtain ⟨gp', -, h'⟩ := eval_sumIDeriv_of_pos (X ^ (p - 1) * f ^ p) prime_p.pos
+  specialize h' 0 (by rw [C_0, sub_zero])
+  use f.eval 0 ^ p + p * gp'.eval 0
+  constructor
+  · rw [dvd_add_left (dvd_mul_right _ _)]
+    contrapose! p_gt with h
+    exact Nat.le_of_dvd (Int.natAbs_pos.mpr hf) (Int.natCast_dvd.mp (Int.Prime.dvd_pow' prime_p h))
+  obtain ⟨gp, gp'_le, h⟩ := aeval_sumIDeriv Complex (X ^ (p - 1) * f ^ p) p
+  refine ⟨gp, ?_, ?_⟩
+  · refine gp'_le.trans ((tsub_le_tsub_right natDegree_mul_le p).trans ?_)
+    rw [natDegree_X_pow]; rw [natDegree_pow]; rw [tsub_add_eq_add_tsub prime_p.one_le]; rw [tsub_right_comm]; rw [add_tsub_cancel_left]
+  intro r hr
+  specialize h r _
+  · rw [mem_roots'] at hr
+    rw [Polynomial.map_mul]; rw [f.map_pow]
+    exact dvd_mul_of_dvd_right (pow_dvd_pow_of_dvd (dvd_iff_isRoot.mpr hr.2) _) _
+  rw [nsmul_eq_mul] at h
+  have :
+      (↑(eval 0 f ^ p + p * eval 0 gp') * cexp r - p * (aeval r) gp) * (p - 1)! =
+      ((eval 0 f ^ p * cexp r) * (p - 1)! +
+        ↑(p * (p - 1)!) * (eval 0 gp' * cexp r - (aeval r) gp)) := by
+    push_cast; ring
+  rw [le_div_iff₀ (Nat.cast_pos.mpr (Nat.factorial_pos _) : (0 : Real) < _)]; rw [← norm_natCast]; rw [← norm_mul]; rw [this]; rw [Nat.mul_factorial_pred prime_p.ne_zero]; rw [mul_sub]; rw [← h]
+  have :
+      ↑(eval 0 f) ^ p * cexp r * ↑(p - 1)! +
+        (↑p ! * (↑(eval 0 gp') * cexp r) - (aeval r) (sumIDeriv (X ^ (p - 1) * f ^ p))) =
+      ((p - 1)! • ↑(eval 0 (f ^ p)) + p ! • ↑(eval 0 gp') : Int) * cexp r -
+        (aeval r) (sumIDeriv (X ^ (p - 1) * f ^ p)) := by
+    simp; ring
+  rw [this]; rw [← h']; rw [mul_comm]; rw [← eq_intCast (algebraMap Int Complex)]; rw [← aeval_algebraMap_apply_eq_algebraMap_eval]; rw [map_zero]; rw [aeval_sumIDeriv_eq_eval]; rw [aeval_sumIDeriv_eq_eval]; rw [← P]
+  refine (Pp'_le r p prime_p.ne_zero).trans (pow_le_pow_left₀ (c'0 r) ?_ _)
+  have aux : c' r in (Multiset.map c' (f.aroots Complex)).toFinset := by
+    simpa only [Multiset.mem_toFinset] using Multiset.mem_map_of_mem _ hr
+  have h : ((f.aroots Complex).map c').toFinset.Nonempty := ⟨c' r, aux⟩
+  simpa only [h, ↓reduceDIte] using Finset.le_max' _ _ aux
 
 中文:
 定理 exp_polynomial_approx
@@ -300,7 +394,41 @@ theorem exp_polynomial_approx
   use
     if h : ((f.aroots Complex).map c').toFinset.Nonempty then ((f.aroots Complex).map c').toFinset.max' h else 0
   intro p p_gt prime_p
-  obtain ⟨gp', -, h'⟩ := eval_sumIDeriv_of_pos (X ^ (p - 1)
+  obtain ⟨gp', -, h'⟩ := eval_sumIDeriv_of_pos (X ^ (p - 1) * f ^ p) prime_p.pos
+  specialize h' 0 (by rw [C_0, sub_zero])
+  use f.eval 0 ^ p + p * gp'.eval 0
+  constructor
+  · rw [dvd_add_left (dvd_mul_right _ _)]
+    contrapose! p_gt with h
+    exact Nat.le_of_dvd (Int.natAbs_pos.mpr hf) (Int.natCast_dvd.mp (Int.Prime.dvd_pow' prime_p h))
+  obtain ⟨gp, gp'_le, h⟩ := aeval_sumIDeriv Complex (X ^ (p - 1) * f ^ p) p
+  refine ⟨gp, ?_, ?_⟩
+  · refine gp'_le.trans ((tsub_le_tsub_right natDegree_mul_le p).trans ?_)
+    rw [natDegree_X_pow]; rw [natDegree_pow]; rw [tsub_add_eq_add_tsub prime_p.one_le]; rw [tsub_right_comm]; rw [add_tsub_cancel_left]
+  intro r hr
+  specialize h r _
+  · rw [mem_roots'] at hr
+    rw [Polynomial.map_mul]; rw [f.map_pow]
+    exact dvd_mul_of_dvd_right (pow_dvd_pow_of_dvd (dvd_iff_isRoot.mpr hr.2) _) _
+  rw [nsmul_eq_mul] at h
+  have :
+      (↑(eval 0 f ^ p + p * eval 0 gp') * cexp r - p * (aeval r) gp) * (p - 1)! =
+      ((eval 0 f ^ p * cexp r) * (p - 1)! +
+        ↑(p * (p - 1)!) * (eval 0 gp' * cexp r - (aeval r) gp)) := by
+    push_cast; ring
+  rw [le_div_iff₀ (Nat.cast_pos.mpr (Nat.factorial_pos _) : (0 : Real) < _)]; rw [← norm_natCast]; rw [← norm_mul]; rw [this]; rw [Nat.mul_factorial_pred prime_p.ne_zero]; rw [mul_sub]; rw [← h]
+  have :
+      ↑(eval 0 f) ^ p * cexp r * ↑(p - 1)! +
+        (↑p ! * (↑(eval 0 gp') * cexp r) - (aeval r) (sumIDeriv (X ^ (p - 1) * f ^ p))) =
+      ((p - 1)! • ↑(eval 0 (f ^ p)) + p ! • ↑(eval 0 gp') : Int) * cexp r -
+        (aeval r) (sumIDeriv (X ^ (p - 1) * f ^ p)) := by
+    simp; ring
+  rw [this]; rw [← h']; rw [mul_comm]; rw [← eq_intCast (algebraMap Int Complex)]; rw [← aeval_algebraMap_apply_eq_algebraMap_eval]; rw [map_zero]; rw [aeval_sumIDeriv_eq_eval]; rw [aeval_sumIDeriv_eq_eval]; rw [← P]
+  refine (Pp'_le r p prime_p.ne_zero).trans (pow_le_pow_left₀ (c'0 r) ?_ _)
+  have aux : c' r in (Multiset.map c' (f.aroots Complex)).toFinset := by
+    simpa only [Multiset.mem_toFinset] using Multiset.mem_map_of_mem _ hr
+  have h : ((f.aroots Complex).map c').toFinset.Nonempty := ⟨c' r, aux⟩
+  simpa only [h, ↓reduceDIte] using Finset.le_max' _ _ aux
 
 Depends on / 依赖: Int.natAbs_pos.mpr, Nat.le_of_dvd, Nonempty, aroots, contrapose, dvd_add_left, dvd_mul_right, eval_sumIDeriv_of_pos, exp_polynomial_approx_aux, f.aroots, f.eval, le_of_dvd, natAbs_pos, nsmul_eq_mul, p_gt, prime_p, prime_p.pos, simp_rw, specialize, sub_zero
 -/

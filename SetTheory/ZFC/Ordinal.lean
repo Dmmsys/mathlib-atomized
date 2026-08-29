@@ -521,7 +521,19 @@ theorem subset_iff_eq_or_mem
     by_cases hyx : y subseteq x
     · exact Or.inl (subset_antisymm hxy hyx)
     · obtain ⟨m, hm, hm'⟩ := mem_wf.has_min (y \ x) (Set.sdiff_nonempty.2 hyx)
-      have hmy : m in y := by simp 
+      have hmy : m in y := by simp only [Set.mem_sdiff, SetLike.mem_coe] at hm; exact hm.1
+      have hmx : m subseteq x := by
+        intro z hzm
+        by_contra hzx
+        exact hm' _ ⟨hy.mem_trans hzm hmy, hzx⟩ hzm
+      obtain rfl | H := IH m x (Sym2.GameAdd.fst_snd hmy) (hy.mem hmy) hx hmx
+      · exact Or.inr hmy
+      · cases Set.notMem_of_mem_sdiff hm H
+  · rintro (rfl | h)
+    · rfl
+    · exact hy.subset_of_mem h
+
+alias ⟨eq_or_mem_of_subset, _⟩ := subset_iff_eq_or_mem
 
 中文:
 定理 subset_iff_eq_or_mem
@@ -535,7 +547,19 @@ theorem subset_iff_eq_or_mem
     by_cases hyx : y subseteq x
     · exact Or.inl (subset_antisymm hxy hyx)
     · obtain ⟨m, hm, hm'⟩ := mem_wf.has_min (y \ x) (Set.sdiff_nonempty.2 hyx)
-      have hmy : m in y := by simp 
+      have hmy : m in y := by simp only [Set.mem_sdiff, SetLike.mem_coe] at hm; exact hm.1
+      have hmx : m subseteq x := by
+        intro z hzm
+        by_contra hzx
+        exact hm' _ ⟨hy.mem_trans hzm hmy, hzx⟩ hzm
+      obtain rfl | H := IH m x (Sym2.GameAdd.fst_snd hmy) (hy.mem hmy) hx hmx
+      · exact Or.inr hmy
+      · cases Set.notMem_of_mem_sdiff hm H
+  · rintro (rfl | h)
+    · rfl
+    · exact hy.subset_of_mem h
+
+alias ⟨eq_or_mem_of_subset, _⟩ := subset_iff_eq_or_mem
 
 Depends on / 依赖: GameAdd, Or.inl, Set.mem_sdiff, Set.sdiff_nonempty, SetLike, SetLike.mem_coe, Sym2.GameAdd.fst_snd, Sym2.GameAdd.recursion, fst_snd, has_min, hy.mem, hy.mem_trans, mem_coe, mem_sdiff, mem_trans, mem_wf, mem_wf.has_min, recursion, revert, sdiff_nonempty
 -/
@@ -765,7 +789,10 @@ theorem _root_.ZFSet.isOrdinal_iff_trichotomous
     obtain hyw | rfl | hwy := trichotomous_of (Subrel (· in ·) (· in x)) y w
     · exact hyw
     · cases asymm hyz hzw
-    · cases mem_wf.asymmetric₃ _ _ _ hyz 
+    · cases mem_wf.asymmetric₃ _ _ _ hyz hzw hwy
+
+@[deprecated (since := "2026-01-24")]
+alias _root_.ZFSet.isOrdinal_iff_isTrichotomous := _root_.ZFSet.isOrdinal_iff_trichotomous
 
 中文:
 定理 _root_.ZFSet.isOrdinal_iff_trichotomous
@@ -777,7 +804,10 @@ theorem _root_.ZFSet.isOrdinal_iff_trichotomous
     obtain hyw | rfl | hwy := trichotomous_of (Subrel (· in ·) (· in x)) y w
     · exact hyw
     · cases asymm hyz hzw
-    · cases mem_wf.asymmetric₃ _ _ _ hyz 
+    · cases mem_wf.asymmetric₃ _ _ _ hyz hzw hwy
+
+@[deprecated (since := "2026-01-24")]
+alias _root_.ZFSet.isOrdinal_iff_isTrichotomous := _root_.ZFSet.isOrdinal_iff_trichotomous
 
 Depends on / 依赖: h.isTransitive, h.trichotomous, isTransitive, trichotomous
 -/
@@ -1505,7 +1535,7 @@ theorem isOrdinal_toZFSet
     obtain ⟨b, hb, rfl⟩ := mem_toZFSet_iff.1 hy
   · exact toZFSet_mem_toZFSet_iff.2 (hb.trans ha)
   · obtain ⟨c, hc, rfl⟩ := mem_toZFSet_iff.1 hz
-    exact toZFSet_mem_toZFSet_if
+    exact toZFSet_mem_toZFSet_iff.2 (hc.trans hb)
 
 中文:
 定理 isOrdinal_toZFSet
@@ -1518,7 +1548,7 @@ theorem isOrdinal_toZFSet
     obtain ⟨b, hb, rfl⟩ := mem_toZFSet_iff.1 hy
   · exact toZFSet_mem_toZFSet_iff.2 (hb.trans ha)
   · obtain ⟨c, hc, rfl⟩ := mem_toZFSet_iff.1 hz
-    exact toZFSet_mem_toZFSet_if
+    exact toZFSet_mem_toZFSet_iff.2 (hc.trans hb)
 
 Depends on / 依赖: all_goals, hb.trans, hc.trans, mem_toZFSet_iff, toZFSet_mem_toZFSet_iff
 -/

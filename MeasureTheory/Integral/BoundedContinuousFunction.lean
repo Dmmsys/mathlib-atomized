@@ -333,7 +333,7 @@ lemma norm_integral_le_mul_norm
     _ <= ∫ _, ‖f‖ ∂μ := ?_
     _ = μ.real Set.univ • ‖f‖ := by rw [integral_const]
   apply integral_mono _ (integrable_const ‖f‖) (fun x => f.norm_coe_le_norm x) -- NOTE: `gcongr`?
-  exact (integrable_norm_iff f.conti
+  exact (integrable_norm_iff f.continuous.measurable.aestronglyMeasurable).mpr (f.integrable μ)
 
 中文:
 引理 norm_integral_le_mul_norm
@@ -344,7 +344,7 @@ lemma norm_integral_le_mul_norm
     _ <= ∫ _, ‖f‖ ∂μ := ?_
     _ = μ.real Set.univ • ‖f‖ := by rw [integral_const]
   apply integral_mono _ (integrable_const ‖f‖) (fun x => f.norm_coe_le_norm x) -- NOTE: `gcongr`?
-  exact (integrable_norm_iff f.conti
+  exact (integrable_norm_iff f.continuous.measurable.aestronglyMeasurable).mpr (f.integrable μ)
 
 Depends on / 依赖: Set.univ, aestronglyMeasurable, continuous, f.continuous.measurable.aestronglyMeasurable, f.integrable, f.norm_coe_le_norm, integrable, integrable_const, integrable_norm_iff, integral_const, integral_mono, measurable, norm_coe_le_norm, norm_integral_le_integral_norm
 -/
@@ -476,7 +476,18 @@ lemma tendsto_integral_of_forall_limsup_integral_le_integral
   · simp only [tendsto_bot]
   have obs := BoundedContinuousFunction.isBounded_range_integral μs f
   have bdd_above := BddAbove.isBoundedUnder L.univ_mem (by simpa using obs.bddAbove)
-  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bd
+  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bddBelow)
+  apply tendsto_of_le_liminf_of_limsup_le _ _ bdd_above bdd_below
+  · have key := h _ (f.norm_sub_nonneg)
+    simp_rw [f.integral_const_sub ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := limsup_const_sub L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above.isCobounded_ge bdd_below
+    rwa [this, _root_.sub_le_sub_iff_left ‖f‖] at key
+  · have key := h _ (f.add_norm_nonneg)
+    simp_rw [f.integral_add_const ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := limsup_add_const L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above bdd_below.isCobounded_le
+    rwa [this, add_le_add_iff_right] at key
 
 中文:
 引理 tendsto_integral_of_对任意_limsup_integral_le_integral
@@ -486,7 +497,18 @@ lemma tendsto_integral_of_forall_limsup_integral_le_integral
   · simp only [tendsto_bot]
   have obs := BoundedContinuousFunction.isBounded_range_integral μs f
   have bdd_above := BddAbove.isBoundedUnder L.univ_mem (by simpa using obs.bddAbove)
-  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bd
+  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bddBelow)
+  apply tendsto_of_le_liminf_of_limsup_le _ _ bdd_above bdd_below
+  · have key := h _ (f.norm_sub_nonneg)
+    simp_rw [f.integral_const_sub ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := limsup_const_sub L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above.isCobounded_ge bdd_below
+    rwa [this, _root_.sub_le_sub_iff_left ‖f‖] at key
+  · have key := h _ (f.add_norm_nonneg)
+    simp_rw [f.integral_add_const ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := limsup_add_const L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above bdd_below.isCobounded_le
+    rwa [this, add_le_add_iff_right] at key
 
 Depends on / 依赖: BddAbove, BddAbove.isBoundedUnder, BddBelow, BddBelow.isBoundedUnder, BoundedContinuousFunction, BoundedContinuousFunction.isBounded_range_integral, L.univ_mem, bddAbove, bddBelow, bdd_above, bdd_below, eq_or_neBot, f.integral_const_sub, f.norm_sub_nonneg, integral_const_sub, isBoundedUnder, isBounded_range_integral, norm_sub_nonneg, obs.bddAbove, obs.bddBelow
 -/
@@ -523,7 +545,20 @@ lemma tendsto_integral_of_forall_integral_le_liminf_integral
   · simp only [tendsto_bot]
   have obs := BoundedContinuousFunction.isBounded_range_integral μs f
   have bdd_above := BddAbove.isBoundedUnder L.univ_mem (by simpa using obs.bddAbove)
-  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bd
+  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bddBelow)
+  apply @tendsto_of_le_liminf_of_limsup_le Real ι _ _ _ L (fun i => ∫ x, f x ∂(μs i)) (∫ x, f x ∂μ)
+  · have key := h _ (f.add_norm_nonneg)
+    simp_rw [f.integral_add_const ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := liminf_add_const L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above.isCobounded_ge bdd_below
+    rwa [this, add_le_add_iff_right] at key
+  · have key := h _ (f.norm_sub_nonneg)
+    simp_rw [f.integral_const_sub ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := liminf_const_sub L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above bdd_below.isCobounded_le
+    rwa [this, sub_le_sub_iff_left] at key
+  · exact bdd_above
+  · exact bdd_below
 
 中文:
 引理 tendsto_integral_of_对任意_integral_le_liminf_integral
@@ -533,7 +568,20 @@ lemma tendsto_integral_of_forall_integral_le_liminf_integral
   · simp only [tendsto_bot]
   have obs := BoundedContinuousFunction.isBounded_range_integral μs f
   have bdd_above := BddAbove.isBoundedUnder L.univ_mem (by simpa using obs.bddAbove)
-  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bd
+  have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bddBelow)
+  apply @tendsto_of_le_liminf_of_limsup_le Real ι _ _ _ L (fun i => ∫ x, f x ∂(μs i)) (∫ x, f x ∂μ)
+  · have key := h _ (f.add_norm_nonneg)
+    simp_rw [f.integral_add_const ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := liminf_add_const L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above.isCobounded_ge bdd_below
+    rwa [this, add_le_add_iff_right] at key
+  · have key := h _ (f.norm_sub_nonneg)
+    simp_rw [f.integral_const_sub ‖f‖] at key
+    simp only [probReal_univ, smul_eq_mul, one_mul] at key
+    have := liminf_const_sub L (fun i => ∫ x, f x ∂(μs i)) ‖f‖ bdd_above bdd_below.isCobounded_le
+    rwa [this, sub_le_sub_iff_left] at key
+  · exact bdd_above
+  · exact bdd_below
 
 Depends on / 依赖: BddAbove, BddAbove.isBoundedUnder, BddBelow, BddBelow.isBoundedUnder, BoundedContinuousFunction, BoundedContinuousFunction.isBounded_range_integral, L.univ_mem, add_norm_nonneg, bddAbove, bddBelow, bdd_above, bdd_below, eq_or_neBot, f.add_norm_nonneg, f.integral_add_const, integral_add_const, isBoundedUnder, isBounded_range_integral, obs.bddAbove, obs.bddBelow
 -/

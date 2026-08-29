@@ -144,13 +144,15 @@ English:
 lemma assoc_inv_app
   given: (h : ShiftMkCore C A) (m₁ m₂ m₃ : A) (X : C)
   proof: by
-  rw [← cancel_mono ((h.add (m₁ + m₂) m₃).hom.app X ≫ (h.F m₃).map ((h.add m₁ m₂).hom.app X))]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [h.assoc_hom_app]; rw [eqToHom_tr
+  rw [← cancel_mono ((h.add (m₁ + m₂) m₃).hom.app X ≫ (h.F m₃).map ((h.add m₁ m₂).hom.app X))]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [h.assoc_hom_app]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app]
+  rfl
 
 中文:
 引理 assoc_inv_app
   条件: (h : ShiftMkCore C A) (m₁ m₂ m₃ : A) (X : C)
   证明: by
-  rw [← cancel_mono ((h.add (m₁ + m₂) m₃).hom.app X ≫ (h.F m₃).map ((h.add m₁ m₂).hom.app X))]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [h.assoc_hom_app]; rw [eqToHom_tr
+  rw [← cancel_mono ((h.add (m₁ + m₂) m₃).hom.app X ≫ (h.F m₃).map ((h.add m₁ m₂).hom.app X))]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [h.assoc_hom_app]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, Functor, Functor.map_comp, Functor.map_id, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, assoc_hom_app, cancel_mono, eqToHom_refl, eqToHom_trans_assoc, h.add, h.assoc_hom_app, hom.app, id_comp, inv_hom_id_app, inv_hom_id_app_assoc, map_comp, map_id
 -/
@@ -580,7 +582,9 @@ lemma shiftFunctorAdd'_assoc
   simp only [eqToHom_app]
   dsimp [shiftFunctorAdd, shiftFunctor]
   simp only [obj_μ_inv_app, Discrete.addMonoidal_associator, eqToIso.hom, eqToHom_map,
-    eqToHom_
+    eqToHom_app]
+  erw [δ_μ_app_assoc, Category.assoc]
+  rfl
 
 中文:
 引理 shiftFunctorAdd'_assoc
@@ -594,7 +598,9 @@ lemma shiftFunctorAdd'_assoc
   simp only [eqToHom_app]
   dsimp [shiftFunctorAdd, shiftFunctor]
   simp only [obj_μ_inv_app, Discrete.addMonoidal_associator, eqToIso.hom, eqToHom_map,
-    eqToHom_
+    eqToHom_app]
+  erw [δ_μ_app_assoc, Category.assoc]
+  rfl
 -/
 lemma shiftFunctorAdd'_assoc (a₁ a₂ a₃ a₁₂ a₂₃ a₁₂₃ : A)
     (h₁₂ : a₁ + a₂ = a₁₂) (h₂₃ : a₂ + a₃ = a₂₃) (h₁₂₃ : a₁ + a₂ + a₃ = a₁₂₃) :
@@ -1071,7 +1077,16 @@ definition shiftEquiv'
     (by rw [← add_left_inj j, add_assoc, h, zero_add, add_zero])
   functor_unitIso_comp X := by
     convert!
-      (equivOfTensorIsoUnit (shiftMonoidalFunctor C
+      (equivOfTensorIsoUnit (shiftMonoidalFunctor C A) ⟨i⟩ ⟨j⟩ (Discrete.eqToIso h)
+            (Discrete.eqToIso (by dsimp; rw [← add_left_inj j, add_assoc, h, zero_add, add_zero]))
+            (Subsingleton.elim _ _)).functor_unitIso_comp
+        X
+    all_goals
+      ext X
+      dsimp [shiftFunctorCompIsoId, unitOfTensorIsoUnit,
+        shiftFunctorAdd']
+      simp only [Category.assoc, eqToHom_map]
+      rfl
 
 中文:
 定义 shiftEquiv'
@@ -1083,7 +1098,16 @@ definition shiftEquiv'
     (by rw [← add_left_inj j, add_assoc, h, zero_add, add_zero])
   functor_unitIso_comp X := by
     convert!
-      (equivOfTensorIsoUnit (shiftMonoidalFunctor C
+      (equivOfTensorIsoUnit (shiftMonoidalFunctor C A) ⟨i⟩ ⟨j⟩ (Discrete.eqToIso h)
+            (Discrete.eqToIso (by dsimp; rw [← add_left_inj j, add_assoc, h, zero_add, add_zero]))
+            (Subsingleton.elim _ _)).functor_unitIso_comp
+        X
+    all_goals
+      ext X
+      dsimp [shiftFunctorCompIsoId, unitOfTensorIsoUnit,
+        shiftFunctorAdd']
+      simp only [Category.assoc, eqToHom_map]
+      rfl
 
 Depends on / 依赖: shiftFunctor
 -/
@@ -1473,7 +1497,14 @@ lemma shiftFunctorCompIsoId_add'_inv_app
   congr 1
   rw [← NatTrans.naturality]
   dsimp
-  rw [← cancel_mono ((shiftFunctorAdd' C p' p 0 hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc
+  rw [← cancel_mono ((shiftFunctorAdd' C p' p 0 hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← shiftFunctorAdd'_assoc_inv_app p' m n n' p 0
+      (by rw [← add_left_inj n]; rw [hn]; rw [add_assoc]; rw [h]; rw [hp]) h (by rw [add_assoc, h, hp]),
+    ← Functor.map_comp_assoc, ← Functor.map_comp_assoc, ← Functor.map_comp_assoc,
+    Category.assoc, Category.assoc,
+    shiftFunctorAdd'_assoc_inv_app n' m' m p' 0 n' _ hm
+      (by rw [add_assoc, hm, add_zero]), Iso.hom_inv_id_app_assoc,
+    ← shiftFunctorAdd'_add_zero_hom_app, Iso.hom_inv_id_app,
+    Functor.map_id, Category.id_comp, Iso.hom_inv_id_app]
 
 中文:
 引理 shiftFunctorCompIsoId_add'_inv_app
@@ -1483,7 +1514,14 @@ lemma shiftFunctorCompIsoId_add'_inv_app
   congr 1
   rw [← NatTrans.naturality]
   dsimp
-  rw [← cancel_mono ((shiftFunctorAdd' C p' p 0 hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc
+  rw [← cancel_mono ((shiftFunctorAdd' C p' p 0 hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← shiftFunctorAdd'_assoc_inv_app p' m n n' p 0
+      (by rw [← add_left_inj n]; rw [hn]; rw [add_assoc]; rw [h]; rw [hp]) h (by rw [add_assoc, h, hp]),
+    ← Functor.map_comp_assoc, ← Functor.map_comp_assoc, ← Functor.map_comp_assoc,
+    Category.assoc, Category.assoc,
+    shiftFunctorAdd'_assoc_inv_app n' m' m p' 0 n' _ hm
+      (by rw [add_assoc, hm, add_zero]), Iso.hom_inv_id_app_assoc,
+    ← shiftFunctorAdd'_add_zero_hom_app, Iso.hom_inv_id_app,
+    Functor.map_id, Category.id_comp, Iso.hom_inv_id_app]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, Functor.map_comp_assoc, Iso.hom_inv_id_app, NatTrans, NatTrans.naturality, _assoc_inv_app, add_assoc, add_left_inj, cancel_mono, hom_inv_id_app, inv.app, map_comp, map_comp_assoc, naturality, shiftFunctorAdd, shiftFunctorCompIsoId
 -/
@@ -1516,12 +1554,16 @@ lemma `shiftFunctorCompIsoId_add'_hom_app` / 引理 `shiftFunctorCompIsoId_add'_
 English:
 lemma shiftFunctorCompIsoId_add'_hom_app
   proof: by
-  rw [← cancel_mono ((shiftFunctorCompIsoId C p' p hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [shiftFunctorCompIsoId_add'_inv_app m n p m' n' p' hm hn hp h]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_
+  rw [← cancel_mono ((shiftFunctorCompIsoId C p' p hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [shiftFunctorCompIsoId_add'_inv_app m n p m' n' p' hm hn hp h]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id_app]
+  dsimp
+  rw [Functor.map_id]; rw [Category.id_comp]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
 
 中文:
 引理 shiftFunctorCompIsoId_add'_hom_app
   证明: by
-  rw [← cancel_mono ((shiftFunctorCompIsoId C p' p hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [shiftFunctorCompIsoId_add'_inv_app m n p m' n' p' hm hn hp h]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_
+  rw [← cancel_mono ((shiftFunctorCompIsoId C p' p hp).inv.app X)]; rw [Iso.hom_inv_id_app]; rw [shiftFunctorCompIsoId_add'_inv_app m n p m' n' p' hm hn hp h]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id_app]
+  dsimp
+  rw [Functor.map_id]; rw [Category.id_comp]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
 -/
 lemma shiftFunctorCompIsoId_add'_hom_app :
     (shiftFunctorCompIsoId C p' p hp).hom.app X =
@@ -1876,7 +1918,19 @@ lemma shiftFunctorComm_hom_app_comp_shift_shiftFunctorAdd_hom_app
   dsimp
   simp only [Category.id_comp, ← Functor.map_comp, Iso.hom_inv_id_app]
   dsimp
-  simp only [Functor.map_id, 
+  simp only [Functor.map_id, Category.comp_id,
+    shiftFunctorComm_eq C _ _ _ rfl, ← shiftFunctorAdd'_eq_shiftFunctorAdd]
+  dsimp
+  simp only [Category.assoc, Iso.hom_inv_id_app_assoc, Iso.inv_hom_id_app_assoc,
+    ← Functor.map_comp,
+    shiftFunctorAdd'_assoc_hom_app_assoc m₂ m₃ m₁ (m₂ + m₃) (m₁ + m₃) (m₁ + (m₂ + m₃)) rfl
+      (add_comm m₃ m₁) (add_comm _ m₁) X,
+    ← shiftFunctorAdd'_assoc_hom_app_assoc m₂ m₁ m₃ (m₁ + m₂) (m₁ + m₃)
+      (m₁ + (m₂ + m₃)) (add_comm _ _) rfl (by rw [add_comm m₂ m₁, add_assoc]) X,
+    shiftFunctorAdd'_assoc_hom_app m₁ m₂ m₃
+      (m₁ + m₂) (m₂ + m₃) (m₁ + (m₂ + m₃)) rfl rfl (add_assoc _ _ _) X]
+
+@[reassoc]
 
 中文:
 引理 shiftFunctorComm_hom_app_comp_shift_shiftFunctorAdd_hom_app
@@ -1887,7 +1941,19 @@ lemma shiftFunctorComm_hom_app_comp_shift_shiftFunctorAdd_hom_app
   dsimp
   simp only [Category.id_comp, ← Functor.map_comp, Iso.hom_inv_id_app]
   dsimp
-  simp only [Functor.map_id, 
+  simp only [Functor.map_id, Category.comp_id,
+    shiftFunctorComm_eq C _ _ _ rfl, ← shiftFunctorAdd'_eq_shiftFunctorAdd]
+  dsimp
+  simp only [Category.assoc, Iso.hom_inv_id_app_assoc, Iso.inv_hom_id_app_assoc,
+    ← Functor.map_comp,
+    shiftFunctorAdd'_assoc_hom_app_assoc m₂ m₃ m₁ (m₂ + m₃) (m₁ + m₃) (m₁ + (m₂ + m₃)) rfl
+      (add_comm m₃ m₁) (add_comm _ m₁) X,
+    ← shiftFunctorAdd'_assoc_hom_app_assoc m₂ m₁ m₃ (m₁ + m₂) (m₁ + m₃)
+      (m₁ + (m₂ + m₃)) (add_comm _ _) rfl (by rw [add_comm m₂ m₁, add_assoc]) X,
+    shiftFunctorAdd'_assoc_hom_app m₁ m₂ m₃
+      (m₁ + m₂) (m₂ + m₃) (m₁ + (m₂ + m₃)) rfl rfl (add_assoc _ _ _) X]
+
+@[reassoc]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Functor, Functor.map_comp, Functor.map_id, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, Iso.inv_hom_id_app_assoc, _eq_shiftFunctorAdd, cancel_mono, comp_id, hom_inv_id_app, hom_inv_id_app_assoc, id_comp, inv.app, inv_hom_id_app_assoc, map_comp, map_id
 -/
@@ -2144,7 +2210,26 @@ definition hasShift
       assoc_hom_app := fun m₁ m₂ m₃ X => hF.map_injective (by
         have h := shiftFunctorAdd'_assoc_hom_app m₁ m₂ m₃ _ _ (m₁ + m₂ + m₃) rfl rfl rfl (F.obj X)
         simp only [shiftFunctorAdd'_eq_shiftFunctorAdd] at h
-
+        rw [← cancel_mono ((i m₃).hom.app ((s m₂).obj ((s m₁).obj X)))]
+        simp only [Functor.comp_obj, Functor.map_comp, map_add_hom_app,
+          Category.assoc, Iso.inv_hom_id_app_assoc, NatTrans.naturality_assoc, Functor.comp_map,
+          Iso.inv_hom_id_app, Category.comp_id]
+        erw [(i m₃).hom.naturality]
+        rw [Functor.comp_map]; rw [map_add_hom_app]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp_assoc _ ((i (m₁ + m₂)).inv.app X)]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [Category.id_comp]; rw [reassoc_of% h]; rw [dcongr_arg (fun a => (i a).hom.app X) (add_assoc m₁ m₂ m₃)]
+        simp [shiftFunctorAdd', eqToHom_map])
+      zero_add_hom_app := fun n X => hF.map_injective (by
+        have := dcongr_arg (fun a => (i a).hom.app X) (zero_add n)
+        rw [← cancel_mono ((i n).hom.app ((s 0).obj X))]
+        simp only [comp_obj, map_add_hom_app, this, shiftFunctorAdd_zero_add_hom_app, id_obj,
+          Category.assoc, eqToHom_trans_assoc, eqToHom_refl, Category.id_comp, Iso.inv_hom_id_app,
+          Category.comp_id, map_comp, eqToHom_map]
+        congr 1
+        erw [(i n).hom.naturality]
+        simp)
+      add_zero_hom_app := fun n X => hF.map_injective (by
+        have := dcongr_arg (fun a => (i a).hom.app X) (add_zero n)
+        simp [this, ← NatTrans.naturality_assoc, eqToHom_map,
+          shiftFunctorAdd_add_zero_hom_app]) }
 
 中文:
 定义 hasShift
@@ -2156,7 +2241,26 @@ definition hasShift
       assoc_hom_app := fun m₁ m₂ m₃ X => hF.map_injective (by
         have h := shiftFunctorAdd'_assoc_hom_app m₁ m₂ m₃ _ _ (m₁ + m₂ + m₃) rfl rfl rfl (F.obj X)
         simp only [shiftFunctorAdd'_eq_shiftFunctorAdd] at h
-
+        rw [← cancel_mono ((i m₃).hom.app ((s m₂).obj ((s m₁).obj X)))]
+        simp only [Functor.comp_obj, Functor.map_comp, map_add_hom_app,
+          Category.assoc, Iso.inv_hom_id_app_assoc, NatTrans.naturality_assoc, Functor.comp_map,
+          Iso.inv_hom_id_app, Category.comp_id]
+        erw [(i m₃).hom.naturality]
+        rw [Functor.comp_map]; rw [map_add_hom_app]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp_assoc _ ((i (m₁ + m₂)).inv.app X)]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [Category.id_comp]; rw [reassoc_of% h]; rw [dcongr_arg (fun a => (i a).hom.app X) (add_assoc m₁ m₂ m₃)]
+        simp [shiftFunctorAdd', eqToHom_map])
+      zero_add_hom_app := fun n X => hF.map_injective (by
+        have := dcongr_arg (fun a => (i a).hom.app X) (zero_add n)
+        rw [← cancel_mono ((i n).hom.app ((s 0).obj X))]
+        simp only [comp_obj, map_add_hom_app, this, shiftFunctorAdd_zero_add_hom_app, id_obj,
+          Category.assoc, eqToHom_trans_assoc, eqToHom_refl, Category.id_comp, Iso.inv_hom_id_app,
+          Category.comp_id, map_comp, eqToHom_map]
+        congr 1
+        erw [(i n).hom.naturality]
+        simp)
+      add_zero_hom_app := fun n X => hF.map_injective (by
+        have := dcongr_arg (fun a => (i a).hom.app X) (add_zero n)
+        simp [this, ← NatTrans.naturality_assoc, eqToHom_map,
+          shiftFunctorAdd_add_zero_hom_app]) }
 
 Depends on / 依赖: Category, Category.assoc, F.obj, Functor, Functor.comp_map, Functor.comp_obj, Functor.map_comp, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, M.subset_closure, NatTrans, NatTrans.naturality_assoc, _assoc_hom_app, _eq_shiftFunctorAdd, _iff_isBasis_inter_ground, assoc_hom_app, cancel_mono, closure_inter_ground, comp_map, comp_obj
 -/

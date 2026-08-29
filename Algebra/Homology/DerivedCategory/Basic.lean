@@ -609,7 +609,10 @@ lemma mem_distTriang_iff
       (Functor.mapTriangleCompIso (HomotopyCategory.quotient C _) Qh).symm.app _ ≪≫
       (Functor.mapTriangleIso (quotientCompQhIso C)).app _
   · rintro ⟨X, Y, f, ⟨e⟩⟩
-    refi
+    refine isomorphic_distinguished _ (Qh.map_distinguished _ ?_) _
+      (e ≪≫ (Functor.mapTriangleIso (quotientCompQhIso C)).symm.app _ ≪≫
+      (Functor.mapTriangleCompIso (HomotopyCategory.quotient C _) Qh).app _)
+    exact ⟨_, _, f, ⟨Iso.refl _⟩⟩
 
 中文:
 引理 mem_distTriang_iff
@@ -622,7 +625,10 @@ lemma mem_distTriang_iff
       (Functor.mapTriangleCompIso (HomotopyCategory.quotient C _) Qh).symm.app _ ≪≫
       (Functor.mapTriangleIso (quotientCompQhIso C)).app _
   · rintro ⟨X, Y, f, ⟨e⟩⟩
-    refi
+    refine isomorphic_distinguished _ (Qh.map_distinguished _ ?_) _
+      (e ≪≫ (Functor.mapTriangleIso (quotientCompQhIso C)).symm.app _ ≪≫
+      (Functor.mapTriangleCompIso (HomotopyCategory.quotient C _) Qh).app _)
+    exact ⟨_, _, f, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: Functor, Functor.mapTriangleCompIso, Functor.mapTriangleIso, HomotopyCategory, HomotopyCategory.quotient, Iso.refl, Qh.mapTriangle.mapIso, Qh.map_distinguished, isomorphic_distinguished, mapIso, mapTriangle, mapTriangleCompIso, mapTriangleIso, map_distinguished, quotient, quotientCompQhIso, symm.app
 -/
@@ -805,7 +811,7 @@ definition singleFunctorsPostcompQIso
     (HomotopyCategory.singleFunctorsPostcompQuotientIso C) ≪≫
       (CochainComplex.singleFunctors C).postcompPostcompIso (HomotopyCategory.quotient _ _) Qh ≪≫
       SingleFunctors.postcompIsoOfIso
-        (CochainComplex.sin
+        (CochainComplex.singleFunctors C) (quotientCompQhIso C)
 
 中文:
 定义 singleFunctorsPostcompQIso
@@ -814,7 +820,7 @@ definition singleFunctorsPostcompQIso
     (HomotopyCategory.singleFunctorsPostcompQuotientIso C) ≪≫
       (CochainComplex.singleFunctors C).postcompPostcompIso (HomotopyCategory.quotient _ _) Qh ≪≫
       SingleFunctors.postcompIsoOfIso
-        (CochainComplex.sin
+        (CochainComplex.singleFunctors C) (quotientCompQhIso C)
 
 Depends on / 依赖: Additive, CochainComplex, CochainComplex.singleFunctors, DerivedCategory, HomotopyCategory, HomotopyCategory.quotient, HomotopyCategory.singleFunctorsPostcompQuotientIso, SingleFunctors, SingleFunctors.postcompFunctor, SingleFunctors.postcompIsoOfIso, mapIso, postcompFunctor, postcompIsoOfIso, postcompPostcompIso, quotient, quotientCompQhIso, singleFunctors, singleFunctorsPostcompQuotientIso
 -/

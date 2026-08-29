@@ -1211,7 +1211,11 @@ definition preNormEDS'
         preNormEDS' (m + 1) * preNormEDS' (m + 3) ^ 3 * (if Even m then 1 else b)
     else
       have : m + 5 < n + 5 := by
-        gcongr; exact Nat.div_lt_self (Nat.not_even_iff_odd.mp h
+        gcongr; exact Nat.div_lt_self (Nat.not_even_iff_odd.mp hn).pos one_lt_two
+      preNormEDS' (m + 2) ^ 2 * preNormEDS' (m + 3) * preNormEDS' (m + 5) -
+        preNormEDS' (m + 1) * preNormEDS' (m + 3) * preNormEDS' (m + 4) ^ 2
+
+@[simp]
 
 中文:
 定义 preNormEDS'
@@ -1222,7 +1226,11 @@ definition preNormEDS'
         preNormEDS' (m + 1) * preNormEDS' (m + 3) ^ 3 * (if Even m then 1 else b)
     else
       have : m + 5 < n + 5 := by
-        gcongr; exact Nat.div_lt_self (Nat.not_even_iff_odd.mp h
+        gcongr; exact Nat.div_lt_self (Nat.not_even_iff_odd.mp hn).pos one_lt_two
+      preNormEDS' (m + 2) ^ 2 * preNormEDS' (m + 3) * preNormEDS' (m + 5) -
+        preNormEDS' (m + 1) * preNormEDS' (m + 3) * preNormEDS' (m + 4) ^ 2
+
+@[simp]
 -/
 def preNormEDS' : Nat -> R
   | 0 => 0
@@ -1616,7 +1624,10 @@ lemma preNormEDS_even
     simp_rw [Nat.cast_succ, Int.add_sub_cancel, show (m : Int) + 1 + 1 + 1 = m + 1 + 2 by rfl,
       Int.add_sub_cancel]
     norm_cast
-    simpa only [preNormEDS_ofNat] using preNormEDS'_even
+    simpa only [preNormEDS_ofNat] using preNormEDS'_even ..
+  | neg ih m =>
+    simp_rw [mul_neg, ← sub_neg_eq_add, ← neg_sub', ← neg_add', preNormEDS_neg, ih]
+    ring1
 
 中文:
 引理 preNormEDS_even
@@ -1630,7 +1641,10 @@ lemma preNormEDS_even
     simp_rw [Nat.cast_succ, Int.add_sub_cancel, show (m : Int) + 1 + 1 + 1 = m + 1 + 2 by rfl,
       Int.add_sub_cancel]
     norm_cast
-    simpa only [preNormEDS_ofNat] using preNormEDS'_even
+    simpa only [preNormEDS_ofNat] using preNormEDS'_even ..
+  | neg ih m =>
+    simp_rw [mul_neg, ← sub_neg_eq_add, ← neg_sub', ← neg_add', preNormEDS_neg, ih]
+    ring1
 
 Depends on / 依赖: Int.add_sub_cancel, Int.negInduction, Nat.cast_succ, _even, add_sub_cancel, cast_succ, iterate, mul_neg, negInduction, neg_add, neg_sub, preNormEDS, preNormEDS_neg, preNormEDS_ofNat, simp_rw, sub_neg_eq_add
 -/
@@ -1665,7 +1679,12 @@ lemma preNormEDS_odd
     norm_cast
     simpa only [preNormEDS_ofNat] using preNormEDS'_odd ..
   | neg ih m =>
-    rcases m 
+    rcases m with _ | m
+    · simp
+    simp_rw [Nat.cast_succ, show 2 * -(m + 1 : Int) + 1 = -(2 * m + 1) by rfl,
+      show -(m + 1 : Int) + 2 = -(m - 1) by ring1, show -(m + 1 : Int) - 1 = -(m + 2) by rfl,
+      show -(m + 1 : Int) + 1 = -m by ring1, preNormEDS_neg, even_neg, Int.even_add_one, ite_not, ih]
+    ring1
 
 中文:
 引理 preNormEDS_odd
@@ -1680,7 +1699,12 @@ lemma preNormEDS_odd
     norm_cast
     simpa only [preNormEDS_ofNat] using preNormEDS'_odd ..
   | neg ih m =>
-    rcases m 
+    rcases m with _ | m
+    · simp
+    simp_rw [Nat.cast_succ, show 2 * -(m + 1 : Int) + 1 = -(2 * m + 1) by rfl,
+      show -(m + 1 : Int) + 2 = -(m - 1) by ring1, show -(m + 1 : Int) - 1 = -(m + 2) by rfl,
+      show -(m + 1 : Int) + 1 = -m by ring1, preNormEDS_neg, even_neg, Int.even_add_one, ite_not, ih]
+    ring1
 
 Depends on / 依赖: Int.add_sub_cancel, Int.even_add_one, Int.even_coe_nat, Int.negInduction, Nat.cast_succ, _odd, add_sub_cancel, cast_succ, even_add_one, even_coe_nat, iterate, negInduction, not_not, preNormEDS, preNormEDS_ofNat, simp_rw
 -/
@@ -2314,7 +2338,9 @@ definition complEDS'
       have : m + 1 < n + 2 :=
         add_lt_add_left (Nat.div_lt_self (Nat.not_even_iff_odd.mp hn).pos one_lt_two) 2
       complEDS' m ^ 2 * normEDS b c d ((m + 1) * k + 1) * normEDS b c d ((m + 1) * k - 1) -
-        compl
+        complEDS' (m + 1) ^ 2 * normEDS b c d (m * k + 1) * normEDS b c d (m * k - 1)
+
+@[simp]
 
 中文:
 定义 complEDS'
@@ -2324,7 +2350,9 @@ definition complEDS'
       have : m + 1 < n + 2 :=
         add_lt_add_left (Nat.div_lt_self (Nat.not_even_iff_odd.mp hn).pos one_lt_two) 2
       complEDS' m ^ 2 * normEDS b c d ((m + 1) * k + 1) * normEDS b c d ((m + 1) * k - 1) -
-        compl
+        complEDS' (m + 1) ^ 2 * normEDS b c d (m * k + 1) * normEDS b c d (m * k - 1)
+
+@[simp]
 -/
 def complEDS' : Nat -> R
   | 0 => 0
@@ -2611,7 +2639,9 @@ lemma complEDS_odd
     rcases m with _ | m
     · simp
     simp_rw [Nat.cast_succ, show 2 * -(m + 1 : Int) + 1 = -(2 * m + 1) by rfl,
-      s
+      show (-(m + 1 : Int) + 1) = -m by ring1, neg_mul, ← sub_neg_eq_add, ← neg_sub', sub_neg_eq_add,
+      ← neg_add', complEDS_neg, normEDS_neg, ih]
+    ring1
 
 中文:
 引理 complEDS_odd
@@ -2628,7 +2658,9 @@ lemma complEDS_odd
     rcases m with _ | m
     · simp
     simp_rw [Nat.cast_succ, show 2 * -(m + 1 : Int) + 1 = -(2 * m + 1) by rfl,
-      s
+      show (-(m + 1 : Int) + 1) = -m by ring1, neg_mul, ← sub_neg_eq_add, ← neg_sub', sub_neg_eq_add,
+      ← neg_add', complEDS_neg, normEDS_neg, ih]
+    ring1
 
 Depends on / 依赖: Int.negInduction, Nat.cast_succ, _odd, cast_succ, complEDS, complEDS_neg, complEDS_ofNat, negInduction, neg_add, neg_mul, neg_sub, normEDS_neg, simp_rw, sub_neg_eq_add
 -/

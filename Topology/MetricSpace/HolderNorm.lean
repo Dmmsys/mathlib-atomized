@@ -631,7 +631,15 @@ lemma eHolderNorm_eq_zero
       rw [← edist_eq_zero]; rw [← nonpos_iff_eq_zero]
       refine le_of_forall_gt fun b hb => ?_
       obtain ⟨C, hC, hC'⟩ := h (b / edist x₁ x₂ ^ (r : Real))
-
+        (ENNReal.div_pos hb.ne.symm (ENNReal.rpow_lt_top_of_nonneg zero_le_coe
+          (edist_lt_top x₁ x₂).ne).ne)
+exact lt_of_le_of_lt (hC x₁ x₂) ENNReal.mul_lt_of_lt_div hC'
+  · intro h
+    rcases isEmpty_or_nonempty X with hX | hX
+    · exact eHolderNorm_of_isEmpty
+    · rw [← eHolderNorm_const X r (f hX.some)]
+      congr
+      simp [funext_iff, h _ hX.some]
 
 中文:
 引理 eHolderNorm_eq_zero
@@ -645,7 +653,15 @@ lemma eHolderNorm_eq_zero
       rw [← edist_eq_zero]; rw [← nonpos_iff_eq_zero]
       refine le_of_forall_gt fun b hb => ?_
       obtain ⟨C, hC, hC'⟩ := h (b / edist x₁ x₂ ^ (r : Real))
-
+        (ENNReal.div_pos hb.ne.symm (ENNReal.rpow_lt_top_of_nonneg zero_le_coe
+          (edist_lt_top x₁ x₂).ne).ne)
+exact lt_of_le_of_lt (hC x₁ x₂) ENNReal.mul_lt_of_lt_div hC'
+  · intro h
+    rcases isEmpty_or_nonempty X with hX | hX
+    · exact eHolderNorm_of_isEmpty
+    · rw [← eHolderNorm_const X r (f hX.some)]
+      congr
+      simp [funext_iff, h _ hX.some]
 
 Depends on / 依赖: ENNReal, ENNReal.bot_eq_zero, ENNReal.div_pos, ENNReal.mul_lt_of_lt_div, ENNReal.rpow_lt_top_of_nonneg, bot_eq_zero, div_pos, eHolderNorm, eHolderNorm_o, edist_eq_zero, edist_lt_top, hb.ne.symm, isEmpty_or_nonempty, le_of_forall_gt, lt_of_le_of_lt, mul_lt_of_lt_div, nonpos_iff_eq_zero, rpow_lt_top_of_nonneg, zero_le_coe
 -/
@@ -682,7 +698,13 @@ lemma MemHolder.holderWith
   rw [nnHolderNorm]; rw [eHolderNorm]; rw [coe_toNNReal]
   on_goal 2 => exact hf.eHolderNorm_lt_top.ne
   have h₁ : edist x₁ x₂ ^ (r : Real) != 0 :=
-    (Ne.symm <| ne_of_lt <| ENNReal.rpow_pos (edist_pos.2 hx) (edist_lt
+    (Ne.symm <| ne_of_lt <| ENNReal.rpow_pos (edist_pos.2 hx) (edist_lt_top x₁ x₂).ne)
+  have h₂ : edist x₁ x₂ ^ (r : Real) != ∞ := by
+    simp [(edist_lt_top x₁ x₂).ne]
+  rw [← ENNReal.div_le_iff h₁ h₂]
+  refine le_iInf₂ fun C hC => ?_
+  rw [ENNReal.div_le_iff h₁ h₂]
+  exact hC x₁ x₂
 
 中文:
 引理 MemHolder.holderWith
@@ -694,7 +716,13 @@ lemma MemHolder.holderWith
   rw [nnHolderNorm]; rw [eHolderNorm]; rw [coe_toNNReal]
   on_goal 2 => exact hf.eHolderNorm_lt_top.ne
   have h₁ : edist x₁ x₂ ^ (r : Real) != 0 :=
-    (Ne.symm <| ne_of_lt <| ENNReal.rpow_pos (edist_pos.2 hx) (edist_lt
+    (Ne.symm <| ne_of_lt <| ENNReal.rpow_pos (edist_pos.2 hx) (edist_lt_top x₁ x₂).ne)
+  have h₂ : edist x₁ x₂ ^ (r : Real) != ∞ := by
+    simp [(edist_lt_top x₁ x₂).ne]
+  rw [← ENNReal.div_le_iff h₁ h₂]
+  refine le_iInf₂ fun C hC => ?_
+  rw [ENNReal.div_le_iff h₁ h₂]
+  exact hC x₁ x₂
 
 Depends on / 依赖: ENNReal, ENNReal.div_le_iff, ENNReal.rpow_pos, Ne.symm, coe_toNNReal, div_le_iff, eHolderNorm, eHolderNorm_lt_top, edist_lt_top, edist_pos, edist_self, hf.eHolderNorm_lt_top.ne, ne_of_lt, nnHolderNorm, on_goal, rpow_pos, zero_le
 -/
@@ -943,7 +971,9 @@ lemma eHolderNorm_add_le
   · obtain ⟨hf, hg⟩ := hfg
     rw [← hf.coe_nnHolderNorm_eq_eHolderNorm]; rw [← hg.coe_nnHolderNorm_eq_eHolderNorm]; rw [← (hf.add hg).coe_nnHolderNorm_eq_eHolderNorm]; rw [← coe_add]; rw [ENNReal.coe_le_coe]
     exact hf.nnHolderNorm_add_le hg
-  · r
+  · rw [Classical.not_and_iff_not_or_not, ← eHolderNorm_eq_top, ← eHolderNorm_eq_top] at hfg
+    obtain (h | h) := hfg
+    all_goals simp [h]
 
 中文:
 引理 eHolderNorm_add_le
@@ -952,7 +982,9 @@ lemma eHolderNorm_add_le
   · obtain ⟨hf, hg⟩ := hfg
     rw [← hf.coe_nnHolderNorm_eq_eHolderNorm]; rw [← hg.coe_nnHolderNorm_eq_eHolderNorm]; rw [← (hf.add hg).coe_nnHolderNorm_eq_eHolderNorm]; rw [← coe_add]; rw [ENNReal.coe_le_coe]
     exact hf.nnHolderNorm_add_le hg
-  · r
+  · rw [Classical.not_and_iff_not_or_not, ← eHolderNorm_eq_top, ← eHolderNorm_eq_top] at hfg
+    obtain (h | h) := hfg
+    all_goals simp [h]
 
 Depends on / 依赖: Classical, Classical.not_and_iff_not_or_not, ENNReal, ENNReal.coe_le_coe, MemHolder, all_goals, coe_add, coe_le_coe, coe_nnHolderNorm_eq_eHolderNorm, eHolderNorm_eq_top, hf.add, hf.coe_nnHolderNorm_eq_eHolderNorm, hf.nnHolderNorm_add_le, hg.coe_nnHolderNorm_eq_eHolderNorm, nnHolderNorm_add_le, not_and_iff_not_or_not
 -/
@@ -979,7 +1011,15 @@ lemma eHolderNorm_smul
   by_cases hf : MemHolder r f
 · refine le_antisymm ((hf.holderWith.smul c).eHolderNorm_le.trans ?_) mul_le_of_le_div' ?_
     · rw [coe_mul, hf.coe_nnHolderNorm_eq_eHolderNorm, mul_comm]
-    · rw [← (hf.holderWith.smul c).memHold
+    · rw [← (hf.holderWith.smul c).memHolder.coe_nnHolderNorm_eq_eHolderNorm, ← coe_div hc]
+      refine HolderWith.eHolderNorm_le fun x₁ x₂ => ?_
+      rw [coe_div hc]; rw [← ENNReal.mul_div_right_comm]; rw [ENNReal.le_div_iff_mul_le (Or.inl <| coe_ne_zero.2 hc) Or.inl coe_ne_top]; rw [mul_comm]; rw [← smul_eq_mul]; rw [← ENNReal.smul_def]; rw [← edist_smul₀]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]
+      exact hf.smul.holderWith x₁ x₂
+  · rw [← eHolderNorm_eq_top] at hf
+    rw [hf]; rw [mul_top <| coe_ne_zero.2 hc]; rw [eHolderNorm_eq_top]; rw [MemHolder.smul_iff hc]
+    rw [nnnorm_eq_zero] at hc
+    intro h
+    exact h.eHolderNorm_lt_top.ne hf
 
 中文:
 引理 eHolderNorm_smul
@@ -991,7 +1031,15 @@ lemma eHolderNorm_smul
   by_cases hf : MemHolder r f
 · refine le_antisymm ((hf.holderWith.smul c).eHolderNorm_le.trans ?_) mul_le_of_le_div' ?_
     · rw [coe_mul, hf.coe_nnHolderNorm_eq_eHolderNorm, mul_comm]
-    · rw [← (hf.holderWith.smul c).memHold
+    · rw [← (hf.holderWith.smul c).memHolder.coe_nnHolderNorm_eq_eHolderNorm, ← coe_div hc]
+      refine HolderWith.eHolderNorm_le fun x₁ x₂ => ?_
+      rw [coe_div hc]; rw [← ENNReal.mul_div_right_comm]; rw [ENNReal.le_div_iff_mul_le (Or.inl <| coe_ne_zero.2 hc) Or.inl coe_ne_top]; rw [mul_comm]; rw [← smul_eq_mul]; rw [← ENNReal.smul_def]; rw [← edist_smul₀]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]
+      exact hf.smul.holderWith x₁ x₂
+  · rw [← eHolderNorm_eq_top] at hf
+    rw [hf]; rw [mul_top <| coe_ne_zero.2 hc]; rw [eHolderNorm_eq_top]; rw [MemHolder.smul_iff hc]
+    rw [nnnorm_eq_zero] at hc
+    intro h
+    exact h.eHolderNorm_lt_top.ne hf
 
 Depends on / 依赖: ENNReal, ENNReal.le_div_iff_mul_le, ENNReal.mul_div_right_comm, HolderWith, HolderWith.eHolderNorm_le, MemHolder, Or.inl, coe_div, coe_mul, coe_ne_zero, coe_nnHolderNorm_eq_eHolderNorm, eHolderNorm_le, eHolderNorm_le.trans, hf.coe_nnHolderNorm_eq_eHolderNorm, hf.holderWith.smul, holderWith, le_antisymm, le_div_iff_mul_le, memHolder, memHolder.coe_nnHolderNorm_eq_eHolderNorm
 -/

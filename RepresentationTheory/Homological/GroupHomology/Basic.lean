@@ -274,7 +274,8 @@ abbreviation inhomogeneousChains
     classical
     rw [inhomogeneousChains.d_eq]; rw [inhomogeneousChains.d_eq]
     slice_lhs 3 4 => rw [Iso.hom_inv_id]
-    slice_lhs 2 4 => rw [Category.id_comp, ((barComplex k G).coi
+    slice_lhs 2 4 => rw [Category.id_comp, ((barComplex k G).coinvariantsTensorObj A).d_comp_d]
+    simp
 
 中文:
 缩写 inhomogeneousChains
@@ -284,7 +285,8 @@ abbreviation inhomogeneousChains
     classical
     rw [inhomogeneousChains.d_eq]; rw [inhomogeneousChains.d_eq]
     slice_lhs 3 4 => rw [Iso.hom_inv_id]
-    slice_lhs 2 4 => rw [Category.id_comp, ((barComplex k G).coi
+    slice_lhs 2 4 => rw [Category.id_comp, ((barComplex k G).coinvariantsTensorObj A).d_comp_d]
+    simp
 
 Depends on / 依赖: Category, Category.id_comp, ChainComplex, ChainComplex.of, Iso.hom_inv_id, ModuleCat, ModuleCat.of, barComplex, classical, coinvariantsTensorObj, d_comp_d, d_eq, hom_inv_id, id_comp, inhomogeneousChains, inhomogeneousChains.d, inhomogeneousChains.d_eq, slice_lhs
 -/

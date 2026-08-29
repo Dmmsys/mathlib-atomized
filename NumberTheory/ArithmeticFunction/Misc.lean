@@ -112,7 +112,7 @@ theorem prodPrimeFactors
     prod_empty, true_and]
   intro x y hx hy hxy
   have hxy₀ : x * y != 0 := mul_ne_zero hx hy
-  rw [prodPrimeFactors_apply hxy₀]; rw [prodPrimeFactors_apply hx]; rw [prodPrimeFactors_a
+  rw [prodPrimeFactors_apply hxy₀]; rw [prodPrimeFactors_apply hx]; rw [prodPrimeFactors_apply hy]; rw [primeFactors_mul hx hy]; rw [← prod_union hxy.disjoint_primeFactors]
 
 中文:
 定理 prodPrimeFactors
@@ -123,7 +123,7 @@ theorem prodPrimeFactors
     prod_empty, true_and]
   intro x y hx hy hxy
   have hxy₀ : x * y != 0 := mul_ne_zero hx hy
-  rw [prodPrimeFactors_apply hxy₀]; rw [prodPrimeFactors_apply hx]; rw [prodPrimeFactors_a
+  rw [prodPrimeFactors_apply hxy₀]; rw [prodPrimeFactors_apply hx]; rw [prodPrimeFactors_apply hy]; rw [primeFactors_mul hx hy]; rw [← prod_union hxy.disjoint_primeFactors]
 
 Depends on / 依赖: disjoint_primeFactors, hxy.disjoint_primeFactors, iff_ne_zero, mul_ne_zero, ne_eq, not_false_eq_true, one_ne_zero, primeFactors_mul, primeFactors_one, prodPrimeFactors_apply, prod_empty, prod_union, true_and
 -/
@@ -147,7 +147,8 @@ theorem prodPrimeFactors_add_of_squarefree
   simp_rw [add_apply (f := f) (g := g)]
   rw [prod_add]; rw [mul_apply]; rw [sum_divisorsAntidiagonal (f · * g ·)]; rw [← divisors_filter_squarefree_of_squarefree hn]; rw [sum_divisors_filter_squarefree hn.ne_zero]; rw [factors_eq]
   apply sum_congr rfl
-  
+  intro t ht
+  rw [t.prod_val]; rw [Function.id_def]; rw [← prod_primeFactors_sdiff_of_squarefree hn (mem_powerset.mp ht)]; rw [hf.map_prod_of_subset_primeFactors n t (mem_powerset.mp ht)]; rw [← hg.map_prod_of_subset_primeFactors n (_ \ t) sdiff_subset]
 
 中文:
 定理 prodPrimeFactors_add_of_squarefree
@@ -157,7 +158,8 @@ theorem prodPrimeFactors_add_of_squarefree
   simp_rw [add_apply (f := f) (g := g)]
   rw [prod_add]; rw [mul_apply]; rw [sum_divisorsAntidiagonal (f · * g ·)]; rw [← divisors_filter_squarefree_of_squarefree hn]; rw [sum_divisors_filter_squarefree hn.ne_zero]; rw [factors_eq]
   apply sum_congr rfl
-  
+  intro t ht
+  rw [t.prod_val]; rw [Function.id_def]; rw [← prod_primeFactors_sdiff_of_squarefree hn (mem_powerset.mp ht)]; rw [hf.map_prod_of_subset_primeFactors n t (mem_powerset.mp ht)]; rw [← hg.map_prod_of_subset_primeFactors n (_ \ t) sdiff_subset]
 
 Depends on / 依赖: Function, Function.id_def, add_apply, divisors_filter_squarefree_of_squarefree, factors_eq, hf.map_prod_of_subset_primeFactors, hg.map_prod_of_sub, hn.ne_zero, id_def, map_prod_of_sub, map_prod_of_subset_primeFactors, mem_powerset, mem_powerset.mp, mul_apply, ne_zero, prodPrimeFactors_apply, prod_add, prod_primeFactors_sdiff_of_squarefree, prod_val, simp_rw
 -/
@@ -1094,7 +1096,8 @@ theorem cardFactors_eq_one_iff_prime
   cases n with | zero => simp at h | succ n =>
   rcases List.length_eq_one_iff.1 h with ⟨x, hx⟩
   rw [← prod_primeFactorsList n.add_one_ne_zero]; rw [hx]; rw [List.prod_singleton]
-  apply prime_of_mem_primeFac
+  apply prime_of_mem_primeFactorsList
+  rw [hx]; rw [List.mem_singleton]
 
 中文:
 定理 cardFactors_eq_one_iff_prime
@@ -1105,7 +1108,8 @@ theorem cardFactors_eq_one_iff_prime
   cases n with | zero => simp at h | succ n =>
   rcases List.length_eq_one_iff.1 h with ⟨x, hx⟩
   rw [← prod_primeFactorsList n.add_one_ne_zero]; rw [hx]; rw [List.prod_singleton]
-  apply prime_of_mem_primeFac
+  apply prime_of_mem_primeFactorsList
+  rw [hx]; rw [List.mem_singleton]
 
 Depends on / 依赖: List.length_eq_one_iff, List.mem_singleton, List.prod_singleton, add_one_ne_zero, length_eq_one_iff, mem_singleton, n.add_one_ne_zero, primeFactorsList_prime, prime_of_mem_primeFactorsList, prod_primeFactorsList, prod_singleton
 -/
@@ -1559,7 +1563,7 @@ theorem cardDistinctFactors_prod
     rw [prod_cons]; rw [sum_cons]; rw [cardDistinctFactors_mul]; rw [ih]
     · exact fun x hx y hy hxy => h (by simp [hx]) (by simp [hy]) hxy
     · exact Coprime.prod_right fun i hi =>
-        h (by simp) (by simp 
+        h (by simp) (by simp [hi]) (ne_of_mem_of_not_mem hi ha).symm
 
 中文:
 定理 cardDistinctFactors_prod
@@ -1571,7 +1575,7 @@ theorem cardDistinctFactors_prod
     rw [prod_cons]; rw [sum_cons]; rw [cardDistinctFactors_mul]; rw [ih]
     · exact fun x hx y hy hxy => h (by simp [hx]) (by simp [hy]) hxy
     · exact Coprime.prod_right fun i hi =>
-        h (by simp) (by simp 
+        h (by simp) (by simp [hi]) (ne_of_mem_of_not_mem hi ha).symm
 
 Depends on / 依赖: Coprime, Coprime.prod_right, cardDistinctFactors_mul, cons_induction_on, ne_of_mem_of_not_mem, prod_cons, prod_right, sum_cons
 -/
@@ -1633,7 +1637,7 @@ theorem sum_Ioc_mul_eq_sum_prod_filter
     rw [divisorsAntidiagonal_eq_prod_filter_of_le hn.1.ne' hn.2]
   · simp_rw [sum_filter]
     rw [sum_comm]
-    exact s
+    exact sum_congr rfl fun _ _ => (by simp_all)
 
 中文:
 定理 sum_Ioc_mul_eq_sum_prod_filter
@@ -1646,7 +1650,7 @@ theorem sum_Ioc_mul_eq_sum_prod_filter
     rw [divisorsAntidiagonal_eq_prod_filter_of_le hn.1.ne' hn.2]
   · simp_rw [sum_filter]
     rw [sum_comm]
-    exact s
+    exact sum_congr rfl fun _ _ => (by simp_all)
 
 Depends on / 依赖: divisorsAntidiagonal_eq_prod_filter_of_le, mem_Ioc, mul_apply, simp_rw, sum_comm, sum_congr, sum_filter
 -/
@@ -1676,7 +1680,11 @@ theorem sum_Ioc_mul_eq_sum_sum
   simp only [mem_filter, mem_Ioc, and_assoc, and_congr_right_iff] at hn ⊢
   intro _
   constructor
-  · intro
+  · intro ⟨_, h⟩
+    grw [← h, Nat.mul_div_cancel_left _ (by lia)]
+  · intro hm
+    grw [hm]
+    simp [mul_div_le, div_le_self]
 
 中文:
 定理 sum_Ioc_mul_eq_sum_sum
@@ -1690,7 +1698,11 @@ theorem sum_Ioc_mul_eq_sum_sum
   simp only [mem_filter, mem_Ioc, and_assoc, and_congr_right_iff] at hn ⊢
   intro _
   constructor
-  · intro
+  · intro ⟨_, h⟩
+    grw [← h, Nat.mul_div_cancel_left _ (by lia)]
+  · intro hm
+    grw [hm]
+    simp [mul_div_le, div_le_self]
 
 Depends on / 依赖: Nat.mul_div_cancel_left, add_zero, and_assoc, and_congr_right_iff, div_le_self, mem_Ioc, mem_filter, mul_div_cancel_left, mul_div_le, mul_sum, not_le, sum_Ioc_mul_eq_sum_prod_filter, sum_congr, sum_const_zero, sum_filter, sum_ite, sum_product
 -/

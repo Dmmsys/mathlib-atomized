@@ -64,7 +64,18 @@ lemma aux₀
   obtain ⟨ε, -, hε', hε₀⟩ := exists_seq_strictAnti_tendsto_nhdsWithin (0 : Real)
   refine not_eventually.2
     (Frequently.of_forall fun _ => lt_irrefl <| ENNReal.ofReal <| 4⁻¹ ^ Fintype.card ι)
-    ((Filter.Tendsto.eventually_lt (H.comp hε₀) tendsto_const_nhd
+    ((Filter.Tendsto.eventually_lt (H.comp hε₀) tendsto_const_nhds ?_).mono fun n =>
+      lt_of_le_of_lt ?_)
+  on_goal 2 =>
+    calc
+      ENNReal.ofReal (4⁻¹ ^ Fintype.card ι)
+        = volume (closedBall (f (ε n) (hε' n)) (ε n / 4)) / volume (closedBall x (ε n)) := ?_
+      _ <= volume (closure s inter closedBall x (ε n)) / volume (closedBall x (ε n)) := by
+        gcongr
+exact subset_inter ((hf₁ _ <| hε' n).trans interior_subset_closure) hf₀ _ hε' n
+    have := hε' n
+    rw [Real.volume_pi_closedBall]; rw [Real.volume_pi_closedBall]; rw [← ENNReal.ofReal_div_of_pos]; rw [← div_pow]; rw [mul_div_mul_left _ _ (two_ne_zero' Real)]; rw [div_right_comm]; rw [div_self]; rw [one_div]
+  all_goals positivity
 
 中文:
 引理 aux₀
@@ -74,7 +85,18 @@ lemma aux₀
   obtain ⟨ε, -, hε', hε₀⟩ := exists_seq_strictAnti_tendsto_nhdsWithin (0 : Real)
   refine not_eventually.2
     (Frequently.of_forall fun _ => lt_irrefl <| ENNReal.ofReal <| 4⁻¹ ^ Fintype.card ι)
-    ((Filter.Tendsto.eventually_lt (H.comp hε₀) tendsto_const_nhd
+    ((Filter.Tendsto.eventually_lt (H.comp hε₀) tendsto_const_nhds ?_).mono fun n =>
+      lt_of_le_of_lt ?_)
+  on_goal 2 =>
+    calc
+      ENNReal.ofReal (4⁻¹ ^ Fintype.card ι)
+        = volume (closedBall (f (ε n) (hε' n)) (ε n / 4)) / volume (closedBall x (ε n)) := ?_
+      _ <= volume (closure s inter closedBall x (ε n)) / volume (closedBall x (ε n)) := by
+        gcongr
+exact subset_inter ((hf₁ _ <| hε' n).trans interior_subset_closure) hf₀ _ hε' n
+    have := hε' n
+    rw [Real.volume_pi_closedBall]; rw [Real.volume_pi_closedBall]; rw [← ENNReal.ofReal_div_of_pos]; rw [← div_pow]; rw [mul_div_mul_left _ _ (two_ne_zero' Real)]; rw [div_right_comm]; rw [div_self]; rw [one_div]
+  all_goals positivity
 -/
 private lemma aux₀
     (h : forall δ, 0 < δ ->
@@ -110,7 +132,25 @@ lemma aux₁
   obtain ⟨ε, -, hε', hε₀⟩ := exists_seq_strictAnti_tendsto_nhdsWithin (0 : Real)
   refine not_eventually.2
       (Frequently.of_forall fun _ => lt_irrefl <| 1 - ENNReal.ofReal (4⁻¹ ^ Fintype.card ι))
-      ((Filter.Tendsto.eventually_lt tendsto_const_nhds (H.c
+      ((Filter.Tendsto.eventually_lt tendsto_const_nhds (H.comp hε₀) <|
+            ENNReal.sub_lt_self ENNReal.one_ne_top one_ne_zero ?_).mono
+        fun n => lt_of_le_of_lt' ?_)
+  on_goal 2 =>
+    calc
+      volume (closure s inter closedBall x (ε n)) / volume (closedBall x (ε n))
+        <= volume (closedBall x (ε n) \ closedBall (f (ε n) <| hε' n) (ε n / 4)) /
+          volume (closedBall x (ε n)) := by
+        gcongr
+        rw [sdiff_eq_compl_inter]
+        refine inter_subset_inter_left _ ?_
+        rw [subset_compl_comm]; rw [← interior_compl]
+        exact hf₁ _ _
+      _ = 1 - ENNReal.ofReal (4⁻¹ ^ Fintype.card ι) := ?_
+    have := hε' n
+    rw [measure_sdiff (hf₀ _ _) _ ((Real.volume_pi_closedBall _ _).trans_ne ENNReal.ofReal_ne_top)]; rw [Real.volume_pi_closedBall]; rw [Real.volume_pi_closedBall]; rw [ENNReal.sub_div fun _ _ => _]; rw [ENNReal.div_self _ ENNReal.ofReal_ne_top]; rw [← ENNReal.ofReal_div_of_pos]; rw [← div_pow]; rw [mul_div_mul_left _ _ (two_ne_zero' Real)]; rw [div_right_comm]; rw [div_self]; rw [one_div]
+  all_goals try positivity
+  · simp_all
+  · exact measurableSet_closedBall.nullMeasurableSet
 
 中文:
 引理 aux₁
@@ -120,7 +160,25 @@ lemma aux₁
   obtain ⟨ε, -, hε', hε₀⟩ := exists_seq_strictAnti_tendsto_nhdsWithin (0 : Real)
   refine not_eventually.2
       (Frequently.of_forall fun _ => lt_irrefl <| 1 - ENNReal.ofReal (4⁻¹ ^ Fintype.card ι))
-      ((Filter.Tendsto.eventually_lt tendsto_const_nhds (H.c
+      ((Filter.Tendsto.eventually_lt tendsto_const_nhds (H.comp hε₀) <|
+            ENNReal.sub_lt_self ENNReal.one_ne_top one_ne_zero ?_).mono
+        fun n => lt_of_le_of_lt' ?_)
+  on_goal 2 =>
+    calc
+      volume (closure s inter closedBall x (ε n)) / volume (closedBall x (ε n))
+        <= volume (closedBall x (ε n) \ closedBall (f (ε n) <| hε' n) (ε n / 4)) /
+          volume (closedBall x (ε n)) := by
+        gcongr
+        rw [sdiff_eq_compl_inter]
+        refine inter_subset_inter_left _ ?_
+        rw [subset_compl_comm]; rw [← interior_compl]
+        exact hf₁ _ _
+      _ = 1 - ENNReal.ofReal (4⁻¹ ^ Fintype.card ι) := ?_
+    have := hε' n
+    rw [measure_sdiff (hf₀ _ _) _ ((Real.volume_pi_closedBall _ _).trans_ne ENNReal.ofReal_ne_top)]; rw [Real.volume_pi_closedBall]; rw [Real.volume_pi_closedBall]; rw [ENNReal.sub_div fun _ _ => _]; rw [ENNReal.div_self _ ENNReal.ofReal_ne_top]; rw [← ENNReal.ofReal_div_of_pos]; rw [← div_pow]; rw [mul_div_mul_left _ _ (two_ne_zero' Real)]; rw [div_right_comm]; rw [div_self]; rw [one_div]
+  all_goals try positivity
+  · simp_all
+  · exact measurableSet_closedBall.nullMeasurableSet
 -/
 private lemma aux₁
     (h : forall δ, 0 < δ ->
@@ -165,7 +223,10 @@ theorem IsUpperSet.null_frontier
       (isClosed_closure (s := s)).measurableSet)
   by_cases h : x in closure s <;>
     simp only [mem_compl_iff, mem_ofPred, h, not_false_eq_true, indicator_of_notMem,
-      indicator_of_m
+      indicator_of_mem, Pi.one_apply]
+· refine aux₁ fun _ => hs.compl.exists_subset_ball frontier_subset_closure ?_
+    rwa [frontier_compl]
+· exact aux₀ fun _ => hs.exists_subset_ball frontier_subset_closure hx
 
 中文:
 定理 是上集.null_frontier
@@ -177,7 +238,10 @@ theorem IsUpperSet.null_frontier
       (isClosed_closure (s := s)).measurableSet)
   by_cases h : x in closure s <;>
     simp only [mem_compl_iff, mem_ofPred, h, not_false_eq_true, indicator_of_notMem,
-      indicator_of_m
+      indicator_of_mem, Pi.one_apply]
+· refine aux₁ fun _ => hs.compl.exists_subset_ball frontier_subset_closure ?_
+    rwa [frontier_compl]
+· exact aux₀ fun _ => hs.exists_subset_ball frontier_subset_closure hx
 
 Depends on / 依赖: Besicovitch, Besicovitch.ae_tendsto_measure_inter_div_of_measurableSet, Pi.one_apply, ae_tendsto_measure_inter_div_of_measurableSet, closure, exists_subset_ball, frontier_compl, frontier_subset_closure, hs.compl.exists_subset_ball, hs.exists_subset_ball, indicator_of_mem, indicator_of_notMem, isClosed_closure, measurableSet, measure_mono_null, mem_compl_iff, mem_ofPred, not_false_eq_true, one_apply
 -/
@@ -205,7 +269,10 @@ theorem IsLowerSet.null_frontier
       (isClosed_closure (s := s)).measurableSet)
   by_cases h : x in closure s <;>
     simp only [mem_compl_iff, mem_ofPred, h, not_false_eq_true, indicator_of_notMem,
-      indicator_of_m
+      indicator_of_mem, Pi.one_apply]
+· refine aux₁ fun _ => hs.compl.exists_subset_ball frontier_subset_closure ?_
+    rwa [frontier_compl]
+· exact aux₀ fun _ => hs.exists_subset_ball frontier_subset_closure hx
 
 中文:
 定理 是下集.null_frontier
@@ -217,7 +284,10 @@ theorem IsLowerSet.null_frontier
       (isClosed_closure (s := s)).measurableSet)
   by_cases h : x in closure s <;>
     simp only [mem_compl_iff, mem_ofPred, h, not_false_eq_true, indicator_of_notMem,
-      indicator_of_m
+      indicator_of_mem, Pi.one_apply]
+· refine aux₁ fun _ => hs.compl.exists_subset_ball frontier_subset_closure ?_
+    rwa [frontier_compl]
+· exact aux₀ fun _ => hs.exists_subset_ball frontier_subset_closure hx
 
 Depends on / 依赖: Besicovitch, Besicovitch.ae_tendsto_measure_inter_div_of_measurableSet, Pi.one_apply, ae_tendsto_measure_inter_div_of_measurableSet, closure, exists_subset_ball, frontier_compl, frontier_subset_closure, hs.compl.exists_subset_ball, hs.exists_subset_ball, indicator_of_mem, indicator_of_notMem, isClosed_closure, measurableSet, measure_mono_null, mem_compl_iff, mem_ofPred, not_false_eq_true, one_apply
 -/

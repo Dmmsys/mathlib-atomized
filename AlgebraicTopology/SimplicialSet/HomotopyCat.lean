@@ -341,7 +341,8 @@ definition OneTruncation₂.ofNerve₂.natIso
       obtain ⟨f, rfl, rfl⟩ := f
       dsimp [ofNerve₂, ReflQuiv.isoOfEquiv, ReflQuiv.isoOfQuivIso,
         Quiv.isoOfEquiv, nerveHomEquiv_apply]
-      simp only [comp_id, id_comp
+      simp only [comp_id, id_comp]
+      rfl))
 
 中文:
 定义 OneTruncation₂.ofNerve₂.natIso
@@ -351,7 +352,8 @@ definition OneTruncation₂.ofNerve₂.natIso
       obtain ⟨f, rfl, rfl⟩ := f
       dsimp [ofNerve₂, ReflQuiv.isoOfEquiv, ReflQuiv.isoOfQuivIso,
         Quiv.isoOfEquiv, nerveHomEquiv_apply]
-      simp only [comp_id, id_comp
+      simp only [comp_id, id_comp]
+      rfl))
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, Quiv.isoOfEquiv, ReflPrefunctor, ReflPrefunctor.ext, ReflQuiv, ReflQuiv.isoOfEquiv, ReflQuiv.isoOfQuivIso, cat_disch, comp_id, id_comp, isoOfEquiv, isoOfQuivIso, nerveHomEquiv_apply, ofComponents
 -/
@@ -1001,7 +1003,7 @@ lemma multiplicativeClosure_morphismPropertyHomMk
     rw [morphismPropertyHomMk_eq_strictMap]
     refine strictMap_multiplicativeClosure_le _ _ _ ?_
     rw [Cat.FreeRefl.multiplicativeClosure_morphismPropertyHomMk]
-    exact map_mem_strictMap _ _ _ 
+    exact map_mem_strictMap _ _ _ (by simp))
 
 中文:
 引理 multiplicativeClosure_morphismPropertyHomMk
@@ -1010,7 +1012,7 @@ lemma multiplicativeClosure_morphismPropertyHomMk
     rw [morphismPropertyHomMk_eq_strictMap]
     refine strictMap_multiplicativeClosure_le _ _ _ ?_
     rw [Cat.FreeRefl.multiplicativeClosure_morphismPropertyHomMk]
-    exact map_mem_strictMap _ _ _ 
+    exact map_mem_strictMap _ _ _ (by simp))
 
 Depends on / 依赖: Cat.FreeRefl.multiplicativeClosure_morphismPropertyHomMk, FreeRefl, le_antisymm, map_mem_strictMap, map_surjective, morphismPropertyHomMk_eq_strictMap, multiplicativeClosure_morphismPropertyHomMk, quotientFunctor, strictMap_multiplicativeClosure_le
 -/

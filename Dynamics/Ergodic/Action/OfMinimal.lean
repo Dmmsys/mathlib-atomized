@@ -63,7 +63,16 @@ theorem aeconst_of_dense_setOfPred_preimage_smul_ae
   refine aeconst_of_forall_preimage_smul_ae_eq M hsm ?_
   rwa [dense_iff_closure_eq, IsClosed.closure_eq, eq_univ_iff_forall] at hd
   let f : C(M × X, X) := ⟨(· • ·).uncurry, continuous_smul⟩
-  exact isClosed_setOfPred_preimage_ae_eq f.curry.continuous (measurePreserving_smul · μ) _ 
+  exact isClosed_setOfPred_preimage_ae_eq f.curry.continuous (measurePreserving_smul · μ) _ hsm
+    (measure_ne_top _ _)
+
+@[deprecated (since := "2026-07-09")]
+alias aeconst_of_dense_setOf_preimage_smul_ae := aeconst_of_dense_setOfPred_preimage_smul_ae
+
+@[deprecated (since := "2026-07-09")]
+alias aeconst_of_dense_setOf_preimage_vadd_ae := aeconst_of_dense_setOfPred_preimage_vadd_ae
+
+@[to_additive]
 
 中文:
 定理 aeconst_of_dense_setOfPred_preimage_smul_ae
@@ -73,7 +82,16 @@ theorem aeconst_of_dense_setOfPred_preimage_smul_ae
   refine aeconst_of_forall_preimage_smul_ae_eq M hsm ?_
   rwa [dense_iff_closure_eq, IsClosed.closure_eq, eq_univ_iff_forall] at hd
   let f : C(M × X, X) := ⟨(· • ·).uncurry, continuous_smul⟩
-  exact isClosed_setOfPred_preimage_ae_eq f.curry.continuous (measurePreserving_smul · μ) _ 
+  exact isClosed_setOfPred_preimage_ae_eq f.curry.continuous (measurePreserving_smul · μ) _ hsm
+    (measure_ne_top _ _)
+
+@[deprecated (since := "2026-07-09")]
+alias aeconst_of_dense_setOf_preimage_smul_ae := aeconst_of_dense_setOfPred_preimage_smul_ae
+
+@[deprecated (since := "2026-07-09")]
+alias aeconst_of_dense_setOf_preimage_vadd_ae := aeconst_of_dense_setOfPred_preimage_vadd_ae
+
+@[to_additive]
 
 Depends on / 依赖: IsClosed, IsClosed.closure_eq, aeconst_of_forall_preimage_smul_ae_eq, borelize, closure_eq, continuous, continuous_smul, dense_iff_closure_eq, eq_univ_iff_forall, f.curry.continuous, isClosed_setOfPred_preimage_ae_eq, measurePreserving_smul, measure_ne_top, uncurry
 -/
@@ -105,7 +123,7 @@ theorem aeconst_of_dense_setOfPred_preimage_smul_eq
 alias aeconst_of_dense_setOf_preimage_smul_eq := aeconst_of_dense_setOfPred_preimage_smul_eq
 
 @[deprecated (since := "2026-07-09")]
-alias aeconst_of_dense_setOf_preimage_va
+alias aeconst_of_dense_setOf_preimage_vadd_eq := aeconst_of_dense_setOfPred_preimage_vadd_eq
 
 中文:
 定理 aeconst_of_dense_setOfPred_preimage_smul_eq
@@ -116,7 +134,7 @@ alias aeconst_of_dense_setOf_preimage_va
 alias aeconst_of_dense_setOf_preimage_smul_eq := aeconst_of_dense_setOfPred_preimage_smul_eq
 
 @[deprecated (since := "2026-07-09")]
-alias aeconst_of_dense_setOf_preimage_va
+alias aeconst_of_dense_setOf_preimage_vadd_eq := aeconst_of_dense_setOfPred_preimage_vadd_eq
 
 Depends on / 依赖: aeconst_of_dense_setOfPred_preimage_smul_ae, hd.mono, mem_ofPred, of_eq
 -/
@@ -197,7 +215,8 @@ theorem ErgodicSMul.trans_isMinimal
   aeconst_of_forall_preimage_smul_ae_eq {s} hsm hs := by
     refine aeconst_of_dense_setOfPred_preimage_smul_ae (M := N) hsm.nullMeasurableSet ?_
     refine (MulAction.dense_orbit M 1).mono ?_
-    rint
+    rintro _ ⟨g, rfl⟩
+    simpa using hs g
 
 中文:
 定理 ErgodicSMul.trans_isMinimal
@@ -207,7 +226,8 @@ theorem ErgodicSMul.trans_isMinimal
   aeconst_of_forall_preimage_smul_ae_eq {s} hsm hs := by
     refine aeconst_of_dense_setOfPred_preimage_smul_ae (M := N) hsm.nullMeasurableSet ?_
     refine (MulAction.dense_orbit M 1).mono ?_
-    rint
+    rintro _ ⟨g, rfl⟩
+    simpa using hs g
 
 Depends on / 依赖: MulAction, MulAction.dense_orbit, SMulInvariantMeasure, SMulInvariantMeasure.measure_preimage_smul, aeconst_of_dense_setOfPred_preimage_smul_ae, aeconst_of_forall_preimage_smul_ae_eq, dense_orbit, hsm.nullMeasurableSet, measure_preimage_smul, nullMeasurableSet, smul_one_smul
 -/
@@ -277,7 +297,7 @@ theorem ergodic_smul_of_denseRange_zpow
   borelize G
   refine ⟨measurePreserving_smul _ _, ⟨fun s hsm hs => ?_⟩⟩
   refine aeconst_of_dense_aestabilizer_smul hsm.nullMeasurableSet (hg.mono ?_)
-  rw [← Subgroup.coe_zpowers]; rw [SetLike.coe_subset_coe]; rw [← Subgroup.zpowers_inv]; rw [Subgroup.zpowers_le]; rw [MulAction.mem_aestabilizer
+  rw [← Subgroup.coe_zpowers]; rw [SetLike.coe_subset_coe]; rw [← Subgroup.zpowers_inv]; rw [Subgroup.zpowers_le]; rw [MulAction.mem_aestabilizer]; rw [← preimage_smul]; rw [hs]
 
 中文:
 定理 ergodic_smul_of_denseRange_zpow
@@ -286,7 +306,7 @@ theorem ergodic_smul_of_denseRange_zpow
   borelize G
   refine ⟨measurePreserving_smul _ _, ⟨fun s hsm hs => ?_⟩⟩
   refine aeconst_of_dense_aestabilizer_smul hsm.nullMeasurableSet (hg.mono ?_)
-  rw [← Subgroup.coe_zpowers]; rw [SetLike.coe_subset_coe]; rw [← Subgroup.zpowers_inv]; rw [Subgroup.zpowers_le]; rw [MulAction.mem_aestabilizer
+  rw [← Subgroup.coe_zpowers]; rw [SetLike.coe_subset_coe]; rw [← Subgroup.zpowers_inv]; rw [Subgroup.zpowers_le]; rw [MulAction.mem_aestabilizer]; rw [← preimage_smul]; rw [hs]
 
 Depends on / 依赖: MulAction, MulAction.mem_aestabilizer, SetLike, SetLike.coe_subset_coe, Subgroup, Subgroup.coe_zpowers, Subgroup.zpowers_inv, Subgroup.zpowers_le, aeconst_of_dense_aestabilizer_smul, borelize, coe_subset_coe, coe_zpowers, hg.mono, hsm.nullMeasurableSet, measurePreserving_smul, mem_aestabilizer, nullMeasurableSet, preimage_smul, zpowers_inv, zpowers_le
 -/
@@ -322,7 +342,27 @@ theorem DenseRange.zpow_of_ergodic_mul_left
   obtain ⟨V, hV₁, hVo, hV⟩ :
       exists V : Set G, 1 in V ∧ IsOpen V ∧ forall x in V, forall y in V, forall m : Int, g ^ m != a * x / y := by
     rw [← mem_compl_iff]; rw [← interior_compl]; rw [mem_interior_iff_mem_nhds] at h
-    have : Tendsto (fun (x, y) => a * x / y)
+    have : Tendsto (fun (x, y) => a * x / y) (𝓝 1) (𝓝 a) :=
+      Continuous.tendsto' (by fun_prop) _ _ (by simp)
+    rw [nhds_prod_eq] at this
+    simpa [(nhds_basis_opens (1 : G)).prod_self.mem_iff, prod_subset_iff, and_assoc] using this h
+  set s := ⋃ m : Int, g ^ m • V
+  have hso : IsOpen s := isOpen_iUnion fun m => hVo.smul _
+  have hsne : s.Nonempty := ⟨1, mem_iUnion.2 ⟨0, by simpa⟩⟩
+  have hd : Disjoint s (a • V) := by
+    simp_rw [s, disjoint_iUnion_left, disjoint_left]
+    rintro m _ ⟨x, hx, rfl⟩ ⟨y, hy, hxy⟩
+    apply hV y hy x hx m
+    simp_all
+  have hgs : (g * ·) ⁻¹' s = s := by
+    simp only [s, preimage_iUnion, ← smul_eq_mul, preimage_smul]
+    refine iUnion_congr_of_surjective _ (add_left_surjective (-1)) fun m => ?_
+    simp [zpow_add, mul_smul]
+  cases hg.measure_self_or_compl_eq_zero hso.measurableSet hgs with
+  | inl h => exact hso.measure_ne_zero _ hsne h
+  | inr h =>
+    refine (hVo.smul a).measure_ne_zero μ (.image _ ⟨1, hV₁⟩) (measure_mono_null ?_ h)
+    rwa [disjoint_right] at hd
 
 中文:
 定理 DenseRange.zpow_of_ergodic_mul_left
@@ -333,7 +373,27 @@ theorem DenseRange.zpow_of_ergodic_mul_left
   obtain ⟨V, hV₁, hVo, hV⟩ :
       exists V : Set G, 1 in V ∧ IsOpen V ∧ forall x in V, forall y in V, forall m : Int, g ^ m != a * x / y := by
     rw [← mem_compl_iff]; rw [← interior_compl]; rw [mem_interior_iff_mem_nhds] at h
-    have : Tendsto (fun (x, y) => a * x / y)
+    have : Tendsto (fun (x, y) => a * x / y) (𝓝 1) (𝓝 a) :=
+      Continuous.tendsto' (by fun_prop) _ _ (by simp)
+    rw [nhds_prod_eq] at this
+    simpa [(nhds_basis_opens (1 : G)).prod_self.mem_iff, prod_subset_iff, and_assoc] using this h
+  set s := ⋃ m : Int, g ^ m • V
+  have hso : IsOpen s := isOpen_iUnion fun m => hVo.smul _
+  have hsne : s.Nonempty := ⟨1, mem_iUnion.2 ⟨0, by simpa⟩⟩
+  have hd : Disjoint s (a • V) := by
+    simp_rw [s, disjoint_iUnion_left, disjoint_left]
+    rintro m _ ⟨x, hx, rfl⟩ ⟨y, hy, hxy⟩
+    apply hV y hy x hx m
+    simp_all
+  have hgs : (g * ·) ⁻¹' s = s := by
+    simp only [s, preimage_iUnion, ← smul_eq_mul, preimage_smul]
+    refine iUnion_congr_of_surjective _ (add_left_surjective (-1)) fun m => ?_
+    simp [zpow_add, mul_smul]
+  cases hg.measure_self_or_compl_eq_zero hso.measurableSet hgs with
+  | inl h => exact hso.measure_ne_zero _ hsne h
+  | inr h =>
+    refine (hVo.smul a).measure_ne_zero μ (.image _ ⟨1, hV₁⟩) (measure_mono_null ?_ h)
+    rwa [disjoint_right] at hd
 
 Depends on / 依赖: Continuous, Continuous.tendsto, IsOpen, Tendsto, and_assoc, fun_prop, interior_compl, mem_compl_iff, mem_iff, mem_interior_iff_mem_nhds, nhds_basis_opens, nhds_prod_eq, prod_self, prod_self.mem_iff, prod_subset_iff, tendsto
 -/
@@ -466,7 +526,9 @@ refine hf.mono iUnion_subset fun n x hx => ?_
   have hsn : f^[n] ⁻¹' s = s := by
     rw [preimage_iterate_eq]; rw [iterate_fixed hs]
   rw [mem_preimage]; rw [Set.mem_one] at hx
-  rw [mem_o
+  rw [mem_ofPred]; rw [← hsn]
+  ext y
+  simp [hx]
 
 中文:
 定理 preErgodic_of_dense_iUnion_preimage_one
@@ -477,7 +539,9 @@ refine hf.mono iUnion_subset fun n x hx => ?_
   have hsn : f^[n] ⁻¹' s = s := by
     rw [preimage_iterate_eq]; rw [iterate_fixed hs]
   rw [mem_preimage]; rw [Set.mem_one] at hx
-  rw [mem_o
+  rw [mem_ofPred]; rw [← hsn]
+  ext y
+  simp [hx]
 
 Depends on / 依赖: Set.mem_one, aeconst_of_dense_setOfPred_preimage_smul_eq, hf.mono, hsm.nullMeasurableSet, iUnion_subset, iterate_fixed, mem_ofPred, mem_one, mem_preimage, nullMeasurableSet, preimage_iterate_eq
 -/

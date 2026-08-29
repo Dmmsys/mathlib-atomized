@@ -136,7 +136,12 @@ instance :
   le_trans _ _ _ h₁₂ h₂₃ :=
     ⟨Subset.trans h₁₂.1 h₂₃.1, fun i hi => (h₁₂.2 i hi).trans (h₂₃.2 i <| h₁₂.1 hi)⟩
   le_antisymm v₁ v₂ h₁₂ h₂₁ :=
-    have hc : v₁.carrier = v₂.carrier :=
+    have hc : v₁.carrier = v₂.carrier := Subset.antisymm h₁₂.1 h₂₁.1
+    PartialRefinement.ext
+      (funext fun x =>
+        if hx : x in v₁.carrier then h₁₂.2 _ hx
+        else (v₁.apply_eq hx).trans (Eq.symm <| v₂.apply_eq <| hc ▸ hx))
+      hc
 
 中文:
 实例 :
@@ -146,7 +151,12 @@ instance :
   le_trans _ _ _ h₁₂ h₂₃ :=
     ⟨Subset.trans h₁₂.1 h₂₃.1, fun i hi => (h₁₂.2 i hi).trans (h₂₃.2 i <| h₁₂.1 hi)⟩
   le_antisymm v₁ v₂ h₁₂ h₂₁ :=
-    have hc : v₁.carrier = v₂.carrier :=
+    have hc : v₁.carrier = v₂.carrier := Subset.antisymm h₁₂.1 h₂₁.1
+    PartialRefinement.ext
+      (funext fun x =>
+        if hx : x in v₁.carrier then h₁₂.2 _ hx
+        else (v₁.apply_eq hx).trans (Eq.symm <| v₂.apply_eq <| hc ▸ hx))
+      hc
 
 Depends on / 依赖: carrier, subseteq
 -/
@@ -321,7 +331,23 @@ subset_iUnion x hxs := mem_iUnion.2 by
     rcases em (exists i, i ∉ chainSupCarrier c ∧ x in u i) with (⟨i, hi, hxi⟩ | hx)
     · use i
       simpa only [(find c ne i).apply_eq (mt (mem_find_carrier_iff _).1 hi)]
-    · s
+    · simp_rw [not_exists, not_and, not_imp_not, chainSupCarrier, mem_iUnion₂] at hx
+      have : Nonempty (PartialRefinement u s p) := ⟨ne.some⟩
+      choose! v hvc hiv using hx
+      rcases (hfin x hxs).exists_maximalFor v _ (mem_iUnion.1 (hU hxs)) with
+        ⟨i, hxi : x in u i, hmax : forall j, x in u j -> v i <= v j -> v j <= v i⟩
+      rcases mem_iUnion.1 ((v i).subset_iUnion hxs) with ⟨j, hj⟩
+      use j
+      have hj' : x in u j := (v i).subset _ hj
+      have : v j <= v i := (hc.total (hvc _ hxi) (hvc _ hj')).elim (hmax j hj') id
+      simpa only [find_apply_of_mem hc ne (hvc _ hxi) (this.1 <| hiv _ hj')]
+  closure_subset hi := (find c ne _).closure_subset ((mem_find_carrier_iff _).2 hi)
+  pred_of_mem {i} hi := by
+    obtain ⟨v, hv⟩ := Set.mem_iUnion.mp hi
+    simp only [mem_iUnion, exists_prop] at hv
+    rw [find_apply_of_mem hc ne hv.1 hv.2]
+    exact v.pred_of_mem hv.2
+  apply_eq hi := (find c ne _).apply_eq (mt (mem_find_carrier_iff _).1 hi)
 
 中文:
 定义 chainSup
@@ -333,7 +359,23 @@ subset_iUnion x hxs := mem_iUnion.2 by
     rcases em (exists i, i ∉ chainSupCarrier c ∧ x in u i) with (⟨i, hi, hxi⟩ | hx)
     · use i
       simpa only [(find c ne i).apply_eq (mt (mem_find_carrier_iff _).1 hi)]
-    · s
+    · simp_rw [not_exists, not_and, not_imp_not, chainSupCarrier, mem_iUnion₂] at hx
+      have : Nonempty (PartialRefinement u s p) := ⟨ne.some⟩
+      choose! v hvc hiv using hx
+      rcases (hfin x hxs).exists_maximalFor v _ (mem_iUnion.1 (hU hxs)) with
+        ⟨i, hxi : x in u i, hmax : forall j, x in u j -> v i <= v j -> v j <= v i⟩
+      rcases mem_iUnion.1 ((v i).subset_iUnion hxs) with ⟨j, hj⟩
+      use j
+      have hj' : x in u j := (v i).subset _ hj
+      have : v j <= v i := (hc.total (hvc _ hxi) (hvc _ hj')).elim (hmax j hj') id
+      simpa only [find_apply_of_mem hc ne (hvc _ hxi) (this.1 <| hiv _ hj')]
+  closure_subset hi := (find c ne _).closure_subset ((mem_find_carrier_iff _).2 hi)
+  pred_of_mem {i} hi := by
+    obtain ⟨v, hv⟩ := Set.mem_iUnion.mp hi
+    simp only [mem_iUnion, exists_prop] at hv
+    rw [find_apply_of_mem hc ne hv.1 hv.2]
+    exact v.pred_of_mem hv.2
+  apply_eq hi := (find c ne _).apply_eq (mt (mem_find_carrier_iff _).1 hi)
 -/
 def chainSup (c : Set (PartialRefinement u s p)) (hc : IsChain (· <= ·) c) (ne : c.Nonempty)
     (hfin : forall x in s, { i | x in u i }.Finite) (hU : s subseteq ⋃ i, u i) : PartialRefinement u s p where
@@ -394,7 +436,32 @@ theorem exists_gt
     intro x hxs H
     rcases mem_iUnion.1 (v.subset_iUnion hxs) with ⟨j, hj⟩
     exact (em (j = i)).elim (fun h => h ▸ hj) fun h => (H j h hj).elim
-  have C : IsClosed
+  have C : IsClosed (s inter ⋂ (j) (_ : j != i), (v j)ᶜ) :=
+    IsClosed.inter hs (isClosed_biInter fun _ _ => isClosed_compl_iff.2 <| v.isOpen _)
+  rcases normal_exists_closure_subset C (v.isOpen i) I with ⟨vi, ovi, hvi, cvi⟩
+  classical
+  refine ⟨⟨update v i vi, insert i v.carrier, ?_, ?_, ?_, ?_, ?_⟩, ?_, ?_⟩
+  · intro j
+    rcases eq_or_ne j i with (rfl | hne) <;> simp [*, v.isOpen]
+  · refine fun x hx => mem_iUnion.2 ?_
+    by_cases! h : exists j != i, x in v j
+    · rcases h with ⟨j, hji, hj⟩
+      use j
+      rwa [update_of_ne hji]
+    · use i
+      rw [update_self]
+      exact hvi ⟨hx, mem_biInter h⟩
+  · rintro j (rfl | hj)
+    · rwa [update_self, ← v.apply_eq hi]
+    · rw [update_of_ne (ne_of_mem_of_not_mem hj hi)]
+      exact v.closure_subset hj
+  · exact fun _ => trivial
+  · intro j hj
+    rw [mem_insert_iff]; rw [not_or] at hj
+    rw [update_of_ne hj.1]; rw [v.apply_eq hj.2]
+  · refine ⟨subset_insert _ _, fun j hj => ?_⟩
+    exact (update_of_ne (ne_of_mem_of_not_mem hj hi) _ _).symm
+  · exact fun hle => hi (hle.1 <| mem_insert _ _)
 
 中文:
 定理 存在_gt
@@ -405,7 +472,32 @@ theorem exists_gt
     intro x hxs H
     rcases mem_iUnion.1 (v.subset_iUnion hxs) with ⟨j, hj⟩
     exact (em (j = i)).elim (fun h => h ▸ hj) fun h => (H j h hj).elim
-  have C : IsClosed
+  have C : IsClosed (s inter ⋂ (j) (_ : j != i), (v j)ᶜ) :=
+    IsClosed.inter hs (isClosed_biInter fun _ _ => isClosed_compl_iff.2 <| v.isOpen _)
+  rcases normal_exists_closure_subset C (v.isOpen i) I with ⟨vi, ovi, hvi, cvi⟩
+  classical
+  refine ⟨⟨update v i vi, insert i v.carrier, ?_, ?_, ?_, ?_, ?_⟩, ?_, ?_⟩
+  · intro j
+    rcases eq_or_ne j i with (rfl | hne) <;> simp [*, v.isOpen]
+  · refine fun x hx => mem_iUnion.2 ?_
+    by_cases! h : exists j != i, x in v j
+    · rcases h with ⟨j, hji, hj⟩
+      use j
+      rwa [update_of_ne hji]
+    · use i
+      rw [update_self]
+      exact hvi ⟨hx, mem_biInter h⟩
+  · rintro j (rfl | hj)
+    · rwa [update_self, ← v.apply_eq hi]
+    · rw [update_of_ne (ne_of_mem_of_not_mem hj hi)]
+      exact v.closure_subset hj
+  · exact fun _ => trivial
+  · intro j hj
+    rw [mem_insert_iff]; rw [not_or] at hj
+    rw [update_of_ne hj.1]; rw [v.apply_eq hj.2]
+  · refine ⟨subset_insert _ _, fun j hj => ?_⟩
+    exact (update_of_ne (ne_of_mem_of_not_mem hj hi) _ _).symm
+  · exact fun hle => hi (hle.1 <| mem_insert _ _)
 
 Depends on / 依赖: IsClosed, IsClosed.inter, and_imp, classical, isClosed_biInter, isClosed_compl_iff, isOpen, mem_iInter, mem_iUnion, mem_inter_iff, normal_exists_closure_subset, subset_def, subset_iUnion, subseteq, v.isOpen, v.subset_iUnion
 -/
@@ -465,7 +557,13 @@ theorem exists_subset_iUnion_closure_subset
     ⟨⟨u, ∅, uo, us, False.elim, False.elim, fun _ => rfl⟩⟩
   have : forall c : Set (PartialRefinement u s ⊤),
       IsChain (· <= ·) c -> c.Nonempty -> exists ub, forall v in c, v <= ub :=
-    fun c hc ne => ⟨.chainSup c hc ne uf us, fun v hv => Part
+    fun c hc ne => ⟨.chainSup c hc ne uf us, fun v hv => PartialRefinement.le_chainSup _ _ _ _ hv⟩
+  rcases zorn_le_nonempty this with ⟨v, hv⟩
+  suffices forall i, i in v.carrier from
+    ⟨v, v.subset_iUnion, fun i => v.isOpen _, fun i => v.closure_subset (this i)⟩
+  intro i; by_contra hi
+  rcases v.exists_gt hs i hi with ⟨v', hlt⟩
+  exact hv.not_lt hlt
 
 中文:
 定理 存在_subset_iUnion_closure_subset
@@ -475,7 +573,13 @@ theorem exists_subset_iUnion_closure_subset
     ⟨⟨u, ∅, uo, us, False.elim, False.elim, fun _ => rfl⟩⟩
   have : forall c : Set (PartialRefinement u s ⊤),
       IsChain (· <= ·) c -> c.Nonempty -> exists ub, forall v in c, v <= ub :=
-    fun c hc ne => ⟨.chainSup c hc ne uf us, fun v hv => Part
+    fun c hc ne => ⟨.chainSup c hc ne uf us, fun v hv => PartialRefinement.le_chainSup _ _ _ _ hv⟩
+  rcases zorn_le_nonempty this with ⟨v, hv⟩
+  suffices forall i, i in v.carrier from
+    ⟨v, v.subset_iUnion, fun i => v.isOpen _, fun i => v.closure_subset (this i)⟩
+  intro i; by_contra hi
+  rcases v.exists_gt hs i hi with ⟨v', hlt⟩
+  exact hv.not_lt hlt
 
 Depends on / 依赖: False.elim, IsChain, Nonempty, PartialRefinement, PartialRefinement.le_chainSup, c.Nonempty, carrier, chainSup, closure_subset, isOpen, le_chainSup, subset_iUnion, v.carrier, v.closure_subset, v.isOpen, v.subset_iUnion, zorn_le_nonempty
 -/
@@ -587,7 +691,65 @@ theorem exists_gt_t2space
   have hsic : IsCompact si := by
     apply IsCompact.of_isClosed_subset hs _ Set.inter_subset_left
     · have : IsOpen (⋃ j != i, v j) := by
-        apply is
+        apply isOpen_biUnion
+        intro j _
+        exact v.isOpen j
+      exact IsClosed.inter (IsCompact.isClosed hs) (IsOpen.isClosed_compl this)
+  have : si subseteq v i := by
+    intro x hx
+    have (j) (hj : j != i) : x ∉ v j := by
+      rw [hsi] at hx
+      apply Set.notMem_of_mem_compl
+      have hsi' : x in (⋂ i_1, ⋂ (_ : ¬i_1 = i), (v.toFun i_1)ᶜ) := Set.mem_of_mem_inter_right hx
+      rw [ne_eq] at hj
+      rw [Set.mem_iInter₂] at hsi'
+      exact hsi' j hj
+    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp
+      (v.subset_iUnion (Set.mem_of_mem_inter_left hx))
+    obtain rfl : j = i := by
+      by_contra! h
+      exact this j h hj
+    exact hj
+  obtain ⟨vi, hvi⟩ := exists_open_between_and_isCompact_closure hsic (v.isOpen i) this
+  classical
+  refine ⟨⟨update v i vi, insert i v.carrier, ?_, ?_, ?_, ?_, ?_⟩, ⟨?_, ?_⟩, ?_⟩
+  · intro j
+    rcases eq_or_ne j i with (rfl | hne) <;> simp [*, v.isOpen]
+  · refine fun x hx => mem_iUnion.2 ?_
+    by_cases! h : exists j != i, x in v j
+    · rcases h with ⟨j, hji, hj⟩
+      use j
+      rwa [update_of_ne hji]
+    · use i
+      rw [update_self]
+      apply hvi.2.1
+      rw [hsi]
+      exact ⟨hx, mem_iInter₂_of_mem h⟩
+  · rintro j (rfl | hj)
+    · rw [update_self]
+exact subset_trans hvi.2.2.1 PartialRefinement.subset v j
+    · rw [update_of_ne (ne_of_mem_of_not_mem hj hi)]
+      exact v.closure_subset hj
+  · intro j hj
+    rw [mem_insert_iff] at hj
+    by_cases h : j = i
+    · rw [← h]
+      simp only [update_self]
+      exact hvi.2.2.2
+    · apply hj.elim
+      · intro hji
+        exact False.elim (h hji)
+      · intro hjmemv
+        rw [update_of_ne h]
+        exact v.pred_of_mem hjmemv
+  · intro j hj
+    rw [mem_insert_iff]; rw [not_or] at hj
+    rw [update_of_ne hj.1]; rw [v.apply_eq hj.2]
+  · refine ⟨subset_insert _ _, fun j hj => ?_⟩
+    exact (update_of_ne (ne_of_mem_of_not_mem hj hi) _ _).symm
+  · exact fun hle => hi (hle.1 <| mem_insert _ _)
+  · simp only [update_self]
+    exact hvi.2.2.2
 
 中文:
 定理 存在_gt_t2space
@@ -599,7 +761,65 @@ theorem exists_gt_t2space
   have hsic : IsCompact si := by
     apply IsCompact.of_isClosed_subset hs _ Set.inter_subset_left
     · have : IsOpen (⋃ j != i, v j) := by
-        apply is
+        apply isOpen_biUnion
+        intro j _
+        exact v.isOpen j
+      exact IsClosed.inter (IsCompact.isClosed hs) (IsOpen.isClosed_compl this)
+  have : si subseteq v i := by
+    intro x hx
+    have (j) (hj : j != i) : x ∉ v j := by
+      rw [hsi] at hx
+      apply Set.notMem_of_mem_compl
+      have hsi' : x in (⋂ i_1, ⋂ (_ : ¬i_1 = i), (v.toFun i_1)ᶜ) := Set.mem_of_mem_inter_right hx
+      rw [ne_eq] at hj
+      rw [Set.mem_iInter₂] at hsi'
+      exact hsi' j hj
+    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp
+      (v.subset_iUnion (Set.mem_of_mem_inter_left hx))
+    obtain rfl : j = i := by
+      by_contra! h
+      exact this j h hj
+    exact hj
+  obtain ⟨vi, hvi⟩ := exists_open_between_and_isCompact_closure hsic (v.isOpen i) this
+  classical
+  refine ⟨⟨update v i vi, insert i v.carrier, ?_, ?_, ?_, ?_, ?_⟩, ⟨?_, ?_⟩, ?_⟩
+  · intro j
+    rcases eq_or_ne j i with (rfl | hne) <;> simp [*, v.isOpen]
+  · refine fun x hx => mem_iUnion.2 ?_
+    by_cases! h : exists j != i, x in v j
+    · rcases h with ⟨j, hji, hj⟩
+      use j
+      rwa [update_of_ne hji]
+    · use i
+      rw [update_self]
+      apply hvi.2.1
+      rw [hsi]
+      exact ⟨hx, mem_iInter₂_of_mem h⟩
+  · rintro j (rfl | hj)
+    · rw [update_self]
+exact subset_trans hvi.2.2.1 PartialRefinement.subset v j
+    · rw [update_of_ne (ne_of_mem_of_not_mem hj hi)]
+      exact v.closure_subset hj
+  · intro j hj
+    rw [mem_insert_iff] at hj
+    by_cases h : j = i
+    · rw [← h]
+      simp only [update_self]
+      exact hvi.2.2.2
+    · apply hj.elim
+      · intro hji
+        exact False.elim (h hji)
+      · intro hjmemv
+        rw [update_of_ne h]
+        exact v.pred_of_mem hjmemv
+  · intro j hj
+    rw [mem_insert_iff]; rw [not_or] at hj
+    rw [update_of_ne hj.1]; rw [v.apply_eq hj.2]
+  · refine ⟨subset_insert _ _, fun j hj => ?_⟩
+    exact (update_of_ne (ne_of_mem_of_not_mem hj hi) _ _).symm
+  · exact fun hle => hi (hle.1 <| mem_insert _ _)
+  · simp only [update_self]
+    exact hvi.2.2.2
 -/
 theorem exists_gt_t2space (v : PartialRefinement u s (fun w => IsCompact (closure w)))
     (hs : IsCompact s) (i : ι) (hi : i ∉ v.carrier) :
@@ -682,6 +902,16 @@ theorem exists_subset_iUnion_closure_subset_t2space
     ⟨⟨u, ∅, uo, us, False.elim, False.elim, fun _ => rfl⟩⟩
   have : forall c : Set (PartialRefinement u s (fun w => IsCompact (closure w))),
       IsChain (· <= ·) c -> c.Nonempty -> exists ub, forall v in c, v <= ub :=
+    fun c hc ne => ⟨.chainSup c hc ne uf us, fun v hv => PartialRefinement.le_chainSup _ _ _ _ hv⟩
+  rcases zorn_le_nonempty this with ⟨v, hv⟩
+  suffices forall i, i in v.carrier from
+    ⟨v, v.subset_iUnion, fun i => v.isOpen _, fun i => v.closure_subset (this i), ?_⟩
+  · intro i
+    exact v.pred_of_mem (this i)
+  · intro i
+    by_contra! hi
+    rcases exists_gt_t2space v hs i hi with ⟨v', hlt, _⟩
+    exact hv.not_lt hlt
 
 中文:
 定理 存在_subset_iUnion_closure_subset_t2space
@@ -691,6 +921,16 @@ theorem exists_subset_iUnion_closure_subset_t2space
     ⟨⟨u, ∅, uo, us, False.elim, False.elim, fun _ => rfl⟩⟩
   have : forall c : Set (PartialRefinement u s (fun w => IsCompact (closure w))),
       IsChain (· <= ·) c -> c.Nonempty -> exists ub, forall v in c, v <= ub :=
+    fun c hc ne => ⟨.chainSup c hc ne uf us, fun v hv => PartialRefinement.le_chainSup _ _ _ _ hv⟩
+  rcases zorn_le_nonempty this with ⟨v, hv⟩
+  suffices forall i, i in v.carrier from
+    ⟨v, v.subset_iUnion, fun i => v.isOpen _, fun i => v.closure_subset (this i), ?_⟩
+  · intro i
+    exact v.pred_of_mem (this i)
+  · intro i
+    by_contra! hi
+    rcases exists_gt_t2space v hs i hi with ⟨v', hlt, _⟩
+    exact hv.not_lt hlt
 
 Depends on / 依赖: False.elim, IsChain, IsCompact, Nonempty, PartialRefinement, PartialRefinement.le_chainSup, c.Nonempty, carrier, chainSup, closure, le_chainSup, subset_iUnion, v.carrier, v.isOpe, v.subset_iUnion, zorn_le_nonempty
 -/

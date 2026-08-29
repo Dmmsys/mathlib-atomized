@@ -122,7 +122,17 @@ definition adjunction
     { homEquiv := fun F G =>
         ((PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).homEquiv _ _).trans
             (((PresheafOfModules.pullbackPushforwardAdjunction φ.hom).homEquiv F.val G.val).trans
-              ((fullyFaithfulForget S).homEquiv (Y := (pushforwar
+              ((fullyFaithfulForget S).homEquiv (Y := (pushforward φ).obj G)).symm)
+      homEquiv_naturality_left_symm := by
+        intros
+        dsimp [Functor.FullyFaithful.homEquiv]
+        -- these erw seem difficult to remove
+        erw [Adjunction.homEquiv_naturality_left_symm,
+          Adjunction.homEquiv_naturality_left_symm]
+        dsimp [pushforward_obj_val]
+        simp only [Functor.map_comp, Category.assoc]
+      homEquiv_naturality_right := by
+        tauto }
 
 中文:
 定义 adjunction
@@ -131,7 +141,17 @@ definition adjunction
     { homEquiv := fun F G =>
         ((PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)).homEquiv _ _).trans
             (((PresheafOfModules.pullbackPushforwardAdjunction φ.hom).homEquiv F.val G.val).trans
-              ((fullyFaithfulForget S).homEquiv (Y := (pushforwar
+              ((fullyFaithfulForget S).homEquiv (Y := (pushforward φ).obj G)).symm)
+      homEquiv_naturality_left_symm := by
+        intros
+        dsimp [Functor.FullyFaithful.homEquiv]
+        -- these erw seem difficult to remove
+        erw [Adjunction.homEquiv_naturality_left_symm,
+          Adjunction.homEquiv_naturality_left_symm]
+        dsimp [pushforward_obj_val]
+        simp only [Functor.map_comp, Category.assoc]
+      homEquiv_naturality_right := by
+        tauto }
 
 Depends on / 依赖: R.obj, pushforward
 -/

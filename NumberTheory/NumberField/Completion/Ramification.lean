@@ -55,7 +55,7 @@ theorem IsRamified.finrank_eq_two
   rw [NumberField.InfinitePlace.LiesOver.comap_eq w v] at H
   have := LiesOver.extensionEmbedding_liesOver_of_isReal w H.2
   rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivRealOfIsReal H.2)
-      (ringEquivComplexOfIsComplex H.1) (by ext;
+      (ringEquivComplexOfIsComplex H.1) (by ext; simp)]; rw [Complex.finrank_real_complex]
 
 中文:
 定理 IsRamified.finrank_eq_two
@@ -65,7 +65,7 @@ theorem IsRamified.finrank_eq_two
   rw [NumberField.InfinitePlace.LiesOver.comap_eq w v] at H
   have := LiesOver.extensionEmbedding_liesOver_of_isReal w H.2
   rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivRealOfIsReal H.2)
-      (ringEquivComplexOfIsComplex H.1) (by ext;
+      (ringEquivComplexOfIsComplex H.1) (by ext; simp)]; rw [Complex.finrank_real_complex]
 
 Depends on / 依赖: Algebra, Algebra.finrank_eq_of_equiv_equiv, Complex.finrank_real_complex, InfinitePlace, LiesOver, LiesOver.extensionEmbedding_liesOver_of_isReal, NumberField, NumberField.InfinitePlace.LiesOver.comap_eq, NumberField.InfinitePlace.isRamified_iff.mp, comap_eq, extensionEmbedding_liesOver_of_isReal, finrank_eq_of_equiv_equiv, finrank_real_complex, isRamified_iff, ringEquivComplexOfIsComplex, ringEquivRealOfIsReal
 -/
@@ -87,7 +87,26 @@ theorem IsUnramified.finrank_eq_one
   rcases v.isReal_or_isComplex with (hv | hv)
   · have := LiesOver.extensionEmbedding_liesOver_of_isReal w hv
     rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivRealOfIsReal hv) (ringEquivRealOfIsReal
-(h.liesOver_isReal_over _ _ hv)) (RingHom.ext fun _ => Complex.ofReal_inj.1 by simp)]; rw [Modu
+(h.liesOver_isReal_over _ _ hv)) (RingHom.ext fun _ => Complex.ofReal_inj.1 by simp)]; rw [Module.finrank_self]
+  · cases LiesOver.embedding_comp_eq_or_conjugate_embedding_comp_eq w v with
+    | inl hl =>
+      have : ComplexEmbedding.LiesOver w.embedding v.embedding := ⟨hl⟩
+      have := liesOver_extensionEmbedding w v
+      rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivComplexOfIsComplex hv)
+          (ringEquivComplexOfIsComplex (LiesOver.isComplex_of_isComplex_under _ hv)) (by ext; simp)]; rw [Module.finrank_self]
+    | inr hr =>
+      have : ComplexEmbedding.LiesOver (conjugate w.embedding) v.embedding := ⟨hr⟩
+      have := liesOver_conjugate_extensionEmbedding w v
+      rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivComplexOfIsComplex hv)
+        ((ringEquivComplexOfIsComplex (LiesOver.isComplex_of_isComplex_under _ hv)).trans
+          (starRingAut (R := Complex))) (by ext; simp [← conjugate_coe_eq]),
+        Module.finrank_self]
+
+@[deprecated (since := "2026-07-10")] alias Completion.finrank_eq_two_of_isRamified :=
+  IsRamified.finrank_eq_two
+
+@[deprecated (since := "2026-07-10")] alias Completion.finrank_eq_one_of_isUnramified :=
+  IsUnramified.finrank_eq_one
 
 中文:
 定理 IsUnramified.finrank_eq_one
@@ -96,7 +115,26 @@ theorem IsUnramified.finrank_eq_one
   rcases v.isReal_or_isComplex with (hv | hv)
   · have := LiesOver.extensionEmbedding_liesOver_of_isReal w hv
     rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivRealOfIsReal hv) (ringEquivRealOfIsReal
-(h.liesOver_isReal_over _ _ hv)) (RingHom.ext fun _ => Complex.ofReal_inj.1 by simp)]; rw [Modu
+(h.liesOver_isReal_over _ _ hv)) (RingHom.ext fun _ => Complex.ofReal_inj.1 by simp)]; rw [Module.finrank_self]
+  · cases LiesOver.embedding_comp_eq_or_conjugate_embedding_comp_eq w v with
+    | inl hl =>
+      have : ComplexEmbedding.LiesOver w.embedding v.embedding := ⟨hl⟩
+      have := liesOver_extensionEmbedding w v
+      rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivComplexOfIsComplex hv)
+          (ringEquivComplexOfIsComplex (LiesOver.isComplex_of_isComplex_under _ hv)) (by ext; simp)]; rw [Module.finrank_self]
+    | inr hr =>
+      have : ComplexEmbedding.LiesOver (conjugate w.embedding) v.embedding := ⟨hr⟩
+      have := liesOver_conjugate_extensionEmbedding w v
+      rw [Algebra.finrank_eq_of_equiv_equiv (ringEquivComplexOfIsComplex hv)
+        ((ringEquivComplexOfIsComplex (LiesOver.isComplex_of_isComplex_under _ hv)).trans
+          (starRingAut (R := Complex))) (by ext; simp [← conjugate_coe_eq]),
+        Module.finrank_self]
+
+@[deprecated (since := "2026-07-10")] alias Completion.finrank_eq_two_of_isRamified :=
+  IsRamified.finrank_eq_two
+
+@[deprecated (since := "2026-07-10")] alias Completion.finrank_eq_one_of_isUnramified :=
+  IsUnramified.finrank_eq_one
 
 Depends on / 依赖: Algebra, Algebra.finrank_eq_of_equiv_equiv, Complex.ofReal_inj, ComplexEmbedding, ComplexEmbedding.LiesOver, LiesOver, LiesOver.embedding_comp_eq_or_conjugate_embedding_comp_eq, LiesOver.extensionEmbedding_liesOver_of_isReal, Module, Module.finrank_self, RingHom, RingHom.ext, embedding, embedding_comp_eq_or_conjugate_embedding_comp_eq, extensionEmbedding_liesOver_of_isReal, finrank_eq_of_equiv_equiv, finrank_self, h.liesOver_isReal_over, isReal_or_isComplex, liesOver_extensionEmbedding
 -/
@@ -278,13 +316,15 @@ English:
 theorem sum_inertiaDeg_eq_finrank
   given: [NumberField K] [NumberField L]
   proof: by
-  rw [← union_ramifiedPlacesOver_unramifiedPlacesOver L v]; rw [toFinset_union]; rw [sum_union (Set.disjoint_toFinset.2 <| disjoint_ramifiedPlacesOver_unramifiedPlacesOver L v)]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_two (by simpa using h))]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_one 
+  rw [← union_ramifiedPlacesOver_unramifiedPlacesOver L v]; rw [toFinset_union]; rw [sum_union (Set.disjoint_toFinset.2 <| disjoint_ramifiedPlacesOver_unramifiedPlacesOver L v)]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_two (by simpa using h))]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_one (by simpa using h))]; rw [sum_const]; rw [add_comm]
+  simp [← unramifedPlacesOver_ncard_add_eq_finrank L v, mul_comm, ncard_eq_toFinset_card']
 
 中文:
 定理 sum_inertiaDeg_eq_finrank
   条件: [数域 K] [数域 L]
   证明: by
-  rw [← union_ramifiedPlacesOver_unramifiedPlacesOver L v]; rw [toFinset_union]; rw [sum_union (Set.disjoint_toFinset.2 <| disjoint_ramifiedPlacesOver_unramifiedPlacesOver L v)]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_two (by simpa using h))]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_one 
+  rw [← union_ramifiedPlacesOver_unramifiedPlacesOver L v]; rw [toFinset_union]; rw [sum_union (Set.disjoint_toFinset.2 <| disjoint_ramifiedPlacesOver_unramifiedPlacesOver L v)]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_two (by simpa using h))]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_one (by simpa using h))]; rw [sum_const]; rw [add_comm]
+  simp [← unramifedPlacesOver_ncard_add_eq_finrank L v, mul_comm, ncard_eq_toFinset_card']
 
 Depends on / 依赖: Set.disjoint_toFinset, add_comm, disjoint_ramifiedPlacesOver_unramifiedPlacesOver, disjoint_toFinset, inertiaDeg_eq_one, inertiaDeg_eq_two, mul_comm, ncard_eq_toFinset_card, sum_congr, sum_const, sum_union, toFinset_union, union_ramifiedPlacesOver_unramifiedPlacesOver, unramifedPlacesOver_ncard_add_eq_finrank
 -/

@@ -91,7 +91,22 @@ theorem conjAct_smul_ι_mem_range_ι
     obtain ⟨a, ha⟩ := hx
     let := x.invertible
     let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q 
+    let : Invertible (Q a) := invertibleOfInvertibleι Q a
+    simp_rw [← invOf_units x, ← ha, ι_mul_ι_mul_invOf_ι, LinearMap.mem_range_self]
+  | inv_mem x hx =>
+    obtain ⟨a, ha⟩ := hx
+    let := x.invertible
+    let : Invertible (ι Q a) := by rwa [ha]
+    let : Invertible (Q a) := invertibleOfInvertibleι Q a
+    simp_rw [← invOf_units x, inv_inv, ← ha, invOf_ι_mul_ι_mul_ι, LinearMap.mem_range_self]
+  | one => simp_rw [inv_one, Units.val_one, one_mul, mul_one, LinearMap.mem_range_self]
+  | mul y z _ _ hy hz =>
+    simp_rw [mul_inv_rev, Units.val_mul]
+    suffices ↑y * (↑z * ι Q m * ↑z⁻¹) * ↑y⁻¹ in _ by
+      simpa only [mul_assoc] using this
+    obtain ⟨z', hz'⟩ := hz m
+    obtain ⟨y', hy'⟩ := hy z'
+    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
 
 中文:
 定理 conjAct_smul_ι_mem_range_ι
@@ -104,7 +119,22 @@ theorem conjAct_smul_ι_mem_range_ι
     obtain ⟨a, ha⟩ := hx
     let := x.invertible
     let : Invertible (ι Q a) := by rwa [ha]
-    let : Invertible (Q 
+    let : Invertible (Q a) := invertibleOfInvertibleι Q a
+    simp_rw [← invOf_units x, ← ha, ι_mul_ι_mul_invOf_ι, LinearMap.mem_range_self]
+  | inv_mem x hx =>
+    obtain ⟨a, ha⟩ := hx
+    let := x.invertible
+    let : Invertible (ι Q a) := by rwa [ha]
+    let : Invertible (Q a) := invertibleOfInvertibleι Q a
+    simp_rw [← invOf_units x, inv_inv, ← ha, invOf_ι_mul_ι_mul_ι, LinearMap.mem_range_self]
+  | one => simp_rw [inv_one, Units.val_one, one_mul, mul_one, LinearMap.mem_range_self]
+  | mul y z _ _ hy hz =>
+    simp_rw [mul_inv_rev, Units.val_mul]
+    suffices ↑y * (↑z * ι Q m * ↑z⁻¹) * ↑y⁻¹ in _ by
+      simpa only [mul_assoc] using this
+    obtain ⟨z', hz'⟩ := hz m
+    obtain ⟨y', hy'⟩ := hy z'
+    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
 
 Depends on / 依赖: ConjAct, ConjAct.ofConjAct_toConjAct, ConjAct.units_smul_def, Invert, Invertible, LinearMap, LinearMap.mem_range_self, Subgroup, Subgroup.closure_induction, closure_induction, generalizing, invOf_units, inv_mem, invertible, lipschitzGroup, mem_range_self, ofConjAct_toConjAct, simp_rw, units_smul_def, x.invertible
 -/
@@ -149,7 +179,25 @@ theorem involute_act_ι_mem_range_ι
     let := x.invertible
     let : Invertible (ι Q a) := by rwa [ha]
     let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, 
+    simp_rw [← invOf_units x, ← ha, involute_ι, neg_mul, ι_mul_ι_mul_invOf_ι Q a b, ← map_neg,
+      LinearMap.mem_range_self]
+  | inv_mem x hx =>
+    obtain ⟨a, ha⟩ := hx
+    let := x.invertible
+    let : Invertible (ι Q a) := by rwa [ha]
+    let : Invertible (Q a) := invertibleOfInvertibleι Q a
+    let := invertibleNeg (ι Q a)
+    let := Invertible.map involute (ι Q a)
+    simp_rw [← invOf_units x, inv_inv, ← ha, map_invOf, involute_ι, invOf_neg, neg_mul,
+      invOf_ι_mul_ι_mul_ι, ← map_neg, LinearMap.mem_range_self]
+  | one => simp_rw [inv_one, Units.val_one, map_one, one_mul, mul_one, LinearMap.mem_range_self]
+  | mul y z _ _ hy hz =>
+    simp_rw [mul_inv_rev, Units.val_mul, map_mul]
+    suffices involute (Q := Q) ↑y * (involute (Q := Q) ↑z * ι Q b * ↑z⁻¹) * ↑y⁻¹ in _ by
+      simpa only [mul_assoc] using this
+    obtain ⟨z', hz'⟩ := hz b
+    obtain ⟨y', hy'⟩ := hy z'
+    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
 
 中文:
 定理 involute_act_ι_mem_range_ι
@@ -162,7 +210,25 @@ theorem involute_act_ι_mem_range_ι
     let := x.invertible
     let : Invertible (ι Q a) := by rwa [ha]
     let : Invertible (Q a) := invertibleOfInvertibleι Q a
-    simp_rw [← invOf_units x, 
+    simp_rw [← invOf_units x, ← ha, involute_ι, neg_mul, ι_mul_ι_mul_invOf_ι Q a b, ← map_neg,
+      LinearMap.mem_range_self]
+  | inv_mem x hx =>
+    obtain ⟨a, ha⟩ := hx
+    let := x.invertible
+    let : Invertible (ι Q a) := by rwa [ha]
+    let : Invertible (Q a) := invertibleOfInvertibleι Q a
+    let := invertibleNeg (ι Q a)
+    let := Invertible.map involute (ι Q a)
+    simp_rw [← invOf_units x, inv_inv, ← ha, map_invOf, involute_ι, invOf_neg, neg_mul,
+      invOf_ι_mul_ι_mul_ι, ← map_neg, LinearMap.mem_range_self]
+  | one => simp_rw [inv_one, Units.val_one, map_one, one_mul, mul_one, LinearMap.mem_range_self]
+  | mul y z _ _ hy hz =>
+    simp_rw [mul_inv_rev, Units.val_mul, map_mul]
+    suffices involute (Q := Q) ↑y * (involute (Q := Q) ↑z * ι Q b * ↑z⁻¹) * ↑y⁻¹ in _ by
+      simpa only [mul_assoc] using this
+    obtain ⟨z', hz'⟩ := hz b
+    obtain ⟨y', hy'⟩ := hy z'
+    simp_rw [← hz', ← hy', LinearMap.mem_range_self]
 
 Depends on / 依赖: Invertible, LinearMap, LinearMap.mem_range_self, LinearMap.range, Subgroup, Subgroup.closure_induction, closure_induction, generalizing, invOf_units, inv_mem, invertible, lipschitzGroup, map_neg, mem_range_self, neg_mul, simp_rw, x.invertible
 -/
@@ -209,7 +275,11 @@ theorem conjAct_smul_range_ι
     · exact this _ hx
 · have := smul_mono_right (ConjAct.toConjAct x) this _ (inv_mem hx)
       refine Eq.trans_le ?_ this
-      simp only [map_inv, smul_in
+      simp only [map_inv, smul_inv_smul]
+  intro x hx
+  rw [Submodule.pointwise_smul_def]; rw [Submodule.map_le_iff_le_comap]
+  rintro _ ⟨m, rfl⟩
+  exact conjAct_smul_ι_mem_range_ι hx _
 
 中文:
 定理 conjAct_smul_range_ι
@@ -221,7 +291,11 @@ theorem conjAct_smul_range_ι
     · exact this _ hx
 · have := smul_mono_right (ConjAct.toConjAct x) this _ (inv_mem hx)
       refine Eq.trans_le ?_ this
-      simp only [map_inv, smul_in
+      simp only [map_inv, smul_inv_smul]
+  intro x hx
+  rw [Submodule.pointwise_smul_def]; rw [Submodule.map_le_iff_le_comap]
+  rintro _ ⟨m, rfl⟩
+  exact conjAct_smul_ι_mem_range_ι hx _
 
 Depends on / 依赖: ConjAct, ConjAct.toConjAct, Eq.trans_le, LinearMap, LinearMap.range, Submodule, Submodule.map_le_iff_le_comap, Submodule.pointwise_smul_def, inv_mem, le_antisymm, lipschitzGroup, map_inv, map_le_iff_le_comap, pointwise_smul_def, smul_inv_smul, smul_mono_right, toConjAct, trans_le
 -/
@@ -502,7 +576,14 @@ theorem star_mem
   simp only [Subgroup.coe_toSubmonoid, SetLike.mem_coe] at hy₁
   simp only [Units.coeHom_apply] at hy₂
   simp only [Submonoid.mem_map, Subgroup.mem_toSubmonoid, Units.coeHom_apply]
-  refine ⟨st
+  refine ⟨star y, ?_, by simp only [hy₂, Units.coe_star]⟩
+  rw [← hy₂] at hx₃
+  have hy₃ : y * star y = 1 := by
+    rw [← Units.val_inj]
+    simp only [hx₃, Units.val_mul, Units.coe_star, Units.val_one]
+  apply_fun fun x => y⁻¹ * x at hy₃
+  simp only [inv_mul_cancel_left, mul_one] at hy₃
+  simp only [hy₃, hy₁, inv_mem_iff]
 
 中文:
 定理 star_mem
@@ -515,7 +596,14 @@ theorem star_mem
   simp only [Subgroup.coe_toSubmonoid, SetLike.mem_coe] at hy₁
   simp only [Units.coeHom_apply] at hy₂
   simp only [Submonoid.mem_map, Subgroup.mem_toSubmonoid, Units.coeHom_apply]
-  refine ⟨st
+  refine ⟨star y, ?_, by simp only [hy₂, Units.coe_star]⟩
+  rw [← hy₂] at hx₃
+  have hy₃ : y * star y = 1 := by
+    rw [← Units.val_inj]
+    simp only [hx₃, Units.val_mul, Units.coe_star, Units.val_one]
+  apply_fun fun x => y⁻¹ * x at hy₃
+  simp only [inv_mul_cancel_left, mul_one] at hy₃
+  simp only [hy₃, hy₁, inv_mem_iff]
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, Subgroup, Subgroup.coe_toSubmonoid, Subgroup.mem_toSubmonoid, Submonoid, Submonoid.mem_map, Unitary, Unitary.star_mem, Units.coeHom_apply, Units.coe_star, Units.val_inj, Units.val_mul, Units.val_one, apply_fun, coeHom_apply, coe_star, coe_toSubmonoid, mem_coe, mem_iff
 -/

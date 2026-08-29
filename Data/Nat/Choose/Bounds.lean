@@ -294,7 +294,7 @@ theorem choose_succ_le_two_pow
       · rw [choose_zero_right]
         exact Nat.one_le_two_pow
       · rw [choose_succ_succ', two_pow_succ]
-        exact Nat.add_le_add (cho
+        exact Nat.add_le_add (choose_succ_le_two_pow n k) (choose_succ_le_two_pow n (k + 1))
 
 中文:
 定理 choose_succ_le_two_pow
@@ -310,7 +310,7 @@ theorem choose_succ_le_two_pow
       · rw [choose_zero_right]
         exact Nat.one_le_two_pow
       · rw [choose_succ_succ', two_pow_succ]
-        exact Nat.add_le_add (cho
+        exact Nat.add_le_add (choose_succ_le_two_pow n k) (choose_succ_le_two_pow n (k + 1))
 
 Depends on / 依赖: Nat.add_le_add, Nat.one_le_two_pow, add_le_add, choose_eq_zero_of_lt, choose_succ_le_two_pow, choose_succ_succ, choose_zero_right, one_le_two_pow, two_pow_succ
 -/

@@ -860,7 +860,7 @@ theorem HasFTaylorSeriesUpToOn.continuousLinearMap_comp
   fderivWithin m hm x hx := (ContinuousLinearMap.compContinuousMultilinearMapL 𝕜
     (fun _ : Fin m => E) F G g).hasFDerivAt.comp_hasFDerivWithinAt x (hf.fderivWithin m hm x hx)
   cont m hm := (ContinuousLinearMap.compContinuousMultilinearMapL 𝕜
-    (fun _ : Fin m => E)
+    (fun _ : Fin m => E) F G g).continuous.comp_continuousOn (hf.cont m hm)
 
 中文:
 定理 有FTaylorSeriesUpToOn.continuousLinearMap_comp
@@ -869,7 +869,7 @@ theorem HasFTaylorSeriesUpToOn.continuousLinearMap_comp
   fderivWithin m hm x hx := (ContinuousLinearMap.compContinuousMultilinearMapL 𝕜
     (fun _ : Fin m => E) F G g).hasFDerivAt.comp_hasFDerivWithinAt x (hf.fderivWithin m hm x hx)
   cont m hm := (ContinuousLinearMap.compContinuousMultilinearMapL 𝕜
-    (fun _ : Fin m => E)
+    (fun _ : Fin m => E) F G g).continuous.comp_continuousOn (hf.cont m hm)
 
 Depends on / 依赖: congr_arg, hf.zero_eq, zero_eq
 -/
@@ -896,7 +896,12 @@ theorem ContDiffWithinAt.continuousLinearMap_comp
     change AnalyticOn 𝕜
       (fun x => (ContinuousLinearMap.compContinuousMultilinearMapL 𝕜
       (fun _ : Fin i => E) F G g) (p x i)) u
-    apply AnalyticOnNhd.comp_ana
+    apply AnalyticOnNhd.comp_analyticOn _ (h'p i) (Set.mapsTo_univ _ _)
+    exact ContinuousLinearMap.analyticOnNhd _ _
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    exact ⟨u, hu, _, hp.continuousLinearMap_comp g⟩
 
 中文:
 定理 ContDiffWithinAt.continuousLinearMap_comp
@@ -909,7 +914,12 @@ theorem ContDiffWithinAt.continuousLinearMap_comp
     change AnalyticOn 𝕜
       (fun x => (ContinuousLinearMap.compContinuousMultilinearMapL 𝕜
       (fun _ : Fin i => E) F G g) (p x i)) u
-    apply AnalyticOnNhd.comp_ana
+    apply AnalyticOnNhd.comp_analyticOn _ (h'p i) (Set.mapsTo_univ _ _)
+    exact ContinuousLinearMap.analyticOnNhd _ _
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    exact ⟨u, hu, _, hp.continuousLinearMap_comp g⟩
 
 Depends on / 依赖: AnalyticOn, AnalyticOnNhd, AnalyticOnNhd.comp_analyticOn, ContinuousLinearMap, ContinuousLinearMap.analyticOnNhd, ContinuousLinearMap.compContinuousMultilinearMapL, Set.mapsTo_univ, analyticOnNhd, compContinuousMultilinearMapL, comp_analyticOn, continuousLinearMap_comp, hp.continuousLinearMap_comp, mapsTo_univ
 -/
@@ -996,7 +1006,7 @@ theorem ContinuousLinearMap.iteratedFDerivWithin_comp_left
   rw [← iteratedFDerivWithin_inter_open hU hxU]; rw [← iteratedFDerivWithin_inter_open (f := f) hU hxU]
   rw [insert_eq_of_mem hx] at hfU
 exact .symm (hfU.ftaylorSeriesWithin (hs.inter hU)).continuousLinearMap_comp g
-.eq_iteratedFDerivWi
+.eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl (hs.inter hU) ⟨hx, hxU⟩
 
 中文:
 定理 连续线性映射.iteratedFDerivWithin_comp_left
@@ -1006,7 +1016,7 @@ exact .symm (hfU.ftaylorSeriesWithin (hs.inter hU)).continuousLinearMap_comp g
   rw [← iteratedFDerivWithin_inter_open hU hxU]; rw [← iteratedFDerivWithin_inter_open (f := f) hU hxU]
   rw [insert_eq_of_mem hx] at hfU
 exact .symm (hfU.ftaylorSeriesWithin (hs.inter hU)).continuousLinearMap_comp g
-.eq_iteratedFDerivWi
+.eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl (hs.inter hU) ⟨hx, hxU⟩
 
 Depends on / 依赖: contDiffOn, continuousLinearMap_comp, eq_iteratedFDerivWithin_of_uniqueDiffOn, ftaylorSeriesWithin, hf.contDiffOn, hfU.ftaylorSeriesWithin, hs.inter, insert_eq_of_mem, iteratedFDerivWithin_inter_open, le_rfl
 -/
@@ -1058,7 +1068,13 @@ theorem ContinuousLinearEquiv.iteratedFDerivWithin_comp_left
       ContinuousLinearMap.compContinuousMultilinearMap_coe, coe_coe]
   | succ i IH =>
     rw [iteratedFDerivWithin_succ_apply_left]
-    have Z : fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 
+    have Z : fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i (g ∘ f) s) s x =
+        fderivWithin 𝕜 (g.continuousMultilinearMapCongrRight (fun _ : Fin i => E) ∘
+          iteratedFDerivWithin 𝕜 i f s) s x :=
+      fderivWithin_congr' (@IH) hx
+    simp_rw [Z]
+    rw [(g.continuousMultilinearMapCongrRight fun _ : Fin i => E).comp_fderivWithin (hs x hx)]
+    simp [iteratedFDerivWithin_succ_apply_left]
 
 中文:
 定理 连续线性等价.iteratedFDerivWithin_comp_left
@@ -1070,7 +1086,13 @@ theorem ContinuousLinearEquiv.iteratedFDerivWithin_comp_left
       ContinuousLinearMap.compContinuousMultilinearMap_coe, coe_coe]
   | succ i IH =>
     rw [iteratedFDerivWithin_succ_apply_left]
-    have Z : fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 
+    have Z : fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i (g ∘ f) s) s x =
+        fderivWithin 𝕜 (g.continuousMultilinearMapCongrRight (fun _ : Fin i => E) ∘
+          iteratedFDerivWithin 𝕜 i f s) s x :=
+      fderivWithin_congr' (@IH) hx
+    simp_rw [Z]
+    rw [(g.continuousMultilinearMapCongrRight fun _ : Fin i => E).comp_fderivWithin (hs x hx)]
+    simp [iteratedFDerivWithin_succ_apply_left]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.compContinuousMultilinearMap_coe, coe_coe, compContinuousMultilinearMap_coe, comp_apply, continuousMultilinearMapCongrRight, fderivWithin, fderivWithin_congr, g.continuousMultilinearMapCongrRight, generalizing, iteratedFDerivWithin, iteratedFDerivWithin_succ_apply_left, iteratedFDerivWithin_zero_apply, simp_rw
 -/
@@ -1191,7 +1213,7 @@ theorem LinearIsometryEquiv.norm_iteratedFDerivWithin_comp_left
       (g : F ->L[𝕜] G).compContinuousMultilinearMap (iteratedFDerivWithin 𝕜 i f s x) :=
     g.toContinuousLinearEquiv.iteratedFDerivWithin_comp_left f hs hx i
   rw [this]
-  apply LinearIsometry.norm_compContinuousMultilinearMap g.toLinearIsometr
+  apply LinearIsometry.norm_compContinuousMultilinearMap g.toLinearIsometry
 
 中文:
 定理 线性等距等价.norm_iteratedFDerivWithin_comp_left
@@ -1202,7 +1224,7 @@ theorem LinearIsometryEquiv.norm_iteratedFDerivWithin_comp_left
       (g : F ->L[𝕜] G).compContinuousMultilinearMap (iteratedFDerivWithin 𝕜 i f s x) :=
     g.toContinuousLinearEquiv.iteratedFDerivWithin_comp_left f hs hx i
   rw [this]
-  apply LinearIsometry.norm_compContinuousMultilinearMap g.toLinearIsometr
+  apply LinearIsometry.norm_compContinuousMultilinearMap g.toLinearIsometry
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.norm_compContinuousMultilinearMap, compContinuousMultilinearMap, g.toContinuousLinearEquiv.iteratedFDerivWithin_comp_left, g.toLinearIsometry, iteratedFDerivWithin, iteratedFDerivWithin_comp_left, norm_compContinuousMultilinearMap, toContinuousLinearEquiv, toLinearIsometry
 -/
@@ -1344,7 +1366,21 @@ theorem HasFTaylorSeriesUpToOn.comp_continuousAffineMap
     isBoundedLinearMap_continuousMultilinearMap_comp_linear g.contLinear
   constructor
   · intro x hx
-    sim
+    simp only [(hf.zero_eq (g x) hx).symm, Function.comp_apply]
+    change (p (g x) 0 fun _ : Fin 0 => g.contLinear 0) = p (g x) 0 0
+    rw [map_zero]
+    rfl
+  · intro m hm x hx
+    convert!
+      (hA m).hasFDerivAt.comp_hasFDerivWithinAt x
+        ((hf.fderivWithin m hm (g x) hx).comp x g.hasFDerivWithinAt (Subset.refl _))
+    ext y v
+    change p (g x) (Nat.succ m) (g.contLinear ∘ cons y v)
+      = p (g x) m.succ (cons (g.contLinear y) (g.contLinear ∘ v))
+    rw [comp_cons]
+  · intro m hm
+exact (hA m).continuous.comp_continuousOn (hf.cont m hm).comp g.continuous.continuousOn
+      Subset.refl _
 
 中文:
 定理 有FTaylorSeriesUpToOn.comp_continuousAffineMap
@@ -1355,7 +1391,21 @@ theorem HasFTaylorSeriesUpToOn.comp_continuousAffineMap
     isBoundedLinearMap_continuousMultilinearMap_comp_linear g.contLinear
   constructor
   · intro x hx
-    sim
+    simp only [(hf.zero_eq (g x) hx).symm, Function.comp_apply]
+    change (p (g x) 0 fun _ : Fin 0 => g.contLinear 0) = p (g x) 0 0
+    rw [map_zero]
+    rfl
+  · intro m hm x hx
+    convert!
+      (hA m).hasFDerivAt.comp_hasFDerivWithinAt x
+        ((hf.fderivWithin m hm (g x) hx).comp x g.hasFDerivWithinAt (Subset.refl _))
+    ext y v
+    change p (g x) (Nat.succ m) (g.contLinear ∘ cons y v)
+      = p (g x) m.succ (cons (g.contLinear y) (g.contLinear ∘ v))
+    rw [comp_cons]
+  · intro m hm
+exact (hA m).continuous.comp_continuousOn (hf.cont m hm).comp g.continuous.continuousOn
+      Subset.refl _
 
 Depends on / 依赖: Function, Function.comp_apply, IsBoundedLinearMap, compContinuousLinearMap, comp_apply, comp_hasFDerivWithinAt, contLinear, convert, g.contLinear, h.compContinuousLinearMap, hasFDerivAt, hasFDerivAt.comp_hasFDerivWithinAt, hf.fder, hf.zero_eq, isBoundedLinearMap_continuousMultilinearMap_comp_linear, map_zero, zero_eq
 -/
@@ -1418,7 +1468,17 @@ theorem ContDiffWithinAt.comp_continuousLinearMap
     · refine g.continuous.continuousWithinAt.tendsto_nhdsWithin ?_ hu
       exact (mapsTo_singleton.2 <| mem_singleton _).union_union (mapsTo_preimage _ _)
     · intro i
-    
+      change AnalyticOn 𝕜 (fun x =>
+        ContinuousMultilinearMap.compContinuousLinearMapL (fun _ => g) (p (g x) i)) (⇑g ⁻¹' u)
+      apply AnalyticOn.comp _ _ (Set.mapsTo_univ _ _)
+      · exact ContinuousLinearMap.analyticOn _ _
+      · exact (h'p i).comp (g.analyticOn _) (mapsTo_preimage _ _)
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    refine ⟨g ⁻¹' u, ?_, _, hp.compContinuousLinearMap g⟩
+    refine g.continuous.continuousWithinAt.tendsto_nhdsWithin ?_ hu
+    exact (mapsTo_singleton.2 <| mem_singleton _).union_union (mapsTo_preimage _ _)
 
 中文:
 定理 ContDiffWithinAt.comp_continuousLinearMap
@@ -1431,7 +1491,17 @@ theorem ContDiffWithinAt.comp_continuousLinearMap
     · refine g.continuous.continuousWithinAt.tendsto_nhdsWithin ?_ hu
       exact (mapsTo_singleton.2 <| mem_singleton _).union_union (mapsTo_preimage _ _)
     · intro i
-    
+      change AnalyticOn 𝕜 (fun x =>
+        ContinuousMultilinearMap.compContinuousLinearMapL (fun _ => g) (p (g x) i)) (⇑g ⁻¹' u)
+      apply AnalyticOn.comp _ _ (Set.mapsTo_univ _ _)
+      · exact ContinuousLinearMap.analyticOn _ _
+      · exact (h'p i).comp (g.analyticOn _) (mapsTo_preimage _ _)
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    refine ⟨g ⁻¹' u, ?_, _, hp.compContinuousLinearMap g⟩
+    refine g.continuous.continuousWithinAt.tendsto_nhdsWithin ?_ hu
+    exact (mapsTo_singleton.2 <| mem_singleton _).union_union (mapsTo_preimage _ _)
 
 Depends on / 依赖: AnalyticOn, AnalyticOn.comp, ContinuousLinearMap, ContinuousLinearMap.analyticOn, ContinuousMultilinearMap, ContinuousMultilinearMap.compContinuousLinearMapL, Set.mapsTo_univ, analyticOn, compContinuousLinearMap, compContinuousLinearMapL, continuous, continuousWithinAt, g.continuous.continuousWithinAt.tendsto_nhdsWithin, hp.compContinuousLinearMap, mapsTo_preimage, mapsTo_singleton, mapsTo_univ, mem_singleton, tendsto_nhdsWithin, union_union
 -/
@@ -1531,7 +1601,17 @@ theorem ContinuousLinearEquiv.iteratedFDerivWithin_comp_right
       ContinuousMultilinearMap.compContinuousLinearMap_apply]
   | succ i IH =>
     simp only [ContinuousMultilinearMap.compContinuousLinearMap_apply,
-      ContinuousLinearEquiv.coe_co
+      ContinuousLinearEquiv.coe_coe, iteratedFDerivWithin_succ_apply_left]
+    have : fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i (f ∘ g) (g ⁻¹' s)) (g ⁻¹' s) x =
+        fderivWithin 𝕜
+          (ContinuousLinearEquiv.continuousMultilinearMapCongrLeft _ (fun _x : Fin i => g) ∘
+            (iteratedFDerivWithin 𝕜 i f s ∘ g)) (g ⁻¹' s) x :=
+      fderivWithin_congr' (@IH) hx
+    rw [this]; rw [ContinuousLinearEquiv.comp_fderivWithin _ (g.uniqueDiffOn_preimage_iff.2 hs x hx)]
+    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearEquiv.coe_coe,
+      ContinuousLinearEquiv.continuousMultilinearMapCongrLeft_apply,
+      ContinuousMultilinearMap.compContinuousLinearMap_apply]
+    rw [ContinuousLinearEquiv.comp_right_fderivWithin _ (g.uniqueDiffOn_preimage_iff.2 hs x hx)]; rw [ContinuousLinearMap.comp_apply]; rw [coe_coe]; rw [tail_def]; rw [tail_def]
 
 中文:
 定理 连续线性等价.iteratedFDerivWithin_comp_right
@@ -1543,7 +1623,17 @@ theorem ContinuousLinearEquiv.iteratedFDerivWithin_comp_right
       ContinuousMultilinearMap.compContinuousLinearMap_apply]
   | succ i IH =>
     simp only [ContinuousMultilinearMap.compContinuousLinearMap_apply,
-      ContinuousLinearEquiv.coe_co
+      ContinuousLinearEquiv.coe_coe, iteratedFDerivWithin_succ_apply_left]
+    have : fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i (f ∘ g) (g ⁻¹' s)) (g ⁻¹' s) x =
+        fderivWithin 𝕜
+          (ContinuousLinearEquiv.continuousMultilinearMapCongrLeft _ (fun _x : Fin i => g) ∘
+            (iteratedFDerivWithin 𝕜 i f s ∘ g)) (g ⁻¹' s) x :=
+      fderivWithin_congr' (@IH) hx
+    rw [this]; rw [ContinuousLinearEquiv.comp_fderivWithin _ (g.uniqueDiffOn_preimage_iff.2 hs x hx)]
+    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearEquiv.coe_coe,
+      ContinuousLinearEquiv.continuousMultilinearMapCongrLeft_apply,
+      ContinuousMultilinearMap.compContinuousLinearMap_apply]
+    rw [ContinuousLinearEquiv.comp_right_fderivWithin _ (g.uniqueDiffOn_preimage_iff.2 hs x hx)]; rw [ContinuousLinearMap.comp_apply]; rw [coe_coe]; rw [tail_def]; rw [tail_def]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_coe, ContinuousLinearEquiv.continuousMultilinearMapCongrLeft, ContinuousMultilinearMap, ContinuousMultilinearMap.compContinuousLinearMap_apply, coe_coe, compContinuousLinearMap_apply, comp_apply, continuousMultilinearMapCongrLeft, fderivWithin, generalizing, iteratedFDerivWithin, iteratedFDerivWithin_succ_apply_left, iteratedFDerivWithin_zero_apply
 -/
@@ -1777,7 +1867,9 @@ theorem HasFTaylorSeriesUpToOn.prodMk
   · intro m hm x hx
     convert!
       (L m).hasFDerivAt.comp_hasFDerivWithinAt x
-        ((hf.fderivWithin m hm x hx).prodMk (hg.fderivWithin
+        ((hf.fderivWithin m hm x hx).prodMk (hg.fderivWithin m hm x hx))
+  · intro m hm
+    exact (L m).continuous.comp_continuousOn ((hf.cont m hm).prodMk (hg.cont m hm))
 
 中文:
 定理 有FTaylorSeriesUpToOn.prodMk
@@ -1789,7 +1881,9 @@ theorem HasFTaylorSeriesUpToOn.prodMk
   · intro m hm x hx
     convert!
       (L m).hasFDerivAt.comp_hasFDerivWithinAt x
-        ((hf.fderivWithin m hm x hx).prodMk (hg.fderivWithin
+        ((hf.fderivWithin m hm x hx).prodMk (hg.fderivWithin m hm x hx))
+  · intro m hm
+    exact (L m).continuous.comp_continuousOn ((hf.cont m hm).prodMk (hg.cont m hm))
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.prodL, comp_continuousOn, comp_hasFDerivWithinAt, continuous, continuous.comp_continuousOn, convert, fderivWithin, hasFDerivAt, hasFDerivAt.comp_hasFDerivWithinAt, hf.cont, hf.fderivWithin, hf.zero_eq, hg.cont, hg.fderivWithin, hg.zero_eq, prodMk, zero_eq
 -/
@@ -1822,7 +1916,15 @@ theorem ContDiffWithinAt.prodMk
     obtain ⟨v, hv, q, hq, h'q⟩ := hg
     refine ⟨u inter v, Filter.inter_mem hu hv, _,
       (hp.mono inter_subset_left).prodMk (hq.mono inter_subset_right), fun i => ?_⟩
-    change AnalyticOn 𝕜 (fun x => ContinuousMultilinearMap.prodL 
+    change AnalyticOn 𝕜 (fun x => ContinuousMultilinearMap.prodL _ _ _ _ (p x i, q x i)) (u inter v)
+    apply (LinearIsometryEquiv.analyticOnNhd _ _).comp_analyticOn _ (Set.mapsTo_univ _ _)
+    exact ((h'p i).mono inter_subset_left).prod ((h'q i).mono inter_subset_right)
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    rcases hg m hm with ⟨v, hv, q, hq⟩
+    exact ⟨u inter v, Filter.inter_mem hu hv, _,
+      (hp.mono inter_subset_left).prodMk (hq.mono inter_subset_right)⟩
 
 中文:
 定理 ContDiffWithinAt.prodMk
@@ -1834,7 +1936,15 @@ theorem ContDiffWithinAt.prodMk
     obtain ⟨v, hv, q, hq, h'q⟩ := hg
     refine ⟨u inter v, Filter.inter_mem hu hv, _,
       (hp.mono inter_subset_left).prodMk (hq.mono inter_subset_right), fun i => ?_⟩
-    change AnalyticOn 𝕜 (fun x => ContinuousMultilinearMap.prodL 
+    change AnalyticOn 𝕜 (fun x => ContinuousMultilinearMap.prodL _ _ _ _ (p x i, q x i)) (u inter v)
+    apply (LinearIsometryEquiv.analyticOnNhd _ _).comp_analyticOn _ (Set.mapsTo_univ _ _)
+    exact ((h'p i).mono inter_subset_left).prod ((h'q i).mono inter_subset_right)
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    rcases hg m hm with ⟨v, hv, q, hq⟩
+    exact ⟨u inter v, Filter.inter_mem hu hv, _,
+      (hp.mono inter_subset_left).prodMk (hq.mono inter_subset_right)⟩
 
 Depends on / 依赖: AnalyticOn, ContinuousMultilinearMap, ContinuousMultilinearMap.prodL, Filter, Filter.inter_mem, LinearIsometryEquiv, LinearIsometryEquiv.analyticOnNhd, Set.mapsTo_univ, analyticOnNhd, comp_analyticOn, hp.mono, hq.mono, inter_mem, inter_subset_left, inter_subset_right, mapsTo_univ, prodMk
 -/

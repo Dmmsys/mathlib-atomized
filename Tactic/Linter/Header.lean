@@ -190,7 +190,25 @@ definition authorsLineChecks
   -- and ending the line with a period.
   let mut stxs := #[]
   if !line.startsWith "Authors: " then
-    stxs := stxs.
+    stxs := stxs.push
+      (toSyntax line (line.take "Authors: ".length |>.copy) offset,
+       s!"The authors line should begin with 'Authors: '")
+  if (line.splitOn " ").length != 1 then
+    stxs := stxs.push (toSyntax line " " offset, s!"Double spaces are not allowed.")
+  if (line.splitOn " and ").length != 1 then
+    stxs := stxs.push (toSyntax line " and " offset, s!"Please, do not use 'and'; use ',' instead.")
+  if line.back == '.' then
+    stxs := stxs.push
+      (toSyntax line "." offset,
+       s!"Please, do not end the authors' line with a period.")
+  -- If there are no previous exceptions, then we try to validate the names.
+  if !stxs.isEmpty then
+    return stxs
+  if (line.drop "Authors:".length).trimAscii.isEmpty then
+    return #[(toSyntax line "Authors:" offset,
+       s!"Please, add at least one author!")]
+  else
+    return #[]
 
 中文:
 定义 authorsLineChecks
@@ -201,7 +219,25 @@ definition authorsLineChecks
   -- and ending the line with a period.
   let mut stxs := #[]
   if !line.startsWith "Authors: " then
-    stxs := stxs.
+    stxs := stxs.push
+      (toSyntax line (line.take "Authors: ".length |>.copy) offset,
+       s!"The authors line should begin with 'Authors: '")
+  if (line.splitOn " ").length != 1 then
+    stxs := stxs.push (toSyntax line " " offset, s!"Double spaces are not allowed.")
+  if (line.splitOn " and ").length != 1 then
+    stxs := stxs.push (toSyntax line " and " offset, s!"Please, do not use 'and'; use ',' instead.")
+  if line.back == '.' then
+    stxs := stxs.push
+      (toSyntax line "." offset,
+       s!"Please, do not end the authors' line with a period.")
+  -- If there are no previous exceptions, then we try to validate the names.
+  if !stxs.isEmpty then
+    return stxs
+  if (line.drop "Authors:".length).trimAscii.isEmpty then
+    return #[(toSyntax line "Authors:" offset,
+       s!"Please, add at least one author!")]
+  else
+    return #[]
 
 Depends on / 依赖: Id.run
 -/
@@ -401,7 +437,23 @@ definition broadImportsCheck
     | `Mathlib.Tactic | `Lean | `Lean.Meta | `Lean.Elab | `Lean.Elab.Tactic | `Std =>
       Linter.logLint linter.style.header i
         s!"Files in mathlib cannot import the whole `{i.getId}` folder. \
-        Doing so would cause imports to be unnece
+        Doing so would cause imports to be unnecessarily slow."
+    | `Mathlib.Tactic.Replace =>
+      if mainModule != `Mathlib.Tactic then
+        Linter.logLint linter.style.header i
+          "'Mathlib.Tactic.Replace' defines a deprecated form of the 'replace' tactic; \
+          please do not use it in mathlib."
+    | `Mathlib.Tactic.Have =>
+      if ![`Mathlib.Tactic, `Mathlib.Tactic.Replace].contains mainModule then
+        Linter.logLint linter.style.header i
+          "'Mathlib.Tactic.Have' defines a deprecated form of the 'have' tactic; \
+          please do not use it in mathlib."
+    | modName =>
+      if modName.getRoot == `Lake then
+      Linter.logLint linter.style.header i
+        "In the past, importing 'Lake' in mathlib has led to dramatic slow-downs of the linter \
+        (see e.g. https://github.com/leanprover-community/mathlib4/pull/13779). Please consider carefully if this import is useful and \
+        make sure to benchmark it. If this is fine, feel free to silence this linter."
 
 中文:
 定义 broadImportsCheck
@@ -412,7 +464,23 @@ definition broadImportsCheck
     | `Mathlib.Tactic | `Lean | `Lean.Meta | `Lean.Elab | `Lean.Elab.Tactic | `Std =>
       Linter.logLint linter.style.header i
         s!"Files in mathlib cannot import the whole `{i.getId}` folder. \
-        Doing so would cause imports to be unnece
+        Doing so would cause imports to be unnecessarily slow."
+    | `Mathlib.Tactic.Replace =>
+      if mainModule != `Mathlib.Tactic then
+        Linter.logLint linter.style.header i
+          "'Mathlib.Tactic.Replace' defines a deprecated form of the 'replace' tactic; \
+          please do not use it in mathlib."
+    | `Mathlib.Tactic.Have =>
+      if ![`Mathlib.Tactic, `Mathlib.Tactic.Replace].contains mainModule then
+        Linter.logLint linter.style.header i
+          "'Mathlib.Tactic.Have' defines a deprecated form of the 'have' tactic; \
+          please do not use it in mathlib."
+    | modName =>
+      if modName.getRoot == `Lake then
+      Linter.logLint linter.style.header i
+        "In the past, importing 'Lake' in mathlib has led to dramatic slow-downs of the linter \
+        (see e.g. https://github.com/leanprover-community/mathlib4/pull/13779). Please consider carefully if this import is useful and \
+        make sure to benchmark it. If this is fine, feel free to silence this linter."
 -/
 def broadImportsCheck (imports : Array Syntax) (mainModule : Name) : CommandElabM Unit := do
   for i in imports do
@@ -476,7 +544,9 @@ definition importInfo
   -- Check for modifiers by collecting all atoms and checking for keywords
   let allAtoms := collectAtoms importStx
   let isPublic := allAtoms.contains "public"
-  
+  let isMeta := allAtoms.contains "meta"
+  let isAll := allAtoms.contains "all"
+  return (moduleId, isPublic, isMeta, isAll)
 
 中文:
 定义 importInfo
@@ -488,7 +558,9 @@ definition importInfo
   -- Check for modifiers by collecting all atoms and checking for keywords
   let allAtoms := collectAtoms importStx
   let isPublic := allAtoms.contains "public"
-  
+  let isMeta := allAtoms.contains "meta"
+  let isAll := allAtoms.contains "all"
+  return (moduleId, isPublic, isMeta, isAll)
 -/
 def importInfo (importStx : Syntax) : Option (Syntax × Bool × Bool × Bool) := do
   guard (importStx.isOfKind `Lean.Parser.Module.import)
@@ -515,7 +587,7 @@ definition duplicateImportsCheck
         let (modId, _, _, _) := info
         Linter.logLint linter.style.header modId m!"Duplicate imports: '{modId}' already imported"
       else
-        imp
+        importsSoFar := importsSoFar.push info
 
 中文:
 定义 duplicateImportsCheck
@@ -528,7 +600,7 @@ definition duplicateImportsCheck
         let (modId, _, _, _) := info
         Linter.logLint linter.style.header modId m!"Duplicate imports: '{modId}' already imported"
       else
-        imp
+        importsSoFar := importsSoFar.push info
 -/
 def duplicateImportsCheck (imports : Array Syntax) : CommandElabM Unit := do
   let mut importsSoFar := #[]
@@ -583,7 +655,76 @@ definition headerLinter
   let inLibraryRoot? ← inLibraryRootMutex.atomically do
     match ← get with
     | some d => return d
-    | no
+    | none =>
+      let val ← isInLibraryRoot mainModule
+      -- We cache the answer to avoid recomputing it on every command. The fill runs under the mutex
+      -- so that concurrent (async) linter runs don't all miss the cache and each redundantly parse
+      -- the library root file; `mainModule` is fixed for the duration of the elaboration.
+      set (some val)
+      return val
+  -- The linter skips files not imported in their library root (e.g. `Mathlib.lean`), to avoid
+  -- linting "scratch files". It is however active in the test files for the linter itself.
+  unless inLibraryRoot? || headerTestFiles.contains mainModule do return
+  -- Skip linting the library root file itself.
+  -- In practice, the `inLibraryRoot?` check above already covers this (a well-formed `<root>.lean`
+  -- does not import itself), but a root module could appear in `headerTestFiles`.
+  if mainModule == mainModule.getRoot then return
+  let fm ← getFileMap
+  let mdDocs := (getMainModuleDoc (← getEnv)).toArray
+  let versoDocs := (getMainVersoModuleDocs (← getEnv)).snippets
+  -- The end of the first module doc-string, or the end of the file if there is none.
+  -- For robustness, we assume Markdown and Verso docstrings can be arbitrarily mixed,
+  -- so we get the end pos for both types of docstrings and take their minimum as the first.
+  let firstMDDocModPos := match mdDocs[0]? with
+  | none => fm.positions.back!
+  | some doc => fm.ofPosition doc.declarationRange.endPos
+  let firstVersoDocModPos := match versoDocs[0]? with
+  | none => fm.positions.back!
+  | some doc => fm.ofPosition doc.declarationRange.endPos
+  let firstDocModPos := min firstMDDocModPos firstVersoDocModPos
+  unless stx.getTailPos?.getD default <= firstDocModPos do
+    return
+  -- We try to parse the file up to `firstDocModPos`.
+let upToStx ← parseUpToHere firstDocModPos > (do
+    -- If parsing failed, there is some command which is not a module docstring.
+    -- In that case, we parse until the end of the imports and add an extra `section` afterwards,
+    -- so we trigger a "no module doc-string" warning.
+    let fil ← getFileName
+    let (stx, _) ← Parser.parseHeader { inputString := fm.source, fileName := fil, fileMap := fm }
+    parseUpToHere (stx.raw.getTailPos?.getD default) "\nsection")
+  let importIds := getImportIds upToStx
+  let imports := getImports upToStx
+  let afterImports := firstNonImport? upToStx
+  -- Deprecated module files are exempt from all header style checks (copyright, doc-string,
+  -- directory dependency, etc.) since they are just import-redirect stubs.
+  if let some (.node _ ``Lean.Parser.Command.deprecated_module _) := afterImports then return
+  -- Report on broad or duplicate imports.
+  broadImportsCheck importIds mainModule
+  duplicateImportsCheck imports
+  let errors ← directoryDependencyCheck mainModule
+  if errors.size > 0 then
+    let mut msgs := ""
+    for msg in errors do
+      msgs := msgs ++ "\n\n" ++ (← msg.toString)
+    Linter.logLint linter.directoryDependency stx msgs.trimAsciiStart.copy
+  if afterImports.isNone then return
+  let copyright := match upToStx.getHeadInfo with
+    | .original lead .. => lead.toString
+    | _ => ""
+  -- Report any errors about the copyright line.
+  if mainModule != `Mathlib.Init && mainModule != `Mathlib.Tactic then
+    let expectedLicense := linter.style.header.license.get (← getOptions)
+    for (stx, m) in copyrightHeaderChecks copyright expectedLicense do
+      Linter.logLint linter.style.header stx m!"* '{stx.getAtomVal}':\n{m}\n"
+  -- Report a missing module doc-string.
+  match afterImports with
+    | none => return
+    | some (.node _ ``Lean.Parser.Command.moduleDoc _) => return
+    | some (.node _ ``Lean.Parser.Command.eoi _) => return
+    | some rest =>
+    Linter.logLint linter.style.header rest
+      m!"The module doc-string for a file should be the first command after the imports.\n\
+       Please, add a module doc-string before `{stx}`."
 
 中文:
 定义 headerLinter
@@ -597,7 +738,76 @@ definition headerLinter
   let inLibraryRoot? ← inLibraryRootMutex.atomically do
     match ← get with
     | some d => return d
-    | no
+    | none =>
+      let val ← isInLibraryRoot mainModule
+      -- We cache the answer to avoid recomputing it on every command. The fill runs under the mutex
+      -- so that concurrent (async) linter runs don't all miss the cache and each redundantly parse
+      -- the library root file; `mainModule` is fixed for the duration of the elaboration.
+      set (some val)
+      return val
+  -- The linter skips files not imported in their library root (e.g. `Mathlib.lean`), to avoid
+  -- linting "scratch files". It is however active in the test files for the linter itself.
+  unless inLibraryRoot? || headerTestFiles.contains mainModule do return
+  -- Skip linting the library root file itself.
+  -- In practice, the `inLibraryRoot?` check above already covers this (a well-formed `<root>.lean`
+  -- does not import itself), but a root module could appear in `headerTestFiles`.
+  if mainModule == mainModule.getRoot then return
+  let fm ← getFileMap
+  let mdDocs := (getMainModuleDoc (← getEnv)).toArray
+  let versoDocs := (getMainVersoModuleDocs (← getEnv)).snippets
+  -- The end of the first module doc-string, or the end of the file if there is none.
+  -- For robustness, we assume Markdown and Verso docstrings can be arbitrarily mixed,
+  -- so we get the end pos for both types of docstrings and take their minimum as the first.
+  let firstMDDocModPos := match mdDocs[0]? with
+  | none => fm.positions.back!
+  | some doc => fm.ofPosition doc.declarationRange.endPos
+  let firstVersoDocModPos := match versoDocs[0]? with
+  | none => fm.positions.back!
+  | some doc => fm.ofPosition doc.declarationRange.endPos
+  let firstDocModPos := min firstMDDocModPos firstVersoDocModPos
+  unless stx.getTailPos?.getD default <= firstDocModPos do
+    return
+  -- We try to parse the file up to `firstDocModPos`.
+let upToStx ← parseUpToHere firstDocModPos > (do
+    -- If parsing failed, there is some command which is not a module docstring.
+    -- In that case, we parse until the end of the imports and add an extra `section` afterwards,
+    -- so we trigger a "no module doc-string" warning.
+    let fil ← getFileName
+    let (stx, _) ← Parser.parseHeader { inputString := fm.source, fileName := fil, fileMap := fm }
+    parseUpToHere (stx.raw.getTailPos?.getD default) "\nsection")
+  let importIds := getImportIds upToStx
+  let imports := getImports upToStx
+  let afterImports := firstNonImport? upToStx
+  -- Deprecated module files are exempt from all header style checks (copyright, doc-string,
+  -- directory dependency, etc.) since they are just import-redirect stubs.
+  if let some (.node _ ``Lean.Parser.Command.deprecated_module _) := afterImports then return
+  -- Report on broad or duplicate imports.
+  broadImportsCheck importIds mainModule
+  duplicateImportsCheck imports
+  let errors ← directoryDependencyCheck mainModule
+  if errors.size > 0 then
+    let mut msgs := ""
+    for msg in errors do
+      msgs := msgs ++ "\n\n" ++ (← msg.toString)
+    Linter.logLint linter.directoryDependency stx msgs.trimAsciiStart.copy
+  if afterImports.isNone then return
+  let copyright := match upToStx.getHeadInfo with
+    | .original lead .. => lead.toString
+    | _ => ""
+  -- Report any errors about the copyright line.
+  if mainModule != `Mathlib.Init && mainModule != `Mathlib.Tactic then
+    let expectedLicense := linter.style.header.license.get (← getOptions)
+    for (stx, m) in copyrightHeaderChecks copyright expectedLicense do
+      Linter.logLint linter.style.header stx m!"* '{stx.getAtomVal}':\n{m}\n"
+  -- Report a missing module doc-string.
+  match afterImports with
+    | none => return
+    | some (.node _ ``Lean.Parser.Command.moduleDoc _) => return
+    | some (.node _ ``Lean.Parser.Command.eoi _) => return
+    | some rest =>
+    Linter.logLint linter.style.header rest
+      m!"The module doc-string for a file should be the first command after the imports.\n\
+       Please, add a module doc-string before `{stx}`."
 
 Depends on / 依赖: withSetOptionIn
 -/

@@ -128,7 +128,10 @@ definition equivalence₁CounitIso
       isoWhiskerLeft _ hF.symm
     _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor ⋙ e'.functor) := associator _ _ _
     _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor) ⋙ e'.functor :=
-      isoWhiskerLeft _ (associ
+      isoWhiskerLeft _ (associator _ _ _).symm
+    _ ≅ e'.inverse ⋙ 𝟭 _ ⋙ e'.functor := isoWhiskerLeft _ (isoWhiskerRight eA.counitIso _)
+    _ ≅ e'.inverse ⋙ e'.functor := isoWhiskerLeft _ (leftUnitor _)
+    _ ≅ 𝟭 B' := e'.counitIso
 
 中文:
 定义 equivalence₁CounitIso
@@ -138,7 +141,10 @@ definition equivalence₁CounitIso
       isoWhiskerLeft _ hF.symm
     _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor ⋙ e'.functor) := associator _ _ _
     _ ≅ e'.inverse ⋙ (eA.inverse ⋙ eA.functor) ⋙ e'.functor :=
-      isoWhiskerLeft _ (associ
+      isoWhiskerLeft _ (associator _ _ _).symm
+    _ ≅ e'.inverse ⋙ 𝟭 _ ⋙ e'.functor := isoWhiskerLeft _ (isoWhiskerRight eA.counitIso _)
+    _ ≅ e'.inverse ⋙ e'.functor := isoWhiskerLeft _ (leftUnitor _)
+    _ ≅ 𝟭 B' := e'.counitIso
 
 Depends on / 依赖: associator, counitIso, eA.counitIso, eA.functor, eA.inverse, functor, hF.symm, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor
 -/
@@ -189,7 +195,10 @@ definition equivalence₁UnitIso
     _ ≅ eA.functor ⋙ 𝟭 A' ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
     _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse) ⋙ eA.inverse :=
       isoWhiskerLeft _ (isoWhiskerRight e'.unitIso _)
-    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse ⋙ eA.
+    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse ⋙ eA.inverse) :=
+      isoWhiskerLeft _ (associator _ _ _)
+    _ ≅ (eA.functor ⋙ e'.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
+    _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerRight hF _
 
 中文:
 定义 equivalence₁UnitIso
@@ -199,7 +208,10 @@ definition equivalence₁UnitIso
     _ ≅ eA.functor ⋙ 𝟭 A' ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
     _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse) ⋙ eA.inverse :=
       isoWhiskerLeft _ (isoWhiskerRight e'.unitIso _)
-    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse ⋙ eA.
+    _ ≅ eA.functor ⋙ (e'.functor ⋙ e'.inverse ⋙ eA.inverse) :=
+      isoWhiskerLeft _ (associator _ _ _)
+    _ ≅ (eA.functor ⋙ e'.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
+    _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerRight hF _
 
 Depends on / 依赖: associator, eA.functor, eA.inverse, eA.unitIso, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, unitIso
 -/
@@ -286,7 +298,10 @@ definition equivalence₂CounitIso
       ≅ eB.functor ⋙ (e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse := associator _ _ _
     _ ≅ eB.functor ⋙ ((e'.inverse ⋙ eA.inverse) ⋙ F) ⋙ eB.inverse :=
       isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ eB.functor ⋙ 𝟭 _ ⋙ eB.inver
+    _ ≅ eB.functor ⋙ 𝟭 _ ⋙ eB.inverse :=
+      isoWhiskerLeft _ (isoWhiskerRight (equivalence₁CounitIso hF) _)
+    _ ≅ eB.functor ⋙ eB.inverse := isoWhiskerLeft _ (leftUnitor _)
+    _ ≅ 𝟭 B := eB.unitIso.symm
 
 中文:
 定义 equivalence₂CounitIso
@@ -296,7 +311,10 @@ definition equivalence₂CounitIso
       ≅ eB.functor ⋙ (e'.inverse ⋙ eA.inverse) ⋙ F ⋙ eB.inverse := associator _ _ _
     _ ≅ eB.functor ⋙ ((e'.inverse ⋙ eA.inverse) ⋙ F) ⋙ eB.inverse :=
       isoWhiskerLeft _ (associator _ _ _).symm
-    _ ≅ eB.functor ⋙ 𝟭 _ ⋙ eB.inver
+    _ ≅ eB.functor ⋙ 𝟭 _ ⋙ eB.inverse :=
+      isoWhiskerLeft _ (isoWhiskerRight (equivalence₁CounitIso hF) _)
+    _ ≅ eB.functor ⋙ eB.inverse := isoWhiskerLeft _ (leftUnitor _)
+    _ ≅ 𝟭 B := eB.unitIso.symm
 
 Depends on / 依赖: associator, eA.inverse, eB.functor, eB.inverse, eB.unitIso.symm, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, unitIso
 -/
@@ -347,7 +365,12 @@ definition equivalence₂UnitIso
       isoWhiskerLeft _ (leftUnitor _).symm
     _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
       isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
-    _ ≅ (F ⋙ e
+    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      (associator _ _ _).symm
+    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      isoWhiskerRight (associator _ _ _).symm _
+    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse :=
+      associator _ _ _
 
 中文:
 定义 equivalence₂UnitIso
@@ -358,7 +381,12 @@ definition equivalence₂UnitIso
       isoWhiskerLeft _ (leftUnitor _).symm
     _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
       isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
-    _ ≅ (F ⋙ e
+    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      (associator _ _ _).symm
+    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      isoWhiskerRight (associator _ _ _).symm _
+    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse :=
+      associator _ _ _
 
 Depends on / 依赖: associator, counitIso, eA.inverse, eB.counitIso.symm, eB.functor, eB.inverse, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor
 -/
@@ -415,7 +443,8 @@ definition equivalence
         (eB.functor ⋙ e'.inverse) ⋙ eA.inverse := (associator _ _ _).symm
     _ ≅ (G ⋙ eA.functor) ⋙ eA.inverse := isoWhiskerRight hG _
     _ ≅ G ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
-    _ ≅ G ⋙ 𝟭 A := isoW
+    _ ≅ G ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
+    _ ≅ G := G.rightUnitor))
 
 中文:
 定义 equivalence
@@ -425,7 +454,8 @@ definition equivalence
         (eB.functor ⋙ e'.inverse) ⋙ eA.inverse := (associator _ _ _).symm
     _ ≅ (G ⋙ eA.functor) ⋙ eA.inverse := isoWhiskerRight hG _
     _ ≅ G ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
-    _ ≅ G ⋙ 𝟭 A := isoW
+    _ ≅ G ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
+    _ ≅ G := G.rightUnitor))
 
 Depends on / 依赖: G.rightUnitor, associator, changeInverse, eA.functor, eA.inverse, eA.unitIso.symm, eB.functor, functor, inverse, isoWhiskerLeft, isoWhiskerRight, rightUnitor, unitIso
 -/
@@ -569,7 +599,14 @@ theorem equivalenceCounitIso_eq
   simp only [comp_id, id_comp, Functor.map_comp, equivalence₂CounitIso_eq,
     equivalence₂CounitIso_hom_app, assoc, equivalenceCounitIso_hom_app]
   simp only [equivalence₂_inverse, comp_obj, ← τ₀_hom_app, hη, τ₁_hom_app, ←
-    eB.inverse.ma
+    eB.inverse.map_comp_assoc]
+  rw [hF.inv.naturality_assoc]; rw [hF.inv.naturality_assoc]
+  congr 2
+  simp only [← e'.functor.map_comp_assoc]
+  simp only [Functor.comp_map, Equivalence.fun_inv_map, comp_obj, id_obj, map_comp, assoc]
+  simp only [← e'.functor.map_comp_assoc]
+  simp only [Iso.inv_hom_id_app_assoc, Iso.inv_hom_id_app, comp_obj, comp_id,
+    Equivalence.functor_unit_comp, map_id, id_comp]
 
 中文:
 定理 equivalenceCounitIso_eq
@@ -580,7 +617,14 @@ theorem equivalenceCounitIso_eq
   simp only [comp_id, id_comp, Functor.map_comp, equivalence₂CounitIso_eq,
     equivalence₂CounitIso_hom_app, assoc, equivalenceCounitIso_hom_app]
   simp only [equivalence₂_inverse, comp_obj, ← τ₀_hom_app, hη, τ₁_hom_app, ←
-    eB.inverse.ma
+    eB.inverse.map_comp_assoc]
+  rw [hF.inv.naturality_assoc]; rw [hF.inv.naturality_assoc]
+  congr 2
+  simp only [← e'.functor.map_comp_assoc]
+  simp only [Functor.comp_map, Equivalence.fun_inv_map, comp_obj, id_obj, map_comp, assoc]
+  simp only [← e'.functor.map_comp_assoc]
+  simp only [Iso.inv_hom_id_app_assoc, Iso.inv_hom_id_app, comp_obj, comp_id,
+    Equivalence.functor_unit_comp, map_id, id_comp]
 
 Depends on / 依赖: Equivalence, Equivalence.fun_inv_map, Functor, Functor.comp_map, Functor.map_comp, NatTrans, NatTrans.ext, comp_id, comp_map, comp_obj, eB.inverse.map_comp_assoc, equivalence, equivalenceCounitIso_hom_app, fun_inv_map, functor, functor.map_comp_assoc, hF.inv.naturality_assoc, id_comp, id_obj, inverse
 -/
@@ -650,7 +694,22 @@ definition equivalenceUnitIso
     _ ≅ (F ⋙ e'.inverse) ⋙ eA.inverse := isoWhiskerRight ε _
     _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
     _ ≅ F ⋙ 𝟭 B' ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inve
+    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
+    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
+    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      isoWhiskerRight (associator _ _ _).symm _
+    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
+    _ ≅ (F ⋙ eB.inverse) ⋙ (eB.functor ⋙ e'.inverse) ⋙ eA.inverse :=
+      isoWhiskerLeft _ (associator _ _ _).symm
+    _ ≅ (F ⋙ eB.inverse) ⋙ (G ⋙ eA.functor) ⋙ eA.inverse :=
+      isoWhiskerLeft _ (isoWhiskerRight hG _)
+    _ ≅ ((F ⋙ eB.inverse) ⋙ G ⋙ eA.functor) ⋙ eA.inverse := (associator _ _ _).symm
+    _ ≅ (((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor) ⋙ eA.inverse :=
+      isoWhiskerRight (associator _ _ _).symm _
+    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
+    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
+    _ ≅ (F ⋙ eB.inverse) ⋙ G := rightUnitor _
 
 中文:
 定义 equivalenceUnitIso
@@ -660,7 +719,22 @@ definition equivalenceUnitIso
     _ ≅ (F ⋙ e'.inverse) ⋙ eA.inverse := isoWhiskerRight ε _
     _ ≅ F ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
     _ ≅ F ⋙ 𝟭 B' ⋙ e'.inverse ⋙ eA.inverse := isoWhiskerLeft _ (leftUnitor _).symm
-    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inve
+    _ ≅ F ⋙ (eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      isoWhiskerLeft _ (isoWhiskerRight eB.counitIso.symm _)
+    _ ≅ (F ⋙ eB.inverse ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse := (associator _ _ _).symm
+    _ ≅ ((F ⋙ eB.inverse) ⋙ eB.functor) ⋙ e'.inverse ⋙ eA.inverse :=
+      isoWhiskerRight (associator _ _ _).symm _
+    _ ≅ (F ⋙ eB.inverse) ⋙ eB.functor ⋙ e'.inverse ⋙ eA.inverse := associator _ _ _
+    _ ≅ (F ⋙ eB.inverse) ⋙ (eB.functor ⋙ e'.inverse) ⋙ eA.inverse :=
+      isoWhiskerLeft _ (associator _ _ _).symm
+    _ ≅ (F ⋙ eB.inverse) ⋙ (G ⋙ eA.functor) ⋙ eA.inverse :=
+      isoWhiskerLeft _ (isoWhiskerRight hG _)
+    _ ≅ ((F ⋙ eB.inverse) ⋙ G ⋙ eA.functor) ⋙ eA.inverse := (associator _ _ _).symm
+    _ ≅ (((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor) ⋙ eA.inverse :=
+      isoWhiskerRight (associator _ _ _).symm _
+    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ eA.functor ⋙ eA.inverse := associator _ _ _
+    _ ≅ ((F ⋙ eB.inverse) ⋙ G) ⋙ 𝟭 A := isoWhiskerLeft _ eA.unitIso.symm
+    _ ≅ (F ⋙ eB.inverse) ⋙ G := rightUnitor _
 
 Depends on / 依赖: associator, counitIso, eA.functor, eA.inve, eA.inverse, eA.unitIso, eB.counitIso.symm, eB.functor, eB.inverse, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, unitIso
 -/

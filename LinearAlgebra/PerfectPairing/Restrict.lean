@@ -55,7 +55,24 @@ lemma restrict_aux
 refine ⟨LinearMap.ker_eq_bot.mp eq_bot_iff.mpr fun m hm => ?_, fun f => ?_⟩
   · replace hm : i m in j.range.dualAnnihilator.map (p.toPerfPair.symm : Dual R N ->ₗ[R] M) := by
       simp only [Submodule.mem_map, Submodule.mem_dualAnnihilator]
-      refine ⟨p.toPerfPair (i m), ?_, LinearEquiv.symm_a
+      refine ⟨p.toPerfPair (i m), ?_, LinearEquiv.symm_apply_apply _ _⟩
+      rintro - ⟨n, rfl⟩
+      simpa using LinearMap.congr_fun hm n
+    suffices i m in (⊥ : Submodule R M) by simpa [hi] using this
+    simpa only [← hij.isCompl_left.inf_eq_bot, Submodule.mem_inf]
+      using ⟨LinearMap.mem_range_self i m, hm⟩
+  · set F : Module.Dual R N := f ∘ₗ j.linearProjOfIsCompl _ hj hij.isCompl_right with hF
+    have hF (n : N') : F (j n) = f n := by simp [hF]
+    set m : M := p.toPerfPair.symm F with hm
+    obtain ⟨-, y, ⟨m₀, rfl⟩, hy, hm'⟩ :=
+      Submodule.codisjoint_iff_exists_add_eq.mp hij.isCompl_left.codisjoint m
+    refine ⟨m₀, LinearMap.ext fun n => ?_⟩
+    replace hy : (p y) (j n) = 0 := by
+      simp only [Submodule.mem_map, Submodule.mem_dualAnnihilator] at hy
+      obtain ⟨g, hg, rfl⟩ := hy
+      simpa using hg _ (LinearMap.mem_range_self j n)
+    rw [hm]; rw [← LinearEquiv.symm_apply_eq]; rw [map_add]; rw [LinearEquiv.symm_symm] at hm'
+    simpa [← hF, ← LinearMap.congr_fun hm' (j n)]
 
 中文:
 引理 restrict_aux
@@ -64,7 +81,24 @@ refine ⟨LinearMap.ker_eq_bot.mp eq_bot_iff.mpr fun m hm => ?_, fun f => ?_⟩
 refine ⟨LinearMap.ker_eq_bot.mp eq_bot_iff.mpr fun m hm => ?_, fun f => ?_⟩
   · replace hm : i m in j.range.dualAnnihilator.map (p.toPerfPair.symm : Dual R N ->ₗ[R] M) := by
       simp only [Submodule.mem_map, Submodule.mem_dualAnnihilator]
-      refine ⟨p.toPerfPair (i m), ?_, LinearEquiv.symm_a
+      refine ⟨p.toPerfPair (i m), ?_, LinearEquiv.symm_apply_apply _ _⟩
+      rintro - ⟨n, rfl⟩
+      simpa using LinearMap.congr_fun hm n
+    suffices i m in (⊥ : Submodule R M) by simpa [hi] using this
+    simpa only [← hij.isCompl_left.inf_eq_bot, Submodule.mem_inf]
+      using ⟨LinearMap.mem_range_self i m, hm⟩
+  · set F : Module.Dual R N := f ∘ₗ j.linearProjOfIsCompl _ hj hij.isCompl_right with hF
+    have hF (n : N') : F (j n) = f n := by simp [hF]
+    set m : M := p.toPerfPair.symm F with hm
+    obtain ⟨-, y, ⟨m₀, rfl⟩, hy, hm'⟩ :=
+      Submodule.codisjoint_iff_exists_add_eq.mp hij.isCompl_left.codisjoint m
+    refine ⟨m₀, LinearMap.ext fun n => ?_⟩
+    replace hy : (p y) (j n) = 0 := by
+      simp only [Submodule.mem_map, Submodule.mem_dualAnnihilator] at hy
+      obtain ⟨g, hg, rfl⟩ := hy
+      simpa using hg _ (LinearMap.mem_range_self j n)
+    rw [hm]; rw [← LinearEquiv.symm_apply_eq]; rw [map_add]; rw [LinearEquiv.symm_symm] at hm'
+    simpa [← hF, ← LinearMap.congr_fun hm' (j n)]
 -/
 private lemma restrict_aux : Bijective (p.compl₁₂ i j) := by
 refine ⟨LinearMap.ker_eq_bot.mp eq_bot_iff.mpr fun m hm => ?_, fun f => ?_⟩
@@ -132,7 +166,17 @@ lemma restrictScalars_injective_aux
   rw [← LinearMap.ker_eq_bot]
   refine (Submodule.eq_bot_iff _).mpr fun x (hx : f x = 0) => ?_
   replace hx (n : N) : p (i x) n = 0 := by
-    have hn : n in span R (LinearMap.
+    have hn : n in span R (LinearMap.range j : Set N) := hN ▸ Submodule.mem_top
+    induction hn using Submodule.span_induction with
+    | mem z hz =>
+      obtain ⟨n', rfl⟩ := hz
+      simpa [f] using LinearMap.congr_fun hx n'
+    | zero => simp
+    | add => rw [map_add]; aesop
+    | smul => rw [map_smul]; aesop
+  rw [← i.map_eq_zero_iff hi]; rw [← p.map_eq_zero_iff p.toPerfPair.injective]
+  ext n
+  simpa using hx n
 
 中文:
 引理 restrictScalars_injective_aux
@@ -142,7 +186,17 @@ lemma restrictScalars_injective_aux
   rw [← LinearMap.ker_eq_bot]
   refine (Submodule.eq_bot_iff _).mpr fun x (hx : f x = 0) => ?_
   replace hx (n : N) : p (i x) n = 0 := by
-    have hn : n in span R (LinearMap.
+    have hn : n in span R (LinearMap.range j : Set N) := hN ▸ Submodule.mem_top
+    induction hn using Submodule.span_induction with
+    | mem z hz =>
+      obtain ⟨n', rfl⟩ := hz
+      simpa [f] using LinearMap.congr_fun hx n'
+    | zero => simp
+    | add => rw [map_add]; aesop
+    | smul => rw [map_smul]; aesop
+  rw [← i.map_eq_zero_iff hi]; rw [← p.map_eq_zero_iff p.toPerfPair.injective]
+  ext n
+  simpa using hx n
 -/
 private lemma restrictScalars_injective_aux
     (hi : Injective i)
@@ -269,7 +323,43 @@ lemma exists_basis_basis_of_span_eq_top_of_mem_algebraMap
   obtain ⟨v, hv₁, hv₂, hv₃⟩ := exists_linearIndependent L (M' : Set M)
   rw [hM] at hv₂
 let b : Basis _ L M := Basis.mk hv₃ by rw [← hv₂, Subtype.range_coe_subtype, Set.ofPred_mem_eq]
-have :
+have : Fintype v := Set.Finite.fintype Module.Finite.finite_basis b
+  set v' : v -> M' := fun i => ⟨i, hv₁ (Subtype.coe_prop i)⟩
+  have hv' : LinearIndependent K v' := by
+replace hv₃ := hv₃.restrict_scalars (R := K) by
+      simp_rw [← Algebra.algebraMap_eq_smul_one]
+      exact FaithfulSMul.algebraMap_injective K L
+    rw [show ((↑) : v -> M) = M'.subtype ∘ v' by ext; simp [v']] at hv₃
+    exact hv₃.of_comp
+  suffices span K (Set.range v') = ⊤ by
+    let e := (Module.Finite.finite_basis b).equivFin
+    let b' : Basis _ K M' := Basis.mk hv' (by rw [this])
+    exact ⟨_, b.reindex e, b'.reindex e, fun i => by simp [b, b', v']⟩
+  suffices span K v = M' by
+    apply Submodule.map_injective_of_injective M'.injective_subtype
+    rw [Submodule.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
+    simpa [v']
+  refine le_antisymm (Submodule.span_le.mpr hv₁) fun m hm => ?_
+  obtain ⟨w, hw₁, hw₂, hw₃⟩ := exists_linearIndependent L (N' : Set N)
+  rw [hN] at hw₂
+let bN : Basis _ L N := Basis.mk hw₃ by
+    rw [← hw₂]; rw [Subtype.range_coe_subtype]; rw [Set.ofPred_mem_eq]
+have : Fintype w := Set.Finite.fintype Module.Finite.finite_basis bN
+have e : v ≃ w := Fintype.equivOfCardEq by rw [← Module.finrank_eq_card_basis b,
+    ← Module.finrank_eq_card_basis bN, Module.finrank_of_isPerfPair p]
+  let bM := bN.dualBasis.map p.toPerfPair.symm
+  have hbM (j : w) (x : M) (hx : x in M') : bM.repr x j = p x (j : N) := by simp [bM, bN]
+  have hj (j : w) : bM.repr m j in (algebraMap K L).range := (hbM _ _ hm) ▸ hp m hm j (hw₁ j.2)
+  replace hp (i : w) (j : v) :
+      (bN.dualBasis.map p.toPerfPair.symm).toMatrix b i j in (algebraMap K L).fieldRange := by
+    simp only [Basis.toMatrix, Basis.map_repr, LinearEquiv.symm_symm, LinearEquiv.trans_apply,
+      Basis.dualBasis_repr]
+    exact hp (b j) (by simpa [b] using hv₁ j.2) (bN i) (by simpa [bN] using hw₁ i.2)
+  have hA (i j) : b.toMatrix bM i j in (algebraMap K L).range :=
+    Matrix.mem_subfield_of_mul_eq_one_of_mem_subfield_left e _ (by simp [bM]) hp i j
+  have h_span : span K v = span K (Set.range b) := by simp [b]
+  rw [h_span]; rw [Basis.mem_span_iff_repr_mem]; rw [← Basis.toMatrix_mulVec_repr bM b m]
+  exact fun i => Subring.sum_mem _ fun j _ => Subring.mul_mem _ (hA i j) (hj j)
 
 中文:
 引理 存在_basis_basis_of_span_eq_top_of_mem_algebraMap
@@ -280,7 +370,43 @@ have :
   obtain ⟨v, hv₁, hv₂, hv₃⟩ := exists_linearIndependent L (M' : Set M)
   rw [hM] at hv₂
 let b : Basis _ L M := Basis.mk hv₃ by rw [← hv₂, Subtype.range_coe_subtype, Set.ofPred_mem_eq]
-have :
+have : Fintype v := Set.Finite.fintype Module.Finite.finite_basis b
+  set v' : v -> M' := fun i => ⟨i, hv₁ (Subtype.coe_prop i)⟩
+  have hv' : LinearIndependent K v' := by
+replace hv₃ := hv₃.restrict_scalars (R := K) by
+      simp_rw [← Algebra.algebraMap_eq_smul_one]
+      exact FaithfulSMul.algebraMap_injective K L
+    rw [show ((↑) : v -> M) = M'.subtype ∘ v' by ext; simp [v']] at hv₃
+    exact hv₃.of_comp
+  suffices span K (Set.range v') = ⊤ by
+    let e := (Module.Finite.finite_basis b).equivFin
+    let b' : Basis _ K M' := Basis.mk hv' (by rw [this])
+    exact ⟨_, b.reindex e, b'.reindex e, fun i => by simp [b, b', v']⟩
+  suffices span K v = M' by
+    apply Submodule.map_injective_of_injective M'.injective_subtype
+    rw [Submodule.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
+    simpa [v']
+  refine le_antisymm (Submodule.span_le.mpr hv₁) fun m hm => ?_
+  obtain ⟨w, hw₁, hw₂, hw₃⟩ := exists_linearIndependent L (N' : Set N)
+  rw [hN] at hw₂
+let bN : Basis _ L N := Basis.mk hw₃ by
+    rw [← hw₂]; rw [Subtype.range_coe_subtype]; rw [Set.ofPred_mem_eq]
+have : Fintype w := Set.Finite.fintype Module.Finite.finite_basis bN
+have e : v ≃ w := Fintype.equivOfCardEq by rw [← Module.finrank_eq_card_basis b,
+    ← Module.finrank_eq_card_basis bN, Module.finrank_of_isPerfPair p]
+  let bM := bN.dualBasis.map p.toPerfPair.symm
+  have hbM (j : w) (x : M) (hx : x in M') : bM.repr x j = p x (j : N) := by simp [bM, bN]
+  have hj (j : w) : bM.repr m j in (algebraMap K L).range := (hbM _ _ hm) ▸ hp m hm j (hw₁ j.2)
+  replace hp (i : w) (j : v) :
+      (bN.dualBasis.map p.toPerfPair.symm).toMatrix b i j in (algebraMap K L).fieldRange := by
+    simp only [Basis.toMatrix, Basis.map_repr, LinearEquiv.symm_symm, LinearEquiv.trans_apply,
+      Basis.dualBasis_repr]
+    exact hp (b j) (by simpa [b] using hv₁ j.2) (bN i) (by simpa [bN] using hw₁ i.2)
+  have hA (i j) : b.toMatrix bM i j in (algebraMap K L).range :=
+    Matrix.mem_subfield_of_mul_eq_one_of_mem_subfield_left e _ (by simp [bM]) hp i j
+  have h_span : span K v = span K (Set.range b) := by simp [b]
+  rw [h_span]; rw [Basis.mem_span_iff_repr_mem]; rw [← Basis.toMatrix_mulVec_repr bM b m]
+  exact fun i => Subring.sum_mem _ fun j _ => Subring.mul_mem _ (hA i j) (hj j)
 
 Depends on / 依赖: Basis.mk, Finite, Fintype, IsReflexive, LinearIndependent, Module, Module.Finite.finite_basis, Set.Finite.fintype, Set.ofPred_mem_eq, Subtype, Subtype.coe_prop, Subtype.range_coe_subtype, classical, coe_prop, exists_linearIndependent, finite_basis, fintype, ofPred_mem_eq, of_isPerfPair, p.flip
 -/
@@ -375,7 +501,9 @@ lemma restrictScalars_field_aux
     (p.flip.restrictScalars_injective_aux j i hj hM (fun m n => hp n m))
 obtain ⟨n, -, b', -⟩ := p.exists_basis_basis_of_span_eq_top_of_mem_algebraMap _ _ hM hN by
     rintro - ⟨m, rfl⟩ - ⟨n, rfl⟩
-
+    exact hp m n
+  have : FiniteDimensional K (LinearMap.range i) := b'.finiteDimensional_of_finite
+  exact Finite.equiv (LinearEquiv.ofInjective i hi).symm
 
 中文:
 引理 restrictScalars_field_aux
@@ -384,7 +512,9 @@ obtain ⟨n, -, b', -⟩ := p.exists_basis_basis_of_span_eq_top_of_mem_algebraMa
     (p.flip.restrictScalars_injective_aux j i hj hM (fun m n => hp n m))
 obtain ⟨n, -, b', -⟩ := p.exists_basis_basis_of_span_eq_top_of_mem_algebraMap _ _ hM hN by
     rintro - ⟨m, rfl⟩ - ⟨n, rfl⟩
-
+    exact hp m n
+  have : FiniteDimensional K (LinearMap.range i) := b'.finiteDimensional_of_finite
+  exact Finite.equiv (LinearEquiv.ofInjective i hi).symm
 -/
 private lemma restrictScalars_field_aux
     (hM : span L (LinearMap.range i : Set M) = ⊤)
@@ -412,7 +542,20 @@ lemma IsPerfPair.restrictScalars_of_field
     .restrict _ _ _ (by simp) (by simp) (by simpa)
   exact restrictScalars_field_aux
     (p.compl₁₂ (span L <| .range i).subtype (span L <| .range j).subtype)
-    ((LinearMap.range i).inclusionSpan L ∘ₗ i
+    ((LinearMap.range i).inclusionSpan L ∘ₗ i.rangeRestrict)
+    ((LinearMap.range j).inclusionSpan L ∘ₗ j.rangeRestrict)
+    (((LinearMap.range i).injective_inclusionSpan L).comp (by simpa))
+    (((LinearMap.range j).injective_inclusionSpan L).comp (by simpa))
+    (by rw [LinearMap.range_comp_of_range_eq_top _ (LinearMap.range_rangeRestrict _)]
+        exact (LinearMap.range i).span_range_inclusionSpan L)
+    (by rw [LinearMap.range_comp_of_range_eq_top _ (LinearMap.range_rangeRestrict _)]
+        exact (LinearMap.range j).span_range_inclusionSpan L)
+    fun x y => LinearMap.BilinMap.apply_apply_mem_of_mem_span
+      (LinearMap.range <| Algebra.linearMap K L) (range i) (range j)
+      ((LinearMap.restrictScalarsₗ K L _ _ _).comp (p.restrictScalars K))
+      (by simpa) (i x) (j y) (subset_span <| by simp) (subset_span <| by simp)
+
+omit [p.IsPerfPair] in
 
 中文:
 引理 是PerfPair.restrictScalars_of_field
@@ -421,7 +564,20 @@ lemma IsPerfPair.restrictScalars_of_field
     .restrict _ _ _ (by simp) (by simp) (by simpa)
   exact restrictScalars_field_aux
     (p.compl₁₂ (span L <| .range i).subtype (span L <| .range j).subtype)
-    ((LinearMap.range i).inclusionSpan L ∘ₗ i
+    ((LinearMap.range i).inclusionSpan L ∘ₗ i.rangeRestrict)
+    ((LinearMap.range j).inclusionSpan L ∘ₗ j.rangeRestrict)
+    (((LinearMap.range i).injective_inclusionSpan L).comp (by simpa))
+    (((LinearMap.range j).injective_inclusionSpan L).comp (by simpa))
+    (by rw [LinearMap.range_comp_of_range_eq_top _ (LinearMap.range_rangeRestrict _)]
+        exact (LinearMap.range i).span_range_inclusionSpan L)
+    (by rw [LinearMap.range_comp_of_range_eq_top _ (LinearMap.range_rangeRestrict _)]
+        exact (LinearMap.range j).span_range_inclusionSpan L)
+    fun x y => LinearMap.BilinMap.apply_apply_mem_of_mem_span
+      (LinearMap.range <| Algebra.linearMap K L) (range i) (range j)
+      ((LinearMap.restrictScalarsₗ K L _ _ _).comp (p.restrictScalars K))
+      (by simpa) (i x) (j y) (subset_span <| by simp) (subset_span <| by simp)
+
+omit [p.IsPerfPair] in
 
 Depends on / 依赖: IsPerfPair, LinearMap, LinearMap.range, i.rangeRestrict, inclusionSpan, injective_inclusionSpan, j.rangeRestrict, p.compl, rangeRestrict, restrict, restrictScalars_field_aux, subtype
 -/

@@ -100,7 +100,9 @@ definition ringFilterBasis
     rintro x₀ U ⟨I, hI, rfl⟩
     exact ⟨I, ⟨I, hI, rfl⟩, fun a ha => Ideal.mul_mem_left I x₀ ha⟩
   mul_right' := by
-    rintro x₀ U ⟨I, hI
+    rintro x₀ U ⟨I, hI, rfl⟩
+    refine ⟨I.colon {x₀}, ⟨I.colon {x₀}, IsUniform.colon_mem hI x₀, rfl⟩,
+      fun a ha => Set.mem_preimage.mpr (Submodule.mem_colon_singleton.mp ha)⟩
 
 中文:
 定义 ringFilterBasis
@@ -113,7 +115,9 @@ definition ringFilterBasis
     rintro x₀ U ⟨I, hI, rfl⟩
     exact ⟨I, ⟨I, hI, rfl⟩, fun a ha => Ideal.mul_mem_left I x₀ ha⟩
   mul_right' := by
-    rintro x₀ U ⟨I, hI
+    rintro x₀ U ⟨I, hI, rfl⟩
+    refine ⟨I.colon {x₀}, ⟨I.colon {x₀}, IsUniform.colon_mem hI x₀, rfl⟩,
+      fun a ha => Set.mem_preimage.mpr (Submodule.mem_colon_singleton.mp ha)⟩
 
 Depends on / 依赖: F.addGroupFilterBasis, addGroupFilterBasis
 -/

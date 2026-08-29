@@ -74,7 +74,12 @@ definition t
   have : HasPullback (pullback.snd _ _ ≫ 𝒰.f j ≫ f) g :=
     hasPullback_assoc_symm (𝒰.f i) (𝒰.f j) (𝒰.f j ≫ f) g
   refine (pullbackSymmetry ..).hom ≫ (pullbackAssoc ..).inv ≫ ?_
-  re
+  refine ?_ ≫ (pullbackAssoc ..).hom ≫ (pullbackSymmetry ..).hom
+  refine pullback.map _ _ _ _ (pullbackSymmetry _ _).hom (𝟙 _) (𝟙 _) ?_ ?_
+  · rw [pullbackSymmetry_hom_comp_snd_assoc, pullback.condition_assoc, Category.comp_id]
+  · rw [Category.comp_id, Category.id_comp]
+
+@[simp, reassoc]
 
 中文:
 定义 t
@@ -85,7 +90,12 @@ definition t
   have : HasPullback (pullback.snd _ _ ≫ 𝒰.f j ≫ f) g :=
     hasPullback_assoc_symm (𝒰.f i) (𝒰.f j) (𝒰.f j ≫ f) g
   refine (pullbackSymmetry ..).hom ≫ (pullbackAssoc ..).inv ≫ ?_
-  re
+  refine ?_ ≫ (pullbackAssoc ..).hom ≫ (pullbackSymmetry ..).hom
+  refine pullback.map _ _ _ _ (pullbackSymmetry _ _).hom (𝟙 _) (𝟙 _) ?_ ?_
+  · rw [pullbackSymmetry_hom_comp_snd_assoc, pullback.condition_assoc, Category.comp_id]
+  · rw [Category.comp_id, Category.id_comp]
+
+@[simp, reassoc]
 
 Depends on / 依赖: Category, Category.comp, HasPullback, condition_assoc, hasPullback_assoc_symm, pullback, pullback.condition_assoc, pullback.map, pullback.snd, pullbackAssoc, pullbackSymmetry, pullbackSymmetry_hom_comp_snd_assoc
 -/
@@ -205,7 +215,7 @@ theorem t_id
   · apply pullback.hom_ext
     · rw [← cancel_mono (𝒰.f i)]; simp only [pullback.condition, Category.assoc, t_fst_fst]
     · simp only [Category.assoc, t_fst_snd]
-  · rw [← cancel_mono (𝒰.f i)]; simp only [pullback.condition, t_snd, Category.asso
+  · rw [← cancel_mono (𝒰.f i)]; simp only [pullback.condition, t_snd, Category.assoc]
 
 中文:
 定理 t_id
@@ -216,7 +226,7 @@ theorem t_id
   · apply pullback.hom_ext
     · rw [← cancel_mono (𝒰.f i)]; simp only [pullback.condition, Category.assoc, t_fst_fst]
     · simp only [Category.assoc, t_fst_snd]
-  · rw [← cancel_mono (𝒰.f i)]; simp only [pullback.condition, t_snd, Category.asso
+  · rw [← cancel_mono (𝒰.f i)]; simp only [pullback.condition, t_snd, Category.assoc]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, cancel_mono, condition, hom_ext, id_comp, pullback, pullback.condition, pullback.hom_ext, t_fst_fst, t_fst_snd, t_snd
 -/
@@ -257,7 +267,9 @@ definition t'
   refine ?_ ≫ (pullbackRightPullbackFstIso ..).inv
   refine pullback.map _ _ _ _ (t 𝒰 f g i j) (𝟙 _) (𝟙 _) ?_ ?_
   · simp_rw [Category.comp_id, t_fst_fst_assoc, ← pullback.condition]
-  · rw [Category.comp_
+  · rw [Category.comp_id, Category.id_comp]
+
+@[simp, reassoc]
 
 中文:
 定义 t'
@@ -268,7 +280,9 @@ definition t'
   refine ?_ ≫ (pullbackRightPullbackFstIso ..).inv
   refine pullback.map _ _ _ _ (t 𝒰 f g i j) (𝟙 _) (𝟙 _) ?_ ?_
   · simp_rw [Category.comp_id, t_fst_fst_assoc, ← pullback.condition]
-  · rw [Category.comp_
+  · rw [Category.comp_id, Category.id_comp]
+
+@[simp, reassoc]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, condition, id_comp, pullback, pullback.condition, pullback.map, pullbackRightPullbackFstIso, pullbackSymmetry, simp_rw, t_fst_fst_assoc
 -/
@@ -609,7 +623,12 @@ theorem cocycle
     · apply pullback.hom_ext
       · simp_rw [Category.assoc, cocycle_fst_fst_fst 𝒰 f g i j k]
       · simp_rw [Category.assoc, cocycle_fst_fst_snd 𝒰 f g i j k]
-    · simp_rw [Category.assoc, cocycle_fst_snd 𝒰 f g i j k
+    · simp_rw [Category.assoc, cocycle_fst_snd 𝒰 f g i j k]
+  · apply pullback.hom_ext
+    · apply pullback.hom_ext
+      · simp_rw [Category.assoc, cocycle_snd_fst_fst 𝒰 f g i j k]
+      · simp_rw [Category.assoc, cocycle_snd_fst_snd 𝒰 f g i j k]
+    · simp_rw [Category.assoc, cocycle_snd_snd 𝒰 f g i j k]
 
 中文:
 定理 cocycle
@@ -621,7 +640,12 @@ theorem cocycle
     · apply pullback.hom_ext
       · simp_rw [Category.assoc, cocycle_fst_fst_fst 𝒰 f g i j k]
       · simp_rw [Category.assoc, cocycle_fst_fst_snd 𝒰 f g i j k]
-    · simp_rw [Category.assoc, cocycle_fst_snd 𝒰 f g i j k
+    · simp_rw [Category.assoc, cocycle_fst_snd 𝒰 f g i j k]
+  · apply pullback.hom_ext
+    · apply pullback.hom_ext
+      · simp_rw [Category.assoc, cocycle_snd_fst_fst 𝒰 f g i j k]
+      · simp_rw [Category.assoc, cocycle_snd_fst_snd 𝒰 f g i j k]
+    · simp_rw [Category.assoc, cocycle_snd_snd 𝒰 f g i j k]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, cocycle_fst_fst_fst, cocycle_fst_fst_snd, cocycle_fst_snd, cocycle_snd_fst_fst, cocycle_snd_fst_snd, cocycle_snd_snd, hom_ext, id_comp, pullback, pullback.hom_ext, simp_rw
 -/
@@ -657,7 +681,14 @@ definition gluing
   t_id i := t_id 𝒰 f g i
   t' i j k := t' 𝒰 f g i j k
   t_fac i j k := by
- 
+    apply pullback.hom_ext
+    on_goal 1 => apply pullback.hom_ext
+    all_goals
+      simp only [t'_snd_fst_fst, t'_snd_fst_snd, t'_snd_snd, t_fst_fst, t_fst_snd, t_snd,
+        Category.assoc]
+  cocycle i j k := cocycle 𝒰 f g i j k
+
+@[simp]
 
 中文:
 定义 gluing
@@ -673,7 +704,14 @@ definition gluing
   t_id i := t_id 𝒰 f g i
   t' i j k := t' 𝒰 f g i j k
   t_fac i j k := by
- 
+    apply pullback.hom_ext
+    on_goal 1 => apply pullback.hom_ext
+    all_goals
+      simp only [t'_snd_fst_fst, t'_snd_fst_snd, t'_snd_snd, t_fst_fst, t_fst_snd, t_snd,
+        Category.assoc]
+  cocycle i j k := cocycle 𝒰 f g i j k
+
+@[simp]
 -/
 def gluing : Scheme.GlueData.{u} where
   J := 𝒰.I₀
@@ -800,7 +838,7 @@ definition gluedLiftPullbackMap
   · exact (pullbackSymmetry _ _).hom ≫
       pullback.map _ _ _ _ (𝟙 _) s.snd f (Category.id_comp _).symm s.condition
   · simpa using! pullback.condition
-  · simp only [Category.comp_id, Categ
+  · simp only [Category.comp_id, Category.id_comp]
 
 中文:
 定义 gluedLiftPullbackMap
@@ -811,7 +849,7 @@ definition gluedLiftPullbackMap
   · exact (pullbackSymmetry _ _).hom ≫
       pullback.map _ _ _ _ (𝟙 _) s.snd f (Category.id_comp _).symm s.condition
   · simpa using! pullback.condition
-  · simp only [Category.comp_id, Categ
+  · simp only [Category.comp_id, Category.id_comp]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, condition, id_comp, pullback, pullback.condition, pullback.map, pullbackRightPullbackFstIso, pullbackSymmetry, s.condition, s.snd
 -/
@@ -888,7 +926,16 @@ definition gluedLift
   · exact fun i => (pullbackSymmetry _ _).hom ≫
       pullback.map _ _ _ _ (𝟙 _) s.snd f (Category.id_comp _).symm s.condition ≫ (gluing 𝒰 f g).ι i
   intro i j
-  rw [← gluedLiftPullbackMap_fst_assoc]; rw [← gluing_f]; rw [← (gluing 𝒰 f g).glue_cond
+  rw [← gluedLiftPullbackMap_fst_assoc]; rw [← gluing_f]; rw [← (gluing 𝒰 f g).glue_condition i j]; rw [gluing_t]; rw [gluing_f]
+  simp_rw [← Category.assoc]
+  congr 1
+  apply pullback.hom_ext <;> simp_rw [Category.assoc]
+  · rw [t_fst_fst, gluedLiftPullbackMap_snd]
+    congr 1
+    rw [← Iso.inv_comp_eq]; rw [pullbackSymmetry_inv_comp_snd]; rw [pullback.lift_fst]; rw [Category.comp_id]
+  · rw [t_fst_snd, gluedLiftPullbackMap_fst_assoc, pullback.lift_snd, pullback.lift_snd]
+    simp_rw [pullbackSymmetry_hom_comp_snd_assoc]
+    exact pullback.condition_assoc _
 
 中文:
 定义 gluedLift
@@ -898,7 +945,16 @@ definition gluedLift
   · exact fun i => (pullbackSymmetry _ _).hom ≫
       pullback.map _ _ _ _ (𝟙 _) s.snd f (Category.id_comp _).symm s.condition ≫ (gluing 𝒰 f g).ι i
   intro i j
-  rw [← gluedLiftPullbackMap_fst_assoc]; rw [← gluing_f]; rw [← (gluing 𝒰 f g).glue_cond
+  rw [← gluedLiftPullbackMap_fst_assoc]; rw [← gluing_f]; rw [← (gluing 𝒰 f g).glue_condition i j]; rw [gluing_t]; rw [gluing_f]
+  simp_rw [← Category.assoc]
+  congr 1
+  apply pullback.hom_ext <;> simp_rw [Category.assoc]
+  · rw [t_fst_fst, gluedLiftPullbackMap_snd]
+    congr 1
+    rw [← Iso.inv_comp_eq]; rw [pullbackSymmetry_inv_comp_snd]; rw [pullback.lift_fst]; rw [Category.comp_id]
+  · rw [t_fst_snd, gluedLiftPullbackMap_fst_assoc, pullback.lift_snd, pullback.lift_snd]
+    simp_rw [pullbackSymmetry_hom_comp_snd_assoc]
+    exact pullback.condition_assoc _
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, Cover.glueMorphisms, Iso.inv_comp_eq, condition, fapply, glueMorphisms, glue_condition, gluedLiftPullbackMap_fst_assoc, gluedLiftPullbackMap_snd, gluing, gluing_f, gluing_t, hom_ext, id_comp, inv_comp_eq, pullbac, pullback, pullback.hom_ext
 -/
@@ -1072,7 +1128,17 @@ theorem lift_comp_ι
   dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
     PreZeroHypercover.pullback₁_X, PreZeroHypercover.pullback₁_f]
   trans pullbackFstιToV 𝒰 f g i j ≫ fV 𝒰 f g j i ≫ (gluing 𝒰 f g).ι _
- 
+  · rw [← show _ = fV 𝒰 f g j i ≫ _ from (gluing 𝒰 f g).glue_condition j i]
+    simp_rw [← Category.assoc]
+    congr 1
+    rw [gluing_f]; rw [gluing_t]
+    apply pullback.hom_ext <;> simp_rw [Category.assoc]
+    · simp_rw [t_fst_fst, pullback.lift_fst, pullbackFstιToV_snd, GlueData.openCover_f]
+    · simp_rw [t_fst_snd, pullback.lift_snd, pullbackFstιToV_fst_assoc, pullback.condition_assoc,
+        GlueData.openCover_f, p2]
+      simp
+  · rw [pullback.condition, ← Category.assoc]
+    simp_rw [pullbackFstιToV_fst, GlueData.openCover_f]
 
 中文:
 定理 lift_comp_ι
@@ -1083,7 +1149,17 @@ theorem lift_comp_ι
   dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
     PreZeroHypercover.pullback₁_X, PreZeroHypercover.pullback₁_f]
   trans pullbackFstιToV 𝒰 f g i j ≫ fV 𝒰 f g j i ≫ (gluing 𝒰 f g).ι _
- 
+  · rw [← show _ = fV 𝒰 f g j i ≫ _ from (gluing 𝒰 f g).glue_condition j i]
+    simp_rw [← Category.assoc]
+    congr 1
+    rw [gluing_f]; rw [gluing_t]
+    apply pullback.hom_ext <;> simp_rw [Category.assoc]
+    · simp_rw [t_fst_fst, pullback.lift_fst, pullbackFstιToV_snd, GlueData.openCover_f]
+    · simp_rw [t_fst_snd, pullback.lift_snd, pullbackFstιToV_fst_assoc, pullback.condition_assoc,
+        GlueData.openCover_f, p2]
+      simp
+  · rw [pullback.condition, ← Category.assoc]
+    simp_rw [pullbackFstιToV_fst, GlueData.openCover_f]
 
 Depends on / 依赖: Category, Category.assoc, Cover.hom_ext, PreZeroHypercover, PreZeroHypercover.pullback, Precoverage, Precoverage.ZeroHypercover.pullback, ZeroHypercover, glue_condition, gluing, gluing_f, gluing_t, hom_ext, openCover, openCover.pullback, pullback, pullback.fst, pullback.hom_ext, simp_rw, t_fst_fst
 -/
@@ -1123,7 +1199,14 @@ definition pullbackP1Iso
         (by rw [← pullback.condition_assoc, Category.assoc, p_comm])
   · exact pullback.lift ((gluing 𝒰 f g).ι i) (pullback.fst _ _)
       (by rw [gluing_ι, p1, Multicoequalizer.π_desc])
-  · apply pullba
+  · apply pullback.hom_ext
+    · simpa using lift_comp_ι 𝒰 f g i
+    · simp_rw [Category.assoc, pullback.lift_snd, pullback.lift_fst, Category.id_comp]
+  · apply pullback.hom_ext
+    · simp_rw [Category.assoc, pullback.lift_fst, pullback.lift_snd, Category.id_comp]
+    · simp [p2]
+
+@[simp, reassoc]
 
 中文:
 定义 pullbackP1Iso
@@ -1135,7 +1218,14 @@ definition pullbackP1Iso
         (by rw [← pullback.condition_assoc, Category.assoc, p_comm])
   · exact pullback.lift ((gluing 𝒰 f g).ι i) (pullback.fst _ _)
       (by rw [gluing_ι, p1, Multicoequalizer.π_desc])
-  · apply pullba
+  · apply pullback.hom_ext
+    · simpa using lift_comp_ι 𝒰 f g i
+    · simp_rw [Category.assoc, pullback.lift_snd, pullback.lift_fst, Category.id_comp]
+  · apply pullback.hom_ext
+    · simp_rw [Category.assoc, pullback.lift_fst, pullback.lift_snd, Category.id_comp]
+    · simp [p2]
+
+@[simp, reassoc]
 
 Depends on / 依赖: Category, Category.assoc, Category.i, Category.id_comp, Multicoequalizer, condition_assoc, fconstructor, gluing, hom_ext, id_comp, lift_fst, lift_snd, p_comm, pullback, pullback.condition_assoc, pullback.fst, pullback.hom_ext, pullback.lift, pullback.lift_fst, pullback.lift_snd
 -/
@@ -1287,7 +1377,23 @@ definition gluedIsLimit
   simp_rw [PullbackCone.mk_pt, PullbackCone.mk_π_app] at h₁ h₂
 apply Cover.hom_ext 𝒰.pullback₁ s.fst
   intro i
-  rw [gluedLift]; rw [(Cover.ι_glueMorphisms <| 𝒰.
+  rw [gluedLift]; rw [(Cover.ι_glueMorphisms <| 𝒰.pullback₁ s.fst)]
+  dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
+    PreZeroHypercover.pullback₁_X, PullbackCone.mk_pt, PreZeroHypercover.pullback₁_f, gluing_ι]
+  rw [← cancel_epi
+    (pullbackRightPullbackFstIso (p1 𝒰 f g) (𝒰.f i) m ≪≫ pullback.congrHom h₁ rfl).hom]; rw [Iso.trans_hom]; rw [Category.assoc]; rw [pullback.congrHom_hom]; rw [pullback.lift_fst_assoc]; rw [Category.comp_id]; rw [pullbackRightPullbackFstIso_hom_fst_assoc]; rw [pullback.condition]
+  conv_lhs => rhs; rw [← pullbackP1Iso_hom_ι]
+  simp_rw [← Category.assoc]
+  congr 1
+  apply pullback.hom_ext
+  · simp_rw [Category.assoc, pullbackP1Iso_hom_fst, pullback.lift_fst, Category.comp_id,
+      pullbackSymmetry_hom_comp_fst, pullback.lift_snd, Category.comp_id,
+      pullbackRightPullbackFstIso_hom_snd]
+  · simp_rw [Category.assoc, pullbackP1Iso_hom_snd, pullback.lift_snd,
+      pullbackSymmetry_hom_comp_snd_assoc, pullback.lift_fst_assoc, Category.comp_id,
+      pullbackRightPullbackFstIso_hom_fst_assoc, ← pullback.condition_assoc, h₂]
+
+include 𝒰 in
 
 中文:
 定义 gluedIsLimit
@@ -1300,7 +1406,23 @@ apply Cover.hom_ext 𝒰.pullback₁ s.fst
   simp_rw [PullbackCone.mk_pt, PullbackCone.mk_π_app] at h₁ h₂
 apply Cover.hom_ext 𝒰.pullback₁ s.fst
   intro i
-  rw [gluedLift]; rw [(Cover.ι_glueMorphisms <| 𝒰.
+  rw [gluedLift]; rw [(Cover.ι_glueMorphisms <| 𝒰.pullback₁ s.fst)]
+  dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
+    PreZeroHypercover.pullback₁_X, PullbackCone.mk_pt, PreZeroHypercover.pullback₁_f, gluing_ι]
+  rw [← cancel_epi
+    (pullbackRightPullbackFstIso (p1 𝒰 f g) (𝒰.f i) m ≪≫ pullback.congrHom h₁ rfl).hom]; rw [Iso.trans_hom]; rw [Category.assoc]; rw [pullback.congrHom_hom]; rw [pullback.lift_fst_assoc]; rw [Category.comp_id]; rw [pullbackRightPullbackFstIso_hom_fst_assoc]; rw [pullback.condition]
+  conv_lhs => rhs; rw [← pullbackP1Iso_hom_ι]
+  simp_rw [← Category.assoc]
+  congr 1
+  apply pullback.hom_ext
+  · simp_rw [Category.assoc, pullbackP1Iso_hom_fst, pullback.lift_fst, Category.comp_id,
+      pullbackSymmetry_hom_comp_fst, pullback.lift_snd, Category.comp_id,
+      pullbackRightPullbackFstIso_hom_snd]
+  · simp_rw [Category.assoc, pullbackP1Iso_hom_snd, pullback.lift_snd,
+      pullbackSymmetry_hom_comp_snd_assoc, pullback.lift_fst_assoc, Category.comp_id,
+      pullbackRightPullbackFstIso_hom_fst_assoc, ← pullback.condition_assoc, h₂]
+
+include 𝒰 in
 
 Depends on / 依赖: Cover.hom_ext, PreZeroHypercover, PreZeroHypercover.pullback, Precoverage, Precoverage.ZeroHypercover.pullback, PullbackCone, PullbackCone.isLimitAux, PullbackCone.mk_, PullbackCone.mk_pt, ZeroHypercover, cancel_epi, gluedLift, gluedLift_p1, gluedLift_p2, hom_ext, isLimitAux, mk_pt, pullbackRightPul, s.fst, simp_rw
 -/
@@ -1538,7 +1660,21 @@ definition openCoverOfLeft
     rw [ofArrows_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun i => ?_⟩
     · let 𝒱 := ((gluing 𝒰.ulift f g).openCover.pushforwardIso
-              (limit.isoLimitCon
+              (limit.isoLimitCone ⟨_, gluedIsLimit 𝒰.ulift f g⟩).inv).copy
+          𝒰.ulift.I₀ (fun i => pullback (𝒰.ulift.f i ≫ f) g)
+          (fun i => pullback.map _ _ _ _ (𝒰.ulift.f i) (𝟙 _) (𝟙 _) (Category.comp_id _) (by simp))
+          (Equiv.refl 𝒰.ulift.I₀) (fun _ => Iso.refl _) fun i => by
+        simp_rw [Cover.pushforwardIso_I₀, Cover.pushforwardIso_f, GlueData.openCover_f,
+          GlueData.openCover_I₀, gluing_J]
+        exact pullback.hom_ext (by simp [p1]) (by simp [p2])
+      obtain ⟨i, x, rfl⟩ := 𝒱.exists_eq x
+      exact ⟨_, x, rfl⟩
+    · dsimp
+      have : pullback.map (𝒰.f i ≫ f) g f g (𝒰.f i) (𝟙 Y) (𝟙 Z) (by simp) (by simp) =
+        (pullbackSymmetry _ _).hom ≫ (pullbackLeftPullbackSndIso _ _ _).inv ≫
+          pullback.fst _ _ ≫ (pullbackSymmetry _ _).hom := by aesop
+      rw [this]
+      infer_instance
 
 中文:
 定义 openCoverOfLeft
@@ -1550,7 +1686,21 @@ definition openCoverOfLeft
     rw [ofArrows_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun i => ?_⟩
     · let 𝒱 := ((gluing 𝒰.ulift f g).openCover.pushforwardIso
-              (limit.isoLimitCon
+              (limit.isoLimitCone ⟨_, gluedIsLimit 𝒰.ulift f g⟩).inv).copy
+          𝒰.ulift.I₀ (fun i => pullback (𝒰.ulift.f i ≫ f) g)
+          (fun i => pullback.map _ _ _ _ (𝒰.ulift.f i) (𝟙 _) (𝟙 _) (Category.comp_id _) (by simp))
+          (Equiv.refl 𝒰.ulift.I₀) (fun _ => Iso.refl _) fun i => by
+        simp_rw [Cover.pushforwardIso_I₀, Cover.pushforwardIso_f, GlueData.openCover_f,
+          GlueData.openCover_I₀, gluing_J]
+        exact pullback.hom_ext (by simp [p1]) (by simp [p2])
+      obtain ⟨i, x, rfl⟩ := 𝒱.exists_eq x
+      exact ⟨_, x, rfl⟩
+    · dsimp
+      have : pullback.map (𝒰.f i ≫ f) g f g (𝒰.f i) (𝟙 Y) (𝟙 Z) (by simp) (by simp) =
+        (pullbackSymmetry _ _).hom ≫ (pullbackLeftPullbackSndIso _ _ _).inv ≫
+          pullback.fst _ _ ≫ (pullbackSymmetry _ _).hom := by aesop
+      rw [this]
+      infer_instance
 -/
 def openCoverOfLeft (𝒰 : OpenCover.{v} X) (f : X ⟶ Z) (g : Y ⟶ Z) :
     OpenCover (pullback f g) where
@@ -1595,7 +1745,7 @@ definition openCoverOfRight
       (Equiv.refl _) fun i => pullbackSymmetry _ _
   intro i
   dsimp
-  apply 
+  apply pullback.hom_ext <;> simp
 
 中文:
 定义 openCoverOfRight
@@ -1608,7 +1758,7 @@ definition openCoverOfRight
       (Equiv.refl _) fun i => pullbackSymmetry _ _
   intro i
   dsimp
-  apply 
+  apply pullback.hom_ext <;> simp
 
 Depends on / 依赖: Category, Category.comp_id, Equiv.refl, comp_id, fapply, hom_ext, openCoverOfLeft, pullback, pullback.hom_ext, pullback.map, pullbackSymmetry, pushforwardIso
 -/
@@ -1640,7 +1790,10 @@ definition openCoverOfLeftRight
       (𝒰X.I₀ × 𝒰Y.I₀) (fun ij => pullback (𝒰X.f ij.1 ≫ f) (𝒰Y.f ij.2 ≫ g))
       (fun ij =>
         pullback.map _ _ _ _ (𝒰X.f ij.1) (𝒰Y.f ij.2) (𝟙 _) (Category.comp_id _)
-          (Category.comp_
+          (Category.comp_id _))
+      (Equiv.sigmaEquivProd _ _).symm fun _ => Iso.refl _
+  rintro ⟨i, j⟩
+  apply pullback.hom_ext <;> simp
 
 中文:
 定义 openCoverOfLeftRight
@@ -1651,7 +1804,10 @@ definition openCoverOfLeftRight
       (𝒰X.I₀ × 𝒰Y.I₀) (fun ij => pullback (𝒰X.f ij.1 ≫ f) (𝒰Y.f ij.2 ≫ g))
       (fun ij =>
         pullback.map _ _ _ _ (𝒰X.f ij.1) (𝒰Y.f ij.2) (𝟙 _) (Category.comp_id _)
-          (Category.comp_
+          (Category.comp_id _))
+      (Equiv.sigmaEquivProd _ _).symm fun _ => Iso.refl _
+  rintro ⟨i, j⟩
+  apply pullback.hom_ext <;> simp
 
 Depends on / 依赖: Category, Category.comp_id, Cover.copy, Equiv.sigmaEquivProd, Iso.refl, comp_id, fapply, hom_ext, openCoverOfLeft, openCoverOfRight, pullback, pullback.hom_ext, pullback.map, sigmaEquivProd
 -/
@@ -1684,7 +1840,11 @@ definition openCoverOfBase'
     (pullback.snd f (𝒰.f i))).paste_horiz (IsPullback.of_hasPullback _ _)).flip
   refine
     @coverOfIsIso _ _ _ _ _
-      (f := (pullbackSymmetry (pullback.snd f (𝒰.f i)) 
+      (f := (pullbackSymmetry (pullback.snd f (𝒰.f i)) (pullback.snd g (𝒰.f i))).hom ≫
+        (limit.isoLimitCone ⟨_, this.isLimit⟩).inv ≫
+        pullback.map _ _ _ _ (𝟙 _) (𝟙 _) (𝟙 _) ?_ ?_) inferInstance
+  · simp [← pullback.condition]
+  · simp only [Category.comp_id, Category.id_comp]
 
 中文:
 定义 openCoverOfBase'
@@ -1696,7 +1856,11 @@ definition openCoverOfBase'
     (pullback.snd f (𝒰.f i))).paste_horiz (IsPullback.of_hasPullback _ _)).flip
   refine
     @coverOfIsIso _ _ _ _ _
-      (f := (pullbackSymmetry (pullback.snd f (𝒰.f i)) 
+      (f := (pullbackSymmetry (pullback.snd f (𝒰.f i)) (pullback.snd g (𝒰.f i))).hom ≫
+        (limit.isoLimitCone ⟨_, this.isLimit⟩).inv ≫
+        pullback.map _ _ _ _ (𝟙 _) (𝟙 _) (𝟙 _) ?_ ?_) inferInstance
+  · simp [← pullback.condition]
+  · simp only [Category.comp_id, Category.id_comp]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, IsPullback, IsPullback.of_hasPullback, comp_id, condition, coverOfIsIso, id_comp, isLimit, isoLimitCone, limit.isoLimitCone, of_hasPullback, openCoverOfLeft, paste_horiz, pullback, pullback.condition, pullback.map, pullback.snd, pullbackSymmetry
 -/
@@ -1732,7 +1896,17 @@ definition openCoverOfBase
           (pullback.snd _ _ : pullback g (𝒰.f i) ⟶ _))
       (fun i =>
         pullback.map _ _ _ _ (pullback.fst _ _) (pullback.fst _ _) (𝒰.f i)
-          pullback.conditio
+          pullback.condition.symm pullback.condition.symm)
+      ((Equiv.prodPUnit 𝒰.I₀).symm.trans (Equiv.sigmaEquivProd 𝒰.I₀ PUnit).symm) fun _ => Iso.refl _
+  intro i
+  rw [Iso.refl_hom]; rw [Category.id_comp]; rw [openCoverOfBase'_f]
+  ext : 1 <;>
+  · simp only [limit.lift_π, PullbackCone.mk_π_app, Equiv.trans_apply, Category.assoc,
+    limit.lift_π_assoc, cospan_left, Category.comp_id,
+      limit.isoLimitCone_inv_π_assoc, PullbackCone.π_app_left, IsPullback.cone_fst,
+      pullbackSymmetry_hom_comp_snd_assoc, limit.isoLimitCone_inv_π,
+      PullbackCone.π_app_right, IsPullback.cone_snd, pullbackSymmetry_hom_comp_fst_assoc]
+    rfl
 
 中文:
 定义 openCoverOfBase
@@ -1745,7 +1919,17 @@ definition openCoverOfBase
           (pullback.snd _ _ : pullback g (𝒰.f i) ⟶ _))
       (fun i =>
         pullback.map _ _ _ _ (pullback.fst _ _) (pullback.fst _ _) (𝒰.f i)
-          pullback.conditio
+          pullback.condition.symm pullback.condition.symm)
+      ((Equiv.prodPUnit 𝒰.I₀).symm.trans (Equiv.sigmaEquivProd 𝒰.I₀ PUnit).symm) fun _ => Iso.refl _
+  intro i
+  rw [Iso.refl_hom]; rw [Category.id_comp]; rw [openCoverOfBase'_f]
+  ext : 1 <;>
+  · simp only [limit.lift_π, PullbackCone.mk_π_app, Equiv.trans_apply, Category.assoc,
+    limit.lift_π_assoc, cospan_left, Category.comp_id,
+      limit.isoLimitCone_inv_π_assoc, PullbackCone.π_app_left, IsPullback.cone_fst,
+      pullbackSymmetry_hom_comp_snd_assoc, limit.isoLimitCone_inv_π,
+      PullbackCone.π_app_right, IsPullback.cone_snd, pullbackSymmetry_hom_comp_fst_assoc]
+    rfl
 
 Depends on / 依赖: Category, Category.id_comp, Equiv.prodPUnit, Equiv.sigmaEquivProd, Iso.refl, Iso.refl_hom, PullbackCone, PullbackCone.m, condition, id_comp, limit.lift_, openCoverOfBase, prodPUnit, pullback, pullback.condition.symm, pullback.fst, pullback.map, pullback.snd, refl_hom, sigmaEquivProd
 -/
@@ -1784,7 +1968,18 @@ lemma _root_.AlgebraicGeometry.Scheme.isPullback_of_openCover
   have h : fWX ≫ fXZ = fWY ≫ fYZ :=
     Scheme.Cover.hom_ext (𝒰.pullback₁ fWX) _ _ fun i => by simpa using (H i).w
   suffices IsIso (lift fWX fWY h) from .of_iso_pullback ⟨h⟩ (asIso (lift _ _ h)) (by simp) (by simp)
-  have H₁ (i : _) : IsIso ((openCoverOfLeft 𝒰 fXZ fYZ).pullbackHom (lift fWX fWY 
+  have H₁ (i : _) : IsIso ((openCoverOfLeft 𝒰 fXZ fYZ).pullbackHom (lift fWX fWY h) i) := by
+    let f := map (𝒰.f i ≫ fXZ) fYZ fXZ fYZ (𝒰.f i) (𝟙 Y) (𝟙 Z) (by simp) (by simp)
+    have : IsPullback (fst (𝒰.f i ≫ fXZ) fYZ) f (𝒰.f i) (fst _ _) := by
+      simpa [← IsPullback.paste_vert_iff (.of_hasPullback _ _), f] using .of_hasPullback _ _
+    have H' : IsPullback (fst fWX (𝒰.f i)) (lift (snd _ _) (fst _ _ ≫ fWY) (by simp [← h]))
+        (lift fWX fWY h) f := by
+      rw [← IsPullback.paste_vert_iff this.flip (by ext <;> simp [f])]
+      simpa using .of_hasPullback _ _
+    convert! (inferInstance : IsIso (H'.isoPullback.inv ≫ (H i).isoPullback.hom))
+    aesop (add simp [Iso.eq_inv_comp, Scheme.Cover.pullbackHom])
+  exact MorphismProperty.of_zeroHypercover_target (P := .isomorphisms Scheme)
+    (Scheme.Pullback.openCoverOfLeft 𝒰 fXZ fYZ) H₁
 
 中文:
 引理 _root_.AlgebraicGeometry.概形.isPullback_of_openCover
@@ -1792,7 +1987,18 @@ lemma _root_.AlgebraicGeometry.Scheme.isPullback_of_openCover
   have h : fWX ≫ fXZ = fWY ≫ fYZ :=
     Scheme.Cover.hom_ext (𝒰.pullback₁ fWX) _ _ fun i => by simpa using (H i).w
   suffices IsIso (lift fWX fWY h) from .of_iso_pullback ⟨h⟩ (asIso (lift _ _ h)) (by simp) (by simp)
-  have H₁ (i : _) : IsIso ((openCoverOfLeft 𝒰 fXZ fYZ).pullbackHom (lift fWX fWY 
+  have H₁ (i : _) : IsIso ((openCoverOfLeft 𝒰 fXZ fYZ).pullbackHom (lift fWX fWY h) i) := by
+    let f := map (𝒰.f i ≫ fXZ) fYZ fXZ fYZ (𝒰.f i) (𝟙 Y) (𝟙 Z) (by simp) (by simp)
+    have : IsPullback (fst (𝒰.f i ≫ fXZ) fYZ) f (𝒰.f i) (fst _ _) := by
+      simpa [← IsPullback.paste_vert_iff (.of_hasPullback _ _), f] using .of_hasPullback _ _
+    have H' : IsPullback (fst fWX (𝒰.f i)) (lift (snd _ _) (fst _ _ ≫ fWY) (by simp [← h]))
+        (lift fWX fWY h) f := by
+      rw [← IsPullback.paste_vert_iff this.flip (by ext <;> simp [f])]
+      simpa using .of_hasPullback _ _
+    convert! (inferInstance : IsIso (H'.isoPullback.inv ≫ (H i).isoPullback.hom))
+    aesop (add simp [Iso.eq_inv_comp, Scheme.Cover.pullbackHom])
+  exact MorphismProperty.of_zeroHypercover_target (P := .isomorphisms Scheme)
+    (Scheme.Pullback.openCoverOfLeft 𝒰 fXZ fYZ) H₁
 
 Depends on / 依赖: IsPullback, IsPullback.paste_vert_iff, Scheme, Scheme.Cover.hom_ext, hom_ext, of_hasPullback, of_iso_pullback, openCoverOfLeft, paste_vert_iff, pullbackHom
 -/
@@ -1912,7 +2118,28 @@ definition diagonalRestrictIsoDiagonal
   refine Arrow.isoMk ?_ (Iso.refl _) ?_
   · exact pullback.congrHom rfl (diagonalCover_map _ _ _ _) ≪≫
       pullbackDiagonalMapIso _ _ _ _ ≪≫ (asIso (pullback.diagonal _)).symm
-  have H : pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱)
+  have H : pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱).f ⟨i, (j, j)⟩) ≫
+      pullback.snd _ _ = pullback.snd _ _ ≫ pullback.fst _ _ := by
+    rw [← cancel_mono ((𝒱 i).f _)]
+    apply pullback.hom_ext
+    · trans pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱).f ⟨i, (j, j)⟩) ≫
+        (diagonalCover f 𝒰 𝒱).f _ ≫ pullback.snd _ _
+      · simp [diagonalCover_map]
+      symm
+      trans pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱).f ⟨i, (j, j)⟩) ≫
+        (diagonalCover f 𝒰 𝒱).f _ ≫ pullback.fst _ _
+      · simp [diagonalCover_map]
+      · rw [← pullback.condition_assoc, ← pullback.condition_assoc]
+        simp
+    · simp [pullback.condition, Cover.pullbackHom]
+  dsimp [Cover.pullbackHom] at H ⊢
+  apply pullback.hom_ext
+  · simp only [Category.assoc, pullback.diagonal_fst, Category.comp_id]
+    simp only [← Category.assoc, IsIso.comp_inv_eq]
+    apply pullback.hom_ext <;> simp [H]
+  · simp only [Category.assoc, pullback.diagonal_snd, Category.comp_id]
+    simp only [← Category.assoc, IsIso.comp_inv_eq]
+    apply pullback.hom_ext <;> simp [H]
 
 中文:
 定义 diagonalRestrictIsoDiagonal
@@ -1922,7 +2149,28 @@ definition diagonalRestrictIsoDiagonal
   refine Arrow.isoMk ?_ (Iso.refl _) ?_
   · exact pullback.congrHom rfl (diagonalCover_map _ _ _ _) ≪≫
       pullbackDiagonalMapIso _ _ _ _ ≪≫ (asIso (pullback.diagonal _)).symm
-  have H : pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱)
+  have H : pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱).f ⟨i, (j, j)⟩) ≫
+      pullback.snd _ _ = pullback.snd _ _ ≫ pullback.fst _ _ := by
+    rw [← cancel_mono ((𝒱 i).f _)]
+    apply pullback.hom_ext
+    · trans pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱).f ⟨i, (j, j)⟩) ≫
+        (diagonalCover f 𝒰 𝒱).f _ ≫ pullback.snd _ _
+      · simp [diagonalCover_map]
+      symm
+      trans pullback.snd (pullback.diagonal f) ((diagonalCover f 𝒰 𝒱).f ⟨i, (j, j)⟩) ≫
+        (diagonalCover f 𝒰 𝒱).f _ ≫ pullback.fst _ _
+      · simp [diagonalCover_map]
+      · rw [← pullback.condition_assoc, ← pullback.condition_assoc]
+        simp
+    · simp [pullback.condition, Cover.pullbackHom]
+  dsimp [Cover.pullbackHom] at H ⊢
+  apply pullback.hom_ext
+  · simp only [Category.assoc, pullback.diagonal_fst, Category.comp_id]
+    simp only [← Category.assoc, IsIso.comp_inv_eq]
+    apply pullback.hom_ext <;> simp [H]
+  · simp only [Category.assoc, pullback.diagonal_snd, Category.comp_id]
+    simp only [← Category.assoc, IsIso.comp_inv_eq]
+    apply pullback.hom_ext <;> simp [H]
 
 Depends on / 依赖: Arrow.isoMk, Iso.refl, cancel_mono, congrHom, diagonal, diagonalCover, diagonalCover_map, hom_ext, morphismRestrictOpensRange, pullback, pullback.congrHom, pullback.diagonal, pullback.fst, pullback.hom_ext, pullback.snd, pullbackDiagonalMapIso
 -/
@@ -2286,7 +2534,7 @@ lemma diagonal_SpecMap
   ext1 <;> simp only [pullback.diagonal_fst, pullback.diagonal_snd, ← Spec.map_comp, ← Spec.map_id,
     AlgHom.toRingHom_eq_coe, Category.assoc, pullbackSpecIso_inv_fst, pullbackSpecIso_inv_snd]
   · congr 1; ext x; change x = Algebra.TensorProduct.lmul' R (S := S) (x otimesₜ[R] 1); simp
-  · congr
+  · congr 1; ext x; change x = Algebra.TensorProduct.lmul' R (S := S) (1 otimesₜ[R] x); simp
 
 中文:
 引理 diagonal_SpecMap
@@ -2294,7 +2542,7 @@ lemma diagonal_SpecMap
   ext1 <;> simp only [pullback.diagonal_fst, pullback.diagonal_snd, ← Spec.map_comp, ← Spec.map_id,
     AlgHom.toRingHom_eq_coe, Category.assoc, pullbackSpecIso_inv_fst, pullbackSpecIso_inv_snd]
   · congr 1; ext x; change x = Algebra.TensorProduct.lmul' R (S := S) (x otimesₜ[R] 1); simp
-  · congr
+  · congr 1; ext x; change x = Algebra.TensorProduct.lmul' R (S := S) (1 otimesₜ[R] x); simp
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Algebra, Algebra.TensorProduct.lmul, Category, Category.assoc, Spec.map_comp, Spec.map_id, TensorProduct, diagonal_fst, diagonal_snd, map_comp, map_id, pullback, pullback.diagonal_fst, pullback.diagonal_snd, pullbackSpecIso_inv_fst, pullbackSpecIso_inv_snd, toRingHom_eq_coe
 -/

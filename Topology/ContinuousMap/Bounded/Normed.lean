@@ -1160,7 +1160,10 @@ definition _root_.ContinuousLinearMap.compLeftContinuousBounded
           g.le_opNorm_of_le (f.norm_coe_le_norm x)
       map_add' := fun f g => by ext; simp
       map_smul' := fun c f => by ext; simp } ‖g‖ fun f =>
-        nor
+        norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg g) (norm_nonneg f))
+          (fun x => by exact g.le_opNorm_of_le (f.norm_coe_le_norm x))
+
+@[simp]
 
 中文:
 定义 _root_.连续线性映射.compLeftContinuousBounded
@@ -1171,7 +1174,10 @@ definition _root_.ContinuousLinearMap.compLeftContinuousBounded
           g.le_opNorm_of_le (f.norm_coe_le_norm x)
       map_add' := fun f g => by ext; simp
       map_smul' := fun c f => by ext; simp } ‖g‖ fun f =>
-        nor
+        norm_ofNormedAddCommGroup_le _ (mul_nonneg (norm_nonneg g) (norm_nonneg f))
+          (fun x => by exact g.le_opNorm_of_le (f.norm_coe_le_norm x))
+
+@[simp]
 -/
 protected def _root_.ContinuousLinearMap.compLeftContinuousBounded (g : β ->L[𝕜] γ) :
     (α ->ᵇ β) ->L[𝕜] α ->ᵇ γ :=
@@ -1373,7 +1379,8 @@ lemma norm_add_eq_max
   have hfg : forall x, f x = 0 ∨ g x = 0 := by simpa [DFunLike.ext_iff, mul_eq_zero] using h
   have hfg' x : ‖(f + g) x‖ = max ‖f x‖ ‖g x‖ := by obtain (h | h) := hfg x <;> simp [h]
   have key (c : Real) (hc : 0 <= c) : ‖f + g‖ <= c ↔ max ‖f‖ ‖g‖ <= c := by
-    simp_rw [norm_le hc, hfg', max_le_i
+    simp_rw [norm_le hc, hfg', max_le_iff, norm_le hc, forall_and]
+  exact le_antisymm (by rw [key]; positivity) (by rw [← key]; positivity)
 
 中文:
 引理 norm_add_eq_max
@@ -1382,7 +1389,8 @@ lemma norm_add_eq_max
   have hfg : forall x, f x = 0 ∨ g x = 0 := by simpa [DFunLike.ext_iff, mul_eq_zero] using h
   have hfg' x : ‖(f + g) x‖ = max ‖f x‖ ‖g x‖ := by obtain (h | h) := hfg x <;> simp [h]
   have key (c : Real) (hc : 0 <= c) : ‖f + g‖ <= c ↔ max ‖f‖ ‖g‖ <= c := by
-    simp_rw [norm_le hc, hfg', max_le_i
+    simp_rw [norm_le hc, hfg', max_le_iff, norm_le hc, forall_and]
+  exact le_antisymm (by rw [key]; positivity) (by rw [← key]; positivity)
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, forall_and, le_antisymm, max_le_iff, mul_eq_zero, norm_le, simp_rw
 -/
@@ -2232,7 +2240,7 @@ instance instSup
         obtain ⟨C₂, hg⟩ := g.bounded
         refine ⟨C₁ + C₂, fun x y => ?_⟩
         simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_sup_sub_sup_le_add_nor
+        exact (norm_sup_sub_sup_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
 
 中文:
 实例 instSup
@@ -2244,7 +2252,7 @@ instance instSup
         obtain ⟨C₂, hg⟩ := g.bounded
         refine ⟨C₁ + C₂, fun x y => ?_⟩
         simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_sup_sub_sup_le_add_nor
+        exact (norm_sup_sub_sup_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
 
 Depends on / 依赖: add_le_add, bounded, continuous, continuous_toFun, dist_eq_norm_sub, f.bounded, f.continuous.sup, g.bounded, g.continuous, map_bounded, norm_sup_sub_sup_le_add_norm, simp_rw
 -/
@@ -2272,7 +2280,7 @@ instance instInf
         obtain ⟨C₂, hg⟩ := g.bounded
         refine ⟨C₁ + C₂, fun x y => ?_⟩
         simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_inf_sub_inf_le_add_nor
+        exact (norm_inf_sub_inf_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
 
 中文:
 实例 instInf
@@ -2284,7 +2292,7 @@ instance instInf
         obtain ⟨C₂, hg⟩ := g.bounded
         refine ⟨C₁ + C₂, fun x y => ?_⟩
         simp_rw [dist_eq_norm_sub] at hf hg ⊢
-        exact (norm_inf_sub_inf_le_add_nor
+        exact (norm_inf_sub_inf_le_add_norm _ _ _ _).trans (add_le_add (hf _ _) (hg _ _)) }
 
 Depends on / 依赖: add_le_add, bounded, continuous, continuous_toFun, dist_eq_norm_sub, f.bounded, f.continuous.inf, g.bounded, g.continuous, map_bounded, norm_inf_sub_inf_le_add_norm, simp_rw
 -/

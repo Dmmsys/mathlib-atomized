@@ -54,7 +54,23 @@ theorem induction
   replace hn : Jac ^ n <= Module.annihilator R M := hn ▸ bot_le
   have {M} [AddCommGroup M] [Module R₀ M] [Module R M] [IsScalarTower R₀ R M] :
       Jac <= Module.annihilator R M -> P M := by
-    rw [← SetLike.co
+    rw [← SetLike.coe_subset_coe]; rw [← Module.isTorsionBySet_iff_subset_annihilator]
+    intro h
+    let _ := h.module
+    have := (h.semilinearMap.isSemisimpleModule_iff_of_bijective Function.bijective_id).2
+      inferInstance
+    exact h0 _ h
+  induction n generalizing M with
+  | zero => rw [Jac.pow_zero, Ideal.one_eq_top] at hn; exact this (le_top.trans hn)
+  | succ n ih => ?_
+  obtain _ | n := n
+  · rw [Jac.pow_one] at hn; exact this hn
+  refine h1 _ (ih _ ?_) (ih _ ?_)
+  · rwa [← Submodule.annihilator_top, Submodule.le_annihilator_iff, Jac.pow_succ,
+      Submodule.mul_smul, ← Submodule.le_annihilator_iff] at hn
+  · rw [← SetLike.coe_subset_coe, ← Module.isTorsionBySet_iff_subset_annihilator,
+      Module.isTorsionBySet_quotient_iff]
+    exact fun m i hi => Submodule.smul_mem_smul (Ideal.pow_le_self n.succ_ne_zero hi) trivial
 
 中文:
 定理 induction
@@ -64,7 +80,23 @@ theorem induction
   replace hn : Jac ^ n <= Module.annihilator R M := hn ▸ bot_le
   have {M} [AddCommGroup M] [Module R₀ M] [Module R M] [IsScalarTower R₀ R M] :
       Jac <= Module.annihilator R M -> P M := by
-    rw [← SetLike.co
+    rw [← SetLike.coe_subset_coe]; rw [← Module.isTorsionBySet_iff_subset_annihilator]
+    intro h
+    let _ := h.module
+    have := (h.semilinearMap.isSemisimpleModule_iff_of_bijective Function.bijective_id).2
+      inferInstance
+    exact h0 _ h
+  induction n generalizing M with
+  | zero => rw [Jac.pow_zero, Ideal.one_eq_top] at hn; exact this (le_top.trans hn)
+  | succ n ih => ?_
+  obtain _ | n := n
+  · rw [Jac.pow_one] at hn; exact this hn
+  refine h1 _ (ih _ ?_) (ih _ ?_)
+  · rwa [← Submodule.annihilator_top, Submodule.le_annihilator_iff, Jac.pow_succ,
+      Submodule.mul_smul, ← Submodule.le_annihilator_iff] at hn
+  · rw [← SetLike.coe_subset_coe, ← Module.isTorsionBySet_iff_subset_annihilator,
+      Module.isTorsionBySet_quotient_iff]
+    exact fun m i hi => Submodule.smul_mem_smul (Ideal.pow_le_self n.succ_ne_zero hi) trivial
 -/
 @[elab_as_elim] protected theorem induction
     {P : forall (M : Type u) [AddCommGroup M] [Module R₀ M] [Module R M], Prop}
@@ -110,7 +142,13 @@ theorem finite_of_isNoetherian_or_isArtinian
     Module.Finite R₀ M) (fun M _ _ _ _ _ hJ h => ?_) (fun M _ _ _ _ hs hq h => ?_)
   · let _ := hJ.module
     have := IsSemisimpleModule.finite_tfae (R := R) (M := M)
-    simp_rw [this.out 1 0, this.ou
+    simp_rw [this.out 1 0, this.out 2 0, or_self,
+      hJ.semilinearMap.finite_iff_of_bijective Function.bijective_id] at h
+    exact .trans (R ⧸ Ring.jacobson R) M
+  · let N := (Ring.jacobson R • ⊤ : Submodule R M).restrictScalars R₀
+    have : Module.Finite R₀ N := by refine hs (h.imp ?_ ?_) <;> (intro; infer_instance)
+    have : Module.Finite R₀ (M ⧸ N) := by refine hq (h.imp ?_ ?_) <;> (intro; infer_instance)
+    exact .of_submodule_quotient N
 
 中文:
 定理 finite_of_isNoetherian_or_isArtinian
@@ -119,7 +157,13 @@ theorem finite_of_isNoetherian_or_isArtinian
     Module.Finite R₀ M) (fun M _ _ _ _ _ hJ h => ?_) (fun M _ _ _ _ hs hq h => ?_)
   · let _ := hJ.module
     have := IsSemisimpleModule.finite_tfae (R := R) (M := M)
-    simp_rw [this.out 1 0, this.ou
+    simp_rw [this.out 1 0, this.out 2 0, or_self,
+      hJ.semilinearMap.finite_iff_of_bijective Function.bijective_id] at h
+    exact .trans (R ⧸ Ring.jacobson R) M
+  · let N := (Ring.jacobson R • ⊤ : Submodule R M).restrictScalars R₀
+    have : Module.Finite R₀ N := by refine hs (h.imp ?_ ?_) <;> (intro; infer_instance)
+    have : Module.Finite R₀ (M ⧸ N) := by refine hq (h.imp ?_ ?_) <;> (intro; infer_instance)
+    exact .of_submodule_quotient N
 -/
 private theorem finite_of_isNoetherian_or_isArtinian :
     IsNoetherian R M ∨ IsArtinian R M -> Module.Finite R₀ M := by
@@ -188,7 +232,7 @@ theorem isNoetherian_iff_isArtinian
   proof: IsSemiprimaryRing.induction R R M (P := fun M => IsNoetherian R M ↔ IsArtinian R M)
     (fun M _ _ _ _ _ _ => IsSemisimpleModule.finite_tfae.out 1 2)
     fun M _ _ _ _ h h' => let N : Submodule R M := Ring.jacobson R • ⊤; by
-      simp_rw [isNoetherian_iff_submodule_quotient N, isArtinian_iff_submod
+      simp_rw [isNoetherian_iff_submodule_quotient N, isArtinian_iff_submodule_quotient N, N, h, h']
 
 中文:
 定理 isNoetherian_iff_isArtinian
@@ -196,7 +240,7 @@ theorem isNoetherian_iff_isArtinian
   证明: IsSemiprimaryRing.induction R R M (P := fun M => IsNoetherian R M ↔ IsArtinian R M)
     (fun M _ _ _ _ _ _ => IsSemisimpleModule.finite_tfae.out 1 2)
     fun M _ _ _ _ h h' => let N : Submodule R M := Ring.jacobson R • ⊤; by
-      simp_rw [isNoetherian_iff_submodule_quotient N, isArtinian_iff_submod
+      simp_rw [isNoetherian_iff_submodule_quotient N, isArtinian_iff_submodule_quotient N, N, h, h']
 
 Depends on / 依赖: IsArtinian, IsNoetherian, IsSemiprimaryRing, IsSemiprimaryRing.induction, IsSemisimpleModule, IsSemisimpleModule.finite_tfae.out, Ring.jacobson, Submodule, finite_tfae, isArtinian_iff_submodule_quotient, isNoetherian_iff_submodule_quotient, jacobson, simp_rw
 -/
@@ -216,7 +260,7 @@ theorem isNoetherian_iff_finite_of_jacobson_fg
     (P := fun M => Module.Finite R M -> IsNoetherian R M)
     (fun M _ _ _ _ _ _ => (IsSemisimpleModule.finite_tfae.out 0 1).mp)
     fun M _ _ _ _ hs hq fin => (isNoetherian_iff_submodule_quotient (Ring.jacobson R • ⊤)).mpr
-      ⟨hs (.of_fg
+      ⟨hs (.of_fg (.smul fg fin.1)), hq inferInstance⟩⟩
 
 中文:
 定理 isNoetherian_iff_finite_of_jacobson_fg
@@ -225,7 +269,7 @@ theorem isNoetherian_iff_finite_of_jacobson_fg
     (P := fun M => Module.Finite R M -> IsNoetherian R M)
     (fun M _ _ _ _ _ _ => (IsSemisimpleModule.finite_tfae.out 0 1).mp)
     fun M _ _ _ _ hs hq fin => (isNoetherian_iff_submodule_quotient (Ring.jacobson R • ⊤)).mpr
-      ⟨hs (.of_fg
+      ⟨hs (.of_fg (.smul fg fin.1)), hq inferInstance⟩⟩
 
 Depends on / 依赖: Finite, IsNoetherian, IsSemiprimaryRing, IsSemiprimaryRing.induction, IsSemisimpleModule, IsSemisimpleModule.finite_tfae.out, Module, Module.Finite, Ring.jacobson, finite_tfae, isNoetherian_iff_submodule_quotient, jacobson, of_fg
 -/
@@ -273,7 +317,9 @@ theorem IsArtinianRing.tfae
   rw [isFiniteLength_iff_isNoetherian_isArtinian]
   tfae_have 4 -> 2 := And.left
   tfae_have 2 -> 4 := fun h => ⟨h, tfae_2_iff_3.mp h⟩
-  tfa
+  tfae_finish
+
+@[stacks 00JB "A ring is Artinian if and only if it has finite length as a module over itself."]
 
 中文:
 定理 是Artin环.tfae
@@ -285,7 +331,9 @@ theorem IsArtinianRing.tfae
   rw [isFiniteLength_iff_isNoetherian_isArtinian]
   tfae_have 4 -> 2 := And.left
   tfae_have 2 -> 4 := fun h => ⟨h, tfae_2_iff_3.mp h⟩
-  tfa
+  tfae_finish
+
+@[stacks 00JB "A ring is Artinian if and only if it has finite length as a module over itself."]
 
 Depends on / 依赖: And.left, IsSemiprimaryRing, IsSemiprimaryRing.isNoetherian_iff_isArtinian, isFiniteLength_iff_isNoetherian_isArtinian, isNoetherian_iff_isArtinian, tfae_2_iff_3, tfae_2_iff_3.mp, tfae_finish, tfae_have
 -/
@@ -358,7 +406,13 @@ theorem isNoetherian_of_finite_isArtinian
   rw [← Set.finite_coe_iff] at fin
   rw [← isNoetherian_top_iff]; rw [← span]
   have _ (i : M) : IsNoetherian R (Submodule.span R {i}) := by
-    rw [Lin
+    rw [LinearMap.span_singleton_eq_range]; rw [← (LinearMap.quotKerEquivRange _).isNoetherian_iff]
+    let e (I : Ideal R) : R ⧸ I ->ₛₗ[Ideal.Quotient.mk I] R ⧸ I := ⟨.id _, fun _ _ => rfl⟩
+    rw [(e _).isNoetherian_iff_of_bijective Function.bijective_id]
+    refine @instIsNoetherianRingOfIsArtinianRing _ _ ?_
+    rw [IsArtinianRing]; rw [← (e _).isArtinian_iff_of_bijective Function.bijective_id]; rw [(LinearMap.quotKerEquivRange _).isArtinian_iff]
+    infer_instance
+  infer_instance
 
 中文:
 定理 isNoetherian_of_finite_isArtinian
@@ -369,7 +423,13 @@ theorem isNoetherian_of_finite_isArtinian
   rw [← Set.finite_coe_iff] at fin
   rw [← isNoetherian_top_iff]; rw [← span]
   have _ (i : M) : IsNoetherian R (Submodule.span R {i}) := by
-    rw [Lin
+    rw [LinearMap.span_singleton_eq_range]; rw [← (LinearMap.quotKerEquivRange _).isNoetherian_iff]
+    let e (I : Ideal R) : R ⧸ I ->ₛₗ[Ideal.Quotient.mk I] R ⧸ I := ⟨.id _, fun _ _ => rfl⟩
+    rw [(e _).isNoetherian_iff_of_bijective Function.bijective_id]
+    refine @instIsNoetherianRingOfIsArtinianRing _ _ ?_
+    rw [IsArtinianRing]; rw [← (e _).isArtinian_iff_of_bijective Function.bijective_id]; rw [(LinearMap.quotKerEquivRange _).isArtinian_iff]
+    infer_instance
+  infer_instance
 
 Depends on / 依赖: Ideal.Quotient.mk, IsNoetherian, LinearMap, LinearMap.quotKerEquivRange, LinearMap.span_singleton_eq_range, Module, Module.finite_def.mp, Quotient, Set.finite_coe_iff, Submodule, Submodule.fg_def.mp, Submodule.span, Submodule.span_iUnion, fg_def, finite_coe_iff, finite_def, iUnion_of_singleton_coe, isNoetherian_iff, isNoetherian_iff_of_bijectiv, isNoetherian_top_iff
 -/
@@ -399,7 +459,13 @@ theorem IsNoetherianRing.isArtinianRing_of_krullDimLE_zero
   have : Finite Spec :=
     (minimalPrimes.finite_of_isNoetherianRing R).subset Ideal.mem_minimalPrimes_of_krullDimLE_zero
   have (I : Spec) : I.1.IsPrime := I.2
-  have (I : Spec) : IsSemisimpleRing (
+  have (I : Spec) : IsSemisimpleRing (R ⧸ I.1) := let _ := Ideal.Quotient.field I.1; inferInstance
+  have : IsSemisimpleRing (R ⧸ Ring.jacobson R) := by
+    rw [eq]; rw [nilradical_eq_sInf]; rw [sInf_eq_iInf']
+    exact (Ideal.quotientInfRingEquivPiQuotient _ fun I J ne =>
+Ideal.isCoprime_of_isMaximal Subtype.coe_ne_coe.mpr ne).symm.isSemisimpleRing
+  have : IsSemiprimaryRing R := ⟨this, eq ▸ IsNoetherianRing.isNilpotent_nilradical R⟩
+  IsSemiprimaryRing.isNoetherian_iff_isArtinian.mp ‹_›
 
 中文:
 定理 是Noether环.isArtinianRing_of_krullDimLE_zero
@@ -409,7 +475,13 @@ theorem IsNoetherianRing.isArtinianRing_of_krullDimLE_zero
   have : Finite Spec :=
     (minimalPrimes.finite_of_isNoetherianRing R).subset Ideal.mem_minimalPrimes_of_krullDimLE_zero
   have (I : Spec) : I.1.IsPrime := I.2
-  have (I : Spec) : IsSemisimpleRing (
+  have (I : Spec) : IsSemisimpleRing (R ⧸ I.1) := let _ := Ideal.Quotient.field I.1; inferInstance
+  have : IsSemisimpleRing (R ⧸ Ring.jacobson R) := by
+    rw [eq]; rw [nilradical_eq_sInf]; rw [sInf_eq_iInf']
+    exact (Ideal.quotientInfRingEquivPiQuotient _ fun I J ne =>
+Ideal.isCoprime_of_isMaximal Subtype.coe_ne_coe.mpr ne).symm.isSemisimpleRing
+  have : IsSemiprimaryRing R := ⟨this, eq ▸ IsNoetherianRing.isNilpotent_nilradical R⟩
+  IsSemiprimaryRing.isNoetherian_iff_isArtinian.mp ‹_›
 
 Depends on / 依赖: Finite, I.IsPrime, Ideal.Quotient.field, Ideal.mem_minimalPrimes_of_krullDimLE_zero, Ideal.quotientInfRingEquivPiQuotient, IsPrime, IsSemisimpleRing, Quotient, Ring.jacobson, Ring.jacobson_eq_nilradical_of_krullDimLE_zero, finite_of_isNoetherianRing, jacobson, jacobson_eq_nilradical_of_krullDimLE_zero, mem_minimalPrimes_of_krullDimLE_zero, minimalPrimes, minimalPrimes.finite_of_isNoetherianRing, nilradical_eq_sInf, quotientInfRingEquivPiQuotient, sInf_eq_iInf, subset
 -/
@@ -473,13 +545,15 @@ English:
 lemma isArtinianRing_iff_isNilpotent_maximalIdeal
   statement: (R : Type*) [CommRing R] [IsNoetherianRing R]
   proof: by
-  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ideal.FG.isNilpotent_iff_le_nilradical (IsNoetherian.noetherian _)]; rw [← and_iff_left (a := Ring.KrullDimLE 0 R) ‹IsLocalRing R›]; rw [(Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 3 rfl rfl]; rw [IsLocalRing.isMaximal_iff]; rw [le_antisymm_i
+  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ideal.FG.isNilpotent_iff_le_nilradical (IsNoetherian.noetherian _)]; rw [← and_iff_left (a := Ring.KrullDimLE 0 R) ‹IsLocalRing R›]; rw [(Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 3 rfl rfl]; rw [IsLocalRing.isMaximal_iff]; rw [le_antisymm_iff]; rw [and_iff_right]
+  exact IsLocalRing.le_maximalIdeal (by simp [nilradical, Ideal.radical_eq_top])
 
 中文:
 引理 isArtinianRing_iff_isNilpotent_maximalIdeal
   结论: (R : 类型) [交换环 R] [是Noether环 R]
   证明: by
-  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ideal.FG.isNilpotent_iff_le_nilradical (IsNoetherian.noetherian _)]; rw [← and_iff_left (a := Ring.KrullDimLE 0 R) ‹IsLocalRing R›]; rw [(Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 3 rfl rfl]; rw [IsLocalRing.isMaximal_iff]; rw [le_antisymm_i
+  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ideal.FG.isNilpotent_iff_le_nilradical (IsNoetherian.noetherian _)]; rw [← and_iff_left (a := Ring.KrullDimLE 0 R) ‹IsLocalRing R›]; rw [(Ring.krullDimLE_zero_and_isLocalRing_tfae R).out 0 3 rfl rfl]; rw [IsLocalRing.isMaximal_iff]; rw [le_antisymm_iff]; rw [and_iff_right]
+  exact IsLocalRing.le_maximalIdeal (by simp [nilradical, Ideal.radical_eq_top])
 
 Depends on / 依赖: Ideal.FG.isNilpotent_iff_le_nilradical, Ideal.radical_eq_top, IsLocalRing, IsLocalRing.isMaximal_iff, IsLocalRing.le_maximalIdeal, IsNoetherian, IsNoetherian.noetherian, KrullDimLE, Ring.KrullDimLE, Ring.krullDimLE_zero_and_isLocalRing_tfae, and_iff_left, and_iff_right, isArtinianRing_iff_krullDimLE_zero, isMaximal_iff, isNilpotent_iff_le_nilradical, krullDimLE_zero_and_isLocalRing_tfae, le_antisymm_iff, le_maximalIdeal, nilradical, noetherian
 -/

@@ -629,6 +629,10 @@ definition pointwiseDistribMulAction
   mul_smul _a₁ _a₂ S :=
     (congr_arg (fun f : Module.End R M => S.map f) (LinearMap.ext <| mul_smul _ _)).trans
       (S.map_comp _ _)
+  smul_zero _a := map_bot _
+  smul_add _a _S₁ _S₂ := map_sup _ _ _
+
+scoped[Pointwise] attribute [instance] Submodule.pointwiseDistribMulAction
 
 中文:
 定义 pointwiseDistribMulAction
@@ -639,6 +643,10 @@ definition pointwiseDistribMulAction
   mul_smul _a₁ _a₂ S :=
     (congr_arg (fun f : Module.End R M => S.map f) (LinearMap.ext <| mul_smul _ _)).trans
       (S.map_comp _ _)
+  smul_zero _a := map_bot _
+  smul_add _a _S₁ _S₂ := map_sup _ _ _
+
+scoped[Pointwise] attribute [instance] Submodule.pointwiseDistribMulAction
 -/
 protected def pointwiseDistribMulAction : DistribMulAction α (Submodule R M) where
   smul a S := S.map (DistribSMul.toLinearMap R M a : M ->ₗ[R] M)
@@ -1234,7 +1242,8 @@ lemma set_smul_inductionOn
       zero_mem' := ⟨Submodule.zero_mem _, zero⟩
       add_mem' := fun ⟨mem, h⟩ ⟨mem', h'⟩ => ⟨_, add mem mem' h h'⟩
       smul_mem' := fun r _ ⟨mem, h⟩ => ⟨_, smul₁ r mem h⟩ }
-    (fun _ _ mem mem' => ⟨me
+    (fun _ _ mem mem' => ⟨mem_set_smul_of_mem_mem mem mem', smul₀ mem mem'⟩) hx
+  h
 
 中文:
 引理 set_smul_inductionOn
@@ -1244,7 +1253,8 @@ lemma set_smul_inductionOn
       zero_mem' := ⟨Submodule.zero_mem _, zero⟩
       add_mem' := fun ⟨mem, h⟩ ⟨mem', h'⟩ => ⟨_, add mem mem' h h'⟩
       smul_mem' := fun r _ ⟨mem, h⟩ => ⟨_, smul₁ r mem h⟩ }
-    (fun _ _ mem mem' => ⟨me
+    (fun _ _ mem mem' => ⟨mem_set_smul_of_mem_mem mem mem', smul₀ mem mem'⟩) hx
+  h
 
 Depends on / 依赖: Submodule, Submodule.zero_mem, add_mem, carrier, mem_set_smul_of_mem_mem, motive, set_smul_le, smul_mem, zero_mem
 -/
@@ -1366,7 +1376,10 @@ lemma mem_singleton_set_smul
       exact ⟨t • n, by aesop, smul_comm _ _ _⟩
     | add mem₁ mem₂ h₁ h₂ =>
       rcases h₁ with ⟨m₁, h₁, rfl⟩
-      rcases h₂ 
+      rcases h₂ with ⟨m₂, h₂, rfl⟩
+      exact ⟨m₁ + m₂, Submodule.add_mem _ h₁ h₂, by simp⟩
+    | zero => exact ⟨0, Submodule.zero_mem _, by simp⟩
+  · aesop
 
 中文:
 引理 mem_singleton_set_smul
@@ -1381,7 +1394,10 @@ lemma mem_singleton_set_smul
       exact ⟨t • n, by aesop, smul_comm _ _ _⟩
     | add mem₁ mem₂ h₁ h₂ =>
       rcases h₁ with ⟨m₁, h₁, rfl⟩
-      rcases h₂ 
+      rcases h₂ with ⟨m₂, h₂, rfl⟩
+      exact ⟨m₁ + m₂, Submodule.add_mem _ h₁ h₂, by simp⟩
+    | zero => exact ⟨0, Submodule.zero_mem _, by simp⟩
+  · aesop
 
 Depends on / 依赖: Submodule, Submodule.add_mem, Submodule.set_smul_inductionOn, Submodule.zero_mem, add_mem, fconstructor, set_smul_inductionOn, smul_comm, zero_mem
 -/
@@ -1413,7 +1429,9 @@ lemma smul_inductionOn_pointwise
     p x (by rwa [← Submodule.singleton_set_smul])
   refine Submodule.set_smul_inductionOn (motive := p') _ (N.singleton_set_smul a ▸ hx)
       (fun r n hr hn => ?_) smul₁ add zero
-  · push _ 
+  · push _ in _ at hr
+    subst hr
+    exact smul₀ n hn
 
 中文:
 引理 smul_inductionOn_pointwise
@@ -1424,7 +1442,9 @@ lemma smul_inductionOn_pointwise
     p x (by rwa [← Submodule.singleton_set_smul])
   refine Submodule.set_smul_inductionOn (motive := p') _ (N.singleton_set_smul a ▸ hx)
       (fun r n hr hn => ?_) smul₁ add zero
-  · push _ 
+  · push _ in _ at hr
+    subst hr
+    exact smul₀ n hn
 
 Depends on / 依赖: N.singleton_set_smul, Submodule, Submodule.set_smul_inductionOn, Submodule.singleton_set_smul, motive, set_smul_inductionOn, singleton_set_smul
 -/

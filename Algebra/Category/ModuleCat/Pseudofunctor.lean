@@ -117,7 +117,8 @@ definition CommRingCat.moduleCatExtendScalarsPseudofunctor
     (fun R => Cat.Hom.isoMk <| extendScalarsId R)
     (fun f g => Cat.Hom.isoMk <| extendScalarsComp f.hom g.hom) ?_ ?_ ?_
   · intros; ext1; apply extendScalars_assoc'
-  
+  · intros; ext1; apply extendScalars_id_comp
+  · intros; ext1; apply extendScalars_comp_id
 
 中文:
 定义 交换环范畴.moduleCatExtendScalarsPseudofunctor
@@ -129,7 +130,8 @@ definition CommRingCat.moduleCatExtendScalarsPseudofunctor
     (fun R => Cat.Hom.isoMk <| extendScalarsId R)
     (fun f g => Cat.Hom.isoMk <| extendScalarsComp f.hom g.hom) ?_ ?_ ?_
   · intros; ext1; apply extendScalars_assoc'
-  
+  · intros; ext1; apply extendScalars_id_comp
+  · intros; ext1; apply extendScalars_comp_id
 
 Depends on / 依赖: Cat.Hom.isoMk, Cat.of, LocallyDiscrete, LocallyDiscrete.mkPseudofunctor, ModuleCat, extendScalars, extendScalarsComp, extendScalarsId, extendScalars_assoc, extendScalars_comp_id, extendScalars_id_comp, f.hom, g.hom, intros, mkPseudofunctor, toCatHom
 -/

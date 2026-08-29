@@ -592,7 +592,11 @@ theorem w_map_wMk
     ext1 x
     cases f x
     rfl
-  rw [this
+  rw [this]
+  dsimp
+  rw [wMk_eq]; rw [wMk_eq]
+  have h := MvPFunctor.map_eq P.wp g
+  rw [h]; rw [comp_wPathCasesOn]
 
 中文:
 定理 w_map_wMk
@@ -609,7 +613,11 @@ theorem w_map_wMk
     ext1 x
     cases f x
     rfl
-  rw [this
+  rw [this]
+  dsimp
+  rw [wMk_eq]; rw [wMk_eq]
+  have h := MvPFunctor.map_eq P.wp g
+  rw [h]; rw [comp_wPathCasesOn]
 
 Depends on / 依赖: Function, Function.comp_def, MvFunctor, MvFunctor.map, MvPFunctor, MvPFunctor.map_eq, P.wMk, P.wp, comp_def, comp_wPathCasesOn, map_eq, wMk_eq
 -/

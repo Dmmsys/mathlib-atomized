@@ -640,7 +640,8 @@ instance :
     fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
       ⟨fun ⟨h⟩ => ⟨(f.symm.toOrderEmbedding.trans h).trans g.toOrderEmbedding⟩, fun ⟨h⟩ =>
         ⟨(f.toOrderEmbedding.trans h).trans g.symm.toOrderEmbedding⟩⟩
-  le_refl o := inductionOn o fun α _ => ⟨(OrderIso
+  le_refl o := inductionOn o fun α _ => ⟨(OrderIso.refl _).toOrderEmbedding⟩
+  le_trans o₁ o₂ o₃ := inductionOn₃ o₁ o₂ o₃ fun _ _ _ _ _ _ ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩
 
 中文:
 实例 :
@@ -649,7 +650,8 @@ instance :
     fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
       ⟨fun ⟨h⟩ => ⟨(f.symm.toOrderEmbedding.trans h).trans g.toOrderEmbedding⟩, fun ⟨h⟩ =>
         ⟨(f.toOrderEmbedding.trans h).trans g.symm.toOrderEmbedding⟩⟩
-  le_refl o := inductionOn o fun α _ => ⟨(OrderIso
+  le_refl o := inductionOn o fun α _ => ⟨(OrderIso.refl _).toOrderEmbedding⟩
+  le_trans o₁ o₂ o₃ := inductionOn₃ o₁ o₂ o₃ fun _ _ _ _ _ _ ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩
 
 Depends on / 依赖: Nonempty, OrderIso, OrderIso.refl, Quotient, Quotient.liftOn, f.symm.toOrderEmbedding.trans, f.toOrderEmbedding.trans, f.trans, g.symm.toOrderEmbedding, g.toOrderEmbedding, inductionOn, le_refl, le_trans, propext, toOrderEmbedding
 -/
@@ -1035,7 +1037,7 @@ theorem lift_type_le_iff
 refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedding.trans h).trans
     ULift.orderIso.symm.toOrderEmbedding⟩
   rw [← type_ulift]; rw [← type_ulift]; rw [type_le_type_iff] at h
-  exact ⟨(ULift.orderIso.symm.toOrderEmbedding.trans h.some).trans ULift.orderIso.toOrderEmbedd
+  exact ⟨(ULift.orderIso.symm.toOrderEmbedding.trans h.some).trans ULift.orderIso.toOrderEmbedding⟩
 
 中文:
 定理 lift_type_le_iff
@@ -1044,7 +1046,7 @@ refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedd
 refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedding.trans h).trans
     ULift.orderIso.symm.toOrderEmbedding⟩
   rw [← type_ulift]; rw [← type_ulift]; rw [type_le_type_iff] at h
-  exact ⟨(ULift.orderIso.symm.toOrderEmbedding.trans h.some).trans ULift.orderIso.toOrderEmbedd
+  exact ⟨(ULift.orderIso.symm.toOrderEmbedding.trans h.some).trans ULift.orderIso.toOrderEmbedding⟩
 
 Depends on / 依赖: ULift.orderIso.symm.toOrderEmbedding, ULift.orderIso.symm.toOrderEmbedding.trans, ULift.orderIso.toOrderEmbedding, ULift.orderIso.toOrderEmbedding.trans, h.some, orderIso, toOrderEmbedding, type_le_type, type_le_type_iff, type_ulift
 -/

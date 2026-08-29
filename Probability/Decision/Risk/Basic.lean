@@ -275,7 +275,10 @@ lemma bayesRisk_const'
   intro κ hκ
   rw [avgRisk_const_left' hl]
   refine le_trans ?_ (iInf_mul_le_lintegral (fun y => ∫⁻ θ, ℓ θ y ∂π))
-  rw [Measure.comp_apply_univ]; rw [ENNReal.iInf_mul' hl_pos (fun hμ => h_z
+  rw [Measure.comp_apply_univ]; rw [ENNReal.iInf_mul' hl_pos (fun hμ => h_zero (by simpa using hμ))]
+  gcongr with y
+  rw [lintegral_mul_const]
+  fun_prop
 
 中文:
 引理 bayesRisk_const'
@@ -286,7 +289,10 @@ lemma bayesRisk_const'
   intro κ hκ
   rw [avgRisk_const_left' hl]
   refine le_trans ?_ (iInf_mul_le_lintegral (fun y => ∫⁻ θ, ℓ θ y ∂π))
-  rw [Measure.comp_apply_univ]; rw [ENNReal.iInf_mul' hl_pos (fun hμ => h_z
+  rw [Measure.comp_apply_univ]; rw [ENNReal.iInf_mul' hl_pos (fun hμ => h_zero (by simpa using hμ))]
+  gcongr with y
+  rw [lintegral_mul_const]
+  fun_prop
 
 Depends on / 依赖: ENNReal, ENNReal.iInf_mul, Measure, Measure.comp_apply_univ, avgRisk_const_left, bayesRisk, bayesRisk_le_iInf, comp_apply_univ, fun_prop, h_zero, hl_pos, iInf_mul, iInf_mul_le_lintegral, le_antisymm, le_iInf_iff, le_trans, lintegral_mul_const, simp_rw, trans_eq
 -/
@@ -382,7 +388,12 @@ lemma avgRisk_le_mul'
   _ = ∫⁻ θ, C * ∫⁻ x, κ x .univ ∂P θ ∂π := by simp [Kernel.comp_apply' _ _ _ .univ]
   _ <= ∫⁻ θ, C * ∫⁻ x, κ.bound ∂P θ ∂π := by
     gcongr with θ x
-    exact Kernel.measure_le_bound κ x Se
+    exact Kernel.measure_le_bound κ x Set.univ
+  _ <= ∫⁻ θ, C * κ.bound * P.bound ∂π := by
+    conv_lhs => simp only [lintegral_const, ← mul_assoc]
+    gcongr with θ
+    exact Kernel.measure_le_bound P θ Set.univ
+  _ = C * κ.bound * P.bound * π Set.univ := by simp
 
 中文:
 引理 avgRisk_le_mul'
@@ -392,7 +403,12 @@ lemma avgRisk_le_mul'
   _ = ∫⁻ θ, C * ∫⁻ x, κ x .univ ∂P θ ∂π := by simp [Kernel.comp_apply' _ _ _ .univ]
   _ <= ∫⁻ θ, C * ∫⁻ x, κ.bound ∂P θ ∂π := by
     gcongr with θ x
-    exact Kernel.measure_le_bound κ x Se
+    exact Kernel.measure_le_bound κ x Set.univ
+  _ <= ∫⁻ θ, C * κ.bound * P.bound ∂π := by
+    conv_lhs => simp only [lintegral_const, ← mul_assoc]
+    gcongr with θ
+    exact Kernel.measure_le_bound P θ Set.univ
+  _ = C * κ.bound * P.bound * π Set.univ := by simp
 
 Depends on / 依赖: Kernel, Kernel.comp_apply, Kernel.measure_le_bound, P.bound, Set.univ, comp_apply, conv_lhs, lintegral_const, measure_le_bound, mul_assoc
 -/
@@ -559,7 +575,11 @@ lemma bayesRisk_eq_iInf_measure_of_subsingleton
   rw [bayesRisk]; rw [iInf_subtype']; rw [iInf_subtype']
   let e : {κ : Kernel 𝓧 𝓨 // IsMarkovKernel κ} ≃ {μ : Measure 𝓨 // IsProbabilityMeasure μ} :=
     { toFun κ := ⟨κ.1 x, κ.2.isProbabilityMeasure x⟩
-  
+      invFun μ := ⟨Kernel.const 𝓧 μ, ⟨fun _ => μ.2⟩⟩
+      left_inv κ := by ext y; simp only [Kernel.const_apply, Subsingleton.elim x y]
+      right_inv μ := by simp }
+  rw [← Equiv.iInf_comp e.symm]
+  rfl
 
 中文:
 引理 bayesRisk_eq_iInf_measure_of_subsingleton
@@ -570,7 +590,11 @@ lemma bayesRisk_eq_iInf_measure_of_subsingleton
   rw [bayesRisk]; rw [iInf_subtype']; rw [iInf_subtype']
   let e : {κ : Kernel 𝓧 𝓨 // IsMarkovKernel κ} ≃ {μ : Measure 𝓨 // IsProbabilityMeasure μ} :=
     { toFun κ := ⟨κ.1 x, κ.2.isProbabilityMeasure x⟩
-  
+      invFun μ := ⟨Kernel.const 𝓧 μ, ⟨fun _ => μ.2⟩⟩
+      left_inv κ := by ext y; simp only [Kernel.const_apply, Subsingleton.elim x y]
+      right_inv μ := by simp }
+  rw [← Equiv.iInf_comp e.symm]
+  rfl
 
 Depends on / 依赖: Equiv.iInf_comp, IsMarkovKernel, IsProbabilityMeasure, Kernel, Kernel.const, Kernel.const_apply, Measure, Subsingleton, Subsingleton.elim, bayesRisk, const_apply, e.symm, hX.some, iInf_comp, iInf_subtype, invFun, isEmpty_or_nonempty, isProbabilityMeasure, left_inv, right_inv
 -/
@@ -602,7 +626,9 @@ lemma bayesRisk_of_subsingleton'
   refine fun μ hμ => (iInf_le_lintegral (μ := μ) _).trans_eq ?_
   rw [lintegral_lintegral_swap]
   · congr with θ
-    rw [lintegral_mul_const _ (by f
+    rw [lintegral_mul_const _ (by fun_prop)]; rw [mul_comm]
+  · have := P.measurable_coe .univ
+    fun_prop
 
 中文:
 引理 bayesRisk_of_subsingleton'
@@ -614,7 +640,9 @@ lemma bayesRisk_of_subsingleton'
   refine fun μ hμ => (iInf_le_lintegral (μ := μ) _).trans_eq ?_
   rw [lintegral_lintegral_swap]
   · congr with θ
-    rw [lintegral_mul_const _ (by f
+    rw [lintegral_mul_const _ (by fun_prop)]; rw [mul_comm]
+  · have := P.measurable_coe .univ
+    fun_prop
 
 Depends on / 依赖: P.measurable_coe, avgRisk_const_right, bayesRisk_eq_iInf_measure_of_subsingleton, bayesRisk_le_iInf, fun_prop, iInf_le_lintegral, le_antisymm, le_iInf_iff, lintegral_lintegral_swap, lintegral_mul_const, measurable_coe, mul_comm, trans_eq
 -/

@@ -48,7 +48,7 @@ definition productEquiv
   unitIso := NatIso.ofComponents (fun _ => Iso.refl _)
   counitIso := NatIso.ofComponents (fun _ => Iso.refl _)
 
-#adap
+#adaptation_note
 
 中文:
 定义 productEquiv
@@ -60,7 +60,7 @@ definition productEquiv
   unitIso := NatIso.ofComponents (fun _ => Iso.refl _)
   counitIso := NatIso.ofComponents (fun _ => Iso.refl _)
 
-#adap
+#adaptation_note
 
 Depends on / 依赖: Discrete, Discrete.functor, functor
 -/
@@ -91,7 +91,12 @@ definition sumEquiv
   inverse := (Discrete.functor <| fun t => Discrete.mk (Sum.inl t)).sum'
     (Discrete.functor <| fun t => Discrete.mk (Sum.inr t))
   unitIso := NatIso.ofComponents (fun ⟨x⟩ =>
-
+    match x with
+    | .inl x => Iso.refl _
+    | .inr x => Iso.refl _)
+  counitIso := Functor.sumIsoExt
+    (Discrete.natIso <| fun _ => Iso.refl _)
+    (Discrete.natIso <| fun _ => Iso.refl _)
 
 中文:
 定义 sumEquiv
@@ -103,7 +108,12 @@ definition sumEquiv
   inverse := (Discrete.functor <| fun t => Discrete.mk (Sum.inl t)).sum'
     (Discrete.functor <| fun t => Discrete.mk (Sum.inr t))
   unitIso := NatIso.ofComponents (fun ⟨x⟩ =>
-
+    match x with
+    | .inl x => Iso.refl _
+    | .inr x => Iso.refl _)
+  counitIso := Functor.sumIsoExt
+    (Discrete.natIso <| fun _ => Iso.refl _)
+    (Discrete.natIso <| fun _ => Iso.refl _)
 
 Depends on / 依赖: Discrete, Discrete.functor, functor
 -/
@@ -162,7 +172,8 @@ instance sum
         · case inr x y f g => rw [((by assumption : IsDiscrete C').subsingleton x y).allEq f g] }
   eq_of_hom {x y} f := by
     cases f with
-    | inl x y f =>
+    | inl x y f => rw [(by assumption : IsDiscrete C).eq_of_hom f]
+    | inr x y f => rw [(by assumption : IsDiscrete C').eq_of_hom f]
 
 中文:
 实例 求和
@@ -173,7 +184,8 @@ instance sum
         · case inr x y f g => rw [((by assumption : IsDiscrete C').subsingleton x y).allEq f g] }
   eq_of_hom {x y} f := by
     cases f with
-    | inl x y f =>
+    | inl x y f => rw [(by assumption : IsDiscrete C).eq_of_hom f]
+    | inr x y f => rw [(by assumption : IsDiscrete C').eq_of_hom f]
 
 Depends on / 依赖: IsDiscrete, eq_of_hom, subsingleton
 -/

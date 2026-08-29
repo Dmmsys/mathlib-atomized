@@ -202,7 +202,7 @@ theorem ergodicSMul_iterateMulAct
     nth_rewrite 2 [← Function.IsFixedPt.preimage_iterate hs n.val]
     rfl
   · intro s hm hs
-exact h.quasiErgodic.aeconst_
+exact h.quasiErgodic.aeconst_set₀ hm.nullMeasurableSet hs (.mk 1)
 
 中文:
 定理 ergodicSMul_iterateMulAct
@@ -215,7 +215,7 @@ exact h.quasiErgodic.aeconst_
     nth_rewrite 2 [← Function.IsFixedPt.preimage_iterate hs n.val]
     rfl
   · intro s hm hs
-exact h.quasiErgodic.aeconst_
+exact h.quasiErgodic.aeconst_set₀ hm.nullMeasurableSet hs (.mk 1)
 
 Depends on / 依赖: Function, Function.IsFixedPt.preimage_iterate, IsFixedPt, ergodicSMul_iff, h.quasiErgodic.aeconst_set, hm.nullMeasurableSet, n.val, nth_rewrite, nullMeasurableSet, preimage_iterate, quasiErgodic, smulInvariantMeasure_iterateMulAct
 -/

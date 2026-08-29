@@ -63,7 +63,9 @@ definition char
     calc dist _ _
       <= (‖_‖ : Real) + ‖_‖ := dist_le_norm_add_norm _ _
     _ <= 1 + 1 := add_le_add (by simp) (by simp)
-    _
+    _ = 2 := by ring
+
+@[simp]
 
 中文:
 定义 char
@@ -76,7 +78,9 @@ definition char
     calc dist _ _
       <= (‖_‖ : Real) + ‖_‖ := dist_le_norm_add_norm _ _
     _ <= 1 + 1 := add_le_add (by simp) (by simp)
-    _
+    _ = 2 := by ring
+
+@[simp]
 -/
 noncomputable def char (he : Continuous e) (hL : Continuous fun p : V × W => L p.1 p.2) (w : W) :
     V ->ᵇ Complex where
@@ -180,7 +184,16 @@ theorem ext_of_char_eq
   obtain ⟨a, ha⟩ := DFunLike.ne_iff.mp he'
   use (a / (L (v - v') w)) • w
   simp only [map_sub, LinearMap.sub_apply, char_apply, ne_eq]
-  rw [← div_eq_one_iff_eq (Circle.coe_ne_zero _)]; rw [div_eq_inv_mul
+  rw [← div_eq_one_iff_eq (Circle.coe_ne_zero _)]; rw [div_eq_inv_mul]; rw [← Metric.unitSphere.coe_inv]; rw [← e.map_neg_eq_inv]; rw [← Submonoid.coe_mul]; rw [← e.map_add_eq_mul]; rw [OneMemClass.coe_eq_one]
+  simp only [map_sub, LinearMap.sub_apply, LinearMap.zero_apply, AddChar.one_apply,
+    map_smul, smul_eq_mul] at ha hw ⊢
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  ring_nf
+  field_simp
+  assumption
 
 中文:
 定理 ext_of_char_eq
@@ -191,7 +204,16 @@ theorem ext_of_char_eq
   obtain ⟨a, ha⟩ := DFunLike.ne_iff.mp he'
   use (a / (L (v - v') w)) • w
   simp only [map_sub, LinearMap.sub_apply, char_apply, ne_eq]
-  rw [← div_eq_one_iff_eq (Circle.coe_ne_zero _)]; rw [div_eq_inv_mul
+  rw [← div_eq_one_iff_eq (Circle.coe_ne_zero _)]; rw [div_eq_inv_mul]; rw [← Metric.unitSphere.coe_inv]; rw [← e.map_neg_eq_inv]; rw [← Submonoid.coe_mul]; rw [← e.map_add_eq_mul]; rw [OneMemClass.coe_eq_one]
+  simp only [map_sub, LinearMap.sub_apply, LinearMap.zero_apply, AddChar.one_apply,
+    map_smul, smul_eq_mul] at ha hw ⊢
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  ring_nf
+  field_simp
+  assumption
 
 Depends on / 依赖: AddChar, Circle, Circle.coe_ne_zero, DFunLike, DFunLike.ne_iff.mp, LinearMap, LinearMap.sub_apply, LinearMap.zero_apply, Metric, Metric.unitSphere.coe_inv, OneMemClass, OneMemClass.coe_eq_one, Submonoid, Submonoid.coe_mul, char_apply, coe_eq_one, coe_inv, coe_mul, coe_ne_zero, contrapose
 -/
@@ -324,7 +346,7 @@ lemma star_mem_range_charAlgHom
   let f : W ↪ W := ⟨fun x => -x, (fun _ _ => neg_inj.mp)⟩
 refine ⟨.ofCoeff z.coeff.embDomain f, ?_⟩
   ext
-  simp [charAlgHom_apply, Finsupp.sum_embDomain, z, Finsupp.sum_mapRange_index, 
+  simp [charAlgHom_apply, Finsupp.sum_embDomain, z, Finsupp.sum_mapRange_index, f]
 
 中文:
 引理 star_mem_range_charAlgHom
@@ -336,7 +358,7 @@ refine ⟨.ofCoeff z.coeff.embDomain f, ?_⟩
   let f : W ↪ W := ⟨fun x => -x, (fun _ _ => neg_inj.mp)⟩
 refine ⟨.ofCoeff z.coeff.embDomain f, ?_⟩
   ext
-  simp [charAlgHom_apply, Finsupp.sum_embDomain, z, Finsupp.sum_mapRange_index, 
+  simp [charAlgHom_apply, Finsupp.sum_embDomain, z, Finsupp.sum_mapRange_index, f]
 
 Depends on / 依赖: AlgHom, AlgHom.mem_range, Finsupp, Finsupp.sum_embDomain, Finsupp.sum_mapRange_index, charAlgHom_apply, embDomain, mem_range, neg_inj, neg_inj.mp, ofCoeff, starRingEnd, sum_embDomain, sum_mapRange_index, toAddMonoidHom, y.map, z.coeff.embDomain
 -/
@@ -432,7 +454,8 @@ lemma separatesPoints_charPoly
     exact ext_of_char_eq he he' hL hL' hvv'
   use char he hL w
   simp only [StarSubalgebra.coe_toSubalgebra, StarSubalgebra.coe_map, Set.mem_image,
-    SetLike.mem_coe, exists_exists_and_eq
+    SetLike.mem_coe, exists_exists_and_eq_and, ne_eq]
+  exact ⟨⟨char he hL w, char_mem_charPoly w, rfl⟩, hw⟩
 
 中文:
 引理 separatesPoints_charPoly
@@ -444,7 +467,8 @@ lemma separatesPoints_charPoly
     exact ext_of_char_eq he he' hL hL' hvv'
   use char he hL w
   simp only [StarSubalgebra.coe_toSubalgebra, StarSubalgebra.coe_map, Set.mem_image,
-    SetLike.mem_coe, exists_exists_and_eq
+    SetLike.mem_coe, exists_exists_and_eq_and, ne_eq]
+  exact ⟨⟨char he hL w, char_mem_charPoly w, rfl⟩, hw⟩
 
 Depends on / 依赖: Set.mem_image, SetLike, SetLike.mem_coe, StarSubalgebra, StarSubalgebra.coe_map, StarSubalgebra.coe_toSubalgebra, char_mem_charPoly, coe_map, coe_toSubalgebra, contrapose, exists_exists_and_eq_and, ext_of_char_eq, mem_coe, mem_image, ne_eq
 -/

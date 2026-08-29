@@ -104,7 +104,15 @@ definition inverse
           mul_assoc := by ext ⟨⟨x, y⟩, z⟩; simp [_root_.mul_assoc] } }
   map f := .mk' (↾f)
     (one_f := by
-      #adaptation_note /-- Prior to
+      #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+      this argument was provided by the auto_param. -/
+      simp +instances only
+      cat_disch)
+    (mul_f := by
+      #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+      this argument was provided by the auto_param. -/
+      simp +instances only
+      cat_disch)
 
 中文:
 定义 inverse
@@ -118,7 +126,15 @@ definition inverse
           mul_assoc := by ext ⟨⟨x, y⟩, z⟩; simp [_root_.mul_assoc] } }
   map f := .mk' (↾f)
     (one_f := by
-      #adaptation_note /-- Prior to
+      #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+      this argument was provided by the auto_param. -/
+      simp +instances only
+      cat_disch)
+    (mul_f := by
+      #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+      this argument was provided by the auto_param. -/
+      simp +instances only
+      cat_disch)
 
 Depends on / 依赖: _root_, _root_.mul_assoc, adaptation_note, argument, auto_param, cat_disch, github, github.com, instances, leanprover, mul_assoc, mul_f, mul_one, one_f, one_mul, provided
 -/

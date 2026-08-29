@@ -79,7 +79,15 @@ definition binaryProductLimitCone
               WalkingPair.casesOn j (ofHom <| LinearMap.fst R M N) (ofHom <| LinearMap.snd R M N)
           naturality := by rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩ ⟨⟨⟨⟩⟩⟩ <;> rfl } }
   isLimit :=
-    { lift := fun 
+    { lift := fun s => ofHom <| LinearMap.prod
+        (s.π.app ⟨WalkingPair.left⟩).hom
+        (s.π.app ⟨WalkingPair.right⟩).hom
+      fac := by rintro s (⟨⟩ | ⟨⟩) <;> rfl
+      uniq := fun s m w => by
+        simp_rw [← w ⟨WalkingPair.left⟩, ← w ⟨WalkingPair.right⟩]
+        rfl }
+
+@[simp]
 
 中文:
 定义 binaryProductLimitCone
@@ -91,7 +99,15 @@ definition binaryProductLimitCone
               WalkingPair.casesOn j (ofHom <| LinearMap.fst R M N) (ofHom <| LinearMap.snd R M N)
           naturality := by rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩ ⟨⟨⟨⟩⟩⟩ <;> rfl } }
   isLimit :=
-    { lift := fun 
+    { lift := fun s => ofHom <| LinearMap.prod
+        (s.π.app ⟨WalkingPair.left⟩).hom
+        (s.π.app ⟨WalkingPair.right⟩).hom
+      fac := by rintro s (⟨⟩ | ⟨⟩) <;> rfl
+      uniq := fun s m w => by
+        simp_rw [← w ⟨WalkingPair.left⟩, ← w ⟨WalkingPair.right⟩]
+        rfl }
+
+@[simp]
 
 Depends on / 依赖: Discrete, Discrete.casesOn, Finite, InducedCategory, InducedCategory.homLinearEquiv.symm, LinearMap, LinearMap.fst, LinearMap.prod, LinearMap.snd, Module, Module.Finite, ModuleCat, ModuleCat.of, V.obj, W.obj, WalkingPair, WalkingPair.casesOn, WalkingPair.left, WalkingPair.right, casesOn
 -/
@@ -283,7 +299,7 @@ definition productLimitCone
       fac := fun _ _ => rfl
       uniq := fun s m w => by
         ext x j
-        exact congr_arg (fun g : s.pt ⟶ f j =>
+        exact congr_arg (fun g : s.pt ⟶ f j => (g : s.pt -> f j) x) (w ⟨j⟩) }
 
 中文:
 定义 productLimitCone
@@ -295,7 +311,7 @@ definition productLimitCone
       fac := fun _ _ => rfl
       uniq := fun s m w => by
         ext x j
-        exact congr_arg (fun g : s.pt ⟶ f j =>
+        exact congr_arg (fun g : s.pt ⟶ f j => (g : s.pt -> f j) x) (w ⟨j⟩) }
 
 Depends on / 依赖: Discrete, Discrete.natTrans, LinearMap, LinearMap.proj, ModuleCat, ModuleCat.of, congr_arg, isLimit, j.as, natTrans, s.pt
 -/
@@ -412,7 +428,7 @@ definition noncomputable
     (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
     (ModuleCat.ofHom g) exac) (ModuleCat.ofHom f) (hom_ext h)
     (by simpa only [ModuleCat.epi_iff_surjective] using! hg)).isoBinaryBiproduct ≪≫
-    biprodIsoProd _ _).symm.toLinearE
+    biprodIsoProd _ _).symm.toLinearEquiv
 
 中文:
 定义 noncomputable
@@ -421,7 +437,7 @@ definition noncomputable
     (ShortComplex.Exact.moduleCat_of_range_eq_ker (ModuleCat.ofHom j)
     (ModuleCat.ofHom g) exac) (ModuleCat.ofHom f) (hom_ext h)
     (by simpa only [ModuleCat.epi_iff_surjective] using! hg)).isoBinaryBiproduct ≪≫
-    biprodIsoProd _ _).symm.toLinearE
+    biprodIsoProd _ _).symm.toLinearEquiv
 -/
 private noncomputable def lequivProdOfLeftSplitExact' {f : M ->ₗ[R] A} (hg : Function.Surjective g)
     (exac : LinearMap.range j = LinearMap.ker g) (h : f.comp j = LinearMap.id) : (A × B) ≃ₗ[R] M :=
@@ -454,7 +470,11 @@ definition lequivProdOfRightSplitExact
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
     (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
     (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
- 
+    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
+    (by simpa using hj)
+    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
+    (by ext x; simpa using congr($h x.down))
+  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
 
 中文:
 定义 lequivProdOfRightSplitExact
@@ -463,7 +483,11 @@ definition lequivProdOfRightSplitExact
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
     (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
     (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
- 
+    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
+    (by simpa using hj)
+    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
+    (by ext x; simpa using congr($h x.down))
+  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
 
 Depends on / 依赖: LinearMap, LinearMap.ker_comp, LinearMap.range_comp, Submodule, Submodule.comap_equiv_eq_map_symm, ULift.moduleEquiv.symm.toLinearMap, ULift.moduleEquiv.toLinearMap, comap_equiv_eq_map_symm, ker_comp, lequivProdOfRightSplitExact, moduleEquiv, range_comp, toLinearMap
 -/
@@ -491,7 +515,11 @@ definition lequivProdOfLeftSplitExact
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
     (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
     (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
-  
+    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
+    (by simpa using hg)
+    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
+    (by ext x; simpa using congr($h x.down))
+  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
 
 中文:
 定义 lequivProdOfLeftSplitExact
@@ -500,7 +528,11 @@ definition lequivProdOfLeftSplitExact
     (A := ULift.{max uA uM uB} A) (M := ULift.{max uA uM uB} M) (B := ULift.{max uA uM uB} B)
     (f := ULift.moduleEquiv.symm.toLinearMap ∘ₗ f ∘ₗ ULift.moduleEquiv.toLinearMap)
     (j := ULift.moduleEquiv.symm.toLinearMap ∘ₗ j ∘ₗ ULift.moduleEquiv.toLinearMap)
-  
+    (g := ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ ULift.moduleEquiv.toLinearMap)
+    (by simpa using hg)
+    (by simp [LinearMap.range_comp, LinearMap.ker_comp, exac, Submodule.comap_equiv_eq_map_symm])
+    (by ext x; simpa using congr($h x.down))
+  ULift.moduleEquiv.symm.prodCongr ULift.moduleEquiv.symm ≪≫ₗ this ≪≫ₗ ULift.moduleEquiv
 
 Depends on / 依赖: Finite, LinearMap, LinearMap.ker_comp, LinearMap.range_comp, Module, Module.Finite.equiv_iff, ModuleCat, ModuleCat.coprodIsoDirectSum, Submodule, Submodule.comap_equiv_eq_map_symm, ULift.moduleEquiv.symm.toLinearMap, ULift.moduleEquiv.toLinearMap, classical, comap_equiv_eq_map_symm, coprodIsoDirectSum, equiv_iff, ker_comp, lequivProdOfLeftSplitExact, moduleEquiv, range_comp
 -/

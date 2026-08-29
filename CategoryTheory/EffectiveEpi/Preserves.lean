@@ -81,7 +81,23 @@ definition effectiveEpiFamilyStructOfEquivalence
   fac ε h a := by
     simp only [Adjunction.homEquiv_counit,
       Equivalence.toAdjunction_counit]
-    have := congrArg ((
+    have := congrArg ((fun f => f ≫ e.counit.app _) ∘ e.functor.map)
+      (EffectiveEpiFamily.fac X π (fun a => e.unit.app _ ≫ e.inverse.map (ε a))
+      (effectiveEpiFamilyStructOfEquivalence_aux e X π ε h) a)
+    simp only [Functor.id_obj, Function.comp_apply, Functor.map_comp,
+        Category.assoc, Equivalence.fun_inv_map,
+        Equivalence.counitIso_inv_hom_id_app, Category.comp_id,
+        Equivalence.functor_unit_comp_assoc] at this
+    simp [this]
+  uniq ε h m hm := by
+    simp only [Adjunction.homEquiv_counit,
+      Equivalence.toAdjunction_counit]
+    have := EffectiveEpiFamily.uniq X π (fun a => e.unit.app _ ≫ e.inverse.map (ε a))
+      (effectiveEpiFamilyStructOfEquivalence_aux e X π ε h)
+    specialize this (e.unit.app _ ≫ e.inverse.map m) fun a => ?_
+    · rw [← congrArg e.inverse.map (hm a)]
+      simp
+    · simp [← this]
 
 中文:
 定义 effectiveEpiFamilyStructOfEquivalence
@@ -92,7 +108,23 @@ definition effectiveEpiFamilyStructOfEquivalence
   fac ε h a := by
     simp only [Adjunction.homEquiv_counit,
       Equivalence.toAdjunction_counit]
-    have := congrArg ((
+    have := congrArg ((fun f => f ≫ e.counit.app _) ∘ e.functor.map)
+      (EffectiveEpiFamily.fac X π (fun a => e.unit.app _ ≫ e.inverse.map (ε a))
+      (effectiveEpiFamilyStructOfEquivalence_aux e X π ε h) a)
+    simp only [Functor.id_obj, Function.comp_apply, Functor.map_comp,
+        Category.assoc, Equivalence.fun_inv_map,
+        Equivalence.counitIso_inv_hom_id_app, Category.comp_id,
+        Equivalence.functor_unit_comp_assoc] at this
+    simp [this]
+  uniq ε h m hm := by
+    simp only [Adjunction.homEquiv_counit,
+      Equivalence.toAdjunction_counit]
+    have := EffectiveEpiFamily.uniq X π (fun a => e.unit.app _ ≫ e.inverse.map (ε a))
+      (effectiveEpiFamilyStructOfEquivalence_aux e X π ε h)
+    specialize this (e.unit.app _ ≫ e.inverse.map m) fun a => ?_
+    · rw [← congrArg e.inverse.map (hm a)]
+      simp
+    · simp [← this]
 
 Depends on / 依赖: e.toAdjunction.homEquiv, homEquiv, toAdjunction
 -/
@@ -223,7 +255,9 @@ definition regularEpiOfPreserves
   isColimit := by
     refine isColimitCoforkOfEffectiveEpi (F.map f) (.mk (F.map c.fst) (F.map c.snd) ?_) ?_
     · simp [← Functor.map_comp, c.condition]
-    · refine IsLimit.equivOfNatIsoOfIso ?_ 
+    · refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (isLimitOfPreserves F hc)
+      · exact cospanIsoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
+· exact Cone.ext (Iso.refl _) by rintro (_ | _ | _) <;> cat_disch
 
 中文:
 定义 regularEpiOfPreserves
@@ -235,7 +269,9 @@ definition regularEpiOfPreserves
   isColimit := by
     refine isColimitCoforkOfEffectiveEpi (F.map f) (.mk (F.map c.fst) (F.map c.snd) ?_) ?_
     · simp [← Functor.map_comp, c.condition]
-    · refine IsLimit.equivOfNatIsoOfIso ?_ 
+    · refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (isLimitOfPreserves F hc)
+      · exact cospanIsoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
+· exact Cone.ext (Iso.refl _) by rintro (_ | _ | _) <;> cat_disch
 
 Depends on / 依赖: F.obj, c.pt
 -/

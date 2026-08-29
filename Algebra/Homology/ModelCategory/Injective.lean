@@ -225,7 +225,59 @@ lemma lifting
     instead of the full subcategory `CochainComplex.Plus C`. -/
     obtain ⟨A, hA⟩ := A
     obtain ⟨B, hB⟩ := B
-   
+    obtain ⟨X, hX⟩ := X
+    obtain ⟨Y, hY⟩ := Y
+    have hi : Mono i.hom := inferInstance
+    have hp : degreewiseEpiWithInjectiveKernel p.hom :=
+      (fibration_iff p).1 inferInstance
+    obtain ⟨i, rfl⟩ := ObjectProperty.homMk_surjective i
+    obtain ⟨p, rfl⟩ := ObjectProperty.homMk_surjective p
+    obtain ⟨t, rfl⟩ := ObjectProperty.homMk_surjective t
+    obtain ⟨b, rfl⟩ := ObjectProperty.homMk_surjective b
+    dsimp at i p t b hp hi
+    have hip : QuasiIso i ∨ QuasiIso p := by
+      simpa only [weakEquivalence_iff] using! hip
+    replace sq : CommSq t i p b := sq.map (ObjectProperty.ι _)
+    suffices sq.HasLift from ⟨⟨{ l := ObjectProperty.homMk sq.lift }⟩⟩
+    have sq' (n : Int) : CommSq (t.f n) (i.f n) (p.f n) (b.f n) :=
+      (sq.map (HomologicalComplex.eval _ _ n))
+    /- The commutative square in `C` obtained by evaluating in a degree `n`
+    admits a lifting because `i.f n` is a monomorphism and `p.f n` is
+    an epimorphism with injective kernel. -/
+    have (n : Int) : (sq' n).HasLift := by
+      have := (hp n).hasLiftingProperty (i.f n)
+      infer_instance
+    /- In order to obtain a lifting in the original square, the obstruction
+    lies in a cocycle `β : Cocycle (cokernel i) (kernel p) 1`. Thanks to the
+    lemma `CochainComplex.Lifting.hasLift`, it suffices to show that `β`
+    is a coboundary. -/
+    let β : Cocycle (cokernel i) (kernel p) 1 :=
+      Lifting.cocycle₁ sq (fun n => { l := (sq' n).lift })
+        (cokernelIsCokernel i) (kernelIsKernel p) (hπ := by simp) (hι := by simp)
+    have (n : Int) : Injective ((kernel p).X n) :=
+      Injective.of_iso
+        (asIso (kernelComparison p (HomologicalComplex.eval _ _ n))).symm (hp n).2
+    have : (kernel p).IsKInjective := by
+      obtain ⟨d, hd⟩ := hX
+      have : (kernel p).IsStrictlyGE d := by
+        rw [isStrictlyGE_iff]
+        intro i hi
+        rw [IsZero.iff_id_eq_zero]; rw [← cancel_mono ((kernel.ι p).f i)]
+        apply (X.isZero_of_isStrictlyGE d i).eq_of_tgt
+      exact isKInjective_of_injective _ d
+    /- The cocycle `β` is a coboundary when `i` or `p` is a quasi-isomorphism. -/
+    obtain ⟨α, hα⟩ : exists (α : Cochain (cokernel i) (kernel p) 0), δ 0 1 α = β.1 := by
+      cases hip
+      · refine IsKInjective.eq_δ_of_cocycle β ?_ 0 (by simp)
+        have : (ShortComplex.mk _ _ (cokernel.condition i)).ShortExact :=
+          { exact := ShortComplex.exact_cokernel i }
+        exact this.acyclic_X₃ (by dsimp; infer_instance)
+      · refine IsKInjective.eq_δ_of_cocycle' β ?_ 0 (by simp)
+        have := hp.epi
+        have : (ShortComplex.mk _ _ (kernel.condition p)).ShortExact :=
+          { exact := ShortComplex.exact_kernel p }
+        exact this.acyclic_X₁ (by dsimp; infer_instance)
+    exact Lifting.hasLift sq _ (cokernelIsCokernel _) (kernelIsKernel _) α hα
 
 中文:
 引理 lifting
@@ -236,7 +288,59 @@ lemma lifting
     instead of the full subcategory `CochainComplex.Plus C`. -/
     obtain ⟨A, hA⟩ := A
     obtain ⟨B, hB⟩ := B
-   
+    obtain ⟨X, hX⟩ := X
+    obtain ⟨Y, hY⟩ := Y
+    have hi : Mono i.hom := inferInstance
+    have hp : degreewiseEpiWithInjectiveKernel p.hom :=
+      (fibration_iff p).1 inferInstance
+    obtain ⟨i, rfl⟩ := ObjectProperty.homMk_surjective i
+    obtain ⟨p, rfl⟩ := ObjectProperty.homMk_surjective p
+    obtain ⟨t, rfl⟩ := ObjectProperty.homMk_surjective t
+    obtain ⟨b, rfl⟩ := ObjectProperty.homMk_surjective b
+    dsimp at i p t b hp hi
+    have hip : QuasiIso i ∨ QuasiIso p := by
+      simpa only [weakEquivalence_iff] using! hip
+    replace sq : CommSq t i p b := sq.map (ObjectProperty.ι _)
+    suffices sq.HasLift from ⟨⟨{ l := ObjectProperty.homMk sq.lift }⟩⟩
+    have sq' (n : Int) : CommSq (t.f n) (i.f n) (p.f n) (b.f n) :=
+      (sq.map (HomologicalComplex.eval _ _ n))
+    /- The commutative square in `C` obtained by evaluating in a degree `n`
+    admits a lifting because `i.f n` is a monomorphism and `p.f n` is
+    an epimorphism with injective kernel. -/
+    have (n : Int) : (sq' n).HasLift := by
+      have := (hp n).hasLiftingProperty (i.f n)
+      infer_instance
+    /- In order to obtain a lifting in the original square, the obstruction
+    lies in a cocycle `β : Cocycle (cokernel i) (kernel p) 1`. Thanks to the
+    lemma `CochainComplex.Lifting.hasLift`, it suffices to show that `β`
+    is a coboundary. -/
+    let β : Cocycle (cokernel i) (kernel p) 1 :=
+      Lifting.cocycle₁ sq (fun n => { l := (sq' n).lift })
+        (cokernelIsCokernel i) (kernelIsKernel p) (hπ := by simp) (hι := by simp)
+    have (n : Int) : Injective ((kernel p).X n) :=
+      Injective.of_iso
+        (asIso (kernelComparison p (HomologicalComplex.eval _ _ n))).symm (hp n).2
+    have : (kernel p).IsKInjective := by
+      obtain ⟨d, hd⟩ := hX
+      have : (kernel p).IsStrictlyGE d := by
+        rw [isStrictlyGE_iff]
+        intro i hi
+        rw [IsZero.iff_id_eq_zero]; rw [← cancel_mono ((kernel.ι p).f i)]
+        apply (X.isZero_of_isStrictlyGE d i).eq_of_tgt
+      exact isKInjective_of_injective _ d
+    /- The cocycle `β` is a coboundary when `i` or `p` is a quasi-isomorphism. -/
+    obtain ⟨α, hα⟩ : exists (α : Cochain (cokernel i) (kernel p) 0), δ 0 1 α = β.1 := by
+      cases hip
+      · refine IsKInjective.eq_δ_of_cocycle β ?_ 0 (by simp)
+        have : (ShortComplex.mk _ _ (cokernel.condition i)).ShortExact :=
+          { exact := ShortComplex.exact_cokernel i }
+        exact this.acyclic_X₃ (by dsimp; infer_instance)
+      · refine IsKInjective.eq_δ_of_cocycle' β ?_ 0 (by simp)
+        have := hp.epi
+        have : (ShortComplex.mk _ _ (kernel.condition p)).ShortExact :=
+          { exact := ShortComplex.exact_kernel p }
+        exact this.acyclic_X₁ (by dsimp; infer_instance)
+    exact Lifting.hasLift sq _ (cokernelIsCokernel _) (kernelIsKernel _) α hα
 -/
 private lemma lifting {A B X Y : CochainComplex.Plus C} (i : A ⟶ B) (p : X ⟶ Y)
     [Mono i] [Fibration p] (hip : WeakEquivalence i ∨ WeakEquivalence p) :
@@ -326,7 +430,13 @@ instance :
         L.isStrictlyGE_of_ge _ m (by simp)⟩
     obtain ⟨K', _, i, p, _, _, hp, fac⟩ := cm5a f d
     exact ⟨{
-      Z
+      Z := ⟨K', d, inferInstance⟩
+      i := ObjectProperty.homMk i
+      p := ObjectProperty.homMk p
+      hi :=
+        ⟨by rwa [← HomotopicalAlgebra.cofibration_iff, cofibration_iff, Plus.mono_iff],
+          by assumption⟩
+      hp := hp }⟩
 
 中文:
 实例 :
@@ -338,7 +448,13 @@ instance :
         L.isStrictlyGE_of_ge _ m (by simp)⟩
     obtain ⟨K', _, i, p, _, _, hp, fac⟩ := cm5a f d
     exact ⟨{
-      Z
+      Z := ⟨K', d, inferInstance⟩
+      i := ObjectProperty.homMk i
+      p := ObjectProperty.homMk p
+      hi :=
+        ⟨by rwa [← HomotopicalAlgebra.cofibration_iff, cofibration_iff, Plus.mono_iff],
+          by assumption⟩
+      hp := hp }⟩
 
 Depends on / 依赖: HomotopicalAlgebra, HomotopicalAlgebra.cofibration_iff, IsStrictlyGE, K.IsStrictlyGE, K.isStrictlyGE_of_ge, L.IsStrictlyGE, L.isStrictlyGE_of_ge, ObjectProperty, ObjectProperty.homMk, Plus.mono_iff, cofibration_iff, isStrictlyGE_of_ge, mono_iff
 -/
@@ -371,7 +487,11 @@ instance :
         L.isStrictlyGE_of_ge _ m (by simp)⟩
     obtain ⟨K', _, i, p, _, hp, _, fac⟩ := cm5b f d
     exact ⟨{
-      Z
+      Z := ⟨K', d, inferInstance⟩
+      i := ObjectProperty.homMk i
+      p := ObjectProperty.homMk p
+      hi := by rwa [← HomotopicalAlgebra.cofibration_iff, cofibration_iff, Plus.mono_iff]
+      hp := ⟨hp, by assumption⟩ }⟩
 
 中文:
 实例 :
@@ -383,7 +503,11 @@ instance :
         L.isStrictlyGE_of_ge _ m (by simp)⟩
     obtain ⟨K', _, i, p, _, hp, _, fac⟩ := cm5b f d
     exact ⟨{
-      Z
+      Z := ⟨K', d, inferInstance⟩
+      i := ObjectProperty.homMk i
+      p := ObjectProperty.homMk p
+      hi := by rwa [← HomotopicalAlgebra.cofibration_iff, cofibration_iff, Plus.mono_iff]
+      hp := ⟨hp, by assumption⟩ }⟩
 
 Depends on / 依赖: HomotopicalAlgebra, HomotopicalAlgebra.cofibration_iff, IsStrictlyGE, K.IsStrictlyGE, K.isStrictlyGE_of_ge, L.IsStrictlyGE, L.isStrictlyGE_of_ge, ObjectProperty, ObjectProperty.homMk, Plus.mono_iff, cofibration_iff, isStrictlyGE_of_ge, mono_iff
 -/

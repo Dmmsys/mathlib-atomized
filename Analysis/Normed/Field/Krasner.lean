@@ -105,7 +105,36 @@ theorem of_completeSpace_of_normal
     have : IsUltrametricDist L := IsUltrametricDist.of_normedAlgebra K
     let y' : K⟮y⟯ := IntermediateField.AdjoinSimple.gen K y
     have zsep : IsSeparable K⟮y⟯ z :=
-      Field.isSeparable_sub (IsSeparable.tower_to
+      Field.isSeparable_sub (IsSeparable.tower_top K⟮y⟯ xsep) (isSeparable_algebraMap y')
+    -- It suffices to show that `z = x - y ∈ K⟮y⟯`.
+    suffices z in K⟮y⟯ by simpa [z, y'] using add_mem this y'.2
+    have : z in K⟮y⟯ ↔ z in (⊥ : Subalgebra K⟮y⟯ L) := by simp [Algebra.mem_bot]
+    rw [this]
+    -- Suppose not, then there exists nontrivial Galois conjugates `z'` of `z` over `K⟮y⟯` in `L`.
+    by_contra hz
+    obtain ⟨z', hne, h1⟩ := (notMem_iff_exists_ne_and_isConjRoot zsep
+        (minpoly_sub_algebraMap_splits y' (IsIntegral.minpoly_splits_tower_top
+          xsep.isIntegral sp))).mp hz
+    obtain ⟨σ, hσ⟩ := isConjRoot_iff_exists_algEquiv.mp h1
+    apply_fun σ.symm at hσ
+    simp only [AlgEquiv.symm_apply_apply] at hσ
+    -- However, `‖z - z'‖ ≤ max ‖z‖ ‖z'‖ = ‖z‖ = ‖x - y‖ < ‖y - y'‖ = ‖z - z'‖`, where `y' = x - z`.
+    -- This is a contradiction.
+    have : ‖z - z'‖ < ‖z - z'‖ :=
+      calc
+        _ <= max ‖z‖ ‖z'‖ := by
+          simpa [norm_neg, sub_eq_add_neg] using (IsUltrametricDist.norm_add_le_max z (- z'))
+        _ <= ‖x - y‖ := by
+          simp only [NormedAlgebra.norm_eq_spectralNorm K, hσ, sup_le_iff]
+          rw [← AlgEquiv.restrictScalars_apply K]; rw [← spectralNorm_eq_of_equiv (σ.symm.restrictScalars K)]
+          simp [z]
+        _ < ‖x - (z' + y)‖ := by
+          apply kr (z' + y)
+          · apply IsConjRoot.of_isScalarTower (L := K⟮y⟯) xsep.isIntegral
+            simpa [z, y'] using IsConjRoot.add_algebraMap y' h1
+          · simpa [z, sub_eq_iff_eq_add] using hne
+        _ = ‖z - z'‖ := by congr 1; ring
+    simp [lt_self_iff_false] at this
 
 中文:
 定理 of_completeSpace_of_normal
@@ -117,7 +146,36 @@ theorem of_completeSpace_of_normal
     have : IsUltrametricDist L := IsUltrametricDist.of_normedAlgebra K
     let y' : K⟮y⟯ := IntermediateField.AdjoinSimple.gen K y
     have zsep : IsSeparable K⟮y⟯ z :=
-      Field.isSeparable_sub (IsSeparable.tower_to
+      Field.isSeparable_sub (IsSeparable.tower_top K⟮y⟯ xsep) (isSeparable_algebraMap y')
+    -- It suffices to show that `z = x - y ∈ K⟮y⟯`.
+    suffices z in K⟮y⟯ by simpa [z, y'] using add_mem this y'.2
+    have : z in K⟮y⟯ ↔ z in (⊥ : Subalgebra K⟮y⟯ L) := by simp [Algebra.mem_bot]
+    rw [this]
+    -- Suppose not, then there exists nontrivial Galois conjugates `z'` of `z` over `K⟮y⟯` in `L`.
+    by_contra hz
+    obtain ⟨z', hne, h1⟩ := (notMem_iff_exists_ne_and_isConjRoot zsep
+        (minpoly_sub_algebraMap_splits y' (IsIntegral.minpoly_splits_tower_top
+          xsep.isIntegral sp))).mp hz
+    obtain ⟨σ, hσ⟩ := isConjRoot_iff_exists_algEquiv.mp h1
+    apply_fun σ.symm at hσ
+    simp only [AlgEquiv.symm_apply_apply] at hσ
+    -- However, `‖z - z'‖ ≤ max ‖z‖ ‖z'‖ = ‖z‖ = ‖x - y‖ < ‖y - y'‖ = ‖z - z'‖`, where `y' = x - z`.
+    -- This is a contradiction.
+    have : ‖z - z'‖ < ‖z - z'‖ :=
+      calc
+        _ <= max ‖z‖ ‖z'‖ := by
+          simpa [norm_neg, sub_eq_add_neg] using (IsUltrametricDist.norm_add_le_max z (- z'))
+        _ <= ‖x - y‖ := by
+          simp only [NormedAlgebra.norm_eq_spectralNorm K, hσ, sup_le_iff]
+          rw [← AlgEquiv.restrictScalars_apply K]; rw [← spectralNorm_eq_of_equiv (σ.symm.restrictScalars K)]
+          simp [z]
+        _ < ‖x - (z' + y)‖ := by
+          apply kr (z' + y)
+          · apply IsConjRoot.of_isScalarTower (L := K⟮y⟯) xsep.isIntegral
+            simpa [z, y'] using IsConjRoot.add_algebraMap y' h1
+          · simpa [z, sub_eq_iff_eq_add] using hne
+        _ = ‖z - z'‖ := by congr 1; ring
+    simp [lt_self_iff_false] at this
 
 Depends on / 依赖: AdjoinSimple, Field.isSeparable_sub, IntermediateField, IntermediateField.AdjoinSimple.gen, IntermediateField.adjoin.finiteDimensional, IsSeparable, IsSeparable.tower_top, IsUltrametricDist, IsUltrametricDist.of_normedAlgebra, adjoin, finiteDimensional, isSeparable_algebraMap, isSeparable_sub, of_normedAlgebra, tower_top
 -/
@@ -170,7 +228,27 @@ instance of_completeSpace
     let C := AlgebraicClosure K
     let : NontriviallyNormedField C := spectralNorm.nontriviallyNormedField K C
     let : NormedAlgebra K C := spectralNorm.normedAlgebra K C
-    let iL : L ->ₐ[K] C := IsAlgClosed.
+    let iL : L ->ₐ[K] C := IsAlgClosed.lift
+    algebraize [iL.toRingHom]
+    let : NormedAlgebra L C := spectralNorm.normedAlgebra' K L C
+    let := IsKrasner.of_completeSpace_of_normal K C
+    -- The norm on `L` is compatible with the norm on the algebraic closure of `K`,
+    -- this gives the result.
+    have norm_iL (x : L) : ‖iL x‖ = ‖x‖ := norm_algebraMap' _ _
+    suffices this : iL x in K⟮iL y⟯ by
+      simpa [← Set.image_singleton, ← IntermediateField.adjoin_map] using! this
+    refine IsKrasner.krasner ((xsep.map _ iL.injective).of_dvd dvd_rfl) ?_ (yint.map iL) ?_
+    · exact Polynomial.Splits.of_dvd (sp.of_isScalarTower C)
+        (Polynomial.map_ne_zero (minpoly.ne_zero xsep.isIntegral))
+        (Polynomial.map_dvd _ (by simpa using! minpoly.dvd_map_of_isScalarTower' K K C x))
+    · intros xC' hx' hne
+      have : xC' in (minpoly K x).rootSet C := by
+        rwa [isConjRoot_iff_mem_minpoly_rootSet (xsep.isIntegral.map _),
+          minpoly.algHom_eq iL iL.injective x] at hx'
+      simp only [← sp.image_rootSet iL, Set.mem_image] at this
+      obtain ⟨c, hc, rfl⟩ := this
+      rw [← isConjRoot_iff_mem_minpoly_rootSet xsep.isIntegral] at hc
+      simpa [norm_iL, ← map_sub] using! kr c hc (fun h => (iff_false_intro hne).mp (congrArg iL h))
 
 中文:
 实例 of_completeSpace
@@ -180,7 +258,27 @@ instance of_completeSpace
     let C := AlgebraicClosure K
     let : NontriviallyNormedField C := spectralNorm.nontriviallyNormedField K C
     let : NormedAlgebra K C := spectralNorm.normedAlgebra K C
-    let iL : L ->ₐ[K] C := IsAlgClosed.
+    let iL : L ->ₐ[K] C := IsAlgClosed.lift
+    algebraize [iL.toRingHom]
+    let : NormedAlgebra L C := spectralNorm.normedAlgebra' K L C
+    let := IsKrasner.of_completeSpace_of_normal K C
+    -- The norm on `L` is compatible with the norm on the algebraic closure of `K`,
+    -- this gives the result.
+    have norm_iL (x : L) : ‖iL x‖ = ‖x‖ := norm_algebraMap' _ _
+    suffices this : iL x in K⟮iL y⟯ by
+      simpa [← Set.image_singleton, ← IntermediateField.adjoin_map] using! this
+    refine IsKrasner.krasner ((xsep.map _ iL.injective).of_dvd dvd_rfl) ?_ (yint.map iL) ?_
+    · exact Polynomial.Splits.of_dvd (sp.of_isScalarTower C)
+        (Polynomial.map_ne_zero (minpoly.ne_zero xsep.isIntegral))
+        (Polynomial.map_dvd _ (by simpa using! minpoly.dvd_map_of_isScalarTower' K K C x))
+    · intros xC' hx' hne
+      have : xC' in (minpoly K x).rootSet C := by
+        rwa [isConjRoot_iff_mem_minpoly_rootSet (xsep.isIntegral.map _),
+          minpoly.algHom_eq iL iL.injective x] at hx'
+      simp only [← sp.image_rootSet iL, Set.mem_image] at this
+      obtain ⟨c, hc, rfl⟩ := this
+      rw [← isConjRoot_iff_mem_minpoly_rootSet xsep.isIntegral] at hc
+      simpa [norm_iL, ← map_sub] using! kr c hc (fun h => (iff_false_intro hne).mp (congrArg iL h))
 -/
 instance of_completeSpace [Algebra.IsAlgebraic K L] : IsKrasner K L where
   krasner' {x} {y} xsep sp yint kr := by

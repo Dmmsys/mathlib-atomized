@@ -115,7 +115,9 @@ theorem piPremeasure_pi'
   rcases (pi univ s).eq_empty_or_nonempty with h | h
   · rcases univ_pi_eq_empty_iff.mp h with ⟨i, hi⟩
     have : exists i, m i (s i) = 0 := ⟨i, by simp [hi]⟩
-    simpa [h, Finset.card_univ, zero_pow Fintype.card_ne_zero, @eq_comm _ (0 : Real>
+    simpa [h, Finset.card_univ, zero_pow Fintype.card_ne_zero, @eq_comm _ (0 : Real>=0∞),
+      Finset.prod_eq_zero_iff, piPremeasure]
+  · simp [h, piPremeasure]
 
 中文:
 定理 piPremeasure_pi'
@@ -127,7 +129,9 @@ theorem piPremeasure_pi'
   rcases (pi univ s).eq_empty_or_nonempty with h | h
   · rcases univ_pi_eq_empty_iff.mp h with ⟨i, hi⟩
     have : exists i, m i (s i) = 0 := ⟨i, by simp [hi]⟩
-    simpa [h, Finset.card_univ, zero_pow Fintype.card_ne_zero, @eq_comm _ (0 : Real>
+    simpa [h, Finset.card_univ, zero_pow Fintype.card_ne_zero, @eq_comm _ (0 : Real>=0∞),
+      Finset.prod_eq_zero_iff, piPremeasure]
+  · simp [h, piPremeasure]
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.prod_eq_zero_iff, Fintype, Fintype.card_ne_zero, card_ne_zero, card_univ, eq_comm, eq_empty_or_nonempty, isEmpty_or_nonempty, piPremeasure, prod_eq_zero_iff, univ_pi_eq_empty_iff, univ_pi_eq_empty_iff.mp, zero_pow
 -/
@@ -443,7 +447,7 @@ theorem pi'_pi
   rw [pi']
   rw [← MeasurableEquiv.piMeasurableEquivTProd_symm_apply]; rw [MeasurableEquiv.map_apply]; rw [MeasurableEquiv.piMeasurableEquivTProd_symm_apply]; rw [elim_preimage_pi]; rw [tprod_tprod _ μ]; rw [←
     List.prod_toFinset]; rw [sortedUniv_toFinset] <;>
-  exact sortedUniv_no
+  exact sortedUniv_nodup ι
 
 中文:
 定理 pi'_pi
@@ -453,7 +457,7 @@ theorem pi'_pi
   rw [pi']
   rw [← MeasurableEquiv.piMeasurableEquivTProd_symm_apply]; rw [MeasurableEquiv.map_apply]; rw [MeasurableEquiv.piMeasurableEquivTProd_symm_apply]; rw [elim_preimage_pi]; rw [tprod_tprod _ μ]; rw [←
     List.prod_toFinset]; rw [sortedUniv_toFinset] <;>
-  exact sortedUniv_no
+  exact sortedUniv_nodup ι
 -/
 theorem pi'_pi [forall i, SigmaFinite (μ i)] (s : forall i, Set (α i)) :
     pi' μ (pi univ s) = ∏ i, μ i (s i) := by
@@ -479,7 +483,9 @@ theorem pi_caratheodory
   intro t
   simp_rw [piPremeasure]
   refine Finset.prod_add_prod_le' (Finset.mem_univ i) ?_ ?_ ?_
-  · simp [image_inter_preimage, image_sdiff_preimage, measure_inter_
+  · simp [image_inter_preimage, image_sdiff_preimage, measure_inter_add_sdiff _ hs]
+  · rintro j - _; gcongr; apply inter_subset_left
+  · rintro j - _; gcongr; apply sdiff_subset
 
 中文:
 定理 pi_caratheodory
@@ -492,7 +498,9 @@ theorem pi_caratheodory
   intro t
   simp_rw [piPremeasure]
   refine Finset.prod_add_prod_le' (Finset.mem_univ i) ?_ ?_ ?_
-  · simp [image_inter_preimage, image_sdiff_preimage, measure_inter_
+  · simp [image_inter_preimage, image_sdiff_preimage, measure_inter_add_sdiff _ hs]
+  · rintro j - _; gcongr; apply inter_subset_left
+  · rintro j - _; gcongr; apply sdiff_subset
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.prod_add_prod_le, MeasurableSpace, MeasurableSpace.comap, boundedBy_caratheodory, iSup_le, image_inter_preimage, image_sdiff_preimage, inter_subset_left, measure_inter_add_sdiff, mem_univ, piPremeasure, prod_add_prod_le, sdiff_subset, simp_rw
 -/
@@ -546,7 +554,12 @@ theorem pi_pi_aux
     apply OuterMeasure.pi_pi_le
   · have : Encodable ι := Fintype.toEncodable ι
     simp_rw [← pi'_pi μ s, Measure.pi,
-      toMeasure_apply _ _ (MeasurableSet.pi countable_univ f
+      toMeasure_apply _ _ (MeasurableSet.pi countable_univ fun i _ => hs i)]
+    suffices (pi' μ).toOuterMeasure <= OuterMeasure.pi fun i => (μ i).toOuterMeasure by exact this _
+    clear hs s
+    rw [OuterMeasure.le_pi]
+    intro s _
+    exact (pi'_pi μ s).le
 
 中文:
 定理 pi_pi_aux
@@ -557,7 +570,12 @@ theorem pi_pi_aux
     apply OuterMeasure.pi_pi_le
   · have : Encodable ι := Fintype.toEncodable ι
     simp_rw [← pi'_pi μ s, Measure.pi,
-      toMeasure_apply _ _ (MeasurableSet.pi countable_univ f
+      toMeasure_apply _ _ (MeasurableSet.pi countable_univ fun i _ => hs i)]
+    suffices (pi' μ).toOuterMeasure <= OuterMeasure.pi fun i => (μ i).toOuterMeasure by exact this _
+    clear hs s
+    rw [OuterMeasure.le_pi]
+    intro s _
+    exact (pi'_pi μ s).le
 
 Depends on / 依赖: Encodable, Fintype, Fintype.toEncodable, MeasurableSet, MeasurableSet.pi, Measure, Measure.pi, OuterMeasure, OuterMeasure.le_pi, OuterMeasure.pi, OuterMeasure.pi_pi_le, countable_univ, le_antisymm, le_pi, pi_pi_le, simp_rw, toEncodable, toMeasure_apply, toOuterMeasure
 -/
@@ -589,7 +607,22 @@ definition FiniteSpanningSetsIn.pi
   refine ⟨fun n => Set.pi univ fun i => (hμ i).set ((@decode (ι -> Nat) _ n).getD default i),
     fun n => ?_, fun n => ?_, ?_⟩ <;>
   -- TODO (kmill) If this let comes before the refine, while the noncomputability checker
-  -
+  -- correctly sees this definition is computable, the Lean VM fails to see the binding is
+  -- computationally irrelevant. The `noncomputable section` doesn't help because all it does
+  -- is insert `noncomputable` for you when necessary.
+  let e : Nat -> ι -> Nat := fun n => (@decode (ι -> Nat) _ n).getD default
+  · refine mem_image_of_mem _ fun i _ => (hμ i).set_mem _
+  · calc
+      Measure.pi μ (Set.pi univ fun i => (hμ i).set (e n i)) <=
+          Measure.pi μ (Set.pi univ fun i => toMeasurable (μ i) ((hμ i).set (e n i))) :=
+        measure_mono (pi_mono fun i _ => subset_toMeasurable _ _)
+      _ = ∏ i, μ i (toMeasurable (μ i) ((hμ i).set (e n i))) :=
+        (pi_pi_aux μ _ fun i => measurableSet_toMeasurable _ _)
+      _ = ∏ i, μ i ((hμ i).set (e n i)) := by simp only [measure_toMeasurable]
+      _ < ∞ := ENNReal.prod_lt_top fun i _ => (hμ i).finite _
+  · simp_rw [(surjective_decode_getD (ι -> Nat) default).iUnion_comp fun x =>
+        Set.pi univ fun i => (hμ i).set (x i),
+      iUnion_univ_pi fun i => (hμ i).set, (hμ _).spanning, Set.pi_univ]
 
 中文:
 定义 FiniteSpanningSetsIn.pi
@@ -600,7 +633,22 @@ definition FiniteSpanningSetsIn.pi
   refine ⟨fun n => Set.pi univ fun i => (hμ i).set ((@decode (ι -> Nat) _ n).getD default i),
     fun n => ?_, fun n => ?_, ?_⟩ <;>
   -- TODO (kmill) If this let comes before the refine, while the noncomputability checker
-  -
+  -- correctly sees this definition is computable, the Lean VM fails to see the binding is
+  -- computationally irrelevant. The `noncomputable section` doesn't help because all it does
+  -- is insert `noncomputable` for you when necessary.
+  let e : Nat -> ι -> Nat := fun n => (@decode (ι -> Nat) _ n).getD default
+  · refine mem_image_of_mem _ fun i _ => (hμ i).set_mem _
+  · calc
+      Measure.pi μ (Set.pi univ fun i => (hμ i).set (e n i)) <=
+          Measure.pi μ (Set.pi univ fun i => toMeasurable (μ i) ((hμ i).set (e n i))) :=
+        measure_mono (pi_mono fun i _ => subset_toMeasurable _ _)
+      _ = ∏ i, μ i (toMeasurable (μ i) ((hμ i).set (e n i))) :=
+        (pi_pi_aux μ _ fun i => measurableSet_toMeasurable _ _)
+      _ = ∏ i, μ i ((hμ i).set (e n i)) := by simp only [measure_toMeasurable]
+      _ < ∞ := ENNReal.prod_lt_top fun i _ => (hμ i).finite _
+  · simp_rw [(surjective_decode_getD (ι -> Nat) default).iUnion_comp fun x =>
+        Set.pi univ fun i => (hμ i).set (x i),
+      iUnion_univ_pi fun i => (hμ i).set, (hμ _).spanning, Set.pi_univ]
 
 Depends on / 依赖: Fintype, Fintype.toEncodable, Set.pi, decode, sigmaFinite, toEncodable
 -/
@@ -641,7 +689,10 @@ theorem pi_eq_generateFrom
   refine
     (FiniteSpanningSetsIn.pi h3C).ext
       (generateFrom_eq_pi hC fun i => (h3C i).isCountablySpanning).symm (IsPiSystem.pi h2C) ?_
-  rintro _ ⟨s, 
+  rintro _ ⟨s, hs, rfl⟩
+  rw [mem_univ_pi] at hs
+  have := fun i => (h3C i).sigmaFinite
+  simp_rw [h₁ s hs, pi_pi_aux μ s fun i => h4C i _ (hs i)]
 
 中文:
 定理 pi_eq_generateFrom
@@ -652,7 +703,10 @@ theorem pi_eq_generateFrom
   refine
     (FiniteSpanningSetsIn.pi h3C).ext
       (generateFrom_eq_pi hC fun i => (h3C i).isCountablySpanning).symm (IsPiSystem.pi h2C) ?_
-  rintro _ ⟨s, 
+  rintro _ ⟨s, hs, rfl⟩
+  rw [mem_univ_pi] at hs
+  have := fun i => (h3C i).sigmaFinite
+  simp_rw [h₁ s hs, pi_pi_aux μ s fun i => h4C i _ (hs i)]
 
 Depends on / 依赖: FiniteSpanningSetsIn, FiniteSpanningSetsIn.pi, IsPiSystem, IsPiSystem.pi, MeasurableSet, generateFrom_eq_pi, isCountablySpanning, measurableSet_generateFrom, mem_univ_pi, pi_pi_aux, sigmaFinite, simp_rw
 -/
@@ -998,7 +1052,8 @@ theorem pi_eval_preimage_null
   suffices Measure.pi μ (eval i ⁻¹' t) = 0 from measure_mono_null (preimage_mono hst) this
   -- Now rewrite it as `Set.pi`, and apply `pi_pi`
   rw [← univ_pi_update_univ]; rw [pi_pi]
-  ap
+  apply Finset.prod_eq_zero (Finset.mem_univ i)
+  simp [hμt]
 
 中文:
 定理 pi_eval_preimage_null
@@ -1010,7 +1065,8 @@ theorem pi_eval_preimage_null
   suffices Measure.pi μ (eval i ⁻¹' t) = 0 from measure_mono_null (preimage_mono hst) this
   -- Now rewrite it as `Set.pi`, and apply `pi_pi`
   rw [← univ_pi_update_univ]; rw [pi_pi]
-  ap
+  apply Finset.prod_eq_zero (Finset.mem_univ i)
+  simp [hμt]
 
 Depends on / 依赖: classical
 -/
@@ -1061,7 +1117,7 @@ lemma pi_map_eval
   congrm ?_ * ?_
   swap; · simp
   refine Finset.prod_congr rfl fun j hj => ?_
-  simp [
+  simp [Function.update, Finset.ne_of_mem_erase hj]
 
 中文:
 引理 pi_map_eval
@@ -1072,7 +1128,7 @@ lemma pi_map_eval
   congrm ?_ * ?_
   swap; · simp
   refine Finset.prod_congr rfl fun j hj => ?_
-  simp [
+  simp [Function.update, Finset.ne_of_mem_erase hj]
 
 Depends on / 依赖: Finset, Finset.ne_of_mem_erase, Finset.prod_congr, Finset.prod_erase_mul, Function, Function.update, Measure, Measure.map_apply, Measure.pi_pi, Measure.smul_apply, Set.univ_pi_update_univ, congrm, map_apply, measurable_pi_apply, ne_of_mem_erase, pi_pi, prod_congr, prod_erase_mul, smul_apply, smul_eq_mul
 -/
@@ -1098,7 +1154,13 @@ lemma pi_map_pi
   swap
   · exact aemeasurable_pi_lambda _
       fun i => (hf i).comp_quasiMeasurePreserving (quasiMeasurePreserving_eval _ i)
-  have : (fun (x : Π i, X i) i => f i (x i))
+  have : (fun (x : Π i, X i) i => f i (x i)) ⁻¹' (Set.univ.pi s) =
+      Set.univ.pi (fun i => (f i) ⁻¹' (s i)) := by ext x; simp
+  rw [this]; rw [pi_pi]
+  congr with i
+  rw [map_apply_of_aemeasurable (hf i) (hs i)]
+
+omit [forall i, SigmaFinite (μ i)] in
 
 中文:
 引理 pi_map_pi
@@ -1110,7 +1172,13 @@ lemma pi_map_pi
   swap
   · exact aemeasurable_pi_lambda _
       fun i => (hf i).comp_quasiMeasurePreserving (quasiMeasurePreserving_eval _ i)
-  have : (fun (x : Π i, X i) i => f i (x i))
+  have : (fun (x : Π i, X i) i => f i (x i)) ⁻¹' (Set.univ.pi s) =
+      Set.univ.pi (fun i => (f i) ⁻¹' (s i)) := by ext x; simp
+  rw [this]; rw [pi_pi]
+  congr with i
+  rw [map_apply_of_aemeasurable (hf i) (hs i)]
+
+omit [forall i, SigmaFinite (μ i)] in
 
 Depends on / 依赖: Set.univ.pi, aemeasurable_pi_lambda, comp_quasiMeasurePreserving, map_apply_of_aemeasurable, of_map, pi_eq, pi_pi, quasiMeasurePreserving_eval, univ_pi
 -/
@@ -1358,7 +1426,12 @@ lemma pi_map_piOptionEquivProd
 .symm MeasurableEquiv.piOptionEquivProd β
   have me := MeasurableEquiv.measurableEmbedding e_meas
   have : e_meas ⁻¹' pi univ s = (pi univ (fun i => s (some i))) ×ˢ (s none) := by
-    
+    ext x
+    simp only [mem_preimage, Set.mem_pi, mem_univ, forall_true_left, mem_prod]
+    refine ⟨by tauto, fun _ i => ?_⟩
+    rcases i <;> tauto
+  simp only [e_meas, me.map_apply, univ_option, Finset.prod_insertNone, this,
+    prod_prod, pi_pi, mul_comm]
 
 中文:
 引理 pi_map_piOptionEquivProd
@@ -1369,7 +1442,12 @@ lemma pi_map_piOptionEquivProd
 .symm MeasurableEquiv.piOptionEquivProd β
   have me := MeasurableEquiv.measurableEmbedding e_meas
   have : e_meas ⁻¹' pi univ s = (pi univ (fun i => s (some i))) ×ˢ (s none) := by
-    
+    ext x
+    simp only [mem_preimage, Set.mem_pi, mem_univ, forall_true_left, mem_prod]
+    refine ⟨by tauto, fun _ i => ?_⟩
+    rcases i <;> tauto
+  simp only [e_meas, me.map_apply, univ_option, Finset.prod_insertNone, this,
+    prod_prod, pi_pi, mul_comm]
 
 Depends on / 依赖: Finset, Finset.prod_insertNone, MeasurableEquiv, MeasurableEquiv.measurableEmbedding, MeasurableEquiv.piOptionEquivProd, Set.mem_pi, cast_intCast, e_meas, forall_true_left, map_apply, me.map_apply, measurableEmbedding, mem_pi, mem_preimage, mem_prod, mem_univ, piOptionEquivProd, pi_eq, prod_insertNone, univ_option
 -/
@@ -1724,7 +1802,8 @@ instance _root_.IsUnifLocDoublingMeasure.pi
   filter_upwards [Filter.eventually_all.mpr fun i =>
       IsUnifLocDoublingMeasure.eventually_measure_le_doublingConstant_mul (μ i),
     eventually_mem_nhdsWithin] with r hr (hr₀ : 0 < r) x
-  simpa (disch := positivity) [Finset.prod_mul_
+  simpa (disch := positivity) [Finset.prod_mul_distrib, closedBall_pi, pi_pi]
+    using Fintype.prod_mono' fun i => hr i (x i)
 
 中文:
 实例 _root_.是UnifLocDoublingMeasure.pi
@@ -1734,7 +1813,8 @@ instance _root_.IsUnifLocDoublingMeasure.pi
   filter_upwards [Filter.eventually_all.mpr fun i =>
       IsUnifLocDoublingMeasure.eventually_measure_le_doublingConstant_mul (μ i),
     eventually_mem_nhdsWithin] with r hr (hr₀ : 0 < r) x
-  simpa (disch := positivity) [Finset.prod_mul_
+  simpa (disch := positivity) [Finset.prod_mul_distrib, closedBall_pi, pi_pi]
+    using Fintype.prod_mono' fun i => hr i (x i)
 
 Depends on / 依赖: Filter, Filter.eventually_all.mpr, Finset, Finset.prod_mul_distrib, Fintype, Fintype.prod_mono, IsUnifLocDoublingMeasure, IsUnifLocDoublingMeasure.doublingConstant, IsUnifLocDoublingMeasure.eventually_measure_le_doublingConstant_mul, closedBall_pi, doublingConstant, eventually_all, eventually_measure_le_doublingConstant_mul, eventually_mem_nhdsWithin, filter_upwards, pi_pi, prod_mono, prod_mul_distrib
 -/
@@ -1949,7 +2029,7 @@ instance pi.isFiniteMeasureOnCompacts
     exact lt_of_le_of_lt (measure_mono (univ.subset_pi_eval_image K)) this
   rw [Measure.pi_pi]
   refine WithTop.prod_lt_top ?_
-  exact fun i _ => IsCompact.measure_lt_top (IsCompact.image hK (co
+  exact fun i _ => IsCompact.measure_lt_top (IsCompact.image hK (continuous_apply i))
 
 中文:
 实例 pi.isFiniteMeasureOnCompacts
@@ -1961,7 +2041,7 @@ instance pi.isFiniteMeasureOnCompacts
     exact lt_of_le_of_lt (measure_mono (univ.subset_pi_eval_image K)) this
   rw [Measure.pi_pi]
   refine WithTop.prod_lt_top ?_
-  exact fun i _ => IsCompact.measure_lt_top (IsCompact.image hK (co
+  exact fun i _ => IsCompact.measure_lt_top (IsCompact.image hK (continuous_apply i))
 
 Depends on / 依赖: Function, Function.eval, IsCompact, IsCompact.image, IsCompact.measure_lt_top, Measure, Measure.pi, Measure.pi_pi, Set.univ.pi, WithTop, WithTop.prod_lt_top, continuous_apply, lt_of_le_of_lt, measure_lt_top, measure_mono, pi_pi, prod_lt_top, subset_pi_eval_image, univ.subset_pi_eval_image
 -/
@@ -2160,7 +2240,9 @@ theorem measurePreserving_piEquivPiSubtypeProd
   refine ⟨e.measurable, (pi_eq fun s _ => ?_).symm⟩
   have : e ⁻¹' pi univ s =
       (pi univ fun i : { i // p i } => s i) ×ˢ pi univ fun i : { i // ¬p i } => s i :=
-    Equiv.preimage_piEquivPiSubtype
+    Equiv.preimage_piEquivPiSubtypeProd_symm_pi p s
+  rw [e.map_apply]; rw [this]; rw [prod_prod]; rw [pi_pi]; rw [pi_pi]
+  exact Fintype.prod_subtype_mul_prod_subtype p fun i => μ i (s i)
 
 中文:
 定理 measurePreserving_piEquivPiSubtypeProd
@@ -2171,7 +2253,9 @@ theorem measurePreserving_piEquivPiSubtypeProd
   refine ⟨e.measurable, (pi_eq fun s _ => ?_).symm⟩
   have : e ⁻¹' pi univ s =
       (pi univ fun i : { i // p i } => s i) ×ˢ pi univ fun i : { i // ¬p i } => s i :=
-    Equiv.preimage_piEquivPiSubtype
+    Equiv.preimage_piEquivPiSubtypeProd_symm_pi p s
+  rw [e.map_apply]; rw [this]; rw [prod_prod]; rw [pi_pi]; rw [pi_pi]
+  exact Fintype.prod_subtype_mul_prod_subtype p fun i => μ i (s i)
 
 Depends on / 依赖: Equiv.preimage_piEquivPiSubtypeProd_symm_pi, Fintype, Fintype.prod_subtype_mul_prod_subtype, MeasurableEquiv, MeasurableEquiv.piEquivPiSubtypeProd, MeasurePreserving, MeasurePreserving.symm, e.map_apply, e.measurable, map_apply, measurable, piEquivPiSubtypeProd, pi_eq, pi_pi, preimage_piEquivPiSubtypeProd_symm_pi, prod_prod, prod_subtype_mul_prod_subtype
 -/
@@ -2287,7 +2371,16 @@ theorem measurePreserving_arrowProdEquivProdArrow
   map_eq := by
     refine (FiniteSpanningSetsIn.ext ?_ (isPiSystem_pi.prod isPiSystem_pi)
       ((FiniteSpanningSetsIn.pi fun i => (μ i).toFiniteSpanningSetsIn).prod
-      (FiniteSpanningSetsIn.pi (fun i => (ν i).toFiniteSpanningSetsIn))) ?_
+      (FiniteSpanningSetsIn.pi (fun i => (ν i).toFiniteSpanningSetsIn))) ?_).symm
+    · refine (generateFrom_eq_prod generateFrom_pi generateFrom_pi ?_ ?_).symm
+      · exact (FiniteSpanningSetsIn.pi (fun i => (μ i).toFiniteSpanningSetsIn)).isCountablySpanning
+      · exact (FiniteSpanningSetsIn.pi (fun i => (ν i).toFiniteSpanningSetsIn)).isCountablySpanning
+    · rintro _ ⟨s, ⟨s, _, rfl⟩, ⟨_, ⟨t, _, rfl⟩, rfl⟩⟩
+      rw [MeasurableEquiv.map_apply]; rw [MeasurableEquiv.arrowProdEquivProdArrow]; rw [MeasurableEquiv.coe_mk]
+      rw [show Equiv.arrowProdEquivProdArrow γ _ _ ⁻¹' (univ.pi s ×ˢ univ.pi t) =
+          (univ.pi fun i => s i ×ˢ t i) by
+          ext; simp [Set.mem_pi]; rw [forall_and]]
+      simp_rw [pi_pi, prod_prod, pi_pi, Finset.prod_mul_distrib]
 
 中文:
 定理 measurePreserving_arrowProdEquivProdArrow
@@ -2296,7 +2389,16 @@ theorem measurePreserving_arrowProdEquivProdArrow
   map_eq := by
     refine (FiniteSpanningSetsIn.ext ?_ (isPiSystem_pi.prod isPiSystem_pi)
       ((FiniteSpanningSetsIn.pi fun i => (μ i).toFiniteSpanningSetsIn).prod
-      (FiniteSpanningSetsIn.pi (fun i => (ν i).toFiniteSpanningSetsIn))) ?_
+      (FiniteSpanningSetsIn.pi (fun i => (ν i).toFiniteSpanningSetsIn))) ?_).symm
+    · refine (generateFrom_eq_prod generateFrom_pi generateFrom_pi ?_ ?_).symm
+      · exact (FiniteSpanningSetsIn.pi (fun i => (μ i).toFiniteSpanningSetsIn)).isCountablySpanning
+      · exact (FiniteSpanningSetsIn.pi (fun i => (ν i).toFiniteSpanningSetsIn)).isCountablySpanning
+    · rintro _ ⟨s, ⟨s, _, rfl⟩, ⟨_, ⟨t, _, rfl⟩, rfl⟩⟩
+      rw [MeasurableEquiv.map_apply]; rw [MeasurableEquiv.arrowProdEquivProdArrow]; rw [MeasurableEquiv.coe_mk]
+      rw [show Equiv.arrowProdEquivProdArrow γ _ _ ⁻¹' (univ.pi s ×ˢ univ.pi t) =
+          (univ.pi fun i => s i ×ˢ t i) by
+          ext; simp [Set.mem_pi]; rw [forall_and]]
+      simp_rw [pi_pi, prod_prod, pi_pi, Finset.prod_mul_distrib]
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.arrowProdEquivProdArrow, arrowProdEquivProdArrow, measurable
 -/
@@ -2353,7 +2455,7 @@ theorem measurePreserving_sumPiEquivProdPi_symm
     refine (pi_eq fun s _ => ?_).symm
     simp_rw [MeasurableEquiv.map_apply, MeasurableEquiv.coe_sumPiEquivProdPi_symm,
       Equiv.sumPiEquivProdPi_symm_preimage_univ_pi, Measure.prod_prod, Measure.pi_pi,
-      Fintype.prod_sum_ty
+      Fintype.prod_sum_type]
 
 中文:
 定理 measurePreserving_sumPiEquivProdPi_symm
@@ -2363,7 +2465,7 @@ theorem measurePreserving_sumPiEquivProdPi_symm
     refine (pi_eq fun s _ => ?_).symm
     simp_rw [MeasurableEquiv.map_apply, MeasurableEquiv.coe_sumPiEquivProdPi_symm,
       Equiv.sumPiEquivProdPi_symm_preimage_univ_pi, Measure.prod_prod, Measure.pi_pi,
-      Fintype.prod_sum_ty
+      Fintype.prod_sum_type]
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.sumPiEquivProdPi, measurable, sumPiEquivProdPi, symm.measurable
 -/
@@ -2510,6 +2612,9 @@ theorem measurePreserving_piUnique
     have : (piPremeasure fun i => (μ i).toOuterMeasure) = Measure.map e.symm (μ default) := by
       ext1 s
       rw [piPremeasure]; rw [Fintype.prod_unique]; rw [e.symm.map_apply]; rw [coe_toOuterMeasure]
+      congr 1; exact e.toEquiv.image_eq_preimage_symm s
+    simp_rw [Measure.pi, OuterMeasure.pi, this, ← coe_toOuterMeasure, boundedBy_eq_self,
+      toOuterMeasure_toMeasure, MeasurableEquiv.map_map_symm]
 
 中文:
 定理 measurePreserving_piUnique
@@ -2520,6 +2625,9 @@ theorem measurePreserving_piUnique
     have : (piPremeasure fun i => (μ i).toOuterMeasure) = Measure.map e.symm (μ default) := by
       ext1 s
       rw [piPremeasure]; rw [Fintype.prod_unique]; rw [e.symm.map_apply]; rw [coe_toOuterMeasure]
+      congr 1; exact e.toEquiv.image_eq_preimage_symm s
+    simp_rw [Measure.pi, OuterMeasure.pi, this, ← coe_toOuterMeasure, boundedBy_eq_self,
+      toOuterMeasure_toMeasure, MeasurableEquiv.map_map_symm]
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.piUnique, measurable, piUnique
 -/
@@ -2877,7 +2985,8 @@ theorem measurePreserving_arrowCongr'
     (measurePreserving_piCongrLeft (fun i : α₂ => ν i) eα).comp
       (measurePreserving_pi μ (fun i : α₁ => ν (eα i)) hm)
   simp only [MeasurableEquiv.arrowCongr', Equiv.arrowCongr', Equiv.arrowCongr, EquivLike.coe_coe,
-    comp_def, MeasurableEquiv.coe_mk, Equiv.coe_fn_mk, Measurable
+    comp_def, MeasurableEquiv.coe_mk, Equiv.coe_fn_mk, MeasurableEquiv.piCongrLeft,
+    Equiv.piCongrLeft, Equiv.symm_symm, Equiv.piCongrLeft', eq_rec_constant, Equiv.coe_fn_symm_mk]
 
 中文:
 定理 measurePreserving_arrowCongr'
@@ -2887,7 +2996,8 @@ theorem measurePreserving_arrowCongr'
     (measurePreserving_piCongrLeft (fun i : α₂ => ν i) eα).comp
       (measurePreserving_pi μ (fun i : α₁ => ν (eα i)) hm)
   simp only [MeasurableEquiv.arrowCongr', Equiv.arrowCongr', Equiv.arrowCongr, EquivLike.coe_coe,
-    comp_def, MeasurableEquiv.coe_mk, Equiv.coe_fn_mk, Measurable
+    comp_def, MeasurableEquiv.coe_mk, Equiv.coe_fn_mk, MeasurableEquiv.piCongrLeft,
+    Equiv.piCongrLeft, Equiv.symm_symm, Equiv.piCongrLeft', eq_rec_constant, Equiv.coe_fn_symm_mk]
 
 Depends on / 依赖: Equiv.arrowCongr, Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Equiv.piCongrLeft, Equiv.symm_symm, EquivLike, EquivLike.coe_coe, MeasurableEquiv, MeasurableEquiv.arrowCongr, MeasurableEquiv.coe_mk, MeasurableEquiv.piCongrLeft, arrowCongr, coe_coe, coe_fn_mk, coe_fn_symm_mk, coe_mk, comp_def, convert, eq_rec_constant, measurePreserving_pi
 -/

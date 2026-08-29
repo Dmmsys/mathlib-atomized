@@ -342,7 +342,14 @@ definition ofPrimeEquiv
   intro x y e
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl x
   obtain ⟨y, t, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl y
-  have
+  have H : forall x : P.primeCompl, x.1 != 0 := by rintro ⟨x, hx⟩ rfl; aesop
+  have : x.1 = y.1 * t.1.1⁻¹ * s.1.1 := by
+    simpa [IsLocalization.lift_mk', Algebra.ofId_apply, H,
+Algebra.algebraMap_ofSubsemiring_apply, IsUnit.coe_liftRight] using congr( e * s.1.1)
+  rw [IsLocalization.mk'_eq_iff_eq]
+  congr 1
+  ext
+  simp [field, H t, this, mul_comm]
 
 中文:
 定义 ofPrimeEquiv
@@ -353,7 +360,14 @@ definition ofPrimeEquiv
   intro x y e
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl x
   obtain ⟨y, t, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl y
-  have
+  have H : forall x : P.primeCompl, x.1 != 0 := by rintro ⟨x, hx⟩ rfl; aesop
+  have : x.1 = y.1 * t.1.1⁻¹ * s.1.1 := by
+    simpa [IsLocalization.lift_mk', Algebra.ofId_apply, H,
+Algebra.algebraMap_ofSubsemiring_apply, IsUnit.coe_liftRight] using congr( e * s.1.1)
+  rw [IsLocalization.mk'_eq_iff_eq]
+  congr 1
+  ext
+  simp [field, H t, this, mul_comm]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjective, Algebra, Algebra.algebraMap_ofSubsemiring_apply, Algebra.ofId, Algebra.ofId_apply, AtPrime, IsLocalization, IsLocalization.exists_mk, IsLocalization.liftAlgHom, IsLocalization.lift_mk, IsUnit, Localization, Localization.AtPrime, P.primeCompl, algebraMap_ofSubsemiring_apply, exists_mk, liftAlgHom, lift_mk, ofId_apply
 -/

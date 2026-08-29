@@ -183,7 +183,12 @@ theorem induction
   Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
     suffices p (single a (f.coeff a) + f.erase a) by rwa [single_add_erase] at this
     classical
-   
+    apply ha
+    · rw [support_erase, Finset.mem_erase]
+      exact fun H => H.1 rfl
+    · simp only [← mem_support_iff, hf, Finset.mem_cons_self]
+    · apply ih
+      rw [support_erase]; rw [hf]; rw [Finset.erase_cons]
 
 中文:
 定理 induction
@@ -193,7 +198,12 @@ theorem induction
   Finset.cons_induction_on s (fun f hf => by rwa [support_eq_empty.1 hf]) fun a s has ih f hf => by
     suffices p (single a (f.coeff a) + f.erase a) by rwa [single_add_erase] at this
     classical
-   
+    apply ha
+    · rw [support_erase, Finset.mem_erase]
+      exact fun H => H.1 rfl
+    · simp only [← mem_support_iff, hf, Finset.mem_cons_self]
+    · apply ih
+      rw [support_erase]; rw [hf]; rw [Finset.erase_cons]
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, Finset.erase_cons, Finset.mem_cons_self, Finset.mem_erase, SkewMonoidAlgebra, classical, cons_induction_on, erase_cons, f.coeff, f.erase, f.support, mem_cons_self, mem_erase, mem_support_iff, single, single_add_erase, support, support_eq_empty, support_erase
 -/

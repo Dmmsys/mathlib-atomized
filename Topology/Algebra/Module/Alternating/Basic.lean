@@ -1065,7 +1065,9 @@ definition ofSubsingleton
       toContinuousMultilinearMap := ContinuousMultilinearMap.ofSubsingleton R M N i f }
   invFun f := (ContinuousMultilinearMap.ofSubsingleton R M N i).symm f.1
 right_inv _ := toContinuousMultilinearMap_injective
-    (ContinuousMultilinearMap.ofSubsingl
+    (ContinuousMultilinearMap.ofSubsingleton R M N i).apply_symm_apply _
+
+@[simp]
 
 中文:
 定义 ofSubsingleton
@@ -1074,7 +1076,9 @@ right_inv _ := toContinuousMultilinearMap_injective
       toContinuousMultilinearMap := ContinuousMultilinearMap.ofSubsingleton R M N i f }
   invFun f := (ContinuousMultilinearMap.ofSubsingleton R M N i).symm f.1
 right_inv _ := toContinuousMultilinearMap_injective
-    (ContinuousMultilinearMap.ofSubsingl
+    (ContinuousMultilinearMap.ofSubsingleton R M N i).apply_symm_apply _
+
+@[simp]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.ofSubsingleton, ContinuousMultilinearMap, ContinuousMultilinearMap.ofSubsingleton, apply_symm_apply, invFun, ofSubsingleton, right_inv, toContinuousMultilinearMap, toContinuousMultilinearMap_injective
 -/
@@ -2118,7 +2122,7 @@ definition alternatization
         simpa [MultilinearMap.alternatization_apply]
           using f.1.alternatization.map_eq_zero_of_eq' v i j hv hne }
   map_zero' := by ext; simp
-  map_add'
+  map_add' _ _ := by ext; simp [Finset.sum_add_distrib]
 
 中文:
 定义 alternatization
@@ -2128,7 +2132,7 @@ definition alternatization
         simpa [MultilinearMap.alternatization_apply]
           using f.1.alternatization.map_eq_zero_of_eq' v i j hv hne }
   map_zero' := by ext; simp
-  map_add'
+  map_add' _ _ := by ext; simp [Finset.sum_add_distrib]
 
 Depends on / 依赖: Equiv.Perm, Equiv.Perm.sign, Finset, Finset.sum_add_distrib, MultilinearMap, MultilinearMap.alternatization_apply, alternatization, alternatization.map_eq_zero_of_eq, alternatization_apply, domDomCongr, f.domDomCongr, map_add, map_eq_zero_of_eq, map_zero, sum_add_distrib, toContinuousMultilinearMap
 -/

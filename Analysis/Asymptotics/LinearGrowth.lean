@@ -749,7 +749,10 @@ lemma tendsto_atTop_of_linearGrowthInf_pos
   refine tendsto_nhds_top_iff_real.2 fun M => eventually_atTop.2 ?_
   lift a to Real using ⟨ne_top_of_lt a_v, ne_bot_of_gt a_0⟩
   rw [EReal.coe_pos] at a_0
-  obtain ⟨
+  obtain ⟨n, hn⟩ := exists_nat_ge (M / a)
+  refine ⟨n + 1, fun k k_n => ?_⟩
+  rw [← coe_coe_eq_natCast]; rw [← coe_mul]; rw [EReal.coe_lt_coe_iff]; rw [mul_comm]
+  exact (div_lt_iff₀ a_0).1 (hn.trans_lt (Nat.cast_lt.2 k_n))
 
 中文:
 引理 tendsto_atTop_of_linearGrowthInf_pos
@@ -760,7 +763,10 @@ lemma tendsto_atTop_of_linearGrowthInf_pos
   refine tendsto_nhds_top_iff_real.2 fun M => eventually_atTop.2 ?_
   lift a to Real using ⟨ne_top_of_lt a_v, ne_bot_of_gt a_0⟩
   rw [EReal.coe_pos] at a_0
-  obtain ⟨
+  obtain ⟨n, hn⟩ := exists_nat_ge (M / a)
+  refine ⟨n + 1, fun k k_n => ?_⟩
+  rw [← coe_coe_eq_natCast]; rw [← coe_mul]; rw [EReal.coe_lt_coe_iff]; rw [mul_comm]
+  exact (div_lt_iff₀ a_0).1 (hn.trans_lt (Nat.cast_lt.2 k_n))
 
 Depends on / 依赖: EReal.coe_lt_coe_iff, EReal.coe_pos, Nat.cast_lt, cast_lt, coe_coe_eq_natCast, coe_lt_coe_iff, coe_mul, coe_pos, eventually_atTop, exists_between, exists_nat_ge, hn.trans_lt, le_linearGrowthInf_iff, le_refl, mul_comm, ne_bot_of_gt, ne_top_of_lt, tendsto_nhds_top_iff_real, tendsto_nhds_top_mono, trans_lt
 -/
@@ -983,7 +989,9 @@ lemma linearGrowthInf_le_of_eventually_le
   rcases eq_bot_or_bot_lt b with rfl | b_bot
   · simp only [add_bot, ← Pi.bot_def, linearGrowthInf_bot, bot_le]
   · apply (linearGrowthInf_add_le' _ _).trans_eq <;> rw [linearGrowthSup_const b_bot.ne' hb]
-    · exact add_zero (linearGrowthInf 
+    · exact add_zero (linearGrowthInf v)
+    · exact Or.inr EReal.zero_ne_top
+    · exact Or.inr EReal.zero_ne_bot
 
 中文:
 引理 linearGrowthInf_le_of_eventually_le
@@ -993,7 +1001,9 @@ lemma linearGrowthInf_le_of_eventually_le
   rcases eq_bot_or_bot_lt b with rfl | b_bot
   · simp only [add_bot, ← Pi.bot_def, linearGrowthInf_bot, bot_le]
   · apply (linearGrowthInf_add_le' _ _).trans_eq <;> rw [linearGrowthSup_const b_bot.ne' hb]
-    · exact add_zero (linearGrowthInf 
+    · exact add_zero (linearGrowthInf v)
+    · exact Or.inr EReal.zero_ne_top
+    · exact Or.inr EReal.zero_ne_bot
 
 Depends on / 依赖: EReal.zero_ne_bot, EReal.zero_ne_top, Or.inr, Pi.bot_def, add_bot, add_zero, b_bot, b_bot.ne, bot_def, bot_le, eq_bot_or_bot_lt, linearGrowthInf, linearGrowthInf_add_le, linearGrowthInf_bot, linearGrowthInf_eventually_monotone, linearGrowthSup_const, trans_eq, zero_ne_bot, zero_ne_top
 -/
@@ -1018,7 +1028,9 @@ lemma linearGrowthSup_le_of_eventually_le
   rcases eq_bot_or_bot_lt b with rfl | b_bot
   · simp only [add_bot, ← Pi.bot_def, linearGrowthSup_bot, bot_le]
   · apply (linearGrowthSup_add_le _ _).trans_eq <;> rw [linearGrowthSup_const b_bot.ne' hb]
-    · exact add_zero (linearGrowthSup v
+    · exact add_zero (linearGrowthSup v)
+    · exact Or.inr EReal.zero_ne_top
+    · exact Or.inr EReal.zero_ne_bot
 
 中文:
 引理 linearGrowthSup_le_of_eventually_le
@@ -1028,7 +1040,9 @@ lemma linearGrowthSup_le_of_eventually_le
   rcases eq_bot_or_bot_lt b with rfl | b_bot
   · simp only [add_bot, ← Pi.bot_def, linearGrowthSup_bot, bot_le]
   · apply (linearGrowthSup_add_le _ _).trans_eq <;> rw [linearGrowthSup_const b_bot.ne' hb]
-    · exact add_zero (linearGrowthSup v
+    · exact add_zero (linearGrowthSup v)
+    · exact Or.inr EReal.zero_ne_top
+    · exact Or.inr EReal.zero_ne_bot
 
 Depends on / 依赖: EReal.zero_ne_bot, EReal.zero_ne_top, Or.inr, Pi.bot_def, add_bot, add_zero, b_bot, b_bot.ne, bot_def, bot_le, eq_bot_or_bot_lt, linearGrowthSup, linearGrowthSup_add_le, linearGrowthSup_bot, linearGrowthSup_const, linearGrowthSup_eventually_monotone, trans_eq, zero_ne_bot, zero_ne_top
 -/
@@ -1320,7 +1334,18 @@ lemma EReal.eventually_atTop_exists_nat_between
     · positivity
   | (a : Real) =>
     match b with
-    | 
+    | ⊤ => by
+      refine (eventually_gt_atTop 0).mono fun n n_0 => ?_
+      obtain ⟨m, hm⟩ := exists_nat_ge_mul h.ne n
+      exact ⟨m, hm, le_of_le_of_eq le_top (top_mul_of_pos (Nat.cast_pos'.2 n_0)).symm⟩
+    | ⊥ => (not_lt_bot h).rec
+    | (b : Real) => by
+obtain ⟨x, hx⟩ := eventually_atTop.1 Real.eventually_atTop_exists_nat_between
+        (EReal.coe_lt_coe_iff.1 h) (EReal.coe_nonneg.1 hb)
+      obtain ⟨n, x_n⟩ := exists_nat_ge x
+      refine eventually_atTop.2 ⟨n, fun k n_k => ?_⟩
+      simp only [← coe_coe_eq_natCast, ← EReal.coe_mul, EReal.coe_le_coe_iff]
+      exact hx k (x_n.trans (Nat.cast_le.2 n_k))
 
 中文:
 引理 E实数.eventually_atTop_存在_nat_between
@@ -1334,7 +1359,18 @@ lemma EReal.eventually_atTop_exists_nat_between
     · positivity
   | (a : Real) =>
     match b with
-    | 
+    | ⊤ => by
+      refine (eventually_gt_atTop 0).mono fun n n_0 => ?_
+      obtain ⟨m, hm⟩ := exists_nat_ge_mul h.ne n
+      exact ⟨m, hm, le_of_le_of_eq le_top (top_mul_of_pos (Nat.cast_pos'.2 n_0)).symm⟩
+    | ⊥ => (not_lt_bot h).rec
+    | (b : Real) => by
+obtain ⟨x, hx⟩ := eventually_atTop.1 Real.eventually_atTop_exists_nat_between
+        (EReal.coe_lt_coe_iff.1 h) (EReal.coe_nonneg.1 hb)
+      obtain ⟨n, x_n⟩ := exists_nat_ge x
+      refine eventually_atTop.2 ⟨n, fun k n_k => ?_⟩
+      simp only [← coe_coe_eq_natCast, ← EReal.coe_mul, EReal.coe_le_coe_iff]
+      exact hx k (x_n.trans (Nat.cast_le.2 n_k))
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Nat.cast_pos, Nat.cast_zero, bot_le, cast_nonneg, cast_pos, cast_zero, eventually_gt_atTop, exists_nat_ge_mul, h.ne, le_of_le_of_eq, le_top, mul_nonpos_iff, n.cast_nonneg, not_lt_bot, not_top_lt, of_forall, top_mul_of_pos
 -/
@@ -1400,7 +1436,13 @@ lemma le_linearGrowthInf_comp
     rw [← linearGrowthInf_const zero_ne_bot zero_ne_top]
     exact linearGrowthInf_eventually_monotone (hv.eventually hu)
   apply EReal.mul_le_of_forall_lt_of_nonneg (linearGrowthInf_natCast_nonneg v) uv_0
-  refine fun a ⟨_, a_v⟩ b ⟨b_0, b_u⟩ => Ev
+  refine fun a ⟨_, a_v⟩ b ⟨b_0, b_u⟩ => Eventually.le_linearGrowthInf ?_
+  have b_uv := eventually_map.1 ((eventually_mul_le b_u).filter_mono hv)
+  filter_upwards [b_uv, eventually_lt_of_lt_liminf a_v, eventually_gt_atTop 0]
+    with n b_uvn a_vn n_0
+  replace a_vn := ((lt_div_iff (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 a_vn).le
+  rw [comp_apply]; rw [mul_comm a b]; rw [mul_assoc b a]
+exact b_uvn.trans' by gcongr
 
 中文:
 引理 le_linearGrowthInf_comp
@@ -1410,7 +1452,13 @@ lemma le_linearGrowthInf_comp
     rw [← linearGrowthInf_const zero_ne_bot zero_ne_top]
     exact linearGrowthInf_eventually_monotone (hv.eventually hu)
   apply EReal.mul_le_of_forall_lt_of_nonneg (linearGrowthInf_natCast_nonneg v) uv_0
-  refine fun a ⟨_, a_v⟩ b ⟨b_0, b_u⟩ => Ev
+  refine fun a ⟨_, a_v⟩ b ⟨b_0, b_u⟩ => Eventually.le_linearGrowthInf ?_
+  have b_uv := eventually_map.1 ((eventually_mul_le b_u).filter_mono hv)
+  filter_upwards [b_uv, eventually_lt_of_lt_liminf a_v, eventually_gt_atTop 0]
+    with n b_uvn a_vn n_0
+  replace a_vn := ((lt_div_iff (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 a_vn).le
+  rw [comp_apply]; rw [mul_comm a b]; rw [mul_assoc b a]
+exact b_uvn.trans' by gcongr
 
 Depends on / 依赖: EReal.mul_le_of_forall_lt_of_nonneg, Eventually, Eventually.le_linearGrowthInf, a_vn, b_uv, b_uvn, eventually, eventually_gt_atTop, eventually_lt_of_lt_liminf, eventually_map, eventually_mul_le, filter_mono, filter_upwards, hv.eventually, le_linearGrowthInf, linearGrowthInf, linearGrowthInf_const, linearGrowthInf_eventually_monotone, linearGrowthInf_natCast_nonneg, mul_le_of_forall_lt_of_nonneg
 -/
@@ -1440,7 +1488,14 @@ have v_0 := hv₀.symm.lt_of_le (linearGrowthInf_natCast_nonneg v).trans (liminf
   refine fun a v_a b u_b => Eventually.linearGrowthSup_le ?_
   have b_0 : 0 <= b := by
     rw [← linearGrowthInf_const zero_ne_bot zero_ne_top]
-    exact
+    exact (linearGrowthInf_le_linearGrowthSup_of_frequently_le hu).trans u_b.le
+  have uv_b : forallᶠ n in atTop, u (v n) <= b * v n :=
+    eventually_map.1 ((eventually_le_mul u_b).filter_mono hv₂)
+  filter_upwards [uv_b, eventually_lt_of_limsup_lt v_a, eventually_gt_atTop 0]
+    with n uvn_b vn_a n_0
+  replace vn_a := ((div_lt_iff (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 vn_a).le
+  rw [comp_apply]; rw [mul_comm a b]; rw [mul_assoc b a]
+exact uvn_b.trans by gcongr
 
 中文:
 引理 linearGrowthSup_comp_le
@@ -1451,7 +1506,14 @@ have v_0 := hv₀.symm.lt_of_le (linearGrowthInf_natCast_nonneg v).trans (liminf
   refine fun a v_a b u_b => Eventually.linearGrowthSup_le ?_
   have b_0 : 0 <= b := by
     rw [← linearGrowthInf_const zero_ne_bot zero_ne_top]
-    exact
+    exact (linearGrowthInf_le_linearGrowthSup_of_frequently_le hu).trans u_b.le
+  have uv_b : forallᶠ n in atTop, u (v n) <= b * v n :=
+    eventually_map.1 ((eventually_le_mul u_b).filter_mono hv₂)
+  filter_upwards [uv_b, eventually_lt_of_limsup_lt v_a, eventually_gt_atTop 0]
+    with n uvn_b vn_a n_0
+  replace vn_a := ((div_lt_iff (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 vn_a).le
+  rw [comp_apply]; rw [mul_comm a b]; rw [mul_assoc b a]
+exact uvn_b.trans by gcongr
 
 Depends on / 依赖: Eventually, Eventually.linearGrowthSup_le, eventual, eventually_le_mul, eventually_map, filter_mono, filter_upwards, le_mul_of_forall_lt, liminf_le_limsup, linearGrowthInf_const, linearGrowthInf_le_linearGrowthSup_of_frequently_le, linearGrowthInf_natCast_nonneg, linearGrowthSup_le, lt_of_le, symm.lt_of_le, u_b.le, uv_b, zero_ne_bot, zero_ne_top
 -/
@@ -1486,7 +1548,9 @@ lemma _root_.Monotone.linearGrowthInf_nonneg
   have m_n : forallᶠ n in atTop, u m <= u n := eventually_atTop.2 ⟨m, fun _ hb => h hb⟩
   rcases eq_or_ne (u m) ⊤ with hm' | hm'
   · rw [hm'] at m_n
-    exact le_top.trans (linearGrowthInf_top.symm.trans_le (linearGrowthInf_
+    exact le_top.trans (linearGrowthInf_top.symm.trans_le (linearGrowthInf_eventually_monotone m_n))
+  · rw [← linearGrowthInf_const hm hm']
+    exact linearGrowthInf_eventually_monotone m_n
 
 中文:
 引理 _root_.递增.linearGrowthInf_nonneg
@@ -1497,7 +1561,9 @@ lemma _root_.Monotone.linearGrowthInf_nonneg
   have m_n : forallᶠ n in atTop, u m <= u n := eventually_atTop.2 ⟨m, fun _ hb => h hb⟩
   rcases eq_or_ne (u m) ⊤ with hm' | hm'
   · rw [hm'] at m_n
-    exact le_top.trans (linearGrowthInf_top.symm.trans_le (linearGrowthInf_
+    exact le_top.trans (linearGrowthInf_top.symm.trans_le (linearGrowthInf_eventually_monotone m_n))
+  · rw [← linearGrowthInf_const hm hm']
+    exact linearGrowthInf_eventually_monotone m_n
 
 Depends on / 依赖: eq_or_ne, eventually_atTop, funext_iff, le_top, le_top.trans, linearGrowthInf_const, linearGrowthInf_eventually_monotone, linearGrowthInf_top, linearGrowthInf_top.symm.trans_le, ne_eq, not_forall, trans_le
 -/
@@ -1544,7 +1610,8 @@ lemma linearGrowthInf_comp_nonneg
     (eventually_atTop.2 ⟨m, fun n m_n => h m_n⟩).filter_mono hv
   apply (linearGrowthInf_eventually_monotone um_uvn).trans'
   rcases eq_or_ne (u m) ⊤ with hum' | hum'
-
+  · rw [hum', ← Pi.top_def, linearGrowthInf_top]; exact le_top
+  · rw [linearGrowthInf_const hum hum']
 
 中文:
 引理 linearGrowthInf_comp_nonneg
@@ -1556,7 +1623,8 @@ lemma linearGrowthInf_comp_nonneg
     (eventually_atTop.2 ⟨m, fun n m_n => h m_n⟩).filter_mono hv
   apply (linearGrowthInf_eventually_monotone um_uvn).trans'
   rcases eq_or_ne (u m) ⊤ with hum' | hum'
-
+  · rw [hum', ← Pi.top_def, linearGrowthInf_top]; exact le_top
+  · rw [linearGrowthInf_const hum hum']
 
 Depends on / 依赖: Pi.top_def, eq_or_ne, eventually_atTop, filter_mono, funext_iff, le_top, linearGrowthInf_const, linearGrowthInf_eventually_monotone, linearGrowthInf_top, ne_eq, not_forall, top_def, um_uvn
 -/
@@ -1602,7 +1670,40 @@ lemma _root_.Monotone.linearGrowthInf_comp_le
   · rw [u_0, Pi.bot_comp, linearGrowthInf_bot]; exact bot_le
 have v_0 := hv₀.symm.lt_of_le (linearGrowthInf_natCast_nonneg v).trans (liminf_le_limsup)
   refine le_mul_of_forall_lt (.inl v_0) (.inl hv₁) fun a v_a b u_b => ?_
-  have 
+  have a_0 := v_0.trans v_a
+  have b_0 := (h.linearGrowthInf_nonneg u_0).trans_lt u_b
+  rcases eq_or_ne a ⊤ with rfl | a_top
+  · rw [top_mul_of_pos b_0]; exact le_top
+  apply Frequently.linearGrowthInf_le
+  obtain ⟨a', v_a', a_a'⟩ := exists_between v_a
+  -- We get an epsilon of room: if `m` is large enough, then `v n ≤ a' * n < a * n`.
+  -- Using `u_b`, we can find arbitrarily large values `n` such that `u n ≤ b * n`.
+  -- If such an `n` is large enough, then we can find an integer `k` such that
+  -- `a⁻¹ * n ≤ k ≤ a'⁻¹ * n`, or, in other words, `a' * k ≤ n ≤ a * k`.
+  -- Then `v k ≤ a' * k ≤ n`, so `u (v k) ≤ u n ≤ b * n ≤ b * a * k`.
+  have a_0' := v_0.trans v_a'
+  have a_a_inv' : a⁻¹ < a'⁻¹ := inv_strictAntiOn (Set.mem_Ioi.2 a_0') (Set.mem_Ioi.2 a_0) a_a'
+  replace v_a' : forallᶠ n : Nat in atTop, v n <= a' * n := by
+    filter_upwards [eventually_lt_of_limsup_lt v_a', eventually_gt_atTop 0] with n vn_a' n_0
+    rw [mul_comm]
+    exact (div_le_iff_le_mul (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 vn_a'.le
+  suffices h : (forallᶠ n : Nat in atTop, v n <= a' * n) -> existsᶠ n : Nat in atTop, (u ∘ v) n <= a * b * n
+    from h v_a'
+  rw [← frequently_imp_distrib]
+  replace u_b := ((frequently_le_mul u_b).and_eventually (eventually_gt_atTop 0)).and_eventually
+ EReal.eventually_atTop_exists_nat_between a_a_inv' (inv_nonneg_of_nonneg a_0'.le)
+  refine frequently_atTop.2 fun M => ?_
+  obtain ⟨M', aM_M'⟩ := exists_nat_ge_mul a_top M
+  obtain ⟨n, n_M', ⟨un_bn, _⟩, k, an_k, k_an'⟩ := frequently_atTop.1 u_b M'
+  refine ⟨k, ?_, fun vk_ak' => ?_⟩
+  · rw [mul_comm a, ← le_div_iff_mul_le a_0 a_top, EReal.div_eq_inv_mul] at aM_M'
+apply Nat.cast_le.1 aM_M'.trans an_k.trans' _
+    gcongr
+  · rw [comp_apply, mul_comm a b, mul_assoc b a]
+    rw [← EReal.div_eq_inv_mul]; rw [le_div_iff_mul_le a_0' (ne_top_of_lt a_a')]; rw [mul_comm] at k_an'
+    rw [← EReal.div_eq_inv_mul]; rw [div_le_iff_le_mul a_0 a_top] at an_k
+    have vk_n := Nat.cast_le.1 (vk_ak'.trans k_an')
+exact (h vk_n).trans un_bn.trans by gcongr
 
 中文:
 引理 _root_.递增.linearGrowthInf_comp_le
@@ -1613,7 +1714,40 @@ have v_0 := hv₀.symm.lt_of_le (linearGrowthInf_natCast_nonneg v).trans (liminf
   · rw [u_0, Pi.bot_comp, linearGrowthInf_bot]; exact bot_le
 have v_0 := hv₀.symm.lt_of_le (linearGrowthInf_natCast_nonneg v).trans (liminf_le_limsup)
   refine le_mul_of_forall_lt (.inl v_0) (.inl hv₁) fun a v_a b u_b => ?_
-  have 
+  have a_0 := v_0.trans v_a
+  have b_0 := (h.linearGrowthInf_nonneg u_0).trans_lt u_b
+  rcases eq_or_ne a ⊤ with rfl | a_top
+  · rw [top_mul_of_pos b_0]; exact le_top
+  apply Frequently.linearGrowthInf_le
+  obtain ⟨a', v_a', a_a'⟩ := exists_between v_a
+  -- We get an epsilon of room: if `m` is large enough, then `v n ≤ a' * n < a * n`.
+  -- Using `u_b`, we can find arbitrarily large values `n` such that `u n ≤ b * n`.
+  -- If such an `n` is large enough, then we can find an integer `k` such that
+  -- `a⁻¹ * n ≤ k ≤ a'⁻¹ * n`, or, in other words, `a' * k ≤ n ≤ a * k`.
+  -- Then `v k ≤ a' * k ≤ n`, so `u (v k) ≤ u n ≤ b * n ≤ b * a * k`.
+  have a_0' := v_0.trans v_a'
+  have a_a_inv' : a⁻¹ < a'⁻¹ := inv_strictAntiOn (Set.mem_Ioi.2 a_0') (Set.mem_Ioi.2 a_0) a_a'
+  replace v_a' : forallᶠ n : Nat in atTop, v n <= a' * n := by
+    filter_upwards [eventually_lt_of_limsup_lt v_a', eventually_gt_atTop 0] with n vn_a' n_0
+    rw [mul_comm]
+    exact (div_le_iff_le_mul (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 vn_a'.le
+  suffices h : (forallᶠ n : Nat in atTop, v n <= a' * n) -> existsᶠ n : Nat in atTop, (u ∘ v) n <= a * b * n
+    from h v_a'
+  rw [← frequently_imp_distrib]
+  replace u_b := ((frequently_le_mul u_b).and_eventually (eventually_gt_atTop 0)).and_eventually
+ EReal.eventually_atTop_exists_nat_between a_a_inv' (inv_nonneg_of_nonneg a_0'.le)
+  refine frequently_atTop.2 fun M => ?_
+  obtain ⟨M', aM_M'⟩ := exists_nat_ge_mul a_top M
+  obtain ⟨n, n_M', ⟨un_bn, _⟩, k, an_k, k_an'⟩ := frequently_atTop.1 u_b M'
+  refine ⟨k, ?_, fun vk_ak' => ?_⟩
+  · rw [mul_comm a, ← le_div_iff_mul_le a_0 a_top, EReal.div_eq_inv_mul] at aM_M'
+apply Nat.cast_le.1 aM_M'.trans an_k.trans' _
+    gcongr
+  · rw [comp_apply, mul_comm a b, mul_assoc b a]
+    rw [← EReal.div_eq_inv_mul]; rw [le_div_iff_mul_le a_0' (ne_top_of_lt a_a')]; rw [mul_comm] at k_an'
+    rw [← EReal.div_eq_inv_mul]; rw [div_le_iff_le_mul a_0 a_top] at an_k
+    have vk_n := Nat.cast_le.1 (vk_ak'.trans k_an')
+exact (h vk_n).trans un_bn.trans by gcongr
 -/
 lemma _root_.Monotone.linearGrowthInf_comp_le (h : Monotone u)
     (hv₀ : (linearGrowthSup fun n => v n : EReal) != 0)
@@ -1671,7 +1805,38 @@ lemma _root_.Monotone.le_linearGrowthSup_comp
   by_cases u_0 : u = ⊥
   · rw [u_0, linearGrowthSup_bot, mul_bot_of_pos v_0]; exact bot_le
   apply EReal.mul_le_of_forall_lt_of_nonneg v_0.le
-    (linearG
+    (linearGrowthSup_comp_nonneg h u_0 (tendsto_atTop_of_linearGrowthInf_natCast_pos hv))
+  intro a ⟨a_0, a_v⟩ b ⟨b_0, b_u⟩
+  apply Frequently.le_linearGrowthSup
+  obtain ⟨a', a_a', a_v'⟩ := exists_between a_v
+  -- We get an epsilon of room: if `m` is large enough, then `a * n < a' * n ≤ v n`.
+  -- Using `b_u`, we can find arbitrarily large values `n` such that `b * n ≤ u n`.
+  -- If such an `n` is large enough, then we can find an integer `k` such that
+  -- `a'⁻¹ * n ≤ k ≤ a⁻¹ * n`, or, in other words, `a * k ≤ n ≤ a' * k`.
+  -- Then `v k ≥ a' * k ≥ n`, so `u (v k) ≥ u n ≥ b * n ≥ b * a * k`.
+  have a_top' := ne_top_of_lt a_v'
+  have a_0' := a_0.trans a_a'
+  have a_a_inv' : a'⁻¹ < a⁻¹ := inv_strictAntiOn (Set.mem_Ioi.2 a_0) (Set.mem_Ioi.2 a_0') a_a'
+  replace a_v' : forallᶠ n : Nat in atTop, a' * n <= v n := by
+    filter_upwards [eventually_lt_of_lt_liminf a_v', eventually_gt_atTop 0] with n a_vn' n_0
+    exact (le_div_iff_mul_le (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 a_vn'.le
+  suffices h : (forallᶠ n : Nat in atTop, a' * n <= v n) -> existsᶠ n : Nat in atTop, a * b * n <= (u ∘ v) n
+    from h a_v'
+  rw [← frequently_imp_distrib]
+  replace b_u := ((frequently_mul_le b_u).and_eventually (eventually_gt_atTop 0)).and_eventually
+ EReal.eventually_atTop_exists_nat_between a_a_inv' (inv_nonneg_of_nonneg a_0.le)
+  refine frequently_atTop.2 fun M => ?_
+  obtain ⟨M', aM_M'⟩ := exists_nat_ge_mul a_top' M
+  obtain ⟨n, n_M', ⟨bn_un, _⟩, k, an_k', k_an⟩ := frequently_atTop.1 b_u M'
+  refine ⟨k, ?_, fun ak_vk' => ?_⟩
+  · rw [mul_comm a', ← le_div_iff_mul_le a_0' a_top', EReal.div_eq_inv_mul] at aM_M'
+apply Nat.cast_le.1 aM_M'.trans an_k'.trans' _
+    gcongr
+  · rw [comp_apply, mul_comm a b, mul_assoc b a]
+    rw [← EReal.div_eq_inv_mul]; rw [div_le_iff_le_mul a_0' a_top'] at an_k'
+    rw [← EReal.div_eq_inv_mul]; rw [le_div_iff_mul_le a_0 (ne_top_of_lt a_a')]; rw [mul_comm] at k_an
+    have n_vk := Nat.cast_le.1 (an_k'.trans ak_vk')
+exact le_trans (by gcongr) bn_un.trans (h n_vk)
 
 中文:
 引理 _root_.递增.le_linearGrowthSup_comp
@@ -1682,7 +1847,38 @@ lemma _root_.Monotone.le_linearGrowthSup_comp
   by_cases u_0 : u = ⊥
   · rw [u_0, linearGrowthSup_bot, mul_bot_of_pos v_0]; exact bot_le
   apply EReal.mul_le_of_forall_lt_of_nonneg v_0.le
-    (linearG
+    (linearGrowthSup_comp_nonneg h u_0 (tendsto_atTop_of_linearGrowthInf_natCast_pos hv))
+  intro a ⟨a_0, a_v⟩ b ⟨b_0, b_u⟩
+  apply Frequently.le_linearGrowthSup
+  obtain ⟨a', a_a', a_v'⟩ := exists_between a_v
+  -- We get an epsilon of room: if `m` is large enough, then `a * n < a' * n ≤ v n`.
+  -- Using `b_u`, we can find arbitrarily large values `n` such that `b * n ≤ u n`.
+  -- If such an `n` is large enough, then we can find an integer `k` such that
+  -- `a'⁻¹ * n ≤ k ≤ a⁻¹ * n`, or, in other words, `a * k ≤ n ≤ a' * k`.
+  -- Then `v k ≥ a' * k ≥ n`, so `u (v k) ≥ u n ≥ b * n ≥ b * a * k`.
+  have a_top' := ne_top_of_lt a_v'
+  have a_0' := a_0.trans a_a'
+  have a_a_inv' : a'⁻¹ < a⁻¹ := inv_strictAntiOn (Set.mem_Ioi.2 a_0) (Set.mem_Ioi.2 a_0') a_a'
+  replace a_v' : forallᶠ n : Nat in atTop, a' * n <= v n := by
+    filter_upwards [eventually_lt_of_lt_liminf a_v', eventually_gt_atTop 0] with n a_vn' n_0
+    exact (le_div_iff_mul_le (Nat.cast_pos'.2 n_0) (natCast_ne_top n)).1 a_vn'.le
+  suffices h : (forallᶠ n : Nat in atTop, a' * n <= v n) -> existsᶠ n : Nat in atTop, a * b * n <= (u ∘ v) n
+    from h a_v'
+  rw [← frequently_imp_distrib]
+  replace b_u := ((frequently_mul_le b_u).and_eventually (eventually_gt_atTop 0)).and_eventually
+ EReal.eventually_atTop_exists_nat_between a_a_inv' (inv_nonneg_of_nonneg a_0.le)
+  refine frequently_atTop.2 fun M => ?_
+  obtain ⟨M', aM_M'⟩ := exists_nat_ge_mul a_top' M
+  obtain ⟨n, n_M', ⟨bn_un, _⟩, k, an_k', k_an⟩ := frequently_atTop.1 b_u M'
+  refine ⟨k, ?_, fun ak_vk' => ?_⟩
+  · rw [mul_comm a', ← le_div_iff_mul_le a_0' a_top', EReal.div_eq_inv_mul] at aM_M'
+apply Nat.cast_le.1 aM_M'.trans an_k'.trans' _
+    gcongr
+  · rw [comp_apply, mul_comm a b, mul_assoc b a]
+    rw [← EReal.div_eq_inv_mul]; rw [div_le_iff_le_mul a_0' a_top'] at an_k'
+    rw [← EReal.div_eq_inv_mul]; rw [le_div_iff_mul_le a_0 (ne_top_of_lt a_a')]; rw [mul_comm] at k_an
+    have n_vk := Nat.cast_le.1 (an_k'.trans ak_vk')
+exact le_trans (by gcongr) bn_un.trans (h n_vk)
 
 Depends on / 依赖: hv.symm.lt_of_le, linearGrowthInf_natCast_nonneg, lt_of_le
 -/
@@ -1738,7 +1934,27 @@ lemma _root_.Monotone.linearGrowthInf_comp
     rw [← hv.liminf_eq] at ha
     exact ha.symm.lt_of_le (linearGrowthInf_natCast_nonneg v)
   have v_top := tendsto_atTop_of_linearGrowthInf_natCast_pos hv₁.ne.symm
-  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` 
+  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` is eventually larger than one.
+  -- In the latter case, we apply `le_linearGrowthInf_comp` and `linearGrowthInf_comp_le`.
+  by_cases u_0 : u = ⊥
+  · rw [u_0, Pi.bot_comp, linearGrowthInf_bot, ← hv.liminf_eq, mul_bot_of_pos hv₁]
+  by_cases! h' : existsᶠ n : Nat in atTop, u n <= 0
+  · replace h' (n : Nat) : u n <= 0 := by
+      obtain ⟨m, n_m, um_1⟩ := (frequently_atTop.1 h') n
+      exact (h n_m).trans um_1
+    have u_0' : linearGrowthInf u = 0 := by
+      apply le_antisymm _ (h.linearGrowthInf_nonneg u_0)
+      exact (linearGrowthInf_monotone h').trans_eq (linearGrowthInf_const zero_ne_bot zero_ne_top)
+    rw [u_0']; rw [mul_zero]
+    apply le_antisymm _ (linearGrowthInf_comp_nonneg h u_0 v_top)
+    apply (linearGrowthInf_monotone fun n => h' (v n)).trans_eq
+    exact linearGrowthInf_const zero_ne_bot zero_ne_top
+  · replace h' := h'.mono fun _ hn => hn.le
+    apply le_antisymm
+    · rw [← hv.limsup_eq] at ha ha' ⊢
+      exact h.linearGrowthInf_comp_le ha ha'
+    · rw [← hv.liminf_eq]
+      exact le_linearGrowthInf_comp h' v_top
 
 中文:
 引理 _root_.递增.linearGrowthInf_comp
@@ -1748,7 +1964,27 @@ lemma _root_.Monotone.linearGrowthInf_comp
     rw [← hv.liminf_eq] at ha
     exact ha.symm.lt_of_le (linearGrowthInf_natCast_nonneg v)
   have v_top := tendsto_atTop_of_linearGrowthInf_natCast_pos hv₁.ne.symm
-  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` 
+  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` is eventually larger than one.
+  -- In the latter case, we apply `le_linearGrowthInf_comp` and `linearGrowthInf_comp_le`.
+  by_cases u_0 : u = ⊥
+  · rw [u_0, Pi.bot_comp, linearGrowthInf_bot, ← hv.liminf_eq, mul_bot_of_pos hv₁]
+  by_cases! h' : existsᶠ n : Nat in atTop, u n <= 0
+  · replace h' (n : Nat) : u n <= 0 := by
+      obtain ⟨m, n_m, um_1⟩ := (frequently_atTop.1 h') n
+      exact (h n_m).trans um_1
+    have u_0' : linearGrowthInf u = 0 := by
+      apply le_antisymm _ (h.linearGrowthInf_nonneg u_0)
+      exact (linearGrowthInf_monotone h').trans_eq (linearGrowthInf_const zero_ne_bot zero_ne_top)
+    rw [u_0']; rw [mul_zero]
+    apply le_antisymm _ (linearGrowthInf_comp_nonneg h u_0 v_top)
+    apply (linearGrowthInf_monotone fun n => h' (v n)).trans_eq
+    exact linearGrowthInf_const zero_ne_bot zero_ne_top
+  · replace h' := h'.mono fun _ hn => hn.le
+    apply le_antisymm
+    · rw [← hv.limsup_eq] at ha ha' ⊢
+      exact h.linearGrowthInf_comp_le ha ha'
+    · rw [← hv.liminf_eq]
+      exact le_linearGrowthInf_comp h' v_top
 
 Depends on / 依赖: ha.symm.lt_of_le, hv.liminf_eq, liminf, liminf_eq, linearGrowthInf_natCast_nonneg, lt_of_le, ne.symm, tendsto_atTop_of_linearGrowthInf_natCast_pos, v_top
 -/
@@ -1792,7 +2028,25 @@ lemma _root_.Monotone.linearGrowthSup_comp
     rw [← hv.liminf_eq] at ha
     exact ha.symm.lt_of_le (linearGrowthInf_natCast_nonneg v)
   have v_top := tendsto_atTop_of_linearGrowthInf_natCast_pos hv₁.ne.symm
-  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` 
+  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` is eventually larger than one.
+  -- In the latter case, we apply `le_linearGrowthSup_comp` and `linearGrowthSup_comp_le`.
+  by_cases u_0 : u = ⊥
+  · rw [u_0, Pi.bot_comp, linearGrowthSup_bot, ← hv.liminf_eq, mul_bot_of_pos hv₁]
+  by_cases! u_1 : forallᶠ n : Nat in atTop, u n <= 0
+  · have u_0' : linearGrowthSup u = 0 := by
+      apply le_antisymm _ (h.linearGrowthSup_nonneg u_0)
+      apply (linearGrowthSup_eventually_monotone u_1).trans_eq
+      exact (linearGrowthSup_const zero_ne_bot zero_ne_top)
+    rw [u_0']; rw [mul_zero]
+    apply le_antisymm _ (linearGrowthSup_comp_nonneg h u_0 v_top)
+    apply (linearGrowthSup_eventually_monotone (v_top.eventually u_1)).trans_eq
+    exact linearGrowthSup_const zero_ne_bot zero_ne_top
+  · replace u_1 := u_1.mono fun x hx => hx.le
+    apply le_antisymm
+    · rw [← hv.limsup_eq] at ha ha' ⊢
+      exact linearGrowthSup_comp_le u_1 ha ha' v_top
+    · rw [← hv.liminf_eq]
+      exact h.le_linearGrowthSup_comp hv₁.ne.symm
 
 中文:
 引理 _root_.递增.linearGrowthSup_comp
@@ -1802,7 +2056,25 @@ lemma _root_.Monotone.linearGrowthSup_comp
     rw [← hv.liminf_eq] at ha
     exact ha.symm.lt_of_le (linearGrowthInf_natCast_nonneg v)
   have v_top := tendsto_atTop_of_linearGrowthInf_natCast_pos hv₁.ne.symm
-  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` 
+  -- Either `u = 0`, or `u` is non-zero and bounded by `1`, or `u` is eventually larger than one.
+  -- In the latter case, we apply `le_linearGrowthSup_comp` and `linearGrowthSup_comp_le`.
+  by_cases u_0 : u = ⊥
+  · rw [u_0, Pi.bot_comp, linearGrowthSup_bot, ← hv.liminf_eq, mul_bot_of_pos hv₁]
+  by_cases! u_1 : forallᶠ n : Nat in atTop, u n <= 0
+  · have u_0' : linearGrowthSup u = 0 := by
+      apply le_antisymm _ (h.linearGrowthSup_nonneg u_0)
+      apply (linearGrowthSup_eventually_monotone u_1).trans_eq
+      exact (linearGrowthSup_const zero_ne_bot zero_ne_top)
+    rw [u_0']; rw [mul_zero]
+    apply le_antisymm _ (linearGrowthSup_comp_nonneg h u_0 v_top)
+    apply (linearGrowthSup_eventually_monotone (v_top.eventually u_1)).trans_eq
+    exact linearGrowthSup_const zero_ne_bot zero_ne_top
+  · replace u_1 := u_1.mono fun x hx => hx.le
+    apply le_antisymm
+    · rw [← hv.limsup_eq] at ha ha' ⊢
+      exact linearGrowthSup_comp_le u_1 ha ha' v_top
+    · rw [← hv.liminf_eq]
+      exact h.le_linearGrowthSup_comp hv₁.ne.symm
 
 Depends on / 依赖: ha.symm.lt_of_le, hv.liminf_eq, liminf, liminf_eq, linearGrowthInf_natCast_nonneg, lt_of_le, ne.symm, tendsto_atTop_of_linearGrowthInf_natCast_pos, v_top
 -/
@@ -1843,7 +2115,8 @@ lemma _root_.Monotone.linearGrowthInf_comp_mul
   have : Tendsto (fun n : Nat => ((m * n : Nat) : EReal) / n) atTop (𝓝 m) := by
     refine tendsto_nhds_of_eventually_eq ((eventually_gt_atTop 0).mono fun x hx => ?_)
     rw [mul_comm]; rw [natCast_mul x m]; rw [← mul_div]
-    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_n
+    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_ne_zero.2 hx.ne.symm)
+  exact h.linearGrowthInf_comp this (Nat.cast_ne_zero.2 hm) (natCast_ne_top m)
 
 中文:
 引理 _root_.递增.linearGrowthInf_comp_mul
@@ -1852,7 +2125,8 @@ lemma _root_.Monotone.linearGrowthInf_comp_mul
   have : Tendsto (fun n : Nat => ((m * n : Nat) : EReal) / n) atTop (𝓝 m) := by
     refine tendsto_nhds_of_eventually_eq ((eventually_gt_atTop 0).mono fun x hx => ?_)
     rw [mul_comm]; rw [natCast_mul x m]; rw [← mul_div]
-    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_n
+    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_ne_zero.2 hx.ne.symm)
+  exact h.linearGrowthInf_comp this (Nat.cast_ne_zero.2 hm) (natCast_ne_top m)
 
 Depends on / 依赖: Nat.cast_ne_zero, Tendsto, cast_ne_zero, eventually_gt_atTop, h.linearGrowthInf_comp, hx.ne.symm, linearGrowthInf_comp, mul_comm, mul_div, mul_div_cancel, natCast_mul, natCast_ne_bot, natCast_ne_top, tendsto_nhds_of_eventually_eq
 -/
@@ -1874,7 +2148,8 @@ lemma _root_.Monotone.linearGrowthSup_comp_mul
   have : Tendsto (fun n : Nat => ((m * n : Nat) : EReal) / n) atTop (𝓝 m) := by
     refine tendsto_nhds_of_eventually_eq ((eventually_gt_atTop 0).mono fun x hx => ?_)
     rw [mul_comm]; rw [natCast_mul x m]; rw [← mul_div]
-    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_n
+    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_ne_zero.2 hx.ne.symm)
+  exact h.linearGrowthSup_comp this (Nat.cast_ne_zero.2 hm) (natCast_ne_top m)
 
 中文:
 引理 _root_.递增.linearGrowthSup_comp_mul
@@ -1883,7 +2158,8 @@ lemma _root_.Monotone.linearGrowthSup_comp_mul
   have : Tendsto (fun n : Nat => ((m * n : Nat) : EReal) / n) atTop (𝓝 m) := by
     refine tendsto_nhds_of_eventually_eq ((eventually_gt_atTop 0).mono fun x hx => ?_)
     rw [mul_comm]; rw [natCast_mul x m]; rw [← mul_div]
-    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_n
+    exact mul_div_cancel (natCast_ne_bot x) (natCast_ne_top x) (Nat.cast_ne_zero.2 hx.ne.symm)
+  exact h.linearGrowthSup_comp this (Nat.cast_ne_zero.2 hm) (natCast_ne_top m)
 
 Depends on / 依赖: Nat.cast_ne_zero, Tendsto, cast_ne_zero, eventually_gt_atTop, h.linearGrowthSup_comp, hx.ne.symm, linearGrowthSup_comp, mul_comm, mul_div, mul_div_cancel, natCast_mul, natCast_ne_bot, natCast_ne_top, tendsto_nhds_of_eventually_eq
 -/

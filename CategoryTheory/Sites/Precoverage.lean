@@ -358,7 +358,14 @@ lemma mem_coverings_of_isPullback
   -- Because `f` needs not be injective, the indexing type is a sum.
   let a (i : (Presieve.ofArrows X f).uncurry oplus (Presieve.ofArrows P p₁).uncurry) : ι :=
     i.elim (fun i => i.2.idx) (fun i => i.2.idx)
-  convert
+  convert_to Presieve.ofArrows (P ∘ a) (fun i => p₁ (a i)) in _
+  · refine le_antisymm (fun Z g hg => ?_) fun Z g ⟨i⟩ => ⟨a i⟩
+    exact .mk' (Sum.inr ⟨⟨_, _⟩, hg⟩) (by cat_disch) (by cat_disch)
+  · refine IsStableUnderBaseChange.mem_coverings_of_isPullback (fun i => f (a i)) ?_ g _
+      (fun i => p₂ (a i)) fun i => h _
+    convert! hR
+    refine le_antisymm (fun Z g ⟨i⟩ => .mk _) fun Z g hg => ?_
+    exact .mk' (Sum.inl ⟨⟨_, _⟩, hg⟩) (by cat_disch) (by cat_disch)
 
 中文:
 引理 mem_coverings_of_isPullback
@@ -368,7 +375,14 @@ lemma mem_coverings_of_isPullback
   -- Because `f` needs not be injective, the indexing type is a sum.
   let a (i : (Presieve.ofArrows X f).uncurry oplus (Presieve.ofArrows P p₁).uncurry) : ι :=
     i.elim (fun i => i.2.idx) (fun i => i.2.idx)
-  convert
+  convert_to Presieve.ofArrows (P ∘ a) (fun i => p₁ (a i)) in _
+  · refine le_antisymm (fun Z g hg => ?_) fun Z g ⟨i⟩ => ⟨a i⟩
+    exact .mk' (Sum.inr ⟨⟨_, _⟩, hg⟩) (by cat_disch) (by cat_disch)
+  · refine IsStableUnderBaseChange.mem_coverings_of_isPullback (fun i => f (a i)) ?_ g _
+      (fun i => p₂ (a i)) fun i => h _
+    convert! hR
+    refine le_antisymm (fun Z g ⟨i⟩ => .mk _) fun Z g hg => ?_
+    exact .mk' (Sum.inl ⟨⟨_, _⟩, hg⟩) (by cat_disch) (by cat_disch)
 -/
 lemma mem_coverings_of_isPullback {J : Precoverage C} [IsStableUnderBaseChange J]
     {ι : Type w} {S : C} {X : ι -> C}
@@ -402,7 +416,29 @@ lemma comp_mem_coverings
   -- We need to construct `max u v`-indexed families with the same presieves.
   -- Because `f` and `g` need not be injective, the indexing type is a sigma of sums.
   let ι' : Type (max u v) := (Presieve.ofArrows X f).uncurry
-  let σ' (i : ι') : Type (max u v) := (Presieve.ofArrows (Y i.2.idx) (g 
+  let σ' (i : ι') : Type (max u v) := (Presieve.ofArrows (Y i.2.idx) (g i.2.idx)).uncurry
+  let α : Type (max u v) :=
+    (Presieve.ofArrows (fun p : Σ i, σ i => Y _ p.2) (fun _ => g _ _ ≫ f _)).uncurry
+  let τ' (a : α) : Type (max u v) := (Presieve.ofArrows (Y a.2.idx.1) (g a.2.idx.1)).uncurry
+  let fib (i : ι' oplus α) := i.elim (fun i => σ' i) (fun i => Unit oplus τ' i)
+  let incl (p : ι' oplus α) : ι := p.elim (fun i => i.2.idx) (fun i => i.2.idx.1)
+  let fibincl (i : ι' oplus α) (j : fib i) : σ (incl i) := match i with
+    | .inl i => j.2.idx
+    | .inr i => j.elim (fun _ => i.2.idx.2) (fun i => i.2.idx)
+  convert_to Presieve.ofArrows _
+      (fun p : Σ (i : ι' oplus α), fib i => g (incl p.1) (fibincl _ p.2) ≫ f (incl p.1)) in J.coverings S
+  · refine le_antisymm (fun T u hu => ?_) fun T u ⟨p⟩ => .mk (Sigma.mk (incl p.1) (fibincl p.1 p.2))
+    exact .mk' ⟨Sum.inr ⟨⟨_, _⟩, hu⟩, .inl ⟨⟩⟩ hu.obj_idx.symm hu.eq_eqToHom_comp_hom_idx
+  · refine IsStableUnderComposition.comp_mem_coverings (f := fun i => f (incl i))
+        (g := fun i j => g (incl i) (fibincl i j)) ?_ fun i => ?_
+    · convert! hf
+      refine le_antisymm (fun T u ⟨p⟩ => .mk _) fun T u hu => ?_
+      exact .mk' (Sum.inl ⟨⟨_, _⟩, hu⟩) (by cat_disch) (by cat_disch)
+    · convert! hg (incl i)
+      refine le_antisymm (fun T u ⟨p⟩ => .mk _) fun T u hu => ?_
+      match i with
+      | .inl i => exact .mk' ⟨⟨_, _⟩, hu⟩ (by cat_disch) (by cat_disch)
+      | .inr i => exact .mk' (.inr ⟨⟨_, _⟩, hu⟩) (by cat_disch) (by cat_disch)
 
 中文:
 引理 comp_mem_coverings
@@ -411,7 +447,29 @@ lemma comp_mem_coverings
   -- We need to construct `max u v`-indexed families with the same presieves.
   -- Because `f` and `g` need not be injective, the indexing type is a sigma of sums.
   let ι' : Type (max u v) := (Presieve.ofArrows X f).uncurry
-  let σ' (i : ι') : Type (max u v) := (Presieve.ofArrows (Y i.2.idx) (g 
+  let σ' (i : ι') : Type (max u v) := (Presieve.ofArrows (Y i.2.idx) (g i.2.idx)).uncurry
+  let α : Type (max u v) :=
+    (Presieve.ofArrows (fun p : Σ i, σ i => Y _ p.2) (fun _ => g _ _ ≫ f _)).uncurry
+  let τ' (a : α) : Type (max u v) := (Presieve.ofArrows (Y a.2.idx.1) (g a.2.idx.1)).uncurry
+  let fib (i : ι' oplus α) := i.elim (fun i => σ' i) (fun i => Unit oplus τ' i)
+  let incl (p : ι' oplus α) : ι := p.elim (fun i => i.2.idx) (fun i => i.2.idx.1)
+  let fibincl (i : ι' oplus α) (j : fib i) : σ (incl i) := match i with
+    | .inl i => j.2.idx
+    | .inr i => j.elim (fun _ => i.2.idx.2) (fun i => i.2.idx)
+  convert_to Presieve.ofArrows _
+      (fun p : Σ (i : ι' oplus α), fib i => g (incl p.1) (fibincl _ p.2) ≫ f (incl p.1)) in J.coverings S
+  · refine le_antisymm (fun T u hu => ?_) fun T u ⟨p⟩ => .mk (Sigma.mk (incl p.1) (fibincl p.1 p.2))
+    exact .mk' ⟨Sum.inr ⟨⟨_, _⟩, hu⟩, .inl ⟨⟩⟩ hu.obj_idx.symm hu.eq_eqToHom_comp_hom_idx
+  · refine IsStableUnderComposition.comp_mem_coverings (f := fun i => f (incl i))
+        (g := fun i j => g (incl i) (fibincl i j)) ?_ fun i => ?_
+    · convert! hf
+      refine le_antisymm (fun T u ⟨p⟩ => .mk _) fun T u hu => ?_
+      exact .mk' (Sum.inl ⟨⟨_, _⟩, hu⟩) (by cat_disch) (by cat_disch)
+    · convert! hg (incl i)
+      refine le_antisymm (fun T u ⟨p⟩ => .mk _) fun T u hu => ?_
+      match i with
+      | .inl i => exact .mk' ⟨⟨_, _⟩, hu⟩ (by cat_disch) (by cat_disch)
+      | .inr i => exact .mk' (.inr ⟨⟨_, _⟩, hu⟩) (by cat_disch) (by cat_disch)
 -/
 lemma comp_mem_coverings {J : Precoverage C} [IsStableUnderComposition J] {ι : Type w}
     {S : C} {X : ι -> C} (f : forall i, X i ⟶ S) (hf : Presieve.ofArrows X f in J S)

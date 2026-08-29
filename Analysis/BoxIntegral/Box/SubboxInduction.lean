@@ -83,7 +83,9 @@ theorem mem_splitCenterBox
   dsimp only [Set.piecewise]
   split_ifs with hs <;> simp only [hs, iff_true, iff_false, not_lt]
   exacts [⟨fun H => ⟨⟨(left_lt_add_div_two.2 (I.lower_lt_upper i)).trans H.1, H.2⟩, H.1⟩,
-      fun H => ⟨H.2, H.
+      fun H => ⟨H.2, H.1.2⟩⟩,
+    ⟨fun H => ⟨⟨H.1, H.2.trans (add_div_two_lt_right.2 (I.lower_lt_upper i)).le⟩, H.2⟩,
+      fun H => ⟨H.1.1, H.2⟩⟩]
 
 中文:
 定理 mem_splitCenterBox
@@ -94,7 +96,9 @@ theorem mem_splitCenterBox
   dsimp only [Set.piecewise]
   split_ifs with hs <;> simp only [hs, iff_true, iff_false, not_lt]
   exacts [⟨fun H => ⟨⟨(left_lt_add_div_two.2 (I.lower_lt_upper i)).trans H.1, H.2⟩, H.1⟩,
-      fun H => ⟨H.2, H.
+      fun H => ⟨H.2, H.1.2⟩⟩,
+    ⟨fun H => ⟨⟨H.1, H.2.trans (add_div_two_lt_right.2 (I.lower_lt_upper i)).le⟩, H.2⟩,
+      fun H => ⟨H.1.1, H.2⟩⟩]
 
 Depends on / 依赖: I.lower_lt_upper, Set.piecewise, add_div_two_lt_right, exacts, forall_and, forall_congr, iff_false, iff_true, left_lt_add_div_two, lower_lt_upper, mem_def, not_lt, piecewise, splitCenterBox, split_ifs
 -/
@@ -312,7 +316,43 @@ theorem subbox_induction_on'
   replace H_ind := fun J hJ => not_imp_not.2 (H_ind J hJ)
   simp only [not_forall] at H_ind
   choose! s hs using H_ind
-  set J : Nat -> Box ι := fun m => (fun J => splitCenterBox J (s 
+  set J : Nat -> Box ι := fun m => (fun J => splitCenterBox J (s J))^[m] I
+  have J_succ : forall m, J (m + 1) = splitCenterBox (J m) (s <| J m) :=
+    fun m => iterate_succ_apply' _ _ _
+  -- Now we prove some properties of `J`
+  have hJmono : Antitone J :=
+    antitone_nat_of_succ_le fun n => by simpa [J_succ] using splitCenterBox_le _ _
+  have hJle (m) : J m <= I := hJmono zero_le
+  have hJp (m) : ¬p (J m) := Nat.recOn m hpI fun m => by simpa only [J_succ] using hs (J m) (hJle m)
+  have hJsub (m i) : (J m).upper i - (J m).lower i = (I.upper i - I.lower i) / 2 ^ m := by
+    induction m with
+    | zero => simp [J]
+    | succ m ihm => simp only [pow_succ, J_succ, upper_sub_lower_splitCenterBox, ihm, div_div]
+  have h0 : J 0 = I := rfl
+  clear_value J
+  clear hpI hs J_succ s
+  -- Let `z` be the unique common point of all `(J m).Icc`. Then `H_nhds` proves `p (J m)` for
+  -- sufficiently large `m`. This contradicts `hJp`.
+  set z : ι -> Real := ⨆ m, (J m).lower
+  have hzJ : forall m, z in Box.Icc (J m) :=
+    mem_iInter.1 (ciSup_mem_iInter_Icc_of_antitone_Icc
+      ((@Box.Icc ι).monotone.comp_antitone hJmono) fun m => (J m).lower_le_upper)
+  have hJl_mem : forall m, (J m).lower in Box.Icc I := fun m => le_iff_Icc.1 (hJle m) (J m).lower_mem_Icc
+  have hJu_mem : forall m, (J m).upper in Box.Icc I := fun m => le_iff_Icc.1 (hJle m) (J m).upper_mem_Icc
+  have hJlz : Tendsto (fun m => (J m).lower) atTop (𝓝 z) :=
+    tendsto_atTop_ciSup (antitone_lower.comp hJmono) ⟨I.upper, fun x ⟨m, hm⟩ => hm ▸ (hJl_mem m).2⟩
+  have hJuz : Tendsto (fun m => (J m).upper) atTop (𝓝 z) := by
+    suffices Tendsto (fun m => (J m).upper - (J m).lower) atTop (𝓝 0) by simpa using hJlz.add this
+    refine tendsto_pi_nhds.2 fun i => ?_
+    simpa [hJsub] using
+      tendsto_const_nhds.div_atTop (tendsto_pow_atTop_atTop_of_one_lt _root_.one_lt_two)
+  replace hJlz : Tendsto (fun m => (J m).lower) atTop (𝓝[Icc I.lower I.upper] z) :=
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hJlz (Eventually.of_forall hJl_mem)
+  replace hJuz : Tendsto (fun m => (J m).upper) atTop (𝓝[Icc I.lower I.upper] z) :=
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hJuz (Eventually.of_forall hJu_mem)
+  rcases H_nhds z (h0 ▸ hzJ 0) with ⟨U, hUz, hU⟩
+  rcases (tendsto_lift'.1 (hJlz.Icc hJuz) U hUz).exists with ⟨m, hUm⟩
+  exact hJp m (hU (J m) (hJle m) m (hzJ m) hUm (hJsub m))
 
 中文:
 定理 subbox_induction_on'
@@ -323,7 +363,43 @@ theorem subbox_induction_on'
   replace H_ind := fun J hJ => not_imp_not.2 (H_ind J hJ)
   simp only [not_forall] at H_ind
   choose! s hs using H_ind
-  set J : Nat -> Box ι := fun m => (fun J => splitCenterBox J (s 
+  set J : Nat -> Box ι := fun m => (fun J => splitCenterBox J (s J))^[m] I
+  have J_succ : forall m, J (m + 1) = splitCenterBox (J m) (s <| J m) :=
+    fun m => iterate_succ_apply' _ _ _
+  -- Now we prove some properties of `J`
+  have hJmono : Antitone J :=
+    antitone_nat_of_succ_le fun n => by simpa [J_succ] using splitCenterBox_le _ _
+  have hJle (m) : J m <= I := hJmono zero_le
+  have hJp (m) : ¬p (J m) := Nat.recOn m hpI fun m => by simpa only [J_succ] using hs (J m) (hJle m)
+  have hJsub (m i) : (J m).upper i - (J m).lower i = (I.upper i - I.lower i) / 2 ^ m := by
+    induction m with
+    | zero => simp [J]
+    | succ m ihm => simp only [pow_succ, J_succ, upper_sub_lower_splitCenterBox, ihm, div_div]
+  have h0 : J 0 = I := rfl
+  clear_value J
+  clear hpI hs J_succ s
+  -- Let `z` be the unique common point of all `(J m).Icc`. Then `H_nhds` proves `p (J m)` for
+  -- sufficiently large `m`. This contradicts `hJp`.
+  set z : ι -> Real := ⨆ m, (J m).lower
+  have hzJ : forall m, z in Box.Icc (J m) :=
+    mem_iInter.1 (ciSup_mem_iInter_Icc_of_antitone_Icc
+      ((@Box.Icc ι).monotone.comp_antitone hJmono) fun m => (J m).lower_le_upper)
+  have hJl_mem : forall m, (J m).lower in Box.Icc I := fun m => le_iff_Icc.1 (hJle m) (J m).lower_mem_Icc
+  have hJu_mem : forall m, (J m).upper in Box.Icc I := fun m => le_iff_Icc.1 (hJle m) (J m).upper_mem_Icc
+  have hJlz : Tendsto (fun m => (J m).lower) atTop (𝓝 z) :=
+    tendsto_atTop_ciSup (antitone_lower.comp hJmono) ⟨I.upper, fun x ⟨m, hm⟩ => hm ▸ (hJl_mem m).2⟩
+  have hJuz : Tendsto (fun m => (J m).upper) atTop (𝓝 z) := by
+    suffices Tendsto (fun m => (J m).upper - (J m).lower) atTop (𝓝 0) by simpa using hJlz.add this
+    refine tendsto_pi_nhds.2 fun i => ?_
+    simpa [hJsub] using
+      tendsto_const_nhds.div_atTop (tendsto_pow_atTop_atTop_of_one_lt _root_.one_lt_two)
+  replace hJlz : Tendsto (fun m => (J m).lower) atTop (𝓝[Icc I.lower I.upper] z) :=
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hJlz (Eventually.of_forall hJl_mem)
+  replace hJuz : Tendsto (fun m => (J m).upper) atTop (𝓝[Icc I.lower I.upper] z) :=
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hJuz (Eventually.of_forall hJu_mem)
+  rcases H_nhds z (h0 ▸ hzJ 0) with ⟨U, hUz, hU⟩
+  rcases (tendsto_lift'.1 (hJlz.Icc hJuz) U hUz).exists with ⟨m, hUm⟩
+  exact hJp m (hU (J m) (hJle m) m (hzJ m) hUm (hJsub m))
 -/
 theorem subbox_induction_on' {p : Box ι -> Prop} (I : Box ι)
     (H_ind : forall J <= I, (forall s, p (splitCenterBox J s)) -> p J)

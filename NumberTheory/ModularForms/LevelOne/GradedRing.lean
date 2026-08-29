@@ -150,7 +150,15 @@ theorem discriminant_eq_E₄_cube_sub_E₆_sq
   obtain ⟨c, hc⟩ := CuspForm.exists_smul_discriminant_of_weight_eq_twelve g
   have hgE : (g : ℍ -> Complex) = E₄CubeSubE₆SqForm := congrArg DFunLike.coe hg
   have hc_eq : c = 1728 := by
-    have hcΔ : (c • CuspForm.discriminant : ℍ -> Complex) = g 
+    have hcΔ : (c • CuspForm.discriminant : ℍ -> Complex) = g := congrArg DFunLike.coe hc
+    have hgΔ := ModularForm.qExpansion_smul one_pos one_mem_strictPeriods_SL c
+      CuspForm.discriminant
+    rw [hcΔ]; rw [hgE] at hgΔ
+    simpa [PowerSeries.coeff_smul, discriminant_qExpansion_coeff_one,
+      E₄CubeSubE₆SqForm_qExpansion_coeff_one] using (congr_arg (·.coeff 1) hgΔ).symm
+  have h1728 : (1728 : Complex) * discriminant z = E₄ z ^ 3 - E₆ z ^ 2 := by
+    rw [← hc_eq]; rw [show c * discriminant z = (c • CuspForm.discriminant) z from rfl]; rw [hc]; rw [congr_fun hgE z]; rw [E₄CubeSubE₆SqForm_apply]
+  linear_combination h1728 / 1728
 
 中文:
 定理 discriminant_eq_E₄_cube_sub_E₆_sq
@@ -160,7 +168,15 @@ theorem discriminant_eq_E₄_cube_sub_E₆_sq
   obtain ⟨c, hc⟩ := CuspForm.exists_smul_discriminant_of_weight_eq_twelve g
   have hgE : (g : ℍ -> Complex) = E₄CubeSubE₆SqForm := congrArg DFunLike.coe hg
   have hc_eq : c = 1728 := by
-    have hcΔ : (c • CuspForm.discriminant : ℍ -> Complex) = g 
+    have hcΔ : (c • CuspForm.discriminant : ℍ -> Complex) = g := congrArg DFunLike.coe hc
+    have hgΔ := ModularForm.qExpansion_smul one_pos one_mem_strictPeriods_SL c
+      CuspForm.discriminant
+    rw [hcΔ]; rw [hgE] at hgΔ
+    simpa [PowerSeries.coeff_smul, discriminant_qExpansion_coeff_one,
+      E₄CubeSubE₆SqForm_qExpansion_coeff_one] using (congr_arg (·.coeff 1) hgΔ).symm
+  have h1728 : (1728 : Complex) * discriminant z = E₄ z ^ 3 - E₆ z ^ 2 := by
+    rw [← hc_eq]; rw [show c * discriminant z = (c • CuspForm.discriminant) z from rfl]; rw [hc]; rw [congr_fun hgE z]; rw [E₄CubeSubE₆SqForm_apply]
+  linear_combination h1728 / 1728
 
 Depends on / 依赖: CuspForm, CuspForm.discriminant, CuspForm.exists_smul_discriminant_of_weight_eq_twelve, DFunLike, DFunLike.coe, ModularForm, ModularForm.qExpansion_smul, PowerSeries, PowerSeries.coeff_smul, coeff_smul, discriminant, discriminant_qExpansion_coeff_, exists_smul_discriminant_of_weight_eq_twelve, hc_eq, one_mem_strictPeriods_SL, one_pos, qExpansion_smul
 -/
@@ -189,7 +205,11 @@ theorem discriminant_eq_E₄_cube_sub_E₆_sq_graded
   simp only [ModularForm.directSum_of_pow]
   change DirectSum.of (ModularForm 𝒮ℒ) 12 CuspForm.discriminant = (1 / 1728 : Complex) •
     (DirectSum.of (ModularForm 𝒮ℒ) 12 (E₄.pow 3) - DirectSum.of (ModularForm 𝒮ℒ) 12 (E₆.pow 2))
-  rw [← map_sub (DirectSum.of (ModularForm 𝒮ℒ) 12)]; rw [← DirectSum.
+  rw [← map_sub (DirectSum.of (ModularForm 𝒮ℒ) 12)]; rw [← DirectSum.of_smul]
+  congr 1
+  ext z
+  change ModularForm.discriminant z = (1 / 1728 : Complex) * (E₄ z ^ 3 - E₆ z ^ 2)
+  grind [discriminant_eq_E₄_cube_sub_E₆_sq z]
 
 中文:
 定理 discriminant_eq_E₄_cube_sub_E₆_sq_graded
@@ -197,7 +217,11 @@ theorem discriminant_eq_E₄_cube_sub_E₆_sq_graded
   simp only [ModularForm.directSum_of_pow]
   change DirectSum.of (ModularForm 𝒮ℒ) 12 CuspForm.discriminant = (1 / 1728 : Complex) •
     (DirectSum.of (ModularForm 𝒮ℒ) 12 (E₄.pow 3) - DirectSum.of (ModularForm 𝒮ℒ) 12 (E₆.pow 2))
-  rw [← map_sub (DirectSum.of (ModularForm 𝒮ℒ) 12)]; rw [← DirectSum.
+  rw [← map_sub (DirectSum.of (ModularForm 𝒮ℒ) 12)]; rw [← DirectSum.of_smul]
+  congr 1
+  ext z
+  change ModularForm.discriminant z = (1 / 1728 : Complex) * (E₄ z ^ 3 - E₆ z ^ 2)
+  grind [discriminant_eq_E₄_cube_sub_E₆_sq z]
 
 Depends on / 依赖: CuspForm, CuspForm.discriminant, DirectSum, DirectSum.of, DirectSum.of_smul, ModularForm, ModularForm.directSum_of_pow, ModularForm.discriminant, directSum_of_pow, discriminant, map_sub, of_smul
 -/

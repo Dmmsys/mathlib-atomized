@@ -704,7 +704,7 @@ theorem mul_cast_floor_div_cancel
     · simp
     apply mul_nonpos_of_nonpos_of_nonneg ha n.cast_nonneg
   refine eq_of_forall_le_iff fun m => ?_
-  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn)]; rw [le_floor_iff (mul_nonneg ha (cast_nonneg' n))]; rw [l
+  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn)]; rw [le_floor_iff (mul_nonneg ha (cast_nonneg' n))]; rw [le_floor_iff ha]; rw [cast_mul]; rw [mul_le_mul_iff_of_pos_right (cast_pos'.mpr (zero_lt_of_ne_zero hn))]
 
 中文:
 定理 mul_cast_floor_div_cancel
@@ -716,7 +716,7 @@ theorem mul_cast_floor_div_cancel
     · simp
     apply mul_nonpos_of_nonpos_of_nonneg ha n.cast_nonneg
   refine eq_of_forall_le_iff fun m => ?_
-  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn)]; rw [le_floor_iff (mul_nonneg ha (cast_nonneg' n))]; rw [l
+  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn)]; rw [le_floor_iff (mul_nonneg ha (cast_nonneg' n))]; rw [le_floor_iff ha]; rw [cast_mul]; rw [mul_le_mul_iff_of_pos_right (cast_pos'.mpr (zero_lt_of_ne_zero hn))]
 
 Depends on / 依赖: cast_mul, cast_nonneg, cast_pos, eq_of_forall_le_iff, floor_of_nonpos, le_div_iff_mul_le, le_floor_iff, le_total, mul_le_mul_iff_of_pos_right, mul_nonneg, mul_nonpos_of_nonpos_of_nonneg, n.cast_nonneg, zero_lt_of_ne_zero
 -/
@@ -1459,7 +1459,11 @@ theorem floor_add_natCast
     rw [le_floor_iff (add_nonneg ha n.cast_nonneg)]
     obtain hb | hb := le_total n b
     · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_le_add_iff_right]; rw [add_le_add_iff_right]; rw [le_floor_iff 
+      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_le_add_iff_right]; rw [add_le_add_iff_right]; rw [le_floor_iff ha]
+    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
+      rw [Nat.cast_add]; rw [add_left_comm _ b]; rw [add_left_comm _ (b : R)]
+      refine iff_of_true ?_ le_self_add
+exact le_add_of_nonneg_right ha.trans le_add_of_nonneg_right d.cast_nonneg
 
 中文:
 定理 floor_add_natCast
@@ -1469,7 +1473,11 @@ theorem floor_add_natCast
     rw [le_floor_iff (add_nonneg ha n.cast_nonneg)]
     obtain hb | hb := le_total n b
     · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_le_add_iff_right]; rw [add_le_add_iff_right]; rw [le_floor_iff 
+      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_le_add_iff_right]; rw [add_le_add_iff_right]; rw [le_floor_iff ha]
+    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
+      rw [Nat.cast_add]; rw [add_left_comm _ b]; rw [add_left_comm _ (b : R)]
+      refine iff_of_true ?_ le_self_add
+exact le_add_of_nonneg_right ha.trans le_add_of_nonneg_right d.cast_nonneg
 
 Depends on / 依赖: Nat.cast_add, add_comm, add_le_add_iff_right, add_left_comm, add_nonneg, cast_add, cast_nonneg, d.cast, eq_of_forall_le_iff, exists_add_of_le, ha.trans, iff_of_true, le_add_of_nonneg_right, le_floor_iff, le_self_add, le_total, n.cast_nonneg
 -/
@@ -1550,7 +1558,10 @@ theorem floor_sub_natCast
   rcases le_total a n with h | h
   · rw [floor_of_nonpos (tsub_nonpos_of_le h), eq_comm, tsub_eq_zero_iff_le]
     exact Nat.cast_le.1 ((Nat.floor_le ha).trans h)
- 
+  · rw [eq_tsub_iff_add_eq_of_le (le_floor h), ← floor_add_natCast _, tsub_add_cancel_of_le h]
+    exact le_tsub_of_add_le_left ((add_zero _).trans_le h)
+
+@[simp]
 
 中文:
 定理 floor_sub_natCast
@@ -1561,7 +1572,10 @@ theorem floor_sub_natCast
   rcases le_total a n with h | h
   · rw [floor_of_nonpos (tsub_nonpos_of_le h), eq_comm, tsub_eq_zero_iff_le]
     exact Nat.cast_le.1 ((Nat.floor_le ha).trans h)
- 
+  · rw [eq_tsub_iff_add_eq_of_le (le_floor h), ← floor_add_natCast _, tsub_add_cancel_of_le h]
+    exact le_tsub_of_add_le_left ((add_zero _).trans_le h)
+
+@[simp]
 
 Depends on / 依赖: Nat.cast_le, Nat.floor_le, add_zero, cast_le, cast_nonneg, eq_comm, eq_tsub_iff_add_eq_of_le, floor_add_natCast, floor_le, floor_of_nonpos, ha.trans, le_floor, le_total, le_tsub_of_add_le_left, n.cast_nonneg, trans_le, tsub_add_cancel_of_le, tsub_eq_zero_iff_le, tsub_nonpos_of_le, zero_tsub
 -/
@@ -1633,7 +1647,7 @@ theorem ceil_add_natCast
     obtain hb | hb := le_or_gt n b
     · obtain ⟨d, rfl⟩ := exists_add_of_le hb
       rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_lt_add_iff_right]; rw [add_lt_add_iff_right]; rw [lt_ceil]
-    · exact iff_of_true
+    · exact iff_of_true (lt_add_of_nonneg_of_lt ha <| cast_lt.2 hb) (Nat.lt_add_left _ hb)
 
 中文:
 定理 ceil_add_natCast
@@ -1645,7 +1659,7 @@ theorem ceil_add_natCast
     obtain hb | hb := le_or_gt n b
     · obtain ⟨d, rfl⟩ := exists_add_of_le hb
       rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_lt_add_iff_right]; rw [add_lt_add_iff_right]; rw [lt_ceil]
-    · exact iff_of_true
+    · exact iff_of_true (lt_add_of_nonneg_of_lt ha <| cast_lt.2 hb) (Nat.lt_add_left _ hb)
 
 Depends on / 依赖: Nat.cast_add, Nat.lt_add_left, add_comm, add_lt_add_iff_right, cast_add, cast_lt, contrapose, eq_of_forall_ge_iff, exists_add_of_le, iff_of_true, le_or_gt, lt_add_left, lt_add_of_nonneg_of_lt, lt_ceil
 -/
@@ -2097,7 +2111,11 @@ theorem subsingleton_floorSemiring
     ext a
     rcases lt_or_ge a 0 with h | h
     · rw [H₁.floor_of_neg, H₂.floor_of_neg] <;> exact h
-    · refine eq_of_forall_le_iff fun n => 
+    · refine eq_of_forall_le_iff fun n => ?_
+      rw [H₁.gc_floor]; rw [H₂.gc_floor] <;> exact h
+  cases H₁
+  cases H₂
+  congr
 
 中文:
 定理 subsingleton_floorSemiring
@@ -2109,7 +2127,11 @@ theorem subsingleton_floorSemiring
     ext a
     rcases lt_or_ge a 0 with h | h
     · rw [H₁.floor_of_neg, H₂.floor_of_neg] <;> exact h
-    · refine eq_of_forall_le_iff fun n => 
+    · refine eq_of_forall_le_iff fun n => ?_
+      rw [H₁.gc_floor]; rw [H₂.gc_floor] <;> exact h
+  cases H₁
+  cases H₂
+  congr
 
 Depends on / 依赖: eq_of_forall_le_iff, floor_of_neg, gc_ceil, gc_ceil.l_unique, gc_floor, l_unique, lt_or_ge
 -/

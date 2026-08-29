@@ -562,7 +562,10 @@ theorem inducedOuterMeasure_eq_iInf
     intro hf
     refine le_trans ?_ (extend_iUnion_le_tsum_nat' _ msU _)
     refine le_iInf ?_
-    int
+    intro h2f
+    exact iInf_le_of_le _ (iInf_le_of_le h2f <| iInf_le _ hf)
+
+omit msU m_mono in
 
 中文:
 定理 inducedOuterMeasure_eq_iInf
@@ -579,7 +582,10 @@ theorem inducedOuterMeasure_eq_iInf
     intro hf
     refine le_trans ?_ (extend_iUnion_le_tsum_nat' _ msU _)
     refine le_iInf ?_
-    int
+    intro h2f
+    exact iInf_le_of_le _ (iInf_le_of_le h2f <| iInf_le _ hf)
+
+omit msU m_mono in
 
 Depends on / 依赖: extend_iUnion_le_tsum_nat, iInf_le, iInf_le_of_le, inducedOuterMeasure_eq, le_antisymm, le_iInf, le_iInf_iff, le_of_eq, le_trans, m_mono
 -/
@@ -637,7 +643,8 @@ theorem inducedOuterMeasure_preimage
     rw [inducedOuterMeasure_eq_iInf _ msU m_mono]; rw [inducedOuterMeasure_eq_iInf _ msU m_mono]; symm
     refine f.injective.preimage_surjective.iInf_congr (preimage f) fun s => ?_
     refine iInf_congr_Prop (Pm s) ?_; intro hs
-    refine iInf_congr_Prop f.surjective.preimage_subset_preimage_iff
+    refine iInf_congr_Prop f.surjective.preimage_subset_preimage_iff ?_
+    intro _; exact mm s hs
 
 中文:
 定理 inducedOuterMeasure_preimage
@@ -646,7 +653,8 @@ theorem inducedOuterMeasure_preimage
     rw [inducedOuterMeasure_eq_iInf _ msU m_mono]; rw [inducedOuterMeasure_eq_iInf _ msU m_mono]; symm
     refine f.injective.preimage_surjective.iInf_congr (preimage f) fun s => ?_
     refine iInf_congr_Prop (Pm s) ?_; intro hs
-    refine iInf_congr_Prop f.surjective.preimage_subset_preimage_iff
+    refine iInf_congr_Prop f.surjective.preimage_subset_preimage_iff ?_
+    intro _; exact mm s hs
 
 Depends on / 依赖: f.injective.preimage_surjective.iInf_congr, f.surjective.preimage_subset_preimage_iff, iInf_congr, iInf_congr_Prop, inducedOuterMeasure_eq_iInf, injective, m_mono, preimage, preimage_subset_preimage_iff, preimage_surjective, surjective
 -/
@@ -722,7 +730,8 @@ theorem inducedOuterMeasure_caratheodory
     intro ht
     refine le_iInf ?_
     intro h2t
-    refine le_trans ?_ ((h t ht).trans_eq
+    refine le_trans ?_ ((h t ht).trans_eq <| inducedOuterMeasure_eq' _ msU m_mono ht)
+    gcongr
 
 中文:
 定理 inducedOuterMeasure_caratheodory
@@ -740,7 +749,8 @@ theorem inducedOuterMeasure_caratheodory
     intro ht
     refine le_iInf ?_
     intro h2t
-    refine le_trans ?_ ((h t ht).trans_eq
+    refine le_trans ?_ ((h t ht).trans_eq <| inducedOuterMeasure_eq' _ msU m_mono ht)
+    gcongr
 
 Depends on / 依赖: conv_rhs, inducedOuterMeasure_eq, inducedOuterMeasure_eq_iInf, isCaratheodory_iff_le, le_iInf, le_trans, m_mono, trans_eq
 -/
@@ -833,7 +843,7 @@ theorem extend_iUnion_le_tsum_nat
   rw [mU (MeasurableSet.disjointed h) (disjoint_disjointed _)]
   refine ENNReal.tsum_le_tsum fun i => ?_
   rw [← extend_eq m]; rw [← extend_eq m]
-  exact extend_mono m0 mU (Meas
+  exact extend_mono m0 mU (MeasurableSet.disjointed h _) (disjointed_le f _)
 
 中文:
 定理 extend_iUnion_le_tsum_nat
@@ -844,7 +854,7 @@ theorem extend_iUnion_le_tsum_nat
   rw [mU (MeasurableSet.disjointed h) (disjoint_disjointed _)]
   refine ENNReal.tsum_le_tsum fun i => ?_
   rw [← extend_eq m]; rw [← extend_eq m]
-  exact extend_mono m0 mU (Meas
+  exact extend_mono m0 mU (MeasurableSet.disjointed h _) (disjointed_le f _)
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, MeasurableSet, MeasurableSet.disjointed, MeasurableSet.iUnion, disjoint_disjointed, disjointed, disjointed_le, extend_eq, extend_iUnion_le_tsum_nat, extend_mono, iUnion, iUnion_disjointed, iUnion_disjointed.symm, singlePass, tsum_le_tsum
 -/
@@ -1279,7 +1289,25 @@ theorem exists_measurable_superset_eq_trim
   · simp only [hs]
     simp only [iInf_eq_top, ms] at hs
     exact ⟨univ, subset_univ s, MeasurableSet.univ, hs _ (subset_univ s) MeasurableSet.univ⟩
-  · have : forall r > ms, 
+  · have : forall r > ms, exists t, s subseteq t ∧ MeasurableSet t ∧ m t < r := by
+      intro r hs
+      have : exists t, MeasurableSet t ∧ s subseteq t ∧ m t < r := by simpa [ms, iInf_lt_iff] using hs
+      rcases this with ⟨t, hmt, hin, hlt⟩
+      exists t
+    have : forall n : Nat, exists t, s subseteq t ∧ MeasurableSet t ∧ m t < ms + (n : Real>=0∞)⁻¹ := by
+      intro n
+      refine this _ (ENNReal.lt_add_right hs ?_)
+      simp
+    choose t hsub hm hm' using this
+    refine ⟨⋂ n, t n, subset_iInter hsub, MeasurableSet.iInter hm, ?_⟩
+    have : Tendsto (fun n : Nat => ms + (n : Real>=0∞)⁻¹) atTop (𝓝 (ms + 0)) :=
+      tendsto_const_nhds.add ENNReal.tendsto_inv_nat_nhds_zero
+    rw [add_zero] at this
+    refine le_antisymm (ge_of_tendsto' this fun n => ?_) ?_
+    · exact le_trans (measure_mono <| iInter_subset t n) (hm' n).le
+    · refine iInf_le_of_le (⋂ n, t n) ?_
+      refine iInf_le_of_le (subset_iInter hsub) ?_
+      exact iInf_le _ (MeasurableSet.iInter hm)
 
 中文:
 定理 存在_measurable_superset_eq_trim
@@ -1290,7 +1318,25 @@ theorem exists_measurable_superset_eq_trim
   · simp only [hs]
     simp only [iInf_eq_top, ms] at hs
     exact ⟨univ, subset_univ s, MeasurableSet.univ, hs _ (subset_univ s) MeasurableSet.univ⟩
-  · have : forall r > ms, 
+  · have : forall r > ms, exists t, s subseteq t ∧ MeasurableSet t ∧ m t < r := by
+      intro r hs
+      have : exists t, MeasurableSet t ∧ s subseteq t ∧ m t < r := by simpa [ms, iInf_lt_iff] using hs
+      rcases this with ⟨t, hmt, hin, hlt⟩
+      exists t
+    have : forall n : Nat, exists t, s subseteq t ∧ MeasurableSet t ∧ m t < ms + (n : Real>=0∞)⁻¹ := by
+      intro n
+      refine this _ (ENNReal.lt_add_right hs ?_)
+      simp
+    choose t hsub hm hm' using this
+    refine ⟨⋂ n, t n, subset_iInter hsub, MeasurableSet.iInter hm, ?_⟩
+    have : Tendsto (fun n : Nat => ms + (n : Real>=0∞)⁻¹) atTop (𝓝 (ms + 0)) :=
+      tendsto_const_nhds.add ENNReal.tendsto_inv_nat_nhds_zero
+    rw [add_zero] at this
+    refine le_antisymm (ge_of_tendsto' this fun n => ?_) ?_
+    · exact le_trans (measure_mono <| iInter_subset t n) (hm' n).le
+    · refine iInf_le_of_le (⋂ n, t n) ?_
+      refine iInf_le_of_le (subset_iInter hsub) ?_
+      exact iInf_le _ (MeasurableSet.iInter hm)
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, iInf_eq_top, iInf_lt_iff, subset_univ, subseteq, trim_eq_iInf
 -/
@@ -1356,7 +1402,7 @@ theorem exists_measurable_superset_forall_eq_trim
   replace hst := subset_iInter hst
   replace ht := MeasurableSet.iInter ht
   refine ⟨⋂ i, t i, hst, ht, fun i => le_antisymm ?_ ?_⟩
-  exacts [hμt i ▸ (μ i).mono (iInter_subset _ _), (measure_mono hst).trans_eq ((μ i).
+  exacts [hμt i ▸ (μ i).mono (iInter_subset _ _), (measure_mono hst).trans_eq ((μ i).trim_eq ht)]
 
 中文:
 定理 存在_measurable_superset_对任意_eq_trim
@@ -1366,7 +1412,7 @@ theorem exists_measurable_superset_forall_eq_trim
   replace hst := subset_iInter hst
   replace ht := MeasurableSet.iInter ht
   refine ⟨⋂ i, t i, hst, ht, fun i => le_antisymm ?_ ?_⟩
-  exacts [hμt i ▸ (μ i).mono (iInter_subset _ _), (measure_mono hst).trans_eq ((μ i).
+  exacts [hμt i ▸ (μ i).mono (iInter_subset _ _), (measure_mono hst).trans_eq ((μ i).trim_eq ht)]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iInter, exacts, exists_measurable_superset_eq_trim, iInter, iInter_subset, le_antisymm, measure_mono, replace, subset_iInter, trans_eq, trim_eq
 -/
@@ -1538,7 +1584,9 @@ theorem restrict_trim
     rw [← hμt']
     rw [inter_subset] at htt'
     refine (measure_mono htt').trans ?_
-    rw [trim_eq _ (hs.compl.union 
+    rw [trim_eq _ (hs.compl.union ht')]; rw [restrict_apply]; rw [union_inter_distrib_right]; rw [compl_inter_self]; rw [Set.empty_union]
+    exact measure_mono inter_subset_left
+  · rw [restrict_apply, trim_eq _ (ht.inter hs), restrict_apply]
 
 中文:
 定理 restrict_trim
@@ -1550,7 +1598,9 @@ theorem restrict_trim
     rw [← hμt']
     rw [inter_subset] at htt'
     refine (measure_mono htt').trans ?_
-    rw [trim_eq _ (hs.compl.union 
+    rw [trim_eq _ (hs.compl.union ht')]; rw [restrict_apply]; rw [union_inter_distrib_right]; rw [compl_inter_self]; rw [Set.empty_union]
+    exact measure_mono inter_subset_left
+  · rw [restrict_apply, trim_eq _ (ht.inter hs), restrict_apply]
 
 Depends on / 依赖: Set.empty_union, compl_inter_self, empty_union, exists_measurable_superset_eq_trim, hs.compl.union, ht.inter, inter_subset, inter_subset_left, le_antisymm, le_trim_iff, measure_mono, restrict_apply, trim_eq, union_inter_distrib_right
 -/

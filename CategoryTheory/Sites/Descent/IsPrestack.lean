@@ -152,14 +152,14 @@ lemma pullHom_pullHom
   proof: by
   dsimp [pullHom]
   rw [Functor.map_comp_assoc]; rw [Functor.map_comp_assoc]; rw [F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _ _ rfl (by aesop)]; rw [F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc _ _ _ _ _ _ _ rfl (by aesop)]
-  simp [mapComp'_inv_naturality_assoc, ← re
+  simp [mapComp'_inv_naturality_assoc, ← reassoc_of% Cat.Hom₂.comp_app]
 
 中文:
 引理 pullHom_pullHom
   证明: by
   dsimp [pullHom]
   rw [Functor.map_comp_assoc]; rw [Functor.map_comp_assoc]; rw [F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _ _ rfl (by aesop)]; rw [F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc _ _ _ _ _ _ _ rfl (by aesop)]
-  simp [mapComp'_inv_naturality_assoc, ← re
+  simp [mapComp'_inv_naturality_assoc, ← reassoc_of% Cat.Hom₂.comp_app]
 
 Depends on / 依赖: F.mapComp, Functor, Functor.map_comp_assoc, _hom_whiskerRight_app_assoc, _inv_whiskerRight_mapComp, cat_disch, mapComp, map_comp_assoc, pullHom
 -/
@@ -251,7 +251,11 @@ definition overMapCompPresheafHomIso
     exact (Iso.homFromEquiv (e.app M)).trans (Iso.homToEquiv (e.app N)))) (by
       rintro ⟨T₁⟩ ⟨T₂⟩ ⟨f⟩
       ext g
-      ds
+      dsimp [pullHom]
+      simp only [Category.assoc,
+        Functor.map_comp]
+      rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ rfl _ rfl]; rw [F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ (by
+          simp only [← Quiver.Hom.comp_toLoc]; rw [← op_comp]; rw [Over.w_assoc])])
 
 中文:
 定义 overMapCompPresheafHomIso
@@ -262,7 +266,11 @@ definition overMapCompPresheafHomIso
     exact (Iso.homFromEquiv (e.app M)).trans (Iso.homToEquiv (e.app N)))) (by
       rintro ⟨T₁⟩ ⟨T₂⟩ ⟨f⟩
       ext g
-      ds
+      dsimp [pullHom]
+      simp only [Category.assoc,
+        Functor.map_comp]
+      rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ rfl _ rfl]; rw [F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ (by
+          simp only [← Quiver.Hom.comp_toLoc]; rw [← op_comp]; rw [Over.w_assoc])])
 
 Depends on / 依赖: Cat.Hom.toNatIso, Category, Category.assoc, Equiv.toIso, F.mapComp, Functor, Functor.map_comp, Iso.homFromEquiv, Iso.homToEquiv, NatIso, NatIso.ofComponents, Over.map, Quiver, Quiver.Hom.comp_, T.unop, T.unop.hom.op, comp_, e.app, hom.op, homFromEquiv
 -/

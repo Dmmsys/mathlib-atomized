@@ -210,7 +210,7 @@ definition noncomputable
     induction g using TensorProduct.induction_on with
     | zero => simp
     | add x y hx hy => aesop
-    | tmul b f => simp [TensorProduct.smul_t
+    | tmul b f => simp [TensorProduct.smul_tmul', mul_smul]
 
 中文:
 定义 noncomputable
@@ -223,7 +223,7 @@ definition noncomputable
     induction g using TensorProduct.induction_on with
     | zero => simp
     | add x y hx hy => aesop
-    | tmul b f => simp [TensorProduct.smul_t
+    | tmul b f => simp [TensorProduct.smul_tmul', mul_smul]
 
 Depends on / 依赖: _congr_ae, _zero, eLpNorm, hf_zero, hq0_ne
 -/
@@ -276,7 +276,19 @@ definition toDualBaseChange
   set ι := Free.ChooseBasisIndex R V
   have ibc_pow : IsBaseChange A ((Algebra.linearMap R A).compLeft ι) := (linearMap R A).finitePow ι
   suffices ibc.toDualBaseChangeAux =
-      (((b.constr R).symm.baseChang
+      (((b.constr R).symm.baseChange ..).trans ibc_pow.equiv).trans ((ibc.basis b).constr A) from
+    this ▸ LinearEquiv.bijective _
+  ext f w
+  simp only [AlgebraTensorModule.curry_apply, curry_apply, LinearMap.coe_restrictScalars,
+    LinearEquiv.coe_coe, LinearEquiv.trans_apply]
+  induction w using ibc.inductionOn with
+  | zero => simp
+  | tmul v =>
+    simp only [toDualBaseChangeAux_tmul, one_mul]
+    conv_lhs => rw [← Basis.sum_equivFun b v, map_sum]
+    simp [LinearEquiv.baseChange, basis_repr_comp_apply]
+  | smul a w h => simp [h]
+  | add x y hx hy => simp [map_add, hx, hy]
 
 中文:
 定义 toDualBaseChange
@@ -287,7 +299,19 @@ definition toDualBaseChange
   set ι := Free.ChooseBasisIndex R V
   have ibc_pow : IsBaseChange A ((Algebra.linearMap R A).compLeft ι) := (linearMap R A).finitePow ι
   suffices ibc.toDualBaseChangeAux =
-      (((b.constr R).symm.baseChang
+      (((b.constr R).symm.baseChange ..).trans ibc_pow.equiv).trans ((ibc.basis b).constr A) from
+    this ▸ LinearEquiv.bijective _
+  ext f w
+  simp only [AlgebraTensorModule.curry_apply, curry_apply, LinearMap.coe_restrictScalars,
+    LinearEquiv.coe_coe, LinearEquiv.trans_apply]
+  induction w using ibc.inductionOn with
+  | zero => simp
+  | tmul v =>
+    simp only [toDualBaseChangeAux_tmul, one_mul]
+    conv_lhs => rw [← Basis.sum_equivFun b v, map_sum]
+    simp [LinearEquiv.baseChange, basis_repr_comp_apply]
+  | smul a w h => simp [h]
+  | add x y hx hy => simp [map_add, hx, hy]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, AlgebraTensorModule, AlgebraTensorModule.curry_apply, ChooseBasisIndex, Free.ChooseBasisIndex, Free.chooseBasis, IsBaseChange, LinearEquiv, LinearEquiv.bijective, LinearEquiv.coe_coe, LinearEquiv.ofBijective, LinearMap, LinearMap.coe_restrictScalars, _congr_enorm_ae, _zero, b.constr, baseChange, bijective, chooseBasis
 -/

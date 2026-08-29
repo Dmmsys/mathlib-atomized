@@ -103,7 +103,7 @@ definition isColimitPUnitCocone
     exact ConcreteCategory.congr_hom (s.ι.naturality f).symm PUnit.unit
   uniq s m h := by
     ext ⟨⟩
- 
+    simp [← h Classical.ofNonempty]
 
 中文:
 定义 isColimitPUnitCocone
@@ -117,7 +117,7 @@ definition isColimitPUnitCocone
     exact ConcreteCategory.congr_hom (s.ι.naturality f).symm PUnit.unit
   uniq s m h := by
     ext ⟨⟩
- 
+    simp [← h Classical.ofNonempty]
 
 Depends on / 依赖: Classical, Classical.ofNonempty, ofNonempty
 -/
@@ -243,7 +243,7 @@ theorem isConnected_iff_colimit_constPUnitFunctor_iso_pUnit
 have : Nonempty C := nonempty_of_nonempty_colimit Nonempty.map h.inv inferInstance
 refine zigzag_isConnected fun c d => ?_
   refine zigzag_of_eqvGen_colimitTypeRel _ (constPUnitFunctor C) ⟨c, PUnit.unit⟩ ⟨d, PUnit.unit⟩ ?_
-exact
+exact colimit_eq h.toEquiv.injective rfl
 
 中文:
 定理 isConnected_iff_colimit_constPUnitFunctor_iso_pUnit
@@ -252,7 +252,7 @@ exact
 have : Nonempty C := nonempty_of_nonempty_colimit Nonempty.map h.inv inferInstance
 refine zigzag_isConnected fun c d => ?_
   refine zigzag_of_eqvGen_colimitTypeRel _ (constPUnitFunctor C) ⟨c, PUnit.unit⟩ ⟨d, PUnit.unit⟩ ?_
-exact
+exact colimit_eq h.toEquiv.injective rfl
 
 Depends on / 依赖: Nonempty, Nonempty.map, PUnit.unit, colimitConstPUnitIsoPUnit, colimit_eq, constPUnitFunctor, h.inv, h.toEquiv.injective, injective, nonempty_of_nonempty_colimit, toEquiv, zigzag_isConnected, zigzag_of_eqvGen_colimitTypeRel
 -/
@@ -275,7 +275,7 @@ theorem isConnected_iff_isColimit_pUnitCocone
   let colimitCocone : ColimitCocone (constPUnitFunctor C) := ⟨pUnitCocone.{w} C, h⟩
   have : HasColimit (constPUnitFunctor.{w} C) := ⟨⟨colimitCocone⟩⟩
   simp only [isConnected_iff_colimit_constPUnitFunctor_iso_pUnit.{w} C]
-  exact ⟨co
+  exact ⟨colimit.isoColimitCocone colimitCocone⟩
 
 中文:
 定理 isConnected_iff_isColimit_pUnitCocone
@@ -284,7 +284,7 @@ theorem isConnected_iff_isColimit_pUnitCocone
   let colimitCocone : ColimitCocone (constPUnitFunctor C) := ⟨pUnitCocone.{w} C, h⟩
   have : HasColimit (constPUnitFunctor.{w} C) := ⟨⟨colimitCocone⟩⟩
   simp only [isConnected_iff_colimit_constPUnitFunctor_iso_pUnit.{w} C]
-  exact ⟨co
+  exact ⟨colimit.isoColimitCocone colimitCocone⟩
 
 Depends on / 依赖: ColimitCocone, Functor, Functor.additive_of_iso, HasColimit, Localization, Localization.functor_additive_iff, additive_of_iso, colimit, colimit.isoColimitCocone, colimitCocone, commShiftIso, constPUnitFunctor, functor_additive_iff, isColimitPUnitCocone, isConnected_iff_colimit_constPUnitFunctor_iso_pUnit, isoColimitCocone, pUnitCocone
 -/
@@ -379,7 +379,7 @@ lemma isConnected_of_isInitial
   use [x, j₂]
   simp only [List.isChain_cons_cons, List.isChain_singleton, and_true, ne_eq,
     reduceCtorEq, not_false_eq_true, List.getLast_cons, List.cons_ne_self, List.getLast_singleton]
-exact ⟨Zag.symm Zag.of_hom h.to _, Z
+exact ⟨Zag.symm Zag.of_hom h.to _, Zag.of_hom h.to _⟩
 
 中文:
 引理 isConnected_of_isInitial
@@ -392,7 +392,7 @@ exact ⟨Zag.symm Zag.of_hom h.to _, Z
   use [x, j₂]
   simp only [List.isChain_cons_cons, List.isChain_singleton, and_true, ne_eq,
     reduceCtorEq, not_false_eq_true, List.getLast_cons, List.cons_ne_self, List.getLast_singleton]
-exact ⟨Zag.symm Zag.of_hom h.to _, Z
+exact ⟨Zag.symm Zag.of_hom h.to _, Zag.of_hom h.to _⟩
 
 Depends on / 依赖: List.cons_ne_self, List.getLast_cons, List.getLast_singleton, List.isChain_cons_cons, List.isChain_singleton, Nonempty, Zag.of_hom, Zag.symm, and_true, cons_ne_self, getLast_cons, getLast_singleton, h.to, isChain_cons_cons, isChain_singleton, isConnected_of_zigzag, ne_eq, not_false_eq_true, of_hom, reduceCtorEq
 -/
@@ -419,7 +419,7 @@ lemma isConnected_of_isTerminal
   use [x, j₂]
   simp only [List.isChain_cons_cons, List.isChain_singleton, and_true, ne_eq,
     reduceCtorEq, not_false_eq_true, List.getLast_cons, List.cons_ne_self, List.getLast_singleton]
-exact ⟨Zag.of_hom h.from _, Zag.symm
+exact ⟨Zag.of_hom h.from _, Zag.symm Zag.of_hom h.from _⟩
 
 中文:
 引理 isConnected_of_isTerminal
@@ -432,7 +432,7 @@ exact ⟨Zag.of_hom h.from _, Zag.symm
   use [x, j₂]
   simp only [List.isChain_cons_cons, List.isChain_singleton, and_true, ne_eq,
     reduceCtorEq, not_false_eq_true, List.getLast_cons, List.cons_ne_self, List.getLast_singleton]
-exact ⟨Zag.of_hom h.from _, Zag.symm
+exact ⟨Zag.of_hom h.from _, Zag.symm Zag.of_hom h.from _⟩
 
 Depends on / 依赖: List.cons_ne_self, List.getLast_cons, List.getLast_singleton, List.isChain_cons_cons, List.isChain_singleton, Nonempty, Zag.of_hom, Zag.symm, and_true, cons_ne_self, getLast_cons, getLast_singleton, h.from, isChain_cons_cons, isChain_singleton, isConnected_of_zigzag, ne_eq, not_false_eq_true, of_hom, reduceCtorEq
 -/

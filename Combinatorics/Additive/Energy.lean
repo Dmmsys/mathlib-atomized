@@ -418,7 +418,10 @@ lemma card_sq_le_card_mul_mulEnergy
         rw [← sum_card_fiberwise_eq_card_filter]
     _ <= #u * ∑ c in u, #{xy in s ×ˢ t | xy.1 * xy.2 = c} ^ 2 := by
         simpa using sum_mul_sq_le_sq_mul_sq (R := Nat) _ 1 _
-    _ <= #u * ∑ c in s * t, #{xy in s ×ˢ t | xy.
+    _ <= #u * ∑ c in s * t, #{xy in s ×ˢ t | xy.1 * xy.2 = c} ^ 2 := by
+        refine mul_le_mul_right (sum_le_sum_of_ne_zero ?_) _
+        aesop (add simp [filter_eq_empty_iff]) (add unsafe mul_mem_mul)
+    _ = #u * Eₘ[s, t] := by rw [mulEnergy_eq_sum_sq']
 
 中文:
 引理 card_sq_le_card_mul_mulEnergy
@@ -429,7 +432,10 @@ lemma card_sq_le_card_mul_mulEnergy
         rw [← sum_card_fiberwise_eq_card_filter]
     _ <= #u * ∑ c in u, #{xy in s ×ˢ t | xy.1 * xy.2 = c} ^ 2 := by
         simpa using sum_mul_sq_le_sq_mul_sq (R := Nat) _ 1 _
-    _ <= #u * ∑ c in s * t, #{xy in s ×ˢ t | xy.
+    _ <= #u * ∑ c in s * t, #{xy in s ×ˢ t | xy.1 * xy.2 = c} ^ 2 := by
+        refine mul_le_mul_right (sum_le_sum_of_ne_zero ?_) _
+        aesop (add simp [filter_eq_empty_iff]) (add unsafe mul_mem_mul)
+    _ = #u * Eₘ[s, t] := by rw [mulEnergy_eq_sum_sq']
 
 Depends on / 依赖: filter_eq_empty_iff, mulEnergy_eq_sum_sq, mul_le_mul_right, mul_mem_mul, sum_card_fiberwise_eq_card_filter, sum_le_sum_of_ne_zero, sum_mul_sq_le_sq_mul_sq, unsafe
 -/
@@ -520,7 +526,18 @@ lemma mulEnergy_univ_left
   let f : α × α × α -> (α × α) × α × α := fun x => ((x.1 * x.2.2, x.1 * x.2.1), x.2)
   have : (↑((univ : Finset α) ×ˢ t ×ˢ t) : Set (α × α × α)).InjOn f := by
     rintro ⟨a₁, b₁, c₁⟩ _ ⟨a₂, b₂, c₂⟩ h₂ h
-    simp_rw [f, P
+    simp_rw [f, Prod.ext_iff] at h
+    obtain ⟨h, rfl, rfl⟩ := h
+    rw [mul_right_cancel h.1]
+  rw [← card_image_of_injOn this]
+  congr with a
+  simp only [mem_filter, mem_product, mem_univ, true_and, mem_image,
+    Prod.exists]
+  refine ⟨fun h => ⟨a.1.1 * a.2.2⁻¹, _, _, h.1, by simp [f, mul_right_comm, h.2]⟩, ?_⟩
+  rintro ⟨b, c, d, hcd, rfl⟩
+  simpa [f, mul_right_comm]
+
+@[to_additive (attr := simp)]
 
 中文:
 引理 mulEnergy_univ_left
@@ -530,7 +547,18 @@ lemma mulEnergy_univ_left
   let f : α × α × α -> (α × α) × α × α := fun x => ((x.1 * x.2.2, x.1 * x.2.1), x.2)
   have : (↑((univ : Finset α) ×ˢ t ×ˢ t) : Set (α × α × α)).InjOn f := by
     rintro ⟨a₁, b₁, c₁⟩ _ ⟨a₂, b₂, c₂⟩ h₂ h
-    simp_rw [f, P
+    simp_rw [f, Prod.ext_iff] at h
+    obtain ⟨h, rfl, rfl⟩ := h
+    rw [mul_right_cancel h.1]
+  rw [← card_image_of_injOn this]
+  congr with a
+  simp only [mem_filter, mem_product, mem_univ, true_and, mem_image,
+    Prod.exists]
+  refine ⟨fun h => ⟨a.1.1 * a.2.2⁻¹, _, _, h.1, by simp [f, mul_right_comm, h.2]⟩, ?_⟩
+  rintro ⟨b, c, d, hcd, rfl⟩
+  simpa [f, mul_right_comm]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Finset, Fintype, Fintype.card, Prod.exists, Prod.ext_iff, card_image_of_injOn, card_product, ext_iff, mem_filter, mem_image, mem_product, mem_univ, mulEnergy, mul_right_cancel, simp_rw, true_and, univ_product_univ
 -/

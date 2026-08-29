@@ -46,7 +46,15 @@ definition uncurry
       map_comp := fun f g => by
         simp only [prod_comp_fst, prod_comp_snd, Functor.map_comp, NatTrans.comp_app,
           Category.assoc]
-        slice_lhs 2 3 => rw [← NatTrans.natura
+        slice_lhs 2 3 => rw [← NatTrans.naturality]
+        rw [Category.assoc] }
+  map T :=
+    { app := fun X => (T.app X.1).app X.2
+      naturality := fun X Y f => by
+        simp only [Category.assoc]
+        slice_lhs 2 3 => rw [NatTrans.naturality]
+        slice_lhs 1 2 => rw [← NatTrans.comp_app, NatTrans.naturality, NatTrans.comp_app]
+        rw [Category.assoc] }
 
 中文:
 定义 uncurry
@@ -56,7 +64,15 @@ definition uncurry
       map_comp := fun f g => by
         simp only [prod_comp_fst, prod_comp_snd, Functor.map_comp, NatTrans.comp_app,
           Category.assoc]
-        slice_lhs 2 3 => rw [← NatTrans.natura
+        slice_lhs 2 3 => rw [← NatTrans.naturality]
+        rw [Category.assoc] }
+  map T :=
+    { app := fun X => (T.app X.1).app X.2
+      naturality := fun X Y f => by
+        simp only [Category.assoc]
+        slice_lhs 2 3 => rw [NatTrans.naturality]
+        slice_lhs 1 2 => rw [← NatTrans.comp_app, NatTrans.naturality, NatTrans.comp_app]
+        rw [Category.assoc] }
 
 Depends on / 依赖: Category, Category.assoc, F.map, F.obj, Functor, Functor.map_comp, NatTrans, NatTrans.comp_app, NatTrans.naturality, T.app, comp_app, map_comp, naturality, prod_comp_fst, prod_comp_snd, slice_lhs
 -/
@@ -92,7 +108,9 @@ definition curryObj
       map_comp := fun f g => by simp [← F.map_comp] }
   map f :=
     { app := fun Y => F.map (f ×ₘ 𝟙 Y)
-      naturality := fun {Y} {Y'} g => by simp [← F.map_comp] 
+      naturality := fun {Y} {Y'} g => by simp [← F.map_comp] }
+  map_id := fun X => by ext Y; exact F.map_id _
+  map_comp := fun f g => by ext Y; simp [← F.map_comp]
 
 中文:
 定义 curryObj
@@ -103,7 +121,9 @@ definition curryObj
       map_comp := fun f g => by simp [← F.map_comp] }
   map f :=
     { app := fun Y => F.map (f ×ₘ 𝟙 Y)
-      naturality := fun {Y} {Y'} g => by simp [← F.map_comp] 
+      naturality := fun {Y} {Y'} g => by simp [← F.map_comp] }
+  map_id := fun X => by ext Y; exact F.map_id _
+  map_comp := fun f g => by ext Y; simp [← F.map_comp]
 
 Depends on / 依赖: F.map, F.map_comp, F.map_id, F.obj, map_comp, map_id, naturality, prod_id
 -/
@@ -184,7 +204,8 @@ definition currying
   counitIso := NatIso.ofComponents
     (fun F => NatIso.ofComponents (fun _ => Iso.refl _) (by
       rintro ⟨X₁, X₂⟩ ⟨Y₁, Y₂⟩ ⟨f₁, f₂⟩
-      dsimp at f₁
+      dsimp at f₁ f₂ ⊢
+      simp only [← F.map_comp, prod_comp, Category.comp_id, Category.id_comp]))
 
 中文:
 定义 currying
@@ -196,7 +217,8 @@ definition currying
   counitIso := NatIso.ofComponents
     (fun F => NatIso.ofComponents (fun _ => Iso.refl _) (by
       rintro ⟨X₁, X₂⟩ ⟨Y₁, Y₂⟩ ⟨f₁, f₂⟩
-      dsimp at f₁
+      dsimp at f₁ f₂ ⊢
+      simp only [← F.map_comp, prod_comp, Category.comp_id, Category.id_comp]))
 
 Depends on / 依赖: uncurry
 -/

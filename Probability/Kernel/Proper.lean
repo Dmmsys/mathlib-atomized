@@ -91,7 +91,13 @@ lemma isProper_iff_inter_eq_indicator_mul
     _ ↔ forall ⦃A : Set X⦄ (_hA : MeasurableSet[𝓧] A) ⦃B : Set X⦄ (hB : MeasurableSet[𝓑] B) (x : X),
           π.restrict (h𝓑𝓧 _ hB) x A = B.indicator 1 x * π x A := by
       simp [isProper_iff_restrict_eq_indicator_smul h𝓑𝓧, Measure.ext_iff]; aesop
-    _ ↔ _ := by congr! 5 with A hA B hB 
+    _ ↔ _ := by congr! 5 with A hA B hB x; rw [restrict_apply, Measure.restrict_apply hA]
+
+alias ⟨IsProper.restrict_eq_indicator_smul, IsProper.of_restrict_eq_indicator_smul⟩ :=
+  isProper_iff_restrict_eq_indicator_smul
+
+alias ⟨IsProper.inter_eq_indicator_mul, IsProper.of_inter_eq_indicator_mul⟩ :=
+  isProper_iff_inter_eq_indicator_mul
 
 中文:
 引理 isProper_iff_inter_eq_indicator_mul
@@ -101,7 +107,13 @@ lemma isProper_iff_inter_eq_indicator_mul
     _ ↔ forall ⦃A : Set X⦄ (_hA : MeasurableSet[𝓧] A) ⦃B : Set X⦄ (hB : MeasurableSet[𝓑] B) (x : X),
           π.restrict (h𝓑𝓧 _ hB) x A = B.indicator 1 x * π x A := by
       simp [isProper_iff_restrict_eq_indicator_smul h𝓑𝓧, Measure.ext_iff]; aesop
-    _ ↔ _ := by congr! 5 with A hA B hB 
+    _ ↔ _ := by congr! 5 with A hA B hB x; rw [restrict_apply, Measure.restrict_apply hA]
+
+alias ⟨IsProper.restrict_eq_indicator_smul, IsProper.of_restrict_eq_indicator_smul⟩ :=
+  isProper_iff_restrict_eq_indicator_smul
+
+alias ⟨IsProper.inter_eq_indicator_mul, IsProper.of_inter_eq_indicator_mul⟩ :=
+  isProper_iff_inter_eq_indicator_mul
 
 Depends on / 依赖: B.indicator, MeasurableSet, Measure, Measure.ext_iff, Measure.restrict_apply, ext_iff, indicator, isProper_iff_restrict_eq_indicator_smul, restrict, restrict_apply
 -/
@@ -163,7 +175,7 @@ lemma IsProper.lintegral_indicator_mul_indicator
   rw [lintegral_indicator ((h𝓑𝓧 _ hB).inter hA)]; rw [lintegral_indicator hA]
   simp only [MeasureTheory.lintegral_const, MeasurableSet.univ, Measure.restrict_apply, univ_inter,
     Pi.one_apply, one_mul]
-  rw [← hπ.inter_eq_indicator_mul h𝓑𝓧 hA hB]; rw [inter_co
+  rw [← hπ.inter_eq_indicator_mul h𝓑𝓧 hA hB]; rw [inter_comm]
 
 中文:
 引理 是真.lintegral_indicator_mul_indicator
@@ -173,7 +185,7 @@ lemma IsProper.lintegral_indicator_mul_indicator
   rw [lintegral_indicator ((h𝓑𝓧 _ hB).inter hA)]; rw [lintegral_indicator hA]
   simp only [MeasureTheory.lintegral_const, MeasurableSet.univ, Measure.restrict_apply, univ_inter,
     Pi.one_apply, one_mul]
-  rw [← hπ.inter_eq_indicator_mul h𝓑𝓧 hA hB]; rw [inter_co
+  rw [← hπ.inter_eq_indicator_mul h𝓑𝓧 hA hB]; rw [inter_comm]
 -/
 private lemma IsProper.lintegral_indicator_mul_indicator (hπ : IsProper π) (h𝓑𝓧 : 𝓑 <= 𝓧)
     (hA : MeasurableSet[𝓧] A) (hB : MeasurableSet[𝓑] B) :
@@ -196,7 +208,14 @@ lemma IsProper.lintegral_indicator_mul
   · rintro c A hA
     simp_rw [← smul_indicator_one_apply, mul_smul_comm, smul_eq_mul]
     rw [lintegral_const_mul]; rw [lintegral_const_mul]; rw [hπ.lintegral_indicator_mul_indicator h𝓑𝓧 hA hB]; rw [mul_left_comm] <;> measurability
-  · rintro f₁ f₂ - _ _ hf
+  · rintro f₁ f₂ - _ _ hf₁ hf₂
+    simp only [Pi.add_apply, mul_add]
+    rw [lintegral_add_right]; rw [lintegral_add_right]; rw [hf₁]; rw [hf₂]; rw [mul_add] <;> measurability
+  · rintro f' hf'_meas hf'_mono hf'
+    simp_rw [ENNReal.mul_iSup]
+    rw [lintegral_iSup (by measurability)]; rw [lintegral_iSup hf'_meas hf'_mono]; rw [ENNReal.mul_iSup]
+    · simp_rw [hf']
+    · exact hf'_mono.const_mul zero_le
 
 中文:
 引理 是真.lintegral_indicator_mul
@@ -206,7 +225,14 @@ lemma IsProper.lintegral_indicator_mul
   · rintro c A hA
     simp_rw [← smul_indicator_one_apply, mul_smul_comm, smul_eq_mul]
     rw [lintegral_const_mul]; rw [lintegral_const_mul]; rw [hπ.lintegral_indicator_mul_indicator h𝓑𝓧 hA hB]; rw [mul_left_comm] <;> measurability
-  · rintro f₁ f₂ - _ _ hf
+  · rintro f₁ f₂ - _ _ hf₁ hf₂
+    simp only [Pi.add_apply, mul_add]
+    rw [lintegral_add_right]; rw [lintegral_add_right]; rw [hf₁]; rw [hf₂]; rw [mul_add] <;> measurability
+  · rintro f' hf'_meas hf'_mono hf'
+    simp_rw [ENNReal.mul_iSup]
+    rw [lintegral_iSup (by measurability)]; rw [lintegral_iSup hf'_meas hf'_mono]; rw [ENNReal.mul_iSup]
+    · simp_rw [hf']
+    · exact hf'_mono.const_mul zero_le
 -/
 private lemma IsProper.lintegral_indicator_mul (hπ : IsProper π) (h𝓑𝓧 : 𝓑 <= 𝓧)
     (hf : Measurable[𝓧] f) (hB : MeasurableSet[𝓑] B) :
@@ -285,7 +311,13 @@ lemma IsProper.lintegral_mul
     · measurability
   · rintro g₁ g₂ - _ hg₂_meas hg₁ hg₂
     simp only [Pi.add_apply, add_mul]
-  
+    rw [lintegral_add_right]; rw [hg₁]; rw [hg₂]
+    · exact (hg₂_meas.mono h𝓑𝓧 le_rfl).mul hf
+  · rintro g' hg'_meas hg'_mono hg'
+    simp_rw [ENNReal.iSup_mul]
+    rw [lintegral_iSup (fun n => ((hg'_meas _).mono h𝓑𝓧 le_rfl).fun_mul hf)
+      (hg'_mono.mul_const zero_le)]
+    simp_rw [hg']
 
 中文:
 引理 是真.lintegral_mul
@@ -298,7 +330,13 @@ lemma IsProper.lintegral_mul
     · measurability
   · rintro g₁ g₂ - _ hg₂_meas hg₁ hg₂
     simp only [Pi.add_apply, add_mul]
-  
+    rw [lintegral_add_right]; rw [hg₁]; rw [hg₂]
+    · exact (hg₂_meas.mono h𝓑𝓧 le_rfl).mul hf
+  · rintro g' hg'_meas hg'_mono hg'
+    simp_rw [ENNReal.iSup_mul]
+    rw [lintegral_iSup (fun n => ((hg'_meas _).mono h𝓑𝓧 le_rfl).fun_mul hf)
+      (hg'_mono.mul_const zero_le)]
+    simp_rw [hg']
 
 Depends on / 依赖: ENNReal, ENNReal.iSup_mul, Pi.add_apply, _meas, _meas.mono, _mono, add_apply, add_mul, ennreal_induction, fun_mul, hg.ennreal_induction, iSup_mul, le_rfl, lintegral_add_right, lintegral_const_mul, lintegral_iSup, lintegral_indicator_mul, measurability, simp_rw, smul_eq_mul
 -/

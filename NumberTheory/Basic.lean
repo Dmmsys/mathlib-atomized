@@ -42,7 +42,10 @@ theorem dvd_sub_pow_of_dvd_sub
     rw [pow_succ p k]; rw [pow_mul]; rw [pow_mul]; rw [← geom_sum₂_mul]; rw [pow_succ']
     refine mul_dvd_mul ?_ ih
     let f : R ->+* R ⧸ span {(p : R)} := mk (span {(p : R)})
-    have hf : forall r : R, (
+    have hf : forall r : R, (p : R) ∣ r ↔ f r = 0 := fun r => by rw [eq_zero_iff_mem, mem_span_singleton]
+    rw [hf]; rw [map_sub]; rw [sub_eq_zero] at h
+    rw [hf]; rw [RingHom.map_geom_sum₂]; rw [map_pow]; rw [map_pow]; rw [h]; rw [geom_sum₂_self]; rw [mul_eq_zero_of_left]
+    rw [← map_natCast f]; rw [eq_zero_iff_mem]; rw [mem_span_singleton]
 
 中文:
 定理 dvd_sub_pow_of_dvd_sub
@@ -54,7 +57,10 @@ theorem dvd_sub_pow_of_dvd_sub
     rw [pow_succ p k]; rw [pow_mul]; rw [pow_mul]; rw [← geom_sum₂_mul]; rw [pow_succ']
     refine mul_dvd_mul ?_ ih
     let f : R ->+* R ⧸ span {(p : R)} := mk (span {(p : R)})
-    have hf : forall r : R, (
+    have hf : forall r : R, (p : R) ∣ r ↔ f r = 0 := fun r => by rw [eq_zero_iff_mem, mem_span_singleton]
+    rw [hf]; rw [map_sub]; rw [sub_eq_zero] at h
+    rw [hf]; rw [RingHom.map_geom_sum₂]; rw [map_pow]; rw [map_pow]; rw [h]; rw [geom_sum₂_self]; rw [mul_eq_zero_of_left]
+    rw [← map_natCast f]; rw [eq_zero_iff_mem]; rw [mem_span_singleton]
 
 Depends on / 依赖: RingHom, RingHom.map_geom_sum, eq_zero_iff_mem, map_pow, map_sub, mem_span_singleton, mul_dvd_mul, pow_mul, pow_one, pow_succ, pow_zero, sub_eq_zero
 -/

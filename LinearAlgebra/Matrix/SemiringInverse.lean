@@ -828,7 +828,12 @@ lemma IsDetpBalanced.submatrix_of_card_le
     exact .of_eq (detp_eq_of_row_eq ne <| by ext; simp [eq])
   by_cases hg : g.Injective; swap
   · obtain ⟨p, q, eq, ne⟩ := Function.not_injective_iff.mp hg
-    exact .of_eq (detp_eq_of_col_eq ne <| by
+    exact .of_eq (detp_eq_of_col_eq ne <| by ext; simp [eq])
+let f' := Equiv.ofBijective f (Fintype.bijective_iff_injective_and_card _).mpr
+    ⟨hf, (Fintype.card_le_of_injective f hf).antisymm le⟩
+let g' := Equiv.ofBijective g (Fintype.bijective_iff_injective_and_card _).mpr
+    ⟨hg, (Fintype.card_le_of_injective g hg).antisymm le⟩
+  rwa [show f = f' by rfl, show g = g' by rfl, isDetpBalanced_submatrix_equiv_iff]
 
 中文:
 引理 IsDetpBalanced.submatrix_of_card_le
@@ -839,7 +844,12 @@ lemma IsDetpBalanced.submatrix_of_card_le
     exact .of_eq (detp_eq_of_row_eq ne <| by ext; simp [eq])
   by_cases hg : g.Injective; swap
   · obtain ⟨p, q, eq, ne⟩ := Function.not_injective_iff.mp hg
-    exact .of_eq (detp_eq_of_col_eq ne <| by
+    exact .of_eq (detp_eq_of_col_eq ne <| by ext; simp [eq])
+let f' := Equiv.ofBijective f (Fintype.bijective_iff_injective_and_card _).mpr
+    ⟨hf, (Fintype.card_le_of_injective f hf).antisymm le⟩
+let g' := Equiv.ofBijective g (Fintype.bijective_iff_injective_and_card _).mpr
+    ⟨hg, (Fintype.card_le_of_injective g hg).antisymm le⟩
+  rwa [show f = f' by rfl, show g = g' by rfl, isDetpBalanced_submatrix_equiv_iff]
 
 Depends on / 依赖: Equiv.ofBijective, Fintype, Fintype.bijective_iff_injective_and, Fintype.bijective_iff_injective_and_card, Fintype.card_le_of_injective, Function, Function.not_injective_iff.mp, Injective, antisymm, bijective_iff_injective_and, bijective_iff_injective_and_card, card_le_of_injective, detp_eq_of_col_eq, detp_eq_of_row_eq, f.Injective, g.Injective, not_injective_iff, ofBijective, of_eq
 -/
@@ -924,7 +934,10 @@ lemma adjp_none_right
   convert sum_image (g := fun σ => decomposeOption.symm (i, σ))
     ((Equiv.injective _).comp (Prod.mk_right_injective i)).injOn
   · ext σ; simp only [mem_filter, mem_ofSign, mem_image]
-    exact ⟨fun _ => ⟨σ.removeNone, by rw [← optionCongr_sign]; aesop⟩, by
+    exact ⟨fun _ => ⟨σ.removeNone, by rw [← optionCongr_sign]; aesop⟩, by aesop⟩
+  convert (prod_image (Option.some_injective n).injOn).symm
+  · rfl
+  · apply SetLike.coe_injective; simp [← Set.compl_range_some]
 
 中文:
 引理 adjp_none_right
@@ -934,7 +947,10 @@ lemma adjp_none_right
   convert sum_image (g := fun σ => decomposeOption.symm (i, σ))
     ((Equiv.injective _).comp (Prod.mk_right_injective i)).injOn
   · ext σ; simp only [mem_filter, mem_ofSign, mem_image]
-    exact ⟨fun _ => ⟨σ.removeNone, by rw [← optionCongr_sign]; aesop⟩, by
+    exact ⟨fun _ => ⟨σ.removeNone, by rw [← optionCongr_sign]; aesop⟩, by aesop⟩
+  convert (prod_image (Option.some_injective n).injOn).symm
+  · rfl
+  · apply SetLike.coe_injective; simp [← Set.compl_range_some]
 -/
 private lemma adjp_none_right (A : Matrix (Option n) (Option n) R) (i : Option n) :
     A.adjp s i none = (A.submatrix some <| swap none i ∘ some).detp (sign (swap none i) * s) := by
@@ -1027,7 +1043,37 @@ theorem detp_mul
     ext τ
     simp_rw [mem_map, mulRightEmbedding_apply, ← eq_mul_inv_iff_mul_eq, exists_eq_right,
       mem_ofSign, map_mul, map_inv, mul_inv_eq_iff_eq_mul, mem_ofSign.mp hσ]
-  h
+  have h {s t} : detp s A * detp t B =
+      ∑ σ in ofSign s, ∑ τ in ofSign (t * s), ∏ k, A k (σ k) * B (σ k) (τ k) := by
+    simp_rw [detp, sum_mul_sum, prod_mul_distrib]
+    refine sum_congr rfl fun σ hσ => ?_
+    simp_rw [hf hσ, sum_map, mulRightEmbedding_apply, Perm.mul_apply]
+    exact sum_congr rfl fun τ hτ => (congr_arg (_ * ·) (Equiv.prod_comp σ _).symm)
+  let ι : Perm n ↪ (n -> n) := ⟨_, coe_fn_injective⟩
+  have hι {σ x} : ι σ x = σ x := rfl
+  let bij : Finset (n -> n) := (disjUnion (ofSign 1) (ofSign (-1)) ofSign_disjoint).map ι
+  replace h (s) : detp s (A * B) =
+      ∑ σ in bijᶜ, ∑ τ in ofSign s, ∏ i : n, A i (σ i) * B (σ i) (τ i) +
+        (detp 1 A * detp s B + detp (-1) A * detp (-s) B) := by
+    simp_rw [h, neg_mul_neg, mul_one, detp, mul_apply, prod_univ_sum, Fintype.piFinset_univ]
+    rw [sum_comm]; rw [← sum_compl_add_sum bij]; rw [sum_map]; rw [sum_disjUnion]
+    simp_rw [hι]
+  rw [h]; rw [h]; rw [neg_neg]; rw [add_assoc]
+  conv_rhs => rw [add_assoc]
+  refine congr_arg₂ (· + ·) (sum_congr rfl fun σ hσ => ?_) (add_comm _ _)
+  replace hσ : ¬ Function.Injective σ := by
+    contrapose hσ
+    rw [notMem_compl]; rw [mem_map]; rw [ofSign_disjUnion]
+    exact ⟨Equiv.ofBijective σ hσ.bijective_of_finite, mem_univ _, rfl⟩
+  obtain ⟨i, j, hσ, hij⟩ := Function.not_injective_iff.mp hσ
+  replace hσ k : σ (swap i j k) = σ k := by
+    rw [swap_apply_def]
+    split_ifs with h h <;> simp only [hσ, h]
+  rw [← mul_neg_one]; rw [hf (mem_ofSign.mpr (sign_swap hij))]; rw [sum_map]
+  simp_rw [prod_mul_distrib, mulRightEmbedding_apply, Perm.mul_apply]
+  refine sum_congr rfl fun τ hτ => congr_arg (_ * ·) ?_
+  rw [← Equiv.prod_comp (swap i j)]
+  simp only [hσ]
 
 中文:
 定理 detp_mul
@@ -1037,7 +1083,37 @@ theorem detp_mul
     ext τ
     simp_rw [mem_map, mulRightEmbedding_apply, ← eq_mul_inv_iff_mul_eq, exists_eq_right,
       mem_ofSign, map_mul, map_inv, mul_inv_eq_iff_eq_mul, mem_ofSign.mp hσ]
-  h
+  have h {s t} : detp s A * detp t B =
+      ∑ σ in ofSign s, ∑ τ in ofSign (t * s), ∏ k, A k (σ k) * B (σ k) (τ k) := by
+    simp_rw [detp, sum_mul_sum, prod_mul_distrib]
+    refine sum_congr rfl fun σ hσ => ?_
+    simp_rw [hf hσ, sum_map, mulRightEmbedding_apply, Perm.mul_apply]
+    exact sum_congr rfl fun τ hτ => (congr_arg (_ * ·) (Equiv.prod_comp σ _).symm)
+  let ι : Perm n ↪ (n -> n) := ⟨_, coe_fn_injective⟩
+  have hι {σ x} : ι σ x = σ x := rfl
+  let bij : Finset (n -> n) := (disjUnion (ofSign 1) (ofSign (-1)) ofSign_disjoint).map ι
+  replace h (s) : detp s (A * B) =
+      ∑ σ in bijᶜ, ∑ τ in ofSign s, ∏ i : n, A i (σ i) * B (σ i) (τ i) +
+        (detp 1 A * detp s B + detp (-1) A * detp (-s) B) := by
+    simp_rw [h, neg_mul_neg, mul_one, detp, mul_apply, prod_univ_sum, Fintype.piFinset_univ]
+    rw [sum_comm]; rw [← sum_compl_add_sum bij]; rw [sum_map]; rw [sum_disjUnion]
+    simp_rw [hι]
+  rw [h]; rw [h]; rw [neg_neg]; rw [add_assoc]
+  conv_rhs => rw [add_assoc]
+  refine congr_arg₂ (· + ·) (sum_congr rfl fun σ hσ => ?_) (add_comm _ _)
+  replace hσ : ¬ Function.Injective σ := by
+    contrapose hσ
+    rw [notMem_compl]; rw [mem_map]; rw [ofSign_disjUnion]
+    exact ⟨Equiv.ofBijective σ hσ.bijective_of_finite, mem_univ _, rfl⟩
+  obtain ⟨i, j, hσ, hij⟩ := Function.not_injective_iff.mp hσ
+  replace hσ k : σ (swap i j k) = σ k := by
+    rw [swap_apply_def]
+    split_ifs with h h <;> simp only [hσ, h]
+  rw [← mul_neg_one]; rw [hf (mem_ofSign.mpr (sign_swap hij))]; rw [sum_map]
+  simp_rw [prod_mul_distrib, mulRightEmbedding_apply, Perm.mul_apply]
+  refine sum_congr rfl fun τ hτ => congr_arg (_ * ·) ?_
+  rw [← Equiv.prod_comp (swap i j)]
+  simp only [hσ]
 
 Depends on / 依赖: eq_mul_inv_iff_mul_eq, exists_eq_right, map_inv, map_mul, mem_map, mem_ofSign, mem_ofSign.mp, mulRightEmbedding, mulRightEmbedding_apply, mul_inv_eq_iff_eq_mul, ofSign, prod_mul_distrib, simp_rw, sum_congr, sum_map, sum_mul_sum
 -/
@@ -1092,7 +1168,7 @@ theorem mul_adjp_apply_eq
   simp_rw [mem_univ, filter_true] at key
   simp_rw [mul_apply, adjp_apply, mul_sum, detp, ← key]
   refine sum_congr rfl fun x hx => sum_congr rfl fun σ hσ => ?_
-  rw [← prod_mul_prod_compl ({i} : Finset n)]; r
+  rw [← prod_mul_prod_compl ({i} : Finset n)]; rw [prod_singleton]; rw [(mem_filter.mp hσ).2]
 
 中文:
 定理 mul_adjp_apply_eq
@@ -1102,7 +1178,7 @@ theorem mul_adjp_apply_eq
   simp_rw [mem_univ, filter_true] at key
   simp_rw [mul_apply, adjp_apply, mul_sum, detp, ← key]
   refine sum_congr rfl fun x hx => sum_congr rfl fun σ hσ => ?_
-  rw [← prod_mul_prod_compl ({i} : Finset n)]; r
+  rw [← prod_mul_prod_compl ({i} : Finset n)]; rw [prod_singleton]; rw [(mem_filter.mp hσ).2]
 
 Depends on / 依赖: Finset, adjp_apply, filter_true, mem_filter, mem_filter.mp, mem_univ, mul_apply, mul_sum, ofSign, prod_mul_prod_compl, prod_singleton, simp_rw, sum_congr, sum_fiberwise_eq_sum_filter
 -/
@@ -1126,7 +1202,7 @@ theorem mul_adjp_apply_ne
 congr_arg₂ (· * ·) (by simp [A']) sum_congr rfl fun σ hσ => prod_congr rfl fun _ _ => by aesop
   simp_rw [h', mul_adjp_apply_eq]
   apply detp_eq_of_row_eq h
-  simp [A
+  simp [A', Matrix.row_apply', h]
 
 中文:
 定理 mul_adjp_apply_ne
@@ -1138,7 +1214,7 @@ congr_arg₂ (· * ·) (by simp [A']) sum_congr rfl fun σ hσ => prod_congr rfl
 congr_arg₂ (· * ·) (by simp [A']) sum_congr rfl fun σ hσ => prod_congr rfl fun _ _ => by aesop
   simp_rw [h', mul_adjp_apply_eq]
   apply detp_eq_of_row_eq h
-  simp [A
+  simp [A', Matrix.row_apply', h]
 
 Depends on / 依赖: A.updateRow, Matrix, Matrix.row_apply, detp_eq_of_row_eq, mul_adjp_apply_eq, prod_congr, row_apply, simp_rw, sum_congr, updateRow
 -/
@@ -1292,7 +1368,12 @@ theorem isAddUnit_detp_mul_detp
   intro σ hσ τ hτ
   rw [mem_ofSign] at hσ hτ
   rw [← hσ]; rw [← hτ]; rw [← sign_inv] at h
-  replace h := ne_of_apply_n
+  replace h := ne_of_apply_ne sign h
+  rw [ne_eq]; rw [eq_comm]; rw [eq_inv_iff_mul_eq_one]; rw [eq_comm] at h
+  simp_rw [Equiv.ext_iff, not_forall, Perm.mul_apply, Perm.one_apply] at h
+  obtain ⟨k, hk⟩ := h
+  rw [mul_comm]; rw [← Equiv.prod_comp σ]; rw [mul_comm]; rw [← prod_mul_distrib]; rw [← mul_prod_erase univ _ (mem_univ k)]; rw [← smul_eq_mul]
+  exact (isAddUnit_mul hAB k (τ (σ k)) (σ k) hk).smul_right _
 
 中文:
 定理 isAddUnit_detp_mul_detp
@@ -1305,7 +1386,12 @@ theorem isAddUnit_detp_mul_detp
   intro σ hσ τ hτ
   rw [mem_ofSign] at hσ hτ
   rw [← hσ]; rw [← hτ]; rw [← sign_inv] at h
-  replace h := ne_of_apply_n
+  replace h := ne_of_apply_ne sign h
+  rw [ne_eq]; rw [eq_comm]; rw [eq_inv_iff_mul_eq_one]; rw [eq_comm] at h
+  simp_rw [Equiv.ext_iff, not_forall, Perm.mul_apply, Perm.one_apply] at h
+  obtain ⟨k, hk⟩ := h
+  rw [mul_comm]; rw [← Equiv.prod_comp σ]; rw [mul_comm]; rw [← prod_mul_distrib]; rw [← mul_prod_erase univ _ (mem_univ k)]; rw [← smul_eq_mul]
+  exact (isAddUnit_mul hAB k (τ (σ k)) (σ k) hk).smul_right _
 
 Depends on / 依赖: Equiv.ext_iff, Equiv.prod_comp, IsAddUnit, IsAddUnit.sum_iff, Perm.mul_apply, Perm.one_apply, eq_comm, eq_inv_iff_mul_eq_one, ext_iff, mem_ofSign, mul_apply, mul_comm, ne_eq, ne_of_apply_ne, not_forall, one_apply, prod_comp, replace, sign_inv, simp_rw
 -/
@@ -1340,6 +1426,20 @@ theorem isAddUnit_detp_smul_mul_adjp
   simp_rw [smul_apply, smul_eq_mul, mul_apply, detp, adjp_apply, mul_sum, sum_mul,
     IsAddUnit.sum_iff]
   intro k hk σ hσ τ hτ
+  rw [mem_filter] at hσ
+  rw [mem_ofSign] at hσ hτ
+  rw [← hσ.1]; rw [← hτ]; rw [← sign_inv] at h
+  replace h := ne_of_apply_ne sign h
+  rw [ne_eq]; rw [eq_comm]; rw [eq_inv_iff_mul_eq_one] at h
+  obtain ⟨l, hl1, hl2⟩ := exists_mem_ne (one_lt_card_support_of_ne_one h) (τ⁻¹ j)
+  rw [mem_support]; rw [ne_comm] at hl1
+  rw [ne_eq]; rw [← mem_singleton]; rw [← mem_compl] at hl2
+  rw [← prod_mul_prod_compl {τ⁻¹ j}]; rw [mul_mul_mul_comm]; rw [mul_comm]; rw [← smul_eq_mul]
+  apply IsAddUnit.smul_right
+  have h0 : forall k, k in ({τ⁻¹ j} : Finset n)ᶜ ↔ τ k in ({j} : Finset n)ᶜ := by
+    simp [inv_def, eq_symm_apply]
+  rw [← prod_equiv τ h0 fun _ _ => rfl]; rw [← prod_mul_distrib]; rw [← mul_prod_erase _ _ hl2]; rw [← smul_eq_mul]
+  exact (isAddUnit_mul hAB l (σ (τ l)) (τ l) hl1).smul_right _
 
 中文:
 定理 isAddUnit_detp_smul_mul_adjp
@@ -1353,6 +1453,20 @@ theorem isAddUnit_detp_smul_mul_adjp
   simp_rw [smul_apply, smul_eq_mul, mul_apply, detp, adjp_apply, mul_sum, sum_mul,
     IsAddUnit.sum_iff]
   intro k hk σ hσ τ hτ
+  rw [mem_filter] at hσ
+  rw [mem_ofSign] at hσ hτ
+  rw [← hσ.1]; rw [← hτ]; rw [← sign_inv] at h
+  replace h := ne_of_apply_ne sign h
+  rw [ne_eq]; rw [eq_comm]; rw [eq_inv_iff_mul_eq_one] at h
+  obtain ⟨l, hl1, hl2⟩ := exists_mem_ne (one_lt_card_support_of_ne_one h) (τ⁻¹ j)
+  rw [mem_support]; rw [ne_comm] at hl1
+  rw [ne_eq]; rw [← mem_singleton]; rw [← mem_compl] at hl2
+  rw [← prod_mul_prod_compl {τ⁻¹ j}]; rw [mul_mul_mul_comm]; rw [mul_comm]; rw [← smul_eq_mul]
+  apply IsAddUnit.smul_right
+  have h0 : forall k, k in ({τ⁻¹ j} : Finset n)ᶜ ↔ τ k in ({j} : Finset n)ᶜ := by
+    simp [inv_def, eq_symm_apply]
+  rw [← prod_equiv τ h0 fun _ _ => rfl]; rw [← prod_mul_distrib]; rw [← mul_prod_erase _ _ hl2]; rw [← smul_eq_mul]
+  exact (isAddUnit_mul hAB l (σ (τ l)) (τ l) hl1).smul_right _
 
 Depends on / 依赖: IsAddUnit, IsAddUnit.sum_iff, adjp_apply, eq_comm, eq_inv_iff_mul_eq_one, exists_mem, isAddUnit_iff, mem_filter, mem_ofSign, mul_apply, mul_sum, ne_eq, ne_of_apply_ne, replace, sign_inv, simp_rw, smul_apply, smul_eq_mul, sum_iff, sum_mul
 -/
@@ -1420,7 +1534,8 @@ theorem detp_smul_adjp
   have h := detp_smul_add_adjp hAB
   replace h := congr(detp 1 A • $h + detp (-1) A • $h.symm)
   simp only [smul_add, smul_smul] at h
-  rwa [add_add_add_comm, ← add_smul, add_add_add_comm, ← add_sm
+  rwa [add_add_add_comm, ← add_smul, add_add_add_comm, ← add_smul, ← h0, add_smul, one_smul,
+    add_comm A, add_assoc, ((isAddUnit_detp_mul_detp hAB).smul_right _).add_right_inj] at h
 
 中文:
 定理 detp_smul_adjp
@@ -1431,7 +1546,8 @@ theorem detp_smul_adjp
   have h := detp_smul_add_adjp hAB
   replace h := congr(detp 1 A • $h + detp (-1) A • $h.symm)
   simp only [smul_add, smul_smul] at h
-  rwa [add_add_add_comm, ← add_smul, add_add_add_comm, ← add_sm
+  rwa [add_add_add_comm, ← add_smul, add_add_add_comm, ← add_smul, ← h0, add_smul, one_smul,
+    add_comm A, add_assoc, ((isAddUnit_detp_mul_detp hAB).smul_right _).add_right_inj] at h
 
 Depends on / 依赖: add_add_add_comm, add_assoc, add_comm, add_right_inj, add_smul, detp_mul, detp_neg_one_one, detp_one_one, detp_smul_add_adjp, h.symm, isAddUnit_detp_mul_detp, one_smul, replace, smul_add, smul_right, smul_smul, zero_add
 -/

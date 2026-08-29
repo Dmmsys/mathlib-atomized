@@ -960,7 +960,7 @@ lemma mul_le_mul_iff_of_ge
   refine ⟨fun h => ?_, by rintro ⟨rfl, rfl⟩; rfl⟩
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
   refine ⟨fun ha => h.not_gt ?_, fun hb => h.not_gt ?_⟩
-  exacts [mul_lt_mul_of_lt_of_le ha hb, mul_lt_mul
+  exacts [mul_lt_mul_of_lt_of_le ha hb, mul_lt_mul_of_le_of_lt ha hb]
 
 中文:
 引理 mul_le_mul_iff_of_ge
@@ -971,7 +971,7 @@ lemma mul_le_mul_iff_of_ge
   refine ⟨fun h => ?_, by rintro ⟨rfl, rfl⟩; rfl⟩
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
   refine ⟨fun ha => h.not_gt ?_, fun hb => h.not_gt ?_⟩
-  exacts [mul_lt_mul_of_lt_of_le ha hb, mul_lt_mul
+  exacts [mul_lt_mul_of_lt_of_le ha hb, mul_lt_mul_of_le_of_lt ha hb]
 -/
 @[to_additive] lemma mul_le_mul_iff_of_ge [MulLeftStrictMono α]
     [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α} (ha : a₁ <= a₂) (hb : b₁ <= b₂) :
@@ -1103,7 +1103,9 @@ theorem trichotomy_of_mul_eq_mul
   · obtain hbd | rfl | hdb := lt_trichotomy b d
     · grind
 · exact False.elim ne_of_lt (mul_lt_mul_left hca b) h.symm
-· exact False.elim ne_of_lt (mul_lt_mul_of_lt_of_lt hc
+· exact False.elim ne_of_lt (mul_lt_mul_of_lt_of_lt hca hdb) h.symm
+
+@[to_additive]
 
 中文:
 定理 trichotomy_of_mul_eq_mul
@@ -1114,7 +1116,9 @@ theorem trichotomy_of_mul_eq_mul
   · obtain hbd | rfl | hdb := lt_trichotomy b d
     · grind
 · exact False.elim ne_of_lt (mul_lt_mul_left hca b) h.symm
-· exact False.elim ne_of_lt (mul_lt_mul_of_lt_of_lt hc
+· exact False.elim ne_of_lt (mul_lt_mul_of_lt_of_lt hca hdb) h.symm
+
+@[to_additive]
 
 Depends on / 依赖: False.elim, h.symm, le_total, lt_trichotomy, mul_lt_mul_left, mul_lt_mul_of_lt_of_lt, mul_right_inj_of_comparable, ne_of_lt
 -/
@@ -3557,7 +3561,7 @@ theorem mul_eq_one_iff_of_one_le
       have : b <= 1 := hab ▸ le_mul_of_one_le_of_le ha le_rfl
       have : b = 1 := le_antisymm this hb
       And.intro ‹a = 1› ‹b = 1›)
-    (by rintro ⟨rfl, 
+    (by rintro ⟨rfl, rfl⟩; rw [mul_one])
 
 中文:
 定理 mul_eq_one_iff_of_one_le
@@ -3569,7 +3573,7 @@ theorem mul_eq_one_iff_of_one_le
       have : b <= 1 := hab ▸ le_mul_of_one_le_of_le ha le_rfl
       have : b = 1 := le_antisymm this hb
       And.intro ‹a = 1› ‹b = 1›)
-    (by rintro ⟨rfl, 
+    (by rintro ⟨rfl, rfl⟩; rw [mul_one])
 
 Depends on / 依赖: And.intro, Iff.intro, le_antisymm, le_mul_of_le_of_one_le, le_mul_of_one_le_of_le, le_rfl, mul_one
 -/

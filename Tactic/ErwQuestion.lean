@@ -56,7 +56,32 @@ definition logDiffs
     -- They agree at reducible transparency, we're done.
     return false
   else
-    verb
+    verbose m!"{crossEmoji} at reducible transparency,\
+      {indentD e₁}\nand{indentD e₂}\nare not defeq."
+    if ← isDefEq e₁ e₂ then
+      match e₁, e₂ with
+      | Expr.app f₁ a₁, Expr.app f₂ a₂ =>
+        if ← logDiffs tk a₁ a₂ then
+          return true
+        else
+          if ← logDiffs tk f₁ f₂ then
+            return true
+          else
+            logInfoAt tk m!"{crossEmoji} at reducible transparency,\
+              {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
+            return true
+      | Expr.const _ _, Expr.const _ _ =>
+        logInfoAt tk m!"{crossEmoji} at reducible transparency,\
+          {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
+        return true
+      | _, _ =>
+        verbose
+          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not both applications or constants."
+        return false
+    else
+        verbose
+          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not defeq at default transparency."
+      return false
 
 中文:
 定义 logDiffs
@@ -69,7 +94,32 @@ definition logDiffs
     -- They agree at reducible transparency, we're done.
     return false
   else
-    verb
+    verbose m!"{crossEmoji} at reducible transparency,\
+      {indentD e₁}\nand{indentD e₂}\nare not defeq."
+    if ← isDefEq e₁ e₂ then
+      match e₁, e₂ with
+      | Expr.app f₁ a₁, Expr.app f₂ a₂ =>
+        if ← logDiffs tk a₁ a₂ then
+          return true
+        else
+          if ← logDiffs tk f₁ f₂ then
+            return true
+          else
+            logInfoAt tk m!"{crossEmoji} at reducible transparency,\
+              {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
+            return true
+      | Expr.const _ _, Expr.const _ _ =>
+        logInfoAt tk m!"{crossEmoji} at reducible transparency,\
+          {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
+        return true
+      | _, _ =>
+        verbose
+          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not both applications or constants."
+        return false
+    else
+        verbose
+          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not defeq at default transparency."
+      return false
 -/
 def logDiffs (tk : Syntax) (e₁ e₂ : Expr) : StateT (Array (Unit -> MessageData)) MetaM Bool := do
   withOptions (fun opts => opts.setBool `pp.analyze true) do
@@ -118,7 +168,10 @@ definition extractRewriteEq
   let (``id, #[ty, e]) := e.getAppFnArgs |
     throwError "Unexpected term produced by `erw`, not of the form: `Eq.mpr (id _) _`."
   let some (_, tgt, _) := ty.eq? |
-  
+    throwError "Unexpected term produced by `erw`, type hint is not an equality."
+  let some (_, inferred, _) := (← inferType e).eq? |
+    throwError "Unexpected term produced by `erw`, inferred type is not an equality."
+  return (tgt, inferred)
 
 中文:
 定义 extractRewriteEq
@@ -129,7 +182,10 @@ definition extractRewriteEq
   let (``id, #[ty, e]) := e.getAppFnArgs |
     throwError "Unexpected term produced by `erw`, not of the form: `Eq.mpr (id _) _`."
   let some (_, tgt, _) := ty.eq? |
-  
+    throwError "Unexpected term produced by `erw`, type hint is not an equality."
+  let some (_, inferred, _) := (← inferType e).eq? |
+    throwError "Unexpected term produced by `erw`, inferred type is not an equality."
+  return (tgt, inferred)
 -/
 def extractRewriteEq (e : Expr) : MetaM (Expr × Expr) := do
   let (``Eq.mpr, #[_, _, e, _]) := e.getAppFnArgs |
@@ -153,7 +209,43 @@ definition extractRewriteHypEq
     throwError "Unexpected term produced by `erw at`, head is not an mvar applied to a proof."
   let (``Eq.mp, #[_, _, e, _]) := e.getAppFnArgs |
     throwError "Unexpected term produced by `erw at`, head is not an `Eq.mp`."
-  let some (_, infe
+  let some (_, inferred, _) := (← inferType e).eq? |
+    throwError "Unexpected term produced by `erw at`, inferred type is not an equality."
+  return inferred
+
+elab_rules : tactic
+  | `(tactic| erw?%$tk $rs $(loc)?) => withMainContext do
+    logInfoAt rs "Debugging `erw?`"
+    let verbose := (← getOptions).get `tactic.erw?.verbose (defVal := false)
+    let cfg := { transparency := .default } -- Default transparency turns `rw` into `erw`.
+    -- Follow the implementation of `rw`, using `withRWRulesSeq` followed by
+    -- `rewriteLocalDecl` or `rewriteTarget`.
+    let loc := expandOptLocation (mkOptionalNode loc)
+    withRWRulesSeq tk rs fun symm term => do
+      withLocation loc
+        (fun loc => do
+          let g ← getMainGoal
+          rewriteLocalDecl term symm loc cfg
+          let decl ← loc.getDecl
+          let e := (← instantiateMVars (.mvar g)).headBeta
+          let inferred ← withRef tk do extractRewriteHypEq e
+          let (_, msgs) ← (logDiffs tk decl.type inferred).run #[]
+          if verbose then
+logInfoAt tk .joinSep
+              (m!"Expression appearing in {decl.toExpr}:{indentD decl.type}" ::
+                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
+        (do
+          let g ← getMainGoal
+          rewriteTarget term symm cfg
+          evalTactic (←`(tactic| try with_reducible rfl))
+          let e := (← instantiateMVars (.mvar g)).headBeta
+          let (tgt, inferred) ← withRef tk do extractRewriteEq e
+          let (_, msgs) ← (logDiffs tk tgt inferred).run #[]
+          if verbose then
+logInfoAt tk .joinSep
+              (m!"Expression appearing in target:{indentD tgt}" ::
+                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
+        (throwTacticEx `rewrite · "did not find instance of the pattern in the current goal")
 
 中文:
 定义 extractRewriteHypEq
@@ -163,7 +255,43 @@ definition extractRewriteHypEq
     throwError "Unexpected term produced by `erw at`, head is not an mvar applied to a proof."
   let (``Eq.mp, #[_, _, e, _]) := e.getAppFnArgs |
     throwError "Unexpected term produced by `erw at`, head is not an `Eq.mp`."
-  let some (_, infe
+  let some (_, inferred, _) := (← inferType e).eq? |
+    throwError "Unexpected term produced by `erw at`, inferred type is not an equality."
+  return inferred
+
+elab_rules : tactic
+  | `(tactic| erw?%$tk $rs $(loc)?) => withMainContext do
+    logInfoAt rs "Debugging `erw?`"
+    let verbose := (← getOptions).get `tactic.erw?.verbose (defVal := false)
+    let cfg := { transparency := .default } -- Default transparency turns `rw` into `erw`.
+    -- Follow the implementation of `rw`, using `withRWRulesSeq` followed by
+    -- `rewriteLocalDecl` or `rewriteTarget`.
+    let loc := expandOptLocation (mkOptionalNode loc)
+    withRWRulesSeq tk rs fun symm term => do
+      withLocation loc
+        (fun loc => do
+          let g ← getMainGoal
+          rewriteLocalDecl term symm loc cfg
+          let decl ← loc.getDecl
+          let e := (← instantiateMVars (.mvar g)).headBeta
+          let inferred ← withRef tk do extractRewriteHypEq e
+          let (_, msgs) ← (logDiffs tk decl.type inferred).run #[]
+          if verbose then
+logInfoAt tk .joinSep
+              (m!"Expression appearing in {decl.toExpr}:{indentD decl.type}" ::
+                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
+        (do
+          let g ← getMainGoal
+          rewriteTarget term symm cfg
+          evalTactic (←`(tactic| try with_reducible rfl))
+          let e := (← instantiateMVars (.mvar g)).headBeta
+          let (tgt, inferred) ← withRef tk do extractRewriteEq e
+          let (_, msgs) ← (logDiffs tk tgt inferred).run #[]
+          if verbose then
+logInfoAt tk .joinSep
+              (m!"Expression appearing in target:{indentD tgt}" ::
+                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
+        (throwTacticEx `rewrite · "did not find instance of the pattern in the current goal")
 -/
 def extractRewriteHypEq (e : Expr) : MetaM Expr := do
   let (.anonymous, .mk (e :: _)) := e.getAppFnArgs |

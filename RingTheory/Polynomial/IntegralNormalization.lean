@@ -250,7 +250,9 @@ lemma degree_integralNormalization
   rw [degree_eq_natDegree hp]
   refine degree_eq_of_le_of_coeff_ne_zero ?_ (by simp [integralNormalization_coeff_natDegree, *])
   exact (Finset.sup_le fun i h =>
-WithBot.coe_le_coe.2 le_natDegree_of_mem_supp i support_integralNormalization_subs
+WithBot.coe_le_coe.2 le_natDegree_of_mem_supp i support_integralNormalization_subset h)
+
+@[simp]
 
 中文:
 引理 degree_integralNormalization
@@ -261,7 +263,9 @@ WithBot.coe_le_coe.2 le_natDegree_of_mem_supp i support_integralNormalization_su
   rw [degree_eq_natDegree hp]
   refine degree_eq_of_le_of_coeff_ne_zero ?_ (by simp [integralNormalization_coeff_natDegree, *])
   exact (Finset.sup_le fun i h =>
-WithBot.coe_le_coe.2 le_natDegree_of_mem_supp i support_integralNormalization_subs
+WithBot.coe_le_coe.2 le_natDegree_of_mem_supp i support_integralNormalization_subset h)
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sup_le, WithBot, WithBot.coe_le_coe, coe_le_coe, degree_eq_natDegree, degree_eq_of_le_of_coeff_ne_zero, integralNormalization_coeff_natDegree, le_natDegree_of_mem_supp, nontriviality, sup_le, support_integralNormalization_subset
 -/
@@ -343,7 +347,9 @@ theorem integralNormalization_coeff_mul_leadingCoeff_pow
   · simp only [mul_assoc, ← pow_add]
     by_cases h' : i < p.degree
     · rw [tsub_add_cancel_of_le]
-  
+      rw [le_tsub_iff_right hp]; rw [Nat.succ_le_iff]
+      exact coe_lt_degree.mp h'
+    · simp [coeff_eq_zero_of_degree_lt (lt_of_le_of_ne (le_of_not_gt h') h)]
 
 中文:
 定理 integralNormalization_coeff_mul_leadingCoeff_pow
@@ -356,7 +362,9 @@ theorem integralNormalization_coeff_mul_leadingCoeff_pow
   · simp only [mul_assoc, ← pow_add]
     by_cases h' : i < p.degree
     · rw [tsub_add_cancel_of_le]
-  
+      rw [le_tsub_iff_right hp]; rw [Nat.succ_le_iff]
+      exact coe_lt_degree.mp h'
+    · simp [coeff_eq_zero_of_degree_lt (lt_of_le_of_ne (le_of_not_gt h') h)]
 
 Depends on / 依赖: Nat.succ_le_iff, coe_lt_degree, coe_lt_degree.mp, coeff_eq_zero_of_degree_lt, degree, integralNormalization_coeff, le_of_not_gt, le_tsub_iff_right, leadingCoeff, lt_of_le_of_ne, mul_assoc, natDegree_eq_of_degree_eq_some, p.degree, pow_add, pow_succ, split_ifs, succ_le_iff, tsub_add_cancel_of_le
 -/
@@ -388,7 +396,9 @@ theorem integralNormalization_mul_C_leadingCoeff
   · simp only [coeff_scaleRoots]
     by_cases h' : i < p.degree
     · rw [mul_assoc, ← pow_succ, tsub_right_comm, tsub_add_cancel_of_le]
-      rw [le_tsub_iff_
+      rw [le_tsub_iff_left (coe_lt_degree.mp h').le]; rw [Nat.succ_le_iff]
+      exact coe_lt_degree.mp h'
+    · simp [coeff_eq_zero_of_degree_lt (lt_of_le_of_ne (le_of_not_gt h') h)]
 
 中文:
 定理 integralNormalization_mul_C_leadingCoeff
@@ -401,7 +411,9 @@ theorem integralNormalization_mul_C_leadingCoeff
   · simp only [coeff_scaleRoots]
     by_cases h' : i < p.degree
     · rw [mul_assoc, ← pow_succ, tsub_right_comm, tsub_add_cancel_of_le]
-      rw [le_tsub_iff_
+      rw [le_tsub_iff_left (coe_lt_degree.mp h').le]; rw [Nat.succ_le_iff]
+      exact coe_lt_degree.mp h'
+    · simp [coeff_eq_zero_of_degree_lt (lt_of_le_of_ne (le_of_not_gt h') h)]
 
 Depends on / 依赖: Nat.succ_le_iff, coe_lt_degree, coe_lt_degree.mp, coeff_eq_zero_of_degree_lt, coeff_mul_C, coeff_scaleRoots, degree, integralNormalization_coeff, le_of_not_gt, le_tsub_iff_left, leadingCoeff, lt_of_le_of_ne, mul_assoc, natDegree_eq_of_degree_eq_some, p.degree, pow_succ, split_ifs, succ_le_iff, tsub_add_cancel_of_le, tsub_right_comm
 -/
@@ -452,7 +464,7 @@ theorem integralNormalization_eval₂_leadingCoeff_mul_of_commute
   apply Finset.sum_congr
   · rw [natDegree_eq_of_degree_eq p.degree_integralNormalization]
   intro n _hn
-  rw [h₁.mul_pow]; rw [← mul_assoc]; rw [← f.map_pow]; rw [← f.map_mul]; rw [integralNormalization_coeff_mul_leadingCoef
+  rw [h₁.mul_pow]; rw [← mul_assoc]; rw [← f.map_pow]; rw [← f.map_mul]; rw [integralNormalization_coeff_mul_leadingCoeff_pow _ h]; rw [f.map_mul]; rw [h₂.eq]; rw [f.map_pow]; rw [mul_assoc]
 
 中文:
 定理 integralNormalization_eval₂_leadingCoeff_mul_of_commute
@@ -462,7 +474,7 @@ theorem integralNormalization_eval₂_leadingCoeff_mul_of_commute
   apply Finset.sum_congr
   · rw [natDegree_eq_of_degree_eq p.degree_integralNormalization]
   intro n _hn
-  rw [h₁.mul_pow]; rw [← mul_assoc]; rw [← f.map_pow]; rw [← f.map_mul]; rw [integralNormalization_coeff_mul_leadingCoef
+  rw [h₁.mul_pow]; rw [← mul_assoc]; rw [← f.map_pow]; rw [← f.map_mul]; rw [integralNormalization_coeff_mul_leadingCoeff_pow _ h]; rw [f.map_mul]; rw [h₂.eq]; rw [f.map_pow]; rw [mul_assoc]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_congr, degree_integralNormalization, f.map_mul, f.map_pow, integralNormalization_coeff_mul_leadingCoeff_pow, map_mul, map_pow, mul_assoc, mul_pow, mul_sum, natDegree_eq_of_degree_eq, p.degree_integralNormalization, sum_congr
 -/
@@ -507,7 +519,7 @@ theorem integralNormalization_eval₂_eq_zero_of_commute
       simp [h0]
     · rw [eq_C_of_natDegree_eq_zero h, eval₂_C] at hz
       exact absurd (inj _ hz) h0
-  · rw [integralNormalization_eval₂_leadingCoeff_mul_of_commute h _ _ h₁ h₂,
+  · rw [integralNormalization_eval₂_leadingCoeff_mul_of_commute h _ _ h₁ h₂, hz, mul_zero]
 
 中文:
 定理 integralNormalization_eval₂_eq_zero_of_commute
@@ -519,7 +531,7 @@ theorem integralNormalization_eval₂_eq_zero_of_commute
       simp [h0]
     · rw [eq_C_of_natDegree_eq_zero h, eval₂_C] at hz
       exact absurd (inj _ hz) h0
-  · rw [integralNormalization_eval₂_leadingCoeff_mul_of_commute h _ _ h₁ h₂,
+  · rw [integralNormalization_eval₂_leadingCoeff_mul_of_commute h _ _ h₁ h₂, hz, mul_zero]
 
 Depends on / 依赖: absurd, eq_C_of_natDegree_eq_zero, eq_zero_or_pos, mul_zero, natDegree, p.natDegree.eq_zero_or_pos
 -/
@@ -624,7 +636,7 @@ theorem support_integralNormalization
   refine ⟨fun h => support_integralNormalization_subset h, ?_⟩
   simp only [integralNormalization_coeff, mem_support_iff]
   intro hfi
-  split_ifs with hi <;> simp [hf, hfi
+  split_ifs with hi <;> simp [hf, hfi]
 
 中文:
 定理 support_integralNormalization
@@ -637,7 +649,7 @@ theorem support_integralNormalization
   refine ⟨fun h => support_integralNormalization_subset h, ?_⟩
   simp only [integralNormalization_coeff, mem_support_iff]
   intro hfi
-  split_ifs with hi <;> simp [hf, hfi
+  split_ifs with hi <;> simp [hf, hfi]
 
 Depends on / 依赖: IsDomain, Subsingleton, Subsingleton.eq_zero, continuousSMul, continuous_id, eq_zero, integralNormalization_coeff, isEmbedding_coe_of_principal, isEmbedding_coe_of_principal.continuousSMul, mem_support_iff, nontriviality, split_ifs, support_integralNormalization_subset
 -/

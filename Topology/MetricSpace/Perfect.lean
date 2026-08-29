@@ -51,7 +51,14 @@ theorem Perfect.small_diam_aux
     apply Metric.mem_eball_self
     rw [ENNReal.div_pos_iff]
     exact ⟨ne_of_gt ε_pos, by simp⟩
-  have := hC.closure_nhds_inter x xC this Metric.
+  have := hC.closure_nhds_inter x xC this Metric.isOpen_eball
+  refine ⟨this.1, this.2, ?_, ?_⟩
+  · rw [IsClosed.closure_subset_iff hC.closed]
+    apply inter_subset_right
+  rw [Metric.ediam_closure]
+  apply le_trans (Metric.ediam_mono inter_subset_left)
+  convert! Metric.ediam_eball_le (x := x)
+  rw [mul_comm]; rw [ENNReal.div_mul_cancel] <;> norm_num
 
 中文:
 定理 完美.small_diam_aux
@@ -62,7 +69,14 @@ theorem Perfect.small_diam_aux
     apply Metric.mem_eball_self
     rw [ENNReal.div_pos_iff]
     exact ⟨ne_of_gt ε_pos, by simp⟩
-  have := hC.closure_nhds_inter x xC this Metric.
+  have := hC.closure_nhds_inter x xC this Metric.isOpen_eball
+  refine ⟨this.1, this.2, ?_, ?_⟩
+  · rw [IsClosed.closure_subset_iff hC.closed]
+    apply inter_subset_right
+  rw [Metric.ediam_closure]
+  apply le_trans (Metric.ediam_mono inter_subset_left)
+  convert! Metric.ediam_eball_le (x := x)
+  rw [mul_comm]; rw [ENNReal.div_mul_cancel] <;> norm_num
 -/
 private theorem Perfect.small_diam_aux (hC : Perfect C) (ε_pos : 0 < ε) {x : α} (xC : x in C) :
     let D := closure (Metric.eball x (ε / 2) inter C)
@@ -91,7 +105,11 @@ theorem Perfect.small_diam_splitting
   obtain ⟨x₀, hx₀⟩ := non0
   obtain ⟨x₁, hx₁⟩ := non1
   rcases perf0.small_diam_aux ε_pos hx₀ with ⟨perf0', non0', sub0', diam0⟩
-  rcases perf1.small_diam_aux ε_pos hx₁ with ⟨perf1', non1', sub1', diam1
+  rcases perf1.small_diam_aux ε_pos hx₁ with ⟨perf1', non1', sub1', diam1⟩
+  refine
+    ⟨closure (Metric.eball x₀ (ε / 2) inter D₀), closure (Metric.eball x₁ (ε / 2) inter D₁),
+      ⟨perf0', non0', sub0'.trans sub0, diam0⟩, ⟨perf1', non1', sub1'.trans sub1, diam1⟩, ?_⟩
+  apply Disjoint.mono _ _ hdisj <;> assumption
 
 中文:
 定理 完美.small_diam_splitting
@@ -101,7 +119,11 @@ theorem Perfect.small_diam_splitting
   obtain ⟨x₀, hx₀⟩ := non0
   obtain ⟨x₁, hx₁⟩ := non1
   rcases perf0.small_diam_aux ε_pos hx₀ with ⟨perf0', non0', sub0', diam0⟩
-  rcases perf1.small_diam_aux ε_pos hx₁ with ⟨perf1', non1', sub1', diam1
+  rcases perf1.small_diam_aux ε_pos hx₁ with ⟨perf1', non1', sub1', diam1⟩
+  refine
+    ⟨closure (Metric.eball x₀ (ε / 2) inter D₀), closure (Metric.eball x₁ (ε / 2) inter D₁),
+      ⟨perf0', non0', sub0'.trans sub0, diam0⟩, ⟨perf1', non1', sub1'.trans sub1, diam1⟩, ?_⟩
+  apply Disjoint.mono _ _ hdisj <;> assumption
 
 Depends on / 依赖: Disjoint, Disjoint.mono, Metric, Metric.eball, closure, hC.splitting, hnonempty, perf0.small_diam_aux, perf1.small_diam_aux, small_diam_aux, splitting
 -/
@@ -130,7 +152,52 @@ theorem Perfect.exists_nat_bool_injection
   have upos := fun n => (upos' n).1
   let P := Subtype fun E : Set α => Perfect E ∧ E.Nonempty
   choose C0 C1 h0 h1 hdisj using
-    fun {C : Set α} (hC : Perfect C) (hnonempty : C.Nonempty) {ε : Real>=0∞} (hε : 0
+    fun {C : Set α} (hC : Perfect C) (hnonempty : C.Nonempty) {ε : Real>=0∞} (hε : 0 < ε) =>
+    hC.small_diam_splitting hnonempty hε
+  let DP : List Bool -> P := fun l => by
+    induction l with
+    | nil => exact ⟨C, ⟨hC, hnonempty⟩⟩
+    | cons a l ih =>
+      cases a
+      · use C0 ih.property.1 ih.property.2 (upos (l.length + 1))
+        exact ⟨(h0 _ _ _).1, (h0 _ _ _).2.1⟩
+      use C1 ih.property.1 ih.property.2 (upos (l.length + 1))
+      exact ⟨(h1 _ _ _).1, (h1 _ _ _).2.1⟩
+  let D : List Bool -> Set α := fun l => (DP l).val
+  have hanti : ClosureAntitone D := by
+    refine Antitone.closureAntitone ?_ fun l => (DP l).property.1.closed
+    intro l a
+    cases a
+    · exact (h0 _ _ _).2.2.1
+    exact (h1 _ _ _).2.2.1
+  have hdiam : VanishingDiam D := by
+    intro x
+    apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hu
+    · simp
+    rw [eventually_atTop]
+    refine ⟨1, fun m (hm : 1 <= m) => ?_⟩
+    rw [Nat.one_le_iff_ne_zero] at hm
+    rcases Nat.exists_eq_succ_of_ne_zero hm with ⟨n, rfl⟩
+    dsimp
+    cases x n
+    · convert! (h0 _ _ _).2.2.2
+      rw [PiNat.res_length]
+    convert! (h1 _ _ _).2.2.2
+    rw [PiNat.res_length]
+  have hdisj' : CantorScheme.Disjoint D := by
+    rintro l (a | a) (b | b) hab <;> try contradiction
+    · exact hdisj _ _ _
+    exact (hdisj _ _ _).symm
+  have hdom : forall {x : Nat -> Bool}, x in (inducedMap D).1 := fun {x} => by
+    rw [hanti.map_of_vanishingDiam hdiam fun l => (DP l).property.2]
+    apply mem_univ
+  refine ⟨fun x => (inducedMap D).2 ⟨x, hdom⟩, ?_, ?_, ?_⟩
+  · rintro y ⟨x, rfl⟩
+    exact map_mem ⟨_, hdom⟩ 0
+  · apply hdiam.map_continuous.comp
+    fun_prop
+  intro x y hxy
+  simpa only [← Subtype.val_inj] using hdisj'.map_injective hxy
 
 中文:
 定理 完美.存在_nat_bool_injection
@@ -139,7 +206,52 @@ theorem Perfect.exists_nat_bool_injection
   have upos := fun n => (upos' n).1
   let P := Subtype fun E : Set α => Perfect E ∧ E.Nonempty
   choose C0 C1 h0 h1 hdisj using
-    fun {C : Set α} (hC : Perfect C) (hnonempty : C.Nonempty) {ε : Real>=0∞} (hε : 0
+    fun {C : Set α} (hC : Perfect C) (hnonempty : C.Nonempty) {ε : Real>=0∞} (hε : 0 < ε) =>
+    hC.small_diam_splitting hnonempty hε
+  let DP : List Bool -> P := fun l => by
+    induction l with
+    | nil => exact ⟨C, ⟨hC, hnonempty⟩⟩
+    | cons a l ih =>
+      cases a
+      · use C0 ih.property.1 ih.property.2 (upos (l.length + 1))
+        exact ⟨(h0 _ _ _).1, (h0 _ _ _).2.1⟩
+      use C1 ih.property.1 ih.property.2 (upos (l.length + 1))
+      exact ⟨(h1 _ _ _).1, (h1 _ _ _).2.1⟩
+  let D : List Bool -> Set α := fun l => (DP l).val
+  have hanti : ClosureAntitone D := by
+    refine Antitone.closureAntitone ?_ fun l => (DP l).property.1.closed
+    intro l a
+    cases a
+    · exact (h0 _ _ _).2.2.1
+    exact (h1 _ _ _).2.2.1
+  have hdiam : VanishingDiam D := by
+    intro x
+    apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hu
+    · simp
+    rw [eventually_atTop]
+    refine ⟨1, fun m (hm : 1 <= m) => ?_⟩
+    rw [Nat.one_le_iff_ne_zero] at hm
+    rcases Nat.exists_eq_succ_of_ne_zero hm with ⟨n, rfl⟩
+    dsimp
+    cases x n
+    · convert! (h0 _ _ _).2.2.2
+      rw [PiNat.res_length]
+    convert! (h1 _ _ _).2.2.2
+    rw [PiNat.res_length]
+  have hdisj' : CantorScheme.Disjoint D := by
+    rintro l (a | a) (b | b) hab <;> try contradiction
+    · exact hdisj _ _ _
+    exact (hdisj _ _ _).symm
+  have hdom : forall {x : Nat -> Bool}, x in (inducedMap D).1 := fun {x} => by
+    rw [hanti.map_of_vanishingDiam hdiam fun l => (DP l).property.2]
+    apply mem_univ
+  refine ⟨fun x => (inducedMap D).2 ⟨x, hdom⟩, ?_, ?_, ?_⟩
+  · rintro y ⟨x, rfl⟩
+    exact map_mem ⟨_, hdom⟩ 0
+  · apply hdiam.map_continuous.comp
+    fun_prop
+  intro x y hxy
+  simpa only [← Subtype.val_inj] using hdisj'.map_injective hxy
 
 Depends on / 依赖: C.Nonempty, E.Nonempty, Nonempty, Perfect, Subtype, exists_seq_strictAnti_tendsto, hC.small_diam_splitting, hnonempty, ih.property, l.len, property, small_diam_splitting, zero_lt_one
 -/

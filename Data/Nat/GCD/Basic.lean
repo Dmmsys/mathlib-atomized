@@ -91,7 +91,12 @@ theorem pow_sub_one_mod_pow_sub_one
   · simp
   rcases lt_or_ge c b with h | h
   · rw [mod_eq_of_lt, mod_eq_of_lt h]
-    rwa [Nat.sub_lt_sub_iff_right (o
+    rwa [Nat.sub_lt_sub_iff_right (one_le_pow c a ha0), Nat.pow_lt_pow_iff_right ha1]
+  · suffices a ^ (c - b + b) - 1 = a ^ (c - b) * (a ^ b - 1) + (a ^ (c - b) - 1) by
+      rw [← Nat.sub_add_cancel h]; rw [add_mod_right]; rw [this]; rw [add_mod]; rw [mul_mod]; rw [mod_self]; rw [mul_zero]; rw [zero_mod]; rw [zero_add]; rw [mod_mod]; rw [pow_sub_one_mod_pow_sub_one]
+    rw [← Nat.add_sub_assoc (one_le_pow (c - b) a ha0)]; rw [← mul_add_one]; rw [pow_add]; rw [Nat.sub_add_cancel (one_le_pow b a ha0)]
+
+@[simp]
 
 中文:
 定理 pow_sub_one_mod_pow_sub_one
@@ -106,7 +111,12 @@ theorem pow_sub_one_mod_pow_sub_one
   · simp
   rcases lt_or_ge c b with h | h
   · rw [mod_eq_of_lt, mod_eq_of_lt h]
-    rwa [Nat.sub_lt_sub_iff_right (o
+    rwa [Nat.sub_lt_sub_iff_right (one_le_pow c a ha0), Nat.pow_lt_pow_iff_right ha1]
+  · suffices a ^ (c - b + b) - 1 = a ^ (c - b) * (a ^ b - 1) + (a ^ (c - b) - 1) by
+      rw [← Nat.sub_add_cancel h]; rw [add_mod_right]; rw [this]; rw [add_mod]; rw [mul_mod]; rw [mod_self]; rw [mul_zero]; rw [zero_mod]; rw [zero_add]; rw [mod_mod]; rw [pow_sub_one_mod_pow_sub_one]
+    rw [← Nat.add_sub_assoc (one_le_pow (c - b) a ha0)]; rw [← mul_add_one]; rw [pow_add]; rw [Nat.sub_add_cancel (one_le_pow b a ha0)]
+
+@[simp]
 
 Depends on / 依赖: Nat.eq_or_lt_of_le, Nat.pow_lt_pow_iff_right, Nat.sub_add_cancel, Nat.sub_lt_sub_iff_right, add_mod, add_mod_right, eq_or_lt_of_le, eq_zero_or_pos, lt_or_ge, mod_eq_of_lt, mul_mod, one_le_pow, pow_lt_pow_iff_right, split_ifs, sub_add_cancel, sub_lt_sub_iff_right, zero_pow_eq
 -/
@@ -1132,7 +1142,11 @@ theorem Coprime.mul_add_mul_ne_mul
         ((congr_arg _ h).mpr (Nat.dvd_mul_left n m)))
   obtain ⟨y, rfl⟩ : m ∣ b :=
     cop.dvd_of_dvd_mul_right
-      ((Nat.dvd_add_iff_right (Nat.dvd_mul_left m (n * 
+      ((Nat.dvd_add_iff_right (Nat.dvd_mul_left m (n * x))).mpr
+        ((congr_arg _ h).mpr (Nat.dvd_mul_right m n)))
+  rw [mul_comm]; rw [mul_ne_zero_iff]; rw [← one_le_iff_ne_zero] at ha hb
+  refine mul_ne_zero hb.2 ha.2 (eq_zero_of_mul_eq_self_left (ne_of_gt (add_le_add ha.1 hb.1)) ?_)
+  rw [← mul_assoc]; rw [← h]; rw [Nat.add_mul]; rw [Nat.add_mul]; rw [mul_comm _ n]; rw [← mul_assoc]; rw [mul_comm y]
 
 中文:
 定理 Coprime.mul_add_mul_ne_mul
@@ -1145,7 +1159,11 @@ theorem Coprime.mul_add_mul_ne_mul
         ((congr_arg _ h).mpr (Nat.dvd_mul_left n m)))
   obtain ⟨y, rfl⟩ : m ∣ b :=
     cop.dvd_of_dvd_mul_right
-      ((Nat.dvd_add_iff_right (Nat.dvd_mul_left m (n * 
+      ((Nat.dvd_add_iff_right (Nat.dvd_mul_left m (n * x))).mpr
+        ((congr_arg _ h).mpr (Nat.dvd_mul_right m n)))
+  rw [mul_comm]; rw [mul_ne_zero_iff]; rw [← one_le_iff_ne_zero] at ha hb
+  refine mul_ne_zero hb.2 ha.2 (eq_zero_of_mul_eq_self_left (ne_of_gt (add_le_add ha.1 hb.1)) ?_)
+  rw [← mul_assoc]; rw [← h]; rw [Nat.add_mul]; rw [Nat.add_mul]; rw [mul_comm _ n]; rw [← mul_assoc]; rw [mul_comm y]
 
 Depends on / 依赖: Nat.dvd_add_iff_left, Nat.dvd_add_iff_right, Nat.dvd_mul_left, Nat.dvd_mul_right, add_le_add, congr_arg, cop.dvd_of_dvd_mul_right, cop.symm.dvd_of_dvd_mul_right, dvd_add_iff_left, dvd_add_iff_right, dvd_mul_left, dvd_mul_right, dvd_of_dvd_mul_right, eq_zero_of_mul_eq_self_left, mul_, mul_comm, mul_ne_zero, mul_ne_zero_iff, ne_of_gt, one_le_iff_ne_zero
 -/
@@ -1259,7 +1277,10 @@ lemma div_lcm_eq_div_gcd
   · simp_all
   rcases n.eq_zero_or_pos with hn | hn
   · simp_all
-  rw [Nat.div_dvd_iff_dvd_mul hkm hm] at 
+  rw [Nat.div_dvd_iff_dvd_mul hkm hm] at hmc
+  rw [Nat.div_dvd_iff_dvd_mul hkn hn] at hnc
+  simpa [Nat.div_dvd_iff_dvd_mul (Nat.dvd_trans (Nat.gcd_dvd_left m n) hkm)
+    (gcd_pos_of_pos_left n hm), Nat.gcd_mul_right m c n] using (Nat.dvd_gcd hmc hnc)
 
 中文:
 引理 div_lcm_eq_div_gcd
@@ -1273,7 +1294,10 @@ lemma div_lcm_eq_div_gcd
   · simp_all
   rcases n.eq_zero_or_pos with hn | hn
   · simp_all
-  rw [Nat.div_dvd_iff_dvd_mul hkm hm] at 
+  rw [Nat.div_dvd_iff_dvd_mul hkm hm] at hmc
+  rw [Nat.div_dvd_iff_dvd_mul hkn hn] at hnc
+  simpa [Nat.div_dvd_iff_dvd_mul (Nat.dvd_trans (Nat.gcd_dvd_left m n) hkm)
+    (gcd_pos_of_pos_left n hm), Nat.gcd_mul_right m c n] using (Nat.dvd_gcd hmc hnc)
 
 Depends on / 依赖: Nat.div_dvd_iff_dvd_mul, Nat.dvd_gcd, Nat.dvd_trans, Nat.gcd_dvd_left, Nat.gcd_dvd_right, Nat.gcd_mul_right, Nat.lcm_eq_iff, div_dvd_div_left, div_dvd_iff_dvd_mul, dvd_gcd, dvd_trans, eq_zero_or_pos, gcd_dvd_left, gcd_dvd_right, gcd_mul_right, gcd_pos_of_pos_left, lcm_eq_iff, m.eq_zero_or_pos, n.eq_zero_or_pos
 -/

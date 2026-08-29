@@ -38,7 +38,8 @@ theorem nonneg_of_iteratedDeriv_nonneg
   rw [hz'] at hz₁ H
   refine H ▸ tsum_nonneg fun n => ?_
   rw [← ofReal_natCast]; rw [← ofReal_pow]; rw [← ofReal_inv]; rw [eq_re_of_ofReal_le (h n)]; rw [← ofReal_mul]; rw [← ofReal_mul]
- 
+  norm_cast at hz₁ ⊢
+  positivity [zero_re ▸ (Complex.le_def.mp (h n)).1]
 
 中文:
 定理 nonneg_of_iteratedDeriv_nonneg
@@ -50,7 +51,8 @@ theorem nonneg_of_iteratedDeriv_nonneg
   rw [hz'] at hz₁ H
   refine H ▸ tsum_nonneg fun n => ?_
   rw [← ofReal_natCast]; rw [← ofReal_pow]; rw [← ofReal_inv]; rw [eq_re_of_ofReal_le (h n)]; rw [← ofReal_mul]; rw [← ofReal_mul]
- 
+  norm_cast at hz₁ ⊢
+  positivity [zero_re ▸ (Complex.le_def.mp (h n)).1]
 
 Depends on / 依赖: Complex.le_def.mp, eq_re_of_ofReal_le, le_def, ofReal_inv, ofReal_mul, ofReal_natCast, ofReal_pow, sub_nonneg, taylorSeries_eq_on_ball, tsum_nonneg, zero_re
 -/
@@ -115,7 +117,8 @@ theorem apply_le_of_iteratedDeriv_nonneg
     | succ n =>
       specialize h (n + 1) n.succ_ne_zero
       rw [iteratedDeriv_succ'] at h ⊢
-      rwa [funext fun x => deriv_sub_const (f := f) (x :=
+      rwa [funext fun x => deriv_sub_const (f := f) (x := x) (f c)]
+exact sub_nonneg.mp nonneg_of_iteratedDeriv_nonneg (hf.sub_const _) h' hz
 
 中文:
 定理 apply_le_of_iteratedDeriv_nonneg
@@ -127,7 +130,8 @@ theorem apply_le_of_iteratedDeriv_nonneg
     | succ n =>
       specialize h (n + 1) n.succ_ne_zero
       rw [iteratedDeriv_succ'] at h ⊢
-      rwa [funext fun x => deriv_sub_const (f := f) (x :=
+      rwa [funext fun x => deriv_sub_const (f := f) (x := x) (f c)]
+exact sub_nonneg.mp nonneg_of_iteratedDeriv_nonneg (hf.sub_const _) h' hz
 
 Depends on / 依赖: deriv_sub_const, hf.sub_const, iteratedDeriv, iteratedDeriv_succ, iteratedDeriv_zero, le_refl, n.succ_ne_zero, nonneg_of_iteratedDeriv_nonneg, specialize, sub_const, sub_nonneg, sub_nonneg.mp, sub_self, succ_ne_zero
 -/

@@ -184,7 +184,8 @@ theorem toOuterMeasure_pure_apply
     exact ite_eq_left_iff.2 fun hb =>
       symm (ite_eq_right_iff.2 fun h => (hb <| h.symm ▸ ha).elim)
   · refine (tsum_congr fun b => ?_).trans tsum_zero
-    exact
+    exact ite_eq_right_iff.2 fun hb =>
+      ite_eq_right_iff.2 fun h => (ha <| h ▸ hb).elim
 
 中文:
 定理 toOuterMeasure_pure_apply
@@ -196,7 +197,8 @@ theorem toOuterMeasure_pure_apply
     exact ite_eq_left_iff.2 fun hb =>
       symm (ite_eq_right_iff.2 fun h => (hb <| h.symm ▸ ha).elim)
   · refine (tsum_congr fun b => ?_).trans tsum_zero
-    exact
+    exact ite_eq_right_iff.2 fun hb =>
+      ite_eq_right_iff.2 fun h => (ha <| h ▸ hb).elim
 
 Depends on / 依赖: h.symm, ite_eq_left_iff, ite_eq_right_iff, split_ifs, toOuterMeasure_apply, tsum_congr, tsum_ite_eq, tsum_zero
 -/
@@ -524,7 +526,12 @@ theorem toOuterMeasure_bind_apply
     (p.bind f).toOuterMeasure s = ∑' b, if b in s then ∑' a, p a * f a b else 0 := by
       simp [toOuterMeasure_apply, Set.indicator_apply]
     _ = ∑' (b) (a), p a * if b in s then f a b else 0 := tsum_congr fun b => by split_ifs <;> simp
-    _ = ∑' (a) (b), p a * if b in s th
+    _ = ∑' (a) (b), p a * if b in s then f a b else 0 := ENNReal.tsum_comm
+    _ = ∑' a, p a * ∑' b, if b in s then f a b else 0 := tsum_congr fun _ => ENNReal.tsum_mul_left
+    _ = ∑' a, p a * ∑' b, if b in s then f a b else 0 :=
+      (tsum_congr fun a => (congr_arg fun x => p a * x) <| tsum_congr fun b => by split_ifs <;> rfl)
+    _ = ∑' a, p a * (f a).toOuterMeasure s :=
+      tsum_congr fun a => by simp only [toOuterMeasure_apply, Set.indicator_apply]
 
 中文:
 定理 toOuterMeasure_bind_apply
@@ -534,7 +541,12 @@ theorem toOuterMeasure_bind_apply
     (p.bind f).toOuterMeasure s = ∑' b, if b in s then ∑' a, p a * f a b else 0 := by
       simp [toOuterMeasure_apply, Set.indicator_apply]
     _ = ∑' (b) (a), p a * if b in s then f a b else 0 := tsum_congr fun b => by split_ifs <;> simp
-    _ = ∑' (a) (b), p a * if b in s th
+    _ = ∑' (a) (b), p a * if b in s then f a b else 0 := ENNReal.tsum_comm
+    _ = ∑' a, p a * ∑' b, if b in s then f a b else 0 := tsum_congr fun _ => ENNReal.tsum_mul_left
+    _ = ∑' a, p a * ∑' b, if b in s then f a b else 0 :=
+      (tsum_congr fun a => (congr_arg fun x => p a * x) <| tsum_congr fun b => by split_ifs <;> rfl)
+    _ = ∑' a, p a * (f a).toOuterMeasure s :=
+      tsum_congr fun a => by simp only [toOuterMeasure_apply, Set.indicator_apply]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_comm, ENNReal.tsum_mul_left, Set.indicator_apply, classical, congr_arg, indicator_apply, p.bind, split_ifs, toOuterMeasure, toOuterMeasure_apply, tsum_comm, tsum_congr, tsum_mul_left
 -/
@@ -619,7 +631,7 @@ definition bindOnSupport
     simp_rw [ENNReal.tsum_mul_left]
     split_ifs with h
     · simp only [h, zero_mul]
-    · rw [(f a h).tsum_coe, mul_one
+    · rw [(f a h).tsum_coe, mul_one])⟩
 
 中文:
 定义 bindOnSupport
@@ -629,7 +641,7 @@ definition bindOnSupport
     simp_rw [ENNReal.tsum_mul_left]
     split_ifs with h
     · simp only [h, zero_mul]
-    · rw [(f a h).tsum_coe, mul_one
+    · rw [(f a h).tsum_coe, mul_one])⟩
 
 Depends on / 依赖: ENNReal, ENNReal.summable.hasSum_iff, ENNReal.tsum_comm.trans, ENNReal.tsum_mul_left, _root_, _root_.trans, hasSum_iff, mul_one, p.tsum_coe, simp_rw, split_ifs, summable, tsum_coe, tsum_comm, tsum_congr, tsum_mul_left, zero_mul
 -/
@@ -852,7 +864,11 @@ theorem bindOnSupport_bindOnSupport
   classical
   simp only [ENNReal.tsum_eq_zero]
   refine ENNReal.tsum_comm.trans (tsum_congr fun a' => tsum_congr fun b => ?_)
-  split_ifs with h
+  split_ifs with h _ h_1 H h_2
+  any_goals ring1
+  · absurd H
+    simpa [h] using h_1 a'
+  · simp [h_2]
 
 中文:
 定理 bindOnSupport_bindOnSupport
@@ -864,7 +880,11 @@ theorem bindOnSupport_bindOnSupport
   classical
   simp only [ENNReal.tsum_eq_zero]
   refine ENNReal.tsum_comm.trans (tsum_congr fun a' => tsum_congr fun b => ?_)
-  split_ifs with h
+  split_ifs with h _ h_1 H h_2
+  any_goals ring1
+  · absurd H
+    simpa [h] using h_1 a'
+  · simp [h_2]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_comm.trans, ENNReal.tsum_eq_zero, ENNReal.tsum_mul_left.symm, ENNReal.tsum_mul_right.symm, PMF.ext, absurd, any_goals, bindOnSupport_apply, classical, split_ifs, tsum_comm, tsum_congr, tsum_dite_right, tsum_eq_zero, tsum_mul_left, tsum_mul_right
 -/
@@ -936,7 +956,13 @@ theorem toOuterMeasure_bindOnSupport_apply
   calc
     (∑' b, ite (b in s) (∑' a, p a * dite (p a = 0) (fun h => 0) fun h => f a h b) 0) =
         ∑' (b) (a), ite (b in s) (p a * dite (p a = 0) (fun h => 0) fun h => f a h b) 0 :=
-      tsum_congr fun b => by split_ifs with hbs <;> simp only [t
+      tsum_congr fun b => by split_ifs with hbs <;> simp only [tsum_zero]
+    _ = ∑' (a) (b), ite (b in s) (p a * dite (p a = 0) (fun h => 0) fun h => f a h b) 0 :=
+      ENNReal.tsum_comm
+    _ = ∑' a, p a * ∑' b, ite (b in s) (dite (p a = 0) (fun h => 0) fun h => f a h b) 0 :=
+      (tsum_congr fun a => by simp only [← ENNReal.tsum_mul_left, mul_ite, mul_zero])
+    _ = ∑' a, p a * dite (p a = 0) (fun h => 0) fun h => ∑' b, ite (b in s) (f a h b) 0 :=
+      tsum_congr fun a => by split_ifs with ha <;> simp only [ite_self, tsum_zero]
 
 中文:
 定理 toOuterMeasure_bindOnSupport_apply
@@ -946,7 +972,13 @@ theorem toOuterMeasure_bindOnSupport_apply
   calc
     (∑' b, ite (b in s) (∑' a, p a * dite (p a = 0) (fun h => 0) fun h => f a h b) 0) =
         ∑' (b) (a), ite (b in s) (p a * dite (p a = 0) (fun h => 0) fun h => f a h b) 0 :=
-      tsum_congr fun b => by split_ifs with hbs <;> simp only [t
+      tsum_congr fun b => by split_ifs with hbs <;> simp only [tsum_zero]
+    _ = ∑' (a) (b), ite (b in s) (p a * dite (p a = 0) (fun h => 0) fun h => f a h b) 0 :=
+      ENNReal.tsum_comm
+    _ = ∑' a, p a * ∑' b, ite (b in s) (dite (p a = 0) (fun h => 0) fun h => f a h b) 0 :=
+      (tsum_congr fun a => by simp only [← ENNReal.tsum_mul_left, mul_ite, mul_zero])
+    _ = ∑' a, p a * dite (p a = 0) (fun h => 0) fun h => ∑' b, ite (b in s) (f a h b) 0 :=
+      tsum_congr fun a => by split_ifs with ha <;> simp only [ite_self, tsum_zero]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_comm, classical, split_ifs, toOuterMeasure_apply, tsum_comm, tsum_congr, tsum_zero
 -/

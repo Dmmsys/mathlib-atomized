@@ -371,7 +371,7 @@ definition boolRingCatEquivBoolAlg
   unitIso := NatIso.ofComponents (fun X => BoolRing.Iso.mk <|
     (RingEquiv.asBoolRingAsBoolAlg X).symm) fun {_ _} _ => rfl
   counitIso := NatIso.ofComponents (fun X => BoolAlg.Iso.mk <|
-    OrderIso.asBoolAlgAsBoolRing X) fun {_ _} _ =
+    OrderIso.asBoolAlgAsBoolRing X) fun {_ _} _ => rfl
 
 中文:
 定义 boolRingCatEquiv布尔Alg
@@ -381,7 +381,7 @@ definition boolRingCatEquivBoolAlg
   unitIso := NatIso.ofComponents (fun X => BoolRing.Iso.mk <|
     (RingEquiv.asBoolRingAsBoolAlg X).symm) fun {_ _} _ => rfl
   counitIso := NatIso.ofComponents (fun X => BoolAlg.Iso.mk <|
-    OrderIso.asBoolAlgAsBoolRing X) fun {_ _} _ =
+    OrderIso.asBoolAlgAsBoolRing X) fun {_ _} _ => rfl
 
 Depends on / 依赖: BoolAlg, BoolRing
 -/

@@ -45,7 +45,9 @@ theorem exp_neg_mul_rpow_isLittleO_exp_neg
     rw [mem_Ioi] at hx
     rw [rpow_sub_one hx.ne']
     field
-  apply tendsto_id.
+  apply tendsto_id.atTop_mul_atTop₀
+  refine tendsto_atTop_add_const_right atTop (-1 : Real) ?_
+  exact Tendsto.const_mul_atTop hb (tendsto_rpow_atTop (by linarith))
 
 中文:
 定理 exp_neg_mul_rpow_isLittleO_exp_neg
@@ -58,7 +60,9 @@ theorem exp_neg_mul_rpow_isLittleO_exp_neg
     rw [mem_Ioi] at hx
     rw [rpow_sub_one hx.ne']
     field
-  apply tendsto_id.
+  apply tendsto_id.atTop_mul_atTop₀
+  refine tendsto_atTop_add_const_right atTop (-1 : Real) ?_
+  exact Tendsto.const_mul_atTop hb (tendsto_rpow_atTop (by linarith))
 
 Depends on / 依赖: Ioi_mem_atTop, Tendsto, Tendsto.congr, Tendsto.const_mul_atTop, const_mul_atTop, eventuallyEq_of_mem, hx.ne, isLittleO_exp_comp_exp_comp, mem_Ioi, rpow_sub_one, tendsto_atTop_add_const_right, tendsto_id, tendsto_id.atTop_mul_atTop, tendsto_rpow_atTop
 -/
@@ -161,7 +165,10 @@ theorem integrableOn_rpow_mul_exp_neg_rpow
   have ht : (0 : Real) < (s + 1) / p := div_pos (by linarith) hp
   refine ((integrableOn_Ioi_comp_rpow_iff' _ hp.ne').mpr
     (GammaIntegral_convergent ht)).congr_fun (fun x hx => ?_) measurableSet_Ioi
-  si
+  simp only [smul_eq_mul]
+  rw [mul_comm (exp (-x ^ p))]; rw [← mul_assoc]; rw [← rpow_mul hx.le]; rw [← rpow_add hx]
+  field_simp
+  ring_nf
 
 中文:
 定理 integrableOn_rpow_mul_exp_neg_rpow
@@ -171,7 +178,10 @@ theorem integrableOn_rpow_mul_exp_neg_rpow
   have ht : (0 : Real) < (s + 1) / p := div_pos (by linarith) hp
   refine ((integrableOn_Ioi_comp_rpow_iff' _ hp.ne').mpr
     (GammaIntegral_convergent ht)).congr_fun (fun x hx => ?_) measurableSet_Ioi
-  si
+  simp only [smul_eq_mul]
+  rw [mul_comm (exp (-x ^ p))]; rw [← mul_assoc]; rw [← rpow_mul hx.le]; rw [← rpow_add hx]
+  field_simp
+  ring_nf
 -/
 theorem integrableOn_rpow_mul_exp_neg_rpow {p s : Real} (hs : -1 < s) (hp : 0 < p) :
     IntegrableOn (fun x : Real => x ^ s * exp (- x ^ p)) (Ioi 0) := by
@@ -195,7 +205,16 @@ theorem integrableOn_rpow_mul_exp_neg_mul_rpow
   suffices IntegrableOn (fun x => (b ^ (-p⁻¹)) ^ s * (x ^ s * exp (-x ^ p))) (Ioi 0) by
     rw [show 0 = b ^ (-p⁻¹) * 0 by rw [mul_zero], ← integrableOn_Ioi_comp_mul_left_iff _ _ hib]
     refine this.congr_fun (fun _ hx => ?_) measurableSet_Ioi
-
+    #adaptation_note /-- 2026-05-17(kmill) added `dsimp only` because a slightly different
+    instantiation order leads to a term with a beta redex.
+    https://github.com/leanprover/lean4/pull/13762
+    This will be removed once app elaboration itself does beta reduction. -/
+    dsimp only
+    rw [← mul_assoc]; rw [mul_rpow]; rw [mul_rpow]; rw [← rpow_mul (z := p)]; rw [neg_mul]; rw [neg_mul]; rw [inv_mul_cancel₀]; rw [rpow_neg_one]; rw [mul_inv_cancel_left₀]
+    all_goals linarith [mem_Ioi.mp hx]
+  refine Integrable.const_mul ?_ _
+  rw [← IntegrableOn]
+  exact integrableOn_rpow_mul_exp_neg_rpow hs hp
 
 中文:
 定理 integrableOn_rpow_mul_exp_neg_mul_rpow
@@ -205,7 +224,16 @@ theorem integrableOn_rpow_mul_exp_neg_mul_rpow
   suffices IntegrableOn (fun x => (b ^ (-p⁻¹)) ^ s * (x ^ s * exp (-x ^ p))) (Ioi 0) by
     rw [show 0 = b ^ (-p⁻¹) * 0 by rw [mul_zero], ← integrableOn_Ioi_comp_mul_left_iff _ _ hib]
     refine this.congr_fun (fun _ hx => ?_) measurableSet_Ioi
-
+    #adaptation_note /-- 2026-05-17(kmill) added `dsimp only` because a slightly different
+    instantiation order leads to a term with a beta redex.
+    https://github.com/leanprover/lean4/pull/13762
+    This will be removed once app elaboration itself does beta reduction. -/
+    dsimp only
+    rw [← mul_assoc]; rw [mul_rpow]; rw [mul_rpow]; rw [← rpow_mul (z := p)]; rw [neg_mul]; rw [neg_mul]; rw [inv_mul_cancel₀]; rw [rpow_neg_one]; rw [mul_inv_cancel_left₀]
+    all_goals linarith [mem_Ioi.mp hx]
+  refine Integrable.const_mul ?_ _
+  rw [← IntegrableOn]
+  exact integrableOn_rpow_mul_exp_neg_rpow hs hp
 
 Depends on / 依赖: IntegrableOn, adaptation_note, because, congr_fun, different, github, github.com, instantiation, integrableOn_Ioi_comp_mul_left_iff, leanprover, measurableSet_Ioi, mul_zero, removed, rpow_pos_of_pos, slightly, this.congr_fun
 -/
@@ -260,7 +288,18 @@ theorem integrable_rpow_mul_exp_neg_mul_sq
   rw [← integrableOn_univ]; rw [← @Iio_union_Ici _ _ (0 : Real)]; rw [integrableOn_union]; rw [integrableOn_Ici_iff_integrableOn_Ioi]
   refine ⟨?_, integrableOn_rpow_mul_exp_neg_mul_sq hb hs⟩
   rw [← (Measure.measurePreserving_neg (volume : Measure Real)).integrableOn_comp_preimage
-      (Homeomo
+      (Homeomorph.neg Real).measurableEmbedding]
+  simp only [Function.comp_def, neg_sq, neg_preimage, neg_Iio, neg_zero]
+  apply Integrable.mono' (integrableOn_rpow_mul_exp_neg_mul_sq hb hs)
+  · apply Measurable.aestronglyMeasurable
+    exact (measurable_id'.neg.pow measurable_const).mul
+      ((measurable_id'.pow measurable_const).const_mul (-b)).exp
+  · have : MeasurableSet (Ioi (0 : Real)) := measurableSet_Ioi
+    filter_upwards [ae_restrict_mem this] with x hx
+    have h'x : 0 <= x := le_of_lt hx
+    rw [Real.norm_eq_abs]; rw [abs_mul]; rw [abs_of_nonneg (exp_pos _).le]
+    apply mul_le_mul_of_nonneg_right _ (exp_pos _).le
+    simpa [abs_of_nonneg h'x] using abs_rpow_le_abs_rpow (-x) s
 
 中文:
 定理 integrable_rpow_mul_exp_neg_mul_sq
@@ -269,7 +308,18 @@ theorem integrable_rpow_mul_exp_neg_mul_sq
   rw [← integrableOn_univ]; rw [← @Iio_union_Ici _ _ (0 : Real)]; rw [integrableOn_union]; rw [integrableOn_Ici_iff_integrableOn_Ioi]
   refine ⟨?_, integrableOn_rpow_mul_exp_neg_mul_sq hb hs⟩
   rw [← (Measure.measurePreserving_neg (volume : Measure Real)).integrableOn_comp_preimage
-      (Homeomo
+      (Homeomorph.neg Real).measurableEmbedding]
+  simp only [Function.comp_def, neg_sq, neg_preimage, neg_Iio, neg_zero]
+  apply Integrable.mono' (integrableOn_rpow_mul_exp_neg_mul_sq hb hs)
+  · apply Measurable.aestronglyMeasurable
+    exact (measurable_id'.neg.pow measurable_const).mul
+      ((measurable_id'.pow measurable_const).const_mul (-b)).exp
+  · have : MeasurableSet (Ioi (0 : Real)) := measurableSet_Ioi
+    filter_upwards [ae_restrict_mem this] with x hx
+    have h'x : 0 <= x := le_of_lt hx
+    rw [Real.norm_eq_abs]; rw [abs_mul]; rw [abs_of_nonneg (exp_pos _).le]
+    apply mul_le_mul_of_nonneg_right _ (exp_pos _).le
+    simpa [abs_of_nonneg h'x] using abs_rpow_le_abs_rpow (-x) s
 
 Depends on / 依赖: Function, Function.comp_def, Homeomorph, Homeomorph.neg, Iio_union_Ici, Integrable, Integrable.mono, Measurable, Measurable.aestronglyMeasurabl, Measure, Measure.measurePreserving_neg, aestronglyMeasurabl, comp_def, integrableOn_Ici_iff_integrableOn_Ioi, integrableOn_comp_preimage, integrableOn_rpow_mul_exp_neg_mul_sq, integrableOn_union, integrableOn_univ, measurableEmbedding, measurePreserving_neg
 -/
@@ -323,7 +373,10 @@ theorem integrableOn_Ioi_exp_neg_mul_sq_iff
   by_contra! hb
   have : ∫⁻ _ : Real in Ioi 0, 1 <= ∫⁻ x : Real in Ioi 0, ‖exp (-b * x ^ 2)‖₊ := by
     apply lintegral_mono (fun x => _)
-    simp only [neg_mul, ENNReal.one_le_coe_iff, ← toNNReal_one, toNNReal_le_iff_le_
+    simp only [neg_mul, ENNReal.one_le_coe_iff, ← toNNReal_one, toNNReal_le_iff_le_coe,
+      Real.norm_of_nonneg (exp_pos _).le, coe_nnnorm, one_le_exp_iff, Right.nonneg_neg_iff]
+    exact fun x => mul_nonpos_of_nonpos_of_nonneg hb (sq_nonneg x)
+  simpa using this.trans_lt h.2
 
 中文:
 定理 integrableOn_Ioi_exp_neg_mul_sq_iff
@@ -333,7 +386,10 @@ theorem integrableOn_Ioi_exp_neg_mul_sq_iff
   by_contra! hb
   have : ∫⁻ _ : Real in Ioi 0, 1 <= ∫⁻ x : Real in Ioi 0, ‖exp (-b * x ^ 2)‖₊ := by
     apply lintegral_mono (fun x => _)
-    simp only [neg_mul, ENNReal.one_le_coe_iff, ← toNNReal_one, toNNReal_le_iff_le_
+    simp only [neg_mul, ENNReal.one_le_coe_iff, ← toNNReal_one, toNNReal_le_iff_le_coe,
+      Real.norm_of_nonneg (exp_pos _).le, coe_nnnorm, one_le_exp_iff, Right.nonneg_neg_iff]
+    exact fun x => mul_nonpos_of_nonpos_of_nonneg hb (sq_nonneg x)
+  simpa using this.trans_lt h.2
 
 Depends on / 依赖: ENNReal, ENNReal.one_le_coe_iff, Real.norm_of_nonneg, Right.nonneg_neg_iff, coe_nnnorm, exp_pos, integrableOn, integrable_exp_neg_mul_sq, lintegral_mono, mul_nonpos_of_nonpos_of_nonneg, neg_mul, nonneg_neg_iff, norm_of_nonneg, one_le_coe_iff, one_le_exp_iff, sq_nonneg, this.trans_lt, toNNReal_le_iff_le_coe, toNNReal_one, trans_lt
 -/
@@ -451,7 +507,7 @@ theorem integrable_mul_cexp_neg_mul_sq
   have := (integrable_mul_exp_neg_mul_sq hb).hasFiniteIntegral
   rw [← hasFiniteIntegral_norm_iff] at this ⊢
   convert! this
-  rw [norm_mul]; rw [norm_mul]; rw [norm_cexp_neg_mul_sq b]; rw [n
+  rw [norm_mul]; rw [norm_mul]; rw [norm_cexp_neg_mul_sq b]; rw [norm_real]; rw [norm_of_nonneg (exp_pos _).le]
 
 中文:
 定理 integrable_mul_cexp_neg_mul_sq
@@ -462,7 +518,7 @@ theorem integrable_mul_cexp_neg_mul_sq
   have := (integrable_mul_exp_neg_mul_sq hb).hasFiniteIntegral
   rw [← hasFiniteIntegral_norm_iff] at this ⊢
   convert! this
-  rw [norm_mul]; rw [norm_mul]; rw [norm_cexp_neg_mul_sq b]; rw [n
+  rw [norm_mul]; rw [norm_mul]; rw [norm_cexp_neg_mul_sq b]; rw [norm_real]; rw [norm_of_nonneg (exp_pos _).le]
 
 Depends on / 依赖: Complex.continuous_exp.comp, aestronglyMeasurable, continuous_exp, continuous_ofReal, continuous_ofReal.mul, convert, exp_pos, fun_prop, hasFiniteIntegral, hasFiniteIntegral_norm_iff, integrable_mul_exp_neg_mul_sq, norm_cexp_neg_mul_sq, norm_mul, norm_of_nonneg, norm_real
 -/
@@ -488,7 +544,17 @@ theorem integral_mul_cexp_neg_mul_sq
     intro x
     convert! ((hasDerivAt_pow 2 x).const_mul (-b)).cexp.const_mul (-(2 * b)⁻¹) using 1
     field
-  have B 
+  have B : Tendsto (fun y : Real => -(2 * b)⁻¹ * cexp (-b * (y : Complex) ^ 2))
+    atTop (𝓝 (-(2 * b)⁻¹ * 0)) := by
+    refine Tendsto.const_mul _ (tendsto_zero_iff_norm_tendsto_zero.mpr ?_)
+    simp_rw [norm_cexp_neg_mul_sq b]
+    exact tendsto_exp_atBot.comp
+      ((tendsto_pow_atTop two_ne_zero).const_mul_atTop_of_neg (neg_lt_zero.2 hb))
+  convert!
+    integral_Ioi_of_hasDerivAt_of_tendsto' (fun x _ => (A ↑x).comp_ofReal)
+      (integrable_mul_cexp_neg_mul_sq hb).integrableOn B using 1
+  simp only [mul_zero, ofReal_zero, zero_pow, Ne,
+    not_false_iff, Complex.exp_zero, mul_one, sub_neg_eq_add, zero_add, reduceCtorEq]
 
 中文:
 定理 integral_mul_cexp_neg_mul_sq
@@ -500,7 +566,17 @@ theorem integral_mul_cexp_neg_mul_sq
     intro x
     convert! ((hasDerivAt_pow 2 x).const_mul (-b)).cexp.const_mul (-(2 * b)⁻¹) using 1
     field
-  have B 
+  have B : Tendsto (fun y : Real => -(2 * b)⁻¹ * cexp (-b * (y : Complex) ^ 2))
+    atTop (𝓝 (-(2 * b)⁻¹ * 0)) := by
+    refine Tendsto.const_mul _ (tendsto_zero_iff_norm_tendsto_zero.mpr ?_)
+    simp_rw [norm_cexp_neg_mul_sq b]
+    exact tendsto_exp_atBot.comp
+      ((tendsto_pow_atTop two_ne_zero).const_mul_atTop_of_neg (neg_lt_zero.2 hb))
+  convert!
+    integral_Ioi_of_hasDerivAt_of_tendsto' (fun x _ => (A ↑x).comp_ofReal)
+      (integrable_mul_cexp_neg_mul_sq hb).integrableOn B using 1
+  simp only [mul_zero, ofReal_zero, zero_pow, Ne,
+    not_false_iff, Complex.exp_zero, mul_one, sub_neg_eq_add, zero_add, reduceCtorEq]
 
 Depends on / 依赖: HasDerivAt, Tendsto, Tendsto.const_mul, cexp.const_mul, const_mul, contrapose, convert, hasDerivAt_pow, isEquivalencePreservesLimits, norm_cexp_neg_mul_sq, simp_rw, tendsto_, tendsto_zero_iff_norm_tendsto_zero, tendsto_zero_iff_norm_tendsto_zero.mpr, zero_re
 -/
@@ -535,7 +611,30 @@ theorem integral_gaussian_sq_complex
   of coordinates. We are left with `∫ r * exp (-b r^2)`, which has been computed in
   `integral_mul_cexp_neg_mul_sq` using the fact that this function has an obvious primitive. -/
   calc
-    (∫ x : Real, 
+    (∫ x : Real, cexp (-b * (x : Complex) ^ 2)) ^ 2 =
+        ∫ p : Real × Real, cexp (-b * (p.1 : Complex) ^ 2) * cexp (-b * (p.2 : Complex) ^ 2) := by
+      rw [pow_two]; rw [← integral_prod_mul]; rfl
+    _ = ∫ p : Real × Real, cexp (-b * ((p.1 : Complex) ^ 2 + (p.2 : Complex) ^ 2)) := by
+      congr
+      ext1 p
+      rw [← Complex.exp_add]; rw [mul_add]
+    _ = ∫ p in polarCoord.target, p.1 •
+        cexp (-b * ((p.1 * Complex.cos p.2) ^ 2 + (p.1 * Complex.sin p.2) ^ 2)) := by
+      rw [← integral_comp_polarCoord_symm]
+      simp only [polarCoord_symm_apply, ofReal_mul, ofReal_cos, ofReal_sin]
+    _ = (∫ r in Ioi (0 : Real), r * cexp (-b * (r : Complex) ^ 2)) * ∫ θ in Ioo (-π) π, 1 := by
+      rw [← setIntegral_prod_mul]
+      congr with p : 1
+      rw [mul_one]
+      congr
+      conv_rhs => rw [← one_mul ((p.1 : Complex) ^ 2), ← sin_sq_add_cos_sq (p.2 : Complex)]
+      ring
+    _ = ↑π / b := by
+      simp only [integral_const, MeasurableSet.univ, measureReal_restrict_apply,
+        univ_inter, real_smul, mul_one, integral_mul_cexp_neg_mul_sq hb]
+      rw [volume_real_Ioo_of_le (by linarith [pi_nonneg])]
+      simp
+      ring
 
 中文:
 定理 integral_gaussian_sq_complex
@@ -545,7 +644,30 @@ theorem integral_gaussian_sq_complex
   of coordinates. We are left with `∫ r * exp (-b r^2)`, which has been computed in
   `integral_mul_cexp_neg_mul_sq` using the fact that this function has an obvious primitive. -/
   calc
-    (∫ x : Real, 
+    (∫ x : Real, cexp (-b * (x : Complex) ^ 2)) ^ 2 =
+        ∫ p : Real × Real, cexp (-b * (p.1 : Complex) ^ 2) * cexp (-b * (p.2 : Complex) ^ 2) := by
+      rw [pow_two]; rw [← integral_prod_mul]; rfl
+    _ = ∫ p : Real × Real, cexp (-b * ((p.1 : Complex) ^ 2 + (p.2 : Complex) ^ 2)) := by
+      congr
+      ext1 p
+      rw [← Complex.exp_add]; rw [mul_add]
+    _ = ∫ p in polarCoord.target, p.1 •
+        cexp (-b * ((p.1 * Complex.cos p.2) ^ 2 + (p.1 * Complex.sin p.2) ^ 2)) := by
+      rw [← integral_comp_polarCoord_symm]
+      simp only [polarCoord_symm_apply, ofReal_mul, ofReal_cos, ofReal_sin]
+    _ = (∫ r in Ioi (0 : Real), r * cexp (-b * (r : Complex) ^ 2)) * ∫ θ in Ioo (-π) π, 1 := by
+      rw [← setIntegral_prod_mul]
+      congr with p : 1
+      rw [mul_one]
+      congr
+      conv_rhs => rw [← one_mul ((p.1 : Complex) ^ 2), ← sin_sq_add_cos_sq (p.2 : Complex)]
+      ring
+    _ = ↑π / b := by
+      simp only [integral_const, MeasurableSet.univ, measureReal_restrict_apply,
+        univ_inter, real_smul, mul_one, integral_mul_cexp_neg_mul_sq hb]
+      rw [volume_real_Ioo_of_le (by linarith [pi_nonneg])]
+      simp
+      ring
 -/
 theorem integral_gaussian_sq_complex {b : Complex} (hb : 0 < b.re) :
     (∫ x : Real, cexp (-b * (x : Complex) ^ 2)) ^ 2 = π / b := by
@@ -591,7 +713,11 @@ theorem integral_gaussian
   · rw [integral_undef, sqrt_eq_zero_of_nonpos]
     · exact div_nonpos_of_nonneg_of_nonpos pi_pos.le hb
     · simpa only [not_lt, integrable_exp_neg_mul_sq_iff] using hb
-  -- Assume 
+  -- Assume now `b > 0`. Then both sides are non-negative and their squares agree.
+  refine (sq_eq_sq₀ (by positivity) (by positivity)).1 ?_
+  rw [← ofReal_inj]; rw [ofReal_pow]; rw [← coe_algebraMap]; rw [RCLike.algebraMap_eq_ofReal]; rw [← integral_ofReal]; rw [sq_sqrt (div_pos pi_pos hb).le]; rw [← RCLike.algebraMap_eq_ofReal]; rw [coe_algebraMap]; rw [ofReal_div]
+  convert! integral_gaussian_sq_complex (by rwa [ofReal_re] : 0 < (b : Complex).re) with _ x
+  rw [ofReal_exp]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_neg]
 
 中文:
 定理 integral_gaussian
@@ -603,7 +729,11 @@ theorem integral_gaussian
   · rw [integral_undef, sqrt_eq_zero_of_nonpos]
     · exact div_nonpos_of_nonneg_of_nonpos pi_pos.le hb
     · simpa only [not_lt, integrable_exp_neg_mul_sq_iff] using hb
-  -- Assume 
+  -- Assume now `b > 0`. Then both sides are non-negative and their squares agree.
+  refine (sq_eq_sq₀ (by positivity) (by positivity)).1 ?_
+  rw [← ofReal_inj]; rw [ofReal_pow]; rw [← coe_algebraMap]; rw [RCLike.algebraMap_eq_ofReal]; rw [← integral_ofReal]; rw [sq_sqrt (div_pos pi_pos hb).le]; rw [← RCLike.algebraMap_eq_ofReal]; rw [coe_algebraMap]; rw [ofReal_div]
+  convert! integral_gaussian_sq_complex (by rwa [ofReal_re] : 0 < (b : Complex).re) with _ x
+  rw [ofReal_exp]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_neg]
 -/
 theorem integral_gaussian (b : Real) : ∫ x : Real, exp (-b * x ^ 2) = √(π / b) := by
   -- First we deal with the crazy case where `b ≤ 0`: then both sides vanish.
@@ -627,7 +757,13 @@ theorem continuousAt_gaussian_integral
   let f : Complex -> Real -> Complex := fun (c : Complex) (x : Real) => cexp (-c * (x : Complex) ^ 2)
   obtain ⟨d, hd, hd'⟩ := exists_between hb
   have f_le_bd : forallᶠ c : Complex in 𝓝 b, forallᵐ x : Real, ‖f c x‖ <= exp (-d * x ^ 2) := by
-    refine eventually_of_mem ((continuous_re.isOpen_pre
+    refine eventually_of_mem ((continuous_re.isOpen_preimage _ isOpen_Ioi).mem_nhds hd') ?_
+    intro c hc; filter_upwards with x
+    rw [norm_cexp_neg_mul_sq]
+    gcongr
+    exact le_of_lt hc
+  exact continuousAt_of_dominated (Eventually.of_forall (by fun_prop)) f_le_bd
+    (integrable_exp_neg_mul_sq hd) (ae_of_all _ (by fun_prop))
 
 中文:
 定理 continuousAt_gaussian_integral
@@ -636,7 +772,13 @@ theorem continuousAt_gaussian_integral
   let f : Complex -> Real -> Complex := fun (c : Complex) (x : Real) => cexp (-c * (x : Complex) ^ 2)
   obtain ⟨d, hd, hd'⟩ := exists_between hb
   have f_le_bd : forallᶠ c : Complex in 𝓝 b, forallᵐ x : Real, ‖f c x‖ <= exp (-d * x ^ 2) := by
-    refine eventually_of_mem ((continuous_re.isOpen_pre
+    refine eventually_of_mem ((continuous_re.isOpen_preimage _ isOpen_Ioi).mem_nhds hd') ?_
+    intro c hc; filter_upwards with x
+    rw [norm_cexp_neg_mul_sq]
+    gcongr
+    exact le_of_lt hc
+  exact continuousAt_of_dominated (Eventually.of_forall (by fun_prop)) f_le_bd
+    (integrable_exp_neg_mul_sq hd) (ae_of_all _ (by fun_prop))
 
 Depends on / 依赖: Eventually, Eventually.of_forall, continuousAt_of_dominated, continuous_re, continuous_re.isOpen_preimage, eventually_of_mem, exists_between, f_le_bd, filter_upwards, fun_prop, integrable, isOpen_Ioi, isOpen_preimage, le_of_lt, mem_nhds, norm_cexp_neg_mul_sq, of_forall
 -/
@@ -665,7 +807,36 @@ theorem integral_gaussian_complex
     (convex_halfSpace_re_gt 0).isPreconnected.eq_of_sq_eq ?_ ?_ (fun c hc => ?_) (fun {c} hc => ?_)
       (by simp : 0 < re (1 : Complex)) ?_ hb
   · -- integral is continuous
-    exact con
+    exact continuousOn_of_forall_continuousAt continuousAt_gaussian_integral
+  · -- `(π / b) ^ (1 / 2 : ℂ)` is continuous
+    refine
+      continuousOn_of_forall_continuousAt fun b hb =>
+        (continuousAt_cpow_const (Or.inl ?_)).comp (continuousAt_const.div continuousAt_id (nv hb))
+    rw [div_re]; rw [ofReal_im]; rw [ofReal_re]; rw [zero_mul]; rw [zero_div]; rw [add_zero]
+    exact div_pos (mul_pos pi_pos hb) (normSq_pos.mpr (nv hb))
+  · -- equality at 1
+    have : forall x : Real, cexp (-(1 : Complex) * (x : Complex) ^ 2) = exp (-(1 : Real) * x ^ 2) := by
+      intro x
+      simp only [ofReal_exp, neg_mul, one_mul, ofReal_neg, ofReal_pow]
+    simp_rw [this, ← coe_algebraMap, RCLike.algebraMap_eq_ofReal, integral_ofReal,
+      ← RCLike.algebraMap_eq_ofReal, coe_algebraMap]
+    conv_rhs =>
+      congr
+      · rw [← ofReal_one, ← ofReal_div]
+      · rw [← ofReal_one, ← ofReal_ofNat, ← ofReal_div]
+    rw [← ofReal_cpow]; rw [ofReal_inj]
+    · convert! integral_gaussian (1 : Real) using 1
+      rw [sqrt_eq_rpow]
+    · rw [div_one]; exact pi_pos.le
+  · -- squares of both sides agree
+    dsimp only [Pi.pow_apply]
+    rw [integral_gaussian_sq_complex hc]; rw [sq]
+    conv_lhs => rw [← cpow_one (↑π / c)]
+    rw [← cpow_add _ _ (div_ne_zero (ofReal_ne_zero.mpr pi_ne_zero) (nv hc))]
+    norm_num
+  · -- RHS doesn't vanish
+    rw [Ne]; rw [cpow_eq_zero_iff]; rw [not_and_or]
+    exact Or.inl (div_ne_zero (ofReal_ne_zero.mpr pi_ne_zero) (nv hc))
 
 中文:
 定理 integral_gaussian_complex
@@ -676,7 +847,36 @@ theorem integral_gaussian_complex
     (convex_halfSpace_re_gt 0).isPreconnected.eq_of_sq_eq ?_ ?_ (fun c hc => ?_) (fun {c} hc => ?_)
       (by simp : 0 < re (1 : Complex)) ?_ hb
   · -- integral is continuous
-    exact con
+    exact continuousOn_of_forall_continuousAt continuousAt_gaussian_integral
+  · -- `(π / b) ^ (1 / 2 : ℂ)` is continuous
+    refine
+      continuousOn_of_forall_continuousAt fun b hb =>
+        (continuousAt_cpow_const (Or.inl ?_)).comp (continuousAt_const.div continuousAt_id (nv hb))
+    rw [div_re]; rw [ofReal_im]; rw [ofReal_re]; rw [zero_mul]; rw [zero_div]; rw [add_zero]
+    exact div_pos (mul_pos pi_pos hb) (normSq_pos.mpr (nv hb))
+  · -- equality at 1
+    have : forall x : Real, cexp (-(1 : Complex) * (x : Complex) ^ 2) = exp (-(1 : Real) * x ^ 2) := by
+      intro x
+      simp only [ofReal_exp, neg_mul, one_mul, ofReal_neg, ofReal_pow]
+    simp_rw [this, ← coe_algebraMap, RCLike.algebraMap_eq_ofReal, integral_ofReal,
+      ← RCLike.algebraMap_eq_ofReal, coe_algebraMap]
+    conv_rhs =>
+      congr
+      · rw [← ofReal_one, ← ofReal_div]
+      · rw [← ofReal_one, ← ofReal_ofNat, ← ofReal_div]
+    rw [← ofReal_cpow]; rw [ofReal_inj]
+    · convert! integral_gaussian (1 : Real) using 1
+      rw [sqrt_eq_rpow]
+    · rw [div_one]; exact pi_pos.le
+  · -- squares of both sides agree
+    dsimp only [Pi.pow_apply]
+    rw [integral_gaussian_sq_complex hc]; rw [sq]
+    conv_lhs => rw [← cpow_one (↑π / c)]
+    rw [← cpow_add _ _ (div_ne_zero (ofReal_ne_zero.mpr pi_ne_zero) (nv hc))]
+    norm_num
+  · -- RHS doesn't vanish
+    rw [Ne]; rw [cpow_eq_zero_iff]; rw [not_and_or]
+    exact Or.inl (div_ne_zero (ofReal_ne_zero.mpr pi_ne_zero) (nv hc))
 
 Depends on / 依赖: Or.inl, continuous, continuousAt_c, continuousAt_cpow_const, continuousAt_gaussian_integral, continuousOn_of_forall_continuousAt, contrapose, convex_halfSpace_re_gt, eq_of_sq_eq, integral, isPreconnected, isPreconnected.eq_of_sq_eq
 -/
@@ -732,7 +932,9 @@ theorem integral_gaussian_complex_Ioi
     ∫ x : Real in Iic 0, f x = ∫ x : Real in Ioi 0, f (-x) := by
       simpa [f] using (integral_comp_neg_Ioi 0 f).symm
     _ = ∫ x : Real in Ioi 0, f x :=
-
+      setIntegral_congr_fun measurableSet_Ioi fun _ _ => (by simp [f])
+  rw [← integral_add_compl (s := Ioi 0) (by simp) (integrable_cexp_neg_mul_sq hb)]; rw [compl_Ioi]; rw [h_eq]; rw [← mul_two] at full_integral
+  exact (eq_div_iff two_ne_zero).2 (by simpa using full_integral)
 
 中文:
 定理 integral_gaussian_complex_Ioi
@@ -744,7 +946,9 @@ theorem integral_gaussian_complex_Ioi
     ∫ x : Real in Iic 0, f x = ∫ x : Real in Ioi 0, f (-x) := by
       simpa [f] using (integral_comp_neg_Ioi 0 f).symm
     _ = ∫ x : Real in Ioi 0, f x :=
-
+      setIntegral_congr_fun measurableSet_Ioi fun _ _ => (by simp [f])
+  rw [← integral_add_compl (s := Ioi 0) (by simp) (integrable_cexp_neg_mul_sq hb)]; rw [compl_Ioi]; rw [h_eq]; rw [← mul_two] at full_integral
+  exact (eq_div_iff two_ne_zero).2 (by simpa using full_integral)
 
 Depends on / 依赖: compl_Ioi, eq_div_, full_integral, h_eq, integrable_cexp_neg_mul_sq, integral_add_compl, integral_comp_neg_Ioi, integral_gaussian_complex, measurableSet_Ioi, mul_two, setIntegral_congr_fun
 -/
@@ -772,7 +976,12 @@ theorem integral_gaussian_Ioi
   · rw [integral_undef, sqrt_eq_zero_of_nonpos, zero_div]
     · exact div_nonpos_of_nonneg_of_nonpos pi_pos.le hb
     · rwa [← IntegrableOn, integrableOn_Ioi_exp_neg_mul_sq_iff, not_lt]
-  rw [← RCLike.ofReal_inj (K := Complex)]; rw [← integral_ofReal]; rw [← R
+  rw [← RCLike.ofReal_inj (K := Complex)]; rw [← integral_ofReal]; rw [← RCLike.algebraMap_eq_ofReal]; rw [coe_algebraMap]
+  convert! integral_gaussian_complex_Ioi (by rwa [ofReal_re] : 0 < (b : Complex).re)
+  · simp
+  · rw [sqrt_eq_rpow, ← ofReal_div, ofReal_div, ofReal_cpow]
+    · simp
+    · exact (div_pos pi_pos hb).le
 
 中文:
 定理 integral_gaussian_Ioi
@@ -782,7 +991,12 @@ theorem integral_gaussian_Ioi
   · rw [integral_undef, sqrt_eq_zero_of_nonpos, zero_div]
     · exact div_nonpos_of_nonneg_of_nonpos pi_pos.le hb
     · rwa [← IntegrableOn, integrableOn_Ioi_exp_neg_mul_sq_iff, not_lt]
-  rw [← RCLike.ofReal_inj (K := Complex)]; rw [← integral_ofReal]; rw [← R
+  rw [← RCLike.ofReal_inj (K := Complex)]; rw [← integral_ofReal]; rw [← RCLike.algebraMap_eq_ofReal]; rw [coe_algebraMap]
+  convert! integral_gaussian_complex_Ioi (by rwa [ofReal_re] : 0 < (b : Complex).re)
+  · simp
+  · rw [sqrt_eq_rpow, ← ofReal_div, ofReal_div, ofReal_cpow]
+    · simp
+    · exact (div_pos pi_pos hb).le
 
 Depends on / 依赖: IntegrableOn, RCLike, RCLike.algebraMap_eq_ofReal, RCLike.ofReal_inj, algebraMap_eq_ofReal, coe_algebraMap, convert, div_nonpos_of_nonneg_of_nonpos, integrableOn_Ioi_exp_neg_mul_sq_iff, integral_gaussian_complex_Ioi, integral_ofReal, integral_undef, le_or_gt, not_lt, ofReal_cpow, ofReal_div, ofReal_inj, ofReal_re, pi_pos, pi_pos.le
 -/
@@ -812,7 +1026,14 @@ theorem Real.Gamma_one_half_eq
   convert! congr_arg (fun x : Real => 2 * x) (integral_gaussian_Ioi 1) using 1
   · rw [← integral_const_mul]
     refine setIntegral_congr_fun measurableSet_Ioi fun x hx => ?_
-    have : (x ^ (2 : Real)) ^ (1 /
+    have : (x ^ (2 : Real)) ^ (1 / (2 : Real) - 1) = x⁻¹ := by
+      rw [← rpow_mul (le_of_lt hx)]
+      norm_num
+      rw [rpow_neg (le_of_lt hx)]; rw [rpow_one]
+    rw [smul_eq_mul]; rw [this]
+    simp [field, (ne_of_lt (show 0 < x from hx)).symm]
+    norm_num
+  · rw [div_one, ← mul_div_assoc, mul_comm, mul_div_cancel_right₀ _ (two_ne_zero' Real)]
 
 中文:
 定理 实数.Gamma_one_half_eq
@@ -822,7 +1043,14 @@ theorem Real.Gamma_one_half_eq
   convert! congr_arg (fun x : Real => 2 * x) (integral_gaussian_Ioi 1) using 1
   · rw [← integral_const_mul]
     refine setIntegral_congr_fun measurableSet_Ioi fun x hx => ?_
-    have : (x ^ (2 : Real)) ^ (1 /
+    have : (x ^ (2 : Real)) ^ (1 / (2 : Real) - 1) = x⁻¹ := by
+      rw [← rpow_mul (le_of_lt hx)]
+      norm_num
+      rw [rpow_neg (le_of_lt hx)]; rw [rpow_one]
+    rw [smul_eq_mul]; rw [this]
+    simp [field, (ne_of_lt (show 0 < x from hx)).symm]
+    norm_num
+  · rw [div_one, ← mul_div_assoc, mul_comm, mul_div_cancel_right₀ _ (two_ne_zero' Real)]
 
 Depends on / 依赖: Gamma_eq_integral, congr_arg, convert, div_one, integral_comp_rpow_Ioi_of_pos, integral_const_mul, integral_gaussian_Ioi, le_of_lt, measurableSet_Ioi, ne_of_lt, one_half_pos, rpow_mul, rpow_neg, rpow_one, setIntegral_congr_fun, smul_eq_mul, zero_lt_two
 -/

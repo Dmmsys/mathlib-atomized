@@ -39,7 +39,10 @@ lemma quasiIso_of_retract
   have h : RetractArrow (homologyMap f₁) (homologyMap f₂) :=
     { i := Arrow.homMk (u := homologyMap (show S₁ ⟶ S₂ from h.i.left))
         (v := homologyMap (show T₁ ⟶ T₂ from h.i.right)) (by simp [← homologyMap_comp])
-      r := Arrow.homMk (u := homologyMap (show S
+      r := Arrow.homMk (u := homologyMap (show S₂ ⟶ S₁ from h.r.left))
+        (v := homologyMap (show T₂ ⟶ T₁ from h.r.right)) (by simp [← homologyMap_comp])
+      retract := by ext <;> simp [← homologyMap_comp] }
+  exact (MorphismProperty.isomorphisms C).of_retract h hf₂
 
 中文:
 引理 quasiIso_of_retract
@@ -49,7 +52,10 @@ lemma quasiIso_of_retract
   have h : RetractArrow (homologyMap f₁) (homologyMap f₂) :=
     { i := Arrow.homMk (u := homologyMap (show S₁ ⟶ S₂ from h.i.left))
         (v := homologyMap (show T₁ ⟶ T₂ from h.i.right)) (by simp [← homologyMap_comp])
-      r := Arrow.homMk (u := homologyMap (show S
+      r := Arrow.homMk (u := homologyMap (show S₂ ⟶ S₁ from h.r.left))
+        (v := homologyMap (show T₂ ⟶ T₁ from h.r.right)) (by simp [← homologyMap_comp])
+      retract := by ext <;> simp [← homologyMap_comp] }
+  exact (MorphismProperty.isomorphisms C).of_retract h hf₂
 
 Depends on / 依赖: Arrow.homMk, MorphismProperty, MorphismProperty.isomorphisms, RetractArrow, h.i.left, h.i.right, h.r.left, h.r.right, homologyMap, homologyMap_comp, isomorphisms, of_retract, quasiIso_iff, retract
 -/

@@ -305,14 +305,20 @@ theorem sinh_add
   statement: sinh (x + y) = sinh x * cosh y + cosh x * sinh y
   proof: by
   rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [two_sinh]; rw [exp_add]; rw [neg_add]; rw [exp_add]; rw [eq_comm]; rw [mul_add]; rw [←
-    mul_assoc]; rw [two_sinh]; rw [mul_left_comm]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh
+    mul_assoc]; rw [two_sinh]; rw [mul_left_comm]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh]; rw [← mul_assoc]; rw [two_cosh]
+  exact sinh_add_aux
+
+@[simp]
 
 中文:
 定理 sinh_add
   结论: sinh (x + y) = sinh x * cosh y + cosh x * sinh y
   证明: by
   rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [two_sinh]; rw [exp_add]; rw [neg_add]; rw [exp_add]; rw [eq_comm]; rw [mul_add]; rw [←
-    mul_assoc]; rw [two_sinh]; rw [mul_left_comm]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh
+    mul_assoc]; rw [two_sinh]; rw [mul_left_comm]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh]; rw [← mul_assoc]; rw [two_cosh]
+  exact sinh_add_aux
+
+@[simp]
 
 Depends on / 依赖: eq_comm, exp_add, mul_add, mul_assoc, mul_left_comm, mul_right_inj, neg_add, sinh_add_aux, two_cosh, two_ne_zero, two_sinh
 -/
@@ -383,14 +389,16 @@ theorem cosh_add
   statement: cosh (x + y) = cosh x * cosh y + sinh x * sinh y
   proof: by
   rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [two_cosh]; rw [exp_add]; rw [neg_add]; rw [exp_add]; rw [eq_comm]; rw [mul_add]; rw [←
-    mul_assoc]; rw [two_cosh]; rw [← mul_assoc]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh];
+    mul_assoc]; rw [two_cosh]; rw [← mul_assoc]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh]; rw [mul_left_comm]; rw [two_sinh]
+  exact cosh_add_aux
 
 中文:
 定理 cosh_add
   结论: cosh (x + y) = cosh x * cosh y + sinh x * sinh y
   证明: by
   rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [two_cosh]; rw [exp_add]; rw [neg_add]; rw [exp_add]; rw [eq_comm]; rw [mul_add]; rw [←
-    mul_assoc]; rw [two_cosh]; rw [← mul_assoc]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh];
+    mul_assoc]; rw [two_cosh]; rw [← mul_assoc]; rw [two_sinh]; rw [← mul_right_inj' (two_ne_zero' Complex)]; rw [mul_add]; rw [mul_left_comm]; rw [two_cosh]; rw [mul_left_comm]; rw [two_sinh]
+  exact cosh_add_aux
 
 Depends on / 依赖: cosh_add_aux, eq_comm, exp_add, mul_add, mul_assoc, mul_left_comm, mul_right_inj, neg_add, two_cosh, two_ne_zero, two_sinh
 -/
@@ -1587,7 +1595,9 @@ theorem sin_sub_sin
   have s1 := sin_add ((x + y) / 2) ((x - y) / 2)
   have s2 := sin_sub ((x + y) / 2) ((x - y) / 2)
   rw [← add_div]; rw [add_sub]; rw [add_right_comm]; rw [add_sub_cancel_right]; rw [add_self_div_two] at s1
-  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at
+  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at s2
+  rw [s1]; rw [s2]
+  ring
 
 中文:
 定理 sin_sub_sin
@@ -1596,7 +1606,9 @@ theorem sin_sub_sin
   have s1 := sin_add ((x + y) / 2) ((x - y) / 2)
   have s2 := sin_sub ((x + y) / 2) ((x - y) / 2)
   rw [← add_div]; rw [add_sub]; rw [add_right_comm]; rw [add_sub_cancel_right]; rw [add_self_div_two] at s1
-  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at
+  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at s2
+  rw [s1]; rw [s2]
+  ring
 
 Depends on / 依赖: add_div, add_right_comm, add_self_div_two, add_sub, add_sub_cancel_left, add_sub_cancel_right, div_sub_div_same, sin_add, sin_sub, sub_add
 -/
@@ -1618,7 +1630,9 @@ theorem cos_sub_cos
   have s1 := cos_add ((x + y) / 2) ((x - y) / 2)
   have s2 := cos_sub ((x + y) / 2) ((x - y) / 2)
   rw [← add_div]; rw [add_sub]; rw [add_right_comm]; rw [add_sub_cancel_right]; rw [add_self_div_two] at s1
-  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at
+  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at s2
+  rw [s1]; rw [s2]
+  ring
 
 中文:
 定理 cos_sub_cos
@@ -1627,7 +1641,9 @@ theorem cos_sub_cos
   have s1 := cos_add ((x + y) / 2) ((x - y) / 2)
   have s2 := cos_sub ((x + y) / 2) ((x - y) / 2)
   rw [← add_div]; rw [add_sub]; rw [add_right_comm]; rw [add_sub_cancel_right]; rw [add_self_div_two] at s1
-  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at
+  rw [div_sub_div_same]; rw [← sub_add]; rw [add_sub_cancel_left]; rw [add_self_div_two] at s2
+  rw [s1]; rw [s2]
+  ring
 
 Depends on / 依赖: add_div, add_right_comm, add_self_div_two, add_sub, add_sub_cancel_left, add_sub_cancel_right, cos_add, cos_sub, div_sub_div_same, sub_add
 -/
@@ -1672,7 +1688,10 @@ theorem cos_add_cos
         cos ((x + y) / 2) * cos ((x - y) / 2) - sin ((x + y) / 2) * sin ((x - y) / 2) +
           (cos ((x + y) / 2) * cos ((x - y) / 2) + sin ((x + y) / 2) * sin ((x - y) / 2)) :=
       ?_
-
+    _ = 2 * cos ((x + y) / 2) * cos ((x - y) / 2) := ?_
+  · congr <;> field
+  · rw [cos_add, cos_sub]
+  ring
 
 中文:
 定理 cos_add_cos
@@ -1684,7 +1703,10 @@ theorem cos_add_cos
         cos ((x + y) / 2) * cos ((x - y) / 2) - sin ((x + y) / 2) * sin ((x - y) / 2) +
           (cos ((x + y) / 2) * cos ((x - y) / 2) + sin ((x + y) / 2) * sin ((x - y) / 2)) :=
       ?_
-
+    _ = 2 * cos ((x + y) / 2) * cos ((x - y) / 2) := ?_
+  · congr <;> field
+  · rw [cos_add, cos_sub]
+  ring
 
 Depends on / 依赖: cos_add, cos_sub
 -/
@@ -2790,7 +2812,14 @@ theorem cos_bound
          (exp (x * I) - ∑ m in range 4, (x * I) ^ m / m.factorial) / 2‖ := by
       simp [cos, field, Finset.sum_range_succ, Nat.factorial]
       grind [I_sq, two_ne_zero]
-    _ <= ‖exp (-
+    _ <= ‖exp (-x * I) - ∑ m in range 4, (-x * I) ^ m / m.factorial‖ / 2 +
+        ‖exp (x * I) - ∑ m in range 4, (x * I) ^ m / m.factorial‖ / 2 := by
+      grw [norm_add_le]
+      simp
+    _ <= ‖-x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : Nat) : Real)⁻¹) / 2 +
+        ‖x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : Nat) : Real)⁻¹) / 2 := by
+      grw [exp_bound (by simpa) (by simp), exp_bound (by simpa) (by simp)]
+    _ <= ‖x‖ ^ 4 * (5 / 96) := by norm_num
 
 中文:
 定理 cos_bound
@@ -2802,7 +2831,14 @@ theorem cos_bound
          (exp (x * I) - ∑ m in range 4, (x * I) ^ m / m.factorial) / 2‖ := by
       simp [cos, field, Finset.sum_range_succ, Nat.factorial]
       grind [I_sq, two_ne_zero]
-    _ <= ‖exp (-
+    _ <= ‖exp (-x * I) - ∑ m in range 4, (-x * I) ^ m / m.factorial‖ / 2 +
+        ‖exp (x * I) - ∑ m in range 4, (x * I) ^ m / m.factorial‖ / 2 := by
+      grw [norm_add_le]
+      simp
+    _ <= ‖-x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : Nat) : Real)⁻¹) / 2 +
+        ‖x * I‖ ^ 4 * (Nat.succ 4 * (Nat.factorial 4 * (4 : Nat) : Real)⁻¹) / 2 := by
+      grw [exp_bound (by simpa) (by simp), exp_bound (by simpa) (by simp)]
+    _ <= ‖x‖ ^ 4 * (5 / 96) := by norm_num
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, I_sq, Nat.factorial, Nat.succ, factorial, m.factorial, norm_add_le, sum_range_succ, two_ne_zero
 -/
@@ -2835,7 +2871,14 @@ theorem sin_bound
          (exp (x * I) - ∑ m in range 5, (x * I) ^ m / m.factorial) * I / 2‖ := by
       simp [sin, field, Finset.sum_range_succ, Nat.factorial]
       grind [I_sq, two_ne_zero]
-    _ <=
+    _ <= ‖exp (-x * I) - ∑ m in range 5, (-x * I) ^ m / m.factorial‖ / 2 +
+        ‖exp (x * I) - ∑ m in range 5, (x * I) ^ m / m.factorial‖ / 2 := by
+      grw [norm_sub_le]
+      simp
+    _ <= ‖-x * I‖ ^ 5 * (Nat.succ 5 * (Nat.factorial 5 * (5 : Nat) : Real)⁻¹) / 2 +
+        ‖x * I‖ ^ 5 * (Nat.succ 5 * (Nat.factorial 5 * (5 : Nat) : Real)⁻¹) / 2 := by
+      grw [exp_bound (by simpa) (by simp), exp_bound (by simpa) (by simp)]
+    _ = ‖x‖ ^ 5 / 100 := by norm_num [mul_one_div]
 
 中文:
 定理 sin_bound
@@ -2847,7 +2890,14 @@ theorem sin_bound
          (exp (x * I) - ∑ m in range 5, (x * I) ^ m / m.factorial) * I / 2‖ := by
       simp [sin, field, Finset.sum_range_succ, Nat.factorial]
       grind [I_sq, two_ne_zero]
-    _ <=
+    _ <= ‖exp (-x * I) - ∑ m in range 5, (-x * I) ^ m / m.factorial‖ / 2 +
+        ‖exp (x * I) - ∑ m in range 5, (x * I) ^ m / m.factorial‖ / 2 := by
+      grw [norm_sub_le]
+      simp
+    _ <= ‖-x * I‖ ^ 5 * (Nat.succ 5 * (Nat.factorial 5 * (5 : Nat) : Real)⁻¹) / 2 +
+        ‖x * I‖ ^ 5 * (Nat.succ 5 * (Nat.factorial 5 * (5 : Nat) : Real)⁻¹) / 2 := by
+      grw [exp_bound (by simpa) (by simp), exp_bound (by simpa) (by simp)]
+    _ = ‖x‖ ^ 5 / 100 := by norm_num [mul_one_div]
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, I_sq, Nat.factorial, Nat.succ, factorial, m.factorial, norm_sub_le, sum_range_succ, two_ne_zero
 -/
@@ -3027,7 +3077,13 @@ nonrec theorem sin_add_sin : sin x + sin y = 2 * sin ((x + y) / 2) * cos ((x - y
 ofReal_injective by simp [sin_add_sin]
 
 nonrec theorem sin_sub_sin : sin x - sin y = 2 * sin ((x - y) / 2) * cos ((x + y) / 2) :=
-ofReal_injective by simp 
+ofReal_injective by simp [sin_sub_sin]
+
+nonrec theorem cos_add_cos : cos x + cos y = 2 * cos ((x + y) / 2) * cos ((x - y) / 2) :=
+ofReal_injective by simp [cos_add_cos]
+
+nonrec theorem cos_sub_cos : cos x - cos y = -2 * sin ((x + y) / 2) * sin ((x - y) / 2) :=
+ofReal_injective by simp [cos_sub_cos]
 
 中文:
 定理 cos_sub
@@ -3039,7 +3095,13 @@ nonrec theorem sin_add_sin : sin x + sin y = 2 * sin ((x + y) / 2) * cos ((x - y
 ofReal_injective by simp [sin_add_sin]
 
 nonrec theorem sin_sub_sin : sin x - sin y = 2 * sin ((x - y) / 2) * cos ((x + y) / 2) :=
-ofReal_injective by simp 
+ofReal_injective by simp [sin_sub_sin]
+
+nonrec theorem cos_add_cos : cos x + cos y = 2 * cos ((x + y) / 2) * cos ((x - y) / 2) :=
+ofReal_injective by simp [cos_add_cos]
+
+nonrec theorem cos_sub_cos : cos x - cos y = -2 * sin ((x + y) / 2) * sin ((x - y) / 2) :=
+ofReal_injective by simp [cos_sub_cos]
 
 Depends on / 依赖: cos_add, cos_neg, sin_neg, sub_eq_add_neg
 -/
@@ -3124,7 +3186,7 @@ ofReal_injective by simp only [ofReal_tan, tan_eq_sin_div_cos, ofReal_div, ofRea
     ofReal_cos]
 
 nonrec theorem cot_eq_cos_div_sin : cot x = cos x / sin x :=
-ofReal_injective by simp [cot_eq_cos_
+ofReal_injective by simp [cot_eq_cos_div_sin]
 
 中文:
 定理 two_mul_sin_mul_cos
@@ -3139,7 +3201,7 @@ ofReal_injective by simp only [ofReal_tan, tan_eq_sin_div_cos, ofReal_div, ofRea
     ofReal_cos]
 
 nonrec theorem cot_eq_cos_div_sin : cot x = cos x / sin x :=
-ofReal_injective by simp [cot_eq_cos_
+ofReal_injective by simp [cot_eq_cos_div_sin]
 
 Depends on / 依赖: sin_add, sin_sub
 -/
@@ -3440,7 +3502,14 @@ ofReal_injective by simp [cos_two_mul]
 nonrec theorem cos_two_mul' : cos (2 * x) = cos x ^ 2 - sin x ^ 2 :=
 ofReal_injective by simp [cos_two_mul']
 
-nonrec theorem cos_two_mul_eq_one_sub : cos (2 * x) =
+nonrec theorem cos_two_mul_eq_one_sub : cos (2 * x) = 1 - 2 * sin x ^ 2 :=
+ofReal_injective by simp [cos_two_mul_eq_one_sub]
+
+nonrec theorem sin_two_mul : sin (2 * x) = 2 * sin x * cos x :=
+ofReal_injective by simp [sin_two_mul]
+
+nonrec theorem cos_sq : cos x ^ 2 = 1 / 2 + cos (2 * x) / 2 :=
+ofReal_injective by simp [cos_sq]
 
 中文:
 定理 neg_one_le_cos
@@ -3453,7 +3522,14 @@ ofReal_injective by simp [cos_two_mul]
 nonrec theorem cos_two_mul' : cos (2 * x) = cos x ^ 2 - sin x ^ 2 :=
 ofReal_injective by simp [cos_two_mul']
 
-nonrec theorem cos_two_mul_eq_one_sub : cos (2 * x) =
+nonrec theorem cos_two_mul_eq_one_sub : cos (2 * x) = 1 - 2 * sin x ^ 2 :=
+ofReal_injective by simp [cos_two_mul_eq_one_sub]
+
+nonrec theorem sin_two_mul : sin (2 * x) = 2 * sin x * cos x :=
+ofReal_injective by simp [sin_two_mul]
+
+nonrec theorem cos_sq : cos x ^ 2 = 1 / 2 + cos (2 * x) / 2 :=
+ofReal_injective by simp [cos_sq]
 
 Depends on / 依赖: abs_cos_le_one, abs_le
 -/
@@ -3672,7 +3748,7 @@ nonrec theorem cos_three_mul : cos (3 * x) = 4 * cos x ^ 3 - 3 * cos x := by
   rw [← ofReal_inj]; simp [cos_three_mul]
 
 nonrec theorem sin_three_mul : sin (3 * x) = 3 * sin x - 4 * sin x ^ 3 := by
-  rw [← ofReal_
+  rw [← ofReal_inj]; simp [sin_three_mul]
 
 中文:
 定理 tan_div_sqrt_one_add_tan_sq
@@ -3684,7 +3760,7 @@ nonrec theorem cos_three_mul : cos (3 * x) = 4 * cos x ^ 3 - 3 * cos x := by
   rw [← ofReal_inj]; simp [cos_three_mul]
 
 nonrec theorem sin_three_mul : sin (3 * x) = 3 * sin x - 4 * sin x ^ 3 := by
-  rw [← ofReal_
+  rw [← ofReal_inj]; simp [sin_three_mul]
 
 Depends on / 依赖: div_eq_mul_inv, hx.ne, inv_sqrt_one_add_tan_sq, tan_mul_cos
 -/
@@ -4141,7 +4217,14 @@ nonrec theorem sinh_sq : sinh x ^ 2 = cosh x ^ 2 - 1 := by rw [← ofReal_inj]; 
 nonrec theorem cosh_two_mul : cosh (2 * x) = cosh x ^ 2 + sinh x ^ 2 := by
   rw [← ofReal_inj]; simp [cosh_two_mul]
 
-nonrec theorem sinh_two_mul : sinh (2 * x) = 2 * sinh x
+nonrec theorem sinh_two_mul : sinh (2 * x) = 2 * sinh x * cosh x := by
+  rw [← ofReal_inj]; simp [sinh_two_mul]
+
+nonrec theorem cosh_three_mul : cosh (3 * x) = 4 * cosh x ^ 3 - 3 * cosh x := by
+  rw [← ofReal_inj]; simp [cosh_three_mul]
+
+nonrec theorem sinh_three_mul : sinh (3 * x) = 4 * sinh x ^ 3 + 3 * sinh x := by
+  rw [← ofReal_inj]; simp [sinh_three_mul]
 
 中文:
 定理 cosh_sq'
@@ -4153,7 +4236,14 @@ nonrec theorem sinh_sq : sinh x ^ 2 = cosh x ^ 2 - 1 := by rw [← ofReal_inj]; 
 nonrec theorem cosh_two_mul : cosh (2 * x) = cosh x ^ 2 + sinh x ^ 2 := by
   rw [← ofReal_inj]; simp [cosh_two_mul]
 
-nonrec theorem sinh_two_mul : sinh (2 * x) = 2 * sinh x
+nonrec theorem sinh_two_mul : sinh (2 * x) = 2 * sinh x * cosh x := by
+  rw [← ofReal_inj]; simp [sinh_two_mul]
+
+nonrec theorem cosh_three_mul : cosh (3 * x) = 4 * cosh x ^ 3 - 3 * cosh x := by
+  rw [← ofReal_inj]; simp [cosh_three_mul]
+
+nonrec theorem sinh_three_mul : sinh (3 * x) = 4 * sinh x ^ 3 + 3 * sinh x := by
+  rw [← ofReal_inj]; simp [sinh_three_mul]
 
 Depends on / 依赖: add_comm, cosh_sq
 -/
@@ -4374,7 +4464,10 @@ sub_pos.2
             |x| ^ 4 * (5 / 96) + x ^ 2 / 2 <= 1 * (5 / 96) + 1 / 2 := by
                   gcongr
                   · exact pow_le_one₀ (abs_nonneg _) hx
-                  · rw [sq, ← abs_mul_self, a
+                  · rw [sq, ← abs_mul_self, abs_mul]
+                    exact mul_le_one₀ hx (abs_nonneg _) hx
+            _ < 1 := by norm_num)
+    _ <= cos x := sub_le_comm.1 (abs_sub_le_iff.1 (cos_bound hx)).2
 
 中文:
 定理 cos_pos_of_le_one
@@ -4387,7 +4480,10 @@ sub_pos.2
             |x| ^ 4 * (5 / 96) + x ^ 2 / 2 <= 1 * (5 / 96) + 1 / 2 := by
                   gcongr
                   · exact pow_le_one₀ (abs_nonneg _) hx
-                  · rw [sq, ← abs_mul_self, a
+                  · rw [sq, ← abs_mul_self, abs_mul]
+                    exact mul_le_one₀ hx (abs_nonneg _) hx
+            _ < 1 := by norm_num)
+    _ <= cos x := sub_le_comm.1 (abs_sub_le_iff.1 (cos_bound hx)).2
 
 Depends on / 依赖: abs_mul, abs_mul_self, abs_nonneg, abs_sub_le_iff, cos_bound, lt_sub_iff_add_lt, sub_le_comm, sub_pos
 -/
@@ -4444,7 +4540,7 @@ theorem sin_pos_of_pos_of_le_two
     0 < 2 * sin (x / 2) * cos (x / 2) :=
       mul_pos (mul_pos (by simp) (sin_pos_of_pos_of_le_one (half_pos hx0) this))
         (cos_pos_of_le_one (by rwa [abs_of_nonneg (le_of_lt (half_pos hx0))]))
-    _ = sin x := by rw [← sin_tw
+    _ = sin x := by rw [← sin_two_mul, two_mul, add_halves]
 
 中文:
 定理 sin_pos_of_pos_of_le_two
@@ -4455,7 +4551,7 @@ theorem sin_pos_of_pos_of_le_two
     0 < 2 * sin (x / 2) * cos (x / 2) :=
       mul_pos (mul_pos (by simp) (sin_pos_of_pos_of_le_one (half_pos hx0) this))
         (cos_pos_of_le_one (by rwa [abs_of_nonneg (le_of_lt (half_pos hx0))]))
-    _ = sin x := by rw [← sin_tw
+    _ = sin x := by rw [← sin_two_mul, two_mul, add_halves]
 
 Depends on / 依赖: abs_of_nonneg, add_halves, cos_pos_of_le_one, half_pos, le_of_lt, mul_pos, sin_pos_of_pos_of_le_one, sin_two_mul, two_mul
 -/
@@ -4768,7 +4864,7 @@ theorem norm_exp_I_mul_ofReal_sub_one
   rw [show ‖2 * Real.sin (x / 2)‖ = ‖2 * sin (x / 2)‖ by norm_cast]; rw [two_sin]
   nth_rw 2 [← one_mul (_ - _), ← exp_zero]
   rw [← neg_add_cancel (x / 2 * I)]; rw [exp_add]; rw [mul_assoc _ _ (_ - _)]; rw [mul_sub]; rw [← exp_add]; rw [← exp_add]; rw [← add_mul]; rw [← add_mul]; norm_cast
-  rw 
+  rw [add_neg_cancel]; rw [ofReal_zero]; rw [zero_mul]; rw [exp_zero]; rw [add_halves]; rw [← neg_mul]; rw [Complex.norm_mul]; rw [norm_I]; rw [mul_one]; rw [Complex.norm_mul]; rw [show -(ofReal (x / 2)) = ofReal (-x / 2) by norm_cast; exact neg_div' 2 x]; rw [norm_exp_ofReal_mul_I]; rw [one_mul]; rw [← norm_neg]; rw [neg_sub]; rw [mul_comm]
 
 中文:
 定理 norm_exp_I_mul_of实数_sub_one
@@ -4778,7 +4874,7 @@ theorem norm_exp_I_mul_ofReal_sub_one
   rw [show ‖2 * Real.sin (x / 2)‖ = ‖2 * sin (x / 2)‖ by norm_cast]; rw [two_sin]
   nth_rw 2 [← one_mul (_ - _), ← exp_zero]
   rw [← neg_add_cancel (x / 2 * I)]; rw [exp_add]; rw [mul_assoc _ _ (_ - _)]; rw [mul_sub]; rw [← exp_add]; rw [← exp_add]; rw [← add_mul]; rw [← add_mul]; norm_cast
-  rw 
+  rw [add_neg_cancel]; rw [ofReal_zero]; rw [zero_mul]; rw [exp_zero]; rw [add_halves]; rw [← neg_mul]; rw [Complex.norm_mul]; rw [norm_I]; rw [mul_one]; rw [Complex.norm_mul]; rw [show -(ofReal (x / 2)) = ofReal (-x / 2) by norm_cast; exact neg_div' 2 x]; rw [norm_exp_ofReal_mul_I]; rw [one_mul]; rw [← norm_neg]; rw [neg_sub]; rw [mul_comm]
 
 Depends on / 依赖: Complex.norm_mul, Real.sin, add_halves, add_mul, add_neg_cancel, exp_add, exp_zero, mul_assoc, mul_one, mul_sub, neg_add_cancel, neg_mul, norm_I, norm_mul, nth_rw, ofReal, ofReal_zero, one_mul, two_sin, zero_mul
 -/

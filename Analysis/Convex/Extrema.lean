@@ -40,7 +40,15 @@ theorem IsMinOn.of_isLocalMinOn_of_convexOn_Icc
   · exact le_rfl
   have H₁ : forallᶠ y in 𝓝[>] a, f a <= f y :=
     h_local_min.filter_mono (nhdsWithin_mono _ Ioi_subset_Ici_self)
-  have
+  have H₂ : forallᶠ y in 𝓝[>] a, y in Ioc a c := Ioc_mem_nhdsGT a_lt_c
+  rcases (H₁.and H₂).exists with ⟨y, hfy, hy_ac⟩
+  rcases (Convex.mem_Ioc a_lt_c).mp hy_ac with ⟨ya, yc, ya₀, yc₀, yac, rfl⟩
+  suffices ya • f a + yc • f a <= ya • f a + yc • f c from
+    (smul_le_smul_iff_of_pos_left yc₀).1 (le_of_add_le_add_left this)
+  calc
+    ya • f a + yc • f a = f a := by rw [← add_smul, yac, one_smul]
+    _ <= f (ya * a + yc * c) := hfy
+    _ <= ya • f a + yc • f c := h_conv.2 (left_mem_Icc.2 a_lt_b.le) hc ya₀ yc₀.le yac
 
 中文:
 定理 IsMinOn.of_isLocalMinOn_of_convexOn_Icc
@@ -53,7 +61,15 @@ theorem IsMinOn.of_isLocalMinOn_of_convexOn_Icc
   · exact le_rfl
   have H₁ : forallᶠ y in 𝓝[>] a, f a <= f y :=
     h_local_min.filter_mono (nhdsWithin_mono _ Ioi_subset_Ici_self)
-  have
+  have H₂ : forallᶠ y in 𝓝[>] a, y in Ioc a c := Ioc_mem_nhdsGT a_lt_c
+  rcases (H₁.and H₂).exists with ⟨y, hfy, hy_ac⟩
+  rcases (Convex.mem_Ioc a_lt_c).mp hy_ac with ⟨ya, yc, ya₀, yc₀, yac, rfl⟩
+  suffices ya • f a + yc • f a <= ya • f a + yc • f c from
+    (smul_le_smul_iff_of_pos_left yc₀).1 (le_of_add_le_add_left this)
+  calc
+    ya • f a + yc • f a = f a := by rw [← add_smul, yac, one_smul]
+    _ <= f (ya * a + yc * c) := hfy
+    _ <= ya • f a + yc • f c := h_conv.2 (left_mem_Icc.2 a_lt_b.le) hc ya₀ yc₀.le yac
 
 Depends on / 依赖: Convex, Convex.mem_Ioc, Ioc_mem_nhdsGT, Ioi_subset_Ici_self, IsLocalMinOn, a_lt_b, a_lt_c, eq_or_lt, filter_mono, h_local_min, h_local_min.filter_mono, hy_ac, le_rfl, mem_Ioc, mem_ofPred_eq, nhdsWithin_Icc_eq_nhdsGE, nhdsWithin_mono
 -/
@@ -90,7 +106,15 @@ theorem IsMinOn.of_isLocalMinOn_of_convexOn
   have hg1 : g 1 = x := AffineMap.lineMap_apply_one a x
   have hgc : Continuous g := AffineMap.lineMap_continuous
   have h_maps : MapsTo g (Icc 0 1) s := by
-    simpa only
+    simpa only [g, mapsTo_iff_image_subset, ← segment_eq_image_lineMap]
+      using h_conv.1.segment_subset a_in_s x_in_s
+  have fg_local_min_on : IsLocalMinOn (f ∘ g) (Icc 0 1) 0 := by
+    rw [← hg0] at h_localmin
+    exact h_localmin.comp_continuousOn h_maps hgc.continuousOn (left_mem_Icc.2 zero_le_one)
+  have fg_min_on : IsMinOn (f ∘ g) (Icc 0 1 : Set Real) 0 := by
+    refine IsMinOn.of_isLocalMinOn_of_convexOn_Icc one_pos fg_local_min_on ?_
+    exact (h_conv.comp_affineMap g).subset h_maps (convex_Icc 0 1)
+  simpa only [hg0, hg1, comp_apply, mem_ofPred_eq] using fg_min_on (right_mem_Icc.2 zero_le_one)
 
 中文:
 定理 IsMinOn.of_isLocalMinOn_of_convexOn
@@ -102,7 +126,15 @@ theorem IsMinOn.of_isLocalMinOn_of_convexOn
   have hg1 : g 1 = x := AffineMap.lineMap_apply_one a x
   have hgc : Continuous g := AffineMap.lineMap_continuous
   have h_maps : MapsTo g (Icc 0 1) s := by
-    simpa only
+    simpa only [g, mapsTo_iff_image_subset, ← segment_eq_image_lineMap]
+      using h_conv.1.segment_subset a_in_s x_in_s
+  have fg_local_min_on : IsLocalMinOn (f ∘ g) (Icc 0 1) 0 := by
+    rw [← hg0] at h_localmin
+    exact h_localmin.comp_continuousOn h_maps hgc.continuousOn (left_mem_Icc.2 zero_le_one)
+  have fg_min_on : IsMinOn (f ∘ g) (Icc 0 1 : Set Real) 0 := by
+    refine IsMinOn.of_isLocalMinOn_of_convexOn_Icc one_pos fg_local_min_on ?_
+    exact (h_conv.comp_affineMap g).subset h_maps (convex_Icc 0 1)
+  simpa only [hg0, hg1, comp_apply, mem_ofPred_eq] using fg_min_on (right_mem_Icc.2 zero_le_one)
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap, AffineMap.lineMap_apply_one, AffineMap.lineMap_apply_zero, AffineMap.lineMap_continuous, Continuous, IsLocalMinOn, MapsTo, a_in_s, comp_conti, fg_local_min_on, h_conv, h_localmin, h_localmin.comp_conti, h_maps, lineMap, lineMap_apply_one, lineMap_apply_zero, lineMap_continuous, mapsTo_iff_image_subset
 -/

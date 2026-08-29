@@ -194,7 +194,60 @@ theorem exists_approx_preimage_norm_le
     rcases exists_nat_gt ‖x‖ with ⟨n, hn⟩
     refine mem_iUnion.2 ⟨n, subset_closure ?_⟩
     refine (mem_image _ _ _).2 ⟨x, ⟨?_, hx⟩⟩
-    rwa [mem
+    rwa [mem_ball, dist_eq_norm, sub_zero]
+  have : exists (n : Nat) (x : _), x in interior (closure (f '' ball 0 n)) :=
+    nonempty_interior_of_iUnion_of_closed (fun n => isClosed_closure) A
+  simp only [mem_interior_iff_mem_nhds, Metric.mem_nhds_iff] at this
+  rcases this with ⟨n, a, ε, ⟨εpos, H⟩⟩
+  rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
+  refine ⟨(ε / 2)⁻¹ * ‖c‖ * 2 * n, by positivity, fun y => ?_⟩
+  rcases eq_or_ne y 0 with rfl | hy
+  · simp
+  · have hc' : 1 < ‖σ c‖ := by simp only [RingHomIsometric.norm_map, hc]
+    rcases rescale_to_shell hc' (half_pos εpos) hy with ⟨d, hd, ydlt, -, dinv⟩
+    let δ := ‖d‖ * ‖y‖ / 4
+    have δpos : 0 < δ := by positivity
+    have : a + d • y in ball a ε := by
+      simp [dist_eq_norm, lt_of_le_of_lt ydlt.le (half_lt_self εpos)]
+    rcases Metric.mem_closure_iff.1 (H this) _ δpos with ⟨z₁, z₁im, h₁⟩
+    rcases (mem_image _ _ _).1 z₁im with ⟨x₁, hx₁, xz₁⟩
+    rw [← xz₁] at h₁
+    rw [mem_ball]; rw [dist_eq_norm]; rw [sub_zero] at hx₁
+    have : a in ball a ε := by
+      simp only [mem_ball, dist_self]
+      exact εpos
+    rcases Metric.mem_closure_iff.1 (H this) _ δpos with ⟨z₂, z₂im, h₂⟩
+    rcases (mem_image _ _ _).1 z₂im with ⟨x₂, hx₂, xz₂⟩
+    rw [← xz₂] at h₂
+    rw [mem_ball]; rw [dist_eq_norm]; rw [sub_zero] at hx₂
+    let x := x₁ - x₂
+    have I : ‖f x - d • y‖ <= 2 * δ :=
+      calc
+        ‖f x - d • y‖ = ‖f x₁ - (a + d • y) - (f x₂ - a)‖ := by
+          congr 1
+          simp only [x, f.map_sub]
+          abel
+        _ <= ‖f x₁ - (a + d • y)‖ + ‖f x₂ - a‖ := norm_sub_le _ _
+        _ <= 2 * δ := by grind [dist_eq_norm']
+    have J : ‖f (σ' d⁻¹ • x) - y‖ <= 1 / 2 * ‖y‖ :=
+      calc
+        ‖f (σ' d⁻¹ • x) - y‖ = ‖d⁻¹ • f x - (d⁻¹ * d) • y‖ := by
+          rwa [f.map_smulₛₗ _, inv_mul_cancel₀, one_smul, map_inv₀, map_inv₀,
+            RingHomCompTriple.comp_apply, RingHom.id_apply]
+        _ = ‖d⁻¹ • (f x - d • y)‖ := by rw [mul_smul, smul_sub]
+        _ = ‖d‖⁻¹ * ‖f x - d • y‖ := by rw [norm_smul, norm_inv]
+        _ <= ‖d‖⁻¹ * (2 * δ) := by gcongr
+        _ = 1 / 2 * ‖y‖ := by simp [δ, field]; norm_num
+    rw [← dist_eq_norm] at J
+    have K : ‖σ' d⁻¹ • x‖ <= (ε / 2)⁻¹ * ‖c‖ * 2 * ↑n * ‖y‖ :=
+      calc
+        ‖σ' d⁻¹ • x‖ = ‖d‖⁻¹ * ‖x₁ - x₂‖ := by rw [norm_smul, RingHomIsometric.norm_map, norm_inv]
+        _ <= (ε / 2)⁻¹ * ‖c‖ * ‖y‖ * (n + n) := by
+          gcongr
+          · simpa using dinv
+          · exact le_trans (norm_sub_le _ _) (by gcongr)
+        _ = (ε / 2)⁻¹ * ‖c‖ * 2 * ↑n * ‖y‖ := by ring
+    exact ⟨σ' d⁻¹ • x, J, K⟩
 
 中文:
 定理 存在_approx_preimage_norm_le
@@ -206,7 +259,60 @@ theorem exists_approx_preimage_norm_le
     rcases exists_nat_gt ‖x‖ with ⟨n, hn⟩
     refine mem_iUnion.2 ⟨n, subset_closure ?_⟩
     refine (mem_image _ _ _).2 ⟨x, ⟨?_, hx⟩⟩
-    rwa [mem
+    rwa [mem_ball, dist_eq_norm, sub_zero]
+  have : exists (n : Nat) (x : _), x in interior (closure (f '' ball 0 n)) :=
+    nonempty_interior_of_iUnion_of_closed (fun n => isClosed_closure) A
+  simp only [mem_interior_iff_mem_nhds, Metric.mem_nhds_iff] at this
+  rcases this with ⟨n, a, ε, ⟨εpos, H⟩⟩
+  rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
+  refine ⟨(ε / 2)⁻¹ * ‖c‖ * 2 * n, by positivity, fun y => ?_⟩
+  rcases eq_or_ne y 0 with rfl | hy
+  · simp
+  · have hc' : 1 < ‖σ c‖ := by simp only [RingHomIsometric.norm_map, hc]
+    rcases rescale_to_shell hc' (half_pos εpos) hy with ⟨d, hd, ydlt, -, dinv⟩
+    let δ := ‖d‖ * ‖y‖ / 4
+    have δpos : 0 < δ := by positivity
+    have : a + d • y in ball a ε := by
+      simp [dist_eq_norm, lt_of_le_of_lt ydlt.le (half_lt_self εpos)]
+    rcases Metric.mem_closure_iff.1 (H this) _ δpos with ⟨z₁, z₁im, h₁⟩
+    rcases (mem_image _ _ _).1 z₁im with ⟨x₁, hx₁, xz₁⟩
+    rw [← xz₁] at h₁
+    rw [mem_ball]; rw [dist_eq_norm]; rw [sub_zero] at hx₁
+    have : a in ball a ε := by
+      simp only [mem_ball, dist_self]
+      exact εpos
+    rcases Metric.mem_closure_iff.1 (H this) _ δpos with ⟨z₂, z₂im, h₂⟩
+    rcases (mem_image _ _ _).1 z₂im with ⟨x₂, hx₂, xz₂⟩
+    rw [← xz₂] at h₂
+    rw [mem_ball]; rw [dist_eq_norm]; rw [sub_zero] at hx₂
+    let x := x₁ - x₂
+    have I : ‖f x - d • y‖ <= 2 * δ :=
+      calc
+        ‖f x - d • y‖ = ‖f x₁ - (a + d • y) - (f x₂ - a)‖ := by
+          congr 1
+          simp only [x, f.map_sub]
+          abel
+        _ <= ‖f x₁ - (a + d • y)‖ + ‖f x₂ - a‖ := norm_sub_le _ _
+        _ <= 2 * δ := by grind [dist_eq_norm']
+    have J : ‖f (σ' d⁻¹ • x) - y‖ <= 1 / 2 * ‖y‖ :=
+      calc
+        ‖f (σ' d⁻¹ • x) - y‖ = ‖d⁻¹ • f x - (d⁻¹ * d) • y‖ := by
+          rwa [f.map_smulₛₗ _, inv_mul_cancel₀, one_smul, map_inv₀, map_inv₀,
+            RingHomCompTriple.comp_apply, RingHom.id_apply]
+        _ = ‖d⁻¹ • (f x - d • y)‖ := by rw [mul_smul, smul_sub]
+        _ = ‖d‖⁻¹ * ‖f x - d • y‖ := by rw [norm_smul, norm_inv]
+        _ <= ‖d‖⁻¹ * (2 * δ) := by gcongr
+        _ = 1 / 2 * ‖y‖ := by simp [δ, field]; norm_num
+    rw [← dist_eq_norm] at J
+    have K : ‖σ' d⁻¹ • x‖ <= (ε / 2)⁻¹ * ‖c‖ * 2 * ↑n * ‖y‖ :=
+      calc
+        ‖σ' d⁻¹ • x‖ = ‖d‖⁻¹ * ‖x₁ - x₂‖ := by rw [norm_smul, RingHomIsometric.norm_map, norm_inv]
+        _ <= (ε / 2)⁻¹ * ‖c‖ * ‖y‖ * (n + n) := by
+          gcongr
+          · simpa using dinv
+          · exact le_trans (norm_sub_le _ _) (by gcongr)
+        _ = (ε / 2)⁻¹ * ‖c‖ * 2 * ↑n * ‖y‖ := by ring
+    exact ⟨σ' d⁻¹ • x, J, K⟩
 
 Depends on / 依赖: Metric, Metric.mem_nh, Set.univ, Subset, Subset.antisymm, antisymm, closure, dist_eq_norm, exists_nat_gt, interior, isClosed_closure, mem_ball, mem_iUnion, mem_image, mem_interior_iff_mem_nhds, mem_nh, nonempty_interior_of_iUnion_of_closed, sub_zero, subset_closure, subset_univ
 -/
@@ -288,7 +394,65 @@ theorem exists_preimage_norm_le
   obtain ⟨C, C0, hC⟩ := exists_approx_preimage_norm_le f surj
   /- Second step of the proof: starting from `y`, we want an exact preimage of `y`. Let `g y` be
     the approximate preimage of `y` given by the first step, and `h y = y - f(g y)` the part that
-    has no preimage yet. We will iterate
+    has no preimage yet. We will iterate this process, taking the approximate preimage of `h y`,
+    leaving only `h^2 y` without preimage yet, and so on. Let `u n` be the approximate preimage
+    of `h^n y`. Then `u` is a converging series, and by design the sum of the series is a
+    preimage of `y`. This uses completeness of `E`. -/
+  choose g hg using hC
+  let h y := y - f (g y)
+  have hle : forall y, ‖h y‖ <= 1 / 2 * ‖y‖ := by
+    intro y
+    rw [← dist_eq_norm]; rw [dist_comm]
+    exact (hg y).1
+  refine ⟨2 * C + 1, by linarith, fun y => ?_⟩
+  have hnle : forall n : Nat, ‖h^[n] y‖ <= (1 / 2) ^ n * ‖y‖ := by
+    intro n
+    induction n with
+    | zero => simp only [one_div, one_mul, iterate_zero_apply, pow_zero, le_rfl]
+    | succ n IH =>
+      rw [iterate_succ']
+      apply le_trans (hle _) _
+      rw [pow_succ']; rw [mul_assoc]
+      gcongr
+  let u n := g (h^[n] y)
+  have ule : forall n, ‖u n‖ <= (1 / 2) ^ n * (C * ‖y‖) := fun n => by
+    apply le_trans (hg _).2
+    calc
+      C * ‖h^[n] y‖ <= C * ((1 / 2) ^ n * ‖y‖) := by gcongr; exact hnle n
+      _ = (1 / 2) ^ n * (C * ‖y‖) := by ring
+  have sNu : Summable fun n => ‖u n‖ := by
+    refine .of_nonneg_of_le (fun n => norm_nonneg _) ule ?_
+    exact Summable.mul_right _ (summable_geometric_of_lt_one (by simp) (by norm_num))
+  have su : Summable u := sNu.of_norm
+  let x := tsum u
+  have x_ineq : ‖x‖ <= (2 * C + 1) * ‖y‖ :=
+    calc
+      ‖x‖ <= ∑' n, ‖u n‖ := norm_tsum_le_tsum_norm sNu
+      _ <= ∑' n, (1 / 2) ^ n * (C * ‖y‖) :=
+sNu.tsum_le_tsum ule Summable.mul_right _ summable_geometric_two
+      _ = (∑' n, (1 / 2) ^ n) * (C * ‖y‖) := tsum_mul_right
+      _ = 2 * C * ‖y‖ := by rw [tsum_geometric_two, mul_assoc]
+      _ <= 2 * C * ‖y‖ + ‖y‖ := le_add_of_nonneg_right (norm_nonneg y)
+      _ = (2 * C + 1) * ‖y‖ := by ring
+  have fsumeq : forall n : Nat, f (∑ i in Finset.range n, u i) = y - h^[n] y := by
+    intro n
+    induction n with
+    | zero => simp [f.map_zero]
+    | succ n IH => rw [sum_range_succ, f.map_add, IH, iterate_succ_apply', sub_add]
+  have : Tendsto (fun n => ∑ i in Finset.range n, u i) atTop (𝓝 x) := su.hasSum.tendsto_sum_nat
+  have L₁ : Tendsto (fun n => f (∑ i in Finset.range n, u i)) atTop (𝓝 (f x)) :=
+    (f.continuous.tendsto _).comp this
+  simp only [fsumeq] at L₁
+  have L₂ : Tendsto (fun n => y - h^[n] y) atTop (𝓝 (y - 0)) := by
+    refine tendsto_const_nhds.sub ?_
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    simp only [sub_zero]
+    refine squeeze_zero (fun _ => norm_nonneg _) hnle ?_
+    rw [← zero_mul ‖y‖]
+    refine (_root_.tendsto_pow_atTop_nhds_zero_of_lt_one ?_ ?_).mul tendsto_const_nhds <;> norm_num
+  have feq : f x = y - 0 := tendsto_nhds_unique L₁ L₂
+  rw [sub_zero] at feq
+  exact ⟨x, feq, x_ineq⟩
 
 中文:
 定理 存在_preimage_norm_le
@@ -297,7 +461,65 @@ theorem exists_preimage_norm_le
   obtain ⟨C, C0, hC⟩ := exists_approx_preimage_norm_le f surj
   /- Second step of the proof: starting from `y`, we want an exact preimage of `y`. Let `g y` be
     the approximate preimage of `y` given by the first step, and `h y = y - f(g y)` the part that
-    has no preimage yet. We will iterate
+    has no preimage yet. We will iterate this process, taking the approximate preimage of `h y`,
+    leaving only `h^2 y` without preimage yet, and so on. Let `u n` be the approximate preimage
+    of `h^n y`. Then `u` is a converging series, and by design the sum of the series is a
+    preimage of `y`. This uses completeness of `E`. -/
+  choose g hg using hC
+  let h y := y - f (g y)
+  have hle : forall y, ‖h y‖ <= 1 / 2 * ‖y‖ := by
+    intro y
+    rw [← dist_eq_norm]; rw [dist_comm]
+    exact (hg y).1
+  refine ⟨2 * C + 1, by linarith, fun y => ?_⟩
+  have hnle : forall n : Nat, ‖h^[n] y‖ <= (1 / 2) ^ n * ‖y‖ := by
+    intro n
+    induction n with
+    | zero => simp only [one_div, one_mul, iterate_zero_apply, pow_zero, le_rfl]
+    | succ n IH =>
+      rw [iterate_succ']
+      apply le_trans (hle _) _
+      rw [pow_succ']; rw [mul_assoc]
+      gcongr
+  let u n := g (h^[n] y)
+  have ule : forall n, ‖u n‖ <= (1 / 2) ^ n * (C * ‖y‖) := fun n => by
+    apply le_trans (hg _).2
+    calc
+      C * ‖h^[n] y‖ <= C * ((1 / 2) ^ n * ‖y‖) := by gcongr; exact hnle n
+      _ = (1 / 2) ^ n * (C * ‖y‖) := by ring
+  have sNu : Summable fun n => ‖u n‖ := by
+    refine .of_nonneg_of_le (fun n => norm_nonneg _) ule ?_
+    exact Summable.mul_right _ (summable_geometric_of_lt_one (by simp) (by norm_num))
+  have su : Summable u := sNu.of_norm
+  let x := tsum u
+  have x_ineq : ‖x‖ <= (2 * C + 1) * ‖y‖ :=
+    calc
+      ‖x‖ <= ∑' n, ‖u n‖ := norm_tsum_le_tsum_norm sNu
+      _ <= ∑' n, (1 / 2) ^ n * (C * ‖y‖) :=
+sNu.tsum_le_tsum ule Summable.mul_right _ summable_geometric_two
+      _ = (∑' n, (1 / 2) ^ n) * (C * ‖y‖) := tsum_mul_right
+      _ = 2 * C * ‖y‖ := by rw [tsum_geometric_two, mul_assoc]
+      _ <= 2 * C * ‖y‖ + ‖y‖ := le_add_of_nonneg_right (norm_nonneg y)
+      _ = (2 * C + 1) * ‖y‖ := by ring
+  have fsumeq : forall n : Nat, f (∑ i in Finset.range n, u i) = y - h^[n] y := by
+    intro n
+    induction n with
+    | zero => simp [f.map_zero]
+    | succ n IH => rw [sum_range_succ, f.map_add, IH, iterate_succ_apply', sub_add]
+  have : Tendsto (fun n => ∑ i in Finset.range n, u i) atTop (𝓝 x) := su.hasSum.tendsto_sum_nat
+  have L₁ : Tendsto (fun n => f (∑ i in Finset.range n, u i)) atTop (𝓝 (f x)) :=
+    (f.continuous.tendsto _).comp this
+  simp only [fsumeq] at L₁
+  have L₂ : Tendsto (fun n => y - h^[n] y) atTop (𝓝 (y - 0)) := by
+    refine tendsto_const_nhds.sub ?_
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    simp only [sub_zero]
+    refine squeeze_zero (fun _ => norm_nonneg _) hnle ?_
+    rw [← zero_mul ‖y‖]
+    refine (_root_.tendsto_pow_atTop_nhds_zero_of_lt_one ?_ ?_).mul tendsto_const_nhds <;> norm_num
+  have feq : f x = y - 0 := tendsto_nhds_unique L₁ L₂
+  rw [sub_zero] at feq
+  exact ⟨x, feq, x_ineq⟩
 
 Depends on / 依赖: exists_approx_preimage_norm_le
 -/
@@ -381,7 +603,18 @@ theorem isOpenMap
   rcases isOpen_iff.1 hs x xs with ⟨ε, εpos, hε⟩
   refine ⟨ε / C, div_pos εpos Cpos, fun z hz => ?_⟩
   rcases hC (z - y) with ⟨w, wim, wnorm⟩
-  have : f (x 
+  have : f (x + w) = z := by rw [f.map_add, wim, fxy, add_sub_cancel]
+  rw [← this]
+  have : x + w in ball x ε :=
+    calc
+      dist (x + w) x = ‖w‖ := by
+        simp
+      _ <= C * ‖z - y‖ := wnorm
+      _ < C * (ε / C) := by
+        apply mul_lt_mul_of_pos_left _ Cpos
+        rwa [mem_ball, dist_eq_norm] at hz
+      _ = ε := mul_div_cancel₀ _ (ne_of_gt Cpos)
+  exact Set.mem_image_of_mem _ (hε this)
 
 中文:
 定理 isOpenMap
@@ -395,7 +628,18 @@ theorem isOpenMap
   rcases isOpen_iff.1 hs x xs with ⟨ε, εpos, hε⟩
   refine ⟨ε / C, div_pos εpos Cpos, fun z hz => ?_⟩
   rcases hC (z - y) with ⟨w, wim, wnorm⟩
-  have : f (x 
+  have : f (x + w) = z := by rw [f.map_add, wim, fxy, add_sub_cancel]
+  rw [← this]
+  have : x + w in ball x ε :=
+    calc
+      dist (x + w) x = ‖w‖ := by
+        simp
+      _ <= C * ‖z - y‖ := wnorm
+      _ < C * (ε / C) := by
+        apply mul_lt_mul_of_pos_left _ Cpos
+        rwa [mem_ball, dist_eq_norm] at hz
+      _ = ε := mul_div_cancel₀ _ (ne_of_gt Cpos)
+  exact Set.mem_image_of_mem _ (hε this)
 -/
 protected theorem isOpenMap (surj : Surjective f) : IsOpenMap f := by
   intro s hs
@@ -939,7 +1183,10 @@ definition leftInverse_of_injective_of_isClosed_range
   LinearMap.mkContinuous f.rangeRestrict.leftInverse K (by
     rintro ⟨y, x, rfl⟩
     have aux := hfK.le_mul_dist x 0
-    simp only [dist_
+    simp only [dist_zero_right, map_zero] at aux
+    convert! aux
+    exact f.rangeRestrict.leftInverse_apply_of_inj
+      (by rw [ker_codRestrict]; exact LinearMap.ker_eq_bot.mpr hf) x)
 
 中文:
 定义 leftInverse_of_injective_of_isClosed_range
@@ -948,7 +1195,10 @@ definition leftInverse_of_injective_of_isClosed_range
   LinearMap.mkContinuous f.rangeRestrict.leftInverse K (by
     rintro ⟨y, x, rfl⟩
     have aux := hfK.le_mul_dist x 0
-    simp only [dist_
+    simp only [dist_zero_right, map_zero] at aux
+    convert! aux
+    exact f.rangeRestrict.leftInverse_apply_of_inj
+      (by rw [ker_codRestrict]; exact LinearMap.ker_eq_bot.mpr hf) x)
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mpr, LinearMap.mkContinuous, antilipschitzConstant_of_injective_of_isClosed_range, antilipschitz_antiLipschitzConstant_of_injective_of_isClosed_range, convert, dist_zero_right, f.antilipschitzConstant_of_injective_of_isClosed_range, f.antilipschitz_antiLipschitzConstant_of_injective_of_isClosed_range, f.rangeRestrict.leftInverse, f.rangeRestrict.leftInverse_apply_of_inj, hfK.le_mul_dist, ker_codRestrict, ker_eq_bot, le_mul_dist, leftInverse, leftInverse_apply_of_inj, map_zero, mkContinuous, rangeRestrict
 -/
@@ -1293,7 +1543,10 @@ theorem LinearMap.continuous_of_isClosed_graph
   let φ₀ : E ->ₗ[𝕜] E × F := LinearMap.id.prod g
   have : Function.LeftInverse Prod.fst φ₀ := fun x => rfl
   let φ : E ≃ₗ[𝕜] g.graph :=
-    (LinearEquiv.ofLeftInverse this).trans (LinearEquiv.ofEq _ _ g.graph_eq_r
+    (LinearEquiv.ofLeftInverse this).trans (LinearEquiv.ofEq _ _ g.graph_eq_range_prod.symm)
+  let ψ : g.graph ≃L[𝕜] E :=
+    φ.symm.toContinuousLinearEquivOfContinuous continuous_subtype_val.fst
+  exact (continuous_subtype_val.comp ψ.symm.continuous).snd
 
 中文:
 定理 线性映射.continuous_of_isClosed_graph
@@ -1303,7 +1556,10 @@ theorem LinearMap.continuous_of_isClosed_graph
   let φ₀ : E ->ₗ[𝕜] E × F := LinearMap.id.prod g
   have : Function.LeftInverse Prod.fst φ₀ := fun x => rfl
   let φ : E ≃ₗ[𝕜] g.graph :=
-    (LinearEquiv.ofLeftInverse this).trans (LinearEquiv.ofEq _ _ g.graph_eq_r
+    (LinearEquiv.ofLeftInverse this).trans (LinearEquiv.ofEq _ _ g.graph_eq_range_prod.symm)
+  let ψ : g.graph ≃L[𝕜] E :=
+    φ.symm.toContinuousLinearEquivOfContinuous continuous_subtype_val.fst
+  exact (continuous_subtype_val.comp ψ.symm.continuous).snd
 
 Depends on / 依赖: CompleteSpace, Function, Function.LeftInverse, LeftInverse, LinearEquiv, LinearEquiv.ofEq, LinearEquiv.ofLeftInverse, LinearMap, LinearMap.id.prod, Prod.fst, completeSpace_coe_iff_isComplete, completeSpace_coe_iff_isComplete.mpr, continuous, continuous_subtype_val, continuous_subtype_val.comp, continuous_subtype_val.fst, g.graph, g.graph_eq_range_prod.symm, graph_eq_range_prod, hg.isComplete
 -/
@@ -1553,7 +1809,8 @@ lemma bijective_iff_dense_range_and_antilipschitz
   case eq_top => simpa [SetLike.ext'_iff] using! h.2.denseRange.closure_eq
   case anti =>
 .antilipschitz⟩ <;> refine ⟨_, ContinuousLinearEquiv.ofBijective f ?_ ?_
-    simp only [LinearMap.range_eq_top, LinearMap.ker_eq
+    simp only [LinearMap.range_eq_top, LinearMap.ker_eq_bot, f.coe_coe, h.1, h.2]
+  case surj => rwa [← f.coe_coe, ← LinearMap.range_eq_top, ← closed_range_of_antilipschitz hf]
 
 中文:
 引理 bijective_iff_dense_range_and_antilipschitz
@@ -1563,7 +1820,8 @@ lemma bijective_iff_dense_range_and_antilipschitz
   case eq_top => simpa [SetLike.ext'_iff] using! h.2.denseRange.closure_eq
   case anti =>
 .antilipschitz⟩ <;> refine ⟨_, ContinuousLinearEquiv.ofBijective f ?_ ?_
-    simp only [LinearMap.range_eq_top, LinearMap.ker_eq
+    simp only [LinearMap.range_eq_top, LinearMap.ker_eq_bot, f.coe_coe, h.1, h.2]
+  case surj => rwa [← f.coe_coe, ← LinearMap.range_eq_top, ← closed_range_of_antilipschitz hf]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ofBijective, LinearMap, LinearMap.ker_eq_bot, LinearMap.range_eq_top, SetLike, SetLike.ext, _iff, antilipschitz, closed_range_of_antilipschitz, closure_eq, coe_coe, denseRange, denseRange.closure_eq, eq_top, f.coe_coe, hf.injective, injective, ker_eq_bot, ofBijective
 -/

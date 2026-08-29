@@ -101,7 +101,20 @@ theorem listDecode_encode_list
     | cons t l lih => rw [flatMap_cons, h t (l.flatMap listEncode), lih]
   intro t l
   induction t generalizing l with
-  
+  | var => rw [listEncode, singleton_append, listDecode]
+  | @func n f ts ih =>
+    rw [listEncode]; rw [cons_append]; rw [listDecode]
+    have h : listDecode (((finRange n).flatMap fun i : Fin n => (ts i).listEncode) ++ l) =
+        (finRange n).map ts ++ listDecode l := by
+      induction finRange n with
+      | nil => rfl
+      | cons i l' l'ih => rw [flatMap_cons, List.append_assoc, ih, map_cons, l'ih, cons_append]
+    simp only [h, length_append, length_map, length_finRange, le_add_iff_nonneg_right,
+      _root_.zero_le, ↓reduceDIte, getElem_fin, cons.injEq, func.injEq, heq_eq_eq, true_and]
+    refine ⟨funext (fun i => ?_), ?_⟩
+    · simp only [length_map, length_finRange, is_lt, getElem_append_left, getElem_map,
+      getElem_finRange, cast_mk, Fin.eta]
+    · simp only [length_map, length_finRange, drop_left']
 
 中文:
 定理 listDecode_encode_list
@@ -114,7 +127,20 @@ theorem listDecode_encode_list
     | cons t l lih => rw [flatMap_cons, h t (l.flatMap listEncode), lih]
   intro t l
   induction t generalizing l with
-  
+  | var => rw [listEncode, singleton_append, listDecode]
+  | @func n f ts ih =>
+    rw [listEncode]; rw [cons_append]; rw [listDecode]
+    have h : listDecode (((finRange n).flatMap fun i : Fin n => (ts i).listEncode) ++ l) =
+        (finRange n).map ts ++ listDecode l := by
+      induction finRange n with
+      | nil => rfl
+      | cons i l' l'ih => rw [flatMap_cons, List.append_assoc, ih, map_cons, l'ih, cons_append]
+    simp only [h, length_append, length_map, length_finRange, le_add_iff_nonneg_right,
+      _root_.zero_le, ↓reduceDIte, getElem_fin, cons.injEq, func.injEq, heq_eq_eq, true_and]
+    refine ⟨funext (fun i => ?_), ?_⟩
+    · simp only [length_map, length_finRange, is_lt, getElem_append_left, getElem_map,
+      getElem_finRange, cast_mk, Fin.eta]
+    · simp only [length_map, length_finRange, drop_left']
 
 Depends on / 依赖: Functions, L.Functions, L.Term, cons_append, finRange, flatMap, flatMap_cons, generalizing, l.flatMap, listDecode, listEncode, singleton_append, t.listEncode
 -/
@@ -227,7 +253,29 @@ theorem card_sigma
     refine (sum_le_lift_mk_mul_iSup _).trans ?_
     rw [mk_nat]; rw [lift_aleph0]; rw [mul_eq_max_of_aleph0_le_left le_rfl]; rw [max_le_iff]; rw [ciSup_le_iff' bddAbove_of_small]
     · refine ⟨le_max_left _ _, fun i => card_le.trans ?_⟩
-      refine ma
+      refine max_le (le_max_left _ _) ?_
+      grw [← add_eq_max le_rfl, mk_sum, mk_sum, mk_sum, add_comm (Cardinal.lift #α), lift_add,
+        add_assoc, lift_lift, lift_lift, mk_fin, lift_natCast, natCast_lt_aleph0]
+    · rw [← Cardinal.one_le_iff_ne_zero]
+      refine _root_.trans ?_ (le_ciSup bddAbove_of_small 1)
+      rw [Cardinal.one_le_iff_ne_zero]; rw [mk_ne_zero_iff]
+      exact ⟨var (Sum.inr 0)⟩
+  · rw [max_le_iff, ← infinite_iff]
+    refine ⟨Infinite.of_injective
+        (fun i => ⟨i + 1, var (Sum.inr (last i))⟩) fun i j ij => ?_, ?_⟩
+    · cases ij
+      rfl
+    · rw [Cardinal.le_def]
+      refine ⟨⟨Sum.elim (fun i => ⟨0, var (Sum.inl i)⟩)
+        fun F => ⟨1, func F.2 fun _ => var (Sum.inr 0)⟩, ?_⟩⟩
+      rintro (a | a) (b | b) h
+      · simp only [Sum.elim_inl, Sigma.mk.inj_iff, heq_eq_eq, var.injEq, Sum.inl.injEq, true_and]
+          at h
+        rw [h]
+      · simp only [Sum.elim_inl, Sum.elim_inr, Sigma.mk.inj_iff, false_and, reduceCtorEq] at h
+      · simp only [Sum.elim_inr, Sum.elim_inl, Sigma.mk.inj_iff, false_and, reduceCtorEq] at h
+      · simp only [Sum.elim_inr, Sigma.mk.inj_iff, heq_eq_eq, func.injEq, true_and] at h
+        rw [Sigma.ext_iff.2 ⟨h.1]; rw [h.2.1⟩]
 
 中文:
 定理 card_sigma
@@ -238,7 +286,29 @@ theorem card_sigma
     refine (sum_le_lift_mk_mul_iSup _).trans ?_
     rw [mk_nat]; rw [lift_aleph0]; rw [mul_eq_max_of_aleph0_le_left le_rfl]; rw [max_le_iff]; rw [ciSup_le_iff' bddAbove_of_small]
     · refine ⟨le_max_left _ _, fun i => card_le.trans ?_⟩
-      refine ma
+      refine max_le (le_max_left _ _) ?_
+      grw [← add_eq_max le_rfl, mk_sum, mk_sum, mk_sum, add_comm (Cardinal.lift #α), lift_add,
+        add_assoc, lift_lift, lift_lift, mk_fin, lift_natCast, natCast_lt_aleph0]
+    · rw [← Cardinal.one_le_iff_ne_zero]
+      refine _root_.trans ?_ (le_ciSup bddAbove_of_small 1)
+      rw [Cardinal.one_le_iff_ne_zero]; rw [mk_ne_zero_iff]
+      exact ⟨var (Sum.inr 0)⟩
+  · rw [max_le_iff, ← infinite_iff]
+    refine ⟨Infinite.of_injective
+        (fun i => ⟨i + 1, var (Sum.inr (last i))⟩) fun i j ij => ?_, ?_⟩
+    · cases ij
+      rfl
+    · rw [Cardinal.le_def]
+      refine ⟨⟨Sum.elim (fun i => ⟨0, var (Sum.inl i)⟩)
+        fun F => ⟨1, func F.2 fun _ => var (Sum.inr 0)⟩, ?_⟩⟩
+      rintro (a | a) (b | b) h
+      · simp only [Sum.elim_inl, Sigma.mk.inj_iff, heq_eq_eq, var.injEq, Sum.inl.injEq, true_and]
+          at h
+        rw [h]
+      · simp only [Sum.elim_inl, Sum.elim_inr, Sigma.mk.inj_iff, false_and, reduceCtorEq] at h
+      · simp only [Sum.elim_inr, Sum.elim_inl, Sigma.mk.inj_iff, false_and, reduceCtorEq] at h
+      · simp only [Sum.elim_inr, Sigma.mk.inj_iff, heq_eq_eq, func.injEq, true_and] at h
+        rw [Sigma.ext_iff.2 ⟨h.1]; rw [h.2.1⟩]
 
 Depends on / 依赖: Cardinal, Cardinal.lift, Cardinal.one_le_iff_ne_ze, add_assoc, add_comm, add_eq_max, bddAbove_of_small, card_le, card_le.trans, ciSup_le_iff, le_antisymm, le_max_left, le_rfl, lift_add, lift_aleph0, lift_lift, lift_natCast, max_le, max_le_iff, mk_fin
 -/
@@ -482,7 +552,56 @@ theorem listDecode_encode_list
     induction l with
     | nil =>
       simp [listDecode]
-    | cons φ l ih => rw [flat
+    | cons φ l ih => rw [flatMap_cons, h φ _, ih]
+  rintro ⟨n, φ⟩
+  induction φ with
+  | falsum => intro l; rw [listEncode, singleton_append, listDecode]
+  | equal =>
+    intro l
+    rw [listEncode]; rw [cons_append]; rw [cons_append]; rw [listDecode]; rw [dif_pos]
+    · simp only [eq_mp_eq_cast, cast_eq, nil_append]
+    · simp only
+  | @rel φ_n φ_l φ_R ts =>
+    intro l
+    rw [listEncode]; rw [cons_append]; rw [cons_append]; rw [singleton_append]; rw [cons_append]; rw [listDecode]
+    have h : forall i : Fin φ_l, ((List.map Sum.getLeft? (List.map (fun i : Fin φ_l =>
+      Sum.inl (⟨(⟨φ_n, rel φ_R ts⟩ : Σ n, L.BoundedFormula α n).fst, ts i⟩ :
+        Σ n, L.Term (α oplus (Fin n)))) (finRange φ_l) ++ l))[↑i]?).join = some ⟨_, ts i⟩ := by
+      intro i
+      simp only [Option.join, map_append, map_map, getElem?_fin, id, Option.bind_eq_some_iff,
+        getElem?_eq_some_iff, length_append, length_map, length_finRange, exists_eq_right]
+      refine ⟨lt_of_lt_of_le i.2 le_self_add, ?_⟩
+      rw [getElem_append_left]; rw [getElem_map]
+      · simp only [getElem_finRange, cast_mk, Fin.eta, Function.comp_apply, Sum.getLeft?_inl]
+      · simp only [length_map, length_finRange, is_lt]
+    rw [dif_pos]
+    swap
+    · exact fun i => Option.isSome_iff_exists.2 ⟨⟨_, ts i⟩, h i⟩
+    rw [dif_pos]
+    swap
+    · intro i
+      obtain ⟨h1, h2⟩ := Option.eq_some_iff_get_eq.1 (h i)
+      rw [h2]
+    simp only [Option.join, eq_mp_eq_cast, cons.injEq, Sigma.mk.inj_iff, heq_eq_eq, rel.injEq,
+      true_and]
+    refine ⟨funext fun i => ?_, ?_⟩
+    · obtain ⟨h1, h2⟩ := Option.eq_some_iff_get_eq.1 (h i)
+      rw [cast_eq_iff_heq]
+      exact (Sigma.ext_iff.1 ((Sigma.eta (Option.get _ h1)).trans h2)).2
+    rw [List.drop_append]; rw [length_map]; rw [length_finRange]; rw [Nat.sub_self]; rw [drop]; rw [drop_eq_nil_of_le]; rw [nil_append]
+    rw [length_map]; rw [length_finRange]
+  | imp _ _ ih1 ih2 =>
+    intro l
+    simp only at *
+    rw [listEncode]; rw [List.append_assoc]; rw [cons_append]; rw [listDecode]
+    simp only [ih1, ih2, length_cons, le_add_iff_nonneg_left, _root_.zero_le, ↓reduceDIte,
+      getElem_cons_zero, getElem_cons_succ, sigmaImp_apply, drop_succ_cons, drop_zero]
+  | all _ ih =>
+    intro l
+    simp only at *
+    rw [listEncode]; rw [cons_append]; rw [listDecode]
+    simp only [ih, length_cons, le_add_iff_nonneg_left, _root_.zero_le, ↓reduceDIte,
+      getElem_cons_zero, sigmaAll_apply, drop_succ_cons, drop_zero]
 
 中文:
 定理 listDecode_encode_list
@@ -494,7 +613,56 @@ theorem listDecode_encode_list
     induction l with
     | nil =>
       simp [listDecode]
-    | cons φ l ih => rw [flat
+    | cons φ l ih => rw [flatMap_cons, h φ _, ih]
+  rintro ⟨n, φ⟩
+  induction φ with
+  | falsum => intro l; rw [listEncode, singleton_append, listDecode]
+  | equal =>
+    intro l
+    rw [listEncode]; rw [cons_append]; rw [cons_append]; rw [listDecode]; rw [dif_pos]
+    · simp only [eq_mp_eq_cast, cast_eq, nil_append]
+    · simp only
+  | @rel φ_n φ_l φ_R ts =>
+    intro l
+    rw [listEncode]; rw [cons_append]; rw [cons_append]; rw [singleton_append]; rw [cons_append]; rw [listDecode]
+    have h : forall i : Fin φ_l, ((List.map Sum.getLeft? (List.map (fun i : Fin φ_l =>
+      Sum.inl (⟨(⟨φ_n, rel φ_R ts⟩ : Σ n, L.BoundedFormula α n).fst, ts i⟩ :
+        Σ n, L.Term (α oplus (Fin n)))) (finRange φ_l) ++ l))[↑i]?).join = some ⟨_, ts i⟩ := by
+      intro i
+      simp only [Option.join, map_append, map_map, getElem?_fin, id, Option.bind_eq_some_iff,
+        getElem?_eq_some_iff, length_append, length_map, length_finRange, exists_eq_right]
+      refine ⟨lt_of_lt_of_le i.2 le_self_add, ?_⟩
+      rw [getElem_append_left]; rw [getElem_map]
+      · simp only [getElem_finRange, cast_mk, Fin.eta, Function.comp_apply, Sum.getLeft?_inl]
+      · simp only [length_map, length_finRange, is_lt]
+    rw [dif_pos]
+    swap
+    · exact fun i => Option.isSome_iff_exists.2 ⟨⟨_, ts i⟩, h i⟩
+    rw [dif_pos]
+    swap
+    · intro i
+      obtain ⟨h1, h2⟩ := Option.eq_some_iff_get_eq.1 (h i)
+      rw [h2]
+    simp only [Option.join, eq_mp_eq_cast, cons.injEq, Sigma.mk.inj_iff, heq_eq_eq, rel.injEq,
+      true_and]
+    refine ⟨funext fun i => ?_, ?_⟩
+    · obtain ⟨h1, h2⟩ := Option.eq_some_iff_get_eq.1 (h i)
+      rw [cast_eq_iff_heq]
+      exact (Sigma.ext_iff.1 ((Sigma.eta (Option.get _ h1)).trans h2)).2
+    rw [List.drop_append]; rw [length_map]; rw [length_finRange]; rw [Nat.sub_self]; rw [drop]; rw [drop_eq_nil_of_le]; rw [nil_append]
+    rw [length_map]; rw [length_finRange]
+  | imp _ _ ih1 ih2 =>
+    intro l
+    simp only at *
+    rw [listEncode]; rw [List.append_assoc]; rw [cons_append]; rw [listDecode]
+    simp only [ih1, ih2, length_cons, le_add_iff_nonneg_left, _root_.zero_le, ↓reduceDIte,
+      getElem_cons_zero, getElem_cons_succ, sigmaImp_apply, drop_succ_cons, drop_zero]
+  | all _ ih =>
+    intro l
+    simp only at *
+    rw [listEncode]; rw [cons_append]; rw [listDecode]
+    simp only [ih, length_cons, le_add_iff_nonneg_left, _root_.zero_le, ↓reduceDIte,
+      getElem_cons_zero, sigmaAll_apply, drop_succ_cons, drop_zero]
 
 Depends on / 依赖: BoundedFormula, L.BoundedFormula, L.Relations, L.Term, Relations, cons_append, dif_pos, falsum, flatMap_cons, listDecode, listEncode, singleton_append
 -/
@@ -621,7 +789,9 @@ theorem card_le
   refine lift_le.1 (BoundedFormula.encoding.card_le_card_list.trans ?_)
   rw [mk_list_eq_max_mk_aleph0]; rw [lift_max]; rw [lift_aleph0]; rw [lift_max]; rw [lift_aleph0]; rw [max_le_iff]
   refine ⟨?_, le_max_left _ _⟩
-  rw [mk_sum]; rw [Term.card_sigma]; rw [mk_sum]; rw [← add_eq_max le_rfl]; rw 
+  rw [mk_sum]; rw [Term.card_sigma]; rw [mk_sum]; rw [← add_eq_max le_rfl]; rw [mk_sum]; rw [mk_nat]
+  simp only [lift_add, lift_lift, lift_aleph0]
+  rw [← add_assoc]; rw [add_comm]; rw [← add_assoc]; rw [← add_assoc]; rw [aleph0_add_aleph0]; rw [add_assoc]; rw [add_eq_max le_rfl]; rw [add_assoc]; rw [card]; rw [Symbols]; rw [mk_sum]; rw [lift_add]; rw [lift_lift]; rw [lift_lift]
 
 中文:
 定理 card_le
@@ -630,7 +800,9 @@ theorem card_le
   refine lift_le.1 (BoundedFormula.encoding.card_le_card_list.trans ?_)
   rw [mk_list_eq_max_mk_aleph0]; rw [lift_max]; rw [lift_aleph0]; rw [lift_max]; rw [lift_aleph0]; rw [max_le_iff]
   refine ⟨?_, le_max_left _ _⟩
-  rw [mk_sum]; rw [Term.card_sigma]; rw [mk_sum]; rw [← add_eq_max le_rfl]; rw 
+  rw [mk_sum]; rw [Term.card_sigma]; rw [mk_sum]; rw [← add_eq_max le_rfl]; rw [mk_sum]; rw [mk_nat]
+  simp only [lift_add, lift_lift, lift_aleph0]
+  rw [← add_assoc]; rw [add_comm]; rw [← add_assoc]; rw [← add_assoc]; rw [aleph0_add_aleph0]; rw [add_assoc]; rw [add_eq_max le_rfl]; rw [add_assoc]; rw [card]; rw [Symbols]; rw [mk_sum]; rw [lift_add]; rw [lift_lift]; rw [lift_lift]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.encoding.card_le_card_list.trans, Term.card_sigma, add_, add_assoc, add_comm, add_eq_max, aleph0_add_aleph0, card_le_card_list, card_sigma, encoding, le_max_left, le_rfl, lift_add, lift_aleph0, lift_le, lift_lift, lift_max, max_le_iff, mk_list_eq_max_mk_aleph0
 -/

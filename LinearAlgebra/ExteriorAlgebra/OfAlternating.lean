@@ -70,7 +70,18 @@ definition liftAlternating
     refine LinearMap.compr₂ this ?_
     refine (LinearEquiv.toLinearMap ?_).comp (LinearMap.proj 0)
     exact AlternatingMap.constLinearEquivOfIsEmpty.symm
-  refine CliffordAlge
+  refine CliffordAlgebra.foldl _ ?_ ?_
+  · refine
+      LinearMap.mk₂ R (fun m f i => (f i.succ).curryLeft m) (fun m₁ m₂ f => ?_) (fun c m f => ?_)
+        (fun m f₁ f₂ => ?_) fun c m f => ?_
+    all_goals
+      ext i : 1
+      simp only [map_smul, map_add, Pi.add_apply, Pi.smul_apply, AlternatingMap.curryLeft_add,
+        AlternatingMap.curryLeft_smul, map_add, map_smul, LinearMap.add_apply, LinearMap.smul_apply]
+  · -- when applied twice with the same `m`, this recursive step produces 0
+    intro m x
+    ext
+    simp
 
 中文:
 定义 liftAlternating
@@ -82,7 +93,18 @@ definition liftAlternating
     refine LinearMap.compr₂ this ?_
     refine (LinearEquiv.toLinearMap ?_).comp (LinearMap.proj 0)
     exact AlternatingMap.constLinearEquivOfIsEmpty.symm
-  refine CliffordAlge
+  refine CliffordAlgebra.foldl _ ?_ ?_
+  · refine
+      LinearMap.mk₂ R (fun m f i => (f i.succ).curryLeft m) (fun m₁ m₂ f => ?_) (fun c m f => ?_)
+        (fun m f₁ f₂ => ?_) fun c m f => ?_
+    all_goals
+      ext i : 1
+      simp only [map_smul, map_add, Pi.add_apply, Pi.smul_apply, AlternatingMap.curryLeft_add,
+        AlternatingMap.curryLeft_smul, map_add, map_smul, LinearMap.add_apply, LinearMap.smul_apply]
+  · -- when applied twice with the same `m`, this recursive step produces 0
+    intro m x
+    ext
+    simp
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.constLinearEquivOfIsEmpty.symm, CliffordAlgebra, CliffordAlgebra.foldl, ExteriorAlgebra, LinearEquiv, LinearEquiv.toLinearMap, LinearMap, LinearMap.compr, LinearMap.mk, LinearMap.proj, Pi.add_apply, Pi.smul, add_apply, all_goals, constLinearEquivOfIsEmpty, curryLeft, i.succ, map_add, map_smul
 -/
@@ -233,7 +255,9 @@ theorem liftAlternating_apply_ιMulti
   | succ n ih =>
     rw [List.ofFn_succ]; rw [List.prod_cons]; rw [liftAlternating_ι_mul]; rw [ih]; rw [AlternatingMap.curryLeft_apply_apply]
     congr
+    exact Matrix.cons_head_tail _
 
+@[simp]
 
 中文:
 定理 liftAlternating_apply_ιMulti
@@ -245,7 +269,9 @@ theorem liftAlternating_apply_ιMulti
   | succ n ih =>
     rw [List.ofFn_succ]; rw [List.prod_cons]; rw [liftAlternating_ι_mul]; rw [ih]; rw [AlternatingMap.curryLeft_apply_apply]
     congr
+    exact Matrix.cons_head_tail _
 
+@[simp]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.curryLeft_apply_apply, List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, Matrix, Matrix.cons_head_tail, Subsingleton, Subsingleton.elim, cons_head_tail, curryLeft_apply_apply, generalizing, liftAlternating_one, ofFn_succ, ofFn_zero, prod_cons, prod_nil
 -/
@@ -296,7 +322,12 @@ theorem liftAlternating_comp
   induction v using CliffordAlgebra.left_induction generalizing f with
   | algebraMap =>
     rw [liftAlternating_algebraMap]; rw [liftAlternating_algebraMap]; rw [map_smul]; rw [LinearMap.compAlternatingMap_apply]
-  | add _ _ hx hy => rw [map_add, map_add, map_
+  | add _ _ hx hy => rw [map_add, map_add, map_add, hx, hy]
+  | ι_mul _ _ hx =>
+    rw [liftAlternating_ι_mul]; rw [liftAlternating_ι_mul]; rw [← hx]
+    simp_rw [AlternatingMap.curryLeft_compAlternatingMap]
+
+@[simp]
 
 中文:
 定理 liftAlternating_comp
@@ -307,7 +338,12 @@ theorem liftAlternating_comp
   induction v using CliffordAlgebra.left_induction generalizing f with
   | algebraMap =>
     rw [liftAlternating_algebraMap]; rw [liftAlternating_algebraMap]; rw [map_smul]; rw [LinearMap.compAlternatingMap_apply]
-  | add _ _ hx hy => rw [map_add, map_add, map_
+  | add _ _ hx hy => rw [map_add, map_add, map_add, hx, hy]
+  | ι_mul _ _ hx =>
+    rw [liftAlternating_ι_mul]; rw [liftAlternating_ι_mul]; rw [← hx]
+    simp_rw [AlternatingMap.curryLeft_compAlternatingMap]
+
+@[simp]
 
 Depends on / 依赖: compAlternatingMap, g.compAlternatingMap
 -/
@@ -336,7 +372,8 @@ theorem liftAlternating_ιMulti
   induction v using CliffordAlgebra.left_induction with
   | algebraMap => rw [liftAlternating_algebraMap, ιMulti_zero_apply, Algebra.algebraMap_eq_smul_one]
   | add _ _ hx hy => rw [map_add, hx, hy]
-  | ι_mul _ _ hx => simp_rw [liftAlternating_ι_mul, ιMulti_succ_curryLeft, liftAlt
+  | ι_mul _ _ hx => simp_rw [liftAlternating_ι_mul, ιMulti_succ_curryLeft, liftAlternating_comp,
+      LinearMap.comp_apply, LinearMap.mulLeft_apply, hx]
 
 中文:
 定理 liftAlternating_ιMulti
@@ -346,7 +383,8 @@ theorem liftAlternating_ιMulti
   induction v using CliffordAlgebra.left_induction with
   | algebraMap => rw [liftAlternating_algebraMap, ιMulti_zero_apply, Algebra.algebraMap_eq_smul_one]
   | add _ _ hx hy => rw [map_add, hx, hy]
-  | ι_mul _ _ hx => simp_rw [liftAlternating_ι_mul, ιMulti_succ_curryLeft, liftAlt
+  | ι_mul _ _ hx => simp_rw [liftAlternating_ι_mul, ιMulti_succ_curryLeft, liftAlternating_comp,
+      LinearMap.comp_apply, LinearMap.mulLeft_apply, hx]
 
 Depends on / 依赖: ExteriorAlgebra
 -/

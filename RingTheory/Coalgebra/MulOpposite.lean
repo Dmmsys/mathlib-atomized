@@ -96,7 +96,12 @@ instance [Coalgebra
     simp only [coe_comp, LinearEquiv.coe_coe, Function.comp_apply, lTensor_map, rTensor_def]
     simp_rw [← map_map_assoc, map_map, comp_assoc, ← lTensor_comp_rTensor]
     simp [lTensor_tensor, comp_assoc]
-  rTensor_counit_comp
+  rTensor_counit_comp_comul := ext fun _ => by
+    simp only [counit_def, comul_def, coe_comp, Function.comp_apply, rTensor_map, comp_assoc]
+    simp [← lTensor_comp_rTensor]
+  lTensor_counit_comp_comul := ext fun _ => by
+    simp only [counit_def, comul_def, coe_comp, Function.comp_apply, lTensor_map, comp_assoc]
+    simp [← rTensor_comp_lTensor]
 
 中文:
 实例 [余algebra
@@ -106,7 +111,12 @@ instance [Coalgebra
     simp only [coe_comp, LinearEquiv.coe_coe, Function.comp_apply, lTensor_map, rTensor_def]
     simp_rw [← map_map_assoc, map_map, comp_assoc, ← lTensor_comp_rTensor]
     simp [lTensor_tensor, comp_assoc]
-  rTensor_counit_comp
+  rTensor_counit_comp_comul := ext fun _ => by
+    simp only [counit_def, comul_def, coe_comp, Function.comp_apply, rTensor_map, comp_assoc]
+    simp [← lTensor_comp_rTensor]
+  lTensor_counit_comp_comul := ext fun _ => by
+    simp only [counit_def, comul_def, coe_comp, Function.comp_apply, lTensor_map, comp_assoc]
+    simp [← rTensor_comp_lTensor]
 
 Depends on / 依赖: Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, coe_coe, coe_comp, comp_apply, comp_assoc, comul_def, counit_def, lTensor_comp_rTensor, lTensor_counit_comp_comul, lTensor_map, lTensor_tensor, map_map, map_map_assoc, rTensor_comp, rTensor_counit_comp_comul, rTensor_def, rTensor_map
 -/

@@ -89,7 +89,11 @@ example (X : HomotopyCategory.Plus (InjectiveObject C)) :
       ((InjectiveObject.ι C).mapHomotopyCategoryPlus.obj X)) := by
   infer_instance
 
-example (K : CochainCom
+example (K : CochainComplex.Plus (InjectiveObject C)) :
+    IsIso (F.rightDerivedFunctorPlusUnit.app
+      ((HomotopyCategory.Plus.quotient C).obj
+        ((InjectiveObject.ι C).mapCochainComplexPlus.obj K))) := by
+  infer_instance
 
 中文:
 实例 :
@@ -102,7 +106,11 @@ example (X : HomotopyCategory.Plus (InjectiveObject C)) :
       ((InjectiveObject.ι C).mapHomotopyCategoryPlus.obj X)) := by
   infer_instance
 
-example (K : CochainCom
+example (K : CochainComplex.Plus (InjectiveObject C)) :
+    IsIso (F.rightDerivedFunctorPlusUnit.app
+      ((HomotopyCategory.Plus.quotient C).obj
+        ((InjectiveObject.ι C).mapCochainComplexPlus.obj K))) := by
+  infer_instance
 
 Depends on / 依赖: infer_instance, rightDerivedFunctorPlus, rightDerivedFunctorPlusUnit
 -/

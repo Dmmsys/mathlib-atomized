@@ -103,7 +103,12 @@ instance Rat.isFractionRing
   surj := by
     rintro ⟨n, d, hd, h⟩
     refine ⟨⟨n, ⟨d, ?_⟩⟩, Rat.mul_den_eq_num _⟩
-    rw [mem_nonZeroDivisors_iff_ne_zero]; rw [Int.
+    rw [mem_nonZeroDivisors_iff_ne_zero]; rw [Int.natCast_ne_zero_iff_pos]
+    exact Nat.zero_lt_of_ne_zero hd
+  exists_of_eq {x y} := by
+    rw [eq_intCast]; rw [eq_intCast]; rw [Int.cast_inj]
+    rintro rfl
+    use 1
 
 中文:
 实例 有理数.isFractionRing
@@ -115,7 +120,12 @@ instance Rat.isFractionRing
   surj := by
     rintro ⟨n, d, hd, h⟩
     refine ⟨⟨n, ⟨d, ?_⟩⟩, Rat.mul_den_eq_num _⟩
-    rw [mem_nonZeroDivisors_iff_ne_zero]; rw [Int.
+    rw [mem_nonZeroDivisors_iff_ne_zero]; rw [Int.natCast_ne_zero_iff_pos]
+    exact Nat.zero_lt_of_ne_zero hd
+  exists_of_eq {x y} := by
+    rw [eq_intCast]; rw [eq_intCast]; rw [Int.cast_inj]
+    rintro rfl
+    use 1
 
 Depends on / 依赖: Int.cast_eq_zero, Int.cast_inj, Int.natCast_ne_zero_iff_pos, Nat.zero_lt_of_ne_zero, Rat.mul_den_eq_num, Subtype, Subtype.coe_mk, cast_eq_zero, cast_inj, coe_mk, eq_intCast, exists_of_eq, isUnit_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero, mul_den_eq_num, natCast_ne_zero_iff_pos, zero_lt_of_ne_zero
 -/
@@ -146,7 +156,7 @@ instance :
     obtain hx2 | hx2 := lt_or_gt_of_ne (show x2.val != 0 by simp)
     · exact ⟨⟨-x1, ⟨-x2.val, by simpa using hx2⟩⟩, by simpa using hx⟩
     · exact ⟨⟨x1, ⟨x2.val, hx2⟩⟩, hx⟩
-  exists_of_
+  exists_of_eq {x y} h := ⟨1, by simpa using Rat.intCast_inj.mp h⟩
 
 中文:
 实例 :
@@ -157,7 +167,7 @@ instance :
     obtain hx2 | hx2 := lt_or_gt_of_ne (show x2.val != 0 by simp)
     · exact ⟨⟨-x1, ⟨-x2.val, by simpa using hx2⟩⟩, by simpa using hx⟩
     · exact ⟨⟨x1, ⟨x2.val, hx2⟩⟩, hx⟩
-  exists_of_
+  exists_of_eq {x y} h := ⟨1, by simpa using Rat.intCast_inj.mp h⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.surj, Rat.intCast_inj.mp, exists_of_eq, intCast_inj, lt_or_gt_of_ne, nonZeroDivisors, x2.val, y.prop.ne
 -/
@@ -211,7 +221,12 @@ theorem of_field
 .mk0 _ (map_ne_zero_iff _ inj).mpr mem_nonZeroDivisors_iff_ne_zero.mp x.2
   surj z := by
     have ⟨x, y, eq⟩ := surj z
-    obtain rfl | hy := eq_
+    obtain rfl | hy := eq_or_ne y 0
+    · obtain rfl : z = 0 := by simpa using eq
+      exact ⟨(0, 1), by simp⟩
+    exact ⟨⟨x, y, mem_nonZeroDivisors_iff_ne_zero.mpr hy⟩,
+      (eq_div_iff_mul_eq <| (map_ne_zero_iff _ inj).mpr hy).mp eq⟩
+  exists_of_eq eq := ⟨1, by simpa using inj eq⟩ }
 
 中文:
 定理 of_field
@@ -223,7 +238,12 @@ theorem of_field
 .mk0 _ (map_ne_zero_iff _ inj).mpr mem_nonZeroDivisors_iff_ne_zero.mp x.2
   surj z := by
     have ⟨x, y, eq⟩ := surj z
-    obtain rfl | hy := eq_
+    obtain rfl | hy := eq_or_ne y 0
+    · obtain rfl : z = 0 := by simpa using eq
+      exact ⟨(0, 1), by simp⟩
+    exact ⟨⟨x, y, mem_nonZeroDivisors_iff_ne_zero.mpr hy⟩,
+      (eq_div_iff_mul_eq <| (map_ne_zero_iff _ inj).mpr hy).mp eq⟩
+  exists_of_eq eq := ⟨1, by simpa using inj eq⟩ }
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, Module, Module.nontrivial, algebraMap_injective, eq_div_iff_mul_eq, eq_or_ne, exists_of_eq, inj.noZeroDivisors, map_mul, map_ne_zero_iff, map_units, map_zero, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mp, mem_nonZeroDivisors_iff_ne_zero.mpr, noZeroDivisors, nontrivial
 -/
@@ -330,7 +350,7 @@ theorem nonZeroDivisors_eq_isUnit
     (eq ▸ mul_mem hx (map_units ..).mem_nonZeroDivisors)⟩
 exact isUnit_of_mul_isUnit_left eq ▸ map_units K r'
 
-inc
+include R in
 
 中文:
 定理 nonZeroDivisors_eq_isUnit
@@ -342,7 +362,7 @@ inc
     (eq ▸ mul_mem hx (map_units ..).mem_nonZeroDivisors)⟩
 exact isUnit_of_mul_isUnit_left eq ▸ map_units K r'
 
-inc
+include R in
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.injective, injective, isUnit_le_nonZeroDivisors, isUnit_of_mul_isUnit_left, le_antisymm, map_units, mem_nonZeroDivisors, mem_nonZeroDivisors_of_injective, mul_mem
 -/
@@ -582,7 +602,8 @@ theorem mul_inv_cancel
       (map_units K
         ⟨(sec _ x).1]; rw [mem_nonZeroDivisors_iff_ne_zero.2 fun h0 =>
 hx eq_zero_of_fst_eq_zero (sec_spec (nonZeroDivisors A) x) h0⟩)]; rw [one_mul]; rw [mul_assoc]
-  rw [mk'_spec]; rw [← eq_mk'_iff_mul_
+  rw [mk'_spec]; rw [← eq_mk'_iff_mul_eq]
+  exact (mk'_sec _ x).symm
 
 中文:
 定理 mul_inv_cancel
@@ -594,7 +615,8 @@ hx eq_zero_of_fst_eq_zero (sec_spec (nonZeroDivisors A) x) h0⟩)]; rw [one_mul]
       (map_units K
         ⟨(sec _ x).1]; rw [mem_nonZeroDivisors_iff_ne_zero.2 fun h0 =>
 hx eq_zero_of_fst_eq_zero (sec_spec (nonZeroDivisors A) x) h0⟩)]; rw [one_mul]; rw [mul_assoc]
-  rw [mk'_spec]; rw [← eq_mk'_iff_mul_
+  rw [mk'_spec]; rw [← eq_mk'_iff_mul_eq]
+  exact (mk'_sec _ x).symm
 -/
 protected theorem mul_inv_cancel (x : K) (hx : x != 0) : x * IsFractionRing.inv A x = 1 := by
   rw [IsFractionRing.inv]; rw [dif_neg hx]; rw [←
@@ -822,7 +844,7 @@ theorem mk'_eq_one_iff_eq
   have hy : (algebraMap A K) ↑y != (0 : K) :=
     IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors y.property
   rw [IsFractionRing.mk'_eq_div]; rw [div_eq_one_iff_eq hy] at hxy
-  exact Is
+  exact IsFractionRing.injective A K hxy
 
 中文:
 定理 mk'_eq_one_iff_eq
@@ -835,7 +857,7 @@ theorem mk'_eq_one_iff_eq
   have hy : (algebraMap A K) ↑y != (0 : K) :=
     IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors y.property
   rw [IsFractionRing.mk'_eq_div]; rw [div_eq_one_iff_eq hy] at hxy
-  exact Is
+  exact IsFractionRing.injective A K hxy
 -/
 theorem mk'_eq_one_iff_eq {x : A} {y : nonZeroDivisors A} : mk' K x y = 1 ↔ x = y := by
   have := (algebraMap A K).domain_nontrivial
@@ -1564,7 +1586,10 @@ lemma semilinearEquivOfRingEquiv_comp
     (semilinearEquivOfRingEquiv K M (f.trans g)) =
       LinearEquiv.trans (σ₁₃ := (f.trans g)) (σ₃₁ := (f.trans g).symm)
       (semilinearEquivOfRingEquiv K L f)
-      (semilinearEquivOfRingEquiv L M
+      (semilinearEquivOfRingEquiv L M g) := by
+  ext a
+  simp [-RingEquiv.coe_ringHom_trans, semilinearEquivOfRingEquiv_apply,
+    semilinearEquivOfRingEquiv_apply K M, ringEquivOfRingEquiv_comp K L M]
 
 中文:
 引理 semilinearEquivOfRingEquiv_comp
@@ -1574,7 +1599,10 @@ lemma semilinearEquivOfRingEquiv_comp
     (semilinearEquivOfRingEquiv K M (f.trans g)) =
       LinearEquiv.trans (σ₁₃ := (f.trans g)) (σ₃₁ := (f.trans g).symm)
       (semilinearEquivOfRingEquiv K L f)
-      (semilinearEquivOfRingEquiv L M
+      (semilinearEquivOfRingEquiv L M g) := by
+  ext a
+  simp [-RingEquiv.coe_ringHom_trans, semilinearEquivOfRingEquiv_apply,
+    semilinearEquivOfRingEquiv_apply K M, ringEquivOfRingEquiv_comp K L M]
 -/
 lemma semilinearEquivOfRingEquiv_comp {C : Type*} (M : Type*) [CommRing C] [CommRing M]
     [Algebra C M] [IsFractionRing C M] (g : B ≃+* C) :
@@ -2061,7 +2089,7 @@ theorem smulCommClass
     obtain ⟨c, d, hd, rfl⟩ := IsFractionRing.div_surjective B y
     simp [Algebra.smul_def, map_div₀, ← IsScalarTower.algebraMap_apply A K L,
       IsScalarTower.algebraMap_apply A B L, smul_mul', smul_div₀',
-      ← al
+      ← algebraMap.coe_smul', smul_algebraMap]⟩
 
 中文:
 定理 smulCommClass
@@ -2072,7 +2100,7 @@ theorem smulCommClass
     obtain ⟨c, d, hd, rfl⟩ := IsFractionRing.div_surjective B y
     simp [Algebra.smul_def, map_div₀, ← IsScalarTower.algebraMap_apply A K L,
       IsScalarTower.algebraMap_apply A B L, smul_mul', smul_div₀',
-      ← al
+      ← algebraMap.coe_smul', smul_algebraMap]⟩
 -/
 protected theorem smulCommClass [SMulCommClass G A B] : SMulCommClass G K L :=
   ⟨fun g x y => by

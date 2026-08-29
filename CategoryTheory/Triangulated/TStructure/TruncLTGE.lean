@@ -116,7 +116,7 @@ definition triangle
     (t.exists_triangle X (n - 1) n
       (by lia)).choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose
     (t.exists_triangle X (n - 1) n
-      (by lia)).choose_spec.c
+      (by lia)).choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose
 
 中文:
 定义 triangle
@@ -127,7 +127,7 @@ definition triangle
     (t.exists_triangle X (n - 1) n
       (by lia)).choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose
     (t.exists_triangle X (n - 1) n
-      (by lia)).choose_spec.c
+      (by lia)).choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose
 
 Depends on / 依赖: Triangle, Triangle.mk, choose_spec, choose_spec.choose_spec.choose_spec.choose_spec.choose, choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose, choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose, exists_triangle, t.exists_triangle
 -/
@@ -239,7 +239,8 @@ definition triangleMap
     hom₂ := φ
     hom₃ := H.choose.hom₃
     comm₁ := by rw [← H.choose.comm₁, H.choose_spec]
-    comm₂ := by rw [H.choose.comm₂
+    comm₂ := by rw [H.choose.comm₂, H.choose_spec]
+    comm₃ := H.choose.comm₃ }
 
 中文:
 定义 triangleMap
@@ -250,7 +251,8 @@ definition triangleMap
     hom₂ := φ
     hom₃ := H.choose.hom₃
     comm₁ := by rw [← H.choose.comm₁, H.choose_spec]
-    comm₂ := by rw [H.choose.comm₂
+    comm₂ := by rw [H.choose.comm₂, H.choose_spec]
+    comm₃ := H.choose.comm₃ }
 
 Depends on / 依赖: H.choose.comm, H.choose.hom, H.choose_spec, choose_spec, triangle_distinguished, triangle_map_exists
 -/
@@ -369,7 +371,8 @@ definition triangleMapOfLE
     hom₂ := 𝟙 _
     hom₃ := H.choose.hom₃
     comm₁ := by rw [← H.choose.comm₁, H.choose_spec]
-    comm₂ := by rw [H.choose.comm₂, H
+    comm₂ := by rw [H.choose.comm₂, H.choose_spec]
+    comm₃ := H.choose.comm₃ }
 
 中文:
 定义 triangleMapOfLE
@@ -380,7 +383,8 @@ definition triangleMapOfLE
     hom₂ := 𝟙 _
     hom₃ := H.choose.hom₃
     comm₁ := by rw [← H.choose.comm₁, H.choose_spec]
-    comm₂ := by rw [H.choose.comm₂, H
+    comm₂ := by rw [H.choose.comm₂, H.choose_spec]
+    comm₃ := H.choose.comm₃ }
 
 Depends on / 依赖: H.choose.comm, H.choose.hom, H.choose_spec, choose_spec, triangle_distinguished, triangle_map_exists
 -/
@@ -1422,7 +1426,15 @@ lemma isLE_iff_isIso_truncLTι_app
   obtain ⟨e, he⟩ := t.triangle_iso_exists
     (contractible_distinguished X) (t.triangleLTGE_distinguished (n₀ + 1) X)
     (Iso.refl X) n₀ (n₀ + 1)
-    (by dsimp; infer_instance) (by dsimp; inf
+    (by dsimp; infer_instance) (by dsimp; infer_instance)
+    (by dsimp; infer_instance) (by dsimp; infer_instance)
+  have he' : e.inv.hom₂ = 𝟙 X := by
+    rw [← cancel_mono e.hom.hom₂]; rw [← comp_hom₂]; rw [e.inv_hom_id]; rw [he]
+    simp
+  have : (t.truncLTι (n₀ + 1)).app X = e.inv.hom₁ := by
+    simpa [he'] using e.inv.comm₁
+  rw [this]
+  infer_instance
 
 中文:
 引理 isLE_iff_isIso_truncLTι_app
@@ -1434,7 +1446,15 @@ lemma isLE_iff_isIso_truncLTι_app
   obtain ⟨e, he⟩ := t.triangle_iso_exists
     (contractible_distinguished X) (t.triangleLTGE_distinguished (n₀ + 1) X)
     (Iso.refl X) n₀ (n₀ + 1)
-    (by dsimp; infer_instance) (by dsimp; inf
+    (by dsimp; infer_instance) (by dsimp; infer_instance)
+    (by dsimp; infer_instance) (by dsimp; infer_instance)
+  have he' : e.inv.hom₂ = 𝟙 X := by
+    rw [← cancel_mono e.hom.hom₂]; rw [← comp_hom₂]; rw [e.inv_hom_id]; rw [he]
+    simp
+  have : (t.truncLTι (n₀ + 1)).app X = e.inv.hom₁ := by
+    simpa [he'] using e.inv.comm₁
+  rw [this]
+  infer_instance
 
 Depends on / 依赖: Iso.refl, cancel_mono, contractible_distinguished, e.hom.hom, e.inv.hom, e.inv_hom_id, infer_instance, inv_hom_id, isLE_of_iso, t.isLE_of_iso, t.triangleLTGE_distinguished, t.triangle_iso_exists, t.truncLT, triangleLTGE_distinguished, triangle_iso_exists
 -/
@@ -1471,7 +1491,16 @@ lemma isGE_iff_isIso_truncGEπ_app
       (inv_rot_of_distTriang _ (contractible_distinguished X))
       (t.triangleLTGE_distinguished n X) (Iso.refl X) (n - 1) n
       (t.isLE_of_iso (shiftFunctor C (-1 : Int)).mapZeroObject.symm _)
-      (by dsimp; infer_instan
+      (by dsimp; infer_instance) (by dsimp; infer_instance) (by dsimp; infer_instance)
+    dsimp at he
+    have : (truncGEπ t n).app X = e.hom.hom₃ := by
+      have := e.hom.comm₂
+      dsimp at this
+      rw [← cancel_epi e.hom.hom₂]; rw [← this]; rw [he]
+    rw [this]
+    infer_instance
+  · intro
+    exact t.isGE_of_iso (asIso ((truncGEπ t n).app X)).symm n
 
 中文:
 引理 isGE_iff_isIso_truncGEπ_app
@@ -1483,7 +1512,16 @@ lemma isGE_iff_isIso_truncGEπ_app
       (inv_rot_of_distTriang _ (contractible_distinguished X))
       (t.triangleLTGE_distinguished n X) (Iso.refl X) (n - 1) n
       (t.isLE_of_iso (shiftFunctor C (-1 : Int)).mapZeroObject.symm _)
-      (by dsimp; infer_instan
+      (by dsimp; infer_instance) (by dsimp; infer_instance) (by dsimp; infer_instance)
+    dsimp at he
+    have : (truncGEπ t n).app X = e.hom.hom₃ := by
+      have := e.hom.comm₂
+      dsimp at this
+      rw [← cancel_epi e.hom.hom₂]; rw [← this]; rw [he]
+    rw [this]
+    infer_instance
+  · intro
+    exact t.isGE_of_iso (asIso ((truncGEπ t n).app X)).symm n
 
 Depends on / 依赖: Iso.refl, cancel_epi, contractible_distinguished, e.hom.comm, e.hom.hom, infer_instance, inv_rot_of_distTriang, isLE_of_iso, mapZeroObject, mapZeroObject.symm, shiftFunctor, t.isLE_of_iso, t.triangleLTGE_distinguished, t.triangle_iso_exists, triangleLTGE_distinguished, triangle_iso_exists
 -/
@@ -1619,7 +1657,9 @@ lemma from_truncGE_obj_ext
   intro f hf
   obtain ⟨g, hg⟩ := Triangle.yoneda_exact₃ _
     (t.triangleLTGE_distinguished n X) f hf
-  have hg' := t.zero_of_isLE_of_isGE g (n-2) n
+  have hg' := t.zero_of_isLE_of_isGE g (n-2) n (by lia)
+    (by exact t.isLE_shift _ (n-1) 1 (n-2) (by lia)) inferInstance
+  rw [hg]; rw [hg']; rw [comp_zero]
 
 中文:
 引理 from_truncGE_obj_ext
@@ -1630,7 +1670,9 @@ lemma from_truncGE_obj_ext
   intro f hf
   obtain ⟨g, hg⟩ := Triangle.yoneda_exact₃ _
     (t.triangleLTGE_distinguished n X) f hf
-  have hg' := t.zero_of_isLE_of_isGE g (n-2) n
+  have hg' := t.zero_of_isLE_of_isGE g (n-2) n (by lia)
+    (by exact t.isLE_shift _ (n-1) 1 (n-2) (by lia)) inferInstance
+  rw [hg]; rw [hg']; rw [comp_zero]
 
 Depends on / 依赖: Triangle, Triangle.yoneda_exact, cat_disch, comp_zero, isLE_shift, sub_eq_zero, t.isLE_shift, t.triangleLTGE_distinguished, t.truncGE, t.zero_of_isLE_of_isGE, triangleLTGE_distinguished, truncGE, zero_of_isLE_of_isGE
 -/
@@ -1661,7 +1703,11 @@ lemma to_truncLT_obj_ext
   intro f hf
   obtain ⟨g, hg⟩ := Triangle.coyoneda_exact₂ _ (inv_rot_of_distTriang _
     (t.triangleLTGE_distinguished n X)) f hf
-  have hg' := t
+  have hg' := t.zero_of_isLE_of_isGE g (n - 1) (n + 1) (by lia) inferInstance
+    (by dsimp; apply (t.isGE_shift _ n (-1) (n + 1) (by lia)))
+  rw [hg]; rw [hg']; rw [zero_comp]
+
+@[reassoc]
 
 中文:
 引理 to_truncLT_obj_ext
@@ -1672,7 +1718,11 @@ lemma to_truncLT_obj_ext
   intro f hf
   obtain ⟨g, hg⟩ := Triangle.coyoneda_exact₂ _ (inv_rot_of_distTriang _
     (t.triangleLTGE_distinguished n X)) f hf
-  have hg' := t
+  have hg' := t.zero_of_isLE_of_isGE g (n - 1) (n + 1) (by lia) inferInstance
+    (by dsimp; apply (t.isGE_shift _ n (-1) (n + 1) (by lia)))
+  rw [hg]; rw [hg']; rw [zero_comp]
+
+@[reassoc]
 
 Depends on / 依赖: Triangle, Triangle.coyoneda_exact, cat_disch, inv_rot_of_distTriang, isGE_shift, sub_eq_zero, t.isGE_shift, t.triangleLTGE_distinguished, t.truncLT, t.zero_of_isLE_of_isGE, triangleLTGE_distinguished, truncLT, zero_comp, zero_of_isLE_of_isGE
 -/
@@ -2088,7 +2138,13 @@ lemma isIso_truncLT_map_iff
   · refine ⟨(t.truncGE n).obj Y, (t.truncGEπ n).app Y,
       (t.truncGEδLT n).app Y ≫ (inv ((t.truncLT n).map f))⟦1⟧',
       isomorphic_distinguished _ (t.triangleLTGE_distinguished n Y) _ ?_, inferInstance⟩
-    exact Triangle.isoMk _ _ (asIso 
+    exact Triangle.isoMk _ _ (asIso ((t.truncLT n).map f)) (Iso.refl _) (Iso.refl _)
+  · obtain ⟨e, he⟩ := t.triangle_iso_exists
+      mem (t.triangleLTGE_distinguished n Y) (Iso.refl _) (n - 1) n
+      (by dsimp; infer_instance) (by dsimp; infer_instance)
+      (by dsimp; infer_instance) (by dsimp; infer_instance)
+    suffices ((t.truncLT n).map f) = e.hom.hom₁ by rw [this]; infer_instance
+    exact t.to_truncLT_obj_ext (Eq.trans (by cat_disch) e.hom.comm₁)
 
 中文:
 引理 isIso_truncLT_map_iff
@@ -2098,7 +2154,13 @@ lemma isIso_truncLT_map_iff
   · refine ⟨(t.truncGE n).obj Y, (t.truncGEπ n).app Y,
       (t.truncGEδLT n).app Y ≫ (inv ((t.truncLT n).map f))⟦1⟧',
       isomorphic_distinguished _ (t.triangleLTGE_distinguished n Y) _ ?_, inferInstance⟩
-    exact Triangle.isoMk _ _ (asIso 
+    exact Triangle.isoMk _ _ (asIso ((t.truncLT n).map f)) (Iso.refl _) (Iso.refl _)
+  · obtain ⟨e, he⟩ := t.triangle_iso_exists
+      mem (t.triangleLTGE_distinguished n Y) (Iso.refl _) (n - 1) n
+      (by dsimp; infer_instance) (by dsimp; infer_instance)
+      (by dsimp; infer_instance) (by dsimp; infer_instance)
+    suffices ((t.truncLT n).map f) = e.hom.hom₁ by rw [this]; infer_instance
+    exact t.to_truncLT_obj_ext (Eq.trans (by cat_disch) e.hom.comm₁)
 
 Depends on / 依赖: Iso.refl, Triangle, Triangle.isoMk, infer_instance, isomorphic_distinguished, t.triangleLTGE_distinguished, t.triangle_iso_exists, t.truncGE, t.truncLT, triangleLTGE_distinguished, triangle_iso_exists, truncGE, truncLT
 -/
@@ -2131,7 +2193,14 @@ lemma isIso_truncGE_map_iff
   · refine ⟨_, (t.truncLTι n₁).app Y, inv ((t.truncGE n₁).map g) ≫ (t.truncGEδLT n₁).app Y,
       isomorphic_distinguished _ (t.triangleLTGE_distinguished n₁ Y) _ ?_,
       by subst hn; infer_instance⟩
-    exact Iso.symm (Triangle.isoMk _ _ (Is
+    exact Iso.symm (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _)
+      (asIso ((t.truncGE n₁).map g)) (by simp) (by simp) (by simp))
+  · obtain ⟨e, he⟩ :=
+      t.triangle_iso_exists (t.triangleLTGE_distinguished n₁ Y) mem (Iso.refl _) n₀ n₁
+        (by dsimp; rw [← hn]; infer_instance) (by dsimp; infer_instance)
+        (by dsimp; infer_instance) (by dsimp; infer_instance)
+    suffices ((t.truncGE n₁).map g) = e.hom.hom₃ by rw [this]; infer_instance
+    exact t.from_truncGE_obj_ext (Eq.trans (by cat_disch) e.hom.comm₂.symm)
 
 中文:
 引理 isIso_truncGE_map_iff
@@ -2141,7 +2210,14 @@ lemma isIso_truncGE_map_iff
   · refine ⟨_, (t.truncLTι n₁).app Y, inv ((t.truncGE n₁).map g) ≫ (t.truncGEδLT n₁).app Y,
       isomorphic_distinguished _ (t.triangleLTGE_distinguished n₁ Y) _ ?_,
       by subst hn; infer_instance⟩
-    exact Iso.symm (Triangle.isoMk _ _ (Is
+    exact Iso.symm (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _)
+      (asIso ((t.truncGE n₁).map g)) (by simp) (by simp) (by simp))
+  · obtain ⟨e, he⟩ :=
+      t.triangle_iso_exists (t.triangleLTGE_distinguished n₁ Y) mem (Iso.refl _) n₀ n₁
+        (by dsimp; rw [← hn]; infer_instance) (by dsimp; infer_instance)
+        (by dsimp; infer_instance) (by dsimp; infer_instance)
+    suffices ((t.truncGE n₁).map g) = e.hom.hom₃ by rw [this]; infer_instance
+    exact t.from_truncGE_obj_ext (Eq.trans (by cat_disch) e.hom.comm₂.symm)
 
 Depends on / 依赖: Iso.refl, Iso.symm, Triangle, Triangle.isoMk, infer_instan, infer_instance, isomorphic_distinguished, t.triangleLTGE_distinguished, t.triangle_iso_exists, t.truncGE, t.truncLT, triangleLTGE_distinguished, triangle_iso_exists, truncGE
 -/
@@ -2232,7 +2308,7 @@ lemma isIso₁_truncLT_map_of_isGE
   obtain ⟨Z, g, k, mem⟩ := distinguished_cocone_triangle ((t.truncLTι n).app T.obj₁ ≫ T.mor₁)
   refine ⟨_, _, _, mem, ?_⟩
   let H := someOctahedron rfl (t.triangleLTGE_distinguished n T.obj₁) hT mem
-  exact t.isGE₂ _ H.mem n (by dsimp; infer_instance) (by dsimp; infer
+  exact t.isGE₂ _ H.mem n (by dsimp; infer_instance) (by dsimp; infer_instance)
 
 中文:
 引理 isIso₁_truncLT_map_of_isGE
@@ -2242,7 +2318,7 @@ lemma isIso₁_truncLT_map_of_isGE
   obtain ⟨Z, g, k, mem⟩ := distinguished_cocone_triangle ((t.truncLTι n).app T.obj₁ ≫ T.mor₁)
   refine ⟨_, _, _, mem, ?_⟩
   let H := someOctahedron rfl (t.triangleLTGE_distinguished n T.obj₁) hT mem
-  exact t.isGE₂ _ H.mem n (by dsimp; infer_instance) (by dsimp; infer
+  exact t.isGE₂ _ H.mem n (by dsimp; infer_instance) (by dsimp; infer_instance)
 
 Depends on / 依赖: H.mem, T.mor, T.obj, distinguished_cocone_triangle, infer_instance, isIso_truncLT_map_iff, someOctahedron, t.isGE, t.triangleLTGE_distinguished, t.truncLT, triangleLTGE_distinguished
 -/
@@ -2267,7 +2343,12 @@ lemma isIso₂_truncGE_map_of_isLE
   refine ⟨_, _, _, mem, ?_⟩
   subst h
   have H := someOctahedron rfl (rot_of_distTriang _ hT)
-    (rot_of_distTriang _ (t.triangleLTGE_distinguished (n₀ + 1) T.ob
+    (rot_of_distTriang _ (t.triangleLTGE_distinguished (n₀ + 1) T.obj₃))
+    (rot_of_distTriang _ mem)
+  have : t.IsLE (X⟦(1 : Int)⟧) (n₀ - 1) :=
+    t.isLE₂ _ H.mem (n₀ - 1) (t.isLE_shift T.obj₁ n₀ 1 (n₀ - 1) (by lia))
+      (t.isLE_shift ((t.truncLT (n₀ + 1)).obj T.obj₃) n₀ 1 (n₀-1) (by lia))
+  exact t.isLE_of_shift X n₀ 1 (n₀ - 1) (by lia)
 
 中文:
 引理 isIso₂_truncGE_map_of_isLE
@@ -2278,7 +2359,12 @@ lemma isIso₂_truncGE_map_of_isLE
   refine ⟨_, _, _, mem, ?_⟩
   subst h
   have H := someOctahedron rfl (rot_of_distTriang _ hT)
-    (rot_of_distTriang _ (t.triangleLTGE_distinguished (n₀ + 1) T.ob
+    (rot_of_distTriang _ (t.triangleLTGE_distinguished (n₀ + 1) T.obj₃))
+    (rot_of_distTriang _ mem)
+  have : t.IsLE (X⟦(1 : Int)⟧) (n₀ - 1) :=
+    t.isLE₂ _ H.mem (n₀ - 1) (t.isLE_shift T.obj₁ n₀ 1 (n₀ - 1) (by lia))
+      (t.isLE_shift ((t.truncLT (n₀ + 1)).obj T.obj₃) n₀ 1 (n₀-1) (by lia))
+  exact t.isLE_of_shift X n₀ 1 (n₀ - 1) (by lia)
 
 Depends on / 依赖: H.mem, T.mor, T.obj, isIso_truncGE_map_iff, isLE_shift, rot_of_distTriang, someOctahedron, t.IsLE, t.isLE, t.isLE_shift, t.triangleLTGE_distinguished, t.truncGE, t.truncLT, triangleLTGE_distinguished, truncLT
 -/
@@ -2553,7 +2639,8 @@ lemma triangleLTLTGELT_distinguished
   refine Triangle.isoMk _ _ ((asIso ((t.truncLT a).map ((t.truncLTι b).app X))).symm)
     (Iso.refl _) (Iso.refl _) ?_ (by simp) (by simp)
   dsimp
-  s
+  simp only [Category.comp_id, IsIso.eq_inv_comp]
+  exact t.to_truncLT_obj_ext (by simp)
 
 中文:
 引理 triangleLTLTGELT_distinguished
@@ -2564,7 +2651,8 @@ lemma triangleLTLTGELT_distinguished
   refine Triangle.isoMk _ _ ((asIso ((t.truncLT a).map ((t.truncLTι b).app X))).symm)
     (Iso.refl _) (Iso.refl _) ?_ (by simp) (by simp)
   dsimp
-  s
+  simp only [Category.comp_id, IsIso.eq_inv_comp]
+  exact t.to_truncLT_obj_ext (by simp)
 
 Depends on / 依赖: Category, Category.comp_id, IsIso.eq_inv_comp, Iso.refl, Triangle, Triangle.isoMk, comp_id, eq_inv_comp, isomorphic_distinguished, t.isIso_truncLT_map_truncLT, t.to_truncLT_obj_ext, t.triangleLTGE_distinguished, t.truncLT, to_truncLT_obj_ext, triangleLTGE_distinguished, truncLT
 -/

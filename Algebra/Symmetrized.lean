@@ -1106,6 +1106,8 @@ instance [Mul
   mul_invOf_self := by
     rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
 
+@[simp]
+
 中文:
 实例 [乘法
   签名: α] [加法带幺幺半群 α] [可逆 (2 : α)] (a
@@ -1114,6 +1116,8 @@ instance [Mul
     rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
   mul_invOf_self := by
     rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
+
+@[simp]
 -/
 instance [Mul α] [AddMonoidWithOne α] [Invertible (2 : α)] (a : α) [Invertible a] :
     Invertible (sym a) where
@@ -1152,7 +1156,21 @@ instance nonAssocSemiring
     zero_mul := fun _ => by
       rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
     mul_zero := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_
+      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
+    mul_one := fun _ => by
+      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
+    one_mul := fun _ => by
+      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
+    left_distrib := fun a b c => by
+      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
+      congr 2
+      rw [mul_add]
+      abel
+    right_distrib := fun a b c => by
+      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
+      congr 2
+      rw [mul_add]
+      abel }
 
 中文:
 实例 nonAssocSemiring
@@ -1161,7 +1179,21 @@ instance nonAssocSemiring
     zero_mul := fun _ => by
       rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
     mul_zero := fun _ => by
-      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_
+      rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
+    mul_one := fun _ => by
+      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
+    one_mul := fun _ => by
+      rw [mul_def]; rw [unsym_one]; rw [mul_one]; rw [one_mul]; rw [← two_mul]; rw [invOf_mul_cancel_left]; rw [sym_unsym]
+    left_distrib := fun a b c => by
+      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
+      congr 2
+      rw [mul_add]
+      abel
+    right_distrib := fun a b c => by
+      rw [mul_def]; rw [mul_def]; rw [mul_def]; rw [← sym_add]; rw [← mul_add]; rw [unsym_add]; rw [add_mul]
+      congr 2
+      rw [mul_add]
+      abel }
 
 Depends on / 依赖: SymAlg, SymAlg.addCommMonoid, addCommMonoid, add_zero, invOf_mul_cancel_left, mul_def, mul_one, mul_zero, one_mul, sym_unsym, sym_zero, two_mul, unsym_one, unsym_zero, zero_mul
 -/
@@ -1299,7 +1331,27 @@ instance [Ring
       exact this.invOf_left.eq
     calc a * b * (a * a)
       _ = sym (⅟2 * ⅟2 * (unsym a * unsym b * unsym (a * a) +
-          unsym b * unsym a * 
+          unsym b * unsym a * unsym (a * a) +
+          unsym (a * a) * unsym a * unsym b +
+          unsym (a * a) * unsym b * unsym a)) := ?_
+      _ = sym (⅟2 * (unsym a *
+          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) +
+          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) * unsym a)) := ?_
+      _ = a * (b * (a * a)) := ?_
+    -- Rearrange LHS
+    · rw [mul_def, mul_def a b, unsym_sym, ← mul_assoc, ← commute_half_left (unsym (a * a)),
+        mul_assoc, mul_assoc, ← mul_add, ← mul_assoc, add_mul, mul_add (unsym (a * a)),
+        ← add_assoc, ← mul_assoc, ← mul_assoc]
+    · rw [unsym_sym, sym_inj, ← mul_assoc, ← commute_half_left (unsym a), mul_assoc (⅟2) (unsym a),
+        mul_assoc (⅟2) _ (unsym a), ← mul_add, ← mul_assoc]
+      conv_rhs => rw [mul_add (unsym a)]
+      rw [add_mul]; rw [← add_assoc]; rw [← mul_assoc]; rw [← mul_assoc]
+      rw [unsym_mul_self]
+      rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← sub_eq_zero]; rw [← mul_sub]
+      convert! mul_zero (⅟(2 : α) * ⅟(2 : α))
+      rw [add_sub_add_right_eq_sub]; rw [add_assoc]; rw [add_assoc]; rw [add_sub_add_left_eq_sub]; rw [add_comm]; rw [add_sub_add_right_eq_sub]; rw [sub_eq_zero]
+    -- Rearrange RHS
+    · rw [← mul_def, ← mul_def]
 
 中文:
 实例 [环
@@ -1311,7 +1363,27 @@ instance [Ring
       exact this.invOf_left.eq
     calc a * b * (a * a)
       _ = sym (⅟2 * ⅟2 * (unsym a * unsym b * unsym (a * a) +
-          unsym b * unsym a * 
+          unsym b * unsym a * unsym (a * a) +
+          unsym (a * a) * unsym a * unsym b +
+          unsym (a * a) * unsym b * unsym a)) := ?_
+      _ = sym (⅟2 * (unsym a *
+          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) +
+          unsym (sym (⅟2 * (unsym b * unsym (a * a) + unsym (a * a) * unsym b))) * unsym a)) := ?_
+      _ = a * (b * (a * a)) := ?_
+    -- Rearrange LHS
+    · rw [mul_def, mul_def a b, unsym_sym, ← mul_assoc, ← commute_half_left (unsym (a * a)),
+        mul_assoc, mul_assoc, ← mul_add, ← mul_assoc, add_mul, mul_add (unsym (a * a)),
+        ← add_assoc, ← mul_assoc, ← mul_assoc]
+    · rw [unsym_sym, sym_inj, ← mul_assoc, ← commute_half_left (unsym a), mul_assoc (⅟2) (unsym a),
+        mul_assoc (⅟2) _ (unsym a), ← mul_add, ← mul_assoc]
+      conv_rhs => rw [mul_add (unsym a)]
+      rw [add_mul]; rw [← add_assoc]; rw [← mul_assoc]; rw [← mul_assoc]
+      rw [unsym_mul_self]
+      rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← sub_eq_zero]; rw [← mul_sub]
+      convert! mul_zero (⅟(2 : α) * ⅟(2 : α))
+      rw [add_sub_add_right_eq_sub]; rw [add_assoc]; rw [add_assoc]; rw [add_sub_add_left_eq_sub]; rw [add_comm]; rw [add_sub_add_right_eq_sub]; rw [sub_eq_zero]
+    -- Rearrange RHS
+    · rw [← mul_def, ← mul_def]
 
 Depends on / 依赖: Commute, Commute.one_left, add_left, commute_half_left, invOf_left, one_add_one_eq_two, one_left, this.invOf_left.eq
 -/

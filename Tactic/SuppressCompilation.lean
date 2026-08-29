@@ -39,7 +39,23 @@ definition elabSuppressCompilationDecl
  (recKind?)? def id sig:optDeclSig val:declVal) => do
 elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
  (recKind?)? def id sig:optDeclSig val:declVal)
-| `($[$doc?:docComment]? $(attrs
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*)
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal)
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? example sig:optDeclSig val:declVal) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? example sig:optDeclSig val:declVal)
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? abbrev id sig:optDeclSig val:declVal) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? abbrev id sig:optDeclSig val:declVal)
+| _ => throwUnsupportedSyntax
 
 中文:
 定义 elabSuppressCompilationDecl
@@ -49,7 +65,23 @@ elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(u
  (recKind?)? def id sig:optDeclSig val:declVal) => do
 elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
  (recKind?)? def id sig:optDeclSig val:declVal)
-| `($[$doc?:docComment]? $(attrs
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*)
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal)
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? example sig:optDeclSig val:declVal) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? example sig:optDeclSig val:declVal)
+| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
+ (recKind?)? abbrev id sig:optDeclSig val:declVal) => do
+elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+ (recKind?)? abbrev id sig:optDeclSig val:declVal)
+| _ => throwUnsupportedSyntax
 -/
 def elabSuppressCompilationDecl : CommandElab := fun
 | `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?

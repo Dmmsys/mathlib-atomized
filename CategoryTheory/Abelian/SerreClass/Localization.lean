@@ -50,7 +50,7 @@ lemma exists_epiModSerre_comp_eq_zero_iff
       (epiModSerre_of_epi _ _)
     rwa [show s ≫ Abelian.factorThruImage f = 0 by cat_disch,
       epiModSerre_zero_iff] at this
-  · exact ⟨_, kernel.ι f, P.prop_of_iso (Abel
+  · exact ⟨_, kernel.ι f, P.prop_of_iso (Abelian.coimageIsoImage f).symm hf, by simp⟩
 
 中文:
 引理 存在_epiModSerre_comp_eq_zero_iff
@@ -62,7 +62,7 @@ lemma exists_epiModSerre_comp_eq_zero_iff
       (epiModSerre_of_epi _ _)
     rwa [show s ≫ Abelian.factorThruImage f = 0 by cat_disch,
       epiModSerre_zero_iff] at this
-  · exact ⟨_, kernel.ι f, P.prop_of_iso (Abel
+  · exact ⟨_, kernel.ι f, P.prop_of_iso (Abelian.coimageIsoImage f).symm hf, by simp⟩
 
 Depends on / 依赖: Abelian, Abelian.coimageIsoImage, Abelian.factorThruImage, P.epiModSerre.comp_mem, P.prop_of_iso, cat_disch, coimageIsoImage, comp_mem, epiModSerre, epiModSerre_of_epi, epiModSerre_zero_iff, factorThruImage, kernel, prop_of_iso
 -/
@@ -130,7 +130,8 @@ lemma exists_comp_monoModSerre_eq_zero_iff
     have := P.monoModSerre.comp_mem (Abelian.factorThruCoimage f) s
       (monoModSerre_of_mono _ _) hs
     rwa [show Abelian.factorThruCoimage f ≫ s = 0 by cat_disch,
-      monoModSerre_zer
+      monoModSerre_zero_iff] at this
+  · exact ⟨_, cokernel.π f, hf, by simp⟩
 
 中文:
 引理 存在_comp_monoModSerre_eq_zero_iff
@@ -142,7 +143,8 @@ lemma exists_comp_monoModSerre_eq_zero_iff
     have := P.monoModSerre.comp_mem (Abelian.factorThruCoimage f) s
       (monoModSerre_of_mono _ _) hs
     rwa [show Abelian.factorThruCoimage f ≫ s = 0 by cat_disch,
-      monoModSerre_zer
+      monoModSerre_zero_iff] at this
+  · exact ⟨_, cokernel.π f, hf, by simp⟩
 
 Depends on / 依赖: Abelian, Abelian.coimageIsoImage, Abelian.factorThruCoimage, P.monoModSerre.comp_mem, P.prop_of_iso, cat_disch, coimageIsoImage, cokernel, comp_mem, factorThruCoimage, monoModSerre, monoModSerre_of_mono, monoModSerre_zero_iff, prop_of_iso
 -/
@@ -263,7 +265,8 @@ instance :
   ext X' X Y f₁ f₂ s hs eq := by
     refine ⟨_, cokernel.π (f₁ - f₂), ?_, ?_⟩
     · rw [isoModSerre_iff_of_epi]
-      exact (exists_isoModSerre_comp_eq_zero_iff P _).1 ⟨_
+      exact (exists_isoModSerre_comp_eq_zero_iff P _).1 ⟨_, s, hs, by simpa [sub_eq_zero]⟩
+    · simpa only [Preadditive.sub_comp, sub_eq_zero] using cokernel.condition (f₁ - f₂)
 
 中文:
 实例 :
@@ -274,7 +277,8 @@ instance :
   ext X' X Y f₁ f₂ s hs eq := by
     refine ⟨_, cokernel.π (f₁ - f₂), ?_, ?_⟩
     · rw [isoModSerre_iff_of_epi]
-      exact (exists_isoModSerre_comp_eq_zero_iff P _).1 ⟨_
+      exact (exists_isoModSerre_comp_eq_zero_iff P _).1 ⟨_, s, hs, by simpa [sub_eq_zero]⟩
+    · simpa only [Preadditive.sub_comp, sub_eq_zero] using cokernel.condition (f₁ - f₂)
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pushout_inl, Preadditive, Preadditive.sub_comp, cokernel, cokernel.condition, condition, exists_isoModSerre_comp_eq_zero_iff, isoModSerre_iff_of_epi, pushout, pushout.condition, pushout.inl, pushout.inr, pushout_inl, sub_comp, sub_eq_zero
 -/
@@ -301,7 +305,12 @@ instance :
   ext X Y Y' f₁ f₂ s hs eq := by
     refine ⟨_, kernel.ι (f₁ - f₂), ?_, ?_⟩
     · rw [isoModSerre_iff_of_mono]
-      exact P.prop_of_iso (Abelian.coimageIsoImage (f₁ 
+      exact P.prop_of_iso (Abelian.coimageIsoImage (f₁ - f₂)).symm
+        ((exists_comp_isoModSerre_eq_zero_iff P _).1 ⟨_ ,s, hs, by simpa [sub_eq_zero]⟩)
+    · simpa only [Preadditive.comp_sub, sub_eq_zero] using kernel.condition (f₁ - f₂)
+
+noncomputable example : Preadditive P.isoModSerre.Localization := inferInstance
+noncomputable example : P.isoModSerre.Q.Additive := inferInstance
 
 中文:
 实例 :
@@ -312,7 +321,12 @@ instance :
   ext X Y Y' f₁ f₂ s hs eq := by
     refine ⟨_, kernel.ι (f₁ - f₂), ?_, ?_⟩
     · rw [isoModSerre_iff_of_mono]
-      exact P.prop_of_iso (Abelian.coimageIsoImage (f₁ 
+      exact P.prop_of_iso (Abelian.coimageIsoImage (f₁ - f₂)).symm
+        ((exists_comp_isoModSerre_eq_zero_iff P _).1 ⟨_ ,s, hs, by simpa [sub_eq_zero]⟩)
+    · simpa only [Preadditive.comp_sub, sub_eq_zero] using kernel.condition (f₁ - f₂)
+
+noncomputable example : Preadditive P.isoModSerre.Localization := inferInstance
+noncomputable example : P.isoModSerre.Q.Additive := inferInstance
 
 Depends on / 依赖: Abelian, Abelian.coimageIsoImage, MorphismProperty, MorphismProperty.pullback_fst, P.prop_of_iso, Preadditive, Preadditive.comp_sub, coimageIsoImage, comp_sub, condition, exists_comp_isoModSerre_eq_zero_iff, isoModSerre_iff_of_mono, kernel, kernel.condition, prop_of_iso, pullback, pullback.condition, pullback.fst, pullback.snd, pullback_fst
 -/
@@ -434,7 +448,23 @@ lemma mono_map_tfae
   tfae_have 1 -> 2 := fun _ => by
     have hf : L.map (kernel.ι f) = 0 := by
       rw [← cancel_mono (L.map f)]; rw [zero_comp]; rw [← L.map_comp]; rw [kernel.condition]; rw [L.map_zero]
-    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (𝟙 _
+    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (𝟙 _) (kernel.ι f)
+  tfae_have 2 -> 3 := fun hf => by
+    intro Z z hz
+    rw [← L.map_comp] at hz
+    rw [map_eq_zero_iff L P]; rw [← exists_comp_monoModSerre_eq_zero_iff P] at hz ⊢
+    obtain ⟨W, s, hs, eq⟩ := hz
+    exact ⟨W, f ≫ s, MorphismProperty.comp_mem _ _ _ hf hs, by simpa using! eq⟩
+  tfae_have 3 -> 1 := fun hf => by
+    rw [Preadditive.mono_iff_cancel_zero]
+    intro W z hz
+    obtain ⟨φ, hφ⟩ := Localization.exists_rightFraction L P.isoModSerre
+      ((L.objObjPreimageIso W).hom ≫ z)
+    rw [← cancel_epi (L.objObjPreimageIso W).hom]; rw [comp_zero]; rw [hφ]; rw [← cancel_epi (L.map φ.s)]; rw [comp_zero]; rw [MorphismProperty.RightFraction.map_s_comp_map]
+    apply hf φ.f
+    have : L.map φ.s ≫ (L.objObjPreimageIso W).hom ≫ z = L.map φ.f := by cat_disch
+    rw [← this]; rw [Category.assoc]; rw [Category.assoc]; rw [hz]; rw [comp_zero]; rw [comp_zero]
+  tfae_finish
 
 中文:
 引理 mono_map_tfae
@@ -444,7 +474,23 @@ lemma mono_map_tfae
   tfae_have 1 -> 2 := fun _ => by
     have hf : L.map (kernel.ι f) = 0 := by
       rw [← cancel_mono (L.map f)]; rw [zero_comp]; rw [← L.map_comp]; rw [kernel.condition]; rw [L.map_zero]
-    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (𝟙 _
+    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (𝟙 _) (kernel.ι f)
+  tfae_have 2 -> 3 := fun hf => by
+    intro Z z hz
+    rw [← L.map_comp] at hz
+    rw [map_eq_zero_iff L P]; rw [← exists_comp_monoModSerre_eq_zero_iff P] at hz ⊢
+    obtain ⟨W, s, hs, eq⟩ := hz
+    exact ⟨W, f ≫ s, MorphismProperty.comp_mem _ _ _ hf hs, by simpa using! eq⟩
+  tfae_have 3 -> 1 := fun hf => by
+    rw [Preadditive.mono_iff_cancel_zero]
+    intro W z hz
+    obtain ⟨φ, hφ⟩ := Localization.exists_rightFraction L P.isoModSerre
+      ((L.objObjPreimageIso W).hom ≫ z)
+    rw [← cancel_epi (L.objObjPreimageIso W).hom]; rw [comp_zero]; rw [hφ]; rw [← cancel_epi (L.map φ.s)]; rw [comp_zero]; rw [MorphismProperty.RightFraction.map_s_comp_map]
+    apply hf φ.f
+    have : L.map φ.s ≫ (L.objObjPreimageIso W).hom ≫ z = L.map φ.f := by cat_disch
+    rw [← this]; rw [Category.assoc]; rw [Category.assoc]; rw [hz]; rw [comp_zero]; rw [comp_zero]
+  tfae_finish
 
 Depends on / 依赖: L.map, L.map_comp, L.map_zero, Localization, Localization.essSurj, Morphism, P.isoModSerre, cancel_mono, condition, essSurj, exists_comp_monoModSerre_eq_zero_iff, isoModSerre, kernel, kernel.condition, map_comp, map_comp_eq_zero_iff_of_epi_mono, map_eq_zero_iff, map_zero, tfae_have, zero_comp
 -/
@@ -504,7 +550,24 @@ lemma epi_map_tfae
   tfae_have 1 -> 2 := fun _ => by
     have hf : L.map (cokernel.π f) = 0 := by
       rw [← cancel_epi (L.map f)]; rw [comp_zero]; rw [← L.map_comp]; rw [cokernel.condition]; rw [L.map_zero]
-    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (
+    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (cokernel.π f) (𝟙 _)
+  tfae_have 2 -> 3 := fun hf => by
+    intro Z z hz
+    rw [← L.map_comp] at hz
+    rw [map_eq_zero_iff L P]; rw [← exists_epiModSerre_comp_eq_zero_iff P] at hz ⊢
+    obtain ⟨W, s, hs, eq⟩ := hz
+    refine ⟨_, s ≫ f, MorphismProperty.comp_mem _ _ _ hs hf, by simpa⟩
+  tfae_have 3 -> 1 := fun hf => by
+    rw [Preadditive.epi_iff_cancel_zero]
+    intro W z hz
+    obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L P.isoModSerre
+      (z ≫ (L.objObjPreimageIso W).inv)
+    rw [← cancel_mono (L.objObjPreimageIso W).inv]; rw [zero_comp]; rw [hφ]; rw [← cancel_mono (L.map φ.s)]; rw [zero_comp]; rw [MorphismProperty.LeftFraction.map_comp_map_s]
+    apply hf φ.f
+    have : L.map φ.f = z ≫ (L.objObjPreimageIso W).inv ≫ L.map φ.s := by
+      simp [reassoc_of% hφ]
+    rw [this]; rw [reassoc_of% hz]; rw [zero_comp]
+  tfae_finish
 
 中文:
 引理 epi_map_tfae
@@ -514,7 +577,24 @@ lemma epi_map_tfae
   tfae_have 1 -> 2 := fun _ => by
     have hf : L.map (cokernel.π f) = 0 := by
       rw [← cancel_epi (L.map f)]; rw [comp_zero]; rw [← L.map_comp]; rw [cokernel.condition]; rw [L.map_zero]
-    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (
+    simpa [hf] using! map_comp_eq_zero_iff_of_epi_mono L P (cokernel.π f) (𝟙 _)
+  tfae_have 2 -> 3 := fun hf => by
+    intro Z z hz
+    rw [← L.map_comp] at hz
+    rw [map_eq_zero_iff L P]; rw [← exists_epiModSerre_comp_eq_zero_iff P] at hz ⊢
+    obtain ⟨W, s, hs, eq⟩ := hz
+    refine ⟨_, s ≫ f, MorphismProperty.comp_mem _ _ _ hs hf, by simpa⟩
+  tfae_have 3 -> 1 := fun hf => by
+    rw [Preadditive.epi_iff_cancel_zero]
+    intro W z hz
+    obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L P.isoModSerre
+      (z ≫ (L.objObjPreimageIso W).inv)
+    rw [← cancel_mono (L.objObjPreimageIso W).inv]; rw [zero_comp]; rw [hφ]; rw [← cancel_mono (L.map φ.s)]; rw [zero_comp]; rw [MorphismProperty.LeftFraction.map_comp_map_s]
+    apply hf φ.f
+    have : L.map φ.f = z ≫ (L.objObjPreimageIso W).inv ≫ L.map φ.s := by
+      simp [reassoc_of% hφ]
+    rw [this]; rw [reassoc_of% hz]; rw [zero_comp]
+  tfae_finish
 
 Depends on / 依赖: L.map, L.map_comp, L.map_zero, Localization, Localization.essSurj, P.isoModSerre, cancel_epi, cokernel, cokernel.condition, comp_zero, condition, essSurj, exists_epiModSerre_comp_eq_zero_iff, isoModSerre, map_comp, map_comp_eq_zero_iff_of_epi_mono, map_eq_zero_iff, map_zero, tfae_have
 -/
@@ -657,7 +737,20 @@ lemma mono_iff
   refine ⟨fun _ => ?_, ?_⟩
   · suffices forall ⦃X Y : C⦄ (f : X ⟶ Y) (_ : Mono (L.map f)),
       exists (X' Y' : C) (f' : X' ⟶ Y') (_ : Mono f'),
-          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map 
+          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map f)) by
+        let e := L.mapArrow.objObjPreimageIso (Arrow.mk f)
+        obtain ⟨X', Y', f', _, ⟨e'⟩⟩ := this _
+          (((MorphismProperty.monomorphisms D).arrow_iso_iff e).2 (.infer_property f))
+        exact ⟨_, _, f', inferInstance, ⟨e' ≪≫ e⟩⟩
+    intro X Y f hf
+    rw [mono_map_iff L P] at hf
+    refine ⟨_, _, Abelian.image.ι f, inferInstance, ⟨Iso.symm ?_⟩⟩
+    have := Localization.inverts L P.isoModSerre _ hf.isoModSerre_factorThruImage
+    exact Arrow.isoMk (asIso (L.map (Abelian.factorThruImage f))) (Iso.refl _)
+      (by simp [← L.map_comp])
+  · rintro ⟨X', Y', f', _, ⟨e⟩⟩
+    exact ((MorphismProperty.monomorphisms D).arrow_mk_iso_iff e).1
+      (by simpa using inferInstanceAs (Mono (L.map f')))
 
 中文:
 引理 mono_iff
@@ -668,7 +761,20 @@ lemma mono_iff
   refine ⟨fun _ => ?_, ?_⟩
   · suffices forall ⦃X Y : C⦄ (f : X ⟶ Y) (_ : Mono (L.map f)),
       exists (X' Y' : C) (f' : X' ⟶ Y') (_ : Mono f'),
-          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map 
+          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map f)) by
+        let e := L.mapArrow.objObjPreimageIso (Arrow.mk f)
+        obtain ⟨X', Y', f', _, ⟨e'⟩⟩ := this _
+          (((MorphismProperty.monomorphisms D).arrow_iso_iff e).2 (.infer_property f))
+        exact ⟨_, _, f', inferInstance, ⟨e' ≪≫ e⟩⟩
+    intro X Y f hf
+    rw [mono_map_iff L P] at hf
+    refine ⟨_, _, Abelian.image.ι f, inferInstance, ⟨Iso.symm ?_⟩⟩
+    have := Localization.inverts L P.isoModSerre _ hf.isoModSerre_factorThruImage
+    exact Arrow.isoMk (asIso (L.map (Abelian.factorThruImage f))) (Iso.refl _)
+      (by simp [← L.map_comp])
+  · rintro ⟨X', Y', f', _, ⟨e⟩⟩
+    exact ((MorphismProperty.monomorphisms D).arrow_mk_iso_iff e).1
+      (by simpa using inferInstanceAs (Mono (L.map f')))
 
 Depends on / 依赖: Arrow.mk, L.map, L.mapArrow.objObjPreimageIso, Localization, Localization.essSurj_mapArrow, MorphismProperty, MorphismProperty.monomorphisms, Nonempty, P.isoModSerre, arrow_iso_iff, essSurj_mapArrow, infer_property, isoModSerre, mapArrow, monomorphisms, objObjPreimageIso, preservesMonomorphisms
 -/
@@ -708,7 +814,19 @@ lemma epi_iff
   refine ⟨fun _ => ?_, ?_⟩
   · suffices forall ⦃X Y : C⦄ (f : X ⟶ Y) (_ : Epi (L.map f)),
       exists (X' Y' : C) (f' : X' ⟶ Y') (_ : Epi f'),
-          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map f))
+          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map f)) by
+        let e := L.mapArrow.objObjPreimageIso (Arrow.mk f)
+        obtain ⟨X', Y', f', _, ⟨e'⟩⟩ := this _
+          (((MorphismProperty.epimorphisms D).arrow_iso_iff e).2 (.infer_property f))
+        exact ⟨_, _, f', inferInstance, ⟨e' ≪≫ e⟩⟩
+    intro X Y f hf
+    rw [epi_map_iff L P] at hf
+    refine ⟨_, _, Abelian.factorThruImage f, inferInstance, ⟨?_⟩⟩
+    have := Localization.inverts L P.isoModSerre _ hf.isoModSerre_image_ι
+    refine Arrow.isoMk (Iso.refl _) (asIso (L.map (Abelian.image.ι f))) (by simp [← L.map_comp])
+  · rintro ⟨X', Y', f', _, ⟨e⟩⟩
+    exact ((MorphismProperty.epimorphisms D).arrow_mk_iso_iff e).1
+      (by simpa using inferInstanceAs (Epi (L.map f')))
 
 中文:
 引理 epi_iff
@@ -719,7 +837,19 @@ lemma epi_iff
   refine ⟨fun _ => ?_, ?_⟩
   · suffices forall ⦃X Y : C⦄ (f : X ⟶ Y) (_ : Epi (L.map f)),
       exists (X' Y' : C) (f' : X' ⟶ Y') (_ : Epi f'),
-          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map f))
+          Nonempty (Arrow.mk (L.map f') ≅ Arrow.mk (L.map f)) by
+        let e := L.mapArrow.objObjPreimageIso (Arrow.mk f)
+        obtain ⟨X', Y', f', _, ⟨e'⟩⟩ := this _
+          (((MorphismProperty.epimorphisms D).arrow_iso_iff e).2 (.infer_property f))
+        exact ⟨_, _, f', inferInstance, ⟨e' ≪≫ e⟩⟩
+    intro X Y f hf
+    rw [epi_map_iff L P] at hf
+    refine ⟨_, _, Abelian.factorThruImage f, inferInstance, ⟨?_⟩⟩
+    have := Localization.inverts L P.isoModSerre _ hf.isoModSerre_image_ι
+    refine Arrow.isoMk (Iso.refl _) (asIso (L.map (Abelian.image.ι f))) (by simp [← L.map_comp])
+  · rintro ⟨X', Y', f', _, ⟨e⟩⟩
+    exact ((MorphismProperty.epimorphisms D).arrow_mk_iso_iff e).1
+      (by simpa using inferInstanceAs (Epi (L.map f')))
 
 Depends on / 依赖: Arrow.mk, L.map, L.mapArrow.objObjPreimageIso, Localization, Localization.essSurj_mapArrow, MorphismProperty, MorphismProperty.epimorphisms, Nonempty, P.isoModSerre, arrow_iso_iff, epimorphisms, essSurj_mapArrow, infer_property, isoModSerre, mapArrow, objObjPreimageIso, preservesEpimorphisms
 -/
@@ -758,7 +888,27 @@ lemma preservesKernel
   suffices forall (W : D) (z : W ⟶ L.obj X) (hz : z ≫ L.map f = 0),
       exists (l : W ⟶ L.obj (kernel f)), l ≫ L.map (kernel.ι f) = z from
     preservesLimit_of_preserves_limit_cone (kernelIsKernel f)
-      ((Ke
+      ((KernelFork.isLimitMapConeEquiv _ L).2
+        (Fork.IsLimit.ofExistsUnique
+          (fun s => existsUnique_of_exists_of_unique
+            (this _ _ (KernelFork.condition s))
+            (fun _ _ h₁ h₂ => by simpa [cancel_mono] using h₁.trans h₂.symm))))
+  intro W w hw
+  wlog hw' : exists (Z : C) (hZ : W = L.obj Z) (z : Z ⟶ X), w = eqToHom hZ ≫ L.map z
+      generalizing W
+  · obtain ⟨φ, hφ⟩ := Localization.exists_rightFraction L P.isoModSerre
+      ((L.objObjPreimageIso W).hom ≫ w)
+    rw [← cancel_epi (L.map φ.s)]; rw [MorphismProperty.RightFraction.map_s_comp_map] at hφ
+    obtain ⟨l, hl⟩ := this _ (L.map φ.f) (by
+      rw [← hφ]; rw [Category.assoc]; rw [Category.assoc]; rw [hw]; rw [comp_zero]; rw [comp_zero]) ⟨_, rfl, by simp⟩
+    exact ⟨(L.objObjPreimageIso W).inv ≫ inv (L.map φ.s) ≫ l, by simp [hl, ← hφ]⟩
+  obtain ⟨Z, rfl, z, rfl⟩ := hw'
+  simp only [eqToHom_refl, Category.id_comp, ← L.map_comp, map_eq_zero_iff L P,
+    ← exists_isoModSerre_comp_eq_zero_iff P] at hw
+  obtain ⟨Z', t, ht, fac⟩ := hw
+  have := Localization.inverts L P.isoModSerre t ht
+  rw [← Category.assoc] at fac
+  exact ⟨inv (L.map t) ≫ L.map (kernel.lift _ _ fac), by simp [← Functor.map_comp]⟩
 
 中文:
 引理 preservesKernel
@@ -769,7 +919,27 @@ lemma preservesKernel
   suffices forall (W : D) (z : W ⟶ L.obj X) (hz : z ≫ L.map f = 0),
       exists (l : W ⟶ L.obj (kernel f)), l ≫ L.map (kernel.ι f) = z from
     preservesLimit_of_preserves_limit_cone (kernelIsKernel f)
-      ((Ke
+      ((KernelFork.isLimitMapConeEquiv _ L).2
+        (Fork.IsLimit.ofExistsUnique
+          (fun s => existsUnique_of_exists_of_unique
+            (this _ _ (KernelFork.condition s))
+            (fun _ _ h₁ h₂ => by simpa [cancel_mono] using h₁.trans h₂.symm))))
+  intro W w hw
+  wlog hw' : exists (Z : C) (hZ : W = L.obj Z) (z : Z ⟶ X), w = eqToHom hZ ≫ L.map z
+      generalizing W
+  · obtain ⟨φ, hφ⟩ := Localization.exists_rightFraction L P.isoModSerre
+      ((L.objObjPreimageIso W).hom ≫ w)
+    rw [← cancel_epi (L.map φ.s)]; rw [MorphismProperty.RightFraction.map_s_comp_map] at hφ
+    obtain ⟨l, hl⟩ := this _ (L.map φ.f) (by
+      rw [← hφ]; rw [Category.assoc]; rw [Category.assoc]; rw [hw]; rw [comp_zero]; rw [comp_zero]) ⟨_, rfl, by simp⟩
+    exact ⟨(L.objObjPreimageIso W).inv ≫ inv (L.map φ.s) ≫ l, by simp [hl, ← hφ]⟩
+  obtain ⟨Z, rfl, z, rfl⟩ := hw'
+  simp only [eqToHom_refl, Category.id_comp, ← L.map_comp, map_eq_zero_iff L P,
+    ← exists_isoModSerre_comp_eq_zero_iff P] at hw
+  obtain ⟨Z', t, ht, fac⟩ := hw
+  have := Localization.inverts L P.isoModSerre t ht
+  rw [← Category.assoc] at fac
+  exact ⟨inv (L.map t) ≫ L.map (kernel.lift _ _ fac), by simp [← Functor.map_comp]⟩
 
 Depends on / 依赖: Fork.IsLimit.ofExistsUnique, IsLimit, KernelFork, KernelFork.condition, KernelFork.isLimitMapConeEquiv, L.map, L.obj, Localization, Localization.essSurj, P.isoModSerre, cancel_mono, condition, essSurj, existsUnique_of_exists_of_unique, isLimitMapConeEquiv, isoModSerre, kernel, kernelIsKernel, ofExistsUnique, preservesLimit_of_preserves_limit_cone
 -/
@@ -814,7 +984,27 @@ lemma preservesCokernel
   have := Localization.essSurj L P.isoModSerre
   suffices forall (W : D) (z : L.obj Y ⟶ W) (hz : L.map f ≫ z = 0),
       exists (l : L.obj (cokernel f) ⟶ W), L.map (cokernel.π f) ≫ l = z from
-    preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel 
+    preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel f)
+      ((CokernelCofork.isColimitMapCoconeEquiv _ L).2
+        (Cofork.IsColimit.ofExistsUnique
+          (fun s => existsUnique_of_exists_of_unique
+            (this _ _ (CokernelCofork.condition s))
+            (fun _ _ h₁ h₂ => by simpa [cancel_epi] using h₁.trans h₂.symm))))
+  intro W w hw
+  wlog hw' : exists (Z : C) (hZ : L.obj Z = W) (z : Y ⟶ Z), w = L.map z ≫ eqToHom hZ
+      generalizing W
+  · obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L P.isoModSerre
+      (w ≫ (L.objObjPreimageIso W).inv)
+    rw [← cancel_mono (L.map φ.s)]; rw [Category.assoc]; rw [MorphismProperty.LeftFraction.map_comp_map_s] at hφ
+    obtain ⟨l, hl⟩ := this _ (L.map φ.f) (by rw [← hφ, reassoc_of% hw, zero_comp]) ⟨_, rfl, by simp⟩
+    exact ⟨l ≫ inv (L.map φ.s) ≫ (L.objObjPreimageIso W).hom, by simp [reassoc_of% hl, ← hφ]⟩
+  obtain ⟨Z, rfl, z, rfl⟩ := hw'
+  simp only [eqToHom_refl, Category.comp_id, ← L.map_comp,
+    map_eq_zero_iff L P, ← exists_comp_isoModSerre_eq_zero_iff P] at hw
+  obtain ⟨Z', t, ht, fac⟩ := hw
+  rw [Category.assoc] at fac
+  have := Localization.inverts L P.isoModSerre t ht
+  exact ⟨L.map (cokernel.desc _ _ fac) ≫ inv (L.map t), by simp [← L.map_comp_assoc]⟩
 
 中文:
 引理 preservesCokernel
@@ -824,7 +1014,27 @@ lemma preservesCokernel
   have := Localization.essSurj L P.isoModSerre
   suffices forall (W : D) (z : L.obj Y ⟶ W) (hz : L.map f ≫ z = 0),
       exists (l : L.obj (cokernel f) ⟶ W), L.map (cokernel.π f) ≫ l = z from
-    preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel 
+    preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel f)
+      ((CokernelCofork.isColimitMapCoconeEquiv _ L).2
+        (Cofork.IsColimit.ofExistsUnique
+          (fun s => existsUnique_of_exists_of_unique
+            (this _ _ (CokernelCofork.condition s))
+            (fun _ _ h₁ h₂ => by simpa [cancel_epi] using h₁.trans h₂.symm))))
+  intro W w hw
+  wlog hw' : exists (Z : C) (hZ : L.obj Z = W) (z : Y ⟶ Z), w = L.map z ≫ eqToHom hZ
+      generalizing W
+  · obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L P.isoModSerre
+      (w ≫ (L.objObjPreimageIso W).inv)
+    rw [← cancel_mono (L.map φ.s)]; rw [Category.assoc]; rw [MorphismProperty.LeftFraction.map_comp_map_s] at hφ
+    obtain ⟨l, hl⟩ := this _ (L.map φ.f) (by rw [← hφ, reassoc_of% hw, zero_comp]) ⟨_, rfl, by simp⟩
+    exact ⟨l ≫ inv (L.map φ.s) ≫ (L.objObjPreimageIso W).hom, by simp [reassoc_of% hl, ← hφ]⟩
+  obtain ⟨Z, rfl, z, rfl⟩ := hw'
+  simp only [eqToHom_refl, Category.comp_id, ← L.map_comp,
+    map_eq_zero_iff L P, ← exists_comp_isoModSerre_eq_zero_iff P] at hw
+  obtain ⟨Z', t, ht, fac⟩ := hw
+  rw [Category.assoc] at fac
+  have := Localization.inverts L P.isoModSerre t ht
+  exact ⟨L.map (cokernel.desc _ _ fac) ≫ inv (L.map t), by simp [← L.map_comp_assoc]⟩
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.ofExistsUnique, CokernelCofork, CokernelCofork.condition, CokernelCofork.isColimitMapCoconeEquiv, IsColimit, L.map, L.obj, Localization, Localization.essSurj, P.isoModSerre, cancel_epi, cokernel, cokernelIsCokernel, condition, essSurj, existsUnique_of_exists_of_unique, isColimitMapCoconeEquiv, isoModSerre, ofExistsUnique
 -/
@@ -869,7 +1079,9 @@ lemma hasKernels
     have := preservesKernel L P g.hom
     have : HasLimit (parallelPair (L.map g.hom) 0) :=
       ⟨_, (KernelFork.isLimitMapConeEquiv _ L).1
-        (isLimitOfPreserves L (kernelIsKernel g.hom))
+        (isLimitOfPreserves L (kernelIsKernel g.hom))⟩
+    exact hasLimit_of_iso (show parallelPair (L.map g.hom) 0 ≅ _ from
+      parallelPair.ext (Arrow.leftFunc.mapIso e) (Arrow.rightFunc.mapIso e))
 
 中文:
 引理 hasKernels
@@ -880,7 +1092,9 @@ lemma hasKernels
     have := preservesKernel L P g.hom
     have : HasLimit (parallelPair (L.map g.hom) 0) :=
       ⟨_, (KernelFork.isLimitMapConeEquiv _ L).1
-        (isLimitOfPreserves L (kernelIsKernel g.hom))
+        (isLimitOfPreserves L (kernelIsKernel g.hom))⟩
+    exact hasLimit_of_iso (show parallelPair (L.map g.hom) 0 ≅ _ from
+      parallelPair.ext (Arrow.leftFunc.mapIso e) (Arrow.rightFunc.mapIso e))
 
 Depends on / 依赖: Arrow.leftFunc.mapIso, Arrow.mk, Arrow.rightFunc.mapIso, HasLimit, KernelFork, KernelFork.isLimitMapConeEquiv, L.map, Localization, Localization.essSurj_mapArrow, P.isoModSerre, essSurj_mapArrow, g.hom, hasLimit_of_iso, isLimitMapConeEquiv, isLimitOfPreserves, isoModSerre, kernelIsKernel, leftFunc, mapIso, mem_essImage
 -/
@@ -908,7 +1122,9 @@ lemma hasCokernels
     have := preservesCokernel L P g.hom
     have : HasColimit (parallelPair (L.map g.hom) 0) :=
       ⟨_, (CokernelCofork.isColimitMapCoconeEquiv _ L).1
-        (isColimitOfPreserves L (cokernel
+        (isColimitOfPreserves L (cokernelIsCokernel g.hom))⟩
+    exact hasColimit_of_iso (show _ ≅ parallelPair (L.map g.hom) 0 from
+      parallelPair.ext (Arrow.leftFunc.mapIso e.symm) (Arrow.rightFunc.mapIso e.symm))
 
 中文:
 引理 hasCokernels
@@ -919,7 +1135,9 @@ lemma hasCokernels
     have := preservesCokernel L P g.hom
     have : HasColimit (parallelPair (L.map g.hom) 0) :=
       ⟨_, (CokernelCofork.isColimitMapCoconeEquiv _ L).1
-        (isColimitOfPreserves L (cokernel
+        (isColimitOfPreserves L (cokernelIsCokernel g.hom))⟩
+    exact hasColimit_of_iso (show _ ≅ parallelPair (L.map g.hom) 0 from
+      parallelPair.ext (Arrow.leftFunc.mapIso e.symm) (Arrow.rightFunc.mapIso e.symm))
 
 Depends on / 依赖: Arrow.leftFunc.mapIso, Arrow.mk, Arrow.rightFunc.mapIso, CokernelCofork, CokernelCofork.isColimitMapCoconeEquiv, HasColimit, L.map, Localization, Localization.essSurj_mapArrow, P.isoModSerre, cokernelIsCokernel, e.symm, essSurj_mapArrow, g.hom, hasColimit_of_iso, isColimitMapCoconeEquiv, isColimitOfPreserves, isoModSerre, leftFunc, mapIso
 -/
@@ -1025,7 +1243,9 @@ lemma isNormalMonoCategory
       Z := L.obj hf'.Z
       g := L.map hf'.g
       w := by rw [← L.map_comp]; simp [hf'.w]
-      isLimit 
+      isLimit :=
+        (KernelFork.isLimitMapConeEquiv _ L).1
+          (isLimitOfPreserves L hf'.isLimit) }
 
 中文:
 引理 isNormalMonoCategory
@@ -1040,7 +1260,9 @@ lemma isNormalMonoCategory
       Z := L.obj hf'.Z
       g := L.map hf'.g
       w := by rw [← L.map_comp]; simp [hf'.w]
-      isLimit 
+      isLimit :=
+        (KernelFork.isLimitMapConeEquiv _ L).1
+          (isLimitOfPreserves L hf'.isLimit) }
 
 Depends on / 依赖: KernelFork, KernelFork.isLimitMapConeEquiv, L.map, L.map_comp, L.obj, NormalMono, NormalMono.ofArrowIso, isLimit, isLimitMapConeEquiv, isLimitOfPreserves, map_comp, mono_iff, normalMonoOfMono, ofArrowIso, preservesKernel
 -/
@@ -1075,7 +1297,9 @@ lemma isNormalEpiCategory
       W := L.obj hf'.W
       g := L.map hf'.g
       w := by rw [← L.map_comp]; simp [hf'.w]
-      isColimit 
+      isColimit :=
+        (CokernelCofork.isColimitMapCoconeEquiv _ L).1
+          (isColimitOfPreserves L hf'.isColimit) }
 
 中文:
 引理 isNormalEpiCategory
@@ -1090,7 +1314,9 @@ lemma isNormalEpiCategory
       W := L.obj hf'.W
       g := L.map hf'.g
       w := by rw [← L.map_comp]; simp [hf'.w]
-      isColimit 
+      isColimit :=
+        (CokernelCofork.isColimitMapCoconeEquiv _ L).1
+          (isColimitOfPreserves L hf'.isColimit) }
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.isColimitMapCoconeEquiv, L.map, L.map_comp, L.obj, NormalEpi, NormalEpi.ofArrowIso, epi_iff, isColimit, isColimitMapCoconeEquiv, isColimitOfPreserves, map_comp, normalEpiOfEpi, ofArrowIso, preservesCokernel
 -/
@@ -1290,7 +1516,19 @@ lemma preservesFiniteLimits_comp_iff
   refine ⟨fun _ => ?_, fun _ => comp_preservesFiniteLimits _ _⟩
   have := (Localization.functor_additive_iff L P.isoModSerre G).mpr
     (L ⋙ G).additive_of_preserves_binary_products
-  refine ((Functor.preservesFiniteLimits_tfae G).out 2 3).
+  refine ((Functor.preservesFiniteLimits_tfae G).out 2 3).mp (fun _ _ f => ?_)
+  obtain ⟨f', ⟨iso⟩⟩ :=
+    (Localization.essSurj_mapArrow L P.isoModSerre).mem_essImage (Arrow.mk f)
+  have : PreservesLimit (parallelPair (L.map f'.hom) 0) G :=
+    preservesLimit_of_preserves_limit_cone
+      (KernelFork.isLimitMapConeEquiv _ _
+        (isLimitOfPreserves L (kernelIsKernel f'.hom)))
+          ((KernelFork.isLimitMapConeEquiv _ G).symm
+            (KernelFork.isLimitMapConeEquiv _ (L ⋙ G)
+              (isLimitOfPreserves (L ⋙ G) (kernelIsKernel f'.hom))))
+  exact preservesLimit_of_iso_diagram G
+    (show parallelPair (L.map f'.hom) 0 ≅ parallelPair f 0 from
+      parallelPair.ext (Arrow.leftFunc.mapIso iso) (Arrow.rightFunc.mapIso iso))
 
 中文:
 引理 preservesFiniteLimits_comp_iff
@@ -1300,7 +1538,19 @@ lemma preservesFiniteLimits_comp_iff
   refine ⟨fun _ => ?_, fun _ => comp_preservesFiniteLimits _ _⟩
   have := (Localization.functor_additive_iff L P.isoModSerre G).mpr
     (L ⋙ G).additive_of_preserves_binary_products
-  refine ((Functor.preservesFiniteLimits_tfae G).out 2 3).
+  refine ((Functor.preservesFiniteLimits_tfae G).out 2 3).mp (fun _ _ f => ?_)
+  obtain ⟨f', ⟨iso⟩⟩ :=
+    (Localization.essSurj_mapArrow L P.isoModSerre).mem_essImage (Arrow.mk f)
+  have : PreservesLimit (parallelPair (L.map f'.hom) 0) G :=
+    preservesLimit_of_preserves_limit_cone
+      (KernelFork.isLimitMapConeEquiv _ _
+        (isLimitOfPreserves L (kernelIsKernel f'.hom)))
+          ((KernelFork.isLimitMapConeEquiv _ G).symm
+            (KernelFork.isLimitMapConeEquiv _ (L ⋙ G)
+              (isLimitOfPreserves (L ⋙ G) (kernelIsKernel f'.hom))))
+  exact preservesLimit_of_iso_diagram G
+    (show parallelPair (L.map f'.hom) 0 ≅ parallelPair f 0 from
+      parallelPair.ext (Arrow.leftFunc.mapIso iso) (Arrow.rightFunc.mapIso iso))
 
 Depends on / 依赖: Arrow.mk, Functor, Functor.preservesFiniteLimits_tfae, L.map, Localization, Localization.essSurj_mapArrow, Localization.functor_additive_iff, P.isoModSerre, PreservesLimit, abelian, additive_of_preserves_binary_products, comp_preservesFiniteLimits, essSurj_mapArrow, functor_additive_iff, isoModSerre, mem_essImage, parallelPair, preservesFiniteLimits, preservesFiniteLimits_tfae, preservesLimit_of_preserves_limit_cone
 -/
@@ -1337,7 +1587,20 @@ lemma preservesFiniteColimits_comp_iff
   refine ⟨fun _ => ?_, fun _ => comp_preservesFiniteColimits _ _⟩
   have := (Localization.functor_additive_iff L P.isoModSerre G).mpr (by
     have := preservesBinaryBiproducts_of_preservesBinaryCoproducts (L ⋙ G)
-    exact Functor.additiv
+    exact Functor.additive_of_preservesBinaryBiproducts _)
+  refine ((Functor.preservesFiniteColimits_tfae G).out 2 3).mp (fun _ _ f => ?_)
+  obtain ⟨f', ⟨iso⟩⟩ :=
+    (Localization.essSurj_mapArrow L P.isoModSerre).mem_essImage (Arrow.mk f)
+  have : PreservesColimit (parallelPair (L.map f'.hom) 0) G :=
+    preservesColimit_of_preserves_colimit_cocone
+      (CokernelCofork.isColimitMapCoconeEquiv _ _
+        (isColimitOfPreserves L (cokernelIsCokernel f'.hom)))
+          ((CokernelCofork.isColimitMapCoconeEquiv _ G).symm
+            (CokernelCofork.isColimitMapCoconeEquiv _ (L ⋙ G)
+              (isColimitOfPreserves (L ⋙ G) (cokernelIsCokernel f'.hom))))
+  exact preservesColimit_of_iso_diagram G
+    (show parallelPair (L.map f'.hom) 0 ≅ parallelPair f 0 from
+      parallelPair.ext (Arrow.leftFunc.mapIso iso) (Arrow.rightFunc.mapIso iso))
 
 中文:
 引理 preservesFiniteColimits_comp_iff
@@ -1347,7 +1610,20 @@ lemma preservesFiniteColimits_comp_iff
   refine ⟨fun _ => ?_, fun _ => comp_preservesFiniteColimits _ _⟩
   have := (Localization.functor_additive_iff L P.isoModSerre G).mpr (by
     have := preservesBinaryBiproducts_of_preservesBinaryCoproducts (L ⋙ G)
-    exact Functor.additiv
+    exact Functor.additive_of_preservesBinaryBiproducts _)
+  refine ((Functor.preservesFiniteColimits_tfae G).out 2 3).mp (fun _ _ f => ?_)
+  obtain ⟨f', ⟨iso⟩⟩ :=
+    (Localization.essSurj_mapArrow L P.isoModSerre).mem_essImage (Arrow.mk f)
+  have : PreservesColimit (parallelPair (L.map f'.hom) 0) G :=
+    preservesColimit_of_preserves_colimit_cocone
+      (CokernelCofork.isColimitMapCoconeEquiv _ _
+        (isColimitOfPreserves L (cokernelIsCokernel f'.hom)))
+          ((CokernelCofork.isColimitMapCoconeEquiv _ G).symm
+            (CokernelCofork.isColimitMapCoconeEquiv _ (L ⋙ G)
+              (isColimitOfPreserves (L ⋙ G) (cokernelIsCokernel f'.hom))))
+  exact preservesColimit_of_iso_diagram G
+    (show parallelPair (L.map f'.hom) 0 ≅ parallelPair f 0 from
+      parallelPair.ext (Arrow.leftFunc.mapIso iso) (Arrow.rightFunc.mapIso iso))
 
 Depends on / 依赖: Arrow.mk, Functor, Functor.additive_of_preservesBinaryBiproducts, Functor.preservesFiniteColimits_tfae, Localization, Localization.essSurj_mapArrow, Localization.functor_additive_iff, P.isoModSerre, abelian, additive_of_preservesBinaryBiproducts, comp_preservesFiniteColimits, essSurj_mapArrow, functor_additive_iff, isoModSerre, mem_essImage, preservesBinaryBiproducts_of_preservesBinaryCoproducts, preservesFiniteColimits, preservesFiniteColimits_tfae
 -/
@@ -1516,7 +1792,10 @@ lemma essImage_whiskeringLeft
     rw [← MorphismProperty.IsInvertedBy.iff_of_iso _
       (show L ⋙ G.obj ≅ F.obj from (ObjectProperty.ι _).mapIso e)]
     exact MorphismProperty.IsInvertedBy.of_comp _ _ (Localization.inverts L _) _
-  · refine ⟨⟨Localization.lift F.obj hF 
+  · refine ⟨⟨Localization.lift F.obj hF L, ?_⟩,
+      ⟨ObjectProperty.isoMk _ (Localization.fac F.obj hF L)⟩⟩
+    rw [← exactFunctor_comp_iff L P]
+    exact ObjectProperty.prop_of_iso _ (Localization.fac F.obj hF L).symm F.property
 
 中文:
 引理 essImage_whiskeringLeft
@@ -1527,7 +1806,10 @@ lemma essImage_whiskeringLeft
     rw [← MorphismProperty.IsInvertedBy.iff_of_iso _
       (show L ⋙ G.obj ≅ F.obj from (ObjectProperty.ι _).mapIso e)]
     exact MorphismProperty.IsInvertedBy.of_comp _ _ (Localization.inverts L _) _
-  · refine ⟨⟨Localization.lift F.obj hF 
+  · refine ⟨⟨Localization.lift F.obj hF L, ?_⟩,
+      ⟨ObjectProperty.isoMk _ (Localization.fac F.obj hF L)⟩⟩
+    rw [← exactFunctor_comp_iff L P]
+    exact ObjectProperty.prop_of_iso _ (Localization.fac F.obj hF L).symm F.property
 
 Depends on / 依赖: F.obj, F.property, G.obj, IsInvertedBy, Localization, Localization.fac, Localization.inverts, Localization.lift, MorphismProperty, MorphismProperty.IsInvertedBy.iff_of_iso, MorphismProperty.IsInvertedBy.of_comp, ObjectProperty, ObjectProperty.isoMk, ObjectProperty.prop_of_iso, exactFunctor_comp_iff, iff_of_iso, inverts, mapIso, of_comp, prop_of_iso
 -/

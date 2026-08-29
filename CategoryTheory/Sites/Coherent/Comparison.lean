@@ -44,7 +44,7 @@ instance [Precoherent
     obtain ⟨β, _, X₂, π₂, h, ι, hι⟩ := hp inferInstance
     refine ⟨∐ X₂, Sigma.desc π₂, inferInstance, Sigma.desc ι, ?_⟩
     ext b
-   
+    simpa using hι b
 
 中文:
 实例 [Precoherent
@@ -56,7 +56,7 @@ instance [Precoherent
     obtain ⟨β, _, X₂, π₂, h, ι, hι⟩ := hp inferInstance
     refine ⟨∐ X₂, Sigma.desc π₂, inferInstance, Sigma.desc ι, ?_⟩
     ext b
-   
+    simpa using hι b
 
 Depends on / 依赖: Precoherent, Precoherent.pullback, Sigma.desc, effectiveEpi_iff_effectiveEpiFamily, exists_const, pullback
 -/
@@ -83,7 +83,15 @@ instance [FinitaryPreExtensive
     let X₂ := fun a => pullback g' (Sigma.ι X₁ a)
     let π₂ := fun a => pullback.fst g' (Sigma.ι X₁ a) ≫ g
     let π' := fun a => pullback.fst g' (Sigma.ι X₁ a)
-    have _ := FinitaryPreExte
+    have _ := FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X₁ a) g' inferInstance
+    refine ⟨X₂, π₂, ?_, ?_⟩
+    · have : (Sigma.desc π' ≫ g) = Sigma.desc π₂ := by ext; simp [π₂, π']
+      rw [← effectiveEpi_desc_iff_effectiveEpiFamily]; rw [← this]
+      infer_instance
+    · refine ⟨id, fun b => pullback.snd _ _, fun b => ?_⟩
+      simp only [X₂, π₂, id_eq, Category.assoc, ← hg]
+      rw [← Category.assoc]; rw [pullback.condition]
+      simp
 
 中文:
 实例 [有限预广延
@@ -94,7 +102,15 @@ instance [FinitaryPreExtensive
     let X₂ := fun a => pullback g' (Sigma.ι X₁ a)
     let π₂ := fun a => pullback.fst g' (Sigma.ι X₁ a) ≫ g
     let π' := fun a => pullback.fst g' (Sigma.ι X₁ a)
-    have _ := FinitaryPreExte
+    have _ := FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X₁ a) g' inferInstance
+    refine ⟨X₂, π₂, ?_, ?_⟩
+    · have : (Sigma.desc π' ≫ g) = Sigma.desc π₂ := by ext; simp [π₂, π']
+      rw [← effectiveEpi_desc_iff_effectiveEpiFamily]; rw [← this]
+      infer_instance
+    · refine ⟨id, fun b => pullback.snd _ _, fun b => ?_⟩
+      simp only [X₂, π₂, id_eq, Category.assoc, ← hg]
+      rw [← Category.assoc]; rw [pullback.condition]
+      simp
 
 Depends on / 依赖: FinitaryPreExtensive, FinitaryPreExtensive.isIso_sigmaDesc_fst, Preregular, Preregular.exists_fac, Sigma.desc, effectiveEpi_desc_iff_effectiveEpiFamily, exists_fac, isIso_sigmaDesc_fst, pullback, pullback.fst
 -/
@@ -131,7 +147,33 @@ theorem extensive_regular_generate_coherent
       simp only [Coverage.sup_covering, Set.mem_union] at hT
       exact Or.elim hT
         (fun ⟨α, x, X, π, ⟨h, _⟩⟩ => ⟨α, x, X, π, ⟨h, inferInstance⟩⟩)
-        (fun ⟨Z, f, ⟨h,
+        (fun ⟨Z, f, ⟨h, _⟩⟩ => ⟨Unit, inferInstance, fun _ => Z, fun _ => f, ⟨h, inferInstance⟩⟩)
+    | top => apply Coverage.Saturate.top
+    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
+  · induction h with
+    | of Y T hT =>
+      obtain ⟨I, _, X, f, rfl, hT⟩ := hT
+      apply Coverage.Saturate.transitive Y (generate (Presieve.ofArrows
+        (fun (_ : Unit) => (∐ fun (i : I) => X i)) (fun (_ : Unit) => Sigma.desc f)))
+      · apply Coverage.Saturate.of
+        simp only [Coverage.sup_covering, extensiveCoverage, regularCoverage, Set.mem_union,
+          Set.mem_ofPred_eq]
+        exact Or.inr ⟨_, Sigma.desc f, ⟨rfl, inferInstance⟩⟩
+      · rintro R g ⟨W, ψ, σ, ⟨⟩, rfl⟩
+        change _ in ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck R
+        rw [Sieve.pullback_comp]
+        apply pullback_stable
+        have : generate (Presieve.ofArrows X fun (i : I) => Sigma.ι X i) <=
+            (generate (Presieve.ofArrows X f)).pullback (Sigma.desc f) := by
+          rintro Q q ⟨E, e, r, ⟨hq, rfl⟩⟩
+          exact ⟨E, e, r ≫ (Sigma.desc f), by cases hq; simpa using Presieve.ofArrows.mk _, by simp⟩
+        apply Coverage.saturate_of_superset _ this
+        apply Coverage.Saturate.of
+        refine Or.inl ⟨I, inferInstance, _, _, ⟨rfl, ?_⟩⟩
+        convert! IsIso.id _
+        aesop
+    | top => apply Coverage.Saturate.top
+    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
 
 中文:
 定理 extensive_regular_generate_coherent
@@ -145,7 +187,33 @@ theorem extensive_regular_generate_coherent
       simp only [Coverage.sup_covering, Set.mem_union] at hT
       exact Or.elim hT
         (fun ⟨α, x, X, π, ⟨h, _⟩⟩ => ⟨α, x, X, π, ⟨h, inferInstance⟩⟩)
-        (fun ⟨Z, f, ⟨h,
+        (fun ⟨Z, f, ⟨h, _⟩⟩ => ⟨Unit, inferInstance, fun _ => Z, fun _ => f, ⟨h, inferInstance⟩⟩)
+    | top => apply Coverage.Saturate.top
+    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
+  · induction h with
+    | of Y T hT =>
+      obtain ⟨I, _, X, f, rfl, hT⟩ := hT
+      apply Coverage.Saturate.transitive Y (generate (Presieve.ofArrows
+        (fun (_ : Unit) => (∐ fun (i : I) => X i)) (fun (_ : Unit) => Sigma.desc f)))
+      · apply Coverage.Saturate.of
+        simp only [Coverage.sup_covering, extensiveCoverage, regularCoverage, Set.mem_union,
+          Set.mem_ofPred_eq]
+        exact Or.inr ⟨_, Sigma.desc f, ⟨rfl, inferInstance⟩⟩
+      · rintro R g ⟨W, ψ, σ, ⟨⟩, rfl⟩
+        change _ in ((extensiveCoverage C) ⊔ (regularCoverage C)).toGrothendieck R
+        rw [Sieve.pullback_comp]
+        apply pullback_stable
+        have : generate (Presieve.ofArrows X fun (i : I) => Sigma.ι X i) <=
+            (generate (Presieve.ofArrows X f)).pullback (Sigma.desc f) := by
+          rintro Q q ⟨E, e, r, ⟨hq, rfl⟩⟩
+          exact ⟨E, e, r ≫ (Sigma.desc f), by cases hq; simpa using Presieve.ofArrows.mk _, by simp⟩
+        apply Coverage.saturate_of_superset _ this
+        apply Coverage.Saturate.of
+        refine Or.inl ⟨I, inferInstance, _, _, ⟨rfl, ?_⟩⟩
+        convert! IsIso.id _
+        aesop
+    | top => apply Coverage.Saturate.top
+    | transitive Y T => apply Coverage.Saturate.transitive Y T <;> [assumption; assumption]
 
 Depends on / 依赖: Coverage, Coverage.Saturate.of, Coverage.Saturate.top, Coverage.Saturate.transitive, Coverage.sup_covering, Or.elim, Saturate, Set.mem_union, mem_union, sup_covering, transitive
 -/

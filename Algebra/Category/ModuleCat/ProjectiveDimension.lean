@@ -67,7 +67,29 @@ lemma hasProjectiveDimensionLE_of_semiLinearEquiv
     simp only [HasProjectiveDimensionLE, zero_add] at this ⊢
     rw [← projective_iff_hasProjectiveDimensionLT_one]; rw [← IsProjective.iff_projective] at this ⊢
     exact Projective.of_equiv e'
-  | 
+  | succ n ih =>
+    let S := M.projectiveShortComplex
+    let S' := N.projectiveShortComplex
+    have S_exact := M.shortExact_projectiveShortComplex
+    have S'_exact := N.shortExact_projectiveShortComplex
+    let eR : Shrink.{v} R ≃ₛₗ[RingHomClass.toRingHom e] Shrink.{v'} R' :=
+      ((Shrink.linearEquiv R R).trans e.toSemilinearEquiv).trans (Shrink.linearEquiv R' R').symm
+    let e2 : S.X₂ ≃ₛₗ[RingHomClass.toRingHom e] S'.X₂ :=
+      (Finsupp.mapDomain.linearEquiv (Shrink R) R e').trans (Finsupp.mapRange.linearEquiv eR)
+    have comm : S'.g.hom.comp e2.toLinearMap = e'.toLinearMap.comp S.g.hom := by
+      ext m r
+      simp [S, S', e2, eR, Basis.constr_apply, map_smulₛₗ]
+    have : S.g.hom.ker = Submodule.comap e2.toLinearMap S'.g.hom.ker := by
+      rw [← LinearMap.ker_comp]; rw [comm]; rw [LinearEquiv.ker_comp]
+    rw [Submodule.comap_equiv_eq_map_symm] at this
+    let eker : S.X₁ ≃ₛₗ[RingHomClass.toRingHom e] S'.X₁ :=
+      (LinearEquiv.ofEq _ _ this).trans (e2.symm.submoduleMap S'.g.hom.ker).symm
+    have := (S_exact.hasProjectiveDimensionLT_X₃_iff n inferInstance).mp ‹_›
+    exact (S'_exact.hasProjectiveDimensionLT_X₃_iff n inferInstance).mpr (ih eker)
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.hasProjectiveDimensionLE_of_semiLinearEquiv :=
+  hasProjectiveDimensionLE_of_semiLinearEquiv
 
 中文:
 引理 hasProjectiveDimensionLE_of_semiLinearEquiv
@@ -79,7 +101,29 @@ lemma hasProjectiveDimensionLE_of_semiLinearEquiv
     simp only [HasProjectiveDimensionLE, zero_add] at this ⊢
     rw [← projective_iff_hasProjectiveDimensionLT_one]; rw [← IsProjective.iff_projective] at this ⊢
     exact Projective.of_equiv e'
-  | 
+  | succ n ih =>
+    let S := M.projectiveShortComplex
+    let S' := N.projectiveShortComplex
+    have S_exact := M.shortExact_projectiveShortComplex
+    have S'_exact := N.shortExact_projectiveShortComplex
+    let eR : Shrink.{v} R ≃ₛₗ[RingHomClass.toRingHom e] Shrink.{v'} R' :=
+      ((Shrink.linearEquiv R R).trans e.toSemilinearEquiv).trans (Shrink.linearEquiv R' R').symm
+    let e2 : S.X₂ ≃ₛₗ[RingHomClass.toRingHom e] S'.X₂ :=
+      (Finsupp.mapDomain.linearEquiv (Shrink R) R e').trans (Finsupp.mapRange.linearEquiv eR)
+    have comm : S'.g.hom.comp e2.toLinearMap = e'.toLinearMap.comp S.g.hom := by
+      ext m r
+      simp [S, S', e2, eR, Basis.constr_apply, map_smulₛₗ]
+    have : S.g.hom.ker = Submodule.comap e2.toLinearMap S'.g.hom.ker := by
+      rw [← LinearMap.ker_comp]; rw [comm]; rw [LinearEquiv.ker_comp]
+    rw [Submodule.comap_equiv_eq_map_symm] at this
+    let eker : S.X₁ ≃ₛₗ[RingHomClass.toRingHom e] S'.X₁ :=
+      (LinearEquiv.ofEq _ _ this).trans (e2.symm.submoduleMap S'.g.hom.ker).symm
+    have := (S_exact.hasProjectiveDimensionLT_X₃_iff n inferInstance).mp ‹_›
+    exact (S'_exact.hasProjectiveDimensionLT_X₃_iff n inferInstance).mpr (ih eker)
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.hasProjectiveDimensionLE_of_semiLinearEquiv :=
+  hasProjectiveDimensionLE_of_semiLinearEquiv
 
 Depends on / 依赖: HasProjectiveDimensionLE, IsProjective, IsProjective.iff_projective, M.projectiveShortComplex, M.shortExact_projectiveShortComplex, N.projectiveShortComplex, N.shortExact_projectiveShortComplex, Projective, Projective.of_equiv, RingHomCl, S_exact, Shrink, _exact, generalizing, iff_projective, of_equiv, projectiveShortComplex, projective_iff_hasProjectiveDimensionLT_one, shortExact_projectiveShortComplex, zero_add
 -/
@@ -132,7 +176,13 @@ lemma projectiveDimension_eq_of_semiLinearEquiv
     | top => simp
     | coe n =>
       norm_cast
-      simp only [projectiveDimens
+      simp only [projectiveDimension_le_iff]
+      exact ⟨fun h => hasProjectiveDimensionLE_of_semiLinearEquiv e e' n,
+        fun h => hasProjectiveDimensionLE_of_semiLinearEquiv e.symm e'.symm n⟩
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.projectiveDimension_eq_of_semiLinearEquiv :=
+  projectiveDimension_eq_of_semiLinearEquiv
 
 中文:
 引理 projectiveDimension_eq_of_semiLinearEquiv
@@ -147,7 +197,13 @@ lemma projectiveDimension_eq_of_semiLinearEquiv
     | top => simp
     | coe n =>
       norm_cast
-      simp only [projectiveDimens
+      simp only [projectiveDimension_le_iff]
+      exact ⟨fun h => hasProjectiveDimensionLE_of_semiLinearEquiv e e' n,
+        fun h => hasProjectiveDimensionLE_of_semiLinearEquiv e.symm e'.symm n⟩
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.projectiveDimension_eq_of_semiLinearEquiv :=
+  projectiveDimension_eq_of_semiLinearEquiv
 
 Depends on / 依赖: ModuleCat, ModuleCat.isZero_iff_subsingleton, e.symm, eq_of_forall_ge_iff, hasProjectiveDimensionLE_of_semiLinearEquiv, isZero_iff_subsingleton, projectiveDimension_eq_bot_iff, projectiveDimension_le_iff, subsingleton_congr
 -/
@@ -185,7 +241,11 @@ lemma hasProjectiveDimensionLE_of_linearEquiv
   proof: #adaptation_note /-- 2026-05-20 (kmill) #13807, instances are more eager to apply, but the
   `univ_out_params` attribute for `Small` doesn't seem to restrict local instances, so the
   wrong universe levels are inferred. Added `.{v, v'}`. -/
-  hasProjectiveDimensionLE_of_semiLinearEquiv.{v, v'} (Ring
+  hasProjectiveDimensionLE_of_semiLinearEquiv.{v, v'} (RingEquiv.refl R) e n
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.hasProjectiveDimensionLE_of_linearEquiv :=
+  hasProjectiveDimensionLE_of_linearEquiv
 
 中文:
 引理 hasProjectiveDimensionLE_of_linearEquiv
@@ -193,7 +253,11 @@ lemma hasProjectiveDimensionLE_of_linearEquiv
   证明: #adaptation_note /-- 2026-05-20 (kmill) #13807, instances are more eager to apply, but the
   `univ_out_params` attribute for `Small` doesn't seem to restrict local instances, so the
   wrong universe levels are inferred. Added `.{v, v'}`. -/
-  hasProjectiveDimensionLE_of_semiLinearEquiv.{v, v'} (Ring
+  hasProjectiveDimensionLE_of_semiLinearEquiv.{v, v'} (RingEquiv.refl R) e n
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.hasProjectiveDimensionLE_of_linearEquiv :=
+  hasProjectiveDimensionLE_of_linearEquiv
 
 Depends on / 依赖: RingEquiv, RingEquiv.refl, adaptation_note, attribute, hasProjectiveDimensionLE_of_semiLinearEquiv, inferred, instances, levels, restrict, univ_out_params, universe
 -/
@@ -217,7 +281,11 @@ lemma projectiveDimension_eq_of_linearEquiv
   proof: #adaptation_note /-- 2026-05-20 (kmill) #13807, instances are more eager to apply, but the
   `univ_out_params` attribute for `Small` doesn't seem to restrict local instances, so the
   wrong universe levels are inferred. Added `.{v, v'}`. -/
-  projectiveDimension_eq_of_semiLinearEquiv.{v, v'} (M := M
+  projectiveDimension_eq_of_semiLinearEquiv.{v, v'} (M := M) (N := N) (RingEquiv.refl R) e
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.projectiveDimension_eq_of_linearEquiv :=
+  projectiveDimension_eq_of_linearEquiv
 
 中文:
 引理 projectiveDimension_eq_of_linearEquiv
@@ -225,7 +293,11 @@ lemma projectiveDimension_eq_of_linearEquiv
   证明: #adaptation_note /-- 2026-05-20 (kmill) #13807, instances are more eager to apply, but the
   `univ_out_params` attribute for `Small` doesn't seem to restrict local instances, so the
   wrong universe levels are inferred. Added `.{v, v'}`. -/
-  projectiveDimension_eq_of_semiLinearEquiv.{v, v'} (M := M
+  projectiveDimension_eq_of_semiLinearEquiv.{v, v'} (M := M) (N := N) (RingEquiv.refl R) e
+
+@[deprecated (since := "2026-04-04")]
+alias _root_.CategoryTheory.projectiveDimension_eq_of_linearEquiv :=
+  projectiveDimension_eq_of_linearEquiv
 
 Depends on / 依赖: RingEquiv, RingEquiv.refl, adaptation_note, attribute, inferred, instances, levels, projectiveDimension_eq_of_semiLinearEquiv, restrict, univ_out_params, universe
 -/

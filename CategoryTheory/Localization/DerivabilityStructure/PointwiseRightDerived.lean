@@ -143,14 +143,14 @@ lemma hasPointwiseRightDerivedFunctorAt_iff_of_isRightDerivabilityStructure
   given: (X : C₁)
   proof: by
   let e : W₂.Q.obj _ ≅ (Φ.localizedFunctor W₁.Q W₂.Q).obj _ := ((Φ.catCommSq W₁.Q W₂.Q).iso).app X
-  rw [F.hasPointwiseRightDerivedFunctorAt_iff W₂.Q W₂ (Φ.functor.obj X)]; rw [(Φ.functor ⋙ F).hasPointwiseRightDerivedFunctorAt_iff W₁.Q W₁ X]; rw [TwoSquare.hasPointwiseLeftKanExtensionAt_iff ((Φ.c
+  rw [F.hasPointwiseRightDerivedFunctorAt_iff W₂.Q W₂ (Φ.functor.obj X)]; rw [(Φ.functor ⋙ F).hasPointwiseRightDerivedFunctorAt_iff W₁.Q W₁ X]; rw [TwoSquare.hasPointwiseLeftKanExtensionAt_iff ((Φ.catCommSq W₁.Q W₂.Q).iso).hom]; rw [Functor.hasPointwiseLeftKanExtensionAt_iff_of_iso W₂.Q F e]
 
 中文:
 引理 hasPointwiseRightDerivedFunctorAt_iff_of_isRightDerivabilityStructure
   条件: (X : C₁)
   证明: by
   let e : W₂.Q.obj _ ≅ (Φ.localizedFunctor W₁.Q W₂.Q).obj _ := ((Φ.catCommSq W₁.Q W₂.Q).iso).app X
-  rw [F.hasPointwiseRightDerivedFunctorAt_iff W₂.Q W₂ (Φ.functor.obj X)]; rw [(Φ.functor ⋙ F).hasPointwiseRightDerivedFunctorAt_iff W₁.Q W₁ X]; rw [TwoSquare.hasPointwiseLeftKanExtensionAt_iff ((Φ.c
+  rw [F.hasPointwiseRightDerivedFunctorAt_iff W₂.Q W₂ (Φ.functor.obj X)]; rw [(Φ.functor ⋙ F).hasPointwiseRightDerivedFunctorAt_iff W₁.Q W₁ X]; rw [TwoSquare.hasPointwiseLeftKanExtensionAt_iff ((Φ.catCommSq W₁.Q W₂.Q).iso).hom]; rw [Functor.hasPointwiseLeftKanExtensionAt_iff_of_iso W₂.Q F e]
 
 Depends on / 依赖: F.hasPointwiseRightDerivedFunctorAt_iff, Functor, Functor.hasPointwiseLeftKanExtensionAt_iff_of_iso, Q.obj, TwoSquare, TwoSquare.hasPointwiseLeftKanExtensionAt_iff, catCommSq, functor, functor.obj, hasPointwiseLeftKanExtensionAt_iff, hasPointwiseLeftKanExtensionAt_iff_of_iso, hasPointwiseRightDerivedFunctorAt_iff, localizedFunctor
 -/
@@ -173,7 +173,7 @@ lemma hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure
   · intro hF X₂
     have R : Φ.RightResolution X₂ := Classical.arbitrary _
     simpa only [hasPointwiseRightDerivedFunctorAt_iff_of_isRightDerivabilityStructure,
-      ← F.has
+      ← F.hasPointwiseRightDerivedFunctorAt_iff_of_mem W₂ R.w R.hw] using hF R.X₁
 
 中文:
 引理 hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure
@@ -185,7 +185,7 @@ lemma hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure
   · intro hF X₂
     have R : Φ.RightResolution X₂ := Classical.arbitrary _
     simpa only [hasPointwiseRightDerivedFunctorAt_iff_of_isRightDerivabilityStructure,
-      ← F.has
+      ← F.hasPointwiseRightDerivedFunctorAt_iff_of_mem W₂ R.w R.hw] using hF R.X₁
 
 Depends on / 依赖: Classical, Classical.arbitrary, F.hasPointwiseRightDerivedFunctorAt_iff_of_mem, R.hw, RightResolution, arbitrary, hasPointwiseRightDerivedFunctorAt_iff_of_isRightDerivabilityStructure, hasPointwiseRightDerivedFunctorAt_iff_of_mem
 -/
@@ -217,7 +217,9 @@ instance :
     rw [Φ.hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure]
     infer_instance
   dsimp only [rightDerivedFunctorComparison]
-  rw [← isRightDerivedFunctor_iff_isIso_rightDerivedDesc]; rw [isRightDerivedFunctor_iff_isLeftKanExte
+  rw [← isRightDerivedFunctor_iff_isIso_rightDerivedDesc]; rw [isRightDerivedFunctor_iff_isLeftKanExtension]
+  exact ((F₂.isPointwiseLeftKanExtensionOfHasPointwiseRightDerivedFunctor α₂ W₂).compTwoSquare
+    ((Φ.catCommSq L₁ L₂).iso).hom).isLeftKanExtension
 
 中文:
 实例 :
@@ -227,7 +229,9 @@ instance :
     rw [Φ.hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure]
     infer_instance
   dsimp only [rightDerivedFunctorComparison]
-  rw [← isRightDerivedFunctor_iff_isIso_rightDerivedDesc]; rw [isRightDerivedFunctor_iff_isLeftKanExte
+  rw [← isRightDerivedFunctor_iff_isIso_rightDerivedDesc]; rw [isRightDerivedFunctor_iff_isLeftKanExtension]
+  exact ((F₂.isPointwiseLeftKanExtensionOfHasPointwiseRightDerivedFunctor α₂ W₂).compTwoSquare
+    ((Φ.catCommSq L₁ L₂).iso).hom).isLeftKanExtension
 
 Depends on / 依赖: F.HasPointwiseRightDerivedFunctor, HasPointwiseRightDerivedFunctor, catCommSq, compTwoSquare, hasPointwiseRightDerivedFunctor_iff_of_isRightDerivabilityStructure, infer_instance, isLeftKanExtension, isPointwiseLeftKanExtensionOfHasPointwiseRightDerivedFunctor, isRightDerivedFunctor_iff_isIso_rightDerivedDesc, isRightDerivedFunctor_iff_isLeftKanExtension, rightDerivedFunctorComparison
 -/

@@ -153,7 +153,7 @@ theorem finitePresentation_ofLocalizationSpanTarget
   replace H : forall r in s, Algebra.FinitePresentation R (Localization.Away (r : S)) := by
     intro r hr; simp_rw [RingHom.FinitePresentation] at H; convert! H ⟨r, hr⟩; ext
     simp_rw [Algebra.smul_def]; rfl
-  exact Algebra.FinitePresentation.of_span_eq_top_tar
+  exact Algebra.FinitePresentation.of_span_eq_top_target s hs H
 
 中文:
 定理 finitePresentation_ofLocalizationSpanTarget
@@ -163,7 +163,7 @@ theorem finitePresentation_ofLocalizationSpanTarget
   replace H : forall r in s, Algebra.FinitePresentation R (Localization.Away (r : S)) := by
     intro r hr; simp_rw [RingHom.FinitePresentation] at H; convert! H ⟨r, hr⟩; ext
     simp_rw [Algebra.smul_def]; rfl
-  exact Algebra.FinitePresentation.of_span_eq_top_tar
+  exact Algebra.FinitePresentation.of_span_eq_top_target s hs H
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation, Algebra.FinitePresentation.of_span_eq_top_target, Algebra.smul_def, FinitePresentation, Localization, Localization.Away, RingHom, RingHom.FinitePresentation, algebraize, convert, introv, of_span_eq_top_target, replace, simp_rw, smul_def
 -/
@@ -186,7 +186,9 @@ theorem finitePresentation_isLocal
     finitePresentation_ofLocalizationSpanTarget,
     finitePresentation_ofLocalizationSpanTarget.ofLocalizationSpan
       (finitePresentation_stableUnderComposition.stableUnderCompositionWithLocalizationAway
-        finitePresentation_holdsForLocalizat
+        finitePresentation_holdsForLocalizationAway).left,
+    (finitePresentation_stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      finitePresentation_holdsForLocalizationAway).right⟩
 
 中文:
 定理 finitePresentation_isLocal
@@ -195,7 +197,9 @@ theorem finitePresentation_isLocal
     finitePresentation_ofLocalizationSpanTarget,
     finitePresentation_ofLocalizationSpanTarget.ofLocalizationSpan
       (finitePresentation_stableUnderComposition.stableUnderCompositionWithLocalizationAway
-        finitePresentation_holdsForLocalizat
+        finitePresentation_holdsForLocalizationAway).left,
+    (finitePresentation_stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      finitePresentation_holdsForLocalizationAway).right⟩
 
 Depends on / 依赖: finitePresentation_holdsForLocalizationAway, finitePresentation_localizationPreserves, finitePresentation_localizationPreserves.away, finitePresentation_ofLocalizationSpanTarget, finitePresentation_ofLocalizationSpanTarget.ofLocalizationSpan, finitePresentation_stableUnderComposition, finitePresentation_stableUnderComposition.stableUnderCompositionWithLocalizationAway, ofLocalizationSpan, stableUnderCompositionWithLocalizationAway
 -/

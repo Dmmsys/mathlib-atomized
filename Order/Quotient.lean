@@ -273,7 +273,11 @@ apply congrFun₂ @Relation.transGen_eq_self α _ ⟨fun x y z h₁ h₂ => ?_�
 · exact .inl h₁.trans h₂
   · rw [or_iff_not_imp_left, not_le]
     rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₂.symm rfl ⟨h.le, 
+    exact fun h => ((H _).out h₂.symm rfl ⟨h.le, h₁⟩).trans h₂
+  · rw [or_iff_not_imp_left, not_le]
+    rw [← Quotient.eq_iff_equiv] at *
+    exact fun h => ((H _).out h₁.symm rfl ⟨h₂, h.le⟩).symm
+  · exact .inr (_root_.trans h₁ h₂)
 
 中文:
 定理 mk_le_mk
@@ -287,7 +291,11 @@ apply congrFun₂ @Relation.transGen_eq_self α _ ⟨fun x y z h₁ h₂ => ?_�
 · exact .inl h₁.trans h₂
   · rw [or_iff_not_imp_left, not_le]
     rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₂.symm rfl ⟨h.le, 
+    exact fun h => ((H _).out h₂.symm rfl ⟨h.le, h₁⟩).trans h₂
+  · rw [or_iff_not_imp_left, not_le]
+    rw [← Quotient.eq_iff_equiv] at *
+    exact fun h => ((H _).out h₁.symm rfl ⟨h₂, h.le⟩).symm
+  · exact .inr (_root_.trans h₁ h₂)
 
 Depends on / 依赖: Quotient, Quotient.eq_iff_equiv, Relation, Relation.transGen_eq_self, _root_, _root_.trans, eq_iff_equiv, h.le, not_le, or_iff_not_imp_left, propext_iff, rename_i, revert, transGen_eq_self
 -/
@@ -320,7 +328,9 @@ instance instLinearOrder
     | inl h₁ =>
       cases h₂ with
       | inr h => exact (Quotient.sound h).symm
-      | inl h₂ => exact
+      | inl h₂ => exact congrArg _ (h₁.antisymm h₂)
+  le_total := total_of _
+  toDecidableLE x y := Quotient.recOnSubsingleton₂ x y fun x y => decidable_of_iff' _ mk_le_mk
 
 中文:
 实例 instLinearOrder
@@ -334,7 +344,9 @@ instance instLinearOrder
     | inl h₁ =>
       cases h₂ with
       | inr h => exact (Quotient.sound h).symm
-      | inl h₂ => exact
+      | inl h₂ => exact congrArg _ (h₁.antisymm h₂)
+  le_total := total_of _
+  toDecidableLE x y := Quotient.recOnSubsingleton₂ x y fun x y => decidable_of_iff' _ mk_le_mk
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.recOnSubsingleton, Quotient.sound, antisymm, decidable_of_iff, inductionOn, le_total, mk_le_mk, toDecidableLE, total_of
 -/

@@ -46,7 +46,12 @@ definition multicofork
             have := h.symm.le (Set.mem_univ k)
             push _ in _ at this
             tauto
-          rf
+          rfl) ≫ s.inr)
+    (by
+      rw [Unique.forall_iff]
+      simpa [h'.symm] using s.condition)
+
+@[simp]
 
 中文:
 定义 multicofork
@@ -61,7 +66,12 @@ definition multicofork
             have := h.symm.le (Set.mem_univ k)
             push _ in _ at this
             tauto
-          rf
+          rfl) ≫ s.inr)
+    (by
+      rw [Unique.forall_iff]
+      simpa [h'.symm] using s.condition)
+
+@[simp]
 
 Depends on / 依赖: J.fst, J.snd, Multicofork, Multicofork.of, Set.mem_univ, Unique, Unique.forall_iff, condition, eqToHom, forall_iff, h.symm.le, mem_univ, s.condition, s.inl, s.inr, s.pt
 -/
@@ -146,7 +156,15 @@ lemma isPushout
   isColimit' := ⟨PushoutCocone.IsColimit.mk _
     (fun s => hc.desc (isPushout.multicofork h h' s))
     (fun s => by simpa using! hc.fac (isPushout.multicofork h h' s) (.right (J.fst default)))
-    (fun s => by simpa using! hc.fac (isPushout.multicofork h h' s) (.right (J.snd default))
+    (fun s => by simpa using! hc.fac (isPushout.multicofork h h' s) (.right (J.snd default)))
+    (fun s m h₁ h₂ => by
+      apply Multicofork.IsColimit.hom_ext hc
+      intro k
+      have := h.symm.le (Set.mem_univ k)
+      push _ in _ at this
+      obtain rfl | rfl := this
+      · simpa [h₁] using! (hc.fac (isPushout.multicofork h h' s) (.right (J.fst default))).symm
+      · simpa [h₂] using! (hc.fac (isPushout.multicofork h h' s) (.right (J.snd default))).symm)⟩
 
 中文:
 引理 isPushout
@@ -155,7 +173,15 @@ lemma isPushout
   isColimit' := ⟨PushoutCocone.IsColimit.mk _
     (fun s => hc.desc (isPushout.multicofork h h' s))
     (fun s => by simpa using! hc.fac (isPushout.multicofork h h' s) (.right (J.fst default)))
-    (fun s => by simpa using! hc.fac (isPushout.multicofork h h' s) (.right (J.snd default))
+    (fun s => by simpa using! hc.fac (isPushout.multicofork h h' s) (.right (J.snd default)))
+    (fun s m h₁ h₂ => by
+      apply Multicofork.IsColimit.hom_ext hc
+      intro k
+      have := h.symm.le (Set.mem_univ k)
+      push _ in _ at this
+      obtain rfl | rfl := this
+      · simpa [h₁] using! (hc.fac (isPushout.multicofork h h' s) (.right (J.fst default))).symm
+      · simpa [h₂] using! (hc.fac (isPushout.multicofork h h' s) (.right (J.snd default))).symm)⟩
 
 Depends on / 依赖: c.condition, condition
 -/

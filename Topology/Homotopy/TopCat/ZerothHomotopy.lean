@@ -204,7 +204,12 @@ definition zerothHomotopyEquiv
       (fun _ _ p => SSet.π₀.sound (toSSetObjEdgeEquiv.symm (pathEquiv.symm p)))
   invFun := SSet.π₀.lift (ZerothHomotopy.mk ∘ toSSetObj₀Equiv) (fun x y e => by
     obtain ⟨x, rfl⟩ := toSSetObj₀Equiv.symm.surjective x
-    obtain ⟨y, rfl⟩ := toSS
+    obtain ⟨y, rfl⟩ := toSSetObj₀Equiv.symm.surjective y
+    exact ZerothHomotopy.sound (pathEquiv (toSSetObjEdgeEquiv e)))
+  left_inv x := by induction x; simp
+  right_inv x := by induction x; simp
+
+@[simp]
 
 中文:
 定义 zerothHomotopyEquiv
@@ -213,7 +218,12 @@ definition zerothHomotopyEquiv
       (fun _ _ p => SSet.π₀.sound (toSSetObjEdgeEquiv.symm (pathEquiv.symm p)))
   invFun := SSet.π₀.lift (ZerothHomotopy.mk ∘ toSSetObj₀Equiv) (fun x y e => by
     obtain ⟨x, rfl⟩ := toSSetObj₀Equiv.symm.surjective x
-    obtain ⟨y, rfl⟩ := toSS
+    obtain ⟨y, rfl⟩ := toSSetObj₀Equiv.symm.surjective y
+    exact ZerothHomotopy.sound (pathEquiv (toSSetObjEdgeEquiv e)))
+  left_inv x := by induction x; simp
+  right_inv x := by induction x; simp
+
+@[simp]
 
 Depends on / 依赖: Equiv.symm, Equiv.symm.surjective, ZerothHomotopy, ZerothHomotopy.lift, ZerothHomotopy.mk, ZerothHomotopy.sound, invFun, left_inv, pathEquiv, pathEquiv.symm, right_inv, surjective, toSSetObjEdgeEquiv, toSSetObjEdgeEquiv.symm
 -/

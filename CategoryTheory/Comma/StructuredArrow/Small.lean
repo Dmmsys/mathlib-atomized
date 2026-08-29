@@ -68,7 +68,7 @@ instance small_inverseImage_proj_of_locallySmall
   ext X
   simp only [ObjectProperty.prop_inverseImage_iff, proj_obj, ObjectProperty.ofObj_iff,
     Sigma.exists, Subtype.exists, exists_prop]
-  exact ⟨fun h => ⟨_, h,
+  exact ⟨fun h => ⟨_, h, _, rfl⟩, by rintro ⟨_, h, _, rfl⟩; exact h⟩
 
 中文:
 实例 small_inverseImage_proj_of_locallySmall
@@ -79,7 +79,7 @@ instance small_inverseImage_proj_of_locallySmall
   ext X
   simp only [ObjectProperty.prop_inverseImage_iff, proj_obj, ObjectProperty.ofObj_iff,
     Sigma.exists, Subtype.exists, exists_prop]
-  exact ⟨fun h => ⟨_, h,
+  exact ⟨fun h => ⟨_, h, _, rfl⟩, by rintro ⟨_, h, _, rfl⟩; exact h⟩
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.ofObj_iff, ObjectProperty.prop_inverseImage_iff, P.inverseImage, Sigma.exists, Subtype, Subtype.exists, T.obj, exists_prop, infer_instance, inverseImage, ofObj_iff, proj_obj, prop_inverseImage_iff
 -/
@@ -166,7 +166,7 @@ instance small_inverseImage_proj_of_locallySmall
   ext X
   simp only [ObjectProperty.prop_inverseImage_iff, proj_obj, ObjectProperty.ofObj_iff,
     Sigma.exists, Subtype.exists, exists_prop]
-  exact ⟨fun h => ⟨_, h,
+  exact ⟨fun h => ⟨_, h, _, rfl⟩, by rintro ⟨_, h, _, rfl⟩; exact h⟩
 
 中文:
 实例 small_inverseImage_proj_of_locallySmall
@@ -177,7 +177,7 @@ instance small_inverseImage_proj_of_locallySmall
   ext X
   simp only [ObjectProperty.prop_inverseImage_iff, proj_obj, ObjectProperty.ofObj_iff,
     Sigma.exists, Subtype.exists, exists_prop]
-  exact ⟨fun h => ⟨_, h,
+  exact ⟨fun h => ⟨_, h, _, rfl⟩, by rintro ⟨_, h, _, rfl⟩; exact h⟩
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.ofObj_iff, ObjectProperty.prop_inverseImage_iff, P.inverseImage, S.obj, Sigma.exists, Subtype, Subtype.exists, exists_prop, infer_instance, inverseImage, ofObj_iff, proj_obj, prop_inverseImage_iff
 -/

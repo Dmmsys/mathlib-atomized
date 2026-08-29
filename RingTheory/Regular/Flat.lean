@@ -42,6 +42,9 @@ theorem IsWeaklyRegular.of_flat_of_isBaseChange
     have e := (QuotSMulTop.algebraMapTensorEquivTensorQuotSMulTop x M S).symm ≪≫ₗ
       QuotSMulTop.congr ((algebraMap R S) x) hf.equiv
 have hg : IsBaseChange S
+        e.toLinearMap.restrictScalars R ∘ₗ TensorProduct.mk R S (QuotSMulTop x M) 1 :=
+      IsBaseChange.of_equiv e (fun _ => by simp)
+    exact ⟨reg.1.of_flat_of_isBaseChange hf, ih hg reg.2⟩
 
 中文:
 定理 是WeaklyRegular.of_flat_of_isBaseChange
@@ -54,6 +57,9 @@ have hg : IsBaseChange S
     have e := (QuotSMulTop.algebraMapTensorEquivTensorQuotSMulTop x M S).symm ≪≫ₗ
       QuotSMulTop.congr ((algebraMap R S) x) hf.equiv
 have hg : IsBaseChange S
+        e.toLinearMap.restrictScalars R ∘ₗ TensorProduct.mk R S (QuotSMulTop x M) 1 :=
+      IsBaseChange.of_equiv e (fun _ => by simp)
+    exact ⟨reg.1.of_flat_of_isBaseChange hf, ih hg reg.2⟩
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.of_equiv, List.map_cons, QuotSMulTop, QuotSMulTop.algebraMapTensorEquivTensorQuotSMulTop, QuotSMulTop.congr, TensorProduct, TensorProduct.mk, algebraMap, algebraMapTensorEquivTensorQuotSMulTop, e.toLinearMap.restrictScalars, generalizing, hf.equiv, isWeaklyRegular_cons_iff, map_cons, of_equiv, of_flat_of_isBaseChange, restrictScalars, toLinearMap
 -/
@@ -149,7 +155,7 @@ theorem IsWeaklyRegular.isRegular_of_isLocalizedModule_of_mem
 refine (IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal (fun _ hr => ?_)).mpr
     reg.of_isLocalizedModule S p.primeCompl f
   rcases List.mem_map.mp hr with ⟨r, hr, eq⟩
-  simpa only [← eq, IsLocalization.AtPrime.to_
+  simpa only [← eq, IsLocalization.AtPrime.to_map_mem_maximal_iff S p] using mem r hr
 
 中文:
 定理 是WeaklyRegular.isRegular_of_isLocalizedModule_of_mem
@@ -158,7 +164,7 @@ refine (IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal (fun _ 
 refine (IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal (fun _ hr => ?_)).mpr
     reg.of_isLocalizedModule S p.primeCompl f
   rcases List.mem_map.mp hr with ⟨r, hr, eq⟩
-  simpa only [← eq, IsLocalization.AtPrime.to_
+  simpa only [← eq, IsLocalization.AtPrime.to_map_mem_maximal_iff S p] using mem r hr
 
 Depends on / 依赖: AtPrime, IsLocalRing, IsLocalRing.isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal, IsLocalization, IsLocalization.AtPrime.isLocalRing, IsLocalization.AtPrime.to_map_mem_maximal_iff, List.mem_map.mp, isLocalRing, isRegular_iff_isWeaklyRegular_of_subset_maximalIdeal, mem_map, of_isLocalizedModule, p.primeCompl, primeCompl, reg.of_isLocalizedModule, to_map_mem_maximal_iff
 -/

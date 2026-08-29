@@ -66,7 +66,20 @@ lemma integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1
   _ = ∫ x, (- ∫ t, B (f' (x, t)) (g (x, t))) ∂μ := by
     apply integral_congr_ae
     filter_upwards [hf'g.prod_right_ae, hfg'.prod_right_ae, hfg.prod_right_ae]
-      with x hf'gx hfg'x 
+      with x hf'gx hfg'x hfgx
+    apply integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable ?_ ?_ hfg'x hf'gx hfgx
+    · intro t ht
+      have : (x, t) in tsupport g :=
+        tsupport_comp_subset_preimage (f := fun y => (x, y)) g (by fun_prop) ht
+      convert! (hf (x, t) this).scomp_of_eq t ((hasDerivAt_id t).add (hasDerivAt_const t (-t)))
+        (by simp) <;> simp
+    · intro t ht
+      have : (x, t) in tsupport f :=
+        tsupport_comp_subset_preimage (f := fun y => (x, y)) f (by fun_prop) ht
+      convert!
+        (hg (x, t) this).scomp_of_eq t ((hasDerivAt_id t).add (hasDerivAt_const t (-t)))
+          (by simp) <;> simp
+  _ = - ∫ x, B (f' x) (g x) ∂(μ.prod volume) := by rw [integral_neg, integral_prod _ hf'g]
 
 中文:
 引理 integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1
@@ -77,7 +90,20 @@ lemma integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1
   _ = ∫ x, (- ∫ t, B (f' (x, t)) (g (x, t))) ∂μ := by
     apply integral_congr_ae
     filter_upwards [hf'g.prod_right_ae, hfg'.prod_right_ae, hfg.prod_right_ae]
-      with x hf'gx hfg'x 
+      with x hf'gx hfg'x hfgx
+    apply integral_bilinear_hasDerivAt_right_eq_neg_left_of_integrable ?_ ?_ hfg'x hf'gx hfgx
+    · intro t ht
+      have : (x, t) in tsupport g :=
+        tsupport_comp_subset_preimage (f := fun y => (x, y)) g (by fun_prop) ht
+      convert! (hf (x, t) this).scomp_of_eq t ((hasDerivAt_id t).add (hasDerivAt_const t (-t)))
+        (by simp) <;> simp
+    · intro t ht
+      have : (x, t) in tsupport f :=
+        tsupport_comp_subset_preimage (f := fun y => (x, y)) f (by fun_prop) ht
+      convert!
+        (hg (x, t) this).scomp_of_eq t ((hasDerivAt_id t).add (hasDerivAt_const t (-t)))
+          (by simp) <;> simp
+  _ = - ∫ x, B (f' x) (g x) ∂(μ.prod volume) := by rw [integral_neg, integral_prod _ hf'g]
 -/
 lemma integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1 [SigmaFinite μ]
     {f f' : E × Real -> F} {g g' : E × Real -> G} {B : F ->L[Real] G ->L[Real] W}
@@ -120,7 +146,12 @@ lemma integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux2
     isAddLeftInvariant_eq_smul _ _
   have Hf'g : Integrable (fun x => B (f' x) (g x)) (ν.prod volume) := by
     rw [A]; exact hf'g.smul_measure_nnreal
-  have Hfg' : Integrable (fun x => B (f x
+  have Hfg' : Integrable (fun x => B (f x) (g' x)) (ν.prod volume) := by
+    rw [A]; exact hfg'.smul_measure_nnreal
+  have Hfg : Integrable (fun x => B (f x) (g x)) (ν.prod volume) := by
+    rw [A]; exact hfg.smul_measure_nnreal
+  rw [isAddLeftInvariant_eq_smul μ (ν.prod volume)]
+  simp [integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1 Hf'g Hfg' Hfg hf hg]
 
 中文:
 引理 integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux2
@@ -130,7 +161,12 @@ lemma integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux2
     isAddLeftInvariant_eq_smul _ _
   have Hf'g : Integrable (fun x => B (f' x) (g x)) (ν.prod volume) := by
     rw [A]; exact hf'g.smul_measure_nnreal
-  have Hfg' : Integrable (fun x => B (f x
+  have Hfg' : Integrable (fun x => B (f x) (g' x)) (ν.prod volume) := by
+    rw [A]; exact hfg'.smul_measure_nnreal
+  have Hfg : Integrable (fun x => B (f x) (g x)) (ν.prod volume) := by
+    rw [A]; exact hfg.smul_measure_nnreal
+  rw [isAddLeftInvariant_eq_smul μ (ν.prod volume)]
+  simp [integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1 Hf'g Hfg' Hfg hf hg]
 
 Depends on / 依赖: Integrable, Measure, addHaar, addHaarScalarFactor, g.smul_measure_nnreal, hfg.smul_measure_nnreal, isAddLeftInvariant_eq_smul, smul_measure_nnreal, volume
 -/
@@ -169,7 +205,53 @@ theorem integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable
   · have Hf' x : B (f' x) (g x) = 0 := by
       by_cases hx : x in tsupport g
       · simp [(hasLineDerivAt_zero (f := f) (x := x)).lineDeriv, (hf x hx).lineDeriv.symm]
-      · simp [image_eq_zero_of
+      · simp [image_eq_zero_of_notMem_tsupport hx]
+    have Hg' x : B (f x) (g' x) = 0 := by
+      by_cases hx : x in tsupport f
+      · simp [(hasLineDerivAt_zero (f := g) (x := x)).lineDeriv, (hg x hx).lineDeriv.symm]
+      · simp [image_eq_zero_of_notMem_tsupport hx]
+    simp [Hf', Hg']
+  have : Nontrivial E := nontrivial_iff.2 ⟨v, 0, hv⟩
+  let n := finrank Real E
+  let E' := Fin (n - 1) -> Real
+  obtain ⟨L, hL⟩ : exists L : E ≃L[Real] (E' × Real), L v = (0, 1) := by
+    have : finrank Real (E' × Real) = n := by simpa [this, E'] using Nat.sub_add_cancel finrank_pos
+    have L₀ : E ≃L[Real] (E' × Real) := (ContinuousLinearEquiv.ofFinrankEq this).symm
+    obtain ⟨M, hM⟩ : exists M : (E' × Real) ≃L[Real] (E' × Real), M (L₀ v) = (0, 1) := by
+      apply SeparatingDual.exists_continuousLinearEquiv_apply_eq
+      · simpa using hv
+      · simp
+    exact ⟨L₀.trans M, by simp [hM]⟩
+  let ν := Measure.map L μ
+  suffices H : ∫ (x : E' × Real), (B (f (L.symm x))) (g' (L.symm x)) ∂ν =
+      -∫ (x : E' × Real), (B (f' (L.symm x))) (g (L.symm x)) ∂ν by
+    have : μ = Measure.map L.symm ν := by
+      simp [ν, Measure.map_map L.symm.continuous.measurable L.continuous.measurable]
+    have hL : IsClosedEmbedding L.symm := L.symm.toHomeomorph.isClosedEmbedding
+    simpa [this, hL.integral_map] using H
+  have L_emb : MeasurableEmbedding L := L.toHomeomorph.measurableEmbedding
+  apply integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux2
+  · simpa [ν, L_emb.integrable_map_iff, Function.comp_def] using hf'g
+  · simpa [ν, L_emb.integrable_map_iff, Function.comp_def] using hfg'
+  · simpa [ν, L_emb.integrable_map_iff, Function.comp_def] using hfg
+  · intro x hx
+    have : f = (f ∘ L.symm) ∘ (L : E ->ₗ[Real] (E' × Real)) := by ext y; simp
+    have h2x : L.symm x in tsupport g :=
+      (Set.ext_iff.mp (tsupport_comp_eq_preimage g L.symm.toHomeomorph) x).mp hx
+    specialize hf (L.symm x) h2x
+    rw [this] at hf
+    convert! hf.of_comp using 1
+    · simp
+    · simp [← hL]
+  · intro x hx
+    have : g = (g ∘ L.symm) ∘ (L : E ->ₗ[Real] (E' × Real)) := by ext y; simp
+    have h2x : L.symm x in tsupport f :=
+      (Set.ext_iff.mp (tsupport_comp_eq_preimage f L.symm.toHomeomorph) x).mp hx
+    specialize hg (L.symm x) h2x
+    rw [this] at hg
+    convert! hg.of_comp using 1
+    · simp
+    · simp [← hL]
 
 中文:
 定理 integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable
@@ -180,7 +262,53 @@ theorem integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable
   · have Hf' x : B (f' x) (g x) = 0 := by
       by_cases hx : x in tsupport g
       · simp [(hasLineDerivAt_zero (f := f) (x := x)).lineDeriv, (hf x hx).lineDeriv.symm]
-      · simp [image_eq_zero_of
+      · simp [image_eq_zero_of_notMem_tsupport hx]
+    have Hg' x : B (f x) (g' x) = 0 := by
+      by_cases hx : x in tsupport f
+      · simp [(hasLineDerivAt_zero (f := g) (x := x)).lineDeriv, (hg x hx).lineDeriv.symm]
+      · simp [image_eq_zero_of_notMem_tsupport hx]
+    simp [Hf', Hg']
+  have : Nontrivial E := nontrivial_iff.2 ⟨v, 0, hv⟩
+  let n := finrank Real E
+  let E' := Fin (n - 1) -> Real
+  obtain ⟨L, hL⟩ : exists L : E ≃L[Real] (E' × Real), L v = (0, 1) := by
+    have : finrank Real (E' × Real) = n := by simpa [this, E'] using Nat.sub_add_cancel finrank_pos
+    have L₀ : E ≃L[Real] (E' × Real) := (ContinuousLinearEquiv.ofFinrankEq this).symm
+    obtain ⟨M, hM⟩ : exists M : (E' × Real) ≃L[Real] (E' × Real), M (L₀ v) = (0, 1) := by
+      apply SeparatingDual.exists_continuousLinearEquiv_apply_eq
+      · simpa using hv
+      · simp
+    exact ⟨L₀.trans M, by simp [hM]⟩
+  let ν := Measure.map L μ
+  suffices H : ∫ (x : E' × Real), (B (f (L.symm x))) (g' (L.symm x)) ∂ν =
+      -∫ (x : E' × Real), (B (f' (L.symm x))) (g (L.symm x)) ∂ν by
+    have : μ = Measure.map L.symm ν := by
+      simp [ν, Measure.map_map L.symm.continuous.measurable L.continuous.measurable]
+    have hL : IsClosedEmbedding L.symm := L.symm.toHomeomorph.isClosedEmbedding
+    simpa [this, hL.integral_map] using H
+  have L_emb : MeasurableEmbedding L := L.toHomeomorph.measurableEmbedding
+  apply integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux2
+  · simpa [ν, L_emb.integrable_map_iff, Function.comp_def] using hf'g
+  · simpa [ν, L_emb.integrable_map_iff, Function.comp_def] using hfg'
+  · simpa [ν, L_emb.integrable_map_iff, Function.comp_def] using hfg
+  · intro x hx
+    have : f = (f ∘ L.symm) ∘ (L : E ->ₗ[Real] (E' × Real)) := by ext y; simp
+    have h2x : L.symm x in tsupport g :=
+      (Set.ext_iff.mp (tsupport_comp_eq_preimage g L.symm.toHomeomorph) x).mp hx
+    specialize hf (L.symm x) h2x
+    rw [this] at hf
+    convert! hf.of_comp using 1
+    · simp
+    · simp [← hL]
+  · intro x hx
+    have : g = (g ∘ L.symm) ∘ (L : E ->ₗ[Real] (E' × Real)) := by ext y; simp
+    have h2x : L.symm x in tsupport f :=
+      (Set.ext_iff.mp (tsupport_comp_eq_preimage f L.symm.toHomeomorph) x).mp hx
+    specialize hg (L.symm x) h2x
+    rw [this] at hg
+    convert! hg.of_comp using 1
+    · simp
+    · simp [← hL]
 
 Depends on / 依赖: CompleteSpace, eq_or_ne, hasLineDerivAt_zero, image_eq_zero_of_notMem_tsupport, integral, lineDeriv, lineDeriv.symm, tsupport
 -/

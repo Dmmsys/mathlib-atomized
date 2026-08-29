@@ -117,7 +117,7 @@ theorem exists_epi
   have h := (isSeparator_iff_epi (projectiveSeparator C)).1
     isSeparator_projectiveSeparator (F.obj X)
   suffices Epi (Sigma.desc (Pi.single X (𝟙 _))) from epi_comp' this h
-  exact SplitEpi.epi ⟨Sigma.ι (fun (X
+  exact SplitEpi.epi ⟨Sigma.ι (fun (X : D) => ∐ fun _ => projectiveSeparator C) X, by simp⟩
 
 中文:
 定理 存在_epi
@@ -129,7 +129,7 @@ theorem exists_epi
   have h := (isSeparator_iff_epi (projectiveSeparator C)).1
     isSeparator_projectiveSeparator (F.obj X)
   suffices Epi (Sigma.desc (Pi.single X (𝟙 _))) from epi_comp' this h
-  exact SplitEpi.epi ⟨Sigma.ι (fun (X
+  exact SplitEpi.epi ⟨Sigma.ι (fun (X : D) => ∐ fun _ => projectiveSeparator C) X, by simp⟩
 
 Depends on / 依赖: F.op, G.op, IsCofiltered, IsCofiltered.iff_of_equivalence, StructuredArrow, costructuredArrowOpEquivalence, iff_of_equivalence, isCofiltered_op_iff_isFiltered
 -/

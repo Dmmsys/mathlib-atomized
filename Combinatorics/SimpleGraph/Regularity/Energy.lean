@@ -83,7 +83,14 @@ theorem energy_le_one
       ∑ uv in P.parts.offDiag, G.edgeDensity uv.1 uv.2 ^ 2 <= #P.parts.offDiag • (1 : Rat) :=
         sum_le_card_nsmul _ _ 1 fun _ _ =>
 (sq_le_one_iff₀ <| G.edgeDensity_nonneg _ _).2 G.edgeDensity_le_one _ _
-      _ = #P.parts.offDiag := Nat.smul
+      _ = #P.parts.offDiag := Nat.smul_one_eq_cast _
+      _ <= _ := by
+        rw [offDiag_card]; rw [one_mul]
+        norm_cast
+        rw [sq]
+        exact tsub_le_self
+
+@[simp, norm_cast]
 
 中文:
 定理 energy_le_one
@@ -93,7 +100,14 @@ theorem energy_le_one
       ∑ uv in P.parts.offDiag, G.edgeDensity uv.1 uv.2 ^ 2 <= #P.parts.offDiag • (1 : Rat) :=
         sum_le_card_nsmul _ _ 1 fun _ _ =>
 (sq_le_one_iff₀ <| G.edgeDensity_nonneg _ _).2 G.edgeDensity_le_one _ _
-      _ = #P.parts.offDiag := Nat.smul
+      _ = #P.parts.offDiag := Nat.smul_one_eq_cast _
+      _ <= _ := by
+        rw [offDiag_card]; rw [one_mul]
+        norm_cast
+        rw [sq]
+        exact tsub_le_self
+
+@[simp, norm_cast]
 
 Depends on / 依赖: G.edgeDensity, G.edgeDensity_le_one, G.edgeDensity_nonneg, Nat.smul_one_eq_cast, P.parts.offDiag, edgeDensity, edgeDensity_le_one, edgeDensity_nonneg, offDiag, offDiag_card, one_mul, smul_one_eq_cast, sq_nonneg, sum_le_card_nsmul, tsub_le_self, zero_le_one
 -/

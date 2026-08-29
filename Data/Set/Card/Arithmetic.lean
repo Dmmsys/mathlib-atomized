@@ -181,7 +181,9 @@ theorem Infinite.exists_union_disjoint_cardinal_eq_of_infinite
     rw [← Cardinal.eq]; rw [← add_def]; rw [add_mk_eq_self]
   refine ⟨Subtype.val '' f ⁻¹' (range .inl), Subtype.val '' f ⁻¹' (range .inr), ?_, ?_, ?_⟩
   · simp [← image_union, ← preimage_union]
-  · exact disjoint_image_of_injec
+  · exact disjoint_image_of_injective Subtype.val_injective
+      (isCompl_range_inl_range_inr.disjoint.preimage f)
+  · simp [mk_image_eq Subtype.val_injective]
 
 中文:
 定理 无限.存在_union_disjoint_cardinal_eq_of_infinite
@@ -192,7 +194,9 @@ theorem Infinite.exists_union_disjoint_cardinal_eq_of_infinite
     rw [← Cardinal.eq]; rw [← add_def]; rw [add_mk_eq_self]
   refine ⟨Subtype.val '' f ⁻¹' (range .inl), Subtype.val '' f ⁻¹' (range .inr), ?_, ?_, ?_⟩
   · simp [← image_union, ← preimage_union]
-  · exact disjoint_image_of_injec
+  · exact disjoint_image_of_injective Subtype.val_injective
+      (isCompl_range_inl_range_inr.disjoint.preimage f)
+  · simp [mk_image_eq Subtype.val_injective]
 
 Depends on / 依赖: Cardinal, Cardinal.eq, Nonempty, Subtype, Subtype.val, Subtype.val_injective, add_def, add_mk_eq_self, disjoint, disjoint_image_of_injective, h.to_subtype, image_union, isCompl_range_inl_range_inr, isCompl_range_inl_range_inr.disjoint.preimage, mk_image_eq, preimage, preimage_union, to_subtype, val_injective
 -/
@@ -283,7 +287,8 @@ theorem exists_union_disjoint_cardinal_eq_iff
   · rw [finite_union] at hfin
     have hn : t.ncard = u.ncard := congrArg Cardinal.toNat hctu
     rw [ncard_union_eq hdtu hfin.1 hfin.2]; rw [hn]
-    exact Even
+    exact Even.add_self u.ncard
+  · simp [hnfin.ncard]
 
 中文:
 定理 存在_union_disjoint_cardinal_eq_iff
@@ -295,7 +300,8 @@ theorem exists_union_disjoint_cardinal_eq_iff
   · rw [finite_union] at hfin
     have hn : t.ncard = u.ncard := congrArg Cardinal.toNat hctu
     rw [ncard_union_eq hdtu hfin.1 hfin.2]; rw [hn]
-    exact Even
+    exact Even.add_self u.ncard
+  · simp [hnfin.ncard]
 
 Depends on / 依赖: Cardinal, Cardinal.toNat, Even.add_self, add_self, exists_union_disjoint_cardinal_eq_of_even, finite_or_infinite, finite_union, hnfin.ncard, ncard_union_eq, t.ncard, u.ncard
 -/
@@ -367,7 +373,9 @@ lemma Finite.encard_biUnion
   by_cases! h : forall i in t, (s i).Finite
   · have : (⋃ i in t, s i).Finite := ht.biUnion (fun i hi => h i hi)
     rw [← this.cast_ncard_eq]; rw [ncard_biUnion ht h hs]; rw [← finsum_mem_congr rfl fun i hi => (h i hi).cast_ncard_eq]; rw [Nat.cast_finsum_mem ht]
-  · obtain ⟨i, hi, (hn : (s i).In
+  · obtain ⟨i, hi, (hn : (s i).Infinite)⟩ := h
+    rw [← Set.insert_sdiff_self_of_mem hi]; rw [finsum_mem_insert _ (notMem_sdiff_of_mem <| mem_singleton i) ht.sdiff]
+    simp [hn]
 
 中文:
 引理 有限.encard_biUnion
@@ -376,7 +384,9 @@ lemma Finite.encard_biUnion
   by_cases! h : forall i in t, (s i).Finite
   · have : (⋃ i in t, s i).Finite := ht.biUnion (fun i hi => h i hi)
     rw [← this.cast_ncard_eq]; rw [ncard_biUnion ht h hs]; rw [← finsum_mem_congr rfl fun i hi => (h i hi).cast_ncard_eq]; rw [Nat.cast_finsum_mem ht]
-  · obtain ⟨i, hi, (hn : (s i).In
+  · obtain ⟨i, hi, (hn : (s i).Infinite)⟩ := h
+    rw [← Set.insert_sdiff_self_of_mem hi]; rw [finsum_mem_insert _ (notMem_sdiff_of_mem <| mem_singleton i) ht.sdiff]
+    simp [hn]
 
 Depends on / 依赖: Finite, Infinite, Nat.cast_finsum_mem, Set.insert_sdiff_self_of_mem, biUnion, cast_finsum_mem, cast_ncard_eq, finsum_mem_congr, finsum_mem_insert, ht.biUnion, ht.sdiff, insert_sdiff_self_of_mem, mem_singleton, ncard_biUnion, notMem_sdiff_of_mem, this.cast_ncard_eq
 -/

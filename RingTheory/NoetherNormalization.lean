@@ -195,7 +195,16 @@ lemma degreeOf_zero_t
   rw [← natDegree_finSuccEquiv]; rw [monomial_eq]; rw [Finsupp.prod_pow v fun a => X a]
   simp only [Fin.prod_univ_succ, Fin.sum_univ_succ, map_mul, map_prod, map_pow,
     AlgEquiv.ofAlgHom_apply, MvPolynomial.aeval_C, MvPolynomial.aeval_X, if_pos, Fin.succ_ne_zero,
-    ite_false, one_smul, map_a
+    ite_false, one_smul, map_add, finSuccEquiv_X_zero, finSuccEquiv_X_succ, algebraMap_eq]
+  have h (i : Fin n) :
+      (Polynomial.C (X (R := k) i) + Polynomial.X ^ r i.succ) ^ v i.succ != 0 :=
+    pow_ne_zero (v i.succ) (leadingCoeff_ne_zero.mp <| by simp [add_comm, leadingCoeff_X_pow_add_C])
+  rw [natDegree_mul (by simp [ha]) (mul_ne_zero (by simp) (Finset.prod_ne_zero_iff.mpr
+    (fun i _ => h i))), natDegree_mul (by simp) (Finset.prod_ne_zero_iff.mpr (fun i _ => h i)),
+    natDegree_prod _ _ (fun i _ => h i), natDegree_finSuccEquiv, degreeOf_C]
+  simpa only [natDegree_pow, zero_add, natDegree_X, mul_one, Fin.val_zero, pow_zero, one_mul,
+    add_right_inj] using Finset.sum_congr rfl (fun i _ => by
+    rw [add_comm (Polynomial.C _)]; rw [natDegree_X_pow_add_C]; rw [mul_comm])
 
 中文:
 引理 degreeOf_zero_t
@@ -205,7 +214,16 @@ lemma degreeOf_zero_t
   rw [← natDegree_finSuccEquiv]; rw [monomial_eq]; rw [Finsupp.prod_pow v fun a => X a]
   simp only [Fin.prod_univ_succ, Fin.sum_univ_succ, map_mul, map_prod, map_pow,
     AlgEquiv.ofAlgHom_apply, MvPolynomial.aeval_C, MvPolynomial.aeval_X, if_pos, Fin.succ_ne_zero,
-    ite_false, one_smul, map_a
+    ite_false, one_smul, map_add, finSuccEquiv_X_zero, finSuccEquiv_X_succ, algebraMap_eq]
+  have h (i : Fin n) :
+      (Polynomial.C (X (R := k) i) + Polynomial.X ^ r i.succ) ^ v i.succ != 0 :=
+    pow_ne_zero (v i.succ) (leadingCoeff_ne_zero.mp <| by simp [add_comm, leadingCoeff_X_pow_add_C])
+  rw [natDegree_mul (by simp [ha]) (mul_ne_zero (by simp) (Finset.prod_ne_zero_iff.mpr
+    (fun i _ => h i))), natDegree_mul (by simp) (Finset.prod_ne_zero_iff.mpr (fun i _ => h i)),
+    natDegree_prod _ _ (fun i _ => h i), natDegree_finSuccEquiv, degreeOf_C]
+  simpa only [natDegree_pow, zero_add, natDegree_X, mul_one, Fin.val_zero, pow_zero, one_mul,
+    add_right_inj] using Finset.sum_congr rfl (fun i _ => by
+    rw [add_comm (Polynomial.C _)]; rw [natDegree_X_pow_add_C]; rw [mul_comm])
 -/
 private lemma degreeOf_zero_t {a : k} (ha : a != 0) : ((T f) (monomial v a)).degreeOf 0 =
     ∑ i : Fin (n + 1), (r i) * v i := by
@@ -261,7 +279,16 @@ lemma leadingCoeff_finSuccEquiv_t
   rw [monomial_eq]; rw [Finsupp.prod_fintype]
   · simp only [map_mul, map_prod, leadingCoeff_mul, leadingCoeff_prod]
     rw [AlgEquiv.ofAlgHom_apply]; rw [algHom_C]; rw [algebraMap_eq]; rw [finSuccEquiv_apply]; rw [eval₂Hom_C]; rw [coe_comp]
-    simp only [AlgEquiv.ofAlgHom_apply, Function.comp_a
+    simp only [AlgEquiv.ofAlgHom_apply, Function.comp_apply, leadingCoeff_C, map_pow,
+      leadingCoeff_pow, algebraMap_eq]
+    have : forall j, ((finSuccEquiv k n) ((T1 f) 1 (X j))).leadingCoeff = 1 := fun j => by
+      by_cases h : j = 0
+      · simp [h, finSuccEquiv_apply]
+      · simp only [aeval_eq_bind₁, bind₁_X_right, if_neg h, one_smul, map_add, map_pow]
+        obtain ⟨i, rfl⟩ := Fin.exists_succ_eq.mpr h
+        simp [finSuccEquiv_X_succ, finSuccEquiv_X_zero, add_comm]
+    simp only [this, one_pow, Finset.prod_const_one, mul_one]
+  exact fun i => pow_zero _
 
 中文:
 引理 leadingCoeff_finSuccEquiv_t
@@ -269,7 +296,16 @@ lemma leadingCoeff_finSuccEquiv_t
   rw [monomial_eq]; rw [Finsupp.prod_fintype]
   · simp only [map_mul, map_prod, leadingCoeff_mul, leadingCoeff_prod]
     rw [AlgEquiv.ofAlgHom_apply]; rw [algHom_C]; rw [algebraMap_eq]; rw [finSuccEquiv_apply]; rw [eval₂Hom_C]; rw [coe_comp]
-    simp only [AlgEquiv.ofAlgHom_apply, Function.comp_a
+    simp only [AlgEquiv.ofAlgHom_apply, Function.comp_apply, leadingCoeff_C, map_pow,
+      leadingCoeff_pow, algebraMap_eq]
+    have : forall j, ((finSuccEquiv k n) ((T1 f) 1 (X j))).leadingCoeff = 1 := fun j => by
+      by_cases h : j = 0
+      · simp [h, finSuccEquiv_apply]
+      · simp only [aeval_eq_bind₁, bind₁_X_right, if_neg h, one_smul, map_add, map_pow]
+        obtain ⟨i, rfl⟩ := Fin.exists_succ_eq.mpr h
+        simp [finSuccEquiv_X_succ, finSuccEquiv_X_zero, add_comm]
+    simp only [this, one_pow, Finset.prod_const_one, mul_one]
+  exact fun i => pow_zero _
 -/
 private lemma leadingCoeff_finSuccEquiv_t :
     (finSuccEquiv k n ((T f) ((monomial v) (coeff v f)))).leadingCoeff =
@@ -299,7 +335,26 @@ lemma T_leadingcoeff_isUnit
     (fun v => (T f ((monomial v) (coeff v f))).degreeOf 0) (support_nonempty.mpr fne)
   set h := fun w => (MvPolynomial.monomial w) (coeff w f)
   simp only [← natDegree_finSuccEquiv] at vs
-  replace vs : forall x in f.support \ {v}, (finS
+  replace vs : forall x in f.support \ {v}, (finSuccEquiv k n ((T f) (h x))).degree <
+      (finSuccEquiv k n ((T f) (h v))).degree := by
+    intro x hx
+    obtain ⟨h1, h2⟩ := Finset.mem_sdiff.mp hx
+apply degree_lt_degree lt_of_le_of_ne (vs x h1) ?_
+    simpa only [natDegree_finSuccEquiv]
+using degreeOf_t_ne_of_ne f _ _ h1 vin ne_of_not_mem_cons h2
+  have coeff : (finSuccEquiv k n ((T f) (h v + ∑ x in f.support \ {v}, h x))).leadingCoeff =
+      (finSuccEquiv k n ((T f) (h v))).leadingCoeff := by
+    simp only [map_add, map_sum]
+    rw [add_comm]
+apply leadingCoeff_add_of_degree_lt (lt_of_le_of_lt <| degree_sum_le _ _) ?_
+    have h2 : h v != 0 := by simpa [h] using mem_support_iff.mp vin
+replace h2 : (finSuccEquiv k n ((T f) (h v))) != 0 := fun eq => h2
+      by simpa only [map_eq_zero_iff _ (AlgEquiv.injective _)] using eq
+    exact (Finset.sup_lt_iff <| Ne.bot_lt (fun x => h2 <| degree_eq_bot.mp x)).mpr vs
+  nth_rw 2 [← f.support_sum_monomial_coeff]
+  rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem vin h]
+  rw [leadingCoeff_finSuccEquiv_t] at coeff
+  simpa only [coeff, algebraMap_eq] using (mem_support_iff.mp vin).isUnit.map MvPolynomial.C
 
 中文:
 引理 T_leadingcoeff_isUnit
@@ -309,7 +364,26 @@ lemma T_leadingcoeff_isUnit
     (fun v => (T f ((monomial v) (coeff v f))).degreeOf 0) (support_nonempty.mpr fne)
   set h := fun w => (MvPolynomial.monomial w) (coeff w f)
   simp only [← natDegree_finSuccEquiv] at vs
-  replace vs : forall x in f.support \ {v}, (finS
+  replace vs : forall x in f.support \ {v}, (finSuccEquiv k n ((T f) (h x))).degree <
+      (finSuccEquiv k n ((T f) (h v))).degree := by
+    intro x hx
+    obtain ⟨h1, h2⟩ := Finset.mem_sdiff.mp hx
+apply degree_lt_degree lt_of_le_of_ne (vs x h1) ?_
+    simpa only [natDegree_finSuccEquiv]
+using degreeOf_t_ne_of_ne f _ _ h1 vin ne_of_not_mem_cons h2
+  have coeff : (finSuccEquiv k n ((T f) (h v + ∑ x in f.support \ {v}, h x))).leadingCoeff =
+      (finSuccEquiv k n ((T f) (h v))).leadingCoeff := by
+    simp only [map_add, map_sum]
+    rw [add_comm]
+apply leadingCoeff_add_of_degree_lt (lt_of_le_of_lt <| degree_sum_le _ _) ?_
+    have h2 : h v != 0 := by simpa [h] using mem_support_iff.mp vin
+replace h2 : (finSuccEquiv k n ((T f) (h v))) != 0 := fun eq => h2
+      by simpa only [map_eq_zero_iff _ (AlgEquiv.injective _)] using eq
+    exact (Finset.sup_lt_iff <| Ne.bot_lt (fun x => h2 <| degree_eq_bot.mp x)).mpr vs
+  nth_rw 2 [← f.support_sum_monomial_coeff]
+  rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem vin h]
+  rw [leadingCoeff_finSuccEquiv_t] at coeff
+  simpa only [coeff, algebraMap_eq] using (mem_support_iff.mp vin).isUnit.map MvPolynomial.C
 -/
 private lemma T_leadingcoeff_isUnit (fne : f != 0) :
     IsUnit (finSuccEquiv k n (T f f)).leadingCoeff := by
@@ -402,7 +476,11 @@ abbreviation noncomputable
   have : g.symm.toRingEquiv.toRingHom.comp g = RingHom.id _ :=
     g.toRingEquiv.symm_toRingHom_comp_toRingHom
   calc
-    _ = Ideal.map ((RingHom.id _).comp <| T f) I := by 
+    _ = Ideal.map ((RingHom.id _).comp <| T f) I := by rw [id_comp, Ideal.map_coe]
+    _ = (I.map (T f)).map (RingHom.id _) := by simp only [← Ideal.map_map, Ideal.map_coe]
+    _ = (I.map (T f)).map (g.symm.toAlgHom.toRingHom.comp g) :=
+      congrFun (congrArg Ideal.map this.symm) (I.map (T f))
+    _ = _ := by simp [← Ideal.map_map, Ideal.map_coe]
 
 中文:
 缩写 noncomputable
@@ -413,7 +491,11 @@ abbreviation noncomputable
   have : g.symm.toRingEquiv.toRingHom.comp g = RingHom.id _ :=
     g.toRingEquiv.symm_toRingHom_comp_toRingHom
   calc
-    _ = Ideal.map ((RingHom.id _).comp <| T f) I := by 
+    _ = Ideal.map ((RingHom.id _).comp <| T f) I := by rw [id_comp, Ideal.map_coe]
+    _ = (I.map (T f)).map (RingHom.id _) := by simp only [← Ideal.map_map, Ideal.map_coe]
+    _ = (I.map (T f)).map (g.symm.toAlgHom.toRingHom.comp g) :=
+      congrFun (congrArg Ideal.map this.symm) (I.map (T f))
+    _ = _ := by simp [← Ideal.map_map, Ideal.map_coe]
 -/
 private noncomputable abbrev eqv1 :
     ((MvPolynomial (Fin n) k)[X] ⧸ (I.map (T f)).map (finSuccEquiv k n)) ≃ₐ[k]
@@ -441,7 +523,9 @@ abbreviation noncomputable
       have : (T f).symm.toRingEquiv.toRingHom.comp (T f) = RingHom.id _ :=
         RingEquiv.symm_toRingHom_comp_toRingHom _
       rw [this]; rw [Ideal.map_id]
-    _ = _ 
+    _ = _ := by
+      rw [← Ideal.map_map]; rw [Ideal.map_coe]; rw [Ideal.map_coe]
+      exact congrArg _ rfl
 
 中文:
 缩写 noncomputable
@@ -452,7 +536,9 @@ abbreviation noncomputable
       have : (T f).symm.toRingEquiv.toRingHom.comp (T f) = RingHom.id _ :=
         RingEquiv.symm_toRingHom_comp_toRingHom _
       rw [this]; rw [Ideal.map_id]
-    _ = _ 
+    _ = _ := by
+      rw [← Ideal.map_map]; rw [Ideal.map_coe]; rw [Ideal.map_coe]
+      exact congrArg _ rfl
 -/
 private noncomputable abbrev eqv2 :
     (MvPolynomial (Fin (n + 1)) k ⧸ I.map (T f)) ≃ₐ[k] MvPolynomial (Fin (n + 1)) k ⧸ I :=
@@ -524,7 +610,25 @@ theorem exists_integral_inj_algHom_of_quotient
     rw [Quotient.mkₐ_eq_mk]; rw [Ideal.Quotient.eq] at hab
     by_contra ne
     have eq := eq_C_of_isEmpty (a - b)
-have ne : coeff 0 (a - b) !
+have ne : coeff 0 (a - b) != 0 := fun h => h ▸ eq ▸ sub_ne_zero_of_ne ne map_zero _
+    obtain ⟨c, _, eqr⟩ := isUnit_iff_exists.mp ne.isUnit
+    have one : c • (a - b) = 1 := by
+      rw [MvPolynomial.smul_eq_C_mul]; rw [eq]; rw [← map_mul]; rw [eqr]; rw [MvPolynomial.C_1]
+    exact hi ((eq_top_iff_one I).mpr (one ▸ I.smul_of_tower_mem c hab))
+  | succ d hd =>
+    by_cases eqi : I = 0
+    · have bij : Function.Bijective (Quotient.mkₐ k I) :=
+        (Quotient.mk_bijective_iff_eq_bot I).mpr eqi
+      exact ⟨d + 1, le_rfl, _, bij.1, isIntegral_of_surjective _ bij.2⟩
+    · obtain ⟨f, fi, fne⟩ := Submodule.exists_mem_ne_zero_of_ne_bot eqi
+set ϕ := kerLiftAlg hom2 f I
+      have := Quotient.nontrivial_iff.mpr hi
+      obtain ⟨s, _, g, injg, intg⟩ := hd (ker <| hom2 f I) (ker_ne_top <| hom2 f I)
+      have comp : (kerLiftAlg (hom2 f I)).comp (Quotient.mkₐ k <| ker <| hom2 f I) = (hom2 f I) :=
+        AlgHom.ext fun a => by
+          simp only [AlgHom.coe_comp, Quotient.mkₐ_eq_mk, Function.comp_apply, kerLiftAlg_mk]
+      exact ⟨s, by lia, ϕ.comp g, (ϕ.coe_comp g) ▸ (kerLiftAlg_injective _).comp injg,
+intg.trans _ _ (comp ▸ hom2_isIntegral f I fne fi).tower_top _ _⟩
 
 中文:
 定理 存在_integral_inj_algHom_of_quotient
@@ -537,7 +641,25 @@ have ne : coeff 0 (a - b) !
     rw [Quotient.mkₐ_eq_mk]; rw [Ideal.Quotient.eq] at hab
     by_contra ne
     have eq := eq_C_of_isEmpty (a - b)
-have ne : coeff 0 (a - b) !
+have ne : coeff 0 (a - b) != 0 := fun h => h ▸ eq ▸ sub_ne_zero_of_ne ne map_zero _
+    obtain ⟨c, _, eqr⟩ := isUnit_iff_exists.mp ne.isUnit
+    have one : c • (a - b) = 1 := by
+      rw [MvPolynomial.smul_eq_C_mul]; rw [eq]; rw [← map_mul]; rw [eqr]; rw [MvPolynomial.C_1]
+    exact hi ((eq_top_iff_one I).mpr (one ▸ I.smul_of_tower_mem c hab))
+  | succ d hd =>
+    by_cases eqi : I = 0
+    · have bij : Function.Bijective (Quotient.mkₐ k I) :=
+        (Quotient.mk_bijective_iff_eq_bot I).mpr eqi
+      exact ⟨d + 1, le_rfl, _, bij.1, isIntegral_of_surjective _ bij.2⟩
+    · obtain ⟨f, fi, fne⟩ := Submodule.exists_mem_ne_zero_of_ne_bot eqi
+set ϕ := kerLiftAlg hom2 f I
+      have := Quotient.nontrivial_iff.mpr hi
+      obtain ⟨s, _, g, injg, intg⟩ := hd (ker <| hom2 f I) (ker_ne_top <| hom2 f I)
+      have comp : (kerLiftAlg (hom2 f I)).comp (Quotient.mkₐ k <| ker <| hom2 f I) = (hom2 f I) :=
+        AlgHom.ext fun a => by
+          simp only [AlgHom.coe_comp, Quotient.mkₐ_eq_mk, Function.comp_apply, kerLiftAlg_mk]
+      exact ⟨s, by lia, ϕ.comp g, (ϕ.coe_comp g) ▸ (kerLiftAlg_injective _).comp injg,
+intg.trans _ _ (comp ▸ hom2_isIntegral f I fne fi).tower_top _ _⟩
 
 Depends on / 依赖: Ideal.Quotient.eq, MvPolynomia, MvPolynomial, MvPolynomial.smul_eq_C_mul, Quotient, Quotient.mk, eq_C_of_isEmpty, isIntegral_of_surjective, isUnit, isUnit_iff_exists, isUnit_iff_exists.mp, le_rfl, map_mul, map_zero, ne.isUnit, smul_eq_C_mul, sub_ne_zero_of_ne
 -/
@@ -591,7 +713,9 @@ theorem exists_integral_inj_algHom_of_fg
   set ϕ := quotientKerAlgEquivOfSurjective fsurj
   obtain ⟨s, _, g, injg, intg⟩ := exists_integral_inj_algHom_of_quotient (ker f) (ker_ne_top _)
   use s, ϕ.toAlgHom.comp g
-  simp only [AlgHom.coe_comp, AlgEquiv.coe_to
+  simp only [AlgHom.coe_comp, AlgEquiv.coe_toAlgHom, EmbeddingLike.comp_injective,
+    AlgHom.toRingHom_eq_coe]
+  exact ⟨injg, intg.trans _ _ (isIntegral_of_surjective _ ϕ.surjective)⟩
 
 中文:
 定理 存在_integral_inj_algHom_of_fg
@@ -601,7 +725,9 @@ theorem exists_integral_inj_algHom_of_fg
   set ϕ := quotientKerAlgEquivOfSurjective fsurj
   obtain ⟨s, _, g, injg, intg⟩ := exists_integral_inj_algHom_of_quotient (ker f) (ker_ne_top _)
   use s, ϕ.toAlgHom.comp g
-  simp only [AlgHom.coe_comp, AlgEquiv.coe_to
+  simp only [AlgHom.coe_comp, AlgEquiv.coe_toAlgHom, EmbeddingLike.comp_injective,
+    AlgHom.toRingHom_eq_coe]
+  exact ⟨injg, intg.trans _ _ (isIntegral_of_surjective _ ϕ.surjective)⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.coe_comp, AlgHom.toRingHom_eq_coe, Algebra, Algebra.FiniteType.iff_quotient_mvPolynomial, EmbeddingLike, EmbeddingLike.comp_injective, FiniteType, coe_comp, coe_toAlgHom, comp_injective, exists_integral_inj_algHom_of_quotient, iff_quotient_mvPolynomial, intg.trans, isIntegral_of_surjective, ker_ne_top, quotientKerAlgEquivOfSurjective, surjective
 -/
@@ -626,7 +752,8 @@ theorem exists_finite_inj_algHom_of_fg
   have h : algebraMap k R = g.toRingHom.comp (algebraMap k (MvPolynomial (Fin s) k)) := by
     algebraize [g.toRingHom]
     rw [IsScalarTower.algebraMap_eq k (MvPolynomial (Fin s) k)]; rw [algebraMap_toAlgebra']
-  exact ⟨s, g, in
+  exact ⟨s, g, inj, int.to_finite
+    (h ▸ RingHom.finiteType_algebraMap.mpr fin).of_comp_finiteType⟩
 
 中文:
 定理 存在_finite_inj_algHom_of_fg
@@ -636,7 +763,8 @@ theorem exists_finite_inj_algHom_of_fg
   have h : algebraMap k R = g.toRingHom.comp (algebraMap k (MvPolynomial (Fin s) k)) := by
     algebraize [g.toRingHom]
     rw [IsScalarTower.algebraMap_eq k (MvPolynomial (Fin s) k)]; rw [algebraMap_toAlgebra']
-  exact ⟨s, g, in
+  exact ⟨s, g, inj, int.to_finite
+    (h ▸ RingHom.finiteType_algebraMap.mpr fin).of_comp_finiteType⟩
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, MvPolynomial, RingHom, RingHom.finiteType_algebraMap.mpr, algebraMap, algebraMap_eq, algebraMap_toAlgebra, algebraize, exists_integral_inj_algHom_of_fg, finiteType_algebraMap, g.toRingHom, g.toRingHom.comp, int.to_finite, of_comp_finiteType, toRingHom, to_finite
 -/

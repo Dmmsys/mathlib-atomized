@@ -92,7 +92,13 @@ lemma isGaussian_iff_gaussian_charFunDual
     fun ⟨m, f, hf, h⟩ => isGaussian_of_map_eq_gaussianReal fun L => ⟨L m, (f L L).toNNReal, ?_⟩⟩
   apply Measure.ext_of_charFun
   ext t
-  simp_rw [charFun_map_eq_charFunDual_smul, h, charFu
+  simp_rw [charFun_map_eq_charFunDual_smul, h, charFun_gaussianReal,
+    smul_apply, map_smul, smul_apply, smul_eq_mul]
+  norm_cast
+  congrm exp (_ - ofReal ?_)
+  rw [Real.coe_toNNReal]
+  · ring
+  exact hf.nonneg L
 
 中文:
 引理 isGaussian_iff_gaussian_charFunDual
@@ -103,7 +109,13 @@ lemma isGaussian_iff_gaussian_charFunDual
     fun ⟨m, f, hf, h⟩ => isGaussian_of_map_eq_gaussianReal fun L => ⟨L m, (f L L).toNNReal, ?_⟩⟩
   apply Measure.ext_of_charFun
   ext t
-  simp_rw [charFun_map_eq_charFunDual_smul, h, charFu
+  simp_rw [charFun_map_eq_charFunDual_smul, h, charFun_gaussianReal,
+    smul_apply, map_smul, smul_apply, smul_eq_mul]
+  norm_cast
+  congrm exp (_ - ofReal ?_)
+  rw [Real.coe_toNNReal]
+  · ring
+  exact hf.nonneg L
 
 Depends on / 依赖: Measure, Measure.ext_of_charFun, Real.coe_toNNReal, charFunDual_eq, charFun_gaussianReal, charFun_map_eq_charFunDual_smul, coe_toNNReal, congrm, covarianceBilinDual, ext_of_charFun, h.charFunDual_eq, hf.nonneg, isGaussian_of_map_eq_gaussianReal, isPosSemidef_covarianceBilinDual, map_smul, nonneg, ofReal, simp_rw, smul_apply, smul_eq_mul
 -/
@@ -136,7 +148,29 @@ lemma gaussian_charFunDual_congr
   choose n hn using h
   have h L : (n L : Complex) = (L (∫ x, id x ∂μ) * I - covarianceBilinDual μ L L / 2 -
       L m * I + f L L / 2) / (2 * π * I) := by
-    r
+    rw [hn L]
+    field_simp
+    ring
+  have : Continuous n := by
+    rw [← Complex.isometry_intCast.comp_continuous_iff]
+    change Continuous (fun L => (n L : Complex))
+    simp_rw [h]
+    fun_prop
+.eq_const have := (IsLocallyConstant.iff_continuous n).2 this
+  have this L : n L = 0 := by
+    rw [this 0]; rw [← Int.cast_inj (α := Complex)]
+    simp [h]
+  simp only [id_eq, this, Int.cast_zero, zero_mul, add_zero, Complex.ext_iff, sub_re, mul_re,
+    ofReal_re, I_re, mul_zero, ofReal_im, I_im, mul_one, sub_self, div_ofNat_re, zero_sub, neg_inj,
+    ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, div_left_inj', sub_im, mul_im, div_ofNat_im,
+    zero_div, sub_zero] at hn
+  constructor
+  · rw [SeparatingDual.eq_iff_forall_dual_eq (R := Real)]
+    simp [hn]
+  · rw [← toBilinForm_inj]
+    apply LinearMap.BilinForm.ext_of_isSymm hf.isSymm isPosSemidef_covarianceBilinDual.isSymm
+    intro x
+    simp [covarianceBilinDual_self_eq_variance IsGaussian.memLp_two_id, (hn x).1.symm]
 
 中文:
 引理 gaussian_charFunDual_congr
@@ -147,7 +181,29 @@ lemma gaussian_charFunDual_congr
   choose n hn using h
   have h L : (n L : Complex) = (L (∫ x, id x ∂μ) * I - covarianceBilinDual μ L L / 2 -
       L m * I + f L L / 2) / (2 * π * I) := by
-    r
+    rw [hn L]
+    field_simp
+    ring
+  have : Continuous n := by
+    rw [← Complex.isometry_intCast.comp_continuous_iff]
+    change Continuous (fun L => (n L : Complex))
+    simp_rw [h]
+    fun_prop
+.eq_const have := (IsLocallyConstant.iff_continuous n).2 this
+  have this L : n L = 0 := by
+    rw [this 0]; rw [← Int.cast_inj (α := Complex)]
+    simp [h]
+  simp only [id_eq, this, Int.cast_zero, zero_mul, add_zero, Complex.ext_iff, sub_re, mul_re,
+    ofReal_re, I_re, mul_zero, ofReal_im, I_im, mul_one, sub_self, div_ofNat_re, zero_sub, neg_inj,
+    ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, div_left_inj', sub_im, mul_im, div_ofNat_im,
+    zero_div, sub_zero] at hn
+  constructor
+  · rw [SeparatingDual.eq_iff_forall_dual_eq (R := Real)]
+    simp [hn]
+  · rw [← toBilinForm_inj]
+    apply LinearMap.BilinForm.ext_of_isSymm hf.isSymm isPosSemidef_covarianceBilinDual.isSymm
+    intro x
+    simp [covarianceBilinDual_self_eq_variance IsGaussian.memLp_two_id, (hn x).1.symm]
 
 Depends on / 依赖: Complex.exp_eq_exp_iff_exists_int, Complex.isometry_intCast.comp_continuous_iff, Continuous, IsLocallyConstant, IsLocallyConstant.iff_continuo, charFunDual_eq, comp_continuous_iff, covarianceBilinDual, eq_const, exp_eq_exp_iff_exists_int, fun_prop, iff_continuo, isGaussian_iff_gaussian_charFunDual, isometry_intCast, simp_rw
 -/
@@ -280,7 +336,13 @@ lemma isGaussian_iff_gaussian_charFun
       (InnerProductSpace.toDualMap Real E).toContinuousLinearMap,
     ⟨⟨fun x y => ?_⟩, ⟨fun x => ?_⟩⟩, ?_⟩,
     fun ⟨m, f, hf, h⟩ => ⟨m,
-   
+      f.bilinearComp (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap
+        (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap,
+    ⟨⟨fun x y => ?_⟩, ⟨fun x => ?_⟩⟩, ?_⟩⟩
+  any_goals simpa using hf.eq ..
+  any_goals simpa using hf.nonneg _
+  · simp [charFun_eq_charFunDual_toDualMap, h, -InnerProductSpace.toContinuousLinearMap_toDualMap]
+  · simp [← charFun_toDual_symm_eq_charFunDual, h]
 
 中文:
 引理 isGaussian_iff_gaussian_charFun
@@ -292,7 +354,13 @@ lemma isGaussian_iff_gaussian_charFun
       (InnerProductSpace.toDualMap Real E).toContinuousLinearMap,
     ⟨⟨fun x y => ?_⟩, ⟨fun x => ?_⟩⟩, ?_⟩,
     fun ⟨m, f, hf, h⟩ => ⟨m,
-   
+      f.bilinearComp (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap
+        (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap,
+    ⟨⟨fun x y => ?_⟩, ⟨fun x => ?_⟩⟩, ?_⟩⟩
+  any_goals simpa using hf.eq ..
+  any_goals simpa using hf.nonneg _
+  · simp [charFun_eq_charFunDual_toDualMap, h, -InnerProductSpace.toContinuousLinearMap_toDualMap]
+  · simp [← charFun_toDual_symm_eq_charFunDual, h]
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.toDual, InnerProductSpace.toDualMap, any_goals, bilinearComp, f.bilinearComp, isGaussian_iff_gaussian_charFunDual, symm.toLinearIsometry.toContinuousLinearMap, toContinuousLinearMap, toDual, toDualMap, toLinearIsometry
 -/
@@ -325,7 +393,15 @@ lemma gaussian_charFun_congr
   let g : StrongDual Real E ->L[Real] StrongDual Real E ->L[Real] Real :=
     f.bilinearComp (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap
       (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap
-  have : forall L : StrongDual Real E, cha
+  have : forall L : StrongDual Real E, charFunDual μ L = exp (L m * I - g L L / 2) := by
+    simp [← charFun_toDual_symm_eq_charFunDual, h, g]
+  have hg : g.toBilinForm.IsPosSemidef :=
+    ⟨⟨fun x y => by simpa [g] using hf.eq ..⟩, ⟨fun x => by simpa [g] using hf.nonneg _⟩⟩
+  have := gaussian_charFunDual_congr hg this
+  refine ⟨this.1, ?_⟩
+  ext
+  simp [covarianceBilin, ← this.2, g, ← InnerProductSpace.toDual_apply_eq_toDualMap_apply,
+    -InnerProductSpace.toContinuousLinearMap_toDualMap]
 
 中文:
 引理 gaussian_charFun_congr
@@ -334,7 +410,15 @@ lemma gaussian_charFun_congr
   let g : StrongDual Real E ->L[Real] StrongDual Real E ->L[Real] Real :=
     f.bilinearComp (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap
       (InnerProductSpace.toDual Real E).symm.toLinearIsometry.toContinuousLinearMap
-  have : forall L : StrongDual Real E, cha
+  have : forall L : StrongDual Real E, charFunDual μ L = exp (L m * I - g L L / 2) := by
+    simp [← charFun_toDual_symm_eq_charFunDual, h, g]
+  have hg : g.toBilinForm.IsPosSemidef :=
+    ⟨⟨fun x y => by simpa [g] using hf.eq ..⟩, ⟨fun x => by simpa [g] using hf.nonneg _⟩⟩
+  have := gaussian_charFunDual_congr hg this
+  refine ⟨this.1, ?_⟩
+  ext
+  simp [covarianceBilin, ← this.2, g, ← InnerProductSpace.toDual_apply_eq_toDualMap_apply,
+    -InnerProductSpace.toContinuousLinearMap_toDualMap]
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.toDual, IsPosSemidef, StrongDual, bilinearComp, charFunDual, charFun_toDual_symm_eq_charFunDual, f.bilinearComp, g.toBilinForm.IsPosSemidef, hf.eq, hf.no, symm.toLinearIsometry.toContinuousLinearMap, toBilinForm, toContinuousLinearMap, toDual, toLinearIsometry
 -/

@@ -56,7 +56,14 @@ theorem charpoly_toMatrix
   set Q := b'.toMatrix b
   let e := Basis.indexEquiv b b'
   let ι' := ChooseBasisIndex R M
-  l
+  let φ := reindexLinearEquiv R R e e
+  let φ₁ := reindexLinearEquiv R R e (Equiv.refl ι')
+  let φ₂ := reindexLinearEquiv R R (Equiv.refl ι') (Equiv.refl ι')
+  let φ₃ := reindexLinearEquiv R R (Equiv.refl ι') e
+  calc
+    (P * A * Q).charpoly = (φ (P * A * Q)).charpoly := (charpoly_reindex ..).symm
+    _ = (φ₁ P * φ₂ A * φ₃ Q).charpoly := by rw [reindexLinearEquiv_mul, reindexLinearEquiv_mul]
+    _ = A.charpoly := by rw [charpoly_mul_comm, ← mul_assoc]; simp [P, Q, φ₁, φ₂, φ₃]
 
 中文:
 定理 charpoly_toMatrix
@@ -71,7 +78,14 @@ theorem charpoly_toMatrix
   set Q := b'.toMatrix b
   let e := Basis.indexEquiv b b'
   let ι' := ChooseBasisIndex R M
-  l
+  let φ := reindexLinearEquiv R R e e
+  let φ₁ := reindexLinearEquiv R R e (Equiv.refl ι')
+  let φ₂ := reindexLinearEquiv R R (Equiv.refl ι') (Equiv.refl ι')
+  let φ₃ := reindexLinearEquiv R R (Equiv.refl ι') e
+  calc
+    (P * A * Q).charpoly = (φ (P * A * Q)).charpoly := (charpoly_reindex ..).symm
+    _ = (φ₁ P * φ₂ A * φ₃ Q).charpoly := by rw [reindexLinearEquiv_mul, reindexLinearEquiv_mul]
+    _ = A.charpoly := by rw [charpoly_mul_comm, ← mul_assoc]; simp [P, Q, φ₁, φ₂, φ₃]
 
 Depends on / 依赖: Basis.indexEquiv, ChooseBasisIndex, Equiv.refl, LinearMap, LinearMap.charpoly, b.toMatrix, basis_toMatrix_mul_linearMap_toMatrix_mul_basis_toMatrix, charpoly, chooseBasis, indexEquiv, nontriviality, reindexLinearEquiv, toMatrix
 -/

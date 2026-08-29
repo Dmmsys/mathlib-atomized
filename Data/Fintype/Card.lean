@@ -1307,7 +1307,7 @@ theorem existsUnique_iff_card_one
     mem_filter_univ]
 
 nonrec theorem two_lt_card_iff : 2 < card α ↔ exists a b c : α, a != b ∧ a != c ∧ b != c := by
-  simp_rw [← Finset.card_univ, 
+  simp_rw [← Finset.card_univ, two_lt_card_iff, mem_univ, true_and]
 
 中文:
 定理 存在Unique_iff_card_one
@@ -1319,7 +1319,7 @@ nonrec theorem two_lt_card_iff : 2 < card α ↔ exists a b c : α, a != b ∧ a
     mem_filter_univ]
 
 nonrec theorem two_lt_card_iff : 2 < card α ↔ exists a b c : α, a != b ∧ a != c ∧ b != c := by
-  simp_rw [← Finset.card_univ, 
+  simp_rw [← Finset.card_univ, two_lt_card_iff, mem_univ, true_and]
 
 Depends on / 依赖: Finset, Finset.card_eq_one, Subset, Subset.antisymm_iff, and_comm, antisymm_iff, card_eq_one, exists_congr, mem_filter_univ, singleton_subset_iff, subset_singleton_iff
 -/
@@ -1375,7 +1375,7 @@ theorem surjective_of_injective
       ((card_image_of_injective univ hinj).symm ▸ le_rfl)
   have h₂ : x in image f univ := h₁.symm ▸ mem_univ x
   obtain ⟨y, h⟩ := mem_image.1 h₂
- 
+  exact ⟨y, h.2⟩
 
 中文:
 定理 surjective_of_injective
@@ -1390,7 +1390,7 @@ theorem surjective_of_injective
       ((card_image_of_injective univ hinj).symm ▸ le_rfl)
   have h₂ : x in image f univ := h₁.symm ▸ mem_univ x
   obtain ⟨y, h⟩ := mem_image.1 h₂
- 
+  exact ⟨y, h.2⟩
 
 Depends on / 依赖: Classical, Classical.propDecidable, card_image_of_injective, eq_of_subset_of_card_le, le_rfl, mem_image, mem_univ, nonempty_fintype, propDecidable, subset_univ
 -/
@@ -1491,6 +1491,14 @@ theorem injective_iff_surjective_of_equiv
     fun hsurj => by
     simpa [Function.comp] using e.injective.comp (this.2 (e.symm.surjective.comp hsurj))⟩
 
+alias ⟨_root_.Function.Injective.bijective_of_finite, _⟩ := injective_iff_bijective
+
+alias ⟨_root_.Function.Surjective.bijective_of_finite, _⟩ := surjective_iff_bijective
+
+alias ⟨_root_.Function.Injective.surjective_of_finite,
+    _root_.Function.Surjective.injective_of_finite⟩ :=
+  injective_iff_surjective_of_equiv
+
 中文:
 定理 injective_iff_surjective_of_equiv
   条件: {f : α -> β} (e : α ≃ β)
@@ -1500,6 +1508,14 @@ theorem injective_iff_surjective_of_equiv
     simpa [Function.comp] using e.surjective.comp (this.1 (e.symm.injective.comp hinj)),
     fun hsurj => by
     simpa [Function.comp] using e.injective.comp (this.2 (e.symm.surjective.comp hsurj))⟩
+
+alias ⟨_root_.Function.Injective.bijective_of_finite, _⟩ := injective_iff_bijective
+
+alias ⟨_root_.Function.Surjective.bijective_of_finite, _⟩ := surjective_iff_bijective
+
+alias ⟨_root_.Function.Injective.surjective_of_finite,
+    _root_.Function.Surjective.injective_of_finite⟩ :=
+  injective_iff_surjective_of_equiv
 
 Depends on / 依赖: Function, Function.comp, Injective, Surjective, e.injective.comp, e.surjective.comp, e.symm, e.symm.injective.comp, e.symm.surjective.comp, injective, injective_iff_surjective, surjective
 -/
@@ -1831,7 +1847,8 @@ Finset.card_lt_card by
       simp_rw [lt_iff_le_not_ge, Finset.subset_iff, mem_filter_univ]
       exact
         ⟨fun z hzx => _root_.trans hzx hxy,
-          not_forall_of_exists_not ⟨x, Classical.n
+          not_forall_of_exists_not ⟨x, Classical.not_imp.2 ⟨hxy, irrefl x⟩⟩⟩
+  exact Subrelation.wf (this _ _) (measure _).wf
 
 中文:
 定理 wellFounded_of_trans_of_irrefl
@@ -1844,7 +1861,8 @@ Finset.card_lt_card by
       simp_rw [lt_iff_le_not_ge, Finset.subset_iff, mem_filter_univ]
       exact
         ⟨fun z hzx => _root_.trans hzx hxy,
-          not_forall_of_exists_not ⟨x, Classical.n
+          not_forall_of_exists_not ⟨x, Classical.not_imp.2 ⟨hxy, irrefl x⟩⟩⟩
+  exact Subrelation.wf (this _ _) (measure _).wf
 
 Depends on / 依赖: Classical, Classical.not_imp, Finset, Finset.card_lt_card, Finset.subset_iff, Subrelation, Subrelation.wf, _root_, _root_.trans, card_lt_card, classical, irrefl, lt_iff_le_not_ge, measure, mem_filter_univ, nonempty_fintype, not_forall_of_exists_not, not_imp, simp_rw, subset_iff
 -/
@@ -1973,7 +1991,7 @@ theorem Fintype.induction_subsingleton_or_nontrivial
   · apply hstep
     intro β _ hlt
     rw [hn] at hlt
-    exact ih (Fintype.
+    exact ih (Fintype.card β) hlt _ rfl
 
 中文:
 定理 有限类型.induction_subsingleton_or_nontrivial
@@ -1986,7 +2004,7 @@ theorem Fintype.induction_subsingleton_or_nontrivial
   · apply hstep
     intro β _ hlt
     rw [hn] at hlt
-    exact ih (Fintype.
+    exact ih (Fintype.card β) hlt _ rfl
 
 Depends on / 依赖: Fintype, Fintype.card, Nat.strong_induction_on, generalizing, hnontriv, strong_induction_on, subsingleton_or_nontrivial
 -/

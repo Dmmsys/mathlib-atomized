@@ -255,7 +255,76 @@ lemma exists_measure_symmDiff_lt_of_generateFrom_isSetRing
   /- We check that the set of sets satisfying the conclusion of the lemma for all positive
   `ε` contains `C` and is stable under complement and disjoint union. It follows that it is
   all the sigma-algebra, as desired. -/
-  apply MeasurableSpace.induction_on_inter (C := fun s hs => forall (ε : R
+  apply MeasurableSpace.induction_on_inter (C := fun s hs => forall (ε : Real>=0∞) (hε : 0 < ε),
+    exists t in C, μ (t ∆ s) < ε) h hC.isSetSemiring.isPiSystem ?_ ?_ ?_ ?_ s hs ε hε
+  · intro ε εpos
+    exact ⟨∅, hC.empty_mem, by simp [εpos]⟩
+  · intro s hs ε εpos
+    exact ⟨s, hs, by simp [εpos]⟩
+  · /- To check the stability under complement, we use the condition `h'C` which guarantees
+    that the space is almost an element of `C`. If `t` approximates `s`, then `univ \ t`
+    approximates well `sᶜ`, and therefore `t' \ t` approximates well `sᶜ` when `t'` is a good
+    enough approximation to `univ`. As `t' \ t` belongs to `C` when `t` and `t'` do, this
+    concludes this step. -/
+    intro s hs h's ε εpos
+    obtain ⟨t, tC, ht⟩ : exists t in C, μ (t ∆ s) < ε / 2 := h's _ (ENNReal.half_pos εpos.ne')
+    obtain ⟨t', t'C, ht'⟩ : exists t' in C, μ (t'ᶜ) < ε / 2 := by
+      obtain ⟨D, D_count, DC, hD, Dne⟩ :
+          exists D : Set (Set α), D.Countable ∧ D subseteq C ∧ μ (⋃₀ D)ᶜ = 0 ∧ D.Nonempty := by
+        rcases h'C with ⟨D, D_count, DC, hD⟩
+        refine ⟨D union {∅}, D_count.union (by simp), ?_⟩
+        simp only [union_subset_iff, DC, singleton_subset_iff, true_and, and_true, hC.empty_mem]
+        simp only [union_singleton, sUnion_insert, empty_union, insert_nonempty, and_true, hD]
+      obtain ⟨f, hf⟩ : exists f : Nat -> Set α, D = Set.range f := Set.Countable.exists_eq_range D_count Dne
+      have fC n : Set.accumulate f n in C := hC.accumulate_mem (fun n => DC (by simp [hf])) n
+      have : Tendsto (fun n => μ (Set.accumulate f n)ᶜ) atTop (𝓝 0) := by
+        have : ⋃₀ D = ⋃ n, Set.accumulate f n := by simp [hf, iUnion_accumulate]
+        rw [show (⋃₀ D)ᶜ = ⋂ n]; rw [(Set.accumulate f n)ᶜ by simp [this]; rw [accumulate]] at hD
+        rw [← hD]
+        apply tendsto_measure_iInter_atTop (fun i => ?_)
+          (fun i j hij => by simpa using monotone_accumulate hij) ⟨0, by simp⟩
+        apply MeasurableSet.nullMeasurableSet
+        rw [h]
+        exact (measurableSet_generateFrom (fC i)).compl
+      obtain ⟨n, hn⟩ : exists n, μ (accumulate f n)ᶜ < ε / 2 :=
+        ((tendsto_order.1 this).2 _ (ENNReal.half_pos εpos.ne')).exists
+      exact ⟨accumulate f n, fC n, hn⟩
+    refine ⟨t' \ t, hC.sdiff_mem t'C tC, ?_⟩
+    calc μ ((t' \ t) ∆ sᶜ)
+      _ <= μ (t ∆ s union t'ᶜ) := by gcongr; grind
+      _ <= μ (t ∆ s) + μ (t'ᶜ) := measure_union_le _ _
+      _ < ε / 2 + ε / 2 := by gcongr
+      _ = ε := ENNReal.add_halves ε
+  · /- To check the stability under disjoint union, approximate `f n` by a set `t n ∈ C`. Then
+    `⋃ i, f i` is well approximated by `U i < n, f i` for large enough `n`, which is itself
+    well approximated by `⋃ i < n, t i`. As this set belongs to `C`, this concludes this step. -/
+    intro f f_disj f_meas hf ε εpos
+    rcases ENNReal.exists_pos_sum_of_countable' (ENNReal.half_pos εpos.ne').ne' Nat with ⟨δ, δpos, hδ⟩
+    have A i : exists t in C, μ (t ∆ (f i)) < δ i := hf i _ (δpos i)
+    choose! t tC ht using A
+    have : Tendsto (fun n => μ (⋃ i in Ici n, f i)) atTop (𝓝 0) :=
+      tendsto_measure_biUnion_Ici_zero_of_pairwise_disjoint
+        (fun i => (f_meas i).nullMeasurableSet) f_disj
+    obtain ⟨n, hn⟩ : exists n, μ (⋃ i in Ici n, f i) < ε / 2 :=
+      ((tendsto_order.1 this).2 _ (ENNReal.half_pos εpos.ne')).exists
+    refine ⟨⋃ i in Finset.range n, t i, hC.biUnion_mem _ (fun i hi => tC _), ?_⟩
+    calc μ ((⋃ i in Finset.range n, t i) ∆ (⋃ i, f i))
+    _ <= μ ((⋃ i in Finset.range n, (t i) ∆ (f i)) union ⋃ i in Ici n, f i) := by
+      gcongr
+      intro x hx
+      simp only [Finset.mem_range, mem_symmDiff, mem_iUnion, exists_prop, not_exists, not_and,
+        mem_Ici, mem_union] at hx ⊢
+      grind
+    _ <= ∑ i in Finset.range n, μ (t i ∆ f i) + μ (⋃ i in Ici n, f i) := by
+      apply (measure_union_le _ _).trans
+      gcongr
+      apply measure_biUnion_finset_le
+    _ <= ∑ i in Finset.range n, δ i + μ (⋃ i in Ici n, f i) := by
+      gcongr with i; exact (ht i).le
+    _ <= ∑' i, δ i + μ (⋃ i in Ici n, f i) := by
+      gcongr; exact ENNReal.sum_le_tsum (Finset.range n)
+    _ < ε / 2 + ε / 2 := by gcongr
+    _ = ε := ENNReal.add_halves ε
 
 中文:
 引理 存在_measure_symmDiff_lt_of_generateFrom_isSetRing
@@ -264,7 +333,76 @@ lemma exists_measure_symmDiff_lt_of_generateFrom_isSetRing
   /- We check that the set of sets satisfying the conclusion of the lemma for all positive
   `ε` contains `C` and is stable under complement and disjoint union. It follows that it is
   all the sigma-algebra, as desired. -/
-  apply MeasurableSpace.induction_on_inter (C := fun s hs => forall (ε : R
+  apply MeasurableSpace.induction_on_inter (C := fun s hs => forall (ε : Real>=0∞) (hε : 0 < ε),
+    exists t in C, μ (t ∆ s) < ε) h hC.isSetSemiring.isPiSystem ?_ ?_ ?_ ?_ s hs ε hε
+  · intro ε εpos
+    exact ⟨∅, hC.empty_mem, by simp [εpos]⟩
+  · intro s hs ε εpos
+    exact ⟨s, hs, by simp [εpos]⟩
+  · /- To check the stability under complement, we use the condition `h'C` which guarantees
+    that the space is almost an element of `C`. If `t` approximates `s`, then `univ \ t`
+    approximates well `sᶜ`, and therefore `t' \ t` approximates well `sᶜ` when `t'` is a good
+    enough approximation to `univ`. As `t' \ t` belongs to `C` when `t` and `t'` do, this
+    concludes this step. -/
+    intro s hs h's ε εpos
+    obtain ⟨t, tC, ht⟩ : exists t in C, μ (t ∆ s) < ε / 2 := h's _ (ENNReal.half_pos εpos.ne')
+    obtain ⟨t', t'C, ht'⟩ : exists t' in C, μ (t'ᶜ) < ε / 2 := by
+      obtain ⟨D, D_count, DC, hD, Dne⟩ :
+          exists D : Set (Set α), D.Countable ∧ D subseteq C ∧ μ (⋃₀ D)ᶜ = 0 ∧ D.Nonempty := by
+        rcases h'C with ⟨D, D_count, DC, hD⟩
+        refine ⟨D union {∅}, D_count.union (by simp), ?_⟩
+        simp only [union_subset_iff, DC, singleton_subset_iff, true_and, and_true, hC.empty_mem]
+        simp only [union_singleton, sUnion_insert, empty_union, insert_nonempty, and_true, hD]
+      obtain ⟨f, hf⟩ : exists f : Nat -> Set α, D = Set.range f := Set.Countable.exists_eq_range D_count Dne
+      have fC n : Set.accumulate f n in C := hC.accumulate_mem (fun n => DC (by simp [hf])) n
+      have : Tendsto (fun n => μ (Set.accumulate f n)ᶜ) atTop (𝓝 0) := by
+        have : ⋃₀ D = ⋃ n, Set.accumulate f n := by simp [hf, iUnion_accumulate]
+        rw [show (⋃₀ D)ᶜ = ⋂ n]; rw [(Set.accumulate f n)ᶜ by simp [this]; rw [accumulate]] at hD
+        rw [← hD]
+        apply tendsto_measure_iInter_atTop (fun i => ?_)
+          (fun i j hij => by simpa using monotone_accumulate hij) ⟨0, by simp⟩
+        apply MeasurableSet.nullMeasurableSet
+        rw [h]
+        exact (measurableSet_generateFrom (fC i)).compl
+      obtain ⟨n, hn⟩ : exists n, μ (accumulate f n)ᶜ < ε / 2 :=
+        ((tendsto_order.1 this).2 _ (ENNReal.half_pos εpos.ne')).exists
+      exact ⟨accumulate f n, fC n, hn⟩
+    refine ⟨t' \ t, hC.sdiff_mem t'C tC, ?_⟩
+    calc μ ((t' \ t) ∆ sᶜ)
+      _ <= μ (t ∆ s union t'ᶜ) := by gcongr; grind
+      _ <= μ (t ∆ s) + μ (t'ᶜ) := measure_union_le _ _
+      _ < ε / 2 + ε / 2 := by gcongr
+      _ = ε := ENNReal.add_halves ε
+  · /- To check the stability under disjoint union, approximate `f n` by a set `t n ∈ C`. Then
+    `⋃ i, f i` is well approximated by `U i < n, f i` for large enough `n`, which is itself
+    well approximated by `⋃ i < n, t i`. As this set belongs to `C`, this concludes this step. -/
+    intro f f_disj f_meas hf ε εpos
+    rcases ENNReal.exists_pos_sum_of_countable' (ENNReal.half_pos εpos.ne').ne' Nat with ⟨δ, δpos, hδ⟩
+    have A i : exists t in C, μ (t ∆ (f i)) < δ i := hf i _ (δpos i)
+    choose! t tC ht using A
+    have : Tendsto (fun n => μ (⋃ i in Ici n, f i)) atTop (𝓝 0) :=
+      tendsto_measure_biUnion_Ici_zero_of_pairwise_disjoint
+        (fun i => (f_meas i).nullMeasurableSet) f_disj
+    obtain ⟨n, hn⟩ : exists n, μ (⋃ i in Ici n, f i) < ε / 2 :=
+      ((tendsto_order.1 this).2 _ (ENNReal.half_pos εpos.ne')).exists
+    refine ⟨⋃ i in Finset.range n, t i, hC.biUnion_mem _ (fun i hi => tC _), ?_⟩
+    calc μ ((⋃ i in Finset.range n, t i) ∆ (⋃ i, f i))
+    _ <= μ ((⋃ i in Finset.range n, (t i) ∆ (f i)) union ⋃ i in Ici n, f i) := by
+      gcongr
+      intro x hx
+      simp only [Finset.mem_range, mem_symmDiff, mem_iUnion, exists_prop, not_exists, not_and,
+        mem_Ici, mem_union] at hx ⊢
+      grind
+    _ <= ∑ i in Finset.range n, μ (t i ∆ f i) + μ (⋃ i in Ici n, f i) := by
+      apply (measure_union_le _ _).trans
+      gcongr
+      apply measure_biUnion_finset_le
+    _ <= ∑ i in Finset.range n, δ i + μ (⋃ i in Ici n, f i) := by
+      gcongr with i; exact (ht i).le
+    _ <= ∑' i, δ i + μ (⋃ i in Ici n, f i) := by
+      gcongr; exact ENNReal.sum_le_tsum (Finset.range n)
+    _ < ε / 2 + ε / 2 := by gcongr
+    _ = ε := ENNReal.add_halves ε
 -/
 lemma exists_measure_symmDiff_lt_of_generateFrom_isSetRing [IsFiniteMeasure μ]
     {C : Set (Set α)} (hC : IsSetRing C)
@@ -357,7 +495,8 @@ lemma exists_measure_symmDiff_lt_of_generateFrom_isSetSemiring
     exact ⟨D, D_count, DC.trans subset_supClosure, hD⟩
   · rw [h]
     apply le_antisymm (generateFrom_mono subset_supClosure)
-    apply generateFrom_le (fun t 
+    apply generateFrom_le (fun t ht => ?_)
+    apply measurableSet_generateFrom_of_mem_supClosure ht
 
 中文:
 引理 存在_measure_symmDiff_lt_of_generateFrom_isSetSemiring
@@ -368,7 +507,8 @@ lemma exists_measure_symmDiff_lt_of_generateFrom_isSetSemiring
     exact ⟨D, D_count, DC.trans subset_supClosure, hD⟩
   · rw [h]
     apply le_antisymm (generateFrom_mono subset_supClosure)
-    apply generateFrom_le (fun t 
+    apply generateFrom_le (fun t ht => ?_)
+    apply measurableSet_generateFrom_of_mem_supClosure ht
 
 Depends on / 依赖: DC.trans, D_count, exists_measure_symmDiff_lt_of_generateFrom_isSetRing, generateFrom_le, generateFrom_mono, hC.isSetRing_supClosure, isSetRing_supClosure, le_antisymm, measurableSet_generateFrom_of_mem_supClosure, subset_supClosure
 -/

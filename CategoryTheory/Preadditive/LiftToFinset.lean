@@ -46,7 +46,9 @@ theorem finiteSubcoproductsCocone_ι_app_eq_sum
   simp only [colimit.ι_desc, Cofan.mk_pt, Cofan.mk_ι_app, Preadditive.comp_sum]
   rw [Finset.sum_eq_single v]
   · simp
-  · intro b hb hb
+  · intro b hb hb₁
+    rw [Sigma.ι_π_of_ne_assoc _ (Ne.symm hb₁)]; rw [zero_comp]
+  · simp
 
 中文:
 定理 finiteSubcoproductsCocone_ι_app_eq_sum
@@ -58,7 +60,9 @@ theorem finiteSubcoproductsCocone_ι_app_eq_sum
   simp only [colimit.ι_desc, Cofan.mk_pt, Cofan.mk_ι_app, Preadditive.comp_sum]
   rw [Finset.sum_eq_single v]
   · simp
-  · intro b hb hb
+  · intro b hb hb₁
+    rw [Sigma.ι_π_of_ne_assoc _ (Ne.symm hb₁)]; rw [zero_comp]
+  · simp
 
 Depends on / 依赖: Cofan.mk_, Cofan.mk_pt, Discrete, Discrete.functor_obj_eq_as, Finset, Finset.sum_eq_single, Functor, Functor.const_obj_obj, Ne.symm, Preadditive, Preadditive.comp_sum, colimit, comp_sum, const_obj_obj, finiteSubcoproductsCocone_pt, functor_obj_eq_as, liftToFinsetObj_obj, mk_pt, sum_eq_single, zero_comp
 -/
@@ -96,7 +100,9 @@ theorem finiteSubproductsCocone_π_app_eq_sum
   simp only [limit.lift_π, Fan.mk_pt, Fan.mk_π_app, Preadditive.sum_comp, Category.assoc]
   rw [Finset.sum_eq_single v]
   · simp
-  · intro b hb 
+  · intro b hb hb₁
+    rw [Pi.ι_π_of_ne _ hb₁]; rw [comp_zero]
+  · simp
 
 中文:
 定理 finiteSubproductsCocone_π_app_eq_sum
@@ -108,7 +114,9 @@ theorem finiteSubproductsCocone_π_app_eq_sum
   simp only [limit.lift_π, Fan.mk_pt, Fan.mk_π_app, Preadditive.sum_comp, Category.assoc]
   rw [Finset.sum_eq_single v]
   · simp
-  · intro b hb 
+  · intro b hb hb₁
+    rw [Pi.ι_π_of_ne _ hb₁]; rw [comp_zero]
+  · simp
 
 Depends on / 依赖: Category, Category.assoc, Discrete, Discrete.functor_obj_eq_as, Fan.mk_, Fan.mk_pt, Finset, Finset.sum_eq_single, Functor, Functor.const_obj_obj, Preadditive, Preadditive.sum_comp, comp_zero, const_obj_obj, finiteSubproductsCone_pt, functor_obj_eq_as, liftToFinsetObj_obj, limit.lift_, mk_pt, sum_comp
 -/

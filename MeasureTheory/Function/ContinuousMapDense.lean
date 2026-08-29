@@ -82,7 +82,48 @@ theorem exists_continuous_eLpNorm_sub_le_of_closed
       exists η : Real>=0, 0 < η ∧ forall s : Set α, μ s <= η -> eLpNorm (s.indicator fun _x => c) p μ <= ε :=
     exists_eLpNorm_indicator_le hp c hε
   have ηpos : (0 : Real>=0∞) < η := ENNReal.coe_lt_coe.2 η_pos
-  obtain ⟨V, sV, V_open, h'V, hV⟩ : exists (V : Set α), V 
+  obtain ⟨V, sV, V_open, h'V, hV⟩ : exists (V : Set α), V ⊇ s ∧ IsOpen V ∧ μ V < ∞ ∧ μ (V \ s) < η :=
+    s_closed.measurableSet.exists_isOpen_sdiff_lt hs ηpos.ne'
+  let v := u inter V
+  have hsv : s subseteq v := subset_inter hsu sV
+  have hμv : μ v < ∞ := (measure_mono inter_subset_right).trans_lt h'V
+  obtain ⟨g, hgv, hgs, hg_range⟩ :=
+    exists_continuous_zero_one_of_isClosed (u_open.inter V_open).isClosed_compl s_closed
+      (disjoint_compl_left_iff.2 hsv)
+  -- Multiply this by `c` to get a continuous approximation to the function `f`; the key point is
+  -- that this is pointwise bounded by the indicator of the set `v \ s`, which has small measure.
+  have g_norm : forall x, ‖g x‖ = g x := fun x => by rw [Real.norm_eq_abs, abs_of_nonneg (hg_range x).1]
+  have gc_bd0 : forall x, ‖g x • c‖ <= ‖c‖ := by
+    intro x
+    simp only [norm_smul, g_norm x]
+    apply mul_le_of_le_one_left (norm_nonneg _)
+    exact (hg_range x).2
+  have gc_bd :
+      forall x, ‖g x • c - s.indicator (fun _x => c) x‖ <= ‖(v \ s).indicator (fun _x => c) x‖ := by
+    intro x
+    by_cases hv : x in v
+    · rw [← Set.sdiff_union_of_subset hsv] at hv
+      rcases hv with hsv | hs
+      · simpa only [hsv.2, Set.indicator_of_notMem, not_false_iff, sub_zero, hsv,
+          Set.indicator_of_mem] using gc_bd0 x
+      · simp [hgs hs, hs]
+    · simp [hgv hv, show x ∉ s from fun h => hv (hsv h)]
+  have gc_support : (Function.support fun x : α => g x • c) subseteq v := by
+    refine Function.support_subset_iff'.2 fun x hx => ?_
+    simp only [hgv hx, Pi.zero_apply, zero_smul]
+  have gc_mem : MemLp (fun x => g x • c) p μ := by
+    refine MemLp.smul (memLp_top_const _) ?_ (p := p) (q := ∞)
+    refine ⟨g.continuous.aestronglyMeasurable, ?_⟩
+    have : eLpNorm (v.indicator fun _x => (1 : Real)) p μ < ⊤ :=
+(eLpNorm_indicator_const_le _ _).trans_lt by simp [lt_top_iff_ne_top, hμv.ne]
+    refine (eLpNorm_mono fun x => ?_).trans_lt this
+    by_cases hx : x in v
+    · simp only [hx, abs_of_nonneg (hg_range x).1, (hg_range x).2, Real.norm_eq_abs,
+        indicator_of_mem, CStarRing.norm_one]
+    · simp only [hgv hx, Pi.zero_apply, Real.norm_eq_abs, abs_zero, abs_nonneg]
+  refine ⟨fun x => g x • c, by fun_prop, (eLpNorm_mono gc_bd).trans ?_, gc_bd0,
+      gc_support.trans inter_subset_left, gc_mem⟩
+  exact hη _ ((measure_mono (sdiff_subset_sdiff inter_subset_right Subset.rfl)).trans hV.le)
 
 中文:
 定理 存在_continuous_eLpNorm_sub_le_of_closed
@@ -92,7 +133,48 @@ theorem exists_continuous_eLpNorm_sub_le_of_closed
       exists η : Real>=0, 0 < η ∧ forall s : Set α, μ s <= η -> eLpNorm (s.indicator fun _x => c) p μ <= ε :=
     exists_eLpNorm_indicator_le hp c hε
   have ηpos : (0 : Real>=0∞) < η := ENNReal.coe_lt_coe.2 η_pos
-  obtain ⟨V, sV, V_open, h'V, hV⟩ : exists (V : Set α), V 
+  obtain ⟨V, sV, V_open, h'V, hV⟩ : exists (V : Set α), V ⊇ s ∧ IsOpen V ∧ μ V < ∞ ∧ μ (V \ s) < η :=
+    s_closed.measurableSet.exists_isOpen_sdiff_lt hs ηpos.ne'
+  let v := u inter V
+  have hsv : s subseteq v := subset_inter hsu sV
+  have hμv : μ v < ∞ := (measure_mono inter_subset_right).trans_lt h'V
+  obtain ⟨g, hgv, hgs, hg_range⟩ :=
+    exists_continuous_zero_one_of_isClosed (u_open.inter V_open).isClosed_compl s_closed
+      (disjoint_compl_left_iff.2 hsv)
+  -- Multiply this by `c` to get a continuous approximation to the function `f`; the key point is
+  -- that this is pointwise bounded by the indicator of the set `v \ s`, which has small measure.
+  have g_norm : forall x, ‖g x‖ = g x := fun x => by rw [Real.norm_eq_abs, abs_of_nonneg (hg_range x).1]
+  have gc_bd0 : forall x, ‖g x • c‖ <= ‖c‖ := by
+    intro x
+    simp only [norm_smul, g_norm x]
+    apply mul_le_of_le_one_left (norm_nonneg _)
+    exact (hg_range x).2
+  have gc_bd :
+      forall x, ‖g x • c - s.indicator (fun _x => c) x‖ <= ‖(v \ s).indicator (fun _x => c) x‖ := by
+    intro x
+    by_cases hv : x in v
+    · rw [← Set.sdiff_union_of_subset hsv] at hv
+      rcases hv with hsv | hs
+      · simpa only [hsv.2, Set.indicator_of_notMem, not_false_iff, sub_zero, hsv,
+          Set.indicator_of_mem] using gc_bd0 x
+      · simp [hgs hs, hs]
+    · simp [hgv hv, show x ∉ s from fun h => hv (hsv h)]
+  have gc_support : (Function.support fun x : α => g x • c) subseteq v := by
+    refine Function.support_subset_iff'.2 fun x hx => ?_
+    simp only [hgv hx, Pi.zero_apply, zero_smul]
+  have gc_mem : MemLp (fun x => g x • c) p μ := by
+    refine MemLp.smul (memLp_top_const _) ?_ (p := p) (q := ∞)
+    refine ⟨g.continuous.aestronglyMeasurable, ?_⟩
+    have : eLpNorm (v.indicator fun _x => (1 : Real)) p μ < ⊤ :=
+(eLpNorm_indicator_const_le _ _).trans_lt by simp [lt_top_iff_ne_top, hμv.ne]
+    refine (eLpNorm_mono fun x => ?_).trans_lt this
+    by_cases hx : x in v
+    · simp only [hx, abs_of_nonneg (hg_range x).1, (hg_range x).2, Real.norm_eq_abs,
+        indicator_of_mem, CStarRing.norm_one]
+    · simp only [hgv hx, Pi.zero_apply, Real.norm_eq_abs, abs_zero, abs_nonneg]
+  refine ⟨fun x => g x • c, by fun_prop, (eLpNorm_mono gc_bd).trans ?_, gc_bd0,
+      gc_support.trans inter_subset_left, gc_mem⟩
+  exact hη _ ((measure_mono (sdiff_subset_sdiff inter_subset_right Subset.rfl)).trans hV.le)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_coe, IsOpen, V_open, coe_lt_coe, eLpNorm, exists_eLpNorm_indicator_le, exists_isOpen_sdiff_lt, indicator, inter_subset, measurableSet, measure_mono, pos.ne, s.indicator, s_closed, s_closed.measurableSet.exists_isOpen_sdiff_lt, subset_inter, subseteq
 -/
@@ -160,7 +242,49 @@ theorem MemLp.exists_hasCompactSupport_eLpNorm_sub_le
       exists g : α -> E, eLpNorm (f - g) p μ <= ε ∧ Continuous g ∧ MemLp g p μ ∧ HasCompactSupport g by
     rcases H with ⟨g, hg, g_cont, g_mem, g_support⟩
     exact ⟨g, g_support, hg, g_cont, g_mem⟩
-  -- It suffices to check that the set of functions we consider approximates chara
+  -- It suffices to check that the set of functions we consider approximates characteristic
+  -- functions, is stable under addition and consists of ae strongly measurable functions.
+  -- First check the latter easy facts.
+  apply hf.induction_dense hp _ _ _ _ hε
+  rotate_left
+  -- stability under addition
+  · rintro f g ⟨f_cont, f_mem, hf⟩ ⟨g_cont, g_mem, hg⟩
+    exact ⟨f_cont.add g_cont, f_mem.add g_mem, hf.add hg⟩
+  -- ae strong measurability
+  · rintro f ⟨_f_cont, f_mem, _hf⟩
+    exact f_mem.aestronglyMeasurable
+  -- We are left with approximating characteristic functions.
+  -- This follows from `exists_continuous_eLpNorm_sub_le_of_closed`.
+  intro c t ht htμ ε hε
+  rcases exists_Lp_half E μ p hε with ⟨δ, δpos, hδ⟩
+  obtain ⟨η, ηpos, hη⟩ :
+      exists η : Real>=0, 0 < η ∧ forall s : Set α, μ s <= η -> eLpNorm (s.indicator fun _x => c) p μ <= δ :=
+    exists_eLpNorm_indicator_le hp c δpos.ne'
+  have hη_pos' : (0 : Real>=0∞) < η := ENNReal.coe_pos.2 ηpos
+  obtain ⟨s, st, s_compact, s_closed, μs⟩ :
+      exists s, s subseteq t ∧ IsCompact s ∧ IsClosed s ∧ μ (t \ s) < η :=
+    ht.exists_isCompact_isClosed_sdiff_lt htμ.ne hη_pos'.ne'
+  have hsμ : μ s < ∞ := (measure_mono st).trans_lt htμ
+  have I1 : eLpNorm ((s.indicator fun _y => c) - t.indicator fun _y => c) p μ <= δ := by
+    rw [← eLpNorm_neg]; rw [neg_sub]; rw [← indicator_sdiff st]
+    exact hη _ μs.le
+  obtain ⟨k, k_compact, sk⟩ : exists k : Set α, IsCompact k ∧ s subseteq interior k :=
+    exists_compact_superset s_compact
+  rcases exists_continuous_eLpNorm_sub_le_of_closed hp s_closed isOpen_interior sk hsμ.ne c δpos.ne'
+    with ⟨f, f_cont, I2, _f_bound, f_support, f_mem⟩
+  have I3 : eLpNorm (f - t.indicator fun _y => c) p μ <= ε := by
+    convert!
+      (hδ _ _
+          (f_mem.aestronglyMeasurable.sub
+            (aestronglyMeasurable_const.indicator s_closed.measurableSet))
+          ((aestronglyMeasurable_const.indicator s_closed.measurableSet).sub
+            (aestronglyMeasurable_const.indicator ht))
+          I2 I1).le using 2
+    simp only [sub_add_sub_cancel]
+  refine ⟨f, I3, f_cont, f_mem, HasCompactSupport.intro k_compact fun x hx => ?_⟩
+  rw [← Function.notMem_support]
+  contrapose hx
+  exact interior_subset (f_support hx)
 
 中文:
 定理 MemLp.存在_hasCompactSupport_eLpNorm_sub_le
@@ -169,7 +293,49 @@ theorem MemLp.exists_hasCompactSupport_eLpNorm_sub_le
       exists g : α -> E, eLpNorm (f - g) p μ <= ε ∧ Continuous g ∧ MemLp g p μ ∧ HasCompactSupport g by
     rcases H with ⟨g, hg, g_cont, g_mem, g_support⟩
     exact ⟨g, g_support, hg, g_cont, g_mem⟩
-  -- It suffices to check that the set of functions we consider approximates chara
+  -- It suffices to check that the set of functions we consider approximates characteristic
+  -- functions, is stable under addition and consists of ae strongly measurable functions.
+  -- First check the latter easy facts.
+  apply hf.induction_dense hp _ _ _ _ hε
+  rotate_left
+  -- stability under addition
+  · rintro f g ⟨f_cont, f_mem, hf⟩ ⟨g_cont, g_mem, hg⟩
+    exact ⟨f_cont.add g_cont, f_mem.add g_mem, hf.add hg⟩
+  -- ae strong measurability
+  · rintro f ⟨_f_cont, f_mem, _hf⟩
+    exact f_mem.aestronglyMeasurable
+  -- We are left with approximating characteristic functions.
+  -- This follows from `exists_continuous_eLpNorm_sub_le_of_closed`.
+  intro c t ht htμ ε hε
+  rcases exists_Lp_half E μ p hε with ⟨δ, δpos, hδ⟩
+  obtain ⟨η, ηpos, hη⟩ :
+      exists η : Real>=0, 0 < η ∧ forall s : Set α, μ s <= η -> eLpNorm (s.indicator fun _x => c) p μ <= δ :=
+    exists_eLpNorm_indicator_le hp c δpos.ne'
+  have hη_pos' : (0 : Real>=0∞) < η := ENNReal.coe_pos.2 ηpos
+  obtain ⟨s, st, s_compact, s_closed, μs⟩ :
+      exists s, s subseteq t ∧ IsCompact s ∧ IsClosed s ∧ μ (t \ s) < η :=
+    ht.exists_isCompact_isClosed_sdiff_lt htμ.ne hη_pos'.ne'
+  have hsμ : μ s < ∞ := (measure_mono st).trans_lt htμ
+  have I1 : eLpNorm ((s.indicator fun _y => c) - t.indicator fun _y => c) p μ <= δ := by
+    rw [← eLpNorm_neg]; rw [neg_sub]; rw [← indicator_sdiff st]
+    exact hη _ μs.le
+  obtain ⟨k, k_compact, sk⟩ : exists k : Set α, IsCompact k ∧ s subseteq interior k :=
+    exists_compact_superset s_compact
+  rcases exists_continuous_eLpNorm_sub_le_of_closed hp s_closed isOpen_interior sk hsμ.ne c δpos.ne'
+    with ⟨f, f_cont, I2, _f_bound, f_support, f_mem⟩
+  have I3 : eLpNorm (f - t.indicator fun _y => c) p μ <= ε := by
+    convert!
+      (hδ _ _
+          (f_mem.aestronglyMeasurable.sub
+            (aestronglyMeasurable_const.indicator s_closed.measurableSet))
+          ((aestronglyMeasurable_const.indicator s_closed.measurableSet).sub
+            (aestronglyMeasurable_const.indicator ht))
+          I2 I1).le using 2
+    simp only [sub_add_sub_cancel]
+  refine ⟨f, I3, f_cont, f_mem, HasCompactSupport.intro k_compact fun x hx => ?_⟩
+  rw [← Function.notMem_support]
+  contrapose hx
+  exact interior_subset (f_support hx)
 
 Depends on / 依赖: Continuous, HasCompactSupport, eLpNorm, g_cont, g_mem, g_support
 -/
@@ -236,7 +402,14 @@ theorem MemLp.exists_hasCompactSupport_integral_rpow_sub_le
   have A : ENNReal.ofReal (ε ^ (1 / p)) != 0 := by
     simp only [Ne, ENNReal.ofReal_eq_zero, not_le, I]
   have B : ENNReal.ofReal p != 0 := by simpa only [Ne, ENNReal.ofReal_eq_zero, not_le] using hp
-  rcases hf.exists_hasCompactSupport_eLp
+  rcases hf.exists_hasCompactSupport_eLpNorm_sub_le ENNReal.coe_ne_top A with
+    ⟨g, g_support, hg, g_cont, g_mem⟩
+  change eLpNorm _ (ENNReal.ofReal p) _ <= _ at hg
+  refine ⟨g, g_support, ?_, g_cont, g_mem⟩
+  rwa [(hf.sub g_mem).eLpNorm_eq_integral_rpow_norm B ENNReal.coe_ne_top,
+    ENNReal.ofReal_le_ofReal_iff I.le, one_div, ENNReal.toReal_ofReal hp.le,
+    Real.rpow_le_rpow_iff _ hε.le (inv_pos.2 hp)] at hg
+  positivity
 
 中文:
 定理 MemLp.存在_hasCompactSupport_integral_rpow_sub_le
@@ -245,7 +418,14 @@ theorem MemLp.exists_hasCompactSupport_integral_rpow_sub_le
   have A : ENNReal.ofReal (ε ^ (1 / p)) != 0 := by
     simp only [Ne, ENNReal.ofReal_eq_zero, not_le, I]
   have B : ENNReal.ofReal p != 0 := by simpa only [Ne, ENNReal.ofReal_eq_zero, not_le] using hp
-  rcases hf.exists_hasCompactSupport_eLp
+  rcases hf.exists_hasCompactSupport_eLpNorm_sub_le ENNReal.coe_ne_top A with
+    ⟨g, g_support, hg, g_cont, g_mem⟩
+  change eLpNorm _ (ENNReal.ofReal p) _ <= _ at hg
+  refine ⟨g, g_support, ?_, g_cont, g_mem⟩
+  rwa [(hf.sub g_mem).eLpNorm_eq_integral_rpow_norm B ENNReal.coe_ne_top,
+    ENNReal.ofReal_le_ofReal_iff I.le, one_div, ENNReal.toReal_ofReal hp.le,
+    Real.rpow_le_rpow_iff _ hε.le (inv_pos.2 hp)] at hg
+  positivity
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, ENNReal.ofReal, ENNReal.ofReal_eq_zero, Real.rpow_pos_of_pos, coe_ne_top, eLpNorm, eLpNorm_eq_integral_rpow_norm, exists_hasCompactSupport_eLpNorm_sub_le, g_cont, g_mem, g_support, hf.exists_hasCompactSupport_eLpNorm_sub_le, hf.sub, not_le, ofReal, ofReal_eq_zero, rpow_pos_of_pos
 -/
@@ -333,7 +513,47 @@ theorem MemLp.exists_boundedContinuous_eLpNorm_sub_le
       exists g : α -> E, eLpNorm (f - g) p μ <= ε ∧ Continuous g ∧ MemLp g p μ ∧ IsBounded (range g) by
     rcases H with ⟨g, hg, g_cont, g_mem, g_bd⟩
     exact ⟨⟨⟨g, g_cont⟩, Metric.isBounded_range_iff.1 g_bd⟩, hg, g_mem⟩
-  -- It suffices to check that the set of functions we cons
+  -- It suffices to check that the set of functions we consider approximates characteristic
+  -- functions, is stable under addition and made of ae strongly measurable functions.
+  -- First check the latter easy facts.
+  apply hf.induction_dense hp _ _ _ _ hε
+  rotate_left
+  -- stability under addition
+  · rintro f g ⟨f_cont, f_mem, f_bd⟩ ⟨g_cont, g_mem, g_bd⟩
+    refine ⟨f_cont.add g_cont, f_mem.add g_mem, ?_⟩
+    let f' : α ->ᵇ E := ⟨⟨f, f_cont⟩, Metric.isBounded_range_iff.1 f_bd⟩
+    let g' : α ->ᵇ E := ⟨⟨g, g_cont⟩, Metric.isBounded_range_iff.1 g_bd⟩
+    exact (f' + g').isBounded_range
+  -- ae strong measurability
+  · exact fun f ⟨_, h, _⟩ => h.aestronglyMeasurable
+  -- We are left with approximating characteristic functions.
+  -- This follows from `exists_continuous_eLpNorm_sub_le_of_closed`.
+  intro c t ht htμ ε hε
+  rcases exists_Lp_half E μ p hε with ⟨δ, δpos, hδ⟩
+  obtain ⟨η, ηpos, hη⟩ :
+      exists η : Real>=0, 0 < η ∧ forall s : Set α, μ s <= η -> eLpNorm (s.indicator fun _x => c) p μ <= δ :=
+    exists_eLpNorm_indicator_le hp c δpos.ne'
+  have hη_pos' : (0 : Real>=0∞) < η := ENNReal.coe_pos.2 ηpos
+  obtain ⟨s, st, s_closed, μs⟩ : exists s, s subseteq t ∧ IsClosed s ∧ μ (t \ s) < η :=
+    ht.exists_isClosed_sdiff_lt htμ.ne hη_pos'.ne'
+  have hsμ : μ s < ∞ := (measure_mono st).trans_lt htμ
+  have I1 : eLpNorm ((s.indicator fun _y => c) - t.indicator fun _y => c) p μ <= δ := by
+    rw [← eLpNorm_neg]; rw [neg_sub]; rw [← indicator_sdiff st]
+    exact hη _ μs.le
+  rcases exists_continuous_eLpNorm_sub_le_of_closed hp s_closed isOpen_univ (subset_univ _) hsμ.ne c
+      δpos.ne' with
+    ⟨f, f_cont, I2, f_bound, -, f_mem⟩
+  have I3 : eLpNorm (f - t.indicator fun _y => c) p μ <= ε := by
+    convert!
+      (hδ _ _
+          (f_mem.aestronglyMeasurable.sub
+            (aestronglyMeasurable_const.indicator s_closed.measurableSet))
+          ((aestronglyMeasurable_const.indicator s_closed.measurableSet).sub
+            (aestronglyMeasurable_const.indicator ht))
+          I2 I1).le using 2
+    simp only [sub_add_sub_cancel]
+  refine ⟨f, I3, f_cont, f_mem, ?_⟩
+  exact (BoundedContinuousFunction.ofNormedAddCommGroup f f_cont _ f_bound).isBounded_range
 
 中文:
 定理 MemLp.存在_boundedContinuous_eLpNorm_sub_le
@@ -343,7 +563,47 @@ theorem MemLp.exists_boundedContinuous_eLpNorm_sub_le
       exists g : α -> E, eLpNorm (f - g) p μ <= ε ∧ Continuous g ∧ MemLp g p μ ∧ IsBounded (range g) by
     rcases H with ⟨g, hg, g_cont, g_mem, g_bd⟩
     exact ⟨⟨⟨g, g_cont⟩, Metric.isBounded_range_iff.1 g_bd⟩, hg, g_mem⟩
-  -- It suffices to check that the set of functions we cons
+  -- It suffices to check that the set of functions we consider approximates characteristic
+  -- functions, is stable under addition and made of ae strongly measurable functions.
+  -- First check the latter easy facts.
+  apply hf.induction_dense hp _ _ _ _ hε
+  rotate_left
+  -- stability under addition
+  · rintro f g ⟨f_cont, f_mem, f_bd⟩ ⟨g_cont, g_mem, g_bd⟩
+    refine ⟨f_cont.add g_cont, f_mem.add g_mem, ?_⟩
+    let f' : α ->ᵇ E := ⟨⟨f, f_cont⟩, Metric.isBounded_range_iff.1 f_bd⟩
+    let g' : α ->ᵇ E := ⟨⟨g, g_cont⟩, Metric.isBounded_range_iff.1 g_bd⟩
+    exact (f' + g').isBounded_range
+  -- ae strong measurability
+  · exact fun f ⟨_, h, _⟩ => h.aestronglyMeasurable
+  -- We are left with approximating characteristic functions.
+  -- This follows from `exists_continuous_eLpNorm_sub_le_of_closed`.
+  intro c t ht htμ ε hε
+  rcases exists_Lp_half E μ p hε with ⟨δ, δpos, hδ⟩
+  obtain ⟨η, ηpos, hη⟩ :
+      exists η : Real>=0, 0 < η ∧ forall s : Set α, μ s <= η -> eLpNorm (s.indicator fun _x => c) p μ <= δ :=
+    exists_eLpNorm_indicator_le hp c δpos.ne'
+  have hη_pos' : (0 : Real>=0∞) < η := ENNReal.coe_pos.2 ηpos
+  obtain ⟨s, st, s_closed, μs⟩ : exists s, s subseteq t ∧ IsClosed s ∧ μ (t \ s) < η :=
+    ht.exists_isClosed_sdiff_lt htμ.ne hη_pos'.ne'
+  have hsμ : μ s < ∞ := (measure_mono st).trans_lt htμ
+  have I1 : eLpNorm ((s.indicator fun _y => c) - t.indicator fun _y => c) p μ <= δ := by
+    rw [← eLpNorm_neg]; rw [neg_sub]; rw [← indicator_sdiff st]
+    exact hη _ μs.le
+  rcases exists_continuous_eLpNorm_sub_le_of_closed hp s_closed isOpen_univ (subset_univ _) hsμ.ne c
+      δpos.ne' with
+    ⟨f, f_cont, I2, f_bound, -, f_mem⟩
+  have I3 : eLpNorm (f - t.indicator fun _y => c) p μ <= ε := by
+    convert!
+      (hδ _ _
+          (f_mem.aestronglyMeasurable.sub
+            (aestronglyMeasurable_const.indicator s_closed.measurableSet))
+          ((aestronglyMeasurable_const.indicator s_closed.measurableSet).sub
+            (aestronglyMeasurable_const.indicator ht))
+          I2 I1).le using 2
+    simp only [sub_add_sub_cancel]
+  refine ⟨f, I3, f_cont, f_mem, ?_⟩
+  exact (BoundedContinuousFunction.ofNormedAddCommGroup f f_cont _ f_bound).isBounded_range
 
 Depends on / 依赖: Continuous, IsBounded, Metric, Metric.isBounded_range_iff, eLpNorm, g_bd, g_cont, g_mem, isBounded_range_iff
 -/
@@ -407,7 +667,13 @@ theorem MemLp.exists_boundedContinuous_integral_rpow_sub_le
   have A : ENNReal.ofReal (ε ^ (1 / p)) != 0 := by
     simp only [Ne, ENNReal.ofReal_eq_zero, not_le, I]
   have B : ENNReal.ofReal p != 0 := by simpa only [Ne, ENNReal.ofReal_eq_zero, not_le] using hp
-  rcases hf.exists_boundedContinuous_eLp
+  rcases hf.exists_boundedContinuous_eLpNorm_sub_le ENNReal.coe_ne_top A with ⟨g, hg, g_mem⟩
+  change eLpNorm _ (ENNReal.ofReal p) _ <= _ at hg
+  refine ⟨g, ?_, g_mem⟩
+  rwa [(hf.sub g_mem).eLpNorm_eq_integral_rpow_norm B ENNReal.coe_ne_top,
+    ENNReal.ofReal_le_ofReal_iff I.le, one_div, ENNReal.toReal_ofReal hp.le,
+    Real.rpow_le_rpow_iff _ hε.le (inv_pos.2 hp)] at hg
+  positivity
 
 中文:
 定理 MemLp.存在_boundedContinuous_integral_rpow_sub_le
@@ -417,7 +683,13 @@ theorem MemLp.exists_boundedContinuous_integral_rpow_sub_le
   have A : ENNReal.ofReal (ε ^ (1 / p)) != 0 := by
     simp only [Ne, ENNReal.ofReal_eq_zero, not_le, I]
   have B : ENNReal.ofReal p != 0 := by simpa only [Ne, ENNReal.ofReal_eq_zero, not_le] using hp
-  rcases hf.exists_boundedContinuous_eLp
+  rcases hf.exists_boundedContinuous_eLpNorm_sub_le ENNReal.coe_ne_top A with ⟨g, hg, g_mem⟩
+  change eLpNorm _ (ENNReal.ofReal p) _ <= _ at hg
+  refine ⟨g, ?_, g_mem⟩
+  rwa [(hf.sub g_mem).eLpNorm_eq_integral_rpow_norm B ENNReal.coe_ne_top,
+    ENNReal.ofReal_le_ofReal_iff I.le, one_div, ENNReal.toReal_ofReal hp.le,
+    Real.rpow_le_rpow_iff _ hε.le (inv_pos.2 hp)] at hg
+  positivity
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, ENNReal.ofReal, ENNReal.ofReal_eq_zero, ENNReal.ofReal_l, Real.rpow_pos_of_pos, coe_ne_top, eLpNorm, eLpNorm_eq_integral_rpow_norm, exists_boundedContinuous_eLpNorm_sub_le, g_mem, hf.exists_boundedContinuous_eLpNorm_sub_le, hf.sub, not_le, ofReal, ofReal_eq_zero, ofReal_l, rpow_pos_of_pos
 -/
@@ -505,7 +777,8 @@ theorem boundedContinuousFunction_dense
   obtain ⟨g, hg, g_mem⟩ :
       exists g : α ->ᵇ E, eLpNorm ((f : α -> E) - (g : α -> E)) p μ <= ε ∧ MemLp g p μ :=
     (Lp.memLp f).exists_boundedContinuous_eLpNorm_sub_le hp hε.ne'
-  refine ⟨g_mem.toL
+  refine ⟨g_mem.toLp _, ⟨g, rfl⟩, ?_⟩
+  rwa [Metric.mem_closedEBall', ← Lp.toLp_coeFn f (Lp.memLp f), Lp.edist_toLp_toLp]
 
 中文:
 定理 boundedContinuousFunction_dense
@@ -516,7 +789,8 @@ theorem boundedContinuousFunction_dense
   obtain ⟨g, hg, g_mem⟩ :
       exists g : α ->ᵇ E, eLpNorm ((f : α -> E) - (g : α -> E)) p μ <= ε ∧ MemLp g p μ :=
     (Lp.memLp f).exists_boundedContinuous_eLpNorm_sub_le hp hε.ne'
-  refine ⟨g_mem.toL
+  refine ⟨g_mem.toLp _, ⟨g, rfl⟩, ?_⟩
+  rwa [Metric.mem_closedEBall', ← Lp.toLp_coeFn f (Lp.memLp f), Lp.edist_toLp_toLp]
 
 Depends on / 依赖: Lp.edist_toLp_toLp, Lp.memLp, Lp.toLp_coeFn, Metric, Metric.mem_closedEBall, Metric.nhds_basis_closedEBall, eLpNorm, edist_toLp_toLp, exists_boundedContinuous_eLpNorm_sub_le, g_mem, g_mem.toLp, mem_closedEBall, mem_closure_iff_nhds_basis, nhds_basis_closedEBall, toLp_coeFn
 -/

@@ -215,7 +215,24 @@ instance [QuasiCompactCover
   wlog h : exists (U : S.Opens), IsAffineOpen U ∧ f '' U' subseteq U generalizing U'
   · refine .of_isCompact_of_forall_exists_isCompactOpenCovered hU'.isCompact fun x hxU => ?_
     obtain ⟨W, hW, hx, _⟩ := isBasis_iff_nbhd.mp S.isBasis_affineOpens (mem_top (f x))
-  
+    obtain ⟨W', hW', hx', hle⟩ := isBasis_iff_nbhd.mp T.isBasis_affineOpens
+      (show x in f ⁻¹ᵁ W ⊓ U' from ⟨hx, hxU⟩)
+    exact ⟨W', le_trans hle inf_le_right, by simpa [hx], W'.2,
+      this hW' ⟨W, hW, by simpa using! le_trans hle inf_le_left⟩⟩
+  obtain ⟨U, hU, hsub⟩ := h
+  obtain ⟨s, hf, V, hc, (heq : _ = (U : Set S))⟩ := hU.isCompactOpenCovered 𝒰
+  refine ⟨s, hf, fun i hi => pullback.fst f (𝒰.f i) ⁻¹ᵁ U' ⊓ pullback.snd f (𝒰.f i) ⁻¹ᵁ (V i hi),
+      fun i hi => ?_, ?_⟩
+· exact hU'.isCompact_pullback_inf (hc _ _) hU (by simpa using! hsub) by
+      simpa [← SetLike.coe_subset_coe, ← heq, Set.range_comp] using! Set.subset_iUnion_of_subset i
+        (Set.subset_iUnion_of_subset hi (Set.subset_preimage_image _ _))
+  · refine subset_antisymm (by simp) (fun x hx => ?_)
+    have : f x in (U : Set S) := hsub ⟨x, hx, rfl⟩
+    simp_rw [← heq, Set.mem_iUnion] at this
+    obtain ⟨i, hi, y, hy, heq⟩ := this
+    simp_rw [Set.mem_iUnion]
+    obtain ⟨z, hzl, hzr⟩ := Scheme.Pullback.exists_preimage_pullback x y heq.symm
+    exact ⟨i, hi, z, ⟨by simpa [hzl], by simpa [hzr]⟩, hzl⟩
 
 中文:
 实例 [QuasiCompactCover
@@ -225,7 +242,24 @@ instance [QuasiCompactCover
   wlog h : exists (U : S.Opens), IsAffineOpen U ∧ f '' U' subseteq U generalizing U'
   · refine .of_isCompact_of_forall_exists_isCompactOpenCovered hU'.isCompact fun x hxU => ?_
     obtain ⟨W, hW, hx, _⟩ := isBasis_iff_nbhd.mp S.isBasis_affineOpens (mem_top (f x))
-  
+    obtain ⟨W', hW', hx', hle⟩ := isBasis_iff_nbhd.mp T.isBasis_affineOpens
+      (show x in f ⁻¹ᵁ W ⊓ U' from ⟨hx, hxU⟩)
+    exact ⟨W', le_trans hle inf_le_right, by simpa [hx], W'.2,
+      this hW' ⟨W, hW, by simpa using! le_trans hle inf_le_left⟩⟩
+  obtain ⟨U, hU, hsub⟩ := h
+  obtain ⟨s, hf, V, hc, (heq : _ = (U : Set S))⟩ := hU.isCompactOpenCovered 𝒰
+  refine ⟨s, hf, fun i hi => pullback.fst f (𝒰.f i) ⁻¹ᵁ U' ⊓ pullback.snd f (𝒰.f i) ⁻¹ᵁ (V i hi),
+      fun i hi => ?_, ?_⟩
+· exact hU'.isCompact_pullback_inf (hc _ _) hU (by simpa using! hsub) by
+      simpa [← SetLike.coe_subset_coe, ← heq, Set.range_comp] using! Set.subset_iUnion_of_subset i
+        (Set.subset_iUnion_of_subset hi (Set.subset_preimage_image _ _))
+  · refine subset_antisymm (by simp) (fun x hx => ?_)
+    have : f x in (U : Set S) := hsub ⟨x, hx, rfl⟩
+    simp_rw [← heq, Set.mem_iUnion] at this
+    obtain ⟨i, hi, y, hy, heq⟩ := this
+    simp_rw [Set.mem_iUnion]
+    obtain ⟨z, hzl, hzr⟩ := Scheme.Pullback.exists_preimage_pullback x y heq.symm
+    exact ⟨i, hi, z, ⟨by simpa [hzl], by simpa [hzr]⟩, hzl⟩
 
 Depends on / 依赖: IsAffineOpen, S.Opens, S.isBasis_affineOpens, T.isBasis_affineOpens, generalizing, inf_le_right, isBasis_affineOpens, isBasis_iff_nbhd, isBasis_iff_nbhd.mp, isCompact, le_trans, mem_top, of_isCompact_of_forall_exists_isCompactOpenCovered, subseteq
 -/
@@ -437,7 +471,25 @@ lemma exists_hom
   obtain ⟨n, f, V, hV, h⟩ := QuasiCompactCover.exists_isAffineOpen_of_isCompact 𝒰.1
     (show IsCompact (⊤ : TopologicalSpace.Opens S).carrier from isCompact_univ)
   simp only [coe_top, ← Set.univ_subset_iff, Set.subset_def, Set.mem_univ, Set.mem_iUnion,
-    Set.mem_image, SetLike.mem_coe, forall
+    Set.mem_image, SetLike.mem_coe, forall_const] at h
+  choose idx x hmem hx using h
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact
+      { I₀ := ULift (Fin n)
+        X i := Γ(_, V i.down)
+        f i := (hV _).fromSpec ≫ 𝒰.f (f _)
+        idx s := ⟨idx s⟩
+        covers s := by
+          use (hV _).isoSpec.hom.base ⟨x s, hmem s⟩
+          rw [← Scheme.Hom.comp_apply]; rw [← IsAffineOpen.isoSpec_inv_ι]; rw [Category.assoc]; rw [Iso.hom_inv_id_assoc]
+          simp [hx]
+        map_prop i :=
+          RespectsLeft.precomp (Q := IsOpenImmersion) _ inferInstance _ (𝒰.map_prop _) }
+  · exact
+      { s₀ i := f i.down
+        h₀ i := (hV i.down).fromSpec }
+  · infer_instance
+  · infer_instance
 
 中文:
 引理 存在_hom
@@ -446,7 +498,25 @@ lemma exists_hom
   obtain ⟨n, f, V, hV, h⟩ := QuasiCompactCover.exists_isAffineOpen_of_isCompact 𝒰.1
     (show IsCompact (⊤ : TopologicalSpace.Opens S).carrier from isCompact_univ)
   simp only [coe_top, ← Set.univ_subset_iff, Set.subset_def, Set.mem_univ, Set.mem_iUnion,
-    Set.mem_image, SetLike.mem_coe, forall
+    Set.mem_image, SetLike.mem_coe, forall_const] at h
+  choose idx x hmem hx using h
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact
+      { I₀ := ULift (Fin n)
+        X i := Γ(_, V i.down)
+        f i := (hV _).fromSpec ≫ 𝒰.f (f _)
+        idx s := ⟨idx s⟩
+        covers s := by
+          use (hV _).isoSpec.hom.base ⟨x s, hmem s⟩
+          rw [← Scheme.Hom.comp_apply]; rw [← IsAffineOpen.isoSpec_inv_ι]; rw [Category.assoc]; rw [Iso.hom_inv_id_assoc]
+          simp [hx]
+        map_prop i :=
+          RespectsLeft.precomp (Q := IsOpenImmersion) _ inferInstance _ (𝒰.map_prop _) }
+  · exact
+      { s₀ i := f i.down
+        h₀ i := (hV i.down).fromSpec }
+  · infer_instance
+  · infer_instance
 
 Depends on / 依赖: IsCompact, QuasiCompactCover, QuasiCompactCover.exists_isAffineOpen_of_isCompact, Set.mem_iUnion, Set.mem_image, Set.mem_univ, Set.subset_def, Set.univ_subset_iff, SetLike, SetLike.mem_coe, TopologicalSpace, TopologicalSpace.Opens, carrier, coe_top, covers, exists_isAffineOpen_of_isCompact, forall_const, fromSpec, i.down, isCompact_univ
 -/

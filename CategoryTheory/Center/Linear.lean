@@ -172,7 +172,17 @@ definition homModuleOfRingMorphism
       simp only [smulOfRingMorphism_smul_eq,
         Functor.id_obj, map_one, End.one_def, NatTrans.id_app, id_comp]
     mul_smul := fun a b f => by
-      simp only [smulOfRingMorphism_smul_eq', Functor.id_obj, map_mul, End.mu
+      simp only [smulOfRingMorphism_smul_eq', Functor.id_obj, map_mul, End.mul_def,
+        NatTrans.comp_app, assoc]
+    smul_zero := fun a => by
+      simp only [smulOfRingMorphism_smul_eq, comp_zero]
+    zero_smul := fun a => by
+      simp only [smulOfRingMorphism_smul_eq, map_zero,
+        zero_app, zero_comp]
+    smul_add := fun a b => by
+      simp [smulOfRingMorphism_smul_eq]
+    add_smul := fun a b f => by
+      simp [smulOfRingMorphism_smul_eq] }
 
 中文:
 定义 homModuleOfRingMorphism
@@ -184,7 +194,17 @@ definition homModuleOfRingMorphism
       simp only [smulOfRingMorphism_smul_eq,
         Functor.id_obj, map_one, End.one_def, NatTrans.id_app, id_comp]
     mul_smul := fun a b f => by
-      simp only [smulOfRingMorphism_smul_eq', Functor.id_obj, map_mul, End.mu
+      simp only [smulOfRingMorphism_smul_eq', Functor.id_obj, map_mul, End.mul_def,
+        NatTrans.comp_app, assoc]
+    smul_zero := fun a => by
+      simp only [smulOfRingMorphism_smul_eq, comp_zero]
+    zero_smul := fun a => by
+      simp only [smulOfRingMorphism_smul_eq, map_zero,
+        zero_app, zero_comp]
+    smul_add := fun a b => by
+      simp [smulOfRingMorphism_smul_eq]
+    add_smul := fun a b f => by
+      simp [smulOfRingMorphism_smul_eq] }
 
 Depends on / 依赖: End.mul_def, End.one_def, Functor, Functor.id_obj, NatTrans, NatTrans.comp_app, NatTrans.id_app, comp_app, comp_zero, id_app, id_comp, id_obj, map_mul, map_one, map_zero, mul_def, mul_smul, one_def, one_smul, smulOfRingMorphism
 -/

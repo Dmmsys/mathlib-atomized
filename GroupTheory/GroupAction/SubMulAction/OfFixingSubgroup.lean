@@ -395,7 +395,11 @@ definition fixingSubgroupInsertEquiv
       fun ⟨x, hx⟩ => by
         simp only [← SetLike.coe_eq_coe]
         refine (mem_fixingSubgroup_iff M).mp m.prop _ (Set.mem_insert_of_mem a ?_)
-        exact ⟨⟨x, (SubMulAction.mem_ofStabilizer_iff M a).mp x.prop⟩, hx, rfl⟩
+        exact ⟨⟨x, (SubMulAction.mem_ofStabilizer_iff M a).mp x.prop⟩, hx, rfl⟩⟩
+  map_mul' _ _ := by simp [← Subtype.coe_inj]
+  invFun m := ⟨m, by simp [fixingSubgroup_of_insert]⟩
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 中文:
 定义 fixingSubgroupInsertEquiv
@@ -404,7 +408,11 @@ definition fixingSubgroupInsertEquiv
       fun ⟨x, hx⟩ => by
         simp only [← SetLike.coe_eq_coe]
         refine (mem_fixingSubgroup_iff M).mp m.prop _ (Set.mem_insert_of_mem a ?_)
-        exact ⟨⟨x, (SubMulAction.mem_ofStabilizer_iff M a).mp x.prop⟩, hx, rfl⟩
+        exact ⟨⟨x, (SubMulAction.mem_ofStabilizer_iff M a).mp x.prop⟩, hx, rfl⟩⟩
+  map_mul' _ _ := by simp [← Subtype.coe_inj]
+  invFun m := ⟨m, by simp [fixingSubgroup_of_insert]⟩
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 Depends on / 依赖: Set.mem_insert, m.prop, mem_fixingSubgroup_iff, mem_insert
 -/
@@ -576,7 +584,8 @@ theorem fixingSubgroup_map_conj_eq
     use MulAut.conj g⁻¹ k
     constructor
     · apply Set.conj_mem_fixingSubgroup _ hk
-      rw [inv_smul_eq_iff]; 
+      rw [inv_smul_eq_iff]; rw [hg]
+    · simp [MulAut.conj]; group
 
 中文:
 定理 fixingSubgroup_map_conj_eq
@@ -591,7 +600,8 @@ theorem fixingSubgroup_map_conj_eq
     use MulAut.conj g⁻¹ k
     constructor
     · apply Set.conj_mem_fixingSubgroup _ hk
-      rw [inv_smul_eq_iff]; 
+      rw [inv_smul_eq_iff]; rw [hg]
+    · simp [MulAut.conj]; group
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_coe, MulAut, MulAut.conj, MulEquiv, MulEquiv.toMonoidHom_eq_coe, Set.conj_mem_fixingSubgroup, Subgroup, Subgroup.mem_map, coe_coe, conj_mem_fixingSubgroup, inv_smul_eq_iff, mem_map, toMonoidHom_eq_coe
 -/
@@ -698,7 +708,9 @@ definition conjMap_ofFixingSubgroup
     simp only [← SetLike.coe_eq_coe, subgroup_smul_def,
       SetLike.val_smul,
       fixingSubgroupEquivFixingSubgroup_coe_apply,
+      MulAut.conj_apply, mul_smul, inv_smul_smul]
 
+@[to_additive (attr := simp)]
 
 中文:
 定义 conjMap_ofFixingSubgroup
@@ -712,7 +724,9 @@ definition conjMap_ofFixingSubgroup
     simp only [← SetLike.coe_eq_coe, subgroup_smul_def,
       SetLike.val_smul,
       fixingSubgroupEquivFixingSubgroup_coe_apply,
+      MulAut.conj_apply, mul_smul, inv_smul_smul]
 
+@[to_additive (attr := simp)]
 -/
 def conjMap_ofFixingSubgroup (hg : g • t = s) :
     ofFixingSubgroup M t ->ₑ[fixingSubgroupEquivFixingSubgroup hg] ofFixingSubgroup M s where
@@ -830,7 +844,7 @@ definition fixingSubgroup_union_to_fixingSubgroup_of_fixingSubgroup
       simp only [← SetLike.coe_eq_coe, SubMulAction.val_smul_of_tower]
       exact (mem_fixingSubgroup_union_iff.mp m.prop).2 ⟨x, hx'⟩⟩
   map_one' := by simp
-  map_mul' _ _ := b
+  map_mul' _ _ := by simp
 
 中文:
 定义 fixingSubgroup_union_to_fixingSubgroup_of_fixingSubgroup
@@ -841,7 +855,7 @@ definition fixingSubgroup_union_to_fixingSubgroup_of_fixingSubgroup
       simp only [← SetLike.coe_eq_coe, SubMulAction.val_smul_of_tower]
       exact (mem_fixingSubgroup_union_iff.mp m.prop).2 ⟨x, hx'⟩⟩
   map_one' := by simp
-  map_mul' _ _ := b
+  map_mul' _ _ := by simp
 
 Depends on / 依赖: Set.mem_preimage, SetLike, SetLike.coe_eq_coe, SubMulAction, SubMulAction.val_smul_of_tower, coe_eq_coe, m.prop, map_mul, map_one, mem_fixingSubgroup_union_iff, mem_fixingSubgroup_union_iff.mp, mem_preimage, val_smul_of_tower
 -/
@@ -877,7 +891,20 @@ definition map_ofFixingSubgroupUnion
       simp only [fixingSubgroup_union, Subgroup.mem_inf] at hm
       rintro ⟨⟨x, hx⟩, hx'⟩
       simp only [Set.mem_preimage] at hx'
-      simp
+      simp only [← SetLike.coe_eq_coe, SubMulAction.val_smul_of_tower]
+      exact hm.right ⟨x, hx'⟩⟩
+    ofFixingSubgroup M (s union t) ->ₑ[ψ]
+      ofFixingSubgroup (fixingSubgroup M s) (Subtype.val ⁻¹' t : Set (ofFixingSubgroup M s)) where
+  toFun x :=
+    ⟨⟨x, fun hx => x.prop (Set.mem_union_left t hx)⟩,
+        fun hx => x.prop (by
+          apply Set.mem_union_right s
+          simpa only [Set.mem_preimage, Subtype.coe_mk] using hx)⟩
+  map_smul' := fun ⟨m, hm⟩ ⟨x, hx⟩ => by
+    rw [← SetLike.coe_eq_coe]; rw [← SetLike.coe_eq_coe]
+    exact subgroup_smul_def ⟨m, hm⟩ x
+
+@[to_additive]
 
 中文:
 定义 map_ofFixingSubgroupUnion
@@ -890,7 +917,20 @@ definition map_ofFixingSubgroupUnion
       simp only [fixingSubgroup_union, Subgroup.mem_inf] at hm
       rintro ⟨⟨x, hx⟩, hx'⟩
       simp only [Set.mem_preimage] at hx'
-      simp
+      simp only [← SetLike.coe_eq_coe, SubMulAction.val_smul_of_tower]
+      exact hm.right ⟨x, hx'⟩⟩
+    ofFixingSubgroup M (s union t) ->ₑ[ψ]
+      ofFixingSubgroup (fixingSubgroup M s) (Subtype.val ⁻¹' t : Set (ofFixingSubgroup M s)) where
+  toFun x :=
+    ⟨⟨x, fun hx => x.prop (Set.mem_union_left t hx)⟩,
+        fun hx => x.prop (by
+          apply Set.mem_union_right s
+          simpa only [Set.mem_preimage, Subtype.coe_mk] using hx)⟩
+  map_smul' := fun ⟨m, hm⟩ ⟨x, hx⟩ => by
+    rw [← SetLike.coe_eq_coe]; rw [← SetLike.coe_eq_coe]
+    exact subgroup_smul_def ⟨m, hm⟩ x
+
+@[to_additive]
 
 Depends on / 依赖: Set.mem_preimage, SetLike, SetLike.coe_eq_coe, SubMulAction, SubMulAction.val_smul_of_tower, Subgroup, Subgroup.mem_inf, Subtype, Subtype.val, coe_eq_coe, fixingSubgroup, fixingSubgroup_union, hm.left, hm.right, m.prop, mem_inf, mem_preimage, ofFixingSubgroup, val_smul_of_tower, x.prop
 -/
@@ -957,7 +997,7 @@ theorem map_ofFixingSubgroupUnion_bijective
     rcases (Set.mem_union a s t).mp hy with h | h
     · exact ha h
     · apply ha'
-      simpa only 
+      simpa only [Set.mem_preimage]
 
 中文:
 定理 map_ofFixingSubgroupUnion_bijective
@@ -972,7 +1012,7 @@ theorem map_ofFixingSubgroupUnion_bijective
     rcases (Set.mem_union a s t).mp hy with h | h
     · exact ha h
     · apply ha'
-      simpa only 
+      simpa only [Set.mem_preimage]
 
 Depends on / 依赖: Set.mem_preimage, Set.mem_union, SetLike, SetLike.coe_eq_coe, coe_eq_coe, mem_preimage, mem_union, ofFixingSubgroup
 -/
@@ -1209,7 +1249,11 @@ definition ofFixingSubgroup.append
   apply Fin.Embedding.append (x := y.trans (subtype _)) (y := x.trans (subtype _))
   rw [Set.disjoint_iff_forall_ne]
   rintro _ ⟨j, rfl⟩ _ ⟨i, rfl⟩ H
-  app
+  apply (x i).prop
+  simp only [trans_apply, Function.Embedding.subtype_apply] at H
+  simpa [H] using Subtype.coe_prop (y j)
+
+@[to_additive]
 
 中文:
 定义 ofFixingSubgroup.append
@@ -1220,7 +1264,11 @@ definition ofFixingSubgroup.append
   apply Fin.Embedding.append (x := y.trans (subtype _)) (y := x.trans (subtype _))
   rw [Set.disjoint_iff_forall_ne]
   rintro _ ⟨j, rfl⟩ _ ⟨i, rfl⟩ H
-  app
+  apply (x i).prop
+  simp only [trans_apply, Function.Embedding.subtype_apply] at H
+  simpa [H] using Subtype.coe_prop (y j)
+
+@[to_additive]
 
 Depends on / 依赖: Classical, Classical.choice, Embedding, Fin.Embedding.append, Finite, Finite.card_eq.mp, Function, Function.Embedding.subtype_apply, Nat.card_coe_set_eq, Nonempty, Set.disjoint_iff_forall_ne, Subtype, Subtype.coe_prop, append, card_coe_set_eq, card_eq, choice, coe_prop, disjoint_iff_forall_ne, s.ncard
 -/
@@ -1309,7 +1357,23 @@ theorem IsPretransitive.isPretransitive_ofFixingSubgroup_inter
   have ha' : a in (s inter g • s)ᶜ := by
     rw [Set.compl_inter]
     exact Set.mem_union_left _ ha.1
-  rw [MulAction.isPretransitive_
+  rw [MulAction.isPretransitive_iff_base (⟨a]; rw [ha'⟩ : ofFixingSubgroup M (s inter g • s))]
+  rintro ⟨x, hx⟩
+  rw [mem_ofFixingSubgroup_iff]; rw [Set.mem_inter_iff]; rw [not_and_or] at hx
+  rcases hx with hx | hx
+  · obtain ⟨⟨k, hk⟩, hkax⟩ := hs.exists_smul_eq ⟨a, ha.1⟩ ⟨x, hx⟩
+    use ⟨k, fun ⟨y, hy⟩ => hk ⟨y, hy.1⟩⟩
+    rwa [Subtype.ext_iff] at hkax ⊢
+  · have hg'x : g⁻¹ • x in ofFixingSubgroup M s := mt Set.mem_smul_set_iff_inv_smul_mem.mpr hx
+    have hg'a : g⁻¹ • a in ofFixingSubgroup M s := mt Set.mem_smul_set_iff_inv_smul_mem.mpr ha.2
+    obtain ⟨⟨k, hk⟩, hkax⟩ := hs.exists_smul_eq ⟨g⁻¹ • a, hg'a⟩ ⟨g⁻¹ • x, hg'x⟩
+    use ⟨g * k * g⁻¹, ?_⟩
+    · simp only [← SetLike.coe_eq_coe] at hkax ⊢
+      rwa [SetLike.val_smul, Subgroup.mk_smul, eq_inv_smul_iff, smul_smul, smul_smul] at hkax
+    · rw [mem_fixingSubgroup_iff] at hk ⊢
+      intro y hy
+      rw [mul_smul]; rw [mul_smul]; rw [smul_eq_iff_eq_inv_smul g]
+      exact hk _ (Set.mem_smul_set_iff_inv_smul_mem.mp hy.2)
 
 中文:
 定理 是Pretransitive.isPretransitive_ofFixingSubgroup_inter
@@ -1320,7 +1384,23 @@ theorem IsPretransitive.isPretransitive_ofFixingSubgroup_inter
   have ha' : a in (s inter g • s)ᶜ := by
     rw [Set.compl_inter]
     exact Set.mem_union_left _ ha.1
-  rw [MulAction.isPretransitive_
+  rw [MulAction.isPretransitive_iff_base (⟨a]; rw [ha'⟩ : ofFixingSubgroup M (s inter g • s))]
+  rintro ⟨x, hx⟩
+  rw [mem_ofFixingSubgroup_iff]; rw [Set.mem_inter_iff]; rw [not_and_or] at hx
+  rcases hx with hx | hx
+  · obtain ⟨⟨k, hk⟩, hkax⟩ := hs.exists_smul_eq ⟨a, ha.1⟩ ⟨x, hx⟩
+    use ⟨k, fun ⟨y, hy⟩ => hk ⟨y, hy.1⟩⟩
+    rwa [Subtype.ext_iff] at hkax ⊢
+  · have hg'x : g⁻¹ • x in ofFixingSubgroup M s := mt Set.mem_smul_set_iff_inv_smul_mem.mpr hx
+    have hg'a : g⁻¹ • a in ofFixingSubgroup M s := mt Set.mem_smul_set_iff_inv_smul_mem.mpr ha.2
+    obtain ⟨⟨k, hk⟩, hkax⟩ := hs.exists_smul_eq ⟨g⁻¹ • a, hg'a⟩ ⟨g⁻¹ • x, hg'x⟩
+    use ⟨g * k * g⁻¹, ?_⟩
+    · simp only [← SetLike.coe_eq_coe] at hkax ⊢
+      rwa [SetLike.val_smul, Subgroup.mk_smul, eq_inv_smul_iff, smul_smul, smul_smul] at hkax
+    · rw [mem_fixingSubgroup_iff] at hk ⊢
+      intro y hy
+      rw [mul_smul]; rw [mul_smul]; rw [smul_eq_iff_eq_inv_smul g]
+      exact hk _ (Set.mem_smul_set_iff_inv_smul_mem.mp hy.2)
 
 Depends on / 依赖: MulAction, MulAction.isPretransitive_iff_base, Set.compl_empty_iff, Set.compl_inter, Set.compl_union, Set.mem_inter_iff, Set.mem_union_left, Set.nonempty_iff_ne_empty, Set.top_eq_univ, compl_empty_iff, compl_inter, compl_union, exists_sm, hs.exists_sm, isPretransitive_iff_base, mem_inter_iff, mem_ofFixingSubgroup_iff, mem_union_left, nonempty_iff_ne_empty, not_and_or
 -/
@@ -1361,7 +1441,10 @@ theorem IsPreprimitive.isPreprimitive_ofFixingSubgroup_inter
   have := IsPretransitive.isPretransitive_ofFixingSubgroup_inter hs.toIsPretransitive ha
   apply IsPreprimitive.of_card_lt (f := ofFixingSubgroup_of_inclusion M Set.inter_subset_left)
   rw [show Nat.card (ofFixingSubgroup M (s inter g • s)) = (s inter g • s)ᶜ.ncard from
-    Nat.card_coe_set_eq _]
+    Nat.card_coe_set_eq _]; rw [Set.ncard_range_of_injective ofFixingSubgroup_of_inclusion_injective]; rw [show Nat.card (ofFixingSubgroup M s) = sᶜ.ncard from Nat.card_coe_set_eq _]; rw [Set.compl_inter]
+  refine (Set.ncard_union_lt sᶜ.toFinite (g • s)ᶜ.toFinite ?_).trans_le ?_
+  · rwa [Set.disjoint_compl_right_iff_subset, Set.compl_subset_iff_union]
+  · rw [← Set.smul_set_compl, Set.ncard_smul_set, two_mul]
 
 中文:
 定理 是Preprimitive.isPreprimitive_ofFixingSubgroup_inter
@@ -1369,7 +1452,10 @@ theorem IsPreprimitive.isPreprimitive_ofFixingSubgroup_inter
   have := IsPretransitive.isPretransitive_ofFixingSubgroup_inter hs.toIsPretransitive ha
   apply IsPreprimitive.of_card_lt (f := ofFixingSubgroup_of_inclusion M Set.inter_subset_left)
   rw [show Nat.card (ofFixingSubgroup M (s inter g • s)) = (s inter g • s)ᶜ.ncard from
-    Nat.card_coe_set_eq _]
+    Nat.card_coe_set_eq _]; rw [Set.ncard_range_of_injective ofFixingSubgroup_of_inclusion_injective]; rw [show Nat.card (ofFixingSubgroup M s) = sᶜ.ncard from Nat.card_coe_set_eq _]; rw [Set.compl_inter]
+  refine (Set.ncard_union_lt sᶜ.toFinite (g • s)ᶜ.toFinite ?_).trans_le ?_
+  · rwa [Set.disjoint_compl_right_iff_subset, Set.compl_subset_iff_union]
+  · rw [← Set.smul_set_compl, Set.ncard_smul_set, two_mul]
 
 Depends on / 依赖: IsPreprimitive, IsPreprimitive.of_card_lt, IsPretransitive, IsPretransitive.isPretransitive_ofFixingSubgroup_inter, Nat.card, Nat.card_coe_set_eq, Set.compl_inter, Set.inter_subset_left, Set.ncard_range_of_injective, Set.ncard_union_lt, card_coe_set_eq, compl_inter, hs.toIsPretransitive, inter_subset_left, isPretransitive_ofFixingSubgroup_inter, ncard_range_of_injective, ncard_union_lt, ofFixingSubgroup, ofFixingSubgroup_of_inclusion, ofFixingSubgroup_of_inclusion_injective
 -/

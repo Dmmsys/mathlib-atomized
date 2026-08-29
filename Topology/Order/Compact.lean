@@ -315,7 +315,9 @@ theorem IsCompact.exists_isLeast
   rw [biInter_eq_iInter]
   by_contra H
   rw [not_nonempty_iff_eq_empty] at H
-  rcases hs.elim_directed_family_closed (fun x : s => Iic
+  rcases hs.elim_directed_family_closed (fun x : s => Iic ↑x) (fun x => isClosed_Iic) H
+      (Monotone.directed_ge fun _ _ h => Iic_subset_Iic.mpr h) with ⟨x, hx⟩
+  exact not_nonempty_iff_eq_empty.mpr hx ⟨x, x.2, le_rfl⟩
 
 中文:
 定理 是紧集.存在_isLeast
@@ -327,7 +329,9 @@ theorem IsCompact.exists_isLeast
   rw [biInter_eq_iInter]
   by_contra H
   rw [not_nonempty_iff_eq_empty] at H
-  rcases hs.elim_directed_family_closed (fun x : s => Iic
+  rcases hs.elim_directed_family_closed (fun x : s => Iic ↑x) (fun x => isClosed_Iic) H
+      (Monotone.directed_ge fun _ _ h => Iic_subset_Iic.mpr h) with ⟨x, hx⟩
+  exact not_nonempty_iff_eq_empty.mpr hx ⟨x, x.2, le_rfl⟩
 
 Depends on / 依赖: Iic_subset_Iic, Iic_subset_Iic.mpr, Monotone, Monotone.directed_ge, Nonempty, biInter_eq_iInter, choose_spec, directed_ge, elim_directed_family_closed, hs.elim_directed_family_closed, isClosed_Iic, le_rfl, ne_s, ne_s.to_subtype, not_nonempty_iff_eq_empty, not_nonempty_iff_eq_empty.mpr, this.choose, this.choose_spec, to_subtype
 -/
@@ -412,7 +416,7 @@ refine fun s hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> 
   · obtain ⟨t, ht⟩ := mem_atBot_sets.mp hs.1
     obtain ⟨u, hu⟩ := mem_atTop_sets.mp hs.2
     refine ⟨Icc t u, isCompact_Icc, fun x hx => ?_⟩
-    
+    exact (not_and_or.mp hx).casesOn (fun h => ht x (le_of_not_ge h)) fun h => hu x (le_of_not_ge h)
 
 中文:
 定理 cocompact_le_atBot_atTop
@@ -423,7 +427,7 @@ refine fun s hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> 
   · obtain ⟨t, ht⟩ := mem_atBot_sets.mp hs.1
     obtain ⟨u, hu⟩ := mem_atTop_sets.mp hs.2
     refine ⟨Icc t u, isCompact_Icc, fun x hx => ?_⟩
-    
+    exact (not_and_or.mp hx).casesOn (fun h => ht x (le_of_not_ge h)) fun h => hu x (le_of_not_ge h)
 
 Depends on / 依赖: IsEmpty, IsEmpty.false, casesOn, isCompact_Icc, isCompact_empty, isEmpty_or_nonempty, le_of_not_ge, mem_atBot_sets, mem_atBot_sets.mp, mem_atTop_sets, mem_atTop_sets.mp, mem_cocompact, mem_cocompact.mpr, not_and_or, not_and_or.mp
 -/
@@ -447,7 +451,7 @@ refine fun _ hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> 
   · exact ⟨∅, isCompact_empty, fun x _ => (IsEmpty.false x).elim⟩
   · obtain ⟨t, ht⟩ := mem_atBot_sets.mp hs
     refine ⟨Icc t ⊤, isCompact_Icc, fun _ hx => ?_⟩
-    exact (not_and_or.mp hx).casesOn (fun h => ht _
+    exact (not_and_or.mp hx).casesOn (fun h => ht _ (le_of_not_ge h)) (fun h => (h le_top).elim)
 
 中文:
 定理 cocompact_le_atBot
@@ -457,7 +461,7 @@ refine fun _ hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> 
   · exact ⟨∅, isCompact_empty, fun x _ => (IsEmpty.false x).elim⟩
   · obtain ⟨t, ht⟩ := mem_atBot_sets.mp hs
     refine ⟨Icc t ⊤, isCompact_Icc, fun _ hx => ?_⟩
-    exact (not_and_or.mp hx).casesOn (fun h => ht _
+    exact (not_and_or.mp hx).casesOn (fun h => ht _ (le_of_not_ge h)) (fun h => (h le_top).elim)
 
 Depends on / 依赖: IsEmpty, IsEmpty.false, casesOn, isCompact_Icc, isCompact_empty, isEmpty_or_nonempty, le_of_not_ge, le_top, mem_atBot_sets, mem_atBot_sets.mp, mem_cocompact, mem_cocompact.mpr, not_and_or, not_and_or.mp
 -/
@@ -501,7 +505,10 @@ theorem atBot_le_cocompact
   · rewrite [compl_univ_iff.mpr h_empty, univ_subset_iff] at hts
     convert! univ_mem
   · have := h_nonempty.nonempty
-    obtain ⟨a, ha⟩ :
+    obtain ⟨a, ha⟩ := ht.exists_isLeast h_nonempty
+    obtain ⟨b, hb⟩ := exists_lt a
+exact Filter.mem_atBot_sets.mpr ⟨b, fun b' hb' => hts Classical.byContradiction
+fun hc => LT.lt.false hb'.trans_lt hb.trans_le ha.2 (not_notMem.mp hc)⟩
 
 中文:
 定理 atBot_le_cocompact
@@ -513,7 +520,10 @@ theorem atBot_le_cocompact
   · rewrite [compl_univ_iff.mpr h_empty, univ_subset_iff] at hts
     convert! univ_mem
   · have := h_nonempty.nonempty
-    obtain ⟨a, ha⟩ :
+    obtain ⟨a, ha⟩ := ht.exists_isLeast h_nonempty
+    obtain ⟨b, hb⟩ := exists_lt a
+exact Filter.mem_atBot_sets.mpr ⟨b, fun b' hb' => hts Classical.byContradiction
+fun hc => LT.lt.false hb'.trans_lt hb.trans_le ha.2 (not_notMem.mp hc)⟩
 
 Depends on / 依赖: Classical, Classical.byContradiction, Filter, Filter.mem_atBot_sets.mpr, LT.lt.false, Set.eq_empty_or_nonempty, byContradiction, casesOn, compl_univ_iff, compl_univ_iff.mpr, convert, eq_empty_or_nonempty, exists_isLeast, exists_lt, h_empty, h_nonempty, h_nonempty.nonempty, hb.trans_le, ht.exists_isLeast, mem_atBot_sets
 -/
@@ -730,7 +740,10 @@ theorem ContinuousOn.exists_isMinOn'
   rcases (hasBasis_cocompact.inf_principal _).eventually_iff.1 hc with ⟨K, hK, hKf⟩
   have hsub : insert x₀ (K inter s) subseteq s := insert_subset_iff.2 ⟨h₀, inter_subset_right⟩
   obtain ⟨x, hx, hxf⟩ : exists x in insert x₀ (K inter s), forall y in insert x₀ (K inter s), f x <= f y :=
-    ((hK.i
+    ((hK.inter_right hsc).insert x₀).exists_isMinOn (insert_nonempty _ _) (hf.mono hsub)
+  refine ⟨x, hsub hx, fun y hy => ?_⟩
+  by_cases hyK : y in K
+  exacts [hxf _ (Or.inr ⟨hyK, hy⟩), (hxf _ (Or.inl rfl)).trans (hKf ⟨hyK, hy⟩)]
 
 中文:
 定理 ContinuousOn.存在_isMinOn'
@@ -739,7 +752,10 @@ theorem ContinuousOn.exists_isMinOn'
   rcases (hasBasis_cocompact.inf_principal _).eventually_iff.1 hc with ⟨K, hK, hKf⟩
   have hsub : insert x₀ (K inter s) subseteq s := insert_subset_iff.2 ⟨h₀, inter_subset_right⟩
   obtain ⟨x, hx, hxf⟩ : exists x in insert x₀ (K inter s), forall y in insert x₀ (K inter s), f x <= f y :=
-    ((hK.i
+    ((hK.inter_right hsc).insert x₀).exists_isMinOn (insert_nonempty _ _) (hf.mono hsub)
+  refine ⟨x, hsub hx, fun y hy => ?_⟩
+  by_cases hyK : y in K
+  exacts [hxf _ (Or.inr ⟨hyK, hy⟩), (hxf _ (Or.inl rfl)).trans (hKf ⟨hyK, hy⟩)]
 
 Depends on / 依赖: Or.inl, Or.inr, eventually_iff, exacts, exists_isMinOn, hK.inter_right, hasBasis_cocompact, hasBasis_cocompact.inf_principal, hf.mono, inf_principal, insert, insert_nonempty, insert_subset_iff, inter_right, inter_subset_right, subseteq
 -/
@@ -1459,7 +1475,22 @@ theorem IsCompact.continuous_sSup
   obtain ⟨y, hyK, h2y, hy⟩ :=
     hK.exists_sSup_image_eq_and_ge h0K
       (show Continuous (f x) from hf.comp <| .prodMk_right x).continuousOn
-  rw [
+  rw [ContinuousAt]; rw [h2y]; rw [tendsto_order]
+  have := tendsto_order.mp ((show Continuous fun x => f x y
+from hf.comp .prodMk_left _).tendsto x)
+  refine ⟨fun z hz => ?_, fun z hz => ?_⟩
+  · refine (this.1 z hz).mono fun x' hx' =>
+hx'.trans_le le_csSup ?_ mem_image_of_mem (f x') hyK
+    exact hK.bddAbove_image (hf.comp <| .prodMk_right x').continuousOn
+  · have h : ({x} : Set γ) ×ˢ K subseteq ↿f ⁻¹' Iio z := by
+      rintro ⟨x', y'⟩ ⟨(rfl : x' = x), hy'⟩
+      exact (hy y' hy').trans_lt hz
+    obtain ⟨u, v, hu, _, hxu, hKv, huv⟩ :=
+      generalized_tube_lemma isCompact_singleton hK (isOpen_Iio.preimage hf) h
+    refine eventually_of_mem (hu.mem_nhds (singleton_subset_iff.mp hxu)) fun x' hx' => ?_
+    rw [hK.sSup_lt_iff_of_continuous h0K
+        (show Continuous (f x') from hf.comp <| .prodMk_right x').continuousOn]
+    exact fun y' hy' => huv (mk_mem_prod hx' (hKv hy'))
 
 中文:
 定理 是紧集.continuous_sSup
@@ -1473,7 +1504,22 @@ theorem IsCompact.continuous_sSup
   obtain ⟨y, hyK, h2y, hy⟩ :=
     hK.exists_sSup_image_eq_and_ge h0K
       (show Continuous (f x) from hf.comp <| .prodMk_right x).continuousOn
-  rw [
+  rw [ContinuousAt]; rw [h2y]; rw [tendsto_order]
+  have := tendsto_order.mp ((show Continuous fun x => f x y
+from hf.comp .prodMk_left _).tendsto x)
+  refine ⟨fun z hz => ?_, fun z hz => ?_⟩
+  · refine (this.1 z hz).mono fun x' hx' =>
+hx'.trans_le le_csSup ?_ mem_image_of_mem (f x') hyK
+    exact hK.bddAbove_image (hf.comp <| .prodMk_right x').continuousOn
+  · have h : ({x} : Set γ) ×ˢ K subseteq ↿f ⁻¹' Iio z := by
+      rintro ⟨x', y'⟩ ⟨(rfl : x' = x), hy'⟩
+      exact (hy y' hy').trans_lt hz
+    obtain ⟨u, v, hu, _, hxu, hKv, huv⟩ :=
+      generalized_tube_lemma isCompact_singleton hK (isOpen_Iio.preimage hf) h
+    refine eventually_of_mem (hu.mem_nhds (singleton_subset_iff.mp hxu)) fun x' hx' => ?_
+    rw [hK.sSup_lt_iff_of_continuous h0K
+        (show Continuous (f x') from hf.comp <| .prodMk_right x').continuousOn]
+    exact fun y' hy' => huv (mk_mem_prod hx' (hKv hy'))
 
 Depends on / 依赖: Continuous, ContinuousAt, continuousOn, continuous_const, continuous_iff_continuousAt, eq_empty_or_nonempty, exists_sSup_image_eq_and_ge, hK.exists_sSup_image_eq_and_ge, hf.comp, image_empty, prodMk_left, prodMk_right, simp_rw, tendsto, tendsto_order, tendsto_order.mp
 -/

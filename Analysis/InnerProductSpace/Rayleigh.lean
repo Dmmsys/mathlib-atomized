@@ -239,7 +239,7 @@ theorem image_rayleigh_eq_image_rayleigh_sphere
     · rw [T.rayleigh_smul x this]
       exact hxT
   · rintro ⟨x, hx, hxT⟩
-    exact ⟨x, ne_zero
+    exact ⟨x, ne_zero_of_mem_sphere hr.ne' ⟨x, hx⟩, hxT⟩
 
 中文:
 定理 image_rayleigh_eq_image_rayleigh_sphere
@@ -255,7 +255,7 @@ theorem image_rayleigh_eq_image_rayleigh_sphere
     · rw [T.rayleigh_smul x this]
       exact hxT
   · rintro ⟨x, hx, hxT⟩
-    exact ⟨x, ne_zero
+    exact ⟨x, ne_zero_of_mem_sphere hr.ne' ⟨x, hx⟩, hxT⟩
 
 Depends on / 依赖: T.rayleigh_smul, abs_of_pos, hr.ne, ne_zero_of_mem_sphere, norm_smul, rayleigh_smul
 -/
@@ -383,7 +383,16 @@ theorem norm_eq_iSup_rayleighQuotient
   have hM x : |re ⟪T x, x⟫| <= M * ‖x‖ ^ 2 := by
     have hM : |T.rayleighQuotient x| <= M := le_ciSup T.bddAbove_rayleighQuotient x
     by_cases hx : 0 < ‖x‖ ^ 2
-    · rwa
+    · rwa [rayleighQuotient, abs_div, abs_sq, reApplyInnerSelf, div_le_iff₀ hx] at hM
+    · simp_all
+  refine le_antisymm ?_ (ciSup_le T.rayleighQuotient_le_norm)
+  refine opNorm_le_of_re_inner_le nonneg fun x y hx hy => ?_
+  transitivity M * (‖x + y‖ ^ 2 + ‖x - y‖ ^ 2) / 4
+  · have key := congrArg re (add_conj ⟪T x, y⟫)
+    rw [map_add]; rw [conj_inner_symm]; rw [← coe_coe]; rw [← hT]; rw [coe_coe]; rw [re_mul_ofReal]; rw [ofNat_re] at key
+    grind [inner_add_left, inner_add_right, inner_sub_left, inner_sub_right]
+  · rw [parallelogram_law_with_norm 𝕜 x y, hx, hy]
+    grind
 
 中文:
 定理 norm_eq_iSup_rayleighQuotient
@@ -394,7 +403,16 @@ theorem norm_eq_iSup_rayleighQuotient
   have hM x : |re ⟪T x, x⟫| <= M * ‖x‖ ^ 2 := by
     have hM : |T.rayleighQuotient x| <= M := le_ciSup T.bddAbove_rayleighQuotient x
     by_cases hx : 0 < ‖x‖ ^ 2
-    · rwa
+    · rwa [rayleighQuotient, abs_div, abs_sq, reApplyInnerSelf, div_le_iff₀ hx] at hM
+    · simp_all
+  refine le_antisymm ?_ (ciSup_le T.rayleighQuotient_le_norm)
+  refine opNorm_le_of_re_inner_le nonneg fun x y hx hy => ?_
+  transitivity M * (‖x + y‖ ^ 2 + ‖x - y‖ ^ 2) / 4
+  · have key := congrArg re (add_conj ⟪T x, y⟫)
+    rw [map_add]; rw [conj_inner_symm]; rw [← coe_coe]; rw [← hT]; rw [coe_coe]; rw [re_mul_ofReal]; rw [ofNat_re] at key
+    grind [inner_add_left, inner_add_right, inner_sub_left, inner_sub_right]
+  · rw [parallelogram_law_with_norm 𝕜 x y, hx, hy]
+    grind
 
 Depends on / 依赖: T.bddAbove_rayleighQuotient, T.rayleighQuotient, T.rayleighQuotient_le_norm, abs_div, abs_nonneg, abs_sq, bddAbove_rayleighQuotient, ciSup_le, le_antisymm, le_ciSup, le_ciSup_of_le, nonneg, opNorm_le_of_re_inner_le, rayleighQuotient, rayleighQuotient_le_norm, reApplyInnerSelf, transitivit
 -/
@@ -426,7 +444,18 @@ theorem rayleighQuotient_le_of_mem_resolventSet
   · exact ⟨t ^ 2 / (2 * t), by positivity, by simp [hT0]⟩
   obtain ⟨c, hc0, hc⟩ := antilipschitzWith_iff_exists_mul_le_norm.mp
     (antilipschitz_of_isEmbedding _ (isHomeomorph_of_isUnit hT').isEmbedding)
-  refine ⟨min (c ^ 2 / (2 * t)) ((t ^ 2 + ‖T‖ ^ 2) / (2 * t)), by pos
+  refine ⟨min (c ^ 2 / (2 * t)) ((t ^ 2 + ‖T‖ ^ 2) / (2 * t)), by positivity, fun x => ?_⟩
+  by_cases hx : x = 0
+  · simp [hx]
+  suffices T.rayleighQuotient x <= (t ^ 2 + ‖T‖ ^ 2) / (2 * t) - c ^ 2 / (2 * t) by
+    grw [this, min_le_left]
+  rw [rayleighQuotient]; rw [reApplyInnerSelf_apply]
+  specialize hc x
+  rw [← sq_le_sq₀ (by positivity) (by positivity)]; rw [sub_apply]; rw [algebraMap_apply]; rw [norm_sub_sq (𝕜 := 𝕜)]; rw [inner_re_symm] at hc
+  grw [le_opNorm] at hc
+  simp [inner_smul_right, norm_smul, abs_of_pos ht] at hc
+  field_simp
+  grind
 
 中文:
 定理 rayleighQuotient_le_of_mem_resolventSet
@@ -435,7 +464,18 @@ theorem rayleighQuotient_le_of_mem_resolventSet
   · exact ⟨t ^ 2 / (2 * t), by positivity, by simp [hT0]⟩
   obtain ⟨c, hc0, hc⟩ := antilipschitzWith_iff_exists_mul_le_norm.mp
     (antilipschitz_of_isEmbedding _ (isHomeomorph_of_isUnit hT').isEmbedding)
-  refine ⟨min (c ^ 2 / (2 * t)) ((t ^ 2 + ‖T‖ ^ 2) / (2 * t)), by pos
+  refine ⟨min (c ^ 2 / (2 * t)) ((t ^ 2 + ‖T‖ ^ 2) / (2 * t)), by positivity, fun x => ?_⟩
+  by_cases hx : x = 0
+  · simp [hx]
+  suffices T.rayleighQuotient x <= (t ^ 2 + ‖T‖ ^ 2) / (2 * t) - c ^ 2 / (2 * t) by
+    grw [this, min_le_left]
+  rw [rayleighQuotient]; rw [reApplyInnerSelf_apply]
+  specialize hc x
+  rw [← sq_le_sq₀ (by positivity) (by positivity)]; rw [sub_apply]; rw [algebraMap_apply]; rw [norm_sub_sq (𝕜 := 𝕜)]; rw [inner_re_symm] at hc
+  grw [le_opNorm] at hc
+  simp [inner_smul_right, norm_smul, abs_of_pos ht] at hc
+  field_simp
+  grind
 -/
 private theorem rayleighQuotient_le_of_mem_resolventSet
     (t : Real) (ht : 0 < t) (hT' : (algebraMap Real 𝕜) t in resolventSet 𝕜 T) :
@@ -541,7 +581,9 @@ theorem spectralRadius_eq_nnnorm
   suffices h : algebraMap Real 𝕜 ‖T‖ in spectrum 𝕜 T ∨ algebraMap Real 𝕜 (-‖T‖) in spectrum 𝕜 T by
     rcases h with h | h <;> exact le_trans (by simp) (le_biSup _ h)
   simp_rw [spectrum, Set.mem_compl_iff, map_neg]
-  by_
+  by_contra! h
+  obtain ⟨c, hc0, hc⟩ := T.abs_rayleighQuotient_le_of_norm_mem_resolventSet h.1 h.2
+  grind [ciSup_le hc, norm_eq_iSup_rayleighQuotient T hT.isSymmetric]
 
 中文:
 定理 spectralRadius_eq_nnnorm
@@ -552,7 +594,9 @@ theorem spectralRadius_eq_nnnorm
   suffices h : algebraMap Real 𝕜 ‖T‖ in spectrum 𝕜 T ∨ algebraMap Real 𝕜 (-‖T‖) in spectrum 𝕜 T by
     rcases h with h | h <;> exact le_trans (by simp) (le_biSup _ h)
   simp_rw [spectrum, Set.mem_compl_iff, map_neg]
-  by_
+  by_contra! h
+  obtain ⟨c, hc0, hc⟩ := T.abs_rayleighQuotient_le_of_norm_mem_resolventSet h.1 h.2
+  grind [ciSup_le hc, norm_eq_iSup_rayleighQuotient T hT.isSymmetric]
 
 Depends on / 依赖: Set.mem_compl_iff, T.abs_rayleighQuotient_le_of_norm_mem_resolventSet, abs_rayleighQuotient_le_of_norm_mem_resolventSet, algebraMap, ciSup_le, hT.isSymmetric, isSymmetric, le_antisymm, le_biSup, le_trans, map_neg, mem_compl_iff, nontriviality, norm_eq_iSup_rayleighQuotient, simp_rw, spectralRadius_le_nnnorm, spectrum, spectrum.spectralRadius_le_nnnorm
 -/
@@ -584,7 +628,7 @@ theorem _root_.LinearMap.IsSymmetric.hasStrictFDerivAt_reApplyInnerSelf
   proof: by
   convert! T.hasStrictFDerivAt.inner Real (hasStrictFDerivAt_id x₀) using 1
   ext y
-  rw [smul_apply]; rw [ContinuousLinearMap.comp_apply]; rw [fderivInnerCLM_apply]; rw [ContinuousLinearMap.prod_apply]; rw [innerSL_apply_apply]; rw [id]; rw [ContinuousLinearMap.id_apply]; rw [hT.apply_clm x₀ y];
+  rw [smul_apply]; rw [ContinuousLinearMap.comp_apply]; rw [fderivInnerCLM_apply]; rw [ContinuousLinearMap.prod_apply]; rw [innerSL_apply_apply]; rw [id]; rw [ContinuousLinearMap.id_apply]; rw [hT.apply_clm x₀ y]; rw [real_inner_comm _ x₀]; rw [two_smul]
 
 中文:
 定理 _root_.线性映射.IsSymmetric.hasStrictFDerivAt_reApplyInnerSelf
@@ -592,7 +636,7 @@ theorem _root_.LinearMap.IsSymmetric.hasStrictFDerivAt_reApplyInnerSelf
   证明: by
   convert! T.hasStrictFDerivAt.inner Real (hasStrictFDerivAt_id x₀) using 1
   ext y
-  rw [smul_apply]; rw [ContinuousLinearMap.comp_apply]; rw [fderivInnerCLM_apply]; rw [ContinuousLinearMap.prod_apply]; rw [innerSL_apply_apply]; rw [id]; rw [ContinuousLinearMap.id_apply]; rw [hT.apply_clm x₀ y];
+  rw [smul_apply]; rw [ContinuousLinearMap.comp_apply]; rw [fderivInnerCLM_apply]; rw [ContinuousLinearMap.prod_apply]; rw [innerSL_apply_apply]; rw [id]; rw [ContinuousLinearMap.id_apply]; rw [hT.apply_clm x₀ y]; rw [real_inner_comm _ x₀]; rw [two_smul]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply, ContinuousLinearMap.prod_apply, T.hasStrictFDerivAt.inner, apply_clm, comp_apply, convert, fderivInnerCLM_apply, hT.apply_clm, hasStrictFDerivAt, hasStrictFDerivAt_id, id_apply, innerSL_apply_apply, prod_apply, real_inner_comm, smul_apply, two_smul
 -/
@@ -619,7 +663,16 @@ theorem linearly_dependent_of_isLocalExtrOn
   -- find Lagrange multipliers for the function `T.re_apply_inner_self` and the
   -- hypersurface-defining function `fun x ↦ ‖x‖ ^ 2`
   obtain ⟨a, b, h₁, h₂⟩ :=
-    IsLocalExtrO
+    IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d H (hasStrictFDerivAt_norm_sq x₀)
+      (hT.isSymmetric.hasStrictFDerivAt_reApplyInnerSelf x₀)
+  refine ⟨a, b, h₁, ?_⟩
+  apply (InnerProductSpace.toDualMap Real F).injective
+  simp only [LinearIsometry.map_add, LinearIsometry.map_zero]
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
+  simp only [map_smulₛₗ _, RCLike.conj_to_real]
+  change a • innerSL Real x₀ + b • innerSL Real (T x₀) = 0
+  apply smul_right_injective (F ->L[Real] Real) (two_ne_zero : (2 : Real) != 0)
+  simpa only [two_smul, smul_add, add_smul, add_zero] using h₂
 
 中文:
 定理 linearly_dependent_of_isLocalExtrOn
@@ -632,7 +685,16 @@ theorem linearly_dependent_of_isLocalExtrOn
   -- find Lagrange multipliers for the function `T.re_apply_inner_self` and the
   -- hypersurface-defining function `fun x ↦ ‖x‖ ^ 2`
   obtain ⟨a, b, h₁, h₂⟩ :=
-    IsLocalExtrO
+    IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d H (hasStrictFDerivAt_norm_sq x₀)
+      (hT.isSymmetric.hasStrictFDerivAt_reApplyInnerSelf x₀)
+  refine ⟨a, b, h₁, ?_⟩
+  apply (InnerProductSpace.toDualMap Real F).injective
+  simp only [LinearIsometry.map_add, LinearIsometry.map_zero]
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`
+  simp only [map_smulₛₗ _, RCLike.conj_to_real]
+  change a • innerSL Real x₀ + b • innerSL Real (T x₀) = 0
+  apply smul_right_injective (F ->L[Real] Real) (two_ne_zero : (2 : Real) != 0)
+  simpa only [two_smul, smul_add, add_smul, add_zero] using h₂
 
 Depends on / 依赖: IsLocalExtrOn, T.reApplyInnerSelf, convert, reApplyInnerSelf
 -/
@@ -673,7 +735,11 @@ theorem eq_smul_self_of_isLocalExtrOn_real
     refine absurd ?_ hx₀
     apply smul_right_injective F this
     simpa [hb] using! h₂
-  have hc : T x₀ = (-b⁻¹ * a) •
+  have hc : T x₀ = (-b⁻¹ * a) • x₀ := by
+    linear_combination (norm := match_scalars <;> field) b⁻¹ • h₂
+  set c : Real := -b⁻¹ * a
+  convert hc
+  simpa [field, inner_smul_left, mul_comm a] using! congr_arg (fun x => ⟪x, x₀⟫_Real) hc
 
 中文:
 定理 eq_smul_self_of_isLocalExtrOn_real
@@ -687,7 +753,11 @@ theorem eq_smul_self_of_isLocalExtrOn_real
     refine absurd ?_ hx₀
     apply smul_right_injective F this
     simpa [hb] using! h₂
-  have hc : T x₀ = (-b⁻¹ * a) •
+  have hc : T x₀ = (-b⁻¹ * a) • x₀ := by
+    linear_combination (norm := match_scalars <;> field) b⁻¹ • h₂
+  set c : Real := -b⁻¹ * a
+  convert hc
+  simpa [field, inner_smul_left, mul_comm a] using! congr_arg (fun x => ⟪x, x₀⟫_Real) hc
 
 Depends on / 依赖: _Real, absurd, congr_arg, convert, hT.linearly_dependent_of_isLocalExtrOn, inner_smul_left, linear_combination, linearly_dependent_of_isLocalExtrOn, match_scalars, mul_comm, smul_right_injective
 -/
@@ -784,7 +854,11 @@ theorem hasEigenvector_of_isMaxOn
   refine IsMaxOn.iSup_eq hx₀'' ?_
   intro x hx
   dsimp
-  have : ‖x‖ = ‖x₀‖ := b
+  have : ‖x‖ = ‖x₀‖ := by simpa using hx
+  simp only [ContinuousLinearMap.rayleighQuotient]
+  rw [this]
+  gcongr
+  exact hextr hx
 
 中文:
 定理 hasEigenvector_of_isMaxOn
@@ -797,7 +871,11 @@ theorem hasEigenvector_of_isMaxOn
   refine IsMaxOn.iSup_eq hx₀'' ?_
   intro x hx
   dsimp
-  have : ‖x‖ = ‖x₀‖ := b
+  have : ‖x‖ = ‖x₀‖ := by simpa using hx
+  simp only [ContinuousLinearMap.rayleighQuotient]
+  rw [this]
+  gcongr
+  exact hextr hx
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.rayleighQuotient, IsMaxOn, IsMaxOn.iSup_eq, Or.inr, T.iSup_rayleigh_eq_iSup_rayleigh_sphere, convert, hT.hasEigenvector_of_isLocalExtrOn, hasEigenvector_of_isLocalExtrOn, hextr.localize, iSup_eq, iSup_rayleigh_eq_iSup_rayleigh_sphere, localize, rayleighQuotient, sphere
 -/
@@ -831,7 +909,11 @@ theorem hasEigenvector_of_isMinOn
   refine IsMinOn.iInf_eq hx₀'' ?_
   intro x hx
   dsimp
-  have : ‖x‖ = ‖x₀‖ := b
+  have : ‖x‖ = ‖x₀‖ := by simpa using hx
+  simp only [ContinuousLinearMap.rayleighQuotient]
+  rw [this]
+  gcongr
+  exact hextr hx
 
 中文:
 定理 hasEigenvector_of_isMinOn
@@ -844,7 +926,11 @@ theorem hasEigenvector_of_isMinOn
   refine IsMinOn.iInf_eq hx₀'' ?_
   intro x hx
   dsimp
-  have : ‖x‖ = ‖x₀‖ := b
+  have : ‖x‖ = ‖x₀‖ := by simpa using hx
+  simp only [ContinuousLinearMap.rayleighQuotient]
+  rw [this]
+  gcongr
+  exact hextr hx
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.rayleighQuotient, IsMinOn, IsMinOn.iInf_eq, Or.inl, T.iInf_rayleigh_eq_iInf_rayleigh_sphere, convert, hT.hasEigenvector_of_isLocalExtrOn, hasEigenvector_of_isLocalExtrOn, hextr.localize, iInf_eq, iInf_rayleigh_eq_iInf_rayleigh_sphere, localize, rayleighQuotient, sphere
 -/
@@ -888,7 +974,15 @@ theorem hasEigenvalue_iSup_of_finiteDimensional
   obtain ⟨x, hx⟩ : exists x : E, x != 0 := exists_ne 0
   have H₁ : IsCompact (sphere (0 : E) ‖x‖) := isCompact_sphere _ _
   have H₂ : (sphere (0 : E) ‖x‖).Nonempty := ⟨x, by simp⟩
-  -- key point: in finite dimension, a con
+  -- key point: in finite dimension, a continuous function on the sphere has a max
+  obtain ⟨x₀, hx₀', hTx₀⟩ :=
+    H₁.exists_isMaxOn H₂ T'.val.reApplyInnerSelf_continuous.continuousOn
+  have hx₀ : ‖x₀‖ = ‖x‖ := by simpa using hx₀'
+  have : IsMaxOn T'.val.reApplyInnerSelf (sphere 0 ‖x₀‖) x₀ := by simpa only [← hx₀] using hTx₀
+  have hx₀_ne : x₀ != 0 := by
+    have : ‖x₀‖ != 0 := by simp only [hx₀, norm_eq_zero, hx, Ne, not_false_iff]
+    simpa [← norm_eq_zero, Ne]
+  exact hasEigenvalue_of_hasEigenvector (T'.prop.hasEigenvector_of_isMaxOn hx₀_ne this)
 
 中文:
 定理 hasEigenvalue_iSup_of_finiteDimensional
@@ -899,7 +993,15 @@ theorem hasEigenvalue_iSup_of_finiteDimensional
   obtain ⟨x, hx⟩ : exists x : E, x != 0 := exists_ne 0
   have H₁ : IsCompact (sphere (0 : E) ‖x‖) := isCompact_sphere _ _
   have H₂ : (sphere (0 : E) ‖x‖).Nonempty := ⟨x, by simp⟩
-  -- key point: in finite dimension, a con
+  -- key point: in finite dimension, a continuous function on the sphere has a max
+  obtain ⟨x₀, hx₀', hTx₀⟩ :=
+    H₁.exists_isMaxOn H₂ T'.val.reApplyInnerSelf_continuous.continuousOn
+  have hx₀ : ‖x₀‖ = ‖x‖ := by simpa using hx₀'
+  have : IsMaxOn T'.val.reApplyInnerSelf (sphere 0 ‖x₀‖) x₀ := by simpa only [← hx₀] using hTx₀
+  have hx₀_ne : x₀ != 0 := by
+    have : ‖x₀‖ != 0 := by simp only [hx₀, norm_eq_zero, hx, Ne, not_false_iff]
+    simpa [← norm_eq_zero, Ne]
+  exact hasEigenvalue_of_hasEigenvector (T'.prop.hasEigenvector_of_isMaxOn hx₀_ne this)
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.proper_rclike, IsCompact, Nonempty, exists_ne, hT.toSelfAdjoint, isCompact_sphere, proper_rclike, sphere, toSelfAdjoint
 -/
@@ -932,7 +1034,15 @@ theorem hasEigenvalue_iInf_of_finiteDimensional
   obtain ⟨x, hx⟩ : exists x : E, x != 0 := exists_ne 0
   have H₁ : IsCompact (sphere (0 : E) ‖x‖) := isCompact_sphere _ _
   have H₂ : (sphere (0 : E) ‖x‖).Nonempty := ⟨x, by simp⟩
-  -- key point: in finite dimension, a con
+  -- key point: in finite dimension, a continuous function on the sphere has a min
+  obtain ⟨x₀, hx₀', hTx₀⟩ :=
+    H₁.exists_isMinOn H₂ T'.val.reApplyInnerSelf_continuous.continuousOn
+  have hx₀ : ‖x₀‖ = ‖x‖ := by simpa using hx₀'
+  have : IsMinOn T'.val.reApplyInnerSelf (sphere 0 ‖x₀‖) x₀ := by simpa only [← hx₀] using hTx₀
+  have hx₀_ne : x₀ != 0 := by
+    have : ‖x₀‖ != 0 := by simp only [hx₀, norm_eq_zero, hx, Ne, not_false_iff]
+    simpa [← norm_eq_zero, Ne]
+  exact hasEigenvalue_of_hasEigenvector (T'.prop.hasEigenvector_of_isMinOn hx₀_ne this)
 
 中文:
 定理 hasEigenvalue_iInf_of_finiteDimensional
@@ -943,7 +1053,15 @@ theorem hasEigenvalue_iInf_of_finiteDimensional
   obtain ⟨x, hx⟩ : exists x : E, x != 0 := exists_ne 0
   have H₁ : IsCompact (sphere (0 : E) ‖x‖) := isCompact_sphere _ _
   have H₂ : (sphere (0 : E) ‖x‖).Nonempty := ⟨x, by simp⟩
-  -- key point: in finite dimension, a con
+  -- key point: in finite dimension, a continuous function on the sphere has a min
+  obtain ⟨x₀, hx₀', hTx₀⟩ :=
+    H₁.exists_isMinOn H₂ T'.val.reApplyInnerSelf_continuous.continuousOn
+  have hx₀ : ‖x₀‖ = ‖x‖ := by simpa using hx₀'
+  have : IsMinOn T'.val.reApplyInnerSelf (sphere 0 ‖x₀‖) x₀ := by simpa only [← hx₀] using hTx₀
+  have hx₀_ne : x₀ != 0 := by
+    have : ‖x₀‖ != 0 := by simp only [hx₀, norm_eq_zero, hx, Ne, not_false_iff]
+    simpa [← norm_eq_zero, Ne]
+  exact hasEigenvalue_of_hasEigenvector (T'.prop.hasEigenvector_of_isMinOn hx₀_ne this)
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.proper_rclike, IsCompact, Nonempty, exists_ne, hT.toSelfAdjoint, isCompact_sphere, proper_rclike, sphere, toSelfAdjoint
 -/

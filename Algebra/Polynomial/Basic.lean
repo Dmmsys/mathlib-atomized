@@ -3348,7 +3348,10 @@ theorem addSubmonoid_closure_setOfPred_eq_monomial
   rintro _ ⟨n, a, rfl⟩
   exact ⟨n, a, Polynomial.ofFinsupp_single _ _⟩
 
-@[depre
+@[deprecated (since := "2026-07-09")]
+alias addSubmonoid_closure_setOf_eq_monomial := addSubmonoid_closure_setOfPred_eq_monomial
+
+@[ext high]
 
 中文:
 定理 addSubmonoid_closure_setOfPred_eq_monomial
@@ -3359,7 +3362,10 @@ theorem addSubmonoid_closure_setOfPred_eq_monomial
   rintro _ ⟨n, a, rfl⟩
   exact ⟨n, a, Polynomial.ofFinsupp_single _ _⟩
 
-@[depre
+@[deprecated (since := "2026-07-09")]
+alias addSubmonoid_closure_setOf_eq_monomial := addSubmonoid_closure_setOfPred_eq_monomial
+
+@[ext high]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_mclosure, AddSubmonoid, AddSubmonoid.closure_mono, AddSubmonoid.map_equiv_top, Polynomial, Polynomial.ofFinsupp_single, Set.image_subset_iff, addSubmonoidClosure_single, closure_mono, image_subset_iff, map_equiv_top, map_mclosure, ofFinsupp_single, symm.toAddEquiv, toAddEquiv, toFinsuppIso, top_unique
 -/
@@ -3694,7 +3700,7 @@ theorem support_binomial_subset
       ((support_C_mul_X_pow_subset m y).trans
         (singleton_subset_iff.mpr (mem_insert_of_mem (mem_singleton_self m)))))
 
-@[deprecated (since := "2026-06-09")] a
+@[deprecated (since := "2026-06-09")] alias support_binomial' := support_binomial_subset
 
 中文:
 定理 support_binomial_subset
@@ -3705,7 +3711,7 @@ theorem support_binomial_subset
       ((support_C_mul_X_pow_subset m y).trans
         (singleton_subset_iff.mpr (mem_insert_of_mem (mem_singleton_self m)))))
 
-@[deprecated (since := "2026-06-09")] a
+@[deprecated (since := "2026-06-09")] alias support_binomial' := support_binomial_subset
 
 Depends on / 依赖: mem_insert_of_mem, mem_insert_self, mem_singleton_self, singleton_subset_iff, singleton_subset_iff.mpr, support_C_mul_X_pow_subset, support_add, support_add.trans, union_subset
 -/
@@ -3732,7 +3738,11 @@ theorem support_trinomial_subset
           ((support_C_mul_X_pow_subset k x).trans
             (singleton_subset_iff.mpr (mem_insert_self k {m, n})))
           ((support_C_mul_X_pow_subset m y).trans
-            (singleton_subset_iff.mpr (mem_insert_
+            (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_self m {n}))))))
+      ((support_C_mul_X_pow_subset n z).trans
+        (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_of_mem (mem_singleton_self n))))))
+
+@[deprecated (since := "2026-06-09")] alias support_trinomial' := support_trinomial_subset
 
 中文:
 定理 support_trinomial_subset
@@ -3744,7 +3754,11 @@ theorem support_trinomial_subset
           ((support_C_mul_X_pow_subset k x).trans
             (singleton_subset_iff.mpr (mem_insert_self k {m, n})))
           ((support_C_mul_X_pow_subset m y).trans
-            (singleton_subset_iff.mpr (mem_insert_
+            (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_self m {n}))))))
+      ((support_C_mul_X_pow_subset n z).trans
+        (singleton_subset_iff.mpr (mem_insert_of_mem (mem_insert_of_mem (mem_singleton_self n))))))
+
+@[deprecated (since := "2026-06-09")] alias support_trinomial' := support_trinomial_subset
 
 Depends on / 依赖: mem_insert_of_mem, mem_insert_self, mem_singleton_self, singleton_subset_iff, singleton_subset_iff.mpr, support_C_mul_X_pow_subset, support_add, support_add.trans, union_subset
 -/
@@ -4334,6 +4348,14 @@ theorem induction_on
     | zero => rw [pow_zero, mul_one]; exact C a
     | succ n ih => exact monomial _ _ ih
   have B : forall s : Finset Nat, motive (s.sum fun n : Nat => Polynomial.C (p.coeff n) * X ^ n) := by
+    apply Finset.induction
+    · convert! C 0
+      exact C_0.symm
+    · intro n s ns ih
+      rw [sum_insert ns]
+      exact add _ _ A ih
+  rw [← sum_C_mul_X_pow_eq p]; rw [Polynomial.sum]
+  exact B (support p)
 
 中文:
 定理 induction_on
@@ -4345,6 +4367,14 @@ theorem induction_on
     | zero => rw [pow_zero, mul_one]; exact C a
     | succ n ih => exact monomial _ _ ih
   have B : forall s : Finset Nat, motive (s.sum fun n : Nat => Polynomial.C (p.coeff n) * X ^ n) := by
+    apply Finset.induction
+    · convert! C 0
+      exact C_0.symm
+    · intro n s ns ih
+      rw [sum_insert ns]
+      exact add _ _ A ih
+  rw [← sum_C_mul_X_pow_eq p]; rw [Polynomial.sum]
+  exact B (support p)
 -/
 protected theorem induction_on {motive : R[X] -> Prop} (p : R[X]) (C : forall a, motive (C a))
     (add : forall p q, motive p -> motive q -> motive (p + q))
@@ -5708,7 +5738,18 @@ instance repr
           then (⊤, "X")
           else (70, "C " ++ reprArg (coeff p 1) ++ " * X")
         | n =>
-          if coef
+          if coeff p n = 1
+          then (80, "X ^ " ++ Nat.repr n)
+          else (70, "C " ++ reprArg (coeff p n) ++ " * X ^ " ++ Nat.repr n))
+      p.support.sort
+    match termPrecAndReprs with
+    | [] => "0"
+    | [(tprec, t)] => if prec >= tprec then Lean.Format.paren t else t
+    | ts =>
+      -- multiple terms, use `+` precedence
+      (if prec >= 65 then Lean.Format.paren else id)
+      (Lean.Format.fill
+        (Lean.Format.joinSep (ts.map Prod.snd) (" +" ++ Lean.Format.line)))⟩
 
 中文:
 实例 repr
@@ -5721,7 +5762,18 @@ instance repr
           then (⊤, "X")
           else (70, "C " ++ reprArg (coeff p 1) ++ " * X")
         | n =>
-          if coef
+          if coeff p n = 1
+          then (80, "X ^ " ++ Nat.repr n)
+          else (70, "C " ++ reprArg (coeff p n) ++ " * X ^ " ++ Nat.repr n))
+      p.support.sort
+    match termPrecAndReprs with
+    | [] => "0"
+    | [(tprec, t)] => if prec >= tprec then Lean.Format.paren t else t
+    | ts =>
+      -- multiple terms, use `+` precedence
+      (if prec >= 65 then Lean.Format.paren else id)
+      (Lean.Format.fill
+        (Lean.Format.joinSep (ts.map Prod.snd) (" +" ++ Lean.Format.line)))⟩
 -/
 protected instance repr [Repr R] [DecidableEq R] : Repr R[X] :=
   ⟨fun p prec =>

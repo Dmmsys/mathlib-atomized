@@ -57,7 +57,42 @@ theorem not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter_aux
   obtain ⟨C, hC₀, s, hsl, hsub, hfd, hg⟩ :
     exists (C : Real) (_ : 0 <= C), exists s in l, (forall x in s, forall y in s, [[x, y]] subseteq k) ∧
       (forall x in s, forall y in s, forall z in [[x, y]], DifferentiableAt Real f z) ∧
-        forall x in s, forall y in s, forall z in
+        forall x in s, forall y in s, forall z in [[x, y]], ‖deriv f z‖ <= C * ‖g z‖ := by
+    rcases hfg.exists_nonneg with ⟨C, C₀, hC⟩
+    have h : forallᶠ x : Real × Real in l ×ˢ l,
+        forall y in [[x.1, x.2]], (DifferentiableAt Real f y ∧ ‖deriv f y‖ <= C * ‖g y‖) ∧ y in k :=
+      (tendsto_fst.uIcc tendsto_snd).eventually ((hd.and hC.bound).and hl).smallSets
+    rcases mem_prod_self_iff.1 h with ⟨s, hsl, hs⟩
+    simp only [prod_subset_iff, mem_ofPred_eq] at hs
+    exact ⟨C, C₀, s, hsl, fun x hx y hy z hz => (hs x hx y hy z hz).2, fun x hx y hy z hz =>
+      (hs x hx y hy z hz).1.1, fun x hx y hy z hz => (hs x hx y hy z hz).1.2⟩
+  replace hgi : IntegrableOn (fun x => C * ‖g x‖) k := by exact hgi.norm.smul C
+  obtain ⟨c, hc, d, hd, hlt⟩ : exists c in s, exists d in s, (‖f c‖ + ∫ y in k, C * ‖g y‖) < ‖f d‖ := by
+    rcases Filter.nonempty_of_mem hsl with ⟨c, hc⟩
+    have : forallᶠ x in l, (‖f c‖ + ∫ y in k, C * ‖g y‖) < ‖f x‖ :=
+      hf.eventually (eventually_gt_atTop _)
+    exact ⟨c, hc, (this.and hsl).exists.imp fun d hd => ⟨hd.2, hd.1⟩⟩
+  specialize hsub c hc d hd; specialize hfd c hc d hd
+  replace hg : forall x in Ι c d, ‖deriv f x‖ <= C * ‖g x‖ :=
+    fun z hz => hg c hc d hd z ⟨hz.1.le, hz.2⟩
+  have hg_ae : forallᵐ x ∂volume.restrict (Ι c d), ‖deriv f x‖ <= C * ‖g x‖ :=
+    (ae_restrict_mem measurableSet_uIoc).mono hg
+  have hsub' : Ι c d subseteq k := Subset.trans Ioc_subset_Icc_self hsub
+  have hfi : IntervalIntegrable (deriv f) volume c d := by
+    rw [intervalIntegrable_iff]
+    have : IntegrableOn (fun x => C * ‖g x‖) (Ι c d) := IntegrableOn.mono hgi hsub' le_rfl
+    exact Integrable.mono' this (aestronglyMeasurable_deriv _ _) hg_ae
+  refine hlt.not_ge (sub_le_iff_le_add'.1 ?_)
+  calc
+    ‖f d‖ - ‖f c‖ <= ‖f d - f c‖ := norm_sub_norm_le _ _
+    _ = ‖∫ x in c..d, deriv f x‖ := congr_arg _ (integral_deriv_eq_sub hfd hfi).symm
+    _ = ‖∫ x in Ι c d, deriv f x‖ := norm_integral_eq_norm_integral_uIoc _
+    _ <= ∫ x in Ι c d, ‖deriv f x‖ := norm_integral_le_integral_norm _
+    _ <= ∫ x in Ι c d, C * ‖g x‖ :=
+      setIntegral_mono_on hfi.norm.def' (hgi.mono_set hsub') measurableSet_uIoc hg
+    _ <= ∫ x in k, C * ‖g x‖ := by
+      apply setIntegral_mono_set hgi
+        (ae_of_all _ fun x => mul_nonneg hC₀ (norm_nonneg _)) hsub'.eventuallyLE
 
 中文:
 定理 not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter_aux
@@ -66,7 +101,42 @@ theorem not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter_aux
   obtain ⟨C, hC₀, s, hsl, hsub, hfd, hg⟩ :
     exists (C : Real) (_ : 0 <= C), exists s in l, (forall x in s, forall y in s, [[x, y]] subseteq k) ∧
       (forall x in s, forall y in s, forall z in [[x, y]], DifferentiableAt Real f z) ∧
-        forall x in s, forall y in s, forall z in
+        forall x in s, forall y in s, forall z in [[x, y]], ‖deriv f z‖ <= C * ‖g z‖ := by
+    rcases hfg.exists_nonneg with ⟨C, C₀, hC⟩
+    have h : forallᶠ x : Real × Real in l ×ˢ l,
+        forall y in [[x.1, x.2]], (DifferentiableAt Real f y ∧ ‖deriv f y‖ <= C * ‖g y‖) ∧ y in k :=
+      (tendsto_fst.uIcc tendsto_snd).eventually ((hd.and hC.bound).and hl).smallSets
+    rcases mem_prod_self_iff.1 h with ⟨s, hsl, hs⟩
+    simp only [prod_subset_iff, mem_ofPred_eq] at hs
+    exact ⟨C, C₀, s, hsl, fun x hx y hy z hz => (hs x hx y hy z hz).2, fun x hx y hy z hz =>
+      (hs x hx y hy z hz).1.1, fun x hx y hy z hz => (hs x hx y hy z hz).1.2⟩
+  replace hgi : IntegrableOn (fun x => C * ‖g x‖) k := by exact hgi.norm.smul C
+  obtain ⟨c, hc, d, hd, hlt⟩ : exists c in s, exists d in s, (‖f c‖ + ∫ y in k, C * ‖g y‖) < ‖f d‖ := by
+    rcases Filter.nonempty_of_mem hsl with ⟨c, hc⟩
+    have : forallᶠ x in l, (‖f c‖ + ∫ y in k, C * ‖g y‖) < ‖f x‖ :=
+      hf.eventually (eventually_gt_atTop _)
+    exact ⟨c, hc, (this.and hsl).exists.imp fun d hd => ⟨hd.2, hd.1⟩⟩
+  specialize hsub c hc d hd; specialize hfd c hc d hd
+  replace hg : forall x in Ι c d, ‖deriv f x‖ <= C * ‖g x‖ :=
+    fun z hz => hg c hc d hd z ⟨hz.1.le, hz.2⟩
+  have hg_ae : forallᵐ x ∂volume.restrict (Ι c d), ‖deriv f x‖ <= C * ‖g x‖ :=
+    (ae_restrict_mem measurableSet_uIoc).mono hg
+  have hsub' : Ι c d subseteq k := Subset.trans Ioc_subset_Icc_self hsub
+  have hfi : IntervalIntegrable (deriv f) volume c d := by
+    rw [intervalIntegrable_iff]
+    have : IntegrableOn (fun x => C * ‖g x‖) (Ι c d) := IntegrableOn.mono hgi hsub' le_rfl
+    exact Integrable.mono' this (aestronglyMeasurable_deriv _ _) hg_ae
+  refine hlt.not_ge (sub_le_iff_le_add'.1 ?_)
+  calc
+    ‖f d‖ - ‖f c‖ <= ‖f d - f c‖ := norm_sub_norm_le _ _
+    _ = ‖∫ x in c..d, deriv f x‖ := congr_arg _ (integral_deriv_eq_sub hfd hfi).symm
+    _ = ‖∫ x in Ι c d, deriv f x‖ := norm_integral_eq_norm_integral_uIoc _
+    _ <= ∫ x in Ι c d, ‖deriv f x‖ := norm_integral_le_integral_norm _
+    _ <= ∫ x in Ι c d, C * ‖g x‖ :=
+      setIntegral_mono_on hfi.norm.def' (hgi.mono_set hsub') measurableSet_uIoc hg
+    _ <= ∫ x in k, C * ‖g x‖ := by
+      apply setIntegral_mono_set hgi
+        (ae_of_all _ fun x => mul_nonneg hC₀ (norm_nonneg _)) hsub'.eventuallyLE
 
 Depends on / 依赖: DifferentiableAt, exists_nonneg, hfg.exists_nonneg, subseteq
 -/
@@ -126,7 +196,21 @@ theorem not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter
   let f' := a ∘ f
   have h'd : forallᶠ x in l, DifferentiableAt Real f' x := by
     filter_upwards [hd] with x hx using a.toContinuousLinearMap.differentiableAt.comp x hx
-  have h'f : Tendsto (fun x => ‖f' x‖) l
+  have h'f : Tendsto (fun x => ‖f' x‖) l atTop := hf.congr (fun x => by simp [f'])
+  have h'fg : deriv f' =O[l] g := by
+    apply IsBigO.trans _ hfg
+    rw [← isBigO_norm_norm]
+    suffices (fun x => ‖deriv f' x‖) =ᶠ[l] (fun x => ‖deriv f x‖) by exact this.isBigO
+    filter_upwards [hd] with x hx
+    have : deriv f' x = a (deriv f x) := by
+      rw [fderiv_comp_deriv x _ hx]
+      · have : fderiv Real a (f x) = a.toContinuousLinearMap := a.toContinuousLinearMap.fderiv
+        simp only [this]
+        rfl
+      · exact a.toContinuousLinearMap.differentiableAt
+    simp only [this]
+    simp
+  exact not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter_aux l hl h'd h'f h'fg
 
 中文:
 定理 not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter
@@ -135,7 +219,21 @@ theorem not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter
   let f' := a ∘ f
   have h'd : forallᶠ x in l, DifferentiableAt Real f' x := by
     filter_upwards [hd] with x hx using a.toContinuousLinearMap.differentiableAt.comp x hx
-  have h'f : Tendsto (fun x => ‖f' x‖) l
+  have h'f : Tendsto (fun x => ‖f' x‖) l atTop := hf.congr (fun x => by simp [f'])
+  have h'fg : deriv f' =O[l] g := by
+    apply IsBigO.trans _ hfg
+    rw [← isBigO_norm_norm]
+    suffices (fun x => ‖deriv f' x‖) =ᶠ[l] (fun x => ‖deriv f x‖) by exact this.isBigO
+    filter_upwards [hd] with x hx
+    have : deriv f' x = a (deriv f x) := by
+      rw [fderiv_comp_deriv x _ hx]
+      · have : fderiv Real a (f x) = a.toContinuousLinearMap := a.toContinuousLinearMap.fderiv
+        simp only [this]
+        rfl
+      · exact a.toContinuousLinearMap.differentiableAt
+    simp only [this]
+    simp
+  exact not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter_aux l hl h'd h'f h'fg
 
 Depends on / 依赖: Completion, DifferentiableAt, IsBigO, IsBigO.trans, Tendsto, UniformSpace, UniformSpace.Completion, UniformSpace.Completion.toCompl, a.toContinuousLinearMap.differentiableAt.comp, differentiableAt, filter_upwards, hf.congr, isBigO, isBigO_norm_norm, this.isBigO, toContinuousLinearMap
 -/
@@ -201,7 +299,14 @@ theorem not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_within_sdif
     rcases (min_lt_max.2 hne).gt_or_lt c with hlt | hlt
     · refine ⟨𝓝[<] c, inferInstance, inferInstance, inf_le_left, ?_⟩
       rw [← Iic_sdiff_right]
-      e
+      exact sdiff_mem_nhdsWithin_sdiff (Icc_mem_nhdsLE_of_mem ⟨hlt, hc.2⟩) _
+    · refine ⟨𝓝[>] c, inferInstance, inferInstance, inf_le_left, ?_⟩
+      rw [← Ici_sdiff_left]
+      exact sdiff_mem_nhdsWithin_sdiff (Icc_mem_nhdsGE_of_mem ⟨hc.1, hlt⟩) _
+  have : l <= 𝓝[[[a, b]] \ {c}] c := le_inf hle (le_principal_iff.2 hmem)
+  exact not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_filter l
+    (mem_of_superset hmem sdiff_subset) (h_deriv.filter_mono this) (h_infty.mono_left this)
+    (hg.mono this)
 
 中文:
 定理 not_interval整数egrable_of_tendsto_norm_atTop_of_deriv_isBigO_within_sdiff_singleton
@@ -211,7 +316,14 @@ theorem not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_within_sdif
     rcases (min_lt_max.2 hne).gt_or_lt c with hlt | hlt
     · refine ⟨𝓝[<] c, inferInstance, inferInstance, inf_le_left, ?_⟩
       rw [← Iic_sdiff_right]
-      e
+      exact sdiff_mem_nhdsWithin_sdiff (Icc_mem_nhdsLE_of_mem ⟨hlt, hc.2⟩) _
+    · refine ⟨𝓝[>] c, inferInstance, inferInstance, inf_le_left, ?_⟩
+      rw [← Ici_sdiff_left]
+      exact sdiff_mem_nhdsWithin_sdiff (Icc_mem_nhdsGE_of_mem ⟨hc.1, hlt⟩) _
+  have : l <= 𝓝[[[a, b]] \ {c}] c := le_inf hle (le_principal_iff.2 hmem)
+  exact not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_filter l
+    (mem_of_superset hmem sdiff_subset) (h_deriv.filter_mono this) (h_infty.mono_left this)
+    (hg.mono this)
 
 Depends on / 依赖: Filter, Icc_mem_nhdsGE_of_mem, Icc_mem_nhdsLE_of_mem, Ici_sdiff_left, Iic_sdiff_right, TendstoIxxClass, gt_or_lt, inf_le_left, l.NeBot, min_lt_max, sdiff_mem_nhdsWithin_sdiff
 -/
@@ -272,7 +384,12 @@ theorem not_intervalIntegrable_of_sub_inv_isBigO_punctured
     filter_upwards [self_mem_nhdsWithin] with x hx
     simpa using ((hasDerivAt_id x).sub_const c).log (sub_ne_zero.2 hx)
   have B : Tendsto (fun x => ‖Real.log (x - c)‖) (𝓝[!=] c) atTop := by
-    refine ten
+    refine tendsto_abs_atBot_atTop.comp (Real.tendsto_log_nhdsNE_zero.comp ?_)
+    rw [← sub_self c]
+    exact ((hasDerivAt_id c).sub_const c).tendsto_nhdsNE one_ne_zero
+  exact not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_punctured
+    (A.mono fun x hx => hx.differentiableAt) B
+    (hf.congr' (A.mono fun x hx => hx.deriv.symm) EventuallyEq.rfl) hne hc
 
 中文:
 定理 not_interval整数egrable_of_sub_inv_isBigO_punctured
@@ -282,7 +399,12 @@ theorem not_intervalIntegrable_of_sub_inv_isBigO_punctured
     filter_upwards [self_mem_nhdsWithin] with x hx
     simpa using ((hasDerivAt_id x).sub_const c).log (sub_ne_zero.2 hx)
   have B : Tendsto (fun x => ‖Real.log (x - c)‖) (𝓝[!=] c) atTop := by
-    refine ten
+    refine tendsto_abs_atBot_atTop.comp (Real.tendsto_log_nhdsNE_zero.comp ?_)
+    rw [← sub_self c]
+    exact ((hasDerivAt_id c).sub_const c).tendsto_nhdsNE one_ne_zero
+  exact not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_punctured
+    (A.mono fun x hx => hx.differentiableAt) B
+    (hf.congr' (A.mono fun x hx => hx.deriv.symm) EventuallyEq.rfl) hne hc
 
 Depends on / 依赖: HasDerivAt, Real.log, Real.tendsto_log_nhdsNE_zero.comp, Tendsto, filter_upwards, hasDerivAt_id, not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_p, one_ne_zero, self_mem_nhdsWithin, sub_const, sub_ne_zero, sub_self, tendsto_abs_atBot_atTop, tendsto_abs_atBot_atTop.comp, tendsto_log_nhdsNE_zero, tendsto_nhdsNE
 -/
@@ -316,7 +438,7 @@ theorem intervalIntegrable_sub_inv_iff
   · rintro (rfl | h₀)
     · exact IntervalIntegrable.refl
     refine ((continuous_sub_right c).continuousOn.inv₀ ?_).intervalIntegrable
-
+exact fun x hx => sub_ne_zero.2 ne_of_mem_of_not_mem hx h₀
 
 中文:
 定理 interval整数egrable_sub_inv_iff
@@ -328,7 +450,7 @@ theorem intervalIntegrable_sub_inv_iff
   · rintro (rfl | h₀)
     · exact IntervalIntegrable.refl
     refine ((continuous_sub_right c).continuousOn.inv₀ ?_).intervalIntegrable
-
+exact fun x hx => sub_ne_zero.2 ne_of_mem_of_not_mem hx h₀
 
 Depends on / 依赖: IntervalIntegrable, IntervalIntegrable.refl, continuousOn, continuousOn.inv, continuous_sub_right, intervalIntegrable, isBigO_refl, ne_of_mem_of_not_mem, not_intervalIntegrable_of_sub_inv_isBigO_punctured, or_iff_not_imp_left, sub_ne_zero
 -/
@@ -377,7 +499,11 @@ theorem not_integrableOn_Ici_inv
     filter_upwards [Ioi_mem_atTop 0] with x hx using Real.hasDerivAt_log (ne_of_gt hx)
   have B : Tendsto (fun x => ‖Real.log x‖) atTop atTop :=
     tendsto_norm_atTop_atTop.comp Real.tendsto_log_atTop
-  exact not_integra
+  exact not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter atTop (Ici_mem_atTop a)
+    (A.mono (fun x hx => hx.differentiableAt)) B
+    (Filter.EventuallyEq.isBigO (A.mono (fun x hx => hx.deriv)))
+
+@[deprecated (since := "2026-01-30")] alias not_IntegrableOn_Ici_inv := not_integrableOn_Ici_inv
 
 中文:
 定理 not_integrableOn_Ici_inv
@@ -387,7 +513,11 @@ theorem not_integrableOn_Ici_inv
     filter_upwards [Ioi_mem_atTop 0] with x hx using Real.hasDerivAt_log (ne_of_gt hx)
   have B : Tendsto (fun x => ‖Real.log x‖) atTop atTop :=
     tendsto_norm_atTop_atTop.comp Real.tendsto_log_atTop
-  exact not_integra
+  exact not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter atTop (Ici_mem_atTop a)
+    (A.mono (fun x hx => hx.differentiableAt)) B
+    (Filter.EventuallyEq.isBigO (A.mono (fun x hx => hx.deriv)))
+
+@[deprecated (since := "2026-01-30")] alias not_IntegrableOn_Ici_inv := not_integrableOn_Ici_inv
 
 Depends on / 依赖: A.mono, EventuallyEq, Filter, Filter.EventuallyEq.isBigO, HasDerivAt, Ici_mem_atTop, Ioi_mem_atTop, Real.hasDerivAt_log, Real.log, Real.tendsto_log_atTop, Tendsto, differentiableAt, filter_upwards, hasDerivAt_log, hx.deriv, hx.differentiableAt, isBigO, ne_of_gt, not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter, tendsto_log_atTop
 -/

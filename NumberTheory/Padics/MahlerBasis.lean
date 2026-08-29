@@ -63,7 +63,16 @@ lemma norm_ascPochhammer_le
   have hC : (k.factorial : Int_[p]) != 0 := Nat.cast_ne_zero.mpr k.factorial_ne_zero
   have hf : ContinuousAt f x := Polynomial.continuousAt _
   -- find `n : ℕ` such that `‖f x - f n‖ ≤ ‖k!‖`
-  obtain ⟨n, hn⟩ : exists n : Nat, ‖f x -
+  obtain ⟨n, hn⟩ : exists n : Nat, ‖f x - f n‖ <= ‖(k.factorial : Int_[p])‖ := by
+    obtain ⟨δ, hδp, hδ⟩ := Metric.continuousAt_iff.mp hf _ (norm_pos_iff.mpr hC)
+    obtain ⟨n, hn'⟩ := PadicInt.denseRange_natCast.exists_dist_lt x hδp
+    simpa only [← dist_eq_norm_sub'] using ⟨n, (hδ (dist_comm x n ▸ hn')).le⟩
+  -- use ultrametric property to show that `‖f n‖ ≤ ‖k!‖` implies `‖f x‖ ≤ ‖k!‖`
+  refine sub_add_cancel (f x) _ ▸ (IsUltrametricDist.norm_add_le_max _ (f n)).trans (max_le hn ?_)
+  -- finish using the fact that `n.multichoose k ∈ ℤ`
+  simp_rw [f, ← ascPochhammer_eval_cast, Polynomial.eval_eq_smeval,
+    ← Ring.factorial_nsmul_multichoose_eq_ascPochhammer, smul_eq_mul, Nat.cast_mul, norm_mul]
+  exact mul_le_of_le_one_right (norm_nonneg _) (norm_le_one _)
 
 中文:
 引理 norm_ascPochhammer_le
@@ -74,7 +83,16 @@ lemma norm_ascPochhammer_le
   have hC : (k.factorial : Int_[p]) != 0 := Nat.cast_ne_zero.mpr k.factorial_ne_zero
   have hf : ContinuousAt f x := Polynomial.continuousAt _
   -- find `n : ℕ` such that `‖f x - f n‖ ≤ ‖k!‖`
-  obtain ⟨n, hn⟩ : exists n : Nat, ‖f x -
+  obtain ⟨n, hn⟩ : exists n : Nat, ‖f x - f n‖ <= ‖(k.factorial : Int_[p])‖ := by
+    obtain ⟨δ, hδp, hδ⟩ := Metric.continuousAt_iff.mp hf _ (norm_pos_iff.mpr hC)
+    obtain ⟨n, hn'⟩ := PadicInt.denseRange_natCast.exists_dist_lt x hδp
+    simpa only [← dist_eq_norm_sub'] using ⟨n, (hδ (dist_comm x n ▸ hn')).le⟩
+  -- use ultrametric property to show that `‖f n‖ ≤ ‖k!‖` implies `‖f x‖ ≤ ‖k!‖`
+  refine sub_add_cancel (f x) _ ▸ (IsUltrametricDist.norm_add_le_max _ (f n)).trans (max_le hn ?_)
+  -- finish using the fact that `n.multichoose k ∈ ℤ`
+  simp_rw [f, ← ascPochhammer_eval_cast, Polynomial.eval_eq_smeval,
+    ← Ring.factorial_nsmul_multichoose_eq_ascPochhammer, smul_eq_mul, Nat.cast_mul, norm_mul]
+  exact mul_le_of_le_one_right (norm_nonneg _) (norm_le_one _)
 
 Depends on / 依赖: ContinuousAt, Int_, Nat.cast_ne_zero.mpr, Polynomial, Polynomial.continuousAt, ascPochhammer, cast_ne_zero, continuousAt, factorial, factorial_ne_zero, k.factorial, k.factorial_ne_zero
 -/
@@ -125,7 +143,10 @@ instance instBinomialRing
     rw [norm_div]; rw [div_le_one (by simpa using k.factorial_ne_zero)]
     exact x.norm_ascPochhammer_le k⟩
   factorial_nsmul_multichoose x k := by rw [← Subtype.coe_inj, nsmul_eq_mul, PadicInt.coe_mul,
-    PadicInt.coe_natCast, mul_di
+    PadicInt.coe_natCast, mul_div_cancel₀ _ (mod_cast k.factorial_ne_zero), Subtype.coe_inj,
+    Polynomial.eval_eq_smeval, Polynomial.ascPochhammer_smeval_cast]
+
+@[fun_prop]
 
 中文:
 实例 instBinomialRing
@@ -134,7 +155,10 @@ instance instBinomialRing
     rw [norm_div]; rw [div_le_one (by simpa using k.factorial_ne_zero)]
     exact x.norm_ascPochhammer_le k⟩
   factorial_nsmul_multichoose x k := by rw [← Subtype.coe_inj, nsmul_eq_mul, PadicInt.coe_mul,
-    PadicInt.coe_natCast, mul_di
+    PadicInt.coe_natCast, mul_div_cancel₀ _ (mod_cast k.factorial_ne_zero), Subtype.coe_inj,
+    Polynomial.eval_eq_smeval, Polynomial.ascPochhammer_smeval_cast]
+
+@[fun_prop]
 
 Depends on / 依赖: Int_, PadicInt, PadicInt.coe_mul, PadicInt.coe_natCast, Polynomial, Polynomial.ascPochhammer_smeval_cast, Polynomial.eval_eq_smeval, Rat_, Subtype, Subtype.coe_inj, ascPochhammer, ascPochhammer_smeval_cast, coe_inj, coe_mul, coe_natCast, div_le_one, eval_eq_smeval, factorial, factorial_ne_zero, factorial_nsmul_multichoose
 -/
@@ -280,7 +304,8 @@ lemma IsUltrametricDist.norm_fwdDiff_iter_apply_le
   -- define `Δ_[h]` as an operator on continuous maps (not just on bare functions). So instead we
   -- use the formula for `Δ_[h]^[n] f` as a sum.
   rw [fwdDiff_iter_eq_sum_shift]
-  refine norm_sum_le_of_f
+  refine norm_sum_le_of_forall_le_of_nonneg (norm_nonneg f) fun i _ => ?_
+  exact (norm_zsmul_le _ _).trans (f.norm_coe_le_norm _)
 
 中文:
 引理 是UltrametricDist.norm_fwdDiff_iter_apply_le
@@ -290,7 +315,8 @@ lemma IsUltrametricDist.norm_fwdDiff_iter_apply_le
   -- define `Δ_[h]` as an operator on continuous maps (not just on bare functions). So instead we
   -- use the formula for `Δ_[h]^[n] f` as a sum.
   rw [fwdDiff_iter_eq_sum_shift]
-  refine norm_sum_le_of_f
+  refine norm_sum_le_of_forall_le_of_nonneg (norm_nonneg f) fun i _ => ?_
+  exact (norm_zsmul_le _ _).trans (f.norm_coe_le_norm _)
 -/
 lemma IsUltrametricDist.norm_fwdDiff_iter_apply_le [TopologicalSpace M] [CompactSpace M]
     [AddCommMonoid M] [SeminormedAddCommGroup G] [IsUltrametricDist G]
@@ -311,7 +337,13 @@ lemma bojanic_mahler_step1
   proof: by
   have aux : Δ_[1]^[n + R] f 0 = R.choose (R - 1 + 1) • Δ_[1]^[n + R] f 0 := by
     rw [Nat.sub_add_cancel hR]; rw [Nat.choose_self]; rw [one_smul]
-  rw [neg_add_eq_sub]; rw [eq_sub_iff_add_eq]; rw [add_comm]; rw [aux]; rw [(by lia : n + R = (n + ((R - 1) + 1)))]; rw [← sum_range_succ]; rw [Nat.s
+  rw [neg_add_eq_sub]; rw [eq_sub_iff_add_eq]; rw [add_comm]; rw [aux]; rw [(by lia : n + R = (n + ((R - 1) + 1)))]; rw [← sum_range_succ]; rw [Nat.sub_add_cancel hR]; rw [← sub_eq_iff_eq_add.mpr (sum_range_succ' (fun x => R.choose x • Δ_[1]^[n + x] f 0) R), add_zero,
+    Nat.choose_zero_right, one_smul]
+  have : ∑ k in Finset.range (R + 1), R.choose k • Δ_[1]^[n + k] f 0 = Δ_[1]^[n] f R := by
+    simpa only [← Function.iterate_add_apply, add_comm, nsmul_one, add_zero] using
+      (shift_eq_sum_fwdDiff_iter 1 (Δ_[1]^[n] f) R 0).symm
+  simp only [this, fwdDiff_iter_eq_sum_shift (1 : M) f n, mul_comm, nsmul_one, mul_smul, add_comm,
+    add_zero, smul_sub, sum_sub_distrib]
 
 中文:
 引理 bojanic_mahler_step1
@@ -319,7 +351,13 @@ lemma bojanic_mahler_step1
   证明: by
   have aux : Δ_[1]^[n + R] f 0 = R.choose (R - 1 + 1) • Δ_[1]^[n + R] f 0 := by
     rw [Nat.sub_add_cancel hR]; rw [Nat.choose_self]; rw [one_smul]
-  rw [neg_add_eq_sub]; rw [eq_sub_iff_add_eq]; rw [add_comm]; rw [aux]; rw [(by lia : n + R = (n + ((R - 1) + 1)))]; rw [← sum_range_succ]; rw [Nat.s
+  rw [neg_add_eq_sub]; rw [eq_sub_iff_add_eq]; rw [add_comm]; rw [aux]; rw [(by lia : n + R = (n + ((R - 1) + 1)))]; rw [← sum_range_succ]; rw [Nat.sub_add_cancel hR]; rw [← sub_eq_iff_eq_add.mpr (sum_range_succ' (fun x => R.choose x • Δ_[1]^[n + x] f 0) R), add_zero,
+    Nat.choose_zero_right, one_smul]
+  have : ∑ k in Finset.range (R + 1), R.choose k • Δ_[1]^[n + k] f 0 = Δ_[1]^[n] f R := by
+    simpa only [← Function.iterate_add_apply, add_comm, nsmul_one, add_zero] using
+      (shift_eq_sum_fwdDiff_iter 1 (Δ_[1]^[n] f) R 0).symm
+  simp only [this, fwdDiff_iter_eq_sum_shift (1 : M) f n, mul_comm, nsmul_one, mul_smul, add_comm,
+    add_zero, smul_sub, sum_sub_distrib]
 -/
 private lemma bojanic_mahler_step1 [AddCommMonoidWithOne M] [AddCommGroup G] (f : M -> G)
     (n : Nat) {R : Nat} (hR : 1 <= R) :
@@ -355,7 +393,30 @@ lemma bojanic_mahler_step2
   rw [bojanic_mahler_step1 _ _ (one_le_pow₀ hp.out.one_le)]
   -- Now use ultrametric property and bound each term separately.
   refine (norm_add_le_max _ _).trans (max_le_max ?_ ?_)
-  · -- Bounding the sum over `range (p ^ t - 1)`: every te
+  · -- Bounding the sum over `range (p ^ t - 1)`: every term involves a value `Δ_[1]^[·] f 0` and
+    -- a binomial coefficient which is divisible by `p`
+    rw [norm_neg]; rw [← coe_nnnorm]; rw [coe_le_coe]
+    refine nnnorm_sum_le_of_forall_le (fun i hi => Finset.le_sup_of_le hi ?_)
+    rw [← Nat.cast_smul_eq_nsmul Int_[p], div_eq_inv_mul]
+refine (nnnorm_smul_le _ _).trans mul_le_mul_of_nonneg_right ?_ (by simp only [zero_le])
+    -- remains to show norm of binomial coeff is `≤ p⁻¹`
+    rw [mem_range] at hi
+    have : 0 < (p ^ t).choose (i + 1) := Nat.choose_pos (by omega)
+    rw [← zpow_neg_one]; rw [← coe_le_coe]; rw [coe_nnnorm]; rw [PadicInt.norm_eq_zpow_neg_valuation
+      (mod_cast this.ne')]; rw [coe_zpow]; rw [NNReal.coe_natCast]; rw [zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt)]; rw [neg_le_neg_iff]; rw [← PadicInt.valuation_coe]; rw [PadicInt.coe_natCast]; rw [Padic.valuation_natCast]; rw [Nat.one_le_cast]
+exact one_le_padicValNat_of_dvd this.ne' hp.out.dvd_choose_pow (by lia) (by omega)
+  · -- Bounding the sum over `range (n + 1)`: every term is small by the choice of `t`
+    refine norm_sum_le_of_forall_le_of_nonempty nonempty_range_add_one (fun i _ => ?_)
+    calc ‖((-1 : Int) ^ (n - i) * n.choose i) • (f (i + ↑(p ^ t)) - f i)‖
+    _ <= ‖((-1 : Int) ^ (n - i) * n.choose i : Int_[p])‖ * ‖(f (i + ↑(p ^ t)) - f i)‖ := by
+      rw [← Int.cast_smul_eq_zsmul Int_[p]]
+      exact (norm_smul_le ..).trans (by norm_cast)
+    _ <= ‖f (i + ↑(p ^ t)) - f i‖ := by
+      apply mul_le_of_le_one_left (norm_nonneg _)
+      simpa only [← coe_intCast] using norm_le_one _
+    _ <= ‖f‖ / p ^ s := by
+      apply hst
+      rw [Nat.cast_pow]; rw [add_sub_cancel_left]; rw [norm_pow]; rw [norm_p]; rw [inv_pow]; rw [zpow_neg]; rw [zpow_natCast]
 
 中文:
 引理 bojanic_mahler_step2
@@ -365,7 +426,30 @@ lemma bojanic_mahler_step2
   rw [bojanic_mahler_step1 _ _ (one_le_pow₀ hp.out.one_le)]
   -- Now use ultrametric property and bound each term separately.
   refine (norm_add_le_max _ _).trans (max_le_max ?_ ?_)
-  · -- Bounding the sum over `range (p ^ t - 1)`: every te
+  · -- Bounding the sum over `range (p ^ t - 1)`: every term involves a value `Δ_[1]^[·] f 0` and
+    -- a binomial coefficient which is divisible by `p`
+    rw [norm_neg]; rw [← coe_nnnorm]; rw [coe_le_coe]
+    refine nnnorm_sum_le_of_forall_le (fun i hi => Finset.le_sup_of_le hi ?_)
+    rw [← Nat.cast_smul_eq_nsmul Int_[p], div_eq_inv_mul]
+refine (nnnorm_smul_le _ _).trans mul_le_mul_of_nonneg_right ?_ (by simp only [zero_le])
+    -- remains to show norm of binomial coeff is `≤ p⁻¹`
+    rw [mem_range] at hi
+    have : 0 < (p ^ t).choose (i + 1) := Nat.choose_pos (by omega)
+    rw [← zpow_neg_one]; rw [← coe_le_coe]; rw [coe_nnnorm]; rw [PadicInt.norm_eq_zpow_neg_valuation
+      (mod_cast this.ne')]; rw [coe_zpow]; rw [NNReal.coe_natCast]; rw [zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt)]; rw [neg_le_neg_iff]; rw [← PadicInt.valuation_coe]; rw [PadicInt.coe_natCast]; rw [Padic.valuation_natCast]; rw [Nat.one_le_cast]
+exact one_le_padicValNat_of_dvd this.ne' hp.out.dvd_choose_pow (by lia) (by omega)
+  · -- Bounding the sum over `range (n + 1)`: every term is small by the choice of `t`
+    refine norm_sum_le_of_forall_le_of_nonempty nonempty_range_add_one (fun i _ => ?_)
+    calc ‖((-1 : Int) ^ (n - i) * n.choose i) • (f (i + ↑(p ^ t)) - f i)‖
+    _ <= ‖((-1 : Int) ^ (n - i) * n.choose i : Int_[p])‖ * ‖(f (i + ↑(p ^ t)) - f i)‖ := by
+      rw [← Int.cast_smul_eq_zsmul Int_[p]]
+      exact (norm_smul_le ..).trans (by norm_cast)
+    _ <= ‖f (i + ↑(p ^ t)) - f i‖ := by
+      apply mul_le_of_le_one_left (norm_nonneg _)
+      simpa only [← coe_intCast] using norm_le_one _
+    _ <= ‖f‖ / p ^ s := by
+      apply hst
+      rw [Nat.cast_pow]; rw [add_sub_cancel_left]; rw [norm_pow]; rw [norm_p]; rw [inv_pow]; rw [zpow_neg]; rw [zpow_natCast]
 -/
 private lemma bojanic_mahler_step2 {f : C(Int_[p], E)} {s t : Nat}
     (hst : forall x y : Int_[p], ‖x - y‖ <= p ^ (-t : Int) -> ‖f x - f y‖ <= ‖f‖ / p ^ s) (n : Nat) :
@@ -412,7 +496,16 @@ lemma fwdDiff_iter_le_of_forall_le
   intro k hk
   induction k generalizing n with
   | zero => -- base case just says that `‖Δ^[·] (⇑f) 0‖` is bounded by `‖f‖`
-   
+    simpa only [zero_mul, pow_zero, add_zero, div_one] using norm_fwdDiff_iter_apply_le 1 f 0 n
+  | succ k IH => -- induction is the "step 2" lemma above
+    rw [add_mul]; rw [one_mul]; rw [← add_assoc]
+    refine (bojanic_mahler_step2 hst (n + k * p ^ t)).trans (max_le ?_ ?_)
+    · rw [← coe_nnnorm, ← NNReal.coe_natCast, ← NNReal.coe_pow, ← NNReal.coe_div, NNReal.coe_le_coe]
+      refine Finset.sup_le fun j _ => ?_
+      rw [pow_succ]; rw [← div_div]; rw [div_le_div_iff_of_pos_right (mod_cast hp.out.pos)]; rw [add_right_comm]
+      exact_mod_cast IH (n + (j + 1)) (by lia)
+    · exact div_le_div_of_nonneg_left (norm_nonneg _)
+        (mod_cast pow_pos hp.out.pos _) (mod_cast pow_le_pow_right₀ hp.out.one_le hk)
 
 中文:
 引理 fwdDiff_iter_le_of_对任意_le
@@ -423,7 +516,16 @@ lemma fwdDiff_iter_le_of_forall_le
   intro k hk
   induction k generalizing n with
   | zero => -- base case just says that `‖Δ^[·] (⇑f) 0‖` is bounded by `‖f‖`
-   
+    simpa only [zero_mul, pow_zero, add_zero, div_one] using norm_fwdDiff_iter_apply_le 1 f 0 n
+  | succ k IH => -- induction is the "step 2" lemma above
+    rw [add_mul]; rw [one_mul]; rw [← add_assoc]
+    refine (bojanic_mahler_step2 hst (n + k * p ^ t)).trans (max_le ?_ ?_)
+    · rw [← coe_nnnorm, ← NNReal.coe_natCast, ← NNReal.coe_pow, ← NNReal.coe_div, NNReal.coe_le_coe]
+      refine Finset.sup_le fun j _ => ?_
+      rw [pow_succ]; rw [← div_div]; rw [div_le_div_iff_of_pos_right (mod_cast hp.out.pos)]; rw [add_right_comm]
+      exact_mod_cast IH (n + (j + 1)) (by lia)
+    · exact div_le_div_of_nonneg_left (norm_nonneg _)
+        (mod_cast pow_pos hp.out.pos _) (mod_cast pow_le_pow_right₀ hp.out.one_le hk)
 -/
 lemma fwdDiff_iter_le_of_forall_le {f : C(Int_[p], E)} {s t : Nat}
     (hst : forall x y : Int_[p], ‖x - y‖ <= p ^ (-t : Int) -> ‖f x - f y‖ <= ‖f‖ / p ^ s) (n : Nat) :
@@ -457,7 +559,18 @@ lemma fwdDiff_tendsto_zero
   have : Tendsto (fun s => ‖f‖ / p ^ s) _ _ := tendsto_const_nhds.div_atTop
     (tendsto_pow_atTop_atTop_of_one_lt (mod_cast hp.out.one_lt))
   obtain ⟨s, hs⟩ := (this.eventually_lt_const hε).exists
-  refine .
+  refine .mp ?_ (.of_forall fun x hx => lt_of_le_of_lt hx hs)
+  -- use uniform continuity to find `t`
+  obtain ⟨t, ht⟩ : exists t : Nat, forall x y, ‖x - y‖ <= p ^ (-t : Int) -> ‖f x - f y‖ <= ‖f‖ / p ^ s := by
+    rcases eq_or_ne f 0 with rfl | hf
+    · -- silly case : f = 0
+      simp
+    have : 0 < ‖f‖ / p ^ s := div_pos (norm_pos_iff.mpr hf) (mod_cast pow_pos hp.out.pos _)
+    obtain ⟨δ, hδpos, hδf⟩ := f.uniform_continuity _ this
+    obtain ⟨t, ht⟩ := PadicInt.exists_pow_neg_lt p hδpos
+    exact ⟨t, fun x y hxy => by simpa only [dist_eq_norm_sub] using (hδf (hxy.trans_lt ht)).le⟩
+  filter_upwards [eventually_ge_atTop (s * p ^ t)] with m hm
+  simpa only [Nat.sub_add_cancel hm] using fwdDiff_iter_le_of_forall_le ht (m - s * p ^ t)
 
 中文:
 引理 fwdDiff_tendsto_zero
@@ -469,7 +582,18 @@ lemma fwdDiff_tendsto_zero
   have : Tendsto (fun s => ‖f‖ / p ^ s) _ _ := tendsto_const_nhds.div_atTop
     (tendsto_pow_atTop_atTop_of_one_lt (mod_cast hp.out.one_lt))
   obtain ⟨s, hs⟩ := (this.eventually_lt_const hε).exists
-  refine .
+  refine .mp ?_ (.of_forall fun x hx => lt_of_le_of_lt hx hs)
+  -- use uniform continuity to find `t`
+  obtain ⟨t, ht⟩ : exists t : Nat, forall x y, ‖x - y‖ <= p ^ (-t : Int) -> ‖f x - f y‖ <= ‖f‖ / p ^ s := by
+    rcases eq_or_ne f 0 with rfl | hf
+    · -- silly case : f = 0
+      simp
+    have : 0 < ‖f‖ / p ^ s := div_pos (norm_pos_iff.mpr hf) (mod_cast pow_pos hp.out.pos _)
+    obtain ⟨δ, hδpos, hδf⟩ := f.uniform_continuity _ this
+    obtain ⟨t, ht⟩ := PadicInt.exists_pow_neg_lt p hδpos
+    exact ⟨t, fun x y hxy => by simpa only [dist_eq_norm_sub] using (hδf (hxy.trans_lt ht)).le⟩
+  filter_upwards [eventually_ge_atTop (s * p ^ t)] with m hm
+  simpa only [Nat.sub_add_cancel hm] using fwdDiff_iter_le_of_forall_le ht (m - s * p ^ t)
 -/
 lemma fwdDiff_tendsto_zero (f : C(Int_[p], E)) : Tendsto (Δ_[1]^[·] f 0) atTop (𝓝 0) := by
   -- first extract an `s`
@@ -552,7 +676,9 @@ lemma norm_mahlerTerm
 refine fun _ => (norm_smul_le _ _).trans mul_le_of_le_one_left (norm_nonneg _) (norm_le_one _)
   · -- Show norm 1 is attained at `x = k`
 refine le_trans ?_ (mahlerTerm a n).norm_coe_le_norm n
-    s
+    simp [mahlerTerm_apply, mahler_natCast_eq]
+
+@[simp]
 
 中文:
 引理 norm_mahlerTerm
@@ -564,7 +690,9 @@ refine le_trans ?_ (mahlerTerm a n).norm_coe_le_norm n
 refine fun _ => (norm_smul_le _ _).trans mul_le_of_le_one_left (norm_nonneg _) (norm_le_one _)
   · -- Show norm 1 is attained at `x = k`
 refine le_trans ?_ (mahlerTerm a n).norm_coe_le_norm n
-    s
+    simp [mahlerTerm_apply, mahler_natCast_eq]
+
+@[simp]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.norm_le_of_nonempty, attained, le_antisymm, le_trans, mahlerTerm, mahlerTerm_apply, mahler_natCast_eq, mul_le_of_le_one_left, norm_coe_le_norm, norm_le_of_nonempty, norm_le_one, norm_nonneg, norm_smul_le, values
 -/
@@ -698,7 +826,8 @@ lemma mahlerSeries_apply_nat
   have h_van (i) : m.choose (i + (n + 1)) = 0 := Nat.choose_eq_zero_of_lt (by lia)
   have aux : Summable fun i => m.choose (i + (n + 1)) • a (i + (n + 1)) := by
     simpa only [h_van, zero_smul] using summable_zero
-  simp only [mahlerSeries_apply ha, mahler_natCast_eq, Nat.cast_smul_eq_nsmul, add
+  simp only [mahlerSeries_apply ha, mahler_natCast_eq, Nat.cast_smul_eq_nsmul, add_zero,
+    ← aux.sum_add_tsum_nat_add' (f := fun i => m.choose i • a i), h_van, zero_smul, tsum_zero]
 
 中文:
 引理 mahlerSeries_apply_nat
@@ -707,7 +836,8 @@ lemma mahlerSeries_apply_nat
   have h_van (i) : m.choose (i + (n + 1)) = 0 := Nat.choose_eq_zero_of_lt (by lia)
   have aux : Summable fun i => m.choose (i + (n + 1)) • a (i + (n + 1)) := by
     simpa only [h_van, zero_smul] using summable_zero
-  simp only [mahlerSeries_apply ha, mahler_natCast_eq, Nat.cast_smul_eq_nsmul, add
+  simp only [mahlerSeries_apply ha, mahler_natCast_eq, Nat.cast_smul_eq_nsmul, add_zero,
+    ← aux.sum_add_tsum_nat_add' (f := fun i => m.choose i • a i), h_van, zero_smul, tsum_zero]
 
 Depends on / 依赖: Nat.cast_smul_eq_nsmul, Nat.choose_eq_zero_of_lt, Summable, add_zero, aux.sum_add_tsum_nat_add, cast_smul_eq_nsmul, choose_eq_zero_of_lt, h_van, m.choose, mahlerSeries_apply, mahler_natCast_eq, sum_add_tsum_nat_add, summable_zero, tsum_zero, zero_smul
 -/
@@ -730,7 +860,19 @@ lemma fwdDiff_mahlerSeries
   _ = Δ_[1]^[n] (fun k => ∑ j in range (n + 1), k.choose j • (a j)) 0 := by
     simp only [fwdDiff_iter_eq_sum_shift, zero_add]
     refine Finset.sum_congr rfl fun j hj => ?_
-    rw [nsmul_one]; rw [nsmul_one]; rw [mahlerSeries_ap
+    rw [nsmul_one]; rw [nsmul_one]; rw [mahlerSeries_apply_nat ha (Nat.lt_succ_iff.mp <| Finset.mem_range.mp hj)]; rw [Nat.cast_id]
+  -- bring `Δ_[1]` inside sum
+  _ = ∑ j in range (n + 1), Δ_[1]^[n] (fun k => k.choose j • (a j)) 0 := by
+    simp only [fwdDiff_iter_eq_sum_shift, smul_sum]
+    rw [sum_comm]
+  -- bring `Δ_[1]` inside scalar-mult
+  _ = ∑ j in range (n + 1), (Δ_[1]^[n] (fun k => k.choose j : Nat -> Int) 0) • (a j) := by
+    simp only [fwdDiff_iter_eq_sum_shift, zero_add, sum_smul, smul_assoc,
+      natCast_zsmul]
+  -- finish using `fwdDiff_iter_choose_zero`
+  _ = a n := by
+    simp only [fwdDiff_iter_choose_zero, ite_smul, one_smul, zero_smul, sum_ite_eq,
+      Finset.mem_range, lt_add_iff_pos_right, zero_lt_one, ↓reduceIte]
 
 中文:
 引理 fwdDiff_mahlerSeries
@@ -740,7 +882,19 @@ lemma fwdDiff_mahlerSeries
   _ = Δ_[1]^[n] (fun k => ∑ j in range (n + 1), k.choose j • (a j)) 0 := by
     simp only [fwdDiff_iter_eq_sum_shift, zero_add]
     refine Finset.sum_congr rfl fun j hj => ?_
-    rw [nsmul_one]; rw [nsmul_one]; rw [mahlerSeries_ap
+    rw [nsmul_one]; rw [nsmul_one]; rw [mahlerSeries_apply_nat ha (Nat.lt_succ_iff.mp <| Finset.mem_range.mp hj)]; rw [Nat.cast_id]
+  -- bring `Δ_[1]` inside sum
+  _ = ∑ j in range (n + 1), Δ_[1]^[n] (fun k => k.choose j • (a j)) 0 := by
+    simp only [fwdDiff_iter_eq_sum_shift, smul_sum]
+    rw [sum_comm]
+  -- bring `Δ_[1]` inside scalar-mult
+  _ = ∑ j in range (n + 1), (Δ_[1]^[n] (fun k => k.choose j : Nat -> Int) 0) • (a j) := by
+    simp only [fwdDiff_iter_eq_sum_shift, zero_add, sum_smul, smul_assoc,
+      natCast_zsmul]
+  -- finish using `fwdDiff_iter_choose_zero`
+  _ = a n := by
+    simp only [fwdDiff_iter_choose_zero, ite_smul, one_smul, zero_smul, sum_ite_eq,
+      Finset.mem_range, lt_add_iff_pos_right, zero_lt_one, ↓reduceIte]
 
 Depends on / 依赖: mahlerSeries
 -/
@@ -777,7 +931,12 @@ lemma hasSum_mahler
   have : HasSum (fun n => mahlerTerm (Δ_[1]^[n] f 0) n)
       (mahlerSeries (Δ_[1]^[·] f 0) : C(Int_[p], E)) :=
     hasSum_mahlerSeries (fwdDiff_tendsto_zero f)
-  -- Now show that the sum of the Mahler terms must equal `f` on a dens
+  -- Now show that the sum of the Mahler terms must equal `f` on a dense set, so it is actually `f`.
+  convert! this using 1
+  refine ContinuousMap.coe_injective (denseRange_natCast.equalizer
+    (map_continuous f) (map_continuous _) (funext fun n => ?_))
+  simpa [mahlerSeries_apply_nat (fwdDiff_tendsto_zero f) le_rfl]
+    using shift_eq_sum_fwdDiff_iter 1 f n 0
 
 中文:
 引理 hasSum_mahler
@@ -788,7 +947,12 @@ lemma hasSum_mahler
   have : HasSum (fun n => mahlerTerm (Δ_[1]^[n] f 0) n)
       (mahlerSeries (Δ_[1]^[·] f 0) : C(Int_[p], E)) :=
     hasSum_mahlerSeries (fwdDiff_tendsto_zero f)
-  -- Now show that the sum of the Mahler terms must equal `f` on a dens
+  -- Now show that the sum of the Mahler terms must equal `f` on a dense set, so it is actually `f`.
+  convert! this using 1
+  refine ContinuousMap.coe_injective (denseRange_natCast.equalizer
+    (map_continuous f) (map_continuous _) (funext fun n => ?_))
+  simpa [mahlerSeries_apply_nat (fwdDiff_tendsto_zero f) le_rfl]
+    using shift_eq_sum_fwdDiff_iter 1 f n 0
 -/
 lemma hasSum_mahler (f : C(Int_[p], E)) : HasSum (fun n => mahlerTerm (Δ_[1]^[n] f 0) n) f := by
   -- First show `∑' n, mahlerTerm f n` converges to *something*.
@@ -816,7 +980,23 @@ definition mahlerEquiv
   map_add' f g := by
     ext x
     simp only [ContinuousMap.coe_add, fwdDiff_iter_add, Pi.add_apply,
-      ZeroAtInftyContinuousMap.coe_mk, ZeroAtInftyContinuo
+      ZeroAtInftyContinuousMap.coe_mk, ZeroAtInftyContinuousMap.coe_add]
+  map_smul' r f := by
+    ext n
+    simp only [ContinuousMap.coe_smul, RingHom.id_apply, ZeroAtInftyContinuousMap.coe_mk,
+      ZeroAtInftyContinuousMap.coe_smul, Pi.smul_apply, fwdDiff_iter_const_smul]
+  left_inv f := (hasSum_mahler f).tsum_eq
+right_inv a := ZeroAtInftyContinuousMap.ext
+    fwdDiff_mahlerSeries (cocompact_eq_atTop (α := Nat) ▸ zero_at_infty a)
+  norm_map' f := by
+    simp only [LinearEquiv.coe_mk, ← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
+    apply le_antisymm
+    · exact BoundedContinuousFunction.norm_le_of_nonempty.mpr
+        (fun n => norm_fwdDiff_iter_apply_le 1 f 0 n)
+    · rw [← (hasSum_mahler f).tsum_eq]
+      refine (norm_tsum_le _).trans (ciSup_le fun n => ?_)
+      refine le_trans (le_of_eq ?_) (BoundedContinuousFunction.norm_coe_le_norm _ n)
+      simp [(hasSum_mahler f).tsum_eq]
 
 中文:
 定义 mahlerEquiv
@@ -827,7 +1007,23 @@ definition mahlerEquiv
   map_add' f g := by
     ext x
     simp only [ContinuousMap.coe_add, fwdDiff_iter_add, Pi.add_apply,
-      ZeroAtInftyContinuousMap.coe_mk, ZeroAtInftyContinuo
+      ZeroAtInftyContinuousMap.coe_mk, ZeroAtInftyContinuousMap.coe_add]
+  map_smul' r f := by
+    ext n
+    simp only [ContinuousMap.coe_smul, RingHom.id_apply, ZeroAtInftyContinuousMap.coe_mk,
+      ZeroAtInftyContinuousMap.coe_smul, Pi.smul_apply, fwdDiff_iter_const_smul]
+  left_inv f := (hasSum_mahler f).tsum_eq
+right_inv a := ZeroAtInftyContinuousMap.ext
+    fwdDiff_mahlerSeries (cocompact_eq_atTop (α := Nat) ▸ zero_at_infty a)
+  norm_map' f := by
+    simp only [LinearEquiv.coe_mk, ← ZeroAtInftyContinuousMap.norm_toBCF_eq_norm]
+    apply le_antisymm
+    · exact BoundedContinuousFunction.norm_le_of_nonempty.mpr
+        (fun n => norm_fwdDiff_iter_apply_le 1 f 0 n)
+    · rw [← (hasSum_mahler f).tsum_eq]
+      refine (norm_tsum_le _).trans (ciSup_le fun n => ?_)
+      refine le_trans (le_of_eq ?_) (BoundedContinuousFunction.norm_coe_le_norm _ n)
+      simp [(hasSum_mahler f).tsum_eq]
 
 Depends on / 依赖: continuous_of_discreteTopology
 -/

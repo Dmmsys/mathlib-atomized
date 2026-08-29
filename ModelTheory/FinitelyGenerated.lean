@@ -265,7 +265,10 @@ theorem FG.of_map_embedding
   have hf : Function.Injective f.toHom := f.injective
   refine map_injective_of_injective hf ?_
   rw [← h]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
-  intro 
+  intro x hx
+  have h' := subset_closure (L := L) hx
+  rw [h] at h'
+  exact Hom.map_le_range h'
 
 中文:
 定理 FG.of_map_embedding
@@ -277,7 +280,10 @@ theorem FG.of_map_embedding
   have hf : Function.Injective f.toHom := f.injective
   refine map_injective_of_injective hf ?_
   rw [← h]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
-  intro 
+  intro x hx
+  have h' := subset_closure (L := L) hx
+  rw [h] at h'
+  exact Hom.map_le_range h'
 
 Depends on / 依赖: Embedding, Embedding.coe_toHom, Function, Function.Injective, Hom.map_le_range, Injective, coe_toHom, f.injective, f.injective.injOn, f.toHom, fg_def, finite_toSet, image_preimage_eq_of_subset, injective, map_closure, map_injective_of_injective, map_le_range, preimage, subset_closure, t.finite_toSet.preimage
 -/
@@ -444,7 +450,16 @@ theorem cg_iff_empty_or_exists_nat_generating_family
     obtain ⟨f, h'⟩ :=
       (Scount.union (Set.countable_singleton h.some)).exists_eq_range
         (singleton_nonempty h.some).inr
-    refine Or.intro_right
+    refine Or.intro_right _ ⟨f, ?_⟩
+    rw [← h']; rw [closure_union]; rw [hS]; rw [sup_eq_left]; rw [closure_le]
+    exact singleton_subset_iff.2 h.some_mem
+  · intro h
+    rcases h with h | h
+    · refine ⟨∅, countable_empty, closure_eq_of_le (empty_subset _) ?_⟩
+      rw [← SetLike.coe_subset_coe]; rw [h]
+      exact empty_subset _
+    · obtain ⟨f, rfl⟩ := h
+      exact ⟨range f, countable_range _, rfl⟩
 
 中文:
 定理 cg_iff_empty_or_存在_nat_generating_family
@@ -458,7 +473,16 @@ theorem cg_iff_empty_or_exists_nat_generating_family
     obtain ⟨f, h'⟩ :=
       (Scount.union (Set.countable_singleton h.some)).exists_eq_range
         (singleton_nonempty h.some).inr
-    refine Or.intro_right
+    refine Or.intro_right _ ⟨f, ?_⟩
+    rw [← h']; rw [closure_union]; rw [hS]; rw [sup_eq_left]; rw [closure_le]
+    exact singleton_subset_iff.2 h.some_mem
+  · intro h
+    rcases h with h | h
+    · refine ⟨∅, countable_empty, closure_eq_of_le (empty_subset _) ?_⟩
+      rw [← SetLike.coe_subset_coe]; rw [h]
+      exact empty_subset _
+    · obtain ⟨f, rfl⟩ := h
+      exact ⟨range f, countable_range _, rfl⟩
 
 Depends on / 依赖: Or.intro_left, Or.intro_right, Scount, Scount.union, Set.countable_singleton, SetLike, cg_def, closure_eq_of_le, closure_le, closure_union, countable_empty, countable_singleton, empty_subset, eq_empty_or_nonempty, exists_eq_range, h.some, h.some_mem, intro_left, intro_right, singleton_nonempty
 -/
@@ -601,7 +625,9 @@ theorem CG.of_map_embedding
   refine map_injective_of_injective hf ?_
   rw [← h2]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
   intro x hx
-  have 
+  have h' := subset_closure (L := L) hx
+  rw [h2] at h'
+  exact Hom.map_le_range h'
 
 中文:
 定理 CG.of_map_embedding
@@ -614,7 +640,9 @@ theorem CG.of_map_embedding
   refine map_injective_of_injective hf ?_
   rw [← h2]; rw [map_closure]; rw [Embedding.coe_toHom]; rw [image_preimage_eq_of_subset]
   intro x hx
-  have 
+  have h' := subset_closure (L := L) hx
+  rw [h2] at h'
+  exact Hom.map_le_range h'
 
 Depends on / 依赖: Embedding, Embedding.coe_toHom, Function, Function.Injective, Hom.map_le_range, Injective, cg_def, coe_toHom, f.injective, f.toHom, h1.preimage, image_preimage_eq_of_subset, injective, map_closure, map_injective_of_injective, map_le_range, preimage, subset_closure
 -/
@@ -827,7 +855,8 @@ theorem FG.countable_hom
     apply Hom.eq_of_eqOn_dense closure_S
     intro x x_in_S
     exact congr_fun h ⟨x, x_in_S⟩
-  have : Finite ↑S := (S.finite_coe_iff).
+  have : Finite ↑S := (S.finite_coe_iff).2 finite_S
+  exact Function.Embedding.countable ⟨g, g_inj⟩
 
 中文:
 定理 FG.countable_hom
@@ -841,7 +870,8 @@ theorem FG.countable_hom
     apply Hom.eq_of_eqOn_dense closure_S
     intro x x_in_S
     exact congr_fun h ⟨x, x_in_S⟩
-  have : Finite ↑S := (S.finite_coe_iff).
+  have : Finite ↑S := (S.finite_coe_iff).2 finite_S
+  exact Function.Embedding.countable ⟨g, g_inj⟩
 
 Depends on / 依赖: Embedding, Finite, Function, Function.Embedding.countable, Function.Injective, Hom.eq_of_eqOn_dense, Injective, S.finite_coe_iff, closure_S, congr_fun, countable, eq_of_eqOn_dense, fg_iff, finite_S, finite_coe_iff, g_inj, x_in_S
 -/
@@ -1265,7 +1295,8 @@ theorem Substructure.countable_fg_substructures_of_countable
     intro S S' h
     apply Subtype.ext
     rw [(Exists.choose_spec S.prop).symm]; rw [(Exists.choose_spec S'.prop).symm]
-    exact congr_arg (closure L ∘ SetLike.c
+    exact congr_arg (closure L ∘ SetLike.coe) h
+  exact Function.Embedding.countable ⟨g, g_inj⟩
 
 中文:
 定理 子结构.countable_fg_substructures_of_countable
@@ -1277,7 +1308,8 @@ theorem Substructure.countable_fg_substructures_of_countable
     intro S S' h
     apply Subtype.ext
     rw [(Exists.choose_spec S.prop).symm]; rw [(Exists.choose_spec S'.prop).symm]
-    exact congr_arg (closure L ∘ SetLike.c
+    exact congr_arg (closure L ∘ SetLike.coe) h
+  exact Function.Embedding.countable ⟨g, g_inj⟩
 
 Depends on / 依赖: Embedding, Exists, Exists.choose, Exists.choose_spec, Finset, Function, Function.Embedding.countable, Function.Injective, Injective, L.Substructure, S.FG, S.prop, SetLike, SetLike.coe, Substructure, Subtype, Subtype.ext, choose_spec, closure, congr_arg
 -/

@@ -89,7 +89,34 @@ lemma isRatCondKernelCDFAux_density_Iic
   mono' a q r hqr :=
     ae_of_all _ fun c => density_mono_set le_rfl a c (Iic_subset_Iic.mpr (by exact_mod_cast hqr))
   nonneg' _ _ := ae_of_all _ fun _ => density_nonneg le_rfl _ _ _
-  le_one' _ _ := ae_of_all _ fun _ =>
+  le_one' _ _ := ae_of_all _ fun _ => density_le_one le_rfl _ _ _
+  tendsto_integral_of_antitone a s hs_anti hs_tendsto := by
+    let s' : Nat -> Set Real := fun n => Iic (s n)
+    refine tendsto_integral_density_of_antitone le_rfl a s' ?_ ?_ (fun _ => measurableSet_Iic)
+    · refine fun i j hij => Iic_subset_Iic.mpr ?_
+      exact mod_cast hs_anti hij
+    · ext x
+      simp only [mem_iInter, mem_Iic, mem_empty_iff_false, iff_false, not_forall, not_le, s']
+      rw [tendsto_atTop_atBot] at hs_tendsto
+      have ⟨q, hq⟩ := exists_rat_lt x
+      obtain ⟨i, hi⟩ := hs_tendsto q
+      refine ⟨i, lt_of_le_of_lt ?_ hq⟩
+      exact mod_cast hi i le_rfl
+  tendsto_integral_of_monotone a s hs_mono hs_tendsto := by
+    rw [fst_real_apply _ _ MeasurableSet.univ]
+    let s' : Nat -> Set Real := fun n => Iic (s n)
+    refine tendsto_integral_density_of_monotone (le_rfl : fst κ <= fst κ)
+      a s' ?_ ?_ (fun _ => measurableSet_Iic)
+    · exact fun i j hij => Iic_subset_Iic.mpr (by exact mod_cast hs_mono hij)
+    · ext x
+      simp only [mem_iUnion, mem_univ, iff_true]
+      rw [tendsto_atTop_atTop] at hs_tendsto
+      have ⟨q, hq⟩ := exists_rat_gt x
+      obtain ⟨i, hi⟩ := hs_tendsto q
+      refine ⟨i, hq.le.trans ?_⟩
+      exact mod_cast hi i le_rfl
+  integrable a _ := integrable_density le_rfl a measurableSet_Iic
+  setIntegral a _ hA _ := setIntegral_density le_rfl a measurableSet_Iic hA
 
 中文:
 引理 isRatCondKernelCDFAux_density_Iic
@@ -98,7 +125,34 @@ lemma isRatCondKernelCDFAux_density_Iic
   mono' a q r hqr :=
     ae_of_all _ fun c => density_mono_set le_rfl a c (Iic_subset_Iic.mpr (by exact_mod_cast hqr))
   nonneg' _ _ := ae_of_all _ fun _ => density_nonneg le_rfl _ _ _
-  le_one' _ _ := ae_of_all _ fun _ =>
+  le_one' _ _ := ae_of_all _ fun _ => density_le_one le_rfl _ _ _
+  tendsto_integral_of_antitone a s hs_anti hs_tendsto := by
+    let s' : Nat -> Set Real := fun n => Iic (s n)
+    refine tendsto_integral_density_of_antitone le_rfl a s' ?_ ?_ (fun _ => measurableSet_Iic)
+    · refine fun i j hij => Iic_subset_Iic.mpr ?_
+      exact mod_cast hs_anti hij
+    · ext x
+      simp only [mem_iInter, mem_Iic, mem_empty_iff_false, iff_false, not_forall, not_le, s']
+      rw [tendsto_atTop_atBot] at hs_tendsto
+      have ⟨q, hq⟩ := exists_rat_lt x
+      obtain ⟨i, hi⟩ := hs_tendsto q
+      refine ⟨i, lt_of_le_of_lt ?_ hq⟩
+      exact mod_cast hi i le_rfl
+  tendsto_integral_of_monotone a s hs_mono hs_tendsto := by
+    rw [fst_real_apply _ _ MeasurableSet.univ]
+    let s' : Nat -> Set Real := fun n => Iic (s n)
+    refine tendsto_integral_density_of_monotone (le_rfl : fst κ <= fst κ)
+      a s' ?_ ?_ (fun _ => measurableSet_Iic)
+    · exact fun i j hij => Iic_subset_Iic.mpr (by exact mod_cast hs_mono hij)
+    · ext x
+      simp only [mem_iUnion, mem_univ, iff_true]
+      rw [tendsto_atTop_atTop] at hs_tendsto
+      have ⟨q, hq⟩ := exists_rat_gt x
+      obtain ⟨i, hi⟩ := hs_tendsto q
+      refine ⟨i, hq.le.trans ?_⟩
+      exact mod_cast hi i le_rfl
+  integrable a _ := integrable_density le_rfl a measurableSet_Iic
+  setIntegral a _ hA _ := setIntegral_density le_rfl a measurableSet_Iic hA
 
 Depends on / 依赖: measurableSet_Iic, measurable_density, measurable_pi_iff, measurable_pi_iff.mpr
 -/
@@ -361,7 +415,7 @@ definition borelMarkovFromReal
   comapRight
     (piecewise ((Kernel.measurable_coe η he.measurableSet_range.compl) (measurableSet_singleton 0) :
         MeasurableSet {a | η a (range (embeddingReal Ω))ᶜ = 0})
-      η (deterministi
+      η (deterministic (fun _ => x₀) measurable_const)) he
 
 中文:
 定义 borelMarkovFrom实数
@@ -371,7 +425,7 @@ definition borelMarkovFromReal
   comapRight
     (piecewise ((Kernel.measurable_coe η he.measurableSet_range.compl) (measurableSet_singleton 0) :
         MeasurableSet {a | η a (range (embeddingReal Ω))ᶜ = 0})
-      η (deterministi
+      η (deterministic (fun _ => x₀) measurable_const)) he
 
 Depends on / 依赖: Kernel, Kernel.measurable_coe, MeasurableSet, comapRight, deterministic, embeddingReal, he.measurableSet_range.compl, measurableEmbedding_embeddingReal, measurableSet_range, measurableSet_singleton, measurable_coe, measurable_const, piecewise, range_nonempty
 -/
@@ -505,7 +559,7 @@ instance instIsMarkovKernelBorelMarkovFromReal
   split_ifs with h
   · rwa [← prob_compl_eq_zero_iff (measurableEmbedding_embeddingReal Ω).measurableSet_range]
   · rw [deterministic_apply]
-    simp [(range_nonempty (embed
+    simp [(range_nonempty (embeddingReal Ω)).choose_spec]
 
 中文:
 实例 instIsMarkovKernelBorelMarkovFrom实数
@@ -517,7 +571,7 @@ instance instIsMarkovKernelBorelMarkovFromReal
   split_ifs with h
   · rwa [← prob_compl_eq_zero_iff (measurableEmbedding_embeddingReal Ω).measurableSet_range]
   · rw [deterministic_apply]
-    simp [(range_nonempty (embed
+    simp [(range_nonempty (embeddingReal Ω)).choose_spec]
 
 Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.comapRight, choose_spec, classical, comapRight, deterministic_apply, embeddingReal, measurableEmbedding_embeddingReal, measurableSet_range, piecewise_apply, prob_compl_eq_zero_iff, range_nonempty, split_ifs
 -/
@@ -543,7 +597,38 @@ lemma compProd_fst_borelMarkovFromReal_eq_comapRight_compProd
   have hη' : fst κ' otimesₖ η = κ' := hη
   have h_prod_embed : MeasurableEmbedding (Prod.map (id : β -> β) e) :=
     MeasurableEmbedding.id.prodMap he
-  change fst κ otimesₖ bor
+  change fst κ otimesₖ borelMarkovFromReal Ω η = comapRight (fst κ' otimesₖ η) h_prod_embed
+  rw [comapRight_compProd_id_prod _ _ he]
+  have h_fst : fst κ' = fst κ := by
+    ext a u
+    unfold κ'
+    rw [fst_apply]; rw [map_apply _ (by fun_prop)]; rw [Measure.map_map measurable_fst h_prod_embed.measurable]; rw [fst_apply]
+    congr
+  rw [h_fst]
+  ext a t ht : 2
+  simp_rw [compProd_apply ht]
+  refine lintegral_congr_ae ?_
+  have h_ae : forallᵐ t ∂(fst κ a), (a, t) in {p : α × β | η p (range e)ᶜ = 0} := by
+    rw [← h_fst]
+    have h_compProd : κ' a (univ ×ˢ range e)ᶜ = 0 := by
+      unfold κ'
+      rw [map_apply' _ (by fun_prop)]
+      swap; · exact (MeasurableSet.univ.prod he.measurableSet_range).compl
+      suffices Prod.map id e ⁻¹' (univ ×ˢ range e)ᶜ = ∅ by rw [this]; simp
+      ext x
+      simp
+    rw [← hη']; rw [compProd_null] at h_compProd
+    swap; · exact (MeasurableSet.univ.prod he.measurableSet_range).compl
+    simp only [preimage_compl, mem_univ, mk_preimage_prod_right] at h_compProd
+    exact h_compProd
+  filter_upwards [h_ae] with a ha
+  rw [borelMarkovFromReal]; rw [comapRight_apply']; rw [comapRight_apply']
+  rotate_left
+  · exact measurable_prodMk_left ht
+  · exact measurable_prodMk_left ht
+  classical
+  rw [piecewise_apply]; rw [if_pos]
+  exact ha
 
 中文:
 引理 compProd_fst_borelMarkovFrom实数_eq_comapRight_compProd
@@ -554,7 +639,38 @@ lemma compProd_fst_borelMarkovFromReal_eq_comapRight_compProd
   have hη' : fst κ' otimesₖ η = κ' := hη
   have h_prod_embed : MeasurableEmbedding (Prod.map (id : β -> β) e) :=
     MeasurableEmbedding.id.prodMap he
-  change fst κ otimesₖ bor
+  change fst κ otimesₖ borelMarkovFromReal Ω η = comapRight (fst κ' otimesₖ η) h_prod_embed
+  rw [comapRight_compProd_id_prod _ _ he]
+  have h_fst : fst κ' = fst κ := by
+    ext a u
+    unfold κ'
+    rw [fst_apply]; rw [map_apply _ (by fun_prop)]; rw [Measure.map_map measurable_fst h_prod_embed.measurable]; rw [fst_apply]
+    congr
+  rw [h_fst]
+  ext a t ht : 2
+  simp_rw [compProd_apply ht]
+  refine lintegral_congr_ae ?_
+  have h_ae : forallᵐ t ∂(fst κ a), (a, t) in {p : α × β | η p (range e)ᶜ = 0} := by
+    rw [← h_fst]
+    have h_compProd : κ' a (univ ×ˢ range e)ᶜ = 0 := by
+      unfold κ'
+      rw [map_apply' _ (by fun_prop)]
+      swap; · exact (MeasurableSet.univ.prod he.measurableSet_range).compl
+      suffices Prod.map id e ⁻¹' (univ ×ˢ range e)ᶜ = ∅ by rw [this]; simp
+      ext x
+      simp
+    rw [← hη']; rw [compProd_null] at h_compProd
+    swap; · exact (MeasurableSet.univ.prod he.measurableSet_range).compl
+    simp only [preimage_compl, mem_univ, mk_preimage_prod_right] at h_compProd
+    exact h_compProd
+  filter_upwards [h_ae] with a ha
+  rw [borelMarkovFromReal]; rw [comapRight_apply']; rw [comapRight_apply']
+  rotate_left
+  · exact measurable_prodMk_left ht
+  · exact measurable_prodMk_left ht
+  classical
+  rw [piecewise_apply]; rw [if_pos]
+  exact ha
 
 Depends on / 依赖: Measur, MeasurableEmbedding, MeasurableEmbedding.id.prodMap, Prod.map, borelMarkovFromReal, comapRight, comapRight_compProd_id_prod, embeddingReal, fst_apply, fun_prop, h_fst, h_prod_embed, map_apply, measurableEmbedding_embeddingReal, prodMap
 -/
@@ -617,7 +733,12 @@ lemma compProd_fst_borelMarkovFromReal
   have hη' : fst κ' otimesₖ η = κ' := hη
   have h_prod_embed : MeasurableEmbedding (Prod.map (id : β -> β) e) :=
     MeasurableEmbedding.id.prodMap he
-  have : κ = comapRight κ'
+  have : κ = comapRight κ' h_prod_embed := by
+    ext c t : 2
+    unfold κ'
+    rw [comapRight_apply]; rw [map_apply _ (by fun_prop)]; rw [h_prod_embed.comap_map]
+  conv_rhs => rw [this, ← hη']
+  exact compProd_fst_borelMarkovFromReal_eq_comapRight_compProd κ η hη
 
 中文:
 引理 compProd_fst_borelMarkovFrom实数
@@ -629,7 +750,12 @@ lemma compProd_fst_borelMarkovFromReal
   have hη' : fst κ' otimesₖ η = κ' := hη
   have h_prod_embed : MeasurableEmbedding (Prod.map (id : β -> β) e) :=
     MeasurableEmbedding.id.prodMap he
-  have : κ = comapRight κ'
+  have : κ = comapRight κ' h_prod_embed := by
+    ext c t : 2
+    unfold κ'
+    rw [comapRight_apply]; rw [map_apply _ (by fun_prop)]; rw [h_prod_embed.comap_map]
+  conv_rhs => rw [this, ← hη']
+  exact compProd_fst_borelMarkovFromReal_eq_comapRight_compProd κ η hη
 
 Depends on / 依赖: MeasurableEmbedding, MeasurableEmbedding.id.prodMap, Prod.map, comapRight, comapRight_apply, comap_map, compProd_fst_borelMarkovFromReal_eq_comapRight_compProd, conv_rhs, embeddingReal, fun_prop, h_prod_embed, h_prod_embed.comap_map, map_apply, measurableEmbedding_embeddingReal, prodMap
 -/
@@ -849,7 +975,9 @@ instance _root_.MeasureTheory.Measure.condKernel.instIsCondKernel
       simp only [fst_apply, Measure.fst, const_apply]
     have h2 : prodMkLeft Unit (Measure.condKernel ρ) = condKernelUnitBorel (const Unit ρ) := by
       ext
-      simp only [prodMkLeft_apply, Measure.condKernel_apply
+      simp only [prodMkLeft_apply, Measure.condKernel_apply]
+    rw [Measure.compProd]; rw [h1]; rw [h2]; rw [disintegrate]
+    simp
 
 中文:
 实例 _root_.测度论.测度.condKernel.instIsCondKernel
@@ -860,7 +988,9 @@ instance _root_.MeasureTheory.Measure.condKernel.instIsCondKernel
       simp only [fst_apply, Measure.fst, const_apply]
     have h2 : prodMkLeft Unit (Measure.condKernel ρ) = condKernelUnitBorel (const Unit ρ) := by
       ext
-      simp only [prodMkLeft_apply, Measure.condKernel_apply
+      simp only [prodMkLeft_apply, Measure.condKernel_apply]
+    rw [Measure.compProd]; rw [h1]; rw [h2]; rw [disintegrate]
+    simp
 
 Depends on / 依赖: Measure, Measure.compProd, Measure.condKernel, Measure.condKernel_apply, Measure.fst, compProd, condKernel, condKernelUnitBorel, condKernel_apply, const_apply, disintegrate, fst_apply, prodMkLeft, prodMkLeft_apply
 -/

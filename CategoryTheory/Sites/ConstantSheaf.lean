@@ -56,7 +56,10 @@ definition constantPresheafAdj
       app := fun ⟨X⟩ => F.map (IsTerminal.from hT X).op
       naturality := fun _ _ _ => by
         simp only [Functor.comp_obj, Functor.const_obj_obj, Functor.id_obj, Functor.const_obj_map,
-          Category.id_comp,
+          Category.id_comp, ← Functor.map_comp]
+        congr
+        simp }
+    naturality := by intros; ext; simp /- Note: `aesop` works but is kind of slow -/ }
 
 中文:
 定义 constantPresheafAdj
@@ -67,7 +70,10 @@ definition constantPresheafAdj
       app := fun ⟨X⟩ => F.map (IsTerminal.from hT X).op
       naturality := fun _ _ _ => by
         simp only [Functor.comp_obj, Functor.const_obj_obj, Functor.id_obj, Functor.const_obj_map,
-          Category.id_comp,
+          Category.id_comp, ← Functor.map_comp]
+        congr
+        simp }
+    naturality := by intros; ext; simp /- Note: `aesop` works but is kind of slow -/ }
 
 Depends on / 依赖: Functor, Functor.constCompEvaluationObj, constCompEvaluationObj
 -/
@@ -382,7 +388,7 @@ lemma Sheaf.isConstant_iff_of_equivalence
   · exact fun ⟨Y, ⟨i⟩⟩ => ⟨_, ⟨(equivCommuteConstant J D K G hT hT').symm.app _ ≪≫
       (sheafEquiv J K G D).functor.mapIso i ≪≫ (sheafEquiv J K G D).counitIso.app _⟩⟩
   · exact fun ⟨Y, ⟨i⟩⟩ => ⟨_, ⟨(equivCommuteConstant' J D K G hT hT').app _ ≪≫
-      (sheafEquiv J K G D).inverse.
+      (sheafEquiv J K G D).inverse.mapIso i⟩⟩
 
 中文:
 引理 层.isConstant_iff_of_equivalence
@@ -392,7 +398,7 @@ lemma Sheaf.isConstant_iff_of_equivalence
   · exact fun ⟨Y, ⟨i⟩⟩ => ⟨_, ⟨(equivCommuteConstant J D K G hT hT').symm.app _ ≪≫
       (sheafEquiv J K G D).functor.mapIso i ≪≫ (sheafEquiv J K G D).counitIso.app _⟩⟩
   · exact fun ⟨Y, ⟨i⟩⟩ => ⟨_, ⟨(equivCommuteConstant' J D K G hT hT').app _ ≪≫
-      (sheafEquiv J K G D).inverse.
+      (sheafEquiv J K G D).inverse.mapIso i⟩⟩
 
 Depends on / 依赖: counitIso, counitIso.app, equivCommuteConstant, functor, functor.mapIso, inverse, inverse.mapIso, mapIso, sheafEquiv, symm.app
 -/
@@ -478,7 +484,7 @@ lemma constantSheafAdj_counit_w
   apply sheafify_hom_ext _ _ _ ((sheafCompose J U).obj F).property
   ext x
   simp [NatTrans.comp_app] -- simp [NatTrans.comp_app] to unfold some definitions
-  simp [← map_comp, ← NatTrans.com
+  simp [← map_comp, ← NatTrans.comp_app] -- simp [← NatTrans.comp_app] to simplify some compositions
 
 中文:
 引理 constantSheafAdj_counit_w
@@ -490,7 +496,7 @@ lemma constantSheafAdj_counit_w
   apply sheafify_hom_ext _ _ _ ((sheafCompose J U).obj F).property
   ext x
   simp [NatTrans.comp_app] -- simp [NatTrans.comp_app] to unfold some definitions
-  simp [← map_comp, ← NatTrans.com
+  simp [← map_comp, ← NatTrans.comp_app] -- simp [← NatTrans.comp_app] to simplify some compositions
 
 Depends on / 依赖: Iso.inv_comp_eq, NatTrans, NatTrans.comp_app, Sheaf.hom_ext, comp_app, compositions, constantCommuteCompose_hom_app_hom, definitions, hom_ext, inv_comp_eq, map_comp, property, sheafCompose, sheafify_hom_ext, simplify
 -/
@@ -553,7 +559,7 @@ instance [h
   exact ⟨U.obj Y, ⟨(fullyFaithfulSheafToPresheaf _ _).preimageIso
     (((sheafifyComposeIso J U ((const Cᵒᵖ).obj Y)).symm ≪≫
       (presheafToSheaf J B ⋙ sheafToPresheaf J B).mapIso (constComp Cᵒᵖ Y U)).symm ≪≫
-        (sheafToPresheaf _ _).mapIso ((sheafCompose J U).mapIso
+        (sheafToPresheaf _ _).mapIso ((sheafCompose J U).mapIso i))⟩⟩
 
 中文:
 实例 [h
@@ -563,7 +569,7 @@ instance [h
   exact ⟨U.obj Y, ⟨(fullyFaithfulSheafToPresheaf _ _).preimageIso
     (((sheafifyComposeIso J U ((const Cᵒᵖ).obj Y)).symm ≪≫
       (presheafToSheaf J B ⋙ sheafToPresheaf J B).mapIso (constComp Cᵒᵖ Y U)).symm ≪≫
-        (sheafToPresheaf _ _).mapIso ((sheafCompose J U).mapIso
+        (sheafToPresheaf _ _).mapIso ((sheafCompose J U).mapIso i))⟩⟩
 
 Depends on / 依赖: U.obj, constComp, fullyFaithfulSheafToPresheaf, mapIso, preimageIso, presheafToSheaf, sheafCompose, sheafToPresheaf, sheafifyComposeIso
 -/

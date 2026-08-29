@@ -275,7 +275,10 @@ definition equivalenceLeftToRight
         intro x y f
         dsimp
         ext
-        · simp only [WidePullback.lift_π, Category.assoc, ← 
+        · simp only [WidePullback.lift_π, Category.assoc, ← X.left.map_comp_assoc]
+          rfl
+        · simp }
+  right := G.right
 
 中文:
 定义 equivalenceLeftToRight
@@ -287,7 +290,10 @@ definition equivalenceLeftToRight
         intro x y f
         dsimp
         ext
-        · simp only [WidePullback.lift_π, Category.assoc, ← 
+        · simp only [WidePullback.lift_π, Category.assoc, ← X.left.map_comp_assoc]
+          rfl
+        · simp }
+  right := G.right
 
 Depends on / 依赖: Category, Category.assoc, G.left, G.right, Limits, Limits.WidePullback.lift, SimplexCategory, SimplexCategory.const, WidePullback, WidePullback.lift_, X.hom.app, X.left.map, X.left.map_comp_assoc, map_comp_assoc, naturality, x.unop
 -/
@@ -369,7 +375,12 @@ abbreviation cechNerveAdjunction
       homEquiv_naturality_left_symm := by dsimp [cechNerveEquiv]; cat_disch
       homEquiv_naturality_right := by
         dsimp [cechNerveEquiv]
-        -- The next three lines were not needed before https://github.com/leanprover/lean4/pull/26
+        -- The next three lines were not needed before https://github.com/leanprover/lean4/pull/2644
+        intro X Y Y' f g
+        change equivalenceLeftToRight X Y' (f ≫ g) =
+          equivalenceLeftToRight X Y f ≫ augmentedCechNerve.map g
+        cat_disch
+    }
 
 中文:
 缩写 cechNerveAdjunction
@@ -379,7 +390,12 @@ abbreviation cechNerveAdjunction
       homEquiv_naturality_left_symm := by dsimp [cechNerveEquiv]; cat_disch
       homEquiv_naturality_right := by
         dsimp [cechNerveEquiv]
-        -- The next three lines were not needed before https://github.com/leanprover/lean4/pull/26
+        -- The next three lines were not needed before https://github.com/leanprover/lean4/pull/2644
+        intro X Y Y' f g
+        change equivalenceLeftToRight X Y' (f ≫ g) =
+          equivalenceLeftToRight X Y f ≫ augmentedCechNerve.map g
+        cat_disch
+    }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, cat_disch, cechNerveEquiv, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, mkOfHomEquiv
 -/
@@ -636,7 +652,18 @@ definition equivalenceRightToLeft
           (by
             rintro j
             rw [← Arrow.w_assoc G]
-            have t := X.hom.naturality (SimplexCategory.const 
+            have t := X.hom.naturality (SimplexCategory.const ⦋0⦌ x j)
+            dsimp at t ⊢
+            simp only [Category.id_comp] at t
+            rw [← t])
+      naturality := by
+        intro x y f
+        dsimp
+        ext
+        · simp only [WidePushout.ι_desc_assoc, WidePushout.ι_desc]
+          rw [Category.assoc]; rw [← X.right.map_comp]
+          rfl
+        · simp [← NatTrans.naturality] }
 
 中文:
 定义 equivalenceRightToLeft
@@ -649,7 +676,18 @@ definition equivalenceRightToLeft
           (by
             rintro j
             rw [← Arrow.w_assoc G]
-            have t := X.hom.naturality (SimplexCategory.const 
+            have t := X.hom.naturality (SimplexCategory.const ⦋0⦌ x j)
+            dsimp at t ⊢
+            simp only [Category.id_comp] at t
+            rw [← t])
+      naturality := by
+        intro x y f
+        dsimp
+        ext
+        · simp only [WidePushout.ι_desc_assoc, WidePushout.ι_desc]
+          rw [Category.assoc]; rw [← X.right.map_comp]
+          rfl
+        · simp [← NatTrans.naturality] }
 
 Depends on / 依赖: G.left
 -/
@@ -695,7 +733,23 @@ definition cechConerveEquiv
     · refine WidePushout.hom_ext _ _ _ (fun j => ?_) ?_
       · dsimp
         simp only [Category.assoc, ← NatTrans.naturality A.right, Arrow.augmentedCechConerve_right,
-          S
+          SimplexCategory.len_mk, Arrow.cechConerve_map, colimit.ι_desc,
+          WidePushoutShape.mkCocone_ι_app, colimit.ι_desc_assoc]
+        rfl
+      · dsimp
+        rw [colimit.ι_desc]
+        exact congr_app A.w x
+  right_inv := by
+    intro A
+    ext
+    · rfl
+    · dsimp
+      rw [WidePushout.ι_desc]
+      nth_rw 2 [← Category.comp_id A.right]
+      congr 1
+      convert! X.right.map_id _
+      ext ⟨a, ha⟩
+      simp
 
 中文:
 定义 cechConerveEquiv
@@ -709,7 +763,23 @@ definition cechConerveEquiv
     · refine WidePushout.hom_ext _ _ _ (fun j => ?_) ?_
       · dsimp
         simp only [Category.assoc, ← NatTrans.naturality A.right, Arrow.augmentedCechConerve_right,
-          S
+          SimplexCategory.len_mk, Arrow.cechConerve_map, colimit.ι_desc,
+          WidePushoutShape.mkCocone_ι_app, colimit.ι_desc_assoc]
+        rfl
+      · dsimp
+        rw [colimit.ι_desc]
+        exact congr_app A.w x
+  right_inv := by
+    intro A
+    ext
+    · rfl
+    · dsimp
+      rw [WidePushout.ι_desc]
+      nth_rw 2 [← Category.comp_id A.right]
+      congr 1
+      convert! X.right.map_id _
+      ext ⟨a, ha⟩
+      simp
 
 Depends on / 依赖: equivalenceLeftToRight
 -/
@@ -852,7 +922,18 @@ definition wideCospan.limitCone
             cases f
             · cases i
               all_goals simp
-            · simp only [Functor.const_obj_obj, Functor.const_obj_ma
+            · simp only [Functor.const_obj_obj, Functor.const_obj_map, terminal.comp_from]
+              subsingleton } }
+  isLimit :=
+    { lift := fun s => Limits.Pi.lift fun j => s.π.app (some j)
+      fac := fun s j => Option.casesOn j (by subsingleton) fun _ => limit.lift_π _ _
+      uniq := fun s f h => by
+        dsimp
+        ext j
+        dsimp only [Limits.Pi.lift]
+        rw [limit.lift_π]
+        dsimp
+        rw [← h (some j)] }
 
 中文:
 定义 wideCospan.limitCone
@@ -864,7 +945,18 @@ definition wideCospan.limitCone
             cases f
             · cases i
               all_goals simp
-            · simp only [Functor.const_obj_obj, Functor.const_obj_ma
+            · simp only [Functor.const_obj_obj, Functor.const_obj_map, terminal.comp_from]
+              subsingleton } }
+  isLimit :=
+    { lift := fun s => Limits.Pi.lift fun j => s.π.app (some j)
+      fac := fun s j => Option.casesOn j (by subsingleton) fun _ => limit.lift_π _ _
+      uniq := fun s f h => by
+        dsimp
+        ext j
+        dsimp only [Limits.Pi.lift]
+        rw [limit.lift_π]
+        dsimp
+        rw [← h (some j)] }
 
 Depends on / 依赖: Functor, Functor.const_obj_map, Functor.const_obj_obj, Limits, Limits.Pi.lift, Option.casesOn, all_goals, casesOn, comp_from, const_obj_map, const_obj_obj, isLimit, limit.lift_, naturality, subsingleton, terminal, terminal.comp_from, terminal.from
 -/

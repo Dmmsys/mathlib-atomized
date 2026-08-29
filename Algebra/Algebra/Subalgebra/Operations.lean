@@ -69,7 +69,24 @@ theorem mem_of_finsetSum_eq_one_of_pow_smul_mem
   let l' : ι -> S' := fun x => ⟨l x, hl x⟩
   have e' : ∑ i in ι', l' i * s' i = 1 := by
     ext
-    change S'.subtype (∑ i
+    change S'.subtype (∑ i in ι', l' i * s' i) = 1
+    simpa only [map_sum, map_mul] using! e
+  have : Ideal.span (s' '' ι') = ⊤ := by
+    rw [Ideal.eq_top_iff_one]; rw [← e']
+    apply sum_mem
+    intro i hi
+exact Ideal.mul_mem_left _ _ Ideal.subset_span Set.mem_image_of_mem s' hi
+  let N := ι'.sup n
+  have hN := Ideal.span_pow_eq_top _ this N
+  apply (Algebra.ofId S' S).range.toSubmodule.mem_of_span_top_of_smul_mem _ hN
+  rintro ⟨_, _, ⟨i, hi, rfl⟩, rfl⟩
+  change s' i ^ N • x in _
+  rw [← tsub_add_cancel_of_le (show n i <= N from Finset.le_sup hi)]; rw [pow_add]; rw [mul_smul]
+  refine Submodule.smul_mem _ (⟨_, pow_mem (hs i) _⟩ : S') ?_
+  exact ⟨⟨_, hn i⟩, rfl⟩
+
+@[deprecated (since := "2026-04-08")]
+alias mem_of_finset_sum_eq_one_of_pow_smul_mem := mem_of_finsetSum_eq_one_of_pow_smul_mem
 
 中文:
 定理 mem_of_finsetSum_eq_one_of_pow_smul_mem
@@ -82,7 +99,24 @@ theorem mem_of_finsetSum_eq_one_of_pow_smul_mem
   let l' : ι -> S' := fun x => ⟨l x, hl x⟩
   have e' : ∑ i in ι', l' i * s' i = 1 := by
     ext
-    change S'.subtype (∑ i
+    change S'.subtype (∑ i in ι', l' i * s' i) = 1
+    simpa only [map_sum, map_mul] using! e
+  have : Ideal.span (s' '' ι') = ⊤ := by
+    rw [Ideal.eq_top_iff_one]; rw [← e']
+    apply sum_mem
+    intro i hi
+exact Ideal.mul_mem_left _ _ Ideal.subset_span Set.mem_image_of_mem s' hi
+  let N := ι'.sup n
+  have hN := Ideal.span_pow_eq_top _ this N
+  apply (Algebra.ofId S' S).range.toSubmodule.mem_of_span_top_of_smul_mem _ hN
+  rintro ⟨_, _, ⟨i, hi, rfl⟩, rfl⟩
+  change s' i ^ N • x in _
+  rw [← tsub_add_cancel_of_le (show n i <= N from Finset.le_sup hi)]; rw [pow_add]; rw [mul_smul]
+  refine Submodule.smul_mem _ (⟨_, pow_mem (hs i) _⟩ : S') ?_
+  exact ⟨⟨_, hn i⟩, rfl⟩
+
+@[deprecated (since := "2026-04-08")]
+alias mem_of_finset_sum_eq_one_of_pow_smul_mem := mem_of_finsetSum_eq_one_of_pow_smul_mem
 
 Depends on / 依赖: Algebra, Algebra.ofId, Ideal.eq_top_iff_one, Ideal.mul_mem_left, Ideal.span, Ideal.subset_span, Set.mem_image_, Subalgebra, Subalgebra.toSubmodule, eq_top_iff_one, map_mul, map_sum, mem_image_, mul_mem_left, subset_span, subtype, sum_mem, toSubmodule
 -/

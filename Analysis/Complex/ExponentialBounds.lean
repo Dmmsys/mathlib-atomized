@@ -295,7 +295,10 @@ theorem log_two_near_10
   have t : |(2⁻¹ : Real)| = 2⁻¹ := by rw [abs_of_pos]; norm_num
   have z := Real.abs_log_sub_add_sum_range_le (show |(2⁻¹ : Real)| < 1 by rw [t]; norm_num) 34
   rw [t] at z
-  
+  norm_num1 at z
+  rw [one_div (2 : Real)]; rw [log_inv]; rw [← sub_eq_add_neg]; rw [_root_.abs_sub_comm] at z
+  apply le_trans (_root_.abs_sub_le _ _ _) (add_le_add z _)
+  norm_num
 
 中文:
 定理 log_two_near_10
@@ -307,7 +310,10 @@ theorem log_two_near_10
   have t : |(2⁻¹ : Real)| = 2⁻¹ := by rw [abs_of_pos]; norm_num
   have z := Real.abs_log_sub_add_sum_range_le (show |(2⁻¹ : Real)| < 1 by rw [t]; norm_num) 34
   rw [t] at z
-  
+  norm_num1 at z
+  rw [one_div (2 : Real)]; rw [log_inv]; rw [← sub_eq_add_neg]; rw [_root_.abs_sub_comm] at z
+  apply le_trans (_root_.abs_sub_le _ _ _) (add_le_add z _)
+  norm_num
 
 Depends on / 依赖: Real.abs_log_sub_add_sum_range_le, _root_, _root_.abs_sub_comm, _root_.abs_sub_le, abs_log_sub_add_sum_range_le, abs_of_pos, abs_sub_comm, abs_sub_le, add_le_add, le_trans, log_inv, norm_num1, one_div, sub_eq_add_neg
 -/
@@ -372,7 +378,9 @@ theorem log_three_near_10
     assumption
   have t : |2 / 3| = (2 : Real) / 3 := by norm_num
   have z := abs_log_sub_add_sum_range_le (x := 2 / 3) (by norm_num) 70
-  rw [t]; rw [show (1 - 
+  rw [t]; rw [show (1 - (2 : Real) / 3) = (1 / 3 : Real) by norm_num]; rw [one_div (3 : Real)]; rw [log_inv]; rw [← sub_eq_add_neg]; rw [_root_.abs_sub_comm] at z
+  apply le_trans (_root_.abs_sub_le _ _ _) (add_le_add z _)
+  norm_num [sum_range_succ]
 
 中文:
 定理 log_three_near_10
@@ -384,7 +392,9 @@ theorem log_three_near_10
     assumption
   have t : |2 / 3| = (2 : Real) / 3 := by norm_num
   have z := abs_log_sub_add_sum_range_le (x := 2 / 3) (by norm_num) 70
-  rw [t]; rw [show (1 - 
+  rw [t]; rw [show (1 - (2 : Real) / 3) = (1 / 3 : Real) by norm_num]; rw [one_div (3 : Real)]; rw [log_inv]; rw [← sub_eq_add_neg]; rw [_root_.abs_sub_comm] at z
+  apply le_trans (_root_.abs_sub_le _ _ _) (add_le_add z _)
+  norm_num [sum_range_succ]
 
 Depends on / 依赖: _root_, _root_.abs_sub_comm, _root_.abs_sub_le, abs_log_sub_add_sum_range_le, abs_sub_comm, abs_sub_le, add_le_add, le_trans, log_inv, norm_num1, one_div, sub_eq_add_neg, sum_range_succ
 -/
@@ -465,7 +475,9 @@ theorem log_five_near_10
     assumption
   have t : |4 / 5| = (4 : Real) / 5 := by norm_num
   have z := abs_log_sub_add_sum_range_le (x := 4 / 5) (by norm_num) 130
-  rw [t]; rw [show (1
+  rw [t]; rw [show (1 - (4 : Real) / 5) = (1 / 5 : Real) by norm_num]; rw [one_div (5 : Real)]; rw [log_inv]; rw [← sub_eq_add_neg]; rw [_root_.abs_sub_comm] at z
+  apply le_trans (_root_.abs_sub_le _ _ _) (add_le_add z _)
+  norm_num [sum_range_succ]
 
 中文:
 定理 log_five_near_10
@@ -477,7 +489,9 @@ theorem log_five_near_10
     assumption
   have t : |4 / 5| = (4 : Real) / 5 := by norm_num
   have z := abs_log_sub_add_sum_range_le (x := 4 / 5) (by norm_num) 130
-  rw [t]; rw [show (1
+  rw [t]; rw [show (1 - (4 : Real) / 5) = (1 / 5 : Real) by norm_num]; rw [one_div (5 : Real)]; rw [log_inv]; rw [← sub_eq_add_neg]; rw [_root_.abs_sub_comm] at z
+  apply le_trans (_root_.abs_sub_le _ _ _) (add_le_add z _)
+  norm_num [sum_range_succ]
 
 Depends on / 依赖: _root_, _root_.abs_sub_comm, _root_.abs_sub_le, abs_log_sub_add_sum_range_le, abs_sub_comm, abs_sub_le, add_le_add, le_trans, log_inv, norm_num1, one_div, sub_eq_add_neg, sum_range_su
 -/

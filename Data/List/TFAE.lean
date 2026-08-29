@@ -199,7 +199,7 @@ theorem tfae_of_cycle
     simp only [tfae_cons_cons, getLastD_cons, isChain_cons_cons] at *
     rcases h_chain with ⟨ab, ⟨bc, ch⟩⟩
     have := IH ⟨bc, ch⟩ (ab ∘ h_last)
-    exact ⟨⟨ab, h_last ∘ (this.2 c (.head _) _ ge
+    exact ⟨⟨ab, h_last ∘ (this.2 c (.head _) _ getLastD_mem_cons).1 ∘ bc⟩, this⟩
 
 中文:
 定理 tfae_of_cycle
@@ -211,7 +211,7 @@ theorem tfae_of_cycle
     simp only [tfae_cons_cons, getLastD_cons, isChain_cons_cons] at *
     rcases h_chain with ⟨ab, ⟨bc, ch⟩⟩
     have := IH ⟨bc, ch⟩ (ab ∘ h_last)
-    exact ⟨⟨ab, h_last ∘ (this.2 c (.head _) _ ge
+    exact ⟨⟨ab, h_last ∘ (this.2 c (.head _) _ getLastD_mem_cons).1 ∘ bc⟩, this⟩
 
 Depends on / 依赖: generalizing, getLastD_cons, getLastD_mem_cons, h_chain, h_last, iff_def, isChain_cons_cons, tfae_cons_cons
 -/

@@ -52,6 +52,7 @@ definition homCongr
       rw [Category.assoc]; rw [Category.assoc]; rw [β.hom_inv_id]; rw [α.hom_inv_id_assoc]; rw [Category.comp_id]
   right_inv f :=
     show α.inv ≫ (α.hom ≫ f ≫ β.inv) ≫ β.hom = f by
+      rw [Category.assoc]; rw [Category.assoc]; rw [β.inv_hom_id]; rw [α.inv_hom_id_assoc]; rw [Category.comp_id]
 
 中文:
 定义 homCongr
@@ -63,6 +64,7 @@ definition homCongr
       rw [Category.assoc]; rw [Category.assoc]; rw [β.hom_inv_id]; rw [α.hom_inv_id_assoc]; rw [Category.comp_id]
   right_inv f :=
     show α.inv ≫ (α.hom ≫ f ≫ β.inv) ≫ β.hom = f by
+      rw [Category.assoc]; rw [Category.assoc]; rw [β.inv_hom_id]; rw [α.inv_hom_id_assoc]; rw [Category.comp_id]
 -/
 def homCongr {X Y X₁ Y₁ : C} (α : X ≅ X₁) (β : Y ≅ Y₁) : (X ⟶ Y) ≃ (X₁ ⟶ Y₁) where
   toFun f := α.inv ≫ f ≫ β.hom

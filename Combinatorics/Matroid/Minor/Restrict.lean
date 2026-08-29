@@ -90,7 +90,35 @@ definition restrictIndepMatroid
   indep_subset := fun _ _ h hIJ => ⟨h.1.subset hIJ, hIJ.trans h.2⟩
   indep_aug := by
     rintro I I' ⟨hI, hIY⟩ (hIn : ¬ M.IsBasis' I R) (hI' : M.IsBasis' I' R)
-    rw [isBasis'_iff_isBasis_inter_ground] at hIn h
+    rw [isBasis'_iff_isBasis_inter_ground] at hIn hI'
+    obtain ⟨B', hB', rfl⟩ := hI'.exists_isBase
+    obtain ⟨B, hB, hIB, hBIB'⟩ := hI.exists_isBase_subset_union_isBase hB'
+    rw [hB'.inter_isBasis_iff_compl_inter_isBasis_dual]; rw [sdiff_inter_sdiff] at hI'
+    have hss : M.E \ (B' union (R inter M.E)) subseteq M.E \ (B union (R inter M.E)) := by
+      apply sdiff_subset_sdiff_right
+      rw [union_subset_iff]; rw [and_iff_left subset_union_right]; rw [union_comm]
+      exact hBIB'.trans (union_subset_union_left _ (subset_inter hIY hI.subset_ground))
+    have hi : M✶.Indep (M.E \ (B union (R inter M.E))) := by
+      rw [dual_indep_iff_exists]
+      exact ⟨B, hB, disjoint_of_subset_right subset_union_left disjoint_sdiff_left⟩
+    have h_eq := hI'.eq_of_subset_indep hi hss
+      (sdiff_subset_sdiff_right subset_union_right)
+    rw [h_eq]; rw [← sdiff_inter_sdiff]; rw [← hB.inter_isBasis_iff_compl_inter_isBasis_dual] at hI'
+    obtain ⟨J, hJ, hIJ⟩ := hI.subset_isBasis_of_subset
+      (subset_inter hIB (subset_inter hIY hI.subset_ground))
+    obtain rfl := hI'.indep.eq_of_isBasis hJ
+    have hIJ' : I ⊂ B inter (R inter M.E) := hIJ.ssubset_of_ne (fun he => hIn (by rwa [he]))
+    obtain ⟨e, he⟩ := exists_of_ssubset hIJ'
+    exact ⟨e, ⟨⟨(hBIB' he.1.1).elim (fun h => (he.2 h).elim) id,he.1.2⟩, he.2⟩,
+      hI'.indep.subset (insert_subset he.1 hIJ), insert_subset he.1.2.1 hIY⟩
+  indep_maximal := by
+    rintro A hAR I ⟨hI, _⟩ hIA
+    obtain ⟨J, hJ, hIJ⟩ := hI.subset_isBasis'_of_subset hIA
+    use J
+    simp only [hIJ, and_assoc, maximal_subset_iff, hJ.indep, hJ.subset, and_imp, true_and,
+      hJ.subset.trans hAR]
+    exact fun K hK _ hKA hJK => hJ.eq_of_subset_indep hK hJK hKA
+  subset_ground _ := And.right
 
 中文:
 定义 restrictIndepMatroid
@@ -101,7 +129,35 @@ definition restrictIndepMatroid
   indep_subset := fun _ _ h hIJ => ⟨h.1.subset hIJ, hIJ.trans h.2⟩
   indep_aug := by
     rintro I I' ⟨hI, hIY⟩ (hIn : ¬ M.IsBasis' I R) (hI' : M.IsBasis' I' R)
-    rw [isBasis'_iff_isBasis_inter_ground] at hIn h
+    rw [isBasis'_iff_isBasis_inter_ground] at hIn hI'
+    obtain ⟨B', hB', rfl⟩ := hI'.exists_isBase
+    obtain ⟨B, hB, hIB, hBIB'⟩ := hI.exists_isBase_subset_union_isBase hB'
+    rw [hB'.inter_isBasis_iff_compl_inter_isBasis_dual]; rw [sdiff_inter_sdiff] at hI'
+    have hss : M.E \ (B' union (R inter M.E)) subseteq M.E \ (B union (R inter M.E)) := by
+      apply sdiff_subset_sdiff_right
+      rw [union_subset_iff]; rw [and_iff_left subset_union_right]; rw [union_comm]
+      exact hBIB'.trans (union_subset_union_left _ (subset_inter hIY hI.subset_ground))
+    have hi : M✶.Indep (M.E \ (B union (R inter M.E))) := by
+      rw [dual_indep_iff_exists]
+      exact ⟨B, hB, disjoint_of_subset_right subset_union_left disjoint_sdiff_left⟩
+    have h_eq := hI'.eq_of_subset_indep hi hss
+      (sdiff_subset_sdiff_right subset_union_right)
+    rw [h_eq]; rw [← sdiff_inter_sdiff]; rw [← hB.inter_isBasis_iff_compl_inter_isBasis_dual] at hI'
+    obtain ⟨J, hJ, hIJ⟩ := hI.subset_isBasis_of_subset
+      (subset_inter hIB (subset_inter hIY hI.subset_ground))
+    obtain rfl := hI'.indep.eq_of_isBasis hJ
+    have hIJ' : I ⊂ B inter (R inter M.E) := hIJ.ssubset_of_ne (fun he => hIn (by rwa [he]))
+    obtain ⟨e, he⟩ := exists_of_ssubset hIJ'
+    exact ⟨e, ⟨⟨(hBIB' he.1.1).elim (fun h => (he.2 h).elim) id,he.1.2⟩, he.2⟩,
+      hI'.indep.subset (insert_subset he.1 hIJ), insert_subset he.1.2.1 hIY⟩
+  indep_maximal := by
+    rintro A hAR I ⟨hI, _⟩ hIA
+    obtain ⟨J, hJ, hIJ⟩ := hI.subset_isBasis'_of_subset hIA
+    use J
+    simp only [hIJ, and_assoc, maximal_subset_iff, hJ.indep, hJ.subset, and_imp, true_and,
+      hJ.subset.trans hAR]
+    exact fun K hK _ hKA hJK => hJ.eq_of_subset_indep hK hJK hKA
+  subset_ground _ := And.right
 -/
 @[simps] def restrictIndepMatroid (M : Matroid α) (R : Set α) : IndepMatroid α where
   E := R
@@ -609,7 +665,7 @@ theorem restrict_eq_restrict_iff
   refine ⟨fun h I hIX => ?_, fun h => ext_indep rfl fun I (hI : I subseteq X) => ?_⟩
   · rw [← and_iff_left (a := (M.Indep I)) hIX, ← and_iff_left (a := (M'.Indep I)) hIX,
       ← restrict_indep_iff, h, restrict_indep_iff]
-  rw [restrict_indep_iff]; rw [and_iff_left hI]; rw [restrict_indep_iff]; 
+  rw [restrict_indep_iff]; rw [and_iff_left hI]; rw [restrict_indep_iff]; rw [and_iff_left hI]; rw [h _ hI]
 
 中文:
 定理 restrict_eq_restrict_iff
@@ -618,7 +674,7 @@ theorem restrict_eq_restrict_iff
   refine ⟨fun h I hIX => ?_, fun h => ext_indep rfl fun I (hI : I subseteq X) => ?_⟩
   · rw [← and_iff_left (a := (M.Indep I)) hIX, ← and_iff_left (a := (M'.Indep I)) hIX,
       ← restrict_indep_iff, h, restrict_indep_iff]
-  rw [restrict_indep_iff]; rw [and_iff_left hI]; rw [restrict_indep_iff]; 
+  rw [restrict_indep_iff]; rw [and_iff_left hI]; rw [restrict_indep_iff]; rw [and_iff_left hI]; rw [h _ hI]
 
 Depends on / 依赖: M.Indep, and_iff_left, ext_indep, restrict_indep_iff, subseteq
 -/
@@ -1825,7 +1881,9 @@ theorem Indep.augment
     simp_rw [hI.isBasis_iff_forall_insert_dep subset_union_left, union_sdiff_left, mem_sdiff,
       and_imp, dep_iff, insert_subset_iff, and_iff_left hI.subset_ground]
     exact fun e heJ heI => ⟨he e ⟨heJ, heI⟩, hJ.subset_ground heJ⟩
-  ob
+  obtain ⟨J', hJ', hJJ'⟩ := hJ.subset_isBasis_of_subset I.subset_union_right
+  rw [← hJ'.encard_eq_encard hb] at hIJ
+  exact hIJ.not_ge (encard_mono hJJ')
 
 中文:
 定理 Indep.augment
@@ -1836,7 +1894,9 @@ theorem Indep.augment
     simp_rw [hI.isBasis_iff_forall_insert_dep subset_union_left, union_sdiff_left, mem_sdiff,
       and_imp, dep_iff, insert_subset_iff, and_iff_left hI.subset_ground]
     exact fun e heJ heI => ⟨he e ⟨heJ, heI⟩, hJ.subset_ground heJ⟩
-  ob
+  obtain ⟨J', hJ', hJJ'⟩ := hJ.subset_isBasis_of_subset I.subset_union_right
+  rw [← hJ'.encard_eq_encard hb] at hIJ
+  exact hIJ.not_ge (encard_mono hJJ')
 
 Depends on / 依赖: I.subset_union_right, IsBasis, M.IsBasis, and_iff_left, and_imp, dep_iff, encard_eq_encard, encard_mono, hI.isBasis_iff_forall_insert_dep, hI.subset_ground, hIJ.not_ge, hJ.subset_ground, hJ.subset_isBasis_of_subset, insert_subset_iff, isBasis_iff_forall_insert_dep, mem_sdiff, not_ge, simp_rw, subset_ground, subset_isBasis_of_subset
 -/

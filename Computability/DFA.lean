@@ -400,7 +400,22 @@ theorem evalFrom_split
   wlog hle : (n : Nat) <= m generalizing n m
   · exact this m n hneq.symm heq.symm (le_of_not_ge hle)
   refine
-    ⟨M.evalFrom s ((x.take m).take n),
+    ⟨M.evalFrom s ((x.take m).take n), (x.take m).take n, (x.take m).drop n,
+                    x.drop m, ?_, ?_, ?_, by rfl, ?_⟩
+  · rw [List.take_append_drop, List.take_append_drop]
+  · simp only [List.length_drop, List.length_take]
+    omega
+  · intro h
+    have hlen' := congr_arg List.length h
+    simp only [List.length_drop, List.length, List.length_take] at hlen'
+    omega
+  have hq : M.evalFrom (M.evalFrom s ((x.take m).take n)) ((x.take m).drop n) =
+      M.evalFrom s ((x.take m).take n) := by
+    rw [List.take_take]; rw [min_eq_left hle]; rw [← evalFrom_of_append]; rw [heq]; rw [← min_eq_left hle]; rw [←
+      List.take_take]; rw [min_eq_left hle]; rw [List.take_append_drop]
+  use hq
+  rwa [← hq, ← evalFrom_of_append, ← evalFrom_of_append, ← List.append_assoc,
+    List.take_append_drop, List.take_append_drop]
 
 中文:
 定理 evalFrom_split
@@ -412,7 +427,22 @@ theorem evalFrom_split
   wlog hle : (n : Nat) <= m generalizing n m
   · exact this m n hneq.symm heq.symm (le_of_not_ge hle)
   refine
-    ⟨M.evalFrom s ((x.take m).take n),
+    ⟨M.evalFrom s ((x.take m).take n), (x.take m).take n, (x.take m).drop n,
+                    x.drop m, ?_, ?_, ?_, by rfl, ?_⟩
+  · rw [List.take_append_drop, List.take_append_drop]
+  · simp only [List.length_drop, List.length_take]
+    omega
+  · intro h
+    have hlen' := congr_arg List.length h
+    simp only [List.length_drop, List.length, List.length_take] at hlen'
+    omega
+  have hq : M.evalFrom (M.evalFrom s ((x.take m).take n)) ((x.take m).drop n) =
+      M.evalFrom s ((x.take m).take n) := by
+    rw [List.take_take]; rw [min_eq_left hle]; rw [← evalFrom_of_append]; rw [heq]; rw [← min_eq_left hle]; rw [←
+      List.take_take]; rw [min_eq_left hle]; rw [List.take_append_drop]
+  use hq
+  rwa [← hq, ← evalFrom_of_append, ← evalFrom_of_append, ← List.append_assoc,
+    List.take_append_drop, List.take_append_drop]
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.exists_ne_map_eq_of_card_lt, List.len, List.length_drop, List.length_take, List.take_append_drop, M.evalFrom, congr_arg, evalFrom, exists_ne_map_eq_of_card_lt, generalizing, heq.symm, hneq.symm, le_of_not_ge, length_drop, length_take, take_append_drop, x.drop, x.take
 -/
@@ -463,7 +493,7 @@ theorem evalFrom_of_pow
     rw [List.flatten_cons]; rw [evalFrom_of_append]; rw [ha]; rw [hx]
     apply ih
     intro z hz
-    exac
+    exact hS z (List.mem_cons_of_mem a hz)
 
 中文:
 定理 evalFrom_of_pow
@@ -479,7 +509,7 @@ theorem evalFrom_of_pow
     rw [List.flatten_cons]; rw [evalFrom_of_append]; rw [ha]; rw [hx]
     apply ih
     intro z hz
-    exac
+    exact hS z (List.mem_cons_of_mem a hz)
 
 Depends on / 依赖: Language, Language.mem_kstar, List.flatten_cons, List.mem_cons_of_mem, List.mem_cons_self, Set.mem_singleton_iff, evalFrom_of_append, flatten_cons, mem_cons_of_mem, mem_cons_self, mem_kstar, mem_singleton_iff
 -/
@@ -512,7 +542,10 @@ theorem pumping_lemma
   rcases hy with ⟨ab, hab, c', hc', rfl⟩
   rw [Language.mem_mul] at hab
   rcases hab with ⟨a', ha', b', hb', rfl⟩
-  rw [Set.mem_s
+  rw [Set.mem_singleton_iff] at ha' hc'
+  subst ha' hc'
+  have h := M.evalFrom_of_pow hb hb'
+  rwa [mem_accepts, eval, evalFrom_of_append, evalFrom_of_append, h, hc]
 
 中文:
 定理 pumping_lemma
@@ -525,7 +558,10 @@ theorem pumping_lemma
   rcases hy with ⟨ab, hab, c', hc', rfl⟩
   rw [Language.mem_mul] at hab
   rcases hab with ⟨a', ha', b', hb', rfl⟩
-  rw [Set.mem_s
+  rw [Set.mem_singleton_iff] at ha' hc'
+  subst ha' hc'
+  have h := M.evalFrom_of_pow hb hb'
+  rwa [mem_accepts, eval, evalFrom_of_append, evalFrom_of_append, h, hc]
 
 Depends on / 依赖: Language, Language.mem_mul, M.evalFrom_of_pow, M.evalFrom_split, M.start, Set.mem_singleton_iff, evalFrom_of_append, evalFrom_of_pow, evalFrom_split, mem_accepts, mem_mul, mem_singleton_iff
 -/

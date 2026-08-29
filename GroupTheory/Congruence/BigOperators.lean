@@ -192,7 +192,7 @@ theorem finsuppProd
     (fun _ _ => Quotient.sound <| H _)
     (fun _ _ => Quotient.sound <| hf _) (fun _ _ => Quotient.sound <| hf' _)
 
-@[to_additive (attr := s
+@[to_additive (attr := simp, norm_cast)]
 
 中文:
 定理 finsuppProd
@@ -205,7 +205,7 @@ theorem finsuppProd
     (fun _ _ => Quotient.sound <| H _)
     (fun _ _ => Quotient.sound <| hf _) (fun _ _ => Quotient.sound <| hf' _)
 
-@[to_additive (attr := s
+@[to_additive (attr := simp, norm_cast)]
 -/
 protected theorem finsuppProd {ι : Type*} {β : Type*} {M : Type*}
     [CommMonoid M] [Zero β]
@@ -257,7 +257,7 @@ theorem dfinsuppProd
     (fun _ _ => Quotient.sound <| H _)
     (fun _ _ => Quotient.sound <| hf _) (fun _ _ => Quotient.sound <| hf' _)
 
-@[to_additive (attr := simp, norm
+@[to_additive (attr := simp, norm_cast)]
 
 中文:
 定理 dfinsuppProd
@@ -269,7 +269,7 @@ theorem dfinsuppProd
     (fun _ _ => Quotient.sound <| H _)
     (fun _ _ => Quotient.sound <| hf _) (fun _ _ => Quotient.sound <| hf' _)
 
-@[to_additive (attr := simp, norm
+@[to_additive (attr := simp, norm_cast)]
 -/
 protected theorem dfinsuppProd {ι : Type*} {β : ι -> Type*} {M : Type*}
     [DecidableEq ι] [CommMonoid M] [forall i, Zero (β i)] [forall i (y : β i), Decidable (y != 0)]

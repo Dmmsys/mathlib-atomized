@@ -76,7 +76,27 @@ definition tarjanDFS
   if g.contains v then
     for edge in g[v]! do
       let u := edge.dst
-    
+      if !(← get).visited.contains u then
+        tarjanDFS g u
+        modify fun s => {s with
+          lowlink := s.lowlink.insert v (min s.lowlink[v]! s.lowlink[u]!),
+        }
+      else if (← get).onStack.contains u then
+        modify fun s => {s with
+          lowlink := s.lowlink.insert v (min s.lowlink[v]! s.id[u]!),
+        }
+
+  if (← get).id[v]! = (← get).lowlink[v]! then
+    let mut w := 0
+    while true do
+      w := (← get).stack.back!
+      modify fun s => {s with
+        stack := s.stack.pop
+        onStack := s.onStack.erase w
+        lowlink := s.lowlink.insert w s.lowlink[v]!
+      }
+      if w = v then
+        break
 
 中文:
 定义 tarjanDFS
@@ -94,7 +114,27 @@ definition tarjanDFS
   if g.contains v then
     for edge in g[v]! do
       let u := edge.dst
-    
+      if !(← get).visited.contains u then
+        tarjanDFS g u
+        modify fun s => {s with
+          lowlink := s.lowlink.insert v (min s.lowlink[v]! s.lowlink[u]!),
+        }
+      else if (← get).onStack.contains u then
+        modify fun s => {s with
+          lowlink := s.lowlink.insert v (min s.lowlink[v]! s.id[u]!),
+        }
+
+  if (← get).id[v]! = (← get).lowlink[v]! then
+    let mut w := 0
+    while true do
+      w := (← get).stack.back!
+      modify fun s => {s with
+        stack := s.stack.pop
+        onStack := s.onStack.erase w
+        lowlink := s.lowlink.insert w s.lowlink[v]!
+      }
+      if w = v then
+        break
 -/
 partial def tarjanDFS (g : Graph) (v : Nat) : StateM TarjanState Unit := do
   modify fun s => {

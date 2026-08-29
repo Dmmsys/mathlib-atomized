@@ -91,7 +91,7 @@ instance FiberBundle.chartedSpace'
   chartAt x := (trivializationAt F E x.proj).toOpenPartialHomeomorph
   mem_chart_source x :=
     (trivializationAt F E x.proj).mem_source.mpr (mem_baseSet_trivializationAt F E x.proj)
-  chart_mem_atlas _ := me
+  chart_mem_atlas _ := mem_image_of_mem _ (trivialization_mem_atlas F E _)
 
 中文:
 实例 纤维丛.chartedSpace'
@@ -100,7 +100,7 @@ instance FiberBundle.chartedSpace'
   chartAt x := (trivializationAt F E x.proj).toOpenPartialHomeomorph
   mem_chart_source x :=
     (trivializationAt F E x.proj).mem_source.mpr (mem_baseSet_trivializationAt F E x.proj)
-  chart_mem_atlas _ := me
+  chart_mem_atlas _ := mem_image_of_mem _ (trivialization_mem_atlas F E _)
 
 Depends on / 依赖: Trivialization, chartAt, chart_mem_atlas, e.toOpenPartialHomeomorph, mem_baseSet_trivializationAt, mem_chart_source, mem_image_of_mem, mem_source, mem_source.mpr, toOpenPartialHomeomorph, trivializationAt, trivializationAtlas, trivialization_mem_atlas, x.proj
 -/
@@ -337,7 +337,17 @@ theorem contMDiffWithinAt_totalSpace
   rw [and_and_and_comm]; rw [← FiberBundle.continuousWithinAt_totalSpace]; rw [and_congr_right_iff]
   intro hf
   simp_rw +instances [modelWithCornersSelf_prod, FiberBundle.extChartAt, Function.comp_def,
-    PartialEquiv.trans_apply, PartialEq
+    PartialEquiv.trans_apply, PartialEquiv.prod_coe, PartialEquiv.refl_coe,
+    extChartAt_self_apply, modelWithCornersSelf_coe, Function.id_def, ← chartedSpaceSelf_prod]
+  refine (contMDiffWithinAt_prod_iff _).trans (and_congr ?_ Iff.rfl)
+  have h1 : (fun x => (f x).proj) ⁻¹' (trivializationAt F E (f x₀).proj).baseSet in 𝓝[s] x₀ :=
+    ((FiberBundle.continuous_proj F E).continuousWithinAt.comp hf (mapsTo_image f s))
+      ((Trivialization.open_baseSet _).mem_nhds (mem_baseSet_trivializationAt F E _))
+  refine EventuallyEq.contMDiffWithinAt_iff (eventually_of_mem h1 fun x hx => ?_) ?_
+  · simp_rw [Function.comp, OpenPartialHomeomorph.coe_toPartialEquiv, Trivialization.coe_coe]
+    rw [Trivialization.coe_fst']
+    exact hx
+  · simp only [mfld_simps]
 
 中文:
 定理 contMDiffWithinAt_totalSpace
@@ -347,7 +357,17 @@ theorem contMDiffWithinAt_totalSpace
   rw [and_and_and_comm]; rw [← FiberBundle.continuousWithinAt_totalSpace]; rw [and_congr_right_iff]
   intro hf
   simp_rw +instances [modelWithCornersSelf_prod, FiberBundle.extChartAt, Function.comp_def,
-    PartialEquiv.trans_apply, PartialEq
+    PartialEquiv.trans_apply, PartialEquiv.prod_coe, PartialEquiv.refl_coe,
+    extChartAt_self_apply, modelWithCornersSelf_coe, Function.id_def, ← chartedSpaceSelf_prod]
+  refine (contMDiffWithinAt_prod_iff _).trans (and_congr ?_ Iff.rfl)
+  have h1 : (fun x => (f x).proj) ⁻¹' (trivializationAt F E (f x₀).proj).baseSet in 𝓝[s] x₀ :=
+    ((FiberBundle.continuous_proj F E).continuousWithinAt.comp hf (mapsTo_image f s))
+      ((Trivialization.open_baseSet _).mem_nhds (mem_baseSet_trivializationAt F E _))
+  refine EventuallyEq.contMDiffWithinAt_iff (eventually_of_mem h1 fun x hx => ?_) ?_
+  · simp_rw [Function.comp, OpenPartialHomeomorph.coe_toPartialEquiv, Trivialization.coe_coe]
+    rw [Trivialization.coe_fst']
+    exact hx
+  · simp only [mfld_simps]
 
 Depends on / 依赖: FiberBundle, FiberBundle.continuousWithinAt_totalSpace, FiberBundle.extChartAt, Function, Function.comp_def, Function.id_def, Iff.rfl, PartialEquiv, PartialEquiv.prod_coe, PartialEquiv.refl_coe, PartialEquiv.trans_apply, and_and_and_comm, and_congr, and_congr_right_iff, chartedSpaceSelf_prod, comp_def, contMDiffWithinAt_iff_target, contMDiffWithinAt_prod_iff, continuousWithinAt_totalSpace, extChartAt
 -/
@@ -542,7 +562,7 @@ theorem contMDiff_zeroSection
   apply (contMDiffAt_const (c := 0)).congr_of_eventuallyEq
   filter_upwards [(trivializationAt F E x).open_baseSet.mem_nhds
     (mem_baseSet_trivializationAt F E x)] with y hy
-using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜
+using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜 hy
 
 中文:
 定理 contMDiff_zeroSection
@@ -554,7 +574,7 @@ using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜
   apply (contMDiffAt_const (c := 0)).congr_of_eventuallyEq
   filter_upwards [(trivializationAt F E x).open_baseSet.mem_nhds
     (mem_baseSet_trivializationAt F E x)] with y hy
-using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜
+using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜 hy
 
 Depends on / 依赖: Prod.snd, congr_arg, congr_of_eventuallyEq, contMDiffAt_const, contMDiffAt_section, filter_upwards, mem_baseSet_trivializationAt, mem_nhds, open_baseSet, open_baseSet.mem_nhds, trivializationAt, zeroSection
 -/
@@ -942,7 +962,7 @@ theorem ContMDiffWithinAt.coordChangeL
 protected nonrec theorem ContMDiffAt.coordChangeL
     (hf : ContMDiffAt IM IB n f x) (he : f x in e.baseSet) (he' : f x in e'.baseSet) :
     ContMDiffAt IM 𝓘(𝕜, F ->L[𝕜] F) n (fun y => (e.coordChangeL 𝕜 e' (f y) : F ->L[𝕜] F)) x :=
-  hf.
+  hf.coordChangeL he he'
 
 中文:
 定理 ContMDiffWithinAt.coordChangeL
@@ -951,7 +971,7 @@ protected nonrec theorem ContMDiffAt.coordChangeL
 protected nonrec theorem ContMDiffAt.coordChangeL
     (hf : ContMDiffAt IM IB n f x) (he : f x in e.baseSet) (he' : f x in e'.baseSet) :
     ContMDiffAt IM 𝓘(𝕜, F ->L[𝕜] F) n (fun y => (e.coordChangeL 𝕜 e' (f y) : F ->L[𝕜] F)) x :=
-  hf.
+  hf.coordChangeL he he'
 -/
 protected theorem ContMDiffWithinAt.coordChangeL
     (hf : ContMDiffWithinAt IM IB n f s x) (he : f x in e.baseSet) (he' : f x in e'.baseSet) :
@@ -1007,7 +1027,14 @@ theorem ContMDiffWithinAt.coordChange
   · have : e.baseSet inter e'.baseSet in 𝓝 (f x) :=
      (e.open_baseSet.inter e'.open_baseSet).mem_nhds ⟨he, he'⟩
     filter_upwards [hf.continuousWithinAt this] with y hy
-    exact (Trivialization.coordChangeL_apply' e
+    exact (Trivialization.coordChangeL_apply' e e' hy (g y)).symm
+  · exact (Trivialization.coordChangeL_apply' e e' ⟨he, he'⟩ (g x)).symm
+
+protected nonrec theorem ContMDiffAt.coordChange
+    (hf : ContMDiffAt IM IB n f x) (hg : ContMDiffAt IM 𝓘(𝕜, F) n g x) (he : f x in e.baseSet)
+    (he' : f x in e'.baseSet) :
+    ContMDiffAt IM 𝓘(𝕜, F) n (fun y => e.coordChange e' (f y) (g y)) x :=
+  hf.coordChange hg he he'
 
 中文:
 定理 ContMDiffWithinAt.coordChange
@@ -1016,7 +1043,14 @@ theorem ContMDiffWithinAt.coordChange
   · have : e.baseSet inter e'.baseSet in 𝓝 (f x) :=
      (e.open_baseSet.inter e'.open_baseSet).mem_nhds ⟨he, he'⟩
     filter_upwards [hf.continuousWithinAt this] with y hy
-    exact (Trivialization.coordChangeL_apply' e
+    exact (Trivialization.coordChangeL_apply' e e' hy (g y)).symm
+  · exact (Trivialization.coordChangeL_apply' e e' ⟨he, he'⟩ (g x)).symm
+
+protected nonrec theorem ContMDiffAt.coordChange
+    (hf : ContMDiffAt IM IB n f x) (hg : ContMDiffAt IM 𝓘(𝕜, F) n g x) (he : f x in e.baseSet)
+    (he' : f x in e'.baseSet) :
+    ContMDiffAt IM 𝓘(𝕜, F) n (fun y => e.coordChange e' (f y) (g y)) x :=
+  hf.coordChange hg he he'
 -/
 protected theorem ContMDiffWithinAt.coordChange
     (hf : ContMDiffWithinAt IM IB n f s x) (hg : ContMDiffWithinAt IM 𝓘(𝕜, F) n g s x)
@@ -1089,7 +1123,12 @@ theorem Bundle.Trivialization.contMDiffOn_symm_trans
   rw [mapsTo_inter] at Hmaps
   -- TODO: drop `congr` https://github.com/leanprover-community/mathlib4/issues/5473
   refine (contMDiffOn_fst.prodMk
-
+    (contMDiffOn_fst.coordChange contMDiffOn_snd Hmaps.1 Hmaps.2)).congr ?_
+  rintro ⟨b, x⟩ hb
+  refine Prod.ext ?_ rfl
+  have : (e.toOpenPartialHomeomorph.symm (b, x)).1 in e'.baseSet := by
+    simp_all only [Trivialization.mem_target, mfld_simps]
+  exact (e'.coe_fst' this).trans (e.proj_symm_apply hb.1)
 
 中文:
 定理 Bundle.Trivialization.contMDiffOn_symm_trans
@@ -1099,7 +1138,12 @@ theorem Bundle.Trivialization.contMDiffOn_symm_trans
   rw [mapsTo_inter] at Hmaps
   -- TODO: drop `congr` https://github.com/leanprover-community/mathlib4/issues/5473
   refine (contMDiffOn_fst.prodMk
-
+    (contMDiffOn_fst.coordChange contMDiffOn_snd Hmaps.1 Hmaps.2)).congr ?_
+  rintro ⟨b, x⟩ hb
+  refine Prod.ext ?_ rfl
+  have : (e.toOpenPartialHomeomorph.symm (b, x)).1 in e'.baseSet := by
+    simp_all only [Trivialization.mem_target, mfld_simps]
+  exact (e'.coe_fst' this).trans (e.proj_symm_apply hb.1)
 
 Depends on / 依赖: MapsTo, Prod.fst, baseSet, e.baseSet, e.mem_target, e.target, mapsTo_inter, mem_target, target
 -/
@@ -1190,7 +1234,12 @@ instance ContMDiffFiberwiseLinear.hasGroupoid
     have : MemTrivializationAtlas e' := ⟨he'⟩
     rw [mem_contMDiffFiberwiseLinear_iff]
     refine ⟨_, _, e.open_baseSet.inter e'.open_baseSet, contMDiffOn_coordChangeL e e',
-      contMDiffOn_symm_coordChangeL
+      contMDiffOn_symm_coordChangeL e e', ?_⟩
+    refine OpenPartialHomeomorph.eqOnSourceSetoid.symm ⟨?_, ?_⟩
+    · simp only [FiberwiseLinear.openPartialHomeomorph, trans_toPartialEquiv, symm_toPartialEquiv,
+        e.symm_trans_source_eq e']
+    · rintro ⟨b, v⟩ hb
+      exact (e.apply_symm_apply_eq_coordChangeL e' hb.1 v).symm
 
 中文:
 实例 ContMDiffFiberwiseLinear.hasGroupoid
@@ -1201,7 +1250,12 @@ instance ContMDiffFiberwiseLinear.hasGroupoid
     have : MemTrivializationAtlas e' := ⟨he'⟩
     rw [mem_contMDiffFiberwiseLinear_iff]
     refine ⟨_, _, e.open_baseSet.inter e'.open_baseSet, contMDiffOn_coordChangeL e e',
-      contMDiffOn_symm_coordChangeL
+      contMDiffOn_symm_coordChangeL e e', ?_⟩
+    refine OpenPartialHomeomorph.eqOnSourceSetoid.symm ⟨?_, ?_⟩
+    · simp only [FiberwiseLinear.openPartialHomeomorph, trans_toPartialEquiv, symm_toPartialEquiv,
+        e.symm_trans_source_eq e']
+    · rintro ⟨b, v⟩ hb
+      exact (e.apply_symm_apply_eq_coordChangeL e' hb.1 v).symm
 
 Depends on / 依赖: FiberwiseLinear, FiberwiseLinear.openPartialHomeomorph, MemTrivializationAtlas, OpenPartialHomeomorph, OpenPartialHomeomorph.eqOnSourceSetoid.symm, contMDiffOn_coordChangeL, contMDiffOn_symm_coordChangeL, e.apply, e.open_baseSet.inter, e.symm_trans_source_eq, eqOnSourceSetoid, mem_contMDiffFiberwiseLinear_iff, openPartialHomeomorph, open_baseSet, symm_toPartialEquiv, symm_trans_source_eq, trans_toPartialEquiv
 -/
@@ -1234,7 +1288,13 @@ instance Bundle.TotalSpace.isManifold
   obtain ⟨φ, U, hU, hφ, h2φ, heφ⟩ := he
   rw [isLocalStructomorphOn_contDiffGroupoid_iff]
   refine ⟨ContMDiffOn.congr ?_ (EqOnSource.eqOn heφ),
-  
+      ContMDiffOn.congr ?_ (EqOnSource.eqOn (EqOnSource.symm' heφ))⟩
+  · rw [EqOnSource.source_eq heφ]
+    apply contMDiffOn_fst.prodMk
+    exact (hφ.comp contMDiffOn_fst <| prod_subset_preimage_fst _ _).clm_apply contMDiffOn_snd
+  · rw [EqOnSource.target_eq heφ]
+    apply contMDiffOn_fst.prodMk
+    exact (h2φ.comp contMDiffOn_fst <| prod_subset_preimage_fst _ _).clm_apply contMDiffOn_snd
 
 中文:
 实例 Bundle.全空间.isManifold
@@ -1246,7 +1306,13 @@ instance Bundle.TotalSpace.isManifold
   obtain ⟨φ, U, hU, hφ, h2φ, heφ⟩ := he
   rw [isLocalStructomorphOn_contDiffGroupoid_iff]
   refine ⟨ContMDiffOn.congr ?_ (EqOnSource.eqOn heφ),
-  
+      ContMDiffOn.congr ?_ (EqOnSource.eqOn (EqOnSource.symm' heφ))⟩
+  · rw [EqOnSource.source_eq heφ]
+    apply contMDiffOn_fst.prodMk
+    exact (hφ.comp contMDiffOn_fst <| prod_subset_preimage_fst _ _).clm_apply contMDiffOn_snd
+  · rw [EqOnSource.target_eq heφ]
+    apply contMDiffOn_fst.prodMk
+    exact (h2φ.comp contMDiffOn_fst <| prod_subset_preimage_fst _ _).clm_apply contMDiffOn_snd
 
 Depends on / 依赖: ContMDiffOn, ContMDiffOn.congr, EqOnSource, EqOnSource.eqOn, EqOnSource.source_eq, EqOnSource.symm, HasGroupoid, StructureGroupoid, StructureGroupoid.HasGroupoid.comp, clm_apply, contMDiffFiberwiseLinear, contMDiffOn_fst, contMDiffOn_fst.prodMk, contMDiffOn_snd, isLocalStructomorphOn_contDiffGroupoid_iff, mem_contMDiffFiberwiseLinear_iff, prodMk, prod_subset_preimage_fst, source_eq
 -/
@@ -1685,7 +1751,10 @@ instance Bundle.Prod.contMDiffVectorBundle
     refine ContMDiffOn.clm_prodMap ?_ ?_
     · refine (contMDiffOn_coordChangeL e₁ e₁').mono ?_
       simp only [Trivialization.prod_baseSet, mfld_simps]
-      mfld_s
+      mfld_set_tac
+    · refine (contMDiffOn_coordChangeL e₂ e₂').mono ?_
+      simp only [Trivialization.prod_baseSet, mfld_simps]
+      mfld_set_tac
 
 中文:
 实例 Bundle.积类型.contMDiffVectorBundle
@@ -1696,7 +1765,10 @@ instance Bundle.Prod.contMDiffVectorBundle
     refine ContMDiffOn.clm_prodMap ?_ ?_
     · refine (contMDiffOn_coordChangeL e₁ e₁').mono ?_
       simp only [Trivialization.prod_baseSet, mfld_simps]
-      mfld_s
+      mfld_set_tac
+    · refine (contMDiffOn_coordChangeL e₂ e₂').mono ?_
+      simp only [Trivialization.prod_baseSet, mfld_simps]
+      mfld_set_tac
 
 Depends on / 依赖: ContMDiffOn, ContMDiffOn.clm_prodMap, ContMDiffOn.congr, Trivialization, Trivialization.prod_baseSet, clm_prodMap, contMDiffOn_coordChangeL, coordChangeL_prod, mfld_set_tac, mfld_simps, prod_baseSet
 -/
@@ -1851,7 +1923,8 @@ theorem contMDiffVectorBundle
       refine (a.contMDiffOn_contMDiffCoordChange he he').congr ?_
       intro b hb
       ext v
-      rw [a.contMDiffCoordChange_apply he he'
+      rw [a.contMDiffCoordChange_apply he he' hb v]; rw [ContinuousLinearEquiv.coe_coe]; rw [Trivialization.coordChangeL_apply]
+      exacts [rfl, hb] }
 
 中文:
 定理 contMDiffVectorBundle
@@ -1862,7 +1935,8 @@ theorem contMDiffVectorBundle
       refine (a.contMDiffOn_contMDiffCoordChange he he').congr ?_
       intro b hb
       ext v
-      rw [a.contMDiffCoordChange_apply he he'
+      rw [a.contMDiffCoordChange_apply he he' hb v]; rw [ContinuousLinearEquiv.coe_coe]; rw [Trivialization.coordChangeL_apply]
+      exacts [rfl, hb] }
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_coe, Trivialization, Trivialization.coordChangeL_apply, a.contMDiffCoordChange_apply, a.contMDiffOn_contMDiffCoordChange, a.toFiberBundle, a.toVectorBundle, a.totalSpaceTopology, coe_coe, contMDiffCoordChange_apply, contMDiffOn_contMDiffCoordChange, contMDiffOn_coordChangeL, coordChangeL_apply, exacts, toFiberBundle, toVectorBundle, totalSpaceTopology
 -/

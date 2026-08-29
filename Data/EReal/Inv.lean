@@ -234,7 +234,10 @@ theorem abs_mul
   | symm h => rwa [mul_comm, EReal.mul_comm]
   | coe_coe => simp only [← coe_mul, abs_def, _root_.abs_mul, ENNReal.ofReal_mul (abs_nonneg _)]
   | top_pos _ h =>
-    rw [top_mul_coe_of
+    rw [top_mul_coe_of_pos h]; rw [abs_top]; rw [ENNReal.top_mul]
+    rw [Ne]; rw [abs_eq_zero_iff]; rw [coe_eq_zero]
+    exact h.ne'
+  | neg_left h => rwa [neg_mul, EReal.abs_neg, EReal.abs_neg]
 
 中文:
 定理 abs_mul
@@ -247,7 +250,10 @@ theorem abs_mul
   | symm h => rwa [mul_comm, EReal.mul_comm]
   | coe_coe => simp only [← coe_mul, abs_def, _root_.abs_mul, ENNReal.ofReal_mul (abs_nonneg _)]
   | top_pos _ h =>
-    rw [top_mul_coe_of
+    rw [top_mul_coe_of_pos h]; rw [abs_top]; rw [ENNReal.top_mul]
+    rw [Ne]; rw [abs_eq_zero_iff]; rw [coe_eq_zero]
+    exact h.ne'
+  | neg_left h => rwa [neg_mul, EReal.abs_neg, EReal.abs_neg]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_mul, ENNReal.top_mul, EReal.abs_neg, EReal.mul_comm, _root_, _root_.abs_mul, abs_def, abs_eq_zero_iff, abs_mul, abs_neg, abs_nonneg, abs_top, abs_zero, coe_coe, coe_eq_zero, coe_mul, h.ne, mul_comm, mul_zero
 -/
@@ -374,7 +380,8 @@ theorem sign_mul
   | symm h => rwa [mul_comm, EReal.mul_comm]
   | coe_coe => simp only [← coe_mul, sign_coe, _root_.sign_mul]
   | top_pos _ h =>
-    rw [top_mul_coe_of_pos h]; rw [sign_top]; rw [one_
+    rw [top_mul_coe_of_pos h]; rw [sign_top]; rw [one_mul]; rw [sign_pos (EReal.coe_pos.2 h)]
+  | neg_left h => rw [neg_mul, sign_neg, sign_neg, h, neg_mul]
 
 中文:
 定理 sign_mul
@@ -387,7 +394,8 @@ theorem sign_mul
   | symm h => rwa [mul_comm, EReal.mul_comm]
   | coe_coe => simp only [← coe_mul, sign_coe, _root_.sign_mul]
   | top_pos _ h =>
-    rw [top_mul_coe_of_pos h]; rw [sign_top]; rw [one_
+    rw [top_mul_coe_of_pos h]; rw [sign_top]; rw [one_mul]; rw [sign_pos (EReal.coe_pos.2 h)]
+  | neg_left h => rw [neg_mul, sign_neg, sign_neg, h, neg_mul]
 
 Depends on / 依赖: EReal.coe_pos, EReal.mul_comm, _root_, _root_.sign_mul, coe_coe, coe_mul, coe_pos, mul_comm, mul_zero, neg_left, neg_mul, one_mul, sign_coe, sign_mul, sign_neg, sign_pos, sign_top, sign_zero, top_mul_coe_of_pos, top_pos
 -/
@@ -486,7 +494,8 @@ theorem le_iff_sign
     · left; simpa using h
     · right; right; simpa using h
   · rintro (h | h | h | h)
-    · exact
+    · exact (sign.monotone.reflect_lt h).le
+    all_goals rw [← x.sign_mul_abs, ← y.sign_mul_abs]; simp [h]
 
 中文:
 定理 le_iff_sign
@@ -501,7 +510,8 @@ theorem le_iff_sign
     · left; simpa using h
     · right; right; simpa using h
   · rintro (h | h | h | h)
-    · exact
+    · exact (sign.monotone.reflect_lt h).le
+    all_goals rw [← x.sign_mul_abs, ← y.sign_mul_abs]; simp [h]
 
 Depends on / 依赖: all_goals, imp_right, lt_or_eq, lt_or_eq.imp_right, monotone, reflect_lt, sign.monotone, sign.monotone.reflect_lt, sign_mul_abs, x.sign_mul_abs, y.sign_mul_abs
 -/
@@ -1015,7 +1025,10 @@ lemma mul_inv
   | top_top | top_zero | top_bot | zero_bot | bot_bot => simp
   | @symm a b h => rw [mul_comm b a, mul_comm b⁻¹ a⁻¹]; exact h
   | top_pos x x_pos => rw [top_mul_of_pos (EReal.coe_pos.2 x_pos), inv_top, zero_mul]
-  | top_neg x x_neg => rw [top_mul_
+  | top_neg x x_neg => rw [top_mul_of_neg (EReal.coe_neg'.2 x_neg), inv_bot, inv_top, zero_mul]
+  | pos_bot x x_pos => rw [mul_bot_of_pos (EReal.coe_pos.2 x_pos), inv_bot, mul_zero]
+  | coe_coe x y => rw [← coe_mul, ← coe_inv, _root_.mul_inv, coe_mul, coe_inv, coe_inv]
+  | neg_bot x x_neg => rw [mul_bot_of_neg (EReal.coe_neg'.2 x_neg), inv_top, inv_bot, mul_zero]
 
 中文:
 引理 mul_inv
@@ -1026,7 +1039,10 @@ lemma mul_inv
   | top_top | top_zero | top_bot | zero_bot | bot_bot => simp
   | @symm a b h => rw [mul_comm b a, mul_comm b⁻¹ a⁻¹]; exact h
   | top_pos x x_pos => rw [top_mul_of_pos (EReal.coe_pos.2 x_pos), inv_top, zero_mul]
-  | top_neg x x_neg => rw [top_mul_
+  | top_neg x x_neg => rw [top_mul_of_neg (EReal.coe_neg'.2 x_neg), inv_bot, inv_top, zero_mul]
+  | pos_bot x x_pos => rw [mul_bot_of_pos (EReal.coe_pos.2 x_pos), inv_bot, mul_zero]
+  | coe_coe x y => rw [← coe_mul, ← coe_inv, _root_.mul_inv, coe_mul, coe_inv, coe_inv]
+  | neg_bot x x_neg => rw [mul_bot_of_neg (EReal.coe_neg'.2 x_neg), inv_top, inv_bot, mul_zero]
 
 Depends on / 依赖: EReal.coe_neg, EReal.coe_pos, EReal.induction, _root_, _root_.mul_inv, bot_bot, coe_coe, coe_inv, coe_mu, coe_mul, coe_neg, coe_pos, inv_bot, inv_top, mul_bot_of_pos, mul_comm, mul_inv, mul_zero, pos_bot, top_bot
 -/
@@ -1054,7 +1070,12 @@ lemma sign_mul_inv_abs
   | coe a =>
     rcases lt_trichotomy a 0 with (a_neg | rfl | a_pos)
     · rw [sign_coe, _root_.sign_neg a_neg, coe_neg_one, neg_one_mul, ← inv_neg, abs_def a,
-        coe_ennreal_ofReal, max_eq_left (abs_nonneg a), ← coe_neg |a|, abs_of_neg a_neg, neg_neg
+        coe_ennreal_ofReal, max_eq_left (abs_nonneg a), ← coe_neg |a|, abs_of_neg a_neg, neg_neg]
+    · simp
+    · rw [sign_coe, _root_.sign_pos a_pos, SignType.coe_one, one_mul]
+      simp only [abs_def a, coe_ennreal_ofReal, abs_nonneg, max_eq_left]
+      congr
+      exact abs_of_pos a_pos
 
 中文:
 引理 sign_mul_inv_abs
@@ -1066,7 +1087,12 @@ lemma sign_mul_inv_abs
   | coe a =>
     rcases lt_trichotomy a 0 with (a_neg | rfl | a_pos)
     · rw [sign_coe, _root_.sign_neg a_neg, coe_neg_one, neg_one_mul, ← inv_neg, abs_def a,
-        coe_ennreal_ofReal, max_eq_left (abs_nonneg a), ← coe_neg |a|, abs_of_neg a_neg, neg_neg
+        coe_ennreal_ofReal, max_eq_left (abs_nonneg a), ← coe_neg |a|, abs_of_neg a_neg, neg_neg]
+    · simp
+    · rw [sign_coe, _root_.sign_pos a_pos, SignType.coe_one, one_mul]
+      simp only [abs_def a, coe_ennreal_ofReal, abs_nonneg, max_eq_left]
+      congr
+      exact abs_of_pos a_pos
 
 Depends on / 依赖: SignType, SignType.coe_one, _root_, _root_.sign_neg, _root_.sign_pos, a_neg, a_pos, abs_def, abs_nonneg, abs_of_neg, abs_of_pos, coe_ennreal_ofReal, coe_neg, coe_neg_one, coe_one, inv_neg, lt_trichotomy, max_eq_left, neg_neg, neg_one_mul
 -/
@@ -1097,7 +1123,14 @@ lemma sign_mul_inv_abs'
     rcases lt_trichotomy a 0 with (a_neg | rfl | a_pos)
     · rw [sign_coe, _root_.sign_neg a_neg, coe_neg_one, neg_one_mul, abs_def a,
         ← ofReal_inv_of_pos (abs_pos_of_neg a_neg), coe_ennreal_ofReal,
-        max_eq_left (inv_nonneg.2 (
+        max_eq_left (inv_nonneg.2 (abs_nonneg a)), ← coe_neg |a|⁻¹, ← coe_inv a, abs_of_neg a_neg,
+        ← _root_.inv_neg, neg_neg]
+    · simp
+    · rw [sign_coe, _root_.sign_pos a_pos, SignType.coe_one, one_mul, abs_def a,
+        ← ofReal_inv_of_pos (abs_pos_of_pos a_pos), coe_ennreal_ofReal,
+          max_eq_left (inv_nonneg.2 (abs_nonneg a)), ← coe_inv a]
+      congr
+      exact abs_of_pos a_pos
 
 中文:
 引理 sign_mul_inv_abs'
@@ -1110,7 +1143,14 @@ lemma sign_mul_inv_abs'
     rcases lt_trichotomy a 0 with (a_neg | rfl | a_pos)
     · rw [sign_coe, _root_.sign_neg a_neg, coe_neg_one, neg_one_mul, abs_def a,
         ← ofReal_inv_of_pos (abs_pos_of_neg a_neg), coe_ennreal_ofReal,
-        max_eq_left (inv_nonneg.2 (
+        max_eq_left (inv_nonneg.2 (abs_nonneg a)), ← coe_neg |a|⁻¹, ← coe_inv a, abs_of_neg a_neg,
+        ← _root_.inv_neg, neg_neg]
+    · simp
+    · rw [sign_coe, _root_.sign_pos a_pos, SignType.coe_one, one_mul, abs_def a,
+        ← ofReal_inv_of_pos (abs_pos_of_pos a_pos), coe_ennreal_ofReal,
+          max_eq_left (inv_nonneg.2 (abs_nonneg a)), ← coe_inv a]
+      congr
+      exact abs_of_pos a_pos
 
 Depends on / 依赖: SignType, SignType.coe_one, _root_, _root_.inv_neg, _root_.sign_neg, _root_.sign_pos, a_neg, a_pos, abs_def, abs_nonneg, abs_of_neg, abs_pos_of_neg, abs_pos_of_pos, coe_ennreal, coe_ennreal_ofReal, coe_inv, coe_neg, coe_neg_one, coe_one, inv_neg
 -/
@@ -1313,7 +1353,9 @@ lemma inv_strictAntiOn
   | ⊤ => exact inv_top ▸ inv_pos_of_pos_ne_top a_0 (coe_ne_top a)
   | ⊥ => exact (not_lt_bot b_0).rec
   | (b : Real) =>
-    rw [← coe_inv a]; rw [← coe_inv b]; rw [EReal.coe_lt_co
+    rw [← coe_inv a]; rw [← coe_inv b]; rw [EReal.coe_lt_coe_iff]
+    exact _root_.inv_strictAntiOn (EReal.coe_pos.1 a_0) (EReal.coe_pos.1 b_0)
+      (EReal.coe_lt_coe_iff.1 a_b)
 
 中文:
 引理 inv_strictAntiOn
@@ -1326,7 +1368,9 @@ lemma inv_strictAntiOn
   | ⊤ => exact inv_top ▸ inv_pos_of_pos_ne_top a_0 (coe_ne_top a)
   | ⊥ => exact (not_lt_bot b_0).rec
   | (b : Real) =>
-    rw [← coe_inv a]; rw [← coe_inv b]; rw [EReal.coe_lt_co
+    rw [← coe_inv a]; rw [← coe_inv b]; rw [EReal.coe_lt_coe_iff]
+    exact _root_.inv_strictAntiOn (EReal.coe_pos.1 a_0) (EReal.coe_pos.1 b_0)
+      (EReal.coe_lt_coe_iff.1 a_b)
 
 Depends on / 依赖: EReal.coe_lt_coe_iff, EReal.coe_pos, _root_, _root_.inv_strictAntiOn, coe_inv, coe_lt_coe_iff, coe_ne_top, coe_pos, inv_pos_of_pos_ne_top, inv_strictAntiOn, inv_top, ne_bot_of_gt, ne_top_of_lt, not_lt_bot
 -/
@@ -1937,7 +1981,8 @@ lemma antitone_div_right_of_nonpos
   intro a a' h'
   change a' * b⁻¹ <= a * b⁻¹
   rw [← neg_neg (a * b⁻¹)]; rw [← neg_neg (a' * b⁻¹)]; rw [neg_le_neg_iff]; rw [mul_comm a b⁻¹]; rw [mul_comm a' b⁻¹]; rw [← neg_mul b⁻¹ a]; rw [← neg_mul b⁻¹ a']; rw [mul_comm (-b⁻¹) a]; rw [mul_comm (-b⁻¹) a']; rw [← inv_neg b]
-  have : 0 <= -b := by
+  have : 0 <= -b := by apply EReal.le_neg_of_le_neg; simp [h]
+  exact div_le_div_right_of_nonneg this h'
 
 中文:
 引理 antitone_div_right_of_nonpos
@@ -1947,7 +1992,8 @@ lemma antitone_div_right_of_nonpos
   intro a a' h'
   change a' * b⁻¹ <= a * b⁻¹
   rw [← neg_neg (a * b⁻¹)]; rw [← neg_neg (a' * b⁻¹)]; rw [neg_le_neg_iff]; rw [mul_comm a b⁻¹]; rw [mul_comm a' b⁻¹]; rw [← neg_mul b⁻¹ a]; rw [← neg_mul b⁻¹ a']; rw [mul_comm (-b⁻¹) a]; rw [mul_comm (-b⁻¹) a']; rw [← inv_neg b]
-  have : 0 <= -b := by
+  have : 0 <= -b := by apply EReal.le_neg_of_le_neg; simp [h]
+  exact div_le_div_right_of_nonneg this h'
 
 Depends on / 依赖: EReal.le_neg_of_le_neg, div_le_div_right_of_nonneg, inv_neg, le_neg_of_le_neg, mul_comm, neg_le_neg_iff, neg_mul, neg_neg
 -/
@@ -2262,7 +2308,9 @@ lemma exists_lt_mul_left_of_nonneg
       use a', mem_Ioo.2 ⟨a0', aa'⟩
       rw [mul_top_of_pos ha] at h
       rwa [mul_top_of_pos a0']
-  · h
+  · have b0 : 0 < b := pos_of_mul_pos_right (hc.trans_lt h) ha
+    obtain ⟨a', ha', aa'⟩ := exists_between ((div_lt_iff b0 b_top).2 h)
+    exact ⟨a', ⟨(div_nonneg hc b0.le).trans_lt ha', aa'⟩, (div_lt_iff b0 b_top).1 ha'⟩
 
 中文:
 引理 存在_lt_mul_left_of_nonneg
@@ -2276,7 +2324,9 @@ lemma exists_lt_mul_left_of_nonneg
       use a', mem_Ioo.2 ⟨a0', aa'⟩
       rw [mul_top_of_pos ha] at h
       rwa [mul_top_of_pos a0']
-  · h
+  · have b0 : 0 < b := pos_of_mul_pos_right (hc.trans_lt h) ha
+    obtain ⟨a', ha', aa'⟩ := exists_between ((div_lt_iff b0 b_top).2 h)
+    exact ⟨a', ⟨(div_nonneg hc b0.le).trans_lt ha', aa'⟩, (div_lt_iff b0 b_top).1 ha'⟩
 -/
 private lemma exists_lt_mul_left_of_nonneg (ha : 0 <= a) (hc : 0 <= c) (h : c < a * b) :
     exists a' in Ioo 0 a, c < a' * b := by
@@ -2328,7 +2378,16 @@ lemma exists_mul_left_lt
   · rw [ne_self_iff_false, false_or] at h₂; rw [top_mul_of_pos h₂] at hc; exact (not_top_lt hc).rec
   rcases le_or_gt b 0 with b0 | b0
   · obtain ⟨a', aa', a_top'⟩ := exists_between a_top
-    exact ⟨a', mem_Ioo.2 ⟨aa', a_top'⟩, lt_of_le_of_lt (mul_le_m
+    exact ⟨a', mem_Ioo.2 ⟨aa', a_top'⟩, lt_of_le_of_lt (mul_le_mul_of_nonpos_right aa'.le b0) hc⟩
+  rcases eq_top_or_lt_top b with rfl | b_top
+  · rcases lt_trichotomy a 0 with a0 | rfl | a0
+    · obtain ⟨a', aa', a0'⟩ := exists_between a0
+      rw [mul_top_of_neg a0] at hc
+      refine ⟨a', mem_Ioo.2 ⟨aa', lt_top_of_lt a0'⟩, mul_top_of_neg a0' ▸ hc⟩
+    · rw [ne_self_iff_false, ne_self_iff_false, false_or] at h₁; exact h₁.rec
+    · rw [mul_top_of_pos a0] at hc; exact (not_top_lt hc).rec
+  · obtain ⟨a', aa', hc'⟩ := exists_between ((lt_div_iff b0 b_top.ne).2 hc)
+    exact ⟨a', mem_Ioo.2 ⟨aa', lt_top_of_lt hc'⟩, (lt_div_iff b0 b_top.ne).1 hc'⟩
 
 中文:
 引理 存在_mul_left_lt
@@ -2338,7 +2397,16 @@ lemma exists_mul_left_lt
   · rw [ne_self_iff_false, false_or] at h₂; rw [top_mul_of_pos h₂] at hc; exact (not_top_lt hc).rec
   rcases le_or_gt b 0 with b0 | b0
   · obtain ⟨a', aa', a_top'⟩ := exists_between a_top
-    exact ⟨a', mem_Ioo.2 ⟨aa', a_top'⟩, lt_of_le_of_lt (mul_le_m
+    exact ⟨a', mem_Ioo.2 ⟨aa', a_top'⟩, lt_of_le_of_lt (mul_le_mul_of_nonpos_right aa'.le b0) hc⟩
+  rcases eq_top_or_lt_top b with rfl | b_top
+  · rcases lt_trichotomy a 0 with a0 | rfl | a0
+    · obtain ⟨a', aa', a0'⟩ := exists_between a0
+      rw [mul_top_of_neg a0] at hc
+      refine ⟨a', mem_Ioo.2 ⟨aa', lt_top_of_lt a0'⟩, mul_top_of_neg a0' ▸ hc⟩
+    · rw [ne_self_iff_false, ne_self_iff_false, false_or] at h₁; exact h₁.rec
+    · rw [mul_top_of_pos a0] at hc; exact (not_top_lt hc).rec
+  · obtain ⟨a', aa', hc'⟩ := exists_between ((lt_div_iff b0 b_top.ne).2 hc)
+    exact ⟨a', mem_Ioo.2 ⟨aa', lt_top_of_lt hc'⟩, (lt_div_iff b0 b_top.ne).1 hc'⟩
 -/
 private lemma exists_mul_left_lt (h₁ : a != 0 ∨ b != ⊤) (h₂ : a != ⊤ ∨ 0 < b) (hc : a * b < c) :
     exists a' in Ioo a ⊤, a' * b < c := by
@@ -2390,7 +2458,8 @@ lemma le_mul_of_forall_lt
   obtain ⟨a', aa', hd⟩ := exists_mul_left_lt (h₁.imp_left ne_of_gt) h₂ hd
   replace h₁ : 0 < a' ∨ b != ⊤ := h₁.imp_left fun a0 => a0.trans (mem_Ioo.1 aa').1
   replace h₂ : a' != ⊤ ∨ b != 0 := Or.inl (mem_Ioo.1 aa').2.ne
-  obtain ⟨b', bb', hd
+  obtain ⟨b', bb', hd⟩ := exists_mul_right_lt h₁ h₂ hd
+  exact (h a' (mem_Ioo.1 aa').1 b' (mem_Ioo.1 bb').1).trans hd.le
 
 中文:
 引理 le_mul_of_对任意_lt
@@ -2400,7 +2469,8 @@ lemma le_mul_of_forall_lt
   obtain ⟨a', aa', hd⟩ := exists_mul_left_lt (h₁.imp_left ne_of_gt) h₂ hd
   replace h₁ : 0 < a' ∨ b != ⊤ := h₁.imp_left fun a0 => a0.trans (mem_Ioo.1 aa').1
   replace h₂ : a' != ⊤ ∨ b != 0 := Or.inl (mem_Ioo.1 aa').2.ne
-  obtain ⟨b', bb', hd
+  obtain ⟨b', bb', hd⟩ := exists_mul_right_lt h₁ h₂ hd
+  exact (h a' (mem_Ioo.1 aa').1 b' (mem_Ioo.1 bb').1).trans hd.le
 
 Depends on / 依赖: Or.inl, a0.trans, exists_mul_left_lt, exists_mul_right_lt, hd.le, imp_left, le_of_forall_gt_imp_ge_of_dense, mem_Ioo, ne_of_gt, replace
 -/

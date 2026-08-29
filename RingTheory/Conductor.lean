@@ -209,7 +209,14 @@ lemma mem_coeSubmodule_conductor
     constructor
     · rintro ⟨y, hy, rfl⟩ z
       exact ⟨_, hy z, map_mul _ _ _⟩
-    · intr
+    · intro H
+      obtain ⟨y, _, e⟩ := H 1
+      rw [map_one]; rw [mul_one] at e
+      subst e
+      simp only [← map_mul, (FaithfulSMul.algebraMap_injective S L).eq_iff,
+        exists_eq_right] at H
+      exact ⟨_, H, rfl⟩
+  · rw [AlgHom.map_adjoin, Set.image_singleton]; rfl
 
 中文:
 引理 mem_coeSubmodule_conductor
@@ -221,7 +228,14 @@ lemma mem_coeSubmodule_conductor
     constructor
     · rintro ⟨y, hy, rfl⟩ z
       exact ⟨_, hy z, map_mul _ _ _⟩
-    · intr
+    · intro H
+      obtain ⟨y, _, e⟩ := H 1
+      rw [map_one]; rw [mul_one] at e
+      subst e
+      simp only [← map_mul, (FaithfulSMul.algebraMap_injective S L).eq_iff,
+        exists_eq_right] at H
+      exact ⟨_, H, rfl⟩
+  · rw [AlgHom.map_adjoin, Set.image_singleton]; rfl
 
 Depends on / 依赖: AlgHom, AlgHom.map_adjoin, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.toAlgHom, Set.image_singleton, Subalgebra, Subalgebra.mem_map, Submodule, Submodule.mem_map, algebraMap, algebraMap_injective, coeSubmodule, coe_toAlgHom, eq_iff, exists_eq_right, image_singleton, linearMap_apply
 -/
@@ -258,7 +272,28 @@ theorem prod_mem_ideal_map_of_mem_conductor
   rw [Finsupp.linearCombination_apply] at H'
   rw [← H']; rw [mul_comm]; rw [Finsupp.sum_mul]
   have lem : forall {a : R}, a in I -> l a • algebraMap R S a * algebraMap R S p in
-
+      algebraMap R<x> S '' I.map (algebraMap R R<x>) := by
+    intro a ha
+    rw [smul_eq_mul]; rw [mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [Set.mem_image]
+    refine Exists.intro
+        (algebraMap R R<x> a * ⟨l a * algebraMap R S p,
+          show l a * algebraMap R S p in R<x> from ?h⟩) ?_
+    case h =>
+      rw [mul_comm]
+      exact mem_conductor_iff.mp (Ideal.mem_comap.mp hp) _
+    · refine ⟨?_, ?_⟩
+      · rw [mul_comm]
+        apply Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ ha)
+      · simp only [map_mul, mul_comm (algebraMap R S p) (l a)]
+        rfl
+  refine Finset.sum_induction _ (fun u => u in algebraMap R<x> S '' I.map (algebraMap R R<x>))
+      (fun a b => ?_) ?_ ?_
+  · rintro ⟨z, hz, rfl⟩ ⟨y, hy, rfl⟩
+    rw [← map_add]
+    exact ⟨z + y, Ideal.add_mem _ (SetLike.mem_coe.mp hz) hy, rfl⟩
+· exact ⟨0, SetLike.mem_coe.mpr Ideal.zero_mem _, map_zero _⟩
+  · intro y hy
+    exact lem ((Finsupp.mem_supported _ l).mp H hy)
 
 中文:
 定理 prod_mem_ideal_map_of_mem_conductor
@@ -269,7 +304,28 @@ theorem prod_mem_ideal_map_of_mem_conductor
   rw [Finsupp.linearCombination_apply] at H'
   rw [← H']; rw [mul_comm]; rw [Finsupp.sum_mul]
   have lem : forall {a : R}, a in I -> l a • algebraMap R S a * algebraMap R S p in
-
+      algebraMap R<x> S '' I.map (algebraMap R R<x>) := by
+    intro a ha
+    rw [smul_eq_mul]; rw [mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [Set.mem_image]
+    refine Exists.intro
+        (algebraMap R R<x> a * ⟨l a * algebraMap R S p,
+          show l a * algebraMap R S p in R<x> from ?h⟩) ?_
+    case h =>
+      rw [mul_comm]
+      exact mem_conductor_iff.mp (Ideal.mem_comap.mp hp) _
+    · refine ⟨?_, ?_⟩
+      · rw [mul_comm]
+        apply Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ ha)
+      · simp only [map_mul, mul_comm (algebraMap R S p) (l a)]
+        rfl
+  refine Finset.sum_induction _ (fun u => u in algebraMap R<x> S '' I.map (algebraMap R R<x>))
+      (fun a b => ?_) ?_ ?_
+  · rintro ⟨z, hz, rfl⟩ ⟨y, hy, rfl⟩
+    rw [← map_add]
+    exact ⟨z + y, Ideal.add_mem _ (SetLike.mem_coe.mp hz) hy, rfl⟩
+· exact ⟨0, SetLike.mem_coe.mpr Ideal.zero_mem _, map_zero _⟩
+  · intro y hy
+    exact lem ((Finsupp.mem_supported _ l).mp H hy)
 
 Depends on / 依赖: Exists, Exists.intro, Finsupp, Finsupp.linearCombination_apply, Finsupp.mem_span_image_iff_linearCombination, Finsupp.sum_mul, I.map, Ideal.map, Ideal.span, Set.mem_image, algebraMap, linearCombination_apply, mem_image, mem_span_image_iff_linearCombination, mul_assoc, mul_comm, smul_eq_mul, sum_mul
 -/
@@ -316,6 +372,30 @@ theorem comap_map_eq_map_adjoin_of_coprime_conductor
     -- `(I * S) ∩ R<x> ⊆ (I + C) * ((I * S) ∩ R<x>) ⊆ I * R<x> + I * C * S ⊆ I * R<x>`.
     intro y hy
     obtain ⟨z, hz⟩ := y
+    obtain ⟨p, hp, q, hq, hpq⟩ := Submodule.mem_sup.mp ((Ideal.eq_top_iff_one _).mp hx)
+    have temp : algebraMap R S p * z + algebraMap R S q * z = z := by
+      simp only [← add_mul, ← map_add (algebraMap R S), hpq, map_one, one_mul]
+    suffices z in algebraMap R<x> S '' I.map (algebraMap R R<x>) ↔
+        (⟨z, hz⟩ : R<x>) in I.map (algebraMap R R<x>) by
+      rw [← this]; rw [← temp]
+      obtain ⟨a, ha⟩ := (Set.mem_image _ _ _).mp (prod_mem_ideal_map_of_mem_conductor hp
+          (show z in I.map (algebraMap R S) by rwa [Ideal.mem_comap] at hy))
+      use a + algebraMap R R<x> q * ⟨z, hz⟩
+      refine ⟨Ideal.add_mem (I.map (algebraMap R R<x>)) ha.left ?_, by
+          simp only [ha.right, map_add, map_mul, add_right_inj]; rfl⟩
+      rw [mul_comm]
+      exact Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ hq)
+    refine ⟨fun h => ?_,
+      fun h => (Set.mem_image _ _ _).mpr (Exists.intro ⟨z, hz⟩ ⟨by simp [h], rfl⟩)⟩
+    obtain ⟨x₁, hx₁, hx₂⟩ := (Set.mem_image _ _ _).mp h
+    have : x₁ = ⟨z, hz⟩ := by
+      apply h_alg
+      simp only [hx₂, algebraMap_eq_smul_one]
+      rw [Submonoid.mk_smul]; rw [smul_eq_mul]; rw [mul_one]
+    rwa [← this]
+  · -- The converse inclusion is trivial
+    rw [IsScalarTower.algebraMap_eq R R<x> S]; rw [← Ideal.map_map]
+    apply Ideal.le_comap_map
 
 中文:
 定理 comap_map_eq_map_adjoin_of_coprime_conductor
@@ -326,6 +406,30 @@ theorem comap_map_eq_map_adjoin_of_coprime_conductor
     -- `(I * S) ∩ R<x> ⊆ (I + C) * ((I * S) ∩ R<x>) ⊆ I * R<x> + I * C * S ⊆ I * R<x>`.
     intro y hy
     obtain ⟨z, hz⟩ := y
+    obtain ⟨p, hp, q, hq, hpq⟩ := Submodule.mem_sup.mp ((Ideal.eq_top_iff_one _).mp hx)
+    have temp : algebraMap R S p * z + algebraMap R S q * z = z := by
+      simp only [← add_mul, ← map_add (algebraMap R S), hpq, map_one, one_mul]
+    suffices z in algebraMap R<x> S '' I.map (algebraMap R R<x>) ↔
+        (⟨z, hz⟩ : R<x>) in I.map (algebraMap R R<x>) by
+      rw [← this]; rw [← temp]
+      obtain ⟨a, ha⟩ := (Set.mem_image _ _ _).mp (prod_mem_ideal_map_of_mem_conductor hp
+          (show z in I.map (algebraMap R S) by rwa [Ideal.mem_comap] at hy))
+      use a + algebraMap R R<x> q * ⟨z, hz⟩
+      refine ⟨Ideal.add_mem (I.map (algebraMap R R<x>)) ha.left ?_, by
+          simp only [ha.right, map_add, map_mul, add_right_inj]; rfl⟩
+      rw [mul_comm]
+      exact Ideal.mul_mem_left (I.map (algebraMap R R<x>)) _ (Ideal.mem_map_of_mem _ hq)
+    refine ⟨fun h => ?_,
+      fun h => (Set.mem_image _ _ _).mpr (Exists.intro ⟨z, hz⟩ ⟨by simp [h], rfl⟩)⟩
+    obtain ⟨x₁, hx₁, hx₂⟩ := (Set.mem_image _ _ _).mp h
+    have : x₁ = ⟨z, hz⟩ := by
+      apply h_alg
+      simp only [hx₂, algebraMap_eq_smul_one]
+      rw [Submonoid.mk_smul]; rw [smul_eq_mul]; rw [mul_one]
+    rwa [← this]
+  · -- The converse inclusion is trivial
+    rw [IsScalarTower.algebraMap_eq R R<x> S]; rw [← Ideal.map_map]
+    apply Ideal.le_comap_map
 
 Depends on / 依赖: Neukirch1992, adapted, conductor, le_antisymm
 -/
@@ -374,7 +478,36 @@ definition quotAdjoinEquivQuotMap
   let f : R<x> ⧸ I.map (algebraMap R R<x>) ->+* S ⧸ I.map (algebraMap R S) :=
     (Ideal.Quotient.lift (I.map (algebraMap R R<x>))
       ((Ideal.Quotient.mk (I.map (algebraMap R S))).comp (algebraMap R<x> S)) (fun r hr => by
-      have : algebraMap R S = (algebraMap R<x> S).comp (algebraMap R R<x
+      have : algebraMap R S = (algebraMap R<x> S).comp (algebraMap R R<x>) := by ext; rfl
+      rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [this]; rw [← Ideal.map_map]
+      exact Ideal.mem_map_of_mem _ hr))
+  refine RingEquiv.ofBijective f ⟨?_, ?_⟩
+  · --the kernel of the map is clearly `(I * S) ∩ R<x>`. To get injectivity, we need to show that
+    --this is contained in `I * R<x>`, which is the content of the previous lemma.
+    refine RingHom.lift_injective_of_ker_le_ideal _ _ fun u hu => ?_
+    rwa [RingHom.mem_ker, RingHom.comp_apply, Ideal.Quotient.eq_zero_iff_mem, ← Ideal.mem_comap,
+      comap_map_eq_map_adjoin_of_coprime_conductor hx h_alg] at hu
+  · -- Surjectivity follows from the surjectivity of the canonical map `R<x> → S ⧸ (I * S)`,
+    -- which in turn follows from the fact that `I * S + (conductor R x) = S`.
+    refine Ideal.Quotient.lift_surjective_of_surjective _ _ fun y => ?_
+    obtain ⟨z, hz⟩ := Ideal.Quotient.mk_surjective y
+    have : z in conductor R x ⊔ I.map (algebraMap R S) := by
+      suffices conductor R x ⊔ I.map (algebraMap R S) = ⊤ by simp only [this, Submodule.mem_top]
+      rw [Ideal.eq_top_iff_one] at hx ⊢
+      replace hx := Ideal.mem_map_of_mem (algebraMap R S) hx
+      rw [Ideal.map_sup]; rw [map_one] at hx
+      exact (sup_le_sup
+        (show ((conductor R x).comap (algebraMap R S)).map (algebraMap R S) <= conductor R x
+          from Ideal.map_comap_le)
+          (le_refl (I.map (algebraMap R S)))) hx
+    rw [← Ideal.mem_quotient_iff_mem_sup]; rw [hz]; rw [Ideal.mem_map_iff_of_surjective] at this
+    · obtain ⟨u, hu, hu'⟩ := this
+      use ⟨u, conductor_subset_adjoin hu⟩
+      simp only [← hu']
+      rfl
+    · exact Ideal.Quotient.mk_surjective
+
+@[simp]
 
 中文:
 定义 quotAdjoinEquivQuotMap
@@ -383,7 +516,36 @@ definition quotAdjoinEquivQuotMap
   let f : R<x> ⧸ I.map (algebraMap R R<x>) ->+* S ⧸ I.map (algebraMap R S) :=
     (Ideal.Quotient.lift (I.map (algebraMap R R<x>))
       ((Ideal.Quotient.mk (I.map (algebraMap R S))).comp (algebraMap R<x> S)) (fun r hr => by
-      have : algebraMap R S = (algebraMap R<x> S).comp (algebraMap R R<x
+      have : algebraMap R S = (algebraMap R<x> S).comp (algebraMap R R<x>) := by ext; rfl
+      rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [this]; rw [← Ideal.map_map]
+      exact Ideal.mem_map_of_mem _ hr))
+  refine RingEquiv.ofBijective f ⟨?_, ?_⟩
+  · --the kernel of the map is clearly `(I * S) ∩ R<x>`. To get injectivity, we need to show that
+    --this is contained in `I * R<x>`, which is the content of the previous lemma.
+    refine RingHom.lift_injective_of_ker_le_ideal _ _ fun u hu => ?_
+    rwa [RingHom.mem_ker, RingHom.comp_apply, Ideal.Quotient.eq_zero_iff_mem, ← Ideal.mem_comap,
+      comap_map_eq_map_adjoin_of_coprime_conductor hx h_alg] at hu
+  · -- Surjectivity follows from the surjectivity of the canonical map `R<x> → S ⧸ (I * S)`,
+    -- which in turn follows from the fact that `I * S + (conductor R x) = S`.
+    refine Ideal.Quotient.lift_surjective_of_surjective _ _ fun y => ?_
+    obtain ⟨z, hz⟩ := Ideal.Quotient.mk_surjective y
+    have : z in conductor R x ⊔ I.map (algebraMap R S) := by
+      suffices conductor R x ⊔ I.map (algebraMap R S) = ⊤ by simp only [this, Submodule.mem_top]
+      rw [Ideal.eq_top_iff_one] at hx ⊢
+      replace hx := Ideal.mem_map_of_mem (algebraMap R S) hx
+      rw [Ideal.map_sup]; rw [map_one] at hx
+      exact (sup_le_sup
+        (show ((conductor R x).comap (algebraMap R S)).map (algebraMap R S) <= conductor R x
+          from Ideal.map_comap_le)
+          (le_refl (I.map (algebraMap R S)))) hx
+    rw [← Ideal.mem_quotient_iff_mem_sup]; rw [hz]; rw [Ideal.mem_map_iff_of_surjective] at this
+    · obtain ⟨u, hu, hu'⟩ := this
+      use ⟨u, conductor_subset_adjoin hu⟩
+      simp only [← hu']
+      rfl
+    · exact Ideal.Quotient.mk_surjective
+
+@[simp]
 
 Depends on / 依赖: I.map, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.lift, Ideal.Quotient.mk, Ideal.map_map, Ideal.mem_map_of_mem, Quotient, RingEquiv, RingEquiv.ofBijective, RingHom, RingHom.comp_apply, algebraMap, comp_apply, eq_zero_iff_mem, kernel, map_map, mem_map_of_mem, ofBijective
 -/

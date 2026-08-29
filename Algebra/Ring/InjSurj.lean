@@ -181,7 +181,7 @@ abbreviation addGroupWithOne
     hf.addMonoidWithOne f zero one add nsmul natCast with
     intCast := Int.cast,
     intCast_ofNat := fun n => hf (by rw [natCast, intCast, Int.cast_natCast]),
-    intCast_negSucc := fun n => hf (by rw [intCast, neg, natCast, Int.cast_neg
+    intCast_negSucc := fun n => hf (by rw [intCast, neg, natCast, Int.cast_negSucc]) }
 
 中文:
 缩写 addGroupWithOne
@@ -190,7 +190,7 @@ abbreviation addGroupWithOne
     hf.addMonoidWithOne f zero one add nsmul natCast with
     intCast := Int.cast,
     intCast_ofNat := fun n => hf (by rw [natCast, intCast, Int.cast_natCast]),
-    intCast_negSucc := fun n => hf (by rw [intCast, neg, natCast, Int.cast_neg
+    intCast_negSucc := fun n => hf (by rw [intCast, neg, natCast, Int.cast_negSucc]) }
 -/
 protected abbrev addGroupWithOne {S} [Zero S] [One S] [Add S] [SMul Nat S] [Neg S] [Sub S]
     [SMul Int S] [NatCast S] [IntCast S] [AddGroupWithOne R] (f : S -> R) (hf : Injective f)
@@ -415,7 +415,7 @@ abbreviation ring
   -- zsmul included here explicitly to make sure it's picked correctly by `fast_instance%`.
   zsmul := fun n x => n • x
   __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-  __ := hf.addCommGroup f zero add neg sub (swap nsm
+  __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
 
 中文:
 缩写 ring
@@ -424,7 +424,7 @@ abbreviation ring
   -- zsmul included here explicitly to make sure it's picked correctly by `fast_instance%`.
   zsmul := fun n x => n • x
   __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-  __ := hf.addCommGroup f zero add neg sub (swap nsm
+  __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
 -/
 protected abbrev ring [Ring R] (zero : f 0 = 0)
     (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
@@ -787,7 +787,7 @@ abbreviation addGroupWithOne
     intCast := Int.cast,
     intCast_ofNat := fun n => by rw [← intCast, Int.cast_natCast, natCast],
     intCast_negSucc := fun n => by
-      rw [← intCast]; rw [Int.cast_negSucc]; r
+      rw [← intCast]; rw [Int.cast_negSucc]; rw [neg]; rw [natCast] }
 
 中文:
 缩写 addGroupWithOne
@@ -797,7 +797,7 @@ abbreviation addGroupWithOne
     intCast := Int.cast,
     intCast_ofNat := fun n => by rw [← intCast, Int.cast_natCast, natCast],
     intCast_negSucc := fun n => by
-      rw [← intCast]; rw [Int.cast_negSucc]; r
+      rw [← intCast]; rw [Int.cast_negSucc]; rw [neg]; rw [natCast] }
 -/
 protected abbrev addGroupWithOne [AddGroupWithOne R]
     (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y) (neg : forall x, f (-x) = -f x)

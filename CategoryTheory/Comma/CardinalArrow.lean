@@ -40,7 +40,12 @@ lemma Arrow.finite_iff
       apply Fintype.ofFinite
     · have := Finite.of_injective (fun (f : a ⟶ b) => Arrow.mk f)
         (fun f g h => by
-          chan
+          change (Arrow.mk f).hom = (Arrow.mk g).hom
+          congr)
+      apply Fintype.ofFinite
+  · rintro ⟨_⟩
+    have := Fintype.ofEquiv _ (Arrow.equivSigma C).symm
+    infer_instance
 
 中文:
 引理 箭头.finite_iff
@@ -54,7 +59,12 @@ lemma Arrow.finite_iff
       apply Fintype.ofFinite
     · have := Finite.of_injective (fun (f : a ⟶ b) => Arrow.mk f)
         (fun f g h => by
-          chan
+          change (Arrow.mk f).hom = (Arrow.mk g).hom
+          congr)
+      apply Fintype.ofFinite
+  · rintro ⟨_⟩
+    have := Fintype.ofEquiv _ (Arrow.equivSigma C).symm
+    infer_instance
 
 Depends on / 依赖: Arrow.equivSigma, Arrow.mk, Comma.left, Finite, Finite.of_injective, Fintype, Fintype.ofEquiv, Fintype.ofFinite, congr_arg, equivSigma, infer_instance, ofEquiv, ofFinite, of_injective
 -/
@@ -259,7 +269,9 @@ definition Arrow.shrinkEquiv
   left_inv _ := Arrow.ext (Equiv.apply_symm_apply _ _)
       ((Equiv.apply_symm_apply _ _)) (by simp; rfl)
   right_inv _ := Arrow.ext (by simp [Shrink.equivalence])
-    (by simp [Shrink.equivalence]) 
+    (by simp [Shrink.equivalence]) (by simp [Shrink.equivalence])
+
+@[simp]
 
 中文:
 定义 箭头.shrinkEquiv
@@ -269,7 +281,9 @@ definition Arrow.shrinkEquiv
   left_inv _ := Arrow.ext (Equiv.apply_symm_apply _ _)
       ((Equiv.apply_symm_apply _ _)) (by simp; rfl)
   right_inv _ := Arrow.ext (by simp [Shrink.equivalence])
-    (by simp [Shrink.equivalence]) 
+    (by simp [Shrink.equivalence]) (by simp [Shrink.equivalence])
+
+@[simp]
 
 Depends on / 依赖: Shrink, Shrink.equivalence, equivalence, inverse, inverse.mapArrow.obj, mapArrow
 -/

@@ -246,7 +246,14 @@ definition toGrothendieck
     rintro ⟨R, hR, RS⟩
     refine ⟨_, K.pullbacks g _ hR, ?_⟩
     rw [← Sieve.generate_le_iff]; rw [Sieve.pullbackArrows_comm]
-    apply Sieve.pullb
+    apply Sieve.pullback_monotone
+    rwa [Sieve.giGenerate.gc]
+  transitive' := by
+    rintro X S ⟨R', hR', RS⟩ R t
+    choose t₁ t₂ t₃ using t
+    refine ⟨_, K.transitive _ _ hR' fun _ f hf => t₂ (RS _ _ hf), ?_⟩
+    rintro Y _ ⟨Z, g, f, hg, hf, rfl⟩
+    apply t₃ (RS _ _ hg) _ _ hf
 
 中文:
 定义 toGrothendieck
@@ -257,7 +264,14 @@ definition toGrothendieck
     rintro ⟨R, hR, RS⟩
     refine ⟨_, K.pullbacks g _ hR, ?_⟩
     rw [← Sieve.generate_le_iff]; rw [Sieve.pullbackArrows_comm]
-    apply Sieve.pullb
+    apply Sieve.pullback_monotone
+    rwa [Sieve.giGenerate.gc]
+  transitive' := by
+    rintro X S ⟨R', hR', RS⟩ R t
+    choose t₁ t₂ t₃ using t
+    refine ⟨_, K.transitive _ _ hR' fun _ f hf => t₂ (RS _ _ hf), ?_⟩
+    rintro Y _ ⟨Z, g, f, hg, hf, rfl⟩
+    apply t₃ (RS _ _ hg) _ _ hf
 
 Depends on / 依赖: Presieve
 -/
@@ -312,7 +326,11 @@ definition GrothendieckTopology.toPretopology
     apply J.transitive hS
     intro Y f
     rintro ⟨Z, g, f, hf, rfl⟩
-    rw [Sieve.pullback
+    rw [Sieve.pullback_comp]
+    apply J.pullback_stable g
+    apply J.superset_covering _ (hTi _ hf)
+    rintro Y g ⟨W, h, g, hg, rfl⟩
+    exact ⟨_, h, _, ⟨_, _, _, hf, hg, rfl⟩, by simp⟩
 
 中文:
 定义 Grothendieck拓扑.toPretopology
@@ -324,7 +342,11 @@ definition GrothendieckTopology.toPretopology
     apply J.transitive hS
     intro Y f
     rintro ⟨Z, g, f, hf, rfl⟩
-    rw [Sieve.pullback
+    rw [Sieve.pullback_comp]
+    apply J.pullback_stable g
+    apply J.superset_covering _ (hTi _ hf)
+    rintro Y g ⟨W, h, g, hg, rfl⟩
+    exact ⟨_, h, _, ⟨_, _, _, hf, hg, rfl⟩, by simp⟩
 
 Depends on / 依赖: Sieve.generate, generate
 -/
@@ -356,7 +378,8 @@ definition Pretopology.gi
       apply J.superset_covering _ (h _ hR)
       rwa [Sieve.giGenerate.gc]
   le_l_u J _ S hS := ⟨S, J.superset_covering (Sieve.le_generate S.arrows) hS, le_rfl⟩
-  choice x _ := toGroth
+  choice x _ := toGrothendieck x
+  choice_eq _ _ := rfl
 
 中文:
 定义 Pretopology.gi
@@ -369,7 +392,8 @@ definition Pretopology.gi
       apply J.superset_covering _ (h _ hR)
       rwa [Sieve.giGenerate.gc]
   le_l_u J _ S hS := ⟨S, J.superset_covering (Sieve.le_generate S.arrows) hS, le_rfl⟩
-  choice x _ := toGroth
+  choice x _ := toGrothendieck x
+  choice_eq _ _ := rfl
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.toPretopology, toPretopology
 -/
@@ -425,7 +449,28 @@ definition trivial
     refine ⟨pullback g f, pullback.snd _ _, ?_, ?_⟩
     · refine ⟨⟨pullback.lift (f ≫ inv g) (𝟙 _) (by simp), ⟨?_, by simp⟩⟩⟩
       ext
-  
+      · rw [assoc, pullback.lift_fst, ← pullback.condition_assoc]
+        simp
+      · simp
+    · apply pullback_singleton
+  transitive := by
+    rintro X S Ti ⟨Z, g, i, rfl⟩ hS
+    rcases hS g (singleton_self g) with ⟨Y, f, i, hTi⟩
+    refine ⟨_, f ≫ g, ?_, ?_⟩
+    · infer_instance
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): the next four lines were just "ext (W k)"
+    apply funext
+    intro W
+    ext K
+    constructor
+    · rintro ⟨V, h, k, ⟨_⟩, hh, rfl⟩
+      rw [hTi] at hh
+      cases hh
+      apply singleton.mk
+    · rintro ⟨_⟩
+      refine bind_comp g singleton.mk ?_
+      rw [hTi]
+      apply singleton.mk
 
 中文:
 定义 trivial
@@ -437,7 +482,28 @@ definition trivial
     refine ⟨pullback g f, pullback.snd _ _, ?_, ?_⟩
     · refine ⟨⟨pullback.lift (f ≫ inv g) (𝟙 _) (by simp), ⟨?_, by simp⟩⟩⟩
       ext
-  
+      · rw [assoc, pullback.lift_fst, ← pullback.condition_assoc]
+        simp
+      · simp
+    · apply pullback_singleton
+  transitive := by
+    rintro X S Ti ⟨Z, g, i, rfl⟩ hS
+    rcases hS g (singleton_self g) with ⟨Y, f, i, hTi⟩
+    refine ⟨_, f ≫ g, ?_, ?_⟩
+    · infer_instance
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): the next four lines were just "ext (W k)"
+    apply funext
+    intro W
+    ext K
+    constructor
+    · rintro ⟨V, h, k, ⟨_⟩, hh, rfl⟩
+      rw [hTi] at hh
+      cases hh
+      apply singleton.mk
+    · rintro ⟨_⟩
+      refine bind_comp g singleton.mk ?_
+      rw [hTi]
+      apply singleton.mk
 
 Depends on / 依赖: Presieve, Presieve.singleton, singleton
 -/
@@ -549,7 +615,18 @@ instance :
         Set.iInter_exists,
         Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter]
       intro t _
-      exact t.h
+      exact t.has_isos f
+    pullbacks := fun X Y f S hS => by
+      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
+        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS ⊢
+      intro t ht
+      exact t.pullbacks f S (hS t ht)
+    transitive := fun X S Ti hS hTi => by
+      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
+        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS hTi ⊢
+      intro t ht
+      exact t.transitive S Ti (hS t ht) (fun Y f H => hTi f H t ht)
+  }
 
 中文:
 实例 :
@@ -561,7 +638,18 @@ instance :
         Set.iInter_exists,
         Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter]
       intro t _
-      exact t.h
+      exact t.has_isos f
+    pullbacks := fun X Y f S hS => by
+      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
+        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS ⊢
+      intro t ht
+      exact t.pullbacks f S (hS t ht)
+    transitive := fun X S Ti hS hTi => by
+      simp only [sInf_apply, Set.iInf_eq_iInter, Set.iInter_coe_set, Set.mem_image,
+        Set.iInter_exists, Set.biInter_and', Set.iInter_iInter_eq_right, Set.mem_iInter] at hS hTi ⊢
+      intro t ht
+      exact t.transitive S Ti (hS t ht) (fun Y f H => hTi f H t ht)
+  }
 -/
 instance : InfSet (Pretopology C) where
   sInf T := {
@@ -666,7 +754,14 @@ instance :
       ⟨t₁.has_isos f, t₂.has_isos f⟩
     pullbacks := fun _ _ f S hS =>
       ⟨t₁.pullbacks f S hS.left, t₂.pullbacks f S hS.right⟩
-    transitive := fun _ S Ti
+    transitive := fun _ S Ti hS hTi =>
+      ⟨t₁.transitive S Ti hS.left (fun _ f H => (hTi f H).left),
+        t₂.transitive S Ti hS.right (fun _ f H => (hTi f H).right)⟩
+  }
+  inf_le_left _ _ _ _ hS := hS.left
+  inf_le_right _ _ _ _ hS := hS.right
+  le_inf _ _ _ hts htr X _ hS := ⟨hts X hS, htr X hS⟩
+  __ := completeLatticeOfInf _ (isGLB_sInf C)
 
 中文:
 实例 :
@@ -679,7 +774,14 @@ instance :
       ⟨t₁.has_isos f, t₂.has_isos f⟩
     pullbacks := fun _ _ f S hS =>
       ⟨t₁.pullbacks f S hS.left, t₂.pullbacks f S hS.right⟩
-    transitive := fun _ S Ti
+    transitive := fun _ S Ti hS hTi =>
+      ⟨t₁.transitive S Ti hS.left (fun _ f H => (hTi f H).left),
+        t₂.transitive S Ti hS.right (fun _ f H => (hTi f H).right)⟩
+  }
+  inf_le_left _ _ _ _ hS := hS.left
+  inf_le_right _ _ _ _ hS := hS.right
+  le_inf _ _ _ hts htr X _ hS := ⟨hts X hS, htr X hS⟩
+  __ := completeLatticeOfInf _ (isGLB_sInf C)
 
 Depends on / 依赖: orderBot
 -/
@@ -737,7 +839,22 @@ definition Precoverage.toPretopology
   transitive X R Ti hR hTi := by
     obtain ⟨ι, Z, g, rfl⟩ := R.exists_eq_ofArrows
     choose κ W p hp using fun ⦃Y⦄ (f : Y ⟶ X) hf => (Ti f hf).exists_eq_ofArrows
-    have : (Presieve.ofArrows Z g)
+    have : (Presieve.ofArrows Z g).bind Ti =
+        .ofArrows (fun ij : Σ i, κ (g i) ⟨i⟩ => W _ _ ij.2) (fun ij => p _ _ ij.2 ≫ g ij.1) := by
+      apply le_antisymm
+      · rintro T u ⟨S, v, w, ⟨i⟩, hv, rfl⟩
+        rw [hp] at hv
+        obtain ⟨j⟩ := hv
+exact .mk Sigma.mk (β := fun i : ι => κ (g i) ⟨i⟩) i j
+      · rintro T u ⟨ij⟩
+        use Z ij.1, p (g ij.1) ⟨ij.1⟩ ij.2, g ij.1, ⟨ij.1⟩
+        rw [hp]
+        exact ⟨⟨_⟩, rfl⟩
+    rw [this]
+    refine J.comp_mem_coverings (Y := fun (i : ι) (j : κ (g i) ⟨i⟩) => W _ _ j)
+      (g := fun i j => p _ _ j) _ hR fun i => ?_
+    rw [← hp]
+    exact hTi _ _
 
 中文:
 定义 Precoverage.toPretopology
@@ -748,7 +865,22 @@ definition Precoverage.toPretopology
   transitive X R Ti hR hTi := by
     obtain ⟨ι, Z, g, rfl⟩ := R.exists_eq_ofArrows
     choose κ W p hp using fun ⦃Y⦄ (f : Y ⟶ X) hf => (Ti f hf).exists_eq_ofArrows
-    have : (Presieve.ofArrows Z g)
+    have : (Presieve.ofArrows Z g).bind Ti =
+        .ofArrows (fun ij : Σ i, κ (g i) ⟨i⟩ => W _ _ ij.2) (fun ij => p _ _ ij.2 ≫ g ij.1) := by
+      apply le_antisymm
+      · rintro T u ⟨S, v, w, ⟨i⟩, hv, rfl⟩
+        rw [hp] at hv
+        obtain ⟨j⟩ := hv
+exact .mk Sigma.mk (β := fun i : ι => κ (g i) ⟨i⟩) i j
+      · rintro T u ⟨ij⟩
+        use Z ij.1, p (g ij.1) ⟨ij.1⟩ ij.2, g ij.1, ⟨ij.1⟩
+        rw [hp]
+        exact ⟨⟨_⟩, rfl⟩
+    rw [this]
+    refine J.comp_mem_coverings (Y := fun (i : ι) (j : κ (g i) ⟨i⟩) => W _ _ j)
+      (g := fun i j => p _ _ j) _ hR fun i => ?_
+    rw [← hp]
+    exact hTi _ _
 -/
 def Precoverage.toPretopology [Limits.HasPullbacks C] (J : Precoverage C) [J.HasIsos]
     [J.IsStableUnderBaseChange] [J.IsStableUnderComposition] : Pretopology C where

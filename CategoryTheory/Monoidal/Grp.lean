@@ -842,7 +842,9 @@ theorem mul_inv
   nth_rw 2 [← Category.comp_id μ]
   rw [← comp_lift]; rw [Category.assoc]; rw [left_inv]; rw [← Category.assoc (β_ A A).hom]; rw [← lift_snd_fst]; rw [lift_map]; rw [lift_lift_assoc]
   nth_rw 2 [← Category.id_comp μ]
-  rw [← lift_fst_snd]; rw [← lift_lift_assoc (fst A 
+  rw [← lift_fst_snd]; rw [← lift_lift_assoc (fst A A ≫ _)]; rw [lift_comp_inv_left]; rw [lift_comp_one_left]; rw [lift_comp_inv_left]; rw [comp_toUnit_assoc]
+
+@[to_additive (attr := reassoc)]
 
 中文:
 定理 mul_inv
@@ -852,7 +854,9 @@ theorem mul_inv
   nth_rw 2 [← Category.comp_id μ]
   rw [← comp_lift]; rw [Category.assoc]; rw [left_inv]; rw [← Category.assoc (β_ A A).hom]; rw [← lift_snd_fst]; rw [lift_map]; rw [lift_lift_assoc]
   nth_rw 2 [← Category.id_comp μ]
-  rw [← lift_fst_snd]; rw [← lift_lift_assoc (fst A 
+  rw [← lift_fst_snd]; rw [← lift_lift_assoc (fst A A ≫ _)]; rw [lift_comp_inv_left]; rw [lift_comp_one_left]; rw [lift_comp_inv_left]; rw [comp_toUnit_assoc]
+
+@[to_additive (attr := reassoc)]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, comp_id, comp_lift, comp_toUnit_assoc, id_comp, left_inv, lift_comp_inv_left, lift_comp_one_left, lift_fst_snd, lift_left_mul_ext, lift_lift_assoc, lift_map, lift_snd_fst, nth_rw
 -/
@@ -988,7 +992,25 @@ isLimit' := Nonempty.intro PullbackCone.IsLimit.mk _
       (s.fst ≫ snd _ _))
     (by
       refine fun s => CartesianMonoidalCategory.hom_ext _ _ ?_ (by simp)
-      simp only 
+      simp only [lift_whiskerRight, lift_fst]
+      rw [← lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_right]; rw [lift_comp_one_left])
+    (by
+      refine fun s => CartesianMonoidalCategory.hom_ext _ _ (by simp) ?_
+      simp only [lift_lift_associator_hom_assoc, lift_whiskerLeft, lift_snd]
+      have : lift (s.snd ≫ fst _ _ ≫ ι) (s.fst ≫ fst _ _) ≫ μ =
+          lift (s.snd ≫ snd _ _) (s.fst ≫ snd _ _ ≫ ι) ≫ μ := by
+        rw [← assoc s.fst]; rw [eq_lift_inv_right]; rw [lift_lift_assoc]; rw [← assoc s.snd]; rw [lift_inv_left_eq]; rw [lift_comp_fst_snd]; rw [lift_comp_fst_snd]; rw [s.condition]
+      rw [this]; rw [lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_left]; rw [lift_comp_one_right])
+    (by
+      intro s m hm₁ hm₂
+      refine CartesianMonoidalCategory.hom_ext _ _ (CartesianMonoidalCategory.hom_ext _ _ ?_ ?_) ?_
+      · simpa using hm₂ =≫ fst _ _
+      · have h : m ≫ fst _ _ ≫ fst _ _ = s.snd ≫ fst _ _ := by simpa using hm₂ =≫ fst _ _
+        have := hm₁ =≫ fst _ _
+        simp only [assoc, whiskerRight_fst, lift_fst, lift_snd] at this ⊢
+        rw [← assoc]; rw [← lift_comp_fst_snd (m ≫ _)]; rw [assoc]; rw [assoc]; rw [h] at this
+        rwa [← assoc s.snd, eq_lift_inv_left]
+      · simpa using hm₁ =≫ snd _ _)
 
 中文:
 定理 isPullback
@@ -1002,7 +1024,25 @@ isLimit' := Nonempty.intro PullbackCone.IsLimit.mk _
       (s.fst ≫ snd _ _))
     (by
       refine fun s => CartesianMonoidalCategory.hom_ext _ _ ?_ (by simp)
-      simp only 
+      simp only [lift_whiskerRight, lift_fst]
+      rw [← lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_right]; rw [lift_comp_one_left])
+    (by
+      refine fun s => CartesianMonoidalCategory.hom_ext _ _ (by simp) ?_
+      simp only [lift_lift_associator_hom_assoc, lift_whiskerLeft, lift_snd]
+      have : lift (s.snd ≫ fst _ _ ≫ ι) (s.fst ≫ fst _ _) ≫ μ =
+          lift (s.snd ≫ snd _ _) (s.fst ≫ snd _ _ ≫ ι) ≫ μ := by
+        rw [← assoc s.fst]; rw [eq_lift_inv_right]; rw [lift_lift_assoc]; rw [← assoc s.snd]; rw [lift_inv_left_eq]; rw [lift_comp_fst_snd]; rw [lift_comp_fst_snd]; rw [s.condition]
+      rw [this]; rw [lift_lift_assoc]; rw [← assoc]; rw [lift_comp_inv_left]; rw [lift_comp_one_right])
+    (by
+      intro s m hm₁ hm₂
+      refine CartesianMonoidalCategory.hom_ext _ _ (CartesianMonoidalCategory.hom_ext _ _ ?_ ?_) ?_
+      · simpa using hm₂ =≫ fst _ _
+      · have h : m ≫ fst _ _ ≫ fst _ _ = s.snd ≫ fst _ _ := by simpa using hm₂ =≫ fst _ _
+        have := hm₁ =≫ fst _ _
+        simp only [assoc, whiskerRight_fst, lift_fst, lift_snd] at this ⊢
+        rw [← assoc]; rw [← lift_comp_fst_snd (m ≫ _)]; rw [assoc]; rw [assoc]; rw [h] at this
+        rwa [← assoc s.snd, eq_lift_inv_left]
+      · simpa using hm₁ =≫ snd _ _)
 
 Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.hom_ext, IsLimit, Nonempty, Nonempty.intro, PullbackCone, PullbackCone.IsLimit.mk, hom_ext, isLimit, lift_comp_inv_right, lift_comp_one_left, lift_fst, lift_lift_assoc, lift_lift_associator_hom_assoc, lift_whiskerLef, lift_whiskerRight, s.fst, s.snd
 -/
@@ -1151,7 +1191,9 @@ definition ofInvertible
       ext g
       simp only [yoneda_obj_map, TypeCat.Fun.toFun_apply, comp_apply,
         ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, invOf_eq_iff_left]
-      rw [← comp_mul]; rw [invOf_mul_self]; rw [comp_
+      rw [← comp_mul]; rw [invOf_mul_self]; rw [comp_one]⟩
+  left_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
+  right_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
 
 中文:
 定义 ofInvertible
@@ -1161,7 +1203,9 @@ definition ofInvertible
       ext g
       simp only [yoneda_obj_map, TypeCat.Fun.toFun_apply, comp_apply,
         ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, invOf_eq_iff_left]
-      rw [← comp_mul]; rw [invOf_mul_self]; rw [comp_
+      rw [← comp_mul]; rw [invOf_mul_self]; rw [comp_one]⟩
+  left_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
+  right_inv := by simp [Yoneda.fullyFaithful_preimage, ← Hom.mul_def, Hom.one_def]
 
 Depends on / 依赖: Yoneda, Yoneda.fullyFaithful.preimage, fullyFaithful, preimage
 -/
@@ -1615,7 +1659,11 @@ instance instMonoidalCategoryStruct
   whiskerLeft G _ _ f := homMk' (MonoidalCategoryStruct.whiskerLeft (C := Mon C) G.toMon f.hom)
   tensorUnit := ⟨𝟙_ C⟩
   associator X Y Z :=
-    (Grp
+    (Grp.fullyFaithfulForget₂Mon C).preimageIso (associator X.toMon Y.toMon Z.toMon)
+  leftUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (leftUnitor G.toMon)
+  rightUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (rightUnitor G.toMon)
+
+@[to_additive (attr := simp)]
 
 中文:
 实例 instMonoidalCategoryStruct
@@ -1626,7 +1674,11 @@ instance instMonoidalCategoryStruct
   whiskerLeft G _ _ f := homMk' (MonoidalCategoryStruct.whiskerLeft (C := Mon C) G.toMon f.hom)
   tensorUnit := ⟨𝟙_ C⟩
   associator X Y Z :=
-    (Grp
+    (Grp.fullyFaithfulForget₂Mon C).preimageIso (associator X.toMon Y.toMon Z.toMon)
+  leftUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (leftUnitor G.toMon)
+  rightUnitor G := (Grp.fullyFaithfulForget₂Mon C).preimageIso (rightUnitor G.toMon)
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: otimes
 -/
@@ -1935,7 +1987,11 @@ instance instCartesianMonoidalCategory
   snd G H := homMk' (snd G.toMon H.toMon)
   tensorProductIsBinaryProduct G H :=
     BinaryFan.IsLimit.mk _ (fun {T} f g => .mk (lift f.hom g.hom))
-      (by aesop_cat) 
+      (by aesop_cat) (by aesop_cat) (by aesop_cat)
+  fst_def G H := by ext; apply fst_def
+  snd_def G H := by ext; apply snd_def
+
+@[to_additive (attr := simp)]
 
 中文:
 实例 instCartesianMonoidalCategory
@@ -1945,7 +2001,11 @@ instance instCartesianMonoidalCategory
   snd G H := homMk' (snd G.toMon H.toMon)
   tensorProductIsBinaryProduct G H :=
     BinaryFan.IsLimit.mk _ (fun {T} f g => .mk (lift f.hom g.hom))
-      (by aesop_cat) 
+      (by aesop_cat) (by aesop_cat) (by aesop_cat)
+  fst_def G H := by ext; apply fst_def
+  snd_def G H := by ext; apply snd_def
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.mk, G.toMon, H.toMon, IsLimit, aesop_cat, f.hom, fst_def, g.hom, ofUniqueHom, snd_def, tensorProductIsBinaryProduct, toUnit, toUnit_unique
 -/
@@ -2137,7 +2197,10 @@ abbreviation grpObjObj
     simp [← Functor.map_id, Functor.Monoidal.lift_μ_assoc,
       Functor.Monoidal.toUnit_ε_assoc, ← Functor.map_comp]
 
-scoped[CategoryTheor
+scoped[CategoryTheory.Obj] attribute [instance] CategoryTheory.Functor.grpObjObj
+  CategoryTheory.Functor.addGrpObjObj
+
+@[to_additive (attr := reassoc, simp) neg_def]
 
 中文:
 缩写 grpObjObj
@@ -2150,7 +2213,10 @@ scoped[CategoryTheor
     simp [← Functor.map_id, Functor.Monoidal.lift_μ_assoc,
       Functor.Monoidal.toUnit_ε_assoc, ← Functor.map_comp]
 
-scoped[CategoryTheor
+scoped[CategoryTheory.Obj] attribute [instance] CategoryTheory.Functor.grpObjObj
+  CategoryTheory.Functor.addGrpObjObj
+
+@[to_additive (attr := reassoc, simp) neg_def]
 
 Depends on / 依赖: F.map
 -/
@@ -2576,7 +2642,17 @@ instance mapGrp.instMonoidal
   { εIso := (Grp.fullyFaithfulForget₂Mon _).preimageIso (εIso F.mapMon)
     μIso X Y := (Grp.fullyFaithfulForget₂Mon _).preimageIso (μIso F.mapMon X.toMon Y.toMon)
     μIso_hom_natural_left f Z :=
-      (Grp.forget₂Mon _).map_injective (μ_natural_left F.mapMon f.hom Z
+      (Grp.forget₂Mon _).map_injective (μ_natural_left F.mapMon f.hom Z.toMon)
+    μIso_hom_natural_right Z f :=
+      (Grp.forget₂Mon _).map_injective (μ_natural_right F.mapMon Z.toMon f.hom)
+    associativity X Y Z :=
+      (Grp.forget₂Mon _).map_injective (associativity F.mapMon X.toMon Y.toMon Z.toMon)
+    left_unitality X :=
+      (Grp.forget₂Mon _).map_injective (left_unitality F.mapMon X.toMon)
+    right_unitality X :=
+      (Grp.forget₂Mon _).map_injective (right_unitality F.mapMon X.toMon) }
+
+@[to_additive]
 
 中文:
 实例 mapGrp.instMonoidal
@@ -2585,7 +2661,17 @@ instance mapGrp.instMonoidal
   { εIso := (Grp.fullyFaithfulForget₂Mon _).preimageIso (εIso F.mapMon)
     μIso X Y := (Grp.fullyFaithfulForget₂Mon _).preimageIso (μIso F.mapMon X.toMon Y.toMon)
     μIso_hom_natural_left f Z :=
-      (Grp.forget₂Mon _).map_injective (μ_natural_left F.mapMon f.hom Z
+      (Grp.forget₂Mon _).map_injective (μ_natural_left F.mapMon f.hom Z.toMon)
+    μIso_hom_natural_right Z f :=
+      (Grp.forget₂Mon _).map_injective (μ_natural_right F.mapMon Z.toMon f.hom)
+    associativity X Y Z :=
+      (Grp.forget₂Mon _).map_injective (associativity F.mapMon X.toMon Y.toMon Z.toMon)
+    left_unitality X :=
+      (Grp.forget₂Mon _).map_injective (left_unitality F.mapMon X.toMon)
+    right_unitality X :=
+      (Grp.forget₂Mon _).map_injective (right_unitality F.mapMon X.toMon) }
+
+@[to_additive]
 
 Depends on / 依赖: CoreMonoidal, F.mapMon, Functor, Functor.CoreMonoidal.toMonoidal, Grp.forget, Grp.fullyFaithfulForget, X.toMon, Y.toMon, Z.toMon, associativity, f.hom, mapMon, map_injective, preimageIso, toMonoidal
 -/

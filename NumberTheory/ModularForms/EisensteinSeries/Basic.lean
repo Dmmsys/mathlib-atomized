@@ -40,7 +40,9 @@ definition eisensteinSeriesMF
   bdd_at_cusps' {c} hc := by
     rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
     rw [OnePoint.isBoundedAt_iff_forall_SL2Z hc]
-    exact fun γ hγ =>
+    exact fun γ hγ => isBoundedAtImInfty_eisensteinSeriesSIF a hk γ
+
+@[deprecated (since := "2026-02-10")] noncomputable alias eisensteinSeries_MF := eisensteinSeriesMF
 
 中文:
 定义 eisensteinSeriesMF
@@ -51,7 +53,9 @@ definition eisensteinSeriesMF
   bdd_at_cusps' {c} hc := by
     rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
     rw [OnePoint.isBoundedAt_iff_forall_SL2Z hc]
-    exact fun γ hγ =>
+    exact fun γ hγ => isBoundedAtImInfty_eisensteinSeriesSIF a hk γ
+
+@[deprecated (since := "2026-02-10")] noncomputable alias eisensteinSeries_MF := eisensteinSeriesMF
 
 Depends on / 依赖: eisensteinSeriesSIF
 -/

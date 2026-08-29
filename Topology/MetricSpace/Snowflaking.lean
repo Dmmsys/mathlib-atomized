@@ -910,7 +910,14 @@ instance :
     grw [edist_triangle x.ofSnowflaking y.ofSnowflaking z.ofSnowflaking,
       ENNReal.rpow_add_le_add_rpow _ _ hα₀.le hα₁]
   toUniformSpace := inferInstance
- 
+  uniformity_edist := by
+    have H : (𝓤 X).HasBasis (0 < ·) fun x => {p | edist p.1 p.2 < x ^ (α⁻¹)} := by
+      refine EMetric.mk_uniformity_basis (fun _ _ => by positivity) fun ε hε =>
+        ⟨ε ^ α, by positivity, ?_⟩
+      rw [ENNReal.rpow_rpow_inv hα₀.ne']
+    simp (disch := positivity) [uniformity_comap, H.eq_biInf, ENNReal.rpow_lt_rpow_iff]
+
+@[simp]
 
 中文:
 实例 :
@@ -922,7 +929,14 @@ instance :
     grw [edist_triangle x.ofSnowflaking y.ofSnowflaking z.ofSnowflaking,
       ENNReal.rpow_add_le_add_rpow _ _ hα₀.le hα₁]
   toUniformSpace := inferInstance
- 
+  uniformity_edist := by
+    have H : (𝓤 X).HasBasis (0 < ·) fun x => {p | edist p.1 p.2 < x ^ (α⁻¹)} := by
+      refine EMetric.mk_uniformity_basis (fun _ _ => by positivity) fun ε hε =>
+        ⟨ε ^ α, by positivity, ?_⟩
+      rw [ENNReal.rpow_rpow_inv hα₀.ne']
+    simp (disch := positivity) [uniformity_comap, H.eq_biInf, ENNReal.rpow_lt_rpow_iff]
+
+@[simp]
 
 Depends on / 依赖: EMetric, EMetric.mk_uniformity_basis, ENNReal, ENNReal.rpow_add_le_add_rpow, ENNReal.rpow_r, HasBasis, edist_comm, edist_def, edist_triangle, mk_uniformity_basis, ofSnowflaking, rpow_add_le_add_rpow, rpow_r, toUniformSpace, uniformity_edist, x.ofSnowflaking, y.ofSnowflaking, z.ofSnowflaking
 -/
@@ -1414,7 +1428,18 @@ instance :
       (by intro x y; cases x; cases y; rw [dist_toSnowflaking_toSnowflaking]; positivity)
       (by
         intro x y; cases x; cases y
-        rw [edist_toSnowflaking_toSnowflaking]; rw [
+        rw [edist_toSnowflaking_toSnowflaking]; rw [dist_toSnowflaking_toSnowflaking]; rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [← edist_dist] <;> positivity)
+  aux.replaceBornology fun s => by
+    rw [← isBounded_preimage_toSnowflaking_iff]; rw [Metric.isBounded_iff]; rw [Metric.isBounded_iff]
+    constructor
+    · rintro ⟨C, hC⟩
+      use C ^ α
+      rintro ⟨x⟩ hx ⟨y⟩ hy
+      grw [mk_eq_toSnowflaking, dist_toSnowflaking_toSnowflaking, hC hx hy]
+    · rintro ⟨C, hC⟩
+      use C ^ α⁻¹
+      intro x hx y hy
+      grw [← hC hx hy, dist_toSnowflaking_toSnowflaking, Real.rpow_rpow_inv (by positivity) hα₀.ne']
 
 中文:
 实例 :
@@ -1424,7 +1449,18 @@ instance :
       (by intro x y; cases x; cases y; rw [dist_toSnowflaking_toSnowflaking]; positivity)
       (by
         intro x y; cases x; cases y
-        rw [edist_toSnowflaking_toSnowflaking]; rw [
+        rw [edist_toSnowflaking_toSnowflaking]; rw [dist_toSnowflaking_toSnowflaking]; rw [← ENNReal.ofReal_rpow_of_nonneg]; rw [← edist_dist] <;> positivity)
+  aux.replaceBornology fun s => by
+    rw [← isBounded_preimage_toSnowflaking_iff]; rw [Metric.isBounded_iff]; rw [Metric.isBounded_iff]
+    constructor
+    · rintro ⟨C, hC⟩
+      use C ^ α
+      rintro ⟨x⟩ hx ⟨y⟩ hy
+      grw [mk_eq_toSnowflaking, dist_toSnowflaking_toSnowflaking, hC hx hy]
+    · rintro ⟨C, hC⟩
+      use C ^ α⁻¹
+      intro x hx y hy
+      grw [← hC hx hy, dist_toSnowflaking_toSnowflaking, Real.rpow_rpow_inv (by positivity) hα₀.ne']
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_rpow_of_nonneg, Metric, Metric.isBounded, Metric.isBounded_iff, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, PseudoMetricSpace, Snowflaking, aux.replaceBornology, dist_toSnowflaking_toSnowflaking, edist_dist, edist_toSnowflaking_toSnowflaking, isBounded, isBounded_iff, isBounded_preimage_toSnowflaking_iff, ofReal_rpow_of_nonneg, replaceBornology, toPseudoMetricSpaceOfDist
 -/

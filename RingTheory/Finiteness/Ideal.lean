@@ -61,7 +61,9 @@ theorem fg_ker_comp
   let : Algebra S A := RingHom.toAlgebra g
   let : IsScalarTower R S A := IsScalarTower.of_algebraMap_eq fun _ => rfl
   let f₁ := Algebra.linearMap R S
-  let g₁ := (IsScalarTower.toAlgHom R S A).toLinea
+  let g₁ := (IsScalarTower.toAlgHom R S A).toLinearMap
+  exact Submodule.fg_ker_comp f₁ g₁ hf
+    (Submodule.FG.restrictScalars_of_surjective hg hsur) hsur
 
 中文:
 定理 fg_ker_comp
@@ -72,7 +74,9 @@ theorem fg_ker_comp
   let : Algebra S A := RingHom.toAlgebra g
   let : IsScalarTower R S A := IsScalarTower.of_algebraMap_eq fun _ => rfl
   let f₁ := Algebra.linearMap R S
-  let g₁ := (IsScalarTower.toAlgHom R S A).toLinea
+  let g₁ := (IsScalarTower.toAlgHom R S A).toLinearMap
+  exact Submodule.fg_ker_comp f₁ g₁ hf
+    (Submodule.FG.restrictScalars_of_surjective hg hsur) hsur
 
 Depends on / 依赖: Algebra, Algebra.linearMap, IsScalarTower, IsScalarTower.of_algebraMap_eq, IsScalarTower.toAlgHom, RingHom, RingHom.toAlgebra, Submodule, Submodule.FG.restrictScalars_of_surjective, Submodule.fg_ker_comp, fg_ker_comp, g.comp, linearMap, of_algebraMap_eq, restrictScalars_of_surjective, toAlgHom, toAlgebra, toLinearMap
 -/
@@ -133,7 +137,16 @@ theorem exists_radical_pow_le_of_fg
   induction J, hJ using Submodule.fg_induction with
   | singleton x =>
     obtain ⟨n, hn⟩ := hJK (subset_span (Set.mem_singleton x))
-    exact ⟨n, by rwa [← 
+    exact ⟨n, by rwa [← span, span_singleton_pow, span_le, Set.singleton_subset_iff]⟩
+  | sup J K _ _ hJ hK =>
+obtain ⟨n, hn⟩ := hJ fun x hx => hJK mem_sup_left hx
+obtain ⟨m, hm⟩ := hK fun x hx => hJK mem_sup_right hx
+    use n + m
+    rw [← add_eq_sup]; rw [add_pow]; rw [sum_eq_sup]; rw [Finset.sup_le_iff]
+    refine fun i _ => mul_le_left.trans ?_
+    obtain h | h := le_or_gt n i
+    · exact mul_le_left.trans ((pow_le_pow_right h).trans hn)
+    · exact mul_le_right.trans ((pow_le_pow_right (by lia)).trans hm)
 
 中文:
 定理 存在_radical_pow_le_of_fg
@@ -145,7 +158,16 @@ theorem exists_radical_pow_le_of_fg
   induction J, hJ using Submodule.fg_induction with
   | singleton x =>
     obtain ⟨n, hn⟩ := hJK (subset_span (Set.mem_singleton x))
-    exact ⟨n, by rwa [← 
+    exact ⟨n, by rwa [← span, span_singleton_pow, span_le, Set.singleton_subset_iff]⟩
+  | sup J K _ _ hJ hK =>
+obtain ⟨n, hn⟩ := hJ fun x hx => hJK mem_sup_left hx
+obtain ⟨m, hm⟩ := hK fun x hx => hJK mem_sup_right hx
+    use n + m
+    rw [← add_eq_sup]; rw [add_pow]; rw [sum_eq_sup]; rw [Finset.sup_le_iff]
+    refine fun i _ => mul_le_left.trans ?_
+    obtain h | h := le_or_gt n i
+    · exact mul_le_left.trans ((pow_le_pow_right h).trans hn)
+    · exact mul_le_right.trans ((pow_le_pow_right (by lia)).trans hm)
 
 Depends on / 依赖: I.radical, J.FG, Set.mem_singleton, Set.singleton_subset_iff, Submodule, Submodule.fg_induction, add_eq_sup, fg_induction, mem_singleton, mem_sup_left, mem_sup_right, radical, singleton, singleton_subset_iff, span_le, span_singleton_pow, subset_span
 -/
@@ -206,7 +228,10 @@ lemma exists_pow_le_of_le_radical_of_fg
     obtain ⟨n, hn⟩ := h'
     refine ⟨n, by simpa [span_singleton_pow, span_le]⟩
   | sup I₁ I₂ _ _ h₁ h₂ =>
-    obtain ⟨n₁, hn₁⟩ := h₁ (
+    obtain ⟨n₁, hn₁⟩ := h₁ (le_sup_left.trans h')
+    obtain ⟨n₂, hn₂⟩ := h₂ (le_sup_right.trans h')
+    use n₁ + n₂
+    exact sup_pow_add_le_pow_sup_pow.trans (sup_le hn₁ hn₂)
 
 中文:
 引理 存在_pow_le_of_le_radical_of_fg
@@ -218,7 +243,10 @@ lemma exists_pow_le_of_le_radical_of_fg
     obtain ⟨n, hn⟩ := h'
     refine ⟨n, by simpa [span_singleton_pow, span_le]⟩
   | sup I₁ I₂ _ _ h₁ h₂ =>
-    obtain ⟨n₁, hn₁⟩ := h₁ (
+    obtain ⟨n₁, hn₁⟩ := h₁ (le_sup_left.trans h')
+    obtain ⟨n₂, hn₂⟩ := h₂ (le_sup_right.trans h')
+    use n₁ + n₂
+    exact sup_pow_add_le_pow_sup_pow.trans (sup_le hn₁ hn₂)
 
 Depends on / 依赖: Set.singleton_subset_iff, SetLike, SetLike.mem_coe, Submodule, Submodule.fg_induction, fg_induction, le_sup_left, le_sup_left.trans, le_sup_right, le_sup_right.trans, mem_coe, singleton, singleton_subset_iff, span_le, span_singleton_pow, submodule_span_eq, sup_le, sup_pow_add_le_pow_sup_pow, sup_pow_add_le_pow_sup_pow.trans
 -/

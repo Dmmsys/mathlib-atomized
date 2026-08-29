@@ -182,7 +182,14 @@ s := (kernel (generatorsOfIsCokernelFree f g H H').π).freeHomEquiv kernel.lift
     (generatorsOfIsCokernelFree f g H H').π f (by simp [H])
   epi := by
     let h : cokernel f ≅ M := (H'.coconePointUniqueUpToIso (colimit.isColimit _)).symm
-    let h' : Abelian.image f ≅ kernel (generatorsOfIsCokerne
+    let h' : Abelian.image f ≅ kernel (generatorsOfIsCokernelFree f g H H').π :=
+      kernel.mapIso (cokernel.π f) (generatorsOfIsCokernelFree f g H H').π
+        (Iso.refl _) h (by simp [h])
+    have comp_aux : Abelian.factorThruImage f ≫ h'.hom =
+      (kernel.lift (generatorsOfIsCokernelFree f g H H').π f (by simp [H])) :=
+equalizer.hom_ext by simp [h']
+    rw [← comp_aux]; rw [Equiv.symm_apply_apply]
+    infer_instance
 
 中文:
 定义 relationsOfIsCokernelFree
@@ -192,7 +199,14 @@ s := (kernel (generatorsOfIsCokernelFree f g H H').π).freeHomEquiv kernel.lift
     (generatorsOfIsCokernelFree f g H H').π f (by simp [H])
   epi := by
     let h : cokernel f ≅ M := (H'.coconePointUniqueUpToIso (colimit.isColimit _)).symm
-    let h' : Abelian.image f ≅ kernel (generatorsOfIsCokerne
+    let h' : Abelian.image f ≅ kernel (generatorsOfIsCokernelFree f g H H').π :=
+      kernel.mapIso (cokernel.π f) (generatorsOfIsCokernelFree f g H H').π
+        (Iso.refl _) h (by simp [h])
+    have comp_aux : Abelian.factorThruImage f ≫ h'.hom =
+      (kernel.lift (generatorsOfIsCokernelFree f g H H').π f (by simp [H])) :=
+equalizer.hom_ext by simp [h']
+    rw [← comp_aux]; rw [Equiv.symm_apply_apply]
+    infer_instance
 -/
 def relationsOfIsCokernelFree {M : SheafOfModules.{u} R}
     (f : free ι ⟶ free σ) (g : free σ ⟶ M) (H : f ≫ g = 0)
@@ -391,7 +405,9 @@ definition Presentation.map
 (P.mapRelations_mapGenerators F η) by
     refine IsColimit.equivOfNatIsoOfIso
       (parallelPairIsoMk (mapFreeIso F _ η).symm (mapFreeIso F _ η).symm
-        (by simp [Presentation.mapRelations]) (by simp)) _ _ ?_ (isColimitOfP
+        (by simp [Presentation.mapRelations]) (by simp)) _ _ ?_ (isColimitOfPreserves F P.isColimit)
+    exact (Cocone.ext (Iso.refl _) <| by rintro (_ | _)
+      <;> simp [Presentation.mapRelations, GeneratingSections.mapFreeHom, ← Functor.map_comp])
 
 中文:
 定义 呈现.map
@@ -400,7 +416,9 @@ definition Presentation.map
 (P.mapRelations_mapGenerators F η) by
     refine IsColimit.equivOfNatIsoOfIso
       (parallelPairIsoMk (mapFreeIso F _ η).symm (mapFreeIso F _ η).symm
-        (by simp [Presentation.mapRelations]) (by simp)) _ _ ?_ (isColimitOfP
+        (by simp [Presentation.mapRelations]) (by simp)) _ _ ?_ (isColimitOfPreserves F P.isColimit)
+    exact (Cocone.ext (Iso.refl _) <| by rintro (_ | _)
+      <;> simp [Presentation.mapRelations, GeneratingSections.mapFreeHom, ← Functor.map_comp])
 
 Depends on / 依赖: Cocone, Cocone.ext, Functor, Functor.map_comp, GeneratingSections, GeneratingSections.mapFreeHom, IsColimit, IsColimit.equivOfNatIsoOfIso, Iso.refl, P.isColimit, P.mapGenerators, P.mapRelations, P.mapRelations_mapGenerators, Presentation, Presentation.mapRelations, equivOfNatIsoOfIso, isColimit, isColimitOfPreserves, mapFreeHom, mapFreeIso
 -/
@@ -708,7 +726,16 @@ refine K.superset_covering ?_ G.cover_lift K _ (P.coversTop (G.obj Y))
     exact ⟨⟨Z, i, v⟩, ⟨𝟙 _⟩⟩
   presentation i := by
     letI overS : SheafOfModules.{u} S ⥤ SheafOfModules.{u} (S.over i.1) :=
-      She
+      SheafOfModules.pushforward (𝟙 _)
+    letI G' := Over.post (X := i.1) G ⋙ Over.map i.2.2
+    letI ψ : S.over i.1 ⟶
+        (G'.sheafPushforwardContinuous RingCat.{u} (K.over i.1) (J.over (P.X i.2.1))).obj
+          (R.over (P.X i.2.1)) :=
+      ((Over.forget i.1).sheafPushforwardContinuous RingCat.{u} (K.over i.1) K).map φ
+    letI e : (SheafOfModules.pushforward ψ).obj (unit (R.over (P.X i.snd.fst))) ≅
+      unit (S.over i.fst) := overS.mapIso η
+    haveI : PreservesColimitsOfSize.{u, u, _} (SheafOfModules.pushforward ψ) := h _ _ _
+    exact (P.presentation i.2.1).map (SheafOfModules.pushforward ψ) e.symm
 
 中文:
 定义 QuasicoherentData.pushforward
@@ -721,7 +748,16 @@ refine K.superset_covering ?_ G.cover_lift K _ (P.coversTop (G.obj Y))
     exact ⟨⟨Z, i, v⟩, ⟨𝟙 _⟩⟩
   presentation i := by
     letI overS : SheafOfModules.{u} S ⥤ SheafOfModules.{u} (S.over i.1) :=
-      She
+      SheafOfModules.pushforward (𝟙 _)
+    letI G' := Over.post (X := i.1) G ⋙ Over.map i.2.2
+    letI ψ : S.over i.1 ⟶
+        (G'.sheafPushforwardContinuous RingCat.{u} (K.over i.1) (J.over (P.X i.2.1))).obj
+          (R.over (P.X i.2.1)) :=
+      ((Over.forget i.1).sheafPushforwardContinuous RingCat.{u} (K.over i.1) K).map φ
+    letI e : (SheafOfModules.pushforward ψ).obj (unit (R.over (P.X i.snd.fst))) ≅
+      unit (S.over i.fst) := overS.mapIso η
+    haveI : PreservesColimitsOfSize.{u, u, _} (SheafOfModules.pushforward ψ) := h _ _ _
+    exact (P.presentation i.2.1).map (SheafOfModules.pushforward ψ) e.symm
 
 Depends on / 依赖: Over.map, Over.post, R.over
 -/
@@ -789,7 +825,12 @@ lemma isQuasicoherent_pushforward_of_isLeftAdjoint
   intro X Y f
   let G' := Over.post (X := X) G ⋙ Over.map f
   have : G'.IsContinuous (K.over X) (J.over Y) := Functor.isContinuous_comp _ _ _ (J.over _) _
-  have : G'.IsCocontinuous (K.over X) (J.over Y) := isCocontinuous_comp _ _ _ 
+  have : G'.IsCocontinuous (K.over X) (J.over Y) := isCocontinuous_comp _ _ _ (J.over _)
+  let a : S.over X ⟶
+      (G'.sheafPushforwardContinuous RingCat.{u} (K.over X) (J.over Y)).obj (R.over Y) :=
+    ((Over.forget X).sheafPushforwardContinuous RingCat.{u} (K.over X) K).map φ
+  have : (pushforward.{u} a).IsLeftAdjoint := isLeftAdjoint_pushforward_of_isIso a
+  infer_instance
 
 中文:
 引理 isQuasicoherent_pushforward_of_isLeftAdjoint
@@ -799,7 +840,12 @@ lemma isQuasicoherent_pushforward_of_isLeftAdjoint
   intro X Y f
   let G' := Over.post (X := X) G ⋙ Over.map f
   have : G'.IsContinuous (K.over X) (J.over Y) := Functor.isContinuous_comp _ _ _ (J.over _) _
-  have : G'.IsCocontinuous (K.over X) (J.over Y) := isCocontinuous_comp _ _ _ 
+  have : G'.IsCocontinuous (K.over X) (J.over Y) := isCocontinuous_comp _ _ _ (J.over _)
+  let a : S.over X ⟶
+      (G'.sheafPushforwardContinuous RingCat.{u} (K.over X) (J.over Y)).obj (R.over Y) :=
+    ((Over.forget X).sheafPushforwardContinuous RingCat.{u} (K.over X) K).map φ
+  have : (pushforward.{u} a).IsLeftAdjoint := isLeftAdjoint_pushforward_of_isIso a
+  infer_instance
 
 Depends on / 依赖: J.over, K.over
 -/
@@ -996,7 +1042,10 @@ definition QuasicoherentData.bind
   presentation i :=
     letI e := pushforwardPushforwardEquivalence (Over.iteratedSliceEquiv ((D i.1).X i.2))
       (S := (R.over _).over _) (R := R.over _) (𝟙 _) (𝟙 _)
-      (by ext : 2; exact R.1.m
+      (by ext : 2; exact R.1.map_id _) (by ext : 2; exact R.1.map_id _)
+    (((D i.1).presentation i.2).map e.inverse (.refl _)).ofIsIso
+      (e.fullyFaithfulFunctor.preimageIso
+      (by exact e.counitIso.app ((M.over (X i.1)).over ((D i.1).X i.2)))).hom
 
 中文:
 定义 QuasicoherentData.bind
@@ -1007,7 +1056,10 @@ definition QuasicoherentData.bind
   presentation i :=
     letI e := pushforwardPushforwardEquivalence (Over.iteratedSliceEquiv ((D i.1).X i.2))
       (S := (R.over _).over _) (R := R.over _) (𝟙 _) (𝟙 _)
-      (by ext : 2; exact R.1.m
+      (by ext : 2; exact R.1.map_id _) (by ext : 2; exact R.1.map_id _)
+    (((D i.1).presentation i.2).map e.inverse (.refl _)).ofIsIso
+      (e.fullyFaithfulFunctor.preimageIso
+      (by exact e.counitIso.app ((M.over (X i.1)).over ((D i.1).X i.2)))).hom
 -/
 noncomputable def QuasicoherentData.bind {R : Sheaf J RingCat.{u}}
     (M : SheafOfModules.{u} R) {I : Type u}

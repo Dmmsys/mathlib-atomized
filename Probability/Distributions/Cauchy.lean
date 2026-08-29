@@ -446,7 +446,9 @@ lemma integral_cauchyPDFReal_eq_one
   field
 
 @[deprecated (since := "2026-03-06")]
-alias _root_Probability.integral_cauchyPDFReal := 
+alias _root_Probability.integral_cauchyPDFReal := integral_cauchyPDFReal_eq_one
+
+@[fun_prop]
 
 中文:
 引理 integral_cauchyPDF实数_eq_one
@@ -458,7 +460,9 @@ alias _root_Probability.integral_cauchyPDFReal :=
   field
 
 @[deprecated (since := "2026-03-06")]
-alias _root_Probability.integral_cauchyPDFReal := 
+alias _root_Probability.integral_cauchyPDFReal := integral_cauchyPDFReal_eq_one
+
+@[fun_prop]
 
 Depends on / 依赖: NNReal, NNReal.coe_inv, cauchyPDFReal_def, coe_inv, integral_comp_div, integral_const_mul, integral_sub_right_eq_self
 -/
@@ -529,7 +533,7 @@ lemma lintegral_cauchyPDF_eq_one
     (ae_of_all _ fun x => (cauchyPDF_pos x₀ hγ x).le) (by fun_prop)]; rw [integral_cauchyPDFReal_eq_one x₀ hγ]
 
 @[deprecated (since := "2026-03-06")]
-alias _root_Probability.lintegral_cauchyPDF_eq_one 
+alias _root_Probability.lintegral_cauchyPDF_eq_one := lintegral_cauchyPDF_eq_one
 
 中文:
 引理 lintegral_cauchyPDF_eq_one
@@ -540,7 +544,7 @@ alias _root_Probability.lintegral_cauchyPDF_eq_one
     (ae_of_all _ fun x => (cauchyPDF_pos x₀ hγ x).le) (by fun_prop)]; rw [integral_cauchyPDFReal_eq_one x₀ hγ]
 
 @[deprecated (since := "2026-03-06")]
-alias _root_Probability.lintegral_cauchyPDF_eq_one 
+alias _root_Probability.lintegral_cauchyPDF_eq_one := lintegral_cauchyPDF_eq_one
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_eq_one_iff, ae_of_all, cauchyPDF, cauchyPDF_pos, fun_prop, integral_cauchyPDFReal_eq_one, integral_eq_lintegral_of_nonneg_ae, toReal_eq_one_iff
 -/

@@ -195,7 +195,7 @@ lemma mk_goursatFst_eq_iff_mk_goursatSnd_eq
   simp only [QuotientGroup.eq_iff_div_mem, mem_goursatFst, mem_goursatSnd]
   constructor <;> intro h
   · simpa [Prod.mul_def, Prod.div_def] using div_mem (mul_mem h hx) hy
-  · simpa [Prod.mul_def, Prod.div_def] using d
+  · simpa [Prod.mul_def, Prod.div_def] using div_mem (mul_mem h hy) hx
 
 中文:
 引理 mk_goursatFst_eq_iff_mk_goursatSnd_eq
@@ -207,7 +207,7 @@ lemma mk_goursatFst_eq_iff_mk_goursatSnd_eq
   simp only [QuotientGroup.eq_iff_div_mem, mem_goursatFst, mem_goursatSnd]
   constructor <;> intro h
   · simpa [Prod.mul_def, Prod.div_def] using div_mem (mul_mem h hx) hy
-  · simpa [Prod.mul_def, Prod.div_def] using d
+  · simpa [Prod.mul_def, Prod.div_def] using div_mem (mul_mem h hy) hx
 
 Depends on / 依赖: Prod.div_def, Prod.mul_def, QuotientGroup, QuotientGroup.eq_iff_div_mem, div_def, div_mem, eq_comm, eq_iff_div_mem, mem_goursatFst, mem_goursatSnd, mul_def, mul_mem, normal_goursatFst, normal_goursatSnd
 -/
@@ -273,7 +273,10 @@ lemma goursat_surjective
         e.toMonoidHom.graph := by
   have := normal_goursatFst hI₁
   have := normal_goursatSnd hI₂
-  exact 
+  exact (((QuotientGroup.mk' I.goursatFst).prodMap
+    (QuotientGroup.mk' I.goursatSnd)).comp I.subtype).exists_mulEquiv_range_eq_graph
+    ((QuotientGroup.mk'_surjective _).comp hI₁) ((QuotientGroup.mk'_surjective _).comp hI₂)
+    fun ⟨x, hx⟩ ⟨y, hy⟩ => mk_goursatFst_eq_iff_mk_goursatSnd_eq hI₁ hI₂ hx hy
 
 中文:
 引理 goursat_surjective
@@ -284,7 +287,10 @@ lemma goursat_surjective
         e.toMonoidHom.graph := by
   have := normal_goursatFst hI₁
   have := normal_goursatSnd hI₂
-  exact 
+  exact (((QuotientGroup.mk' I.goursatFst).prodMap
+    (QuotientGroup.mk' I.goursatSnd)).comp I.subtype).exists_mulEquiv_range_eq_graph
+    ((QuotientGroup.mk'_surjective _).comp hI₁) ((QuotientGroup.mk'_surjective _).comp hI₂)
+    fun ⟨x, hx⟩ ⟨y, hy⟩ => mk_goursatFst_eq_iff_mk_goursatSnd_eq hI₁ hI₂ hx hy
 
 Depends on / 依赖: normal_goursatFst
 -/
@@ -324,7 +330,42 @@ lemma goursat
   let Q : I ->* H' := (MonoidHom.snd ..).subgroupMap I
   let I' : Subgroup (G' × H') := (P.prod Q).range
   have hI₁' : Surjective (Prod.fst ∘ I'.subtype) := by
-    simp
+    simp only [← MonoidHom.coe_fst, ← MonoidHom.coe_comp, ← MonoidHom.range_eq_top,
+      MonoidHom.range_comp, Subgroup.range_subtype, I']
+    simp only [← MonoidHom.range_comp, MonoidHom.fst_comp_prod, MonoidHom.range_eq_top]
+    exact (MonoidHom.fst ..).subgroupMap_surjective I
+  have hI₂' : Surjective (Prod.snd ∘ I'.subtype) := by
+    simp only [← MonoidHom.coe_snd, ← MonoidHom.coe_comp, ← MonoidHom.range_eq_top,
+      MonoidHom.range_comp, Subgroup.range_subtype, I']
+    simp only [← MonoidHom.range_comp, MonoidHom.range_eq_top]
+    exact (MonoidHom.snd ..).subgroupMap_surjective I
+  have := normal_goursatFst hI₁'
+  have := normal_goursatSnd hI₂'
+  obtain ⟨e, he⟩ := goursat_surjective hI₁' hI₂'
+  refine ⟨I.map (MonoidHom.fst ..), I.map (MonoidHom.snd ..),
+    I'.goursatFst, I'.goursatSnd, inferInstance, inferInstance, e, ?_⟩
+  rw [← he]
+  simp only [MonoidHom.range_comp, Subgroup.range_subtype, I']
+  rw [comap_map_eq_self]
+  · ext ⟨g, h⟩
+    constructor
+    · intro hgh
+      simpa only [G', H', mem_map, MonoidHom.mem_range, MonoidHom.prod_apply, Subtype.exists,
+        Prod.exists, MonoidHom.coe_prodMap, coe_subtype, Prod.mk.injEq, Prod.map_apply,
+        MonoidHom.coe_snd, exists_eq_right, exists_and_right, exists_eq_right_right,
+        MonoidHom.coe_fst]
+        using ⟨⟨h, hgh⟩, ⟨g, hgh⟩, g, h, hgh, ⟨rfl, rfl⟩⟩
+    · simp only [G', H', mem_map, MonoidHom.mem_range, MonoidHom.prod_apply, Subtype.exists,
+        Prod.exists, MonoidHom.coe_prodMap, coe_subtype, Prod.mk.injEq, Prod.map_apply,
+        MonoidHom.coe_snd, exists_eq_right, exists_and_right, exists_eq_right_right,
+        MonoidHom.coe_fst, forall_exists_index, and_imp]
+      rintro h₁ hgh₁ g₁ hg₁h g₂ h₂ hg₂h₂ hP hQ
+      simp only [Subtype.ext_iff] at hP hQ
+      rwa [← hP, ← hQ]
+  · convert! goursatFst_prod_goursatSnd_le (P.prod Q).range
+    ext ⟨g, h⟩
+    simp_rw [G', H', MonoidHom.mem_ker, MonoidHom.coe_prodMap, Prod.map_apply, Subgroup.mem_prod,
+      Prod.one_eq_mk, Prod.ext_iff, ← MonoidHom.mem_ker, QuotientGroup.ker_mk']
 
 中文:
 引理 goursat
@@ -335,7 +376,42 @@ lemma goursat
   let Q : I ->* H' := (MonoidHom.snd ..).subgroupMap I
   let I' : Subgroup (G' × H') := (P.prod Q).range
   have hI₁' : Surjective (Prod.fst ∘ I'.subtype) := by
-    simp
+    simp only [← MonoidHom.coe_fst, ← MonoidHom.coe_comp, ← MonoidHom.range_eq_top,
+      MonoidHom.range_comp, Subgroup.range_subtype, I']
+    simp only [← MonoidHom.range_comp, MonoidHom.fst_comp_prod, MonoidHom.range_eq_top]
+    exact (MonoidHom.fst ..).subgroupMap_surjective I
+  have hI₂' : Surjective (Prod.snd ∘ I'.subtype) := by
+    simp only [← MonoidHom.coe_snd, ← MonoidHom.coe_comp, ← MonoidHom.range_eq_top,
+      MonoidHom.range_comp, Subgroup.range_subtype, I']
+    simp only [← MonoidHom.range_comp, MonoidHom.range_eq_top]
+    exact (MonoidHom.snd ..).subgroupMap_surjective I
+  have := normal_goursatFst hI₁'
+  have := normal_goursatSnd hI₂'
+  obtain ⟨e, he⟩ := goursat_surjective hI₁' hI₂'
+  refine ⟨I.map (MonoidHom.fst ..), I.map (MonoidHom.snd ..),
+    I'.goursatFst, I'.goursatSnd, inferInstance, inferInstance, e, ?_⟩
+  rw [← he]
+  simp only [MonoidHom.range_comp, Subgroup.range_subtype, I']
+  rw [comap_map_eq_self]
+  · ext ⟨g, h⟩
+    constructor
+    · intro hgh
+      simpa only [G', H', mem_map, MonoidHom.mem_range, MonoidHom.prod_apply, Subtype.exists,
+        Prod.exists, MonoidHom.coe_prodMap, coe_subtype, Prod.mk.injEq, Prod.map_apply,
+        MonoidHom.coe_snd, exists_eq_right, exists_and_right, exists_eq_right_right,
+        MonoidHom.coe_fst]
+        using ⟨⟨h, hgh⟩, ⟨g, hgh⟩, g, h, hgh, ⟨rfl, rfl⟩⟩
+    · simp only [G', H', mem_map, MonoidHom.mem_range, MonoidHom.prod_apply, Subtype.exists,
+        Prod.exists, MonoidHom.coe_prodMap, coe_subtype, Prod.mk.injEq, Prod.map_apply,
+        MonoidHom.coe_snd, exists_eq_right, exists_and_right, exists_eq_right_right,
+        MonoidHom.coe_fst, forall_exists_index, and_imp]
+      rintro h₁ hgh₁ g₁ hg₁h g₂ h₂ hg₂h₂ hP hQ
+      simp only [Subtype.ext_iff] at hP hQ
+      rwa [← hP, ← hQ]
+  · convert! goursatFst_prod_goursatSnd_le (P.prod Q).range
+    ext ⟨g, h⟩
+    simp_rw [G', H', MonoidHom.mem_ker, MonoidHom.coe_prodMap, Prod.map_apply, Subgroup.mem_prod,
+      Prod.one_eq_mk, Prod.ext_iff, ← MonoidHom.mem_ker, QuotientGroup.ker_mk']
 
 Depends on / 依赖: I.map, MonoidHom, MonoidHom.coe_comp, MonoidHom.coe_fst, MonoidHom.fst, MonoidHom.fst_comp_prod, MonoidHom.range_comp, MonoidHom.range_eq_top, MonoidHom.snd, P.prod, Prod.fst, Subgroup, Subgroup.range_subtype, Surjective, coe_comp, coe_fst, fst_comp_prod, range_comp, range_eq_top, range_subtype
 -/

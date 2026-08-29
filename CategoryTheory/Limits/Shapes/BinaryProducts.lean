@@ -1394,7 +1394,7 @@ definition BinaryFan.isLimitFlip
     (fun _ => hc.fac _ _) fun s _ e₁ e₂ =>
     BinaryFan.IsLimit.hom_ext hc
       (e₂.trans (hc.fac (BinaryFan.mk s.snd s.fst) ⟨WalkingPair.left⟩).symm)
-      (e₁.trans (hc.fac (BinaryFan.mk s.snd s.fst) ⟨WalkingPair.ri
+      (e₁.trans (hc.fac (BinaryFan.mk s.snd s.fst) ⟨WalkingPair.right⟩).symm)
 
 中文:
 定义 BinaryFan.isLimitFlip
@@ -1403,7 +1403,7 @@ definition BinaryFan.isLimitFlip
     (fun _ => hc.fac _ _) fun s _ e₁ e₂ =>
     BinaryFan.IsLimit.hom_ext hc
       (e₂.trans (hc.fac (BinaryFan.mk s.snd s.fst) ⟨WalkingPair.left⟩).symm)
-      (e₁.trans (hc.fac (BinaryFan.mk s.snd s.fst) ⟨WalkingPair.ri
+      (e₁.trans (hc.fac (BinaryFan.mk s.snd s.fst) ⟨WalkingPair.right⟩).symm)
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.hom_ext, BinaryFan.isLimitMk, BinaryFan.mk, IsLimit, IsLimit.lift, WalkingPair, WalkingPair.left, WalkingPair.right, hc.fac, hom_ext, isLimitMk, s.fst, s.snd
 -/
@@ -1433,7 +1433,8 @@ theorem BinaryFan.isLimit_iff_isIso_fst
           hl⟩⟩
   · intro
     exact
-      ⟨BinaryFan.
+      ⟨BinaryFan.IsLimit.mk _ (fun f _ => f ≫ inv c.fst) (fun _ _ => by simp)
+          (fun _ _ => h.hom_ext _ _) fun _ _ _ e _ => by simp [← e]⟩
 
 中文:
 定理 BinaryFan.isLimit_iff_isIso_fst
@@ -1449,7 +1450,8 @@ theorem BinaryFan.isLimit_iff_isIso_fst
           hl⟩⟩
   · intro
     exact
-      ⟨BinaryFan.
+      ⟨BinaryFan.IsLimit.mk _ (fun f _ => f ≫ inv c.fst) (fun _ _ => by simp)
+          (fun _ _ => h.hom_ext _ _) fun _ _ _ e _ => by simp [← e]⟩
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.hom_ext, BinaryFan.IsLimit.lift, BinaryFan.IsLimit.mk, Category, Category.comp_id, IsLimit, c.fst, comp_id, h.from, h.hom_ext, hom_ext
 -/
@@ -1570,7 +1572,7 @@ definition BinaryCofan.isColimitFlip
     (fun _ => hc.fac _ _) fun s _ e₁ e₂ =>
     BinaryCofan.IsColimit.hom_ext hc
       (e₂.trans (hc.fac (BinaryCofan.mk s.inr s.inl) ⟨WalkingPair.left⟩).symm)
-      (e₁.trans (hc.fac (BinaryCofan.mk s.inr s.inl) ⟨
+      (e₁.trans (hc.fac (BinaryCofan.mk s.inr s.inl) ⟨WalkingPair.right⟩).symm)
 
 中文:
 定义 BinaryCofan.isColimitFlip
@@ -1579,7 +1581,7 @@ definition BinaryCofan.isColimitFlip
     (fun _ => hc.fac _ _) fun s _ e₁ e₂ =>
     BinaryCofan.IsColimit.hom_ext hc
       (e₂.trans (hc.fac (BinaryCofan.mk s.inr s.inl) ⟨WalkingPair.left⟩).symm)
-      (e₁.trans (hc.fac (BinaryCofan.mk s.inr s.inl) ⟨
+      (e₁.trans (hc.fac (BinaryCofan.mk s.inr s.inl) ⟨WalkingPair.right⟩).symm)
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.hom_ext, BinaryCofan.isColimitMk, BinaryCofan.mk, IsColimit, IsColimit.desc, WalkingPair, WalkingPair.left, WalkingPair.right, hc.fac, hom_ext, isColimitMk, s.inl, s.inr
 -/
@@ -1605,7 +1607,12 @@ theorem BinaryCofan.isColimit_iff_isIso_inl
     refine ⟨⟨l, hl, BinaryCofan.IsColimit.hom_ext H (?_) (h.hom_ext _ _)⟩⟩
     rw [Category.comp_id]
     have e : (inl c ≫ l) ≫ inl c = 𝟙 X ≫ inl c := congrArg (· ≫ inl c) hl
-    rwa [Category.assoc
+    rwa [Category.assoc, Category.id_comp] at e
+  · intro
+    exact
+      ⟨BinaryCofan.IsColimit.mk _ (fun f _ => inv c.inl ≫ f)
+          (fun _ _ => IsIso.hom_inv_id_assoc _ _) (fun _ _ => h.hom_ext _ _) fun _ _ _ e _ =>
+          (IsIso.eq_inv_comp _).mpr e⟩
 
 中文:
 定理 BinaryCofan.isColimit_iff_isIso_inl
@@ -1617,7 +1624,12 @@ theorem BinaryCofan.isColimit_iff_isIso_inl
     refine ⟨⟨l, hl, BinaryCofan.IsColimit.hom_ext H (?_) (h.hom_ext _ _)⟩⟩
     rw [Category.comp_id]
     have e : (inl c ≫ l) ≫ inl c = 𝟙 X ≫ inl c := congrArg (· ≫ inl c) hl
-    rwa [Category.assoc
+    rwa [Category.assoc, Category.id_comp] at e
+  · intro
+    exact
+      ⟨BinaryCofan.IsColimit.mk _ (fun f _ => inv c.inl ≫ f)
+          (fun _ _ => IsIso.hom_inv_id_assoc _ _) (fun _ _ => h.hom_ext _ _) fun _ _ _ e _ =>
+          (IsIso.eq_inv_comp _).mpr e⟩
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.desc, BinaryCofan.IsColimit.hom_ext, BinaryCofan.IsColimit.mk, Category, Category.assoc, Category.comp_id, Category.id_comp, IsColimit, IsIso.eq_inv_comp, IsIso.hom_inv_id_assoc, c.inl, comp_id, eq_inv_comp, h.hom_ext, h.to, hom_ext, hom_inv_id_assoc, id_comp
 -/
@@ -5346,7 +5358,12 @@ definition IsLimit.assoc
     · apply P.hom_ext
       rintro ⟨⟨⟩⟩
       · simpa using w ⟨.left⟩
-      · replace w 
+      · replace w : m ≫ BinaryFan.IsLimit.lift Q (s.fst ≫ sXY.snd) s.snd = t.π.app ⟨.right⟩ := by
+          simpa using! w ⟨.right⟩
+        simp [← w]
+    · replace w : m ≫ BinaryFan.IsLimit.lift Q (s.fst ≫ sXY.snd) s.snd = t.π.app ⟨.right⟩ := by
+        simpa using! w ⟨.right⟩
+      simp [← w]
 
 中文:
 定义 是极限.assoc
@@ -5364,7 +5381,12 @@ definition IsLimit.assoc
     · apply P.hom_ext
       rintro ⟨⟨⟩⟩
       · simpa using w ⟨.left⟩
-      · replace w 
+      · replace w : m ≫ BinaryFan.IsLimit.lift Q (s.fst ≫ sXY.snd) s.snd = t.π.app ⟨.right⟩ := by
+          simpa using! w ⟨.right⟩
+        simp [← w]
+    · replace w : m ≫ BinaryFan.IsLimit.lift Q (s.fst ≫ sXY.snd) s.snd = t.π.app ⟨.right⟩ := by
+        simpa using! w ⟨.right⟩
+      simp [← w]
 -/
 protected def IsLimit.assoc (P : IsLimit sXY) (Q : IsLimit sYZ) {s : BinaryFan sXY.pt Z}
     (R : IsLimit s) : IsLimit (BinaryFan.assoc Q s) where

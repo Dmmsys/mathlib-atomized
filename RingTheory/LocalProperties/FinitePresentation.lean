@@ -35,7 +35,11 @@ theorem Module.FinitePresentation.of_localizationSpan'
   obtain ⟨n, f, fsurj⟩ := Module.Finite.exists_fin' R M
   rw [← Module.FinitePresentation.fg_ker_iff f fsurj]
   refine f.ker.of_localizationSpan' s hs (Rₚ := Rₚ)
-    (fun g => TensorPro
+    (fun g => TensorProduct.mk R (Rₚ g) (Fin n -> R) 1) (fun g => ?_)
+  rw [LinearMap.localized'_ker_eq_ker_localizedMap (Rₚ g) (Submonoid.powers g.1) _ (ϕ g) f]
+  apply Module.FinitePresentation.fg_ker
+  rw [← LinearMap.range_eq_top] at fsurj ⊢
+  simp [← LinearMap.localized'_range_eq_range_localizedMap (Rₚ g) (Submonoid.powers g.1), fsurj]
 
 中文:
 定理 模.有限呈现.of_localizationSpan'
@@ -46,7 +50,11 @@ theorem Module.FinitePresentation.of_localizationSpan'
   obtain ⟨n, f, fsurj⟩ := Module.Finite.exists_fin' R M
   rw [← Module.FinitePresentation.fg_ker_iff f fsurj]
   refine f.ker.of_localizationSpan' s hs (Rₚ := Rₚ)
-    (fun g => TensorPro
+    (fun g => TensorProduct.mk R (Rₚ g) (Fin n -> R) 1) (fun g => ?_)
+  rw [LinearMap.localized'_ker_eq_ker_localizedMap (Rₚ g) (Submonoid.powers g.1) _ (ϕ g) f]
+  apply Module.FinitePresentation.fg_ker
+  rw [← LinearMap.range_eq_top] at fsurj ⊢
+  simp [← LinearMap.localized'_range_eq_range_localizedMap (Rₚ g) (Submonoid.powers g.1), fsurj]
 
 Depends on / 依赖: Finite, FinitePresentation, LinearMap, LinearMap.localized, LinearMap.range_eq_top, Module, Module.Finite, Module.Finite.exists_fin, Module.Finite.of_localizationSpan, Module.FinitePresentation.fg_ker, Module.FinitePresentation.fg_ker_iff, Submonoid, Submonoid.powers, TensorProduct, TensorProduct.mk, _ker_eq_ker_localizedMap, exists_fin, f.ker.of_localizationSpan, fg_ker, fg_ker_iff
 -/

@@ -69,7 +69,10 @@ theorem eq_smul_of_le_smul_of_le_jacobson
   intro n hn
   obtain ⟨r, hr⟩ := Submodule.exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul I N hN hIN
   obtain ⟨s, hs⟩ := exists_mul_sub_mem_of_sub_one_mem_jacobson r (hIjac hr.1)
-  have : n = -(s * r - 1) • n 
+  have : n = -(s * r - 1) • n := by
+    rw [neg_sub]; rw [sub_smul]; rw [mul_smul]; rw [hr.2 n hn]; rw [one_smul]; rw [smul_zero]; rw [sub_zero]
+  rw [this]
+  exact Submodule.smul_mem_smul (Submodule.neg_mem _ hs) hn
 
 中文:
 定理 eq_smul_of_le_smul_of_le_jacobson
@@ -79,7 +82,10 @@ theorem eq_smul_of_le_smul_of_le_jacobson
   intro n hn
   obtain ⟨r, hr⟩ := Submodule.exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul I N hN hIN
   obtain ⟨s, hs⟩ := exists_mul_sub_mem_of_sub_one_mem_jacobson r (hIjac hr.1)
-  have : n = -(s * r - 1) • n 
+  have : n = -(s * r - 1) • n := by
+    rw [neg_sub]; rw [sub_smul]; rw [mul_smul]; rw [hr.2 n hn]; rw [one_smul]; rw [smul_zero]; rw [sub_zero]
+  rw [this]
+  exact Submodule.smul_mem_smul (Submodule.neg_mem _ hs) hn
 
 Depends on / 依赖: Submodule, Submodule.exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul, Submodule.neg_mem, Submodule.smul_le, Submodule.smul_mem, Submodule.smul_mem_smul, exists_mul_sub_mem_of_sub_one_mem_jacobson, exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul, le_antisymm, mul_smul, neg_mem, neg_sub, one_smul, smul_le, smul_mem, smul_mem_smul, smul_zero, sub_smul, sub_zero
 -/
@@ -277,7 +283,13 @@ theorem sup_eq_sup_smul_of_le_smul_of_le_jacobson
     (sup_le_sup_left (Submodule.smul_le.2 fun _ _ _ => Submodule.smul_mem _ _) _)
   have h_comap :=
     comap_injective_of_surjective (LinearMap.range_eq_top.1 N.range_mkQ)
-  have : (I • N').map N.mkQ = N'.map N.mkQ := 
+  have : (I • N').map N.mkQ = N'.map N.mkQ := by
+    simpa only [← h_comap.eq_iff, comap_map_mkQ, sup_comm, eq_comm] using hNN'
+  have :=
+    @Submodule.eq_smul_of_le_smul_of_le_jacobson _ _ _ _ _ I J (N'.map N.mkQ) (hN'.map _)
+      (by rw [← map_smul'', this]) hIJ
+  rwa [← map_smul'', ← h_comap.eq_iff, comap_map_eq, comap_map_eq, Submodule.ker_mkQ, sup_comm,
+    sup_comm (b := N)] at this
 
 中文:
 定理 sup_eq_sup_smul_of_le_smul_of_le_jacobson
@@ -288,7 +300,13 @@ theorem sup_eq_sup_smul_of_le_smul_of_le_jacobson
     (sup_le_sup_left (Submodule.smul_le.2 fun _ _ _ => Submodule.smul_mem _ _) _)
   have h_comap :=
     comap_injective_of_surjective (LinearMap.range_eq_top.1 N.range_mkQ)
-  have : (I • N').map N.mkQ = N'.map N.mkQ := 
+  have : (I • N').map N.mkQ = N'.map N.mkQ := by
+    simpa only [← h_comap.eq_iff, comap_map_mkQ, sup_comm, eq_comm] using hNN'
+  have :=
+    @Submodule.eq_smul_of_le_smul_of_le_jacobson _ _ _ _ _ I J (N'.map N.mkQ) (hN'.map _)
+      (by rw [← map_smul'', this]) hIJ
+  rwa [← map_smul'', ← h_comap.eq_iff, comap_map_eq, comap_map_eq, Submodule.ker_mkQ, sup_comm,
+    sup_comm (b := N)] at this
 
 Depends on / 依赖: LinearMap, LinearMap.range_eq_top, N.mkQ, N.range_mkQ, Submodule, Submodule.eq_smul_of_le_smul_of_le_jacobson, Submodule.smul_le, Submodule.smul_mem, comap_injective_of_surjective, comap_map_mkQ, eq_comm, eq_iff, eq_smul_of_le_smul_of_le_jacobson, h_comap, h_comap.eq_iff, le_antisymm, le_sup_left, map_sm, map_smul, range_eq_top
 -/
@@ -393,7 +411,23 @@ lemma exists_sub_one_mem_and_smul_le_of_fg_of_le_sup
     refine le_antisymm ?_ (map_mono hN'le)
     simpa using map_mono (f := N.mkQ) hNN''
   have h2 : P.map N.mkQ = (I • N').map N.mkQ := by
-    apply le_anti
+    apply le_antisymm
+    · simpa using map_mono (f := N.mkQ) hNN'
+    · rw [h1]
+      simp [smul_le_right]
+  have hle : (P.map N.mkQ) <= I • P.map N.mkQ := by
+    conv_lhs => rw [h2]
+    simp [← h1]
+  obtain ⟨r, hmem, hr⟩ := exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul I _
+    (h1 ▸ hN'.map _) hle
+  refine ⟨r, hmem, fun x hx => ?_⟩
+  induction hx using Submodule.smul_inductionOn_pointwise with
+  | smul₀ p hp =>
+    rw [← Submodule.Quotient.mk_eq_zero]; rw [Quotient.mk_smul]
+    exact hr _ ⟨p, hp, rfl⟩
+  | smul₁ _ _ _ h => exact N.smul_mem _ h
+  | add _ _ _ _ hx hy => exact N.add_mem hx hy
+  | zero => exact N.zero_mem
 
 中文:
 引理 存在_sub_one_mem_and_smul_le_of_fg_of_le_sup
@@ -404,7 +438,23 @@ lemma exists_sub_one_mem_and_smul_le_of_fg_of_le_sup
     refine le_antisymm ?_ (map_mono hN'le)
     simpa using map_mono (f := N.mkQ) hNN''
   have h2 : P.map N.mkQ = (I • N').map N.mkQ := by
-    apply le_anti
+    apply le_antisymm
+    · simpa using map_mono (f := N.mkQ) hNN'
+    · rw [h1]
+      simp [smul_le_right]
+  have hle : (P.map N.mkQ) <= I • P.map N.mkQ := by
+    conv_lhs => rw [h2]
+    simp [← h1]
+  obtain ⟨r, hmem, hr⟩ := exists_sub_one_mem_and_smul_eq_zero_of_fg_of_le_smul I _
+    (h1 ▸ hN'.map _) hle
+  refine ⟨r, hmem, fun x hx => ?_⟩
+  induction hx using Submodule.smul_inductionOn_pointwise with
+  | smul₀ p hp =>
+    rw [← Submodule.Quotient.mk_eq_zero]; rw [Quotient.mk_smul]
+    exact hr _ ⟨p, hp, rfl⟩
+  | smul₁ _ _ _ h => exact N.smul_mem _ h
+  | add _ _ _ _ hx hy => exact N.add_mem hx hy
+  | zero => exact N.zero_mem
 
 Depends on / 依赖: N.mkQ, P.map, conv_lhs, exists_sub_one_mem_and_smul_eq_zero, le_antisymm, le_sup_right, le_trans, map_mono, smul_le_right
 -/
@@ -447,7 +497,8 @@ lemma le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot
   grw [sup_comm, ← hmaple]
 
 @[deprecated (since := "2026-01-03")]
-alias le_span_of_map_mkQ_le_m
+alias le_span_of_map_mkQ_le_map_mkQ_span_of_le_jacobson_bot :=
+  le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot
 
 中文:
 引理 le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot
@@ -459,7 +510,8 @@ alias le_span_of_map_mkQ_le_m
   grw [sup_comm, ← hmaple]
 
 @[deprecated (since := "2026-01-03")]
-alias le_span_of_map_mkQ_le_m
+alias le_span_of_map_mkQ_le_map_mkQ_span_of_le_jacobson_bot :=
+  le_of_map_mkQ_le_map_mkQ_of_le_jacobson_bot
 
 Depends on / 依赖: Submodule, Submodule.comap_mono, apply_fun, comap_map_mkQ, comap_mono, hmaple, le_of_le_smul_of_le_jacobson_bot, on_goal, smul_le_right, sup_comm, sup_of_le_right
 -/

@@ -1745,7 +1745,9 @@ definition comapSubgroup
   right_inv sh := by simp [Subgroup.comap_comap]
   map_rel_iff' {sg1 sg2} :=
     ⟨fun h => by simpa [Subgroup.comap_comap] using
-      Subgroup.comap_mono (f := (f.symm : H ->* G)) h, Subgroup.comap_mo
+      Subgroup.comap_mono (f := (f.symm : H ->* G)) h, Subgroup.comap_mono⟩
+
+@[to_additive (attr := simp, norm_cast)]
 
 中文:
 定义 comapSubgroup
@@ -1756,7 +1758,9 @@ definition comapSubgroup
   right_inv sh := by simp [Subgroup.comap_comap]
   map_rel_iff' {sg1 sg2} :=
     ⟨fun h => by simpa [Subgroup.comap_comap] using
-      Subgroup.comap_mono (f := (f.symm : H ->* G)) h, Subgroup.comap_mo
+      Subgroup.comap_mono (f := (f.symm : H ->* G)) h, Subgroup.comap_mono⟩
+
+@[to_additive (attr := simp, norm_cast)]
 
 Depends on / 依赖: Subgroup, Subgroup.comap
 -/
@@ -1835,7 +1839,7 @@ definition mapSubgroup
     ⟨fun h => by simpa [Subgroup.map_map] using
       Subgroup.map_mono (f := (f.symm : H ->* G)) h, Subgroup.map_mono⟩
 
-@[to_additive (
+@[to_additive (attr := simp, norm_cast)]
 
 中文:
 定义 mapSubgroup
@@ -1848,7 +1852,7 @@ definition mapSubgroup
     ⟨fun h => by simpa [Subgroup.map_map] using
       Subgroup.map_mono (f := (f.symm : H ->* G)) h, Subgroup.map_mono⟩
 
-@[to_additive (
+@[to_additive (attr := simp, norm_cast)]
 
 Depends on / 依赖: Subgroup, Subgroup.map
 -/

@@ -103,7 +103,7 @@ definition hom
   simp_rw [← RingHom.mem_ker, ← SetLike.le_def, Ideal.span_le, Set.range_subset_iff]
   intro i
   simpa only [Generators.toExtension_Ring, Generators.toExtension_commRing, Function.comp_apply,
-    SetLike.mem_coe, RingHom.mem_ker, ← P.algebraMap_apply] using (D
+    SetLike.mem_coe, RingHom.mem_ker, ← P.algebraMap_apply] using (D.f _).property
 
 中文:
 定义 hom
@@ -112,7 +112,7 @@ definition hom
   simp_rw [← RingHom.mem_ker, ← SetLike.le_def, Ideal.span_le, Set.range_subset_iff]
   intro i
   simpa only [Generators.toExtension_Ring, Generators.toExtension_commRing, Function.comp_apply,
-    SetLike.mem_coe, RingHom.mem_ker, ← P.algebraMap_apply] using (D
+    SetLike.mem_coe, RingHom.mem_ker, ← P.algebraMap_apply] using (D.f _).property
 
 Depends on / 依赖: Function, Function.comp_apply, Generators, Generators.toExtension_Ring, Generators.toExtension_commRing, Ideal.Quotient.lift, Ideal.span_le, P.algebraMap_apply, P.val, Quotient, RingHom, RingHom.mem_ker, Set.range_subset_iff, SetLike, SetLike.le_def, SetLike.mem_coe, algebraMap_apply, comp_apply, le_def, mem_coe
 -/
@@ -219,7 +219,9 @@ instance :
     ext x
     exact (IsScalarTower.algebraMap_apply _ D.T S x).symm
   · simp [T, Ideal.Quotient.mk_surjective]
-  · suffices 
+  · suffices h : (algebraMap P.Ring S) D.g = 1 by simp [h]
+    rw [← map_one (algebraMap P.Ring S)]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]
+    exact D.hgmem
 
 中文:
 实例 :
@@ -231,7 +233,9 @@ instance :
     ext x
     exact (IsScalarTower.algebraMap_apply _ D.T S x).symm
   · simp [T, Ideal.Quotient.mk_surjective]
-  · suffices 
+  · suffices h : (algebraMap P.Ring S) D.g = 1 by simp [h]
+    rw [← map_one (algebraMap P.Ring S)]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]
+    exact D.hgmem
 
 Depends on / 依赖: D.hg, D.hgmem, Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.algebraMap_apply, P.Ring, P.algebraMap_surjective, Quotient, RingHom, RingHom.mem_ker, algebraMap, algebraMap_apply, algebraMap_surjective, convert, map_one, map_sub, mem_ker, mk_surjective, of_comp, of_surjective_of_isScalarTower
 -/
@@ -407,7 +411,7 @@ lemma tensorCotangentHom_tmul
   simp_rw +instances [tensorCotangentHom, LinearMap.liftBaseChange_tmul, one_smul, presLeft,
     Extension.Cotangent.map_mk, Extension.Hom.toAlgHom_apply, Hom.toExtensionHom_toRingHom,
     toAlgHom_fhom, AlgHom.toRingHom_eq_coe, AlgHom.id_toRingHom, toExtension_Ring,
-    toExtension_commRing, toE
+    toExtension_commRing, toExtension_algebra₂, Presentation.naive_toGenerators, RingHom.id_apply]
 
 中文:
 引理 tensorCotangentHom_tmul
@@ -416,7 +420,7 @@ lemma tensorCotangentHom_tmul
   simp_rw +instances [tensorCotangentHom, LinearMap.liftBaseChange_tmul, one_smul, presLeft,
     Extension.Cotangent.map_mk, Extension.Hom.toAlgHom_apply, Hom.toExtensionHom_toRingHom,
     toAlgHom_fhom, AlgHom.toRingHom_eq_coe, AlgHom.id_toRingHom, toExtension_Ring,
-    toExtension_commRing, toE
+    toExtension_commRing, toExtension_algebra₂, Presentation.naive_toGenerators, RingHom.id_apply]
 
 Depends on / 依赖: AlgHom, AlgHom.id_toRingHom, AlgHom.toRingHom_eq_coe, Cotangent, Extension, Extension.Cotangent.map_mk, Extension.Hom.toAlgHom_apply, Hom.toExtensionHom_toRingHom, LinearMap, LinearMap.liftBaseChange_tmul, Presentation, Presentation.naive_toGenerators, RingHom, RingHom.id_apply, id_apply, id_toRingHom, instances, liftBaseChange_tmul, map_mk, naive_toGenerators
 -/
@@ -512,7 +516,9 @@ definition tensorCotangentEquiv
     simpa only [LinearMap.coe_comp, Function.comp_apply, tensorCotangentInv_apply,
       tensorCotangentHom_tmul] using! D.hf (b i)
   · ext : 2
-    refine LinearMap.ext_on_range D.span_ra
+    refine LinearMap.ext_on_range D.span_range_mk_kerGen fun i => ?_
+    simp [-toExtension_commRing, -toExtension_Ring, -toExtension_algebra₂, tensorCotangentHom_tmul,
+      kerGen, D.hf]
 
 中文:
 定义 tensorCotangentEquiv
@@ -523,7 +529,9 @@ definition tensorCotangentEquiv
     simpa only [LinearMap.coe_comp, Function.comp_apply, tensorCotangentInv_apply,
       tensorCotangentHom_tmul] using! D.hf (b i)
   · ext : 2
-    refine LinearMap.ext_on_range D.span_ra
+    refine LinearMap.ext_on_range D.span_range_mk_kerGen fun i => ?_
+    simp [-toExtension_commRing, -toExtension_Ring, -toExtension_algebra₂, tensorCotangentHom_tmul,
+      kerGen, D.hf]
 
 Depends on / 依赖: D.hf, D.span_range_mk_kerGen, D.tensorCotangentHom, D.tensorCotangentInv, Function, Function.comp_apply, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.coe_comp, LinearMap.ext_on_range, b.ext, coe_comp, comp_apply, ext_on_range, kerGen, ofLinearMap, span_range_mk_kerGen, tensorCotangentHom, tensorCotangentHom_tmul
 -/
@@ -609,7 +617,12 @@ lemma map_ofComp_mk
   congr 2
   have : Nontrivial D.T := inferInstance
   dsimp only [T, Generators.toExtension_Ring, Generators.toExtension_commRing] at this
-  rw [pres]; rw [presLeft]; rw [presRight]; rw [Presentation.relation_comp
+  rw [pres]; rw [presLeft]; rw [presRight]; rw [Presentation.relation_comp_localizationAway_inl]
+  · exact Generators.toAlgHom_ofComp_localizationAway _ _
+  · rw [Presentation.naive, Generators.naive_σ];
+    simp
+  · rw [Presentation.naive, Generators.naive_σ]
+    simp
 
 中文:
 引理 map_ofComp_mk
@@ -619,7 +632,12 @@ lemma map_ofComp_mk
   congr 2
   have : Nontrivial D.T := inferInstance
   dsimp only [T, Generators.toExtension_Ring, Generators.toExtension_commRing] at this
-  rw [pres]; rw [presLeft]; rw [presRight]; rw [Presentation.relation_comp
+  rw [pres]; rw [presLeft]; rw [presRight]; rw [Presentation.relation_comp_localizationAway_inl]
+  · exact Generators.toAlgHom_ofComp_localizationAway _ _
+  · rw [Presentation.naive, Generators.naive_σ];
+    simp
+  · rw [Presentation.naive, Generators.naive_σ]
+    simp
 
 Depends on / 依赖: Cotangent, Extension, Extension.Cotangent.map_mk, Generators, Generators.Hom.toExtensionHom_toAlgHom_apply, Generators.naive_, Generators.toAlgHom_ofComp_localizationAway, Generators.toExtension_Ring, Generators.toExtension_commRing, Nontrivial, Presentation, Presentation.naive, Presentation.relation_comp_localizationAway_inl, map_mk, presLeft, presRight, relation_comp_localizationAway_inl, simp_rw, toAlgHom_ofComp_localizationAway, toExtensionHom_toAlgHom_apply
 -/
@@ -813,7 +831,12 @@ lemma basis_apply
   · rw [basis_inl, cotangentEquivProd_symm_apply]
     exact cotangentCompLocalizationAwayEquiv_symm_inr _ _ _
   · rw [basis_inr, cotangentEquivProd_symm_apply, cotangentCompLocalizationAwayEquiv_symm_inl,
-      basisLeft, Module.Basis.map_apply, tensorCotangentEquiv_symm_app
+      basisLeft, Module.Basis.map_apply, tensorCotangentEquiv_symm_apply,
+      LinearMap.liftBaseChange_tmul, one_smul, Extension.Cotangent.map_mk]
+    simp only [Extension.Hom.toAlgHom_apply, Hom.toExtensionHom_toRingHom, AlgHom.toRingHom_eq_coe]
+    congr! 2 with x
+    simp [pres, Presentation.comp_relation_inr, kerGen, presLeft, Generators.toComp_toAlgHom]
+    rfl
 
 中文:
 引理 basis_apply
@@ -823,7 +846,12 @@ lemma basis_apply
   · rw [basis_inl, cotangentEquivProd_symm_apply]
     exact cotangentCompLocalizationAwayEquiv_symm_inr _ _ _
   · rw [basis_inr, cotangentEquivProd_symm_apply, cotangentCompLocalizationAwayEquiv_symm_inl,
-      basisLeft, Module.Basis.map_apply, tensorCotangentEquiv_symm_app
+      basisLeft, Module.Basis.map_apply, tensorCotangentEquiv_symm_apply,
+      LinearMap.liftBaseChange_tmul, one_smul, Extension.Cotangent.map_mk]
+    simp only [Extension.Hom.toAlgHom_apply, Hom.toExtensionHom_toRingHom, AlgHom.toRingHom_eq_coe]
+    congr! 2 with x
+    simp [pres, Presentation.comp_relation_inr, kerGen, presLeft, Generators.toComp_toAlgHom]
+    rfl
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Cotangent, Extension, Extension.Cotangent.map_mk, Extension.Hom.toAlgHom_apply, Hom.toExtensionHom_toRingHom, LinearMap, LinearMap.liftBaseChange_tmul, Module, Module.Basis.map_apply, Presentation, Presentation.comp_r, basisLeft, basis_inl, basis_inr, comp_r, cotangentCompLocalizationAwayEquiv_symm_inl, cotangentCompLocalizationAwayEquiv_symm_inr, cotangentEquivProd_symm_apply
 -/

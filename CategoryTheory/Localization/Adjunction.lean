@@ -183,7 +183,24 @@ definition localization
         apply natTrans_ext L₁ W₁
         intro X₁
         have eq := adj.left_triangle_components X₁
-        rw [NatTrans.comp_app]; rw [NatTrans.comp
+        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerRight_app]; rw [Localization.ε_app]; rw [Functor.associator_hom_app]; rw [id_comp]; rw [whiskerLeft_app]; rw [G'.map_comp]; rw [G'.map_comp]; rw [assoc]; rw [assoc]
+        erw [(Localization.η adj L₁ L₂ W₂ G' F').naturality, Localization.η_app,
+          assoc, assoc, ← G'.map_comp_assoc, ← G'.map_comp_assoc, assoc, Iso.hom_inv_id_app,
+          comp_id, (CatCommSq.iso G L₁ L₂ G').inv.naturality_assoc, ← L₂.map_comp_assoc, eq,
+          L₂.map_id, id_comp, Iso.inv_hom_id_app]
+        rfl
+      right_triangle := by
+        apply natTrans_ext L₂ W₂
+        intro X₂
+        have eq := adj.right_triangle_components X₂
+        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerLeft_app]; rw [whiskerRight_app]; rw [Localization.η_app]; rw [Functor.associator_inv_app]; rw [id_comp]; rw [F'.map_comp]; rw [F'.map_comp]
+        erw [← (Localization.ε _ _ _ _ _ _).naturality_assoc, Localization.ε_app,
+          assoc, assoc, ← F'.map_comp_assoc, Iso.hom_inv_id_app, F'.map_id, id_comp,
+          ← NatTrans.naturality, ← L₁.map_comp_assoc, eq, L₁.map_id, id_comp,
+          Iso.inv_hom_id_app]
+        rfl }
+
+@[simp]
 
 中文:
 定义 localization
@@ -195,7 +212,24 @@ definition localization
         apply natTrans_ext L₁ W₁
         intro X₁
         have eq := adj.left_triangle_components X₁
-        rw [NatTrans.comp_app]; rw [NatTrans.comp
+        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerRight_app]; rw [Localization.ε_app]; rw [Functor.associator_hom_app]; rw [id_comp]; rw [whiskerLeft_app]; rw [G'.map_comp]; rw [G'.map_comp]; rw [assoc]; rw [assoc]
+        erw [(Localization.η adj L₁ L₂ W₂ G' F').naturality, Localization.η_app,
+          assoc, assoc, ← G'.map_comp_assoc, ← G'.map_comp_assoc, assoc, Iso.hom_inv_id_app,
+          comp_id, (CatCommSq.iso G L₁ L₂ G').inv.naturality_assoc, ← L₂.map_comp_assoc, eq,
+          L₂.map_id, id_comp, Iso.inv_hom_id_app]
+        rfl
+      right_triangle := by
+        apply natTrans_ext L₂ W₂
+        intro X₂
+        have eq := adj.right_triangle_components X₂
+        rw [NatTrans.comp_app]; rw [NatTrans.comp_app]; rw [whiskerLeft_app]; rw [whiskerRight_app]; rw [Localization.η_app]; rw [Functor.associator_inv_app]; rw [id_comp]; rw [F'.map_comp]; rw [F'.map_comp]
+        erw [← (Localization.ε _ _ _ _ _ _).naturality_assoc, Localization.ε_app,
+          assoc, assoc, ← F'.map_comp_assoc, Iso.hom_inv_id_app, F'.map_id, id_comp,
+          ← NatTrans.naturality, ← L₁.map_comp_assoc, eq, L₁.map_id, id_comp,
+          Iso.inv_hom_id_app]
+        rfl }
+
+@[simp]
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfUnitCounit, Functor, Functor.associator_hom_app, Localization, NatTrans, NatTrans.comp_app, adj.left_triangle_components, associator_hom_app, comp_app, counit, id_comp, left_triangle, left_triangle_components, map_comp, mkOfUnitCounit, natTrans_ext, naturality, whiskerLeft_app, whiskerRight_app
 -/
@@ -293,7 +327,16 @@ lemma isLocalization
     Localization.inverts W.Q W _ (by
       change IsIso _
       infer_instance)
-  have : IsIso (whisker
+  have : IsIso (whiskerRight adj.unit W.Q) := NatIso.isIso_of_isIso_app _
+  let e : W.Localization ≌ C₂ := Equivalence.mk (Localization.lift G hG W.Q) (F ⋙ W.Q)
+    (liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
+    (W.Q.leftUnitor.symm ≪≫ asIso (whiskerRight adj.unit W.Q)))
+    (Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Localization.fac G hG W.Q) ≪≫
+      asIso adj.counit)
+  apply Functor.IsLocalization.of_equivalence_target W.Q W G e
+    (Localization.fac G hG W.Q)
+
+include adj in
 
 中文:
 引理 isLocalization
@@ -305,7 +348,16 @@ lemma isLocalization
     Localization.inverts W.Q W _ (by
       change IsIso _
       infer_instance)
-  have : IsIso (whisker
+  have : IsIso (whiskerRight adj.unit W.Q) := NatIso.isIso_of_isIso_app _
+  let e : W.Localization ≌ C₂ := Equivalence.mk (Localization.lift G hG W.Q) (F ⋙ W.Q)
+    (liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
+    (W.Q.leftUnitor.symm ≪≫ asIso (whiskerRight adj.unit W.Q)))
+    (Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Localization.fac G hG W.Q) ≪≫
+      asIso adj.counit)
+  apply Functor.IsLocalization.of_equivalence_target W.Q W G e
+    (Localization.fac G hG W.Q)
+
+include adj in
 
 Depends on / 依赖: Equivalence, Equivalence.mk, IsInvertedBy, Localization, Localization.inverts, Localization.lift, MorphismProperty, MorphismProperty.isomorphisms, NatIso, NatIso.isIso_of_isIso_app, W.IsInvertedBy, W.Localization, W.Q.leftUnitor.symm, adj.unit, infer_instance, inverseImage, inverts, isIso_of_isIso_app, isomorphisms, leftUnitor
 -/

@@ -1326,7 +1326,9 @@ theorem isRightInversion_of_mem_rightInvSeq
     rw [cs.length_rightInvSeq] at hj
     calc
       ℓ (π (ω.eraseIdx j))
-      _ <= (ω.eraseIdx j).lengt
+      _ <= (ω.eraseIdx j).length := cs.length_wordProd_le _
+      _ < ω.length := by rw [← List.length_eraseIdx_add_one hj]; exact lt_add_one _
+      _ = ℓ (π ω) := hω.symm
 
 中文:
 定理 isRightInversion_of_mem_rightInvSeq
@@ -1339,7 +1341,9 @@ theorem isRightInversion_of_mem_rightInvSeq
     rw [cs.length_rightInvSeq] at hj
     calc
       ℓ (π (ω.eraseIdx j))
-      _ <= (ω.eraseIdx j).lengt
+      _ <= (ω.eraseIdx j).length := cs.length_wordProd_le _
+      _ < ω.length := by rw [← List.length_eraseIdx_add_one hj]; exact lt_add_one _
+      _ = ℓ (π ω) := hω.symm
 
 Depends on / 依赖: List.getD_eq_getElem, List.length_eraseIdx_add_one, List.mem_iff_getElem.mp, cs.isReflection_of_mem_rightInvSeq, cs.length_rightInvSeq, cs.length_wordProd_le, eraseIdx, getD_eq_getElem, isReflection_of_mem_rightInvSeq, length, length_eraseIdx_add_one, length_rightInvSeq, length_wordProd_le, lt_add_one, mem_iff_getElem, wordProd_mul_getD_rightInvSeq
 -/
@@ -1370,7 +1374,9 @@ theorem isLeftInversion_of_mem_leftInvSeq
     rw [cs.length_leftInvSeq] at hj
     calc
       ℓ (π (ω.eraseIdx j))
-      _ <= (ω.eraseIdx j).length :
+      _ <= (ω.eraseIdx j).length := cs.length_wordProd_le _
+      _ < ω.length := by rw [← List.length_eraseIdx_add_one hj]; exact lt_add_one _
+      _ = ℓ (π ω) := hω.symm
 
 中文:
 定理 isLeftInversion_of_mem_leftInvSeq
@@ -1383,7 +1389,9 @@ theorem isLeftInversion_of_mem_leftInvSeq
     rw [cs.length_leftInvSeq] at hj
     calc
       ℓ (π (ω.eraseIdx j))
-      _ <= (ω.eraseIdx j).length :
+      _ <= (ω.eraseIdx j).length := cs.length_wordProd_le _
+      _ < ω.length := by rw [← List.length_eraseIdx_add_one hj]; exact lt_add_one _
+      _ = ℓ (π ω) := hω.symm
 
 Depends on / 依赖: List.getD_eq_getElem, List.length_eraseIdx_add_one, List.mem_iff_getElem.mp, cs.isReflection_of_mem_leftInvSeq, cs.length_leftInvSeq, cs.length_wordProd_le, eraseIdx, getD_eq_getElem, getD_leftInvSeq_mul_wordProd, isReflection_of_mem_leftInvSeq, length, length_eraseIdx_add_one, length_leftInvSeq, length_wordProd_le, lt_add_one, mem_iff_getElem
 -/
@@ -1441,7 +1449,13 @@ theorem prod_leftInvSeq
     List.map (fun x => x⁻¹) (ris ω.reverse)
     _ = List.map id (ris ω.reverse) := by
         apply List.map_congr_left
-        intro t h
+        intro t ht
+        exact (cs.isReflection_of_mem_rightInvSeq _ ht).inv
+    _ = ris ω.reverse := map_id _
+  rw [this]
+  nth_rw 2 [← reverse_reverse ω]
+  rw [wordProd_reverse]
+  exact cs.prod_rightInvSeq _
 
 中文:
 定理 prod_leftInvSeq
@@ -1453,7 +1467,13 @@ theorem prod_leftInvSeq
     List.map (fun x => x⁻¹) (ris ω.reverse)
     _ = List.map id (ris ω.reverse) := by
         apply List.map_congr_left
-        intro t h
+        intro t ht
+        exact (cs.isReflection_of_mem_rightInvSeq _ ht).inv
+    _ = ris ω.reverse := map_id _
+  rw [this]
+  nth_rw 2 [← reverse_reverse ω]
+  rw [wordProd_reverse]
+  exact cs.prod_rightInvSeq _
 
 Depends on / 依赖: List.map, List.map_congr_left, cs.isReflection_of_mem_rightInvSeq, cs.prod_rightInvSeq, inv_inj, isReflection_of_mem_rightInvSeq, leftInvSeq_eq_reverse_rightInvSeq_reverse, map_congr_left, map_id, nth_rw, prod_reverse_noncomm, prod_rightInvSeq, reverse, reverse_reverse, wordProd_reverse
 -/
@@ -1483,7 +1503,29 @@ theorem IsReduced.nodup_rightInvSeq
   intro j j' j_lt_j' j'_lt_length (dup : (rightInvSeq cs ω)[j]? = (rightInvSeq cs ω)[j']?)
   show False
   replace j'_lt_length : j' < List.length ω := by simpa using j'_lt_length
-  rw [getElem?_eq_getElem (by simp; lia)]; rw [getElem?_eq_getElem (by
+  rw [getElem?_eq_getElem (by simp; lia)]; rw [getElem?_eq_getElem (by simp; lia)] at dup
+  apply Option.some_injective at dup
+  rw [← getD_eq_getElem _ 1]; rw [← getD_eq_getElem _ 1] at dup
+  set! t := (ris ω).getD j 1 with h₁
+  set! t' := (ris (ω.eraseIdx j)).getD (j' - 1) 1 with h₂
+  have h₃ : t' = (ris ω).getD j' 1 := by
+    grind only [cs.getD_rightInvSeq, = eraseIdx_eq_take_drop_succ, = getElem?_eraseIdx,
+      = drop_append, drop_of_length_le, drop_drop, = length_append, = length_take, = length_drop,
+      = min_def]
+  have h₄ : t * t' = 1 := by
+    rw [h₁]; rw [h₃]; rw [dup]
+    exact cs.getD_rightInvSeq_mul_self _ _
+  have h₅ := calc
+    π ω = π ω * t * t' := by rw [mul_assoc, h₄]; group
+    _ = (π (ω.eraseIdx j)) * t' :=
+        congrArg (· * t') (cs.wordProd_mul_getD_rightInvSeq _ _)
+    _ = π ((ω.eraseIdx j).eraseIdx (j' - 1)) :=
+        cs.wordProd_mul_getD_rightInvSeq _ _
+  have h₆ := calc
+    ω.length = ℓ (π ω) := rω.symm
+    _ = ℓ (π ((ω.eraseIdx j).eraseIdx (j' - 1))) := congrArg cs.length h₅
+    _ <= ((ω.eraseIdx j).eraseIdx (j' - 1)).length := cs.length_wordProd_le _
+  grind
 
 中文:
 定理 是既约.nodup_rightInvSeq
@@ -1494,7 +1536,29 @@ theorem IsReduced.nodup_rightInvSeq
   intro j j' j_lt_j' j'_lt_length (dup : (rightInvSeq cs ω)[j]? = (rightInvSeq cs ω)[j']?)
   show False
   replace j'_lt_length : j' < List.length ω := by simpa using j'_lt_length
-  rw [getElem?_eq_getElem (by simp; lia)]; rw [getElem?_eq_getElem (by
+  rw [getElem?_eq_getElem (by simp; lia)]; rw [getElem?_eq_getElem (by simp; lia)] at dup
+  apply Option.some_injective at dup
+  rw [← getD_eq_getElem _ 1]; rw [← getD_eq_getElem _ 1] at dup
+  set! t := (ris ω).getD j 1 with h₁
+  set! t' := (ris (ω.eraseIdx j)).getD (j' - 1) 1 with h₂
+  have h₃ : t' = (ris ω).getD j' 1 := by
+    grind only [cs.getD_rightInvSeq, = eraseIdx_eq_take_drop_succ, = getElem?_eraseIdx,
+      = drop_append, drop_of_length_le, drop_drop, = length_append, = length_take, = length_drop,
+      = min_def]
+  have h₄ : t * t' = 1 := by
+    rw [h₁]; rw [h₃]; rw [dup]
+    exact cs.getD_rightInvSeq_mul_self _ _
+  have h₅ := calc
+    π ω = π ω * t * t' := by rw [mul_assoc, h₄]; group
+    _ = (π (ω.eraseIdx j)) * t' :=
+        congrArg (· * t') (cs.wordProd_mul_getD_rightInvSeq _ _)
+    _ = π ((ω.eraseIdx j).eraseIdx (j' - 1)) :=
+        cs.wordProd_mul_getD_rightInvSeq _ _
+  have h₆ := calc
+    ω.length = ℓ (π ω) := rω.symm
+    _ = ℓ (π ((ω.eraseIdx j).eraseIdx (j' - 1))) := congrArg cs.length h₅
+    _ <= ((ω.eraseIdx j).eraseIdx (j' - 1)).length := cs.length_wordProd_le _
+  grind
 
 Depends on / 依赖: List.length, List.nodup_iff_getElem, Option.some_injective, _eq_getElem, _lt_length, _ne_getElem, eraseIdx, getD_eq_getElem, getElem, j_lt_j, length, nodup_iff_getElem, replace, rightInvSeq, some_injective
 -/
@@ -1564,7 +1628,10 @@ lemma getElem_succ_leftInvSeq_alternatingWord
   rw [cs.getElem_leftInvSeq (alternatingWord i j (2 * p)) (k + 1) (by simp [h]),
     cs.getElem_leftInvSeq (alternatingWord j i (2 * p)) k (by simp; lia)]
   simp only [MulAut.conj, listTake_succ_alternatingWord i j p k h, cs.wordProd_cons, mul_assoc,
-    mul_inv_rev, inv_simple, MonoidHom.coe_mk,
+    mul_inv_rev, inv_simple, MonoidHom.coe_mk, OneHom.coe_mk, MulEquiv.coe_mk, Equiv.coe_fn_mk,
+    mul_right_inj, mul_left_inj]
+  rw [getElem_alternatingWord_swapIndices i j (2 * p) k]
+  lia
 
 中文:
 引理 getElem_succ_leftInvSeq_alternatingWord
@@ -1572,7 +1639,10 @@ lemma getElem_succ_leftInvSeq_alternatingWord
   rw [cs.getElem_leftInvSeq (alternatingWord i j (2 * p)) (k + 1) (by simp [h]),
     cs.getElem_leftInvSeq (alternatingWord j i (2 * p)) k (by simp; lia)]
   simp only [MulAut.conj, listTake_succ_alternatingWord i j p k h, cs.wordProd_cons, mul_assoc,
-    mul_inv_rev, inv_simple, MonoidHom.coe_mk,
+    mul_inv_rev, inv_simple, MonoidHom.coe_mk, OneHom.coe_mk, MulEquiv.coe_mk, Equiv.coe_fn_mk,
+    mul_right_inj, mul_left_inj]
+  rw [getElem_alternatingWord_swapIndices i j (2 * p) k]
+  lia
 
 Depends on / 依赖: Equiv.coe_fn_mk, MonoidHom, MonoidHom.coe_mk, MulAut, MulAut.conj, MulEquiv, MulEquiv.coe_mk, OneHom, OneHom.coe_mk, alternatingWord, coe_fn_mk, coe_mk, cs.getElem_leftInvSeq, cs.wordProd_cons, getElem_alternatingWord_swapIndices, getElem_leftInvSeq, inv_simple, listTake_succ_alternatingWord, mul_assoc, mul_inv_rev
 -/
@@ -1599,7 +1669,14 @@ theorem getElem_leftInvSeq_alternatingWord
     simp only [CoxeterSystem.getElem_leftInvSeq cs (alternatingWord i j (2 * p)) 0 (by simp [h]),
       take_zero, wordProd_nil, one_mul, inv_one, mul_one, alternatingWord, concat_eq_append,
       nil_append, wordProd_singleton]
-    simp only [getEl
+    simp only [getElem_alternatingWord i j (2 * p) 0 (by simp [h]), add_zero, even_two,
+      Even.mul_right, ↓reduceIte]
+  | succ k hk =>
+    simp only [getElem_succ_leftInvSeq_alternatingWord cs i j p k h, hk _ _ (by lia),
+      MulAut.conj_apply, inv_simple, alternatingWord_succ' j i, even_two, Even.mul_right,
+      ↓reduceIte, wordProd_cons]
+    rw [(by ring : 2 * (k + 1) = 2 * k + 1 + 1)]; rw [alternatingWord_succ j i]; rw [wordProd_concat]
+    simp [mul_assoc]
 
 中文:
 定理 getElem_leftInvSeq_alternatingWord
@@ -1609,7 +1686,14 @@ theorem getElem_leftInvSeq_alternatingWord
     simp only [CoxeterSystem.getElem_leftInvSeq cs (alternatingWord i j (2 * p)) 0 (by simp [h]),
       take_zero, wordProd_nil, one_mul, inv_one, mul_one, alternatingWord, concat_eq_append,
       nil_append, wordProd_singleton]
-    simp only [getEl
+    simp only [getElem_alternatingWord i j (2 * p) 0 (by simp [h]), add_zero, even_two,
+      Even.mul_right, ↓reduceIte]
+  | succ k hk =>
+    simp only [getElem_succ_leftInvSeq_alternatingWord cs i j p k h, hk _ _ (by lia),
+      MulAut.conj_apply, inv_simple, alternatingWord_succ' j i, even_two, Even.mul_right,
+      ↓reduceIte, wordProd_cons]
+    rw [(by ring : 2 * (k + 1) = 2 * k + 1 + 1)]; rw [alternatingWord_succ j i]; rw [wordProd_concat]
+    simp [mul_assoc]
 
 Depends on / 依赖: CoxeterSystem, CoxeterSystem.getElem_leftInvSeq, Even.mul_right, MulAut, MulAut.conj_apply, add_zero, alternatingWord, concat_eq_append, conj_apply, even_two, generalizing, getElem_alternatingWord, getElem_leftInvSeq, getElem_succ_leftInvSeq_alternatingWord, inv_one, inv_simple, mul_one, mul_right, nil_append, one_mul
 -/

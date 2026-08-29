@@ -113,7 +113,8 @@ theorem IsGrothendieckAbelian.of_equivalence
   refine ⟨?_, hasFilteredColimits, ?_, ?_⟩
   · exact locallySmall_of_faithful α.inverse
   · refine ⟨fun _ _ _ => ?_⟩
-    exact HasExactColimitsOfSha
+    exact HasExactColimitsOfShape.of_codomain_equivalence _ α
+  · exact HasSeparator.of_equivalence α
 
 中文:
 定理 是GrothendieckAbelian.of_equivalence
@@ -124,7 +125,8 @@ theorem IsGrothendieckAbelian.of_equivalence
   refine ⟨?_, hasFilteredColimits, ?_, ?_⟩
   · exact locallySmall_of_faithful α.inverse
   · refine ⟨fun _ _ _ => ?_⟩
-    exact HasExactColimitsOfSha
+    exact HasExactColimitsOfShape.of_codomain_equivalence _ α
+  · exact HasSeparator.of_equivalence α
 
 Depends on / 依赖: Adjunction, Adjunction.hasColimitsOfShape_of_equivalence, HasExactColimitsOfShape, HasExactColimitsOfShape.of_codomain_equivalence, HasFilteredColimitsOfSize, HasSeparator, HasSeparator.of_equivalence, hasColimitsOfShape_of_equivalence, hasFilteredColimits, inverse, locallySmall_of_faithful, of_codomain_equivalence, of_equivalence
 -/

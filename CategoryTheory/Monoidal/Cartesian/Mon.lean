@@ -336,7 +336,8 @@ instance :
   tensorProductIsBinaryProduct M N :=
     BinaryFan.IsLimit.mk _ (fun {T} f g => ⟨lift f.hom g.hom⟩)
       (by aesop_cat) (by aesop_cat) (by aesop_cat)
-  fst_def
+  fst_def M N := by ext; simp [fst_def]; congr
+  snd_def M N := by ext; simp [snd_def]; congr
 
 中文:
 实例 :
@@ -347,7 +348,8 @@ instance :
   tensorProductIsBinaryProduct M N :=
     BinaryFan.IsLimit.mk _ (fun {T} f g => ⟨lift f.hom g.hom⟩)
       (by aesop_cat) (by aesop_cat) (by aesop_cat)
-  fst_def
+  fst_def M N := by ext; simp [fst_def]; congr
+  snd_def M N := by ext; simp [snd_def]; congr
 
 Depends on / 依赖: ofUniqueHom, toUnit, toUnit_unique
 -/
@@ -529,7 +531,22 @@ definition MonObj.ofRepresentableBy
     apply α.homEquiv'.injective
     simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
     simp only [← α.homEquiv'_comp]
-    simp only [whiskerRight_fst, whiskerRight_snd, α.homEq
+    simp only [whiskerRight_fst, whiskerRight_snd, α.homEquiv'_comp, Equiv.apply_symm_apply]
+    simp [leftUnitor_hom, -op_tensorObj, -op_whiskerRight, -op_tensorUnit]
+  mul_one := by
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
+    simp only [← α.homEquiv'_comp]
+    simp only [whiskerLeft_fst, whiskerLeft_snd, α.homEquiv'_comp, Equiv.apply_symm_apply]
+    simp [rightUnitor_hom, -op_tensorObj, -op_whiskerRight, -op_tensorUnit]
+  mul_assoc := by
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
+    simp only [← α.homEquiv'_comp]
+    simp only [whiskerRight_fst, whiskerRight_snd, whiskerLeft_fst, associator_hom_fst,
+      whiskerLeft_snd, α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul, _root_.mul_assoc]
+    simp only [← α.homEquiv'_comp]
+    simp
 
 中文:
 定义 MonObj.ofRepresentableBy
@@ -540,7 +557,22 @@ definition MonObj.ofRepresentableBy
     apply α.homEquiv'.injective
     simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
     simp only [← α.homEquiv'_comp]
-    simp only [whiskerRight_fst, whiskerRight_snd, α.homEq
+    simp only [whiskerRight_fst, whiskerRight_snd, α.homEquiv'_comp, Equiv.apply_symm_apply]
+    simp [leftUnitor_hom, -op_tensorObj, -op_whiskerRight, -op_tensorUnit]
+  mul_one := by
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
+    simp only [← α.homEquiv'_comp]
+    simp only [whiskerLeft_fst, whiskerLeft_snd, α.homEquiv'_comp, Equiv.apply_symm_apply]
+    simp [rightUnitor_hom, -op_tensorObj, -op_whiskerRight, -op_tensorUnit]
+  mul_assoc := by
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
+    simp only [← α.homEquiv'_comp]
+    simp only [whiskerRight_fst, whiskerRight_snd, whiskerLeft_fst, associator_hom_fst,
+      whiskerLeft_snd, α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul, _root_.mul_assoc]
+    simp only [← α.homEquiv'_comp]
+    simp
 
 Depends on / 依赖: homEquiv
 -/
@@ -585,7 +617,24 @@ abbreviation Hom.monoid
     · rw [← tensorHom_id, lift_map_assoc, Category.comp_id]
     trans lift f₁ (lift f₂ f₃) ≫ M ◁ μ ≫ μ
     · rw [MonObj.mul_assoc]
-      simp_rw
+      simp_rw [← Category.assoc]
+      congr 2
+      ext <;> simp
+    · rw [← id_tensorHom, lift_map_assoc, Category.comp_id]
+  one := toUnit X ≫ η
+  one_mul f := by
+    change lift (toUnit _ ≫ η) f ≫ μ = f
+    rw [← Category.comp_id f]; rw [← lift_map_assoc]; rw [tensorHom_id]; rw [MonObj.one_mul]; rw [Category.comp_id]; rw [leftUnitor_hom]
+    exact lift_snd _ _
+  mul_one f := by
+    change lift f (toUnit _ ≫ η) ≫ μ = f
+    rw [← Category.comp_id f]; rw [← lift_map_assoc]; rw [id_tensorHom]; rw [MonObj.mul_one]; rw [Category.comp_id]; rw [rightUnitor_hom]
+    exact lift_fst _ _
+
+scoped[CategoryTheory.MonObj] attribute [instance] Hom.monoid
+scoped[CategoryTheory.AddMonObj] attribute [instance] Hom.addMonoid
+
+@[to_additive]
 
 中文:
 缩写 态射.monoid
@@ -597,7 +646,24 @@ abbreviation Hom.monoid
     · rw [← tensorHom_id, lift_map_assoc, Category.comp_id]
     trans lift f₁ (lift f₂ f₃) ≫ M ◁ μ ≫ μ
     · rw [MonObj.mul_assoc]
-      simp_rw
+      simp_rw [← Category.assoc]
+      congr 2
+      ext <;> simp
+    · rw [← id_tensorHom, lift_map_assoc, Category.comp_id]
+  one := toUnit X ≫ η
+  one_mul f := by
+    change lift (toUnit _ ≫ η) f ≫ μ = f
+    rw [← Category.comp_id f]; rw [← lift_map_assoc]; rw [tensorHom_id]; rw [MonObj.one_mul]; rw [Category.comp_id]; rw [leftUnitor_hom]
+    exact lift_snd _ _
+  mul_one f := by
+    change lift f (toUnit _ ≫ η) ≫ μ = f
+    rw [← Category.comp_id f]; rw [← lift_map_assoc]; rw [id_tensorHom]; rw [MonObj.mul_one]; rw [Category.comp_id]; rw [rightUnitor_hom]
+    exact lift_fst _ _
+
+scoped[CategoryTheory.MonObj] attribute [instance] Hom.monoid
+scoped[CategoryTheory.AddMonObj] attribute [instance] Hom.addMonoid
+
+@[to_additive]
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, Sheaf.homEquiv.toIso, homEquiv, ofComponents
 -/
@@ -946,7 +1012,11 @@ definition yonedaMonObj
         change φ.unop ≫ toUnit _ ≫ η = toUnit _ ≫ η
         rw [← Category.assoc]; rw [toUnit_unique (φ.unop ≫ toUnit _)]
       map_mul' f₁ f₂ := by
-        change φ.unop ≫ lift f₁ f₂ ≫ μ = lift (φ
+        change φ.unop ≫ lift f₁ f₂ ≫ μ = lift (φ.unop ≫ f₁) (φ.unop ≫ f₂) ≫ μ
+        rw [← Category.assoc]
+        cat_disch }
+  map_id _ := MonCat.hom_ext (MonoidHom.ext Category.id_comp)
+  map_comp _ _ := MonCat.hom_ext (MonoidHom.ext (Category.assoc _ _))
 
 中文:
 定义 yonedaMonObj
@@ -958,7 +1028,11 @@ definition yonedaMonObj
         change φ.unop ≫ toUnit _ ≫ η = toUnit _ ≫ η
         rw [← Category.assoc]; rw [toUnit_unique (φ.unop ≫ toUnit _)]
       map_mul' f₁ f₂ := by
-        change φ.unop ≫ lift f₁ f₂ ≫ μ = lift (φ
+        change φ.unop ≫ lift f₁ f₂ ≫ μ = lift (φ.unop ≫ f₁) (φ.unop ≫ f₂) ≫ μ
+        rw [← Category.assoc]
+        cat_disch }
+  map_id _ := MonCat.hom_ext (MonoidHom.ext Category.id_comp)
+  map_comp _ _ := MonCat.hom_ext (MonoidHom.ext (Category.assoc _ _))
 
 Depends on / 依赖: MonCat, MonCat.of
 -/
@@ -994,7 +1068,10 @@ definition yonedaMonObjIsoOfRepresentableBy
     { toEquiv := α.homEquiv'
       map_mul' f₁ f₂ := by
         change α.homEquiv' (lift f₁ f₂ ≫ α.homEquiv'.symm (α.homEquiv' (fst X X) *
-          
+          α.homEquiv' (snd X X))) = α.homEquiv' f₁ * α.homEquiv' f₂
+        simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
+        simp only [← α.homEquiv'_comp]
+        simp }) (fun φ => MonCat.hom_ext (MonoidHom.ext (α.homEquiv'_comp φ.unop)))
 
 中文:
 定义 yonedaMonObjIsoOfRepresentableBy
@@ -1005,7 +1082,10 @@ definition yonedaMonObjIsoOfRepresentableBy
     { toEquiv := α.homEquiv'
       map_mul' f₁ f₂ := by
         change α.homEquiv' (lift f₁ f₂ ≫ α.homEquiv'.symm (α.homEquiv' (fst X X) *
-          
+          α.homEquiv' (snd X X))) = α.homEquiv' f₁ * α.homEquiv' f₂
+        simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul]
+        simp only [← α.homEquiv'_comp]
+        simp }) (fun φ => MonCat.hom_ext (MonoidHom.ext (α.homEquiv'_comp φ.unop)))
 
 Depends on / 依赖: MonObj, MonObj.ofRepresentableBy, ofRepresentableBy
 -/
@@ -1037,7 +1117,9 @@ definition yonedaMon
   { app _ := MonCat.ofHom <| IsMonHom.monoidHom _ _
 naturality {_ _} φ := MonCat.hom_ext MonoidHom.ext fun f => Category.assoc φ.unop f ψ.hom }
 map_id _ := NatTrans.ext funext fun _ => MonCat.hom_ext IsMonHom.monoidHom_id
-map_comp _ _ := NatTrans.ext funext fun _ => MonCa
+map_comp _ _ := NatTrans.ext funext fun _ => MonCat.hom_ext IsMonHom.monoidHom_comp _ _
+
+#adaptation_note
 
 中文:
 定义 yonedaMon
@@ -1047,7 +1129,9 @@ map_comp _ _ := NatTrans.ext funext fun _ => MonCa
   { app _ := MonCat.ofHom <| IsMonHom.monoidHom _ _
 naturality {_ _} φ := MonCat.hom_ext MonoidHom.ext fun f => Category.assoc φ.unop f ψ.hom }
 map_id _ := NatTrans.ext funext fun _ => MonCat.hom_ext IsMonHom.monoidHom_id
-map_comp _ _ := NatTrans.ext funext fun _ => MonCa
+map_comp _ _ := NatTrans.ext funext fun _ => MonCat.hom_ext IsMonHom.monoidHom_comp _ _
+
+#adaptation_note
 
 Depends on / 依赖: yonedaMonObj
 -/
@@ -1139,7 +1223,22 @@ definition yonedaMonFullyFaithful
       isMonHom_hom.one_hom := by
           dsimp only [yonedaMon_obj] at α ⊢
           rw [← yonedaMon_naturality]; rw [Category.comp_id]; rw [← Category.id_comp η[M.X], toUnit_unique (𝟙 _) (toUnit _),
-            ← Category.id_comp η[N.X], toUnit_unique (𝟙 _) (toUnit
+            ← Category.id_comp η[N.X], toUnit_unique (𝟙 _) (toUnit _)]
+          exact (α.app _).hom.map_one
+      isMonHom_hom.mul_hom := by
+        dsimp only [yonedaMon_obj] at α ⊢
+        rw [← yonedaMon_naturality]; rw [Category.comp_id]; rw [← Category.id_comp μ[M.X], ← lift_fst_snd]
+        refine ((α.app _).hom.map_mul _ _).trans ?_
+        change lift _ _ ≫ μ[N.X] = _
+        congr 1
+        ext <;> simp only [lift_fst, tensorHom_fst, lift_snd, tensorHom_snd,
+          ← yonedaMon_naturality, Category.comp_id] }
+  map_preimage {M N} α := by
+    ext Y f
+    simp [← dsimp% yonedaMon_naturality]
+  preimage_map φ := Mon.Hom.ext (Category.id_comp φ.hom)
+
+@[to_additive]
 
 中文:
 定义 yonedaMonFullyFaithful
@@ -1148,7 +1247,22 @@ definition yonedaMonFullyFaithful
       isMonHom_hom.one_hom := by
           dsimp only [yonedaMon_obj] at α ⊢
           rw [← yonedaMon_naturality]; rw [Category.comp_id]; rw [← Category.id_comp η[M.X], toUnit_unique (𝟙 _) (toUnit _),
-            ← Category.id_comp η[N.X], toUnit_unique (𝟙 _) (toUnit
+            ← Category.id_comp η[N.X], toUnit_unique (𝟙 _) (toUnit _)]
+          exact (α.app _).hom.map_one
+      isMonHom_hom.mul_hom := by
+        dsimp only [yonedaMon_obj] at α ⊢
+        rw [← yonedaMon_naturality]; rw [Category.comp_id]; rw [← Category.id_comp μ[M.X], ← lift_fst_snd]
+        refine ((α.app _).hom.map_mul _ _).trans ?_
+        change lift _ _ ≫ μ[N.X] = _
+        congr 1
+        ext <;> simp only [lift_fst, tensorHom_fst, lift_snd, tensorHom_snd,
+          ← yonedaMon_naturality, Category.comp_id] }
+  map_preimage {M N} α := by
+    ext Y f
+    simp [← dsimp% yonedaMon_naturality]
+  preimage_map φ := Mon.Hom.ext (Category.id_comp φ.hom)
+
+@[to_additive]
 
 Depends on / 依赖: FullyFaithful
 -/
@@ -1229,7 +1343,7 @@ lemma essImage_yonedaMon
     let := MonObj.ofRepresentableBy X F e
     exact ⟨Mon.mk X, ⟨yonedaMonObjIsoOfRepresentableBy X F e⟩⟩
 
-@[to_additive (attr := reassoc (attr 
+@[to_additive (attr := reassoc (attr := simp))]
 
 中文:
 引理 essImage_yonedaMon
@@ -1242,7 +1356,7 @@ lemma essImage_yonedaMon
     let := MonObj.ofRepresentableBy X F e
     exact ⟨Mon.mk X, ⟨yonedaMonObjIsoOfRepresentableBy X F e⟩⟩
 
-@[to_additive (attr := reassoc (attr 
+@[to_additive (attr := reassoc (attr := simp))]
 
 Depends on / 依赖: Functor, Functor.isoWhiskerRight, Functor.representableByEquiv.symm, IsRepresentable, Mon.mk, MonObj, MonObj.ofRepresentableBy, essImage, forget, isoWhiskerRight, ofRepresentableBy, representableByEquiv, yonedaMonObjIsoOfRepresentableBy
 -/

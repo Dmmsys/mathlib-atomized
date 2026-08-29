@@ -90,7 +90,7 @@ theorem imageToKernel_unop
   dsimp only [imageUnopUnop]
   simp only [Iso.trans_hom, Iso.symm_hom, Iso.trans_inv, kernelUnopUnop_inv, Category.assoc,
     imageToKernel_arrow, kernelSubobject_arrow', kernel.lift_ι, cokernel.π_desc, Iso.unop_inv,
-    ← unop_comp, factorThruImage_comp_imageUnopOp_inv, Quiver.Hom.unop_op,
+    ← unop_comp, factorThruImage_comp_imageUnopOp_inv, Quiver.Hom.unop_op, imageSubobject_arrow]
 
 中文:
 定理 imageToKernel_unop
@@ -100,7 +100,7 @@ theorem imageToKernel_unop
   dsimp only [imageUnopUnop]
   simp only [Iso.trans_hom, Iso.symm_hom, Iso.trans_inv, kernelUnopUnop_inv, Category.assoc,
     imageToKernel_arrow, kernelSubobject_arrow', kernel.lift_ι, cokernel.π_desc, Iso.unop_inv,
-    ← unop_comp, factorThruImage_comp_imageUnopOp_inv, Quiver.Hom.unop_op,
+    ← unop_comp, factorThruImage_comp_imageUnopOp_inv, Quiver.Hom.unop_op, imageSubobject_arrow]
 
 Depends on / 依赖: Category, Category.assoc, Iso.symm_hom, Iso.trans_hom, Iso.trans_inv, Iso.unop_inv, Quiver, Quiver.Hom.unop_op, cokernel, factorThruImage_comp_imageUnopOp_inv, imageSubobject_arrow, imageToKernel_arrow, imageUnopUnop, kernel, kernel.lift_, kernelSubobject_arrow, kernelUnopUnop_inv, symm_hom, trans_hom, trans_inv
 -/
@@ -308,7 +308,11 @@ definition opUnitIso
             simp only [Iso.refl_hom, Category.id_comp, unopSymm_d, op_d, Quiver.Hom.unop_op,
               Category.comp_id] :
           (Opposite.unop X).op.unopSymm ≅ unop X).op)
- 
+    (by
+      intro X Y f
+      refine Quiver.Hom.unop_inj ?_
+      ext x
+      simp)
 
 中文:
 定义 opUnitIso
@@ -319,7 +323,11 @@ definition opUnitIso
             simp only [Iso.refl_hom, Category.id_comp, unopSymm_d, op_d, Quiver.Hom.unop_op,
               Category.comp_id] :
           (Opposite.unop X).op.unopSymm ≅ unop X).op)
- 
+    (by
+      intro X Y f
+      refine Quiver.Hom.unop_inj ?_
+      ext x
+      simp)
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, Iso.refl, Iso.refl_hom, NatIso, NatIso.ofComponents, Opposite, Opposite.unop, Quiver, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, comp_id, id_comp, isoOfComponents, ofComponents, op.unopSymm, op_d
 -/
@@ -377,7 +385,7 @@ definition opEquivalence
     ext
     simp only [opUnitIso, opCounitIso, NatIso.ofComponents_hom_app, Iso.op_hom, comp_f,
       opFunctor_map_f, Hom.isoOfComponents_hom_f]
-    exact Category.comp_
+    exact Category.comp_id _
 
 中文:
 定义 opEquivalence
@@ -390,7 +398,7 @@ definition opEquivalence
     ext
     simp only [opUnitIso, opCounitIso, NatIso.ofComponents_hom_app, Iso.op_hom, comp_f,
       opFunctor_map_f, Hom.isoOfComponents_hom_f]
-    exact Category.comp_
+    exact Category.comp_id _
 
 Depends on / 依赖: opFunctor
 -/
@@ -510,7 +518,11 @@ definition unopUnitIso
             simp only [Iso.refl_hom, Category.id_comp, unopSymm_d, op_d, Quiver.Hom.unop_op,
               Category.comp_id] :
           (Opposite.unop X).op.unopSymm ≅ unop X).op)
- 
+    (by
+      intro X Y f
+      refine Quiver.Hom.unop_inj ?_
+      ext x
+      simp)
 
 中文:
 定义 unopUnitIso
@@ -521,7 +533,11 @@ definition unopUnitIso
             simp only [Iso.refl_hom, Category.id_comp, unopSymm_d, op_d, Quiver.Hom.unop_op,
               Category.comp_id] :
           (Opposite.unop X).op.unopSymm ≅ unop X).op)
- 
+    (by
+      intro X Y f
+      refine Quiver.Hom.unop_inj ?_
+      ext x
+      simp)
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, Iso.refl, Iso.refl_hom, NatIso, NatIso.ofComponents, Opposite, Opposite.unop, Quiver, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, comp_id, id_comp, isoOfComponents, ofComponents, op.unopSymm, op_d
 -/

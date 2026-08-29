@@ -197,7 +197,9 @@ lemma map_opShiftFunctorEquivalence_unitIso_hom_app_unop
     map_shiftFunctorCompIsoId_hom_app, commShiftIso_hom_naturality_assoc,
     op_commShiftIso_inv_app _ _ _ _ (add_neg_cancel n)]
   congr 3
-  rw [← Functor.map_comp_assoc]; rw [← unop_comp]; rw [Iso.i
+  rw [← Functor.map_comp_assoc]; rw [← unop_comp]; rw [Iso.inv_hom_id_app]
+  dsimp
+  rw [map_id]; rw [id_comp]
 
 中文:
 引理 map_opShiftFunctorEquivalence_unitIso_hom_app_unop
@@ -208,7 +210,9 @@ lemma map_opShiftFunctorEquivalence_unitIso_hom_app_unop
     map_shiftFunctorCompIsoId_hom_app, commShiftIso_hom_naturality_assoc,
     op_commShiftIso_inv_app _ _ _ _ (add_neg_cancel n)]
   congr 3
-  rw [← Functor.map_comp_assoc]; rw [← unop_comp]; rw [Iso.i
+  rw [← Functor.map_comp_assoc]; rw [← unop_comp]; rw [Iso.inv_hom_id_app]
+  dsimp
+  rw [map_id]; rw [id_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp_assoc, Iso.inv_hom_id_app, Quiver, Quiver.Hom.unop_op, add_neg_cancel, commShiftIso_hom_naturality_assoc, id_comp, inv_hom_id_app, map_comp, map_comp_assoc, map_id, map_shiftFunctorCompIsoId_hom_app, opShiftFunctorEquivalence, op_commShiftIso_inv_app, unop_comp, unop_op
 -/
@@ -236,13 +240,15 @@ English:
 lemma map_opShiftFunctorEquivalence_unitIso_inv_app_unop
   given: (X : Cᵒᵖ) (n : Int)
   proof: by
-  rw [← cancel_mono (F.map ((opShiftFunctorEquivalence C n).unitIso.hom.app X).unop)]; rw [← F.map_comp]; rw [← unop_comp]; rw [Iso.hom_inv_id_app]; rw [map_opShiftFunctorEquivalence_unitIso_hom_app_unop]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [←
+  rw [← cancel_mono (F.map ((opShiftFunctorEquivalence C n).unitIso.hom.app X).unop)]; rw [← F.map_comp]; rw [← unop_comp]; rw [Iso.hom_inv_id_app]; rw [map_opShiftFunctorEquivalence_unitIso_hom_app_unop]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [← unop_comp]
+  simp
 
 中文:
 引理 map_opShiftFunctorEquivalence_unitIso_inv_app_unop
   条件: (X : Cᵒᵖ) (n : 整数)
   证明: by
-  rw [← cancel_mono (F.map ((opShiftFunctorEquivalence C n).unitIso.hom.app X).unop)]; rw [← F.map_comp]; rw [← unop_comp]; rw [Iso.hom_inv_id_app]; rw [map_opShiftFunctorEquivalence_unitIso_hom_app_unop]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [←
+  rw [← cancel_mono (F.map ((opShiftFunctorEquivalence C n).unitIso.hom.app X).unop)]; rw [← F.map_comp]; rw [← unop_comp]; rw [Iso.hom_inv_id_app]; rw [map_opShiftFunctorEquivalence_unitIso_hom_app_unop]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [← unop_comp]
+  simp
 
 Depends on / 依赖: F.map, F.map_comp, Functor, Functor.map_comp_assoc, Iso.hom_inv_id_app, Iso.inv_hom_id_app_assoc, cancel_mono, hom_inv_id_app, inv_hom_id_app_assoc, map_comp, map_comp_assoc, map_opShiftFunctorEquivalence_unitIso_hom_app_unop, opShiftFunctorEquivalence, unitIso, unitIso.hom.app, unop_comp
 -/
@@ -266,7 +272,7 @@ lemma map_opShiftFunctorEquivalence_counitIso_hom_app_unop
   proof: by
   apply Quiver.Hom.op_inj
   dsimp [opShiftFunctorEquivalence]
-  rw [assoc]; rw [F.op_commShiftIso_hom_app_assoc _ _ _ (add_neg_cancel n)]; rw [map_comp]; rw [map_shiftFunctorCompIsoId_inv_app_assoc]; rw [op_comp]; rw [op_comp_assoc]; rw [op_comp_assoc]; rw [NatTrans.naturality_assoc]; rw [op_map]
+  rw [assoc]; rw [F.op_commShiftIso_hom_app_assoc _ _ _ (add_neg_cancel n)]; rw [map_comp]; rw [map_shiftFunctorCompIsoId_inv_app_assoc]; rw [op_comp]; rw [op_comp_assoc]; rw [op_comp_assoc]; rw [NatTrans.naturality_assoc]; rw [op_map]; rw [Iso.inv_hom_id_app_assoc]; rw [Quiver.Hom.unop_op]
 
 中文:
 引理 map_opShiftFunctorEquivalence_counitIso_hom_app_unop
@@ -274,7 +280,7 @@ lemma map_opShiftFunctorEquivalence_counitIso_hom_app_unop
   证明: by
   apply Quiver.Hom.op_inj
   dsimp [opShiftFunctorEquivalence]
-  rw [assoc]; rw [F.op_commShiftIso_hom_app_assoc _ _ _ (add_neg_cancel n)]; rw [map_comp]; rw [map_shiftFunctorCompIsoId_inv_app_assoc]; rw [op_comp]; rw [op_comp_assoc]; rw [op_comp_assoc]; rw [NatTrans.naturality_assoc]; rw [op_map]
+  rw [assoc]; rw [F.op_commShiftIso_hom_app_assoc _ _ _ (add_neg_cancel n)]; rw [map_comp]; rw [map_shiftFunctorCompIsoId_inv_app_assoc]; rw [op_comp]; rw [op_comp_assoc]; rw [op_comp_assoc]; rw [NatTrans.naturality_assoc]; rw [op_map]; rw [Iso.inv_hom_id_app_assoc]; rw [Quiver.Hom.unop_op]
 
 Depends on / 依赖: F.op_commShiftIso_hom_app_assoc, Iso.inv_hom_id_app_assoc, NatTrans, NatTrans.naturality_assoc, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_op, add_neg_cancel, inv_hom_id_app_assoc, map_comp, map_shiftFunctorCompIsoId_inv_app_assoc, naturality_assoc, opShiftFunctorEquivalence, op_commShiftIso_hom_app_assoc, op_comp, op_comp_assoc, op_inj, op_map, unop_op
 -/
@@ -299,7 +305,9 @@ lemma map_opShiftFunctorEquivalence_counitIso_inv_app_unop
   rw [← cancel_epi (F.map ((opShiftFunctorEquivalence C n).counitIso.hom.app X).unop)]; rw [← F.map_comp]; rw [← unop_comp]; rw [Iso.inv_hom_id_app]; rw [map_opShiftFunctorEquivalence_counitIso_hom_app_unop]
   dsimp
   simp only [map_id, assoc, ← Functor.map_comp_assoc,
-    ← unop_comp, Iso.inv_ho
+    ← unop_comp, Iso.inv_hom_id_app_assoc, ← op_comp,
+    Iso.inv_hom_id_app]
+  simp
 
 中文:
 引理 map_opShiftFunctorEquivalence_counitIso_inv_app_unop
@@ -308,7 +316,9 @@ lemma map_opShiftFunctorEquivalence_counitIso_inv_app_unop
   rw [← cancel_epi (F.map ((opShiftFunctorEquivalence C n).counitIso.hom.app X).unop)]; rw [← F.map_comp]; rw [← unop_comp]; rw [Iso.inv_hom_id_app]; rw [map_opShiftFunctorEquivalence_counitIso_hom_app_unop]
   dsimp
   simp only [map_id, assoc, ← Functor.map_comp_assoc,
-    ← unop_comp, Iso.inv_ho
+    ← unop_comp, Iso.inv_hom_id_app_assoc, ← op_comp,
+    Iso.inv_hom_id_app]
+  simp
 
 Depends on / 依赖: F.map, F.map_comp, Functor, Functor.map_comp_assoc, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, cancel_epi, counitIso, counitIso.hom.app, inv_hom_id_app, inv_hom_id_app_assoc, map_comp, map_comp_assoc, map_id, map_opShiftFunctorEquivalence_counitIso_hom_app_unop, opShiftFunctorEquivalence, op_comp, unop_comp
 -/
@@ -481,7 +491,9 @@ lemma isTriangulated_of_op
     have := distinguished_iff_of_iso ((triangleOpEquivalence D).unitIso.app
       (Opposite.op (F.mapTriangle.obj T))).unop
     rw [Functor.id_obj]; rw [Opposite.unop_op (F.mapTriangle.obj T)] at this
-    rw [← this]; rw [Functor.comp_obj]; rw [← mem_distTriang_op_iff]; rw [← Functor.op_obj]; rw 
+    rw [← this]; rw [Functor.comp_obj]; rw [← mem_distTriang_op_iff]; rw [← Functor.op_obj]; rw [← Functor.comp_obj]; rw [distinguished_iff_of_iso ((mapTriangleOpCompTriangleOpEquivalenceFunctor F).app
+      (Opposite.op T))]
+    exact F.op.map_distinguished _ (op_distinguished _ dT)
 
 中文:
 引理 isTriangulated_of_op
@@ -491,7 +503,9 @@ lemma isTriangulated_of_op
     have := distinguished_iff_of_iso ((triangleOpEquivalence D).unitIso.app
       (Opposite.op (F.mapTriangle.obj T))).unop
     rw [Functor.id_obj]; rw [Opposite.unop_op (F.mapTriangle.obj T)] at this
-    rw [← this]; rw [Functor.comp_obj]; rw [← mem_distTriang_op_iff]; rw [← Functor.op_obj]; rw 
+    rw [← this]; rw [Functor.comp_obj]; rw [← mem_distTriang_op_iff]; rw [← Functor.op_obj]; rw [← Functor.comp_obj]; rw [distinguished_iff_of_iso ((mapTriangleOpCompTriangleOpEquivalenceFunctor F).app
+      (Opposite.op T))]
+    exact F.op.map_distinguished _ (op_distinguished _ dT)
 
 Depends on / 依赖: F.mapTriangle.obj, F.op.map_distinguished, Functor, Functor.comp_obj, Functor.id_obj, Functor.op_obj, Opposite, Opposite.op, Opposite.unop_op, comp_obj, distinguished_iff_of_iso, id_obj, mapTriangle, mapTriangleOpCompTriangleOpEquivalenceFunctor, map_distinguished, mem_distTriang_op_iff, op_distinguished, op_obj, triangleOpEquivalence, unitIso
 -/

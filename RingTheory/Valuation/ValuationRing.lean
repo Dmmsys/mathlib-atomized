@@ -164,7 +164,10 @@ instance :
         · rintro ⟨e, he⟩; use (c⁻¹ : Aˣ) * e * d
           apply_fun fun t => c⁻¹ • t at he
           simpa [mul_smul] using! he
-        · rintr
+        · rintro ⟨e, he⟩; dsimp
+          use c * e * (d⁻¹ : Aˣ)
+          simp_rw [Units.smul_def, ← he, mul_smul]
+          rw [← mul_smul _ _ b]; rw [Units.inv_mul]; rw [one_smul])
 
 中文:
 实例 :
@@ -177,7 +180,10 @@ instance :
         · rintro ⟨e, he⟩; use (c⁻¹ : Aˣ) * e * d
           apply_fun fun t => c⁻¹ • t at he
           simpa [mul_smul] using! he
-        · rintr
+        · rintro ⟨e, he⟩; dsimp
+          use c * e * (d⁻¹ : Aˣ)
+          simp_rw [Units.smul_def, ← he, mul_smul]
+          rw [← mul_smul _ _ b]; rw [Units.inv_mul]; rw [one_smul])
 
 Depends on / 依赖: LE.mk, Quotient, Quotient.liftOn, Units.inv_mul, Units.smul_def, apply_fun, inv_mul, mul_smul, one_smul, simp_rw, smul_def
 -/
@@ -354,7 +360,18 @@ theorem le_total
   obtain ⟨xa, ya, hya, rfl⟩ := IsFractionRing.div_surjective A a
   obtain ⟨xb, yb, hyb, rfl⟩ := IsFractionRing.div_surjective A b
   have : (algebraMap A K) ya != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hya
-  have : (algebraMap A K) yb != 0 
+  have : (algebraMap A K) yb != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hyb
+  obtain ⟨c, h | h⟩ := ValuationRing.cond (xa * yb) (xb * ya)
+  · right
+    use c
+    rw [Algebra.smul_def]
+    field_simp
+    simp only [← map_mul]; congr 1; linear_combination h
+  · left
+    use c
+    rw [Algebra.smul_def]
+    field_simp
+    simp only [← map_mul]; congr 1; linear_combination h
 
 中文:
 定理 le_total
@@ -365,7 +382,18 @@ theorem le_total
   obtain ⟨xa, ya, hya, rfl⟩ := IsFractionRing.div_surjective A a
   obtain ⟨xb, yb, hyb, rfl⟩ := IsFractionRing.div_surjective A b
   have : (algebraMap A K) ya != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hya
-  have : (algebraMap A K) yb != 0 
+  have : (algebraMap A K) yb != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hyb
+  obtain ⟨c, h | h⟩ := ValuationRing.cond (xa * yb) (xb * ya)
+  · right
+    use c
+    rw [Algebra.smul_def]
+    field_simp
+    simp only [← map_mul]; congr 1; linear_combination h
+  · left
+    use c
+    rw [Algebra.smul_def]
+    field_simp
+    simp only [← map_mul]; congr 1; linear_combination h
 -/
 protected theorem le_total (a b : ValueGroup A K) : a <= b ∨ b <= a := by
   rcases a with ⟨a⟩; rcases b with ⟨b⟩
@@ -401,7 +429,14 @@ instance linearOrder
       apply isUnit_of_dvd_one
       use f
       rw [mul_comm]
-    
+      rw [← mul_smul]; rw [Algebra.smul_def] at hf
+      nth_rw 2 [← one_mul b] at hf
+      rw [← (algebraMap A K).map_one] at hf
+      exact IsFractionRing.injective _ _ (mul_right_cancel₀ hb hf).symm
+    apply Quotient.sound'
+    exact ⟨this.unit, rfl⟩
+  le_total := ValuationRing.le_total _ _
+  toDecidableLE := Classical.decRel _
 
 中文:
 实例 linearOrder
@@ -415,7 +450,14 @@ instance linearOrder
       apply isUnit_of_dvd_one
       use f
       rw [mul_comm]
-    
+      rw [← mul_smul]; rw [Algebra.smul_def] at hf
+      nth_rw 2 [← one_mul b] at hf
+      rw [← (algebraMap A K).map_one] at hf
+      exact IsFractionRing.injective _ _ (mul_right_cancel₀ hb hf).symm
+    apply Quotient.sound'
+    exact ⟨this.unit, rfl⟩
+  le_total := ValuationRing.le_total _ _
+  toDecidableLE := Classical.decRel _
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.injective, IsUnit, Quotient, Quotient.sound, algebraMap, injective, isUnit_of_dvd_one, le_antisymm, le_total, le_trans, map_one, mul_comm, mul_smul, nth_rw, one_mul, one_smul, smul_def
 -/
@@ -448,7 +490,18 @@ instance commGroupWithZero
     one_mul := by rintro ⟨a⟩; apply Quotient.sound'; rw [one_mul]
     mul_one := by rintro ⟨a⟩; apply Quotient.sound'; rw [mul_one]
     mul_comm := by rintro ⟨a⟩ ⟨b⟩; apply Quotient.sound'; rw [mul_comm]
-    zero_mul := by r
+    zero_mul := by rintro ⟨a⟩; apply Quotient.sound'; rw [zero_mul]
+    mul_zero := by rintro ⟨a⟩; apply Quotient.sound'; rw [mul_zero]
+    inv_zero := by apply Quotient.sound'; rw [inv_zero]
+    mul_inv_cancel := by
+      rintro ⟨a⟩ ha
+      apply Quotient.sound'
+      use 1
+      simp only [one_smul]
+      apply (mul_inv_cancel₀ _).symm
+      contrapose ha
+      rw [ha]
+      rfl }
 
 中文:
 实例 commGroupWithZero
@@ -457,7 +510,18 @@ instance commGroupWithZero
     one_mul := by rintro ⟨a⟩; apply Quotient.sound'; rw [one_mul]
     mul_one := by rintro ⟨a⟩; apply Quotient.sound'; rw [mul_one]
     mul_comm := by rintro ⟨a⟩ ⟨b⟩; apply Quotient.sound'; rw [mul_comm]
-    zero_mul := by r
+    zero_mul := by rintro ⟨a⟩; apply Quotient.sound'; rw [zero_mul]
+    mul_zero := by rintro ⟨a⟩; apply Quotient.sound'; rw [mul_zero]
+    inv_zero := by apply Quotient.sound'; rw [inv_zero]
+    mul_inv_cancel := by
+      rintro ⟨a⟩ ha
+      apply Quotient.sound'
+      use 1
+      simp only [one_smul]
+      apply (mul_inv_cancel₀ _).symm
+      contrapose ha
+      rw [ha]
+      rfl }
 
 Depends on / 依赖: Quotient, Quotient.so, Quotient.sound, inv_zero, mul_assoc, mul_comm, mul_inv_cancel, mul_one, mul_zero, one_mul, zero_mul
 -/
@@ -494,7 +558,10 @@ instance linearOrderedCommGroupWithZero
     rintro ⟨a⟩ ha ⟨b⟩ ⟨c⟩ hbc
     contrapose hbc
     obtain ⟨d, hd⟩ := hbc
-    simp only [Algebra.smul_def, mul_left_comm, mul_eq_mul_left
+    simp only [Algebra.smul_def, mul_left_comm, mul_eq_mul_left_iff] at hd
+    obtain rfl | rfl := hd
+    · exact ⟨d, by simp [Algebra.smul_def]⟩
+    · cases ha le_rfl
 
 中文:
 实例 linearOrderedCommGroupWithZero
@@ -507,7 +574,10 @@ instance linearOrderedCommGroupWithZero
     rintro ⟨a⟩ ha ⟨b⟩ ⟨c⟩ hbc
     contrapose hbc
     obtain ⟨d, hd⟩ := hbc
-    simp only [Algebra.smul_def, mul_left_comm, mul_eq_mul_left
+    simp only [Algebra.smul_def, mul_left_comm, mul_eq_mul_left_iff] at hd
+    obtain rfl | rfl := hd
+    · exact ⟨d, by simp [Algebra.smul_def]⟩
+    · cases ha le_rfl
 -/
 noncomputable instance linearOrderedCommGroupWithZero :
     LinearOrderedCommGroupWithZero (ValueGroup A K) where
@@ -538,7 +608,21 @@ definition valuation
     intro a b
     obtain ⟨xa, ya, hya, rfl⟩ := IsFractionRing.div_surjective A a
     obtain ⟨xb, yb, hyb, rfl⟩ := IsFractionRing.div_surjective A b
-    have : (algebraMap A K) ya != 0 := IsFractionRing.t
+    have : (algebraMap A K) ya != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hya
+    have : (algebraMap A K) yb != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hyb
+    obtain ⟨c, h | h⟩ := ValuationRing.cond (xa * yb) (xb * ya)
+    · apply le_trans _ (le_max_left _ _)
+      use c + 1
+      rw [Algebra.smul_def]
+      field_simp
+      simp only [← map_mul, ← map_add]
+      congr 1; linear_combination h
+    · apply le_trans _ (le_max_right _ _)
+      use c + 1
+      rw [Algebra.smul_def]
+      field_simp
+      simp only [← map_mul, ← map_add]
+      congr 1; linear_combination h
 
 中文:
 定义 valuation
@@ -551,7 +635,21 @@ definition valuation
     intro a b
     obtain ⟨xa, ya, hya, rfl⟩ := IsFractionRing.div_surjective A a
     obtain ⟨xb, yb, hyb, rfl⟩ := IsFractionRing.div_surjective A b
-    have : (algebraMap A K) ya != 0 := IsFractionRing.t
+    have : (algebraMap A K) ya != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hya
+    have : (algebraMap A K) yb != 0 := IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors hyb
+    obtain ⟨c, h | h⟩ := ValuationRing.cond (xa * yb) (xb * ya)
+    · apply le_trans _ (le_max_left _ _)
+      use c + 1
+      rw [Algebra.smul_def]
+      field_simp
+      simp only [← map_mul, ← map_add]
+      congr 1; linear_combination h
+    · apply le_trans _ (le_max_right _ _)
+      use c + 1
+      rw [Algebra.smul_def]
+      field_simp
+      simp only [← map_mul, ← map_add]
+      congr 1; linear_combination h
 
 Depends on / 依赖: Quotient, Quotient.mk
 -/
@@ -631,7 +729,18 @@ definition equivInteger
       { toFun := fun a => ⟨algebraMap A K a, (mem_integer_iff _ _ _).mpr ⟨a, rfl⟩⟩
         map_mul' := fun _ _ => by ext1; exact (algebraMap A K).map_mul _ _
         map_zero' := by ext1; exact (algebraMap A K).map_zero
-        map
+        map_add' := fun _ _ => by ext1; exact (algebraMap A K).map_add _ _ })
+    (by
+      constructor
+      · intro x y h
+        apply_fun (algebraMap (valuation A K).integer K) at h
+        exact IsFractionRing.injective _ _ h
+      · rintro ⟨-, ha⟩
+        rw [mem_integer_iff] at ha
+        obtain ⟨a, rfl⟩ := ha
+        exact ⟨a, rfl⟩)
+
+@[simp]
 
 中文:
 定义 equiv整数eger
@@ -641,7 +750,18 @@ definition equivInteger
       { toFun := fun a => ⟨algebraMap A K a, (mem_integer_iff _ _ _).mpr ⟨a, rfl⟩⟩
         map_mul' := fun _ _ => by ext1; exact (algebraMap A K).map_mul _ _
         map_zero' := by ext1; exact (algebraMap A K).map_zero
-        map
+        map_add' := fun _ _ => by ext1; exact (algebraMap A K).map_add _ _ })
+    (by
+      constructor
+      · intro x y h
+        apply_fun (algebraMap (valuation A K).integer K) at h
+        exact IsFractionRing.injective _ _ h
+      · rintro ⟨-, ha⟩
+        rw [mem_integer_iff] at ha
+        obtain ⟨a, rfl⟩ := ha
+        exact ⟨a, rfl⟩)
+
+@[simp]
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.injective, RingEquiv, RingEquiv.ofBijective, algebraMap, apply_fun, injective, integer, map_add, map_mul, map_zero, mem_integer_iff, ofBijective, valuation
 -/
@@ -733,7 +853,7 @@ instance le_total_ideal
   · rw [← h]
     exact Ideal.mul_mem_right _ _ h₁
   · exfalso; apply h₂; rw [← h]
-    apply Ideal.mul_mem_righ
+    apply Ideal.mul_mem_right _ _ hb
 
 中文:
 实例 le_total_ideal
@@ -749,7 +869,7 @@ instance le_total_ideal
   · rw [← h]
     exact Ideal.mul_mem_right _ _ h₁
   · exfalso; apply h₂; rw [← h]
-    apply Ideal.mul_mem_righ
+    apply Ideal.mul_mem_right _ _ hb
 
 Depends on / 依赖: Ideal.mul_mem_right, Or.inl, PreValuationRing, PreValuationRing.cond, mul_mem_right
 -/
@@ -965,7 +1085,21 @@ theorem iff_isInteger_or_isInteger
     have := (map_ne_zero_iff _ (IsFractionRing.injective R K)).mpr (nonZeroDivisors.ne_zero hy)
     obtain ⟨s, rfl | rfl⟩ := ValuationRing.cond x y
     · exact Or.inr
-⟨s, eq_inv_of_mul_eq_one_left by r
+⟨s, eq_inv_of_mul_eq_one_left by rwa [mul_div, div_eq_one_iff_eq, map_mul, mul_comm]⟩
+    · exact Or.inl ⟨s, by rwa [eq_div_iff, map_mul, mul_comm]⟩
+  · intro H
+    suffices PreValuationRing R from mk
+    constructor
+    intro a b
+by_cases ha : a = 0; · subst ha; exact ⟨0, Or.inr mul_zero b⟩
+by_cases hb : b = 0; · subst hb; exact ⟨0, Or.inl mul_zero a⟩
+    replace ha := (map_ne_zero_iff _ (IsFractionRing.injective R K)).mpr ha
+    replace hb := (map_ne_zero_iff _ (IsFractionRing.injective R K)).mpr hb
+    obtain ⟨c, e⟩ | ⟨c, e⟩ := H (algebraMap R K a / algebraMap R K b)
+    · rw [eq_div_iff hb, ← map_mul, (IsFractionRing.injective R K).eq_iff, mul_comm] at e
+      exact ⟨c, Or.inr e⟩
+    · rw [inv_div, eq_div_iff ha, ← map_mul, (IsFractionRing.injective R K).eq_iff, mul_comm c] at e
+      exact ⟨c, Or.inl e⟩
 
 中文:
 定理 iff_is整数eger_or_is整数eger
@@ -976,7 +1110,21 @@ theorem iff_isInteger_or_isInteger
     have := (map_ne_zero_iff _ (IsFractionRing.injective R K)).mpr (nonZeroDivisors.ne_zero hy)
     obtain ⟨s, rfl | rfl⟩ := ValuationRing.cond x y
     · exact Or.inr
-⟨s, eq_inv_of_mul_eq_one_left by r
+⟨s, eq_inv_of_mul_eq_one_left by rwa [mul_div, div_eq_one_iff_eq, map_mul, mul_comm]⟩
+    · exact Or.inl ⟨s, by rwa [eq_div_iff, map_mul, mul_comm]⟩
+  · intro H
+    suffices PreValuationRing R from mk
+    constructor
+    intro a b
+by_cases ha : a = 0; · subst ha; exact ⟨0, Or.inr mul_zero b⟩
+by_cases hb : b = 0; · subst hb; exact ⟨0, Or.inl mul_zero a⟩
+    replace ha := (map_ne_zero_iff _ (IsFractionRing.injective R K)).mpr ha
+    replace hb := (map_ne_zero_iff _ (IsFractionRing.injective R K)).mpr hb
+    obtain ⟨c, e⟩ | ⟨c, e⟩ := H (algebraMap R K a / algebraMap R K b)
+    · rw [eq_div_iff hb, ← map_mul, (IsFractionRing.injective R K).eq_iff, mul_comm] at e
+      exact ⟨c, Or.inr e⟩
+    · rw [inv_div, eq_div_iff ha, ← map_mul, (IsFractionRing.injective R K).eq_iff, mul_comm c] at e
+      exact ⟨c, Or.inl e⟩
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.div_surjective, IsFractionRing.injective, Or.inl, Or.inr, PreValuationRing, ValuationRing, ValuationRing.cond, div_eq_one_iff_eq, div_surjective, eq_div_iff, eq_inv_of_mul_eq_one_left, injective, map_mul, map_ne_zero_iff, mul_comm, mul_div, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero
 -/
@@ -1175,7 +1323,12 @@ lemma _root_.isFractionRing_of_exists_eq_algebraMap_or_inv_eq_algebraMap_of_inje
   intro x
   obtain ⟨a, ha⟩ := h x
   by_cases h0 : a = 0
-  · refine ⟨⟨0, 1⟩, by simpa [h0, eq_comm] usi
+  · refine ⟨⟨0, 1⟩, by simpa [h0, eq_comm] using ha⟩
+  · have : algebraMap 𝒪 K a != 0 := by simpa using h0
+    rw [inv_eq_iff_eq_inv]; rw [← one_div]; rw [eq_div_iff this] at ha
+    cases ha with
+    | inl ha => exact ⟨⟨a, 1⟩, by simpa⟩
+    | inr ha => exact ⟨⟨1, ⟨a, mem_nonZeroDivisors_of_ne_zero h0⟩⟩, by simpa using ha⟩
 
 中文:
 引理 _root_.isFractionRing_of_存在_eq_algebraMap_or_inv_eq_algebraMap_of_injective
@@ -1187,7 +1340,12 @@ lemma _root_.isFractionRing_of_exists_eq_algebraMap_or_inv_eq_algebraMap_of_inje
   intro x
   obtain ⟨a, ha⟩ := h x
   by_cases h0 : a = 0
-  · refine ⟨⟨0, 1⟩, by simpa [h0, eq_comm] usi
+  · refine ⟨⟨0, 1⟩, by simpa [h0, eq_comm] using ha⟩
+  · have : algebraMap 𝒪 K a != 0 := by simpa using h0
+    rw [inv_eq_iff_eq_inv]; rw [← one_div]; rw [eq_div_iff this] at ha
+    cases ha with
+    | inl ha => exact ⟨⟨a, 1⟩, by simpa⟩
+    | inr ha => exact ⟨⟨1, ⟨a, mem_nonZeroDivisors_of_ne_zero h0⟩⟩, by simpa using ha⟩
 
 Depends on / 依赖: IsDomain, IsDomain.of_faithfulSMul, algebraMap, eq_comm, eq_div_iff, faithfulSMul_iff_algebraMap_injective, hinj.isDomain, inv_eq_iff_eq_inv, isDomain, mem_nonZeroD, of_faithfulSMul, one_div
 -/
@@ -1263,7 +1421,9 @@ theorem of_integers
   intro a b
   rcases le_total (v (algebraMap 𝒪 K a)) (v (algebraMap 𝒪 K b)) with h | h
   · obtain ⟨c, hc⟩ := Valuation.Integers.dvd_of_le hh h
-    use c; exact Or.inr hc.s
+    use c; exact Or.inr hc.symm
+  · obtain ⟨c, hc⟩ := Valuation.Integers.dvd_of_le hh h
+    use c; exact Or.inl hc.symm
 
 中文:
 定理 of_integers
@@ -1276,7 +1436,9 @@ theorem of_integers
   intro a b
   rcases le_total (v (algebraMap 𝒪 K a)) (v (algebraMap 𝒪 K b)) with h | h
   · obtain ⟨c, hc⟩ := Valuation.Integers.dvd_of_le hh h
-    use c; exact Or.inr hc.s
+    use c; exact Or.inr hc.symm
+  · obtain ⟨c, hc⟩ := Valuation.Integers.dvd_of_le hh h
+    use c; exact Or.inl hc.symm
 
 Depends on / 依赖: hh.hom_inj.isDomain, hom_inj, isDomain
 -/

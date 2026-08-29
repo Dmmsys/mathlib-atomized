@@ -165,6 +165,11 @@ theorem addAction_faithful
     rw [Equiv.ext_iff]; rw [not_forall]
     use s
     contrapose has'
+    simp only [AddAction.toPerm_apply, coe_one, id_eq] at has'
+    rw [← has']
+    simpa [← mem_coe_iff]
+  · simp only [Equiv.ext_iff, AddAction.toPerm_apply] at h ⊢
+    simp [Subtype.ext_iff, Finset.ext_iff, mem_vadd_finset, h]
 
 中文:
 定理 addAction_faithful
@@ -178,6 +183,11 @@ theorem addAction_faithful
     rw [Equiv.ext_iff]; rw [not_forall]
     use s
     contrapose has'
+    simp only [AddAction.toPerm_apply, coe_one, id_eq] at has'
+    rw [← has']
+    simpa [← mem_coe_iff]
+  · simp only [Equiv.ext_iff, AddAction.toPerm_apply] at h ⊢
+    simp [Subtype.ext_iff, Finset.ext_iff, mem_vadd_finset, h]
 
 Depends on / 依赖: AddAction, AddAction.toPerm_apply, Equiv.ext_iff, Finset, Finset.ext_iff, Ne.symm, Subtype, Subtype.ext_iff, coe_one, contrapose, exists_mem_notMem, ext_iff, id_eq, mem_coe_iff, mem_vadd_finset, not_forall, toPerm_apply
 -/
@@ -247,6 +257,11 @@ theorem mulAction_faithful
     rw [Equiv.ext_iff]; rw [not_forall]
     use s
     contrapose! has'
+    simp only [toPerm_apply, coe_one, id_eq] at has'
+    rw [← has']
+    simpa only [coe_smul, smul_mem_smul_finset_iff, ← mem_coe_iff]
+  · simp only [Equiv.ext_iff, toPerm_apply] at h ⊢
+    simp [Subtype.ext_iff, Finset.ext_iff, mem_smul_finset, h]
 
 中文:
 定理 mulAction_faithful
@@ -260,6 +275,11 @@ theorem mulAction_faithful
     rw [Equiv.ext_iff]; rw [not_forall]
     use s
     contrapose! has'
+    simp only [toPerm_apply, coe_one, id_eq] at has'
+    rw [← has']
+    simpa only [coe_smul, smul_mem_smul_finset_iff, ← mem_coe_iff]
+  · simp only [Equiv.ext_iff, toPerm_apply] at h ⊢
+    simp [Subtype.ext_iff, Finset.ext_iff, mem_smul_finset, h]
 
 Depends on / 依赖: Equiv.ext_iff, Finset, Finset.ext_iff, Ne.symm, Subtype, Subtype.ext_iff, coe_one, coe_smul, contrapose, exists_mem_notMem, ext_iff, id_eq, mem_coe_iff, mem_smul_finset, not_forall, smul_mem_smul_finset_iff, toPerm_apply
 -/
@@ -574,7 +594,8 @@ theorem fixedPoints_ne_univ_of_faithfulSMul
     exact eq_univ_iff_forall.mp h s g
   rwa [← toPermHom_apply, map_eq_one_iff] at h
   have := powersetCard.faithfulSMul (G := G) (α := α) hn ?_
-  · exact MulAction.toPerm_
+  · exact MulAction.toPerm_injective
+  · simpa [ENat.card_eq_coe_natCard, Nat.cast_lt, Nat.finite_of_card_ne_zero (ne_zero_of_lt hn')]
 
 中文:
 定理 fixedPoints_ne_univ_of_faithfulSMul
@@ -586,7 +607,8 @@ theorem fixedPoints_ne_univ_of_faithfulSMul
     exact eq_univ_iff_forall.mp h s g
   rwa [← toPermHom_apply, map_eq_one_iff] at h
   have := powersetCard.faithfulSMul (G := G) (α := α) hn ?_
-  · exact MulAction.toPerm_
+  · exact MulAction.toPerm_injective
+  · simpa [ENat.card_eq_coe_natCard, Nat.cast_lt, Nat.finite_of_card_ne_zero (ne_zero_of_lt hn')]
 
 Depends on / 依赖: ENat.card_eq_coe_natCard, MulAction, MulAction.toPerm_injective, Nat.cast_lt, Nat.finite_of_card_ne_zero, card_eq_coe_natCard, cast_lt, contrapose, eq_univ_iff_forall, eq_univ_iff_forall.mp, exists_ne, faithfulSMul, finite_of_card_ne_zero, map_eq_one_iff, ne_zero_of_lt, powersetCard, powersetCard.faithfulSMul, replace, toPerm, toPermHom_apply
 -/
@@ -672,7 +694,23 @@ theorem isPreprimitive_perm
   have : Finite α := Nat.finite_of_card_ne_zero (Nat.ne_zero_of_lt hn)
   have : Fintype α := Fintype.ofFinite α
   -- The action is pretransitive.
-  have : IsPretransitive (Perm α) (powersetCard α n) := powersetCard.isPretrans
+  have : IsPretransitive (Perm α) (powersetCard α n) := powersetCard.isPretransitive
+  -- The type on which the group acts is nontrivial.
+  have : Nontrivial (powersetCard α n) := powersetCard.nontrivial' h_one_le hn
+  obtain ⟨s⟩ := this.to_nonempty
+  -- It remains to prove that stabilizer of some point is maximal.
+  rw [← isCoatom_stabilizer_iff_preprimitive _ s]
+  -- The stabilizer of a combination is the stabilizer of the underlying set.
+  rw [stabilizer_coe]
+  -- We conclude by `Equiv.Perm.isCoatom_stabilizer`
+  apply isCoatom_stabilizer
+  -- `s` is nonempty because `n ≠ 0`.
+  · rwa [powersetCard.coe_nonempty_iff]
+  -- `sᶜ` is nonempty because `n < Nat.card α`.
+  · rw [nonempty_compl, ne_eq, eq_univ_iff_ncard, ncard_eq]
+    exact hn.ne
+  -- `Nat.card α ≠ 2 * s.ncard` because `Nat.card α ≠ 2 * s`.
+  · rwa [ncard_eq]
 
 中文:
 定理 isPreprimitive_perm
@@ -682,7 +720,23 @@ theorem isPreprimitive_perm
   have : Finite α := Nat.finite_of_card_ne_zero (Nat.ne_zero_of_lt hn)
   have : Fintype α := Fintype.ofFinite α
   -- The action is pretransitive.
-  have : IsPretransitive (Perm α) (powersetCard α n) := powersetCard.isPretrans
+  have : IsPretransitive (Perm α) (powersetCard α n) := powersetCard.isPretransitive
+  -- The type on which the group acts is nontrivial.
+  have : Nontrivial (powersetCard α n) := powersetCard.nontrivial' h_one_le hn
+  obtain ⟨s⟩ := this.to_nonempty
+  -- It remains to prove that stabilizer of some point is maximal.
+  rw [← isCoatom_stabilizer_iff_preprimitive _ s]
+  -- The stabilizer of a combination is the stabilizer of the underlying set.
+  rw [stabilizer_coe]
+  -- We conclude by `Equiv.Perm.isCoatom_stabilizer`
+  apply isCoatom_stabilizer
+  -- `s` is nonempty because `n ≠ 0`.
+  · rwa [powersetCard.coe_nonempty_iff]
+  -- `sᶜ` is nonempty because `n < Nat.card α`.
+  · rw [nonempty_compl, ne_eq, eq_univ_iff_ncard, ncard_eq]
+    exact hn.ne
+  -- `Nat.card α ≠ 2 * s.ncard` because `Nat.card α ≠ 2 * s`.
+  · rwa [ncard_eq]
 -/
 theorem isPreprimitive_perm {n : Nat} (h_one_le : 1 <= n) (hn : n < Nat.card α)
     (hα : Nat.card α != 2 * n) :
@@ -723,7 +777,20 @@ theorem isPretransitive_alternatingGroup
       grind
     by_cases hn' : n <= Nat.card α
     · apply IsPretransitive.of_surjective_map
-        (mulActionHom_compl_bijective (alternatingGroup α) α _)
+        (mulActionHom_compl_bijective (alternatingGroup α) α _).surjective this
+      aesop
+    · suffices Subsingleton (powersetCard α n) by infer_instance
+      rw [not_le] at hn'
+      rw [← Finite.card_le_one_iff_subsingleton]; rw [powersetCard.card]; rw [Nat.choose_eq_zero_iff.mpr hn']
+      simp
+  apply isPretransitive_of_isMultiplyPretransitive
+  rcases eq_or_ne n 0 with rfl | hn0
+  · infer_instance
+  rcases eq_or_ne n 1 with rfl | hn1
+  · rw [is_one_pretransitive_iff]
+    exact alternatingGroup.isPretransitive_of_three_le_card α hα
+  have := alternatingGroup.isMultiplyPretransitive α
+  apply isMultiplyPretransitive_of_le (n := Nat.card α - 2) <;> grind
 
 中文:
 定理 isPretransitive_alternatingGroup
@@ -735,7 +802,20 @@ theorem isPretransitive_alternatingGroup
       grind
     by_cases hn' : n <= Nat.card α
     · apply IsPretransitive.of_surjective_map
-        (mulActionHom_compl_bijective (alternatingGroup α) α _)
+        (mulActionHom_compl_bijective (alternatingGroup α) α _).surjective this
+      aesop
+    · suffices Subsingleton (powersetCard α n) by infer_instance
+      rw [not_le] at hn'
+      rw [← Finite.card_le_one_iff_subsingleton]; rw [powersetCard.card]; rw [Nat.choose_eq_zero_iff.mpr hn']
+      simp
+  apply isPretransitive_of_isMultiplyPretransitive
+  rcases eq_or_ne n 0 with rfl | hn0
+  · infer_instance
+  rcases eq_or_ne n 1 with rfl | hn1
+  · rw [is_one_pretransitive_iff]
+    exact alternatingGroup.isPretransitive_of_three_le_card α hα
+  have := alternatingGroup.isMultiplyPretransitive α
+  apply isMultiplyPretransitive_of_le (n := Nat.card α - 2) <;> grind
 
 Depends on / 依赖: Finite, Finite.card_le_one_iff_subsingleton, IsPretransitive, IsPretransitive.of_surjective_map, Nat.card, Nat.choose_eq_zero_iff.mpr, Subsingleton, alternatingGroup, card_le_one_iff_subsingleton, choose_eq_zero_iff, infer_instance, isPretransitiv, mulActionHom_compl_bijective, not_le, of_surjective_map, powersetCard, powersetCard.card, surjective
 -/
@@ -774,7 +854,12 @@ theorem isPreprimitive_alternatingGroup
     isPretransitive_alternatingGroup (le_trans h_three_le hn.le)
   have : Nontrivial (powersetCard α n) := nontrivial (by positivity) (by simpa using hn)
   obtain ⟨s⟩ := this.to_nonempty
-  rw [← isCoatom_stabilizer_iff_preprimiti
+  rw [← isCoatom_stabilizer_iff_preprimitive _ s]; rw [stabilizer_coe]
+  apply alternatingGroup.isCoatom_stabilizer
+  · rw [powersetCard.coe_nonempty_iff]
+    exact le_trans (by norm_num) h_three_le
+  · simpa [nonempty_compl, ne_eq, eq_univ_iff_ncard, ncard_eq] using ne_of_lt hn
+  · simpa only [ncard_eq]
 
 中文:
 定理 isPreprimitive_alternatingGroup
@@ -784,7 +869,12 @@ theorem isPreprimitive_alternatingGroup
     isPretransitive_alternatingGroup (le_trans h_three_le hn.le)
   have : Nontrivial (powersetCard α n) := nontrivial (by positivity) (by simpa using hn)
   obtain ⟨s⟩ := this.to_nonempty
-  rw [← isCoatom_stabilizer_iff_preprimiti
+  rw [← isCoatom_stabilizer_iff_preprimitive _ s]; rw [stabilizer_coe]
+  apply alternatingGroup.isCoatom_stabilizer
+  · rw [powersetCard.coe_nonempty_iff]
+    exact le_trans (by norm_num) h_three_le
+  · simpa [nonempty_compl, ne_eq, eq_univ_iff_ncard, ncard_eq] using ne_of_lt hn
+  · simpa only [ncard_eq]
 
 Depends on / 依赖: IsPretransitive, Nontrivial, alternatingGroup, alternatingGroup.isCoatom_stabilizer, coe_nonempty_iff, eq_univ_iff_ncard, h_three_le, hn.le, isCoatom_stabilizer, isCoatom_stabilizer_iff_preprimitive, isPretransitive_alternatingGroup, le_trans, ncard_eq, ne_eq, nonempty_compl, nontrivial, powersetCard, powersetCard.coe_nonempty_iff, stabilizer_coe, this.to_nonempty
 -/

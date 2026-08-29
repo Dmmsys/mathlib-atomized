@@ -437,7 +437,13 @@ lemma strictLimitsClosureIter_le_limitsClosure
     simp
   | succ b hb hb' =>
     rw [strictLimitsClosureIter]; rw [transfiniteIterate_succ _ _ _ hb]; rw [strictLimitsClosureStep]; rw [sup_le_iff]; rw [iSup_le_iff]
-    exact ⟨hb', fun a => ((strictLimit
+    exact ⟨hb', fun a => ((strictLimitsOfShape_le_limitsOfShape _ _).trans
+      (limitsOfShape_monotone _ hb')).trans (limitsOfShape_le _ _)⟩
+  | isSuccLimit b hb hb' =>
+    simp only [transfiniteIterate_limit _ _ _ hb,
+      iSup_le_iff, Subtype.forall, Set.mem_Iio]
+    intro c hc
+    exact hb' _ hc
 
 中文:
 引理 strictLimitsClosureIter_le_limitsClosure
@@ -449,7 +455,13 @@ lemma strictLimitsClosureIter_le_limitsClosure
     simp
   | succ b hb hb' =>
     rw [strictLimitsClosureIter]; rw [transfiniteIterate_succ _ _ _ hb]; rw [strictLimitsClosureStep]; rw [sup_le_iff]; rw [iSup_le_iff]
-    exact ⟨hb', fun a => ((strictLimit
+    exact ⟨hb', fun a => ((strictLimitsOfShape_le_limitsOfShape _ _).trans
+      (limitsOfShape_monotone _ hb')).trans (limitsOfShape_le _ _)⟩
+  | isSuccLimit b hb hb' =>
+    simp only [transfiniteIterate_limit _ _ _ hb,
+      iSup_le_iff, Subtype.forall, Set.mem_Iio]
+    intro c hc
+    exact hb' _ hc
 
 Depends on / 依赖: Set.mem_Iio, Subtype, Subtype.forall, SuccOrder, SuccOrder.limitRecOn, eq_bot, hb.eq_bot, iSup_le_iff, isSuccLimit, limitRecOn, limitsOfShape_le, limitsOfShape_monotone, mem_Iio, strictLimitsClosureIter, strictLimitsClosureStep, strictLimitsOfShape_le_limitsOfShape, sup_le_iff, transfiniteIterate_limit, transfiniteIterate_succ
 -/
@@ -482,7 +494,20 @@ instance [ObjectProperty.Small.{w}
       (fun _ _ _ => by aesop)
   induction b using SuccOrder.limitRecOn generalizing hb₀ with
   | isMin b hb =>
-    obtain rfl := 
+    obtain rfl := hb.eq_bot
+    simp only [transfiniteIterate_bot]
+    infer_instance
+  | succ b hb hb' =>
+    have := H (Order.le_succ b)
+    rw [strictLimitsClosureIter]; rw [transfiniteIterate_succ _ _ _ hb]; rw [strictLimitsClosureStep]
+    infer_instance
+  | isSuccLimit b hb hb' =>
+    simp only [transfiniteIterate_limit _ _ _ hb]
+    have (c : Set.Iio b) : ObjectProperty.Small.{w}
+      (transfiniteIterate (fun Q => Q.strictLimitsClosureStep J) c.1 P) := by
+      have := H c.2.le
+      exact hb' c.1 c.2
+    infer_instance
 
 中文:
 实例 [ObjectProperty.Small.{w}
@@ -493,7 +518,20 @@ instance [ObjectProperty.Small.{w}
       (fun _ _ _ => by aesop)
   induction b using SuccOrder.limitRecOn generalizing hb₀ with
   | isMin b hb =>
-    obtain rfl := 
+    obtain rfl := hb.eq_bot
+    simp only [transfiniteIterate_bot]
+    infer_instance
+  | succ b hb hb' =>
+    have := H (Order.le_succ b)
+    rw [strictLimitsClosureIter]; rw [transfiniteIterate_succ _ _ _ hb]; rw [strictLimitsClosureStep]
+    infer_instance
+  | isSuccLimit b hb hb' =>
+    simp only [transfiniteIterate_limit _ _ _ hb]
+    have (c : Set.Iio b) : ObjectProperty.Small.{w}
+      (transfiniteIterate (fun Q => Q.strictLimitsClosureStep J) c.1 P) := by
+      have := H c.2.le
+      exact hb' c.1 c.2
+    infer_instance
 
 Depends on / 依赖: Order.le_succ, Set.Iio, SuccOrder, SuccOrder.limitRecOn, eq_bot, generalizing, hb.eq_bot, infer_instance, le_succ, limitRecOn, lt_of_lt_of_le, small_of_injective, strictLimitsClosureIter, strictLimitsClosureStep, transfiniteIterate_bot, transfiniteIterate_succ
 -/
@@ -541,7 +579,25 @@ lemma strictLimitsClosureStep_strictLimitsClosureIter_eq_self
   simp only [strictLimitsClosureStep, prop_sup_iff, prop_iSup_iff] at hX
   obtain (hX | ⟨a, F, hF⟩) := hX
   · exact hX
-  · simp only [strictLimitsClosureIter, t
+  · simp only [strictLimitsClosureIter, transfiniteIterate_limit _ _ _
+      (Cardinal.isSuccLimit_ord hκ.aleph0_le), prop_iSup_iff,
+      Subtype.exists, Set.mem_Iio, exists_prop] at hF
+    choose o ho ho' using hF
+    obtain ⟨m, hm, hm'⟩ : exists (m : Ordinal.{w}) (hm : m < κ.ord), forall (j : J a), o j <= m := by
+      refine ⟨⨆ j, o ((equivShrink.{w} (J a)).symm j),
+        Ordinal.iSup_lt_of_lt_cof ?_ (fun _ => ho _), fun j => ?_⟩
+      · rw [hκ.cof_ord, ← hasCardinalLT_iff_cardinal_mk_lt _ κ,
+          ← hasCardinalLT_iff_of_equiv (equivShrink.{w} (J a))]
+        exact h a
+      · obtain ⟨j, rfl⟩ := (equivShrink.{w} (J a)).symm.surjective j
+        exact le_ciSup Ordinal.bddAbove_of_small _
+    refine monotone_transfiniteIterate _ _
+      (fun (Q : ObjectProperty C) => Q.le_strictLimitsClosureStep J) (Order.succ_le_iff.2 hm) _ ?_
+    dsimp
+    rw [transfiniteIterate_succ _ _ _ (by simp)]
+    simp only [strictLimitsClosureStep, prop_sup_iff, prop_iSup_iff]
+    exact Or.inr ⟨a, ⟨_, fun j => monotone_transfiniteIterate _ _
+      (fun (Q : ObjectProperty C) => Q.le_strictLimitsClosureStep J) (hm' j) _ (ho' j)⟩⟩
 
 中文:
 引理 strictLimitsClosureStep_strictLimitsClosureIter_eq_self
@@ -552,7 +608,25 @@ lemma strictLimitsClosureStep_strictLimitsClosureIter_eq_self
   simp only [strictLimitsClosureStep, prop_sup_iff, prop_iSup_iff] at hX
   obtain (hX | ⟨a, F, hF⟩) := hX
   · exact hX
-  · simp only [strictLimitsClosureIter, t
+  · simp only [strictLimitsClosureIter, transfiniteIterate_limit _ _ _
+      (Cardinal.isSuccLimit_ord hκ.aleph0_le), prop_iSup_iff,
+      Subtype.exists, Set.mem_Iio, exists_prop] at hF
+    choose o ho ho' using hF
+    obtain ⟨m, hm, hm'⟩ : exists (m : Ordinal.{w}) (hm : m < κ.ord), forall (j : J a), o j <= m := by
+      refine ⟨⨆ j, o ((equivShrink.{w} (J a)).symm j),
+        Ordinal.iSup_lt_of_lt_cof ?_ (fun _ => ho _), fun j => ?_⟩
+      · rw [hκ.cof_ord, ← hasCardinalLT_iff_cardinal_mk_lt _ κ,
+          ← hasCardinalLT_iff_of_equiv (equivShrink.{w} (J a))]
+        exact h a
+      · obtain ⟨j, rfl⟩ := (equivShrink.{w} (J a)).symm.surjective j
+        exact le_ciSup Ordinal.bddAbove_of_small _
+    refine monotone_transfiniteIterate _ _
+      (fun (Q : ObjectProperty C) => Q.le_strictLimitsClosureStep J) (Order.succ_le_iff.2 hm) _ ?_
+    dsimp
+    rw [transfiniteIterate_succ _ _ _ (by simp)]
+    simp only [strictLimitsClosureStep, prop_sup_iff, prop_iSup_iff]
+    exact Or.inr ⟨a, ⟨_, fun j => monotone_transfiniteIterate _ _
+      (fun (Q : ObjectProperty C) => Q.le_strictLimitsClosureStep J) (hm' j) _ (ho' j)⟩⟩
 
 Depends on / 依赖: Cardinal, Cardinal.isSuccLimit_ord, Fact.out, IsRegular, Ordinal, Set.mem_Iio, Subtype, Subtype.exists, aleph0_le, exists_prop, isSuccLimit_ord, le_antisymm, le_strictLimitsClosureStep, mem_Iio, prop_iSup_iff, prop_sup_iff, strictLimitsClosureIter, strictLimitsClosureStep, transfiniteIterate_limit
 -/
@@ -596,7 +670,11 @@ lemma isoClosure_strictLimitsClosureIter_eq_limitsClosure
     exact P.strictLimitsClosureIter_le_limitsClosure J κ.ord
   · have (a : α) :
         (P.strictLimitsClosureIter J κ.ord).isoClosure.IsClosedUnderLimitsOfShape (J a) := ⟨by
-      conv_rhs => rw [← P.strictLimitsClosureStep_strictLimitsClosur
+      conv_rhs => rw [← P.strictLimitsClosureStep_strictLimitsClosureIter_eq_self J κ h]
+      rw [limitsOfShape_isoClosure]; rw [← isoClosure_strictLimitsOfShape]; rw [strictLimitsClosureStep]
+      exact monotone_isoClosure ((le_trans (by rfl) (le_iSup _ a)).trans le_sup_right)⟩
+    refine limitsClosure_le
+      ((P.le_strictLimitsClosureIter J κ.ord).trans (le_isoClosure _))
 
 中文:
 引理 isoClosure_strictLimitsClosureIter_eq_limitsClosure
@@ -606,7 +684,11 @@ lemma isoClosure_strictLimitsClosureIter_eq_limitsClosure
     exact P.strictLimitsClosureIter_le_limitsClosure J κ.ord
   · have (a : α) :
         (P.strictLimitsClosureIter J κ.ord).isoClosure.IsClosedUnderLimitsOfShape (J a) := ⟨by
-      conv_rhs => rw [← P.strictLimitsClosureStep_strictLimitsClosur
+      conv_rhs => rw [← P.strictLimitsClosureStep_strictLimitsClosureIter_eq_self J κ h]
+      rw [limitsOfShape_isoClosure]; rw [← isoClosure_strictLimitsOfShape]; rw [strictLimitsClosureStep]
+      exact monotone_isoClosure ((le_trans (by rfl) (le_iSup _ a)).trans le_sup_right)⟩
+    refine limitsClosure_le
+      ((P.le_strictLimitsClosureIter J κ.ord).trans (le_isoClosure _))
 
 Depends on / 依赖: IsClosedUnderLimitsOfShape, P.strictLimitsClosureIter, P.strictLimitsClosureIter_le_limitsClosure, P.strictLimitsClosureStep_strictLimitsClosureIter_eq_self, conv_rhs, isoClosure, isoClosure.IsClosedUnderLimitsOfShape, isoClosure_le_iff, isoClosure_strictLimitsOfShape, le_antisymm, le_iSup, le_sup_right, le_trans, limitsClosure_l, limitsOfShape_isoClosure, monotone_isoClosure, strictLimitsClosureIter, strictLimitsClosureIter_le_limitsClosure, strictLimitsClosureStep, strictLimitsClosureStep_strictLimitsClosureIter_eq_self
 -/
@@ -633,7 +715,7 @@ lemma isEssentiallySmall_limitsClosure
   have : ObjectProperty.EssentiallySmall.{w} (Q.isoClosure.limitsClosure J) := by
     rw [limitsClosure_isoClosure]; rw [← Q.isoClosure_strictLimitsClosureIter_eq_limitsClosure J κ h]
     infer_instance
-  exact .of_le (limitsClo
+  exact .of_le (limitsClosure_monotone J hQ₂)
 
 中文:
 引理 isEssentiallySmall_limitsClosure
@@ -642,7 +724,7 @@ lemma isEssentiallySmall_limitsClosure
   have : ObjectProperty.EssentiallySmall.{w} (Q.isoClosure.limitsClosure J) := by
     rw [limitsClosure_isoClosure]; rw [← Q.isoClosure_strictLimitsClosureIter_eq_limitsClosure J κ h]
     infer_instance
-  exact .of_le (limitsClo
+  exact .of_le (limitsClosure_monotone J hQ₂)
 
 Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, ObjectProperty, ObjectProperty.EssentiallySmall, Q.isoClosure.limitsClosure, Q.isoClosure_strictLimitsClosureIter_eq_limitsClosure, exists_small_le, infer_instance, isoClosure, isoClosure_strictLimitsClosureIter_eq_limitsClosure, limitsClosure, limitsClosure_isoClosure, limitsClosure_monotone, of_le
 -/

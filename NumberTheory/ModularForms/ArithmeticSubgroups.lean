@@ -661,6 +661,8 @@ lemma Subgroup.hasDetPlusMinusOne_adjoinNegOne_iff
   · by_cases hn : Even (Fintype.card n)
     · convert! HasDetPlusMinusOne.det_eq hg using 1 <;>
         simp [Units.ext_iff, det_neg, hn]
+    · convert! (HasDetPlusMinusOne.det_eq hg).symm using 1 <;>
+        simp [Units.ext_iff, det_neg, Nat.not_even_iff_odd.mp hn, neg_eq_iff_eq_neg]
 
 中文:
 引理 子群.hasDetPlusMinusOne_adjoinNegOne_iff
@@ -672,6 +674,8 @@ lemma Subgroup.hasDetPlusMinusOne_adjoinNegOne_iff
   · by_cases hn : Even (Fintype.card n)
     · convert! HasDetPlusMinusOne.det_eq hg using 1 <;>
         simp [Units.ext_iff, det_neg, hn]
+    · convert! (HasDetPlusMinusOne.det_eq hg).symm using 1 <;>
+        simp [Units.ext_iff, det_neg, Nat.not_even_iff_odd.mp hn, neg_eq_iff_eq_neg]
 -/
 @[simp] lemma Subgroup.hasDetPlusMinusOne_adjoinNegOne_iff {𝒢 : Subgroup (GL n R)} :
     𝒢.adjoinNegOne.HasDetPlusMinusOne ↔ 𝒢.HasDetPlusMinusOne := by

@@ -150,7 +150,7 @@ theorem orthogonalFamily_eigenspaces
   have H := hT.conj_eigenvalue_eq_self (hasEigenvalue_of_hasEigenvector ⟨hv, hv'⟩)
   rw [mem_eigenspace_iff] at hv hw
   refine Or.resolve_left ?_ hμν.symm
-  simpa [inner_smul_left, inner_smul_right, hv, hw, H] using (hT v w).s
+  simpa [inner_smul_left, inner_smul_right, hv, hw, H] using (hT v w).symm
 
 中文:
 定理 orthogonalFamily_eigenspaces
@@ -162,7 +162,7 @@ theorem orthogonalFamily_eigenspaces
   have H := hT.conj_eigenvalue_eq_self (hasEigenvalue_of_hasEigenvector ⟨hv, hv'⟩)
   rw [mem_eigenspace_iff] at hv hw
   refine Or.resolve_left ?_ hμν.symm
-  simpa [inner_smul_left, inner_smul_right, hv, hw, H] using (hT v w).s
+  simpa [inner_smul_left, inner_smul_right, hv, hw, H] using (hT v w).symm
 
 Depends on / 依赖: Or.resolve_left, conj_eigenvalue_eq_self, hT.conj_eigenvalue_eq_self, hasEigenvalue_of_hasEigenvector, inner_smul_left, inner_smul_right, mem_eigenspace_iff, resolve_left
 -/
@@ -266,7 +266,7 @@ theorem orthogonalComplement_iSup_eigenspaces_eq_bot
   -- a self-adjoint operator on a nontrivial inner product space has an eigenvalue
   have :=
     hT'.subsingleton_of_no_eigenvalue_finiteDimensional hT.orthogonalComplement_iSup_eigenspaces
-
+  exact Submodule.eq_bot_of_subsingleton
 
 中文:
 定理 orthogonalComplement_iSup_eigenspaces_eq_bot
@@ -277,7 +277,7 @@ theorem orthogonalComplement_iSup_eigenspaces_eq_bot
   -- a self-adjoint operator on a nontrivial inner product space has an eigenvalue
   have :=
     hT'.subsingleton_of_no_eigenvalue_finiteDimensional hT.orthogonalComplement_iSup_eigenspaces
-
+  exact Submodule.eq_bot_of_subsingleton
 
 Depends on / 依赖: IsSymmetric, hT.orthogonalComplement_iSup_eigenspaces_invariant, hT.restrict_invariant, orthogonalComplement_iSup_eigenspaces_invariant, restrict_invariant
 -/
@@ -437,7 +437,10 @@ theorem diagonalization_apply_self_apply
     forall w : PiLp 2 fun μ : Eigenvalues T => eigenspace T μ,
       T (hT.diagonalization.symm w) = hT.diagonalization.symm (toLp 2 fun μ => (μ : 𝕜) • w μ) by
     simpa only [LinearIsometryEquiv.symm_apply_apply, LinearIsometryEquiv.apply_symm_apply] using
-      congr_arg (fun w => hT
+      congr_arg (fun w => hT.diagonalization w μ) (this (hT.diagonalization v))
+  intro w
+  have hwT : forall μ, T (w μ) = (μ : 𝕜) • w μ := fun μ => mem_eigenspace_iff.1 (w μ).2
+  simp only [diagonalization_symm_apply, map_sum, hwT, SetLike.val_smul]
 
 中文:
 定理 diagonalization_apply_self_apply
@@ -447,7 +450,10 @@ theorem diagonalization_apply_self_apply
     forall w : PiLp 2 fun μ : Eigenvalues T => eigenspace T μ,
       T (hT.diagonalization.symm w) = hT.diagonalization.symm (toLp 2 fun μ => (μ : 𝕜) • w μ) by
     simpa only [LinearIsometryEquiv.symm_apply_apply, LinearIsometryEquiv.apply_symm_apply] using
-      congr_arg (fun w => hT
+      congr_arg (fun w => hT.diagonalization w μ) (this (hT.diagonalization v))
+  intro w
+  have hwT : forall μ, T (w μ) = (μ : 𝕜) • w μ := fun μ => mem_eigenspace_iff.1 (w μ).2
+  simp only [diagonalization_symm_apply, map_sum, hwT, SetLike.val_smul]
 
 Depends on / 依赖: Eigenvalues, LinearIsometryEquiv, LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.symm_apply_apply, SetLike, SetLike.val_smul, apply_symm_apply, congr_arg, diagonalization, diagonalization_symm_apply, eigenspace, hT.diagonalization, hT.diagonalization.symm, map_sum, mem_eigenspace_iff, symm_apply_apply, val_smul
 -/
@@ -528,7 +534,7 @@ theorem exists_unsortedEigenvalues_eq
   obtain ⟨i, hi⟩ := hT.direct_sum_isInternal.exists_subordinateOrthonormalBasisIndex_eq hn
     hT.orthogonalFamily_eigenspaces' (hasEigenvalue_iff.mp x.prop)
   use i
-  rw [unsortedEigenvalues]; rw [hi]; rw [hx]; rw [Eigenvalues.val_mk]; rw [← RCLike.c
+  rw [unsortedEigenvalues]; rw [hi]; rw [hx]; rw [Eigenvalues.val_mk]; rw [← RCLike.conj_eq_iff_re]; rw [hT.conj_eigenvalue_eq_self hμ]
 
 中文:
 定理 存在_unsortedEigenvalues_eq
@@ -538,7 +544,7 @@ theorem exists_unsortedEigenvalues_eq
   obtain ⟨i, hi⟩ := hT.direct_sum_isInternal.exists_subordinateOrthonormalBasisIndex_eq hn
     hT.orthogonalFamily_eigenspaces' (hasEigenvalue_iff.mp x.prop)
   use i
-  rw [unsortedEigenvalues]; rw [hi]; rw [hx]; rw [Eigenvalues.val_mk]; rw [← RCLike.c
+  rw [unsortedEigenvalues]; rw [hi]; rw [hx]; rw [Eigenvalues.val_mk]; rw [← RCLike.conj_eq_iff_re]; rw [hT.conj_eigenvalue_eq_self hμ]
 -/
 private theorem exists_unsortedEigenvalues_eq (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
     {μ : 𝕜} (hμ : HasEigenvalue T μ) : exists i : Fin n, hT.unsortedEigenvalues hn i = μ := by
@@ -561,6 +567,12 @@ theorem card_filter_unsortedEigenvalues_eq
         hT.orthogonalFamily_eigenspaces' ⟨μ, hμ⟩ with i
     unfold unsortedEigenvalues
     let ⟨x, hx⟩ := hT.direct_sum_isInternal.subordinateOrthonormalBasisIndex hn i
+      hT.orthogonalFamily_eigenspaces'
+    rw [Eigenvalues.val_mk]; rw [RCLike.conj_eq_iff_re.mp (hT.conj_eigenvalue_eq_self hx)]
+    exact Subtype.mk_eq_mk.symm
+  · rw [Module.End.hasEigenvalue_iff.not_left.mp hμ, finrank_bot, Finset.card_filter_eq_zero_iff]
+    intro i _ rfl
+    exact hμ (hT.hasEigenvalue_unsortedEigenvalues hn i)
 
 中文:
 定理 card_filter_unsortedEigenvalues_eq
@@ -572,6 +584,12 @@ theorem card_filter_unsortedEigenvalues_eq
         hT.orthogonalFamily_eigenspaces' ⟨μ, hμ⟩ with i
     unfold unsortedEigenvalues
     let ⟨x, hx⟩ := hT.direct_sum_isInternal.subordinateOrthonormalBasisIndex hn i
+      hT.orthogonalFamily_eigenspaces'
+    rw [Eigenvalues.val_mk]; rw [RCLike.conj_eq_iff_re.mp (hT.conj_eigenvalue_eq_self hx)]
+    exact Subtype.mk_eq_mk.symm
+  · rw [Module.End.hasEigenvalue_iff.not_left.mp hμ, finrank_bot, Finset.card_filter_eq_zero_iff]
+    intro i _ rfl
+    exact hμ (hT.hasEigenvalue_unsortedEigenvalues hn i)
 -/
 private theorem card_filter_unsortedEigenvalues_eq (hT : T.IsSymmetric)
     (hn : Module.finrank 𝕜 E = n) (μ : 𝕜) :
@@ -620,7 +638,17 @@ theorem hasEigenvector_eigenvectorBasis_helper
   simp_rw [unsortedEigenvalues]
   change HasEigenvector T (RCLike.re μ) v
   have key : HasEigenvector T μ v := by
-    have
+    have H₁ : v in eigenspace T μ := by
+      simp_rw [v, unsortedEigenvectorBasis]
+      exact
+        hT.direct_sum_isInternal.subordinateOrthonormalBasis_subordinate hn i
+          hT.orthogonalFamily_eigenspaces'
+    have H₂ : v != 0 := by simpa using (hT.unsortedEigenvectorBasis hn).toBasis.ne_zero i
+    exact ⟨H₁, H₂⟩
+  have re_μ : ↑(RCLike.re μ) = μ := by
+    rw [← RCLike.conj_eq_iff_re]
+    exact hT.conj_eigenvalue_eq_self (hasEigenvalue_of_hasEigenvector key)
+  simpa [re_μ] using key
 
 中文:
 定理 hasEigenvector_eigenvectorBasis_helper
@@ -633,7 +661,17 @@ theorem hasEigenvector_eigenvectorBasis_helper
   simp_rw [unsortedEigenvalues]
   change HasEigenvector T (RCLike.re μ) v
   have key : HasEigenvector T μ v := by
-    have
+    have H₁ : v in eigenspace T μ := by
+      simp_rw [v, unsortedEigenvectorBasis]
+      exact
+        hT.direct_sum_isInternal.subordinateOrthonormalBasis_subordinate hn i
+          hT.orthogonalFamily_eigenspaces'
+    have H₂ : v != 0 := by simpa using (hT.unsortedEigenvectorBasis hn).toBasis.ne_zero i
+    exact ⟨H₁, H₂⟩
+  have re_μ : ↑(RCLike.re μ) = μ := by
+    rw [← RCLike.conj_eq_iff_re]
+    exact hT.conj_eigenvalue_eq_self (hasEigenvalue_of_hasEigenvector key)
+  simpa [re_μ] using key
 -/
 private theorem hasEigenvector_eigenvectorBasis_helper (hT : T.IsSymmetric)
     (hn : Module.finrank 𝕜 E = n) (i : Fin n) :
@@ -842,7 +880,13 @@ theorem eigenvectorBasis_apply_self_apply
       T ((hT.eigenvectorBasis hn).repr.symm w) =
         (hT.eigenvectorBasis hn).repr.symm (toLp 2 fun i => hT.eigenvalues hn i * w i) by
     simpa [OrthonormalBasis.sum_repr_symm] using
-      congr_arg (fun v => (hT.eigenvectorBasis hn).repr v
+      congr_arg (fun v => (hT.eigenvectorBasis hn).repr v i)
+        (this ((hT.eigenvectorBasis hn).repr v))
+  intro w
+  simp_rw [← OrthonormalBasis.sum_repr_symm, map_sum, map_smul, apply_eigenvectorBasis]
+  apply Fintype.sum_congr
+  intro a
+  rw [smul_smul]; rw [mul_comm]; rw [ofLp_toLp]
 
 中文:
 定理 eigenvectorBasis_apply_self_apply
@@ -853,7 +897,13 @@ theorem eigenvectorBasis_apply_self_apply
       T ((hT.eigenvectorBasis hn).repr.symm w) =
         (hT.eigenvectorBasis hn).repr.symm (toLp 2 fun i => hT.eigenvalues hn i * w i) by
     simpa [OrthonormalBasis.sum_repr_symm] using
-      congr_arg (fun v => (hT.eigenvectorBasis hn).repr v
+      congr_arg (fun v => (hT.eigenvectorBasis hn).repr v i)
+        (this ((hT.eigenvectorBasis hn).repr v))
+  intro w
+  simp_rw [← OrthonormalBasis.sum_repr_symm, map_sum, map_smul, apply_eigenvectorBasis]
+  apply Fintype.sum_congr
+  intro a
+  rw [smul_smul]; rw [mul_comm]; rw [ofLp_toLp]
 
 Depends on / 依赖: EuclideanSpace, Fintype, Fintype.sum_congr, OrthonormalBasis, OrthonormalBasis.sum_repr_symm, apply_eigenvectorBasis, congr_arg, eigenvalues, eigenvectorBasis, hT.eigenvalues, hT.eigenvectorBasis, map_smul, map_sum, mul_comm, ofLp_toLp, repr.symm, simp_rw, smul_smul, sum_congr, sum_repr_symm
 -/
@@ -968,7 +1018,7 @@ theorem sort_roots_charpoly_eq_eigenvalues
   have := hn.symm
   convert! List.mergeSort_of_pairwise ?_
   simp_rw [decide_eq_true_eq, ← List.sortedGE_iff_pairwise]
-  convert! (hT.eigenva
+  convert! (hT.eigenvalues_antitone hn).sortedGE_ofFn
 
 中文:
 定理 sort_roots_charpoly_eq_eigenvalues
@@ -979,7 +1029,7 @@ theorem sort_roots_charpoly_eq_eigenvalues
   have := hn.symm
   convert! List.mergeSort_of_pairwise ?_
   simp_rw [decide_eq_true_eq, ← List.sortedGE_iff_pairwise]
-  convert! (hT.eigenva
+  convert! (hT.eigenvalues_antitone hn).sortedGE_ofFn
 
 Depends on / 依赖: Fin.univ_val_map, Function, Function.comp_def, List.map_ofFn, List.mergeSort_of_pairwise, List.sortedGE_iff_pairwise, Multiset, Multiset.coe_sort, Multiset.map_coe, RCLike, RCLike.ofReal_re, coe_sort, comp_def, convert, decide_eq_true_eq, eigenvalues_antitone, hT.eigenvalues_antitone, hT.roots_charpoly_eq_eigenvalues, hn.symm, map_coe
 -/
@@ -1109,7 +1159,8 @@ theorem eigenvalue_nonneg_of_nonneg
   have hpos : (0 : Real) < ‖v‖ ^ 2 := by simpa only [sq_pos_iff, norm_ne_zero_iff] using hv₂
   simp only [mem_genEigenspace_one] at hv₁
   have : RCLike.re ⟪v, T v⟫ = μ * ‖v‖ ^ 2 :=
-    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector
+    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector hv₁)
+  exact (mul_nonneg_iff_of_pos_right hpos).mp (this ▸ hnn v)
 
 中文:
 定理 eigenvalue_nonneg_of_nonneg
@@ -1119,7 +1170,8 @@ theorem eigenvalue_nonneg_of_nonneg
   have hpos : (0 : Real) < ‖v‖ ^ 2 := by simpa only [sq_pos_iff, norm_ne_zero_iff] using hv₂
   simp only [mem_genEigenspace_one] at hv₁
   have : RCLike.re ⟪v, T v⟫ = μ * ‖v‖ ^ 2 :=
-    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector
+    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector hv₁)
+  exact (mul_nonneg_iff_of_pos_right hpos).mp (this ▸ hnn v)
 
 Depends on / 依赖: RCLike, RCLike.re, congr_arg, exists_hasEigenvector, inner_product_apply_eigenvector, mem_genEigenspace_one, mod_cast, mul_nonneg_iff_of_pos_right, norm_ne_zero_iff, sq_pos_iff
 -/
@@ -1143,7 +1195,8 @@ theorem eigenvalue_pos_of_pos
   have hpos : (0 : Real) < ‖v‖ ^ 2 := by simpa only [sq_pos_iff, norm_ne_zero_iff] using hv₂
   simp only [mem_genEigenspace_one] at hv₁
   have : RCLike.re ⟪v, T v⟫ = μ * ‖v‖ ^ 2 :=
-    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector
+    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector hv₁)
+  exact (mul_pos_iff_of_pos_right hpos).mp (this ▸ hnn v)
 
 中文:
 定理 eigenvalue_pos_of_pos
@@ -1153,7 +1206,8 @@ theorem eigenvalue_pos_of_pos
   have hpos : (0 : Real) < ‖v‖ ^ 2 := by simpa only [sq_pos_iff, norm_ne_zero_iff] using hv₂
   simp only [mem_genEigenspace_one] at hv₁
   have : RCLike.re ⟪v, T v⟫ = μ * ‖v‖ ^ 2 :=
-    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector
+    mod_cast congr_arg RCLike.re (inner_product_apply_eigenvector hv₁)
+  exact (mul_pos_iff_of_pos_right hpos).mp (this ▸ hnn v)
 
 Depends on / 依赖: RCLike, RCLike.re, congr_arg, exists_hasEigenvector, inner_product_apply_eigenvector, mem_genEigenspace_one, mod_cast, mul_pos_iff_of_pos_right, norm_ne_zero_iff, sq_pos_iff
 -/
@@ -1212,7 +1266,16 @@ theorem orthogonalComplement_iSup_eigenspaces_eq_bot
     T.restrict hT'.orthogonalComplement_iSup_eigenspaces_invariant
   have hS_compact : IsCompactOperator S :=
     hT.restrict' hT'.orthogonalComplement_iSup_eigenspaces_invariant
-  have hS_symm : S.I
+  have hS_symm : S.IsSymmetric :=
+    hT'.restrict_invariant (hT'.orthogonalComplement_iSup_eigenspaces_invariant)
+  have hS μ : eigenspace (S : Module.End 𝕜 (⨆ μ, eigenspace T μ : Submodule 𝕜 E)ᗮ) μ = ⊥ :=
+    hT'.orthogonalComplement_iSup_eigenspaces _
+  have h μ : HasEigenvalue (S : End 𝕜 (⨆ μ, eigenspace T μ : Submodule 𝕜 E)ᗮ) μ -> μ = 0 := by
+    simp_all [hasEigenvalue_iff]
+  rw [eq_zero_of_forall_hasEigenvalue_eq_zero hS_compact hS_symm] at h
+  rw [← Submodule.subsingleton_iff_eq_bot]
+  by_contra! hV
+  simpa [h] using hS 0
 
 中文:
 定理 orthogonalComplement_iSup_eigenspaces_eq_bot
@@ -1221,7 +1284,16 @@ theorem orthogonalComplement_iSup_eigenspaces_eq_bot
     T.restrict hT'.orthogonalComplement_iSup_eigenspaces_invariant
   have hS_compact : IsCompactOperator S :=
     hT.restrict' hT'.orthogonalComplement_iSup_eigenspaces_invariant
-  have hS_symm : S.I
+  have hS_symm : S.IsSymmetric :=
+    hT'.restrict_invariant (hT'.orthogonalComplement_iSup_eigenspaces_invariant)
+  have hS μ : eigenspace (S : Module.End 𝕜 (⨆ μ, eigenspace T μ : Submodule 𝕜 E)ᗮ) μ = ⊥ :=
+    hT'.orthogonalComplement_iSup_eigenspaces _
+  have h μ : HasEigenvalue (S : End 𝕜 (⨆ μ, eigenspace T μ : Submodule 𝕜 E)ᗮ) μ -> μ = 0 := by
+    simp_all [hasEigenvalue_iff]
+  rw [eq_zero_of_forall_hasEigenvalue_eq_zero hS_compact hS_symm] at h
+  rw [← Submodule.subsingleton_iff_eq_bot]
+  by_contra! hV
+  simpa [h] using hS 0
 
 Depends on / 依赖: IsCompactOperator, IsSymmetric, Module, Module.End, S.IsSymmetric, Submodule, T.restrict, eigenspace, hS_compact, hS_symm, hT.restrict, orthogonalComplement_iSup_eig, orthogonalComplement_iSup_eigenspaces_invariant, restrict, restrict_invariant
 -/

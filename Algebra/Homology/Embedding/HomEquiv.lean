@@ -142,7 +142,21 @@ lemma comm
       · obtain ⟨j, hj⟩ := hj'
         rw [f_eq φ hj]; rw [L.extend_d_eq e hi hj]
         subst hi hj
-        simp [HomologicalComplex.r
+        simp [HomologicalComplex.restrictionXIso]
+      · apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
+    · have : (L.extend e).d i' j' = 0 := by
+        apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_src
+      rw [this]; rw [comp_zero]
+      by_cases hj' : exists j, e.f j = j'
+      · obtain ⟨j, rfl⟩ := hj'
+        rw [f_eq φ rfl]
+        dsimp [restrictionXIso]
+        rw [id_comp]; rw [reassoc_of% (hφ j (e.boundaryGE hij'
+          (by simpa using hi')) i' hij')]; rw [zero_comp]
+      · have : f φ j' = 0 := by
+          apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
+        rw [this]; rw [comp_zero]
+  · simp [HomologicalComplex.shape _ _ _ hij']
 
 中文:
 引理 comm
@@ -156,7 +170,21 @@ lemma comm
       · obtain ⟨j, hj⟩ := hj'
         rw [f_eq φ hj]; rw [L.extend_d_eq e hi hj]
         subst hi hj
-        simp [HomologicalComplex.r
+        simp [HomologicalComplex.restrictionXIso]
+      · apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
+    · have : (L.extend e).d i' j' = 0 := by
+        apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_src
+      rw [this]; rw [comp_zero]
+      by_cases hj' : exists j, e.f j = j'
+      · obtain ⟨j, rfl⟩ := hj'
+        rw [f_eq φ rfl]
+        dsimp [restrictionXIso]
+        rw [id_comp]; rw [reassoc_of% (hφ j (e.boundaryGE hij'
+          (by simpa using hi')) i' hij')]; rw [zero_comp]
+      · have : f φ j' = 0 := by
+          apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
+        rw [this]; rw [comp_zero]
+  · simp [HomologicalComplex.shape _ _ _ hij']
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.restrictionXIso, L.extend, L.extend_d_eq, L.isZero_extend_X, comp_zero, eq_of_src, eq_of_tgt, extend, extend_d_eq, f_eq, isZero_extend_X, restrictionXIso
 -/
@@ -443,7 +471,9 @@ lemma homRestrict_hasLift
   have : (L.extend e).d i' (e.f j) = 0 := by
     apply (L.isZero_extend_X e i' (hj.notMem hij')).eq_of_src
   dsimp [homRestrict]
-  rw [homRestrict.f_eq ψ rfl]; rw [restrictionXIso]; rw [eqToIso_refl]; rw [Iso.refl_hom]; rw [id_comp]; rw [← ψ.comm_assoc]; rw [this]; rw [zero_c
+  rw [homRestrict.f_eq ψ rfl]; rw [restrictionXIso]; rw [eqToIso_refl]; rw [Iso.refl_hom]; rw [id_comp]; rw [← ψ.comm_assoc]; rw [this]; rw [zero_comp]; rw [comp_zero]
+
+@[simp]
 
 中文:
 引理 homRestrict_hasLift
@@ -453,7 +483,9 @@ lemma homRestrict_hasLift
   have : (L.extend e).d i' (e.f j) = 0 := by
     apply (L.isZero_extend_X e i' (hj.notMem hij')).eq_of_src
   dsimp [homRestrict]
-  rw [homRestrict.f_eq ψ rfl]; rw [restrictionXIso]; rw [eqToIso_refl]; rw [Iso.refl_hom]; rw [id_comp]; rw [← ψ.comm_assoc]; rw [this]; rw [zero_c
+  rw [homRestrict.f_eq ψ rfl]; rw [restrictionXIso]; rw [eqToIso_refl]; rw [Iso.refl_hom]; rw [id_comp]; rw [← ψ.comm_assoc]; rw [this]; rw [zero_comp]; rw [comp_zero]
+
+@[simp]
 
 Depends on / 依赖: Iso.refl_hom, L.extend, L.isZero_extend_X, comm_assoc, comp_zero, eqToIso_refl, eq_of_src, extend, f_eq, hj.notMem, homRestrict, homRestrict.f_eq, id_comp, isZero_extend_X, notMem, refl_hom, restrictionXIso, zero_comp
 -/

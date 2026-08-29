@@ -48,7 +48,15 @@ lemma iIndepFun.map_fun_eq_infinitePi_map₀
   refine eq_infinitePi _ fun s t ht => ?_
   rw [iIndepFun_iff_finset] at h
   have : (s : Set ι).pi t = s.restrict ⁻¹' (Set.univ.pi fun i => t i) := by ext; simp
-  rw [this]; rw [← map_apply]; rw [AEMeasurable.map_
+  rw [this]; rw [← map_apply]; rw [AEMeasurable.map_map_of_aemeasurable]
+  · have : s.restrict ∘ (fun ω i => X i ω) = fun ω i => s.restrict X i ω := by ext; simp
+    rw [this]; rw [(h s).map_fun_eq_pi_map]; rw [pi_pi]
+    · simp only [Finset.restrict]
+      rw [s.prod_coe_sort fun i => P.map (X i) (t i)]
+    exact fun i => mX.eval i
+  any_goals fun_prop
+  · exact mX
+  · exact .univ_pi fun i => ht i
 
 中文:
 引理 iIndepFun.map_fun_eq_infinitePi_map₀
@@ -59,7 +67,15 @@ lemma iIndepFun.map_fun_eq_infinitePi_map₀
   refine eq_infinitePi _ fun s t ht => ?_
   rw [iIndepFun_iff_finset] at h
   have : (s : Set ι).pi t = s.restrict ⁻¹' (Set.univ.pi fun i => t i) := by ext; simp
-  rw [this]; rw [← map_apply]; rw [AEMeasurable.map_
+  rw [this]; rw [← map_apply]; rw [AEMeasurable.map_map_of_aemeasurable]
+  · have : s.restrict ∘ (fun ω i => X i ω) = fun ω i => s.restrict X i ω := by ext; simp
+    rw [this]; rw [(h s).map_fun_eq_pi_map]; rw [pi_pi]
+    · simp only [Finset.restrict]
+      rw [s.prod_coe_sort fun i => P.map (X i) (t i)]
+    exact fun i => mX.eval i
+  any_goals fun_prop
+  · exact mX
+  · exact .univ_pi fun i => ht i
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, Finset, Finset.restrict, Set.univ.pi, eq_infinitePi, h.isProbabilityMeasure, iIndepFun_iff_finset, isProbabilityMeasure, isProbabilityMeasure_map, mX.eval, map_apply, map_fun_eq_pi_map, map_map_of_aemeasurable, pi_pi, prod_coe_sort, restrict, s.prod_coe_sort, s.restrict
 -/
@@ -94,7 +110,11 @@ lemma iIndepFun_iff_map_fun_eq_infinitePi_map₀
     intro s
     rw [iIndepFun_iff_map_fun_eq_pi_map]
     · have : s.restrict ∘ (fun ω i => X i ω) = fun ω i => s.restrict X i ω := by ext; simp
-      rw [← this]; rw [← AE
+      rw [← this]; rw [← AEMeasurable.map_map_of_aemeasurable]; rw [h]; rw [infinitePi_map_restrict]
+      · simp
+      · fun_prop
+      exact mX
+    exact fun i => mX.eval i
 
 中文:
 引理 iIndepFun_iff_map_fun_eq_infinitePi_map₀
@@ -106,7 +126,11 @@ lemma iIndepFun_iff_map_fun_eq_infinitePi_map₀
     intro s
     rw [iIndepFun_iff_map_fun_eq_pi_map]
     · have : s.restrict ∘ (fun ω i => X i ω) = fun ω i => s.restrict X i ω := by ext; simp
-      rw [← this]; rw [← AE
+      rw [← this]; rw [← AEMeasurable.map_map_of_aemeasurable]; rw [h]; rw [infinitePi_map_restrict]
+      · simp
+      · fun_prop
+      exact mX
+    exact fun i => mX.eval i
 
 Depends on / 依赖: h.map_fun_eq_infinitePi_map
 -/
@@ -371,7 +395,12 @@ lemma iIndepFun_uncurry
   have : forall i j, IsProbabilityMeasure (P.map (X i j)) :=
     fun i j => isProbabilityMeasure_map (mX i j).aemeasurable
   have : forall i, IsProbabilityMeasure (P.map (fun ω => (X i · ω))) :=
-    fun i => isProbabilityMeasure_map (Measurable.aemeasurable (by f
+    fun i => isProbabilityMeasure_map (Measurable.aemeasurable (by fun_prop))
+  have : (MeasurableEquiv.piCurry 𝓧) ∘ (fun ω p => X p.1 p.2 ω) = fun ω i j => X i j ω := by
+    ext; simp [Sigma.curry]
+  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [← (MeasurableEquiv.piCurry 𝓧).map_measurableEquiv_injective.eq_iff]; rw [map_map (by fun_prop) (by fun_prop)]; rw [this]; rw [(iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)).1 h1]; rw [infinitePi_map_piCurry (fun i j => P.map (X i j))]
+  congrm infinitePi fun i => ?_
+  rw [(iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)).1 (h2 i)]
 
 中文:
 引理 iIndepFun_uncurry
@@ -381,7 +410,12 @@ lemma iIndepFun_uncurry
   have : forall i j, IsProbabilityMeasure (P.map (X i j)) :=
     fun i j => isProbabilityMeasure_map (mX i j).aemeasurable
   have : forall i, IsProbabilityMeasure (P.map (fun ω => (X i · ω))) :=
-    fun i => isProbabilityMeasure_map (Measurable.aemeasurable (by f
+    fun i => isProbabilityMeasure_map (Measurable.aemeasurable (by fun_prop))
+  have : (MeasurableEquiv.piCurry 𝓧) ∘ (fun ω p => X p.1 p.2 ω) = fun ω i j => X i j ω := by
+    ext; simp [Sigma.curry]
+  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [← (MeasurableEquiv.piCurry 𝓧).map_measurableEquiv_injective.eq_iff]; rw [map_map (by fun_prop) (by fun_prop)]; rw [this]; rw [(iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)).1 h1]; rw [infinitePi_map_piCurry (fun i j => P.map (X i j))]
+  congrm infinitePi fun i => ?_
+  rw [(iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)).1 (h2 i)]
 
 Depends on / 依赖: IsProbabilityMeasure, Measurable, Measurable.aemeasurable, MeasurableEquiv, MeasurableEquiv.piCurr, MeasurableEquiv.piCurry, P.map, Sigma.curry, aemeasurable, fun_prop, h1.isProbabilityMeasure, iIndepFun_iff_map_fun_eq_infinitePi_map, isProbabilityMeasure, isProbabilityMeasure_map, piCurr, piCurry
 -/
@@ -410,7 +444,21 @@ lemma iIndepFun_uncurry_infinitePi
     (X := fun i j ω => X i j (ω i j)) (by fun_prop) ?_ fun i => ?_
   · exact iIndepFun_infinitePi (P := fun i => infinitePi (μ i))
       (X := fun i u j => X i j (u j)) (by fun_prop)
-  rw [iIndepFun_iff_map_fun_eq_infinitePi
+  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]
+  change map ((fun f => f i) ∘ (fun ω i j => X i j (ω i j)))
+    (infinitePi fun i => infinitePi (μ i)) = _
+  rw [← map_map (by fun_prop) (by fun_prop)]; rw [infinitePi_map_pi (X := fun i => (j : κ i) -> Ω i j) (μ := fun i => infinitePi (μ i))
+      (f := fun i f j => X i j (f j))]; rw [@infinitePi_map_eval ..]; rw [infinitePi_map_pi]
+  · congrm infinitePi fun j => ?_
+    change _ = map (((fun f => f j) ∘ (fun f => f i)) ∘ (fun ω i j => X i j (ω i j)))
+      (infinitePi fun i => infinitePi (μ i))
+    rw [← map_map (by fun_prop) (by fun_prop)]; rw [infinitePi_map_pi (X := fun i => (j : κ i) -> Ω i j)
+        (μ := fun i => infinitePi (μ i)) (f := fun i f j => X i j (f j))]; rw [← map_map (by fun_prop) (by fun_prop)]; rw [@infinitePi_map_eval ..]; rw [infinitePi_map_pi]; rw [@infinitePi_map_eval ..]
+    any_goals fun_prop
+    · exact fun _ => isProbabilityMeasure_map (by fun_prop)
+    · exact fun _ => isProbabilityMeasure_map (Measurable.aemeasurable (by fun_prop))
+  any_goals fun_prop
+  exact fun _ => isProbabilityMeasure_map (Measurable.aemeasurable (by fun_prop))
 
 中文:
 引理 iIndepFun_uncurry_infinitePi
@@ -420,7 +468,21 @@ lemma iIndepFun_uncurry_infinitePi
     (X := fun i j ω => X i j (ω i j)) (by fun_prop) ?_ fun i => ?_
   · exact iIndepFun_infinitePi (P := fun i => infinitePi (μ i))
       (X := fun i u j => X i j (u j)) (by fun_prop)
-  rw [iIndepFun_iff_map_fun_eq_infinitePi
+  rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]
+  change map ((fun f => f i) ∘ (fun ω i j => X i j (ω i j)))
+    (infinitePi fun i => infinitePi (μ i)) = _
+  rw [← map_map (by fun_prop) (by fun_prop)]; rw [infinitePi_map_pi (X := fun i => (j : κ i) -> Ω i j) (μ := fun i => infinitePi (μ i))
+      (f := fun i f j => X i j (f j))]; rw [@infinitePi_map_eval ..]; rw [infinitePi_map_pi]
+  · congrm infinitePi fun j => ?_
+    change _ = map (((fun f => f j) ∘ (fun f => f i)) ∘ (fun ω i j => X i j (ω i j)))
+      (infinitePi fun i => infinitePi (μ i))
+    rw [← map_map (by fun_prop) (by fun_prop)]; rw [infinitePi_map_pi (X := fun i => (j : κ i) -> Ω i j)
+        (μ := fun i => infinitePi (μ i)) (f := fun i f j => X i j (f j))]; rw [← map_map (by fun_prop) (by fun_prop)]; rw [@infinitePi_map_eval ..]; rw [infinitePi_map_pi]; rw [@infinitePi_map_eval ..]
+    any_goals fun_prop
+    · exact fun _ => isProbabilityMeasure_map (by fun_prop)
+    · exact fun _ => isProbabilityMeasure_map (Measurable.aemeasurable (by fun_prop))
+  any_goals fun_prop
+  exact fun _ => isProbabilityMeasure_map (Measurable.aemeasurable (by fun_prop))
 
 Depends on / 依赖: fun_prop, iIndepFun_iff_map_fun_eq_infinitePi_map, iIndepFun_infinitePi, iIndepFun_uncurry, infinitePi, infinitePi_map_pi, map_map
 -/

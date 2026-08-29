@@ -220,7 +220,10 @@ definition isColimitCocone
     exact ConcreteCategory.congr_hom s.condition t))) (fun _ => rfl) (fun _ => rfl)
       (fun s m h₁ h₂ => by
       ext ⟨x₁ | x₂⟩
-      · e
+      · exact ConcreteCategory.congr_hom h₁ x₁
+      · exact ConcreteCategory.congr_hom h₂ x₂)
+
+@[simp]
 
 中文:
 定义 isColimitCocone
@@ -232,7 +235,10 @@ definition isColimitCocone
     exact ConcreteCategory.congr_hom s.condition t))) (fun _ => rfl) (fun _ => rfl)
       (fun s m h₁ h₂ => by
       ext ⟨x₁ | x₂⟩
-      · e
+      · exact ConcreteCategory.congr_hom h₁ x₁
+      · exact ConcreteCategory.congr_hom h₂ x₂)
+
+@[simp]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, IsColimit, PushoutCocone, PushoutCocone.IsColimit.mk, Quot.lift, Sum.inl, Sum.inr, condition, congr_hom, s.condition, s.inl, s.inr
 -/
@@ -414,7 +420,32 @@ lemma equivalence_rel'
       · rw [inl_rel'_inl_iff] at hyz
         obtain rfl | ⟨_, _, h', h'', rfl⟩ := hyz
         · exact Rel'.inl_inl _ _ h
-        · obtain rfl := (mono_iff_injective f).1 
+        · obtain rfl := (mono_iff_injective f).1 inferInstance h''
+          exact Rel'.inl_inl _ _ (h.trans h')
+      · rw [inl_rel'_inr_iff] at hyz
+        obtain ⟨s, hs, rfl⟩ := hyz
+        obtain rfl := (mono_iff_injective f).1 inferInstance hs
+        rw [← h]
+        apply Rel'.inl_inr
+    · obtain z₁ | z₂ := z
+      · replace hyz := hyz.symm
+        rw [inl_rel'_inr_iff] at hyz
+        obtain ⟨s', rfl, hs'⟩ := hyz
+        exact Rel'.inl_inl _ _ hs'
+      · rw [inr_rel'_inr_iff] at hyz
+        subst hyz
+        apply Rel'.inl_inr
+    · obtain z₁ | z₂ := z
+      · rw [inl_rel'_inl_iff] at hyz
+        obtain rfl | ⟨_, _, h, h', rfl⟩ := hyz
+        · apply Rel'.inr_inl
+        · obtain rfl := (mono_iff_injective f).1 inferInstance h'
+          rw [h]
+          apply Rel'.inr_inl
+      · rw [inl_rel'_inr_iff] at hyz
+        obtain ⟨s, hs, rfl⟩ := hyz
+        obtain rfl := (mono_iff_injective f).1 inferInstance hs
+        apply Rel'.refl
 
 中文:
 引理 equivalence_rel'
@@ -429,7 +460,32 @@ lemma equivalence_rel'
       · rw [inl_rel'_inl_iff] at hyz
         obtain rfl | ⟨_, _, h', h'', rfl⟩ := hyz
         · exact Rel'.inl_inl _ _ h
-        · obtain rfl := (mono_iff_injective f).1 
+        · obtain rfl := (mono_iff_injective f).1 inferInstance h''
+          exact Rel'.inl_inl _ _ (h.trans h')
+      · rw [inl_rel'_inr_iff] at hyz
+        obtain ⟨s, hs, rfl⟩ := hyz
+        obtain rfl := (mono_iff_injective f).1 inferInstance hs
+        rw [← h]
+        apply Rel'.inl_inr
+    · obtain z₁ | z₂ := z
+      · replace hyz := hyz.symm
+        rw [inl_rel'_inr_iff] at hyz
+        obtain ⟨s', rfl, hs'⟩ := hyz
+        exact Rel'.inl_inl _ _ hs'
+      · rw [inr_rel'_inr_iff] at hyz
+        subst hyz
+        apply Rel'.inl_inr
+    · obtain z₁ | z₂ := z
+      · rw [inl_rel'_inl_iff] at hyz
+        obtain rfl | ⟨_, _, h, h', rfl⟩ := hyz
+        · apply Rel'.inr_inl
+        · obtain rfl := (mono_iff_injective f).1 inferInstance h'
+          rw [h]
+          apply Rel'.inr_inl
+      · rw [inl_rel'_inr_iff] at hyz
+        obtain ⟨s, hs, rfl⟩ := hyz
+        obtain rfl := (mono_iff_injective f).1 inferInstance hs
+        apply Rel'.refl
 -/
 lemma equivalence_rel' [Mono f] : _root_.Equivalence (Rel' f g) where
   refl := Rel'.refl
@@ -485,7 +541,14 @@ definition equivPushout'
       rw [Quot.sound h₀]; rw [h]
       symm
       apply Quot.sound
-      app
+      apply Rel.inl_inr
+    · apply Quot.sound
+      apply Rel.inl_inr
+    · symm
+      apply Quot.sound
+      apply Rel.inl_inr)
+  left_inv := by rintro ⟨x⟩; rfl
+  right_inv := by rintro ⟨x⟩; rfl
 
 中文:
 定义 equivPushout'
@@ -501,7 +564,14 @@ definition equivPushout'
       rw [Quot.sound h₀]; rw [h]
       symm
       apply Quot.sound
-      app
+      apply Rel.inl_inr
+    · apply Quot.sound
+      apply Rel.inl_inr
+    · symm
+      apply Quot.sound
+      apply Rel.inl_inr)
+  left_inv := by rintro ⟨x⟩; rfl
+  right_inv := by rintro ⟨x⟩; rfl
 
 Depends on / 依赖: Quot.lift, Quot.mk, Quot.sound, Rel.inl_inr, inl_inr, invFun, left_inv, right_inv
 -/
@@ -946,7 +1016,19 @@ lemma mono_of_isPushout_of_isPullback
       ((ConcreteCategory.congr_hom h₂.w x₁).trans (Eq.trans (by simp [h])
       (ConcreteCategory.congr_hom h₂.w.symm y₁)))) h
   rw [mono_iff_injective] at hr' ⊢
-  have w := Co
+  have w := ConcreteCategory.congr_hom h₁.w
+  simp only [comp_apply] at w
+  intro x₃ y₃ eq
+  obtain (⟨x₂, rfl⟩ | ⟨x₃, rfl, hx₃⟩) := eq_or_eq_of_isPushout' h₁ x₃ <;>
+  obtain (⟨y₂, rfl⟩ | ⟨y₃, rfl, hy₃⟩) := eq_or_eq_of_isPushout' h₁ y₃
+  · obtain rfl : x₂ = y₂ := hr' eq
+    rfl
+  · obtain ⟨x₁, rfl, rfl⟩ := exists_of_isPullback h₂ x₂ y₃ eq
+    rw [w]
+  · obtain ⟨x₁, rfl, rfl⟩ := exists_of_isPullback h₂ y₂ x₃ eq.symm
+    rw [w]
+  · obtain rfl := H x₃ y₃ hx₃ hy₃ eq
+    rfl
 
 中文:
 引理 mono_of_isPushout_of_isPullback
@@ -958,7 +1040,19 @@ lemma mono_of_isPushout_of_isPullback
       ((ConcreteCategory.congr_hom h₂.w x₁).trans (Eq.trans (by simp [h])
       (ConcreteCategory.congr_hom h₂.w.symm y₁)))) h
   rw [mono_iff_injective] at hr' ⊢
-  have w := Co
+  have w := ConcreteCategory.congr_hom h₁.w
+  simp only [comp_apply] at w
+  intro x₃ y₃ eq
+  obtain (⟨x₂, rfl⟩ | ⟨x₃, rfl, hx₃⟩) := eq_or_eq_of_isPushout' h₁ x₃ <;>
+  obtain (⟨y₂, rfl⟩ | ⟨y₃, rfl, hy₃⟩) := eq_or_eq_of_isPushout' h₁ y₃
+  · obtain rfl : x₂ = y₂ := hr' eq
+    rfl
+  · obtain ⟨x₁, rfl, rfl⟩ := exists_of_isPullback h₂ x₂ y₃ eq
+    rw [w]
+  · obtain ⟨x₁, rfl, rfl⟩ := exists_of_isPullback h₂ y₂ x₃ eq.symm
+    rw [w]
+  · obtain rfl := H x₃ y₃ hx₃ hy₃ eq
+    rfl
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Eq.trans, Function, Function.Injective, Injective, comp_apply, congr_hom, eq_or_eq_of_isPushout, ext_of_isPullback, mono_iff_injective, w.symm
 -/
@@ -1000,7 +1094,16 @@ lemma isPushout_of_isPullback_of_mono
   have := mono_of_isPushout_of_isPullback (IsPushout.of_hasPushout t l) h₁
     (k := φ ≫ k) (by cat_disch) (by cat_disch) H
   have : IsIso φ := by
-    rw [isIso_iff_bijecti
+    rw [isIso_iff_bijective]
+    refine ⟨(mono_iff_injective _).1 (mono_of_mono φ k), fun x₄ => ?_⟩
+    have hx₄ := Set.mem_univ x₄
+    simp only [← h₂, Set.sup_eq_union, Set.mem_union, Set.mem_range] at hx₄
+    obtain (⟨x₂, rfl⟩ | ⟨x₃, rfl⟩) := hx₄
+    · exact ⟨_, ConcreteCategory.congr_hom hφ₁ x₂⟩
+    · exact ⟨_, ConcreteCategory.congr_hom hφ₂ x₃⟩
+  exact IsPushout.of_iso (IsPushout.of_hasPushout t l)
+    (Iso.refl _) (Iso.refl _) (Iso.refl _) (asIso φ) (by simp) (by simp)
+    (by simpa) (by simpa)
 
 中文:
 引理 isPushout_of_isPullback_of_mono
@@ -1011,7 +1114,16 @@ lemma isPushout_of_isPullback_of_mono
   have := mono_of_isPushout_of_isPullback (IsPushout.of_hasPushout t l) h₁
     (k := φ ≫ k) (by cat_disch) (by cat_disch) H
   have : IsIso φ := by
-    rw [isIso_iff_bijecti
+    rw [isIso_iff_bijective]
+    refine ⟨(mono_iff_injective _).1 (mono_of_mono φ k), fun x₄ => ?_⟩
+    have hx₄ := Set.mem_univ x₄
+    simp only [← h₂, Set.sup_eq_union, Set.mem_union, Set.mem_range] at hx₄
+    obtain (⟨x₂, rfl⟩ | ⟨x₃, rfl⟩) := hx₄
+    · exact ⟨_, ConcreteCategory.congr_hom hφ₁ x₂⟩
+    · exact ⟨_, ConcreteCategory.congr_hom hφ₂ x₃⟩
+  exact IsPushout.of_iso (IsPushout.of_hasPushout t l)
+    (Iso.refl _) (Iso.refl _) (Iso.refl _) (asIso φ) (by simp) (by simp)
+    (by simpa) (by simpa)
 
 Depends on / 依赖: Category, Category.assoc, Injective, Injective.hasLiftingProperty_of_isZero, IsPushout, IsPushout.of_hasPushout, Set.mem_range, Set.mem_union, Set.mem_univ, Set.sup_eq_union, cancel_mono, cat_disch, exists_desc, hasLiftingProperty_of_isZero, isIso_iff_bijective, isZero_zero, mem_range, mem_union, mem_univ, mono_iff_injective
 -/

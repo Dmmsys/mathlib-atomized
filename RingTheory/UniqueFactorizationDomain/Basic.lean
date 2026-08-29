@@ -185,7 +185,21 @@ exact Multiset.rel_zero_left.2
       Multiset.eq_zero_of_forall_notMem fun x hx =>
         have : IsUnit g.prod := by simpa [associated_one_iff_isUnit] using h.symm
 (hg x hx).not_isUnit
-isUnit_iff_dvd_one.2 (
+isUnit_iff_dvd_one.2 (Multiset.dvd_prod hx).trans (isUnit_iff_dvd_one.1 this)
+  | cons p f ih =>
+    intro g hf hg hfg
+    let ⟨b, hbg, hb⟩ :=
+(exists_associated_mem_of_dvd_prod (hf p (by simp)) fun q hq => hg _ hq)
+        hfg.dvd_iff_dvd_right.1 (show p ∣ (p ::ₘ f).prod by simp)
+    have := Classical.decEq α
+    rw [← Multiset.cons_erase hbg]
+    exact
+      Multiset.Rel.cons hb
+        (ih (fun q hq => hf _ (by simp [hq]))
+          (fun {q} (hq : q in g.erase b) => hg q (Multiset.mem_of_mem_erase hq))
+          (Associated.of_mul_left
+            (by rwa [← Multiset.prod_cons, ← Multiset.prod_cons, Multiset.cons_erase hbg]) hb
+            (hf p (by simp)).ne_zero))
 
 中文:
 定理 prime_factors_unique
@@ -199,7 +213,21 @@ exact Multiset.rel_zero_left.2
       Multiset.eq_zero_of_forall_notMem fun x hx =>
         have : IsUnit g.prod := by simpa [associated_one_iff_isUnit] using h.symm
 (hg x hx).not_isUnit
-isUnit_iff_dvd_one.2 (
+isUnit_iff_dvd_one.2 (Multiset.dvd_prod hx).trans (isUnit_iff_dvd_one.1 this)
+  | cons p f ih =>
+    intro g hf hg hfg
+    let ⟨b, hbg, hb⟩ :=
+(exists_associated_mem_of_dvd_prod (hf p (by simp)) fun q hq => hg _ hq)
+        hfg.dvd_iff_dvd_right.1 (show p ∣ (p ::ₘ f).prod by simp)
+    have := Classical.decEq α
+    rw [← Multiset.cons_erase hbg]
+    exact
+      Multiset.Rel.cons hb
+        (ih (fun q hq => hf _ (by simp [hq]))
+          (fun {q} (hq : q in g.erase b) => hg q (Multiset.mem_of_mem_erase hq))
+          (Associated.of_mul_left
+            (by rwa [← Multiset.prod_cons, ← Multiset.prod_cons, Multiset.cons_erase hbg]) hb
+            (hf p (by simp)).ne_zero))
 
 Depends on / 依赖: IsUnit, Multiset, Multiset.dvd_prod, Multiset.eq_zero_of_forall_notMem, Multiset.induction_on, Multiset.rel_zero_left, associated_one_iff_isUnit, dvd_iff_dvd_right, dvd_prod, eq_zero_of_forall_notMem, exists_associated_mem_of_dvd_prod, g.prod, h.symm, hfg.dvd_iff_dvd_right, induction_on, isUnit_iff_dvd_one, not_isUnit, rel_zero_left
 -/
@@ -307,7 +335,18 @@ theorem prime_factors_irreducible
   · intro h; exact (ha.not_isUnit (associated_one_iff_isUnit.1 (Associated.symm h))).elim
   · rintro p s _ ⟨u, hu⟩ hs
     use p
-
+    have hs0 : s = 0 := by
+      by_contra hs0
+      obtain ⟨q, hq⟩ := Multiset.exists_mem_of_ne_zero hs0
+      apply (hs q (by simp [hq])).2.1
+      refine (ha.isUnit_or_isUnit (?_ : _ = p * ↑u * (s.erase q).prod * _)).resolve_left ?_
+      · rw [mul_right_comm _ _ q, mul_assoc, ← Multiset.prod_cons, Multiset.cons_erase hq, ← hu,
+          mul_comm, mul_comm p _, mul_assoc]
+        simp
+      apply mt isUnit_of_mul_isUnit_left (mt isUnit_of_mul_isUnit_left _)
+      apply (hs p (Multiset.mem_cons_self _ _)).2.1
+    simp only [mul_one, Multiset.prod_cons, Multiset.prod_zero, hs0] at *
+    exact ⟨Associated.symm ⟨u, hu⟩, rfl⟩
 
 中文:
 定理 prime_factors_irreducible
@@ -319,7 +358,18 @@ theorem prime_factors_irreducible
   · intro h; exact (ha.not_isUnit (associated_one_iff_isUnit.1 (Associated.symm h))).elim
   · rintro p s _ ⟨u, hu⟩ hs
     use p
-
+    have hs0 : s = 0 := by
+      by_contra hs0
+      obtain ⟨q, hq⟩ := Multiset.exists_mem_of_ne_zero hs0
+      apply (hs q (by simp [hq])).2.1
+      refine (ha.isUnit_or_isUnit (?_ : _ = p * ↑u * (s.erase q).prod * _)).resolve_left ?_
+      · rw [mul_right_comm _ _ q, mul_assoc, ← Multiset.prod_cons, Multiset.cons_erase hq, ← hu,
+          mul_comm, mul_comm p _, mul_assoc]
+        simp
+      apply mt isUnit_of_mul_isUnit_left (mt isUnit_of_mul_isUnit_left _)
+      apply (hs p (Multiset.mem_cons_self _ _)).2.1
+    simp only [mul_one, Multiset.prod_cons, Multiset.prod_zero, hs0] at *
+    exact ⟨Associated.symm ⟨u, hu⟩, rfl⟩
 
 Depends on / 依赖: Associated, Associated.symm, Classical, Classical.decEq, Multiset, Multiset.exists_mem_of_ne_zero, Multiset.induction_on, associated_one_iff_isUnit, exists_mem_of_ne_zero, g.prod, ha.isUnit_or_isUnit, ha.not_isUnit, induction_on, isUnit_or_isUnit, not_isUnit, resolve_left, s.erase
 -/
@@ -358,7 +408,28 @@ theorem irreducible_iff_prime_of_existsUnique_irreducible_factors
           simp [hb0]
       else by
         have hx0 : x != 0 := fun hx0 => by simp_all
-  
+        have ha0 : a != 0 := left_ne_zero_of_mul hab0
+        have hb0 : b != 0 := right_ne_zero_of_mul hab0
+        obtain ⟨fx, hfx⟩ := eif x hx0
+        obtain ⟨fa, hfa⟩ := eif a ha0
+        obtain ⟨fb, hfb⟩ := eif b hb0
+        have h : Multiset.Rel Associated (p ::ₘ fx) (fa + fb) := by
+          apply uif
+          · exact fun i hi => (Multiset.mem_cons.1 hi).elim (fun hip => hip.symm ▸ hpi) (hfx.1 _)
+          · exact fun i hi => (Multiset.mem_add.1 hi).elim (hfa.1 _) (hfb.1 _)
+          calc
+            Multiset.prod (p ::ₘ fx) ~ᵤ a * b := by
+              rw [hx]; rw [Multiset.prod_cons]; exact hfx.2.mul_left _
+            _ ~ᵤ fa.prod * fb.prod := hfa.2.symm.mul_mul hfb.2.symm
+            _ = _ := by rw [Multiset.prod_add]
+        exact
+          let ⟨q, hqf, hq⟩ := Multiset.exists_mem_of_rel_of_mem h (Multiset.mem_cons_self p _)
+          (Multiset.mem_add.1 hqf).elim
+            (fun hqa =>
+Or.inl hq.dvd_iff_dvd_left.2 hfa.2.dvd_iff_dvd_right.1 (Multiset.dvd_prod hqa))
+            fun hqb =>
+Or.inr hq.dvd_iff_dvd_left.2 hfb.2.dvd_iff_dvd_right.1 (Multiset.dvd_prod hqb)⟩,
+    Prime.irreducible⟩
 
 中文:
 定理 irreducible_iff_prime_of_存在Unique_irreducible_factors
@@ -371,7 +442,28 @@ theorem irreducible_iff_prime_of_existsUnique_irreducible_factors
           simp [hb0]
       else by
         have hx0 : x != 0 := fun hx0 => by simp_all
-  
+        have ha0 : a != 0 := left_ne_zero_of_mul hab0
+        have hb0 : b != 0 := right_ne_zero_of_mul hab0
+        obtain ⟨fx, hfx⟩ := eif x hx0
+        obtain ⟨fa, hfa⟩ := eif a ha0
+        obtain ⟨fb, hfb⟩ := eif b hb0
+        have h : Multiset.Rel Associated (p ::ₘ fx) (fa + fb) := by
+          apply uif
+          · exact fun i hi => (Multiset.mem_cons.1 hi).elim (fun hip => hip.symm ▸ hpi) (hfx.1 _)
+          · exact fun i hi => (Multiset.mem_add.1 hi).elim (hfa.1 _) (hfb.1 _)
+          calc
+            Multiset.prod (p ::ₘ fx) ~ᵤ a * b := by
+              rw [hx]; rw [Multiset.prod_cons]; exact hfx.2.mul_left _
+            _ ~ᵤ fa.prod * fb.prod := hfa.2.symm.mul_mul hfb.2.symm
+            _ = _ := by rw [Multiset.prod_add]
+        exact
+          let ⟨q, hqf, hq⟩ := Multiset.exists_mem_of_rel_of_mem h (Multiset.mem_cons_self p _)
+          (Multiset.mem_add.1 hqf).elim
+            (fun hqa =>
+Or.inl hq.dvd_iff_dvd_left.2 hfa.2.dvd_iff_dvd_right.1 (Multiset.dvd_prod hqa))
+            fun hqb =>
+Or.inr hq.dvd_iff_dvd_left.2 hfb.2.dvd_iff_dvd_right.1 (Multiset.dvd_prod hqb)⟩,
+    Prime.irreducible⟩
 
 Depends on / 依赖: Associated, Classical, Classical.decEq, Multiset, Multiset.Rel, eq_zero_or_eq_zero_of_mul_eq_zero, hpi.ne_zero, left_ne_zero_of_mul, ne_zero, right_ne_zero_of_mul
 -/
@@ -468,7 +560,11 @@ theorem exists_mem_factors_of_dvd
       irreducible_of_factor
       (Associated.symm <|
         calc
-      
+          prod (factors a) ~ᵤ a := factors_prod ha0
+          _ = p * b := hb
+          _ ~ᵤ prod (p ::ₘ factors b) := by
+            rw [prod_cons]; exact (factors_prod hb0).symm.mul_left _)
+  exists_mem_of_rel_of_mem this (by simp)
 
 中文:
 定理 存在_mem_factors_of_dvd
@@ -481,7 +577,11 @@ theorem exists_mem_factors_of_dvd
       irreducible_of_factor
       (Associated.symm <|
         calc
-      
+          prod (factors a) ~ᵤ a := factors_prod ha0
+          _ = p * b := hb
+          _ ~ᵤ prod (p ::ₘ factors b) := by
+            rw [prod_cons]; exact (factors_prod hb0).symm.mul_left _)
+  exists_mem_of_rel_of_mem this (by simp)
 -/
 theorem exists_mem_factors_of_dvd {a p : α} (ha0 : a != 0) (hp : Irreducible p) :
     p ∣ a -> exists q in factors a, p ~ᵤ q := fun ⟨b, hb⟩ =>
@@ -567,7 +667,7 @@ theorem factors_mul
         (mem_add.mp ha).by_cases (irreducible_of_factor _) (irreducible_of_factor _))
       ((factors_prod (mul_ne_zero hx hy)).trans ?_)
   rw [prod_add]
-  exact (Associated.mul_mul (factors_prod hx) (factors_prod hy
+  exact (Associated.mul_mul (factors_prod hx) (factors_prod hy)).symm
 
 中文:
 定理 factors_mul
@@ -580,7 +680,7 @@ theorem factors_mul
         (mem_add.mp ha).by_cases (irreducible_of_factor _) (irreducible_of_factor _))
       ((factors_prod (mul_ne_zero hx hy)).trans ?_)
   rw [prod_add]
-  exact (Associated.mul_mul (factors_prod hx) (factors_prod hy
+  exact (Associated.mul_mul (factors_prod hx) (factors_prod hy)).symm
 
 Depends on / 依赖: Associated, Associated.mul_mul, classical, factors_prod, factors_unique, irreducible_of_factor, mem_add, mem_add.mp, mul_mul, mul_ne_zero, prod_add
 -/
@@ -609,7 +709,8 @@ theorem factors_pow
     · simp [h0, zero_pow n.succ_ne_zero, nsmul_zero]
     · rw [pow_succ', succ_nsmul']
       refine Rel.trans _ (factors_mul h0 (pow_ne_zero n h0)) ?_
-refine Rel.add ?_ factors_pow 
+refine Rel.add ?_ factors_pow n
+      exact rel_refl_of_refl_on fun y _ => Associated.refl _
 
 中文:
 定理 factors_pow
@@ -622,7 +723,8 @@ refine Rel.add ?_ factors_pow
     · simp [h0, zero_pow n.succ_ne_zero, nsmul_zero]
     · rw [pow_succ', succ_nsmul']
       refine Rel.trans _ (factors_mul h0 (pow_ne_zero n h0)) ?_
-refine Rel.add ?_ factors_pow 
+refine Rel.add ?_ factors_pow n
+      exact rel_refl_of_refl_on fun y _ => Associated.refl _
 
 Depends on / 依赖: Associated, Associated.refl, Rel.add, Rel.trans, factors_mul, factors_one, factors_pow, n.succ_ne_zero, nsmul_zero, pow_ne_zero, pow_succ, pow_zero, rel_refl_of_refl_on, rel_zero_right, succ_ne_zero, succ_nsmul, zero_nsmul, zero_pow
 -/
@@ -797,7 +899,9 @@ theorem unique'
   intro s t hs ht eq
   refine Multiset.map_mk_eq_map_mk_of_rel (UniqueFactorizationMonoid.factors_unique ?_ ?_ ?_)
 · exact fun a ha => irreducible_mk.1 hs _ Multiset.mem_map_of_mem _ ha
-· exact fun a ha =>
+· exact fun a ha => irreducible_mk.1 ht _ Multiset.mem_map_of_mem _ ha
+  have eq' : (Quot.mk Setoid.r : α -> Associates α) = Associates.mk := funext quot_mk_eq_mk
+  rwa [eq', prod_mk, prod_mk, mk_eq_mk_iff_associated] at eq
 
 中文:
 定理 unique'
@@ -808,7 +912,9 @@ theorem unique'
   intro s t hs ht eq
   refine Multiset.map_mk_eq_map_mk_of_rel (UniqueFactorizationMonoid.factors_unique ?_ ?_ ?_)
 · exact fun a ha => irreducible_mk.1 hs _ Multiset.mem_map_of_mem _ ha
-· exact fun a ha =>
+· exact fun a ha => irreducible_mk.1 ht _ Multiset.mem_map_of_mem _ ha
+  have eq' : (Quot.mk Setoid.r : α -> Associates α) = Associates.mk := funext quot_mk_eq_mk
+  rwa [eq', prod_mk, prod_mk, mk_eq_mk_iff_associated] at eq
 
 Depends on / 依赖: Associates, Associates.mk, Multiset, Multiset.induction_on_multiset_quot, Multiset.map_mk_eq_map_mk_of_rel, Multiset.mem_map_of_mem, Quot.mk, Setoid, Setoid.r, UniqueFactorizationMonoid, UniqueFactorizationMonoid.factors_unique, factors_unique, induction_on_multiset_quot, irreducible_mk, map_mk_eq_map_mk_of_rel, mem_map_of_mem, mk_eq_mk_iff_associated, prod_mk, quot_mk_eq_mk
 -/
@@ -838,7 +944,9 @@ theorem prod_le_prod_iff_le
     · exact irreducible_of_factor _ h
   · rw [eqc, Multiset.prod_add]
     congr
-    refine associated_iff_eq
+    refine associated_iff_eq.mp (factors_prod fun hc => ?_).symm
+    refine not_irreducible_zero (hq _ ?_)
+    rw [← prod_eq_zero_iff]; rw [eqc]; rw [hc]; rw [mul_zero]
 
 中文:
 定理 prod_le_prod_iff_le
@@ -852,7 +960,9 @@ theorem prod_le_prod_iff_le
     · exact irreducible_of_factor _ h
   · rw [eqc, Multiset.prod_add]
     congr
-    refine associated_iff_eq
+    refine associated_iff_eq.mp (factors_prod fun hc => ?_).symm
+    refine not_irreducible_zero (hq _ ?_)
+    rw [← prod_eq_zero_iff]; rw [eqc]; rw [hc]; rw [mul_zero]
 
 Depends on / 依赖: Multiset, Multiset.le_iff_exists_add, Multiset.mem_add, Multiset.prod_add, associated_iff_eq, associated_iff_eq.mp, factors, factors_prod, irreducible_of_factor, le_iff_exists_add, mem_add, mul_zero, not_irreducible_zero, prod_add, prod_eq_zero_iff, prod_le_prod, unique
 -/
@@ -892,7 +1002,33 @@ theorem WfDvdMonoid.of_exists_prime_factors
       · exact ⊤
       exact ↑(Multiset.card (Classical.choose (pf a h)))
     rintro a b ⟨ane0, ⟨c, hc, b_eq⟩⟩
-    
+    rw [dif_neg ane0]
+    by_cases h : b = 0
+    · simp [h, lt_top_iff_ne_top]
+    · rw [dif_neg h, Nat.cast_lt]
+      have cne0 : c != 0 := by
+        refine mt (fun con => ?_) h
+        rw [b_eq]; rw [con]; rw [mul_zero]
+      calc
+        Multiset.card (Classical.choose (pf a ane0)) <
+            _ + Multiset.card (Classical.choose (pf c cne0)) :=
+          lt_add_of_pos_right _
+            (Multiset.card_pos.mpr fun con => hc (associated_one_iff_isUnit.mp ?_))
+        _ = Multiset.card (Classical.choose (pf a ane0) + Classical.choose (pf c cne0)) :=
+          (Multiset.card_add _ _).symm
+        _ = Multiset.card (Classical.choose (pf b h)) :=
+          Multiset.card_eq_card_of_rel
+          (prime_factors_unique ?_ (Classical.choose_spec (pf _ h)).1 ?_)
+      · convert! (Classical.choose_spec (pf c cne0)).2.symm
+        rw [con]; rw [Multiset.prod_zero]
+      · intro x hadd
+        rw [Multiset.mem_add] at hadd
+        rcases hadd with h | h <;> apply (Classical.choose_spec (pf _ _)).1 _ h <;> assumption
+      · rw [Multiset.prod_add]
+        trans a * c
+        · apply Associated.mul_mul <;> apply (Classical.choose_spec (pf _ _)).2 <;> assumption
+        · rw [← b_eq]
+          apply (Classical.choose_spec (pf _ _)).2.symm; assumption⟩
 
 中文:
 定理 WfDvdMonoid.of_存在_prime_factors
@@ -905,7 +1041,33 @@ theorem WfDvdMonoid.of_exists_prime_factors
       · exact ⊤
       exact ↑(Multiset.card (Classical.choose (pf a h)))
     rintro a b ⟨ane0, ⟨c, hc, b_eq⟩⟩
-    
+    rw [dif_neg ane0]
+    by_cases h : b = 0
+    · simp [h, lt_top_iff_ne_top]
+    · rw [dif_neg h, Nat.cast_lt]
+      have cne0 : c != 0 := by
+        refine mt (fun con => ?_) h
+        rw [b_eq]; rw [con]; rw [mul_zero]
+      calc
+        Multiset.card (Classical.choose (pf a ane0)) <
+            _ + Multiset.card (Classical.choose (pf c cne0)) :=
+          lt_add_of_pos_right _
+            (Multiset.card_pos.mpr fun con => hc (associated_one_iff_isUnit.mp ?_))
+        _ = Multiset.card (Classical.choose (pf a ane0) + Classical.choose (pf c cne0)) :=
+          (Multiset.card_add _ _).symm
+        _ = Multiset.card (Classical.choose (pf b h)) :=
+          Multiset.card_eq_card_of_rel
+          (prime_factors_unique ?_ (Classical.choose_spec (pf _ h)).1 ?_)
+      · convert! (Classical.choose_spec (pf c cne0)).2.symm
+        rw [con]; rw [Multiset.prod_zero]
+      · intro x hadd
+        rw [Multiset.mem_add] at hadd
+        rcases hadd with h | h <;> apply (Classical.choose_spec (pf _ _)).1 _ h <;> assumption
+      · rw [Multiset.prod_add]
+        trans a * c
+        · apply Associated.mul_mul <;> apply (Classical.choose_spec (pf _ _)).2 <;> assumption
+        · rw [← b_eq]
+          apply (Classical.choose_spec (pf _ _)).2.symm; assumption⟩
 
 Depends on / 依赖: Classical, Classical.choose, DvdNotUnit, Multiset, Multiset.card, Nat.cast_lt, RelHom, RelHom.mk, RelHomClass, RelHomClass.wellFounded, b_eq, cast_lt, dif_neg, lt_top_iff_ne_top, mul_zero, wellFounded, wellFounded_lt
 -/
@@ -1054,7 +1216,11 @@ ha by
         simp [← h]
   exact
     ⟨w.map e, fun b hb =>
-        let ⟨c, hc, he⟩ := 
+        let ⟨c, hc, he⟩ := Multiset.mem_map.1 hb
+        he ▸ (prime_iff e).2 (hp c hc),
+        Units.map e.toMonoidHom u,
+      by
+        rw [Multiset.prod_hom]; rw [toMonoidHom_eq_coe]; rw [Units.coe_map]; rw [MonoidHom.coe_coe]; rw [← map_mul e]; rw [h]; rw [apply_symm_apply]⟩
 
 中文:
 定理 乘法等价.uniqueFactorizationMonoid
@@ -1070,7 +1236,11 @@ ha by
         simp [← h]
   exact
     ⟨w.map e, fun b hb =>
-        let ⟨c, hc, he⟩ := 
+        let ⟨c, hc, he⟩ := Multiset.mem_map.1 hb
+        he ▸ (prime_iff e).2 (hp c hc),
+        Units.map e.toMonoidHom u,
+      by
+        rw [Multiset.prod_hom]; rw [toMonoidHom_eq_coe]; rw [Units.coe_map]; rw [MonoidHom.coe_coe]; rw [← map_mul e]; rw [h]; rw [apply_symm_apply]⟩
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_coe, Multiset, Multiset.mem_map, Multiset.prod_hom, UniqueFactorizationMonoid, UniqueFactorizationMonoid.iff_exists_prime_factors, Units.coe_map, Units.map, apply_symm_apply, coe_coe, coe_map, convert, e.isCancelMulZero_iff.mp, e.symm, e.toMonoidHom, iff_exists_prime_factors, isCancelMulZero_iff, map_mul, map_zero
 -/
@@ -1233,7 +1403,18 @@ theorem exists_reduced_factors
     · simp
   · intro a p a_ne_zero p_prime ih_a pa_ne_zero b
     by_cases h : p ∣ b
-    · rcas
+    · rcases h with ⟨b, rfl⟩
+      obtain ⟨a', b', c', no_factor, ha', hb'⟩ := ih_a a_ne_zero b
+      refine ⟨a', b', p * c', @no_factor, ?_, ?_⟩
+      · rw [mul_assoc, ha']
+      · rw [mul_assoc, hb']
+    · obtain ⟨a', b', c', coprime, rfl, rfl⟩ := ih_a a_ne_zero b
+      refine ⟨p * a', b', c', ?_, mul_left_comm _ _ _, rfl⟩
+      intro q q_dvd_pa' q_dvd_b'
+      rcases p_prime.left_dvd_or_dvd_right_of_dvd_mul q_dvd_pa' with p_dvd_q | q_dvd_a'
+      · have : p ∣ c' * b' := dvd_mul_of_dvd_right (p_dvd_q.trans q_dvd_b') _
+        contradiction
+      exact coprime q_dvd_a' q_dvd_b'
 
 中文:
 定理 存在_reduced_factors
@@ -1250,7 +1431,18 @@ theorem exists_reduced_factors
     · simp
   · intro a p a_ne_zero p_prime ih_a pa_ne_zero b
     by_cases h : p ∣ b
-    · rcas
+    · rcases h with ⟨b, rfl⟩
+      obtain ⟨a', b', c', no_factor, ha', hb'⟩ := ih_a a_ne_zero b
+      refine ⟨a', b', p * c', @no_factor, ?_, ?_⟩
+      · rw [mul_assoc, ha']
+      · rw [mul_assoc, hb']
+    · obtain ⟨a', b', c', coprime, rfl, rfl⟩ := ih_a a_ne_zero b
+      refine ⟨p * a', b', c', ?_, mul_left_comm _ _ _, rfl⟩
+      intro q q_dvd_pa' q_dvd_b'
+      rcases p_prime.left_dvd_or_dvd_right_of_dvd_mul q_dvd_pa' with p_dvd_q | q_dvd_a'
+      · have : p ∣ c' * b' := dvd_mul_of_dvd_right (p_dvd_q.trans q_dvd_b') _
+        contradiction
+      exact coprime q_dvd_a' q_dvd_b'
 
 Depends on / 依赖: a_ne_zero, a_unit, coprime, ih_a, induction_on_prime, intros, isUnit_of_dvd_unit, mul_assoc, no_factor, p_dvd_a, p_prime, pa_ne_zero
 -/

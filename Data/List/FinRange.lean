@@ -170,7 +170,7 @@ theorem nodup_ofFn
   · intro h
     rw [Fin.cons_injective_iff]
     simp_rw [ofFn_succ, Fin.cons_succ, nodup_cons, Fin.cons_zero, mem_ofFn] at h
-    exact h.imp_right 
+    exact h.imp_right ih
 
 中文:
 定理 nodup_ofFn
@@ -184,7 +184,7 @@ theorem nodup_ofFn
   · intro h
     rw [Fin.cons_injective_iff]
     simp_rw [ofFn_succ, Fin.cons_succ, nodup_cons, Fin.cons_zero, mem_ofFn] at h
-    exact h.imp_right 
+    exact h.imp_right ih
 
 Depends on / 依赖: Fin.consInduction, Fin.cons_injective_iff, Fin.cons_succ, Fin.cons_zero, Function, Function.injective_of_subsingleton, consInduction, cons_injective_iff, cons_succ, cons_zero, h.imp_right, imp_right, injective_of_subsingleton, mem_ofFn, nodup_cons, nodup_ofFn_ofInjective, ofFn_succ, simp_rw
 -/

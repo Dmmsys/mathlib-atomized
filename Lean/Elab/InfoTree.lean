@@ -195,7 +195,11 @@ definition getDeclBodyInfos
       if i.value.typeName == ``Lean.Elab.Term.BodyInfo then
         if h : 0 < body.size then
           -- See through `.context`s instead of just matching on `.node`:
-          let result? 
+          let result? := body[0].getHighestInfo? ctx
+          if let some result := result? then
+            return (i.stx, result) :: acc
+      return acc
+    | _ => acc
 
 中文:
 定义 getDeclBodyInfos
@@ -206,7 +210,11 @@ definition getDeclBodyInfos
       if i.value.typeName == ``Lean.Elab.Term.BodyInfo then
         if h : 0 < body.size then
           -- See through `.context`s instead of just matching on `.node`:
-          let result? 
+          let result? := body[0].getHighestInfo? ctx
+          if let some result := result? then
+            return (i.stx, result) :: acc
+      return acc
+    | _ => acc
 
 Depends on / 依赖: BodyInfo, Id.run, Lean.Elab.Term.BodyInfo, body.size, foldInfoTree, i.value.typeName, ofCustomInfo, t.foldInfoTree, typeName
 -/

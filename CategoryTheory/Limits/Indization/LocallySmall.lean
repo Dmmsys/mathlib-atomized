@@ -50,7 +50,8 @@ definition colimitYonedaHomEquiv
         colimitYonedaHomIsoLimitOp _ _
   _ ≅ limit ((F.op ⋙ G) ⋙ uliftFunctor.{u}) :=
         HasLimit.isoOfNatIso (Functor.associator _ _ _).symm
-  _ ≅ uliftFunctor.{u
+  _ ≅ uliftFunctor.{u}.obj (limit (F.op ⋙ G)) :=
+        (preservesLimitIso _ _).symm
 
 中文:
 定义 colimitYonedaHomEquiv
@@ -60,7 +61,8 @@ definition colimitYonedaHomEquiv
         colimitYonedaHomIsoLimitOp _ _
   _ ≅ limit ((F.op ⋙ G) ⋙ uliftFunctor.{u}) :=
         HasLimit.isoOfNatIso (Functor.associator _ _ _).symm
-  _ ≅ uliftFunctor.{u
+  _ ≅ uliftFunctor.{u}.obj (limit (F.op ⋙ G)) :=
+        (preservesLimitIso _ _).symm
 
 Depends on / 依赖: Equiv.symm, Equiv.ulift.symm.trans, F.op, Functor, Functor.associator, HasLimit, HasLimit.isoOfNatIso, Iso.toEquiv, associator, colimit, colimitYonedaHomIsoLimitOp, isoOfNatIso, preservesLimitIso, toEquiv, uliftFunctor, yoneda
 -/
@@ -91,7 +93,12 @@ theorem colimitYonedaHomEquiv_π_apply
     Iso.trans_def, Iso.trans_assoc, Iso.trans_hom, Iso.trans_inv,
     Category.assoc, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.coe_fn_mk, comp_apply,
     Equiv.ulift_apply]
-  have (a : limit ((F.op ⋙ G) ⋙ uliftFunctor.{u, v}
+  have (a : limit ((F.op ⋙ G) ⋙ uliftFunctor.{u, v})) := congrArg ULift.down
+    (ConcreteCategory.congr_hom (preservesLimitIso_inv_π uliftFunctor.{u, v} (F.op ⋙ G) i) a)
+  refine Eq.trans (dsimp% this _) ?_
+  rw [HasLimit.isoOfNatIso_hom_π_apply]
+  dsimp
+  erw [colimitYonedaHomIsoLimitOp_π_apply]
 
 中文:
 定理 colimitYonedaHomEquiv_π_apply
@@ -101,7 +108,12 @@ theorem colimitYonedaHomEquiv_π_apply
     Iso.trans_def, Iso.trans_assoc, Iso.trans_hom, Iso.trans_inv,
     Category.assoc, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.coe_fn_mk, comp_apply,
     Equiv.ulift_apply]
-  have (a : limit ((F.op ⋙ G) ⋙ uliftFunctor.{u, v}
+  have (a : limit ((F.op ⋙ G) ⋙ uliftFunctor.{u, v})) := congrArg ULift.down
+    (ConcreteCategory.congr_hom (preservesLimitIso_inv_π uliftFunctor.{u, v} (F.op ⋙ G) i) a)
+  refine Eq.trans (dsimp% this _) ?_
+  rw [HasLimit.isoOfNatIso_hom_π_apply]
+  dsimp
+  erw [colimitYonedaHomIsoLimitOp_π_apply]
 
 Depends on / 依赖: Category, Category.assoc, ConcreteCategory, ConcreteCategory.congr_hom, Eq.trans, Equiv.coe_fn_mk, Equiv.symm_symm, Equiv.symm_trans_apply, Equiv.ulift_apply, F.op, HasLimit, HasLimit.isoOfNatIso_hom_, Iso.toEquiv, Iso.trans_assoc, Iso.trans_def, Iso.trans_hom, Iso.trans_inv, SmallHom, SmallHom.mk_comp_mk, ULift.down
 -/
@@ -152,7 +164,7 @@ instance :
     let e₂ := IsColimit.coconePointUniqueUpToIso (Q.isColimit) (colimit.isColimit _)
     let e₃ := Iso.homCongr e₁ e₂
     dsimp only [colimit.cocone_x] at e₃
-    ex
+    exact small_map (InducedCategory.homEquiv.trans e₃)
 
 中文:
 实例 :
@@ -164,7 +176,7 @@ instance :
     let e₂ := IsColimit.coconePointUniqueUpToIso (Q.isColimit) (colimit.isColimit _)
     let e₃ := Iso.homCongr e₁ e₂
     dsimp only [colimit.cocone_x] at e₃
-    ex
+    exact small_map (InducedCategory.homEquiv.trans e₃)
 -/
 instance : LocallySmall.{v} (ObjectProperty.FullSubcategory (IsIndObject (C := C))) where
   hom_small X Y := by

@@ -90,7 +90,7 @@ definition mk
     smul_mem' := fun ab m =>
       TensorProduct.induction_on ab (fun _ => by simp only [zero_smul, SetLike.mem_coe, zero_mem])
         (fun a b hm => by simpa only [TensorProduct.Algebra.smul_def] using! hA a (hB b hm))
-        fun z w hz hw hm => by simpa only [add_smul] 
+        fun z w hz hw hm => by simpa only [add_smul] using! p.add_mem (hz hm) (hw hm) }
 
 中文:
 定义 mk
@@ -100,7 +100,7 @@ definition mk
     smul_mem' := fun ab m =>
       TensorProduct.induction_on ab (fun _ => by simp only [zero_smul, SetLike.mem_coe, zero_mem])
         (fun a b hm => by simpa only [TensorProduct.Algebra.smul_def] using! hA a (hB b hm))
-        fun z w hz hw hm => by simpa only [add_smul] 
+        fun z w hz hw hm => by simpa only [add_smul] using! p.add_mem (hz hm) (hw hm) }
 
 Depends on / 依赖: Algebra, SetLike, SetLike.mem_coe, TensorProduct, TensorProduct.Algebra.smul_def, TensorProduct.induction_on, add_mem, add_smul, carrier, induction_on, mem_coe, p.add_mem, smul_def, smul_mem, zero_mem, zero_smul
 -/

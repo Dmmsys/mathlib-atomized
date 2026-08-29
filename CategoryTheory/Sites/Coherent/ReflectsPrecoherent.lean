@@ -39,7 +39,12 @@ lemma Functor.reflects_precoherent
       (fun a => F.map (π₁ a)) inferInstance
     refine ⟨β, inferInstance, _, fun b => F.preimage (F.effectiveEpiOver (Y₂ b) ≫ τ₂ b),
       F.finite_effectiveEpiFamily_of_map _ _ ?_,
-        ⟨i, fun b => F.preimage (F.eff
+        ⟨i, fun b => F.preimage (F.effectiveEpiOver (Y₂ b) ≫ ι b), ?_⟩⟩
+    · simp only [Functor.map_preimage]
+      infer_instance
+    · intro b
+      apply F.map_injective
+      simp [hh b]
 
 中文:
 引理 函子.reflects_precoherent
@@ -49,7 +54,12 @@ lemma Functor.reflects_precoherent
       (fun a => F.map (π₁ a)) inferInstance
     refine ⟨β, inferInstance, _, fun b => F.preimage (F.effectiveEpiOver (Y₂ b) ≫ τ₂ b),
       F.finite_effectiveEpiFamily_of_map _ _ ?_,
-        ⟨i, fun b => F.preimage (F.eff
+        ⟨i, fun b => F.preimage (F.effectiveEpiOver (Y₂ b) ≫ ι b), ?_⟩⟩
+    · simp only [Functor.map_preimage]
+      infer_instance
+    · intro b
+      apply F.map_injective
+      simp [hh b]
 
 Depends on / 依赖: F.effectiveEpiOver, F.finite_effectiveEpiFamily_of_map, F.map, F.map_injective, F.preimage, Functor, Functor.map_preimage, Precoherent, Precoherent.pullback, effectiveEpiOver, finite_effectiveEpiFamily_of_map, infer_instance, map_injective, map_preimage, preimage, pullback
 -/

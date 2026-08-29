@@ -194,7 +194,7 @@ theorem contractible_iff_id_nullhomotopic
             left_inv := ?_
             right_inv := ?_ }⟩ }
   · exact h.symm
-  · convert! Homotopic.refl (Co
+  · convert! Homotopic.refl (ContinuousMap.id Unit)
 
 中文:
 定理 contractible_iff_id_nullhomotopic
@@ -211,7 +211,7 @@ theorem contractible_iff_id_nullhomotopic
             left_inv := ?_
             right_inv := ?_ }⟩ }
   · exact h.symm
-  · convert! Homotopic.refl (Co
+  · convert! Homotopic.refl (ContinuousMap.id Unit)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.const, ContinuousMap.id, Homotopic, Homotopic.refl, convert, h.symm, hequiv_unit, id_nullhomotopic, invFun, left_inv, right_inv
 -/

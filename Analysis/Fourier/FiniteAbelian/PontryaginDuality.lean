@@ -243,7 +243,8 @@ definition circleEquivComplex
       map_zero_eq_one' := by simp [Circle]
       map_add_eq_mul' := fun a b => by ext : 1; simp [map_add_eq_mul] }
   left_inv ψ := by ext : 1; simp
-  r
+  right_inv ψ := by ext : 1; simp
+  map_add' ψ χ := rfl
 
 中文:
 定义 circleEquivComplex
@@ -254,7 +255,8 @@ definition circleEquivComplex
       map_zero_eq_one' := by simp [Circle]
       map_add_eq_mul' := fun a b => by ext : 1; simp [map_add_eq_mul] }
   left_inv ψ := by ext : 1; simp
-  r
+  right_inv ψ := by ext : 1; simp
+  map_add' ψ χ := rfl
 
 Depends on / 依赖: coeHom, coeHom.comp, toMonoidHom, toMonoidHomEquiv, toMonoidHomEquiv.symm
 -/
@@ -280,7 +282,10 @@ lemma card_eq
   classical
   have hn' i : NeZero (n i) := by have := hn i; exact ⟨by positivity⟩
   let f : α -> AddChar α Complex := fun a => coeHom.compAddChar ((mkZModAux n <| e a).compAddMonoidHom e)
-  have hf : Injective f := circ
+  have hf : Injective f := circleEquivComplex.injective.comp
+    ((compAddMonoidHom_injective_left _ e.surjective).comp <| mkZModAux_injective.comp <|
+DFunLike.coe_injective.comp e.injective.comp Additive.ofMul.injective)
+  exact (card_addChar_le _ _).antisymm (Fintype.card_le_of_injective _ hf)
 
 中文:
 引理 card_eq
@@ -291,7 +296,10 @@ lemma card_eq
   classical
   have hn' i : NeZero (n i) := by have := hn i; exact ⟨by positivity⟩
   let f : α -> AddChar α Complex := fun a => coeHom.compAddChar ((mkZModAux n <| e a).compAddMonoidHom e)
-  have hf : Injective f := circ
+  have hf : Injective f := circleEquivComplex.injective.comp
+    ((compAddMonoidHom_injective_left _ e.surjective).comp <| mkZModAux_injective.comp <|
+DFunLike.coe_injective.comp e.injective.comp Additive.ofMul.injective)
+  exact (card_addChar_le _ _).antisymm (Fintype.card_le_of_injective _ hf)
 -/
 @[simp] lemma card_eq [Fintype α] : card (AddChar α Complex) = card α := by
   obtain ⟨ι, _, n, hn, ⟨e⟩⟩ := AddCommGroup.equiv_directSum_zmod_of_finite' α
@@ -434,7 +442,9 @@ lemma exists_apply_ne_zero
   let f : α -> Complex := fun b => if a = b then 1 else 0
   have h₀ := congr_fun ((complexBasis α).sum_repr f) 0
   have h₁ := congr_fun ((complexBasis α).sum_repr f) a
-  simp only [complex
+  simp only [complexBasis_apply, Fintype.sum_apply, Pi.smul_apply, h, smul_eq_mul, mul_one,
+    map_zero_eq_one, if_pos rfl, if_neg ha, f] at h₀ h₁
+  exact one_ne_zero (h₁.symm.trans h₀)
 
 中文:
 引理 存在_apply_ne_zero
@@ -448,7 +458,9 @@ lemma exists_apply_ne_zero
   let f : α -> Complex := fun b => if a = b then 1 else 0
   have h₀ := congr_fun ((complexBasis α).sum_repr f) 0
   have h₁ := congr_fun ((complexBasis α).sum_repr f) a
-  simp only [complex
+  simp only [complexBasis_apply, Fintype.sum_apply, Pi.smul_apply, h, smul_eq_mul, mul_one,
+    map_zero_eq_one, if_pos rfl, if_neg ha, f] at h₀ h₁
+  exact one_ne_zero (h₁.symm.trans h₀)
 
 Depends on / 依赖: Fintype, Fintype.sum_apply, Pi.smul_apply, classical, complexBasis, complexBasis_apply, congr_fun, if_neg, if_pos, map_zero_eq_one, mul_one, one_ne_zero, smul_apply, smul_eq_mul, sum_apply, sum_repr, symm.trans
 -/

@@ -570,7 +570,7 @@ definition binaryProductIsoProd
     · exact ((limit.isLimit _).conePointUniqueUpToIso (binaryProductLimit X Y)).symm
     · apply Limits.prod.hom_ext <;> simp <;> rfl
   · ext : 2
-    apply Limits.prod.hom_ext <;> s
+    apply Limits.prod.hom_ext <;> simp <;> rfl
 
 中文:
 定义 binaryProductIsoProd
@@ -581,7 +581,7 @@ definition binaryProductIsoProd
     · exact ((limit.isLimit _).conePointUniqueUpToIso (binaryProductLimit X Y)).symm
     · apply Limits.prod.hom_ext <;> simp <;> rfl
   · ext : 2
-    apply Limits.prod.hom_ext <;> s
+    apply Limits.prod.hom_ext <;> simp <;> rfl
 
 Depends on / 依赖: Limits, Limits.prod.hom_ext, NatIso, NatIso.ofComponents, binaryProductLimit, conePointUniqueUpToIso, hom_ext, isLimit, limit.isLimit, ofComponents
 -/
@@ -718,7 +718,8 @@ definition productLimitCone
         ↾fun f => (equivShrink (forall j, F j)).symm f j) }
   isLimit :=
     { lift := fun s => ↾fun x => (equivShrink _) (fun j => s.π.app ⟨j⟩ x)
-      uniq := fun s m w => ConcreteCategory.hom_ext _ _ fun x => Shrink.ext (fune
+      uniq := fun s m w => ConcreteCategory.hom_ext _ _ fun x => Shrink.ext (funext fun j => by
+        simpa using! ConcreteCategory.congr_hom (w ⟨j⟩) x) }
 
 中文:
 定义 productLimitCone
@@ -728,7 +729,8 @@ definition productLimitCone
         ↾fun f => (equivShrink (forall j, F j)).symm f j) }
   isLimit :=
     { lift := fun s => ↾fun x => (equivShrink _) (fun j => s.π.app ⟨j⟩ x)
-      uniq := fun s m w => ConcreteCategory.hom_ext _ _ fun x => Shrink.ext (fune
+      uniq := fun s m w => ConcreteCategory.hom_ext _ _ fun x => Shrink.ext (funext fun j => by
+        simpa using! ConcreteCategory.congr_hom (w ⟨j⟩) x) }
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom_ext, Discrete, Discrete.natTrans, Shrink, Shrink.ext, congr_hom, equivShrink, hom_ext, isLimit, natTrans
 -/

@@ -288,7 +288,7 @@ theorem AlgebraicIndependent.option_iff_transcendental
   proof: by
   rw [algebraicIndependent_iff_injective_aeval]; rw [transcendental_iff_injective]; rw [← AlgHom.coe_toRingHom]; rw [← hx.aeval_comp_mvPolynomialOptionEquivPolynomialAdjoin]; rw [RingHom.coe_comp]
   exact Injective.of_comp_iff' (Polynomial.aeval a)
-    (mvPolynomialOptionEquivPolynomialAdjoin hx)
+    (mvPolynomialOptionEquivPolynomialAdjoin hx).bijective
 
 中文:
 定理 AlgebraicIndependent.option_iff_transcendental
@@ -296,7 +296,7 @@ theorem AlgebraicIndependent.option_iff_transcendental
   证明: by
   rw [algebraicIndependent_iff_injective_aeval]; rw [transcendental_iff_injective]; rw [← AlgHom.coe_toRingHom]; rw [← hx.aeval_comp_mvPolynomialOptionEquivPolynomialAdjoin]; rw [RingHom.coe_comp]
   exact Injective.of_comp_iff' (Polynomial.aeval a)
-    (mvPolynomialOptionEquivPolynomialAdjoin hx)
+    (mvPolynomialOptionEquivPolynomialAdjoin hx).bijective
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, Injective, Injective.of_comp_iff, Polynomial, Polynomial.aeval, RingHom, RingHom.coe_comp, aeval_comp_mvPolynomialOptionEquivPolynomialAdjoin, algebraicIndependent_iff_injective_aeval, bijective, coe_comp, coe_toRingHom, hx.aeval_comp_mvPolynomialOptionEquivPolynomialAdjoin, mvPolynomialOptionEquivPolynomialAdjoin, of_comp_iff, transcendental_iff_injective
 -/
@@ -404,7 +404,17 @@ theorem algebraicIndependent_of_set_of_finite
   refine algebraicIndependent_of_finite_type fun t hfin => ?_
   suffices AlgebraicIndependent R fun i : ↥(t inter s union t \ s) => x i from
     this.comp (Equiv.setCongr (t.inter_union_sdiff s).symm) (Equiv.injective _)
-  refine hfin.sdiff.induction_on_subset _ (ind.comp (inclusion <
+  refine hfin.sdiff.induction_on_subset _ (ind.comp (inclusion <| by simp) (inclusion_injective _))
+    fun {a u} ha hu ha' h => ?_
+  have : a ∉ t inter s union u := (·.elim (ha.2 ·.2) ha')
+  convert!
+    (((image_eq_range .. ▸ h.option_iff_transcendental <| x a).2 <|
+              H _ (hfin.subset (union_subset inter_subset_left <| hu.trans sdiff_subset)) h a ha.2
+                this).comp
+          _ (subtypeInsertEquivOption this).injective).comp
+      (Equiv.setCongr union_insert) (Equiv.injective _) with
+    x
+  by_cases h : ↑x = a <;> simp [h, Set.subtypeInsertEquivOption]
 
 中文:
 定理 algebraicIndependent_of_set_of_finite
@@ -414,7 +424,17 @@ theorem algebraicIndependent_of_set_of_finite
   refine algebraicIndependent_of_finite_type fun t hfin => ?_
   suffices AlgebraicIndependent R fun i : ↥(t inter s union t \ s) => x i from
     this.comp (Equiv.setCongr (t.inter_union_sdiff s).symm) (Equiv.injective _)
-  refine hfin.sdiff.induction_on_subset _ (ind.comp (inclusion <
+  refine hfin.sdiff.induction_on_subset _ (ind.comp (inclusion <| by simp) (inclusion_injective _))
+    fun {a u} ha hu ha' h => ?_
+  have : a ∉ t inter s union u := (·.elim (ha.2 ·.2) ha')
+  convert!
+    (((image_eq_range .. ▸ h.option_iff_transcendental <| x a).2 <|
+              H _ (hfin.subset (union_subset inter_subset_left <| hu.trans sdiff_subset)) h a ha.2
+                this).comp
+          _ (subtypeInsertEquivOption this).injective).comp
+      (Equiv.setCongr union_insert) (Equiv.injective _) with
+    x
+  by_cases h : ↑x = a <;> simp [h, Set.subtypeInsertEquivOption]
 
 Depends on / 依赖: AlgebraicIndependent, Equiv.injective, Equiv.setCongr, algebraicIndependent_of_finite_type, classical, convert, h.option_iff_transcendental, hfin.sdiff.induction_on_subset, hfin.subset, image_eq_range, inclusion, inclusion_injective, ind.comp, induction_on_subset, injective, inter_union_sdiff, option_iff_transcendental, setCongr, subset, t.inter_union_sdiff
 -/
@@ -504,7 +524,8 @@ theorem sumElim_iff
   · exact ⟨fun h => (hx <| by apply h.comp _ Sum.inr_injective).elim, fun h => (hx h.1).elim⟩
   let e := (sumAlgEquiv R ι' ι).trans (mapAlgEquiv _ hx.aevalEquiv)
   have : aeval (Sum.elim y x) = ((aeval y).restrictScalars R).comp e.toAlgHom := by
-    
+    ext (_ | _) <;> simp [e]
+  simp_rw [hx, AlgebraicIndependent, this]; simp
 
 中文:
 定理 sumElim_iff
@@ -515,7 +536,8 @@ theorem sumElim_iff
   · exact ⟨fun h => (hx <| by apply h.comp _ Sum.inr_injective).elim, fun h => (hx h.1).elim⟩
   let e := (sumAlgEquiv R ι' ι).trans (mapAlgEquiv _ hx.aevalEquiv)
   have : aeval (Sum.elim y x) = ((aeval y).restrictScalars R).comp e.toAlgHom := by
-    
+    ext (_ | _) <;> simp [e]
+  simp_rw [hx, AlgebraicIndependent, this]; simp
 
 Depends on / 依赖: AlgebraicIndependent, Sum.elim, Sum.inr_injective, aevalEquiv, e.toAlgHom, h.comp, hx.aevalEquiv, inr_injective, mapAlgEquiv, restrictScalars, simp_rw, sumAlgEquiv, toAlgHom
 -/
@@ -637,7 +659,11 @@ theorem sumElim_of_tower
   set Rx := adjoin R (range x)
   let _ : Algebra Rx S :=
     (e.symm.toAlgHom.comp <| Subalgebra.inclusion <| adjoin_le hxS).toAlgebra
-  have : IsScalarTower Rx S A := .of_algebraMap_eq fun x => show _ = (e (e.
+  have : IsScalarTower Rx S A := .of_algebraMap_eq fun x => show _ = (e (e.symm _)).1 by simp
+  refine hx.sumElim (hy.restrictScalars (e.symm.injective.comp ?_))
+  simpa only [AlgHom.coe_toRingHom] using Subalgebra.inclusion_injective _
+
+omit hx in
 
 中文:
 定理 sumElim_of_tower
@@ -647,7 +673,11 @@ theorem sumElim_of_tower
   set Rx := adjoin R (range x)
   let _ : Algebra Rx S :=
     (e.symm.toAlgHom.comp <| Subalgebra.inclusion <| adjoin_le hxS).toAlgebra
-  have : IsScalarTower Rx S A := .of_algebraMap_eq fun x => show _ = (e (e.
+  have : IsScalarTower Rx S A := .of_algebraMap_eq fun x => show _ = (e (e.symm _)).1 by simp
+  refine hx.sumElim (hy.restrictScalars (e.symm.injective.comp ?_))
+  simpa only [AlgHom.coe_toRingHom] using Subalgebra.inclusion_injective _
+
+omit hx in
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjective, AlgHom, AlgHom.coe_toRingHom, Algebra, IsScalarTower, IsScalarTower.toAlgHom, Subalgebra, Subalgebra.inclusion, Subalgebra.inclusion_injective, adjoin, adjoin_le, algebraMap_injective, coe_toRingHom, e.symm, e.symm.injective.comp, e.symm.toAlgHom.comp, hx.sumElim, hy.algebraMap_injective, hy.restrictScalars
 -/
@@ -799,7 +829,8 @@ theorem lift_trdeg_add_le
     add_comm (lift.{v, u} _), ← mk_sum]
   refine ciSup_le fun ⟨s, hs⟩ => ciSup_le fun ⟨t, ht⟩ => ?_
   have := hs.sumElim_comp ht
-  refine le_ciSup_of_le bddAbove_of_small ⟨_
+  refine le_ciSup_of_le bddAbove_of_small ⟨_, this.to_subtype_range⟩ ?_
+  rw [← lift_umax]; rw [mk_range_eq_of_injective this.injective]; rw [lift_id']
 
 中文:
 定理 lift_trdeg_add_le
@@ -810,7 +841,8 @@ theorem lift_trdeg_add_le
     add_comm (lift.{v, u} _), ← mk_sum]
   refine ciSup_le fun ⟨s, hs⟩ => ciSup_le fun ⟨t, ht⟩ => ?_
   have := hs.sumElim_comp ht
-  refine le_ciSup_of_le bddAbove_of_small ⟨_
+  refine le_ciSup_of_le bddAbove_of_small ⟨_, this.to_subtype_range⟩ ?_
+  rw [← lift_umax]; rw [mk_range_eq_of_injective this.injective]; rw [lift_id']
 
 Depends on / 依赖: Cardinal, Cardinal.ciSup_add_ciSup, add_comm, bddAbove_of_small, ciSup_add_ciSup, ciSup_le, hs.sumElim_comp, injective, le_ciSup_of_le, lift_iSup, lift_id, lift_umax, mk_range_eq_of_injective, mk_sum, simp_rw, sumElim_comp, this.injective, this.to_subtype_range, to_subtype_range
 -/
@@ -860,7 +892,10 @@ theorem MvPolynomial.algebraicIndependent_polynomial_aeval_X
   have hle : adjoin R (x '' t) <= supported R t := by
     rw [Algebra.adjoin_le_iff]; rw [Set.image_subset_iff]
     intro _ h
-    rw [Set.mem_pr
+    rw [Set.mem_preimage]
+    refine Algebra.adjoin_mono ?_ (Polynomial.aeval_mem_adjoin_singleton R _)
+    simp_rw [singleton_subset_iff, Set.mem_image_of_mem _ h]
+  exact (transcendental_supported_polynomial_aeval_X R hi (hf i)).of_tower_top_of_subalgebra_le hle
 
 中文:
 定理 多元多项式.algebraicIndependent_polynomial_aeval_X
@@ -870,7 +905,10 @@ theorem MvPolynomial.algebraicIndependent_polynomial_aeval_X
   have hle : adjoin R (x '' t) <= supported R t := by
     rw [Algebra.adjoin_le_iff]; rw [Set.image_subset_iff]
     intro _ h
-    rw [Set.mem_pr
+    rw [Set.mem_preimage]
+    refine Algebra.adjoin_mono ?_ (Polynomial.aeval_mem_adjoin_singleton R _)
+    simp_rw [singleton_subset_iff, Set.mem_image_of_mem _ h]
+  exact (transcendental_supported_polynomial_aeval_X R hi (hf i)).of_tower_top_of_subalgebra_le hle
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le_iff, Algebra.adjoin_mono, C_injective, MvPolynomial, Polynomial, Polynomial.aeval, Polynomial.aeval_mem_adjoin_singleton, Set.image_subset_iff, Set.mem_image_of_mem, Set.mem_preimage, adjoin, adjoin_le_iff, adjoin_mono, aeval_mem_adjoin_singleton, algebraicIndependent_of_finite_type, image_subset_iff, mem_image_of_mem, mem_preimage, of_tower_top_of
 -/

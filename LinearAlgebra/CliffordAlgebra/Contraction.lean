@@ -125,7 +125,21 @@ definition contractLeft
       rw [LinearMap.add_apply]
       induction x using CliffordAlgebra.left_induction with
       | algebraMap => simp_rw [foldr'_algebraMap, smul_zero, zero_add]
-      | add _ _ h
+      | add _ _ hx hy => rw [map_add, map_add, map_add, add_add_add_comm, hx, hy]
+      | ι_mul _ _ hx =>
+        rw [foldr'_ι_mul]; rw [foldr'_ι_mul]; rw [foldr'_ι_mul]; rw [hx]
+        dsimp only [contractLeftAux_apply_apply]
+        rw [sub_add_sub_comm]; rw [mul_add]; rw [LinearMap.add_apply]; rw [add_smul]
+  map_smul' c d :=
+    LinearMap.ext fun x => by
+      rw [LinearMap.smul_apply]; rw [RingHom.id_apply]
+      induction x using CliffordAlgebra.left_induction with
+      | algebraMap => simp_rw [foldr'_algebraMap, smul_zero]
+      | add _ _ hx hy => rw [map_add, map_add, smul_add, hx, hy]
+      | ι_mul _ _ hx =>
+        rw [foldr'_ι_mul]; rw [foldr'_ι_mul]; rw [hx]
+        dsimp only [contractLeftAux_apply_apply]
+        rw [LinearMap.smul_apply]; rw [smul_assoc]; rw [mul_smul_comm]; rw [smul_sub]
 
 中文:
 定义 contractLeft
@@ -136,7 +150,21 @@ definition contractLeft
       rw [LinearMap.add_apply]
       induction x using CliffordAlgebra.left_induction with
       | algebraMap => simp_rw [foldr'_algebraMap, smul_zero, zero_add]
-      | add _ _ h
+      | add _ _ hx hy => rw [map_add, map_add, map_add, add_add_add_comm, hx, hy]
+      | ι_mul _ _ hx =>
+        rw [foldr'_ι_mul]; rw [foldr'_ι_mul]; rw [foldr'_ι_mul]; rw [hx]
+        dsimp only [contractLeftAux_apply_apply]
+        rw [sub_add_sub_comm]; rw [mul_add]; rw [LinearMap.add_apply]; rw [add_smul]
+  map_smul' c d :=
+    LinearMap.ext fun x => by
+      rw [LinearMap.smul_apply]; rw [RingHom.id_apply]
+      induction x using CliffordAlgebra.left_induction with
+      | algebraMap => simp_rw [foldr'_algebraMap, smul_zero]
+      | add _ _ hx hy => rw [map_add, map_add, smul_add, hx, hy]
+      | ι_mul _ _ hx =>
+        rw [foldr'_ι_mul]; rw [foldr'_ι_mul]; rw [hx]
+        dsimp only [contractLeftAux_apply_apply]
+        rw [LinearMap.smul_apply]; rw [smul_assoc]; rw [mul_smul_comm]; rw [smul_sub]
 
 Depends on / 依赖: contractLeftAux, contractLeftAux_contractLeftAux
 -/
@@ -496,7 +524,7 @@ theorem contractLeft_contractLeft
   | algebraMap => simp_rw [contractLeft_algebraMap, map_zero]
   | add _ _ hx hy => rw [map_add, map_add, hx, hy, add_zero]
   | ι_mul _ _ hx =>
-    rw [contractLeft_ι_mul]; rw [map_sub]; rw [contractLeft_ι_mul]; rw [hx]; rw [map_smul]; rw [mu
+    rw [contractLeft_ι_mul]; rw [map_sub]; rw [contractLeft_ι_mul]; rw [hx]; rw [map_smul]; rw [mul_zero]; rw [sub_zero]; rw [sub_self]
 
 中文:
 定理 contractLeft_contractLeft
@@ -507,7 +535,7 @@ theorem contractLeft_contractLeft
   | algebraMap => simp_rw [contractLeft_algebraMap, map_zero]
   | add _ _ hx hy => rw [map_add, map_add, hx, hy, add_zero]
   | ι_mul _ _ hx =>
-    rw [contractLeft_ι_mul]; rw [map_sub]; rw [contractLeft_ι_mul]; rw [hx]; rw [map_smul]; rw [mu
+    rw [contractLeft_ι_mul]; rw [map_sub]; rw [contractLeft_ι_mul]; rw [hx]; rw [map_smul]; rw [mul_zero]; rw [sub_zero]; rw [sub_self]
 
 Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.left_induction, add_zero, algebraMap, contractLeft_algebraMap, left_induction, map_add, map_smul, map_sub, map_zero, mul_zero, simp_rw, sub_self, sub_zero
 -/
@@ -553,7 +581,7 @@ theorem contractLeft_comm
   | add _ _ hx hy => rw [map_add, map_add, map_add, map_add, hx, hy, neg_add]
   | ι_mul _ _ hx =>
     simp only [contractLeft_ι_mul, map_sub, map_smul]
-    rw [neg_sub];
+    rw [neg_sub]; rw [sub_sub_eq_add_sub]; rw [hx]; rw [mul_neg]; rw [← sub_eq_add_neg]
 
 中文:
 定理 contractLeft_comm
@@ -565,7 +593,7 @@ theorem contractLeft_comm
   | add _ _ hx hy => rw [map_add, map_add, map_add, map_add, hx, hy, neg_add]
   | ι_mul _ _ hx =>
     simp only [contractLeft_ι_mul, map_sub, map_smul]
-    rw [neg_sub];
+    rw [neg_sub]; rw [sub_sub_eq_add_sub]; rw [hx]; rw [mul_neg]; rw [← sub_eq_add_neg]
 
 Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.left_induction, algebraMap, contractLeft_algebraMap, left_induction, map_add, map_smul, map_sub, map_zero, mul_neg, neg_add, neg_sub, neg_zero, simp_rw, sub_eq_add_neg, sub_sub_eq_add_sub
 -/
@@ -896,7 +924,8 @@ theorem changeForm_contractLeft
   | algebraMap => simp only [contractLeft_algebraMap, changeForm_algebraMap, map_zero]
   | add _ _ hx hy => rw [map_add, map_add, map_add, map_add, hx, hy]
   | ι_mul _ _ hx =>
-    simp only [contractLeft_ι_mul, changeForm_ι_mul, map_sub, map
+    simp only [contractLeft_ι_mul, changeForm_ι_mul, map_sub, map_smul]
+    rw [← hx]; rw [contractLeft_comm]; rw [← sub_add]; rw [sub_neg_eq_add]; rw [← hx]
 
 中文:
 定理 changeForm_contractLeft
@@ -906,7 +935,8 @@ theorem changeForm_contractLeft
   | algebraMap => simp only [contractLeft_algebraMap, changeForm_algebraMap, map_zero]
   | add _ _ hx hy => rw [map_add, map_add, map_add, map_add, hx, hy]
   | ι_mul _ _ hx =>
-    simp only [contractLeft_ι_mul, changeForm_ι_mul, map_sub, map
+    simp only [contractLeft_ι_mul, changeForm_ι_mul, map_sub, map_smul]
+    rw [← hx]; rw [contractLeft_comm]; rw [← sub_add]; rw [sub_neg_eq_add]; rw [← hx]
 
 Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.left_induction, algebraMap, changeForm_algebraMap, contractLeft_algebraMap, contractLeft_comm, left_induction, map_add, map_smul, map_sub, map_zero, sub_add, sub_neg_eq_add
 -/
@@ -985,7 +1015,8 @@ theorem changeForm_changeForm
   | algebraMap => simp_rw [changeForm_algebraMap]
   | add _ _ hx hy => rw [map_add, map_add, map_add, hx, hy]
   | ι_mul _ _ hx => rw [changeForm_ι_mul, map_sub, changeForm_ι_mul, changeForm_ι_mul, hx, sub_sub,
-      LinearMap.add_apply, map_
+      LinearMap.add_apply, map_add, LinearMap.add_apply, changeForm_contractLeft, hx,
+      add_comm (_ : CliffordAlgebra Q'')]
 
 中文:
 定理 changeForm_changeForm
@@ -995,7 +1026,8 @@ theorem changeForm_changeForm
   | algebraMap => simp_rw [changeForm_algebraMap]
   | add _ _ hx hy => rw [map_add, map_add, map_add, hx, hy]
   | ι_mul _ _ hx => rw [changeForm_ι_mul, map_sub, changeForm_ι_mul, changeForm_ι_mul, hx, sub_sub,
-      LinearMap.add_apply, map_
+      LinearMap.add_apply, map_add, LinearMap.add_apply, changeForm_contractLeft, hx,
+      add_comm (_ : CliffordAlgebra Q'')]
 
 Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.left_induction, LinearMap, LinearMap.add_apply, add_apply, add_comm, algebraMap, changeForm_algebraMap, changeForm_contractLeft, left_induction, map_add, map_sub, simp_rw, sub_sub
 -/
@@ -1043,7 +1075,9 @@ exact (changeForm_changeForm _ _ x).trans
         by simp_rw [(add_neg_cancel B), changeForm_self_apply]
     right_inv := fun x => by
 exact (changeForm_changeForm _ _ x).trans
+        by simp_rw [(neg_add_cancel B), changeForm_self_apply] }
 
+@[simp]
 
 中文:
 定义 changeFormEquiv
@@ -1056,7 +1090,9 @@ exact (changeForm_changeForm _ _ x).trans
         by simp_rw [(add_neg_cancel B), changeForm_self_apply]
     right_inv := fun x => by
 exact (changeForm_changeForm _ _ x).trans
+        by simp_rw [(neg_add_cancel B), changeForm_self_apply] }
 
+@[simp]
 
 Depends on / 依赖: add_neg_cancel, changeForm, changeForm.neg_proof, changeForm_changeForm, changeForm_self_apply, invFun, left_inv, neg_add_cancel, neg_proof, right_inv, simp_rw
 -/

@@ -127,7 +127,18 @@ lemma ProperlyDiscontinuousSMul.ofFiniteRelIndex
   have (t : Γ) : {g | g in H ∧ (g • t • K inter L).Nonempty}.Finite :=
     hH (hK.image <| continuous_const_smul t) hL
   obtain ⟨S, hS, -⟩ := (H.subgroupOf G).exists_isComplement_right 1
-  have hT : (Subtype.val '' S).Finite 
+  have hT : (Subtype.val '' S).Finite := by
+    have : Fintype (G ⧸ H.subgroupOf G) := Subgroup.fintypeQuotientOfFiniteIndex
+    have : Fintype S := .ofEquiv _ hS.rightQuotientEquiv
+    exact (toFinite S).image _
+  have hS' {g : Γ} (hg : g in G) : exists t in Subtype.val '' S, g * t⁻¹ in H := by
+    obtain ⟨p, hp⟩ := (hS.existsUnique ⟨g, hg⟩).exists
+    aesop
+  refine (hT.biUnion <| fun t ht => (this t).map fun g => g * t).subset fun g => ?_
+  simp [mul_smul]
+  grind
+
+@[to_additive]
 
 中文:
 引理 ProperlyDiscontinuousSMul.ofFiniteRelIndex
@@ -138,7 +149,18 @@ lemma ProperlyDiscontinuousSMul.ofFiniteRelIndex
   have (t : Γ) : {g | g in H ∧ (g • t • K inter L).Nonempty}.Finite :=
     hH (hK.image <| continuous_const_smul t) hL
   obtain ⟨S, hS, -⟩ := (H.subgroupOf G).exists_isComplement_right 1
-  have hT : (Subtype.val '' S).Finite 
+  have hT : (Subtype.val '' S).Finite := by
+    have : Fintype (G ⧸ H.subgroupOf G) := Subgroup.fintypeQuotientOfFiniteIndex
+    have : Fintype S := .ofEquiv _ hS.rightQuotientEquiv
+    exact (toFinite S).image _
+  have hS' {g : Γ} (hg : g in G) : exists t in Subtype.val '' S, g * t⁻¹ in H := by
+    obtain ⟨p, hp⟩ := (hS.existsUnique ⟨g, hg⟩).exists
+    aesop
+  refine (hT.biUnion <| fun t ht => (this t).map fun g => g * t).subset fun g => ?_
+  simp [mul_smul]
+  grind
+
+@[to_additive]
 
 Depends on / 依赖: Finite, Fintype, H.subgroupOf, Nonempty, Subgroup, Subgroup.fintypeQuotientOfFiniteIndex, Subgroup.properlyDiscontinuousSMul_iff, Subtyp, Subtype, Subtype.val, continuous_const_smul, exists_isComplement_right, fintypeQuotientOfFiniteIndex, hK.image, hS.rightQuotientEquiv, ofEquiv, properlyDiscontinuousSMul_iff, rightQuotientEquiv, subgroupOf, toFinite
 -/
@@ -195,7 +217,9 @@ lemma Subgroup.Commensurable.properlyDiscontinuousSMul_iff
   have : IsFiniteRelIndex (G ⊓ H) H := ⟨Subgroup.inf_relIndex_right G H ▸ h.1⟩
   have : IsFiniteRelIndex (G ⊓ H) G := ⟨Subgroup.inf_relIndex_left G H ▸ h.2⟩
   calc ProperlyDiscontinuousSMul G α ↔ ProperlyDiscontinuousSMul ↑(G ⊓ H) α :=
-    (properlyDiscontinuousSMul_iff_of_isFiniteRelIndex inf_le
+    (properlyDiscontinuousSMul_iff_of_isFiniteRelIndex inf_le_left).symm
+  _ ↔ ProperlyDiscontinuousSMul H α :=
+    properlyDiscontinuousSMul_iff_of_isFiniteRelIndex inf_le_right
 
 中文:
 引理 子群.Commensurable.properlyDiscontinuousSMul_iff
@@ -203,7 +227,9 @@ lemma Subgroup.Commensurable.properlyDiscontinuousSMul_iff
   have : IsFiniteRelIndex (G ⊓ H) H := ⟨Subgroup.inf_relIndex_right G H ▸ h.1⟩
   have : IsFiniteRelIndex (G ⊓ H) G := ⟨Subgroup.inf_relIndex_left G H ▸ h.2⟩
   calc ProperlyDiscontinuousSMul G α ↔ ProperlyDiscontinuousSMul ↑(G ⊓ H) α :=
-    (properlyDiscontinuousSMul_iff_of_isFiniteRelIndex inf_le
+    (properlyDiscontinuousSMul_iff_of_isFiniteRelIndex inf_le_left).symm
+  _ ↔ ProperlyDiscontinuousSMul H α :=
+    properlyDiscontinuousSMul_iff_of_isFiniteRelIndex inf_le_right
 
 Depends on / 依赖: IsFiniteRelIndex, ProperlyDiscontinuousSMul, Subgroup, Subgroup.inf_relIndex_left, Subgroup.inf_relIndex_right, inf_le_left, inf_le_right, inf_relIndex_left, inf_relIndex_right, properlyDiscontinuousSMul_iff_of_isFiniteRelIndex
 -/

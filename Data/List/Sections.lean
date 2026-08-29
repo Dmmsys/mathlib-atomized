@@ -38,7 +38,10 @@ theorem mem_sections
     rcases h with ⟨_, _, _, _, rfl⟩
     simp only [*, forall₂_cons, true_and]
   · induction h with
-    | nil => simp only [s
+    | nil => simp only [sections, mem_singleton]
+    | @cons a l f L al fL fs =>
+      simp only [sections, mem_flatMap, mem_map]
+      exact ⟨f, fs, a, al, rfl⟩
 
 中文:
 定理 mem_sections
@@ -53,7 +56,10 @@ theorem mem_sections
     rcases h with ⟨_, _, _, _, rfl⟩
     simp only [*, forall₂_cons, true_and]
   · induction h with
-    | nil => simp only [s
+    | nil => simp only [sections, mem_singleton]
+    | @cons a l f L al fL fs =>
+      simp only [sections, mem_flatMap, mem_map]
+      exact ⟨f, fs, a, al, rfl⟩
 
 Depends on / 依赖: generalizing, mem_flatMap, mem_map, mem_singleton, sections, true_and
 -/

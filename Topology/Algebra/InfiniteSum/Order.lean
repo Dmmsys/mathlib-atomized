@@ -514,7 +514,9 @@ theorem tprod_le_of_prod_le'
     · rwa [tprod_eq_one_of_not_multipliable hf]
   · by_cases hf : f.mulSupport.Finite
     · simpa [tprod_bot hL, finprod_eq_prod _ hf] using h _
-    · rwa [tprod_bot hL, finprod_of_infinite_mulSupport 
+    · rwa [tprod_bot hL, finprod_of_infinite_mulSupport hf]
+
+@[to_additive]
 
 中文:
 定理 tprod_le_of_prod_le'
@@ -526,7 +528,9 @@ theorem tprod_le_of_prod_le'
     · rwa [tprod_eq_one_of_not_multipliable hf]
   · by_cases hf : f.mulSupport.Finite
     · simpa [tprod_bot hL, finprod_eq_prod _ hf] using h _
-    · rwa [tprod_bot hL, finprod_of_infinite_mulSupport 
+    · rwa [tprod_bot hL, finprod_of_infinite_mulSupport hf]
+
+@[to_additive]
 
 Depends on / 依赖: Finite, L.NeBot, Multipliable, f.mulSupport.Finite, finprod_eq_prod, finprod_of_infinite_mulSupport, hf.tprod_le_of_prod_le, mulSupport, tprod_bot, tprod_eq_one_of_not_multipliable, tprod_le_of_prod_le
 -/
@@ -728,7 +732,7 @@ theorem hasProd_lt
   have : 1 / f i * a₁ <= 1 / g i * a₂ := hasProd_le this (hf.update i 1) (hg.update i 1)
   simpa only [one_div, mul_inv_cancel_left] using mul_lt_mul_of_lt_of_le hi this
 
-@[to_additive (attr := 
+@[to_additive (attr := mono)]
 
 中文:
 定理 hasProd_lt
@@ -739,7 +743,7 @@ theorem hasProd_lt
   have : 1 / f i * a₁ <= 1 / g i * a₂ := hasProd_le this (hf.update i 1) (hg.update i 1)
   simpa only [one_div, mul_inv_cancel_left] using mul_lt_mul_of_lt_of_le hi this
 
-@[to_additive (attr := 
+@[to_additive (attr := mono)]
 
 Depends on / 依赖: classical, hasProd_le, hf.update, hg.update, mul_inv_cancel_left, mul_lt_mul_of_lt_of_le, one_div, rfl.le, update, update_le_update_iff, update_le_update_iff.mpr
 -/
@@ -1164,7 +1168,12 @@ theorem multipliable_mabs_iff
   have h1 : forall x : s, mabs (f x) = f x := fun x => mabs_of_one_le x.2
   have h2 : forall x : ↑sᶜ, mabs (f x) = (f x)⁻¹ := fun x => mabs_of_lt_one (not_le.1 x.2)
   calc (Multipliable fun x => mabs (f x)) ↔
-      (Multipliable fun x : s => mabs (f x)) ∧ Multipliable fun x
+      (Multipliable fun x : s => mabs (f x)) ∧ Multipliable fun x : ↑sᶜ => mabs (f x) :=
+        multipliable_subtype_and_compl.symm
+  _ ↔ (Multipliable fun x : s => f x) ∧ Multipliable fun x : ↑sᶜ => (f x)⁻¹ := by simp only [h1, h2]
+  _ ↔ Multipliable f := by simp only [multipliable_inv_iff, multipliable_subtype_and_compl]
+
+alias ⟨Summable.of_abs, Summable.abs⟩ := summable_abs_iff
 
 中文:
 定理 multipliable_mabs_iff
@@ -1173,7 +1182,12 @@ theorem multipliable_mabs_iff
   have h1 : forall x : s, mabs (f x) = f x := fun x => mabs_of_one_le x.2
   have h2 : forall x : ↑sᶜ, mabs (f x) = (f x)⁻¹ := fun x => mabs_of_lt_one (not_le.1 x.2)
   calc (Multipliable fun x => mabs (f x)) ↔
-      (Multipliable fun x : s => mabs (f x)) ∧ Multipliable fun x
+      (Multipliable fun x : s => mabs (f x)) ∧ Multipliable fun x : ↑sᶜ => mabs (f x) :=
+        multipliable_subtype_and_compl.symm
+  _ ↔ (Multipliable fun x : s => f x) ∧ Multipliable fun x : ↑sᶜ => (f x)⁻¹ := by simp only [h1, h2]
+  _ ↔ Multipliable f := by simp only [multipliable_inv_iff, multipliable_subtype_and_compl]
+
+alias ⟨Summable.of_abs, Summable.abs⟩ := summable_abs_iff
 
 Depends on / 依赖: Multipliable, mabs_of_lt_one, mabs_of_one_le, multipliable_inv_, multipliable_subtype_and_compl, multipliable_subtype_and_compl.symm, not_le
 -/
@@ -1203,7 +1217,8 @@ theorem Finite.of_summable_const
   obtain ⟨n, hn⟩ := Archimedean.arch (∑' _ : ι, b) hb
   have : forall s : Finset ι, #s <= n := fun s => by
     simpa [nsmul_le_nsmul_iff_left hb] using (H s).trans hn
-
+  have : Fintype ι := fintypeOfFinsetCardLe n this
+  infer_instance
 
 中文:
 定理 有限.of_summable_const
@@ -1214,7 +1229,8 @@ theorem Finite.of_summable_const
   obtain ⟨n, hn⟩ := Archimedean.arch (∑' _ : ι, b) hb
   have : forall s : Finset ι, #s <= n := fun s => by
     simpa [nsmul_le_nsmul_iff_left hb] using (H s).trans hn
-
+  have : Fintype ι := fintypeOfFinsetCardLe n this
+  infer_instance
 
 Depends on / 依赖: Archimedean, Archimedean.arch, Finset, Fintype, fintypeOfFinsetCardLe, hasSum, hb.le, hf.hasSum, infer_instance, nsmul_le_nsmul_iff_left, sum_le_hasSum
 -/

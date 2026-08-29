@@ -159,7 +159,10 @@ theorem Fin.snoc_eq_cons_rotate
       simp only [not_lt] at h'
       exact (Nat.eq_of_le_of_lt_succ h' h).symm
     subst h''
-    rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_ir
+    rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_irrefl _)]
+    rfl
+
+@[simp]
 
 中文:
 定理 有限集.snoc_eq_cons_rotate
@@ -173,7 +176,10 @@ theorem Fin.snoc_eq_cons_rotate
       simp only [not_lt] at h'
       exact (Nat.eq_of_le_of_lt_succ h' h).symm
     subst h''
-    rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_ir
+    rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_irrefl _)]
+    rfl
+
+@[simp]
 
 Depends on / 依赖: Fin.cons, Fin.snoc, Nat.eq_of_le_of_lt_succ, dif_neg, dif_pos, eq_of_le_of_lt_succ, finRotate_last, finRotate_of_lt, lt_irrefl, not_lt
 -/
@@ -230,7 +236,9 @@ theorem finRotate_apply
     · simp [finRotate_last]
     · cases i
       simp only [Fin.lt_def, Fin.val_last] at h
-      simp [finRotate_
+      simp [finRotate_of_lt h, Fin.add_def, Nat.mod_eq_of_lt (Nat.succ_lt_succ h)]
+
+@[deprecated finRotate_apply (since := "2026-03-29")]
 
 中文:
 定理 finRotate_apply
@@ -245,7 +253,9 @@ theorem finRotate_apply
     · simp [finRotate_last]
     · cases i
       simp only [Fin.lt_def, Fin.val_last] at h
-      simp [finRotate_
+      simp [finRotate_of_lt h, Fin.add_def, Nat.mod_eq_of_lt (Nat.succ_lt_succ h)]
+
+@[deprecated finRotate_apply (since := "2026-03-29")]
 
 Depends on / 依赖: Fin.add_def, Fin.eq_or_lt_of_le, Fin.lt_def, Fin.val_last, Nat.mod_eq_of_lt, Nat.succ_lt_succ, Subsingleton, Subsingleton.elim, add_def, eq_or_lt_of_le, finRotate, finRotate_last, finRotate_of_lt, i.elim0, i.le_last, i.neZero, le_last, lt_def, mod_eq_of_lt, neZero
 -/
@@ -543,7 +553,7 @@ lemma finCycle_eq_finRotate_iterate
     | zero => simp
     | succ k ih =>
       rw [Fin.val_eq_val]; rw [Fin.val_castSucc] at ih
-      rw [Fin.val_succ]; rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [← ih]; rw [finRotate_
+      rw [Fin.val_succ]; rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [← ih]; rw [finRotate_apply]; rw [finCycle_apply]; rw [finCycle_apply]; rw [add_assoc]; rw [Fin.coeSucc_eq_succ]
 
 中文:
 引理 finCycle_eq_finRotate_iterate
@@ -557,7 +567,7 @@ lemma finCycle_eq_finRotate_iterate
     | zero => simp
     | succ k ih =>
       rw [Fin.val_eq_val]; rw [Fin.val_castSucc] at ih
-      rw [Fin.val_succ]; rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [← ih]; rw [finRotate_
+      rw [Fin.val_succ]; rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [← ih]; rw [finRotate_apply]; rw [finCycle_apply]; rw [finCycle_apply]; rw [add_assoc]; rw [Fin.coeSucc_eq_succ]
 
 Depends on / 依赖: Fin.coeSucc_eq_succ, Fin.induction, Fin.val_castSucc, Fin.val_eq_val, Fin.val_succ, Function, Function.comp_apply, Function.iterate_succ, add_assoc, coeSucc_eq_succ, comp_apply, finCycle_apply, finRotate_apply, iterate_succ, k.elim0, val_castSucc, val_eq_val, val_succ
 -/

@@ -412,7 +412,13 @@ lemma shortExact_res
     rw [ShortComplex.exact_map_iff_of_faithful] at h₁
     simp only [ShortComplex.map_f, mono_iff_injective, ShortComplex.map_g,
       epi_iff_surjective] at h₂ h₃
-    exact {exact := h₁, mono_f := mono_iff_injecti
+    exact {exact := h₁, mono_f := mono_iff_injective _|>.2 h₂, epi_g := epi_iff_surjective _|>.2 h₃}
+  · rintro @⟨_, mono_f, epi_g⟩
+    exact {
+      exact := by rwa [ShortComplex.exact_map_iff_of_faithful]
+      mono_f := by simpa [mono_iff_injective] using! mono_f
+      epi_g := by simpa [epi_iff_surjective] using! epi_g
+    }
 
 中文:
 引理 shortExact_res
@@ -426,7 +432,13 @@ lemma shortExact_res
     rw [ShortComplex.exact_map_iff_of_faithful] at h₁
     simp only [ShortComplex.map_f, mono_iff_injective, ShortComplex.map_g,
       epi_iff_surjective] at h₂ h₃
-    exact {exact := h₁, mono_f := mono_iff_injecti
+    exact {exact := h₁, mono_f := mono_iff_injective _|>.2 h₂, epi_g := epi_iff_surjective _|>.2 h₃}
+  · rintro @⟨_, mono_f, epi_g⟩
+    exact {
+      exact := by rwa [ShortComplex.exact_map_iff_of_faithful]
+      mono_f := by simpa [mono_iff_injective] using! mono_f
+      epi_g := by simpa [epi_iff_surjective] using! epi_g
+    }
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_map_iff_of_faithful, ShortComplex.map_f, ShortComplex.map_g, epi_g, epi_iff_surjecti, epi_iff_surjective, exact_map_iff_of_faithful, map_f, map_g, mono_f, mono_iff_injective
 -/

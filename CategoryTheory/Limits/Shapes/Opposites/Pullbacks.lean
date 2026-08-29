@@ -167,7 +167,8 @@ definition opCospan
     _ ≅ (walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse) ⋙ (cospan f g).op :=
       isoWhiskerRight walkingCospanOpEquiv.unitIso _
     _ ≅ walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse ⋙ (cospan f g).op :=
-      F
+      Functor.associator _ _ _
+    _ ≅ walkingCospanOpEquiv.functor ⋙ span f.op g.op := isoWhiskerLeft _ (spanOp f g).symm
 
 中文:
 定义 opCospan
@@ -177,7 +178,8 @@ definition opCospan
     _ ≅ (walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse) ⋙ (cospan f g).op :=
       isoWhiskerRight walkingCospanOpEquiv.unitIso _
     _ ≅ walkingCospanOpEquiv.functor ⋙ walkingCospanOpEquiv.inverse ⋙ (cospan f g).op :=
-      F
+      Functor.associator _ _ _
+    _ ≅ walkingCospanOpEquiv.functor ⋙ span f.op g.op := isoWhiskerLeft _ (spanOp f g).symm
 
 Depends on / 依赖: Functor, Functor.associator, associator, cospan, f.op, functor, g.op, inverse, isoWhiskerLeft, isoWhiskerRight, spanOp, unitIso, walkingCospanOpEquiv, walkingCospanOpEquiv.functor, walkingCospanOpEquiv.inverse, walkingCospanOpEquiv.unitIso
 -/
@@ -274,7 +276,8 @@ definition opSpan
     _ ≅ (walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse) ⋙ (span f g).op :=
       isoWhiskerRight walkingSpanOpEquiv.unitIso _
     _ ≅ walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse ⋙ (span f g).op :=
-      Functor.associator 
+      Functor.associator _ _ _
+    _ ≅ walkingSpanOpEquiv.functor ⋙ cospan f.op g.op := isoWhiskerLeft _ (cospanOp f g).symm
 
 中文:
 定义 opSpan
@@ -284,7 +287,8 @@ definition opSpan
     _ ≅ (walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse) ⋙ (span f g).op :=
       isoWhiskerRight walkingSpanOpEquiv.unitIso _
     _ ≅ walkingSpanOpEquiv.functor ⋙ walkingSpanOpEquiv.inverse ⋙ (span f g).op :=
-      Functor.associator 
+      Functor.associator _ _ _
+    _ ≅ walkingSpanOpEquiv.functor ⋙ cospan f.op g.op := isoWhiskerLeft _ (cospanOp f g).symm
 
 Depends on / 依赖: Functor, Functor.associator, associator, cospan, cospanOp, f.op, functor, g.op, inverse, isoWhiskerLeft, isoWhiskerRight, unitIso, walkingSpanOpEquiv, walkingSpanOpEquiv.functor, walkingSpanOpEquiv.inverse, walkingSpanOpEquiv.unitIso
 -/
@@ -640,7 +644,8 @@ definition isColimitEquivIsLimitOp
       ((IsLimit.whiskerEquivalenceEquiv walkingSpanOpEquiv.symm).toFun h.op)
   · intro h
     exact (IsColimit.equivIsoColimit c.opUnopIso).toFun
-      (((IsLimit.postcomposeHomEquiv _ _).invFu
+      (((IsLimit.postcomposeHomEquiv _ _).invFun
+        ((IsLimit.whiskerEquivalenceEquiv _).toFun h)).unop)
 
 中文:
 定义 isColimitEquivIsLimitOp
@@ -652,7 +657,8 @@ definition isColimitEquivIsLimitOp
       ((IsLimit.whiskerEquivalenceEquiv walkingSpanOpEquiv.symm).toFun h.op)
   · intro h
     exact (IsColimit.equivIsoColimit c.opUnopIso).toFun
-      (((IsLimit.postcomposeHomEquiv _ _).invFu
+      (((IsLimit.postcomposeHomEquiv _ _).invFun
+        ((IsLimit.whiskerEquivalenceEquiv _).toFun h)).unop)
 
 Depends on / 依赖: IsColimit, IsColimit.equivIsoColimit, IsLimit, IsLimit.postcomposeHomEquiv, IsLimit.whiskerEquivalenceEquiv, c.opUnopIso, equivIsoColimit, equivOfSubsingletonOfSubsingleton, h.op, invFun, opUnopIso, postcomposeHomEquiv, walkingSpanOpEquiv, walkingSpanOpEquiv.symm, whiskerEquivalenceEquiv
 -/
@@ -684,7 +690,7 @@ definition isColimitEquivIsLimitUnop
   · intro h
     exact (IsColimit.equivIsoColimit c.unopOpIso).toFun
       ((IsColimit.precomposeHomEquiv _ _).invFun
-      ((IsCol
+      ((IsColimit.whiskerEquivalenceEquiv walkingCospanOpEquiv.symm).toFun h.op))
 
 中文:
 定义 isColimitEquivIsLimitUnop
@@ -697,7 +703,7 @@ definition isColimitEquivIsLimitUnop
   · intro h
     exact (IsColimit.equivIsoColimit c.unopOpIso).toFun
       ((IsColimit.precomposeHomEquiv _ _).invFun
-      ((IsCol
+      ((IsColimit.whiskerEquivalenceEquiv walkingCospanOpEquiv.symm).toFun h.op))
 
 Depends on / 依赖: IsColimit, IsColimit.equivIsoColimit, IsColimit.precomposeHomEquiv, IsColimit.whiskerEquivalenceEquiv, c.unopOpIso, equivIsoColimit, equivOfSubsingletonOfSubsingleton, h.op, invFun, precomposeHomEquiv, unopOpIso, walkingCospanOpEquiv, walkingCospanOpEquiv.symm, whiskerEquivalenceEquiv
 -/

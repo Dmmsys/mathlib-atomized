@@ -1095,7 +1095,10 @@ theorem UniformContinuousOn.tendstoUniformlyOn
   change Tendsto (Prod.map ↿F ↿F ∘ φ) (𝓝[U] x ×ˢ 𝓟 V) (𝓤 γ)
   simp only [nhdsWithin, Filter.prod_eq_inf, comap_inf, inf_assoc, comap_principal, inf_principal]
   refine Tendsto.comp hF
-    (Tendsto.inf ?_ <| tendsto_pr
+    (Tendsto.inf ?_ <| tendsto_principal_principal.2 fun x hx => ⟨⟨hU, hx.2⟩, hx⟩)
+  simp only [uniformity_prod_eq_comap_prod, tendsto_comap_iff,
+    nhds_eq_comap_uniformity, comap_comap]
+  exact tendsto_comap.prodMk (tendsto_diag_uniformity _ _)
 
 中文:
 定理 UniformContinuousOn.tendstoUniformlyOn
@@ -1106,7 +1109,10 @@ theorem UniformContinuousOn.tendstoUniformlyOn
   change Tendsto (Prod.map ↿F ↿F ∘ φ) (𝓝[U] x ×ˢ 𝓟 V) (𝓤 γ)
   simp only [nhdsWithin, Filter.prod_eq_inf, comap_inf, inf_assoc, comap_principal, inf_principal]
   refine Tendsto.comp hF
-    (Tendsto.inf ?_ <| tendsto_pr
+    (Tendsto.inf ?_ <| tendsto_principal_principal.2 fun x hx => ⟨⟨hU, hx.2⟩, hx⟩)
+  simp only [uniformity_prod_eq_comap_prod, tendsto_comap_iff,
+    nhds_eq_comap_uniformity, comap_comap]
+  exact tendsto_comap.prodMk (tendsto_diag_uniformity _ _)
 
 Depends on / 依赖: Filter, Filter.prod_eq_inf, Prod.map, Tendsto, Tendsto.comp, Tendsto.inf, comap_comap, comap_inf, comap_principal, inf_assoc, inf_principal, nhdsWithin, nhds_eq_comap_uniformity, prodMk, prod_eq_inf, tendstoUniformlyOn_iff_tendsto, tendsto_comap, tendsto_comap.prodMk, tendsto_comap_iff, tendsto_diag_uniformity
 -/
@@ -1472,7 +1478,27 @@ theorem UniformCauchySeqOnFilter.tendstoUniformlyOnFilter_of_tendsto
   · simp only [TendstoUniformlyOnFilter, bot_prod, eventually_bot, implies_true]
   -- Proof idea: |f_n(x) - f(x)| ≤ |f_n(x) - f_m(x)| + |f_m(x) - f(x)|. We choose `n`
   -- so that |f_n(x) - f_m(x)| is uniformly small across `s` whenever `m ≥ n`. Then for
-  -- a
+  -- a fixed `x`, we choose `m` sufficiently large such that |f_m(x) - f(x)| is small.
+  intro u hu
+  rcases comp_symm_of_uniformity hu with ⟨t, ht, htsymm, htmem⟩
+  -- We will choose n, x, and m simultaneously. n and x come from hF. m comes from hF'
+  -- But we need to promote hF' to the full product filter to use it
+  have hmc : forallᶠ x in (p ×ˢ p) ×ˢ p', Tendsto (fun n : ι => F n x.snd) p (𝓝 (f x.snd)) := by
+    rw [eventually_prod_iff]
+    exact ⟨fun _ => True, by simp, _, hF', by simp⟩
+  -- To apply filter operations we'll need to do some order manipulation
+  rw [Filter.eventually_swap_iff]
+  have := tendsto_prodAssoc.eventually (tendsto_prod_swap.eventually ((hF t ht).and hmc))
+  apply this.curry.mono
+  simp only [Equiv.prodAssoc_apply, eventually_and, eventually_const, Prod.snd_swap, Prod.fst_swap,
+    and_imp, Prod.forall]
+  -- Complete the proof
+  intro x n hx hm'
+  refine Set.mem_of_mem_of_subset ?_ htmem
+  rw [Uniform.tendsto_nhds_right] at hm'
+  have := hx.and (hm' ht)
+  obtain ⟨m, hm⟩ := this.exists
+  exact ⟨F m x, ⟨hm.2, htsymm hm.1⟩⟩
 
 中文:
 定理 UniformCauchySeqOnFilter.tendstoUniformlyOnFilter_of_tendsto
@@ -1481,7 +1507,27 @@ theorem UniformCauchySeqOnFilter.tendstoUniformlyOnFilter_of_tendsto
   · simp only [TendstoUniformlyOnFilter, bot_prod, eventually_bot, implies_true]
   -- Proof idea: |f_n(x) - f(x)| ≤ |f_n(x) - f_m(x)| + |f_m(x) - f(x)|. We choose `n`
   -- so that |f_n(x) - f_m(x)| is uniformly small across `s` whenever `m ≥ n`. Then for
-  -- a
+  -- a fixed `x`, we choose `m` sufficiently large such that |f_m(x) - f(x)| is small.
+  intro u hu
+  rcases comp_symm_of_uniformity hu with ⟨t, ht, htsymm, htmem⟩
+  -- We will choose n, x, and m simultaneously. n and x come from hF. m comes from hF'
+  -- But we need to promote hF' to the full product filter to use it
+  have hmc : forallᶠ x in (p ×ˢ p) ×ˢ p', Tendsto (fun n : ι => F n x.snd) p (𝓝 (f x.snd)) := by
+    rw [eventually_prod_iff]
+    exact ⟨fun _ => True, by simp, _, hF', by simp⟩
+  -- To apply filter operations we'll need to do some order manipulation
+  rw [Filter.eventually_swap_iff]
+  have := tendsto_prodAssoc.eventually (tendsto_prod_swap.eventually ((hF t ht).and hmc))
+  apply this.curry.mono
+  simp only [Equiv.prodAssoc_apply, eventually_and, eventually_const, Prod.snd_swap, Prod.fst_swap,
+    and_imp, Prod.forall]
+  -- Complete the proof
+  intro x n hx hm'
+  refine Set.mem_of_mem_of_subset ?_ htmem
+  rw [Uniform.tendsto_nhds_right] at hm'
+  have := hx.and (hm' ht)
+  obtain ⟨m, hm⟩ := this.exists
+  exact ⟨F m x, ⟨hm.2, htsymm hm.1⟩⟩
 
 Depends on / 依赖: TendstoUniformlyOnFilter, bot_prod, eq_or_neBot, eventually_bot, implies_true, p.eq_or_neBot
 -/
@@ -1686,7 +1732,8 @@ theorem UniformCauchySeqOn.prodMap
   simp_rw [mem_prod, and_imp, Prod.forall, Prod.map_apply]
   rw [← Set.image_subset_iff] at hvw
   apply (tendsto_swap4_prod.eventually ((h v hv).prod_mk (h' w hw))).mono
-  intro x
+  intro x hx a b ha hb
+  exact hvw ⟨_, mk_mem_prod (hx.1 a ha) (hx.2 b hb), rfl⟩
 
 中文:
 定理 UniformCauchySeqOn.prodMap
@@ -1698,7 +1745,8 @@ theorem UniformCauchySeqOn.prodMap
   simp_rw [mem_prod, and_imp, Prod.forall, Prod.map_apply]
   rw [← Set.image_subset_iff] at hvw
   apply (tendsto_swap4_prod.eventually ((h v hv).prod_mk (h' w hw))).mono
-  intro x
+  intro x hx a b ha hb
+  exact hvw ⟨_, mk_mem_prod (hx.1 a ha) (hx.2 b hb), rfl⟩
 
 Depends on / 依赖: Prod.forall, Prod.map_apply, Set.image_subset_iff, and_imp, eventually, image_subset_iff, map_apply, mem_map, mem_prod, mem_prod_iff, mk_mem_prod, prod_mk, simp_rw, tendsto_swap4_prod, tendsto_swap4_prod.eventually, uniformity_prod_eq_prod
 -/
@@ -1934,7 +1982,10 @@ theorem TendstoUniformlyOnFilter.tendsto_of_eventually_tendsto
   obtain ⟨t, ht, hts⟩ := comp3_mem_uniformity hs
   have p1 : forallᶠ i in p, (L i, ℓ) in t := tendsto_nhds_left.mp h3 ht
   have p2 : forallᶠ i in p, forallᶠ x in p', (F i x, L i) in t := by
-    filter_u
+    filter_upwards [h2] with i h2 using tendsto_nhds_left.mp h2 ht
+  have p3 : forallᶠ i in p, forallᶠ x in p', (f x, F i x) in t := (h1 t ht).curry
+  obtain ⟨i, p4, p5, p6⟩ := (p1.and (p2.and p3)).exists
+  filter_upwards [p5, p6] with x p5 p6 using hts ⟨F i x, p6, L i, p5, p4⟩
 
 中文:
 定理 TendstoUniformlyOnFilter.tendsto_of_eventually_tendsto
@@ -1945,7 +1996,10 @@ theorem TendstoUniformlyOnFilter.tendsto_of_eventually_tendsto
   obtain ⟨t, ht, hts⟩ := comp3_mem_uniformity hs
   have p1 : forallᶠ i in p, (L i, ℓ) in t := tendsto_nhds_left.mp h3 ht
   have p2 : forallᶠ i in p, forallᶠ x in p', (F i x, L i) in t := by
-    filter_u
+    filter_upwards [h2] with i h2 using tendsto_nhds_left.mp h2 ht
+  have p3 : forallᶠ i in p, forallᶠ x in p', (f x, F i x) in t := (h1 t ht).curry
+  obtain ⟨i, p4, p5, p6⟩ := (p1.and (p2.and p3)).exists
+  filter_upwards [p5, p6] with x p5 p6 using hts ⟨F i x, p6, L i, p5, p4⟩
 
 Depends on / 依赖: Set.preimage, comp3_mem_uniformity, eventually_iff, filter_upwards, mem_map, p1.and, p2.and, preimage, tendsto_nhds_left, tendsto_nhds_left.mp
 -/

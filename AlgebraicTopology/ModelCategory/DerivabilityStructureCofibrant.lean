@@ -61,7 +61,7 @@ instance :
     w := Arrow.homMk (HoCat.pResolutionObj f.left) (HoCat.pResolutionObj f.right)
       (HoCat.resolutionMap_fac f.hom).symm
     hw := ⟨mem_weakEquivalences (HoCat.pResolutionObj f.left),
-      mem_weakEquivalences (HoCat.pResolution
+      mem_weakEquivalences (HoCat.pResolutionObj f.right)⟩ }⟩
 
 中文:
 实例 :
@@ -71,7 +71,7 @@ instance :
     w := Arrow.homMk (HoCat.pResolutionObj f.left) (HoCat.pResolutionObj f.right)
       (HoCat.resolutionMap_fac f.hom).symm
     hw := ⟨mem_weakEquivalences (HoCat.pResolutionObj f.left),
-      mem_weakEquivalences (HoCat.pResolution
+      mem_weakEquivalences (HoCat.pResolutionObj f.right)⟩ }⟩
 
 Depends on / 依赖: Arrow.homMk, Arrow.mk, HoCat.pResolutionObj, HoCat.resolutionMap, HoCat.resolutionMap_fac, f.hom, f.left, f.right, mem_weakEquivalences, pResolutionObj, resolutionMap, resolutionMap_fac
 -/

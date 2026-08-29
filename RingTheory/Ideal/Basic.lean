@@ -310,7 +310,21 @@ theorem pow_multiset_sum_mem_span_pow
   refine Submodule.sum_mem _ ?_
   intro c _hc
   rw [mem_span_insert]
-  by_cases! h 
+  by_cases! h : n + 1 <= c
+  · refine ⟨a ^ (c - (n + 1)) * s.sum ^ ((Multiset.card s + 1) * n + 1 - c) *
+      ((Multiset.card s + 1) * n + 1).choose c, 0, Submodule.zero_mem _, ?_⟩
+    rw [mul_comm _ (a ^ (n + 1))]
+    simp_rw [← mul_assoc]
+    rw [← pow_add]; rw [add_zero]; rw [add_tsub_cancel_of_le h]
+  · use 0
+    simp_rw [zero_mul, zero_add]
+    refine ⟨_, ?_, rfl⟩
+    replace h : c <= n := Nat.lt_succ_iff.mp h
+    have : (Multiset.card s + 1) * n + 1 - c = Multiset.card s * n + 1 + (n - c) := by
+      rw [add_mul]; rw [one_mul]; rw [add_assoc]; rw [add_comm n 1]; rw [← add_assoc]; rw [add_tsub_assoc_of_le h]
+    rw [this]; rw [pow_add]
+    simp_rw [mul_assoc, mul_comm (s.sum ^ (Multiset.card s * n + 1)), ← mul_assoc]
+    exact mul_mem_left _ _ hs
 
 中文:
 定理 pow_multiset_sum_mem_span_pow
@@ -324,7 +338,21 @@ theorem pow_multiset_sum_mem_span_pow
   refine Submodule.sum_mem _ ?_
   intro c _hc
   rw [mem_span_insert]
-  by_cases! h 
+  by_cases! h : n + 1 <= c
+  · refine ⟨a ^ (c - (n + 1)) * s.sum ^ ((Multiset.card s + 1) * n + 1 - c) *
+      ((Multiset.card s + 1) * n + 1).choose c, 0, Submodule.zero_mem _, ?_⟩
+    rw [mul_comm _ (a ^ (n + 1))]
+    simp_rw [← mul_assoc]
+    rw [← pow_add]; rw [add_zero]; rw [add_tsub_cancel_of_le h]
+  · use 0
+    simp_rw [zero_mul, zero_add]
+    refine ⟨_, ?_, rfl⟩
+    replace h : c <= n := Nat.lt_succ_iff.mp h
+    have : (Multiset.card s + 1) * n + 1 - c = Multiset.card s * n + 1 + (n - c) := by
+      rw [add_mul]; rw [one_mul]; rw [add_assoc]; rw [add_comm n 1]; rw [← add_assoc]; rw [add_tsub_assoc_of_le h]
+    rw [this]; rw [pow_add]
+    simp_rw [mul_assoc, mul_comm (s.sum ^ (Multiset.card s * n + 1)), ← mul_assoc]
+    exact mul_mem_left _ _ hs
 
 Depends on / 依赖: Finset, Finset.coe_insert, Multiset, Multiset.card, Multiset.card_cons, Multiset.induction_on, Multiset.map_cons, Multiset.sum_cons, Multiset.toFinset_cons, Submodule, Submodule.sum_mem, Submodule.zero_mem, add_pow, card_cons, coe_insert, induction_on, map_cons, mem_span_insert, mul_assoc, mul_comm
 -/
@@ -397,7 +425,20 @@ theorem span_pow_eq_top
     · exact subset_span ⟨_, hx, pow_zero _⟩
   rw [eq_top_iff_one]; rw [span]; rw [Finsupp.mem_span_iff_linearCombination] at hs
   rcases hs with ⟨f, hf⟩
-  si
+  simp only [Finsupp.linearCombination, Finsupp.coe_lsum, Finsupp.sum, LinearMap.coe_smulRight,
+    LinearMap.id_coe, id_eq, smul_eq_mul] at hf
+  have := sum_pow_mem_span_pow f.support (fun a => f a * a) n
+  rw [hf]; rw [one_pow] at this
+  refine span_le.mpr ?_ this
+  rintro _ hx
+  simp_rw [Set.mem_image] at hx
+  rcases hx with ⟨x, _, rfl⟩
+  have : span ({(x : α) ^ (n + 1)} : Set α) <= span ((fun x : α => x ^ (n + 1)) '' s) := by
+    rw [span_le]; rw [Set.singleton_subset_iff]
+    exact subset_span ⟨x, x.prop, rfl⟩
+  refine this ?_
+  rw [mul_pow]; rw [mem_span_singleton]
+  exact ⟨f x ^ (n + 1), mul_comm _ _⟩
 
 中文:
 定理 span_pow_eq_top
@@ -411,7 +452,20 @@ theorem span_pow_eq_top
     · exact subset_span ⟨_, hx, pow_zero _⟩
   rw [eq_top_iff_one]; rw [span]; rw [Finsupp.mem_span_iff_linearCombination] at hs
   rcases hs with ⟨f, hf⟩
-  si
+  simp only [Finsupp.linearCombination, Finsupp.coe_lsum, Finsupp.sum, LinearMap.coe_smulRight,
+    LinearMap.id_coe, id_eq, smul_eq_mul] at hf
+  have := sum_pow_mem_span_pow f.support (fun a => f a * a) n
+  rw [hf]; rw [one_pow] at this
+  refine span_le.mpr ?_ this
+  rintro _ hx
+  simp_rw [Set.mem_image] at hx
+  rcases hx with ⟨x, _, rfl⟩
+  have : span ({(x : α) ^ (n + 1)} : Set α) <= span ((fun x : α => x ^ (n + 1)) '' s) := by
+    rw [span_le]; rw [Set.singleton_subset_iff]
+    exact subset_span ⟨x, x.prop, rfl⟩
+  refine this ?_
+  rw [mul_pow]; rw [mem_span_singleton]
+  exact ⟨f x ^ (n + 1), mul_comm _ _⟩
 
 Depends on / 依赖: Finsupp, Finsupp.coe_lsum, Finsupp.linearCombination, Finsupp.mem_span_iff_linearCombination, Finsupp.sum, LinearMap, LinearMap.coe_smulRight, LinearMap.id_coe, Set.image_empty, coe_lsum, coe_smulRight, eq_empty_or_nonempty, eq_top_iff_one, f.support, id_coe, id_eq, image_empty, linearCombination, mem_span_iff_linearCombination, one_pow
 -/
@@ -451,7 +505,9 @@ theorem span_range_pow_eq_top
   refine top_unique ((span_pow_eq_top _ ((eq_top_iff_one _).mpr mem) <|
     t.attach.sup fun x => n ⟨x, hts x.2⟩).ge.trans <| span_le.mpr ?_)
   rintro _ ⟨x, hxt, rfl⟩
-  rw [← Nat.sub_add_cancel (Finset.le_sup
+  rw [← Nat.sub_add_cancel (Finset.le_sup <| t.mem_attach ⟨x]; rw [hxt⟩)]
+  simp_rw [pow_add]
+  exact mul_mem_left _ _ (subset_span ⟨_, rfl⟩)
 
 中文:
 定理 span_range_pow_eq_top
@@ -461,7 +517,9 @@ theorem span_range_pow_eq_top
   refine top_unique ((span_pow_eq_top _ ((eq_top_iff_one _).mpr mem) <|
     t.attach.sup fun x => n ⟨x, hts x.2⟩).ge.trans <| span_le.mpr ?_)
   rintro _ ⟨x, hxt, rfl⟩
-  rw [← Nat.sub_add_cancel (Finset.le_sup
+  rw [← Nat.sub_add_cancel (Finset.le_sup <| t.mem_attach ⟨x]; rw [hxt⟩)]
+  simp_rw [pow_add]
+  exact mul_mem_left _ _ (subset_span ⟨_, rfl⟩)
 
 Depends on / 依赖: Finset, Finset.le_sup, Nat.sub_add_cancel, Submodule, Submodule.mem_span_finite_of_mem_span, attach, eq_top_iff_one, ge.trans, le_sup, mem_attach, mem_span_finite_of_mem_span, mul_mem_left, pow_add, simp_rw, span_le, span_le.mpr, span_pow_eq_top, sub_add_cancel, subset_span, t.attach.sup
 -/
@@ -517,7 +575,7 @@ lemma span_single_eq_top
   | add f g hf hg => exact Ideal.add_mem _ hf hg
   | single i r =>
       rw [show Pi.single i r = Pi.single i r * Pi.single i 1 by simp [← Pi.single_mul_left]]
-      exact Ideal.mul_mem_left _ _ (I
+      exact Ideal.mul_mem_left _ _ (Ideal.subset_span ⟨i, rfl⟩)
 
 中文:
 引理 span_single_eq_top
@@ -530,7 +588,7 @@ lemma span_single_eq_top
   | add f g hf hg => exact Ideal.add_mem _ hf hg
   | single i r =>
       rw [show Pi.single i r = Pi.single i r * Pi.single i 1 by simp [← Pi.single_mul_left]]
-      exact Ideal.mul_mem_left _ _ (I
+      exact Ideal.mul_mem_left _ _ (Ideal.subset_span ⟨i, rfl⟩)
 
 Depends on / 依赖: Ideal.add_mem, Ideal.mul_mem_left, Ideal.subset_span, Pi.single, Pi.single_induction, Pi.single_mul_left, _root_, _root_.eq_top_iff, add_mem, eq_top_iff, mul_mem_left, single, single_induction, single_mul_left, subset_span
 -/
@@ -809,7 +867,8 @@ theorem isField_iff_isSimpleOrder_ideal
         (false_of_nontrivial_of_subsingleton <| Ideal R).elim⟩
   rw [← not_iff_not]; rw [Ring.not_isField_iff_exists_ideal_bot_lt_and_lt_top]
   contrapose! +distrib
-  simp_rw [not_lt_to
+  simp_rw [not_lt_top_iff, not_bot_lt_iff]
+  exact ⟨fun h => ⟨h⟩, fun h => h.2⟩
 
 中文:
 定理 isField_iff_isSimpleOrder_ideal
@@ -821,7 +880,8 @@ theorem isField_iff_isSimpleOrder_ideal
         (false_of_nontrivial_of_subsingleton <| Ideal R).elim⟩
   rw [← not_iff_not]; rw [Ring.not_isField_iff_exists_ideal_bot_lt_and_lt_top]
   contrapose! +distrib
-  simp_rw [not_lt_to
+  simp_rw [not_lt_top_iff, not_bot_lt_iff]
+  exact ⟨fun h => ⟨h⟩, fun h => h.2⟩
 
 Depends on / 依赖: Ring.not_isField_iff_exists_ideal_bot_lt_and_lt_top, contrapose, distrib, false_of_nontrivial_of_subsingleton, not_bot_lt_iff, not_iff_not, not_isField_iff_exists_ideal_bot_lt_and_lt_top, not_isField_of_subsingleton, not_lt_top_iff, simp_rw, subsingleton_or_nontrivial
 -/

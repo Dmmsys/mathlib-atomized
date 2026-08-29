@@ -172,7 +172,7 @@ definition fullSubcategoryEquiv
   invFun h :=
     { h := P.homMk h.h
       h₀ := by ext; exact h.h₀
-      h₁ := by ext; e
+      h₁ := by ext; exact h.h₁ }
 
 中文:
 定义 fullSubcategoryEquiv
@@ -187,7 +187,7 @@ definition fullSubcategoryEquiv
   invFun h :=
     { h := P.homMk h.h
       h₀ := by ext; exact h.h₀
-      h₁ := by ext; e
+      h₁ := by ext; exact h.h₁ }
 
 Depends on / 依赖: FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory.comp_hom, P.homMk, comp_hom, h.h.hom, invFun
 -/
@@ -478,7 +478,8 @@ lemma factorsThroughLocalization
     simp only [← h.h₀, ← h.h₁, L.map_comp, this]
   have := Localization.inverts L (weakEquivalences C) P.π (by
     rw [← weakEquivalence_iff]
-    infer_instanc
+    infer_instance)
+  simp [← cancel_mono (L.map P.π), ← L.map_comp, P.i₀_π, P.i₁_π]
 
 中文:
 引理 factorsThroughLocalization
@@ -491,7 +492,8 @@ lemma factorsThroughLocalization
     simp only [← h.h₀, ← h.h₁, L.map_comp, this]
   have := Localization.inverts L (weakEquivalences C) P.π (by
     rw [← weakEquivalence_iff]
-    infer_instanc
+    infer_instance)
+  simp [← cancel_mono (L.map P.π), ← L.map_comp, P.i₀_π, P.i₁_π]
 
 Depends on / 依赖: L.map, L.map_comp, Localization, Localization.inverts, areEqualizedByLocalization_iff, cancel_mono, infer_instance, inverts, map_comp, weakEquivalence_iff, weakEquivalences
 -/
@@ -592,7 +594,12 @@ lemma exists_very_good_cylinder
       i₀ := P.i₀ ≫ fac.i
       i₁ := P.i₁ ≫ fac.i
       π := fac.p
-      weakEquivalence_π := weakEquivalence_of_prec
+      weakEquivalence_π := weakEquivalence_of_precomp_of_fac fac.fac }
+  have : Cofibration P'.i := by
+    rw [show P'.i = P.i ≫ fac.i by cat_disch]
+    infer_instance
+  have sq : CommSq h.h fac.i (terminal.from _) (terminal.from _) := { }
+  exact ⟨P', { }, ⟨{ h := sq.lift }⟩ ⟩
 
 中文:
 引理 存在_very_good_cylinder
@@ -605,7 +612,12 @@ lemma exists_very_good_cylinder
       i₀ := P.i₀ ≫ fac.i
       i₁ := P.i₁ ≫ fac.i
       π := fac.p
-      weakEquivalence_π := weakEquivalence_of_prec
+      weakEquivalence_π := weakEquivalence_of_precomp_of_fac fac.fac }
+  have : Cofibration P'.i := by
+    rw [show P'.i = P.i ≫ fac.i by cat_disch]
+    infer_instance
+  have sq : CommSq h.h fac.i (terminal.from _) (terminal.from _) := { }
+  exact ⟨P', { }, ⟨{ h := sq.lift }⟩ ⟩
 
 Depends on / 依赖: Cofibration, CommSq, Cylinder, MorphismProperty, MorphismProperty.factorizationData, cat_disch, exists_good_cylinder, fac.Z, fac.fac, fac.i, fac.p, factorizationData, fibrations, h.exists_good_cylinder, infer_instance, sq.lift, terminal, terminal.from, trivialCofibrations, weakEquivalence_of_precomp_of_fac
 -/
@@ -716,7 +728,12 @@ lemma precomp
    ⟨{ h := sq.lift ≫ h.h
       h₀ := by
         have := coprod.inl ≫= sq.fac_left
-        simp 
+        simp only [Q.inl_i_assoc, coprod.inl_desc] at this
+        simp [reassoc_of% this]
+      h₁ := by
+        have := coprod.inr ≫= sq.fac_left
+        simp only [Q.inr_i_assoc, coprod.inr_desc] at this
+        simp [reassoc_of% this] }⟩⟩
 
 中文:
 引理 precomp
@@ -729,7 +746,12 @@ lemma precomp
    ⟨{ h := sq.lift ≫ h.h
       h₀ := by
         have := coprod.inl ≫= sq.fac_left
-        simp 
+        simp only [Q.inl_i_assoc, coprod.inl_desc] at this
+        simp [reassoc_of% this]
+      h₁ := by
+        have := coprod.inr ≫= sq.fac_left
+        simp only [Q.inr_i_assoc, coprod.inr_desc] at this
+        simp [reassoc_of% this] }⟩⟩
 
 Depends on / 依赖: CommSq, Cylinder, Cylinder.exists_very_good, Q.inl_i_assoc, Q.inr_i_assoc, aesop_cat, coprod, coprod.desc, coprod.inl, coprod.inl_desc, coprod.inr, coprod.inr_desc, exists_very_good, exists_very_good_cylinder, fac_left, h.exists_very_good_cylinder, inl_desc, inl_i_assoc, inr_desc, inr_i_assoc
 -/

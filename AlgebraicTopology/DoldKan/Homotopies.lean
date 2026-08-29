@@ -211,7 +211,8 @@ theorem hσ'_eq
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was: `grind [hσ', hσ]` -/
+  simp [hσ', hσ, ha]
 
 中文:
 定理 hσ'_eq
@@ -220,7 +221,8 @@ theorem hσ'_eq
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was: `grind [hσ', hσ]` -/
+  simp [hσ', hσ, ha]
 -/
 theorem hσ'_eq {q n a m : Nat} (ha : n = a + q) (hnm : c.Rel m n) :
     (hσ' q n m hnm : X _⦋n⦌ ⟶ X _⦋m⦌) =
@@ -302,7 +304,9 @@ theorem Hσ_eq_zero
   rcases q with (_ | q)
   · rw [hσ'_eq (show 0 = 0 + 0 by rfl) (c_mk 1 0 rfl)]
     suffices X.σ 0 ≫ X.δ 0 + -X.σ 0 ≫ X.δ 1 = 0 by simpa
-    rw [← Fin.succ_zero_eq_one]; rw [δ_comp_σ_succ]; rw [δ_comp_σ_se
+    rw [← Fin.succ_zero_eq_one]; rw [δ_comp_σ_succ]; rw [δ_comp_σ_self' X (Fin.castSucc_zero.symm)]
+    simp
+  · rw [hσ'_eq_zero (Nat.succ_pos q) (c_mk 1 0 rfl), zero_comp]
 
 中文:
 定理 Hσ_eq_zero
@@ -314,7 +318,9 @@ theorem Hσ_eq_zero
   rcases q with (_ | q)
   · rw [hσ'_eq (show 0 = 0 + 0 by rfl) (c_mk 1 0 rfl)]
     suffices X.σ 0 ≫ X.δ 0 + -X.σ 0 ≫ X.δ 1 = 0 by simpa
-    rw [← Fin.succ_zero_eq_one]; rw [δ_comp_σ_succ]; rw [δ_comp_σ_se
+    rw [← Fin.succ_zero_eq_one]; rw [δ_comp_σ_succ]; rw [δ_comp_σ_self' X (Fin.castSucc_zero.symm)]
+    simp
+  · rw [hσ'_eq_zero (Nat.succ_pos q) (c_mk 1 0 rfl), zero_comp]
 
 Depends on / 依赖: Fin.castSucc_zero.symm, Fin.succ_zero_eq_one, Nat.succ_pos, _eq_zero, _f_of_not_rel_left, c_mk, castSucc_zero, cs_down_0_not_rel_left, nullHomotopicMap, succ_pos, succ_zero_eq_one, zero_comp
 -/

@@ -369,7 +369,10 @@ instance finset
       Finset.map (eqv α).symm.toEmbedding (raise'Finset (ofNat (List Nat) n) 0), fun s =>
 Finset.eq_of_veq by
         simp [-Multiset.map_coe, raise'Finset,
-          raise_lower' (fun n _ => Nat.zero_le n) (Finset.s
+          raise_lower' (fun n _ => Nat.zero_le n) (Finset.sortedLT_sort _)],
+      fun n => by
+      simp [-Multiset.map_coe, Finset.map, raise'Finset, Finset.sort,
+        List.mergeSort_eq_self _ (raise'_sorted _ _).sortedLE.pairwise, lower_raise']⟩
 
 中文:
 实例 finset
@@ -379,7 +382,10 @@ Finset.eq_of_veq by
       Finset.map (eqv α).symm.toEmbedding (raise'Finset (ofNat (List Nat) n) 0), fun s =>
 Finset.eq_of_veq by
         simp [-Multiset.map_coe, raise'Finset,
-          raise_lower' (fun n _ => Nat.zero_le n) (Finset.s
+          raise_lower' (fun n _ => Nat.zero_le n) (Finset.sortedLT_sort _)],
+      fun n => by
+      simp [-Multiset.map_coe, Finset.map, raise'Finset, Finset.sort,
+        List.mergeSort_eq_self _ (raise'_sorted _ _).sortedLE.pairwise, lower_raise']⟩
 
 Depends on / 依赖: Finset, Finset.eq_of_veq, Finset.map, Finset.sort, Finset.sortedLT_sort, List.mergeSort_eq_self, Multiset, Multiset.map_coe, Nat.zero_le, _sorted, encode, eq_of_veq, lower_raise, map_coe, mergeSort_eq_self, pairwise, raise_lower, s.map, sortedLE, sortedLE.pairwise
 -/

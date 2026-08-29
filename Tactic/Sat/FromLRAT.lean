@@ -465,7 +465,9 @@ theorem Valuation.mk_implies
     subst e; clear ih H
     suffices forall n n', n' = List.length as₁ + n ->
       forall bs, mk (as₁.reverseAux bs) n' ↔ mk bs n from this 0 _ rfl (a::as)
-    induct
+    induction as₁ with
+    | nil => simp
+    | cons b as₁ ih => simpa using! fun n bs => ih (n + 1) _ (Nat.succ_add ..) _
 
 中文:
 定理 赋值.mk_implies
@@ -479,7 +481,9 @@ theorem Valuation.mk_implies
     subst e; clear ih H
     suffices forall n n', n' = List.length as₁ + n ->
       forall bs, mk (as₁.reverseAux bs) n' ↔ mk bs n from this 0 _ rfl (a::as)
-    induct
+    induction as₁ with
+    | nil => simp
+    | cons b as₁ ih => simpa using! fun n bs => ih (n + 1) _ (Nat.succ_add ..) _
 
 Depends on / 依赖: List.length, Nat.succ_add, generalizing, length, reverseAux, succ_add
 -/
@@ -815,7 +819,12 @@ definition buildClauses
     (n, accum.2.insert n { lits := arr[start]!, expr := c, proof })
   | len =>
     let mid := start + len / 2
-    let f₁ := 
+    let f₁ := f.appFn!.appArg!
+    let f₂ := f.appArg!
+    let p₁ := mkApp4 (mkConst ``Sat.Fmla.subsumes_left) ctx f₁ f₂ p
+    let p₂ := mkApp4 (mkConst ``Sat.Fmla.subsumes_right) ctx f₁ f₂ p
+    let accum := buildClauses arr ctx start mid f₁ p₁ accum
+    buildClauses arr ctx mid stop f₂ p₂ accum
 
 中文:
 定义 buildClauses
@@ -829,7 +838,12 @@ definition buildClauses
     (n, accum.2.insert n { lits := arr[start]!, expr := c, proof })
   | len =>
     let mid := start + len / 2
-    let f₁ := 
+    let f₁ := f.appFn!.appArg!
+    let f₂ := f.appArg!
+    let p₁ := mkApp4 (mkConst ``Sat.Fmla.subsumes_left) ctx f₁ f₂ p
+    let p₂ := mkApp4 (mkConst ``Sat.Fmla.subsumes_right) ctx f₁ f₂ p
+    let accum := buildClauses arr ctx start mid f₁ p₁ accum
+    buildClauses arr ctx mid stop f₂ p₂ accum
 -/
 partial def buildClauses (arr : Array (Array Int)) (ctx : Expr) (start stop : Nat)
     (f p : Expr) (accum : Nat × HashMap Nat Clause) : Nat × HashMap Nat Clause :=
@@ -895,7 +909,56 @@ definition buildProofStep
     let i := i.natAbs
     let some cl := db[i]? | return Except.error "missing clause"
     if !gctx.contains i then
-      lams := lams.push (mkApp2 (mkConst ``Sat.Fmla.proof)
+      lams := lams.push (mkApp2 (mkConst ``Sat.Fmla.proof) ctx cl.expr)
+      args := args.push cl.proof
+      gctx := gctx.insert i {
+        lits := cl.lits
+        expr := cl.expr
+        depth := args.size
+      }
+  let n := args.size
+  -- step 2
+  let mut f :=
+    (mkAppN · args) ∘
+    lams.foldr (mkLambda `c default) ∘
+    mkLambda `v default (mkConst ``Sat.Valuation) ∘
+    mkLambda `hv default (mkApp2 (mkConst ``Sat.Valuation.satisfies_fmla) (mkBVar 0) ctx)
+  let v depth := mkBVar (depth + 1)
+  let hv depth := mkBVar depth
+  lams := #[]
+  let mut clause := clause
+  let mut depth := 0
+  let mut lctx : HashMap Int Nat := {}
+  for i in ns do
+    let l := clause.appFn!.appArg!
+    clause := clause.appArg!
+    lams := lams.push (mkApp2 (mkConst ``Sat.Valuation.neg) (v depth) l)
+    depth := depth.succ
+    lctx := lctx.insert i depth
+  f := f ∘ lams.foldr (mkLambda `h default)
+  -- step 3
+  for (step : Int) in pf do
+    if step < 0 then return Except.error "unimplemented: RAT step"
+    let some cl := gctx[step.toNat]? | return Except.error "missing clause"
+    let mut unit := none
+    for i in cl.lits do
+      unless lctx.contains i do
+        if unit.isSome then return Except.error s!"not unit: {cl.lits}"
+        depth := depth.succ
+        unit := some i
+    let mut pr := mkApp2 (mkBVar (depth + n + 2 - cl.depth)) (v depth) (hv depth)
+    for i in cl.lits do
+pr := mkApp pr mkBVar (match lctx[i]? with | some k => depth - k | _ => 0)
+let some u := unit | return Except.ok f pr
+let lit := toExpr Sat.Literal.ofInt u
+let nlit := toExpr Sat.Literal.ofInt (-u)
+    let d1 := depth-1
+let app := mkApp3 (mkConst ``Sat.Valuation.by_cases) (v d1) nlit
+      mkLambda `h default (mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) lit) pr
+    let dom := mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) nlit
+f := fun e => f mkApp app mkLambda `h default dom e
+    lctx := lctx.insert (-u) depth
+  return Except.error s!"no refutation: {ns}, {pf}, {lctx.toList}"
 
 中文:
 定义 buildProofStep
@@ -909,7 +972,56 @@ definition buildProofStep
     let i := i.natAbs
     let some cl := db[i]? | return Except.error "missing clause"
     if !gctx.contains i then
-      lams := lams.push (mkApp2 (mkConst ``Sat.Fmla.proof)
+      lams := lams.push (mkApp2 (mkConst ``Sat.Fmla.proof) ctx cl.expr)
+      args := args.push cl.proof
+      gctx := gctx.insert i {
+        lits := cl.lits
+        expr := cl.expr
+        depth := args.size
+      }
+  let n := args.size
+  -- step 2
+  let mut f :=
+    (mkAppN · args) ∘
+    lams.foldr (mkLambda `c default) ∘
+    mkLambda `v default (mkConst ``Sat.Valuation) ∘
+    mkLambda `hv default (mkApp2 (mkConst ``Sat.Valuation.satisfies_fmla) (mkBVar 0) ctx)
+  let v depth := mkBVar (depth + 1)
+  let hv depth := mkBVar depth
+  lams := #[]
+  let mut clause := clause
+  let mut depth := 0
+  let mut lctx : HashMap Int Nat := {}
+  for i in ns do
+    let l := clause.appFn!.appArg!
+    clause := clause.appArg!
+    lams := lams.push (mkApp2 (mkConst ``Sat.Valuation.neg) (v depth) l)
+    depth := depth.succ
+    lctx := lctx.insert i depth
+  f := f ∘ lams.foldr (mkLambda `h default)
+  -- step 3
+  for (step : Int) in pf do
+    if step < 0 then return Except.error "unimplemented: RAT step"
+    let some cl := gctx[step.toNat]? | return Except.error "missing clause"
+    let mut unit := none
+    for i in cl.lits do
+      unless lctx.contains i do
+        if unit.isSome then return Except.error s!"not unit: {cl.lits}"
+        depth := depth.succ
+        unit := some i
+    let mut pr := mkApp2 (mkBVar (depth + n + 2 - cl.depth)) (v depth) (hv depth)
+    for i in cl.lits do
+pr := mkApp pr mkBVar (match lctx[i]? with | some k => depth - k | _ => 0)
+let some u := unit | return Except.ok f pr
+let lit := toExpr Sat.Literal.ofInt u
+let nlit := toExpr Sat.Literal.ofInt (-u)
+    let d1 := depth-1
+let app := mkApp3 (mkConst ``Sat.Valuation.by_cases) (v d1) nlit
+      mkLambda `h default (mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) lit) pr
+    let dom := mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) nlit
+f := fun e => f mkApp app mkLambda `h default dom e
+    lctx := lctx.insert (-u) depth
+  return Except.error s!"no refutation: {ns}, {pf}, {lctx.toList}"
 -/
 partial def buildProofStep (db : HashMap Nat Clause)
     (ns pf : Array Int) (ctx clause : Expr) : Except String Expr := Id.run do
@@ -1007,7 +1119,12 @@ definition buildProof
     | LRATStep.del ds => db := ds.foldl (·.erase ·) db
     | LRATStep.add i ns pf =>
       let e := buildClause ns
-      match buil
+      match buildProofStep db ns pf ctx e with
+      | Except.ok proof =>
+        if ns.isEmpty then return proof
+        db := db.insert i { lits := ns, expr := e, proof }
+      | Except.error msg => throwError msg
+  throwError "failed to prove empty clause"
 
 中文:
 定义 buildProof
@@ -1020,7 +1137,12 @@ definition buildProof
     | LRATStep.del ds => db := ds.foldl (·.erase ·) db
     | LRATStep.add i ns pf =>
       let e := buildClause ns
-      match buil
+      match buildProofStep db ns pf ctx e with
+      | Except.ok proof =>
+        if ns.isEmpty then return proof
+        db := db.insert i { lits := ns, expr := e, proof }
+      | Except.error msg => throwError msg
+  throwError "failed to prove empty clause"
 -/
 partial def buildProof (arr : Array (Array Int)) (ctx ctx' : Expr)
     (steps : Array LRATStep) : MetaM Expr := do
@@ -1052,7 +1174,17 @@ definition buildReify
     let ty := mkApp2 (mkConst ``Iff) (mkApp (mkBVar j) (mkRawNatLit j)) (mkBVar nvars)
     pr := mkLambda `h default ty pr
   pr := mkLambda `v default (mkConst ``Sat.Valuation) pr
-  let mut e 
+  let mut e := e.lowerLooseBVars (nvars+1) (nvars+1)
+  let cons := mkApp (mkConst ``List.cons [.zero]) (mkSort .zero)
+  let nil := mkApp (mkConst ``List.nil [.zero]) (mkSort .zero)
+  let rec mkPS depth e
+  | 0 => e
+  | n + 1 => mkPS (depth+1) (mkApp2 cons (mkBVar depth) e) n
+  pr := mkApp5 (mkConst ``Sat.Fmla.refute) e (mkPS 0 nil nvars) ctx proof pr
+  for _ in [0:nvars] do
+    e := mkForall `a default (mkSort .zero) e
+    pr := mkLambda `a default (mkSort .zero) pr
+  pure (e, pr)
 
 中文:
 定义 buildReify
@@ -1065,7 +1197,17 @@ definition buildReify
     let ty := mkApp2 (mkConst ``Iff) (mkApp (mkBVar j) (mkRawNatLit j)) (mkBVar nvars)
     pr := mkLambda `h default ty pr
   pr := mkLambda `v default (mkConst ``Sat.Valuation) pr
-  let mut e 
+  let mut e := e.lowerLooseBVars (nvars+1) (nvars+1)
+  let cons := mkApp (mkConst ``List.cons [.zero]) (mkSort .zero)
+  let nil := mkApp (mkConst ``List.nil [.zero]) (mkSort .zero)
+  let rec mkPS depth e
+  | 0 => e
+  | n + 1 => mkPS (depth+1) (mkApp2 cons (mkBVar depth) e) n
+  pr := mkApp5 (mkConst ``Sat.Fmla.refute) e (mkPS 0 nil nvars) ctx proof pr
+  for _ in [0:nvars] do
+    e := mkForall `a default (mkSort .zero) e
+    pr := mkLambda `a default (mkSort .zero) pr
+  pure (e, pr)
 -/
 partial def buildReify (ctx ctx' proof : Expr) (nvars : Nat) : Expr × Expr := Id.run do
   let (e, pr) := reifyFmla ctx'
@@ -1299,7 +1441,25 @@ definition fromLRATAux
   let ctx' := buildConj arr 0 arr.size
   let ctxName ← mkAuxDeclName (name ++ `ctx)
 addDecl Declaration.defnDecl {
-    name := c
+    name := ctxName
+    levelParams := []
+    type := mkConst ``Sat.Fmla
+    value := ctx'
+    hints := ReducibilityHints.regular 0
+    safety := DefinitionSafety.safe
+  }
+  let ctx := mkConst ctxName
+  let Parsec.ParseResult.success _ steps := Parser.parseLRAT ⟨_, lrat.startPos⟩
+    | throwError "parse LRAT failed"
+  let proof ← buildProof arr ctx ctx' steps
+  let declName ← mkAuxDeclName (name ++ `proof)
+addDecl Declaration.thmDecl {
+    name := declName
+    levelParams := []
+    type := mkApp2 (mkConst ``Sat.Fmla.proof) ctx (buildClause #[])
+    value := proof
+  }
+  return (nvars, ctx, ctx', mkConst declName)
 
 中文:
 定义 fromLRATAux
@@ -1311,7 +1471,25 @@ addDecl Declaration.defnDecl {
   let ctx' := buildConj arr 0 arr.size
   let ctxName ← mkAuxDeclName (name ++ `ctx)
 addDecl Declaration.defnDecl {
-    name := c
+    name := ctxName
+    levelParams := []
+    type := mkConst ``Sat.Fmla
+    value := ctx'
+    hints := ReducibilityHints.regular 0
+    safety := DefinitionSafety.safe
+  }
+  let ctx := mkConst ctxName
+  let Parsec.ParseResult.success _ steps := Parser.parseLRAT ⟨_, lrat.startPos⟩
+    | throwError "parse LRAT failed"
+  let proof ← buildProof arr ctx ctx' steps
+  let declName ← mkAuxDeclName (name ++ `proof)
+addDecl Declaration.thmDecl {
+    name := declName
+    levelParams := []
+    type := mkApp2 (mkConst ``Sat.Fmla.proof) ctx (buildClause #[])
+    value := proof
+  }
+  return (nvars, ctx, ctx', mkConst declName)
 -/
 def fromLRATAux (cnf lrat : String) (name : Name) : MetaM (Nat × Expr × Expr × Expr) := do
   let Parsec.ParseResult.success _ (nvars, arr) := Parser.parseDimacs ⟨_, cnf.startPos⟩

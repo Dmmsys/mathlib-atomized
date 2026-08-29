@@ -424,7 +424,7 @@ theorem RingHom.ofLocalizationSpan_iff_finite
   · intro h s; exact h s
   · intro h s hs hs'
     obtain ⟨s', h₁, h₂⟩ := (Ideal.span_eq_top_iff_finite s).mp hs
-    exact h s' h₂ fun x 
+    exact h s' h₂ fun x => hs' ⟨_, h₁ x.prop⟩
 
 中文:
 定理 环态射.ofLocalizationSpan_iff_finite
@@ -437,7 +437,7 @@ theorem RingHom.ofLocalizationSpan_iff_finite
   · intro h s; exact h s
   · intro h s hs hs'
     obtain ⟨s', h₁, h₂⟩ := (Ideal.span_eq_top_iff_finite s).mp hs
-    exact h s' h₂ fun x 
+    exact h s' h₂ fun x => hs' ⟨_, h₁ x.prop⟩
 
 Depends on / 依赖: OfLocalizationFiniteSpan, OfLocalizationSpan, RingHom, RingHom.OfLocalizationFiniteSpan, RingHom.OfLocalizationSpan
 -/
@@ -467,7 +467,7 @@ theorem RingHom.ofLocalizationSpanTarget_iff_finite
   · intro h s; exact h s
   · intro h s hs hs'
     obtain ⟨s', h₁, h₂⟩ := (Ideal.span_eq_top_iff_finite s).mp hs
-    exact h 
+    exact h s' h₂ fun x => hs' ⟨_, h₁ x.prop⟩
 
 中文:
 定理 环态射.ofLocalizationSpanTarget_iff_finite
@@ -480,7 +480,7 @@ theorem RingHom.ofLocalizationSpanTarget_iff_finite
   · intro h s; exact h s
   · intro h s hs hs'
     obtain ⟨s', h₁, h₂⟩ := (Ideal.span_eq_top_iff_finite s).mp hs
-    exact h 
+    exact h s' h₂ fun x => hs' ⟨_, h₁ x.prop⟩
 
 Depends on / 依赖: OfLocalizationFiniteSpanTarget, OfLocalizationSpanTarget, RingHom, RingHom.OfLocalizationFiniteSpanTarget, RingHom.OfLocalizationSpanTarget
 -/
@@ -511,7 +511,14 @@ lemma RingHom.OfLocalizationSpan.mk
   let _ := fun r : R => (Localization.awayMap (algebraMap R S) r).toAlgebra
   refine H s hs (fun r hr => ?_)
   have : algebraMap (Localization.Away r) (Localization.Away r otimes[R] S) =
-      ((IsLocalization.Away.tensorRightEquiv S r (Localization.Away r)).symm
+      ((IsLocalization.Away.tensorRightEquiv S r (Localization.Away r)).symm : _ ->+* _).comp
+        (algebraMap (Localization.Away r) (Localization.Away (algebraMap R S r))) := by
+    apply IsLocalization.ringHom_ext (Submonoid.powers r)
+    ext
+    simp [RingHom.algebraMap_toAlgebra, Localization.awayMap, IsLocalization.Away.map,
+      Algebra.TensorProduct.tmul_one_eq_one_tmul, RingHom.algebraMap_toAlgebra]
+  rw [this]
+  exact hP.1 _ _ (hf ⟨r, hr⟩)
 
 中文:
 引理 环态射.OfLocalizationSpan.mk
@@ -522,7 +529,14 @@ lemma RingHom.OfLocalizationSpan.mk
   let _ := fun r : R => (Localization.awayMap (algebraMap R S) r).toAlgebra
   refine H s hs (fun r hr => ?_)
   have : algebraMap (Localization.Away r) (Localization.Away r otimes[R] S) =
-      ((IsLocalization.Away.tensorRightEquiv S r (Localization.Away r)).symm
+      ((IsLocalization.Away.tensorRightEquiv S r (Localization.Away r)).symm : _ ->+* _).comp
+        (algebraMap (Localization.Away r) (Localization.Away (algebraMap R S r))) := by
+    apply IsLocalization.ringHom_ext (Submonoid.powers r)
+    ext
+    simp [RingHom.algebraMap_toAlgebra, Localization.awayMap, IsLocalization.Away.map,
+      Algebra.TensorProduct.tmul_one_eq_one_tmul, RingHom.algebraMap_toAlgebra]
+  rw [this]
+  exact hP.1 _ _ (hf ⟨r, hr⟩)
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.tensorRightEquiv, IsLocalization.ringHom_ext, Localization, Localization.Away, Localization.awayMap, RingHom, RingHom.algebraMap_toAlgebra, Submonoid, Submonoid.powers, algebraMap, algebraMap_toAlgebra, algebraize, awayMap, introv, otimes, powers, ringHom_ext, tensorRightEquiv, toAlgebra
 -/
@@ -607,7 +621,18 @@ lemma RingHom.HoldsForLocalization.isLocalizationMap
   let : Algebra (Localization (M.map f)) S' :=
     IsLocalization.localizationAlgebraOfSubmonoidLe _ _ (M.map f) T hle
   have : IsScalarTower S (Localization (Submonoid.map f M)) S' :=
-    IsLocalization.localization_
+    IsLocalization.localization_isScalarTower_of_submonoid_le _ _ _ _ _
+  have : IsLocalization (T.map (algebraMap S (Localization (M.map f)))) S' :=
+    IsLocalization.isLocalization_of_submonoid_le _ _ (M.map f) T hle
+  have heq : IsLocalization.map (S := R') S' f hy =
+      (algebraMap _ _).comp
+        (IsLocalization.map (M := M) (T := M.map f) (S := R') (Localization (M.map f)) f
+          (M.le_comap_map)) := by
+    apply IsLocalization.ringHom_ext M
+    ext
+    simp [← IsScalarTower.algebraMap_apply]
+  rw [heq]
+  exact hPc _ _ (hPp _ _ _ _ hf) (hPl _ (T.map (algebraMap S (Localization (M.map f)))))
 
 中文:
 引理 环态射.HoldsForLocalization.isLocalizationMap
@@ -616,7 +641,18 @@ lemma RingHom.HoldsForLocalization.isLocalizationMap
   let : Algebra (Localization (M.map f)) S' :=
     IsLocalization.localizationAlgebraOfSubmonoidLe _ _ (M.map f) T hle
   have : IsScalarTower S (Localization (Submonoid.map f M)) S' :=
-    IsLocalization.localization_
+    IsLocalization.localization_isScalarTower_of_submonoid_le _ _ _ _ _
+  have : IsLocalization (T.map (algebraMap S (Localization (M.map f)))) S' :=
+    IsLocalization.isLocalization_of_submonoid_le _ _ (M.map f) T hle
+  have heq : IsLocalization.map (S := R') S' f hy =
+      (algebraMap _ _).comp
+        (IsLocalization.map (M := M) (T := M.map f) (S := R') (Localization (M.map f)) f
+          (M.le_comap_map)) := by
+    apply IsLocalization.ringHom_ext M
+    ext
+    simp [← IsScalarTower.algebraMap_apply]
+  rw [heq]
+  exact hPc _ _ (hPp _ _ _ _ hf) (hPl _ (T.map (algebraMap S (Localization (M.map f)))))
 
 Depends on / 依赖: Algebra, IsLocalization, IsLocalization.isLocalization_of_submonoid_le, IsLocalization.localizationAlgebraOfSubmonoidLe, IsLocalization.localization_isScalarTower_of_submonoid_le, IsScalarTower, Localization, M.map, Submonoid, Submonoid.map, Submonoid.map_le_iff_le_comap, T.map, algebraMap, isLocalization_of_submonoid_le, localizationAlgebraOfSubmonoidLe, localization_isScalarTower_of_submonoid_le, map_le_iff_le_comap
 -/
@@ -770,7 +806,22 @@ lemma RingHom.LocalizationAwayPreserves.respectsIso
       IsLocalization.away_of_isUnit_of_bijective _ isUnit_one (Equiv.refl _).bijective
     have : IsLocalization.Away (f 1) T :=
       IsLocalization.away_of_isUnit_of_bijective _ (by simp) e.bijective
-    convert! hP f 
+    convert! hP f 1 R T hf
+    trans (IsLocalization.Away.map R T f 1).comp (algebraMap R R)
+    · rw [IsLocalization.Away.map, IsLocalization.map_comp]; rfl
+    · rfl
+  right {R S T} _ _ _ f e hf := by
+    let := e.symm.toRingHom.toAlgebra
+    have : IsLocalization.Away (1 : S) R :=
+      IsLocalization.away_of_isUnit_of_bijective _ isUnit_one e.symm.bijective
+    have : IsLocalization.Away (f 1) T :=
+      IsLocalization.away_of_isUnit_of_bijective _ (by simp) (Equiv.refl _).bijective
+    convert! hP f 1 R T hf
+    have : RingHomInvPair (e : R ->+* S) e.symm := RingHomInvPair.of_ringEquiv _
+    have : (IsLocalization.Away.map R T f 1).comp e.symm.toRingHom = f :=
+      IsLocalization.map_comp ..
+    conv_lhs => rw [← this, RingHom.comp_assoc]
+    simp only [RingEquiv.toRingHom_eq_coe, RingHomCompTriple.comp_eq]
 
 中文:
 引理 环态射.LocalizationAwayPreserves.respectsIso
@@ -780,7 +831,22 @@ lemma RingHom.LocalizationAwayPreserves.respectsIso
       IsLocalization.away_of_isUnit_of_bijective _ isUnit_one (Equiv.refl _).bijective
     have : IsLocalization.Away (f 1) T :=
       IsLocalization.away_of_isUnit_of_bijective _ (by simp) e.bijective
-    convert! hP f 
+    convert! hP f 1 R T hf
+    trans (IsLocalization.Away.map R T f 1).comp (algebraMap R R)
+    · rw [IsLocalization.Away.map, IsLocalization.map_comp]; rfl
+    · rfl
+  right {R S T} _ _ _ f e hf := by
+    let := e.symm.toRingHom.toAlgebra
+    have : IsLocalization.Away (1 : S) R :=
+      IsLocalization.away_of_isUnit_of_bijective _ isUnit_one e.symm.bijective
+    have : IsLocalization.Away (f 1) T :=
+      IsLocalization.away_of_isUnit_of_bijective _ (by simp) (Equiv.refl _).bijective
+    convert! hP f 1 R T hf
+    have : RingHomInvPair (e : R ->+* S) e.symm := RingHomInvPair.of_ringEquiv _
+    have : (IsLocalization.Away.map R T f 1).comp e.symm.toRingHom = f :=
+      IsLocalization.map_comp ..
+    conv_lhs => rw [← this, RingHom.comp_assoc]
+    simp only [RingEquiv.toRingHom_eq_coe, RingHomCompTriple.comp_eq]
 
 Depends on / 依赖: Equiv.refl, IsLocalization, IsLocalization.A, IsLocalization.Away, IsLocalization.Away.map, IsLocalization.away_of_isUnit_of_bijective, IsLocalization.map_comp, algebraMap, away_of_isUnit_of_bijective, bijective, convert, e.bijective, e.symm.toRingHom.toAlgebra, e.toRingHom.toAlgebra, isUnit_one, map_comp, toAlgebra, toRingHom
 -/
@@ -823,7 +889,8 @@ lemma RingHom.StableUnderCompositionWithLocalizationAway.respectsIso
   right {R S T} _ _ _ f e hf := by
     let := e.toRingHom.toAlgebra
     have : IsLocalization.Away (1 : R) S :=
-
+      IsLocalization.away_of_isUnit_of_bijective _ isUnit_one e.bijective
+    exact hP.left S (1 : R) f hf
 
 中文:
 引理 环态射.StableUnderCompositionWithLocalizationAway.respectsIso
@@ -835,7 +902,8 @@ lemma RingHom.StableUnderCompositionWithLocalizationAway.respectsIso
   right {R S T} _ _ _ f e hf := by
     let := e.toRingHom.toAlgebra
     have : IsLocalization.Away (1 : R) S :=
-
+      IsLocalization.away_of_isUnit_of_bijective _ isUnit_one e.bijective
+    exact hP.left S (1 : R) f hf
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away, IsLocalization.away_of_isUnit_of_bijective, away_of_isUnit_of_bijective, bijective, e.bijective, e.toRingHom.toAlgebra, hP.left, hP.right, isUnit_one, toAlgebra, toRingHom
 -/
@@ -948,7 +1016,7 @@ theorem RingHom.OfLocalizationSpanTarget.ofLocalizationSpan
   rw [← IsLocalization.map_comp (M := Submonoid.powers r) (S := Localization.Away r)
     (T := Submonoid.powers (f r))]
   · apply hP' _ r
-    exact hs' ⟨r, hr
+    exact hs' ⟨r, hr⟩
 
 中文:
 定理 环态射.OfLocalizationSpanTarget.ofLocalizationSpan
@@ -961,7 +1029,7 @@ theorem RingHom.OfLocalizationSpanTarget.ofLocalizationSpan
   rw [← IsLocalization.map_comp (M := Submonoid.powers r) (S := Localization.Away r)
     (T := Submonoid.powers (f r))]
   · apply hP' _ r
-    exact hs' ⟨r, hr
+    exact hs' ⟨r, hr⟩
 
 Depends on / 依赖: Ideal.map, Ideal.map_span, Ideal.map_top, IsLocalization, IsLocalization.map_comp, Localization, Localization.Away, Submonoid, Submonoid.powers, apply_fun, introv, map_comp, map_span, map_top, powers
 -/
@@ -991,7 +1059,17 @@ lemma RingHom.OfLocalizationSpan.ofIsLocalization
   let e₁ := (Localization.algEquiv (.powers r.val) Rᵣ).toRingEquiv
   let e₂ := (IsLocalization.algEquiv (.powers (f r.val))
     (Localization (.powers (f r.val))) Sᵣ).symm.toRingEquiv
-  have : Localization.awayMa
+  have : Localization.awayMap f r.val =
+      (e₂.toRingHom.comp fᵣ).comp e₁.toRingHom := by
+    apply IsLocalization.ringHom_ext (.powers r.val)
+    ext x
+    have : fᵣ ((algebraMap R Rᵣ) x) = algebraMap S Sᵣ (f x) := by
+      rw [← RingHom.comp_apply]; rw [hfᵣ]; rw [RingHom.comp_apply]
+    simp [-AlgEquiv.symm_toRingEquiv, e₂, e₁, Localization.awayMap, IsLocalization.Away.map, this]
+  rw [this]
+  apply hPi.right
+  apply hPi.left
+  exact hf
 
 中文:
 引理 环态射.OfLocalizationSpan.ofIsLocalization
@@ -1002,7 +1080,17 @@ lemma RingHom.OfLocalizationSpan.ofIsLocalization
   let e₁ := (Localization.algEquiv (.powers r.val) Rᵣ).toRingEquiv
   let e₂ := (IsLocalization.algEquiv (.powers (f r.val))
     (Localization (.powers (f r.val))) Sᵣ).symm.toRingEquiv
-  have : Localization.awayMa
+  have : Localization.awayMap f r.val =
+      (e₂.toRingHom.comp fᵣ).comp e₁.toRingHom := by
+    apply IsLocalization.ringHom_ext (.powers r.val)
+    ext x
+    have : fᵣ ((algebraMap R Rᵣ) x) = algebraMap S Sᵣ (f x) := by
+      rw [← RingHom.comp_apply]; rw [hfᵣ]; rw [RingHom.comp_apply]
+    simp [-AlgEquiv.symm_toRingEquiv, e₂, e₁, Localization.awayMap, IsLocalization.Away.map, this]
+  rw [this]
+  apply hPi.right
+  apply hPi.left
+  exact hf
 
 Depends on / 依赖: IsLocalization, IsLocalization.algEquiv, IsLocalization.ringHom_ext, Localization, Localization.algEquiv, Localization.awayMap, RingHom, RingHom.comp_apply, algEquiv, algebraMap, awayMap, comp_apply, powers, r.val, ringHom_ext, symm.toRingEquiv, toRingEquiv, toRingHom, toRingHom.comp
 -/
@@ -1079,7 +1167,7 @@ lemma RingHom.OfLocalizationSpanTarget.ofIsLocalization
   intro r
   obtain ⟨T, _, _, _, hT⟩ := hT r
   convert! hP'.1 _ (Localization.algEquiv (R := S) (Submonoid.powers (r : S)) T).symm.toRingEquiv hT
-  rw [← RingHom.comp_assoc]; rw [RingEquiv.toRingHom_eq_coe]; rw [AlgEquiv.toRingEquiv_toRingHom]; rw [Localization.coe_algEquiv_symm]
+  rw [← RingHom.comp_assoc]; rw [RingEquiv.toRingHom_eq_coe]; rw [AlgEquiv.toRingEquiv_toRingHom]; rw [Localization.coe_algEquiv_symm]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]
 
 中文:
 引理 环态射.OfLocalizationSpanTarget.ofIsLocalization
@@ -1088,7 +1176,7 @@ lemma RingHom.OfLocalizationSpanTarget.ofIsLocalization
   intro r
   obtain ⟨T, _, _, _, hT⟩ := hT r
   convert! hP'.1 _ (Localization.algEquiv (R := S) (Submonoid.powers (r : S)) T).symm.toRingEquiv hT
-  rw [← RingHom.comp_assoc]; rw [RingEquiv.toRingHom_eq_coe]; rw [AlgEquiv.toRingEquiv_toRingHom]; rw [Localization.coe_algEquiv_symm]
+  rw [← RingHom.comp_assoc]; rw [RingEquiv.toRingHom_eq_coe]; rw [AlgEquiv.toRingEquiv_toRingHom]; rw [Localization.coe_algEquiv_symm]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.toRingEquiv_toRingHom, IsLocalization, IsLocalization.map_comp, Localization, Localization.algEquiv, Localization.coe_algEquiv_symm, RingEquiv, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.comp_assoc, RingHom.comp_id, Submonoid, Submonoid.powers, algEquiv, coe_algEquiv_symm, comp_assoc, comp_id, convert, map_comp
 -/
@@ -1215,7 +1303,8 @@ lemma RingHom.PropertyIsLocal.and
   ofLocalizationSpanTarget := hP.ofLocalizationSpanTarget.and hQ.ofLocalizationSpanTarget
   ofLocalizationSpan := hP.ofLocalizationSpan.and hQ.ofLocalizationSpan
   StableUnderCompositionWithLocalizationAwayTarget :=
-    hP.StableUnderComp
+    hP.StableUnderCompositionWithLocalizationAwayTarget.and
+    hQ.StableUnderCompositionWithLocalizationAwayTarget
 
 中文:
 引理 环态射.PropertyIsLocal.and
@@ -1224,7 +1313,8 @@ lemma RingHom.PropertyIsLocal.and
   ofLocalizationSpanTarget := hP.ofLocalizationSpanTarget.and hQ.ofLocalizationSpanTarget
   ofLocalizationSpan := hP.ofLocalizationSpan.and hQ.ofLocalizationSpan
   StableUnderCompositionWithLocalizationAwayTarget :=
-    hP.StableUnderComp
+    hP.StableUnderCompositionWithLocalizationAwayTarget.and
+    hQ.StableUnderCompositionWithLocalizationAwayTarget
 
 Depends on / 依赖: hP.localizationAwayPreserves.and, hQ.localizationAwayPreserves, localizationAwayPreserves
 -/
@@ -1282,7 +1372,9 @@ lemma RingHom.IsStableUnderBaseChange.isLocalization_map
     (IsLocalization.map (S := Rᵣ) Sᵣ f M.le_comap_map).comp (algebraMap R Rᵣ)]
   have : IsScalarTower R S Sᵣ := IsScalarTower.of_algebraMap_eq'
     (IsLocalization.map_comp M.le_comap_map)
-  have : IsLocalization (Algebra.algebraM
+  have : IsLocalization (Algebra.algebraMapSubmonoid S M) Sᵣ :=
+inferInstanceAs IsLocalization (M.map f) Sᵣ
+  apply hP.of_isLocalization M hf
 
 中文:
 引理 环态射.是StableUnderBaseChange.isLocalization_map
@@ -1292,7 +1384,9 @@ lemma RingHom.IsStableUnderBaseChange.isLocalization_map
     (IsLocalization.map (S := Rᵣ) Sᵣ f M.le_comap_map).comp (algebraMap R Rᵣ)]
   have : IsScalarTower R S Sᵣ := IsScalarTower.of_algebraMap_eq'
     (IsLocalization.map_comp M.le_comap_map)
-  have : IsLocalization (Algebra.algebraM
+  have : IsLocalization (Algebra.algebraMapSubmonoid S M) Sᵣ :=
+inferInstanceAs IsLocalization (M.map f) Sᵣ
+  apply hP.of_isLocalization M hf
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, IsLocalization, IsLocalization.map, IsLocalization.map_comp, IsScalarTower, IsScalarTower.of_algebraMap_eq, M.le_comap_map, M.map, algebraMap, algebraMapSubmonoid, algebraize, hP.of_isLocalization, le_comap_map, map_comp, of_algebraMap_eq, of_isLocalization
 -/

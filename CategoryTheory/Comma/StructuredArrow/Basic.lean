@@ -1404,7 +1404,7 @@ definition map₂Iso
     (map₂CompMap₂Iso ..).symm
   counitIso := map₂CompMap₂Iso .. ≪≫
     map₂Congr _ _ F.counitIso G.counitIso _ _ ?_ ?_ ≪≫ map₂IdIso _ _ _ rfl rfl
-  functor_unitIso_comp := ?
+  functor_unitIso_comp := ?_
 
 中文:
 定义 map₂Iso
@@ -1415,7 +1415,7 @@ definition map₂Iso
     (map₂CompMap₂Iso ..).symm
   counitIso := map₂CompMap₂Iso .. ≪≫
     map₂Congr _ _ F.counitIso G.counitIso _ _ ?_ ?_ ≪≫ map₂IdIso _ _ _ rfl rfl
-  functor_unitIso_comp := ?
+  functor_unitIso_comp := ?_
 -/
 def map₂Iso {F : C ≌ A} {G : D ≌ B}
     (α : L' ⟶ G.functor.obj L) (α' : L ⟶ G.inverse.obj L')
@@ -3029,7 +3029,8 @@ definition map₂Iso
   unitIso := (map₂IdIso _ _ _ rfl rfl).symm ≪≫ map₂Congr _ _ F.unitIso G.unitIso _ _ ?_ ?_ ≪≫
     (map₂CompMap₂Iso ..).symm
   counitIso := map₂CompMap₂Iso .. ≪≫
-    map₂Congr _ _ F.counitIso G.counitIso _ _ ?_ ?_ ≪≫ map₂IdIso _ _ _
+    map₂Congr _ _ F.counitIso G.counitIso _ _ ?_ ?_ ≪≫ map₂IdIso _ _ _ rfl rfl
+  functor_unitIso_comp := ?_
 
 中文:
 定义 map₂Iso
@@ -3039,7 +3040,8 @@ definition map₂Iso
   unitIso := (map₂IdIso _ _ _ rfl rfl).symm ≪≫ map₂Congr _ _ F.unitIso G.unitIso _ _ ?_ ?_ ≪≫
     (map₂CompMap₂Iso ..).symm
   counitIso := map₂CompMap₂Iso .. ≪≫
-    map₂Congr _ _ F.counitIso G.counitIso _ _ ?_ ?_ ≪≫ map₂IdIso _ _ _
+    map₂Congr _ _ F.counitIso G.counitIso _ _ ?_ ?_ ≪≫ map₂IdIso _ _ _ rfl rfl
+  functor_unitIso_comp := ?_
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.map
 -/
@@ -3544,7 +3546,10 @@ definition structuredArrowOpEquivalence
     (fun X => (StructuredArrow.isoMk (Iso.refl _)).op) (by
       rintro ⟨X⟩ ⟨Y⟩ f
       obtain ⟨X, x, rfl⟩ := X.mk_surjective
-      obtain ⟨Y, y, rfl⟩ := Y.mk_surj
+      obtain ⟨Y, y, rfl⟩ := Y.mk_surjective
+      exact Quiver.Hom.unop_inj (by ext; apply Quiver.Hom.op_inj (by simp)))
+  counitIso := NatIso.ofComponents
+    (fun X => CostructuredArrow.isoMk (Iso.refl _))
 
 中文:
 定义 structuredArrowOpEquivalence
@@ -3555,7 +3560,10 @@ definition structuredArrowOpEquivalence
     (fun X => (StructuredArrow.isoMk (Iso.refl _)).op) (by
       rintro ⟨X⟩ ⟨Y⟩ f
       obtain ⟨X, x, rfl⟩ := X.mk_surjective
-      obtain ⟨Y, y, rfl⟩ := Y.mk_surj
+      obtain ⟨Y, y, rfl⟩ := Y.mk_surjective
+      exact Quiver.Hom.unop_inj (by ext; apply Quiver.Hom.op_inj (by simp)))
+  counitIso := NatIso.ofComponents
+    (fun X => CostructuredArrow.isoMk (Iso.refl _))
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.toCostructuredArrow, toCostructuredArrow
 -/
@@ -3586,7 +3594,10 @@ definition costructuredArrowOpEquivalence
     (fun X => (CostructuredArrow.isoMk (Iso.refl _)).op) (by
       rintro ⟨X⟩ ⟨Y⟩ f
       obtain ⟨X, x, rfl⟩ := X.mk_surjective
-      obtain ⟨Y, y, rfl⟩ := Y.mk_su
+      obtain ⟨Y, y, rfl⟩ := Y.mk_surjective
+      exact Quiver.Hom.unop_inj (by ext; apply Quiver.Hom.op_inj (by simp)))
+  counitIso := NatIso.ofComponents
+      (fun X => StructuredArrow.isoMk (Iso.refl _))
 
 中文:
 定义 costructuredArrowOpEquivalence
@@ -3597,7 +3608,10 @@ definition costructuredArrowOpEquivalence
     (fun X => (CostructuredArrow.isoMk (Iso.refl _)).op) (by
       rintro ⟨X⟩ ⟨Y⟩ f
       obtain ⟨X, x, rfl⟩ := X.mk_surjective
-      obtain ⟨Y, y, rfl⟩ := Y.mk_su
+      obtain ⟨Y, y, rfl⟩ := Y.mk_surjective
+      exact Quiver.Hom.unop_inj (by ext; apply Quiver.Hom.op_inj (by simp)))
+  counitIso := NatIso.ofComponents
+      (fun X => StructuredArrow.isoMk (Iso.refl _))
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.toStructuredArrow, toStructuredArrow
 -/

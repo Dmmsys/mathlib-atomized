@@ -448,7 +448,11 @@ definition chooseX
       suffices all_equal : forall x y : { t // t in b ∧ p t }, x = y by
         apply all_equal
       rintro ⟨x, px⟩ ⟨y, py⟩
-      rcases hp with ⟨z, ⟨_z_mem_l, _pz⟩, z_
+      rcases hp with ⟨z, ⟨_z_mem_l, _pz⟩, z_unique⟩
+      congr
+      calc
+        x = z := z_unique x px
+        _ = y := (z_unique y py).symm)
 
 中文:
 定义 chooseX
@@ -460,7 +464,11 @@ definition chooseX
       suffices all_equal : forall x y : { t // t in b ∧ p t }, x = y by
         apply all_equal
       rintro ⟨x, px⟩ ⟨y, py⟩
-      rcases hp with ⟨z, ⟨_z_mem_l, _pz⟩, z_
+      rcases hp with ⟨z, ⟨_z_mem_l, _pz⟩, z_unique⟩
+      congr
+      calc
+        x = z := z_unique x px
+        _ = y := (z_unique y py).symm)
 
 Depends on / 依赖: ExistsUnique, ExistsUnique.exists, List.chooseX, Quotient, Quotient.recOn, _z_mem_l, all_equal, chooseX, ex_unique, z_unique
 -/

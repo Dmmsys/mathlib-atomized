@@ -624,7 +624,15 @@ definition createsLimitOfReflectsIso
         let d' : Cone K := (h (F.mapCone d) hd).toLiftableCone.liftedCone
         let i : F.mapCone d' ≅ F.mapCone d :=
           (h (F.mapCone d) hd).toLiftableCone.validLift
-        let hd' : IsLimit d' := (h (F.mapCon
+        let hd' : IsLimit d' := (h (F.mapCone d) hd).makesLimit
+        let f : d ⟶ d' := hd'.liftConeMorphism d
+        have : (Cone.functoriality K F).map f = i.inv :=
+          (hd.ofIsoLimit i.symm).uniq_cone_morphism
+        haveI : IsIso ((Cone.functoriality K F).map f) := by
+          rw [this]
+          infer_instance
+        haveI : IsIso f := isIso_of_reflects_iso f (Cone.functoriality K F)
+        exact IsLimit.ofIsoLimit hd' (asIso f).symm⟩ }
 
 中文:
 定义 createsLimitOfReflectsIso
@@ -635,7 +643,15 @@ definition createsLimitOfReflectsIso
         let d' : Cone K := (h (F.mapCone d) hd).toLiftableCone.liftedCone
         let i : F.mapCone d' ≅ F.mapCone d :=
           (h (F.mapCone d) hd).toLiftableCone.validLift
-        let hd' : IsLimit d' := (h (F.mapCon
+        let hd' : IsLimit d' := (h (F.mapCone d) hd).makesLimit
+        let f : d ⟶ d' := hd'.liftConeMorphism d
+        have : (Cone.functoriality K F).map f = i.inv :=
+          (hd.ofIsoLimit i.symm).uniq_cone_morphism
+        haveI : IsIso ((Cone.functoriality K F).map f) := by
+          rw [this]
+          infer_instance
+        haveI : IsIso f := isIso_of_reflects_iso f (Cone.functoriality K F)
+        exact IsLimit.ofIsoLimit hd' (asIso f).symm⟩ }
 
 Depends on / 依赖: toLiftableCone
 -/
@@ -792,7 +808,7 @@ definition createsLimitOfFullyFaithfulOfIso'
           naturality := fun Y Z f =>
 F.map_injective by
               simpa using (l.w f).symm } }
-    (Cone.ext i fun j => by simp only [Functor.map_preimage, Functor.mapCone_π_ap
+    (Cone.ext i fun j => by simp only [Functor.map_preimage, Functor.mapCone_π_app])
 
 中文:
 定义 createsLimitOfFullyFaithfulOfIso'
@@ -804,7 +820,7 @@ F.map_injective by
           naturality := fun Y Z f =>
 F.map_injective by
               simpa using (l.w f).symm } }
-    (Cone.ext i fun j => by simp only [Functor.map_preimage, Functor.mapCone_π_ap
+    (Cone.ext i fun j => by simp only [Functor.map_preimage, Functor.mapCone_π_app])
 
 Depends on / 依赖: Cone.ext, F.map_injective, F.preimage, Functor, Functor.mapCone_, Functor.map_preimage, createsLimitOfFullyFaithfulOfLift, i.hom, map_injective, map_preimage, naturality, preimage
 -/
@@ -903,7 +919,15 @@ definition createsColimitOfReflectsIso
         let d' : Cocone K := (h (F.mapCocone d) hd).toLiftableCocone.liftedCocone
         let i : F.mapCocone d' ≅ F.mapCocone d :=
           (h (F.mapCocone d) hd).toLiftableCocone.validLift
-        let hd' : IsColi
+        let hd' : IsColimit d' := (h (F.mapCocone d) hd).makesColimit
+        let f : d' ⟶ d := hd'.descCoconeMorphism d
+        have : (Cocone.functoriality K F).map f = i.hom :=
+          (hd.ofIsoColimit i.symm).uniq_cocone_morphism
+        haveI : IsIso ((Cocone.functoriality K F).map f) := by
+          rw [this]
+          infer_instance
+        haveI := isIso_of_reflects_iso f (Cocone.functoriality K F)
+        exact IsColimit.ofIsoColimit hd' (asIso f)⟩ }
 
 中文:
 定义 createsColimitOfReflectsIso
@@ -914,7 +938,15 @@ definition createsColimitOfReflectsIso
         let d' : Cocone K := (h (F.mapCocone d) hd).toLiftableCocone.liftedCocone
         let i : F.mapCocone d' ≅ F.mapCocone d :=
           (h (F.mapCocone d) hd).toLiftableCocone.validLift
-        let hd' : IsColi
+        let hd' : IsColimit d' := (h (F.mapCocone d) hd).makesColimit
+        let f : d' ⟶ d := hd'.descCoconeMorphism d
+        have : (Cocone.functoriality K F).map f = i.hom :=
+          (hd.ofIsoColimit i.symm).uniq_cocone_morphism
+        haveI : IsIso ((Cocone.functoriality K F).map f) := by
+          rw [this]
+          infer_instance
+        haveI := isIso_of_reflects_iso f (Cocone.functoriality K F)
+        exact IsColimit.ofIsoColimit hd' (asIso f)⟩ }
 
 Depends on / 依赖: toLiftableCocone
 -/
@@ -1162,7 +1194,11 @@ definition createsLimitOfIsoDiagram
       { liftedCone := (Cone.postcompose h.hom).obj (liftLimit t')
         validLift :=
           Functor.mapConePostcompose F ≪≫
-            (Cone.postcompos
+            (Cone.postcompose (isoWhiskerRight h F).hom).mapIso (liftedLimitMapsToOriginal t') ≪≫
+              Cone.ext (Iso.refl _) fun j => by
+                dsimp
+                rw [Category.assoc]; rw [← F.map_comp]
+                simp } }
 
 中文:
 定义 createsLimitOfIsoDiagram
@@ -1173,7 +1209,11 @@ definition createsLimitOfIsoDiagram
       { liftedCone := (Cone.postcompose h.hom).obj (liftLimit t')
         validLift :=
           Functor.mapConePostcompose F ≪≫
-            (Cone.postcompos
+            (Cone.postcompose (isoWhiskerRight h F).hom).mapIso (liftedLimitMapsToOriginal t') ≪≫
+              Cone.ext (Iso.refl _) fun j => by
+                dsimp
+                rw [Category.assoc]; rw [← F.map_comp]
+                simp } }
 
 Depends on / 依赖: Category, Category.assoc, Cone.ext, Cone.postcompose, F.map_comp, Functor, Functor.mapConePostcompose, IsLimit, IsLimit.postcomposeInvEquiv, Iso.refl, h.hom, isoWhiskerRight, liftLimit, liftedCone, liftedLimitMapsToOriginal, mapConePostcompose, mapIso, map_comp, postcompose, postcomposeInvEquiv
 -/
@@ -1204,7 +1244,7 @@ definition createsLimitOfNatIso
         refine (IsLimit.mapConeEquiv h ?_).uniqueUpToIso t
         apply IsLimit.ofIsoLimit _ (liftedLimitMapsToOriginal _).symm
         apply (IsLimit.postcomposeInvEquiv _ _).symm t }
-  
+  toReflectsLimit := reflectsLimit_of_natIso _ h
 
 中文:
 定义 createsLimitOf自然数Iso
@@ -1214,7 +1254,7 @@ definition createsLimitOfNatIso
         refine (IsLimit.mapConeEquiv h ?_).uniqueUpToIso t
         apply IsLimit.ofIsoLimit _ (liftedLimitMapsToOriginal _).symm
         apply (IsLimit.postcomposeInvEquiv _ _).symm t }
-  
+  toReflectsLimit := reflectsLimit_of_natIso _ h
 
 Depends on / 依赖: IsLimit, IsLimit.mapConeEquiv, IsLimit.ofIsoLimit, IsLimit.postcomposeInvEquiv, isoWhiskerLeft, liftLimit, liftedCone, liftedLimitMapsToOriginal, mapConeEquiv, ofIsoLimit, postcomposeInvEquiv, reflectsLimit_of_natIso, toReflectsLimit, uniqueUpToIso, validLift
 -/
@@ -1282,7 +1322,9 @@ definition createsLimitsOfShapeOfEquiv
           (liftLimit (hc.whiskerEquivalence e)), ?_⟩
         letI inner := (Cone.whiskeringEquivalence (F := K ⋙ F) e).inverse.mapIso
           (liftedLimitMapsToOriginal (K := e.functor ⋙ K) (hc.whiskerEquivalence e))
-   
+        refine ?_ ≪≫ inner ≪≫ ((Cone.whiskeringEquivalence e).unitIso.app c).symm
+        exact Cone.ext (Iso.refl _)
+      toReflectsLimit := have := reflectsLimitsOfShape_of_equiv e F; inferInstance }
 
 中文:
 定义 createsLimitsOfShapeOfEquiv
@@ -1292,7 +1334,9 @@ definition createsLimitsOfShapeOfEquiv
           (liftLimit (hc.whiskerEquivalence e)), ?_⟩
         letI inner := (Cone.whiskeringEquivalence (F := K ⋙ F) e).inverse.mapIso
           (liftedLimitMapsToOriginal (K := e.functor ⋙ K) (hc.whiskerEquivalence e))
-   
+        refine ?_ ≪≫ inner ≪≫ ((Cone.whiskeringEquivalence e).unitIso.app c).symm
+        exact Cone.ext (Iso.refl _)
+      toReflectsLimit := have := reflectsLimitsOfShape_of_equiv e F; inferInstance }
 
 Depends on / 依赖: Cone.ext, Cone.whiskeringEquivalence, Iso.refl, e.functor, functor, hc.whiskerEquivalence, inverse, inverse.mapIso, inverse.obj, liftLimit, liftedLimitMapsToOriginal, mapIso, reflectsLimitsOfShape_of_equiv, toReflectsLimit, unitIso, unitIso.app, whiskerEquivalence, whiskeringEquivalence
 -/
@@ -1323,7 +1367,12 @@ definition createsColimitOfIsoDiagram
       { liftedCocone := (Cocone.precompose h.inv).obj (liftColimit t')
         validLift :=
           Functor.mapCoconePrecompose F ≪≫
-            (Cocone
+            (Cocone.precompose (isoWhiskerRight h F).inv).mapIso
+                (liftedColimitMapsToOriginal t') ≪≫
+              Cocone.ext (Iso.refl _) fun j => by
+                dsimp
+                rw [← F.map_comp_assoc]
+                simp } }
 
 中文:
 定义 createsColimitOfIsoDiagram
@@ -1334,7 +1383,12 @@ definition createsColimitOfIsoDiagram
       { liftedCocone := (Cocone.precompose h.inv).obj (liftColimit t')
         validLift :=
           Functor.mapCoconePrecompose F ≪≫
-            (Cocone
+            (Cocone.precompose (isoWhiskerRight h F).inv).mapIso
+                (liftedColimitMapsToOriginal t') ≪≫
+              Cocone.ext (Iso.refl _) fun j => by
+                dsimp
+                rw [← F.map_comp_assoc]
+                simp } }
 
 Depends on / 依赖: Cocone, Cocone.ext, Cocone.precompose, F.map_comp_assoc, Functor, Functor.mapCoconePrecompose, IsColimit, IsColimit.precomposeHomEquiv, Iso.refl, h.inv, isoWhiskerRight, liftColimit, liftedCocone, liftedColimitMapsToOriginal, mapCoconePrecompose, mapIso, map_comp_assoc, precompose, precomposeHomEquiv, reflectsColimit_of_iso_diagram
 -/
@@ -1365,7 +1419,8 @@ definition createsColimitOfNatIso
       validLift := by
         refine (IsColimit.mapCoconeEquiv h ?_).uniqueUpToIso t
         apply IsColimit.ofIsoColimit _ (liftedColimitMapsToOriginal _).symm
-        apply (IsColimit.precomposeHomEquiv 
+        apply (IsColimit.precomposeHomEquiv _ _).symm t }
+  toReflectsColimit := reflectsColimit_of_natIso _ h
 
 中文:
 定义 createsColimitOf自然数Iso
@@ -1374,7 +1429,8 @@ definition createsColimitOfNatIso
       validLift := by
         refine (IsColimit.mapCoconeEquiv h ?_).uniqueUpToIso t
         apply IsColimit.ofIsoColimit _ (liftedColimitMapsToOriginal _).symm
-        apply (IsColimit.precomposeHomEquiv 
+        apply (IsColimit.precomposeHomEquiv _ _).symm t }
+  toReflectsColimit := reflectsColimit_of_natIso _ h
 
 Depends on / 依赖: IsColimit, IsColimit.mapCoconeEquiv, IsColimit.ofIsoColimit, IsColimit.precomposeHomEquiv, isoWhiskerLeft, liftColimit, liftedCocone, liftedColimitMapsToOriginal, mapCoconeEquiv, ofIsoColimit, precomposeHomEquiv, reflectsColimit_of_natIso, toReflectsColimit, uniqueUpToIso, validLift
 -/
@@ -1441,7 +1497,10 @@ definition createsColimitsOfShapeOfEquiv
         refine ⟨(Cocone.whiskeringEquivalence e).inverse.obj
           (liftColimit (hc.whiskerEquivalence e)), ?_⟩
         letI inner := (Cocone.whiskeringEquivalence (F := K ⋙ F) e).inverse.mapIso
-          (liftedColimitMapsToOriginal (K := e.functor ⋙ K) (hc.whiskerEquivalence
+          (liftedColimitMapsToOriginal (K := e.functor ⋙ K) (hc.whiskerEquivalence e))
+        refine ?_ ≪≫ inner ≪≫ ((Cocone.whiskeringEquivalence e).unitIso.app c).symm
+        exact Cocone.ext (Iso.refl _)
+      toReflectsColimit := have := reflectsColimitsOfShape_of_equiv e F; inferInstance }
 
 中文:
 定义 createsColimitsOfShapeOfEquiv
@@ -1450,7 +1509,10 @@ definition createsColimitsOfShapeOfEquiv
         refine ⟨(Cocone.whiskeringEquivalence e).inverse.obj
           (liftColimit (hc.whiskerEquivalence e)), ?_⟩
         letI inner := (Cocone.whiskeringEquivalence (F := K ⋙ F) e).inverse.mapIso
-          (liftedColimitMapsToOriginal (K := e.functor ⋙ K) (hc.whiskerEquivalence
+          (liftedColimitMapsToOriginal (K := e.functor ⋙ K) (hc.whiskerEquivalence e))
+        refine ?_ ≪≫ inner ≪≫ ((Cocone.whiskeringEquivalence e).unitIso.app c).symm
+        exact Cocone.ext (Iso.refl _)
+      toReflectsColimit := have := reflectsColimitsOfShape_of_equiv e F; inferInstance }
 
 Depends on / 依赖: Cocone, Cocone.ext, Cocone.whiskeringEquivalence, Iso.refl, e.functor, functor, hc.whiskerEquivalence, inverse, inverse.mapIso, inverse.obj, liftColimit, liftedColimitMapsToOriginal, mapIso, reflectsColimitsOfShape_of_equiv, toReflectsColimit, unitIso, unitIso.app, whiskerEquivalence, whiskeringEquivalence
 -/
@@ -1700,7 +1762,7 @@ instance compCreatesLimit
       { liftedCone := liftLimit (liftedLimitIsLimit t')
         validLift := (Cone.functoriality (K ⋙ F) G).mapIso
             (liftedLimitMapsToOriginal (liftedLimitIsLimit t')) ≪≫
-          liftedLimitMapsToOriginal t' 
+          liftedLimitMapsToOriginal t' }
 
 中文:
 实例 compCreatesLimit
@@ -1712,7 +1774,7 @@ instance compCreatesLimit
       { liftedCone := liftLimit (liftedLimitIsLimit t')
         validLift := (Cone.functoriality (K ⋙ F) G).mapIso
             (liftedLimitMapsToOriginal (liftedLimitIsLimit t')) ≪≫
-          liftedLimitMapsToOriginal t' 
+          liftedLimitMapsToOriginal t' }
 
 Depends on / 依赖: Cone.functoriality, IsLimit, functoriality, liftLimit, liftedCone, liftedLimitIsLimit, liftedLimitMapsToOriginal, mapIso, validLift
 -/
@@ -1796,7 +1858,7 @@ instance compCreatesColimit
       validLift :=
         (Cocone.functoriality (K ⋙ F) G).mapIso
             (liftedColimitMapsToOriginal (liftedColimitIsColimit t')) ≪≫
-          liftedColimitMapsToOri
+          liftedColimitMapsToOriginal t' }
 
 中文:
 实例 compCreatesColimit
@@ -1807,7 +1869,7 @@ instance compCreatesColimit
       validLift :=
         (Cocone.functoriality (K ⋙ F) G).mapIso
             (liftedColimitMapsToOriginal (liftedColimitIsColimit t')) ≪≫
-          liftedColimitMapsToOri
+          liftedColimitMapsToOriginal t' }
 
 Depends on / 依赖: Cocone, Cocone.functoriality, IsColimit, functoriality, liftColimit, liftedCocone, liftedColimitIsColimit, liftedColimitMapsToOriginal, mapIso, validLift
 -/

@@ -780,7 +780,33 @@ theorem unit_inverse_comp
   rw [← id_comp (e.inverse.map _)]; rw [← map_id e.inverse]; rw [← counitInv_functor_comp]; rw [map_comp]
   rw [← Iso.hom_inv_id_assoc (e.unitIso.app _) (e.inverse.map (e.functor.map _))]; rw [Iso.app_hom]; rw [Iso.app_inv]
   slice_lhs 2 3 => rw [← e.unit_naturality]
-  slice_lhs 1 2 => rw [← e.un
+  slice_lhs 1 2 => rw [← e.unit_naturality]
+  slice_lhs 4 4 =>
+    rw [← Iso.hom_inv_id_assoc (e.inverse.mapIso (e.counitIso.app _)) (e.unitInv.app _)]
+  slice_lhs 3 4 =>
+    dsimp only [Functor.mapIso_hom, Iso.app_hom]
+    rw [← map_comp e.inverse]
+    dsimp
+    rw [e.counit_naturality]; rw [e.counitIso.hom_inv_id_app]
+    dsimp only [Functor.comp_obj]
+    rw [map_id]
+  dsimp only [comp_obj, id_obj]
+  rw [id_comp]
+  slice_lhs 2 3 =>
+    dsimp only [Functor.mapIso_inv, Iso.app_inv]
+    rw [← map_comp e.inverse]; rw [← e.counitInv_naturality]; rw [map_comp]
+  slice_lhs 3 4 => rw [e.unitInv_naturality]
+  slice_lhs 4 5 =>
+    rw [← map_comp e.inverse]; rw [← map_comp e.functor]; rw [e.unitIso.hom_inv_id_app]
+    dsimp only [Functor.id_obj]
+    rw [map_id]; rw [map_id]
+  rw [id_comp]
+  slice_lhs 3 4 => rw [← e.unitInv_naturality]
+  slice_lhs 2 3 =>
+    rw [← map_comp e.inverse]; rw [e.counitInv_naturality]; rw [e.counitIso.hom_inv_id_app]
+  simp
+
+@[to_dual unitInv_app_inverse]
 
 中文:
 定理 unit_inverse_comp
@@ -789,7 +815,33 @@ theorem unit_inverse_comp
   rw [← id_comp (e.inverse.map _)]; rw [← map_id e.inverse]; rw [← counitInv_functor_comp]; rw [map_comp]
   rw [← Iso.hom_inv_id_assoc (e.unitIso.app _) (e.inverse.map (e.functor.map _))]; rw [Iso.app_hom]; rw [Iso.app_inv]
   slice_lhs 2 3 => rw [← e.unit_naturality]
-  slice_lhs 1 2 => rw [← e.un
+  slice_lhs 1 2 => rw [← e.unit_naturality]
+  slice_lhs 4 4 =>
+    rw [← Iso.hom_inv_id_assoc (e.inverse.mapIso (e.counitIso.app _)) (e.unitInv.app _)]
+  slice_lhs 3 4 =>
+    dsimp only [Functor.mapIso_hom, Iso.app_hom]
+    rw [← map_comp e.inverse]
+    dsimp
+    rw [e.counit_naturality]; rw [e.counitIso.hom_inv_id_app]
+    dsimp only [Functor.comp_obj]
+    rw [map_id]
+  dsimp only [comp_obj, id_obj]
+  rw [id_comp]
+  slice_lhs 2 3 =>
+    dsimp only [Functor.mapIso_inv, Iso.app_inv]
+    rw [← map_comp e.inverse]; rw [← e.counitInv_naturality]; rw [map_comp]
+  slice_lhs 3 4 => rw [e.unitInv_naturality]
+  slice_lhs 4 5 =>
+    rw [← map_comp e.inverse]; rw [← map_comp e.functor]; rw [e.unitIso.hom_inv_id_app]
+    dsimp only [Functor.id_obj]
+    rw [map_id]; rw [map_id]
+  rw [id_comp]
+  slice_lhs 3 4 => rw [← e.unitInv_naturality]
+  slice_lhs 2 3 =>
+    rw [← map_comp e.inverse]; rw [e.counitInv_naturality]; rw [e.counitIso.hom_inv_id_app]
+  simp
+
+@[to_dual unitInv_app_inverse]
 
 Depends on / 依赖: Functor, Functor.mapIso_hom, Iso.app_hom, Iso.app_inv, Iso.hom_inv_id_assoc, app_hom, app_inv, counitInv_functor_comp, counitIso, e.counitIso.app, e.functor.map, e.inverse, e.inverse.map, e.inverse.mapIso, e.unitInv.app, e.unitIso.app, e.unit_naturality, functor, hom_inv_id_assoc, id_comp
 -/
@@ -912,7 +964,10 @@ definition adjointifyη
     _ ≅ F ⋙ (G ⋙ F) ⋙ G := isoWhiskerLeft F (isoWhiskerRight ε.symm G)
     _ ≅ F ⋙ G ⋙ F ⋙ G := isoWhiskerLeft F (associator G F G)
     _ ≅ (F ⋙ G) ⋙ F ⋙ G := (associator F G (F ⋙ G)).symm
-    _ ≅ 𝟭 C ⋙ F ⋙ G 
+    _ ≅ 𝟭 C ⋙ F ⋙ G := isoWhiskerRight η.symm (F ⋙ G)
+    _ ≅ F ⋙ G := leftUnitor (F ⋙ G)
+
+@[reassoc]
 
 中文:
 定义 adjointifyη
@@ -924,7 +979,10 @@ definition adjointifyη
     _ ≅ F ⋙ (G ⋙ F) ⋙ G := isoWhiskerLeft F (isoWhiskerRight ε.symm G)
     _ ≅ F ⋙ G ⋙ F ⋙ G := isoWhiskerLeft F (associator G F G)
     _ ≅ (F ⋙ G) ⋙ F ⋙ G := (associator F G (F ⋙ G)).symm
-    _ ≅ 𝟭 C ⋙ F ⋙ G 
+    _ ≅ 𝟭 C ⋙ F ⋙ G := isoWhiskerRight η.symm (F ⋙ G)
+    _ ≅ F ⋙ G := leftUnitor (F ⋙ G)
+
+@[reassoc]
 
 Depends on / 依赖: associator, isoWhiskerLeft, isoWhiskerRight, leftUnitor
 -/
@@ -951,7 +1009,8 @@ theorem adjointify_η_ε
   have := ε.hom.naturality (F.map (η.inv.app X)); dsimp at this; rw [this]; clear this
   rw [← assoc _ _ (F.map _)]
   have := ε.hom.naturality (ε.inv.app <| F.obj X); dsimp at this; rw [this]; clear this
-  have := (ε.app <|
+  have := (ε.app <| F.obj X).hom_inv_id; dsimp at this; rw [this]; clear this
+  rw [id_comp]; have := (F.mapIso <| η.app X).hom_inv_id; dsimp at this; rw [this]
 
 中文:
 定理 adjointify_η_ε
@@ -962,7 +1021,8 @@ theorem adjointify_η_ε
   have := ε.hom.naturality (F.map (η.inv.app X)); dsimp at this; rw [this]; clear this
   rw [← assoc _ _ (F.map _)]
   have := ε.hom.naturality (ε.inv.app <| F.obj X); dsimp at this; rw [this]; clear this
-  have := (ε.app <|
+  have := (ε.app <| F.obj X).hom_inv_id; dsimp at this; rw [this]; clear this
+  rw [id_comp]; have := (F.mapIso <| η.app X).hom_inv_id; dsimp at this; rw [this]
 
 Depends on / 依赖: F.map, F.mapIso, F.obj, Trans.trans, comp_id, hom.naturality, hom_inv_id, id_comp, inv.app, mapIso, map_comp, naturality
 -/
@@ -1130,7 +1190,17 @@ definition trans
   inverse := f.inverse ⋙ e.inverse
   unitIso := e.unitIso ≪≫ isoWhiskerRight (e.functor.rightUnitor.symm ≪≫
     isoWhiskerLeft _ f.unitIso ≪≫ (Functor.associator _ _ _).symm) _ ≪≫ Functor.associator _ _ _
-  counitIso := (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight ((Funct
+  counitIso := (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight ((Functor.associator _ _ _) ≪≫
+      isoWhiskerLeft _ e.counitIso ≪≫ f.inverse.rightUnitor) _ ≪≫ f.counitIso
+  -- We wouldn't have needed to give this proof if we'd used `Equivalence.mk`,
+  -- but we choose to avoid using that here, for the sake of good structure projection `simp`
+  -- lemmas.
+  functor_unitIso_comp X := by
+    dsimp
+    simp only [comp_id, id_comp, map_comp, fun_inv_map, comp_obj, id_obj, counitInv,
+      functor_unit_comp_assoc, assoc]
+    slice_lhs 2 3 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
+    simp
 
 中文:
 定义 trans
@@ -1139,7 +1209,17 @@ definition trans
   inverse := f.inverse ⋙ e.inverse
   unitIso := e.unitIso ≪≫ isoWhiskerRight (e.functor.rightUnitor.symm ≪≫
     isoWhiskerLeft _ f.unitIso ≪≫ (Functor.associator _ _ _).symm) _ ≪≫ Functor.associator _ _ _
-  counitIso := (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight ((Funct
+  counitIso := (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight ((Functor.associator _ _ _) ≪≫
+      isoWhiskerLeft _ e.counitIso ≪≫ f.inverse.rightUnitor) _ ≪≫ f.counitIso
+  -- We wouldn't have needed to give this proof if we'd used `Equivalence.mk`,
+  -- but we choose to avoid using that here, for the sake of good structure projection `simp`
+  -- lemmas.
+  functor_unitIso_comp X := by
+    dsimp
+    simp only [comp_id, id_comp, map_comp, fun_inv_map, comp_obj, id_obj, counitInv,
+      functor_unit_comp_assoc, assoc]
+    slice_lhs 2 3 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
+    simp
 
 Depends on / 依赖: e.functor, f.functor, functor
 -/
@@ -1269,7 +1349,8 @@ definition congrLeft
   functor_unitIso_comp F := by
     ext X
     dsimp
-    simp only [funInvIdAssoc_
+    simp only [funInvIdAssoc_inv_app, id_obj, comp_obj, invFunIdAssoc_hom_app,
+      Functor.comp_map, ← F.map_comp, unit_inverse_comp, map_id]
 
 中文:
 定义 congrLeft
@@ -1281,7 +1362,8 @@ definition congrLeft
   functor_unitIso_comp F := by
     ext X
     dsimp
-    simp only [funInvIdAssoc_
+    simp only [funInvIdAssoc_inv_app, id_obj, comp_obj, invFunIdAssoc_hom_app,
+      Functor.comp_map, ← F.map_comp, unit_inverse_comp, map_id]
 
 Depends on / 依赖: e.inverse, inverse, whiskeringLeft
 -/
@@ -1309,7 +1391,7 @@ definition congrRight
   unitIso := NatIso.ofComponents
       fun F => F.rightUnitor.symm ≪≫ isoWhiskerLeft F e.unitIso ≪≫ Functor.associator _ _ _
   counitIso := NatIso.ofComponents
-      fun F => Functor.associator _ _ _ ≪≫ isoWhisk
+      fun F => Functor.associator _ _ _ ≪≫ isoWhiskerLeft F e.counitIso ≪≫ F.rightUnitor
 
 中文:
 定义 congrRight
@@ -1319,7 +1401,7 @@ definition congrRight
   unitIso := NatIso.ofComponents
       fun F => F.rightUnitor.symm ≪≫ isoWhiskerLeft F e.unitIso ≪≫ Functor.associator _ _ _
   counitIso := NatIso.ofComponents
-      fun F => Functor.associator _ _ _ ≪≫ isoWhisk
+      fun F => Functor.associator _ _ _ ≪≫ isoWhiskerLeft F e.counitIso ≪≫ F.rightUnitor
 
 Depends on / 依赖: e.functor, functor, whiskeringRight
 -/

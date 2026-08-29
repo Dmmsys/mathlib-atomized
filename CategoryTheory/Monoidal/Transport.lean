@@ -120,7 +120,26 @@ definition induced
     rw [fData.tensorHom_eq]; rw [Functor.map_comp]; rw [fData.whiskerRight_eq]; rw [fData.whiskerLeft_eq]
     simp only [tensorHom_def, assoc, Iso.hom_inv_id_assoc]
 id_tensorHom_id X₁ X₂ := F.map_injective by cases fData; cat_disch
-tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := F.map_inj
+tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := F.map_injective by cases fData; cat_disch
+whiskerLeft_id X Y := F.map_injective by simp [fData.whiskerLeft_eq]
+id_whiskerRight X Y := F.map_injective by simp [fData.whiskerRight_eq]
+triangle X Y := F.map_injective by cases fData; cat_disch
+pentagon W X Y Z := F.map_injective by
+    simp only [Functor.map_comp, fData.whiskerRight_eq, fData.associator_eq, Iso.trans_assoc,
+      Iso.trans_hom, Iso.symm_hom, tensorIso_hom, Iso.refl_hom, tensorHom_id, id_tensorHom,
+      comp_whiskerRight, whisker_assoc, assoc, fData.whiskerLeft_eq, whiskerLeft_comp,
+      Iso.hom_inv_id_assoc, whiskerLeft_hom_inv_assoc, hom_inv_whiskerRight_assoc,
+      Iso.inv_hom_id_assoc, Iso.cancel_iso_inv_left]
+    slice_lhs 5 6 =>
+      rw [← whiskerLeft_comp]; rw [hom_inv_whiskerRight]
+    rw [whisker_exchange_assoc]
+    simp
+leftUnitor_naturality {X Y : D} f := F.map_injective by
+    simp [fData.leftUnitor_eq, fData.whiskerLeft_eq, whisker_exchange_assoc]
+rightUnitor_naturality {X Y : D} f := F.map_injective by
+    simp [fData.rightUnitor_eq, fData.whiskerRight_eq, ← whisker_exchange_assoc]
+associator_naturality {X₁ X₂ X₃ Y₁ Y₂ Y₃} f₁ f₂ f₃ := F.map_injective by
+    simp [fData.tensorHom_eq, fData.associator_eq, tensorHom_def, whisker_exchange_assoc]
 
 中文:
 定义 induced
@@ -129,7 +148,26 @@ tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := F.map_inj
     rw [fData.tensorHom_eq]; rw [Functor.map_comp]; rw [fData.whiskerRight_eq]; rw [fData.whiskerLeft_eq]
     simp only [tensorHom_def, assoc, Iso.hom_inv_id_assoc]
 id_tensorHom_id X₁ X₂ := F.map_injective by cases fData; cat_disch
-tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := F.map_inj
+tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := F.map_injective by cases fData; cat_disch
+whiskerLeft_id X Y := F.map_injective by simp [fData.whiskerLeft_eq]
+id_whiskerRight X Y := F.map_injective by simp [fData.whiskerRight_eq]
+triangle X Y := F.map_injective by cases fData; cat_disch
+pentagon W X Y Z := F.map_injective by
+    simp only [Functor.map_comp, fData.whiskerRight_eq, fData.associator_eq, Iso.trans_assoc,
+      Iso.trans_hom, Iso.symm_hom, tensorIso_hom, Iso.refl_hom, tensorHom_id, id_tensorHom,
+      comp_whiskerRight, whisker_assoc, assoc, fData.whiskerLeft_eq, whiskerLeft_comp,
+      Iso.hom_inv_id_assoc, whiskerLeft_hom_inv_assoc, hom_inv_whiskerRight_assoc,
+      Iso.inv_hom_id_assoc, Iso.cancel_iso_inv_left]
+    slice_lhs 5 6 =>
+      rw [← whiskerLeft_comp]; rw [hom_inv_whiskerRight]
+    rw [whisker_exchange_assoc]
+    simp
+leftUnitor_naturality {X Y : D} f := F.map_injective by
+    simp [fData.leftUnitor_eq, fData.whiskerLeft_eq, whisker_exchange_assoc]
+rightUnitor_naturality {X Y : D} f := F.map_injective by
+    simp [fData.rightUnitor_eq, fData.whiskerRight_eq, ← whisker_exchange_assoc]
+associator_naturality {X₁ X₂ X₃ Y₁ Y₂ Y₃} f₁ f₂ f₃ := F.map_injective by
+    simp [fData.tensorHom_eq, fData.associator_eq, tensorHom_def, whisker_exchange_assoc]
 
 Depends on / 依赖: F.map_injective, Functor, Functor.map_comp, Iso.hom_inv_id_assoc, Subobject, Subobject.semilatticeInf, Subobject.semilatticeSup, cat_disch, fData.tensorHom_eq, fData.whiskerLeft_eq, fData.whiskerRight_eq, hom_inv_id_assoc, id_tensorHom_id, id_whiskerRight, map_comp, map_injective, semilatticeInf, semilatticeSup, tensorHom_comp_tensorHom, tensorHom_def
 -/
@@ -175,7 +213,9 @@ definition fromInducedCoreMonoidal
       μIso := fData.μIso
       μIso_hom_natural_left := fun _ => by simp [fData.whiskerRight_eq]
       μIso_hom_natural_right := fun _ => by simp [fData.whiskerLeft_eq]
-      associativity := fun _ _ 
+      associativity := fun _ _ _ => by simp [fData.associator_eq]
+      left_unitality := fun _ => by simp [fData.leftUnitor_eq]
+      right_unitality := fun _ => by simp [fData.rightUnitor_eq] }
 
 中文:
 定义 fromInducedCoreMonoidal
@@ -188,7 +228,9 @@ definition fromInducedCoreMonoidal
       μIso := fData.μIso
       μIso_hom_natural_left := fun _ => by simp [fData.whiskerRight_eq]
       μIso_hom_natural_right := fun _ => by simp [fData.whiskerLeft_eq]
-      associativity := fun _ _ 
+      associativity := fun _ _ _ => by simp [fData.associator_eq]
+      left_unitality := fun _ => by simp [fData.leftUnitor_eq]
+      right_unitality := fun _ => by simp [fData.rightUnitor_eq] }
 
 Depends on / 依赖: induced
 -/
@@ -247,7 +289,21 @@ definition transportStruct
   whiskerLeft X _ _ f := e.functor.map (e.inverse.obj X ◁ e.inverse.map f)
   whiskerRight f X := e.functor.map (e.inverse.map f ▷ e.inverse.obj X)
   tensorHom f g := e.functor.map (e.inverse.map f otimesₘ e.inverse.map g)
-  tensorUnit := e.funct
+  tensorUnit := e.functor.obj (𝟙_ C)
+  associator X Y Z :=
+    e.functor.mapIso
+      (whiskerRightIso (e.unitIso.app _).symm _ ≪≫
+        α_ (e.inverse.obj X) (e.inverse.obj Y) (e.inverse.obj Z) ≪≫
+        whiskerLeftIso _ (e.unitIso.app _))
+  leftUnitor X :=
+    e.functor.mapIso ((whiskerRightIso (e.unitIso.app _).symm _) ≪≫ fun_ (e.inverse.obj X)) ≪≫
+      e.counitIso.app _
+  rightUnitor X :=
+    e.functor.mapIso ((whiskerLeftIso _ (e.unitIso.app _).symm) ≪≫ ρ_ (e.inverse.obj X)) ≪≫
+      e.counitIso.app _
+
+#adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+the fields `whiskerLeft_eq` and following were all filled by the `cat_disch` auto_param. -/
 
 中文:
 定义 transportStruct
@@ -256,7 +312,21 @@ definition transportStruct
   whiskerLeft X _ _ f := e.functor.map (e.inverse.obj X ◁ e.inverse.map f)
   whiskerRight f X := e.functor.map (e.inverse.map f ▷ e.inverse.obj X)
   tensorHom f g := e.functor.map (e.inverse.map f otimesₘ e.inverse.map g)
-  tensorUnit := e.funct
+  tensorUnit := e.functor.obj (𝟙_ C)
+  associator X Y Z :=
+    e.functor.mapIso
+      (whiskerRightIso (e.unitIso.app _).symm _ ≪≫
+        α_ (e.inverse.obj X) (e.inverse.obj Y) (e.inverse.obj Z) ≪≫
+        whiskerLeftIso _ (e.unitIso.app _))
+  leftUnitor X :=
+    e.functor.mapIso ((whiskerRightIso (e.unitIso.app _).symm _) ≪≫ fun_ (e.inverse.obj X)) ≪≫
+      e.counitIso.app _
+  rightUnitor X :=
+    e.functor.mapIso ((whiskerLeftIso _ (e.unitIso.app _).symm) ≪≫ ρ_ (e.inverse.obj X)) ≪≫
+      e.counitIso.app _
+
+#adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+the fields `whiskerLeft_eq` and following were all filled by the `cat_disch` auto_param. -/
 
 Depends on / 依赖: e.functor.obj, e.inverse.obj, functor, inverse, otimes
 -/
@@ -296,7 +366,10 @@ definition transport
       εIso := e.unitIso.app _
       whiskerLeft_eq := by simp +zetaDelta +instances
       whiskerRight_eq := by simp +zetaDelta +instances
-      tensorHom_eq := by simp +zetaDelta +
+      tensorHom_eq := by simp +zetaDelta +instances
+      associator_eq := by simp +zetaDelta +instances
+      leftUnitor_eq := by simp +zetaDelta +instances
+      rightUnitor_eq := by simp +zetaDelta +instances }
 
 中文:
 定义 transport
@@ -307,7 +380,10 @@ definition transport
       εIso := e.unitIso.app _
       whiskerLeft_eq := by simp +zetaDelta +instances
       whiskerRight_eq := by simp +zetaDelta +instances
-      tensorHom_eq := by simp +zetaDelta +
+      tensorHom_eq := by simp +zetaDelta +instances
+      associator_eq := by simp +zetaDelta +instances
+      leftUnitor_eq := by simp +zetaDelta +instances
+      rightUnitor_eq := by simp +zetaDelta +instances }
 
 Depends on / 依赖: MonoidalCategoryStruct, associator_eq, e.inverse, e.unitIso.app, induced, instances, inverse, leftUnitor_eq, rightUnitor_eq, tensorHom_eq, transportStruct, unitIso, whiskerLeft_eq, whiskerRight_eq, zetaDelta
 -/

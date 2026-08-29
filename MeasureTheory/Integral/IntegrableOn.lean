@@ -873,7 +873,8 @@ theorem integrableOn_singleton_iff
   have : f =ᵐ[μ.restrict {x}] fun _ => f x := by
     filter_upwards [ae_restrict_mem (measurableSet_singleton x)] with _ ha
     simp only [mem_singleton_iff.1 ha]
-  rw [IntegrableOn]; rw [integrable_congr this]; rw [integrable_const_iff_enorm]; rw [isFiniteMeasure_restrict]; rw [lt_top_iff_ne_top
+  rw [IntegrableOn]; rw [integrable_congr this]; rw [integrable_const_iff_enorm]; rw [isFiniteMeasure_restrict]; rw [lt_top_iff_ne_top]
+  exact hfx
 
 中文:
 定理 integrableOn_singleton_iff
@@ -882,7 +883,8 @@ theorem integrableOn_singleton_iff
   have : f =ᵐ[μ.restrict {x}] fun _ => f x := by
     filter_upwards [ae_restrict_mem (measurableSet_singleton x)] with _ ha
     simp only [mem_singleton_iff.1 ha]
-  rw [IntegrableOn]; rw [integrable_congr this]; rw [integrable_const_iff_enorm]; rw [isFiniteMeasure_restrict]; rw [lt_top_iff_ne_top
+  rw [IntegrableOn]; rw [integrable_congr this]; rw [integrable_const_iff_enorm]; rw [isFiniteMeasure_restrict]; rw [lt_top_iff_ne_top]
+  exact hfx
 
 Depends on / 依赖: IntegrableOn, ae_restrict_mem, filter_upwards, finiteness, integrable_congr, integrable_const_iff_enorm, isFiniteMeasure_restrict, lt_top_iff_ne_top, measurableSet_singleton, mem_singleton_iff, restrict
 -/
@@ -1594,7 +1596,13 @@ theorem IntegrableOn.restrict_toMeasurable
   let v n := toMeasurable (μ.restrict s) { x | u n <= ‖f x‖ₑ }
   have A : forall n, μ (s inter v n) != ∞ := by
     intro n
-    rw [inter_comm]; rw [← Measure.restrict_apply (measurableSet_toMeasurable _ _)]; rw 
+    rw [inter_comm]; rw [← Measure.restrict_apply (measurableSet_toMeasurable _ _)]; rw [measure_toMeasurable]
+    exact (hf.measure_enorm_ge_lt_top (u_pos n).1 (u_pos n).2.ne).ne
+  apply Measure.restrict_toMeasurable_of_cover _ A
+  intro x hx
+  obtain ⟨n, hn⟩ : exists n, u n < ‖f x‖ₑ :=
+    ((tendsto_order.1 u_lim).2 _ (pos_of_ne_zero (h's x hx))).exists
+  exact mem_iUnion.2 ⟨n, subset_toMeasurable _ _ hn.le⟩
 
 中文:
 定理 整数egrableOn.restrict_toMeasurable
@@ -1604,7 +1612,13 @@ theorem IntegrableOn.restrict_toMeasurable
   let v n := toMeasurable (μ.restrict s) { x | u n <= ‖f x‖ₑ }
   have A : forall n, μ (s inter v n) != ∞ := by
     intro n
-    rw [inter_comm]; rw [← Measure.restrict_apply (measurableSet_toMeasurable _ _)]; rw 
+    rw [inter_comm]; rw [← Measure.restrict_apply (measurableSet_toMeasurable _ _)]; rw [measure_toMeasurable]
+    exact (hf.measure_enorm_ge_lt_top (u_pos n).1 (u_pos n).2.ne).ne
+  apply Measure.restrict_toMeasurable_of_cover _ A
+  intro x hx
+  obtain ⟨n, hn⟩ : exists n, u n < ‖f x‖ₑ :=
+    ((tendsto_order.1 u_lim).2 _ (pos_of_ne_zero (h's x hx))).exists
+  exact mem_iUnion.2 ⟨n, subset_toMeasurable _ _ hn.le⟩
 
 Depends on / 依赖: ENNReal, ENNReal.zero_lt_top, Measure, Measure.restrict_apply, Measure.restrict_toMeasurable_of_cover, exists_seq_strictAnti_tendsto, hf.measure_enorm_ge_lt_top, inter_comm, measurableSet_toMeasurable, measure_enorm_ge_lt_top, measure_toMeasurable, restrict, restrict_apply, restrict_toMeasurable_of_cover, tendsto_order, toMeasurable, u_lim, u_pos, zero_lt_top
 -/
@@ -1644,7 +1658,20 @@ theorem IntegrableOn.of_ae_sdiff_eq_zero
     rw [IntegrableOn]; rw [hu.restrict_toMeasurable]
     · exact hu
     · intro x hx; simpa using hx.2
-  have B : IntegrableOn f (t \ v) 
+  have B : IntegrableOn f (t \ v) μ := by
+    apply integrableOn_zero.congr
+    filter_upwards [ae_restrict_of_ae h't,
+      ae_restrict_mem₀ (ht.diff (measurableSet_toMeasurable μ u).nullMeasurableSet)] with x hxt hx
+    by_cases h'x : x in s
+    · by_contra H
+      exact hx.2 (subset_toMeasurable μ u ⟨h'x, Ne.symm H⟩)
+    · exact (hxt ⟨hx.1, h'x⟩).symm
+  apply (A.union B).mono_set _
+  rw [union_sdiff_self]
+  exact subset_union_right
+
+@[deprecated (since := "2026-06-03")]
+alias IntegrableOn.of_ae_diff_eq_zero := IntegrableOn.of_ae_sdiff_eq_zero
 
 中文:
 定理 整数egrableOn.of_ae_sdiff_eq_zero
@@ -1657,7 +1684,20 @@ theorem IntegrableOn.of_ae_sdiff_eq_zero
     rw [IntegrableOn]; rw [hu.restrict_toMeasurable]
     · exact hu
     · intro x hx; simpa using hx.2
-  have B : IntegrableOn f (t \ v) 
+  have B : IntegrableOn f (t \ v) μ := by
+    apply integrableOn_zero.congr
+    filter_upwards [ae_restrict_of_ae h't,
+      ae_restrict_mem₀ (ht.diff (measurableSet_toMeasurable μ u).nullMeasurableSet)] with x hxt hx
+    by_cases h'x : x in s
+    · by_contra H
+      exact hx.2 (subset_toMeasurable μ u ⟨h'x, Ne.symm H⟩)
+    · exact (hxt ⟨hx.1, h'x⟩).symm
+  apply (A.union B).mono_set _
+  rw [union_sdiff_self]
+  exact subset_union_right
+
+@[deprecated (since := "2026-06-03")]
+alias IntegrableOn.of_ae_diff_eq_zero := IntegrableOn.of_ae_sdiff_eq_zero
 
 Depends on / 依赖: IntegrableOn, ae_restrict_of_ae, filter_upwards, hf.mono_set, ht.diff, hu.restrict_toMeasurable, integrableOn_zero, integrableOn_zero.congr, measurableSet_toMeasurable, mono_set, nullMeasurableSet, restrict_toMeasurable, toMeasurable
 -/
@@ -1820,7 +1860,7 @@ theorem integrableOn_Lp_of_measure_ne_top
   have hμ_restrict_univ : (μ.restrict s) Set.univ < ∞ := by
     simpa only [Set.univ_inter, MeasurableSet.univ, Measure.restrict_apply, lt_top_iff_ne_top]
   have hμ_finite : IsFiniteMeasure (μ.restrict s) := ⟨hμ_restrict_univ⟩
-  exact ((Lp.memLp _).restrict
+  exact ((Lp.memLp _).restrict s).mono_exponent hp
 
 中文:
 定理 integrableOn_Lp_of_measure_ne_top
@@ -1830,7 +1870,7 @@ theorem integrableOn_Lp_of_measure_ne_top
   have hμ_restrict_univ : (μ.restrict s) Set.univ < ∞ := by
     simpa only [Set.univ_inter, MeasurableSet.univ, Measure.restrict_apply, lt_top_iff_ne_top]
   have hμ_finite : IsFiniteMeasure (μ.restrict s) := ⟨hμ_restrict_univ⟩
-  exact ((Lp.memLp _).restrict
+  exact ((Lp.memLp _).restrict s).mono_exponent hp
 
 Depends on / 依赖: IsFiniteMeasure, Lp.memLp, MeasurableSet, MeasurableSet.univ, Measure, Measure.restrict_apply, Set.univ, Set.univ_inter, lt_top_iff_ne_top, memLp_one_iff_integrable, memLp_one_iff_integrable.mp, mono_exponent, restrict, restrict_apply, univ_inter
 -/
@@ -2584,7 +2624,9 @@ theorem Measure.FiniteAtFilter.integrableAtFilter
     hf.imp fun C hC => eventually_smallSets.2 ⟨_, hC, fun t => id⟩
   rcases (hfm.eventually.and (hμ.eventually.and hC)).exists_measurable_mem_of_smallSets with
     ⟨s, hsl, hsm, hfm, hμ, hC⟩
-  refine ⟨s, hsl, ⟨hfm
+  refine ⟨s, hsl, ⟨hfm, .restrict_of_bounded hμ (C := C) ?_⟩⟩
+  rw [ae_restrict_eq hsm]; rw [eventually_inf_principal]
+  exact Eventually.of_forall hC
 
 中文:
 定理 测度.FiniteAtFilter.integrableAtFilter
@@ -2594,7 +2636,9 @@ theorem Measure.FiniteAtFilter.integrableAtFilter
     hf.imp fun C hC => eventually_smallSets.2 ⟨_, hC, fun t => id⟩
   rcases (hfm.eventually.and (hμ.eventually.and hC)).exists_measurable_mem_of_smallSets with
     ⟨s, hsl, hsm, hfm, hμ, hC⟩
-  refine ⟨s, hsl, ⟨hfm
+  refine ⟨s, hsl, ⟨hfm, .restrict_of_bounded hμ (C := C) ?_⟩⟩
+  rw [ae_restrict_eq hsm]; rw [eventually_inf_principal]
+  exact Eventually.of_forall hC
 
 Depends on / 依赖: Eventually, Eventually.of_forall, ae_restrict_eq, eventually, eventually.and, eventually_inf_principal, eventually_smallSets, exists_measurable_mem_of_smallSets, hf.imp, hfm.eventually.and, l.smallSets, of_forall, restrict_of_bounded, smallSets
 -/
@@ -2730,7 +2774,11 @@ lemma IntegrableAtFilter.eq_zero_of_tendsto
   rcases h with ⟨u, ul, hu⟩
   let v := u inter {b | ε < ‖f b‖}
   have hv : IntegrableOn f v μ := hu.mono_set inter_subset_left
-  have vl : v in l := inter_mem ul ((tendsto_order.1 hf.n
+  have vl : v in l := inter_mem ul ((tendsto_order.1 hf.norm).1 _ hε)
+  have : μ.restrict v v < ∞ := lt_of_le_of_lt (measure_mono inter_subset_right)
+    (Integrable.measure_gt_lt_top hv.norm εpos)
+  have : μ v != ∞ := ne_of_lt (by simpa only [Measure.restrict_apply_self])
+  exact this (h' v vl)
 
 中文:
 引理 整数egrableAtFilter.eq_zero_of_tendsto
@@ -2741,7 +2789,11 @@ lemma IntegrableAtFilter.eq_zero_of_tendsto
   rcases h with ⟨u, ul, hu⟩
   let v := u inter {b | ε < ‖f b‖}
   have hv : IntegrableOn f v μ := hu.mono_set inter_subset_left
-  have vl : v in l := inter_mem ul ((tendsto_order.1 hf.n
+  have vl : v in l := inter_mem ul ((tendsto_order.1 hf.norm).1 _ hε)
+  have : μ.restrict v v < ∞ := lt_of_le_of_lt (measure_mono inter_subset_right)
+    (Integrable.measure_gt_lt_top hv.norm εpos)
+  have : μ v != ∞ := ne_of_lt (by simpa only [Measure.restrict_apply_self])
+  exact this (h' v vl)
 
 Depends on / 依赖: Integrable, Integrable.measure_gt_lt_top, IntegrableOn, Measure, Measure.restrict_apply_self, exists_between, hf.norm, hu.mono_set, hv.norm, inter_mem, inter_subset_left, inter_subset_right, lt_of_le_of_lt, measure_gt_lt_top, measure_mono, mono_set, ne_of_lt, norm_pos_iff, norm_pos_iff.mpr, restrict
 -/
@@ -2780,7 +2832,10 @@ theorem ContinuousOn.aemeasurable
   refine ⟨Set.piecewise s f fun _ => f default, ?_, this.symm⟩
   apply measurable_of_isOpen
   intro t ht
-  obtain ⟨u, u_open, hu⟩ : exists u : Set α, IsOpen u
+  obtain ⟨u, u_open, hu⟩ : exists u : Set α, IsOpen u ∧ f ⁻¹' t inter s = u inter s :=
+    _root_.continuousOn_iff'.1 hf t ht
+  rw [piecewise_preimage]; rw [Set.ite]; rw [hu]
+  exact (u_open.measurableSet.inter hs).union ((measurable_const ht.measurableSet).diff hs)
 
 中文:
 定理 ContinuousOn.aemeasurable
@@ -2792,7 +2847,10 @@ theorem ContinuousOn.aemeasurable
   refine ⟨Set.piecewise s f fun _ => f default, ?_, this.symm⟩
   apply measurable_of_isOpen
   intro t ht
-  obtain ⟨u, u_open, hu⟩ : exists u : Set α, IsOpen u
+  obtain ⟨u, u_open, hu⟩ : exists u : Set α, IsOpen u ∧ f ⁻¹' t inter s = u inter s :=
+    _root_.continuousOn_iff'.1 hf t ht
+  rw [piecewise_preimage]; rw [Set.ite]; rw [hu]
+  exact (u_open.measurableSet.inter hs).union ((measurable_const ht.measurableSet).diff hs)
 
 Depends on / 依赖: IsOpen, Set.ite, Set.piecewise, _root_, _root_.continuousOn_iff, classical, continuousOn_iff, ht.measurableSet, inhabit, measurableSet, measurable_const, measurable_of_isOpen, nontriviality, piecewise, piecewise_ae_eq_restrict, piecewise_preimage, restrict, this.symm, u_open, u_open.measurableSet.inter
 -/
@@ -2888,7 +2946,8 @@ theorem ContinuousOn.aestronglyMeasurable
         mem_of_superset (self_mem_ae_restrict hs) (subset_preimage_image _ _)⟩
   cases h.out
   · rw [image_eq_range]
-exact isSeparable_range continuousOn_iff_continuous_domRestrict.1
+exact isSeparable_range continuousOn_iff_continuous_domRestrict.1 hf
+  · exact .of_separableSpace _
 
 中文:
 定理 ContinuousOn.aestronglyMeasurable
@@ -2901,7 +2960,8 @@ exact isSeparable_range continuousOn_iff_continuous_domRestrict.1
         mem_of_superset (self_mem_ae_restrict hs) (subset_preimage_image _ _)⟩
   cases h.out
   · rw [image_eq_range]
-exact isSeparable_range continuousOn_iff_continuous_domRestrict.1
+exact isSeparable_range continuousOn_iff_continuous_domRestrict.1 hf
+  · exact .of_separableSpace _
 
 Depends on / 依赖: aemeasurable, aestronglyMeasurable_iff_aemeasurable_separable, borelize, continuousOn_iff_continuous_domRestrict, h.out, hf.aemeasurable, image_eq_range, isSeparable_range, mem_of_superset, of_separableSpace, self_mem_ae_restrict, subset_preimage_image
 -/

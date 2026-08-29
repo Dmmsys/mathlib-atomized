@@ -451,7 +451,10 @@ theorem one_mul
     rw [TensorProduct.tmul_smul]; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod]; rw [cast_tprod]
     congr 2 with i
     rw [Fin.elim0_append]
-    refine congr_arg a (Fi
+    refine congr_arg a (Fin.ext ?_)
+    simp
+  | add x y hx hy =>
+    rw [TensorProduct.tmul_add]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
 
 中文:
 定理 one_mul
@@ -464,7 +467,10 @@ theorem one_mul
     rw [TensorProduct.tmul_smul]; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod]; rw [cast_tprod]
     congr 2 with i
     rw [Fin.elim0_append]
-    refine congr_arg a (Fi
+    refine congr_arg a (Fin.ext ?_)
+    simp
+  | add x y hx hy =>
+    rw [TensorProduct.tmul_add]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
 
 Depends on / 依赖: Fin.elim0_append, Fin.ext, PiTensorProduct, PiTensorProduct.induction_on, TensorProduct, TensorProduct.tmul_add, TensorProduct.tmul_smul, cast_tprod, congr_arg, elim0_append, gMul_def, gOne_def, induction_on, map_add, map_smul, smul_tprod, tmul_add, tmul_smul, tprod_mul_tprod
 -/
@@ -494,7 +500,7 @@ theorem mul_one
     rw [← TensorProduct.smul_tmul']; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod R a _]; rw [cast_tprod]
     simp
   | add x y hx hy =>
-    rw [TensorProduct.add_tmul];
+    rw [TensorProduct.add_tmul]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
 
 中文:
 定理 mul_one
@@ -507,7 +513,7 @@ theorem mul_one
     rw [← TensorProduct.smul_tmul']; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod R a _]; rw [cast_tprod]
     simp
   | add x y hx hy =>
-    rw [TensorProduct.add_tmul];
+    rw [TensorProduct.add_tmul]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
 
 Depends on / 依赖: PiTensorProduct, PiTensorProduct.induction_on, TensorProduct, TensorProduct.add_tmul, TensorProduct.smul_tmul, add_tmul, cast_tprod, gMul_def, gOne_def, induction_on, map_add, map_smul, smul_tmul, smul_tprod, tprod_mul_tprod
 -/
@@ -530,7 +536,23 @@ theorem mul_assoc
   let mul : forall n m : Nat, ⨂[R]^n M ->ₗ[R] (⨂[R]^m) M ->ₗ[R] (⨂[R]^(n + m)) M := fun n m =>
     (TensorProduct.mk R _ _).compr₂ ↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(n + m)) M)
   -- replace `a`, `b`, `c` with `tprod R a`, `tprod R b`, `tprod R c`
-  let e : (⨂[R]^(na + nb + nc)) M ≃ₗ[R] (⨂[R]^(na + (nb +
+  let e : (⨂[R]^(na + nb + nc)) M ≃ₗ[R] (⨂[R]^(na + (nb + nc))) M := cast R M (add_assoc _ _ _)
+  let lhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
+    (LinearMap.llcomp R _ _ _ ((mul _ nc).compr₂ e.toLinearMap)).comp (mul na nb)
+  have lhs_eq : forall a b c, lhs a b c = e (a ₜ* b ₜ* c) := fun _ _ _ => rfl
+  let rhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
+    (LinearMap.llcomp R _ _ _ (LinearMap.lflip (R := R)).toLinearMap <|
+        (LinearMap.llcomp R _ _ _ (mul na _).flip).comp (mul nb nc)).flip
+  have rhs_eq : forall a b c, rhs a b c = a ₜ* (b ₜ* c) := fun _ _ _ => rfl
+  suffices lhs = rhs from
+    LinearMap.congr_fun (LinearMap.congr_fun (LinearMap.congr_fun this a) b) c
+  ext a b c
+  -- clean up
+  simp only [e, LinearMap.compMultilinearMap_apply, lhs_eq, rhs_eq, tprod_mul_tprod, cast_tprod]
+  congr 1 with j
+  rw [Fin.append_assoc]
+  refine congr_arg (Fin.append a (Fin.append b c)) (Fin.ext ?_)
+  rw [Fin.val_cast]; rw [Fin.val_cast]
 
 中文:
 定理 mul_assoc
@@ -539,7 +561,23 @@ theorem mul_assoc
   let mul : forall n m : Nat, ⨂[R]^n M ->ₗ[R] (⨂[R]^m) M ->ₗ[R] (⨂[R]^(n + m)) M := fun n m =>
     (TensorProduct.mk R _ _).compr₂ ↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(n + m)) M)
   -- replace `a`, `b`, `c` with `tprod R a`, `tprod R b`, `tprod R c`
-  let e : (⨂[R]^(na + nb + nc)) M ≃ₗ[R] (⨂[R]^(na + (nb +
+  let e : (⨂[R]^(na + nb + nc)) M ≃ₗ[R] (⨂[R]^(na + (nb + nc))) M := cast R M (add_assoc _ _ _)
+  let lhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
+    (LinearMap.llcomp R _ _ _ ((mul _ nc).compr₂ e.toLinearMap)).comp (mul na nb)
+  have lhs_eq : forall a b c, lhs a b c = e (a ₜ* b ₜ* c) := fun _ _ _ => rfl
+  let rhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
+    (LinearMap.llcomp R _ _ _ (LinearMap.lflip (R := R)).toLinearMap <|
+        (LinearMap.llcomp R _ _ _ (mul na _).flip).comp (mul nb nc)).flip
+  have rhs_eq : forall a b c, rhs a b c = a ₜ* (b ₜ* c) := fun _ _ _ => rfl
+  suffices lhs = rhs from
+    LinearMap.congr_fun (LinearMap.congr_fun (LinearMap.congr_fun this a) b) c
+  ext a b c
+  -- clean up
+  simp only [e, LinearMap.compMultilinearMap_apply, lhs_eq, rhs_eq, tprod_mul_tprod, cast_tprod]
+  congr 1 with j
+  rw [Fin.append_assoc]
+  refine congr_arg (Fin.append a (Fin.append b c)) (Fin.ext ?_)
+  rw [Fin.val_cast]; rw [Fin.val_cast]
 
 Depends on / 依赖: TensorProduct, TensorProduct.mk, mulEquiv
 -/
@@ -728,7 +766,10 @@ instance gsemiring
     mul_add := fun _ _ _ => map_add _ _ _
     add_mul := fun _ _ _ => LinearMap.map_add₂ _ _ _ _
     natCast := fun n => algebraMap₀ (n : R)
-    natCast_zero := by simp only [Nat.cast_zero
+    natCast_zero := by simp only [Nat.cast_zero, map_zero]
+    natCast_succ := fun n => by simp only [Nat.cast_succ, map_add, algebraMap₀_one] }
+
+example : Semiring (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
 
 中文:
 实例 gsemiring
@@ -739,7 +780,10 @@ instance gsemiring
     mul_add := fun _ _ _ => map_add _ _ _
     add_mul := fun _ _ _ => LinearMap.map_add₂ _ _ _ _
     natCast := fun n => algebraMap₀ (n : R)
-    natCast_zero := by simp only [Nat.cast_zero
+    natCast_zero := by simp only [Nat.cast_zero, map_zero]
+    natCast_succ := fun n => by simp only [Nat.cast_succ, map_add, algebraMap₀_one] }
+
+example : Semiring (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
 
 Depends on / 依赖: LinearMap, LinearMap.map_add, LinearMap.map_zero, Nat.cast_succ, Nat.cast_zero, TensorPower, TensorPower.gmonoid, add_mul, cast_succ, cast_zero, gmonoid, map_add, map_zero, mul_add, mul_zero, natCast, natCast_succ, natCast_zero, zero_mul
 -/
@@ -768,7 +812,14 @@ instance galgebra
     rw [← LinearEquiv.eq_symm_apply]
     have := algebraMap₀_mul_algebraMap₀ (M := M) r s
     exact this.symm)
-  commutes r x := gradedMonoid_eq_of_cast (add_co
+  commutes r x := gradedMonoid_eq_of_cast (add_comm _ _) (by
+    have := (algebraMap₀_mul r x.snd).trans (mul_algebraMap₀ r x.snd).symm
+    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
+    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]; rw [cast_cast] at this
+    exact this)
+  smul_def r x := gradedMonoid_eq_of_cast (zero_add x.fst).symm (by
+    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
+    exact (algebraMap₀_mul r x.snd).symm)
 
 中文:
 实例 galgebra
@@ -779,7 +830,14 @@ instance galgebra
     rw [← LinearEquiv.eq_symm_apply]
     have := algebraMap₀_mul_algebraMap₀ (M := M) r s
     exact this.symm)
-  commutes r x := gradedMonoid_eq_of_cast (add_co
+  commutes r x := gradedMonoid_eq_of_cast (add_comm _ _) (by
+    have := (algebraMap₀_mul r x.snd).trans (mul_algebraMap₀ r x.snd).symm
+    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
+    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]; rw [cast_cast] at this
+    exact this)
+  smul_def r x := gradedMonoid_eq_of_cast (zero_add x.fst).symm (by
+    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
+    exact (algebraMap₀_mul r x.snd).symm)
 
 Depends on / 依赖: toAddMonoidHom, toLinearMap, toLinearMap.toAddMonoidHom
 -/

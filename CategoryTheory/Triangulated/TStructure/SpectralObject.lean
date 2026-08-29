@@ -90,7 +90,7 @@ definition ω₁δ
     (t.ω₁.obj (mk₁ (homOfLE (hab.trans hbc)))).whiskerLeft (t.eTruncGEδLT.app b) ≫
       (associator _ _ _).inv ≫
         whiskerRight ((associator _ _ _).hom ≫ whiskerLeft _ (t.eTruncLTGEIsoGELT a b).hom ≫
-          (associator _ _ _).
+          (associator _ _ _).inv ≫ whiskerRight (t.eTruncLTLTToLT c b) _) _
 
 中文:
 定义 ω₁δ
@@ -99,7 +99,7 @@ definition ω₁δ
     (t.ω₁.obj (mk₁ (homOfLE (hab.trans hbc)))).whiskerLeft (t.eTruncGEδLT.app b) ≫
       (associator _ _ _).inv ≫
         whiskerRight ((associator _ _ _).hom ≫ whiskerLeft _ (t.eTruncLTGEIsoGELT a b).hom ≫
-          (associator _ _ _).
+          (associator _ _ _).inv ≫ whiskerRight (t.eTruncLTLTToLT c b) _) _
 
 Depends on / 依赖: LT.app, associator, eTruncGEToGEGE, eTruncLTGEIsoGELT, eTruncLTLTToLT, hab.trans, homOfLE, t.eTruncGE, t.eTruncGEToGEGE, t.eTruncLTGEIsoGELT, t.eTruncLTLTToLT, whiskerLeft, whiskerRight
 -/
@@ -127,7 +127,11 @@ lemma ω₁δ_naturality
     Category.assoc, ← Functor.map_comp_assoc, NatTrans.naturality_app_assoc,
     Functor.whiskeringRight_obj_map, Functor.whiskerRight_app, NatTrans.naturality]
   congr 2
-  simp only [Functor.map_
+  simp only [Functor.map_comp, Category.assoc]
+  have h₁ := t.eTruncLTGEIsoGELT_naturality_app a b hab a' b' hab' (homMk₁ (φ.app 0) (φ.app 1))
+  rw [← reassoc_of% dsimp% h₁]; rw [← eTruncLTGEIsoGELT_hom_naturality]; rw [← eTruncLTGEIsoGELT_hom_naturality]; rw [← t.eTruncLT_map_app_eTruncLTι_app (φ.app 2)]
+  simp only [↓NatTrans.naturality_assoc, ↓← Functor.map_comp_assoc]
+  simp
 
 中文:
 引理 ω₁δ_naturality
@@ -139,7 +143,11 @@ lemma ω₁δ_naturality
     Category.assoc, ← Functor.map_comp_assoc, NatTrans.naturality_app_assoc,
     Functor.whiskeringRight_obj_map, Functor.whiskerRight_app, NatTrans.naturality]
   congr 2
-  simp only [Functor.map_
+  simp only [Functor.map_comp, Category.assoc]
+  have h₁ := t.eTruncLTGEIsoGELT_naturality_app a b hab a' b' hab' (homMk₁ (φ.app 0) (φ.app 1))
+  rw [← reassoc_of% dsimp% h₁]; rw [← eTruncLTGEIsoGELT_hom_naturality]; rw [← eTruncLTGEIsoGELT_hom_naturality]; rw [← t.eTruncLT_map_app_eTruncLTι_app (φ.app 2)]
+  simp only [↓NatTrans.naturality_assoc, ↓← Functor.map_comp_assoc]
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.comp_map, Functor.map_comp, Functor.map_comp_assoc, Functor.whiskerRight_app, Functor.whiskeringRight_obj_map, NatTrans, NatTrans.naturality, NatTrans.naturality_app_assoc, NatTrans.naturality_assoc, comp_map, eTruncLTGEIsoGELT_hom_nat, eTruncLTGEIsoGELT_hom_naturality, eTruncLTGEIsoGELT_naturality_app, map_comp, map_comp_assoc, naturality, naturality_app_assoc
 -/
@@ -195,7 +203,13 @@ definition triangleω₁δObjIso
     (t.eTruncLTGEIsoGELT a b).symm.app _) (Iso.refl _) ((t.eTruncGEIsoGEGE a b hab).app _) ?_ ?_ ?_
   · dsimp
     simp only [triangleω₁δ_obj_mor₁, homOfLE_leOfHom, Category.comp_id, Category.assoc]
-
+    rw [← cancel_epi ((t.eTruncGE.obj a).map ((t.eTruncLTLTIsoLT c b hbc).hom.app X))]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]; rw [Category.id_comp]; rw [← cancel_epi ((t.eTruncLTGEIsoGELT a b).hom.app ((t.eTruncLT.obj c).obj X))]; rw [Iso.hom_inv_id_app_assoc]; rw [eTruncLTLTIsoLT_hom]; rw [eTruncLTLTToLT_app]; rw [← Functor.map_comp]; rw [eTruncLT_obj_map_eTruncLTι_app_eTruncLT_map_app]
+    simp
+  · dsimp
+    simp only [triangleω₁δ_obj_mor₂, eTruncGEToGEGE_app, Category.id_comp,
+      ← t.eTruncGEπ_app_eTruncGE_map_app (homOfLE hab), ← NatTrans.naturality,
+      eTruncGE_obj_map_eTruncGEπ_app]
+  · simp [← Functor.map_comp_assoc, ← Functor.map_comp]
 
 中文:
 定义 triangleω₁δObjIso
@@ -205,7 +219,13 @@ definition triangleω₁δObjIso
     (t.eTruncLTGEIsoGELT a b).symm.app _) (Iso.refl _) ((t.eTruncGEIsoGEGE a b hab).app _) ?_ ?_ ?_
   · dsimp
     simp only [triangleω₁δ_obj_mor₁, homOfLE_leOfHom, Category.comp_id, Category.assoc]
-
+    rw [← cancel_epi ((t.eTruncGE.obj a).map ((t.eTruncLTLTIsoLT c b hbc).hom.app X))]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]; rw [Category.id_comp]; rw [← cancel_epi ((t.eTruncLTGEIsoGELT a b).hom.app ((t.eTruncLT.obj c).obj X))]; rw [Iso.hom_inv_id_app_assoc]; rw [eTruncLTLTIsoLT_hom]; rw [eTruncLTLTToLT_app]; rw [← Functor.map_comp]; rw [eTruncLT_obj_map_eTruncLTι_app_eTruncLT_map_app]
+    simp
+  · dsimp
+    simp only [triangleω₁δ_obj_mor₂, eTruncGEToGEGE_app, Category.id_comp,
+      ← t.eTruncGEπ_app_eTruncGE_map_app (homOfLE hab), ← NatTrans.naturality,
+      eTruncGE_obj_map_eTruncGEπ_app]
+  · simp [← Functor.map_comp_assoc, ← Functor.map_comp]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Functor, Functor.map_comp_assoc, Functor.map_id, Iso.hom_inv_id_app, Iso.refl, Triangle, Triangle.isoMk, cancel_epi, comp_id, eTruncGE, eTruncGEIsoGEGE, eTruncL, eTruncLTGEIsoGELT, eTruncLTLTIsoLT, hom.app, homOfLE_leOfHom
 -/
@@ -264,7 +284,13 @@ definition spectralObject
   δ'.naturality {D D'} φ := by
     obtain ⟨a, b, c, f, g, rfl⟩ := mk₂_surjective D
     obtain ⟨a', b', c', f', g', rfl⟩ := mk₂_surjective D'
-    exact NatTrans.co
+    exact NatTrans.congr_app (t.ω₁δ_naturality a b c (leOfHom f) (leOfHom g)
+      a' b' c' (leOfHom f') (leOfHom g') φ) X
+  distinguished' D := by
+    obtain ⟨a, b, c, f, g, rfl⟩ := mk₂_surjective D
+    exact t.triangleω₁δ_distinguished a b c (leOfHom f) (leOfHom g) X
+
+@[simp]
 
 中文:
 定义 spectralObject
@@ -275,7 +301,13 @@ definition spectralObject
   δ'.naturality {D D'} φ := by
     obtain ⟨a, b, c, f, g, rfl⟩ := mk₂_surjective D
     obtain ⟨a', b', c', f', g', rfl⟩ := mk₂_surjective D'
-    exact NatTrans.co
+    exact NatTrans.congr_app (t.ω₁δ_naturality a b c (leOfHom f) (leOfHom g)
+      a' b' c' (leOfHom f') (leOfHom g') φ) X
+  distinguished' D := by
+    obtain ⟨a, b, c, f, g, rfl⟩ := mk₂_surjective D
+    exact t.triangleω₁δ_distinguished a b c (leOfHom f) (leOfHom g) X
+
+@[simp]
 
 Depends on / 依赖: evaluation
 -/

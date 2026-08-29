@@ -237,7 +237,12 @@ lemma hasDerivAt_logTaylor
       Finset.sum_range_succ]
     refine HasDerivAt.add ih ?_
     simp only [mul_div_assoc]
-    have : HasDerivAt (
+    have : HasDerivAt (fun x : Complex => (x ^ (n + 1) / (n + 1))) (z ^ n) z := by
+      simp_rw [div_eq_mul_inv]
+      convert! HasDerivAt.mul_const (hasDerivAt_pow (n + 1) z) (((n : Complex) + 1)⁻¹) using 1
+      simp [field]
+    convert! HasDerivAt.const_mul _ this using 2
+    ring
 
 中文:
 引理 hasDerivAt_logTaylor
@@ -251,7 +256,12 @@ lemma hasDerivAt_logTaylor
       Finset.sum_range_succ]
     refine HasDerivAt.add ih ?_
     simp only [mul_div_assoc]
-    have : HasDerivAt (
+    have : HasDerivAt (fun x : Complex => (x ^ (n + 1) / (n + 1))) (z ^ n) z := by
+      simp_rw [div_eq_mul_inv]
+      convert! HasDerivAt.mul_const (hasDerivAt_pow (n + 1) z) (((n : Complex) + 1)⁻¹) using 1
+      simp [field]
+    convert! HasDerivAt.const_mul _ this using 2
+    ring
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, HasDerivAt, HasDerivAt.add, HasDerivAt.const_mul, HasDerivAt.mul_const, Nat.cast_add, Nat.cast_one, Pi.add_def, add_def, cast_add, cast_one, const_mul, convert, div_eq_mul_inv, hasDerivAt_const, hasDerivAt_pow, logTaylor_succ, logTaylor_zero, mul_const
 -/
@@ -286,7 +296,8 @@ lemma hasDerivAt_log_sub_logTaylor
     rw [neg_eq_iff_eq_neg] at H
     simp only [H, add_neg_cancel] at hz
     exact slitPlane_ne_zero hz rfl
-  simp_rw [← mul_pow, neg_one_mul, geom_sum_eq hz', ← neg_ad
+  simp_rw [← mul_pow, neg_one_mul, geom_sum_eq hz', ← neg_add', div_neg, add_comm z]
+  simp [field]
 
 中文:
 引理 hasDerivAt_log_sub_logTaylor
@@ -298,7 +309,8 @@ lemma hasDerivAt_log_sub_logTaylor
     rw [neg_eq_iff_eq_neg] at H
     simp only [H, add_neg_cancel] at hz
     exact slitPlane_ne_zero hz rfl
-  simp_rw [← mul_pow, neg_one_mul, geom_sum_eq hz', ← neg_ad
+  simp_rw [← mul_pow, neg_one_mul, geom_sum_eq hz', ← neg_add', div_neg, add_comm z]
+  simp [field]
 
 Depends on / 依赖: add_comm, add_neg_cancel, comp_const_add, convert, div_neg, geom_sum_eq, hasDerivAt_log, hasDerivAt_logTaylor, mul_pow, neg_add, neg_eq_iff_eq_neg, neg_one_mul, simp_rw, slitPlane_ne_zero
 -/
@@ -329,7 +341,9 @@ lemma norm_one_add_mul_inv_le
     _ = 1 - ‖t * z‖ := by
       rw [norm_mul]; rw [Complex.norm_of_nonneg ht.1]
     _ <= ‖1 + t * z‖ := by
-      rw [← norm_neg (t * z)]; rw [← su
+      rw [← norm_neg (t * z)]; rw [← sub_neg_eq_add]
+      convert! norm_sub_norm_le 1 (-(t * z))
+      exact norm_one.symm
 
 中文:
 引理 norm_one_add_mul_inv_le
@@ -344,7 +358,9 @@ lemma norm_one_add_mul_inv_le
     _ = 1 - ‖t * z‖ := by
       rw [norm_mul]; rw [Complex.norm_of_nonneg ht.1]
     _ <= ‖1 + t * z‖ := by
-      rw [← norm_neg (t * z)]; rw [← su
+      rw [← norm_neg (t * z)]; rw [← sub_neg_eq_add]
+      convert! norm_sub_norm_le 1 (-(t * z))
+      exact norm_one.symm
 
 Depends on / 依赖: Complex.norm_of_nonneg, Set.mem_Icc, convert, mem_Icc, norm_inv, norm_mul, norm_neg, norm_nonneg, norm_of_nonneg, norm_one, norm_one.symm, norm_sub_norm_le, sub_neg_eq_add
 -/
@@ -401,7 +417,37 @@ lemma norm_log_sub_logTaylor_le
   have help : IntervalIntegrable (fun t : Real => t ^ n * (1 - ‖z‖)⁻¹) MeasureTheory.volume 0 1 :=
     IntervalIntegrable.mul_const (Continuous.intervalIntegrable (by fun_prop) 0 1) (1 - ‖z‖)⁻¹
   let f (z : Complex) : Complex := log (1 + z) - logTaylor (n + 1) z
-  let f' (z : Complex) : Complex :
+  let f' (z : Complex) : Complex := (-z) ^ n * (1 + z)⁻¹
+  have hderiv : forall t in Set.Icc (0 : Real) 1, HasDerivAt f (f' (0 + t * z)) (0 + t * z) := by
+    intro t ht
+    rw [zero_add]
+exact hasDerivAt_log_sub_logTaylor n
+      StarConvex.add_smul_mem starConvex_one_slitPlane (mem_slitPlane_of_norm_lt_one hz) ht.1 ht.2
+  have hcont : ContinuousOn (fun t : Real => f' (0 + t * z)) (Set.Icc 0 1) := by
+    simp only [zero_add]
+exact (Continuous.continuousOn (by fun_prop)).mul
+continuousOn_one_add_mul_inv mem_slitPlane_of_norm_lt_one hz
+  have H : f z = z * ∫ t in (0 : Real)..1, (-(t * z)) ^ n * (1 + t * z)⁻¹ := by
+    convert! (integral_unitInterval_deriv_eq_sub hcont hderiv).symm using 1
+    · simp only [f, zero_add, add_zero, log_one, logTaylor_at_zero, sub_self, sub_zero]
+    · simp only [f', real_smul, zero_add,
+        smul_eq_mul]
+  unfold f at H
+  simp only [H, norm_mul]
+  simp_rw [neg_pow (_ * z) n, mul_assoc, intervalIntegral.integral_const_mul, mul_pow,
+    mul_comm _ (z ^ n), mul_assoc, intervalIntegral.integral_const_mul, norm_mul, norm_pow,
+    norm_neg, norm_one, one_pow, one_mul, ← mul_assoc, ← pow_succ', mul_div_assoc]
+  gcongr _ * ?_
+  calc ‖∫ t in (0 : Real)..1, (t : Complex) ^ n * (1 + t * z)⁻¹‖
+    _ <= ∫ t in (0 : Real)..1, t ^ n * (1 - ‖z‖)⁻¹ := by
+      refine intervalIntegral.norm_integral_le_of_norm_le zero_le_one ?_ help
+      filter_upwards with t ⟨ht₀, ht₁⟩
+      rw [norm_mul]; rw [norm_pow]; rw [Complex.norm_of_nonneg ht₀.le]
+      gcongr
+      exact norm_one_add_mul_inv_le ⟨ht₀.le, ht₁⟩ hz
+    _ = (1 - ‖z‖)⁻¹ / (n + 1) := by
+      rw [intervalIntegral.integral_mul_const]; rw [mul_comm]; rw [integral_pow]
+      simp [field]
 
 中文:
 引理 norm_log_sub_logTaylor_le
@@ -410,7 +456,37 @@ lemma norm_log_sub_logTaylor_le
   have help : IntervalIntegrable (fun t : Real => t ^ n * (1 - ‖z‖)⁻¹) MeasureTheory.volume 0 1 :=
     IntervalIntegrable.mul_const (Continuous.intervalIntegrable (by fun_prop) 0 1) (1 - ‖z‖)⁻¹
   let f (z : Complex) : Complex := log (1 + z) - logTaylor (n + 1) z
-  let f' (z : Complex) : Complex :
+  let f' (z : Complex) : Complex := (-z) ^ n * (1 + z)⁻¹
+  have hderiv : forall t in Set.Icc (0 : Real) 1, HasDerivAt f (f' (0 + t * z)) (0 + t * z) := by
+    intro t ht
+    rw [zero_add]
+exact hasDerivAt_log_sub_logTaylor n
+      StarConvex.add_smul_mem starConvex_one_slitPlane (mem_slitPlane_of_norm_lt_one hz) ht.1 ht.2
+  have hcont : ContinuousOn (fun t : Real => f' (0 + t * z)) (Set.Icc 0 1) := by
+    simp only [zero_add]
+exact (Continuous.continuousOn (by fun_prop)).mul
+continuousOn_one_add_mul_inv mem_slitPlane_of_norm_lt_one hz
+  have H : f z = z * ∫ t in (0 : Real)..1, (-(t * z)) ^ n * (1 + t * z)⁻¹ := by
+    convert! (integral_unitInterval_deriv_eq_sub hcont hderiv).symm using 1
+    · simp only [f, zero_add, add_zero, log_one, logTaylor_at_zero, sub_self, sub_zero]
+    · simp only [f', real_smul, zero_add,
+        smul_eq_mul]
+  unfold f at H
+  simp only [H, norm_mul]
+  simp_rw [neg_pow (_ * z) n, mul_assoc, intervalIntegral.integral_const_mul, mul_pow,
+    mul_comm _ (z ^ n), mul_assoc, intervalIntegral.integral_const_mul, norm_mul, norm_pow,
+    norm_neg, norm_one, one_pow, one_mul, ← mul_assoc, ← pow_succ', mul_div_assoc]
+  gcongr _ * ?_
+  calc ‖∫ t in (0 : Real)..1, (t : Complex) ^ n * (1 + t * z)⁻¹‖
+    _ <= ∫ t in (0 : Real)..1, t ^ n * (1 - ‖z‖)⁻¹ := by
+      refine intervalIntegral.norm_integral_le_of_norm_le zero_le_one ?_ help
+      filter_upwards with t ⟨ht₀, ht₁⟩
+      rw [norm_mul]; rw [norm_pow]; rw [Complex.norm_of_nonneg ht₀.le]
+      gcongr
+      exact norm_one_add_mul_inv_le ⟨ht₀.le, ht₁⟩ hz
+    _ = (1 - ‖z‖)⁻¹ / (n + 1) := by
+      rw [intervalIntegral.integral_mul_const]; rw [mul_comm]; rw [integral_pow]
+      simp [field]
 
 Depends on / 依赖: Continuous, Continuous.intervalIntegrable, HasDerivAt, IntervalIntegrable, IntervalIntegrable.mul_const, MeasureTheory, MeasureTheory.volume, Set.Icc, StarConvex, StarConvex.add_smul_mem, add_smul_mem, fun_prop, hasDerivAt_log_sub_logTaylor, hderiv, intervalIntegrable, logTaylor, mul_const, volume, zero_add
 -/
@@ -494,7 +570,9 @@ lemma log_sub_logTaylor_isBigO
     eventually_norm_sub_lt 0 (show 0 < 1 / 2 by simp)] with z hz1 hz12
   rw [sub_zero] at hz1 hz12
   have : (1 - ‖z‖)⁻¹ <= 2 := by rw [inv_le_comm₀ (sub_pos_of_lt hz1) two_pos]; linarith
-  app
+  apply (norm_log_sub_logTaylor_le n hz1).trans
+  rw [mul_div_assoc]; rw [mul_comm]; rw [norm_pow]
+  gcongr
 
 中文:
 引理 log_sub_logTaylor_isBigO
@@ -507,7 +585,9 @@ lemma log_sub_logTaylor_isBigO
     eventually_norm_sub_lt 0 (show 0 < 1 / 2 by simp)] with z hz1 hz12
   rw [sub_zero] at hz1 hz12
   have : (1 - ‖z‖)⁻¹ <= 2 := by rw [inv_le_comm₀ (sub_pos_of_lt hz1) two_pos]; linarith
-  app
+  apply (norm_log_sub_logTaylor_le n hz1).trans
+  rw [mul_div_assoc]; rw [mul_comm]; rw [norm_pow]
+  gcongr
 
 Depends on / 依赖: Asymptotics, Asymptotics.isBigO_iff, eventually_norm_sub_lt, filter_upwards, isBigO_iff, mul_comm, mul_div_assoc, norm_log_sub_logTaylor_le, norm_pow, one_pos, sub_pos_of_lt, sub_zero, two_pos
 -/
@@ -588,7 +668,11 @@ lemma norm_log_one_add_half_le_self
     gcongr
     · rw [inv_nonneg]
       linarith
-  
+    · rw [sq, div_eq_mul_one_div]
+      gcongr
+  simp only [isUnit_iff_ne_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true,
+    IsUnit.div_mul_cancel] at hz4
+  linarith
 
 中文:
 引理 norm_log_one_add_half_le_self
@@ -604,7 +688,11 @@ lemma norm_log_one_add_half_le_self
     gcongr
     · rw [inv_nonneg]
       linarith
-  
+    · rw [sq, div_eq_mul_one_div]
+      gcongr
+  simp only [isUnit_iff_ne_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true,
+    IsUnit.div_mul_cancel] at hz4
+  linarith
 
 Depends on / 依赖: IsUnit, IsUnit.div_mul_cancel, OfNat.ofNat_ne_zero, div_eq_mul_one_div, div_mul_cancel, inv_eq_one_div, inv_nonneg, isUnit_iff_ne_zero, le_trans, lt_of_le_of_lt, ne_eq, norm_log_one_add_le, not_false_eq_true, ofNat_ne_zero, one_half_lt_one
 -/
@@ -687,7 +775,31 @@ lemma hasSum_taylorSeries_log
   · refine (summable_geometric_of_norm_lt_one hz).norm.of_nonneg_of_le (fun _ => norm_nonneg _) ?_
     intro n
     simp only [norm_div, norm_mul, norm_pow, norm_neg, norm_one, one_pow, one_mul, norm_natCast]
-    rcases n.eq_zero_or_pos 
+    rcases n.eq_zero_or_pos with rfl | hn
+    · simp
+    conv => enter [2]; rw [← div_one (‖z‖ ^ n)]
+    gcongr
+    norm_cast
+  · rw [← tendsto_sub_nhds_zero_iff]
+    conv => enter [1, x]; rw [← div_one (_ - _), ← logTaylor]
+    rw [← isLittleO_iff_tendsto fun _ h => (one_ne_zero h).elim]
+refine IsLittleO.trans_isBigO ?_ isBigO_const_one Complex (1 : Real) atTop
+    have H : (fun n => logTaylor n z - log (1 + z)) =O[atTop] (fun n : Nat => ‖z‖ ^ n) := by
+      have (n : Nat) : ‖logTaylor n z - log (1 + z)‖
+          <= (max ‖log (1 + z)‖ (1 - ‖z‖)⁻¹) * ‖(‖z‖ ^ n)‖ := by
+        rw [norm_sub_rev]; rw [norm_pow]; rw [norm_norm]
+        cases n with
+        | zero => simp [logTaylor_zero]
+        | succ n =>
+            refine (norm_log_sub_logTaylor_le n hz).trans ?_
+            rw [mul_comm]; rw [← div_one ((max _ _) * _)]
+            gcongr
+            · exact le_max_right ..
+            · linarith
+      exact (isBigOWith_of_le' atTop this).isBigO
+    refine IsBigO.trans_isLittleO H ?_
+    convert! isLittleO_pow_pow_of_lt_left (norm_nonneg z) hz
+    exact (one_pow _).symm
 
 中文:
 引理 hasSum_taylorSeries_log
@@ -697,7 +809,31 @@ lemma hasSum_taylorSeries_log
   · refine (summable_geometric_of_norm_lt_one hz).norm.of_nonneg_of_le (fun _ => norm_nonneg _) ?_
     intro n
     simp only [norm_div, norm_mul, norm_pow, norm_neg, norm_one, one_pow, one_mul, norm_natCast]
-    rcases n.eq_zero_or_pos 
+    rcases n.eq_zero_or_pos with rfl | hn
+    · simp
+    conv => enter [2]; rw [← div_one (‖z‖ ^ n)]
+    gcongr
+    norm_cast
+  · rw [← tendsto_sub_nhds_zero_iff]
+    conv => enter [1, x]; rw [← div_one (_ - _), ← logTaylor]
+    rw [← isLittleO_iff_tendsto fun _ h => (one_ne_zero h).elim]
+refine IsLittleO.trans_isBigO ?_ isBigO_const_one Complex (1 : Real) atTop
+    have H : (fun n => logTaylor n z - log (1 + z)) =O[atTop] (fun n : Nat => ‖z‖ ^ n) := by
+      have (n : Nat) : ‖logTaylor n z - log (1 + z)‖
+          <= (max ‖log (1 + z)‖ (1 - ‖z‖)⁻¹) * ‖(‖z‖ ^ n)‖ := by
+        rw [norm_sub_rev]; rw [norm_pow]; rw [norm_norm]
+        cases n with
+        | zero => simp [logTaylor_zero]
+        | succ n =>
+            refine (norm_log_sub_logTaylor_le n hz).trans ?_
+            rw [mul_comm]; rw [← div_one ((max _ _) * _)]
+            gcongr
+            · exact le_max_right ..
+            · linarith
+      exact (isBigOWith_of_le' atTop this).isBigO
+    refine IsBigO.trans_isLittleO H ?_
+    convert! isLittleO_pow_pow_of_lt_left (norm_nonneg z) hz
+    exact (one_pow _).symm
 
 Depends on / 依赖: div_one, eq_zero_or_pos, hasSum_iff_tendsto_nat_of_summable_norm, isLittleO_iff_tendsto, logTaylor, n.eq_zero_or_pos, norm.of_nonneg_of_le, norm_div, norm_mul, norm_natCast, norm_neg, norm_nonneg, norm_one, norm_pow, of_nonneg_of_le, one_mul, one_pow, summable_geometric_of_norm_lt_one, tendsto_sub_nhds_zero_iff
 -/
@@ -816,7 +952,16 @@ lemma tendsto_mul_log_one_add_of_tendsto
   simp_rw [dist_comm (_ * g _), dist_eq, ← mul_sub, isBigO_norm_left]
   calc
     _ =O[atTop] fun x => x * g x ^ 2 := by
-      have hg0 := tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hg.norm.isBounded
+      have hg0 := tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hg.norm.isBoundedUnder_le
+        (RCLike.tendsto_ofReal_atTop_cobounded Complex)
+      exact (isBigO_refl _ _).mul (log_sub_self_isBigO.comp_tendsto hg0)
+    _ =ᶠ[atTop] fun x => (x * g x) ^ 2 * x⁻¹ := by
+      filter_upwards [eventually_ne_atTop 0] with x hx0
+      rw [ofReal_inv]; rw [eq_mul_inv_iff_mul_eq₀ (mod_cast hx0)]
+      ring
+    _ =O[atTop] _ := by
+      simpa using isBigO_const_of_tendsto hg (one_ne_zero (α := Complex))
+.mul (isBigO_refl _ _) .pow 2
 
 中文:
 引理 tendsto_mul_log_one_add_of_tendsto
@@ -827,7 +972,16 @@ lemma tendsto_mul_log_one_add_of_tendsto
   simp_rw [dist_comm (_ * g _), dist_eq, ← mul_sub, isBigO_norm_left]
   calc
     _ =O[atTop] fun x => x * g x ^ 2 := by
-      have hg0 := tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hg.norm.isBounded
+      have hg0 := tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded hg.norm.isBoundedUnder_le
+        (RCLike.tendsto_ofReal_atTop_cobounded Complex)
+      exact (isBigO_refl _ _).mul (log_sub_self_isBigO.comp_tendsto hg0)
+    _ =ᶠ[atTop] fun x => (x * g x) ^ 2 * x⁻¹ := by
+      filter_upwards [eventually_ne_atTop 0] with x hx0
+      rw [ofReal_inv]; rw [eq_mul_inv_iff_mul_eq₀ (mod_cast hx0)]
+      ring
+    _ =O[atTop] _ := by
+      simpa using isBigO_const_of_tendsto hg (one_ne_zero (α := Complex))
+.mul (isBigO_refl _ _) .pow 2
 
 Depends on / 依赖: IsBigO, IsBigO.trans_tendsto, RCLike, RCLike.tendsto_ofReal_atTop_cobounded, comp_tendsto, congr_dist, dist_comm, dist_eq, eventually_ne_atTop, filter_upwards, hg.congr_dist, hg.norm.isBoundedUnder_le, isBigO_norm_left, isBigO_refl, isBoundedUnder_le, log_sub_self_isBigO, log_sub_self_isBigO.comp_tendsto, mul_sub, ofReal, simp_rw
 -/
@@ -860,7 +1014,12 @@ lemma tendsto_one_add_cpow_exp_of_tendsto
   apply ((continuous_exp.tendsto _).comp (tendsto_mul_log_one_add_of_tendsto hg)).congr'
   have hg0 := tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
     hg.norm.isBoundedUnder_le (RCLike.tendsto_ofReal_atTop_cobounded Complex)
-  filter_upwards [hg0.eventually_ne (show 0 != -1 by simp)]
+  filter_upwards [hg0.eventually_ne (show 0 != -1 by simp)] with x hg1
+  dsimp
+  rw [cpow_def_of_ne_zero]; rw [mul_comm]
+  intro hg0
+  rw [← add_eq_zero_iff_neg_eq.mp hg0] at hg1
+  norm_num at hg1
 
 中文:
 引理 tendsto_one_add_cpow_exp_of_tendsto
@@ -869,7 +1028,12 @@ lemma tendsto_one_add_cpow_exp_of_tendsto
   apply ((continuous_exp.tendsto _).comp (tendsto_mul_log_one_add_of_tendsto hg)).congr'
   have hg0 := tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
     hg.norm.isBoundedUnder_le (RCLike.tendsto_ofReal_atTop_cobounded Complex)
-  filter_upwards [hg0.eventually_ne (show 0 != -1 by simp)]
+  filter_upwards [hg0.eventually_ne (show 0 != -1 by simp)] with x hg1
+  dsimp
+  rw [cpow_def_of_ne_zero]; rw [mul_comm]
+  intro hg0
+  rw [← add_eq_zero_iff_neg_eq.mp hg0] at hg1
+  norm_num at hg1
 
 Depends on / 依赖: RCLike, RCLike.tendsto_ofReal_atTop_cobounded, add_eq_zero_iff_neg_eq, add_eq_zero_iff_neg_eq.mp, continuous_exp, continuous_exp.tendsto, cpow_def_of_ne_zero, eventually_ne, filter_upwards, hg.norm.isBoundedUnder_le, hg0.eventually_ne, isBoundedUnder_le, mul_comm, tendsto, tendsto_mul_log_one_add_of_tendsto, tendsto_ofReal_atTop_cobounded, tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
 -/
@@ -994,6 +1158,7 @@ lemma tendsto_pow_exp_of_isLittleO_sub_add_div
   filter_upwards [eventually_ne_atTop 0] with n h0
   simp
   field_simp [n.cast_ne_zero.2 h0]
+  ring
 
 中文:
 引理 tendsto_pow_exp_of_isLittleO_sub_add_div
@@ -1005,6 +1170,7 @@ lemma tendsto_pow_exp_of_isLittleO_sub_add_div
   filter_upwards [eventually_ne_atTop 0] with n h0
   simp
   field_simp [n.cast_ne_zero.2 h0]
+  ring
 
 Depends on / 依赖: cast_ne_zero, convert, eventually_ne_atTop, filter_upwards, hf.tendsto_inv_smul_nhds_zero.congr, n.cast_ne_zero, tendsto_inv_smul_nhds_zero, tendsto_one_add_pow_exp_of_tendsto, tendsto_sub_nhds_zero_iff
 -/
@@ -1035,7 +1201,8 @@ lemma tendsto_mul_log_one_add_of_tendsto
   rw [← tendsto_ofReal_iff] at hg ⊢
   push_cast at hg ⊢
   apply (Complex.tendsto_mul_log_one_add_of_tendsto hg).congr'
-  filter_upwards [hg0.eventually_const_le (show (
+  filter_upwards [hg0.eventually_const_le (show (-1 : Real) < 0 by simp)] with x hg1
+  rw [Complex.ofReal_log (by linarith)]; rw [Complex.ofReal_add]; rw [Complex.ofReal_one]
 
 中文:
 引理 tendsto_mul_log_one_add_of_tendsto
@@ -1046,7 +1213,8 @@ lemma tendsto_mul_log_one_add_of_tendsto
   rw [← tendsto_ofReal_iff] at hg ⊢
   push_cast at hg ⊢
   apply (Complex.tendsto_mul_log_one_add_of_tendsto hg).congr'
-  filter_upwards [hg0.eventually_const_le (show (
+  filter_upwards [hg0.eventually_const_le (show (-1 : Real) < 0 by simp)] with x hg1
+  rw [Complex.ofReal_log (by linarith)]; rw [Complex.ofReal_add]; rw [Complex.ofReal_one]
 
 Depends on / 依赖: Complex.ofReal_add, Complex.ofReal_log, Complex.ofReal_one, Complex.tendsto_mul_log_one_add_of_tendsto, eventually_const_le, filter_upwards, hg.norm.isBoundedUnder_le, hg0.eventually_const_le, isBoundedUnder_le, ofReal_add, ofReal_log, ofReal_one, tendsto_id, tendsto_mul_log_one_add_of_tendsto, tendsto_ofReal_iff, tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
 -/
@@ -1101,7 +1269,8 @@ lemma tendsto_one_add_rpow_exp_of_tendsto
   rw [← tendsto_ofReal_iff] at hg ⊢
   push_cast at hg ⊢
   apply (Complex.tendsto_one_add_cpow_exp_of_tendsto hg).congr'
-  filter_upwards [hg0.eventually_const_le (show 
+  filter_upwards [hg0.eventually_const_le (show (-1 : Real) < 0 by simp)] with x hg1
+  rw [Complex.ofReal_cpow (by linarith)]; rw [Complex.ofReal_add]; rw [Complex.ofReal_one]
 
 中文:
 引理 tendsto_one_add_rpow_exp_of_tendsto
@@ -1112,7 +1281,8 @@ lemma tendsto_one_add_rpow_exp_of_tendsto
   rw [← tendsto_ofReal_iff] at hg ⊢
   push_cast at hg ⊢
   apply (Complex.tendsto_one_add_cpow_exp_of_tendsto hg).congr'
-  filter_upwards [hg0.eventually_const_le (show 
+  filter_upwards [hg0.eventually_const_le (show (-1 : Real) < 0 by simp)] with x hg1
+  rw [Complex.ofReal_cpow (by linarith)]; rw [Complex.ofReal_add]; rw [Complex.ofReal_one]
 
 Depends on / 依赖: Complex.ofReal_add, Complex.ofReal_cpow, Complex.ofReal_one, Complex.tendsto_one_add_cpow_exp_of_tendsto, eventually_const_le, filter_upwards, hg.norm.isBoundedUnder_le, hg0.eventually_const_le, isBoundedUnder_le, ofReal_add, ofReal_cpow, ofReal_one, tendsto_id, tendsto_ofReal_iff, tendsto_one_add_cpow_exp_of_tendsto, tendsto_zero_of_isBoundedUnder_smul_of_tendsto_cobounded
 -/

@@ -72,7 +72,10 @@ definition mkHigherOrderType
     let body := instantiate1 e.bindingBody! fvar
     if body.isForall then
       let exp ← mkHigherOrderType body
-      mkForallFVars #[fvar] exp (binderInfoForMVars 
+      mkForallFVars #[fvar] exp (binderInfoForMVars := e.binderInfo)
+    else
+      let some (_, lhs, rhs) ← matchEq? body | throwError "not an equality {← ppExpr body}"
+      mkEq (← mkComp fvar lhs) (← mkComp fvar rhs)
 
 中文:
 定义 mkHigherOrderType
@@ -84,7 +87,10 @@ definition mkHigherOrderType
     let body := instantiate1 e.bindingBody! fvar
     if body.isForall then
       let exp ← mkHigherOrderType body
-      mkForallFVars #[fvar] exp (binderInfoForMVars 
+      mkForallFVars #[fvar] exp (binderInfoForMVars := e.binderInfo)
+    else
+      let some (_, lhs, rhs) ← matchEq? body | throwError "not an equality {← ppExpr body}"
+      mkEq (← mkComp fvar lhs) (← mkComp fvar rhs)
 -/
 partial def mkHigherOrderType (e : Expr) : MetaM Expr := do
   if not e.isForall then
@@ -114,7 +120,33 @@ definition higherOrderGetParam
       else
         thm.appendAfter "\'"
 MetaM.run' TermElabM.run' do
-      let lvl := 
+      let lvl := (← getConstInfo thm).levelParams
+      let typ ← instantiateMVars (← inferType <| .const thm (lvl.map mkLevelParam))
+      let hot ← mkHigherOrderType typ
+      let prf ← do
+        let mvar ← mkFreshExprMVar hot
+        let (_, mvarId) ← mvar.mvarId!.intros
+        let [mvarId] ← mvarId.apply (← mkConst ``funext) | throwError "failed"
+        let (_, mvarId) ← mvarId.intro1
+        let lmvr ← mvarId.apply (← mkConst thm)
+        lmvr.forM fun mv => mv.assumption
+        instantiateMVars mvar
+addDecl .thmDecl
+        { name := hothmName
+          levelParams := lvl
+          type := hot
+          value := prf }
+      addDeclarationRangesFromSyntax hothmName (← getRef) ref
+      addTermInfo' ref (← mkConstWithLevelParams hothmName) (isBinder := true)
+.lemmaNames.contains (.decl thm) let hsm := simpExtension.getState (← getEnv)
+      if hsm then
+        addSimpTheorem simpExtension hothmName true false .global 1000
+      let some fcn ← getSimpExtension? `functor_norm | failure
+.lemmaNames.contains .decl thm let hfm := fcn.getState (← getEnv)
+      if hfm then
+        addSimpTheorem fcn hothmName true false .global 1000
+      return hothmName
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 higherOrderGetParam
@@ -129,7 +161,33 @@ MetaM.run' TermElabM.run' do
       else
         thm.appendAfter "\'"
 MetaM.run' TermElabM.run' do
-      let lvl := 
+      let lvl := (← getConstInfo thm).levelParams
+      let typ ← instantiateMVars (← inferType <| .const thm (lvl.map mkLevelParam))
+      let hot ← mkHigherOrderType typ
+      let prf ← do
+        let mvar ← mkFreshExprMVar hot
+        let (_, mvarId) ← mvar.mvarId!.intros
+        let [mvarId] ← mvarId.apply (← mkConst ``funext) | throwError "failed"
+        let (_, mvarId) ← mvarId.intro1
+        let lmvr ← mvarId.apply (← mkConst thm)
+        lmvr.forM fun mv => mv.assumption
+        instantiateMVars mvar
+addDecl .thmDecl
+        { name := hothmName
+          levelParams := lvl
+          type := hot
+          value := prf }
+      addDeclarationRangesFromSyntax hothmName (← getRef) ref
+      addTermInfo' ref (← mkConstWithLevelParams hothmName) (isBinder := true)
+.lemmaNames.contains (.decl thm) let hsm := simpExtension.getState (← getEnv)
+      if hsm then
+        addSimpTheorem simpExtension hothmName true false .global 1000
+      let some fcn ← getSimpExtension? `functor_norm | failure
+.lemmaNames.contains .decl thm let hfm := fcn.getState (← getEnv)
+      if hfm then
+        addSimpTheorem fcn hothmName true false .global 1000
+      return hothmName
+  | _ => throwUnsupportedSyntax
 -/
 def higherOrderGetParam (thm : Name) (stx : Syntax) : AttrM Name := do
   match stx with

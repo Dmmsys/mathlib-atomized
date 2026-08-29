@@ -498,7 +498,27 @@ definition rightAngleRotationAux₂
         · rw [← h]
           positivity
         refine le_of_mul_le_mul_right ?_ h
-        rw [← real_inner_self_eq_norm_mul
+        rw [← real_inner_self_eq_norm_mul_norm]; rw [o.inner_rightAngleRotationAux₁_left]
+        exact o.areaForm_le x (o.rightAngleRotationAux₁ x)
+      · let K : Submodule Real E := Real ∙ x
+        have : Nontrivial Kᗮ := by
+          apply nontrivial_of_finrank_pos (R := Real)
+          have : finrank Real K <= Finset.card {x} := by
+            rw [← Set.toFinset_singleton]
+            exact finrank_span_le_card ({x} : Set E)
+          have : Finset.card {x} = 1 := Finset.card_singleton x
+          have : finrank Real K + finrank Real Kᗮ = finrank Real E := K.finrank_add_finrank_orthogonal
+          have : finrank Real E = 2 := Fact.out
+          lia
+        obtain ⟨w, hw₀⟩ : exists w : Kᗮ, w != 0 := exists_ne 0
+        have hw' : ⟪x, (w : E)⟫ = 0 := Submodule.mem_orthogonal_singleton_iff_inner_right.mp w.2
+        have hw : (w : E) != 0 := fun h => hw₀ (Submodule.coe_eq_zero.mp h)
+        refine le_of_mul_le_mul_right ?_ (by rwa [norm_pos_iff] : 0 < ‖(w : E)‖)
+        rw [← o.abs_areaForm_of_orthogonal hw']
+        rw [← o.inner_rightAngleRotationAux₁_left x w]
+        exact abs_real_inner_le_norm (o.rightAngleRotationAux₁ x) w }
+
+@[simp]
 
 中文:
 定义 rightAngleRotationAux₂
@@ -510,7 +530,27 @@ definition rightAngleRotationAux₂
         · rw [← h]
           positivity
         refine le_of_mul_le_mul_right ?_ h
-        rw [← real_inner_self_eq_norm_mul
+        rw [← real_inner_self_eq_norm_mul_norm]; rw [o.inner_rightAngleRotationAux₁_left]
+        exact o.areaForm_le x (o.rightAngleRotationAux₁ x)
+      · let K : Submodule Real E := Real ∙ x
+        have : Nontrivial Kᗮ := by
+          apply nontrivial_of_finrank_pos (R := Real)
+          have : finrank Real K <= Finset.card {x} := by
+            rw [← Set.toFinset_singleton]
+            exact finrank_span_le_card ({x} : Set E)
+          have : Finset.card {x} = 1 := Finset.card_singleton x
+          have : finrank Real K + finrank Real Kᗮ = finrank Real E := K.finrank_add_finrank_orthogonal
+          have : finrank Real E = 2 := Fact.out
+          lia
+        obtain ⟨w, hw₀⟩ : exists w : Kᗮ, w != 0 := exists_ne 0
+        have hw' : ⟪x, (w : E)⟫ = 0 := Submodule.mem_orthogonal_singleton_iff_inner_right.mp w.2
+        have hw : (w : E) != 0 := fun h => hw₀ (Submodule.coe_eq_zero.mp h)
+        refine le_of_mul_le_mul_right ?_ (by rwa [norm_pos_iff] : 0 < ‖(w : E)‖)
+        rw [← o.abs_areaForm_of_orthogonal hw']
+        rw [← o.inner_rightAngleRotationAux₁_left x w]
+        exact abs_real_inner_le_norm (o.rightAngleRotationAux₁ x) w }
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.card, Nontrivial, Submodule, areaForm_le, eq_or_lt_of_le, finrank, le_antisymm, le_of_mul_le_mul_right, nontrivial_of_finrank_pos, norm_map, norm_nonneg, o.areaForm_le, o.inner_rightAngleRotationAux, o.rightAngleRotationAux, real_inner_self_eq_norm_mul_norm
 -/
@@ -554,7 +594,7 @@ theorem rightAngleRotationAux₁_rightAngleRotationAux₁
   intro y
   have : ⟪o.rightAngleRotationAux₁ y, o.rightAngleRotationAux₁ x⟫ = ⟪y, x⟫ :=
     LinearIsometry.inner_map_map o.rightAngleRotationAux₂ y x
-  rw [o.inner_rightAngleRotationAux₁_right]; rw [← o.inner_rightAngleRotationAux₁_left]; rw [this]; rw [inner_neg_right
+  rw [o.inner_rightAngleRotationAux₁_right]; rw [← o.inner_rightAngleRotationAux₁_left]; rw [this]; rw [inner_neg_right]
 
 中文:
 定理 rightAngleRotationAux₁_rightAngleRotationAux₁
@@ -564,7 +604,7 @@ theorem rightAngleRotationAux₁_rightAngleRotationAux₁
   intro y
   have : ⟪o.rightAngleRotationAux₁ y, o.rightAngleRotationAux₁ x⟫ = ⟪y, x⟫ :=
     LinearIsometry.inner_map_map o.rightAngleRotationAux₂ y x
-  rw [o.inner_rightAngleRotationAux₁_right]; rw [← o.inner_rightAngleRotationAux₁_left]; rw [this]; rw [inner_neg_right
+  rw [o.inner_rightAngleRotationAux₁_right]; rw [← o.inner_rightAngleRotationAux₁_left]; rw [this]; rw [inner_neg_right]
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.inner_map_map, ext_inner_left, inner_map_map, inner_neg_right, o.inner_rightAngleRotationAux, o.rightAngleRotationAux
 -/
@@ -1244,7 +1284,20 @@ theorem nonneg_inner_and_areaForm_eq_zero_iff_sameRay
   · let a : Real := (o.basisRightAngleRotation x hx).repr y 0
     let b : Real := (o.basisRightAngleRotation x hx).repr y 1
     suffices ↑0 <= a * ‖x‖ ^ 2 ∧ b * ‖x‖ ^ 2 = 0 -> SameRay Real x (a • x + b • J x) by
-      rw [← (o.basisRightAngleRotat
+      rw [← (o.basisRightAngleRotation x hx).sum_repr y]
+      simp only [Fin.sum_univ_succ, coe_basisRightAngleRotation, Matrix.cons_val_zero,
+        Fin.succ_zero_eq_one', Finset.univ_eq_empty, Finset.sum_empty, areaForm_apply_self,
+        map_smul, map_add, real_inner_smul_right, inner_add_right, Matrix.cons_val_one,
+        smul_eq_mul, areaForm_rightAngleRotation_right,
+        mul_zero, add_zero, zero_add, neg_zero, inner_rightAngleRotation_right,
+        real_inner_self_eq_norm_sq]
+      exact this
+    simp_all
+  · intro h
+    obtain ⟨r, hr, rfl⟩ := h.exists_nonneg_left hx
+    simp only [inner_smul_right, real_inner_self_eq_norm_sq, map_smulₛₗ, areaForm_apply_self,
+      smul_eq_mul, mul_zero, and_true]
+    positivity
 
 中文:
 定理 nonneg_inner_and_areaForm_eq_zero_iff_sameRay
@@ -1256,7 +1309,20 @@ theorem nonneg_inner_and_areaForm_eq_zero_iff_sameRay
   · let a : Real := (o.basisRightAngleRotation x hx).repr y 0
     let b : Real := (o.basisRightAngleRotation x hx).repr y 1
     suffices ↑0 <= a * ‖x‖ ^ 2 ∧ b * ‖x‖ ^ 2 = 0 -> SameRay Real x (a • x + b • J x) by
-      rw [← (o.basisRightAngleRotat
+      rw [← (o.basisRightAngleRotation x hx).sum_repr y]
+      simp only [Fin.sum_univ_succ, coe_basisRightAngleRotation, Matrix.cons_val_zero,
+        Fin.succ_zero_eq_one', Finset.univ_eq_empty, Finset.sum_empty, areaForm_apply_self,
+        map_smul, map_add, real_inner_smul_right, inner_add_right, Matrix.cons_val_one,
+        smul_eq_mul, areaForm_rightAngleRotation_right,
+        mul_zero, add_zero, zero_add, neg_zero, inner_rightAngleRotation_right,
+        real_inner_self_eq_norm_sq]
+      exact this
+    simp_all
+  · intro h
+    obtain ⟨r, hr, rfl⟩ := h.exists_nonneg_left hx
+    simp only [inner_smul_right, real_inner_self_eq_norm_sq, map_smulₛₗ, areaForm_apply_self,
+      smul_eq_mul, mul_zero, and_true]
+    positivity
 
 Depends on / 依赖: Fin.succ_zero_eq_one, Fin.sum_univ_succ, Finset, Finset.sum_empty, Finset.univ_eq_empty, Matrix, Matrix.cons_val_zero, SameRay, areaForm_apply_self, basisRightAngleRotation, coe_basisRightAngleRotation, cons_val_zero, map_add, map_smul, o.basisRightAngleRotation, real_inner_smul_, succ_zero_eq_one, sum_empty, sum_repr, sum_univ_succ
 -/
@@ -1527,7 +1593,13 @@ theorem kahler_mul
   · apply Complex.ext
     · simp only [o.kahler_apply_apply, Complex.add_im, Complex.add_re, Complex.I_im, Complex.I_re,
         Complex.mul_im, Complex.mul_re, Complex.ofReal_im, Complex.ofReal_re, Complex.real_smul]
-      rw [real_inner_comm a x]; 
+      rw [real_inner_comm a x]; rw [o.areaForm_swap x a]
+      linear_combination o.inner_mul_inner_add_areaForm_mul_areaForm a x y
+    · simp only [o.kahler_apply_apply, Complex.add_im, Complex.add_re, Complex.I_im, Complex.I_re,
+        Complex.mul_im, Complex.mul_re, Complex.ofReal_im, Complex.ofReal_re, Complex.real_smul]
+      rw [real_inner_comm a x]; rw [o.areaForm_swap x a]
+      linear_combination o.inner_mul_areaForm_sub a x y
+  · norm_cast
 
 中文:
 定理 kahler_mul
@@ -1538,7 +1610,13 @@ theorem kahler_mul
   · apply Complex.ext
     · simp only [o.kahler_apply_apply, Complex.add_im, Complex.add_re, Complex.I_im, Complex.I_re,
         Complex.mul_im, Complex.mul_re, Complex.ofReal_im, Complex.ofReal_re, Complex.real_smul]
-      rw [real_inner_comm a x]; 
+      rw [real_inner_comm a x]; rw [o.areaForm_swap x a]
+      linear_combination o.inner_mul_inner_add_areaForm_mul_areaForm a x y
+    · simp only [o.kahler_apply_apply, Complex.add_im, Complex.add_re, Complex.I_im, Complex.I_re,
+        Complex.mul_im, Complex.mul_re, Complex.ofReal_im, Complex.ofReal_re, Complex.real_smul]
+      rw [real_inner_comm a x]; rw [o.areaForm_swap x a]
+      linear_combination o.inner_mul_areaForm_sub a x y
+  · norm_cast
 
 Depends on / 依赖: Complex.I_im, Complex.I_re, Complex.add_im, Complex.add_re, Complex.ext, Complex.mul_im, Complex.mul_re, Complex.ofReal_im, Complex.ofReal_re, Complex.real_smul, I_im, I_re, add_im, add_re, areaForm_swap, inner_mul_inner_add_areaForm_mul_areaForm, kahler, kahler_apply_apply, linear_combination, mul_im
 -/
@@ -1789,7 +1867,10 @@ theorem areaForm
   simp only [o, o.areaForm_to_volumeForm,
     o.volumeForm_robust Complex.orthonormalBasisOneI rfl, Basis.det_apply, Matrix.det_fin_two,
     Basis.toMatrix_apply, toBasis_orthonormalBasisOneI, Matrix.cons_val_zero, coe_basisOneI_repr,
-    Matrix.cons_val_one, mul_im
+    Matrix.cons_val_one, mul_im, conj_re, conj_im]
+  ring
+
+@[simp]
 
 中文:
 定理 areaForm
@@ -1800,7 +1881,10 @@ theorem areaForm
   simp only [o, o.areaForm_to_volumeForm,
     o.volumeForm_robust Complex.orthonormalBasisOneI rfl, Basis.det_apply, Matrix.det_fin_two,
     Basis.toMatrix_apply, toBasis_orthonormalBasisOneI, Matrix.cons_val_zero, coe_basisOneI_repr,
-    Matrix.cons_val_one, mul_im
+    Matrix.cons_val_one, mul_im, conj_re, conj_im]
+  ring
+
+@[simp]
 -/
 protected theorem areaForm (w z : Complex) : Complex.orientation.areaForm w z = (conj w * z).im := by
   let o := Complex.orientation

@@ -1073,7 +1073,18 @@ definition corec
   revert h; generalize some b = o
   induction n generalizing o with
   | zero =>
-    change (Corec.f f o).1 = none -> (Corec.f f (Corec.f f o
+    change (Corec.f f o).1 = none -> (Corec.f f (Corec.f f o).2).1 = none
+    rcases o with - | b <;> intro h
+    · rfl
+    dsimp [Corec.f] at h
+    dsimp [Corec.f]
+    revert h; rcases h₁ : f b with - | s <;> intro h
+    · rfl
+    · obtain ⟨a, b'⟩ := s
+      contradiction
+  | succ n IH =>
+    rw [Stream'.corec'_eq (Corec.f f) (Corec.f f o).2]; rw [Stream'.corec'_eq (Corec.f f) o]
+    exact IH (Corec.f f o).2
 
 中文:
 定义 corec
@@ -1085,7 +1096,18 @@ definition corec
   revert h; generalize some b = o
   induction n generalizing o with
   | zero =>
-    change (Corec.f f o).1 = none -> (Corec.f f (Corec.f f o
+    change (Corec.f f o).1 = none -> (Corec.f f (Corec.f f o).2).1 = none
+    rcases o with - | b <;> intro h
+    · rfl
+    dsimp [Corec.f] at h
+    dsimp [Corec.f]
+    revert h; rcases h₁ : f b with - | s <;> intro h
+    · rfl
+    · obtain ⟨a, b'⟩ := s
+      contradiction
+  | succ n IH =>
+    rw [Stream'.corec'_eq (Corec.f f) (Corec.f f o).2]; rw [Stream'.corec'_eq (Corec.f f) o]
+    exact IH (Corec.f f o).2
 
 Depends on / 依赖: Corec.f, Stream, generalize, generalizing, revert
 -/
@@ -1126,7 +1148,8 @@ theorem corec_eq
   apply congr_arg fun b' => some (a, b')
   apply Subtype.ext
   dsimp [corec, tail]
-  rw [S
+  rw [Stream'.corec'_eq]; rw [Stream'.tail_cons]
+  dsimp [Corec.f]; rw [h]
 
 中文:
 定理 corec_eq
@@ -1140,7 +1163,8 @@ theorem corec_eq
   apply congr_arg fun b' => some (a, b')
   apply Subtype.ext
   dsimp [corec, tail]
-  rw [S
+  rw [Stream'.corec'_eq]; rw [Stream'.tail_cons]
+  dsimp [Corec.f]; rw [h]
 
 Depends on / 依赖: Corec.f, Stream, Subtype, Subtype.ext, congr_arg, destruct, tail_cons
 -/
@@ -1268,7 +1292,22 @@ theorem eq_of_bisim
     match t₁, t₂, e with
     | _, _, ⟨s, s', rfl, rfl, r⟩ => by
       suffices head s = head s' ∧ R (tail s) (tail s') from
-  
+        And.imp id (fun r => ⟨tail s, tail s', by cases s using Subtype.recOn; rfl,
+          by cases s' using Subtype.recOn; rfl, r⟩) this
+      have := bisim r; revert r this
+      cases s <;> cases s'
+      · intro r _
+        constructor
+        · rfl
+        · assumption
+      · intro _ this
+        rw [destruct_nil]; rw [destruct_cons] at this
+        exact False.elim this
+      · intro _ this
+        rw [destruct_nil]; rw [destruct_cons] at this
+        exact False.elim this
+      · simp
+  · exact ⟨s₁, s₂, rfl, rfl, r⟩
 
 中文:
 定理 eq_of_bisim
@@ -1283,7 +1322,22 @@ theorem eq_of_bisim
     match t₁, t₂, e with
     | _, _, ⟨s, s', rfl, rfl, r⟩ => by
       suffices head s = head s' ∧ R (tail s) (tail s') from
-  
+        And.imp id (fun r => ⟨tail s, tail s', by cases s using Subtype.recOn; rfl,
+          by cases s' using Subtype.recOn; rfl, r⟩) this
+      have := bisim r; revert r this
+      cases s <;> cases s'
+      · intro r _
+        constructor
+        · rfl
+        · assumption
+      · intro _ this
+        rw [destruct_nil]; rw [destruct_cons] at this
+        exact False.elim this
+      · intro _ this
+        rw [destruct_nil]; rw [destruct_cons] at this
+        exact False.elim this
+      · simp
+  · exact ⟨s₁, s₂, rfl, rfl, r⟩
 
 Depends on / 依赖: And.imp, IsBisimulation, Stream, Subtype, Subtype.ext, Subtype.recOn, eq_of_bisim, revert
 -/
@@ -1366,7 +1420,7 @@ theorem eq_of_bisim_strong
   · cases s₁ <;> grind
   rcases step s₁ s₂ ih with (rfl | ⟨hd, s₁', s₂', _⟩)
   · cases s₁ <;> grind
-  · 
+  · grind
 
 中文:
 定理 eq_of_bisim_strong
@@ -1380,7 +1434,7 @@ theorem eq_of_bisim_strong
   · cases s₁ <;> grind
   rcases step s₁ s₂ ih with (rfl | ⟨hd, s₁', s₂', _⟩)
   · cases s₁ <;> grind
-  · 
+  · grind
 
 Depends on / 依赖: eq_of_bisim, motive
 -/
@@ -1939,7 +1993,12 @@ theorem mem_rec_on
     rw [TH]
     apply h1 _ _ (Or.inl rfl)
   | succ k IH =>
-    cases s w
+    cases s with
+    | nil => injection e
+    | cons b s' =>
+      have h_eq : (cons b s').val (Nat.succ k) = s'.val k := by cases s' using Subtype.recOn; rfl
+      rw [h_eq] at e
+      apply h1 _ _ (Or.inr (IH e))
 
 中文:
 定理 mem_rec_on
@@ -1956,7 +2015,12 @@ theorem mem_rec_on
     rw [TH]
     apply h1 _ _ (Or.inl rfl)
   | succ k IH =>
-    cases s w
+    cases s with
+    | nil => injection e
+    | cons b s' =>
+      have h_eq : (cons b s').val (Nat.succ k) = s'.val k := by cases s' using Subtype.recOn; rfl
+      rw [h_eq] at e
+      apply h1 _ _ (Or.inr (IH e))
 
 Depends on / 依赖: Functor, Functor.map, Nat.succ, Or.inl, Or.inr, Stream, Subtype, Subtype.recOn, destruct, destruct_eq_cons, generalizing, h_eq, injection
 -/

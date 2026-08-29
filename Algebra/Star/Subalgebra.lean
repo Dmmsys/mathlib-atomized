@@ -1413,7 +1413,18 @@ instance involutiveStar
         simp only [Set.mem_star, Subalgebra.mem_carrier] at *
         exact (star_mul x y).symm ▸ mul_mem hy hx
       one_mem' := Set.mem_star.mp ((star_one A).symm ▸ one_mem S : star (1 : A) in S)
-      add_mem' := fun {x y} hx hy 
+      add_mem' := fun {x y} hx hy => by
+        simp only [Set.mem_star, Subalgebra.mem_carrier] at *
+        exact (star_add x y).symm ▸ add_mem hx hy
+      zero_mem' := Set.mem_star.mp ((star_zero A).symm ▸ zero_mem S : star (0 : A) in S)
+      algebraMap_mem' := fun r => by
+        simpa only [Set.mem_star, Subalgebra.mem_carrier, ← algebraMap_star_comm] using
+          S.algebraMap_mem (star r) }
+  star_involutive S :=
+    Subalgebra.ext fun x =>
+      ⟨fun hx => star_star x ▸ hx, fun hx => ((star_star x).symm ▸ hx : star (star x) in S)⟩
+
+@[simp]
 
 中文:
 实例 involutiveStar
@@ -1423,7 +1434,18 @@ instance involutiveStar
         simp only [Set.mem_star, Subalgebra.mem_carrier] at *
         exact (star_mul x y).symm ▸ mul_mem hy hx
       one_mem' := Set.mem_star.mp ((star_one A).symm ▸ one_mem S : star (1 : A) in S)
-      add_mem' := fun {x y} hx hy 
+      add_mem' := fun {x y} hx hy => by
+        simp only [Set.mem_star, Subalgebra.mem_carrier] at *
+        exact (star_add x y).symm ▸ add_mem hx hy
+      zero_mem' := Set.mem_star.mp ((star_zero A).symm ▸ zero_mem S : star (0 : A) in S)
+      algebraMap_mem' := fun r => by
+        simpa only [Set.mem_star, Subalgebra.mem_carrier, ← algebraMap_star_comm] using
+          S.algebraMap_mem (star r) }
+  star_involutive S :=
+    Subalgebra.ext fun x =>
+      ⟨fun hx => star_star x ▸ hx, fun hx => ((star_star x).symm ▸ hx : star (star x) in S)⟩
+
+@[simp]
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, I.ideal, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsPreimmersion, Quotient, RingHom, RingHom.surjectiveOnStalks_of_surjective, S.carrier, Set.me, Set.mem_star, Set.mem_star.mp, Spec.map, Subalgebra, Subalgebra.mem_carrier, add_mem, algebraMap_mem, carrier, isClosedEmbedding_comap_of_surjective
 -/
@@ -2161,7 +2183,18 @@ theorem adjoin_induction₂
     | mem _ h => exact mem_mem _ _ h hz
     | algebraMap _ => exact algebraMap_left _ _ hz
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => exact add_left _ _ 
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | star _ _ h => exact star_left _ _ _ _ h
+  | algebraMap r =>
+    induction ha using adjoin_induction with
+    | mem _ h => exact algebraMap_right _ _ h
+    | algebraMap _ => exact algebraMap_both _ _
+    | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | star _ _ h => exact star_left _ _ _ _ h
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | star _ _ h => exact star_right _ _ _ _ h
 
 中文:
 定理 adjoin_induction₂
@@ -2172,7 +2205,18 @@ theorem adjoin_induction₂
     | mem _ h => exact mem_mem _ _ h hz
     | algebraMap _ => exact algebraMap_left _ _ hz
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => exact add_left _ _ 
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | star _ _ h => exact star_left _ _ _ _ h
+  | algebraMap r =>
+    induction ha using adjoin_induction with
+    | mem _ h => exact algebraMap_right _ _ h
+    | algebraMap _ => exact algebraMap_both _ _
+    | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+    | star _ _ h => exact star_left _ _ _ _ h
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | star _ _ h => exact star_right _ _ _ _ h
 
 Depends on / 依赖: add_left, adjoin_induction, algebraMap, algebraMap_both, algebraMap_left, algebraMap_right, mem_mem, mul_left, star_left
 -/
@@ -2295,7 +2339,11 @@ theorem isMulCommutative_adjoin
   refine .of_setLike_mul_comm fun _ h₁ _ h₂ => ?_
   have hcomm : forall a in s union star s, forall b in s union star s, a * b = b * a := fun a ha b hb =>
     Set.union_star_self_comm (fun _ ha _ hb => hcomm _ hb _ ha)
-      (fun _ ha _ hb => hcomm_
+      (fun _ ha _ hb => hcomm_star _ hb _ ha) b hb a ha
+  apply this at h₁
+  apply this at h₂
+  rw [← SetLike.mem_coe]; rw [coe_centralizer_centralizer] at h₁ h₂
+  exact Set.centralizer_centralizer_comm_of_comm hcomm _ h₁ _ h₂
 
 中文:
 定理 isMulCommutative_adjoin
@@ -2305,7 +2353,11 @@ theorem isMulCommutative_adjoin
   refine .of_setLike_mul_comm fun _ h₁ _ h₂ => ?_
   have hcomm : forall a in s union star s, forall b in s union star s, a * b = b * a := fun a ha b hb =>
     Set.union_star_self_comm (fun _ ha _ hb => hcomm _ hb _ ha)
-      (fun _ ha _ hb => hcomm_
+      (fun _ ha _ hb => hcomm_star _ hb _ ha) b hb a ha
+  apply this at h₁
+  apply this at h₂
+  rw [← SetLike.mem_coe]; rw [coe_centralizer_centralizer] at h₁ h₂
+  exact Set.centralizer_centralizer_comm_of_comm hcomm _ h₁ _ h₂
 
 Depends on / 依赖: Set.centralizer_centralizer_comm_of_comm, Set.union_star_self_comm, SetLike, SetLike.mem_coe, adjoin_le_centralizer_centralizer, centralizer_centralizer_comm_of_comm, coe_centralizer_centralizer, hcomm_star, mem_coe, of_setLike_mul_comm, union_star_self_comm
 -/
@@ -3056,7 +3108,9 @@ theorem ext_adjoin
     (fun x y hx hy => ?_) (fun x y hx hy => ?_) fun x hx => ?_
   · exact h ⟨x, subset_adjoin R s hx⟩ hx
   · simp only [AlgHomClass.commutes]
-  · simp only [map_add, map_add, 
+  · simp only [map_add, map_add, hx, hy]
+  · simp only [map_mul, map_mul, hx, hy]
+  · simp only [map_star, hx]
 
 中文:
 定理 ext_adjoin
@@ -3067,7 +3121,9 @@ theorem ext_adjoin
     (fun x y hx hy => ?_) (fun x y hx hy => ?_) fun x hx => ?_
   · exact h ⟨x, subset_adjoin R s hx⟩ hx
   · simp only [AlgHomClass.commutes]
-  · simp only [map_add, map_add, 
+  · simp only [map_add, map_add, hx, hy]
+  · simp only [map_mul, map_mul, hx, hy]
+  · simp only [map_star, hx]
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, DFunLike, DFunLike.ext, adjoin_induction_subtype, commutes, map_add, map_mul, map_star, subset_adjoin
 -/
@@ -3678,7 +3734,10 @@ theorem coe_iSup_of_directed
         (S := fun i => (S i).toNonUnitalStarSubalgebra) dir).symm
       algebraMap_mem' x :=
         let ⟨i⟩ := ‹Nonempty ι›
-        Set.mem_iUnion.mpr ⟨i, algebraMap_mem (S i) x⟩
+        Set.mem_iUnion.mpr ⟨i, algebraMap_mem (S i) x⟩ }
+  have : iSup S = K := le_antisymm (iSup_le fun i => le_iSup (fun i => (S i : Set A)) i)
+    (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
 
 中文:
 定理 coe_iSup_of_directed
@@ -3688,7 +3747,10 @@ theorem coe_iSup_of_directed
         (S := fun i => (S i).toNonUnitalStarSubalgebra) dir).symm
       algebraMap_mem' x :=
         let ⟨i⟩ := ‹Nonempty ι›
-        Set.mem_iUnion.mpr ⟨i, algebraMap_mem (S i) x⟩
+        Set.mem_iUnion.mpr ⟨i, algebraMap_mem (S i) x⟩ }
+  have : iSup S = K := le_antisymm (iSup_le fun i => le_iSup (fun i => (S i : Set A)) i)
+    (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
 
 Depends on / 依赖: NonUnitalStarSubalgebra, NonUnitalStarSubalgebra.coe_iSup_of_directed, NonUnitalStarSubalgebra.copy, Nonempty, Set.iUnion_subset, Set.mem_iUnion.mpr, StarSubalgebra, algebraMap_mem, coe_iSup_of_directed, iSup_le, iUnion_subset, le_antisymm, le_iSup, mem_iUnion, this.symm, toNonUnitalStarSubalgebra
 -/

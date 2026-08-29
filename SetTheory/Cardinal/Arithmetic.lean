@@ -53,7 +53,31 @@ theorem mul_eq_self
   induction c using WellFoundedLT.induction with | ind c IH
   refine le_antisymm ?_ (by simpa using mul_le_mul_right (one_le_aleph0.trans hc) c)
   -- Consider the minimal well-order on `α` (a type with cardinality `c`).
-  indu
+  induction c using Cardinal.inductionOn with | mk α
+  obtain ⟨_, _, hα⟩ := exists_ord_eq_type_lt α
+  have : NoMaxOrder α := by
+    rw [← isSuccPrelimit_type_lt_iff]; rw [← hα]
+    exact (isSuccLimit_ord hc).isSuccPrelimit
+  -- Define an order `s` on `α × α`, comparing first by `max x.1 x.2`, then by `toLex (x.1, x.2)`.
+  let g : α × α -> α := uncurry max
+  let f : α × α ↪ α ×ₗ (α ×ₗ α) := ⟨fun p => toLex (g p, toLex p), fun p q => congrArg Prod.snd⟩
+  let s := f ⁻¹'o (· < ·)
+  have : IsWellOrder _ s := (RelEmbedding.preimage ..).isWellOrder
+  -- Every initial segment of `s` is contained in `β × β` for some `β` of cardinality `< c`.
+  -- By the inductive hypothesis, this means `#(β × β) < c`. Thus, `α × α` must have
+  -- cardinality `≤ c`.
+refine @card_le_card (type s) (typeLT α) le_of_forall_lt fun o h => ?_
+  obtain ⟨p, rfl⟩ := typein_surj s h
+  obtain ⟨q, hq'⟩ := exists_gt (g p)
+  rw [← hα]; rw [lt_ord]
+  apply lt_of_le_of_lt (b := #(Iio q) * #(Iio q))
+  · apply (Set.embeddingOfSubset { x | s x p } ..).cardinal_le.trans_eq (mk_setProd ..)
+    simp [s, f, Prod.Lex.lt_iff, subset_def]
+    grind
+  rcases lt_or_ge #(Iio q) ℵ₀ with hq | hq
+  · exact (mul_lt_aleph0 hq hq).trans_le hc
+  · have := mk_Iio_lt q hα
+    rwa [IH _ this hq]
 
 中文:
 定理 mul_eq_self
@@ -64,7 +88,31 @@ theorem mul_eq_self
   induction c using WellFoundedLT.induction with | ind c IH
   refine le_antisymm ?_ (by simpa using mul_le_mul_right (one_le_aleph0.trans hc) c)
   -- Consider the minimal well-order on `α` (a type with cardinality `c`).
-  indu
+  induction c using Cardinal.inductionOn with | mk α
+  obtain ⟨_, _, hα⟩ := exists_ord_eq_type_lt α
+  have : NoMaxOrder α := by
+    rw [← isSuccPrelimit_type_lt_iff]; rw [← hα]
+    exact (isSuccLimit_ord hc).isSuccPrelimit
+  -- Define an order `s` on `α × α`, comparing first by `max x.1 x.2`, then by `toLex (x.1, x.2)`.
+  let g : α × α -> α := uncurry max
+  let f : α × α ↪ α ×ₗ (α ×ₗ α) := ⟨fun p => toLex (g p, toLex p), fun p q => congrArg Prod.snd⟩
+  let s := f ⁻¹'o (· < ·)
+  have : IsWellOrder _ s := (RelEmbedding.preimage ..).isWellOrder
+  -- Every initial segment of `s` is contained in `β × β` for some `β` of cardinality `< c`.
+  -- By the inductive hypothesis, this means `#(β × β) < c`. Thus, `α × α` must have
+  -- cardinality `≤ c`.
+refine @card_le_card (type s) (typeLT α) le_of_forall_lt fun o h => ?_
+  obtain ⟨p, rfl⟩ := typein_surj s h
+  obtain ⟨q, hq'⟩ := exists_gt (g p)
+  rw [← hα]; rw [lt_ord]
+  apply lt_of_le_of_lt (b := #(Iio q) * #(Iio q))
+  · apply (Set.embeddingOfSubset { x | s x p } ..).cardinal_le.trans_eq (mk_setProd ..)
+    simp [s, f, Prod.Lex.lt_iff, subset_def]
+    grind
+  rcases lt_or_ge #(Iio q) ℵ₀ with hq | hq
+  · exact (mul_lt_aleph0 hq hq).trans_le hc
+  · have := mk_Iio_lt q hα
+    rwa [IH _ this hq]
 -/
 theorem mul_eq_self {c : Cardinal} (hc : ℵ₀ <= c) : c * c = c := by
   -- The only nontrivial part is `c * c ≤ c`. We prove it inductively.
@@ -525,7 +573,9 @@ theorem mul_le_max
   · rw [mul_eq_max_of_aleph0_le_left ha hb0]
     exact le_max_left _ _
   · rcases le_or_gt ℵ₀ b with hb | hb
-    · rw [mul_comm, mul_eq_max_of_aleph0_le_left hb ha0, m
+    · rw [mul_comm, mul_eq_max_of_aleph0_le_left hb ha0, max_comm]
+      exact le_max_left _ _
+    · exact le_max_of_le_right (mul_lt_aleph0 ha hb).le
 
 中文:
 定理 mul_le_max
@@ -538,7 +588,9 @@ theorem mul_le_max
   · rw [mul_eq_max_of_aleph0_le_left ha hb0]
     exact le_max_left _ _
   · rcases le_or_gt ℵ₀ b with hb | hb
-    · rw [mul_comm, mul_eq_max_of_aleph0_le_left hb ha0, m
+    · rw [mul_comm, mul_eq_max_of_aleph0_le_left hb ha0, max_comm]
+      exact le_max_left _ _
+    · exact le_max_of_le_right (mul_lt_aleph0 ha hb).le
 
 Depends on / 依赖: eq_or_ne, le_max_left, le_max_of_le_right, le_or_gt, max_comm, mul_comm, mul_eq_max_of_aleph0_le_left, mul_lt_aleph0
 -/
@@ -666,7 +718,37 @@ theorem mul_eq_left_iff
       use ha
       constructor
       · rw [← not_lt]
-        exact fun hb => ne_of_gt (hb.trans_le (le
+        exact fun hb => ne_of_gt (hb.trans_le (le_mul_left this)) h
+      · rintro rfl
+        apply this
+        rw [mul_zero] at h
+        exact h.symm
+    right
+    by_cases h2a : a = 0
+    · exact Or.inr h2a
+    have hb : b != 0 := by
+      rintro rfl
+      apply h2a
+      rw [mul_zero] at h
+      exact h.symm
+    left
+    rw [← h]; rw [mul_lt_aleph0_iff]; rw [lt_aleph0]; rw [lt_aleph0] at ha
+    rcases ha with (rfl | rfl | ⟨⟨n, rfl⟩, ⟨m, rfl⟩⟩)
+    · contradiction
+    · contradiction
+    rw [← Ne] at h2a
+    rw [← Cardinal.one_le_iff_ne_zero] at h2a hb
+    norm_cast at h2a hb h ⊢
+    apply le_antisymm _ hb
+    rw [← not_lt]
+    apply fun h2b => ne_of_gt _ h
+    conv_rhs => left; rw [← mul_one n]
+    rw [Nat.mul_lt_mul_left]
+    · exact id
+    apply Nat.lt_of_succ_le h2a
+  · rintro (⟨⟨ha, hab⟩, hb⟩ | rfl | rfl)
+    · rw [mul_eq_max_of_aleph0_le_left ha hb, max_eq_left hab]
+    all_goals simp
 
 中文:
 定理 mul_eq_left_iff
@@ -684,7 +766,37 @@ theorem mul_eq_left_iff
       use ha
       constructor
       · rw [← not_lt]
-        exact fun hb => ne_of_gt (hb.trans_le (le
+        exact fun hb => ne_of_gt (hb.trans_le (le_mul_left this)) h
+      · rintro rfl
+        apply this
+        rw [mul_zero] at h
+        exact h.symm
+    right
+    by_cases h2a : a = 0
+    · exact Or.inr h2a
+    have hb : b != 0 := by
+      rintro rfl
+      apply h2a
+      rw [mul_zero] at h
+      exact h.symm
+    left
+    rw [← h]; rw [mul_lt_aleph0_iff]; rw [lt_aleph0]; rw [lt_aleph0] at ha
+    rcases ha with (rfl | rfl | ⟨⟨n, rfl⟩, ⟨m, rfl⟩⟩)
+    · contradiction
+    · contradiction
+    rw [← Ne] at h2a
+    rw [← Cardinal.one_le_iff_ne_zero] at h2a hb
+    norm_cast at h2a hb h ⊢
+    apply le_antisymm _ hb
+    rw [← not_lt]
+    apply fun h2b => ne_of_gt _ h
+    conv_rhs => left; rw [← mul_one n]
+    rw [Nat.mul_lt_mul_left]
+    · exact id
+    apply Nat.lt_of_succ_le h2a
+  · rintro (⟨⟨ha, hab⟩, hb⟩ | rfl | rfl)
+    · rw [mul_eq_max_of_aleph0_le_left ha hb, max_eq_left hab]
+    all_goals simp
 
 Depends on / 依赖: Or.inr, aleph0_pos, and_assoc, h.symm, ha.not_gt, hb.trans_le, le_mul_left, le_or_gt, lt_aleph, lt_aleph0, max_le_iff, mul_lt_aleph0_iff, mul_zero, ne_of_gt, not_gt, not_lt, trans_le
 -/
@@ -1108,7 +1220,13 @@ theorem add_eq_left_iff
       intro hb
       exact hb.trans_le (self_le_add_left b a)
     right
-    rw [← h]; rw [add_lt_aleph0_iff]; rw [lt_aleph0]; rw [lt_al
+    rw [← h]; rw [add_lt_aleph0_iff]; rw [lt_aleph0]; rw [lt_aleph0] at ha
+    rcases ha with ⟨⟨n, rfl⟩, ⟨m, rfl⟩⟩
+    norm_cast at h ⊢
+    rw [← add_right_inj]; rw [h]; rw [add_zero]
+  · rintro (⟨h1, h2⟩ | h3)
+    · rw [add_eq_max h1, max_eq_left h2]
+    · rw [h3, add_zero]
 
 中文:
 定理 add_eq_left_iff
@@ -1125,7 +1243,13 @@ theorem add_eq_left_iff
       intro hb
       exact hb.trans_le (self_le_add_left b a)
     right
-    rw [← h]; rw [add_lt_aleph0_iff]; rw [lt_aleph0]; rw [lt_al
+    rw [← h]; rw [add_lt_aleph0_iff]; rw [lt_aleph0]; rw [lt_aleph0] at ha
+    rcases ha with ⟨⟨n, rfl⟩, ⟨m, rfl⟩⟩
+    norm_cast at h ⊢
+    rw [← add_right_inj]; rw [h]; rw [add_zero]
+  · rintro (⟨h1, h2⟩ | h3)
+    · rw [add_eq_max h1, max_eq_left h2]
+    · rw [h3, add_zero]
 
 Depends on / 依赖: add_eq_max, add_lt_aleph0_iff, add_right_inj, add_zero, hb.trans_le, le_or_gt, lt_aleph0, max_eq_left, max_le_iff, ne_of_gt, not_lt, self_le_add_left, trans_le
 -/
@@ -1310,7 +1434,15 @@ theorem eq_of_add_eq_add_left
       rw [← not_le]
       intro hc
       apply lt_irrefl ℵ₀
-      apply (hc.trans (self_le_add_left _ 
+      apply (hc.trans (self_le_add_left _ a)).trans_lt
+      rw [← h]
+      apply add_lt_aleph0 ha hb
+    rw [lt_aleph0] at *
+    rcases ha with ⟨n, rfl⟩
+    rcases hb with ⟨m, rfl⟩
+    rcases hc with ⟨k, rfl⟩
+    norm_cast at h ⊢
+    apply add_left_cancel h
 
 中文:
 定理 eq_of_add_eq_add_left
@@ -1324,7 +1456,15 @@ theorem eq_of_add_eq_add_left
       rw [← not_le]
       intro hc
       apply lt_irrefl ℵ₀
-      apply (hc.trans (self_le_add_left _ 
+      apply (hc.trans (self_le_add_left _ a)).trans_lt
+      rw [← h]
+      apply add_lt_aleph0 ha hb
+    rw [lt_aleph0] at *
+    rcases ha with ⟨n, rfl⟩
+    rcases hb with ⟨m, rfl⟩
+    rcases hc with ⟨k, rfl⟩
+    norm_cast at h ⊢
+    apply add_left_cancel h
 -/
 protected theorem eq_of_add_eq_add_left {a b c : Cardinal} (h : a + b = a + c) (ha : a < ℵ₀) :
     b = c := by
@@ -1417,7 +1557,11 @@ theorem ciSup_add
   refine le_antisymm ?_ (ciSup_le' this)
   have bdd : BddAbove (range (f · + c)) := ⟨_, forall_mem_range.mpr this⟩
   obtain hs | hs := lt_or_ge (⨆ i, f i) ℵ₀
-  · obtain ⟨i, hi⟩ := exists_eq_ciSup_of_not_isSuccLimit hf (not_isSuc
+  · obtain ⟨i, hi⟩ := exists_eq_ciSup_of_not_isSuccLimit hf (not_isSuccLimit_of_lt_aleph0 hs)
+    exact hi ▸ le_ciSup bdd i
+  rw [add_eq_max hs]; rw [max_le_iff]
+  exact ⟨ciSup_mono bdd fun i => self_le_add_right _ c,
+    (self_le_add_left _ _).trans (le_ciSup bdd <| Classical.arbitrary ι)⟩
 
 中文:
 定理 ciSup_add
@@ -1427,7 +1571,11 @@ theorem ciSup_add
   refine le_antisymm ?_ (ciSup_le' this)
   have bdd : BddAbove (range (f · + c)) := ⟨_, forall_mem_range.mpr this⟩
   obtain hs | hs := lt_or_ge (⨆ i, f i) ℵ₀
-  · obtain ⟨i, hi⟩ := exists_eq_ciSup_of_not_isSuccLimit hf (not_isSuc
+  · obtain ⟨i, hi⟩ := exists_eq_ciSup_of_not_isSuccLimit hf (not_isSuccLimit_of_lt_aleph0 hs)
+    exact hi ▸ le_ciSup bdd i
+  rw [add_eq_max hs]; rw [max_le_iff]
+  exact ⟨ciSup_mono bdd fun i => self_le_add_right _ c,
+    (self_le_add_left _ _).trans (le_ciSup bdd <| Classical.arbitrary ι)⟩
 -/
 protected theorem ciSup_add (hf : BddAbove (range f)) (c : Cardinal.{v}) :
     (⨆ i, f i) + c = ⨆ i, f i + c := by
@@ -1495,7 +1643,17 @@ theorem ciSup_mul
   by_cases hf : BddAbove (range f); swap
   · have hfc : ¬ BddAbove (range (f · * c)) := fun bdd => hf
       ⟨⨆ i, f i * c, forall_mem_range.mpr fun i => (le_mul_right h0).trans (le_ciSup bdd i)⟩
-    simp [iSup, csSup_
+    simp [iSup, csSup_of_not_bddAbove, hf, hfc]
+  have (i : ι) : f i * c <= (⨆ i, f i) * c := by grw [← le_ciSup hf i]
+  refine le_antisymm ?_ (ciSup_le' this)
+  have bdd : BddAbove (range (f · * c)) := ⟨_, forall_mem_range.mpr this⟩
+  obtain hs | hs := lt_or_ge (⨆ i, f i) ℵ₀
+  · obtain ⟨i, hi⟩ := exists_eq_ciSup_of_not_isSuccLimit hf (not_isSuccLimit_of_lt_aleph0 hs)
+    exact hi ▸ le_ciSup bdd i
+  rw [mul_eq_max_of_aleph0_le_left hs h0]; rw [max_le_iff]
+  obtain ⟨i, hi⟩ := exists_lt_of_lt_ciSup' (one_lt_aleph0.trans_le hs)
+  exact ⟨ciSup_mono bdd fun i => le_mul_right h0,
+    (le_mul_left (zero_lt_one.trans hi).ne').trans (le_ciSup bdd i)⟩
 
 中文:
 定理 ciSup_mul
@@ -1507,7 +1665,17 @@ theorem ciSup_mul
   by_cases hf : BddAbove (range f); swap
   · have hfc : ¬ BddAbove (range (f · * c)) := fun bdd => hf
       ⟨⨆ i, f i * c, forall_mem_range.mpr fun i => (le_mul_right h0).trans (le_ciSup bdd i)⟩
-    simp [iSup, csSup_
+    simp [iSup, csSup_of_not_bddAbove, hf, hfc]
+  have (i : ι) : f i * c <= (⨆ i, f i) * c := by grw [← le_ciSup hf i]
+  refine le_antisymm ?_ (ciSup_le' this)
+  have bdd : BddAbove (range (f · * c)) := ⟨_, forall_mem_range.mpr this⟩
+  obtain hs | hs := lt_or_ge (⨆ i, f i) ℵ₀
+  · obtain ⟨i, hi⟩ := exists_eq_ciSup_of_not_isSuccLimit hf (not_isSuccLimit_of_lt_aleph0 hs)
+    exact hi ▸ le_ciSup bdd i
+  rw [mul_eq_max_of_aleph0_le_left hs h0]; rw [max_le_iff]
+  obtain ⟨i, hi⟩ := exists_lt_of_lt_ciSup' (one_lt_aleph0.trans_le hs)
+  exact ⟨ciSup_mono bdd fun i => le_mul_right h0,
+    (le_mul_left (zero_lt_one.trans hi).ne').trans (le_ciSup bdd i)⟩
 -/
 protected theorem ciSup_mul (c : Cardinal.{v}) : (⨆ i, f i) * c = ⨆ i, f i * c := by
   cases isEmpty_or_nonempty ι; · simp
@@ -1873,7 +2041,8 @@ lemma add_lt_add
   · refine add_lt_of_lt hinf ?_ ?_ <;> apply lt_of_lt_of_le <;> solve | assumption | simp
   · have hfin_ : κ₂ < ℵ₀ ∧ μ₂ < ℵ₀ := add_lt_aleph0_iff.1 hfin
     apply lt_of_le_of_lt
-    · exact (add_le_add_iff_of_lt_aleph0 (hμ.trans hfin_.right)).mpr hκ
+    · exact (add_le_add_iff_of_lt_aleph0 (hμ.trans hfin_.right)).mpr hκ.le
+    · simpa [add_comm] using (add_lt_add_iff_of_right_lt_aleph0 hfin_.left).mpr hμ
 
 中文:
 引理 add_lt_add
@@ -1883,7 +2052,8 @@ lemma add_lt_add
   · refine add_lt_of_lt hinf ?_ ?_ <;> apply lt_of_lt_of_le <;> solve | assumption | simp
   · have hfin_ : κ₂ < ℵ₀ ∧ μ₂ < ℵ₀ := add_lt_aleph0_iff.1 hfin
     apply lt_of_le_of_lt
-    · exact (add_le_add_iff_of_lt_aleph0 (hμ.trans hfin_.right)).mpr hκ
+    · exact (add_le_add_iff_of_lt_aleph0 (hμ.trans hfin_.right)).mpr hκ.le
+    · simpa [add_comm] using (add_lt_add_iff_of_right_lt_aleph0 hfin_.left).mpr hμ
 -/
 protected lemma add_lt_add {κ₁ κ₂ μ₁ μ₂ : Cardinal}
     (hκ : κ₁ < κ₂) (hμ : μ₁ < μ₂) : κ₁ + μ₁ < κ₂ + μ₂ := by
@@ -2222,7 +2392,10 @@ theorem prod_eq_two_power
   apply le_antisymm
   · refine (prod_le_prod _ _ h₂).trans_eq ?_
     rw [prod_const]; rw [lift_lift]; rw [← lift_power]; rw [power_self_eq (aleph0_le_mk ι)]; rw [lift_umax.{u]; rw [v}]
-  · rw [← prod_const',
+  · rw [← prod_const', lift_prod]
+    refine prod_le_prod _ _ fun i => ?_
+    rw [lift_two]; rw [← lift_two.{u]; rw [v}]; rw [lift_le]
+    exact h₁ i
 
 中文:
 定理 prod_eq_two_power
@@ -2232,7 +2405,10 @@ theorem prod_eq_two_power
   apply le_antisymm
   · refine (prod_le_prod _ _ h₂).trans_eq ?_
     rw [prod_const]; rw [lift_lift]; rw [← lift_power]; rw [power_self_eq (aleph0_le_mk ι)]; rw [lift_umax.{u]; rw [v}]
-  · rw [← prod_const',
+  · rw [← prod_const', lift_prod]
+    refine prod_le_prod _ _ fun i => ?_
+    rw [lift_two]; rw [← lift_two.{u]; rw [v}]; rw [lift_le]
+    exact h₁ i
 
 Depends on / 依赖: aleph0_le_mk, le_antisymm, lift_id, lift_le, lift_lift, lift_power, lift_prod, lift_two, lift_two_power, lift_umax, power_self_eq, prod_const, prod_le_prod, trans_eq
 -/
@@ -2662,7 +2838,11 @@ theorem mk_perm_eq_self_power
     suffices Nonempty ((α -> Bool) ↪ Equiv.Perm (α × Bool)) by
       obtain ⟨e⟩ : Nonempty (α ≃ α × Bool) := by simp [← Cardinal.eq, mul_two]
       simp only [← le_def, mk_pi, mk_fintype, Fintype.card_bool, Nat.cast_ofNat,
- 
+        prod_const, lift_ofNat, lift_uzero] at this
+      rwa [← power_def, power_self_eq (aleph0_le_mk α), e.permCongr.cardinal_eq]
+    refine ⟨⟨fun f => Involutive.toPerm (fun x => ⟨x.1, xor (f x.1) x.2⟩) fun x => ?_, fun f g h => ?_⟩⟩
+    · simp_rw [← Bool.xor_assoc, Bool.xor_self, Bool.false_xor]
+    · ext a; rw [← (f a).xor_false, ← (g a).xor_false]; exact congr(($h ⟨a, false⟩).2)
 
 中文:
 定理 mk_perm_eq_self_power
@@ -2671,7 +2851,11 @@ theorem mk_perm_eq_self_power
     suffices Nonempty ((α -> Bool) ↪ Equiv.Perm (α × Bool)) by
       obtain ⟨e⟩ : Nonempty (α ≃ α × Bool) := by simp [← Cardinal.eq, mul_two]
       simp only [← le_def, mk_pi, mk_fintype, Fintype.card_bool, Nat.cast_ofNat,
- 
+        prod_const, lift_ofNat, lift_uzero] at this
+      rwa [← power_def, power_self_eq (aleph0_le_mk α), e.permCongr.cardinal_eq]
+    refine ⟨⟨fun f => Involutive.toPerm (fun x => ⟨x.1, xor (f x.1) x.2⟩) fun x => ?_, fun f g h => ?_⟩⟩
+    · simp_rw [← Bool.xor_assoc, Bool.xor_self, Bool.false_xor]
+    · ext a; rw [← (f a).xor_false, ← (g a).xor_false]; exact congr(($h ⟨a, false⟩).2)
 
 Depends on / 依赖: Cardinal, Cardinal.eq, Equiv.Perm, Fintype, Fintype.card_bool, Involutive, Involutive.toPerm, Nat.cast_ofNat, Nonempty, aleph0_le_mk, antisymm, card_bool, cardinal_eq, cast_ofNat, e.permCongr.cardinal_eq, le_def, lift_ofNat, lift_uzero, mk_embedding_le_arrow, mk_equiv_le_embedding
 -/
@@ -2814,7 +2998,7 @@ theorem mk_embedding_eq_arrow_of_lift_le
       (Cardinal.eq.mp <| mul_eq_self <| aleph0_le_mk α).some).cardinal_eq]
     obtain ⟨e⟩ := lift_mk_le'.mp lle
     exact ⟨⟨fun f => ⟨fun b => ⟨e b, f b⟩, fun _ _ h => e.injective congr(Prod.fst $h)⟩,
-     
+      fun f g h => funext fun b => congr(Prod.snd <| $h b)⟩⟩
 
 中文:
 定理 mk_embedding_eq_arrow_of_lift_le
@@ -2824,7 +3008,7 @@ theorem mk_embedding_eq_arrow_of_lift_le
       (Cardinal.eq.mp <| mul_eq_self <| aleph0_le_mk α).some).cardinal_eq]
     obtain ⟨e⟩ := lift_mk_le'.mp lle
     exact ⟨⟨fun f => ⟨fun b => ⟨e b, f b⟩, fun _ _ h => e.injective congr(Prod.fst $h)⟩,
-     
+      fun f g h => funext fun b => congr(Prod.snd <| $h b)⟩⟩
 
 Depends on / 依赖: Cardinal, Cardinal.eq.mp, Equiv.embeddingCongr, Prod.fst, Prod.snd, aleph0_le_mk, antisymm, cardinal_eq, conv_rhs, e.injective, embeddingCongr, injective, lift_mk_le, mk_embedding_le_arrow, mul_eq_self
 -/
@@ -2867,7 +3051,9 @@ theorem mk_surjective_eq_arrow_of_lift_le
     have ⟨e⟩ : Nonempty (α ≃ α oplus β') := by
       simp_rw [← lift_mk_eq', mk_sum, lift_add, lift_lift]; rw [lift_umax.{u, v}, eq_comm]
       exact add_eq_left (aleph0_le_lift.mpr <| aleph0_le_mk α) lle
-    ⟨⟨fun f => ⟨fun a => (e a).elim f id, fun b => ⟨e.symm (.inr b), con
+    ⟨⟨fun f => ⟨fun a => (e a).elim f id, fun b => ⟨e.symm (.inr b), congr_arg _ (e.right_inv _)⟩⟩,
+      fun f g h => funext fun a => by
+        simpa only [e.apply_symm_apply] using! congr_fun (Subtype.ext_iff.mp h) (e.symm <| .inl a)⟩⟩
 
 中文:
 定理 mk_surjective_eq_arrow_of_lift_le
@@ -2876,7 +3062,9 @@ theorem mk_surjective_eq_arrow_of_lift_le
     have ⟨e⟩ : Nonempty (α ≃ α oplus β') := by
       simp_rw [← lift_mk_eq', mk_sum, lift_add, lift_lift]; rw [lift_umax.{u, v}, eq_comm]
       exact add_eq_left (aleph0_le_lift.mpr <| aleph0_le_mk α) lle
-    ⟨⟨fun f => ⟨fun a => (e a).elim f id, fun b => ⟨e.symm (.inr b), con
+    ⟨⟨fun f => ⟨fun a => (e a).elim f id, fun b => ⟨e.symm (.inr b), congr_arg _ (e.right_inv _)⟩⟩,
+      fun f g h => funext fun a => by
+        simpa only [e.apply_symm_apply] using! congr_fun (Subtype.ext_iff.mp h) (e.symm <| .inl a)⟩⟩
 
 Depends on / 依赖: Nonempty, Subtype, Subtype.ext_iff.mp, add_eq_left, aleph0_le_lift, aleph0_le_lift.mpr, aleph0_le_mk, antisymm, apply_symm_apply, congr_arg, congr_fun, e.apply_symm_apply, e.right_inv, e.symm, eq_comm, ext_iff, lift_add, lift_lift, lift_mk_eq, lift_umax
 -/
@@ -2926,7 +3114,7 @@ le_antisymm ((le_def _ _).2 ⟨⟨fun a => [a], fun _ => by simp⟩⟩)
       calc
         #(List α) = sum fun n : Nat => #α ^ (n : Cardinal.{u}) := mk_list_eq_sum_pow α
         _ <= sum fun _ : Nat => #α := sum_le_sum _ _ fun n => pow_le H1 natCast_lt_aleph0
-   
+        _ = #α := by simp [H1]
 
 中文:
 定理 mk_list_eq_mk
@@ -2938,7 +3126,7 @@ le_antisymm ((le_def _ _).2 ⟨⟨fun a => [a], fun _ => by simp⟩⟩)
       calc
         #(List α) = sum fun n : Nat => #α ^ (n : Cardinal.{u}) := mk_list_eq_sum_pow α
         _ <= sum fun _ : Nat => #α := sum_le_sum _ _ fun n => pow_le H1 natCast_lt_aleph0
-   
+        _ = #α := by simp [H1]
 
 Depends on / 依赖: Cardinal, Eq.symm, aleph0_le_mk, le_antisymm, le_def, mk_list_eq_sum_pow, natCast_lt_aleph0, pow_le, sum_le_sum
 -/
@@ -3167,7 +3355,27 @@ theorem mk_bounded_set_le_of_infinite
     apply mk_range_le
   rintro ⟨s, ⟨g⟩⟩
   classical
-  use fun 
+  use fun y => if h : exists x : s, g x = y then Sum.inl (Classical.choose h).val
+               else Sum.inr (ULift.up 0)
+  apply Subtype.ext; ext x
+  constructor
+  · rintro ⟨y, h⟩
+    dsimp only at h
+    by_cases h' : exists z : s, g z = y
+    · rw [dif_pos h'] at h
+      cases Sum.inl.inj h
+      exact (Classical.choose h').2
+    · rw [dif_neg h'] at h
+      cases h
+  · intro h
+    have : exists z : s, g z = g ⟨x, h⟩ := ⟨⟨x, h⟩, rfl⟩
+    use g ⟨x, h⟩
+    dsimp only
+    rw [dif_pos this]
+    congr
+    suffices Classical.choose this = ⟨x, h⟩ from congr_arg Subtype.val this
+    apply g.2
+    exact Classical.choose_spec this
 
 中文:
 定理 mk_bounded_set_le_of_infinite
@@ -3182,7 +3390,27 @@ theorem mk_bounded_set_le_of_infinite
     apply mk_range_le
   rintro ⟨s, ⟨g⟩⟩
   classical
-  use fun 
+  use fun y => if h : exists x : s, g x = y then Sum.inl (Classical.choose h).val
+               else Sum.inr (ULift.up 0)
+  apply Subtype.ext; ext x
+  constructor
+  · rintro ⟨y, h⟩
+    dsimp only at h
+    by_cases h' : exists z : s, g z = y
+    · rw [dif_pos h'] at h
+      cases Sum.inl.inj h
+      exact (Classical.choose h').2
+    · rw [dif_neg h'] at h
+      cases h
+  · intro h
+    have : exists z : s, g z = g ⟨x, h⟩ := ⟨⟨x, h⟩, rfl⟩
+    use g ⟨x, h⟩
+    dsimp only
+    rw [dif_pos this]
+    congr
+    suffices Classical.choose this = ⟨x, h⟩ from congr_arg Subtype.val this
+    apply g.2
+    exact Classical.choose_spec this
 
 Depends on / 依赖: Cardinal, Cardinal.inductionOn, Classical, Classical.choose, Subtype, Subtype.ext, Sum.inl, Sum.inl.inj, Sum.inr, ULift.up, add_one_eq, aleph0_le_mk, classical, dif_pos, fapply, inductionOn, le_trans, mk_le_of_surjective, mk_preimage_of_injective, mk_range_le
 -/
@@ -3234,7 +3462,7 @@ theorem mk_bounded_set_le
     intro s hs
     exact mk_image_le.trans hs
   apply (mk_bounded_set_le_of_infinite ((ULift.{u} Nat) oplus α) c).trans
-  rw [max
+  rw [max_comm]; rw [← add_eq_max] <;> rfl
 
 中文:
 定理 mk_bounded_set_le
@@ -3248,7 +3476,7 @@ theorem mk_bounded_set_le
     intro s hs
     exact mk_image_le.trans hs
   apply (mk_bounded_set_le_of_infinite ((ULift.{u} Nat) oplus α) c).trans
-  rw [max
+  rw [max_comm]; rw [← add_eq_max] <;> rfl
 
 Depends on / 依赖: Embedding, Embedding.image, Embedding.subtypeMap, Sum.inr, Sum.inr.inj, add_eq_max, max_comm, mk_bounded_set_le_of_infinite, mk_image_le, mk_image_le.trans, subtypeMap
 -/
@@ -3278,7 +3506,7 @@ theorem mk_bounded_subset_le
     apply Subtype.ext
     dsimp only at h ⊢
     refine (preimage_eq_preimage' ?_ ?_).1 h <;> rw [Subtype.range_coe] <;> assumption
-  rintr
+  rintro ⟨t, _, h2t⟩; exact (mk_preimage_of_injective _ _ Subtype.val_injective).trans h2t
 
 中文:
 定理 mk_bounded_subset_le
@@ -3291,7 +3519,7 @@ theorem mk_bounded_subset_le
     apply Subtype.ext
     dsimp only at h ⊢
     refine (preimage_eq_preimage' ?_ ?_).1 h <;> rw [Subtype.range_coe] <;> assumption
-  rintr
+  rintro ⟨t, _, h2t⟩; exact (mk_preimage_of_injective _ _ Subtype.val_injective).trans h2t
 
 Depends on / 依赖: Embedding, Embedding.codRestrict, Subtype, Subtype.ext, Subtype.range_coe, Subtype.val_injective, codRestrict, le_trans, mk_bounded_set_le, mk_preimage_of_injective, preimage_eq_preimage, range_coe, val_injective
 -/
@@ -3393,7 +3621,9 @@ theorem mk_compl_eq_mk_compl_finite_lift
   classical
     lift s to Finset α using s.toFinite
     lift t to Finset β using t.toFinite
-    simp only [Finset.c
+    simp only [Finset.coe_sort_coe, mk_fintype, Fintype.card_coe, lift_natCast, Nat.cast_inj] at h2
+    simp only [← Finset.coe_compl, Finset.coe_sort_coe, mk_coe_finset, Finset.card_compl,
+      lift_natCast, h1, h2]
 
 中文:
 定理 mk_compl_eq_mk_compl_finite_lift
@@ -3405,7 +3635,9 @@ theorem mk_compl_eq_mk_compl_finite_lift
   classical
     lift s to Finset α using s.toFinite
     lift t to Finset β using t.toFinite
-    simp only [Finset.c
+    simp only [Finset.coe_sort_coe, mk_fintype, Fintype.card_coe, lift_natCast, Nat.cast_inj] at h2
+    simp only [← Finset.coe_compl, Finset.coe_sort_coe, mk_coe_finset, Finset.card_compl,
+      lift_natCast, h1, h2]
 
 Depends on / 依赖: Finset, Finset.card_compl, Finset.coe_compl, Finset.coe_sort_coe, Fintype, Fintype.card, Fintype.card_coe, Fintype.ofEquiv, Fintype.ofEquiv_card, Nat.cast_inj, card_coe, card_compl, cast_inj, classical, coe_compl, coe_sort_coe, lift_mk_eq, lift_natCast, mk_coe_finset, mk_fintype
 -/
@@ -3554,7 +3786,7 @@ theorem extend_function_of_lt
     have := Infinite.of_injective _ g.injective
     rw [← lift_mk_eq'] at h ⊢
     rwa [mk_compl_of_infinite s hs, mk_compl_of_infinite]
-    rwa [← lift_lt, mk_range_eq_of_injective 
+    rwa [← lift_lt, mk_range_eq_of_injective f.injective, ← h, lift_lt]
 
 中文:
 定理 extend_function_of_lt
@@ -3567,7 +3799,7 @@ theorem extend_function_of_lt
     have := Infinite.of_injective _ g.injective
     rw [← lift_mk_eq'] at h ⊢
     rwa [mk_compl_of_infinite s hs, mk_compl_of_infinite]
-    rwa [← lift_lt, mk_range_eq_of_injective 
+    rwa [← lift_lt, mk_range_eq_of_injective f.injective, ← h, lift_lt]
 
 Depends on / 依赖: Infinite, Infinite.of_injective, extend_function, extend_function_finite, f.injective, fintypeOrInfinite, g.injective, injective, lift_lt, lift_mk_eq, mk_compl_of_infinite, mk_range_eq_of_injective, of_injective
 -/

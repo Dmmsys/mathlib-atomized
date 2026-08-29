@@ -42,7 +42,20 @@ definition checkCoreAux
     try
       for c in (← realizeGlobalConstWithInfos term) do
 addCompletionInfo .id term id.getId (danglingDot := false) {} none
-logInfoAt tk ← do if showImplicit then pure .signature c 
+logInfoAt tk ← do if showImplicit then pure .signature c else
+pure m!"{.ofConstName c}{delabSignatureWithoutImplicit (← getConstInfo c).type}"
+        return
+    catch _ => pure () -- identifier might not be a constant but constant + projection
+  -- TODO: handle expressions in `#check'`. Currently it behaves the same as `#check` here.
+  let e ← Term.elabTerm term none
+  Term.synthesizeSyntheticMVarsNoPostponing (ignoreStuckTC := true)
+  -- Users might be testing out buggy elaborators. Let's typecheck before proceeding:
+withRef tk Meta.check e
+  let e ← Term.levelMVarToParam (← instantiateMVars e)
+  if e.isSyntheticSorry then
+    return
+  let type ← inferType e
+  logInfoAt tk m!"{e} : {type}"
 
 中文:
 定义 checkCoreAux
@@ -53,7 +66,20 @@ logInfoAt tk ← do if showImplicit then pure .signature c
     try
       for c in (← realizeGlobalConstWithInfos term) do
 addCompletionInfo .id term id.getId (danglingDot := false) {} none
-logInfoAt tk ← do if showImplicit then pure .signature c 
+logInfoAt tk ← do if showImplicit then pure .signature c else
+pure m!"{.ofConstName c}{delabSignatureWithoutImplicit (← getConstInfo c).type}"
+        return
+    catch _ => pure () -- identifier might not be a constant but constant + projection
+  -- TODO: handle expressions in `#check'`. Currently it behaves the same as `#check` here.
+  let e ← Term.elabTerm term none
+  Term.synthesizeSyntheticMVarsNoPostponing (ignoreStuckTC := true)
+  -- Users might be testing out buggy elaborators. Let's typecheck before proceeding:
+withRef tk Meta.check e
+  let e ← Term.levelMVarToParam (← instantiateMVars e)
+  if e.isSyntheticSorry then
+    return
+  let type ← inferType e
+  logInfoAt tk m!"{e} : {type}"
 -/
 partial def checkCoreAux (tk : Syntax) (term : Term) (showImplicit : Bool) : TermElabM Unit :=
   Term.withDeclName `_check do

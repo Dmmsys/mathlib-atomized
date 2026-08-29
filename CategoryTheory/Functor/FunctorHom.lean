@@ -78,7 +78,7 @@ definition homObjEquiv
     ext x
     simpa using! (a.naturality_apply φ) (x, y)⟩
   left_inv _ := by aesop
-  right_inv _ :=
+  right_inv _ := by aesop
 
 中文:
 定义 homObjEquiv
@@ -90,7 +90,7 @@ definition homObjEquiv
     ext x
     simpa using! (a.naturality_apply φ) (x, y)⟩
   left_inv _ := by aesop
-  right_inv _ :=
+  right_inv _ := by aesop
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, a.app, a.naturality, a.naturality_apply, congr_hom, invFun, left_inv, naturality, naturality_apply, right_inv
 -/
@@ -305,7 +305,16 @@ definition functorHomEquiv
         rw [← (φ.app X a).naturality f (𝟙 _)]
         have := HomObj.congr_app (ConcreteCategory.congr_hom (φ.naturality f) a) Y (𝟙 _)
         simp_all [-NatTrans.naturality, functorHom, homObjFunctor] }
-  invFun x :
+  invFun x :=
+    { app X := ↾fun a => { app := fun Y f => x.app Y (A.map f a) }
+      naturality X Y f := by
+        ext
+        simp [functorHom, homObjFunctor] }
+  left_inv φ := by
+    ext X a Y f
+    exact (HomObj.congr_app (ConcreteCategory.congr_hom (φ.naturality f) a) Y (𝟙 _)).trans
+      (congr_arg ((φ.app X a).app Y) (by simp))
+  right_inv x := by simp [functorHom, homObjFunctor]
 
 中文:
 定义 functorHomEquiv
@@ -315,7 +324,16 @@ definition functorHomEquiv
         rw [← (φ.app X a).naturality f (𝟙 _)]
         have := HomObj.congr_app (ConcreteCategory.congr_hom (φ.naturality f) a) Y (𝟙 _)
         simp_all [-NatTrans.naturality, functorHom, homObjFunctor] }
-  invFun x :
+  invFun x :=
+    { app X := ↾fun a => { app := fun Y f => x.app Y (A.map f a) }
+      naturality X Y f := by
+        ext
+        simp [functorHom, homObjFunctor] }
+  left_inv φ := by
+    ext X a Y f
+    exact (HomObj.congr_app (ConcreteCategory.congr_hom (φ.naturality f) a) Y (𝟙 _)).trans
+      (congr_arg ((φ.app X a).app Y) (by simp))
+  right_inv x := by simp [functorHom, homObjFunctor]
 
 Depends on / 依赖: A.map, ConcreteCategory, ConcreteCategory.congr_hom, HomObj, HomObj.congr_app, NatTrans, NatTrans.naturality, congr_app, congr_hom, functorHom, homObjFunctor, invFun, left_inv, naturality, x.app
 -/
@@ -356,7 +374,12 @@ definition natTransEquiv
     have := HomObj.congr_app (ConcreteCategory.congr_hom (f.naturality φ) PUnit.unit) Y (𝟙 Y)
     dsimp [functorHom, homObjFunctor] at this
     aesop ⟩
-  invFun f := { app _ :=
+  invFun f := { app _ := ↾fun _ => HomObj.ofNatTrans f }
+  left_inv f := by
+    ext X a Y φ
+    have := HomObj.congr_app (ConcreteCategory.congr_hom (f.naturality φ) PUnit.unit) Y (𝟙 Y)
+    dsimp [functorHom, homObjFunctor] at this
+    aesop
 
 中文:
 定义 natTransEquiv
@@ -368,7 +391,12 @@ definition natTransEquiv
     have := HomObj.congr_app (ConcreteCategory.congr_hom (f.naturality φ) PUnit.unit) Y (𝟙 Y)
     dsimp [functorHom, homObjFunctor] at this
     aesop ⟩
-  invFun f := { app _ :=
+  invFun f := { app _ := ↾fun _ => HomObj.ofNatTrans f }
+  left_inv f := by
+    ext X a Y φ
+    have := HomObj.congr_app (ConcreteCategory.congr_hom (f.naturality φ) PUnit.unit) Y (𝟙 Y)
+    dsimp [functorHom, homObjFunctor] at this
+    aesop
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, HomObj, HomObj.congr_app, HomObj.ofNatTrans, PUnit.unit, congr_app, congr_hom, f.app, f.naturality, functorHom, homObjFunctor, invFun, left_inv, naturality, ofNatTrans
 -/

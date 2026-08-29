@@ -59,7 +59,9 @@ definition sectionsEquivOfHasPullbacks
       conv_rhs => rw [← pullback.lift_snd _ _ hgij]
       rw [op_comp]; rw [Functor.map_comp]; rw [op_comp]; rw [Functor.map_comp]
       simp [heq]⟩
-  invFun s := ⟨
+  invFun s := ⟨s.val, fun r => s.property _ _ _ _ _ pullback.condition⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
 
 中文:
 定义 sectionsEquivOfHasPullbacks
@@ -71,7 +73,9 @@ definition sectionsEquivOfHasPullbacks
       conv_rhs => rw [← pullback.lift_snd _ _ hgij]
       rw [op_comp]; rw [Functor.map_comp]; rw [op_comp]; rw [Functor.map_comp]
       simp [heq]⟩
-  invFun s := ⟨
+  invFun s := ⟨s.val, fun r => s.property _ _ _ _ _ pullback.condition⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
 
 Depends on / 依赖: Functor, Functor.map_comp, condition, conv_rhs, invFun, left_inv, lift_fst, lift_snd, map_comp, op_comp, property, pullback, pullback.condition, pullback.lift_fst, pullback.lift_snd, right_inv, s.property, s.val
 -/
@@ -132,7 +136,10 @@ lemma Precoverage.ZeroHypercover.Hom.isSheafFor_iff
     intro i
     rw [← f.w₀]
     exact ⟨_, f.h₀ i, 𝒱.f _, ⟨_⟩, rfl⟩
-  
+  · rwa [← Presieve.isSheafFor_iff_generate]
+  · intro Y f hf
+    rw [← Sieve.pullbackArrows_comm]; rw [← Presieve.isSeparatedFor_iff_generate]; rw [← Presieve.ofArrows_pullback]
+    apply H₂
 
 中文:
 引理 Precoverage.ZeroHypercover.态射.isSheafFor_iff
@@ -145,7 +152,10 @@ lemma Precoverage.ZeroHypercover.Hom.isSheafFor_iff
     intro i
     rw [← f.w₀]
     exact ⟨_, f.h₀ i, 𝒱.f _, ⟨_⟩, rfl⟩
-  
+  · rwa [← Presieve.isSheafFor_iff_generate]
+  · intro Y f hf
+    rw [← Sieve.pullbackArrows_comm]; rw [← Presieve.isSeparatedFor_iff_generate]; rw [← Presieve.ofArrows_pullback]
+    apply H₂
 
 Depends on / 依赖: Presieve, Presieve.isSeparatedFor_iff_generate, Presieve.isSheafFor_iff_generate, Presieve.isSheafFor_subsieve_aux, Presieve.ofArrows_le_iff, Presieve.ofArrows_pullback, Sieve.generate_le_iff, Sieve.generate_sieve, Sieve.pullbackArrows_comm, generate, generate_le_iff, generate_sieve, isSeparatedFor_iff_generate, isSheafFor_iff_generate, isSheafFor_subsieve_aux, ofArrows, ofArrows_le_iff, ofArrows_pullback, pullbackArrows_comm
 -/
@@ -345,7 +355,7 @@ definition IsStronglySheafFor.isLimitMultifork
   refine ⟨fun s t hst => ?_, fun s => ?_⟩
   · exact h.isSheafFor_presieve₀.isSeparatedFor.ext fun _ _ ⟨i⟩ => congr($(hst).val i)
   · exact ⟨h.amalgamate s.val fun i j k => s.property ⟨(i, j), k⟩, by
-      ext; exact map_amalgamate _ _ _
+      ext; exact map_amalgamate _ _ _ _⟩
 
 中文:
 定义 是StronglySheafFor.isLimitMultifork
@@ -356,7 +366,7 @@ definition IsStronglySheafFor.isLimitMultifork
   refine ⟨fun s t hst => ?_, fun s => ?_⟩
   · exact h.isSheafFor_presieve₀.isSeparatedFor.ext fun _ _ ⟨i⟩ => congr($(hst).val i)
   · exact ⟨h.amalgamate s.val fun i j k => s.property ⟨(i, j), k⟩, by
-      ext; exact map_amalgamate _ _ _
+      ext; exact map_amalgamate _ _ _ _⟩
 
 Depends on / 依赖: Multifork, Multifork.isLimit_types_iff, Nonempty, Nonempty.some, amalgamate, h.amalgamate, h.isSheafFor_presieve, isLimit_types_iff, isSeparatedFor, isSeparatedFor.ext, map_amalgamate, property, s.property, s.val
 -/
@@ -381,7 +391,26 @@ lemma IsStronglySheafFor.isSheafFor_sieve_of_pullback
   have hr : Presieve.Arrows.Compatible _ E.f s := by
     intro i j Z gi gj hgij
     refine (h₁.isSeparatedFor_sieve₁ gi gj hgij).ext fun Y f ⟨k, h, hf₁, hf₂⟩ => ?_
-    simp only [← comp_apply, ← Functor
+    simp only [← comp_apply, ← Functor.map_comp, ← op_comp, hf₁, hf₂]
+    simp only [op_comp, Functor.map_comp, comp_apply]
+    congr! 1
+    refine (H' k).ext fun W p hp => ?_
+    simp only [← comp_apply, ← Functor.map_comp, ← op_comp, hs i (p ≫ E.p₁ k) (by simpa),
+      hs j (p ≫ E.p₂ k) (by simpa [← E.w])]
+    dsimp only [Presieve.FamilyOfElements.pullback]
+    congr 1
+    simp [E.w]
+  obtain ⟨s', hs'⟩ := hr.exists_familyOfElements
+  obtain ⟨t', ht', hunique⟩ := (Presieve.isSheafFor_arrows_iff _ _).mp h₁.isSheafFor_presieve₀ _ hr
+  refine ⟨t', fun T f hf => (h₂ f).ext fun Z g hg => ?_, fun y hy => ?_⟩
+  · obtain ⟨W, w, u, ⟨i⟩, heq⟩ := hg
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]
+    have : t (g ≫ f) (by simp [hf]) = t (w ≫ E.f i) (by simp [heq, hf]) := by
+      congr 1
+      rw [heq]
+    simpa [← heq, ht' i, ← t.comp_of_compatible _ ht, this] using! hs i w _
+  · refine hunique _ fun i => huniq _ _ fun Z g hg => ?_
+    simp [Presieve.FamilyOfElements.pullback, ← hy _ hg]
 
 中文:
 引理 是StronglySheafFor.isSheafFor_sieve_of_pullback
@@ -392,7 +421,26 @@ lemma IsStronglySheafFor.isSheafFor_sieve_of_pullback
   have hr : Presieve.Arrows.Compatible _ E.f s := by
     intro i j Z gi gj hgij
     refine (h₁.isSeparatedFor_sieve₁ gi gj hgij).ext fun Y f ⟨k, h, hf₁, hf₂⟩ => ?_
-    simp only [← comp_apply, ← Functor
+    simp only [← comp_apply, ← Functor.map_comp, ← op_comp, hf₁, hf₂]
+    simp only [op_comp, Functor.map_comp, comp_apply]
+    congr! 1
+    refine (H' k).ext fun W p hp => ?_
+    simp only [← comp_apply, ← Functor.map_comp, ← op_comp, hs i (p ≫ E.p₁ k) (by simpa),
+      hs j (p ≫ E.p₂ k) (by simpa [← E.w])]
+    dsimp only [Presieve.FamilyOfElements.pullback]
+    congr 1
+    simp [E.w]
+  obtain ⟨s', hs'⟩ := hr.exists_familyOfElements
+  obtain ⟨t', ht', hunique⟩ := (Presieve.isSheafFor_arrows_iff _ _).mp h₁.isSheafFor_presieve₀ _ hr
+  refine ⟨t', fun T f hf => (h₂ f).ext fun Z g hg => ?_, fun y hy => ?_⟩
+  · obtain ⟨W, w, u, ⟨i⟩, heq⟩ := hg
+    rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]
+    have : t (g ≫ f) (by simp [hf]) = t (w ≫ E.f i) (by simp [heq, hf]) := by
+      congr 1
+      rw [heq]
+    simpa [← heq, ht' i, ← t.comp_of_compatible _ ht, this] using! hs i w _
+  · refine hunique _ fun i => huniq _ _ fun Z g hg => ?_
+    simp [Presieve.FamilyOfElements.pullback, ← hy _ hg]
 
 Depends on / 依赖: Arrows, Compatible, Functor, Functor.map_comp, Presieve, Presieve.Arrows.Compatible, comp_apply, ht.pullback, map_comp, op_comp, pullback, t.pullback
 -/

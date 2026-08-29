@@ -903,7 +903,9 @@ theorem mul_cpow_ofReal_nonneg
   · rw [ofReal_zero, zero_mul, zero_cpow hr, zero_mul]
   rcases eq_or_lt_of_le hb with (rfl | hb')
   · rw [ofReal_zero, mul_zero, zero_cpow hr, mul_zero]
-  have ha'' : (a : Complex
+  have ha'' : (a : Complex) != 0 := ofReal_ne_zero.mpr ha'.ne'
+  have hb'' : (b : Complex) != 0 := ofReal_ne_zero.mpr hb'.ne'
+  rw [cpow_def_of_ne_zero (mul_ne_zero ha'' hb'')]; rw [log_ofReal_mul ha' hb'']; rw [ofReal_log ha]; rw [add_mul]; rw [exp_add]; rw [← cpow_def_of_ne_zero ha'']; rw [← cpow_def_of_ne_zero hb'']
 
 中文:
 定理 mul_cpow_of实数_nonneg
@@ -915,7 +917,9 @@ theorem mul_cpow_ofReal_nonneg
   · rw [ofReal_zero, zero_mul, zero_cpow hr, zero_mul]
   rcases eq_or_lt_of_le hb with (rfl | hb')
   · rw [ofReal_zero, mul_zero, zero_cpow hr, mul_zero]
-  have ha'' : (a : Complex
+  have ha'' : (a : Complex) != 0 := ofReal_ne_zero.mpr ha'.ne'
+  have hb'' : (b : Complex) != 0 := ofReal_ne_zero.mpr hb'.ne'
+  rw [cpow_def_of_ne_zero (mul_ne_zero ha'' hb'')]; rw [log_ofReal_mul ha' hb'']; rw [ofReal_log ha]; rw [add_mul]; rw [exp_add]; rw [← cpow_def_of_ne_zero ha'']; rw [← cpow_def_of_ne_zero hb'']
 
 Depends on / 依赖: add_mul, cpow_def_of_ne_zero, cpow_zero, eq_or_lt_of_le, eq_or_ne, log_ofReal_mul, mul_ne_zero, mul_one, mul_zero, ofReal_log, ofReal_ne_zero, ofReal_ne_zero.mpr, ofReal_zero, zero_cpow, zero_mul
 -/

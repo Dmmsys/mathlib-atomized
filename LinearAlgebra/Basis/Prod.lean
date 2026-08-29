@@ -109,7 +109,7 @@ theorem prod_apply_inl_fst
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b.repr.apply_symm_apply,
       LinearEquiv.symm_symm, repr_self, Finsupp.fst_sumFinsuppLEquivProdFinsupp]
-    apply Finsupp.single_a
+    apply Finsupp.single_apply_left Sum.inl_injective
 
 中文:
 定理 prod_apply_inl_fst
@@ -120,7 +120,7 @@ theorem prod_apply_inl_fst
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b.repr.apply_symm_apply,
       LinearEquiv.symm_symm, repr_self, Finsupp.fst_sumFinsuppLEquivProdFinsupp]
-    apply Finsupp.single_a
+    apply Finsupp.single_apply_left Sum.inl_injective
 
 Depends on / 依赖: Basis.coe_ofRepr, Basis.prod, Finsupp, Finsupp.fst_sumFinsuppLEquivProdFinsupp, Finsupp.single_apply_left, LinearEquiv, LinearEquiv.prodCongr_apply, LinearEquiv.prodCongr_symm, LinearEquiv.symm_symm, LinearEquiv.symm_trans_apply, Sum.inl_injective, apply_symm_apply, b.repr.apply_symm_apply, b.repr.injective, coe_ofRepr, fst_sumFinsuppLEquivProdFinsupp, injective, inl_injective, prodCongr_apply, prodCongr_symm
 -/
@@ -145,7 +145,7 @@ theorem prod_apply_inr_fst
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b.repr.apply_symm_apply,
       LinearEquiv.symm_symm, Finsupp.fst_sumFinsuppLEquivProdFinsupp,
       map_zero, Finsupp.zero_apply]
- 
+    apply Finsupp.single_eq_of_ne Sum.inl_ne_inr
 
 中文:
 定理 prod_apply_inr_fst
@@ -157,7 +157,7 @@ theorem prod_apply_inr_fst
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b.repr.apply_symm_apply,
       LinearEquiv.symm_symm, Finsupp.fst_sumFinsuppLEquivProdFinsupp,
       map_zero, Finsupp.zero_apply]
- 
+    apply Finsupp.single_eq_of_ne Sum.inl_ne_inr
 
 Depends on / 依赖: Basis.coe_ofRepr, Basis.prod, Finsupp, Finsupp.fst_sumFinsuppLEquivProdFinsupp, Finsupp.single_eq_of_ne, Finsupp.zero_apply, LinearEquiv, LinearEquiv.prodCongr_apply, LinearEquiv.prodCongr_symm, LinearEquiv.symm_symm, LinearEquiv.symm_trans_apply, Sum.inl_ne_inr, apply_symm_apply, b.repr.apply_symm_apply, b.repr.injective, coe_ofRepr, fst_sumFinsuppLEquivProdFinsupp, injective, inl_ne_inr, map_zero
 -/
@@ -183,6 +183,7 @@ theorem prod_apply_inl_snd
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b'.repr.apply_symm_apply,
       LinearEquiv.symm_symm, Finsupp.snd_sumFinsuppLEquivProdFinsupp,
       map_zero, Finsupp.zero_apply]
+    apply Finsupp.single_eq_of_ne Sum.inr_ne_inl
 
 中文:
 定理 prod_apply_inl_snd
@@ -194,6 +195,7 @@ theorem prod_apply_inl_snd
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b'.repr.apply_symm_apply,
       LinearEquiv.symm_symm, Finsupp.snd_sumFinsuppLEquivProdFinsupp,
       map_zero, Finsupp.zero_apply]
+    apply Finsupp.single_eq_of_ne Sum.inr_ne_inl
 
 Depends on / 依赖: Basis.coe_ofRepr, Basis.prod, Finsupp, Finsupp.single_eq_of_ne, Finsupp.snd_sumFinsuppLEquivProdFinsupp, Finsupp.zero_apply, LinearEquiv, LinearEquiv.prodCongr_apply, LinearEquiv.prodCongr_symm, LinearEquiv.symm_symm, LinearEquiv.symm_trans_apply, Sum.inr_ne_inl, apply_symm_apply, coe_ofRepr, injective, inr_ne_inl, map_zero, prodCongr_apply, prodCongr_symm, repr.apply_symm_apply
 -/
@@ -218,7 +220,9 @@ theorem prod_apply_inr_snd
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b'.repr.apply_symm_apply,
       LinearEquiv.symm_symm, repr_self, Finsupp.snd_sumFinsuppLEquivProdFinsupp]
-    apply Finsupp.single
+    apply Finsupp.single_apply_left Sum.inr_injective
+
+@[simp]
 
 中文:
 定理 prod_apply_inr_snd
@@ -229,7 +233,9 @@ theorem prod_apply_inr_snd
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
       LinearEquiv.prodCongr_symm, LinearEquiv.prodCongr_apply, b'.repr.apply_symm_apply,
       LinearEquiv.symm_symm, repr_self, Finsupp.snd_sumFinsuppLEquivProdFinsupp]
-    apply Finsupp.single
+    apply Finsupp.single_apply_left Sum.inr_injective
+
+@[simp]
 
 Depends on / 依赖: Basis.coe_ofRepr, Basis.prod, Finsupp, Finsupp.single_apply_left, Finsupp.snd_sumFinsuppLEquivProdFinsupp, LinearEquiv, LinearEquiv.prodCongr_apply, LinearEquiv.prodCongr_symm, LinearEquiv.symm_symm, LinearEquiv.symm_trans_apply, Sum.inr_injective, apply_symm_apply, coe_ofRepr, injective, inr_injective, prodCongr_apply, prodCongr_symm, repr.apply_symm_apply, repr.injective, repr_self
 -/

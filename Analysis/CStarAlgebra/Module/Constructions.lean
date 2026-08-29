@@ -88,7 +88,8 @@ instance :
   inner_smul_right_complex := smul_mul_assoc ..
   star_inner x y := by simp
   norm_eq_sqrt_norm_inner_self {x} := by
-  
+    rw [← sq_eq_sq₀ (norm_nonneg _) (by positivity)]
+simpa [sq] using Eq.symm CStarRing.norm_self_mul_star
 
 中文:
 实例 :
@@ -101,7 +102,8 @@ instance :
   inner_smul_right_complex := smul_mul_assoc ..
   star_inner x y := by simp
   norm_eq_sqrt_norm_inner_self {x} := by
-  
+    rw [← sq_eq_sq₀ (norm_nonneg _) (by positivity)]
+simpa [sq] using Eq.symm CStarRing.norm_self_mul_star
 -/
 instance : CStarModule A A where
   inner x y := y * star x
@@ -213,7 +215,7 @@ lemma prod_norm_le_norm_add
   calc ‖x‖ ^ 2 <= ‖⟪x.1, x.1⟫_A‖ + ‖⟪x.2, x.2⟫_A‖ := prod_norm_sq x ▸ norm_add_le _ _
     _ = ‖x.1‖ ^ 2 + 0 + ‖x.2‖ ^ 2 := by simp [norm_sq_eq A]
     _ <= ‖x.1‖ ^ 2 + 2 * ‖x.1‖ * ‖x.2‖ + ‖x.2‖ ^ 2 := by gcongr; positivity
-    _ = (‖x.1‖ + ‖x.2‖) ^ 
+    _ = (‖x.1‖ + ‖x.2‖) ^ 2 := by ring
 
 中文:
 引理 prod_norm_le_norm_add
@@ -224,7 +226,7 @@ lemma prod_norm_le_norm_add
   calc ‖x‖ ^ 2 <= ‖⟪x.1, x.1⟫_A‖ + ‖⟪x.2, x.2⟫_A‖ := prod_norm_sq x ▸ norm_add_le _ _
     _ = ‖x.1‖ ^ 2 + 0 + ‖x.2‖ ^ 2 := by simp [norm_sq_eq A]
     _ <= ‖x.1‖ ^ 2 + 2 * ‖x.1‖ * ‖x.2‖ + ‖x.2‖ ^ 2 := by gcongr; positivity
-    _ = (‖x.1‖ + ‖x.2‖) ^ 
+    _ = (‖x.1‖ + ‖x.2‖) ^ 2 := by ring
 
 Depends on / 依赖: abs_le_of_sq_le_sq, norm_add_le, norm_sq_eq, prod_norm_sq
 -/
@@ -250,7 +252,14 @@ instance :
     refine ⟨fun h => ?_, fun h => by simp [h]⟩
 .injective apply equiv A (E × F)
     ext
-· r
+· refine inner_self.mp le_antisymm ?_ (inner_self_nonneg (A := A))
+.trans_eq h exact le_add_of_nonneg_right CStarModule.inner_self_nonneg
+· refine inner_self.mp le_antisymm ?_ (inner_self_nonneg (A := A))
+.trans_eq h exact le_add_of_nonneg_left CStarModule.inner_self_nonneg
+  inner_op_smul_right := by simp [mul_add]
+  inner_smul_right_complex := by simp [smul_add]
+  star_inner x y := by simp
+  norm_eq_sqrt_norm_inner_self {x} := by with_reducible_and_instances rfl
 
 中文:
 实例 :
@@ -262,7 +271,14 @@ instance :
     refine ⟨fun h => ?_, fun h => by simp [h]⟩
 .injective apply equiv A (E × F)
     ext
-· r
+· refine inner_self.mp le_antisymm ?_ (inner_self_nonneg (A := A))
+.trans_eq h exact le_add_of_nonneg_right CStarModule.inner_self_nonneg
+· refine inner_self.mp le_antisymm ?_ (inner_self_nonneg (A := A))
+.trans_eq h exact le_add_of_nonneg_left CStarModule.inner_self_nonneg
+  inner_op_smul_right := by simp [mul_add]
+  inner_smul_right_complex := by simp [smul_add]
+  star_inner x y := by simp
+  norm_eq_sqrt_norm_inner_self {x} := by with_reducible_and_instances rfl
 -/
 noncomputable instance : CStarModule A C⋆ᵐᵒᵈ(A, E × F) where
   inner x y := ⟪x.1, y.1⟫_A + ⟪x.2, y.2⟫_A
@@ -314,7 +330,7 @@ lemma max_le_prod_norm
   all_goals
     refine CStarAlgebra.norm_le_norm_of_nonneg_of_le (A := A) ?_ ?_
     all_goals
-      a
+      aesop (add safe apply CStarModule.inner_self_nonneg)
 
 中文:
 引理 max_le_prod_norm
@@ -329,7 +345,7 @@ lemma max_le_prod_norm
   all_goals
     refine CStarAlgebra.norm_le_norm_of_nonneg_of_le (A := A) ?_ ?_
     all_goals
-      a
+      aesop (add safe apply CStarModule.inner_self_nonneg)
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.norm_le_norm_of_nonneg_of_le, CStarModule, CStarModule.inner_self_nonneg, Real.sqrt_le_sqrt_iff, all_goals, inner_self_nonneg, max_le_iff, norm_eq_sqrt_norm_inner_self, norm_le_norm_of_nonneg_of_le, norm_nonneg, prod_norm, sqrt_le_sqrt_iff
 -/
@@ -640,7 +656,11 @@ inner_self_nonneg := sum_nonneg fun _ _ => CStarModule.inner_self_nonneg
     refine ⟨fun h => ?_, fun h => by simp [h]⟩
     ext i
 refine inner_self.mp le_antisymm (le_of_le_of_eq ?_ h) inner_self_nonneg
- 
+    exact single_le_sum (fun i _ => CStarModule.inner_self_nonneg (A := A) (x := x i)) (mem_univ _)
+  inner_op_smul_right := by simp [mul_sum]
+  inner_smul_right_complex := by simp [smul_sum]
+  star_inner x y := by simp
+  norm_eq_sqrt_norm_inner_self {x} := by with_reducible_and_instances rfl
 
 中文:
 实例 :
@@ -652,7 +672,11 @@ inner_self_nonneg := sum_nonneg fun _ _ => CStarModule.inner_self_nonneg
     refine ⟨fun h => ?_, fun h => by simp [h]⟩
     ext i
 refine inner_self.mp le_antisymm (le_of_le_of_eq ?_ h) inner_self_nonneg
- 
+    exact single_le_sum (fun i _ => CStarModule.inner_self_nonneg (A := A) (x := x i)) (mem_univ _)
+  inner_op_smul_right := by simp [mul_sum]
+  inner_smul_right_complex := by simp [smul_sum]
+  star_inner x y := by simp
+  norm_eq_sqrt_norm_inner_self {x} := by with_reducible_and_instances rfl
 -/
 noncomputable instance : CStarModule A C⋆ᵐᵒᵈ(A, Π i, E i) where
   inner x y := ∑ i, ⟪x i, y i⟫_A
@@ -793,7 +817,7 @@ lemma norm_apply_le_norm
 .2 refine abs_le_of_sq_le_sq' ?_ (by positivity)
   rw [pi_norm_sq]; rw [norm_sq_eq A]
   refine CStarAlgebra.norm_le_norm_of_nonneg_of_le inner_self_nonneg ?_
-  exact Finset.single_le_sum (fun j _ => inner_self_nonneg (A := A)
+  exact Finset.single_le_sum (fun j _ => inner_self_nonneg (A := A) (x := x j)) (Finset.mem_univ i)
 
 中文:
 引理 norm_apply_le_norm
@@ -804,7 +828,7 @@ lemma norm_apply_le_norm
 .2 refine abs_le_of_sq_le_sq' ?_ (by positivity)
   rw [pi_norm_sq]; rw [norm_sq_eq A]
   refine CStarAlgebra.norm_le_norm_of_nonneg_of_le inner_self_nonneg ?_
-  exact Finset.single_le_sum (fun j _ => inner_self_nonneg (A := A)
+  exact Finset.single_le_sum (fun j _ => inner_self_nonneg (A := A) (x := x j)) (Finset.mem_univ i)
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.norm_le_norm_of_nonneg_of_le, Finset, Finset.mem_univ, Finset.single_le_sum, NormedAddCommGroup, abs_le_of_sq_le_sq, inner_self_nonneg, mem_univ, norm_le_norm_of_nonneg_of_le, norm_sq_eq, normedAddCommGroup, pi_norm_sq, single_le_sum
 -/
@@ -885,7 +909,7 @@ lemma antilipschitzWith_card_equiv_pi_aux
     simp only [NNReal.coe_natCast, linearEquiv_apply]
     calc ‖x‖ <= ∑ i, ‖x i‖ := pi_norm_le_sum_norm x
       _ <= ∑ _, ‖⇑x‖ := Finset.sum_le_sum fun _ _ => norm_le_pi_norm ..
-      _ <= Fintype.card ι * ‖⇑x‖ :
+      _ <= Fintype.card ι * ‖⇑x‖ := by simp
 
 中文:
 引理 antilipschitzWith_card_equiv_pi_aux
@@ -893,7 +917,7 @@ lemma antilipschitzWith_card_equiv_pi_aux
     simp only [NNReal.coe_natCast, linearEquiv_apply]
     calc ‖x‖ <= ∑ i, ‖x i‖ := pi_norm_le_sum_norm x
       _ <= ∑ _, ‖⇑x‖ := Finset.sum_le_sum fun _ _ => norm_le_pi_norm ..
-      _ <= Fintype.card ι * ‖⇑x‖ :
+      _ <= Fintype.card ι * ‖⇑x‖ := by simp
 -/
 private lemma antilipschitzWith_card_equiv_pi_aux :
     AntilipschitzWith (Fintype.card ι) (equiv A (Π i, E i)) :=
@@ -1018,7 +1042,10 @@ instance instCStarModuleComplex
     exact inner_self_nonneg
   inner_self := by simp
   inner_op_smul_right := by simp [inner_smul_right]
-  inner_smul_right_complex := by simp 
+  inner_smul_right_complex := by simp [inner_smul_right, smul_eq_mul]
+  star_inner _ _ := by simp
+  norm_eq_sqrt_norm_inner_self {x} := by
+    simpa only [← inner_self_re_eq_norm] using norm_eq_sqrt_re_inner x
 
 中文:
 实例 instCStarModuleComplex
@@ -1030,7 +1057,10 @@ instance instCStarModuleComplex
     exact inner_self_nonneg
   inner_self := by simp
   inner_op_smul_right := by simp [inner_smul_right]
-  inner_smul_right_complex := by simp 
+  inner_smul_right_complex := by simp [inner_smul_right, smul_eq_mul]
+  star_inner _ _ := by simp
+  norm_eq_sqrt_norm_inner_self {x} := by
+    simpa only [← inner_self_re_eq_norm] using norm_eq_sqrt_re_inner x
 
 Depends on / 依赖: _Complex
 -/

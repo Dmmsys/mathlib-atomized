@@ -533,7 +533,16 @@ lemma D₁_D₁
       simp only [totalAux.ιMapObj_D₁_assoc, comp_zero]
       by_cases h₃ : c₁.Rel i₁ (c₁.next i₁)
       · rw [totalAux.d₁_eq K c₁₂ h₃ i₂ i₁₂']; swap
-        · rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃ i₂, ← c₁₂.
+        · rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃ i₂, ← c₁₂.next_eq' h₁, h]
+        simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₁]
+        by_cases h₄ : c₁.Rel (c₁.next i₁) (c₁.next (c₁.next i₁))
+        · rw [totalAux.d₁_eq K c₁₂ h₄ i₂ i₁₂'', Linear.comp_units_smul,
+            d_f_comp_d_f_assoc, zero_comp, smul_zero, smul_zero]
+          rw [← ComplexShape.next_π₁ c₂ c₁₂ h₄]; rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃]; rw [h]; rw [c₁₂.next_eq' h₁]; rw [c₁₂.next_eq' h₂]
+        · rw [K.d₁_eq_zero _ _ _ _ h₄, comp_zero, smul_zero]
+      · rw [K.d₁_eq_zero c₁₂ _ _ _ h₃, zero_comp]
+    · rw [K.D₁_shape c₁₂ _ _ h₂, comp_zero]
+  · rw [K.D₁_shape c₁₂ _ _ h₁, zero_comp]
 
 中文:
 引理 D₁_D₁
@@ -546,7 +555,16 @@ lemma D₁_D₁
       simp only [totalAux.ιMapObj_D₁_assoc, comp_zero]
       by_cases h₃ : c₁.Rel i₁ (c₁.next i₁)
       · rw [totalAux.d₁_eq K c₁₂ h₃ i₂ i₁₂']; swap
-        · rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃ i₂, ← c₁₂.
+        · rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃ i₂, ← c₁₂.next_eq' h₁, h]
+        simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₁]
+        by_cases h₄ : c₁.Rel (c₁.next i₁) (c₁.next (c₁.next i₁))
+        · rw [totalAux.d₁_eq K c₁₂ h₄ i₂ i₁₂'', Linear.comp_units_smul,
+            d_f_comp_d_f_assoc, zero_comp, smul_zero, smul_zero]
+          rw [← ComplexShape.next_π₁ c₂ c₁₂ h₄]; rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃]; rw [h]; rw [c₁₂.next_eq' h₁]; rw [c₁₂.next_eq' h₂]
+        · rw [K.d₁_eq_zero _ _ _ _ h₄, comp_zero, smul_zero]
+      · rw [K.d₁_eq_zero c₁₂ _ _ _ h₃, zero_comp]
+    · rw [K.D₁_shape c₁₂ _ _ h₂, comp_zero]
+  · rw [K.D₁_shape c₁₂ _ _ h₁, zero_comp]
 
 Depends on / 依赖: ComplexShape, ComplexShape.next_, Linear, Linear.comp_units_smul, Linear.units_smul_comp, comp_units_smul, comp_zero, d_f_comp_d_f_assoc, next_eq, totalAux, totalAux.d, units_smul_comp, zero_comp
 -/
@@ -584,7 +602,16 @@ lemma D₂_D₂
       simp only [totalAux.ιMapObj_D₂_assoc, comp_zero]
       by_cases h₃ : c₂.Rel i₂ (c₂.next i₂)
       · rw [totalAux.d₂_eq K c₁₂ i₁ h₃ i₁₂']; swap
-        · rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₃, ← c₁₂.
+        · rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₃, ← c₁₂.next_eq' h₁, h]
+        simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₂]
+        by_cases h₄ : c₂.Rel (c₂.next i₂) (c₂.next (c₂.next i₂))
+        · rw [totalAux.d₂_eq K c₁₂ i₁ h₄ i₁₂'', Linear.comp_units_smul,
+            HomologicalComplex.d_comp_d_assoc, zero_comp, smul_zero, smul_zero]
+          rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₄]; rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₃]; rw [h]; rw [c₁₂.next_eq' h₁]; rw [c₁₂.next_eq' h₂]
+        · rw [K.d₂_eq_zero c₁₂ _ _ _ h₄, comp_zero, smul_zero]
+      · rw [K.d₂_eq_zero c₁₂ _ _ _ h₃, zero_comp]
+    · rw [K.D₂_shape c₁₂ _ _ h₂, comp_zero]
+  · rw [K.D₂_shape c₁₂ _ _ h₁, zero_comp]
 
 中文:
 引理 D₂_D₂
@@ -597,7 +624,16 @@ lemma D₂_D₂
       simp only [totalAux.ιMapObj_D₂_assoc, comp_zero]
       by_cases h₃ : c₂.Rel i₂ (c₂.next i₂)
       · rw [totalAux.d₂_eq K c₁₂ i₁ h₃ i₁₂']; swap
-        · rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₃, ← c₁₂.
+        · rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₃, ← c₁₂.next_eq' h₁, h]
+        simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₂]
+        by_cases h₄ : c₂.Rel (c₂.next i₂) (c₂.next (c₂.next i₂))
+        · rw [totalAux.d₂_eq K c₁₂ i₁ h₄ i₁₂'', Linear.comp_units_smul,
+            HomologicalComplex.d_comp_d_assoc, zero_comp, smul_zero, smul_zero]
+          rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₄]; rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₃]; rw [h]; rw [c₁₂.next_eq' h₁]; rw [c₁₂.next_eq' h₂]
+        · rw [K.d₂_eq_zero c₁₂ _ _ _ h₄, comp_zero, smul_zero]
+      · rw [K.d₂_eq_zero c₁₂ _ _ _ h₃, zero_comp]
+    · rw [K.D₂_shape c₁₂ _ _ h₂, comp_zero]
+  · rw [K.D₂_shape c₁₂ _ _ h₁, zero_comp]
 
 Depends on / 依赖: ComplexShape, ComplexShape.next_, HomologicalComplex, HomologicalComplex.d_comp_d_assoc, Linear, Linear.comp_units_smul, Linear.units_smul_comp, comp_units_smul, comp_zero, d_comp_d_assoc, next_eq, totalAux, totalAux.d, units_smul_comp
 -/
@@ -634,7 +670,29 @@ lemma D₂_D₁
       simp only [totalAux.ιMapObj_D₂_assoc, comp_neg, totalAux.ιMapObj_D₁_assoc]
       by_cases h₃ : c₁.Rel i₁ (c₁.next i₁)
       · rw [totalAux.d₁_eq K c₁₂ h₃ i₂ i₁₂']; swap
-        · rw [← ComplexShape.ne
+        · rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃ i₂, ← c₁₂.next_eq' h₁, h]
+        simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₂]
+        by_cases h₄ : c₂.Rel i₂ (c₂.next i₂)
+        · have h₅ : ComplexShape.π c₁ c₂ c₁₂ (i₁, c₂.next i₂) = i₁₂' := by
+            rw [← c₁₂.next_eq' h₁]; rw [← h]; rw [ComplexShape.next_π₂ c₁ c₁₂ i₁ h₄]
+          have h₆ : ComplexShape.π c₁ c₂ c₁₂ (c₁.next i₁, c₂.next i₂) = i₁₂'' := by
+            rw [← c₁₂.next_eq' h₂]; rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃]; rw [h₅]
+          simp only [totalAux.d₂_eq K c₁₂ _ h₄ _ h₅, totalAux.d₂_eq K c₁₂ _ h₄ _ h₆,
+            Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₁, Linear.comp_units_smul,
+            totalAux.d₁_eq K c₁₂ h₃ _ _ h₆, HomologicalComplex.Hom.comm_assoc, smul_smul,
+            ComplexShape.ε₂_ε₁ c₁₂ h₃ h₄, neg_mul, Units.neg_smul]
+        · simp only [K.d₂_eq_zero c₁₂ _ _ _ h₄, zero_comp, comp_zero, smul_zero, neg_zero]
+      · rw [K.d₁_eq_zero c₁₂ _ _ _ h₃, zero_comp, neg_zero]
+        by_cases h₄ : c₂.Rel i₂ (c₂.next i₂)
+        · rw [totalAux.d₂_eq K c₁₂ i₁ h₄ i₁₂']; swap
+          · rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₄, ← c₁₂.next_eq' h₁, h]
+          simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₁]
+          rw [K.d₁_eq_zero c₁₂ _ _ _ h₃]; rw [comp_zero]; rw [smul_zero]
+        · rw [K.d₂_eq_zero c₁₂ _ _ _ h₄, zero_comp]
+    · rw [K.D₁_shape c₁₂ _ _ h₂, K.D₂_shape c₁₂ _ _ h₂, comp_zero, comp_zero, neg_zero]
+  · rw [K.D₁_shape c₁₂ _ _ h₁, K.D₂_shape c₁₂ _ _ h₁, zero_comp, zero_comp, neg_zero]
+
+@[reassoc]
 
 中文:
 引理 D₂_D₁
@@ -646,7 +704,29 @@ lemma D₂_D₁
       simp only [totalAux.ιMapObj_D₂_assoc, comp_neg, totalAux.ιMapObj_D₁_assoc]
       by_cases h₃ : c₁.Rel i₁ (c₁.next i₁)
       · rw [totalAux.d₁_eq K c₁₂ h₃ i₂ i₁₂']; swap
-        · rw [← ComplexShape.ne
+        · rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃ i₂, ← c₁₂.next_eq' h₁, h]
+        simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₂]
+        by_cases h₄ : c₂.Rel i₂ (c₂.next i₂)
+        · have h₅ : ComplexShape.π c₁ c₂ c₁₂ (i₁, c₂.next i₂) = i₁₂' := by
+            rw [← c₁₂.next_eq' h₁]; rw [← h]; rw [ComplexShape.next_π₂ c₁ c₁₂ i₁ h₄]
+          have h₆ : ComplexShape.π c₁ c₂ c₁₂ (c₁.next i₁, c₂.next i₂) = i₁₂'' := by
+            rw [← c₁₂.next_eq' h₂]; rw [← ComplexShape.next_π₁ c₂ c₁₂ h₃]; rw [h₅]
+          simp only [totalAux.d₂_eq K c₁₂ _ h₄ _ h₅, totalAux.d₂_eq K c₁₂ _ h₄ _ h₆,
+            Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₁, Linear.comp_units_smul,
+            totalAux.d₁_eq K c₁₂ h₃ _ _ h₆, HomologicalComplex.Hom.comm_assoc, smul_smul,
+            ComplexShape.ε₂_ε₁ c₁₂ h₃ h₄, neg_mul, Units.neg_smul]
+        · simp only [K.d₂_eq_zero c₁₂ _ _ _ h₄, zero_comp, comp_zero, smul_zero, neg_zero]
+      · rw [K.d₁_eq_zero c₁₂ _ _ _ h₃, zero_comp, neg_zero]
+        by_cases h₄ : c₂.Rel i₂ (c₂.next i₂)
+        · rw [totalAux.d₂_eq K c₁₂ i₁ h₄ i₁₂']; swap
+          · rw [← ComplexShape.next_π₂ c₁ c₁₂ i₁ h₄, ← c₁₂.next_eq' h₁, h]
+          simp only [Linear.units_smul_comp, assoc, totalAux.ιMapObj_D₁]
+          rw [K.d₁_eq_zero c₁₂ _ _ _ h₃]; rw [comp_zero]; rw [smul_zero]
+        · rw [K.d₂_eq_zero c₁₂ _ _ _ h₄, zero_comp]
+    · rw [K.D₁_shape c₁₂ _ _ h₂, K.D₂_shape c₁₂ _ _ h₂, comp_zero, comp_zero, neg_zero]
+  · rw [K.D₁_shape c₁₂ _ _ h₁, K.D₂_shape c₁₂ _ _ h₁, zero_comp, zero_comp, neg_zero]
+
+@[reassoc]
 
 Depends on / 依赖: ComplexShape, ComplexShape.next_, Linear, Linear.units_smul_comp, comp_neg, next_eq, totalAux, totalAux.d, units_smul_comp
 -/

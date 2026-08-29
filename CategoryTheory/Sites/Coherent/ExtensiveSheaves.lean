@@ -163,7 +163,26 @@ theorem Presieve.isSheaf_iff_preservesFiniteProducts
   · rw [extensiveTopology, isSheaf_coverage] at hF
     let Z : Fin n -> C := fun i => unop (K.obj ⟨i⟩)
     have : (ofArrows Z (Cofan.mk (∐ Z) (Sigma.ι Z)).inj).HasPairwisePullbacks :=
-      inferInstanceAs (ofArrows Z (Sigma.ι Z)).HasP
+      inferInstanceAs (ofArrows Z (Sigma.ι Z)).HasPairwisePullbacks
+    have : forall (i : Fin n), Mono (Cofan.inj (Cofan.mk (∐ Z) (Sigma.ι Z)) i) :=
+inferInstanceAs forall (i : Fin n), Mono (Sigma.ι Z i)
+    let i : K ≅ Discrete.functor (fun i => op (Z i)) := Discrete.natIsoFunctor
+    let _ : PreservesLimit (Discrete.functor (fun i => op (Z i))) F :=
+        Presieve.preservesProduct_of_isSheafFor F ?_ initialIsInitial _ (coproductIsCoproduct Z)
+        (FinitaryExtensive.isPullback_initial_to_sigma_ι Z)
+        (hF (Presieve.ofArrows Z (fun i => Sigma.ι Z i)) ?_)
+    · exact preservesLimit_of_iso_diagram F i.symm
+    · apply hF
+      refine ⟨Empty, inferInstance, Empty.elim, IsEmpty.elim inferInstance, rfl, ⟨default,?_, ?_⟩⟩
+      · ext b
+        cases b
+      · simp only [eq_iff_true_of_subsingleton]
+    · exact ⟨Fin n, inferInstance, Z, (fun i => Sigma.ι Z i), rfl, instIsIsoDescι⟩
+  · rw [extensiveTopology, Presieve.isSheaf_coverage]
+    intro X R ⟨Y, α, Z, π, hR, hi⟩
+    have : IsIso (Sigma.desc (Cofan.inj (Cofan.mk X π))) := hi
+    have : R.Extensive := ⟨Y, α, Z, π, hR, ⟨Cofan.isColimitOfIsIsoSigmaDesc (Cofan.mk X π)⟩⟩
+    exact isSheafFor_extensive_of_preservesFiniteProducts R F
 
 中文:
 定理 Presieve.isSheaf_iff_preservesFiniteProducts
@@ -173,7 +192,26 @@ theorem Presieve.isSheaf_iff_preservesFiniteProducts
   · rw [extensiveTopology, isSheaf_coverage] at hF
     let Z : Fin n -> C := fun i => unop (K.obj ⟨i⟩)
     have : (ofArrows Z (Cofan.mk (∐ Z) (Sigma.ι Z)).inj).HasPairwisePullbacks :=
-      inferInstanceAs (ofArrows Z (Sigma.ι Z)).HasP
+      inferInstanceAs (ofArrows Z (Sigma.ι Z)).HasPairwisePullbacks
+    have : forall (i : Fin n), Mono (Cofan.inj (Cofan.mk (∐ Z) (Sigma.ι Z)) i) :=
+inferInstanceAs forall (i : Fin n), Mono (Sigma.ι Z i)
+    let i : K ≅ Discrete.functor (fun i => op (Z i)) := Discrete.natIsoFunctor
+    let _ : PreservesLimit (Discrete.functor (fun i => op (Z i))) F :=
+        Presieve.preservesProduct_of_isSheafFor F ?_ initialIsInitial _ (coproductIsCoproduct Z)
+        (FinitaryExtensive.isPullback_initial_to_sigma_ι Z)
+        (hF (Presieve.ofArrows Z (fun i => Sigma.ι Z i)) ?_)
+    · exact preservesLimit_of_iso_diagram F i.symm
+    · apply hF
+      refine ⟨Empty, inferInstance, Empty.elim, IsEmpty.elim inferInstance, rfl, ⟨default,?_, ?_⟩⟩
+      · ext b
+        cases b
+      · simp only [eq_iff_true_of_subsingleton]
+    · exact ⟨Fin n, inferInstance, Z, (fun i => Sigma.ι Z i), rfl, instIsIsoDescι⟩
+  · rw [extensiveTopology, Presieve.isSheaf_coverage]
+    intro X R ⟨Y, α, Z, π, hR, hi⟩
+    have : IsIso (Sigma.desc (Cofan.inj (Cofan.mk X π))) := hi
+    have : R.Extensive := ⟨Y, α, Z, π, hR, ⟨Cofan.isColimitOfIsIsoSigmaDesc (Cofan.mk X π)⟩⟩
+    exact isSheafFor_extensive_of_preservesFiniteProducts R F
 
 Depends on / 依赖: Cofan.inj, Cofan.mk, Discrete, Discrete.functor, Discrete.natIsoF, HasPairwisePullbacks, K.obj, extensiveTopology, functor, isSheaf_coverage, natIsoF, ofArrows
 -/
@@ -220,7 +258,10 @@ theorem Presheaf.isSheaf_iff_preservesFiniteProducts
     intro ⟨E⟩
     specialize h E
     rw [Presieve.isSheaf_iff_preservesFiniteProducts] at h
-    exact isLimitOfPreserves (F.comp (coyoneda.
+    exact isLimitOfPreserves (F.comp (coyoneda.obj ⟨E⟩)) hc
+  · intro _ E
+    rw [Presieve.isSheaf_iff_preservesFiniteProducts]
+    exact ⟨inferInstance⟩
 
 中文:
 定理 预层.isSheaf_iff_preservesFiniteProducts
@@ -235,7 +276,10 @@ theorem Presheaf.isSheaf_iff_preservesFiniteProducts
     intro ⟨E⟩
     specialize h E
     rw [Presieve.isSheaf_iff_preservesFiniteProducts] at h
-    exact isLimitOfPreserves (F.comp (coyoneda.
+    exact isLimitOfPreserves (F.comp (coyoneda.obj ⟨E⟩)) hc
+  · intro _ E
+    rw [Presieve.isSheaf_iff_preservesFiniteProducts]
+    exact ⟨inferInstance⟩
 
 Depends on / 依赖: F.comp, IsSheaf, Presieve, Presieve.isSheaf_iff_preservesFiniteProducts, coyoneda, coyoneda.obj, coyonedaJointlyReflectsLimits, isLimitOfPreserves, isSheaf_iff_preservesFiniteProducts, specialize
 -/

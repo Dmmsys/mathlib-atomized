@@ -297,7 +297,30 @@ definition toDual
           have h' := LinearMap.ker_eq_top.mp htriv
           norm_cast at h'
         exact ⟨0, by simp [hℓ]⟩
-      · rw [← Submodule.orthogonal_eq_bo
+      · rw [← Submodule.orthogonal_eq_bot_iff] at htriv
+        change Yᗮ != ⊥ at htriv
+        rw [Submodule.ne_bot_iff] at htriv
+        obtain ⟨z : E, hz : z in Yᗮ, z_ne_0 : z != 0⟩ := htriv
+        refine ⟨(starRingEnd (R := 𝕜) (ℓ z) / ⟪z, z⟫) • z, ?_⟩
+        apply ContinuousLinearMap.ext
+        intro x
+        have h₁ : ℓ z • x - ℓ x • z in Y := by
+          rw [LinearMap.mem_ker]; rw [map_sub]; rw [map_smul]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]
+          exact sub_self (ℓ x * ℓ z)
+        have h₂ : ℓ z * ⟪z, x⟫ = ℓ x * ⟪z, z⟫ :=
+          haveI h₃ :=
+            calc
+              0 = ⟪z, ℓ z • x - ℓ x • z⟫ := by
+                rw [(Y.mem_orthogonal' z).mp hz]
+                exact h₁
+              _ = ⟪z, ℓ z • x⟫ - ⟪z, ℓ x • z⟫ := by rw [inner_sub_right]
+              _ = ℓ z * ⟪z, x⟫ - ℓ x * ⟪z, z⟫ := by simp [inner_smul_right]
+          sub_eq_zero.mp h₃.symm
+        calc
+          ⟪(ℓ z† / ⟪z, z⟫) • z, x⟫ = ℓ z / ⟪z, z⟫ * ⟪z, x⟫ := by simp [inner_smul_left]
+          _ = ℓ z * ⟪z, x⟫ / ⟪z, z⟫ := by rw [← div_mul_eq_mul_div]
+          _ = ℓ x * ⟪z, z⟫ / ⟪z, z⟫ := by rw [h₂]
+          _ = ℓ x := by have : ⟪z, z⟫ != 0 := inner_self_ne_zero.mpr z_ne_0; field)
 
 中文:
 定义 toDual
@@ -311,7 +334,30 @@ definition toDual
           have h' := LinearMap.ker_eq_top.mp htriv
           norm_cast at h'
         exact ⟨0, by simp [hℓ]⟩
-      · rw [← Submodule.orthogonal_eq_bo
+      · rw [← Submodule.orthogonal_eq_bot_iff] at htriv
+        change Yᗮ != ⊥ at htriv
+        rw [Submodule.ne_bot_iff] at htriv
+        obtain ⟨z : E, hz : z in Yᗮ, z_ne_0 : z != 0⟩ := htriv
+        refine ⟨(starRingEnd (R := 𝕜) (ℓ z) / ⟪z, z⟫) • z, ?_⟩
+        apply ContinuousLinearMap.ext
+        intro x
+        have h₁ : ℓ z • x - ℓ x • z in Y := by
+          rw [LinearMap.mem_ker]; rw [map_sub]; rw [map_smul]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]
+          exact sub_self (ℓ x * ℓ z)
+        have h₂ : ℓ z * ⟪z, x⟫ = ℓ x * ⟪z, z⟫ :=
+          haveI h₃ :=
+            calc
+              0 = ⟪z, ℓ z • x - ℓ x • z⟫ := by
+                rw [(Y.mem_orthogonal' z).mp hz]
+                exact h₁
+              _ = ⟪z, ℓ z • x⟫ - ⟪z, ℓ x • z⟫ := by rw [inner_sub_right]
+              _ = ℓ z * ⟪z, x⟫ - ℓ x * ⟪z, z⟫ := by simp [inner_smul_right]
+          sub_eq_zero.mp h₃.symm
+        calc
+          ⟪(ℓ z† / ⟪z, z⟫) • z, x⟫ = ℓ z / ⟪z, z⟫ * ⟪z, x⟫ := by simp [inner_smul_left]
+          _ = ℓ z * ⟪z, x⟫ / ⟪z, z⟫ := by rw [← div_mul_eq_mul_div]
+          _ = ℓ x * ⟪z, z⟫ / ⟪z, z⟫ := by rw [h₂]
+          _ = ℓ x := by have : ⟪z, z⟫ != 0 := inner_self_ne_zero.mpr z_ne_0; field)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext, LinearIsometryEquiv, LinearIsometryEquiv.ofSurjective, LinearMap, LinearMap.ker_eq_top.mp, Submodule, Submodule.ne_bot_iff, Submodule.orthogonal_eq_bot_iff, ker_eq_top, ne_bot_iff, ofSurjective, orthogonal_eq_bot_iff, starRingEnd, toDualMap, z_ne_0
 -/

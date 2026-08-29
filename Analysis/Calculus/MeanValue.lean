@@ -74,7 +74,27 @@ theorem image_le_of_liminf_slope_right_lt_deriv_boundary'
   have A : ContinuousOn (fun x => (f x, B x)) (Icc a b) := hf.prodMk hB
   have : IsClosed s := by
     simp only [s, inter_comm]
-    exact A.preimage_isClosed_of_isClosed isClosed_Icc OrderClosedTopology.isClo
+    exact A.preimage_isClosed_of_isClosed isClosed_Icc OrderClosedTopology.isClosed_le'
+  apply this.Icc_subset_of_forall_exists_gt ha
+  rintro x ⟨hxB : f x <= B x, xab⟩ y hy
+  rcases hxB.lt_or_eq with hxB | hxB
+  · -- If `f x < B x`, then all we need is continuity of both sides
+    refine nonempty_of_mem (inter_mem ?_ (Ioc_mem_nhdsGT hy))
+    have : forallᶠ x in 𝓝[Icc a b] x, f x < B x :=
+      A x (Ico_subset_Icc_self xab) (IsOpen.mem_nhds (isOpen_lt continuous_fst continuous_snd) hxB)
+    have : forallᶠ x in 𝓝[>] x, f x < B x := nhdsWithin_le_of_mem (Icc_mem_nhdsGT_of_mem xab) this
+    exact this.mono fun y => le_of_lt
+  · rcases exists_between (bound x xab hxB) with ⟨r, hfr, hrB⟩
+    specialize hf' x xab r hfr
+    have HB : forallᶠ z in 𝓝[>] x, r < slope B x z :=
+      (hasDerivWithinAt_iff_tendsto_slope' <| lt_irrefl x).1 (hB' x xab).Ioi_of_Ici
+        (Ioi_mem_nhds hrB)
+    obtain ⟨z, hfz, hzB, hz⟩ : exists z, slope f x z < r ∧ r < slope B x z ∧ z in Ioc x y :=
+.exists hf'.and_eventually (HB.and (Ioc_mem_nhdsGT hy))
+    refine ⟨z, ?_, hz⟩
+    have := (hfz.trans hzB).le
+    rwa [slope_def_field, slope_def_field, div_le_div_iff_of_pos_right (sub_pos.2 hz.1), hxB,
+      sub_le_sub_iff_right] at this
 
 中文:
 定理 image_le_of_liminf_slope_right_lt_deriv_boundary'
@@ -85,7 +105,27 @@ theorem image_le_of_liminf_slope_right_lt_deriv_boundary'
   have A : ContinuousOn (fun x => (f x, B x)) (Icc a b) := hf.prodMk hB
   have : IsClosed s := by
     simp only [s, inter_comm]
-    exact A.preimage_isClosed_of_isClosed isClosed_Icc OrderClosedTopology.isClo
+    exact A.preimage_isClosed_of_isClosed isClosed_Icc OrderClosedTopology.isClosed_le'
+  apply this.Icc_subset_of_forall_exists_gt ha
+  rintro x ⟨hxB : f x <= B x, xab⟩ y hy
+  rcases hxB.lt_or_eq with hxB | hxB
+  · -- If `f x < B x`, then all we need is continuity of both sides
+    refine nonempty_of_mem (inter_mem ?_ (Ioc_mem_nhdsGT hy))
+    have : forallᶠ x in 𝓝[Icc a b] x, f x < B x :=
+      A x (Ico_subset_Icc_self xab) (IsOpen.mem_nhds (isOpen_lt continuous_fst continuous_snd) hxB)
+    have : forallᶠ x in 𝓝[>] x, f x < B x := nhdsWithin_le_of_mem (Icc_mem_nhdsGT_of_mem xab) this
+    exact this.mono fun y => le_of_lt
+  · rcases exists_between (bound x xab hxB) with ⟨r, hfr, hrB⟩
+    specialize hf' x xab r hfr
+    have HB : forallᶠ z in 𝓝[>] x, r < slope B x z :=
+      (hasDerivWithinAt_iff_tendsto_slope' <| lt_irrefl x).1 (hB' x xab).Ioi_of_Ici
+        (Ioi_mem_nhds hrB)
+    obtain ⟨z, hfz, hzB, hz⟩ : exists z, slope f x z < r ∧ r < slope B x z ∧ z in Ioc x y :=
+.exists hf'.and_eventually (HB.and (Ioc_mem_nhdsGT hy))
+    refine ⟨z, ?_, hz⟩
+    have := (hfz.trans hzB).le
+    rwa [slope_def_field, slope_def_field, div_le_div_iff_of_pos_right (sub_pos.2 hz.1), hxB,
+      sub_le_sub_iff_right] at this
 
 Depends on / 依赖: A.preimage_isClosed_of_isClosed, ContinuousOn, Icc_subset_of_forall_exists_gt, IsClosed, OrderClosedTopology, OrderClosedTopology.isClosed_le, continuity, hf.prodMk, hxB.lt_or_eq, inter_comm, isClosed_Icc, isClosed_le, lt_or_eq, nonempty_of_mem, preimage_isClosed_of_isClosed, prodMk, subseteq, this.Icc_subset_of_forall_exists_gt
 -/
@@ -160,7 +200,15 @@ theorem image_le_of_liminf_slope_right_le_deriv_boundary
     apply image_le_of_liminf_slope_right_lt_deriv_boundary' hf bound
     · rwa [sub_self, mul_zero, add_zero]
     · exact hB.add (continuousOn_const.mul (continuousOn_id.sub continuousOn_const))
-    · i
+    · intro x hx
+      exact (hB' x hx).add (((hasDerivWithinAt_id x (Ici x)).sub_const a).const_mul r)
+    · intro x _ _
+      rw [mul_one]
+      exact (lt_add_iff_pos_right _).2 hr
+    exact hx
+  intro x hx
+  have : ContinuousWithinAt (fun r => B x + r * (x - a)) (Ioi 0) 0 := by fun_prop
+  convert! continuousWithinAt_const.closure_le _ this (Hr x hx) using 1 <;> simp
 
 中文:
 定理 image_le_of_liminf_slope_right_le_deriv_boundary
@@ -170,7 +218,15 @@ theorem image_le_of_liminf_slope_right_le_deriv_boundary
     apply image_le_of_liminf_slope_right_lt_deriv_boundary' hf bound
     · rwa [sub_self, mul_zero, add_zero]
     · exact hB.add (continuousOn_const.mul (continuousOn_id.sub continuousOn_const))
-    · i
+    · intro x hx
+      exact (hB' x hx).add (((hasDerivWithinAt_id x (Ici x)).sub_const a).const_mul r)
+    · intro x _ _
+      rw [mul_one]
+      exact (lt_add_iff_pos_right _).2 hr
+    exact hx
+  intro x hx
+  have : ContinuousWithinAt (fun r => B x + r * (x - a)) (Ioi 0) 0 := by fun_prop
+  convert! continuousWithinAt_const.closure_le _ this (Hr x hx) using 1 <;> simp
 
 Depends on / 依赖: ContinuousWithinAt, add_zero, const_mul, continuousOn_const, continuousOn_const.mul, continuousOn_id, continuousOn_id.sub, hB.add, hasDerivWithinAt_id, image_le_of_liminf_slope_right_lt_deriv_boundary, lt_add_iff_pos_right, mul_one, mul_zero, sub_const, sub_self
 -/
@@ -415,7 +471,9 @@ theorem norm_image_sub_le_of_norm_deriv_right_le_segment
   let B x := C * (x - a)
   have hB : forall x, HasDerivAt B C x := by
     intro x
-    simpa us
+    simpa using! (hasDerivAt_const x C).mul ((hasDerivAt_id x).sub (hasDerivAt_const x a))
+  convert image_norm_le_of_norm_deriv_right_le_deriv_boundary hg hg' _ hB bound
+  simp only [g, B]; rw [sub_self, norm_zero, sub_self, mul_zero]
 
 中文:
 定理 norm_image_sub_le_of_norm_deriv_right_le_segment
@@ -429,7 +487,9 @@ theorem norm_image_sub_le_of_norm_deriv_right_le_segment
   let B x := C * (x - a)
   have hB : forall x, HasDerivAt B C x := by
     intro x
-    simpa us
+    simpa using! (hasDerivAt_const x C).mul ((hasDerivAt_id x).sub (hasDerivAt_const x a))
+  convert image_norm_le_of_norm_deriv_right_le_deriv_boundary hg hg' _ hB bound
+  simp only [g, B]; rw [sub_self, norm_zero, sub_self, mul_zero]
 
 Depends on / 依赖: ContinuousOn, HasDerivAt, HasDerivWithinAt, continuousOn_const, convert, hasDerivAt_const, hasDerivAt_id, hf.sub, image_norm_le_of_norm_deriv_right_le_deriv_boundary, mul_zero, norm_zero, sub_self
 -/
@@ -651,7 +711,11 @@ theorem eq_of_derivWithin_eq
   have A : forall y in Ico a b, HasDerivWithinAt f (derivWithin f (Icc a b) y) (Ici y) y := fun y hy =>
     (fdiff y (mem_Icc_of_Ico hy)).hasDerivWithinAt.mono_of_mem_nhdsWithin
     (Icc_mem_nhdsGE_of_mem hy)
-  have B : forall y in Ico a b, HasDerivWithinAt g (derivWithin g (Icc a b) y) (Ici y) y
+  have B : forall y in Ico a b, HasDerivWithinAt g (derivWithin g (Icc a b) y) (Ici y) y := fun y hy =>
+    (gdiff y (mem_Icc_of_Ico hy)).hasDerivWithinAt.mono_of_mem_nhdsWithin
+    (Icc_mem_nhdsGE_of_mem hy)
+  exact eq_of_has_deriv_right_eq A (fun y hy => (hderiv hy).symm ▸ B y hy) fdiff.continuousOn
+    gdiff.continuousOn hi
 
 中文:
 定理 eq_of_derivWithin_eq
@@ -660,7 +724,11 @@ theorem eq_of_derivWithin_eq
   have A : forall y in Ico a b, HasDerivWithinAt f (derivWithin f (Icc a b) y) (Ici y) y := fun y hy =>
     (fdiff y (mem_Icc_of_Ico hy)).hasDerivWithinAt.mono_of_mem_nhdsWithin
     (Icc_mem_nhdsGE_of_mem hy)
-  have B : forall y in Ico a b, HasDerivWithinAt g (derivWithin g (Icc a b) y) (Ici y) y
+  have B : forall y in Ico a b, HasDerivWithinAt g (derivWithin g (Icc a b) y) (Ici y) y := fun y hy =>
+    (gdiff y (mem_Icc_of_Ico hy)).hasDerivWithinAt.mono_of_mem_nhdsWithin
+    (Icc_mem_nhdsGE_of_mem hy)
+  exact eq_of_has_deriv_right_eq A (fun y hy => (hderiv hy).symm ▸ B y hy) fdiff.continuousOn
+    gdiff.continuousOn hi
 
 Depends on / 依赖: HasDerivWithinAt, Icc_mem_nhdsGE_of_mem, continuousOn, derivWithin, eq_of_has_deriv_right_eq, fdiff.continuousOn, gdiff.c, hasDerivWithinAt, hasDerivWithinAt.mono_of_mem_nhdsWithin, hderiv, mem_Icc_of_Ico, mono_of_mem_nhdsWithin
 -/
@@ -710,7 +778,17 @@ theorem norm_image_sub_le_of_norm_hasFDerivWithin_le
   let : NormedSpace Real G := .restrictScalars Real 𝕜 G
   /- By composition with `AffineMap.lineMap x y`, we reduce to a statement for functions defined
     on `[0,1]`, for which it is proved in `norm_image_sub_le_of_norm_deriv_le_segment`.
-    We 
+    We just have to check the differentiability of the composition and bounds on its derivative,
+    which is straightforward but tedious for lack of automation. -/
+  set g := (AffineMap.lineMap x y : Real -> E)
+  have segm : MapsTo g (Icc 0 1 : Set Real) s := hs.mapsTo_lineMap xs ys
+  have hD : forall t in Icc (0 : Real) 1,
+      HasDerivWithinAt (f ∘ g) (f' (g t) (y - x)) (Icc 0 1) t := fun t ht => by
+    simpa using ((hf (g t) (segm ht)).restrictScalars Real).comp_hasDerivWithinAt _
+      AffineMap.hasDerivWithinAt_lineMap segm
+  have bound : forall t in Ico (0 : Real) 1, ‖f' (g t) (y - x)‖ <= C * ‖y - x‖ := fun t ht =>
+    le_of_opNorm_le _ (bound _ <| segm <| Ico_subset_Icc_self ht) _
+  simpa [g] using norm_image_sub_le_of_norm_deriv_le_segment_01' hD bound
 
 中文:
 定理 norm_image_sub_le_of_norm_hasFDerivWithin_le
@@ -719,7 +797,17 @@ theorem norm_image_sub_le_of_norm_hasFDerivWithin_le
   let : NormedSpace Real G := .restrictScalars Real 𝕜 G
   /- By composition with `AffineMap.lineMap x y`, we reduce to a statement for functions defined
     on `[0,1]`, for which it is proved in `norm_image_sub_le_of_norm_deriv_le_segment`.
-    We 
+    We just have to check the differentiability of the composition and bounds on its derivative,
+    which is straightforward but tedious for lack of automation. -/
+  set g := (AffineMap.lineMap x y : Real -> E)
+  have segm : MapsTo g (Icc 0 1 : Set Real) s := hs.mapsTo_lineMap xs ys
+  have hD : forall t in Icc (0 : Real) 1,
+      HasDerivWithinAt (f ∘ g) (f' (g t) (y - x)) (Icc 0 1) t := fun t ht => by
+    simpa using ((hf (g t) (segm ht)).restrictScalars Real).comp_hasDerivWithinAt _
+      AffineMap.hasDerivWithinAt_lineMap segm
+  have bound : forall t in Ico (0 : Real) 1, ‖f' (g t) (y - x)‖ <= C * ‖y - x‖ := fun t ht =>
+    le_of_opNorm_le _ (bound _ <| segm <| Ico_subset_Icc_self ht) _
+  simpa [g] using norm_image_sub_le_of_norm_deriv_le_segment_01' hD bound
 
 Depends on / 依赖: IsRCLikeNormedField, IsRCLikeNormedField.rclike, NormedSpace, RCLike, rclike, restrictScalars
 -/
@@ -781,7 +869,10 @@ theorem exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
       ball x ε inter s subseteq { y | HasFDerivWithinAt f (f' y) s y ∧ ‖f' y‖₊ < K } :=
     mem_nhdsWithin_iff.1 (hder.and <| hcont.nnnorm.eventually (gt_mem_nhds hK))
   rw [inter_comm] at hε
-  refine ⟨s inter ball x ε, inter_mem_nhdsWithin _ (ball_mem_nhds _ 
+  refine ⟨s inter ball x ε, inter_mem_nhdsWithin _ (ball_mem_nhds _ ε0), ?_⟩
+  exact
+    (hs.inter (convex_ball _ _)).lipschitzOnWith_of_nnnorm_hasFDerivWithin_le
+      (fun y hy => (hε hy).1.mono inter_subset_left) fun y hy => (hε hy).2.le
 
 中文:
 定理 存在_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
@@ -791,7 +882,10 @@ theorem exists_nhdsWithin_lipschitzOnWith_of_hasFDerivWithinAt_of_nnnorm_lt
       ball x ε inter s subseteq { y | HasFDerivWithinAt f (f' y) s y ∧ ‖f' y‖₊ < K } :=
     mem_nhdsWithin_iff.1 (hder.and <| hcont.nnnorm.eventually (gt_mem_nhds hK))
   rw [inter_comm] at hε
-  refine ⟨s inter ball x ε, inter_mem_nhdsWithin _ (ball_mem_nhds _ 
+  refine ⟨s inter ball x ε, inter_mem_nhdsWithin _ (ball_mem_nhds _ ε0), ?_⟩
+  exact
+    (hs.inter (convex_ball _ _)).lipschitzOnWith_of_nnnorm_hasFDerivWithin_le
+      (fun y hy => (hε hy).1.mono inter_subset_left) fun y hy => (hε hy).2.le
 
 Depends on / 依赖: HasFDerivWithinAt, ball_mem_nhds, convex_ball, eventually, gt_mem_nhds, hcont.nnnorm.eventually, hder.and, hs.inter, inter_comm, inter_mem_nhdsWithin, inter_subset_left, lipschitzOnWith_of_nnnorm_hasFDerivWithin_le, mem_nhdsWithin_iff, nnnorm, subseteq
 -/
@@ -958,7 +1052,13 @@ theorem norm_image_sub_le_of_norm_hasFDerivWithin_le'
     applies, `Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le`. Then, we just need to glue
     together the pieces, expressing back `f` in terms of `g`. -/
   let g y := f y - φ y
-  have hg : f
+  have hg : forall x in s, HasFDerivWithinAt g (f' x - φ) s x := fun x xs =>
+    (hf x xs).sub φ.hasFDerivWithinAt
+  calc
+    ‖f y - f x - φ (y - x)‖ = ‖f y - f x - (φ y - φ x)‖ := by simp
+    _ = ‖f y - φ y - (f x - φ x)‖ := by congr 1; abel
+    _ = ‖g y - g x‖ := by simp [g]
+    _ <= C * ‖y - x‖ := Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le hg bound hs xs ys
 
 中文:
 定理 norm_image_sub_le_of_norm_hasFDerivWithin_le'
@@ -967,7 +1067,13 @@ theorem norm_image_sub_le_of_norm_hasFDerivWithin_le'
     applies, `Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le`. Then, we just need to glue
     together the pieces, expressing back `f` in terms of `g`. -/
   let g y := f y - φ y
-  have hg : f
+  have hg : forall x in s, HasFDerivWithinAt g (f' x - φ) s x := fun x xs =>
+    (hf x xs).sub φ.hasFDerivWithinAt
+  calc
+    ‖f y - f x - φ (y - x)‖ = ‖f y - f x - (φ y - φ x)‖ := by simp
+    _ = ‖f y - φ y - (f x - φ x)‖ := by congr 1; abel
+    _ = ‖g y - g x‖ := by simp [g]
+    _ <= C * ‖y - x‖ := Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le hg bound hs xs ys
 -/
 theorem norm_image_sub_le_of_norm_hasFDerivWithin_le'
     (hf : forall x in s, HasFDerivWithinAt f (f' x) s x) (bound : forall x in s, ‖f' x - φ‖ <= C)
@@ -1132,7 +1238,7 @@ theorem _root_.IsOpen.isOpen_inter_preimage_of_fderiv_eq_zero
   have := (convex_ball y r).is_const_of_fderivWithin_eq_zero (hf.mono h) ?_ hx (mem_ball_self hr)
   · simpa [this]
   · intro z hz
-    simpa 
+    simpa only [fderivWithin_of_isOpen Metric.isOpen_ball hz] using! hf' (h hz)
 
 中文:
 定理 _root_.是开集.isOpen_inter_preimage_of_fderiv_eq_zero
@@ -1143,7 +1249,7 @@ theorem _root_.IsOpen.isOpen_inter_preimage_of_fderiv_eq_zero
   have := (convex_ball y r).is_const_of_fderivWithin_eq_zero (hf.mono h) ?_ hx (mem_ball_self hr)
   · simpa [this]
   · intro z hz
-    simpa 
+    simpa only [fderivWithin_of_isOpen Metric.isOpen_ball hz] using! hf' (h hz)
 
 Depends on / 依赖: Metric, Metric.isOpen_ball, Metric.isOpen_iff.mp, Metric.isOpen_iff.mpr, Set.subset_inter, convex_ball, fderivWithin_of_isOpen, hf.mono, isOpen_ball, isOpen_iff, is_const_of_fderivWithin_eq_zero, mem_ball_self, subset_inter
 -/
@@ -1194,7 +1300,11 @@ theorem _root_.IsOpen.exists_is_const_of_fderiv_eq_zero
     have h₁ := hs.isOpen_inter_preimage_of_fderiv_eq_zero hf hf' {f y}
     have h₂ := hf.continuousOn.comp_continuous continuous_subtype_val (fun x => x.2)
     by_contra h₃
-    obtain ⟨t, ht
+    obtain ⟨t, ht, ht'⟩ := (isClosed_singleton (x := f y)).preimage h₂
+    have ht'' : forall a in s, a in t ↔ f a != f y := by simpa [Set.ext_iff] using ht'
+    obtain ⟨z, H₁, H₂, H₃⟩ := hs' _ _ h₁ ht (fun x h => by simp [h, ht'', eq_or_ne]) ⟨y, by simpa⟩
+      ⟨x, by simp [ht'' _ hx, hx, h₃]⟩
+    exact (ht'' _ H₁).mp H₃ H₂.2
 
 中文:
 定理 _root_.是开集.存在_is_const_of_fderiv_eq_zero
@@ -1205,7 +1315,11 @@ theorem _root_.IsOpen.exists_is_const_of_fderiv_eq_zero
     have h₁ := hs.isOpen_inter_preimage_of_fderiv_eq_zero hf hf' {f y}
     have h₂ := hf.continuousOn.comp_continuous continuous_subtype_val (fun x => x.2)
     by_contra h₃
-    obtain ⟨t, ht
+    obtain ⟨t, ht, ht'⟩ := (isClosed_singleton (x := f y)).preimage h₂
+    have ht'' : forall a in s, a in t ↔ f a != f y := by simpa [Set.ext_iff] using ht'
+    obtain ⟨z, H₁, H₂, H₃⟩ := hs' _ _ h₁ ht (fun x h => by simp [h, ht'', eq_or_ne]) ⟨y, by simpa⟩
+      ⟨x, by simp [ht'' _ hx, hx, h₃]⟩
+    exact (ht'' _ H₁).mp H₃ H₂.2
 
 Depends on / 依赖: Set.ext_iff, comp_continuous, continuousOn, continuous_subtype_val, eq_empty_or_nonempty, eq_or_ne, ext_iff, hf.continuousOn.comp_continuous, hs.isOpen_inter_preimage_of_fderiv_eq_zero, isClosed_singleton, isOpen_inter_preimage_of_fderiv_eq_zero, preimage, s.eq_empty_or_nonempty
 -/
@@ -1314,7 +1428,7 @@ theorem _root_.eq_of_fderiv_eq
   let A : NormedSpace Real E := .restrictScalars Real 𝕜 E
 suffices Set.univ.EqOn f g from funext fun x => this mem_univ x
   exact convex_univ.eqOn_of_fderivWithin_eq hf.differentiableOn hg.differentiableOn
-    uniqueDiffOn_univ (fun x _ => by simpa
+    uniqueDiffOn_univ (fun x _ => by simpa using hf' _) (mem_univ _) hfgx
 
 中文:
 定理 _root_.eq_of_fderiv_eq
@@ -1323,7 +1437,7 @@ suffices Set.univ.EqOn f g from funext fun x => this mem_univ x
   let A : NormedSpace Real E := .restrictScalars Real 𝕜 E
 suffices Set.univ.EqOn f g from funext fun x => this mem_univ x
   exact convex_univ.eqOn_of_fderivWithin_eq hf.differentiableOn hg.differentiableOn
-    uniqueDiffOn_univ (fun x _ => by simpa
+    uniqueDiffOn_univ (fun x _ => by simpa using hf' _) (mem_univ _) hfgx
 
 Depends on / 依赖: IsRCLikeNormedField, IsRCLikeNormedField.rclike, NormedSpace, RCLike, Set.univ.EqOn, convex_univ, convex_univ.eqOn_of_fderivWithin_eq, differentiableOn, eqOn_of_fderivWithin_eq, hf.differentiableOn, hg.differentiableOn, mem_univ, rclike, restrictScalars, uniqueDiffOn_univ
 -/
@@ -1349,7 +1463,20 @@ lemma isLittleO_pow_succ
   simp_rw [norm_pow, pow_succ, ← mul_assoc, norm_norm]
   simp_rw [norm_pow, norm_norm] at hf'
   have : forallᶠ x in 𝓝[s] x₀, segment Real x₀ x subseteq s ∧ forall y in segment Real x₀ x, ‖f' y‖ <= c * ‖x - x₀‖ ^ n := by
-    have h1 : forallᶠ 
+    have h1 : forallᶠ x in 𝓝[s] x₀, x in s := eventually_mem_nhdsWithin
+    filter_upwards [h1, hs.eventually_nhdsWithin_segment hx₀s (hf' hc)] with x hxs h
+    refine ⟨hs.segment_subset hx₀s hxs, fun y hy => (h y hy).trans ?_⟩
+    gcongr
+    exact norm_sub_le_of_mem_segment hy
+  filter_upwards [this] with x ⟨h_segment, h⟩
+  convert!
+    (convex_segment x₀ x).norm_image_sub_le_of_norm_hasFDerivWithin_le (f := fun x => f x - f x₀)
+      (y := x) (x := x₀) (s := segment Real x₀ x) ?_ h
+      (left_mem_segment Real x₀ x)
+      (right_mem_segment Real x₀ x) using 1
+  · simp
+  · simp only [hasFDerivWithinAt_sub_const_iff]
+    exact fun x hx => (hff' x (h_segment hx)).mono h_segment
 
 中文:
 引理 isLittleO_pow_succ
@@ -1360,7 +1487,20 @@ lemma isLittleO_pow_succ
   simp_rw [norm_pow, pow_succ, ← mul_assoc, norm_norm]
   simp_rw [norm_pow, norm_norm] at hf'
   have : forallᶠ x in 𝓝[s] x₀, segment Real x₀ x subseteq s ∧ forall y in segment Real x₀ x, ‖f' y‖ <= c * ‖x - x₀‖ ^ n := by
-    have h1 : forallᶠ 
+    have h1 : forallᶠ x in 𝓝[s] x₀, x in s := eventually_mem_nhdsWithin
+    filter_upwards [h1, hs.eventually_nhdsWithin_segment hx₀s (hf' hc)] with x hxs h
+    refine ⟨hs.segment_subset hx₀s hxs, fun y hy => (h y hy).trans ?_⟩
+    gcongr
+    exact norm_sub_le_of_mem_segment hy
+  filter_upwards [this] with x ⟨h_segment, h⟩
+  convert!
+    (convex_segment x₀ x).norm_image_sub_le_of_norm_hasFDerivWithin_le (f := fun x => f x - f x₀)
+      (y := x) (x := x₀) (s := segment Real x₀ x) ?_ h
+      (left_mem_segment Real x₀ x)
+      (right_mem_segment Real x₀ x) using 1
+  · simp
+  · simp only [hasFDerivWithinAt_sub_const_iff]
+    exact fun x hx => (hff' x (h_segment hx)).mono h_segment
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_iff, eventually_mem_nhdsWithin, eventually_nhdsWithin_segment, filter_upwards, hs.eventually_nhdsWithin_segment, hs.segment_subset, isLittleO_iff, mul_assoc, norm_norm, norm_pow, pow_succ, segment, segment_subset, simp_rw, subseteq
 -/
@@ -1741,7 +1881,19 @@ theorem hasStrictFDerivAt_of_hasFDerivAt_of_continuousAt
   rw [hasStrictFDerivAt_iff_isLittleO]; rw [isLittleO_iff]
   refine fun c hc => Metric.eventually_nhds_iff_ball.mpr ?_
   -- the correct ε is the modulus of continuity of f'
-  rcases Metric.mem_nhds_iff.mp (inter_mem hd
+  rcases Metric.mem_nhds_iff.mp (inter_mem hder (hcont <| ball_mem_nhds _ hc)) with ⟨ε, ε0, hε⟩
+  refine ⟨ε, ε0, ?_⟩
+  -- simplify formulas involving the product E × E
+  rintro ⟨a, b⟩ h
+  rw [← ball_prod_same]; rw [prodMk_mem_set_prod_eq] at h
+  -- exploit the choice of ε as the modulus of continuity of f'
+  have hf' : forall x' in ball x ε, ‖f' x' - f' x‖ <= c := fun x' H' => by
+    rw [← dist_eq_norm]
+    exact le_of_lt (hε H').2
+  -- apply mean value theorem
+  let : NormedSpace Real G := .restrictScalars Real 𝕜 G
+  refine (convex_ball _ _).norm_image_sub_le_of_norm_hasFDerivWithin_le' ?_ hf' h.2 h.1
+  exact fun y hy => (hε hy).1.hasFDerivWithinAt
 
 中文:
 定理 hasStrictFDerivAt_of_hasFDerivAt_of_continuousAt
@@ -1750,7 +1902,19 @@ theorem hasStrictFDerivAt_of_hasFDerivAt_of_continuousAt
   rw [hasStrictFDerivAt_iff_isLittleO]; rw [isLittleO_iff]
   refine fun c hc => Metric.eventually_nhds_iff_ball.mpr ?_
   -- the correct ε is the modulus of continuity of f'
-  rcases Metric.mem_nhds_iff.mp (inter_mem hd
+  rcases Metric.mem_nhds_iff.mp (inter_mem hder (hcont <| ball_mem_nhds _ hc)) with ⟨ε, ε0, hε⟩
+  refine ⟨ε, ε0, ?_⟩
+  -- simplify formulas involving the product E × E
+  rintro ⟨a, b⟩ h
+  rw [← ball_prod_same]; rw [prodMk_mem_set_prod_eq] at h
+  -- exploit the choice of ε as the modulus of continuity of f'
+  have hf' : forall x' in ball x ε, ‖f' x' - f' x‖ <= c := fun x' H' => by
+    rw [← dist_eq_norm]
+    exact le_of_lt (hε H').2
+  -- apply mean value theorem
+  let : NormedSpace Real G := .restrictScalars Real 𝕜 G
+  refine (convex_ball _ _).norm_image_sub_le_of_norm_hasFDerivWithin_le' ?_ hf' h.2 h.1
+  exact fun y hy => (hε hy).1.hasFDerivWithinAt
 -/
 theorem hasStrictFDerivAt_of_hasFDerivAt_of_continuousAt
     (hder : forallᶠ y in 𝓝 x, HasFDerivAt f (f' y) y) (hcont : ContinuousAt f' x) :

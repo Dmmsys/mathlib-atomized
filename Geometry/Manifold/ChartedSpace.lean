@@ -586,7 +586,11 @@ theorem ChartedSpace.locallyCompactSpace
       (fun s => s in 𝓝 (chartAt H x x) ∧ IsCompact s ∧ s subseteq (chartAt H x).target)
       fun s => (chartAt H x).symm '' s := fun x => by
     rw [← (chartAt H x).symm_map_nhds_eq (mem_chart_source H x)]
-    exact ((compact_basis_nhds (chartAt H x x)).hasB
+    exact ((compact_basis_nhds (chartAt H x x)).hasBasis_self_subset
+      (chart_target_mem_nhds H x)).map _
+  refine .of_hasBasis this ?_
+  rintro x s ⟨_, h₂, h₃⟩
+  exact h₂.image_of_continuousOn ((chartAt H x).continuousOn_symm.mono h₃)
 
 中文:
 定理 Charted空间.locallyCompactSpace
@@ -597,7 +601,11 @@ theorem ChartedSpace.locallyCompactSpace
       (fun s => s in 𝓝 (chartAt H x x) ∧ IsCompact s ∧ s subseteq (chartAt H x).target)
       fun s => (chartAt H x).symm '' s := fun x => by
     rw [← (chartAt H x).symm_map_nhds_eq (mem_chart_source H x)]
-    exact ((compact_basis_nhds (chartAt H x x)).hasB
+    exact ((compact_basis_nhds (chartAt H x x)).hasBasis_self_subset
+      (chart_target_mem_nhds H x)).map _
+  refine .of_hasBasis this ?_
+  rintro x s ⟨_, h₂, h₃⟩
+  exact h₂.image_of_continuousOn ((chartAt H x).continuousOn_symm.mono h₃)
 
 Depends on / 依赖: HasBasis, IsCompact, chartAt, chart_target_mem_nhds, compact_basis_nhds, continuousOn_symm, continuousOn_symm.mono, hasBasis_self_subset, image_of_continuousOn, mem_chart_source, of_hasBasis, subseteq, symm_map_nhds_eq, target
 -/
@@ -624,7 +632,11 @@ theorem ChartedSpace.locallyConnectedSpace
   refine locallyConnectedSpace_of_connected_bases (fun x s => (e x).symm '' s)
       (fun x s => (IsOpen s ∧ e x x in s ∧ IsConnected s) ∧ s subseteq (e x).target) ?_ ?_
   · intro x
-    simpa only [e, OpenPartialHomeomorph.symm_map_nhds_eq, me
+    simpa only [e, OpenPartialHomeomorph.symm_map_nhds_eq, mem_chart_source] using!
+      ((LocallyConnectedSpace.open_connected_basis (e x x)).restrict_subset
+        ((e x).open_target.mem_nhds (mem_chart_target H x))).map (e x).symm
+  · rintro x s ⟨⟨-, -, hsconn⟩, hssubset⟩
+    exact hsconn.isPreconnected.image _ ((e x).continuousOn_symm.mono hssubset)
 
 中文:
 定理 Charted空间.locallyConnectedSpace
@@ -635,7 +647,11 @@ theorem ChartedSpace.locallyConnectedSpace
   refine locallyConnectedSpace_of_connected_bases (fun x s => (e x).symm '' s)
       (fun x s => (IsOpen s ∧ e x x in s ∧ IsConnected s) ∧ s subseteq (e x).target) ?_ ?_
   · intro x
-    simpa only [e, OpenPartialHomeomorph.symm_map_nhds_eq, me
+    simpa only [e, OpenPartialHomeomorph.symm_map_nhds_eq, mem_chart_source] using!
+      ((LocallyConnectedSpace.open_connected_basis (e x x)).restrict_subset
+        ((e x).open_target.mem_nhds (mem_chart_target H x))).map (e x).symm
+  · rintro x s ⟨⟨-, -, hsconn⟩, hssubset⟩
+    exact hsconn.isPreconnected.image _ ((e x).continuousOn_symm.mono hssubset)
 
 Depends on / 依赖: IsConnected, IsOpen, LocallyConnectedSpace, LocallyConnectedSpace.open_connected_basis, OpenPartialHomeomorph, OpenPartialHomeomorph.symm_map_nhds_eq, chartAt, hsconn, hsconn.is, hssubset, locallyConnectedSpace_of_connected_bases, mem_chart_source, mem_chart_target, mem_nhds, open_connected_basis, open_target, open_target.mem_nhds, restrict_subset, subseteq, symm_map_nhds_eq
 -/
@@ -661,7 +677,19 @@ theorem ChartedSpace.locallyPathConnectedSpace
   let e := chartAt H x
   let t := s inter e.source
   have ht : t in 𝓝 x := Filter.inter_mem hs (chart_source_mem_nhds _ _)
-  refine ⟨e.symm '' pathComponentIn (e '' t) (e x), ⟨?_, ?_⟩, (?_ : _ subsete
+  refine ⟨e.symm '' pathComponentIn (e '' t) (e x), ⟨?_, ?_⟩, (?_ : _ subseteq t).trans inter_subset_left⟩
+  · nth_rewrite 1 [← e.left_inv (mem_chart_source _ _)]
+    apply e.symm.image_mem_nhds (by simp [e])
+exact pathComponentIn_mem_nhds e.image_mem_nhds (mem_chart_source _ _) ht
+  · refine (isPathConnected_pathComponentIn <| mem_image_of_mem e (mem_of_mem_nhds ht)).image' ?_
+    refine e.continuousOn_symm.mono ?_
+    unfold t
+    grw [pathComponentIn_subset, inter_subset_right, e.image_source_subset]
+  · exact (image_mono pathComponentIn_subset).trans
+      (PartialEquiv.symm_image_image_of_subset_source _ inter_subset_right).subset
+
+@[deprecated (since := "2026-06-21")]
+alias ChartedSpace.locPathConnectedSpace := ChartedSpace.locallyPathConnectedSpace
 
 中文:
 定理 Charted空间.locallyPathConnectedSpace
@@ -671,7 +699,19 @@ theorem ChartedSpace.locallyPathConnectedSpace
   let e := chartAt H x
   let t := s inter e.source
   have ht : t in 𝓝 x := Filter.inter_mem hs (chart_source_mem_nhds _ _)
-  refine ⟨e.symm '' pathComponentIn (e '' t) (e x), ⟨?_, ?_⟩, (?_ : _ subsete
+  refine ⟨e.symm '' pathComponentIn (e '' t) (e x), ⟨?_, ?_⟩, (?_ : _ subseteq t).trans inter_subset_left⟩
+  · nth_rewrite 1 [← e.left_inv (mem_chart_source _ _)]
+    apply e.symm.image_mem_nhds (by simp [e])
+exact pathComponentIn_mem_nhds e.image_mem_nhds (mem_chart_source _ _) ht
+  · refine (isPathConnected_pathComponentIn <| mem_image_of_mem e (mem_of_mem_nhds ht)).image' ?_
+    refine e.continuousOn_symm.mono ?_
+    unfold t
+    grw [pathComponentIn_subset, inter_subset_right, e.image_source_subset]
+  · exact (image_mono pathComponentIn_subset).trans
+      (PartialEquiv.symm_image_image_of_subset_source _ inter_subset_right).subset
+
+@[deprecated (since := "2026-06-21")]
+alias ChartedSpace.locPathConnectedSpace := ChartedSpace.locallyPathConnectedSpace
 
 Depends on / 依赖: Filter, Filter.inter_mem, Filter.mem_of_superset, chartAt, chart_source_mem_nhds, e.image_mem_nhds, e.left_inv, e.source, e.symm, e.symm.image_mem_nhds, image_mem_nhds, inter_mem, inter_subset_left, left_inv, mem_chart_source, mem_of_superset, nth_rewrite, pathComponentIn, pathComponentIn_mem_nhds, source
 -/
@@ -759,7 +799,10 @@ theorem ChartedSpace.t1Space
   by_cases hy : y in (chartAt H x).source
   · refine ⟨(chartAt H x).source inter (chartAt H x)⁻¹' ({chartAt H x y}ᶜ), ?_, ?_, by simp⟩
     · exact OpenPartialHomeomorph.isOpen_inter_preimage _ isOpen_compl_singleton
-    · simp only [preimage_c
+    · simp only [preimage_compl, mem_inter_iff, mem_chart_source, mem_compl_iff, mem_preimage,
+        mem_singleton_iff, true_and]
+      exact (chartAt H x).injOn.ne (ChartedSpace.mem_chart_source x) hy hxy
+  · exact ⟨(chartAt H x).source, (chartAt H x).open_source, ChartedSpace.mem_chart_source x, hy⟩
 
 中文:
 定理 Charted空间.t1Space
@@ -770,7 +813,10 @@ theorem ChartedSpace.t1Space
   by_cases hy : y in (chartAt H x).source
   · refine ⟨(chartAt H x).source inter (chartAt H x)⁻¹' ({chartAt H x y}ᶜ), ?_, ?_, by simp⟩
     · exact OpenPartialHomeomorph.isOpen_inter_preimage _ isOpen_compl_singleton
-    · simp only [preimage_c
+    · simp only [preimage_compl, mem_inter_iff, mem_chart_source, mem_compl_iff, mem_preimage,
+        mem_singleton_iff, true_and]
+      exact (chartAt H x).injOn.ne (ChartedSpace.mem_chart_source x) hy hxy
+  · exact ⟨(chartAt H x).source, (chartAt H x).open_source, ChartedSpace.mem_chart_source x, hy⟩
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.mem_chart_source, OpenPartialHomeomorph, OpenPartialHomeomorph.isOpen_inter_preimage, chartAt, injOn.ne, isOpen_compl_singleton, isOpen_inter_preimage, mem_chart_source, mem_compl_iff, mem_inter_iff, mem_preimage, mem_singleton_iff, preimage_compl, source, t1Space_iff_exists_open, true_and
 -/
@@ -797,7 +843,9 @@ theorem ChartedSpace.discreteTopology
     isOpen_inter_preimage _ (isOpen_discrete _)
   convert! this
   refine Subset.antisymm (by simp) ?_
-  simp only [subset_singleton_iff, mem_inter_iff, m
+  simp only [subset_singleton_iff, mem_inter_iff, mem_preimage, mem_singleton_iff, and_imp]
+  intro y hy h'y
+  exact (chartAt H x).injOn hy (mem_chart_source _ x) h'y
 
 中文:
 定理 Charted空间.discreteTopology
@@ -809,7 +857,9 @@ theorem ChartedSpace.discreteTopology
     isOpen_inter_preimage _ (isOpen_discrete _)
   convert! this
   refine Subset.antisymm (by simp) ?_
-  simp only [subset_singleton_iff, mem_inter_iff, m
+  simp only [subset_singleton_iff, mem_inter_iff, mem_preimage, mem_singleton_iff, and_imp]
+  intro y hy h'y
+  exact (chartAt H x).injOn hy (mem_chart_source _ x) h'y
 
 Depends on / 依赖: IsOpen, Subset, Subset.antisymm, and_imp, antisymm, chartAt, convert, discreteTopology_iff_isOpen_singleton, isOpen_discrete, isOpen_inter_preimage, mem_chart_source, mem_inter_iff, mem_preimage, mem_singleton_iff, source, subset_singleton_iff
 -/
@@ -938,7 +988,8 @@ definition ChartedSpace.ofDiscreteTopology
   mem_chart_source x := by simp
   chart_mem_atlas x := by simp
 
-@[deprecate
+@[deprecated (since := "2026-07-26")]
+alias ChartedSpace.of_discreteTopology := ChartedSpace.ofDiscreteTopology
 
 中文:
 定义 Charted空间.ofDiscreteTopology
@@ -950,7 +1001,8 @@ definition ChartedSpace.ofDiscreteTopology
   mem_chart_source x := by simp
   chart_mem_atlas x := by simp
 
-@[deprecate
+@[deprecated (since := "2026-07-26")]
+alias ChartedSpace.of_discreteTopology := ChartedSpace.ofDiscreteTopology
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.const, Set.image, chartAt, chart_mem_atlas, h.default, isOpen_discrete, mem_chart_source
 -/
@@ -1325,7 +1377,29 @@ definition ChartedSpace.sumOfNonempty
   body: ((fun e => e.lift_openEmbedding IsOpenEmbedding.inl) '' cm.atlas) union
     ((fun e => e.lift_openEmbedding IsOpenEmbedding.inr) '' cm'.atlas)
   -- At `x : M`, the chart is the chart in `M`; at `x' ∈ M'`, it is the chart in `M'`.
-  chartAt := Sum.elim (fun x => (cm.chartAt x).lift_openEmbedding IsOp
+  chartAt := Sum.elim (fun x => (cm.chartAt x).lift_openEmbedding IsOpenEmbedding.inl)
+    (fun x => (cm'.chartAt x).lift_openEmbedding IsOpenEmbedding.inr)
+  mem_chart_source p := by
+    cases p with
+    | inl x =>
+      rw [Sum.elim_inl]; rw [lift_openEmbedding_source]; rw [← OpenPartialHomeomorph.lift_openEmbedding_source _ IsOpenEmbedding.inl]
+      use x, cm.mem_chart_source x
+    | inr x =>
+      rw [Sum.elim_inr]; rw [lift_openEmbedding_source]; rw [← OpenPartialHomeomorph.lift_openEmbedding_source _ IsOpenEmbedding.inr]
+      use x, cm'.mem_chart_source x
+  chart_mem_atlas p := by
+    cases p with
+    | inl x =>
+      rw [Sum.elim_inl]
+      left
+      use ChartedSpace.chartAt x, cm.chart_mem_atlas x
+    | inr x =>
+      rw [Sum.elim_inr]
+      right
+      use ChartedSpace.chartAt x, cm'.chart_mem_atlas x
+
+@[deprecated (since := "2026-07-26")]
+alias ChartedSpace.sum_of_nonempty := ChartedSpace.sumOfNonempty
 
 中文:
 定义 Charted空间.sumOfNonempty
@@ -1333,7 +1407,29 @@ definition ChartedSpace.sumOfNonempty
   定义体: ((fun e => e.lift_openEmbedding IsOpenEmbedding.inl) '' cm.atlas) union
     ((fun e => e.lift_openEmbedding IsOpenEmbedding.inr) '' cm'.atlas)
   -- At `x : M`, the chart is the chart in `M`; at `x' ∈ M'`, it is the chart in `M'`.
-  chartAt := Sum.elim (fun x => (cm.chartAt x).lift_openEmbedding IsOp
+  chartAt := Sum.elim (fun x => (cm.chartAt x).lift_openEmbedding IsOpenEmbedding.inl)
+    (fun x => (cm'.chartAt x).lift_openEmbedding IsOpenEmbedding.inr)
+  mem_chart_source p := by
+    cases p with
+    | inl x =>
+      rw [Sum.elim_inl]; rw [lift_openEmbedding_source]; rw [← OpenPartialHomeomorph.lift_openEmbedding_source _ IsOpenEmbedding.inl]
+      use x, cm.mem_chart_source x
+    | inr x =>
+      rw [Sum.elim_inr]; rw [lift_openEmbedding_source]; rw [← OpenPartialHomeomorph.lift_openEmbedding_source _ IsOpenEmbedding.inr]
+      use x, cm'.mem_chart_source x
+  chart_mem_atlas p := by
+    cases p with
+    | inl x =>
+      rw [Sum.elim_inl]
+      left
+      use ChartedSpace.chartAt x, cm.chart_mem_atlas x
+    | inr x =>
+      rw [Sum.elim_inr]
+      right
+      use ChartedSpace.chartAt x, cm'.chart_mem_atlas x
+
+@[deprecated (since := "2026-07-26")]
+alias ChartedSpace.sum_of_nonempty := ChartedSpace.sumOfNonempty
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.inl, cm.atlas, e.lift_openEmbedding, lift_openEmbedding
 -/
@@ -1773,7 +1869,27 @@ definition openPartialHomeomorph
       let : TopologicalSpace M := c.toTopologicalSpace
       rw [continuousOn_open_iff (c.open_source' he)]
       intro s s_open
-    
+      rw [inter_comm]
+      apply TopologicalSpace.GenerateOpen.basic
+      simp only [exists_prop, mem_iUnion, mem_singleton_iff]
+      exact ⟨e, he, ⟨s, s_open, rfl⟩⟩
+    continuousOn_invFun := by
+      let : TopologicalSpace M := c.toTopologicalSpace
+      apply continuousOn_isOpen_of_generateFrom
+      intro t ht
+      simp only [exists_prop, mem_iUnion, mem_singleton_iff] at ht
+      rcases ht with ⟨e', e'_atlas, s, s_open, ts⟩
+      rw [ts]
+      let f := e.symm.trans e'
+      have : IsOpen (f ⁻¹' s inter f.source) := by
+        simpa [f, inter_comm] using (continuousOn_open_iff (c.open_source e e' he e'_atlas)).1
+          (c.continuousOn_toFun e e' he e'_atlas) s s_open
+      have A : e' ∘ e.symm ⁻¹' s inter (e.target inter e.symm ⁻¹' e'.source) =
+          e.target inter (e' ∘ e.symm ⁻¹' s inter e.symm ⁻¹' e'.source) := by
+        rw [← inter_assoc]; rw [← inter_assoc]
+        congr 1
+        exact inter_comm _ _
+      simpa [f, PartialEquiv.trans_source, preimage_inter, preimage_comp.symm, A] using this }
 
 中文:
 定义 openPartialHomeomorph
@@ -1786,7 +1902,27 @@ definition openPartialHomeomorph
       let : TopologicalSpace M := c.toTopologicalSpace
       rw [continuousOn_open_iff (c.open_source' he)]
       intro s s_open
-    
+      rw [inter_comm]
+      apply TopologicalSpace.GenerateOpen.basic
+      simp only [exists_prop, mem_iUnion, mem_singleton_iff]
+      exact ⟨e, he, ⟨s, s_open, rfl⟩⟩
+    continuousOn_invFun := by
+      let : TopologicalSpace M := c.toTopologicalSpace
+      apply continuousOn_isOpen_of_generateFrom
+      intro t ht
+      simp only [exists_prop, mem_iUnion, mem_singleton_iff] at ht
+      rcases ht with ⟨e', e'_atlas, s, s_open, ts⟩
+      rw [ts]
+      let f := e.symm.trans e'
+      have : IsOpen (f ⁻¹' s inter f.source) := by
+        simpa [f, inter_comm] using (continuousOn_open_iff (c.open_source e e' he e'_atlas)).1
+          (c.continuousOn_toFun e e' he e'_atlas) s s_open
+      have A : e' ∘ e.symm ⁻¹' s inter (e.target inter e.symm ⁻¹' e'.source) =
+          e.target inter (e' ∘ e.symm ⁻¹' s inter e.symm ⁻¹' e'.source) := by
+        rw [← inter_assoc]; rw [← inter_assoc]
+        congr 1
+        exact inter_comm _ _
+      simpa [f, PartialEquiv.trans_source, preimage_inter, preimage_comp.symm, A] using this }
 -/
 protected def openPartialHomeomorph (e : PartialEquiv M H) (he : e in c.atlas) :
     @OpenPartialHomeomorph M H c.toTopologicalSpace _ :=
@@ -1834,7 +1970,8 @@ definition toChartedSpace
     chartAt := fun x => c.openPartialHomeomorph (c.chartAt x) (c.chart_mem_atlas x)
     mem_chart_source := fun x => c.mem_chart_source x
     chart_mem_atlas := fun x => by
-      si
+      simp only [mem_iUnion, mem_singleton_iff]
+      exact ⟨c.chartAt x, c.chart_mem_atlas x, rfl⟩}
 
 中文:
 定义 toChartedSpace
@@ -1844,7 +1981,8 @@ definition toChartedSpace
     chartAt := fun x => c.openPartialHomeomorph (c.chartAt x) (c.chart_mem_atlas x)
     mem_chart_source := fun x => c.mem_chart_source x
     chart_mem_atlas := fun x => by
-      si
+      simp only [mem_iUnion, mem_singleton_iff]
+      exact ⟨c.chartAt x, c.chart_mem_atlas x, rfl⟩}
 
 Depends on / 依赖: PartialEquiv, c.atlas, c.chartAt, c.chart_mem_atlas, c.mem_chart_source, c.openPartialHomeomorph, c.toTopologicalSpace, chartAt, chart_mem_atlas, mem_chart_source, mem_iUnion, mem_singleton_iff, openPartialHomeomorph, toTopologicalSpace
 -/

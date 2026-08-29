@@ -215,7 +215,9 @@ lemma IsMonicOfDegree.mul
     exact ⟨hp, hq⟩
   refine ⟨?_, hp.monic.mul hq.monic⟩
   have : p.leadingCoeff * q.leadingCoeff != 0 := by
-    rw [hp.leadingCoeff_eq]; rw [hq.leadingCoeff_eq]; rw
+    rw [hp.leadingCoeff_eq]; rw [hq.leadingCoeff_eq]; rw [one_mul]
+    exact one_ne_zero
+  rw [natDegree_mul' this]; rw [hp.natDegree_eq]; rw [hq.natDegree_eq]
 
 中文:
 引理 是MonicOfDegree.mul
@@ -226,7 +228,9 @@ lemma IsMonicOfDegree.mul
     exact ⟨hp, hq⟩
   refine ⟨?_, hp.monic.mul hq.monic⟩
   have : p.leadingCoeff * q.leadingCoeff != 0 := by
-    rw [hp.leadingCoeff_eq]; rw [hq.leadingCoeff_eq]; rw
+    rw [hp.leadingCoeff_eq]; rw [hq.leadingCoeff_eq]; rw [one_mul]
+    exact one_ne_zero
+  rw [natDegree_mul' this]; rw [hp.natDegree_eq]; rw [hq.natDegree_eq]
 
 Depends on / 依赖: Nat.add_eq_zero_iff, add_eq_zero_iff, hp.leadingCoeff_eq, hp.monic.mul, hp.natDegree_eq, hq.leadingCoeff_eq, hq.monic, hq.natDegree_eq, isMonicOfDegree_iff_of_subsingleton, leadingCoeff, leadingCoeff_eq, natDegree_eq, natDegree_mul, one_mul, one_ne_zero, p.leadingCoeff, q.leadingCoeff, subsingleton_or_nontrivial
 -/
@@ -288,7 +292,7 @@ lemma IsMonicOfDegree.coeff_eq
   · rw [hp.2, hq.2]
   · replace hp : p.natDegree < m := hp.1.trans_lt hm
     replace hq : q.natDegree < m := hq.1.trans_lt hm
-    rw [coeff_eq_zero_of_natDegree_lt hp]; rw [coeff_eq_zero_of_natDegree_lt
+    rw [coeff_eq_zero_of_natDegree_lt hp]; rw [coeff_eq_zero_of_natDegree_lt hq]
 
 中文:
 引理 是MonicOfDegree.coeff_eq
@@ -300,7 +304,7 @@ lemma IsMonicOfDegree.coeff_eq
   · rw [hp.2, hq.2]
   · replace hp : p.natDegree < m := hp.1.trans_lt hm
     replace hq : q.natDegree < m := hq.1.trans_lt hm
-    rw [coeff_eq_zero_of_natDegree_lt hp]; rw [coeff_eq_zero_of_natDegree_lt
+    rw [coeff_eq_zero_of_natDegree_lt hp]; rw [coeff_eq_zero_of_natDegree_lt hq]
 
 Depends on / 依赖: coeff_eq_zero_of_natDegree_lt, eq_or_lt_of_le, isMonicOfDegree_iff, natDegree, nontriviality, p.natDegree, q.natDegree, replace, trans_lt
 -/
@@ -328,7 +332,11 @@ lemma IsMonicOfDegree.of_mul_left
   have h₂ : q.Monic := hp.monic.of_mul_monic_left hpq.monic
   refine ⟨?_, h₂⟩
   have := hpq.natDegree_eq
-  have h : p.leadingCoeff * q.leadingCoeff !=
+  have h : p.leadingCoeff * q.leadingCoeff != 0 := by
+    rw [hp.leadingCoeff_eq]; rw [h₂.leadingCoeff]; rw [one_mul]
+    exact one_ne_zero
+  rw [natDegree_mul' h]; rw [hp.natDegree_eq] at this
+  exact (Nat.add_left_cancel this.symm).symm
 
 中文:
 引理 是MonicOfDegree.of_mul_left
@@ -340,7 +348,11 @@ lemma IsMonicOfDegree.of_mul_left
   have h₂ : q.Monic := hp.monic.of_mul_monic_left hpq.monic
   refine ⟨?_, h₂⟩
   have := hpq.natDegree_eq
-  have h : p.leadingCoeff * q.leadingCoeff !=
+  have h : p.leadingCoeff * q.leadingCoeff != 0 := by
+    rw [hp.leadingCoeff_eq]; rw [h₂.leadingCoeff]; rw [one_mul]
+    exact one_ne_zero
+  rw [natDegree_mul' h]; rw [hp.natDegree_eq] at this
+  exact (Nat.add_left_cancel this.symm).symm
 
 Depends on / 依赖: Nat.add_eq_zero_iff, Nat.add_left_cancel, add_eq_zero_iff, add_left_cancel, hp.leadingCoeff_eq, hp.monic.of_mul_monic_left, hp.natDegree_eq, hpq.monic, hpq.natDegree_eq, isMonicOfDegree_iff_of_subsingleton, leadingCoeff, leadingCoeff_eq, natDegree_eq, natDegree_mul, of_mul_monic_left, one_mul, one_ne_zero, p.leadingCoeff, q.Monic, q.leadingCoeff
 -/
@@ -372,7 +384,11 @@ lemma IsMonicOfDegree.of_mul_right
   have h₂ : p.Monic := hq.monic.of_mul_monic_right hpq.monic
   refine ⟨?_, h₂⟩
   have := hpq.natDegree_eq
-  have h : p.leadingCoeff * q.leadingCoeff !
+  have h : p.leadingCoeff * q.leadingCoeff != 0 := by
+    rw [h₂.leadingCoeff]; rw [hq.leadingCoeff_eq]; rw [one_mul]
+    exact one_ne_zero
+  rw [natDegree_mul' h]; rw [hq.natDegree_eq] at this
+  exact (Nat.add_right_cancel this.symm).symm
 
 中文:
 引理 是MonicOfDegree.of_mul_right
@@ -384,7 +400,11 @@ lemma IsMonicOfDegree.of_mul_right
   have h₂ : p.Monic := hq.monic.of_mul_monic_right hpq.monic
   refine ⟨?_, h₂⟩
   have := hpq.natDegree_eq
-  have h : p.leadingCoeff * q.leadingCoeff !
+  have h : p.leadingCoeff * q.leadingCoeff != 0 := by
+    rw [h₂.leadingCoeff]; rw [hq.leadingCoeff_eq]; rw [one_mul]
+    exact one_ne_zero
+  rw [natDegree_mul' h]; rw [hq.natDegree_eq] at this
+  exact (Nat.add_right_cancel this.symm).symm
 
 Depends on / 依赖: Nat.add_eq_zero_iff, Nat.add_right_cancel, add_eq_zero_iff, add_right_cancel, hpq.monic, hpq.natDegree_eq, hq.leadingCoeff_eq, hq.monic.of_mul_monic_right, hq.natDegree_eq, isMonicOfDegree_iff_of_subsingleton, leadingCoeff, leadingCoeff_eq, natDegree_eq, natDegree_mul, of_mul_monic_right, one_mul, one_ne_zero, p.Monic, p.leadingCoeff, q.leadingCoeff
 -/
@@ -477,7 +497,7 @@ lemma IsMonicOfDegree.comp
     exact .inl hp
   rw [← hp.natDegree_eq]; rw [← hq.natDegree_eq]
   refine (isMonicOfDegree_iff ..).mpr ⟨natDegree_comp_le, ?_⟩
-  rw [coeff_comp_degree_mul_degree (hq.natDegr
+  rw [coeff_comp_degree_mul_degree (hq.natDegree_eq ▸ hn)]; rw [hp.leadingCoeff_eq]; rw [hq.leadingCoeff_eq]; rw [one_pow]; rw [one_mul]
 
 中文:
 引理 是MonicOfDegree.comp
@@ -488,7 +508,7 @@ lemma IsMonicOfDegree.comp
     exact .inl hp
   rw [← hp.natDegree_eq]; rw [← hq.natDegree_eq]
   refine (isMonicOfDegree_iff ..).mpr ⟨natDegree_comp_le, ?_⟩
-  rw [coeff_comp_degree_mul_degree (hq.natDegr
+  rw [coeff_comp_degree_mul_degree (hq.natDegree_eq ▸ hn)]; rw [hp.leadingCoeff_eq]; rw [hq.leadingCoeff_eq]; rw [one_pow]; rw [one_mul]
 
 Depends on / 依赖: coeff_comp_degree_mul_degree, hp.leadingCoeff_eq, hp.natDegree_eq, hq.leadingCoeff_eq, hq.natDegree_eq, isMonicOfDegree_iff, isMonicOfDegree_iff_of_subsingleton, leadingCoeff_eq, mul_eq_zero, natDegree_comp_le, natDegree_eq, one_mul, one_pow, subsingleton_or_nontrivial
 -/
@@ -693,7 +713,7 @@ lemma isMonicOfDegree_two_iff
   · obtain rfl : n = 0 := Nat.lt_one_iff.mp hn
     simp
   · simp
-  · exact H.coeff_eq (isMonicOfDegree_add_add_two ..) (by li
+  · exact H.coeff_eq (isMonicOfDegree_add_add_two ..) (by lia)
 
 中文:
 引理 isMonicOfDegree_two_iff
@@ -705,7 +725,7 @@ lemma isMonicOfDegree_two_iff
   · obtain rfl : n = 0 := Nat.lt_one_iff.mp hn
     simp
   · simp
-  · exact H.coeff_eq (isMonicOfDegree_add_add_two ..) (by li
+  · exact H.coeff_eq (isMonicOfDegree_add_add_two ..) (by lia)
 
 Depends on / 依赖: H.coeff_eq, Nat.lt_one_iff.mp, coeff_eq, f.coeff, isMonicOfDegree_add_add_two, lt_one_iff, lt_trichotomy
 -/

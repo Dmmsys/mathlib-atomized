@@ -214,7 +214,9 @@ theorem conjStarAlgAut_ext_iff
   simp_rw [StarAlgEquiv.ext_iff, conjStarAlgAut_apply, ← coe_star, star_eq_inv,
     ← val_inv_toUnits_apply, ← val_toUnits_apply, mul_assoc, ← Units.eq_inv_mul_iff_mul_eq,
     ← mul_assoc, Units.eq_mul_inv_iff_mul_eq, mul_assoc, ← mul_assoc (((toUnits v)⁻¹ : Rˣ) : R),
- 
+    ← Subalgebra.mem_center_iff (R := S), Algebra.IsCentral.center_eq_bot, Algebra.mem_bot,
+    Set.mem_range, Algebra.algebraMap_eq_smul_one, Units.eq_inv_mul_iff_mul_eq, mul_smul_comm,
+    mul_one, eq_comm]
 
 中文:
 定理 conjStarAlgAut_ext_iff
@@ -224,7 +226,9 @@ theorem conjStarAlgAut_ext_iff
   simp_rw [StarAlgEquiv.ext_iff, conjStarAlgAut_apply, ← coe_star, star_eq_inv,
     ← val_inv_toUnits_apply, ← val_toUnits_apply, mul_assoc, ← Units.eq_inv_mul_iff_mul_eq,
     ← mul_assoc, Units.eq_mul_inv_iff_mul_eq, mul_assoc, ← mul_assoc (((toUnits v)⁻¹ : Rˣ) : R),
- 
+    ← Subalgebra.mem_center_iff (R := S), Algebra.IsCentral.center_eq_bot, Algebra.mem_bot,
+    Set.mem_range, Algebra.algebraMap_eq_smul_one, Units.eq_inv_mul_iff_mul_eq, mul_smul_comm,
+    mul_one, eq_comm]
 
 Depends on / 依赖: Algebra, Algebra.IsCentral.center_eq_bot, Algebra.algebraMap_eq_smul_one, Algebra.mem_bot, IsAffineHom, IsCentral, QuasiCompact, Set.mem_range, StarAlgEquiv, StarAlgEquiv.ext_iff, Subalgebra, Subalgebra.mem_center_iff, Units.eq_inv_mul_iff_mul_eq, Units.eq_mul_inv_iff_mul_eq, algebraMap_eq_smul_one, center_eq_bot, coe_star, conjStarAlgAut_apply, conv_lhs, eq_comm
 -/
@@ -249,7 +253,19 @@ theorem conjStarAlgAut_ext_iff'
   simp_rw [StarAlgEquiv.ext_iff, conjStarAlgAut_apply, ← coe_star, star_eq_inv,
     ← val_inv_toUnits_apply, ← val_toUnits_apply, mul_assoc, ← Units.eq_inv_mul_iff_mul_eq,
     ← mul_assoc, Units.eq_mul_inv_iff_mul_eq, mul_assoc, ← mul_assoc (((toUnits v)⁻¹ : Rˣ) : R),
- 
+    ← Subalgebra.mem_center_iff (R := S), Algebra.IsCentral.center_eq_bot, Algebra.mem_bot,
+    Set.mem_range, Algebra.algebraMap_eq_smul_one, val_inv_toUnits_apply, val_toUnits_apply,
+    ← star_eq_inv, coe_star]
+  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : S), by
+    simp only [h, coe_smul, mul_smul_comm, SetLike.coe_mem, star_mul_self_of_mem]; rfl⟩⟩
+  have huv : (u : R) = y • (v : R) := by simpa [← mul_assoc] using congr(v * $h).symm
+  have hvu : (v : R) = star y • (u : R) := by simpa [← mul_assoc] using congr(u * (star $h)).symm
+  have hvy : (v : R) = (star y * y) • (v : R) := by simp [← smul_smul, ← huv, ← hvu]
+  nth_rw 1 [← one_smul S (v : R)] at hvy
+  rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [eq_comm] at hvy
+  obtain (this | this) := hvy
+  · exact ⟨⟨y, by simp [mem_iff, this, mul_comm y]⟩, by ext; exact huv⟩
+  · exact ⟨1, by ext; simp [this, huv] at huv ⊢⟩
 
 中文:
 定理 conjStarAlgAut_ext_iff'
@@ -259,7 +275,19 @@ theorem conjStarAlgAut_ext_iff'
   simp_rw [StarAlgEquiv.ext_iff, conjStarAlgAut_apply, ← coe_star, star_eq_inv,
     ← val_inv_toUnits_apply, ← val_toUnits_apply, mul_assoc, ← Units.eq_inv_mul_iff_mul_eq,
     ← mul_assoc, Units.eq_mul_inv_iff_mul_eq, mul_assoc, ← mul_assoc (((toUnits v)⁻¹ : Rˣ) : R),
- 
+    ← Subalgebra.mem_center_iff (R := S), Algebra.IsCentral.center_eq_bot, Algebra.mem_bot,
+    Set.mem_range, Algebra.algebraMap_eq_smul_one, val_inv_toUnits_apply, val_toUnits_apply,
+    ← star_eq_inv, coe_star]
+  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : S), by
+    simp only [h, coe_smul, mul_smul_comm, SetLike.coe_mem, star_mul_self_of_mem]; rfl⟩⟩
+  have huv : (u : R) = y • (v : R) := by simpa [← mul_assoc] using congr(v * $h).symm
+  have hvu : (v : R) = star y • (u : R) := by simpa [← mul_assoc] using congr(u * (star $h)).symm
+  have hvy : (v : R) = (star y * y) • (v : R) := by simp [← smul_smul, ← huv, ← hvu]
+  nth_rw 1 [← one_smul S (v : R)] at hvy
+  rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [eq_comm] at hvy
+  obtain (this | this) := hvy
+  · exact ⟨⟨y, by simp [mem_iff, this, mul_comm y]⟩, by ext; exact huv⟩
+  · exact ⟨1, by ext; simp [this, huv] at huv ⊢⟩
 
 Depends on / 依赖: Algebra, Algebra.IsCentral.center_eq_bot, Algebra.algebraMap_eq_smul_one, Algebra.mem_bot, IsCentral, Set.mem_range, StarAlgEquiv, StarAlgEquiv.ext_iff, Subalgebra, Subalgebra.mem_center_iff, Units.eq_inv_mul_iff_mul_eq, Units.eq_mul_inv_iff_mul_eq, algebraMap_eq_smul_one, center_eq_bot, coe_star, conjStarAlgAut_apply, conv_lhs, eq_comm, eq_inv_mul_iff_mul_eq, eq_mul_inv_iff_mul_eq
 -/

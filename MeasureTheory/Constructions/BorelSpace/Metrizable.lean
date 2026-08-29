@@ -38,7 +38,15 @@ theorem measurable_of_tendsto_metrizable'
   intro s h1s h2s h3s
   have : Measurable fun x => infNndist (g x) s := by
     suffices Tendsto (fun i x => infNndist (f i x) s) u (𝓝 fun x => infNndist (g x) s) from
-      NNReal.measurable_of_tend
+      NNReal.measurable_of_tendsto' u (fun i => (hf i).infNndist) this
+    rw [tendsto_pi_nhds] at lim ⊢
+    intro x
+    exact ((continuous_infNndist_pt s).tendsto (g x)).comp (lim x)
+  have h4s : g ⁻¹' s = (fun x => infNndist (g x) s) ⁻¹' {0} := by
+    ext x
+    simp [← h1s.mem_iff_infDist_zero h2s, ← NNReal.coe_eq_zero]
+  rw [h4s]
+  exact this (measurableSet_singleton 0)
 
 中文:
 定理 measurable_of_tendsto_metrizable'
@@ -49,7 +57,15 @@ theorem measurable_of_tendsto_metrizable'
   intro s h1s h2s h3s
   have : Measurable fun x => infNndist (g x) s := by
     suffices Tendsto (fun i x => infNndist (f i x) s) u (𝓝 fun x => infNndist (g x) s) from
-      NNReal.measurable_of_tend
+      NNReal.measurable_of_tendsto' u (fun i => (hf i).infNndist) this
+    rw [tendsto_pi_nhds] at lim ⊢
+    intro x
+    exact ((continuous_infNndist_pt s).tendsto (g x)).comp (lim x)
+  have h4s : g ⁻¹' s = (fun x => infNndist (g x) s) ⁻¹' {0} := by
+    ext x
+    simp [← h1s.mem_iff_infDist_zero h2s, ← NNReal.coe_eq_zero]
+  rw [h4s]
+  exact this (measurableSet_singleton 0)
 
 Depends on / 依赖: Measurable, NNReal, NNReal.measurable_of_tendsto, PseudoMetricSpace, Tendsto, continuous_infNndist_pt, infNndist, measurable_of_isClosed, measurable_of_tendsto, pseudoMetrizableSpacePseudoMetric, tendsto, tendsto_pi_nhds
 -/
@@ -102,7 +118,21 @@ theorem aemeasurable_of_tendsto_metrizable_ae
   have h'f : forall n, AEMeasurable (f (v n)) μ := fun n => hf (v n)
   set p : α -> (Nat -> β) -> Prop := fun x f' => Tendsto (fun n => f' n) atTop (𝓝 (g x))
   have hp : forallᵐ x ∂μ, p x fun n => f (v n) x := by
-    filter_upwards [h_tendsto
+    filter_upwards [h_tendsto] with x hx using hx.comp hv
+  set aeSeqLim := fun x => ite (x in aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty β).some
+  refine
+    ⟨aeSeqLim,
+      measurable_of_tendsto_metrizable' atTop (aeSeq.measurable h'f p)
+        (tendsto_pi_nhds.mpr fun x => ?_),
+      ?_⟩
+  · simp_rw [aeSeqLim, aeSeq]
+    split_ifs with hx
+    · simp_rw [aeSeq.mk_eq_fun_of_mem_aeSeqSet h'f hx]
+      exact @aeSeq.fun_prop_of_mem_aeSeqSet _ α β _ _ _ _ _ h'f x hx
+    · exact tendsto_const_nhds
+  · exact
+      (ite_ae_eq_of_measure_compl_zero g (fun x => (⟨f (v 0) x⟩ : Nonempty β).some) (aeSeqSet h'f p)
+          (aeSeq.measure_compl_aeSeqSet_eq_zero h'f hp)).symm
 
 中文:
 定理 aemeasurable_of_tendsto_metrizable_ae
@@ -113,7 +143,21 @@ theorem aemeasurable_of_tendsto_metrizable_ae
   have h'f : forall n, AEMeasurable (f (v n)) μ := fun n => hf (v n)
   set p : α -> (Nat -> β) -> Prop := fun x f' => Tendsto (fun n => f' n) atTop (𝓝 (g x))
   have hp : forallᵐ x ∂μ, p x fun n => f (v n) x := by
-    filter_upwards [h_tendsto
+    filter_upwards [h_tendsto] with x hx using hx.comp hv
+  set aeSeqLim := fun x => ite (x in aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty β).some
+  refine
+    ⟨aeSeqLim,
+      measurable_of_tendsto_metrizable' atTop (aeSeq.measurable h'f p)
+        (tendsto_pi_nhds.mpr fun x => ?_),
+      ?_⟩
+  · simp_rw [aeSeqLim, aeSeq]
+    split_ifs with hx
+    · simp_rw [aeSeq.mk_eq_fun_of_mem_aeSeqSet h'f hx]
+      exact @aeSeq.fun_prop_of_mem_aeSeqSet _ α β _ _ _ _ _ h'f x hx
+    · exact tendsto_const_nhds
+  · exact
+      (ite_ae_eq_of_measure_compl_zero g (fun x => (⟨f (v 0) x⟩ : Nonempty β).some) (aeSeqSet h'f p)
+          (aeSeq.measure_compl_aeSeqSet_eq_zero h'f hp)).symm
 
 Depends on / 依赖: AEMeasurable, Nonempty, Tendsto, aeSeq.measurable, aeSeqLim, aeSeqSet, classical, exists_seq_tendsto, filter_upwards, h_tendsto, hx.comp, measurable, measurable_of_tendsto_metrizable, tendsto_pi_n, u.exists_seq_tendsto
 -/
@@ -173,7 +217,12 @@ theorem aemeasurable_of_unif_approx
     exists_seq_strictAnti_tendsto (0 : Real)
   choose f Hf using fun n : Nat => hf (u n) (u_pos n)
   have : forallᵐ x ∂μ, Tendsto (fun n => f n x) atTop (𝓝 (g x)) := by
-
+    have : forallᵐ x ∂μ, forall n, dist (f n x) (g x) <= u n := ae_all_iff.2 fun n => (Hf n).2
+    filter_upwards [this]
+    intro x hx
+    rw [tendsto_iff_dist_tendsto_zero]
+    exact squeeze_zero (fun n => dist_nonneg) hx u_lim
+  exact aemeasurable_of_tendsto_metrizable_ae' (fun n => (Hf n).1) this
 
 中文:
 定理 aemeasurable_of_unif_approx
@@ -184,7 +233,12 @@ theorem aemeasurable_of_unif_approx
     exists_seq_strictAnti_tendsto (0 : Real)
   choose f Hf using fun n : Nat => hf (u n) (u_pos n)
   have : forallᵐ x ∂μ, Tendsto (fun n => f n x) atTop (𝓝 (g x)) := by
-
+    have : forallᵐ x ∂μ, forall n, dist (f n x) (g x) <= u n := ae_all_iff.2 fun n => (Hf n).2
+    filter_upwards [this]
+    intro x hx
+    rw [tendsto_iff_dist_tendsto_zero]
+    exact squeeze_zero (fun n => dist_nonneg) hx u_lim
+  exact aemeasurable_of_tendsto_metrizable_ae' (fun n => (Hf n).1) this
 
 Depends on / 依赖: StrictAnti, Tendsto, ae_all_iff, dist_nonneg, exists_seq_strictAnti_tendsto, filter_upwards, squeeze_zero, tendsto_iff_dist_tendsto_zero, u_lim, u_pos
 -/
@@ -240,7 +294,15 @@ theorem measurable_limit_of_tendsto_metrizable_ae
   · exact ⟨(hf default).mk _, (hf default).measurable_mk, Eventually.of_forall fun x => tendsto_bot⟩
   set f_lim : α -> β := fun x =>
     if h : exists l : β, Tendsto (fun n => f n x) L (𝓝 l) then h.choose
-      else (⟨f default x⟩ : 
+      else (⟨f default x⟩ : Nonempty β).some
+  have h_ae_tendsto_f_lim : forallᵐ x ∂μ, Tendsto (fun n => f n x) L (𝓝 (f_lim x)) := by
+    filter_upwards [h_ae_tendsto] with x hx
+    simpa [f_lim, hx] using hx.choose_spec
+  have hf_lim : AEMeasurable f_lim μ :=
+    aemeasurable_of_tendsto_metrizable_ae L hf h_ae_tendsto_f_lim
+  refine ⟨hf_lim.mk f_lim, hf_lim.measurable_mk, ?_⟩
+  filter_upwards [h_ae_tendsto_f_lim, hf_lim.ae_eq_mk] with x hx h_eq
+  simpa [h_eq] using hx
 
 中文:
 定理 measurable_limit_of_tendsto_metrizable_ae
@@ -252,7 +314,15 @@ theorem measurable_limit_of_tendsto_metrizable_ae
   · exact ⟨(hf default).mk _, (hf default).measurable_mk, Eventually.of_forall fun x => tendsto_bot⟩
   set f_lim : α -> β := fun x =>
     if h : exists l : β, Tendsto (fun n => f n x) L (𝓝 l) then h.choose
-      else (⟨f default x⟩ : 
+      else (⟨f default x⟩ : Nonempty β).some
+  have h_ae_tendsto_f_lim : forallᵐ x ∂μ, Tendsto (fun n => f n x) L (𝓝 (f_lim x)) := by
+    filter_upwards [h_ae_tendsto] with x hx
+    simpa [f_lim, hx] using hx.choose_spec
+  have hf_lim : AEMeasurable f_lim μ :=
+    aemeasurable_of_tendsto_metrizable_ae L hf h_ae_tendsto_f_lim
+  refine ⟨hf_lim.mk f_lim, hf_lim.measurable_mk, ?_⟩
+  filter_upwards [h_ae_tendsto_f_lim, hf_lim.ae_eq_mk] with x hx h_eq
+  simpa [h_eq] using hx
 
 Depends on / 依赖: AEMeasurable, Eventually, Eventually.of_forall, Nonempty, Tendsto, choose_spec, classical, eq_or_neBot, f_lim, filter_upwards, h.choose, h_ae_tendsto, h_ae_tendsto_f_lim, hf_lim, hx.choose_spec, inhabit, measurable_mk, of_forall, tendsto_bot
 -/

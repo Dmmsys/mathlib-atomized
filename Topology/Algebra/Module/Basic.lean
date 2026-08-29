@@ -105,7 +105,11 @@ theorem Submodule.eq_top_of_nonempty_interior'
   rw [mem_interior_iff_mem_nhds] at hy
   have : Tendsto (fun c : R => y + c • x) (𝓝[{ x : R | IsUnit x }] 0) (𝓝 (y + 0)) :=
     tendsto_const_nhds.add ((tendsto_nhdsWithin_of_tendsto_nhds tendsto_id).zero_smul_const _)
-  rw [ad
+  rw [add_zero] at this
+  obtain ⟨_, hu : y + _ • _ in s, u, rfl⟩ :=
+    nonempty_of_mem (inter_mem (Filter.mem_map.1 (this hy)) self_mem_nhdsWithin)
+  have hy' : y in ↑s := mem_of_mem_nhds hy
+  rwa [s.add_mem_iff_right hy', ← Units.smul_def, s.smul_mem_iff' u] at hu
 
 中文:
 定理 子模.eq_top_of_nonempty_interior'
@@ -116,7 +120,11 @@ theorem Submodule.eq_top_of_nonempty_interior'
   rw [mem_interior_iff_mem_nhds] at hy
   have : Tendsto (fun c : R => y + c • x) (𝓝[{ x : R | IsUnit x }] 0) (𝓝 (y + 0)) :=
     tendsto_const_nhds.add ((tendsto_nhdsWithin_of_tendsto_nhds tendsto_id).zero_smul_const _)
-  rw [ad
+  rw [add_zero] at this
+  obtain ⟨_, hu : y + _ • _ in s, u, rfl⟩ :=
+    nonempty_of_mem (inter_mem (Filter.mem_map.1 (this hy)) self_mem_nhdsWithin)
+  have hy' : y in ↑s := mem_of_mem_nhds hy
+  rwa [s.add_mem_iff_right hy', ← Units.smul_def, s.smul_mem_iff' u] at hu
 
 Depends on / 依赖: Filter, Filter.mem_map, IsUnit, Submodule, Submodule.eq_top_iff, Tendsto, add_mem_iff_right, add_zero, eq_top_iff, inter_mem, mem_interior_iff_mem_nhds, mem_map, mem_of_mem_nhds, nonempty_of_mem, s.add_mem_iff_right, self_mem_nhdsWithin, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_id, tendsto_nhdsWithin_of_tendsto_nhds
 -/
@@ -148,7 +156,7 @@ theorem Module.punctured_nhds_neBot
   · convert! tendsto_const_nhds.add ((@tendsto_id R _).zero_smul_const y)
     rw [add_zero]
   · intro c hc
-    simp
+    simpa [hy] using hc
 
 中文:
 定理 模.punctured_nhds_neBot
@@ -160,7 +168,7 @@ theorem Module.punctured_nhds_neBot
   · convert! tendsto_const_nhds.add ((@tendsto_id R _).zero_smul_const y)
     rw [add_zero]
   · intro c hc
-    simp
+    simpa [hy] using hc
 
 Depends on / 依赖: Tendsto, Tendsto.inf, add_zero, convert, exists_ne, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_id, tendsto_principal_principal, this.neBot, zero_smul_const
 -/
@@ -240,7 +248,8 @@ lemma TopologicalSpace.IsSeparable.span
   · have : IsSeparable {f : Fin n -> R × M | forall (i : Fin n), f i in Set.univ ×ˢ s} := by
       apply isSeparable_pi (fun i => .prod (.of_separableSpace Set.univ) hs)
     rwa [Set.univ_prod] at this
-  · apply continuous
+  · apply continuous_finsetSum _ (fun i _ => ?_)
+    exact (continuous_fst.comp (continuous_apply i)).smul (continuous_snd.comp (continuous_apply i))
 
 中文:
 引理 拓扑空间.是可分.span
@@ -251,7 +260,8 @@ lemma TopologicalSpace.IsSeparable.span
   · have : IsSeparable {f : Fin n -> R × M | forall (i : Fin n), f i in Set.univ ×ˢ s} := by
       apply isSeparable_pi (fun i => .prod (.of_separableSpace Set.univ) hs)
     rwa [Set.univ_prod] at this
-  · apply continuous
+  · apply continuous_finsetSum _ (fun i _ => ?_)
+    exact (continuous_fst.comp (continuous_apply i)).smul (continuous_snd.comp (continuous_apply i))
 
 Depends on / 依赖: IsSeparable, Set.univ, Set.univ_prod, Submodule, Submodule.span_eq_iUnion_nat, continuous_apply, continuous_finsetSum, continuous_fst, continuous_fst.comp, continuous_snd, continuous_snd.comp, iUnion, isSeparable_pi, of_separableSpace, span_eq_iUnion_nat, univ_prod
 -/
@@ -601,7 +611,9 @@ refine (closure_mono ?_).antisymm closure_minimal ?_ isClosed_closure
   · simp only [Set.subset_def, mem_closure_iff]
     intro x hx U hU hxU
     rcases isOpen_pi_iff.mp hU x hxU with ⟨t, V, hV, hVU⟩
-    refine ⟨∑ i in t, Pi.sing
+    refine ⟨∑ i in t, Pi.single i (x i), hVU ?_, ?_⟩
+    · simp_all [Finset.sum_pi_single]
+· exact sum_mem fun i hi => mem_iSup_of_mem i mem_map_of_mem hx _ Set.mem_univ _
 
 中文:
 定理 closure_coe_iSup_map_single
@@ -613,7 +625,9 @@ refine (closure_mono ?_).antisymm closure_minimal ?_ isClosed_closure
   · simp only [Set.subset_def, mem_closure_iff]
     intro x hx U hU hxU
     rcases isOpen_pi_iff.mp hU x hxU with ⟨t, V, hV, hVU⟩
-    refine ⟨∑ i in t, Pi.sing
+    refine ⟨∑ i in t, Pi.single i (x i), hVU ?_, ?_⟩
+    · simp_all [Finset.sum_pi_single]
+· exact sum_mem fun i hi => mem_iSup_of_mem i mem_map_of_mem hx _ Set.mem_univ _
 
 Depends on / 依赖: Finset, Finset.sum_pi_single, Pi.single, Set.mem_univ, Set.subset_def, SetLike, SetLike.coe_mono, antisymm, closure_minimal, closure_mono, closure_pi_set, coe_mono, iSup_map_single_le, isClosed_closure, isOpen_pi_iff, isOpen_pi_iff.mp, mem_closure_iff, mem_iSup_of_mem, mem_map_of_mem, mem_univ
 -/
@@ -668,7 +682,9 @@ theorem LinearMap.continuous_on_pi
     -- function.
     have : (f : (ι -> R) -> M) = fun x => ∑ i : ι, x i • f fun j => if i = j then 1 else 0 := by
       ext x
-      exact f.pi_apply_eq_sum_un
+      exact f.pi_apply_eq_sum_univ x
+    rw [this]
+    fun_prop
 
 中文:
 定理 线性映射.continuous_on_pi
@@ -680,7 +696,9 @@ theorem LinearMap.continuous_on_pi
     -- function.
     have : (f : (ι -> R) -> M) = fun x => ∑ i : ι, x i • f fun j => if i = j then 1 else 0 := by
       ext x
-      exact f.pi_apply_eq_sum_un
+      exact f.pi_apply_eq_sum_univ x
+    rw [this]
+    fun_prop
 
 Depends on / 依赖: classical, nonempty_fintype
 -/

@@ -225,7 +225,25 @@ theorem sub_apply
     (fun (t : Set α) (_ : MeasurableSet t) => μ t - ν t) (by simp)
     (fun g h_meas h_disj => by
       simp only [measure_iUnion h_disj h_meas]
-      rw 
+      rw [ENNReal.tsum_sub _ (h₂ <| g ·)]
+      rw [← measure_iUnion h_disj h_meas]
+      apply measure_ne_top)
+  -- Now, we demonstrate `μ - ν = measure_sub`, and apply it.
+  have h_measure_sub_add : ν + measure_sub = μ := by
+    ext1 t h_t_measurable_set
+    simp only [Pi.add_apply, coe_add]
+    rw [MeasureTheory.Measure.ofMeasurable_apply _ h_t_measurable_set]; rw [add_comm]; rw [tsub_add_cancel_of_le (h₂ t)]
+  have h_measure_sub_eq : μ - ν = measure_sub := by
+    rw [MeasureTheory.Measure.sub_def]
+    apply le_antisymm
+    · apply sInf_le
+      simp [add_comm, h_measure_sub_add]
+    apply le_sInf
+    intro d h_d
+    rw [← h_measure_sub_add]; rw [mem_ofPred_eq]; rw [add_comm d] at h_d
+    apply Measure.le_of_add_le_add_left h_d
+  rw [h_measure_sub_eq]
+  apply Measure.ofMeasurable_apply _ h₁
 
 中文:
 定理 sub_apply
@@ -236,7 +254,25 @@ theorem sub_apply
     (fun (t : Set α) (_ : MeasurableSet t) => μ t - ν t) (by simp)
     (fun g h_meas h_disj => by
       simp only [measure_iUnion h_disj h_meas]
-      rw 
+      rw [ENNReal.tsum_sub _ (h₂ <| g ·)]
+      rw [← measure_iUnion h_disj h_meas]
+      apply measure_ne_top)
+  -- Now, we demonstrate `μ - ν = measure_sub`, and apply it.
+  have h_measure_sub_add : ν + measure_sub = μ := by
+    ext1 t h_t_measurable_set
+    simp only [Pi.add_apply, coe_add]
+    rw [MeasureTheory.Measure.ofMeasurable_apply _ h_t_measurable_set]; rw [add_comm]; rw [tsub_add_cancel_of_le (h₂ t)]
+  have h_measure_sub_eq : μ - ν = measure_sub := by
+    rw [MeasureTheory.Measure.sub_def]
+    apply le_antisymm
+    · apply sInf_le
+      simp [add_comm, h_measure_sub_add]
+    apply le_sInf
+    intro d h_d
+    rw [← h_measure_sub_add]; rw [mem_ofPred_eq]; rw [add_comm d] at h_d
+    apply Measure.le_of_add_le_add_left h_d
+  rw [h_measure_sub_eq]
+  apply Measure.ofMeasurable_apply _ h₁
 -/
 theorem sub_apply [IsFiniteMeasure ν] (h₁ : MeasurableSet s) (h₂ : ν <= μ) :
     (μ - ν) s = μ s - ν s := by
@@ -332,7 +368,26 @@ theorem restrict_sub_eq_restrict_sub_restrict
   · refine sInf_le_sInf_of_isCoinitialFor ?_
     intro ν' h_ν'_in
     rw [mem_ofPred_eq] at h_ν'_in
-    refine ⟨ν
+    refine ⟨ν'.restrict s, ?_, restrict_le_self⟩
+    refine ⟨ν' + (⊤ : Measure α).restrict sᶜ, ?_, ?_⟩
+    · rw [mem_ofPred_eq, add_right_comm, Measure.le_iff]
+      intro t h_meas_t
+      repeat rw [← measure_inter_add_sdiff t h_meas_s]
+      refine add_le_add ?_ ?_
+      · rw [add_apply, add_apply]
+        apply le_add_right _
+        rw [← restrict_eq_self μ inter_subset_right]; rw [← restrict_eq_self ν inter_subset_right]
+        apply h_ν'_in
+      · rw [add_apply, restrict_apply (h_meas_t.diff h_meas_s), sdiff_eq, inter_assoc, inter_self,
+          ← add_apply]
+        have h_mu_le_add_top : μ <= ν' + ν + ⊤ := by simp only [add_top, le_top]
+        exact Measure.le_iff'.1 h_mu_le_add_top _
+    · ext1 t h_meas_t
+      simp [restrict_apply h_meas_t, restrict_apply (h_meas_t.inter h_meas_s), inter_assoc]
+  · refine sInf_le_sInf_of_isCoinitialFor ?_
+    refine forall_mem_image.2 fun t h_t_in => ⟨t.restrict s, ?_, le_rfl⟩
+    rw [Set.mem_ofPred_eq]; rw [← restrict_add]
+    exact restrict_mono Subset.rfl h_t_in
 
 中文:
 定理 restrict_sub_eq_restrict_sub_restrict
@@ -345,7 +400,26 @@ theorem restrict_sub_eq_restrict_sub_restrict
   · refine sInf_le_sInf_of_isCoinitialFor ?_
     intro ν' h_ν'_in
     rw [mem_ofPred_eq] at h_ν'_in
-    refine ⟨ν
+    refine ⟨ν'.restrict s, ?_, restrict_le_self⟩
+    refine ⟨ν' + (⊤ : Measure α).restrict sᶜ, ?_, ?_⟩
+    · rw [mem_ofPred_eq, add_right_comm, Measure.le_iff]
+      intro t h_meas_t
+      repeat rw [← measure_inter_add_sdiff t h_meas_s]
+      refine add_le_add ?_ ?_
+      · rw [add_apply, add_apply]
+        apply le_add_right _
+        rw [← restrict_eq_self μ inter_subset_right]; rw [← restrict_eq_self ν inter_subset_right]
+        apply h_ν'_in
+      · rw [add_apply, restrict_apply (h_meas_t.diff h_meas_s), sdiff_eq, inter_assoc, inter_self,
+          ← add_apply]
+        have h_mu_le_add_top : μ <= ν' + ν + ⊤ := by simp only [add_top, le_top]
+        exact Measure.le_iff'.1 h_mu_le_add_top _
+    · ext1 t h_meas_t
+      simp [restrict_apply h_meas_t, restrict_apply (h_meas_t.inter h_meas_s), inter_assoc]
+  · refine sInf_le_sInf_of_isCoinitialFor ?_
+    refine forall_mem_image.2 fun t h_t_in => ⟨t.restrict s, ?_, le_rfl⟩
+    rw [Set.mem_ofPred_eq]; rw [← restrict_add]
+    exact restrict_mono Subset.rfl h_t_in
 
 Depends on / 依赖: Measure, Measure.le_add_right, Measure.le_iff, Nonempty, add_le_add, add_right_comm, h_meas_s, h_meas_t, h_nonempty, le_add_right, le_antisymm, le_iff, le_rfl, measure_inter_add_sdiff, mem_ofPred_eq, repeat, restrict, restrict_le_self, restrict_sInf_eq_sInf_restrict, sInf_le_sInf_of_isCoinitialFor
 -/

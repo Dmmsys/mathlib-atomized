@@ -775,7 +775,9 @@ lemma exists_lift
   obtain ⟨φ₂₃, w₂', w₃⟩ := h₂₃.isPullback.exists_lift g₂ g₃ (by cat_disch)
   obtain ⟨φ, w₁₂, w₂₃⟩ := h.chosenPullback.isPullback.exists_lift φ₁₂ φ₂₃ (by cat_disch)
   refine ⟨φ, ?_, ?_, ?_⟩
-  · rw [← w₁, ← w₁₂, Category.asso
+  · rw [← w₁, ← w₁₂, Category.assoc, ← p₁₂, p₁₂_p₁]
+  · rw [← w₂, ← w₁₂, Category.assoc, ← p₁₂, p₁₂_p₂]
+  · rw [← w₃, ← w₂₃, Category.assoc, ← p₂₃, p₂₃_p₃]
 
 中文:
 引理 存在_lift
@@ -785,7 +787,9 @@ lemma exists_lift
   obtain ⟨φ₂₃, w₂', w₃⟩ := h₂₃.isPullback.exists_lift g₂ g₃ (by cat_disch)
   obtain ⟨φ, w₁₂, w₂₃⟩ := h.chosenPullback.isPullback.exists_lift φ₁₂ φ₂₃ (by cat_disch)
   refine ⟨φ, ?_, ?_, ?_⟩
-  · rw [← w₁, ← w₁₂, Category.asso
+  · rw [← w₁, ← w₁₂, Category.assoc, ← p₁₂, p₁₂_p₁]
+  · rw [← w₂, ← w₁₂, Category.assoc, ← p₁₂, p₁₂_p₂]
+  · rw [← w₃, ← w₂₃, Category.assoc, ← p₂₃, p₂₃_p₃]
 
 Depends on / 依赖: Category, Category.assoc, cat_disch, chosenPullback, exists_lift, h.chosenPullback.isPullback.exists_lift, isPullback, isPullback.exists_lift
 -/
@@ -855,7 +859,8 @@ lemma isPullback₁
     (fun _ a b w => by
       obtain ⟨φ, hφ₁, hφ₂, hφ₃⟩ :=
         h.exists_lift (a ≫ h₁₂.p₁) (a ≫ h₁₂.p₂) (b ≫ h₁₃.p₂) _ rfl
-          (by simp) (by simpa usi
+          (by simp) (by simpa using w.symm =≫ f₁)
+      exact ⟨φ, by cat_disch, by cat_disch⟩)
 
 中文:
 引理 isPullback₁
@@ -865,7 +870,8 @@ lemma isPullback₁
     (fun _ a b w => by
       obtain ⟨φ, hφ₁, hφ₂, hφ₃⟩ :=
         h.exists_lift (a ≫ h₁₂.p₁) (a ≫ h₁₂.p₂) (b ≫ h₁₃.p₂) _ rfl
-          (by simp) (by simpa usi
+          (by simp) (by simpa using w.symm =≫ f₁)
+      exact ⟨φ, by cat_disch, by cat_disch⟩)
 
 Depends on / 依赖: cat_disch, exists_lift, h.exists_lift, h.hom_ext, hom_ext, w.symm
 -/
@@ -889,7 +895,8 @@ lemma isPullback₃
     (fun _ a b w => by
       obtain ⟨φ, hφ₁, hφ₂, hφ₃⟩ :=
         h.exists_lift (a ≫ h₁₃.p₁) (b ≫ h₂₃.p₁) (a ≫ h₁₃.p₂) _ rfl
-          (by simpa using w.symm 
+          (by simpa using w.symm =≫ f₃) (by simp)
+      exact ⟨φ, by cat_disch, by cat_disch⟩)
 
 中文:
 引理 isPullback₃
@@ -899,7 +906,8 @@ lemma isPullback₃
     (fun _ a b w => by
       obtain ⟨φ, hφ₁, hφ₂, hφ₃⟩ :=
         h.exists_lift (a ≫ h₁₃.p₁) (b ≫ h₂₃.p₁) (a ≫ h₁₃.p₂) _ rfl
-          (by simpa using w.symm 
+          (by simpa using w.symm =≫ f₃) (by simp)
+      exact ⟨φ, by cat_disch, by cat_disch⟩)
 
 Depends on / 依赖: cat_disch, exists_lift, h.exists_lift, h.hom_ext, hom_ext, w.symm
 -/

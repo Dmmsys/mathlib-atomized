@@ -126,7 +126,29 @@ theorem UniformSpace.completelyNormalSpace_of_hasAntitoneBasis
     let S (b : Bool) : Set α := b.casesOn (false := s) (true := t)
     have hx (b : Bool) (x : S b) : exists i, Disjoint (ball x.1 ((B i).comp (B i).inv)) (S (!b)) := by
       have hST : Disjoint (S b) (closure (S !b)) := b.casesOn (false := hsT) (true := hSt.symm)
-      rw [← disjoint_nhdsSet_pr
+      rw [← disjoint_nhdsSet_principal]; rw [disjoint_principal_right] at hST
+      obtain ⟨U, hUu, hU⟩ := UniformSpace.mem_nhds_iff.1 (nhds_le_nhdsSet x.2 hST)
+      obtain ⟨(V : SetRel α α), hV, hVs, hVU⟩ := comp_symm_mem_uniformity_sets hUu
+      obtain ⟨i, hi⟩ := hB.mem_iff.1 hV
+      refine ⟨i, subset_compl_iff_disjoint_right.1 (subset_trans (ball_mono ?_ x.1) hU)⟩
+      exact subset_trans (SetRel.comp_subset_comp hi (V.inv_eq_self ▸ (SetRel.inv_mono hi))) hVU
+    choose U hU using hx
+    have hUS (b : Bool) : ⋃ x, ball x.1 (B (U b x)) in nhdsSet (S b) := by
+      rw [mem_nhdsSet_iff_forall]
+      intro x hx
+      apply mem_of_superset (ball_mem_nhds x (hB.mem (U b ⟨x, hx⟩)))
+      exact subset_iUnion (fun x => ball x.1 (B (U b x))) ⟨x, hx⟩
+    rw [Filter.disjoint_iff]
+    refine ⟨_, hUS false, _, hUS true, ?_⟩
+    have hdj (b : Bool) (x : S b) (y : S (!b)) (hxy : U b x <= U (!b) y) :
+        Disjoint (ball x.1 (B (U b x))) (ball y.1 (B (U (!b) y))) := by
+      rw [Set.disjoint_iff]
+      intro z hz
+      exact (hU b x).notMem_of_mem_left (mem_ball_comp hz.1 (hB.antitone hxy hz.2)) y.2
+    simp_rw [disjoint_iUnion_left, disjoint_iUnion_right]
+    intro x y
+    exact (le_total (U false x) (U true y)).elim
+      (fun h => hdj false x y h) (fun h => (hdj true y x h).symm)
 
 中文:
 定理 一致空间.completelyNormalSpace_of_hasAntitoneBasis
@@ -135,7 +157,29 @@ theorem UniformSpace.completelyNormalSpace_of_hasAntitoneBasis
     let S (b : Bool) : Set α := b.casesOn (false := s) (true := t)
     have hx (b : Bool) (x : S b) : exists i, Disjoint (ball x.1 ((B i).comp (B i).inv)) (S (!b)) := by
       have hST : Disjoint (S b) (closure (S !b)) := b.casesOn (false := hsT) (true := hSt.symm)
-      rw [← disjoint_nhdsSet_pr
+      rw [← disjoint_nhdsSet_principal]; rw [disjoint_principal_right] at hST
+      obtain ⟨U, hUu, hU⟩ := UniformSpace.mem_nhds_iff.1 (nhds_le_nhdsSet x.2 hST)
+      obtain ⟨(V : SetRel α α), hV, hVs, hVU⟩ := comp_symm_mem_uniformity_sets hUu
+      obtain ⟨i, hi⟩ := hB.mem_iff.1 hV
+      refine ⟨i, subset_compl_iff_disjoint_right.1 (subset_trans (ball_mono ?_ x.1) hU)⟩
+      exact subset_trans (SetRel.comp_subset_comp hi (V.inv_eq_self ▸ (SetRel.inv_mono hi))) hVU
+    choose U hU using hx
+    have hUS (b : Bool) : ⋃ x, ball x.1 (B (U b x)) in nhdsSet (S b) := by
+      rw [mem_nhdsSet_iff_forall]
+      intro x hx
+      apply mem_of_superset (ball_mem_nhds x (hB.mem (U b ⟨x, hx⟩)))
+      exact subset_iUnion (fun x => ball x.1 (B (U b x))) ⟨x, hx⟩
+    rw [Filter.disjoint_iff]
+    refine ⟨_, hUS false, _, hUS true, ?_⟩
+    have hdj (b : Bool) (x : S b) (y : S (!b)) (hxy : U b x <= U (!b) y) :
+        Disjoint (ball x.1 (B (U b x))) (ball y.1 (B (U (!b) y))) := by
+      rw [Set.disjoint_iff]
+      intro z hz
+      exact (hU b x).notMem_of_mem_left (mem_ball_comp hz.1 (hB.antitone hxy hz.2)) y.2
+    simp_rw [disjoint_iUnion_left, disjoint_iUnion_right]
+    intro x y
+    exact (le_total (U false x) (U true y)).elim
+      (fun h => hdj false x y h) (fun h => (hdj true y x h).symm)
 
 Depends on / 依赖: Disjoint, SetRel, UniformSpace, UniformSpace.mem_nhds_iff, b.casesOn, casesOn, closure, comp_symm_mem_uniformity_sets, disjoint_nhdsSet_principal, disjoint_principal_right, hSt.symm, mem_nhds_iff, nhds_le_nhdsSet
 -/
@@ -466,7 +510,11 @@ theorem isClosed_of_spaced_out
   suffices x = y by rwa [this]
   apply eq_of_forall_symmetric
   intro V V_in _
-  rcases hx (inter_me
+  rcases hx (inter_mem V₁_in V_in) with ⟨z, hz, hz'⟩
+  obtain rfl : z = y := by
+    by_contra hzy
+    exact hs hz' hy' hzy (h_comp <| mem_comp_of_mem_ball (ball_inter_left x _ _ hz) hy)
+  exact ball_inter_right x _ _ hz
 
 中文:
 定理 isClosed_of_spaced_out
@@ -480,7 +528,11 @@ theorem isClosed_of_spaced_out
   suffices x = y by rwa [this]
   apply eq_of_forall_symmetric
   intro V V_in _
-  rcases hx (inter_me
+  rcases hx (inter_mem V₁_in V_in) with ⟨z, hz, hz'⟩
+  obtain rfl : z = y := by
+    by_contra hzy
+    exact hs hz' hy' hzy (h_comp <| mem_comp_of_mem_ball (ball_inter_left x _ _ hz) hy)
+  exact ball_inter_right x _ _ hz
 
 Depends on / 依赖: V_in, ball_inter_left, ball_inter_right, comp_symm_mem_uniformity_sets, eq_of_forall_symmetric, h_comp, inter_mem, isClosed_of_closure_subset, mem_closure_iff_ball, mem_comp_of_mem_ball
 -/
@@ -542,7 +594,7 @@ theorem comap_map_mk_uniformity
   refine ((((𝓤 α).basis_sets.map _).comap _).le_basis_iff uniformity_hasBasis_open).2 fun U hU => ?_
   refine ⟨U, hU.1, fun (x₁, x₂) ⟨(y₁, y₂), hyU, hxy⟩ => ?_⟩
   simp only [Prod.map, Prod.ext_iff, mk_eq_mk] at hxy
-  exact ((hxy.1.prod hxy.2).mem_open_iff hU.2
+  exact ((hxy.1.prod hxy.2).mem_open_iff hU.2).1 hyU
 
 中文:
 定理 comap_map_mk_uniformity
@@ -552,7 +604,7 @@ theorem comap_map_mk_uniformity
   refine ((((𝓤 α).basis_sets.map _).comap _).le_basis_iff uniformity_hasBasis_open).2 fun U hU => ?_
   refine ⟨U, hU.1, fun (x₁, x₂) ⟨(y₁, y₂), hyU, hxy⟩ => ?_⟩
   simp only [Prod.map, Prod.ext_iff, mk_eq_mk] at hxy
-  exact ((hxy.1.prod hxy.2).mem_open_iff hU.2
+  exact ((hxy.1.prod hxy.2).mem_open_iff hU.2).1 hyU
 
 Depends on / 依赖: Prod.ext_iff, Prod.map, basis_sets, basis_sets.map, ext_iff, le_antisymm, le_basis_iff, le_comap_map, mem_open_iff, mk_eq_mk, uniformity_hasBasis_open
 -/
@@ -574,7 +626,13 @@ symm := tendsto_map' tendsto_map.comp tendsto_swap_uniformity
   comp := fun t ht => by
     rcases comp_open_symm_mem_uniformity_sets ht with ⟨U, hU, hUo, -, hUt⟩
     refine mem_of_superset (mem_lift' <| image_mem_map hU) ?_
-    simp only [subset_def, Prod.forall, SetRel.me
+    simp only [subset_def, Prod.forall, SetRel.mem_comp, mem_image, Prod.ext_iff]
+    rintro _ _ ⟨_, ⟨⟨x, y⟩, hxyU, rfl, rfl⟩, ⟨⟨y', z⟩, hyzU, hy, rfl⟩⟩
+    have : y' ⤳ y := (mk_eq_mk.1 hy).specializes
+    exact @hUt (x, z) ⟨y', this.mem_open (UniformSpace.isOpen_ball _ hUo) hxyU, hyzU⟩
+nhds_eq_comap_uniformity := surjective_mk.forall.2 fun x => comap_injective surjective_mk by
+    conv_lhs => rw [comap_mk_nhds_mk, nhds_eq_comap_uniformity, ← comap_map_mk_uniformity]
+    simp only [Filter.comap_comap, Function.comp_def, Prod.map_apply]
 
 中文:
 实例 instUniformSpace
@@ -584,7 +642,13 @@ symm := tendsto_map' tendsto_map.comp tendsto_swap_uniformity
   comp := fun t ht => by
     rcases comp_open_symm_mem_uniformity_sets ht with ⟨U, hU, hUo, -, hUt⟩
     refine mem_of_superset (mem_lift' <| image_mem_map hU) ?_
-    simp only [subset_def, Prod.forall, SetRel.me
+    simp only [subset_def, Prod.forall, SetRel.mem_comp, mem_image, Prod.ext_iff]
+    rintro _ _ ⟨_, ⟨⟨x, y⟩, hxyU, rfl, rfl⟩, ⟨⟨y', z⟩, hyzU, hy, rfl⟩⟩
+    have : y' ⤳ y := (mk_eq_mk.1 hy).specializes
+    exact @hUt (x, z) ⟨y', this.mem_open (UniformSpace.isOpen_ball _ hUo) hxyU, hyzU⟩
+nhds_eq_comap_uniformity := surjective_mk.forall.2 fun x => comap_injective surjective_mk by
+    conv_lhs => rw [comap_mk_nhds_mk, nhds_eq_comap_uniformity, ← comap_map_mk_uniformity]
+    simp only [Filter.comap_comap, Function.comp_def, Prod.map_apply]
 
 Depends on / 依赖: Prod.map
 -/

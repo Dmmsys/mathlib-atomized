@@ -356,7 +356,7 @@ instance [P.ContainsZero]
       (IsLimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
         (by exact Cone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isLimit
     exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsLimit.c
+      (IsLimit.conePointUniqueUpToIso hX (IsZero.isTerminal hZ)))
 
 中文:
 实例 [P.余ntainsZero]
@@ -368,7 +368,7 @@ instance [P.ContainsZero]
       (IsLimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
         (by exact Cone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isLimit
     exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsLimit.c
+      (IsLimit.conePointUniqueUpToIso hX (IsZero.isTerminal hZ)))
 
 Depends on / 依赖: Cone.ext, IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.equivOfNatIsoOfIso, IsTerminal, IsZero, IsZero.isTerminal, IsZero.of_iso, Iso.refl, P.exists_prop_of_containsZero, P.prop_of_isZero, conePointUniqueUpToIso, equivOfNatIsoOfIso, exists_prop_of_containsZero, isLimit, isTerminal, of_iso, p.diag.uniqueFromEmpty, p.isLimit, prop_of_isZero
 -/
@@ -742,7 +742,7 @@ instance [P.ContainsZero]
       (IsColimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
         (by exact Cocone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isColimit
     exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsCo
+      (IsColimit.coconePointUniqueUpToIso hX (IsZero.isInitial hZ)))
 
 中文:
 实例 [P.余ntainsZero]
@@ -754,7 +754,7 @@ instance [P.ContainsZero]
       (IsColimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
         (by exact Cocone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isColimit
     exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsCo
+      (IsColimit.coconePointUniqueUpToIso hX (IsZero.isInitial hZ)))
 
 Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.equivOfNatIsoOfIso, IsInitial, IsZero, IsZero.isInitial, IsZero.of_iso, Iso.refl, P.exists_prop_of_containsZero, P.prop_of_isZero, coconePointUniqueUpToIso, equivOfNatIsoOfIso, exists_prop_of_containsZero, isColimit, isInitial, of_iso, p.diag.uniqueFromEmpty, p.isColimit
 -/
@@ -780,7 +780,7 @@ lemma IsClosedUnderFiniteCoproducts.mk'
   have := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms P
   have := hasFiniteCoproducts_of_has_binary_and_initial (C := P.FullSubcategory)
   have := PreservesFiniteCoproducts.of_preserves_binary_and_initial P.ι
-  exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape
+  exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι _⟩
 
 中文:
 引理 是ClosedUnderFiniteCoproducts.mk'
@@ -789,7 +789,7 @@ lemma IsClosedUnderFiniteCoproducts.mk'
   have := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms P
   have := hasFiniteCoproducts_of_has_binary_and_initial (C := P.FullSubcategory)
   have := PreservesFiniteCoproducts.of_preserves_binary_and_initial P.ι
-  exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape
+  exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι _⟩
 
 Depends on / 依赖: FullSubcategory, IsClosedUnderBinaryCoproducts, IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms, P.FullSubcategory, P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_, PreservesFiniteCoproducts, PreservesFiniteCoproducts.of_preserves_binary_and_initial, closedUnderIsomorphisms, hasFiniteCoproducts_of_has_binary_and_initial, of_preserves_binary_and_initial
 -/

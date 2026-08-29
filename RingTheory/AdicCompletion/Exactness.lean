@@ -53,14 +53,16 @@ definition noncomputable
   signature: def mapPreimageDelta (hf : Function.Surjective f) (x : AdicCauchySequence I N)
   body: have h : f (yₙ - y) in Submodule.map f (I ^ n • ⊤ : Submodule R M) := by
     rw [Submodule.map_smul'']; rw [Submodule.map_top]; rw [LinearMap.range_eq_top.2 hf]; rw [map_sub]; rw [hyₙ]; rw [hy]; rw [← Submodule.neg_mem_iff]; rw [neg_sub]; rw [← SModEq.sub_mem]
-    exact AdicCauchySequence.mk_eq_mk (
+    exact AdicCauchySequence.mk_eq_mk (Nat.le_succ n) x
+  ⟨⟨h.choose, h.choose_spec.1⟩, h.choose_spec.2⟩
 
 中文:
 定义 noncomputable
   签名: def mapPreimageDelta (hf : 函数.满射 f) (x : AdicCauchySequence I N)
   定义体: have h : f (yₙ - y) in Submodule.map f (I ^ n • ⊤ : Submodule R M) := by
     rw [Submodule.map_smul'']; rw [Submodule.map_top]; rw [LinearMap.range_eq_top.2 hf]; rw [map_sub]; rw [hyₙ]; rw [hy]; rw [← Submodule.neg_mem_iff]; rw [neg_sub]; rw [← SModEq.sub_mem]
-    exact AdicCauchySequence.mk_eq_mk (
+    exact AdicCauchySequence.mk_eq_mk (Nat.le_succ n) x
+  ⟨⟨h.choose, h.choose_spec.1⟩, h.choose_spec.2⟩
 -/
 private noncomputable def mapPreimageDelta (hf : Function.Surjective f) (x : AdicCauchySequence I N)
     {n : Nat} {y yₙ : M} (hy : f y = x (n + 1)) (hyₙ : f yₙ = x n) :
@@ -115,7 +117,8 @@ theorem map_surjective
   refine ⟨AdicCompletion.mk I M (AdicCauchySequence.mk I M (fun n => (a n : M)) ?_), ?_⟩
   · refine fun n => SModEq.symm ?_
     simp only [SModEq, mapPreimage, Submodule.Quotient.mk_sub,
-      sub_eq_self
+      sub_eq_self, Submodule.Quotient.mk_eq_zero, SetLike.coe_mem, a]
+  · exact _root_.AdicCompletion.ext fun n => congrArg _ ((a n).property)
 
 中文:
 定理 map_surjective
@@ -127,7 +130,8 @@ theorem map_surjective
   refine ⟨AdicCompletion.mk I M (AdicCauchySequence.mk I M (fun n => (a n : M)) ?_), ?_⟩
   · refine fun n => SModEq.symm ?_
     simp only [SModEq, mapPreimage, Submodule.Quotient.mk_sub,
-      sub_eq_self
+      sub_eq_self, Submodule.Quotient.mk_eq_zero, SetLike.coe_mem, a]
+  · exact _root_.AdicCompletion.ext fun n => congrArg _ ((a n).property)
 
 Depends on / 依赖: AdicCauchySequence, AdicCauchySequence.mk, AdicCompletion, AdicCompletion.induction_on, AdicCompletion.mk, Quotient, SModEq, SModEq.symm, SetLike, SetLike.coe_mem, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.Quotient.mk_sub, _root_, _root_.AdicCompletion.ext, coe_mem, induction_on, mapPreimage, mk_eq_zero, mk_sub
 -/
@@ -163,7 +167,11 @@ theorem map_injective
   apply AdicCompletion.induction_on I M x (fun a => ?_)
   intro hx
   refine AdicCompletion.mk_zero_of _ _ _ ⟨42, fun n _ => ⟨n + k, by lia, n, by lia, ?_⟩⟩
-  rw [← 
+  rw [← Submodule.comap_map_eq_of_injective hf (I ^ n • ⊤ : Submodule R M)]; rw [Submodule.map_smul'']; rw [Submodule.map_top]
+  apply (smul_mono_right _ inf_le_right : I ^ n • (I ^ k • ⊤ ⊓ (range f)) <= _)
+  nth_rw 1 [show n = n + k - k by lia]
+  rw [← hk (n + k) (show n + k >= k by lia)]
+  exact ⟨by simpa using congrArg (fun x => x.val (n + k)) hx, ⟨a (n + k), rfl⟩⟩
 
 中文:
 定理 map_injective
@@ -175,7 +183,11 @@ theorem map_injective
   apply AdicCompletion.induction_on I M x (fun a => ?_)
   intro hx
   refine AdicCompletion.mk_zero_of _ _ _ ⟨42, fun n _ => ⟨n + k, by lia, n, by lia, ?_⟩⟩
-  rw [← 
+  rw [← Submodule.comap_map_eq_of_injective hf (I ^ n • ⊤ : Submodule R M)]; rw [Submodule.map_smul'']; rw [Submodule.map_top]
+  apply (smul_mono_right _ inf_le_right : I ^ n • (I ^ k • ⊤ ⊓ (range f)) <= _)
+  nth_rw 1 [show n = n + k - k by lia]
+  rw [← hk (n + k) (show n + k >= k by lia)]
+  exact ⟨by simpa using congrArg (fun x => x.val (n + k)) hx, ⟨a (n + k), rfl⟩⟩
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.induction_on, AdicCompletion.mk_zero_of, Ideal.exists_pow_inf_eq_pow_smul, LinearMap, LinearMap.ker_eq_bot, Submodule, Submodule.comap_map_eq_of_injective, Submodule.map_smul, Submodule.map_top, comap_map_eq_of_injective, exists_pow_inf_eq_pow_smul, induction_on, inf_le_right, ker_eq_bot, map_smul, map_top, mk_zero_of, nth_rw, smul_mono_right
 -/
@@ -220,7 +232,19 @@ definition noncomputable
     · abel
     · refine Submodule.sub_mem _ (Submodule.sub_mem _ ?_ ?_) hyₙ
       · rw [← Submodule.Quotient.eq]
-        exa
+        exact AdicCauchySequence.mk_eq_mk (by lia) _
+      · exact (Submodule.smul_mono_left (Ideal.pow_le_pow_right (by lia))) hdmem
+  have hincl : I ^ (k + n - k) • (I ^ k • ⊤ ⊓ range f) <= I ^ (k + n - k) • (range f) :=
+    smul_mono_right _ inf_le_right
+  have hyyₙ : y - yₙ in (I ^ n • ⊤ : Submodule R M) := by
+    convert_to y - yₙ in (I ^ (k + n - k) • ⊤ : Submodule R M)
+    · simp
+    · rw [← Submodule.comap_map_eq_of_injective hf (I ^ (k + n - k) • ⊤ : Submodule R M),
+        Submodule.map_smul'', Submodule.map_top]
+      apply hincl
+      rw [← hkn (k + n) (by lia)]
+      exact ⟨h, ⟨y - yₙ, rfl⟩⟩
+  ⟨⟨y - yₙ, hyyₙ⟩, by simpa [hd, Nat.succ_eq_add_one, Nat.add_assoc]⟩
 
 中文:
 定义 noncomputable
@@ -231,7 +255,19 @@ definition noncomputable
     · abel
     · refine Submodule.sub_mem _ (Submodule.sub_mem _ ?_ ?_) hyₙ
       · rw [← Submodule.Quotient.eq]
-        exa
+        exact AdicCauchySequence.mk_eq_mk (by lia) _
+      · exact (Submodule.smul_mono_left (Ideal.pow_le_pow_right (by lia))) hdmem
+  have hincl : I ^ (k + n - k) • (I ^ k • ⊤ ⊓ range f) <= I ^ (k + n - k) • (range f) :=
+    smul_mono_right _ inf_le_right
+  have hyyₙ : y - yₙ in (I ^ n • ⊤ : Submodule R M) := by
+    convert_to y - yₙ in (I ^ (k + n - k) • ⊤ : Submodule R M)
+    · simp
+    · rw [← Submodule.comap_map_eq_of_injective hf (I ^ (k + n - k) • ⊤ : Submodule R M),
+        Submodule.map_smul'', Submodule.map_top]
+      apply hincl
+      rw [← hkn (k + n) (by lia)]
+      exact ⟨h, ⟨y - yₙ, rfl⟩⟩
+  ⟨⟨y - yₙ, hyyₙ⟩, by simpa [hd, Nat.succ_eq_add_one, Nat.add_assoc]⟩
 -/
 private noncomputable def mapExactAuxDelta {n : Nat} {d : N}
     (hdmem : d in (I ^ (k + n + 1) • ⊤ : Submodule R N)) {y yₙ : M}
@@ -275,6 +311,12 @@ definition noncomputable
   | .succ n =>
     let d := (h2 <| n + 1).choose
     let y := (h2 <| n + 1).choose_spec.choose
+    have hdy : f y = x (k + (n + 1)) - d := (h2 <| n + 1).choose_spec.choose_spec.right
+    have hdmem := (h2 <| n + 1).choose_spec.choose_spec.left
+    let ⟨yₙ, (hyₙ : f yₙ - x (k + n) in (I ^ (k + n) • ⊤ : Submodule R N))⟩ :=
+      mapExactAux n
+    let ⟨d, hd⟩ := mapExactAuxDelta hf hkn x hdmem hdy hyₙ
+    ⟨yₙ + d, hd⟩
 
 中文:
 定义 noncomputable
@@ -287,6 +329,12 @@ definition noncomputable
   | .succ n =>
     let d := (h2 <| n + 1).choose
     let y := (h2 <| n + 1).choose_spec.choose
+    have hdy : f y = x (k + (n + 1)) - d := (h2 <| n + 1).choose_spec.choose_spec.right
+    have hdmem := (h2 <| n + 1).choose_spec.choose_spec.left
+    let ⟨yₙ, (hyₙ : f yₙ - x (k + n) in (I ^ (k + n) • ⊤ : Submodule R N))⟩ :=
+      mapExactAux n
+    let ⟨d, hd⟩ := mapExactAuxDelta hf hkn x hdmem hdy hyₙ
+    ⟨yₙ + d, hd⟩
 -/
 private noncomputable def mapExactAux :
     (n : Nat) -> { a : M | f a - x (k + n) in (I ^ (k + n) • ⊤ : Submodule R N) }
@@ -330,7 +378,20 @@ theorem map_exact
   · apply AdicCompletion.induction_on I N y (fun b => ?_)
     intro hz
     obtain ⟨k, hk⟩ := Ideal.exists_pow_inf_eq_pow_smul I (LinearMap.range f)
-    
+    have hb (n : Nat) : g (b n) in (I ^ n • ⊤ : Submodule R P) := by
+      simpa using congrArg (fun x => x.val n) hz
+    let a := mapExactAux hf hfg hg hk b hb
+    refine ⟨AdicCompletion.mk I M (AdicCauchySequence.mk I M (fun n => (a n : M)) ?_), ?_⟩
+    · refine fun n => SModEq.symm ?_
+      simp [a, mapExactAux, SModEq]
+    · ext n
+      suffices h : Submodule.Quotient.mk (p := (I ^ n • ⊤ : Submodule R N)) (f (a n)) =
+            Submodule.Quotient.mk (p := (I ^ n • ⊤ : Submodule R N)) (b (k + n)) by
+        simp [h, AdicCauchySequence.mk_eq_mk (show n <= k + n by lia)]
+      rw [Submodule.Quotient.eq]
+      have hle : (I ^ (k + n) • ⊤ : Submodule R N) <= (I ^ n • ⊤ : Submodule R N) :=
+        Submodule.smul_mono_left (Ideal.pow_le_pow_right (by lia))
+      exact hle (a n).property
 
 中文:
 定理 map_exact
@@ -341,7 +402,20 @@ theorem map_exact
   · apply AdicCompletion.induction_on I N y (fun b => ?_)
     intro hz
     obtain ⟨k, hk⟩ := Ideal.exists_pow_inf_eq_pow_smul I (LinearMap.range f)
-    
+    have hb (n : Nat) : g (b n) in (I ^ n • ⊤ : Submodule R P) := by
+      simpa using congrArg (fun x => x.val n) hz
+    let a := mapExactAux hf hfg hg hk b hb
+    refine ⟨AdicCompletion.mk I M (AdicCauchySequence.mk I M (fun n => (a n : M)) ?_), ?_⟩
+    · refine fun n => SModEq.symm ?_
+      simp [a, mapExactAux, SModEq]
+    · ext n
+      suffices h : Submodule.Quotient.mk (p := (I ^ n • ⊤ : Submodule R N)) (f (a n)) =
+            Submodule.Quotient.mk (p := (I ^ n • ⊤ : Submodule R N)) (b (k + n)) by
+        simp [h, AdicCauchySequence.mk_eq_mk (show n <= k + n by lia)]
+      rw [Submodule.Quotient.eq]
+      have hle : (I ^ (k + n) • ⊤ : Submodule R N) <= (I ^ n • ⊤ : Submodule R N) :=
+        Submodule.smul_mono_left (Ideal.pow_le_pow_right (by lia))
+      exact hle (a n).property
 
 Depends on / 依赖: AdicCauchySequence, AdicCauchySequence.mk, AdicCompletion, AdicCompletion.induction_on, AdicCompletion.map_zero, AdicCompletion.mk, Ideal.exists_pow_inf_eq_pow_smul, LinearMap, LinearMap.exact_of_comp_eq_zero_of_ker_le_range, LinearMap.range, Submodule, exact_of_comp_eq_zero_of_ker_le_range, exists_pow_inf_eq_pow_smul, hfg.linearMap_comp_eq_zero, induction_on, linearMap_comp_eq_zero, mapExactAux, map_comp, map_zero, x.val
 -/

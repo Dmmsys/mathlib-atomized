@@ -92,7 +92,37 @@ theorem ContDiffWithinAt.comp
     obtain ⟨v, hv, q, hq, h'q⟩ := hg
     let w := insert x s inter (u inter f ⁻¹' v)
     have wv : w subseteq f ⁻¹' v := fun y hy => hy.2.2
-    have wu : w subseteq u := fun y hy => hy.2.
+    have wu : w subseteq u := fun y hy => hy.2.1
+    refine ⟨w, ?_, fun y => (q (f y)).taylorComp (p y), hq.comp (hp.mono wu) wv, ?_⟩
+    · apply inter_mem self_mem_nhdsWithin (inter_mem hu ?_)
+      apply (continuousWithinAt_insert_self.2 hf.continuousWithinAt).preimage_mem_nhdsWithin'
+      apply nhdsWithin_mono _ _ hv
+      simp only [image_insert_eq]
+      apply insert_subset_insert
+      exact image_subset_iff.mpr st
+    · have : AnalyticOn 𝕜 f w := by
+        have : AnalyticOn 𝕜 (fun y => (continuousMultilinearCurryFin0 𝕜 E F).symm (f y)) w :=
+          ((h'p 0).mono wu).congr fun y hy => (hp.zero_eq' (wu hy)).symm
+        have : AnalyticOn 𝕜 (fun y => (continuousMultilinearCurryFin0 𝕜 E F)
+            ((continuousMultilinearCurryFin0 𝕜 E F).symm (f y))) w :=
+          AnalyticOnNhd.comp_analyticOn (LinearIsometryEquiv.analyticOnNhd _ _) this
+          (mapsTo_univ _ _)
+        simpa using this
+      exact analyticOn_taylorComp h'q (fun n => (h'p n).mono wu) this wv
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    rcases hg m hm with ⟨v, hv, q, hq⟩
+    let w := insert x s inter (u inter f ⁻¹' v)
+    have wv : w subseteq f ⁻¹' v := fun y hy => hy.2.2
+    have wu : w subseteq u := fun y hy => hy.2.1
+    refine ⟨w, ?_, fun y => (q (f y)).taylorComp (p y), hq.comp (hp.mono wu) wv⟩
+    apply inter_mem self_mem_nhdsWithin (inter_mem hu ?_)
+    apply (continuousWithinAt_insert_self.2 hf.continuousWithinAt).preimage_mem_nhdsWithin'
+    apply nhdsWithin_mono _ _ hv
+    simp only [image_insert_eq]
+    apply insert_subset_insert
+    exact image_subset_iff.mpr st
 
 中文:
 定理 ContDiffWithinAt.comp
@@ -105,7 +135,37 @@ theorem ContDiffWithinAt.comp
     obtain ⟨v, hv, q, hq, h'q⟩ := hg
     let w := insert x s inter (u inter f ⁻¹' v)
     have wv : w subseteq f ⁻¹' v := fun y hy => hy.2.2
-    have wu : w subseteq u := fun y hy => hy.2.
+    have wu : w subseteq u := fun y hy => hy.2.1
+    refine ⟨w, ?_, fun y => (q (f y)).taylorComp (p y), hq.comp (hp.mono wu) wv, ?_⟩
+    · apply inter_mem self_mem_nhdsWithin (inter_mem hu ?_)
+      apply (continuousWithinAt_insert_self.2 hf.continuousWithinAt).preimage_mem_nhdsWithin'
+      apply nhdsWithin_mono _ _ hv
+      simp only [image_insert_eq]
+      apply insert_subset_insert
+      exact image_subset_iff.mpr st
+    · have : AnalyticOn 𝕜 f w := by
+        have : AnalyticOn 𝕜 (fun y => (continuousMultilinearCurryFin0 𝕜 E F).symm (f y)) w :=
+          ((h'p 0).mono wu).congr fun y hy => (hp.zero_eq' (wu hy)).symm
+        have : AnalyticOn 𝕜 (fun y => (continuousMultilinearCurryFin0 𝕜 E F)
+            ((continuousMultilinearCurryFin0 𝕜 E F).symm (f y))) w :=
+          AnalyticOnNhd.comp_analyticOn (LinearIsometryEquiv.analyticOnNhd _ _) this
+          (mapsTo_univ _ _)
+        simpa using this
+      exact analyticOn_taylorComp h'q (fun n => (h'p n).mono wu) this wv
+  | (n : Nat∞) =>
+    intro m hm
+    rcases hf m hm with ⟨u, hu, p, hp⟩
+    rcases hg m hm with ⟨v, hv, q, hq⟩
+    let w := insert x s inter (u inter f ⁻¹' v)
+    have wv : w subseteq f ⁻¹' v := fun y hy => hy.2.2
+    have wu : w subseteq u := fun y hy => hy.2.1
+    refine ⟨w, ?_, fun y => (q (f y)).taylorComp (p y), hq.comp (hp.mono wu) wv⟩
+    apply inter_mem self_mem_nhdsWithin (inter_mem hu ?_)
+    apply (continuousWithinAt_insert_self.2 hf.continuousWithinAt).preimage_mem_nhdsWithin'
+    apply nhdsWithin_mono _ _ hv
+    simp only [image_insert_eq]
+    apply insert_subset_insert
+    exact image_subset_iff.mpr st
 
 Depends on / 依赖: ContDiffWithinAt, continuousWithinAt, continuousWithinAt_insert_self, hf.continuousWithinAt, hp.mono, hq.comp, insert, inter_mem, preimage_mem_nhdsWithin, self_mem_nhdsWithin, subseteq, taylorComp
 -/
@@ -577,7 +637,19 @@ theorem iteratedFDerivWithin_comp_of_eventually_mem
       HasFTaylorSeriesUpToOn i f (ftaylorSeriesWithin 𝕜 f s) (s inter u) ∧
       HasFTaylorSeriesUpToOn i g (ftaylorSeriesWithin 𝕜 g t) (f '' (s inter u)) := by
     have hxt : f x in t := hst.self_of_nhdsWithin hxs
-    have hf_tends
+    have hf_tendsto : Tendsto f (𝓝[s] x) (𝓝[t] (f x)) :=
+      tendsto_nhdsWithin_iff.mpr ⟨hf.continuousWithinAt, hst⟩
+    have H₁ : forallᶠ u in (𝓝[s] x).smallSets,
+        HasFTaylorSeriesUpToOn i f (ftaylorSeriesWithin 𝕜 f s) u :=
+      hf.eventually_hasFTaylorSeriesUpToOn hs hxs hi
+    have H₂ : forallᶠ u in (𝓝[s] x).smallSets,
+        HasFTaylorSeriesUpToOn i g (ftaylorSeriesWithin 𝕜 g t) (f '' u) :=
+      hf_tendsto.image_smallSets.eventually (hg.eventually_hasFTaylorSeriesUpToOn ht hxt hi)
+    rcases (nhdsWithin_basis_open _ _).smallSets.eventually_iff.mp (H₁.and H₂)
+      with ⟨u, ⟨hxu, huo⟩, hu⟩
+    exact ⟨u, hxu, huo, hu (by simp [inter_comm])⟩
+exact .symm (hgu.comp hfu (mapsTo_image _ _)).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl
+.trans iteratedFDerivWithin_inter_open huo hxu (hs.inter huo) ⟨hxs, hxu⟩
 
 中文:
 定理 iteratedFDerivWithin_comp_of_eventually_mem
@@ -587,7 +659,19 @@ theorem iteratedFDerivWithin_comp_of_eventually_mem
       HasFTaylorSeriesUpToOn i f (ftaylorSeriesWithin 𝕜 f s) (s inter u) ∧
       HasFTaylorSeriesUpToOn i g (ftaylorSeriesWithin 𝕜 g t) (f '' (s inter u)) := by
     have hxt : f x in t := hst.self_of_nhdsWithin hxs
-    have hf_tends
+    have hf_tendsto : Tendsto f (𝓝[s] x) (𝓝[t] (f x)) :=
+      tendsto_nhdsWithin_iff.mpr ⟨hf.continuousWithinAt, hst⟩
+    have H₁ : forallᶠ u in (𝓝[s] x).smallSets,
+        HasFTaylorSeriesUpToOn i f (ftaylorSeriesWithin 𝕜 f s) u :=
+      hf.eventually_hasFTaylorSeriesUpToOn hs hxs hi
+    have H₂ : forallᶠ u in (𝓝[s] x).smallSets,
+        HasFTaylorSeriesUpToOn i g (ftaylorSeriesWithin 𝕜 g t) (f '' u) :=
+      hf_tendsto.image_smallSets.eventually (hg.eventually_hasFTaylorSeriesUpToOn ht hxt hi)
+    rcases (nhdsWithin_basis_open _ _).smallSets.eventually_iff.mp (H₁.and H₂)
+      with ⟨u, ⟨hxu, huo⟩, hu⟩
+    exact ⟨u, hxu, huo, hu (by simp [inter_comm])⟩
+exact .symm (hgu.comp hfu (mapsTo_image _ _)).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl
+.trans iteratedFDerivWithin_inter_open huo hxu (hs.inter huo) ⟨hxs, hxu⟩
 
 Depends on / 依赖: HasFTaylorSeriesUpToOn, IsOpen, Tendsto, continuousWithinAt, eventually_hasFTaylo, ftaylorSeriesWithin, hf.continuousWithinAt, hf.eventually_hasFTaylo, hf_tendsto, hst.self_of_nhdsWithin, self_of_nhdsWithin, smallSets, tendsto_nhdsWithin_iff, tendsto_nhdsWithin_iff.mpr
 -/
@@ -1690,7 +1774,17 @@ theorem iteratedFDerivWithin_clm_apply_const_apply
   | succ i ih =>
     replace hi : (i : Nat∞ω) < n := lt_of_lt_of_le (by norm_cast; simp) hi
     have h_deriv_apply : DifferentiableOn 𝕜 (iteratedFDerivWithin 𝕜 i (fun y => (c y) u) s) s :=
-      (hc.clm_apply contDiffOn_const).differentiableOn_it
+      (hc.clm_apply contDiffOn_const).differentiableOn_iteratedFDerivWithin hi hs
+    have h_deriv : DifferentiableOn 𝕜 (iteratedFDerivWithin 𝕜 i c s) s :=
+      hc.differentiableOn_iteratedFDerivWithin hi hs
+    simp only [iteratedFDerivWithin_succ_apply_left]
+    rw [← fderivWithin_continuousMultilinear_apply_const_apply (hs x hx) (h_deriv_apply x hx)]
+    rw [fderivWithin_congr' (fun x hx => ih hi.le hx) hx]
+    rw [fderivWithin_clm_apply (hs x hx) (h_deriv.continuousMultilinear_apply_const _ x hx)
+      (differentiableWithinAt_const u)]
+    rw [fderivWithin_const_apply]
+    simp only [ContinuousLinearMap.flip_apply, ContinuousLinearMap.comp_zero, zero_add]
+    rw [fderivWithin_continuousMultilinear_apply_const_apply (hs x hx) (h_deriv x hx)]
 
 中文:
 定理 iteratedFDerivWithin_clm_apply_const_apply
@@ -1700,7 +1794,17 @@ theorem iteratedFDerivWithin_clm_apply_const_apply
   | succ i ih =>
     replace hi : (i : Nat∞ω) < n := lt_of_lt_of_le (by norm_cast; simp) hi
     have h_deriv_apply : DifferentiableOn 𝕜 (iteratedFDerivWithin 𝕜 i (fun y => (c y) u) s) s :=
-      (hc.clm_apply contDiffOn_const).differentiableOn_it
+      (hc.clm_apply contDiffOn_const).differentiableOn_iteratedFDerivWithin hi hs
+    have h_deriv : DifferentiableOn 𝕜 (iteratedFDerivWithin 𝕜 i c s) s :=
+      hc.differentiableOn_iteratedFDerivWithin hi hs
+    simp only [iteratedFDerivWithin_succ_apply_left]
+    rw [← fderivWithin_continuousMultilinear_apply_const_apply (hs x hx) (h_deriv_apply x hx)]
+    rw [fderivWithin_congr' (fun x hx => ih hi.le hx) hx]
+    rw [fderivWithin_clm_apply (hs x hx) (h_deriv.continuousMultilinear_apply_const _ x hx)
+      (differentiableWithinAt_const u)]
+    rw [fderivWithin_const_apply]
+    simp only [ContinuousLinearMap.flip_apply, ContinuousLinearMap.comp_zero, zero_add]
+    rw [fderivWithin_continuousMultilinear_apply_const_apply (hs x hx) (h_deriv x hx)]
 
 Depends on / 依赖: DifferentiableOn, clm_apply, contDiffOn_const, differentiableOn_iteratedFDerivWithin, fderivWithin_continuous, generalizing, h_deriv, h_deriv_apply, hc.clm_apply, hc.differentiableOn_iteratedFDerivWithin, iteratedFDerivWithin, iteratedFDerivWithin_succ_apply_left, lt_of_lt_of_le, replace
 -/
@@ -1765,7 +1869,24 @@ theorem ContDiffWithinAt.hasFDerivWithinAt_nhds
     refine nhdsWithin_mono _ ?_ (nhdsWithin_prod self_mem_nhdsWithin hgt)
     simp_rw [image_subset_iff, mk_preimage_prod, preimage_id', subset_inter_iff, subset_insert,
       true_and, subset_preimage_image]
-  obtain ⟨
+  obtain ⟨v, hv, hvs, f_an, f', hvf', hf'⟩ :=
+    (contDiffWithinAt_succ_iff_hasFDerivWithinAt' hn).mp hf
+  refine
+    ⟨(fun z => (z, g z)) ⁻¹' v inter insert x₀ s, ?_, inter_subset_right, fun z =>
+      (f' (z, g z)).comp (ContinuousLinearMap.inr 𝕜 E F), ?_, ?_⟩
+  · refine inter_mem ?_ self_mem_nhdsWithin
+    have := mem_of_mem_nhdsWithin (mem_insert _ _) hv
+    refine mem_nhdsWithin_insert.mpr ⟨this, ?_⟩
+    refine (continuousWithinAt_id.prodMk hg.continuousWithinAt).preimage_mem_nhdsWithin' ?_
+    rw [← nhdsWithin_le_iff] at hst hv ⊢
+    exact (hst.trans <| nhdsWithin_mono _ <| subset_insert _ _).trans hv
+  · intro z hz
+    have := hvf' (z, g z) hz.1
+    refine this.comp _ (hasFDerivAt_prodMk_right _ _).hasFDerivWithinAt ?_
+    exact mapsTo_iff_image_subset.mpr (image_prodMk_subset_prod_right hz.2)
+  · exact (hf'.continuousLinearMap_comp <| (ContinuousLinearMap.compL 𝕜 F (E × F) G).flip
+      (ContinuousLinearMap.inr 𝕜 E F)).comp_of_mem_nhdsWithin_image x₀
+      (contDiffWithinAt_id.prodMk hg) hst
 
 中文:
 定理 ContDiffWithinAt.hasFDerivWithinAt_nhds
@@ -1775,7 +1896,24 @@ theorem ContDiffWithinAt.hasFDerivWithinAt_nhds
     refine nhdsWithin_mono _ ?_ (nhdsWithin_prod self_mem_nhdsWithin hgt)
     simp_rw [image_subset_iff, mk_preimage_prod, preimage_id', subset_inter_iff, subset_insert,
       true_and, subset_preimage_image]
-  obtain ⟨
+  obtain ⟨v, hv, hvs, f_an, f', hvf', hf'⟩ :=
+    (contDiffWithinAt_succ_iff_hasFDerivWithinAt' hn).mp hf
+  refine
+    ⟨(fun z => (z, g z)) ⁻¹' v inter insert x₀ s, ?_, inter_subset_right, fun z =>
+      (f' (z, g z)).comp (ContinuousLinearMap.inr 𝕜 E F), ?_, ?_⟩
+  · refine inter_mem ?_ self_mem_nhdsWithin
+    have := mem_of_mem_nhdsWithin (mem_insert _ _) hv
+    refine mem_nhdsWithin_insert.mpr ⟨this, ?_⟩
+    refine (continuousWithinAt_id.prodMk hg.continuousWithinAt).preimage_mem_nhdsWithin' ?_
+    rw [← nhdsWithin_le_iff] at hst hv ⊢
+    exact (hst.trans <| nhdsWithin_mono _ <| subset_insert _ _).trans hv
+  · intro z hz
+    have := hvf' (z, g z) hz.1
+    refine this.comp _ (hasFDerivAt_prodMk_right _ _).hasFDerivWithinAt ?_
+    exact mapsTo_iff_image_subset.mpr (image_prodMk_subset_prod_right hz.2)
+  · exact (hf'.continuousLinearMap_comp <| (ContinuousLinearMap.compL 𝕜 F (E × F) G).flip
+      (ContinuousLinearMap.inr 𝕜 E F)).comp_of_mem_nhdsWithin_image x₀
+      (contDiffWithinAt_id.prodMk hg) hst
 
 Depends on / 依赖: ContinuousLinearMap, contDiffWithinAt_succ_iff_hasFDerivWithinAt, f_an, image_subset_iff, insert, inter_subset_right, mk_preimage_prod, nhdsWithin_mono, nhdsWithin_prod, preimage_id, self_mem_nhdsWithin, simp_rw, subset_insert, subset_inter_iff, subset_preimage_image, true_and
 -/
@@ -1819,7 +1957,20 @@ theorem ContDiffWithinAt.fderivWithin''
     intro k hkm
     obtain ⟨v, hv, -, f', hvf', hf'⟩ :=
       (hf.of_le <| by grw [hkm, hmn]).hasFDerivWithinAt_nhds (by simp) (hg.of_le hkm) hgt
-    refine hf'.congr_of_eventuallyEq_insert 
+    refine hf'.congr_of_eventuallyEq_insert ?_
+    filter_upwards [hv, ht]
+    exact fun y hy h2y => (hvf' y hy).fderivWithin h2y
+  match m with
+  | ω =>
+    obtain rfl : n = ω := by simpa using hmn
+    obtain ⟨v, hv, -, f', hvf', hf'⟩ := hf.hasFDerivWithinAt_nhds (by simp) hg hgt
+    refine hf'.congr_of_eventuallyEq_insert ?_
+    filter_upwards [hv, ht]
+    exact fun y hy h2y => (hvf' y hy).fderivWithin h2y
+  | ∞ =>
+    rw [contDiffWithinAt_infty]
+    exact fun k => this k (by exact_mod_cast le_top)
+  | (m : Nat) => exact this _ le_rfl
 
 中文:
 定理 ContDiffWithinAt.fderivWithin''
@@ -1829,7 +1980,20 @@ theorem ContDiffWithinAt.fderivWithin''
     intro k hkm
     obtain ⟨v, hv, -, f', hvf', hf'⟩ :=
       (hf.of_le <| by grw [hkm, hmn]).hasFDerivWithinAt_nhds (by simp) (hg.of_le hkm) hgt
-    refine hf'.congr_of_eventuallyEq_insert 
+    refine hf'.congr_of_eventuallyEq_insert ?_
+    filter_upwards [hv, ht]
+    exact fun y hy h2y => (hvf' y hy).fderivWithin h2y
+  match m with
+  | ω =>
+    obtain rfl : n = ω := by simpa using hmn
+    obtain ⟨v, hv, -, f', hvf', hf'⟩ := hf.hasFDerivWithinAt_nhds (by simp) hg hgt
+    refine hf'.congr_of_eventuallyEq_insert ?_
+    filter_upwards [hv, ht]
+    exact fun y hy h2y => (hvf' y hy).fderivWithin h2y
+  | ∞ =>
+    rw [contDiffWithinAt_infty]
+    exact fun k => this k (by exact_mod_cast le_top)
+  | (m : Nat) => exact this _ le_rfl
 
 Depends on / 依赖: ContDiffWithinAt, congr_of_eventuallyEq_insert, fderivWithin, filter_upwards, hasFDerivWithinAt_nhds, hf.hasFDerivWithinAt_nhds, hf.of_le, hg.of_le, of_le
 -/
@@ -2001,7 +2165,10 @@ theorem ContDiffWithinAt.iteratedFDerivWithin_right
     exact (hf.of_le hmn).continuousLinearMap_comp
       ((continuousMultilinearCurryFin0 𝕜 E F).symm : _ ->L[𝕜] E [×0]->L[𝕜] F)
   | succ i hi =>
-    rw [Nat.cast_succ]; rw [add_comm _ 1]; rw [← add_a
+    rw [Nat.cast_succ]; rw [add_comm _ 1]; rw [← add_assoc] at hmn
+    exact ((hi hmn).fderivWithin_right hs le_rfl hx₀s).continuousLinearMap_comp
+      ((continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (i + 1) => E) F).symm :
+        _ ->L[𝕜] E [×(i + 1)]->L[𝕜] F)
 
 中文:
 定理 ContDiffWithinAt.iteratedFDerivWithin_right
@@ -2013,7 +2180,10 @@ theorem ContDiffWithinAt.iteratedFDerivWithin_right
     exact (hf.of_le hmn).continuousLinearMap_comp
       ((continuousMultilinearCurryFin0 𝕜 E F).symm : _ ->L[𝕜] E [×0]->L[𝕜] F)
   | succ i hi =>
-    rw [Nat.cast_succ]; rw [add_comm _ 1]; rw [← add_a
+    rw [Nat.cast_succ]; rw [add_comm _ 1]; rw [← add_assoc] at hmn
+    exact ((hi hmn).fderivWithin_right hs le_rfl hx₀s).continuousLinearMap_comp
+      ((continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (i + 1) => E) F).symm :
+        _ ->L[𝕜] E [×(i + 1)]->L[𝕜] F)
 
 Depends on / 依赖: CharP.cast_eq_zero, Nat.cast_succ, add_assoc, add_comm, add_zero, cast_eq_zero, cast_succ, continuousLinearMap_comp, continuousMultilinearCurryFin0, continuousMultilinearCurryLeftEquiv, fderivWithin_right, generalizing, hf.of_le, le_rfl, of_le
 -/

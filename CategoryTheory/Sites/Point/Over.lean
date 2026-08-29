@@ -55,7 +55,11 @@ definition over
   jointly_surjective := by
     rintro U R hR ⟨u, hu⟩
     obtain ⟨R, rfl⟩ := (Sieve.overEquiv _).symm.surjective R
- 
+    simp only [mem_over_iff, OrderIso.apply_symm_apply] at hR
+    obtain ⟨Y, f, hf, v, rfl⟩ := Φ.jointly_surjective R hR u
+    refine ⟨Over.mk (f ≫ U.hom), Over.homMk f, hf, ⟨v, ?_⟩, rfl⟩
+    rw [FunctorToTypes.mem_fromOverSubfunctor_iff] at hu ⊢
+    simpa
 
 中文:
 定义 over
@@ -67,7 +71,11 @@ definition over
   jointly_surjective := by
     rintro U R hR ⟨u, hu⟩
     obtain ⟨R, rfl⟩ := (Sieve.overEquiv _).symm.surjective R
- 
+    simp only [mem_over_iff, OrderIso.apply_symm_apply] at hR
+    obtain ⟨Y, f, hf, v, rfl⟩ := Φ.jointly_surjective R hR u
+    refine ⟨Over.mk (f ≫ U.hom), Over.homMk f, hf, ⟨v, ?_⟩, rfl⟩
+    rw [FunctorToTypes.mem_fromOverSubfunctor_iff] at hu ⊢
+    simpa
 
 Depends on / 依赖: FunctorToTypes, FunctorToTypes.fromOverFunctor, fromOverFunctor
 -/
@@ -102,7 +110,11 @@ lemma IsConservativeFamilyOfPoints.over
     obtain ⟨ι, Z, g, rfl⟩ := S.exists_eq_ofArrows
     rw [hP.jointly_reflect_ofArrows_mem_of_small]
     intro Φ y
-  
+    obtain ⟨T, a, ⟨_, b, _, ⟨i⟩, hb⟩, ⟨z, hz₁⟩, hz₂⟩ := hS (⟨_, ⟨⟨Φ, Φ.obj.fiber.map f y⟩⟩⟩)
+      (⟨by exact y, by rw [FunctorToTypes.mem_fromOverSubfunctor_iff]; rfl⟩)
+    rw [Subtype.ext_iff] at hz₂
+    exact ⟨i, Φ.obj.fiber.map b z,
+      (ConcreteCategory.congr_hom (Φ.obj.fiber.map_comp b (g i)) _).symm.trans (by rwa [hb])⟩)
 
 中文:
 引理 是余nservativeFamilyOfPoints.over
@@ -113,7 +125,11 @@ lemma IsConservativeFamilyOfPoints.over
     obtain ⟨ι, Z, g, rfl⟩ := S.exists_eq_ofArrows
     rw [hP.jointly_reflect_ofArrows_mem_of_small]
     intro Φ y
-  
+    obtain ⟨T, a, ⟨_, b, _, ⟨i⟩, hb⟩, ⟨z, hz₁⟩, hz₂⟩ := hS (⟨_, ⟨⟨Φ, Φ.obj.fiber.map f y⟩⟩⟩)
+      (⟨by exact y, by rw [FunctorToTypes.mem_fromOverSubfunctor_iff]; rfl⟩)
+    rw [Subtype.ext_iff] at hz₂
+    exact ⟨i, Φ.obj.fiber.map b z,
+      (ConcreteCategory.congr_hom (Φ.obj.fiber.map_comp b (g i)) _).symm.trans (by rwa [hb])⟩)
 
 Depends on / 依赖: Concre, FunctorToTypes, FunctorToTypes.mem_fromOverSubfunctor_iff, OrderIso, OrderIso.apply_symm_apply, Over.mk_surjective, S.exists_eq_ofArrows, Sieve.overEquiv, Subtype, Subtype.ext_iff, apply_symm_apply, exists_eq_ofArrows, ext_iff, hP.jointly_reflect_ofArrows_mem_of_small, jointly_reflect_ofArrows_mem_of_small, mem_fromOverSubfunctor_iff, mem_over_iff, mk_surjective, obj.fiber.map, overEquiv
 -/

@@ -1035,7 +1035,9 @@ definition Cofan.isColimitTrans
     erw [hc.fac, (hs a).fac]
     rfl
   · intro t m h
-    refine hc.hom_ext fun ⟨a⟩ => 
+    refine hc.hom_ext fun ⟨a⟩ => (hs a).hom_ext fun ⟨b⟩ => ?_
+    erw [hc.fac, (hs a).fac]
+    simpa using! h ⟨a, b⟩
 
 中文:
 定义 Cofan.isColimitTrans
@@ -1048,7 +1050,9 @@ definition Cofan.isColimitTrans
     erw [hc.fac, (hs a).fac]
     rfl
   · intro t m h
-    refine hc.hom_ext fun ⟨a⟩ => 
+    refine hc.hom_ext fun ⟨a⟩ => (hs a).hom_ext fun ⟨b⟩ => ?_
+    erw [hc.fac, (hs a).fac]
+    simpa using! h ⟨a, b⟩
 
 Depends on / 依赖: c.pt
 -/
@@ -2691,7 +2695,8 @@ definition limitConeOfUnique
         obtain rfl := Subsingleton.elim j default
         simp
       uniq := fun s m w => by
-    
+        specialize w default
+        simpa using w }
 
 中文:
 定义 limitConeOfUnique
@@ -2707,7 +2712,8 @@ definition limitConeOfUnique
         obtain rfl := Subsingleton.elim j default
         simp
       uniq := fun s m w => by
-    
+        specialize w default
+        simpa using w }
 
 Depends on / 依赖: Discrete, Discrete.natTrans, Subsingleton, Subsingleton.elim, eqToHom, isLimit, natTrans, specialize, subsingleton
 -/
@@ -2855,7 +2861,9 @@ definition colimitCoconeOfUnique
       fac := fun s j => by
         obtain rfl := Subsingleton.elim j default
         apply Category.id_comp
-      uniq := 
+      uniq := fun s m w => by
+        specialize w default
+        simp_all }
 
 中文:
 定义 colimitCoconeOfUnique
@@ -2870,7 +2878,9 @@ definition colimitCoconeOfUnique
       fac := fun s j => by
         obtain rfl := Subsingleton.elim j default
         apply Category.id_comp
-      uniq := 
+      uniq := fun s m w => by
+        specialize w default
+        simp_all }
 
 Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.natTrans, Subsingleton, Subsingleton.elim, eqToHom, id_comp, isColimit, natTrans, specialize, subsingleton
 -/
@@ -3045,7 +3055,9 @@ theorem Pi.reindex_hom_π
   simp only [HasLimit.isoOfEquivalence_hom_π, Discrete.equivalence_inverse, Discrete.functor_obj,
     Function.comp_apply, Functor.id_obj, Discrete.equivalence_functor, Functor.comp_obj,
     Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  exact limit.w (Discrete.fu
+  exact limit.w (Discrete.functor (f ∘ ε)) (Discrete.eqToHom' (ε.symm_apply_apply b))
+
+@[reassoc (attr := simp)]
 
 中文:
 定理 依赖函数类型.reindex_hom_π
@@ -3056,7 +3068,9 @@ theorem Pi.reindex_hom_π
   simp only [HasLimit.isoOfEquivalence_hom_π, Discrete.equivalence_inverse, Discrete.functor_obj,
     Function.comp_apply, Functor.id_obj, Discrete.equivalence_functor, Functor.comp_obj,
     Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  exact limit.w (Discrete.fu
+  exact limit.w (Discrete.functor (f ∘ ε)) (Discrete.eqToHom' (ε.symm_apply_apply b))
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.eqToHom, Discrete.equivalence_functor, Discrete.equivalence_inverse, Discrete.functor, Discrete.functor_obj, Discrete.natIso_inv_app, Function, Function.comp_apply, Functor, Functor.comp_obj, Functor.id_obj, HasLimit, HasLimit.isoOfEquivalence_hom_, Iso.refl_inv, Pi.reindex, comp_apply, comp_obj
 -/
@@ -3148,7 +3162,12 @@ theorem Sigma.ι_reindex_hom
   simp only [HasColimit.ι_isoOfEquivalence_hom, Functor.id_obj, Discrete.functor_obj,
     Function.comp_apply, Discrete.equivalence_functor, Discrete.equivalence_inverse,
     Functor.comp_obj, Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  have h := colimit.w (
+  have h := colimit.w (Discrete.functor f) (Discrete.eqToHom' (ε.apply_symm_apply (ε b)))
+  simp only [Discrete.functor_obj] at h
+  erw [← h, eqToHom_map, eqToHom_map, eqToHom_trans_assoc]
+  all_goals { simp }
+
+@[reassoc (attr := simp)]
 
 中文:
 定理 依赖和类型.ι_reindex_hom
@@ -3158,7 +3177,12 @@ theorem Sigma.ι_reindex_hom
   simp only [HasColimit.ι_isoOfEquivalence_hom, Functor.id_obj, Discrete.functor_obj,
     Function.comp_apply, Discrete.equivalence_functor, Discrete.equivalence_inverse,
     Functor.comp_obj, Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  have h := colimit.w (
+  have h := colimit.w (Discrete.functor f) (Discrete.eqToHom' (ε.apply_symm_apply (ε b)))
+  simp only [Discrete.functor_obj] at h
+  erw [← h, eqToHom_map, eqToHom_map, eqToHom_trans_assoc]
+  all_goals { simp }
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.eqToHom, Discrete.equivalence_functor, Discrete.equivalence_inverse, Discrete.functor, Discrete.functor_obj, Discrete.natIso_inv_app, Function, Function.comp_apply, Functor, Functor.comp_obj, Functor.id_obj, HasColimit, Iso.refl_inv, Sigma.reindex, all_goals, apply_symm_apply, colimit
 -/
@@ -3374,7 +3398,7 @@ definition Cofan.IsColimit.prod
   · exact Cofan.IsColimit.desc hc' fun i => Cofan.IsColimit.desc (hc i) fun j => t.inj (i, j)
   · simp
   · refine Cofan.IsColimit.hom_ext hc' _ _ fun i => ?_
-    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i
+    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
 
 中文:
 定义 Cofan.是余极限.乘积
@@ -3384,7 +3408,7 @@ definition Cofan.IsColimit.prod
   · exact Cofan.IsColimit.desc hc' fun i => Cofan.IsColimit.desc (hc i) fun j => t.inj (i, j)
   · simp
   · refine Cofan.IsColimit.hom_ext hc' _ _ fun i => ?_
-    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i
+    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
 
 Depends on / 依赖: Cofan.IsColimit.desc, Cofan.IsColimit.hom_ext, Cofan.IsColimit.mk, IsColimit, hom_ext, t.inj
 -/

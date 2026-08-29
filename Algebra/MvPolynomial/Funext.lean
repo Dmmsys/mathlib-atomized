@@ -45,7 +45,11 @@ theorem funext_fin
     apply (finSuccEquiv R n).injective
     rw [map_zero]
     apply Polynomial.eq_zero_of_infinite_isRoot
-    apply ((hs 0).image (C_
+    apply ((hs 0).image (C_injective ..).injOn).mono
+    rintro _ ⟨r, hr, rfl⟩
+    refine ih (s ·.succ) (fun _ => hs _) fun x hx => ?_
+    rw [eval_polynomial_eval_finSuccEquiv]
+    exact h _ fun i _ => i.cases (by simpa [eval_C] using hr) (by simpa using hx)
 
 中文:
 定理 funext_fin
@@ -59,7 +63,11 @@ theorem funext_fin
     apply (finSuccEquiv R n).injective
     rw [map_zero]
     apply Polynomial.eq_zero_of_infinite_isRoot
-    apply ((hs 0).image (C_
+    apply ((hs 0).image (C_injective ..).injOn).mono
+    rintro _ ⟨r, hr, rfl⟩
+    refine ih (s ·.succ) (fun _ => hs _) fun x hx => ?_
+    rw [eval_polynomial_eval_finSuccEquiv]
+    exact h _ fun i _ => i.cases (by simpa [eval_C] using hr) (by simpa using hx)
 -/
 private theorem funext_fin {n : Nat} {p : MvPolynomial (Fin n) R}
     (s : Fin n -> Set R) (hs : forall i, (s i).Infinite)
@@ -97,7 +105,13 @@ theorem funext_set
   intro p h
   obtain ⟨n, f, hf, p, rfl⟩ := exists_fin_rename p
   suffices p = 0 by rw [this, map_zero]
-  refine funext_fin (
+  refine funext_fin (s ∘ f) (fun _ => hs _) fun x hx => ?_
+  choose g hg using fun i => (hs i).nonempty
+  convert! h (Function.extend f x g) fun i _ => ?_
+  · simp only [eval, eval₂Hom_rename, Function.extend_comp hf]
+  obtain ⟨i, rfl⟩ | nex := em (exists x, f x = i)
+  · rw [hf.extend_apply]; exact hx _ ⟨⟩
+  · simp_rw [Function.extend, dif_neg nex, hg]
 
 中文:
 定理 funext_set
@@ -110,7 +124,13 @@ theorem funext_set
   intro p h
   obtain ⟨n, f, hf, p, rfl⟩ := exists_fin_rename p
   suffices p = 0 by rw [this, map_zero]
-  refine funext_fin (
+  refine funext_fin (s ∘ f) (fun _ => hs _) fun x hx => ?_
+  choose g hg using fun i => (hs i).nonempty
+  convert! h (Function.extend f x g) fun i _ => ?_
+  · simp only [eval, eval₂Hom_rename, Function.extend_comp hf]
+  obtain ⟨i, rfl⟩ | nex := em (exists x, f x = i)
+  · rw [hf.extend_apply]; exact hx _ ⟨⟩
+  · simp_rw [Function.extend, dif_neg nex, hg]
 
 Depends on / 依赖: Function, Function.extend, Function.extend_comp, Set.pi, convert, exists_fin_rename, extend, extend_comp, funext_fin, map_sub, map_zero, nonempty, simp_rw, sub_eq_zero, sub_self
 -/

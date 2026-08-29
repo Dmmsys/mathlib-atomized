@@ -128,7 +128,13 @@ lemma lift_cRank_submatrix_le
 Submodule.rank_mono span_mono by rintro _ ⟨x, rfl⟩; exact ⟨c x, rfl⟩
   refine (Cardinal.lift_monotone h).trans ?_
   let f : (m -> R) ->ₗ[R] (m₀ -> R) := LinearMap.funLeft R R r
-  have h_eq : Submodule.map f (span 
+  have h_eq : Submodule.map f (span R (range A.col)) = span R (range (A.submatrix r id).col) := by
+    simp_rw [LinearMap.map_span, ← image_univ, image_image, col_eq_transpose, transpose_submatrix]
+    aesop
+  rw [cRank]; rw [← h_eq]
+  have hwin := lift_rank_map_le f (span R (range Aᵀ))
+  simp_rw [← lift_umax] at hwin ⊢
+  exact hwin
 
 中文:
 引理 lift_cRank_submatrix_le
@@ -138,7 +144,13 @@ Submodule.rank_mono span_mono by rintro _ ⟨x, rfl⟩; exact ⟨c x, rfl⟩
 Submodule.rank_mono span_mono by rintro _ ⟨x, rfl⟩; exact ⟨c x, rfl⟩
   refine (Cardinal.lift_monotone h).trans ?_
   let f : (m -> R) ->ₗ[R] (m₀ -> R) := LinearMap.funLeft R R r
-  have h_eq : Submodule.map f (span 
+  have h_eq : Submodule.map f (span R (range A.col)) = span R (range (A.submatrix r id).col) := by
+    simp_rw [LinearMap.map_span, ← image_univ, image_image, col_eq_transpose, transpose_submatrix]
+    aesop
+  rw [cRank]; rw [← h_eq]
+  have hwin := lift_rank_map_le f (span R (range Aᵀ))
+  simp_rw [← lift_umax] at hwin ⊢
+  exact hwin
 
 Depends on / 依赖: A.col, A.submatrix, Cardinal, Cardinal.lift_monotone, LinearMap, LinearMap.funLeft, LinearMap.map_span, Submodule, Submodule.map, Submodule.rank_mono, col_eq_transpose, funLeft, h_eq, image_image, image_univ, lift_monotone, lift_ra, map_span, rank_mono, simp_rw
 -/
@@ -824,7 +836,8 @@ lemma rank_smul_of_mem_nonZeroDivisors
   have hreg : IsSMulRegular (m -> R) c := IsSMulRegular.pi fun _ => hc'
   let f := LinearMap.lsmul R (m -> R) c
   have hcomp : (c • B).mulVecLin = f.comp B.mulVecLin := by aesop
-  rw [rank]; rw [rank]; rw [hcomp]
+  rw [rank]; rw [rank]; rw [hcomp]; rw [LinearMap.range_comp]
+  exact (Submodule.equivMapOfInjective f hreg _).finrank_eq.symm
 
 中文:
 引理 rank_smul_of_mem_nonZeroDivisors
@@ -834,7 +847,8 @@ lemma rank_smul_of_mem_nonZeroDivisors
   have hreg : IsSMulRegular (m -> R) c := IsSMulRegular.pi fun _ => hc'
   let f := LinearMap.lsmul R (m -> R) c
   have hcomp : (c • B).mulVecLin = f.comp B.mulVecLin := by aesop
-  rw [rank]; rw [rank]; rw [hcomp]
+  rw [rank]; rw [rank]; rw [hcomp]; rw [LinearMap.range_comp]
+  exact (Submodule.equivMapOfInjective f hreg _).finrank_eq.symm
 
 Depends on / 依赖: B.mulVecLin, IsSMulRegular, IsSMulRegular.pi, LinearMap, LinearMap.lsmul, LinearMap.range_comp, Submodule, Submodule.equivMapOfInjective, equivMapOfInjective, f.comp, finrank_eq, finrank_eq.symm, isSMulRegular_iff_mem_nonZeroSMulDivisors, isSMulRegular_iff_mem_nonZeroSMulDivisors.mpr, mulVecLin, range_comp
 -/
@@ -859,7 +873,8 @@ lemma rank_mul_eq_left_of_det_mem_nonZeroDivisors
   have key : (B * A) * A.adjugate = A.det • B := by
     rw [Matrix.mul_assoc]; rw [Matrix.mul_adjugate]; rw [Matrix.mul_smul]; rw [Matrix.mul_one]
   calc B.rank = (A.det • B).rank := (rank_smul_of_mem_nonZeroDivisors B hA).symm
-    
+    _ = ((B * A) * A.adjugate).rank := by rw [key]
+    _ <= (B * A).rank := rank_mul_le_left _ _
 
 中文:
 引理 rank_mul_eq_left_of_det_mem_nonZeroDivisors
@@ -870,7 +885,8 @@ lemma rank_mul_eq_left_of_det_mem_nonZeroDivisors
   have key : (B * A) * A.adjugate = A.det • B := by
     rw [Matrix.mul_assoc]; rw [Matrix.mul_adjugate]; rw [Matrix.mul_smul]; rw [Matrix.mul_one]
   calc B.rank = (A.det • B).rank := (rank_smul_of_mem_nonZeroDivisors B hA).symm
-    
+    _ = ((B * A) * A.adjugate).rank := by rw [key]
+    _ <= (B * A).rank := rank_mul_le_left _ _
 
 Depends on / 依赖: A.adjugate, A.det, B.rank, Matrix, Matrix.mul_adjugate, Matrix.mul_assoc, Matrix.mul_one, Matrix.mul_smul, adjugate, le_antisymm, mul_adjugate, mul_assoc, mul_one, mul_smul, nontriviality, rank_mul_le_left, rank_smul_of_mem_nonZeroDivisors
 -/
@@ -1053,7 +1069,15 @@ theorem rank_submatrix_le
   calc
     _ = (((A.submatrix r id)ᵀᵀ.submatrix id c)ᵀᵀ).rank := by simp
     _ <= finrank R (span R (range (A.submatrix r id).col)) := by
-      rw [rank]; rw [Matrix.mulVecLin_transpose]; rw [Matr
+      rw [rank]; rw [Matrix.mulVecLin_transpose]; rw [Matrix.transpose_submatrix]; rw [transpose_transpose]; rw [range_vecMulLinear]; rw [← Matrix.transpose_submatrix]; rw [row_transpose]
+      exact Submodule.finrank_mono (Submodule.span_mono (fun v ⟨j, hj⟩ => ⟨c j, hj⟩))
+    _ = (A.submatrix r id)ᵀᵀ.rank := by
+      rw [rank]; rw [Matrix.mulVecLin_transpose]; rw [range_vecMulLinear]
+      rfl
+    _ = (A.submatrix r (Equiv.refl n)).rank := by simp
+  rw [rank]; rw [rank]; rw [mulVecLin_submatrix]; rw [LinearMap.range_comp]; rw [LinearMap.range_comp]; rw [show LinearMap.funLeft R R (Equiv.refl n).symm = LinearEquiv.funCongrLeft R R
+      (Equiv.refl n).symm from rfl]; rw [LinearEquiv.range]; rw [Submodule.map_top]
+  exact Submodule.finrank_map_le _ _
 
 中文:
 定理 rank_submatrix_le
@@ -1064,7 +1088,15 @@ theorem rank_submatrix_le
   calc
     _ = (((A.submatrix r id)ᵀᵀ.submatrix id c)ᵀᵀ).rank := by simp
     _ <= finrank R (span R (range (A.submatrix r id).col)) := by
-      rw [rank]; rw [Matrix.mulVecLin_transpose]; rw [Matr
+      rw [rank]; rw [Matrix.mulVecLin_transpose]; rw [Matrix.transpose_submatrix]; rw [transpose_transpose]; rw [range_vecMulLinear]; rw [← Matrix.transpose_submatrix]; rw [row_transpose]
+      exact Submodule.finrank_mono (Submodule.span_mono (fun v ⟨j, hj⟩ => ⟨c j, hj⟩))
+    _ = (A.submatrix r id)ᵀᵀ.rank := by
+      rw [rank]; rw [Matrix.mulVecLin_transpose]; rw [range_vecMulLinear]
+      rfl
+    _ = (A.submatrix r (Equiv.refl n)).rank := by simp
+  rw [rank]; rw [rank]; rw [mulVecLin_submatrix]; rw [LinearMap.range_comp]; rw [LinearMap.range_comp]; rw [show LinearMap.funLeft R R (Equiv.refl n).symm = LinearEquiv.funCongrLeft R R
+      (Equiv.refl n).symm from rfl]; rw [LinearEquiv.range]; rw [Submodule.map_top]
+  exact Submodule.finrank_map_le _ _
 
 Depends on / 依赖: A.sub, A.submatrix, Finite, Matrix, Matrix.mulVecLin_transpose, Matrix.transpose_submatrix, Module, Module.Finite.span_of_finite, Set.finite_range, Submodule, Submodule.finrank_mono, Submodule.span_mono, finite_range, finrank, finrank_mono, mulVecLin_transpose, nontriviality, range_vecMulLinear, row_transpose, span_mono
 -/
@@ -1278,7 +1310,16 @@ theorem rank_eq_finrank_range_toLin
   let e₂ := (Pi.basisFun R n).equiv v₂ (Equiv.refl _)
   refine LinearEquiv.finrank_eq (e₁.ofSubmodules _ _ ?_)
   rw [← LinearMap.range_comp]; rw [← LinearMap.range_comp_of_range_eq_top (toLin v₂ v₁ A) e₂.range]
-  con
+  congr 1
+  apply LinearMap.pi_ext'
+  rintro i
+  apply LinearMap.ext_ring
+  have aux₁ := toLin_self (Pi.basisFun R n) (Pi.basisFun R m) A i
+  have aux₂ := Basis.equiv_apply (Pi.basisFun R n) i v₂
+  rw [toLin_eq_toLin']; rw [toLin'_apply'] at aux₁
+  rw [Pi.basisFun_apply] at aux₁ aux₂
+  simp only [e₁, e₂, LinearMap.comp_apply, LinearEquiv.coe_coe, Equiv.refl_apply,
+    aux₁, aux₂, LinearMap.coe_single, toLin_self, map_sum, map_smul, Basis.equiv_apply]
 
 中文:
 定理 rank_eq_finrank_range_toLin
@@ -1289,7 +1330,16 @@ theorem rank_eq_finrank_range_toLin
   let e₂ := (Pi.basisFun R n).equiv v₂ (Equiv.refl _)
   refine LinearEquiv.finrank_eq (e₁.ofSubmodules _ _ ?_)
   rw [← LinearMap.range_comp]; rw [← LinearMap.range_comp_of_range_eq_top (toLin v₂ v₁ A) e₂.range]
-  con
+  congr 1
+  apply LinearMap.pi_ext'
+  rintro i
+  apply LinearMap.ext_ring
+  have aux₁ := toLin_self (Pi.basisFun R n) (Pi.basisFun R m) A i
+  have aux₂ := Basis.equiv_apply (Pi.basisFun R n) i v₂
+  rw [toLin_eq_toLin']; rw [toLin'_apply'] at aux₁
+  rw [Pi.basisFun_apply] at aux₁ aux₂
+  simp only [e₁, e₂, LinearMap.comp_apply, LinearEquiv.coe_coe, Equiv.refl_apply,
+    aux₁, aux₂, LinearMap.coe_single, toLin_self, map_sum, map_smul, Basis.equiv_apply]
 
 Depends on / 依赖: Basis.equiv_apply, Equiv.refl, LinearEquiv, LinearEquiv.finrank_eq, LinearMap, LinearMap.ext_ring, LinearMap.pi_ext, LinearMap.range_comp, LinearMap.range_comp_of_range_eq_top, Pi.basisFun, basisFun, equiv_apply, ext_ring, finrank_eq, nonempty_fintype, ofSubmodules, pi_ext, range_comp, range_comp_of_range_eq_top, toLin_eq_toLin
 -/
@@ -1345,7 +1395,15 @@ theorem rank_le_card_of_support_subset
   have hB : B * A.submatrix Subtype.val id = A := by
     ext i j
     simp only [hBdef, mul_apply, of_apply, submatrix_apply, id_eq]
-    by_cases
+    by_cases hi : i in s
+    · rw [Fintype.sum_eq_single (⟨i, hi⟩ : {x // x in s})
+        fun a ha => by rw [if_neg fun he => ha (Subtype.ext he), zero_mul], if_pos rfl, one_mul]
+    · have h0 : A i = 0 := hz i hi
+      aesop
+  calc A.rank = (B * A.submatrix Subtype.val id).rank := by rw [hB]
+    _ <= (A.submatrix Subtype.val id).rank := rank_mul_le_right _ _
+    _ <= Fintype.card {x // x in s} := rank_le_card_height _
+    _ = s.card := Fintype.card_coe s
 
 中文:
 定理 rank_le_card_of_support_subset
@@ -1357,7 +1415,15 @@ theorem rank_le_card_of_support_subset
   have hB : B * A.submatrix Subtype.val id = A := by
     ext i j
     simp only [hBdef, mul_apply, of_apply, submatrix_apply, id_eq]
-    by_cases
+    by_cases hi : i in s
+    · rw [Fintype.sum_eq_single (⟨i, hi⟩ : {x // x in s})
+        fun a ha => by rw [if_neg fun he => ha (Subtype.ext he), zero_mul], if_pos rfl, one_mul]
+    · have h0 : A i = 0 := hz i hi
+      aesop
+  calc A.rank = (B * A.submatrix Subtype.val id).rank := by rw [hB]
+    _ <= (A.submatrix Subtype.val id).rank := rank_mul_le_right _ _
+    _ <= Fintype.card {x // x in s} := rank_le_card_height _
+    _ = s.card := Fintype.card_coe s
 
 Depends on / 依赖: A.rank, A.submat, A.submatrix, Fintype, Fintype.sum_eq_single, Function, Function.support_subset_iff, Matrix, Matrix.of, Subtype, Subtype.ext, Subtype.val, classical, id_eq, if_neg, if_pos, mul_apply, of_apply, one_mul, submat
 -/
@@ -1507,7 +1573,29 @@ theorem exists_rank_normal_form
   obtain ⟨L, L', D, hM0⟩ := Matrix.Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec M
   set E := fun i => if D i = 0 then 1 else (D i)⁻¹ with E_def
   set s : Finset m := .filter (fun i => D i != 0) .univ with s_def
-  set V := diagonal E * (L.reverse.map (toMatrix ∘ .inv)).pro
+  set V := diagonal E * (L.reverse.map (toMatrix ∘ .inv)).prod with V_def
+  set U := (L'.reverse.map (toMatrix ∘ .inv)).prod with U_def
+have hUdet : IsUnit U.det := (isUnit_iff_isUnit_det _).1 isUnit_prod_comp_inverse _
+  have hVdet : IsUnit V.det := by
+    rw [V_def]; rw [det_mul]; rw [det_diagonal]
+.mul exact IsUnit.mk0 _ (Finset.prod_ne_zero_iff.2 (by grind))
+      (isUnit_iff_isUnit_det _).1 (isUnit_prod_comp_inverse _)
+  have hM : V * M * U = diagonal (fun i => if i in s then 1 else 0) := by
+    rw [V_def]; rw [U_def]; rw [hM0]; rw [mul_assoc]; rw [mul_assoc _ (L'.map _).prod]; rw [prod_mul_reverse_inv_prod]; rw [mul_one]; rw [← mul_assoc]; rw [mul_assoc _ (L.reverse.map _).prod]; rw [reverse_inv_prod_mul_prod]; rw [mul_one]
+    ext
+    simp only [E_def, mul_diagonal, diagonal_apply, ite_mul, one_mul, zero_mul, s_def,
+      Finset.mem_filter, Finset.mem_univ, true_and, ite_not]
+    split_ifs with h1 h2 <;> first | rw [← h1, h2] | rw [← h1, inv_mul_cancel₀ h2] | rfl
+  have hs : s.card = M.rank := by
+    simp [← rank_mul_eq_right_of_isUnit_det V M hVdet, ← rank_mul_eq_left_of_isUnit_det U (V * M)
+      hUdet, hM, rank_diagonal]
+  set e : m ≃ Fin M.rank oplus Fin (Fintype.card m - M.rank) :=
+(Equiv.sumCompl (· in s)).symm.trans (Finset.equivFinOfCardEq hs).sumCongr
+Fintype.equivFinOfCardEq by rw [Fintype.card_subtype_compl, Fintype.card_coe, hs] with he
+  refine ⟨V, U, e, (isUnit_iff_isUnit_det _).2 hVdet, isUnit_prod_comp_inverse _, ?_⟩
+  rw [hM]; rw [← diagonal_one]; rw [← diagonal_zero]; rw [fromBlocks_diagonal]; rw [submatrix_diagonal_equiv]
+  refine congrArg _ (funext fun i => ?_)
+  split_ifs with hi <;> simp [he, hi]
 
 中文:
 定理 存在_rank_normal_form
@@ -1517,7 +1605,29 @@ theorem exists_rank_normal_form
   obtain ⟨L, L', D, hM0⟩ := Matrix.Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec M
   set E := fun i => if D i = 0 then 1 else (D i)⁻¹ with E_def
   set s : Finset m := .filter (fun i => D i != 0) .univ with s_def
-  set V := diagonal E * (L.reverse.map (toMatrix ∘ .inv)).pro
+  set V := diagonal E * (L.reverse.map (toMatrix ∘ .inv)).prod with V_def
+  set U := (L'.reverse.map (toMatrix ∘ .inv)).prod with U_def
+have hUdet : IsUnit U.det := (isUnit_iff_isUnit_det _).1 isUnit_prod_comp_inverse _
+  have hVdet : IsUnit V.det := by
+    rw [V_def]; rw [det_mul]; rw [det_diagonal]
+.mul exact IsUnit.mk0 _ (Finset.prod_ne_zero_iff.2 (by grind))
+      (isUnit_iff_isUnit_det _).1 (isUnit_prod_comp_inverse _)
+  have hM : V * M * U = diagonal (fun i => if i in s then 1 else 0) := by
+    rw [V_def]; rw [U_def]; rw [hM0]; rw [mul_assoc]; rw [mul_assoc _ (L'.map _).prod]; rw [prod_mul_reverse_inv_prod]; rw [mul_one]; rw [← mul_assoc]; rw [mul_assoc _ (L.reverse.map _).prod]; rw [reverse_inv_prod_mul_prod]; rw [mul_one]
+    ext
+    simp only [E_def, mul_diagonal, diagonal_apply, ite_mul, one_mul, zero_mul, s_def,
+      Finset.mem_filter, Finset.mem_univ, true_and, ite_not]
+    split_ifs with h1 h2 <;> first | rw [← h1, h2] | rw [← h1, inv_mul_cancel₀ h2] | rfl
+  have hs : s.card = M.rank := by
+    simp [← rank_mul_eq_right_of_isUnit_det V M hVdet, ← rank_mul_eq_left_of_isUnit_det U (V * M)
+      hUdet, hM, rank_diagonal]
+  set e : m ≃ Fin M.rank oplus Fin (Fintype.card m - M.rank) :=
+(Equiv.sumCompl (· in s)).symm.trans (Finset.equivFinOfCardEq hs).sumCongr
+Fintype.equivFinOfCardEq by rw [Fintype.card_subtype_compl, Fintype.card_coe, hs] with he
+  refine ⟨V, U, e, (isUnit_iff_isUnit_det _).2 hVdet, isUnit_prod_comp_inverse _, ?_⟩
+  rw [hM]; rw [← diagonal_one]; rw [← diagonal_zero]; rw [fromBlocks_diagonal]; rw [submatrix_diagonal_equiv]
+  refine congrArg _ (funext fun i => ?_)
+  split_ifs with hi <;> simp [he, hi]
 
 Depends on / 依赖: E_def, Finset, IsUnit, L.reverse.map, Matrix, Matrix.Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec, U.det, U_def, V.det, V_def, classical, det_m, diagonal, exists_list_transvec_mul_diagonal_mul_list_transvec, filter, isUnit_iff_isUnit_det, isUnit_prod_comp_inverse, reverse, reverse.map, s_def
 -/
@@ -1566,7 +1676,15 @@ theorem cRank_diagonal
   have h : LinearIndependent R w' := by
     have hli' := Pi.linearIndependent_single_of_ne_zero (R := R)
       (v := fun i : m => if w i = 0 then (1 : R) else w i) (by simp [ite_eq_iff'])
-    convert! hli'.comp Subtype.val S
+    convert! hli'.comp Subtype.val Subtype.val_injective
+    ext ⟨j, hj⟩ k
+    simp [w', diagonal, hj, Pi.single_apply, eq_comm]
+  have hrw : insert 0 (range (diagonal w).col) = insert 0 (range w') := by
+    suffices forall a, diagonal w a = 0 ∨ exists b, w b != 0 ∧ diagonal w b = diagonal w a
+      by aesop (add simp [col_eq_transpose, subset_def])
+    simp_rw [or_iff_not_imp_right, not_exists, not_and, not_imp_not]
+    simp +contextual [funext_iff, diagonal]
+  rw [cRank]; rw [← span_insert_zero]; rw [hrw]; rw [span_insert_zero]; rw [rank_span h]; rw [← lift_umax]; rw [← Cardinal.mk_range_eq_of_injective h.injective]; rw [lift_id']
 
 中文:
 定理 cRank_diagonal
@@ -1577,7 +1695,15 @@ theorem cRank_diagonal
   have h : LinearIndependent R w' := by
     have hli' := Pi.linearIndependent_single_of_ne_zero (R := R)
       (v := fun i : m => if w i = 0 then (1 : R) else w i) (by simp [ite_eq_iff'])
-    convert! hli'.comp Subtype.val S
+    convert! hli'.comp Subtype.val Subtype.val_injective
+    ext ⟨j, hj⟩ k
+    simp [w', diagonal, hj, Pi.single_apply, eq_comm]
+  have hrw : insert 0 (range (diagonal w).col) = insert 0 (range w') := by
+    suffices forall a, diagonal w a = 0 ∨ exists b, w b != 0 ∧ diagonal w b = diagonal w a
+      by aesop (add simp [col_eq_transpose, subset_def])
+    simp_rw [or_iff_not_imp_right, not_exists, not_and, not_imp_not]
+    simp +contextual [funext_iff, diagonal]
+  rw [cRank]; rw [← span_insert_zero]; rw [hrw]; rw [span_insert_zero]; rw [rank_span h]; rw [← lift_umax]; rw [← Cardinal.mk_range_eq_of_injective h.injective]; rw [lift_id']
 
 Depends on / 依赖: LinearIndependent, Pi.linearIndependent_single_of_ne_zero, Pi.single_apply, Subtype, Subtype.val, Subtype.val_injective, classical, convert, diagonal, eq_comm, insert, ite_eq_iff, linearIndependent_single_of_ne_zero, single_apply, val_injective
 -/
@@ -1677,7 +1803,7 @@ theorem rank_conjTranspose_mul_self
   trans finrank R { x // x in LinearMap.range (mulVecLin (Aᴴ * A)) } +
     finrank R { x // x in LinearMap.ker (mulVecLin (Aᴴ * A)) }
   · rw [ker_mulVecLin_conjTranspose_mul_self]
-  · simp on
+  · simp only [LinearMap.finrank_range_add_finrank_ker]
 
 中文:
 定理 rank_conjTranspose_mul_self
@@ -1690,7 +1816,7 @@ theorem rank_conjTranspose_mul_self
   trans finrank R { x // x in LinearMap.range (mulVecLin (Aᴴ * A)) } +
     finrank R { x // x in LinearMap.ker (mulVecLin (Aᴴ * A)) }
   · rw [ker_mulVecLin_conjTranspose_mul_self]
-  · simp on
+  · simp only [LinearMap.finrank_range_add_finrank_ker]
 
 Depends on / 依赖: LinearMap, LinearMap.finrank_range_add_finrank_ker, LinearMap.ker, LinearMap.range, add_left_injective, finrank, finrank_range_add_finrank_ker, ker_mulVecLin_conjTranspose_mul_self, mulVecLin
 -/
@@ -1827,7 +1953,7 @@ theorem rank_transpose_mul_self
   trans finrank R { x // x in LinearMap.range (mulVecLin (Aᵀ * A)) } +
     finrank R { x // x in LinearMap.ker (mulVecLin (Aᵀ * A)) }
   · rw [ker_mulVecLin_transpose_mul_self]
-  · simp only [L
+  · simp only [LinearMap.finrank_range_add_finrank_ker]
 
 中文:
 定理 rank_transpose_mul_self
@@ -1840,7 +1966,7 @@ theorem rank_transpose_mul_self
   trans finrank R { x // x in LinearMap.range (mulVecLin (Aᵀ * A)) } +
     finrank R { x // x in LinearMap.ker (mulVecLin (Aᵀ * A)) }
   · rw [ker_mulVecLin_transpose_mul_self]
-  · simp only [L
+  · simp only [LinearMap.finrank_range_add_finrank_ker]
 
 Depends on / 依赖: A.mulVecLin, LinearMap, LinearMap.finrank_range_add_finrank_ker, LinearMap.ker, LinearMap.range, add_left_injective, finrank, finrank_range_add_finrank_ker, ker_mulVecLin_transpose_mul_self, mulVecLin
 -/
@@ -1964,7 +2090,9 @@ lemma rank_add_rank_le_card_of_mul_eq_zero
   let el : Basis l R (l -> R) := Pi.basisFun R l
   let em : Basis m R (m -> R) := Pi.basisFun R m
   let en : Basis n R (n -> R) := Pi.basisFun R n
-  rw [Matrix.rank_eq_finrank_range_toLin A el em]; rw [Matrix.rank_eq_finrank_range_toLin B em en]; rw [← Module.finrank_fintype_fun_eq_ca
+  rw [Matrix.rank_eq_finrank_range_toLin A el em]; rw [Matrix.rank_eq_finrank_range_toLin B em en]; rw [← Module.finrank_fintype_fun_eq_card R]; rw [← LinearMap.finrank_range_add_finrank_ker (Matrix.toLin em el A)]; rw [add_le_add_iff_left]
+  apply Submodule.finrank_mono
+  rw [LinearMap.range_le_ker_iff]; rw [← Matrix.toLin_mul]; rw [hAB]; rw [map_zero]
 
 中文:
 引理 rank_add_rank_le_card_of_mul_eq_zero
@@ -1974,7 +2102,9 @@ lemma rank_add_rank_le_card_of_mul_eq_zero
   let el : Basis l R (l -> R) := Pi.basisFun R l
   let em : Basis m R (m -> R) := Pi.basisFun R m
   let en : Basis n R (n -> R) := Pi.basisFun R n
-  rw [Matrix.rank_eq_finrank_range_toLin A el em]; rw [Matrix.rank_eq_finrank_range_toLin B em en]; rw [← Module.finrank_fintype_fun_eq_ca
+  rw [Matrix.rank_eq_finrank_range_toLin A el em]; rw [Matrix.rank_eq_finrank_range_toLin B em en]; rw [← Module.finrank_fintype_fun_eq_card R]; rw [← LinearMap.finrank_range_add_finrank_ker (Matrix.toLin em el A)]; rw [add_le_add_iff_left]
+  apply Submodule.finrank_mono
+  rw [LinearMap.range_le_ker_iff]; rw [← Matrix.toLin_mul]; rw [hAB]; rw [map_zero]
 
 Depends on / 依赖: LinearMap, LinearMap.finrank_range_add_finrank_ker, LinearMap.range_le_ker_iff, Matrix, Matrix.rank_eq_finrank_range_toLin, Matrix.toLin, Matrix.toLin_mul, Module, Module.finrank_fintype_fun_eq_card, Pi.basisFun, Submodule, Submodule.finrank_mono, add_le_add_iff_left, basisFun, classical, finrank_fintype_fun_eq_card, finrank_mono, finrank_range_add_finrank_ker, map_ze, range_le_ker_iff
 -/

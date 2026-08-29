@@ -686,7 +686,10 @@ theorem commutator_commutator_eq_bot_of_rotate
   intro x hx y hy z hz
   trans x * z * ⁅y, ⁅z⁻¹, x⁻¹⁆⁆⁻¹ * z⁻¹ * y * ⁅x⁻¹, ⁅y⁻¹, z⁆⁆⁻¹ * y⁻¹ * x⁻¹
   -- We avoid `group` here to minimize imports while low in the hierarchy;
-  -- 
+  -- typically it would be better to invoke the tactic.
+  · simp [commutatorElement_def, mul_assoc]
+  · rw [h1 _ (H₂.inv_mem hy) _ hz _ (H₁.inv_mem hx), h2 _ (H₃.inv_mem hz) _ (H₁.inv_mem hx) _ hy]
+    simp [mul_assoc]
 
 中文:
 定理 commutator_commutator_eq_bot_of_rotate
@@ -697,7 +700,10 @@ theorem commutator_commutator_eq_bot_of_rotate
   intro x hx y hy z hz
   trans x * z * ⁅y, ⁅z⁻¹, x⁻¹⁆⁆⁻¹ * z⁻¹ * y * ⁅x⁻¹, ⁅y⁻¹, z⁆⁆⁻¹ * y⁻¹ * x⁻¹
   -- We avoid `group` here to minimize imports while low in the hierarchy;
-  -- 
+  -- typically it would be better to invoke the tactic.
+  · simp [commutatorElement_def, mul_assoc]
+  · rw [h1 _ (H₂.inv_mem hy) _ hz _ (H₁.inv_mem hx), h2 _ (H₃.inv_mem hz) _ (H₁.inv_mem hx) _ hy]
+    simp [mul_assoc]
 
 Depends on / 依赖: commutator_eq_bot_iff_le_centralizer, commutator_le, mem_centralizer_iff_commutator_eq_one, simp_rw
 -/
@@ -893,7 +899,11 @@ instance commutator_normal
     rw [h_base]
     exact Subgroup.normalClosure_normal
   refine Set.Subset.antisymm Group.subset_conjugatesOfSet fun a h => ?_
-  si
+  simp_rw [Group.mem_conjugatesOfSet_iff, isConj_iff] at h
+  rcases h with ⟨b, ⟨c, hc, e, he, rfl⟩, d, rfl⟩
+  exact ⟨_, h₁.conj_mem c hc d, _, h₂.conj_mem e he d, (conjugate_commutatorElement c e d).symm⟩
+
+@[to_additive]
 
 中文:
 实例 commutator_normal
@@ -905,7 +915,11 @@ instance commutator_normal
     rw [h_base]
     exact Subgroup.normalClosure_normal
   refine Set.Subset.antisymm Group.subset_conjugatesOfSet fun a h => ?_
-  si
+  simp_rw [Group.mem_conjugatesOfSet_iff, isConj_iff] at h
+  rcases h with ⟨b, ⟨c, hc, e, he, rfl⟩, d, rfl⟩
+  exact ⟨_, h₁.conj_mem c hc d, _, h₂.conj_mem e he d, (conjugate_commutatorElement c e d).symm⟩
+
+@[to_additive]
 
 Depends on / 依赖: Group.conjugatesOfSet, Group.mem_conjugatesOfSet_iff, Group.subset_conjugatesOfSet, Normal, Set.Subset.antisymm, Subgroup, Subgroup.normalClosure_normal, Subset, antisymm, closure, conj_mem, conjugate_commutatorElement, conjugatesOfSet, h_base, isConj_iff, mem_conjugatesOfSet_iff, normalClosure_normal, simp_rw, subset_conjugatesOfSet
 -/
@@ -1319,7 +1333,7 @@ theorem map_commutator
     exact commutator_mem_commutator (mem_map_of_mem _ hp) (mem_map_of_mem _ hq)
   · rintro _ ⟨p, hp, rfl⟩ _ ⟨q, hq, rfl⟩
     rw [← map_commutatorElement]
-    exact m
+    exact mem_map_of_mem _ (commutator_mem_commutator hp hq)
 
 中文:
 定理 map_commutator
@@ -1332,7 +1346,7 @@ theorem map_commutator
     exact commutator_mem_commutator (mem_map_of_mem _ hp) (mem_map_of_mem _ hq)
   · rintro _ ⟨p, hp, rfl⟩ _ ⟨q, hq, rfl⟩
     rw [← map_commutatorElement]
-    exact m
+    exact mem_map_of_mem _ (commutator_mem_commutator hp hq)
 
 Depends on / 依赖: commutator_le, commutator_mem_commutator, le_antisymm_iff, map_commutatorElement, map_le_iff_le_comap, mem_comap, mem_map_of_mem, simp_rw
 -/
@@ -1415,7 +1429,8 @@ theorem commutator_prod_prod
     constructor <;>
       · rw [map_commutator]
         apply commutator_mono <;>
-          simp [le_
+          simp [le_prod_iff, map_map, MonoidHom.fst_comp_inl, MonoidHom.snd_comp_inl,
+            MonoidHom.fst_comp_inr, MonoidHom.snd_comp_inr]
 
 中文:
 定理 commutator_prod_prod
@@ -1429,7 +1444,8 @@ theorem commutator_prod_prod
     constructor <;>
       · rw [map_commutator]
         apply commutator_mono <;>
-          simp [le_
+          simp [le_prod_iff, map_map, MonoidHom.fst_comp_inl, MonoidHom.snd_comp_inl,
+            MonoidHom.fst_comp_inr, MonoidHom.snd_comp_inr]
 
 Depends on / 依赖: MonoidHom, MonoidHom.fst_comp_inl, MonoidHom.fst_comp_inr, MonoidHom.snd_comp_inl, MonoidHom.snd_comp_inr, commutator_le, commutator_mem_commutator, commutator_mono, fst_comp_inl, fst_comp_inr, le_antisymm, le_prod_iff, map_commutator, map_map, prod_le_iff, snd_comp_inl, snd_comp_inr
 -/
@@ -1858,7 +1874,9 @@ lemma commutator_centralizer_commutator_le_center
     Subgroup.commutator_eq_bot_iff_le_centralizer]
   suffices ⁅⁅⊤, centralizer (commutator G : Set G)⁆, centralizer (commutator G : Set G)⁆ = ⊥ by
     refine Subgroup.commutator_commutator_eq_bot_of_rotate ?_ this
-    rwa [Subgrou
+    rwa [Subgroup.commutator_comm (centralizer (commutator G : Set G))]
+  rw [Subgroup.commutator_comm]; rw [Subgroup.commutator_eq_bot_iff_le_centralizer]
+  exact Set.centralizer_subset (Subgroup.commutator_mono le_top le_top)
 
 中文:
 引理 commutator_centralizer_commutator_le_center
@@ -1867,7 +1885,9 @@ lemma commutator_centralizer_commutator_le_center
     Subgroup.commutator_eq_bot_iff_le_centralizer]
   suffices ⁅⁅⊤, centralizer (commutator G : Set G)⁆, centralizer (commutator G : Set G)⁆ = ⊥ by
     refine Subgroup.commutator_commutator_eq_bot_of_rotate ?_ this
-    rwa [Subgrou
+    rwa [Subgroup.commutator_comm (centralizer (commutator G : Set G))]
+  rw [Subgroup.commutator_comm]; rw [Subgroup.commutator_eq_bot_iff_le_centralizer]
+  exact Set.centralizer_subset (Subgroup.commutator_mono le_top le_top)
 
 Depends on / 依赖: Set.centralizer_subset, Subgroup, Subgroup.centralizer_univ, Subgroup.coe_top, Subgroup.commutator_comm, Subgroup.commutator_commutator_eq_bot_of_rotate, Subgroup.commutator_eq_bot_iff_le_centralizer, Subgroup.commutator_mono, centralizer, centralizer_subset, centralizer_univ, coe_top, commutator, commutator_comm, commutator_commutator_eq_bot_of_rotate, commutator_eq_bot_iff_le_centralizer, commutator_mono, le_top
 -/
@@ -2058,7 +2078,14 @@ theorem Subgroup.Normal.quotient_commutative_iff_commutator_le
   · rw [commutator_eq_normalClosure, ← Subgroup.normalClosure_subset_iff]
     rintro x ⟨p, q, rfl⟩
     rw [SetLike.mem_coe]; rw [← QuotientGroup.eq_one_iff]; rw [commutatorElement_def]
-    simp only [QuotientGroup.mk_mul, QuotientGroup.mk
+    simp only [QuotientGroup.mk_mul, QuotientGroup.mk_inv]
+    rw [← commutatorElement_def]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [mul_comm']
+  · obtain ⟨x, rfl⟩ := QuotientGroup.mk'_surjective N x'
+    obtain ⟨y, rfl⟩ := QuotientGroup.mk'_surjective N y'
+    rw [← commutatorElement_eq_one_iff_mul_comm]; rw [← map_commutatorElement]; rw [QuotientGroup.mk'_apply]; rw [QuotientGroup.eq_one_iff]
+    apply hGN
+    rw [commutator_eq_closure]
+    exact Subgroup.subset_closure (commutator_mem_commutatorSet x y)
 
 中文:
 定理 子群.正规.quotient_commutative_iff_commutator_le
@@ -2068,7 +2095,14 @@ theorem Subgroup.Normal.quotient_commutative_iff_commutator_le
   · rw [commutator_eq_normalClosure, ← Subgroup.normalClosure_subset_iff]
     rintro x ⟨p, q, rfl⟩
     rw [SetLike.mem_coe]; rw [← QuotientGroup.eq_one_iff]; rw [commutatorElement_def]
-    simp only [QuotientGroup.mk_mul, QuotientGroup.mk
+    simp only [QuotientGroup.mk_mul, QuotientGroup.mk_inv]
+    rw [← commutatorElement_def]; rw [commutatorElement_eq_one_iff_mul_comm]; rw [mul_comm']
+  · obtain ⟨x, rfl⟩ := QuotientGroup.mk'_surjective N x'
+    obtain ⟨y, rfl⟩ := QuotientGroup.mk'_surjective N y'
+    rw [← commutatorElement_eq_one_iff_mul_comm]; rw [← map_commutatorElement]; rw [QuotientGroup.mk'_apply]; rw [QuotientGroup.eq_one_iff]
+    apply hGN
+    rw [commutator_eq_closure]
+    exact Subgroup.subset_closure (commutator_mem_commutatorSet x y)
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk, QuotientGroup.mk_inv, QuotientGroup.mk_mul, SetLike, SetLike.mem_coe, Subgroup, Subgroup.normalClosure_subset_iff, _surjective, commuta, commutatorElement_def, commutatorElement_eq_one_iff_mul_comm, commutator_eq_normalClosure, eq_one_iff, mem_coe, mk_inv, mk_mul, mul_comm, normalClosure_subset_iff
 -/
@@ -2103,7 +2137,13 @@ theorem Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top
   -- Q is a quotient of H
   let φ : H ->ₙ* G ⧸ N := MonoidHom.comp (QuotientGroup.mk' N) (Subgroup.subtype H)
   -- It is enough to prove that φ is surjective
-  apply Function.Surjective.mul_
+  apply Function.Surjective.mul_comm (f := φ) _ hH
+  -- We have to prove that `MonoidHom.range φ = ⊤`
+  have : Subgroup.map (QuotientGroup.mk' N) ⊤ = ⊤ := by
+    rw [← MonoidHom.range_eq_map]; rw [MonoidHom.range_eq_top]
+    exact QuotientGroup.mk'_surjective N
+  rw [MulHom.coe_coe]; rw [← MonoidHom.range_eq_top]; rw [MonoidHom.range_eq_map]; rw [← Subgroup.map_map]; rw [← this]; rw [Subgroup.map_eq_map_iff]; rw [QuotientGroup.ker_mk']; rw [sup_comm]; rw [← hHN]; rw [← MonoidHom.range_eq_map]
+  simp
 
 中文:
 定理 子群.正规.commutator_le_of_self_sup_commutative_eq_top
@@ -2114,7 +2154,13 @@ theorem Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top
   -- Q is a quotient of H
   let φ : H ->ₙ* G ⧸ N := MonoidHom.comp (QuotientGroup.mk' N) (Subgroup.subtype H)
   -- It is enough to prove that φ is surjective
-  apply Function.Surjective.mul_
+  apply Function.Surjective.mul_comm (f := φ) _ hH
+  -- We have to prove that `MonoidHom.range φ = ⊤`
+  have : Subgroup.map (QuotientGroup.mk' N) ⊤ = ⊤ := by
+    rw [← MonoidHom.range_eq_map]; rw [MonoidHom.range_eq_top]
+    exact QuotientGroup.mk'_surjective N
+  rw [MulHom.coe_coe]; rw [← MonoidHom.range_eq_top]; rw [MonoidHom.range_eq_map]; rw [← Subgroup.map_map]; rw [← this]; rw [Subgroup.map_eq_map_iff]; rw [QuotientGroup.ker_mk']; rw [sup_comm]; rw [← hHN]; rw [← MonoidHom.range_eq_map]
+  simp
 -/
 theorem Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top {N : Subgroup G} [N.Normal]
     {H : Subgroup G} (hHN : N ⊔ H = ⊤) (hH : IsMulCommutative H) : _root_.commutator G <= N := by

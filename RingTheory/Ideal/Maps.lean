@@ -66,7 +66,10 @@ definition comap
     exact add_mem hx hy
   zero_mem' := by simp only [Set.mem_preimage, map_zero, SetLike.mem_coe, Submodule.zero_mem]
   smul_mem' c x hx := by
-    simp only [smul_eq_mul, Set.mem_preimage, ma
+    simp only [smul_eq_mul, Set.mem_preimage, map_mul, SetLike.mem_coe] at *
+    exact mul_mem_left I _ hx
+
+@[simp]
 
 中文:
 定义 comap
@@ -77,7 +80,10 @@ definition comap
     exact add_mem hx hy
   zero_mem' := by simp only [Set.mem_preimage, map_zero, SetLike.mem_coe, Submodule.zero_mem]
   smul_mem' c x hx := by
-    simp only [smul_eq_mul, Set.mem_preimage, ma
+    simp only [smul_eq_mul, Set.mem_preimage, map_mul, SetLike.mem_coe] at *
+    exact mul_mem_left I _ hx
+
+@[simp]
 -/
 def comap [RingHomClass F R S] (I : Ideal S) : Ideal R where
   carrier := f ⁻¹' I
@@ -1439,7 +1445,7 @@ theorem mem_image_of_mem_map_of_surjective
       ⟨x1 + x2, I.add_mem hx1i hx2i, hxy1 ▸ hxy2 ▸ map_add f _ _⟩)
     fun c _ _ ⟨x, hxi, hxy⟩ =>
     let ⟨d, hdc⟩ := hf c
-    ⟨d * x, I.mul_mem_left _ hxi, hdc ▸ hxy ▸ 
+    ⟨d * x, I.mul_mem_left _ hxi, hdc ▸ hxy ▸ map_mul f _ _⟩
 
 中文:
 定理 mem_image_of_mem_map_of_surjective
@@ -1450,7 +1456,7 @@ theorem mem_image_of_mem_map_of_surjective
       ⟨x1 + x2, I.add_mem hx1i hx2i, hxy1 ▸ hxy2 ▸ map_add f _ _⟩)
     fun c _ _ ⟨x, hxi, hxy⟩ =>
     let ⟨d, hdc⟩ := hf c
-    ⟨d * x, I.mul_mem_left _ hxi, hdc ▸ hxy ▸ 
+    ⟨d * x, I.mul_mem_left _ hxi, hdc ▸ hxy ▸ map_mul f _ _⟩
 
 Depends on / 依赖: I.add_mem, I.mul_mem_left, I.zero_mem, Submodule, Submodule.span_induction, add_mem, map_add, map_mul, map_zero, mul_mem_left, span_induction, zero_mem
 -/
@@ -1567,7 +1573,9 @@ theorem IsMaximal.comap_piEvalRingHom
     J.add_mem (J.mul_mem_left (update 0 i r) hxJ) (b := update 1 i y)
       (le <| by apply update_self i y 1 ▸ hy)
   ext j
-  obtain rfl | ne := eq_
+  obtain rfl | ne := eq_or_ne j i
+  · simpa [eq_comm] using eq
+  · simp [update_of_ne ne]
 
 中文:
 定理 是极大.comap_piEvalRingHom
@@ -1580,7 +1588,9 @@ theorem IsMaximal.comap_piEvalRingHom
     J.add_mem (J.mul_mem_left (update 0 i r) hxJ) (b := update 1 i y)
       (le <| by apply update_self i y 1 ▸ hy)
   ext j
-  obtain rfl | ne := eq_
+  obtain rfl | ne := eq_or_ne j i
+  · simpa [eq_comm] using eq
+  · simp [update_of_ne ne]
 
 Depends on / 依赖: I.ne_top_iff_one.mp, J.add_mem, J.mul_mem_left, add_mem, classical, convert, eq_comm, eq_or_ne, exists_inv, h.exists_inv, h.ne_top, isMaximal_iff, isMaximal_iff.mpr, mul_mem_left, ne_top, ne_top_iff_one, update, update_of_ne, update_self
 -/
@@ -1724,7 +1734,12 @@ definition piOrderIso
     right_inv I := by
       ext r
       simp_rw [mem_pi, mem_map_iff_of_surjective (Pi.evalRingHom R _) (Function.surjective_eval _)]
-      refine ⟨(fun ⟨r', hr'⟩ => ?_) ∘ Classical.skolem.
+      refine ⟨(fun ⟨r', hr'⟩ => ?_) ∘ Classical.skolem.mp, fun hr i => ⟨r, hr, rfl⟩⟩
+      have := Fintype.ofFinite ι
+      classical rw [show r = ∑ i, Pi.single i 1 * r' i from funext fun i => by
+        rw [← (hr' _).2]; rw [Finset.sum_apply]; rw [Fintype.sum_eq_single i fun j ne => by simp [ne]]; simp]
+      exact sum_mem fun i _ => I.mul_mem_left _ (hr' i).1
+    map_rel_iff' := pi_le_pi_iff }
 
 中文:
 定义 piOrderIso
@@ -1736,7 +1751,12 @@ definition piOrderIso
     right_inv I := by
       ext r
       simp_rw [mem_pi, mem_map_iff_of_surjective (Pi.evalRingHom R _) (Function.surjective_eval _)]
-      refine ⟨(fun ⟨r', hr'⟩ => ?_) ∘ Classical.skolem.
+      refine ⟨(fun ⟨r', hr'⟩ => ?_) ∘ Classical.skolem.mp, fun hr i => ⟨r, hr, rfl⟩⟩
+      have := Fintype.ofFinite ι
+      classical rw [show r = ∑ i, Pi.single i 1 * r' i from funext fun i => by
+        rw [← (hr' _).2]; rw [Finset.sum_apply]; rw [Fintype.sum_eq_single i fun j ne => by simp [ne]]; simp]
+      exact sum_mem fun i _ => I.mul_mem_left _ (hr' i).1
+    map_rel_iff' := pi_le_pi_iff }
 -/
 @[simps!] def piOrderIso [Finite ι] : Ideal (Π i, R i) ≃o Π i, Ideal (R i) := .symm
   { toFun := pi
@@ -2099,7 +2119,8 @@ definition relIsoOfBijective
       le_comap_map
   map_rel_iff' {_ _} := by
     refine ⟨fun h => ?_, comap_mono⟩
-    have := map_mono
+    have := map_mono (f := f) h
+    simpa only [Equiv.coe_fn_mk, map_comap_of_surjective f hf.2] using this
 
 中文:
 定义 relIsoOfBijective
@@ -2113,7 +2134,8 @@ definition relIsoOfBijective
       le_comap_map
   map_rel_iff' {_ _} := by
     refine ⟨fun h => ?_, comap_mono⟩
-    have := map_mono
+    have := map_mono (f := f) h
+    simpa only [Equiv.coe_fn_mk, map_comap_of_surjective f hf.2] using this
 -/
 def relIsoOfBijective : Ideal S ≃o Ideal R where
   toFun := comap f
@@ -2355,7 +2377,7 @@ theorem coheight_comap_of_surjective
   · rw [← J.map_comap_of_surjective f hf]
     apply lt_of_le_not_ge (map_mono h.le)
     simpa [map_le_iff_le_comap, φ] using h.not_ge
-  · exact (K.comap_map
+  · exact (K.comap_map_of_surjective f hf).trans (sup_of_le_left ((comap_mono bot_le).trans h.le))
 
 中文:
 定理 coheight_comap_of_surjective
@@ -2366,7 +2388,7 @@ theorem coheight_comap_of_surjective
   · rw [← J.map_comap_of_surjective f hf]
     apply lt_of_le_not_ge (map_mono h.le)
     simpa [map_le_iff_le_comap, φ] using h.not_ge
-  · exact (K.comap_map
+  · exact (K.comap_map_of_surjective f hf).trans (sup_of_le_left ((comap_mono bot_le).trans h.le))
 
 Depends on / 依赖: J.map_comap_of_surjective, K.comap_map_of_surjective, K.map, Order.coheight_eq_of_strictMono, bot_le, coheight_eq_of_strictMono, comap_map_of_surjective, comap_mono, h.le, h.not_ge, lt_of_le_not_ge, map_comap_of_surjective, map_le_iff_le_comap, map_mono, not_ge, orderEmbeddingOfSurjective, strictMono, sup_of_le_left
 -/
@@ -2393,7 +2415,8 @@ Subtype.ext
       show comap f (map f I.1) = I.1 from
         (comap_map_of_surjective f hf I).symm ▸ le_antisymm (sup_le le_rfl I.2) le_sup_left
   map_rel_iff' {I1 I2} :=
-    ⟨fun 
+    ⟨fun H => map_comap_of_surjective f hf I1 ▸ map_comap_of_surjective f hf I2 ▸ map_mono H,
+      comap_mono⟩
 
 中文:
 定义 relIsoOfSurjective
@@ -2406,7 +2429,8 @@ Subtype.ext
       show comap f (map f I.1) = I.1 from
         (comap_map_of_surjective f hf I).symm ▸ le_antisymm (sup_le le_rfl I.2) le_sup_left
   map_rel_iff' {I1 I2} :=
-    ⟨fun 
+    ⟨fun H => map_comap_of_surjective f hf I1 ▸ map_comap_of_surjective f hf I2 ▸ map_mono H,
+      comap_mono⟩
 
 Depends on / 依赖: bot_le, comap_mono
 -/
@@ -2436,7 +2460,13 @@ theorem comap_isMaximal_of_surjective
     have := congr_arg (comap f) this
     rw [comap_top]; rw [comap_map_of_surjective _ hf]; rw [eq_top_iff] at this
     rw [eq_top_iff]
-    exact le_trans this (sup_le (le_of_eq rfl) (le_trans (comap_mono bot_le) (le_of_l
+    exact le_trans this (sup_le (le_of_eq rfl) (le_trans (comap_mono bot_le) (le_of_lt hJ)))
+  refine
+    H.1.2 (map f J)
+      (lt_of_le_of_ne (le_map_of_comap_le_of_surjective _ hf (le_of_lt hJ)) fun h =>
+        ne_of_lt hJ (_root_.trans (congr_arg (comap f) h) ?_))
+  rw [comap_map_of_surjective _ hf]; rw [sup_eq_left]
+  exact le_trans (comap_mono bot_le) (le_of_lt hJ)
 
 中文:
 定理 comap_isMaximal_of_surjective
@@ -2447,7 +2477,13 @@ theorem comap_isMaximal_of_surjective
     have := congr_arg (comap f) this
     rw [comap_top]; rw [comap_map_of_surjective _ hf]; rw [eq_top_iff] at this
     rw [eq_top_iff]
-    exact le_trans this (sup_le (le_of_eq rfl) (le_trans (comap_mono bot_le) (le_of_l
+    exact le_trans this (sup_le (le_of_eq rfl) (le_trans (comap_mono bot_le) (le_of_lt hJ)))
+  refine
+    H.1.2 (map f J)
+      (lt_of_le_of_ne (le_map_of_comap_le_of_surjective _ hf (le_of_lt hJ)) fun h =>
+        ne_of_lt hJ (_root_.trans (congr_arg (comap f) h) ?_))
+  rw [comap_map_of_surjective _ hf]; rw [sup_eq_left]
+  exact le_trans (comap_mono bot_le) (le_of_lt hJ)
 
 Depends on / 依赖: _root_, _root_.trans, bot_le, comap_map_of_surjective, comap_mono, comap_ne_top, comap_top, congr_arg, eq_top_iff, le_map_of_comap_le_of_surjective, le_of_eq, le_of_lt, le_trans, lt_of_le_of_ne, ne_of_lt, sup_eq_left, sup_le
 -/
@@ -2490,7 +2526,8 @@ theorem map_mul
         show (f (r * s)) in map f I * map f J by
           rw [map_mul]; exact mul_mem_mul (mem_map_of_mem f hri) (mem_map_of_mem f hsj))
     (span_mul_span (↑f '' ↑I) (↑f '' ↑J) ▸ (span_le.2 <| by
-      rintro _ ⟨_, ⟨r, hri
+      rintro _ ⟨_, ⟨r, hri, rfl⟩, _, ⟨s, hsj, rfl⟩, rfl⟩
+      simp_rw [← map_mul]; exact mem_map_of_mem f (mul_mem_mul hri hsj)))
 
 中文:
 定理 map_mul
@@ -2501,7 +2538,8 @@ theorem map_mul
         show (f (r * s)) in map f I * map f J by
           rw [map_mul]; exact mul_mem_mul (mem_map_of_mem f hri) (mem_map_of_mem f hsj))
     (span_mul_span (↑f '' ↑I) (↑f '' ↑J) ▸ (span_le.2 <| by
-      rintro _ ⟨_, ⟨r, hri
+      rintro _ ⟨_, ⟨r, hri, rfl⟩, _, ⟨s, hsj, rfl⟩, rfl⟩
+      simp_rw [← map_mul]; exact mem_map_of_mem f (mul_mem_mul hri hsj)))
 -/
 protected theorem map_mul {R} [Semiring R] [FunLike F R S] [RingHomClass F R S]
     (f : F) (I J : Ideal R) :
@@ -3910,7 +3948,9 @@ theorem mem_annihilator_span
       exact h ⟨x, hx⟩
     · exact smul_zero _
     · intro x y _ _ hx hy
-      rw [smul_add]; rw [hx]; rw [
+      rw [smul_add]; rw [hx]; rw [hy]; rw [zero_add]
+    · intro a x _ hx
+      rw [smul_comm]; rw [hx]; rw [smul_zero]
 
 中文:
 定理 mem_annihilator_span
@@ -3926,7 +3966,9 @@ theorem mem_annihilator_span
       exact h ⟨x, hx⟩
     · exact smul_zero _
     · intro x y _ _ hx hy
-      rw [smul_add]; rw [hx]; rw [
+      rw [smul_add]; rw [hx]; rw [hy]; rw [zero_add]
+    · intro a x _ hx
+      rw [smul_comm]; rw [hx]; rw [smul_zero]
 
 Depends on / 依赖: Submodule, Submodule.mem_annihilator, Submodule.span_induction, Submodule.subset_span, mem_annihilator, n.prop, smul_add, smul_comm, smul_zero, span_induction, subset_span, zero_add
 -/
@@ -4225,7 +4267,17 @@ theorem map_sInf
     obtain ⟨J, hJ⟩ := (Set.mem_image _ _ _).mp hj
     rw [← hJ.right]; rw [← hx.right]
     exact mem_map_of_mem f (sInf_le_of_le hJ.left (le_of_eq rfl) hx.left)
-  · intro 
+  · intro y hy
+    obtain ⟨x, hx⟩ := hf y
+    refine hx ▸ mem_map_of_mem f ?_
+    have : forall I in A, y in map f I := by simpa using hy
+    rw [Submodule.mem_sInf]
+    intro J hJ
+    rcases (mem_map_iff_of_surjective f hf).1 (this J hJ) with ⟨x', hx', rfl⟩
+    have : x - x' in J := by
+      apply h J hJ
+      rw [RingHom.mem_ker]; rw [map_sub]; rw [hx]; rw [sub_self]
+    simpa only [sub_add_cancel] using J.add_mem this hx'
 
 中文:
 定理 map_sInf
@@ -4237,7 +4289,17 @@ theorem map_sInf
     obtain ⟨J, hJ⟩ := (Set.mem_image _ _ _).mp hj
     rw [← hJ.right]; rw [← hx.right]
     exact mem_map_of_mem f (sInf_le_of_le hJ.left (le_of_eq rfl) hx.left)
-  · intro 
+  · intro y hy
+    obtain ⟨x, hx⟩ := hf y
+    refine hx ▸ mem_map_of_mem f ?_
+    have : forall I in A, y in map f I := by simpa using hy
+    rw [Submodule.mem_sInf]
+    intro J hJ
+    rcases (mem_map_iff_of_surjective f hf).1 (this J hJ) with ⟨x', hx', rfl⟩
+    have : x - x' in J := by
+      apply h J hJ
+      rw [RingHom.mem_ker]; rw [map_sub]; rw [hx]; rw [sub_self]
+    simpa only [sub_add_cancel] using J.add_mem this hx'
 
 Depends on / 依赖: Set.mem_image, Submodule, Submodule.mem_sInf, hJ.left, hJ.right, hx.left, hx.right, le_antisymm, le_of_eq, le_sInf, mem_image, mem_map_iff_of_surjective, mem_map_of_mem, mem_sInf, sInf_le_of_le
 -/
@@ -4273,7 +4335,14 @@ theorem map_isPrime_of_surjective
     rw [comap_map_of_surjective _ hf]; rw [comap_top] at h
     exact h ▸ sup_le (le_of_eq rfl) hk
   · refine fun hxy => (hf x).recOn fun a ha => (hf y).recOn fun b hb => ?_
-    rw [← ha]; rw [← 
+    rw [← ha]; rw [← hb]; rw [← map_mul f]; rw [mem_map_iff_of_surjective _ hf] at hxy
+    rcases hxy with ⟨c, hc, hc'⟩
+    rw [← sub_eq_zero]; rw [← map_sub] at hc'
+    have : a * b in I := by
+      convert! I.sub_mem hc (hk (hc' : c - a * b in RingHom.ker f)) using 1
+      abel
+    exact
+      (H.mem_or_mem this).imp (fun h => ha ▸ mem_map_of_mem f h) fun h => hb ▸ mem_map_of_mem f h
 
 中文:
 定理 map_isPrime_of_surjective
@@ -4284,7 +4353,14 @@ theorem map_isPrime_of_surjective
     rw [comap_map_of_surjective _ hf]; rw [comap_top] at h
     exact h ▸ sup_le (le_of_eq rfl) hk
   · refine fun hxy => (hf x).recOn fun a ha => (hf y).recOn fun b hb => ?_
-    rw [← ha]; rw [← 
+    rw [← ha]; rw [← hb]; rw [← map_mul f]; rw [mem_map_iff_of_surjective _ hf] at hxy
+    rcases hxy with ⟨c, hc, hc'⟩
+    rw [← sub_eq_zero]; rw [← map_sub] at hc'
+    have : a * b in I := by
+      convert! I.sub_mem hc (hk (hc' : c - a * b in RingHom.ker f)) using 1
+      abel
+    exact
+      (H.mem_or_mem this).imp (fun h => ha ▸ mem_map_of_mem f h) fun h => hb ▸ mem_map_of_mem f h
 
 Depends on / 依赖: H.ne_top, I.sub_mem, RingHom, RingHom.ker, comap_map_of_surjective, comap_top, congr_arg, convert, eq_top_iff, le_of_eq, map_mul, map_sub, mem_map_iff_of_surjective, ne_top, replace, sub_eq_zero, sub_mem, sup_le
 -/
@@ -4395,7 +4471,10 @@ theorem map_radical_of_surjective
   · rintro ⟨hj, hj'⟩
     have : j.IsPrime := hj'
     exact
-      ⟨comap f j, ⟨⟨map_le_iff_le_co
+      ⟨comap f j, ⟨⟨map_le_iff_le_comap.1 hj, comap_isPrime f j⟩, map_comap_of_surjective f hf j⟩⟩
+  · rintro ⟨J, ⟨hJ, hJ'⟩⟩
+    have : J.IsPrime := hJ.right
+    exact ⟨hJ' ▸ map_mono hJ.left, hJ' ▸ map_isPrime_of_surjective hf (le_trans h hJ.left)⟩
 
 中文:
 定理 map_radical_of_surjective
@@ -4409,7 +4488,10 @@ theorem map_radical_of_surjective
   · rintro ⟨hj, hj'⟩
     have : j.IsPrime := hj'
     exact
-      ⟨comap f j, ⟨⟨map_le_iff_le_co
+      ⟨comap f j, ⟨⟨map_le_iff_le_comap.1 hj, comap_isPrime f j⟩, map_comap_of_surjective f hf j⟩⟩
+  · rintro ⟨J, ⟨hJ, hJ'⟩⟩
+    have : J.IsPrime := hJ.right
+    exact ⟨hJ' ▸ map_mono hJ.left, hJ' ▸ map_isPrime_of_surjective hf (le_trans h hJ.left)⟩
 
 Depends on / 依赖: IsPrime, J.IsPrime, RingHom, RingHom.ker, Subtype, Subtype.val_injective, bot_unique, comap_isPrime, convert, h.trans, hJ.left, hJ.right, isOpen_discrete, j.IsPrime, le_trans, map_comap_of_surjective, map_isPrime_of_surjective, map_le_iff_le_comap, map_mono, map_sInf
 -/
@@ -4448,7 +4530,16 @@ definition liftOfRightInverseAux
     map_one' := by
       rw [← map_one g]; rw [← sub_eq_zero]; rw [← map_sub g]; rw [← mem_ker]
       apply hg
-      rw [mem_ker]; rw [map_sub f]; rw [sub_eq_zero]; rw [map_one f
+      rw [mem_ker]; rw [map_sub f]; rw [sub_eq_zero]; rw [map_one f]
+      exact hf 1
+    map_mul' := by
+      intro x y
+      rw [← map_mul g]; rw [← sub_eq_zero]; rw [← map_sub g]; rw [← mem_ker]
+      apply hg
+      rw [mem_ker]; rw [map_sub f]; rw [sub_eq_zero]; rw [map_mul f]
+      simp only [hf _] }
+
+@[simp]
 
 中文:
 定义 liftOfRightInverseAux
@@ -4458,7 +4549,16 @@ definition liftOfRightInverseAux
     map_one' := by
       rw [← map_one g]; rw [← sub_eq_zero]; rw [← map_sub g]; rw [← mem_ker]
       apply hg
-      rw [mem_ker]; rw [map_sub f]; rw [sub_eq_zero]; rw [map_one f
+      rw [mem_ker]; rw [map_sub f]; rw [sub_eq_zero]; rw [map_one f]
+      exact hf 1
+    map_mul' := by
+      intro x y
+      rw [← map_mul g]; rw [← sub_eq_zero]; rw [← map_sub g]; rw [← mem_ker]
+      apply hg
+      rw [mem_ker]; rw [map_sub f]; rw [sub_eq_zero]; rw [map_mul f]
+      simp only [hf _] }
+
+@[simp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.liftOfRightInverse, f.toAddMonoidHom, f_inv, g.toAddMonoidHom, liftOfRightInverse, map_mul, map_one, map_sub, mem_ker, sub_eq_zero, toAddMonoidHom
 -/

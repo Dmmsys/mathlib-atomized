@@ -127,7 +127,10 @@ refine tendsto_map' tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within ofRe
     (tendsto_nhdsWithin_of_tendsto_nhds <| ofRealCLM.continuous.tendsto' 1 1 rfl) ?_
   simp only [eventually_iff, mem_nhdsWithin]
   refine ⟨Set.Ioo 0 2, isOpen_Ioo, by simp, fun x hx => ?_⟩
-  p
+  push _ in _ at hx
+  simp only [Set.mem_ofPred_eq, stolzSet, ← ofReal_one, ← ofReal_sub, norm_real,
+norm_of_nonneg hx.1.1.le, norm_of_nonneg (sub_pos.mpr hx.2).le]
+  exact ⟨hx.2, lt_mul_left (sub_pos.mpr hx.2) hM⟩
 
 中文:
 定理 nhdsWithin_lt_le_nhdsWithin_stolzSet
@@ -138,7 +141,10 @@ refine tendsto_map' tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within ofRe
     (tendsto_nhdsWithin_of_tendsto_nhds <| ofRealCLM.continuous.tendsto' 1 1 rfl) ?_
   simp only [eventually_iff, mem_nhdsWithin]
   refine ⟨Set.Ioo 0 2, isOpen_Ioo, by simp, fun x hx => ?_⟩
-  p
+  push _ in _ at hx
+  simp only [Set.mem_ofPred_eq, stolzSet, ← ofReal_one, ← ofReal_sub, norm_real,
+norm_of_nonneg hx.1.1.le, norm_of_nonneg (sub_pos.mpr hx.2).le]
+  exact ⟨hx.2, lt_mul_left (sub_pos.mpr hx.2) hM⟩
 
 Depends on / 依赖: Set.Ioo, Set.mem_ofPred_eq, continuous, eventually_iff, isOpen_Ioo, lt_mul_left, mem_nhdsWithin, mem_ofPred_eq, norm_of_nonneg, norm_real, ofReal, ofRealCLM, ofRealCLM.continuous.tendsto, ofReal_one, ofReal_sub, stolzSet, sub_pos, sub_pos.mpr, tendsto, tendsto_id
 -/
@@ -167,7 +173,21 @@ lemma stolzCone_subset_stolzSet_aux'
   have H : √((1 - x) ^ 2 + y ^ 2) <= 1 - x / 2 := by
     calc √((1 - x) ^ 2 + y ^ 2)
 _ <= √((1 - x) ^ 2 + (s * x) ^ 2) := sqrt_le_sqrt by rw [← sq_abs y]; gcongr
-      _ = √(1 - 2 * x + (1
+      _ = √(1 - 2 * x + (1 + s ^ 2) * x * x) := by congr 1; ring
+      _ <= √(1 - 2 * x + (1 + s ^ 2) * (1 / (1 + s ^ 2)) * x) := by gcongr
+      _ = √(1 - x) := by congr 1; field
+      _ <= 1 - x / 2 := by
+        simp_rw [sub_eq_add_neg, ← neg_div]
+refine sqrt_one_add_le neg_le_neg_iff.mpr (hx₁.trans_le ?_).le
+        rw [div_le_one (by positivity)]
+exact le_add_of_nonneg_right sq_nonneg s
+  calc √(x ^ 2 + y ^ 2)
+    _ <= √(x ^ 2 + (s * x) ^ 2) := by rw [← sq_abs y]; gcongr
+    _ = √((1 + s ^ 2) * x ^ 2) := by congr; ring
+    _ = √(1 + s ^ 2) * x := by rw [sqrt_mul' _ (sq_nonneg x), sqrt_sq hx₀.le]
+    _ = 2 * √(1 + s ^ 2) * (x / 2) := by ring
+    _ < (2 * √(1 + s ^ 2) + 1) * (x / 2) := by gcongr; exact lt_add_one _
+    _ <= _ := by gcongr; exact le_sub_comm.mpr H
 
 中文:
 引理 stolzCone_subset_stolzSet_aux'
@@ -178,7 +198,21 @@ _ <= √((1 - x) ^ 2 + (s * x) ^ 2) := sqrt_le_sqrt by rw [← sq_abs y]; gcongr
   have H : √((1 - x) ^ 2 + y ^ 2) <= 1 - x / 2 := by
     calc √((1 - x) ^ 2 + y ^ 2)
 _ <= √((1 - x) ^ 2 + (s * x) ^ 2) := sqrt_le_sqrt by rw [← sq_abs y]; gcongr
-      _ = √(1 - 2 * x + (1
+      _ = √(1 - 2 * x + (1 + s ^ 2) * x * x) := by congr 1; ring
+      _ <= √(1 - 2 * x + (1 + s ^ 2) * (1 / (1 + s ^ 2)) * x) := by gcongr
+      _ = √(1 - x) := by congr 1; field
+      _ <= 1 - x / 2 := by
+        simp_rw [sub_eq_add_neg, ← neg_div]
+refine sqrt_one_add_le neg_le_neg_iff.mpr (hx₁.trans_le ?_).le
+        rw [div_le_one (by positivity)]
+exact le_add_of_nonneg_right sq_nonneg s
+  calc √(x ^ 2 + y ^ 2)
+    _ <= √(x ^ 2 + (s * x) ^ 2) := by rw [← sq_abs y]; gcongr
+    _ = √((1 + s ^ 2) * x ^ 2) := by congr; ring
+    _ = √(1 + s ^ 2) * x := by rw [sqrt_mul' _ (sq_nonneg x), sqrt_sq hx₀.le]
+    _ = 2 * √(1 + s ^ 2) * (x / 2) := by ring
+    _ < (2 * √(1 + s ^ 2) + 1) * (x / 2) := by gcongr; exact lt_add_one _
+    _ <= _ := by gcongr; exact le_sub_comm.mpr H
 -/
 private lemma stolzCone_subset_stolzSet_aux' (s : Real) :
     exists M ε, 0 < M ∧ 0 < ε ∧ forall x y, 0 < x -> x < ε -> |y| < s * x ->
@@ -216,7 +250,11 @@ lemma stolzCone_subset_stolzSet_aux
   rw [Set.mem_ofPred_eq]; rw [sub_lt_comm]; rw [← one_re]; rw [← sub_re] at hzl
   rw [stolzCone]; rw [Set.mem_ofPred_eq]; rw [← one_re]; rw [← sub_re] at hzr
   replace H :=
-    H (1 - z).re z.im ((mul_pos_iff_of_pos_le
+    H (1 - z).re z.im ((mul_pos_iff_of_pos_left hs).mp <| (abs_nonneg z.im).trans_lt hzr) hzl hzr
+  have h : z.im ^ 2 = (1 - z).im ^ 2 := by
+    simp only [sub_im, one_im, zero_sub, neg_sq]
+  rw [h]; rw [← norm_eq_sqrt_sq_add_sq]; rw [← h]; rw [sub_re]; rw [one_re]; rw [sub_sub_cancel]; rw [← norm_eq_sqrt_sq_add_sq] at H
+exact ⟨sub_pos.mp (mul_pos_iff_of_pos_left hM).mp (norm_nonneg _).trans_lt H, H⟩
 
 中文:
 引理 stolzCone_subset_stolzSet_aux
@@ -227,7 +265,11 @@ lemma stolzCone_subset_stolzSet_aux
   rw [Set.mem_ofPred_eq]; rw [sub_lt_comm]; rw [← one_re]; rw [← sub_re] at hzl
   rw [stolzCone]; rw [Set.mem_ofPred_eq]; rw [← one_re]; rw [← sub_re] at hzr
   replace H :=
-    H (1 - z).re z.im ((mul_pos_iff_of_pos_le
+    H (1 - z).re z.im ((mul_pos_iff_of_pos_left hs).mp <| (abs_nonneg z.im).trans_lt hzr) hzl hzr
+  have h : z.im ^ 2 = (1 - z).im ^ 2 := by
+    simp only [sub_im, one_im, zero_sub, neg_sq]
+  rw [h]; rw [← norm_eq_sqrt_sq_add_sq]; rw [← h]; rw [sub_re]; rw [one_re]; rw [sub_sub_cancel]; rw [← norm_eq_sqrt_sq_add_sq] at H
+exact ⟨sub_pos.mp (mul_pos_iff_of_pos_left hM).mp (norm_nonneg _).trans_lt H, H⟩
 
 Depends on / 依赖: Set.mem_ofPred_eq, abs_nonneg, mem_ofPred_eq, mul_pos_iff_of_pos_left, neg_sq, norm_eq_sqrt_sq_add_sq, one_im, one_re, replace, stolzCone, stolzCone_subset_stolzSet_aux, sub_im, sub_lt_comm, sub_re, trans_lt, z.im, zero_sub
 -/
@@ -291,7 +333,30 @@ lemma abel_aux
   let s := fun n => ∑ i in range n, f i
   have k := h.sub (summable_powerSeries_of_norm_lt_one h.cauchySeq hz).hasSum.tendsto_sum_nat
   simp_rw [← sum_sub_distrib, ← mul_one_sub, ← geom_sum_mul_neg, ← mul_assoc, ← sum_mul,
-    mul_comm, mul_sum _ _ (f _), range_eq_Ico, ← sum_Ico_Ico_comm', ← rang
+    mul_comm, mul_sum _ _ (f _), range_eq_Ico, ← sum_Ico_Ico_comm', ← range_eq_Ico,
+    ← sum_mul] at k
+  conv at k =>
+    enter [1, n]
+    rw [sum_congr (g := fun j => (∑ k in range n]; rw [f k - ∑ k in range (j + 1)]; rw [f k) * z ^ j)
+      rfl (fun j hj => by congr 1; exact sum_Ico_eq_sub _ (mem_range.mp hj))]
+  suffices Tendsto (fun n => (l - s n) * ∑ i in range n, z ^ i) atTop (𝓝 0) by
+    simp_rw [mul_sum] at this
+    replace this := (this.const_mul (1 - z)).add k
+    conv at this =>
+      enter [1, n]
+      rw [← mul_add]; rw [← sum_add_distrib]
+      enter [2, 2, i]
+      rw [← add_mul]; rw [sub_add_sub_cancel]
+    rwa [mul_zero, zero_add] at this
+  rw [← zero_mul (-1 / (z - 1))]
+  apply Tendsto.mul
+  · simpa only [neg_zero, neg_sub] using (tendsto_sub_nhds_zero_iff.mpr h).neg
+  · conv =>
+      enter [1, n]
+      rw [geom_sum_eq (by contrapose! hz; simp [hz]), sub_div, sub_eq_add_neg, ← neg_div]
+    rw [← zero_add (-1 / (z - 1))]; rw [← zero_div (z - 1)]
+    apply Tendsto.add (Tendsto.div_const (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hz) (z - 1))
+    simp only [zero_div, zero_add, tendsto_const_nhds_iff]
 
 中文:
 引理 abel_aux
@@ -300,7 +365,30 @@ lemma abel_aux
   let s := fun n => ∑ i in range n, f i
   have k := h.sub (summable_powerSeries_of_norm_lt_one h.cauchySeq hz).hasSum.tendsto_sum_nat
   simp_rw [← sum_sub_distrib, ← mul_one_sub, ← geom_sum_mul_neg, ← mul_assoc, ← sum_mul,
-    mul_comm, mul_sum _ _ (f _), range_eq_Ico, ← sum_Ico_Ico_comm', ← rang
+    mul_comm, mul_sum _ _ (f _), range_eq_Ico, ← sum_Ico_Ico_comm', ← range_eq_Ico,
+    ← sum_mul] at k
+  conv at k =>
+    enter [1, n]
+    rw [sum_congr (g := fun j => (∑ k in range n]; rw [f k - ∑ k in range (j + 1)]; rw [f k) * z ^ j)
+      rfl (fun j hj => by congr 1; exact sum_Ico_eq_sub _ (mem_range.mp hj))]
+  suffices Tendsto (fun n => (l - s n) * ∑ i in range n, z ^ i) atTop (𝓝 0) by
+    simp_rw [mul_sum] at this
+    replace this := (this.const_mul (1 - z)).add k
+    conv at this =>
+      enter [1, n]
+      rw [← mul_add]; rw [← sum_add_distrib]
+      enter [2, 2, i]
+      rw [← add_mul]; rw [sub_add_sub_cancel]
+    rwa [mul_zero, zero_add] at this
+  rw [← zero_mul (-1 / (z - 1))]
+  apply Tendsto.mul
+  · simpa only [neg_zero, neg_sub] using (tendsto_sub_nhds_zero_iff.mpr h).neg
+  · conv =>
+      enter [1, n]
+      rw [geom_sum_eq (by contrapose! hz; simp [hz]), sub_div, sub_eq_add_neg, ← neg_div]
+    rw [← zero_add (-1 / (z - 1))]; rw [← zero_div (z - 1)]
+    apply Tendsto.add (Tendsto.div_const (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hz) (z - 1))
+    simp only [zero_div, zero_add, tendsto_const_nhds_iff]
 
 Depends on / 依赖: cauchySeq, geom_sum_mul_neg, h.cauchySeq, h.sub, hasSum, hasSum.tendsto_sum_nat, mem_ran, mul_assoc, mul_comm, mul_one_sub, mul_sum, range_eq_Ico, simp_rw, sum_Ico_Ico_comm, sum_Ico_eq_sub, sum_congr, sum_mul, sum_sub_distrib, summable_powerSeries_of_norm_lt_one, tendsto_sum_nat
 -/
@@ -347,7 +435,74 @@ theorem tendsto_tsum_powerSeries_nhdsWithin_stolzSet
   -- Abbreviations
   let s := fun n => ∑ i in range n, f i
   let g := fun z => ∑' n, f n * z ^ n
-  have hm := Metric.tendsto_atTop.
+  have hm := Metric.tendsto_atTop.mp h
+  rw [Metric.tendsto_nhdsWithin_nhds]
+  simp only [dist_eq_norm] at hm ⊢
+  -- Introduce the "challenge" `ε`
+  intro ε εpos
+  -- First bound, handles the tail
+  obtain ⟨B₁, hB₁⟩ := hm (ε / 4 / M) (by positivity)
+  -- Second bound, handles the head
+  let F := ∑ i in range B₁, ‖l - s (i + 1)‖
+  use ε / 4 / (F + 1), by positivity
+  intro z ⟨zn, zm⟩ zd
+  have p := abel_aux h zn
+  simp_rw [Metric.tendsto_atTop, dist_eq_norm, norm_sub_rev] at p
+  -- Third bound, regarding the distance between `l - g z` and the rearranged sum
+  obtain ⟨B₂, hB₂⟩ := p (ε / 2) (by positivity)
+  clear hm p
+  replace hB₂ := hB₂ (max B₁ B₂) (by simp)
+  suffices ‖(1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ < ε / 2 by
+    calc
+      _ = ‖l - g z‖ := by rw [norm_sub_rev]
+      _ = ‖l - g z - (1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i +
+          (1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := by rw [sub_add_cancel _]
+      _ <= ‖l - g z - (1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ +
+          ‖(1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := norm_add_le _ _
+      _ < ε / 2 + ε / 2 := add_lt_add hB₂ this
+      _ = _ := add_halves ε
+  -- We break the rearranged sum along `B₁`
+  calc
+    _ = ‖(1 - z) * ∑ i in range B₁, (l - s (i + 1)) * z ^ i +
+        (1 - z) * ∑ i in Ico B₁ (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := by
+      rw [← mul_add]; rw [sum_range_add_sum_Ico _ (le_max_left B₁ B₂)]
+    _ <= ‖(1 - z) * ∑ i in range B₁, (l - s (i + 1)) * z ^ i‖ +
+        ‖(1 - z) * ∑ i in Ico B₁ (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := norm_add_le _ _
+    _ = ‖1 - z‖ * ‖∑ i in range B₁, (l - s (i + 1)) * z ^ i‖ +
+        ‖1 - z‖ * ‖∑ i in Ico B₁ (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := by
+      rw [norm_mul]; rw [norm_mul]
+    _ <= ‖1 - z‖ * ∑ i in range B₁, ‖l - s (i + 1)‖ * ‖z‖ ^ i +
+        ‖1 - z‖ * ∑ i in Ico B₁ (max B₁ B₂), ‖l - s (i + 1)‖ * ‖z‖ ^ i := by
+      gcongr <;> simp_rw [← norm_pow, ← norm_mul, norm_sum_le]
+  -- then prove that the two pieces are each less than `ε / 4`
+  have S₁ : ‖1 - z‖ * ∑ i in range B₁, ‖l - s (i + 1)‖ * ‖z‖ ^ i < ε / 4 :=
+    calc
+      _ <= ‖1 - z‖ * ∑ i in range B₁, ‖l - s (i + 1)‖ := by
+        gcongr; nth_rw 3 [← mul_one ‖_‖]
+        gcongr; exact pow_le_one₀ (norm_nonneg _) zn.le
+      _ <= ‖1 - z‖ * (F + 1) := by gcongr; linarith only
+      _ < _ := by rwa [norm_sub_rev, lt_div_iff₀ (by positivity)] at zd
+  have S₂ : ‖1 - z‖ * ∑ i in Ico B₁ (max B₁ B₂), ‖l - s (i + 1)‖ * ‖z‖ ^ i < ε / 4 :=
+    calc
+      _ <= ‖1 - z‖ * ∑ i in Ico B₁ (max B₁ B₂), ε / 4 / M * ‖z‖ ^ i := by
+        gcongr with i hi
+        have := hB₁ (i + 1) (by linarith only [(mem_Ico.mp hi).1])
+        rw [norm_sub_rev] at this
+        exact this.le
+      _ = ‖1 - z‖ * (ε / 4 / M) * ∑ i in Ico B₁ (max B₁ B₂), ‖z‖ ^ i := by
+        rw [← mul_sum]; rw [← mul_assoc]
+      _ <= ‖1 - z‖ * (ε / 4 / M) * ∑' i, ‖z‖ ^ i := by
+        gcongr
+        exact Summable.sum_le_tsum _ (fun _ _ => by positivity)
+          (summable_geometric_of_lt_one (by positivity) zn)
+      _ = ‖1 - z‖ * (ε / 4 / M) / (1 - ‖z‖) := by
+        rw [tsum_geometric_of_lt_one (by positivity) zn]; rw [← div_eq_mul_inv]
+      _ < M * (1 - ‖z‖) * (ε / 4 / M) / (1 - ‖z‖) := by gcongr
+      _ = _ := by
+        rw [← mul_rotate]; rw [mul_div_cancel_right₀ _ (by linarith only [zn]),
+          div_mul_cancel₀ _ (by linarith only [hM])]
+  convert! add_lt_add S₁ S₂ using 1
+  linarith only
 
 中文:
 定理 tendsto_tsum_powerSeries_nhdsWithin_stolzSet
@@ -358,7 +513,74 @@ theorem tendsto_tsum_powerSeries_nhdsWithin_stolzSet
   -- Abbreviations
   let s := fun n => ∑ i in range n, f i
   let g := fun z => ∑' n, f n * z ^ n
-  have hm := Metric.tendsto_atTop.
+  have hm := Metric.tendsto_atTop.mp h
+  rw [Metric.tendsto_nhdsWithin_nhds]
+  simp only [dist_eq_norm] at hm ⊢
+  -- Introduce the "challenge" `ε`
+  intro ε εpos
+  -- First bound, handles the tail
+  obtain ⟨B₁, hB₁⟩ := hm (ε / 4 / M) (by positivity)
+  -- Second bound, handles the head
+  let F := ∑ i in range B₁, ‖l - s (i + 1)‖
+  use ε / 4 / (F + 1), by positivity
+  intro z ⟨zn, zm⟩ zd
+  have p := abel_aux h zn
+  simp_rw [Metric.tendsto_atTop, dist_eq_norm, norm_sub_rev] at p
+  -- Third bound, regarding the distance between `l - g z` and the rearranged sum
+  obtain ⟨B₂, hB₂⟩ := p (ε / 2) (by positivity)
+  clear hm p
+  replace hB₂ := hB₂ (max B₁ B₂) (by simp)
+  suffices ‖(1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ < ε / 2 by
+    calc
+      _ = ‖l - g z‖ := by rw [norm_sub_rev]
+      _ = ‖l - g z - (1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i +
+          (1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := by rw [sub_add_cancel _]
+      _ <= ‖l - g z - (1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ +
+          ‖(1 - z) * ∑ i in range (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := norm_add_le _ _
+      _ < ε / 2 + ε / 2 := add_lt_add hB₂ this
+      _ = _ := add_halves ε
+  -- We break the rearranged sum along `B₁`
+  calc
+    _ = ‖(1 - z) * ∑ i in range B₁, (l - s (i + 1)) * z ^ i +
+        (1 - z) * ∑ i in Ico B₁ (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := by
+      rw [← mul_add]; rw [sum_range_add_sum_Ico _ (le_max_left B₁ B₂)]
+    _ <= ‖(1 - z) * ∑ i in range B₁, (l - s (i + 1)) * z ^ i‖ +
+        ‖(1 - z) * ∑ i in Ico B₁ (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := norm_add_le _ _
+    _ = ‖1 - z‖ * ‖∑ i in range B₁, (l - s (i + 1)) * z ^ i‖ +
+        ‖1 - z‖ * ‖∑ i in Ico B₁ (max B₁ B₂), (l - s (i + 1)) * z ^ i‖ := by
+      rw [norm_mul]; rw [norm_mul]
+    _ <= ‖1 - z‖ * ∑ i in range B₁, ‖l - s (i + 1)‖ * ‖z‖ ^ i +
+        ‖1 - z‖ * ∑ i in Ico B₁ (max B₁ B₂), ‖l - s (i + 1)‖ * ‖z‖ ^ i := by
+      gcongr <;> simp_rw [← norm_pow, ← norm_mul, norm_sum_le]
+  -- then prove that the two pieces are each less than `ε / 4`
+  have S₁ : ‖1 - z‖ * ∑ i in range B₁, ‖l - s (i + 1)‖ * ‖z‖ ^ i < ε / 4 :=
+    calc
+      _ <= ‖1 - z‖ * ∑ i in range B₁, ‖l - s (i + 1)‖ := by
+        gcongr; nth_rw 3 [← mul_one ‖_‖]
+        gcongr; exact pow_le_one₀ (norm_nonneg _) zn.le
+      _ <= ‖1 - z‖ * (F + 1) := by gcongr; linarith only
+      _ < _ := by rwa [norm_sub_rev, lt_div_iff₀ (by positivity)] at zd
+  have S₂ : ‖1 - z‖ * ∑ i in Ico B₁ (max B₁ B₂), ‖l - s (i + 1)‖ * ‖z‖ ^ i < ε / 4 :=
+    calc
+      _ <= ‖1 - z‖ * ∑ i in Ico B₁ (max B₁ B₂), ε / 4 / M * ‖z‖ ^ i := by
+        gcongr with i hi
+        have := hB₁ (i + 1) (by linarith only [(mem_Ico.mp hi).1])
+        rw [norm_sub_rev] at this
+        exact this.le
+      _ = ‖1 - z‖ * (ε / 4 / M) * ∑ i in Ico B₁ (max B₁ B₂), ‖z‖ ^ i := by
+        rw [← mul_sum]; rw [← mul_assoc]
+      _ <= ‖1 - z‖ * (ε / 4 / M) * ∑' i, ‖z‖ ^ i := by
+        gcongr
+        exact Summable.sum_le_tsum _ (fun _ _ => by positivity)
+          (summable_geometric_of_lt_one (by positivity) zn)
+      _ = ‖1 - z‖ * (ε / 4 / M) / (1 - ‖z‖) := by
+        rw [tsum_geometric_of_lt_one (by positivity) zn]; rw [← div_eq_mul_inv]
+      _ < M * (1 - ‖z‖) * (ε / 4 / M) / (1 - ‖z‖) := by gcongr
+      _ = _ := by
+        rw [← mul_rotate]; rw [mul_div_cancel_right₀ _ (by linarith only [zn]),
+          div_mul_cancel₀ _ (by linarith only [hM])]
+  convert! add_lt_add S₁ S₂ using 1
+  linarith only
 -/
 theorem tendsto_tsum_powerSeries_nhdsWithin_stolzSet
     (h : Tendsto (fun n => ∑ i in range n, f i) atTop (𝓝 l)) {M : Real} :
@@ -500,7 +722,10 @@ theorem tendsto_tsum_powerSeries_nhdsWithin_lt
   push_cast at h
   replace h := Complex.tendsto_tsum_powerSeries_nhdsWithin_lt h
   rw [tendsto_map'_iff] at h
-  rw [Metric.tendsto_nhdsWithin_nhds] 
+  rw [Metric.tendsto_nhdsWithin_nhds] at h ⊢
+  convert! h
+  simp_rw [Function.comp_apply, dist_eq_norm]
+  norm_cast
 
 中文:
 定理 tendsto_tsum_powerSeries_nhdsWithin_lt
@@ -511,7 +736,10 @@ theorem tendsto_tsum_powerSeries_nhdsWithin_lt
   push_cast at h
   replace h := Complex.tendsto_tsum_powerSeries_nhdsWithin_lt h
   rw [tendsto_map'_iff] at h
-  rw [Metric.tendsto_nhdsWithin_nhds] 
+  rw [Metric.tendsto_nhdsWithin_nhds] at h ⊢
+  convert! h
+  simp_rw [Function.comp_apply, dist_eq_norm]
+  norm_cast
 
 Depends on / 依赖: Complex.tendsto_tsum_powerSeries_nhdsWithin_lt, Function, Function.comp_apply, Function.comp_def, Metric, Metric.tendsto_nhdsWithin_nhds, _iff, comp_apply, comp_def, continuous, convert, dist_eq_norm, mono_right, ofReal, ofRealCLM, ofRealCLM.continuous.tendsto, replace, simp_rw, tendsto, tendsto_map
 -/

@@ -45,7 +45,8 @@ instance instMonoidalCategoryStruct
   tensorHom f g := ofHom (Bialgebra.TensorProduct.map f.1 g.1)
   tensorUnit := of R R
   associator X Y Z := (Bialgebra.TensorProduct.assoc R R X Y Z).toBialgIso
-  leftUnitor X := (Bialgebr
+  leftUnitor X := (Bialgebra.TensorProduct.lid R X).toBialgIso
+  rightUnitor X := (Bialgebra.TensorProduct.rid R R X).toBialgIso
 
 中文:
 实例 instMonoidalCategoryStruct
@@ -56,7 +57,8 @@ instance instMonoidalCategoryStruct
   tensorHom f g := ofHom (Bialgebra.TensorProduct.map f.1 g.1)
   tensorUnit := of R R
   associator X Y Z := (Bialgebra.TensorProduct.assoc R R X Y Z).toBialgIso
-  leftUnitor X := (Bialgebr
+  leftUnitor X := (Bialgebra.TensorProduct.lid R X).toBialgIso
+  rightUnitor X := (Bialgebra.TensorProduct.rid R R X).toBialgIso
 
 Depends on / 依赖: otimes
 -/
@@ -87,7 +89,8 @@ definition MonoidalCategory.inducingFunctorData
   εIso := Iso.refl _
 associator_eq _ _ _ := AlgCat.hom_ext _ Algebra.TensorProduct.ext
     (Algebra.TensorProduct.ext (by ext; rfl) (by ext; rfl)) (by ext; rfl)
-leftUnitor_eq _ :
+leftUnitor_eq _ := AlgCat.hom_ext _ Algebra.TensorProduct.ext rfl (by ext; rfl)
+rightUnitor_eq _ := AlgCat.hom_ext _ Algebra.TensorProduct.ext (by ext; rfl) rfl
 
 中文:
 定义 幺半群范畴.inducingFunctorData
@@ -99,7 +102,8 @@ leftUnitor_eq _ :
   εIso := Iso.refl _
 associator_eq _ _ _ := AlgCat.hom_ext _ Algebra.TensorProduct.ext
     (Algebra.TensorProduct.ext (by ext; rfl) (by ext; rfl)) (by ext; rfl)
-leftUnitor_eq _ :
+leftUnitor_eq _ := AlgCat.hom_ext _ Algebra.TensorProduct.ext rfl (by ext; rfl)
+rightUnitor_eq _ := AlgCat.hom_ext _ Algebra.TensorProduct.ext (by ext; rfl) rfl
 
 Depends on / 依赖: Iso.refl
 -/

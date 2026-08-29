@@ -415,7 +415,17 @@ lemma add_mul_mul_invOf_mul_eq_one
     (A + U*C*V)*(⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)
     _ = A*⅟A - A*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A - U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A := by
       simp_rw [add_sub_assoc, add_mul, mul_sub, Matrix.mul_assoc]
-    _ = (1 + U*C*V*⅟A) - (U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) :=
+    _ = (1 + U*C*V*⅟A) - (U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) := by
+      rw [mul_invOf_self]; rw [Matrix.one_mul]
+      abel
+    _ = 1 + U*C*V*⅟A - (U + U*C*V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
+      rw [sub_right_inj]; rw [Matrix.add_mul]; rw [Matrix.add_mul]; rw [Matrix.add_mul]
+    _ = 1 + U*C*V*⅟A - U*C*(⅟C + V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
+      congr
+      simp only [Matrix.mul_add, Matrix.mul_invOf_cancel_right, ← Matrix.mul_assoc]
+    _ = 1 := by
+      rw [Matrix.mul_invOf_cancel_right]
+      abel
 
 中文:
 引理 add_mul_mul_invOf_mul_eq_one
@@ -424,7 +434,17 @@ lemma add_mul_mul_invOf_mul_eq_one
     (A + U*C*V)*(⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)
     _ = A*⅟A - A*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A - U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A := by
       simp_rw [add_sub_assoc, add_mul, mul_sub, Matrix.mul_assoc]
-    _ = (1 + U*C*V*⅟A) - (U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) :=
+    _ = (1 + U*C*V*⅟A) - (U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) := by
+      rw [mul_invOf_self]; rw [Matrix.one_mul]
+      abel
+    _ = 1 + U*C*V*⅟A - (U + U*C*V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
+      rw [sub_right_inj]; rw [Matrix.add_mul]; rw [Matrix.add_mul]; rw [Matrix.add_mul]
+    _ = 1 + U*C*V*⅟A - U*C*(⅟C + V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
+      congr
+      simp only [Matrix.mul_add, Matrix.mul_invOf_cancel_right, ← Matrix.mul_assoc]
+    _ = 1 := by
+      rw [Matrix.mul_invOf_cancel_right]
+      abel
 
 Depends on / 依赖: Matrix, Matrix.add_mul, Matrix.mul_assoc, Matrix.one_mul, add_mul, add_sub_assoc, mul_assoc, mul_invOf_self, mul_sub, one_mul, simp_rw, sub_right_inj
 -/
@@ -458,7 +478,18 @@ lemma add_mul_mul_invOf_mul_eq_one'
     (⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)*(A + U*C*V)
     _ = ⅟A*A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*A + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V := by
       simp_rw [add_sub_assoc, _root_.mul_add, _root_.sub_mul, Matrix.mul_assoc]
-    _ = (1 + ⅟A*U*C*V) - (⅟A*U*⅟(⅟C + V*⅟A*U)*V + ⅟A*U*⅟(⅟C + V*⅟A*U)*
+    _ = (1 + ⅟A*U*C*V) - (⅟A*U*⅟(⅟C + V*⅟A*U)*V + ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V) := by
+      rw [invOf_mul_self]; rw [Matrix.invOf_mul_cancel_right]
+      abel
+    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(V + V*⅟A*U*C*V) := by
+      rw [sub_right_inj]; rw [Matrix.mul_add]
+      simp_rw [Matrix.mul_assoc]
+    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(⅟C + V*⅟A*U)*C*V := by
+      simp only [Matrix.mul_add, Matrix.add_mul, ← Matrix.mul_assoc,
+        Matrix.invOf_mul_cancel_right]
+    _ = 1 := by
+      rw [Matrix.invOf_mul_cancel_right]
+      abel
 
 中文:
 引理 add_mul_mul_invOf_mul_eq_one'
@@ -467,7 +498,18 @@ lemma add_mul_mul_invOf_mul_eq_one'
     (⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)*(A + U*C*V)
     _ = ⅟A*A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*A + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V := by
       simp_rw [add_sub_assoc, _root_.mul_add, _root_.sub_mul, Matrix.mul_assoc]
-    _ = (1 + ⅟A*U*C*V) - (⅟A*U*⅟(⅟C + V*⅟A*U)*V + ⅟A*U*⅟(⅟C + V*⅟A*U)*
+    _ = (1 + ⅟A*U*C*V) - (⅟A*U*⅟(⅟C + V*⅟A*U)*V + ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V) := by
+      rw [invOf_mul_self]; rw [Matrix.invOf_mul_cancel_right]
+      abel
+    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(V + V*⅟A*U*C*V) := by
+      rw [sub_right_inj]; rw [Matrix.mul_add]
+      simp_rw [Matrix.mul_assoc]
+    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(⅟C + V*⅟A*U)*C*V := by
+      simp only [Matrix.mul_add, Matrix.add_mul, ← Matrix.mul_assoc,
+        Matrix.invOf_mul_cancel_right]
+    _ = 1 := by
+      rw [Matrix.invOf_mul_cancel_right]
+      abel
 
 Depends on / 依赖: Matrix, Matrix.invOf_mul_cancel_right, Matrix.mul_add, Matrix.mul_assoc, _root_, _root_.mul_add, _root_.sub_mul, add_sub_assoc, invOf_mul_cancel_right, invOf_mul_self, mul_add, mul_assoc, simp_rw, sub_mul, sub_right_inj
 -/
@@ -558,7 +600,7 @@ lemma add_mul_mul_mul_invOf_eq_one
   simp only [← Matrix.add_mul]
   congr
   rw [← Matrix.mul_right_eq_iff_eq_mul_invOf]
-  simp only [Matrix.add_mul
+  simp only [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
 
 中文:
 引理 add_mul_mul_mul_invOf_eq_one
@@ -569,7 +611,7 @@ lemma add_mul_mul_mul_invOf_eq_one
   simp only [← Matrix.add_mul]
   congr
   rw [← Matrix.mul_right_eq_iff_eq_mul_invOf]
-  simp only [Matrix.add_mul
+  simp only [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
 
 Depends on / 依赖: Matrix, Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, Matrix.mul_right_eq_iff_eq_mul_invOf, Matrix.mul_sub, Matrix.one_mul, add_eq_left, add_mul, add_sub_assoc, mul_add, mul_assoc, mul_invOf_self, mul_right_eq_iff_eq_mul_invOf, mul_sub, one_mul, sub_eq_zero
 -/
@@ -595,7 +637,8 @@ lemma add_mul_mul_mul_invOf_eq_one'
   congr
   rw [eq_sub_iff_add_eq]; rw [← Matrix.mul_add]
   rw [Matrix.invOf_mul_eq_iff_eq_mul_left]
-  simp only [Matrix.add_mul, invOf_m
+  simp only [Matrix.add_mul, invOf_mul_self', Matrix.mul_one, add_right_inj]
+  simp only [Matrix.mul_assoc]
 
 中文:
 引理 add_mul_mul_mul_invOf_eq_one'
@@ -606,7 +649,8 @@ lemma add_mul_mul_mul_invOf_eq_one'
   congr
   rw [eq_sub_iff_add_eq]; rw [← Matrix.mul_add]
   rw [Matrix.invOf_mul_eq_iff_eq_mul_left]
-  simp only [Matrix.add_mul, invOf_m
+  simp only [Matrix.add_mul, invOf_mul_self', Matrix.mul_one, add_right_inj]
+  simp only [Matrix.mul_assoc]
 
 Depends on / 依赖: Matrix, Matrix.add_mul, Matrix.invOf_mul_eq_iff_eq_mul_left, Matrix.mul_add, Matrix.mul_assoc, Matrix.mul_one, Matrix.mul_sub, Matrix.sub_mul, add_mul, add_right_inj, eq_sub_iff_add_eq, invOf_mul_eq_iff_eq_mul_left, invOf_mul_self, mul_add, mul_assoc, mul_one, mul_sub, sub_add, sub_eq_self, sub_eq_zero
 -/

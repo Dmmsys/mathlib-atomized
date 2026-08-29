@@ -735,7 +735,7 @@ lemma eval_polynomial_of_Z_ne_zero
   linear_combination (norm := (rw [eval_polynomial, Affine.evalEval_polynomial]; ring1))
     P y ^ 2 / P z ^ 2 * div_self hPz + W.a₁ * P x * P y / P z ^ 2 * div_self hPz
       + W.a₃ * P y / P z * div_self (pow_ne_zero 2 hPz) - W.a₂ * P x ^ 2 / P z ^ 2 * div_self hPz
-      - W.a₄ * P x / P z * di
+      - W.a₄ * P x / P z * div_self (pow_ne_zero 2 hPz) - W.a₆ * div_self (pow_ne_zero 3 hPz)
 
 中文:
 引理 eval_polynomial_of_Z_ne_zero
@@ -745,7 +745,7 @@ lemma eval_polynomial_of_Z_ne_zero
   linear_combination (norm := (rw [eval_polynomial, Affine.evalEval_polynomial]; ring1))
     P y ^ 2 / P z ^ 2 * div_self hPz + W.a₁ * P x * P y / P z ^ 2 * div_self hPz
       + W.a₃ * P y / P z * div_self (pow_ne_zero 2 hPz) - W.a₂ * P x ^ 2 / P z ^ 2 * div_self hPz
-      - W.a₄ * P x / P z * di
+      - W.a₄ * P x / P z * div_self (pow_ne_zero 2 hPz) - W.a₆ * div_self (pow_ne_zero 3 hPz)
 
 Depends on / 依赖: Affine, Affine.evalEval_polynomial, Localization, Localization.inverts, NatTrans, NatTrans.isIso_iff_isIso_app, div_self, evalEval_polynomial, eval_polynomial, infer_instance, inverts, isIso_iff_isIso_app, linear_combination, pow_ne_zero, weakEquivalence_iff, weakEquivalences
 -/
@@ -1317,7 +1317,10 @@ lemma nonsingular_smul
     refine (nonsingular_iff P).mpr ⟨(equation_smul P hu).mp hP, ?_⟩
     contrapose! hP'
     simp only [smul_fin3_ext]
-    exact ⟨by linea
+    exact ⟨by linear_combination (norm := ring1) u ^ 2 * hP'.left,
+      by linear_combination (norm := ring1) u ^ 2 * hP'.right.left,
+      by linear_combination (norm := ring1) u ^ 2 * hP'.right.right⟩
+⟨hP hu, fun h => hP hu.unit⁻¹.isUnit by rwa [smul_smul, hu.val_inv_mul, one_smul]⟩
 
 中文:
 引理 nonsingular_smul
@@ -1328,7 +1331,10 @@ lemma nonsingular_smul
     refine (nonsingular_iff P).mpr ⟨(equation_smul P hu).mp hP, ?_⟩
     contrapose! hP'
     simp only [smul_fin3_ext]
-    exact ⟨by linea
+    exact ⟨by linear_combination (norm := ring1) u ^ 2 * hP'.left,
+      by linear_combination (norm := ring1) u ^ 2 * hP'.right.left,
+      by linear_combination (norm := ring1) u ^ 2 * hP'.right.right⟩
+⟨hP hu, fun h => hP hu.unit⁻¹.isUnit by rwa [smul_smul, hu.val_inv_mul, one_smul]⟩
 
 Depends on / 依赖: IsUnit, Nonsingular, contrapose, equation_smul, hu.unit, isUnit, linear_combination, nonsingular_iff, right.left, right.right, smul_fin3_ext, smul_smu
 -/
@@ -1432,7 +1438,7 @@ lemma nonsingular_some
     Affine.equation_iff', and_congr_right_iff, ← not_and_or, not_iff_not, one_pow, mul_one,
     and_congr_right_iff, Iff.comm, iff_self_and]
   intro h ha hb
-  linear_combination (norm := ring1) 3 * h - a * ha - b * 
+  linear_combination (norm := ring1) 3 * h - a * ha - b * hb
 
 中文:
 引理 nonsingular_some
@@ -1443,7 +1449,7 @@ lemma nonsingular_some
     Affine.equation_iff', and_congr_right_iff, ← not_and_or, not_iff_not, one_pow, mul_one,
     and_congr_right_iff, Iff.comm, iff_self_and]
   intro h ha hb
-  linear_combination (norm := ring1) 3 * h - a * ha - b * 
+  linear_combination (norm := ring1) 3 * h - a * ha - b * hb
 
 Depends on / 依赖: Affine, Affine.equation_iff, Affine.nonsingular_iff, Iff.comm, and_congr_right_iff, equation_iff, equation_some, fin3_def_ext, iff_self_and, linear_combination, mul_one, nonsingular_iff, not_and_or, not_iff_not, one_pow, simp_rw
 -/
@@ -1551,7 +1557,7 @@ lemma equiv_of_Z_eq_zero
   use (isUnit_Y_of_Z_eq_zero hP hPz).unit / (isUnit_Y_of_Z_eq_zero hQ hQz).unit
   simp only [Units.smul_def, smul_fin3, X_eq_zero_of_Z_eq_zero hQ.left hQz, hQz, mul_zero,
     Units.val_div_eq_div_val, IsUnit.unit_spec, (isUnit_Y_of_Z_eq_zero hQ hQz).div_mul_cancel]
-  conv_rhs => rw [← fin3_def P,
+  conv_rhs => rw [← fin3_def P, X_eq_zero_of_Z_eq_zero hP.left hPz, hPz]
 
 中文:
 引理 equiv_of_Z_eq_zero
@@ -1560,7 +1566,7 @@ lemma equiv_of_Z_eq_zero
   use (isUnit_Y_of_Z_eq_zero hP hPz).unit / (isUnit_Y_of_Z_eq_zero hQ hQz).unit
   simp only [Units.smul_def, smul_fin3, X_eq_zero_of_Z_eq_zero hQ.left hQz, hQz, mul_zero,
     Units.val_div_eq_div_val, IsUnit.unit_spec, (isUnit_Y_of_Z_eq_zero hQ hQz).div_mul_cancel]
-  conv_rhs => rw [← fin3_def P,
+  conv_rhs => rw [← fin3_def P, X_eq_zero_of_Z_eq_zero hP.left hPz, hPz]
 
 Depends on / 依赖: IsUnit, IsUnit.unit_spec, Units.smul_def, Units.val_div_eq_div_val, X_eq_zero_of_Z_eq_zero, conv_rhs, div_mul_cancel, fin3_def, hP.left, hQ.left, isUnit_Y_of_Z_eq_zero, mul_zero, smul_def, smul_fin3, unit_spec, val_div_eq_div_val
 -/
@@ -1602,7 +1608,11 @@ lemma comp_equiv_comp
 · exact equiv_of_Z_eq_zero hP hQ ((map_eq_zero_iff f f.injective).mp hz)
 (map_eq_zero_iff f f.injective).mp (Z_eq_zero_of_equiv h).mp hz
     · refine equiv_of_X_eq_of_Y_eq ((map_ne_zero_iff f f.injective).mp hz)
-        ((map_ne_ze
+        ((map_ne_zero_iff f f.injective).mp <| hz.comp (Z_eq_zero_of_equiv h).mpr) ?_ ?_
+      all_goals apply f.injective; map_simp
+      exacts [X_eq_of_equiv h, Y_eq_of_equiv h]
+  · rcases h with ⟨u, rfl⟩
+    exact ⟨Units.map f u, (comp_smul ..).symm⟩
 
 中文:
 引理 comp_equiv_comp
@@ -1613,7 +1623,11 @@ lemma comp_equiv_comp
 · exact equiv_of_Z_eq_zero hP hQ ((map_eq_zero_iff f f.injective).mp hz)
 (map_eq_zero_iff f f.injective).mp (Z_eq_zero_of_equiv h).mp hz
     · refine equiv_of_X_eq_of_Y_eq ((map_ne_zero_iff f f.injective).mp hz)
-        ((map_ne_ze
+        ((map_ne_zero_iff f f.injective).mp <| hz.comp (Z_eq_zero_of_equiv h).mpr) ?_ ?_
+      all_goals apply f.injective; map_simp
+      exacts [X_eq_of_equiv h, Y_eq_of_equiv h]
+  · rcases h with ⟨u, rfl⟩
+    exact ⟨Units.map f u, (comp_smul ..).symm⟩
 
 Depends on / 依赖: Units.map, X_eq_of_equiv, Y_eq_of_equiv, Z_eq_zero_of_equiv, all_goals, comp_smul, equiv_of_X_eq_of_Y_eq, equiv_of_Z_eq_zero, exacts, f.injective, hz.comp, injective, map_eq_zero_iff, map_ne_zero_iff, map_simp
 -/

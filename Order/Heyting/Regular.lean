@@ -239,7 +239,9 @@ codisjoint_iff.2 by rw [← (h a), compl_sup, inf_compl_eq_bot, compl_bot]⟩
   { ‹HeytingAlgebra α›,
     GeneralizedHeytingAlgebra.toDistribLattice with
     himp_eq := fun _ _ =>
-      eq_of_forall_le_iff fun _ => le_himp_iff.tran
+      eq_of_forall_le_iff fun _ => le_himp_iff.trans (this _).le_sup_right_iff_inf_left_le.symm
+    inf_compl_le_bot := fun _ => (this _).1.le_bot
+    top_le_sup_compl := fun _ => (this _).2.top_le }
 
 中文:
 缩写 _root_.布尔代数.ofRegular
@@ -250,7 +252,9 @@ codisjoint_iff.2 by rw [← (h a), compl_sup, inf_compl_eq_bot, compl_bot]⟩
   { ‹HeytingAlgebra α›,
     GeneralizedHeytingAlgebra.toDistribLattice with
     himp_eq := fun _ _ =>
-      eq_of_forall_le_iff fun _ => le_himp_iff.tran
+      eq_of_forall_le_iff fun _ => le_himp_iff.trans (this _).le_sup_right_iff_inf_left_le.symm
+    inf_compl_le_bot := fun _ => (this _).1.le_bot
+    top_le_sup_compl := fun _ => (this _).2.top_le }
 
 Depends on / 依赖: GeneralizedHeytingAlgebra, GeneralizedHeytingAlgebra.toDistribLattice, HeytingAlgebra, IsCompl, codisjoint_iff, compl_bot, compl_sup, disjoint_compl_right, eq_of_forall_le_iff, himp_eq, inf_compl_eq_bot, inf_compl_le_bot, le_bot, le_himp_iff, le_himp_iff.trans, le_sup_right_iff_inf_left_le, le_sup_right_iff_inf_left_le.symm, toDistribLattice, top_le, top_le_sup_compl
 -/
@@ -838,7 +842,20 @@ coe_le_coe.1 by
         dsimp
         rw [sup_inf_left]; rw [compl_compl_inf_distrib]
 inf_compl_le_bot := fun _ => coe_le_coe.1 disjoint_iff_inf_le.1 disjoint_compl_right
-    top_le_sup_c
+    top_le_sup_compl := fun a =>
+coe_le_coe.1 by
+        dsimp
+        rw [compl_sup]; rw [inf_compl_eq_bot]; rw [compl_bot]
+    himp_eq := fun a b =>
+      coe_injective
+        (by
+          dsimp
+          rw [compl_sup]; rw [a.prop.eq]
+          refine eq_of_forall_le_iff fun c => le_himp_iff.trans ?_
+          rw [le_compl_iff_disjoint_right]; rw [disjoint_left_comm]
+          rw [b.prop.disjoint_compl_left_iff]) }
+
+@[simp, norm_cast]
 
 中文:
 实例 :
@@ -850,7 +867,20 @@ coe_le_coe.1 by
         dsimp
         rw [sup_inf_left]; rw [compl_compl_inf_distrib]
 inf_compl_le_bot := fun _ => coe_le_coe.1 disjoint_iff_inf_le.1 disjoint_compl_right
-    top_le_sup_c
+    top_le_sup_compl := fun a =>
+coe_le_coe.1 by
+        dsimp
+        rw [compl_sup]; rw [inf_compl_eq_bot]; rw [compl_bot]
+    himp_eq := fun a b =>
+      coe_injective
+        (by
+          dsimp
+          rw [compl_sup]; rw [a.prop.eq]
+          refine eq_of_forall_le_iff fun c => le_himp_iff.trans ?_
+          rw [le_compl_iff_disjoint_right]; rw [disjoint_left_comm]
+          rw [b.prop.disjoint_compl_left_iff]) }
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Regular, Regular.boundedOrder, Regular.himp, Regular.instCompl, Regular.lattice, a.prop.eq, boundedOrder, coe_injective, coe_le_coe, compl_bot, compl_compl_inf_distrib, compl_sup, disjoint_compl_right, disjoint_iff_inf_le, eq_of_forall_le_iff, himp_eq, inf_compl_eq_bot, inf_compl_le_bot, instCompl, lattice
 -/

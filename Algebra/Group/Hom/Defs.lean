@@ -3199,7 +3199,7 @@ instance instMonoid
 npow n f := (npowRec n f).copy f^[n] by induction n <;> simp [npowRec, *] <;> rfl
 npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
 
-@[
+@[to_additive]
 
 中文:
 实例 instMonoid
@@ -3212,7 +3212,7 @@ npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
 npow n f := (npowRec n f).copy f^[n] by induction n <;> simp [npowRec, *] <;> rfl
 npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
 
-@[
+@[to_additive]
 
 Depends on / 依赖: MonoidHom, MonoidHom.comp
 -/

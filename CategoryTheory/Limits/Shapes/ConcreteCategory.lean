@@ -760,7 +760,23 @@ definition multiequalizerEquivAux
     { val := fun j =>
         match j with
         | WalkingMulticospan.left _ => x.1 _
-      
+        | WalkingMulticospan.right b => I.fst b (x.1 _)
+      property := by
+        rintro (a | b) (a' | b') (f | f | f)
+        · simp only [WalkingMulticospan.Hom.id_eq_id, Functor.map_id]; rfl
+        · rfl
+        · dsimp
+          exact (x.2 b').symm
+        · simp only [WalkingMulticospan.Hom.id_eq_id, Functor.map_id]; rfl }
+  left_inv := by
+    intro x; ext (a | b)
+    · rfl
+    · rw [← x.2 (WalkingMulticospan.Hom.fst b)]
+      rfl
+  right_inv := by
+    intro x
+    ext i
+    rfl
 
 中文:
 定义 multiequalizerEquivAux
@@ -774,7 +790,23 @@ definition multiequalizerEquivAux
     { val := fun j =>
         match j with
         | WalkingMulticospan.left _ => x.1 _
-      
+        | WalkingMulticospan.right b => I.fst b (x.1 _)
+      property := by
+        rintro (a | b) (a' | b') (f | f | f)
+        · simp only [WalkingMulticospan.Hom.id_eq_id, Functor.map_id]; rfl
+        · rfl
+        · dsimp
+          exact (x.2 b').symm
+        · simp only [WalkingMulticospan.Hom.id_eq_id, Functor.map_id]; rfl }
+  left_inv := by
+    intro x; ext (a | b)
+    · rfl
+    · rw [← x.2 (WalkingMulticospan.Hom.fst b)]
+      rfl
+  right_inv := by
+    intro x
+    ext i
+    rfl
 
 Depends on / 依赖: Functor, Functor.map_id, I.fst, WalkingMulticospan, WalkingMulticospan.Hom.fst, WalkingMulticospan.Hom.id_eq_id, WalkingMulticospan.Hom.snd, WalkingMulticospan.left, WalkingMulticospan.right, id_eq_id, invFun, map_id, property
 -/

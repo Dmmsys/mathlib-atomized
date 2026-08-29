@@ -148,14 +148,28 @@ lemma mono_of_isPullback_of_mono
   proof: Preadditive.mono_of_cancel_zero _ (fun {T₀} x₄ hx₄ => by
     obtain ⟨T₁, π, _, x₂, x₃, eq⟩ := hom_eq_add_up_to_refinements h₁ x₄
     have fac₃ : (-x₂) ≫ r' = x₃ ≫ b' := by
-      rw [Preadditive.neg_comp]; rw [neg_eq_iff_add_eq_zero]; rw [← fac₂]; rw [← fac₁]; rw [← assoc]; rw [← assoc]; rw [← Preadd
+      rw [Preadditive.neg_comp]; rw [neg_eq_iff_add_eq_zero]; rw [← fac₂]; rw [← fac₁]; rw [← assoc]; rw [← assoc]; rw [← Preadditive.add_comp]; rw [← eq]; rw [assoc]; rw [hx₄]; rw [comp_zero]
+    obtain ⟨x₂', hx₂'⟩ : exists x₂', π ≫ x₄ = x₂' ≫ r := by
+      refine ⟨x₂ + h₂.lift (-x₂) x₃ fac₃ ≫ t, ?_⟩
+      rw [eq]; rw [Preadditive.add_comp]; rw [assoc]; rw [h₁.w]; rw [IsPullback.lift_snd_assoc]; rw [add_comm]
+    rw [← cancel_epi π]; rw [comp_zero]; rw [reassoc_of% hx₂']; rw [fac₁] at hx₄
+    obtain rfl := zero_of_comp_mono _ hx₄
+    rw [zero_comp] at hx₂'
+    rw [← cancel_epi π]; rw [hx₂']; rw [comp_zero])
 
 中文:
 引理 mono_of_isPullback_of_mono
   证明: Preadditive.mono_of_cancel_zero _ (fun {T₀} x₄ hx₄ => by
     obtain ⟨T₁, π, _, x₂, x₃, eq⟩ := hom_eq_add_up_to_refinements h₁ x₄
     have fac₃ : (-x₂) ≫ r' = x₃ ≫ b' := by
-      rw [Preadditive.neg_comp]; rw [neg_eq_iff_add_eq_zero]; rw [← fac₂]; rw [← fac₁]; rw [← assoc]; rw [← assoc]; rw [← Preadd
+      rw [Preadditive.neg_comp]; rw [neg_eq_iff_add_eq_zero]; rw [← fac₂]; rw [← fac₁]; rw [← assoc]; rw [← assoc]; rw [← Preadditive.add_comp]; rw [← eq]; rw [assoc]; rw [hx₄]; rw [comp_zero]
+    obtain ⟨x₂', hx₂'⟩ : exists x₂', π ≫ x₄ = x₂' ≫ r := by
+      refine ⟨x₂ + h₂.lift (-x₂) x₃ fac₃ ≫ t, ?_⟩
+      rw [eq]; rw [Preadditive.add_comp]; rw [assoc]; rw [h₁.w]; rw [IsPullback.lift_snd_assoc]; rw [add_comm]
+    rw [← cancel_epi π]; rw [comp_zero]; rw [reassoc_of% hx₂']; rw [fac₁] at hx₄
+    obtain rfl := zero_of_comp_mono _ hx₄
+    rw [zero_comp] at hx₂'
+    rw [← cancel_epi π]; rw [hx₂']; rw [comp_zero])
 
 Depends on / 依赖: Preadditive, Preadditive.add_comp, Preadditive.mono_of_cancel_zero, Preadditive.neg_comp, add_comp, comp_zero, hom_eq_add_up_to_refinements, mono_of_cancel_zero, neg_comp, neg_eq_iff_add_eq_zero
 -/
@@ -229,7 +243,10 @@ lemma mono_cokernel_map_of_isPullback
     surjective_up_to_refinements_of_epi (cokernel.π t) z
   have : (ShortComplex.mk _ _ (cokernel.condition b)).Exact :=
     ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel b)
-  obtain ⟨A₂, π₂, _, x₃
+  obtain ⟨A₂, π₂, _, x₃, hx₃⟩ := this.exact_up_to_refinements (x₂ ≫ r) (by
+    simpa [hz] using hx₂.symm =≫ cokernel.map _ _ _ _ sq.w)
+  obtain ⟨x₁, hx₁, rfl⟩ := sq.exists_lift (π₂ ≫ x₂) x₃ (by simpa)
+  simp [← cancel_epi π₁, ← cancel_epi π₂, hx₂, ← reassoc_of% hx₁]
 
 中文:
 引理 mono_cokernel_map_of_isPullback
@@ -241,7 +258,10 @@ lemma mono_cokernel_map_of_isPullback
     surjective_up_to_refinements_of_epi (cokernel.π t) z
   have : (ShortComplex.mk _ _ (cokernel.condition b)).Exact :=
     ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel b)
-  obtain ⟨A₂, π₂, _, x₃
+  obtain ⟨A₂, π₂, _, x₃, hx₃⟩ := this.exact_up_to_refinements (x₂ ≫ r) (by
+    simpa [hz] using hx₂.symm =≫ cokernel.map _ _ _ _ sq.w)
+  obtain ⟨x₁, hx₁, rfl⟩ := sq.exists_lift (π₂ ≫ x₂) x₃ (by simpa)
+  simp [← cancel_epi π₁, ← cancel_epi π₂, hx₂, ← reassoc_of% hx₁]
 
 Depends on / 依赖: Preadditive, Preadditive.mono_iff_cancel_zero, ShortComplex, ShortComplex.exact_of_g_is_cokernel, ShortComplex.mk, cancel_epi, cokernel, cokernel.condition, cokernel.map, cokernelIsCokernel, condition, exact_of_g_is_cokernel, exact_up_to_refinements, exists_lift, mono_iff_cancel_zero, sq.exists_lift, sq.w, surjective_up_to_refinements_of_epi, this.exact_up_to_refinements
 -/
@@ -272,7 +292,10 @@ lemma epi_kernel_map_of_isPushout
     sq.cokernelCofork.condition).exact_of_g_is_cokernel
       sq.isColimitCokernelCofork).exact_up_to_refinements
         (z ≫ kernel.ι _ ≫ biprod.inr) (by simp)
-  refine ⟨A₁, π₁, infer
+  refine ⟨A₁, π₁, inferInstance, -kernel.lift _ x₁ ?_, ?_⟩
+  · simpa using hx₁.symm =≫ biprod.fst
+  · ext
+    simpa using hx₁ =≫ biprod.snd
 
 中文:
 引理 epi_kernel_map_of_isPushout
@@ -284,7 +307,10 @@ lemma epi_kernel_map_of_isPushout
     sq.cokernelCofork.condition).exact_of_g_is_cokernel
       sq.isColimitCokernelCofork).exact_up_to_refinements
         (z ≫ kernel.ι _ ≫ biprod.inr) (by simp)
-  refine ⟨A₁, π₁, infer
+  refine ⟨A₁, π₁, inferInstance, -kernel.lift _ x₁ ?_, ?_⟩
+  · simpa using hx₁.symm =≫ biprod.fst
+  · ext
+    simpa using hx₁ =≫ biprod.snd
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk, biprod, biprod.fst, biprod.inr, biprod.snd, cokernelCofork, condition, epi_iff_surjective_up_to_refinements, exact_of_g_is_cokernel, exact_up_to_refinements, isColimitCokernelCofork, kernel, kernel.lift, sq.cokernelCofork.condition, sq.isColimitCokernelCofork
 -/

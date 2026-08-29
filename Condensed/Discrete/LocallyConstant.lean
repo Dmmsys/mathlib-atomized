@@ -331,7 +331,9 @@ lemma incl_of_counitAppApp
   rw [← sigmaComparison_comp_sigmaIso]; rw [Functor.mapIso_hom]; rw [Iso.op_hom]; rw [types_comp_apply]
   simp only [counitAppApp, Functor.mapIso_inv, ← Iso.op_hom, CategoryTheory.comp_apply,
     ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, ← Functor.map_comp_apply, Iso.inv_hom_id,
-    Functor
+    Functor.map_id_apply]
+  exact congrFun (Iso.inv_hom_id_apply (asIso (sigmaComparison Y (fun a => (fiber f a).1)))
+    (counitAppAppImage f)) _
 
 中文:
 引理 incl_of_counitAppApp
@@ -340,7 +342,9 @@ lemma incl_of_counitAppApp
   rw [← sigmaComparison_comp_sigmaIso]; rw [Functor.mapIso_hom]; rw [Iso.op_hom]; rw [types_comp_apply]
   simp only [counitAppApp, Functor.mapIso_inv, ← Iso.op_hom, CategoryTheory.comp_apply,
     ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, ← Functor.map_comp_apply, Iso.inv_hom_id,
-    Functor
+    Functor.map_id_apply]
+  exact congrFun (Iso.inv_hom_id_apply (asIso (sigmaComparison Y (fun a => (fiber f a).1)))
+    (counitAppAppImage f)) _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.mapIso_hom, Functor.mapIso_inv, Functor.map_comp_apply, Functor.map_id_apply, Iso.inv_hom_id, Iso.inv_hom_id_apply, Iso.op_hom, TypeCat, TypeCat.Fun.coe_mk, coe_fn_eq, coe_fn_eq.symm, coe_mk, comp_apply, counitAppApp, counitAppAppImage
 -/
@@ -427,6 +431,11 @@ definition counitApp
     intro a
     simp only [op_unop, functorToPresheaves_obj_obj, functorToPresheaves_obj_map,
       TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom,
+      TypeCat.Fun.coe_mk]
+    rw [incl_of_counitAppApp]; rw [← Functor.map_comp_apply]; rw [incl_comap]; rw [Functor.map_comp_apply]; rw [incl_of_counitAppApp]
+    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
+    apply congrArg
+    exact image_eq_image_mk (g := g.unop) (a := a)
 
 中文:
 定义 counitApp
@@ -439,6 +448,11 @@ definition counitApp
     intro a
     simp only [op_unop, functorToPresheaves_obj_obj, functorToPresheaves_obj_map,
       TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom,
+      TypeCat.Fun.coe_mk]
+    rw [incl_of_counitAppApp]; rw [← Functor.map_comp_apply]; rw [incl_comap]; rw [Functor.map_comp_apply]; rw [incl_of_counitAppApp]
+    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
+    apply congrArg
+    exact image_eq_image_mk (g := g.unop) (a := a)
 
 Depends on / 依赖: counitAppApp
 -/
@@ -494,7 +508,10 @@ definition functor
     Type (max u w) ⥤ Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w)) :=
   ObjectProperty.lift _ (functorToPresheaves.{u, w}) (fun X => by
     rw [Presheaf.isSheaf_of_iso_iff (functorToPresheavesIso P hs X)]
-    exact ((TopCat.discrete.obj X).toSheafCompHausL
+    exact ((TopCat.discrete.obj X).toSheafCompHausLike P hs).property)
+
+@[deprecated (since := "2026-03-20")] alias functor_obj_obj := functor_obj_obj_obj
+@[deprecated (since := "2026-03-20")] alias functor_map_hom := functor_map_hom_app
 
 中文:
 定义 functor
@@ -503,7 +520,10 @@ definition functor
     Type (max u w) ⥤ Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w)) :=
   ObjectProperty.lift _ (functorToPresheaves.{u, w}) (fun X => by
     rw [Presheaf.isSheaf_of_iso_iff (functorToPresheavesIso P hs X)]
-    exact ((TopCat.discrete.obj X).toSheafCompHausL
+    exact ((TopCat.discrete.obj X).toSheafCompHausLike P hs).property)
+
+@[deprecated (since := "2026-03-20")] alias functor_obj_obj := functor_obj_obj_obj
+@[deprecated (since := "2026-03-20")] alias functor_map_hom := functor_map_hom_app
 
 Depends on / 依赖: CompHausLike, CompHausLike.preregular, preregular
 -/
@@ -555,7 +575,41 @@ definition counit
         𝟭 (Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w))) where
   app X := haveI := CompHausLike.preregular hs
     (ObjectProperty.homMk) (counitApp X.obj)
-  naturality X
+  naturality X Y g := by
+    have := CompHausLike.preregular hs
+    apply InducedCategory.hom_ext
+    simp only [functor, Functor.comp_obj, Functor.flip_obj_obj, ObjectProperty.ι_obj,
+      ObjectProperty.lift_obj_obj, Functor.id_obj, Functor.comp_map, Functor.flip_obj_map,
+      ObjectProperty.ι_map, ObjectProperty.lift_map, ObjectProperty.FullSubcategory.comp_hom,
+      ObjectProperty.homMk_hom, Functor.id_map]
+    ext S (f : LocallyConstant _ _)
+    simp only [NatTrans.comp_app, counitApp_app, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply]
+    apply presheaf_ext (f.map (g.hom.app (op (CompHausLike.of P PUnit.{u + 1}))))
+    intro a
+    simp only [functorToPresheaves_obj_obj, functorToPresheaves_map_app, TypeCat.hom_ofHom,
+      TypeCat.Fun.coe_mk, dsimp% incl_of_counitAppApp]
+    apply presheaf_ext (f.comap (sigmaIncl _ _).hom.hom)
+    intro b
+    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp,
+      map_apply, IsTerminal.comp_from, ← map_preimage_eq_image_map]
+    change (_ ≫ Y.obj.map _) _ = (_ ≫ Y.obj.map _) _
+    simp only [← g.hom.naturality]
+    rw [show sigmaIncl (f.comap (sigmaIncl (f.map _) a).hom.hom) b ≫ sigmaIncl (f.map _) a =
+        CompHausLike.ofHom P (X := fiber _ b) (sigmaInclIncl f _ a b) ≫ sigmaIncl f (Fiber.mk f _)
+      by ext; rfl]
+    simp only [op_comp, Functor.map_comp, types_comp_apply, dsimp% incl_of_counitAppApp]
+    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
+    rw [mk_image]
+    change (X.obj.map _ ≫ _) _ = (X.obj.map _ ≫ _) _
+    simp only [g.hom.naturality]
+    simp only [types_comp_apply]
+    have := map_preimage_eq_image (f := g.hom.app _ ∘ f) (a := a)
+    simp only [Function.comp_apply] at this
+    rw [this]
+    apply congrArg
+    symm
+    convert! (b.preimage).prop
+    exact (mem_iff_eq_image (g.hom.app _ ∘ f) _ _).symm
 
 中文:
 定义 counit
@@ -565,7 +619,41 @@ definition counit
         𝟭 (Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w))) where
   app X := haveI := CompHausLike.preregular hs
     (ObjectProperty.homMk) (counitApp X.obj)
-  naturality X
+  naturality X Y g := by
+    have := CompHausLike.preregular hs
+    apply InducedCategory.hom_ext
+    simp only [functor, Functor.comp_obj, Functor.flip_obj_obj, ObjectProperty.ι_obj,
+      ObjectProperty.lift_obj_obj, Functor.id_obj, Functor.comp_map, Functor.flip_obj_map,
+      ObjectProperty.ι_map, ObjectProperty.lift_map, ObjectProperty.FullSubcategory.comp_hom,
+      ObjectProperty.homMk_hom, Functor.id_map]
+    ext S (f : LocallyConstant _ _)
+    simp only [NatTrans.comp_app, counitApp_app, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply]
+    apply presheaf_ext (f.map (g.hom.app (op (CompHausLike.of P PUnit.{u + 1}))))
+    intro a
+    simp only [functorToPresheaves_obj_obj, functorToPresheaves_map_app, TypeCat.hom_ofHom,
+      TypeCat.Fun.coe_mk, dsimp% incl_of_counitAppApp]
+    apply presheaf_ext (f.comap (sigmaIncl _ _).hom.hom)
+    intro b
+    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp,
+      map_apply, IsTerminal.comp_from, ← map_preimage_eq_image_map]
+    change (_ ≫ Y.obj.map _) _ = (_ ≫ Y.obj.map _) _
+    simp only [← g.hom.naturality]
+    rw [show sigmaIncl (f.comap (sigmaIncl (f.map _) a).hom.hom) b ≫ sigmaIncl (f.map _) a =
+        CompHausLike.ofHom P (X := fiber _ b) (sigmaInclIncl f _ a b) ≫ sigmaIncl f (Fiber.mk f _)
+      by ext; rfl]
+    simp only [op_comp, Functor.map_comp, types_comp_apply, dsimp% incl_of_counitAppApp]
+    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
+    rw [mk_image]
+    change (X.obj.map _ ≫ _) _ = (X.obj.map _ ≫ _) _
+    simp only [g.hom.naturality]
+    simp only [types_comp_apply]
+    have := map_preimage_eq_image (f := g.hom.app _ ∘ f) (a := a)
+    simp only [Function.comp_apply] at this
+    rw [this]
+    apply congrArg
+    symm
+    convert! (b.preimage).prop
+    exact (mem_iff_eq_image (g.hom.app _ ∘ f) _ _).symm
 
 Depends on / 依赖: CompHausLike, CompHausLike.preregular, preregular
 -/
@@ -667,7 +755,20 @@ lemma adjunction_left_triangle
   simp only [Functor.id_obj, functor_obj_obj_obj, functorToPresheaves_obj_obj, Functor.comp_obj,
     Functor.flip_obj_obj, ObjectProperty.ι_obj, unit_app, NatTrans.comp_app,
     functorToPresheaves_map_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.toFun_apply,
- 
+    CategoryTheory.comp_apply, TypeCat.Fun.coe_mk, NatTrans.id_app, id_apply]
+  simp only [counit]
+  have := CompHausLike.preregular hs
+  apply presheaf_ext
+    (X := ((functor P hs).obj X).obj) (Y := ((functor.{u, w} P hs).obj X).obj)
+      (f.map ((unit P hs).app X))
+  intro a
+  erw [incl_of_counitAppApp]
+  simp only [functor_obj_obj_obj, Functor.id_obj, Functor.comp_obj, Functor.flip_obj_obj,
+    ObjectProperty.ι_obj, unit_app, counitAppAppImage, functor_obj_obj_map,
+    Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom]
+  ext x
+  erw [← map_eq_image _ a x]
+  rfl
 
 中文:
 引理 adjunction_left_triangle
@@ -677,7 +778,20 @@ lemma adjunction_left_triangle
   simp only [Functor.id_obj, functor_obj_obj_obj, functorToPresheaves_obj_obj, Functor.comp_obj,
     Functor.flip_obj_obj, ObjectProperty.ι_obj, unit_app, NatTrans.comp_app,
     functorToPresheaves_map_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.toFun_apply,
- 
+    CategoryTheory.comp_apply, TypeCat.Fun.coe_mk, NatTrans.id_app, id_apply]
+  simp only [counit]
+  have := CompHausLike.preregular hs
+  apply presheaf_ext
+    (X := ((functor P hs).obj X).obj) (Y := ((functor.{u, w} P hs).obj X).obj)
+      (f.map ((unit P hs).app X))
+  intro a
+  erw [incl_of_counitAppApp]
+  simp only [functor_obj_obj_obj, Functor.id_obj, Functor.comp_obj, Functor.flip_obj_obj,
+    ObjectProperty.ι_obj, unit_app, counitAppAppImage, functor_obj_obj_map,
+    Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom]
+  ext x
+  erw [← map_eq_image _ a x]
+  rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, CompHausLike, CompHausLike.preregular, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.comp_obj, Functor.flip_obj_obj, Functor.id_obj, LocallyConstant, MyEmbedding, MyEmbedding.injective, NatTrans, NatTrans.comp_app, NatTrans.id_app, ObjectProperty, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply
 -/
@@ -724,7 +838,14 @@ definition adjunction
     ext (x : X.obj.obj _)
     dsimp
     have := CompHausLike.preregular hs
-    let : PreservesFiniteProducts ((sheafToPresheaf (coh
+    let : PreservesFiniteProducts ((sheafToPresheaf (coherentTopology _) _).obj X) :=
+      inferInstanceAs (PreservesFiniteProducts X.obj)
+    apply presheaf_ext ((unit P hs).app _ x)
+    intro a
+    erw [incl_of_counitAppApp]
+    simp only [counitAppAppImage]
+    erw [← map_eq_image _ a ⟨PUnit.unit, by simp [mem_iff_eq_image, ← map_preimage_eq_image]⟩]
+    rfl
 
 中文:
 定义 adjunction
@@ -739,7 +860,14 @@ definition adjunction
     ext (x : X.obj.obj _)
     dsimp
     have := CompHausLike.preregular hs
-    let : PreservesFiniteProducts ((sheafToPresheaf (coh
+    let : PreservesFiniteProducts ((sheafToPresheaf (coherentTopology _) _).obj X) :=
+      inferInstanceAs (PreservesFiniteProducts X.obj)
+    apply presheaf_ext ((unit P hs).app _ x)
+    intro a
+    erw [incl_of_counitAppApp]
+    simp only [counitAppAppImage]
+    erw [← map_eq_image _ a ⟨PUnit.unit, by simp [mem_iff_eq_image, ← map_preimage_eq_image]⟩]
+    rfl
 
 Depends on / 依赖: MyEmbeddingClass, MyEmbeddingClass.map_op, map_op
 -/

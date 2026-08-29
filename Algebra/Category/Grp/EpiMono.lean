@@ -75,7 +75,8 @@ theorem range_eq_top_of_cancel
     simp only [one_apply, coe_comp, coe_mk', Function.comp_apply]
     rw [show (1 : B ⧸ f.range) = (1 : B) from QuotientGroup.mk_one _]; rw [QuotientGroup.eq]; rw [inv_one]; rw [one_mul]
     exact ⟨x, rfl⟩
-  replace h : (QuotientGroup.mk' f.rang
+  replace h : (QuotientGroup.mk' f.range).ker = (1 : B ->* B ⧸ f.range).ker := by rw [h]
+  rwa [ker_one, QuotientGroup.ker_mk'] at h
 
 中文:
 定理 range_eq_top_of_cancel
@@ -86,7 +87,8 @@ theorem range_eq_top_of_cancel
     simp only [one_apply, coe_comp, coe_mk', Function.comp_apply]
     rw [show (1 : B ⧸ f.range) = (1 : B) from QuotientGroup.mk_one _]; rw [QuotientGroup.eq]; rw [inv_one]; rw [one_mul]
     exact ⟨x, rfl⟩
-  replace h : (QuotientGroup.mk' f.rang
+  replace h : (QuotientGroup.mk' f.range).ker = (1 : B ->* B ⧸ f.range).ker := by rw [h]
+  rwa [ker_one, QuotientGroup.ker_mk'] at h
 
 Depends on / 依赖: Function, Function.comp_apply, QuotientGroup, QuotientGroup.eq, QuotientGroup.ker_mk, QuotientGroup.mk, QuotientGroup.mk_one, coe_comp, coe_mk, comp_apply, f.range, inv_one, ker_mk, ker_one, mk_one, one_apply, one_mul, replace, specialize
 -/
@@ -535,7 +537,13 @@ definition g
         dsimp only
         rw [← mul_smul]; rw [mul_inv_cancel]; rw [one_smul] }
   map_one' := by
-   
+    ext
+    simp [one_smul]
+  map_mul' b1 b2 := by
+    ext
+    simp [mul_smul]
+
+local notation "g" => g f
 
 中文:
 定义 g
@@ -549,7 +557,13 @@ definition g
         dsimp only
         rw [← mul_smul]; rw [mul_inv_cancel]; rw [one_smul] }
   map_one' := by
-   
+    ext
+    simp [one_smul]
+  map_mul' b1 b2 := by
+    ext
+    simp [mul_smul]
+
+local notation "g" => g f
 
 Depends on / 依赖: invFun, inv_mul_cancel, left_inv, map_mul, map_one, mul_inv_cancel, mul_smul, one_smul, right_inv
 -/
@@ -737,7 +751,11 @@ theorem h_apply_fromCoset_nin_range
   change ((τ).symm.trans (g x)).trans τ _ = _
   simp only [tau, Equiv.coe_trans, Function.comp_apply]
   rw [Equiv.symm_swap]; rw [@Equiv.swap_apply_of_ne_of_ne X' _ (fromCoset ⟨f.hom.range]; rw [1]; rw [one_leftCoset _⟩) ∞
-      (fromCoset ⟨b • ↑f.hom.range]; rw [b]; rw [rfl⟩) (fromCoset_ne_of_ni
+      (fromCoset ⟨b • ↑f.hom.range]; rw [b]; rw [rfl⟩) (fromCoset_ne_of_nin_range _ hb) (by simp)]
+  simp only [g_apply_fromCoset, leftCoset_assoc]
+  refine Equiv.swap_apply_of_ne_of_ne (fromCoset_ne_of_nin_range _ fun r => hb ?_) (by simp)
+  convert! Subgroup.mul_mem _ (Subgroup.inv_mem _ hx) r
+  rw [← mul_assoc]; rw [inv_mul_cancel]; rw [one_mul]
 
 中文:
 定理 h_apply_fromCoset_nin_range
@@ -746,7 +764,11 @@ theorem h_apply_fromCoset_nin_range
   change ((τ).symm.trans (g x)).trans τ _ = _
   simp only [tau, Equiv.coe_trans, Function.comp_apply]
   rw [Equiv.symm_swap]; rw [@Equiv.swap_apply_of_ne_of_ne X' _ (fromCoset ⟨f.hom.range]; rw [1]; rw [one_leftCoset _⟩) ∞
-      (fromCoset ⟨b • ↑f.hom.range]; rw [b]; rw [rfl⟩) (fromCoset_ne_of_ni
+      (fromCoset ⟨b • ↑f.hom.range]; rw [b]; rw [rfl⟩) (fromCoset_ne_of_nin_range _ hb) (by simp)]
+  simp only [g_apply_fromCoset, leftCoset_assoc]
+  refine Equiv.swap_apply_of_ne_of_ne (fromCoset_ne_of_nin_range _ fun r => hb ?_) (by simp)
+  convert! Subgroup.mul_mem _ (Subgroup.inv_mem _ hx) r
+  rw [← mul_assoc]; rw [inv_mul_cancel]; rw [one_mul]
 
 Depends on / 依赖: Equiv.coe_trans, Equiv.swap_apply_of_ne_of_ne, Equiv.symm_swap, Function, Function.comp_apply, Subgroup, Subgroup.inv_mem, Subgroup.mul_mem, coe_trans, comp_apply, convert, f.hom.range, fromCoset, fromCoset_ne_of_nin_range, g_apply_fromCoset, inv_mem, leftCoset_assoc, mul_mem, one_leftCoset, swap_apply_of_ne_of_ne
 -/
@@ -775,7 +797,20 @@ theorem agree
     · rw [g_apply_fromCoset]
       by_cases m : y in f.hom.range
       · rw [h_apply_fromCoset' _ _ _ m, fromCoset_eq_of_mem_range _ m]
-     
+        change fromCoset _ = fromCoset ⟨f a • (y • _), _⟩
+        simp only [← fromCoset_eq_of_mem_range _ (Subgroup.mul_mem _ ⟨a, rfl⟩ m), smul_smul]
+      · rw [h_apply_fromCoset_nin_range f (f a) ⟨_, rfl⟩ _ m]
+        simp only [leftCoset_assoc]
+    · rw [g_apply_infinity, h_apply_infinity f (f a) ⟨_, rfl⟩]
+  · have eq1 : (h b) (fromCoset ⟨f.hom.range, 1, one_leftCoset _⟩) =
+        fromCoset ⟨f.hom.range, 1, one_leftCoset _⟩ := by
+      change ((τ).symm.trans (g b)).trans τ _ = _
+      dsimp [tau]
+      simp [g_apply_infinity f]
+    have eq2 :
+        g b (fromCoset ⟨f.hom.range, 1, one_leftCoset _⟩) = fromCoset ⟨b • ↑f.hom.range, b, rfl⟩ :=
+      rfl
+    exact (fromCoset_ne_of_nin_range _ r).symm (by rw [← eq1, ← eq2, DFunLike.congr_fun hb])
 
 中文:
 定理 agree
@@ -788,7 +823,20 @@ theorem agree
     · rw [g_apply_fromCoset]
       by_cases m : y in f.hom.range
       · rw [h_apply_fromCoset' _ _ _ m, fromCoset_eq_of_mem_range _ m]
-     
+        change fromCoset _ = fromCoset ⟨f a • (y • _), _⟩
+        simp only [← fromCoset_eq_of_mem_range _ (Subgroup.mul_mem _ ⟨a, rfl⟩ m), smul_smul]
+      · rw [h_apply_fromCoset_nin_range f (f a) ⟨_, rfl⟩ _ m]
+        simp only [leftCoset_assoc]
+    · rw [g_apply_infinity, h_apply_infinity f (f a) ⟨_, rfl⟩]
+  · have eq1 : (h b) (fromCoset ⟨f.hom.range, 1, one_leftCoset _⟩) =
+        fromCoset ⟨f.hom.range, 1, one_leftCoset _⟩ := by
+      change ((τ).symm.trans (g b)).trans τ _ = _
+      dsimp [tau]
+      simp [g_apply_infinity f]
+    have eq2 :
+        g b (fromCoset ⟨f.hom.range, 1, one_leftCoset _⟩) = fromCoset ⟨b • ↑f.hom.range, b, rfl⟩ :=
+      rfl
+    exact (fromCoset_ne_of_nin_range _ r).symm (by rw [← eq1, ← eq2, DFunLike.congr_fun hb])
 
 Depends on / 依赖: Set.ext, Subgroup, Subgroup.mul_mem, by_contradiction, f.hom.range, fromCoset, fromCoset_eq_of_mem_range, g_apply_, g_apply_fromCoset, h_apply_fromCoset, h_apply_fromCoset_nin_range, leftCoset_assoc, mul_mem, smul_smul
 -/

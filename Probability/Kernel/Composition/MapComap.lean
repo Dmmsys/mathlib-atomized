@@ -2042,7 +2042,7 @@ lemma fst_map_prod
     · exact measurable_fst hs
   · have : ¬ Measurable (fun x => (f x, g x)) := by
       contrapose hf; exact hf.fst
-  
+    simp [map_of_not_measurable _ hf, map_of_not_measurable _ this]
 
 中文:
 引理 fst_map_prod
@@ -2055,7 +2055,7 @@ lemma fst_map_prod
     · exact measurable_fst hs
   · have : ¬ Measurable (fun x => (f x, g x)) := by
       contrapose hf; exact hf.fst
-  
+    simp [map_of_not_measurable _ hf, map_of_not_measurable _ this]
 
 Depends on / 依赖: Measurable, Set.mem_ofPred, Set.preimage, contrapose, fst_apply, hf.fst, hf.prod, map_apply, map_of_not_measurable, measurable_fst, mem_ofPred, preimage
 -/
@@ -2336,7 +2336,7 @@ lemma snd_map_prod
     · exact measurable_snd hs
   · have : ¬ Measurable (fun x => (f x, g x)) := by
       contrapose hg; exact hg.snd
-    
+    simp [map_of_not_measurable _ hg, map_of_not_measurable _ this]
 
 中文:
 引理 snd_map_prod
@@ -2349,7 +2349,7 @@ lemma snd_map_prod
     · exact measurable_snd hs
   · have : ¬ Measurable (fun x => (f x, g x)) := by
       contrapose hg; exact hg.snd
-    
+    simp [map_of_not_measurable _ hg, map_of_not_measurable _ this]
 
 Depends on / 依赖: Measurable, Set.mem_ofPred, Set.preimage, contrapose, hf.prod, hg.snd, map_apply, map_of_not_measurable, measurable_snd, mem_ofPred, preimage, snd_apply
 -/

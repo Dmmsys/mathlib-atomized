@@ -90,7 +90,13 @@ theorem cos_arg
   · rw [Real.cos_add_pi, Real.cos_arcsin]
     field_simp
     simp [Real.sqrt_div (sq_nonneg _), Real.sqrt_sq_eq_abs, _root_.abs_of_neg (not_le.1 h₁), *]
-    fie
+    field
+  · rw [Real.cos_sub_pi, Real.cos_arcsin]
+    field_simp
+    simp [Real.sqrt_div (sq_nonneg _), Real.sqrt_sq_eq_abs, _root_.abs_of_neg (not_le.1 h₁), *]
+    field
+
+@[simp]
 
 中文:
 定理 cos_arg
@@ -106,7 +112,13 @@ theorem cos_arg
   · rw [Real.cos_add_pi, Real.cos_arcsin]
     field_simp
     simp [Real.sqrt_div (sq_nonneg _), Real.sqrt_sq_eq_abs, _root_.abs_of_neg (not_le.1 h₁), *]
-    fie
+    field
+  · rw [Real.cos_sub_pi, Real.cos_arcsin]
+    field_simp
+    simp [Real.sqrt_div (sq_nonneg _), Real.sqrt_sq_eq_abs, _root_.abs_of_neg (not_le.1 h₁), *]
+    field
+
+@[simp]
 
 Depends on / 依赖: Real.cos_add_pi, Real.cos_arcsin, Real.cos_sub_pi, Real.sqrt_div, Real.sqrt_sq, Real.sqrt_sq_eq_abs, _root_, _root_.abs_of_neg, abs_of_neg, cos_add_pi, cos_arcsin, cos_sub_pi, norm_pos_iff, norm_pos_iff.mpr, not_le, split_ifs, sq_nonneg, sqrt_div, sqrt_sq, sqrt_sq_eq_abs
 -/
@@ -314,7 +326,23 @@ theorem arg_mul_cos_add_sin_mul_I
   simp only [arg, norm_mul, norm_cos_add_sin_mul_I, Complex.norm_of_nonneg hr.le, mul_one]
   simp only [re_ofReal_mul, im_ofReal_mul, neg_im, ← ofReal_cos, ← ofReal_sin, ←
     mk_eq_add_mul_I, neg_div, mul_div_cancel_left₀ _ hr.ne', mul_nonneg_iff_right_nonneg_of_pos hr]
-  by_cases h₁ : θ in Set.
+  by_cases h₁ : θ in Set.Icc (-(π / 2)) (π / 2)
+  · rw [if_pos]
+    exacts [Real.arcsin_sin' h₁, Real.cos_nonneg_of_mem_Icc h₁]
+  · rw [Set.mem_Icc, not_and_or, not_le, not_le] at h₁
+    rcases h₁ with h₁ | h₁
+    · replace hθ := hθ.1
+      have hcos : Real.cos θ < 0 := by
+        rw [← neg_pos]; rw [← Real.cos_add_pi]
+        refine Real.cos_pos_of_mem_Ioo ⟨?_, ?_⟩ <;> linarith
+      have hsin : Real.sin θ < 0 := Real.sin_neg_of_neg_of_neg_pi_lt (by linarith) hθ
+      rw [if_neg]; rw [if_neg]; rw [← Real.sin_add_pi]; rw [Real.arcsin_sin]; rw [add_sub_cancel_right] <;> [linarith;
+        linarith; exact hsin.not_ge; exact hcos.not_ge]
+    · replace hθ := hθ.2
+      have hcos : Real.cos θ < 0 := Real.cos_neg_of_pi_div_two_lt_of_lt h₁ (by linarith)
+      have hsin : 0 <= Real.sin θ := Real.sin_nonneg_of_mem_Icc ⟨by linarith, hθ⟩
+      rw [if_neg]; rw [if_pos]; rw [← Real.sin_sub_pi]; rw [Real.arcsin_sin]; rw [sub_add_cancel] <;> [linarith;
+        linarith; exact hsin; exact hcos.not_ge]
 
 中文:
 定理 arg_mul_cos_add_sin_mul_I
@@ -323,7 +351,23 @@ theorem arg_mul_cos_add_sin_mul_I
   simp only [arg, norm_mul, norm_cos_add_sin_mul_I, Complex.norm_of_nonneg hr.le, mul_one]
   simp only [re_ofReal_mul, im_ofReal_mul, neg_im, ← ofReal_cos, ← ofReal_sin, ←
     mk_eq_add_mul_I, neg_div, mul_div_cancel_left₀ _ hr.ne', mul_nonneg_iff_right_nonneg_of_pos hr]
-  by_cases h₁ : θ in Set.
+  by_cases h₁ : θ in Set.Icc (-(π / 2)) (π / 2)
+  · rw [if_pos]
+    exacts [Real.arcsin_sin' h₁, Real.cos_nonneg_of_mem_Icc h₁]
+  · rw [Set.mem_Icc, not_and_or, not_le, not_le] at h₁
+    rcases h₁ with h₁ | h₁
+    · replace hθ := hθ.1
+      have hcos : Real.cos θ < 0 := by
+        rw [← neg_pos]; rw [← Real.cos_add_pi]
+        refine Real.cos_pos_of_mem_Ioo ⟨?_, ?_⟩ <;> linarith
+      have hsin : Real.sin θ < 0 := Real.sin_neg_of_neg_of_neg_pi_lt (by linarith) hθ
+      rw [if_neg]; rw [if_neg]; rw [← Real.sin_add_pi]; rw [Real.arcsin_sin]; rw [add_sub_cancel_right] <;> [linarith;
+        linarith; exact hsin.not_ge; exact hcos.not_ge]
+    · replace hθ := hθ.2
+      have hcos : Real.cos θ < 0 := Real.cos_neg_of_pi_div_two_lt_of_lt h₁ (by linarith)
+      have hsin : 0 <= Real.sin θ := Real.sin_nonneg_of_mem_Icc ⟨by linarith, hθ⟩
+      rw [if_neg]; rw [if_pos]; rw [← Real.sin_sub_pi]; rw [Real.arcsin_sin]; rw [sub_add_cancel] <;> [linarith;
+        linarith; exact hsin; exact hcos.not_ge]
 
 Depends on / 依赖: Arrow.isIso_iff_isIso_of_isIso, Arrow.mk_hom, Arrow.mk_left, Arrow.mk_right, Complex.norm_of_nonneg, Ind.exists_nonempty_arrow_mk_iso_ind_lim, Ind.lim, Iso.isIso_hom, PreservesCoimageImageComparison, PreservesCoimageImageComparison.iso, Real.arcsin_sin, Real.cos_nonneg_of_mem_Icc, Set.Icc, Set.mem_Icc, arcsin_sin, coimageImageComparisonFunctor, coimageImageComparisonFunctor.mapIso, coimageImageComparisonFunctor_obj, cos_nonneg_of_mem_Icc, exacts
 -/
@@ -511,7 +555,12 @@ theorem arg_mem_Ioc
   · simp [hπ, hπ.le]
   rcases existsUnique_add_zsmul_mem_Ioc Real.two_pi_pos (arg z) (-π) with ⟨N, hN, -⟩
   rw [two_mul]; rw [neg_add_cancel_left]; rw [← two_mul]; rw [zsmul_eq_mul] at hN
-  rw [← norm_mul_cos_add_sin_mul_I z];
+  rw [← norm_mul_cos_add_sin_mul_I z]; rw [← cos_add_int_mul_two_pi _ N]; rw [← sin_add_int_mul_two_pi _ N]
+  have := arg_mul_cos_add_sin_mul_I (norm_pos_iff.mpr hz) hN
+  push_cast at this
+  rwa [this]
+
+@[simp]
 
 中文:
 定理 arg_mem_Ioc
@@ -523,7 +572,12 @@ theorem arg_mem_Ioc
   · simp [hπ, hπ.le]
   rcases existsUnique_add_zsmul_mem_Ioc Real.two_pi_pos (arg z) (-π) with ⟨N, hN, -⟩
   rw [two_mul]; rw [neg_add_cancel_left]; rw [← two_mul]; rw [zsmul_eq_mul] at hN
-  rw [← norm_mul_cos_add_sin_mul_I z];
+  rw [← norm_mul_cos_add_sin_mul_I z]; rw [← cos_add_int_mul_two_pi _ N]; rw [← sin_add_int_mul_two_pi _ N]
+  have := arg_mul_cos_add_sin_mul_I (norm_pos_iff.mpr hz) hN
+  push_cast at this
+  rwa [this]
+
+@[simp]
 
 Depends on / 依赖: Real.pi_pos, Real.two_pi_pos, arg_mul_cos_add_sin_mul_I, cos_add_int_mul_two_pi, eq_or_ne, existsUnique_add_zsmul_mem_Ioc, neg_add_cancel_left, norm_mul_cos_add_sin_mul_I, norm_pos_iff, norm_pos_iff.mpr, pi_pos, sin_add_int_mul_two_pi, two_mul, two_pi_pos, zsmul_eq_mul
 -/
@@ -708,7 +762,9 @@ theorem arg_nonneg_iff
         contrapose!
         intro h
         exact Real.sin_neg_of_neg_of_neg_pi_lt h (neg_pi_lt_arg _)⟩
-    _ ↔ _ := by rw [sin_arg, le_di
+    _ ↔ _ := by rw [sin_arg, le_div_iff₀ (norm_pos_iff.mpr h₀), zero_mul]
+
+@[simp]
 
 中文:
 定理 arg_nonneg_iff
@@ -722,7 +778,9 @@ theorem arg_nonneg_iff
         contrapose!
         intro h
         exact Real.sin_neg_of_neg_of_neg_pi_lt h (neg_pi_lt_arg _)⟩
-    _ ↔ _ := by rw [sin_arg, le_di
+    _ ↔ _ := by rw [sin_arg, le_div_iff₀ (norm_pos_iff.mpr h₀), zero_mul]
+
+@[simp]
 
 Depends on / 依赖: Real.sin, Real.sin_neg_of_neg_of_neg_pi_lt, Real.sin_nonneg_of_mem_Icc, arg_le_pi, contrapose, eq_or_ne, neg_pi_lt_arg, norm_pos_iff, norm_pos_iff.mpr, sin_arg, sin_neg_of_neg_of_neg_pi_lt, sin_nonneg_of_mem_Icc, zero_mul
 -/
@@ -1222,7 +1280,7 @@ theorem arg_eq_pi_div_two_iff
     simp [h₀]
   · obtain ⟨x, y⟩ := z
     rintro ⟨rfl : x = 0, hy : 0 < y⟩
-    rw [← arg_I]; rw [← arg_real_mul I hy]; rw [ofReal_mul']; rw [I_re]; rw [I_im]; rw [mu
+    rw [← arg_I]; rw [← arg_real_mul I hy]; rw [ofReal_mul']; rw [I_re]; rw [I_im]; rw [mul_zero]; rw [mul_one]
 
 中文:
 定理 arg_eq_pi_div_two_iff
@@ -1236,7 +1294,7 @@ theorem arg_eq_pi_div_two_iff
     simp [h₀]
   · obtain ⟨x, y⟩ := z
     rintro ⟨rfl : x = 0, hy : 0 < y⟩
-    rw [← arg_I]; rw [← arg_real_mul I hy]; rw [ofReal_mul']; rw [I_re]; rw [I_im]; rw [mu
+    rw [← arg_I]; rw [← arg_real_mul I hy]; rw [ofReal_mul']; rw [I_re]; rw [I_im]; rw [mul_zero]; rw [mul_one]
 
 Depends on / 依赖: I_im, I_re, Real.pi_div_two_pos.ne, arg_I, arg_real_mul, mul_one, mul_zero, norm_mul_cos_add_sin_mul_I, ofReal_mul, pi_div_two_pos
 -/
@@ -1440,7 +1498,14 @@ theorem arg_conj
   rcases lt_trichotomy x.re 0 with (hr | hr | hr) <;>
     rcases lt_trichotomy x.im 0 with (hi | hi | hi)
   · simp [hr, hr.not_ge, hi.le, hi.ne, not_le.2 hi, add_comm]
-  · simp [hr, hr.not_g
+  · simp [hr, hr.not_ge, hi]
+  · simp [hr, hr.not_ge, hi.ne.symm, hi.le, not_le.2 hi, sub_eq_neg_add]
+  · simp [hr]
+  · simp [hr]
+  · simp [hr]
+  · simp [hr.le, hi.ne]
+  · simp [hr.le, hr.le.not_gt]
+  · simp [hr.le, hr.le.not_gt]
 
 中文:
 定理 arg_conj
@@ -1452,7 +1517,14 @@ theorem arg_conj
   rcases lt_trichotomy x.re 0 with (hr | hr | hr) <;>
     rcases lt_trichotomy x.im 0 with (hi | hi | hi)
   · simp [hr, hr.not_ge, hi.le, hi.ne, not_le.2 hi, add_comm]
-  · simp [hr, hr.not_g
+  · simp [hr, hr.not_ge, hi]
+  · simp [hr, hr.not_ge, hi.ne.symm, hi.le, not_le.2 hi, sub_eq_neg_add]
+  · simp [hr]
+  · simp [hr]
+  · simp [hr]
+  · simp [hr.le, hi.ne]
+  · simp [hr.le, hr.le.not_gt]
+  · simp [hr.le, hr.le.not_gt]
 
 Depends on / 依赖: Real.arcsin_neg, add_comm, arcsin_neg, arg_eq_pi_iff, conj_im, conj_re, hi.le, hi.ne, hi.ne.symm, hr.le, hr.le.not_gt, hr.not_ge, lt_trichotomy, neg_div, neg_im, neg_neg, norm_conj, not_ge, not_gt, not_le
 -/
@@ -1534,7 +1606,9 @@ lemma norm_eq_one_iff'
     · convert! toIocMod_mem_Ioc _ _ _
       ring
     · rw [eq_sub_of_add_eq <| toIocMod_add_toIocDiv_zsmul _ _ θ, ofReal_sub,
-      ofReal_zsmul, ofReal_mul, ofReal_ofNat, e
+      ofReal_zsmul, ofReal_mul, ofReal_ofNat, exp_mul_I_periodic.sub_zsmul_eq]
+  · rintro ⟨θ, _, rfl⟩
+    exact ⟨θ, rfl⟩
 
 中文:
 引理 norm_eq_one_iff'
@@ -1547,7 +1621,9 @@ lemma norm_eq_one_iff'
     · convert! toIocMod_mem_Ioc _ _ _
       ring
     · rw [eq_sub_of_add_eq <| toIocMod_add_toIocDiv_zsmul _ _ θ, ofReal_sub,
-      ofReal_zsmul, ofReal_mul, ofReal_ofNat, e
+      ofReal_zsmul, ofReal_mul, ofReal_ofNat, exp_mul_I_periodic.sub_zsmul_eq]
+  · rintro ⟨θ, _, rfl⟩
+    exact ⟨θ, rfl⟩
 
 Depends on / 依赖: Real.pi_pos, convert, eq_sub_of_add_eq, exp_mul_I_periodic, exp_mul_I_periodic.sub_zsmul_eq, mul_pos, norm_eq_one_iff, ofReal_mul, ofReal_ofNat, ofReal_sub, ofReal_zsmul, pi_pos, sub_zsmul_eq, toIocMod, toIocMod_add_toIocDiv_zsmul, toIocMod_mem_Ioc, two_pos
 -/
@@ -1596,7 +1672,12 @@ theorem arg_le_pi_div_two_iff
   simp only [hre.not_ge, false_or]
   rcases le_or_gt 0 (im z) with him | him
   · simp only [him.not_gt]
-    rw [iff_false]; rw [not_le]; rw [arg_of_re_neg_of_im_nonneg hre him];
+    rw [iff_false]; rw [not_le]; rw [arg_of_re_neg_of_im_nonneg hre him]; rw [← sub_lt_iff_lt_add]; rw [half_sub]; rw [Real.neg_pi_div_two_lt_arcsin]; rw [neg_im]; rw [neg_div]; rw [neg_lt_neg_iff]; rw [div_lt_one]; rw [←
+      abs_of_nonneg him]; rw [abs_im_lt_norm]
+    exacts [hre.ne, norm_pos_iff.mpr <| ne_of_apply_ne re hre.ne]
+  · simp only [him]
+    rw [iff_true]; rw [arg_of_re_neg_of_im_neg hre him]
+    exact (sub_le_self _ Real.pi_pos.le).trans (Real.arcsin_le_pi_div_two _)
 
 中文:
 定理 arg_le_pi_div_two_iff
@@ -1608,7 +1689,12 @@ theorem arg_le_pi_div_two_iff
   simp only [hre.not_ge, false_or]
   rcases le_or_gt 0 (im z) with him | him
   · simp only [him.not_gt]
-    rw [iff_false]; rw [not_le]; rw [arg_of_re_neg_of_im_nonneg hre him];
+    rw [iff_false]; rw [not_le]; rw [arg_of_re_neg_of_im_nonneg hre him]; rw [← sub_lt_iff_lt_add]; rw [half_sub]; rw [Real.neg_pi_div_two_lt_arcsin]; rw [neg_im]; rw [neg_div]; rw [neg_lt_neg_iff]; rw [div_lt_one]; rw [←
+      abs_of_nonneg him]; rw [abs_im_lt_norm]
+    exacts [hre.ne, norm_pos_iff.mpr <| ne_of_apply_ne re hre.ne]
+  · simp only [him]
+    rw [iff_true]; rw [arg_of_re_neg_of_im_neg hre him]
+    exact (sub_le_self _ Real.pi_pos.le).trans (Real.arcsin_le_pi_div_two _)
 
 Depends on / 依赖: Real.arcsin_le_pi_div_two, Real.neg_pi_div_two_lt_arcsin, abs_im_lt_norm, abs_of_nonneg, arcsin_le_pi_div_two, arg_of_re_neg_of_im_nonneg, arg_of_re_nonneg, div_lt_one, exacts, false_or, half_sub, him.not_gt, hre.ne, hre.not_ge, iff_false, le_or_gt, neg_div, neg_im, neg_lt_neg_iff, neg_pi_div_two_lt_arcsin
 -/
@@ -1639,7 +1725,11 @@ theorem neg_pi_div_two_le_arg_iff
   rcases le_or_gt 0 (im z) with him | him
   · simp only [him]
     rw [iff_true]; rw [arg_of_re_neg_of_im_nonneg hre him]
-    exact (Real.n
+    exact (Real.neg_pi_div_two_le_arcsin _).trans (le_add_of_nonneg_right Real.pi_pos.le)
+  · simp only [him.not_ge]
+    rw [iff_false]; rw [not_le]; rw [arg_of_re_neg_of_im_neg hre him]; rw [sub_lt_iff_lt_add']; rw [←
+      sub_eq_add_neg]; rw [sub_half]; rw [Real.arcsin_lt_pi_div_two]; rw [div_lt_one]; rw [neg_im]; rw [← abs_of_neg him]; rw [abs_im_lt_norm]
+    exacts [hre.ne, norm_pos_iff.mpr <| ne_of_apply_ne re hre.ne]
 
 中文:
 定理 neg_pi_div_two_le_arg_iff
@@ -1652,7 +1742,11 @@ theorem neg_pi_div_two_le_arg_iff
   rcases le_or_gt 0 (im z) with him | him
   · simp only [him]
     rw [iff_true]; rw [arg_of_re_neg_of_im_nonneg hre him]
-    exact (Real.n
+    exact (Real.neg_pi_div_two_le_arcsin _).trans (le_add_of_nonneg_right Real.pi_pos.le)
+  · simp only [him.not_ge]
+    rw [iff_false]; rw [not_le]; rw [arg_of_re_neg_of_im_neg hre him]; rw [sub_lt_iff_lt_add']; rw [←
+      sub_eq_add_neg]; rw [sub_half]; rw [Real.arcsin_lt_pi_div_two]; rw [div_lt_one]; rw [neg_im]; rw [← abs_of_neg him]; rw [abs_im_lt_norm]
+    exacts [hre.ne, norm_pos_iff.mpr <| ne_of_apply_ne re hre.ne]
 
 Depends on / 依赖: Real.neg_pi_div_two_le_arcsin, Real.pi_pos.le, arg_of_re_neg_of_im_neg, arg_of_re_neg_of_im_nonneg, arg_of_re_nonneg, false_or, him.not_ge, hre.not_ge, iff_false, iff_true, le_add_of_nonneg_right, le_or_gt, neg_pi_div_two_le_arcsin, not_ge, not_le, pi_pos, sub_eq_add_neg, sub_lt_iff_lt_add, true_or
 -/
@@ -1715,7 +1809,11 @@ lemma arg_lt_pi_div_two_iff
   rcases lt_trichotomy z.re 0 with hre | hre | hre
   · have : z != 0 := by simp [Complex.ext_iff, hre.ne]
     simp [hre.ne, hre.not_ge, hre.not_gt, this]
-  · have : z = 0 ↔ z.im = 0 := by simp [Complex.ext_if
+  · have : z = 0 ↔ z.im = 0 := by simp [Complex.ext_iff, hre]
+    simp [hre, this, or_comm, le_iff_eq_or_lt]
+  · simp [hre, hre.le, hre.ne']
+
+@[simp]
 
 中文:
 引理 arg_lt_pi_div_two_iff
@@ -1726,7 +1824,11 @@ lemma arg_lt_pi_div_two_iff
   rcases lt_trichotomy z.re 0 with hre | hre | hre
   · have : z != 0 := by simp [Complex.ext_iff, hre.ne]
     simp [hre.ne, hre.not_ge, hre.not_gt, this]
-  · have : z = 0 ↔ z.im = 0 := by simp [Complex.ext_if
+  · have : z = 0 ↔ z.im = 0 := by simp [Complex.ext_iff, hre]
+    simp [hre, this, or_comm, le_iff_eq_or_lt]
+  · simp [hre, hre.le, hre.ne']
+
+@[simp]
 
 Depends on / 依赖: Complex.ext_iff, arg_eq_pi_div_two_iff, arg_le_pi_div_two_iff, ext_iff, hre.le, hre.ne, hre.not_ge, hre.not_gt, le_iff_eq_or_lt, lt_iff_le_and_ne, lt_trichotomy, not_ge, not_gt, or_comm, z.im, z.re
 -/
@@ -1914,7 +2016,12 @@ theorem arg_neg_eq_arg_sub_pi_iff
       add_eq_zero_iff_eq_neg, Real.pi_ne_zero]
   · rw [(ext rfl hi : x = x.re)]
     rcases lt_trichotomy x.re 0 with (hr | hr | hr)
-    · rw [arg_ofReal_of_neg hr, 
+    · rw [arg_ofReal_of_neg hr, ← ofReal_neg, arg_ofReal_of_nonneg (Left.neg_pos_iff.2 hr).le]
+      simp [hr]
+    · simp [hr, Real.pi_ne_zero]
+    · rw [arg_ofReal_of_nonneg hr.le, ← ofReal_neg, arg_ofReal_of_neg (Left.neg_neg_iff.2 hr)]
+      simp [hr.not_gt, ← add_eq_zero_iff_eq_neg, Real.pi_ne_zero]
+  · simp [hi, arg_neg_eq_arg_sub_pi_of_im_pos]
 
 中文:
 定理 arg_neg_eq_arg_sub_pi_iff
@@ -1925,7 +2032,12 @@ theorem arg_neg_eq_arg_sub_pi_iff
       add_eq_zero_iff_eq_neg, Real.pi_ne_zero]
   · rw [(ext rfl hi : x = x.re)]
     rcases lt_trichotomy x.re 0 with (hr | hr | hr)
-    · rw [arg_ofReal_of_neg hr, 
+    · rw [arg_ofReal_of_neg hr, ← ofReal_neg, arg_ofReal_of_nonneg (Left.neg_pos_iff.2 hr).le]
+      simp [hr]
+    · simp [hr, Real.pi_ne_zero]
+    · rw [arg_ofReal_of_nonneg hr.le, ← ofReal_neg, arg_ofReal_of_neg (Left.neg_neg_iff.2 hr)]
+      simp [hr.not_gt, ← add_eq_zero_iff_eq_neg, Real.pi_ne_zero]
+  · simp [hi, arg_neg_eq_arg_sub_pi_of_im_pos]
 
 Depends on / 依赖: Left.neg_neg_iff, Left.neg_pos_iff, Real.pi_ne_zero, add_eq_z, add_eq_zero_iff_eq_neg, arg_neg_eq_arg_add_pi_of_im_neg, arg_ofReal_of_neg, arg_ofReal_of_nonneg, hi.ne, hi.not_gt, hr.le, hr.not_gt, lt_trichotomy, neg_neg_iff, neg_pos_iff, not_gt, ofReal_neg, pi_ne_zero, sub_eq_add_neg, x.im
 -/
@@ -1955,7 +2067,12 @@ theorem arg_neg_eq_arg_add_pi_iff
   · rw [(ext rfl hi : x = x.re)]
     rcases lt_trichotomy x.re 0 with (hr | hr | hr)
     · rw [arg_ofReal_of_neg hr, ← ofReal_neg, arg_ofReal_of_nonneg (Left.neg_pos_iff.2 hr).le]
-      simp [hr.not_g
+      simp [hr.not_gt, ← two_mul, Real.pi_ne_zero]
+    · simp [hr, Real.pi_ne_zero.symm]
+    · rw [arg_ofReal_of_nonneg hr.le, ← ofReal_neg, arg_ofReal_of_neg (Left.neg_neg_iff.2 hr)]
+      simp [hr]
+  · simp [hi, hi.ne.symm, hi.not_gt, arg_neg_eq_arg_sub_pi_of_im_pos, sub_eq_add_neg, ←
+      add_eq_zero_iff_neg_eq, Real.pi_ne_zero]
 
 中文:
 定理 arg_neg_eq_arg_add_pi_iff
@@ -1966,7 +2083,12 @@ theorem arg_neg_eq_arg_add_pi_iff
   · rw [(ext rfl hi : x = x.re)]
     rcases lt_trichotomy x.re 0 with (hr | hr | hr)
     · rw [arg_ofReal_of_neg hr, ← ofReal_neg, arg_ofReal_of_nonneg (Left.neg_pos_iff.2 hr).le]
-      simp [hr.not_g
+      simp [hr.not_gt, ← two_mul, Real.pi_ne_zero]
+    · simp [hr, Real.pi_ne_zero.symm]
+    · rw [arg_ofReal_of_nonneg hr.le, ← ofReal_neg, arg_ofReal_of_neg (Left.neg_neg_iff.2 hr)]
+      simp [hr]
+  · simp [hi, hi.ne.symm, hi.not_gt, arg_neg_eq_arg_sub_pi_of_im_pos, sub_eq_add_neg, ←
+      add_eq_zero_iff_neg_eq, Real.pi_ne_zero]
 
 Depends on / 依赖: Left.neg_neg_iff, Left.neg_pos_iff, Real.pi_ne_zero, Real.pi_ne_zero.symm, arg_neg_eq_arg_add_pi_of_im_neg, arg_neg_eq_arg_sub_, arg_ofReal_of_neg, arg_ofReal_of_nonneg, hi.ne.symm, hi.not_gt, hr.le, hr.not_gt, lt_trichotomy, neg_neg_iff, neg_pos_iff, not_gt, ofReal_neg, pi_ne_zero, two_mul, x.im
 -/
@@ -1997,7 +2119,11 @@ theorem arg_neg_coe_angle
   · rw [(ext rfl hi : x = x.re)]
     rcases lt_trichotomy x.re 0 with (hr | hr | hr)
     · rw [arg_ofReal_of_neg hr, ← ofReal_neg, arg_ofReal_of_nonneg (Left.neg_pos_iff.2 hr).le, ←
- 
+        Real.Angle.coe_add, ← two_mul, Real.Angle.coe_two_pi, Real.Angle.coe_zero]
+    · exact False.elim (hx (ext hr hi))
+    · rw [arg_ofReal_of_nonneg hr.le, ← ofReal_neg, arg_ofReal_of_neg (Left.neg_neg_iff.2 hr),
+        Real.Angle.coe_zero, zero_add]
+  · rw [arg_neg_eq_arg_sub_pi_of_im_pos hi, Real.Angle.coe_sub, Real.Angle.sub_coe_pi_eq_add_coe_pi]
 
 中文:
 定理 arg_neg_coe_angle
@@ -2009,7 +2135,11 @@ theorem arg_neg_coe_angle
   · rw [(ext rfl hi : x = x.re)]
     rcases lt_trichotomy x.re 0 with (hr | hr | hr)
     · rw [arg_ofReal_of_neg hr, ← ofReal_neg, arg_ofReal_of_nonneg (Left.neg_pos_iff.2 hr).le, ←
- 
+        Real.Angle.coe_add, ← two_mul, Real.Angle.coe_two_pi, Real.Angle.coe_zero]
+    · exact False.elim (hx (ext hr hi))
+    · rw [arg_ofReal_of_nonneg hr.le, ← ofReal_neg, arg_ofReal_of_neg (Left.neg_neg_iff.2 hr),
+        Real.Angle.coe_zero, zero_add]
+  · rw [arg_neg_eq_arg_sub_pi_of_im_pos hi, Real.Angle.coe_sub, Real.Angle.sub_coe_pi_eq_add_coe_pi]
 
 Depends on / 依赖: False.elim, Left.neg_neg_iff, Left.neg_pos_iff, Real.Angle.co, Real.Angle.coe_add, Real.Angle.coe_two_pi, Real.Angle.coe_zero, arg_neg_eq_arg_add_pi_of_im_neg, arg_ofReal_of_neg, arg_ofReal_of_nonneg, coe_add, coe_two_pi, coe_zero, hr.le, lt_trichotomy, neg_neg_iff, neg_pos_iff, ofReal_neg, two_mul, x.im
 -/
@@ -2168,7 +2298,9 @@ theorem arg_mul_coe_angle
     arg_mul_cos_add_sin_mul_I_coe_angle (mul_pos (norm_pos_iff.mpr hx) (norm_pos_iff.mpr hy))
       (arg x + arg y : Real.Angle) using 3
   simp_rw [← Real.Angle.coe_add, Real.Angle.sin_coe, Real.Angle.cos_coe, ofReal_cos, ofReal_sin,
-    cos_add_sin_I, ofReal_add, add_mul, exp_add, ofR
+    cos_add_sin_I, ofReal_add, add_mul, exp_add, ofReal_mul]
+  rw [mul_assoc]; rw [mul_comm (exp _)]; rw [← mul_assoc (‖y‖ : Complex)]; rw [norm_mul_exp_arg_mul_I]; rw [mul_comm y]; rw [←
+    mul_assoc]; rw [norm_mul_exp_arg_mul_I]
 
 中文:
 定理 arg_mul_coe_angle
@@ -2178,7 +2310,9 @@ theorem arg_mul_coe_angle
     arg_mul_cos_add_sin_mul_I_coe_angle (mul_pos (norm_pos_iff.mpr hx) (norm_pos_iff.mpr hy))
       (arg x + arg y : Real.Angle) using 3
   simp_rw [← Real.Angle.coe_add, Real.Angle.sin_coe, Real.Angle.cos_coe, ofReal_cos, ofReal_sin,
-    cos_add_sin_I, ofReal_add, add_mul, exp_add, ofR
+    cos_add_sin_I, ofReal_add, add_mul, exp_add, ofReal_mul]
+  rw [mul_assoc]; rw [mul_comm (exp _)]; rw [← mul_assoc (‖y‖ : Complex)]; rw [norm_mul_exp_arg_mul_I]; rw [mul_comm y]; rw [←
+    mul_assoc]; rw [norm_mul_exp_arg_mul_I]
 
 Depends on / 依赖: Real.Angle, Real.Angle.coe_add, Real.Angle.cos_coe, Real.Angle.sin_coe, add_mul, arg_mul_cos_add_sin_mul_I_coe_angle, coe_add, convert, cos_add_sin_I, cos_coe, exp_add, mul_assoc, mul_comm, mul_pos, norm_mul_exp_arg_mul_I, norm_pos_iff, norm_pos_iff.mpr, ofReal_add, ofReal_cos, ofReal_mul
 -/
@@ -2480,7 +2614,7 @@ theorem arg_eq_nhds_of_re_neg_of_im_pos
     h_forall_nhds.mono fun y hy => arg_of_re_neg_of_im_nonneg hy.1 hy.2.le
   refine IsOpen.eventually_mem ?_ (⟨hx_re, hx_im⟩ : x.re < 0 ∧ 0 < x.im)
   exact
-    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isO
+    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isOpen_lt continuous_zero continuous_im)
 
 中文:
 定理 arg_eq_nhds_of_re_neg_of_im_pos
@@ -2490,7 +2624,7 @@ theorem arg_eq_nhds_of_re_neg_of_im_pos
     h_forall_nhds.mono fun y hy => arg_of_re_neg_of_im_nonneg hy.1 hy.2.le
   refine IsOpen.eventually_mem ?_ (⟨hx_re, hx_im⟩ : x.re < 0 ∧ 0 < x.im)
   exact
-    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isO
+    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isOpen_lt continuous_zero continuous_im)
 
 Depends on / 依赖: IsOpen, IsOpen.and, IsOpen.eventually_mem, arg_of_re_neg_of_im_nonneg, continuous_im, continuous_re, continuous_zero, eventually_mem, h_forall_nhds, h_forall_nhds.mono, hx_im, hx_re, isOpen_lt, x.im, x.re, y.im, y.re
 -/
@@ -2513,7 +2647,7 @@ theorem arg_eq_nhds_of_re_neg_of_im_neg
     h_forall_nhds.mono fun y hy => arg_of_re_neg_of_im_neg hy.1 hy.2
   refine IsOpen.eventually_mem ?_ (⟨hx_re, hx_im⟩ : x.re < 0 ∧ x.im < 0)
   exact
-    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isOpen_lt
+    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isOpen_lt continuous_im continuous_zero)
 
 中文:
 定理 arg_eq_nhds_of_re_neg_of_im_neg
@@ -2523,7 +2657,7 @@ theorem arg_eq_nhds_of_re_neg_of_im_neg
     h_forall_nhds.mono fun y hy => arg_of_re_neg_of_im_neg hy.1 hy.2
   refine IsOpen.eventually_mem ?_ (⟨hx_re, hx_im⟩ : x.re < 0 ∧ x.im < 0)
   exact
-    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isOpen_lt
+    IsOpen.and (isOpen_lt continuous_re continuous_zero) (isOpen_lt continuous_im continuous_zero)
 
 Depends on / 依赖: IsOpen, IsOpen.and, IsOpen.eventually_mem, arg_of_re_neg_of_im_neg, continuous_im, continuous_re, continuous_zero, eventually_mem, h_forall_nhds, h_forall_nhds.mono, hx_im, hx_re, isOpen_lt, x.im, x.re, y.im, y.re
 -/
@@ -2589,7 +2723,16 @@ theorem continuousAt_arg
   rw [mem_slitPlane_iff]; rw [← lt_or_lt_iff_ne] at h
   rcases h with (hx_re | hx_im | hx_im)
   exacts [(Real.continuousAt_arcsin.comp
-          (continuous_im.continuousAt.div continuous_norm.continuousAt h₀)).con
+          (continuous_im.continuousAt.div continuous_norm.continuousAt h₀)).congr
+      (arg_eq_nhds_of_re_pos hx_re).symm,
+    (Real.continuous_arccos.continuousAt.comp
+            (continuous_re.continuousAt.div continuous_norm.continuousAt h₀)).neg.congr
+      (arg_eq_nhds_of_im_neg hx_im).symm,
+    (Real.continuous_arccos.continuousAt.comp
+          (continuous_re.continuousAt.div continuous_norm.continuousAt h₀)).congr
+      (arg_eq_nhds_of_im_pos hx_im).symm]
+
+@[fun_prop]
 
 中文:
 定理 continuousAt_arg
@@ -2602,7 +2745,16 @@ theorem continuousAt_arg
   rw [mem_slitPlane_iff]; rw [← lt_or_lt_iff_ne] at h
   rcases h with (hx_re | hx_im | hx_im)
   exacts [(Real.continuousAt_arcsin.comp
-          (continuous_im.continuousAt.div continuous_norm.continuousAt h₀)).con
+          (continuous_im.continuousAt.div continuous_norm.continuousAt h₀)).congr
+      (arg_eq_nhds_of_re_pos hx_re).symm,
+    (Real.continuous_arccos.continuousAt.comp
+            (continuous_re.continuousAt.div continuous_norm.continuousAt h₀)).neg.congr
+      (arg_eq_nhds_of_im_neg hx_im).symm,
+    (Real.continuous_arccos.continuousAt.comp
+          (continuous_re.continuousAt.div continuous_norm.continuousAt h₀)).congr
+      (arg_eq_nhds_of_im_pos hx_im).symm]
+
+@[fun_prop]
 
 Depends on / 依赖: Real.continuousAt_arcsin.comp, Real.continuous_arccos.continuou, Real.continuous_arccos.continuousAt.comp, arg_eq_nhds_of_im_neg, arg_eq_nhds_of_re_pos, continuou, continuousAt, continuousAt_arcsin, continuous_arccos, continuous_im, continuous_im.continuousAt.div, continuous_norm, continuous_norm.continuousAt, continuous_re, continuous_re.continuousAt.div, exacts, hx_im, hx_re, lt_or_lt_iff_ne, mem_slitPlane_iff
 -/
@@ -2652,7 +2804,16 @@ theorem tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero
       (𝓝[{ z : Complex | z.im < 0 }] z) (𝓝 (-π)) by
     refine H.congr' ?_
     have : forallᶠ x : Complex in 𝓝 z, x.re < 0 := continuous_re.tendsto z (gt_mem_nhds hre)
-    filter_upwards [self_mem_nhdsWithin, mem_nhdsWith
+    filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds this] with _ him hre
+    rw [arg]; rw [if_neg hre.not_ge]; rw [if_neg him.not_ge]
+  convert!
+    (Real.continuousAt_arcsin.comp_continuousWithinAt
+          ((continuous_im.continuousAt.comp_continuousWithinAt continuousWithinAt_neg).div
+            continuous_norm.continuousWithinAt _)).sub_const
+      π using 1
+  · simp [him]
+  · lift z to Real using him
+    simpa using hre.ne
 
 中文:
 定理 tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero
@@ -2662,7 +2823,16 @@ theorem tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero
       (𝓝[{ z : Complex | z.im < 0 }] z) (𝓝 (-π)) by
     refine H.congr' ?_
     have : forallᶠ x : Complex in 𝓝 z, x.re < 0 := continuous_re.tendsto z (gt_mem_nhds hre)
-    filter_upwards [self_mem_nhdsWithin, mem_nhdsWith
+    filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds this] with _ him hre
+    rw [arg]; rw [if_neg hre.not_ge]; rw [if_neg him.not_ge]
+  convert!
+    (Real.continuousAt_arcsin.comp_continuousWithinAt
+          ((continuous_im.continuousAt.comp_continuousWithinAt continuousWithinAt_neg).div
+            continuous_norm.continuousWithinAt _)).sub_const
+      π using 1
+  · simp [him]
+  · lift z to Real using him
+    simpa using hre.ne
 
 Depends on / 依赖: H.congr, Real.arcsin, Real.continuousAt_arcsin.comp_continuousWithinAt, Tendsto, arcsin, comp_continuousWithinAt, continuousAt, continuousAt_arcsin, continuousWithi, continuous_im, continuous_im.continuousAt.comp_continuousWithinAt, continuous_re, continuous_re.tendsto, convert, filter_upwards, gt_mem_nhds, him.not_ge, hre.not_ge, if_neg, mem_nhdsWithin_of_mem_nhds
 -/
@@ -2693,7 +2863,17 @@ theorem continuousWithinAt_arg_of_re_neg_of_im_zero
   have : arg =ᶠ[𝓝[{ z : Complex | 0 <= z.im }] z] fun x => Real.arcsin ((-x).im / ‖x‖) + π := by
     have : forallᶠ x : Complex in 𝓝 z, x.re < 0 := continuous_re.tendsto z (gt_mem_nhds hre)
     filter_upwards [self_mem_nhdsWithin (s := { z : Complex | 0 <= z.im }),
-      mem_nhdsWithin_of_mem_nhd
+      mem_nhdsWithin_of_mem_nhds this] with _ him hre
+    rw [arg]; rw [if_neg hre.not_ge]; rw [if_pos him]
+  refine ContinuousWithinAt.congr_of_eventuallyEq ?_ this ?_
+  · refine
+      (Real.continuousAt_arcsin.comp_continuousWithinAt
+            ((continuous_im.continuousAt.comp_continuousWithinAt continuousWithinAt_neg).div
+              continuous_norm.continuousWithinAt ?_)).add
+        tendsto_const_nhds
+    lift z to Real using him
+    simpa using hre.ne
+  · rw [arg, if_neg hre.not_ge, if_pos him.ge]
 
 中文:
 定理 continuousWithinAt_arg_of_re_neg_of_im_zero
@@ -2702,7 +2882,17 @@ theorem continuousWithinAt_arg_of_re_neg_of_im_zero
   have : arg =ᶠ[𝓝[{ z : Complex | 0 <= z.im }] z] fun x => Real.arcsin ((-x).im / ‖x‖) + π := by
     have : forallᶠ x : Complex in 𝓝 z, x.re < 0 := continuous_re.tendsto z (gt_mem_nhds hre)
     filter_upwards [self_mem_nhdsWithin (s := { z : Complex | 0 <= z.im }),
-      mem_nhdsWithin_of_mem_nhd
+      mem_nhdsWithin_of_mem_nhds this] with _ him hre
+    rw [arg]; rw [if_neg hre.not_ge]; rw [if_pos him]
+  refine ContinuousWithinAt.congr_of_eventuallyEq ?_ this ?_
+  · refine
+      (Real.continuousAt_arcsin.comp_continuousWithinAt
+            ((continuous_im.continuousAt.comp_continuousWithinAt continuousWithinAt_neg).div
+              continuous_norm.continuousWithinAt ?_)).add
+        tendsto_const_nhds
+    lift z to Real using him
+    simpa using hre.ne
+  · rw [arg, if_neg hre.not_ge, if_pos him.ge]
 
 Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.congr_of_eventuallyEq, Real.arcsin, Real.continuousAt_arcsin.comp_continuousWithinAt, arcsin, comp_continuousWithinAt, congr_of_eventuallyEq, continuou, continuousAt_arcsin, continuous_im, continuous_im.continuou, continuous_re, continuous_re.tendsto, filter_upwards, gt_mem_nhds, hre.not_ge, if_neg, if_pos, mem_nhdsWithin_of_mem_nhds, not_ge
 -/
@@ -2760,7 +2950,22 @@ theorem continuousAt_arg_coe_angle
   · rw [← Function.comp_id (((↑) : Real -> Real.Angle) ∘ arg),
       (funext_iff.2 fun _ => (neg_neg _).symm : (id : Complex -> Complex) = Neg.neg ∘ Neg.neg), ←
       Function.comp_assoc]
-  
+    refine ContinuousAt.comp ?_ continuous_neg.continuousAt
+    suffices ContinuousAt (Function.update (((↑) ∘ arg) ∘ Neg.neg : Complex -> Real.Angle) 0 π) (-x) by
+      rwa [continuousAt_update_of_ne (neg_ne_zero.2 h)] at this
+    have ha :
+      Function.update (((↑) ∘ arg) ∘ Neg.neg : Complex -> Real.Angle) 0 π = fun z =>
+        (arg z : Real.Angle) + π := by
+      rw [Function.update_eq_iff]
+      exact ⟨by simp, fun z hz => arg_neg_coe_angle hz⟩
+    rw [ha]
+    replace hs := mem_slitPlane_iff.mpr.mt hs
+    push Not at hs
+    refine
+      (Real.Angle.continuous_coe.continuousAt.comp (continuousAt_arg (Or.inl ?_))).add
+        continuousAt_const
+    rw [neg_re]; rw [neg_pos]
+    exact hs.1.lt_of_ne fun h0 => h (Complex.ext_iff.2 ⟨h0, hs.2⟩)
 
 中文:
 定理 continuousAt_arg_coe_angle
@@ -2772,7 +2977,22 @@ theorem continuousAt_arg_coe_angle
   · rw [← Function.comp_id (((↑) : Real -> Real.Angle) ∘ arg),
       (funext_iff.2 fun _ => (neg_neg _).symm : (id : Complex -> Complex) = Neg.neg ∘ Neg.neg), ←
       Function.comp_assoc]
-  
+    refine ContinuousAt.comp ?_ continuous_neg.continuousAt
+    suffices ContinuousAt (Function.update (((↑) ∘ arg) ∘ Neg.neg : Complex -> Real.Angle) 0 π) (-x) by
+      rwa [continuousAt_update_of_ne (neg_ne_zero.2 h)] at this
+    have ha :
+      Function.update (((↑) ∘ arg) ∘ Neg.neg : Complex -> Real.Angle) 0 π = fun z =>
+        (arg z : Real.Angle) + π := by
+      rw [Function.update_eq_iff]
+      exact ⟨by simp, fun z hz => arg_neg_coe_angle hz⟩
+    rw [ha]
+    replace hs := mem_slitPlane_iff.mpr.mt hs
+    push Not at hs
+    refine
+      (Real.Angle.continuous_coe.continuousAt.comp (continuousAt_arg (Or.inl ?_))).add
+        continuousAt_const
+    rw [neg_re]; rw [neg_pos]
+    exact hs.1.lt_of_ne fun h0 => h (Complex.ext_iff.2 ⟨h0, hs.2⟩)
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.comp, Function, Function.comp_assoc, Function.comp_id, Function.update, Neg.neg, Real.Angle, Real.Angle.continuous_coe.continuousAt.comp, comp_assoc, comp_id, continuousAt, continuousAt_arg, continuousAt_update_of_ne, continuous_coe, continuous_neg, continuous_neg.continuousAt, funext_iff, neg_ne_zero, neg_neg
 -/

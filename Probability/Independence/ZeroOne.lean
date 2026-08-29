@@ -46,7 +46,8 @@ theorem Kernel.measure_eq_zero_or_one_or_top_of_indepSet_self
   · exact Or.inl h0
   by_cases h_top : κ a t = ∞
   · exact Or.inr (Or.inr h_top)
-  rw [← one_mul (κ a (
+  rw [← one_mul (κ a (t inter t))]; rw [Set.inter_self]; rw [ENNReal.mul_left_inj h0 h_top] at ha
+  exact Or.inr (Or.inl ha.symm)
 
 中文:
 定理 核.measure_eq_zero_or_one_or_top_of_indepSet_self
@@ -59,7 +60,8 @@ theorem Kernel.measure_eq_zero_or_one_or_top_of_indepSet_self
   · exact Or.inl h0
   by_cases h_top : κ a t = ∞
   · exact Or.inr (Or.inr h_top)
-  rw [← one_mul (κ a (
+  rw [← one_mul (κ a (t inter t))]; rw [Set.inter_self]; rw [ENNReal.mul_left_inj h0 h_top] at ha
+  exact Or.inr (Or.inl ha.symm)
 
 Depends on / 依赖: ENNReal, ENNReal.mul_left_inj, Or.inl, Or.inr, Set.inter_self, Set.mem_singleton, filter_upwards, h_indep, h_top, ha.symm, inter_self, measurableSet_generateFrom, mem_singleton, mul_left_inj, one_mul, specialize
 -/
@@ -224,7 +226,7 @@ theorem condExp_eq_zero_or_one_of_condIndepSet_self
   have (a : _) : IsFiniteMeasure (condExpKernel μ m a) := inferInstance
   have h := ae_of_ae_trim hm (Kernel.measure_eq_zero_or_one_of_indepSet_self h_indep)
   filter_upwards [condExpKernel_ae_eq_condExp hm ht, h] with ω hω_eq hω
-  rwa [← hω_eq, measureReal_eq_zero
+  rwa [← hω_eq, measureReal_eq_zero_iff, measureReal_def, ENNReal.toReal_eq_one_iff]
 
 中文:
 定理 condExp_eq_zero_or_one_of_condIndepSet_self
@@ -233,7 +235,7 @@ theorem condExp_eq_zero_or_one_of_condIndepSet_self
   have (a : _) : IsFiniteMeasure (condExpKernel μ m a) := inferInstance
   have h := ae_of_ae_trim hm (Kernel.measure_eq_zero_or_one_of_indepSet_self h_indep)
   filter_upwards [condExpKernel_ae_eq_condExp hm ht, h] with ω hω_eq hω
-  rwa [← hω_eq, measureReal_eq_zero
+  rwa [← hω_eq, measureReal_eq_zero_iff, measureReal_def, ENNReal.toReal_eq_one_iff]
 -/
 theorem condExp_eq_zero_or_one_of_condIndepSet_self
     [StandardBorelSpace Ω]
@@ -397,7 +399,15 @@ theorem Kernel.indep_iSup_directed_limsup
     exists_ae_eq_isMarkovKernel h_indep.ae_isProbabilityMeasure hμ
   replace h_indep := h_indep.congr η_eq
   apply Indep.congr (Filter.EventuallyEq.symm η_eq)
-  apply i
+  apply indep_iSup_of_directed_le
+  · exact fun a => indep_biSup_limsup h_le h_indep hf (hnsp a)
+  · exact fun a => iSup₂_le fun n _ => h_le n
+  · exact limsup_le_iSup.trans (iSup_le h_le)
+  · intro a b
+    obtain ⟨c, hc⟩ := hns a b
+    refine ⟨c, ?_, ?_⟩ <;> refine iSup_mono fun n => iSup_mono' fun hn => ⟨?_, le_rfl⟩
+    · exact hc.1 hn
+    · exact hc.2 hn
 
 中文:
 定理 核.indep_iSup_directed_limsup
@@ -409,7 +419,15 @@ theorem Kernel.indep_iSup_directed_limsup
     exists_ae_eq_isMarkovKernel h_indep.ae_isProbabilityMeasure hμ
   replace h_indep := h_indep.congr η_eq
   apply Indep.congr (Filter.EventuallyEq.symm η_eq)
-  apply i
+  apply indep_iSup_of_directed_le
+  · exact fun a => indep_biSup_limsup h_le h_indep hf (hnsp a)
+  · exact fun a => iSup₂_le fun n _ => h_le n
+  · exact limsup_le_iSup.trans (iSup_le h_le)
+  · intro a b
+    obtain ⟨c, hc⟩ := hns a b
+    refine ⟨c, ?_, ?_⟩ <;> refine iSup_mono fun n => iSup_mono' fun hn => ⟨?_, le_rfl⟩
+    · exact hc.1 hn
+    · exact hc.2 hn
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.symm, Indep.congr, IsMarkovKernel, Kernel, ae_isProbabilityMeasure, eq_or_ne, exists_ae_eq_isMarkovKernel, h_indep, h_indep.ae_isProbabilityMeasure, h_indep.congr, h_le, iSup_le, indep_biSup_limsup, indep_iSup_of_directed_le, limsup_le_iSup, limsup_le_iSup.trans, replace
 -/
@@ -486,7 +504,8 @@ theorem Kernel.indep_iSup_limsup
   rw [iSup_comm]
   refine iSup_congr fun n => ?_
   have h : ⨆ (i : β) (_ : n in ns i), s n = ⨆ _ : exists i, n in ns i, s n := by rw [iSup_exists]
-  have : Nonempty (exis
+  have : Nonempty (exists i : β, n in ns i) := ⟨hns_univ n⟩
+  rw [h]; rw [iSup_const]
 
 中文:
 定理 核.indep_iSup_limsup
@@ -498,7 +517,8 @@ theorem Kernel.indep_iSup_limsup
   rw [iSup_comm]
   refine iSup_congr fun n => ?_
   have h : ⨆ (i : β) (_ : n in ns i), s n = ⨆ _ : exists i, n in ns i, s n := by rw [iSup_exists]
-  have : Nonempty (exis
+  have : Nonempty (exists i : β, n in ns i) := ⟨hns_univ n⟩
+  rw [h]; rw [iSup_const]
 
 Depends on / 依赖: Nonempty, h_indep, h_le, hns_univ, iSup_comm, iSup_congr, iSup_const, iSup_exists, indep_iSup_directed_limsup
 -/
@@ -690,7 +710,7 @@ theorem condExp_zero_or_one_of_measurableSet_limsup
     (Kernel.measure_zero_or_one_of_measurableSet_limsup h_le h_indep hf hns hnsp hns_univ ht_tail)
   have ht : MeasurableSet t := limsup_le_iSup.trans (iSup_le h_le) t ht_tail
   filter_upwards [condExpKernel_ae_eq_condExp hm ht, h] with ω hω_eq hω
-  rwa [← hω_eq, meas
+  rwa [← hω_eq, measureReal_eq_zero_iff, measureReal_def, ENNReal.toReal_eq_one_iff]
 
 中文:
 定理 condExp_zero_or_one_of_measurableSet_limsup
@@ -700,7 +720,7 @@ theorem condExp_zero_or_one_of_measurableSet_limsup
     (Kernel.measure_zero_or_one_of_measurableSet_limsup h_le h_indep hf hns hnsp hns_univ ht_tail)
   have ht : MeasurableSet t := limsup_le_iSup.trans (iSup_le h_le) t ht_tail
   filter_upwards [condExpKernel_ae_eq_condExp hm ht, h] with ω hω_eq hω
-  rwa [← hω_eq, meas
+  rwa [← hω_eq, measureReal_eq_zero_iff, measureReal_def, ENNReal.toReal_eq_one_iff]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_eq_one_iff, Kernel, Kernel.measure_zero_or_one_of_measurableSet_limsup, MeasurableSet, ae_of_ae_trim, condExpKernel_ae_eq_condExp, filter_upwards, h_indep, h_le, hns_univ, ht_tail, iSup_le, limsup_le_iSup, limsup_le_iSup.trans, measureReal_def, measureReal_eq_zero_iff, measure_zero_or_one_of_measurableSet_limsup, toReal_eq_one_iff
 -/
@@ -734,7 +754,12 @@ theorem Kernel.indep_limsup_atTop_self
   refine indep_limsup_self h_le h_indep ?_ ?_ hnsp ?_
   · simp only [mem_atTop_sets, Set.mem_compl_iff, BddAbove, upperBounds, Set.Nonempty]
     rintro t ⟨a, ha⟩
-    obtain ⟨b, hb⟩ : exists b, a < b 
+    obtain ⟨b, hb⟩ : exists b, a < b := exists_gt a
+    refine ⟨b, fun c hc hct => ?_⟩
+    suffices forall i in t, i < c from lt_irrefl c (this c hct)
+    exact fun i hi => (ha hi).trans_lt (hb.trans_le hc)
+  · exact Monotone.directed_le fun i j hij k hki => le_trans hki hij
+  · exact fun n => ⟨n, le_rfl⟩
 
 中文:
 定理 核.indep_limsup_atTop_self
@@ -745,7 +770,12 @@ theorem Kernel.indep_limsup_atTop_self
   refine indep_limsup_self h_le h_indep ?_ ?_ hnsp ?_
   · simp only [mem_atTop_sets, Set.mem_compl_iff, BddAbove, upperBounds, Set.Nonempty]
     rintro t ⟨a, ha⟩
-    obtain ⟨b, hb⟩ : exists b, a < b 
+    obtain ⟨b, hb⟩ : exists b, a < b := exists_gt a
+    refine ⟨b, fun c hc hct => ?_⟩
+    suffices forall i in t, i < c from lt_irrefl c (this c hct)
+    exact fun i hi => (ha hi).trans_lt (hb.trans_le hc)
+  · exact Monotone.directed_le fun i j hij k hki => le_trans hki hij
+  · exact fun n => ⟨n, le_rfl⟩
 
 Depends on / 依赖: BddAbove, Monotone, Monotone.directed_le, Nonempty, Set.Iic, Set.Nonempty, Set.mem_compl_iff, bddAbove_Iic, directed_le, exists_gt, h_indep, h_le, hb.trans_le, indep_limsup_self, le_trans, lt_irrefl, mem_atTop_sets, mem_compl_iff, trans_le, trans_lt
 -/
@@ -897,7 +927,12 @@ theorem Kernel.indep_limsup_atBot_self
   refine indep_limsup_self h_le h_indep ?_ ?_ hnsp ?_
   · simp only [mem_atBot_sets, Set.mem_compl_iff, BddBelow, lowerBounds, Set.Nonempty]
     rintro t ⟨a, ha⟩
-    obtain ⟨b, hb⟩ : exists b, b < a 
+    obtain ⟨b, hb⟩ : exists b, b < a := exists_lt a
+    refine ⟨b, fun c hc hct => ?_⟩
+    suffices forall i in t, c < i from lt_irrefl c (this c hct)
+    exact fun i hi => hc.trans_lt (hb.trans_le (ha hi))
+  · exact Antitone.directed_le fun _ _ => Set.Ici_subset_Ici.2
+  · exact fun n => ⟨n, le_rfl⟩
 
 中文:
 定理 核.indep_limsup_atBot_self
@@ -908,7 +943,12 @@ theorem Kernel.indep_limsup_atBot_self
   refine indep_limsup_self h_le h_indep ?_ ?_ hnsp ?_
   · simp only [mem_atBot_sets, Set.mem_compl_iff, BddBelow, lowerBounds, Set.Nonempty]
     rintro t ⟨a, ha⟩
-    obtain ⟨b, hb⟩ : exists b, b < a 
+    obtain ⟨b, hb⟩ : exists b, b < a := exists_lt a
+    refine ⟨b, fun c hc hct => ?_⟩
+    suffices forall i in t, c < i from lt_irrefl c (this c hct)
+    exact fun i hi => hc.trans_lt (hb.trans_le (ha hi))
+  · exact Antitone.directed_le fun _ _ => Set.Ici_subset_Ici.2
+  · exact fun n => ⟨n, le_rfl⟩
 
 Depends on / 依赖: Antitone, Antitone.directed_le, BddBelow, Ici_subset_Ici, Nonempty, Set.Ici, Set.Ici_subset_Ici, Set.Nonempty, Set.mem_compl_iff, bddBelow_Ici, directed_le, exists_lt, h_indep, h_le, hb.trans_le, hc.trans_lt, indep_limsup_self, lowerBounds, lt_irrefl, mem_atBot_sets
 -/

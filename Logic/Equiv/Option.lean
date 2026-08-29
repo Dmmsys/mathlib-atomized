@@ -260,7 +260,15 @@ theorem removeNoneAux_inv
       · rw [removeNoneAux_some _ ⟨_, h2⟩] at h1
         simp at h1
       · rw [removeNoneAux_none _ h2] at h1
+        simp at h1
+      · rw [removeNoneAux_some _ ⟨_, h1⟩]
+        rw [removeNoneAux_some _ ⟨_]; rw [h2⟩]
+        simp)
 
+@[deprecated (since := "2026-06-06")] alias removeNone_aux := removeNoneAux
+@[deprecated (since := "2026-06-06")] alias removeNone_aux_none := removeNoneAux_none
+@[deprecated (since := "2026-06-06")] alias removeNone_aux_some := removeNoneAux_some
+@[deprecated (since := "2026-06-06")] alias removeNone_aux_inv := removeNoneAux_inv
 
 中文:
 定理 removeNoneAux_inv
@@ -274,7 +282,15 @@ theorem removeNoneAux_inv
       · rw [removeNoneAux_some _ ⟨_, h2⟩] at h1
         simp at h1
       · rw [removeNoneAux_none _ h2] at h1
+        simp at h1
+      · rw [removeNoneAux_some _ ⟨_, h1⟩]
+        rw [removeNoneAux_some _ ⟨_]; rw [h2⟩]
+        simp)
 
+@[deprecated (since := "2026-06-06")] alias removeNone_aux := removeNoneAux
+@[deprecated (since := "2026-06-06")] alias removeNone_aux_none := removeNoneAux_none
+@[deprecated (since := "2026-06-06")] alias removeNone_aux_some := removeNoneAux_some
+@[deprecated (since := "2026-06-06")] alias removeNone_aux_inv := removeNoneAux_inv
 
 Depends on / 依赖: Option.some_injective, e.eq_symm_apply.mpr, e.symm, eq_symm_apply, removeNoneAux, removeNoneAux_none, removeNoneAux_some, some_injective
 -/
@@ -508,7 +524,36 @@ definition optionSubtype
         get _
           (ne_none_iff_isSome.1
             (((EquivLike.injective _).ne_iff'
-              ((eq_symm_apply _).2 e.property).symm).2 b.property)
+              ((eq_symm_apply _).2 e.property).symm).2 b.property)),
+      left_inv := fun a => by
+        rw [← some_inj]; rw [some_get]
+        exact symm_apply_apply (e : Option α ≃ β) a,
+      right_inv := fun b => by
+        ext
+        simp }
+  invFun e :=
+    ⟨{ toFun := fun a => casesOn' a x (Subtype.val ∘ e),
+        invFun := fun b => if h : b = x then none else e.symm ⟨b, h⟩,
+        left_inv := fun a => by
+          cases a with
+          | none => simp
+          | some a =>
+            simp only [casesOn'_some, Function.comp_apply, Subtype.coe_eta,
+              symm_apply_apply, dite_eq_ite]
+            exact if_neg (e a).property,
+        right_inv := fun b => by
+          by_cases h : b = x <;> simp [h] },
+      rfl⟩
+  left_inv e := by
+    ext a
+    cases a
+    · simpa using e.property.symm
+    · simp
+  right_inv e := by
+    ext a
+    rfl
+
+@[simp]
 
 中文:
 定义 optionSubtype
@@ -519,7 +564,36 @@ definition optionSubtype
         get _
           (ne_none_iff_isSome.1
             (((EquivLike.injective _).ne_iff'
-              ((eq_symm_apply _).2 e.property).symm).2 b.property)
+              ((eq_symm_apply _).2 e.property).symm).2 b.property)),
+      left_inv := fun a => by
+        rw [← some_inj]; rw [some_get]
+        exact symm_apply_apply (e : Option α ≃ β) a,
+      right_inv := fun b => by
+        ext
+        simp }
+  invFun e :=
+    ⟨{ toFun := fun a => casesOn' a x (Subtype.val ∘ e),
+        invFun := fun b => if h : b = x then none else e.symm ⟨b, h⟩,
+        left_inv := fun a => by
+          cases a with
+          | none => simp
+          | some a =>
+            simp only [casesOn'_some, Function.comp_apply, Subtype.coe_eta,
+              symm_apply_apply, dite_eq_ite]
+            exact if_neg (e a).property,
+        right_inv := fun b => by
+          by_cases h : b = x <;> simp [h] },
+      rfl⟩
+  left_inv e := by
+    ext a
+    cases a
+    · simpa using e.property.symm
+    · simp
+  right_inv e := by
+    ext a
+    rfl
+
+@[simp]
 
 Depends on / 依赖: EquivLike, EquivLike.injective, Subtype, Subtype.val, b.property, casesOn, e.property, e.symm, eq_symm_apply, injective, invFun, left_inv, ne_iff, ne_none_iff_isSome, property, right_inv, some_get, some_inj, some_ne_none, symm_apply_apply
 -/

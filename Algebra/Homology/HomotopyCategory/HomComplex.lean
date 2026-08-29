@@ -879,7 +879,7 @@ lemma comp_assoc
   proof: by
   subst h₁₂ h₂₃ h₁₂₃
   ext p q hpq
-  rw [comp_v _ _ rfl p (p + n₁ + n₂) q (add_assoc _ _ _).symm (by lia)]; rw [comp_v z₁ z₂ rfl p (p + n₁) (p + n₁ + n₂) (by lia) (by lia)]; rw [comp_v z₁ (z₂.comp z₃ rfl) (add_assoc n₁ n₂ n₃).symm p (p + n₁) q (by lia) (by lia)]; rw [comp_v z₂ z₃ rfl (p + n₁) (p 
+  rw [comp_v _ _ rfl p (p + n₁ + n₂) q (add_assoc _ _ _).symm (by lia)]; rw [comp_v z₁ z₂ rfl p (p + n₁) (p + n₁ + n₂) (by lia) (by lia)]; rw [comp_v z₁ (z₂.comp z₃ rfl) (add_assoc n₁ n₂ n₃).symm p (p + n₁) q (by lia) (by lia)]; rw [comp_v z₂ z₃ rfl (p + n₁) (p + n₁ + n₂) q (by lia) (by lia)]; rw [assoc]
 
 中文:
 引理 comp_assoc
@@ -887,7 +887,7 @@ lemma comp_assoc
   证明: by
   subst h₁₂ h₂₃ h₁₂₃
   ext p q hpq
-  rw [comp_v _ _ rfl p (p + n₁ + n₂) q (add_assoc _ _ _).symm (by lia)]; rw [comp_v z₁ z₂ rfl p (p + n₁) (p + n₁ + n₂) (by lia) (by lia)]; rw [comp_v z₁ (z₂.comp z₃ rfl) (add_assoc n₁ n₂ n₃).symm p (p + n₁) q (by lia) (by lia)]; rw [comp_v z₂ z₃ rfl (p + n₁) (p 
+  rw [comp_v _ _ rfl p (p + n₁ + n₂) q (add_assoc _ _ _).symm (by lia)]; rw [comp_v z₁ z₂ rfl p (p + n₁) (p + n₁ + n₂) (by lia) (by lia)]; rw [comp_v z₁ (z₂.comp z₃ rfl) (add_assoc n₁ n₂ n₃).symm p (p + n₁) q (by lia) (by lia)]; rw [comp_v z₂ z₃ rfl (p + n₁) (p + n₁ + n₂) q (by lia) (by lia)]; rw [assoc]
 
 Depends on / 依赖: add_assoc, comp_v
 -/
@@ -1582,7 +1582,10 @@ definition δ_hom
   map_smul' r a := by
     by_cases h : n + 1 = m
     · ext p q hpq
- 
+      dsimp
+      simp only [δ_v n m h _ p q hpq _ _ rfl rfl, Cochain.smul_v, Linear.comp_smul,
+        Linear.smul_comp, smul_add, smul_comm m.negOnePow r]
+    · simp only [δ_shape _ _ h, smul_zero]
 
 中文:
 定义 δ_hom
@@ -1598,7 +1601,10 @@ definition δ_hom
   map_smul' r a := by
     by_cases h : n + 1 = m
     · ext p q hpq
- 
+      dsimp
+      simp only [δ_v n m h _ p q hpq _ _ rfl rfl, Cochain.smul_v, Linear.comp_smul,
+        Linear.smul_comp, smul_add, smul_comm m.negOnePow r]
+    · simp only [δ_shape _ _ h, smul_zero]
 -/
 def δ_hom : Cochain F G n ->ₗ[R] Cochain F G m where
   toFun := δ n m
@@ -1740,7 +1746,12 @@ lemma δ_δ
   dsimp
   simp only [δ_v n₁ n₂ h₁₂ _ p q hpq _ _ rfl rfl,
     δ_v n₀ n₁ h₀₁ z p (q - 1) (by lia) (q - 2) _ (by lia) rfl,
-    δ_v n₀ n₁ h₀₁ z (p + 1) q (by 
+    δ_v n₀ n₁ h₀₁ z (p + 1) q (by lia) _ (p + 2) rfl (by lia),
+    ← h₁₂, Int.negOnePow_succ, add_comp, assoc,
+    HomologicalComplex.d_comp_d, comp_zero, zero_add, comp_add,
+    HomologicalComplex.d_comp_d_assoc, zero_comp, smul_zero,
+    add_zero, add_neg_cancel, Units.neg_smul,
+    Linear.units_smul_comp, Linear.comp_units_smul]
 
 中文:
 引理 δ_δ
@@ -1755,7 +1766,12 @@ lemma δ_δ
   dsimp
   simp only [δ_v n₁ n₂ h₁₂ _ p q hpq _ _ rfl rfl,
     δ_v n₀ n₁ h₀₁ z p (q - 1) (by lia) (q - 2) _ (by lia) rfl,
-    δ_v n₀ n₁ h₀₁ z (p + 1) q (by 
+    δ_v n₀ n₁ h₀₁ z (p + 1) q (by lia) _ (p + 2) rfl (by lia),
+    ← h₁₂, Int.negOnePow_succ, add_comp, assoc,
+    HomologicalComplex.d_comp_d, comp_zero, zero_add, comp_add,
+    HomologicalComplex.d_comp_d_assoc, zero_comp, smul_zero,
+    add_zero, add_neg_cancel, Units.neg_smul,
+    Linear.units_smul_comp, Linear.comp_units_smul]
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.d_comp_d, HomologicalComplex.d_comp_d_assoc, Int.negOnePow_succ, add_comp, add_neg_cancel, add_zero, comp_add, comp_zero, d_comp_d, d_comp_d_assoc, negOnePow_succ, smul_zero, zero_add, zero_comp
 -/
@@ -1787,7 +1803,11 @@ lemma δ_comp
   ext p q hpq
   dsimp
   rw [z₁.comp_v _ (add_assoc n₁ n₂ 1).symm p _ q rfl (by lia)]; rw [Cochain.comp_v _ _ (show n₁ + 1 + n₂ = n₁ + n₂ + 1 by lia) p (p + n₁ + 1) q
-      (by lia) (by lia)]; rw [δ_v (n₁ + n₂) _ rfl (z₁.comp z₂ rfl) p q hpq (p + n₁ + n₂) _ (by lia) rfl]; rw [z
+      (by lia) (by lia)]; rw [δ_v (n₁ + n₂) _ rfl (z₁.comp z₂ rfl) p q hpq (p + n₁ + n₂) _ (by lia) rfl]; rw [z₁.comp_v z₂ rfl p _ _ rfl rfl]; rw [z₁.comp_v z₂ rfl (p + 1) (p + n₁ + 1) q (by lia) (by lia)]; rw [δ_v n₂ (n₂ + 1) rfl z₂ (p + n₁) q (by lia) (p + n₁ + n₂) _ (by lia) rfl]; rw [δ_v n₁ (n₁ + 1) rfl z₁ p (p + n₁ + 1) (by lia) (p + n₁) _ (by lia) rfl]
+  simp only [assoc, comp_add, add_comp, Int.negOnePow_succ, Int.negOnePow_add n₁ n₂,
+    Units.neg_smul, comp_neg, neg_comp, smul_neg, smul_smul, Linear.units_smul_comp,
+    mul_comm n₁.negOnePow n₂.negOnePow, Linear.comp_units_smul, smul_add]
+  abel
 
 中文:
 引理 δ_comp
@@ -1797,7 +1817,11 @@ lemma δ_comp
   ext p q hpq
   dsimp
   rw [z₁.comp_v _ (add_assoc n₁ n₂ 1).symm p _ q rfl (by lia)]; rw [Cochain.comp_v _ _ (show n₁ + 1 + n₂ = n₁ + n₂ + 1 by lia) p (p + n₁ + 1) q
-      (by lia) (by lia)]; rw [δ_v (n₁ + n₂) _ rfl (z₁.comp z₂ rfl) p q hpq (p + n₁ + n₂) _ (by lia) rfl]; rw [z
+      (by lia) (by lia)]; rw [δ_v (n₁ + n₂) _ rfl (z₁.comp z₂ rfl) p q hpq (p + n₁ + n₂) _ (by lia) rfl]; rw [z₁.comp_v z₂ rfl p _ _ rfl rfl]; rw [z₁.comp_v z₂ rfl (p + 1) (p + n₁ + 1) q (by lia) (by lia)]; rw [δ_v n₂ (n₂ + 1) rfl z₂ (p + n₁) q (by lia) (p + n₁ + n₂) _ (by lia) rfl]; rw [δ_v n₁ (n₁ + 1) rfl z₁ p (p + n₁ + 1) (by lia) (p + n₁) _ (by lia) rfl]
+  simp only [assoc, comp_add, add_comp, Int.negOnePow_succ, Int.negOnePow_add n₁ n₂,
+    Units.neg_smul, comp_neg, neg_comp, smul_neg, smul_smul, Linear.units_smul_comp,
+    mul_comm n₁.negOnePow n₂.negOnePow, Linear.comp_units_smul, smul_add]
+  abel
 
 Depends on / 依赖: Cochain, Cochain.comp_v, add_assoc, comp_v
 -/
@@ -1949,7 +1973,8 @@ lemma δ_ofHomotopy
   have eq := h.comm p
   rw [dNext_eq h.hom (show (ComplexShape.up Int).Rel p (p + 1) by simp)]; rw [prevD_eq h.hom (show (ComplexShape.up Int).Rel (p - 1) p by simp)] at eq
   rw [Cochain.ofHomotopy]; rw [δ_v (-1) 0 (neg_add_cancel 1) _ p p (add_zero p) (p - 1) (p + 1) rfl rfl]
-  simp only
+  simp only [Cochain.mk_v, one_smul, Int.negOnePow_zero, Cochain.sub_v, Cochain.ofHom_v, eq]
+  abel
 
 中文:
 引理 δ_ofHomotopy
@@ -1959,7 +1984,8 @@ lemma δ_ofHomotopy
   have eq := h.comm p
   rw [dNext_eq h.hom (show (ComplexShape.up Int).Rel p (p + 1) by simp)]; rw [prevD_eq h.hom (show (ComplexShape.up Int).Rel (p - 1) p by simp)] at eq
   rw [Cochain.ofHomotopy]; rw [δ_v (-1) 0 (neg_add_cancel 1) _ p p (add_zero p) (p - 1) (p + 1) rfl rfl]
-  simp only
+  simp only [Cochain.mk_v, one_smul, Int.negOnePow_zero, Cochain.sub_v, Cochain.ofHom_v, eq]
+  abel
 
 Depends on / 依赖: Cochain, Cochain.mk_v, Cochain.ofHom_v, Cochain.ofHomotopy, Cochain.sub_v, ComplexShape, ComplexShape.up, Int.negOnePow_zero, add_zero, dNext_eq, h.comm, h.hom, mk_v, negOnePow_zero, neg_add_cancel, ofHom_v, ofHomotopy, one_smul, prevD_eq, sub_v
 -/
@@ -2644,7 +2670,15 @@ definition isKernel
           exact ConcreteCategory.congr_hom s.condition x⟩
         map_zero' := by
           #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
-          this was 
+          this was just `cat_disch`. -/
+          simp +instances only [HomComplex_X, map_zero]
+          rfl
+        map_add' _ _ := by
+          #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+          this was just `cat_disch`. -/
+          simp +instances only [HomComplex_X, map_add]
+          rfl })
+    (by cat_disch) (fun s l hl => by ext : 3; simp [← hl])
 
 中文:
 定义 isKernel
@@ -2656,7 +2690,15 @@ definition isKernel
           exact ConcreteCategory.congr_hom s.condition x⟩
         map_zero' := by
           #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
-          this was 
+          this was just `cat_disch`. -/
+          simp +instances only [HomComplex_X, map_zero]
+          rfl
+        map_add' _ _ := by
+          #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12244
+          this was just `cat_disch`. -/
+          simp +instances only [HomComplex_X, map_add]
+          rfl })
+    (by cat_disch) (fun s l hl => by ext : 3; simp [← hl])
 
 Depends on / 依赖: HomComplex
 -/
@@ -2858,7 +2900,24 @@ definition equivHomotopy
     { hom := fun i j => if hij : i + (-1) = j then z.1.v i j hij else 0
       zero := fun i j (hij : j + 1 != i) => dif_neg (fun _ => hij (by lia))
       comm := fun p => by
-        have eq := Cochain.congr_v z.2 p p 
+        have eq := Cochain.congr_v z.2 p p (add_zero p)
+        have h₁ : (ComplexShape.up Int).Rel (p - 1) p := by simp
+        have h₂ : (ComplexShape.up Int).Rel p (p + 1) := by simp
+        simp only [δ_neg_one_cochain, Cochain.ofHom_v, ComplexShape.up_Rel, Cochain.add_v,
+          Homotopy.nullHomotopicMap'_f h₁ h₂] at eq
+        rw [dNext_eq _ h₂]; rw [prevD_eq _ h₁]; rw [eq]; rw [dif_pos]; rw [dif_pos] }
+  left_inv := fun ho => by
+    ext i j
+    dsimp
+    split_ifs with h
+    · rfl
+    · rw [ho.zero i j (fun h' => h (by dsimp at h'; lia))]
+  right_inv := fun z => by
+    ext p q hpq
+    dsimp [Cochain.ofHomotopy]
+    rw [dif_pos hpq]
+
+@[simp]
 
 中文:
 定义 equivHomotopy
@@ -2868,7 +2927,24 @@ definition equivHomotopy
     { hom := fun i j => if hij : i + (-1) = j then z.1.v i j hij else 0
       zero := fun i j (hij : j + 1 != i) => dif_neg (fun _ => hij (by lia))
       comm := fun p => by
-        have eq := Cochain.congr_v z.2 p p 
+        have eq := Cochain.congr_v z.2 p p (add_zero p)
+        have h₁ : (ComplexShape.up Int).Rel (p - 1) p := by simp
+        have h₂ : (ComplexShape.up Int).Rel p (p + 1) := by simp
+        simp only [δ_neg_one_cochain, Cochain.ofHom_v, ComplexShape.up_Rel, Cochain.add_v,
+          Homotopy.nullHomotopicMap'_f h₁ h₂] at eq
+        rw [dNext_eq _ h₂]; rw [prevD_eq _ h₁]; rw [eq]; rw [dif_pos]; rw [dif_pos] }
+  left_inv := fun ho => by
+    ext i j
+    dsimp
+    split_ifs with h
+    · rfl
+    · rw [ho.zero i j (fun h' => h (by dsimp at h'; lia))]
+  right_inv := fun z => by
+    ext p q hpq
+    dsimp [Cochain.ofHomotopy]
+    rw [dif_pos hpq]
+
+@[simp]
 
 Depends on / 依赖: Cochain, Cochain.ofHomotopy, ofHomotopy, sub_add_cancel
 -/
@@ -3108,7 +3184,19 @@ lemma δ_single
       · subst h
         obtain rfl : q' = q'' := by lia
         simp only [single_v]
-
+      · rw [single_v_eq_zero', single_v_eq_zero', zero_comp]
+        all_goals lia
+    · rw [single_v_eq_zero _ _ _ _ _ h, single_v_eq_zero _ _ _ _ _ h, zero_comp]
+  · subst hm
+    by_cases h : q'' = q
+    · subst h
+      by_cases h : p'' = p'
+      · subst h
+        obtain rfl : p = p'' + 1 := by lia
+        simp
+      · rw [single_v_eq_zero _ _ _ _ _ h, single_v_eq_zero, comp_zero, smul_zero]
+        lia
+    · simp [single_v_eq_zero' _ _ _ _ _ h]
 
 中文:
 引理 δ_single
@@ -3123,7 +3211,19 @@ lemma δ_single
       · subst h
         obtain rfl : q' = q'' := by lia
         simp only [single_v]
-
+      · rw [single_v_eq_zero', single_v_eq_zero', zero_comp]
+        all_goals lia
+    · rw [single_v_eq_zero _ _ _ _ _ h, single_v_eq_zero _ _ _ _ _ h, zero_comp]
+  · subst hm
+    by_cases h : q'' = q
+    · subst h
+      by_cases h : p'' = p'
+      · subst h
+        obtain rfl : p = p'' + 1 := by lia
+        simp
+      · rw [single_v_eq_zero _ _ _ _ _ h, single_v_eq_zero, comp_zero, smul_zero]
+        lia
+    · simp [single_v_eq_zero' _ _ _ _ _ h]
 
 Depends on / 依赖: add_v, all_goals, single, single_v, single_v_eq_zero, units_smul_v, zero_comp
 -/

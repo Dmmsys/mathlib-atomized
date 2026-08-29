@@ -834,7 +834,13 @@ functor.map {A B} f := .op .mk' .op CommAlgCat.ofHom f.hom.toAlgHom
   inverse.obj A := .of R A.unop.X.unop
 inverse.map {A B} f := CommBialgCat.ofHom .ofAlgHom f.unop.hom.unop.hom
     congr(($(IsMonHom.one_hom (f := f.unop.hom))).unop.hom)
-    congr(($((IsMonHom.mul_hom (f := f.un
+    congr(($((IsMonHom.mul_hom (f := f.unop.hom)).symm)).unop.hom)
+  unitIso.hom := 𝟙 _
+  unitIso.inv := 𝟙 _
+  counitIso.hom := 𝟙 _
+  counitIso.inv := 𝟙 _
+
+@[simp]
 
 中文:
 定义 commBialgCatEquivComonCommAlgCat
@@ -844,7 +850,13 @@ functor.map {A B} f := .op .mk' .op CommAlgCat.ofHom f.hom.toAlgHom
   inverse.obj A := .of R A.unop.X.unop
 inverse.map {A B} f := CommBialgCat.ofHom .ofAlgHom f.unop.hom.unop.hom
     congr(($(IsMonHom.one_hom (f := f.unop.hom))).unop.hom)
-    congr(($((IsMonHom.mul_hom (f := f.un
+    congr(($((IsMonHom.mul_hom (f := f.unop.hom)).symm)).unop.hom)
+  unitIso.hom := 𝟙 _
+  unitIso.inv := 𝟙 _
+  counitIso.hom := 𝟙 _
+  counitIso.inv := 𝟙 _
+
+@[simp]
 -/
 def commBialgCatEquivComonCommAlgCat : CommBialgCat R ≌ (Mon (CommAlgCat R)ᵒᵖ)ᵒᵖ where
 functor.obj A := .op .mk .op .of R A

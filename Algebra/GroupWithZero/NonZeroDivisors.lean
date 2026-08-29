@@ -1581,7 +1581,9 @@ theorem mk_mem_nonZeroDivisors_associates
   · rintro ⟨⟨x⟩, hx₁, hx₂⟩
     refine ⟨x, ?_, ?_⟩
     · rwa [← Associates.mk_eq_zero, ← Associates.mk_mul_mk, ← Associates.quot_mk_eq_mk]
-    · rwa [← Associates.mk_ne_zero, ← Associates.quot_mk_e
+    · rwa [← Associates.mk_ne_zero, ← Associates.quot_mk_eq_mk]
+  · refine fun ⟨b, hb₁, hb₂⟩ => ⟨Associates.mk b, ?_, by rwa [Associates.mk_ne_zero]⟩
+    rw [Associates.mk_mul_mk]; rw [hb₁]; rw [Associates.mk_zero]
 
 中文:
 定理 mk_mem_nonZeroDivisors_associates
@@ -1593,7 +1595,9 @@ theorem mk_mem_nonZeroDivisors_associates
   · rintro ⟨⟨x⟩, hx₁, hx₂⟩
     refine ⟨x, ?_, ?_⟩
     · rwa [← Associates.mk_eq_zero, ← Associates.mk_mul_mk, ← Associates.quot_mk_eq_mk]
-    · rwa [← Associates.mk_ne_zero, ← Associates.quot_mk_e
+    · rwa [← Associates.mk_ne_zero, ← Associates.quot_mk_eq_mk]
+  · refine fun ⟨b, hb₁, hb₂⟩ => ⟨Associates.mk b, ?_, by rwa [Associates.mk_ne_zero]⟩
+    rw [Associates.mk_mul_mk]; rw [hb₁]; rw [Associates.mk_zero]
 
 Depends on / 依赖: Associates, Associates.mk, Associates.mk_eq_zero, Associates.mk_mul_mk, Associates.mk_ne_zero, Associates.mk_zero, Associates.quot_mk_eq_mk, contrapose, mem_nonZeroDivisors_iff_right, mk_eq_zero, mk_mul_mk, mk_ne_zero, mk_zero, quot_mk_eq_mk
 -/

@@ -135,7 +135,13 @@ theorem hasFDerivAt_exp_of_mem_ball
     (fun h => exp x * (exp (0 + h) - exp 0 - ContinuousLinearMap.id 𝕂 𝔸 h)) =ᶠ[𝓝 0] fun h =>
       exp (x + h) - exp x - exp x • ContinuousLinearMap.id 𝕂 𝔸 h by
     refine (IsLittleO.const_mul_left ?_ _).congr' this (EventuallyEq.refl _ _)
-   
+    rw [← hasFDerivAt_iff_isLittleO_nhds_zero]
+    exact hasFDerivAt_exp_zero_of_radius_pos hx.pos
+  have : forallᶠ h in 𝓝 (0 : 𝔸), h in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius :=
+    Metric.eball_mem_nhds _ hx.pos
+  filter_upwards [this] with _ hh
+  rw [exp_add_of_mem_ball hx hh]; rw [exp_zero]; rw [zero_add]; rw [ContinuousLinearMap.id_apply]; rw [smul_eq_mul]
+  ring
 
 中文:
 定理 hasFDerivAt_exp_of_mem_ball
@@ -146,7 +152,13 @@ theorem hasFDerivAt_exp_of_mem_ball
     (fun h => exp x * (exp (0 + h) - exp 0 - ContinuousLinearMap.id 𝕂 𝔸 h)) =ᶠ[𝓝 0] fun h =>
       exp (x + h) - exp x - exp x • ContinuousLinearMap.id 𝕂 𝔸 h by
     refine (IsLittleO.const_mul_left ?_ _).congr' this (EventuallyEq.refl _ _)
-   
+    rw [← hasFDerivAt_iff_isLittleO_nhds_zero]
+    exact hasFDerivAt_exp_zero_of_radius_pos hx.pos
+  have : forallᶠ h in 𝓝 (0 : 𝔸), h in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius :=
+    Metric.eball_mem_nhds _ hx.pos
+  filter_upwards [this] with _ hh
+  rw [exp_add_of_mem_ball hx hh]; rw [exp_zero]; rw [zero_add]; rw [ContinuousLinearMap.id_apply]; rw [smul_eq_mul]
+  ring
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, EventuallyEq, EventuallyEq.refl, IsLittleO, IsLittleO.const_mul_left, Metric, Metric.eball, Metric.eball_mem_nhds, const_mul_left, eball_mem_nhds, expSeries, filter_upwards, hasFDerivAt_exp_zero_of_radius_pos, hasFDerivAt_iff_isLittleO_nhds_zero, hx.pos, radius
 -/
@@ -542,7 +554,24 @@ theorem hasFDerivAt_exp_smul_const_of_mem_ball
   -- `Algebra.elementalAlgebra 𝕊 x`. See https://github.com/leanprover-community/mathlib3/pull/19062 for discussion.
   rw [hasFDerivAt_iff_isLittleO_nhds_zero]
   suffices (fun (h : 𝕊) => exp (t • x) *
-      (exp ((
+      (exp ((0 + h) • x) - exp ((0 : 𝕊) • x) - ((1 : 𝕊 ->L[𝕂] 𝕊).smulRight x) h)) =ᶠ[𝓝 0]
+        fun h =>
+          exp ((t + h) • x) - exp (t • x) - (exp (t • x) • (1 : 𝕊 ->L[𝕂] 𝕊).smulRight x) h by
+    apply (IsLittleO.const_mul_left _ _).congr' this (EventuallyEq.refl _ _)
+    rw [← hasFDerivAt_iff_isLittleO_nhds_zero (f := fun u => exp (u • x))
+      (f' := (1 : 𝕊 ->L[𝕂] 𝕊).smulRight x) (x := 0)]
+    have : HasFDerivAt exp (1 : 𝔸 ->L[𝕂] 𝔸) ((1 : 𝕊 ->L[𝕂] 𝕊).smulRight x 0) := by
+      rw [ContinuousLinearMap.smulRight_apply]; rw [one_apply_eq_self]; rw [zero_smul]
+      exact hasFDerivAt_exp_zero_of_radius_pos htx.pos
+    exact this.comp 0 ((1 : 𝕊 ->L[𝕂] 𝕊).smulRight x).hasFDerivAt
+  have : Tendsto (fun h : 𝕊 => h • x) (𝓝 0) (𝓝 0) := by
+    rw [← zero_smul 𝕊 x]
+    exact tendsto_id.smul_const x
+  have : forallᶠ h in 𝓝 (0 : 𝕊), h • x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius :=
+    this.eventually (Metric.eball_mem_nhds _ htx.pos)
+  filter_upwards [this] with h hh
+  have : Commute (t • x) (h • x) := ((Commute.refl x).smul_left t).smul_right h
+  rw [add_smul t h]; rw [exp_add_of_commute_of_mem_ball this htx hh]; rw [zero_add]; rw [zero_smul]; rw [exp_zero]; rw [ContinuousLinearMap.smulRight_apply]; rw [one_apply_eq_self]; rw [smul_apply]; rw [ContinuousLinearMap.smulRight_apply]; rw [one_apply_eq_self]; rw [smul_eq_mul]; rw [mul_sub_left_distrib]; rw [mul_sub_left_distrib]; rw [mul_one]
 
 中文:
 定理 hasFDerivAt_exp_smul_const_of_mem_ball
@@ -552,7 +581,24 @@ theorem hasFDerivAt_exp_smul_const_of_mem_ball
   -- `Algebra.elementalAlgebra 𝕊 x`. See https://github.com/leanprover-community/mathlib3/pull/19062 for discussion.
   rw [hasFDerivAt_iff_isLittleO_nhds_zero]
   suffices (fun (h : 𝕊) => exp (t • x) *
-      (exp ((
+      (exp ((0 + h) • x) - exp ((0 : 𝕊) • x) - ((1 : 𝕊 ->L[𝕂] 𝕊).smulRight x) h)) =ᶠ[𝓝 0]
+        fun h =>
+          exp ((t + h) • x) - exp (t • x) - (exp (t • x) • (1 : 𝕊 ->L[𝕂] 𝕊).smulRight x) h by
+    apply (IsLittleO.const_mul_left _ _).congr' this (EventuallyEq.refl _ _)
+    rw [← hasFDerivAt_iff_isLittleO_nhds_zero (f := fun u => exp (u • x))
+      (f' := (1 : 𝕊 ->L[𝕂] 𝕊).smulRight x) (x := 0)]
+    have : HasFDerivAt exp (1 : 𝔸 ->L[𝕂] 𝔸) ((1 : 𝕊 ->L[𝕂] 𝕊).smulRight x 0) := by
+      rw [ContinuousLinearMap.smulRight_apply]; rw [one_apply_eq_self]; rw [zero_smul]
+      exact hasFDerivAt_exp_zero_of_radius_pos htx.pos
+    exact this.comp 0 ((1 : 𝕊 ->L[𝕂] 𝕊).smulRight x).hasFDerivAt
+  have : Tendsto (fun h : 𝕊 => h • x) (𝓝 0) (𝓝 0) := by
+    rw [← zero_smul 𝕊 x]
+    exact tendsto_id.smul_const x
+  have : forallᶠ h in 𝓝 (0 : 𝕊), h • x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius :=
+    this.eventually (Metric.eball_mem_nhds _ htx.pos)
+  filter_upwards [this] with h hh
+  have : Commute (t • x) (h • x) := ((Commute.refl x).smul_left t).smul_right h
+  rw [add_smul t h]; rw [exp_add_of_commute_of_mem_ball this htx hh]; rw [zero_add]; rw [zero_smul]; rw [exp_zero]; rw [ContinuousLinearMap.smulRight_apply]; rw [one_apply_eq_self]; rw [smul_apply]; rw [ContinuousLinearMap.smulRight_apply]; rw [one_apply_eq_self]; rw [smul_eq_mul]; rw [mul_sub_left_distrib]; rw [mul_sub_left_distrib]; rw [mul_one]
 -/
 theorem hasFDerivAt_exp_smul_const_of_mem_ball (x : 𝔸) (t : 𝕊)
     (htx : t • x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
@@ -622,7 +668,8 @@ theorem hasStrictFDerivAt_exp_smul_const_of_mem_ball
   have deriv₁ : HasStrictFDerivAt (fun u : 𝕊 => exp (u • x)) _ t :=
     hp.hasStrictFDerivAt.comp t ((ContinuousLinearMap.id 𝕂 𝕊).smulRight x).hasStrictFDerivAt
   have deriv₂ : HasFDerivAt (fun u : 𝕊 => exp (u • x)) _ t :=
-    hasFDerivAt_exp_smu
+    hasFDerivAt_exp_smul_const_of_mem_ball 𝕂 x t htx
+  deriv₁.hasFDerivAt.unique deriv₂ ▸ deriv₁
 
 中文:
 定理 hasStrictFDerivAt_exp_smul_const_of_mem_ball
@@ -631,7 +678,8 @@ theorem hasStrictFDerivAt_exp_smul_const_of_mem_ball
   have deriv₁ : HasStrictFDerivAt (fun u : 𝕊 => exp (u • x)) _ t :=
     hp.hasStrictFDerivAt.comp t ((ContinuousLinearMap.id 𝕂 𝕊).smulRight x).hasStrictFDerivAt
   have deriv₂ : HasFDerivAt (fun u : 𝕊 => exp (u • x)) _ t :=
-    hasFDerivAt_exp_smu
+    hasFDerivAt_exp_smul_const_of_mem_ball 𝕂 x t htx
+  deriv₁.hasFDerivAt.unique deriv₂ ▸ deriv₁
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, HasFDerivAt, HasStrictFDerivAt, analyticAt_exp_of_mem_ball, hasFDerivAt, hasFDerivAt.unique, hasFDerivAt_exp_smul_const_of_mem_ball, hasStrictFDerivAt, hp.hasStrictFDerivAt.comp, smulRight, unique
 -/

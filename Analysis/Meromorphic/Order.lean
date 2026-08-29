@@ -122,7 +122,21 @@ lemma meromorphicOrderAt_eq_top_iff
       false_iff]
     contrapose hf
     exact (MeromorphicAt.const 0 x).congr (EventuallyEq.symm hf)
-  simp only [meromorphicOrderAt, hf, ↓reduceDIte, sub_eq_
+  simp only [meromorphicOrderAt, hf, ↓reduceDIte, sub_eq_top_iff, ENat.map_eq_top_iff,
+    WithTop.natCast_ne_top, or_false]
+  by_cases h : analyticOrderAt (fun z => (z - x) ^ hf.choose • f z) x = ⊤
+  · simp only [h, eventually_nhdsWithin_iff, mem_compl_iff, mem_singleton_iff, true_iff]
+    rw [analyticOrderAt_eq_top] at h
+    filter_upwards [h] with z hf hz
+    rwa [smul_eq_zero_iff_right <| pow_ne_zero _ (sub_ne_zero.mpr hz)] at hf
+  · obtain ⟨m, hm⟩ := ENat.ne_top_iff_exists.mp h
+    simp only [← hm, ENat.natCast_ne_top, false_iff]
+    contrapose h
+    rw [analyticOrderAt_eq_top]
+    rw [← hf.choose_spec.frequently_eq_iff_eventually_eq analyticAt_const]
+    apply Eventually.frequently
+    filter_upwards [h] with z hfz
+    rw [hfz]; rw [smul_zero]
 
 中文:
 引理 meromorphicOrderAt_eq_top_iff
@@ -132,7 +146,21 @@ lemma meromorphicOrderAt_eq_top_iff
       false_iff]
     contrapose hf
     exact (MeromorphicAt.const 0 x).congr (EventuallyEq.symm hf)
-  simp only [meromorphicOrderAt, hf, ↓reduceDIte, sub_eq_
+  simp only [meromorphicOrderAt, hf, ↓reduceDIte, sub_eq_top_iff, ENat.map_eq_top_iff,
+    WithTop.natCast_ne_top, or_false]
+  by_cases h : analyticOrderAt (fun z => (z - x) ^ hf.choose • f z) x = ⊤
+  · simp only [h, eventually_nhdsWithin_iff, mem_compl_iff, mem_singleton_iff, true_iff]
+    rw [analyticOrderAt_eq_top] at h
+    filter_upwards [h] with z hf hz
+    rwa [smul_eq_zero_iff_right <| pow_ne_zero _ (sub_ne_zero.mpr hz)] at hf
+  · obtain ⟨m, hm⟩ := ENat.ne_top_iff_exists.mp h
+    simp only [← hm, ENat.natCast_ne_top, false_iff]
+    contrapose h
+    rw [analyticOrderAt_eq_top]
+    rw [← hf.choose_spec.frequently_eq_iff_eventually_eq analyticAt_const]
+    apply Eventually.frequently
+    filter_upwards [h] with z hfz
+    rw [hfz]; rw [smul_zero]
 
 Depends on / 依赖: ENat.map_eq_top_iff, EventuallyEq, EventuallyEq.symm, MeromorphicAt, MeromorphicAt.const, WithTop, WithTop.natCast_ne_top, WithTop.zero_ne_top, analyticOrderAt, contrapose, eventually_nhdsWithin_iff, false_iff, hf.choose, map_eq_top_iff, mem_compl_iff, mem_singleton_iff, meromorphicOrderAt, meromorphicOrderAt_of_not_meromorphicAt, natCast_ne_top, not_false_eq_true
 -/
@@ -194,7 +222,25 @@ lemma meromorphicOrderAt_eq_int_iff
   · rw [h, ENat.map_top, ← WithTop.coe_natCast, top_sub,
       eq_false_intro WithTop.top_ne_coe, false_iff]
     rw [analyticOrderAt_eq_top] at h
-    refine fun ⟨g, hg_an, h
+    refine fun ⟨g, hg_an, hg_ne, hg_eq⟩ => hg_ne ?_
+    apply EventuallyEq.eq_of_nhds
+    rw [EventuallyEq]; rw [← AnalyticAt.frequently_eq_iff_eventually_eq hg_an analyticAt_const]
+    apply Eventually.frequently
+    rw [eventually_nhdsWithin_iff] at hg_eq ⊢
+    filter_upwards [h, hg_eq] with z hfz hfz_eq hz
+    rwa [hfz_eq hz, ← mul_smul, smul_eq_zero_iff_right] at hfz
+    exact mul_ne_zero (pow_ne_zero _ (sub_ne_zero.mpr hz)) (zpow_ne_zero _ (sub_ne_zero.mpr hz))
+  · obtain ⟨m, h⟩ := ENat.ne_top_iff_exists.mp h
+    rw [← h]; rw [ENat.map_natCast]; rw [← WithTop.coe_natCast]; rw [← coe_sub]; rw [WithTop.coe_inj]
+    obtain ⟨g, hg_an, hg_ne, hg_eq⟩ := hf.choose_spec.analyticOrderAt_eq_natCast.mp h.symm
+    replace hg_eq : forallᶠ (z : 𝕜) in 𝓝[!=] x, f z = (z - x) ^ (↑m - ↑hf.choose : Int) • g z := by
+      rw [eventually_nhdsWithin_iff]
+      filter_upwards [hg_eq] with z hg_eq hz
+      rwa [← smul_right_inj <| zpow_ne_zero _ (sub_ne_zero.mpr hz), ← mul_smul,
+        ← zpow_add₀ (sub_ne_zero.mpr hz), ← add_sub_assoc, add_sub_cancel_left, zpow_natCast,
+        zpow_natCast]
+    exact ⟨fun h => ⟨g, hg_an, hg_ne, h ▸ hg_eq⟩,
+      AnalyticAt.unique_eventuallyEq_zpow_smul_nonzero ⟨g, hg_an, hg_ne, hg_eq⟩⟩
 
 中文:
 引理 meromorphicOrderAt_eq_int_iff
@@ -206,7 +252,25 @@ lemma meromorphicOrderAt_eq_int_iff
   · rw [h, ENat.map_top, ← WithTop.coe_natCast, top_sub,
       eq_false_intro WithTop.top_ne_coe, false_iff]
     rw [analyticOrderAt_eq_top] at h
-    refine fun ⟨g, hg_an, h
+    refine fun ⟨g, hg_an, hg_ne, hg_eq⟩ => hg_ne ?_
+    apply EventuallyEq.eq_of_nhds
+    rw [EventuallyEq]; rw [← AnalyticAt.frequently_eq_iff_eventually_eq hg_an analyticAt_const]
+    apply Eventually.frequently
+    rw [eventually_nhdsWithin_iff] at hg_eq ⊢
+    filter_upwards [h, hg_eq] with z hfz hfz_eq hz
+    rwa [hfz_eq hz, ← mul_smul, smul_eq_zero_iff_right] at hfz
+    exact mul_ne_zero (pow_ne_zero _ (sub_ne_zero.mpr hz)) (zpow_ne_zero _ (sub_ne_zero.mpr hz))
+  · obtain ⟨m, h⟩ := ENat.ne_top_iff_exists.mp h
+    rw [← h]; rw [ENat.map_natCast]; rw [← WithTop.coe_natCast]; rw [← coe_sub]; rw [WithTop.coe_inj]
+    obtain ⟨g, hg_an, hg_ne, hg_eq⟩ := hf.choose_spec.analyticOrderAt_eq_natCast.mp h.symm
+    replace hg_eq : forallᶠ (z : 𝕜) in 𝓝[!=] x, f z = (z - x) ^ (↑m - ↑hf.choose : Int) • g z := by
+      rw [eventually_nhdsWithin_iff]
+      filter_upwards [hg_eq] with z hg_eq hz
+      rwa [← smul_right_inj <| zpow_ne_zero _ (sub_ne_zero.mpr hz), ← mul_smul,
+        ← zpow_add₀ (sub_ne_zero.mpr hz), ← add_sub_assoc, add_sub_cancel_left, zpow_natCast,
+        zpow_natCast]
+    exact ⟨fun h => ⟨g, hg_an, hg_ne, h ▸ hg_eq⟩,
+      AnalyticAt.unique_eventuallyEq_zpow_smul_nonzero ⟨g, hg_an, hg_ne, hg_eq⟩⟩
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.frequently_eq_iff_eventually_eq, ENat.map_top, Eventually, Eventually.frequently, EventuallyEq, EventuallyEq.eq_of_nhds, WithTop, WithTop.coe_natCast, WithTop.top_ne_coe, analyticAt_const, analyticOrderAt, analyticOrderAt_eq_top, coe_natCast, eq_false_intro, eq_of_nhds, eventually_nhdsWithin_iff, false_iff, frequently, frequently_eq_iff_eventually_eq
 -/
@@ -275,7 +339,8 @@ theorem meromorphicOrderAt_ne_top_iff_eventually_ne_zero
     obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff hf).1 h
     filter_upwards [h₃g, self_mem_nhdsWithin, eventually_nhdsWithin_of_eventually_nhds
       ((h₁g.continuousAt.ne_iff_eventually_ne continuousAt_const).mp h₂g)]
-    simp_all [zpow_ne_zero, sub_ne_ze
+    simp_all [zpow_ne_zero, sub_ne_zero]
+  · simp_all [meromorphicOrderAt_eq_top_iff, Eventually.frequently]
 
 中文:
 定理 meromorphicOrderAt_ne_top_iff_eventually_ne_zero
@@ -286,7 +351,8 @@ theorem meromorphicOrderAt_ne_top_iff_eventually_ne_zero
     obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff hf).1 h
     filter_upwards [h₃g, self_mem_nhdsWithin, eventually_nhdsWithin_of_eventually_nhds
       ((h₁g.continuousAt.ne_iff_eventually_ne continuousAt_const).mp h₂g)]
-    simp_all [zpow_ne_zero, sub_ne_ze
+    simp_all [zpow_ne_zero, sub_ne_zero]
+  · simp_all [meromorphicOrderAt_eq_top_iff, Eventually.frequently]
 
 Depends on / 依赖: Eventually, Eventually.frequently, continuousAt, continuousAt_const, eventually_nhdsWithin_of_eventually_nhds, filter_upwards, frequently, g.continuousAt.ne_iff_eventually_ne, meromorphicOrderAt_eq_top_iff, meromorphicOrderAt_ne_top_iff, ne_iff_eventually_ne, self_mem_nhdsWithin, sub_ne_zero, zpow_ne_zero
 -/
@@ -345,7 +411,20 @@ lemma tendsto_cobounded_of_meromorphicOrderAt_neg
   simp only [← tendsto_norm_atTop_iff_cobounded]
   obtain ⟨m, hm⟩ := WithTop.ne_top_iff_exists.mp ho.ne_top
   have m_neg : m < 0 := by simpa [← hm] using ho
-  rcases (meromorphicOrderAt_eq_int_iff hf).1 hm.symm wit
+  rcases (meromorphicOrderAt_eq_int_iff hf).1 hm.symm with ⟨g, g_an, gx, hg⟩
+  have A : Tendsto (fun z => ‖(z - x) ^ m • g z‖) (𝓝[!=] x) atTop := by
+    simp only [norm_smul]
+    apply Filter.Tendsto.atTop_mul_pos (C := ‖g x‖) (by simp [gx]) _
+      g_an.continuousAt.continuousWithinAt.tendsto.norm
+    have : Tendsto (fun z => z - x) (𝓝[!=] x) (𝓝[!=] 0) := by
+      refine tendsto_nhdsWithin_iff.2 ⟨?_, ?_⟩
+      · have : ContinuousWithinAt (fun z => z - x) {x}ᶜ x := by fun_prop
+        simpa using this.tendsto
+      · filter_upwards [self_mem_nhdsWithin] with y hy
+        simpa [sub_eq_zero] using hy
+    exact (tendsto_norm_cobounded_atTop.comp (tendsto_zpow_nhdsNE_zero_cobounded m_neg)).comp this
+  apply A.congr'
+  filter_upwards [hg] with z hz using by simp [hz]
 
 中文:
 引理 tendsto_cobounded_of_meromorphicOrderAt_neg
@@ -355,7 +434,20 @@ lemma tendsto_cobounded_of_meromorphicOrderAt_neg
   simp only [← tendsto_norm_atTop_iff_cobounded]
   obtain ⟨m, hm⟩ := WithTop.ne_top_iff_exists.mp ho.ne_top
   have m_neg : m < 0 := by simpa [← hm] using ho
-  rcases (meromorphicOrderAt_eq_int_iff hf).1 hm.symm wit
+  rcases (meromorphicOrderAt_eq_int_iff hf).1 hm.symm with ⟨g, g_an, gx, hg⟩
+  have A : Tendsto (fun z => ‖(z - x) ^ m • g z‖) (𝓝[!=] x) atTop := by
+    simp only [norm_smul]
+    apply Filter.Tendsto.atTop_mul_pos (C := ‖g x‖) (by simp [gx]) _
+      g_an.continuousAt.continuousWithinAt.tendsto.norm
+    have : Tendsto (fun z => z - x) (𝓝[!=] x) (𝓝[!=] 0) := by
+      refine tendsto_nhdsWithin_iff.2 ⟨?_, ?_⟩
+      · have : ContinuousWithinAt (fun z => z - x) {x}ᶜ x := by fun_prop
+        simpa using this.tendsto
+      · filter_upwards [self_mem_nhdsWithin] with y hy
+        simpa [sub_eq_zero] using hy
+    exact (tendsto_norm_cobounded_atTop.comp (tendsto_zpow_nhdsNE_zero_cobounded m_neg)).comp this
+  apply A.congr'
+  filter_upwards [hg] with z hz using by simp [hz]
 
 Depends on / 依赖: Filter, Filter.Tendsto.atTop_mul_pos, IsRCLikeNormedField, MeromorphicAt, RCLike, Tendsto, WithTop, WithTop.ne_top_iff_exists.mp, atTop_mul_pos, continuousAt, continuousWithi, g_an, g_an.continuousAt.continuousWithi, hm.symm, ho.ne, ho.ne_top, m_neg, meromorphicAt_of_meromorphicOrderAt_ne_zero, meromorphicOrderAt_eq_int_iff, ne_top
 -/
@@ -422,7 +514,15 @@ lemma tendsto_zero_of_meromorphicOrderAt_pos
     apply tendsto_const_nhds.congr'
     filter_upwards [meromorphicOrderAt_eq_top_iff.1 h'o] with y hy using hy.symm
   | coe n =>
-    rcases (meromorphicOrderAt
+    rcases (meromorphicOrderAt_eq_int_iff hf).1 h'o with ⟨g, g_an, gx, hg⟩
+    lift n to Nat using by simpa [h'o] using ho.le
+    have : (0 : E) = (x - x) ^ n • g x := by
+      have : 0 < n := by simpa [h'o] using ho
+      simp [zero_pow_eq_zero.2 this.ne']
+    rw [this]
+    have : ContinuousAt (fun z => (z - x) ^ n • g z) x := by fun_prop
+    apply this.continuousWithinAt.tendsto.congr'
+    filter_upwards [hg] with y hy using by simp [hy]
 
 中文:
 引理 tendsto_zero_of_meromorphicOrderAt_pos
@@ -434,7 +534,15 @@ lemma tendsto_zero_of_meromorphicOrderAt_pos
     apply tendsto_const_nhds.congr'
     filter_upwards [meromorphicOrderAt_eq_top_iff.1 h'o] with y hy using hy.symm
   | coe n =>
-    rcases (meromorphicOrderAt
+    rcases (meromorphicOrderAt_eq_int_iff hf).1 h'o with ⟨g, g_an, gx, hg⟩
+    lift n to Nat using by simpa [h'o] using ho.le
+    have : (0 : E) = (x - x) ^ n • g x := by
+      have : 0 < n := by simpa [h'o] using ho
+      simp [zero_pow_eq_zero.2 this.ne']
+    rw [this]
+    have : ContinuousAt (fun z => (z - x) ^ n • g z) x := by fun_prop
+    apply this.continuousWithinAt.tendsto.congr'
+    filter_upwards [hg] with y hy using by simp [hy]
 
 Depends on / 依赖: MeromorphicAt, filter_upwards, g_an, ho.le, ho.ne, hy.symm, meromorphicAt_of_meromorphicOrderAt_ne_zero, meromorphicOrderAt, meromorphicOrderAt_eq_int_iff, meromorphicOrderAt_eq_top_iff, tendsto_const_nhds, tendsto_const_nhds.congr, this.ne, zero_pow_eq_zero
 -/
@@ -496,7 +604,7 @@ lemma tendsto_cobounded_iff_meromorphicOrderAt_neg
   · simp [ho, tendsto_cobounded_of_meromorphicOrderAt_neg]
   · simp only [lt_iff_not_ge, ho, not_true_eq_false, iff_false, ← tendsto_norm_atTop_iff_cobounded]
     obtain ⟨c, hc⟩ := tendsto_nhds_of_meromorphicOrderAt_nonneg hf ho
-    exact 
+    exact not_tendsto_atTop_of_tendsto_nhds hc.norm
 
 中文:
 引理 tendsto_cobounded_iff_meromorphicOrderAt_neg
@@ -506,7 +614,7 @@ lemma tendsto_cobounded_iff_meromorphicOrderAt_neg
   · simp [ho, tendsto_cobounded_of_meromorphicOrderAt_neg]
   · simp only [lt_iff_not_ge, ho, not_true_eq_false, iff_false, ← tendsto_norm_atTop_iff_cobounded]
     obtain ⟨c, hc⟩ := tendsto_nhds_of_meromorphicOrderAt_nonneg hf ho
-    exact 
+    exact not_tendsto_atTop_of_tendsto_nhds hc.norm
 
 Depends on / 依赖: hc.norm, iff_false, lt_iff_not_ge, lt_or_ge, meromorphicOrderAt, not_tendsto_atTop_of_tendsto_nhds, not_true_eq_false, tendsto_cobounded_of_meromorphicOrderAt_neg, tendsto_nhds_of_meromorphicOrderAt_nonneg, tendsto_norm_atTop_iff_cobounded
 -/
@@ -531,7 +639,7 @@ lemma tendsto_nhds_iff_meromorphicOrderAt_nonneg
     apply not_tendsto_atTop_of_tendsto_nhds hc.norm
     rw [tendsto_norm_atTop_iff_cobounded]
     exact tendsto_cobounded_of_meromorphicOrderAt_neg ho
-  
+  · simp [ho, tendsto_nhds_of_meromorphicOrderAt_nonneg hf ho]
 
 中文:
 引理 tendsto_nhds_iff_meromorphicOrderAt_nonneg
@@ -543,7 +651,7 @@ lemma tendsto_nhds_iff_meromorphicOrderAt_nonneg
     apply not_tendsto_atTop_of_tendsto_nhds hc.norm
     rw [tendsto_norm_atTop_iff_cobounded]
     exact tendsto_cobounded_of_meromorphicOrderAt_neg ho
-  
+  · simp [ho, tendsto_nhds_of_meromorphicOrderAt_nonneg hf ho]
 
 Depends on / 依赖: hc.norm, iff_false, lt_or_ge, meromorphicOrderAt, not_exists, not_lt, not_tendsto_atTop_of_tendsto_nhds, not_true_eq_false, tendsto_cobounded_of_meromorphicOrderAt_neg, tendsto_nhds_of_meromorphicOrderAt_nonneg, tendsto_norm_atTop_iff_cobounded
 -/
@@ -570,7 +678,10 @@ lemma tendsto_ne_zero_iff_meromorphicOrderAt_eq_zero
   intro c c_ne hc
   rcases ho.lt_or_gt with ho | ho
   · apply not_tendsto_atTop_of_tendsto_nhds hc.norm
-    rw [tend
+    rw [tendsto_norm_atTop_iff_cobounded]
+    exact tendsto_cobounded_of_meromorphicOrderAt_neg ho
+  · apply c_ne
+    exact tendsto_nhds_unique hc (tendsto_zero_of_meromorphicOrderAt_pos ho)
 
 中文:
 引理 tendsto_ne_zero_iff_meromorphicOrderAt_eq_zero
@@ -582,7 +693,10 @@ lemma tendsto_ne_zero_iff_meromorphicOrderAt_eq_zero
   intro c c_ne hc
   rcases ho.lt_or_gt with ho | ho
   · apply not_tendsto_atTop_of_tendsto_nhds hc.norm
-    rw [tend
+    rw [tendsto_norm_atTop_iff_cobounded]
+    exact tendsto_cobounded_of_meromorphicOrderAt_neg ho
+  · apply c_ne
+    exact tendsto_nhds_unique hc (tendsto_zero_of_meromorphicOrderAt_pos ho)
 
 Depends on / 依赖: c_ne, eq_or_ne, hc.norm, ho.lt_or_gt, iff_false, lt_or_gt, meromorphicOrderAt, ne_eq, not_and, not_exists, not_tendsto_atTop_of_tendsto_nhds, tendsto_cobounded_of_meromorphicOrderAt_neg, tendsto_ne_zero_of_meromorphicOrderAt_eq_zero, tendsto_nhds_unique, tendsto_norm_atTop_iff_cobounded, tendsto_zero_of_meromorphicOrderAt_pos
 -/
@@ -612,6 +726,11 @@ lemma tendsto_zero_iff_meromorphicOrderAt_pos
   intro hc
   rcases ho.eq_or_lt with ho | ho
   · obtain ⟨c, c_ne, h'c⟩ := tendsto_ne_zero_of_meromorphicOrderAt_eq_zero hf ho
+    apply c_ne
+    exact tendsto_nhds_unique h'c hc
+  · apply not_tendsto_atTop_of_tendsto_nhds hc.norm
+    rw [tendsto_norm_atTop_iff_cobounded]
+    exact tendsto_cobounded_of_meromorphicOrderAt_neg ho
 
 中文:
 引理 tendsto_zero_iff_meromorphicOrderAt_pos
@@ -623,6 +742,11 @@ lemma tendsto_zero_iff_meromorphicOrderAt_pos
   intro hc
   rcases ho.eq_or_lt with ho | ho
   · obtain ⟨c, c_ne, h'c⟩ := tendsto_ne_zero_of_meromorphicOrderAt_eq_zero hf ho
+    apply c_ne
+    exact tendsto_nhds_unique h'c hc
+  · apply not_tendsto_atTop_of_tendsto_nhds hc.norm
+    rw [tendsto_norm_atTop_iff_cobounded]
+    exact tendsto_cobounded_of_meromorphicOrderAt_neg ho
 
 Depends on / 依赖: c_ne, eq_or_lt, hc.norm, ho.eq_or_lt, iff_false, lt_or_ge, meromorphicOrderAt, not_le, not_tendsto_atTop_of_tendsto_nhds, not_true_eq_false, tendsto_cobounded_of_meromorphicOrderAt_neg, tendsto_ne_zero_of_meromorphicOrderAt_eq_zero, tendsto_nhds_unique, tendsto_norm_atTop_iff_cobounded, tendsto_zero_of_meromorphicOrderAt_pos
 -/
@@ -656,7 +780,12 @@ theorem meromorphicOrderAt_congr
   cases h₁f₁ : meromorphicOrderAt f₁ x with
   | top =>
     rw [meromorphicOrderAt_eq_top_iff] at h₁f₁ ⊢
-    filter_upwards [hf₁₂
+    filter_upwards [hf₁₂, h₁f₁] using by grind
+  | coe n =>
+    obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 h₁f₁
+    rw [meromorphicOrderAt_eq_int_iff (hf₁.congr hf₁₂)]
+    use g, h₁g, h₂g
+    filter_upwards [hf₁₂, h₃g] using by grind
 
 中文:
 定理 meromorphicOrderAt_congr
@@ -671,7 +800,12 @@ theorem meromorphicOrderAt_congr
   cases h₁f₁ : meromorphicOrderAt f₁ x with
   | top =>
     rw [meromorphicOrderAt_eq_top_iff] at h₁f₁ ⊢
-    filter_upwards [hf₁₂
+    filter_upwards [hf₁₂, h₁f₁] using by grind
+  | coe n =>
+    obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 h₁f₁
+    rw [meromorphicOrderAt_eq_int_iff (hf₁.congr hf₁₂)]
+    use g, h₁g, h₂g
+    filter_upwards [hf₁₂, h₃g] using by grind
 
 Depends on / 依赖: MeromorphicAt, contrapose, eq_comm, filter_upwards, meromorphicOrderAt, meromorphicOrderAt_eq_int_iff, meromorphicOrderAt_eq_top_iff
 -/
@@ -704,7 +838,8 @@ lemma AnalyticAt.meromorphicOrderAt_eq
   · rw [ENat.map_top, meromorphicOrderAt_eq_top_iff]
     exact (analyticOrderAt_eq_top.mp hn).filter_mono nhdsWithin_le_nhds
   · simp_rw [ENat.map_natCast, meromorphicOrderAt_eq_int_iff hf.meromorphicAt, zpow_natCast]
-    rcases hf.analyticOrderAt_eq_natCast.mp hn
+    rcases hf.analyticOrderAt_eq_natCast.mp hn with ⟨g, h1, h2, h3⟩
+    exact ⟨g, h1, h2, h3.filter_mono nhdsWithin_le_nhds⟩
 
 中文:
 引理 AnalyticAt.meromorphicOrderAt_eq
@@ -714,7 +849,8 @@ lemma AnalyticAt.meromorphicOrderAt_eq
   · rw [ENat.map_top, meromorphicOrderAt_eq_top_iff]
     exact (analyticOrderAt_eq_top.mp hn).filter_mono nhdsWithin_le_nhds
   · simp_rw [ENat.map_natCast, meromorphicOrderAt_eq_int_iff hf.meromorphicAt, zpow_natCast]
-    rcases hf.analyticOrderAt_eq_natCast.mp hn
+    rcases hf.analyticOrderAt_eq_natCast.mp hn with ⟨g, h1, h2, h3⟩
+    exact ⟨g, h1, h2, h3.filter_mono nhdsWithin_le_nhds⟩
 
 Depends on / 依赖: ENat.map_natCast, ENat.map_top, analyticOrderAt, analyticOrderAt_eq_natCast, analyticOrderAt_eq_top, analyticOrderAt_eq_top.mp, filter_mono, h3.filter_mono, hf.analyticOrderAt_eq_natCast.mp, hf.meromorphicAt, map_natCast, map_top, meromorphicAt, meromorphicOrderAt_eq_int_iff, meromorphicOrderAt_eq_top_iff, nhdsWithin_le_nhds, simp_rw, zpow_natCast
 -/
@@ -759,7 +895,9 @@ theorem MeromorphicAt.meromorphicOrderAt_nonneg_iff
     | top => exact ⟨0, analyticAt_const, meromorphicOrderAt_eq_top_iff.mp h₀⟩
     | coe n =>
       obtain ⟨g, hg, -, hfg⟩ := (meromorphicOrderAt_eq_int_iff hf).mp h₀
-      refine ⟨fun z => (z - x) ^ n • 
+      refine ⟨fun z => (z - x) ^ n • g z, ?_, hfg⟩
+      exact (AnalyticAt.zpow_nonneg (by fun_prop) (by simpa [h₀] using nneg)).smul hg
+  · simp [meromorphicOrderAt_congr hg₂, hg₁.meromorphicOrderAt_nonneg]
 
 中文:
 定理 MeromorphicAt.meromorphicOrderAt_nonneg_iff
@@ -769,7 +907,9 @@ theorem MeromorphicAt.meromorphicOrderAt_nonneg_iff
     | top => exact ⟨0, analyticAt_const, meromorphicOrderAt_eq_top_iff.mp h₀⟩
     | coe n =>
       obtain ⟨g, hg, -, hfg⟩ := (meromorphicOrderAt_eq_int_iff hf).mp h₀
-      refine ⟨fun z => (z - x) ^ n • 
+      refine ⟨fun z => (z - x) ^ n • g z, ?_, hfg⟩
+      exact (AnalyticAt.zpow_nonneg (by fun_prop) (by simpa [h₀] using nneg)).smul hg
+  · simp [meromorphicOrderAt_congr hg₂, hg₁.meromorphicOrderAt_nonneg]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.zpow_nonneg, analyticAt_const, fun_prop, meromorphicOrderAt, meromorphicOrderAt_congr, meromorphicOrderAt_eq_int_iff, meromorphicOrderAt_eq_top_iff, meromorphicOrderAt_eq_top_iff.mp, meromorphicOrderAt_nonneg, zpow_nonneg
 -/
@@ -798,7 +938,22 @@ theorem MeromorphicAt.analyticAt
     it also vanishes at `x`.-/
     have : AnalyticAt 𝕜 (fun _ => (0 : E)) x := analyticAt_const
     apply this.congr
-    rw [← ContinuousAt.event
+    rw [← ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE continuousAt_const h']
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 ho] with y hy using by simp [hy]
+  | coe n =>
+    /- If the order is finite, then the order has to be nonnegative, as otherwise the norm of `f`
+    would tend to infinity at `x`. Then the local expression of `f` coming from its meromorphicity
+    shows that it coincides with an analytic function close to `x`, except maybe at `x`. By
+    continuity of `f`, the two functions also coincide at `x`. -/
+    rcases (meromorphicOrderAt_eq_int_iff h).1 ho with ⟨g, g_an, gx, hg⟩
+    have : 0 <= meromorphicOrderAt f x := by
+      apply (tendsto_nhds_iff_meromorphicOrderAt_nonneg h).1
+      exact ⟨f x, h'.continuousWithinAt.tendsto⟩
+    lift n to Nat using by simpa [ho] using this
+    have A : forallᶠ (z : 𝕜) in 𝓝 x, (z - x) ^ n • g z = f z := by
+      apply (ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE (by fun_prop) h').1
+      filter_upwards [hg] with z hz using by simpa using hz.symm
+    exact AnalyticAt.congr (by fun_prop) A
 
 中文:
 定理 MeromorphicAt.analyticAt
@@ -810,7 +965,22 @@ theorem MeromorphicAt.analyticAt
     it also vanishes at `x`.-/
     have : AnalyticAt 𝕜 (fun _ => (0 : E)) x := analyticAt_const
     apply this.congr
-    rw [← ContinuousAt.event
+    rw [← ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE continuousAt_const h']
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 ho] with y hy using by simp [hy]
+  | coe n =>
+    /- If the order is finite, then the order has to be nonnegative, as otherwise the norm of `f`
+    would tend to infinity at `x`. Then the local expression of `f` coming from its meromorphicity
+    shows that it coincides with an analytic function close to `x`, except maybe at `x`. By
+    continuity of `f`, the two functions also coincide at `x`. -/
+    rcases (meromorphicOrderAt_eq_int_iff h).1 ho with ⟨g, g_an, gx, hg⟩
+    have : 0 <= meromorphicOrderAt f x := by
+      apply (tendsto_nhds_iff_meromorphicOrderAt_nonneg h).1
+      exact ⟨f x, h'.continuousWithinAt.tendsto⟩
+    lift n to Nat using by simpa [ho] using this
+    have A : forallᶠ (z : 𝕜) in 𝓝 x, (z - x) ^ n • g z = f z := by
+      apply (ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE (by fun_prop) h').1
+      filter_upwards [hg] with z hz using by simpa using hz.symm
+    exact AnalyticAt.congr (by fun_prop) A
 -/
 protected theorem MeromorphicAt.analyticAt {f : 𝕜 -> E} {x : 𝕜}
     (h : MeromorphicAt f x) (h' : ContinuousAt f x) :
@@ -1059,7 +1229,10 @@ theorem meromorphicOrderAt_neg
   · rw [h₂, eq_comm]
     simp_all [meromorphicOrderAt_eq_top_iff]
   lift meromorphicOrderAt f x to Int using h₂ with n hn
-  rw [eq_comm]; rw [meromorphicOrderAt_eq_int_iff (by fun_prop)] a
+  rw [eq_comm]; rw [meromorphicOrderAt_eq_int_iff (by fun_prop)] at *
+  obtain ⟨g, hg⟩ := hn
+  use -g
+  simp_all
 
 中文:
 定理 meromorphicOrderAt_neg
@@ -1072,7 +1245,10 @@ theorem meromorphicOrderAt_neg
   · rw [h₂, eq_comm]
     simp_all [meromorphicOrderAt_eq_top_iff]
   lift meromorphicOrderAt f x to Int using h₂ with n hn
-  rw [eq_comm]; rw [meromorphicOrderAt_eq_int_iff (by fun_prop)] a
+  rw [eq_comm]; rw [meromorphicOrderAt_eq_int_iff (by fun_prop)] at *
+  obtain ⟨g, hg⟩ := hn
+  use -g
+  simp_all
 
 Depends on / 依赖: MeromorphicAt, eq_comm, fun_prop, meromorphicOrderAt, meromorphicOrderAt_eq_int_iff, meromorphicOrderAt_eq_top_iff, not_not
 -/
@@ -1122,7 +1298,16 @@ theorem meromorphicOrderAt_smul
     filter_upwards [h₂f] with z hz using by simp [hz]
   | coe m =>
     cases h₂g : meromorphicOrderAt g x with
-    | top
+    | top =>
+      simp only [add_top, meromorphicOrderAt_eq_top_iff] at h₂g ⊢
+      filter_upwards [h₂g] with z hz using by simp [hz]
+    | coe n => -- Non-trivial case: both functions do not vanish around z₀
+      rw [← WithTop.coe_add]; rw [meromorphicOrderAt_eq_int_iff (hf.smul hg)]
+      obtain ⟨F, h₁F, h₂F, h₃F⟩ := (meromorphicOrderAt_eq_int_iff hf).1 h₂f
+      obtain ⟨G, h₁G, h₂G, h₃G⟩ := (meromorphicOrderAt_eq_int_iff hg).1 h₂g
+      use F • G, h₁F.smul h₁G, by simp [h₂F, h₂G]
+      filter_upwards [self_mem_nhdsWithin, h₃F, h₃G] with a ha hfa hga
+      simp [hfa, hga, smul_comm (F a), zpow_add₀ (sub_ne_zero.mpr ha), mul_smul]
 
 中文:
 定理 meromorphicOrderAt_smul
@@ -1135,7 +1320,16 @@ theorem meromorphicOrderAt_smul
     filter_upwards [h₂f] with z hz using by simp [hz]
   | coe m =>
     cases h₂g : meromorphicOrderAt g x with
-    | top
+    | top =>
+      simp only [add_top, meromorphicOrderAt_eq_top_iff] at h₂g ⊢
+      filter_upwards [h₂g] with z hz using by simp [hz]
+    | coe n => -- Non-trivial case: both functions do not vanish around z₀
+      rw [← WithTop.coe_add]; rw [meromorphicOrderAt_eq_int_iff (hf.smul hg)]
+      obtain ⟨F, h₁F, h₂F, h₃F⟩ := (meromorphicOrderAt_eq_int_iff hf).1 h₂f
+      obtain ⟨G, h₁G, h₂G, h₃G⟩ := (meromorphicOrderAt_eq_int_iff hg).1 h₂g
+      use F • G, h₁F.smul h₁G, by simp [h₂F, h₂G]
+      filter_upwards [self_mem_nhdsWithin, h₃F, h₃G] with a ha hfa hga
+      simp [hfa, hga, smul_comm (F a), zpow_add₀ (sub_ne_zero.mpr ha), mul_smul]
 -/
 @[to_fun] theorem meromorphicOrderAt_smul [NormedAlgebra 𝕜 R] [IsScalarTower 𝕜 R E]
     {f : 𝕜 -> R} {g : 𝕜 -> E} (hf : MeromorphicAt f x) (hg : MeromorphicAt g x) :
@@ -1190,7 +1384,11 @@ theorem meromorphicOrderAt_prod
     · exact ⟨1, analyticAt_const, by simp⟩
     · apply MeromorphicAt.const
   | insert a s ha hs =>
-    rw [Finset.sum_i
+    rw [Finset.sum_insert ha]; rw [Finset.prod_insert ha]; rw [meromorphicOrderAt_mul
+      (hf a (Finset.mem_insert_self a s))
+      (MeromorphicAt.prod (fun i hi => hf i (Finset.mem_insert_of_mem hi)))]
+    congr
+    rw [hs (fun i hi => hf i (Finset.mem_insert_of_mem hi))]
 
 中文:
 定理 meromorphicOrderAt_prod
@@ -1203,7 +1401,11 @@ theorem meromorphicOrderAt_prod
     · exact ⟨1, analyticAt_const, by simp⟩
     · apply MeromorphicAt.const
   | insert a s ha hs =>
-    rw [Finset.sum_i
+    rw [Finset.sum_insert ha]; rw [Finset.prod_insert ha]; rw [meromorphicOrderAt_mul
+      (hf a (Finset.mem_insert_self a s))
+      (MeromorphicAt.prod (fun i hi => hf i (Finset.mem_insert_of_mem hi)))]
+    congr
+    rw [hs (fun i hi => hf i (Finset.mem_insert_of_mem hi))]
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_o, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_empty, Finset.prod_insert, Finset.sum_empty, Finset.sum_insert, MeromorphicAt, MeromorphicAt.const, MeromorphicAt.prod, WithTop, WithTop.coe_zero, analyticAt_const, classical, coe_zero, insert, mem_insert_o, mem_insert_of_mem
 -/
@@ -1293,7 +1495,13 @@ theorem meromorphicOrderAt_pow
     · exact ⟨1, analyticAt_const, by simp⟩
     · apply MeromorphicAt.const
   case succ n hn =>
-    simp only [pow_add, pow_one, meromorphicOrderAt_mu
+    simp only [pow_add, pow_one, meromorphicOrderAt_mul (hf.pow n) hf, hn, Nat.cast_add,
+      Nat.cast_one]
+    cases meromorphicOrderAt f x
+    · aesop
+    · norm_cast
+      simp only [Nat.cast_add, Nat.cast_one]
+      ring
 
 中文:
 定理 meromorphicOrderAt_pow
@@ -1306,7 +1514,13 @@ theorem meromorphicOrderAt_pow
     · exact ⟨1, analyticAt_const, by simp⟩
     · apply MeromorphicAt.const
   case succ n hn =>
-    simp only [pow_add, pow_one, meromorphicOrderAt_mu
+    simp only [pow_add, pow_one, meromorphicOrderAt_mul (hf.pow n) hf, hn, Nat.cast_add,
+      Nat.cast_one]
+    cases meromorphicOrderAt f x
+    · aesop
+    · norm_cast
+      simp only [Nat.cast_add, Nat.cast_one]
+      ring
 -/
 @[to_fun] theorem meromorphicOrderAt_pow {f : 𝕜 -> 𝕜'} {x : 𝕜} (hf : MeromorphicAt f x) {n : Nat} :
     meromorphicOrderAt (f ^ n) x = n * meromorphicOrderAt f x := by
@@ -1339,7 +1553,23 @@ theorem meromorphicOrderAt_zpow
     · exact ⟨1, analyticAt_const, by simp⟩
     · apply MeromorphicAt.const
   -- Trivial case: f locally zero
-  by_cases h : mero
+  by_cases h : meromorphicOrderAt f x = ⊤
+  · simp only [h, ne_eq, WithTop.coe_eq_zero, hn, not_false_eq_true, WithTop.mul_top]
+    rw [meromorphicOrderAt_eq_top_iff] at *
+    filter_upwards [h]
+    intro y hy
+    simp [hy, zero_zpow n hn]
+  -- General case
+  obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff hf).1 h
+  rw [← WithTop.coe_untop₀_of_ne_top h]; rw [← WithTop.coe_mul]; rw [meromorphicOrderAt_eq_int_iff (hf.zpow n)]
+  use g ^ n, h₁g.zpow h₂g
+  constructor
+  · simp_all [zpow_eq_zero_iff hn]
+  · filter_upwards [h₃g]
+    intro y hy
+    rw [Pi.pow_apply]; rw [hy]; rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [mul_zpow]; rw [← map_zpow₀]
+    congr 1
+    rw [mul_comm]; rw [zpow_mul]
 
 中文:
 定理 meromorphicOrderAt_zpow
@@ -1352,7 +1582,23 @@ theorem meromorphicOrderAt_zpow
     · exact ⟨1, analyticAt_const, by simp⟩
     · apply MeromorphicAt.const
   -- Trivial case: f locally zero
-  by_cases h : mero
+  by_cases h : meromorphicOrderAt f x = ⊤
+  · simp only [h, ne_eq, WithTop.coe_eq_zero, hn, not_false_eq_true, WithTop.mul_top]
+    rw [meromorphicOrderAt_eq_top_iff] at *
+    filter_upwards [h]
+    intro y hy
+    simp [hy, zero_zpow n hn]
+  -- General case
+  obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_ne_top_iff hf).1 h
+  rw [← WithTop.coe_untop₀_of_ne_top h]; rw [← WithTop.coe_mul]; rw [meromorphicOrderAt_eq_int_iff (hf.zpow n)]
+  use g ^ n, h₁g.zpow h₂g
+  constructor
+  · simp_all [zpow_eq_zero_iff hn]
+  · filter_upwards [h₃g]
+    intro y hy
+    rw [Pi.pow_apply]; rw [hy]; rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [mul_zpow]; rw [← map_zpow₀]
+    congr 1
+    rw [mul_comm]; rw [zpow_mul]
 -/
 @[to_fun] theorem meromorphicOrderAt_zpow {f : 𝕜 -> 𝕜'} {x : 𝕜} (hf : MeromorphicAt f x) {n : Int} :
     meromorphicOrderAt (f ^ n) x = n * meromorphicOrderAt f x := by
@@ -1395,7 +1641,17 @@ theorem meromorphicOrderAt_inv
     simp [hf, this]
   by_cases h₂f : meromorphicOrderAt f x = ⊤
   · rw [h₂f, ← LinearOrderedAddCommGroupWithTop.neg_top, neg_neg]
-    rw [meromorphicOrderAt_eq_top_iff] at
+    rw [meromorphicOrderAt_eq_top_iff] at *
+    filter_upwards [h₂f]
+    simp
+  lift meromorphicOrderAt f x to Int using h₂f with a ha
+  apply (meromorphicOrderAt_eq_int_iff hf.inv).2
+  obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff hf).1 ha.symm
+  use g⁻¹, h₁g.inv h₂g, inv_eq_zero.not.2 h₂g
+  rw [eventually_nhdsWithin_iff] at *
+  filter_upwards [h₃g]
+  intro _ h₁a h₂a
+  simp [h₁a h₂a, Algebra.smul_def, mul_comm]
 
 中文:
 定理 meromorphicOrderAt_inv
@@ -1408,7 +1664,17 @@ theorem meromorphicOrderAt_inv
     simp [hf, this]
   by_cases h₂f : meromorphicOrderAt f x = ⊤
   · rw [h₂f, ← LinearOrderedAddCommGroupWithTop.neg_top, neg_neg]
-    rw [meromorphicOrderAt_eq_top_iff] at
+    rw [meromorphicOrderAt_eq_top_iff] at *
+    filter_upwards [h₂f]
+    simp
+  lift meromorphicOrderAt f x to Int using h₂f with a ha
+  apply (meromorphicOrderAt_eq_int_iff hf.inv).2
+  obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff hf).1 ha.symm
+  use g⁻¹, h₁g.inv h₂g, inv_eq_zero.not.2 h₂g
+  rw [eventually_nhdsWithin_iff] at *
+  filter_upwards [h₃g]
+  intro _ h₁a h₂a
+  simp [h₁a h₂a, Algebra.smul_def, mul_comm]
 -/
 @[to_fun] theorem meromorphicOrderAt_inv {f : 𝕜 -> 𝕜'} :
     meromorphicOrderAt (f⁻¹) x = -meromorphicOrderAt f x := by
@@ -1518,7 +1784,29 @@ theorem meromorphicOrderAt_add
     filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₂f₁]
     simp
   by_cases h₂f₂ : meromorphicOrderAt f₂ x = ⊤
-  · simp only [h₂f₂, 
+  · simp only [h₂f₂, le_top, inf_of_le_left]
+    rw [meromorphicOrderAt_congr]
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₂f₂]
+    simp
+  -- General case
+  lift meromorphicOrderAt f₁ x to Int using h₂f₁ with n₁ hn₁
+  lift meromorphicOrderAt f₂ x to Int using h₂f₂ with n₂ hn₂
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  let n := min n₁ n₂
+  let g := (fun z => (z - x) ^ (n₁ - n)) • g₁ + (fun z => (z - x) ^ (n₂ - n)) • g₂
+  have h₁g : AnalyticAt 𝕜 g x := by
+    apply AnalyticAt.add
+    · apply (AnalyticAt.zpow_nonneg (by fun_prop) (sub_nonneg.2 (min_le_left n₁ n₂))).smul h₁g₁
+    apply (AnalyticAt.zpow_nonneg (by fun_prop) (sub_nonneg.2 (min_le_right n₁ n₂))).smul h₁g₂
+  have : f₁ + f₂ =ᶠ[𝓝[!=] x] ((· - x) ^ n) • g := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin]
+    simp_all [g, ← smul_assoc, ← zpow_add', sub_ne_zero]
+  have t₀ : MeromorphicAt ((· - x) ^ n) x := by fun_prop
+  have t₁ : meromorphicOrderAt ((· - x) ^ n) x = n :=
+    (meromorphicOrderAt_eq_int_iff t₀).2 ⟨1, analyticAt_const, by simp⟩
+  rw [meromorphicOrderAt_congr this]; rw [meromorphicOrderAt_smul t₀ h₁g.meromorphicAt]; rw [t₁]
+  exact le_add_of_nonneg_right h₁g.meromorphicOrderAt_nonneg
 
 中文:
 定理 meromorphicOrderAt_add
@@ -1530,7 +1818,29 @@ theorem meromorphicOrderAt_add
     filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₂f₁]
     simp
   by_cases h₂f₂ : meromorphicOrderAt f₂ x = ⊤
-  · simp only [h₂f₂, 
+  · simp only [h₂f₂, le_top, inf_of_le_left]
+    rw [meromorphicOrderAt_congr]
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₂f₂]
+    simp
+  -- General case
+  lift meromorphicOrderAt f₁ x to Int using h₂f₁ with n₁ hn₁
+  lift meromorphicOrderAt f₂ x to Int using h₂f₂ with n₂ hn₂
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  let n := min n₁ n₂
+  let g := (fun z => (z - x) ^ (n₁ - n)) • g₁ + (fun z => (z - x) ^ (n₂ - n)) • g₂
+  have h₁g : AnalyticAt 𝕜 g x := by
+    apply AnalyticAt.add
+    · apply (AnalyticAt.zpow_nonneg (by fun_prop) (sub_nonneg.2 (min_le_left n₁ n₂))).smul h₁g₁
+    apply (AnalyticAt.zpow_nonneg (by fun_prop) (sub_nonneg.2 (min_le_right n₁ n₂))).smul h₁g₂
+  have : f₁ + f₂ =ᶠ[𝓝[!=] x] ((· - x) ^ n) • g := by
+    filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin]
+    simp_all [g, ← smul_assoc, ← zpow_add', sub_ne_zero]
+  have t₀ : MeromorphicAt ((· - x) ^ n) x := by fun_prop
+  have t₁ : meromorphicOrderAt ((· - x) ^ n) x = n :=
+    (meromorphicOrderAt_eq_int_iff t₀).2 ⟨1, analyticAt_const, by simp⟩
+  rw [meromorphicOrderAt_congr this]; rw [meromorphicOrderAt_smul t₀ h₁g.meromorphicAt]; rw [t₁]
+  exact le_add_of_nonneg_right h₁g.meromorphicOrderAt_nonneg
 -/
 theorem meromorphicOrderAt_add (hf₁ : MeromorphicAt f₁ x) (hf₂ : MeromorphicAt f₂ x) :
     min (meromorphicOrderAt f₁ x) (meromorphicOrderAt f₂ x) <= meromorphicOrderAt (f₁ + f₂) x := by
@@ -1579,7 +1889,21 @@ lemma meromorphicOrderAt_add_eq_left_of_lt
   -- Trivial case: f₂ vanishes identically around z₀
   by_cases h₁f₂ : meromorphicOrderAt f₂ x = ⊤
   · rw [meromorphicOrderAt_congr]
-   
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₁f₂]
+    simp
+  -- General case
+  lift meromorphicOrderAt f₂ x to Int using h₁f₂ with n₂ hn₂
+  lift meromorphicOrderAt f₁ x to Int using h.ne_top with n₁ hn₁
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  rw [meromorphicOrderAt_eq_int_iff (hf₁.add hf₂)]
+  refine ⟨g₁ + (· - x) ^ (n₂ - n₁) • g₂, ?_, ?_, ?_⟩
+  · apply h₁g₁.add (AnalyticAt.smul _ h₁g₂)
+    apply AnalyticAt.zpow_nonneg (by fun_prop)
+      (sub_nonneg.2 (le_of_lt (WithTop.coe_lt_coe.1 h)))
+  · simpa [zero_zpow _ <| sub_ne_zero.mpr (WithTop.coe_lt_coe.1 h).ne']
+  · filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin]
+    simp_all [smul_add, ← smul_assoc, ← zpow_add', sub_ne_zero]
 
 中文:
 引理 meromorphicOrderAt_add_eq_left_of_lt
@@ -1593,7 +1917,21 @@ lemma meromorphicOrderAt_add_eq_left_of_lt
   -- Trivial case: f₂ vanishes identically around z₀
   by_cases h₁f₂ : meromorphicOrderAt f₂ x = ⊤
   · rw [meromorphicOrderAt_congr]
-   
+    filter_upwards [meromorphicOrderAt_eq_top_iff.1 h₁f₂]
+    simp
+  -- General case
+  lift meromorphicOrderAt f₂ x to Int using h₁f₂ with n₂ hn₂
+  lift meromorphicOrderAt f₁ x to Int using h.ne_top with n₁ hn₁
+  obtain ⟨g₁, h₁g₁, h₂g₁, h₃g₁⟩ := (meromorphicOrderAt_eq_int_iff hf₁).1 hn₁.symm
+  obtain ⟨g₂, h₁g₂, h₂g₂, h₃g₂⟩ := (meromorphicOrderAt_eq_int_iff hf₂).1 hn₂.symm
+  rw [meromorphicOrderAt_eq_int_iff (hf₁.add hf₂)]
+  refine ⟨g₁ + (· - x) ^ (n₂ - n₁) • g₂, ?_, ?_, ?_⟩
+  · apply h₁g₁.add (AnalyticAt.smul _ h₁g₂)
+    apply AnalyticAt.zpow_nonneg (by fun_prop)
+      (sub_nonneg.2 (le_of_lt (WithTop.coe_lt_coe.1 h)))
+  · simpa [zero_zpow _ <| sub_ne_zero.mpr (WithTop.coe_lt_coe.1 h).ne']
+  · filter_upwards [h₃g₁, h₃g₂, self_mem_nhdsWithin]
+    simp_all [smul_add, ← smul_assoc, ← zpow_add', sub_ne_zero]
 
 Depends on / 依赖: MeromorphicAt, contrapose
 -/
@@ -1698,7 +2036,46 @@ theorem isClopen_setOfPred_meromorphicOrderAt_eq_top
     · -- Case: f is locally zero in a punctured neighborhood of z
       rw [← meromorphicOrderAt_eq_top_iff] at h
       tauto
-    · -- C
+    · -- Case: f is locally nonzero in a punctured neighborhood of z
+      obtain ⟨t', h₁t', h₂t', h₃t'⟩ := eventually_nhds_iff.1 (eventually_nhdsWithin_iff.1 h)
+      use Subtype.val ⁻¹' t'
+      constructor
+      · intro w hw
+        push _ in _
+        by_cases h₁w : w = z
+        · rwa [h₁w]
+        · rw [meromorphicOrderAt_eq_top_iff, not_eventually]
+          apply Filter.Eventually.frequently
+          rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff]
+          use t' \ {z.1}, fun y h₁y h₂y => h₁t' y h₁y.1 h₁y.2, h₂t'.sdiff isClosed_singleton, hw,
+            mem_singleton_iff.not.2 (Subtype.coe_ne_coe.mpr h₁w)
+      · exact ⟨isOpen_induced h₂t', h₃t'⟩
+  · apply isOpen_iff_forall_mem_open.mpr
+    intro z hz
+    conv =>
+      arg 1; intro; left; right; arg 1; intro
+      rw [meromorphicOrderAt_eq_top_iff]; rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff]
+    simp only [mem_ofPred_eq] at hz
+    rw [meromorphicOrderAt_eq_top_iff]; rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff] at hz
+    obtain ⟨t', h₁t', h₂t', h₃t'⟩ := hz
+    use Subtype.val ⁻¹' t'
+    simp only [mem_compl_iff, mem_singleton_iff, isOpen_induced h₂t', mem_preimage,
+      h₃t', and_self, and_true]
+    intro w hw
+    simp only [mem_ofPred_eq]
+    -- Trivial case: w = z
+    by_cases h₁w : w = z
+    · rw [h₁w]
+      tauto
+    -- Nontrivial case: w ≠ z
+    use t' \ {z.1}, fun y h₁y _ => h₁t' y (mem_of_mem_sdiff h₁y) (mem_of_mem_inter_right h₁y)
+    constructor
+    · exact h₂t'.sdiff isClosed_singleton
+    · apply (mem_sdiff w).1
+      exact ⟨hw, mem_singleton_iff.not.1 (Subtype.coe_ne_coe.2 h₁w)⟩
+
+@[deprecated (since := "2026-07-09")]
+alias isClopen_setOf_meromorphicOrderAt_eq_top := isClopen_setOfPred_meromorphicOrderAt_eq_top
 
 中文:
 定理 isClopen_setOfPred_meromorphicOrderAt_eq_top
@@ -1711,7 +2088,46 @@ theorem isClopen_setOfPred_meromorphicOrderAt_eq_top
     · -- Case: f is locally zero in a punctured neighborhood of z
       rw [← meromorphicOrderAt_eq_top_iff] at h
       tauto
-    · -- C
+    · -- Case: f is locally nonzero in a punctured neighborhood of z
+      obtain ⟨t', h₁t', h₂t', h₃t'⟩ := eventually_nhds_iff.1 (eventually_nhdsWithin_iff.1 h)
+      use Subtype.val ⁻¹' t'
+      constructor
+      · intro w hw
+        push _ in _
+        by_cases h₁w : w = z
+        · rwa [h₁w]
+        · rw [meromorphicOrderAt_eq_top_iff, not_eventually]
+          apply Filter.Eventually.frequently
+          rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff]
+          use t' \ {z.1}, fun y h₁y h₂y => h₁t' y h₁y.1 h₁y.2, h₂t'.sdiff isClosed_singleton, hw,
+            mem_singleton_iff.not.2 (Subtype.coe_ne_coe.mpr h₁w)
+      · exact ⟨isOpen_induced h₂t', h₃t'⟩
+  · apply isOpen_iff_forall_mem_open.mpr
+    intro z hz
+    conv =>
+      arg 1; intro; left; right; arg 1; intro
+      rw [meromorphicOrderAt_eq_top_iff]; rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff]
+    simp only [mem_ofPred_eq] at hz
+    rw [meromorphicOrderAt_eq_top_iff]; rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff] at hz
+    obtain ⟨t', h₁t', h₂t', h₃t'⟩ := hz
+    use Subtype.val ⁻¹' t'
+    simp only [mem_compl_iff, mem_singleton_iff, isOpen_induced h₂t', mem_preimage,
+      h₃t', and_self, and_true]
+    intro w hw
+    simp only [mem_ofPred_eq]
+    -- Trivial case: w = z
+    by_cases h₁w : w = z
+    · rw [h₁w]
+      tauto
+    -- Nontrivial case: w ≠ z
+    use t' \ {z.1}, fun y h₁y _ => h₁t' y (mem_of_mem_sdiff h₁y) (mem_of_mem_inter_right h₁y)
+    constructor
+    · exact h₂t'.sdiff isClosed_singleton
+    · apply (mem_sdiff w).1
+      exact ⟨hw, mem_singleton_iff.not.1 (Subtype.coe_ne_coe.2 h₁w)⟩
+
+@[deprecated (since := "2026-07-09")]
+alias isClopen_setOf_meromorphicOrderAt_eq_top := isClopen_setOfPred_meromorphicOrderAt_eq_top
 
 Depends on / 依赖: Subtype, Subtype.val, eventually_eq_zero_or_eventually_ne_zero, eventually_nhdsWithin_iff, eventually_nhds_iff, isOpen_compl_iff, isOpen_iff_forall_mem_open, locally, meromorphicOrderAt_eq_top_iff, neighborhood, nonzero, punctured
 -/
@@ -1780,7 +2196,13 @@ theorem exists_meromorphicOrderAt_ne_top_iff_forall
       have : u ∉ (∅ : Set U) := by exact fun a => a
       rw [← h] at this
       tauto
-    · obtain ⟨
+    · obtain ⟨u, hU⟩ := h₂f
+      have : u in univ := by trivial
+      rw [← h] at this
+      tauto
+  · intro h₂f
+    obtain ⟨v, hv⟩ := hU.nonempty
+    use ⟨v, hv⟩, h₂f ⟨v, hv⟩
 
 中文:
 定理 存在_meromorphicOrderAt_ne_top_iff_对任意
@@ -1794,7 +2216,13 @@ theorem exists_meromorphicOrderAt_ne_top_iff_forall
       have : u ∉ (∅ : Set U) := by exact fun a => a
       rw [← h] at this
       tauto
-    · obtain ⟨
+    · obtain ⟨u, hU⟩ := h₂f
+      have : u in univ := by trivial
+      rw [← h] at this
+      tauto
+  · intro h₂f
+    obtain ⟨v, hv⟩ := hU.nonempty
+    use ⟨v, hv⟩, h₂f ⟨v, hv⟩
 
 Depends on / 依赖: hU.isPreconnected, hU.nonempty, hf.isClopen_setOfPred_meromorphicOrderAt_eq_top, isClopen_iff, isClopen_setOfPred_meromorphicOrderAt_eq_top, isPreconnected, isPreconnected_iff_preconnectedSpace, nonempty
 -/
@@ -1875,7 +2303,10 @@ theorem eventually_analyticAt
   and continuous (thanks to the formula for a meromorphic function around the point `x`), so it is
   analytic. -/
   have : forallᶠ y in 𝓝[U \ {x}] x, ContinuousAt f y := by
-    have : U \ {x} subset
+    have : U \ {x} subseteq {x}ᶜ := by simp
+    exact nhdsWithin_mono _ this (h x hx).eventually_continuousAt
+  filter_upwards [this, self_mem_nhdsWithin] with y hy h'y
+  exact (h y h'y.1).analyticAt hy
 
 中文:
 定理 eventually_analyticAt
@@ -1885,7 +2316,10 @@ theorem eventually_analyticAt
   and continuous (thanks to the formula for a meromorphic function around the point `x`), so it is
   analytic. -/
   have : forallᶠ y in 𝓝[U \ {x}] x, ContinuousAt f y := by
-    have : U \ {x} subset
+    have : U \ {x} subseteq {x}ᶜ := by simp
+    exact nhdsWithin_mono _ this (h x hx).eventually_continuousAt
+  filter_upwards [this, self_mem_nhdsWithin] with y hy h'y
+  exact (h y h'y.1).analyticAt hy
 -/
 theorem eventually_analyticAt (h : MeromorphicOn f U) (hx : x in U) :
     forallᶠ y in 𝓝[U \ {x}] x, AnalyticAt 𝕜 f y := by
@@ -1910,7 +2344,7 @@ theorem eventually_analyticAt_or_mem_compl
   simp only [mem_compl_iff, eventually_sup]
   refine ⟨?_, ?_⟩
   · filter_upwards [h.eventually_analyticAt hx] with y hy using Or.inl hy
-  · filter_upwards [self_mem_nhdsWithin] with y hy usin
+  · filter_upwards [self_mem_nhdsWithin] with y hy using Or.inr hy
 
 中文:
 定理 eventually_analyticAt_or_mem_compl
@@ -1921,7 +2355,7 @@ theorem eventually_analyticAt_or_mem_compl
   simp only [mem_compl_iff, eventually_sup]
   refine ⟨?_, ?_⟩
   · filter_upwards [h.eventually_analyticAt hx] with y hy using Or.inl hy
-  · filter_upwards [self_mem_nhdsWithin] with y hy usin
+  · filter_upwards [self_mem_nhdsWithin] with y hy using Or.inr hy
 
 Depends on / 依赖: Classical, Classical.em, Or.inl, Or.inr, eventually_analyticAt, eventually_sup, filter_upwards, h.eventually_analyticAt, mem_compl_iff, nhdsWithin_union, self_mem_nhdsWithin
 -/
@@ -1982,7 +2416,24 @@ theorem codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top
   rw [Filter.disjoint_principal_right]
   rcases (hf x hx).eventually_eq_zero_or_eventually_ne_zero with h₁f | h₁f
   · filter_upwards [eventually_eventually_nhdsWithin.2 h₁f] with a h₁a
-    suffices fora
+    suffices forallᶠ (z : 𝕜) in 𝓝[!=] a, f z = 0 by
+      simp +contextual [meromorphicOrderAt_eq_top_iff, this]
+    obtain rfl | hax := eq_or_ne a x
+    · exact h₁a
+    rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff] at h₁a ⊢
+    obtain ⟨t, h₁t, h₂t, h₃t⟩ := h₁a
+    use t \ {x}, fun y h₁y _ => h₁t y h₁y.1 h₁y.2
+    exact ⟨h₂t.sdiff isClosed_singleton, Set.mem_sdiff_of_mem h₃t hax⟩
+  · filter_upwards [hf.eventually_analyticAt_or_mem_compl hx, h₁f] with a h₁a h'₁a
+    simp only [mem_compl_iff, Set.mem_sdiff, mem_image, mem_ofPred_eq, Subtype.exists,
+      exists_and_right, exists_eq_right, not_exists, not_or, not_and, not_forall, Decidable.not_not]
+    rcases h₁a with h' | h'
+    · simp +contextual [h'.meromorphicOrderAt_eq, h'.analyticOrderAt_eq_zero.2, h'₁a]
+    · exact fun ha => (h' ha).elim
+
+@[deprecated (since := "2026-07-09")]
+alias codiscrete_setOf_meromorphicOrderAt_eq_zero_or_top :=
+  codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top
 
 中文:
 定理 codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top
@@ -1993,7 +2444,24 @@ theorem codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top
   rw [Filter.disjoint_principal_right]
   rcases (hf x hx).eventually_eq_zero_or_eventually_ne_zero with h₁f | h₁f
   · filter_upwards [eventually_eventually_nhdsWithin.2 h₁f] with a h₁a
-    suffices fora
+    suffices forallᶠ (z : 𝕜) in 𝓝[!=] a, f z = 0 by
+      simp +contextual [meromorphicOrderAt_eq_top_iff, this]
+    obtain rfl | hax := eq_or_ne a x
+    · exact h₁a
+    rw [eventually_nhdsWithin_iff]; rw [eventually_nhds_iff] at h₁a ⊢
+    obtain ⟨t, h₁t, h₂t, h₃t⟩ := h₁a
+    use t \ {x}, fun y h₁y _ => h₁t y h₁y.1 h₁y.2
+    exact ⟨h₂t.sdiff isClosed_singleton, Set.mem_sdiff_of_mem h₃t hax⟩
+  · filter_upwards [hf.eventually_analyticAt_or_mem_compl hx, h₁f] with a h₁a h'₁a
+    simp only [mem_compl_iff, Set.mem_sdiff, mem_image, mem_ofPred_eq, Subtype.exists,
+      exists_and_right, exists_eq_right, not_exists, not_or, not_and, not_forall, Decidable.not_not]
+    rcases h₁a with h' | h'
+    · simp +contextual [h'.meromorphicOrderAt_eq, h'.analyticOrderAt_eq_zero.2, h'₁a]
+    · exact fun ha => (h' ha).elim
+
+@[deprecated (since := "2026-07-09")]
+alias codiscrete_setOf_meromorphicOrderAt_eq_zero_or_top :=
+  codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top
 
 Depends on / 依赖: Filter, Filter.disjoint_principal_right, contextual, disjoint_principal_right, eq_or_ne, eventually_eq_zero_or_eventually_ne_zero, eventually_eventually_nhdsWithin, eventually_nhdsWithin_iff, eventually_nhds_iff, filter_upwards, mem_codiscreteWithin, mem_codiscrete_subtype_iff_mem_codiscreteWithin, meromorphicOrderAt_eq_top_iff
 -/
@@ -2037,7 +2505,7 @@ theorem codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zero_or_top
 
 @[deprecated (since := "2026-07-09")]
 alias codiscreteWithin_setOf_meromorphicOrderAt_eq_zero_or_top :=
-  codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zer
+  codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zero_or_top
 
 中文:
 定理 codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zero_or_top
@@ -2050,7 +2518,7 @@ alias codiscreteWithin_setOf_meromorphicOrderAt_eq_zero_or_top :=
 
 @[deprecated (since := "2026-07-09")]
 alias codiscreteWithin_setOf_meromorphicOrderAt_eq_zero_or_top :=
-  codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zer
+  codiscreteWithin_setOfPred_meromorphicOrderAt_eq_zero_or_top
 
 Depends on / 依赖: codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top, convert, f.codiscrete_setOfPred_meromorphicOrderAt_eq_zero_or_top, mem_codiscrete_subtype_iff_mem_codiscreteWithin
 -/
@@ -2086,7 +2554,20 @@ lemma MeromorphicAt.meromorphicOrderAt_comp
   · rw [hf', WithTop.top_mul]
     · rw [meromorphicOrderAt_eq_top_iff] at hf' ⊢
       rw [Function.comp_def]; rw [← eventually_map (P := (f · = 0))]
-     
+      exact EventuallyEq.filter_mono hf' (hg.map_nhdsNE hg_nc)
+    · simp [(show AnalyticAt 𝕜 (g · - g x) x by fun_prop).analyticOrderAt_eq_zero]
+  -- Now the interesting case. First unpack the data
+  have hr := (WithTop.coe_untop₀_of_ne_top hf').symm
+  rw [meromorphicOrderAt_ne_top_iff hf] at hf'
+  set r := (meromorphicOrderAt f (g x)).untop₀
+  rw [hr]
+  -- Now write `f = (· - g x) ^ r • F` for `F` analytic and nonzero at `g x`
+  obtain ⟨F, hFan, hFne, hFev⟩ := hf'
+  have aux1 : f ∘ g =ᶠ[𝓝[!=] x] (g · - g x) ^ r • (F ∘ g) := hFev.comp_tendsto (hg.map_nhdsNE hg_nc)
+  have aux2 : meromorphicOrderAt (F ∘ g) x = 0 := by
+    rw [AnalyticAt.meromorphicOrderAt_eq (by fun_prop)]; rw [analyticOrderAt_eq_zero.mpr (by exact .inr hFne)]; rw [ENat.map_zero]; rw [CharP.cast_eq_zero]; rw [WithTop.coe_zero]
+  rw [meromorphicOrderAt_congr aux1]; rw [meromorphicOrderAt_smul ?_ (AnalyticAt.meromorphicAt ?_)]; rw [aux2]; rw [add_zero]; rw [meromorphicOrderAt_zpow]; rw [AnalyticAt.meromorphicOrderAt_eq] <;>
+  fun_prop
 
 中文:
 引理 MeromorphicAt.meromorphicOrderAt_comp
@@ -2097,7 +2578,20 @@ lemma MeromorphicAt.meromorphicOrderAt_comp
   · rw [hf', WithTop.top_mul]
     · rw [meromorphicOrderAt_eq_top_iff] at hf' ⊢
       rw [Function.comp_def]; rw [← eventually_map (P := (f · = 0))]
-     
+      exact EventuallyEq.filter_mono hf' (hg.map_nhdsNE hg_nc)
+    · simp [(show AnalyticAt 𝕜 (g · - g x) x by fun_prop).analyticOrderAt_eq_zero]
+  -- Now the interesting case. First unpack the data
+  have hr := (WithTop.coe_untop₀_of_ne_top hf').symm
+  rw [meromorphicOrderAt_ne_top_iff hf] at hf'
+  set r := (meromorphicOrderAt f (g x)).untop₀
+  rw [hr]
+  -- Now write `f = (· - g x) ^ r • F` for `F` analytic and nonzero at `g x`
+  obtain ⟨F, hFan, hFne, hFev⟩ := hf'
+  have aux1 : f ∘ g =ᶠ[𝓝[!=] x] (g · - g x) ^ r • (F ∘ g) := hFev.comp_tendsto (hg.map_nhdsNE hg_nc)
+  have aux2 : meromorphicOrderAt (F ∘ g) x = 0 := by
+    rw [AnalyticAt.meromorphicOrderAt_eq (by fun_prop)]; rw [analyticOrderAt_eq_zero.mpr (by exact .inr hFne)]; rw [ENat.map_zero]; rw [CharP.cast_eq_zero]; rw [WithTop.coe_zero]
+  rw [meromorphicOrderAt_congr aux1]; rw [meromorphicOrderAt_smul ?_ (AnalyticAt.meromorphicAt ?_)]; rw [aux2]; rw [add_zero]; rw [meromorphicOrderAt_zpow]; rw [AnalyticAt.meromorphicOrderAt_eq] <;>
+  fun_prop
 -/
 lemma MeromorphicAt.meromorphicOrderAt_comp (hf : MeromorphicAt f (g x)) (hg : AnalyticAt 𝕜 g x)
     (hg_nc : ¬EventuallyConst g (𝓝 x)) :
@@ -2134,7 +2628,8 @@ lemma meromorphicOrderAt_comp_of_deriv_ne_zero
   · have hgo : analyticOrderAt _ x = 1 := hg.analyticOrderAt_sub_eq_one_of_deriv_ne_zero hg'
     rw [hf.meromorphicOrderAt_comp hg]; rw [hgo] <;>
     simp [eventuallyConst_iff_analyticOrderAt_sub_eq_top, hgo]
-  · rw [meromorphicOrderAt_of_not_meromorphicAt hf
+  · rw [meromorphicOrderAt_of_not_meromorphicAt hf, meromorphicOrderAt_of_not_meromorphicAt]
+    rwa [meromorphicAt_comp_iff_of_deriv_ne_zero hg hg']
 
 中文:
 引理 meromorphicOrderAt_comp_of_deriv_ne_zero
@@ -2144,7 +2639,8 @@ lemma meromorphicOrderAt_comp_of_deriv_ne_zero
   · have hgo : analyticOrderAt _ x = 1 := hg.analyticOrderAt_sub_eq_one_of_deriv_ne_zero hg'
     rw [hf.meromorphicOrderAt_comp hg]; rw [hgo] <;>
     simp [eventuallyConst_iff_analyticOrderAt_sub_eq_top, hgo]
-  · rw [meromorphicOrderAt_of_not_meromorphicAt hf
+  · rw [meromorphicOrderAt_of_not_meromorphicAt hf, meromorphicOrderAt_of_not_meromorphicAt]
+    rwa [meromorphicAt_comp_iff_of_deriv_ne_zero hg hg']
 
 Depends on / 依赖: MeromorphicAt, analyticOrderAt, analyticOrderAt_sub_eq_one_of_deriv_ne_zero, eventuallyConst_iff_analyticOrderAt_sub_eq_top, hf.meromorphicOrderAt_comp, hg.analyticOrderAt_sub_eq_one_of_deriv_ne_zero, meromorphicAt_comp_iff_of_deriv_ne_zero, meromorphicOrderAt_comp, meromorphicOrderAt_of_not_meromorphicAt
 -/
@@ -2236,7 +2732,7 @@ lemma meromorphicOrderAt_smul_of_ne_zero
   · simp [meromorphicOrderAt_smul hg.meromorphicAt hf, hg.meromorphicOrderAt_eq,
       hg.analyticOrderAt_eq_zero.mpr hg']
   · rw [meromorphicOrderAt_of_not_meromorphicAt hf, meromorphicOrderAt_of_not_meromorphicAt]
-    rwa [meromorphicAt_smul_iff_of_ne_zero hg h
+    rwa [meromorphicAt_smul_iff_of_ne_zero hg hg']
 
 中文:
 引理 meromorphicOrderAt_smul_of_ne_zero
@@ -2246,7 +2742,7 @@ lemma meromorphicOrderAt_smul_of_ne_zero
   · simp [meromorphicOrderAt_smul hg.meromorphicAt hf, hg.meromorphicOrderAt_eq,
       hg.analyticOrderAt_eq_zero.mpr hg']
   · rw [meromorphicOrderAt_of_not_meromorphicAt hf, meromorphicOrderAt_of_not_meromorphicAt]
-    rwa [meromorphicAt_smul_iff_of_ne_zero hg h
+    rwa [meromorphicAt_smul_iff_of_ne_zero hg hg']
 
 Depends on / 依赖: MeromorphicAt, analyticOrderAt_eq_zero, hg.analyticOrderAt_eq_zero.mpr, hg.meromorphicAt, hg.meromorphicOrderAt_eq, meromorphicAt, meromorphicAt_smul_iff_of_ne_zero, meromorphicOrderAt_eq, meromorphicOrderAt_of_not_meromorphicAt, meromorphicOrderAt_smul
 -/
@@ -2296,7 +2792,20 @@ lemma meromorphicOrderAt_deriv_eq_sub_one
   rw [meromorphicOrderAt_eq_int_iff hmero] at hf
   rw [meromorphicOrderAt_eq_int_iff hmero.deriv]
   obtain ⟨g, hga, hg0, (hg : f =ᶠ[𝓝[!=] x] fun z => (z - x) ^ n • g z)⟩ := hf
-  refine ⟨fun z => (n : 𝕜) • g
+  refine ⟨fun z => (n : 𝕜) • g z + (z - x) • deriv g z, by fun_prop, by simpa using ⟨hn, hg0⟩, ?_⟩
+  filter_upwards [hga.eventually_analyticAt.filter_mono (nhdsWithin_le_nhds),
+    eventually_mem_nhdsWithin, hg.nhdsNE_deriv] with z hgz hmem hz
+  have hzx : z - x != 0 := by simpa [sub_eq_zero] using hmem
+  calc
+    deriv f z = deriv (fun z => (z - x) ^ n • g z) z :=
+      hz
+    _ = (z - x) ^ n • deriv g z + deriv ((· ^ n) ∘ (· - x)) z • g z :=
+      deriv_fun_smul (by fun_prop (disch := grind)) hgz.differentiableAt
+    _ = (z - x) ^ n • deriv g z + (n * (z - x) ^ (n - 1)) • g z := by
+      rw [deriv_comp _ (by fun_prop (disch := grind)) (by fun_prop)]
+      simp [deriv_zpow]
+    _ = (z - x) ^ (n - 1) • ((n : 𝕜) • g z + (z - x) • deriv g z) := by
+      simp [smul_smul, ← zpow_add_one₀ hzx, add_comm, mul_comm]
 
 中文:
 引理 meromorphicOrderAt_deriv_eq_sub_one
@@ -2306,7 +2815,20 @@ lemma meromorphicOrderAt_deriv_eq_sub_one
   rw [meromorphicOrderAt_eq_int_iff hmero] at hf
   rw [meromorphicOrderAt_eq_int_iff hmero.deriv]
   obtain ⟨g, hga, hg0, (hg : f =ᶠ[𝓝[!=] x] fun z => (z - x) ^ n • g z)⟩ := hf
-  refine ⟨fun z => (n : 𝕜) • g
+  refine ⟨fun z => (n : 𝕜) • g z + (z - x) • deriv g z, by fun_prop, by simpa using ⟨hn, hg0⟩, ?_⟩
+  filter_upwards [hga.eventually_analyticAt.filter_mono (nhdsWithin_le_nhds),
+    eventually_mem_nhdsWithin, hg.nhdsNE_deriv] with z hgz hmem hz
+  have hzx : z - x != 0 := by simpa [sub_eq_zero] using hmem
+  calc
+    deriv f z = deriv (fun z => (z - x) ^ n • g z) z :=
+      hz
+    _ = (z - x) ^ n • deriv g z + deriv ((· ^ n) ∘ (· - x)) z • g z :=
+      deriv_fun_smul (by fun_prop (disch := grind)) hgz.differentiableAt
+    _ = (z - x) ^ n • deriv g z + (n * (z - x) ^ (n - 1)) • g z := by
+      rw [deriv_comp _ (by fun_prop (disch := grind)) (by fun_prop)]
+      simp [deriv_zpow]
+    _ = (z - x) ^ (n - 1) • ((n : 𝕜) • g z + (z - x) • deriv g z) := by
+      simp [smul_smul, ← zpow_add_one₀ hzx, add_comm, mul_comm]
 
 Depends on / 依赖: MeromorphicAt, eventually_analyticAt, eventually_mem_nhdsWithin, filter_mono, filter_upwards, fun_prop, hg.nhdsNE_deriv, hga.eventually_analyticAt.filter_mono, hmero.deriv, meromorphicAt_of_meromorphicOrderAt_ne_zero, meromorphicOrderAt_eq_int_iff, nhdsNE_deriv, nhdsWithin_le_nhds
 -/
@@ -2398,7 +2920,7 @@ theorem meromorphicOrderAt_logDeriv_nonneg
   have h₄ : f =ᶠ[𝓝[!=] x] g := by
     filter_upwards [h₃g] with z hz using by simpa using hz
   rw [meromorphicOrderAt_congr (logDeriv_congr_nhdsNE h₄)]
-  exact (h₁g.deriv.div h₁g h₂g).meromorphi
+  exact (h₁g.deriv.div h₁g h₂g).meromorphicOrderAt_nonneg
 
 中文:
 定理 meromorphicOrderAt_logDeriv_nonneg
@@ -2409,7 +2931,7 @@ theorem meromorphicOrderAt_logDeriv_nonneg
   have h₄ : f =ᶠ[𝓝[!=] x] g := by
     filter_upwards [h₃g] with z hz using by simpa using hz
   rw [meromorphicOrderAt_congr (logDeriv_congr_nhdsNE h₄)]
-  exact (h₁g.deriv.div h₁g h₂g).meromorphi
+  exact (h₁g.deriv.div h₁g h₂g).meromorphicOrderAt_nonneg
 
 Depends on / 依赖: filter_upwards, g.deriv.div, logDeriv_congr_nhdsNE, meromorphicOrderAt_congr, meromorphicOrderAt_eq_int_iff, meromorphicOrderAt_nonneg
 -/

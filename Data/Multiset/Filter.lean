@@ -1410,7 +1410,7 @@ theorem count_map_eq_count
 exact count_filter_of_pos rfl
   · rw [eq_replicate_card.2 fun b hb => (hf H (mem_filter.1 hb).left _).symm]
     · simp
-    · simp only [mem_filter, and
+    · simp only [mem_filter, and_imp, @eq_comm _ (f x), imp_self, implies_true]
 
 中文:
 定理 count_map_eq_count
@@ -1421,7 +1421,7 @@ exact count_filter_of_pos rfl
 exact count_filter_of_pos rfl
   · rw [eq_replicate_card.2 fun b hb => (hf H (mem_filter.1 hb).left _).symm]
     · simp
-    · simp only [mem_filter, and
+    · simp only [mem_filter, and_imp, @eq_comm _ (f x), imp_self, implies_true]
 
 Depends on / 依赖: and_imp, countP_map, count_filter_of_pos, eq_comm, eq_replicate_card, filter, imp_self, implies_true, mem_filter
 -/
@@ -1540,7 +1540,15 @@ lemma filter_sub
     congr
     by_cases m : a in s
     · rw [← cons_inj_right a, ← filter_cons_of_pos _ h, cons_erase (mem_filter_of_mem m h),
-        cons_
+        cons_erase m]
+    · rw [erase_of_notMem m, erase_of_notMem (mt mem_of_mem_filter m)]
+  · rw [filter_cons_of_neg _ h]
+    by_cases m : a in s
+    · rw [(by rw [filter_cons_of_neg _ h] : filter p (erase s a) = filter p (a ::ₘ erase s a)),
+        cons_erase m]
+    · rw [erase_of_notMem m]
+
+@[simp]
 
 中文:
 引理 filter_sub
@@ -1553,7 +1561,15 @@ lemma filter_sub
     congr
     by_cases m : a in s
     · rw [← cons_inj_right a, ← filter_cons_of_pos _ h, cons_erase (mem_filter_of_mem m h),
-        cons_
+        cons_erase m]
+    · rw [erase_of_notMem m, erase_of_notMem (mt mem_of_mem_filter m)]
+  · rw [filter_cons_of_neg _ h]
+    by_cases m : a in s
+    · rw [(by rw [filter_cons_of_neg _ h] : filter p (erase s a) = filter p (a ::ₘ erase s a)),
+        cons_erase m]
+    · rw [erase_of_notMem m]
+
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, cons_erase, cons_inj_right, erase_of_notMem, filter, filter_cons_of_neg, filter_cons_of_pos, induction_on, mem_filter_of_mem, mem_of_mem_filter, revert, sub_cons
 -/

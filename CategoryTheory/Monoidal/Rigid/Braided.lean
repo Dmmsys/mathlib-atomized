@@ -33,7 +33,22 @@ theorem coevaluation_evaluation_braided'
   /- Whitney trick transcribed: https://mathoverflow.net/a/162729/493261 -/
   calc
     _ = 𝟙 X otimes≫ X ◁ η_ X Y otimes≫ (X ◁ (β_ Y X).inv otimes≫ (β_ X Y).hom ▷ X) otimes≫ ε_ X Y ▷ X otimes≫ 𝟙 X := by
-      monoida
+      monoidal
+    _ = 𝟙 X otimes≫ X ◁ η_ X Y otimes≫ (𝟙 (X otimes X otimes Y) otimes≫ (β_ X X).hom ▷ Y otimes≫ X ◁ (β_ X Y).hom
+          otimes≫ (β_ Y X).inv ▷ X otimes≫ Y ◁ (β_ X X).inv otimes≫ 𝟙 ((Y otimes X) otimes X)) otimes≫ ε_ X Y ▷ X otimes≫ 𝟙 X := by
+      congr 3
+      simp only [monoidalComp, MonoidalCoherence.assoc'_iso, MonoidalCoherence.whiskerRight_iso,
+        MonoidalCoherence.refl_iso, whiskerRightIso_refl, Iso.refl_trans, Iso.symm_hom,
+        MonoidalCoherence.assoc_iso, Iso.trans_refl, comp_id, id_comp]
+      rw [← IsIso.eq_inv_comp]
+      repeat rw [← assoc]
+      iterate 5 rw [← IsIso.comp_inv_eq]
+      simpa using yang_baxter X Y X
+    _ = 𝟙 X otimes≫ (X ◁ η_ X Y ≫ (β_ X (X otimes Y)).hom) otimes≫ ((β_ (Y otimes X) X).inv ≫ ε_ X Y ▷ X) otimes≫ 𝟙 X := by
+      simp [monoidalComp, braiding_tensor_right_hom, braiding_tensor_left_inv]
+    _ = _ := by
+      rw [braiding_naturality_right]; rw [← braiding_inv_naturality_right]
+      simp [monoidalComp]
 
 中文:
 定理 coevaluation_evaluation_braided'
@@ -44,7 +59,22 @@ theorem coevaluation_evaluation_braided'
   /- Whitney trick transcribed: https://mathoverflow.net/a/162729/493261 -/
   calc
     _ = 𝟙 X otimes≫ X ◁ η_ X Y otimes≫ (X ◁ (β_ Y X).inv otimes≫ (β_ X Y).hom ▷ X) otimes≫ ε_ X Y ▷ X otimes≫ 𝟙 X := by
-      monoida
+      monoidal
+    _ = 𝟙 X otimes≫ X ◁ η_ X Y otimes≫ (𝟙 (X otimes X otimes Y) otimes≫ (β_ X X).hom ▷ Y otimes≫ X ◁ (β_ X Y).hom
+          otimes≫ (β_ Y X).inv ▷ X otimes≫ Y ◁ (β_ X X).inv otimes≫ 𝟙 ((Y otimes X) otimes X)) otimes≫ ε_ X Y ▷ X otimes≫ 𝟙 X := by
+      congr 3
+      simp only [monoidalComp, MonoidalCoherence.assoc'_iso, MonoidalCoherence.whiskerRight_iso,
+        MonoidalCoherence.refl_iso, whiskerRightIso_refl, Iso.refl_trans, Iso.symm_hom,
+        MonoidalCoherence.assoc_iso, Iso.trans_refl, comp_id, id_comp]
+      rw [← IsIso.eq_inv_comp]
+      repeat rw [← assoc]
+      iterate 5 rw [← IsIso.comp_inv_eq]
+      simpa using yang_baxter X Y X
+    _ = 𝟙 X otimes≫ (X ◁ η_ X Y ≫ (β_ X (X otimes Y)).hom) otimes≫ ((β_ (Y otimes X) X).inv ≫ ε_ X Y ▷ X) otimes≫ 𝟙 X := by
+      simp [monoidalComp, braiding_tensor_right_hom, braiding_tensor_left_inv]
+    _ = _ := by
+      rw [braiding_naturality_right]; rw [← braiding_inv_naturality_right]
+      simp [monoidalComp]
 -/
 private theorem coevaluation_evaluation_braided' [inst : ExactPairing X Y] :
     X ◁ (η_ X Y ≫ (β_ Y X).inv) ≫ (α_ X Y X).inv ≫ ((β_ X Y).hom ≫ ε_ X Y) ▷ X
@@ -83,7 +113,22 @@ theorem evaluation_coevaluation_braided'
   calc
     _ = 𝟙 Y otimes≫ η_ X Y ▷ Y otimes≫ ((β_ Y X).inv ▷ Y otimes≫ Y ◁ (β_ X Y).hom) ≫ Y ◁ ε_ X Y otimes≫ 𝟙 Y := by
       monoidal
-    _ = 𝟙 Y otimes≫ η_ X Y ▷ Y otimes≫ (𝟙 ((X otimes Y) otimes Y) otimes≫ X ◁ (β_ Y Y).hom otimes≫ (β_ X Y).hom
+    _ = 𝟙 Y otimes≫ η_ X Y ▷ Y otimes≫ (𝟙 ((X otimes Y) otimes Y) otimes≫ X ◁ (β_ Y Y).hom otimes≫ (β_ X Y).hom ▷ Y
+        otimes≫ Y ◁ (β_ Y X).inv otimes≫ (β_ Y Y).inv ▷ X otimes≫ 𝟙 (Y otimes Y otimes X)) otimes≫ Y ◁ ε_ X Y otimes≫ 𝟙 Y := by
+      congr 3
+      on_goal 2 => simp [monoidalComp]
+      simp only [monoidalComp, MonoidalCoherence.assoc_iso, MonoidalCoherence.whiskerRight_iso,
+        MonoidalCoherence.refl_iso, whiskerRightIso_refl, Iso.trans_refl,
+        MonoidalCoherence.assoc'_iso, Iso.refl_trans, Iso.symm_hom, comp_id, id_comp]
+      iterate 2 rw [← IsIso.eq_inv_comp]
+      repeat rw [← assoc]
+      iterate 4 rw [← IsIso.comp_inv_eq]
+      simpa using (yang_baxter Y X Y).symm
+    _ = 𝟙 Y otimes≫ (η_ X Y ▷ Y ≫ (β_ (X otimes Y) Y).hom) otimes≫ ((β_ Y (Y otimes X)).inv ≫ Y ◁ ε_ X Y) otimes≫ 𝟙 Y := by
+      simp [monoidalComp, braiding_tensor_left_hom, braiding_tensor_right_inv]
+    _ = _ := by
+      rw [braiding_naturality_left]; rw [← braiding_inv_naturality_left]
+      simp [monoidalComp]
 
 中文:
 定理 evaluation_coevaluation_braided'
@@ -93,7 +138,22 @@ theorem evaluation_coevaluation_braided'
   calc
     _ = 𝟙 Y otimes≫ η_ X Y ▷ Y otimes≫ ((β_ Y X).inv ▷ Y otimes≫ Y ◁ (β_ X Y).hom) ≫ Y ◁ ε_ X Y otimes≫ 𝟙 Y := by
       monoidal
-    _ = 𝟙 Y otimes≫ η_ X Y ▷ Y otimes≫ (𝟙 ((X otimes Y) otimes Y) otimes≫ X ◁ (β_ Y Y).hom otimes≫ (β_ X Y).hom
+    _ = 𝟙 Y otimes≫ η_ X Y ▷ Y otimes≫ (𝟙 ((X otimes Y) otimes Y) otimes≫ X ◁ (β_ Y Y).hom otimes≫ (β_ X Y).hom ▷ Y
+        otimes≫ Y ◁ (β_ Y X).inv otimes≫ (β_ Y Y).inv ▷ X otimes≫ 𝟙 (Y otimes Y otimes X)) otimes≫ Y ◁ ε_ X Y otimes≫ 𝟙 Y := by
+      congr 3
+      on_goal 2 => simp [monoidalComp]
+      simp only [monoidalComp, MonoidalCoherence.assoc_iso, MonoidalCoherence.whiskerRight_iso,
+        MonoidalCoherence.refl_iso, whiskerRightIso_refl, Iso.trans_refl,
+        MonoidalCoherence.assoc'_iso, Iso.refl_trans, Iso.symm_hom, comp_id, id_comp]
+      iterate 2 rw [← IsIso.eq_inv_comp]
+      repeat rw [← assoc]
+      iterate 4 rw [← IsIso.comp_inv_eq]
+      simpa using (yang_baxter Y X Y).symm
+    _ = 𝟙 Y otimes≫ (η_ X Y ▷ Y ≫ (β_ (X otimes Y) Y).hom) otimes≫ ((β_ Y (Y otimes X)).inv ≫ Y ◁ ε_ X Y) otimes≫ 𝟙 Y := by
+      simp [monoidalComp, braiding_tensor_left_hom, braiding_tensor_right_inv]
+    _ = _ := by
+      rw [braiding_naturality_left]; rw [← braiding_inv_naturality_left]
+      simp [monoidalComp]
 -/
 private theorem evaluation_coevaluation_braided' [inst : ExactPairing X Y] :
     (η_ X Y ≫ (β_ Y X).inv) ▷ Y ≫ (α_ Y X Y).hom ≫ Y ◁ ((β_ X Y).hom ≫ ε_ X Y) =

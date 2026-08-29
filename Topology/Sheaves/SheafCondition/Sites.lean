@@ -506,7 +506,8 @@ instance :
 exact ⟨⟨⟨PUnit.unit⟩, V.right ⊓ W.right, homOfLE le_inf V.hom.le W.hom.le⟩,
         StructuredArrow.homMk (homOfLE inf_le_left),
         StructuredArrow.homMk (homOfLE inf_le_right), trivial⟩
-    · exact f
+    · exact fun _ _ _ _ => ⟨_, 𝟙 _, by simp [eq_iff_true_of_subsingleton]⟩
+· exact ⟨StructuredArrow.mk show U ⟶ (Opens.map f).obj ⊤ from homOfLE le_top⟩
 
 中文:
 实例 :
@@ -520,7 +521,8 @@ exact ⟨⟨⟨PUnit.unit⟩, V.right ⊓ W.right, homOfLE le_inf V.hom.le W.hom
 exact ⟨⟨⟨PUnit.unit⟩, V.right ⊓ W.right, homOfLE le_inf V.hom.le W.hom.le⟩,
         StructuredArrow.homMk (homOfLE inf_le_left),
         StructuredArrow.homMk (homOfLE inf_le_right), trivial⟩
-    · exact f
+    · exact fun _ _ _ _ => ⟨_, 𝟙 _, by simp [eq_iff_true_of_subsingleton]⟩
+· exact ⟨StructuredArrow.mk show U ⟶ (Opens.map f).obj ⊤ from homOfLE le_top⟩
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.mk, Opens.map, PUnit.unit, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, V.hom.le, V.right, W.hom.le, W.right, eq_iff_true_of_subsingleton, homOfLE, inf_le_left, inf_le_right, le_inf, le_top
 -/

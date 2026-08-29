@@ -325,7 +325,11 @@ theorem IsCompact.image_of_continuousOn
   obtain ⟨x, hxs, hx⟩ : exists x in s, ClusterPt x (l.comap f ⊓ 𝓟 s) := @hs _ this inf_le_right
   have := hx.neBot
   use f x, mem_image_of_mem f hxs
-  have : Tendsto f (𝓝 x 
+  have : Tendsto f (𝓝 x ⊓ (comap f l ⊓ 𝓟 s)) (𝓝 (f x) ⊓ l) := by
+    convert! (hf x hxs).inf (@tendsto_comap _ _ f l) using 1
+    rw [nhdsWithin]
+    ac_rfl
+  exact this.neBot
 
 中文:
 定理 是紧集.image_of_continuousOn
@@ -337,7 +341,11 @@ theorem IsCompact.image_of_continuousOn
   obtain ⟨x, hxs, hx⟩ : exists x in s, ClusterPt x (l.comap f ⊓ 𝓟 s) := @hs _ this inf_le_right
   have := hx.neBot
   use f x, mem_image_of_mem f hxs
-  have : Tendsto f (𝓝 x 
+  have : Tendsto f (𝓝 x ⊓ (comap f l ⊓ 𝓟 s)) (𝓝 (f x) ⊓ l) := by
+    convert! (hf x hxs).inf (@tendsto_comap _ _ f l) using 1
+    rw [nhdsWithin]
+    ac_rfl
+  exact this.neBot
 
 Depends on / 依赖: ClusterPt, Tendsto, comap_inf_principal_neBot_of_image_mem, convert, hx.neBot, inf_le_right, l.comap, le_principal_iff, mem_image_of_mem, nhdsWithin, tendsto_comap, this.neBot
 -/
@@ -385,7 +393,9 @@ theorem IsCompact.adherence_nhdset
 let ⟨x, hx, (hfx : ClusterPt x <| f ⊓ 𝓟 tᶜ)⟩ := @hs _ ⟨this⟩ inf_le_of_left_le hf₂
     have : x in t := ht₂ x hx hfx.of_inf_left
     have : tᶜ inter t in 𝓝[tᶜ] x := inter_mem_nhdsWithin _ (IsOpen.mem_nhds ht₁ this)
-have A : 𝓝[tᶜ] x = ⊥ :
+have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ this
+    have : 𝓝[tᶜ] x != ⊥ := hfx.of_inf_right.ne
+    absurd A this
 
 中文:
 定理 是紧集.adherence_nhdset
@@ -394,7 +404,9 @@ have A : 𝓝[tᶜ] x = ⊥ :
 let ⟨x, hx, (hfx : ClusterPt x <| f ⊓ 𝓟 tᶜ)⟩ := @hs _ ⟨this⟩ inf_le_of_left_le hf₂
     have : x in t := ht₂ x hx hfx.of_inf_left
     have : tᶜ inter t in 𝓝[tᶜ] x := inter_mem_nhdsWithin _ (IsOpen.mem_nhds ht₁ this)
-have A : 𝓝[tᶜ] x = ⊥ :
+have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ this
+    have : 𝓝[tᶜ] x != ⊥ := hfx.of_inf_right.ne
+    absurd A this
 
 Depends on / 依赖: Classical, Classical.by_cases, ClusterPt, IsOpen, IsOpen.mem_nhds, absurd, compl_inter_self, empty_mem_iff_bot, hfx.of_inf_left, hfx.of_inf_right.ne, inf_le_of_left_le, inter_mem_nhdsWithin, mem_nhds, mem_of_eq_bot, of_inf_left, of_inf_right
 -/
@@ -581,7 +593,8 @@ theorem IsCompact.elim_directed_cover
         let ⟨k, hki, hkj⟩ := hdU i j
         ⟨k, union_subset (Subset.trans hi hki) (Subset.trans hj hkj)⟩)
       fun _x hx =>
-      let ⟨i, hi⟩ := mem_iUni
+      let ⟨i, hi⟩ := mem_iUnion.1 (hsU hx)
+      ⟨U i, mem_nhdsWithin_of_mem_nhds (IsOpen.mem_nhds (hUo i) hi), i, Subset.refl _⟩
 
 中文:
 定理 是紧集.elim_directed_cover
@@ -592,7 +605,8 @@ theorem IsCompact.elim_directed_cover
         let ⟨k, hki, hkj⟩ := hdU i j
         ⟨k, union_subset (Subset.trans hi hki) (Subset.trans hj hkj)⟩)
       fun _x hx =>
-      let ⟨i, hi⟩ := mem_iUni
+      let ⟨i, hi⟩ := mem_iUnion.1 (hsU hx)
+      ⟨U i, mem_nhdsWithin_of_mem_nhds (IsOpen.mem_nhds (hUo i) hi), i, Subset.refl _⟩
 
 Depends on / 依赖: IsCompact, IsCompact.induction_on, IsOpen, IsOpen.mem_nhds, Subset, Subset.refl, Subset.trans, empty_subset, hs.trans, induction_on, mem_iUnion, mem_nhds, mem_nhdsWithin_of_mem_nhds, union_subset
 -/
@@ -644,7 +658,8 @@ lemma IsCompact.elim_nhds_subcover_nhdsSet'
 fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩ with ⟨t, hst⟩
   refine ⟨t, mem_nhdsSet_iff_forall.2 fun x hx => ?_⟩
   rcases mem_iUnion₂.1 (hst hx) with ⟨y, hyt, hy⟩
-  refine mem_o
+  refine mem_of_superset ?_ (subset_biUnion_of_mem hyt)
+  exact mem_interior_iff_mem_nhds.1 hy
 
 中文:
 引理 是紧集.elim_nhds_subcover_nhdsSet'
@@ -654,7 +669,8 @@ fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩ w
 fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩ with ⟨t, hst⟩
   refine ⟨t, mem_nhdsSet_iff_forall.2 fun x hx => ?_⟩
   rcases mem_iUnion₂.1 (hst hx) with ⟨y, hyt, hy⟩
-  refine mem_o
+  refine mem_of_superset ?_ (subset_biUnion_of_mem hyt)
+  exact mem_interior_iff_mem_nhds.1 hy
 
 Depends on / 依赖: elim_finite_subcover, hs.elim_finite_subcover, interior, isOpen_interior, mem_iUnion, mem_interior_iff_mem_nhds, mem_nhdsSet_iff_forall, mem_of_superset, subset_biUnion_of_mem
 -/
@@ -812,7 +828,10 @@ refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
   choose! U hxU hUl using fun x hx => (nhds_basis_opens x).disjoint_iff_left.1 (H x hx)
   choose hxU hUo using hxU
   rcases hs.elim_nhds_subcover U fun x hx => (hUo x hx).mem_nhds (hxU x hx) with ⟨t, hts, hst⟩
-  refine (hasBasis_n
+  refine (hasBasis_nhdsSet _).disjoint_iff_left.2
+    ⟨⋃ x in t, U x, ⟨isOpen_biUnion fun x hx => hUo x (hts x hx), hst⟩, ?_⟩
+  rw [compl_iUnion₂]; rw [biInter_finset_mem]
+  exact fun x hx => hUl x (hts x hx)
 
 中文:
 定理 是紧集.disjoint_nhdsSet_left
@@ -822,7 +841,10 @@ refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
   choose! U hxU hUl using fun x hx => (nhds_basis_opens x).disjoint_iff_left.1 (H x hx)
   choose hxU hUo using hxU
   rcases hs.elim_nhds_subcover U fun x hx => (hUo x hx).mem_nhds (hxU x hx) with ⟨t, hts, hst⟩
-  refine (hasBasis_n
+  refine (hasBasis_nhdsSet _).disjoint_iff_left.2
+    ⟨⋃ x in t, U x, ⟨isOpen_biUnion fun x hx => hUo x (hts x hx), hst⟩, ?_⟩
+  rw [compl_iUnion₂]; rw [biInter_finset_mem]
+  exact fun x hx => hUl x (hts x hx)
 
 Depends on / 依赖: biInter_finset_mem, disjoint_iff_left, elim_nhds_subcover, h.mono_left, hasBasis_nhdsSet, hs.elim_nhds_subcover, isOpen_biUnion, mem_nhds, mono_left, nhds_basis_opens, nhds_le_nhdsSet
 -/
@@ -870,7 +892,10 @@ theorem IsCompact.elim_directed_family_closed
       (by
         simpa only [subset_def, not_forall, eq_empty_iff_forall_notMem, mem_iUnion, exists_prop,
           mem_inter_iff, not_and, mem_iInter, mem_compl_iff] using! hst)
-      (hdt.mono_comp _ fun _ _ => 
+      (hdt.mono_comp _ fun _ _ => compl_subset_compl.mpr)
+  ⟨t, by
+    simpa only [subset_def, not_forall, eq_empty_iff_forall_notMem, mem_iUnion, exists_prop,
+      mem_inter_iff, not_and, mem_iInter, mem_compl_iff] using! ht⟩
 
 中文:
 定理 是紧集.elim_directed_family_closed
@@ -880,7 +905,10 @@ theorem IsCompact.elim_directed_family_closed
       (by
         simpa only [subset_def, not_forall, eq_empty_iff_forall_notMem, mem_iUnion, exists_prop,
           mem_inter_iff, not_and, mem_iInter, mem_compl_iff] using! hst)
-      (hdt.mono_comp _ fun _ _ => 
+      (hdt.mono_comp _ fun _ _ => compl_subset_compl.mpr)
+  ⟨t, by
+    simpa only [subset_def, not_forall, eq_empty_iff_forall_notMem, mem_iUnion, exists_prop,
+      mem_inter_iff, not_and, mem_iInter, mem_compl_iff] using! ht⟩
 
 Depends on / 依赖: compl_subset_compl, compl_subset_compl.mpr, elim_directed_cover, eq_empty_iff_forall_notMem, exists_prop, hdt.mono_comp, hs.elim_directed_cover, isOpen_compl, mem_compl_iff, mem_iInter, mem_iUnion, mem_inter_iff, mono_comp, not_and, not_forall, subset_def
 -/
@@ -1011,7 +1039,9 @@ theorem IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
   apply mt ((htc i₀).elim_directed_family_closed t htcl)
   push Not
   simp only [← nonempty_iff_ne_empty] at htn ⊢
-  refine ⟨htd,
+  refine ⟨htd, fun i => ?_⟩
+  rcases htd i₀ i with ⟨j, hji₀, hji⟩
+  exact (htn j).mono (subset_inter hji₀ hji)
 
 中文:
 定理 是紧集.nonempty_i整数er_of_directed_nonempty_isCompact_isClosed
@@ -1023,7 +1053,9 @@ theorem IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
   apply mt ((htc i₀).elim_directed_family_closed t htcl)
   push Not
   simp only [← nonempty_iff_ne_empty] at htn ⊢
-  refine ⟨htd,
+  refine ⟨htd, fun i => ?_⟩
+  rcases htd i₀ i with ⟨j, hji₀, hji⟩
+  exact (htn j).mono (subset_inter hji₀ hji)
 
 Depends on / 依赖: Nonempty, elim_directed_family_closed, iInter_subset, inter_eq_right, inter_eq_right.mpr, nonempty_iff_ne_empty, subset_inter
 -/
@@ -1078,7 +1110,7 @@ theorem IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
   have htd : Directed (· ⊇ ·) t := tmono.directed_ge
 have : forall i, t i subseteq t 0 := fun i => tmono Nat.zero_le i
   have htc : forall i, IsCompact (t i) := fun i => ht0.of_isClosed_subset (htcl i) (this i)
-  IsCompact.nonempty_iInter_of_dir
+  IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed t htd htn htc htcl
 
 中文:
 定理 是紧集.nonempty_i整数er_of_sequence_nonempty_isCompact_isClosed
@@ -1087,7 +1119,7 @@ have : forall i, t i subseteq t 0 := fun i => tmono Nat.zero_le i
   have htd : Directed (· ⊇ ·) t := tmono.directed_ge
 have : forall i, t i subseteq t 0 := fun i => tmono Nat.zero_le i
   have htc : forall i, IsCompact (t i) := fun i => ht0.of_isClosed_subset (htcl i) (this i)
-  IsCompact.nonempty_iInter_of_dir
+  IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed t htd htn htc htcl
 
 Depends on / 依赖: Antitone, Directed, IsCompact, IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed, Nat.zero_le, antitone_nat_of_succ_le, directed_ge, ht0.of_isClosed_subset, nonempty_iInter_of_directed_nonempty_isCompact_isClosed, of_isClosed_subset, subseteq, tmono.directed_ge, zero_le
 -/
@@ -1145,7 +1177,10 @@ theorem isCompact_of_finite_subcover
     (nhds_basis_opens _).disjoint_iff_left] at h
   choose U hU hUf using h
   refine ⟨s, U, fun x => (hU x).2, fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, (hU _).1⟩, fun t ht => ?_⟩
-  refine compl_notMem (le_
+  refine compl_notMem (le_principal_iff.1 hfs) ?_
+  refine mem_of_superset ((biInter_finset_mem t).2 fun x _ => hUf x) ?_
+  rw [subset_compl_comm]; rw [compl_iInter₂]
+  simpa only [compl_compl]
 
 中文:
 定理 isCompact_of_finite_subcover
@@ -1155,7 +1190,10 @@ theorem isCompact_of_finite_subcover
     (nhds_basis_opens _).disjoint_iff_left] at h
   choose U hU hUf using h
   refine ⟨s, U, fun x => (hU x).2, fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, (hU _).1⟩, fun t ht => ?_⟩
-  refine compl_notMem (le_
+  refine compl_notMem (le_principal_iff.1 hfs) ?_
+  refine mem_of_superset ((biInter_finset_mem t).2 fun x _ => hUf x) ?_
+  rw [subset_compl_comm]; rw [compl_iInter₂]
+  simpa only [compl_compl]
 
 Depends on / 依赖: ClusterPt, SetCoe, SetCoe.forall, biInter_finset_mem, compl_compl, compl_notMem, contrapose, disjoint_iff, disjoint_iff_left, le_principal_iff, mem_iUnion, mem_of_superset, nhds_basis_opens, not_neBot, subset_compl_comm
 -/
@@ -1183,7 +1221,7 @@ theorem isCompact_of_finite_subfamily_closed
     rw [← disjoint_compl_right_iff_subset]; rw [compl_iUnion]; rw [disjoint_iff] at hsU
     rcases h (fun i => (U i)ᶜ) (fun i => (hUo _).isClosed_compl) hsU with ⟨t, ht⟩
     refine ⟨t, ?_⟩
-    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂, dis
+    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂, disjoint_iff]
 
 中文:
 定理 isCompact_of_finite_subfamily_closed
@@ -1191,7 +1229,7 @@ theorem isCompact_of_finite_subfamily_closed
     rw [← disjoint_compl_right_iff_subset]; rw [compl_iUnion]; rw [disjoint_iff] at hsU
     rcases h (fun i => (U i)ᶜ) (fun i => (hUo _).isClosed_compl) hsU with ⟨t, ht⟩
     refine ⟨t, ?_⟩
-    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂, dis
+    rwa [← disjoint_compl_right_iff_subset, compl_iUnion₂, disjoint_iff]
 
 Depends on / 依赖: compl_iUnion, disjoint_compl_right_iff_subset, disjoint_iff, isClosed_compl, isCompact_of_finite_subcover
 -/
@@ -1253,7 +1291,8 @@ theorem IsCompact.mem_nhdsSet_prod_of_forall
   · simp [sup_prod, *]
   · rcases ((nhds_basis_opens _).prod l.basis_sets).mem_iff.1 (hs x hx)
       with ⟨⟨u, v⟩, ⟨⟨hx, huo⟩, hv⟩, hs⟩
-    refine ⟨u, n
+    refine ⟨u, nhdsWithin_le_nhds (huo.mem_nhds hx), mem_of_superset ?_ hs⟩
+    exact prod_mem_prod (huo.mem_nhdsSet.2 Subset.rfl) hv
 
 中文:
 定理 是紧集.mem_nhdsSet_prod_of_对任意
@@ -1264,7 +1303,8 @@ theorem IsCompact.mem_nhdsSet_prod_of_forall
   · simp [sup_prod, *]
   · rcases ((nhds_basis_opens _).prod l.basis_sets).mem_iff.1 (hs x hx)
       with ⟨⟨u, v⟩, ⟨⟨hx, huo⟩, hv⟩, hs⟩
-    refine ⟨u, n
+    refine ⟨u, nhdsWithin_le_nhds (huo.mem_nhds hx), mem_of_superset ?_ hs⟩
+    exact prod_mem_prod (huo.mem_nhdsSet.2 Subset.rfl) hv
 
 Depends on / 依赖: Subset, Subset.rfl, basis_sets, hK.induction_on, huo.mem_nhds, huo.mem_nhdsSet, induction_on, l.basis_sets, le_rfl, mem_iff, mem_nhds, mem_nhdsSet, mem_of_superset, nhdsSet_mono, nhdsWithin_le_nhds, nhds_basis_opens, prod_mem_prod, prod_mono, sup_prod
 -/
@@ -1796,7 +1836,17 @@ theorem exists_subset_nhds_of_isCompact'
   by_contra! H
   replace H : forall i, (V i inter Wᶜ).Nonempty := fun i => Set.inter_compl_nonempty_iff.mpr (H i)
   have : (⋂ i, V i inter Wᶜ).Nonempty := by
-    re
+    refine
+      IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed _ (fun i j => ?_) H
+        (fun i => (hV_cpct i).inter_right W_op.isClosed_compl) fun i =>
+        (hV_closed i).inter W_op.isClosed_compl
+    rcases hV i j with ⟨k, hki, hkj⟩
+    refine ⟨k, ⟨fun x => ?_, fun x => ?_⟩⟩ <;> simp only [and_imp, mem_inter_iff, mem_compl_iff] <;>
+      tauto
+  have : ¬⋂ i : ι, V i subseteq W := by simpa [← iInter_inter, inter_compl_nonempty_iff]
+  contradiction
+
+omit [TopologicalSpace X] in
 
 中文:
 定理 存在_subset_nhds_of_isCompact'
@@ -1807,7 +1857,17 @@ theorem exists_subset_nhds_of_isCompact'
   by_contra! H
   replace H : forall i, (V i inter Wᶜ).Nonempty := fun i => Set.inter_compl_nonempty_iff.mpr (H i)
   have : (⋂ i, V i inter Wᶜ).Nonempty := by
-    re
+    refine
+      IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed _ (fun i j => ?_) H
+        (fun i => (hV_cpct i).inter_right W_op.isClosed_compl) fun i =>
+        (hV_closed i).inter W_op.isClosed_compl
+    rcases hV i j with ⟨k, hki, hkj⟩
+    refine ⟨k, ⟨fun x => ?_, fun x => ?_⟩⟩ <;> simp only [and_imp, mem_inter_iff, mem_compl_iff] <;>
+      tauto
+  have : ¬⋂ i : ι, V i subseteq W := by simpa [← iInter_inter, inter_compl_nonempty_iff]
+  contradiction
+
+omit [TopologicalSpace X] in
 
 Depends on / 依赖: IsCompact, IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed, Nonempty, Set.inter_compl_nonempty_iff.mpr, W_op, W_op.isClosed_compl, exists_open_set_nhds, hV_closed, hV_cpct, hi.trans, inter_compl_nonempty_iff, inter_right, isClosed_compl, nonempty_iInter_of_directed_nonempty_isCompact_isClosed, replace, subseteq, this.imp
 -/
@@ -1843,7 +1903,14 @@ theorem isCompact_generateFrom
   have hSF : forall x in s, exists t, x in t ∧ t in S ∧ t ∉ F := by simpa [nhds_generateFrom] using hF
   choose! U hxU hSU hUF using hSF
   obtain ⟨Q, hQU, hQ, hsQ⟩ := h (U '' s) (by simpa [Set.subset_def])
-    (fun x
+    (fun x hx => Set.mem_sUnion_of_mem (hxU _ hx) (by grind))
+  have : forall s in Q, s ∉ F := fun s hsQ => (hQU hsQ).choose_spec.2 ▸ hUF _ (hQU hsQ).choose_spec.1
+  have hQF : ⋂₀ (compl '' Q) in F.sets := by simpa [Filter.biInter_mem hQ, F.compl_mem_iff_notMem]
+  have : ⋃₀ Q ∉ F := by
+    simpa [-Set.sInter_image, ← Set.compl_sUnion, hsQ, F.compl_mem_iff_notMem] using hQF
+  exact this (F.mem_of_superset hsF hsQ)
+
+omit [TopologicalSpace X] in
 
 中文:
 定理 isCompact_generateFrom
@@ -1855,7 +1922,14 @@ theorem isCompact_generateFrom
   have hSF : forall x in s, exists t, x in t ∧ t in S ∧ t ∉ F := by simpa [nhds_generateFrom] using hF
   choose! U hxU hSU hUF using hSF
   obtain ⟨Q, hQU, hQ, hsQ⟩ := h (U '' s) (by simpa [Set.subset_def])
-    (fun x
+    (fun x hx => Set.mem_sUnion_of_mem (hxU _ hx) (by grind))
+  have : forall s in Q, s ∉ F := fun s hsQ => (hQU hsQ).choose_spec.2 ▸ hUF _ (hQU hsQ).choose_spec.1
+  have hQF : ⋂₀ (compl '' Q) in F.sets := by simpa [Filter.biInter_mem hQ, F.compl_mem_iff_notMem]
+  have : ⋃₀ Q ∉ F := by
+    simpa [-Set.sInter_image, ← Set.compl_sUnion, hsQ, F.compl_mem_iff_notMem] using hQF
+  exact this (F.mem_of_superset hsF hsQ)
+
+omit [TopologicalSpace X] in
 
 Depends on / 依赖: F.sets, Filter, Filter.biInter, Set.mem_sUnion_of_mem, Set.subset_def, biInter, choose_spec, isCompact_iff_ultrafilter_le_nhds, mem_sUnion_of_mem, nhds_generateFrom, subset_def
 -/
@@ -2093,7 +2167,12 @@ theorem Tendsto.isCompact_insert_range_of_cocompact
   rcases hy with ⟨s, hsy, t, htl, hd⟩
   rcases mem_cocompact.1 (hf hsy) with ⟨K, hKc, hKs⟩
   have : f '' K in l := by
-  
+    filter_upwards [htl, le_principal_iff.1 hle] with y hyt hyf
+    rcases hyf with (rfl | ⟨x, rfl⟩)
+    exacts [(hd.le_bot ⟨mem_of_mem_nhds hsy, hyt⟩).elim,
+      mem_image_of_mem _ (not_not.1 fun hxK => hd.le_bot ⟨hKs hxK, hyt⟩)]
+  rcases hKc.image hfc (le_principal_iff.2 this) with ⟨y, hy, hyl⟩
+exact ⟨y, Or.inr image_subset_range _ _ hy, hyl⟩
 
 中文:
 定理 收敛.isCompact_insert_range_of_cocompact
@@ -2106,7 +2185,12 @@ theorem Tendsto.isCompact_insert_range_of_cocompact
   rcases hy with ⟨s, hsy, t, htl, hd⟩
   rcases mem_cocompact.1 (hf hsy) with ⟨K, hKc, hKs⟩
   have : f '' K in l := by
-  
+    filter_upwards [htl, le_principal_iff.1 hle] with y hyt hyf
+    rcases hyf with (rfl | ⟨x, rfl⟩)
+    exacts [(hd.le_bot ⟨mem_of_mem_nhds hsy, hyt⟩).elim,
+      mem_image_of_mem _ (not_not.1 fun hxK => hd.le_bot ⟨hKs hxK, hyt⟩)]
+  rcases hKc.image hfc (le_principal_iff.2 this) with ⟨y, hy, hyl⟩
+exact ⟨y, Or.inr image_subset_range _ _ hy, hyl⟩
 
 Depends on / 依赖: ClusterPt, Or.inl, clusterPt_iff_nonempty, exacts, filter_upwards, hd.le_bot, le_bot, le_principal_iff, mem_cocompact, mem_image_of_mem, mem_of_mem_nhds, not_disjoint_iff_nonempty_inter, not_forall, not_not
 -/
@@ -2418,7 +2502,7 @@ theorem nhdsSet_prod_le_of_disjoint_cocompact
     _ <= 𝓝ˢ s ×ˢ 𝓟 K := Filter.prod_mono_right _ (Filter.le_principal_iff.mpr hKf)
     _ <= 𝓝ˢ s ×ˢ 𝓝ˢ K := Filter.prod_mono_right _ principal_le_nhdsSet
     _ = 𝓝ˢ (s ×ˢ K) := (hs.nhdsSet_prod_eq hK).symm
-    _ <= 𝓝
+    _ <= 𝓝ˢ (s ×ˢ Set.univ) := nhdsSet_mono (prod_mono_right le_top)
 
 中文:
 定理 nhdsSet_prod_le_of_disjoint_cocompact
@@ -2430,7 +2514,7 @@ theorem nhdsSet_prod_le_of_disjoint_cocompact
     _ <= 𝓝ˢ s ×ˢ 𝓟 K := Filter.prod_mono_right _ (Filter.le_principal_iff.mpr hKf)
     _ <= 𝓝ˢ s ×ˢ 𝓝ˢ K := Filter.prod_mono_right _ principal_le_nhdsSet
     _ = 𝓝ˢ (s ×ˢ K) := (hs.nhdsSet_prod_eq hK).symm
-    _ <= 𝓝
+    _ <= 𝓝ˢ (s ×ˢ Set.univ) := nhdsSet_mono (prod_mono_right le_top)
 
 Depends on / 依赖: Filter, Filter.le_principal_iff.mpr, Filter.prod_mono_right, Set.univ, disjoint_cocompact_right, hs.nhdsSet_prod_eq, le_principal_iff, le_top, nhdsSet_mono, nhdsSet_prod_eq, principal_le_nhdsSet, prod_mono_right
 -/
@@ -2458,7 +2542,7 @@ theorem prod_nhdsSet_le_of_disjoint_cocompact
     _ <= (𝓟 K) ×ˢ 𝓝ˢ t := Filter.prod_mono_left _ (Filter.le_principal_iff.mpr hKf)
     _ <= 𝓝ˢ K ×ˢ 𝓝ˢ t := Filter.prod_mono_left _ principal_le_nhdsSet
     _ = 𝓝ˢ (K ×ˢ t) := (hK.nhdsSet_prod_eq ht).symm
-    _ <= 𝓝
+    _ <= 𝓝ˢ (Set.univ ×ˢ t) := nhdsSet_mono (prod_mono_left le_top)
 
 中文:
 定理 prod_nhdsSet_le_of_disjoint_cocompact
@@ -2470,7 +2554,7 @@ theorem prod_nhdsSet_le_of_disjoint_cocompact
     _ <= (𝓟 K) ×ˢ 𝓝ˢ t := Filter.prod_mono_left _ (Filter.le_principal_iff.mpr hKf)
     _ <= 𝓝ˢ K ×ˢ 𝓝ˢ t := Filter.prod_mono_left _ principal_le_nhdsSet
     _ = 𝓝ˢ (K ×ˢ t) := (hK.nhdsSet_prod_eq ht).symm
-    _ <= 𝓝
+    _ <= 𝓝ˢ (Set.univ ×ˢ t) := nhdsSet_mono (prod_mono_left le_top)
 
 Depends on / 依赖: Filter, Filter.le_principal_iff.mpr, Filter.prod_mono_left, Set.univ, disjoint_cocompact_right, hK.nhdsSet_prod_eq, le_principal_iff, le_top, nhdsSet_mono, nhdsSet_prod_eq, principal_le_nhdsSet, prod_mono_left
 -/
@@ -2866,7 +2950,9 @@ lemma compactSpace_generateFrom_of_compl_mem
   refine h _ ?_ fun Q hQP hQ => ?_
   · rintro _ ⟨S, hS, rfl⟩
     exact h𝔅 _ (hP𝔅 hS)
-  · replace hP : Q subseteq compl '' P -> (compl '' Q).Finite -> (⋂₀ Q).Nonempt
+  · replace hP : Q subseteq compl '' P -> (compl '' Q).Finite -> (⋂₀ Q).Nonempty := by
+      simpa [← compl_involutive.image_eq_preimage_symm] using hP (compl '' Q)
+    exact hP hQP (hQ.image _)
 
 中文:
 引理 compactSpace_generateFrom_of_compl_mem
@@ -2878,7 +2964,9 @@ lemma compactSpace_generateFrom_of_compl_mem
   refine h _ ?_ fun Q hQP hQ => ?_
   · rintro _ ⟨S, hS, rfl⟩
     exact h𝔅 _ (hP𝔅 hS)
-  · replace hP : Q subseteq compl '' P -> (compl '' Q).Finite -> (⋂₀ Q).Nonempt
+  · replace hP : Q subseteq compl '' P -> (compl '' Q).Finite -> (⋂₀ Q).Nonempty := by
+      simpa [← compl_involutive.image_eq_preimage_symm] using hP (compl '' Q)
+    exact hP hQP (hQ.image _)
 
 Depends on / 依赖: Finite, Nonempty, Set.compl_sUnion, Set.nonempty_compl, compactSpace_generateFrom, compl_involutive, compl_involutive.image_eq_preimage_symm, compl_sUnion, contrapose, hQ.image, image_eq_preimage_symm, nonempty_compl, replace, simp_rw, subseteq
 -/
@@ -3677,7 +3765,7 @@ theorem IsCompact.elim_finite_subfamily_isClosed_subtype
     simpa [eq_empty_iff_forall_notMem] using
       (isCompact_iff_isCompact_univ.mp ks).elim_finite_subfamily_closed
       (fun i : I => s ↓inter t i) (fun i => htc i.val i.prop) this
-  simpa [Set.eq_empty_iff_forall_notMem, Subtype.
+  simpa [Set.eq_empty_iff_forall_notMem, Subtype.forall] using hst
 
 中文:
 定理 是紧集.elim_finite_subfamily_isClosed_subtype
@@ -3686,7 +3774,7 @@ theorem IsCompact.elim_finite_subfamily_isClosed_subtype
     simpa [eq_empty_iff_forall_notMem] using
       (isCompact_iff_isCompact_univ.mp ks).elim_finite_subfamily_closed
       (fun i : I => s ↓inter t i) (fun i => htc i.val i.prop) this
-  simpa [Set.eq_empty_iff_forall_notMem, Subtype.
+  simpa [Set.eq_empty_iff_forall_notMem, Subtype.forall] using hst
 
 Depends on / 依赖: Set.eq_empty_iff_forall_notMem, Subtype, Subtype.forall, elim_finite_subfamily_closed, eq_empty_iff_forall_notMem, i.prop, i.val, isCompact_iff_isCompact_univ, isCompact_iff_isCompact_univ.mp
 -/
@@ -3813,7 +3901,10 @@ theorem IsCompact.prod
   obtain ⟨x : X, sx : x in s, hx : map Prod.fst f.1 <= 𝓝 x⟩ :=
     hs (f.map Prod.fst) (mem_map.2 <| mem_of_superset hfs fun x => And.left)
   obtain ⟨y : Y, ty : y in t, hy : map Prod.snd f.1 <= 𝓝 y⟩ :=
-    ht (f.map Prod.snd) (me
+    ht (f.map Prod.snd) (mem_map.2 <| mem_of_superset hfs fun x => And.right)
+  rw [map_le_iff_le_comap] at hx hy
+  refine ⟨⟨x, y⟩, ⟨sx, ty⟩, ?_⟩
+  rw [nhds_prod_eq]; exact le_inf hx hy
 
 中文:
 定理 是紧集.乘积
@@ -3824,7 +3915,10 @@ theorem IsCompact.prod
   obtain ⟨x : X, sx : x in s, hx : map Prod.fst f.1 <= 𝓝 x⟩ :=
     hs (f.map Prod.fst) (mem_map.2 <| mem_of_superset hfs fun x => And.left)
   obtain ⟨y : Y, ty : y in t, hy : map Prod.snd f.1 <= 𝓝 y⟩ :=
-    ht (f.map Prod.snd) (me
+    ht (f.map Prod.snd) (mem_map.2 <| mem_of_superset hfs fun x => And.right)
+  rw [map_le_iff_le_comap] at hx hy
+  refine ⟨⟨x, y⟩, ⟨sx, ty⟩, ?_⟩
+  rw [nhds_prod_eq]; exact le_inf hx hy
 
 Depends on / 依赖: And.left, And.right, Prod.fst, Prod.snd, f.map, isCompact_iff_ultrafilter_le_nhds, le_inf, map_le_iff_le_comap, mem_map, mem_of_superset, nhds_prod_eq
 -/
@@ -3952,7 +4046,12 @@ lemma IsCompact.sigma_exists_finite_sigma_eq
     (fun i => isOpenMap_sigmaMk _ <| isOpen_univ.preimage continuous_sigmaMk)
     fun x hx => (by simp)
   use s, fun i => Sigma.mk i ⁻¹' u, s.finite_toSet, fun i => ?_, ?_
-  · exact Topology.IsClosedE
+  · exact Topology.IsClosedEmbedding.sigmaMk.isCompact_preimage hu
+  · ext x
+    simp only [Set.mem_sigma_iff, Finset.mem_coe, Set.mem_preimage, and_iff_right_iff_imp]
+    intro hx
+    obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (hs hx)
+    simp_all
 
 中文:
 引理 是紧集.sigma_存在_finite_sigma_eq
@@ -3962,7 +4061,12 @@ lemma IsCompact.sigma_exists_finite_sigma_eq
     (fun i => isOpenMap_sigmaMk _ <| isOpen_univ.preimage continuous_sigmaMk)
     fun x hx => (by simp)
   use s, fun i => Sigma.mk i ⁻¹' u, s.finite_toSet, fun i => ?_, ?_
-  · exact Topology.IsClosedE
+  · exact Topology.IsClosedEmbedding.sigmaMk.isCompact_preimage hu
+  · ext x
+    simp only [Set.mem_sigma_iff, Finset.mem_coe, Set.mem_preimage, and_iff_right_iff_imp]
+    intro hx
+    obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (hs hx)
+    simp_all
 
 Depends on / 依赖: Finset, Finset.mem_coe, IsClosedEmbedding, Set.mem_iUnion.mp, Set.mem_preimage, Set.mem_sigma_iff, Set.univ, Sigma.mk, Topology, Topology.IsClosedEmbedding.sigmaMk.isCompact_preimage, and_iff_right_iff_imp, continuous_sigmaMk, elim_finite_subcover, finite_toSet, hu.elim_finite_subcover, isCompact_preimage, isOpenMap_sigmaMk, isOpen_univ, isOpen_univ.preimage, mem_coe
 -/
@@ -3990,7 +4094,7 @@ theorem Filter.coprod_cocompact
   · exact sup_le (comap_cocompact_le continuous_fst) (comap_cocompact_le continuous_snd)
   · refine (hasBasis_cocompact.coprod hasBasis_cocompact).ge_iff.2 fun K hK => ?_
     rw [← univ_prod]; rw [← prod_univ]; rw [← compl_prod_eq_union]
-    exact (hK.1.prod hK.2).compl_mem_co
+    exact (hK.1.prod hK.2).compl_mem_cocompact
 
 中文:
 定理 滤子.coprod_cocompact
@@ -3999,7 +4103,7 @@ theorem Filter.coprod_cocompact
   · exact sup_le (comap_cocompact_le continuous_fst) (comap_cocompact_le continuous_snd)
   · refine (hasBasis_cocompact.coprod hasBasis_cocompact).ge_iff.2 fun K hK => ?_
     rw [← univ_prod]; rw [← prod_univ]; rw [← compl_prod_eq_union]
-    exact (hK.1.prod hK.2).compl_mem_co
+    exact (hK.1.prod hK.2).compl_mem_cocompact
 
 Depends on / 依赖: comap_cocompact_le, compl_mem_cocompact, compl_prod_eq_union, continuous_fst, continuous_snd, coprod, ge_iff, hasBasis_cocompact, hasBasis_cocompact.coprod, le_antisymm, prod_univ, sup_le, univ_prod
 -/
@@ -4056,7 +4160,8 @@ theorem isCompact_pi_infinite
   have : forall i : ι, exists x, x in s i ∧ Tendsto (Function.eval i) f (𝓝 x) := by
     refine fun i => h i (f.map _) (mem_map.2 ?_)
     exact mem_of_superset hfs fun x hx => hx i
-  choose x hx using
+  choose x hx using this
+  exact ⟨x, fun i => (hx i).left, fun i => (hx i).right⟩
 
 中文:
 定理 isCompact_pi_infinite
@@ -4067,7 +4172,8 @@ theorem isCompact_pi_infinite
   have : forall i : ι, exists x, x in s i ∧ Tendsto (Function.eval i) f (𝓝 x) := by
     refine fun i => h i (f.map _) (mem_map.2 ?_)
     exact mem_of_superset hfs fun x hx => hx i
-  choose x hx using
+  choose x hx using this
+  exact ⟨x, fun i => (hx i).left, fun i => (hx i).right⟩
 
 Depends on / 依赖: Function, Function.eval, Tendsto, f.map, isCompact_iff_ultrafilter_le_nhds, le_pi, le_principal_iff, mem_map, mem_of_superset, nhds_pi
 -/
@@ -4213,7 +4319,7 @@ theorem Filter.coprodᵢ_cocompact
   refine compl_surjective.forall.2 fun s H => ?_
   simp only [compl_mem_coprodᵢ, Filter.mem_cocompact, compl_subset_compl, image_subset_iff] at H ⊢
   choose K hKc htK using H
-  exact ⟨Set.pi univ K, isCompac
+  exact ⟨Set.pi univ K, isCompact_univ_pi hKc, fun f hf i _ => htK i hf⟩
 
 中文:
 定理 滤子.coprodᵢ_cocompact
@@ -4223,7 +4329,7 @@ theorem Filter.coprodᵢ_cocompact
   refine compl_surjective.forall.2 fun s H => ?_
   simp only [compl_mem_coprodᵢ, Filter.mem_cocompact, compl_subset_compl, image_subset_iff] at H ⊢
   choose K hKc htK using H
-  exact ⟨Set.pi univ K, isCompac
+  exact ⟨Set.pi univ K, isCompact_univ_pi hKc, fun f hf i _ => htK i hf⟩
 
 Depends on / 依赖: Filter, Filter.comap_cocompact_le, Filter.mem_cocompact, Set.pi, comap_cocompact_le, compl_subset_compl, compl_surjective, compl_surjective.forall, continuous_apply, iSup_le, image_subset_iff, isCompact_univ_pi, le_antisymm, mem_cocompact
 -/
@@ -4293,7 +4399,33 @@ theorem IsClosed.exists_minimal_nonempty_closed_subset
       · obtain ⟨U₀, hU₀⟩ := hcne
         have : Nonempty { U // U in c } := ⟨⟨U₀, hU₀⟩⟩
         obtain ⟨U₀compl, -, -⟩ := hc hU₀
-      
+        use ⋃₀ c
+        refine ⟨⟨?_, ?_, ?_⟩, fun U hU _ hx => ⟨U, hU, hx⟩⟩
+        · exact fun _ hx => ⟨U₀, hU₀, U₀compl hx⟩
+        · exact isOpen_sUnion fun _ h => (hc h).2.1
+        · convert_to (⋂ U : { U // U in c }, U.1ᶜ).Nonempty
+          · ext
+            simp only [not_exists, not_and, Set.mem_iInter, Subtype.forall,
+              mem_compl_iff, mem_sUnion]
+          apply IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
+          · rintro ⟨U, hU⟩ ⟨U', hU'⟩
+            obtain ⟨V, hVc, hVU, hVU'⟩ := hz.directedOn U hU U' hU'
+            exact ⟨⟨V, hVc⟩, Set.compl_subset_compl.mpr hVU, Set.compl_subset_compl.mpr hVU'⟩
+          · exact fun U => (hc U.2).2.2
+          · exact fun U => (hc U.2).2.1.isClosed_compl.isCompact
+          · exact fun U => (hc U.2).2.1.isClosed_compl
+      · use Sᶜ
+        refine ⟨⟨Set.Subset.refl _, isOpen_compl_iff.mpr hS, ?_⟩, fun U Uc => (hcne ⟨U, Uc⟩).elim⟩
+        rw [compl_compl]
+        exact hne
+  obtain ⟨Uc, Uo, Ucne⟩ := h.prop
+  refine ⟨Uᶜ, Set.compl_subset_comm.mp Uc, Ucne, Uo.isClosed_compl, ?_⟩
+  intro V' V'sub V'ne V'cls
+  have : V'ᶜ = U := by
+    refine h.eq_of_ge ⟨?_, isOpen_compl_iff.mpr V'cls, ?_⟩ (subset_compl_comm.2 V'sub)
+    · exact Set.Subset.trans Uc (Set.subset_compl_comm.mp V'sub)
+    · simp only [compl_compl, V'ne]
+  rw [← this]; rw [compl_compl]
 
 中文:
 定理 是闭集.存在_minimal_nonempty_closed_subset
@@ -4306,7 +4438,33 @@ theorem IsClosed.exists_minimal_nonempty_closed_subset
       · obtain ⟨U₀, hU₀⟩ := hcne
         have : Nonempty { U // U in c } := ⟨⟨U₀, hU₀⟩⟩
         obtain ⟨U₀compl, -, -⟩ := hc hU₀
-      
+        use ⋃₀ c
+        refine ⟨⟨?_, ?_, ?_⟩, fun U hU _ hx => ⟨U, hU, hx⟩⟩
+        · exact fun _ hx => ⟨U₀, hU₀, U₀compl hx⟩
+        · exact isOpen_sUnion fun _ h => (hc h).2.1
+        · convert_to (⋂ U : { U // U in c }, U.1ᶜ).Nonempty
+          · ext
+            simp only [not_exists, not_and, Set.mem_iInter, Subtype.forall,
+              mem_compl_iff, mem_sUnion]
+          apply IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
+          · rintro ⟨U, hU⟩ ⟨U', hU'⟩
+            obtain ⟨V, hVc, hVU, hVU'⟩ := hz.directedOn U hU U' hU'
+            exact ⟨⟨V, hVc⟩, Set.compl_subset_compl.mpr hVU, Set.compl_subset_compl.mpr hVU'⟩
+          · exact fun U => (hc U.2).2.2
+          · exact fun U => (hc U.2).2.1.isClosed_compl.isCompact
+          · exact fun U => (hc U.2).2.1.isClosed_compl
+      · use Sᶜ
+        refine ⟨⟨Set.Subset.refl _, isOpen_compl_iff.mpr hS, ?_⟩, fun U Uc => (hcne ⟨U, Uc⟩).elim⟩
+        rw [compl_compl]
+        exact hne
+  obtain ⟨Uc, Uo, Ucne⟩ := h.prop
+  refine ⟨Uᶜ, Set.compl_subset_comm.mp Uc, Ucne, Uo.isClosed_compl, ?_⟩
+  intro V' V'sub V'ne V'cls
+  have : V'ᶜ = U := by
+    refine h.eq_of_ge ⟨?_, isOpen_compl_iff.mpr V'cls, ?_⟩ (subset_compl_comm.2 V'sub)
+    · exact Set.Subset.trans Uc (Set.subset_compl_comm.mp V'sub)
+    · simp only [compl_compl, V'ne]
+  rw [← this]; rw [compl_compl]
 
 Depends on / 依赖: IsOpen, Nonempty, Set.m, c.Nonempty, convert_to, isOpen_sUnion, not_and, not_exists, subseteq, zorn_subset
 -/

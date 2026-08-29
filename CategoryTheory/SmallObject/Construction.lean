@@ -441,7 +441,11 @@ instance :
         (B ((equivShrink _).symm i) ⟶ S)) :=
         ⟨equivShrink _ x.i, equivShrink _
           ⟨eqToHom (by simp) ≫ x.t, eqToHom (by simp) ≫ x.b⟩⟩
-  have hφ : Function.Injective φ
+  have hφ : Function.Injective φ := by
+    rintro ⟨i₁, t₁, b₁, _⟩ ⟨i₂, t₂, b₂, _⟩ h
+    obtain rfl : i₁ = i₂ := by simpa [φ] using congr_arg Sigma.fst h
+    simpa [cancel_epi, φ] using h
+  exact small_of_injective hφ
 
 中文:
 实例 :
@@ -453,7 +457,11 @@ instance :
         (B ((equivShrink _).symm i) ⟶ S)) :=
         ⟨equivShrink _ x.i, equivShrink _
           ⟨eqToHom (by simp) ≫ x.t, eqToHom (by simp) ≫ x.b⟩⟩
-  have hφ : Function.Injective φ
+  have hφ : Function.Injective φ := by
+    rintro ⟨i₁, t₁, b₁, _⟩ ⟨i₂, t₂, b₂, _⟩ h
+    obtain rfl : i₁ = i₂ := by simpa [φ] using congr_arg Sigma.fst h
+    simpa [cancel_epi, φ] using h
+  exact small_of_injective hφ
 
 Depends on / 依赖: DecidableRel, Function, Function.Injective, FunctorObjIndex, H.Adj, Injective, Shrink, Sigma.fst, cancel_epi, congr_arg, eqToHom, equivShrink, small_of_injective
 -/
@@ -817,7 +825,8 @@ lemma ιFunctorObj_extension'
     ιFunctorObj_extension f (πX := πX) (i := i) (t ≫ eX.hom) (b ≫ eS.hom) ⟨by
       rw [assoc]; rw [← ιFunctorObj_πFunctorObj f πX]; rw [← reassoc_of% commι]; rw [← commπ]; rw [reassoc_of% fac']; rw [reassoc_of% fac]⟩
   refine ⟨l ≫ eZ.inv, ?_, ?_⟩
-  · rw [reassoc_of% hl₁
+  · rw [reassoc_of% hl₁, ← reassoc_of% commι, eZ.hom_inv_id, comp_id]
+  · rw [← cancel_mono eS.hom, assoc, assoc, commπ, eZ.inv_hom_id_assoc, hl₂]
 
 中文:
 引理 ιFunctorObj_extension'
@@ -827,7 +836,8 @@ lemma ιFunctorObj_extension'
     ιFunctorObj_extension f (πX := πX) (i := i) (t ≫ eX.hom) (b ≫ eS.hom) ⟨by
       rw [assoc]; rw [← ιFunctorObj_πFunctorObj f πX]; rw [← reassoc_of% commι]; rw [← commπ]; rw [reassoc_of% fac']; rw [reassoc_of% fac]⟩
   refine ⟨l ≫ eZ.inv, ?_, ?_⟩
-  · rw [reassoc_of% hl₁
+  · rw [reassoc_of% hl₁, ← reassoc_of% commι, eZ.hom_inv_id, comp_id]
+  · rw [← cancel_mono eS.hom, assoc, assoc, commπ, eZ.inv_hom_id_assoc, hl₂]
 
 Depends on / 依赖: cancel_mono, comp_id, eS.hom, eX.hom, eZ.hom_inv_id, eZ.inv, eZ.inv_hom_id_assoc, hom_inv_id, inv_hom_id_assoc, reassoc_of
 -/
@@ -873,7 +883,12 @@ definition functor
       simp only [functorMap, Arrow.comp_left, Arrow.mk_left]
       ext ⟨i, t, b, w⟩
       · simp
-
+      · simp [ι_functorMapTgt_assoc f τ i t b w _ rfl _ rfl,
+          ι_functorMapTgt_assoc f (τ ≫ τ') i t b w _ rfl _ rfl,
+          ι_functorMapTgt_assoc f τ' i (t ≫ τ.left) (b ≫ τ.right)
+            (by simp [reassoc_of% w]) (b ≫ τ.right ≫ τ'.right) (by simp)
+            (t ≫ (τ ≫ τ').left) (by simp)]
+    · dsimp
 
 中文:
 定义 functor
@@ -890,7 +905,12 @@ definition functor
       simp only [functorMap, Arrow.comp_left, Arrow.mk_left]
       ext ⟨i, t, b, w⟩
       · simp
-
+      · simp [ι_functorMapTgt_assoc f τ i t b w _ rfl _ rfl,
+          ι_functorMapTgt_assoc f (τ ≫ τ') i t b w _ rfl _ rfl,
+          ι_functorMapTgt_assoc f τ' i (t ≫ τ.left) (b ≫ τ.right)
+            (by simp [reassoc_of% w]) (b ≫ τ.right ≫ τ'.right) (by simp)
+            (t ≫ (τ ≫ τ').left) (by simp)]
+    · dsimp
 
 Depends on / 依赖: Arrow.mk
 -/

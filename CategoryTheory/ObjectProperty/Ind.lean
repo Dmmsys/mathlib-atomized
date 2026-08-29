@@ -129,7 +129,8 @@ lemma ind_ind
   choose J Jc Jf pres K Kc Kf pres' hp using h
   have (j : J) (i : K j) : IsFinitelyPresentable ((pres' j).diag.obj i) := h _ (hp _ _)
   have := IsFiltered.of_equivalence (ShrinkHoms.equivalence (ColimitPresentation.Total pres'))
-  exact ⟨_, inf
+  exact ⟨_, inferInstance, inferInstance,
+    (pres.bind pres').reindex (ShrinkHoms.equivalence _).inverse, fun k => by simp [hp]⟩
 
 中文:
 引理 ind_ind
@@ -139,7 +140,8 @@ lemma ind_ind
   choose J Jc Jf pres K Kc Kf pres' hp using h
   have (j : J) (i : K j) : IsFinitelyPresentable ((pres' j).diag.obj i) := h _ (hp _ _)
   have := IsFiltered.of_equivalence (ShrinkHoms.equivalence (ColimitPresentation.Total pres'))
-  exact ⟨_, inf
+  exact ⟨_, inferInstance, inferInstance,
+    (pres.bind pres').reindex (ShrinkHoms.equivalence _).inverse, fun k => by simp [hp]⟩
 
 Depends on / 依赖: ColimitPresentation, ColimitPresentation.Total, IsFiltered, IsFiltered.of_equivalence, IsFinitelyPresentable, P.ind, ShrinkHoms, ShrinkHoms.equivalence, diag.obj, equivalence, inverse, le_antisymm, le_ind, of_equivalence, pres.bind, reindex
 -/
@@ -186,7 +188,26 @@ lemma ind_iff_exists
   · have : IsFinitelyPresentable Z := hZ
     obtain ⟨j, u, hcomp⟩ := IsFinitelyPresentable.exists_hom_of_isColimit pres.isColimit g
     exact ⟨_, u, pres.ι.app j, hcomp, h j⟩
-  · let incl : P.FullSubcategory ⥤ (isFinitelyPresentable.{
+  · let incl : P.FullSubcategory ⥤ (isFinitelyPresentable.{w} C).FullSubcategory :=
+      ObjectProperty.ιOfLE H
+    have H (d : CostructuredArrow (isFinitelyPresentable.{w} C).ι X) : exists c,
+        Nonempty (d ⟶ (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X).obj c) := by
+      obtain ⟨W, u, v, huv, hW⟩ := hfac d.hom
+      exact ⟨CostructuredArrow.mk (Y := FullSubcategory.mk _ hW) v,
+        ⟨CostructuredArrow.homMk ⟨u⟩ huv⟩⟩
+    have : (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X).Final :=
+      Functor.final_of_exists_of_isFiltered_of_fullyFaithful (C := CostructuredArrow (incl ⋙ _) X)
+        (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X) H
+    have : IsFiltered (CostructuredArrow P.ι X) :=
+      .of_exists_of_isFiltered_of_fullyFaithful (C := CostructuredArrow (incl ⋙ _) X)
+        (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X) H
+    obtain ⟨hc⟩ : P.ι.isDenseAt X :=
+      Functor.IsDenseAt.of_final (F := (isFinitelyPresentable.{w} C).ι) incl
+        (Functor.IsDense.isDenseAt _ _)
+    have : EssentiallySmall.{w} (CostructuredArrow P.ι X) :=
+      essentiallySmall_of_fully_faithful (C := CostructuredArrow (incl ⋙ _) X)
+        (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X)
+    exact of_essentiallySmall_index ⟨_, _, hc⟩ fun Y => Y.left.2
 
 中文:
 引理 ind_iff_存在
@@ -196,7 +217,26 @@ lemma ind_iff_exists
   · have : IsFinitelyPresentable Z := hZ
     obtain ⟨j, u, hcomp⟩ := IsFinitelyPresentable.exists_hom_of_isColimit pres.isColimit g
     exact ⟨_, u, pres.ι.app j, hcomp, h j⟩
-  · let incl : P.FullSubcategory ⥤ (isFinitelyPresentable.{
+  · let incl : P.FullSubcategory ⥤ (isFinitelyPresentable.{w} C).FullSubcategory :=
+      ObjectProperty.ιOfLE H
+    have H (d : CostructuredArrow (isFinitelyPresentable.{w} C).ι X) : exists c,
+        Nonempty (d ⟶ (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X).obj c) := by
+      obtain ⟨W, u, v, huv, hW⟩ := hfac d.hom
+      exact ⟨CostructuredArrow.mk (Y := FullSubcategory.mk _ hW) v,
+        ⟨CostructuredArrow.homMk ⟨u⟩ huv⟩⟩
+    have : (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X).Final :=
+      Functor.final_of_exists_of_isFiltered_of_fullyFaithful (C := CostructuredArrow (incl ⋙ _) X)
+        (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X) H
+    have : IsFiltered (CostructuredArrow P.ι X) :=
+      .of_exists_of_isFiltered_of_fullyFaithful (C := CostructuredArrow (incl ⋙ _) X)
+        (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X) H
+    obtain ⟨hc⟩ : P.ι.isDenseAt X :=
+      Functor.IsDenseAt.of_final (F := (isFinitelyPresentable.{w} C).ι) incl
+        (Functor.IsDense.isDenseAt _ _)
+    have : EssentiallySmall.{w} (CostructuredArrow P.ι X) :=
+      essentiallySmall_of_fully_faithful (C := CostructuredArrow (incl ⋙ _) X)
+        (CostructuredArrow.pre incl (isFinitelyPresentable.{w} C).ι X)
+    exact of_essentiallySmall_index ⟨_, _, hc⟩ fun Y => Y.left.2
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, FullSubcategory, IsFinitelyPresentable, IsFinitelyPresentable.exists_hom_of_isColimit, Nonempty, ObjectProperty, P.FullSubcategory, exists_hom_of_isColimit, isColimit, isFinitelyPresentable, pres.isColimit
 -/
@@ -369,7 +409,11 @@ instance isClosedUnderLimitsOfShape_ind_discrete
     hasLimitsOfShape_of_equivalence (Discrete.equivalence e)
   have : IsIPCOfShape.{w} (Shrink.{w} ι) C := .of_equiv e
   have : P.IsClosedUnderLimitsOfShape (Discrete (Shrink.{w} ι)) :=
-    .
+    .of_equivalence (Discrete.equivalence e)
+  let iso : limit Y ≅ ∏ᶜ fun i => Y.obj ⟨e.symm i⟩ :=
+    (Pi.isoLimit _).symm ≪≫ (Pi.reindex e.symm _).symm
+  rw [(ind.{w} P).prop_iff_of_iso iso]
+  exact ind_pi_of_ind fun i => h _
 
 中文:
 实例 isClosedUnderLimitsOfShape_ind_discrete
@@ -381,7 +425,11 @@ instance isClosedUnderLimitsOfShape_ind_discrete
     hasLimitsOfShape_of_equivalence (Discrete.equivalence e)
   have : IsIPCOfShape.{w} (Shrink.{w} ι) C := .of_equiv e
   have : P.IsClosedUnderLimitsOfShape (Discrete (Shrink.{w} ι)) :=
-    .
+    .of_equivalence (Discrete.equivalence e)
+  let iso : limit Y ≅ ∏ᶜ fun i => Y.obj ⟨e.symm i⟩ :=
+    (Pi.isoLimit _).symm ≪≫ (Pi.reindex e.symm _).symm
+  rw [(ind.{w} P).prop_iff_of_iso iso]
+  exact ind_pi_of_ind fun i => h _
 
 Depends on / 依赖: Discrete, Discrete.equivalence, HasProductsOfShape, IsClosedUnderLimitsOfShape, IsIPCOfShape, P.IsClosedUnderLimitsOfShape, Pi.isoLimit, Pi.reindex, Shrink, Y.obj, e.symm, equivShrink, equivalence, hasLimitsOfShape_of_equivalence, ind_pi_of_ind, isoLimit, of_equiv, of_equivalence, prop_iff_of_iso, reindex
 -/

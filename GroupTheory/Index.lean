@@ -110,7 +110,16 @@ theorem index_comap_of_surjective
       QuotientGroup.leftRel (H.comap f) x y ↔ QuotientGroup.leftRel H (f x) (f y) := by
     simp only [QuotientGroup.leftRel_apply]
     exact fun x y => iff_of_eq (congr_arg (· in H) (by rw [f.map_mul, f.map_inv]))
-  refine Nat.card_congr (Equiv.ofBijective (Quotient
+  refine Nat.card_congr (Equiv.ofBijective (Quotient.map' f fun x y => (key x y).mp) ⟨?_, ?_⟩)
+  · simp_rw [← Quotient.eq''] at key
+    refine Quotient.ind' fun x => ?_
+    refine Quotient.ind' fun y => ?_
+    exact (key x y).mpr
+  · refine Quotient.ind' fun x => ?_
+    obtain ⟨y, hy⟩ := hf x
+    exact ⟨y, (Quotient.map'_mk'' f _ y).trans (congr_arg Quotient.mk'' hy)⟩
+
+@[to_additive]
 
 中文:
 定理 index_comap_of_surjective
@@ -120,7 +129,16 @@ theorem index_comap_of_surjective
       QuotientGroup.leftRel (H.comap f) x y ↔ QuotientGroup.leftRel H (f x) (f y) := by
     simp only [QuotientGroup.leftRel_apply]
     exact fun x y => iff_of_eq (congr_arg (· in H) (by rw [f.map_mul, f.map_inv]))
-  refine Nat.card_congr (Equiv.ofBijective (Quotient
+  refine Nat.card_congr (Equiv.ofBijective (Quotient.map' f fun x y => (key x y).mp) ⟨?_, ?_⟩)
+  · simp_rw [← Quotient.eq''] at key
+    refine Quotient.ind' fun x => ?_
+    refine Quotient.ind' fun y => ?_
+    exact (key x y).mpr
+  · refine Quotient.ind' fun x => ?_
+    obtain ⟨y, hy⟩ := hf x
+    exact ⟨y, (Quotient.map'_mk'' f _ y).trans (congr_arg Quotient.mk'' hy)⟩
+
+@[to_additive]
 
 Depends on / 依赖: Equiv.ofBijective, H.comap, Nat.card_congr, Quotient, Quotient.eq, Quotient.ind, Quotient.map, QuotientGroup, QuotientGroup.leftRel, QuotientGroup.leftRel_apply, card_congr, congr_arg, f.map_inv, f.map_mul, iff_of_eq, leftRel, leftRel_apply, map_inv, map_mul, ofBijective
 -/
@@ -559,7 +577,12 @@ theorem index_eq_two_iff
     QuotientGroup.exists_mk, QuotientGroup.forall_mk, Ne, QuotientGroup.eq, mul_one,
     xor_iff_iff_not]
   refine exists_congr fun a =>
-    ⟨fun ha b => ⟨fun hba hb => ?_, fun hb => ?_⟩, fun ha => ⟨?_, fun b h
+    ⟨fun ha b => ⟨fun hba hb => ?_, fun hb => ?_⟩, fun ha => ⟨?_, fun b hb => ?_⟩⟩
+  · exact ha.1 ((mul_mem_cancel_left hb).1 hba)
+  · exact inv_inv b ▸ ha.2 _ (mt (inv_mem_iff (x := b)).1 hb)
+  · rw [← inv_mem_iff (x := a), ← ha, inv_mul_cancel]
+    exact one_mem _
+  · rwa [ha, inv_mem_iff (x := b)]
 
 中文:
 定理 index_eq_two_iff
@@ -569,7 +592,12 @@ theorem index_eq_two_iff
     QuotientGroup.exists_mk, QuotientGroup.forall_mk, Ne, QuotientGroup.eq, mul_one,
     xor_iff_iff_not]
   refine exists_congr fun a =>
-    ⟨fun ha b => ⟨fun hba hb => ?_, fun hb => ?_⟩, fun ha => ⟨?_, fun b h
+    ⟨fun ha b => ⟨fun hba hb => ?_, fun hb => ?_⟩, fun ha => ⟨?_, fun b hb => ?_⟩⟩
+  · exact ha.1 ((mul_mem_cancel_left hb).1 hba)
+  · exact inv_inv b ▸ ha.2 _ (mt (inv_mem_iff (x := b)).1 hb)
+  · rw [← inv_mem_iff (x := a), ← ha, inv_mul_cancel]
+    exact one_mem _
+  · rwa [ha, inv_mem_iff (x := b)]
 
 Depends on / 依赖: ExistsUnique, Nat.card_eq_two_iff, QuotientGroup, QuotientGroup.eq, QuotientGroup.exists_mk, QuotientGroup.forall_mk, card_eq_two_iff, exists_congr, exists_mk, forall_mk, inv_inv, inv_mem_iff, inv_mul_cancel, mul_mem_cancel_left, mul_one, one_mem, xor_iff_iff_not
 -/
@@ -795,7 +823,9 @@ theorem mul_mem_iff_of_index_two
   simp only [ha, hb, iff_true]
   rcases index_eq_two_iff.1 h with ⟨c, hc⟩
   refine (hc _).or.resolve_left ?_
-  rwa [mul_assoc, mul_mem_cancel_righ
+  rwa [mul_assoc, mul_mem_cancel_right ((hc _).or.resolve_right hb)]
+
+@[to_additive]
 
 中文:
 定理 mul_mem_iff_of_index_two
@@ -807,7 +837,9 @@ theorem mul_mem_iff_of_index_two
   simp only [ha, hb, iff_true]
   rcases index_eq_two_iff.1 h with ⟨c, hc⟩
   refine (hc _).or.resolve_left ?_
-  rwa [mul_assoc, mul_mem_cancel_righ
+  rwa [mul_assoc, mul_mem_cancel_right ((hc _).or.resolve_right hb)]
+
+@[to_additive]
 
 Depends on / 依赖: iff_true, index_eq_two_iff, mul_assoc, mul_mem_cancel_left, mul_mem_cancel_right, or.resolve_left, or.resolve_right, resolve_left, resolve_right, true_iff
 -/
@@ -1776,7 +1808,7 @@ theorem relIndex_inf_le
   rw [← inf_relIndex_right]; rw [inf_assoc]; rw [← relIndex_mul_relIndex _ _ L inf_le_right inf_le_right]; rw [inf_relIndex_right]; rw [inf_relIndex_right]
   grw [relIndex_le_of_le_right inf_le_right h]
 
-@[to_add
+@[to_additive]
 
 中文:
 定理 relIndex_inf_le
@@ -1787,7 +1819,7 @@ theorem relIndex_inf_le
   rw [← inf_relIndex_right]; rw [inf_assoc]; rw [← relIndex_mul_relIndex _ _ L inf_le_right inf_le_right]; rw [inf_relIndex_right]; rw [inf_relIndex_right]
   grw [relIndex_le_of_le_right inf_le_right h]
 
-@[to_add
+@[to_additive]
 
 Depends on / 依赖: H.relIndex, inf_assoc, inf_le_left, inf_le_right, inf_relIndex_right, relIndex, relIndex_eq_zero_of_le_left, relIndex_le_of_le_right, relIndex_mul_relIndex
 -/
@@ -2029,7 +2061,18 @@ theorem index_dvd_two_iff
       -- This is just showing that 2 is prime, but we do it "longhand" to avoid making any
       -- dependence on number theory files.
       have := Nat.le_succ_iff.mp (Nat.le_of_dvd two_pos hH)
-      rw [Nat.le_one_iff_eq_zero_or_eq_one]; rw
+      rw [Nat.le_one_iff_eq_zero_or_eq_one]; rw [or_assoc] at this
+      exact this.resolve_left fun h => (two_ne_zero <| Nat.zero_dvd.mp (h ▸ hH)).elim
+    · simp [index_eq_one.mp hH]
+    · exact match index_eq_two_iff.mp hH with | ⟨a, ha⟩ => ⟨a, fun b => (ha b).or⟩
+  mpr := by
+    rintro ⟨a, ha⟩
+    by_cases ha' : a in H
+    · suffices forall b, b in H by simp [(eq_top_iff' _).mpr this]
+      exact fun b => (ha b).elim (fun h => by simpa using mul_mem h (inv_mem ha')) id
+    · refine dvd_of_eq (index_eq_two_iff.mpr
+        ⟨a, fun b => (xor_iff_or_and_not_and _ _).mpr ⟨ha b, fun h => ha' ?_⟩⟩)
+      simpa using mul_mem (inv_mem h.2) h.1
 
 中文:
 定理 index_dvd_two_iff
@@ -2039,7 +2082,18 @@ theorem index_dvd_two_iff
       -- This is just showing that 2 is prime, but we do it "longhand" to avoid making any
       -- dependence on number theory files.
       have := Nat.le_succ_iff.mp (Nat.le_of_dvd two_pos hH)
-      rw [Nat.le_one_iff_eq_zero_or_eq_one]; rw
+      rw [Nat.le_one_iff_eq_zero_or_eq_one]; rw [or_assoc] at this
+      exact this.resolve_left fun h => (two_ne_zero <| Nat.zero_dvd.mp (h ▸ hH)).elim
+    · simp [index_eq_one.mp hH]
+    · exact match index_eq_two_iff.mp hH with | ⟨a, ha⟩ => ⟨a, fun b => (ha b).or⟩
+  mpr := by
+    rintro ⟨a, ha⟩
+    by_cases ha' : a in H
+    · suffices forall b, b in H by simp [(eq_top_iff' _).mpr this]
+      exact fun b => (ha b).elim (fun h => by simpa using mul_mem h (inv_mem ha')) id
+    · refine dvd_of_eq (index_eq_two_iff.mpr
+        ⟨a, fun b => (xor_iff_or_and_not_and _ _).mpr ⟨ha b, fun h => ha' ?_⟩⟩)
+      simpa using mul_mem (inv_mem h.2) h.1
 
 Depends on / 依赖: H.index
 -/
@@ -2389,7 +2443,29 @@ lemma exists_pow_mem_of_index_ne_zero
   suffices exists n₁ n₂, n₁ < n₂ ∧ n₂ <= H.index ∧ ((a ^ n₂ : G) : G ⧸ H) = ((a ^ n₁ : G) : G ⧸ H) by
     rcases this with ⟨n₁, n₂, hlt, hle, he⟩
     refine ⟨n₂ - n₁, by lia, by lia, ?_⟩
-    rw [eq_comm]; rw [QuotientGroup.eq]; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← zpow_neg]; rw [← zpow
+    rw [eq_comm]; rw [QuotientGroup.eq]; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← zpow_neg]; rw [← zpow_add]; rw [add_comm] at he
+    rw [← zpow_natCast]
+    convert! he
+    lia
+  suffices exists n₁ n₂, n₁ != n₂ ∧ n₁ <= H.index ∧ n₂ <= H.index ∧
+      ((a ^ n₂ : G) : G ⧸ H) = ((a ^ n₁ : G) : G ⧸ H) by
+    rcases this with ⟨n₁, n₂, hne, hle₁, hle₂, he⟩
+    rcases hne.lt_or_gt with hlt | hlt
+    · exact ⟨n₁, n₂, hlt, hle₂, he⟩
+    · exact ⟨n₂, n₁, hlt, hle₁, he.symm⟩
+  by_contra hc
+  simp_rw [not_exists] at hc
+  let f : (Set.Icc 0 H.index) -> G ⧸ H := fun n => (a ^ (n : Nat) : G)
+  have hf : Function.Injective f := by
+    rintro ⟨n₁, h₁, hle₁⟩ ⟨n₂, h₂, hle₂⟩ he
+    have hc' := hc n₁ n₂
+    dsimp only [f] at he
+    simpa [hle₁, hle₂, he] using hc'
+  have := (fintypeOfIndexNeZero h).finite
+  have hcard := Nat.card_le_card_of_injective f hf
+  simp [← index_eq_card] at hcard
+
+@[to_additive]
 
 中文:
 引理 存在_pow_mem_of_index_ne_zero
@@ -2398,7 +2474,29 @@ lemma exists_pow_mem_of_index_ne_zero
   suffices exists n₁ n₂, n₁ < n₂ ∧ n₂ <= H.index ∧ ((a ^ n₂ : G) : G ⧸ H) = ((a ^ n₁ : G) : G ⧸ H) by
     rcases this with ⟨n₁, n₂, hlt, hle, he⟩
     refine ⟨n₂ - n₁, by lia, by lia, ?_⟩
-    rw [eq_comm]; rw [QuotientGroup.eq]; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← zpow_neg]; rw [← zpow
+    rw [eq_comm]; rw [QuotientGroup.eq]; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← zpow_neg]; rw [← zpow_add]; rw [add_comm] at he
+    rw [← zpow_natCast]
+    convert! he
+    lia
+  suffices exists n₁ n₂, n₁ != n₂ ∧ n₁ <= H.index ∧ n₂ <= H.index ∧
+      ((a ^ n₂ : G) : G ⧸ H) = ((a ^ n₁ : G) : G ⧸ H) by
+    rcases this with ⟨n₁, n₂, hne, hle₁, hle₂, he⟩
+    rcases hne.lt_or_gt with hlt | hlt
+    · exact ⟨n₁, n₂, hlt, hle₂, he⟩
+    · exact ⟨n₂, n₁, hlt, hle₁, he.symm⟩
+  by_contra hc
+  simp_rw [not_exists] at hc
+  let f : (Set.Icc 0 H.index) -> G ⧸ H := fun n => (a ^ (n : Nat) : G)
+  have hf : Function.Injective f := by
+    rintro ⟨n₁, h₁, hle₁⟩ ⟨n₂, h₂, hle₂⟩ he
+    have hc' := hc n₁ n₂
+    dsimp only [f] at he
+    simpa [hle₁, hle₂, he] using hc'
+  have := (fintypeOfIndexNeZero h).finite
+  have hcard := Nat.card_le_card_of_injective f hf
+  simp [← index_eq_card] at hcard
+
+@[to_additive]
 
 Depends on / 依赖: H.index, QuotientGroup, QuotientGroup.eq, add_comm, convert, eq_comm, zpow_add, zpow_natCast, zpow_neg
 -/
@@ -3301,7 +3399,7 @@ exact finiteIndex_of_le subgroupOf_mono L h
 
 @[deprecated (since := "2026-05-09")] alias isFiniteRelIndex_of_le := isFiniteRelIndex_of_le_left
 @[deprecated (since := "2026-05-09")] alias
-  _root_.AddSubgroup.isFiniteRelIndex_of_le := AddSubgroup.isFini
+  _root_.AddSubgroup.isFiniteRelIndex_of_le := AddSubgroup.isFiniteRelIndex_of_le_left
 
 中文:
 引理 isFiniteRelIndex_of_le_left
@@ -3312,7 +3410,7 @@ exact finiteIndex_of_le subgroupOf_mono L h
 
 @[deprecated (since := "2026-05-09")] alias isFiniteRelIndex_of_le := isFiniteRelIndex_of_le_left
 @[deprecated (since := "2026-05-09")] alias
-  _root_.AddSubgroup.isFiniteRelIndex_of_le := AddSubgroup.isFini
+  _root_.AddSubgroup.isFiniteRelIndex_of_le := AddSubgroup.isFiniteRelIndex_of_le_left
 
 Depends on / 依赖: finiteIndex_of_le, isFiniteRelIndex_iff_finiteIndex, subgroupOf_mono
 -/
@@ -3652,7 +3750,7 @@ lemma surjective_of_card_ker_le_div
   proof: by
 refine range_eq_top.1 SetLike.ext' Set.eq_of_subset_of_ncard_le (Set.subset_univ _) ?_
   rw [Subgroup.coe_top]; rw [Set.ncard_univ]; rw [← Nat.card_coe_set_eq]; rw [SetLike.coe_sort_coe]; rw [← Nat.card_congr (QuotientGroup.quotientKerEquivRange f).toEquiv]
-  exact Nat.le_of_mul_le_mul_left (f.ke
+  exact Nat.le_of_mul_le_mul_left (f.ker.card_mul_index ▸ Nat.mul_le_of_le_div _ _ _ h) Nat.card_pos
 
 中文:
 引理 surjective_of_card_ker_le_div
@@ -3660,7 +3758,7 @@ refine range_eq_top.1 SetLike.ext' Set.eq_of_subset_of_ncard_le (Set.subset_univ
   证明: by
 refine range_eq_top.1 SetLike.ext' Set.eq_of_subset_of_ncard_le (Set.subset_univ _) ?_
   rw [Subgroup.coe_top]; rw [Set.ncard_univ]; rw [← Nat.card_coe_set_eq]; rw [SetLike.coe_sort_coe]; rw [← Nat.card_congr (QuotientGroup.quotientKerEquivRange f).toEquiv]
-  exact Nat.le_of_mul_le_mul_left (f.ke
+  exact Nat.le_of_mul_le_mul_left (f.ker.card_mul_index ▸ Nat.mul_le_of_le_div _ _ _ h) Nat.card_pos
 
 Depends on / 依赖: Nat.card_coe_set_eq, Nat.card_congr, Nat.card_pos, Nat.le_of_mul_le_mul_left, Nat.mul_le_of_le_div, QuotientGroup, QuotientGroup.quotientKerEquivRange, Set.eq_of_subset_of_ncard_le, Set.ncard_univ, Set.subset_univ, SetLike, SetLike.coe_sort_coe, SetLike.ext, Subgroup, Subgroup.coe_top, card_coe_set_eq, card_congr, card_mul_index, card_pos, coe_sort_coe
 -/
@@ -3690,7 +3788,9 @@ lemma card_fiber_eq_of_mem_range
     rw [← map_univ_equiv (Equiv.mulRight y⁻¹)]; rw [filter_map]; rw [card_map]
   congr 2 with g
   simp only [Function.comp, Equiv.toEmbedding_apply, Equiv.coe_mulRight, map_mul]
-  let 
+  let f' := MonoidHomClass.toMonoidHom f
+  change f' g * f' y⁻¹ = f' x ↔ f' g = f' x * f' y
+  rw [← f'.coe_toHomUnits y⁻¹]; rw [map_inv]; rw [Units.mul_inv_eq_iff_eq_mul]; rw [f'.coe_toHomUnits]
 
 中文:
 引理 card_fiber_eq_of_mem_range
@@ -3703,7 +3803,9 @@ lemma card_fiber_eq_of_mem_range
     rw [← map_univ_equiv (Equiv.mulRight y⁻¹)]; rw [filter_map]; rw [card_map]
   congr 2 with g
   simp only [Function.comp, Equiv.toEmbedding_apply, Equiv.coe_mulRight, map_mul]
-  let 
+  let f' := MonoidHomClass.toMonoidHom f
+  change f' g * f' y⁻¹ = f' x ↔ f' g = f' x * f' y
+  rw [← f'.coe_toHomUnits y⁻¹]; rw [map_inv]; rw [Units.mul_inv_eq_iff_eq_mul]; rw [f'.coe_toHomUnits]
 
 Depends on / 依赖: Equiv.coe_mulRight, Equiv.mulRight, Equiv.toEmbedding_apply, Function, Function.comp, MonoidHomClass, MonoidHomClass.toMonoidHom, Units.mul_inv_eq_iff_eq_mul, card_map, coe_mulRight, coe_toHomUnits, conv_lhs, filter_map, map_inv, map_mul, map_univ_equiv, mulRight, mul_inv_eq_iff_eq_mul, mul_left_surjective, toEmbedding_apply
 -/

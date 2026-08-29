@@ -663,7 +663,7 @@ theorem mem_eraseLast_of_ne_of_mem
     conv_rhs => rw [← Nat.succ_sub (length_pos_of_nontrivial ⟨_, ⟨i, rfl⟩, _, s.last_mem, hx⟩),
       Nat.add_one_sub_one]
     exact lt_of_le_of_ne (Nat.le_of_lt_succ i.2) (by simpa [last, s.inj, Fin.ext_iff] using hx)
- 
+  exact ⟨⟨↑i, hi⟩, by simp⟩
 
 中文:
 定理 mem_eraseLast_of_ne_of_mem
@@ -674,7 +674,7 @@ theorem mem_eraseLast_of_ne_of_mem
     conv_rhs => rw [← Nat.succ_sub (length_pos_of_nontrivial ⟨_, ⟨i, rfl⟩, _, s.last_mem, hx⟩),
       Nat.add_one_sub_one]
     exact lt_of_le_of_ne (Nat.le_of_lt_succ i.2) (by simpa [last, s.inj, Fin.ext_iff] using hx)
- 
+  exact ⟨⟨↑i, hi⟩, by simp⟩
 
 Depends on / 依赖: Fin.ext_iff, Nat.add_one_sub_one, Nat.le_of_lt_succ, Nat.succ_sub, add_one_sub_one, conv_rhs, ext_iff, last_mem, le_of_lt_succ, length, length_pos_of_nontrivial, lt_of_le_of_ne, s.inj, s.last_mem, s.length, succ_sub
 -/
@@ -944,7 +944,30 @@ theorem smash
     calc
       Fin (s₁.length + s₂.length) ≃ (Fin s₁.length) oplus (Fin s₂.length) := finSumFinEquiv.symm
       _ ≃ (Fin t₁.length) oplus (Fin t₂.length) := Equiv.sumCongr h₁.choose h₂.choose
-      _ ≃ Fin (t₁.length + t₂.length) :
+      _ ≃ Fin (t₁.length + t₂.length) := finSumFinEquiv
+  ⟨e, by
+    intro i
+    refine Fin.addCases ?_ ?_ i
+    · intro i
+      simpa [e, smash_castAdd, smash_succ_castAdd] using h₁.choose_spec i
+    · intro i
+      simpa [e, -Fin.castSucc_natAdd, smash_natAdd, smash_succ_natAdd] using h₂.choose_spec i⟩
+
+#adaptation_note /-- Proof repaired after leanprover/lean4#13492.
+The proof body used to be a single term
+```
+⟨e, fun i => by
+  refine Fin.lastCases ?_ ?_ i
+  · simpa [e, apply_last] using hlast
+  · intro i
+    simpa [e, ← Fin.castSucc_succ] using hequiv.choose_spec i⟩
+```
+(where `e` was defined via the same `calc` block; the signature had `: ... :=` rather
+than `: ... := by`).
+The replacement proof is a short-term fix, and we request that the authors/maintainers of
+this file review the proof, and either approve it by removing this note, revise
+the proof or the prerequisites appropriately, or minimize a problem in lean4 that still
+needs addressing. -/
 
 中文:
 定理 smash
@@ -953,7 +976,30 @@ theorem smash
     calc
       Fin (s₁.length + s₂.length) ≃ (Fin s₁.length) oplus (Fin s₂.length) := finSumFinEquiv.symm
       _ ≃ (Fin t₁.length) oplus (Fin t₂.length) := Equiv.sumCongr h₁.choose h₂.choose
-      _ ≃ Fin (t₁.length + t₂.length) :
+      _ ≃ Fin (t₁.length + t₂.length) := finSumFinEquiv
+  ⟨e, by
+    intro i
+    refine Fin.addCases ?_ ?_ i
+    · intro i
+      simpa [e, smash_castAdd, smash_succ_castAdd] using h₁.choose_spec i
+    · intro i
+      simpa [e, -Fin.castSucc_natAdd, smash_natAdd, smash_succ_natAdd] using h₂.choose_spec i⟩
+
+#adaptation_note /-- Proof repaired after leanprover/lean4#13492.
+The proof body used to be a single term
+```
+⟨e, fun i => by
+  refine Fin.lastCases ?_ ?_ i
+  · simpa [e, apply_last] using hlast
+  · intro i
+    simpa [e, ← Fin.castSucc_succ] using hequiv.choose_spec i⟩
+```
+(where `e` was defined via the same `calc` block; the signature had `: ... :=` rather
+than `: ... := by`).
+The replacement proof is a short-term fix, and we request that the authors/maintainers of
+this file review the proof, and either approve it by removing this note, revise
+the proof or the prerequisites appropriately, or minimize a problem in lean4 that still
+needs addressing. -/
 -/
 protected theorem smash {s₁ s₂ t₁ t₂ : CompositionSeries X}
     (hs : s₁.last = s₂.head) (ht : t₁.last = t₂.head)
@@ -1000,7 +1046,26 @@ theorem snoc
       Fin (s₁.length + 1) ≃ Option (Fin s₁.length) := finSuccEquivLast
       _ ≃ Option (Fin s₂.length) := Functor.mapEquiv Option hequiv.choose
       _ ≃ Fin (s₂.length + 1) := finSuccEquivLast.symm
-  have he_last : e (Fin.last s₁.len
+  have he_last : e (Fin.last s₁.length) = Fin.last s₂.length := by
+    simp [e, finSuccEquivLast_last, Functor.mapEquiv_apply]
+  have he_castSucc (j : Fin s₁.length) :
+      e j.castSucc = (hequiv.choose j).castSucc := by
+    simp [e, finSuccEquivLast_castSucc, Functor.mapEquiv_apply]
+  refine ⟨e, fun i => ?_⟩
+  refine Fin.lastCases ?_ ?_ i
+  · change Iso ((snoc s₁ x₁ hsat₁).toFun (Fin.last s₁.length).castSucc,
+        (snoc s₁ x₁ hsat₁).toFun (Fin.last s₁.length).succ)
+      ((snoc s₂ x₂ hsat₂).toFun (e (Fin.last s₁.length)).castSucc,
+        (snoc s₂ x₂ hsat₂).toFun (e (Fin.last s₁.length)).succ)
+    rw [he_last]
+    simpa [apply_last] using hlast
+  · intro i
+    change Iso ((snoc s₁ x₁ hsat₁).toFun i.castSucc.castSucc,
+        (snoc s₁ x₁ hsat₁).toFun i.castSucc.succ)
+      ((snoc s₂ x₂ hsat₂).toFun (e i.castSucc).castSucc,
+        (snoc s₂ x₂ hsat₂).toFun (e i.castSucc).succ)
+    rw [he_castSucc]
+    simpa [snoc_castSucc, ← Fin.castSucc_succ] using hequiv.choose_spec i
 
 中文:
 定理 snoc
@@ -1011,7 +1076,26 @@ theorem snoc
       Fin (s₁.length + 1) ≃ Option (Fin s₁.length) := finSuccEquivLast
       _ ≃ Option (Fin s₂.length) := Functor.mapEquiv Option hequiv.choose
       _ ≃ Fin (s₂.length + 1) := finSuccEquivLast.symm
-  have he_last : e (Fin.last s₁.len
+  have he_last : e (Fin.last s₁.length) = Fin.last s₂.length := by
+    simp [e, finSuccEquivLast_last, Functor.mapEquiv_apply]
+  have he_castSucc (j : Fin s₁.length) :
+      e j.castSucc = (hequiv.choose j).castSucc := by
+    simp [e, finSuccEquivLast_castSucc, Functor.mapEquiv_apply]
+  refine ⟨e, fun i => ?_⟩
+  refine Fin.lastCases ?_ ?_ i
+  · change Iso ((snoc s₁ x₁ hsat₁).toFun (Fin.last s₁.length).castSucc,
+        (snoc s₁ x₁ hsat₁).toFun (Fin.last s₁.length).succ)
+      ((snoc s₂ x₂ hsat₂).toFun (e (Fin.last s₁.length)).castSucc,
+        (snoc s₂ x₂ hsat₂).toFun (e (Fin.last s₁.length)).succ)
+    rw [he_last]
+    simpa [apply_last] using hlast
+  · intro i
+    change Iso ((snoc s₁ x₁ hsat₁).toFun i.castSucc.castSucc,
+        (snoc s₁ x₁ hsat₁).toFun i.castSucc.succ)
+      ((snoc s₂ x₂ hsat₂).toFun (e i.castSucc).castSucc,
+        (snoc s₂ x₂ hsat₂).toFun (e i.castSucc).succ)
+    rw [he_castSucc]
+    simpa [snoc_castSucc, ← Fin.castSucc_succ] using hequiv.choose_spec i
 -/
 protected theorem snoc {s₁ s₂ : CompositionSeries X} {x₁ x₂ : X} {hsat₁ : IsMaximal s₁.last x₁}
     {hsat₂ : IsMaximal s₂.last x₂} (hequiv : Equivalent s₁ s₂)
@@ -1075,7 +1159,25 @@ theorem snoc_snoc_swap
     Equiv.swap (Fin.last _) (Fin.castSucc (Fin.last _))
   have h1 : forall {i : Fin s.length},
       (Fin.castSucc (Fin.castSucc i)) != (Fin.castSucc (Fin.last _)) := by simp
-  have h2 : forall {i : Fin s.length}, (Fin.castSucc (Fin.castSucc
+  have h2 : forall {i : Fin s.length}, (Fin.castSucc (Fin.castSucc i)) != Fin.last _ := by simp
+  ⟨e, by
+    intro i
+    dsimp only [e]
+    refine Fin.lastCases ?_ (fun i => ?_) i
+    · erw [Equiv.swap_apply_left, snoc_castSucc,
+      show (snoc s x₁ hsat₁).toFun (Fin.last _) = x₁ from last_snoc _ _ _, Fin.succ_last,
+      show ((s.snoc x₁ hsat₁).snoc y₁ hsaty₁).toFun (Fin.last _) = y₁ from last_snoc _ _ _,
+      snoc_castSucc, snoc_castSucc, Fin.succ_castSucc, snoc_castSucc, Fin.succ_last,
+      show (s.snoc _ hsat₂).toFun (Fin.last _) = x₂ from last_snoc _ _ _]
+      exact hr₂
+    · refine Fin.lastCases ?_ (fun i => ?_) i
+      · erw [Equiv.swap_apply_right, snoc_castSucc, snoc_castSucc, snoc_castSucc,
+          Fin.succ_castSucc, snoc_castSucc, Fin.succ_last, last_snoc', last_snoc', last_snoc']
+        exact hr₁
+      · erw [Equiv.swap_apply_of_ne_of_ne h2 h1, snoc_castSucc, snoc_castSucc,
+          snoc_castSucc, snoc_castSucc, Fin.succ_castSucc, snoc_castSucc,
+          Fin.succ_castSucc, snoc_castSucc, snoc_castSucc, snoc_castSucc]
+        exact iso_refl⟩
 
 中文:
 定理 snoc_snoc_swap
@@ -1084,7 +1186,25 @@ theorem snoc_snoc_swap
     Equiv.swap (Fin.last _) (Fin.castSucc (Fin.last _))
   have h1 : forall {i : Fin s.length},
       (Fin.castSucc (Fin.castSucc i)) != (Fin.castSucc (Fin.last _)) := by simp
-  have h2 : forall {i : Fin s.length}, (Fin.castSucc (Fin.castSucc
+  have h2 : forall {i : Fin s.length}, (Fin.castSucc (Fin.castSucc i)) != Fin.last _ := by simp
+  ⟨e, by
+    intro i
+    dsimp only [e]
+    refine Fin.lastCases ?_ (fun i => ?_) i
+    · erw [Equiv.swap_apply_left, snoc_castSucc,
+      show (snoc s x₁ hsat₁).toFun (Fin.last _) = x₁ from last_snoc _ _ _, Fin.succ_last,
+      show ((s.snoc x₁ hsat₁).snoc y₁ hsaty₁).toFun (Fin.last _) = y₁ from last_snoc _ _ _,
+      snoc_castSucc, snoc_castSucc, Fin.succ_castSucc, snoc_castSucc, Fin.succ_last,
+      show (s.snoc _ hsat₂).toFun (Fin.last _) = x₂ from last_snoc _ _ _]
+      exact hr₂
+    · refine Fin.lastCases ?_ (fun i => ?_) i
+      · erw [Equiv.swap_apply_right, snoc_castSucc, snoc_castSucc, snoc_castSucc,
+          Fin.succ_castSucc, snoc_castSucc, Fin.succ_last, last_snoc', last_snoc', last_snoc']
+        exact hr₁
+      · erw [Equiv.swap_apply_of_ne_of_ne h2 h1, snoc_castSucc, snoc_castSucc,
+          snoc_castSucc, snoc_castSucc, Fin.succ_castSucc, snoc_castSucc,
+          Fin.succ_castSucc, snoc_castSucc, snoc_castSucc, snoc_castSucc]
+        exact iso_refl⟩
 
 Depends on / 依赖: Equiv.swap, Equiv.swap_apply_left, Fin.castSucc, Fin.last, Fin.lastCases, castSucc, lastCases, last_snoc, length, s.length, snoc_castSucc, swap_apply_left
 -/
@@ -1185,7 +1305,11 @@ theorem eq_of_head_eq_head_of_last_eq_last_of_length_eq_zero
   have : forall x, x in s₂ ↔ x = s₂.last := fun x =>
     ⟨fun hx =>
       subsingleton_of_length_eq_zero
-        (length_eq_zero_of_head_eq_head
+        (length_eq_zero_of_head_eq_head_of_last_eq_last_of_length_eq_zero hb ht
+          hs₁0) hx s₂.last_mem,
+      fun hx => hx.symm ▸ s₂.last_mem⟩
+  ext
+  simp [*]
 
 中文:
 定理 eq_of_head_eq_head_of_last_eq_last_of_length_eq_zero
@@ -1196,7 +1320,11 @@ theorem eq_of_head_eq_head_of_last_eq_last_of_length_eq_zero
   have : forall x, x in s₂ ↔ x = s₂.last := fun x =>
     ⟨fun hx =>
       subsingleton_of_length_eq_zero
-        (length_eq_zero_of_head_eq_head
+        (length_eq_zero_of_head_eq_head_of_last_eq_last_of_length_eq_zero hb ht
+          hs₁0) hx s₂.last_mem,
+      fun hx => hx.symm ▸ s₂.last_mem⟩
+  ext
+  simp [*]
 
 Depends on / 依赖: hx.symm, last_mem, length_eq_zero_of_head_eq_head_of_last_eq_last_of_length_eq_zero, subsingleton_of_length_eq_zero
 -/
@@ -1227,7 +1355,29 @@ theorem exists_last_eq_snoc_equivalent
       (subsingleton_of_length_eq_zero hn s.last_mem s.head_mem)).elim
   | succ n ih =>
     have h0s : 0 < s.length := hn.symm ▸ Nat.succ_pos _
-    by_cases hetx : s.eraseLast.l
+    by_cases hetx : s.eraseLast.last = x
+    · use s.eraseLast
+      simp [← hetx, hn, Equivalent.refl]
+    · have imxs : IsMaximal (x ⊓ s.eraseLast.last) s.eraseLast.last :=
+        isMaximal_of_eq_inf x s.last rfl (Ne.symm hetx) hm (isMaximal_eraseLast_last h0s)
+      have := ih _ _ imxs (le_inf (by simpa) (le_last_of_mem s.eraseLast.head_mem)) (by simp [hn])
+      rcases this with ⟨t, htb, htl, htt, hteqv⟩
+      have hmtx : IsMaximal t.last x :=
+        isMaximal_of_eq_inf s.eraseLast.last s.last (by rw [inf_comm, htt]) hetx
+          (isMaximal_eraseLast_last h0s) hm
+      use snoc t x hmtx
+      refine ⟨by simp [htb], by simp [htl], by simp, ?_⟩
+      have : s.Equivalent ((snoc t s.eraseLast.last <| show IsMaximal t.last _ from
+        htt.symm ▸ imxs).snoc s.last
+          (by simpa using isMaximal_eraseLast_last h0s)) := by
+        conv_lhs => rw [eq_snoc_eraseLast h0s]
+        exact Equivalent.snoc hteqv (by simpa using iso_refl)
+refine this.trans Equivalent.snoc_snoc_swap
+        (iso_symm
+            (second_iso_of_eq hm
+              (sup_eq_of_isMaximal hm (isMaximal_eraseLast_last h0s) (Ne.symm hetx)) htt.symm))
+        (second_iso_of_eq (isMaximal_eraseLast_last h0s)
+            (sup_eq_of_isMaximal (isMaximal_eraseLast_last h0s) hm hetx) (by rw [inf_comm, htt]))
 
 中文:
 定理 存在_last_eq_snoc_equivalent
@@ -1239,7 +1389,29 @@ theorem exists_last_eq_snoc_equivalent
       (subsingleton_of_length_eq_zero hn s.last_mem s.head_mem)).elim
   | succ n ih =>
     have h0s : 0 < s.length := hn.symm ▸ Nat.succ_pos _
-    by_cases hetx : s.eraseLast.l
+    by_cases hetx : s.eraseLast.last = x
+    · use s.eraseLast
+      simp [← hetx, hn, Equivalent.refl]
+    · have imxs : IsMaximal (x ⊓ s.eraseLast.last) s.eraseLast.last :=
+        isMaximal_of_eq_inf x s.last rfl (Ne.symm hetx) hm (isMaximal_eraseLast_last h0s)
+      have := ih _ _ imxs (le_inf (by simpa) (le_last_of_mem s.eraseLast.head_mem)) (by simp [hn])
+      rcases this with ⟨t, htb, htl, htt, hteqv⟩
+      have hmtx : IsMaximal t.last x :=
+        isMaximal_of_eq_inf s.eraseLast.last s.last (by rw [inf_comm, htt]) hetx
+          (isMaximal_eraseLast_last h0s) hm
+      use snoc t x hmtx
+      refine ⟨by simp [htb], by simp [htl], by simp, ?_⟩
+      have : s.Equivalent ((snoc t s.eraseLast.last <| show IsMaximal t.last _ from
+        htt.symm ▸ imxs).snoc s.last
+          (by simpa using isMaximal_eraseLast_last h0s)) := by
+        conv_lhs => rw [eq_snoc_eraseLast h0s]
+        exact Equivalent.snoc hteqv (by simpa using iso_refl)
+refine this.trans Equivalent.snoc_snoc_swap
+        (iso_symm
+            (second_iso_of_eq hm
+              (sup_eq_of_isMaximal hm (isMaximal_eraseLast_last h0s) (Ne.symm hetx)) htt.symm))
+        (second_iso_of_eq (isMaximal_eraseLast_last h0s)
+            (sup_eq_of_isMaximal (isMaximal_eraseLast_last h0s) hm hetx) (by rw [inf_comm, htt]))
 
 Depends on / 依赖: Equivalent, Equivalent.refl, IsMaximal, Nat.succ_pos, Ne.symm, eraseLast, generalizing, head_mem, hn.symm, isMaximal_eraseLast_last, isMaximal_of_eq_inf, last_mem, length, lt_of_isMaximal, lt_of_le_of_lt, ne_of_gt, s.eraseLast, s.eraseLast.last, s.head_mem, s.last
 -/
@@ -1291,7 +1463,15 @@ theorem jordan_holder
   | succ n ih =>
     have h0s₂ : 0 < s₂.length :=
       length_pos_of_head_eq_head_of_last_eq_last_of_length_pos hb ht (hle.symm ▸ Nat.succ_pos _)
-    rcases exists_
+    rcases exists_last_eq_snoc_equivalent s₁ s₂.eraseLast.last
+        (ht.symm ▸ isMaximal_eraseLast_last h0s₂)
+        (hb.symm ▸ s₂.head_eraseLast ▸ head_le_of_mem (last_mem _)) with
+      ⟨t, htb, htl, htt, hteq⟩
+    have := ih t s₂.eraseLast (by simp [htb, ← hb]) htt (Nat.succ_inj.1 (htl.trans hle))
+    refine hteq.trans ?_
+    conv_rhs => rw [eq_snoc_eraseLast h0s₂]
+    simp only [ht]
+    exact Equivalent.snoc this (by simpa [htt] using iso_refl)
 
 中文:
 定理 jordan_holder
@@ -1302,7 +1482,15 @@ theorem jordan_holder
   | succ n ih =>
     have h0s₂ : 0 < s₂.length :=
       length_pos_of_head_eq_head_of_last_eq_last_of_length_pos hb ht (hle.symm ▸ Nat.succ_pos _)
-    rcases exists_
+    rcases exists_last_eq_snoc_equivalent s₁ s₂.eraseLast.last
+        (ht.symm ▸ isMaximal_eraseLast_last h0s₂)
+        (hb.symm ▸ s₂.head_eraseLast ▸ head_le_of_mem (last_mem _)) with
+      ⟨t, htb, htl, htt, hteq⟩
+    have := ih t s₂.eraseLast (by simp [htb, ← hb]) htt (Nat.succ_inj.1 (htl.trans hle))
+    refine hteq.trans ?_
+    conv_rhs => rw [eq_snoc_eraseLast h0s₂]
+    simp only [ht]
+    exact Equivalent.snoc this (by simpa [htt] using iso_refl)
 
 Depends on / 依赖: Nat.succ_pos, eq_of_head_eq_head_of_last_eq_last_of_length_eq_zero, eraseLast, eraseLast.last, exists_last_eq_snoc_equivalent, generalizing, hb.symm, head_eraseLast, head_le_of_mem, hle.symm, ht.symm, isMaximal_eraseLast_last, last_mem, length, length_pos_of_head_eq_head_of_last_eq_last_of_length_pos, succ_pos
 -/

@@ -48,7 +48,14 @@ definition overEquivalence
   inverse.obj W :=
     Over.mk (Y := ⟨_, (U.isOpenEmbedding'.isOpen_iff_image_isOpen).1 W.isOpen⟩)
       (homOfLE (fun _ _ => by aesop))
-  inverse.map f := O
+  inverse.map f := Over.homMk (homOfLE (Set.image_mono (leOfHom f)))
+  unitIso := NatIso.ofComponents (fun V => Over.isoMk (eqToIso (by
+    ext x
+    dsimp
+    simp only [SetLike.mem_coe, Set.mem_image, Set.mem_preimage,
+      Subtype.exists, exists_and_left, exists_prop, exists_eq_right_right, iff_self_and]
+    apply leOfHom V.hom)))
+  counitIso := NatIso.ofComponents (fun V => eqToIso (by aesop))
 
 中文:
 定义 overEquivalence
@@ -58,7 +65,14 @@ definition overEquivalence
   inverse.obj W :=
     Over.mk (Y := ⟨_, (U.isOpenEmbedding'.isOpen_iff_image_isOpen).1 W.isOpen⟩)
       (homOfLE (fun _ _ => by aesop))
-  inverse.map f := O
+  inverse.map f := Over.homMk (homOfLE (Set.image_mono (leOfHom f)))
+  unitIso := NatIso.ofComponents (fun V => Over.isoMk (eqToIso (by
+    ext x
+    dsimp
+    simp only [SetLike.mem_coe, Set.mem_image, Set.mem_preimage,
+      Subtype.exists, exists_and_left, exists_prop, exists_eq_right_right, iff_self_and]
+    apply leOfHom V.hom)))
+  counitIso := NatIso.ofComponents (fun V => eqToIso (by aesop))
 
 Depends on / 依赖: IsOpen, IsOpen.preimage, V.left.isOpen, continuous_subtype_val, isOpen, preimage
 -/
@@ -108,7 +122,11 @@ instance :
     · intro H x hxV
       obtain ⟨W, f, hW, hxW⟩ := H ⟨x, V.hom.le hxV⟩ hxV
       exact ⟨_, ((U.overEquivalence.symm.toAdjunction.homEquiv _ _ ).symm f).left,
-        ⟨_, _, 𝟙 _, hW, rfl⟩, _, hxW,
+        ⟨_, _, 𝟙 _, hW, rfl⟩, _, hxW, rfl⟩
+    · intro H x hxV
+      obtain ⟨W, f, ⟨W', hW'V, hWW', hSW'V, rfl⟩, hxW⟩ := H x hxV
+      exact ⟨_, U.overEquivalence.functor.map hW'V,
+        S.downward_closed hSW'V (U.overEquivalence.unitInv.app W'), hWW'.le hxW⟩
 
 中文:
 实例 :
@@ -119,7 +137,11 @@ instance :
     · intro H x hxV
       obtain ⟨W, f, hW, hxW⟩ := H ⟨x, V.hom.le hxV⟩ hxV
       exact ⟨_, ((U.overEquivalence.symm.toAdjunction.homEquiv _ _ ).symm f).left,
-        ⟨_, _, 𝟙 _, hW, rfl⟩, _, hxW,
+        ⟨_, _, 𝟙 _, hW, rfl⟩, _, hxW, rfl⟩
+    · intro H x hxV
+      obtain ⟨W, f, ⟨W', hW'V, hWW', hSW'V, rfl⟩, hxW⟩ := H x hxV
+      exact ⟨_, U.overEquivalence.functor.map hW'V,
+        S.downward_closed hSW'V (U.overEquivalence.unitInv.app W'), hWW'.le hxW⟩
 
 Depends on / 依赖: Opens.mem_grothendieckTopology, S.downward_closed, Sieve.mem_functorPushforward_functor, U.overEquivalence.functor.map, U.overEquivalence.symm.toAdjunction.homEquiv, U.overEquivalence.unitInv.app, V.hom.le, downward_closed, functor, homEquiv, mem_functorPushforward_functor, mem_grothendieckTopology, overEquivalence, toAdjunction, unitInv
 -/

@@ -162,7 +162,10 @@ lemma tilted_const'
     simp only [Measure.tilted, withDensity_const, integral_const, smul_eq_mul]
     by_cases h_univ : μ Set.univ = ∞
     · simp only [measureReal_def, h_univ, ENNReal.toReal_top, zero_mul, div_zero,
-      ENNReal.ofReal_zero,
+      ENNReal.ofReal_zero, zero_smul, ENNReal.inv_top]
+    congr
+    rw [div_eq_mul_inv]; rw [mul_inv]; rw [mul_comm]; rw [mul_assoc]; rw [inv_mul_cancel₀ (exp_pos _).ne']; rw [mul_one]; rw [measureReal_def]; rw [← ENNReal.toReal_inv]; rw [ENNReal.ofReal_toReal]
+    simp [h0.out]
 
 中文:
 引理 tilted_const'
@@ -174,7 +177,10 @@ lemma tilted_const'
     simp only [Measure.tilted, withDensity_const, integral_const, smul_eq_mul]
     by_cases h_univ : μ Set.univ = ∞
     · simp only [measureReal_def, h_univ, ENNReal.toReal_top, zero_mul, div_zero,
-      ENNReal.ofReal_zero,
+      ENNReal.ofReal_zero, zero_smul, ENNReal.inv_top]
+    congr
+    rw [div_eq_mul_inv]; rw [mul_inv]; rw [mul_comm]; rw [mul_assoc]; rw [inv_mul_cancel₀ (exp_pos _).ne']; rw [mul_one]; rw [measureReal_def]; rw [← ENNReal.toReal_inv]; rw [ENNReal.ofReal_toReal]
+    simp [h0.out]
 
 Depends on / 依赖: ENNReal, ENNReal.inv_top, ENNReal.ofReal_toR, ENNReal.ofReal_zero, ENNReal.toReal_inv, ENNReal.toReal_top, Measure, Measure.tilted, Set.univ, div_eq_mul_inv, div_zero, eq_zero_or_neZero, exp_pos, h_univ, integral_const, inv_top, measureReal_def, mul_assoc, mul_comm, mul_inv
 -/
@@ -375,7 +381,7 @@ lemma tilted_apply_eq_ofReal_integral'
     · exact hf.integrableOn.div_const _
     · exact ae_of_all _ (fun _ => by positivity)
   · simp only [hf, not_false_eq_true, tilted_of_not_integrable, Measure.coe_zero,
-      P
+      Pi.zero_apply, integral_undef hf, div_zero, integral_zero, ENNReal.ofReal_zero]
 
 中文:
 引理 tilted_apply_eq_of实数_integral'
@@ -386,7 +392,7 @@ lemma tilted_apply_eq_ofReal_integral'
     · exact hf.integrableOn.div_const _
     · exact ae_of_all _ (fun _ => by positivity)
   · simp only [hf, not_false_eq_true, tilted_of_not_integrable, Measure.coe_zero,
-      P
+      Pi.zero_apply, integral_undef hf, div_zero, integral_zero, ENNReal.ofReal_zero]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_zero, Integrable, Measure, Measure.coe_zero, Pi.zero_apply, ae_of_all, coe_zero, div_const, div_zero, hf.integrableOn.div_const, integrableOn, integral_undef, integral_zero, not_false_eq_true, ofReal_integral_eq_lintegral_ofReal, ofReal_zero, tilted_apply, tilted_of_not_integrable, zero_apply
 -/
@@ -442,7 +448,10 @@ lemma isProbabilityMeasure_tilted
   constructor
   simp_rw [tilted_apply' _ _ MeasurableSet.univ, setLIntegral_univ,
     ENNReal.ofReal_div_of_pos (integral_exp_pos hf), div_eq_mul_inv]
-  rw [lintegral_mul_const'' _ hf.1.aemeasurable.ennreal_ofReal]; rw [← ofReal_integral_eq_lintegral_ofReal hf (ae_of_all _ fun _ => (exp_pos _).le
+  rw [lintegral_mul_const'' _ hf.1.aemeasurable.ennreal_ofReal]; rw [← ofReal_integral_eq_lintegral_ofReal hf (ae_of_all _ fun _ => (exp_pos _).le)]; rw [ENNReal.mul_inv_cancel]
+  · simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]
+    exact integral_exp_pos hf
+  · simp
 
 中文:
 引理 isProbabilityMeasure_tilted
@@ -451,7 +460,10 @@ lemma isProbabilityMeasure_tilted
   constructor
   simp_rw [tilted_apply' _ _ MeasurableSet.univ, setLIntegral_univ,
     ENNReal.ofReal_div_of_pos (integral_exp_pos hf), div_eq_mul_inv]
-  rw [lintegral_mul_const'' _ hf.1.aemeasurable.ennreal_ofReal]; rw [← ofReal_integral_eq_lintegral_ofReal hf (ae_of_all _ fun _ => (exp_pos _).le
+  rw [lintegral_mul_const'' _ hf.1.aemeasurable.ennreal_ofReal]; rw [← ofReal_integral_eq_lintegral_ofReal hf (ae_of_all _ fun _ => (exp_pos _).le)]; rw [ENNReal.mul_inv_cancel]
+  · simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]
+    exact integral_exp_pos hf
+  · simp
 
 Depends on / 依赖: ENNReal, ENNReal.mul_inv_cancel, ENNReal.ofReal_div_of_pos, ENNReal.ofReal_eq_zero, MeasurableSet, MeasurableSet.univ, ae_of_all, aemeasurable, aemeasurable.ennreal_ofReal, div_eq_mul_inv, ennreal_ofReal, exp_pos, integral_exp_pos, lintegral_mul_const, mul_inv_cancel, ne_eq, not_le, ofReal_div_of_pos, ofReal_eq_zero, ofReal_integral_eq_lintegral_ofReal
 -/
@@ -521,7 +533,14 @@ lemma setLIntegral_tilted'
     · refine AEMeasurable.restrict ?_
       exact ((measurable_exp.comp_aemeasurable hf).div_const _).ennreal_ofReal
     · exact hs
-    · filter_up
+    · filter_upwards
+      simp only [ENNReal.ofReal_lt_top, implies_true]
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      lintegral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 中文:
 引理 setL整数egral_tilted'
@@ -533,7 +552,14 @@ lemma setLIntegral_tilted'
     · refine AEMeasurable.restrict ?_
       exact ((measurable_exp.comp_aemeasurable hf).div_const _).ennreal_ofReal
     · exact hs
-    · filter_up
+    · filter_upwards
+      simp only [ENNReal.ofReal_lt_top, implies_true]
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      lintegral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.restrict, ENNReal, ENNReal.ofReal_lt_top, Integrable, Measure, Measure.tilted, Pi.mul_apply, aemeasurable, aemeasurable_of_aemeasurable_exp, comp_aemeasurable, div_const, ennreal_ofReal, filter_upwards, implies_true, measurable_exp, measurable_exp.comp_aemeasurable, mul_apply, not_false_eq_true, ofReal_lt_top
 -/
@@ -568,7 +594,13 @@ lemma setLIntegral_tilted
     · refine AEMeasurable.restrict ?_
       exact ((measurable_exp.comp_aemeasurable hf).div_const _).ennreal_ofReal
     · filter_upwards
-      si
+      simp only [ENNReal.ofReal_lt_top, implies_true]
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      lintegral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 中文:
 引理 setL整数egral_tilted
@@ -580,7 +612,13 @@ lemma setLIntegral_tilted
     · refine AEMeasurable.restrict ?_
       exact ((measurable_exp.comp_aemeasurable hf).div_const _).ennreal_ofReal
     · filter_upwards
-      si
+      simp only [ENNReal.ofReal_lt_top, implies_true]
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      lintegral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.restrict, ENNReal, ENNReal.ofReal_lt_top, Integrable, Measure, Measure.tilted, Pi.mul_apply, aemeasurable, aemeasurable_of_aemeasurable_exp, comp_aemeasurable, div_const, ennreal_ofReal, filter_upwards, implies_true, measurable_exp, measurable_exp.comp_aemeasurable, mul_apply, not_false_eq_true, ofReal_lt_top
 -/
@@ -642,6 +680,14 @@ lemma setIntegral_tilted'
     · suffices AEMeasurable (fun x => exp (f x) / ∫ x, exp (f x) ∂μ) μ by
         rw [← aemeasurable_coe_nnreal_real_iff]
         refine AEMeasurable.restrict ?_
+        simpa only [NNReal.coe_mk]
+      exact (measurable_exp.comp_aemeasurable hf).div_const _
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      integral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 中文:
 引理 set整数egral_tilted'
@@ -653,6 +699,14 @@ lemma setIntegral_tilted'
     · suffices AEMeasurable (fun x => exp (f x) / ∫ x, exp (f x) ∂μ) μ by
         rw [← aemeasurable_coe_nnreal_real_iff]
         refine AEMeasurable.restrict ?_
+        simpa only [NNReal.coe_mk]
+      exact (measurable_exp.comp_aemeasurable hf).div_const _
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      integral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.restrict, Integrable, NNReal, NNReal.coe_mk, aemeasurable, aemeasurable_coe_nnreal_real_iff, aemeasurable_of_aemeasurable_exp, coe_mk, comp_aemeasurable, div_const, measurable_exp, measurable_exp.comp_aemeasurable, not_, restrict, tilted_eq_withDensity_nnreal
 -/
@@ -686,7 +740,14 @@ lemma setIntegral_tilted
     · suffices AEMeasurable (fun x => exp (f x) / ∫ x, exp (f x) ∂μ) μ by
         rw [← aemeasurable_coe_nnreal_real_iff]
         refine AEMeasurable.restrict ?_
-     
+        simpa only [NNReal.coe_mk]
+      exact (measurable_exp.comp_aemeasurable hf).div_const _
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      integral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 中文:
 引理 set整数egral_tilted
@@ -698,7 +759,14 @@ lemma setIntegral_tilted
     · suffices AEMeasurable (fun x => exp (f x) / ∫ x, exp (f x) ∂μ) μ by
         rw [← aemeasurable_coe_nnreal_real_iff]
         refine AEMeasurable.restrict ?_
-     
+        simpa only [NNReal.coe_mk]
+      exact (measurable_exp.comp_aemeasurable hf).div_const _
+  · have hf' : ¬ Integrable (fun x => exp (f x)) μ := by
+      exact fun h => hf (aemeasurable_of_aemeasurable_exp h.1.aemeasurable)
+    simp only [hf, not_false_eq_true, tilted_of_not_aemeasurable, Measure.restrict_zero,
+      integral_zero_measure]
+    rw [integral_undef hf']
+    simp
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.restrict, Integrable, NNReal, NNReal.coe_mk, aemeasurable, aemeasurable_coe_nnreal_real_iff, aemeasurable_of_aemeasurable_exp, coe_mk, comp_aemeasurable, div_const, measurable_exp, measurable_exp.comp_aemeasurable, not_false_, restrict, tilted_eq_withDensity_nnreal
 -/
@@ -758,7 +826,9 @@ lemma integral_exp_tilted
         = (exp ((f + g) x) / ∫ x, exp (f x) ∂μ) := by
       intro x
       rw [Pi.add_apply]; rw [exp_add]
-
+      ring
+    simp_rw [this, div_eq_mul_inv]
+    rw [integral_mul_const]
 
 中文:
 引理 integral_exp_tilted
@@ -773,7 +843,9 @@ lemma integral_exp_tilted
         = (exp ((f + g) x) / ∫ x, exp (f x) ∂μ) := by
       intro x
       rw [Pi.add_apply]; rw [exp_add]
-
+      ring
+    simp_rw [this, div_eq_mul_inv]
+    rw [integral_mul_const]
 
 Depends on / 依赖: Pi.add_apply, add_apply, div_eq_mul_inv, eq_zero_or_neZero, exp_add, integral_mul_const, integral_tilted, simp_rw, smul_eq_mul
 -/
@@ -806,6 +878,10 @@ lemma tilted_tilted
     rw [tilted_apply' _ _ hs]; rw [tilted_apply' _ _ hs]; rw [setLIntegral_tilted' f _ hs]
     congr with x
     rw [← ENNReal.ofReal_mul (by positivity)]; rw [integral_exp_tilted f]; rw [Pi.add_apply]; rw [exp_add]
+    congr 1
+    simp only [Pi.add_apply]
+    have := (integral_exp_pos hf).ne'
+    simp [field]
 
 中文:
 引理 tilted_tilted
@@ -818,6 +894,10 @@ lemma tilted_tilted
     rw [tilted_apply' _ _ hs]; rw [tilted_apply' _ _ hs]; rw [setLIntegral_tilted' f _ hs]
     congr with x
     rw [← ENNReal.ofReal_mul (by positivity)]; rw [integral_exp_tilted f]; rw [Pi.add_apply]; rw [exp_add]
+    congr 1
+    simp only [Pi.add_apply]
+    have := (integral_exp_pos hf).ne'
+    simp [field]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_mul, Pi.add_apply, add_apply, eq_zero_or_neZero, exp_add, integral_exp_pos, integral_exp_tilted, ofReal_mul, setLIntegral_tilted, tilted_apply
 -/
@@ -938,7 +1018,8 @@ lemma absolutelyContinuous_tilted
     refine withDensity_absolutelyContinuous' ?_ ?_
     · exact (hf.1.aemeasurable.div_const _).ennreal_ofReal
     · filter_upwards
-      simp only [ne_eq, ENNReal.ofReal_eq_zer
+      simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]
+      exact fun _ => div_pos (exp_pos _) (integral_exp_pos hf)
 
 中文:
 引理 absolutelyContinuous_tilted
@@ -951,7 +1032,8 @@ lemma absolutelyContinuous_tilted
     refine withDensity_absolutelyContinuous' ?_ ?_
     · exact (hf.1.aemeasurable.div_const _).ennreal_ofReal
     · filter_upwards
-      simp only [ne_eq, ENNReal.ofReal_eq_zer
+      simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]
+      exact fun _ => div_pos (exp_pos _) (integral_exp_pos hf)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_eq_zero, aemeasurable, aemeasurable.div_const, div_const, div_pos, ennreal_ofReal, eq_zero_or_neZero, exp_pos, f.hom, filter_upwards, integral_exp_pos, ne_eq, not_le, ofReal_eq_zero, tilted_zero_measure, withDensity_absolutelyContinuous
 -/
@@ -976,7 +1058,19 @@ lemma integrable_tilted_iff
   · simp [hμ]
   have hf_meas : AEMeasurable f μ := aemeasurable_of_aemeasurable_exp hf.1.aemeasurable
   rw [Measure.tilted]; rw [integrable_withDensity_iff_integrable_smul₀' (by fun_prop) (by simp)]
-  calc Integrable (fun x => (ENNReal.ofReal (exp (f x) / ∫ a, exp (f a) ∂μ))
+  calc Integrable (fun x => (ENNReal.ofReal (exp (f x) / ∫ a, exp (f a) ∂μ)).toReal • g x) μ
+  _ ↔ Integrable (fun x => (exp (f x) / ∫ a, exp (f a) ∂μ) • g x) μ := by
+    congr! with a
+    rw [ENNReal.toReal_ofReal]
+    positivity
+  _ ↔ Integrable (fun x => (∫ a, exp (f a) ∂μ)⁻¹ • exp (f x) • g x) μ := by
+    congr! 2 with a
+    rw [smul_smul]; rw [div_eq_inv_mul]
+  _ ↔ Integrable (fun x => exp (f x) • g x) μ := by
+    rw [integrable_fun_smul_iff]
+    simp only [ne_eq, inv_eq_zero]
+    have : NeZero μ := ⟨hμ⟩
+    exact (integral_exp_pos hf).ne'
 
 中文:
 引理 integrable_tilted_iff
@@ -986,7 +1080,19 @@ lemma integrable_tilted_iff
   · simp [hμ]
   have hf_meas : AEMeasurable f μ := aemeasurable_of_aemeasurable_exp hf.1.aemeasurable
   rw [Measure.tilted]; rw [integrable_withDensity_iff_integrable_smul₀' (by fun_prop) (by simp)]
-  calc Integrable (fun x => (ENNReal.ofReal (exp (f x) / ∫ a, exp (f a) ∂μ))
+  calc Integrable (fun x => (ENNReal.ofReal (exp (f x) / ∫ a, exp (f a) ∂μ)).toReal • g x) μ
+  _ ↔ Integrable (fun x => (exp (f x) / ∫ a, exp (f a) ∂μ) • g x) μ := by
+    congr! with a
+    rw [ENNReal.toReal_ofReal]
+    positivity
+  _ ↔ Integrable (fun x => (∫ a, exp (f a) ∂μ)⁻¹ • exp (f x) • g x) μ := by
+    congr! 2 with a
+    rw [smul_smul]; rw [div_eq_inv_mul]
+  _ ↔ Integrable (fun x => exp (f x) • g x) μ := by
+    rw [integrable_fun_smul_iff]
+    simp only [ne_eq, inv_eq_zero]
+    have : NeZero μ := ⟨hμ⟩
+    exact (integral_exp_pos hf).ne'
 
 Depends on / 依赖: AEMeasurable, ENNReal, ENNReal.ofReal, ENNReal.toReal_ofReal, Integrable, Measure, Measure.tilted, aemeasurable, aemeasurable_of_aemeasurable_exp, fun_prop, hf_meas, ofReal, tilted, toReal, toReal_ofReal
 -/
@@ -1024,7 +1130,13 @@ lemma rnDeriv_tilted_right
     refine (Measure.rnDeriv_withDensity_right μ ν ?_ ?_ ?_).trans ?_
     · exact (hf.1.aemeasurable.div_const _).ennreal_ofReal
     · filter_upwards
-      simp only [
+      simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]
+      exact fun _ => div_pos (exp_pos _) (integral_exp_pos hf)
+    · refine ae_of_all _ (by simp)
+    · filter_upwards with x
+      congr
+      rw [← ENNReal.ofReal_inv_of_pos]; rw [inv_div']; rw [← exp_neg]; rw [div_eq_mul_inv]; rw [inv_inv]
+      exact div_pos (exp_pos _) (integral_exp_pos hf)
 
 中文:
 引理 rnDeriv_tilted_right
@@ -1036,7 +1148,13 @@ lemma rnDeriv_tilted_right
     refine (Measure.rnDeriv_withDensity_right μ ν ?_ ?_ ?_).trans ?_
     · exact (hf.1.aemeasurable.div_const _).ennreal_ofReal
     · filter_upwards
-      simp only [
+      simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]
+      exact fun _ => div_pos (exp_pos _) (integral_exp_pos hf)
+    · refine ae_of_all _ (by simp)
+    · filter_upwards with x
+      congr
+      rw [← ENNReal.ofReal_inv_of_pos]; rw [inv_div']; rw [← exp_neg]; rw [div_eq_mul_inv]; rw [inv_inv]
+      exact div_pos (exp_pos _) (integral_exp_pos hf)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_eq_zero, ENNReal.ofReal_inv_of_pos, EventuallyEq, Filter, Filter.EventuallyEq, Filter.eventually_bot, Measure, Measure.rnDeriv_withDensity_right, ae_of_all, ae_zero, aemeasurable, aemeasurable.div_const, div_const, div_pos, ennreal_ofReal, eq_zero_or_neZero, eventually_bot, exp_neg, exp_pos
 -/
@@ -1194,7 +1312,8 @@ lemma log_rnDeriv_tilted_left_self
   | inr h0 =>
     have hf' : AEMeasurable f μ := aemeasurable_of_aemeasurable_exp hf.1.aemeasurable
     filter_upwards [rnDeriv_tilted_left_self hf'] with x hx
-    rw [hx]; rw [ENN
+    rw [hx]; rw [ENNReal.toReal_ofReal (by positivity)]; rw [log_div (exp_pos _).ne']; rw [log_exp]
+    exact (integral_exp_pos hf).ne'
 
 中文:
 引理 log_rnDeriv_tilted_left_self
@@ -1205,7 +1324,8 @@ lemma log_rnDeriv_tilted_left_self
   | inr h0 =>
     have hf' : AEMeasurable f μ := aemeasurable_of_aemeasurable_exp hf.1.aemeasurable
     filter_upwards [rnDeriv_tilted_left_self hf'] with x hx
-    rw [hx]; rw [ENN
+    rw [hx]; rw [ENNReal.toReal_ofReal (by positivity)]; rw [log_div (exp_pos _).ne']; rw [log_exp]
+    exact (integral_exp_pos hf).ne'
 
 Depends on / 依赖: AEMeasurable, ENNReal, ENNReal.toReal_ofReal, EventuallyEq, Filter, Filter.EventuallyEq, Filter.eventually_bot, ae_zero, aemeasurable, aemeasurable_of_aemeasurable_exp, eq_zero_or_neZero, eventually_bot, exp_pos, filter_upwards, integral_exp_pos, log_div, log_exp, rnDeriv_tilted_left_self, simp_rw, toReal_ofReal
 -/

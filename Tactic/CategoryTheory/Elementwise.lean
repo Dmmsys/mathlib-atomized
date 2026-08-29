@@ -75,7 +75,9 @@ definition elementwiseThms
     ``ConcreteCategory.coe_id, ``ConcreteCategory.coe_comp,
     ``CategoryTheory.comp_apply, ``CategoryTheory.id_apply,
     ``CategoryTheory.hom_id, ``CategoryTheory.hom_comp, ``id_eq, ``Function.comp_apply,
-    -- simp can itself simplify trivial equalities into `true`.
+    -- simp can itself simplify trivial equalities into `true`. Adding this lemma makes it
+    -- easier to detect when this has occurred.
+    ``implies_true]
 
 中文:
 定义 elementwiseThms
@@ -84,7 +86,9 @@ definition elementwiseThms
     ``ConcreteCategory.coe_id, ``ConcreteCategory.coe_comp,
     ``CategoryTheory.comp_apply, ``CategoryTheory.id_apply,
     ``CategoryTheory.hom_id, ``CategoryTheory.hom_comp, ``id_eq, ``Function.comp_apply,
-    -- simp can itself simplify trivial equalities into `true`.
+    -- simp can itself simplify trivial equalities into `true`. Adding this lemma makes it
+    -- easier to detect when this has occurred.
+    ``implies_true]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, CategoryTheory.hom_comp, CategoryTheory.hom_id, CategoryTheory.id_apply, ConcreteCategory, ConcreteCategory.coe_comp, ConcreteCategory.coe_id, ConditionallyCompleteLinearOrder, ConditionallyCompleteLinearOrder.toCompactIccSpace, Function, Function.comp_apply, coe_comp, coe_id, comp_apply, hom_comp, hom_id, id_apply, id_eq, lemmas
 -/
@@ -108,7 +112,26 @@ definition elementwiseExpr
   forallTelescope type fun fvars type' => do
     mkHomElementwise type' (mkAppN pf fvars) fun eqPf instConcr? => do
       -- First simplify using elementwise-specific lemmas
-      let mut eqPf' ← simpType (simpOnlyNames elemen
+      let mut eqPf' ← simpType (simpOnlyNames elementwiseThms (config := { decide := false })) eqPf
+      if (← inferType eqPf') == .const ``True [] then
+        throwError "elementwise lemma for {src} is trivial after applying ConcreteCategory \
+          lemmas, which can be caused by how applications are unfolded. \
+          Using elementwise is unnecessary."
+      if simpSides then
+        let ctx ← Simp.Context.mkDefault
+        let (ty', eqPf'') ← simpEq (fun e => return (← simp e ctx).1) (← inferType eqPf') eqPf'
+        -- check that it's not a simp-trivial equality:
+        forallTelescope ty' fun _ ty' => do
+          if let some (_, lhs, rhs) := ty'.eq? then
+            if ← Batteries.Tactic.Lint.isSimpEq lhs rhs then
+              throwError "applying simp to both sides reduces elementwise lemma for {src} \
+                to the trivial equality {ty'}. \
+                Either add `nosimp` or remove the `elementwise` attribute."
+        eqPf' ← mkExpectedTypeHint eqPf'' ty'
+      if let some (w, uF, insts) := instConcr? then
+        return (← Meta.mkLambdaFVars (fvars.append insts) eqPf', (w, uF))
+      else
+        return (← Meta.mkLambdaFVars fvars eqPf', none)
 
 中文:
 定义 elementwiseExpr
@@ -118,7 +141,26 @@ definition elementwiseExpr
   forallTelescope type fun fvars type' => do
     mkHomElementwise type' (mkAppN pf fvars) fun eqPf instConcr? => do
       -- First simplify using elementwise-specific lemmas
-      let mut eqPf' ← simpType (simpOnlyNames elemen
+      let mut eqPf' ← simpType (simpOnlyNames elementwiseThms (config := { decide := false })) eqPf
+      if (← inferType eqPf') == .const ``True [] then
+        throwError "elementwise lemma for {src} is trivial after applying ConcreteCategory \
+          lemmas, which can be caused by how applications are unfolded. \
+          Using elementwise is unnecessary."
+      if simpSides then
+        let ctx ← Simp.Context.mkDefault
+        let (ty', eqPf'') ← simpEq (fun e => return (← simp e ctx).1) (← inferType eqPf') eqPf'
+        -- check that it's not a simp-trivial equality:
+        forallTelescope ty' fun _ ty' => do
+          if let some (_, lhs, rhs) := ty'.eq? then
+            if ← Batteries.Tactic.Lint.isSimpEq lhs rhs then
+              throwError "applying simp to both sides reduces elementwise lemma for {src} \
+                to the trivial equality {ty'}. \
+                Either add `nosimp` or remove the `elementwise` attribute."
+        eqPf' ← mkExpectedTypeHint eqPf'' ty'
+      if let some (w, uF, insts) := instConcr? then
+        return (← Meta.mkLambdaFVars (fvars.append insts) eqPf', (w, uF))
+      else
+        return (← Meta.mkLambdaFVars fvars eqPf', none)
 
 Depends on / 依赖: isCompact_Icc, isCompact_univ_pi, pi_univ_Icc
 -/

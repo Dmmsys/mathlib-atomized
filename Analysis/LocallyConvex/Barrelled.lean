@@ -177,7 +177,28 @@ instance BaireSpace.instBarrelledSpace
     intro p hp
     -- Consider the family of all `p`-closed-balls with integer radius.
     -- By lower semicontinuity, each of these closed balls is indeed closed...
-    have h₁ : forall n : Nat, IsClosed (p.closedBall (0 : E) n) := fun n 
+    have h₁ : forall n : Nat, IsClosed (p.closedBall (0 : E) n) := fun n => by
+      simpa [p.closedBall_zero_eq] using! hp.isClosed_preimage n
+    -- ... and clearly they cover the whole space.
+    have h₂ : (⋃ n : Nat, p.closedBall (0 : E) n) = univ :=
+      eq_univ_of_forall fun x => mem_iUnion.mpr (exists_nat_ge <| p (x - 0))
+    -- Hence, one of them has nonempty interior. Let `n : ℕ` be its radius, and fix `x` an
+    -- interior point.
+    rcases nonempty_interior_of_iUnion_of_closed h₁ h₂ with ⟨n, ⟨x, hxn⟩⟩
+    -- To show that `p` is continuous, we will show that the `p`-closed-ball of
+    -- radius `2*n` is a neighborhood of zero.
+    refine Seminorm.continuous' (r := n + n) ?_
+    rw [p.closedBall_zero_eq] at hxn ⊢
+    have hxn' : p x <= n := by convert! interior_subset hxn
+    -- By definition, we have `p x' ≤ n` for `x'` sufficiently close to `x`.
+    -- In other words, `p (x + y) ≤ n` for `y` sufficiently close to `0`.
+    rw [mem_interior_iff_mem_nhds]; rw [← map_add_left_nhds_zero] at hxn
+    -- Hence, for `y` sufficiently close to `0`, we have
+    -- `p y = p (x + y - x) ≤ p (x + y) + p x ≤ 2*n`
+    filter_upwards [hxn] with y hy
+    calc p y = p (x + y - x) := by rw [add_sub_cancel_left]
+      _ <= p (x + y) + p x := map_sub_le_add _ _ _
+      _ <= n + n := add_le_add hy hxn'
 
 中文:
 实例 Baire空间.instBarrelledSpace
@@ -187,7 +208,28 @@ instance BaireSpace.instBarrelledSpace
     intro p hp
     -- Consider the family of all `p`-closed-balls with integer radius.
     -- By lower semicontinuity, each of these closed balls is indeed closed...
-    have h₁ : forall n : Nat, IsClosed (p.closedBall (0 : E) n) := fun n 
+    have h₁ : forall n : Nat, IsClosed (p.closedBall (0 : E) n) := fun n => by
+      simpa [p.closedBall_zero_eq] using! hp.isClosed_preimage n
+    -- ... and clearly they cover the whole space.
+    have h₂ : (⋃ n : Nat, p.closedBall (0 : E) n) = univ :=
+      eq_univ_of_forall fun x => mem_iUnion.mpr (exists_nat_ge <| p (x - 0))
+    -- Hence, one of them has nonempty interior. Let `n : ℕ` be its radius, and fix `x` an
+    -- interior point.
+    rcases nonempty_interior_of_iUnion_of_closed h₁ h₂ with ⟨n, ⟨x, hxn⟩⟩
+    -- To show that `p` is continuous, we will show that the `p`-closed-ball of
+    -- radius `2*n` is a neighborhood of zero.
+    refine Seminorm.continuous' (r := n + n) ?_
+    rw [p.closedBall_zero_eq] at hxn ⊢
+    have hxn' : p x <= n := by convert! interior_subset hxn
+    -- By definition, we have `p x' ≤ n` for `x'` sufficiently close to `x`.
+    -- In other words, `p (x + y) ≤ n` for `y` sufficiently close to `0`.
+    rw [mem_interior_iff_mem_nhds]; rw [← map_add_left_nhds_zero] at hxn
+    -- Hence, for `y` sufficiently close to `0`, we have
+    -- `p y = p (x + y - x) ≤ p (x + y) + p x ≤ 2*n`
+    filter_upwards [hxn] with y hy
+    calc p y = p (x + y - x) := by rw [add_sub_cancel_left]
+      _ <= p (x + y) + p x := map_sub_le_add _ _ _
+      _ <= n + n := add_le_add hy hxn'
 -/
 instance BaireSpace.instBarrelledSpace [TopologicalSpace E] [IsTopologicalAddGroup E]
     [ContinuousConstSMul 𝕜₁ E] [BaireSpace E] :
@@ -238,7 +280,16 @@ theorem banach_steinhaus
   -- for all `k`.
   refine (hq.uniformEquicontinuous_iff_bddAbove_and_continuous_iSup (toLinearMap ∘ 𝓕)).mpr ?_
   intro k
-  -- By assumption the supremum `⊔ i, q k (𝓕 i x)` is well-defined for all `x`, he
+  -- By assumption the supremum `⊔ i, q k (𝓕 i x)` is well-defined for all `x`, hence the
+  -- supremum `⊔ i, (q k) ∘ (𝓕 i)` is well defined in the lattice of seminorms.
+  have : BddAbove (range fun i => (q k).comp (𝓕 i).toLinearMap) := by
+    rw [Seminorm.bddAbove_range_iff]
+    exact H k
+  -- By definition of the lattice structure on seminorms, `⊔ i, (q k) ∘ (𝓕 i)` is the *pointwise*
+  -- supremum of the continuous seminorms `(q k) ∘ (𝓕 i)`. Since `E` is barrelled, this supremum
+  -- is continuous.
+  exact ⟨this, Seminorm.continuous_iSup _
+    (fun i => (hq.continuous_seminorm k).comp (𝓕 i).continuous) this⟩
 
 中文:
 定理 banach_steinhaus
@@ -248,7 +299,16 @@ theorem banach_steinhaus
   -- for all `k`.
   refine (hq.uniformEquicontinuous_iff_bddAbove_and_continuous_iSup (toLinearMap ∘ 𝓕)).mpr ?_
   intro k
-  -- By assumption the supremum `⊔ i, q k (𝓕 i x)` is well-defined for all `x`, he
+  -- By assumption the supremum `⊔ i, q k (𝓕 i x)` is well-defined for all `x`, hence the
+  -- supremum `⊔ i, (q k) ∘ (𝓕 i)` is well defined in the lattice of seminorms.
+  have : BddAbove (range fun i => (q k).comp (𝓕 i).toLinearMap) := by
+    rw [Seminorm.bddAbove_range_iff]
+    exact H k
+  -- By definition of the lattice structure on seminorms, `⊔ i, (q k) ∘ (𝓕 i)` is the *pointwise*
+  -- supremum of the continuous seminorms `(q k) ∘ (𝓕 i)`. Since `E` is barrelled, this supremum
+  -- is continuous.
+  exact ⟨this, Seminorm.continuous_iSup _
+    (fun i => (hq.continuous_seminorm k).comp (𝓕 i).continuous) this⟩
 -/
 protected theorem banach_steinhaus (H : forall k x, BddAbove (range fun i => q k (𝓕 i x))) :
     UniformEquicontinuous ((↑) ∘ 𝓕) := by
@@ -315,7 +375,16 @@ definition continuousLinearMapOfTendsto
     -- Since the filter `l` is countably generated and nontrivial, we can find a sequence
     -- `u : ℕ → α` that tends to `l`. By considering `g ∘ u` instead of `g`, we can thus assume
     -- that `α = ℕ` and `l = atTop`
-    rcases l.exists_seq_tendsto with ⟨u,
+    rcases l.exists_seq_tendsto with ⟨u, hu⟩
+    -- We claim that the limit is continuous because it's a limit of an equicontinuous family.
+    -- By the Banach-Steinhaus theorem, this equicontinuity will follow from pointwise boundedness.
+    refine (h.comp hu).continuous_of_equicontinuous
+      (PolynormableSpace.banach_steinhaus ?_).equicontinuous
+    -- For `x` fixed, we need to show that the range of `(i : ℕ) ↦ g i x` is bounded.
+    intro x
+    -- This follows from the fact that this sequence converges (to `f x`) by hypothesis.
+    rw [tendsto_pi_nhds] at h
+    exact ((h x).comp hu).isVonNBounded_range 𝕜₂
 
 中文:
 定义 continuousLinearMapOfTendsto
@@ -324,7 +393,16 @@ definition continuousLinearMapOfTendsto
     -- Since the filter `l` is countably generated and nontrivial, we can find a sequence
     -- `u : ℕ → α` that tends to `l`. By considering `g ∘ u` instead of `g`, we can thus assume
     -- that `α = ℕ` and `l = atTop`
-    rcases l.exists_seq_tendsto with ⟨u,
+    rcases l.exists_seq_tendsto with ⟨u, hu⟩
+    -- We claim that the limit is continuous because it's a limit of an equicontinuous family.
+    -- By the Banach-Steinhaus theorem, this equicontinuity will follow from pointwise boundedness.
+    refine (h.comp hu).continuous_of_equicontinuous
+      (PolynormableSpace.banach_steinhaus ?_).equicontinuous
+    -- For `x` fixed, we need to show that the range of `(i : ℕ) ↦ g i x` is bounded.
+    intro x
+    -- This follows from the fact that this sequence converges (to `f x`) by hypothesis.
+    rw [tendsto_pi_nhds] at h
+    exact ((h x).comp hu).isVonNBounded_range 𝕜₂
 
 Depends on / 依赖: linearMapOfTendsto
 -/

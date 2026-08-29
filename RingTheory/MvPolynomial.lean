@@ -43,7 +43,7 @@ theorem quotient_mk_comp_C_injective
   rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem] at hx
   refine _root_.by_contradiction fun hx0 => absurd (I.eq_top_iff_one.2 ?_) hI
   have := I.mul_mem_left (MvPolynomial.C x⁻¹) hx
-  rwa [← MvPolynomial.C.map_mul, inv_mul_canc
+  rwa [← MvPolynomial.C.map_mul, inv_mul_cancel₀ hx0, MvPolynomial.C_1] at this
 
 中文:
 定理 quotient_mk_comp_C_injective
@@ -53,7 +53,7 @@ theorem quotient_mk_comp_C_injective
   rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem] at hx
   refine _root_.by_contradiction fun hx0 => absurd (I.eq_top_iff_one.2 ?_) hI
   have := I.mul_mem_left (MvPolynomial.C x⁻¹) hx
-  rwa [← MvPolynomial.C.map_mul, inv_mul_canc
+  rwa [← MvPolynomial.C.map_mul, inv_mul_cancel₀ hx0, MvPolynomial.C_1] at this
 
 Depends on / 依赖: I.eq_top_iff_one, I.mul_mem_left, Ideal.Quotient.eq_zero_iff_mem, MvPolynomial, MvPolynomial.C, MvPolynomial.C.map_mul, MvPolynomial.C_1, Quotient, RingHom, RingHom.comp_apply, _root_, _root_.by_contradiction, absurd, by_contradiction, comp_apply, eq_top_iff_one, eq_zero_iff_mem, injective_iff_map_eq_zero, map_mul, mul_mem_left
 -/

@@ -77,7 +77,7 @@ lemma geometrically_eq_universally
   · let := (isField_of_isIntegral_of_subsingleton W).toField
     apply hf (W.isoSpec.inv ≫ q) snd (fst ≫ W.isoSpec.hom)
     apply h.flip.of_iso (.refl _) (.refl _) W.isoSpec (.refl _) <;> simp
-  · exact hf _ 
+  · exact hf _ _ _ h.flip inferInstance inferInstance
 
 中文:
 引理 geometrically_eq_universally
@@ -88,7 +88,7 @@ lemma geometrically_eq_universally
   · let := (isField_of_isIntegral_of_subsingleton W).toField
     apply hf (W.isoSpec.inv ≫ q) snd (fst ≫ W.isoSpec.hom)
     apply h.flip.of_iso (.refl _) (.refl _) W.isoSpec (.refl _) <;> simp
-  · exact hf _ 
+  · exact hf _ _ _ h.flip inferInstance inferInstance
 
 Depends on / 依赖: W.isoSpec, W.isoSpec.hom, W.isoSpec.inv, h.flip, h.flip.of_iso, isField_of_isIntegral_of_subsingleton, isoSpec, of_iso, toField
 -/
@@ -167,7 +167,9 @@ instance [P.IsClosedUnderIsomorphisms]
   obtain ⟨y⟩ := (inferInstance : Nonempty Y)
   obtain ⟨i, hy⟩ := hU.exists_mem y
   have heq : U i = ⊤ := eq_top_iff.mpr fun z _ => by rwa [Subsingleton.elim z y]
-  let e : ↑(U i) ≅ Y :
+  let e : ↑(U i) ≅ Y := Y.isoOfEq heq ≪≫ Y.topIso
+  let e' : ↑(f ⁻¹ᵁ U i) ≅ X := X.isoOfEq (by simp [heq]) ≪≫ X.topIso
+exact P.prop_of_iso e' H i (.of_isIso e.inv) (e.hom.homeomorph.subsingleton_congr.mpr ‹_›)
 
 中文:
 实例 [P.在同构下封闭]
@@ -178,7 +180,9 @@ instance [P.IsClosedUnderIsomorphisms]
   obtain ⟨y⟩ := (inferInstance : Nonempty Y)
   obtain ⟨i, hy⟩ := hU.exists_mem y
   have heq : U i = ⊤ := eq_top_iff.mpr fun z _ => by rwa [Subsingleton.elim z y]
-  let e : ↑(U i) ≅ Y :
+  let e : ↑(U i) ≅ Y := Y.isoOfEq heq ≪≫ Y.topIso
+  let e' : ↑(f ⁻¹ᵁ U i) ≅ X := X.isoOfEq (by simp [heq]) ≪≫ X.topIso
+exact P.prop_of_iso e' H i (.of_isIso e.inv) (e.hom.homeomorph.subsingleton_congr.mpr ‹_›)
 
 Depends on / 依赖: Nonempty, P.prop_of_iso, Subsingleton, Subsingleton.elim, X.isoOfEq, X.topIso, Y.isoOfEq, Y.topIso, e.hom.homeomorph.subsingleton_congr.mpr, e.inv, eq_top_iff, eq_top_iff.mpr, exists_mem, geometrically_eq_universally, hU.exists_mem, homeomorph, isoOfEq, of_isIso, prop_of_iso, subsingleton_congr
 -/
@@ -291,7 +295,12 @@ lemma geometrically_iff_forall_fiberToSpecResidueField
   obtain ⟨⟨y, φ⟩, rfl⟩ := (Scheme.SpecToEquivOfField _ _).symm.surjective y
   let p : Z ⟶ f.fiber y :=
     pullback.lift fst (snd ≫ Spec.map φ) (by simp [h.w, Scheme.SpecToEquivOfField])
-  apply H 
+  apply H y (Spec.map φ) p snd
+  simp only [Scheme.SpecToEquivOfField, Equiv.coe_fn_symm_mk] at h
+  refine .flip (.of_bot (.flip ?_) ?_ (IsPullback.of_hasPullback f (Y.fromSpecResidueField y)).flip)
+  · convert! h
+    simp [p]
+  · simp [p, Scheme.Hom.fiberToSpecResidueField]
 
 中文:
 引理 geometrically_iff_对任意_fiberToSpecResidueField
@@ -301,7 +310,12 @@ lemma geometrically_iff_forall_fiberToSpecResidueField
   obtain ⟨⟨y, φ⟩, rfl⟩ := (Scheme.SpecToEquivOfField _ _).symm.surjective y
   let p : Z ⟶ f.fiber y :=
     pullback.lift fst (snd ≫ Spec.map φ) (by simp [h.w, Scheme.SpecToEquivOfField])
-  apply H 
+  apply H y (Spec.map φ) p snd
+  simp only [Scheme.SpecToEquivOfField, Equiv.coe_fn_symm_mk] at h
+  refine .flip (.of_bot (.flip ?_) ?_ (IsPullback.of_hasPullback f (Y.fromSpecResidueField y)).flip)
+  · convert! h
+    simp [p]
+  · simp [p, Scheme.Hom.fiberToSpecResidueField]
 
 Depends on / 依赖: Equiv.coe_fn_symm_mk, IsPullback, IsPullback.of_hasPullback, Scheme, Scheme.SpecToEquivOfField, Spec.map, SpecToEquivOfField, Y.fromSpecResidueField, coe_fn_symm_mk, convert, f.fiber, fromSpecResidueField, geometrically, of_bot, of_hasPullback, pullback, pullback.lift, pullback_snd, surjective, symm.surjective
 -/

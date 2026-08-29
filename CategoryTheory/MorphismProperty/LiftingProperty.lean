@@ -720,7 +720,16 @@ lemma Functor.hasLiftingProperty_iff_of_isEquivalence
   simp only [dsimp% G.asEquivalence.toAdjunction.hasLiftingProperty_iff,
     ← MorphismProperty.rlp_ofHoms_iff_hasLiftingProperty Unit]
   ```
-  This is a temporary repair, and authors/maintainers are encourag
+  This is a temporary repair, and authors/maintainers are encouraged to either find a better repair,
+  or identify a minimal example of an underlying problem in Lean.
+  -/
+  change HasLiftingProperty (G.asEquivalence.functor.map i) (G.asEquivalence.functor.map p) ↔ _
+  rw [G.asEquivalence.toAdjunction.hasLiftingProperty_iff]
+  simp only [← MorphismProperty.rlp_ofHoms_iff_hasLiftingProperty Unit]
+  exact MorphismProperty.arrow_mk_iso_iff _
+    (Arrow.isoMk (G.asEquivalence.unitIso.symm.app _)
+      (G.asEquivalence.unitIso.symm.app _)
+      (G.asEquivalence.unitIso.inv.naturality p).symm)
 
 中文:
 引理 函子.hasLiftingProperty_iff_of_isEquivalence
@@ -730,7 +739,16 @@ lemma Functor.hasLiftingProperty_iff_of_isEquivalence
   simp only [dsimp% G.asEquivalence.toAdjunction.hasLiftingProperty_iff,
     ← MorphismProperty.rlp_ofHoms_iff_hasLiftingProperty Unit]
   ```
-  This is a temporary repair, and authors/maintainers are encourag
+  This is a temporary repair, and authors/maintainers are encouraged to either find a better repair,
+  or identify a minimal example of an underlying problem in Lean.
+  -/
+  change HasLiftingProperty (G.asEquivalence.functor.map i) (G.asEquivalence.functor.map p) ↔ _
+  rw [G.asEquivalence.toAdjunction.hasLiftingProperty_iff]
+  simp only [← MorphismProperty.rlp_ofHoms_iff_hasLiftingProperty Unit]
+  exact MorphismProperty.arrow_mk_iso_iff _
+    (Arrow.isoMk (G.asEquivalence.unitIso.symm.app _)
+      (G.asEquivalence.unitIso.symm.app _)
+      (G.asEquivalence.unitIso.inv.naturality p).symm)
 
 Depends on / 依赖: G.asEquivalenc, G.asEquivalence.functor.map, G.asEquivalence.toAdjunction.hasLiftingProperty_iff, HasLiftingProperty, MorphismProperty, MorphismProperty.rlp_ofHoms_iff_hasLiftingProperty, adaptation_note, asEquivalenc, asEquivalence, authors, better, either, encouraged, example, functor, hasLiftingProperty_iff, identify, maintainers, minimal, nightly
 -/

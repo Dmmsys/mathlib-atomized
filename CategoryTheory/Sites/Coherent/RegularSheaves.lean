@@ -151,7 +151,10 @@ theorem equalizerCondition_precomp_of_preservesPullback
   have h : P.map (F.map π).op = (F.op ⋙ P).map π.op := by simp
   refine ⟨(IsLimit.equivIsoLimit (ForkOfι.ext ?_ _ h)) ?_⟩
   · simp only [Functor.comp_map, op_map, Quiver.Hom.unop_op, ← map_comp, ← op_comp, c.condition]
-  · refine (hP (F.map π) (PullbackCone.mk (F.map c.fst) (
+  · refine (hP (F.map π) (PullbackCone.mk (F.map c.fst) (F.map c.snd) ?_) ?_).some
+    · simp only [← map_comp, c.condition]
+    · exact (isLimitMapConePullbackConeEquiv F c.condition)
+        (isLimitOfPreserves F (hc.ofIsoLimit (PullbackCone.ext (Iso.refl _) (by simp) (by simp))))
 
 中文:
 定理 equalizerCondition_precomp_of_preservesPullback
@@ -161,7 +164,10 @@ theorem equalizerCondition_precomp_of_preservesPullback
   have h : P.map (F.map π).op = (F.op ⋙ P).map π.op := by simp
   refine ⟨(IsLimit.equivIsoLimit (ForkOfι.ext ?_ _ h)) ?_⟩
   · simp only [Functor.comp_map, op_map, Quiver.Hom.unop_op, ← map_comp, ← op_comp, c.condition]
-  · refine (hP (F.map π) (PullbackCone.mk (F.map c.fst) (
+  · refine (hP (F.map π) (PullbackCone.mk (F.map c.fst) (F.map c.snd) ?_) ?_).some
+    · simp only [← map_comp, c.condition]
+    · exact (isLimitMapConePullbackConeEquiv F c.condition)
+        (isLimitOfPreserves F (hc.ofIsoLimit (PullbackCone.ext (Iso.refl _) (by simp) (by simp))))
 
 Depends on / 依赖: F.map, F.op, Functor, Functor.comp_map, IsLimit, IsLimit.equivIsoLimit, Iso.refl, P.map, PullbackCone, PullbackCone.ext, PullbackCone.mk, Quiver, Quiver.Hom.unop_op, c.condition, c.fst, c.snd, comp_map, condition, equivIsoLimit, hc.ofIsoLimit
 -/
@@ -217,7 +223,7 @@ theorem EqualizerCondition.bijective_mapToEqualizer_pullback'
     simpa [mapToEqualizer] using! ha₁
   · intro y h
     apply ha₂ y
-    simpa [mapToEqualizer] using Subtyp
+    simpa [mapToEqualizer] using Subtype.ext_iff.1 h
 
 中文:
 定理 EqualizerCondition.bijective_mapToEqualizer_pullback'
@@ -233,7 +239,7 @@ theorem EqualizerCondition.bijective_mapToEqualizer_pullback'
     simpa [mapToEqualizer] using! ha₁
   · intro y h
     apply ha₂ y
-    simpa [mapToEqualizer] using Subtyp
+    simpa [mapToEqualizer] using Subtype.ext_iff.1 h
 
 Depends on / 依赖: Function, Function.bijective_iff_existsUnique, Subtype, Subtype.ext_iff, Types.type_equalizer_iff_unique, bijective_iff_existsUnique, ext_iff, mapToEqualizer, specialize, type_equalizer_iff_unique
 -/
@@ -291,7 +297,8 @@ theorem EqualizerCondition.mk'
   · simpa [mapToEqualizer] using Subtype.ext_iff.1 ha₁
   · intro y h
     apply ha₂ y
-    e
+    ext
+    simpa [mapToEqualizer] using h
 
 中文:
 定理 EqualizerCondition.mk'
@@ -307,7 +314,8 @@ theorem EqualizerCondition.mk'
   · simpa [mapToEqualizer] using Subtype.ext_iff.1 ha₁
   · intro y h
     apply ha₂ y
-    e
+    ext
+    simpa [mapToEqualizer] using h
 
 Depends on / 依赖: Function, Function.bijective_iff_existsUnique, Subtype, Subtype.ext_iff, Types.type_equalizer_iff_unique, _iff_isBasis_inter_ground, and_iff_left, bijective_iff_existsUnique, ext_iff, isBasis, isBasis_restrict_iff, mapToEqualizer, specialize, subset_univ, type_equalizer_iff_unique
 -/
@@ -344,7 +352,13 @@ theorem EqualizerCondition.mk
   intro b hb
   have h₁ : ((pullbackIsPullback π π).conePointUniqueUpToIso hc).hom ≫ c.fst =
     pullback.fst π π := by simp
-  have
+  have hb' : P.map (pullback.fst π π).op b = P.map (pullback.snd _ _).op b := by
+    rw [← h₁]; rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [hb]
+    simp [← comp_apply, ← Functor.map_comp, ← op_comp]
+  obtain ⟨a, ha₁, ha₂⟩ := hP ⟨b, hb'⟩
+  refine ⟨a, ?_, ?_⟩
+  · simpa [mapToEqualizer] using ha₁
+  · simpa [mapToEqualizer] using ha₂
 
 中文:
 定理 EqualizerCondition.mk
@@ -358,7 +372,13 @@ theorem EqualizerCondition.mk
   intro b hb
   have h₁ : ((pullbackIsPullback π π).conePointUniqueUpToIso hc).hom ≫ c.fst =
     pullback.fst π π := by simp
-  have
+  have hb' : P.map (pullback.fst π π).op b = P.map (pullback.snd _ _).op b := by
+    rw [← h₁]; rw [op_comp]; rw [Functor.map_comp]; rw [comp_apply]; rw [hb]
+    simp [← comp_apply, ← Functor.map_comp, ← op_comp]
+  obtain ⟨a, ha₁, ha₂⟩ := hP ⟨b, hb'⟩
+  refine ⟨a, ?_, ?_⟩
+  · simpa [mapToEqualizer] using ha₁
+  · simpa [mapToEqualizer] using ha₂
 
 Depends on / 依赖: Function, Function.bijective_iff_existsUnique, Functor, Functor.map_comp, HasPullback, P.map, Types.type_equalizer_iff_unique, bijective_iff_existsUnique, c.fst, comp_apply, conePointUniqueUpToIso, map_comp, op_comp, pullback, pullback.fst, pullback.snd, pullbackIsPullback, specialize, type_equalizer_iff_unique
 -/
@@ -450,7 +470,11 @@ theorem equalizerCondition_iff_isIso_lift
     exact IsIso.of_isIso_comp_right (equalizer.lift (P.map π.op)
       (equalizerCondition_w' P π))
       (Types.equalizerIso _ _).hom
-  · int
+  · intro hP
+    apply EqualizerCondition.mk
+    intro X B π _ _
+    rw [mapToEqualizer_eq_comp]; rw [← isIso_iff_bijective]
+    infer_instance
 
 中文:
 定理 equalizerCondition_iff_isIso_lift
@@ -464,7 +488,11 @@ theorem equalizerCondition_iff_isIso_lift
     exact IsIso.of_isIso_comp_right (equalizer.lift (P.map π.op)
       (equalizerCondition_w' P π))
       (Types.equalizerIso _ _).hom
-  · int
+  · intro hP
+    apply EqualizerCondition.mk
+    intro X B π _ _
+    rw [mapToEqualizer_eq_comp]; rw [← isIso_iff_bijective]
+    infer_instance
 
 Depends on / 依赖: EqualizerCondition, EqualizerCondition.mk, IsIso.of_isIso_comp_right, P.map, Types.equalizerIso, bijective_mapToEqualizer_pullback, equalizer, equalizer.lift, equalizerCondition_w, equalizerIso, hP.bijective_mapToEqualizer_pullback, infer_instance, isIso_iff_bijective, mapToEqualizer_eq_comp, of_isIso_comp_right, toMatroid
 -/
@@ -524,7 +552,14 @@ theorem parallelPair_pullback_initial
     let X' : (Presieve.ofArrows (fun () => X) (fun () => π)).category :=
       Presieve.categoryMk _ π (ofArrows.mk ())
     let f' : Z.obj.left ⟶ X'.obj.left := f
-    exact ⟨(ObjectProperty.homMk (Over
+    exact ⟨(ObjectProperty.homMk (Over.homMk f')).op⟩
+  · intro ⟨Z⟩ ⟨i⟩ ⟨j⟩
+    have hi := Over.w i.hom
+    have hj := Over.w j.hom
+    dsimp at hi hj
+    let ij := PullbackCone.IsLimit.lift hc i.hom.left j.hom.left (by simp [hi, hj])
+    refine ⟨Quiver.Hom.op (ObjectProperty.homMk (Over.homMk ij)), ?_, ?_⟩
+    all_goals congr; aesop
 
 中文:
 定理 parallelPair_pullback_initial
@@ -536,7 +571,14 @@ theorem parallelPair_pullback_initial
     let X' : (Presieve.ofArrows (fun () => X) (fun () => π)).category :=
       Presieve.categoryMk _ π (ofArrows.mk ())
     let f' : Z.obj.left ⟶ X'.obj.left := f
-    exact ⟨(ObjectProperty.homMk (Over
+    exact ⟨(ObjectProperty.homMk (Over.homMk f')).op⟩
+  · intro ⟨Z⟩ ⟨i⟩ ⟨j⟩
+    have hi := Over.w i.hom
+    have hj := Over.w j.hom
+    dsimp at hi hj
+    let ij := PullbackCone.IsLimit.lift hc i.hom.left j.hom.left (by simp [hi, hj])
+    refine ⟨Quiver.Hom.op (ObjectProperty.homMk (Over.homMk ij)), ?_, ?_⟩
+    all_goals congr; aesop
 
 Depends on / 依赖: Sieve.ofArrows, arrows, arrows.category, ofArrows
 -/
@@ -575,7 +617,16 @@ definition isLimit_forkOfι_equiv
   let X' := S.categoryMk π ⟨_, 𝟙 _, π, ofArrows.mk (), Category.id_comp _⟩
   let P' := S.categoryMk (c.fst ≫ π) ⟨_, c.fst, π, ofArrows.mk (), rfl⟩
   let fst : P' ⟶ X' := ObjectProperty.homMk (Over.homMk c.fst)
-  let snd : P' ⟶ 
+  let snd : P' ⟶ X' := ObjectProperty.homMk (Over.homMk c.snd c.condition.symm)
+  let F : S.categoryᵒᵖ ⥤ D := S.diagram.op ⋙ P
+  let G := parallelPair (P.map c.fst.op) (P.map c.snd.op)
+  let H := parallelPair fst.op snd.op
+  have : H.Initial := parallelPair_pullback_initial π c hc
+  let i : H ⋙ F ≅ G := parallelPair.ext (Iso.refl _) (Iso.refl _) (by aesop) (by aesop)
+  refine (IsLimit.equivOfNatIsoOfIso i.symm _ _ ?_).trans (Functor.Initial.isLimitWhiskerEquiv H _)
+  refine Cone.ext (Iso.refl _) ?_
+  rintro ⟨_ | _⟩
+  all_goals aesop
 
 中文:
 定义 isLimit_forkOfι_equiv
@@ -585,7 +636,16 @@ definition isLimit_forkOfι_equiv
   let X' := S.categoryMk π ⟨_, 𝟙 _, π, ofArrows.mk (), Category.id_comp _⟩
   let P' := S.categoryMk (c.fst ≫ π) ⟨_, c.fst, π, ofArrows.mk (), rfl⟩
   let fst : P' ⟶ X' := ObjectProperty.homMk (Over.homMk c.fst)
-  let snd : P' ⟶ 
+  let snd : P' ⟶ X' := ObjectProperty.homMk (Over.homMk c.snd c.condition.symm)
+  let F : S.categoryᵒᵖ ⥤ D := S.diagram.op ⋙ P
+  let G := parallelPair (P.map c.fst.op) (P.map c.snd.op)
+  let H := parallelPair fst.op snd.op
+  have : H.Initial := parallelPair_pullback_initial π c hc
+  let i : H ⋙ F ≅ G := parallelPair.ext (Iso.refl _) (Iso.refl _) (by aesop) (by aesop)
+  refine (IsLimit.equivOfNatIsoOfIso i.symm _ _ ?_).trans (Functor.Initial.isLimitWhiskerEquiv H _)
+  refine Cone.ext (Iso.refl _) ?_
+  rintro ⟨_ | _⟩
+  all_goals aesop
 
 Depends on / 依赖: Category, Category.id_comp, ObjectProperty, ObjectProperty.homMk, Over.homMk, P.map, S.category, S.categoryMk, S.diagram.op, Sieve.ofArrows, arrows, c.condition.symm, c.fst, c.fst.op, c.snd, c.snd.op, categoryMk, condition, diagram, fst.op
 -/
@@ -658,7 +718,7 @@ lemma equalizerCondition_iff_isSheaf
   · rintro hF X _ ⟨Y, f, rfl, _⟩
     exact (equalizerConditionMap_iff_nonempty_isLimit F f).1 (hF f)
   · intro hF Y X f _
-    exact (equalizerConditionMap_iff_nonempty_isLimit F f).2 (hF _ ⟨_, f, rfl, inferInstan
+    exact (equalizerConditionMap_iff_nonempty_isLimit F f).2 (hF _ ⟨_, f, rfl, inferInstance⟩)
 
 中文:
 引理 equalizerCondition_iff_isSheaf
@@ -670,7 +730,7 @@ lemma equalizerCondition_iff_isSheaf
   · rintro hF X _ ⟨Y, f, rfl, _⟩
     exact (equalizerConditionMap_iff_nonempty_isLimit F f).1 (hF f)
   · intro hF Y X f _
-    exact (equalizerConditionMap_iff_nonempty_isLimit F f).2 (hF _ ⟨_, f, rfl, inferInstan
+    exact (equalizerConditionMap_iff_nonempty_isLimit F f).2 (hF _ ⟨_, f, rfl, inferInstance⟩)
 
 Depends on / 依赖: Presheaf, Presheaf.isSheaf_iff_isLimit_coverage, equalizerConditionMap_iff_nonempty_isLimit, isSheaf_iff_isLimit_coverage, regularTopology
 -/
@@ -696,7 +756,7 @@ lemma isSheafFor_regular_of_projective
   rw [isSheafFor_arrows_iff]
 refine fun x hx => ⟨F.map (Projective.factorThru (𝟙 _) f).op x (), fun _ => ?_, fun y h => ?_⟩
   · simpa using (hx () () Y (𝟙 Y) (f ≫ (Projective.factorThru (𝟙 _) f)) (by simp)).symm
-  · simp [← h (), ← 
+  · simp [← h (), ← comp_apply, ← Functor.map_comp, ← op_comp]
 
 中文:
 引理 isSheafFor_regular_of_projective
@@ -706,7 +766,7 @@ refine fun x hx => ⟨F.map (Projective.factorThru (𝟙 _) f).op x (), fun _ =>
   rw [isSheafFor_arrows_iff]
 refine fun x hx => ⟨F.map (Projective.factorThru (𝟙 _) f).op x (), fun _ => ?_, fun y h => ?_⟩
   · simpa using (hx () () Y (𝟙 Y) (f ≫ (Projective.factorThru (𝟙 _) f)) (by simp)).symm
-  · simp [← h (), ← 
+  · simp [← h (), ← comp_apply, ← Functor.map_comp, ← op_comp]
 
 Depends on / 依赖: F.map, Functor, Functor.map_comp, Presieve, Presieve.regular.single_epi, Projective, Projective.factorThru, comp_apply, factorThru, isSheafFor_arrows_iff, map_comp, op_comp, regular, single_epi
 -/
@@ -752,7 +812,19 @@ lemma isSheaf_yoneda_obj
   have : S.regular := ⟨_, hS⟩
   obtain ⟨Y, f, rfl, hf⟩ := Presieve.regular.single_epi (R := S)
   have h_colim := isColimitOfEffectiveEpiStruct f hf.effectiveEpi.some
-  rw [← Sieve.generateSingleton_eq]; rw [← Presieve.ofArrows_pUni
+  rw [← Sieve.generateSingleton_eq]; rw [← Presieve.ofArrows_pUnit] at h_colim
+  intro x hx
+  let x_ext := Presieve.FamilyOfElements.sieveExtend x
+  have hx_ext := Presieve.FamilyOfElements.Compatible.sieveExtend hx
+  let S := Sieve.generate (Presieve.ofArrows (fun () => Y) (fun () => f))
+  obtain ⟨t, t_amalg, t_uniq⟩ :=
+    (Sieve.forallYonedaIsSheaf_iff_colimit S).mpr ⟨h_colim⟩ W x_ext hx_ext
+  refine ⟨t, ?_, ?_⟩
+  · convert!
+    Presieve.isAmalgamation_restrict
+      (Sieve.le_generate (Presieve.ofArrows (fun () => Y) (fun () => f))) _ _ t_amalg
+    exact (Presieve.restrict_extend hx).symm
+· exact fun y hy => t_uniq y Presieve.isAmalgamation_sieveExtend x y hy
 
 中文:
 引理 isSheaf_yoneda_obj
@@ -763,7 +835,19 @@ lemma isSheaf_yoneda_obj
   have : S.regular := ⟨_, hS⟩
   obtain ⟨Y, f, rfl, hf⟩ := Presieve.regular.single_epi (R := S)
   have h_colim := isColimitOfEffectiveEpiStruct f hf.effectiveEpi.some
-  rw [← Sieve.generateSingleton_eq]; rw [← Presieve.ofArrows_pUni
+  rw [← Sieve.generateSingleton_eq]; rw [← Presieve.ofArrows_pUnit] at h_colim
+  intro x hx
+  let x_ext := Presieve.FamilyOfElements.sieveExtend x
+  have hx_ext := Presieve.FamilyOfElements.Compatible.sieveExtend hx
+  let S := Sieve.generate (Presieve.ofArrows (fun () => Y) (fun () => f))
+  obtain ⟨t, t_amalg, t_uniq⟩ :=
+    (Sieve.forallYonedaIsSheaf_iff_colimit S).mpr ⟨h_colim⟩ W x_ext hx_ext
+  refine ⟨t, ?_, ?_⟩
+  · convert!
+    Presieve.isAmalgamation_restrict
+      (Sieve.le_generate (Presieve.ofArrows (fun () => Y) (fun () => f))) _ _ t_amalg
+    exact (Presieve.restrict_extend hx).symm
+· exact fun y hy => t_uniq y Presieve.isAmalgamation_sieveExtend x y hy
 
 Depends on / 依赖: Compatible, FamilyOfElements, Presieve, Presieve.FamilyOfElements.Compatible.sieveExtend, Presieve.FamilyOfElements.sieveExtend, Presieve.ofArrows, Presieve.ofArrows_pUnit, Presieve.regular.single_epi, S.regular, Sieve.generate, Sieve.generateSingleton_eq, effectiveEpi, generate, generateSingleton_eq, h_colim, hf.effectiveEpi.some, hx_ext, isColimitOfEffectiveEpiStruct, isSheaf_coverage, ofArrows
 -/

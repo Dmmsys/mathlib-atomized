@@ -338,7 +338,21 @@ definition MulAction.prodEquiv
     { smul_comm := fun m n a => by
         change (m, (1 : N)) • ((1 : M), n) • a = ((1 : M), n) • (m, (1 : N)) • a
         simp_rw [smul_smul, Prod.mk_mul_mk, mul_one, one_mul] }⟩
-  invF
+  invFun _insts :=
+    letI := _insts.1; letI := _insts.2.1; have := _insts.2.2
+    MulAction.prodOfSMulCommClass M N α
+  left_inv := by
+    rintro ⟨_⟩; dsimp only; ext ⟨m, n⟩ a
+    change (m, (1 : N)) • ((1 : M), n) • a = _
+    rw [← mul_smul]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rfl
+  right_inv := by
+    rintro ⟨hM, hN, -⟩
+    dsimp only; congr 1
+    · ext m a; (conv_rhs => rw [← hN.one_smul a]); rfl
+    congr 1
+    · funext; congr; ext m a; (conv_rhs => rw [← hN.one_smul a]); rfl
+    · ext n a; (conv_rhs => rw [← hM.one_smul (SMul.smul n a)]); rfl
+    · exact proof_irrel_heq ..
 
 中文:
 定义 乘法作用.prodEquiv
@@ -349,7 +363,21 @@ definition MulAction.prodEquiv
     { smul_comm := fun m n a => by
         change (m, (1 : N)) • ((1 : M), n) • a = ((1 : M), n) • (m, (1 : N)) • a
         simp_rw [smul_smul, Prod.mk_mul_mk, mul_one, one_mul] }⟩
-  invF
+  invFun _insts :=
+    letI := _insts.1; letI := _insts.2.1; have := _insts.2.2
+    MulAction.prodOfSMulCommClass M N α
+  left_inv := by
+    rintro ⟨_⟩; dsimp only; ext ⟨m, n⟩ a
+    change (m, (1 : N)) • ((1 : M), n) • a = _
+    rw [← mul_smul]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rfl
+  right_inv := by
+    rintro ⟨hM, hN, -⟩
+    dsimp only; congr 1
+    · ext m a; (conv_rhs => rw [← hN.one_smul a]); rfl
+    congr 1
+    · funext; congr; ext m a; (conv_rhs => rw [← hN.one_smul a]); rfl
+    · ext n a; (conv_rhs => rw [← hM.one_smul (SMul.smul n a)]); rfl
+    · exact proof_irrel_heq ..
 
 Depends on / 依赖: MulAction, MulAction.compHom, MulAction.prodOfSMulCommClass, Prod.mk_, Prod.mk_mul_mk, _insts, compHom, invFun, left_inv, mk_mul_mk, mul_one, mul_smul, one_mul, prodOfSMulCommClass, simp_rw, smul_comm, smul_smul
 -/

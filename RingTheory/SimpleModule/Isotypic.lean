@@ -191,7 +191,7 @@ theorem IsIsotypic.of_self
     have ⟨_, ⟨e'⟩⟩ := IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule R m'
     have := IsSimpleModule.congr e.symm
     have := IsSimpleModule.congr e'.symm
-⟨e'.trans (h _ _).some.trans e.
+⟨e'.trans (h _ _).some.trans e.symm⟩
 
 中文:
 定理 IsIsotypic.of_self
@@ -202,7 +202,7 @@ theorem IsIsotypic.of_self
     have ⟨_, ⟨e'⟩⟩ := IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule R m'
     have := IsSimpleModule.congr e.symm
     have := IsSimpleModule.congr e'.symm
-⟨e'.trans (h _ _).some.trans e.
+⟨e'.trans (h _ _).some.trans e.symm⟩
 
 Depends on / 依赖: IsSemisimpleRing, IsSemisimpleRing.exists_linearEquiv_ideal_of_isSimpleModule, IsSimpleModule, IsSimpleModule.congr, e.symm, exists_linearEquiv_ideal_of_isSimpleModule, some.trans
 -/
@@ -353,7 +353,7 @@ theorem isIsotypicOfType_submodule_iff
   rw [Subtype.forall']; rw [← (Submodule.MapSubtype.orderIso N).forall_congr_right]
   have e := Submodule.equivMapOfInjective _ N.subtype_injective
   simp_rw [Submodule.MapSubtype.orderIso, Equiv.coe_fn_mk, ← (e _).isSimpleModule_iff]
-  exact forall₂_congr fun m _ => ⟨fun ⟨e'⟩ => ⟨(e m).symm.tran
+  exact forall₂_congr fun m _ => ⟨fun ⟨e'⟩ => ⟨(e m).symm.trans e'⟩, fun ⟨e'⟩ => ⟨(e m).trans e'⟩⟩
 
 中文:
 定理 isIsotypicOfType_submodule_iff
@@ -362,7 +362,7 @@ theorem isIsotypicOfType_submodule_iff
   rw [Subtype.forall']; rw [← (Submodule.MapSubtype.orderIso N).forall_congr_right]
   have e := Submodule.equivMapOfInjective _ N.subtype_injective
   simp_rw [Submodule.MapSubtype.orderIso, Equiv.coe_fn_mk, ← (e _).isSimpleModule_iff]
-  exact forall₂_congr fun m _ => ⟨fun ⟨e'⟩ => ⟨(e m).symm.tran
+  exact forall₂_congr fun m _ => ⟨fun ⟨e'⟩ => ⟨(e m).symm.trans e'⟩, fun ⟨e'⟩ => ⟨(e m).trans e'⟩⟩
 
 Depends on / 依赖: Equiv.coe_fn_mk, MapSubtype, N.subtype_injective, Submodule, Submodule.MapSubtype.orderIso, Submodule.equivMapOfInjective, Subtype, Subtype.forall, coe_fn_mk, equivMapOfInjective, forall_congr_right, isSimpleModule_iff, orderIso, simp_rw, subtype_injective, symm.trans
 -/
@@ -730,7 +730,7 @@ theorem Submodule.le_linearEquiv_of_sSup_eq_top
   have ⟨m, hm, ne⟩ := exists_ne_zero_of_sSup_eq_top (ne_zero_of_surjective
     (projectionOnto_surjective compl)) _ hs
   have ⟨S, ⟨e⟩⟩ := linearEquiv_of_ne_zero ne
-  exact ⟨m, hm, _, m.map_subtype_le S, ⟨e.trans (S.equi
+  exact ⟨m, hm, _, m.map_subtype_le S, ⟨e.trans (S.equivMapOfInjective _ m.subtype_injective)⟩⟩
 
 中文:
 定理 子模.le_linearEquiv_of_sSup_eq_top
@@ -741,7 +741,7 @@ theorem Submodule.le_linearEquiv_of_sSup_eq_top
   have ⟨m, hm, ne⟩ := exists_ne_zero_of_sSup_eq_top (ne_zero_of_surjective
     (projectionOnto_surjective compl)) _ hs
   have ⟨S, ⟨e⟩⟩ := linearEquiv_of_ne_zero ne
-  exact ⟨m, hm, _, m.map_subtype_le S, ⟨e.trans (S.equi
+  exact ⟨m, hm, _, m.map_subtype_le S, ⟨e.trans (S.equivMapOfInjective _ m.subtype_injective)⟩⟩
 
 Depends on / 依赖: IsSimpleModule, IsSimpleModule.nontrivial, S.equivMapOfInjective, e.trans, equivMapOfInjective, exists_isCompl, exists_ne_zero_of_sSup_eq_top, linearEquiv_of_ne_zero, m.map_subtype_le, m.subtype_injective, map_subtype_le, ne_zero_of_surjective, nontrivial, projectionOnto_surjective, subtype_injective
 -/
@@ -764,7 +764,8 @@ theorem Submodule.linearEquiv_of_sSup_eq_top
     (sSup_eq_iSup' s ▸ hs)
   have ⟨m, hm, _S, le, ⟨e⟩⟩ := N.le_linearEquiv_of_sSup_eq_top _ hs
   have := isSimpleModule_iff_isAtom.mp (IsSimpleModule.congr e.symm)
-  have := ((isSimpleModule_iff_isAtom.mp <| h ⟨m, h
+  have := ((isSimpleModule_iff_isAtom.mp <| h ⟨m, hm⟩).le_iff_eq this.1).mp le
+  ⟨m, hm, ⟨e.trans (.ofEq _ _ this)⟩⟩
 
 中文:
 定理 子模.linearEquiv_of_sSup_eq_top
@@ -773,7 +774,8 @@ theorem Submodule.linearEquiv_of_sSup_eq_top
     (sSup_eq_iSup' s ▸ hs)
   have ⟨m, hm, _S, le, ⟨e⟩⟩ := N.le_linearEquiv_of_sSup_eq_top _ hs
   have := isSimpleModule_iff_isAtom.mp (IsSimpleModule.congr e.symm)
-  have := ((isSimpleModule_iff_isAtom.mp <| h ⟨m, h
+  have := ((isSimpleModule_iff_isAtom.mp <| h ⟨m, hm⟩).le_iff_eq this.1).mp le
+  ⟨m, hm, ⟨e.trans (.ofEq _ _ this)⟩⟩
 
 Depends on / 依赖: IsSimpleModule, IsSimpleModule.congr, N.le_linearEquiv_of_sSup_eq_top, e.symm, e.trans, isSemisimpleModule_of_isSemisimpleModule_submodule, isSimpleModule_iff_isAtom, isSimpleModule_iff_isAtom.mp, le_iff_eq, le_linearEquiv_of_sSup_eq_top, sSup_eq_iSup
 -/
@@ -798,7 +800,10 @@ theorem Submodule.le_linearEquiv_of_le_sSup
   have := IsSimpleModule.congr e.symm
   have := isSemisimpleModule_biSup_of_isSemisimpleModule_submodule fun m hm => hs ⟨m, hm⟩
   obtain ⟨_, ⟨m, hm, rfl⟩, S, le, ⟨e'⟩⟩ := LinearMap.range (inclusion hN)
-.le_li
+.le_linearEquiv_of_sSup_eq_top (comap (⨆ i in s, i).subtype '' s) by
+    rw [sSup_image]; rw [biSup_comap_subtype_eq_top]
+  exact ⟨m, hm, _, map_le_iff_le_comap.mpr le,
+    ⟨(e.trans e').trans (equivMapOfInjective _ (subtype_injective _) _)⟩⟩
 
 中文:
 定理 子模.le_linearEquiv_of_le_sSup
@@ -809,7 +814,10 @@ theorem Submodule.le_linearEquiv_of_le_sSup
   have := IsSimpleModule.congr e.symm
   have := isSemisimpleModule_biSup_of_isSemisimpleModule_submodule fun m hm => hs ⟨m, hm⟩
   obtain ⟨_, ⟨m, hm, rfl⟩, S, le, ⟨e'⟩⟩ := LinearMap.range (inclusion hN)
-.le_li
+.le_linearEquiv_of_sSup_eq_top (comap (⨆ i in s, i).subtype '' s) by
+    rw [sSup_image]; rw [biSup_comap_subtype_eq_top]
+  exact ⟨m, hm, _, map_le_iff_le_comap.mpr le,
+    ⟨(e.trans e').trans (equivMapOfInjective _ (subtype_injective _) _)⟩⟩
 
 Depends on / 依赖: IsSimpleModule, IsSimpleModule.congr, LinearEquiv, LinearEquiv.ofInjective, LinearMap, LinearMap.range, biSup_comap_subtype_eq_top, e.symm, e.trans, equivMapOfInjective, inclusion, inclusion_injective, isSemisimpleModule_biSup_of_isSemisimpleModule_submodule, le_linearEquiv_of_sSup_eq_top, map_le_iff_le_comap, map_le_iff_le_comap.mpr, ofInjective, sSup_eq_iSup, sSup_image, subtype
 -/
@@ -958,7 +966,13 @@ theorem sSupIndep_isotypicComponents
     have : IsSemisimpleModule R c := by obtain ⟨S, _, rfl⟩ := hc; infer_instance
     have := IsSemisimpleModule.of_injective _
       (Submodule.inclusion_injective (inf_le_left : c ⊓ sSup s <= c))
-    have
+    have (c : s) : IsSemisimpleModule R c := by obtain ⟨_, ⟨_, _, rfl⟩, _⟩ := c; infer_instance
+    have ⟨S, le, _⟩ := (IsSemisimpleModule.eq_bot_or_exists_simple_le _).resolve_left ne
+    have ⟨c', hc', S', le', ⟨e⟩⟩ := S.le_linearEquiv_of_le_sSup _ (le.trans inf_le_right)
+    have := IsSimpleModule.congr e.symm
+    refine hc'.2 ?_
+    rw [eq_isotypicComponent_of_le hc (le.trans inf_le_left)]; rw [eq_isotypicComponent_of_le hc'.1 le']
+    exact e.symm.isotypicComponent_eq
 
 中文:
 定理 sSupIndep_isotypicComponents
@@ -968,7 +982,13 @@ theorem sSupIndep_isotypicComponents
     have : IsSemisimpleModule R c := by obtain ⟨S, _, rfl⟩ := hc; infer_instance
     have := IsSemisimpleModule.of_injective _
       (Submodule.inclusion_injective (inf_le_left : c ⊓ sSup s <= c))
-    have
+    have (c : s) : IsSemisimpleModule R c := by obtain ⟨_, ⟨_, _, rfl⟩, _⟩ := c; infer_instance
+    have ⟨S, le, _⟩ := (IsSemisimpleModule.eq_bot_or_exists_simple_le _).resolve_left ne
+    have ⟨c', hc', S', le', ⟨e⟩⟩ := S.le_linearEquiv_of_le_sSup _ (le.trans inf_le_right)
+    have := IsSimpleModule.congr e.symm
+    refine hc'.2 ?_
+    rw [eq_isotypicComponent_of_le hc (le.trans inf_le_left)]; rw [eq_isotypicComponent_of_le hc'.1 le']
+    exact e.symm.isotypicComponent_eq
 
 Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.eq_bot_or_exists_simple_le, IsSemisimpleModule.of_injective, S.le_linearEquiv_, Submodule, Submodule.inclusion_injective, disjoint_iff, disjoint_iff.mpr, eq_bot_or_exists_simple_le, inclusion_injective, inf_le_left, infer_instance, isotypicComponents, le_linearEquiv_, of_injective, of_not_not, resolve_left
 -/
@@ -1192,7 +1212,11 @@ definition iSupIndep.ringEquiv
   invFun f := letI e := ind.linearEquiv iSup_top; e ∘ₗ DFinsupp.mapRange.linearMap f ∘ₗ e.symm
   left_inv f := LinearMap.ext fun x => by
     exact Submodule.iSup_induction _ (motive := (_ = f ·)) (iSup_top ▸ Submodule.mem_top (x := x))
-      (fun i x h => by simp [ind.linearEq
+      (fun i x h => by simp [ind.linearEquiv_symm_apply _ h]) (by simp)
+      fun _ _ h₁ h₂ => by simpa only [map_add] using congr($h₁ + $h₂)
+  right_inv f := by ext i x; simp [ind.linearEquiv_symm_apply _ x.2]
+  map_add' _ _ := rfl
+  map_mul' _ _ := rfl
 
 中文:
 定义 iSupIndep.ringEquiv
@@ -1201,7 +1225,11 @@ definition iSupIndep.ringEquiv
   invFun f := letI e := ind.linearEquiv iSup_top; e ∘ₗ DFinsupp.mapRange.linearMap f ∘ₗ e.symm
   left_inv f := LinearMap.ext fun x => by
     exact Submodule.iSup_induction _ (motive := (_ = f ·)) (iSup_top ▸ Submodule.mem_top (x := x))
-      (fun i x h => by simp [ind.linearEq
+      (fun i x h => by simp [ind.linearEquiv_symm_apply _ h]) (by simp)
+      fun _ _ h₁ h₂ => by simpa only [map_add] using congr($h₁ + $h₂)
+  right_inv f := by ext i x; simp [ind.linearEquiv_symm_apply _ x.2]
+  map_add' _ _ := rfl
+  map_mul' _ _ := rfl
 
 Depends on / 依赖: f.restrict, restrict
 -/
@@ -1288,7 +1316,7 @@ definition GaloisCoinsertion.setIsotypicComponents
 (bot_lt_isotypicComponents c.2).ne' (sSupIndep_isotypicComponents R M c.2).eq_bot_of_le
 hc.trans by
       simp_rw [CompleteSublattice.coe_iSup, iSup₂_le_iff]
-      exact fun c hc => le_sSup ⟨c.2, Subty
+      exact fun c hc => le_sSup ⟨c.2, Subtype.coe_ne_coe.mpr (ne_of_mem_of_not_mem hc hcs)⟩
 
 中文:
 定义 Galois余嵌入.setIsotypicComponents
@@ -1297,7 +1325,7 @@ hc.trans by
 (bot_lt_isotypicComponents c.2).ne' (sSupIndep_isotypicComponents R M c.2).eq_bot_of_le
 hc.trans by
       simp_rw [CompleteSublattice.coe_iSup, iSup₂_le_iff]
-      exact fun c hc => le_sSup ⟨c.2, Subty
+      exact fun c hc => le_sSup ⟨c.2, Subtype.coe_ne_coe.mpr (ne_of_mem_of_not_mem hc hcs)⟩
 
 Depends on / 依赖: fullyInvariantSubmodule, isotypicComponents
 -/
@@ -1367,7 +1395,8 @@ theorem isFullyInvariant_iff_le_imp_isotypicComponent_le
     have ⟨p, eq⟩ := extension_property _ S.subtype_injective (S'.subtype ∘ₗ e.symm)
     refine le_trans ?_ (Submodule.map_le_iff_le_comap.mpr (le.trans (h p)))
     rw [← S.range_subtype]; rw [← LinearMap.range_comp]; rw [eq]; rw [e.symm.range_comp]; rw [S'.range_subtype]
-mpr
+mpr h f := (sSup_simples_le m).ge.trans sSup_le fun S ⟨_, le⟩ =>
+    Submodule.map_le_iff_le_comap.mp ((S.map_le_isotypicComponent f).trans (h S le))
 
 中文:
 定理 isFullyInvariant_iff_le_imp_isotypicComponent_le
@@ -1376,7 +1405,8 @@ mpr
     have ⟨p, eq⟩ := extension_property _ S.subtype_injective (S'.subtype ∘ₗ e.symm)
     refine le_trans ?_ (Submodule.map_le_iff_le_comap.mpr (le.trans (h p)))
     rw [← S.range_subtype]; rw [← LinearMap.range_comp]; rw [eq]; rw [e.symm.range_comp]; rw [S'.range_subtype]
-mpr
+mpr h f := (sSup_simples_le m).ge.trans sSup_le fun S ⟨_, le⟩ =>
+    Submodule.map_le_iff_le_comap.mp ((S.map_le_isotypicComponent f).trans (h S le))
 
 Depends on / 依赖: LinearMap, LinearMap.range_comp, S.map_le_isotypicComponent, S.range_subtype, S.subtype_injective, Submodule, Submodule.map_le_iff_le_comap.mp, Submodule.map_le_iff_le_comap.mpr, e.symm, e.symm.range_comp, extension_property, ge.trans, le.trans, le_trans, map_le_iff_le_comap, map_le_isotypicComponent, range_comp, range_subtype, sSup_le, sSup_simples_le
 -/
@@ -1399,7 +1429,8 @@ theorem eq_isotypicComponent_iff
   proof: by rintro rfl; exact ⟨.isotypicComponent R M S, .isotypicComponent R M S⟩
 mpr := fun ⟨iso, invar⟩ => (le_isotypicComponent_iff.mpr iso).antisymm
     have ⟨S', le, _⟩ := (IsSemisimpleModule.eq_bot_or_exists_simple_le m).resolve_left ne
-    (isIsotypicOfType_submodule_iff.mp iso S' le).some.symm.isoty
+    (isIsotypicOfType_submodule_iff.mp iso S' le).some.symm.isotypicComponent_eq.trans_le
+      (isFullyInvariant_iff_le_imp_isotypicComponent_le.mp invar _ le)
 
 中文:
 定理 eq_isotypicComponent_iff
@@ -1407,7 +1438,8 @@ mpr := fun ⟨iso, invar⟩ => (le_isotypicComponent_iff.mpr iso).antisymm
   证明: by rintro rfl; exact ⟨.isotypicComponent R M S, .isotypicComponent R M S⟩
 mpr := fun ⟨iso, invar⟩ => (le_isotypicComponent_iff.mpr iso).antisymm
     have ⟨S', le, _⟩ := (IsSemisimpleModule.eq_bot_or_exists_simple_le m).resolve_left ne
-    (isIsotypicOfType_submodule_iff.mp iso S' le).some.symm.isoty
+    (isIsotypicOfType_submodule_iff.mp iso S' le).some.symm.isotypicComponent_eq.trans_le
+      (isFullyInvariant_iff_le_imp_isotypicComponent_le.mp invar _ le)
 
 Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.eq_bot_or_exists_simple_le, antisymm, eq_bot_or_exists_simple_le, isFullyInvariant_iff_le_imp_isotypicComponent_le, isFullyInvariant_iff_le_imp_isotypicComponent_le.mp, isIsotypicOfType_submodule_iff, isIsotypicOfType_submodule_iff.mp, isotypicComponent, isotypicComponent_eq, le_isotypicComponent_iff, le_isotypicComponent_iff.mpr, resolve_left, some.symm.isotypicComponent_eq.trans_le, trans_le
 -/
@@ -1434,7 +1466,7 @@ theorem isIsotypic_iff_isFullyInvariant_imp_bot_or_top
     (isotypicComponent_eq_top_iff.mpr (h S)).ge.trans
     ((isFullyInvariant_iff_le_imp_isotypicComponent_le.mp hN) _ le)
 mpr h S _ := isotypicComponent_eq_top_iff.mp
-    (h _ (.isotypicComponent R M S)).resolve_left (bot_lt_isoty
+    (h _ (.isotypicComponent R M S)).resolve_left (bot_lt_isotypicComponent S).ne'
 
 中文:
 定理 isIsotypic_iff_isFullyInvariant_imp_bot_or_top
@@ -1442,7 +1474,7 @@ mpr h S _ := isotypicComponent_eq_top_iff.mp
     (isotypicComponent_eq_top_iff.mpr (h S)).ge.trans
     ((isFullyInvariant_iff_le_imp_isotypicComponent_le.mp hN) _ le)
 mpr h S _ := isotypicComponent_eq_top_iff.mp
-    (h _ (.isotypicComponent R M S)).resolve_left (bot_lt_isoty
+    (h _ (.isotypicComponent R M S)).resolve_left (bot_lt_isotypicComponent S).ne'
 
 Depends on / 依赖: eq_bot_or_exists_simple_le, imp_right, top_unique
 -/
@@ -1464,7 +1496,7 @@ theorem mem_isotypicComponents_iff
     .isotypicComponent R M S, (bot_lt_isotypicComponent S).ne'⟩
   mpr := fun ⟨iso, invar, ne⟩ =>
     have ⟨S, le, simple⟩ := (eq_bot_or_exists_simple_le m).resolve_left ne
-    ⟨S, simple, (eq_isotypicComponent_iff ne).mpr ⟨isIsotypic_submodule_
+    ⟨S, simple, (eq_isotypicComponent_iff ne).mpr ⟨isIsotypic_submodule_iff.mp iso S le, invar⟩⟩
 
 中文:
 定理 mem_isotypicComponents_iff
@@ -1473,7 +1505,7 @@ theorem mem_isotypicComponents_iff
     .isotypicComponent R M S, (bot_lt_isotypicComponent S).ne'⟩
   mpr := fun ⟨iso, invar, ne⟩ =>
     have ⟨S, le, simple⟩ := (eq_bot_or_exists_simple_le m).resolve_left ne
-    ⟨S, simple, (eq_isotypicComponent_iff ne).mpr ⟨isIsotypic_submodule_
+    ⟨S, simple, (eq_isotypicComponent_iff ne).mpr ⟨isIsotypic_submodule_iff.mp iso S le, invar⟩⟩
 
 Depends on / 依赖: bot_lt_isotypicComponent, eq_bot_or_exists_simple_le, eq_isotypicComponent_iff, isIsotypic_submodule_iff, isIsotypic_submodule_iff.mp, isotypicComponent, resolve_left, simple
 -/
@@ -1496,7 +1528,10 @@ definition OrderIso.setIsotypicComponents
   left_inv := (GaloisCoinsertion.setIsotypicComponents R M).u_l_eq
 right_inv m := (iSup₂_le fun _ => by exact id).antisymm (sSup_simples_le m.1).ge.trans
 sSup_le fun S ⟨simple, le⟩ => S.le_isotypicComponent.trans by
-    let
+    let c : isotypicComponents R M := ⟨_, S, simple, rfl⟩
+    simp_rw [← show c.1 = isotypicComponent R M S from rfl, CompleteSublattice.coe_iSup]
+    exact le_biSup _ (isFullyInvariant_iff_le_imp_isotypicComponent_le.mp m.2 _ le)
+  map_rel_iff' := (GaloisCoinsertion.setIsotypicComponents R M).l_le_l_iff
 
 中文:
 定义 OrderIso.setIsotypicComponents
@@ -1506,7 +1541,10 @@ sSup_le fun S ⟨simple, le⟩ => S.le_isotypicComponent.trans by
   left_inv := (GaloisCoinsertion.setIsotypicComponents R M).u_l_eq
 right_inv m := (iSup₂_le fun _ => by exact id).antisymm (sSup_simples_le m.1).ge.trans
 sSup_le fun S ⟨simple, le⟩ => S.le_isotypicComponent.trans by
-    let
+    let c : isotypicComponents R M := ⟨_, S, simple, rfl⟩
+    simp_rw [← show c.1 = isotypicComponent R M S from rfl, CompleteSublattice.coe_iSup]
+    exact le_biSup _ (isFullyInvariant_iff_le_imp_isotypicComponent_le.mp m.2 _ le)
+  map_rel_iff' := (GaloisCoinsertion.setIsotypicComponents R M).l_le_l_iff
 -/
 @[simps] def OrderIso.setIsotypicComponents :
     Set (isotypicComponents R M) ≃o fullyInvariantSubmodule R M where
@@ -1533,7 +1571,7 @@ theorem isFullyInvariant_iff_sSup_isotypicComponents
   · convert! Subtype.ext_iff.mp (OrderIso.setIsotypicComponents.right_inv ⟨m, h⟩).symm
     simp [sSup_image, OrderIso.setIsotypicComponents, OrderIso.symm]
   · rintro ⟨_, hs, rfl⟩
-  
+    exact (fullyInvariantSubmodule R M).sSupClosed fun _ h => .of_mem_isotypicComponents (hs h)
 
 中文:
 定理 isFullyInvariant_iff_sSup_isotypicComponents
@@ -1544,7 +1582,7 @@ theorem isFullyInvariant_iff_sSup_isotypicComponents
   · convert! Subtype.ext_iff.mp (OrderIso.setIsotypicComponents.right_inv ⟨m, h⟩).symm
     simp [sSup_image, OrderIso.setIsotypicComponents, OrderIso.symm]
   · rintro ⟨_, hs, rfl⟩
-  
+    exact (fullyInvariantSubmodule R M).sSupClosed fun _ h => .of_mem_isotypicComponents (hs h)
 
 Depends on / 依赖: OrderIso, OrderIso.setIsotypicComponents, OrderIso.setIsotypicComponents.right_inv, OrderIso.setIsotypicComponents.symm, OrderIso.symm, Subtype, Subtype.ext_iff.mp, convert, ext_iff, fullyInvariantSubmodule, of_mem_isotypicComponents, right_inv, sSupClosed, sSup_image, setIsotypicComponents
 -/

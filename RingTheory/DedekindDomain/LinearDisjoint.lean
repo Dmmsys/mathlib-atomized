@@ -54,7 +54,20 @@ theorem Submodule.traceDual_le_span_map_traceDual
     simpa [sup_toSubalgebra_of_isAlgebraic_right] using congr_arg IntermediateField.toSubalgebra h₂
   let b₂ := (Free.chooseBasis A R₂).localizationLocalization K A⁰ F₂
   let B₁ := h₁.basisOfBasisRight h₂' b₂
-  have h_main : x 
+  have h_main : x in span R₁ (Set.range B₁.traceDual) := by
+    rw [B₁.traceDual.mem_span_iff_repr_mem R₁ x]
+    intro i
+    rw [B₁.traceDual_repr_apply]
+    refine mem_traceDual.mp hx _ ?_
+    rw [LinearDisjoint.basisOfBasisRight_apply]; rw [Basis.localizationLocalization_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R₂ B L]; rw [mem_one]
+    exact ⟨_, rfl⟩
+  have h : Set.range B₁.traceDual =
+      Set.range (IsScalarTower.toAlgHom A F₂ L ∘ b₂.traceDual) := by
+refine congr_arg Set.range B₁.traceDual_eq_iff.mpr fun i j => ?_
+    rw [LinearDisjoint.basisOfBasisRight_apply]; rw [traceForm_apply]; rw [Function.comp_apply]; rw [IsScalarTower.coe_toAlgHom']; rw [← map_mul]; rw [h₁.trace_algebraMap h₂]; rw [b₂.trace_traceDual_mul]; rw [MonoidWithZeroHom.map_ite_one_zero]
+  rwa [← span_span_of_tower A R₁, h, Set.range_comp, ← AlgHom.coe_toLinearMap, ← map_span,
+    ← traceDual_span_of_basis A (1 : Submodule R₂ F₂) b₂
+      (by rw [Basis.localizationLocalization_span K A⁰ F₂]; ext; simp)] at h_main
 
 中文:
 定理 子模.traceDual_le_span_map_traceDual
@@ -65,7 +78,20 @@ theorem Submodule.traceDual_le_span_map_traceDual
     simpa [sup_toSubalgebra_of_isAlgebraic_right] using congr_arg IntermediateField.toSubalgebra h₂
   let b₂ := (Free.chooseBasis A R₂).localizationLocalization K A⁰ F₂
   let B₁ := h₁.basisOfBasisRight h₂' b₂
-  have h_main : x 
+  have h_main : x in span R₁ (Set.range B₁.traceDual) := by
+    rw [B₁.traceDual.mem_span_iff_repr_mem R₁ x]
+    intro i
+    rw [B₁.traceDual_repr_apply]
+    refine mem_traceDual.mp hx _ ?_
+    rw [LinearDisjoint.basisOfBasisRight_apply]; rw [Basis.localizationLocalization_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R₂ B L]; rw [mem_one]
+    exact ⟨_, rfl⟩
+  have h : Set.range B₁.traceDual =
+      Set.range (IsScalarTower.toAlgHom A F₂ L ∘ b₂.traceDual) := by
+refine congr_arg Set.range B₁.traceDual_eq_iff.mpr fun i j => ?_
+    rw [LinearDisjoint.basisOfBasisRight_apply]; rw [traceForm_apply]; rw [Function.comp_apply]; rw [IsScalarTower.coe_toAlgHom']; rw [← map_mul]; rw [h₁.trace_algebraMap h₂]; rw [b₂.trace_traceDual_mul]; rw [MonoidWithZeroHom.map_ite_one_zero]
+  rwa [← span_span_of_tower A R₁, h, Set.range_comp, ← AlgHom.coe_toLinearMap, ← map_span,
+    ← traceDual_span_of_basis A (1 : Submodule R₂ F₂) b₂
+      (by rw [Basis.localizationLocalization_span K A⁰ F₂]; ext; simp)] at h_main
 
 Depends on / 依赖: Basis.loc, Free.chooseBasis, IntermediateField, IntermediateField.toSubalgebra, LinearDisjoint, LinearDisjoint.basisOfBasisRight_apply, Set.range, basisOfBasisRight, basisOfBasisRight_apply, chooseBasis, congr_arg, h_main, localizationLocalization, mem_span_iff_repr_mem, mem_traceDual, mem_traceDual.mp, sup_toSubalgebra_of_isAlgebraic_right, toSubalgebra, traceDual, traceDual.mem_span_iff_repr_mem
 -/
@@ -115,7 +141,12 @@ theorem differentIdeal_dvd_map_differentIdeal
     refine Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv A K).symm.toRingEquiv
           (FractionRing.algEquiv R₂ F₂).symm.toRingEquiv ?_
     ext _
-    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv 
+    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K).symm
+      (FractionRing.algEquiv R₂ ↥F₂).symm _
+  rw [Ideal.dvd_iff_le]; rw [← coeIdeal_le_coeIdeal L]; rw [coeIdeal_differentIdeal R₁ F₁ L B]; rw [← extendedHom_coeIdeal_eq_map L B (K := F₂)]; rw [le_inv_comm _ (by simp)]; rw [← map_inv₀]; rw [coeIdeal_differentIdeal A K]; rw [inv_inv]; rw [← coe_le_coe]; rw [coe_dual_one]; rw [coe_extendedHom_eq_span]; rw [← coeToSet_coeToSubmodule]; rw [coe_dual_one]
+· have := Submodule.span_mono (R := B) traceDual_le_span_map_traceDual A B R₁ R₂ h₁ h₂
+    rwa [← span_coe_eq_restrictScalars, span_span_of_tower, span_span_of_tower, span_eq] at this
+· exact (_root_.map_ne_zero _).mpr coeIdeal_eq_zero.not.mpr differentIdeal_ne_bot
 
 中文:
 定理 differentIdeal_dvd_map_differentIdeal
@@ -125,7 +156,12 @@ theorem differentIdeal_dvd_map_differentIdeal
     refine Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv A K).symm.toRingEquiv
           (FractionRing.algEquiv R₂ F₂).symm.toRingEquiv ?_
     ext _
-    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv 
+    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K).symm
+      (FractionRing.algEquiv R₂ ↥F₂).symm _
+  rw [Ideal.dvd_iff_le]; rw [← coeIdeal_le_coeIdeal L]; rw [coeIdeal_differentIdeal R₁ F₁ L B]; rw [← extendedHom_coeIdeal_eq_map L B (K := F₂)]; rw [le_inv_comm _ (by simp)]; rw [← map_inv₀]; rw [coeIdeal_differentIdeal A K]; rw [inv_inv]; rw [← coe_le_coe]; rw [coe_dual_one]; rw [coe_extendedHom_eq_span]; rw [← coeToSet_coeToSubmodule]; rw [coe_dual_one]
+· have := Submodule.span_mono (R := B) traceDual_le_span_map_traceDual A B R₁ R₂ h₁ h₂
+    rwa [← span_coe_eq_restrictScalars, span_span_of_tower, span_span_of_tower, span_eq] at this
+· exact (_root_.map_ne_zero _).mpr coeIdeal_eq_zero.not.mpr differentIdeal_ne_bot
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable, Algebra.IsSeparable.of_equiv_equiv, FractionRing, FractionRing.algEquiv, Ideal.dvd_iff_le, IsFractionRing, IsFractionRing.algEquiv_commutes, IsSeparable, algEquiv, algEquiv_commutes, coeIdeal_differentIdeal, coeIdeal_le_coeIdeal, dvd_iff_le, extendedHom_coeIdeal_eq_map, le_inv_comm, of_equiv_equiv, symm.toRingEquiv, toRingEquiv
 -/
@@ -250,7 +286,25 @@ theorem Submodule.traceDual_eq_span_map_traceDual_of_linearDisjoint
     refine Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv A K).symm.toRingEquiv
           (FractionRing.algEquiv R₂ F₂).symm.toRingEquiv ?_
     ext x
-    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv 
+    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K).symm
+      (FractionRing.algEquiv R₂ ↥F₂).symm _
+  suffices span B (algebraMap F₂ L '' (traceDual A K (1 : Submodule R₂ F₂))) <=
+      traceDual R₁ F₁ (1 : Submodule B L) by
+    apply le_antisymm
+    · refine SetLike.coe_subset_coe.mp (subset_trans ?_ this)
+      rw [← Submodule.span_span_of_tower R₁ B]
+      exact Submodule.subset_span
+    · exact traceDual_le_span_map_traceDual A B R₁ R₂ h₁ h₂
+have := dvd_of_eq
+    (IsDedekindDomain.differentIdeal_eq_map_differentIdeal A B R₁ R₂ h₁ h₂ h₃).symm
+  rwa [Ideal.dvd_iff_le, ← coeIdeal_le_coeIdeal (K := L), coeIdeal_differentIdeal R₁ F₁,
+    inv_le_comm, ← extendedHom_coeIdeal_eq_map (K := F₂), coeIdeal_differentIdeal A K, map_inv₀,
+    inv_inv, ← coe_le_coe, coe_extendedHom_eq_span, coe_dual_one, ← coeToSet_coeToSubmodule,
+    coe_dual_one] at this
+  · simp
+  · rw [← extendedHom_coeIdeal_eq_map (K := F₂), ne_eq, extendedHom_eq_zero_iff]
+    rw [coeIdeal_eq_zero]
+    exact differentIdeal_ne_bot
 
 中文:
 定理 子模.traceDual_eq_span_map_traceDual_of_linearDisjoint
@@ -260,7 +314,25 @@ theorem Submodule.traceDual_eq_span_map_traceDual_of_linearDisjoint
     refine Algebra.IsSeparable.of_equiv_equiv (FractionRing.algEquiv A K).symm.toRingEquiv
           (FractionRing.algEquiv R₂ F₂).symm.toRingEquiv ?_
     ext x
-    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv 
+    exact IsFractionRing.algEquiv_commutes (FractionRing.algEquiv A K).symm
+      (FractionRing.algEquiv R₂ ↥F₂).symm _
+  suffices span B (algebraMap F₂ L '' (traceDual A K (1 : Submodule R₂ F₂))) <=
+      traceDual R₁ F₁ (1 : Submodule B L) by
+    apply le_antisymm
+    · refine SetLike.coe_subset_coe.mp (subset_trans ?_ this)
+      rw [← Submodule.span_span_of_tower R₁ B]
+      exact Submodule.subset_span
+    · exact traceDual_le_span_map_traceDual A B R₁ R₂ h₁ h₂
+have := dvd_of_eq
+    (IsDedekindDomain.differentIdeal_eq_map_differentIdeal A B R₁ R₂ h₁ h₂ h₃).symm
+  rwa [Ideal.dvd_iff_le, ← coeIdeal_le_coeIdeal (K := L), coeIdeal_differentIdeal R₁ F₁,
+    inv_le_comm, ← extendedHom_coeIdeal_eq_map (K := F₂), coeIdeal_differentIdeal A K, map_inv₀,
+    inv_inv, ← coe_le_coe, coe_extendedHom_eq_span, coe_dual_one, ← coeToSet_coeToSubmodule,
+    coe_dual_one] at this
+  · simp
+  · rw [← extendedHom_coeIdeal_eq_map (K := F₂), ne_eq, extendedHom_eq_zero_iff]
+    rw [coeIdeal_eq_zero]
+    exact differentIdeal_ne_bot
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable, Algebra.IsSeparable.of_equiv_equiv, FractionRing, FractionRing.algEquiv, IsFractionRing, IsFractionRing.algEquiv_commutes, IsSeparable, SetLike, SetLike.coe_subset_coe.mp, Submodule, algEquiv, algEquiv_commutes, algebraMap, coe_subset_coe, le_antisymm, of_equiv_equiv, symm.toRingEquiv, toRingEquiv, traceDual
 -/
@@ -308,7 +380,14 @@ theorem ofIsCoprimeDifferentIdeal_aux
     rwa [← sup_toSubalgebra_of_isAlgebraic_right, ← top_toSubalgebra, toSubalgebra_inj] at h₂
   have : Finite ι := Module.Finite.finite_basis b
 have h_main := congr_arg (Submodule.restrictScalars R₁)
-congr_arg coeToSubmodule (1 : FractionalIdeal B⁰ L).du
+congr_arg coeToSubmodule (1 : FractionalIdeal B⁰ L).dual_dual R₁ F₁
+  rw [← coe_one]; rw [← h_main]; rw [coe_dual _ _ (by simp)]; rw [coe_dual_one]; rw [restrictScalars_traceDual]; rw [← traceDual_eq_span_map_traceDual_of_linearDisjoint A B R₁ R₂ h₁ h₂' h₃]; rw [← coe_restrictScalars A]; rw [traceDual_span_of_basis A (1 : Submodule R₂ F₂) b]; rw [← IsScalarTower.coe_toAlgHom' A F₂ L]; rw [← AlgHom.coe_toLinearMap]; rw [← map_coe]; rw [map_span]; rw [span_span_of_tower]; rw [AlgHom.coe_toLinearMap]; rw [IsScalarTower.coe_toAlgHom']; rw [← Set.range_comp]
+  · have : (h₁.basisOfBasisRight h₂ b).traceDual = algebraMap F₂ L ∘ b.traceDual := by
+      refine Basis.traceDual_eq_iff.mpr fun i j => ?_
+      rw [Function.comp_apply]; rw [h₁.basisOfBasisRight_apply]; rw [traceForm_apply]; rw [← map_mul]; rw [h₁.trace_algebraMap h₂']; rw [b.trace_traceDual_mul i j]; rw [MonoidWithZeroHom.map_ite_one_zero]
+    rw [← this]; rw [(traceForm F₁ L).dualSubmodule_span_of_basis (traceForm_nondegenerate F₁ L)]; rw [← Basis.traceDual_def]; rw [Basis.traceDual_traceDual]
+  · rw [hb]
+    ext; simp
 
 中文:
 定理 ofIsCoprimeDifferentIdeal_aux
@@ -319,7 +398,14 @@ congr_arg coeToSubmodule (1 : FractionalIdeal B⁰ L).du
     rwa [← sup_toSubalgebra_of_isAlgebraic_right, ← top_toSubalgebra, toSubalgebra_inj] at h₂
   have : Finite ι := Module.Finite.finite_basis b
 have h_main := congr_arg (Submodule.restrictScalars R₁)
-congr_arg coeToSubmodule (1 : FractionalIdeal B⁰ L).du
+congr_arg coeToSubmodule (1 : FractionalIdeal B⁰ L).dual_dual R₁ F₁
+  rw [← coe_one]; rw [← h_main]; rw [coe_dual _ _ (by simp)]; rw [coe_dual_one]; rw [restrictScalars_traceDual]; rw [← traceDual_eq_span_map_traceDual_of_linearDisjoint A B R₁ R₂ h₁ h₂' h₃]; rw [← coe_restrictScalars A]; rw [traceDual_span_of_basis A (1 : Submodule R₂ F₂) b]; rw [← IsScalarTower.coe_toAlgHom' A F₂ L]; rw [← AlgHom.coe_toLinearMap]; rw [← map_coe]; rw [map_span]; rw [span_span_of_tower]; rw [AlgHom.coe_toLinearMap]; rw [IsScalarTower.coe_toAlgHom']; rw [← Set.range_comp]
+  · have : (h₁.basisOfBasisRight h₂ b).traceDual = algebraMap F₂ L ∘ b.traceDual := by
+      refine Basis.traceDual_eq_iff.mpr fun i j => ?_
+      rw [Function.comp_apply]; rw [h₁.basisOfBasisRight_apply]; rw [traceForm_apply]; rw [← map_mul]; rw [h₁.trace_algebraMap h₂']; rw [b.trace_traceDual_mul i j]; rw [MonoidWithZeroHom.map_ite_one_zero]
+    rw [← this]; rw [(traceForm F₁ L).dualSubmodule_span_of_basis (traceForm_nondegenerate F₁ L)]; rw [← Basis.traceDual_def]; rw [Basis.traceDual_traceDual]
+  · rw [hb]
+    ext; simp
 -/
 private theorem ofIsCoprimeDifferentIdeal_aux [Module.Free A R₂]
     (h₁ : F₁.LinearDisjoint F₂) (h₂ : F₁.toSubalgebra ⊔ F₂.toSubalgebra = ⊤)
@@ -353,7 +439,25 @@ definition ofIsCoprimeDifferentIdeal
   let b₂ : Basis ι K F₂ := b.localizationLocalization K A⁰ F₂
   have P₁ : LinearIndependent R₁ v := by
     rw [← LinearMap.linearIndependent_iff (IsScalarTower.toAlgHom R₁ B L).toLinearMap
-      (LinearMap.ker_e
+      (LinearMap.ker_eq_bot.mpr <| FaithfulSMul.algebraMap_injective _ _)]; rw [LinearIndependent.iff_fractionRing R₁ F₁]; rw [Function.comp_def]
+    simp_rw [AlgHom.toLinearMap_apply, IsScalarTower.coe_toAlgHom', v,
+      ← IsScalarTower.algebraMap_apply, IsScalarTower.algebraMap_apply R₂ F₂ L,
+      ← b.localizationLocalization_apply K A⁰ F₂]
+    exact h₁.linearIndependent_right b₂.linearIndependent
+  have P₂ : ⊤ <= span R₁ (Set.range v) := by
+    rw [top_le_iff]
+    apply map_injective_of_injective (f := (IsScalarTower.toAlgHom R₁ B L).toLinearMap)
+      (FaithfulSMul.algebraMap_injective B L)
+    rw [map_span]; rw [← Set.range_comp]
+    convert!
+      Module.Basis.ofIsCoprimeDifferentIdeal_aux A B R₁ R₂ h₁ h₂ h₃ b₂
+        (b.localizationLocalization_span K A⁰ F₂)
+    · ext
+      simp [b₂, v, ← IsScalarTower.algebraMap_apply]
+    · ext; simp
+  Basis.mk P₁ P₂
+
+@[simp]
 
 中文:
 定义 ofIsCoprimeDifferentIdeal
@@ -363,7 +467,25 @@ definition ofIsCoprimeDifferentIdeal
   let b₂ : Basis ι K F₂ := b.localizationLocalization K A⁰ F₂
   have P₁ : LinearIndependent R₁ v := by
     rw [← LinearMap.linearIndependent_iff (IsScalarTower.toAlgHom R₁ B L).toLinearMap
-      (LinearMap.ker_e
+      (LinearMap.ker_eq_bot.mpr <| FaithfulSMul.algebraMap_injective _ _)]; rw [LinearIndependent.iff_fractionRing R₁ F₁]; rw [Function.comp_def]
+    simp_rw [AlgHom.toLinearMap_apply, IsScalarTower.coe_toAlgHom', v,
+      ← IsScalarTower.algebraMap_apply, IsScalarTower.algebraMap_apply R₂ F₂ L,
+      ← b.localizationLocalization_apply K A⁰ F₂]
+    exact h₁.linearIndependent_right b₂.linearIndependent
+  have P₂ : ⊤ <= span R₁ (Set.range v) := by
+    rw [top_le_iff]
+    apply map_injective_of_injective (f := (IsScalarTower.toAlgHom R₁ B L).toLinearMap)
+      (FaithfulSMul.algebraMap_injective B L)
+    rw [map_span]; rw [← Set.range_comp]
+    convert!
+      Module.Basis.ofIsCoprimeDifferentIdeal_aux A B R₁ R₂ h₁ h₂ h₃ b₂
+        (b.localizationLocalization_span K A⁰ F₂)
+    · ext
+      simp [b₂, v, ← IsScalarTower.algebraMap_apply]
+    · ext; simp
+  Basis.mk P₁ P₂
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap_apply, FaithfulSMul, FaithfulSMul.algebraMap_injective, Free.of_basis, Function, Function.comp_def, IsScalarTower, IsScalarTower.algebraMa, IsScalarTower.coe_toAlgHom, IsScalarTower.toAlgHom, LinearIndependent, LinearIndependent.iff_fractionRing, LinearMap, LinearMap.ker_eq_bot.mpr, LinearMap.linearIndependent_iff, Module, Module.Free, algebraMa, algebraMap
 -/
@@ -435,7 +557,7 @@ theorem range_sup_range_eq_top_of_isCoprime_differentIdeal
   rw [← B₁.sum_repr x]
   refine Subalgebra.sum_mem _ fun i _ => ?_
   rw [Algebra.smul_def]
-  exact Subalgebra.mul_mem _ (Algebra.mem_sup_left (by simp)) (Algebra.mem_sup_ri
+  exact Subalgebra.mul_mem _ (Algebra.mem_sup_left (by simp)) (Algebra.mem_sup_right (by simp [B₁]))
 
 中文:
 定理 range_sup_range_eq_top_of_isCoprime_differentIdeal
@@ -445,7 +567,7 @@ theorem range_sup_range_eq_top_of_isCoprime_differentIdeal
   rw [← B₁.sum_repr x]
   refine Subalgebra.sum_mem _ fun i _ => ?_
   rw [Algebra.smul_def]
-  exact Subalgebra.mul_mem _ (Algebra.mem_sup_left (by simp)) (Algebra.mem_sup_ri
+  exact Subalgebra.mul_mem _ (Algebra.mem_sup_left (by simp)) (Algebra.mem_sup_right (by simp [B₁]))
 
 Depends on / 依赖: Algebra, Algebra.eq_top_iff.mpr, Algebra.mem_sup_left, Algebra.mem_sup_right, Algebra.smul_def, Free.chooseBasis, Subalgebra, Subalgebra.mul_mem, Subalgebra.sum_mem, chooseBasis, eq_top_iff, mem_sup_left, mem_sup_right, mul_mem, ofIsCoprimeDifferentIdeal, smul_def, sum_mem, sum_repr
 -/
@@ -471,14 +593,14 @@ theorem adjoin_union_eq_top_of_isCoprime_differentialIdeal
   statement: [Module.Free A R₂]
   proof: by
   rw [Algebra.adjoin_union]; rw [← IsScalarTower.coe_toAlgHom' A R₁]; rw [← IsScalarTower.coe_toAlgHom' A R₂]; rw [← AlgHom.map_adjoin]; rw [hs]; rw [← AlgHom.map_adjoin]; rw [ht]; rw [Algebra.map_top]; rw [Algebra.map_top]
-  exact range_sup_range_eq_top_of_isCoprime_differentIdeal A B R₁ R₂ h₁ h
+  exact range_sup_range_eq_top_of_isCoprime_differentIdeal A B R₁ R₂ h₁ h₂ h₃
 
 中文:
 定理 adjoin_union_eq_top_of_isCoprime_differentialIdeal
   结论: [模.自由 A R₂]
   证明: by
   rw [Algebra.adjoin_union]; rw [← IsScalarTower.coe_toAlgHom' A R₁]; rw [← IsScalarTower.coe_toAlgHom' A R₂]; rw [← AlgHom.map_adjoin]; rw [hs]; rw [← AlgHom.map_adjoin]; rw [ht]; rw [Algebra.map_top]; rw [Algebra.map_top]
-  exact range_sup_range_eq_top_of_isCoprime_differentIdeal A B R₁ R₂ h₁ h
+  exact range_sup_range_eq_top_of_isCoprime_differentIdeal A B R₁ R₂ h₁ h₂ h₃
 
 Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.adjoin_union, Algebra.map_top, IsScalarTower, IsScalarTower.coe_toAlgHom, adjoin_union, coe_toAlgHom, map_adjoin, map_top, range_sup_range_eq_top_of_isCoprime_differentIdeal
 -/

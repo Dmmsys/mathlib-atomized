@@ -234,7 +234,10 @@ abbreviation Module.addCommMonoidToAddCommGroup
       rw [← add_smul]; rw [neg_add_cancel]; rw [zero_smul]
   zsmul z a := (z : R) • a
   zsmul_zero' a := by simp_rw [HSMul.hSMul, SMul.smul, Int.cast_zero]; exact zero_smul R a
-  zsmul
+  zsmul_succ' z a := by simp_rw [HSMul.hSMul, SMul.smul]; simp [add_comm, add_smul]
+  zsmul_neg' z a := by
+    change (Int.negSucc z : R) • a = -1 • ((z.succ : Int) : R) • a
+    simp [← smul_assoc]
 
 中文:
 缩写 模.addCommMonoidToAddCommGroup
@@ -245,7 +248,10 @@ abbreviation Module.addCommMonoidToAddCommGroup
       rw [← add_smul]; rw [neg_add_cancel]; rw [zero_smul]
   zsmul z a := (z : R) • a
   zsmul_zero' a := by simp_rw [HSMul.hSMul, SMul.smul, Int.cast_zero]; exact zero_smul R a
-  zsmul
+  zsmul_succ' z a := by simp_rw [HSMul.hSMul, SMul.smul]; simp [add_comm, add_smul]
+  zsmul_neg' z a := by
+    change (Int.negSucc z : R) • a = -1 • ((z.succ : Int) : R) • a
+    simp [← smul_assoc]
 -/
 abbrev Module.addCommMonoidToAddCommGroup
     [Ring R] [AddCommMonoid M] [Module R M] : AddCommGroup M where

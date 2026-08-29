@@ -169,7 +169,8 @@ theorem biUnion_Ico_Ioc_map_succ
     · intro k hmk ihk
       rw [← Ioc_union_Ioc_eq_Ioc (hf hmk) (hf <| le_succ _)]; rw [union_comm]; rw [← ihk]
       by_cases hk : IsMax k
-   
+      · rw [hk.succ_eq, Ioc_self, empty_union]
+      · rw [Ico_succ_right_eq_insert_of_not_isMax hmk hk, biUnion_insert]
 
 中文:
 定理 biUnion_Ico_Ioc_map_succ
@@ -182,7 +183,8 @@ theorem biUnion_Ico_Ioc_map_succ
     · intro k hmk ihk
       rw [← Ioc_union_Ioc_eq_Ioc (hf hmk) (hf <| le_succ _)]; rw [union_comm]; rw [← ihk]
       by_cases hk : IsMax k
-   
+      · rw [hk.succ_eq, Ioc_self, empty_union]
+      · rw [Ico_succ_right_eq_insert_of_not_isMax hmk hk, biUnion_insert]
 
 Depends on / 依赖: Ico_eq_empty_of_le, Ico_succ_right_eq_insert_of_not_isMax, Ioc_eq_empty_of_le, Ioc_self, Ioc_union_Ioc_eq_Ioc, Succ.rec, biUnion_empty, biUnion_insert, empty_union, hk.succ_eq, le_succ, le_total, succ_eq, union_comm
 -/

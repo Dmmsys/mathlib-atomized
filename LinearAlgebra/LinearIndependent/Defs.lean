@@ -609,7 +609,25 @@ theorem linearIndependent_iff'ₛ
 hv (∑ i in s, Finsupp.single i (f i)) (∑ i in s, Finsupp.single i (g i)) by
           simpa only [map_sum, Finsupp.linearCombination_single] using eq
       have (f : ι -> R) : f i = (∑ j in s, Finsupp.single j (f j)) i :=
-
+        calc
+          f i = (Finsupp.lapply i : (ι ->₀ R) ->ₗ[R] R) (Finsupp.single i (f i)) := by
+            { rw [Finsupp.lapply_apply, Finsupp.single_eq_same] }
+          _ = ∑ j in s, (Finsupp.lapply i : (ι ->₀ R) ->ₗ[R] R) (Finsupp.single j (f j)) :=
+Eq.symm
+              Finset.sum_eq_single i
+                (fun j _hjs hji => by rw [Finsupp.lapply_apply, Finsupp.single_eq_of_ne' hji])
+                fun hnis => hnis.elim his
+          _ = (∑ j in s, Finsupp.single j (f j)) i := (map_sum ..).symm
+      rw [this f]; rw [this g]; rw [h],
+      fun hv f g hl =>
+      Finsupp.ext fun _ => by
+        classical
+refine _root_.by_contradiction fun hni => hni hv (f.support union g.support) f g ?_ _ ?_
+        · rwa [← sum_subset subset_union_left, ← sum_subset subset_union_right] <;>
+            rintro i - hi <;> rw [Finsupp.notMem_support_iff.mp hi, zero_smul]
+        · contrapose hni
+          simp_rw [notMem_union, Finsupp.notMem_support_iff] at hni
+          rw [hni.1]; rw [hni.2]⟩
 
 中文:
 定理 linearIndependent_iff'ₛ
@@ -619,7 +637,25 @@ hv (∑ i in s, Finsupp.single i (f i)) (∑ i in s, Finsupp.single i (g i)) by
 hv (∑ i in s, Finsupp.single i (f i)) (∑ i in s, Finsupp.single i (g i)) by
           simpa only [map_sum, Finsupp.linearCombination_single] using eq
       have (f : ι -> R) : f i = (∑ j in s, Finsupp.single j (f j)) i :=
-
+        calc
+          f i = (Finsupp.lapply i : (ι ->₀ R) ->ₗ[R] R) (Finsupp.single i (f i)) := by
+            { rw [Finsupp.lapply_apply, Finsupp.single_eq_same] }
+          _ = ∑ j in s, (Finsupp.lapply i : (ι ->₀ R) ->ₗ[R] R) (Finsupp.single j (f j)) :=
+Eq.symm
+              Finset.sum_eq_single i
+                (fun j _hjs hji => by rw [Finsupp.lapply_apply, Finsupp.single_eq_of_ne' hji])
+                fun hnis => hnis.elim his
+          _ = (∑ j in s, Finsupp.single j (f j)) i := (map_sum ..).symm
+      rw [this f]; rw [this g]; rw [h],
+      fun hv f g hl =>
+      Finsupp.ext fun _ => by
+        classical
+refine _root_.by_contradiction fun hni => hni hv (f.support union g.support) f g ?_ _ ?_
+        · rwa [← sum_subset subset_union_left, ← sum_subset subset_union_right] <;>
+            rintro i - hi <;> rw [Finsupp.notMem_support_iff.mp hi, zero_smul]
+        · contrapose hni
+          simp_rw [notMem_union, Finsupp.notMem_support_iff] at hni
+          rw [hni.1]; rw [hni.2]⟩
 
 Depends on / 依赖: Eq.symm, Finsupp, Finsupp.lapply, Finsupp.lapply_apply, Finsupp.linearCombination_single, Finsupp.single, Finsupp.single_eq_same, lapply, lapply_apply, linearCombination_single, map_sum, single, single_eq_same
 -/
@@ -664,7 +700,9 @@ theorem linearIndependent_iff''ₛ
       fun H s f g eq i hi => by
       convert!
         H s (fun j => if j in s then f j else 0) (fun j => if j in s then g j else 0)
-          (fun j hj => (if_neg hj
+          (fun j hj => (if_neg hj).trans (if_neg hj).symm)
+          (by simp_rw [ite_smul, zero_smul, Finset.sum_extend_by_zero, eq]) i <;>
+      exact (if_pos hi).symm⟩
 
 中文:
 定理 linearIndependent_iff''ₛ
@@ -675,7 +713,9 @@ theorem linearIndependent_iff''ₛ
       fun H s f g eq i hi => by
       convert!
         H s (fun j => if j in s then f j else 0) (fun j => if j in s then g j else 0)
-          (fun j hj => (if_neg hj
+          (fun j hj => (if_neg hj).trans (if_neg hj).symm)
+          (by simp_rw [ite_smul, zero_smul, Finset.sum_extend_by_zero, eq]) i <;>
+      exact (if_pos hi).symm⟩
 
 Depends on / 依赖: Finset, Finset.sum_extend_by_zero, classical, convert, if_neg, if_pos, ite_smul, linearIndependent_iff, simp_rw, sum_extend_by_zero, zero_smul
 -/
@@ -775,7 +815,8 @@ lemma linearIndepOn_finset_iffₛ
     simp_rw [← s.sum_attach] at hfg
     exact hv (f ∘ Subtype.val) (g ∘ Subtype.val) hfg ⟨i, hi⟩
   · rintro hv f g hfg i
-    simpa using hv (fun j => if hj : j in s then f ⟨j, hj⟩ else 0
+    simpa using hv (fun j => if hj : j in s then f ⟨j, hj⟩ else 0)
+      (fun j => if hj : j in s then g ⟨j, hj⟩ else 0) (by simpa +contextual [← s.sum_attach]) i
 
 中文:
 引理 linearIndepOn_finset_iffₛ
@@ -788,7 +829,8 @@ lemma linearIndepOn_finset_iffₛ
     simp_rw [← s.sum_attach] at hfg
     exact hv (f ∘ Subtype.val) (g ∘ Subtype.val) hfg ⟨i, hi⟩
   · rintro hv f g hfg i
-    simpa using hv (fun j => if hj : j in s then f ⟨j, hj⟩ else 0
+    simpa using hv (fun j => if hj : j in s then f ⟨j, hj⟩ else 0)
+      (fun j => if hj : j in s then g ⟨j, hj⟩ else 0) (by simpa +contextual [← s.sum_attach]) i
 
 Depends on / 依赖: Fintype, Fintype.linearIndependent_iff, LinearIndepOn, Subtype, Subtype.val, classical, contextual, s.sum_attach, simp_rw, sum_attach
 -/
@@ -1267,7 +1309,13 @@ theorem linearIndepOn_iffₛ
   simp only [LinearIndepOn, linearIndependent_iffₛ, Finsupp.mem_supported,
     Finsupp.linearCombination_apply, Set.subset_def, Finset.mem_coe]
 refine ⟨fun h l₁ h₁ l₂ h₂ eq => (Finsupp.subtypeDomain_eq_iff h₁ h₂).1 h _ _
-    (Finsupp.sum_subtypeDomain_index h₁).trans eq ▸ (Finsupp.sum_subtypeDoma
+    (Finsupp.sum_subtypeDomain_index h₁).trans eq ▸ (Finsupp.sum_subtypeDomain_index h₂).symm,
+    fun h l₁ l₂ eq => ?_⟩
+refine Finsupp.embDomain_injective (Embedding.subtype (· in s)) h _ ?_ _ ?_ ?_
+  iterate 2 simpa using fun _ h _ => h
+  simp_rw [Finsupp.embDomain_eq_mapDomain]
+  rwa [Finsupp.sum_mapDomain_index, Finsupp.sum_mapDomain_index] <;>
+    intros <;> simp only [zero_smul, add_smul]
 
 中文:
 定理 linearIndepOn_iffₛ
@@ -1276,7 +1324,13 @@ refine ⟨fun h l₁ h₁ l₂ h₂ eq => (Finsupp.subtypeDomain_eq_iff h₁ h�
   simp only [LinearIndepOn, linearIndependent_iffₛ, Finsupp.mem_supported,
     Finsupp.linearCombination_apply, Set.subset_def, Finset.mem_coe]
 refine ⟨fun h l₁ h₁ l₂ h₂ eq => (Finsupp.subtypeDomain_eq_iff h₁ h₂).1 h _ _
-    (Finsupp.sum_subtypeDomain_index h₁).trans eq ▸ (Finsupp.sum_subtypeDoma
+    (Finsupp.sum_subtypeDomain_index h₁).trans eq ▸ (Finsupp.sum_subtypeDomain_index h₂).symm,
+    fun h l₁ l₂ eq => ?_⟩
+refine Finsupp.embDomain_injective (Embedding.subtype (· in s)) h _ ?_ _ ?_ ?_
+  iterate 2 simpa using fun _ h _ => h
+  simp_rw [Finsupp.embDomain_eq_mapDomain]
+  rwa [Finsupp.sum_mapDomain_index, Finsupp.sum_mapDomain_index] <;>
+    intros <;> simp only [zero_smul, add_smul]
 
 Depends on / 依赖: Embedding, Embedding.subtype, Finset, Finset.mem_coe, Finsupp, Finsupp.embDomain_eq_mapDomain, Finsupp.embDomain_injective, Finsupp.linearCombination_apply, Finsupp.mem_supported, Finsupp.subtypeDomain_eq_iff, Finsupp.sum_subtypeDomain_index, LinearIndepOn, Set.subset_def, embDomain_eq_mapDomain, embDomain_injective, iterate, linearCombination_apply, mem_coe, mem_supported, simp_rw
 -/
@@ -1406,7 +1460,7 @@ definition LinearIndependent.linearCombinationEquiv
   refine LinearEquiv.ofBijective (LinearMap.codRestrict (span R (range v))
     (Finsupp.linearCombination R v) ?_) ⟨hv.codRestrict _, ?_⟩
   · simp_rw [← Finsupp.range_linearCombination]; exact fun c => ⟨c, rfl⟩
-  rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRes
+  rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRestrict]; rw [← LinearMap.range_le_iff_comap]; rw [range_subtype]; rw [Submodule.map_top]; rw [Finsupp.range_linearCombination]
 
 中文:
 定义 LinearIndependent.linearCombinationEquiv
@@ -1415,7 +1469,7 @@ definition LinearIndependent.linearCombinationEquiv
   refine LinearEquiv.ofBijective (LinearMap.codRestrict (span R (range v))
     (Finsupp.linearCombination R v) ?_) ⟨hv.codRestrict _, ?_⟩
   · simp_rw [← Finsupp.range_linearCombination]; exact fun c => ⟨c, rfl⟩
-  rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRes
+  rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [LinearMap.map_codRestrict]; rw [← LinearMap.range_le_iff_comap]; rw [range_subtype]; rw [Submodule.map_top]; rw [Finsupp.range_linearCombination]
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.range_linearCombination, LinearEquiv, LinearEquiv.ofBijective, LinearMap, LinearMap.codRestrict, LinearMap.map_codRestrict, LinearMap.range_eq_map, LinearMap.range_eq_top, LinearMap.range_le_iff_comap, Submodule, Submodule.map_top, codRestrict, hv.codRestrict, linearCombination, map_codRestrict, map_top, ofBijective, range_eq_map
 -/
@@ -1536,7 +1590,10 @@ theorem LinearIndependent.repr_eq
     rfl
   have : (LinearIndependent.linearCombinationEquiv hv : (ι ->₀ R) ->ₗ[R] span R (range v)) l = x := by
     rw [eq] at this
-    exact Subtype.ext_i
+    exact Subtype.ext_iff.2 this
+  rw [← LinearEquiv.symm_apply_apply hv.linearCombinationEquiv l]
+  rw [← this]
+  rfl
 
 中文:
 定理 LinearIndependent.repr_eq
@@ -1548,7 +1605,10 @@ theorem LinearIndependent.repr_eq
     rfl
   have : (LinearIndependent.linearCombinationEquiv hv : (ι ->₀ R) ->ₗ[R] span R (range v)) l = x := by
     rw [eq] at this
-    exact Subtype.ext_i
+    exact Subtype.ext_iff.2 this
+  rw [← LinearEquiv.symm_apply_apply hv.linearCombinationEquiv l]
+  rw [← this]
+  rfl
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, LinearEquiv, LinearEquiv.symm_apply_apply, LinearIndependent, LinearIndependent.linearCombinationEquiv, Subtype, Subtype.ext_iff, ext_iff, hv.linearCombinationEquiv, linearCombination, linearCombinationEquiv, symm_apply_apply
 -/
@@ -1601,7 +1661,11 @@ theorem LinearIndependent.span_repr_eq
       hv.repr x := by
     apply (LinearIndependent.linearCombinationEquiv hv).injective
     ext
-    simp only [LinearIndependent.linearCombinationEquiv_apply_coe, Equiv.self_comp_ofInjective_symm
+    simp only [LinearIndependent.linearCombinationEquiv_apply_coe, Equiv.self_comp_ofInjective_symm,
+      LinearIndependent.linearCombination_repr, Finsupp.linearCombination_equivMapDomain,
+      Span.finsupp_linearCombination_repr]
+  ext ⟨_, ⟨i, rfl⟩⟩
+  simp [← p]
 
 中文:
 定理 LinearIndependent.span_repr_eq
@@ -1612,7 +1676,11 @@ theorem LinearIndependent.span_repr_eq
       hv.repr x := by
     apply (LinearIndependent.linearCombinationEquiv hv).injective
     ext
-    simp only [LinearIndependent.linearCombinationEquiv_apply_coe, Equiv.self_comp_ofInjective_symm
+    simp only [LinearIndependent.linearCombinationEquiv_apply_coe, Equiv.self_comp_ofInjective_symm,
+      LinearIndependent.linearCombination_repr, Finsupp.linearCombination_equivMapDomain,
+      Span.finsupp_linearCombination_repr]
+  ext ⟨_, ⟨i, rfl⟩⟩
+  simp [← p]
 
 Depends on / 依赖: Equiv.ofInjective, Equiv.self_comp_ofInjective_symm, Finsupp, Finsupp.linearCombination_equivMapDomain, LinearIndependent, LinearIndependent.linearCombinationEquiv, LinearIndependent.linearCombinationEquiv_apply_coe, LinearIndependent.linearCombination_repr, Set.range, Span.finsupp_linearCombination_repr, Span.repr, equivMapDomain, finsupp_linearCombination_repr, hv.injective, hv.repr, injective, linearCombinationEquiv, linearCombinationEquiv_apply_coe, linearCombination_equivMapDomain, linearCombination_repr
 -/
@@ -1643,7 +1711,10 @@ theorem LinearIndependent.eq_zero_of_smul_mem_span
   by_contra hn
   exact (notMem_of_mem_sdiff (hl <| by simp [hn])) (mem_singleton _)
 
-nonrec lemma LinearIndepOn.eq_zero_
+nonrec lemma LinearIndepOn.eq_zero_of_smul_mem_span (hv : LinearIndepOn R v s) (hi : i in s) (a : R)
+    (ha : a • v i in span R (v '' (s \ {i}))) : a = 0 :=
+hv.eq_zero_of_smul_mem_span ⟨i, hi⟩ _ by
+    simpa [← comp_def, image_comp, image_sdiff Subtype.val_injective]
 
 中文:
 定理 LinearIndependent.eq_zero_of_smul_mem_span
@@ -1655,7 +1726,10 @@ nonrec lemma LinearIndepOn.eq_zero_
   by_contra hn
   exact (notMem_of_mem_sdiff (hl <| by simp [hn])) (mem_singleton _)
 
-nonrec lemma LinearIndepOn.eq_zero_
+nonrec lemma LinearIndepOn.eq_zero_of_smul_mem_span (hv : LinearIndepOn R v s) (hi : i in s) (a : R)
+    (ha : a • v i in span R (v '' (s \ {i}))) : a = 0 :=
+hv.eq_zero_of_smul_mem_span ⟨i, hi⟩ _ by
+    simpa [← comp_def, image_comp, image_sdiff Subtype.val_injective]
 
 Depends on / 依赖: Finsupp, Finsupp.single, Finsupp.span_image_eq_map_linearCombination, mem_map, mem_singleton, notMem_of_mem_sdiff, single, span_image_eq_map_linearCombination
 -/
@@ -1773,7 +1847,13 @@ theorem LinearIndependent.maximal_iff
     exact range_eq_univ.mp (image_injective.mpr i'.injective p)
   · intro p w i' h
     specialize
-      p w ((↑) : w -> M) i' (
+      p w ((↑) : w -> M) i' (fun i => ⟨v i, range_subset_iff.mp h i⟩)
+        (by
+          ext
+          simp)
+    have q := congr_arg (fun s => ((↑) : w -> M) '' s) p.range_eq
+    rw [← image_univ]; rw [image_image] at q
+    simpa using q
 
 中文:
 定理 LinearIndependent.maximal_iff
@@ -1786,7 +1866,13 @@ theorem LinearIndependent.maximal_iff
     exact range_eq_univ.mp (image_injective.mpr i'.injective p)
   · intro p w i' h
     specialize
-      p w ((↑) : w -> M) i' (
+      p w ((↑) : w -> M) i' (fun i => ⟨v i, range_subset_iff.mp h i⟩)
+        (by
+          ext
+          simp)
+    have q := congr_arg (fun s => ((↑) : w -> M) '' s) p.range_eq
+    rw [← image_univ]; rw [image_image] at q
+    simpa using q
 
 Depends on / 依赖: congr_arg, image_image, image_injective, image_injective.mpr, image_univ, injective, linearIndepOn_id, p.range_eq, range_comp, range_comp_subset_range, range_eq, range_eq_univ, range_eq_univ.mp, range_subset_iff, range_subset_iff.mp, specialize
 -/
@@ -1834,7 +1920,32 @@ theorem linearIndependent_iffₒₛ
   have : OrderedSub R := CanonicallyOrderedAdd.toOrderedSub
   rw [linearIndependent_iff'ₛ]
   refine ⟨fun h s t f hst heq => ?_, fun h s f g heq => ?_⟩
-  · specialize h (s union t) (fun i => if i in s then f i else 0) (fun i => if i in t the
+  · specialize h (s union t) (fun i => if i in s then f i else 0) (fun i => if i in t then f i else 0) ?_
+    · simpa
+    refine ⟨fun i hi => ?_, fun i hi => ?_⟩
+    · simpa [hi, hst.notMem_of_mem_left_finset hi] using h i (Finset.mem_union_left _ hi)
+    · simpa [hi, hst.notMem_of_mem_right_finset hi] using (h i (Finset.mem_union_right _ hi)).symm
+  · specialize h { i in s | g i <= f i } { i in s | f i < g i }
+      (fun i => if g i <= f i then f i - g i else g i - f i) ?_ ?_
+    · simp_rw [Finset.disjoint_left, Finset.mem_filter]
+      exact fun i ⟨_, hi⟩ ⟨_, hi'⟩ => hi.not_gt hi'
+    · rw [← add_right_cancel_iff
+        (a := ∑ i in s with g i <= f i, g i • v i + ∑ i in s with f i < g i, f i • v i)]
+      conv_lhs => rw [← add_assoc, ← Finset.sum_add_distrib]
+      conv_rhs => rw [add_left_comm, ← Finset.sum_add_distrib]
+      convert! heq
+        <;> simp_rw [← Finset.sum_filter_add_sum_filter_not s (fun i => g i <= f i), not_le]
+        <;> congr! 2 with i hi
+        <;> simp only [Finset.mem_filter] at hi
+      · simp [hi.2, ← add_smul, tsub_add_cancel_of_le hi.2]
+      · simp [hi.2.not_ge, ← add_smul, tsub_add_cancel_of_le hi.2.le]
+    simp only [Finset.mem_filter] at h
+    intro i hi
+    by_cases hi' : g i <= f i
+    · apply hi'.antisymm'
+      simpa [hi', tsub_eq_zero_iff_le] using h.1 i ⟨hi, hi'⟩
+    · apply (not_le.1 hi').le.antisymm
+      simpa [hi', tsub_eq_zero_iff_le] using h.2 i ⟨hi, not_le.1 hi'⟩
 
 中文:
 定理 linearIndependent_iffₒₛ
@@ -1844,7 +1955,32 @@ theorem linearIndependent_iffₒₛ
   have : OrderedSub R := CanonicallyOrderedAdd.toOrderedSub
   rw [linearIndependent_iff'ₛ]
   refine ⟨fun h s t f hst heq => ?_, fun h s f g heq => ?_⟩
-  · specialize h (s union t) (fun i => if i in s then f i else 0) (fun i => if i in t the
+  · specialize h (s union t) (fun i => if i in s then f i else 0) (fun i => if i in t then f i else 0) ?_
+    · simpa
+    refine ⟨fun i hi => ?_, fun i hi => ?_⟩
+    · simpa [hi, hst.notMem_of_mem_left_finset hi] using h i (Finset.mem_union_left _ hi)
+    · simpa [hi, hst.notMem_of_mem_right_finset hi] using (h i (Finset.mem_union_right _ hi)).symm
+  · specialize h { i in s | g i <= f i } { i in s | f i < g i }
+      (fun i => if g i <= f i then f i - g i else g i - f i) ?_ ?_
+    · simp_rw [Finset.disjoint_left, Finset.mem_filter]
+      exact fun i ⟨_, hi⟩ ⟨_, hi'⟩ => hi.not_gt hi'
+    · rw [← add_right_cancel_iff
+        (a := ∑ i in s with g i <= f i, g i • v i + ∑ i in s with f i < g i, f i • v i)]
+      conv_lhs => rw [← add_assoc, ← Finset.sum_add_distrib]
+      conv_rhs => rw [add_left_comm, ← Finset.sum_add_distrib]
+      convert! heq
+        <;> simp_rw [← Finset.sum_filter_add_sum_filter_not s (fun i => g i <= f i), not_le]
+        <;> congr! 2 with i hi
+        <;> simp only [Finset.mem_filter] at hi
+      · simp [hi.2, ← add_smul, tsub_add_cancel_of_le hi.2]
+      · simp [hi.2.not_ge, ← add_smul, tsub_add_cancel_of_le hi.2.le]
+    simp only [Finset.mem_filter] at h
+    intro i hi
+    by_cases hi' : g i <= f i
+    · apply hi'.antisymm'
+      simpa [hi', tsub_eq_zero_iff_le] using h.1 i ⟨hi, hi'⟩
+    · apply (not_le.1 hi').le.antisymm
+      simpa [hi', tsub_eq_zero_iff_le] using h.2 i ⟨hi, not_le.1 hi'⟩
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.toOrderedSub, CanonicallyOrderedAdd.toSub, Finset, Finset.mem_union_left, OrderedSub, classical, hst.notMem_of_mem_left_finset, hst.notMem_of_mem_right_finset, linearIndependent_iff, mem_union_left, notMem_of_mem_left_finset, notMem_of_mem_right_finset, specialize, toOrderedSub
 -/
@@ -1896,7 +2032,23 @@ theorem not_linearIndependent_iffₒₛ
     fun ⟨s, t, f, hst, heq, hi⟩ => ⟨s, t, f, hst, heq, .inl hi⟩⟩
   rcases h with ⟨i, hi, hfi⟩ | ⟨i, hi, hgi⟩
   · exact ⟨s, t, f, hst, heq, i, hi, hfi⟩
-  · exact ⟨t, s, f, hst.sym
+  · exact ⟨t, s, f, hst.symm, heq.symm, i, hi, hgi⟩
+
+nonrec theorem Fintype.linearIndependent_iffₒₛ [DecidableEq ι] [Fintype ι] :
+    LinearIndependent R v ↔ forall t, forall (f : ι -> R),
+      ∑ i in t, f i • v i = ∑ i ∉ t, f i • v i -> forall i, f i = 0 := by
+  rw [linearIndependent_iffₒₛ]
+  refine ⟨fun h t f heq i => ?_, fun h t₁ t₂ f ht₁t₂ heq => ?_⟩
+  · specialize h t tᶜ f disjoint_compl_right heq
+    by_cases hi : i in t
+    · exact h.1 i hi
+    · exact h.2 i (Finset.mem_compl.2 hi)
+  · specialize h t₁ (fun i => if i in t₁ ∨ i in t₂ then f i else 0) ?_
+    · rw [← Finset.sum_subset ht₁t₂.le_compl_left]
+      · convert! heq using 2 with i hi i hi <;> simp [hi]
+      · intro i hi hi'
+        simp [Finset.mem_compl.1 hi, hi']
+    refine ⟨fun i hi => ?_, fun i hi => ?_⟩ <;> simpa [hi] using h i
 
 中文:
 定理 not_linearIndependent_iffₒₛ
@@ -1907,7 +2059,23 @@ theorem not_linearIndependent_iffₒₛ
     fun ⟨s, t, f, hst, heq, hi⟩ => ⟨s, t, f, hst, heq, .inl hi⟩⟩
   rcases h with ⟨i, hi, hfi⟩ | ⟨i, hi, hgi⟩
   · exact ⟨s, t, f, hst, heq, i, hi, hfi⟩
-  · exact ⟨t, s, f, hst.sym
+  · exact ⟨t, s, f, hst.symm, heq.symm, i, hi, hgi⟩
+
+nonrec theorem Fintype.linearIndependent_iffₒₛ [DecidableEq ι] [Fintype ι] :
+    LinearIndependent R v ↔ forall t, forall (f : ι -> R),
+      ∑ i in t, f i • v i = ∑ i ∉ t, f i • v i -> forall i, f i = 0 := by
+  rw [linearIndependent_iffₒₛ]
+  refine ⟨fun h t f heq i => ?_, fun h t₁ t₂ f ht₁t₂ heq => ?_⟩
+  · specialize h t tᶜ f disjoint_compl_right heq
+    by_cases hi : i in t
+    · exact h.1 i hi
+    · exact h.2 i (Finset.mem_compl.2 hi)
+  · specialize h t₁ (fun i => if i in t₁ ∨ i in t₂ then f i else 0) ?_
+    · rw [← Finset.sum_subset ht₁t₂.le_compl_left]
+      · convert! heq using 2 with i hi i hi <;> simp [hi]
+      · intro i hi hi'
+        simp [Finset.mem_compl.1 hi, hi']
+    refine ⟨fun i hi => ?_, fun i hi => ?_⟩ <;> simpa [hi] using h i
 
 Depends on / 依赖: distrib, heq.symm, hst.symm, pos_iff_ne_zero
 -/
@@ -1991,7 +2159,17 @@ lemma linearIndepOn_finset_iffₒₛ
   refine ⟨fun h t ht f heq i hi => h { i | i.1 in t } (f ∘ Subtype.val) ?_ ⟨i, hi⟩,
     fun h t f heq i => ?_⟩
   · simp only [Finset.compl_filter, Finset.sum_filter, Function.comp_apply, Finset.coe_sort_coe]
-    rw [Finset.sum_coe_sort s 
+    rw [Finset.sum_coe_sort s fun i => if i in t then f i • v i else 0]; rw [Finset.sum_coe_sort s fun i => if i ∉ t then f i • v i else 0]
+    simpa [Finset.inter_eq_right.2 ht, Finset.sum_ite, Finset.filter_notMem_eq_sdiff]
+  · specialize h (t.map (Embedding.subtype _)) (Finset.map_subtype_subset _)
+      (fun i => if h : i in s then f ⟨i, h⟩ else 0) ?_ i i.2
+    · conv =>
+        enter [2, 1, 1]
+        rw [← s.subtype_map_of_mem (fun x hx => hx)]; rw [Finset.subtype_eq_univ.2 (fun x hx => hx)]
+        change Finset.map (Embedding.subtype (· in (s : Set ι))) _
+      rw [← Finset.map_sdiff]
+      simpa [Embedding.subtype, ← Finset.compl_eq_univ_sdiff]
+    simpa using h
 
 中文:
 引理 linearIndepOn_finset_iffₒₛ
@@ -2001,7 +2179,17 @@ lemma linearIndepOn_finset_iffₒₛ
   refine ⟨fun h t ht f heq i hi => h { i | i.1 in t } (f ∘ Subtype.val) ?_ ⟨i, hi⟩,
     fun h t f heq i => ?_⟩
   · simp only [Finset.compl_filter, Finset.sum_filter, Function.comp_apply, Finset.coe_sort_coe]
-    rw [Finset.sum_coe_sort s 
+    rw [Finset.sum_coe_sort s fun i => if i in t then f i • v i else 0]; rw [Finset.sum_coe_sort s fun i => if i ∉ t then f i • v i else 0]
+    simpa [Finset.inter_eq_right.2 ht, Finset.sum_ite, Finset.filter_notMem_eq_sdiff]
+  · specialize h (t.map (Embedding.subtype _)) (Finset.map_subtype_subset _)
+      (fun i => if h : i in s then f ⟨i, h⟩ else 0) ?_ i i.2
+    · conv =>
+        enter [2, 1, 1]
+        rw [← s.subtype_map_of_mem (fun x hx => hx)]; rw [Finset.subtype_eq_univ.2 (fun x hx => hx)]
+        change Finset.map (Embedding.subtype (· in (s : Set ι))) _
+      rw [← Finset.map_sdiff]
+      simpa [Embedding.subtype, ← Finset.compl_eq_univ_sdiff]
+    simpa using h
 
 Depends on / 依赖: Finset, Finset.coe_sort_coe, Finset.compl_filter, Finset.filter_notMem_eq_sdiff, Finset.inter_eq_right, Finset.sum_coe_sort, Finset.sum_filter, Finset.sum_ite, Fintype, Fintype.linearIndependent_iff, Function, Function.comp_apply, LinearIndepOn, Subtype, Subtype.val, coe_sort_coe, comp_apply, compl_filter, filter_notMem_eq_sdiff, inter_eq_right
 -/
@@ -2036,7 +2224,8 @@ lemma not_linearIndepOn_finset_iffₒₛ
     fun ⟨t, hst, f, heq, i, hi, hfi⟩ => ⟨t, hst, f, heq, i, hst hi, hfi⟩⟩
   by_cases hi' : i in t
   · exact ⟨t, hst, f, heq, i, hi', hfi⟩
-  · refine ⟨s \ t, Finset.sdiff_subset,
+  · refine ⟨s \ t, Finset.sdiff_subset, f, ?_, i, Finset.mem_sdiff.2 ⟨hi, hi'⟩, hfi⟩
+    simpa [Finset.sdiff_sdiff_eq_self hst] using heq.symm
 
 中文:
 引理 not_linearIndepOn_finset_iffₒₛ
@@ -2047,7 +2236,8 @@ lemma not_linearIndepOn_finset_iffₒₛ
     fun ⟨t, hst, f, heq, i, hi, hfi⟩ => ⟨t, hst, f, heq, i, hst hi, hfi⟩⟩
   by_cases hi' : i in t
   · exact ⟨t, hst, f, heq, i, hi', hfi⟩
-  · refine ⟨s \ t, Finset.sdiff_subset,
+  · refine ⟨s \ t, Finset.sdiff_subset, f, ?_, i, Finset.mem_sdiff.2 ⟨hi, hi'⟩, hfi⟩
+    simpa [Finset.sdiff_sdiff_eq_self hst] using heq.symm
 
 Depends on / 依赖: Finset, Finset.mem_sdiff, Finset.sdiff_sdiff_eq_self, Finset.sdiff_subset, heq.symm, mem_sdiff, not_forall, pos_iff_ne_zero, sdiff_sdiff_eq_self, sdiff_subset
 -/
@@ -2202,7 +2392,8 @@ theorem linearIndependent_iff''
     ⟨fun H s g hg hv i => if his : i in s then H s g hv i his else hg i his, fun H s g hg i hi => by
       convert!
         H s (fun j => if j in s then g j else 0) (fun j hj => if_neg hj)
-          (by simp_rw [ite_smul, zero_smul, Finset.sum_exte
+          (by simp_rw [ite_smul, zero_smul, Finset.sum_extend_by_zero, hg]) i
+      exact (if_pos hi).symm⟩
 
 中文:
 定理 linearIndependent_iff''
@@ -2212,7 +2403,8 @@ theorem linearIndependent_iff''
     ⟨fun H s g hg hv i => if his : i in s then H s g hv i his else hg i his, fun H s g hg i hi => by
       convert!
         H s (fun j => if j in s then g j else 0) (fun j hj => if_neg hj)
-          (by simp_rw [ite_smul, zero_smul, Finset.sum_exte
+          (by simp_rw [ite_smul, zero_smul, Finset.sum_extend_by_zero, hg]) i
+      exact (if_pos hi).symm⟩
 -/
 theorem linearIndependent_iff'' :
     LinearIndependent R v ↔
@@ -2382,7 +2574,7 @@ lemma linearIndepOn_finset_iff
     exact hv (f ∘ Subtype.val) hf ⟨i, hi⟩
   · rintro hv f hf₀ i
     simpa using hv (fun j => if hj : j in s then f ⟨j, hj⟩ else 0)
-      (by simpa +contextual [
+      (by simpa +contextual [← s.sum_attach]) i
 
 中文:
 引理 linearIndepOn_finset_iff
@@ -2396,7 +2588,7 @@ lemma linearIndepOn_finset_iff
     exact hv (f ∘ Subtype.val) hf ⟨i, hi⟩
   · rintro hv f hf₀ i
     simpa using hv (fun j => if hj : j in s then f ⟨j, hj⟩ else 0)
-      (by simpa +contextual [
+      (by simpa +contextual [← s.sum_attach]) i
 
 Depends on / 依赖: Fintype, Fintype.linearIndependent_iff, LinearIndepOn, Subtype, Subtype.val, classical, contextual, linearIndependent_iff, s.sum_attach, simp_rw, sum_attach
 -/
@@ -2566,7 +2758,12 @@ lemma linearIndepOn_iff'
   rw [LinearIndepOn]; rw [linearIndependent_iff']
   refine ⟨fun h t g hts h0 i hit => ?_, fun h t g h0 i hit => ?_⟩
   · refine h (t.preimage _ Subtype.val_injective.injOn) (fun i => g i) ?_ ⟨i, hts hit⟩ (by simpa)
-    rwa [t.sum_preimage ((↑) : s -> ι) Subtype.val_injective.injOn (fun
+    rwa [t.sum_preimage ((↑) : s -> ι) Subtype.val_injective.injOn (fun i => g i • v i)]
+    simp only [Subtype.range_coe_subtype, ofPred_mem_eq]
+.elim exact fun x hxt hxs => (hxs (hts hxt))
+  replace h : forall i (hi : i in s), ⟨i, hi⟩ in t -> forall (h : i in s), g ⟨i, h⟩ = 0 := by
+    simpa [h0] using h (t.image (↑)) (fun i => if hi : i in s then g ⟨i, hi⟩ else 0)
+  apply h _ _ hit
 
 中文:
 引理 linearIndepOn_iff'
@@ -2576,7 +2773,12 @@ lemma linearIndepOn_iff'
   rw [LinearIndepOn]; rw [linearIndependent_iff']
   refine ⟨fun h t g hts h0 i hit => ?_, fun h t g h0 i hit => ?_⟩
   · refine h (t.preimage _ Subtype.val_injective.injOn) (fun i => g i) ?_ ⟨i, hts hit⟩ (by simpa)
-    rwa [t.sum_preimage ((↑) : s -> ι) Subtype.val_injective.injOn (fun
+    rwa [t.sum_preimage ((↑) : s -> ι) Subtype.val_injective.injOn (fun i => g i • v i)]
+    simp only [Subtype.range_coe_subtype, ofPred_mem_eq]
+.elim exact fun x hxt hxs => (hxs (hts hxt))
+  replace h : forall i (hi : i in s), ⟨i, hi⟩ in t -> forall (h : i in s), g ⟨i, h⟩ = 0 := by
+    simpa [h0] using h (t.image (↑)) (fun i => if hi : i in s then g ⟨i, hi⟩ else 0)
+  apply h _ _ hit
 
 Depends on / 依赖: LinearIndepOn, Subtype, Subtype.range_coe_subtype, Subtype.val_injective.injOn, classical, linearIndependent_iff, ofPred_mem_eq, preimage, range_coe_subtype, replace, sum_preimage, t.preimage, t.sum_preimage, val_injective
 -/
@@ -2635,7 +2837,13 @@ theorem linearIndependent_iff_eq_zero_of_smul_mem_span
       by_contra hn
       refine hn (H i _ ?_)
       refine (Finsupp.mem_span_image_iff_linearCombination R).2 ⟨Finsupp.single i (l i) - l, ?_, ?_⟩
-      · rw [Finsu
+      · rw [Finsupp.mem_supported']
+        intro j hj
+        have hij : j = i :=
+          Classical.not_not.1 fun hij : j != i =>
+            hj ((mem_sdiff _).2 ⟨mem_univ _, fun h => hij (eq_of_mem_singleton h)⟩)
+        simp [hij]
+      · simp [hl]⟩
 
 中文:
 定理 linearIndependent_iff_eq_zero_of_smul_mem_span
@@ -2645,7 +2853,13 @@ theorem linearIndependent_iff_eq_zero_of_smul_mem_span
       by_contra hn
       refine hn (H i _ ?_)
       refine (Finsupp.mem_span_image_iff_linearCombination R).2 ⟨Finsupp.single i (l i) - l, ?_, ?_⟩
-      · rw [Finsu
+      · rw [Finsupp.mem_supported']
+        intro j hj
+        have hij : j = i :=
+          Classical.not_not.1 fun hij : j != i =>
+            hj ((mem_sdiff _).2 ⟨mem_univ _, fun h => hij (eq_of_mem_singleton h)⟩)
+        simp [hij]
+      · simp [hl]⟩
 
 Depends on / 依赖: Classical, Classical.not_not, Finsupp, Finsupp.mem_span_image_iff_linearCombination, Finsupp.mem_supported, Finsupp.single, Finsupp.zero_apply, eq_of_mem_singleton, eq_zero_of_smul_mem_span, hv.eq_zero_of_smul_mem_span, linearIndependent_iff, mem_sdiff, mem_span_image_iff_linearCombination, mem_supported, mem_univ, not_not, single, zero_apply
 -/

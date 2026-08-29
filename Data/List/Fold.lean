@@ -205,7 +205,10 @@ theorem foldr_flip_eq_foldl
 
 @[deprecated (since := "2026-04-02")] alias foldl_eq_of_comm' := foldl_cons_eq_apply_foldl
 @[deprecated (since := "2026-04-02")] alias foldr_eq_of_comm' := foldr_cons_eq_foldr_apply
-@[deprecated (since := "20
+@[deprecated (since := "2026-04-02")] alias foldl_eq_foldr' := foldr_flip_eq_foldl
+@[deprecated (since := "2026-04-02")] alias foldl_eq_of_comm_of_assoc := foldl_cons_eq_apply_foldl
+@[deprecated (since := "2026-04-02")] alias foldl_op_eq_op_foldr_assoc := foldl1_eq_foldr1
+@[deprecated (since := "2026-04-02")] alias foldl_assoc_comm_cons := foldl_cons_eq_apply_foldl
 
 中文:
 定理 foldr_flip_eq_foldl
@@ -216,7 +219,10 @@ theorem foldr_flip_eq_foldl
 
 @[deprecated (since := "2026-04-02")] alias foldl_eq_of_comm' := foldl_cons_eq_apply_foldl
 @[deprecated (since := "2026-04-02")] alias foldr_eq_of_comm' := foldr_cons_eq_foldr_apply
-@[deprecated (since := "20
+@[deprecated (since := "2026-04-02")] alias foldl_eq_foldr' := foldr_flip_eq_foldl
+@[deprecated (since := "2026-04-02")] alias foldl_eq_of_comm_of_assoc := foldl_cons_eq_apply_foldl
+@[deprecated (since := "2026-04-02")] alias foldl_op_eq_op_foldr_assoc := foldl1_eq_foldr1
+@[deprecated (since := "2026-04-02")] alias foldl_assoc_comm_cons := foldl_cons_eq_apply_foldl
 
 Depends on / 依赖: foldl_cons, foldl_cons_eq_apply_foldl, generalizing
 -/

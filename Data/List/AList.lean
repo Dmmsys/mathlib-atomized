@@ -1838,7 +1838,19 @@ theorem union_comm_of_disjoint
         · right
           refine ⟨?_, h'⟩
           apply h
-          rw [keys]; rw [← List.dlookup
+          rw [keys]; rw [← List.dlookup_isSome]; rw [h']
+          exact rfl
+        · left
+          rw [h'.2]
+      · rcases h' with h' | h'
+        · right
+          refine ⟨?_, h'⟩
+          intro h''
+          apply h _ h''
+          rw [keys]; rw [← List.dlookup_isSome]; rw [h']
+          exact rfl
+        · left
+          rw [h'.2])
 
 中文:
 定理 union_comm_of_disjoint
@@ -1851,7 +1863,19 @@ theorem union_comm_of_disjoint
         · right
           refine ⟨?_, h'⟩
           apply h
-          rw [keys]; rw [← List.dlookup
+          rw [keys]; rw [← List.dlookup_isSome]; rw [h']
+          exact rfl
+        · left
+          rw [h'.2]
+      · rcases h' with h' | h'
+        · right
+          refine ⟨?_, h'⟩
+          intro h''
+          apply h _ h''
+          rw [keys]; rw [← List.dlookup_isSome]; rw [h']
+          exact rfl
+        · left
+          rw [h'.2])
 
 Depends on / 依赖: AList.nodupKeys, List.dlookup_isSome, Option.mem_def, dlookup_isSome, dlookup_kunion_eq_some, intros, lookup_ext, mem_def, nodupKeys, union_entries
 -/

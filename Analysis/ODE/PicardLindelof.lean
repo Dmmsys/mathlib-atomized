@@ -473,7 +473,7 @@ instance [CompleteSpace
   rw [range_toContinuousMap]; rw [ofPred_and]
 .inter .preimage continuous_coeFun apply isClosed_setOfPred_lipschitzWith L
   simp_rw [mem_closedBall_iff_norm]
-  exact isClosed_le (by fun_prop) (
+  exact isClosed_le (by fun_prop) (by fun_prop)
 
 中文:
 实例 [完备空间
@@ -484,7 +484,7 @@ instance [CompleteSpace
   rw [range_toContinuousMap]; rw [ofPred_and]
 .inter .preimage continuous_coeFun apply isClosed_setOfPred_lipschitzWith L
   simp_rw [mem_closedBall_iff_norm]
-  exact isClosed_le (by fun_prop) (
+  exact isClosed_le (by fun_prop) (by fun_prop)
 
 Depends on / 依赖: IsClosed, IsClosed.isComplete, completeSpace_iff_isComplete_range, continuous_coeFun, fun_prop, isClosed_le, isClosed_setOfPred_lipschitzWith, isComplete, isUniformInducing_toContinuousMap, mem_closedBall_iff_norm, ofPred_and, preimage, range_toContinuousMap, simp_rw
 -/
@@ -608,7 +608,12 @@ lemma mem_closedBall
     _ <= L * |t.1 - t₀.1| + r := by
 apply add_le_add _ mem_closedBall_iff_norm.mp α.mem_closedBall₀
       rw [← dist_eq_norm]
-      exact α.lipschitzWith.dist_le_mu
+      exact α.lipschitzWith.dist_le_mul t t₀
+    _ <= L * max (tmax - t₀) (t₀ - tmin) + r := by
+      gcongr
+      exact abs_sub_le_max_sub t.2.1 t.2.2 _
+    _ <= a - r + r := by gcongr
+    _ = a := sub_add_cancel _ _
 
 中文:
 引理 mem_closedBall
@@ -619,7 +624,12 @@ apply add_le_add _ mem_closedBall_iff_norm.mp α.mem_closedBall₀
     _ <= L * |t.1 - t₀.1| + r := by
 apply add_le_add _ mem_closedBall_iff_norm.mp α.mem_closedBall₀
       rw [← dist_eq_norm]
-      exact α.lipschitzWith.dist_le_mu
+      exact α.lipschitzWith.dist_le_mul t t₀
+    _ <= L * max (tmax - t₀) (t₀ - tmin) + r := by
+      gcongr
+      exact abs_sub_le_max_sub t.2.1 t.2.2 _
+    _ <= a - r + r := by gcongr
+    _ = a := sub_add_cancel _ _
 -/
 protected lemma mem_closedBall
     {α : FunSpace t₀ x₀ r L} (h : L * max (tmax - t₀) (t₀ - tmin) <= a - r) {t : Icc tmin tmax} :
@@ -732,7 +742,15 @@ definition next
   body: picard f t₀ x α.compProj t
   lipschitzWith := LipschitzWith.of_dist_le_mul fun t₁ t₂ => by
     rw [dist_eq_norm]; rw [picard_apply]; rw [picard_apply]; rw [add_sub_add_left_eq_sub]; rw [integral_interval_sub_left (intervalIntegrable_comp_compProj hf _ t₁)
-        (intervalIntegrable_comp_compProj hf
+        (intervalIntegrable_comp_compProj hf _ t₂)]; rw [Subtype.dist_eq]; rw [Real.dist_eq]
+    apply intervalIntegral.norm_integral_le_of_norm_le_const
+    intro t ht
+    -- Can `grind` do this in the future?
+    have ht : t in Icc tmin tmax := subset_trans uIoc_subset_uIcc (uIcc_subset_Icc t₂.2 t₁.2) ht
+exact hf.norm_le _ ht _ α.mem_closedBall hf.mul_max_le
+  mem_closedBall₀ := by simp [hx]
+
+@[simp]
 
 中文:
 定义 next
@@ -740,7 +758,15 @@ definition next
   定义体: picard f t₀ x α.compProj t
   lipschitzWith := LipschitzWith.of_dist_le_mul fun t₁ t₂ => by
     rw [dist_eq_norm]; rw [picard_apply]; rw [picard_apply]; rw [add_sub_add_left_eq_sub]; rw [integral_interval_sub_left (intervalIntegrable_comp_compProj hf _ t₁)
-        (intervalIntegrable_comp_compProj hf
+        (intervalIntegrable_comp_compProj hf _ t₂)]; rw [Subtype.dist_eq]; rw [Real.dist_eq]
+    apply intervalIntegral.norm_integral_le_of_norm_le_const
+    intro t ht
+    -- Can `grind` do this in the future?
+    have ht : t in Icc tmin tmax := subset_trans uIoc_subset_uIcc (uIcc_subset_Icc t₂.2 t₁.2) ht
+exact hf.norm_le _ ht _ α.mem_closedBall hf.mul_max_le
+  mem_closedBall₀ := by simp [hx]
+
+@[simp]
 
 Depends on / 依赖: compProj, picard
 -/
@@ -836,7 +862,9 @@ lemma dist_comp_iterate_next_le
 .dist_le_mul hf.lipschitzOnWith t.1 t.2
         _ (FunSpace.mem_closedBall hf.mul_max_le) _ (FunSpace.mem_closedBall hf.mul_max_le)
     _ <= K ^ (n + 1) * |t - t₀.1| ^ n / n ! * dist α β := by
-      rw [pow_succ']; rw [mul_assoc
+      rw [pow_succ']; rw [mul_assoc]; rw [mul_div_assoc]; rw [mul_assoc]
+      gcongr
+      rwa [← mul_pow]
 
 中文:
 引理 dist_comp_iterate_next_le
@@ -846,7 +874,9 @@ lemma dist_comp_iterate_next_le
 .dist_le_mul hf.lipschitzOnWith t.1 t.2
         _ (FunSpace.mem_closedBall hf.mul_max_le) _ (FunSpace.mem_closedBall hf.mul_max_le)
     _ <= K ^ (n + 1) * |t - t₀.1| ^ n / n ! * dist α β := by
-      rw [pow_succ']; rw [mul_assoc
+      rw [pow_succ']; rw [mul_assoc]; rw [mul_div_assoc]; rw [mul_assoc]
+      gcongr
+      rwa [← mul_pow]
 
 Depends on / 依赖: FunSpace, FunSpace.mem_closedBall, dist_le_mul, hf.lipschitzOnWith, hf.mul_max_le, lipschitzOnWith, mem_closedBall, mul_assoc, mul_div_assoc, mul_max_le, mul_pow, pow_succ
 -/
@@ -877,7 +907,23 @@ lemma dist_iterate_next_apply_le
   | zero => simpa using!
       ContinuousMap.dist_apply_le_dist (f := toContinuousMap α) (g := toContinuousMap β) _
   | succ n hn =>
-    rw [iterate_succ_apply']; rw [iterate_succ_apply']; rw [dist_eq_norm]; rw [next_apply]; rw [next_apply]; rw [picard_apply]; rw
+    rw [iterate_succ_apply']; rw [iterate_succ_apply']; rw [dist_eq_norm]; rw [next_apply]; rw [next_apply]; rw [picard_apply]; rw [picard_apply]; rw [add_sub_add_left_eq_sub]; rw [← intervalIntegral.integral_sub (intervalIntegrable_comp_compProj hf _ t)
+        (intervalIntegrable_comp_compProj hf _ t)]
+    calc
+      _ <= ∫ τ in uIoc t₀.1 t.1, K ^ (n + 1) * |τ - t₀| ^ n / n ! * dist α β := by
+        rw [intervalIntegral.norm_intervalIntegral_eq]
+        apply MeasureTheory.norm_integral_le_of_norm_le (Continuous.integrableOn_uIoc (by fun_prop))
+.mono apply ae_restrict_mem measurableSet_Ioc
+        intro t' ht'
+        -- Can `grind` do this in the future?
+        have ht' : t' in Icc tmin tmax :=
+          subset_trans uIoc_subset_uIcc (uIcc_subset_Icc t₀.2 t.2) ht'
+        rw [← dist_eq_norm]; rw [compProj_of_mem]; rw [compProj_of_mem]
+        exact dist_comp_iterate_next_le hf hx _ ⟨t', ht'⟩ (hn _)
+      _ <= (K * |t.1 - t₀.1|) ^ (n + 1) / (n + 1) ! * dist α β := by
+        apply le_of_abs_le
+        -- critical: `integral_pow_abs_sub_uIoc`
+        rw [← intervalIntegral.abs_intervalIntegral_eq]; rw [intervalIntegral.integral_mul_const]; rw [intervalIntegral.integral_div]; rw [intervalIntegral.integral_const_mul]; rw [abs_mul]; rw [abs_div]; rw [abs_mul]; rw [intervalIntegral.abs_intervalIntegral_eq]; rw [integral_pow_abs_sub_uIoc]; rw [abs_div]; rw [abs_pow]; rw [abs_pow]; rw [abs_dist]; rw [NNReal.abs_eq]; rw [abs_abs]; rw [mul_div]; rw [div_div]; rw [← abs_mul]; rw [← Nat.cast_succ]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]; rw [Nat.abs_cast]; rw [← mul_pow]
 
 中文:
 引理 dist_iterate_next_apply_le
@@ -887,7 +933,23 @@ lemma dist_iterate_next_apply_le
   | zero => simpa using!
       ContinuousMap.dist_apply_le_dist (f := toContinuousMap α) (g := toContinuousMap β) _
   | succ n hn =>
-    rw [iterate_succ_apply']; rw [iterate_succ_apply']; rw [dist_eq_norm]; rw [next_apply]; rw [next_apply]; rw [picard_apply]; rw
+    rw [iterate_succ_apply']; rw [iterate_succ_apply']; rw [dist_eq_norm]; rw [next_apply]; rw [next_apply]; rw [picard_apply]; rw [picard_apply]; rw [add_sub_add_left_eq_sub]; rw [← intervalIntegral.integral_sub (intervalIntegrable_comp_compProj hf _ t)
+        (intervalIntegrable_comp_compProj hf _ t)]
+    calc
+      _ <= ∫ τ in uIoc t₀.1 t.1, K ^ (n + 1) * |τ - t₀| ^ n / n ! * dist α β := by
+        rw [intervalIntegral.norm_intervalIntegral_eq]
+        apply MeasureTheory.norm_integral_le_of_norm_le (Continuous.integrableOn_uIoc (by fun_prop))
+.mono apply ae_restrict_mem measurableSet_Ioc
+        intro t' ht'
+        -- Can `grind` do this in the future?
+        have ht' : t' in Icc tmin tmax :=
+          subset_trans uIoc_subset_uIcc (uIcc_subset_Icc t₀.2 t.2) ht'
+        rw [← dist_eq_norm]; rw [compProj_of_mem]; rw [compProj_of_mem]
+        exact dist_comp_iterate_next_le hf hx _ ⟨t', ht'⟩ (hn _)
+      _ <= (K * |t.1 - t₀.1|) ^ (n + 1) / (n + 1) ! * dist α β := by
+        apply le_of_abs_le
+        -- critical: `integral_pow_abs_sub_uIoc`
+        rw [← intervalIntegral.abs_intervalIntegral_eq]; rw [intervalIntegral.integral_mul_const]; rw [intervalIntegral.integral_div]; rw [intervalIntegral.integral_const_mul]; rw [abs_mul]; rw [abs_div]; rw [abs_mul]; rw [intervalIntegral.abs_intervalIntegral_eq]; rw [integral_pow_abs_sub_uIoc]; rw [abs_div]; rw [abs_pow]; rw [abs_pow]; rw [abs_dist]; rw [NNReal.abs_eq]; rw [abs_abs]; rw [mul_div]; rw [div_div]; rw [← abs_mul]; rw [← Nat.cast_succ]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]; rw [Nat.abs_cast]; rw [← mul_pow]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.dist_apply_le_dist, add_sub_add_left_eq_sub, dist_apply_le_dist, dist_eq_norm, generalizing, integral_sub, intervalIntegrable_comp_compProj, intervalIntegral, intervalIntegral.integral_sub, iterate_succ_apply, next_apply, picard_apply, toContinuousMap
 -/
@@ -930,7 +992,8 @@ lemma dist_iterate_next_iterate_next_le
 apply le_trans dist_iterate_next_apply_le hf hx α β n t
     gcongr
     exact abs_sub_le_max_sub t.2.1 t.2.2 _
-· have : 0 <= max (tmax - t₀) (t₀ - tmin
+· have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le t₀.2.2
+    positivity
 
 中文:
 引理 dist_iterate_next_iterate_next_le
@@ -942,7 +1005,8 @@ apply le_trans dist_iterate_next_apply_le hf hx α β n t
 apply le_trans dist_iterate_next_apply_le hf hx α β n t
     gcongr
     exact abs_sub_le_max_sub t.2.1 t.2.2 _
-· have : 0 <= max (tmax - t₀) (t₀ - tmin
+· have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le t₀.2.2
+    positivity
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.dist_le, FunSpace, FunSpace.toContinuousMap, FunSpace.toContinuousMap.injective, MetricSpace, MetricSpace.isometry_induced, abs_sub_le_max_sub, dist_eq, dist_iterate_next_apply_le, dist_le, injective, isometry_induced, le_max_of_le_left, le_trans, sub_nonneg_of_le, toContinuousMap
 -/
@@ -969,7 +1033,10 @@ lemma exists_contractingWith_iterate_next
   obtain ⟨n, hn⟩ := FloorSemiring.tendsto_pow_div_factorial_atTop (K * max (tmax - t₀) (t₀ - tmin))
 .exists .eventually (gt_mem_nhds zero_lt_one)
   have : (0 : Real) <= (K * max (tmax - t₀) (t₀ - tmin)) ^ n / n ! := by
-have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le 
+have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le t₀.2.2
+    positivity
+  refine ⟨n, ⟨_, this⟩, fun x hx => ?_⟩
+  exact ⟨hn, LipschitzWith.of_dist_le_mul fun α β => dist_iterate_next_iterate_next_le hf hx α β n⟩
 
 中文:
 引理 存在_contractingWith_iterate_next
@@ -978,7 +1045,10 @@ have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_l
   obtain ⟨n, hn⟩ := FloorSemiring.tendsto_pow_div_factorial_atTop (K * max (tmax - t₀) (t₀ - tmin))
 .exists .eventually (gt_mem_nhds zero_lt_one)
   have : (0 : Real) <= (K * max (tmax - t₀) (t₀ - tmin)) ^ n / n ! := by
-have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le 
+have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le t₀.2.2
+    positivity
+  refine ⟨n, ⟨_, this⟩, fun x hx => ?_⟩
+  exact ⟨hn, LipschitzWith.of_dist_le_mul fun α β => dist_iterate_next_iterate_next_le hf hx α β n⟩
 
 Depends on / 依赖: FloorSemiring, FloorSemiring.tendsto_pow_div_factorial_atTop, LipschitzWith, LipschitzWith.of_dist_le_mul, dist_iterate_next_iterate_next_le, eventually, gt_mem_nhds, le_max_of_le_left, of_dist_le_mul, sub_nonneg_of_le, tendsto_pow_div_factorial_atTop, zero_lt_one
 -/
@@ -1107,7 +1177,9 @@ lemma dist_iterate_iterate_next_le_of_lipschitzWith
   intro i hi
   rw [iterate_succ_apply]
 apply le_trans hm.dist_iterate_succ_le_geometric α i
-  rw [mul_assoc]; rw [mul_comm ((C : 
+  rw [mul_assoc]; rw [mul_comm ((C : Real) ^ i)]; rw [← mul_assoc]
+  gcongr
+  exact dist_iterate_next_le hf hx α m
 
 中文:
 引理 dist_iterate_iterate_next_le_of_lipschitzWith
@@ -1119,7 +1191,9 @@ apply le_trans hm.dist_iterate_succ_le_geometric α i
   intro i hi
   rw [iterate_succ_apply]
 apply le_trans hm.dist_iterate_succ_le_geometric α i
-  rw [mul_assoc]; rw [mul_comm ((C : 
+  rw [mul_assoc]; rw [mul_comm ((C : Real) ^ i)]; rw [← mul_assoc]
+  gcongr
+  exact dist_iterate_next_le hf hx α m
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_mul, dist_iterate_next_le, dist_iterate_succ_le_geometric, dist_le_range_sum_of_dist_le, hm.dist_iterate_succ_le_geometric, iterate_succ_apply, iterate_zero_apply, le_trans, mul_assoc, mul_comm, mul_sum, nth_rw, sum_mul
 -/
@@ -1151,7 +1225,18 @@ lemma exists_forall_closedBall_funSpace_dist_le_mul
   have hL' : 0 <= L' := by
 have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le t₀.2.2
     positivity
-  refine ⟨.mk L'
+  refine ⟨.mk L' hL', fun x y hx hy α β hα hβ => ?_⟩
+  rw [NNReal.coe_mk]
+apply le_of_tendsto_of_tendsto' (b := Filter.atTop) _ _
+    dist_iterate_iterate_next_le_of_lipschitzWith hf hy α (h y hy).2
+  · apply Filter.Tendsto.comp (y := 𝓝 β) (tendsto_const_nhds.dist Filter.tendsto_id)
+    rw [h y hy |>.fixedPoint_unique (hβ.iterate m)]
+.tendsto_iterate_fixedPoint α exact h y hy
+  · nth_rw 1 [← hα, dist_next_next]
+    apply Filter.Tendsto.mul_const
+    apply Filter.Tendsto.const_mul
+.tendsto_sum_nat convert! hasSum_geometric_of_lt_one C.2 (h y hy).1
+    simp [NNReal.coe_sub <| le_of_lt (h y hy).1, NNReal.coe_one]
 
 中文:
 引理 存在_对任意_closedBall_funSpace_dist_le_mul
@@ -1162,7 +1247,18 @@ have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_l
   have hL' : 0 <= L' := by
 have : 0 <= max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left sub_nonneg_of_le t₀.2.2
     positivity
-  refine ⟨.mk L'
+  refine ⟨.mk L' hL', fun x y hx hy α β hα hβ => ?_⟩
+  rw [NNReal.coe_mk]
+apply le_of_tendsto_of_tendsto' (b := Filter.atTop) _ _
+    dist_iterate_iterate_next_le_of_lipschitzWith hf hy α (h y hy).2
+  · apply Filter.Tendsto.comp (y := 𝓝 β) (tendsto_const_nhds.dist Filter.tendsto_id)
+    rw [h y hy |>.fixedPoint_unique (hβ.iterate m)]
+.tendsto_iterate_fixedPoint α exact h y hy
+  · nth_rw 1 [← hα, dist_next_next]
+    apply Filter.Tendsto.mul_const
+    apply Filter.Tendsto.const_mul
+.tendsto_sum_nat convert! hasSum_geometric_of_lt_one C.2 (h y hy).1
+    simp [NNReal.coe_sub <| le_of_lt (h y hy).1, NNReal.coe_one]
 
 Depends on / 依赖: Filter, Filter.Tendsto.comp, Filter.atTop, Finset, Finset.range, NNReal, NNReal.coe_mk, Tendsto, coe_mk, dist_iterate_iterate_next_le_of_lipschitzWith, exists_contractingWith_iterate_next, le_max_of_le_left, le_of_tendsto_of_tendsto, sub_nonneg_of_le
 -/
@@ -1210,7 +1306,11 @@ lemma hasDerivWithinAt_picard_Icc
   apply HasDerivWithinAt.const_add
   have : Fact (t in Icc tmin tmax) := ⟨ht⟩ -- needed to synthesise `FTCFilter` for `Icc`
   apply intervalIntegral.integral_hasDerivWithinAt_right _ -- need `CompleteSpace E` and `Icc`
-    (continuousOn_comp hf hα hmem |>.stronglyMeasurableAtFilter_nhdsWithin mea
+    (continuousOn_comp hf hα hmem |>.stronglyMeasurableAtFilter_nhdsWithin measurableSet_Icc t)
+    (continuousOn_comp hf hα hmem _ ht)
+  apply ContinuousOn.intervalIntegrable
+.mono apply continuousOn_comp hf hα hmem
+  exact uIcc_subset_Icc ht₀ ht
 
 中文:
 引理 hasDerivWithinAt_picard_Icc
@@ -1218,7 +1318,11 @@ lemma hasDerivWithinAt_picard_Icc
   apply HasDerivWithinAt.const_add
   have : Fact (t in Icc tmin tmax) := ⟨ht⟩ -- needed to synthesise `FTCFilter` for `Icc`
   apply intervalIntegral.integral_hasDerivWithinAt_right _ -- need `CompleteSpace E` and `Icc`
-    (continuousOn_comp hf hα hmem |>.stronglyMeasurableAtFilter_nhdsWithin mea
+    (continuousOn_comp hf hα hmem |>.stronglyMeasurableAtFilter_nhdsWithin measurableSet_Icc t)
+    (continuousOn_comp hf hα hmem _ ht)
+  apply ContinuousOn.intervalIntegrable
+.mono apply continuousOn_comp hf hα hmem
+  exact uIcc_subset_Icc ht₀ ht
 
 Depends on / 依赖: CompleteSpace, ContinuousOn, ContinuousOn.intervalIntegrable, FTCFilter, HasDerivWithinAt, HasDerivWithinAt.const_add, const_add, continuousOn_comp, integral_hasDerivWithinAt_right, intervalIntegrable, intervalIntegral, intervalIntegral.integral_hasDerivWithinAt_right, measurableSet_Icc, needed, stronglyMeasurableAtFilter_nhdsWithin, synthesise, uIcc_subset_Icc
 -/
@@ -1249,7 +1353,7 @@ lemma picard_eq_of_hasDerivAt
       (continuousOn_comp hf (HasDerivWithinAt.continuousOn hα) hmap |>.intervalIntegrable)]
   intro t' ht'
   apply HasDerivAt.hasDerivWithinAt
-.hasDerivAt Icc_mem_nh
+.hasDerivAt Icc_mem_nhds ht'.1 ht'.2 exact hα t' (Ioo_subset_Icc_self ht')
 
 中文:
 引理 picard_eq_of_hasDerivAt
@@ -1259,7 +1363,7 @@ lemma picard_eq_of_hasDerivAt
       (continuousOn_comp hf (HasDerivWithinAt.continuousOn hα) hmap |>.intervalIntegrable)]
   intro t' ht'
   apply HasDerivAt.hasDerivWithinAt
-.hasDerivAt Icc_mem_nh
+.hasDerivAt Icc_mem_nhds ht'.1 ht'.2 exact hα t' (Ioo_subset_Icc_self ht')
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.hasDerivWithinAt, HasDerivWithinAt, HasDerivWithinAt.continuousOn, Icc_mem_nhds, Ioo_subset_Icc_self, add_sub_cancel, continuousOn, continuousOn_comp, hasDerivAt, hasDerivWithinAt, integral_eq_sub_of_hasDeriv_right, intervalIntegrable, picard_apply
 -/
@@ -1288,7 +1392,16 @@ lemma contDiffOn_nat_picard_Icc
       simp only [Nat.cast_zero, contDiffOn_zero] at *
       exact HasDerivWithinAt.continuousOn this
     | succ n hn =>
-   
+      simp only [Nat.cast_add, Nat.cast_one] at *
+      rw [contDiffOn_succ_iff_derivWithin <| uniqueDiffOn_Icc hlt]
+      refine ⟨fun t ht => HasDerivWithinAt.differentiableWithinAt (this t ht), by simp, ?_⟩
+.congr apply contDiffOn_comp hf.of_succ (ContDiffOn.congr (hn hf.of_succ) heqon) hmem
+      intro t ht
+exact HasDerivWithinAt.derivWithin (this t ht) (uniqueDiffOn_Icc hlt).uniqueDiffWithinAt ht
+  · rw [(subsingleton_Icc_of_ge (not_lt.mp hlt)).eq_singleton_of_mem ht₀]
+    intro t ht
+    rw [eq_of_mem_singleton ht]
+    exact contDiffWithinAt_singleton
 
 中文:
 引理 contDiffOn_nat_picard_Icc
@@ -1301,7 +1414,16 @@ lemma contDiffOn_nat_picard_Icc
       simp only [Nat.cast_zero, contDiffOn_zero] at *
       exact HasDerivWithinAt.continuousOn this
     | succ n hn =>
-   
+      simp only [Nat.cast_add, Nat.cast_one] at *
+      rw [contDiffOn_succ_iff_derivWithin <| uniqueDiffOn_Icc hlt]
+      refine ⟨fun t ht => HasDerivWithinAt.differentiableWithinAt (this t ht), by simp, ?_⟩
+.congr apply contDiffOn_comp hf.of_succ (ContDiffOn.congr (hn hf.of_succ) heqon) hmem
+      intro t ht
+exact HasDerivWithinAt.derivWithin (this t ht) (uniqueDiffOn_Icc hlt).uniqueDiffWithinAt ht
+  · rw [(subsingleton_Icc_of_ge (not_lt.mp hlt)).eq_singleton_of_mem ht₀]
+    intro t ht
+    rw [eq_of_mem_singleton ht]
+    exact contDiffWithinAt_singleton
 
 Depends on / 依赖: HasDerivWithinAt, HasDerivWithinAt.continuousOn, HasDerivWithinAt.differentiableWithinAt, Nat.cast_add, Nat.cast_one, Nat.cast_zero, cast_add, cast_one, cast_zero, contDiffOn_comp, contDiffOn_succ_iff_derivWithin, contDiffOn_zero, continuousOn, differentiableWithinAt, hasDerivWithinAt_picard_Icc, hf.continuousOn, hf.of_succ, of_succ, uniqueDiffOn_Icc
 -/
@@ -1380,7 +1502,22 @@ theorem contDiffOn_enat_Icc_of_hasDerivWithinAt
     have : forall t in Icc tmin tmax, α t = picard f t₀ (α t₀) α t := by
       intro t ht
       have : uIcc t₀ t subseteq Icc tmin tmax := uIcc_subset_Icc ht₀ ht
-  
+      rw [picard_eq_of_hasDerivAt (hf.continuousOn.mono (prod_subset_prod_left this))
+        (fun t' ht' => hα t' (this ht') |>.mono this) (hmem.mono_left this)]
+    exact contDiffOn_enat_picard_Icc ht₀ hf (HasDerivWithinAt.continuousOn hα) hmem (α t₀) this
+.congr this
+  · rw [not_lt, le_iff_lt_or_eq] at hlt
+    cases hlt with
+    | inl h =>
+      intro _ ht
+      rw [Icc_eq_empty (not_le.mpr h)] at ht
+      exfalso
+      exact notMem_empty _ ht
+    | inr h =>
+      rw [h]; rw [Icc_self]
+      intro _ ht
+      rw [eq_of_mem_singleton ht]
+      exact contDiffWithinAt_singleton
 
 中文:
 定理 contDiffOn_enat_Icc_of_hasDerivWithinAt
@@ -1392,7 +1529,22 @@ theorem contDiffOn_enat_Icc_of_hasDerivWithinAt
     have : forall t in Icc tmin tmax, α t = picard f t₀ (α t₀) α t := by
       intro t ht
       have : uIcc t₀ t subseteq Icc tmin tmax := uIcc_subset_Icc ht₀ ht
-  
+      rw [picard_eq_of_hasDerivAt (hf.continuousOn.mono (prod_subset_prod_left this))
+        (fun t' ht' => hα t' (this ht') |>.mono this) (hmem.mono_left this)]
+    exact contDiffOn_enat_picard_Icc ht₀ hf (HasDerivWithinAt.continuousOn hα) hmem (α t₀) this
+.congr this
+  · rw [not_lt, le_iff_lt_or_eq] at hlt
+    cases hlt with
+    | inl h =>
+      intro _ ht
+      rw [Icc_eq_empty (not_le.mpr h)] at ht
+      exfalso
+      exact notMem_empty _ ht
+    | inr h =>
+      rw [h]; rw [Icc_self]
+      intro _ ht
+      rw [eq_of_mem_singleton ht]
+      exact contDiffWithinAt_singleton
 
 Depends on / 依赖: HasDerivWithinAt, HasDerivWithinAt.continuousOn, contDiffOn_enat_picard_Icc, continuousOn, eqToIso, hf.continuousOn.mono, hmem.mono_left, isIso_hom, mono_left, picard, picard_eq_of_hasDerivAt, prod_subset_prod_left, subseteq, uIcc_subset_Icc
 -/
@@ -1466,7 +1618,9 @@ lemma shrink
     (closedBall_subset_closedBall ha)
   continuousOn x hx := (hf.continuousOn x (closedBall_subset_closedBall ha hx)).mono
     fun _ ht => ⟨htmin.trans ht.1, ht.2.trans htmax⟩
-  norm_le t ht x hx := hf.norm_le t ⟨htmin.trans ht.1, ht.2
+  norm_le t ht x hx := hf.norm_le t ⟨htmin.trans ht.1, ht.2.trans htmax⟩ x
+    (closedBall_subset_closedBall ha hx)
+  mul_max_le := htime
 
 中文:
 引理 shrink
@@ -1475,7 +1629,9 @@ lemma shrink
     (closedBall_subset_closedBall ha)
   continuousOn x hx := (hf.continuousOn x (closedBall_subset_closedBall ha hx)).mono
     fun _ ht => ⟨htmin.trans ht.1, ht.2.trans htmax⟩
-  norm_le t ht x hx := hf.norm_le t ⟨htmin.trans ht.1, ht.2
+  norm_le t ht x hx := hf.norm_le t ⟨htmin.trans ht.1, ht.2.trans htmax⟩ x
+    (closedBall_subset_closedBall ha hx)
+  mul_max_le := htime
 
 Depends on / 依赖: hf.lipschitzOnWith, htmin.trans, lipschitzOnWith
 -/
@@ -1564,7 +1720,13 @@ lemma exists_shrink_radius
   let ε' := min ε ((a' - r') / (L + 1))
   have hε'pos : 0 < ε' := lt_min hε (by positivity)
   have hε'_le : ε' <= ε := min_le_left _ _
-  refine ⟨ε', hε'pos, hf.shrink ⟨t₀, by simp [le_of_lt hε'pos]⟩ (by linarith)
+  refine ⟨ε', hε'pos, hf.shrink ⟨t₀, by simp [le_of_lt hε'pos]⟩ (by linarith) (by linarith) ha ?_⟩
+  simp only [add_sub_cancel_left, sub_sub_cancel, max_self]
+  calc (L : Real) * ε'
+    _ <= L * ((a' - r') / (L + 1)) := by gcongr; exact min_le_right _ _
+    _ = L / (L + 1) * (a' - r') := by ring
+    _ <= 1 * (a' - r') := by gcongr; rw [div_le_one (by positivity : (0 : Real) < L + 1)]; linarith
+    _ = a' - r' := one_mul _
 
 中文:
 引理 存在_shrink_radius
@@ -1574,7 +1736,13 @@ lemma exists_shrink_radius
   let ε' := min ε ((a' - r') / (L + 1))
   have hε'pos : 0 < ε' := lt_min hε (by positivity)
   have hε'_le : ε' <= ε := min_le_left _ _
-  refine ⟨ε', hε'pos, hf.shrink ⟨t₀, by simp [le_of_lt hε'pos]⟩ (by linarith)
+  refine ⟨ε', hε'pos, hf.shrink ⟨t₀, by simp [le_of_lt hε'pos]⟩ (by linarith) (by linarith) ha ?_⟩
+  simp only [add_sub_cancel_left, sub_sub_cancel, max_self]
+  calc (L : Real) * ε'
+    _ <= L * ((a' - r') / (L + 1)) := by gcongr; exact min_le_right _ _
+    _ = L / (L + 1) * (a' - r') := by ring
+    _ <= 1 * (a' - r') := by gcongr; rw [div_le_one (by positivity : (0 : Real) < L + 1)]; linarith
+    _ = a' - r' := one_mul _
 -/
 lemma exists_shrink_radius {f : Real -> E -> E} {t₀ ε : Real} (hε : 0 < ε) {x₀ : E} {a r L K : Real>=0}
     (hf : IsPicardLindelof f (tmin := t₀ - ε) (tmax := t₀ + ε)
@@ -1634,7 +1802,29 @@ lemma of_contDiffAt_one
   obtain ⟨a, ha : 0 < a, has⟩ := Metric.mem_nhds_iff.mp hs
   set L := K * a + ‖f x₀‖ + 1 with hL
   have hL0 : 0 < L := by positivity
-  have hb (x : E) (hx : x in close
+  have hb (x : E) (hx : x in closedBall x₀ (a / 2)) : ‖f x‖ <= L := by
+    rw [hL]
+    calc
+      ‖f x‖ <= ‖f x - f x₀‖ + ‖f x₀‖ := norm_le_norm_sub_add _ _
+      _ <= K * ‖x - x₀‖ + ‖f x₀‖ := by
+        gcongr
+        apply hl.norm_sub_le _ (mem_of_mem_nhds hs)
+        apply subset_trans _ has hx
+exact closedBall_subset_ball half_lt_self ha-- this is where we need `a / 2`
+      _ <= K * a + ‖f x₀‖ := by
+        gcongr
+        rw [← mem_closedBall_iff_norm]
+        exact closedBall_subset_closedBall (half_le_self (le_of_lt ha)) hx
+      _ <= L := le_add_of_nonneg_right zero_le_one
+  let ε := a / L / 2 / 2
+  have hε0 : 0 < ε := by positivity
+  refine ⟨ε, hε0,
+    .mk (a / 2) (half_pos ha).le, (.mk (a / 2) (half_pos ha).le) / 2,
+.mk L hL0.le, K, half_pos half_pos ha, fun t₀ => ?_⟩
+apply of_time_independent hb
+hl.mono subset_trans (closedBall_subset_ball (half_lt_self ha)) has
+  simp [ε, field]
+  norm_num
 
 中文:
 引理 of_contDiffAt_one
@@ -1645,7 +1835,29 @@ lemma of_contDiffAt_one
   obtain ⟨a, ha : 0 < a, has⟩ := Metric.mem_nhds_iff.mp hs
   set L := K * a + ‖f x₀‖ + 1 with hL
   have hL0 : 0 < L := by positivity
-  have hb (x : E) (hx : x in close
+  have hb (x : E) (hx : x in closedBall x₀ (a / 2)) : ‖f x‖ <= L := by
+    rw [hL]
+    calc
+      ‖f x‖ <= ‖f x - f x₀‖ + ‖f x₀‖ := norm_le_norm_sub_add _ _
+      _ <= K * ‖x - x₀‖ + ‖f x₀‖ := by
+        gcongr
+        apply hl.norm_sub_le _ (mem_of_mem_nhds hs)
+        apply subset_trans _ has hx
+exact closedBall_subset_ball half_lt_self ha-- this is where we need `a / 2`
+      _ <= K * a + ‖f x₀‖ := by
+        gcongr
+        rw [← mem_closedBall_iff_norm]
+        exact closedBall_subset_closedBall (half_le_self (le_of_lt ha)) hx
+      _ <= L := le_add_of_nonneg_right zero_le_one
+  let ε := a / L / 2 / 2
+  have hε0 : 0 < ε := by positivity
+  refine ⟨ε, hε0,
+    .mk (a / 2) (half_pos ha).le, (.mk (a / 2) (half_pos ha).le) / 2,
+.mk L hL0.le, K, half_pos half_pos ha, fun t₀ => ?_⟩
+apply of_time_independent hb
+hl.mono subset_trans (closedBall_subset_ball (half_lt_self ha)) has
+  simp [ε, field]
+  norm_num
 
 Depends on / 依赖: le_of_lt
 -/

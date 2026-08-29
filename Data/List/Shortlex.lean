@@ -344,7 +344,10 @@ theorem append_left
     exact h
   | cons head tail =>
     apply of_lex
-    · simp only [List.cons_append, List.length_co
+    · simp only [List.cons_append, List.length_cons, List.length_append,
+      add_left_inj, add_right_inj]
+      exact h2.1
+    exact List.Lex.append_left r h2.2 (head :: tail)
 
 中文:
 定理 append_left
@@ -360,7 +363,10 @@ theorem append_left
     exact h
   | cons head tail =>
     apply of_lex
-    · simp only [List.cons_append, List.length_co
+    · simp only [List.cons_append, List.length_cons, List.length_append,
+      add_left_inj, add_right_inj]
+      exact h2.1
+    exact List.Lex.append_left r h2.2 (head :: tail)
 
 Depends on / 依赖: List.Lex.append_left, List.cons_append, List.length_append, List.length_cons, List.nil_append, add_left_inj, add_right_inj, append_left, cons_append, length_append, length_cons, nil_append, of_length_lt, of_lex, shortlex_def, shortlex_def.mp
 -/
@@ -401,7 +407,18 @@ theorem _root_.Acc.shortlex
       · exact ih _ h1
       · cases h2lex with
         | nil => simp at h2len
-        
+        | @cons x xs _ h =>
+          simp only [length_cons, add_left_inj] at h2len
+          refine ihb _ (of_lex h2len h) fun l hl => ?_
+          apply ih
+          rw [List.length_cons]; rw [← h2len]
+          exact hl
+        | @rel x xs _ _ h =>
+          simp only [List.length_cons, add_left_inj] at h2len
+          refine iha _ h (ih xs (by rw [h2len]; simp)) fun l hl => ?_
+          apply ih
+          rw [List.length_cons]; rw [← h2len]
+          exact hl
 
 中文:
 定理 _root_.Acc.shortlex
@@ -416,7 +433,18 @@ theorem _root_.Acc.shortlex
       · exact ih _ h1
       · cases h2lex with
         | nil => simp at h2len
-        
+        | @cons x xs _ h =>
+          simp only [length_cons, add_left_inj] at h2len
+          refine ihb _ (of_lex h2len h) fun l hl => ?_
+          apply ih
+          rw [List.length_cons]; rw [← h2len]
+          exact hl
+        | @rel x xs _ _ h =>
+          simp only [List.length_cons, add_left_inj] at h2len
+          refine iha _ h (ih xs (by rw [h2len]; simp)) fun l hl => ?_
+          apply ih
+          rw [List.length_cons]; rw [← h2len]
+          exact hl
 -/
 private theorem _root_.Acc.shortlex {a : α} {b : List α} (aca : Acc r a)
     (acb : Acc (Shortlex r) b)
@@ -458,7 +486,13 @@ theorem wf
     rw [len_a]
 exact Acc.intro _ fun _ ylt => (not_shortlex_nil_right ylt).elim
   | ind n ih =>
-    obtain ⟨head, tail, rfl⟩ := List.exists_of_length_su
+    obtain ⟨head, tail, rfl⟩ := List.exists_of_length_succ a len_a
+    rw [List.length_cons]; rw [add_left_inj] at len_a
+    apply Acc.shortlex (WellFounded.apply h head) (ih n le_rfl tail len_a)
+    intro l ll
+    apply ih l.length _ _ rfl
+    rw [← len_a]
+    exact Nat.le_of_lt_succ ll
 
 中文:
 定理 wf
@@ -471,7 +505,13 @@ exact Acc.intro _ fun _ ylt => (not_shortlex_nil_right ylt).elim
     rw [len_a]
 exact Acc.intro _ fun _ ylt => (not_shortlex_nil_right ylt).elim
   | ind n ih =>
-    obtain ⟨head, tail, rfl⟩ := List.exists_of_length_su
+    obtain ⟨head, tail, rfl⟩ := List.exists_of_length_succ a len_a
+    rw [List.length_cons]; rw [add_left_inj] at len_a
+    apply Acc.shortlex (WellFounded.apply h head) (ih n le_rfl tail len_a)
+    intro l ll
+    apply ih l.length _ _ rfl
+    rw [← len_a]
+    exact Nat.le_of_lt_succ ll
 
 Depends on / 依赖: Acc.intro, Acc.shortlex, List.exists_of_length_succ, List.length_cons, List.length_eq_zero_iff, Nat.caseStrongRecOn, Nat.le_of_lt_succ, WellFounded, WellFounded.apply, a.length, add_left_inj, caseStrongRecOn, exists_of_length_succ, generalizing, l.length, le_of_lt_succ, le_rfl, len_a, length, length_cons
 -/

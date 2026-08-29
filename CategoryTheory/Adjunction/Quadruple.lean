@@ -199,7 +199,15 @@ lemma epi_leftTriple_rightToLeft_app_iff_mono_rightTriple_leftToRight_app
   dsimp
   simp only [NatIso.isIso_inv_app, Functor.comp_obj, Functor.id_obj,
     whiskerLeft_app, Category.comp_id, Category.id_comp]
-  simp_rw [epi_comp_iff_of_epi, epi_iff_forall_injective, mono_iff_forall_injective
+  simp_rw [epi_comp_iff_of_epi, epi_iff_forall_injective, mono_iff_forall_injective]
+  rw [forall_comm]
+  refine forall_congr' fun X => forall_congr' fun Y => ?_
+  rw [← (q.adj₁.homEquiv _ _).comp_injective _]
+  simp_rw [Function.comp_def, q.adj₁.homEquiv_naturality_left]
+  refine ((q.adj₁.homEquiv _ _).injective_comp fun f => _).trans ?_
+  rw [← ((q.adj₂.homEquiv _ _).trans (q.adj₃.homEquiv _ _)).comp_injective _]
+  simp [Function.comp_def, ← q.adj₂.homEquiv_symm_id, ← q.adj₂.homEquiv_naturality_right_symm,
+    ← q.adj₃.homEquiv_id, ← q.adj₃.homEquiv_naturality_left]
 
 中文:
 引理 epi_leftTriple_rightToLeft_app_iff_mono_rightTriple_leftToRight_app
@@ -208,7 +216,15 @@ lemma epi_leftTriple_rightToLeft_app_iff_mono_rightTriple_leftToRight_app
   dsimp
   simp only [NatIso.isIso_inv_app, Functor.comp_obj, Functor.id_obj,
     whiskerLeft_app, Category.comp_id, Category.id_comp]
-  simp_rw [epi_comp_iff_of_epi, epi_iff_forall_injective, mono_iff_forall_injective
+  simp_rw [epi_comp_iff_of_epi, epi_iff_forall_injective, mono_iff_forall_injective]
+  rw [forall_comm]
+  refine forall_congr' fun X => forall_congr' fun Y => ?_
+  rw [← (q.adj₁.homEquiv _ _).comp_injective _]
+  simp_rw [Function.comp_def, q.adj₁.homEquiv_naturality_left]
+  refine ((q.adj₁.homEquiv _ _).injective_comp fun f => _).trans ?_
+  rw [← ((q.adj₂.homEquiv _ _).trans (q.adj₃.homEquiv _ _)).comp_injective _]
+  simp [Function.comp_def, ← q.adj₂.homEquiv_symm_id, ← q.adj₂.homEquiv_naturality_right_symm,
+    ← q.adj₃.homEquiv_id, ← q.adj₃.homEquiv_naturality_left]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Function, Function.comp_def, Functor, Functor.comp_obj, Functor.id_obj, NatIso, NatIso.isIso_inv_app, comp_def, comp_id, comp_injective, comp_obj, epi_comp_iff_of_epi, epi_iff_forall_injective, forall_comm, forall_congr, homEquiv, homEquiv_naturality_left
 -/

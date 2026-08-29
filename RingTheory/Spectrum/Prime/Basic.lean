@@ -222,7 +222,13 @@ definition primeSpectrumProd
         · rintro (⟨I, hI⟩ | ⟨J, hJ⟩) (⟨I', hI'⟩ | ⟨J', hJ'⟩) h <;>
           simp only [mk.injEq, Ideal.prod_inj, primeSpectrumProdOfSum] at h
           · simp only [h]
-          · exact False.elim (hI.ne_top h.lef
+          · exact False.elim (hI.ne_top h.left)
+          · exact False.elim (hJ.ne_top h.right)
+          · simp only [h]
+        · rintro ⟨I, hI⟩
+          rcases (Ideal.ideal_prod_prime I).mp hI with (⟨p, ⟨hp, rfl⟩⟩ | ⟨p, ⟨hp, rfl⟩⟩)
+          · exact ⟨Sum.inl ⟨p, hp⟩, rfl⟩
+          · exact ⟨Sum.inr ⟨p, hp⟩, rfl⟩)
 
 中文:
 定义 primeSpectrumProd
@@ -233,7 +239,13 @@ definition primeSpectrumProd
         · rintro (⟨I, hI⟩ | ⟨J, hJ⟩) (⟨I', hI'⟩ | ⟨J', hJ'⟩) h <;>
           simp only [mk.injEq, Ideal.prod_inj, primeSpectrumProdOfSum] at h
           · simp only [h]
-          · exact False.elim (hI.ne_top h.lef
+          · exact False.elim (hI.ne_top h.left)
+          · exact False.elim (hJ.ne_top h.right)
+          · simp only [h]
+        · rintro ⟨I, hI⟩
+          rcases (Ideal.ideal_prod_prime I).mp hI with (⟨p, ⟨hp, rfl⟩⟩ | ⟨p, ⟨hp, rfl⟩⟩)
+          · exact ⟨Sum.inl ⟨p, hp⟩, rfl⟩
+          · exact ⟨Sum.inr ⟨p, hp⟩, rfl⟩)
 
 Depends on / 依赖: Equiv.ofBijective, Equiv.symm, False.elim, Ideal.ideal_prod_prime, Ideal.prod_inj, Sum.inl, Sum.inr, h.left, h.right, hI.ne_top, hJ.ne_top, ideal_prod_prime, mk.injEq, ne_top, ofBijective, primeSpectrumProdOfSum, prod_inj
 -/
@@ -1682,7 +1694,22 @@ theorem exists_primeSpectrum_prod_le
   by_cases htop : M = ⊤
   · rw [htop]
     exact ⟨0, le_top⟩
-  have lt_add : forall z ∉ M, M < M + sp
+  have lt_add : forall z ∉ M, M < M + span R {z} := by
+    intro z hz
+    refine lt_of_le_of_ne le_sup_left fun m_eq => hz ?_
+    rw [m_eq]
+    exact Ideal.mem_sup_right (mem_span_singleton_self z)
+  obtain ⟨x, hx, y, hy, hxy⟩ := (Ideal.not_isPrime_iff.mp h_prM).resolve_left htop
+  obtain ⟨Wx, h_Wx⟩ := hgt (M + span R {x}) (lt_add _ hx)
+  obtain ⟨Wy, h_Wy⟩ := hgt (M + span R {y}) (lt_add _ hy)
+  use Wx + Wy
+  rw [Multiset.map_add]; rw [Multiset.prod_add]
+  apply le_trans (mul_le_mul' h_Wx h_Wy)
+  rw [add_mul]
+  apply sup_le (show M * (M + span R {y}) <= M from Ideal.mul_le_left)
+  rw [mul_add]
+  apply sup_le (show span R {x} * M <= M from Ideal.mul_le_right)
+  rwa [span_mul_span, Set.singleton_mul_singleton, span_singleton_le_iff_mem]
 
 中文:
 定理 存在_primeSpectrum_prod_le
@@ -1696,7 +1723,22 @@ theorem exists_primeSpectrum_prod_le
   by_cases htop : M = ⊤
   · rw [htop]
     exact ⟨0, le_top⟩
-  have lt_add : forall z ∉ M, M < M + sp
+  have lt_add : forall z ∉ M, M < M + span R {z} := by
+    intro z hz
+    refine lt_of_le_of_ne le_sup_left fun m_eq => hz ?_
+    rw [m_eq]
+    exact Ideal.mem_sup_right (mem_span_singleton_self z)
+  obtain ⟨x, hx, y, hy, hxy⟩ := (Ideal.not_isPrime_iff.mp h_prM).resolve_left htop
+  obtain ⟨Wx, h_Wx⟩ := hgt (M + span R {x}) (lt_add _ hx)
+  obtain ⟨Wy, h_Wy⟩ := hgt (M + span R {y}) (lt_add _ hy)
+  use Wx + Wy
+  rw [Multiset.map_add]; rw [Multiset.prod_add]
+  apply le_trans (mul_le_mul' h_Wx h_Wy)
+  rw [add_mul]
+  apply sup_le (show M * (M + span R {y}) <= M from Ideal.mul_le_left)
+  rw [mul_add]
+  apply sup_le (show span R {x} * M <= M from Ideal.mul_le_right)
+  rwa [span_mul_span, Set.singleton_mul_singleton, span_singleton_le_iff_mem]
 
 Depends on / 依赖: Ideal.mem_sup_right, Ideal.not_isPrime_iff.mp, IsNoetherian, IsNoetherian.induction, IsPrime, M.IsPrime, Multiset, Multiset.map_singleton, Multiset.prod_singleton, h_prM, le_sup_left, le_top, lt_add, lt_of_le_of_ne, m_eq, map_singleton, mem_span_singleton_self, mem_sup_right, not_isPrime_iff, prod_singleton
 -/
@@ -1740,7 +1782,30 @@ theorem exists_primeSpectrum_prod_le_and_ne_bot_of_domain
   by_cases h_topM : M = ⊤
   · rcases h_topM with rfl
     obtain ⟨p_id, h_nzp, h_pp⟩ : exists p : Ideal A, p != ⊥ ∧ p.IsPrime := by
-      apply Ring.not_isFie
+      apply Ring.not_isField_iff_exists_prime.mp h_fA
+    use ({⟨p_id, h_pp⟩} : Multiset (PrimeSpectrum A)), le_top
+    rwa [Multiset.map_singleton, Multiset.prod_singleton]
+  by_cases h_prM : M.IsPrime
+  · use ({⟨M, h_prM⟩} : Multiset (PrimeSpectrum A))
+    rw [Multiset.map_singleton]; rw [Multiset.prod_singleton]
+    exact ⟨le_rfl, h_nzI⟩
+  obtain ⟨x, hx, y, hy, h_xy⟩ := (Ideal.not_isPrime_iff.mp h_prM).resolve_left h_topM
+  have lt_add : forall z ∉ M, M < M + span A {z} := by
+    intro z hz
+    refine lt_of_le_of_ne le_sup_left fun m_eq => hz ?_
+    rw [m_eq]
+    exact mem_sup_right (mem_span_singleton_self z)
+  obtain ⟨Wx, h_Wx_le, h_Wx_ne⟩ := hgt (M + span A {x}) (lt_add _ hx) (ne_bot_of_gt (lt_add _ hx))
+  obtain ⟨Wy, h_Wy_le, h_Wx_ne⟩ := hgt (M + span A {y}) (lt_add _ hy) (ne_bot_of_gt (lt_add _ hy))
+  use Wx + Wy
+  rw [Multiset.map_add]; rw [Multiset.prod_add]
+  refine ⟨le_trans (mul_le_mul' h_Wx_le h_Wy_le) ?_, mt Ideal.mul_eq_bot.mp ?_⟩
+  · rw [add_mul]
+    apply sup_le (show M * (M + span A {y}) <= M from Ideal.mul_le_left)
+    rw [mul_add]
+    apply sup_le (show span A {x} * M <= M from Ideal.mul_le_right)
+    rwa [span_mul_span, Set.singleton_mul_singleton, span_singleton_le_iff_mem]
+  · rintro (hx | hy) <;> contradiction
 
 中文:
 定理 存在_primeSpectrum_prod_le_and_ne_bot_of_domain
@@ -1752,7 +1817,30 @@ theorem exists_primeSpectrum_prod_le_and_ne_bot_of_domain
   by_cases h_topM : M = ⊤
   · rcases h_topM with rfl
     obtain ⟨p_id, h_nzp, h_pp⟩ : exists p : Ideal A, p != ⊥ ∧ p.IsPrime := by
-      apply Ring.not_isFie
+      apply Ring.not_isField_iff_exists_prime.mp h_fA
+    use ({⟨p_id, h_pp⟩} : Multiset (PrimeSpectrum A)), le_top
+    rwa [Multiset.map_singleton, Multiset.prod_singleton]
+  by_cases h_prM : M.IsPrime
+  · use ({⟨M, h_prM⟩} : Multiset (PrimeSpectrum A))
+    rw [Multiset.map_singleton]; rw [Multiset.prod_singleton]
+    exact ⟨le_rfl, h_nzI⟩
+  obtain ⟨x, hx, y, hy, h_xy⟩ := (Ideal.not_isPrime_iff.mp h_prM).resolve_left h_topM
+  have lt_add : forall z ∉ M, M < M + span A {z} := by
+    intro z hz
+    refine lt_of_le_of_ne le_sup_left fun m_eq => hz ?_
+    rw [m_eq]
+    exact mem_sup_right (mem_span_singleton_self z)
+  obtain ⟨Wx, h_Wx_le, h_Wx_ne⟩ := hgt (M + span A {x}) (lt_add _ hx) (ne_bot_of_gt (lt_add _ hx))
+  obtain ⟨Wy, h_Wy_le, h_Wx_ne⟩ := hgt (M + span A {y}) (lt_add _ hy) (ne_bot_of_gt (lt_add _ hy))
+  use Wx + Wy
+  rw [Multiset.map_add]; rw [Multiset.prod_add]
+  refine ⟨le_trans (mul_le_mul' h_Wx_le h_Wy_le) ?_, mt Ideal.mul_eq_bot.mp ?_⟩
+  · rw [add_mul]
+    apply sup_le (show M * (M + span A {y}) <= M from Ideal.mul_le_left)
+    rw [mul_add]
+    apply sup_le (show span A {x} * M <= M from Ideal.mul_le_right)
+    rwa [span_mul_span, Set.singleton_mul_singleton, span_singleton_le_iff_mem]
+  · rintro (hx | hy) <;> contradiction
 
 Depends on / 依赖: IsDomain, IsDomain.toNontrivial, IsNoetherian, IsNoetherian.induction, IsPrime, M.IsPrime, Multiset, Multiset.map_singleton, Multiset.prod_singleton, Nontrivial, PrimeSpectrum, Ring.not_isField_iff_exists_prime.mp, hA_nont, h_fA, h_nzp, h_pp, h_prM, h_topM, le_top, map_singleton
 -/

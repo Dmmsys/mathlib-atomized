@@ -39,7 +39,14 @@ lemma Real.norm_inv_mul_rpow_sub_one_sub_log_le
     _ = p⁻¹ * ‖(rexp (p * log x) - 1) - p * log x‖ := by
           simp only [norm_mul, Real.norm_of_nonneg (r := p⁻¹) pinv_nonneg]
           congr
-          rw [mul_comm]; r
+          rw [mul_comm]; rw [Real.exp_mul]; rw [Real.exp_log (by grind)]
+    _ <= p⁻¹ * ‖p * log x‖ ^ 2 := by
+          gcongr
+          refine Real.norm_exp_sub_one_sub_id_le ?_
+          simp only [hx]
+    _ = p * ‖log x‖ ^ 2 := by
+          simp only [norm_mul]
+          grind [Real.norm_of_nonneg]
 
 中文:
 引理 实数.norm_inv_mul_rpow_sub_one_sub_log_le
@@ -51,7 +58,14 @@ lemma Real.norm_inv_mul_rpow_sub_one_sub_log_le
     _ = p⁻¹ * ‖(rexp (p * log x) - 1) - p * log x‖ := by
           simp only [norm_mul, Real.norm_of_nonneg (r := p⁻¹) pinv_nonneg]
           congr
-          rw [mul_comm]; r
+          rw [mul_comm]; rw [Real.exp_mul]; rw [Real.exp_log (by grind)]
+    _ <= p⁻¹ * ‖p * log x‖ ^ 2 := by
+          gcongr
+          refine Real.norm_exp_sub_one_sub_id_le ?_
+          simp only [hx]
+    _ = p * ‖log x‖ ^ 2 := by
+          simp only [norm_mul]
+          grind [Real.norm_of_nonneg]
 
 Depends on / 依赖: Real.exp_log, Real.exp_mul, Real.norm_exp_sub_one_sub_id_le, Real.norm_of_nonneg, _root_, _root_.inv_nonneg, exp_log, exp_mul, inv_nonneg, mul_comm, norm_exp_sub_one_sub_id_le, norm_mul, norm_of_nonneg, pinv_nonneg
 -/
@@ -85,7 +99,39 @@ lemma Real.tendstoLocallyUniformlyOn_rpow_sub_one_log
   intro ε hε
   let pbound : Real := ε / (sSup ((fun x => ‖log x‖ ^ 2) '' s) + 1)
   have hxs : forall x in s, x != 0 := by grind
-
+  have sSup_nonneg : 0 <= sSup ((fun x => ‖log x‖ ^ 2) '' s) := by
+    refine Real.sSup_nonneg ?_
+    grind [← sq_nonneg]
+  have sSup_nonneg' : 0 <= sSup ((fun x => ‖log x‖) '' s) := by
+    refine Real.sSup_nonneg ?_
+    grind [← sq_nonneg]
+  have pbound_pos : 0 < pbound := by positivity
+.mem_of_mem pbound_pos have h₁ : forallᶠ p : Real in 𝓝[>] 0, 0 < p ∧ p < pbound := nhdsGT_basis 0
+  have h₂ : forallᶠ p : Real in 𝓝[>] 0, p <= 1 / (sSup ((fun x => ‖log x‖) '' s) + 1) :=
+Eventually.filter_mono nhdsWithin_le_nhds eventually_le_nhds (by positivity)
+  have hcont : ContinuousOn (fun x => ‖log x‖ ^ 2) s := by fun_prop
+  have hcont' : ContinuousOn (fun x => ‖log x‖) s := by fun_prop
+  filter_upwards [h₁, h₂] with p ⟨hp₁,hp₂⟩ hp₃
+  intro x hx
+  have hx' : ‖p * log x‖ <= 1 := calc
+    _ = p * ‖log x‖ := by grind [norm_mul, Real.norm_of_nonneg]
+    _ <= 1 / (sSup ((fun y => ‖log y‖) '' s) + 1) * ‖log x‖ := by gcongr
+    _ <= 1 / (‖log x‖ + 1) * ‖log x‖ := by
+        gcongr
+        refine le_csSup ?_ (by grind)
+        grind [IsCompact.bddAbove, ← IsCompact.image_of_continuousOn]
+    _ = ‖log x‖ / (‖log x‖ + 1) := by grind
+    _ <= 1 := by rw [div_le_one₀] <;> grind [norm_nonneg]
+  have pinv_nonneg : 0 <= p⁻¹ := by grind [_root_.inv_nonneg]
+  rw [dist_eq_norm']
+  calc
+    _ <= p * ‖log x‖ ^ 2 := Real.norm_inv_mul_rpow_sub_one_sub_log_le hp₁ (hs hx) hx'
+    _ <= p * sSup ((fun x => ‖log x‖ ^ 2) '' s) := by
+          gcongr
+          refine le_csSup ?_ (by grind)
+          grind [IsCompact.bddAbove, ← IsCompact.image_of_continuousOn]
+    _ <= pbound * (sSup ((fun x => ‖log x‖ ^ 2) '' s) + 1) := by gcongr; grind
+    _ = ε := by grind
 
 中文:
 引理 实数.tendstoLocallyUniformlyOn_rpow_sub_one_log
@@ -96,7 +142,39 @@ lemma Real.tendstoLocallyUniformlyOn_rpow_sub_one_log
   intro ε hε
   let pbound : Real := ε / (sSup ((fun x => ‖log x‖ ^ 2) '' s) + 1)
   have hxs : forall x in s, x != 0 := by grind
-
+  have sSup_nonneg : 0 <= sSup ((fun x => ‖log x‖ ^ 2) '' s) := by
+    refine Real.sSup_nonneg ?_
+    grind [← sq_nonneg]
+  have sSup_nonneg' : 0 <= sSup ((fun x => ‖log x‖) '' s) := by
+    refine Real.sSup_nonneg ?_
+    grind [← sq_nonneg]
+  have pbound_pos : 0 < pbound := by positivity
+.mem_of_mem pbound_pos have h₁ : forallᶠ p : Real in 𝓝[>] 0, 0 < p ∧ p < pbound := nhdsGT_basis 0
+  have h₂ : forallᶠ p : Real in 𝓝[>] 0, p <= 1 / (sSup ((fun x => ‖log x‖) '' s) + 1) :=
+Eventually.filter_mono nhdsWithin_le_nhds eventually_le_nhds (by positivity)
+  have hcont : ContinuousOn (fun x => ‖log x‖ ^ 2) s := by fun_prop
+  have hcont' : ContinuousOn (fun x => ‖log x‖) s := by fun_prop
+  filter_upwards [h₁, h₂] with p ⟨hp₁,hp₂⟩ hp₃
+  intro x hx
+  have hx' : ‖p * log x‖ <= 1 := calc
+    _ = p * ‖log x‖ := by grind [norm_mul, Real.norm_of_nonneg]
+    _ <= 1 / (sSup ((fun y => ‖log y‖) '' s) + 1) * ‖log x‖ := by gcongr
+    _ <= 1 / (‖log x‖ + 1) * ‖log x‖ := by
+        gcongr
+        refine le_csSup ?_ (by grind)
+        grind [IsCompact.bddAbove, ← IsCompact.image_of_continuousOn]
+    _ = ‖log x‖ / (‖log x‖ + 1) := by grind
+    _ <= 1 := by rw [div_le_one₀] <;> grind [norm_nonneg]
+  have pinv_nonneg : 0 <= p⁻¹ := by grind [_root_.inv_nonneg]
+  rw [dist_eq_norm']
+  calc
+    _ <= p * ‖log x‖ ^ 2 := Real.norm_inv_mul_rpow_sub_one_sub_log_le hp₁ (hs hx) hx'
+    _ <= p * sSup ((fun x => ‖log x‖ ^ 2) '' s) := by
+          gcongr
+          refine le_csSup ?_ (by grind)
+          grind [IsCompact.bddAbove, ← IsCompact.image_of_continuousOn]
+    _ <= pbound * (sSup ((fun x => ‖log x‖ ^ 2) '' s) + 1) := by gcongr; grind
+    _ = ε := by grind
 
 Depends on / 依赖: Metric, Metric.uniformity_basis_dist_le.tendstoUniformlyOn_iff_of_uniformity, Real.sSup_nonneg, isOpen_Ioi, pbound, sSup_nonneg, sq_nonneg, tendstoLocallyUniformlyOn_iff_forall_isCompact, tendstoUniformlyOn_iff_of_uniformity, uniformity_basis_dist_le
 -/

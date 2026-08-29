@@ -117,7 +117,11 @@ theorem Convex.span_tangentConeAt
     apply (Submodule.span Real (tangentConeAt Real s x)).eq_top_of_nonempty_interior'
     exact ⟨y - x, interior_mono Submodule.subset_span this⟩
   rw [mem_interior_iff_mem_nhds]
-  replace hy : interior s in 𝓝 y := 
+  replace hy : interior s in 𝓝 y := IsOpen.mem_nhds isOpen_interior hy
+  apply mem_of_superset ((isOpenMap_sub_right x).image_mem_nhds hy)
+  rintro _ ⟨z, zs, rfl⟩
+  refine mem_tangentConeAt_of_openSegment_subset (Subset.trans ?_ interior_subset)
+  exact conv.openSegment_closure_interior_subset_interior hx zs
 
 中文:
 定理 凸.span_tangentConeAt
@@ -128,7 +132,11 @@ theorem Convex.span_tangentConeAt
     apply (Submodule.span Real (tangentConeAt Real s x)).eq_top_of_nonempty_interior'
     exact ⟨y - x, interior_mono Submodule.subset_span this⟩
   rw [mem_interior_iff_mem_nhds]
-  replace hy : interior s in 𝓝 y := 
+  replace hy : interior s in 𝓝 y := IsOpen.mem_nhds isOpen_interior hy
+  apply mem_of_superset ((isOpenMap_sub_right x).image_mem_nhds hy)
+  rintro _ ⟨z, zs, rfl⟩
+  refine mem_tangentConeAt_of_openSegment_subset (Subset.trans ?_ interior_subset)
+  exact conv.openSegment_closure_interior_subset_interior hx zs
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, Submodule, Submodule.span, Submodule.subset_span, Subset, Subset.trans, conv.o, eq_top_of_nonempty_interior, image_mem_nhds, interior, interior_mono, interior_subset, isOpenMap_sub_right, isOpen_interior, mem_interior_iff_mem_nhds, mem_nhds, mem_of_superset, mem_tangentConeAt_of_openSegment_subset, replace
 -/

@@ -252,7 +252,8 @@ obtain rfl : m = 0 := Finset.mem_singleton.1 Finsupp.support_single_subset h
   mul_mem i j a b ha hb c hc := by
     classical
     obtain ⟨ma, hma, mb, hmb, rfl⟩ : exists y in a.coeff.support, exists z in b.coeff.support, y + z = c :=
-Finset.mem_add.1 suppo
+Finset.mem_add.1 support_coeff_mul_subset a b hc
+    rw [map_add]; rw [ha ma hma]; rw [hb mb hmb]
 
 中文:
 实例 gradeBy.gradedMonoid
@@ -264,7 +265,8 @@ obtain rfl : m = 0 := Finset.mem_singleton.1 Finsupp.support_single_subset h
   mul_mem i j a b ha hb c hc := by
     classical
     obtain ⟨ma, hma, mb, hmb, rfl⟩ : exists y in a.coeff.support, exists z in b.coeff.support, y + z = c :=
-Finset.mem_add.1 suppo
+Finset.mem_add.1 support_coeff_mul_subset a b hc
+    rw [map_add]; rw [ha ma hma]; rw [hb mb hmb]
 
 Depends on / 依赖: Finset, Finset.mem_add, Finset.mem_singleton, Finsupp, Finsupp.support_single_subset, a.coeff.support, b.coeff.support, classical, map_add, map_zero, mem_add, mem_singleton, mul_mem, one_def, support, support_coeff_mul_subset, support_single_subset
 -/
@@ -315,7 +317,8 @@ definition decomposeAux
     map_one' := of_eq_of_gradedMonoid_eq (by congr 2 <;> simp)
     map_mul' i j := by
       simpa [toAdd_mul, of_mul_of, GradedMonoid.GMul.mul, single_mul_single, mul_one] using
-DirectSu
+DirectSum.of_eq_of_gradedMonoid_eq Sigma.subtype_ext (f.map_add _ _) rfl
+  }
 
 中文:
 定义 decomposeAux
@@ -325,7 +328,8 @@ DirectSu
     map_one' := of_eq_of_gradedMonoid_eq (by congr 2 <;> simp)
     map_mul' i j := by
       simpa [toAdd_mul, of_mul_of, GradedMonoid.GMul.mul, single_mul_single, mul_one] using
-DirectSu
+DirectSum.of_eq_of_gradedMonoid_eq Sigma.subtype_ext (f.map_add _ _) rfl
+  }
 
 Depends on / 依赖: DirectSum, DirectSum.of_eq_of_gradedMonoid_eq, GradedMonoid, GradedMonoid.GMul.mul, Sigma.subtype_ext, f.map_add, gradeBy, m.toAdd, map_add, map_mul, map_one, mul_one, of_eq_of_gradedMonoid_eq, of_mul_of, single, single_mem_gradeBy, single_mul_single, subtype_ext, toAdd_mul
 -/
@@ -395,7 +399,18 @@ theorem decomposeAux_coe
   · intro m b y hmy hb ih hmby
     have : Disjoint (Finsupp.single m b).support y.coeff.support := by
       simpa only [Finsupp.support_single _ hb, Finset.disjoint_singleton_left]
-
+    rw [mem_gradeBy_iff]; rw [coeff_add]; rw [coeff_single]; rw [Finsupp.support_add_eq this]; rw [Finset.coe_union]; rw [Set.union_subset_iff] at hmby
+    obtain ⟨h1, h2⟩ := hmby
+    have : f m = i := by
+      rwa [Finsupp.support_single _ hb, Finset.coe_singleton, Set.singleton_subset_iff]
+        at h1
+    subst this
+    simp only [map_add, decomposeAux_single f m]
+    let ih' := ih h2
+    dsimp at ih'
+    rw [ih']; rw [← map_add]
+    apply DirectSum.of_eq_of_gradedMonoid_eq
+    congr 2
 
 中文:
 定理 decomposeAux_coe
@@ -411,7 +426,18 @@ theorem decomposeAux_coe
   · intro m b y hmy hb ih hmby
     have : Disjoint (Finsupp.single m b).support y.coeff.support := by
       simpa only [Finsupp.support_single _ hb, Finset.disjoint_singleton_left]
-
+    rw [mem_gradeBy_iff]; rw [coeff_add]; rw [coeff_single]; rw [Finsupp.support_add_eq this]; rw [Finset.coe_union]; rw [Set.union_subset_iff] at hmby
+    obtain ⟨h1, h2⟩ := hmby
+    have : f m = i := by
+      rwa [Finsupp.support_single _ hb, Finset.coe_singleton, Set.singleton_subset_iff]
+        at h1
+    subst this
+    simp only [map_add, decomposeAux_single f m]
+    let ih' := ih h2
+    dsimp at ih'
+    rw [ih']; rw [← map_add]
+    apply DirectSum.of_eq_of_gradedMonoid_eq
+    congr 2
 
 Depends on / 依赖: Disjoint, Finset, Finset.coe_union, Finset.disjoint_singleton_left, Finsupp, Finsupp.single, Finsupp.support_add_eq, Finsupp.support_single, Set.union_subset_iff, classical, coe_union, coeff_add, coeff_single, disjoint_singleton_left, map_zero, mem_gradeBy_iff, revert, single, support, support_add_eq
 -/

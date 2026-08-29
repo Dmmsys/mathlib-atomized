@@ -60,7 +60,28 @@ theorem separate_convex_open_set
   have := exists_extension_of_le_sublinear f (gauge s) (fun c hc => gauge_smul_of_nonneg hc.le)
     (gauge_add_le hs₁ <| absorbent_nhds_zero <| hs₂.mem_nhds hs₀) ?_
   · obtain ⟨φ, hφ₁, hφ₂⟩ := this
-
+    have hφ₃ : φ x₀ = 1 := by
+      rw [← f.domain.coe_mk x₀ (Submodule.mem_span_singleton_self _)]; rw [hφ₁]; rw [LinearPMap.mkSpanSingleton'_apply_self]
+    have hφ₄ : forall x in s, φ x < 1 := fun x hx =>
+      (hφ₂ x).trans_lt (gauge_lt_one_of_mem_of_isOpen hs₂ hx)
+    refine ⟨⟨φ, ?_⟩, hφ₃, hφ₄⟩
+    refine
+      φ.continuous_of_nonzero_on_open _ (hs₂.vadd (-x₀)) (Nonempty.vadd_set ⟨0, hs₀⟩)
+        (vadd_set_subset_iff.mpr fun x hx => ?_)
+    change φ (-x₀ + x) != 0
+    rw [map_add]; rw [map_neg]
+    specialize hφ₄ x hx
+    linarith
+  rintro ⟨x, hx⟩
+  obtain ⟨y, rfl⟩ := Submodule.mem_span_singleton.1 hx
+  rw [LinearPMap.mkSpanSingleton'_apply]
+  simp only [mul_one, smul_eq_mul]
+  obtain h | h := le_or_gt y 0
+  · exact h.trans (gauge_nonneg _)
+  · rw [gauge_smul_of_nonneg h.le, smul_eq_mul, RingHom.id_apply, le_mul_iff_one_le_right h]
+    exact
+      one_le_gauge_of_notMem (hs₁.starConvex hs₀)
+        (absorbent_nhds_zero <| hs₂.mem_nhds hs₀).absorbs hx₀
 
 中文:
 定理 separate_convex_open_set
@@ -70,7 +91,28 @@ theorem separate_convex_open_set
   have := exists_extension_of_le_sublinear f (gauge s) (fun c hc => gauge_smul_of_nonneg hc.le)
     (gauge_add_le hs₁ <| absorbent_nhds_zero <| hs₂.mem_nhds hs₀) ?_
   · obtain ⟨φ, hφ₁, hφ₂⟩ := this
-
+    have hφ₃ : φ x₀ = 1 := by
+      rw [← f.domain.coe_mk x₀ (Submodule.mem_span_singleton_self _)]; rw [hφ₁]; rw [LinearPMap.mkSpanSingleton'_apply_self]
+    have hφ₄ : forall x in s, φ x < 1 := fun x hx =>
+      (hφ₂ x).trans_lt (gauge_lt_one_of_mem_of_isOpen hs₂ hx)
+    refine ⟨⟨φ, ?_⟩, hφ₃, hφ₄⟩
+    refine
+      φ.continuous_of_nonzero_on_open _ (hs₂.vadd (-x₀)) (Nonempty.vadd_set ⟨0, hs₀⟩)
+        (vadd_set_subset_iff.mpr fun x hx => ?_)
+    change φ (-x₀ + x) != 0
+    rw [map_add]; rw [map_neg]
+    specialize hφ₄ x hx
+    linarith
+  rintro ⟨x, hx⟩
+  obtain ⟨y, rfl⟩ := Submodule.mem_span_singleton.1 hx
+  rw [LinearPMap.mkSpanSingleton'_apply]
+  simp only [mul_one, smul_eq_mul]
+  obtain h | h := le_or_gt y 0
+  · exact h.trans (gauge_nonneg _)
+  · rw [gauge_smul_of_nonneg h.le, smul_eq_mul, RingHom.id_apply, le_mul_iff_one_le_right h]
+    exact
+      one_le_gauge_of_notMem (hs₁.starConvex hs₀)
+        (absorbent_nhds_zero <| hs₂.mem_nhds hs₀).absorbs hx₀
 
 Depends on / 依赖: LinearPMap, LinearPMap.mkSpanSingleton, Submodule, Submodule.mem_span_singleton_self, _apply_self, absorbent_nhds_zero, coe_mk, domain, exists_extension_of_le_sublinear, f.domain.coe_mk, gauge_add_le, gauge_smul_of_nonneg, hc.le, mem_nhds, mem_span_singleton_self, mkSpanSingleton, ne_of_mem_of_not_mem, trans_lt
 -/
@@ -125,7 +167,25 @@ theorem geometric_hahn_banach_open
   let x₀ := b₀ - a₀
   let C := x₀ +ᵥ (s - t)
   have : (0 : E) in C :=
-    ⟨a₀ - b₀, sub_mem_sub 
+    ⟨a₀ - b₀, sub_mem_sub ha₀ hb₀, by simp_rw [x₀, vadd_eq_add, sub_add_sub_cancel', sub_self]⟩
+  have : Convex Real C := (hs₁.sub ht).vadd _
+  have : x₀ ∉ C := by
+    intro hx₀
+    rw [← add_zero x₀] at hx₀
+    exact disj.zero_notMem_sub_set (vadd_mem_vadd_set_iff.1 hx₀)
+  obtain ⟨f, hf₁, hf₂⟩ := separate_convex_open_set ‹0 in C› ‹_› (hs₂.sub_right.vadd _) ‹x₀ ∉ C›
+  have forall_le : forall a in s, forall b in t, f a <= f b := by
+    intro a ha b hb
+    have := hf₂ (x₀ + (a - b)) (vadd_mem_vadd_set <| sub_mem_sub ha hb)
+    simp only [f.map_add, f.map_sub, hf₁] at this
+    linarith
+  refine ⟨f, sInf (f '' t), image_subset_iff.1 (?_ : f '' s subseteq Iio (sInf (f '' t))), fun b hb => ?_⟩
+  · rw [← interior_Iic]
+    refine interior_maximal (image_subset_iff.2 fun a ha => ?_) (f.isOpenMap_of_ne_zero ?_ _ hs₂)
+    · exact le_csInf (Nonempty.image _ ⟨_, hb₀⟩) (forall_mem_image.2 <| forall_le _ ha)
+    · rintro rfl
+      simp at hf₁
+· exact csInf_le ⟨f a₀, forall_mem_image.2 forall_le _ ha₀⟩ (mem_image_of_mem _ hb)
 
 中文:
 定理 geometric_hahn_banach_open
@@ -138,7 +198,25 @@ theorem geometric_hahn_banach_open
   let x₀ := b₀ - a₀
   let C := x₀ +ᵥ (s - t)
   have : (0 : E) in C :=
-    ⟨a₀ - b₀, sub_mem_sub 
+    ⟨a₀ - b₀, sub_mem_sub ha₀ hb₀, by simp_rw [x₀, vadd_eq_add, sub_add_sub_cancel', sub_self]⟩
+  have : Convex Real C := (hs₁.sub ht).vadd _
+  have : x₀ ∉ C := by
+    intro hx₀
+    rw [← add_zero x₀] at hx₀
+    exact disj.zero_notMem_sub_set (vadd_mem_vadd_set_iff.1 hx₀)
+  obtain ⟨f, hf₁, hf₂⟩ := separate_convex_open_set ‹0 in C› ‹_› (hs₂.sub_right.vadd _) ‹x₀ ∉ C›
+  have forall_le : forall a in s, forall b in t, f a <= f b := by
+    intro a ha b hb
+    have := hf₂ (x₀ + (a - b)) (vadd_mem_vadd_set <| sub_mem_sub ha hb)
+    simp only [f.map_add, f.map_sub, hf₁] at this
+    linarith
+  refine ⟨f, sInf (f '' t), image_subset_iff.1 (?_ : f '' s subseteq Iio (sInf (f '' t))), fun b hb => ?_⟩
+  · rw [← interior_Iic]
+    refine interior_maximal (image_subset_iff.2 fun a ha => ?_) (f.isOpenMap_of_ne_zero ?_ _ hs₂)
+    · exact le_csInf (Nonempty.image _ ⟨_, hb₀⟩) (forall_mem_image.2 <| forall_le _ ha)
+    · rintro rfl
+      simp at hf₁
+· exact csInf_le ⟨f a₀, forall_mem_image.2 forall_le _ ha₀⟩ (mem_image_of_mem _ hb)
 
 Depends on / 依赖: Convex, add_zero, disj.zero_notMem_sub_set, eq_empty_or_nonempty, le_rfl, s.eq_empty_or_nonempty, simp_rw, sub_add_sub_cancel, sub_mem_sub, sub_self, t.eq_empty_or_nonempty, vadd_eq_add, vadd_mem_vadd_se, zero_lt_one, zero_notMem_sub_set
 -/
@@ -231,7 +309,12 @@ theorem geometric_hahn_banach_open_open
   obtain rfl | ⟨b₀, hb₀⟩ := t.eq_empty_or_nonempty
   · exact ⟨0, 1, fun a _ha => by simp, by simp⟩
   obtain ⟨f, s, hf₁, hf₂⟩ := geometric_hahn_banach_open hs₁ hs₂ ht₁ disj
-  refine ⟨f, s, hf₁, imag
+  refine ⟨f, s, hf₁, image_subset_iff.1 (?_ : f '' t subseteq Ioi s)⟩
+  rw [← interior_Ici]
+  refine interior_maximal (image_subset_iff.2 hf₂) (f.isOpenMap_of_ne_zero ?_ _ ht₃)
+  rintro rfl
+  simp_rw [zero_apply] at hf₁ hf₂
+  exact (hf₁ _ ha₀).not_ge (hf₂ _ hb₀)
 
 中文:
 定理 geometric_hahn_banach_open_open
@@ -242,7 +325,12 @@ theorem geometric_hahn_banach_open_open
   obtain rfl | ⟨b₀, hb₀⟩ := t.eq_empty_or_nonempty
   · exact ⟨0, 1, fun a _ha => by simp, by simp⟩
   obtain ⟨f, s, hf₁, hf₂⟩ := geometric_hahn_banach_open hs₁ hs₂ ht₁ disj
-  refine ⟨f, s, hf₁, imag
+  refine ⟨f, s, hf₁, image_subset_iff.1 (?_ : f '' t subseteq Ioi s)⟩
+  rw [← interior_Ici]
+  refine interior_maximal (image_subset_iff.2 hf₂) (f.isOpenMap_of_ne_zero ?_ _ ht₃)
+  rintro rfl
+  simp_rw [zero_apply] at hf₁ hf₂
+  exact (hf₁ _ ha₀).not_ge (hf₂ _ hb₀)
 
 Depends on / 依赖: eq_empty_or_nonempty, f.isOpenMap_of_ne_zero, geometric_hahn_banach_open, image_subset_iff, interior_Ici, interior_maximal, isOpenMap_of_ne_zero, s.eq_empty_or_nonempty, simp_rw, subseteq, t.eq_empty_or_nonempty, zero_apply
 -/
@@ -274,7 +362,10 @@ theorem geometric_hahn_banach_of_nonempty_interior
     obtain ⟨b, hb⟩ := htne
     intro hzero
     have ha' : (0 : Real) < u := by simpa [hzero] using hfA a ha
-    have hb' : u <= (0 : 
+    have hb' : u <= (0 : Real) := by simpa [hzero] using hfB b hb
+    linarith
+· apply closure_minimal (fun x hx => le_of_lt (hfA x hx)) isClosed_Iic.preimage f.continuous
+    simpa [hs.closure_interior_eq_closure_of_nonempty_interior hsint] using subset_closure ha
 
 中文:
 定理 geometric_hahn_banach_of_nonempty_interior
@@ -286,7 +377,10 @@ theorem geometric_hahn_banach_of_nonempty_interior
     obtain ⟨b, hb⟩ := htne
     intro hzero
     have ha' : (0 : Real) < u := by simpa [hzero] using hfA a ha
-    have hb' : u <= (0 : 
+    have hb' : u <= (0 : Real) := by simpa [hzero] using hfB b hb
+    linarith
+· apply closure_minimal (fun x hx => le_of_lt (hfA x hx)) isClosed_Iic.preimage f.continuous
+    simpa [hs.closure_interior_eq_closure_of_nonempty_interior hsint] using subset_closure ha
 
 Depends on / 依赖: closure_interior_eq_closure_of_nonempty_interior, closure_minimal, continuous, f.continuous, geometric_hahn_banach_open, hs.closure_interior_eq_closure_of_nonempty_interior, hs.interior, interior, isClosed_Iic, isClosed_Iic.preimage, isOpen_interior, le_of_lt, preimage, subset_clos
 -/
@@ -382,7 +476,14 @@ theorem geometric_hahn_banach_compact_closed
   obtain rfl | _ht := t.eq_empty_or_nonempty
   · exact ⟨0, 1, 2, by simp⟩
   obtain ⟨U, V, hU, hV, hU₁, hV₁, sU, tV, disj'⟩ := disj.exists_open_convexes hs₁ hs₂ ht₁ ht₂
-  obtain ⟨f, u, hf₁, hf₂⟩ := geometric_hahn_banach_ope
+  obtain ⟨f, u, hf₁, hf₂⟩ := geometric_hahn_banach_open_open hU₁ hU hV₁ hV disj'
+  obtain ⟨x, hx₁, hx₂⟩ := hs₂.exists_isMaxOn hs f.continuous.continuousOn
+  have : f x < u := hf₁ x (sU hx₁)
+  exact
+    ⟨f, (f x + u) / 2, u,
+      fun a ha => by have := hx₂ ha; dsimp at this; linarith,
+      by linarith,
+      fun b hb => hf₂ b (tV hb)⟩
 
 中文:
 定理 geometric_hahn_banach_compact_closed
@@ -393,7 +494,14 @@ theorem geometric_hahn_banach_compact_closed
   obtain rfl | _ht := t.eq_empty_or_nonempty
   · exact ⟨0, 1, 2, by simp⟩
   obtain ⟨U, V, hU, hV, hU₁, hV₁, sU, tV, disj'⟩ := disj.exists_open_convexes hs₁ hs₂ ht₁ ht₂
-  obtain ⟨f, u, hf₁, hf₂⟩ := geometric_hahn_banach_ope
+  obtain ⟨f, u, hf₁, hf₂⟩ := geometric_hahn_banach_open_open hU₁ hU hV₁ hV disj'
+  obtain ⟨x, hx₁, hx₂⟩ := hs₂.exists_isMaxOn hs f.continuous.continuousOn
+  have : f x < u := hf₁ x (sU hx₁)
+  exact
+    ⟨f, (f x + u) / 2, u,
+      fun a ha => by have := hx₂ ha; dsimp at this; linarith,
+      by linarith,
+      fun b hb => hf₂ b (tV hb)⟩
 
 Depends on / 依赖: continuous, continuousOn, disj.exists_open_convexes, eq_empty_or_nonempty, exists_isMaxOn, exists_open_convexes, f.continuous.continuousOn, geometric_hahn_banach_open_open, linari, s.eq_empty_or_nonempty, t.eq_empty_or_nonempty
 -/
@@ -720,7 +828,9 @@ theorem geometric_hahn_banach_of_nonempty_interior
   obtain ⟨f, u, hfne, hA', hB'⟩ :=
     _root_.geometric_hahn_banach_of_nonempty_interior hs ht hst hsint htne
   refine ⟨f.extendRCLikeₗ, u, fun hzero => ?_, ?_, ?_⟩
-· exact hfne (StrongDual.extendRCLikeₗ (𝕜 := 𝕜)).injective (by simpa u
+· exact hfne (StrongDual.extendRCLikeₗ (𝕜 := 𝕜)).injective (by simpa using hzero)
+  · simpa [f.extendRCLikeₗ_apply] using hA'
+  · simpa [f.extendRCLikeₗ_apply] using hB'
 
 中文:
 定理 geometric_hahn_banach_of_nonempty_interior
@@ -729,7 +839,9 @@ theorem geometric_hahn_banach_of_nonempty_interior
   obtain ⟨f, u, hfne, hA', hB'⟩ :=
     _root_.geometric_hahn_banach_of_nonempty_interior hs ht hst hsint htne
   refine ⟨f.extendRCLikeₗ, u, fun hzero => ?_, ?_, ?_⟩
-· exact hfne (StrongDual.extendRCLikeₗ (𝕜 := 𝕜)).injective (by simpa u
+· exact hfne (StrongDual.extendRCLikeₗ (𝕜 := 𝕜)).injective (by simpa using hzero)
+  · simpa [f.extendRCLikeₗ_apply] using hA'
+  · simpa [f.extendRCLikeₗ_apply] using hB'
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.continuousSMul, StrongDual, StrongDual.extendRCLike, _root_, _root_.geometric_hahn_banach_of_nonempty_interior, continuousSMul, f.extendRCLike, geometric_hahn_banach_of_nonempty_interior, injective
 -/
@@ -757,7 +869,8 @@ theorem geometric_hahn_banach_of_nonempty_interior'
           f != 0 ∧ (forall a in s, re (f a) <= u) ∧ forall b in t, u <= re (f b) :=
         geometric_hahn_banach_of_nonempty_interior hs ht hst hsint htne
     obtain ⟨f, u, -, hs', ht'⟩ := hsep
-    exact
+    exact ⟨f, u, hs', ht'⟩
+  · exact ⟨0, 0, by simp⟩
 
 中文:
 定理 geometric_hahn_banach_of_nonempty_interior'
@@ -768,7 +881,8 @@ theorem geometric_hahn_banach_of_nonempty_interior'
           f != 0 ∧ (forall a in s, re (f a) <= u) ∧ forall b in t, u <= re (f b) :=
         geometric_hahn_banach_of_nonempty_interior hs ht hst hsint htne
     obtain ⟨f, u, -, hs', ht'⟩ := hsep
-    exact
+    exact ⟨f, u, hs', ht'⟩
+  · exact ⟨0, 0, by simp⟩
 
 Depends on / 依赖: Nonempty, StrongDual, geometric_hahn_banach_of_nonempty_interior, t.Nonempty
 -/
@@ -795,7 +909,7 @@ theorem geometric_hahn_banach_of_nonempty_interior_point
   obtain ⟨f, hfne, hA'⟩ := _root_.geometric_hahn_banach_of_nonempty_interior_point hA hxA hAint
   refine ⟨f.extendRCLikeₗ, fun hzero => ?_, ?_⟩
 · exact hfne (StrongDual.extendRCLikeₗ (𝕜 := 𝕜)).injective (by simpa using hzero)
-  · simpa
+  · simpa [f.extendRCLikeₗ_apply] using hA'
 
 中文:
 定理 geometric_hahn_banach_of_nonempty_interior_point
@@ -804,7 +918,7 @@ theorem geometric_hahn_banach_of_nonempty_interior_point
   obtain ⟨f, hfne, hA'⟩ := _root_.geometric_hahn_banach_of_nonempty_interior_point hA hxA hAint
   refine ⟨f.extendRCLikeₗ, fun hzero => ?_, ?_⟩
 · exact hfne (StrongDual.extendRCLikeₗ (𝕜 := 𝕜)).injective (by simpa using hzero)
-  · simpa
+  · simpa [f.extendRCLikeₗ_apply] using hA'
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.continuousSMul, StrongDual, StrongDual.extendRCLike, _root_, _root_.geometric_hahn_banach_of_nonempty_interior_point, continuousSMul, f.extendRCLike, geometric_hahn_banach_of_nonempty_interior_point, injective
 -/
@@ -1040,7 +1154,11 @@ theorem iInter_countable_halfSpaces_eq
   set c : ι -> Real := fun lc => lc.2.val
   set hc : forall i, forall y in s, re (l i y) <= c i := fun lc => lc.2.prop
   have : Nonempty ι := ⟨0, 0, fun _ _ => by simp⟩
-
+  have : ⋂ i : ι, { x | re (l i x) <= c i } = s := by
+    simpa only [ι, iInter_sigma, iInter_subtype, l, c] using iInter_halfSpaces_eq' hs₁ hs₂
+  obtain ⟨k, hk⟩ := eq_closed_inter_nat (fun i : ι => { x | re (l i x) <= c i })
+    (fun i => isClosed_le (continuous_re.comp (l i).continuous) continuous_const)
+  exact ⟨l ∘ k, c ∘ k, hk.trans this⟩
 
 中文:
 定理 i整数er_countable_halfSpaces_eq
@@ -1051,7 +1169,11 @@ theorem iInter_countable_halfSpaces_eq
   set c : ι -> Real := fun lc => lc.2.val
   set hc : forall i, forall y in s, re (l i y) <= c i := fun lc => lc.2.prop
   have : Nonempty ι := ⟨0, 0, fun _ _ => by simp⟩
-
+  have : ⋂ i : ι, { x | re (l i x) <= c i } = s := by
+    simpa only [ι, iInter_sigma, iInter_subtype, l, c] using iInter_halfSpaces_eq' hs₁ hs₂
+  obtain ⟨k, hk⟩ := eq_closed_inter_nat (fun i : ι => { x | re (l i x) <= c i })
+    (fun i => isClosed_le (continuous_re.comp (l i).continuous) continuous_const)
+  exact ⟨l ∘ k, c ∘ k, hk.trans this⟩
 
 Depends on / 依赖: Nonempty, StrongDual, eq_closed_inter_nat, iInter_halfSpaces_eq, iInter_sigma, iInter_subtype
 -/

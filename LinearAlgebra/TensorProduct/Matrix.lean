@@ -96,7 +96,8 @@ theorem TensorProduct.toMatrix_comm
   ext ⟨i, j⟩ ⟨i', j'⟩
   simp only [toMatrix_apply, Basis.tensorProduct_apply, LinearEquiv.coe_coe, comm_tmul,
     Basis.tensorProduct_repr_tmul_apply, Basis.repr_self, Finsupp.single_apply, @eq_comm _ i',
-    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, and_comm, submatrix_a
+    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, and_comm, submatrix_apply,
+    Matrix.one_apply, Prod.swap_prod_mk, id_eq, Prod.mk.injEq]
 
 中文:
 定理 张量积.toMatrix_comm
@@ -104,7 +105,8 @@ theorem TensorProduct.toMatrix_comm
   ext ⟨i, j⟩ ⟨i', j'⟩
   simp only [toMatrix_apply, Basis.tensorProduct_apply, LinearEquiv.coe_coe, comm_tmul,
     Basis.tensorProduct_repr_tmul_apply, Basis.repr_self, Finsupp.single_apply, @eq_comm _ i',
-    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, and_comm, submatrix_a
+    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, and_comm, submatrix_apply,
+    Matrix.one_apply, Prod.swap_prod_mk, id_eq, Prod.mk.injEq]
 
 Depends on / 依赖: Basis.repr_self, Basis.tensorProduct_apply, Basis.tensorProduct_repr_tmul_apply, Finsupp, Finsupp.single_apply, LinearEquiv, LinearEquiv.coe_coe, Matrix, Matrix.one_apply, Prod.mk.injEq, Prod.swap_prod_mk, and_comm, coe_coe, comm_tmul, eq_comm, id_eq, ite_and, mul_ite, mul_one, mul_zero
 -/
@@ -126,7 +128,8 @@ theorem TensorProduct.toMatrix_assoc
   ext ⟨i, j, k⟩ ⟨⟨i', j'⟩, k'⟩
   simp only [toMatrix_apply, Basis.tensorProduct_apply, LinearEquiv.coe_coe, assoc_tmul,
     Basis.tensorProduct_repr_tmul_apply, Basis.repr_self, Finsupp.single_apply, @eq_comm _ k',
-    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, @eq_comm _ 
+    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, @eq_comm _ i',
+    submatrix_apply, Matrix.one_apply, id_eq, Equiv.prodAssoc_apply, Prod.mk.injEq]
 
 中文:
 定理 张量积.toMatrix_assoc
@@ -134,7 +137,8 @@ theorem TensorProduct.toMatrix_assoc
   ext ⟨i, j, k⟩ ⟨⟨i', j'⟩, k'⟩
   simp only [toMatrix_apply, Basis.tensorProduct_apply, LinearEquiv.coe_coe, assoc_tmul,
     Basis.tensorProduct_repr_tmul_apply, Basis.repr_self, Finsupp.single_apply, @eq_comm _ k',
-    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, @eq_comm _ 
+    @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, @eq_comm _ i',
+    submatrix_apply, Matrix.one_apply, id_eq, Equiv.prodAssoc_apply, Prod.mk.injEq]
 
 Depends on / 依赖: Basis.repr_self, Basis.tensorProduct_apply, Basis.tensorProduct_repr_tmul_apply, Equiv.prodAssoc_apply, Finsupp, Finsupp.single_apply, LinearEquiv, LinearEquiv.coe_coe, Matrix, Matrix.one_apply, Prod.mk.injEq, assoc_tmul, coe_coe, eq_comm, id_eq, ite_and, mul_ite, mul_one, mul_zero, one_apply
 -/

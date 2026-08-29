@@ -212,7 +212,21 @@ abbreviation fieldOfModelField
   letI := zeroOfRingStructure K
   letI := oneOfRingStructure K
   letI := compatibleRingOfRingStructure K
-  have exists_inv : forall x : K, x != 0 -> exists y : K, x 
+  have exists_inv : forall x : K, x != 0 -> exists y : K, x * y = 1 :=
+    existsInv.toProp_of_model
+  letI : Inv K := ⟨fun x => if hx0 : x = 0 then 0 else Classical.choose (exists_inv x hx0)⟩
+  Field.ofMinimalAxioms K
+    addAssoc.toProp_of_model
+    zeroAdd.toProp_of_model
+    negAddCancel.toProp_of_model
+    mulAssoc.toProp_of_model
+    mulComm.toProp_of_model
+    oneMul.toProp_of_model
+    (fun x hx0 => show x * (dite _ _ _) = _ from
+        (dif_neg hx0).symm ▸ Classical.choose_spec (existsInv.toProp_of_model x hx0))
+    (dif_pos rfl)
+    leftDistrib.toProp_of_model
+    existsPairNE.toProp_of_model
 
 中文:
 缩写 fieldOfModelField
@@ -224,7 +238,21 @@ abbreviation fieldOfModelField
   letI := zeroOfRingStructure K
   letI := oneOfRingStructure K
   letI := compatibleRingOfRingStructure K
-  have exists_inv : forall x : K, x != 0 -> exists y : K, x 
+  have exists_inv : forall x : K, x != 0 -> exists y : K, x * y = 1 :=
+    existsInv.toProp_of_model
+  letI : Inv K := ⟨fun x => if hx0 : x = 0 then 0 else Classical.choose (exists_inv x hx0)⟩
+  Field.ofMinimalAxioms K
+    addAssoc.toProp_of_model
+    zeroAdd.toProp_of_model
+    negAddCancel.toProp_of_model
+    mulAssoc.toProp_of_model
+    mulComm.toProp_of_model
+    oneMul.toProp_of_model
+    (fun x hx0 => show x * (dite _ _ _) = _ from
+        (dif_neg hx0).symm ▸ Classical.choose_spec (existsInv.toProp_of_model x hx0))
+    (dif_pos rfl)
+    leftDistrib.toProp_of_model
+    existsPairNE.toProp_of_model
 
 Depends on / 依赖: Classical, Classical.choose, Classical.decEq, DecidableEq, Field.ofMinimalAxioms, addAssoc, addAssoc.toProp_of_model, addOfRingStructure, compatibleRingOfRingStructure, existsInv, existsInv.toProp_of_model, exists_inv, mulOfRingStructure, negAddCancel, negAddCancel.t, negOfRingStructure, ofMinimalAxioms, oneOfRingStructure, toProp_of_model, zeroAdd
 -/
@@ -291,7 +319,13 @@ instance [Field
       cases a with
       | existsPairNE => exact exists_pair_ne K
       | existsInv => exact fun x hx0 => ⟨x⁻¹, mul_inv_cancel₀ hx0⟩
-      | addAs
+      | addAssoc => exact add_assoc
+      | zeroAdd => exact zero_add
+      | negAddCancel => exact neg_add_cancel
+      | mulAssoc => exact mul_assoc
+      | mulComm => exact mul_comm
+      | oneMul => exact one_mul
+      | leftDistrib => exact mul_add }
 
 中文:
 实例 [域
@@ -303,7 +337,13 @@ instance [Field
       cases a with
       | existsPairNE => exact exists_pair_ne K
       | existsInv => exact fun x hx0 => ⟨x⁻¹, mul_inv_cancel₀ hx0⟩
-      | addAs
+      | addAssoc => exact add_assoc
+      | zeroAdd => exact zero_add
+      | negAddCancel => exact neg_add_cancel
+      | mulAssoc => exact mul_assoc
+      | mulComm => exact mul_comm
+      | oneMul => exact one_mul
+      | leftDistrib => exact mul_add }
 
 Depends on / 依赖: Set.mem_range, Theory, Theory.field, a.realize_toSentence_iff_toProp, addAssoc, add_assoc, existsInv, existsPairNE, exists_imp, exists_pair_ne, leftDistrib, mem_range, mulAssoc, mulComm, mul_add, mul_assoc, mul_comm, negAddCancel, neg_add_cancel, oneMul
 -/

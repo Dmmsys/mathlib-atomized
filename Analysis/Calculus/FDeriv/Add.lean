@@ -314,7 +314,7 @@ theorem fderivWithin_const_smul_of_invertible
       contrapose h
       exact (differentiableWithinAt_smul_iff c).mp h
     simp [fderivWithin_zero_of_not_differentiableWithinAt h,
-  
+      fderivWithin_zero_of_not_differentiableWithinAt this]
 
 中文:
 定理 fderivWithin_const_smul_of_invertible
@@ -326,7 +326,7 @@ theorem fderivWithin_const_smul_of_invertible
       contrapose h
       exact (differentiableWithinAt_smul_iff c).mp h
     simp [fderivWithin_zero_of_not_differentiableWithinAt h,
-  
+      fderivWithin_zero_of_not_differentiableWithinAt this]
 
 Depends on / 依赖: DifferentiableWithinAt, const_smul, contrapose, differentiableWithinAt_smul_iff, fderivWithin, fderivWithin_zero_of_not_differentiableWithinAt, h.hasFDerivWithinAt.const_smul, hasFDerivWithinAt
 -/

@@ -46,7 +46,7 @@ definition doublyStochastic
     refine ⟨fun i j => sum_nonneg fun i _ => mul_nonneg (hM.1 _ _) (hN.1 _ _), ?_, ?_⟩
     next => rw [← mulVec_mulVec, hN.2.1, hM.2.1]
     next => rw [← vecMul_vecMul, hM.2.2, hN.2.2]
-  one_mem' := by simp [zero_
+  one_mem' := by simp [zero_le_one_elem]
 
 中文:
 定义 doublyStochastic
@@ -56,7 +56,7 @@ definition doublyStochastic
     refine ⟨fun i j => sum_nonneg fun i _ => mul_nonneg (hM.1 _ _) (hN.1 _ _), ?_, ?_⟩
     next => rw [← mulVec_mulVec, hN.2.1, hM.2.1]
     next => rw [← vecMul_vecMul, hM.2.2, hN.2.2]
-  one_mem' := by simp [zero_
+  one_mem' := by simp [zero_le_one_elem]
 -/
 def doublyStochastic (R n : Type*) [Fintype n] [DecidableEq n] [Semiring R] [PartialOrder R]
     [IsOrderedRing R] :
@@ -426,7 +426,15 @@ lemma exists_mem_doublyStochastic_eq_smul_iff
     exact ⟨fun i j => mul_nonneg hs (hM'.1 _ _), by simp [hM']⟩
   rcases eq_or_lt_of_le hs with rfl | hs
   case inl =>
-    simp only [zero_sm
+    simp only [zero_smul, exists_and_right, and_imp]
+    intro h₁ h₂ _
+    refine ⟨⟨1, Submonoid.one_mem _⟩, ?_⟩
+    ext i j
+    specialize h₂ i
+    rw [sum_eq_zero_iff_of_nonneg (by simp [h₁ i])] at h₂
+    exact h₂ _ (by simp)
+  rintro ⟨hM₁, hM₂, hM₃⟩
+  exact ⟨s⁻¹ • M, by simp [mem_doublyStochastic_iff_sum, ← mul_sum, hs.ne', *]⟩
 
 中文:
 引理 存在_mem_doublyStochastic_eq_smul_iff
@@ -440,7 +448,15 @@ lemma exists_mem_doublyStochastic_eq_smul_iff
     exact ⟨fun i j => mul_nonneg hs (hM'.1 _ _), by simp [hM']⟩
   rcases eq_or_lt_of_le hs with rfl | hs
   case inl =>
-    simp only [zero_sm
+    simp only [zero_smul, exists_and_right, and_imp]
+    intro h₁ h₂ _
+    refine ⟨⟨1, Submonoid.one_mem _⟩, ?_⟩
+    ext i j
+    specialize h₂ i
+    rw [sum_eq_zero_iff_of_nonneg (by simp [h₁ i])] at h₂
+    exact h₂ _ (by simp)
+  rintro ⟨hM₁, hM₂, hM₃⟩
+  exact ⟨s⁻¹ • M, by simp [mem_doublyStochastic_iff_sum, ← mul_sum, hs.ne', *]⟩
 
 Depends on / 依赖: Matrix, Matrix.smul_apply, Submonoid, Submonoid.one_mem, and_imp, eq_or_lt_of_le, exists_and_right, mem_doublyStochastic_iff_sum, mul_nonneg, mul_sum, one_mem, smul_apply, smul_eq_mul, specialize, sum_eq_zero_iff_of_nonneg, zero_smul
 -/

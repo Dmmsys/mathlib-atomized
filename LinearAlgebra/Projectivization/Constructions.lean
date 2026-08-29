@@ -196,7 +196,7 @@ definition cross
         mul_comm b a, smul_eq_zero_iff_eq]
       split_ifs
       · use a
-  
+      · use a * b)
 
 中文:
 定义 cross
@@ -207,7 +207,7 @@ definition cross
         mul_comm b a, smul_eq_zero_iff_eq]
       split_ifs
       · use a
-  
+      · use a * b)
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul_of_tower, LinearMap.smul_apply, Quotient, Quotient.map, crossProduct, map_smul_of_tower, mul_comm, simp_rw, smul_apply, smul_eq_zero_iff_eq, smul_smul, split_ifs
 -/

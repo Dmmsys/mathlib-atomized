@@ -63,7 +63,20 @@ instance gradedAlgebra
       ext m
       dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
         AlgHom.id_apply]
-      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.
+      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
+    fun i x => by
+    obtain ⟨x, hx⟩ := x
+    dsimp only [Subtype.coe_mk, DirectSum.lof_eq_of]
+    induction hx using Submodule.pow_induction_on_left' with
+    | algebraMap r =>
+      rw [AlgHom.commutes]; rw [DirectSum.algebraMap_apply]; rfl
+    | add x y i hx hy ihx ihy =>
+      rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]
+      rfl
+    | mem_mul m hm i x hx ih =>
+      obtain ⟨_, rfl⟩ := hm
+      rw [map_mul]; rw [ih]; rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.of_mul_of]
+      exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext (add_comm _ _) rfl)
 
 中文:
 实例 gradedAlgebra
@@ -73,7 +86,20 @@ instance gradedAlgebra
       ext m
       dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
         AlgHom.id_apply]
-      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.
+      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
+    fun i x => by
+    obtain ⟨x, hx⟩ := x
+    dsimp only [Subtype.coe_mk, DirectSum.lof_eq_of]
+    induction hx using Submodule.pow_induction_on_left' with
+    | algebraMap r =>
+      rw [AlgHom.commutes]; rw [DirectSum.algebraMap_apply]; rfl
+    | add x y i hx hy ihx ihy =>
+      rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]
+      rfl
+    | mem_mul m hm i x hx ih =>
+      obtain ⟨_, rfl⟩ := hm
+      rw [map_mul]; rw [ih]; rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.of_mul_of]
+      exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext (add_comm _ _) rfl)
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, AlgHom.comp_apply, AlgHom.id_apply, AlgHom.toLinearMap_apply, DirectSum, DirectSum.algebraMap_apply, DirectSum.coeAlgHom_of, DirectSum.lof_eq_of, GradedAlgebra, GradedAlgebra.ofAlgHom, LinearMap, LinearMap.comp_apply, Submodule, Submodule.pow_induction_on_left, Subtype, Subtype.coe_mk, algebraMap, algebraMap_apply, coeAlgHom_of
 -/

@@ -578,7 +578,7 @@ refine (and_iff_right fun i => star_mul_self_nonneg (v i)).trans exists_congr fu
   constructor
   · rintro h hv
     simp [hv] at h
-  · 
+  · exact (star_mul_self_pos <| .of_ne_zero ·)
 
 中文:
 定理 dotProduct_star_self_pos_iff
@@ -591,7 +591,7 @@ refine (and_iff_right fun i => star_mul_self_nonneg (v i)).trans exists_congr fu
   constructor
   · rintro h hv
     simp [hv] at h
-  · 
+  · exact (star_mul_self_pos <| .of_ne_zero ·)
 
 Depends on / 依赖: Fintype, Fintype.sum_pos_iff_of_nonneg, Function, Function.ne_iff, Pi.lt_def, Pi.zero_apply, and_iff_right, exists_congr, lt_def, ne_iff, nontriviality, of_ne_zero, simp_rw, star_mul_self_nonneg, star_mul_self_pos, sum_pos_iff_of_nonneg, zero_apply
 -/

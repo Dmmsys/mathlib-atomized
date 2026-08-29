@@ -474,7 +474,7 @@ theorem IsPositive.smul_of_nonneg
     simp [conj_eq_iff_im, ← (le_iff_re_im.mp hc).right]
   refine ⟨hT.left.smul hc', fun x => ?_⟩
   rw [smul_apply]; rw [inner_smul_left]; rw [hc']; rw [mul_re]; rw [conj_eq_iff_im.mp hc']; rw [zero_mul]; rw [sub_zero]
-  exact mul_nonneg ((re_nonneg_of_nonneg
+  exact mul_nonneg ((re_nonneg_of_nonneg hc').mpr hc) (re_inner_nonneg_left hT x)
 
 中文:
 定理 IsPositive.smul_of_nonneg
@@ -484,7 +484,7 @@ theorem IsPositive.smul_of_nonneg
     simp [conj_eq_iff_im, ← (le_iff_re_im.mp hc).right]
   refine ⟨hT.left.smul hc', fun x => ?_⟩
   rw [smul_apply]; rw [inner_smul_left]; rw [hc']; rw [mul_re]; rw [conj_eq_iff_im.mp hc']; rw [zero_mul]; rw [sub_zero]
-  exact mul_nonneg ((re_nonneg_of_nonneg
+  exact mul_nonneg ((re_nonneg_of_nonneg hc').mpr hc) (re_inner_nonneg_left hT x)
 
 Depends on / 依赖: conj_eq_iff_im, conj_eq_iff_im.mp, hT.left.smul, inner_smul_left, le_iff_re_im, le_iff_re_im.mp, mul_nonneg, mul_re, re_inner_nonneg_left, re_nonneg_of_nonneg, smul_apply, starRingEnd, sub_zero, zero_mul
 -/
@@ -569,7 +569,9 @@ instance instLoewnerPartialOrder
     rw [← sub_eq_zero]; rw [← h₂.isSymmetric.inner_map_self_eq_zero]
     intro x
     have hba2 := h₁.2 x
-    rw [← neg_le_neg_iff]; rw [← map_neg]; rw [← inner_neg_left]; rw [
+    rw [← neg_le_neg_iff]; rw [← map_neg]; rw [← inner_neg_left]; rw [← neg_apply]; rw [neg_sub]; rw [neg_zero] at hba2
+    rw [← h₂.isSymmetric.coe_re_inner_apply_self]; rw [RCLike.ofReal_eq_zero]
+    exact le_antisymm hba2 (h₂.2 _)
 
 中文:
 实例 instLoewnerPartialOrder
@@ -581,7 +583,9 @@ instance instLoewnerPartialOrder
     rw [← sub_eq_zero]; rw [← h₂.isSymmetric.inner_map_self_eq_zero]
     intro x
     have hba2 := h₁.2 x
-    rw [← neg_le_neg_iff]; rw [← map_neg]; rw [← inner_neg_left]; rw [
+    rw [← neg_le_neg_iff]; rw [← map_neg]; rw [← inner_neg_left]; rw [← neg_apply]; rw [neg_sub]; rw [neg_zero] at hba2
+    rw [← h₂.isSymmetric.coe_re_inner_apply_self]; rw [RCLike.ofReal_eq_zero]
+    exact le_antisymm hba2 (h₂.2 _)
 
 Depends on / 依赖: IsPositive
 -/
@@ -694,7 +698,8 @@ theorem isPositive_linearIsometryEquiv_conj_iff
   simp_rw [IsPositive, isSymmetric_linearIsometryEquiv_conj_iff, and_congr_right_iff,
     LinearIsometryEquiv.toLinearEquiv_symm, coe_comp, LinearEquiv.coe_coe,
     LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.coe_symm_toLinearEquiv,
-    Function.comp_apply, LinearIsometryEquiv.inne
+    Function.comp_apply, LinearIsometryEquiv.inner_map_eq_flip]
+  exact fun _ => ⟨fun h x => by simpa using h (f x), fun h x => h _⟩
 
 中文:
 定理 isPositive_linearIsometryEquiv_conj_iff
@@ -703,7 +708,8 @@ theorem isPositive_linearIsometryEquiv_conj_iff
   simp_rw [IsPositive, isSymmetric_linearIsometryEquiv_conj_iff, and_congr_right_iff,
     LinearIsometryEquiv.toLinearEquiv_symm, coe_comp, LinearEquiv.coe_coe,
     LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.coe_symm_toLinearEquiv,
-    Function.comp_apply, LinearIsometryEquiv.inne
+    Function.comp_apply, LinearIsometryEquiv.inner_map_eq_flip]
+  exact fun _ => ⟨fun h x => by simpa using h (f x), fun h x => h _⟩
 
 Depends on / 依赖: Function, Function.comp_apply, IsPositive, LinearEquiv, LinearEquiv.coe_coe, LinearIsometryEquiv, LinearIsometryEquiv.coe_symm_toLinearEquiv, LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.inner_map_eq_flip, LinearIsometryEquiv.toLinearEquiv_symm, and_congr_right_iff, coe_coe, coe_comp, coe_symm_toLinearEquiv, coe_toLinearEquiv, comp_apply, inner_map_eq_flip, isSymmetric_linearIsometryEquiv_conj_iff, simp_rw, toLinearEquiv_symm
 -/
@@ -726,7 +732,9 @@ theorem _root_.Matrix.isPositive_toEuclideanLin_iff
   simp_rw [LinearMap.IsPositive, Matrix.isSymmetric_toEuclideanLin_iff, inner_re_symm,
     EuclideanSpace.inner_eq_star_dotProduct, Matrix.ofLp_toLpLin, Matrix.toLin'_apply,
     dotProduct_comm (A.mulVec _), Matrix.posSemidef_iff_dotProduct_mulVec, and_congr_right_iff,
-    RCLike.nonneg_iff (K :=
+    RCLike.nonneg_iff (K := 𝕜)]
+  refine fun hA => (EuclideanSpace.equiv n 𝕜).forall_congr' fun x => ?_
+  simp [hA.im_star_dotProduct_mulVec_self]
 
 中文:
 定理 _root_.矩阵.isPositive_toEuclideanLin_iff
@@ -735,7 +743,9 @@ theorem _root_.Matrix.isPositive_toEuclideanLin_iff
   simp_rw [LinearMap.IsPositive, Matrix.isSymmetric_toEuclideanLin_iff, inner_re_symm,
     EuclideanSpace.inner_eq_star_dotProduct, Matrix.ofLp_toLpLin, Matrix.toLin'_apply,
     dotProduct_comm (A.mulVec _), Matrix.posSemidef_iff_dotProduct_mulVec, and_congr_right_iff,
-    RCLike.nonneg_iff (K :=
+    RCLike.nonneg_iff (K := 𝕜)]
+  refine fun hA => (EuclideanSpace.equiv n 𝕜).forall_congr' fun x => ?_
+  simp [hA.im_star_dotProduct_mulVec_self]
 -/
 @[simp] theorem _root_.Matrix.isPositive_toEuclideanLin_iff {n : Type*} [Fintype n] [DecidableEq n]
     {A : Matrix n n 𝕜} : A.toEuclideanLin.IsPositive ↔ A.PosSemidef := by
@@ -807,7 +817,13 @@ theorem IsSymmetricProjection.le_iff_range_le_range
   specialize h2 a
   have hh {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetricProjection) : RCLike.re ⟪T a, a⟫_𝕜 = ‖T a‖ ^ 2 := by
     conv_lhs => rw [← hT.isIdempotentElem]
-    rw [Module.End.mul_apply]; rw [hT.isSymme
+    rw [Module.End.mul_apply]; rw [hT.isSymmetric]
+    exact inner_self_eq_norm_sq _
+  simp_rw [sub_apply, inner_sub_left, map_sub, hh hq, hh hp,
+    hp.isIdempotentElem.mem_range_iff.mp ha, sub_nonneg, sq_le_sq, abs_norm] at h2
+  obtain ⟨U, _, rfl⟩ := isSymmetricProjection_iff_eq_coe_starProjection.mp hq
+  simpa [Submodule.toLinearMap_starProjection_eq_isComplProjection] using
+.mpr le_antisymm (U.norm_starProjection_apply_le a) h2 U.mem_iff_norm_starProjection _
 
 中文:
 定理 是SymmetricProjection.le_iff_range_le_range
@@ -817,7 +833,13 @@ theorem IsSymmetricProjection.le_iff_range_le_range
   specialize h2 a
   have hh {T : E ->ₗ[𝕜] E} (hT : T.IsSymmetricProjection) : RCLike.re ⟪T a, a⟫_𝕜 = ‖T a‖ ^ 2 := by
     conv_lhs => rw [← hT.isIdempotentElem]
-    rw [Module.End.mul_apply]; rw [hT.isSymme
+    rw [Module.End.mul_apply]; rw [hT.isSymmetric]
+    exact inner_self_eq_norm_sq _
+  simp_rw [sub_apply, inner_sub_left, map_sub, hh hq, hh hp,
+    hp.isIdempotentElem.mem_range_iff.mp ha, sub_nonneg, sq_le_sq, abs_norm] at h2
+  obtain ⟨U, _, rfl⟩ := isSymmetricProjection_iff_eq_coe_starProjection.mp hq
+  simpa [Submodule.toLinearMap_starProjection_eq_isComplProjection] using
+.mpr le_antisymm (U.norm_starProjection_apply_le a) h2 U.mem_iff_norm_starProjection _
 
 Depends on / 依赖: IsSymmetricProjection, Module, Module.End.mul_apply, RCLike, RCLike.re, T.IsSymmetricProjection, abs_norm, conv_lhs, hT.isIdempotentElem, hT.isSymmetric, hp.isIdempotentElem.mem_range_iff.mp, hp.sub_of_range_le_range, inner_self_eq_norm_sq, inner_sub_left, isIdempotentElem, isPositive, isSymmetric, isSymmetricProject, map_sub, mem_range_iff
 -/
@@ -1577,7 +1599,7 @@ theorem IsPositive.conj_starProjection
     Function.comp_apply, comp_apply]
   simp_rw [← coe_coe, U.starProjection_isSymmetric _, hT.isSymmetric _,
     U.starProjection_isSymmetric _, ← U.starProjection_isSymmetric _, coe_coe,
-    hT.inner_nonneg_
+    hT.inner_nonneg_right, implies_true, and_self]
 
 中文:
 定理 IsPositive.conj_starProjection
@@ -1587,7 +1609,7 @@ theorem IsPositive.conj_starProjection
     Function.comp_apply, comp_apply]
   simp_rw [← coe_coe, U.starProjection_isSymmetric _, hT.isSymmetric _,
     U.starProjection_isSymmetric _, ← U.starProjection_isSymmetric _, coe_coe,
-    hT.inner_nonneg_
+    hT.inner_nonneg_right, implies_true, and_self]
 
 Depends on / 依赖: Function, Function.comp_apply, IsSymmetric, LinearMap, LinearMap.coe_comp, U.starProjection_isSymmetric, and_self, coe_coe, coe_comp, comp_apply, hT.inner_nonneg_right, hT.isSymmetric, implies_true, inner_nonneg_right, isPositive_iff, isSymmetric, simp_rw, starProjection_isSymmetric, toLinearMap_comp
 -/
@@ -1610,7 +1632,11 @@ theorem IsPositive.orthogonalProjectionOnto_comp
   simp only [isPositive_iff, IsSymmetric, toLinearMap_comp, LinearMap.coe_comp, coe_coe,
     Function.comp_apply, comp_apply]
   simp_rw [U.inner_orthogonalProjectionOnto_eq_of_mem_right, Submodule.subtypeL_apply,
-    U.inner_orthogonalProjectionOnto_eq_of_mem_left, ← coe_coe, hT.isSymmetric _, co
+    U.inner_orthogonalProjectionOnto_eq_of_mem_left, ← coe_coe, hT.isSymmetric _, coe_coe,
+    hT.inner_nonneg_right, implies_true, and_self]
+
+@[deprecated (since := "2026-05-05")] alias IsPositive.orthogonalProjection_comp :=
+  IsPositive.orthogonalProjectionOnto_comp
 
 中文:
 定理 IsPositive.orthogonalProjectionOnto_comp
@@ -1619,7 +1645,11 @@ theorem IsPositive.orthogonalProjectionOnto_comp
   simp only [isPositive_iff, IsSymmetric, toLinearMap_comp, LinearMap.coe_comp, coe_coe,
     Function.comp_apply, comp_apply]
   simp_rw [U.inner_orthogonalProjectionOnto_eq_of_mem_right, Submodule.subtypeL_apply,
-    U.inner_orthogonalProjectionOnto_eq_of_mem_left, ← coe_coe, hT.isSymmetric _, co
+    U.inner_orthogonalProjectionOnto_eq_of_mem_left, ← coe_coe, hT.isSymmetric _, coe_coe,
+    hT.inner_nonneg_right, implies_true, and_self]
+
+@[deprecated (since := "2026-05-05")] alias IsPositive.orthogonalProjection_comp :=
+  IsPositive.orthogonalProjectionOnto_comp
 
 Depends on / 依赖: Function, Function.comp_apply, IsSymmetric, LinearMap, LinearMap.coe_comp, Submodule, Submodule.subtypeL_apply, U.inner_orthogonalProjectionOnto_eq_of_mem_left, U.inner_orthogonalProjectionOnto_eq_of_mem_right, and_self, coe_coe, coe_comp, comp_apply, hT.inner_nonneg_right, hT.isSymmetric, implies_true, inner_nonneg_right, inner_orthogonalProjectionOnto_eq_of_mem_left, inner_orthogonalProjectionOnto_eq_of_mem_right, isPositive_iff
 -/
@@ -1650,7 +1680,7 @@ lemma antilipschitz_of_forall_le_inner_map
   by_cases hx0 : x = 0
   · simp [hx0]
   · apply (map_le_map_iff <| OrderIso.mulLeft₀ ‖x‖ (norm_pos_iff.mpr hx0)).mp
-exact (h 
+exact (h x).trans (norm_inner_le_norm _ _).trans (mul_comm _ _).le
 
 中文:
 引理 antilipschitz_of_对任意_le_inner_map
@@ -1662,7 +1692,7 @@ exact (h
   by_cases hx0 : x = 0
   · simp [hx0]
   · apply (map_le_map_iff <| OrderIso.mulLeft₀ ‖x‖ (norm_pos_iff.mpr hx0)).mp
-exact (h 
+exact (h x).trans (norm_inner_le_norm _ _).trans (mul_comm _ _).le
 
 Depends on / 依赖: NNReal, NNReal.coe_inv, OrderIso, OrderIso.mulLeft, antilipschitz_of_bound, coe_inv, f.antilipschitz_of_bound, inv_mul_eq_div, map_le_map_iff, mul_assoc, mul_comm, norm_inner_le_norm, norm_pos_iff, norm_pos_iff.mpr, simp_rw
 -/
@@ -1689,7 +1719,9 @@ lemma isUnit_of_forall_le_norm_inner_map
   refine ⟨?_, ⟨_, h_anti⟩⟩
   rw [Submodule.topologicalClosure_eq_top_iff]; rw [Submodule.eq_bot_iff]
   intro x hx
-  have : ‖x‖ ^ 2 *
+  have : ‖x‖ ^ 2 * c = 0 := le_antisymm (by simpa only [hx (f x) ⟨x, rfl⟩, norm_zero] using h x)
+    (by positivity)
+  aesop
 
 中文:
 引理 isUnit_of_对任意_le_norm_inner_map
@@ -1700,7 +1732,9 @@ lemma isUnit_of_forall_le_norm_inner_map
   refine ⟨?_, ⟨_, h_anti⟩⟩
   rw [Submodule.topologicalClosure_eq_top_iff]; rw [Submodule.eq_bot_iff]
   intro x hx
-  have : ‖x‖ ^ 2 *
+  have : ‖x‖ ^ 2 * c = 0 := le_antisymm (by simpa only [hx (f x) ⟨x, rfl⟩, norm_zero] using h x)
+    (by positivity)
+  aesop
 
 Depends on / 依赖: AntilipschitzWith, Submodule, Submodule.eq_bot_iff, Submodule.topologicalClosure_eq_top_iff, antilipschitz_of_forall_le_inner_map, bijective_iff_dense_range_and_antilipschitz, eq_bot_iff, h_anti, isUnit_iff_bijective, le_antisymm, norm_zero, topologicalClosure_eq_top_iff
 -/
@@ -2049,7 +2083,12 @@ theorem ContinuousLinearMap.isPositive_iff_eq_sum_rankOne
   let a (i : Fin (Module.finrank 𝕜 E)) : E :=
     ((hT.isSymmetric.eigenvalues rfl i).sqrt : 𝕜) • hT.isSymmetric.eigenvectorBasis rfl i
   refine ⟨Module.finrank 𝕜 E, a, ext fun _ => ?_⟩
-  simp_rw
+  simp_rw [_root_.sum_apply, rankOne_apply, a, inner_smul_left, smul_smul, mul_assoc, conj_ofReal,
+    mul_comm (⟪_, _⟫_𝕜), ← mul_assoc, ← ofReal_mul,
+    ← Real.sqrt_mul (hT.toLinearMap.nonneg_eigenvalues rfl _),
+    Real.sqrt_mul_self (hT.toLinearMap.nonneg_eigenvalues rfl _), mul_comm _ (⟪_, _⟫_𝕜),
+    ← smul_eq_mul, smul_assoc, ← hT.isSymmetric.apply_eigenvectorBasis, ← map_smul, ← map_sum,
+    ← OrthonormalBasis.repr_apply_apply, OrthonormalBasis.sum_repr, coe_coe]
 
 中文:
 定理 连续线性映射.isPositive_iff_eq_sum_rankOne
@@ -2059,7 +2098,12 @@ theorem ContinuousLinearMap.isPositive_iff_eq_sum_rankOne
   let a (i : Fin (Module.finrank 𝕜 E)) : E :=
     ((hT.isSymmetric.eigenvalues rfl i).sqrt : 𝕜) • hT.isSymmetric.eigenvectorBasis rfl i
   refine ⟨Module.finrank 𝕜 E, a, ext fun _ => ?_⟩
-  simp_rw
+  simp_rw [_root_.sum_apply, rankOne_apply, a, inner_smul_left, smul_smul, mul_assoc, conj_ofReal,
+    mul_comm (⟪_, _⟫_𝕜), ← mul_assoc, ← ofReal_mul,
+    ← Real.sqrt_mul (hT.toLinearMap.nonneg_eigenvalues rfl _),
+    Real.sqrt_mul_self (hT.toLinearMap.nonneg_eigenvalues rfl _), mul_comm _ (⟪_, _⟫_𝕜),
+    ← smul_eq_mul, smul_assoc, ← hT.isSymmetric.apply_eigenvectorBasis, ← map_smul, ← map_sum,
+    ← OrthonormalBasis.repr_apply_apply, OrthonormalBasis.sum_repr, coe_coe]
 
 Depends on / 依赖: Module, Module.finrank, Real.sqrt_mul, Real.sqrt_mul_s, _root_, _root_.sum_apply, conj_ofReal, eigenvalues, eigenvectorBasis, finrank, hT.isSymmetric.eigenvalues, hT.isSymmetric.eigenvectorBasis, hT.toLinearMap.nonneg_eigenvalues, inner_smul_left, isPositive_rankOne_self, isPositive_sum, isSymmetric, mul_assoc, mul_comm, nonneg_eigenvalues
 -/
@@ -2087,7 +2131,9 @@ theorem Matrix.posSemidef_iff_eq_sum_vecMulVec
   have := Fintype.ofFinite n
   rw [← isPositive_toEuclideanLin_iff]; rw [← isPositive_toContinuousLinearMap_iff]; rw [isPositive_iff_eq_sum_rankOne]
   simp_rw [eq_comm, ← LinearEquiv.symm_apply_eq, coe_toContinuousLinearMap_symm,
-    ContinuousLinearMap.toLinearMap_sum, map_sum, symm_
+    ContinuousLinearMap.toLinearMap_sum, map_sum, symm_toEuclideanLin_rankOne, eq_comm]
+  exact ⟨fun ⟨m, u, hu⟩ => ⟨m, fun i => (u i).ofLp, hu⟩,
+    fun ⟨m, u, hu⟩ => ⟨m, fun i => WithLp.toLp 2 (u i), hu⟩⟩
 
 中文:
 定理 矩阵.posSemidef_iff_eq_sum_vecMulVec
@@ -2097,7 +2143,9 @@ theorem Matrix.posSemidef_iff_eq_sum_vecMulVec
   have := Fintype.ofFinite n
   rw [← isPositive_toEuclideanLin_iff]; rw [← isPositive_toContinuousLinearMap_iff]; rw [isPositive_iff_eq_sum_rankOne]
   simp_rw [eq_comm, ← LinearEquiv.symm_apply_eq, coe_toContinuousLinearMap_symm,
-    ContinuousLinearMap.toLinearMap_sum, map_sum, symm_
+    ContinuousLinearMap.toLinearMap_sum, map_sum, symm_toEuclideanLin_rankOne, eq_comm]
+  exact ⟨fun ⟨m, u, hu⟩ => ⟨m, fun i => (u i).ofLp, hu⟩,
+    fun ⟨m, u, hu⟩ => ⟨m, fun i => WithLp.toLp 2 (u i), hu⟩⟩
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.toLinearMap_sum, Fintype, Fintype.ofFinite, LinearEquiv, LinearEquiv.symm_apply_eq, WithLp, WithLp.toLp, classical, coe_toContinuousLinearMap_symm, eq_comm, isPositive_iff_eq_sum_rankOne, isPositive_toContinuousLinearMap_iff, isPositive_toEuclideanLin_iff, map_sum, ofFinite, simp_rw, symm_apply_eq, symm_toEuclideanLin_rankOne, toLinearMap_sum
 -/

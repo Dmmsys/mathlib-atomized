@@ -233,7 +233,75 @@ definition goalSignature
     let (g, _) ← g.renameInaccessibleFVars
     -- Check if the original goal has foralls before reverting
     -- We only consider it to have "original foralls" if it has a named forall,
-    -- not just implications (which have anonymous or internal hygien
+    -- not just implications (which have anonymous or internal hygienic names)
+    let originalTy ← instantiateMVars (← g.getType)
+    let hasOriginalForalls :=
+      originalTy.isForall &&
+      !originalTy.bindingName!.isAnonymous &&
+      !originalTy.bindingName!.isInternal
+    let (_, g) ← g.revert (clearAuxDeclsInsteadOfRevert := true) (← g.getDecl).lctx.getFVarIds
+    let ty ← instantiateMVars (← g.getType)
+    if ty.hasExprMVar then
+      -- TODO: turn metavariables into new hypotheses?
+      throwError "Extracted goal has metavariables: {ty}"
+    let ty ← Term.levelMVarToParam ty
+    let seenLevels := collectLevelParams {} ty
+    let levels := (← Term.getLevelNames).filter
+      fun u => seenLevels.visitedLevel.contains (.param u)
+addAndCompile Declaration.axiomDecl
+      { name := name
+        levelParams := levels
+        isUnsafe := false
+        type := ty }
+let sig ← addMessageContext MessageData.signature name
+let context ← liftM (m := CoreM) read
+    let state ← get
+    let env ← getEnv
+    let (ts, _) ← ((Mathlib.Command.MinImports.getVisited name).run
+        { context with snap? := none }).run
+        { state with env, maxRecDepth := context.maxRecDepth }
+    let mut hm : Std.HashMap Nat Name := {}
+    for imp in env.header.moduleNames do
+      hm := hm.insert ((env.getModuleIdx? imp).getD default) imp
+    let mut fins : NameSet := {}
+    for t in ts do
+      let new := match env.getModuleIdxFor? t with
+        | some t => (hm.get? t).get!
+        | none => .anonymous -- instead of `getMainModule`, we omit the current module
+      if !fins.contains new then fins := fins.insert new
+    let tot := Mathlib.Command.MinImports.getIrredundantImports (← getEnv) (fins.erase .anonymous)
+    let fileNames := tot.toArray.qsort Name.lt
+    return (sig, ty, fileNames, hasOriginalForalls)
+
+elab_rules : tactic
+  | `(tactic| extract_goal $cfg:config $[using $name?]?) => do
+    let name ← if let some name := name?
+                then pure name.getId
+                else mkAuxDeclName `extracted
+let msg ← withoutModifyingEnv withoutModifyingState do
+      let g ← getMainGoal
+      let g ← do match cfg with
+        | `(config| *) => pure g
+        | `(config| ) =>
+          if (← g.getType >>= instantiateMVars).consumeMData.isConstOf ``False then
+            -- In a contradiction proof, it is not very helpful to clear all hypotheses!
+            pure g
+          else
+            g.cleanup
+        | `(config| $fvars:ident*) =>
+          -- Note: `getFVarIds` does `withMainContext`
+          g.cleanup (toPreserve := (← getFVarIds fvars)) (indirectProps := false)
+        | _ => throwUnsupportedSyntax
+      let (sig, ty, _, hasOriginalForalls) ← goalSignature name g
+      let cmd := if ← Meta.isProp ty then "theorem" else "def"
+      let msg ← if hasOriginalForalls then
+        -- Preserve foralls: format as "theorem name : ty := sorry"
+        pure m!"{cmd} {name} : {ty} := sorry"
+      else
+        -- Convert foralls to parameters: format using signature
+        pure m!"{cmd} {sig} := sorry"
+      pure msg
+    logInfo msg
 
 中文:
 定义 goalSignature
@@ -242,7 +310,75 @@ definition goalSignature
     let (g, _) ← g.renameInaccessibleFVars
     -- Check if the original goal has foralls before reverting
     -- We only consider it to have "original foralls" if it has a named forall,
-    -- not just implications (which have anonymous or internal hygien
+    -- not just implications (which have anonymous or internal hygienic names)
+    let originalTy ← instantiateMVars (← g.getType)
+    let hasOriginalForalls :=
+      originalTy.isForall &&
+      !originalTy.bindingName!.isAnonymous &&
+      !originalTy.bindingName!.isInternal
+    let (_, g) ← g.revert (clearAuxDeclsInsteadOfRevert := true) (← g.getDecl).lctx.getFVarIds
+    let ty ← instantiateMVars (← g.getType)
+    if ty.hasExprMVar then
+      -- TODO: turn metavariables into new hypotheses?
+      throwError "Extracted goal has metavariables: {ty}"
+    let ty ← Term.levelMVarToParam ty
+    let seenLevels := collectLevelParams {} ty
+    let levels := (← Term.getLevelNames).filter
+      fun u => seenLevels.visitedLevel.contains (.param u)
+addAndCompile Declaration.axiomDecl
+      { name := name
+        levelParams := levels
+        isUnsafe := false
+        type := ty }
+let sig ← addMessageContext MessageData.signature name
+let context ← liftM (m := CoreM) read
+    let state ← get
+    let env ← getEnv
+    let (ts, _) ← ((Mathlib.Command.MinImports.getVisited name).run
+        { context with snap? := none }).run
+        { state with env, maxRecDepth := context.maxRecDepth }
+    let mut hm : Std.HashMap Nat Name := {}
+    for imp in env.header.moduleNames do
+      hm := hm.insert ((env.getModuleIdx? imp).getD default) imp
+    let mut fins : NameSet := {}
+    for t in ts do
+      let new := match env.getModuleIdxFor? t with
+        | some t => (hm.get? t).get!
+        | none => .anonymous -- instead of `getMainModule`, we omit the current module
+      if !fins.contains new then fins := fins.insert new
+    let tot := Mathlib.Command.MinImports.getIrredundantImports (← getEnv) (fins.erase .anonymous)
+    let fileNames := tot.toArray.qsort Name.lt
+    return (sig, ty, fileNames, hasOriginalForalls)
+
+elab_rules : tactic
+  | `(tactic| extract_goal $cfg:config $[using $name?]?) => do
+    let name ← if let some name := name?
+                then pure name.getId
+                else mkAuxDeclName `extracted
+let msg ← withoutModifyingEnv withoutModifyingState do
+      let g ← getMainGoal
+      let g ← do match cfg with
+        | `(config| *) => pure g
+        | `(config| ) =>
+          if (← g.getType >>= instantiateMVars).consumeMData.isConstOf ``False then
+            -- In a contradiction proof, it is not very helpful to clear all hypotheses!
+            pure g
+          else
+            g.cleanup
+        | `(config| $fvars:ident*) =>
+          -- Note: `getFVarIds` does `withMainContext`
+          g.cleanup (toPreserve := (← getFVarIds fvars)) (indirectProps := false)
+        | _ => throwUnsupportedSyntax
+      let (sig, ty, _, hasOriginalForalls) ← goalSignature name g
+      let cmd := if ← Meta.isProp ty then "theorem" else "def"
+      let msg ← if hasOriginalForalls then
+        -- Preserve foralls: format as "theorem name : ty := sorry"
+        pure m!"{cmd} {name} : {ty} := sorry"
+      else
+        -- Convert foralls to parameters: format using signature
+        pure m!"{cmd} {sig} := sorry"
+      pure msg
+    logInfo msg
 
 Depends on / 依赖: g.renameInaccessibleFVars, renameInaccessibleFVars, withoutModifyingEnv, withoutModifyingState
 -/

@@ -179,7 +179,7 @@ lemma integrable_cfc
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ bound bound_int bound_ge
     exact .of_forall fun x =>
-      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ 
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
 
 中文:
 引理 integrable_cfc
@@ -189,7 +189,7 @@ lemma integrable_cfc
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ bound bound_int bound_ge
     exact .of_forall fun x =>
-      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ 
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, Integrable, Set.mem_univ, aeStronglyMeasurable_mkD_restrict_of_uncurry, bound_ge, bound_int, cfc_tac, continuousOn, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, integrable_cfc, mem_univ, of_forall, prodMk_right
 -/
@@ -217,7 +217,7 @@ lemma integrableOn_cfc
   · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ bound bound_int bound_ge
     exact ae_restrict_of_forall_mem hs fun x hx =>
-      hf.comp (Continuous.prodMk_right x).cont
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
 
 中文:
 引理 integrableOn_cfc
@@ -227,7 +227,7 @@ lemma integrableOn_cfc
   · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ bound bound_int bound_ge
     exact ae_restrict_of_forall_mem hs fun x hx =>
-      hf.comp (Continuous.prodMk_right x).cont
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, IntegrableOn, aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry, ae_restrict_of_forall_mem, bound_ge, bound_int, cfc_tac, continuousOn, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, integrableOn_cfc, prodMk_right
 -/
@@ -259,7 +259,15 @@ lemma cfc_integral'
     filter_upwards [hf₁] with x cont_x
     rw [mkD_apply_of_continuousOn cont_x]
   have key₂ (z : spectrum 𝕜 a) :
-      ∫ x
+      ∫ x, f x z ∂μ = mkD ((spectrum 𝕜 a).domRestrict (fun z => ∫ x, f x z ∂μ)) 0 z := by
+    rw [mkD_apply_of_continuousOn]
+    rw [continuousOn_iff_continuous_domRestrict]
+.mpr ?_ refine continuous_congr key₁
+    exact map_continuous (∫ x, mkD ((spectrum 𝕜 a).domRestrict (f x)) 0 ∂μ)
+  simp_rw [cfc_eq_cfcL_mkD _ a, cfcL_integral a _ hf₂ ha]
+  congr
+  ext z
+  rw [← key₁]; rw [key₂]
 
 中文:
 引理 cfc_integral'
@@ -272,7 +280,15 @@ lemma cfc_integral'
     filter_upwards [hf₁] with x cont_x
     rw [mkD_apply_of_continuousOn cont_x]
   have key₂ (z : spectrum 𝕜 a) :
-      ∫ x
+      ∫ x, f x z ∂μ = mkD ((spectrum 𝕜 a).domRestrict (fun z => ∫ x, f x z ∂μ)) 0 z := by
+    rw [mkD_apply_of_continuousOn]
+    rw [continuousOn_iff_continuous_domRestrict]
+.mpr ?_ refine continuous_congr key₁
+    exact map_continuous (∫ x, mkD ((spectrum 𝕜 a).domRestrict (f x)) 0 ∂μ)
+  simp_rw [cfc_eq_cfcL_mkD _ a, cfcL_integral a _ hf₂ ha]
+  congr
+  ext z
+  rw [← key₁]; rw [key₂]
 
 Depends on / 依赖: cfc_tac, cont_x, continuousOn_iff_continuous_domRestrict, domRestrict, filter_upwards, integral_apply, integral_congr_ae, mkD_apply_of_continuousOn, spectrum
 -/
@@ -335,7 +351,7 @@ lemma cfc_integral
     hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
   refine cfc_integral' _ _ this ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf
-  · exact hasFinite
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this bound bound_int bound_ge
 
 中文:
 引理 cfc_integral
@@ -345,7 +361,7 @@ lemma cfc_integral
     hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
   refine cfc_integral' _ _ this ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf
-  · exact hasFinite
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this bound bound_int bound_ge
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, ContinuousOn, Set.mem_univ, aeStronglyMeasurable_mkD_restrict_of_uncurry, bound_ge, bound_int, cfc_integral, cfc_tac, continuousOn, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, mem_univ, of_forall, prodMk_right, spectrum
 -/
@@ -373,7 +389,8 @@ lemma cfc_setIntegral
     ae_restrict_of_forall_mem hs fun x hx =>
       hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
   refine cfc_setIntegral' _ _ this ⟨?_, ?_⟩ ha
-  · exact aeStronglyMeasurable_restrict_mkD_restri
+  · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this bound bound_int bound_ge
 
 中文:
 引理 cfc_set整数egral
@@ -383,7 +400,8 @@ lemma cfc_setIntegral
     ae_restrict_of_forall_mem hs fun x hx =>
       hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
   refine cfc_setIntegral' _ _ this ⟨?_, ?_⟩ ha
-  · exact aeStronglyMeasurable_restrict_mkD_restri
+  · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this bound bound_int bound_ge
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, ContinuousOn, aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry, ae_restrict_of_forall_mem, bound_ge, bound_int, cfc_setIntegral, cfc_tac, continuousOn, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, prodMk_right, restrict, spectrum
 -/
@@ -538,7 +556,7 @@ lemma integrable_cfcₙ
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf f_zero
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ f_zero bound bound_int bound_ge
     exact .of_forall fun x =>
-      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz =>
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
 
 中文:
 引理 integrable_cfcₙ
@@ -548,7 +566,7 @@ lemma integrable_cfcₙ
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf f_zero
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ f_zero bound bound_int bound_ge
     exact .of_forall fun x =>
-      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz =>
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, Integrable, Set.mem_univ, aeStronglyMeasurable_mkD_restrict_of_uncurry, bound_ge, bound_int, cfc_tac, continuousOn, f_zero, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, mem_univ, of_forall, prodMk_right
 -/
@@ -578,7 +596,7 @@ lemma integrableOn_cfcₙ
   · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf f_zero
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ f_zero bound bound_int bound_ge
     exact ae_restrict_of_forall_mem hs fun x hx =>
-      hf.comp (Continuous.prodM
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
 
 中文:
 引理 integrableOn_cfcₙ
@@ -588,7 +606,7 @@ lemma integrableOn_cfcₙ
   · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf f_zero
   · refine hasFiniteIntegral_mkD_restrict_of_bound f _ ?_ f_zero bound bound_int bound_ge
     exact ae_restrict_of_forall_mem hs fun x hx =>
-      hf.comp (Continuous.prodM
+      hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, IntegrableOn, aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry, ae_restrict_of_forall_mem, bound_ge, bound_int, cfc_tac, continuousOn, f_zero, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, prodMk_right
 -/
@@ -620,7 +638,17 @@ lemma cfcₙ_integral'
     refine integral_congr_ae ?_
     filter_upwards [hf₁, hf₂] with x cont_x zero_x
     rw [mkD_apply_of_continuousOn cont_x zero_x]
-  have key₂ (
+  have key₂ (z : quasispectrum 𝕜 a) :
+      ∫ x, f x z ∂μ = mkD ((quasispectrum 𝕜 a).domRestrict (fun z => ∫ x, f x z ∂μ)) 0 z := by
+    rw [mkD_apply_of_continuousOn]
+    · rw [continuousOn_iff_continuous_domRestrict]
+.mpr ?_ refine continuous_congr key₁
+      exact map_continuous (∫ x, mkD ((quasispectrum 𝕜 a).domRestrict (f x)) 0 ∂μ)
+    · exact integral_eq_zero_of_ae hf₂
+  simp_rw [cfcₙ_eq_cfcₙL_mkD _ a, cfcₙL_integral a _ hf₃ ha]
+  congr
+  ext z
+  rw [← key₁]; rw [key₂]
 
 中文:
 引理 cfcₙ_integral'
@@ -632,7 +660,17 @@ lemma cfcₙ_integral'
     refine integral_congr_ae ?_
     filter_upwards [hf₁, hf₂] with x cont_x zero_x
     rw [mkD_apply_of_continuousOn cont_x zero_x]
-  have key₂ (
+  have key₂ (z : quasispectrum 𝕜 a) :
+      ∫ x, f x z ∂μ = mkD ((quasispectrum 𝕜 a).domRestrict (fun z => ∫ x, f x z ∂μ)) 0 z := by
+    rw [mkD_apply_of_continuousOn]
+    · rw [continuousOn_iff_continuous_domRestrict]
+.mpr ?_ refine continuous_congr key₁
+      exact map_continuous (∫ x, mkD ((quasispectrum 𝕜 a).domRestrict (f x)) 0 ∂μ)
+    · exact integral_eq_zero_of_ae hf₂
+  simp_rw [cfcₙ_eq_cfcₙL_mkD _ a, cfcₙL_integral a _ hf₃ ha]
+  congr
+  ext z
+  rw [← key₁]; rw [key₂]
 
 Depends on / 依赖: cfc_tac, cont_x, domRestrict, filter_upwards, integral_apply, integral_congr_ae, mkD_apply_of_continuousOn, quasispectrum, zero_x
 -/
@@ -698,6 +736,7 @@ lemma cfcₙ_integral
     hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
   refine cfcₙ_integral' _ _ this f_zero ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf f_zero
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this f_zero bound bound_int bound_ge
 
 中文:
 引理 cfcₙ_integral
@@ -707,6 +746,7 @@ lemma cfcₙ_integral
     hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
   refine cfcₙ_integral' _ _ this f_zero ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf f_zero
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this f_zero bound bound_int bound_ge
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, ContinuousOn, Set.mem_univ, aeStronglyMeasurable_mkD_restrict_of_uncurry, bound_ge, bound_int, cfc_tac, continuousOn, f_zero, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, mem_univ, of_forall, prodMk_right, quasispectrum
 -/
@@ -736,7 +776,8 @@ lemma cfcₙ_setIntegral
     ae_restrict_of_forall_mem hs fun x hx =>
       hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
   refine cfcₙ_setIntegral' _ _ this f_zero ⟨?_, ?_⟩ ha
-  · exact aeStronglyMeasurable_restri
+  · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf f_zero
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this f_zero bound bound_int bound_ge
 
 中文:
 引理 cfcₙ_set整数egral
@@ -746,7 +787,8 @@ lemma cfcₙ_setIntegral
     ae_restrict_of_forall_mem hs fun x hx =>
       hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨hx, hz⟩
   refine cfcₙ_setIntegral' _ _ this f_zero ⟨?_, ?_⟩ ha
-  · exact aeStronglyMeasurable_restri
+  · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf f_zero
+  · exact hasFiniteIntegral_mkD_restrict_of_bound f _ this f_zero bound bound_int bound_ge
 
 Depends on / 依赖: Continuous, Continuous.prodMk_right, ContinuousOn, aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry, ae_restrict_of_forall_mem, bound_ge, bound_int, cfc_tac, continuousOn, f_zero, hasFiniteIntegral_mkD_restrict_of_bound, hf.comp, prodMk_right, quasispectrum, restrict
 -/

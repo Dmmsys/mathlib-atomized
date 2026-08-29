@@ -145,7 +145,7 @@ definition functorCategoryClosed
   have := isLeftAdjoint_square_lift_comonadic (tensorLeft F) ((whiskeringLeft _ _ C).obj (incl I))
     ((whiskeringLeft _ _ C).obj (incl I)) (tensorLeft (incl I ⋙ F)) (Iso.refl _)
   { rightAdj := (tensorLeft F).rightAdjoint
-    adj := Adjunction.o
+    adj := Adjunction.ofIsLeftAdjoint (tensorLeft F) }
 
 中文:
 定义 functorCategoryClosed
@@ -154,7 +154,7 @@ definition functorCategoryClosed
   have := isLeftAdjoint_square_lift_comonadic (tensorLeft F) ((whiskeringLeft _ _ C).obj (incl I))
     ((whiskeringLeft _ _ C).obj (incl I)) (tensorLeft (incl I ⋙ F)) (Iso.refl _)
   { rightAdj := (tensorLeft F).rightAdjoint
-    adj := Adjunction.o
+    adj := Adjunction.ofIsLeftAdjoint (tensorLeft F) }
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, Iso.refl, adjunction, ihom.adjunction, isLeftAdjoint, isLeftAdjoint_square_lift_comonadic, ofIsLeftAdjoint, rightAdj, rightAdjoint, tensorLeft, whiskeringLeft
 -/

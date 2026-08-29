@@ -32,6 +32,7 @@ theorem isProperMap_iff_isCompact_preimage
   mpr := fun ⟨hf, h⟩ => isProperMap_iff_isClosedMap_and_compact_fibers.2
     ⟨hf, fun s hs => (CompactlyCoherentSpace.isClosed_iff _).mpr fun K hK => by
         convert! (((h hK).inter_left hs).image hf).isClosed.preimage continuous_subtype_val using 1
+        aesop, fun _ => h isCompact_singleton⟩
 
 中文:
 定理 isProperMap_iff_isCompact_preimage
@@ -39,6 +40,7 @@ theorem isProperMap_iff_isCompact_preimage
   mpr := fun ⟨hf, h⟩ => isProperMap_iff_isClosedMap_and_compact_fibers.2
     ⟨hf, fun s hs => (CompactlyCoherentSpace.isClosed_iff _).mpr fun K hK => by
         convert! (((h hK).inter_left hs).image hf).isClosed.preimage continuous_subtype_val using 1
+        aesop, fun _ => h isCompact_singleton⟩
 
 Depends on / 依赖: continuous, hf.continuous, hf.isCompact_preimage, isCompact_preimage
 -/
@@ -60,7 +62,9 @@ lemma isProperMap_iff_tendsto_cocompact
     hasBasis_cocompact.tendsto_right_iff, ← mem_preimage, eventually_mem_set, preimage_compl]
   refine and_congr_right fun f_cont =>
     ⟨fun H K hK => (H hK).compl_mem_cocompact, fun H K hK => ?_⟩
-  rcases mem_cocompact.mp (H K hK) with ⟨K', hK', hK
+  rcases mem_cocompact.mp (H K hK) with ⟨K', hK', hK'y⟩
+  exact hK'.of_isClosed_subset (hK.isClosed.preimage f_cont)
+    (compl_le_compl_iff_le.mp hK'y)
 
 中文:
 引理 isProperMap_iff_tendsto_cocompact
@@ -69,7 +73,9 @@ lemma isProperMap_iff_tendsto_cocompact
     hasBasis_cocompact.tendsto_right_iff, ← mem_preimage, eventually_mem_set, preimage_compl]
   refine and_congr_right fun f_cont =>
     ⟨fun H K hK => (H hK).compl_mem_cocompact, fun H K hK => ?_⟩
-  rcases mem_cocompact.mp (H K hK) with ⟨K', hK', hK
+  rcases mem_cocompact.mp (H K hK) with ⟨K', hK', hK'y⟩
+  exact hK'.of_isClosed_subset (hK.isClosed.preimage f_cont)
+    (compl_le_compl_iff_le.mp hK'y)
 
 Depends on / 依赖: and_congr_right, compl_le_compl_iff_le, compl_le_compl_iff_le.mp, compl_mem_cocompact, eventually_mem_set, f_cont, hK.isClosed.preimage, hasBasis_cocompact, hasBasis_cocompact.tendsto_right_iff, isClosed, isProperMap_iff_isCompact_preimage, mem_cocompact, mem_cocompact.mp, mem_preimage, of_isClosed_subset, preimage, preimage_compl, simp_rw, tendsto_right_iff
 -/

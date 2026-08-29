@@ -78,7 +78,14 @@ theorem isLocalHom_of_le_jacobson_bot
     obtain ⟨b, hb⟩ := h
     obtain ⟨b, rfl⟩ := Ideal.Quotient.mk_surjective b
     use Ideal.Quotient.mk _ b
-    rw [← (Ideal.Quotient.mk _).map_one]; rw [← (Ideal.Quotient.
+    rw [← (Ideal.Quotient.mk _).map_one]; rw [← (Ideal.Quotient.mk _).map_mul]; rw [Ideal.Quotient.eq] at hb ⊢
+    exact h hb
+  obtain ⟨⟨x, y, h1, h2⟩, rfl : x = _⟩ := this
+  obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y
+  rw [← (Ideal.Quotient.mk _).map_mul]; rw [← (Ideal.Quotient.mk _).map_one]; rw [Ideal.Quotient.eq]; rw [Ideal.mem_jacobson_bot] at h1 h2
+  specialize h1 1
+  have h1 : IsUnit a ∧ IsUnit y := by simpa using h1
+  exact h1.1
 
 中文:
 定理 isLocalHom_of_le_jacobson_bot
@@ -91,7 +98,14 @@ theorem isLocalHom_of_le_jacobson_bot
     obtain ⟨b, hb⟩ := h
     obtain ⟨b, rfl⟩ := Ideal.Quotient.mk_surjective b
     use Ideal.Quotient.mk _ b
-    rw [← (Ideal.Quotient.mk _).map_one]; rw [← (Ideal.Quotient.
+    rw [← (Ideal.Quotient.mk _).map_one]; rw [← (Ideal.Quotient.mk _).map_mul]; rw [Ideal.Quotient.eq] at hb ⊢
+    exact h hb
+  obtain ⟨⟨x, y, h1, h2⟩, rfl : x = _⟩ := this
+  obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y
+  rw [← (Ideal.Quotient.mk _).map_mul]; rw [← (Ideal.Quotient.mk _).map_one]; rw [Ideal.Quotient.eq]; rw [Ideal.mem_jacobson_bot] at h1 h2
+  specialize h1 1
+  have h1 : IsUnit a ∧ IsUnit y := by simpa using h1
+  exact h1.1
 
 Depends on / 依赖: Ideal.Quotient.eq, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.jacobson, IsUnit, Quotient, isUnit_iff_exists_inv, jacobson, map_mul, map_one, mk_surjective
 -/
@@ -180,7 +194,23 @@ theorem HenselianLocalRing.TFAE
     specialize H f hf (residue R a₀)
     have aux := flip mem_nonunits_iff.mp h₂
     simp only [aeval_def, ResidueField.algebraMap_eq, eval₂_at_apply, ←
-  
+      Ideal.Quotient.eq_zero_iff_mem, ← IsLocalRing.mem_maximalIdeal] at H h₁ aux
+    obtain ⟨a, ha₁, ha₂⟩ := H h₁ aux
+    refine ⟨a, ha₁, ?_⟩
+    rw [← Ideal.Quotient.eq_zero_iff_mem]
+    rwa [← sub_eq_zero, ← map_sub] at ha₂
+  tfae_have 1 -> 3
+  | hR, K, _K, φ, hφ, f, hf, a₀, h₁, h₂ => by
+    obtain ⟨a₀, rfl⟩ := hφ a₀
+    have H := HenselianLocalRing.is_henselian f hf a₀
+    simp only [← ker_eq_maximalIdeal φ hφ, eval₂_at_apply, RingHom.mem_ker] at H h₁ h₂
+    obtain ⟨a, ha₁, ha₂⟩ := H h₁ (by
+      contrapose h₂
+      rwa [← mem_nonunits_iff, ← mem_maximalIdeal, ← ker_eq_maximalIdeal φ hφ,
+        RingHom.mem_ker] at h₂)
+    refine ⟨a, ha₁, ?_⟩
+    rwa [φ.map_sub, sub_eq_zero] at ha₂
+  tfae_finish
 
 中文:
 定理 HenselianLocal环.TFAE
@@ -195,7 +225,23 @@ theorem HenselianLocalRing.TFAE
     specialize H f hf (residue R a₀)
     have aux := flip mem_nonunits_iff.mp h₂
     simp only [aeval_def, ResidueField.algebraMap_eq, eval₂_at_apply, ←
-  
+      Ideal.Quotient.eq_zero_iff_mem, ← IsLocalRing.mem_maximalIdeal] at H h₁ aux
+    obtain ⟨a, ha₁, ha₂⟩ := H h₁ aux
+    refine ⟨a, ha₁, ?_⟩
+    rw [← Ideal.Quotient.eq_zero_iff_mem]
+    rwa [← sub_eq_zero, ← map_sub] at ha₂
+  tfae_have 1 -> 3
+  | hR, K, _K, φ, hφ, f, hf, a₀, h₁, h₂ => by
+    obtain ⟨a₀, rfl⟩ := hφ a₀
+    have H := HenselianLocalRing.is_henselian f hf a₀
+    simp only [← ker_eq_maximalIdeal φ hφ, eval₂_at_apply, RingHom.mem_ker] at H h₁ h₂
+    obtain ⟨a, ha₁, ha₂⟩ := H h₁ (by
+      contrapose h₂
+      rwa [← mem_nonunits_iff, ← mem_maximalIdeal, ← ker_eq_maximalIdeal φ hφ,
+        RingHom.mem_ker] at h₂)
+    refine ⟨a, ha₁, ?_⟩
+    rwa [φ.map_sub, sub_eq_zero] at ha₂
+  tfae_finish
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk_surjective, IsLocalRing, IsLocalRing.mem_maximalIdeal, Quotient, ResidueField, ResidueField.algebraMap_eq, aeval_def, algebraMap_eq, eq_zero_iff_mem, map_sub, mem_maximalIdeal, mem_nonunits_iff, mem_nonunits_iff.mp, mk_surjective, residue, specialize, sub_eq_zero, tfae_have
 -/
@@ -357,7 +403,10 @@ theorem IsLocalRing.eq_of_eval_eq_zero_of_not_isUnit_sub
   suffices (c * (b - a) + eval a (derivative f)) ∉ maximalIdeal R by
     rw [notMem_maximalIdeal]; rw [isUnit_iff_exists] at this
     grind
-  by_con
+  by_contra!
+  replace this := (maximalIdeal R).add_mem this ((maximalIdeal R).mul_mem_left c h)
+  ring_nf at this
+  contradiction
 
 中文:
 定理 是局部环.eq_of_eval_eq_zero_of_not_isUnit_sub
@@ -368,7 +417,10 @@ theorem IsLocalRing.eq_of_eval_eq_zero_of_not_isUnit_sub
   suffices (c * (b - a) + eval a (derivative f)) ∉ maximalIdeal R by
     rw [notMem_maximalIdeal]; rw [isUnit_iff_exists] at this
     grind
-  by_con
+  by_contra!
+  replace this := (maximalIdeal R).add_mem this ((maximalIdeal R).mul_mem_left c h)
+  ring_nf at this
+  contradiction
 
 Depends on / 依赖: add_mem, derivative, exists_mul_sq_add_linear_part_eq_eval_add, isUnit_iff_exists, maximalIdeal, mul_mem_left, notMem_maximalIdeal, replace, ring_nf
 -/

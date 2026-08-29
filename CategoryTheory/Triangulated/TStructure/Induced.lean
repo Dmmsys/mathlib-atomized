@@ -73,7 +73,25 @@ definition tStructure
   ge n X := t.ge n X.obj
   le_isClosedUnderIsomorphisms n := ⟨fun {X Y} e hX => (t.le n).prop_of_iso (P.ι.mapIso e) hX⟩
   ge_isClosedUnderIsomorphisms n := ⟨fun {X Y} e hX => (t.ge n).prop_of_iso (P.ι.mapIso e) hX⟩
-  le_shift n a n' h X hX := (t.le n').prop_of_iso ((P.ι.commShiftIso a).
+  le_shift n a n' h X hX := (t.le n').prop_of_iso ((P.ι.commShiftIso a).symm.app X)
+      (t.le_shift n a n' h X.obj hX)
+  ge_shift n a n' h X hX := (t.ge n').prop_of_iso ((P.ι.commShiftIso a).symm.app X)
+    (t.ge_shift n a n' h X.obj hX)
+  zero' {X Y} f hX hY := P.ι.map_injective (by
+    rw [Functor.map_zero]
+    exact t.zero' (P.ι.map f) hX hY)
+  le_zero_le X hX := t.le_zero_le _ hX
+  ge_one_le X hX := t.ge_one_le _ hX
+  exists_triangle_zero_one A := by
+    obtain ⟨X, Y, hX, hY, f, g, h, hT, ⟨X', hX', ⟨e⟩⟩, ⟨Y', hY', ⟨e'⟩⟩⟩ :=
+      h.exists_triangle_zero_one A.1 A.2
+    exact ⟨⟨X', hX'⟩, ⟨Y', hY'⟩, (t.le 0).prop_of_iso e hX.le,
+      (t.ge 1).prop_of_iso e' hY.ge,
+      P.fullyFaithfulι.preimage (e.inv ≫ f),
+      P.fullyFaithfulι.preimage (g ≫ e'.hom),
+      P.fullyFaithfulι.preimage (e'.inv ≫ h ≫ e.hom⟦(1 : Int)⟧' ≫
+          (P.ι.commShiftIso (1 : Int)).inv.app ⟨X', hX'⟩),
+      isomorphic_distinguished _ hT _ (Triangle.isoMk _ _ e.symm (Iso.refl _) e'.symm)⟩
 
 中文:
 定义 tStructure
@@ -82,7 +100,25 @@ definition tStructure
   ge n X := t.ge n X.obj
   le_isClosedUnderIsomorphisms n := ⟨fun {X Y} e hX => (t.le n).prop_of_iso (P.ι.mapIso e) hX⟩
   ge_isClosedUnderIsomorphisms n := ⟨fun {X Y} e hX => (t.ge n).prop_of_iso (P.ι.mapIso e) hX⟩
-  le_shift n a n' h X hX := (t.le n').prop_of_iso ((P.ι.commShiftIso a).
+  le_shift n a n' h X hX := (t.le n').prop_of_iso ((P.ι.commShiftIso a).symm.app X)
+      (t.le_shift n a n' h X.obj hX)
+  ge_shift n a n' h X hX := (t.ge n').prop_of_iso ((P.ι.commShiftIso a).symm.app X)
+    (t.ge_shift n a n' h X.obj hX)
+  zero' {X Y} f hX hY := P.ι.map_injective (by
+    rw [Functor.map_zero]
+    exact t.zero' (P.ι.map f) hX hY)
+  le_zero_le X hX := t.le_zero_le _ hX
+  ge_one_le X hX := t.ge_one_le _ hX
+  exists_triangle_zero_one A := by
+    obtain ⟨X, Y, hX, hY, f, g, h, hT, ⟨X', hX', ⟨e⟩⟩, ⟨Y', hY', ⟨e'⟩⟩⟩ :=
+      h.exists_triangle_zero_one A.1 A.2
+    exact ⟨⟨X', hX'⟩, ⟨Y', hY'⟩, (t.le 0).prop_of_iso e hX.le,
+      (t.ge 1).prop_of_iso e' hY.ge,
+      P.fullyFaithfulι.preimage (e.inv ≫ f),
+      P.fullyFaithfulι.preimage (g ≫ e'.hom),
+      P.fullyFaithfulι.preimage (e'.inv ≫ h ≫ e.hom⟦(1 : Int)⟧' ≫
+          (P.ι.commShiftIso (1 : Int)).inv.app ⟨X', hX'⟩),
+      isomorphic_distinguished _ hT _ (Triangle.isoMk _ _ e.symm (Iso.refl _) e'.symm)⟩
 
 Depends on / 依赖: X.obj, t.le
 -/
@@ -184,7 +220,9 @@ lemma mem_of_hasInductedTStructure
     (P.ι.map_distinguished _ ((P.tStructure t).triangleLEGE_distinguished n₀ n₁ h ⟨_, h₂⟩))
     (Iso.refl _) n₀ n₁ inferInstance inferInstance
       (by dsimp; rw [← P.tStructure_isLE_iff]; infer_instance)
-      (by dsimp; rw [← P.tStructure_isGE_iff]; 
+      (by dsimp; rw [← P.tStructure_isGE_iff]; infer_instance)
+  exact ⟨(P.prop_iff_of_iso (Triangle.π₁.mapIso e)).2 (P.prop_ι_obj _),
+    (P.prop_iff_of_iso (Triangle.π₃.mapIso e)).2 (P.prop_ι_obj _)⟩
 
 中文:
 引理 mem_of_hasInductedTStructure
@@ -194,7 +232,9 @@ lemma mem_of_hasInductedTStructure
     (P.ι.map_distinguished _ ((P.tStructure t).triangleLEGE_distinguished n₀ n₁ h ⟨_, h₂⟩))
     (Iso.refl _) n₀ n₁ inferInstance inferInstance
       (by dsimp; rw [← P.tStructure_isLE_iff]; infer_instance)
-      (by dsimp; rw [← P.tStructure_isGE_iff]; 
+      (by dsimp; rw [← P.tStructure_isGE_iff]; infer_instance)
+  exact ⟨(P.prop_iff_of_iso (Triangle.π₁.mapIso e)).2 (P.prop_ι_obj _),
+    (P.prop_iff_of_iso (Triangle.π₃.mapIso e)).2 (P.prop_ι_obj _)⟩
 
 Depends on / 依赖: Iso.refl, P.prop_, P.prop_iff_of_iso, P.tStructure, P.tStructure_isGE_iff, P.tStructure_isLE_iff, Triangle, infer_instance, mapIso, map_distinguished, prop_iff_of_iso, t.triangle_iso_exists, tStructure, tStructure_isGE_iff, tStructure_isLE_iff, triangleLEGE_distinguished, triangle_iso_exists
 -/

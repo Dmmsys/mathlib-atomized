@@ -836,13 +836,13 @@ English:
 theorem map_le_lineMap_iff_slope_le_slope_left
   given: (h : 0 < r * (b - a))
   proof: by
-  rw [lineMap_apply]; rw [lineMap_apply]; rw [slope]; rw [slope]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vadd_eq_add]; rw [vadd_eq_add]; rw [smul_eq_mul]; rw [add_sub_cancel_right]; rw [smul_sub]; rw [smul_sub]; rw [smul_sub]; rw [sub_le_iff_le_add]; rw [mul_inv_rev]; rw [mul_s
+  rw [lineMap_apply]; rw [lineMap_apply]; rw [slope]; rw [slope]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vadd_eq_add]; rw [vadd_eq_add]; rw [smul_eq_mul]; rw [add_sub_cancel_right]; rw [smul_sub]; rw [smul_sub]; rw [smul_sub]; rw [sub_le_iff_le_add]; rw [mul_inv_rev]; rw [mul_smul]; rw [mul_smul]; rw [← smul_sub]; rw [← smul_sub]; rw [← smul_add]; rw [smul_smul]; rw [← mul_inv_rev]; rw [inv_smul_le_iff_of_pos h]; rw [smul_smul]; rw [mul_inv_cancel_right₀ (right_ne_zero_of_mul h.ne')]; rw [smul_add]; rw [smul_inv_smul₀ (left_ne_zero_of_mul h.ne')]
 
 中文:
 定理 map_le_lineMap_iff_slope_le_slope_left
   条件: (h : 0 < r * (b - a))
   证明: by
-  rw [lineMap_apply]; rw [lineMap_apply]; rw [slope]; rw [slope]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vadd_eq_add]; rw [vadd_eq_add]; rw [smul_eq_mul]; rw [add_sub_cancel_right]; rw [smul_sub]; rw [smul_sub]; rw [smul_sub]; rw [sub_le_iff_le_add]; rw [mul_inv_rev]; rw [mul_s
+  rw [lineMap_apply]; rw [lineMap_apply]; rw [slope]; rw [slope]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vsub_eq_sub]; rw [vadd_eq_add]; rw [vadd_eq_add]; rw [smul_eq_mul]; rw [add_sub_cancel_right]; rw [smul_sub]; rw [smul_sub]; rw [smul_sub]; rw [sub_le_iff_le_add]; rw [mul_inv_rev]; rw [mul_smul]; rw [mul_smul]; rw [← smul_sub]; rw [← smul_sub]; rw [← smul_add]; rw [smul_smul]; rw [← mul_inv_rev]; rw [inv_smul_le_iff_of_pos h]; rw [smul_smul]; rw [mul_inv_cancel_right₀ (right_ne_zero_of_mul h.ne')]; rw [smul_add]; rw [smul_inv_smul₀ (left_ne_zero_of_mul h.ne')]
 -/
 theorem map_le_lineMap_iff_slope_le_slope_left (h : 0 < r * (b - a)) :
     f c <= lineMap (f a) (f b) r ↔ slope f a c <= slope f a b := by
@@ -922,7 +922,8 @@ theorem map_le_lineMap_iff_slope_le_slope_right
   rw [← lineMap_apply_one_sub]; rw [← lineMap_apply_one_sub _ _ r]
   revert h; generalize 1 - r = r'; clear! r; intro h
   simp_rw [lineMap_apply, slope, vsub_eq_sub, vadd_eq_add, smul_eq_mul]
-  rw [sub_add_eq_sub_sub_swap]; rw [sub_self]; rw [zero_sub]; rw [neg_mul_eq_mul_neg]; rw [neg_sub]; rw [
+  rw [sub_add_eq_sub_sub_swap]; rw [sub_self]; rw [zero_sub]; rw [neg_mul_eq_mul_neg]; rw [neg_sub]; rw [le_inv_smul_iff_of_pos h]; rw [smul_smul]; rw [mul_inv_cancel_right₀]; rw [le_sub_comm]; rw [← neg_sub (f b)]; rw [smul_neg]; rw [neg_add_eq_sub]
+  · exact right_ne_zero_of_mul h.ne'
 
 中文:
 定理 map_le_lineMap_iff_slope_le_slope_right
@@ -931,7 +932,8 @@ theorem map_le_lineMap_iff_slope_le_slope_right
   rw [← lineMap_apply_one_sub]; rw [← lineMap_apply_one_sub _ _ r]
   revert h; generalize 1 - r = r'; clear! r; intro h
   simp_rw [lineMap_apply, slope, vsub_eq_sub, vadd_eq_add, smul_eq_mul]
-  rw [sub_add_eq_sub_sub_swap]; rw [sub_self]; rw [zero_sub]; rw [neg_mul_eq_mul_neg]; rw [neg_sub]; rw [
+  rw [sub_add_eq_sub_sub_swap]; rw [sub_self]; rw [zero_sub]; rw [neg_mul_eq_mul_neg]; rw [neg_sub]; rw [le_inv_smul_iff_of_pos h]; rw [smul_smul]; rw [mul_inv_cancel_right₀]; rw [le_sub_comm]; rw [← neg_sub (f b)]; rw [smul_neg]; rw [neg_add_eq_sub]
+  · exact right_ne_zero_of_mul h.ne'
 
 Depends on / 依赖: generalize, h.ne, le_inv_smul_iff_of_pos, le_sub_comm, lineMap_apply, lineMap_apply_one_sub, neg_add_eq_sub, neg_mul_eq_mul_neg, neg_sub, revert, right_ne_zero_of_mul, simp_rw, smul_eq_mul, smul_neg, smul_smul, sub_add_eq_sub_sub_swap, sub_self, vadd_eq_add, vsub_eq_sub, zero_sub
 -/

@@ -371,7 +371,21 @@ lemma IsConvexSet.image
 weights := .onFinset u (fun x => if x in u then w.weights (f x) else 0) by simp +contextual
       nonneg x := by simp; split <;> simp
       total := by
-        sim
+        simp only [implies_true, sum_onFinset, Finset.sum_ite_mem, Finset.inter_self,
+        ← Finset.sum_image hfu, huw]
+        exact w.total
+    }, hs.sConvexComb_mem <| by grw [support_onFinset_subset, hus], ?_⟩
+  rw [hf.map_sConvexComb]
+  congr
+  ext y
+  rw [StdSimplex.weights_map]
+  by_cases hy : y in w.weights.support
+  · rw [← huw, Finset.mem_image] at hy
+    obtain ⟨x, hx, rfl⟩ := hy
+    convert mapDomain_apply' _ _ support_onFinset_subset hfu hx
+    exact (if_pos hx).symm
+  · rw [mapDomain_of_not_mem_image_support (by simp [← huw] at ⊢ hy; tauto)]
+    simp_all
 
 中文:
 引理 IsConvexSet.像
@@ -384,7 +398,21 @@ weights := .onFinset u (fun x => if x in u then w.weights (f x) else 0) by simp 
 weights := .onFinset u (fun x => if x in u then w.weights (f x) else 0) by simp +contextual
       nonneg x := by simp; split <;> simp
       total := by
-        sim
+        simp only [implies_true, sum_onFinset, Finset.sum_ite_mem, Finset.inter_self,
+        ← Finset.sum_image hfu, huw]
+        exact w.total
+    }, hs.sConvexComb_mem <| by grw [support_onFinset_subset, hus], ?_⟩
+  rw [hf.map_sConvexComb]
+  congr
+  ext y
+  rw [StdSimplex.weights_map]
+  by_cases hy : y in w.weights.support
+  · rw [← huw, Finset.mem_image] at hy
+    obtain ⟨x, hx, rfl⟩ := hy
+    convert mapDomain_apply' _ _ support_onFinset_subset hfu hx
+    exact (if_pos hx).symm
+  · rw [mapDomain_of_not_mem_image_support (by simp [← huw] at ⊢ hy; tauto)]
+    simp_all
 -/
 protected lemma IsConvexSet.image (hf : IsAffineMap R f) (hs : IsConvexSet R s) :
     IsConvexSet R (f '' s) := by
@@ -631,7 +659,15 @@ lemma IsConvexSet.of_convexCombPair_mem
   induction ht using Finset.Nonempty.cons_induction generalizing w with
   | singleton x => simp_all [eq_comm]
   | cons x t hx ht ih =>
-  have hwx : w.weights x != 0
+  have hwx : w.weights x != 0 := by simpa using congr(x in $hsw)
+  have hwx' : exists y != x, w.weights y != 0 := by
+    obtain ⟨y, hy⟩ := ht
+    exact ⟨y, ne_of_mem_of_not_mem hy hx, by simpa [hy] using congr(y in $hsw)⟩
+  rw [← w.convexCombPair_restrict_restrict_compl {x} (by simpa) hwx']
+  simp only [mem_singleton_iff, StdSimplex.restrict_singleton, sConvexComb_convexCombPair,
+    sConvexComb_single]
+exact hs _ _ _ _ _ _ (hw <| by simp) _ ih (by grw [← hw, ← Finset.subset_cons])
+    (by simp [← hsw]; grind)
 
 中文:
 引理 IsConvexSet.of_convexCombPair_mem
@@ -644,7 +680,15 @@ lemma IsConvexSet.of_convexCombPair_mem
   induction ht using Finset.Nonempty.cons_induction generalizing w with
   | singleton x => simp_all [eq_comm]
   | cons x t hx ht ih =>
-  have hwx : w.weights x != 0
+  have hwx : w.weights x != 0 := by simpa using congr(x in $hsw)
+  have hwx' : exists y != x, w.weights y != 0 := by
+    obtain ⟨y, hy⟩ := ht
+    exact ⟨y, ne_of_mem_of_not_mem hy hx, by simpa [hy] using congr(y in $hsw)⟩
+  rw [← w.convexCombPair_restrict_restrict_compl {x} (by simpa) hwx']
+  simp only [mem_singleton_iff, StdSimplex.restrict_singleton, sConvexComb_convexCombPair,
+    sConvexComb_single]
+exact hs _ _ _ _ _ _ (hw <| by simp) _ ih (by grw [← hw, ← Finset.subset_cons])
+    (by simp [← hsw]; grind)
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Nonempty, classical, clear_value, cons_induction, convexCombPair_restrict_res, eq_comm, generalizing, ne_of_mem_of_not_mem, singleton, support, support_weights_nonempty, t.Nonempty, w.convexCombPair_restrict_res, w.support_weights_nonempty, w.weights, w.weights.support, weights
 -/

@@ -323,7 +323,17 @@ lemma exists_Finpartition_sum_ge
   obtain hw | hw : preVariationFun f s != 0 ∨ preVariationFun f s = 0 := ne_or_eq _ _
   · have : 0 < ε' := by
       simp only [lt_inf_iff, ε']
-      exa
+      exact ⟨hε, toNNReal_pos hw h⟩
+    let a := preVariationFun f s - ε'
+    have ha : a < preVariationFun f s := ENNReal.sub_lt_self h hw (by positivity)
+    obtain ⟨P, hP⟩ := exists_Finpartition_sum_gt f hs ha
+    use P
+    calc preVariationFun f s
+      _ = a + ε' := (tsub_add_cancel_of_le hε').symm
+      _ <= ∑ p in P.parts, f p + ε' := by
+        exact (ENNReal.add_le_add_iff_right coe_ne_top).mpr (le_of_lt hP)
+      _ <= ∑ p in P.parts, f p + ε := by gcongr
+  · simp [*]
 
 中文:
 引理 存在_Finpartition_sum_ge
@@ -335,7 +345,17 @@ lemma exists_Finpartition_sum_ge
   obtain hw | hw : preVariationFun f s != 0 ∨ preVariationFun f s = 0 := ne_or_eq _ _
   · have : 0 < ε' := by
       simp only [lt_inf_iff, ε']
-      exa
+      exact ⟨hε, toNNReal_pos hw h⟩
+    let a := preVariationFun f s - ε'
+    have ha : a < preVariationFun f s := ENNReal.sub_lt_self h hw (by positivity)
+    obtain ⟨P, hP⟩ := exists_Finpartition_sum_gt f hs ha
+    use P
+    calc preVariationFun f s
+      _ = a + ε' := (tsub_add_cancel_of_le hε').symm
+      _ <= ∑ p in P.parts, f p + ε' := by
+        exact (ENNReal.add_le_add_iff_right coe_ne_top).mpr (le_of_lt hP)
+      _ <= ∑ p in P.parts, f p + ε := by gcongr
+  · simp [*]
 
 Depends on / 依赖: ENNReal, ENNReal.sub_lt_self, exists_Finpartition_sum_gt, lt_inf_iff, ne_or_eq, preVariationFun, sub_lt_self, toNNReal, toNNReal_pos
 -/
@@ -404,7 +424,15 @@ lemma sum_le_preVariationFun_iUnion'
   have hs_disj : Set.PairwiseDisjoint (Finset.range n : Set Nat) s' := fun i _ j _ hij => by
     simp only [Function.onFun, disjoint_iff, Subtype.ext_iff]
     exact Set.disjoint_iff_inter_eq_empty.mp (hs' hij)
-  let Q := Finpartition.combi
+  let Q := Finpartition.combine P hs_disj.supIndep
+  have hQ_le : (Finset.range n).sup s' <= ⟨⋃ i, s i, MeasurableSet.iUnion hs⟩ := by
+    rw [← Subtype.coe_le_coe]; rw [Finset.sup_coe (Psup := by measurability)]; rw [Finset.sup_set_eq_biUnion]
+    exact Set.iUnion₂_subset fun i _ => Set.subset_iUnion s i
+  let R := Q.extendOfLE hQ_le
+  calc ∑ i in Finset.range n, ∑ p in (P i).parts, f p
+    _ = ∑ p in Q.parts, f p := (Finpartition.sum_combine P hs_disj.supIndep (fun p => f p)).symm
+    _ <= ∑ p in R.parts, f p := Finset.sum_le_sum_of_subset (Q.parts_subset_extendOfLE hQ_le)
+    _ <= preVariationFun f (⋃ i, s i) := sum_le f (MeasurableSet.iUnion hs) R
 
 中文:
 引理 sum_le_preVariationFun_iUnion'
@@ -414,7 +442,15 @@ lemma sum_le_preVariationFun_iUnion'
   have hs_disj : Set.PairwiseDisjoint (Finset.range n : Set Nat) s' := fun i _ j _ hij => by
     simp only [Function.onFun, disjoint_iff, Subtype.ext_iff]
     exact Set.disjoint_iff_inter_eq_empty.mp (hs' hij)
-  let Q := Finpartition.combi
+  let Q := Finpartition.combine P hs_disj.supIndep
+  have hQ_le : (Finset.range n).sup s' <= ⟨⋃ i, s i, MeasurableSet.iUnion hs⟩ := by
+    rw [← Subtype.coe_le_coe]; rw [Finset.sup_coe (Psup := by measurability)]; rw [Finset.sup_set_eq_biUnion]
+    exact Set.iUnion₂_subset fun i _ => Set.subset_iUnion s i
+  let R := Q.extendOfLE hQ_le
+  calc ∑ i in Finset.range n, ∑ p in (P i).parts, f p
+    _ = ∑ p in Q.parts, f p := (Finpartition.sum_combine P hs_disj.supIndep (fun p => f p)).symm
+    _ <= ∑ p in R.parts, f p := Finset.sum_le_sum_of_subset (Q.parts_subset_extendOfLE hQ_le)
+    _ <= preVariationFun f (⋃ i, s i) := sum_le f (MeasurableSet.iUnion hs) R
 
 Depends on / 依赖: Finpartition, Finpartition.combine, Finset, Finset.range, Finset.sup_coe, Finset.sup_set_eq_biUnion, Function, Function.onFun, MeasurableSet, MeasurableSet.iUnion, PairwiseDisjoint, Set.PairwiseDisjoint, Set.disjoint_iff_inter_eq_empty.mp, Subtype, Subtype.coe_le_coe, Subtype.ext_iff, coe_le_coe, combine, disjoint_iff, disjoint_iff_inter_eq_empty
 -/
@@ -450,7 +486,17 @@ lemma sum_le_preVariationFun_iUnion
   let ε := ε' / n
   have hε : 0 < ε := by positivity
 have hs'' i : preVariationFun f (s i) != ⊤ := lt_top_iff_ne_top.mp
-    (mono f (Measurabl
+    (mono f (MeasurableSet.iUnion hs) (Set.subset_iUnion s i)).trans_lt hsnetop
+  -- For each set `s i` we choose a Finpartition `P i` such that, for each `i`,
+  -- `preVariationFun f (s i) ≤ ∑ p ∈ (P i), f p + ε`.
+  choose P hP using fun i => exists_Finpartition_sum_ge f (hs i) (hε) (hs'' i)
+  calc ∑ i in Finset.range n, preVariationFun f (s i)
+    _ <= ∑ i in Finset.range n, (∑ p in (P i).parts, f p + ε) := Finset.sum_le_sum fun i _ => hP i
+    _ = ∑ i in Finset.range n, ∑ p in (P i).parts, f p + ε' := by
+      rw [Finset.sum_add_distrib]; norm_cast
+      simp [show n * ε = ε' by field]
+    _ <= preVariationFun f (⋃ i, s i) + ε' := by
+      gcongr; exact sum_le_preVariationFun_iUnion' f hs hs' P n
 
 中文:
 引理 sum_le_preVariationFun_iUnion
@@ -463,7 +509,17 @@ have hs'' i : preVariationFun f (s i) != ⊤ := lt_top_iff_ne_top.mp
   let ε := ε' / n
   have hε : 0 < ε := by positivity
 have hs'' i : preVariationFun f (s i) != ⊤ := lt_top_iff_ne_top.mp
-    (mono f (Measurabl
+    (mono f (MeasurableSet.iUnion hs) (Set.subset_iUnion s i)).trans_lt hsnetop
+  -- For each set `s i` we choose a Finpartition `P i` such that, for each `i`,
+  -- `preVariationFun f (s i) ≤ ∑ p ∈ (P i), f p + ε`.
+  choose P hP using fun i => exists_Finpartition_sum_ge f (hs i) (hε) (hs'' i)
+  calc ∑ i in Finset.range n, preVariationFun f (s i)
+    _ <= ∑ i in Finset.range n, (∑ p in (P i).parts, f p + ε) := Finset.sum_le_sum fun i _ => hP i
+    _ = ∑ i in Finset.range n, ∑ p in (P i).parts, f p + ε' := by
+      rw [Finset.sum_add_distrib]; norm_cast
+      simp [show n * ε = ε' by field]
+    _ <= preVariationFun f (⋃ i, s i) + ε' := by
+      gcongr; exact sum_le_preVariationFun_iUnion' f hs hs' P n
 
 Depends on / 依赖: ENNReal, ENNReal.le_of_forall_pos_le_add, ENNReal.tsum_le_of_sum_range_le, MeasurableSet, MeasurableSet.iUnion, Set.subset_iUnion, hsnetop, iUnion, le_of_forall_pos_le_add, lt_top_iff_ne_top, lt_top_iff_ne_top.mp, preVariationFun, subset_iUnion, trans_lt, tsum_le_of_sum_range_le
 -/
@@ -542,7 +598,30 @@ lemma iUnion
   refine ENNReal.le_tsum_of_forall_lt_exists_sum fun b hb => ?_
   simp only [preVariationFun, MeasurableSet.iUnion hs, reduceDIte, lt_iSup_iff] at hb
   obtain ⟨Q, hQ⟩ := hb
-  let s' (i : Nat) : Subt
+  let s' (i : Nat) : Subtype MeasurableSet := ⟨s i, hs i⟩
+  let P (i : Nat) := Q.restrict (b := s' i) (Set.subset_iUnion s i)
+  have splitting : ∑ q in Q.parts, f q <= ∑' i, ∑ p in (P i).parts, f p := by
+    calc ∑ q in Q.parts, f q
+      _ <= ∑ q in Q.parts, ∑' i, f (q ⊓ s' i) := by
+          apply Finset.sum_le_sum fun q hq => ?_
+          have hq_eq : q.val = ⋃ i, q.val inter s i := by
+            rw [← Set.inter_iUnion]; exact (Set.inter_eq_left.mpr (Q.le hq)).symm
+          let t (i : Nat) : Subtype MeasurableSet := ⟨q.val inter s i, q.2.inter (hs i)⟩
+          have ht_disj : Pairwise (Disjoint on (Subtype.val ∘ t)) :=
+            fun i j hij => (hs' hij).mono Set.inter_subset_right Set.inter_subset_right
+          calc f q
+            _ = f (⋃ i, q.val inter s i) := congrArg f hq_eq
+            _ = f (⋃ i, (t i).val) := rfl
+            _ <= ∑' i, f (t i) := hf t ht_disj
+            _ = ∑' i, f (q ⊓ s' i) := rfl
+      _ = ∑' i, ∑ q in Q.parts, f (q ⊓ s' i) :=
+          (Summable.tsum_finsetSum (fun _ _ => ENNReal.summable)).symm
+      _ = ∑' i, ∑ p in (P i).parts, f p := by
+          congr 1; funext i
+          exact (Q.sum_restrict _ (fun p => f p) hf').symm
+obtain ⟨n, hn⟩ := lt_iSup_iff.mp ENNReal.tsum_eq_iSup_nat ▸ lt_of_lt_of_le hQ splitting
+  have bound (i : Nat) : ∑ p in (P i).parts, f p <= preVariationFun f (s i) := sum_le f (hs i) (P i)
+  exact ⟨Finset.range n, lt_of_lt_of_le hn (Finset.sum_le_sum fun i _ => bound i)⟩
 
 中文:
 引理 iUnion
@@ -552,7 +631,30 @@ lemma iUnion
   refine ENNReal.le_tsum_of_forall_lt_exists_sum fun b hb => ?_
   simp only [preVariationFun, MeasurableSet.iUnion hs, reduceDIte, lt_iSup_iff] at hb
   obtain ⟨Q, hQ⟩ := hb
-  let s' (i : Nat) : Subt
+  let s' (i : Nat) : Subtype MeasurableSet := ⟨s i, hs i⟩
+  let P (i : Nat) := Q.restrict (b := s' i) (Set.subset_iUnion s i)
+  have splitting : ∑ q in Q.parts, f q <= ∑' i, ∑ p in (P i).parts, f p := by
+    calc ∑ q in Q.parts, f q
+      _ <= ∑ q in Q.parts, ∑' i, f (q ⊓ s' i) := by
+          apply Finset.sum_le_sum fun q hq => ?_
+          have hq_eq : q.val = ⋃ i, q.val inter s i := by
+            rw [← Set.inter_iUnion]; exact (Set.inter_eq_left.mpr (Q.le hq)).symm
+          let t (i : Nat) : Subtype MeasurableSet := ⟨q.val inter s i, q.2.inter (hs i)⟩
+          have ht_disj : Pairwise (Disjoint on (Subtype.val ∘ t)) :=
+            fun i j hij => (hs' hij).mono Set.inter_subset_right Set.inter_subset_right
+          calc f q
+            _ = f (⋃ i, q.val inter s i) := congrArg f hq_eq
+            _ = f (⋃ i, (t i).val) := rfl
+            _ <= ∑' i, f (t i) := hf t ht_disj
+            _ = ∑' i, f (q ⊓ s' i) := rfl
+      _ = ∑' i, ∑ q in Q.parts, f (q ⊓ s' i) :=
+          (Summable.tsum_finsetSum (fun _ _ => ENNReal.summable)).symm
+      _ = ∑' i, ∑ p in (P i).parts, f p := by
+          congr 1; funext i
+          exact (Q.sum_restrict _ (fun p => f p) hf').symm
+obtain ⟨n, hn⟩ := lt_iSup_iff.mp ENNReal.tsum_eq_iSup_nat ▸ lt_of_lt_of_le hQ splitting
+  have bound (i : Nat) : ∑ p in (P i).parts, f p <= preVariationFun f (s i) := sum_le f (hs i) (P i)
+  exact ⟨Finset.range n, lt_of_lt_of_le hn (Finset.sum_le_sum fun i _ => bound i)⟩
 
 Depends on / 依赖: ENNReal, ENNReal.le_tsum_of_forall_lt_exists_sum, ENNReal.summable.hasSum_iff.mpr, MeasurableSet, MeasurableSet.iUnion, Q.parts, Q.restrict, Set.subset_iUnion, Subtype, hasSum_iff, iUnion, le_antisymm, le_tsum_of_forall_lt_exists_sum, lt_iSup_iff, preVariationFun, reduceDIte, restrict, splitting, subset_iUnion, sum_le_preVariationFun_iUnion
 -/

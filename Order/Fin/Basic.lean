@@ -1295,7 +1295,8 @@ lemma predAbove_left_injective
     · exact (this hij.symm h).symm
     · rfl
   replace hij := congr_fun hij i.succ
-  rw [predAbove_succ_self]; rw [Fin.predAbove_of_le_castSucc _ _ (by 
+  rw [predAbove_succ_self]; rw [Fin.predAbove_of_le_castSucc _ _ (by simpa)]; rw [← Fin.castSucc_inj]; rw [castSucc_castPred] at hij
+  exact (i.castSucc_lt_succ.ne hij).elim
 
 中文:
 引理 predAbove_left_injective
@@ -1308,7 +1309,8 @@ lemma predAbove_left_injective
     · exact (this hij.symm h).symm
     · rfl
   replace hij := congr_fun hij i.succ
-  rw [predAbove_succ_self]; rw [Fin.predAbove_of_le_castSucc _ _ (by 
+  rw [predAbove_succ_self]; rw [Fin.predAbove_of_le_castSucc _ _ (by simpa)]; rw [← Fin.castSucc_inj]; rw [castSucc_castPred] at hij
+  exact (i.castSucc_lt_succ.ne hij).elim
 
 Depends on / 依赖: Fin.castSucc_inj, Fin.predAbove_of_le_castSucc, Nat.exists_add_one_eq, castSucc_castPred, castSucc_inj, castSucc_lt_succ, congr_fun, exists_add_one_eq, generalizing, h.lt_or_eq, hij.symm, i.castSucc_lt_succ.ne, i.size_positive, i.succ, lt_or_eq, predAbove_of_le_castSucc, predAbove_succ_self, replace, size_positive
 -/
@@ -1804,7 +1806,9 @@ lemma coe_orderIso_apply
   refine le_antisymm (forall_lt_iff_le.1 fun j hj => ?_) (forall_lt_iff_le.1 fun j hj => ?_)
   · have := e.symm.lt_symm_apply.1 (mk_lt_of_lt_val hj)
     specialize h _ this (e.symm _).is_lt
-    simp only
+    simp only [Fin.eta, OrderIso.apply_symm_apply] at h
+    rwa [h]
+  · rwa [← h j hj (hj.trans hi), ← lt_def, e.lt_iff_lt]
 
 中文:
 引理 coe_orderIso_apply
@@ -1817,7 +1821,9 @@ lemma coe_orderIso_apply
   refine le_antisymm (forall_lt_iff_le.1 fun j hj => ?_) (forall_lt_iff_le.1 fun j hj => ?_)
   · have := e.symm.lt_symm_apply.1 (mk_lt_of_lt_val hj)
     specialize h _ this (e.symm _).is_lt
-    simp only
+    simp only [Fin.eta, OrderIso.apply_symm_apply] at h
+    rwa [h]
+  · rwa [← h j hj (hj.trans hi), ← lt_def, e.lt_iff_lt]
 -/
 @[simp] lemma coe_orderIso_apply (e : Fin n ≃o Fin m) (i : Fin n) : (e i : Nat) = i := by
   rcases i with ⟨i, hi⟩

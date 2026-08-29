@@ -200,7 +200,18 @@ lemma projectiveFamilyFun_union
   classical
   let S' := restrict₂ (subset_union_left (s₂ := J)) ⁻¹' S
   let T' := restrict₂ (subset_union_right (s₁ := I)) ⁻¹' T
-  have hS' : MeasurableSet S' := measurabl
+  have hS' : MeasurableSet S' := measurable_restrict₂ _ hS
+  have hT' : MeasurableSet T' := measurable_restrict₂ _ hT
+  have h_eq1 : s = cylinder (I union J) S' := by rw [hs_eq]; exact cylinder_eq_cylinder_union I S J
+  have h_eq2 : t = cylinder (I union J) T' := by rw [ht_eq]; exact cylinder_eq_cylinder_union J T I
+  have h_eq3 : s union t = cylinder (I union J) (S' union T') := by
+    rw [hs_eq]; rw [ht_eq]; exact union_cylinder _ _ _ _
+  rw [projectiveFamilyFun_congr hP hs h_eq1 hS']; rw [projectiveFamilyFun_congr hP ht h_eq2 hT']; rw [projectiveFamilyFun_congr hP (union_mem_measurableCylinders hs ht) h_eq3 (hS'.union hT')]
+  cases isEmpty_or_nonempty (Π i, α i) with
+  | inl h => simp [hP.eq_zero_of_isEmpty]
+  | inr h =>
+    rw [measure_union _ hT']
+    rwa [hs_eq, ht_eq, disjoint_cylinder_iff] at hst
 
 中文:
 引理 projectiveFamilyFun_union
@@ -211,7 +222,18 @@ lemma projectiveFamilyFun_union
   classical
   let S' := restrict₂ (subset_union_left (s₂ := J)) ⁻¹' S
   let T' := restrict₂ (subset_union_right (s₁ := I)) ⁻¹' T
-  have hS' : MeasurableSet S' := measurabl
+  have hS' : MeasurableSet S' := measurable_restrict₂ _ hS
+  have hT' : MeasurableSet T' := measurable_restrict₂ _ hT
+  have h_eq1 : s = cylinder (I union J) S' := by rw [hs_eq]; exact cylinder_eq_cylinder_union I S J
+  have h_eq2 : t = cylinder (I union J) T' := by rw [ht_eq]; exact cylinder_eq_cylinder_union J T I
+  have h_eq3 : s union t = cylinder (I union J) (S' union T') := by
+    rw [hs_eq]; rw [ht_eq]; exact union_cylinder _ _ _ _
+  rw [projectiveFamilyFun_congr hP hs h_eq1 hS']; rw [projectiveFamilyFun_congr hP ht h_eq2 hT']; rw [projectiveFamilyFun_congr hP (union_mem_measurableCylinders hs ht) h_eq3 (hS'.union hT')]
+  cases isEmpty_or_nonempty (Π i, α i) with
+  | inl h => simp [hP.eq_zero_of_isEmpty]
+  | inr h =>
+    rw [measure_union _ hT']
+    rwa [hs_eq, ht_eq, disjoint_cylinder_iff] at hst
 
 Depends on / 依赖: MeasurableSet, classical, cylinder, cylinder_eq_cylinder_union, h_eq1, h_eq2, hs_eq, ht_eq, mem_measurableCylinders, subset_union_left, subset_union_right
 -/

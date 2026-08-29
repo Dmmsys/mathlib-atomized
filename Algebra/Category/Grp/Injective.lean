@@ -47,7 +47,9 @@ theorem Module.Baer.of_divisible
     subst hn
     exact (map_zero g).symm
   let gₘ := g ⟨m, Submodule.subset_span (Set.mem_singleton _)⟩
-  refine ⟨Linear
+  refine ⟨LinearMap.toSpanSingleton Int A (DivisibleBy.div gₘ m), fun n hn => ?_⟩
+  rcases Submodule.mem_span_singleton.mp hn with ⟨n, rfl⟩
+  rw [map_zsmul]; rw [LinearMap.toSpanSingleton_apply]; rw [DivisibleBy.div_cancel gₘ h0]; rw [← map_zsmul g]; rw [SetLike.mk_smul_mk]
 
 中文:
 定理 模.Baer.of_divisible
@@ -61,7 +63,9 @@ theorem Module.Baer.of_divisible
     subst hn
     exact (map_zero g).symm
   let gₘ := g ⟨m, Submodule.subset_span (Set.mem_singleton _)⟩
-  refine ⟨Linear
+  refine ⟨LinearMap.toSpanSingleton Int A (DivisibleBy.div gₘ m), fun n hn => ?_⟩
+  rcases Submodule.mem_span_singleton.mp hn with ⟨n, rfl⟩
+  rw [map_zsmul]; rw [LinearMap.toSpanSingleton_apply]; rw [DivisibleBy.div_cancel gₘ h0]; rw [← map_zsmul g]; rw [SetLike.mk_smul_mk]
 
 Depends on / 依赖: DivisibleBy, DivisibleBy.div, DivisibleBy.div_cancel, IsPrincipalIdealRing, IsPrincipalIdealRing.principal, LinearMap, LinearMap.toSpanSingleton, LinearMap.toSpanSingleton_apply, Set.mem_singleton, Submodule, Submodule.mem_span_singleton.mp, Submodule.span_zero_singleton, Submodule.subset_span, div_cancel, eq_or_ne, map_z, map_zero, map_zsmul, mem_singleton, mem_span_singleton
 -/

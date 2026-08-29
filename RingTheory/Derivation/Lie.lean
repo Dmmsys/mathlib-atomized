@@ -108,7 +108,7 @@ instance :
   body: by ext a; simp only [commutator_apply, add_apply, map_add]; ring
   lie_add d e f := by ext a; simp only [commutator_apply, add_apply, map_add]; ring
   lie_self d := by ext a; simp only [commutator_apply]; ring_nf; simp
-  leibniz_lie d e f := by ext a; simp only [commutator_apply, add_apply, map_sub]
+  leibniz_lie d e f := by ext a; simp only [commutator_apply, add_apply, map_sub]; ring
 
 中文:
 实例 :
@@ -116,7 +116,7 @@ instance :
   定义体: by ext a; simp only [commutator_apply, add_apply, map_add]; ring
   lie_add d e f := by ext a; simp only [commutator_apply, add_apply, map_add]; ring
   lie_self d := by ext a; simp only [commutator_apply]; ring_nf; simp
-  leibniz_lie d e f := by ext a; simp only [commutator_apply, add_apply, map_sub]
+  leibniz_lie d e f := by ext a; simp only [commutator_apply, add_apply, map_sub]; ring
 
 Depends on / 依赖: add_apply, commutator_apply, leibniz_lie, lie_add, lie_self, map_add, map_sub, ring_nf
 -/
@@ -235,7 +235,9 @@ definition couple
   lie_mem' {x y} hx hy := by
     have hxx (a : A) := congrArg (fun f => f a) hx
     have hyy (a : A) := congrArg (fun f => f a) hy
-    e
+    ext z
+    simp at hxx hyy
+    simp [Derivation.commutator_apply, hxx, hyy]
 
 中文:
 定义 couple
@@ -247,7 +249,9 @@ definition couple
   lie_mem' {x y} hx hy := by
     have hxx (a : A) := congrArg (fun f => f a) hx
     have hyy (a : A) := congrArg (fun f => f a) hy
-    e
+    ext z
+    simp at hxx hyy
+    simp [Derivation.commutator_apply, hxx, hyy]
 
 Depends on / 依赖: Algebra, Algebra.ofId, compAlgebraMapL, compDer, toLinearMap, toLinearMap.compDer, x.fst.compAlgebraMapL, x.snd
 -/

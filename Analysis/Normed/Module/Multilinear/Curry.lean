@@ -345,7 +345,11 @@ definition continuousMultilinearCurryLeftEquiv
       map_smul' := fun _ _ => rfl
       invFun := ContinuousLinearMap.uncurryLeft
       left_inv := ContinuousMultilinearMap.uncurry_curryLeft
-      right_inv := ContinuousLinearMap.curry_
+      right_inv := ContinuousLinearMap.curry_uncurryLeft }
+    (fun f => by dsimp; exact MultilinearMap.mkContinuousLinear_norm_le _ (norm_nonneg f) _)
+    (fun f => by
+      simp only [LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
 
 中文:
 定义 continuousMultilinearCurryLeftEquiv
@@ -356,7 +360,11 @@ definition continuousMultilinearCurryLeftEquiv
       map_smul' := fun _ _ => rfl
       invFun := ContinuousLinearMap.uncurryLeft
       left_inv := ContinuousMultilinearMap.uncurry_curryLeft
-      right_inv := ContinuousLinearMap.curry_
+      right_inv := ContinuousLinearMap.curry_uncurryLeft }
+    (fun f => by dsimp; exact MultilinearMap.mkContinuousLinear_norm_le _ (norm_nonneg f) _)
+    (fun f => by
+      simp only [LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.curry_uncurryLeft, ContinuousLinearMap.uncurryLeft, ContinuousMultilinearMap, ContinuousMultilinearMap.curryLeft, ContinuousMultilinearMap.uncurry_curryLeft, LinearEquiv, LinearEquiv.coe_symm_mk, LinearIsometryEquiv, LinearIsometryEquiv.ofBounds, MultilinearMap, MultilinearMap.mkContinuousLinear_norm_le, MultilinearMap.mkContinuous_norm_le, coe_symm_mk, curryLeft, curry_uncurryLeft, invFun, left_inv, map_add, map_smul
 -/
@@ -524,7 +532,14 @@ definition ContinuousMultilinearMap.curryRight
       map_update_add' := fun m i x y => by
         ext
         simp
-    
+      map_update_smul' := fun m i c x => by
+        ext
+        simp }
+  f'.mkContinuous ‖f‖ fun m => by
+    simp only [f', MultilinearMap.coe_mk]
+    exact LinearMap.mkContinuous_norm_le _ (by positivity) _
+
+@[simp]
 
 中文:
 定义 连续多重线性映射.curryRight
@@ -536,7 +551,14 @@ definition ContinuousMultilinearMap.curryRight
       map_update_add' := fun m i x y => by
         ext
         simp
-    
+      map_update_smul' := fun m i c x => by
+        ext
+        simp }
+  f'.mkContinuous ‖f‖ fun m => by
+    simp only [f', MultilinearMap.coe_mk]
+    exact LinearMap.mkContinuous_norm_le _ (by positivity) _
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous_norm_le, MultilinearMap, MultilinearMap.coe_mk, castSucc, coe_mk, curryRight, f.norm_map_snoc_le, f.toMultilinearMap.curryRight, map_update_add, map_update_smul, mkContinuous, mkContinuous_norm_le, norm_map_snoc_le, toMultilinearMap
 -/
@@ -646,7 +668,13 @@ definition continuousMultilinearCurryRightEquiv
       map_smul' := fun _ _ => rfl
       invFun := ContinuousMultilinearMap.uncurryRight
       left_inv := ContinuousMultilinearMap.uncurry_curryRight
-      right_inv := ContinuousMultilin
+      right_inv := ContinuousMultilinearMap.curry_uncurryRight }
+    (fun f => by
+      simp only [curryRight, LinearEquiv.coe_mk, LinearMap.coe_mk, AddHom.coe_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
+    (fun f => by
+      simp only [uncurryRight, LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
 
 中文:
 定义 continuousMultilinearCurryRightEquiv
@@ -657,7 +685,13 @@ definition continuousMultilinearCurryRightEquiv
       map_smul' := fun _ _ => rfl
       invFun := ContinuousMultilinearMap.uncurryRight
       left_inv := ContinuousMultilinearMap.uncurry_curryRight
-      right_inv := ContinuousMultilin
+      right_inv := ContinuousMultilinearMap.curry_uncurryRight }
+    (fun f => by
+      simp only [curryRight, LinearEquiv.coe_mk, LinearMap.coe_mk, AddHom.coe_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
+    (fun f => by
+      simp only [uncurryRight, LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, ContinuousMultilinearMap, ContinuousMultilinearMap.curryRight, ContinuousMultilinearMap.curry_uncurryRight, ContinuousMultilinearMap.uncurryRight, ContinuousMultilinearMap.uncurry_curryRight, LinearEquiv, LinearEquiv.coe_, LinearEquiv.coe_mk, LinearIsometryEquiv, LinearIsometryEquiv.ofBounds, LinearMap, LinearMap.coe_mk, MultilinearMap, MultilinearMap.mkContinuous_norm_le, coe_, coe_mk, curryRight, curry_uncurryRight
 -/
@@ -964,7 +998,11 @@ definition ContinuousMultilinearMap.curryMidEquiv
       map_smul' := fun _ _ => rfl
       invFun := ContinuousLinearMap.uncurryMid p
       left_inv := ContinuousMultilinearMap.uncurryMid_curryMid p
-      right_inv := ContinuousLinearMap.
+      right_inv := ContinuousLinearMap.curryMid_uncurryMid p }
+    (fun f => by dsimp; exact MultilinearMap.mkContinuousLinear_norm_le _ (norm_nonneg f) _)
+    (fun f => by
+      simp only [LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
 
 中文:
 定义 连续多重线性映射.curryMidEquiv
@@ -975,7 +1013,11 @@ definition ContinuousMultilinearMap.curryMidEquiv
       map_smul' := fun _ _ => rfl
       invFun := ContinuousLinearMap.uncurryMid p
       left_inv := ContinuousMultilinearMap.uncurryMid_curryMid p
-      right_inv := ContinuousLinearMap.
+      right_inv := ContinuousLinearMap.curryMid_uncurryMid p }
+    (fun f => by dsimp; exact MultilinearMap.mkContinuousLinear_norm_le _ (norm_nonneg f) _)
+    (fun f => by
+      simp only [LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.curryMid_uncurryMid, ContinuousLinearMap.uncurryMid, ContinuousMultilinearMap, ContinuousMultilinearMap.curryMid, ContinuousMultilinearMap.uncurryMid_curryMid, LinearEquiv, LinearEquiv.coe_symm_mk, LinearIsometryEquiv, LinearIsometryEquiv.ofBounds, MultilinearMap, MultilinearMap.mkContinuousLinear_norm_le, MultilinearMap.mkContinuous_norm_le, coe_symm_mk, curryMid, curryMid_uncurryMid, invFun, left_inv, map_add, map_smul
 -/
@@ -1231,7 +1273,10 @@ theorem ContinuousMultilinearMap.fin0_apply_norm
   refine le_antisymm (by simpa using f.le_opNorm 0) ?_
   have : ‖ContinuousMultilinearMap.uncurry0 𝕜 G f.curry0‖ <= ‖f.curry0‖ :=
     ContinuousMultilinearMap.opNorm_le_bound (norm_nonneg _) fun m => by
-      simp [-ContinuousMultilinearMap.apply_zero
+      simp [-ContinuousMultilinearMap.apply_zero_uncurry0]
+  simpa [-Matrix.zero_empty] using this
+
+@[simp]
 
 中文:
 定理 连续多重线性映射.fin0_apply_norm
@@ -1241,7 +1286,10 @@ theorem ContinuousMultilinearMap.fin0_apply_norm
   refine le_antisymm (by simpa using f.le_opNorm 0) ?_
   have : ‖ContinuousMultilinearMap.uncurry0 𝕜 G f.curry0‖ <= ‖f.curry0‖ :=
     ContinuousMultilinearMap.opNorm_le_bound (norm_nonneg _) fun m => by
-      simp [-ContinuousMultilinearMap.apply_zero
+      simp [-ContinuousMultilinearMap.apply_zero_uncurry0]
+  simpa [-Matrix.zero_empty] using this
+
+@[simp]
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.apply_zero_uncurry0, ContinuousMultilinearMap.opNorm_le_bound, ContinuousMultilinearMap.uncurry0, Matrix, Matrix.zero_empty, Subsingleton, Subsingleton.elim, apply_zero_uncurry0, curry0, f.curry0, f.le_opNorm, le_antisymm, le_opNorm, norm_nonneg, opNorm_le_bound, uncurry0, zero_empty
 -/
@@ -1642,7 +1690,9 @@ definition currySumEquiv
       left_inv := fun f => by
         ext m
         exact congr_arg f (Sum.elim_comp_inl_inr m) }
-    (fun 
+    (fun f => MultilinearMap.mkContinuousMultilinear_norm_le _ (norm_nonneg f) _) fun f => by
+      simp only [LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _
 
 中文:
 定义 currySumEquiv
@@ -1659,7 +1709,9 @@ definition currySumEquiv
       left_inv := fun f => by
         ext m
         exact congr_arg f (Sum.elim_comp_inl_inr m) }
-    (fun 
+    (fun f => MultilinearMap.mkContinuousMultilinear_norm_le _ (norm_nonneg f) _) fun f => by
+      simp only [LinearEquiv.coe_symm_mk]
+      exact MultilinearMap.mkContinuous_norm_le _ (norm_nonneg f) _
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_symm_mk, LinearIsometryEquiv, LinearIsometryEquiv.ofBounds, MultilinearMap, MultilinearMap.mkContinuousMultilinear_norm_le, MultilinearMap.mkContinuous_norm_le, Sum.elim_comp_inl_inr, coe_symm_mk, congr_arg, currySum, elim_comp_inl_inr, invFun, left_inv, map_add, map_smul, mkContinuousMultilinear_norm_le, mkContinuous_norm_le, norm_nonneg, ofBounds
 -/
@@ -1847,7 +1899,34 @@ definition continuousMultilinearMapOption
       | some j =>
         classical
         have B z : (fun i => (Function.update v (some j) z (some i)).2 i) =
-            F
+            Function.update (fun (i : ι) => (v i).2 i) j (z.2 j) := by
+          ext i
+          rcases eq_or_ne i j with rfl | hij
+          · simp
+          · simp [hij]
+        simp [B]
+    map_update_smul' := by
+      intro inst v j c x
+      match j with
+      | none => simp
+      | some j =>
+        classical
+        have B z : (fun i => (Function.update v (some j) z (some i)).2 i) =
+            Function.update (fun (i : ι) => (v i).2 i) j (z.2 j) := by
+          ext i
+          rcases eq_or_ne i j with rfl | hij
+          · simp
+          · simp [hij]
+        simp [B] } (‖B‖) <| by
+  intro b
+  simp only [MultilinearMap.coe_mk, Fintype.prod_option]
+  apply (ContinuousMultilinearMap.le_opNorm _ _).trans
+  rw [← mul_assoc]
+  gcongr with i _
+  · apply (B.le_opNorm _).trans
+    gcongr
+    exact norm_fst_le _
+  · exact (norm_le_pi_norm _ _).trans (norm_snd_le _)
 
 中文:
 定义 continuousMultilinearMapOption
@@ -1861,7 +1940,34 @@ definition continuousMultilinearMapOption
       | some j =>
         classical
         have B z : (fun i => (Function.update v (some j) z (some i)).2 i) =
-            F
+            Function.update (fun (i : ι) => (v i).2 i) j (z.2 j) := by
+          ext i
+          rcases eq_or_ne i j with rfl | hij
+          · simp
+          · simp [hij]
+        simp [B]
+    map_update_smul' := by
+      intro inst v j c x
+      match j with
+      | none => simp
+      | some j =>
+        classical
+        have B z : (fun i => (Function.update v (some j) z (some i)).2 i) =
+            Function.update (fun (i : ι) => (v i).2 i) j (z.2 j) := by
+          ext i
+          rcases eq_or_ne i j with rfl | hij
+          · simp
+          · simp [hij]
+        simp [B] } (‖B‖) <| by
+  intro b
+  simp only [MultilinearMap.coe_mk, Fintype.prod_option]
+  apply (ContinuousMultilinearMap.le_opNorm _ _).trans
+  rw [← mul_assoc]
+  gcongr with i _
+  · apply (B.le_opNorm _).trans
+    gcongr
+    exact norm_fst_le _
+  · exact (norm_le_pi_norm _ _).trans (norm_snd_le _)
 
 Depends on / 依赖: Function, Function.update, MultilinearMap, MultilinearMap.mkContinuous, classical, eq_or_ne, map_update_add, map_update_smul, mkContinuous, update
 -/

@@ -129,7 +129,12 @@ theorem MeasureTheory.Measure.euclideanHausdorffMeasure_zero
     EuclideanSpace.basisFun (Fin 0) Real
   have heq : ({0} : Set (EuclideanSpace Real (Fin 0))) = parallelepiped basis := by
     simp [parallelepiped]
-  obtain h := isAddLeftInvariant_eq_smul (volume : Measure (Euclidean
+  obtain h := isAddLeftInvariant_eq_smul (volume : Measure (EuclideanSpace Real (Fin 0))) μH[(0 : Nat)]
+  obtain h := congr($h.symm {0})
+  conv_rhs at h => rw [heq, OrthonormalBasis.volume_parallelepiped]
+  simp_rw [CharP.cast_eq_zero, smul_apply, hausdorffMeasure_zero_singleton, ENNReal.smul_def,
+    smul_eq_mul, mul_one, ENNReal.coe_eq_one] at h
+  simp [euclideanHausdorffMeasure_def, h]
 
 中文:
 定理 测度论.测度.euclideanHausdorffMeasure_zero
@@ -138,7 +143,12 @@ theorem MeasureTheory.Measure.euclideanHausdorffMeasure_zero
     EuclideanSpace.basisFun (Fin 0) Real
   have heq : ({0} : Set (EuclideanSpace Real (Fin 0))) = parallelepiped basis := by
     simp [parallelepiped]
-  obtain h := isAddLeftInvariant_eq_smul (volume : Measure (Euclidean
+  obtain h := isAddLeftInvariant_eq_smul (volume : Measure (EuclideanSpace Real (Fin 0))) μH[(0 : Nat)]
+  obtain h := congr($h.symm {0})
+  conv_rhs at h => rw [heq, OrthonormalBasis.volume_parallelepiped]
+  simp_rw [CharP.cast_eq_zero, smul_apply, hausdorffMeasure_zero_singleton, ENNReal.smul_def,
+    smul_eq_mul, mul_one, ENNReal.coe_eq_one] at h
+  simp [euclideanHausdorffMeasure_def, h]
 
 Depends on / 依赖: CharP.cast_eq_zero, ENNReal, EuclideanSpace, EuclideanSpace.basisFun, Measure, OrthonormalBasis, OrthonormalBasis.volume_parallelepiped, basisFun, cast_eq_zero, conv_rhs, h.symm, hausdorffMeasure_zero_singleton, isAddLeftInvariant_eq_smul, parallelepiped, simp_rw, smul_apply, volume, volume_parallelepiped
 -/
@@ -743,7 +753,28 @@ theorem AffineSubspace.euclideanHausdorffMeasure_eq_lintegral
   proof: by
   obtain p := hs.some
   rw [← (s.direction.measurePreserving_measurableEquivProd p.val).symm.measure_preimage_equiv]; rw [volume_eq_prod]; rw [prod_apply (by measurability)]; rw [euclideanHausdorffMeasure_eq]; rw [MeasurableEmbedding.lintegral_map
-        (by simpa using (IsometryEquiv.vaddConst 
+        (by simpa using (IsometryEquiv.vaddConst p).toHomeomorph.measurableEmbedding)]
+  congr with x
+  let u : Set (mk' (x +ᵥ p).val s.directionᗮ) := Subtype.val ⁻¹' (t inter mk' (x +ᵥ p).val s.directionᗮ)
+  have hu : MeasurableSet u :=
+    (ht.inter (closed_of_finiteDimensional _).measurableSet).preimage measurable_subtype_coe
+  have hinter : t inter (mk' (x +ᵥ p).val s.directionᗮ) = Subtype.val '' u := by
+    ext x
+    simp [u]
+  have hxp : (x +ᵥ p).val in mk' (x +ᵥ p).val s.directionᗮ := by simp
+  have hrank : finrank Real s.directionᗮ = finrank Real (mk' (x +ᵥ p).val s.directionᗮ).direction := by
+    rw [direction_mk']
+  rw [IsometryEquiv.vaddConst_apply]; rw [hinter]; rw [euclideanHausdorffMeasure_coe_image]; rw [hrank]; rw [euclideanHausdorffMeasure_eq ⟨x +ᵥ p]; rw [hxp⟩]; rw [map_apply (by fun_prop) hu]
+  /- we have ⊢ volume (a : Set A) = volume (b : Set B). We'd like show a = b, but A and B are
+    non-defeq subspaces!
+    Lucky we have just developed euclideanHausdorffMeasure, which allows us to move the measure to
+    the global vector space. -/
+  simp_rw [← InnerProductSpace.euclideanHausdorffMeasure_eq_volume]
+  conv_lhs => rw [← isometry_subtype_coe.euclideanHausdorffMeasure_image]
+  conv_rhs => rw [← isometry_subtype_coe.euclideanHausdorffMeasure_image]
+  congrm μHE[$hrank] ?_
+  ext y
+  simp [u, vadd_vadd, add_comm]
 
 中文:
 定理 仿射子空间.euclideanHausdorffMeasure_eq_lintegral
@@ -751,7 +782,28 @@ theorem AffineSubspace.euclideanHausdorffMeasure_eq_lintegral
   证明: by
   obtain p := hs.some
   rw [← (s.direction.measurePreserving_measurableEquivProd p.val).symm.measure_preimage_equiv]; rw [volume_eq_prod]; rw [prod_apply (by measurability)]; rw [euclideanHausdorffMeasure_eq]; rw [MeasurableEmbedding.lintegral_map
-        (by simpa using (IsometryEquiv.vaddConst 
+        (by simpa using (IsometryEquiv.vaddConst p).toHomeomorph.measurableEmbedding)]
+  congr with x
+  let u : Set (mk' (x +ᵥ p).val s.directionᗮ) := Subtype.val ⁻¹' (t inter mk' (x +ᵥ p).val s.directionᗮ)
+  have hu : MeasurableSet u :=
+    (ht.inter (closed_of_finiteDimensional _).measurableSet).preimage measurable_subtype_coe
+  have hinter : t inter (mk' (x +ᵥ p).val s.directionᗮ) = Subtype.val '' u := by
+    ext x
+    simp [u]
+  have hxp : (x +ᵥ p).val in mk' (x +ᵥ p).val s.directionᗮ := by simp
+  have hrank : finrank Real s.directionᗮ = finrank Real (mk' (x +ᵥ p).val s.directionᗮ).direction := by
+    rw [direction_mk']
+  rw [IsometryEquiv.vaddConst_apply]; rw [hinter]; rw [euclideanHausdorffMeasure_coe_image]; rw [hrank]; rw [euclideanHausdorffMeasure_eq ⟨x +ᵥ p]; rw [hxp⟩]; rw [map_apply (by fun_prop) hu]
+  /- we have ⊢ volume (a : Set A) = volume (b : Set B). We'd like show a = b, but A and B are
+    non-defeq subspaces!
+    Lucky we have just developed euclideanHausdorffMeasure, which allows us to move the measure to
+    the global vector space. -/
+  simp_rw [← InnerProductSpace.euclideanHausdorffMeasure_eq_volume]
+  conv_lhs => rw [← isometry_subtype_coe.euclideanHausdorffMeasure_image]
+  conv_rhs => rw [← isometry_subtype_coe.euclideanHausdorffMeasure_image]
+  congrm μHE[$hrank] ?_
+  ext y
+  simp [u, vadd_vadd, add_comm]
 
 Depends on / 依赖: IsometryEquiv, IsometryEquiv.vaddConst, MeasurableEmbedding, MeasurableEmbedding.lintegral_map, MeasurableSet, Subtype, Subtype.val, closed_of_finiteDi, direction, euclideanHausdorffMeasure_eq, hs.some, ht.inter, lintegral_map, measurability, measurableEmbedding, measurePreserving_measurableEquivProd, measure_preimage_equiv, p.val, prod_apply, s.direction
 -/
@@ -795,7 +847,27 @@ theorem EuclideanGeometry.euclideanHausdorffMeasure_eq_lintegral
     rw [AffineSubspace.direction_mk']
     apply finrank_span_singleton hv
   have hrank' : finrank Real (AffineSubspace.mk' p (Real ∙ v)).directionᗮ = finrank Real V - 1 := by
-    rw [← (AffineSubspace.mk' p (Real ∙ 
+    rw [← (AffineSubspace.mk' p (Real ∙ v)).direction.finrank_add_finrank_orthogonal]; rw [hrank]; rw [Nat.add_sub_cancel_left]
+  let f : Real ≃L[Real] (AffineSubspace.mk' p (Real ∙ v)).direction :=
+    (ContinuousLinearEquiv.toSpanNonzeroSingleton Real v hv).trans
+    (ContinuousLinearEquiv.ofEq (Real ∙ v) ((AffineSubspace.mk' p (Real ∙ v)).direction) (by simp))
+  have hf : MeasurableEmbedding f := f.toHomeomorph.measurableEmbedding
+  let p' : AffineSubspace.mk' p (Real ∙ v) := ⟨p, by simp⟩
+  let g : Real -> AffineSubspace.mk' p (Real ∙ v) := IsometryEquiv.vaddConst p' ∘ f
+  have hadd : MeasurableEmbedding (IsometryEquiv.vaddConst p') :=
+    (IsometryEquiv.vaddConst p').toHomeomorph.measurableEmbedding
+  have hg : MeasurableEmbedding g := hadd.comp hf
+  have hm : μHE[finrank Real (AffineSubspace.mk' p (Real ∙ v)).direction] =
+      ‖v‖ₑ • (volume : Measure Real).map g := by
+    unfold g
+    rw [euclideanHausdorffMeasure_eq p']; rw [← map_map hadd.measurable hf.measurable]; rw [← Measure.map_smul]
+    congr
+    let v' : (AffineSubspace.mk' p (Real ∙ v)).direction := ⟨v, by simp⟩
+    suffices volume = ‖v'‖ₑ • volume.map f by simpa [v']
+    exact volume_eq_of_finrank_eq_one hrank (by simpa [v'] using hv)
+  have hx (x : Real) : x • v +ᵥ p = g x := by rfl
+  simp_rw [(AffineSubspace.mk' p (Real ∙ v)).euclideanHausdorffMeasure_eq_lintegral ht, hx,
+    hm, lintegral_smul_measure, hg.lintegral_map, smul_eq_mul, hrank', AffineSubspace.direction_mk']
 
 中文:
 定理 EuclideanGeometry.euclideanHausdorffMeasure_eq_lintegral
@@ -805,7 +877,27 @@ theorem EuclideanGeometry.euclideanHausdorffMeasure_eq_lintegral
     rw [AffineSubspace.direction_mk']
     apply finrank_span_singleton hv
   have hrank' : finrank Real (AffineSubspace.mk' p (Real ∙ v)).directionᗮ = finrank Real V - 1 := by
-    rw [← (AffineSubspace.mk' p (Real ∙ 
+    rw [← (AffineSubspace.mk' p (Real ∙ v)).direction.finrank_add_finrank_orthogonal]; rw [hrank]; rw [Nat.add_sub_cancel_left]
+  let f : Real ≃L[Real] (AffineSubspace.mk' p (Real ∙ v)).direction :=
+    (ContinuousLinearEquiv.toSpanNonzeroSingleton Real v hv).trans
+    (ContinuousLinearEquiv.ofEq (Real ∙ v) ((AffineSubspace.mk' p (Real ∙ v)).direction) (by simp))
+  have hf : MeasurableEmbedding f := f.toHomeomorph.measurableEmbedding
+  let p' : AffineSubspace.mk' p (Real ∙ v) := ⟨p, by simp⟩
+  let g : Real -> AffineSubspace.mk' p (Real ∙ v) := IsometryEquiv.vaddConst p' ∘ f
+  have hadd : MeasurableEmbedding (IsometryEquiv.vaddConst p') :=
+    (IsometryEquiv.vaddConst p').toHomeomorph.measurableEmbedding
+  have hg : MeasurableEmbedding g := hadd.comp hf
+  have hm : μHE[finrank Real (AffineSubspace.mk' p (Real ∙ v)).direction] =
+      ‖v‖ₑ • (volume : Measure Real).map g := by
+    unfold g
+    rw [euclideanHausdorffMeasure_eq p']; rw [← map_map hadd.measurable hf.measurable]; rw [← Measure.map_smul]
+    congr
+    let v' : (AffineSubspace.mk' p (Real ∙ v)).direction := ⟨v, by simp⟩
+    suffices volume = ‖v'‖ₑ • volume.map f by simpa [v']
+    exact volume_eq_of_finrank_eq_one hrank (by simpa [v'] using hv)
+  have hx (x : Real) : x • v +ᵥ p = g x := by rfl
+  simp_rw [(AffineSubspace.mk' p (Real ∙ v)).euclideanHausdorffMeasure_eq_lintegral ht, hx,
+    hm, lintegral_smul_measure, hg.lintegral_map, smul_eq_mul, hrank', AffineSubspace.direction_mk']
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.direction_mk, AffineSubspace.mk, ContinuousLinearEquiv, ContinuousLinearEquiv.toSpanNonzeroSingleton, Nat.add_sub_cancel_left, add_sub_cancel_left, direction, direction.finrank_add_finrank_orthogonal, direction_mk, finrank, finrank_add_finrank_orthogonal, finrank_span_singleton, toSpanNonzeroSingleton
 -/

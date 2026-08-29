@@ -341,7 +341,14 @@ theorem prodOfFinsuppNat_injective
   clear_value n; revert x y
   induction n using Nat.strong_induction_on with | h n ih =>
   intro x y s _ hn eq
-  rw [← x.single_add_erase 0]; rw [← y.single_ad
+  rw [← x.single_add_erase 0]; rw [← y.single_add_erase 0]
+  simp_rw [← mapDomain_comapDomain_nat_add_one, ← f.fst_prodOfFinsuppNat, eq]
+  congr 2
+  by_contra ne
+  apply ne (ih _ _ _ rfl (inj _))
+  · contrapose! ne; simp_all [-comapDomain_support]
+  · simp +contextual [hn, s, ← Nat.succ_le_iff, Finset.le_max']
+  simp_rw [← snd_prodOfFinsuppNat, eq]
 
 中文:
 定理 prodOfFinsupp自然数_injective
@@ -356,7 +363,14 @@ theorem prodOfFinsuppNat_injective
   clear_value n; revert x y
   induction n using Nat.strong_induction_on with | h n ih =>
   intro x y s _ hn eq
-  rw [← x.single_add_erase 0]; rw [← y.single_ad
+  rw [← x.single_add_erase 0]; rw [← y.single_add_erase 0]
+  simp_rw [← mapDomain_comapDomain_nat_add_one, ← f.fst_prodOfFinsuppNat, eq]
+  congr 2
+  by_contra ne
+  apply ne (ih _ _ _ rfl (inj _))
+  · contrapose! ne; simp_all [-comapDomain_support]
+  · simp +contextual [hn, s, ← Nat.succ_le_iff, Finset.le_max']
+  simp_rw [← snd_prodOfFinsuppNat, eq]
 
 Depends on / 依赖: Nat.strong_induction_on, clear_value, comapDomain_support, contextual, contrapose, eq_empty_or_nonempty, f.fst_prodOfFinsuppNat, fst_prodOfFinsuppNat, mapDomain_comapDomain_nat_add_one, revert, s.eq_empty_or_nonempty, s.max, simp_rw, single_add_erase, strong_induction_on, support, x.single_add_erase, x.support, y.single_add_erase, y.support
 -/

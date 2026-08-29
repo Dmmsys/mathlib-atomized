@@ -139,7 +139,32 @@ definition restrictedULiftYonedaHomEquiv'
         ext x
         let φ : CostructuredArrow.mk (uliftYonedaEquiv.{max w v₂}.symm (P.map g x)) ⟶
           CostructuredArrow.mk (uliftYonedaEquiv.symm x) :=
-            Cost
+            CostructuredArrow.homMk g.unop (by
+              dsimp
+              rw [uliftYonedaEquiv_symm_map])
+        dsimp
+        congr 1
+        simpa using! (f.naturality φ).symm }
+  invFun g :=
+    { app y := (uliftYonedaEquiv.{max w v₂} (y.hom ≫ g)).down
+      naturality y y' f := by
+        dsimp
+        rw [comp_id]; rw [← CostructuredArrow.w f]; rw [assoc]; rw [map_comp_uliftYonedaEquiv_down] }
+  left_inv f := by
+    ext X
+    let e : CostructuredArrow.mk
+      (uliftYonedaEquiv.{max w v₂}.symm (X.hom.app (op X.left) ⟨𝟙 X.left⟩)) ≅ X :=
+        CostructuredArrow.isoMk (Iso.refl _) (by
+          ext Y x
+          dsimp
+          simp [← NatTrans.naturality_apply])
+    simpa [e] using! f.naturality e.inv
+  right_inv g := by
+    ext X x
+    apply ULift.down_injective
+    simp [uliftYonedaEquiv]
+
+@[reassoc]
 
 中文:
 定义 restrictedULiftYonedaHomEquiv'
@@ -150,7 +175,32 @@ definition restrictedULiftYonedaHomEquiv'
         ext x
         let φ : CostructuredArrow.mk (uliftYonedaEquiv.{max w v₂}.symm (P.map g x)) ⟶
           CostructuredArrow.mk (uliftYonedaEquiv.symm x) :=
-            Cost
+            CostructuredArrow.homMk g.unop (by
+              dsimp
+              rw [uliftYonedaEquiv_symm_map])
+        dsimp
+        congr 1
+        simpa using! (f.naturality φ).symm }
+  invFun g :=
+    { app y := (uliftYonedaEquiv.{max w v₂} (y.hom ≫ g)).down
+      naturality y y' f := by
+        dsimp
+        rw [comp_id]; rw [← CostructuredArrow.w f]; rw [assoc]; rw [map_comp_uliftYonedaEquiv_down] }
+  left_inv f := by
+    ext X
+    let e : CostructuredArrow.mk
+      (uliftYonedaEquiv.{max w v₂}.symm (X.hom.app (op X.left) ⟨𝟙 X.left⟩)) ≅ X :=
+        CostructuredArrow.isoMk (Iso.refl _) (by
+          ext Y x
+          dsimp
+          simp [← NatTrans.naturality_apply])
+    simpa [e] using! f.naturality e.inv
+  right_inv g := by
+    ext X x
+    apply ULift.down_injective
+    simp [uliftYonedaEquiv]
+
+@[reassoc]
 
 Depends on / 依赖: Costructured, CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, P.map, ULift.up, comp_id, f.app, f.naturality, g.unop, invFun, naturality, uliftYonedaEquiv, uliftYonedaEquiv.symm, uliftYonedaEquiv_symm_map, y.hom
 -/
@@ -286,7 +336,24 @@ definition uliftYonedaAdjunction
       homEquiv_naturality_left_symm {P Q X} f g := by
         apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
         intro p
-        have hfg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanE
+        have hfg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
+          L α P).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A P X).symm (f ≫ g)) p
+        have hg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
+          L α Q).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A Q X).symm g)
+            ((CostructuredArrow.map f).obj p)
+        dsimp at hfg hg
+        dsimp [restrictedULiftYonedaHomEquiv]
+        simp only [assoc, hfg, ← L.map_comp_assoc, hg,
+          restrictedULiftYonedaHomEquiv'_symm_app_naturality_left]
+      homEquiv_naturality_right {P X Y} f g := by
+        have := @IsColimit.homEquiv_symm_naturality (h :=
+          Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P)
+        dsimp at this
+        apply (restrictedULiftYonedaHomEquiv L α P Y).symm.injective
+        apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
+        intro
+        simp [restrictedULiftYonedaHomEquiv,
+          restrictedULiftYonedaHomEquiv'_symm_naturality_right, this] }
 
 中文:
 定义 uliftYonedaAdjunction
@@ -296,7 +363,24 @@ definition uliftYonedaAdjunction
       homEquiv_naturality_left_symm {P Q X} f g := by
         apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
         intro p
-        have hfg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanE
+        have hfg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
+          L α P).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A P X).symm (f ≫ g)) p
+        have hg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
+          L α Q).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A Q X).symm g)
+            ((CostructuredArrow.map f).obj p)
+        dsimp at hfg hg
+        dsimp [restrictedULiftYonedaHomEquiv]
+        simp only [assoc, hfg, ← L.map_comp_assoc, hg,
+          restrictedULiftYonedaHomEquiv'_symm_app_naturality_left]
+      homEquiv_naturality_right {P X Y} f g := by
+        have := @IsColimit.homEquiv_symm_naturality (h :=
+          Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P)
+        dsimp at this
+        apply (restrictedULiftYonedaHomEquiv L α P Y).symm.injective
+        apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
+        intro
+        simp [restrictedULiftYonedaHomEquiv,
+          restrictedULiftYonedaHomEquiv'_symm_naturality_right, this] }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Functor, Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension, comp_homEquiv_symm, homEquiv, homEquiv_naturality_left_symm, hom_ext, isPointwiseLeftKanExtensionOfIsLeftKanExtension, mkOfHomEquiv, restrictedULiftYonedaHomEquiv
 -/
@@ -593,7 +677,24 @@ definition colimitOfRepresentable
         have := s.w (Quiver.Hom.op (CategoryOfElements.homMk (P.elementsMk X x)
           (P.elementsMk Y (P.map f x)) f rfl))
         dsimp at this x ⊢
-       
+        rw [← this]; rw [uliftYonedaEquiv_comp]
+        dsimp
+        rw [uliftYonedaEquiv_apply]; rw [uliftYonedaEquiv_apply]; rw [← NatTrans.naturality_apply]
+        simp [uliftYoneda] }
+  fac s j := by
+    ext X x
+    let φ : j.unop ⟶ (Functor.elementsMk P _
+      ((uliftYonedaEquiv.symm (unop j).snd).app X x)) := ⟨x.down.op, rfl⟩
+    have := s.w φ.op
+    dsimp [φ] at this x ⊢
+    rw [← this]; rw [uliftYonedaEquiv_apply]
+    simp [uliftYoneda]
+  uniq s m hm := by
+    ext X x
+    simp only [functorToRepresentables_obj, coconeOfRepresentable_pt, Functor.const_obj_obj,
+      coconeOfRepresentable_ι_app, Functor.leftOp_obj, CategoryOfElements.π_obj, op_unop,
+      TypeCat.Fun.toFun_apply, hom_ofHom, TypeCat.Fun.coe_mk] at hm ⊢
+    rw [← hm]; rw [uliftYonedaEquiv_comp]; rw [Equiv.apply_symm_apply]
 
 中文:
 定义 colimitOfRepresentable
@@ -605,7 +706,24 @@ definition colimitOfRepresentable
         have := s.w (Quiver.Hom.op (CategoryOfElements.homMk (P.elementsMk X x)
           (P.elementsMk Y (P.map f x)) f rfl))
         dsimp at this x ⊢
-       
+        rw [← this]; rw [uliftYonedaEquiv_comp]
+        dsimp
+        rw [uliftYonedaEquiv_apply]; rw [uliftYonedaEquiv_apply]; rw [← NatTrans.naturality_apply]
+        simp [uliftYoneda] }
+  fac s j := by
+    ext X x
+    let φ : j.unop ⟶ (Functor.elementsMk P _
+      ((uliftYonedaEquiv.symm (unop j).snd).app X x)) := ⟨x.down.op, rfl⟩
+    have := s.w φ.op
+    dsimp [φ] at this x ⊢
+    rw [← this]; rw [uliftYonedaEquiv_apply]
+    simp [uliftYoneda]
+  uniq s m hm := by
+    ext X x
+    simp only [functorToRepresentables_obj, coconeOfRepresentable_pt, Functor.const_obj_obj,
+      coconeOfRepresentable_ι_app, Functor.leftOp_obj, CategoryOfElements.π_obj, op_unop,
+      TypeCat.Fun.toFun_apply, hom_ofHom, TypeCat.Fun.coe_mk] at hm ⊢
+    rw [← hm]; rw [uliftYonedaEquiv_comp]; rw [Equiv.apply_symm_apply]
 
 Depends on / 依赖: CategoryOfElements, CategoryOfElements.homMk, Functor, Functor.elementsMk, NatTrans, NatTrans.naturality_apply, Opposite, Opposite.op, P.elementsMk, P.map, Quiver, Quiver.Hom.op, elementsMk, j.unop, naturality, naturality_apply, uliftYoneda, uliftYonedaEquiv, uliftYonedaEquiv.symm, uliftYonedaEquiv_apply
 -/
@@ -682,7 +800,20 @@ lemma isLeftKanExtension_along_uliftYoneda_iff
       (uliftYoneda.{max w v₂}.leftKanExtensionUnit A) _ α)⟩
   · rintro ⟨_, _⟩
     apply Functor.LeftExtension.IsPointwiseLeftKanExtension.isLeftKanExtension
-      (E := Functor.LeftExte
+      (E := Functor.LeftExtension.mk _ α)
+    intro P
+    dsimp [Functor.LeftExtension.IsPointwiseLeftKanExtensionAt]
+    apply IsColimit.ofWhiskerEquivalence
+      (CategoryOfElements.costructuredArrowULiftYonedaEquivalence _)
+    let e : (CategoryOfElements.costructuredArrowULiftYonedaEquivalence P).functor ⋙
+      CostructuredArrow.proj uliftYoneda.{max w v₂} P ⋙ A ≅
+        functorToRepresentables.{max w v₂} P ⋙ L :=
+      Functor.isoWhiskerLeft _ (Functor.isoWhiskerLeft _ (asIso α)) ≪≫
+        Functor.isoWhiskerLeft _ (Functor.associator _ _ _).symm ≪≫
+        (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight (Iso.refl _) L
+    refine (IsColimit.precomposeHomEquiv e.symm _).1 ?_
+    exact IsColimit.ofIsoColimit (isColimitOfPreserves L (colimitOfRepresentable.{max w v₂} P))
+      (Cocone.ext (Iso.refl _))
 
 中文:
 引理 isLeftKanExtension_along_uliftYoneda_iff
@@ -693,7 +824,20 @@ lemma isLeftKanExtension_along_uliftYoneda_iff
       (uliftYoneda.{max w v₂}.leftKanExtensionUnit A) _ α)⟩
   · rintro ⟨_, _⟩
     apply Functor.LeftExtension.IsPointwiseLeftKanExtension.isLeftKanExtension
-      (E := Functor.LeftExte
+      (E := Functor.LeftExtension.mk _ α)
+    intro P
+    dsimp [Functor.LeftExtension.IsPointwiseLeftKanExtensionAt]
+    apply IsColimit.ofWhiskerEquivalence
+      (CategoryOfElements.costructuredArrowULiftYonedaEquivalence _)
+    let e : (CategoryOfElements.costructuredArrowULiftYonedaEquivalence P).functor ⋙
+      CostructuredArrow.proj uliftYoneda.{max w v₂} P ⋙ A ≅
+        functorToRepresentables.{max w v₂} P ⋙ L :=
+      Functor.isoWhiskerLeft _ (Functor.isoWhiskerLeft _ (asIso α)) ≪≫
+        Functor.isoWhiskerLeft _ (Functor.associator _ _ _).symm ≪≫
+        (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight (Iso.refl _) L
+    refine (IsColimit.precomposeHomEquiv e.symm _).1 ?_
+    exact IsColimit.ofIsoColimit (isColimitOfPreserves L (colimitOfRepresentable.{max w v₂} P))
+      (Cocone.ext (Iso.refl _))
 
 Depends on / 依赖: CategoryOfElements, CategoryOfElements.costructuredArro, CategoryOfElements.costructuredArrowULiftYonedaEquivalence, Functor, Functor.LeftExtension.IsPointwiseLeftKanExtension.isLeftKanExtension, Functor.LeftExtension.IsPointwiseLeftKanExtensionAt, Functor.LeftExtension.mk, Functor.leftKanExtensionUnique, IsColimit, IsColimit.ofWhiskerEquivalence, IsPointwiseLeftKanExtension, IsPointwiseLeftKanExtensionAt, LeftExtension, costructuredArro, costructuredArrowULiftYonedaEquivalence, isLeftKanExtension, leftKanExtensionUnique, leftKanExtensionUnit, ofWhiskerEquivalence, preservesColimits_of_natIso
 -/
@@ -869,7 +1013,20 @@ definition compULiftYonedaIsoULiftYonedaCompLan
     (fun {X Y} f => by
       apply uliftYonedaEquiv.injective
       have eq₁ := ConcreteCategory.congr_hom
-        ((uliftYoneda.{max w v₁}.obj (F.obj 
+        ((uliftYoneda.{max w v₁}.obj (F.obj Y)).descOfIsLeftKanExtension_fac_app
+        (uliftYonedaMap F Y) (F.op.lan.obj (uliftYoneda.obj Y))
+          (F.op.lanUnit.app (uliftYoneda.obj Y)) _) ⟨f⟩
+      have eq₂ := ConcreteCategory.congr_hom
+        (((uliftYoneda.{max w v₁}.obj (F.obj X)).descOfIsLeftKanExtension_fac_app
+        (uliftYonedaMap F X) (F.op.lan.obj (uliftYoneda.obj X))
+          (F.op.lanUnit.app (uliftYoneda.obj X))) _) ⟨𝟙 _⟩
+      have eq₃ := ConcreteCategory.congr_hom (congr_app (F.op.lanUnit.naturality
+        (uliftYoneda.{max w v₂}.map f)) _) ⟨𝟙 _⟩
+      dsimp [uliftYoneda, uliftYonedaMap, uliftYonedaEquiv,
+        Functor.leftKanExtensionUnique] at eq₁ eq₂ eq₃ ⊢
+      simp only [Functor.map_id] at eq₂
+      simp only [id_comp] at eq₃
+      simp [eq₁, eq₂, eq₃])
 
 中文:
 定义 compULiftYonedaIsoULiftYonedaCompLan
@@ -879,7 +1036,20 @@ definition compULiftYonedaIsoULiftYonedaCompLan
     (fun {X Y} f => by
       apply uliftYonedaEquiv.injective
       have eq₁ := ConcreteCategory.congr_hom
-        ((uliftYoneda.{max w v₁}.obj (F.obj 
+        ((uliftYoneda.{max w v₁}.obj (F.obj Y)).descOfIsLeftKanExtension_fac_app
+        (uliftYonedaMap F Y) (F.op.lan.obj (uliftYoneda.obj Y))
+          (F.op.lanUnit.app (uliftYoneda.obj Y)) _) ⟨f⟩
+      have eq₂ := ConcreteCategory.congr_hom
+        (((uliftYoneda.{max w v₁}.obj (F.obj X)).descOfIsLeftKanExtension_fac_app
+        (uliftYonedaMap F X) (F.op.lan.obj (uliftYoneda.obj X))
+          (F.op.lanUnit.app (uliftYoneda.obj X))) _) ⟨𝟙 _⟩
+      have eq₃ := ConcreteCategory.congr_hom (congr_app (F.op.lanUnit.naturality
+        (uliftYoneda.{max w v₂}.map f)) _) ⟨𝟙 _⟩
+      dsimp [uliftYoneda, uliftYonedaMap, uliftYonedaEquiv,
+        Functor.leftKanExtensionUnique] at eq₁ eq₂ eq₃ ⊢
+      simp only [Functor.map_id] at eq₂
+      simp only [id_comp] at eq₃
+      simp [eq₁, eq₂, eq₃])
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.obj, F.op.lan.obj, F.op.lanUnit.app, Functor, Functor.leftKanExtensionUnique, NatIso, NatIso.ofComponents, congr_hom, descOfIsL, descOfIsLeftKanExtension_fac_app, injective, lanUnit, leftKanExtensionUnique, ofComponents, uliftYoneda, uliftYoneda.obj, uliftYonedaEquiv, uliftYonedaEquiv.injective
 -/
@@ -984,7 +1154,19 @@ lemma coconeApp_naturality
       uliftYonedaEquiv.{max w v₂}.symm y.2 :=
     uliftYonedaEquiv.injective
       (by simpa only [Equiv.apply_symm_apply, ← uliftYonedaEquiv_naturality] using f.2)
-  have eq₂ := ConcreteCategory.congr_hom ((G.map (uliftYonedaEqu
+  have eq₂ := ConcreteCategory.congr_hom ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).naturality
+    (F.map f.1.unop).op) ((φ.app x.1.unop).app _ (ULift.up (𝟙 _)))
+  have eq₃ := ConcreteCategory.congr_hom (CC := fun X => X)
+    (congr_app (φ.naturality f.1.unop) _) (ULift.up (𝟙 _))
+  have eq₄ := ConcreteCategory.congr_hom ((φ.app x.1.unop).naturality (F.map f.1.unop).op)
+  dsimp at eq₂ eq₃ eq₄
+  apply uliftYonedaEquiv.{max w v₂}.injective
+  dsimp only [coconeApp]
+  rw [Equiv.apply_symm_apply]; rw [← uliftYonedaEquiv_naturality]; rw [Equiv.apply_symm_apply]
+  simp only [op_unop, Functor.comp_obj, Functor.op_obj, Functor.comp_map, Functor.op_map,
+    uliftYoneda_obj_obj, yoneda_obj_obj, ← eq₃, ← eq₄, ← eq₂, ← eq₁, Functor.map_comp,
+    NatTrans.comp_app, comp_apply]
+  simp [uliftYoneda]
 
 中文:
 引理 coconeApp_naturality
@@ -994,7 +1176,19 @@ lemma coconeApp_naturality
       uliftYonedaEquiv.{max w v₂}.symm y.2 :=
     uliftYonedaEquiv.injective
       (by simpa only [Equiv.apply_symm_apply, ← uliftYonedaEquiv_naturality] using f.2)
-  have eq₂ := ConcreteCategory.congr_hom ((G.map (uliftYonedaEqu
+  have eq₂ := ConcreteCategory.congr_hom ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).naturality
+    (F.map f.1.unop).op) ((φ.app x.1.unop).app _ (ULift.up (𝟙 _)))
+  have eq₃ := ConcreteCategory.congr_hom (CC := fun X => X)
+    (congr_app (φ.naturality f.1.unop) _) (ULift.up (𝟙 _))
+  have eq₄ := ConcreteCategory.congr_hom ((φ.app x.1.unop).naturality (F.map f.1.unop).op)
+  dsimp at eq₂ eq₃ eq₄
+  apply uliftYonedaEquiv.{max w v₂}.injective
+  dsimp only [coconeApp]
+  rw [Equiv.apply_symm_apply]; rw [← uliftYonedaEquiv_naturality]; rw [Equiv.apply_symm_apply]
+  simp only [op_unop, Functor.comp_obj, Functor.op_obj, Functor.comp_map, Functor.op_map,
+    uliftYoneda_obj_obj, yoneda_obj_obj, ← eq₃, ← eq₄, ← eq₂, ← eq₁, Functor.map_comp,
+    NatTrans.comp_app, comp_apply]
+  simp [uliftYoneda]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Equiv.apply_symm_apply, F.map, G.map, ULift.up, apply_symm_apply, congr_app, congr_hom, injective, naturality, uliftYoneda, uliftYoneda.map, uliftYonedaEquiv, uliftYonedaEquiv.injective, uliftYonedaEquiv.symm, uliftYonedaEquiv_naturality
 -/
@@ -1136,7 +1330,7 @@ definition natTrans
     apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
     have eq := F.op.lanUnit.naturality f
     dsimp at eq ⊢
-    rw [Functor.descOfIsLeftKanExtension_fac_assoc]; 
+    rw [Functor.descOfIsLeftKanExtension_fac_assoc]; rw [← reassoc_of% eq]; rw [Functor.descOfIsLeftKanExtension_fac]; rw [presheafHom_naturality]
 
 中文:
 定义 natTrans
@@ -1146,7 +1340,7 @@ definition natTrans
     apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
     have eq := F.op.lanUnit.naturality f
     dsimp at eq ⊢
-    rw [Functor.descOfIsLeftKanExtension_fac_assoc]; 
+    rw [Functor.descOfIsLeftKanExtension_fac_assoc]; rw [← reassoc_of% eq]; rw [Functor.descOfIsLeftKanExtension_fac]; rw [presheafHom_naturality]
 
 Depends on / 依赖: F.op.lan.obj, F.op.lanUnit.app, descOfIsLeftKanExtension, lanUnit, presheafHom
 -/
@@ -1170,7 +1364,7 @@ lemma natTrans_app_uliftYoneda_obj
   rw [Functor.descOfIsLeftKanExtension_fac]
   apply uliftYonedaEquiv.injective
   rw [uliftYonedaEquiv_presheafHom_uliftYoneda_obj]
-  exact _root_.congr_arg _ (compULiftYonedaIsoULiftYo
+  exact _root_.congr_arg _ (compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id F X).symm
 
 中文:
 引理 natTrans_app_uliftYoneda_obj
@@ -1181,7 +1375,7 @@ lemma natTrans_app_uliftYoneda_obj
   rw [Functor.descOfIsLeftKanExtension_fac]
   apply uliftYonedaEquiv.injective
   rw [uliftYonedaEquiv_presheafHom_uliftYoneda_obj]
-  exact _root_.congr_arg _ (compULiftYonedaIsoULiftYo
+  exact _root_.congr_arg _ (compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id F X).symm
 
 Depends on / 依赖: F.op.lan.obj, F.op.lanUnit.app, Functor, Functor.descOfIsLeftKanExtension_fac, _root_, _root_.congr_arg, compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id, congr_arg, descOfIsLeftKanExtension_fac, hom_ext_of_isLeftKanExtension, injective, lanUnit, natTrans, uliftYoneda, uliftYoneda.obj, uliftYonedaEquiv, uliftYonedaEquiv.injective, uliftYonedaEquiv_presheafHom_uliftYoneda_obj
 -/
@@ -1242,7 +1436,17 @@ lemma hom_ext
   apply (colimitOfRepresentable.{max w v₂} P).hom_ext
   intro x
   have eq := F.op.lanUnit.naturality (uliftYonedaEquiv.{max w v₂}.symm x.unop.2)
-  have eq₁ := congr_hom (CC := fun X => X) (congr_app (congr_app
+  have eq₁ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w f) x.unop.1.unop)
+    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
+  have eq₂ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w g) x.unop.1.unop)
+    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
+  dsimp at eq₁ eq₂ eq ⊢
+  simp only [reassoc_of% eq, ← Functor.whiskerLeft_comp]
+  congr 2
+  simp only [← cancel_epi ((compULiftYonedaIsoULiftYonedaCompLan F).hom.app x.unop.1.unop),
+    NatTrans.naturality]
+  apply uliftYonedaEquiv.injective
+  simp [eq₁, eq₂, uliftYonedaEquiv_apply]
 
 中文:
 引理 hom_ext
@@ -1253,7 +1457,17 @@ lemma hom_ext
   apply (colimitOfRepresentable.{max w v₂} P).hom_ext
   intro x
   have eq := F.op.lanUnit.naturality (uliftYonedaEquiv.{max w v₂}.symm x.unop.2)
-  have eq₁ := congr_hom (CC := fun X => X) (congr_app (congr_app
+  have eq₁ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w f) x.unop.1.unop)
+    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
+  have eq₂ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w g) x.unop.1.unop)
+    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
+  dsimp at eq₁ eq₂ eq ⊢
+  simp only [reassoc_of% eq, ← Functor.whiskerLeft_comp]
+  congr 2
+  simp only [← cancel_epi ((compULiftYonedaIsoULiftYonedaCompLan F).hom.app x.unop.1.unop),
+    NatTrans.naturality]
+  apply uliftYonedaEquiv.injective
+  simp [eq₁, eq₂, uliftYonedaEquiv_apply]
 
 Depends on / 依赖: F.op.lan.obj, F.op.lanUnit.app, F.op.lanUnit.naturality, F.op.obj, StructuredArrow, StructuredArrow.w, ULift.up, colimitOfRepresentable, congr_app, congr_hom, hom_ext, hom_ext_of_isLeftKanExtension, lanUnit, naturality, uliftYonedaEquiv, x.unop
 -/
@@ -1401,7 +1615,8 @@ definition isColimitTautologicalCocone
       CostructuredArrow.proj yoneda P ⋙ yoneda) :=
     NatIso.ofComponents (fun e => NatIso.ofComponents (fun X => Equiv.ulift.toIso))
   (IsColimit.whiskerEquivalenceEquiv
-    (CategoryO
+    (CategoryOfElements.costructuredArrowYonedaEquivalence P)).2
+      ((IsColimit.precomposeHomEquiv e _).1 (colimitOfRepresentable.{v₁} P))
 
 中文:
 定义 isColimitTautologicalCocone
@@ -1411,7 +1626,8 @@ definition isColimitTautologicalCocone
       CostructuredArrow.proj yoneda P ⋙ yoneda) :=
     NatIso.ofComponents (fun e => NatIso.ofComponents (fun X => Equiv.ulift.toIso))
   (IsColimit.whiskerEquivalenceEquiv
-    (CategoryO
+    (CategoryOfElements.costructuredArrowYonedaEquivalence P)).2
+      ((IsColimit.precomposeHomEquiv e _).1 (colimitOfRepresentable.{v₁} P))
 
 Depends on / 依赖: CategoryOfElements, CategoryOfElements.costructuredArrowYonedaEquivalence, CostructuredArrow, CostructuredArrow.proj, Equiv.ulift.toIso, IsColimit, IsColimit.precomposeHomEquiv, IsColimit.whiskerEquivalenceEquiv, NatIso, NatIso.ofComponents, colimitOfRepresentable, costructuredArrowYonedaEquivalence, functor, functorToRepresentables, ofComponents, precomposeHomEquiv, whiskerEquivalenceEquiv, yoneda
 -/
@@ -1440,7 +1656,16 @@ theorem final_toCostructuredArrow_comp_pre
   suffices IsTerminal (colimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
       CostructuredArrow.toOver yoneda c.pt)) by
     apply IsTerminal.isTerminalOfObj (overEquivPresheafCostructuredArrow c.pt).inverse
-    apply 
+    apply IsTerminal.ofIso this
+    refine ?_ ≪≫ (preservesColimitIso (overEquivPresheafCostructuredArrow c.pt).inverse _).symm
+    apply HasColimit.isoOfNatIso
+    exact Functor.isoWhiskerLeft _
+      (CostructuredArrow.toOverCompOverEquivPresheafCostructuredArrow c.pt).isoCompInverse
+  apply IsTerminal.ofIso Over.mkIdTerminal
+  let isc : IsColimit ((Over.forget _).mapCocone _) := isColimitOfPreserves _
+    (colimit.isColimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
+      CostructuredArrow.toOver yoneda c.pt))
+  exact Over.isoMk (hc.coconePointUniqueUpToIso isc) (hc.hom_ext fun i => by simp)
 
 中文:
 定理 final_toCostructuredArrow_comp_pre
@@ -1450,7 +1675,16 @@ theorem final_toCostructuredArrow_comp_pre
   suffices IsTerminal (colimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
       CostructuredArrow.toOver yoneda c.pt)) by
     apply IsTerminal.isTerminalOfObj (overEquivPresheafCostructuredArrow c.pt).inverse
-    apply 
+    apply IsTerminal.ofIso this
+    refine ?_ ≪≫ (preservesColimitIso (overEquivPresheafCostructuredArrow c.pt).inverse _).symm
+    apply HasColimit.isoOfNatIso
+    exact Functor.isoWhiskerLeft _
+      (CostructuredArrow.toOverCompOverEquivPresheafCostructuredArrow c.pt).isoCompInverse
+  apply IsTerminal.ofIso Over.mkIdTerminal
+  let isc : IsColimit ((Over.forget _).mapCocone _) := isColimitOfPreserves _
+    (colimit.isColimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
+      CostructuredArrow.toOver yoneda c.pt))
+  exact Over.isoMk (hc.coconePointUniqueUpToIso isc) (hc.hom_ext fun i => by simp)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, CostructuredArrow.toOver, CostructuredArrow.toOverCompOverEquivPreshe, Functor, Functor.final_of_isTerminal_colimit_comp_yoneda, Functor.isoWhiskerLeft, HasColimit, HasColimit.isoOfNatIso, IsTerminal, IsTerminal.isTerminalOfObj, IsTerminal.ofIso, c.pt, c.toCostructuredArrow, colimit, final_of_isTerminal_colimit_comp_yoneda, inverse, isTerminalOfObj, isoOfNatIso, isoWhiskerLeft
 -/
@@ -1530,7 +1764,21 @@ definition isColimitCoconeπOpCompShrinkYonedaObj
     ⟨?_, fun x => ?_⟩)
   · let G := (CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj X
     let c := G.coconeTypesEquiv.symm (coconeπOpCompShrinkYonedaObj F X)
-    have (u : G.ColimitType) (x : F.obj X) (h : G.descColimitType
+    have (u : G.ColimitType) (x : F.obj X) (h : G.descColimitType c u = x) :
+        G.ιColimitType (op (elementsMk _ _ x))
+          (shrinkYonedaObjObjEquiv.symm (𝟙 X)) = u := by
+      obtain ⟨⟨u⟩, v, rfl⟩ := Functor.ιColimitType_jointly_surjective _ u
+      obtain ⟨v, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective v
+      dsimp [c] at v h
+      simp only [Equiv.apply_symm_apply] at h
+      rw [← G.ιColimitType_map (show u ⟶ F.elementsMk _ x from ⟨v]; rw [h⟩).op]
+      simp [G, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
+    intro u₁ u₂ hu
+    generalize hx₁ : G.descColimitType c u₁ = x
+    have hx₂ : G.descColimitType c u₂ = x := by rw [← hx₁]; exact hu.symm
+    rw [← this _ _ hx₁]; rw [← this _ _ hx₂]
+  · exact ⟨Functor.ιColimitType _ (op (elementsMk _ _ x))
+      (shrinkYonedaObjObjEquiv.symm (𝟙 X)), by simp⟩
 
 中文:
 定义 isColimitCoconeπOpCompShrinkYonedaObj
@@ -1540,7 +1788,21 @@ definition isColimitCoconeπOpCompShrinkYonedaObj
     ⟨?_, fun x => ?_⟩)
   · let G := (CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj X
     let c := G.coconeTypesEquiv.symm (coconeπOpCompShrinkYonedaObj F X)
-    have (u : G.ColimitType) (x : F.obj X) (h : G.descColimitType
+    have (u : G.ColimitType) (x : F.obj X) (h : G.descColimitType c u = x) :
+        G.ιColimitType (op (elementsMk _ _ x))
+          (shrinkYonedaObjObjEquiv.symm (𝟙 X)) = u := by
+      obtain ⟨⟨u⟩, v, rfl⟩ := Functor.ιColimitType_jointly_surjective _ u
+      obtain ⟨v, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective v
+      dsimp [c] at v h
+      simp only [Equiv.apply_symm_apply] at h
+      rw [← G.ιColimitType_map (show u ⟶ F.elementsMk _ x from ⟨v]; rw [h⟩).op]
+      simp [G, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
+    intro u₁ u₂ hu
+    generalize hx₁ : G.descColimitType c u₁ = x
+    have hx₂ : G.descColimitType c u₂ = x := by rw [← hx₁]; exact hu.symm
+    rw [← this _ _ hx₁]; rw [← this _ _ hx₂]
+  · exact ⟨Functor.ιColimitType _ (op (elementsMk _ _ x))
+      (shrinkYonedaObjObjEquiv.symm (𝟙 X)), by simp⟩
 
 Depends on / 依赖: CategoryOfElements, ColimitType, F.obj, Functor, G.ColimitType, G.coconeTypesEquiv.symm, G.descColimitType, Nonempty, Nonempty.some, Types.isColimit_iff_coconeTypesIsColimit, coconeTypesEquiv, descColimitType, elementsMk, isColimit_iff_coconeTypesIsColimit, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, shrinkYonedaObjObjEquiv.symm.su
 -/
@@ -1614,7 +1876,8 @@ definition coconeπOpCompShrinkYonedaFlip
         simp }
   ι.naturality u v g := by
     ext X x
-    obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surject
+    obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective x
+    simp [← shrinkYonedaObjObjEquiv_symm_comp.{w}]
 
 中文:
 定义 coconeπOpCompShrinkYonedaFlip
@@ -1628,7 +1891,8 @@ definition coconeπOpCompShrinkYonedaFlip
         simp }
   ι.naturality u v g := by
     ext X x
-    obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surject
+    obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective x
+    simp [← shrinkYonedaObjObjEquiv_symm_comp.{w}]
 -/
 noncomputable def coconeπOpCompShrinkYonedaFlip :
     Cocone ((CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.flip) where
@@ -1705,7 +1969,8 @@ lemma shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply
       (coconeπOpCompShrinkYonedaObj F u.fst).ι.app (op u) ≫
         (shrinkYonedaCompWhiskeringLeftObjπCompColimIso F).inv.app u.fst =
       colimit.ι ((CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj u.fst) (op u) :=
-    IsColimit.comp_coconePointUniqueUpToIso_inv (colimit.isColimit _
+    IsColimit.comp_coconePointUniqueUpToIso_inv (colimit.isColimit _) _ (op u)
+  simpa using ConcreteCategory.congr_hom this (shrinkYonedaObjObjEquiv.symm (𝟙 _))
 
 中文:
 引理 shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply
@@ -1714,7 +1979,8 @@ lemma shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply
       (coconeπOpCompShrinkYonedaObj F u.fst).ι.app (op u) ≫
         (shrinkYonedaCompWhiskeringLeftObjπCompColimIso F).inv.app u.fst =
       colimit.ι ((CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj u.fst) (op u) :=
-    IsColimit.comp_coconePointUniqueUpToIso_inv (colimit.isColimit _
+    IsColimit.comp_coconePointUniqueUpToIso_inv (colimit.isColimit _) _ (op u)
+  simpa using ConcreteCategory.congr_hom this (shrinkYonedaObjObjEquiv.symm (𝟙 _))
 
 Depends on / 依赖: CategoryOfElements, ConcreteCategory, ConcreteCategory.congr_hom, IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, colimit, colimit.isColimit, comp_coconePointUniqueUpToIso_inv, congr_hom, inv.app, isColimit, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, u.fst
 -/

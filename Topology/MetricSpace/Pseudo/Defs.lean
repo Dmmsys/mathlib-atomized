@@ -120,7 +120,18 @@ abbreviation Bornology.ofDist
     ⟨0, fun _ hx _ => hx.elim⟩ (fun _ ⟨c, hc⟩ _ h => ⟨c, fun _ hx _ hy => hc (h hx) (h hy)⟩)
     (fun s hs t ht => by
       rcases s.eq_empty_or_nonempty with rfl | ⟨x, hx⟩
-      · rwa [empty_unio
+      · rwa [empty_union]
+      rcases t.eq_empty_or_nonempty with rfl | ⟨y, hy⟩
+      · rwa [union_empty]
+      rsuffices ⟨C, hC⟩ : exists C, forall z in s union t, dist x z <= C
+      · refine ⟨C + C, fun a ha b hb => (dist_triangle a x b).trans ?_⟩
+        simpa only [dist_comm] using add_le_add (hC _ ha) (hC _ hb)
+      rcases hs with ⟨Cs, hs⟩; rcases ht with ⟨Ct, ht⟩
+      refine ⟨max Cs (dist x y + Ct), fun z hz => hz.elim
+        (fun hz => (hs hx hz).trans (le_max_left _ _))
+        (fun hz => (dist_triangle x y z).trans <|
+          (add_le_add le_rfl (ht hy hz)).trans (le_max_right _ _))⟩)
+fun z => ⟨dist z z, forall_eq.2 forall_eq.2 le_rfl⟩
 
 中文:
 缩写 有界结构.ofDist
@@ -129,7 +140,18 @@ abbreviation Bornology.ofDist
     ⟨0, fun _ hx _ => hx.elim⟩ (fun _ ⟨c, hc⟩ _ h => ⟨c, fun _ hx _ hy => hc (h hx) (h hy)⟩)
     (fun s hs t ht => by
       rcases s.eq_empty_or_nonempty with rfl | ⟨x, hx⟩
-      · rwa [empty_unio
+      · rwa [empty_union]
+      rcases t.eq_empty_or_nonempty with rfl | ⟨y, hy⟩
+      · rwa [union_empty]
+      rsuffices ⟨C, hC⟩ : exists C, forall z in s union t, dist x z <= C
+      · refine ⟨C + C, fun a ha b hb => (dist_triangle a x b).trans ?_⟩
+        simpa only [dist_comm] using add_le_add (hC _ ha) (hC _ hb)
+      rcases hs with ⟨Cs, hs⟩; rcases ht with ⟨Ct, ht⟩
+      refine ⟨max Cs (dist x y + Ct), fun z hz => hz.elim
+        (fun hz => (hs hx hz).trans (le_max_left _ _))
+        (fun hz => (dist_triangle x y z).trans <|
+          (add_le_add le_rfl (ht hy hz)).trans (le_max_right _ _))⟩)
+fun z => ⟨dist z z, forall_eq.2 forall_eq.2 le_rfl⟩
 
 Depends on / 依赖: Bornology, Bornology.ofBounded, dist_triangle, empty_union, eq_empty_or_nonempty, hx.elim, ofBounded, rsuffices, s.eq_empty_or_nonempty, t.eq_empty_or_nonempty, union_empty
 -/
@@ -281,7 +303,7 @@ theorem PseudoMetricSpace.ext
     rw [hed]; rw [hed']
   · exact UniformSpace.ext (hU.trans hU'.symm)
   · ext : 2
-    rw [← Filter.mem_sets
+    rw [← Filter.mem_sets]; rw [← Filter.mem_sets]; rw [hB]; rw [hB']
 
 中文:
 定理 伪度量空间.ext
@@ -297,7 +319,7 @@ theorem PseudoMetricSpace.ext
     rw [hed]; rw [hed']
   · exact UniformSpace.ext (hU.trans hU'.symm)
   · ext : 2
-    rw [← Filter.mem_sets
+    rw [← Filter.mem_sets]; rw [← Filter.mem_sets]; rw [hB]; rw [hB']
 
 Depends on / 依赖: Filter, Filter.mem_sets, UniformSpace, UniformSpace.ext, hU.trans, m.toDist, mem_sets, toDist
 -/
@@ -341,7 +363,13 @@ definition PseudoMetricSpace.ofDistTopology
     toUniformSpace :=
 (UniformSpace.ofDist dist dist_self dist_comm dist_triangle).replaceTopology
 TopologicalSpace.ext_iff.2 fun s => (H s).trans forall₂_congr fun x _ =>
-          ((UniformSpace
+          ((UniformSpace.hasBasis_ofFun (exists_gt (0 : Real)) dist dist_self dist_comm dist_triangle
+            UniformSpace.ofDist_aux).comap (Prod.mk x)).mem_iff.symm
+    uniformity_dist := rfl
+    toBornology := Bornology.ofDist dist dist_comm dist_triangle
+    cobounded_sets := rfl }
+
+@[simp]
 
 中文:
 定义 伪度量空间.ofDistTopology
@@ -353,7 +381,13 @@ TopologicalSpace.ext_iff.2 fun s => (H s).trans forall₂_congr fun x _ =>
     toUniformSpace :=
 (UniformSpace.ofDist dist dist_self dist_comm dist_triangle).replaceTopology
 TopologicalSpace.ext_iff.2 fun s => (H s).trans forall₂_congr fun x _ =>
-          ((UniformSpace
+          ((UniformSpace.hasBasis_ofFun (exists_gt (0 : Real)) dist dist_self dist_comm dist_triangle
+            UniformSpace.ofDist_aux).comap (Prod.mk x)).mem_iff.symm
+    uniformity_dist := rfl
+    toBornology := Bornology.ofDist dist dist_comm dist_triangle
+    cobounded_sets := rfl }
+
+@[simp]
 
 Depends on / 依赖: Bornology, Bornology.ofDist, Prod.mk, TopologicalSpace, TopologicalSpace.ext_iff, UniformSpace, UniformSpace.hasBasis_ofFun, UniformSpace.ofDist, UniformSpace.ofDist_aux, cobound, dist_comm, dist_self, dist_triangle, exists_gt, ext_iff, hasBasis_ofFun, mem_iff, mem_iff.symm, ofDist, ofDist_aux
 -/
@@ -2968,7 +3002,7 @@ theorem mk_uniformity_basis_le
     rcases exists_between ε₀ with ⟨ε', hε'⟩
     rcases hf ε' hε'.1 with ⟨i, hi, H⟩
 exact ⟨i, hi, fun x (hx : _ <= _) => hε lt_of_le_of_lt (le_trans hx H) hε'.2⟩
-  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i 
+  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i hi, fun x (hx : _ < _) => H (mem_ofPred.2 hx.le)⟩
 
 中文:
 定理 mk_uniformity_basis_le
@@ -2980,7 +3014,7 @@ exact ⟨i, hi, fun x (hx : _ <= _) => hε lt_of_le_of_lt (le_trans hx H) hε'.2
     rcases exists_between ε₀ with ⟨ε', hε'⟩
     rcases hf ε' hε'.1 with ⟨i, hi, H⟩
 exact ⟨i, hi, fun x (hx : _ <= _) => hε lt_of_le_of_lt (le_trans hx H) hε'.2⟩
-  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i 
+  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i hi, fun x (hx : _ < _) => H (mem_ofPred.2 hx.le)⟩
 -/
 protected theorem mk_uniformity_basis_le {β : Type*} {p : β -> Prop} {f : β -> Real}
     (hf₀ : forall x, p x -> 0 < f x) (hf : forall ε, 0 < ε -> exists x, p x ∧ f x <= ε) :
@@ -3915,7 +3949,7 @@ theorem _root_.Dense.exists_dist_lt
 
 nonrec theorem _root_.DenseRange.exists_dist_lt {β : Type*} {f : β -> α} (hf : DenseRange f) (x : α)
     {ε : Real} (hε : 0 < ε) : exists y, dist x (f y) < ε :=
-  exists_range_iff.1 (h
+  exists_range_iff.1 (hf.exists_dist_lt x hε)
 
 中文:
 定理 _root_.稠密.存在_dist_lt
@@ -3926,7 +3960,7 @@ nonrec theorem _root_.DenseRange.exists_dist_lt {β : Type*} {f : β -> α} (hf 
 
 nonrec theorem _root_.DenseRange.exists_dist_lt {β : Type*} {f : β -> α} (hf : DenseRange f) (x : α)
     {ε : Real} (hε : 0 < ε) : exists y, dist x (f y) < ε :=
-  exists_range_iff.1 (h
+  exists_range_iff.1 (hf.exists_dist_lt x hε)
 
 Depends on / 依赖: Nonempty, exists_mem_open, hs.exists_mem_open, isOpen_ball, mem_ball
 -/
@@ -3992,7 +4026,10 @@ theorem Metric.uniformity_edist_aux
   refine ⟨fun ε hε => ?_, fun ε hε => ?_⟩
   · rcases ENNReal.lt_iff_exists_nnreal_btwn.1 hε with ⟨ε', ε'0, ε'ε⟩
     refine mem_iInf_of_mem (ε' : Real) (mem_iInf_of_mem (ENNReal.coe_pos.1 ε'0) ?_)
-    exact fun x hx => lt_trans (ENNReal.
+    exact fun x hx => lt_trans (ENNReal.coe_lt_coe.2 hx) ε'ε
+  · lift ε to Real>=0 using le_of_lt hε
+    refine mem_iInf_of_mem (ε : Real>=0∞) (mem_iInf_of_mem (ENNReal.coe_pos.2 hε) ?_)
+    exact fun _ => ENNReal.coe_lt_coe.1
 
 中文:
 定理 Metric.uniformity_edist_aux
@@ -4002,7 +4039,10 @@ theorem Metric.uniformity_edist_aux
   refine ⟨fun ε hε => ?_, fun ε hε => ?_⟩
   · rcases ENNReal.lt_iff_exists_nnreal_btwn.1 hε with ⟨ε', ε'0, ε'ε⟩
     refine mem_iInf_of_mem (ε' : Real) (mem_iInf_of_mem (ENNReal.coe_pos.1 ε'0) ?_)
-    exact fun x hx => lt_trans (ENNReal.
+    exact fun x hx => lt_trans (ENNReal.coe_lt_coe.2 hx) ε'ε
+  · lift ε to Real>=0 using le_of_lt hε
+    refine mem_iInf_of_mem (ε : Real>=0∞) (mem_iInf_of_mem (ENNReal.coe_pos.2 hε) ?_)
+    exact fun _ => ENNReal.coe_lt_coe.1
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_coe, ENNReal.coe_pos, ENNReal.lt_iff_exists_nnreal_btwn, coe_lt_coe, coe_pos, le_antisymm_iff, le_iInf_iff, le_of_lt, le_principal_iff, lt_iff_exists_nnreal_btwn, lt_trans, mem_iInf_of_mem
 -/
@@ -4351,7 +4391,11 @@ abbreviation PseudoEMetricSpace.toPseudoMetricSpaceOfDist
   dist_triangle x y z := by
     simpa [h, dist_nonneg, add_nonneg, ← ENNReal.ofReal_add] using edist_triangle x y z
   edist := edist
-  ed
+  edist_dist _ _ := by simp only [h]
+  toUniformSpace := PseudoEMetricSpace.toUniformSpace
+uniformity_dist := e.uniformity_edist.trans by
+    simpa [h, dist_nonneg, ENNReal.coe_toNNReal_eq_toReal]
+      using (Metric.uniformity_edist_aux fun x y : X => (edist x y).toNNReal).symm
 
 中文:
 缩写 PseudoEMetric空间.toPseudoMetricSpaceOfDist
@@ -4362,7 +4406,11 @@ abbreviation PseudoEMetricSpace.toPseudoMetricSpaceOfDist
   dist_triangle x y z := by
     simpa [h, dist_nonneg, add_nonneg, ← ENNReal.ofReal_add] using edist_triangle x y z
   edist := edist
-  ed
+  edist_dist _ _ := by simp only [h]
+  toUniformSpace := PseudoEMetricSpace.toUniformSpace
+uniformity_dist := e.uniformity_edist.trans by
+    simpa [h, dist_nonneg, ENNReal.coe_toNNReal_eq_toReal]
+      using (Metric.uniformity_edist_aux fun x y : X => (edist x y).toNNReal).symm
 -/
 abbrev PseudoEMetricSpace.toPseudoMetricSpaceOfDist {X : Type*} [e : PseudoEMetricSpace X]
     (dist : X -> X -> Real) (dist_nonneg : forall x y, 0 <= dist x y)

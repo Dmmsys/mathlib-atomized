@@ -34,7 +34,7 @@ lemma convexHull_reProdIm
     convexHull Real (equivRealProdLm ⁻¹' (s ×ˢ t)) = equivRealProdLm ⁻¹' convexHull Real (s ×ˢ t) := by
       simpa only [← LinearEquiv.image_symm_eq_preimage]
         using! ((equivRealProdLm.symm.toLinearMap).image_convexHull (s ×ˢ t)).symm
-    _ = convexHull Real s ×Complex convexHull Real t
+    _ = convexHull Real s ×Complex convexHull Real t := by rw [convexHull_prod]; rfl
 
 中文:
 引理 convexHull_reProdIm
@@ -43,7 +43,7 @@ lemma convexHull_reProdIm
     convexHull Real (equivRealProdLm ⁻¹' (s ×ˢ t)) = equivRealProdLm ⁻¹' convexHull Real (s ×ˢ t) := by
       simpa only [← LinearEquiv.image_symm_eq_preimage]
         using! ((equivRealProdLm.symm.toLinearMap).image_convexHull (s ×ˢ t)).symm
-    _ = convexHull Real s ×Complex convexHull Real t
+    _ = convexHull Real s ×Complex convexHull Real t := by rw [convexHull_prod]; rfl
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.image_symm_eq_preimage, convexHull, convexHull_prod, equivRealProdLm, equivRealProdLm.symm.toLinearMap, image_convexHull, image_symm_eq_preimage, toLinearMap
 -/
@@ -370,7 +370,15 @@ instance :
     (isPathConnected_iff_pathConnectedSpace (F := {0}ᶜ)).mp (by
       convert!
         (((convex_halfSpace_im_gt 0).isPathConnected ⟨.I, by simp⟩).union
-              ((convex_halfSpace_re_gt 0).isPathConnected ⟨1, by simp⟩) ⟨1 + .I, by simp⟩).u
+              ((convex_halfSpace_re_gt 0).isPathConnected ⟨1, by simp⟩) ⟨1 + .I, by simp⟩).union
+          (((convex_halfSpace_im_lt 0).isPathConnected ⟨-.I, by simp⟩).union
+            ((convex_halfSpace_re_lt 0).isPathConnected ⟨-1, by simp⟩) ⟨-1 - .I, by simp⟩)
+          ⟨1 - .I, by simp⟩ using 1
+      ext x
+      refine ⟨?_, by aesop⟩
+      simp +contextual [Complex.ext_iff, -not_and, not_and_or, or_imp, ← ne_eq, ← lt_or_lt_iff_ne])
+  let e := unitsHomeomorphNeZero (G₀ := Complex)
+  e.symm.surjective.pathConnectedSpace e.symm.continuous
 
 中文:
 实例 :
@@ -379,7 +387,15 @@ instance :
     (isPathConnected_iff_pathConnectedSpace (F := {0}ᶜ)).mp (by
       convert!
         (((convex_halfSpace_im_gt 0).isPathConnected ⟨.I, by simp⟩).union
-              ((convex_halfSpace_re_gt 0).isPathConnected ⟨1, by simp⟩) ⟨1 + .I, by simp⟩).u
+              ((convex_halfSpace_re_gt 0).isPathConnected ⟨1, by simp⟩) ⟨1 + .I, by simp⟩).union
+          (((convex_halfSpace_im_lt 0).isPathConnected ⟨-.I, by simp⟩).union
+            ((convex_halfSpace_re_lt 0).isPathConnected ⟨-1, by simp⟩) ⟨-1 - .I, by simp⟩)
+          ⟨1 - .I, by simp⟩ using 1
+      ext x
+      refine ⟨?_, by aesop⟩
+      simp +contextual [Complex.ext_iff, -not_and, not_and_or, or_imp, ← ne_eq, ← lt_or_lt_iff_ne])
+  let e := unitsHomeomorphNeZero (G₀ := Complex)
+  e.symm.surjective.pathConnectedSpace e.symm.continuous
 
 Depends on / 依赖: Complex.e, PathConnectedSpace, contextual, convert, convex_halfSpace_im_gt, convex_halfSpace_im_lt, convex_halfSpace_re_gt, convex_halfSpace_re_lt, isPathConnected, isPathConnected_iff_pathConnectedSpace
 -/

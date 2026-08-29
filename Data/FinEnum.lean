@@ -606,7 +606,8 @@ theorem Finset.mem_enum
       simp only [enum, List.bind_eq_flatMap, List.mem_flatMap, List.mem_cons,
         List.not_mem_nil, or_false, ih]
       refine ⟨by aesop, fun hs => ⟨s.erase x, ?_⟩⟩
-      simp only [or_if
+      simp only [or_iff_not_imp_left] at hs
+      simp +contextual [eq_comm (a := s), or_iff_not_imp_left, hs]
 
 中文:
 定理 有限集.mem_enum
@@ -618,7 +619,8 @@ theorem Finset.mem_enum
       simp only [enum, List.bind_eq_flatMap, List.mem_flatMap, List.mem_cons,
         List.not_mem_nil, or_false, ih]
       refine ⟨by aesop, fun hs => ⟨s.erase x, ?_⟩⟩
-      simp only [or_if
+      simp only [or_iff_not_imp_left] at hs
+      simp +contextual [eq_comm (a := s), or_iff_not_imp_left, hs]
 
 Depends on / 依赖: List.bind_eq_flatMap, List.mem_cons, List.mem_flatMap, List.not_mem_nil, bind_eq_flatMap, contextual, eq_comm, eq_empty_iff_forall_notMem, generalizing, mem_cons, mem_flatMap, not_mem_nil, or_false, or_iff_not_imp_left, s.erase
 -/

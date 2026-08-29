@@ -364,14 +364,22 @@ lemma transferTransversal_apply''
   statement: (q : orbitRel.Quotient (zpowers g) (G ⧸ H))
   proof: by
   rw [smul_apply_eq_smul_apply_inv_smul]; rw [transferTransversal_apply]; rw [transferFunction_apply]; rw [←
-    mul_smul]; rw [← zpow_neg_one]; rw [← zpow_add]; rw [quotientEquivSigmaZMod_apply]; rw [smul_eq_mul]; rw [← mul_assoc]; rw [← zpow_one_add]; rw [Int.cast_add]; rw [Int.cast_neg]; rw [I
+    mul_smul]; rw [← zpow_neg_one]; rw [← zpow_add]; rw [quotientEquivSigmaZMod_apply]; rw [smul_eq_mul]; rw [← mul_assoc]; rw [← zpow_one_add]; rw [Int.cast_add]; rw [Int.cast_neg]; rw [Int.cast_one]; rw [intCast_cast]; rw [cast_id']; rw [id]; rw [←
+    sub_eq_neg_add]; rw [cast_sub_one]; rw [add_sub_cancel]
+  by_cases hk : k = 0
+  · rw [if_pos hk, if_pos hk, zpow_natCast]
+  · rw [if_neg hk, if_neg hk]
 
 中文:
 引理 transferTransversal_apply''
   结论: (q : orbitRel.商 (zpowers g) (G ⧸ H))
   证明: by
   rw [smul_apply_eq_smul_apply_inv_smul]; rw [transferTransversal_apply]; rw [transferFunction_apply]; rw [←
-    mul_smul]; rw [← zpow_neg_one]; rw [← zpow_add]; rw [quotientEquivSigmaZMod_apply]; rw [smul_eq_mul]; rw [← mul_assoc]; rw [← zpow_one_add]; rw [Int.cast_add]; rw [Int.cast_neg]; rw [I
+    mul_smul]; rw [← zpow_neg_one]; rw [← zpow_add]; rw [quotientEquivSigmaZMod_apply]; rw [smul_eq_mul]; rw [← mul_assoc]; rw [← zpow_one_add]; rw [Int.cast_add]; rw [Int.cast_neg]; rw [Int.cast_one]; rw [intCast_cast]; rw [cast_id']; rw [id]; rw [←
+    sub_eq_neg_add]; rw [cast_sub_one]; rw [add_sub_cancel]
+  by_cases hk : k = 0
+  · rw [if_pos hk, if_pos hk, zpow_natCast]
+  · rw [if_neg hk, if_neg hk]
 
 Depends on / 依赖: Int.cast_add, Int.cast_neg, Int.cast_one, add_sub_cancel, cast_add, cast_id, cast_neg, cast_one, cast_sub_one, if_neg, if_pos, intCast_cast, mul_assoc, mul_smul, quotientEquivSigmaZMod_apply, smul_apply_eq_smul_apply_inv_smul, smul_eq_mul, sub_eq_neg_add, transferFunction_apply, transferTransversal_apply
 -/
@@ -463,7 +471,13 @@ theorem transfer_eq_prod_quotient_orbitRel_zpowers_quot
     _ = _ := Finset.prod_sigma _ _ _
     _ = _ := by
       refine Fintype.prod_congr _ _ (fun q => ?_)
- 
+      simp only [quotientEquivSigmaZMod_symm_apply, transferTransversal_apply',
+        transferTransversal_apply'']
+      rw [Fintype.prod_eq_single (0 : ZMod (Function.minimalPeriod (g • ·) q.out)) _]
+      · simp only [if_pos, ZMod.cast_zero, zpow_zero, one_mul, mul_assoc]
+      · intro k hk
+        simp only [if_neg hk, inv_mul_cancel]
+        exact map_one ϕ
 
 中文:
 定理 transfer_eq_prod_quotient_orbitRel_zpowers_quot
@@ -476,7 +490,13 @@ theorem transfer_eq_prod_quotient_orbitRel_zpowers_quot
     _ = _ := Finset.prod_sigma _ _ _
     _ = _ := by
       refine Fintype.prod_congr _ _ (fun q => ?_)
- 
+      simp only [quotientEquivSigmaZMod_symm_apply, transferTransversal_apply',
+        transferTransversal_apply'']
+      rw [Fintype.prod_eq_single (0 : ZMod (Function.minimalPeriod (g • ·) q.out)) _]
+      · simp only [if_pos, ZMod.cast_zero, zpow_zero, one_mul, mul_assoc]
+      · intro k hk
+        simp only [if_neg hk, inv_mul_cancel]
+        exact map_one ϕ
 
 Depends on / 依赖: Finset, Finset.prod_sigma, Fintype, Fintype.prod_congr, Fintype.prod_eq_single, Function, Function.minimalPeriod, H.fintypeQuotientOfFiniteIndex, ZMod.cast_zero, cast_zero, fintypeQuotientOfFiniteIndex, if_pos, minimalPeriod, prod_comp, prod_congr, prod_eq_single, prod_sigma, q.out, quotientEquivSigmaZMod, quotientEquivSigmaZMod_symm_apply
 -/
@@ -517,7 +537,15 @@ theorem transfer_eq_pow_aux
   classical
     replace key : forall (k : Nat) (g₀ : G), g₀⁻¹ * g ^ k * g₀ in H -> g ^ k in H := fun k g₀ hk =>
       (congr_arg (· in H) (key k g₀ hk)).mp hk
-    replace key : forall q : G ⧸ H,
+    replace key : forall q : G ⧸ H, g ^ Function.minimalPeriod (g • ·) q in H := fun q =>
+      key (Function.minimalPeriod (g • ·) q) q.out
+        (QuotientGroup.out_conj_pow_minimalPeriod_mem H g q)
+    let f : Quotient (orbitRel (zpowers g) (G ⧸ H)) -> zpowers g := fun q =>
+      (⟨g, mem_zpowers g⟩ : zpowers g) ^ Function.minimalPeriod (g • ·) q.out
+    have hf : forall q, f q in H.subgroupOf (zpowers g) := fun q => key q.out
+    replace key :=
+      Subgroup.prod_mem (H.subgroupOf (zpowers g)) fun q (_ : q in Finset.univ) => hf q
+    simpa only [f, Finset.prod_pow_eq_pow_sum, index_eq_sum_minimalPeriod H g] using! key
 
 中文:
 定理 transfer_eq_pow_aux
@@ -530,7 +558,15 @@ theorem transfer_eq_pow_aux
   classical
     replace key : forall (k : Nat) (g₀ : G), g₀⁻¹ * g ^ k * g₀ in H -> g ^ k in H := fun k g₀ hk =>
       (congr_arg (· in H) (key k g₀ hk)).mp hk
-    replace key : forall q : G ⧸ H,
+    replace key : forall q : G ⧸ H, g ^ Function.minimalPeriod (g • ·) q in H := fun q =>
+      key (Function.minimalPeriod (g • ·) q) q.out
+        (QuotientGroup.out_conj_pow_minimalPeriod_mem H g q)
+    let f : Quotient (orbitRel (zpowers g) (G ⧸ H)) -> zpowers g := fun q =>
+      (⟨g, mem_zpowers g⟩ : zpowers g) ^ Function.minimalPeriod (g • ·) q.out
+    have hf : forall q, f q in H.subgroupOf (zpowers g) := fun q => key q.out
+    replace key :=
+      Subgroup.prod_mem (H.subgroupOf (zpowers g)) fun q (_ : q in Finset.univ) => hf q
+    simpa only [f, Finset.prod_pow_eq_pow_sum, index_eq_sum_minimalPeriod H g] using! key
 
 Depends on / 依赖: Function, Function.minimalPeriod, H.index, H.one_mem, Quotient, QuotientGroup, QuotientGroup.out_conj_pow_minimalPeriod_mem, classical, congr_arg, fintypeOfIndexNeZero, minimalPeriod, one_mem, orbitRel, out_conj_pow_minimalPeriod_mem, pow_zero, q.out, replace, zpowers
 -/
@@ -566,7 +602,13 @@ theorem transfer_eq_pow
     let := H.fintypeQuotientOfFiniteIndex
     change forall (k g₀) (hk : g₀⁻¹ * g ^ k * g₀ in H), ↑(⟨g₀⁻¹ * g ^ k * g₀, hk⟩ : H) = g ^ k at key
     rw [transfer_eq_prod_quotient_orbitRel_zpowers_quot]; rw [← Finset.prod_map_toList]; rw [← Function.comp_def ϕ]; rw [List.prod_map_hom]
- 
+    refine congrArg ϕ (Subtype.coe_injective ?_)
+    dsimp only
+    rw [H.coe_mk]; rw [← (zpowers g).coe_mk g (mem_zpowers g)]; rw [← (zpowers g).coe_pow]; rw [index_eq_sum_minimalPeriod H g]; rw [← Finset.prod_pow_eq_pow_sum]; rw [← Finset.prod_map_toList]
+    simp only [Subgroup.val_list_prod, List.map_map]
+    congr 2
+    funext
+    apply key
 
 中文:
 定理 transfer_eq_pow
@@ -576,7 +618,13 @@ theorem transfer_eq_pow
     let := H.fintypeQuotientOfFiniteIndex
     change forall (k g₀) (hk : g₀⁻¹ * g ^ k * g₀ in H), ↑(⟨g₀⁻¹ * g ^ k * g₀, hk⟩ : H) = g ^ k at key
     rw [transfer_eq_prod_quotient_orbitRel_zpowers_quot]; rw [← Finset.prod_map_toList]; rw [← Function.comp_def ϕ]; rw [List.prod_map_hom]
- 
+    refine congrArg ϕ (Subtype.coe_injective ?_)
+    dsimp only
+    rw [H.coe_mk]; rw [← (zpowers g).coe_mk g (mem_zpowers g)]; rw [← (zpowers g).coe_pow]; rw [index_eq_sum_minimalPeriod H g]; rw [← Finset.prod_pow_eq_pow_sum]; rw [← Finset.prod_map_toList]
+    simp only [Subgroup.val_list_prod, List.map_map]
+    congr 2
+    funext
+    apply key
 
 Depends on / 依赖: Finset, Finset.prod_map_toList, Finset.prod_pow_eq_pow_sum, Function, Function.comp_def, H.coe_mk, H.fintypeQuotientOfFiniteIndex, List.prod_map_hom, Subtype, Subtype.coe_injective, classical, coe_injective, coe_mk, coe_pow, comp_def, fintypeQuotientOfFiniteIndex, index_eq_sum_minimalPeriod, mem_zpowers, prod_map_hom, prod_map_toList
 -/
@@ -791,7 +839,10 @@ theorem ker_transferSylow_isComplement'
   have hf : Function.Bijective ((transferSylow P hP).domRestrict (P : Subgroup G)) :=
     (transferSylow_domRestrict_eq_pow P hP).symm ▸ (P.2.powEquiv' P.not_dvd_index).bijective
   rw [Function.Bijective]; rw [← range_eq_top]; rw [domRestrict_range] at hf
-  have := range_eq_top.mp (top_le_iff.mp 
+  have := range_eq_top.mp (top_le_iff.mp (hf.2.ge.trans
+    (map_le_range (transferSylow P hP) P)))
+  rw [← (comap_injective this).eq_iff]; rw [comap_top]; rw [comap_map_eq]; rw [sup_comm]; rw [SetLike.ext'_iff]; rw [normal_mul]; rw [← ker_eq_bot_iff]; rw [← map_subtype_inj]; rw [ker_domRestrict]; rw [subgroupOf_map_subtype]; rw [Subgroup.map_bot]; rw [coe_top] at hf
+  exact isComplement'_of_disjoint_and_mul_eq_univ (disjoint_iff.2 hf.1) hf.2
 
 中文:
 定理 ker_transferSylow_isComplement'
@@ -800,7 +851,10 @@ theorem ker_transferSylow_isComplement'
   have hf : Function.Bijective ((transferSylow P hP).domRestrict (P : Subgroup G)) :=
     (transferSylow_domRestrict_eq_pow P hP).symm ▸ (P.2.powEquiv' P.not_dvd_index).bijective
   rw [Function.Bijective]; rw [← range_eq_top]; rw [domRestrict_range] at hf
-  have := range_eq_top.mp (top_le_iff.mp 
+  have := range_eq_top.mp (top_le_iff.mp (hf.2.ge.trans
+    (map_le_range (transferSylow P hP) P)))
+  rw [← (comap_injective this).eq_iff]; rw [comap_top]; rw [comap_map_eq]; rw [sup_comm]; rw [SetLike.ext'_iff]; rw [normal_mul]; rw [← ker_eq_bot_iff]; rw [← map_subtype_inj]; rw [ker_domRestrict]; rw [subgroupOf_map_subtype]; rw [Subgroup.map_bot]; rw [coe_top] at hf
+  exact isComplement'_of_disjoint_and_mul_eq_univ (disjoint_iff.2 hf.1) hf.2
 
 Depends on / 依赖: Bijective, Function, Function.Bijective, P.not_dvd_index, SetLike, SetLike.ext, Subgroup, _iff, bijective, comap_injective, comap_map_eq, comap_top, domRestrict, domRestrict_range, eq_iff, ge.trans, ker_eq_bot_iff, map_le_range, normal_mul, not_dvd_index
 -/
@@ -884,7 +938,28 @@ theorem normalizer_le_centralizer
     rw [Subsingleton.elim (normalizer _) (centralizer P)]
   have := Fact.mk (Nat.minFac_prime hn)
   have key := card_dvd_of_injective _ (QuotientGroup.kerLift_injective P.normalizerMonoidHom)
-  rw [normaliz
+  rw [normalizerMonoidHom_ker]; rw [← index]; rw [← relIndex] at key
+  refine relIndex_eq_one.mp (Nat.eq_one_of_dvd_coprimes ?_ dvd_rfl key)
+  obtain ⟨k, hk⟩ := P.2.exists_card_eq
+  rcases eq_zero_or_pos k with h0 | h0
+  · rw [hP.card_mulAut, hk, h0, pow_zero, Nat.totient_one]
+    apply Nat.coprime_one_right
+  rw [hP.card_mulAut]; rw [hk]; rw [Nat.totient_prime_pow Fact.out h0]
+  refine (Nat.Coprime.pow_right _ ?_).mul_right ?_
+  · apply Nat.Coprime.coprime_dvd_left (relIndex_dvd_of_le_left _ P.le_centralizer)
+    apply Nat.Coprime.coprime_dvd_left (relIndex_dvd_index_of_le P.le_normalizer)
+    rw [Nat.coprime_comm]; rw [Nat.Prime.coprime_iff_not_dvd Fact.out]
+    exact P.not_dvd_index
+· apply Nat.Coprime.coprime_dvd_left relIndex_dvd_card ..
+apply Nat.Coprime.coprime_dvd_left card_subgroup_dvd_card _
+    have h1 := Nat.gcd_dvd_left (Nat.card G) ((Nat.card G).minFac - 1)
+    have h2 := Nat.gcd_le_right (n := (Nat.card G).minFac - 1) (Nat.card G)
+      (tsub_pos_iff_lt.mpr (Nat.minFac_prime hn).one_lt)
+    contrapose! h2
+    refine Nat.sub_one_lt_of_le (Nat.card G).minFac_pos (Nat.minFac_le_of_dvd ?_ h1)
+    exact (Nat.two_le_iff _).mpr ⟨ne_zero_of_dvd_ne_zero Nat.card_pos.ne' h1, h2⟩
+
+include hp in
 
 中文:
 定理 normalizer_le_centralizer
@@ -896,7 +971,28 @@ theorem normalizer_le_centralizer
     rw [Subsingleton.elim (normalizer _) (centralizer P)]
   have := Fact.mk (Nat.minFac_prime hn)
   have key := card_dvd_of_injective _ (QuotientGroup.kerLift_injective P.normalizerMonoidHom)
-  rw [normaliz
+  rw [normalizerMonoidHom_ker]; rw [← index]; rw [← relIndex] at key
+  refine relIndex_eq_one.mp (Nat.eq_one_of_dvd_coprimes ?_ dvd_rfl key)
+  obtain ⟨k, hk⟩ := P.2.exists_card_eq
+  rcases eq_zero_or_pos k with h0 | h0
+  · rw [hP.card_mulAut, hk, h0, pow_zero, Nat.totient_one]
+    apply Nat.coprime_one_right
+  rw [hP.card_mulAut]; rw [hk]; rw [Nat.totient_prime_pow Fact.out h0]
+  refine (Nat.Coprime.pow_right _ ?_).mul_right ?_
+  · apply Nat.Coprime.coprime_dvd_left (relIndex_dvd_of_le_left _ P.le_centralizer)
+    apply Nat.Coprime.coprime_dvd_left (relIndex_dvd_index_of_le P.le_normalizer)
+    rw [Nat.coprime_comm]; rw [Nat.Prime.coprime_iff_not_dvd Fact.out]
+    exact P.not_dvd_index
+· apply Nat.Coprime.coprime_dvd_left relIndex_dvd_card ..
+apply Nat.Coprime.coprime_dvd_left card_subgroup_dvd_card _
+    have h1 := Nat.gcd_dvd_left (Nat.card G) ((Nat.card G).minFac - 1)
+    have h2 := Nat.gcd_le_right (n := (Nat.card G).minFac - 1) (Nat.card G)
+      (tsub_pos_iff_lt.mpr (Nat.minFac_prime hn).one_lt)
+    contrapose! h2
+    refine Nat.sub_one_lt_of_le (Nat.card G).minFac_pos (Nat.minFac_le_of_dvd ?_ h1)
+    exact (Nat.two_le_iff _).mpr ⟨ne_zero_of_dvd_ne_zero Nat.card_pos.ne' h1, h2⟩
+
+include hp in
 
 Depends on / 依赖: Fact.mk, Nat.card, Nat.card_eq_one_iff_unique.mp, Nat.eq_one_of_dvd_coprimes, Nat.minFac_prime, P.normalizerMonoidHom, QuotientGroup, QuotientGroup.kerLift_injective, Subsingleton, Subsingleton.elim, card_dvd_of_injective, card_eq_one_iff_unique, card_mul, centralizer, dvd_rfl, eq_one_of_dvd_coprimes, eq_zero_or_pos, exists_card_eq, hP.card_mul, kerLift_injective
 -/
@@ -943,7 +1039,7 @@ theorem isComplement'
     rw [Subsingleton.elim (MonoidHom.transferSylow P (hP.normalizer_le_centralizer rfl)).ker ⊥]; rw [Subsingleton.elim P.1 ⊤]
     exact isComplement'_bot_top
   have := Fact.mk (Nat.minFac_prime hn)
-  exact 
+  exact MonoidHom.ker_transferSylow_isComplement' P (hP.normalizer_le_centralizer rfl)
 
 中文:
 定理 isComplement'
@@ -955,7 +1051,7 @@ theorem isComplement'
     rw [Subsingleton.elim (MonoidHom.transferSylow P (hP.normalizer_le_centralizer rfl)).ker ⊥]; rw [Subsingleton.elim P.1 ⊤]
     exact isComplement'_bot_top
   have := Fact.mk (Nat.minFac_prime hn)
-  exact 
+  exact MonoidHom.ker_transferSylow_isComplement' P (hP.normalizer_le_centralizer rfl)
 
 Depends on / 依赖: Fact.mk, MonoidHom, MonoidHom.ker_transferSylow_isComplement, MonoidHom.transferSylow, Nat.card, Nat.card_eq_one_iff_unique.mp, Nat.minFac_prime, Subsingleton, Subsingleton.elim, _bot_top, card_eq_one_iff_unique, hP.normalizer_le_centralizer, isComplement, ker_transferSylow_isComplement, minFac_prime, normalizer_le_centralizer, transferSylow
 -/

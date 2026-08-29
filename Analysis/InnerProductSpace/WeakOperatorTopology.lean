@@ -183,7 +183,8 @@ lemma continuous_iff
 
 @[fun_prop] alias ⟨continuousWithinAt_inner_apply, continuousWithinAt⟩ := continuousWithinAt_iff
 @[fun_prop] alias ⟨continuousOn_inner_apply, continuousOn⟩ := continuousOn_iff
-@[fun_prop] al
+@[fun_prop] alias ⟨continuousAt_inner_apply, continuousAt⟩ := continuousAt_iff
+@[fun_prop] alias ⟨continuous_inner_apply, continuous⟩ := continuous_iff
 
 中文:
 引理 continuous_iff
@@ -194,7 +195,8 @@ lemma continuous_iff
 
 @[fun_prop] alias ⟨continuousWithinAt_inner_apply, continuousWithinAt⟩ := continuousWithinAt_iff
 @[fun_prop] alias ⟨continuousOn_inner_apply, continuousOn⟩ := continuousOn_iff
-@[fun_prop] al
+@[fun_prop] alias ⟨continuousAt_inner_apply, continuousAt⟩ := continuousAt_iff
+@[fun_prop] alias ⟨continuous_inner_apply, continuous⟩ := continuous_iff
 
 Depends on / 依赖: continuousAt_iff, continuous_iff_continuousAt, forall_comm, simp_rw
 -/

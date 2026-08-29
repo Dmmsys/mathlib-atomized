@@ -219,7 +219,11 @@ theorem coe_lowerCentralSeries_eq_int_aux
   simp only [SetLike.mem_coe] at hx ⊢
   induction hx using Submodule.closure_induction with
   | zero => exact Submodule.zero_mem _
-  | a
+  | add y z hy₁ hz₁ hy₂ hz₂ => exact Submodule.add_mem _ hy₂ hz₂
+  | smul_mem c y hy =>
+      obtain ⟨a, b, hb, rfl⟩ := hy
+      rw [← smul_lie]
+      exact Submodule.subset_span ⟨c • a, b, hb, rfl⟩
 
 中文:
 定理 coe_lowerCentralSeries_eq_int_aux
@@ -230,7 +234,11 @@ theorem coe_lowerCentralSeries_eq_int_aux
   simp only [SetLike.mem_coe] at hx ⊢
   induction hx using Submodule.closure_induction with
   | zero => exact Submodule.zero_mem _
-  | a
+  | add y z hy₁ hz₁ hy₂ hz₂ => exact Submodule.add_mem _ hy₂ hz₂
+  | smul_mem c y hy =>
+      obtain ⟨a, b, hb, rfl⟩ := hy
+      rw [← smul_lie]
+      exact Submodule.subset_span ⟨c • a, b, hb, rfl⟩
 -/
 private theorem coe_lowerCentralSeries_eq_int_aux (R₁ R₂ L M : Type*)
     [CommRing R₁] [CommRing R₂] [AddCommGroup M]
@@ -261,7 +269,13 @@ theorem coe_lowerCentralSeries_eq_int
   | succ k ih =>
     rw [lowerCentralSeries_succ]; rw [lowerCentralSeries_succ]
     rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw [LieSubmodule.lieIdeal_oper_eq_linear_span']
-    rw
+    rw [Set.ext_iff] at ih
+    simp only [SetLike.mem_coe, LieSubmodule.mem_toSubmodule] at ih
+    simp only [LieSubmodule.mem_top, ih, true_and]
+    apply le_antisymm
+    · exact coe_lowerCentralSeries_eq_int_aux _ _ L M k
+    · simp only [← ih]
+      exact coe_lowerCentralSeries_eq_int_aux _ _ L M k
 
 中文:
 定理 coe_lowerCentralSeries_eq_int
@@ -273,7 +287,13 @@ theorem coe_lowerCentralSeries_eq_int
   | succ k ih =>
     rw [lowerCentralSeries_succ]; rw [lowerCentralSeries_succ]
     rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw [LieSubmodule.lieIdeal_oper_eq_linear_span']
-    rw
+    rw [Set.ext_iff] at ih
+    simp only [SetLike.mem_coe, LieSubmodule.mem_toSubmodule] at ih
+    simp only [LieSubmodule.mem_top, ih, true_and]
+    apply le_antisymm
+    · exact coe_lowerCentralSeries_eq_int_aux _ _ L M k
+    · simp only [← ih]
+      exact coe_lowerCentralSeries_eq_int_aux _ _ L M k
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.coe_toSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top, Set.ext_iff, SetLike, SetLike.mem_coe, coe_lowerCentralSeries_eq_int_aux, coe_toSubmodule, ext_iff, le_antisymm, lieIdeal_oper_eq_linear_span, lowerCentralSeries_succ, mem_coe, mem_toSubmodule, mem_top, true_and
 -/
@@ -449,7 +469,8 @@ theorem antitone_lowerCentralSeries
     intro h
     rcases Nat.of_le_succ h with (hk | hk)
     · rw [lowerCentralSeries_succ]
-      exact (LieSubmodule.mono_lie_right ⊤ (ih hk)).trans (LieSubmodule.lie_le_right
+      exact (LieSubmodule.mono_lie_right ⊤ (ih hk)).trans (LieSubmodule.lie_le_right _ _)
+    · exact hk.symm ▸ le_rfl
 
 中文:
 定理 antitone_lowerCentralSeries
@@ -462,7 +483,8 @@ theorem antitone_lowerCentralSeries
     intro h
     rcases Nat.of_le_succ h with (hk | hk)
     · rw [lowerCentralSeries_succ]
-      exact (LieSubmodule.mono_lie_right ⊤ (ih hk)).trans (LieSubmodule.lie_le_right
+      exact (LieSubmodule.mono_lie_right ⊤ (ih hk)).trans (LieSubmodule.lie_le_right _ _)
+    · exact hk.symm ▸ le_rfl
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lie_le_right, LieSubmodule.mono_lie_right, Nat.le_zero.mp, Nat.of_le_succ, generalizing, hk.symm, le_rfl, le_zero, lie_le_right, lowerCentralSeries_succ, mono_lie_right, of_le_succ
 -/
@@ -488,7 +510,10 @@ theorem eventually_iInf_lowerCentralSeries_eq
     LieSubmodule.wellFoundedLT_of_isArtinian R L M
   obtain ⟨n, hn : forall m, n <= m -> lowerCentralSeries R L M n = lowerCentralSeries R L M m⟩ :=
     h_wf.monotone_chain_condition ⟨_, antitone_lowerCentralSeries R L M⟩
-  refine Filter.event
+  refine Filter.eventually_atTop.mpr ⟨n, fun l hl => le_antisymm (iInf_le _ _) (le_iInf fun m => ?_)⟩
+  rcases le_or_gt l m with h | h
+  · rw [← hn _ hl, ← hn _ (hl.trans h)]
+  · exact antitone_lowerCentralSeries R L M (le_of_lt h)
 
 中文:
 定理 eventually_iInf_lowerCentralSeries_eq
@@ -498,7 +523,10 @@ theorem eventually_iInf_lowerCentralSeries_eq
     LieSubmodule.wellFoundedLT_of_isArtinian R L M
   obtain ⟨n, hn : forall m, n <= m -> lowerCentralSeries R L M n = lowerCentralSeries R L M m⟩ :=
     h_wf.monotone_chain_condition ⟨_, antitone_lowerCentralSeries R L M⟩
-  refine Filter.event
+  refine Filter.eventually_atTop.mpr ⟨n, fun l hl => le_antisymm (iInf_le _ _) (le_iInf fun m => ?_)⟩
+  rcases le_or_gt l m with h | h
+  · rw [← hn _ hl, ← hn _ (hl.trans h)]
+  · exact antitone_lowerCentralSeries R L M (le_of_lt h)
 
 Depends on / 依赖: Filter, Filter.eventually_atTop.mpr, LieSubmodule, LieSubmodule.wellFoundedLT_of_isArtinian, WellFoundedGT, antitone_lowerCentralSeries, eventually_atTop, h_wf, h_wf.monotone_chain_condition, hl.trans, iInf_le, le_antisymm, le_iInf, le_of_lt, le_or_gt, lowerCentralSeries, monotone_chain_condition, wellFoundedLT_of_isArtinian
 -/
@@ -563,7 +591,7 @@ theorem iterate_toEnd_mem_lowerCentralSeries
   | succ k ih =>
     simp only [lowerCentralSeries_succ, Function.comp_apply, Function.iterate_succ',
       toEnd_apply_apply]
-    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x
+    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x) ih
 
 中文:
 定理 iterate_toEnd_mem_lowerCentralSeries
@@ -574,7 +602,7 @@ theorem iterate_toEnd_mem_lowerCentralSeries
   | succ k ih =>
     simp only [lowerCentralSeries_succ, Function.comp_apply, Function.iterate_succ',
       toEnd_apply_apply]
-    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x
+    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x) ih
 
 Depends on / 依赖: Function, Function.comp_apply, Function.iterate_succ, Function.iterate_zero, LieSubmodule, LieSubmodule.lie_mem_lie, LieSubmodule.mem_top, comp_apply, iterate_succ, iterate_zero, lie_mem_lie, lowerCentralSeries_succ, lowerCentralSeries_zero, mem_top, toEnd_apply_apply
 -/
@@ -600,7 +628,8 @@ theorem iterate_toEnd_mem_lowerCentralSeries₂
     have hk : 2 * k.succ = (2 * k + 1) + 1 := rfl
     simp only [lowerCentralSeries_succ, Function.comp_apply, Function.iterate_succ', hk,
       toEnd_apply_apply, LinearMap.coe_comp, toEnd_apply_apply]
-    refine LieSubmodule.lie_mem_lie (LieS
+    refine LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x) ?_
+    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top y) ih
 
 中文:
 定理 iterate_toEnd_mem_lowerCentralSeries₂
@@ -612,7 +641,8 @@ theorem iterate_toEnd_mem_lowerCentralSeries₂
     have hk : 2 * k.succ = (2 * k + 1) + 1 := rfl
     simp only [lowerCentralSeries_succ, Function.comp_apply, Function.iterate_succ', hk,
       toEnd_apply_apply, LinearMap.coe_comp, toEnd_apply_apply]
-    refine LieSubmodule.lie_mem_lie (LieS
+    refine LieSubmodule.lie_mem_lie (LieSubmodule.mem_top x) ?_
+    exact LieSubmodule.lie_mem_lie (LieSubmodule.mem_top y) ih
 
 Depends on / 依赖: Function, Function.comp_apply, Function.iterate_succ, LieSubmodule, LieSubmodule.lie_mem_lie, LieSubmodule.mem_top, LinearMap, LinearMap.coe_comp, coe_comp, comp_apply, iterate_succ, k.succ, lie_mem_lie, lowerCentralSeries_succ, mem_top, toEnd_apply_apply
 -/
@@ -677,7 +707,8 @@ lemma map_lowerCentralSeries_eq
       f.range_eq_top]
   | succ =>
     simp only [lowerCentralSeries_succ, LieSubmodule.map_bracket_eq]
-    apply LieSubmodule.mono_l
+    apply LieSubmodule.mono_lie_right
+    assumption
 
 中文:
 引理 map_lowerCentralSeries_eq
@@ -690,7 +721,8 @@ lemma map_lowerCentralSeries_eq
       f.range_eq_top]
   | succ =>
     simp only [lowerCentralSeries_succ, LieSubmodule.map_bracket_eq]
-    apply LieSubmodule.mono_l
+    apply LieSubmodule.mono_lie_right
+    assumption
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.map_bracket_eq, LieSubmodule.mono_lie_right, f.map_top, f.range_eq_top, le_antisymm, lowerCentralSeries_succ, lowerCentralSeries_zero, map_bracket_eq, map_lowerCentralSeries_le, map_top, mono_lie_right, range_eq_top, top_le_iff
 -/
@@ -722,7 +754,7 @@ theorem derivedSeries_le_lowerCentralSeries
   | succ k h =>
     have h' : derivedSeries R L k <= ⊤ := by simp only [le_top]
     rw [derivedSeries_def]; rw [derivedSeriesOfIdeal_succ]; rw [lowerCentralSeries_succ]
-    exact LieSubmodule
+    exact LieSubmodule.mono_lie h' h
 
 中文:
 定理 derivedSeries_le_lowerCentralSeries
@@ -733,7 +765,7 @@ theorem derivedSeries_le_lowerCentralSeries
   | succ k h =>
     have h' : derivedSeries R L k <= ⊤ := by simp only [le_top]
     rw [derivedSeries_def]; rw [derivedSeriesOfIdeal_succ]; rw [lowerCentralSeries_succ]
-    exact LieSubmodule
+    exact LieSubmodule.mono_lie h' h
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.mono_lie, derivedSeries, derivedSeriesOfIdeal_succ, derivedSeriesOfIdeal_zero, derivedSeries_def, le_top, lowerCentralSeries_succ, lowerCentralSeries_zero, mono_lie
 -/
@@ -906,7 +938,13 @@ instance instIsNilpotentSup
   obtain ⟨l, hl⟩ := IsNilpotent.nilpotent R L M₂
   let lcs_eq_bot {m n} (N : LieSubmodule R L M) (le : m <= n) (hn : lowerCentralSeries R L N m = ⊥) :
     lowerCentralSeries R L N n = ⊥ := by
-    simpa [hn] using antitone_lowerCentralSeries R L N l
+    simpa [hn] using antitone_lowerCentralSeries R L N le
+  have h₁ : lowerCentralSeries R L M₁ (k ⊔ l) = ⊥ := lcs_eq_bot M₁ (Nat.le_max_left k l) hk
+  have h₂ : lowerCentralSeries R L M₂ (k ⊔ l) = ⊥ := lcs_eq_bot M₂ (Nat.le_max_right k l) hl
+  refine (isNilpotent_iff R L (M₁ + M₂)).mpr ⟨k ⊔ l, ?_⟩
+  simp [LieSubmodule.add_eq_sup, (M₁ ⊔ M₂).lowerCentralSeries_eq_lcs_comap, LieSubmodule.lcs_sup,
+    (M₁.lowerCentralSeries_eq_bot_iff_lcs_eq_bot (k ⊔ l)).1 h₁,
+    (M₂.lowerCentralSeries_eq_bot_iff_lcs_eq_bot (k ⊔ l)).1 h₂, LieSubmodule.comap_incl_eq_bot]
 
 中文:
 实例 instIsNilpotentSup
@@ -916,7 +954,13 @@ instance instIsNilpotentSup
   obtain ⟨l, hl⟩ := IsNilpotent.nilpotent R L M₂
   let lcs_eq_bot {m n} (N : LieSubmodule R L M) (le : m <= n) (hn : lowerCentralSeries R L N m = ⊥) :
     lowerCentralSeries R L N n = ⊥ := by
-    simpa [hn] using antitone_lowerCentralSeries R L N l
+    simpa [hn] using antitone_lowerCentralSeries R L N le
+  have h₁ : lowerCentralSeries R L M₁ (k ⊔ l) = ⊥ := lcs_eq_bot M₁ (Nat.le_max_left k l) hk
+  have h₂ : lowerCentralSeries R L M₂ (k ⊔ l) = ⊥ := lcs_eq_bot M₂ (Nat.le_max_right k l) hl
+  refine (isNilpotent_iff R L (M₁ + M₂)).mpr ⟨k ⊔ l, ?_⟩
+  simp [LieSubmodule.add_eq_sup, (M₁ ⊔ M₂).lowerCentralSeries_eq_lcs_comap, LieSubmodule.lcs_sup,
+    (M₁.lowerCentralSeries_eq_bot_iff_lcs_eq_bot (k ⊔ l)).1 h₁,
+    (M₂.lowerCentralSeries_eq_bot_iff_lcs_eq_bot (k ⊔ l)).1 h₂, LieSubmodule.comap_incl_eq_bot]
 
 Depends on / 依赖: IsNilpotent, IsNilpotent.nilpotent, LieSubmodule, Nat.le_max_left, Nat.le_max_right, antitone_lowerCentralSeries, isNilpotent_iff, lcs_eq_bot, le_max_left, le_max_right, lowerCentralSeries, nilpotent
 -/
@@ -1006,7 +1050,8 @@ theorem isNilpotent_toEnd_of_isNilpotent₂
     rw [eq_bot_iff]; rw [← hM]; exact antitone_lowerCentralSeries R L M (by lia)
   use k
   ext m
-  rw [Module.End.pow_apply]; rw [LinearMap.zero_apply]; rw [← LieSubmodule.mem_bot (R := R) (L
+  rw [Module.End.pow_apply]; rw [LinearMap.zero_apply]; rw [← LieSubmodule.mem_bot (R := R) (L := L)]; rw [← hM]
+  exact iterate_toEnd_mem_lowerCentralSeries₂ R L M x y m k
 
 中文:
 定理 isNilpotent_toEnd_of_isNilpotent₂
@@ -1017,7 +1062,8 @@ theorem isNilpotent_toEnd_of_isNilpotent₂
     rw [eq_bot_iff]; rw [← hM]; exact antitone_lowerCentralSeries R L M (by lia)
   use k
   ext m
-  rw [Module.End.pow_apply]; rw [LinearMap.zero_apply]; rw [← LieSubmodule.mem_bot (R := R) (L
+  rw [Module.End.pow_apply]; rw [LinearMap.zero_apply]; rw [← LieSubmodule.mem_bot (R := R) (L := L)]; rw [← hM]
+  exact iterate_toEnd_mem_lowerCentralSeries₂ R L M x y m k
 
 Depends on / 依赖: IsNilpotent, IsNilpotent.nilpotent, LieSubmodule, LieSubmodule.mem_bot, LinearMap, LinearMap.zero_apply, Module, Module.End.pow_apply, antitone_lowerCentralSeries, eq_bot_iff, lowerCentralSeries, mem_bot, nilpotent, pow_apply, replace, zero_apply
 -/
@@ -1076,7 +1122,8 @@ theorem nilpotentOfNilpotentQuotient
   suffices lowerCentralSeries R L M k <= N by
     replace this := LieSubmodule.mono_lie_right ⊤ (le_trans this h₁)
     rwa [ideal_oper_maxTrivSubmodule_eq_bot, le_bot_iff] at this
-  rw [← L
+  rw [← LieSubmodule.Quotient.map_mk'_eq_bot_le]; rw [← le_bot_iff]; rw [← hk]
+  exact map_lowerCentralSeries_le k (LieSubmodule.Quotient.mk' N)
 
 中文:
 定理 nilpotentOfNilpotentQuotient
@@ -1089,7 +1136,8 @@ theorem nilpotentOfNilpotentQuotient
   suffices lowerCentralSeries R L M k <= N by
     replace this := LieSubmodule.mono_lie_right ⊤ (le_trans this h₁)
     rwa [ideal_oper_maxTrivSubmodule_eq_bot, le_bot_iff] at this
-  rw [← L
+  rw [← LieSubmodule.Quotient.map_mk'_eq_bot_le]; rw [← le_bot_iff]; rw [← hk]
+  exact map_lowerCentralSeries_le k (LieSubmodule.Quotient.mk' N)
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.Quotient.map_mk, LieSubmodule.Quotient.mk, LieSubmodule.mono_lie_right, Quotient, _eq_bot_le, ideal_oper_maxTrivSubmodule_eq_bot, isNilpotent_iff, le_bot_iff, le_trans, lowerCentralSeries, lowerCentralSeries_succ, map_lowerCentralSeries_le, map_mk, mono_lie_right, replace
 -/
@@ -1195,7 +1243,10 @@ theorem nilpotencyLength_eq_zero_iff
     exact ⟨k, hk⟩
   change sInf s = 0 ↔ _
   rw [← LieSubmodule.subsingleton_iff Int L M]; rw [← subsingleton_iff_bot_eq_top]; rw [←
-    lowerCentralSeries_zero]; rw [
+    lowerCentralSeries_zero]; rw [@eq_comm (LieSubmodule Int L M)]
+  refine ⟨fun h => h ▸ Nat.sInf_mem hs, fun h => ?_⟩
+  rw [Nat.sInf_eq_zero]
+  exact Or.inl h
 
 中文:
 定理 nilpotencyLength_eq_zero_iff
@@ -1207,7 +1258,10 @@ theorem nilpotencyLength_eq_zero_iff
     exact ⟨k, hk⟩
   change sInf s = 0 ↔ _
   rw [← LieSubmodule.subsingleton_iff Int L M]; rw [← subsingleton_iff_bot_eq_top]; rw [←
-    lowerCentralSeries_zero]; rw [
+    lowerCentralSeries_zero]; rw [@eq_comm (LieSubmodule Int L M)]
+  refine ⟨fun h => h ▸ Nat.sInf_mem hs, fun h => ?_⟩
+  rw [Nat.sInf_eq_zero]
+  exact Or.inl h
 
 Depends on / 依赖: IsNilpotent, IsNilpotent.nilpotent, LieSubmodule, LieSubmodule.subsingleton_iff, Nat.sInf_eq_zero, Nat.sInf_mem, Nonempty, Or.inl, eq_comm, lowerCentralSeries, lowerCentralSeries_zero, nilpotent, s.Nonempty, sInf_eq_zero, sInf_mem, subsingleton_iff, subsingleton_iff_bot_eq_top
 -/
@@ -1240,7 +1294,12 @@ theorem nilpotencyLength_eq_succ_iff
   let s := {k | lowerCentralSeries Int L M k = ⊥}
   rw [aux]; rw [ne_eq]; rw [aux]
   change sInf s = k + 1 ↔ k + 1 in s ∧ k ∉ s
-  have hs
+  have hs : forall k₁ k₂, k₁ <= k₂ -> k₁ in s -> k₂ in s := by
+    rintro k₁ k₂ h₁₂ (h₁ : lowerCentralSeries Int L M k₁ = ⊥)
+    exact eq_bot_iff.mpr (h₁ ▸ antitone_lowerCentralSeries Int L M h₁₂)
+  exact Nat.sInf_upward_closed_eq_succ_iff hs k
+
+@[simp]
 
 中文:
 定理 nilpotencyLength_eq_succ_iff
@@ -1251,7 +1310,12 @@ theorem nilpotencyLength_eq_succ_iff
   let s := {k | lowerCentralSeries Int L M k = ⊥}
   rw [aux]; rw [ne_eq]; rw [aux]
   change sInf s = k + 1 ↔ k + 1 in s ∧ k ∉ s
-  have hs
+  have hs : forall k₁ k₂, k₁ <= k₂ -> k₁ in s -> k₂ in s := by
+    rintro k₁ k₂ h₁₂ (h₁ : lowerCentralSeries Int L M k₁ = ⊥)
+    exact eq_bot_iff.mpr (h₁ ▸ antitone_lowerCentralSeries Int L M h₁₂)
+  exact Nat.sInf_upward_closed_eq_succ_iff hs k
+
+@[simp]
 
 Depends on / 依赖: Nat.sInf_upward_closed_eq_su, SetLike, SetLike.ext, _iff, antitone_lowerCentralSeries, coe_lowerCentralSeries_eq_int, eq_bot_iff, eq_bot_iff.mpr, lowerCentralSeries, ne_eq, sInf_upward_closed_eq_su
 -/
@@ -1435,7 +1499,7 @@ theorem lowerCentralSeriesLast_le_of_not_isTrivial
     contradiction
   rcases hk : nilpotencyLength L M with - | k <;> rw [hk] at h
   · contradiction
-  · exact antitone_lowerCentra
+  · exact antitone_lowerCentralSeries _ _ _ (Nat.le_of_lt_succ h)
 
 中文:
 定理 lowerCentralSeriesLast_le_of_not_isTrivial
@@ -1448,7 +1512,7 @@ theorem lowerCentralSeriesLast_le_of_not_isTrivial
     contradiction
   rcases hk : nilpotencyLength L M with - | k <;> rw [hk] at h
   · contradiction
-  · exact antitone_lowerCentra
+  · exact antitone_lowerCentralSeries _ _ _ (Nat.le_of_lt_succ h)
 
 Depends on / 依赖: Nat.le_of_lt_succ, antitone_lowerCentralSeries, contra, isTrivial_of_nilpotencyLength_le_one, le_of_lt_succ, lowerCentralSeriesLast, nilpotencyLength, not_lt, not_lt.mp, replace
 -/
@@ -1478,7 +1542,11 @@ lemma disjoint_lowerCentralSeries_maxTrivSubmodule_iff
   by_contra contra
   have : lowerCentralSeriesLast R L M <= lowerCentralSeries R L M 1 ⊓ maxTrivSubmodule R L M :=
     le_inf_iff.mpr ⟨lowerCentralSeriesLast_le_of_not_isTrivial R L M contra,
-      lowerCentralSeriesLast_le_max_triv R L M
+      lowerCentralSeriesLast_le_max_triv R L M⟩
+  suffices ¬ Nontrivial (lowerCentralSeriesLast R L M) by
+    exact this (nontrivial_lowerCentralSeriesLast R L M)
+  rw [h.eq_bot]; rw [le_bot_iff] at this
+  exact this ▸ not_nontrivial _
 
 中文:
 引理 disjoint_lowerCentralSeries_maxTrivSubmodule_iff
@@ -1489,7 +1557,11 @@ lemma disjoint_lowerCentralSeries_maxTrivSubmodule_iff
   by_contra contra
   have : lowerCentralSeriesLast R L M <= lowerCentralSeries R L M 1 ⊓ maxTrivSubmodule R L M :=
     le_inf_iff.mpr ⟨lowerCentralSeriesLast_le_of_not_isTrivial R L M contra,
-      lowerCentralSeriesLast_le_max_triv R L M
+      lowerCentralSeriesLast_le_max_triv R L M⟩
+  suffices ¬ Nontrivial (lowerCentralSeriesLast R L M) by
+    exact this (nontrivial_lowerCentralSeriesLast R L M)
+  rw [h.eq_bot]; rw [le_bot_iff] at this
+  exact this ▸ not_nontrivial _
 
 Depends on / 依赖: Nontrivial, contra, eq_bot, h.eq_bot, le_bot_iff, le_inf_iff, le_inf_iff.mpr, lowerCentralSeries, lowerCentralSeriesLast, lowerCentralSeriesLast_le_max_triv, lowerCentralSeriesLast_le_of_not_isTrivial, maxTrivSubmodule, nontrivial_lowerCentralSeriesLast, nontriviality, not_nontrivial
 -/
@@ -1998,7 +2070,15 @@ theorem lieModule_lcs_map_le
   | succ k ih =>
     rw [lowerCentralSeries_succ]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw [Submodule.map_span]; rw [Submodule.span_le]
     rintro m₂ ⟨m, ⟨x, n, m_n, ⟨h₁, h₂⟩⟩, rfl⟩
-    simp only [lowerCentralSeries_succ, Set
+    simp only [lowerCentralSeries_succ, SetLike.mem_coe, LieSubmodule.mem_toSubmodule]
+    have : exists y : L₂, exists n : lowerCentralSeries R L₂ M₂ k, ⁅y, n⁆ = g m := by
+      use f x, ⟨g m_n, ih (Submodule.mem_map_of_mem h₁)⟩
+      simp [hfg x m_n, h₂]
+    obtain ⟨y, n, hn⟩ := this
+    rw [← hn]
+    apply LieSubmodule.lie_mem_lie
+    · simp
+    · exact SetLike.coe_mem n
 
 中文:
 定理 lieModule_lcs_map_le
@@ -2010,7 +2090,15 @@ theorem lieModule_lcs_map_le
   | succ k ih =>
     rw [lowerCentralSeries_succ]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span']; rw [Submodule.map_span]; rw [Submodule.span_le]
     rintro m₂ ⟨m, ⟨x, n, m_n, ⟨h₁, h₂⟩⟩, rfl⟩
-    simp only [lowerCentralSeries_succ, Set
+    simp only [lowerCentralSeries_succ, SetLike.mem_coe, LieSubmodule.mem_toSubmodule]
+    have : exists y : L₂, exists n : lowerCentralSeries R L₂ M₂ k, ⁅y, n⁆ = g m := by
+      use f x, ⟨g m_n, ih (Submodule.mem_map_of_mem h₁)⟩
+      simp [hfg x m_n, h₂]
+    obtain ⟨y, n, hn⟩ := this
+    rw [← hn]
+    apply LieSubmodule.lie_mem_lie
+    · simp
+    · exact SetLike.coe_mem n
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, SetLike, SetLike.mem_coe, Submodule, Submodule.map_span, Submodule.map_top, Submodule.mem_map_of_mem, Submodule.span_le, lieIdeal_oper_eq_linear_span, lowerCentralSeries, lowerCentralSeries_succ, map_span, map_top, mem_coe, mem_map_of_mem, mem_toSubmodule, span_le
 -/
@@ -2088,7 +2176,19 @@ theorem Function.Surjective.lieModule_lcs_map_eq
   | succ k ih =>
     suffices
       {m | exists (x : L₂) (n : _), n in lowerCentralSeries R L M k ∧ ⁅x, g n⁆ = m} subseteq
-        g '' {m | exists (x : L) (n : _), n in lowerCentral
+        g '' {m | exists (x : L) (n : _), n in lowerCentralSeries R L M k ∧ ⁅x, n⁆ = m} by
+      simp only [← LieSubmodule.mem_toSubmodule] at this
+      simp_rw [lowerCentralSeries_succ, LieSubmodule.lieIdeal_oper_eq_linear_span',
+        Submodule.map_span, LieSubmodule.mem_top, true_and, ← LieSubmodule.mem_toSubmodule]
+      refine Submodule.span_mono (Set.Subset.trans ?_ this)
+      rintro m₁ ⟨x, n, hn, rfl⟩
+      obtain ⟨n', hn', rfl⟩ := ih hn
+      exact ⟨x, n', hn', rfl⟩
+    rintro m₂ ⟨x, n, hn, rfl⟩
+    obtain ⟨y, rfl⟩ := hf_surj x
+    exact ⟨⁅y, n⁆, ⟨y, n, hn, rfl⟩, (hfg y n).symm⟩
+
+include hf_surj hg_surj hfg in
 
 中文:
 定理 函数.满射.lieModule_lcs_map_eq
@@ -2100,7 +2200,19 @@ theorem Function.Surjective.lieModule_lcs_map_eq
   | succ k ih =>
     suffices
       {m | exists (x : L₂) (n : _), n in lowerCentralSeries R L M k ∧ ⁅x, g n⁆ = m} subseteq
-        g '' {m | exists (x : L) (n : _), n in lowerCentral
+        g '' {m | exists (x : L) (n : _), n in lowerCentralSeries R L M k ∧ ⁅x, n⁆ = m} by
+      simp only [← LieSubmodule.mem_toSubmodule] at this
+      simp_rw [lowerCentralSeries_succ, LieSubmodule.lieIdeal_oper_eq_linear_span',
+        Submodule.map_span, LieSubmodule.mem_top, true_and, ← LieSubmodule.mem_toSubmodule]
+      refine Submodule.span_mono (Set.Subset.trans ?_ this)
+      rintro m₁ ⟨x, n, hn, rfl⟩
+      obtain ⟨n', hn', rfl⟩ := ih hn
+      exact ⟨x, n', hn', rfl⟩
+    rintro m₂ ⟨x, n, hn, rfl⟩
+    obtain ⟨y, rfl⟩ := hf_surj x
+    exact ⟨⁅y, n⁆, ⟨y, n, hn, rfl⟩, (hfg y n).symm⟩
+
+include hf_surj hg_surj hfg in
 
 Depends on / 依赖: LieSubmodul, LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top, LinearMap, LinearMap.range_eq_top, Submodule, Submodule.map_span, le_antisymm, lieIdeal_oper_eq_linear_span, lieModule_lcs_map_le, lowerCentralSeries, lowerCentralSeries_succ, map_span, mem_toSubmodule, mem_top, range_eq_top, simp_rw, subseteq
 -/
@@ -2171,7 +2283,10 @@ theorem Equiv.lieModule_isNilpotent_iff
     exact f.surjective.lieModuleIsNilpotent hfg hg
   · have hg : Surjective (g.symm : M₂ ->ₗ[R] M) := g.symm.surjective
     refine f.symm.surjective.lieModuleIsNilpotent (fun x m => ?_) hg
-    rw [LinearEquiv.coe
+    rw [LinearEquiv.coe_coe]; rw [LieEquiv.coe_toLieHom]; rw [← g.symm_apply_apply ⁅f.symm x]; rw [g.symm m⁆]; rw [←
+      hfg]; rw [f.apply_symm_apply]; rw [g.apply_symm_apply]
+
+@[simp]
 
 中文:
 定理 等价.lieModule_isNilpotent_iff
@@ -2182,7 +2297,10 @@ theorem Equiv.lieModule_isNilpotent_iff
     exact f.surjective.lieModuleIsNilpotent hfg hg
   · have hg : Surjective (g.symm : M₂ ->ₗ[R] M) := g.symm.surjective
     refine f.symm.surjective.lieModuleIsNilpotent (fun x m => ?_) hg
-    rw [LinearEquiv.coe
+    rw [LinearEquiv.coe_coe]; rw [LieEquiv.coe_toLieHom]; rw [← g.symm_apply_apply ⁅f.symm x]; rw [g.symm m⁆]; rw [←
+      hfg]; rw [f.apply_symm_apply]; rw [g.apply_symm_apply]
+
+@[simp]
 
 Depends on / 依赖: LieEquiv, LieEquiv.coe_toLieHom, LinearEquiv, LinearEquiv.coe_coe, Surjective, apply_symm_apply, coe_coe, coe_toLieHom, f.apply_symm_apply, f.surjective.lieModuleIsNilpotent, f.symm, f.symm.surjective.lieModuleIsNilpotent, g.apply_symm_apply, g.surjective, g.symm, g.symm.surjective, g.symm_apply_apply, lieModuleIsNilpotent, surjective, symm_apply_apply
 -/
@@ -2432,7 +2550,12 @@ theorem coe_lowerCentralSeries_ideal_quot_eq
     congr
     ext x
     constructor
-    · rintro ⟨⟨y, -⟩, ⟨z, hz⟩, rfl : ⁅y,
+    · rintro ⟨⟨y, -⟩, ⟨z, hz⟩, rfl : ⁅y, z⁆ = x⟩
+      rw [← LieSubmodule.mem_toSubmodule]; rw [ih]; rw [LieSubmodule.mem_toSubmodule] at hz
+      exact ⟨⟨LieSubmodule.Quotient.mk y, LieSubmodule.mem_top _⟩, ⟨z, hz⟩, rfl⟩
+    · rintro ⟨⟨⟨y⟩, -⟩, ⟨z, hz⟩, rfl : ⁅y, z⁆ = x⟩
+      rw [← LieSubmodule.mem_toSubmodule]; rw [← ih]; rw [LieSubmodule.mem_toSubmodule] at hz
+      exact ⟨⟨y, LieSubmodule.mem_top _⟩, ⟨z, hz⟩, rfl⟩
 
 中文:
 定理 coe_lowerCentralSeries_ideal_quot_eq
@@ -2446,7 +2569,12 @@ theorem coe_lowerCentralSeries_ideal_quot_eq
     congr
     ext x
     constructor
-    · rintro ⟨⟨y, -⟩, ⟨z, hz⟩, rfl : ⁅y,
+    · rintro ⟨⟨y, -⟩, ⟨z, hz⟩, rfl : ⁅y, z⁆ = x⟩
+      rw [← LieSubmodule.mem_toSubmodule]; rw [ih]; rw [LieSubmodule.mem_toSubmodule] at hz
+      exact ⟨⟨LieSubmodule.Quotient.mk y, LieSubmodule.mem_top _⟩, ⟨z, hz⟩, rfl⟩
+    · rintro ⟨⟨⟨y⟩, -⟩, ⟨z, hz⟩, rfl : ⁅y, z⁆ = x⟩
+      rw [← LieSubmodule.mem_toSubmodule]; rw [← ih]; rw [LieSubmodule.mem_toSubmodule] at hz
+      exact ⟨⟨y, LieSubmodule.mem_top _⟩, ⟨z, hz⟩, rfl⟩
 
 Depends on / 依赖: LieModule, LieModule.lowerCentralSeries_succ, LieModule.lowerCentralSeries_zero, LieSubm, LieSubmodule, LieSubmodule.Quotient.mk, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top, LieSubmodule.top_toSubmodule, Quotient, lieIdeal_oper_eq_linear_span, lowerCentralSeries_succ, lowerCentralSeries_zero, mem_toSubmodule, mem_top, top_toSubmodule
 -/
@@ -2605,7 +2733,7 @@ theorem LieIdeal.lowerCentralSeries_map_eq
     exact f.idealRange_eq_top_of_surjective h
   induction k with
   | zero => simp only [LieModule.lowerCentralSeries_zero]; exact h'
-  | succ k ih => simp only [LieModule.lowerCentralSeries_succ, LieIdeal.map_bracket_eq
+  | succ k ih => simp only [LieModule.lowerCentralSeries_succ, LieIdeal.map_bracket_eq f h, ih, h']
 
 中文:
 定理 LieIdeal.lowerCentralSeries_map_eq
@@ -2616,7 +2744,7 @@ theorem LieIdeal.lowerCentralSeries_map_eq
     exact f.idealRange_eq_top_of_surjective h
   induction k with
   | zero => simp only [LieModule.lowerCentralSeries_zero]; exact h'
-  | succ k ih => simp only [LieModule.lowerCentralSeries_succ, LieIdeal.map_bracket_eq
+  | succ k ih => simp only [LieModule.lowerCentralSeries_succ, LieIdeal.map_bracket_eq f h, ih, h']
 
 Depends on / 依赖: LieIdeal, LieIdeal.map_bracket_eq, LieModule, LieModule.lowerCentralSeries_succ, LieModule.lowerCentralSeries_zero, f.idealRange_eq_map, f.idealRange_eq_top_of_surjective, idealRange_eq_map, idealRange_eq_top_of_surjective, lowerCentralSeries_succ, lowerCentralSeries_zero, map_bracket_eq
 -/
@@ -2899,7 +3027,8 @@ theorem coe_lcs_eq
   | succ k ih =>
     simp_rw [lowerCentralSeries_succ, lcs_succ, LieSubmodule.lieIdeal_oper_eq_linear_span', ←
       (I.lcs M k).mem_toSubmodule, ih, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top,
-      true_and, (I : LieSubalgebra R L).coe_bracket_of_modu
+      true_and, (I : LieSubalgebra R L).coe_bracket_of_module]
+    simp
 
 中文:
 定理 coe_lcs_eq
@@ -2910,7 +3039,8 @@ theorem coe_lcs_eq
   | succ k ih =>
     simp_rw [lowerCentralSeries_succ, lcs_succ, LieSubmodule.lieIdeal_oper_eq_linear_span', ←
       (I.lcs M k).mem_toSubmodule, ih, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top,
-      true_and, (I : LieSubalgebra R L).coe_bracket_of_modu
+      true_and, (I : LieSubalgebra R L).coe_bracket_of_module]
+    simp
 
 Depends on / 依赖: I.lcs, LieSubalgebra, LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top, coe_bracket_of_module, lcs_succ, lieIdeal_oper_eq_linear_span, lowerCentralSeries_succ, mem_toSubmodule, mem_top, simp_rw, true_and
 -/

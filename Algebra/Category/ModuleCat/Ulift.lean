@@ -218,7 +218,7 @@ lemma uliftFunctor_map_exact
   intro x
   simp only [Function.comp_apply, Set.mem_range, LinearEquiv.symm_apply_eq, map_zero]
   rw [(CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact S).mp h]
-  cat_d
+  cat_disch
 
 中文:
 引理 uliftFunctor_map_exact
@@ -229,7 +229,7 @@ lemma uliftFunctor_map_exact
   intro x
   simp only [Function.comp_apply, Set.mem_range, LinearEquiv.symm_apply_eq, map_zero]
   rw [(CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact S).mp h]
-  cat_d
+  cat_disch
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact, Function, Function.comp_apply, LinearEquiv, LinearEquiv.symm_apply_eq, Set.mem_range, ShortComplex, ShortExact, cat_disch, comp_apply, map_zero, mem_range, moduleCat_exact_iff_function_exact, symm_apply_eq, uliftFunctor
 -/

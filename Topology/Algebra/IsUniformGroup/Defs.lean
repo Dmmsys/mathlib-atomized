@@ -1007,7 +1007,8 @@ theorem uniformity_translate_mul
       𝓤 α =
           ((𝓤 α).map fun x : α × α => (x.1 * a⁻¹, x.2 * a⁻¹)).map fun x : α × α =>
             (x.1 * a, x.2 * a) := by simp [Filter.map_map, Function.comp_def]
-      _ <= (𝓤 α).map fun x : α × α => (x.1 * a, x.2 * 
+      _ <= (𝓤 α).map fun x : α × α => (x.1 * a, x.2 * a) :=
+        Filter.map_mono (uniformContinuous_id.mul uniformContinuous_const))
 
 中文:
 定理 uniformity_translate_mul
@@ -1018,7 +1019,8 @@ theorem uniformity_translate_mul
       𝓤 α =
           ((𝓤 α).map fun x : α × α => (x.1 * a⁻¹, x.2 * a⁻¹)).map fun x : α × α =>
             (x.1 * a, x.2 * a) := by simp [Filter.map_map, Function.comp_def]
-      _ <= (𝓤 α).map fun x : α × α => (x.1 * a, x.2 * 
+      _ <= (𝓤 α).map fun x : α × α => (x.1 * a, x.2 * a) :=
+        Filter.map_mono (uniformContinuous_id.mul uniformContinuous_const))
 
 Depends on / 依赖: Filter, Filter.map_map, Filter.map_mono, Function, Function.comp_def, comp_def, le_antisymm, map_map, map_mono, uniformContinuous_const, uniformContinuous_id, uniformContinuous_id.mul
 -/
@@ -1233,7 +1235,10 @@ theorem comap_conj_nhds_one
   let conj : β × β -> β := fun gx => gx.1 * gx.2 * gx.1⁻¹
   let φ : β × β ≃ β × β := (Equiv.refl β).prodShear (fun b => (Equiv.mulLeft b).symm)
   have conj_φ : conj ∘ φ = dr := by
-    ext; simp [conj
+    ext; simp [conj, φ, dr]
+  have snd_φ : snd ∘ φ = dl := by
+    ext; simp [φ, dl]
+  rw [← (comap_injective φ.surjective).eq_iff]; rw [comap_comap]; rw [comap_comap]; rw [conj_φ]; rw [snd_φ]; rw [← uniformity_eq_comap_inv_mul_nhds_one]; rw [← uniformity_eq_comap_mul_inv_nhds_one]
 
 中文:
 定理 comap_conj_nhds_one
@@ -1243,7 +1248,10 @@ theorem comap_conj_nhds_one
   let conj : β × β -> β := fun gx => gx.1 * gx.2 * gx.1⁻¹
   let φ : β × β ≃ β × β := (Equiv.refl β).prodShear (fun b => (Equiv.mulLeft b).symm)
   have conj_φ : conj ∘ φ = dr := by
-    ext; simp [conj
+    ext; simp [conj, φ, dr]
+  have snd_φ : snd ∘ φ = dl := by
+    ext; simp [φ, dl]
+  rw [← (comap_injective φ.surjective).eq_iff]; rw [comap_comap]; rw [comap_comap]; rw [conj_φ]; rw [snd_φ]; rw [← uniformity_eq_comap_inv_mul_nhds_one]; rw [← uniformity_eq_comap_mul_inv_nhds_one]
 
 Depends on / 依赖: Equiv.mulLeft, Equiv.refl, comap_comap, comap_injective, eq_iff, mulLeft, prodShear, surjective, uniformity_eq_comap_inv_mul_nhds_one
 -/
@@ -1331,7 +1339,19 @@ theorem IsUniformGroup.of_left_right
     let ψ : (β × β) × (β × β) -> β := fun ⟨⟨x₁, x₂⟩, ⟨y₁, y₂⟩⟩ => (x₁⁻¹ * x₂) * (y₂⁻¹ * y₁)
     let g : (β × β) × (β × β) -> β := fun ⟨⟨x₁, x₂⟩, ⟨y₁, y₂⟩⟩ => x₁
     suffices Tendsto φ (𝓤 β ×ˢ 𝓤 β) (𝓝 1) by
-   
+      rw [UniformContinuous]; rw [uniformity_eq_comap_mul_inv_nhds_one β]; rw [tendsto_comap_iff]; rw [uniformity_prod_eq_prod]; rw [tendsto_map'_iff]
+      simpa [Function.comp_def, div_eq_mul_inv, ← mul_assoc]
+    have φ_ψ_conj : φ = g * ψ * g⁻¹ := by
+      ext
+      simp [φ, ψ, g, mul_assoc]
+    have ψ_tendsto : Tendsto ψ (𝓤 β ×ˢ 𝓤 β) (𝓝 1) := by
+      rw [← one_mul 1]
+      refine .mul ?_ ?_
+      · rw [uniformity_eq_comap_inv_mul_nhds_one]
+        exact tendsto_comap.comp tendsto_fst
+      · rw [uniformity_eq_comap_inv_mul_nhds_one_swapped]
+        exact tendsto_comap.comp tendsto_snd
+    exact φ_ψ_conj ▸ ψ_tendsto.conj_nhds_one g
 
 中文:
 定理 是一致群.of_left_right
@@ -1341,7 +1361,19 @@ theorem IsUniformGroup.of_left_right
     let ψ : (β × β) × (β × β) -> β := fun ⟨⟨x₁, x₂⟩, ⟨y₁, y₂⟩⟩ => (x₁⁻¹ * x₂) * (y₂⁻¹ * y₁)
     let g : (β × β) × (β × β) -> β := fun ⟨⟨x₁, x₂⟩, ⟨y₁, y₂⟩⟩ => x₁
     suffices Tendsto φ (𝓤 β ×ˢ 𝓤 β) (𝓝 1) by
-   
+      rw [UniformContinuous]; rw [uniformity_eq_comap_mul_inv_nhds_one β]; rw [tendsto_comap_iff]; rw [uniformity_prod_eq_prod]; rw [tendsto_map'_iff]
+      simpa [Function.comp_def, div_eq_mul_inv, ← mul_assoc]
+    have φ_ψ_conj : φ = g * ψ * g⁻¹ := by
+      ext
+      simp [φ, ψ, g, mul_assoc]
+    have ψ_tendsto : Tendsto ψ (𝓤 β ×ˢ 𝓤 β) (𝓝 1) := by
+      rw [← one_mul 1]
+      refine .mul ?_ ?_
+      · rw [uniformity_eq_comap_inv_mul_nhds_one]
+        exact tendsto_comap.comp tendsto_fst
+      · rw [uniformity_eq_comap_inv_mul_nhds_one_swapped]
+        exact tendsto_comap.comp tendsto_snd
+    exact φ_ψ_conj ▸ ψ_tendsto.conj_nhds_one g
 
 Depends on / 依赖: Function, Function.comp_def, Tendsto, UniformContinuous, _iff, comp_def, div_eq_mul_inv, mul_assoc, tendsto_comap_iff, tendsto_map, uniformity_eq_comap_mul_inv_nhds_one, uniformity_prod_eq_prod
 -/
@@ -1539,7 +1571,8 @@ theorem uniformContinuous_of_tendsto_one
   have :
     ((fun x : β × β => x.2 / x.1) ∘ fun x : α × α => (f x.1, f x.2)) = fun x : α × α =>
       f (x.2 / x.1) := by ext; simp only [Function.comp_apply, map_div]
-  rw [UniformContinuous]; rw [uniformity_eq_comap_nhds_one α]; rw [uniformity_eq_comap_nhds_one β]; rw [tendsto_comap_iff]; rw [
+  rw [UniformContinuous]; rw [uniformity_eq_comap_nhds_one α]; rw [uniformity_eq_comap_nhds_one β]; rw [tendsto_comap_iff]; rw [this]
+  exact Tendsto.comp h tendsto_comap
 
 中文:
 定理 uniformContinuous_of_tendsto_one
@@ -1548,7 +1581,8 @@ theorem uniformContinuous_of_tendsto_one
   have :
     ((fun x : β × β => x.2 / x.1) ∘ fun x : α × α => (f x.1, f x.2)) = fun x : α × α =>
       f (x.2 / x.1) := by ext; simp only [Function.comp_apply, map_div]
-  rw [UniformContinuous]; rw [uniformity_eq_comap_nhds_one α]; rw [uniformity_eq_comap_nhds_one β]; rw [tendsto_comap_iff]; rw [
+  rw [UniformContinuous]; rw [uniformity_eq_comap_nhds_one α]; rw [uniformity_eq_comap_nhds_one β]; rw [tendsto_comap_iff]; rw [this]
+  exact Tendsto.comp h tendsto_comap
 
 Depends on / 依赖: Function, Function.comp_apply, Tendsto, Tendsto.comp, UniformContinuous, comp_apply, map_div, tendsto_comap, tendsto_comap_iff, uniformity_eq_comap_nhds_one
 -/
@@ -1772,7 +1806,12 @@ definition IsTopologicalGroup.rightUniformSpace
       (𝓝 1⁻¹) := tendsto_id.inv.comp tendsto_comap
     by simpa [tendsto_comap_iff]
   comp := Tendsto.le_comap fun U H => by
-    rcases exists_nhds_
+    rcases exists_nhds_one_split H with ⟨V, V_nhds, V_mul⟩
+    refine mem_map.2 (mem_of_superset (mem_lift' <| preimage_mem_comap V_nhds) ?_)
+    rintro ⟨x, y⟩ ⟨z, hz₁, hz₂⟩
+    simpa using V_mul _ hz₂ _ hz₁
+  nhds_eq_comap_uniformity _ := by
+    simp only [comap_comap, Function.comp_def, nhds_translation_mul_inv]
 
 中文:
 定义 是拓扑群.rightUniformSpace
@@ -1783,7 +1822,12 @@ definition IsTopologicalGroup.rightUniformSpace
       (𝓝 1⁻¹) := tendsto_id.inv.comp tendsto_comap
     by simpa [tendsto_comap_iff]
   comp := Tendsto.le_comap fun U H => by
-    rcases exists_nhds_
+    rcases exists_nhds_one_split H with ⟨V, V_nhds, V_mul⟩
+    refine mem_map.2 (mem_of_superset (mem_lift' <| preimage_mem_comap V_nhds) ?_)
+    rintro ⟨x, y⟩ ⟨z, hz₁, hz₂⟩
+    simpa using V_mul _ hz₂ _ hz₁
+  nhds_eq_comap_uniformity _ := by
+    simp only [comap_comap, Function.comp_def, nhds_translation_mul_inv]
 -/
 def IsTopologicalGroup.rightUniformSpace : UniformSpace G where
   uniformity := comap (fun p : G × G => p.2 * p.1⁻¹) (𝓝 1)
@@ -1853,7 +1897,12 @@ definition IsTopologicalGroup.leftUniformSpace
       (𝓝 1⁻¹) := tendsto_id.inv.comp tendsto_comap
     by simpa [tendsto_comap_iff]
   comp := Tendsto.le_comap fun U H => by
-    rcases exists_nhds_
+    rcases exists_nhds_one_split H with ⟨V, V_nhds, V_mul⟩
+    refine mem_map.2 (mem_of_superset (mem_lift' <| preimage_mem_comap V_nhds) ?_)
+    rintro ⟨x, y⟩ ⟨z, hz₁, hz₂⟩
+    simpa using V_mul _ hz₁ _ hz₂
+  nhds_eq_comap_uniformity _ := by
+    simp only [comap_comap, Function.comp_def, nhds_translation_inv_mul]
 
 中文:
 定义 是拓扑群.leftUniformSpace
@@ -1864,7 +1913,12 @@ definition IsTopologicalGroup.leftUniformSpace
       (𝓝 1⁻¹) := tendsto_id.inv.comp tendsto_comap
     by simpa [tendsto_comap_iff]
   comp := Tendsto.le_comap fun U H => by
-    rcases exists_nhds_
+    rcases exists_nhds_one_split H with ⟨V, V_nhds, V_mul⟩
+    refine mem_map.2 (mem_of_superset (mem_lift' <| preimage_mem_comap V_nhds) ?_)
+    rintro ⟨x, y⟩ ⟨z, hz₁, hz₂⟩
+    simpa using V_mul _ hz₁ _ hz₂
+  nhds_eq_comap_uniformity _ := by
+    simp only [comap_comap, Function.comp_def, nhds_translation_inv_mul]
 -/
 def IsTopologicalGroup.leftUniformSpace : UniformSpace G where
   uniformity := comap (fun p : G × G => p.1⁻¹ * p.2) (𝓝 1)
@@ -1928,7 +1982,17 @@ theorem isUniformGroup_of_commGroup
       ∘ (fun (p : (G × G) × (G × G)) => (p.1.2 * p.1.1⁻¹, p.2.2 * p.2.1⁻¹)) := by
     ext x
     simp only [Function.comp_apply, mul_inv_rev, inv_inv]
-    rw [mul_asso
+    rw [mul_assoc]; rw [mul_comm x.2.2⁻¹]; rw [mul_comm x.2.1]
+    simp [mul_assoc]
+  simp only [UniformContinuous, div_eq_mul_inv, uniformity_prod_eq_prod,
+    uniformity_eq_comap_nhds_one', prod_comap_comap_eq, ← nhds_prod_eq, tendsto_comap_iff,
+    Function.comp_def, mul_inv_rev, inv_inv, tendsto_map'_iff]
+  rw [this]
+  apply Tendsto.comp ?_ tendsto_comap
+  nth_rewrite 3 [show (1 : G) = 1 * 1⁻¹ by simp]
+  apply Continuous.tendsto (by fun_prop)
+
+alias comm_topologicalGroup_is_uniform := isUniformGroup_of_commGroup
 
 中文:
 定理 isUniformGroup_of_commGroup
@@ -1940,7 +2004,17 @@ theorem isUniformGroup_of_commGroup
       ∘ (fun (p : (G × G) × (G × G)) => (p.1.2 * p.1.1⁻¹, p.2.2 * p.2.1⁻¹)) := by
     ext x
     simp only [Function.comp_apply, mul_inv_rev, inv_inv]
-    rw [mul_asso
+    rw [mul_assoc]; rw [mul_comm x.2.2⁻¹]; rw [mul_comm x.2.1]
+    simp [mul_assoc]
+  simp only [UniformContinuous, div_eq_mul_inv, uniformity_prod_eq_prod,
+    uniformity_eq_comap_nhds_one', prod_comap_comap_eq, ← nhds_prod_eq, tendsto_comap_iff,
+    Function.comp_def, mul_inv_rev, inv_inv, tendsto_map'_iff]
+  rw [this]
+  apply Tendsto.comp ?_ tendsto_comap
+  nth_rewrite 3 [show (1 : G) = 1 * 1⁻¹ by simp]
+  apply Continuous.tendsto (by fun_prop)
+
+alias comm_topologicalGroup_is_uniform := isUniformGroup_of_commGroup
 
 Depends on / 依赖: Function, Function.comp_apply, UniformContinuous, comp_apply, div_eq_mul_inv, inv_inv, mul_assoc, mul_comm, mul_inv_rev, nhds_prod_eq, prod_comap_comap_eq, tendsto_comap_iff, uniformity_eq_comap_nhds_one, uniformity_prod_eq_prod
 -/

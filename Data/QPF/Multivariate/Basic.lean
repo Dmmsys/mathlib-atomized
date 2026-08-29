@@ -198,7 +198,7 @@ theorem liftP_iff
     apply (f i j).property
   rintro ⟨a, f, h₀, h₁⟩
   use abs ⟨a, fun i j => ⟨f i j, h₁ i j⟩⟩
-  rw [← abs_map]; rw [h₀
+  rw [← abs_map]; rw [h₀]; rfl
 
 中文:
 定理 liftP_iff
@@ -214,7 +214,7 @@ theorem liftP_iff
     apply (f i j).property
   rintro ⟨a, f, h₀, h₁⟩
   use abs ⟨a, fun i j => ⟨f i j, h₁ i j⟩⟩
-  rw [← abs_map]; rw [h₀
+  rw [← abs_map]; rw [h₀]; rfl
 
 Depends on / 依赖: abs_map, abs_repr, property
 -/
@@ -249,7 +249,12 @@ theorem liftR_iff
     constructor
     · rw [← yeq, ← abs_repr u, h, ← abs_map]; rfl
     intro i j
-    exact (f
+    exact (f i j).property
+  rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
+  use abs ⟨a, fun i j => ⟨(f₀ i j, f₁ i j), h i j⟩⟩
+  constructor
+  · rw [xeq, ← abs_map]; rfl
+  rw [yeq]; rw [← abs_map]; rfl
 
 中文:
 定理 liftR_iff
@@ -264,7 +269,12 @@ theorem liftR_iff
     constructor
     · rw [← yeq, ← abs_repr u, h, ← abs_map]; rfl
     intro i j
-    exact (f
+    exact (f i j).property
+  rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
+  use abs ⟨a, fun i j => ⟨(f₀ i j, f₁ i j), h i j⟩⟩
+  constructor
+  · rw [xeq, ← abs_map]; rfl
+  rw [yeq]; rw [← abs_map]; rfl
 
 Depends on / 依赖: abs_map, abs_repr, property, val.fst, val.snd
 -/
@@ -367,7 +377,19 @@ theorem has_good_supp_iff
     refine ⟨a, f, xeq.symm, ?_⟩
     intro a' f' h''
     rintro hu u ⟨j, _h₂, hfi⟩
-    have hh : u in supp x a' := by rw [← hfi]; a
+    have hh : u in supp x a' := by rw [← hfi]; apply h'
+    exact (mem_supp x _ u).mp hh _ _ hu
+  rintro ⟨a, f, xeq, h⟩ p; rw [liftP_iff]; constructor
+  · rintro ⟨a', f', xeq', h'⟩ i u usuppx
+    rcases (mem_supp x _ u).mp (@usuppx) a' f' xeq'.symm with ⟨i, _, f'ieq⟩
+    rw [← f'ieq]
+    apply h'
+  intro h'
+  refine ⟨a, f, xeq.symm, ?_⟩; intro j y
+  apply h'; rw [mem_supp]
+  intro a' f' xeq'
+  apply h _ a' f' xeq'
+  apply mem_image_of_mem _ (mem_univ _)
 
 中文:
 定理 has_good_supp_iff
@@ -381,7 +403,19 @@ theorem has_good_supp_iff
     refine ⟨a, f, xeq.symm, ?_⟩
     intro a' f' h''
     rintro hu u ⟨j, _h₂, hfi⟩
-    have hh : u in supp x a' := by rw [← hfi]; a
+    have hh : u in supp x a' := by rw [← hfi]; apply h'
+    exact (mem_supp x _ u).mp hh _ _ hu
+  rintro ⟨a, f, xeq, h⟩ p; rw [liftP_iff]; constructor
+  · rintro ⟨a', f', xeq', h'⟩ i u usuppx
+    rcases (mem_supp x _ u).mp (@usuppx) a' f' xeq'.symm with ⟨i, _, f'ieq⟩
+    rw [← f'ieq]
+    apply h'
+  intro h'
+  refine ⟨a, f, xeq.symm, ?_⟩; intro j y
+  apply h'; rw [mem_supp]
+  intro a' f' xeq'
+  apply h _ a' f' xeq'
+  apply mem_image_of_mem _ (mem_univ _)
 
 Depends on / 依赖: introv, liftP_iff, mem_supp, usuppx, xeq.symm
 -/
@@ -515,7 +549,7 @@ theorem liftP_iff_of_isUniform
   intro h'
   refine ⟨a, f, rfl, fun _ i => h' _ _ ?_⟩
   rw [supp_eq_of_isUniform h]
-
+  exact ⟨i, mem_univ i, rfl⟩
 
 中文:
 定理 liftP_iff_of_isUniform
@@ -531,7 +565,7 @@ theorem liftP_iff_of_isUniform
   intro h'
   refine ⟨a, f, rfl, fun _ i => h' _ _ ?_⟩
   rw [supp_eq_of_isUniform h]
-
+  exact ⟨i, mem_univ i, rfl⟩
 
 Depends on / 依赖: abs_repr, liftP_iff, mem_univ, supp_eq_of_isUniform
 -/
@@ -628,7 +662,11 @@ theorem suppPreservation_iff_liftpPreservation
     dsimp only [SuppPreservation, supp] at h
     simp only [liftP_iff_of_isUniform, supp_eq_of_isUniform, MvPFunctor.liftP_iff', h',
       image_univ, mem_range, exists_imp]
-    construc
+    constructor <;> intros <;> subst_vars <;> solve_by_elim
+  · rintro α ⟨a, f⟩
+    simp only [LiftPPreservation] at h
+    ext
+    simp only [supp, h, mem_ofPred_eq]
 
 中文:
 定理 suppPreservation_iff_liftpPreservation
@@ -641,7 +679,11 @@ theorem suppPreservation_iff_liftpPreservation
     dsimp only [SuppPreservation, supp] at h
     simp only [liftP_iff_of_isUniform, supp_eq_of_isUniform, MvPFunctor.liftP_iff', h',
       image_univ, mem_range, exists_imp]
-    construc
+    constructor <;> intros <;> subst_vars <;> solve_by_elim
+  · rintro α ⟨a, f⟩
+    simp only [LiftPPreservation] at h
+    ext
+    simp only [supp, h, mem_ofPred_eq]
 
 Depends on / 依赖: LiftPPreservation, MvPFunctor, MvPFunctor.liftP_iff, SuppPreservation, exists_imp, image_univ, intros, liftP_iff, liftP_iff_of_isUniform, mem_ofPred_eq, mem_range, solve_by_elim, suppPreservation_iff_isUniform, supp_eq_of_isUniform
 -/

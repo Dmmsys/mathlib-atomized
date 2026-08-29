@@ -1059,7 +1059,29 @@ theorem vars_bind₁
       rw [← map_sum]; rw [← φ.as_sum]
     _ <= φ.support.biUnion fun i : σ ->₀ Nat => ((bind₁ f) (monomial i (coeff i φ))).vars :=
       (vars_sum_subset _ _)
-    _ = φ.support.biUni
+    _ = φ.support.biUnion fun d : σ ->₀ Nat => vars (C (coeff d φ) * ∏ i in d.support, f i ^ d i) := by
+      simp only [bind₁_monomial]
+    _ <= φ.support.biUnion fun d : σ ->₀ Nat => d.support.biUnion fun i => vars (f i) := ?_
+    -- proof below
+    _ <= φ.vars.biUnion fun i : σ => vars (f i) := ?_
+    -- proof below
+  · apply Finset.biUnion_mono
+    intro d _hd
+    calc
+      vars (C (coeff d φ) * ∏ i in d.support, f i ^ d i) <=
+          (C (coeff d φ)).vars union (∏ i in d.support, f i ^ d i).vars :=
+        vars_mul _ _
+      _ <= (∏ i in d.support, f i ^ d i).vars := by
+        simp only [Finset.empty_union, vars_C, Finset.Subset.refl]
+      _ <= d.support.biUnion fun i : σ => vars (f i ^ d i) := vars_prod _
+      _ <= d.support.biUnion fun i : σ => (f i).vars := ?_
+    apply Finset.biUnion_mono
+    intro i _hi
+    apply vars_pow
+  · intro j
+    simp_rw [Finset.mem_biUnion]
+    rintro ⟨d, hd, ⟨i, hi, hj⟩⟩
+    exact ⟨i, (mem_vars_iff_mem_support _).mpr ⟨d, hd, hi⟩, hj⟩
 
 中文:
 定理 vars_bind₁
@@ -1070,7 +1092,29 @@ theorem vars_bind₁
       rw [← map_sum]; rw [← φ.as_sum]
     _ <= φ.support.biUnion fun i : σ ->₀ Nat => ((bind₁ f) (monomial i (coeff i φ))).vars :=
       (vars_sum_subset _ _)
-    _ = φ.support.biUni
+    _ = φ.support.biUnion fun d : σ ->₀ Nat => vars (C (coeff d φ) * ∏ i in d.support, f i ^ d i) := by
+      simp only [bind₁_monomial]
+    _ <= φ.support.biUnion fun d : σ ->₀ Nat => d.support.biUnion fun i => vars (f i) := ?_
+    -- proof below
+    _ <= φ.vars.biUnion fun i : σ => vars (f i) := ?_
+    -- proof below
+  · apply Finset.biUnion_mono
+    intro d _hd
+    calc
+      vars (C (coeff d φ) * ∏ i in d.support, f i ^ d i) <=
+          (C (coeff d φ)).vars union (∏ i in d.support, f i ^ d i).vars :=
+        vars_mul _ _
+      _ <= (∏ i in d.support, f i ^ d i).vars := by
+        simp only [Finset.empty_union, vars_C, Finset.Subset.refl]
+      _ <= d.support.biUnion fun i : σ => vars (f i ^ d i) := vars_prod _
+      _ <= d.support.biUnion fun i : σ => (f i).vars := ?_
+    apply Finset.biUnion_mono
+    intro i _hi
+    apply vars_pow
+  · intro j
+    simp_rw [Finset.mem_biUnion]
+    rintro ⟨d, hd, ⟨i, hi, hj⟩⟩
+    exact ⟨i, (mem_vars_iff_mem_support _).mpr ⟨d, hd, hi⟩, hj⟩
 
 Depends on / 依赖: as_sum, biUnion, d.support, d.support.biUnion, map_sum, monomial, support, support.biUnion, support.sum, vars_sum_subset
 -/
@@ -1188,7 +1232,9 @@ instance lawfulMonad
   seqLeft_eq _ _ := by
     simp [SeqLeft.seqLeft, Seq.seq, (· <$> ·), bind₁_rename]; simp [rename_eq_aeval]; rfl
   seqRight_eq := by intros; simp [SeqRight.seqRight, Seq.seq, (· <$> ·), bind₁_rename]; rfl
-  pure_
+  pure_seq := by intros; simp [(· <$> ·), pure, Seq.seq]
+  bind_pure_comp _ _ := congr(⇑$((rename_eq_aeval ..).symm) _)
+  bind_map := by aesop
 
 中文:
 实例 lawfulMonad
@@ -1198,7 +1244,9 @@ instance lawfulMonad
   seqLeft_eq _ _ := by
     simp [SeqLeft.seqLeft, Seq.seq, (· <$> ·), bind₁_rename]; simp [rename_eq_aeval]; rfl
   seqRight_eq := by intros; simp [SeqRight.seqRight, Seq.seq, (· <$> ·), bind₁_rename]; rfl
-  pure_
+  pure_seq := by intros; simp [(· <$> ·), pure, Seq.seq]
+  bind_pure_comp _ _ := congr(⇑$((rename_eq_aeval ..).symm) _)
+  bind_map := by aesop
 
 Depends on / 依赖: Seq.seq, SeqLeft, SeqLeft.seqLeft, SeqRight, SeqRight.seqRight, bind_assoc, bind_map, bind_pure_comp, intros, pure_seq, rename_eq_aeval, seqLeft, seqLeft_eq, seqRight, seqRight_eq
 -/

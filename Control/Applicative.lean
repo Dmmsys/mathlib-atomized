@@ -93,7 +93,11 @@ theorem Applicative.ext
     obtain ⟨seqLeft_eq2, seqRight_eq2, pure_seq2, -⟩ := L2
     obtain rfl : F1 = F2 := by
       apply Functor.ext
-      i
+      intros
+      exact (pure_seq1 _ _).symm.trans (pure_seq2 _ _)
+    congr <;> funext α β x y
+    · exact (seqLeft_eq1 _ (y Unit.unit)).trans (seqLeft_eq2 _ _).symm
+    · exact (seqRight_eq1 _ (y Unit.unit)).trans (seqRight_eq2 _ (y Unit.unit)).symm
 
 中文:
 定理 适用.ext
@@ -108,7 +112,11 @@ theorem Applicative.ext
     obtain ⟨seqLeft_eq2, seqRight_eq2, pure_seq2, -⟩ := L2
     obtain rfl : F1 = F2 := by
       apply Functor.ext
-      i
+      intros
+      exact (pure_seq1 _ _).symm.trans (pure_seq2 _ _)
+    congr <;> funext α β x y
+    · exact (seqLeft_eq1 _ (y Unit.unit)).trans (seqLeft_eq2 _ _).symm
+    · exact (seqRight_eq1 _ (y Unit.unit)).trans (seqRight_eq2 _ (y Unit.unit)).symm
 
 Depends on / 依赖: seqLeft, seqRight
 -/

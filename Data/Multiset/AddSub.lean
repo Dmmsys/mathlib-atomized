@@ -1815,7 +1815,10 @@ theorem rel_add_left
         rcases h with ⟨b, bs', hab, h, rfl⟩
         rcases h with ⟨bs₀, bs₁, h₀, h₁, rfl⟩
         exact ⟨b ::ₘ bs₀, bs₁, ⟨b, bs₀, hab, h₀, rfl⟩, h₁, by simp⟩
-    
+      · intro h
+        rcases h with ⟨bs₀, bs₁, h, h₁, rfl⟩
+        rcases h with ⟨b, bs, hab, h₀, rfl⟩
+        exact ⟨b, bs + bs₁, hab, ⟨bs, bs₁, h₀, h₁, rfl⟩, by simp⟩)
 
 中文:
 定理 rel_add_left
@@ -1827,7 +1830,10 @@ theorem rel_add_left
         rcases h with ⟨b, bs', hab, h, rfl⟩
         rcases h with ⟨bs₀, bs₁, h₀, h₁, rfl⟩
         exact ⟨b ::ₘ bs₀, bs₁, ⟨b, bs₀, hab, h₀, rfl⟩, h₁, by simp⟩
-    
+      · intro h
+        rcases h with ⟨bs₀, bs₁, h, h₁, rfl⟩
+        rcases h with ⟨b, bs, hab, h₀, rfl⟩
+        exact ⟨b, bs + bs₁, hab, ⟨bs, bs₁, h₀, h₁, rfl⟩, by simp⟩)
 
 Depends on / 依赖: Multiset, Multiset.induction_on, cons_add, induction_on, rel_cons_left
 -/
@@ -1938,7 +1944,7 @@ theorem mem_sub_of_nodup
       refine count_eq_zero.1 ?_ h
       rw [count_sub a s t]; rw [Nat.sub_eq_zero_iff_le]
       exact le_trans (nodup_iff_count_le_one.1 d _) (count_pos.2 h')⟩,
-    fun ⟨h₁, h₂⟩ => Or.resolve_right (mem_add.1 <| mem_of_le Multiset.le
+    fun ⟨h₁, h₂⟩ => Or.resolve_right (mem_add.1 <| mem_of_le Multiset.le_sub_add h₁) h₂⟩
 
 中文:
 定理 mem_sub_of_nodup
@@ -1948,7 +1954,7 @@ theorem mem_sub_of_nodup
       refine count_eq_zero.1 ?_ h
       rw [count_sub a s t]; rw [Nat.sub_eq_zero_iff_le]
       exact le_trans (nodup_iff_count_le_one.1 d _) (count_pos.2 h')⟩,
-    fun ⟨h₁, h₂⟩ => Or.resolve_right (mem_add.1 <| mem_of_le Multiset.le
+    fun ⟨h₁, h₂⟩ => Or.resolve_right (mem_add.1 <| mem_of_le Multiset.le_sub_add h₁) h₂⟩
 
 Depends on / 依赖: Multiset, Multiset.le_sub_add, Multiset.sub_le_self, Nat.sub_eq_zero_iff_le, Or.resolve_right, count_eq_zero, count_pos, count_sub, le_sub_add, le_trans, mem_add, mem_of_le, nodup_iff_count_le_one, resolve_right, sub_eq_zero_iff_le, sub_le_self
 -/

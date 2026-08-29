@@ -53,7 +53,9 @@ lemma Scheme.exists_hom_isAffine_of_isZariskiLocalAtSource
   refine ⟨_, p, ⟨fun x => ?_⟩, ?_, inferInstance⟩
   · obtain ⟨i, x, rfl⟩ := X.affineCover.finiteSubcover.exists_eq x
     use Sigma.ι X.affineCover.finiteSubcover.X i x
-    rw [← Scheme.H
+    rw [← Scheme.Hom.comp_apply]; rw [Sigma.ι_desc]
+  · rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) (sigmaOpenCover _)]
+    exact fun i => by simpa [p] using IsZariskiLocalAtSource.of_isOpenImmersion _
 
 中文:
 引理 概形.存在_hom_isAffine_of_isZariskiLocalAtSource
@@ -64,7 +66,9 @@ lemma Scheme.exists_hom_isAffine_of_isZariskiLocalAtSource
   refine ⟨_, p, ⟨fun x => ?_⟩, ?_, inferInstance⟩
   · obtain ⟨i, x, rfl⟩ := X.affineCover.finiteSubcover.exists_eq x
     use Sigma.ι X.affineCover.finiteSubcover.X i x
-    rw [← Scheme.H
+    rw [← Scheme.Hom.comp_apply]; rw [Sigma.ι_desc]
+  · rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) (sigmaOpenCover _)]
+    exact fun i => by simpa [p] using IsZariskiLocalAtSource.of_isOpenImmersion _
 
 Depends on / 依赖: IsZariskiLocalAtSource, IsZariskiLocalAtSource.iff_of_openCover, IsZariskiLocalAtSource.of_isOpenImmersion, Scheme, Scheme.Hom.comp_apply, Sigma.desc, X.affineCover.finiteSubcover, X.affineCover.finiteSubcover.X, X.affineCover.finiteSubcover.exists_eq, affineCover, comp_apply, exists_eq, finiteSubcover, iff_of_openCover, of_isOpenImmersion, sigmaOpenCover
 -/
@@ -95,7 +99,22 @@ lemma IsZariskiLocalAtTarget.descendsAlong
     intro i
     let ι := Z.affineCover.f i
     let e : pullback (pullback.snd f ι) (pullback.snd g ι) ≅
-        pull
+        pullback (pullback.fst f g) (pullback.fst f ι) :=
+      pullbackLeftPullbackSndIso f ι (pullback.snd g ι) ≪≫
+        pullback.congrHom rfl pullback.condition.symm ≪≫
+        (pullbackAssoc f g g ι).symm ≪≫ pullback.congrHom pullback.condition.symm rfl ≪≫
+        (pullbackRightPullbackFstIso f ι (pullback.fst f g)).symm
+    have heq : e.hom ≫ pullback.snd (pullback.fst f g) (pullback.fst f ι) =
+        pullback.fst (pullback.snd f ι) (pullback.snd g ι) := by
+      apply pullback.hom_ext <;> simp [e, pullback.condition]
+    refine this (f := pullback.snd f ι) ?_ ?_ ⟨_, rfl⟩
+    · exact P'.pullback_snd _ _ h
+    · change P (pullback.fst (pullback.snd f ι) (pullback.snd g ι))
+      rw [← heq]; rw [P.cancel_left_of_respectsIso]
+      exact AlgebraicGeometry.IsZariskiLocalAtTarget.of_isPullback (iY := pullback.fst f ι)
+        (CategoryTheory.IsPullback.of_hasPullback _ _) hf
+  obtain ⟨R, rfl⟩ := hZ
+  exact H f g h hf
 
 中文:
 引理 IsZariskiLocalAtTarget.descendsAlong
@@ -108,7 +127,22 @@ lemma IsZariskiLocalAtTarget.descendsAlong
     intro i
     let ι := Z.affineCover.f i
     let e : pullback (pullback.snd f ι) (pullback.snd g ι) ≅
-        pull
+        pullback (pullback.fst f g) (pullback.fst f ι) :=
+      pullbackLeftPullbackSndIso f ι (pullback.snd g ι) ≪≫
+        pullback.congrHom rfl pullback.condition.symm ≪≫
+        (pullbackAssoc f g g ι).symm ≪≫ pullback.congrHom pullback.condition.symm rfl ≪≫
+        (pullbackRightPullbackFstIso f ι (pullback.fst f g)).symm
+    have heq : e.hom ≫ pullback.snd (pullback.fst f g) (pullback.fst f ι) =
+        pullback.fst (pullback.snd f ι) (pullback.snd g ι) := by
+      apply pullback.hom_ext <;> simp [e, pullback.condition]
+    refine this (f := pullback.snd f ι) ?_ ?_ ⟨_, rfl⟩
+    · exact P'.pullback_snd _ _ h
+    · change P (pullback.fst (pullback.snd f ι) (pullback.snd g ι))
+      rw [← heq]; rw [P.cancel_left_of_respectsIso]
+      exact AlgebraicGeometry.IsZariskiLocalAtTarget.of_isPullback (iY := pullback.fst f ι)
+        (CategoryTheory.IsPullback.of_hasPullback _ _) hf
+  obtain ⟨R, rfl⟩ := hZ
+  exact H f g h hf
 
 Depends on / 依赖: DescendsAlong, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, MorphismProperty, MorphismProperty.DescendsAlong.mk, Z.affineCover, Z.affineCover.f, affineCover, condition, congrHom, generalizing, iff_of_openCover, introv, pullback, pullback.condition.symm, pullback.congrHom, pullback.fst, pullback.snd, pullbackAssoc, pullbackLeftPullbackSndIso
 -/
@@ -156,7 +190,8 @@ lemma of_pullback_fst_Spec_of_codescendsAlong
   replace hf : P (pullback.fst (Spec.map <| CommRingCat.ofHom <| algebraMap R T)
     (Spec.map <| CommRingCat.ofHom <| algebraMap R S)) := hf
   rw [H₂]
-  refine hQQ'.algebraMap_tensor
+  refine hQQ'.algebraMap_tensorProduct (R := R) (S := T) (T := S) _ (H₁ h) ?_
+  rwa [← pullbackSpecIso_hom_fst R T S, P.cancel_left_of_respectsIso, H₂] at hf
 
 中文:
 引理 of_pullback_fst_Spec_of_codescendsAlong
@@ -168,7 +203,8 @@ lemma of_pullback_fst_Spec_of_codescendsAlong
   replace hf : P (pullback.fst (Spec.map <| CommRingCat.ofHom <| algebraMap R T)
     (Spec.map <| CommRingCat.ofHom <| algebraMap R S)) := hf
   rw [H₂]
-  refine hQQ'.algebraMap_tensor
+  refine hQQ'.algebraMap_tensorProduct (R := R) (S := T) (T := S) _ (H₁ h) ?_
+  rwa [← pullbackSpecIso_hom_fst R T S, P.cancel_left_of_respectsIso, H₂] at hf
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, P.cancel_left_of_respectsIso, Spec.map, Spec.map_surjective, algebraMap, algebraMap_tensorProduct, algebraize, cancel_left_of_respectsIso, map_surjective, pullback, pullback.fst, pullbackSpecIso_hom_fst, replace
 -/
@@ -247,7 +283,17 @@ lemma IsZariskiLocalAtTarget.descendsAlong_inf_quasiCompact
   intro R X Y f g hf h
   wlog hX : exists T, X = Spec T generalizing X
   · have _ : CompactSpace X := by simpa [← quasiCompact_iff_compactSpace f] using hf.2
-    obtain ⟨Y, p, hsurj, hP', hY⟩ := X.exists_hom_isAffine_of_isZariskiLocalAtSource @IsLocalI
+    obtain ⟨Y, p, hsurj, hP', hY⟩ := X.exists_hom_isAffine_of_isZariskiLocalAtSource @IsLocalIso
+    refine this (f := (Y.isoSpec.inv ≫ p) ≫ f) ?_ ?_ ⟨_, rfl⟩
+    · rw [Category.assoc, (P' ⊓ @QuasiCompact).cancel_left_of_respectsIso]
+      exact ⟨P'.comp_mem _ _ (H₁ _ ⟨hP', hsurj⟩) hf.1, inferInstance⟩
+    · rw [← pullbackRightPullbackFstIso_inv_fst f g _, P.cancel_left_of_respectsIso]
+      exact P.pullback_fst _ _ h
+  obtain ⟨T, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  exact H φ g hf.1 h
+
+include H₁ H₂ in
 
 中文:
 引理 IsZariskiLocalAtTarget.descendsAlong_inf_quasiCompact
@@ -257,7 +303,17 @@ lemma IsZariskiLocalAtTarget.descendsAlong_inf_quasiCompact
   intro R X Y f g hf h
   wlog hX : exists T, X = Spec T generalizing X
   · have _ : CompactSpace X := by simpa [← quasiCompact_iff_compactSpace f] using hf.2
-    obtain ⟨Y, p, hsurj, hP', hY⟩ := X.exists_hom_isAffine_of_isZariskiLocalAtSource @IsLocalI
+    obtain ⟨Y, p, hsurj, hP', hY⟩ := X.exists_hom_isAffine_of_isZariskiLocalAtSource @IsLocalIso
+    refine this (f := (Y.isoSpec.inv ≫ p) ≫ f) ?_ ?_ ⟨_, rfl⟩
+    · rw [Category.assoc, (P' ⊓ @QuasiCompact).cancel_left_of_respectsIso]
+      exact ⟨P'.comp_mem _ _ (H₁ _ ⟨hP', hsurj⟩) hf.1, inferInstance⟩
+    · rw [← pullbackRightPullbackFstIso_inv_fst f g _, P.cancel_left_of_respectsIso]
+      exact P.pullback_fst _ _ h
+  obtain ⟨T, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  exact H φ g hf.1 h
+
+include H₁ H₂ in
 
 Depends on / 依赖: Category, Category.assoc, CompactSpace, IsLocalIso, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.descendsAlong, QuasiCompact, X.exists_hom_isAffine_of_isZariskiLocalAtSource, Y.isoSpec.inv, cancel_left_of_respectsIso, comp_mem, descendsAlong, exists_hom_isAffine_of_isZariskiLocalAtSource, generalizing, isoSpec, pullback, quasiCompact_iff_compactSpace
 -/

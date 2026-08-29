@@ -147,7 +147,10 @@ theorem StrictConvexSpace.of_norm_combo_lt_one
     StrictConvexSpace.of_strictConvex_unitClosedBall Real
       ((convex_closedBall _ _).strictConvex' fun x hx y hy hne => ?_)
   rw [interior_closedBall (0 : E) one_ne_zero]; rw [closedBall_sdiff_ball]; rw [mem_sphere_zero_iff_norm] at hx hy
-  rcases h x y hx hy hne with ⟨a, b, hab, hlt
+  rcases h x y hx hy hne with ⟨a, b, hab, hlt⟩
+  use b
+  rwa [AffineMap.lineMap_apply_module, interior_closedBall (0 : E) one_ne_zero, mem_ball_zero_iff,
+    sub_eq_iff_eq_add.2 hab.symm]
 
 中文:
 定理 严格凸空间.of_norm_combo_lt_one
@@ -156,7 +159,10 @@ theorem StrictConvexSpace.of_norm_combo_lt_one
     StrictConvexSpace.of_strictConvex_unitClosedBall Real
       ((convex_closedBall _ _).strictConvex' fun x hx y hy hne => ?_)
   rw [interior_closedBall (0 : E) one_ne_zero]; rw [closedBall_sdiff_ball]; rw [mem_sphere_zero_iff_norm] at hx hy
-  rcases h x y hx hy hne with ⟨a, b, hab, hlt
+  rcases h x y hx hy hne with ⟨a, b, hab, hlt⟩
+  use b
+  rwa [AffineMap.lineMap_apply_module, interior_closedBall (0 : E) one_ne_zero, mem_ball_zero_iff,
+    sub_eq_iff_eq_add.2 hab.symm]
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply_module, StrictConvexSpace, StrictConvexSpace.of_strictConvex_unitClosedBall, closedBall_sdiff_ball, convex_closedBall, hab.symm, interior_closedBall, lineMap_apply_module, mem_ball_zero_iff, mem_sphere_zero_iff_norm, of_strictConvex_unitClosedBall, one_ne_zero, strictConvex, sub_eq_iff_eq_add
 -/
@@ -183,7 +189,8 @@ theorem StrictConvexSpace.of_norm_combo_ne_one
   simp only [interior_closedBall _ one_ne_zero, closedBall_sdiff_ball, Set.Pairwise,
     frontier_closedBall _ one_ne_zero, mem_sphere_zero_iff_norm]
   intro x hx y hy hne
-  rcases h x y h
+  rcases h x y hx hy hne with ⟨a, b, ha, hb, hab, hne'⟩
+  exact ⟨_, ⟨a, b, ha, hb, hab, rfl⟩, mt mem_sphere_zero_iff_norm.1 hne'⟩
 
 中文:
 定理 严格凸空间.of_norm_combo_ne_one
@@ -193,7 +200,8 @@ theorem StrictConvexSpace.of_norm_combo_ne_one
   simp only [interior_closedBall _ one_ne_zero, closedBall_sdiff_ball, Set.Pairwise,
     frontier_closedBall _ one_ne_zero, mem_sphere_zero_iff_norm]
   intro x hx y hy hne
-  rcases h x y h
+  rcases h x y hx hy hne with ⟨a, b, ha, hb, hab, hne'⟩
+  exact ⟨_, ⟨a, b, ha, hb, hab, rfl⟩, mt mem_sphere_zero_iff_norm.1 hne'⟩
 
 Depends on / 依赖: Pairwise, Set.Pairwise, StrictConvexSpace, StrictConvexSpace.of_strictConvex_unitClosedBall, closedBall_sdiff_ball, convex_closedBall, frontier_closedBall, interior_closedBall, mem_sphere_zero_iff_norm, of_strictConvex_unitClosedBall, one_ne_zero, strictConvex
 -/
@@ -219,7 +227,8 @@ theorem StrictConvexSpace.of_norm_add_ne_two
   refine
     StrictConvexSpace.of_norm_combo_ne_one fun x y hx hy hne =>
       ⟨1 / 2, 1 / 2, one_half_pos.le, one_half_pos.le, add_halves _, ?_⟩
-  rw [← smul_add]; rw [norm_smul]; rw [Real.norm_of_nonneg one_half_pos.le]; rw [one_div]; rw [← div_eq_inv_mul]; rw [Ne]; rw [div_eq_one_iff_eq (two_n
+  rw [← smul_add]; rw [norm_smul]; rw [Real.norm_of_nonneg one_half_pos.le]; rw [one_div]; rw [← div_eq_inv_mul]; rw [Ne]; rw [div_eq_one_iff_eq (two_ne_zero' Real)]
+  exact h hx hy hne
 
 中文:
 定理 严格凸空间.of_norm_add_ne_two
@@ -227,7 +236,8 @@ theorem StrictConvexSpace.of_norm_add_ne_two
   refine
     StrictConvexSpace.of_norm_combo_ne_one fun x y hx hy hne =>
       ⟨1 / 2, 1 / 2, one_half_pos.le, one_half_pos.le, add_halves _, ?_⟩
-  rw [← smul_add]; rw [norm_smul]; rw [Real.norm_of_nonneg one_half_pos.le]; rw [one_div]; rw [← div_eq_inv_mul]; rw [Ne]; rw [div_eq_one_iff_eq (two_n
+  rw [← smul_add]; rw [norm_smul]; rw [Real.norm_of_nonneg one_half_pos.le]; rw [one_div]; rw [← div_eq_inv_mul]; rw [Ne]; rw [div_eq_one_iff_eq (two_ne_zero' Real)]
+  exact h hx hy hne
 
 Depends on / 依赖: Real.norm_of_nonneg, StrictConvexSpace, StrictConvexSpace.of_norm_combo_ne_one, add_halves, div_eq_inv_mul, div_eq_one_iff_eq, norm_of_nonneg, norm_smul, of_norm_combo_ne_one, one_div, one_half_pos, one_half_pos.le, smul_add, two_ne_zero
 -/
@@ -376,7 +386,11 @@ theorem norm_add_lt_of_not_sameRay
   have hxy : 0 < ‖x‖ + ‖y‖ := add_pos hx hy
   have :=
     combo_mem_ball_of_ne (inv_norm_smul_mem_unitClosedBall x)
-      (inv_norm_smul_mem_unitClosedBall y) hne (div
+      (inv_norm_smul_mem_unitClosedBall y) hne (div_pos hx hxy) (div_pos hy hxy)
+      (by rw [← add_div, div_self hxy.ne'])
+  rwa [mem_ball_zero_iff, div_eq_inv_mul, div_eq_inv_mul, mul_smul, mul_smul, smul_inv_smul₀ hx.ne',
+    smul_inv_smul₀ hy.ne', ← smul_add, norm_smul, Real.norm_of_nonneg (inv_pos.2 hxy).le, ←
+    div_eq_inv_mul, div_lt_one hxy] at this
 
 中文:
 定理 norm_add_lt_of_not_sameRay
@@ -389,7 +403,11 @@ theorem norm_add_lt_of_not_sameRay
   have hxy : 0 < ‖x‖ + ‖y‖ := add_pos hx hy
   have :=
     combo_mem_ball_of_ne (inv_norm_smul_mem_unitClosedBall x)
-      (inv_norm_smul_mem_unitClosedBall y) hne (div
+      (inv_norm_smul_mem_unitClosedBall y) hne (div_pos hx hxy) (div_pos hy hxy)
+      (by rw [← add_div, div_self hxy.ne'])
+  rwa [mem_ball_zero_iff, div_eq_inv_mul, div_eq_inv_mul, mul_smul, mul_smul, smul_inv_smul₀ hx.ne',
+    smul_inv_smul₀ hy.ne', ← smul_add, norm_smul, Real.norm_of_nonneg (inv_pos.2 hxy).le, ←
+    div_eq_inv_mul, div_lt_one hxy] at this
 
 Depends on / 依赖: Ne.eq_def, Real.no, add_div, add_pos, combo_mem_ball_of_ne, div_eq_inv_mul, div_pos, div_self, eq_def, hx.ne, hxy.ne, hy.ne, inv_norm_smul_mem_unitClosedBall, mem_ball_zero_iff, mul_smul, norm_pos_iff, norm_smul, not_or, sameRay_iff_inv_norm_smul_eq, smul_add
 -/

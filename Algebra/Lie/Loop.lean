@@ -111,7 +111,28 @@ instance [DecidableEq
     | zero => simp
     | tmul x y =>
       simp only [LinearMap.rTensor_tmul, Submodule.subtype_apply]
-      induction xj using TensorProduct.indu
+      induction xj using TensorProduct.induction_on with
+      | zero => simp
+      | tmul u v =>
+        obtain ⟨x, hx⟩ := x
+        obtain ⟨u, hu⟩ := u
+        use ⟨x * u, SetLike.mul_mem_graded hx hu⟩ otimesₜ ⁅y, v⁆
+        simp
+      | add u v hu hv =>
+        rw [LinearMap.map_add]; rw [lie_add]
+        obtain ⟨u', hu'⟩ := hu
+        obtain ⟨v', hv'⟩ := hv
+        use u' + v'
+        simp [← hu', ← hv']
+    | add x y hx hy =>
+      rw [LinearMap.map_add]; rw [add_lie]
+      obtain ⟨u, hu⟩ := hx
+      obtain ⟨v, hv⟩ := hy
+      use u + v
+      simp [← hu, ← hv]
+  decompose' := (tensorDecomposition (fun a : A => AddMonoidAlgebra.grade R a) L).decompose'
+  left_inv := (tensorDecomposition _ L).left_inv
+  right_inv := (tensorDecomposition _ L).right_inv
 
 中文:
 实例 [DecidableEq
@@ -124,7 +145,28 @@ instance [DecidableEq
     | zero => simp
     | tmul x y =>
       simp only [LinearMap.rTensor_tmul, Submodule.subtype_apply]
-      induction xj using TensorProduct.indu
+      induction xj using TensorProduct.induction_on with
+      | zero => simp
+      | tmul u v =>
+        obtain ⟨x, hx⟩ := x
+        obtain ⟨u, hu⟩ := u
+        use ⟨x * u, SetLike.mul_mem_graded hx hu⟩ otimesₜ ⁅y, v⁆
+        simp
+      | add u v hu hv =>
+        rw [LinearMap.map_add]; rw [lie_add]
+        obtain ⟨u', hu'⟩ := hu
+        obtain ⟨v', hv'⟩ := hv
+        use u' + v'
+        simp [← hu', ← hv']
+    | add x y hx hy =>
+      rw [LinearMap.map_add]; rw [add_lie]
+      obtain ⟨u, hu⟩ := hx
+      obtain ⟨v, hv⟩ := hy
+      use u + v
+      simp [← hu, ← hv]
+  decompose' := (tensorDecomposition (fun a : A => AddMonoidAlgebra.grade R a) L).decompose'
+  left_inv := (tensorDecomposition _ L).left_inv
+  right_inv := (tensorDecomposition _ L).right_inv
 
 Depends on / 依赖: LinearMap, LinearMap.map_add, LinearMap.rTensor_tmul, SetLike, SetLike.mul_mem_graded, Submodule, Submodule.subtype_apply, TensorProduct, TensorProduct.induction_on, decomposeTensor_apply, induction_on, lie_add, map_add, mul_mem_graded, rTensor_tmul, subtype_apply
 -/
@@ -249,7 +291,17 @@ definition residuePairing
         classical
         let u : Finset A := (F x).support union (F y).support
         have hu₁ : (F x).support subseteq u := Finset.subset_union_left
-        have hu₂ : (F y).support subsete
+        have hu₂ : (F y).support subseteq u := Finset.subset_union_right
+        have hu₃ : (F (x + y)).support subseteq u := fun a ha => by
+          replace ha : F x a + F y a != 0 := by simpa using ha
+          grind
+        rw [sum_of_support_subset _ hu₃ _ (by simp)]; rw [sum_of_support_subset _ hu₁ _ (by simp)]; rw [sum_of_support_subset _ hu₂ _ (by simp)]
+        simp [Finset.sum_add_distrib, u]
+      map_smul' r x := by
+        rw [map_smul]; rw [sum_of_support_subset _ support_smul _ (by simp)]; rw [sum]; rw [Finset.smul_sum]
+        simp [-smul_eq_mul, smul_comm] }
+  map_add' x y := by ext; simp [sum_add]
+  map_smul' r x := by ext; simp [-smul_eq_mul, smul_comm]
 
 中文:
 定义 residuePairing
@@ -260,7 +312,17 @@ definition residuePairing
         classical
         let u : Finset A := (F x).support union (F y).support
         have hu₁ : (F x).support subseteq u := Finset.subset_union_left
-        have hu₂ : (F y).support subsete
+        have hu₂ : (F y).support subseteq u := Finset.subset_union_right
+        have hu₃ : (F (x + y)).support subseteq u := fun a ha => by
+          replace ha : F x a + F y a != 0 := by simpa using ha
+          grind
+        rw [sum_of_support_subset _ hu₃ _ (by simp)]; rw [sum_of_support_subset _ hu₁ _ (by simp)]; rw [sum_of_support_subset _ hu₂ _ (by simp)]
+        simp [Finset.sum_add_distrib, u]
+      map_smul' r x := by
+        rw [map_smul]; rw [sum_of_support_subset _ support_smul _ (by simp)]; rw [sum]; rw [Finset.smul_sum]
+        simp [-smul_eq_mul, smul_comm] }
+  map_add' x y := by ext; simp [sum_add]
+  map_smul' r x := by ext; simp [-smul_eq_mul, smul_comm]
 
 Depends on / 依赖: Finset, Finset.subset_union_left, Finset.subset_union_right, classical, map_add, replace, subset_union_left, subset_union_right, subseteq, sum_of_support_subset, support, toFinsupp
 -/
@@ -299,7 +361,18 @@ definition twoCochainOfBilinear
     let F := toFinsupp R A L
     suffices ((F f).sum fun a v => a • Φ (F f (-a)) v) = 0 by simpa
     classical
-    set s := (F f).support un
+    set s := (F f).support union (F f).support.image (Equiv.neg A) with hs
+    have hs' : (F f).support subseteq s := Finset.subset_union_left
+    rw [Finsupp.sum_of_support_subset _ hs' _ (by simp)]
+    refine Function.Odd.finsetSum_eq_zero (fun n => by simp [hΦ.eq]) (Finset.map_eq_of_subset ?_)
+    intro x hx
+    rw [Finset.mem_union]
+    replace hx : -x in (F f).support ∨ -x in (F f).support.image Neg.neg := by simpa [hs] using hx
+    obtain (h | h) := hx
+· exact Or.inr Finset.mem_image.mpr ⟨-x, by simp [h]⟩
+· exact Or.inl by simpa using h
+
+@[simp]
 
 中文:
 定义 twoCochainOfBilinear
@@ -310,7 +383,18 @@ definition twoCochainOfBilinear
     let F := toFinsupp R A L
     suffices ((F f).sum fun a v => a • Φ (F f (-a)) v) = 0 by simpa
     classical
-    set s := (F f).support un
+    set s := (F f).support union (F f).support.image (Equiv.neg A) with hs
+    have hs' : (F f).support subseteq s := Finset.subset_union_left
+    rw [Finsupp.sum_of_support_subset _ hs' _ (by simp)]
+    refine Function.Odd.finsetSum_eq_zero (fun n => by simp [hΦ.eq]) (Finset.map_eq_of_subset ?_)
+    intro x hx
+    rw [Finset.mem_union]
+    replace hx : -x in (F f).support ∨ -x in (F f).support.image Neg.neg := by simpa [hs] using hx
+    obtain (h | h) := hx
+· exact Or.inr Finset.mem_image.mpr ⟨-x, by simp [h]⟩
+· exact Or.inl by simpa using h
+
+@[simp]
 
 Depends on / 依赖: TrivialLieModule, TrivialLieModule.equiv, loopAlgebra, residuePairing
 -/
@@ -370,7 +454,17 @@ definition twoCocycleOfBilinear
     suffices
         b • Φ (Finsupp.single (a + c) ⁅x, z⁆ (-b)) y =
         c • Φ (Finsupp.single (a + b) ⁅x, y⁆ (-c)) z +
-        a • Φ (Finsupp.single (b + c) ⁅y, z⁆ (-a
+        a • Φ (Finsupp.single (b + c) ⁅y, z⁆ (-a)) x by
+      simpa [trivial_lie_zero, sub_eq_zero, neg_add_eq_iff_eq_add, ← LinearEquiv.map_add,
+        -LinearEquiv.map_add]
+    by_cases h0 : a + b + c = 0
+    · suffices b • Φ ⁅x, z⁆ y = c • Φ ⁅x, y⁆ z + a • Φ ⁅y, z⁆ x by
+        simpa only [show a + b = -c by grind, show a + c = -b by grind, show b + c = -a by grind,
+          Finsupp.single_eq_same]
+      rw [hΦ]; rw [hΦs.eq z ⁅x]; rw [y⁆]; rw [hΦ y]; rw [← lie_skew y x]; rw [hΦs.eq z]; rw [Φ.neg_left]; rw [neg_neg]; rw [show b = -(a + c) by grind]; rw [neg_smul]; rw [smul_neg]; rw [neg_neg]; rw [add_smul]; rw [add_comm]
+    · simp [Finsupp.single_eq_of_ne (a := a + c) (a' := -b) (by grind),
+        Finsupp.single_eq_of_ne (a := a + b) (a' := -c) (by grind),
+        Finsupp.single_eq_of_ne (a := b + c) (a' := -a) (by grind)]
 
 中文:
 定义 twoCocycleOfBilinear
@@ -382,7 +476,17 @@ definition twoCocycleOfBilinear
     suffices
         b • Φ (Finsupp.single (a + c) ⁅x, z⁆ (-b)) y =
         c • Φ (Finsupp.single (a + b) ⁅x, y⁆ (-c)) z +
-        a • Φ (Finsupp.single (b + c) ⁅y, z⁆ (-a
+        a • Φ (Finsupp.single (b + c) ⁅y, z⁆ (-a)) x by
+      simpa [trivial_lie_zero, sub_eq_zero, neg_add_eq_iff_eq_add, ← LinearEquiv.map_add,
+        -LinearEquiv.map_add]
+    by_cases h0 : a + b + c = 0
+    · suffices b • Φ ⁅x, z⁆ y = c • Φ ⁅x, y⁆ z + a • Φ ⁅y, z⁆ x by
+        simpa only [show a + b = -c by grind, show a + c = -b by grind, show b + c = -a by grind,
+          Finsupp.single_eq_same]
+      rw [hΦ]; rw [hΦs.eq z ⁅x]; rw [y⁆]; rw [hΦ y]; rw [← lie_skew y x]; rw [hΦs.eq z]; rw [Φ.neg_left]; rw [neg_neg]; rw [show b = -(a + c) by grind]; rw [neg_smul]; rw [smul_neg]; rw [neg_neg]; rw [add_smul]; rw [add_comm]
+    · simp [Finsupp.single_eq_of_ne (a := a + c) (a' := -b) (by grind),
+        Finsupp.single_eq_of_ne (a := a + b) (a' := -c) (by grind),
+        Finsupp.single_eq_of_ne (a := b + c) (a' := -a) (by grind)]
 
 Depends on / 依赖: twoCochainOfBilinear
 -/

@@ -213,7 +213,53 @@ lemma fermatLastTheoremWith_nat_int_rat_tfae
         (Int.natCast_inj.1 ?_)
       push_cast
       simp only [hn.pow_abs, habc]
-    obtain ha | ha := ha.lt_or_
+    obtain ha | ha := ha.lt_or_gt <;> obtain hb | hb := hb.lt_or_gt <;>
+      obtain hc | hc := hc.lt_or_gt
+    · refine h a.natAbs b.natAbs c.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_neg, neg_pow a, neg_pow b, neg_pow c, ← mul_add, *]
+· exact (by positivity : 0 < c ^ n).not_gt habc.symm.trans_lt add_neg (hn.pow_neg ha)
+        hn.pow_neg hb
+    · refine h b.natAbs c.natAbs a.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, add_neg_eq_iff_eq_add,
+        eq_neg_add_iff_add_eq, *]
+    · refine h a.natAbs c.natAbs b.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, neg_add_eq_iff_eq_add,
+        *]
+    · refine h c.natAbs a.natAbs b.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, neg_add_eq_iff_eq_add,
+        eq_add_neg_iff_add_eq, *]
+    · refine h c.natAbs b.natAbs a.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, add_neg_eq_iff_eq_add,
+        *]
+· exact (by positivity : 0 < a ^ n + b ^ n).not_gt habc.trans_lt hn.pow_neg hc
+    · refine h a.natAbs b.natAbs c.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, *]
+  tfae_have 2 -> 3
+  | h, a, b, c, ha, hb, hc, habc => by
+    rw [← Rat.num_ne_zero] at ha hb hc
+    refine h (a.num * b.den * c.den) (a.den * b.num * c.den) (a.den * b.den * c.num)
+      (by positivity) (by positivity) (by positivity) ?_
+    have : (a.den * b.den * c.den : Rat) ^ n != 0 := by positivity
+refine Int.cast_injective (div_left_inj' this).1 ?_
+    push_cast
+    simp only [add_div, ← div_pow, mul_div_mul_comm, div_self (by positivity : (a.den : Rat) != 0),
+      div_self (by positivity : (b.den : Rat) != 0), div_self (by positivity : (c.den : Rat) != 0),
+      one_mul, mul_one, Rat.num_div_den, habc]
+  tfae_have 3 -> 1
+  | h, a, b, c => mod_cast h a b c
+  tfae_finish
 
 中文:
 引理 fermatLastTheoremWith_nat_int_rat_tfae
@@ -226,7 +272,53 @@ lemma fermatLastTheoremWith_nat_int_rat_tfae
         (Int.natCast_inj.1 ?_)
       push_cast
       simp only [hn.pow_abs, habc]
-    obtain ha | ha := ha.lt_or_
+    obtain ha | ha := ha.lt_or_gt <;> obtain hb | hb := hb.lt_or_gt <;>
+      obtain hc | hc := hc.lt_or_gt
+    · refine h a.natAbs b.natAbs c.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_neg, neg_pow a, neg_pow b, neg_pow c, ← mul_add, *]
+· exact (by positivity : 0 < c ^ n).not_gt habc.symm.trans_lt add_neg (hn.pow_neg ha)
+        hn.pow_neg hb
+    · refine h b.natAbs c.natAbs a.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, add_neg_eq_iff_eq_add,
+        eq_neg_add_iff_add_eq, *]
+    · refine h a.natAbs c.natAbs b.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, neg_add_eq_iff_eq_add,
+        *]
+    · refine h c.natAbs a.natAbs b.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, neg_add_eq_iff_eq_add,
+        eq_add_neg_iff_add_eq, *]
+    · refine h c.natAbs b.natAbs a.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, abs_of_neg, hn.neg_pow, add_neg_eq_iff_eq_add,
+        *]
+· exact (by positivity : 0 < a ^ n + b ^ n).not_gt habc.trans_lt hn.pow_neg hc
+    · refine h a.natAbs b.natAbs c.natAbs (by positivity) (by positivity) (by positivity)
+        (Int.natCast_inj.1 ?_)
+      push_cast
+      simp only [abs_of_pos, *]
+  tfae_have 2 -> 3
+  | h, a, b, c, ha, hb, hc, habc => by
+    rw [← Rat.num_ne_zero] at ha hb hc
+    refine h (a.num * b.den * c.den) (a.den * b.num * c.den) (a.den * b.den * c.num)
+      (by positivity) (by positivity) (by positivity) ?_
+    have : (a.den * b.den * c.den : Rat) ^ n != 0 := by positivity
+refine Int.cast_injective (div_left_inj' this).1 ?_
+    push_cast
+    simp only [add_div, ← div_pow, mul_div_mul_comm, div_self (by positivity : (a.den : Rat) != 0),
+      div_self (by positivity : (b.den : Rat) != 0), div_self (by positivity : (c.den : Rat) != 0),
+      one_mul, mul_one, Rat.num_div_den, habc]
+  tfae_have 3 -> 1
+  | h, a, b, c => mod_cast h a b c
+  tfae_finish
 
 Depends on / 依赖: Int.natCast_inj, a.natAbs, abs_of_neg, b.natAbs, c.natAbs, even_or_odd, ha.lt_or_gt, hb.lt_or_gt, hc.lt_or_gt, hn.pow_abs, lt_or_gt, n.even_or_odd, natAbs, natCast_inj, neg_pow, pow_abs, tfae_have
 -/
@@ -472,7 +564,17 @@ lemma fermatLastTheoremWith'_nat_int_tfae
     rw [ha]; rw [hb]; rw [hc]
     simp only [one_pow, Nat.reduceAdd, ne_eq, OfNat.ofNat_ne_one, not_false_eq_true]
   tfae_have 3 ↔ 1 := by
-    rw [fermatLastT
+    rw [fermatLastTheoremFor_iff_int]
+    apply fermatLastTheoremWith'_iff_fermatLastTheoremWith
+    intro a b c ha hb hc
+    by_cases hn : n = 0
+    · subst hn
+      simp only [pow_zero, Int.reduceAdd, ne_eq, OfNat.ofNat_ne_one, not_false_eq_true]
+    · rw [← isUnit_pow_iff hn, Int.isUnit_iff] at ha hb hc
+      -- case division
+      rcases ha with ha | ha <;> rcases hb with hb | hb <;> rcases hc with hc | hc <;>
+        rw [ha]; rw [hb]; rw [hc] <;> decide
+  tfae_finish
 
 中文:
 引理 fermatLastTheoremWith'_nat_int_tfae
@@ -485,7 +587,17 @@ lemma fermatLastTheoremWith'_nat_int_tfae
     rw [ha]; rw [hb]; rw [hc]
     simp only [one_pow, Nat.reduceAdd, ne_eq, OfNat.ofNat_ne_one, not_false_eq_true]
   tfae_have 3 ↔ 1 := by
-    rw [fermatLastT
+    rw [fermatLastTheoremFor_iff_int]
+    apply fermatLastTheoremWith'_iff_fermatLastTheoremWith
+    intro a b c ha hb hc
+    by_cases hn : n = 0
+    · subst hn
+      simp only [pow_zero, Int.reduceAdd, ne_eq, OfNat.ofNat_ne_one, not_false_eq_true]
+    · rw [← isUnit_pow_iff hn, Int.isUnit_iff] at ha hb hc
+      -- case division
+      rcases ha with ha | ha <;> rcases hb with hb | hb <;> rcases hc with hc | hc <;>
+        rw [ha]; rw [hb]; rw [hc] <;> decide
+  tfae_finish
 -/
 lemma fermatLastTheoremWith'_nat_int_tfae (n : Nat) :
     TFAE [FermatLastTheoremFor n, FermatLastTheoremWith' Nat n, FermatLastTheoremWith' Int n] := by
@@ -522,7 +634,12 @@ lemma fermatLastTheoremWith_of_fermatLastTheoremWith_coprime
   obtain ⟨B, hB⟩ : d ∣ b := gcd_dvd (by simp [s])
   obtain ⟨C, hC⟩ : d ∣ c := gcd_dvd (by simp [s])
   simp only [hA, hB, hC, mul_ne_zero_iff, mul_pow] at ha hb hc habc
-
+  rw [← mul_add]; rw [mul_right_inj' (pow_ne_zero n ha.1)] at habc
+  refine hn A B C ha.2 hb.2 hc.2 ?_ habc
+  rw [← Finset.normalize_gcd]; rw [normalize_eq_one]
+  refine isUnit_of_associated_mul ?_ ha.1
+  grw [← Finset.gcd_mul_left', gcd_eq_gcd_image]
+  refine .of_eq ?_; congr; simp [s, hA, hB, hC]
 
 中文:
 引理 fermatLastTheoremWith_of_fermatLastTheoremWith_coprime
@@ -534,7 +651,12 @@ lemma fermatLastTheoremWith_of_fermatLastTheoremWith_coprime
   obtain ⟨B, hB⟩ : d ∣ b := gcd_dvd (by simp [s])
   obtain ⟨C, hC⟩ : d ∣ c := gcd_dvd (by simp [s])
   simp only [hA, hB, hC, mul_ne_zero_iff, mul_pow] at ha hb hc habc
-
+  rw [← mul_add]; rw [mul_right_inj' (pow_ne_zero n ha.1)] at habc
+  refine hn A B C ha.2 hb.2 hc.2 ?_ habc
+  rw [← Finset.normalize_gcd]; rw [normalize_eq_one]
+  refine isUnit_of_associated_mul ?_ ha.1
+  grw [← Finset.gcd_mul_left', gcd_eq_gcd_image]
+  refine .of_eq ?_; congr; simp [s, hA, hB, hC]
 
 Depends on / 依赖: Finset, Finset.gcd, Finset.normalize_gcd, gcd_dvd, isUnit_of_associated_mul, mul_add, mul_ne_zero_iff, mul_pow, mul_right_inj, normalize_eq_one, normalize_gcd, pow_ne_zero, s.gcd
 -/
@@ -601,7 +723,14 @@ lemma isCoprime_of_gcd_eq_one_of_FLT
 refine isCoprime_of_prime_dvd ?_ (fun p hp hpa hpb => hp.not_dvd_one ?_)
   · rintro ⟨rfl, rfl⟩
     simp only [ne_eq, hn, not_false_eq_true, zero_pow, add_zero, zero_add, pow_eq_zero_iff]
-      a
+      at HF
+    simp only [HF, Finset.mem_singleton, Finset.insert_eq_of_mem, Finset.gcd_singleton, id_eq,
+      normalize_zero, zero_ne_one] at Hgcd
+  · rw [← Hgcd]
+    refine Finset.dvd_gcd_iff.mpr fun x hx => ?_
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+    rcases hx with hx | hx | hx <;> simp only [id_eq, hx, hpa, hpb,
+      dvd_c_of_prime_of_dvd_a_of_dvd_b_of_FLT hp hpa hpb HF]
 
 中文:
 引理 isCoprime_of_gcd_eq_one_of_FLT
@@ -612,7 +741,14 @@ refine isCoprime_of_prime_dvd ?_ (fun p hp hpa hpb => hp.not_dvd_one ?_)
 refine isCoprime_of_prime_dvd ?_ (fun p hp hpa hpb => hp.not_dvd_one ?_)
   · rintro ⟨rfl, rfl⟩
     simp only [ne_eq, hn, not_false_eq_true, zero_pow, add_zero, zero_add, pow_eq_zero_iff]
-      a
+      at HF
+    simp only [HF, Finset.mem_singleton, Finset.insert_eq_of_mem, Finset.gcd_singleton, id_eq,
+      normalize_zero, zero_ne_one] at Hgcd
+  · rw [← Hgcd]
+    refine Finset.dvd_gcd_iff.mpr fun x hx => ?_
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+    rcases hx with hx | hx | hx <;> simp only [id_eq, hx, hpa, hpb,
+      dvd_c_of_prime_of_dvd_a_of_dvd_b_of_FLT hp hpa hpb HF]
 
 Depends on / 依赖: Finset, Finset.dvd_gcd_iff.mpr, Finset.gcd_singleton, Finset.insert_eq_of_mem, Finset.mem_in, Finset.mem_singleton, Int.reduceAdd, OfNat.ofNat_ne_zero, add_zero, dvd_gcd_iff, eq_or_ne, gcd_singleton, hp.not_dvd_one, id_eq, insert_eq_of_mem, isCoprime_of_prime_dvd, mem_in, mem_singleton, ne_eq, normalize_zero
 -/

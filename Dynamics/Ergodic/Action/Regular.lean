@@ -36,7 +36,14 @@ instance [μ.IsMulLeftInvariant]
     exact or_not_of_imp this
   intro hμs
   obtain ⟨a, has, ha⟩ : exists a in s, forallᵐ b ∂μ, (b * a in s ↔ a in s) := by
-    refine (hμs.and_eventual
+    refine (hμs.and_eventually ?_).exists
+    rw [ae_ae_comm]
+    · exact ae_of_all _ fun b => (hs b).mem_iff
+    · exact ((hsm.preimage <| measurable_snd.mul measurable_fst).mem.iff
+        (hsm.preimage measurable_fst).mem).setOf
+  simpa [has] using (MeasureTheory.quasiMeasurePreserving_mul_right μ a⁻¹).ae ha
+
+@[to_additive]
 
 中文:
 实例 [μ.是MulLeftInvariant]
@@ -48,7 +55,14 @@ instance [μ.IsMulLeftInvariant]
     exact or_not_of_imp this
   intro hμs
   obtain ⟨a, has, ha⟩ : exists a in s, forallᵐ b ∂μ, (b * a in s ↔ a in s) := by
-    refine (hμs.and_eventual
+    refine (hμs.and_eventually ?_).exists
+    rw [ae_ae_comm]
+    · exact ae_of_all _ fun b => (hs b).mem_iff
+    · exact ((hsm.preimage <| measurable_snd.mul measurable_fst).mem.iff
+        (hsm.preimage measurable_fst).mem).setOf
+  simpa [has] using (MeasureTheory.quasiMeasurePreserving_mul_right μ a⁻¹).ae ha
+
+@[to_additive]
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.qua, ae_ae_comm, ae_of_all, and_eventually, eventuallyConst_set, hsm.preimage, measurable_fst, measurable_snd, measurable_snd.mul, mem.iff, mem_iff, not_frequently, or_not_of_imp, preimage, s.and_eventually
 -/
@@ -80,7 +94,12 @@ instance [μ.IsMulRightInvariant]
     exact or_not_of_imp this
   intro hμs
   obtain ⟨a, has, ha⟩ : exists a in s, forallᵐ b ∂μ, (a * b in s ↔ a in s) := by
-    refine (hμs.and_eventual
+    refine (hμs.and_eventually ?_).exists
+    rw [ae_ae_comm]
+    · exact ae_of_all _ fun b => (hs ⟨b⟩).mem_iff
+    · exact ((hsm.preimage <| measurable_fst.mul measurable_snd).mem.iff
+        (hsm.preimage measurable_fst).mem).setOf
+  simpa [has] using (quasiMeasurePreserving_mul_left μ a⁻¹).ae ha
 
 中文:
 实例 [μ.是MulRightInvariant]
@@ -92,7 +111,12 @@ instance [μ.IsMulRightInvariant]
     exact or_not_of_imp this
   intro hμs
   obtain ⟨a, has, ha⟩ : exists a in s, forallᵐ b ∂μ, (a * b in s ↔ a in s) := by
-    refine (hμs.and_eventual
+    refine (hμs.and_eventually ?_).exists
+    rw [ae_ae_comm]
+    · exact ae_of_all _ fun b => (hs ⟨b⟩).mem_iff
+    · exact ((hsm.preimage <| measurable_fst.mul measurable_snd).mem.iff
+        (hsm.preimage measurable_fst).mem).setOf
+  simpa [has] using (quasiMeasurePreserving_mul_left μ a⁻¹).ae ha
 
 Depends on / 依赖: ae_ae_comm, ae_of_all, and_eventually, eventuallyConst_set, hsm.preimage, measurable_fst, measurable_fst.mul, measurable_snd, mem.iff, mem_iff, not_frequently, or_not_of_imp, preimage, quasiMeasurePre, s.and_eventually
 -/

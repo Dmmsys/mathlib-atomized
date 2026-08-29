@@ -830,7 +830,14 @@ theorem monomialRpow_approximates
     | zero =>
       simp only [Fin.coe_ofNat_eq_mod, Nat.zero_mod, Multiseries.monomialRpow,
         List.getElem_cons_zero]
-  
+      apply (one_approximates h_basis.tail).cons _ (by simp)
+exact Majorized.self h_basis.tendsto_atTop (by simp)
+    | succ m =>
+      simp only [Fin.val_succ, Multiseries.monomialRpow, List.getElem_cons_succ]
+      apply (monomialRpow_approximates h_basis.tail).cons _ (by simp)
+      apply h_basis.tail_pow_majorized_head (by simp)
+
+@[simp]
 
 中文:
 定理 monomialRpow_approximates
@@ -844,7 +851,14 @@ theorem monomialRpow_approximates
     | zero =>
       simp only [Fin.coe_ofNat_eq_mod, Nat.zero_mod, Multiseries.monomialRpow,
         List.getElem_cons_zero]
-  
+      apply (one_approximates h_basis.tail).cons _ (by simp)
+exact Majorized.self h_basis.tendsto_atTop (by simp)
+    | succ m =>
+      simp only [Fin.val_succ, Multiseries.monomialRpow, List.getElem_cons_succ]
+      apply (monomialRpow_approximates h_basis.tail).cons _ (by simp)
+      apply h_basis.tail_pow_majorized_head (by simp)
+
+@[simp]
 
 Depends on / 依赖: Fin.cases, Fin.coe_ofNat_eq_mod, Fin.is_lt, Fin.val_succ, List.getElem_cons_succ, List.getElem_cons_zero, List.length_cons, Majorized, Majorized.self, Multiseries, Multiseries.monomialRpow, Nat.zero_mod, _pos, basis_hd, basis_tl, coe_ofNat_eq_mod, getElem, getElem_cons_succ, getElem_cons_zero, h_basi
 -/

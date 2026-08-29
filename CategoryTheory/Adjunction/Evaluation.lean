@@ -97,7 +97,10 @@ definition evaluationAdjunctionRight
             ext x
             dsimp
             ext g
-  
+            simp only [colimit.ι_desc, Cofan.mk_ι_app, Category.assoc, ← f.naturality,
+              evaluationLeftAdjoint_obj_map, colimit.ι_desc_assoc,
+              Discrete.functor_obj, Cofan.mk_pt, Category.id_comp]
+          right_inv := fun f => by simp } }
 
 中文:
 定义 evaluationAdjunctionRight
@@ -111,7 +114,10 @@ definition evaluationAdjunctionRight
             ext x
             dsimp
             ext g
-  
+            simp only [colimit.ι_desc, Cofan.mk_ι_app, Category.assoc, ← f.naturality,
+              evaluationLeftAdjoint_obj_map, colimit.ι_desc_assoc,
+              Discrete.functor_obj, Cofan.mk_pt, Category.id_comp]
+          right_inv := fun f => by simp } }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Category, Category.assoc, Category.id_comp, Cofan.mk_, Cofan.mk_pt, Discrete, Discrete.functor_obj, F.map, Sigma.desc, colimit, evaluationLeftAdjoint_obj_map, f.app, f.naturality, functor_obj, homEquiv, id_comp, invFun, left_inv
 -/
@@ -234,7 +240,11 @@ definition evaluationAdjunctionLeft
           right_inv := by
             intro f
             ext x
-            dsi
+            dsimp
+            ext g
+            simp only [NatTrans.naturality_assoc,
+              evaluationRightAdjoint_obj_obj, evaluationRightAdjoint_obj_map, limit.lift_π,
+              Fan.mk_pt, Fan.mk_π_app, Category.comp_id] } }
 
 中文:
 定义 evaluationAdjunctionLeft
@@ -247,7 +257,11 @@ definition evaluationAdjunctionLeft
           right_inv := by
             intro f
             ext x
-            dsi
+            dsimp
+            ext g
+            simp only [NatTrans.naturality_assoc,
+              evaluationRightAdjoint_obj_obj, evaluationRightAdjoint_obj_map, limit.lift_π,
+              Fan.mk_pt, Fan.mk_π_app, Category.comp_id] } }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Category, Category.comp_id, F.map, Fan.mk_, Fan.mk_pt, NatTrans, NatTrans.naturality_assoc, Pi.lift, comp_id, evaluationRightAdjoint_obj_map, evaluationRightAdjoint_obj_obj, f.app, homEquiv, invFun, left_inv, limit.lift_, mkOfHomEquiv, mk_pt
 -/

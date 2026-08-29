@@ -113,7 +113,10 @@ theorem isPrimePow_iff_factorization_eq_single
   · rintro ⟨hk, hn⟩
     have hn0 : n != 0 := by
       rintro rfl
-      simp_all only [Finsupp.single_eq_zero, eq_comm, Nat.factorizatio
+      simp_all only [Finsupp.single_eq_zero, eq_comm, Nat.factorization_zero, hk.ne']
+    rw [Nat.eq_pow_of_factorization_eq_single hn0 hn]
+exact ⟨Nat.prime_of_mem_primeFactors
+      Finsupp.mem_support_iff.2 (by simp [hn, hk.ne'] : n.factorization p != 0), hk, rfl⟩
 
 中文:
 定理 isPrimePow_iff_factorization_eq_single
@@ -127,7 +130,10 @@ theorem isPrimePow_iff_factorization_eq_single
   · rintro ⟨hk, hn⟩
     have hn0 : n != 0 := by
       rintro rfl
-      simp_all only [Finsupp.single_eq_zero, eq_comm, Nat.factorizatio
+      simp_all only [Finsupp.single_eq_zero, eq_comm, Nat.factorization_zero, hk.ne']
+    rw [Nat.eq_pow_of_factorization_eq_single hn0 hn]
+exact ⟨Nat.prime_of_mem_primeFactors
+      Finsupp.mem_support_iff.2 (by simp [hn, hk.ne'] : n.factorization p != 0), hk, rfl⟩
 
 Depends on / 依赖: Finsupp, Finsupp.mem_support_iff, Finsupp.single_eq_zero, Nat.Prime.factorization_pow, Nat.eq_pow_of_factorization_eq_single, Nat.factorization_zero, Nat.prime_of_mem_primeFactors, eq_comm, eq_pow_of_factorization_eq_single, factorization, factorization_pow, factorization_zero, hk.ne, isPrimePow_nat_iff, mem_support_iff, n.factorization, prime_of_mem_primeFactors, single_eq_zero
 -/
@@ -207,7 +213,9 @@ theorem IsPrimePow.exists_ordCompl_eq_one
   · refine absurd ?_ hk0.ne'
     simp [← Nat.factorization_eq_zero_of_not_prime n pp, h1]
   refine ⟨p, pp, ?_⟩
-  refi
+  refine Nat.eq_of_factorization_eq (Nat.ordCompl_pos p hn0).ne' (by simp) fun q => ?_
+  rw [Nat.factorization_ordCompl n p]; rw [h1]
+  simp
 
 中文:
 定理 IsPrimePow.存在_ordCompl_eq_one
@@ -219,7 +227,9 @@ theorem IsPrimePow.exists_ordCompl_eq_one
   · refine absurd ?_ hk0.ne'
     simp [← Nat.factorization_eq_zero_of_not_prime n pp, h1]
   refine ⟨p, pp, ?_⟩
-  refi
+  refine Nat.eq_of_factorization_eq (Nat.ordCompl_pos p hn0).ne' (by simp) fun q => ?_
+  rw [Nat.factorization_ordCompl n p]; rw [h1]
+  simp
 
 Depends on / 依赖: Nat.eq_of_factorization_eq, Nat.factorization_eq_zero_of_not_prime, Nat.factorization_ordCompl, Nat.ordCompl_pos, absurd, eq_of_factorization_eq, eq_or_ne, factorization_eq_zero_of_not_prime, factorization_ordCompl, hk0.ne, isPrimePow_iff_factorization_eq_single, isPrimePow_iff_factorization_eq_single.mp, not_isPrimePow_zero, ordCompl_pos, p.Prime
 -/
@@ -290,7 +300,17 @@ theorem isPrimePow_iff_unique_prime_dvd
     exact (Nat.prime_dvd_prime_iff_eq hq hp).1 (hq.dvd_of_dvd_pow hq')
   rintro ⟨p, ⟨hp, hn⟩, hq⟩
   rcases eq_or_ne n 0 with (rfl | hn₀)
-  · cases (hq 2 ⟨N
+  · cases (hq 2 ⟨Nat.prime_two, dvd_zero 2⟩).trans (hq 3 ⟨Nat.prime_three, dvd_zero 3⟩).symm
+  refine ⟨p, n.factorization p, hp, hp.factorization_pos_of_dvd hn₀ hn, ?_⟩
+  simp only [and_imp] at hq
+  apply Nat.dvd_antisymm (Nat.ordProj_dvd _ _)
+  -- We need to show n ∣ p ^ n.factorization p
+  apply Nat.dvd_of_primeFactorsList_subperm hn₀
+  rw [hp.primeFactorsList_pow]; rw [List.subperm_ext_iff]
+  intro q hq'
+  rw [Nat.mem_primeFactorsList hn₀] at hq'
+  cases hq _ hq'.1 hq'.2
+  simp
 
 中文:
 定理 isPrimePow_iff_unique_prime_dvd
@@ -305,7 +325,17 @@ theorem isPrimePow_iff_unique_prime_dvd
     exact (Nat.prime_dvd_prime_iff_eq hq hp).1 (hq.dvd_of_dvd_pow hq')
   rintro ⟨p, ⟨hp, hn⟩, hq⟩
   rcases eq_or_ne n 0 with (rfl | hn₀)
-  · cases (hq 2 ⟨N
+  · cases (hq 2 ⟨Nat.prime_two, dvd_zero 2⟩).trans (hq 3 ⟨Nat.prime_three, dvd_zero 3⟩).symm
+  refine ⟨p, n.factorization p, hp, hp.factorization_pos_of_dvd hn₀ hn, ?_⟩
+  simp only [and_imp] at hq
+  apply Nat.dvd_antisymm (Nat.ordProj_dvd _ _)
+  -- We need to show n ∣ p ^ n.factorization p
+  apply Nat.dvd_of_primeFactorsList_subperm hn₀
+  rw [hp.primeFactorsList_pow]; rw [List.subperm_ext_iff]
+  intro q hq'
+  rw [Nat.mem_primeFactorsList hn₀] at hq'
+  cases hq _ hq'.1 hq'.2
+  simp
 
 Depends on / 依赖: Nat.dvd_antisymm, Nat.ordProj_dvd, Nat.prime_dvd_prime_iff_eq, Nat.prime_three, Nat.prime_two, and_imp, dvd_antisymm, dvd_of_dvd_pow, dvd_pow_self, dvd_zero, eq_or_ne, factorization, factorization_pos_of_dvd, hk.ne, hp.factorization_pos_of_dvd, hq.dvd_of_dvd_pow, isPrimePow_nat_iff, n.factorization, ordProj_dvd, prime_dvd_prime_iff_eq
 -/
@@ -373,7 +403,16 @@ theorem Nat.Coprime.isPrimePow_dvd_mul
     ⟨?_, fun h =>
       Or.elim h (fun i => i.trans ((@dvd_mul_right a b a hab).mpr (dvd_refl a)))
           fun i => i.trans ((@dvd_mul_left a b b hab.symm).mpr (dvd_refl b))⟩
-  obtain ⟨p, k, h
+  obtain ⟨p, k, hp, _, rfl⟩ := (isPrimePow_nat_iff _).1 hn
+  simp only [hp.pow_dvd_iff_le_factorization (mul_ne_zero ha hb), Nat.factorization_mul ha hb,
+    hp.pow_dvd_iff_le_factorization ha, hp.pow_dvd_iff_le_factorization hb, Pi.add_apply,
+    Finsupp.coe_add]
+  have : a.factorization p = 0 ∨ b.factorization p = 0 := by
+    rw [← Finsupp.notMem_support_iff]; rw [← Finsupp.notMem_support_iff]; rw [← not_and_or]; rw [←
+      Finset.mem_inter]
+    intro t
+    simpa using hab.disjoint_primeFactors.le_bot t
+  rcases this with h | h <;> simp [h, imp_or]
 
 中文:
 定理 自然数.Coprime.isPrimePow_dvd_mul
@@ -387,7 +426,16 @@ theorem Nat.Coprime.isPrimePow_dvd_mul
     ⟨?_, fun h =>
       Or.elim h (fun i => i.trans ((@dvd_mul_right a b a hab).mpr (dvd_refl a)))
           fun i => i.trans ((@dvd_mul_left a b b hab.symm).mpr (dvd_refl b))⟩
-  obtain ⟨p, k, h
+  obtain ⟨p, k, hp, _, rfl⟩ := (isPrimePow_nat_iff _).1 hn
+  simp only [hp.pow_dvd_iff_le_factorization (mul_ne_zero ha hb), Nat.factorization_mul ha hb,
+    hp.pow_dvd_iff_le_factorization ha, hp.pow_dvd_iff_le_factorization hb, Pi.add_apply,
+    Finsupp.coe_add]
+  have : a.factorization p = 0 ∨ b.factorization p = 0 := by
+    rw [← Finsupp.notMem_support_iff]; rw [← Finsupp.notMem_support_iff]; rw [← not_and_or]; rw [←
+      Finset.mem_inter]
+    intro t
+    simpa using hab.disjoint_primeFactors.le_bot t
+  rcases this with h | h <;> simp [h, imp_or]
 
 Depends on / 依赖: Finsupp, Finsupp.coe, Nat.factorization_mul, Or.elim, Pi.add_apply, add_apply, dvd_mul_left, dvd_mul_right, dvd_refl, eq_or_ne, factorization_mul, hab.symm, hp.pow_dvd_iff_le_factorization, i.trans, isPrimePow_nat_iff, mul_ne_zero, pow_dvd_iff_le_factorization
 -/
@@ -426,7 +474,9 @@ theorem Nat.mul_divisors_filter_prime_pow
   · simp only [Nat.coprime_zero_right] at hab
     simp [hab, Finset.filter_singleton, not_isPrimePow_one]
   ext n
-  
+  simp only [ha, hb, Finset.mem_union, Finset.mem_filter, Nat.mul_eq_zero, and_true, Ne,
+    and_congr_left_iff, not_false_iff, Nat.mem_divisors, or_self_iff]
+  apply hab.isPrimePow_dvd_mul
 
 中文:
 定理 自然数.mul_divisors_filter_prime_pow
@@ -439,7 +489,9 @@ theorem Nat.mul_divisors_filter_prime_pow
   · simp only [Nat.coprime_zero_right] at hab
     simp [hab, Finset.filter_singleton, not_isPrimePow_one]
   ext n
-  
+  simp only [ha, hb, Finset.mem_union, Finset.mem_filter, Nat.mul_eq_zero, and_true, Ne,
+    and_congr_left_iff, not_false_iff, Nat.mem_divisors, or_self_iff]
+  apply hab.isPrimePow_dvd_mul
 
 Depends on / 依赖: Finset, Finset.filter_singleton, Finset.mem_filter, Finset.mem_union, Nat.coprime_zero_left, Nat.coprime_zero_right, Nat.mem_divisors, Nat.mul_eq_zero, and_congr_left_iff, and_true, coprime_zero_left, coprime_zero_right, eq_or_ne, filter_singleton, hab.isPrimePow_dvd_mul, isPrimePow_dvd_mul, mem_divisors, mem_filter, mem_union, mul_eq_zero
 -/
@@ -467,7 +519,15 @@ definition Nat.Primes.prodNatEquiv
   invFun n :=
     (⟨n.val.minFac, minFac_prime n.prop.ne_one⟩, n.val.factorization n.val.minFac - 1)
   left_inv := fun (p, k) => by
-    simp only [p.prop.pow_minFac k.add_one_ne_zero, Subtype.coe_eta, factorization_
+    simp only [p.prop.pow_minFac k.add_one_ne_zero, Subtype.coe_eta, factorization_pow, p.prop,
+      Prime.factorization, Finsupp.smul_single, smul_eq_mul, mul_one, Finsupp.single_add,
+      Finsupp.coe_add, Pi.add_apply, Finsupp.single_eq_same, add_tsub_cancel_right]
+  right_inv n := by
+    ext1
+    dsimp only
+    rw [sub_one_add_one (Nat.factorization_minFac_ne_zero n.prop.one_lt)]; rw [n.prop.minFac_pow_factorization_eq]
+
+@[simp]
 
 中文:
 定义 自然数.Primes.prod自然数Equiv
@@ -476,7 +536,15 @@ definition Nat.Primes.prodNatEquiv
   invFun n :=
     (⟨n.val.minFac, minFac_prime n.prop.ne_one⟩, n.val.factorization n.val.minFac - 1)
   left_inv := fun (p, k) => by
-    simp only [p.prop.pow_minFac k.add_one_ne_zero, Subtype.coe_eta, factorization_
+    simp only [p.prop.pow_minFac k.add_one_ne_zero, Subtype.coe_eta, factorization_pow, p.prop,
+      Prime.factorization, Finsupp.smul_single, smul_eq_mul, mul_one, Finsupp.single_add,
+      Finsupp.coe_add, Pi.add_apply, Finsupp.single_eq_same, add_tsub_cancel_right]
+  right_inv n := by
+    ext1
+    dsimp only
+    rw [sub_one_add_one (Nat.factorization_minFac_ne_zero n.prop.one_lt)]; rw [n.prop.minFac_pow_factorization_eq]
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.coe_add, Finsupp.single_add, Finsupp.single_eq_same, Finsupp.smul_single, Pi.add_apply, Prime.factorization, Subtype, Subtype.coe_eta, add_apply, add_one_ne_zero, add_one_pos, add_tsub_cancel_right, coe_add, coe_eta, factorization, factorization_pow, invFun, k.add_one_ne_zero, left_inv
 -/

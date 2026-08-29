@@ -1693,7 +1693,7 @@ definition ringEquivOfPrime
   have : CharP R p := (CharP.charP_iff_prime_eq_zero hp).2 (hR ▸ Nat.cast_card_eq_zero R)
   ZMod.ringEquiv R hR
 
-@
+@[simp]
 
 中文:
 定义 ringEquivOfPrime
@@ -1704,7 +1704,7 @@ definition ringEquivOfPrime
   have : CharP R p := (CharP.charP_iff_prime_eq_zero hp).2 (hR ▸ Nat.cast_card_eq_zero R)
   ZMod.ringEquiv R hR
 
-@
+@[simp]
 
 Depends on / 依赖: Fintype, Fintype.one_lt_card_iff_nontrivial, Nontrivial, hp.one_lt, one_lt, one_lt_card_iff_nontrivial
 -/
@@ -1753,7 +1753,11 @@ definition ringEquivCongr
         map_mul' := fun a b => by
           dsimp [ZMod]
           ext
-          rw [Fin.val_cast]; rw [Fin
+          rw [Fin.val_cast]; rw [Fin.val_mul]; rw [Fin.val_mul]; rw [Fin.val_cast]; rw [Fin.val_cast]; rw [← h]
+        map_add' := fun a b => by
+          dsimp [ZMod]
+          ext
+          rw [Fin.val_cast]; rw [Fin.val_add]; rw [Fin.val_add]; rw [Fin.val_cast]; rw [Fin.val_cast]; rw [← h] }
 
 中文:
 定义 ringEquivCongr
@@ -1770,7 +1774,11 @@ definition ringEquivCongr
         map_mul' := fun a b => by
           dsimp [ZMod]
           ext
-          rw [Fin.val_cast]; rw [Fin
+          rw [Fin.val_cast]; rw [Fin.val_mul]; rw [Fin.val_mul]; rw [Fin.val_cast]; rw [Fin.val_cast]; rw [← h]
+        map_add' := fun a b => by
+          dsimp [ZMod]
+          ext
+          rw [Fin.val_cast]; rw [Fin.val_add]; rw [Fin.val_add]; rw [Fin.val_cast]; rw [Fin.val_cast]; rw [← h] }
 
 Depends on / 依赖: Fin.val_add, Fin.val_cast, Fin.val_mul, RingEquiv, RingEquiv.refl, finCongr, h.symm, m.succ_ne_zero, map_add, map_mul, n.succ_ne_zero, succ_ne_zero, val_add, val_cast, val_mul
 -/
@@ -2021,7 +2029,7 @@ theorem val_intCast
   have hle : (0 : Int) <= ↑(a : ZMod n).val := Int.natCast_nonneg _
   have hlt : ↑(a : ZMod n).val < (n : Int) := Int.ofNat_lt.mpr (ZMod.val_lt a)
   refine (Int.emod_eq_of_lt hle hlt).symm.trans ?_
-  rw [← ZMod.intCast_eq_intCast_iff']; rw [Int.cast_natCast]; rw [ZMod.natCast_val]; rw [ZMod.cast_
+  rw [← ZMod.intCast_eq_intCast_iff']; rw [Int.cast_natCast]; rw [ZMod.natCast_val]; rw [ZMod.cast_id]
 
 中文:
 定理 val_intCast
@@ -2031,7 +2039,7 @@ theorem val_intCast
   have hle : (0 : Int) <= ↑(a : ZMod n).val := Int.natCast_nonneg _
   have hlt : ↑(a : ZMod n).val < (n : Int) := Int.ofNat_lt.mpr (ZMod.val_lt a)
   refine (Int.emod_eq_of_lt hle hlt).symm.trans ?_
-  rw [← ZMod.intCast_eq_intCast_iff']; rw [Int.cast_natCast]; rw [ZMod.natCast_val]; rw [ZMod.cast_
+  rw [← ZMod.intCast_eq_intCast_iff']; rw [Int.cast_natCast]; rw [ZMod.natCast_val]; rw [ZMod.cast_id]
 
 Depends on / 依赖: Int.cast_natCast, Int.emod_eq_of_lt, Int.natCast_nonneg, Int.ofNat_lt.mpr, ZMod.cast_id, ZMod.intCast_eq_intCast_iff, ZMod.natCast_val, ZMod.val_lt, cast_id, cast_natCast, emod_eq_of_lt, intCast_eq_intCast_iff, natCast_nonneg, natCast_val, ofNat_lt, symm.trans, val_lt
 -/
@@ -2347,7 +2355,8 @@ theorem cast_sub_one
     · dsimp [ZMod, ZMod.cast, ZMod.val]
       rw [Fin.coe_sub_one]; rw [if_neg]
       · rw [Nat.cast_sub, Nat.cast_one]
-        rwa [Fin.ext_iff, Fin.v
+        rwa [Fin.ext_iff, Fin.val_zero, ← Ne, ← Nat.one_le_iff_ne_zero] at hk
+      · exact hk
 
 中文:
 定理 cast_sub_one
@@ -2361,7 +2370,8 @@ theorem cast_sub_one
     · dsimp [ZMod, ZMod.cast, ZMod.val]
       rw [Fin.coe_sub_one]; rw [if_neg]
       · rw [Nat.cast_sub, Nat.cast_one]
-        rwa [Fin.ext_iff, Fin.v
+        rwa [Fin.ext_iff, Fin.val_zero, ← Ne, ← Nat.one_le_iff_ne_zero] at hk
+      · exact hk
 
 Depends on / 依赖: Fin.coe_sub_one, Fin.ext_iff, Fin.val_zero, Int.cast_one, Int.cast_sub, Nat.cast_one, Nat.cast_sub, Nat.one_le_iff_ne_zero, ZMod.cast, ZMod.cast_neg_one, ZMod.val, cast_neg_one, cast_one, cast_sub, coe_sub_one, ext_iff, if_neg, one_le_iff_ne_zero, split_ifs, val_zero
 -/
@@ -2428,7 +2438,7 @@ theorem intCast_eq_iff
   · rintro ⟨k, rfl⟩
     rw [Int.cast_add]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [Int.cast_natCast]; rw [natCast_val]; rw [ZMod.natCast_self]; rw [zero_mul]; rw [add_zero]; rw [cast_id]
 
-@[
+@[push_cast, simp]
 
 中文:
 定理 intCast_eq_iff
@@ -2441,7 +2451,7 @@ theorem intCast_eq_iff
   · rintro ⟨k, rfl⟩
     rw [Int.cast_add]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [Int.cast_natCast]; rw [natCast_val]; rw [ZMod.natCast_self]; rw [zero_mul]; rw [add_zero]; rw [cast_id]
 
-@[
+@[push_cast, simp]
 
 Depends on / 依赖: Int.cast_add, Int.cast_mul, Int.cast_natCast, Int.emod_add_mul_ediv, ZMod.natCast_self, add_zero, cast_add, cast_id, cast_mul, cast_natCast, emod_add_mul_ediv, natCast_self, natCast_val, val_intCast, zero_mul
 -/
@@ -3084,7 +3094,12 @@ theorem mul_inv_eq_gcd
       _ = a.natAbs.gcd 0 := by rw [Nat.gcd_zero_right]
   · calc
       a * a⁻¹ = a * a⁻¹ + n.succ * Nat.gcdB (val a) n.succ := by
-        rw [natCast_self]; rw [ze
+        rw [natCast_self]; rw [zero_mul]; rw [add_zero]
+      _ = ↑(↑a.val * Nat.gcdA (val a) n.succ + n.succ * Nat.gcdB (val a) n.succ) := by
+        push_cast
+        rw [natCast_zmod_val]
+        rfl
+      _ = Nat.gcd a.val n.succ := by rw [← Nat.gcd_eq_gcd_ab a.val n.succ]; rfl
 
 中文:
 定理 mul_inv_eq_gcd
@@ -3099,7 +3114,12 @@ theorem mul_inv_eq_gcd
       _ = a.natAbs.gcd 0 := by rw [Nat.gcd_zero_right]
   · calc
       a * a⁻¹ = a * a⁻¹ + n.succ * Nat.gcdB (val a) n.succ := by
-        rw [natCast_self]; rw [ze
+        rw [natCast_self]; rw [zero_mul]; rw [add_zero]
+      _ = ↑(↑a.val * Nat.gcdA (val a) n.succ + n.succ * Nat.gcdB (val a) n.succ) := by
+        push_cast
+        rw [natCast_zmod_val]
+        rfl
+      _ = Nat.gcd a.val n.succ := by rw [← Nat.gcd_eq_gcd_ab a.val n.succ]; rfl
 
 Depends on / 依赖: Int.mul_sign_self, Int.sign, Nat.gcd, Nat.gcdA, Nat.gcdB, Nat.gcd_eq_gcd_ab, Nat.gcd_zero_right, a.natAbs, a.natAbs.gcd, a.val, add_zero, gcd_eq_gcd_ab, gcd_zero_right, mul_sign_self, n.succ, natAbs, natCast_self, natCast_zmod_val, zero_mul
 -/
@@ -3432,7 +3452,9 @@ theorem val_coe_unit_coprime
   apply Nat.coprime_of_mul_modEq_one ((u⁻¹ : Units (ZMod (n + 1))) : ZMod (n + 1)).val
   have := Units.ext_iff.1 (mul_inv_cancel u)
   rw [Units.val_one] at this
-  rw [← natCast_eq_natCast_iff]; rw [Nat.cast_one]; rw 
+  rw [← natCast_eq_natCast_iff]; rw [Nat.cast_one]; rw [← this]; clear this
+  rw [← natCast_zmod_val ((u * u⁻¹ : Units (ZMod (n + 1))) : ZMod (n + 1))]
+  rw [Units.val_mul]; rw [val_mul]; rw [natCast_mod]
 
 中文:
 定理 val_coe_unit_coprime
@@ -3444,7 +3466,9 @@ theorem val_coe_unit_coprime
   apply Nat.coprime_of_mul_modEq_one ((u⁻¹ : Units (ZMod (n + 1))) : ZMod (n + 1)).val
   have := Units.ext_iff.1 (mul_inv_cancel u)
   rw [Units.val_one] at this
-  rw [← natCast_eq_natCast_iff]; rw [Nat.cast_one]; rw 
+  rw [← natCast_eq_natCast_iff]; rw [Nat.cast_one]; rw [← this]; clear this
+  rw [← natCast_zmod_val ((u * u⁻¹ : Units (ZMod (n + 1))) : ZMod (n + 1))]
+  rw [Units.val_mul]; rw [val_mul]; rw [natCast_mod]
 
 Depends on / 依赖: Int.units_eq_one_or, Nat.cast_one, Nat.coprime_of_mul_modEq_one, Units.ext_iff, Units.val_mul, Units.val_one, cast_one, coprime_of_mul_modEq_one, ext_iff, mul_inv_cancel, natCast_eq_natCast_iff, natCast_mod, natCast_zmod_val, units_eq_one_or, val_mul, val_one
 -/
@@ -3804,7 +3828,42 @@ definition chineseRemainder
     ZMod.castHom (show m.lcm n ∣ m * n by simp [Nat.lcm_dvd_iff]) (ZMod m × ZMod n)
   let inv_fun : ZMod m × ZMod n -> ZMod (m * n) := fun x =>
     if m * n = 0 then
-      if m = 1 then cast (RingHom.snd _ (ZMod n) x) else cast (RingHom.fst (ZMod m) _ 
+      if m = 1 then cast (RingHom.snd _ (ZMod n) x) else cast (RingHom.fst (ZMod m) _ x)
+    else Nat.chineseRemainder h x.1.val x.2.val
+  have inv : Function.LeftInverse inv_fun to_fun ∧ Function.RightInverse inv_fun to_fun :=
+    if hmn0 : m * n = 0 then by
+      rcases h.eq_of_mul_eq_zero hmn0 with (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)
+      · constructor
+        · intro x; rfl
+        · rintro ⟨x, y⟩
+          fin_cases y
+          simp [to_fun, inv_fun, castHom, Prod.ext_iff, eq_iff_true_of_subsingleton]
+      · constructor
+        · intro x; rfl
+        · rintro ⟨x, y⟩
+          fin_cases x
+          simp [to_fun, inv_fun, castHom, Prod.ext_iff, eq_iff_true_of_subsingleton]
+    else by
+      have : NeZero (m * n) := ⟨hmn0⟩
+      have : NeZero m := ⟨left_ne_zero_of_mul hmn0⟩
+      have : NeZero n := ⟨right_ne_zero_of_mul hmn0⟩
+      have left_inv : Function.LeftInverse inv_fun to_fun := by
+        intro x
+        dsimp only [to_fun, inv_fun, ZMod.castHom_apply]
+        conv_rhs => rw [← ZMod.natCast_zmod_val x]
+        rw [if_neg hmn0]; rw [ZMod.natCast_eq_natCast_iff]; rw [← Nat.modEq_and_modEq_iff_modEq_mul h]; rw [Prod.fst_zmod_cast]; rw [Prod.snd_zmod_cast]
+        refine
+          ⟨(Nat.chineseRemainder h (cast x : ZMod m).val (cast x : ZMod n).val).2.left.trans ?_,
+            (Nat.chineseRemainder h (cast x : ZMod m).val (cast x : ZMod n).val).2.right.trans ?_⟩
+        · rw [← ZMod.natCast_eq_natCast_iff, ZMod.natCast_zmod_val, ZMod.natCast_val]
+        · rw [← ZMod.natCast_eq_natCast_iff, ZMod.natCast_zmod_val, ZMod.natCast_val]
+      exact ⟨left_inv, left_inv.rightInverse_of_card_le (by simp)⟩
+  { toFun := to_fun,
+    invFun := inv_fun,
+    map_mul' := map_mul _
+    map_add' := map_add _
+    left_inv := inv.1
+    right_inv := inv.2 }
 
 中文:
 定义 chineseRemainder
@@ -3813,7 +3872,42 @@ definition chineseRemainder
     ZMod.castHom (show m.lcm n ∣ m * n by simp [Nat.lcm_dvd_iff]) (ZMod m × ZMod n)
   let inv_fun : ZMod m × ZMod n -> ZMod (m * n) := fun x =>
     if m * n = 0 then
-      if m = 1 then cast (RingHom.snd _ (ZMod n) x) else cast (RingHom.fst (ZMod m) _ 
+      if m = 1 then cast (RingHom.snd _ (ZMod n) x) else cast (RingHom.fst (ZMod m) _ x)
+    else Nat.chineseRemainder h x.1.val x.2.val
+  have inv : Function.LeftInverse inv_fun to_fun ∧ Function.RightInverse inv_fun to_fun :=
+    if hmn0 : m * n = 0 then by
+      rcases h.eq_of_mul_eq_zero hmn0 with (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)
+      · constructor
+        · intro x; rfl
+        · rintro ⟨x, y⟩
+          fin_cases y
+          simp [to_fun, inv_fun, castHom, Prod.ext_iff, eq_iff_true_of_subsingleton]
+      · constructor
+        · intro x; rfl
+        · rintro ⟨x, y⟩
+          fin_cases x
+          simp [to_fun, inv_fun, castHom, Prod.ext_iff, eq_iff_true_of_subsingleton]
+    else by
+      have : NeZero (m * n) := ⟨hmn0⟩
+      have : NeZero m := ⟨left_ne_zero_of_mul hmn0⟩
+      have : NeZero n := ⟨right_ne_zero_of_mul hmn0⟩
+      have left_inv : Function.LeftInverse inv_fun to_fun := by
+        intro x
+        dsimp only [to_fun, inv_fun, ZMod.castHom_apply]
+        conv_rhs => rw [← ZMod.natCast_zmod_val x]
+        rw [if_neg hmn0]; rw [ZMod.natCast_eq_natCast_iff]; rw [← Nat.modEq_and_modEq_iff_modEq_mul h]; rw [Prod.fst_zmod_cast]; rw [Prod.snd_zmod_cast]
+        refine
+          ⟨(Nat.chineseRemainder h (cast x : ZMod m).val (cast x : ZMod n).val).2.left.trans ?_,
+            (Nat.chineseRemainder h (cast x : ZMod m).val (cast x : ZMod n).val).2.right.trans ?_⟩
+        · rw [← ZMod.natCast_eq_natCast_iff, ZMod.natCast_zmod_val, ZMod.natCast_val]
+        · rw [← ZMod.natCast_eq_natCast_iff, ZMod.natCast_zmod_val, ZMod.natCast_val]
+      exact ⟨left_inv, left_inv.rightInverse_of_card_le (by simp)⟩
+  { toFun := to_fun,
+    invFun := inv_fun,
+    map_mul' := map_mul _
+    map_add' := map_add _
+    left_inv := inv.1
+    right_inv := inv.2 }
 
 Depends on / 依赖: Function, Function.LeftInverse, Function.RightInverse, LeftInverse, Nat.chineseRemainder, Nat.lcm_dvd_iff, RightInverse, RingHom, RingHom.fst, RingHom.snd, ZMod.castHom, castHom, chineseRemainder, eq_of_mul_eq_zero, h.eq_of_mul_eq_zero, inv_fun, lcm_dvd_iff, m.lcm, to_fun
 -/
@@ -4163,7 +4257,19 @@ theorem neg_eq_self_iff
   · rintro ⟨m, he⟩
     rcases m with - | m
     · rw [mul_zero, mul_eq_zero] at he
-      rcases he with (⟨⟨
+      rcases he with (⟨⟨⟩⟩ | he)
+      exact Or.inl (a.val_eq_zero.1 he)
+    cases m
+    · right
+      rwa [show 0 + 1 = 1 from rfl, mul_one] at he
+    refine (a.val_lt.not_ge <| Nat.le_of_mul_le_mul_left ?_ zero_lt_two).elim
+    rw [he]; rw [mul_comm]
+    apply Nat.mul_le_mul_left
+    simp
+  · rintro (rfl | h)
+    · rw [val_zero, mul_zero]
+      apply dvd_zero
+    · rw [h]
 
 中文:
 定理 neg_eq_self_iff
@@ -4179,7 +4285,19 @@ theorem neg_eq_self_iff
   · rintro ⟨m, he⟩
     rcases m with - | m
     · rw [mul_zero, mul_eq_zero] at he
-      rcases he with (⟨⟨
+      rcases he with (⟨⟨⟩⟩ | he)
+      exact Or.inl (a.val_eq_zero.1 he)
+    cases m
+    · right
+      rwa [show 0 + 1 = 1 from rfl, mul_one] at he
+    refine (a.val_lt.not_ge <| Nat.le_of_mul_le_mul_left ?_ zero_lt_two).elim
+    rw [he]; rw [mul_comm]
+    apply Nat.mul_le_mul_left
+    simp
+  · rintro (rfl | h)
+    · rw [val_zero, mul_zero]
+      apply dvd_zero
+    · rw [h]
 
 Depends on / 依赖: Nat.cast_mul, Nat.cast_two, Nat.le_of_mul_le_mul_left, Nat.mul_le_mul_left, Or.inl, a.natCast_zmod_val, a.val_eq_zero, a.val_lt.not_ge, cast_mul, cast_two, conv_lhs, le_of_mul_le_mul_left, mul_comm, mul_eq_zero, mul_le_mul_left, mul_one, mul_zero, natCast_eq_zero_iff, natCast_zmod_val, neg_eq_iff_add_eq_zero
 -/
@@ -4242,7 +4360,7 @@ theorem val_cast_zmod_lt
     rw [← natCast_val]; rw [val_cast_of_lt]
     · apply a.val_lt
     apply lt_of_le_of_lt (Nat.le_of_lt_succ (ZMod.val_lt a)) h
-  · apply
+  · apply lt_of_lt_of_le (ZMod.val_lt _) (le_trans h (Nat.le_succ m))
 
 中文:
 定理 val_cast_zmod_lt
@@ -4254,7 +4372,7 @@ theorem val_cast_zmod_lt
     rw [← natCast_val]; rw [val_cast_of_lt]
     · apply a.val_lt
     apply lt_of_le_of_lt (Nat.le_of_lt_succ (ZMod.val_lt a)) h
-  · apply
+  · apply lt_of_lt_of_le (ZMod.val_lt _) (le_trans h (Nat.le_succ m))
 
 Depends on / 依赖: Nat.exists_eq_add_one_of_ne_zero, Nat.le_of_lt_succ, Nat.le_succ, NeZero, NeZero.ne, ZMod.val_lt, a.val_lt, exists_eq_add_one_of_ne_zero, le_of_lt_succ, le_succ, le_trans, lt_of_le_of_lt, lt_of_lt_of_le, natCast_val, val_cast_of_lt, val_lt
 -/
@@ -4454,7 +4572,9 @@ theorem val_pow
       · by_cases hm : m = 0
         · cases hm; simp [ilt.out]
         · simp only [val_zero, ne_eq, hm, not_false_eq_true, zero_pow, Nat.zero_lt_of_lt h]
-     
+      · exact lt_of_le_of_lt
+         (Nat.pow_le_pow_right (by rwa [gt_iff_lt, ZMod.val_pos]) (Nat.le_succ m)) h
+    rw [pow_succ]; rw [ZMod.val_mul]; rw [ih this]; rw [← pow_succ]; rw [Nat.mod_eq_of_lt h]
 
 中文:
 定理 val_pow
@@ -4468,7 +4588,9 @@ theorem val_pow
       · by_cases hm : m = 0
         · cases hm; simp [ilt.out]
         · simp only [val_zero, ne_eq, hm, not_false_eq_true, zero_pow, Nat.zero_lt_of_lt h]
-     
+      · exact lt_of_le_of_lt
+         (Nat.pow_le_pow_right (by rwa [gt_iff_lt, ZMod.val_pos]) (Nat.le_succ m)) h
+    rw [pow_succ]; rw [ZMod.val_mul]; rw [ih this]; rw [← pow_succ]; rw [Nat.mod_eq_of_lt h]
 
 Depends on / 依赖: Nat.le_succ, Nat.mod_eq_of_lt, Nat.pow_le_pow_right, Nat.zero_lt_of_lt, ZMod.val_mul, ZMod.val_one, ZMod.val_pos, a.val, eq_or_ne, gt_iff_lt, ilt.out, le_succ, lt_of_le_of_lt, mod_eq_of_lt, ne_eq, not_false_eq_true, pow_le_pow_right, pow_succ, val_mul, val_one
 -/
@@ -4538,7 +4660,10 @@ theorem natAbs_min_of_le_div_two
   · rw [mul_zero, zero_add]
   apply hl.trans
   rw [← add_le_add_iff_right x.natAbs]
-  refine le_trans (le_trans ((add_le_add_iff_left _).2 hl) ?_) (Int.na
+  refine le_trans (le_trans ((add_le_add_iff_left _).2 hl) ?_) (Int.natAbs_sub_le _ _)
+  rw [add_sub_cancel_right]; rw [Int.natAbs_mul]; rw [Int.natAbs_natCast]
+  refine le_trans ?_ (Nat.le_mul_of_pos_right _ <| Int.natAbs_pos.2 hm)
+  rw [← mul_two]; apply Nat.div_mul_le_self
 
 中文:
 定理 natAbs_min_of_le_div_two
@@ -4552,7 +4677,10 @@ theorem natAbs_min_of_le_div_two
   · rw [mul_zero, zero_add]
   apply hl.trans
   rw [← add_le_add_iff_right x.natAbs]
-  refine le_trans (le_trans ((add_le_add_iff_left _).2 hl) ?_) (Int.na
+  refine le_trans (le_trans ((add_le_add_iff_left _).2 hl) ?_) (Int.natAbs_sub_le _ _)
+  rw [add_sub_cancel_right]; rw [Int.natAbs_mul]; rw [Int.natAbs_natCast]
+  refine le_trans ?_ (Nat.le_mul_of_pos_right _ <| Int.natAbs_pos.2 hm)
+  rw [← mul_two]; apply Nat.div_mul_le_self
 
 Depends on / 依赖: Int.natAbs_mul, Int.natAbs_natCast, Int.natAbs_pos, Int.natAbs_sub_le, Nat.div_mul_le_self, Nat.le_mul_of_pos_right, add_le_add_iff_left, add_le_add_iff_right, add_sub_cancel_right, div_mul_le_self, eq_or_ne, hl.trans, intCast_eq_intCast_iff_dvd_sub, le_mul_of_pos_right, le_trans, mul_two, mul_zero, natAbs, natAbs_mul, natAbs_natCast
 -/
@@ -4796,7 +4924,7 @@ definition lift
           simp only [f.map_zsmul, zsmul_zero, f.mem_ker, hf]
         · intro h
           exact h (AddSubgroup.mem_zmultiples _)).trans <|
-    (Int.castAddHom (ZMod n)).lif
+    (Int.castAddHom (ZMod n)).liftOfRightInverse cast intCast_zmod_cast
 
 中文:
 定义 lift
@@ -4809,7 +4937,7 @@ definition lift
           simp only [f.map_zsmul, zsmul_zero, f.mem_ker, hf]
         · intro h
           exact h (AddSubgroup.mem_zmultiples _)).trans <|
-    (Int.castAddHom (ZMod n)).lif
+    (Int.castAddHom (ZMod n)).liftOfRightInverse cast intCast_zmod_cast
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mem_zmultiples, Equiv.subtypeEquivRight, Int.castAddHom, castAddHom, f.map_zsmul, f.mem_ker, intCast_zmod_cast, ker_intCastAddHom, liftOfRightInverse, map_zsmul, mem_ker, mem_zmultiples, subtypeEquivRight, zsmul_zero
 -/
@@ -5322,7 +5450,9 @@ lemma Nat.range_mul_add
   refine ⟨fun ⟨a, ha⟩ => ⟨?_, le_iff_exists_add.mpr ⟨_, ha⟩⟩, fun ⟨H₁, H₂⟩ => ?_⟩
   · simpa using congr_arg ((↑) : Nat -> ZMod m) ha
   · obtain ⟨a, ha⟩ := le_iff_exists_add.mp H₂
-    simp only
+    simp only [ha, Nat.cast_add, add_eq_left, ZMod.natCast_eq_zero_iff] at H₁
+    obtain ⟨b, rfl⟩ := H₁
+    exact ⟨b, ha⟩
 
 中文:
 引理 自然数.range_mul_add
@@ -5334,7 +5464,9 @@ lemma Nat.range_mul_add
   refine ⟨fun ⟨a, ha⟩ => ⟨?_, le_iff_exists_add.mpr ⟨_, ha⟩⟩, fun ⟨H₁, H₂⟩ => ?_⟩
   · simpa using congr_arg ((↑) : Nat -> ZMod m) ha
   · obtain ⟨a, ha⟩ := le_iff_exists_add.mp H₂
-    simp only
+    simp only [ha, Nat.cast_add, add_eq_left, ZMod.natCast_eq_zero_iff] at H₁
+    obtain ⟨b, rfl⟩ := H₁
+    exact ⟨b, ha⟩
 
 Depends on / 依赖: Nat.cast_add, Set.mem_ofPred_eq, Set.mem_range, ZMod.natCast_eq_zero_iff, add_comm, add_eq_left, cast_add, congr_arg, eq_comm, le_iff_exists_add, le_iff_exists_add.mp, le_iff_exists_add.mpr, mem_ofPred_eq, mem_range, natCast_eq_zero_iff
 -/
@@ -5363,7 +5495,8 @@ definition Nat.residueClassesEquiv
     ext1
     · simp only [add_comm p.1.val, cast_add, cast_mul, natCast_self, zero_mul, natCast_val,
         cast_id', id_eq, zero_add]
-    · simp only [add_comm p.1.val,
+    · simp only [add_comm p.1.val, mul_add_div (NeZero.pos _),
+(Nat.div_eq_zero_iff).2 .inr p.1.val_lt, add_zero]
 
 中文:
 定义 自然数.residueClassesEquiv
@@ -5375,7 +5508,8 @@ definition Nat.residueClassesEquiv
     ext1
     · simp only [add_comm p.1.val, cast_add, cast_mul, natCast_self, zero_mul, natCast_val,
         cast_id', id_eq, zero_add]
-    · simp only [add_comm p.1.val,
+    · simp only [add_comm p.1.val, mul_add_div (NeZero.pos _),
+(Nat.div_eq_zero_iff).2 .inr p.1.val_lt, add_zero]
 -/
 def Nat.residueClassesEquiv (N : Nat) [NeZero N] : Nat ≃ ZMod N × Nat where
   toFun n := (↑n, n / N)

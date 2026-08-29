@@ -57,7 +57,7 @@ lemma exists_hasLaw_indepFun
   rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [map_id']
   congr
   funext i
-  exact ((measur
+  exact ((measurePreserving_eval_infinitePi μ i).map_eq).symm
 
 中文:
 引理 存在_hasLaw_indepFun
@@ -69,7 +69,7 @@ lemma exists_hasLaw_indepFun
   rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [map_id']
   congr
   funext i
-  exact ((measur
+  exact ((measurePreserving_eval_infinitePi μ i).map_eq).symm
 
 Depends on / 依赖: Function, Function.eval, MeasurePreserving, MeasurePreserving.hasLaw, fun_prop, hasLaw, iIndepFun_iff_map_fun_eq_infinitePi_map, infer_instance, infinitePi, map_eq, map_id, measurePreserving_eval_infinitePi
 -/

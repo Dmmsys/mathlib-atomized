@@ -185,7 +185,17 @@ lemma isNilpotent_iff
     exact isNilpotent_sum (fun i _ => by simpa only [isNilpotent_monomial_iff] using h i)
   · have hr : IsNilpotent (C r) := by
       obtain ⟨k, hk⟩ := hpr
-   
+      replace hp : eval 0 p = 0 := by rwa [coeff_zero_eq_aeval_zero] at hp₀
+      refine isNilpotent_C_iff.mpr ⟨k, ?_⟩
+      simpa [coeff_zero_eq_aeval_zero, hp] using congr_arg (fun q => coeff q 0) hk
+    rcases i with - | i
+    · simpa [hp₀] using hr
+    simp only [coeff_add, coeff_C_succ, add_zero]
+    apply hp
+    simpa using Commute.isNilpotent_sub (Commute.all _ _) hpr hr
+  · rcases i with - | i
+    · simp
+    simpa using hnp (isNilpotent_mul_X_iff.mp hpX) i
 
 中文:
 引理 isNilpotent_iff
@@ -196,7 +206,17 @@ lemma isNilpotent_iff
     exact isNilpotent_sum (fun i _ => by simpa only [isNilpotent_monomial_iff] using h i)
   · have hr : IsNilpotent (C r) := by
       obtain ⟨k, hk⟩ := hpr
-   
+      replace hp : eval 0 p = 0 := by rwa [coeff_zero_eq_aeval_zero] at hp₀
+      refine isNilpotent_C_iff.mpr ⟨k, ?_⟩
+      simpa [coeff_zero_eq_aeval_zero, hp] using congr_arg (fun q => coeff q 0) hk
+    rcases i with - | i
+    · simpa [hp₀] using hr
+    simp only [coeff_add, coeff_C_succ, add_zero]
+    apply hp
+    simpa using Commute.isNilpotent_sub (Commute.all _ _) hpr hr
+  · rcases i with - | i
+    · simp
+    simpa using hnp (isNilpotent_mul_X_iff.mp hpX) i
 
 Depends on / 依赖: IsTopologicalSemiring, IsTopologicalSemiring.toIsSemitopologicalSemiring, toIsSemitopologicalSemiring
 -/
@@ -232,7 +252,7 @@ lemma isNilpotent_reflect_iff
   · simpa [tsub_tsub_cancel_of_le hi] using h (N - i)
   · simp [coeff_eq_zero_of_natDegree_lt <| lt_of_le_of_lt hN hi]
   · simpa [hi, revAt_le] using h (N - i)
-  · simpa [revAt_eq
+  · simpa [revAt_eq_self_of_lt hi] using h i
 
 中文:
 引理 isNilpotent_reflect_iff
@@ -243,7 +263,7 @@ lemma isNilpotent_reflect_iff
   · simpa [tsub_tsub_cancel_of_le hi] using h (N - i)
   · simp [coeff_eq_zero_of_natDegree_lt <| lt_of_le_of_lt hN hi]
   · simpa [hi, revAt_le] using h (N - i)
-  · simpa [revAt_eq
+  · simpa [revAt_eq_self_of_lt hi] using h i
 
 Depends on / 依赖: IsSemitopologicalRing, IsSemitopologicalRing.toIsTopologicalAddGroup, NonUnitalNonAssocRing, toIsTopologicalAddGroup
 -/
@@ -284,7 +304,17 @@ theorem isUnit_of_coeff_isUnit_isNilpotent
     exact hunit.map C
   set P₁ := P.eraseLead with hP₁
   suffices IsUnit P₁ by
-    rw [← eraseLead_add_monomial_natDegree_leadingCoeff
+    rw [← eraseLead_add_monomial_natDegree_leadingCoeff P]; rw [← C_mul_X_pow_eq_monomial]; rw [← hP₁]
+    refine IsNilpotent.isUnit_add_left_of_commute ?_ this (Commute.all _ _)
+    exact isNilpotent_C_mul_pow_X_of_isNilpotent _ (hnil _ hdeg)
+  have hdeg₂ := lt_of_le_of_lt P.eraseLead_natDegree_le (Nat.sub_lt
+    (Nat.pos_of_ne_zero hdeg) zero_lt_one)
+  refine hind P₁.natDegree ?_ ?_ (fun i hi => ?_) rfl
+  · simp_rw [P₁, ← h, hdeg₂]
+  · simp_rw [P₁, eraseLead_coeff_of_ne _ (Ne.symm hdeg), hunit]
+  · by_cases! H : i <= P₁.natDegree
+    · simp_rw [P₁, eraseLead_coeff_of_ne _ (ne_of_lt (lt_of_le_of_lt H hdeg₂)), hnil i hi]
+    · simp_rw [coeff_eq_zero_of_natDegree_lt H, IsNilpotent.zero]
 
 中文:
 定理 isUnit_of_coeff_isUnit_isNilpotent
@@ -296,7 +326,17 @@ theorem isUnit_of_coeff_isUnit_isNilpotent
     exact hunit.map C
   set P₁ := P.eraseLead with hP₁
   suffices IsUnit P₁ by
-    rw [← eraseLead_add_monomial_natDegree_leadingCoeff
+    rw [← eraseLead_add_monomial_natDegree_leadingCoeff P]; rw [← C_mul_X_pow_eq_monomial]; rw [← hP₁]
+    refine IsNilpotent.isUnit_add_left_of_commute ?_ this (Commute.all _ _)
+    exact isNilpotent_C_mul_pow_X_of_isNilpotent _ (hnil _ hdeg)
+  have hdeg₂ := lt_of_le_of_lt P.eraseLead_natDegree_le (Nat.sub_lt
+    (Nat.pos_of_ne_zero hdeg) zero_lt_one)
+  refine hind P₁.natDegree ?_ ?_ (fun i hi => ?_) rfl
+  · simp_rw [P₁, ← h, hdeg₂]
+  · simp_rw [P₁, eraseLead_coeff_of_ne _ (Ne.symm hdeg), hunit]
+  · by_cases! H : i <= P₁.natDegree
+    · simp_rw [P₁, eraseLead_coeff_of_ne _ (ne_of_lt (lt_of_le_of_lt H hdeg₂)), hnil i hi]
+    · simp_rw [coeff_eq_zero_of_natDegree_lt H, IsNilpotent.zero]
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, Commute, Commute.all, DiscreteTopology, DiscreteTopology.topologicalSemiring, IsNilpotent, IsNilpotent.isUnit_add_left_of_commute, IsUnit, Nat.strong_induction_on, P.eraseL, P.eraseLead, P.natDegree, TopologicalSpace, eq_C_of_natDegree_eq_zero, eraseL, eraseLead, eraseLead_add_monomial_natDegree_leadingCoeff, generalizing, hunit.map, isNilpotent_C_mul_pow_X_of_isNilpotent
 -/
@@ -336,7 +376,14 @@ theorem coeff_isUnit_isNilpotent_of_isUnit
     rw [nilpotent_iff_mem_prime]
     intro I hI
     let f := mapRingHom (Ideal.Quotient.mk I)
-    have 
+    have hPQ : degree (f P) = 0 ∧ degree (f Q) = 0 := by
+      rw [← Nat.WithBot.add_eq_zero_iff]; rw [← degree_mul]; rw [← map_mul]; rw [hQ]; rw [map_one]; rw [degree_one]
+    have hcoeff : (f P).coeff n = 0 := by
+      refine coeff_eq_zero_of_degree_lt ?_
+      rw [hPQ.1]
+      exact WithBot.coe_pos.2 hn.bot_lt
+    rw [coe_mapRingHom]; rw [coeff_map]; rw [← RingHom.mem_ker]; rw [Ideal.mk_ker] at hcoeff
+    exact hcoeff
 
 中文:
 定理 coeff_isUnit_isNilpotent_of_isUnit
@@ -351,7 +398,14 @@ theorem coeff_isUnit_isNilpotent_of_isUnit
     rw [nilpotent_iff_mem_prime]
     intro I hI
     let f := mapRingHom (Ideal.Quotient.mk I)
-    have 
+    have hPQ : degree (f P) = 0 ∧ degree (f Q) = 0 := by
+      rw [← Nat.WithBot.add_eq_zero_iff]; rw [← degree_mul]; rw [← map_mul]; rw [hQ]; rw [map_one]; rw [degree_one]
+    have hcoeff : (f P).coeff n = 0 := by
+      refine coeff_eq_zero_of_degree_lt ?_
+      rw [hPQ.1]
+      exact WithBot.coe_pos.2 hn.bot_lt
+    rw [coe_mapRingHom]; rw [coeff_map]; rw [← RingHom.mem_ker]; rw [Ideal.mk_ker] at hcoeff
+    exact hcoeff
 
 Depends on / 依赖: DiscreteTopology, DiscreteTopology.topologicalRing, Ideal.Quotient.mk, IsUnit, IsUnit.exists_right_inv, Nat.WithBot.add_eq_zero_iff, Q.coeff, Quotient, TopologicalSpace, WithBot, add_eq_zero_iff, coeff_eq_zero_of_degree_lt, coeff_one_zero, degree, degree_mul, degree_one, exists_right_inv, hcoeff, mapRingHom, map_mul
 -/

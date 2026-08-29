@@ -37,7 +37,16 @@ theorem isUnit_iff_not_dvd_char_of_ringChar_ne_zero
     have h₃ : ¬ringChar R ∣ q := by
       rintro ⟨r, hr⟩
       rw [hr]; rw [← mul_assoc]; rw [mul_comm p]; rw [mul_assoc] at hq
-   
+      nth_rw 1 [← mul_one (ringChar R)] at hq
+      exact Nat.Prime.not_dvd_one hp ⟨r, mul_left_cancel₀ hR hq⟩
+    simp_all only [ne_eq]
+    grind [ringChar.dvd]
+  · intro h
+    rcases (hp.coprime_iff_not_dvd.mpr h).isCoprime with ⟨a, b, hab⟩
+    apply_fun ((↑) : Int -> R) at hab
+    push_cast at hab
+    rw [hch]; rw [mul_zero]; rw [add_zero]; rw [mul_comm] at hab
+    exact .of_mul_eq_one a hab
 
 中文:
 定理 isUnit_iff_not_dvd_char_of_ringChar_ne_zero
@@ -51,7 +60,16 @@ theorem isUnit_iff_not_dvd_char_of_ringChar_ne_zero
     have h₃ : ¬ringChar R ∣ q := by
       rintro ⟨r, hr⟩
       rw [hr]; rw [← mul_assoc]; rw [mul_comm p]; rw [mul_assoc] at hq
-   
+      nth_rw 1 [← mul_one (ringChar R)] at hq
+      exact Nat.Prime.not_dvd_one hp ⟨r, mul_left_cancel₀ hR hq⟩
+    simp_all only [ne_eq]
+    grind [ringChar.dvd]
+  · intro h
+    rcases (hp.coprime_iff_not_dvd.mpr h).isCoprime with ⟨a, b, hab⟩
+    apply_fun ((↑) : Int -> R) at hab
+    push_cast at hab
+    rw [hch]; rw [mul_zero]; rw [add_zero]; rw [mul_comm] at hab
+    exact .of_mul_eq_one a hab
 
 Depends on / 依赖: CharP.cast_eq_zero, Fact.out, IsUnit, IsUnit.exists_left_inv, Nat.Prime.not_dvd_one, apply_fun, cast_eq_zero, coprime_iff_not_dvd, exists_left_inv, hp.coprime_iff_not_dvd.mpr, isCoprime, mul_assoc, mul_comm, mul_one, ne_eq, not_dvd_one, nth_rw, p.Prime, ringChar, ringChar.dvd
 -/
@@ -111,7 +129,12 @@ Int.natCast_dvd_natCast.mp
       fun h => ?_⟩
   by_contra h₀
   rcases exists_prime_addOrderOf_dvd_card p h with ⟨r, hr⟩
-  have hr₁ := addOrderOf_nsmul_eq_zer
+  have hr₁ := addOrderOf_nsmul_eq_zero r
+  rw [hr]; rw [nsmul_eq_mul] at hr₁
+  rcases IsUnit.exists_left_inv ((isUnit_iff_not_dvd_char R p).mpr h₀) with ⟨u, hu⟩
+  apply_fun (· * ·) u at hr₁
+  rw [mul_zero]; rw [← mul_assoc]; rw [hu]; rw [one_mul] at hr₁
+  exact mt AddMonoid.addOrderOf_eq_one_iff.mpr (ne_of_eq_of_ne hr (Nat.Prime.ne_one Fact.out)) hr₁
 
 中文:
 定理 prime_dvd_char_iff_dvd_card
@@ -126,7 +149,12 @@ Int.natCast_dvd_natCast.mp
       fun h => ?_⟩
   by_contra h₀
   rcases exists_prime_addOrderOf_dvd_card p h with ⟨r, hr⟩
-  have hr₁ := addOrderOf_nsmul_eq_zer
+  have hr₁ := addOrderOf_nsmul_eq_zero r
+  rw [hr]; rw [nsmul_eq_mul] at hr₁
+  rcases IsUnit.exists_left_inv ((isUnit_iff_not_dvd_char R p).mpr h₀) with ⟨u, hu⟩
+  apply_fun (· * ·) u at hr₁
+  rw [mul_zero]; rw [← mul_assoc]; rw [hu]; rw [one_mul] at hr₁
+  exact mt AddMonoid.addOrderOf_eq_one_iff.mpr (ne_of_eq_of_ne hr (Nat.Prime.ne_one Fact.out)) hr₁
 
 Depends on / 依赖: AddMonoid, AddMonoid.ad, CharP.intCast_eq_zero_iff, Fintype, Fintype.card, Int.natCast_dvd_natCast.mp, IsUnit, IsUnit.exists_left_inv, Nat.cast_card_eq_zero, addOrderOf_nsmul_eq_zero, apply_fun, cast_card_eq_zero, exists_left_inv, exists_prime_addOrderOf_dvd_card, h.trans, intCast_eq_zero_iff, isUnit_iff_not_dvd_char, mod_cast, mul_assoc, mul_zero
 -/

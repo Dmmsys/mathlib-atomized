@@ -35,7 +35,9 @@ lemma integral_of_ae_eq_zero_or_one
   rw [(Measure.ae_eq_or_eq_iff_map_eq_dirac_add_dirac hXmeas zero_ne_one).1 hX]
   by_cases h : μ {ω | X ω = 1} = ⊤
   · simp [h, Measure.real, Set.preimage, integral_undef, Integrable, HasFiniteIntegral]
-  rw [integral_add_measu
+  rw [integral_add_measure ⟨by fun_prop]; rw [by simp [HasFiniteIntegral]⟩ <|
+    .smul_measure (by simp [integrable_dirac]) h]
+  simp [Measure.real, Set.preimage]
 
 中文:
 引理 integral_of_ae_eq_zero_or_one
@@ -45,7 +47,9 @@ lemma integral_of_ae_eq_zero_or_one
   rw [(Measure.ae_eq_or_eq_iff_map_eq_dirac_add_dirac hXmeas zero_ne_one).1 hX]
   by_cases h : μ {ω | X ω = 1} = ⊤
   · simp [h, Measure.real, Set.preimage, integral_undef, Integrable, HasFiniteIntegral]
-  rw [integral_add_measu
+  rw [integral_add_measure ⟨by fun_prop]; rw [by simp [HasFiniteIntegral]⟩ <|
+    .smul_measure (by simp [integrable_dirac]) h]
+  simp [Measure.real, Set.preimage]
 
 Depends on / 依赖: HasFiniteIntegral, Integrable, Measure, Measure.ae_eq_or_eq_iff_map_eq_dirac_add_dirac, Measure.real, Set.preimage, ae_eq_or_eq_iff_map_eq_dirac_add_dirac, fun_prop, hXmeas, integrable_dirac, integral_add_measure, integral_map, integral_undef, preimage, smul_measure, symm.trans, zero_ne_one
 -/
@@ -112,7 +116,29 @@ lemma condVar_of_ae_eq_zero_or_one
       _ =ᵐ[μ] Var[Y; μ | m] := condVar_congr_ae hXY
       _ =ᵐ[μ] μ[Y | m] * μ[1 - Y | m] := by
         refine this hm hYmeas.aemeasurable ?_ hYmeas
-        filter_upwards [hX, hXY]
+        filter_upwards [hX, hXY] with ω hXω hXYω
+        simp [hXω, ← hXYω]
+      _ =ᵐ[μ] μ[X | m] * μ[1 - X | m] := by
+        refine .mul ?_ ?_ <;>
+exact condExp_congr_ae by filter_upwards [hXY] with ω hω; simp [hω]
+  calc
+    _ =ᵐ[μ] μ[X ^ 2 | m] - μ[X | m] ^ 2 :=
+condVar_ae_eq_condExp_sq_sub_sq_condExp hm .of_bound hXmeas.aestronglyMeasurable 1 by
+        filter_upwards [hX]; rintro ω (hω | hω) <;> simp [hω]
+    _ =ᵐ[μ] μ[X | m] - μ[X | m] ^ 2 := by
+      refine .sub ?_ ae_eq_rfl
+exact condExp_congr_ae by filter_upwards [hX]; rintro ω (hω | hω) <;> simp [hω]
+    _ =ᵐ[μ] μ[X | m] * μ[1 - X | m] := by
+      rw [sq]; rw [← one_sub_mul]; rw [mul_comm]
+      refine .mul ae_eq_rfl ?_
+      calc
+        1 - μ[X | m]
+        _ = μ[1 | m] - μ[X | m] := by simp [Pi.one_def, hm]
+        _ =ᵐ[μ] μ[1 - X | m] := by
+          refine (condExp_sub (integrable_const _)
+            (.of_bound (C := 1) hXmeas.aestronglyMeasurable ?_) _).symm
+          filter_upwards [hX]
+          rintro ω (hω | hω) <;> simp [hω]
 
 中文:
 引理 condVar_of_ae_eq_zero_or_one
@@ -125,7 +151,29 @@ lemma condVar_of_ae_eq_zero_or_one
       _ =ᵐ[μ] Var[Y; μ | m] := condVar_congr_ae hXY
       _ =ᵐ[μ] μ[Y | m] * μ[1 - Y | m] := by
         refine this hm hYmeas.aemeasurable ?_ hYmeas
-        filter_upwards [hX, hXY]
+        filter_upwards [hX, hXY] with ω hXω hXYω
+        simp [hXω, ← hXYω]
+      _ =ᵐ[μ] μ[X | m] * μ[1 - X | m] := by
+        refine .mul ?_ ?_ <;>
+exact condExp_congr_ae by filter_upwards [hXY] with ω hω; simp [hω]
+  calc
+    _ =ᵐ[μ] μ[X ^ 2 | m] - μ[X | m] ^ 2 :=
+condVar_ae_eq_condExp_sq_sub_sq_condExp hm .of_bound hXmeas.aestronglyMeasurable 1 by
+        filter_upwards [hX]; rintro ω (hω | hω) <;> simp [hω]
+    _ =ᵐ[μ] μ[X | m] - μ[X | m] ^ 2 := by
+      refine .sub ?_ ae_eq_rfl
+exact condExp_congr_ae by filter_upwards [hX]; rintro ω (hω | hω) <;> simp [hω]
+    _ =ᵐ[μ] μ[X | m] * μ[1 - X | m] := by
+      rw [sq]; rw [← one_sub_mul]; rw [mul_comm]
+      refine .mul ae_eq_rfl ?_
+      calc
+        1 - μ[X | m]
+        _ = μ[1 | m] - μ[X | m] := by simp [Pi.one_def, hm]
+        _ =ᵐ[μ] μ[1 - X | m] := by
+          refine (condExp_sub (integrable_const _)
+            (.of_bound (C := 1) hXmeas.aestronglyMeasurable ?_) _).symm
+          filter_upwards [hX]
+          rintro ω (hω | hω) <;> simp [hω]
 
 Depends on / 依赖: AEMeasurable, Measurable, aemeasurable, condExp_congr_ae, condVar_ae_eq_condExp_sq_sub_sq_co, condVar_congr_ae, filter_upwards, hXmeas, hYmeas, hYmeas.aemeasurable
 -/

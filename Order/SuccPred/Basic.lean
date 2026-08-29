@@ -226,7 +226,7 @@ definition SuccOrder.ofLinearWellFoundedLT
       rw [not_isMax_iff] at ha
       simp_rw [Set.Nonempty, mem_Ioi, dif_pos ha]
       exact ⟨wellFounded_lt.min_le (s := Ioi _), lt_of_lt_of_le (wellFounded_lt.prop_min ha)⟩)
-    fun _ ha => dif_neg (no
+    fun _ ha => dif_neg (not_not_intro ha <| not_isMax_iff.mpr ·)
 
 中文:
 定义 Succ序.ofLinearWellFoundedLT
@@ -236,7 +236,7 @@ definition SuccOrder.ofLinearWellFoundedLT
       rw [not_isMax_iff] at ha
       simp_rw [Set.Nonempty, mem_Ioi, dif_pos ha]
       exact ⟨wellFounded_lt.min_le (s := Ioi _), lt_of_lt_of_le (wellFounded_lt.prop_min ha)⟩)
-    fun _ ha => dif_neg (no
+    fun _ ha => dif_neg (not_not_intro ha <| not_isMax_iff.mpr ·)
 
 Depends on / 依赖: Nonempty, Set.Nonempty, dif_neg, dif_pos, lt_of_lt_of_le, mem_Ioi, min_le, not_isMax_iff, not_isMax_iff.mpr, not_not_intro, ofCore, prop_min, simp_rw, wellFounded_lt, wellFounded_lt.min, wellFounded_lt.min_le, wellFounded_lt.prop_min
 -/
@@ -755,7 +755,7 @@ theorem isMax_iterate_succ_of_eq_of_ne
     exact isMax_iterate_succ_of_eq_of_lt h_eq.symm (lt_of_le_of_ne h h_ne.symm)
 
 @[to_dual (attr := deprecated "use `gcongr`/`grw` and `lt_succ_of_not_isMax"
-  (since := "2026-06-0
+  (since := "2026-06-06"))]
 
 中文:
 定理 isMax_iterate_succ_of_eq_of_ne
@@ -767,7 +767,7 @@ theorem isMax_iterate_succ_of_eq_of_ne
     exact isMax_iterate_succ_of_eq_of_lt h_eq.symm (lt_of_le_of_ne h h_ne.symm)
 
 @[to_dual (attr := deprecated "use `gcongr`/`grw` and `lt_succ_of_not_isMax"
-  (since := "2026-06-0
+  (since := "2026-06-06"))]
 
 Depends on / 依赖: h_eq, h_eq.symm, h_ne, h_ne.symm, isMax_iterate_succ_of_eq_of_lt, le_total, lt_of_le_of_ne
 -/
@@ -2893,7 +2893,17 @@ theorem pred_succ_iterate_of_not_isMax
     have h_not_max : ¬IsMax (succ^[n - 1] i) := by
       rcases n with - | n
       · simpa using hin
-      rw [Nat.succ_sub_succ_eq_sub]; rw [Nat.sub_z
+      rw [Nat.succ_sub_succ_eq_sub]; rw [Nat.sub_zero] at hn ⊢
+      have h_sub_le : succ^[n] i <= succ^[n.succ] i := by
+        rw [Function.iterate_succ']
+        exact le_succ _
+      refine fun h_max => hin fun j hj => ?_
+      have hj_le : j <= succ^[n] i := h_max (h_sub_le.trans hj)
+      exact hj_le.trans h_sub_le
+    rw [Function.iterate_succ]; rw [Function.iterate_succ']
+    simp only [Function.comp_apply]
+    rw [pred_succ_of_not_isMax hin]
+    exact hn h_not_max
 
 中文:
 定理 pred_succ_iterate_of_not_isMax
@@ -2906,7 +2916,17 @@ theorem pred_succ_iterate_of_not_isMax
     have h_not_max : ¬IsMax (succ^[n - 1] i) := by
       rcases n with - | n
       · simpa using hin
-      rw [Nat.succ_sub_succ_eq_sub]; rw [Nat.sub_z
+      rw [Nat.succ_sub_succ_eq_sub]; rw [Nat.sub_zero] at hn ⊢
+      have h_sub_le : succ^[n] i <= succ^[n.succ] i := by
+        rw [Function.iterate_succ']
+        exact le_succ _
+      refine fun h_max => hin fun j hj => ?_
+      have hj_le : j <= succ^[n] i := h_max (h_sub_le.trans hj)
+      exact hj_le.trans h_sub_le
+    rw [Function.iterate_succ]; rw [Function.iterate_succ']
+    simp only [Function.comp_apply]
+    rw [pred_succ_of_not_isMax hin]
+    exact hn h_not_max
 
 Depends on / 依赖: Function, Function.iterate_succ, Function.iterate_zero, Nat.sub_zero, Nat.succ_sub_succ_eq_sub, h_max, h_not_max, h_sub_le, h_sub_le.trans, hj_le, hj_le.trans, iterate_succ, iterate_zero, le_succ, n.succ, sub_zero, succ_sub_succ_eq_sub
 -/
@@ -2976,7 +2996,21 @@ instance :
     dsimp only at ha
     split_ifs at ha with ha'
     · exact (not_top_le_coe _ ha).elim
-    · r
+    · rw [coe_le_coe, succ_le_iff_isMax, ← succ_eq_iff_isMax] at ha
+      exact (ha' ha).elim
+  succ_le_of_lt {a b} h := by
+    cases b
+    · exact le_top
+    cases a
+    · exact (not_top_lt h).elim
+    rw [coe_lt_coe] at h
+    change ite _ _ _ <= _
+    split_ifs with ha
+    · rw [succ_eq_iff_isMax] at ha
+      exact (ha.not_lt h).elim
+    · exact coe_le_coe.2 (succ_le_of_lt h)
+
+@[to_dual (attr := simp)]
 
 中文:
 实例 :
@@ -2994,7 +3028,21 @@ instance :
     dsimp only at ha
     split_ifs at ha with ha'
     · exact (not_top_le_coe _ ha).elim
-    · r
+    · rw [coe_le_coe, succ_le_iff_isMax, ← succ_eq_iff_isMax] at ha
+      exact (ha' ha).elim
+  succ_le_of_lt {a b} h := by
+    cases b
+    · exact le_top
+    cases a
+    · exact (not_top_lt h).elim
+    rw [coe_lt_coe] at h
+    change ite _ _ _ <= _
+    split_ifs with ha
+    · rw [succ_eq_iff_isMax] at ha
+      exact (ha.not_lt h).elim
+    · exact coe_le_coe.2 (succ_le_of_lt h)
+
+@[to_dual (attr := simp)]
 
 Depends on / 依赖: coe_le_coe, coe_lt_coe, isMax_top, le_succ, le_top, max_of_succ_le, not_top_le_coe, not_top_lt, split_ifs, succ_eq_iff_isM, succ_eq_iff_isMax, succ_le_iff_isMax, succ_le_of_lt
 -/
@@ -3122,7 +3170,10 @@ instance :
     · exact (min_of_le_pred <| coe_le_coe.1 ha).withTop
   le_pred_of_lt {a b} h := by
     cases a
-    · exact (le_top.not_gt h).e
+    · exact (le_top.not_gt h).elim
+    cases b
+    · exact coe_le_coe.2 le_top
+    exact coe_le_coe.2 (le_pred_of_lt <| coe_lt_coe.1 h)
 
 中文:
 实例 :
@@ -3136,7 +3187,10 @@ instance :
     · exact (min_of_le_pred <| coe_le_coe.1 ha).withTop
   le_pred_of_lt {a b} h := by
     cases a
-    · exact (le_top.not_gt h).e
+    · exact (le_top.not_gt h).elim
+    cases b
+    · exact coe_le_coe.2 le_top
+    exact coe_le_coe.2 (le_pred_of_lt <| coe_lt_coe.1 h)
 
 Depends on / 依赖: Option.some, coe_le_coe, coe_lt_coe, coe_lt_top, le_pred_of_lt, le_top, le_top.not_gt, min_of_le_pred, not_ge, not_gt, pred_le, withTop
 -/
@@ -3322,7 +3376,24 @@ instance Set.OrdConnected.predOrder
     dsimp at h
     split_ifs at h with h'
     · simp only [Subtype.mk_le_mk, Order.le_pred_iff_isMin] at h
-      rintro ⟨y, _⟩ 
+      rintro ⟨y, _⟩ hy
+      simp [h hy]
+    · rintro ⟨y, hy⟩ h
+      rcases h.lt_or_eq with h | h
+      · simp only [Subtype.mk_lt_mk] at h
+        have := h.le_pred
+        absurd h'
+        apply out' hy hx
+        simp [this, Order.pred_le]
+      · simp [h]
+  le_pred_of_lt := @fun ⟨b, hb⟩ ⟨c, hc⟩ h => by
+    rw [Subtype.mk_lt_mk] at h
+    dsimp only
+    split
+    · exact h.le_pred
+    · exact h.le
+
+@[simp, norm_cast]
 
 中文:
 实例 集合.序连通.predOrder
@@ -3333,7 +3404,24 @@ instance Set.OrdConnected.predOrder
     dsimp at h
     split_ifs at h with h'
     · simp only [Subtype.mk_le_mk, Order.le_pred_iff_isMin] at h
-      rintro ⟨y, _⟩ 
+      rintro ⟨y, _⟩ hy
+      simp [h hy]
+    · rintro ⟨y, hy⟩ h
+      rcases h.lt_or_eq with h | h
+      · simp only [Subtype.mk_lt_mk] at h
+        have := h.le_pred
+        absurd h'
+        apply out' hy hx
+        simp [this, Order.pred_le]
+      · simp [h]
+  le_pred_of_lt := @fun ⟨b, hb⟩ ⟨c, hc⟩ h => by
+    rw [Subtype.mk_lt_mk] at h
+    dsimp only
+    split
+    · exact h.le_pred
+    · exact h.le
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Order.pred
 -/

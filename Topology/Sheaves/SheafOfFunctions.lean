@@ -52,7 +52,28 @@ theorem toTypes_isSheaf
   -- We use the sheaf condition in terms of unique gluing
   -- U is a family of open sets, indexed by `ι` and `sf` is a compatible family of sections.
   -- In the informal comments below, I'll just write `U` to represent the union.
-    -- O
+    -- Our first goal is to define a function "lifted" to all of `U`.
+    -- We do this one point at a time. Using the axiom of choice, we can pick for each
+    -- `x : ↑(iSup U)` an index `i : ι` such that `x` lies in `U i`
+    choose index index_spec using fun x : ↑(iSup U) => Opens.mem_iSup.mp x.2
+    -- Using this data, we can glue our functions together to a single section
+    let s : forall x : ↑(iSup U), T x := fun x => sf (index x) ⟨x.1, index_spec x⟩
+    refine ⟨s, ?_, ?_⟩
+    · intro i
+      funext x
+      -- Now we need to verify that this lifted function restricts correctly to each set `U i`.
+      -- Of course, the difficulty is that at any given point `x ∈ U i`,
+      -- we may have used the axiom of choice to pick a different `j` with `x ∈ U j`
+      -- when defining the function.
+      -- Thus we'll need to use the fact that the restrictions are compatible.
+      exact congr_fun (hsf (index ⟨x, _⟩) i) ⟨x, ⟨index_spec ⟨x.1, _⟩, x.2⟩⟩
+    · -- Now we just need to check that the lift we picked was the only possible one.
+      -- So we suppose we had some other gluing `t` of our sections
+      intro t ht
+      -- and observe that we need to check that it agrees with our choice
+      -- for each `x ∈ ↑(iSup U)`.
+      funext x
+      exact congr_fun (ht (index x)) ⟨x.1, index_spec x⟩
 
 中文:
 定理 toTypes_isSheaf
@@ -62,7 +83,28 @@ theorem toTypes_isSheaf
   -- We use the sheaf condition in terms of unique gluing
   -- U is a family of open sets, indexed by `ι` and `sf` is a compatible family of sections.
   -- In the informal comments below, I'll just write `U` to represent the union.
-    -- O
+    -- Our first goal is to define a function "lifted" to all of `U`.
+    -- We do this one point at a time. Using the axiom of choice, we can pick for each
+    -- `x : ↑(iSup U)` an index `i : ι` such that `x` lies in `U i`
+    choose index index_spec using fun x : ↑(iSup U) => Opens.mem_iSup.mp x.2
+    -- Using this data, we can glue our functions together to a single section
+    let s : forall x : ↑(iSup U), T x := fun x => sf (index x) ⟨x.1, index_spec x⟩
+    refine ⟨s, ?_, ?_⟩
+    · intro i
+      funext x
+      -- Now we need to verify that this lifted function restricts correctly to each set `U i`.
+      -- Of course, the difficulty is that at any given point `x ∈ U i`,
+      -- we may have used the axiom of choice to pick a different `j` with `x ∈ U j`
+      -- when defining the function.
+      -- Thus we'll need to use the fact that the restrictions are compatible.
+      exact congr_fun (hsf (index ⟨x, _⟩) i) ⟨x, ⟨index_spec ⟨x.1, _⟩, x.2⟩⟩
+    · -- Now we just need to check that the lift we picked was the only possible one.
+      -- So we suppose we had some other gluing `t` of our sections
+      intro t ht
+      -- and observe that we need to check that it agrees with our choice
+      -- for each `x ∈ ↑(iSup U)`.
+      funext x
+      exact congr_fun (ht (index x)) ⟨x.1, index_spec x⟩
 
 Depends on / 依赖: isSheaf_of_isSheafUniqueGluing_types
 -/

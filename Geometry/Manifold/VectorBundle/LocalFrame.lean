@@ -557,7 +557,11 @@ lemma contMDiffOn_of_coeff
   have := fintypeOfFiniteDimensional hs hx
   have this (i) : CMDiff[u] n (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
     (h i).smul_section (hs.contMDiffOn i)
-  have almost : CMDiff[u] n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.c
+  have almost : CMDiff[u] n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) :=
+    .sum_section fun i _ => this i
+  apply almost.congr
+  intro y hy
+  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
 
 中文:
 引理 contMDiffOn_of_coeff
@@ -567,7 +571,11 @@ lemma contMDiffOn_of_coeff
   have := fintypeOfFiniteDimensional hs hx
   have this (i) : CMDiff[u] n (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
     (h i).smul_section (hs.contMDiffOn i)
-  have almost : CMDiff[u] n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.c
+  have almost : CMDiff[u] n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) :=
+    .sum_section fun i _ => this i
+  apply almost.congr
+  intro y hy
+  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
 
 Depends on / 依赖: CMDiff, LinearMap, LinearMap.piApply, TotalSpace, TotalSpace.mk, almost, almost.congr, coeff_sum_eq, contMDiffOn, eq_empty_or_nonempty, fintypeOfFiniteDimensional, hs.coeff, hs.coeff_sum_eq, hs.contMDiffOn, piApply, smul_section, sum_section, u.eq_empty_or_nonempty
 -/
@@ -594,7 +602,7 @@ lemma contMDiffAt_of_coeff
   have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
   have almost : CMDiffAt n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) x :=
     .sum_section (fun i _ => (h i).smul_section <| (hs.contMDiffOn i).contMDiffAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_
+exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
 
 中文:
 引理 contMDiffAt_of_coeff
@@ -603,7 +611,7 @@ exact almost.congr_of_eventuallyEq (hs.eventually_
   have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
   have almost : CMDiffAt n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) x :=
     .sum_section (fun i _ => (h i).smul_section <| (hs.contMDiffOn i).contMDiffAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_
+exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
 
 Depends on / 依赖: CMDiffAt, LinearMap, LinearMap.piApply, almost, almost.congr_of_eventuallyEq, congr_of_eventuallyEq, contMDiffAt, contMDiffOn, eventually_eq_sum_coeff_smul, fintypeOfFiniteDimensional, hs.coeff, hs.contMDiffOn, hs.eventually_eq_sum_coeff_smul, mem_of_mem_nhds, piApply, smul_section, sum_section
 -/
@@ -655,7 +663,11 @@ lemma mdifferentiableOn_of_coeff
   have := fintypeOfFiniteDimensional hs hx
   have this (i) : MDiff[u] (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
     (h i).smul_section ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero)
-  have almost : MDiff[u] (T% (fun x => ∑ i,
+  have almost : MDiff[u] (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) :=
+    .sum_section (fun i _ _ hx => this i _ hx)
+  apply almost.congr
+  intro y hy
+  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
 
 中文:
 引理 mdifferentiableOn_of_coeff
@@ -665,7 +677,11 @@ lemma mdifferentiableOn_of_coeff
   have := fintypeOfFiniteDimensional hs hx
   have this (i) : MDiff[u] (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
     (h i).smul_section ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero)
-  have almost : MDiff[u] (T% (fun x => ∑ i,
+  have almost : MDiff[u] (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) :=
+    .sum_section (fun i _ _ hx => this i _ hx)
+  apply almost.congr
+  intro y hy
+  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
 
 Depends on / 依赖: LinearMap, LinearMap.piApply, TotalSpace, TotalSpace.mk, almost, almost.congr, coeff_sum_eq, contMDiffOn, eq_empty_or_nonempty, fintypeOfFiniteDimensional, hs.coeff, hs.coeff_sum_eq, hs.contMDiffOn, mdifferentiableOn, one_ne_zero, piApply, smul_section, sum_section, u.eq_empty_or_nonempty
 -/
@@ -693,7 +709,7 @@ lemma mdifferentiableAt_of_coeff
   have almost : MDiffAt (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) x :=
     .sum_section (fun i _ => (h i).smul_section <|
       ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero).mdifferentiableAt hu)
-exact almost.congr_of_eventua
+exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
 
 中文:
 引理 mdifferentiableAt_of_coeff
@@ -703,7 +719,7 @@ exact almost.congr_of_eventua
   have almost : MDiffAt (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) x :=
     .sum_section (fun i _ => (h i).smul_section <|
       ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero).mdifferentiableAt hu)
-exact almost.congr_of_eventua
+exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
 
 Depends on / 依赖: MDiffAt, almost, almost.congr_of_eventuallyEq, congr_of_eventuallyEq, contMDiffOn, eventually_eq_sum_coeff_smul, fintypeOfFiniteDimensional, hs.coeff, hs.contMDiffOn, hs.eventually_eq_sum_coeff_smul, mdifferentiableAt, mdifferentiableOn, mem_of_mem_nhds, one_ne_zero, smul_section, sum_section
 -/
@@ -1007,7 +1023,7 @@ lemma localFrameCoeff_apply_of_mem_baseSet
   simp [localFrameCoeff, IsLocalFrameOn.coeff, hx, hbasis]
 
 @[deprecated (since := "2026-07-26")]
-alias localFrame_c
+alias localFrame_coeff_apply_of_mem_baseSet := localFrameCoeff_apply_of_mem_baseSet
 
 中文:
 引理 localFrameCoeff_apply_of_mem_baseSet
@@ -1020,7 +1036,7 @@ alias localFrame_c
   simp [localFrameCoeff, IsLocalFrameOn.coeff, hx, hbasis]
 
 @[deprecated (since := "2026-07-26")]
-alias localFrame_c
+alias localFrame_coeff_apply_of_mem_baseSet := localFrameCoeff_apply_of_mem_baseSet
 
 Depends on / 依赖: IsLocalFrameOn, IsLocalFrameOn.coeff, IsLocalFrameOn.toBasisAt, basisAt, e.basisAt, e.isLocalFrameOn_localFrame_baseSet, hbasis, he.toBasisAt, isLocalFrameOn_localFrame_baseSet, localFrame, localFrameCoeff, toBasisAt
 -/
@@ -1170,7 +1186,25 @@ lemma contMDiffAt_localFrameCoeff
   let aux := fun x => b.repr (e ((T% s) x)).2 i
   -- Since `e.baseSet` is open, this is sufficient.
   suffices CMDiffAt k aux x by
-    apply thi
+    apply this.congr_of_eventuallyEq ?_
+    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
+    intro y hy
+    simp [aux, e.localFrameCoeff_eq_coeff hy]
+  simp only [aux]
+  -- step 2: `s` read in trivialization `e` is `C^k`
+  have h₁ : CMDiffAt k (fun x => (e ((T% s) x)).2) x := by
+    simpa using (e.contMDiffAt_section_iff hxe).1 hs
+  -- step 3: `b.repr` is a linear map, so the composition is smooth
+  let breprl : F ->ₗ[𝕜] 𝕜 :=
+    { toFun v := b.repr v i
+      map_add' m m' := by simp
+      map_smul' m x := by simp }
+  have : CMDiffAt k breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
+contMDiffAt_iff_contDiffAt.mpr by fun_prop
+  exact this.comp x h₁
+
+@[deprecated (since := "2026-07-26")]
+alias contMDiffAt_localFrame_coeff := contMDiffAt_localFrameCoeff
 
 中文:
 引理 contMDiffAt_localFrameCoeff
@@ -1181,7 +1215,25 @@ lemma contMDiffAt_localFrameCoeff
   let aux := fun x => b.repr (e ((T% s) x)).2 i
   -- Since `e.baseSet` is open, this is sufficient.
   suffices CMDiffAt k aux x by
-    apply thi
+    apply this.congr_of_eventuallyEq ?_
+    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
+    intro y hy
+    simp [aux, e.localFrameCoeff_eq_coeff hy]
+  simp only [aux]
+  -- step 2: `s` read in trivialization `e` is `C^k`
+  have h₁ : CMDiffAt k (fun x => (e ((T% s) x)).2) x := by
+    simpa using (e.contMDiffAt_section_iff hxe).1 hs
+  -- step 3: `b.repr` is a linear map, so the composition is smooth
+  let breprl : F ->ₗ[𝕜] 𝕜 :=
+    { toFun v := b.repr v i
+      map_add' m m' := by simp
+      map_smul' m x := by simp }
+  have : CMDiffAt k breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
+contMDiffAt_iff_contDiffAt.mpr by fun_prop
+  exact this.comp x h₁
+
+@[deprecated (since := "2026-07-26")]
+alias contMDiffAt_localFrame_coeff := contMDiffAt_localFrameCoeff
 -/
 lemma contMDiffAt_localFrameCoeff (hxe : x in e.baseSet) (hs : CMDiffAt k (T% s) x) (i : ι) :
     CMDiffAt k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x := by
@@ -1316,7 +1368,7 @@ lemma contMDiffOn_iff_localFrameCoeff
 .contMDiffWithinAt (fun i => (h i x hx).contMDiffAt (ht.mem_nhds hx))
 
 @[deprecated (since := "2026-07-26")]
-alias contMDiffOn_iff_localFrame_coeff := contMDif
+alias contMDiffOn_iff_localFrame_coeff := contMDiffOn_iff_localFrameCoeff
 
 中文:
 引理 contMDiffOn_iff_localFrameCoeff
@@ -1327,7 +1379,7 @@ alias contMDiffOn_iff_localFrame_coeff := contMDif
 .contMDiffWithinAt (fun i => (h i x hx).contMDiffAt (ht.mem_nhds hx))
 
 @[deprecated (since := "2026-07-26")]
-alias contMDiffOn_iff_localFrame_coeff := contMDif
+alias contMDiffOn_iff_localFrame_coeff := contMDiffOn_iff_localFrameCoeff
 
 Depends on / 依赖: contMDiffAt, contMDiffAt_iff_localFrameCoeff, contMDiffOn_localFrameCoeff, contMDiffWithinAt, ht.mem_nhds, mem_nhds
 -/
@@ -1384,7 +1436,25 @@ lemma mdifferentiableAt_localFrameCoeff
   let aux := fun x => b.repr (e ((T% s) x)).2 i
   -- Since `e.baseSet` is open, this is sufficient.
   suffices MDiffAt aux x by
-    apply this.congr_o
+    apply this.congr_of_eventuallyEq
+    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
+    intro y hy
+    simp [aux, e.localFrameCoeff_eq_coeff hy]
+  simp only [aux]
+  -- step 2: `s` read in trivialization `e` is differentiable
+  have h₁ : MDiffAt (fun x => (e ((T% s) x)).2) x := by
+    simpa using (e.mdifferentiableAt_section_iff I s hxe).1 hs
+  -- step 3: `b.repr` is a linear map, so the composition is smooth
+  let breprl : F ->ₗ[𝕜] 𝕜 :=
+    { toFun v := b.repr v i
+      map_add' m m' := by simp
+      map_smul' m x := by simp }
+  have : MDifferentiableAt 𝓘(𝕜, F) 𝓘(𝕜) breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
+mdifferentiableAt_iff_differentiableAt.mpr by fun_prop
+  exact this.comp x h₁
+
+@[deprecated (since := "2026-07-26")]
+alias mdifferentiableAt_localFrame_coeff := mdifferentiableAt_localFrameCoeff
 
 中文:
 引理 mdifferentiableAt_localFrameCoeff
@@ -1394,7 +1464,25 @@ lemma mdifferentiableAt_localFrameCoeff
   let aux := fun x => b.repr (e ((T% s) x)).2 i
   -- Since `e.baseSet` is open, this is sufficient.
   suffices MDiffAt aux x by
-    apply this.congr_o
+    apply this.congr_of_eventuallyEq
+    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
+    intro y hy
+    simp [aux, e.localFrameCoeff_eq_coeff hy]
+  simp only [aux]
+  -- step 2: `s` read in trivialization `e` is differentiable
+  have h₁ : MDiffAt (fun x => (e ((T% s) x)).2) x := by
+    simpa using (e.mdifferentiableAt_section_iff I s hxe).1 hs
+  -- step 3: `b.repr` is a linear map, so the composition is smooth
+  let breprl : F ->ₗ[𝕜] 𝕜 :=
+    { toFun v := b.repr v i
+      map_add' m m' := by simp
+      map_smul' m x := by simp }
+  have : MDifferentiableAt 𝓘(𝕜, F) 𝓘(𝕜) breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
+mdifferentiableAt_iff_differentiableAt.mpr by fun_prop
+  exact this.comp x h₁
+
+@[deprecated (since := "2026-07-26")]
+alias mdifferentiableAt_localFrame_coeff := mdifferentiableAt_localFrameCoeff
 -/
 lemma mdifferentiableAt_localFrameCoeff
     (hxe : x in e.baseSet) (hs : MDiffAt (T% s) x) (i : ι) :

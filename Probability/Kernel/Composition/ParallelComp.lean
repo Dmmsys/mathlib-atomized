@@ -481,7 +481,7 @@ instance [IsFiniteKernel
   _ <= κ.bound * η.bound := by
     gcongr
     · exact measure_le_bound κ a.1 Set.univ
-    · exact measure_le_bo
+    · exact measure_le_bound η a.2 Set.univ
 
 中文:
 实例 [是FiniteKernel
@@ -493,7 +493,7 @@ instance [IsFiniteKernel
   _ <= κ.bound * η.bound := by
     gcongr
     · exact measure_le_bound κ a.1 Set.univ
-    · exact measure_le_bo
+    · exact measure_le_bound η a.2 Set.univ
 
 Depends on / 依赖: ENNReal, ENNReal.mul_lt_top, Set.univ, bound_lt_top, measure_le_bound, mul_lt_top, parallelComp_apply_univ
 -/
@@ -521,7 +521,8 @@ instance :
   swap
   · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_right]
     infer_instance
-  simp_rw [← kernel_
+  simp_rw [← kernel_sum_seq κ, ← kernel_sum_seq η, parallelComp_sum_left, parallelComp_sum_right]
+  infer_instance
 
 中文:
 实例 :
@@ -535,7 +536,8 @@ instance :
   swap
   · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_right]
     infer_instance
-  simp_rw [← kernel_
+  simp_rw [← kernel_sum_seq κ, ← kernel_sum_seq η, parallelComp_sum_left, parallelComp_sum_right]
+  infer_instance
 
 Depends on / 依赖: IsSFiniteKernel, infer_instance, kernel_sum_seq, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_left, parallelComp_of_not_isSFiniteKernel_right, parallelComp_sum_left, parallelComp_sum_right, simp_rw
 -/

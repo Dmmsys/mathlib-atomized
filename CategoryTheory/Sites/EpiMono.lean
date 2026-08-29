@@ -90,7 +90,26 @@ definition functorialLocallySurjectiveInjectiveFactorization
   i := whiskerLeft Arrow.leftFunc (inv (sheafificationAdjunction J A).counit) ≫
         whiskerLeft (sheafToPresheaf J A).mapArrow
           (whiskerRight (data.functorCategory Cᵒᵖ).i (presheafToSheaf J A))
-  p := wh
+  p := whiskerLeft (sheafToPresheaf J A).mapArrow
+        (whiskerRight (data.functorCategory Cᵒᵖ).p (presheafToSheaf J A)) ≫
+          whiskerLeft Arrow.rightFunc (sheafificationAdjunction J A).counit
+  fac := by
+    ext f : 2
+    dsimp
+    simp only [assoc, ← Functor.map_comp_assoc,
+      MorphismProperty.FunctorialFactorizationData.fac_app,
+      NatIso.isIso_inv_app, IsIso.inv_comp_eq]
+    exact (sheafificationAdjunction J A).counit.naturality f.hom
+  hi _ := by
+    dsimp [locallySurjective]
+    rw [← isLocallySurjective_sheafToPresheaf_map_iff]; rw [Functor.map_comp]; rw [Presheaf.comp_isLocallySurjective_iff]; rw [isLocallySurjective_sheafToPresheaf_map_iff]; rw [Presheaf.isLocallySurjective_presheafToSheaf_map_iff]
+    apply Presheaf.isLocallySurjective_of_surjective
+    apply (data.functorCategory Cᵒᵖ).hi
+  hp _ := by
+    dsimp [locallyInjective]
+    rw [← isLocallyInjective_sheafToPresheaf_map_iff]; rw [Functor.map_comp]; rw [Presheaf.isLocallyInjective_comp_iff]; rw [isLocallyInjective_sheafToPresheaf_map_iff]; rw [Presheaf.isLocallyInjective_presheafToSheaf_map_iff]
+    apply Presheaf.isLocallyInjective_of_injective
+    apply (data.functorCategory Cᵒᵖ).hp
 
 中文:
 定义 functorialLocallySurjectiveInjectiveFactorization
@@ -99,7 +118,26 @@ definition functorialLocallySurjectiveInjectiveFactorization
   i := whiskerLeft Arrow.leftFunc (inv (sheafificationAdjunction J A).counit) ≫
         whiskerLeft (sheafToPresheaf J A).mapArrow
           (whiskerRight (data.functorCategory Cᵒᵖ).i (presheafToSheaf J A))
-  p := wh
+  p := whiskerLeft (sheafToPresheaf J A).mapArrow
+        (whiskerRight (data.functorCategory Cᵒᵖ).p (presheafToSheaf J A)) ≫
+          whiskerLeft Arrow.rightFunc (sheafificationAdjunction J A).counit
+  fac := by
+    ext f : 2
+    dsimp
+    simp only [assoc, ← Functor.map_comp_assoc,
+      MorphismProperty.FunctorialFactorizationData.fac_app,
+      NatIso.isIso_inv_app, IsIso.inv_comp_eq]
+    exact (sheafificationAdjunction J A).counit.naturality f.hom
+  hi _ := by
+    dsimp [locallySurjective]
+    rw [← isLocallySurjective_sheafToPresheaf_map_iff]; rw [Functor.map_comp]; rw [Presheaf.comp_isLocallySurjective_iff]; rw [isLocallySurjective_sheafToPresheaf_map_iff]; rw [Presheaf.isLocallySurjective_presheafToSheaf_map_iff]
+    apply Presheaf.isLocallySurjective_of_surjective
+    apply (data.functorCategory Cᵒᵖ).hi
+  hp _ := by
+    dsimp [locallyInjective]
+    rw [← isLocallyInjective_sheafToPresheaf_map_iff]; rw [Functor.map_comp]; rw [Presheaf.isLocallyInjective_comp_iff]; rw [isLocallyInjective_sheafToPresheaf_map_iff]; rw [Presheaf.isLocallyInjective_presheafToSheaf_map_iff]
+    apply Presheaf.isLocallyInjective_of_injective
+    apply (data.functorCategory Cᵒᵖ).hp
 
 Depends on / 依赖: data.functorCategory, functorCategory, mapArrow, presheafToSheaf, sheafToPresheaf
 -/
@@ -264,7 +302,10 @@ lemma isLocallySurjective_iff_epi'
     have : IsLocallySurjective data.i := data.hi
     have : IsLocallyInjective data.p := data.hp
     have : Epi data.p := epi_of_epi_fac data.fac
-    have := mon
+    have := mono_of_isLocallyInjective data.p
+    have := isIso_of_mono_of_epi data.p
+    rw [← data.fac]
+    infer_instance
 
 中文:
 引理 isLocallySurjective_iff_epi'
@@ -277,7 +318,10 @@ lemma isLocallySurjective_iff_epi'
     have : IsLocallySurjective data.i := data.hi
     have : IsLocallyInjective data.p := data.hp
     have : Epi data.p := epi_of_epi_fac data.fac
-    have := mon
+    have := mono_of_isLocallyInjective data.p
+    have := isIso_of_mono_of_epi data.p
+    rw [← data.fac]
+    infer_instance
 
 Depends on / 依赖: IsLocallyInjective, IsLocallySurjective, data.fac, data.hi, data.hp, data.i, data.p, epi_of_epi_fac, factorizationData, infer_instance, isIso_of_mono_of_epi, locallyInjective, locallySurjective, mono_of_isLocallyInjective
 -/

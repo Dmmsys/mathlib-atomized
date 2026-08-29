@@ -178,7 +178,8 @@ theorem Products.span_nil_eq_top
   refine ⟨f default, ?_⟩
   simp only [eval, List.map, List.prod_nil, zsmul_eq_mul, mul_one, Products.nil]
   ext x
-  obtain rfl : x = default := by simp only [Set.default_coe_singleton, eq_iff_true_of_subsi
+  obtain rfl : x = default := by simp only [Set.default_coe_singleton, eq_iff_true_of_subsingleton]
+  rfl
 
 中文:
 定理 Products.span_nil_eq_top
@@ -190,7 +191,8 @@ theorem Products.span_nil_eq_top
   refine ⟨f default, ?_⟩
   simp only [eval, List.map, List.prod_nil, zsmul_eq_mul, mul_one, Products.nil]
   ext x
-  obtain rfl : x = default := by simp only [Set.default_coe_singleton, eq_iff_true_of_subsi
+  obtain rfl : x = default := by simp only [Set.default_coe_singleton, eq_iff_true_of_subsingleton]
+  rfl
 
 Depends on / 依赖: List.map, List.prod_nil, Products, Products.nil, Set.default_coe_singleton, Set.image_singleton, Submodule, Submodule.mem_span_singleton, default_coe_singleton, eq_iff_true_of_subsingleton, eq_top_iff, image_singleton, mem_span_singleton, mul_one, prod_nil, zsmul_eq_mul
 -/
@@ -223,7 +225,10 @@ instance :
     intro _
     apply hll
     have he : {Products.nil} subseteq {m | m < ⟨l,hl⟩} := by
-      simpa only [Products.nil, Products.lt_
+      simpa only [Products.nil, Products.lt_iff_lex_lt, Set.singleton_subset_iff, Set.mem_ofPred_eq]
+    grw [← he]
+    rw [Products.span_nil_eq_top]
+    exact Submodule.mem_top
 
 中文:
 实例 :
@@ -237,7 +242,10 @@ instance :
     intro _
     apply hll
     have he : {Products.nil} subseteq {m | m < ⟨l,hl⟩} := by
-      simpa only [Products.nil, Products.lt_
+      simpa only [Products.nil, Products.lt_iff_lex_lt, Set.singleton_subset_iff, Set.mem_ofPred_eq]
+    grw [← he]
+    rw [Products.span_nil_eq_top]
+    exact Submodule.mem_top
 
 Depends on / 依赖: Products, Products.isGood_nil, Products.nil, isGood_nil
 -/
@@ -478,7 +486,9 @@ theorem smaller_mono
   · use ⟨l, Products.isGood_mono C h gl⟩
     ext x
     rw [eval]; rw [← Products.eval_πs' _ h (Products.prop_of_isGood C _ gl)]; rw [eval]
-  · rw [← LocallyConstant.coe_inj
+  · rw [← LocallyConstant.coe_inj, coe_πs C o₂, ← LocallyConstant.toFun_eq_coe, coe_πs',
+      Function.comp_assoc, projRestricts_comp_projRestrict C _, coe_πs]
+    rfl
 
 中文:
 定理 smaller_mono
@@ -493,7 +503,9 @@ theorem smaller_mono
   · use ⟨l, Products.isGood_mono C h gl⟩
     ext x
     rw [eval]; rw [← Products.eval_πs' _ h (Products.prop_of_isGood C _ gl)]; rw [eval]
-  · rw [← LocallyConstant.coe_inj
+  · rw [← LocallyConstant.coe_inj, coe_πs C o₂, ← LocallyConstant.toFun_eq_coe, coe_πs',
+      Function.comp_assoc, projRestricts_comp_projRestrict C _, coe_πs]
+    rfl
 
 Depends on / 依赖: Function, Function.comp_assoc, LocallyConstant, LocallyConstant.coe_inj, LocallyConstant.toFun_eq_coe, Products, Products.eval_, Products.isGood_mono, Products.prop_of_isGood, Set.mem_image, coe_inj, comp_assoc, isGood_mono, mem_image, projRestricts_comp_projRestrict, prop_of_isGood, smaller, toFun_eq_coe
 -/
@@ -527,7 +539,14 @@ theorem Products.limitOrdinal
   use Finset.sup l.val.toFinset (fun a => Order.succ (ord I a))
   have hslt : Finset.sup l.val.toFinset (fun a => Order.succ (ord I a)) < o := by
     simp only [Finset.sup_lt_iff ho.bot_lt, List.mem_toFinset]
-    exact
+    exact fun b hb => ho.succ_lt (prop_of_isGood C (ord I · < o) h b hb)
+  refine ⟨hslt, fun he => h ?_⟩
+  have hlt : forall i in l.val, ord I i < Finset.sup l.val.toFinset (fun a => Order.succ (ord I a)) := by
+    intro i hi
+    simp only [Finset.lt_sup_iff, List.mem_toFinset, Order.lt_succ_iff]
+    exact ⟨i, hi, le_rfl⟩
+  rwa [eval_πs_image' C (le_of_lt hslt) hlt, ← eval_πs' C (le_of_lt hslt) hlt,
+    Submodule.apply_mem_span_image_iff_mem_span (injective_πs' C _)]
 
 中文:
 定理 Products.limitOrdinal
@@ -538,7 +557,14 @@ theorem Products.limitOrdinal
   use Finset.sup l.val.toFinset (fun a => Order.succ (ord I a))
   have hslt : Finset.sup l.val.toFinset (fun a => Order.succ (ord I a)) < o := by
     simp only [Finset.sup_lt_iff ho.bot_lt, List.mem_toFinset]
-    exact
+    exact fun b hb => ho.succ_lt (prop_of_isGood C (ord I · < o) h b hb)
+  refine ⟨hslt, fun he => h ?_⟩
+  have hlt : forall i in l.val, ord I i < Finset.sup l.val.toFinset (fun a => Order.succ (ord I a)) := by
+    intro i hi
+    simp only [Finset.lt_sup_iff, List.mem_toFinset, Order.lt_succ_iff]
+    exact ⟨i, hi, le_rfl⟩
+  rwa [eval_πs_image' C (le_of_lt hslt) hlt, ← eval_πs' C (le_of_lt hslt) hlt,
+    Submodule.apply_mem_span_image_iff_mem_span (injective_πs' C _)]
 
 Depends on / 依赖: Finset, Finset.sup, Finset.sup_lt_iff, List.mem_toFinset, Order.succ, bot_lt, ho.bot_lt, ho.succ_lt, isGood_mono, l.val, l.val.toFinset, le_of_lt, mem_toFinset, prop_of_isGood, succ_lt, sup_lt_iff, toFinset
 -/
@@ -573,7 +599,12 @@ theorem GoodProducts.union
   · obtain ⟨l, hl, rfl⟩ := hp
     rw [contained_eq_proj C o hsC]; rw [Products.limitOrdinal C ho] at hl
     obtain ⟨o', ho'⟩ := hl
-    refine ⟨o', ho'.1, eval (
+    refine ⟨o', ho'.1, eval (π C (ord I · < o')) ⟨l, ho'.2⟩, ⟨l, ho'.2, rfl⟩, ?_⟩
+    exact Products.eval_πs C (Products.prop_of_isGood C _ ho'.2)
+  · obtain ⟨o', h, _, ⟨l, hl, rfl⟩, rfl⟩ := hp
+    refine ⟨l, ?_, (Products.eval_πs C (Products.prop_of_isGood C _ hl)).symm⟩
+    rw [contained_eq_proj C o hsC]
+    exact Products.isGood_mono C (le_of_lt h) hl
 
 中文:
 定理 GoodProducts.union
@@ -585,7 +616,12 @@ theorem GoodProducts.union
   · obtain ⟨l, hl, rfl⟩ := hp
     rw [contained_eq_proj C o hsC]; rw [Products.limitOrdinal C ho] at hl
     obtain ⟨o', ho'⟩ := hl
-    refine ⟨o', ho'.1, eval (
+    refine ⟨o', ho'.1, eval (π C (ord I · < o')) ⟨l, ho'.2⟩, ⟨l, ho'.2, rfl⟩, ?_⟩
+    exact Products.eval_πs C (Products.prop_of_isGood C _ ho'.2)
+  · obtain ⟨o', h, _, ⟨l, hl, rfl⟩, rfl⟩ := hp
+    refine ⟨l, ?_, (Products.eval_πs C (Products.prop_of_isGood C _ hl)).symm⟩
+    rw [contained_eq_proj C o hsC]
+    exact Products.isGood_mono C (le_of_lt h) hl
 
 Depends on / 依赖: Products, Products.eval_, Products.limitOrdinal, Products.prop_of_isGood, Set.mem_iUnion, Set.mem_image, Set.mem_range, Subtype, Subtype.exists, contained_eq_proj, limitOrdinal, mem_iUnion, mem_image, mem_range, prop_of_isGood, smaller
 -/

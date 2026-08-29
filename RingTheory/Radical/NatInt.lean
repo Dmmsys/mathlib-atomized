@@ -318,7 +318,14 @@ lemma UniqueFactorizationMonoid.primeFactors_eq_primeFactors_natAbs
   ext p
   rw [mem_primeFactors]; rw [mem_normalizedFactors_iff' hz]; rw [irreducible_iff_prime]; rw [Int.nonneg_iff_normalize_eq_self]; rw [Finset.mem_map]; rw [Function.Embedding.coeFn_mk]
   refine ⟨fun ⟨pp, nnp, dp⟩ => ?_, fun h => ?_⟩
-  · lift p to Nat
+  · lift p to Nat using nnp
+    rw [← Nat.prime_iff_prime_int] at pp
+    rw [Int.natCast_dvd] at dp
+    exact ⟨p, by simp_all, rfl⟩
+  · simp_rw [Nat.mem_primeFactors, Function.Embedding.toFun_eq_coe, Nat.castEmbedding_apply] at h
+    obtain ⟨n, ⟨pn, dn, -⟩, rfl⟩ := h
+    rw [Int.natCast_dvd]; rw [← Nat.prime_iff_prime_int]
+    exact ⟨pn, by simp, dn⟩
 
 中文:
 引理 唯一分解幺半群.primeFactors_eq_primeFactors_natAbs
@@ -327,7 +334,14 @@ lemma UniqueFactorizationMonoid.primeFactors_eq_primeFactors_natAbs
   ext p
   rw [mem_primeFactors]; rw [mem_normalizedFactors_iff' hz]; rw [irreducible_iff_prime]; rw [Int.nonneg_iff_normalize_eq_self]; rw [Finset.mem_map]; rw [Function.Embedding.coeFn_mk]
   refine ⟨fun ⟨pp, nnp, dp⟩ => ?_, fun h => ?_⟩
-  · lift p to Nat
+  · lift p to Nat using nnp
+    rw [← Nat.prime_iff_prime_int] at pp
+    rw [Int.natCast_dvd] at dp
+    exact ⟨p, by simp_all, rfl⟩
+  · simp_rw [Nat.mem_primeFactors, Function.Embedding.toFun_eq_coe, Nat.castEmbedding_apply] at h
+    obtain ⟨n, ⟨pn, dn, -⟩, rfl⟩ := h
+    rw [Int.natCast_dvd]; rw [← Nat.prime_iff_prime_int]
+    exact ⟨pn, by simp, dn⟩
 
 Depends on / 依赖: Embedding, Finset, Finset.mem_map, Function, Function.Embedding.coeFn_mk, Function.Embedding.toFun_eq_coe, Int.natCast_dvd, Int.nonneg_iff_normalize_eq_self, Nat.castEmbedding_apply, Nat.mem_primeFactors, Nat.prime_iff_prime_int, castEmbedding_apply, coeFn_mk, eq_or_ne, irreducible_iff_prime, mem_map, mem_normalizedFactors_iff, mem_primeFactors, natCast_dvd, nonneg_iff_normalize_eq_self
 -/

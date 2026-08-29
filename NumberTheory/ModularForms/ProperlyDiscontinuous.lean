@@ -29,7 +29,9 @@ instance properlyDiscontinuousSL2ZRange
   let 𝒮ℒ' : Subgroup SL(2, Real) := (SpecialLinearGroup.map (Int.castRingHom Real)).range
   have : ProperlyDiscontinuousSMul 𝒮ℒ' ℍ := inferInstance
   simp only [Subgroup.properlyDiscontinuousSMul_iff] at this ⊢
-  refine fun K L hK hL => ((this hK hL).map SpecialLinearGroup.toGL).subset fun g => ?
+  refine fun K L hK hL => ((this hK hL).map SpecialLinearGroup.toGL).subset fun g => ?_
+  rintro ⟨⟨γ, rfl⟩, hγ⟩
+  exact ⟨γ, ⟨by simp [𝒮ℒ'], hγ⟩, rfl⟩
 
 中文:
 实例 properlyDiscontinuousSL2ZRange
@@ -38,7 +40,9 @@ instance properlyDiscontinuousSL2ZRange
   let 𝒮ℒ' : Subgroup SL(2, Real) := (SpecialLinearGroup.map (Int.castRingHom Real)).range
   have : ProperlyDiscontinuousSMul 𝒮ℒ' ℍ := inferInstance
   simp only [Subgroup.properlyDiscontinuousSMul_iff] at this ⊢
-  refine fun K L hK hL => ((this hK hL).map SpecialLinearGroup.toGL).subset fun g => ?
+  refine fun K L hK hL => ((this hK hL).map SpecialLinearGroup.toGL).subset fun g => ?_
+  rintro ⟨⟨γ, rfl⟩, hγ⟩
+  exact ⟨γ, ⟨by simp [𝒮ℒ'], hγ⟩, rfl⟩
 
 Depends on / 依赖: Int.castRingHom, ProperlyDiscontinuousSMul, SpecialLinearGroup, SpecialLinearGroup.map, SpecialLinearGroup.toGL, Subgroup, Subgroup.properlyDiscontinuousSMul_iff, castRingHom, properlyDiscontinuousSMul_iff, subset
 -/

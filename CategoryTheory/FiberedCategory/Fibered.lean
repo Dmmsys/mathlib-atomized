@@ -207,7 +207,17 @@ instance isStronglyCartesian_of_isCartesian
     -- Let `τ` be the map induced by the universal property of `ψ ≫ φ`.
     let τ := IsCartesian.map p (g ≫ f) (ψ ≫ φ) φ'
     use τ ≫ ψ
-    -- It is easily verified that `τ ≫ ψ` lifts `g` and `τ ≫ ψ ≫ 
+    -- It is easily verified that `τ ≫ ψ` lifts `g` and `τ ≫ ψ ≫ φ = φ'`
+    refine ⟨⟨inferInstance, by simp only [assoc, IsCartesian.fac, τ]⟩, ?_⟩
+    -- It remains to check that `τ ≫ ψ` is unique.
+    -- So fix another lift `π` of `g` satisfying `π ≫ φ = φ'`.
+    intro π ⟨hπ, hπ_comp⟩
+    -- Write `π` as `π = τ' ≫ ψ` for some `τ'` induced by the universal property of `ψ`.
+    rw [← fac p g ψ π]
+    -- It remains to show that `τ' = τ`. This follows again from the universal property of `ψ`.
+    congr 1
+    apply map_uniq
+    rwa [← assoc, IsCartesian.fac]
 
 中文:
 实例 isStronglyCartesian_of_isCartesian
@@ -218,7 +228,17 @@ instance isStronglyCartesian_of_isCartesian
     -- Let `τ` be the map induced by the universal property of `ψ ≫ φ`.
     let τ := IsCartesian.map p (g ≫ f) (ψ ≫ φ) φ'
     use τ ≫ ψ
-    -- It is easily verified that `τ ≫ ψ` lifts `g` and `τ ≫ ψ ≫ 
+    -- It is easily verified that `τ ≫ ψ` lifts `g` and `τ ≫ ψ ≫ φ = φ'`
+    refine ⟨⟨inferInstance, by simp only [assoc, IsCartesian.fac, τ]⟩, ?_⟩
+    -- It remains to check that `τ ≫ ψ` is unique.
+    -- So fix another lift `π` of `g` satisfying `π ≫ φ = φ'`.
+    intro π ⟨hπ, hπ_comp⟩
+    -- Write `π` as `π = τ' ≫ ψ` for some `τ'` induced by the universal property of `ψ`.
+    rw [← fac p g ψ π]
+    -- It remains to show that `τ' = τ`. This follows again from the universal property of `ψ`.
+    congr 1
+    apply map_uniq
+    rwa [← assoc, IsCartesian.fac]
 -/
 instance isStronglyCartesian_of_isCartesian (p : 𝒳 ⥤ 𝒮) [p.IsFibered] {R S : 𝒮} (f : R ⟶ S)
     {a b : 𝒳} (φ : a ⟶ b) [p.IsCartesian f φ] : p.IsStronglyCartesian f φ where
@@ -253,7 +273,19 @@ lemma isStronglyCartesian_of_exists_isCartesian
   -- Let `ψ` be a Cartesian arrow lying over `g`
   obtain ⟨a', ψ, hψ⟩ := h _ _ (p.map φ)
   -- Let `τ' : c ⟶ a'` be the map induced by the universal property of `ψ`
-  let τ' := IsStronglyCartesian.map p (p.map φ) ψ (f' := g ≫ p
+  let τ' := IsStronglyCartesian.map p (p.map φ) ψ (f' := g ≫ p.map φ) rfl φ'
+  -- Let `Φ : a' ≅ a` be natural isomorphism induced between `φ` and `ψ`.
+  let Φ := domainUniqueUpToIso p (p.map φ) φ ψ
+  -- The map induced by `φ` will be `τ' ≫ Φ.hom`
+  use τ' ≫ Φ.hom
+  -- It is easily verified that `τ' ≫ Φ.hom` lifts `g` and `τ' ≫ Φ.hom ≫ φ = φ'`
+  refine ⟨⟨by simp only [Φ]; infer_instance, ?_⟩, ?_⟩
+  · simp [τ', Φ]
+  -- It remains to check that it is unique. This follows from the universal property of `ψ`.
+  intro π ⟨hπ, hπ_comp⟩
+  rw [← Iso.comp_inv_eq]
+  apply IsStronglyCartesian.map_uniq p (p.map φ) ψ rfl φ'
+  simp [hπ_comp, Φ]
 
 中文:
 引理 isStronglyCartesian_of_存在_isCartesian
@@ -265,7 +297,19 @@ lemma isStronglyCartesian_of_exists_isCartesian
   -- Let `ψ` be a Cartesian arrow lying over `g`
   obtain ⟨a', ψ, hψ⟩ := h _ _ (p.map φ)
   -- Let `τ' : c ⟶ a'` be the map induced by the universal property of `ψ`
-  let τ' := IsStronglyCartesian.map p (p.map φ) ψ (f' := g ≫ p
+  let τ' := IsStronglyCartesian.map p (p.map φ) ψ (f' := g ≫ p.map φ) rfl φ'
+  -- Let `Φ : a' ≅ a` be natural isomorphism induced between `φ` and `ψ`.
+  let Φ := domainUniqueUpToIso p (p.map φ) φ ψ
+  -- The map induced by `φ` will be `τ' ≫ Φ.hom`
+  use τ' ≫ Φ.hom
+  -- It is easily verified that `τ' ≫ Φ.hom` lifts `g` and `τ' ≫ Φ.hom ≫ φ = φ'`
+  refine ⟨⟨by simp only [Φ]; infer_instance, ?_⟩, ?_⟩
+  · simp [τ', Φ]
+  -- It remains to check that it is unique. This follows from the universal property of `ψ`.
+  intro π ⟨hπ, hπ_comp⟩
+  rw [← Iso.comp_inv_eq]
+  apply IsStronglyCartesian.map_uniq p (p.map φ) ψ rfl φ'
+  simp [hπ_comp, Φ]
 
 Depends on / 依赖: subst_hom_lift
 -/
@@ -304,7 +348,8 @@ lemma of_exists_isStronglyCartesian
     refine ⟨b, φ, inferInstance⟩
   comp := fun R S T f g {a b c} φ ψ _ _ =>
     have : p.IsStronglyCartesian f φ := isStronglyCartesian_of_exists_isCartesian p h _ _
-    have : p.IsStronglyCartesian g ψ := isStronglyCartesian_of_exists_isCartesian 
+    have : p.IsStronglyCartesian g ψ := isStronglyCartesian_of_exists_isCartesian p h _ _
+    inferInstance
 
 中文:
 引理 of_存在_isStronglyCartesian
@@ -315,7 +360,8 @@ lemma of_exists_isStronglyCartesian
     refine ⟨b, φ, inferInstance⟩
   comp := fun R S T f g {a b c} φ ψ _ _ =>
     have : p.IsStronglyCartesian f φ := isStronglyCartesian_of_exists_isCartesian p h _ _
-    have : p.IsStronglyCartesian g ψ := isStronglyCartesian_of_exists_isCartesian 
+    have : p.IsStronglyCartesian g ψ := isStronglyCartesian_of_exists_isCartesian p h _ _
+    inferInstance
 
 Depends on / 依赖: IsStronglyCartesian, isStronglyCartesian_of_exists_isCartesian, p.IsStronglyCartesian
 -/

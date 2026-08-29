@@ -110,7 +110,29 @@ theorem norm_max_aux₁
   -- Assume the converse. Since `‖f w‖ ≤ ‖f z‖`, we have `‖f w‖ < ‖f z‖`.
   refine (isMaxOn_iff.1 hz _ hw).antisymm (not_lt.1 ?_)
   rintro hw_lt : ‖f w‖ < ‖f z‖
- 
+  have hr : 0 < r := dist_pos.2 (ne_of_apply_ne (norm ∘ f) hw_lt.ne)
+  -- Due to Cauchy integral formula, it suffices to prove the following inequality.
+  suffices ‖∮ ζ in C(z, r), (ζ - z)⁻¹ • f ζ‖ < 2 * π * ‖f z‖ by
+    refine this.ne ?_
+    have A : (∮ ζ in C(z, r), (ζ - z)⁻¹ • f ζ) = (2 * π * I : Complex) • f z :=
+      hd.circleIntegral_sub_inv_smul (mem_ball_self hr)
+    simp [A, norm_smul, Real.pi_pos.le]
+  suffices ‖∮ ζ in C(z, r), (ζ - z)⁻¹ • f ζ‖ < 2 * π * r * (‖f z‖ / r) by
+    rwa [mul_assoc, mul_div_cancel₀ _ hr.ne'] at this
+  /- This inequality is true because `‖(ζ - z)⁻¹ • f ζ‖ ≤ ‖f z‖ / r` for all `ζ` on the circle and
+    this inequality is strict at `ζ = w`. -/
+  have hsub : sphere z r subseteq closedBall z r := sphere_subset_closedBall
+  refine circleIntegral.norm_integral_lt_of_norm_le_const_of_lt hr ?_ ?_ ⟨w, rfl, ?_⟩
+  · show ContinuousOn (fun ζ : Complex => (ζ - z)⁻¹ • f ζ) (sphere z r)
+    refine ((continuousOn_id.sub continuousOn_const).inv₀ ?_).smul (hd.continuousOn_ball.mono hsub)
+    exact fun ζ hζ => sub_ne_zero.2 (ne_of_mem_sphere hζ hr.ne')
+  · show forall ζ in sphere z r, ‖(ζ - z)⁻¹ • f ζ‖ <= ‖f z‖ / r
+    rintro ζ hζ
+    rw [le_div_iff₀ hr]; rw [norm_smul]; rw [norm_inv]; rw [mem_sphere_iff_norm.1 hζ]; rw [mul_comm]; rw [mul_inv_cancel_left₀ hr.ne']
+    exact hz (hsub hζ)
+  show ‖(w - z)⁻¹ • f w‖ < ‖f z‖ / r
+  rw [norm_smul]; rw [norm_inv]; rw [← div_eq_inv_mul]; rw [← dist_eq_norm]
+  exact (div_lt_div_iff_of_pos_right hr).2 hw_lt
 
 中文:
 定理 norm_max_aux₁
@@ -122,7 +144,29 @@ theorem norm_max_aux₁
   -- Assume the converse. Since `‖f w‖ ≤ ‖f z‖`, we have `‖f w‖ < ‖f z‖`.
   refine (isMaxOn_iff.1 hz _ hw).antisymm (not_lt.1 ?_)
   rintro hw_lt : ‖f w‖ < ‖f z‖
- 
+  have hr : 0 < r := dist_pos.2 (ne_of_apply_ne (norm ∘ f) hw_lt.ne)
+  -- Due to Cauchy integral formula, it suffices to prove the following inequality.
+  suffices ‖∮ ζ in C(z, r), (ζ - z)⁻¹ • f ζ‖ < 2 * π * ‖f z‖ by
+    refine this.ne ?_
+    have A : (∮ ζ in C(z, r), (ζ - z)⁻¹ • f ζ) = (2 * π * I : Complex) • f z :=
+      hd.circleIntegral_sub_inv_smul (mem_ball_self hr)
+    simp [A, norm_smul, Real.pi_pos.le]
+  suffices ‖∮ ζ in C(z, r), (ζ - z)⁻¹ • f ζ‖ < 2 * π * r * (‖f z‖ / r) by
+    rwa [mul_assoc, mul_div_cancel₀ _ hr.ne'] at this
+  /- This inequality is true because `‖(ζ - z)⁻¹ • f ζ‖ ≤ ‖f z‖ / r` for all `ζ` on the circle and
+    this inequality is strict at `ζ = w`. -/
+  have hsub : sphere z r subseteq closedBall z r := sphere_subset_closedBall
+  refine circleIntegral.norm_integral_lt_of_norm_le_const_of_lt hr ?_ ?_ ⟨w, rfl, ?_⟩
+  · show ContinuousOn (fun ζ : Complex => (ζ - z)⁻¹ • f ζ) (sphere z r)
+    refine ((continuousOn_id.sub continuousOn_const).inv₀ ?_).smul (hd.continuousOn_ball.mono hsub)
+    exact fun ζ hζ => sub_ne_zero.2 (ne_of_mem_sphere hζ hr.ne')
+  · show forall ζ in sphere z r, ‖(ζ - z)⁻¹ • f ζ‖ <= ‖f z‖ / r
+    rintro ζ hζ
+    rw [le_div_iff₀ hr]; rw [norm_smul]; rw [norm_inv]; rw [mem_sphere_iff_norm.1 hζ]; rw [mul_comm]; rw [mul_inv_cancel_left₀ hr.ne']
+    exact hz (hsub hζ)
+  show ‖(w - z)⁻¹ • f w‖ < ‖f z‖ / r
+  rw [norm_smul]; rw [norm_inv]; rw [← div_eq_inv_mul]; rw [← dist_eq_norm]
+  exact (div_lt_div_iff_of_pos_right hr).2 hw_lt
 -/
 theorem norm_max_aux₁ [CompleteSpace F] {f : Complex -> F} {z w : Complex}
     (hd : DiffContOnCl Complex f (ball z (dist w z)))
@@ -169,7 +213,8 @@ theorem norm_max_aux₂
   have he : forall x, ‖e x‖ = ‖x‖ := UniformSpace.Completion.norm_coe
   replace hz : IsMaxOn (norm ∘ e ∘ f) (closedBall z (dist w z)) z := by
     simpa only [IsMaxOn, Function.comp_def, he] using hz
-  simpa only [he, Function.comp_de
+  simpa only [he, Function.comp_def]
+    using norm_max_aux₁ (e.differentiable.comp_diffContOnCl hd) hz
 
 中文:
 定理 norm_max_aux₂
@@ -179,7 +224,8 @@ theorem norm_max_aux₂
   have he : forall x, ‖e x‖ = ‖x‖ := UniformSpace.Completion.norm_coe
   replace hz : IsMaxOn (norm ∘ e ∘ f) (closedBall z (dist w z)) z := by
     simpa only [IsMaxOn, Function.comp_def, he] using hz
-  simpa only [he, Function.comp_de
+  simpa only [he, Function.comp_def]
+    using norm_max_aux₁ (e.differentiable.comp_diffContOnCl hd) hz
 
 Depends on / 依赖: Completion, Function, Function.comp_def, IsMaxOn, UniformSpace, UniformSpace.Completion.norm_coe, UniformSpace.Completion.toComplL, closedBall, comp_def, comp_diffContOnCl, differentiable, e.differentiable.comp_diffContOnCl, norm_coe, replace, toComplL
 -/
@@ -247,7 +293,14 @@ theorem norm_eqOn_closedBall_of_isMaxOn
   rcases eq_or_ne z w with (rfl | hne); · rfl
   set e := (lineMap z w : Complex -> E)
   have hde : Differentiable Complex e := (differentiable_id.smul_const (w - z)).add_const z
-  suffices ‖(f ∘ e) (1 : Complex)‖ = ‖(f ∘ e) (0 : Complex)‖ b
+  suffices ‖(f ∘ e) (1 : Complex)‖ = ‖(f ∘ e) (0 : Complex)‖ by simpa [e]
+  have hr : dist (1 : Complex) 0 = 1 := by simp
+  have hball : MapsTo e (ball 0 1) (ball z r) := by
+    refine ((lipschitzWith_lineMap z w).mapsTo_ball (mt nndist_eq_zero.1 hne) 0 1).mono
+      Subset.rfl ?_
+    simpa only [lineMap_apply_zero, mul_one, coe_nndist] using ball_subset_ball hw
+  exact norm_max_aux₃ hr (hd.comp hde.diffContOnCl hball)
+      (hz.comp_mapsTo hball (lineMap_apply_zero z w))
 
 中文:
 定理 norm_eqOn_closedBall_of_isMaxOn
@@ -258,7 +311,14 @@ theorem norm_eqOn_closedBall_of_isMaxOn
   rcases eq_or_ne z w with (rfl | hne); · rfl
   set e := (lineMap z w : Complex -> E)
   have hde : Differentiable Complex e := (differentiable_id.smul_const (w - z)).add_const z
-  suffices ‖(f ∘ e) (1 : Complex)‖ = ‖(f ∘ e) (0 : Complex)‖ b
+  suffices ‖(f ∘ e) (1 : Complex)‖ = ‖(f ∘ e) (0 : Complex)‖ by simpa [e]
+  have hr : dist (1 : Complex) 0 = 1 := by simp
+  have hball : MapsTo e (ball 0 1) (ball z r) := by
+    refine ((lipschitzWith_lineMap z w).mapsTo_ball (mt nndist_eq_zero.1 hne) 0 1).mono
+      Subset.rfl ?_
+    simpa only [lineMap_apply_zero, mul_one, coe_nndist] using ball_subset_ball hw
+  exact norm_max_aux₃ hr (hd.comp hde.diffContOnCl hball)
+      (hz.comp_mapsTo hball (lineMap_apply_zero z w))
 
 Depends on / 依赖: Differentiable, MapsTo, Subset, Subset.rfl, add_const, differentiable_id, differentiable_id.smul_const, dist_comm, eq_or_ne, lineMap, lipschitzWith_lineMap, mapsTo_ball, mem_closedBall, nndist_eq_zero, smul_const
 -/
@@ -309,7 +369,8 @@ theorem norm_eventually_eq_of_isLocalMax
   rcases nhds_basis_closedBall.eventually_iff.1 (hd.and hc) with ⟨r, hr₀, hr⟩
   exact nhds_basis_closedBall.eventually_iff.2
     ⟨r, hr₀, norm_eqOn_closedBall_of_isMaxOn (DifferentiableOn.diffContOnCl fun x hx =>
-        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx
+        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx =>
+      (hr <| ball_subset_closedBall hx).2⟩
 
 中文:
 定理 norm_eventually_eq_of_isLocalMax
@@ -318,7 +379,8 @@ theorem norm_eventually_eq_of_isLocalMax
   rcases nhds_basis_closedBall.eventually_iff.1 (hd.and hc) with ⟨r, hr₀, hr⟩
   exact nhds_basis_closedBall.eventually_iff.2
     ⟨r, hr₀, norm_eqOn_closedBall_of_isMaxOn (DifferentiableOn.diffContOnCl fun x hx =>
-        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx
+        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx =>
+      (hr <| ball_subset_closedBall hx).2⟩
 
 Depends on / 依赖: DifferentiableOn, DifferentiableOn.diffContOnCl, ball_subset_closedBall, closure_ball_subset_closedBall, diffContOnCl, differentiableWithinAt, eventually_iff, hd.and, nhds_basis_closedBall, nhds_basis_closedBall.eventually_iff, norm_eqOn_closedBall_of_isMaxOn
 -/
@@ -341,7 +403,10 @@ theorem isOpen_setOfPred_mem_nhds_and_isMaxOn_norm
   refine isOpen_iff_mem_nhds.2 fun z hz => (eventually_eventually_nhds.2 hz.1).and ?_
   replace hd : forallᶠ w in 𝓝 z, DifferentiableAt Complex f w := hd.eventually_differentiableAt hz.1
   exact (norm_eventually_eq_of_isLocalMax hd <| hz.2.isLocalMax hz.1).mono fun x hx y hy =>
-    le_trans (hz.2
+    le_trans (hz.2 hy).out hx.ge
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_mem_nhds_and_isMaxOn_norm := isOpen_setOfPred_mem_nhds_and_isMaxOn_norm
 
 中文:
 定理 isOpen_setOfPred_mem_nhds_and_isMaxOn_norm
@@ -350,7 +415,10 @@ theorem isOpen_setOfPred_mem_nhds_and_isMaxOn_norm
   refine isOpen_iff_mem_nhds.2 fun z hz => (eventually_eventually_nhds.2 hz.1).and ?_
   replace hd : forallᶠ w in 𝓝 z, DifferentiableAt Complex f w := hd.eventually_differentiableAt hz.1
   exact (norm_eventually_eq_of_isLocalMax hd <| hz.2.isLocalMax hz.1).mono fun x hx y hy =>
-    le_trans (hz.2
+    le_trans (hz.2 hy).out hx.ge
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_mem_nhds_and_isMaxOn_norm := isOpen_setOfPred_mem_nhds_and_isMaxOn_norm
 
 Depends on / 依赖: DifferentiableAt, eventually_differentiableAt, eventually_eventually_nhds, hd.eventually_differentiableAt, hx.ge, isLocalMax, isOpen_iff_mem_nhds, le_trans, norm_eventually_eq_of_isLocalMax, replace
 -/
@@ -376,7 +444,15 @@ theorem norm_eqOn_of_isPreconnected_of_isMaxOn
   suffices U subseteq V from fun x hx => hV x (this hx)
   have hVo : IsOpen V := by
     simpa only [ho.mem_nhds_iff, ofPred_and, ofPred_mem_eq]
-      using isOp
+      using isOpen_setOfPred_mem_nhds_and_isMaxOn_norm hd
+  have hVne : (U inter V).Nonempty := ⟨c, hcU, hcU, hm⟩
+  set W := U inter {z | ‖f z‖ != ‖f c‖}
+  have hWo : IsOpen W := hd.continuousOn.norm.isOpen_inter_preimage ho isOpen_ne
+  have hdVW : Disjoint V W := disjoint_left.mpr fun x hxV hxW => hxW.2 (hV x hxV)
+  have hUVW : U subseteq V union W := fun x hx =>
+    (eq_or_ne ‖f x‖ ‖f c‖).imp (fun h => ⟨hx, fun y hy => (hm hy).out.trans_eq h.symm⟩)
+      (And.intro hx)
+  exact hc.subset_left_of_subset_union hVo hWo hdVW hUVW hVne
 
 中文:
 定理 norm_eqOn_of_isPreconnected_of_isMaxOn
@@ -387,7 +463,15 @@ theorem norm_eqOn_of_isPreconnected_of_isMaxOn
   suffices U subseteq V from fun x hx => hV x (this hx)
   have hVo : IsOpen V := by
     simpa only [ho.mem_nhds_iff, ofPred_and, ofPred_mem_eq]
-      using isOp
+      using isOpen_setOfPred_mem_nhds_and_isMaxOn_norm hd
+  have hVne : (U inter V).Nonempty := ⟨c, hcU, hcU, hm⟩
+  set W := U inter {z | ‖f z‖ != ‖f c‖}
+  have hWo : IsOpen W := hd.continuousOn.norm.isOpen_inter_preimage ho isOpen_ne
+  have hdVW : Disjoint V W := disjoint_left.mpr fun x hxV hxW => hxW.2 (hV x hxV)
+  have hUVW : U subseteq V union W := fun x hx =>
+    (eq_or_ne ‖f x‖ ‖f c‖).imp (fun h => ⟨hx, fun y hy => (hm hy).out.trans_eq h.symm⟩)
+      (And.intro hx)
+  exact hc.subset_left_of_subset_union hVo hWo hdVW hUVW hVne
 
 Depends on / 依赖: IsMaxOn, IsOpen, Nonempty, continuousOn, hd.continuousOn.norm.isOpen_inter_preimage, ho.mem_nhds_iff, isOpen_inter_preimage, isOpen_ne, isOpen_setOfPred_mem_nhds_and_isMaxOn_norm, le_antisymm, mem_nhds_iff, ofPred_and, ofPred_mem_eq, subseteq
 -/
@@ -458,7 +542,7 @@ theorem eqOn_of_isPreconnected_of_isMaxOn_norm
   have H₁ : ‖f x‖ = ‖f c‖ := norm_eqOn_of_isPreconnected_of_isMaxOn hc ho hd hcU hm hx
   have H₂ : ‖f x + f c‖ = ‖f c + f c‖ :=
     norm_eqOn_of_isPreconnected_of_isMaxOn hc ho (hd.add_const _) hcU hm.norm_add_self hx
-eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add
+eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add, H₁, Function.const]
 
 中文:
 定理 eqOn_of_isPreconnected_of_isMaxOn_norm
@@ -467,7 +551,7 @@ eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add
   have H₁ : ‖f x‖ = ‖f c‖ := norm_eqOn_of_isPreconnected_of_isMaxOn hc ho hd hcU hm hx
   have H₂ : ‖f x + f c‖ = ‖f c + f c‖ :=
     norm_eqOn_of_isPreconnected_of_isMaxOn hc ho (hd.add_const _) hcU hm.norm_add_self hx
-eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add
+eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add, H₁, Function.const]
 -/
 theorem eqOn_of_isPreconnected_of_isMaxOn_norm {f : E -> F} {U : Set E} {c : E}
     (hc : IsPreconnected U) (ho : IsOpen U) (hd : DifferentiableOn Complex f U) (hcU : c in U)
@@ -583,7 +667,9 @@ lemma eq_const_of_exists_le
     (h_an.continuousOn.mono <| closedBall_subset_ball hr_lt).norm
   suffices Set.EqOn f (Function.const E (f x)) (ball 0 b) by
     rwa [this (mem_ball_self (hr_nn.trans_lt hr_lt))]
-  a
+  apply eq_const_of_exists_max h_an (closedBall_subset_ball hr_lt hx_mem) (fun z hz => ?_)
+  obtain ⟨w, hw, hw'⟩ := hr z hz
+  exact hw'.trans (hx_max hw)
 
 中文:
 引理 eq_const_of_存在_le
@@ -594,7 +680,9 @@ lemma eq_const_of_exists_le
     (h_an.continuousOn.mono <| closedBall_subset_ball hr_lt).norm
   suffices Set.EqOn f (Function.const E (f x)) (ball 0 b) by
     rwa [this (mem_ball_self (hr_nn.trans_lt hr_lt))]
-  a
+  apply eq_const_of_exists_max h_an (closedBall_subset_ball hr_lt hx_mem) (fun z hz => ?_)
+  obtain ⟨w, hw, hw'⟩ := hr z hz
+  exact hw'.trans (hx_max hw)
 
 Depends on / 依赖: Function, Function.const, Set.EqOn, closedBall_subset_ball, continuousOn, eq_const_of_exists_max, exists_isMaxOn, h_an, h_an.continuousOn.mono, hr_lt, hr_nn, hr_nn.trans_lt, hx_max, hx_mem, isCompact_closedBall, mem_ball_self, nonempty_closedBall, nonempty_closedBall.mpr, trans_lt
 -/
@@ -621,7 +709,8 @@ theorem eventually_eq_of_isLocalMax_norm
   rcases nhds_basis_closedBall.eventually_iff.1 (hd.and hc) with ⟨r, hr₀, hr⟩
   exact nhds_basis_closedBall.eventually_iff.2
     ⟨r, hr₀, eqOn_closedBall_of_isMaxOn_norm (DifferentiableOn.diffContOnCl fun x hx =>
-        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx
+        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx =>
+      (hr <| ball_subset_closedBall hx).2⟩
 
 中文:
 定理 eventually_eq_of_isLocalMax_norm
@@ -630,7 +719,8 @@ theorem eventually_eq_of_isLocalMax_norm
   rcases nhds_basis_closedBall.eventually_iff.1 (hd.and hc) with ⟨r, hr₀, hr⟩
   exact nhds_basis_closedBall.eventually_iff.2
     ⟨r, hr₀, eqOn_closedBall_of_isMaxOn_norm (DifferentiableOn.diffContOnCl fun x hx =>
-        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx
+        (hr <| closure_ball_subset_closedBall hx).1.differentiableWithinAt) fun x hx =>
+      (hr <| ball_subset_closedBall hx).2⟩
 
 Depends on / 依赖: DifferentiableOn, DifferentiableOn.diffContOnCl, ball_subset_closedBall, closure_ball_subset_closedBall, diffContOnCl, differentiableWithinAt, eqOn_closedBall_of_isMaxOn_norm, eventually_iff, hd.and, nhds_basis_closedBall, nhds_basis_closedBall.eventually_iff
 -/
@@ -653,7 +743,9 @@ theorem eventually_eq_or_eq_zero_of_isLocalMin_norm
   refine or_iff_not_imp_right.mpr fun h => ?_
   have h1 : forallᶠ z in 𝓝 c, f z != 0 := hf.self_of_nhds.continuousAt.eventually_ne h
   have h2 : IsLocalMax (norm ∘ f)⁻¹ c := hc.inv (h1.mono fun z => norm_pos_iff.mpr)
-  have h3 : IsLocalMax (norm ∘ f⁻¹) c := by refine h2.congr (Eventually.of_foral
+  have h3 : IsLocalMax (norm ∘ f⁻¹) c := by refine h2.congr (Eventually.of_forall ?_); simp
+  have h4 : forallᶠ z in 𝓝 c, DifferentiableAt Complex f⁻¹ z := by filter_upwards [hf, h1] with z h using h.inv
+  filter_upwards [eventually_eq_of_isLocalMax_norm h4 h3] with z using inv_inj.mp
 
 中文:
 定理 eventually_eq_or_eq_zero_of_isLocalMin_norm
@@ -662,7 +754,9 @@ theorem eventually_eq_or_eq_zero_of_isLocalMin_norm
   refine or_iff_not_imp_right.mpr fun h => ?_
   have h1 : forallᶠ z in 𝓝 c, f z != 0 := hf.self_of_nhds.continuousAt.eventually_ne h
   have h2 : IsLocalMax (norm ∘ f)⁻¹ c := hc.inv (h1.mono fun z => norm_pos_iff.mpr)
-  have h3 : IsLocalMax (norm ∘ f⁻¹) c := by refine h2.congr (Eventually.of_foral
+  have h3 : IsLocalMax (norm ∘ f⁻¹) c := by refine h2.congr (Eventually.of_forall ?_); simp
+  have h4 : forallᶠ z in 𝓝 c, DifferentiableAt Complex f⁻¹ z := by filter_upwards [hf, h1] with z h using h.inv
+  filter_upwards [eventually_eq_of_isLocalMax_norm h4 h3] with z using inv_inj.mp
 
 Depends on / 依赖: DifferentiableAt, Eventually, Eventually.of_forall, IsLocalMax, continuousAt, eventually_eq_of_isLocalMax_norm, eventually_ne, filter_upwards, h.inv, h1.mono, h2.congr, hc.inv, hf.self_of_nhds.continuousAt.eventually_ne, inv_inj, inv_inj.mp, norm_pos_iff, norm_pos_iff.mpr, of_forall, or_iff_not_imp_right, or_iff_not_imp_right.mpr
 -/
@@ -699,7 +793,13 @@ theorem exists_mem_frontier_isMaxOn_norm
   obtain ⟨w, hwU, hle⟩ : exists w in closure U, IsMaxOn (norm ∘ f) (closure U) w :=
     hc.exists_isMaxOn hne.closure hd.continuousOn.norm
   rw [closure_eq_interior_union_frontier]; rw [mem_union] at hwU
-  rcases hwU with hwU | hwU; rotate
+  rcases hwU with hwU | hwU; rotate_left; · exact ⟨w, hwU, hle⟩
+  have : interior U != univ := ne_top_of_le_ne_top hc.ne_univ interior_subset_closure
+  rcases exists_mem_frontier_infDist_compl_eq_dist hwU this with ⟨z, hzU, hzw⟩
+  refine ⟨z, frontier_interior_subset hzU, fun x hx => (hle hx).out.trans_eq ?_⟩
+  refine (norm_eq_norm_of_isMaxOn_of_ball_subset hd (hle.on_subset subset_closure) ?_).symm
+  rw [dist_comm]; rw [← hzw]
+  exact ball_infDist_compl_subset.trans interior_subset
 
 中文:
 定理 存在_mem_frontier_isMaxOn_norm
@@ -709,7 +809,13 @@ theorem exists_mem_frontier_isMaxOn_norm
   obtain ⟨w, hwU, hle⟩ : exists w in closure U, IsMaxOn (norm ∘ f) (closure U) w :=
     hc.exists_isMaxOn hne.closure hd.continuousOn.norm
   rw [closure_eq_interior_union_frontier]; rw [mem_union] at hwU
-  rcases hwU with hwU | hwU; rotate
+  rcases hwU with hwU | hwU; rotate_left; · exact ⟨w, hwU, hle⟩
+  have : interior U != univ := ne_top_of_le_ne_top hc.ne_univ interior_subset_closure
+  rcases exists_mem_frontier_infDist_compl_eq_dist hwU this with ⟨z, hzU, hzw⟩
+  refine ⟨z, frontier_interior_subset hzU, fun x hx => (hle hx).out.trans_eq ?_⟩
+  refine (norm_eq_norm_of_isMaxOn_of_ball_subset hd (hle.on_subset subset_closure) ?_).symm
+  rw [dist_comm]; rw [← hzw]
+  exact ball_infDist_compl_subset.trans interior_subset
 
 Depends on / 依赖: IsCompact, IsMaxOn, closure, closure_eq_interior_union_frontier, continuousOn, exists_isMaxOn, exists_mem_frontier_infDist_compl_eq_dist, frontier_in, hb.isCompact_closure, hc.exists_isMaxOn, hc.ne_univ, hd.continuousOn.norm, hne.closure, interior, interior_subset_closure, isCompact_closure, mem_union, ne_top_of_le_ne_top, ne_univ, rotate_left
 -/
@@ -740,7 +846,19 @@ theorem norm_le_of_forall_mem_frontier_norm_le
   rcases hz with hz | hz; · exact hC z hz
   /- In case of a finite-dimensional domain, one can just apply
     `Complex.exists_mem_frontier_isMaxOn_norm`. To make it work in any Banach space, we restrict
-    the function 
+    the function to a line first. -/
+  rcases exists_ne z with ⟨w, hne⟩
+  set e := (lineMap z w : Complex -> E)
+  have hde : Differentiable Complex e := (differentiable_id.smul_const (w - z)).add_const z
+  have hL : AntilipschitzWith (nndist z w)⁻¹ e := antilipschitzWith_lineMap hne.symm
+  replace hd : DiffContOnCl Complex (f ∘ e) (e ⁻¹' U) :=
+    hd.comp hde.diffContOnCl (mapsTo_preimage _ _)
+  have h₀ : (0 : Complex) in e ⁻¹' U := by simpa only [e, mem_preimage, lineMap_apply_zero]
+  rcases exists_mem_frontier_isMaxOn_norm (hL.isBounded_preimage hU) ⟨0, h₀⟩ hd with ⟨ζ, hζU, hζ⟩
+  calc
+    ‖f z‖ = ‖f (e 0)‖ := by simp only [e, lineMap_apply_zero]
+    _ <= ‖f (e ζ)‖ := hζ (subset_closure h₀)
+    _ <= C := hC _ (hde.continuous.frontier_preimage_subset _ hζU)
 
 中文:
 定理 norm_le_of_对任意_mem_frontier_norm_le
@@ -750,7 +868,19 @@ theorem norm_le_of_forall_mem_frontier_norm_le
   rcases hz with hz | hz; · exact hC z hz
   /- In case of a finite-dimensional domain, one can just apply
     `Complex.exists_mem_frontier_isMaxOn_norm`. To make it work in any Banach space, we restrict
-    the function 
+    the function to a line first. -/
+  rcases exists_ne z with ⟨w, hne⟩
+  set e := (lineMap z w : Complex -> E)
+  have hde : Differentiable Complex e := (differentiable_id.smul_const (w - z)).add_const z
+  have hL : AntilipschitzWith (nndist z w)⁻¹ e := antilipschitzWith_lineMap hne.symm
+  replace hd : DiffContOnCl Complex (f ∘ e) (e ⁻¹' U) :=
+    hd.comp hde.diffContOnCl (mapsTo_preimage _ _)
+  have h₀ : (0 : Complex) in e ⁻¹' U := by simpa only [e, mem_preimage, lineMap_apply_zero]
+  rcases exists_mem_frontier_isMaxOn_norm (hL.isBounded_preimage hU) ⟨0, h₀⟩ hd with ⟨ζ, hζU, hζ⟩
+  calc
+    ‖f z‖ = ‖f (e 0)‖ := by simp only [e, lineMap_apply_zero]
+    _ <= ‖f (e ζ)‖ := hζ (subset_closure h₀)
+    _ <= C := hC _ (hde.continuous.frontier_preimage_subset _ hζU)
 
 Depends on / 依赖: closure_eq_self_union_frontier, mem_union, union_comm
 -/

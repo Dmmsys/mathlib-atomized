@@ -41,7 +41,12 @@ lemma trace_restrict_eq_of_forall_mem
   obtain ⟨n, snf⟩ := p.smithNormalForm (Module.Free.chooseBasis R M)
   rw [trace_eq_matrix_trace R snf.bM]; rw [trace_eq_matrix_trace R snf.bN]
   set A : Matrix (Fin n) (Fin n) R := toMatrix snf.bN snf.bN (f.restrict hf')
-  set B : Matrix ι ι R := toMat
+  set B : Matrix ι ι R := toMatrix snf.bM snf.bM f
+  have aux : forall i, B i i != 0 -> i in Set.range snf.f := fun i hi => by
+    contrapose hi; exact snf.repr_eq_zero_of_notMem_range ⟨_, (hf _)⟩ hi
+  change ∑ i, A i i = ∑ i, B i i
+  rw [← Finset.sum_filter_of_ne (p := fun j => j in Set.range snf.f) (by simpa using aux)]
+  simp [A, B, hf, Finset.sum_image snf.f.injective.injOn]
 
 中文:
 引理 trace_restrict_eq_of_对任意_mem
@@ -51,7 +56,12 @@ lemma trace_restrict_eq_of_forall_mem
   obtain ⟨n, snf⟩ := p.smithNormalForm (Module.Free.chooseBasis R M)
   rw [trace_eq_matrix_trace R snf.bM]; rw [trace_eq_matrix_trace R snf.bN]
   set A : Matrix (Fin n) (Fin n) R := toMatrix snf.bN snf.bN (f.restrict hf')
-  set B : Matrix ι ι R := toMat
+  set B : Matrix ι ι R := toMatrix snf.bM snf.bM f
+  have aux : forall i, B i i != 0 -> i in Set.range snf.f := fun i hi => by
+    contrapose hi; exact snf.repr_eq_zero_of_notMem_range ⟨_, (hf _)⟩ hi
+  change ∑ i, A i i = ∑ i, B i i
+  rw [← Finset.sum_filter_of_ne (p := fun j => j in Set.range snf.f) (by simpa using aux)]
+  simp [A, B, hf, Finset.sum_image snf.f.injective.injOn]
 -/
 lemma trace_restrict_eq_of_forall_mem [IsDomain R] [IsPrincipalIdealRing R]
     (p : Submodule R M) (f : M ->ₗ[R] M)

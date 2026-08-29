@@ -247,7 +247,7 @@ theorem coe_splitUpper
   simp only [mem_univ_pi, mem_Ioc, mem_inter_iff, mem_coe, mem_ofPred_eq, forall_and,
     forall_update_iff I.lower fun j z => z < y j, max_lt_iff, and_assoc (a := x < y i),
     and_forall_ne (p := fun j => lower I j < y j) i, mem_def]
-  exact a
+  exact and_comm
 
 中文:
 定理 coe_splitUpper
@@ -259,7 +259,7 @@ theorem coe_splitUpper
   simp only [mem_univ_pi, mem_Ioc, mem_inter_iff, mem_coe, mem_ofPred_eq, forall_and,
     forall_update_iff I.lower fun j z => z < y j, max_lt_iff, and_assoc (a := x < y i),
     and_forall_ne (p := fun j => lower I j < y j) i, mem_def]
-  exact a
+  exact and_comm
 
 Depends on / 依赖: I.lower, and_assoc, and_comm, and_forall_ne, classical, coe_mk, forall_and, forall_update_iff, max_lt_iff, mem_Ioc, mem_coe, mem_def, mem_inter_iff, mem_ofPred_eq, mem_univ_pi, splitUpper
 -/
@@ -458,7 +458,11 @@ definition split
       exacts [Box.splitLower_le, Box.splitUpper_le])
     (by
       simp only [Finset.coe_insert, Finset.coe_singleton, true_and, Set.mem_singleton_iff,
-        
+        pairwise_insert_of_symm, pairwise_singleton]
+      rintro J rfl -
+      exact I.disjoint_splitLower_splitUpper i x)
+
+@[simp]
 
 中文:
 定义 split
@@ -470,7 +474,11 @@ definition split
       exacts [Box.splitLower_le, Box.splitUpper_le])
     (by
       simp only [Finset.coe_insert, Finset.coe_singleton, true_and, Set.mem_singleton_iff,
-        
+        pairwise_insert_of_symm, pairwise_singleton]
+      rintro J rfl -
+      exact I.disjoint_splitLower_splitUpper i x)
+
+@[simp]
 
 Depends on / 依赖: Box.splitLower_le, Box.splitUpper_le, Finset, Finset.coe_insert, Finset.coe_singleton, Finset.mem_insert, Finset.mem_singleton, I.disjoint_splitLower_splitUpper, I.splitLower, I.splitUpper, Set.mem_singleton_iff, coe_insert, coe_singleton, disjoint_splitLower_splitUpper, exacts, mem_insert, mem_singleton, mem_singleton_iff, ofWithBot, pairwise_insert_of_symm
 -/
@@ -613,7 +621,7 @@ theorem split_of_notMem_Ioo
   rw [mem_Ioo]; rw [not_and_or]; rw [not_lt]; rw [not_lt] at h
   cases h <;> [right; left]
   · rwa [eq_comm, Box.splitUpper_eq_self]
-  · rwa [eq_comm,
+  · rwa [eq_comm, Box.splitLower_eq_self]
 
 中文:
 定理 split_of_notMem_Ioo
@@ -626,7 +634,7 @@ theorem split_of_notMem_Ioo
   rw [mem_Ioo]; rw [not_and_or]; rw [not_lt]; rw [not_lt] at h
   cases h <;> [right; left]
   · rwa [eq_comm, Box.splitUpper_eq_self]
-  · rwa [eq_comm,
+  · rwa [eq_comm, Box.splitLower_eq_self]
 
 Depends on / 依赖: Box.splitLower_eq_self, Box.splitUpper_eq_self, eq_comm, eq_of_boxes_subset, isPartitionTop, mem_Ioo, mem_boxes, mem_split_iff, mem_top, not_and_or, not_lt, splitLower_eq_self, splitUpper_eq_self
 -/
@@ -710,7 +718,7 @@ theorem restrict_split
   simp only [Finset.subset_iff, mem_boxes, mem_restrict', mem_split_iff']
   have : forall s, (I inter s : Set (ι -> Real)) subseteq J := fun s => inter_subset_left.trans h
   rintro J₁ ⟨J₂, H₂ | H₂, H₁⟩ <;> [left; right] <;>
-    
+    simp [H₁, H₂, inter_left_comm (I : Set (ι -> Real)), this]
 
 中文:
 定理 restrict_split
@@ -721,7 +729,7 @@ theorem restrict_split
   simp only [Finset.subset_iff, mem_boxes, mem_restrict', mem_split_iff']
   have : forall s, (I inter s : Set (ι -> Real)) subseteq J := fun s => inter_subset_left.trans h
   rintro J₁ ⟨J₂, H₂ | H₂, H₁⟩ <;> [left; right] <;>
-    
+    simp [H₁, H₂, inter_left_comm (I : Set (ι -> Real)), this]
 
 Depends on / 依赖: Finset, Finset.subset_iff, eq_of_boxes_subset, inter_left_comm, inter_subset_left, inter_subset_left.trans, isPartitionSplit, mem_boxes, mem_restrict, mem_split_iff, restrict, subset_iff, subseteq
 -/
@@ -930,7 +938,12 @@ theorem not_disjoint_imp_le_of_subset_of_mem_splitMany
   refine fun y hy i => ⟨?_, ?_⟩
   · rcases splitMany_le_split I (H i).1 HJs with ⟨Jl, Hmem : Jl in split I i (J.lower i), Hle⟩
     have := Hle hxs
-    
+    rw [← Box.coe_subset_coe]; rw [coe_eq_of_mem_split_of_lt_mem Hmem this (hx i).1] at Hle
+    exact (Hle hy).2
+  · rcases splitMany_le_split I (H i).2 HJs with ⟨Jl, Hmem : Jl in split I i (J.upper i), Hle⟩
+    have := Hle hxs
+    rw [← Box.coe_subset_coe]; rw [coe_eq_of_mem_split_of_mem_le Hmem this (hx i).2] at Hle
+    exact (Hle hy).2
 
 中文:
 定理 not_disjoint_imp_le_of_subset_of_mem_splitMany
@@ -941,7 +954,12 @@ theorem not_disjoint_imp_le_of_subset_of_mem_splitMany
   refine fun y hy i => ⟨?_, ?_⟩
   · rcases splitMany_le_split I (H i).1 HJs with ⟨Jl, Hmem : Jl in split I i (J.lower i), Hle⟩
     have := Hle hxs
-    
+    rw [← Box.coe_subset_coe]; rw [coe_eq_of_mem_split_of_lt_mem Hmem this (hx i).1] at Hle
+    exact (Hle hy).2
+  · rcases splitMany_le_split I (H i).2 HJs with ⟨Jl, Hmem : Jl in split I i (J.upper i), Hle⟩
+    have := Hle hxs
+    rw [← Box.coe_subset_coe]; rw [coe_eq_of_mem_split_of_mem_le Hmem this (hx i).2] at Hle
+    exact (Hle hy).2
 
 Depends on / 依赖: Box.coe_subset_coe, Box.not_disjoint_coe_iff_nonempty_inter.mp, Finset, Finset.insert_subset_iff, Finset.singleton_subset_iff, J.lower, J.upper, coe_eq_of_mem_split_of_lt_mem, coe_subset_coe, insert_subset_iff, not_disjoint_coe_iff_nonempty_inter, singleton_subset_iff, splitMany_le_split
 -/
@@ -977,7 +995,7 @@ theorem eventually_not_disjoint_imp_le_of_mem_splitMany
     ⟨s.biUnion fun J => Finset.univ.biUnion fun i => {(i, J.lower i), (i, J.upper i)},
       fun t ht I J hJ J' hJ' => not_disjoint_imp_le_of_subset_of_mem_splitMany (fun i => ?_) hJ'⟩
   exact fun p hp =>
-    ht (Finset.mem_biUnio
+    ht (Finset.mem_biUnion.2 ⟨J, hJ, Finset.mem_biUnion.2 ⟨i, Finset.mem_univ _, hp⟩⟩)
 
 中文:
 定理 eventually_not_disjoint_imp_le_of_mem_splitMany
@@ -989,7 +1007,7 @@ theorem eventually_not_disjoint_imp_le_of_mem_splitMany
     ⟨s.biUnion fun J => Finset.univ.biUnion fun i => {(i, J.lower i), (i, J.upper i)},
       fun t ht I J hJ J' hJ' => not_disjoint_imp_le_of_subset_of_mem_splitMany (fun i => ?_) hJ'⟩
   exact fun p hp =>
-    ht (Finset.mem_biUnio
+    ht (Finset.mem_biUnion.2 ⟨J, hJ, Finset.mem_biUnion.2 ⟨i, Finset.mem_univ _, hp⟩⟩)
 
 Depends on / 依赖: Finset, Finset.mem_biUnion, Finset.mem_univ, Finset.univ.biUnion, J.lower, J.upper, biUnion, classical, eventually_atTop, mem_biUnion, mem_univ, nonempty_fintype, not_disjoint_imp_le_of_subset_of_mem_splitMany, s.biUnion
 -/
@@ -1015,7 +1033,13 @@ theorem eventually_splitMany_inf_eq_filter
   refine le_antisymm ((biUnion_le_iff _).2 fun J hJ => ?_) (le_inf (fun J hJ => ?_) (filter_le _ _))
   · refine ofWithBot_mono ?_
     simp only [Finset.mem_image, mem_boxes, mem_filter]
-    rintro _ ⟨J₁, h₁, rf
+    rintro _ ⟨J₁, h₁, rfl⟩ hne
+    refine ⟨_, ⟨J₁, ⟨h₁, Subset.trans ?_ (π.subset_iUnion hJ)⟩, rfl⟩, le_rfl⟩
+    exact ht I J hJ J₁ h₁ (mt disjoint_iff.1 hne)
+  · rw [mem_filter] at hJ
+    rcases Set.mem_iUnion₂.1 (hJ.2 J.upper_mem) with ⟨J', hJ', hmem⟩
+refine ⟨J', hJ', ht I _ hJ' _ hJ.1 Box.not_disjoint_coe_iff_nonempty_inter.2 ?_⟩
+    exact ⟨J.upper, hmem, J.upper_mem⟩
 
 中文:
 定理 eventually_splitMany_inf_eq_filter
@@ -1025,7 +1049,13 @@ theorem eventually_splitMany_inf_eq_filter
   refine le_antisymm ((biUnion_le_iff _).2 fun J hJ => ?_) (le_inf (fun J hJ => ?_) (filter_le _ _))
   · refine ofWithBot_mono ?_
     simp only [Finset.mem_image, mem_boxes, mem_filter]
-    rintro _ ⟨J₁, h₁, rf
+    rintro _ ⟨J₁, h₁, rfl⟩ hne
+    refine ⟨_, ⟨J₁, ⟨h₁, Subset.trans ?_ (π.subset_iUnion hJ)⟩, rfl⟩, le_rfl⟩
+    exact ht I J hJ J₁ h₁ (mt disjoint_iff.1 hne)
+  · rw [mem_filter] at hJ
+    rcases Set.mem_iUnion₂.1 (hJ.2 J.upper_mem) with ⟨J', hJ', hmem⟩
+refine ⟨J', hJ', ht I _ hJ' _ hJ.1 Box.not_disjoint_coe_iff_nonempty_inter.2 ?_⟩
+    exact ⟨J.upper, hmem, J.upper_mem⟩
 
 Depends on / 依赖: Finset, Finset.mem_image, J.upper_mem, Set.mem_iUnion, Subset, Subset.trans, biUnion_le_iff, disjoint_iff, eventually_not_disjoint_imp_le_of_mem_splitMany, filter_le, le_antisymm, le_inf, le_rfl, mem_boxes, mem_filter, mem_image, ofWithBot_mono, subset_iUnion, upper_mem
 -/

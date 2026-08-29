@@ -110,6 +110,15 @@ definition map
         simp only [obj_obj_p, assoc, ← h]
         slice_lhs 1 3 => rw [h', h'] }
   naturality _ _ f := by
+    ext
+    dsimp [obj]
+    have h := φ.naturality f.f
+    have h' := F.congr_map (comp_p f)
+    have h'' := F.congr_map (p_comp f)
+    simp only [hom_ext_iff, Functor.map_comp, comp_f] at h h' h'' ⊢
+    slice_rhs 2 3 => rw [← h]
+    slice_lhs 1 2 => rw [h']
+    slice_rhs 1 2 => rw [h'']
 
 中文:
 定义 map
@@ -122,6 +131,15 @@ definition map
         simp only [obj_obj_p, assoc, ← h]
         slice_lhs 1 3 => rw [h', h'] }
   naturality _ _ f := by
+    ext
+    dsimp [obj]
+    have h := φ.naturality f.f
+    have h' := F.congr_map (comp_p f)
+    have h'' := F.congr_map (p_comp f)
+    simp only [hom_ext_iff, Functor.map_comp, comp_f] at h h' h'' ⊢
+    slice_rhs 2 3 => rw [← h]
+    slice_lhs 1 2 => rw [h']
+    slice_rhs 1 2 => rw [h'']
 
 Depends on / 依赖: F.congr_map, F.map, F.map_comp, Functor, Functor.map_comp, Karoubi, Karoubi.comp_f, P.idem, comp_f, comp_p, congr_map, hom_ext_iff, map_comp, naturality, obj_obj_p, p_comp, slice_lhs, slice_rhs
 -/
@@ -168,7 +186,10 @@ definition functorExtension₁
     simp only [comp_f, FunctorExtension₁.map_app_f, NatTrans.comp_app, assoc]
     have h := φ.naturality P.p
     have h' := F.congr_map P.idem
-    simp
+    simp only [hom_ext_iff, comp_f, F.map_comp] at h h'
+    slice_rhs 2 3 => rw [← h]
+    slice_rhs 1 2 => rw [h']
+    simp only [assoc]
 
 中文:
 定义 functorExtension₁
@@ -183,7 +204,10 @@ definition functorExtension₁
     simp only [comp_f, FunctorExtension₁.map_app_f, NatTrans.comp_app, assoc]
     have h := φ.naturality P.p
     have h' := F.congr_map P.idem
-    simp
+    simp only [hom_ext_iff, comp_f, F.map_comp] at h h'
+    slice_rhs 2 3 => rw [← h]
+    slice_rhs 1 2 => rw [h']
+    simp only [assoc]
 -/
 def functorExtension₁ : (C ⥤ Karoubi D) ⥤ Karoubi C ⥤ Karoubi D where
   obj := FunctorExtension₁.obj
@@ -259,7 +283,31 @@ definition KaroubiUniversal₁.counitIso
                 comm := by
                   simpa only [hom_ext_iff, G.map_comp, G.map_id] using!
                     G.congr_map
-                      (show (toKaroubi C).map 
+                      (show (toKaroubi C).map P.p ≫ P.decompId_p ≫ 𝟙 _ = P.decompId_p by simp) }
+            naturality := fun P Q f => by
+              simpa only [hom_ext_iff, G.map_comp]
+                using! (G.congr_map (decompId_p_naturality f)).symm }
+        inv :=
+          { app := fun P =>
+              { f := (G.map (decompId_i P)).f
+                comm := by
+                  simpa only [hom_ext_iff, G.map_comp, G.map_id] using!
+                    G.congr_map
+                      (show 𝟙 _ ≫ P.decompId_i ≫ (toKaroubi C).map P.p = P.decompId_i by simp) }
+            naturality := fun P Q f => by
+              simpa only [hom_ext_iff, G.map_comp] using! G.congr_map (decompId_i_naturality f) }
+        hom_inv_id := by
+          ext P
+          simpa only [hom_ext_iff, G.map_comp, G.map_id] using! G.congr_map P.decomp_p.symm
+        inv_hom_id := by
+          ext P
+          simpa only [hom_ext_iff, G.map_comp, G.map_id] using! G.congr_map P.decompId.symm })
+    (fun {X Y} φ => by
+      ext P
+      dsimp
+      rw [natTrans_eq φ P]; rw [P.decomp_p]
+      simp only [Functor.map_comp, comp_f, assoc]
+      rfl)
 
 中文:
 定义 KaroubiUniversal₁.counitIso
@@ -272,7 +320,31 @@ definition KaroubiUniversal₁.counitIso
                 comm := by
                   simpa only [hom_ext_iff, G.map_comp, G.map_id] using!
                     G.congr_map
-                      (show (toKaroubi C).map 
+                      (show (toKaroubi C).map P.p ≫ P.decompId_p ≫ 𝟙 _ = P.decompId_p by simp) }
+            naturality := fun P Q f => by
+              simpa only [hom_ext_iff, G.map_comp]
+                using! (G.congr_map (decompId_p_naturality f)).symm }
+        inv :=
+          { app := fun P =>
+              { f := (G.map (decompId_i P)).f
+                comm := by
+                  simpa only [hom_ext_iff, G.map_comp, G.map_id] using!
+                    G.congr_map
+                      (show 𝟙 _ ≫ P.decompId_i ≫ (toKaroubi C).map P.p = P.decompId_i by simp) }
+            naturality := fun P Q f => by
+              simpa only [hom_ext_iff, G.map_comp] using! G.congr_map (decompId_i_naturality f) }
+        hom_inv_id := by
+          ext P
+          simpa only [hom_ext_iff, G.map_comp, G.map_id] using! G.congr_map P.decomp_p.symm
+        inv_hom_id := by
+          ext P
+          simpa only [hom_ext_iff, G.map_comp, G.map_id] using! G.congr_map P.decompId.symm })
+    (fun {X Y} φ => by
+      ext P
+      dsimp
+      rw [natTrans_eq φ P]; rw [P.decomp_p]
+      simp only [Functor.map_comp, comp_f, assoc]
+      rfl)
 
 Depends on / 依赖: G.congr_map, G.map, G.map_comp, G.map_id, NatIso, NatIso.ofComponents, P.decompId_p, congr_map, decompId_i, decompId_p, decompId_p_naturality, hom_ext_iff, map_comp, map_id, naturality, ofComponents, toKaroubi
 -/
@@ -331,7 +403,7 @@ definition karoubiUniversal₁
   functor_unitIso_comp F := by
     ext P
     dsimp
-    rw [comp_p]; rw [← comp_f]; rw
+    rw [comp_p]; rw [← comp_f]; rw [← F.map_comp]; rw [P.idem]
 
 中文:
 定义 karoubiUniversal₁
@@ -343,7 +415,7 @@ definition karoubiUniversal₁
   functor_unitIso_comp F := by
     ext P
     dsimp
-    rw [comp_p]; rw [← comp_f]; rw
+    rw [comp_p]; rw [← comp_f]; rw [← F.map_comp]; rw [P.idem]
 -/
 def karoubiUniversal₁ : C ⥤ Karoubi D ≌ Karoubi C ⥤ Karoubi D where
   functor := functorExtension₁ C D
@@ -599,7 +671,9 @@ instance :
     (whiskeringRight C (Karoubi D) D).obj (Functor.inv (toKaroubi D))).IsEquivalence := by
     change (karoubiUniversal C D).inverse.IsEquivalence
     infer_instance
-  exact Fu
+  exact Functor.isEquivalence_of_comp_right _
+    ((whiskeringRight C _ _).obj (toKaroubi D) ⋙
+      (whiskeringRight C (Karoubi D) D).obj (Functor.inv (toKaroubi D)))
 
 中文:
 实例 :
@@ -610,7 +684,9 @@ instance :
     (whiskeringRight C (Karoubi D) D).obj (Functor.inv (toKaroubi D))).IsEquivalence := by
     change (karoubiUniversal C D).inverse.IsEquivalence
     infer_instance
-  exact Fu
+  exact Functor.isEquivalence_of_comp_right _
+    ((whiskeringRight C _ _).obj (toKaroubi D) ⋙
+      (whiskeringRight C (Karoubi D) D).obj (Functor.inv (toKaroubi D)))
 
 Depends on / 依赖: Functor, Functor.inv, Functor.isEquivalence_of_comp_right, IsEquivalence, Karoubi, infer_instance, inverse, inverse.IsEquivalence, isEquivalence_of_comp_right, karoubiUniversal, toKaroubi, whiskeringLeft, whiskeringRight
 -/
@@ -679,7 +755,16 @@ definition whiskeringLeftObjToKaroubiFullyFaithful
         dsimp at τ ⊢
         have h₁ : f ≫ Y.decompId_i = X.decompId_i ≫ (toKaroubi C).map f.f := by simp
         have h₂ := τ.naturality f.f
-        have h₃ : X.decompId_p ≫ f = (toKaroubi C).map f.f ≫ Y.dec
+        have h₃ : X.decompId_p ≫ f = (toKaroubi C).map f.f ≫ Y.decompId_p := by simp
+        dsimp at h₂
+        rw [Category.assoc]; rw [Category.assoc]; rw [← F.map_comp_assoc]; rw [h₁]; rw [F.map_comp_assoc]; rw [reassoc_of% h₂]; rw [← G.map_comp]; rw [← h₃]; rw [G.map_comp] }
+  preimage_map {F G} τ := by ext X; exact (natTrans_eq _ _).symm
+  map_preimage {F G} τ := by
+    ext X
+    dsimp
+    rw [Karoubi.decompId_i_toKaroubi]; rw [Karoubi.decompId_p_toKaroubi]; rw [Functor.map_id]; rw [Category.id_comp]
+    change _ ≫ G.map (𝟙 _) = _
+    simp
 
 中文:
 定义 whiskeringLeftObjToKaroubiFullyFaithful
@@ -689,7 +774,16 @@ definition whiskeringLeftObjToKaroubiFullyFaithful
         dsimp at τ ⊢
         have h₁ : f ≫ Y.decompId_i = X.decompId_i ≫ (toKaroubi C).map f.f := by simp
         have h₂ := τ.naturality f.f
-        have h₃ : X.decompId_p ≫ f = (toKaroubi C).map f.f ≫ Y.dec
+        have h₃ : X.decompId_p ≫ f = (toKaroubi C).map f.f ≫ Y.decompId_p := by simp
+        dsimp at h₂
+        rw [Category.assoc]; rw [Category.assoc]; rw [← F.map_comp_assoc]; rw [h₁]; rw [F.map_comp_assoc]; rw [reassoc_of% h₂]; rw [← G.map_comp]; rw [← h₃]; rw [G.map_comp] }
+  preimage_map {F G} τ := by ext X; exact (natTrans_eq _ _).symm
+  map_preimage {F G} τ := by
+    ext X
+    dsimp
+    rw [Karoubi.decompId_i_toKaroubi]; rw [Karoubi.decompId_p_toKaroubi]; rw [Functor.map_id]; rw [Category.id_comp]
+    change _ ≫ G.map (𝟙 _) = _
+    simp
 
 Depends on / 依赖: Category, Category.assoc, F.map, F.map_comp_assoc, G.map, G.map_comp, P.decompId_i, P.decompId_p, X.decompId_i, X.decompId_p, Y.decompId_i, Y.decompId_p, decompId_i, decompId_p, map_comp, map_comp_assoc, naturality, preimage_map, reassoc_of, toKaroubi
 -/

@@ -39,7 +39,8 @@ lemma prod_one_sub_pow_eq_order
   rw [C_1]; rw [← mul_geom_sum]; rw [prod_range_succ']; rw [pow_zero]; rw [mul_one]; rw [mul_comm]; rw [eq_comm] at this
   replace this := mul_right_cancel₀ (Polynomial.X_sub_C_ne_zero 1) this
   apply_fun Polynomial.eval 1 at this
-
+  simpa only [mul_one, map_pow, eval_prod, eval_sub, eval_X, eval_pow, eval_C, eval_geom_sum,
+    one_pow, sum_const, card_range, nsmul_eq_mul, Nat.cast_add, Nat.cast_one] using this
 
 中文:
 引理 prod_one_sub_pow_eq_order
@@ -49,7 +50,8 @@ lemma prod_one_sub_pow_eq_order
   rw [C_1]; rw [← mul_geom_sum]; rw [prod_range_succ']; rw [pow_zero]; rw [mul_one]; rw [mul_comm]; rw [eq_comm] at this
   replace this := mul_right_cancel₀ (Polynomial.X_sub_C_ne_zero 1) this
   apply_fun Polynomial.eval 1 at this
-
+  simpa only [mul_one, map_pow, eval_prod, eval_sub, eval_X, eval_pow, eval_C, eval_geom_sum,
+    one_pow, sum_const, card_range, nsmul_eq_mul, Nat.cast_add, Nat.cast_one] using this
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, Polynomial, Polynomial.X_sub_C_ne_zero, Polynomial.eval, X_pow_sub_C_eq_prod, X_sub_C_ne_zero, apply_fun, card_range, cast_add, cast_one, eq_comm, eval_C, eval_X, eval_geom_sum, eval_pow, eval_prod, eval_sub, map_pow, mul_comm
 -/
@@ -98,7 +100,27 @@ lemma self_sub_one_pow_dvd_order
   obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.le_of_lt_succ hn)
   have hdvd k : exists z in Int[μ], μ ^ k - 1 = z * (μ - 1) := by
     refine ⟨(Finset.range k).sum (μ ^ ·), ?_, (geom_sum_mul μ k).symm⟩
-    exact Subalgebra.sum_mem _ fun m _ => Subalgebra.pow_mem _ (self_mem_
+    exact Subalgebra.sum_mem _ fun m _ => Subalgebra.pow_mem _ (self_mem_adjoin_singleton _ μ) _
+let Z k := Classical.choose hdvd k
+  have Zdef k : Z k in Int[μ] ∧ μ ^ k - 1 = Z k * (μ - 1) :=
+Classical.choose_spec hdvd k
+  refine ⟨(-1) ^ (m + k) * (∏ j in range k, Z (j + 1)) * ∏ j in Ico k (m + k), (μ ^ (j + 1) - 1),
+    ?_, ?_⟩
+  · apply Subalgebra.mul_mem
+    · apply Subalgebra.mul_mem
+      · exact Subalgebra.pow_mem _ (Subalgebra.neg_mem _ <| Subalgebra.one_mem _) _
+      · exact Subalgebra.prod_mem _ fun _ _ => (Zdef _).1
+    · refine Subalgebra.prod_mem _ fun _ _ => ?_
+      apply Subalgebra.sub_mem
+      · exact Subalgebra.pow_mem _ (self_mem_adjoin_singleton Int μ) _
+      · exact Subalgebra.one_mem _
+  · push_cast
+    have := Nat.cast_add (R := R) m k ▸ hμ.prod_pow_sub_one_eq_order
+    rw [← this]; rw [mul_assoc]; rw [mul_assoc]
+    congr 1
+    conv => enter [2, 2, 2]; rw [← card_range k]
+    rw [← prod_range_mul_prod_Ico _ (Nat.le_add_left k m)]; rw [mul_comm _ (_ ^ #_)]; rw [← mul_assoc]; rw [prod_mul_pow_card]
+    conv => enter [2, 1, 2, j]; rw [← (Zdef _).2]
 
 中文:
 引理 self_sub_one_pow_dvd_order
@@ -108,7 +130,27 @@ lemma self_sub_one_pow_dvd_order
   obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.le_of_lt_succ hn)
   have hdvd k : exists z in Int[μ], μ ^ k - 1 = z * (μ - 1) := by
     refine ⟨(Finset.range k).sum (μ ^ ·), ?_, (geom_sum_mul μ k).symm⟩
-    exact Subalgebra.sum_mem _ fun m _ => Subalgebra.pow_mem _ (self_mem_
+    exact Subalgebra.sum_mem _ fun m _ => Subalgebra.pow_mem _ (self_mem_adjoin_singleton _ μ) _
+let Z k := Classical.choose hdvd k
+  have Zdef k : Z k in Int[μ] ∧ μ ^ k - 1 = Z k * (μ - 1) :=
+Classical.choose_spec hdvd k
+  refine ⟨(-1) ^ (m + k) * (∏ j in range k, Z (j + 1)) * ∏ j in Ico k (m + k), (μ ^ (j + 1) - 1),
+    ?_, ?_⟩
+  · apply Subalgebra.mul_mem
+    · apply Subalgebra.mul_mem
+      · exact Subalgebra.pow_mem _ (Subalgebra.neg_mem _ <| Subalgebra.one_mem _) _
+      · exact Subalgebra.prod_mem _ fun _ _ => (Zdef _).1
+    · refine Subalgebra.prod_mem _ fun _ _ => ?_
+      apply Subalgebra.sub_mem
+      · exact Subalgebra.pow_mem _ (self_mem_adjoin_singleton Int μ) _
+      · exact Subalgebra.one_mem _
+  · push_cast
+    have := Nat.cast_add (R := R) m k ▸ hμ.prod_pow_sub_one_eq_order
+    rw [← this]; rw [mul_assoc]; rw [mul_assoc]
+    congr 1
+    conv => enter [2, 2, 2]; rw [← card_range k]
+    rw [← prod_range_mul_prod_Ico _ (Nat.le_add_left k m)]; rw [mul_comm _ (_ ^ #_)]; rw [← mul_assoc]; rw [prod_mul_pow_card]
+    conv => enter [2, 1, 2, j]; rw [← (Zdef _).2]
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Finset, Finset.range, Nat.exists_eq_add_of_le, Nat.le_of_lt_succ, Subalgebra, Subalgebra.pow_mem, Subalgebra.sum_mem, choose_spec, exists_eq_add_of_le, geom_sum_mul, le_of_lt_succ, pow_mem, self_mem_adjoin_singleton, sum_mem
 -/

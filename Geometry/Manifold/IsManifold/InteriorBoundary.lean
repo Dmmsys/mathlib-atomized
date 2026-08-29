@@ -620,7 +620,18 @@ lemma _root_.DifferentiableAt.mem_interior_convex_of_surjective_fderiv
   -- It suffices to show that `fderiv ℝ f x` sends everything to the kernel of `F`.
   suffices h : forall y, F (fderiv Real f x y) = 0 by
     have ⟨y, hy⟩ := hs''
-    unfold Function.Surjective; pu
+    unfold Function.Surjective; push Not
+    refine ⟨f x - y, fun z => ne_of_apply_ne F ?_⟩
+    rw [h z]; rw [F.map_sub]
+    exact (sub_pos.2 <| hF _ hy).ne
+  -- This follows from `F ∘ f` taking on a local maximum at `e.extend I x`.
+  have hF' : MapsTo F s (Iic (F (f x))) := by
+    rw [← hs'.closure_eq]; rw [← closure_Iio]; rw [← hs.closure_interior_eq_closure_of_nonempty_interior hs'']
+    exact .closure hF F.continuous
+have hFφ : IsLocalMax (F ∘ f) x := Filter.eventually_of_mem hu fun y hy => hF' hfus hy
+  have h := hFφ.fderiv_eq_zero
+  rw [fderiv_comp _ (by fun_prop) hf]; rw [ContinuousLinearMap.fderiv] at h
+  exact DFunLike.congr_fun h
 
 中文:
 引理 _root_.DifferentiableAt.mem_interior_convex_of_surjective_fderiv
@@ -630,7 +641,18 @@ lemma _root_.DifferentiableAt.mem_interior_convex_of_surjective_fderiv
   -- It suffices to show that `fderiv ℝ f x` sends everything to the kernel of `F`.
   suffices h : forall y, F (fderiv Real f x y) = 0 by
     have ⟨y, hy⟩ := hs''
-    unfold Function.Surjective; pu
+    unfold Function.Surjective; push Not
+    refine ⟨f x - y, fun z => ne_of_apply_ne F ?_⟩
+    rw [h z]; rw [F.map_sub]
+    exact (sub_pos.2 <| hF _ hy).ne
+  -- This follows from `F ∘ f` taking on a local maximum at `e.extend I x`.
+  have hF' : MapsTo F s (Iic (F (f x))) := by
+    rw [← hs'.closure_eq]; rw [← closure_Iio]; rw [← hs.closure_interior_eq_closure_of_nonempty_interior hs'']
+    exact .closure hF F.continuous
+have hFφ : IsLocalMax (F ∘ f) x := Filter.eventually_of_mem hu fun y hy => hF' hfus hy
+  have h := hFφ.fderiv_eq_zero
+  rw [fderiv_comp _ (by fun_prop) hf]; rw [ContinuousLinearMap.fderiv] at h
+  exact DFunLike.congr_fun h
 
 Depends on / 依赖: contrapose, geometric_hahn_banach_open_point, hs.interior, interior, isOpen_interior
 -/
@@ -670,7 +692,30 @@ lemma mem_interior_range_of_mem_interior_range_of_mem_atlas
   to the boundary of `range I`, the differential of the transition map `φ` from `e` to `e'` at `x`
   could not be surjective. -/
   let φ := I.extendCoordChange e e'
-  have hφ : ContDiffOn 𝕜 n φ φ.sou
+  have hφ : ContDiffOn 𝕜 n φ φ.source := contDiffOn_extendCoordChange
+    (IsManifold.subset_maximalAtlas he) (IsManifold.subset_maximalAtlas he')
+  suffices h : Function.Surjective (fderivWithin 𝕜 φ φ.source (e.extend I x)) ->
+      e'.extend I x in interior (range I) by
+refine e'.mem_interior_extend_target (by simp [hex']) h ?_
+    exact (isInvertible_fderivWithin_extendCoordChange hn (IsManifold.subset_maximalAtlas he)
+(IsManifold.subset_maximalAtlas he') by simp [hex, hex']).surjective
+  intro hφx'
+  /- Reduce the situation to the real case, then apply
+  `DifferentiableAt.mem_interior_convex_of_surjective_fderiv`. -/
+  wlog _ : IsRCLikeNormedField 𝕜
+  · simp [I.range_eq_univ_of_not_isRCLikeNormedField ‹_›]
+  let _ := IsRCLikeNormedField.rclike 𝕜
+  let _ : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
+  have hφx : φ.source in 𝓝 (e.extend I x) := by
+    simp_rw [φ, extendCoordChange, PartialEquiv.trans_source, PartialEquiv.symm_source,
+      Filter.inter_mem_iff, mem_interior_iff_mem_nhds.1 hx, true_and, e'.extend_source]
+exact e.extend_preimage_mem_nhds hex e'.open_source.mem_nhds hex'
+  rw [← ContinuousLinearMap.coe_restrictScalars' (R := Real)]; rw [(hφ.differentiableOn hn _ (by simp [φ]; rw [hex]; rw [hex'])).restrictScalars_fderivWithin (𝕜 := Real)
+(uniqueDiffWithinAt_of_mem_nhds hφx), fderivWithin_of_mem_nhds hφx] at hφx'
+  rw [show e'.extend I x = φ (e.extend I x) by simp [φ]; rw [hex]]
+  replace hφ := ((hφ.restrict_scalars Real).differentiableOn hn).differentiableAt hφx
+  exact hφ.mem_interior_convex_of_surjective_fderiv hφx I.convex_range I.isClosed_range
+    I.nonempty_interior (φ.mapsTo.mono_right <| by simp [φ, inter_assoc]) hφx'
 
 中文:
 引理 mem_interior_range_of_mem_interior_range_of_mem_atlas
@@ -680,7 +725,30 @@ lemma mem_interior_range_of_mem_interior_range_of_mem_atlas
   to the boundary of `range I`, the differential of the transition map `φ` from `e` to `e'` at `x`
   could not be surjective. -/
   let φ := I.extendCoordChange e e'
-  have hφ : ContDiffOn 𝕜 n φ φ.sou
+  have hφ : ContDiffOn 𝕜 n φ φ.source := contDiffOn_extendCoordChange
+    (IsManifold.subset_maximalAtlas he) (IsManifold.subset_maximalAtlas he')
+  suffices h : Function.Surjective (fderivWithin 𝕜 φ φ.source (e.extend I x)) ->
+      e'.extend I x in interior (range I) by
+refine e'.mem_interior_extend_target (by simp [hex']) h ?_
+    exact (isInvertible_fderivWithin_extendCoordChange hn (IsManifold.subset_maximalAtlas he)
+(IsManifold.subset_maximalAtlas he') by simp [hex, hex']).surjective
+  intro hφx'
+  /- Reduce the situation to the real case, then apply
+  `DifferentiableAt.mem_interior_convex_of_surjective_fderiv`. -/
+  wlog _ : IsRCLikeNormedField 𝕜
+  · simp [I.range_eq_univ_of_not_isRCLikeNormedField ‹_›]
+  let _ := IsRCLikeNormedField.rclike 𝕜
+  let _ : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
+  have hφx : φ.source in 𝓝 (e.extend I x) := by
+    simp_rw [φ, extendCoordChange, PartialEquiv.trans_source, PartialEquiv.symm_source,
+      Filter.inter_mem_iff, mem_interior_iff_mem_nhds.1 hx, true_and, e'.extend_source]
+exact e.extend_preimage_mem_nhds hex e'.open_source.mem_nhds hex'
+  rw [← ContinuousLinearMap.coe_restrictScalars' (R := Real)]; rw [(hφ.differentiableOn hn _ (by simp [φ]; rw [hex]; rw [hex'])).restrictScalars_fderivWithin (𝕜 := Real)
+(uniqueDiffWithinAt_of_mem_nhds hφx), fderivWithin_of_mem_nhds hφx] at hφx'
+  rw [show e'.extend I x = φ (e.extend I x) by simp [φ]; rw [hex]]
+  replace hφ := ((hφ.restrict_scalars Real).differentiableOn hn).differentiableAt hφx
+  exact hφ.mem_interior_convex_of_surjective_fderiv hφx I.convex_range I.isClosed_range
+    I.nonempty_interior (φ.mapsTo.mono_right <| by simp [φ, inter_assoc]) hφx'
 -/
 lemma mem_interior_range_of_mem_interior_range_of_mem_atlas (hn : n != 0)
     (he : e in atlas H M) (he' : e' in atlas H M) (hex : x in e.source) (hex' : x in e'.source)
@@ -861,7 +929,30 @@ lemma MDifferentiableAt.isInteriorPoint_of_surjective_mfderiv
   wlog _ : IsRCLikeNormedField 𝕜
   · simp [IsInteriorPoint, I'.range_eq_univ_of_not_isRCLikeNormedField ‹_›]
   let _ := IsRCLikeNormedField.rclike 𝕜
-  let _ : NormedSpace Real E := NormedSpace.rest
+  let _ : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
+  let _ : NormedSpace Real E' := NormedSpace.restrictScalars Real 𝕜 E'
+  -- Write everything in terms of extended charts around `x` and `f x`.
+  simp only [mfderiv, hf] at hf'
+have hf'' := hf.differentiableWithinAt_writtenInExtChartAt.differentiableAt by
+    simpa [← mem_interior_iff_mem_nhds] using! hx
+  rw [fderivWithin_eq_fderiv (I.uniqueDiffOn _ <| by simp) hf''] at hf'
+  /- Since `writtenInExtChartAt I I' x f` is differentiable with surjective differential at `x`
+  over `𝕜`, it also is so over `ℝ`. -/
+  replace hf' : Surjective (fderiv Real (writtenInExtChartAt I I' x f) (extChartAt I x x)) := by
+    rwa [hf''.fderiv_restrictScalars (𝕜 := Real), ContinuousLinearMap.coe_restrictScalars']
+  replace hf'' := hf''.restrictScalars Real
+  /- The lemma is now essentially just `mem_interior_convex_of_surjective_fderiv`: because
+  `writtenInExtChartAt I I' x f` is differentiable with surjective differential at `x` over `ℝ` and
+  sends a neighbourhood of `x` (the region in which it could be written in the extended charts) to
+  a closed convex set with nonempty interior (`I'.range`), it must send `x` to that interior. -/
+  have := hf''.mem_interior_convex_of_surjective_fderiv (Filter.inter_mem ?_ ?_) I'.convex_range
+    I'.isClosed_range I'.nonempty_interior (writtenInExtChartAt_mapsTo.mono_right ?_) hf'
+  · simpa using! this
+  · rw [← nhdsWithin_eq_nhds.2 (mem_interior_iff_mem_nhds.1 hx)]
+    exact extChartAt_target_mem_nhdsWithin x
+· exact extChartAt_preimage_mem_nhds hf.continuousAt.preimage_mem_nhds
+      extChartAt_source_mem_nhds _
+  · exact extChartAt_target_subset_range _
 
 中文:
 引理 MDifferentiableAt.is整数eriorPoint_of_surjective_mfderiv
@@ -871,7 +962,30 @@ lemma MDifferentiableAt.isInteriorPoint_of_surjective_mfderiv
   wlog _ : IsRCLikeNormedField 𝕜
   · simp [IsInteriorPoint, I'.range_eq_univ_of_not_isRCLikeNormedField ‹_›]
   let _ := IsRCLikeNormedField.rclike 𝕜
-  let _ : NormedSpace Real E := NormedSpace.rest
+  let _ : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
+  let _ : NormedSpace Real E' := NormedSpace.restrictScalars Real 𝕜 E'
+  -- Write everything in terms of extended charts around `x` and `f x`.
+  simp only [mfderiv, hf] at hf'
+have hf'' := hf.differentiableWithinAt_writtenInExtChartAt.differentiableAt by
+    simpa [← mem_interior_iff_mem_nhds] using! hx
+  rw [fderivWithin_eq_fderiv (I.uniqueDiffOn _ <| by simp) hf''] at hf'
+  /- Since `writtenInExtChartAt I I' x f` is differentiable with surjective differential at `x`
+  over `𝕜`, it also is so over `ℝ`. -/
+  replace hf' : Surjective (fderiv Real (writtenInExtChartAt I I' x f) (extChartAt I x x)) := by
+    rwa [hf''.fderiv_restrictScalars (𝕜 := Real), ContinuousLinearMap.coe_restrictScalars']
+  replace hf'' := hf''.restrictScalars Real
+  /- The lemma is now essentially just `mem_interior_convex_of_surjective_fderiv`: because
+  `writtenInExtChartAt I I' x f` is differentiable with surjective differential at `x` over `ℝ` and
+  sends a neighbourhood of `x` (the region in which it could be written in the extended charts) to
+  a closed convex set with nonempty interior (`I'.range`), it must send `x` to that interior. -/
+  have := hf''.mem_interior_convex_of_surjective_fderiv (Filter.inter_mem ?_ ?_) I'.convex_range
+    I'.isClosed_range I'.nonempty_interior (writtenInExtChartAt_mapsTo.mono_right ?_) hf'
+  · simpa using! this
+  · rw [← nhdsWithin_eq_nhds.2 (mem_interior_iff_mem_nhds.1 hx)]
+    exact extChartAt_target_mem_nhdsWithin x
+· exact extChartAt_preimage_mem_nhds hf.continuousAt.preimage_mem_nhds
+      extChartAt_source_mem_nhds _
+  · exact extChartAt_target_subset_range _
 -/
 lemma MDifferentiableAt.isInteriorPoint_of_surjective_mfderiv {f : M -> N} {x : M}
     (hf : MDiffAt f x) (hf' : Surjective (mfderiv% f x))
@@ -916,7 +1030,8 @@ lemma IsLocalDiffeomorphAt.isInteriorPoint_iff
   · refine (hf.mdifferentiableAt hn).isInteriorPoint_of_surjective_mfderiv ?_ h
     exact (hf.mfderivToContinuousLinearEquiv hn).surjective
   · rw [← hf.localInverse_left_inv hf.localInverse_mem_target]
-    refine (hf.localInverse_mdifferentiableAt hn).isInteri
+    refine (hf.localInverse_mdifferentiableAt hn).isInteriorPoint_of_surjective_mfderiv ?_ h
+    exact (hf.mfderivToContinuousLinearEquiv hn).symm.surjective
 
 中文:
 引理 IsLocalDiffeomorphAt.is整数eriorPoint_iff
@@ -926,7 +1041,8 @@ lemma IsLocalDiffeomorphAt.isInteriorPoint_iff
   · refine (hf.mdifferentiableAt hn).isInteriorPoint_of_surjective_mfderiv ?_ h
     exact (hf.mfderivToContinuousLinearEquiv hn).surjective
   · rw [← hf.localInverse_left_inv hf.localInverse_mem_target]
-    refine (hf.localInverse_mdifferentiableAt hn).isInteri
+    refine (hf.localInverse_mdifferentiableAt hn).isInteriorPoint_of_surjective_mfderiv ?_ h
+    exact (hf.mfderivToContinuousLinearEquiv hn).symm.surjective
 
 Depends on / 依赖: hf.localInverse_left_inv, hf.localInverse_mdifferentiableAt, hf.localInverse_mem_target, hf.mdifferentiableAt, hf.mfderivToContinuousLinearEquiv, isInteriorPoint_of_surjective_mfderiv, localInverse_left_inv, localInverse_mdifferentiableAt, localInverse_mem_target, mdifferentiableAt, mfderivToContinuousLinearEquiv, surjective, symm.surjective
 -/
@@ -1334,7 +1450,13 @@ lemma interior_prod
     rw [← interior_prod_eq]; rw [← range_prodMap]; rw [modelWithCorners_prod_coe]
   constructor <;> intro hp
   · replace hp : (I.prod J).IsInteriorPoint p := hp
-    rw [IsInteriorPoint]; rw [← a
+    rw [IsInteriorPoint]; rw [← aux] at hp
+    exact hp
+  · change (I.prod J).IsInteriorPoint p
+    rw [IsInteriorPoint]; rw [← aux]; rw [mem_prod]
+    obtain h := Set.mem_prod.mp hp
+    rw [ModelWithCorners.interior] at h
+    exact h
 
 中文:
 引理 interior_prod
@@ -1344,7 +1466,13 @@ lemma interior_prod
     rw [← interior_prod_eq]; rw [← range_prodMap]; rw [modelWithCorners_prod_coe]
   constructor <;> intro hp
   · replace hp : (I.prod J).IsInteriorPoint p := hp
-    rw [IsInteriorPoint]; rw [← a
+    rw [IsInteriorPoint]; rw [← aux] at hp
+    exact hp
+  · change (I.prod J).IsInteriorPoint p
+    rw [IsInteriorPoint]; rw [← aux]; rw [mem_prod]
+    obtain h := Set.mem_prod.mp hp
+    rw [ModelWithCorners.interior] at h
+    exact h
 
 Depends on / 依赖: I.prod, IsInteriorPoint, ModelWithCorners, ModelWithCorners.interior, Set.mem_prod.mp, interior, interior_prod_eq, mem_prod, modelWithCorners_prod_coe, range_prodMap, replace
 -/
@@ -1373,7 +1501,8 @@ lemma boundary_prod
     _ = ((I.prod J).interior (M × N))ᶜ := compl_interior.symm
     _ = ((I.interior M) ×ˢ (J.interior N))ᶜ := by rw [interior_prod]
     _ = (I.interior M)ᶜ ×ˢ univ union univ ×ˢ (J.interior N)ᶜ := by rw [compl_prod_eq_union]
-  rw [h]; rw [I.compl_interio
+  rw [h]; rw [I.compl_interior]; rw [J.compl_interior]; rw [union_comm]
+  rfl
 
 中文:
 引理 boundary_prod
@@ -1382,7 +1511,8 @@ lemma boundary_prod
     _ = ((I.prod J).interior (M × N))ᶜ := compl_interior.symm
     _ = ((I.interior M) ×ˢ (J.interior N))ᶜ := by rw [interior_prod]
     _ = (I.interior M)ᶜ ×ˢ univ union univ ×ˢ (J.interior N)ᶜ := by rw [compl_prod_eq_union]
-  rw [h]; rw [I.compl_interio
+  rw [h]; rw [I.compl_interior]; rw [J.compl_interior]; rw [union_comm]
+  rfl
 
 Depends on / 依赖: I.compl_interior, I.interior, I.prod, J.compl_interior, J.interior, boundary, compl_interior, compl_interior.symm, compl_prod_eq_union, interior, interior_prod, union_comm
 -/
@@ -1460,7 +1590,7 @@ instance BoundarylessManifold.prod
   simp only [boundary_prod, Boundaryless.boundary_eq_empty, union_empty_iff]
   -- These are simp lemmas, but `simp` does not apply them on its own:
   -- presumably because of the distinction between `Prod` and `ModelProd`
-  exact ⟨Set.prod_empty, Set.empt
+  exact ⟨Set.prod_empty, Set.empty_prod⟩
 
 中文:
 实例 无边界流形.乘积
@@ -1470,7 +1600,7 @@ instance BoundarylessManifold.prod
   simp only [boundary_prod, Boundaryless.boundary_eq_empty, union_empty_iff]
   -- These are simp lemmas, but `simp` does not apply them on its own:
   -- presumably because of the distinction between `Prod` and `ModelProd`
-  exact ⟨Set.prod_empty, Set.empt
+  exact ⟨Set.prod_empty, Set.empty_prod⟩
 
 Depends on / 依赖: Boundaryless, Boundaryless.boundary_eq_empty, Boundaryless.of_boundary_eq_empty, boundary_eq_empty, boundary_prod, of_boundary_eq_empty, union_empty_iff
 -/

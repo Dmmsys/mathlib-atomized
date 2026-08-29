@@ -152,7 +152,22 @@ definition S_equiv
       unfold S.encode S.decode
       simp [iha, ihb]
   right_inv n := by -- The fact it's a right inverse isn't needed for the deriving handler.
-  
+    induction n using Nat.strongRecOn with | _ n ih =>
+    unfold S.decode
+    dsimp only
+    split
+    next h =>
+      unfold S.encode
+      rw [← h]; rw [Nat.pair_unpair]
+    next h =>
+      unfold S.encode
+      rw [ih]; rw [ih]; rw [Nat.sub_add_cancel]; rw [Nat.pair_unpair]
+      · rwa [Nat.one_le_iff_ne_zero]
+      · exact nat_unpair_lt_2 h
+      · obtain _ | n' := n
+        · exact False.elim (h (by simp))
+        · have := Nat.unpair_lt (by lia : 1 <= n' + 1)
+          lia
 
 中文:
 定义 S_equiv
@@ -168,7 +183,22 @@ definition S_equiv
       unfold S.encode S.decode
       simp [iha, ihb]
   right_inv n := by -- The fact it's a right inverse isn't needed for the deriving handler.
-  
+    induction n using Nat.strongRecOn with | _ n ih =>
+    unfold S.decode
+    dsimp only
+    split
+    next h =>
+      unfold S.encode
+      rw [← h]; rw [Nat.pair_unpair]
+    next h =>
+      unfold S.encode
+      rw [ih]; rw [ih]; rw [Nat.sub_add_cancel]; rw [Nat.pair_unpair]
+      · rwa [Nat.one_le_iff_ne_zero]
+      · exact nat_unpair_lt_2 h
+      · obtain _ | n' := n
+        · exact False.elim (h (by simp))
+        · have := Nat.unpair_lt (by lia : 1 <= n' + 1)
+          lia
 -/
 private def S_equiv : S ≃ Nat where
   toFun := S.encode
@@ -400,7 +430,9 @@ definition mkFromSFuns
     let indVal := ctx.typeInfos[i]!
     let header ← mkHeader ``Encodable 1 indVal
     let body ← mkFromSMatch ctx indVal fromSFunNames
-    -- Last binder is for the targ
+    -- Last binder is for the target
+    let binders := header.binders[0:header.binders.size - 1]
+res := res.push ← `(
 
 中文:
 定义 mkFromSFuns
@@ -412,7 +444,9 @@ definition mkFromSFuns
     let indVal := ctx.typeInfos[i]!
     let header ← mkHeader ``Encodable 1 indVal
     let body ← mkFromSMatch ctx indVal fromSFunNames
-    -- Last binder is for the targ
+    -- Last binder is for the target
+    let binders := header.binders[0:header.binders.size - 1]
+res := res.push ← `(
 -/
 private def mkFromSFuns (ctx : Deriving.Context) (fromSFunNames : Array Name) :
     TermElabM (TSyntax `command) := do
@@ -448,7 +482,17 @@ definition mkInjThms
     let injThmName := ctx.auxFunNames[i]!
     let indVal := ctx.typeInfos[i]!
     let header ← mkHeader ``Encodable 1 indVal
-    let en
+    let enc := mkIdent toSFunName
+    let dec := mkIdent fromSFunName
+    let t := mkIdent header.targetNames[0]!
+    let lemmas : TSyntaxArray ``Parser.Tactic.simpLemma ← ctx.auxFunNames.mapM fun i =>
+      `(Parser.Tactic.simpLemma| $(mkIdent i):term)
+    let tactic : Term ← `(by
+cases t:ident
+        <;> (unfold $(mkIdent toSFunName):ident $(mkIdent fromSFunName):ident;
+              simp only [Encodable.encodek, $lemmas,*]; try rfl)
+      )
+res := res.push ← `(
 
 中文:
 定义 mkInjThms
@@ -461,7 +505,17 @@ definition mkInjThms
     let injThmName := ctx.auxFunNames[i]!
     let indVal := ctx.typeInfos[i]!
     let header ← mkHeader ``Encodable 1 indVal
-    let en
+    let enc := mkIdent toSFunName
+    let dec := mkIdent fromSFunName
+    let t := mkIdent header.targetNames[0]!
+    let lemmas : TSyntaxArray ``Parser.Tactic.simpLemma ← ctx.auxFunNames.mapM fun i =>
+      `(Parser.Tactic.simpLemma| $(mkIdent i):term)
+    let tactic : Term ← `(by
+cases t:ident
+        <;> (unfold $(mkIdent toSFunName):ident $(mkIdent fromSFunName):ident;
+              simp only [Encodable.encodek, $lemmas,*]; try rfl)
+      )
+res := res.push ← `(
 -/
 private def mkInjThms (ctx : Deriving.Context) (toSFunNames fromSFunNames : Array Name) :
     TermElabM (TSyntax `command) := do
@@ -507,7 +561,13 @@ definition mkEncodableInstanceCmds
       let auxFunName := ctx.auxFunNames[i]!
       let argNames ← mkInductArgNames indVal
       let binders ← mkImplicitBinders argNames
-      let binders :
+      let binders := binders ++ (← mkInstImplicitBinders ``Encodable indVal argNames)
+      let indType ← mkInductiveApp indVal argNames
+      let type ← `($(mkCIdent ``Encodable) $indType)
+      let encode := mkIdent toSFunNames[i]!
+      let decode := mkIdent fromSFunNames[i]!
+      let kencode := mkIdent auxFunName
+      let instCmd ← `(
 
 中文:
 定义 mkEncodableInstanceCmds
@@ -520,7 +580,13 @@ definition mkEncodableInstanceCmds
       let auxFunName := ctx.auxFunNames[i]!
       let argNames ← mkInductArgNames indVal
       let binders ← mkImplicitBinders argNames
-      let binders :
+      let binders := binders ++ (← mkInstImplicitBinders ``Encodable indVal argNames)
+      let indType ← mkInductiveApp indVal argNames
+      let type ← `($(mkCIdent ``Encodable) $indType)
+      let encode := mkIdent toSFunNames[i]!
+      let decode := mkIdent fromSFunNames[i]!
+      let kencode := mkIdent auxFunName
+      let instCmd ← `(
 -/
 private def mkEncodableInstanceCmds (ctx : Deriving.Context) (typeNames : Array Name)
     (toSFunNames fromSFunNames : Array Name) : TermElabM (Array Command) := do
@@ -577,7 +643,15 @@ definition mkEncodableCmds
     let .str n' s := name.eraseMacroScopes | unreachable!
 mkFreshUserName .str n' (s ++ "_toS")
   let fromSFunNames : Array Name ← ctx.auxFunNames.mapM fun name => do
-   
+    let .str n' s := name.eraseMacroScopes | unreachable!
+mkFreshUserName .str n' (s ++ "_fromS")
+  let cmds :=
+    #[← mkToSFuns ctx toSFunNames,
+      ← mkFromSFuns ctx fromSFunNames,
+      ← mkInjThms ctx toSFunNames fromSFunNames]
+    ++ (← mkEncodableInstanceCmds ctx declNames toSFunNames fromSFunNames)
+  trace[Mathlib.Deriving.encodable] "\n{cmds}"
+  return cmds
 
 中文:
 定义 mkEncodableCmds
@@ -588,7 +662,15 @@ mkFreshUserName .str n' (s ++ "_toS")
     let .str n' s := name.eraseMacroScopes | unreachable!
 mkFreshUserName .str n' (s ++ "_toS")
   let fromSFunNames : Array Name ← ctx.auxFunNames.mapM fun name => do
-   
+    let .str n' s := name.eraseMacroScopes | unreachable!
+mkFreshUserName .str n' (s ++ "_fromS")
+  let cmds :=
+    #[← mkToSFuns ctx toSFunNames,
+      ← mkFromSFuns ctx fromSFunNames,
+      ← mkInjThms ctx toSFunNames fromSFunNames]
+    ++ (← mkEncodableInstanceCmds ctx declNames toSFunNames fromSFunNames)
+  trace[Mathlib.Deriving.encodable] "\n{cmds}"
+  return cmds
 -/
 private def mkEncodableCmds (indVal : InductiveVal) (declNames : Array Name) :
     TermElabM (Array Syntax) := do
@@ -622,7 +704,14 @@ definition mkEncodableInstance
     if seen.contains declName then continue
     let indVal ← getConstInfoInduct declName
     if indVal.isNested || indVal.isReflexive || indVal.numIndices != 0 then
-      return false -- no
+      return false -- not supported yet
+    seen := seen.append (NameSet.ofList indVal.all)
+    toVisit := toVisit.push indVal
+  for indVal in toVisit do
+let cmds ← liftTermElabM mkEncodableCmds indVal (declNames.filter indVal.all.contains)
+    withEnableInfoTree false do
+elabCommand mkNullNode cmds
+  return true
 
 中文:
 定义 mkEncodableInstance
@@ -634,7 +723,14 @@ definition mkEncodableInstance
     if seen.contains declName then continue
     let indVal ← getConstInfoInduct declName
     if indVal.isNested || indVal.isReflexive || indVal.numIndices != 0 then
-      return false -- no
+      return false -- not supported yet
+    seen := seen.append (NameSet.ofList indVal.all)
+    toVisit := toVisit.push indVal
+  for indVal in toVisit do
+let cmds ← liftTermElabM mkEncodableCmds indVal (declNames.filter indVal.all.contains)
+    withEnableInfoTree false do
+elabCommand mkNullNode cmds
+  return true
 
 Depends on / 依赖: T0Space, t0Space
 -/

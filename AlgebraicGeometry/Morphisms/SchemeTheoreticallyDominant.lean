@@ -96,14 +96,14 @@ lemma IsSchemeTheoreticallyDominant.of_isDominant
   given: (f : X ⟶ Y) [IsDominant f] [IsReduced Y]
   proof: by
   rw [isSchemeTheoreticallyDominant_iff]; rw [← Scheme.IdealSheafData.support_eq_top_iff]; rw [← SetLike.coe_injective.eq_iff]; rw [TopologicalSpace.Closeds.coe_top]; rw [← Set.univ_subset_iff]; rw [← f.denseRange.closure_eq]; rw [f.ker.support.isClosed.closure_subset_iff]
-  exact f.range_subset_
+  exact f.range_subset_ker_support
 
 中文:
 引理 是SchemeTheoreticallyDominant.of_isDominant
   条件: (f : X ⟶ Y) [是Dominant f] [是既约 Y]
   证明: by
   rw [isSchemeTheoreticallyDominant_iff]; rw [← Scheme.IdealSheafData.support_eq_top_iff]; rw [← SetLike.coe_injective.eq_iff]; rw [TopologicalSpace.Closeds.coe_top]; rw [← Set.univ_subset_iff]; rw [← f.denseRange.closure_eq]; rw [f.ker.support.isClosed.closure_subset_iff]
-  exact f.range_subset_
+  exact f.range_subset_ker_support
 
 Depends on / 依赖: Closeds, IdealSheafData, Scheme, Scheme.IdealSheafData.support_eq_top_iff, Set.univ_subset_iff, SetLike, SetLike.coe_injective.eq_iff, TopologicalSpace, TopologicalSpace.Closeds.coe_top, closure_eq, closure_subset_iff, coe_injective, coe_top, denseRange, eq_iff, f.denseRange.closure_eq, f.ker.support.isClosed.closure_subset_iff, f.range_subset_ker_support, isClosed, isSchemeTheoreticallyDominant_iff
 -/
@@ -145,7 +145,10 @@ lemma Scheme.Hom.app_injective
   intro s hs
   refine Y.IsSheaf.section_ext fun x hx => ?_
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU : V <= U⟩ :=
-    Y.isBasis_affine
+    Y.isBasis_affineOpens.exists_subset_of_mem_open hx U.isOpen
+  refine ⟨V, hVU, hxV, this V hV ?_⟩
+  rw [← ConcreteCategory.comp_apply]; rw [f.naturality]
+  simp [hs]
 
 中文:
 引理 概形.态射.app_injective
@@ -158,7 +161,10 @@ lemma Scheme.Hom.app_injective
   intro s hs
   refine Y.IsSheaf.section_ext fun x hx => ?_
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU : V <= U⟩ :=
-    Y.isBasis_affine
+    Y.isBasis_affineOpens.exists_subset_of_mem_open hx U.isOpen
+  refine ⟨V, hVU, hxV, this V hV ?_⟩
+  rw [← ConcreteCategory.comp_apply]; rw [f.naturality]
+  simp [hs]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, IsAffineOpen, IsSheaf, RingHom, RingHom.injective_iff_ker_eq_bot, U.isOpen, Y.IsSheaf.section_ext, Y.isBasis_affineOpens.exists_subset_of_mem_open, comp_apply, exists_subset_of_mem_open, f.ker_apply, f.ker_eq_bot, f.naturality, generalizing, injective_iff_ker_eq_bot, injective_iff_map_eq_zero, isBasis_affineOpens, isOpen, ker_apply
 -/
@@ -209,7 +215,17 @@ instance IsSchemeTheoreticallyDominant.pullbackSnd
     (S.isBasis_affineOpens.isOpenCover.comap g.base.hom)
   refine Scheme.IdealSheafData.ext_of_iSup_eq_top (fun U => ⟨_, by exact U.2.1⟩) h𝒰 ?_
   rintro ⟨⟨V, ⟨U, hU⟩⟩, hV, hVU : V <= g ⁻¹ᵁ U⟩
-  simp 
+  simp only [Scheme.Hom.ker_apply, Scheme.IdealSheafData.ideal_bot, Pi.bot_apply, ← le_bot_iff]
+  intro x hx
+  have := mono_pushoutSection_of_isCompact_of_flat_right
+    (.of_hasPullback f g) (UY := pullback.snd f g ⁻¹ᵁ V) hVU le_rfl (by
+      grw [← Scheme.Hom.comp_preimage, pullback.condition, Scheme.Hom.comp_preimage, right_eq_inf,
+        hVU]) hU hV (f.isCompact_preimage hU.isCompact)
+  rw [@ConcreteCategory.mono_iff_injective_of_preservesPullback] at this
+  refine CommRingCat.inr_injective_of_flat (f.appLE U (f ⁻¹ᵁ U) le_rfl) (g.appLE U V hVU)
+    (by simpa [Scheme.Hom.appLE] using f.app_injective U) (g.flat_appLE hU hV hVU) ?_
+  apply this
+  simpa [← CommRingCat.comp_apply, ← Scheme.Hom.app_eq_appLE] using hx
 
 中文:
 实例 是SchemeTheoreticallyDominant.pullbackSnd
@@ -220,7 +236,17 @@ instance IsSchemeTheoreticallyDominant.pullbackSnd
     (S.isBasis_affineOpens.isOpenCover.comap g.base.hom)
   refine Scheme.IdealSheafData.ext_of_iSup_eq_top (fun U => ⟨_, by exact U.2.1⟩) h𝒰 ?_
   rintro ⟨⟨V, ⟨U, hU⟩⟩, hV, hVU : V <= g ⁻¹ᵁ U⟩
-  simp 
+  simp only [Scheme.Hom.ker_apply, Scheme.IdealSheafData.ideal_bot, Pi.bot_apply, ← le_bot_iff]
+  intro x hx
+  have := mono_pushoutSection_of_isCompact_of_flat_right
+    (.of_hasPullback f g) (UY := pullback.snd f g ⁻¹ᵁ V) hVU le_rfl (by
+      grw [← Scheme.Hom.comp_preimage, pullback.condition, Scheme.Hom.comp_preimage, right_eq_inf,
+        hVU]) hU hV (f.isCompact_preimage hU.isCompact)
+  rw [@ConcreteCategory.mono_iff_injective_of_preservesPullback] at this
+  refine CommRingCat.inr_injective_of_flat (f.appLE U (f ⁻¹ᵁ U) le_rfl) (g.appLE U V hVU)
+    (by simpa [Scheme.Hom.appLE] using f.app_injective U) (g.flat_appLE hU hV hVU) ?_
+  apply this
+  simpa [← CommRingCat.comp_apply, ← Scheme.Hom.app_eq_appLE] using hx
 
 Depends on / 依赖: IdealSheafData, Pi.bot_apply, S.isBasis_affineOpens.isOpenCover.comap, Scheme, Scheme.Hom.ker_apply, Scheme.IdealSheafData.ext_of_iSup_eq_top, Scheme.IdealSheafData.ideal_bot, Y.isBasis_affineOpens.isOpenCover_mem_and_le, bot_apply, ext_of_iSup_eq_top, g.base.hom, ideal_bot, isBasis_affineOpens, isOpenCover, isOpenCover_mem_and_le, isSchemeTheoreticallyDominant_iff, ker_apply, le_bot_iff, mono_pushoutSection_of_isCompact_of_flat_right, of_hasPullback
 -/

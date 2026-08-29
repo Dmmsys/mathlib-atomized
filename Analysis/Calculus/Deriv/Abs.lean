@@ -847,7 +847,9 @@ theorem not_differentiableAt_abs_zero
 (uniqueDiffOn_Ici _ _ Set.self_mem_Ici).eq_deriv _ h.hasDerivAt.hasDerivWithinAt
       (hasDerivWithinAt_id _ _).congr_of_mem (fun _ h => abs_of_nonneg h) Set.self_mem_Ici
   have h₂ : deriv abs (0 : Real) = -1 :=
-(uniqueDiffOn_Iic _ _ Set.self_mem
+(uniqueDiffOn_Iic _ _ Set.self_mem_Iic).eq_deriv _ h.hasDerivAt.hasDerivWithinAt
+      (hasDerivWithinAt_neg _ _).congr_of_mem (fun _ h => abs_of_nonpos h) Set.self_mem_Iic
+  linarith
 
 中文:
 定理 not_differentiableAt_abs_zero
@@ -858,7 +860,9 @@ theorem not_differentiableAt_abs_zero
 (uniqueDiffOn_Ici _ _ Set.self_mem_Ici).eq_deriv _ h.hasDerivAt.hasDerivWithinAt
       (hasDerivWithinAt_id _ _).congr_of_mem (fun _ h => abs_of_nonneg h) Set.self_mem_Ici
   have h₂ : deriv abs (0 : Real) = -1 :=
-(uniqueDiffOn_Iic _ _ Set.self_mem
+(uniqueDiffOn_Iic _ _ Set.self_mem_Iic).eq_deriv _ h.hasDerivAt.hasDerivWithinAt
+      (hasDerivWithinAt_neg _ _).congr_of_mem (fun _ h => abs_of_nonpos h) Set.self_mem_Iic
+  linarith
 
 Depends on / 依赖: Set.self_mem_Ici, Set.self_mem_Iic, abs_of_nonneg, abs_of_nonpos, congr_of_mem, eq_deriv, h.hasDerivAt.hasDerivWithinAt, hasDerivAt, hasDerivWithinAt, hasDerivWithinAt_id, hasDerivWithinAt_neg, self_mem_Ici, self_mem_Iic, uniqueDiffOn_Ici, uniqueDiffOn_Iic
 -/

@@ -199,7 +199,14 @@ definition beckAlgebraCoequalizer
     have h₂ : (T : C ⥤ C).map s.π.f ≫ s.pt.a = T.μ.app X.A ≫ s.π.f := s.π.h
     refine ⟨⟨T.η.app _ ≫ s.π.f, ?_⟩, ?_, ?_⟩
     · dsimp
-      rw [Functor
+      rw [Functor.map_comp]; rw [Category.assoc]; rw [h₂]; rw [Monad.right_unit_assoc]; rw [show X.a ≫ _ ≫ _ = _ from T.η.naturality_assoc _ _]; rw [h₁]; rw [Monad.left_unit_assoc]
+    · ext
+      simpa [← T.η.naturality_assoc, T.left_unit_assoc] using! T.η.app ((T : C ⥤ C).obj X.A) ≫= h₁
+    · intro m hm
+      ext
+      dsimp only
+      rw [← hm]
+      apply (X.unit_assoc _).symm
 
 中文:
 定义 beckAlgebraCoequalizer
@@ -210,7 +217,14 @@ definition beckAlgebraCoequalizer
     have h₂ : (T : C ⥤ C).map s.π.f ≫ s.pt.a = T.μ.app X.A ≫ s.π.f := s.π.h
     refine ⟨⟨T.η.app _ ≫ s.π.f, ?_⟩, ?_, ?_⟩
     · dsimp
-      rw [Functor
+      rw [Functor.map_comp]; rw [Category.assoc]; rw [h₂]; rw [Monad.right_unit_assoc]; rw [show X.a ≫ _ ≫ _ = _ from T.η.naturality_assoc _ _]; rw [h₁]; rw [Monad.left_unit_assoc]
+    · ext
+      simpa [← T.η.naturality_assoc, T.left_unit_assoc] using! T.η.app ((T : C ⥤ C).obj X.A) ≫= h₁
+    · intro m hm
+      ext
+      dsimp only
+      rw [← hm]
+      apply (X.unit_assoc _).symm
 
 Depends on / 依赖: Algebra, Category, Category.assoc, Cofork, Cofork.IsColimit.mk, Functor, Functor.map_comp, IsColimit, Monad.Algebra.Hom.f, Monad.left_unit_assoc, Monad.right_unit_assoc, T.left_unit_assoc, condition, congr_arg, left_unit_assoc, map_comp, naturality_assoc, right_unit_assoc, s.condition, s.pt.a
 -/

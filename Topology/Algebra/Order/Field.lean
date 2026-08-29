@@ -321,7 +321,19 @@ theorem IsTopologicalRing.of_norm
       Tendsto f (𝓝 0) (𝓝 0) := by
     refine fun f c c0 hf => (nhds_basis.tendsto_iff nhds_basis).2 fun ε ε0 => ?_
     rcases exists_pos_mul_lt ε0 c with ⟨δ, δ0, hδ⟩
-    refine ⟨δ, δ0, fun x hx => (hf _).t
+    refine ⟨δ, δ0, fun x hx => (hf _).trans_lt ?_⟩
+    exact (mul_le_mul_of_nonneg_left (le_of_lt hx) c0).trans_lt hδ
+  apply IsTopologicalRing.of_addGroup_of_nhds_zero
+  case hmul =>
+    refine ((nhds_basis.prod nhds_basis).tendsto_iff nhds_basis).2 fun ε ε0 => ?_
+    refine ⟨(1, ε), ⟨one_pos, ε0⟩, fun (x, y) ⟨hx, hy⟩ => ?_⟩
+    simp only at *
+    calc norm (x * y) <= norm x * norm y := norm_mul_le _ _
+    _ < ε := (mul_le_of_le_one_left (norm_nonneg _) hx.le).trans_lt hy
+  case hmul_left => exact fun x => h0 _ (norm x) (norm_nonneg _) (norm_mul_le x)
+  case hmul_right =>
+    exact fun y => h0 (· * y) (norm y) (norm_nonneg y) fun x =>
+      (norm_mul_le x y).trans_eq (mul_comm _ _)
 
 中文:
 定理 是拓扑环.of_norm
@@ -331,7 +343,19 @@ theorem IsTopologicalRing.of_norm
       Tendsto f (𝓝 0) (𝓝 0) := by
     refine fun f c c0 hf => (nhds_basis.tendsto_iff nhds_basis).2 fun ε ε0 => ?_
     rcases exists_pos_mul_lt ε0 c with ⟨δ, δ0, hδ⟩
-    refine ⟨δ, δ0, fun x hx => (hf _).t
+    refine ⟨δ, δ0, fun x hx => (hf _).trans_lt ?_⟩
+    exact (mul_le_mul_of_nonneg_left (le_of_lt hx) c0).trans_lt hδ
+  apply IsTopologicalRing.of_addGroup_of_nhds_zero
+  case hmul =>
+    refine ((nhds_basis.prod nhds_basis).tendsto_iff nhds_basis).2 fun ε ε0 => ?_
+    refine ⟨(1, ε), ⟨one_pos, ε0⟩, fun (x, y) ⟨hx, hy⟩ => ?_⟩
+    simp only at *
+    calc norm (x * y) <= norm x * norm y := norm_mul_le _ _
+    _ < ε := (mul_le_of_le_one_left (norm_nonneg _) hx.le).trans_lt hy
+  case hmul_left => exact fun x => h0 _ (norm x) (norm_nonneg _) (norm_mul_le x)
+  case hmul_right =>
+    exact fun y => h0 (· * y) (norm y) (norm_nonneg y) fun x =>
+      (norm_mul_le x y).trans_eq (mul_comm _ _)
 
 Depends on / 依赖: IsTopologicalRing, IsTopologicalRing.of_addGroup_of_nhds_zero, Tendsto, exists_pos_mul_lt, le_of_lt, mul_le_mul_of_nonneg_left, nhds_basis, nhds_basis.prod, nhds_basis.tendsto_iff, of_addGroup_of_nhds_zero, tendsto_iff, trans_lt
 -/
@@ -773,7 +797,9 @@ theorem bdd_le_mul_tendsto_zero'
     simp_rw [mul_zero, abs_zero]
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hC
   · filter_upwards [hf] with x _ using abs_nonneg _
-  · filte
+  · filter_upwards [hf] with x hx
+    simp only [comp_apply, abs_mul]
+    exact mul_le_mul_of_nonneg_right (hx.trans (le_abs_self C)) (abs_nonneg _)
 
 中文:
 定理 bdd_le_mul_tendsto_zero'
@@ -785,7 +811,9 @@ theorem bdd_le_mul_tendsto_zero'
     simp_rw [mul_zero, abs_zero]
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hC
   · filter_upwards [hf] with x _ using abs_nonneg _
-  · filte
+  · filter_upwards [hf] with x hx
+    simp only [comp_apply, abs_mul]
+    exact mul_le_mul_of_nonneg_right (hx.trans (le_abs_self C)) (abs_nonneg _)
 
 Depends on / 依赖: Tendsto, abs_mul, abs_nonneg, abs_zero, comp_apply, const_mul, convert, filter_upwards, hg.const_mul, hx.trans, le_abs_self, mul_le_mul_of_nonneg_right, mul_zero, simp_rw, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_zero_iff_abs_tendsto_zero
 -/
@@ -895,7 +923,8 @@ theorem tendsto_const_mul_pow_nhds_iff'
   · have := tendsto_const_mul_pow_atBot_iff.2 ⟨hn, hc⟩
     simp [not_tendsto_nhds_of_tendsto_atBot this, hc.ne, hn]
   · simp [tendsto_const_nhds_iff]
-  · have := tendsto_const_m
+  · have := tendsto_const_mul_pow_atTop_iff.2 ⟨hn, hc⟩
+    simp [not_tendsto_nhds_of_tendsto_atTop this, hc.ne', hn]
 
 中文:
 定理 tendsto_const_mul_pow_nhds_iff'
@@ -907,7 +936,8 @@ theorem tendsto_const_mul_pow_nhds_iff'
   · have := tendsto_const_mul_pow_atBot_iff.2 ⟨hn, hc⟩
     simp [not_tendsto_nhds_of_tendsto_atBot this, hc.ne, hn]
   · simp [tendsto_const_nhds_iff]
-  · have := tendsto_const_m
+  · have := tendsto_const_mul_pow_atTop_iff.2 ⟨hn, hc⟩
+    simp [not_tendsto_nhds_of_tendsto_atTop this, hc.ne', hn]
 
 Depends on / 依赖: eq_or_ne, hc.ne, lt_trichotomy, not_tendsto_nhds_of_tendsto_atBot, not_tendsto_nhds_of_tendsto_atTop, tendsto_const_mul_pow_atBot_iff, tendsto_const_mul_pow_atTop_iff, tendsto_const_nhds_iff
 -/
@@ -958,7 +988,10 @@ theorem tendsto_const_mul_zpow_atTop_nhds_iff
     | negSucc n =>
       have hn := Int.negSucc_lt_zero n
       exact Or.inr ⟨hn, tendsto_nhds_unique h (tendsto_const_mul_zpow_atTop_zero hn)⟩
-  · rcases h wit
+  · rcases h with h | h
+    · simp only [h.left, h.right, zpow_zero, mul_one]
+      exact tendsto_const_nhds
+    · exact h.2.symm ▸ tendsto_const_mul_zpow_atTop_zero h.1
 
 中文:
 定理 tendsto_const_mul_zpow_atTop_nhds_iff
@@ -972,7 +1005,10 @@ theorem tendsto_const_mul_zpow_atTop_nhds_iff
     | negSucc n =>
       have hn := Int.negSucc_lt_zero n
       exact Or.inr ⟨hn, tendsto_nhds_unique h (tendsto_const_mul_zpow_atTop_zero hn)⟩
-  · rcases h wit
+  · rcases h with h | h
+    · simp only [h.left, h.right, zpow_zero, mul_one]
+      exact tendsto_const_nhds
+    · exact h.2.symm ▸ tendsto_const_mul_zpow_atTop_zero h.1
 
 Depends on / 依赖: Int.negSucc_lt_zero, Or.inr, h.left, h.right, mul_one, negSucc, negSucc_lt_zero, tendsto_const_mul_pow_nhds_iff, tendsto_const_mul_zpow_atTop_zero, tendsto_const_nhds, tendsto_nhds_unique, zpow_zero
 -/

@@ -96,7 +96,11 @@ definition checkVersoSyntax
     env,
     options := ← getOptions,
     currNamespace := (← getCurrNamespace),
-    openDecls := (← getOpenDec
+    openDecls := (← getOpenDecls)
+  }
+  let s := mkParserState docComment
+  let s := Doc.Parser.document.run ictx pmctx (getTokenTable env) s
+  return s.allErrors
 
 中文:
 定义 checkVersoSyntax
@@ -110,7 +114,11 @@ definition checkVersoSyntax
     env,
     options := ← getOptions,
     currNamespace := (← getCurrNamespace),
-    openDecls := (← getOpenDec
+    openDecls := (← getOpenDecls)
+  }
+  let s := mkParserState docComment
+  let s := Doc.Parser.document.run ictx pmctx (getTokenTable env) s
+  return s.allErrors
 -/
 def checkVersoSyntax (docComment : String) (fileName : Option String := none) :
     CommandElabM (Array (String.Pos.Raw × SyntaxStack × Error)) := do
@@ -159,7 +167,17 @@ definition lintVersoSyntax
   -- everywhere would be very noisy.
 let trimmedStr := Std.Iter.fold (· ++ ·) ""
 .map fun str => docComment.splitInclusive Char.isWhitespace
-      if (str.contains "http://" || str.contains "https://
+      if (str.contains "http://" || str.contains "https://") && !str.contains "(http" then "URL"
+      else str.toString
+  -- Drop anything between LaTeX `$$`s.
+  -- We keep single `$`s, since those also occur in `backquoted` code snippets (e.g. as `· <$> ·`),
+  -- and so we'd need to build an actual parser to figure out if they are in a snippet or not.
+let trimmedStr := Std.Iter.fold (· ++ ·) ""
+trimmedStr.split " "
+.zip (0...docComment.length).iter
+.map fun (str, i) => if i % 2 == 0 then str.toString else "LaTeX"
+  let errs ← checkVersoSyntax trimmedStr fileName
+  return errs.filter fun (_, _, err) => !isSilencedVersoWarning err
 
 中文:
 定义 lintVersoSyntax
@@ -169,7 +187,17 @@ let trimmedStr := Std.Iter.fold (· ++ ·) ""
   -- everywhere would be very noisy.
 let trimmedStr := Std.Iter.fold (· ++ ·) ""
 .map fun str => docComment.splitInclusive Char.isWhitespace
-      if (str.contains "http://" || str.contains "https://
+      if (str.contains "http://" || str.contains "https://") && !str.contains "(http" then "URL"
+      else str.toString
+  -- Drop anything between LaTeX `$$`s.
+  -- We keep single `$`s, since those also occur in `backquoted` code snippets (e.g. as `· <$> ·`),
+  -- and so we'd need to build an actual parser to figure out if they are in a snippet or not.
+let trimmedStr := Std.Iter.fold (· ++ ·) ""
+trimmedStr.split " "
+.zip (0...docComment.length).iter
+.map fun (str, i) => if i % 2 == 0 then str.toString else "LaTeX"
+  let errs ← checkVersoSyntax trimmedStr fileName
+  return errs.filter fun (_, _, err) => !isSilencedVersoWarning err
 -/
 def lintVersoSyntax (docComment : String) (fileName : Option String := none) :
     CommandElabM (Array (String.Pos.Raw × SyntaxStack × Error)) := do
@@ -204,7 +232,56 @@ definition docStringLinter
       getLinterValue linter.style.docStringVerso (← getLinterOptions) do
     return
   if (← get).messages.hasErrors then
-    
+    return
+  let fm ← getFileMap
+  for declMods in getDeclModifiers stx do
+    -- `docStx` extracts the `Lean.Parser.Command.docComment` node from the declaration modifiers.
+    -- In particular, this ignores parsing `#adaptation_note`s.
+    let docStx := declMods[0][0]
+
+    let some pos := docStx.getPos? | continue
+.column let currIndent := fm.toPosition pos
+
+    if docStx.isMissing then continue -- this is probably superfluous, thanks to `some pos` above.
+    -- ignore antiquotations from syntax patterns like `$(_)?`
+    unless docStx.getKind == ``Parser.Command.docComment do continue
+    -- `docString` contains e.g. trailing spaces before the `-/`, but does not contain
+    -- any leading whitespace before the actual string starts.
+    let docString ← try getDocStringText ⟨docStx⟩ catch _ => continue
+    if docString.trimAscii.isEmpty then
+      Linter.logLintIf linter.style.docString.empty docStx m!"warning: this doc-string is empty"
+      continue
+    -- `startSubstring` is the whitespace between `/--` and the actual doc-string text.
+    let startSubstring := match docStx with
+      | .node _ _ #[(.atom si ..), _] => si.getTrailing?.getD default
+      | _ => default
+    -- We replace all line-breaks followed by `currIndent` spaces with a single space.
+    let start := deindentString currIndent startSubstring.toString
+    if !#["\n", " "].contains start then
+      let startRange := {start := startSubstring.startPos, stop := startSubstring.stopPos}
+      Linter.logLintIf linter.style.docString (.ofRange startRange)
+        s!"error: doc-strings should start with a single space or newline"
+
+    let deIndentedDocString := deindentString currIndent docString
+
+    let docTrim := deIndentedDocString.trimAsciiEnd.copy
+    let tail := docTrim.length
+    -- `endRange` creates an 0-wide range `n` characters from the end of `docStx`
+    let endRange (n : Nat) : Syntax := .ofRange
+      {start := docStx.getTailPos?.get!.unoffsetBy ⟨n⟩, stop := docStx.getTailPos?.get!.unoffsetBy ⟨n⟩}
+    if docTrim.takeEnd 1 == ",".toSlice then
+      Linter.logLintIf linter.style.docString (endRange (docString.length - tail + 3))
+        s!"error: doc-strings should not end with a comma"
+    if tail + 1 != deIndentedDocString.length then
+      Linter.logLintIf linter.style.docString (endRange 3)
+        s!"error: doc-strings should end with a single space or newline"
+    -- Check for verso syntax, but only if it is not already enabled.
+    -- If Verso is already enabled for docstrings, then this check would be superfluous.
+    if !doc.verso.get (← getOptions) &&
+        getLinterValue linter.style.docStringVerso (← getLinterOptions) then do
+      let errs ← lintVersoSyntax docString
+      for (pos, stxStack, err) in errs do
+        Linter.logLint linter.style.docStringVerso stxStack.back m!"{err}"
 
 中文:
 定义 docStringLinter
@@ -215,7 +292,56 @@ definition docStringLinter
       getLinterValue linter.style.docStringVerso (← getLinterOptions) do
     return
   if (← get).messages.hasErrors then
-    
+    return
+  let fm ← getFileMap
+  for declMods in getDeclModifiers stx do
+    -- `docStx` extracts the `Lean.Parser.Command.docComment` node from the declaration modifiers.
+    -- In particular, this ignores parsing `#adaptation_note`s.
+    let docStx := declMods[0][0]
+
+    let some pos := docStx.getPos? | continue
+.column let currIndent := fm.toPosition pos
+
+    if docStx.isMissing then continue -- this is probably superfluous, thanks to `some pos` above.
+    -- ignore antiquotations from syntax patterns like `$(_)?`
+    unless docStx.getKind == ``Parser.Command.docComment do continue
+    -- `docString` contains e.g. trailing spaces before the `-/`, but does not contain
+    -- any leading whitespace before the actual string starts.
+    let docString ← try getDocStringText ⟨docStx⟩ catch _ => continue
+    if docString.trimAscii.isEmpty then
+      Linter.logLintIf linter.style.docString.empty docStx m!"warning: this doc-string is empty"
+      continue
+    -- `startSubstring` is the whitespace between `/--` and the actual doc-string text.
+    let startSubstring := match docStx with
+      | .node _ _ #[(.atom si ..), _] => si.getTrailing?.getD default
+      | _ => default
+    -- We replace all line-breaks followed by `currIndent` spaces with a single space.
+    let start := deindentString currIndent startSubstring.toString
+    if !#["\n", " "].contains start then
+      let startRange := {start := startSubstring.startPos, stop := startSubstring.stopPos}
+      Linter.logLintIf linter.style.docString (.ofRange startRange)
+        s!"error: doc-strings should start with a single space or newline"
+
+    let deIndentedDocString := deindentString currIndent docString
+
+    let docTrim := deIndentedDocString.trimAsciiEnd.copy
+    let tail := docTrim.length
+    -- `endRange` creates an 0-wide range `n` characters from the end of `docStx`
+    let endRange (n : Nat) : Syntax := .ofRange
+      {start := docStx.getTailPos?.get!.unoffsetBy ⟨n⟩, stop := docStx.getTailPos?.get!.unoffsetBy ⟨n⟩}
+    if docTrim.takeEnd 1 == ",".toSlice then
+      Linter.logLintIf linter.style.docString (endRange (docString.length - tail + 3))
+        s!"error: doc-strings should not end with a comma"
+    if tail + 1 != deIndentedDocString.length then
+      Linter.logLintIf linter.style.docString (endRange 3)
+        s!"error: doc-strings should end with a single space or newline"
+    -- Check for verso syntax, but only if it is not already enabled.
+    -- If Verso is already enabled for docstrings, then this check would be superfluous.
+    if !doc.verso.get (← getOptions) &&
+        getLinterValue linter.style.docStringVerso (← getLinterOptions) then do
+      let errs ← lintVersoSyntax docString
+      for (pos, stxStack, err) in errs do
+        Linter.logLint linter.style.docStringVerso stxStack.back m!"{err}"
 
 Depends on / 依赖: withSetOptionIn
 -/
@@ -290,7 +416,18 @@ definition moduleDocVersoLinter
   -- Check for verso syntax, but only if it is not already enabled.
   -- If Verso is already enabled for module docs, then this check would be superfluous.
   let opts ← getOptions
-  i
+  if (doc.verso.module.get? opts).getD (doc.verso.get opts) then return
+  if (← get).messages.hasErrors then
+    return
+  let some moduleDoc := (match stx with
+  | s@(.node _ ``Parser.Command.moduleDoc args) => some s
+  | _ => none) | return
+  try
+    let docString ← getDocStringText ⟨moduleDoc⟩
+    let errs ← lintVersoSyntax docString
+    for (pos, stxStack, err) in errs do
+      Linter.logLint linter.style.docStringVerso stxStack.back m!"{err}"
+  catch _ => return
 
 中文:
 定义 moduleDocVersoLinter
@@ -301,7 +438,18 @@ definition moduleDocVersoLinter
   -- Check for verso syntax, but only if it is not already enabled.
   -- If Verso is already enabled for module docs, then this check would be superfluous.
   let opts ← getOptions
-  i
+  if (doc.verso.module.get? opts).getD (doc.verso.get opts) then return
+  if (← get).messages.hasErrors then
+    return
+  let some moduleDoc := (match stx with
+  | s@(.node _ ``Parser.Command.moduleDoc args) => some s
+  | _ => none) | return
+  try
+    let docString ← getDocStringText ⟨moduleDoc⟩
+    let errs ← lintVersoSyntax docString
+    for (pos, stxStack, err) in errs do
+      Linter.logLint linter.style.docStringVerso stxStack.back m!"{err}"
+  catch _ => return
 
 Depends on / 依赖: withSetOptionIn
 -/

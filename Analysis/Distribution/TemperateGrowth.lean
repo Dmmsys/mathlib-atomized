@@ -159,7 +159,9 @@ theorem HasTemperateGrowth.norm_iteratedFDeriv_le_uniform
     simp_rw [F, isBigO_pi, Fin.forall_iff, Nat.lt_succ_iff]
     exact hk
   rcases this.exists_nonneg with ⟨C, C_nonneg, hC⟩
-  simp (d
+  simp (discharger := positivity) only [isBigOWith_top, Real.norm_of_nonneg,
+    pi_norm_le_iff_of_nonneg, Fin.forall_iff, Nat.lt_succ_iff] at hC
+  exact ⟨k, C, C_nonneg, fun N hN x => hC x N hN⟩
 
 中文:
 定理 有TemperateGrowth.norm_iteratedFDeriv_le_uniform
@@ -171,7 +173,9 @@ theorem HasTemperateGrowth.norm_iteratedFDeriv_le_uniform
     simp_rw [F, isBigO_pi, Fin.forall_iff, Nat.lt_succ_iff]
     exact hk
   rcases this.exists_nonneg with ⟨C, C_nonneg, hC⟩
-  simp (d
+  simp (discharger := positivity) only [isBigOWith_top, Real.norm_of_nonneg,
+    pi_norm_le_iff_of_nonneg, Fin.forall_iff, Nat.lt_succ_iff] at hC
+  exact ⟨k, C, C_nonneg, fun N hN x => hC x N hN⟩
 
 Depends on / 依赖: C_nonneg, Fin.forall_iff, Nat.lt_succ_iff, Real.norm_of_nonneg, discharger, exists_nonneg, forall_iff, hf_temperate, hf_temperate.isBigO_uniform, isBigOWith_top, isBigO_pi, isBigO_uniform, iteratedFDeriv, lt_succ_iff, norm_of_nonneg, pi_norm_le_iff_of_nonneg, simp_rw, this.exists_nonneg
 -/
@@ -294,7 +298,7 @@ lemma _root_.HasCompactSupport.hasTemperateGrowth
   have hg : Continuous g := (h₂.continuous_iteratedFDeriv <| mod_cast le_top).norm
   obtain ⟨x₀, hx₀⟩ := hg.exists_forall_ge_of_hasCompactSupport ((h₁.iteratedFDeriv _).norm)
   refine ⟨0, g x₀, fun x => ?_⟩
-  simpa using h
+  simpa using hx₀ x
 
 中文:
 引理 _root_.HasCompactSupport.hasTemperateGrowth
@@ -305,7 +309,7 @@ lemma _root_.HasCompactSupport.hasTemperateGrowth
   have hg : Continuous g := (h₂.continuous_iteratedFDeriv <| mod_cast le_top).norm
   obtain ⟨x₀, hx₀⟩ := hg.exists_forall_ge_of_hasCompactSupport ((h₁.iteratedFDeriv _).norm)
   refine ⟨0, g x₀, fun x => ?_⟩
-  simpa using h
+  simpa using hx₀ x
 
 Depends on / 依赖: Continuous, continuous_iteratedFDeriv, exists_forall_ge_of_hasCompactSupport, hg.exists_forall_ge_of_hasCompactSupport, iteratedFDeriv, le_top, mod_cast
 -/
@@ -329,7 +333,35 @@ theorem HasTemperateGrowth.comp'
   obtain ⟨k₁, C₁, hC₁, h₁⟩ := hf.norm_iteratedFDeriv_le_uniform n
   obtain ⟨k₂, C₂, hC₂, h₂⟩ := hg₂ n
   have h₁' : forall x, ‖f x‖ <= C₁ * (1 + ‖x‖) ^ k₁ := by simpa using h₁ 0
-  set C₃ := ∑ k in Finset.range (k₂ + 1), C₂ * (k₂.choose k
+  set C₃ := ∑ k in Finset.range (k₂ + 1), C₂ * (k₂.choose k : Real) * (C₁ ^ k)
+  use k₁ * k₂ + k₁ * n, n ! * C₃ * (1 + C₁) ^ n
+  intro x
+  have hg' : forall i, i <= n -> ‖iteratedFDerivWithin Real i g t (f x)‖ <= C₃ * (1 + ‖x‖) ^ (k₁ * k₂) := by
+    intro i hi
+    calc _ <= C₂ * (1 + ‖f x‖) ^ k₂ := h₂ i hi (f x) (ht ⟨x, rfl⟩)
+      _ = ∑ i in Finset.range (k₂ + 1), C₂ * (‖f x‖ ^ i * (k₂.choose i)) := by
+        rw [add_comm]; rw [add_pow]; rw [Finset.mul_sum]
+        simp
+      _ <= ∑ i in Finset.range (k₂ + 1), C₂ * (k₂.choose i) * C₁ ^ i * (1 + ‖x‖) ^ (k₁ * k₂) := by
+        apply Finset.sum_le_sum
+        intro i hi
+        grw [h₁']
+        simp_rw [mul_pow, ← pow_mul]
+        move_mul [← (k₂.choose _ : Real), C₂]
+        gcongr
+        · simp
+        · grind
+      _ = _ := by simp [C₃, Finset.sum_mul]
+  have hf' : forall i, 1 <= i -> i <= n -> ‖iteratedFDeriv Real i f x‖ <= ((1 + C₁) * (1 + ‖x‖) ^ k₁) ^ i := by
+    intro i hi hi'
+    calc _ <= C₁ * (1 + ‖x‖) ^ k₁ := h₁ i hi' x
+      _ <= (1 + C₁) * (1 + ‖x‖) ^ k₁ := by gcongr; simp
+      _ <= _ := by
+        apply le_self_pow₀ (one_le_mul_of_one_le_of_one_le (by simp [hC₁]) (by simp [one_le_pow₀]))
+        grind
+  calc _ <= n ! * (C₃ * (1 + ‖x‖) ^ (k₁ * k₂)) * ((1 + C₁) * (1 + ‖x‖) ^ k₁) ^ n :=
+      norm_iteratedFDeriv_comp_le' ht ht' hg₁ hf.1 (mod_cast le_top) x hg' hf'
+    _ = _ := by rw [mul_pow, ← pow_mul, pow_add]; ring
 
 中文:
 定理 有TemperateGrowth.comp'
@@ -339,7 +371,35 @@ theorem HasTemperateGrowth.comp'
   obtain ⟨k₁, C₁, hC₁, h₁⟩ := hf.norm_iteratedFDeriv_le_uniform n
   obtain ⟨k₂, C₂, hC₂, h₂⟩ := hg₂ n
   have h₁' : forall x, ‖f x‖ <= C₁ * (1 + ‖x‖) ^ k₁ := by simpa using h₁ 0
-  set C₃ := ∑ k in Finset.range (k₂ + 1), C₂ * (k₂.choose k
+  set C₃ := ∑ k in Finset.range (k₂ + 1), C₂ * (k₂.choose k : Real) * (C₁ ^ k)
+  use k₁ * k₂ + k₁ * n, n ! * C₃ * (1 + C₁) ^ n
+  intro x
+  have hg' : forall i, i <= n -> ‖iteratedFDerivWithin Real i g t (f x)‖ <= C₃ * (1 + ‖x‖) ^ (k₁ * k₂) := by
+    intro i hi
+    calc _ <= C₂ * (1 + ‖f x‖) ^ k₂ := h₂ i hi (f x) (ht ⟨x, rfl⟩)
+      _ = ∑ i in Finset.range (k₂ + 1), C₂ * (‖f x‖ ^ i * (k₂.choose i)) := by
+        rw [add_comm]; rw [add_pow]; rw [Finset.mul_sum]
+        simp
+      _ <= ∑ i in Finset.range (k₂ + 1), C₂ * (k₂.choose i) * C₁ ^ i * (1 + ‖x‖) ^ (k₁ * k₂) := by
+        apply Finset.sum_le_sum
+        intro i hi
+        grw [h₁']
+        simp_rw [mul_pow, ← pow_mul]
+        move_mul [← (k₂.choose _ : Real), C₂]
+        gcongr
+        · simp
+        · grind
+      _ = _ := by simp [C₃, Finset.sum_mul]
+  have hf' : forall i, 1 <= i -> i <= n -> ‖iteratedFDeriv Real i f x‖ <= ((1 + C₁) * (1 + ‖x‖) ^ k₁) ^ i := by
+    intro i hi hi'
+    calc _ <= C₁ * (1 + ‖x‖) ^ k₁ := h₁ i hi' x
+      _ <= (1 + C₁) * (1 + ‖x‖) ^ k₁ := by gcongr; simp
+      _ <= _ := by
+        apply le_self_pow₀ (one_le_mul_of_one_le_of_one_le (by simp [hC₁]) (by simp [one_le_pow₀]))
+        grind
+  calc _ <= n ! * (C₃ * (1 + ‖x‖) ^ (k₁ * k₂)) * ((1 + C₁) * (1 + ‖x‖) ^ k₁) ^ n :=
+      norm_iteratedFDeriv_comp_le' ht ht' hg₁ hf.1 (mod_cast le_top) x hg' hf'
+    _ = _ := by rw [mul_pow, ← pow_mul, pow_add]; ring
 
 Depends on / 依赖: Finset, Finset.range, comp_contDiff, hf.norm_iteratedFDeriv_le_uniform, iteratedFDerivWithin, norm_iteratedFDeriv_le_uniform
 -/
@@ -472,7 +532,11 @@ theorem HasTemperateGrowth.add
   use max k₁ k₂
   rw [iteratedFDeriv_add (hf.1.of_le <| mod_cast le_top) (hg.1.of_le <| mod_cast le_top)]
   have : 1 <=ᶠ[⊤] fun (x : E) => 1 + ‖x‖ := by
-    filt
+    filter_upwards with _ using (le_add_iff_nonneg_right _).mpr (by positivity)
+  exact (h₁.trans (IsBigO.pow_of_le_right this (k₁.le_max_left k₂))).add
+    (h₂.trans (IsBigO.pow_of_le_right this (k₁.le_max_right k₂)))
+
+@[to_fun (attr := fun_prop)]
 
 中文:
 定理 有TemperateGrowth.add
@@ -485,7 +549,11 @@ theorem HasTemperateGrowth.add
   use max k₁ k₂
   rw [iteratedFDeriv_add (hf.1.of_le <| mod_cast le_top) (hg.1.of_le <| mod_cast le_top)]
   have : 1 <=ᶠ[⊤] fun (x : E) => 1 + ‖x‖ := by
-    filt
+    filter_upwards with _ using (le_add_iff_nonneg_right _).mpr (by positivity)
+  exact (h₁.trans (IsBigO.pow_of_le_right this (k₁.le_max_left k₂))).add
+    (h₂.trans (IsBigO.pow_of_le_right this (k₁.le_max_right k₂)))
+
+@[to_fun (attr := fun_prop)]
 
 Depends on / 依赖: IsBigO, IsBigO.pow_of_le_right, filter_upwards, hasTemperateGrowth_iff_isBigO, iteratedFDeriv_add, le_add_iff_nonneg_right, le_max_left, le_max_right, le_top, mod_cast, of_le, pow_of_le_right
 -/
@@ -595,7 +663,14 @@ theorem _root_.ContinuousLinearMap.bilinear_hasTemperateGrowth
   rcases hf.isBigO_uniform n with ⟨k1, h1⟩
   rcases hg.isBigO_uniform n with ⟨k2, h2⟩
   use k1 + k2
-  have estimate (x : D) : ‖ite
+  have estimate (x : D) : ‖iteratedFDeriv Real n (fun x => B (f x) (g x)) x‖ <=
+      ‖B‖ * ∑ i in Finset.range (n + 1), (n.choose i) *
+        ‖iteratedFDeriv Real i f x‖ * ‖iteratedFDeriv Real (n - i) g x‖ :=
+    (B.bilinearRestrictScalars Real).norm_iteratedFDeriv_le_of_bilinear hf.1 hg.1 x (mod_cast le_top)
+  refine (IsBigO.of_norm_le estimate).trans (.const_mul_left (.fun_sum fun i hi => ?_) _)
+  simp_rw [mul_assoc, pow_add]
+  refine .const_mul_left (.mul (h1 i ?_).norm_left (h2 (n - i) ?_).norm_left) _ <;>
+  grind
 
 中文:
 定理 _root_.连续线性映射.bilinear_hasTemperateGrowth
@@ -608,7 +683,14 @@ theorem _root_.ContinuousLinearMap.bilinear_hasTemperateGrowth
   rcases hf.isBigO_uniform n with ⟨k1, h1⟩
   rcases hg.isBigO_uniform n with ⟨k2, h2⟩
   use k1 + k2
-  have estimate (x : D) : ‖ite
+  have estimate (x : D) : ‖iteratedFDeriv Real n (fun x => B (f x) (g x)) x‖ <=
+      ‖B‖ * ∑ i in Finset.range (n + 1), (n.choose i) *
+        ‖iteratedFDeriv Real i f x‖ * ‖iteratedFDeriv Real (n - i) g x‖ :=
+    (B.bilinearRestrictScalars Real).norm_iteratedFDeriv_le_of_bilinear hf.1 hg.1 x (mod_cast le_top)
+  refine (IsBigO.of_norm_le estimate).trans (.const_mul_left (.fun_sum fun i hi => ?_) _)
+  simp_rw [mul_assoc, pow_add]
+  refine .const_mul_left (.mul (h1 i ?_).norm_left (h2 (n - i) ?_).norm_left) _ <;>
+  grind
 
 Depends on / 依赖: B.bilinearRestrictScalars, Finset, Finset.range, Function, Function.hasTemperateGrowth_iff_isBigO, bilinearRestrictScalars, contDiff, estimate, hasTemperateGrowth_iff_isBigO, hf.isBigO_uniform, hg.isBigO_uniform, isBigO_uniform, isBoundedBilinearMap, isBoundedBilinearMap.contDiff.comp, iteratedFDeriv, n.choose, norm_iteratedFDe, prodMk
 -/
@@ -929,7 +1011,7 @@ theorem hasTemperateGrowth_norm_sq
   · exact .norm_sq Real differentiable_id
   · intro x
     rw [norm_pow]; rw [norm_norm]; rw [one_mul]; rw [add_pow_two]
-    exact le_add_of_nonneg_left
+    exact le_add_of_nonneg_left (by positivity)
 
 中文:
 定理 hasTemperateGrowth_norm_sq
@@ -941,7 +1023,7 @@ theorem hasTemperateGrowth_norm_sq
   · exact .norm_sq Real differentiable_id
   · intro x
     rw [norm_pow]; rw [norm_norm]; rw [one_mul]; rw [add_pow_two]
-    exact le_add_of_nonneg_left
+    exact le_add_of_nonneg_left (by positivity)
 
 Depends on / 依赖: Function, HasTemperateGrowth, _root_, _root_.Function.HasTemperateGrowth.of_fderiv, add_pow_two, convert, differentiable_id, fderiv_norm_sq, hasTemperateGrowth, innerSL, le_add_of_nonneg_left, norm_norm, norm_pow, norm_sq, of_fderiv, one_mul
 -/
@@ -967,7 +1049,73 @@ theorem hasTemperateGrowth_one_add_norm_sq_rpow
   /- We prove this using that the composition of temperate functions is temperate.
   Since `x ^ r` is not smooth at the origin, we have to use `HasTemperateGrowth.comp'`, with any
   open set `t` that is contains the complement of the unit ball and does not contain the origin. -/
-  set t := {y : R
+  set t := {y : Real | 1 / 2 < y}
+  have ht : Set.range (fun (x : H) => (1 + ‖x‖ ^ 2)) subseteq t := by
+    rintro - ⟨y, rfl⟩
+    simp only [Set.mem_ofPred_eq, t]
+    exact lt_add_of_lt_add_left (c := 0) (by norm_num) (by positivity)
+  have hdiff : ContDiffOn Real ∞ (fun x => x ^ r) t :=
+    contDiffOn_fun_id.rpow_const_of_ne fun x hx => (lt_trans (by norm_num) hx).ne'
+  have hunique : UniqueDiffOn Real t := (isOpen_lt' (1 / 2)).uniqueDiffOn
+  apply HasTemperateGrowth.comp' ht hunique hdiff _ (by fun_prop)
+  -- The remaining part of the proof is proving that `x ↦ x ^ r` has temperate growth on `t`.
+  -- This could be generalized to `t := {y : ℝ | ε < y}` for any `0 < ε < 1` if necessary.
+  intro N
+  /- Since `x ^ r` for negative `r` blows up near the origin (and we can't take
+  `t := {y : ℝ | 1 / 2 < y}`), we have to choose `k` later than `N - r` times some factor depending
+  on `t`. -/
+  obtain ⟨k, hk⟩ := exists_nat_ge (max r <| (N - r) * Real.log 2 / (Real.log (3 / 2)))
+  have hk₁ : r <= k := le_sup_left.trans hk
+  have hk₂ : Real.log 2 * (N - r) <= (Real.log (3 / 2)) * k := by
+    have := le_sup_right.trans hk
+    field_simp at this
+    grind
+  use k, ∑ k in Finset.range (N + 1), ‖Polynomial.eval r (descPochhammer Real k)‖, by positivity
+  intro n hn x hx
+  have : ContDiffAt Real n (fun x => x ^ r) x :=
+Real.contDiffAt_rpow_const Or.inl (lt_trans (by norm_num) hx).ne'
+  -- We calculate the derivative of `x ^ r`.
+  rw [norm_iteratedFDerivWithin_eq_norm_iteratedDerivWithin]; rw [iteratedDerivWithin_eq_iteratedDeriv hunique this hx]; rw [iteratedDeriv_eq_iterate]; rw [Real.iter_deriv_rpow_const]; rw [norm_mul]
+  gcongr 1
+  · have : n in Finset.range (N + 1) := by grind
+    apply Finset.single_le_sum (fun _ _ => by positivity) this
+  -- It remains to show that `‖x ^ (r - n)‖ ≤ (1 + ‖x‖) ^ k`:
+  have hx' : 1 / 2 < x := by simpa [t] using hx
+  have hx'' : 0 < x := lt_of_lt_of_le (by norm_num) hx'.le
+  simp only [Real.norm_eq_abs]
+  apply (Real.abs_rpow_le_abs_rpow _ _).trans
+  -- We consider the two cases `n ≤ r` and `r < n`.
+  by_cases! h : 0 <= r - n
+  · have : r - n <= k := by simpa using hk₁.trans (by simp)
+    rw [← Real.rpow_natCast]
+    exact (Real.rpow_le_rpow (by positivity) (by simp) h).trans
+      (Real.rpow_le_rpow_of_exponent_le (by simp) this)
+  have h : 0 < n - r := by grind
+  calc
+    /- In the case `0 < n - r`, we need the factor `Real.log 2 / (Real.log (3 / 2))` to control
+    the growth near `‖x‖ = 1/2`. -/
+    _ = x ^ (-(n - r)) := by
+      rw [neg_sub]
+      congr
+      simpa using hx''.le
+    _ <= (2 : Real) ^ (n - r) := by
+      simp only [one_div, Set.mem_ofPred_eq, t] at hx
+      rw [Real.rpow_neg_eq_inv_rpow]
+      gcongr
+      exact ((inv_lt_comm₀ hx'' (by norm_num)).mpr hx).le
+    _ = Real.exp (Real.log 2 * (n - r)) := by
+      rw [Real.rpow_def_of_pos]
+      norm_num
+    _ <= Real.exp (Real.log (3 / 2) * k) := by
+      gcongr 1
+      apply le_trans _ hk₂
+      gcongr
+    _ <= (3 / 2) ^ k := by
+      rw [← Real.rpow_natCast]; rw [Real.rpow_def_of_pos]
+      norm_num
+    _ <= _ := by
+      gcongr
+      grind
 
 中文:
 定理 hasTemperateGrowth_one_add_norm_sq_rpow
@@ -976,7 +1124,73 @@ theorem hasTemperateGrowth_one_add_norm_sq_rpow
   /- We prove this using that the composition of temperate functions is temperate.
   Since `x ^ r` is not smooth at the origin, we have to use `HasTemperateGrowth.comp'`, with any
   open set `t` that is contains the complement of the unit ball and does not contain the origin. -/
-  set t := {y : R
+  set t := {y : Real | 1 / 2 < y}
+  have ht : Set.range (fun (x : H) => (1 + ‖x‖ ^ 2)) subseteq t := by
+    rintro - ⟨y, rfl⟩
+    simp only [Set.mem_ofPred_eq, t]
+    exact lt_add_of_lt_add_left (c := 0) (by norm_num) (by positivity)
+  have hdiff : ContDiffOn Real ∞ (fun x => x ^ r) t :=
+    contDiffOn_fun_id.rpow_const_of_ne fun x hx => (lt_trans (by norm_num) hx).ne'
+  have hunique : UniqueDiffOn Real t := (isOpen_lt' (1 / 2)).uniqueDiffOn
+  apply HasTemperateGrowth.comp' ht hunique hdiff _ (by fun_prop)
+  -- The remaining part of the proof is proving that `x ↦ x ^ r` has temperate growth on `t`.
+  -- This could be generalized to `t := {y : ℝ | ε < y}` for any `0 < ε < 1` if necessary.
+  intro N
+  /- Since `x ^ r` for negative `r` blows up near the origin (and we can't take
+  `t := {y : ℝ | 1 / 2 < y}`), we have to choose `k` later than `N - r` times some factor depending
+  on `t`. -/
+  obtain ⟨k, hk⟩ := exists_nat_ge (max r <| (N - r) * Real.log 2 / (Real.log (3 / 2)))
+  have hk₁ : r <= k := le_sup_left.trans hk
+  have hk₂ : Real.log 2 * (N - r) <= (Real.log (3 / 2)) * k := by
+    have := le_sup_right.trans hk
+    field_simp at this
+    grind
+  use k, ∑ k in Finset.range (N + 1), ‖Polynomial.eval r (descPochhammer Real k)‖, by positivity
+  intro n hn x hx
+  have : ContDiffAt Real n (fun x => x ^ r) x :=
+Real.contDiffAt_rpow_const Or.inl (lt_trans (by norm_num) hx).ne'
+  -- We calculate the derivative of `x ^ r`.
+  rw [norm_iteratedFDerivWithin_eq_norm_iteratedDerivWithin]; rw [iteratedDerivWithin_eq_iteratedDeriv hunique this hx]; rw [iteratedDeriv_eq_iterate]; rw [Real.iter_deriv_rpow_const]; rw [norm_mul]
+  gcongr 1
+  · have : n in Finset.range (N + 1) := by grind
+    apply Finset.single_le_sum (fun _ _ => by positivity) this
+  -- It remains to show that `‖x ^ (r - n)‖ ≤ (1 + ‖x‖) ^ k`:
+  have hx' : 1 / 2 < x := by simpa [t] using hx
+  have hx'' : 0 < x := lt_of_lt_of_le (by norm_num) hx'.le
+  simp only [Real.norm_eq_abs]
+  apply (Real.abs_rpow_le_abs_rpow _ _).trans
+  -- We consider the two cases `n ≤ r` and `r < n`.
+  by_cases! h : 0 <= r - n
+  · have : r - n <= k := by simpa using hk₁.trans (by simp)
+    rw [← Real.rpow_natCast]
+    exact (Real.rpow_le_rpow (by positivity) (by simp) h).trans
+      (Real.rpow_le_rpow_of_exponent_le (by simp) this)
+  have h : 0 < n - r := by grind
+  calc
+    /- In the case `0 < n - r`, we need the factor `Real.log 2 / (Real.log (3 / 2))` to control
+    the growth near `‖x‖ = 1/2`. -/
+    _ = x ^ (-(n - r)) := by
+      rw [neg_sub]
+      congr
+      simpa using hx''.le
+    _ <= (2 : Real) ^ (n - r) := by
+      simp only [one_div, Set.mem_ofPred_eq, t] at hx
+      rw [Real.rpow_neg_eq_inv_rpow]
+      gcongr
+      exact ((inv_lt_comm₀ hx'' (by norm_num)).mpr hx).le
+    _ = Real.exp (Real.log 2 * (n - r)) := by
+      rw [Real.rpow_def_of_pos]
+      norm_num
+    _ <= Real.exp (Real.log (3 / 2) * k) := by
+      gcongr 1
+      apply le_trans _ hk₂
+      gcongr
+    _ <= (3 / 2) ^ k := by
+      rw [← Real.rpow_natCast]; rw [Real.rpow_def_of_pos]
+      norm_num
+    _ <= _ := by
+      gcongr
+      grind
 -/
 theorem hasTemperateGrowth_one_add_norm_sq_rpow (r : Real) :
     (fun (x : H) => (1 + ‖x‖ ^ 2) ^ r).HasTemperateGrowth := by
@@ -1166,7 +1380,22 @@ lemma _root_.pow_mul_le_of_le_of_pow_mul_le
     simp [div_eq_inv_mul, ← Real.rpow_neg_one, ← Real.rpow_mul]
     ring
   rw [this]
-  rcases 
+  rcases le_total x 1 with h'x | h'x
+  · gcongr
+    · apply (pow_le_one₀ hx h'x).trans
+      apply Real.one_le_rpow_of_pos_of_le_one_of_nonpos
+      · positivity
+      · linarith
+      · simp
+    · linarith
+  · calc
+    x ^ k * f = x ^ (-(l : Real)) * (x ^ (k + l) * f) := by
+      rw [← Real.rpow_natCast]; rw [← Real.rpow_natCast]; rw [← mul_assoc]; rw [← Real.rpow_add (by positivity)]
+      simp
+    _ <= ((1 + x) / 2) ^ (-(l : Real)) * (C₁ + C₂) := by
+      apply mul_le_mul _ _ (by positivity) (by positivity)
+      · exact Real.rpow_le_rpow_of_nonpos (by positivity) (by linarith) (by simp)
+      · exact h₂.trans (by linarith)
 
 中文:
 引理 _root_.pow_mul_le_of_le_of_pow_mul_le
@@ -1178,7 +1407,22 @@ lemma _root_.pow_mul_le_of_le_of_pow_mul_le
     simp [div_eq_inv_mul, ← Real.rpow_neg_one, ← Real.rpow_mul]
     ring
   rw [this]
-  rcases 
+  rcases le_total x 1 with h'x | h'x
+  · gcongr
+    · apply (pow_le_one₀ hx h'x).trans
+      apply Real.one_le_rpow_of_pos_of_le_one_of_nonpos
+      · positivity
+      · linarith
+      · simp
+    · linarith
+  · calc
+    x ^ k * f = x ^ (-(l : Real)) * (x ^ (k + l) * f) := by
+      rw [← Real.rpow_natCast]; rw [← Real.rpow_natCast]; rw [← mul_assoc]; rw [← Real.rpow_add (by positivity)]
+      simp
+    _ <= ((1 + x) / 2) ^ (-(l : Real)) * (C₁ + C₂) := by
+      apply mul_le_mul _ _ (by positivity) (by positivity)
+      · exact Real.rpow_le_rpow_of_nonpos (by positivity) (by linarith) (by simp)
+      · exact h₂.trans (by linarith)
 
 Depends on / 依赖: Real.div_rpow, Real.one_le_rpow_of_pos_of_le_one_of_nonpos, Real.rpow_mul, Real.rpow_neg_one, div_eq_inv_mul, div_rpow, le_total, le_trans, one_le_rpow_of_pos_of_le_one_of_nonpos, rpow_mul, rpow_neg_one, zero_le_two
 -/
@@ -1222,7 +1466,7 @@ lemma _root_.integrable_of_le_of_pow_mul_le
   · exact AEStronglyMeasurable.mul (aestronglyMeasurable_id.norm.pow _) h''f.norm
   · filter_upwards with v
     simp only [norm_mul, norm_pow, norm_norm]
-    apply pow_mul_le_of_le_of_pow_mul_le (
+    apply pow_mul_le_of_le_of_pow_mul_le (norm_nonneg _) (norm_nonneg _) (hf v) (h'f v)
 
 中文:
 引理 _root_.integrable_of_le_of_pow_mul_le
@@ -1232,7 +1476,7 @@ lemma _root_.integrable_of_le_of_pow_mul_le
   · exact AEStronglyMeasurable.mul (aestronglyMeasurable_id.norm.pow _) h''f.norm
   · filter_upwards with v
     simp only [norm_mul, norm_pow, norm_norm]
-    apply pow_mul_le_of_le_of_pow_mul_le (
+    apply pow_mul_le_of_le_of_pow_mul_le (norm_nonneg _) (norm_nonneg _) (hf v) (h'f v)
 
 Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.mul, aestronglyMeasurable_id, aestronglyMeasurable_id.norm.pow, const_mul, f.norm, filter_upwards, integrablePower, integrable_pow_neg_integrablePower, norm_mul, norm_nonneg, norm_norm, norm_pow, pow_mul_le_of_le_of_pow_mul_le
 -/
@@ -1257,7 +1501,8 @@ lemma _root_.integral_pow_mul_le_of_le_of_pow_mul_le
   · filter_upwards with v using by positivity
   · exact ((integrable_pow_neg_integrablePower μ).const_mul _).mul_const _
   filter_upwards with v
-  exact (pow_mul_le_of_le_of_pow_mul_le (norm_nonneg _) (norm_non
+  exact (pow_mul_le_of_le_of_pow_mul_le (norm_nonneg _) (norm_nonneg _) (hf v) (h'f v)).trans
+    (le_of_eq (by ring))
 
 中文:
 引理 _root_.integral_pow_mul_le_of_le_of_pow_mul_le
@@ -1267,7 +1512,8 @@ lemma _root_.integral_pow_mul_le_of_le_of_pow_mul_le
   · filter_upwards with v using by positivity
   · exact ((integrable_pow_neg_integrablePower μ).const_mul _).mul_const _
   filter_upwards with v
-  exact (pow_mul_le_of_le_of_pow_mul_le (norm_nonneg _) (norm_non
+  exact (pow_mul_le_of_le_of_pow_mul_le (norm_nonneg _) (norm_nonneg _) (hf v) (h'f v)).trans
+    (le_of_eq (by ring))
 
 Depends on / 依赖: const_mul, filter_upwards, integrable_pow_neg_integrablePower, integral_const_mul, integral_mono_of_nonneg, integral_mul_const, le_of_eq, mul_const, norm_nonneg, pow_mul_le_of_le_of_pow_mul_le
 -/
@@ -1298,7 +1544,22 @@ theorem HasTemperateGrowth.exists_eLpNorm_lt_top
     | inl hp => exact ⟨0, by simp [hp]⟩
     | inr hp =>
       have h_one_add (x : E) : 0 < 1 + ‖x‖ := lt_add_of_pos_of_le zero_lt_one (norm_nonneg x)
-    
+      have hp_pos : 0 < (p : Real) := by simpa [zero_lt_iff] using hp
+      rcases hμ.exists_integrable with ⟨l, hl⟩
+      let k := ⌈(l / p : Real)⌉₊
+      have hlk : l <= k * (p : Real) := by simpa [div_le_iff₀ hp_pos] using Nat.le_ceil (l / p : Real)
+      use k
+      suffices HasFiniteIntegral (fun x => ((1 + ‖x‖) ^ (-(k * p) : Real))) μ by
+        rw [hasFiniteIntegral_iff_enorm] at this
+        rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp ENNReal.coe_ne_top]
+        simp only [ENNReal.coe_toReal]
+        refine Eq.subst (motive := (∫⁻ x, · x ∂μ < ⊤)) (funext fun x => ?_) this
+        rw [← neg_mul]; rw [Real.rpow_mul (h_one_add x).le]
+        exact Real.enorm_rpow_of_nonneg (by positivity) NNReal.zero_le_coe
+      refine hl.hasFiniteIntegral.mono' (ae_of_all μ fun x => ?_)
+      rw [Real.norm_of_nonneg (Real.rpow_nonneg (h_one_add x).le _)]
+      gcongr
+      simp
 
 中文:
 定理 有TemperateGrowth.存在_eLpNorm_lt_top
@@ -1311,7 +1572,22 @@ theorem HasTemperateGrowth.exists_eLpNorm_lt_top
     | inl hp => exact ⟨0, by simp [hp]⟩
     | inr hp =>
       have h_one_add (x : E) : 0 < 1 + ‖x‖ := lt_add_of_pos_of_le zero_lt_one (norm_nonneg x)
-    
+      have hp_pos : 0 < (p : Real) := by simpa [zero_lt_iff] using hp
+      rcases hμ.exists_integrable with ⟨l, hl⟩
+      let k := ⌈(l / p : Real)⌉₊
+      have hlk : l <= k * (p : Real) := by simpa [div_le_iff₀ hp_pos] using Nat.le_ceil (l / p : Real)
+      use k
+      suffices HasFiniteIntegral (fun x => ((1 + ‖x‖) ^ (-(k * p) : Real))) μ by
+        rw [hasFiniteIntegral_iff_enorm] at this
+        rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp ENNReal.coe_ne_top]
+        simp only [ENNReal.coe_toReal]
+        refine Eq.subst (motive := (∫⁻ x, · x ∂μ < ⊤)) (funext fun x => ?_) this
+        rw [← neg_mul]; rw [Real.rpow_mul (h_one_add x).le]
+        exact Real.enorm_rpow_of_nonneg (by positivity) NNReal.zero_le_coe
+      refine hl.hasFiniteIntegral.mono' (ae_of_all μ fun x => ?_)
+      rw [Real.norm_of_nonneg (Real.rpow_nonneg (h_one_add x).le _)]
+      gcongr
+      simp
 
 Depends on / 依赖: Nat.le_ceil, eLpNormEssSup_lt_top_of_ae_bound, eq_or_ne, exists_integrable, h_one_add, hp_pos, le_ceil, lt_add_of_pos_of_le, norm_nonneg, zero_lt_iff, zero_lt_one
 -/

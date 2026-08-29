@@ -66,7 +66,10 @@ lemma mem_iSup_of_directed
     simpa only [closure_iUnion, closure_eq (S _)] using this
   refine fun hx => closure_induction (by simp) (by simp) ?_ hx
   rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩ :=
+  obtain ⟨k, hik, hjk⟩ := hS i j
+  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
+
+@[to_additive]
 
 中文:
 引理 mem_iSup_of_directed
@@ -77,7 +80,10 @@ lemma mem_iSup_of_directed
     simpa only [closure_iUnion, closure_eq (S _)] using this
   refine fun hx => closure_induction (by simp) (by simp) ?_ hx
   rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩ :=
+  obtain ⟨k, hik, hjk⟩ := hS i j
+  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
+
+@[to_additive]
 
 Depends on / 依赖: closure, closure_eq, closure_iUnion, closure_induction, le_iSup, mul_mem
 -/
@@ -495,7 +501,7 @@ theorem iSup_induction'
   · exact ⟨_, mem _ _ hx⟩
   · exact ⟨_, one⟩
   · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact 
+    exact ⟨_, mul _ _ _ _ Cx Cy⟩
 
 中文:
 定理 iSup_induction'
@@ -507,7 +513,7 @@ theorem iSup_induction'
   · exact ⟨_, mem _ _ hx⟩
   · exact ⟨_, one⟩
   · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact 
+    exact ⟨_, mul _ _ _ _ Cx Cy⟩
 
 Depends on / 依赖: Exists, Exists.elim, iSup_induction, motive
 -/
@@ -942,7 +948,9 @@ theorem closure_induction_left
   | of_mul x y ih =>
     simp only [map_mul, FreeMonoid.lift_eval_of]
     refine mul_left _ x.prop (FreeMonoid.lift Subtype.val y) _ (ih ?_)
-    simp only [closure_eq_mr
+    simp only [closure_eq_mrange, mem_mrange, exists_apply_eq_apply]
+
+@[to_additive (attr := elab_as_elim)]
 
 中文:
 定理 closure_induction_left
@@ -954,7 +962,9 @@ theorem closure_induction_left
   | of_mul x y ih =>
     simp only [map_mul, FreeMonoid.lift_eval_of]
     refine mul_left _ x.prop (FreeMonoid.lift Subtype.val y) _ (ih ?_)
-    simp only [closure_eq_mr
+    simp only [closure_eq_mrange, mem_mrange, exists_apply_eq_apply]
+
+@[to_additive (attr := elab_as_elim)]
 
 Depends on / 依赖: FreeMonoid, FreeMonoid.inductionOn, FreeMonoid.lift, FreeMonoid.lift_eval_of, Subtype, Subtype.val, closure_eq_mrange, exists_apply_eq_apply, inductionOn, lift_eval_of, map_mul, mem_mrange, mul_left, of_mul, simp_rw, x.prop
 -/
@@ -1262,7 +1272,9 @@ theorem _root_.IsIdempotentElem.coe_powers
       · rw [mul_one]; exact .inr rfl
       · rw [ha]; exact .inr rfl
     one_mem' := .inl rfl }
-  suffices Submonoid.pow
+  suffices Submonoid.powers a = S from congr_arg _ this
+  le_antisymm (Submonoid.powers_le.mpr <| .inr rfl)
+    (by rintro _ (rfl | rfl); exacts [one_mem _, Submonoid.mem_powers _])
 
 中文:
 定理 _root_.IsIdempotentElem.coe_powers
@@ -1276,7 +1288,9 @@ theorem _root_.IsIdempotentElem.coe_powers
       · rw [mul_one]; exact .inr rfl
       · rw [ha]; exact .inr rfl
     one_mem' := .inl rfl }
-  suffices Submonoid.pow
+  suffices Submonoid.powers a = S from congr_arg _ this
+  le_antisymm (Submonoid.powers_le.mpr <| .inr rfl)
+    (by rintro _ (rfl | rfl); exacts [one_mem _, Submonoid.mem_powers _])
 
 Depends on / 依赖: Submonoid, Submonoid.mem_powers, Submonoid.powers, Submonoid.powers_le.mpr, carrier, congr_arg, exacts, le_antisymm, mem_powers, mul_mem, mul_one, one_mem, one_mul, powers, powers_le
 -/
@@ -1308,7 +1322,25 @@ inv_mul_cancel y := Subtype.ext by
     rw [← pow_succ]; rw [Nat.sub_add_cancel hpos]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [hx]; rw [one_pow]
   zpow z x := x ^ z.natMod n
   zpow_zero' z := by
-
+    simp_rw [HPow.hPow, Pow.pow]
+    simp only [Int.natMod, Int.zero_emod, Int.toNat_zero, pow_zero]
+  zpow_neg' m x := by
+    change x ^ (Int.natMod _ n) = (x ^ (Int.natMod _ n)) ^ (n - 1)
+    ext
+    obtain ⟨_, k, rfl⟩ := x
+    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow]
+    rw [Int.negSucc_eq]; rw [← Int.natCast_succ]; rw [← Int.add_mul_emod_self_right (b := (m + 1 : Nat))]
+    nth_rw 1 [← mul_one ((m + 1 : Nat) : Int)]
+    rw [← sub_eq_neg_add]; rw [← Int.mul_sub]; rw [← Int.natCast_pred_of_pos hpos]; norm_cast
+    simp only [Int.toNat_natCast]
+    rw [mul_comm]; rw [pow_mul]; rw [← pow_eq_pow_mod _ hx]; rw [mul_comm k]; rw [mul_assoc]; rw [pow_mul _ (_ % _)]; rw [← pow_eq_pow_mod _ hx]; rw [pow_mul]; rw [pow_mul]
+zpow_succ' m x := Subtype.ext by
+    simp_rw [HPow.hPow, Pow.pow]
+    obtain ⟨_, k, rfl⟩ := x
+    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow, coe_mul]
+    norm_cast
+    iterate 2 rw [Int.toNat_natCast, mul_comm, pow_mul, ← pow_eq_pow_mod _ hx]
+    rw [← pow_mul _ m]; rw [mul_comm]; rw [pow_mul]; rw [← pow_succ]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]
 
 中文:
 缩写 groupPowers
@@ -1320,7 +1352,25 @@ inv_mul_cancel y := Subtype.ext by
     rw [← pow_succ]; rw [Nat.sub_add_cancel hpos]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [hx]; rw [one_pow]
   zpow z x := x ^ z.natMod n
   zpow_zero' z := by
-
+    simp_rw [HPow.hPow, Pow.pow]
+    simp only [Int.natMod, Int.zero_emod, Int.toNat_zero, pow_zero]
+  zpow_neg' m x := by
+    change x ^ (Int.natMod _ n) = (x ^ (Int.natMod _ n)) ^ (n - 1)
+    ext
+    obtain ⟨_, k, rfl⟩ := x
+    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow]
+    rw [Int.negSucc_eq]; rw [← Int.natCast_succ]; rw [← Int.add_mul_emod_self_right (b := (m + 1 : Nat))]
+    nth_rw 1 [← mul_one ((m + 1 : Nat) : Int)]
+    rw [← sub_eq_neg_add]; rw [← Int.mul_sub]; rw [← Int.natCast_pred_of_pos hpos]; norm_cast
+    simp only [Int.toNat_natCast]
+    rw [mul_comm]; rw [pow_mul]; rw [← pow_eq_pow_mod _ hx]; rw [mul_comm k]; rw [mul_assoc]; rw [pow_mul _ (_ % _)]; rw [← pow_eq_pow_mod _ hx]; rw [pow_mul]; rw [pow_mul]
+zpow_succ' m x := Subtype.ext by
+    simp_rw [HPow.hPow, Pow.pow]
+    obtain ⟨_, k, rfl⟩ := x
+    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow, coe_mul]
+    norm_cast
+    iterate 2 rw [Int.toNat_natCast, mul_comm, pow_mul, ← pow_eq_pow_mod _ hx]
+    rw [← pow_mul _ m]; rw [mul_comm]; rw [pow_mul]; rw [← pow_succ]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]
 -/
 abbrev groupPowers {x : M} {n : Nat} (hpos : 0 < n) (hx : x ^ n = 1) : Group (powers x) where
   inv x := x ^ (n - 1)

@@ -46,7 +46,17 @@ definition isLimitOfEval
         intro j
         have eq := fun k => (hs k).fac ((eval C c k).mapCone t)
         simp only [Functor.mapCone_π_app, eval_map] at eq
-        simp only [Functor.mapCone_π_ap
+        simp only [Functor.mapCone_π_app, eval_map, assoc]
+        rw [eq i']; rw [← Hom.comm]; rw [reassoc_of% (eq i)]; rw [Hom.comm] }
+  fac t j := by
+    ext i
+    apply (hs i).fac
+  uniq t m hm := by
+    ext i
+    apply (hs i).uniq ((eval C c i).mapCone t)
+    intro j
+    dsimp
+    simp only [← comp_f, hm]
 
 中文:
 定义 isLimitOfEval
@@ -57,7 +67,17 @@ definition isLimitOfEval
         intro j
         have eq := fun k => (hs k).fac ((eval C c k).mapCone t)
         simp only [Functor.mapCone_π_app, eval_map] at eq
-        simp only [Functor.mapCone_π_ap
+        simp only [Functor.mapCone_π_app, eval_map, assoc]
+        rw [eq i']; rw [← Hom.comm]; rw [reassoc_of% (eq i)]; rw [Hom.comm] }
+  fac t j := by
+    ext i
+    apply (hs i).fac
+  uniq t m hm := by
+    ext i
+    apply (hs i).uniq ((eval C c i).mapCone t)
+    intro j
+    dsimp
+    simp only [← comp_f, hm]
 
 Depends on / 依赖: Functor, Functor.mapCone_, Hom.comm, IsLimit, IsLimit.hom_ext, SingleFunctors, SingleFunctors.postcomp, comp_f, eval_map, hom_ext, infer_instance, mapCone, postcomp, reassoc_of, singleFunctor, singleFunctors
 -/
@@ -103,7 +123,12 @@ definition coneOfHasLimitEval
         dsimp
         rw [(F.obj j).shape _ _ h]; rw [comp_zero]; rw [zero_comp] }
   π :=
-    { app := fun j => { f := fun _ =>
+    { app := fun j => { f := fun _ => limit.π _ j }
+      naturality := fun i j φ => by
+        ext n
+        dsimp
+        simp only [Category.id_comp]
+        rw [← eval_map]; rw [← Functor.comp_map]; rw [limit.w] }
 
 中文:
 定义 coneOfHasLimitEval
@@ -116,7 +141,12 @@ definition coneOfHasLimitEval
         dsimp
         rw [(F.obj j).shape _ _ h]; rw [comp_zero]; rw [zero_comp] }
   π :=
-    { app := fun j => { f := fun _ =>
+    { app := fun j => { f := fun _ => limit.π _ j }
+      naturality := fun i j φ => by
+        ext n
+        dsimp
+        simp only [Category.id_comp]
+        rw [← eval_map]; rw [← Functor.comp_map]; rw [limit.w] }
 
 Depends on / 依赖: Category, Category.id_comp, CochainComplex, CochainComplex.singleFunctor, F.obj, Functor, Functor.Linear, Functor.comp_map, HomotopyCategory, HomotopyCategory.quotient, Linear, comp_map, comp_zero, eval_map, id_comp, limMap, limit.w, naturality, quotient, singleFunctor
 -/
@@ -282,7 +312,17 @@ definition isColimitOfEval
         intro j
         have eq := fun k => (hs k).fac ((eval C c k).mapCocone t)
         simp only [Functor.mapCocone_ι_app, eval_map] at eq
-        simp only [Functor.mapCo
+        simp only [Functor.mapCocone_ι_app, eval_map]
+        rw [reassoc_of% (eq i)]; rw [Hom.comm_assoc]; rw [eq i']; rw [Hom.comm] }
+  fac t j := by
+    ext i
+    apply (hs i).fac
+  uniq t m hm := by
+    ext i
+    apply (hs i).uniq ((eval C c i).mapCocone t)
+    intro j
+    dsimp
+    simp only [← comp_f, hm]
 
 中文:
 定义 isColimitOfEval
@@ -293,7 +333,17 @@ definition isColimitOfEval
         intro j
         have eq := fun k => (hs k).fac ((eval C c k).mapCocone t)
         simp only [Functor.mapCocone_ι_app, eval_map] at eq
-        simp only [Functor.mapCo
+        simp only [Functor.mapCocone_ι_app, eval_map]
+        rw [reassoc_of% (eq i)]; rw [Hom.comm_assoc]; rw [eq i']; rw [Hom.comm] }
+  fac t j := by
+    ext i
+    apply (hs i).fac
+  uniq t m hm := by
+    ext i
+    apply (hs i).uniq ((eval C c i).mapCocone t)
+    intro j
+    dsimp
+    simp only [← comp_f, hm]
 
 Depends on / 依赖: Functor, Functor.mapCocone_, Hom.comm, Hom.comm_assoc, IsColimit, IsColimit.hom_ext, comm_assoc, comp_f, eval_map, hom_ext, mapCocone, reassoc_of
 -/
@@ -340,7 +390,12 @@ definition coconeOfHasColimitEval
         dsimp
         rw [(F.obj j).shape _ _ h]; rw [zero_comp]; rw [comp_zero] }
   ι :=
-    { app := fun j => { f := fu
+    { app := fun j => { f := fun n => colimit.ι (F ⋙ eval C c n) j }
+      naturality := fun i j φ => by
+        ext n
+        dsimp
+        simp only [Category.comp_id]
+        rw [← eval_map]; rw [← Functor.comp_map]; rw [colimit.w] }
 
 中文:
 定义 coconeOfHasColimitEval
@@ -353,7 +408,12 @@ definition coconeOfHasColimitEval
         dsimp
         rw [(F.obj j).shape _ _ h]; rw [zero_comp]; rw [comp_zero] }
   ι :=
-    { app := fun j => { f := fu
+    { app := fun j => { f := fun n => colimit.ι (F ⋙ eval C c n) j }
+      naturality := fun i j φ => by
+        ext n
+        dsimp
+        simp only [Category.comp_id]
+        rw [← eval_map]; rw [← Functor.comp_map]; rw [colimit.w] }
 
 Depends on / 依赖: Category, Category.comp_id, F.obj, Functor, Functor.comp_map, colimMap, colimit, colimit.w, comp_id, comp_map, comp_zero, eval_map, naturality, zero_comp
 -/

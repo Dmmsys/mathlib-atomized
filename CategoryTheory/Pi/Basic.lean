@@ -308,7 +308,7 @@ definition sum
     { app := fun Y s =>
         match s with
         | .inl i => f i
-        | .inr 
+        | .inr j => 𝟙 (Y j) }
 
 中文:
 定义 求和
@@ -325,7 +325,7 @@ definition sum
     { app := fun Y s =>
         match s with
         | .inl i => f i
-        | .inr 
+        | .inr j => 𝟙 (Y j) }
 -/
 def sum : (forall i, C i) ⥤ (forall j, D j) ⥤ forall s : I oplus J, Sum.elim C D s where
   obj X :=
@@ -864,7 +864,13 @@ definition Pi.equivalenceOfEquiv
   inverse := Functor.pi' (fun i' => Pi.eval _ (e i'))
   unitIso := NatIso.pi' (fun i' => leftUnitor _ ≪≫
     (Pi.evalCompEqToEquivalenceFunctor (fun j => C (e j)) (e.symm_apply_apply i')).symm ≪≫
-    isoWhiskerLeft _ 
+    isoWhiskerLeft _ ((Pi.eqToEquivalenceFunctorIso C e (e.symm_apply_apply i')).symm) ≪≫
+    (pi'CompEval _ _).symm ≪≫ isoWhiskerLeft _ (pi'CompEval _ _).symm ≪≫
+    (associator _ _ _).symm)
+  counitIso := NatIso.pi' (fun i => (associator _ _ _).symm ≪≫
+    isoWhiskerRight (pi'CompEval _ _) _ ≪≫
+    Pi.evalCompEqToEquivalenceFunctor C (e.apply_symm_apply i) ≪≫
+    (leftUnitor _).symm)
 
 中文:
 定义 依赖函数类型.equivalenceOfEquiv
@@ -874,7 +880,13 @@ definition Pi.equivalenceOfEquiv
   inverse := Functor.pi' (fun i' => Pi.eval _ (e i'))
   unitIso := NatIso.pi' (fun i' => leftUnitor _ ≪≫
     (Pi.evalCompEqToEquivalenceFunctor (fun j => C (e j)) (e.symm_apply_apply i')).symm ≪≫
-    isoWhiskerLeft _ 
+    isoWhiskerLeft _ ((Pi.eqToEquivalenceFunctorIso C e (e.symm_apply_apply i')).symm) ≪≫
+    (pi'CompEval _ _).symm ≪≫ isoWhiskerLeft _ (pi'CompEval _ _).symm ≪≫
+    (associator _ _ _).symm)
+  counitIso := NatIso.pi' (fun i => (associator _ _ _).symm ≪≫
+    isoWhiskerRight (pi'CompEval _ _) _ ≪≫
+    Pi.evalCompEqToEquivalenceFunctor C (e.apply_symm_apply i) ≪≫
+    (leftUnitor _).symm)
 
 Depends on / 依赖: Pi.eval, e.symm
 -/
@@ -910,7 +922,8 @@ definition Pi.optionEquivalence
     | some i => Prod.snd _ _ ⋙ (Pi.eval _ i))
   unitIso := NatIso.pi' (fun i => match i with
     | none => Iso.refl _
-    | some _ => Iso.refl 
+    | some _ => Iso.refl _)
+  counitIso := by exact Iso.refl _
 
 中文:
 定义 依赖函数类型.optionEquivalence
@@ -922,7 +935,8 @@ definition Pi.optionEquivalence
     | some i => Prod.snd _ _ ⋙ (Pi.eval _ i))
   unitIso := NatIso.pi' (fun i => match i with
     | none => Iso.refl _
-    | some _ => Iso.refl 
+    | some _ => Iso.refl _)
+  counitIso := by exact Iso.refl _
 
 Depends on / 依赖: Functor, Functor.prod, Pi.eval
 -/

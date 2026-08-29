@@ -601,7 +601,7 @@ definition restrict
   nonneg := by
     classical
     exact smul_nonneg (inv_nonneg.2 restrict_nonneg_aux) fun _ => by simp [filter_apply, apply_ite]
-  total := by classical simp [sum_smul_index, ← mul_sum, restrict
+  total := by classical simp [sum_smul_index, ← mul_sum, restrict_ne_zero_aux hs]
 
 中文:
 定义 restrict
@@ -611,7 +611,7 @@ definition restrict
   nonneg := by
     classical
     exact smul_nonneg (inv_nonneg.2 restrict_nonneg_aux) fun _ => by simp [filter_apply, apply_ite]
-  total := by classical simp [sum_smul_index, ← mul_sum, restrict
+  total := by classical simp [sum_smul_index, ← mul_sum, restrict_ne_zero_aux hs]
 
 Depends on / 依赖: Classical, scoped
 -/
@@ -1391,7 +1391,7 @@ lemma iConvexComb_comm
       (g.map (f.map ∘ Prod.mk)).sConvexComb by
     simpa [iConvexComb, map_sConvexComb, map_map, Function.comp_def]
   ext1
-  simp [ma
+  simp [mapDomain, sum_sum_index, add_smul, smul_sum, mul_comm, sum_comm f.weights g.weights]
 
 中文:
 引理 iConvexComb_comm
@@ -1403,7 +1403,7 @@ lemma iConvexComb_comm
       (g.map (f.map ∘ Prod.mk)).sConvexComb by
     simpa [iConvexComb, map_sConvexComb, map_map, Function.comp_def]
   ext1
-  simp [ma
+  simp [mapDomain, sum_sum_index, add_smul, smul_sum, mul_comm, sum_comm f.weights g.weights]
 
 Depends on / 依赖: Function, Function.comp_def, Prod.mk, add_smul, comp_def, f.map, f.weights, g.map, g.weights, iConvexComb, iConvexComb_assoc, iConvexComb_reindex, mapDomain, map_map, map_sConvexComb, mul_comm, prodComm, sConvexComb, smul_sum, sum_comm
 -/
@@ -1644,7 +1644,8 @@ lemma convexCombPair_iConvexComb_iConvexComb
     (J := ![ULift.{max u₁ u₂} J₁, ULift.{max u₁ u₂} J₂])
     (M := M) (Fin.cons (g₁.map ULift.up) (Fin.cons (g₂.map ULift.up) nofun))
     (Fin.cons (m₁ ∘ ULift.down) (Fin.cons (m₂ ∘ ULift.down) nofun))
-  simp [iConvexComb, map_sConve
+  simp [iConvexComb, map_sConvexComb, map_map, Sigma.uncurry] at this
+  simpa [convexCombPair, ← convexCombPair_def]
 
 中文:
 引理 convexCombPair_iConvexComb_iConvexComb
@@ -1654,7 +1655,8 @@ lemma convexCombPair_iConvexComb_iConvexComb
     (J := ![ULift.{max u₁ u₂} J₁, ULift.{max u₁ u₂} J₂])
     (M := M) (Fin.cons (g₁.map ULift.up) (Fin.cons (g₂.map ULift.up) nofun))
     (Fin.cons (m₁ ∘ ULift.down) (Fin.cons (m₂ ∘ ULift.down) nofun))
-  simp [iConvexComb, map_sConve
+  simp [iConvexComb, map_sConvexComb, map_map, Sigma.uncurry] at this
+  simpa [convexCombPair, ← convexCombPair_def]
 
 Depends on / 依赖: Fin.cons, Sigma.uncurry, ULift.down, ULift.up, convexCombPair, convexCombPair_def, iConvexComb, iConvexComb_assoc, map_map, map_sConvexComb, uncurry
 -/
@@ -1681,7 +1683,7 @@ lemma iConvexComb_convexCombPair
   simp [iConvexComb, map_sConvexComb, map_map] at this
   simp only [← convexCombPair.eq_def] at this
   simp only [← iConvexComb.eq_def] at this
-  simpa [co
+  simpa [convexCombPair, ← convexCombPair_def]
 
 中文:
 引理 iConvexComb_convexCombPair
@@ -1691,7 +1693,7 @@ lemma iConvexComb_convexCombPair
   simp [iConvexComb, map_sConvexComb, map_map] at this
   simp only [← convexCombPair.eq_def] at this
   simp only [← iConvexComb.eq_def] at this
-  simpa [co
+  simpa [convexCombPair, ← convexCombPair_def]
 
 Depends on / 依赖: convexCombPair, convexCombPair.eq_def, convexCombPair_def, eq_def, iConvexComb, iConvexComb.eq_def, iConvexComb_assoc, map_map, map_sConvexComb
 -/
@@ -1807,7 +1809,8 @@ lemma convexCombPair_convexCombPair_assoc_left
   congr 1
   ext1
   have : s * (t' * t'') + t * t'' = t := by rw [← mul_assoc, ← H, ← mul_add, h'', mul_one]
-  simp [convexCombPair, sum_add_index, add_smul, ← single_add, 
+  simp [convexCombPair, sum_add_index, add_smul, ← single_add, H, mul_assoc, ← mul_add, h'',
+    add_assoc, this]
 
 中文:
 引理 convexCombPair_convexCombPair_assoc_left
@@ -1818,7 +1821,8 @@ lemma convexCombPair_convexCombPair_assoc_left
   congr 1
   ext1
   have : s * (t' * t'') + t * t'' = t := by rw [← mul_assoc, ← H, ← mul_add, h'', mul_one]
-  simp [convexCombPair, sum_add_index, add_smul, ← single_add, 
+  simp [convexCombPair, sum_add_index, add_smul, ← single_add, H, mul_assoc, ← mul_add, h'',
+    add_assoc, this]
 
 Depends on / 依赖: add_assoc, add_smul, classical, convexCombPair, convexCombPair_convexCombPair_left_eq_sConvexComb, convexCombPair_convexCombPair_right_eq_sConvexComb, mul_add, mul_assoc, mul_one, single_add, sum_add_index
 -/

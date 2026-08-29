@@ -122,7 +122,22 @@ theorem normDet_eq_norm_det_toMatrix_rangeRestrict
   have h : Nonempty (OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 f.range) := by
     rw [hrank]
     exact ⟨stdOrthonormalBasis 𝕜 f.range⟩
-  simp only [normDet, h
+  simp only [normDet, h, ↓reduceDIte]
+  rw [← basis_toMatrix_mul_linearMap_toMatrix_mul_basis_toMatrix (stdOrthonormalBasis 𝕜 U).toBasis
+    bu.toBasis h.some.toBasis bv.toBasis]
+  have h1 : bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis *
+      (stdOrthonormalBasis 𝕜 U).toBasis.toMatrix bu.toBasis = 1 :=
+    Basis.toMatrix_mul_toMatrix_flip _ _
+  have h2 : (stdOrthonormalBasis 𝕜 U).toBasis.toMatrix bu.toBasis *
+      bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis = 1 :=
+    Basis.toMatrix_mul_toMatrix_flip _ _
+  rw [← Matrix.det_comm' h1 h2]; rw [← Matrix.mul_assoc]; rw [Matrix.det_mul]; rw [norm_mul]
+  suffices ‖(bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis *
+      h.some.toBasis.toMatrix ⇑bv.toBasis).det‖ = 1 by
+    rw [this]; rw [one_mul]
+refine CStarRing.norm_of_mem_unitary Matrix.det_of_mem_unitary ?_
+  rw [Matrix.mem_unitaryGroup_iff]; rw [Matrix.star_eq_conjTranspose]; rw [Matrix.conjTranspose_mul]; rw [← Matrix.mul_assoc]; rw [Matrix.mul_assoc (bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis)]
+  simp
 
 中文:
 定理 normDet_eq_norm_det_toMatrix_rangeRestrict
@@ -133,7 +148,22 @@ theorem normDet_eq_norm_det_toMatrix_rangeRestrict
   have h : Nonempty (OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 f.range) := by
     rw [hrank]
     exact ⟨stdOrthonormalBasis 𝕜 f.range⟩
-  simp only [normDet, h
+  simp only [normDet, h, ↓reduceDIte]
+  rw [← basis_toMatrix_mul_linearMap_toMatrix_mul_basis_toMatrix (stdOrthonormalBasis 𝕜 U).toBasis
+    bu.toBasis h.some.toBasis bv.toBasis]
+  have h1 : bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis *
+      (stdOrthonormalBasis 𝕜 U).toBasis.toMatrix bu.toBasis = 1 :=
+    Basis.toMatrix_mul_toMatrix_flip _ _
+  have h2 : (stdOrthonormalBasis 𝕜 U).toBasis.toMatrix bu.toBasis *
+      bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis = 1 :=
+    Basis.toMatrix_mul_toMatrix_flip _ _
+  rw [← Matrix.det_comm' h1 h2]; rw [← Matrix.mul_assoc]; rw [Matrix.det_mul]; rw [norm_mul]
+  suffices ‖(bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis *
+      h.some.toBasis.toMatrix ⇑bv.toBasis).det‖ = 1 by
+    rw [this]; rw [one_mul]
+refine CStarRing.norm_of_mem_unitary Matrix.det_of_mem_unitary ?_
+  rw [Matrix.mem_unitaryGroup_iff]; rw [Matrix.star_eq_conjTranspose]; rw [Matrix.conjTranspose_mul]; rw [← Matrix.mul_assoc]; rw [Matrix.mul_assoc (bu.toBasis.toMatrix (stdOrthonormalBasis 𝕜 U).toBasis)]
+  simp
 
 Depends on / 依赖: Nonempty, OrthonormalBasis, basis_toMatrix_mul_linearMap_toMatrix_mul_basis_toMatrix, bu.toBasis, bu.toBasis.toMatrix, bv.toBasis, f.range, finrank, finrank_eq_nat_card_basis, h.some.toBasis, normDet, reduceDIte, stdOrthonormalBasis, toBasis, toMatrix
 -/
@@ -174,7 +204,20 @@ theorem normDet_eq_zero_iff_ker_ne_bot
       ⟨by simpa using ker_eq_bot.mp h, f.surjective_rangeRestrict⟩
     let bu := stdOrthonormalBasis 𝕜 U
     let bv := g.finrank_eq.symm ▸ stdOrthonormalBasis 𝕜 f.range
-    rw [f.normDet_eq_norm_det_toMatrix_r
+    rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv]; rw [norm_eq_zero.not]
+    suffices (f.rangeRestrict.adjoint.toMatrix bv.toBasis bu.toBasis).det *
+        (f.rangeRestrict.toMatrix bu.toBasis bv.toBasis).det != 0 by
+      simpa [toMatrix_adjoint, Matrix.det_conjTranspose] using this
+    simpa [← Matrix.det_mul, ← LinearMap.toMatrix_comp, det_eq_zero_iff_ker_ne_bot,
+      LinearMap.ker_adjoint_comp_self] using h
+  mpr h := by
+    suffices ¬ Nonempty (OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 f.range) by
+      simp [normDet, this]
+    contrapose h
+    obtain ⟨b⟩ := h
+    have hrank : finrank 𝕜 f.range = finrank 𝕜 U := by
+      simpa using finrank_eq_card_basis b.toBasis
+    simpa [hrank] using f.finrank_range_add_finrank_ker
 
 中文:
 定理 normDet_eq_zero_iff_ker_ne_bot
@@ -185,7 +228,20 @@ theorem normDet_eq_zero_iff_ker_ne_bot
       ⟨by simpa using ker_eq_bot.mp h, f.surjective_rangeRestrict⟩
     let bu := stdOrthonormalBasis 𝕜 U
     let bv := g.finrank_eq.symm ▸ stdOrthonormalBasis 𝕜 f.range
-    rw [f.normDet_eq_norm_det_toMatrix_r
+    rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv]; rw [norm_eq_zero.not]
+    suffices (f.rangeRestrict.adjoint.toMatrix bv.toBasis bu.toBasis).det *
+        (f.rangeRestrict.toMatrix bu.toBasis bv.toBasis).det != 0 by
+      simpa [toMatrix_adjoint, Matrix.det_conjTranspose] using this
+    simpa [← Matrix.det_mul, ← LinearMap.toMatrix_comp, det_eq_zero_iff_ker_ne_bot,
+      LinearMap.ker_adjoint_comp_self] using h
+  mpr h := by
+    suffices ¬ Nonempty (OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 f.range) by
+      simp [normDet, this]
+    contrapose h
+    obtain ⟨b⟩ := h
+    have hrank : finrank 𝕜 f.range = finrank 𝕜 U := by
+      simpa using finrank_eq_card_basis b.toBasis
+    simpa [hrank] using f.finrank_range_add_finrank_ker
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, Matrix, Matrix.det_conjTranspose, adjoint, bu.toBasis, bv.toBasis, contrapose, det_conjTranspose, f.normDet_eq_norm_det_toMatrix_rangeRestrict, f.range, f.rangeRestrict, f.rangeRestrict.adjoint.toMatrix, f.rangeRestrict.toMatrix, f.surjective_rangeRestrict, finrank_eq, g.finrank_eq.symm, ker_eq_bot, ker_eq_bot.mp, normDet_eq_norm_det_toMatrix_rangeRestrict
 -/
@@ -248,7 +304,9 @@ theorem normDet_ne_zero_tfae
     exact ⟨stdOrthonormalBasis 𝕜 f.range⟩
   tfae_have 4 -> 3 := by
     rintro ⟨b⟩
-    simpa using Module.finrank_eq_ca
+    simpa using Module.finrank_eq_card_basis b.toBasis
+  tfae_have 2 ↔ 5 := ker_eq_bot
+  tfae_finish
 
 中文:
 定理 normDet_ne_zero_tfae
@@ -262,7 +320,9 @@ theorem normDet_ne_zero_tfae
     exact ⟨stdOrthonormalBasis 𝕜 f.range⟩
   tfae_have 4 -> 3 := by
     rintro ⟨b⟩
-    simpa using Module.finrank_eq_ca
+    simpa using Module.finrank_eq_card_basis b.toBasis
+  tfae_have 2 ↔ 5 := ker_eq_bot
+  tfae_finish
 
 Depends on / 依赖: Module, Module.finrank_eq_card_basis, b.toBasis, f.normDet_eq_zero_iff_ker_ne_bot.not_left, f.normDet_eq_zero_iff_rank_range_ne.not_left, f.range, finrank_eq_card_basis, ker_eq_bot, normDet_eq_zero_iff_ker_ne_bot, normDet_eq_zero_iff_rank_range_ne, not_left, stdOrthonormalBasis, tfae_finish, tfae_have, toBasis
 -/
@@ -321,7 +381,7 @@ theorem normDet_eq_zero_tfae
     have h := (f.normDet_ne_zero_tfae.out 2 3).not
     simpa using h
   tfae_have 2 ↔ 6 := ker_eq_bot.not
-  
+  tfae_finish
 
 中文:
 定理 normDet_eq_zero_tfae
@@ -334,7 +394,7 @@ theorem normDet_eq_zero_tfae
     have h := (f.normDet_ne_zero_tfae.out 2 3).not
     simpa using h
   tfae_have 2 ↔ 6 := ker_eq_bot.not
-  
+  tfae_finish
 
 Depends on / 依赖: f.normDet_eq_zero_iff_ker_ne_bot, f.normDet_eq_zero_iff_rank_range_ne, f.normDet_ne_zero_tfae.out, finrank_range_le, ker_eq_bot, ker_eq_bot.not, normDet_eq_zero_iff_ker_ne_bot, normDet_eq_zero_iff_rank_range_ne, normDet_ne_zero_tfae, tfae_finish, tfae_have
 -/
@@ -366,7 +426,18 @@ theorem normDet_eq_norm_det_toMatrix
   · have h : f.range = ⊤ := by
       apply Submodule.eq_of_le_of_finrank_le le_top
       simp [finrank_eq_card_basis bv.toBasis, ← hrank, finrank_eq_card_basis bu.toBasis]
-
+    let bv' : OrthonormalBasis ι 𝕜 f.range := bv.map (LinearIsometryEquiv.ofTop _ _ h).symm
+    rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv']
+    rfl
+  · symm
+    rw [normDet_eq_zero_iff_rank_range_ne.mpr hrank.symm]
+    contrapose hrank with hdet
+    have h : IsUnit ((f.toMatrix bu.toBasis bv.toBasis).det) := by
+      simpa using hdet
+    let f' := LinearEquiv.ofIsUnitDet h
+    have hf : f.range = ⊤ := f'.range
+    rw [hf]
+    simpa using f'.finrank_eq
 
 中文:
 定理 normDet_eq_norm_det_toMatrix
@@ -377,7 +448,18 @@ theorem normDet_eq_norm_det_toMatrix
   · have h : f.range = ⊤ := by
       apply Submodule.eq_of_le_of_finrank_le le_top
       simp [finrank_eq_card_basis bv.toBasis, ← hrank, finrank_eq_card_basis bu.toBasis]
-
+    let bv' : OrthonormalBasis ι 𝕜 f.range := bv.map (LinearIsometryEquiv.ofTop _ _ h).symm
+    rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv']
+    rfl
+  · symm
+    rw [normDet_eq_zero_iff_rank_range_ne.mpr hrank.symm]
+    contrapose hrank with hdet
+    have h : IsUnit ((f.toMatrix bu.toBasis bv.toBasis).det) := by
+      simpa using hdet
+    let f' := LinearEquiv.ofIsUnitDet h
+    have hf : f.range = ⊤ := f'.range
+    rw [hf]
+    simpa using f'.finrank_eq
 
 Depends on / 依赖: FiniteDimensional, LinearIsometryEquiv, LinearIsometryEquiv.ofTop, OrthonormalBasis, Submodule, Submodule.eq_of_le_of_finrank_le, bu.toBasis, bv.map, bv.toBasis, bv.toBasis.finiteDimensional_of_finite, contrapo, eq_of_le_of_finrank_le, f.normDet_eq_norm_det_toMatrix_rangeRestrict, f.range, finiteDimensional_of_finite, finrank, finrank_eq_card_basis, hrank.symm, le_top, normDet_eq_norm_det_toMatrix_rangeRestrict
 -/
@@ -524,7 +606,9 @@ theorem normDet_of_subsingleton
   have hrank : finrank 𝕜 U = 0 := finrank_zero_iff.mpr ‹_›
   let bu : OrthonormalBasis (Fin 0) 𝕜 U := (stdOrthonormalBasis 𝕜 U).reindex (by rw [hrank])
   let bv := orthonormalBasis_range h bu
-  simp [normDet_eq_norm_det_toMatrix_rangeRestri
+  simp [normDet_eq_norm_det_toMatrix_rangeRestrict f bu bv]
+
+@[simp]
 
 中文:
 定理 normDet_of_subsingleton
@@ -535,7 +619,9 @@ theorem normDet_of_subsingleton
   have hrank : finrank 𝕜 U = 0 := finrank_zero_iff.mpr ‹_›
   let bu : OrthonormalBasis (Fin 0) 𝕜 U := (stdOrthonormalBasis 𝕜 U).reindex (by rw [hrank])
   let bv := orthonormalBasis_range h bu
-  simp [normDet_eq_norm_det_toMatrix_rangeRestri
+  simp [normDet_eq_norm_det_toMatrix_rangeRestrict f bu bv]
+
+@[simp]
 
 Depends on / 依赖: OrthonormalBasis, Submodule, Submodule.eq_bot_of_subsingleton, eq_bot_of_subsingleton, f.ker, finrank, finrank_zero_iff, finrank_zero_iff.mpr, normDet_eq_norm_det_toMatrix_rangeRestrict, orthonormalBasis_range, reindex, stdOrthonormalBasis
 -/
@@ -588,7 +674,17 @@ theorem normDet_smul
   by_cases h : f.ker = ⊥
   · obtain ⟨bv⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp h
     let bu : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U := stdOrthonormalBasis 𝕜 U
-    let bv' : OrthonormalBasis (Fin (finrank 𝕜 U
+    let bv' : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 (c • f).range := bv.map
+      (LinearIsometryEquiv.ofEq _ _ (LinearMap.range_smul _ _ hc).symm)
+    rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv]; rw [(c • f).normDet_eq_norm_det_toMatrix_rangeRestrict bu bv']; rw [← norm_pow]; rw [← norm_mul]
+    have : finrank 𝕜 U = Fintype.card (Fin (finrank 𝕜 U)) := by simp
+    conv in c ^ finrank 𝕜 U => rw [this]
+    rw [← Matrix.det_smul]; rw [← map_smul]
+    rfl
+  · have h' : (c • f).ker != ⊥ := by simpa [f.ker_smul _ hc] using h
+    simp [normDet_eq_zero_iff_ker_ne_bot.mpr h, normDet_eq_zero_iff_ker_ne_bot.mpr h']
+
+@[simp]
 
 中文:
 定理 normDet_smul
@@ -600,7 +696,17 @@ theorem normDet_smul
   by_cases h : f.ker = ⊥
   · obtain ⟨bv⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp h
     let bu : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U := stdOrthonormalBasis 𝕜 U
-    let bv' : OrthonormalBasis (Fin (finrank 𝕜 U
+    let bv' : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 (c • f).range := bv.map
+      (LinearIsometryEquiv.ofEq _ _ (LinearMap.range_smul _ _ hc).symm)
+    rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv]; rw [(c • f).normDet_eq_norm_det_toMatrix_rangeRestrict bu bv']; rw [← norm_pow]; rw [← norm_mul]
+    have : finrank 𝕜 U = Fintype.card (Fin (finrank 𝕜 U)) := by simp
+    conv in c ^ finrank 𝕜 U => rw [this]
+    rw [← Matrix.det_smul]; rw [← map_smul]
+    rfl
+  · have h' : (c • f).ker != ⊥ := by simpa [f.ker_smul _ hc] using h
+    simp [normDet_eq_zero_iff_ker_ne_bot.mpr h, normDet_eq_zero_iff_ker_ne_bot.mpr h']
+
+@[simp]
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.ofEq, LinearMap, LinearMap.range_smul, OrthonormalBasis, bv.map, f.ker, f.normDet_eq_norm_det_toMatrix_rangeRestrict, f.normDet_ne_zero_tfae.out, finrank, finrank_pos, finrank_pos.ne.symm, nontriviality, normDet_eq_norm_det_toMatrix_rangeRestrict, normDet_ne_zero_tfae, range_smul, stdOrthonormalBasis, zero_pow
 -/
@@ -657,7 +763,16 @@ theorem _root_.ContinuousLinearMap.normDet_sq
   have : CompleteSpace f.range := FiniteDimensional.complete 𝕜 f.range
   let bu := stdOrthonormalBasis 𝕜 U
   by_cases h : f.ker = ⊥
-  · obtain ⟨b⟩ := (f.normDet
+  · obtain ⟨b⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp h
+    have hf : f = f.range.subtypeₗᵢ.toContinuousLinearMap ∘L f.rangeRestrict := rfl
+    conv_rhs => rw [hf]
+    rw [ContinuousLinearMap.adjoint_comp]; rw [← ContinuousLinearMap.comp_assoc]; rw [ContinuousLinearMap.comp_assoc (ContinuousLinearMap.adjoint _)]; rw [f.range.subtypeₗᵢ.adjoint_comp_self]; rw [ContinuousLinearMap.one_def]; rw [ContinuousLinearMap.comp_id]; rw [ContinuousLinearMap.det]; rw [ContinuousLinearMap.toLinearMap_comp]; rw [← det_toMatrix bu.toBasis]; rw [toMatrix_comp bu.toBasis b.toBasis bu.toBasis]; rw [← ContinuousLinearMap.adjoint_toLinearMap]; rw [toMatrix_adjoint]; rw [f.toLinearMap.normDet_eq_norm_det_toMatrix_rangeRestrict bu b]
+    simp [RCLike.conj_mul]
+  · trans 0
+    · simp [show f.normDet = 0 from (f.normDet_eq_zero_tfae.out 1 0).mp h]
+    symm
+    rw [det_eq_zero_iff_ker_ne_bot]; rw [ContinuousLinearMap.ker_adjoint_comp_self]
+    exact h
 
 中文:
 定理 _root_.连续线性映射.normDet_sq
@@ -668,7 +783,16 @@ theorem _root_.ContinuousLinearMap.normDet_sq
   have : CompleteSpace f.range := FiniteDimensional.complete 𝕜 f.range
   let bu := stdOrthonormalBasis 𝕜 U
   by_cases h : f.ker = ⊥
-  · obtain ⟨b⟩ := (f.normDet
+  · obtain ⟨b⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp h
+    have hf : f = f.range.subtypeₗᵢ.toContinuousLinearMap ∘L f.rangeRestrict := rfl
+    conv_rhs => rw [hf]
+    rw [ContinuousLinearMap.adjoint_comp]; rw [← ContinuousLinearMap.comp_assoc]; rw [ContinuousLinearMap.comp_assoc (ContinuousLinearMap.adjoint _)]; rw [f.range.subtypeₗᵢ.adjoint_comp_self]; rw [ContinuousLinearMap.one_def]; rw [ContinuousLinearMap.comp_id]; rw [ContinuousLinearMap.det]; rw [ContinuousLinearMap.toLinearMap_comp]; rw [← det_toMatrix bu.toBasis]; rw [toMatrix_comp bu.toBasis b.toBasis bu.toBasis]; rw [← ContinuousLinearMap.adjoint_toLinearMap]; rw [toMatrix_adjoint]; rw [f.toLinearMap.normDet_eq_norm_det_toMatrix_rangeRestrict bu b]
+    simp [RCLike.conj_mul]
+  · trans 0
+    · simp [show f.normDet = 0 from (f.normDet_eq_zero_tfae.out 1 0).mp h]
+    symm
+    rw [det_eq_zero_iff_ker_ne_bot]; rw [ContinuousLinearMap.ker_adjoint_comp_self]
+    exact h
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
 -/
@@ -726,7 +850,18 @@ theorem normDet_sq_eq_det_gram
   by_cases h : f.ker = ⊥
   · let bv := orthonormalBasis_range h b
     rw [Matrix.gram_eq_conjTranspose_mul bv]; rw [Matrix.det_mul]; rw [Matrix.det_conjTranspose]
-    rw [RCLike.star_def]; rw [RCLike.conj_mul]
+    rw [RCLike.star_def]; rw [RCLike.conj_mul]; rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict b bv]
+    simp only [map_pow]
+    congr
+    ext i j
+    simp [LinearMap.toMatrix_apply]
+  · trans 0
+    · simp [show f.normDet = 0 from (f.normDet_eq_zero_tfae.out 1 0).mp h]
+    have hrank := (f.normDet_eq_zero_tfae.out 1 3).mp h
+    symm
+    contrapose! hrank with h0
+    rw [finrank_eq_card_basis b.toBasis]
+    exact (Matrix.linearIndependent_of_det_gram_ne_zero h0).fintype_card_le_finrank
 
 中文:
 定理 normDet_sq_eq_det_gram
@@ -737,7 +872,18 @@ theorem normDet_sq_eq_det_gram
   by_cases h : f.ker = ⊥
   · let bv := orthonormalBasis_range h b
     rw [Matrix.gram_eq_conjTranspose_mul bv]; rw [Matrix.det_mul]; rw [Matrix.det_conjTranspose]
-    rw [RCLike.star_def]; rw [RCLike.conj_mul]
+    rw [RCLike.star_def]; rw [RCLike.conj_mul]; rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict b bv]
+    simp only [map_pow]
+    congr
+    ext i j
+    simp [LinearMap.toMatrix_apply]
+  · trans 0
+    · simp [show f.normDet = 0 from (f.normDet_eq_zero_tfae.out 1 0).mp h]
+    have hrank := (f.normDet_eq_zero_tfae.out 1 3).mp h
+    symm
+    contrapose! hrank with h0
+    rw [finrank_eq_card_basis b.toBasis]
+    exact (Matrix.linearIndependent_of_det_gram_ne_zero h0).fintype_card_le_finrank
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix_apply, Matrix, Matrix.det_conjTranspose, Matrix.det_mul, Matrix.gram, Matrix.gram_eq_conjTranspose_mul, RCLike, RCLike.conj_mul, RCLike.star_def, conj_mul, det_conjTranspose, det_mul, f.ker, f.normDet, f.normDet_eq_norm_det_toMatrix_rangeRestrict, f.normDet_eq_zero_tfae.out, f.rangeRestrict, gram_eq_conjTranspose_mul, map_pow
 -/
@@ -774,7 +920,20 @@ theorem normDet_comp
     obtain ⟨bv⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp hf
     by_cases hgf : (g ∘ₗ f).ker = ⊥
     · obtain ⟨bw⟩ := ((g ∘ₗ f).normDet_ne_zero_tfae.out 1 3).mp hgf
-      let bw' : OrthonormalB
+      let bw' : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 (g.domRestrict f.range).range :=
+        bw.map (LinearIsometryEquiv.ofEq _ _ (by simp [LinearMap.range_comp]))
+      rw [(g ∘ₗ f).normDet_eq_norm_det_toMatrix_rangeRestrict bu bw]; rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv]; rw [(g.domRestrict f.range).normDet_eq_norm_det_toMatrix_rangeRestrict bv bw']
+      rw [← norm_mul]; rw [← Matrix.det_mul]; rw [← LinearMap.toMatrix_comp]
+      rfl
+    · have hg : (g.domRestrict f.range).ker != ⊥ := by
+        contrapose hf with hgf'
+        rw [← LinearMap.ker_rangeRestrict]; rw [← LinearMap.ker_comp_of_ker_eq_bot _ hgf']
+        exact hgf
+      simp [normDet_eq_zero_iff_ker_ne_bot.mpr hgf, normDet_eq_zero_iff_ker_ne_bot.mpr hg]
+  · have hgf : (g ∘ₗ f).ker != ⊥ := by
+      contrapose hf with hbot
+      simpa [hbot] using ker_le_ker_comp f g
+    simp [normDet_eq_zero_iff_ker_ne_bot.mpr hf, normDet_eq_zero_iff_ker_ne_bot.mpr hgf]
 
 中文:
 定理 normDet_comp
@@ -785,7 +944,20 @@ theorem normDet_comp
     obtain ⟨bv⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp hf
     by_cases hgf : (g ∘ₗ f).ker = ⊥
     · obtain ⟨bw⟩ := ((g ∘ₗ f).normDet_ne_zero_tfae.out 1 3).mp hgf
-      let bw' : OrthonormalB
+      let bw' : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 (g.domRestrict f.range).range :=
+        bw.map (LinearIsometryEquiv.ofEq _ _ (by simp [LinearMap.range_comp]))
+      rw [(g ∘ₗ f).normDet_eq_norm_det_toMatrix_rangeRestrict bu bw]; rw [f.normDet_eq_norm_det_toMatrix_rangeRestrict bu bv]; rw [(g.domRestrict f.range).normDet_eq_norm_det_toMatrix_rangeRestrict bv bw']
+      rw [← norm_mul]; rw [← Matrix.det_mul]; rw [← LinearMap.toMatrix_comp]
+      rfl
+    · have hg : (g.domRestrict f.range).ker != ⊥ := by
+        contrapose hf with hgf'
+        rw [← LinearMap.ker_rangeRestrict]; rw [← LinearMap.ker_comp_of_ker_eq_bot _ hgf']
+        exact hgf
+      simp [normDet_eq_zero_iff_ker_ne_bot.mpr hgf, normDet_eq_zero_iff_ker_ne_bot.mpr hg]
+  · have hgf : (g ∘ₗ f).ker != ⊥ := by
+      contrapose hf with hbot
+      simpa [hbot] using ker_le_ker_comp f g
+    simp [normDet_eq_zero_iff_ker_ne_bot.mpr hf, normDet_eq_zero_iff_ker_ne_bot.mpr hgf]
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.ofEq, LinearMap, LinearMap.range_comp, OrthonormalBasis, bw.map, domRestrict, f.ker, f.normDet_eq_norm_det_t, f.normDet_ne_zero_tfae.out, f.range, finrank, g.domRestrict, normDet_eq_norm_det_t, normDet_eq_norm_det_toMatrix_rangeRestrict, normDet_ne_zero_tfae, normDet_ne_zero_tfae.out, range_comp, stdOrthonormalBasis
 -/
@@ -825,7 +997,13 @@ theorem normDet_comp_of_finrank_eq
     have : f.range = id.range := by simp [htop]
     convert! (normDet_comp LinearMap.id g).symm
   · have hker : f.ker != ⊥ := by
-    
+      simpa [ker_eq_bot_iff_range_eq_top_of_finrank_eq_finrank h] using htop
+    have hker' : (g ∘ₗ f).ker != ⊥ := by
+      contrapose hker with hbot
+      simpa [hbot] using ker_le_ker_comp f g
+    simp [normDet_eq_zero_iff_ker_ne_bot.mpr hker, normDet_eq_zero_iff_ker_ne_bot.mpr hker']
+
+@[simp]
 
 中文:
 定理 normDet_comp_of_finrank_eq
@@ -838,7 +1016,13 @@ theorem normDet_comp_of_finrank_eq
     have : f.range = id.range := by simp [htop]
     convert! (normDet_comp LinearMap.id g).symm
   · have hker : f.ker != ⊥ := by
-    
+      simpa [ker_eq_bot_iff_range_eq_top_of_finrank_eq_finrank h] using htop
+    have hker' : (g ∘ₗ f).ker != ⊥ := by
+      contrapose hker with hbot
+      simpa [hbot] using ker_le_ker_comp f g
+    simp [normDet_eq_zero_iff_ker_ne_bot.mpr hker, normDet_eq_zero_iff_ker_ne_bot.mpr hker']
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.id, congrm, contrapose, convert, domRestrict, f.ker, f.range, g.domRestrict, g.normDet, id.range, ker_eq_bot_iff_range_eq_top_of_finrank_eq_finrank, ker_le_ker_comp, normDe, normDet, normDet_comp, normDet_eq_zero_iff_ker_ne_bot, normDet_eq_zero_iff_ker_ne_bot.mpr
 -/
@@ -905,7 +1089,7 @@ theorem normDet_eq_prod_singularValues
   rw [← sq_eq_sq₀ f.normDet_nonneg (Finset.prod_nonneg fun i _ => f.singularValues_nonneg i)]; rw [← RCLike.ofReal_inj (K := 𝕜)]; rw [← Finset.prod_pow]; rw [← Fin.prod_univ_eq_prod_range]; rw [normDet_sq]
   simp_rw [sq_singularValues_fin]
   push_cast
-  rw [← LinearMap.IsSymmetric.det_eq_prod_eig
+  rw [← LinearMap.IsSymmetric.det_eq_prod_eigenvalues]
 
 中文:
 定理 normDet_eq_prod_singularValues
@@ -914,7 +1098,7 @@ theorem normDet_eq_prod_singularValues
   rw [← sq_eq_sq₀ f.normDet_nonneg (Finset.prod_nonneg fun i _ => f.singularValues_nonneg i)]; rw [← RCLike.ofReal_inj (K := 𝕜)]; rw [← Finset.prod_pow]; rw [← Fin.prod_univ_eq_prod_range]; rw [normDet_sq]
   simp_rw [sq_singularValues_fin]
   push_cast
-  rw [← LinearMap.IsSymmetric.det_eq_prod_eig
+  rw [← LinearMap.IsSymmetric.det_eq_prod_eigenvalues]
 
 Depends on / 依赖: Fin.prod_univ_eq_prod_range, Finset, Finset.prod_nonneg, Finset.prod_pow, IsSymmetric, LinearMap, LinearMap.IsSymmetric.det_eq_prod_eigenvalues, RCLike, RCLike.ofReal_inj, det_eq_prod_eigenvalues, f.normDet_nonneg, f.singularValues_nonneg, normDet_nonneg, normDet_sq, ofReal_inj, prod_nonneg, prod_pow, prod_univ_eq_prod_range, simp_rw, singularValues_nonneg
 -/
@@ -965,7 +1149,19 @@ theorem hausdorffMeasure_image
   · have hrank : finrank Real ↥f.range = finrank Real U := (f.normDet_ne_zero_tfae.out 1 2).mp h
     obtain ⟨bv⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp h
     let g : U ≃ₗᵢ[Real] f.range := (stdOrthonormalBasis Real U).equiv bv (Equiv.refl _)
-    suffices μH[finrank Real U
+    suffices μH[finrank Real U] ((f.range.subtypeₗᵢ.comp g.toLinearIsometry) ''
+        ((g.symm.toLinearIsometry.toLinearMap ∘ₗ f.rangeRestrict) '' s)) =
+        ENNReal.ofReal f.normDet * μH[finrank Real U] s by
+      simpa [Set.image_image]
+    rw [(LinearIsometry.isometry _).hausdorffMeasure_image (by simp)]; rw [addHaar_image_linearMap μH[finrank Real U], ← normDet_eq_abs_det,
+      normDet_comp_of_finrank_eq _ _ hrank.symm, g.symm.toLinearIsometry.normDet_eq_one]
+    simp
+  · suffices μH[finrank Real U] (f.range.subtypeₗᵢ '' (f.rangeRestrict '' s)) = 0 by
+      simpa [(f.normDet_eq_zero_tfae.out 1 0).mp h, Set.image_image]
+    rw [(LinearIsometry.isometry _).hausdorffMeasure_image (by simp)]
+    have h : (finrank Real f.range : Real) < finrank Real U := by
+      exact_mod_cast (f.normDet_eq_zero_tfae.out 1 3).mp h
+    simp [Real.hausdorffMeasure_of_finrank_lt h]
 
 中文:
 定理 hausdorffMeasure_image
@@ -975,7 +1171,19 @@ theorem hausdorffMeasure_image
   · have hrank : finrank Real ↥f.range = finrank Real U := (f.normDet_ne_zero_tfae.out 1 2).mp h
     obtain ⟨bv⟩ := (f.normDet_ne_zero_tfae.out 1 3).mp h
     let g : U ≃ₗᵢ[Real] f.range := (stdOrthonormalBasis Real U).equiv bv (Equiv.refl _)
-    suffices μH[finrank Real U
+    suffices μH[finrank Real U] ((f.range.subtypeₗᵢ.comp g.toLinearIsometry) ''
+        ((g.symm.toLinearIsometry.toLinearMap ∘ₗ f.rangeRestrict) '' s)) =
+        ENNReal.ofReal f.normDet * μH[finrank Real U] s by
+      simpa [Set.image_image]
+    rw [(LinearIsometry.isometry _).hausdorffMeasure_image (by simp)]; rw [addHaar_image_linearMap μH[finrank Real U], ← normDet_eq_abs_det,
+      normDet_comp_of_finrank_eq _ _ hrank.symm, g.symm.toLinearIsometry.normDet_eq_one]
+    simp
+  · suffices μH[finrank Real U] (f.range.subtypeₗᵢ '' (f.rangeRestrict '' s)) = 0 by
+      simpa [(f.normDet_eq_zero_tfae.out 1 0).mp h, Set.image_image]
+    rw [(LinearIsometry.isometry _).hausdorffMeasure_image (by simp)]
+    have h : (finrank Real f.range : Real) < finrank Real U := by
+      exact_mod_cast (f.normDet_eq_zero_tfae.out 1 3).mp h
+    simp [Real.hausdorffMeasure_of_finrank_lt h]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, Equiv.refl, LinearIsometry, LinearIsometry.isom, Set.image_image, f.ker, f.normDet, f.normDet_ne_zero_tfae.out, f.range, f.range.subtype, f.rangeRestrict, finrank, g.symm.toLinearIsometry.toLinearMap, g.toLinearIsometry, image_image, normDet, normDet_ne_zero_tfae, ofReal, rangeRestrict
 -/

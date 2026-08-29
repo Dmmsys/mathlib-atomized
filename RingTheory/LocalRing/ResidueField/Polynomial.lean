@@ -43,7 +43,49 @@ definition residueFieldMapCAlgEquiv
     refine Ideal.ResidueField.lift _
         ((algebraMap I.ResidueField[X] _).comp (mapRingHom (algebraMap _ _))) ?_ ?_
     · simp [hJ, Ideal.map_le_iff_le_comap, RingHom.comap_ker _ C, mapRingHom_comp_C,
-        RingHom.ker_comp_of_inj
+        RingHom.ker_comp_of_injective, C_injective,
+        FaithfulSMul.algebraMap_injective I.ResidueField[X] (RatFunc I.ResidueField)]
+    · rintro x (hx : x ∉ J)
+      suffices exists i, x.coeff i ∉ I by simpa [IsUnit.mem_submonoid_iff, Polynomial.ext_iff]
+      contrapose! hx
+      rwa [hJ, Ideal.mem_map_C_iff]
+  haveI hf : f.comp (algebraMap I.ResidueField _) = algebraMap _ _ := by
+    ext
+    simp [f, ← IsScalarTower.algebraMap_apply, IsScalarTower.algebraMap_apply R R[X] J.ResidueField]
+  refine .ofAlgHom ⟨f, fun r => congr($hf r)⟩
+      (RatFunc.liftAlgHom (aeval (algebraMap R[X] _ X)) fun x => ?_) ?_ ?_
+  · suffices Function.Injective (aeval (R := I.ResidueField) (algebraMap R[X] J.ResidueField X)) by
+      simp [← this.eq_iff]
+    rw [injective_iff_map_eq_zero]
+    intro x hx
+    obtain ⟨r, hr⟩ := map_surjective _ Ideal.Quotient.mk_surjective
+      (IsLocalization.integerNormalization (R ⧸ I)⁰ x)
+    obtain ⟨s, hs, hr⟩ : exists s ∉ I, r.map (algebraMap _ _) = s • x := by
+      obtain ⟨b, hb0, hb⟩ := IsLocalization.integerNormalization_spec (R ⧸ I)⁰ x
+      obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective b
+      refine ⟨s, by simpa [Ideal.Quotient.eq_zero_iff_mem] using! hb0, ?_⟩
+      simpa [← hr, map_map, ← Ideal.Quotient.algebraMap_eq] using! hb
+    replace hx : r in J := by
+      apply_fun aeval (algebraMap R[X] J.ResidueField X) at hr
+      simpa [hx, aeval_map_algebraMap, aeval_algebraMap_apply, Algebra.smul_def] using! hr
+    refine ((IsUnit.mk0 (algebraMap R I.ResidueField s) (by simpa)).map C).mul_right_injective ?_
+    simp only [← algebraMap_eq, ← Algebra.smul_def]
+    rw [algebraMap_smul]
+    simp only [← hr]
+    simpa [Polynomial.ext_iff, Ideal.mem_map_C_iff] using! hJ.le hx
+  · apply AlgHom.coe_ringHom_injective
+    apply IsFractionRing.injective_comp_algebraMap (A := I.ResidueField[X])
+    dsimp [RatFunc.liftAlgHom]
+    simp only [AlgHom.comp_toRingHom, AlgHom.coe_ringHom_mk, RingHom.comp_assoc,
+      RatFunc.liftRingHom_comp_algebraMap, RingHomCompTriple.comp_eq, f]
+    ext <;> simp [← IsScalarTower.algebraMap_apply,
+      IsScalarTower.algebraMap_apply R R[X] J.ResidueField]
+  · apply AlgHom.coe_ringHom_injective
+    ext
+    · simp [f, RatFunc.liftAlgHom, ← IsScalarTower.algebraMap_apply]; rfl
+    · simp [f, RatFunc.liftAlgHom]
+
+@[simp]
 
 中文:
 定义 residueFieldMapCAlgEquiv
@@ -53,7 +95,49 @@ definition residueFieldMapCAlgEquiv
     refine Ideal.ResidueField.lift _
         ((algebraMap I.ResidueField[X] _).comp (mapRingHom (algebraMap _ _))) ?_ ?_
     · simp [hJ, Ideal.map_le_iff_le_comap, RingHom.comap_ker _ C, mapRingHom_comp_C,
-        RingHom.ker_comp_of_inj
+        RingHom.ker_comp_of_injective, C_injective,
+        FaithfulSMul.algebraMap_injective I.ResidueField[X] (RatFunc I.ResidueField)]
+    · rintro x (hx : x ∉ J)
+      suffices exists i, x.coeff i ∉ I by simpa [IsUnit.mem_submonoid_iff, Polynomial.ext_iff]
+      contrapose! hx
+      rwa [hJ, Ideal.mem_map_C_iff]
+  haveI hf : f.comp (algebraMap I.ResidueField _) = algebraMap _ _ := by
+    ext
+    simp [f, ← IsScalarTower.algebraMap_apply, IsScalarTower.algebraMap_apply R R[X] J.ResidueField]
+  refine .ofAlgHom ⟨f, fun r => congr($hf r)⟩
+      (RatFunc.liftAlgHom (aeval (algebraMap R[X] _ X)) fun x => ?_) ?_ ?_
+  · suffices Function.Injective (aeval (R := I.ResidueField) (algebraMap R[X] J.ResidueField X)) by
+      simp [← this.eq_iff]
+    rw [injective_iff_map_eq_zero]
+    intro x hx
+    obtain ⟨r, hr⟩ := map_surjective _ Ideal.Quotient.mk_surjective
+      (IsLocalization.integerNormalization (R ⧸ I)⁰ x)
+    obtain ⟨s, hs, hr⟩ : exists s ∉ I, r.map (algebraMap _ _) = s • x := by
+      obtain ⟨b, hb0, hb⟩ := IsLocalization.integerNormalization_spec (R ⧸ I)⁰ x
+      obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective b
+      refine ⟨s, by simpa [Ideal.Quotient.eq_zero_iff_mem] using! hb0, ?_⟩
+      simpa [← hr, map_map, ← Ideal.Quotient.algebraMap_eq] using! hb
+    replace hx : r in J := by
+      apply_fun aeval (algebraMap R[X] J.ResidueField X) at hr
+      simpa [hx, aeval_map_algebraMap, aeval_algebraMap_apply, Algebra.smul_def] using! hr
+    refine ((IsUnit.mk0 (algebraMap R I.ResidueField s) (by simpa)).map C).mul_right_injective ?_
+    simp only [← algebraMap_eq, ← Algebra.smul_def]
+    rw [algebraMap_smul]
+    simp only [← hr]
+    simpa [Polynomial.ext_iff, Ideal.mem_map_C_iff] using! hJ.le hx
+  · apply AlgHom.coe_ringHom_injective
+    apply IsFractionRing.injective_comp_algebraMap (A := I.ResidueField[X])
+    dsimp [RatFunc.liftAlgHom]
+    simp only [AlgHom.comp_toRingHom, AlgHom.coe_ringHom_mk, RingHom.comp_assoc,
+      RatFunc.liftRingHom_comp_algebraMap, RingHomCompTriple.comp_eq, f]
+    ext <;> simp [← IsScalarTower.algebraMap_apply,
+      IsScalarTower.algebraMap_apply R R[X] J.ResidueField]
+  · apply AlgHom.coe_ringHom_injective
+    ext
+    · simp [f, RatFunc.liftAlgHom, ← IsScalarTower.algebraMap_apply]; rfl
+    · simp [f, RatFunc.liftAlgHom]
+
+@[simp]
 
 Depends on / 依赖: C_injective, FaithfulSMul, FaithfulSMul.algebraMap_injective, I.ResidueField, Ideal.ResidueField.lift, Ideal.map_le_iff_le_comap, IsUnit, IsUnit.mem_submonoid_iff, J.ResidueField, Polynomial, Polynomial.ext_iff, RatFunc, ResidueField, RingHom, RingHom.comap_ker, RingHom.ker_comp_of_injective, algebraMap, algebraMap_injective, comap_ker, contrapose
 -/
@@ -189,7 +273,20 @@ definition fiberEquivQuotient
   refine .ofAlgHom (Algebra.TensorProduct.lift (Algebra.ofId _ _) (AlgHom.liftOfSurjective _ hf
     ((Ideal.Quotient.mkₐ _ _).comp (mapAlgHom (Algebra.ofId _ _))) ?_) fun _ _ => .all _ _)
     (Ideal.Quotient.liftₐ _ (aeval (1 otimesₜ f .X)) ?_) ?_ ?_
-  · simp [AlgHom.comp_toRingHom, ← RingHom.com
+  · simp [AlgHom.comp_toRingHom, ← RingHom.comap_ker, ← Ideal.map_le_iff_le_comap]
+  · change Ideal.map _ _ <= RingHom.ker (aeval _).toRingHom
+    rw [Ideal.map_le_iff_le_comap]; rw [RingHom.comap_ker]
+    have : ((aeval (1 otimesₜ[R] f X : p.Fiber S)).restrictScalars R).comp
+        (mapAlgHom (Algebra.ofId R p.ResidueField)) =
+        Algebra.TensorProduct.includeRight.comp f := by ext; simp
+    exact .trans_eq (by intro; aesop) congr(RingHom.ker $this).symm
+  · apply Ideal.Quotient.algHom_ext
+    ext
+    simp
+  · ext x
+    obtain ⟨x, rfl⟩ := hf x
+    simpa using aeval_algHom_apply
+      ((Algebra.TensorProduct.includeRight : S ->ₐ[_] p.Fiber S).comp f) X x
 
 中文:
 定义 fiberEquivQuotient
@@ -198,7 +295,20 @@ definition fiberEquivQuotient
   refine .ofAlgHom (Algebra.TensorProduct.lift (Algebra.ofId _ _) (AlgHom.liftOfSurjective _ hf
     ((Ideal.Quotient.mkₐ _ _).comp (mapAlgHom (Algebra.ofId _ _))) ?_) fun _ _ => .all _ _)
     (Ideal.Quotient.liftₐ _ (aeval (1 otimesₜ f .X)) ?_) ?_ ?_
-  · simp [AlgHom.comp_toRingHom, ← RingHom.com
+  · simp [AlgHom.comp_toRingHom, ← RingHom.comap_ker, ← Ideal.map_le_iff_le_comap]
+  · change Ideal.map _ _ <= RingHom.ker (aeval _).toRingHom
+    rw [Ideal.map_le_iff_le_comap]; rw [RingHom.comap_ker]
+    have : ((aeval (1 otimesₜ[R] f X : p.Fiber S)).restrictScalars R).comp
+        (mapAlgHom (Algebra.ofId R p.ResidueField)) =
+        Algebra.TensorProduct.includeRight.comp f := by ext; simp
+    exact .trans_eq (by intro; aesop) congr(RingHom.ker $this).symm
+  · apply Ideal.Quotient.algHom_ext
+    ext
+    simp
+  · ext x
+    obtain ⟨x, rfl⟩ := hf x
+    simpa using aeval_algHom_apply
+      ((Algebra.TensorProduct.includeRight : S ->ₐ[_] p.Fiber S).comp f) X x
 
 Depends on / 依赖: AlgHom, AlgHom.comp_toRingHom, AlgHom.liftOfSurjective, Algebra, Algebra.TensorProduct.lift, Algebra.ofId, Ideal.Quotient.lift, Ideal.Quotient.mk, Ideal.map, Ideal.map_le_iff_le_comap, Quotient, RingHom, RingHom.comap_ker, RingHom.ker, TensorProduct, comap_ker, comp_toRingHom, liftOfSurjective, mapAlgHom, map_le_iff_le_comap
 -/
@@ -254,7 +364,19 @@ theorem _root_.Ideal.exists_mem_span_singleton_map_residueField_eq
     (I.map (mapRingHom (algebraMap R P.ResidueField))).IsPrincipal)
   let := (mapRingHom (algebraMap (R ⧸ P) P.ResidueField)).toAlgebra
   have := Polynomial.isLocalization (R ⧸ P)⁰ P.ResidueField
-  have : p in (I.map (mapRingHom (algebraMap 
+  have : p in (I.map (mapRingHom (algebraMap R (R ⧸ P)))).map (algebraMap _ _) := by
+    rw [Ideal.map_map]; rw [RingHom.algebraMap_toAlgebra]; rw [mapRingHom_comp]; rw [← IsScalarTower.algebraMap_eq]; rw [hp]
+    exact Ideal.mem_span_singleton_self _
+  obtain ⟨⟨⟨r, hr⟩, s⟩, e⟩ := (IsLocalization.mem_map_algebraMap_iff ((R ⧸ P)⁰.map C) _).mp this
+  obtain ⟨r, hr', rfl⟩ := (Ideal.mem_map_iff_of_surjective _
+    (Polynomial.map_surjective _ Ideal.Quotient.mk_surjective)).mp hr
+  simp only [algebraMap_def, coe_mapRingHom,
+    Polynomial.map_map, ← IsScalarTower.algebraMap_eq] at e
+  refine ⟨r, hr', le_antisymm ?_ ?_⟩
+  · simpa [-le_of_subsingleton, Ideal.span_le] using! Ideal.mem_map_of_mem _ hr'
+  · simp only [hp, Ideal.span_le, Set.singleton_subset_iff, SetLike.mem_coe]
+    rw [(IsLocalization.map_units P.ResidueField[X] s).unit.eq_mul_inv_iff_mul_eq.mpr e]
+    exact Ideal.mul_mem_right _ _ (Ideal.mem_span_singleton_self _)
 
 中文:
 定理 _root_.理想.存在_mem_span_singleton_map_residueField_eq
@@ -263,7 +385,19 @@ theorem _root_.Ideal.exists_mem_span_singleton_map_residueField_eq
     (I.map (mapRingHom (algebraMap R P.ResidueField))).IsPrincipal)
   let := (mapRingHom (algebraMap (R ⧸ P) P.ResidueField)).toAlgebra
   have := Polynomial.isLocalization (R ⧸ P)⁰ P.ResidueField
-  have : p in (I.map (mapRingHom (algebraMap 
+  have : p in (I.map (mapRingHom (algebraMap R (R ⧸ P)))).map (algebraMap _ _) := by
+    rw [Ideal.map_map]; rw [RingHom.algebraMap_toAlgebra]; rw [mapRingHom_comp]; rw [← IsScalarTower.algebraMap_eq]; rw [hp]
+    exact Ideal.mem_span_singleton_self _
+  obtain ⟨⟨⟨r, hr⟩, s⟩, e⟩ := (IsLocalization.mem_map_algebraMap_iff ((R ⧸ P)⁰.map C) _).mp this
+  obtain ⟨r, hr', rfl⟩ := (Ideal.mem_map_iff_of_surjective _
+    (Polynomial.map_surjective _ Ideal.Quotient.mk_surjective)).mp hr
+  simp only [algebraMap_def, coe_mapRingHom,
+    Polynomial.map_map, ← IsScalarTower.algebraMap_eq] at e
+  refine ⟨r, hr', le_antisymm ?_ ?_⟩
+  · simpa [-le_of_subsingleton, Ideal.span_le] using! Ideal.mem_map_of_mem _ hr'
+  · simp only [hp, Ideal.span_le, Set.singleton_subset_iff, SetLike.mem_coe]
+    rw [(IsLocalization.map_units P.ResidueField[X] s).unit.eq_mul_inv_iff_mul_eq.mpr e]
+    exact Ideal.mul_mem_right _ _ (Ideal.mem_span_singleton_self _)
 
 Depends on / 依赖: I.map, Ideal.map_map, Ideal.mem_span_singleton_self, Ideal.span, IsPrincipal, IsScalarTower, IsScalarTower.algebraMap_eq, P.ResidueField, Polynomial, Polynomial.isLocalization, ResidueField, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_eq, algebraMap_toAlgebra, isLocalization, mapRingHom, mapRingHom_comp, map_map
 -/

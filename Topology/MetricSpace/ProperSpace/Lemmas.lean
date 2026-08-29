@@ -40,7 +40,11 @@ theorem exists_pos_lt_subset_ball
   · exact ⟨r / 2, ⟨half_pos hr, half_lt_self hr⟩, empty_subset _⟩
   have : IsCompact s :=
     (isCompact_closedBall x r).of_isClosed_subset hs (h.trans ball_subset_closedBall)
-  obtain ⟨y, hys, hy⟩ : exists y in s, s subseteq closedBall x (dist y x
+  obtain ⟨y, hys, hy⟩ : exists y in s, s subseteq closedBall x (dist y x) :=
+    this.exists_isMaxOn (β := α) (α := Real) hne (by fun_prop)
+  have hyr : dist y x < r := h hys
+  rcases exists_between hyr with ⟨r', hyr', hrr'⟩
+exact ⟨r', ⟨dist_nonneg.trans_lt hyr', hrr'⟩, hy.trans closedBall_subset_ball hyr'⟩
 
 中文:
 定理 存在_pos_lt_subset_ball
@@ -50,7 +54,11 @@ theorem exists_pos_lt_subset_ball
   · exact ⟨r / 2, ⟨half_pos hr, half_lt_self hr⟩, empty_subset _⟩
   have : IsCompact s :=
     (isCompact_closedBall x r).of_isClosed_subset hs (h.trans ball_subset_closedBall)
-  obtain ⟨y, hys, hy⟩ : exists y in s, s subseteq closedBall x (dist y x
+  obtain ⟨y, hys, hy⟩ : exists y in s, s subseteq closedBall x (dist y x) :=
+    this.exists_isMaxOn (β := α) (α := Real) hne (by fun_prop)
+  have hyr : dist y x < r := h hys
+  rcases exists_between hyr with ⟨r', hyr', hrr'⟩
+exact ⟨r', ⟨dist_nonneg.trans_lt hyr', hrr'⟩, hy.trans closedBall_subset_ball hyr'⟩
 
 Depends on / 依赖: IsCompact, ball_subset_closedBall, closedBall, closedBall_s, dist_nonneg, dist_nonneg.trans_lt, empty_subset, eq_empty_or_nonempty, exists_between, exists_isMaxOn, fun_prop, h.trans, half_lt_self, half_pos, hy.trans, isCompact_closedBall, of_isClosed_subset, subseteq, this.exists_isMaxOn, trans_lt
 -/

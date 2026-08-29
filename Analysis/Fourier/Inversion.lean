@@ -64,6 +64,15 @@ lemma tendsto_integral_cexp_sq_smul
     apply (Tendsto.cexp _).smul_const
     exact tendsto_inv_atTop_zero.ofReal.neg.mul_const _
   · filter_upwards with c using
+      AEStronglyMeasurable.smul (Continuous.aestronglyMeasurable (by fun_prop)) hf.1
+  · filter_upwards [Ici_mem_atTop (0 : Real)] with c (hc : 0 <= c)
+    filter_upwards with v
+    simp only [ofReal_inv, neg_mul, norm_smul]
+    norm_cast
+    conv_rhs => rw [← one_mul (‖f v‖)]
+    gcongr
+    simp only [norm_eq_abs, abs_exp, exp_le_one_iff, Left.neg_nonpos_iff]
+    positivity
 
 中文:
 引理 tendsto_integral_cexp_sq_smul
@@ -75,6 +84,15 @@ lemma tendsto_integral_cexp_sq_smul
     apply (Tendsto.cexp _).smul_const
     exact tendsto_inv_atTop_zero.ofReal.neg.mul_const _
   · filter_upwards with c using
+      AEStronglyMeasurable.smul (Continuous.aestronglyMeasurable (by fun_prop)) hf.1
+  · filter_upwards [Ici_mem_atTop (0 : Real)] with c (hc : 0 <= c)
+    filter_upwards with v
+    simp only [ofReal_inv, neg_mul, norm_smul]
+    norm_cast
+    conv_rhs => rw [← one_mul (‖f v‖)]
+    gcongr
+    simp only [norm_eq_abs, abs_exp, exp_le_one_iff, Left.neg_nonpos_iff]
+    positivity
 
 Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.smul, Continuous, Continuous.aestronglyMeasurable, Ici_mem_atTop, Tendsto, Tendsto.cexp, aestronglyMeasurable, filter_upwards, fun_prop, hf.norm, mul_const, neg_mul, norm_cas, norm_smul, nth_rewrite, ofReal, ofReal_inv, smul_const, tendsto_integral_filter_of_dominated_convergence
 -/
@@ -111,7 +129,30 @@ lemma tendsto_integral_gaussian_smul
        • (𝓕 f) w)) atTop (𝓝 (𝓕⁻ (𝓕 f) v)) := by
     have : Integrable (fun w => 𝐞 ⟪w, v⟫ • (𝓕 f) w) := by
       have B : Continuous fun p : V × V => (- innerₗ V) p.1 p.2 := continuous_inner.neg
-      simpa
+      simpa using!
+        (VectorFourier.fourierIntegral_convergent_iff Real.continuous_fourierChar B v).2 h'f
+    convert! tendsto_integral_cexp_sq_smul this using 4 with c w
+    · rw [Submonoid.smul_def, Real.fourierChar_apply, smul_smul, ← Complex.exp_add, real_inner_comm]
+      congr 3
+      simp only [ofReal_mul, ofReal_ofNat]
+      ring
+    · simp [fourierInv_eq]
+  have B : Tendsto (fun (c : Real) => (∫ w : V,
+        𝓕 (fun w => cexp (- c⁻¹ * ‖w‖ ^ 2 + 2 * π * I * ⟪v, w⟫)) w • f w)) atTop
+      (𝓝 (𝓕⁻ (𝓕 f) v)) := by
+    apply A.congr'
+    filter_upwards [Ioi_mem_atTop 0] with c (hc : 0 < c)
+    have J : Integrable (fun w => cexp (- c⁻¹ * ‖w‖ ^ 2 + 2 * π * I * ⟪v, w⟫)) :=
+      GaussianFourier.integrable_cexp_neg_mul_sq_norm_add (by simpa) _ _
+    simpa using! (VectorFourier.integral_fourierIntegral_smul_eq_flip (L := innerₗ V)
+      Real.continuous_fourierChar continuous_inner J hf).symm
+  apply B.congr'
+  filter_upwards [Ioi_mem_atTop 0] with c (hc : 0 < c)
+  congr with w
+  rw [fourier_gaussian_innerProductSpace' (by simpa)]
+  congr
+  · simp
+  · simp; ring
 
 中文:
 引理 tendsto_integral_gaussian_smul
@@ -121,7 +162,30 @@ lemma tendsto_integral_gaussian_smul
        • (𝓕 f) w)) atTop (𝓝 (𝓕⁻ (𝓕 f) v)) := by
     have : Integrable (fun w => 𝐞 ⟪w, v⟫ • (𝓕 f) w) := by
       have B : Continuous fun p : V × V => (- innerₗ V) p.1 p.2 := continuous_inner.neg
-      simpa
+      simpa using!
+        (VectorFourier.fourierIntegral_convergent_iff Real.continuous_fourierChar B v).2 h'f
+    convert! tendsto_integral_cexp_sq_smul this using 4 with c w
+    · rw [Submonoid.smul_def, Real.fourierChar_apply, smul_smul, ← Complex.exp_add, real_inner_comm]
+      congr 3
+      simp only [ofReal_mul, ofReal_ofNat]
+      ring
+    · simp [fourierInv_eq]
+  have B : Tendsto (fun (c : Real) => (∫ w : V,
+        𝓕 (fun w => cexp (- c⁻¹ * ‖w‖ ^ 2 + 2 * π * I * ⟪v, w⟫)) w • f w)) atTop
+      (𝓝 (𝓕⁻ (𝓕 f) v)) := by
+    apply A.congr'
+    filter_upwards [Ioi_mem_atTop 0] with c (hc : 0 < c)
+    have J : Integrable (fun w => cexp (- c⁻¹ * ‖w‖ ^ 2 + 2 * π * I * ⟪v, w⟫)) :=
+      GaussianFourier.integrable_cexp_neg_mul_sq_norm_add (by simpa) _ _
+    simpa using! (VectorFourier.integral_fourierIntegral_smul_eq_flip (L := innerₗ V)
+      Real.continuous_fourierChar continuous_inner J hf).symm
+  apply B.congr'
+  filter_upwards [Ioi_mem_atTop 0] with c (hc : 0 < c)
+  congr with w
+  rw [fourier_gaussian_innerProductSpace' (by simpa)]
+  congr
+  · simp
+  · simp; ring
 
 Depends on / 依赖: Continuous, Integrable, Real.continuous_fourierChar, Real.fourierChar_apply, Submonoid, Submonoid.smul_def, Tendsto, VectorFourier, VectorFourier.fourierIntegral_convergent_iff, continuous_fourierChar, continuous_inner, continuous_inner.neg, convert, fourierChar_apply, fourierIntegral_convergent_iff, smul_def, smul_smul, tendsto_integral_cexp_sq_smul
 -/
@@ -169,7 +233,44 @@ lemma tendsto_integral_gaussian_smul'
   have A : Tendsto (fun (c : Real) => ∫ w : V, (c ^ finrank Real V * φ (c • (v - w))) • f w)
       atTop (𝓝 (f v)) := by
     apply tendsto_integral_comp_smul_smul_of_integrable'
-    · exact fun x => by p
+    · exact fun x => by positivity
+    · rw [integral_const_mul, GaussianFourier.integral_rexp_neg_mul_sq_norm (by positivity)]
+      nth_rewrite 2 [← pow_one π]
+      rw [← rpow_natCast]; rw [← rpow_natCast]; rw [← rpow_sub pi_pos]; rw [← rpow_mul pi_nonneg]; rw [← rpow_add pi_pos]
+      ring_nf
+      exact rpow_zero _
+    · have A : Tendsto (fun (w : V) => π ^ 2 * ‖w‖ ^ 2) (cobounded V) atTop := by
+        rw [tendsto_const_mul_atTop_of_pos (by positivity)]
+        apply (tendsto_pow_atTop two_ne_zero).comp tendsto_norm_cobounded_atTop
+      have B := tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero (finrank Real V / 2) 1
+.const_mul (π ^ (-finrank Real V / 2 : Real)) .comp A zero_lt_one
+      rw [mul_zero] at B
+      convert! B using 2 with x
+      simp only [neg_mul, one_mul, Function.comp_apply, ← mul_assoc, ← rpow_natCast, φ]
+      congr 1
+      rw [mul_rpow (by positivity) (by positivity)]; rw [← rpow_mul pi_nonneg]; rw [← rpow_mul (norm_nonneg _)]; rw [← mul_assoc]; rw [← rpow_add pi_pos]; rw [mul_comm]
+      congr <;> ring
+    · exact hf
+    · exact h'f
+  have B : Tendsto
+      (fun (c : Real) =>
+        ∫ w : V, ((c ^ (1 / 2 : Real)) ^ finrank Real V * φ ((c ^ (1 / 2 : Real)) • (v - w))) • f w)
+      atTop (𝓝 (f v)) :=
+    A.comp (tendsto_rpow_atTop (by simp))
+  apply B.congr'
+  filter_upwards [Ioi_mem_atTop 0] with c (hc : 0 < c)
+  congr with w
+  rw [← coe_smul]
+  congr
+  rw [ofReal_mul]; rw [ofReal_mul]; rw [ofReal_exp]; rw [← mul_assoc]
+  congr
+  · rw [mul_cpow_ofReal_nonneg pi_nonneg hc.le, ← rpow_natCast, ← rpow_mul hc.le, mul_comm,
+      ofReal_cpow pi_nonneg, ofReal_cpow hc.le]
+    simp [div_eq_inv_mul]
+  · norm_cast
+    simp only [one_div, norm_smul, Real.norm_eq_abs, mul_pow, sq_abs, neg_mul, neg_inj,
+      ← rpow_natCast, ← rpow_mul hc.le, mul_assoc]
+    simp
 
 中文:
 引理 tendsto_integral_gaussian_smul'
@@ -179,7 +280,44 @@ lemma tendsto_integral_gaussian_smul'
   have A : Tendsto (fun (c : Real) => ∫ w : V, (c ^ finrank Real V * φ (c • (v - w))) • f w)
       atTop (𝓝 (f v)) := by
     apply tendsto_integral_comp_smul_smul_of_integrable'
-    · exact fun x => by p
+    · exact fun x => by positivity
+    · rw [integral_const_mul, GaussianFourier.integral_rexp_neg_mul_sq_norm (by positivity)]
+      nth_rewrite 2 [← pow_one π]
+      rw [← rpow_natCast]; rw [← rpow_natCast]; rw [← rpow_sub pi_pos]; rw [← rpow_mul pi_nonneg]; rw [← rpow_add pi_pos]
+      ring_nf
+      exact rpow_zero _
+    · have A : Tendsto (fun (w : V) => π ^ 2 * ‖w‖ ^ 2) (cobounded V) atTop := by
+        rw [tendsto_const_mul_atTop_of_pos (by positivity)]
+        apply (tendsto_pow_atTop two_ne_zero).comp tendsto_norm_cobounded_atTop
+      have B := tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero (finrank Real V / 2) 1
+.const_mul (π ^ (-finrank Real V / 2 : Real)) .comp A zero_lt_one
+      rw [mul_zero] at B
+      convert! B using 2 with x
+      simp only [neg_mul, one_mul, Function.comp_apply, ← mul_assoc, ← rpow_natCast, φ]
+      congr 1
+      rw [mul_rpow (by positivity) (by positivity)]; rw [← rpow_mul pi_nonneg]; rw [← rpow_mul (norm_nonneg _)]; rw [← mul_assoc]; rw [← rpow_add pi_pos]; rw [mul_comm]
+      congr <;> ring
+    · exact hf
+    · exact h'f
+  have B : Tendsto
+      (fun (c : Real) =>
+        ∫ w : V, ((c ^ (1 / 2 : Real)) ^ finrank Real V * φ ((c ^ (1 / 2 : Real)) • (v - w))) • f w)
+      atTop (𝓝 (f v)) :=
+    A.comp (tendsto_rpow_atTop (by simp))
+  apply B.congr'
+  filter_upwards [Ioi_mem_atTop 0] with c (hc : 0 < c)
+  congr with w
+  rw [← coe_smul]
+  congr
+  rw [ofReal_mul]; rw [ofReal_mul]; rw [ofReal_exp]; rw [← mul_assoc]
+  congr
+  · rw [mul_cpow_ofReal_nonneg pi_nonneg hc.le, ← rpow_natCast, ← rpow_mul hc.le, mul_comm,
+      ofReal_cpow pi_nonneg, ofReal_cpow hc.le]
+    simp [div_eq_inv_mul]
+  · norm_cast
+    simp only [one_div, norm_smul, Real.norm_eq_abs, mul_pow, sq_abs, neg_mul, neg_inj,
+      ← rpow_natCast, ← rpow_mul hc.le, mul_assoc]
+    simp
 
 Depends on / 依赖: GaussianFourier, GaussianFourier.integral_rexp_neg_mul_sq_norm, Real.exp, Tendsto, finrank, integral_const_mul, integral_rexp_neg_mul_sq_norm, nth_rewrite, pi_nonneg, pi_pos, pow_one, rpow_mul, rpow_natCast, rpow_sub, tendsto_integral_comp_smul_smul_of_integrable
 -/

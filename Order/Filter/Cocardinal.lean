@@ -41,7 +41,9 @@ definition cocardinal
 · refine fun s hS hSc => lt_of_le_of_lt (mk_sUnion_le _) mul_lt_of_lt hreg.aleph0_le hS ?_
     apply iSup_lt_of_lt_cof_ord _ fun i => hSc i.1 i.2
     rwa [hreg.cof_ord]
-  · exact fun _ hSc _ ht => lt_of_le
+  · exact fun _ hSc _ ht => lt_of_le_of_lt (mk_le_mk_of_subset ht) hSc
+
+@[simp]
 
 中文:
 定义 cocardinal
@@ -51,7 +53,9 @@ definition cocardinal
 · refine fun s hS hSc => lt_of_le_of_lt (mk_sUnion_le _) mul_lt_of_lt hreg.aleph0_le hS ?_
     apply iSup_lt_of_lt_cof_ord _ fun i => hSc i.1 i.2
     rwa [hreg.cof_ord]
-  · exact fun _ hSc _ ht => lt_of_le
+  · exact fun _ hSc _ ht => lt_of_le_of_lt (mk_le_mk_of_subset ht) hSc
+
+@[simp]
 
 Depends on / 依赖: Cardinal, Cardinal.mk, aleph0_le, cof_ord, hreg.aleph0_le, hreg.cof_ord, iSup_lt_of_lt_cof_ord, lt_of_le_of_lt, mk_le_mk_of_subset, mk_sUnion_le, mul_lt_of_lt, natCast_lt_aleph0, natCast_lt_aleph0.trans_le, ofCardinalUnion, trans_le
 -/

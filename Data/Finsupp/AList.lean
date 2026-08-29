@@ -39,7 +39,11 @@ definition toAList
       rw [List.NodupKeys]; rw [List.keys]; rw [List.map_map]; rw [Prod.fst_comp_toSigma]; rw [List.nodup_map_iff_inj_on]
       · rintro ⟨b, m⟩ hb ⟨c, n⟩ hc (rfl : b = c)
         rw [Finset.mem_toList]; rw [Finsupp.mem_graph_iff] at hb hc
-        dsimp at hb h
+        dsimp at hb hc
+        rw [← hc.1]; rw [hb.1]
+      · apply Finset.nodup_toList⟩
+
+@[simp]
 
 中文:
 定义 toAList
@@ -49,7 +53,11 @@ definition toAList
       rw [List.NodupKeys]; rw [List.keys]; rw [List.map_map]; rw [Prod.fst_comp_toSigma]; rw [List.nodup_map_iff_inj_on]
       · rintro ⟨b, m⟩ hb ⟨c, n⟩ hc (rfl : b = c)
         rw [Finset.mem_toList]; rw [Finsupp.mem_graph_iff] at hb hc
-        dsimp at hb h
+        dsimp at hb hc
+        rw [← hc.1]; rw [hb.1]
+      · apply Finset.nodup_toList⟩
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.mem_toList, Finset.nodup_toList, Finsupp, Finsupp.mem_graph_iff, List.NodupKeys, List.keys, List.map_map, List.nodup_map_iff_inj_on, NodupKeys, Prod.fst_comp_toSigma, Prod.toSigma, f.graph.toList.map, fst_comp_toSigma, map_map, mem_graph_iff, mem_toList, nodup_map_iff_inj_on, nodup_toList, toList
 -/
@@ -137,7 +145,10 @@ definition lookupFinsupp
     (l.lookup a).getD 0
   mem_support_toFun a := by
     classical
-      simp_rw [mem_toFinset, List.mem_keys, List.mem_filter, ← me
+      simp_rw [mem_toFinset, List.mem_keys, List.mem_filter, ← mem_lookup_iff]
+      cases lookup a l <;> simp
+
+@[simp]
 
 中文:
 定义 lookupFinsupp
@@ -150,7 +161,10 @@ definition lookupFinsupp
     (l.lookup a).getD 0
   mem_support_toFun a := by
     classical
-      simp_rw [mem_toFinset, List.mem_keys, List.mem_filter, ← me
+      simp_rw [mem_toFinset, List.mem_keys, List.mem_filter, ← mem_lookup_iff]
+      cases lookup a l <;> simp
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.decEq, List.mem_filter, List.mem_keys, Sigma.snd, classical, filter, keys.toFinset, l.lookup, lookup, mem_filter, mem_keys, mem_lookup_iff, mem_support_toFun, mem_toFinset, simp_rw, toFinset
 -/

@@ -81,7 +81,7 @@ definition indIso
   (inhomogeneousChainsIso (ind S.subtype A :) ≪≫
     (coinvariantsTensorResProjectiveResolutionIso S A (barResolution k G)).symm) ≪≫
   (groupHomologyIso A n ((resFunctor.{u} S.subtype).mapProjectiveResolution <|
-    
+    barResolution k G)).symm
 
 中文:
 定义 indIso
@@ -90,7 +90,7 @@ definition indIso
   (inhomogeneousChainsIso (ind S.subtype A :) ≪≫
     (coinvariantsTensorResProjectiveResolutionIso S A (barResolution k G)).symm) ≪≫
   (groupHomologyIso A n ((resFunctor.{u} S.subtype).mapProjectiveResolution <|
-    
+    barResolution k G)).symm
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, HomologicalComplex, HomologicalComplex.homologyFunctor, ModuleCat, S.subtype, barResolution, coinvariantsTensorResProjectiveResolutionIso, groupHomologyIso, homologyFunctor, inhomogeneousChainsIso, mapIso, mapProjectiveResolution, resFunctor, subtype
 -/

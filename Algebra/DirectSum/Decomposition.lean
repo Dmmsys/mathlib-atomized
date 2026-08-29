@@ -236,7 +236,12 @@ theorem Decomposition.inductionOn
   have t : DirectSum.Decomposition ℳ' :=
     { decompose' := DirectSum.decompose ℳ
       left_inv := fun _ => (decompose ℳ).left_inv _
-      right_inv := fun _ 
+      right_inv := fun _ => (decompose ℳ).right_inv _ }
+  have mem : forall m, m in iSup ℳ' := fun _m =>
+    (DirectSum.IsInternal.addSubmonoid_iSup_eq_top ℳ' (Decomposition.isInternal ℳ')).symm ▸ trivial
+  -- Porting note: needs to use @ even though no implicit argument is provided
+  exact fun m => @AddSubmonoid.iSup_induction _ _ _ ℳ' _ _ (mem m)
+    (fun i m h => homogeneous ⟨m, h⟩) zero add
 
 中文:
 定理 分解.inductionOn
@@ -247,7 +252,12 @@ theorem Decomposition.inductionOn
   have t : DirectSum.Decomposition ℳ' :=
     { decompose' := DirectSum.decompose ℳ
       left_inv := fun _ => (decompose ℳ).left_inv _
-      right_inv := fun _ 
+      right_inv := fun _ => (decompose ℳ).right_inv _ }
+  have mem : forall m, m in iSup ℳ' := fun _m =>
+    (DirectSum.IsInternal.addSubmonoid_iSup_eq_top ℳ' (Decomposition.isInternal ℳ')).symm ▸ trivial
+  -- Porting note: needs to use @ even though no implicit argument is provided
+  exact fun m => @AddSubmonoid.iSup_induction _ _ _ ℳ' _ _ (mem m)
+    (fun i m h => homogeneous ⟨m, h⟩) zero add
 -/
 protected theorem Decomposition.inductionOn {motive : M -> Prop} (zero : motive 0)
     (homogeneous : forall {i} (m : ℳ i), motive (m : M))
@@ -962,7 +972,7 @@ theorem decompose_lhom_ext
            = (g ∘ₗ (decomposeLinearEquiv ℳ).symm : (⨁ i, ℳ i) ->ₗ[R] N) from
       DFunLike.congr_fun this
     linearMap_ext _ fun i => by
-      simp_rw [LinearMap.comp_assoc, decomposeL
+      simp_rw [LinearMap.comp_assoc, decomposeLinearEquiv_symm_comp_lof ℳ i, h]
 
 中文:
 定理 decompose_lhom_ext
@@ -973,7 +983,7 @@ theorem decompose_lhom_ext
            = (g ∘ₗ (decomposeLinearEquiv ℳ).symm : (⨁ i, ℳ i) ->ₗ[R] N) from
       DFunLike.congr_fun this
     linearMap_ext _ fun i => by
-      simp_rw [LinearMap.comp_assoc, decomposeL
+      simp_rw [LinearMap.comp_assoc, decomposeLinearEquiv_symm_comp_lof ℳ i, h]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, LinearMap, LinearMap.comp_assoc, LinearMap.ext, comp_assoc, congr_fun, decomposeLinearEquiv, decomposeLinearEquiv_symm_comp_lof, linearMap_ext, simp_rw, surjective, symm.surjective.forall.mpr
 -/

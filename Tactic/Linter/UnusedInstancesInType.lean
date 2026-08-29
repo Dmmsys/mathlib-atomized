@@ -122,7 +122,8 @@ definition _root_.Lean.Name.unusedInstancesMsg
   let unusedInstanceBinders := unusedInstanceBinders.map toMessageData
   m!"`{.ofConstName declName}` does not use the following \
   {if unusedInstanceBinders.size = 1 then "hypothesis" else "hypotheses"} \
-  in its type{i
+  in its type{if anyAppearsInTypeProof then " outside of proofs" else ""}:\
+  {(unusedInstanceBinders.map (m!"\n • {·}") |>.foldl (init := .nil) .compose)}"
 
 中文:
 定义 _root_.Lean.Name.unusedInstancesMsg
@@ -131,7 +132,8 @@ definition _root_.Lean.Name.unusedInstancesMsg
   let unusedInstanceBinders := unusedInstanceBinders.map toMessageData
   m!"`{.ofConstName declName}` does not use the following \
   {if unusedInstanceBinders.size = 1 then "hypothesis" else "hypotheses"} \
-  in its type{i
+  in its type{if anyAppearsInTypeProof then " outside of proofs" else ""}:\
+  {(unusedInstanceBinders.map (m!"\n • {·}") |>.foldl (init := .nil) .compose)}"
 
 Depends on / 依赖: anyAppearsInTypeProof, appearsInTypeProof, compose, declName, following, hypotheses, hypothesis, ofConstName, outside, proofs, toMessageData, unusedInstanceBinders, unusedInstanceBinders.any, unusedInstanceBinders.map, unusedInstanceBinders.size
 -/
@@ -154,7 +156,11 @@ definition collectFVarsOutsideOfProofs
   body: Meta.forEachExpr' e fun subExpr =>
     -- If it doesn't have an fvar, or it's a sorry, or it's a proof, don't descend further.
     pure (subExpr.hasFVar && !subExpr.isSorryAx) <&&> notM (Meta.isProof subExpr) <&&> do
-      let .fvar fvarId := subExpr | return true -- not an fvar, but there's one bel
+      let .fvar fvarId := subExpr | return true -- not an fvar, but there's one below us; continue
+      modifyThe FVarIdSet (·.insert fvarId)
+      /- Note: return value is irrelevant here (`false` says "do not visit the children of this
+      fvar", but fvars are atomic anyway) -/
+      return false
 
 中文:
 定义 collectFVarsOutsideOfProofs
@@ -162,7 +168,11 @@ definition collectFVarsOutsideOfProofs
   定义体: Meta.forEachExpr' e fun subExpr =>
     -- If it doesn't have an fvar, or it's a sorry, or it's a proof, don't descend further.
     pure (subExpr.hasFVar && !subExpr.isSorryAx) <&&> notM (Meta.isProof subExpr) <&&> do
-      let .fvar fvarId := subExpr | return true -- not an fvar, but there's one bel
+      let .fvar fvarId := subExpr | return true -- not an fvar, but there's one below us; continue
+      modifyThe FVarIdSet (·.insert fvarId)
+      /- Note: return value is irrelevant here (`false` says "do not visit the children of this
+      fvar", but fvars are atomic anyway) -/
+      return false
 
 Depends on / 依赖: Meta.forEachExpr, forEachExpr, subExpr
 -/
@@ -279,7 +289,19 @@ definition _root_.Lean.ConstantVal.onUnusedInstancesWhere
   if let some maxIdx := unusedInstances.back? then
     unless decl.type.hasSorry do -- only check for `sorry` in the "expensive" interactive case
       forallBoundedTelescope decl.type (some <| maxIdx + 1)
-        (clea
+        (cleanupAnnotations := true) fun fvars _ => do
+          /- If the binder is not unused in the type per se (by bvar dependence), but is considered
+          unused by `collectUnusedInstanceIdxsOf`, then it must have been used in a proof.
+          We record this in the `appearsInTypeProof` field. -/
+          let unusedEverywhereInstances := decl.type.getUnusedForallInstanceBinderIdxsWhere p
+          let unusedInstances : Array Parameter ← unusedInstances.mapM fun idx =>
+            return {
+                fvar? := fvars[idx]?
+                type? := ← fvars[idx]?.mapM (inferType ·)
+                idx
+                appearsInTypeProof := !unusedEverywhereInstances.contains idx
+              }
+          logOnUnused unusedInstances
 
 中文:
 定义 _root_.Lean.ConstantVal.onUnusedInstancesWhere
@@ -289,7 +311,19 @@ definition _root_.Lean.ConstantVal.onUnusedInstancesWhere
   if let some maxIdx := unusedInstances.back? then
     unless decl.type.hasSorry do -- only check for `sorry` in the "expensive" interactive case
       forallBoundedTelescope decl.type (some <| maxIdx + 1)
-        (clea
+        (cleanupAnnotations := true) fun fvars _ => do
+          /- If the binder is not unused in the type per se (by bvar dependence), but is considered
+          unused by `collectUnusedInstanceIdxsOf`, then it must have been used in a proof.
+          We record this in the `appearsInTypeProof` field. -/
+          let unusedEverywhereInstances := decl.type.getUnusedForallInstanceBinderIdxsWhere p
+          let unusedInstances : Array Parameter ← unusedInstances.mapM fun idx =>
+            return {
+                fvar? := fvars[idx]?
+                type? := ← fvars[idx]?.mapM (inferType ·)
+                idx
+                appearsInTypeProof := !unusedEverywhereInstances.contains idx
+              }
+          logOnUnused unusedInstances
 -/
 def _root_.Lean.ConstantVal.onUnusedInstancesWhere (decl : ConstantVal)
     (p : Expr -> Bool) (logOnUnused : Array Parameter -> TermElabM Unit) :
@@ -360,7 +394,11 @@ definition _root_.Lean.Syntax.logUnusedInstancesInTheoremsWhere
       declFilter thm && thm.type.hasInstanceBinderOf instanceTypeFilter
     -- use `liftTermElabM` on the outside in the hopes of sharing a cache
     unless thms.isEmpty do liftTermElabM do for thm in thms do
-   
+      thm.onUnusedInstancesWhere instanceTypeFilter
+        fun unusedParams =>
+          -- TODO: restore in order to log on type signature. See (#31729)[https://github.com/leanprover-community/mathlib4/pull/31729].
+          -- t.withDeclSigRef cmd thm.name do
+          log t thm unusedParams
 
 中文:
 定义 _root_.Lean.Syntax.logUnusedInstancesInTheoremsWhere
@@ -371,7 +409,11 @@ definition _root_.Lean.Syntax.logUnusedInstancesInTheoremsWhere
       declFilter thm && thm.type.hasInstanceBinderOf instanceTypeFilter
     -- use `liftTermElabM` on the outside in the hopes of sharing a cache
     unless thms.isEmpty do liftTermElabM do for thm in thms do
-   
+      thm.onUnusedInstancesWhere instanceTypeFilter
+        fun unusedParams =>
+          -- TODO: restore in order to log on type signature. See (#31729)[https://github.com/leanprover-community/mathlib4/pull/31729].
+          -- t.withDeclSigRef cmd thm.name do
+          log t thm unusedParams
 -/
 def _root_.Lean.Syntax.logUnusedInstancesInTheoremsWhere (_cmd : Syntax)
     (instanceTypeFilter : Expr -> Bool)
@@ -474,7 +516,17 @@ definition unusedDecidableInType
       return
     cmd.logUnusedInstancesInTheoremsWhere
       /- Theorems in the `Decidable` namespace such as `Decidable.eq_or_ne` are allowed to depend
-      on decidable instances witho
+      on decidable instances without using them in the type. -/
+      (declFilter := (!(`Decidable).isPrefixOf ·.name))
+      isDecidableVariant
+      fun _ thm unusedParams => do
+        logLint linter.unusedDecidableInType (← getRef) m!"\
+          {thm.name.unusedInstancesMsg unusedParams}\n\n\
+          Consider removing \
+          {if unusedParams.size = 1 then "this hypothesis" else "these hypotheses"} \
+          and using `classical` in the proof instead. \
+          For terms, consider using `open scoped Classical in` at the term level (not the \
+          command level)."
 
 中文:
 定义 unusedDecidableInType
@@ -484,7 +536,17 @@ definition unusedDecidableInType
       return
     cmd.logUnusedInstancesInTheoremsWhere
       /- Theorems in the `Decidable` namespace such as `Decidable.eq_or_ne` are allowed to depend
-      on decidable instances witho
+      on decidable instances without using them in the type. -/
+      (declFilter := (!(`Decidable).isPrefixOf ·.name))
+      isDecidableVariant
+      fun _ thm unusedParams => do
+        logLint linter.unusedDecidableInType (← getRef) m!"\
+          {thm.name.unusedInstancesMsg unusedParams}\n\n\
+          Consider removing \
+          {if unusedParams.size = 1 then "this hypothesis" else "these hypotheses"} \
+          and using `classical` in the proof instead. \
+          For terms, consider using `open scoped Classical in` at the term level (not the \
+          command level)."
 
 Depends on / 依赖: withSetBoolOptionIn
 -/
@@ -539,7 +601,21 @@ definition unusedFintypeInType
     unless (← getEnv).isImportedConst `Fintype do
       return
     cmd.logUnusedInstancesInTheoremsWhere
-      (·.isAppOrF
+      (·.isAppOrForallOfConst `Fintype)
+      fun _ thm unusedParams => do
+        let importFintypeOfFiniteNote? :=
+          if (← getEnv).isImportedConst `Fintype.ofFinite then none else
+some .note "Add `import Mathlib.Data.Fintype.EquivFin` \
+              to make `Fintype.ofFinite` available."
+        logLint linter.unusedFintypeInType (← getRef) m!"\
+          {thm.name.unusedInstancesMsg unusedParams}\n\n\
+          Consider replacing \
+          {if unusedParams.size = 1 then "this hypothesis" else "these hypotheses"} with the \
+          corresponding {if unusedParams.size = 1 then "instance" else "instances"} of \
+          `{.ofConstName `Finite}` and using \
+          `{.ofConstName `Fintype.ofFinite}` in the proof, or removing \
+          {if unusedParams.size = 1 then "it" else "them"} entirely.\
+          {importFintypeOfFiniteNote?.getD m!""}"
 
 中文:
 定义 unusedFintypeInType
@@ -551,7 +627,21 @@ definition unusedFintypeInType
     unless (← getEnv).isImportedConst `Fintype do
       return
     cmd.logUnusedInstancesInTheoremsWhere
-      (·.isAppOrF
+      (·.isAppOrForallOfConst `Fintype)
+      fun _ thm unusedParams => do
+        let importFintypeOfFiniteNote? :=
+          if (← getEnv).isImportedConst `Fintype.ofFinite then none else
+some .note "Add `import Mathlib.Data.Fintype.EquivFin` \
+              to make `Fintype.ofFinite` available."
+        logLint linter.unusedFintypeInType (← getRef) m!"\
+          {thm.name.unusedInstancesMsg unusedParams}\n\n\
+          Consider replacing \
+          {if unusedParams.size = 1 then "this hypothesis" else "these hypotheses"} with the \
+          corresponding {if unusedParams.size = 1 then "instance" else "instances"} of \
+          `{.ofConstName `Finite}` and using \
+          `{.ofConstName `Fintype.ofFinite}` in the proof, or removing \
+          {if unusedParams.size = 1 then "it" else "them"} entirely.\
+          {importFintypeOfFiniteNote?.getD m!""}"
 
 Depends on / 依赖: withSetBoolOptionIn
 -/

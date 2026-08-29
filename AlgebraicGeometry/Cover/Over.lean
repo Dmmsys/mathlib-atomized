@@ -142,7 +142,12 @@ definition Cover.pullbackCoverOver
     refine ⟨fun x => ?_, fun j => ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
       use i
-      exact (mem_
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
+        ((PreservesPullback.iso (Over.forget S) (f.asOver S) ((𝒰.f _).asOver S)).inv)
+        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
+    · dsimp only
+      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_fst _ _ (𝒰.map_prop j)
 
 中文:
 定义 Cover.pullbackCoverOver
@@ -155,7 +160,12 @@ definition Cover.pullbackCoverOver
     refine ⟨fun x => ?_, fun j => ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
       use i
-      exact (mem_
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
+        ((PreservesPullback.iso (Over.forget S) (f.asOver S) ((𝒰.f _).asOver S)).inv)
+        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
+    · dsimp only
+      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_fst _ _ (𝒰.map_prop j)
 -/
 def Cover.pullbackCoverOver : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀
@@ -213,7 +223,12 @@ definition Cover.pullbackCoverOver'
     refine ⟨fun x => ?_, fun j => ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
       use i
-      exact (mem_
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f _) _
+        ((PreservesPullback.iso (Over.forget S) ((𝒰.f _).asOver S) (f.asOver S)).inv)
+        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
+    · dsimp only
+      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_snd _ _ (𝒰.map_prop j)
 
 中文:
 定义 Cover.pullbackCoverOver'
@@ -226,7 +241,12 @@ definition Cover.pullbackCoverOver'
     refine ⟨fun x => ?_, fun j => ?_⟩
     · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
       use i
-      exact (mem_
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f _) _
+        ((PreservesPullback.iso (Over.forget S) ((𝒰.f _).asOver S) (f.asOver S)).inv)
+        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
+    · dsimp only
+      rw [← Over.forget_map]; rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_snd _ _ (𝒰.map_prop j)
 -/
 def Cover.pullbackCoverOver' : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀
@@ -290,7 +310,16 @@ definition Cover.pullbackCoverOverProp
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ 
+    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
+      use i
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
+        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
+          (f.asOverProp S) ((𝒰.f _).asOverProp S)).inv)
+        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
+    · simp only [← CategoryTheory.Over.forget_map]
+      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
+      rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_fst _ _ (𝒰.map_prop j)
 
 中文:
 定义 Cover.pullbackCoverOverProp
@@ -302,7 +331,16 @@ definition Cover.pullbackCoverOverProp
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ 
+    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₁ f) x
+      use i
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₁ f).f i) _
+        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
+          (f.asOverProp S) ((𝒰.f _).asOverProp S)).inv)
+        (PreservesPullback.iso_inv_fst _ _ _) x).mp hy
+    · simp only [← CategoryTheory.Over.forget_map]
+      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
+      rw [← PreservesPullback.iso_hom_fst]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_fst _ _ (𝒰.map_prop j)
 -/
 def Cover.pullbackCoverOverProp : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀
@@ -364,7 +402,16 @@ definition Cover.pullbackCoverOverProp'
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ 
+    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
+      use i
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f i) _
+        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
+          ((𝒰.f _).asOverProp S) (f.asOverProp S)).inv)
+        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
+    · simp only [← CategoryTheory.Over.forget_map]
+      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
+      rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_snd _ _ (𝒰.map_prop j)
 
 中文:
 定义 Cover.pullbackCoverOverProp'
@@ -376,7 +423,16 @@ definition Cover.pullbackCoverOverProp'
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun j => ?_⟩
-    · obtain ⟨i, hy⟩ 
+    · obtain ⟨i, hy⟩ := Cover.exists_eq (𝒰.pullback₂ f) x
+      use i
+      exact (mem_range_iff_of_surjective ((𝒰.pullback₂ f).f i) _
+        ((PreservesPullback.iso (MorphismProperty.Over.forget Q _ _ ⋙ Over.forget S)
+          ((𝒰.f _).asOverProp S) (f.asOverProp S)).inv)
+        (PreservesPullback.iso_inv_snd _ _ _) x).mp hy
+    · simp only [← CategoryTheory.Over.forget_map]
+      rw [MorphismProperty.Comma.toCommaMorphism_eq_hom]; rw [← MorphismProperty.Comma.forget_map]; rw [← Functor.comp_map]
+      rw [← PreservesPullback.iso_hom_snd]; rw [P.cancel_left_of_respectsIso]
+      exact P.pullback_snd _ _ (𝒰.map_prop j)
 -/
 def Cover.pullbackCoverOverProp' : W.Cover (precoverage P) where
   I₀ := 𝒰.I₀

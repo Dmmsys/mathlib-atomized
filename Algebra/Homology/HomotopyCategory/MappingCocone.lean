@@ -249,7 +249,9 @@ lemma id_X
     Cochain.leftShift_v (n := 1) _ _ _ _ _ p _ (p + -1) (by lia),
     Cochain.rightShift_v _ _ _ _ _ _ _ _ hpq,
     Cochain.leftShift_v _ _ _ _ _ _ _ _ (add_zero (p + -1)),
-    Cochain.rightShift_v _ _ _ _ _ _ _ _ (add
+    Cochain.rightShift_v _ _ _ _ _ _ _ _ (add_zero (p + -1)),
+    Int.negOnePow_even 2 ⟨1, rfl⟩,
+    mappingCone.id_X φ (p + -1) p (by lia)]
 
 中文:
 引理 id_X
@@ -260,7 +262,9 @@ lemma id_X
     Cochain.leftShift_v (n := 1) _ _ _ _ _ p _ (p + -1) (by lia),
     Cochain.rightShift_v _ _ _ _ _ _ _ _ hpq,
     Cochain.leftShift_v _ _ _ _ _ _ _ _ (add_zero (p + -1)),
-    Cochain.rightShift_v _ _ _ _ _ _ _ _ (add
+    Cochain.rightShift_v _ _ _ _ _ _ _ _ (add_zero (p + -1)),
+    Int.negOnePow_even 2 ⟨1, rfl⟩,
+    mappingCone.id_X φ (p + -1) p (by lia)]
 
 Depends on / 依赖: Cochain, Cochain.leftShift_v, Cochain.rightShift_v, Int.negOnePow_even, add_zero, id_X, leftShift_v, mappingCocone, mappingCone, mappingCone.id_X, negOnePow_even, rightShift_v
 -/
@@ -428,7 +432,17 @@ lemma δ_descCochain
   obtain rfl : n' = m + 2 := by lia
   simp [Cochain.δ_leftShift _ (-1) _ (m + 1) _ (m + 2) (by lia),
     mappingCone.δ_descCochain (m := m) (n := m + 1) _ _ _ _ (m + 2) (by lia),
-    Cochain.leftShift_v (n := 1) _ _ _ _ p p _ 
+    Cochain.leftShift_v (n := 1) _ _ _ _ p p _ (p + -1) (by lia),
+    Cochain.leftShift_v (n := m + 2) _ (-1) _ _ _ q _ (p + -1) (by lia),
+    Cochain.leftShift_v _ _ _ _ _ _ _ _ (add_zero (p + -1)),
+    Cochain.comp_v (n₁ := 1) _ _ _ (p + -1) p _ (by lia) hpq,
+    Cochain.comp_v (n₂ := m + 2) _ _ _ p (p + -1) q rfl (by lia),
+    smul_smul, Int.negOnePow_add, Int.negOnePow_even 2 ⟨1, rfl⟩]
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  abel
 
 中文:
 引理 δ_descCochain
@@ -440,7 +454,17 @@ lemma δ_descCochain
   obtain rfl : n' = m + 2 := by lia
   simp [Cochain.δ_leftShift _ (-1) _ (m + 1) _ (m + 2) (by lia),
     mappingCone.δ_descCochain (m := m) (n := m + 1) _ _ _ _ (m + 2) (by lia),
-    Cochain.leftShift_v (n := 1) _ _ _ _ p p _ 
+    Cochain.leftShift_v (n := 1) _ _ _ _ p p _ (p + -1) (by lia),
+    Cochain.leftShift_v (n := m + 2) _ (-1) _ _ _ q _ (p + -1) (by lia),
+    Cochain.leftShift_v _ _ _ _ _ _ _ _ (add_zero (p + -1)),
+    Cochain.comp_v (n₁ := 1) _ _ _ (p + -1) p _ (by lia) hpq,
+    Cochain.comp_v (n₂ := m + 2) _ _ _ p (p + -1) q rfl (by lia),
+    smul_smul, Int.negOnePow_add, Int.negOnePow_even 2 ⟨1, rfl⟩]
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  abel
 
 Depends on / 依赖: Cochain, Cochain.comp_v, Cochain.leftShift_v, add_zero, comp_v, descCochain, leftShift_v, mappingCocone, mappingCone
 -/
@@ -751,7 +775,14 @@ lemma δ_liftCochain
     Cochain.δ_rightShift _ (-1) _ n' _ n (by lia),
     Cochain.rightShift_v (n := n) _ _ _ _ p _ _ (q + -1) (by lia),
     Cochain.rightShift_v _ _ _ _ _ _ _ (q + -1) rfl,
-    Cochain.rightShift_v _ _ _
+    Cochain.rightShift_v _ _ _ _ _ _ _ _ (add_zero (q + -1)),
+    Cochain.comp_v _ _ _ p q _ hpq rfl,
+    Cochain.comp_v (n₁ := n) (n₂ := 1) _ _ _ p (q + -1) q (by lia) (by lia)]
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  abel
 
 中文:
 引理 δ_liftCochain
@@ -763,7 +794,14 @@ lemma δ_liftCochain
     Cochain.δ_rightShift _ (-1) _ n' _ n (by lia),
     Cochain.rightShift_v (n := n) _ _ _ _ p _ _ (q + -1) (by lia),
     Cochain.rightShift_v _ _ _ _ _ _ _ (q + -1) rfl,
-    Cochain.rightShift_v _ _ _
+    Cochain.rightShift_v _ _ _ _ _ _ _ _ (add_zero (q + -1)),
+    Cochain.comp_v _ _ _ p q _ hpq rfl,
+    Cochain.comp_v (n₁ := n) (n₂ := 1) _ _ _ p (q + -1) q (by lia) (by lia)]
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  abel
 
 Depends on / 依赖: Before, Cochain, Cochain.comp_v, Cochain.rightShift_v, adaptation_note, add_zero, comp_v, github, github.com, leanprover, liftCochain, mappingCone, rightShift_v
 -/
@@ -979,7 +1017,7 @@ definition rotateTriangleIso
   ext n
   simp [fst, mappingCone.triangle, Cochain.leftShift_v _ _ _ _ _ _ _ _ rfl,
     Cochain.rightShift_v _ _ _ _ _ _ _ _ rfl,
-    shi
+    shiftFunctorCompIsoId, shiftFunctorAdd'_inv_app_f', shiftFunctorZero_hom_app_f]
 
 中文:
 定义 rotateTriangleIso
@@ -992,7 +1030,7 @@ definition rotateTriangleIso
   ext n
   simp [fst, mappingCone.triangle, Cochain.leftShift_v _ _ _ _ _ _ _ _ rfl,
     Cochain.rightShift_v _ _ _ _ _ _ _ _ rfl,
-    shi
+    shiftFunctorCompIsoId, shiftFunctorAdd'_inv_app_f', shiftFunctorZero_hom_app_f]
 
 Depends on / 依赖: Cochain, Cochain.leftShift_v, Cochain.rightShift_v, Iso.refl, Triangle, Triangle.isoMk, _assoc, _i_assoc, _inv_app_f, cancel_epi, cancel_mono, cyclesMap, leftShift_v, mappingCone, mappingCone.triangle, p_opcyclesMap, rightShift_v, shiftFunctorAdd, shiftFunctorCompIsoId, shiftFunctorZero_hom_app_f
 -/

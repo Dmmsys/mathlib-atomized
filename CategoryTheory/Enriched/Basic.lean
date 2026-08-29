@@ -271,7 +271,18 @@ instance :
   id_comp X Y := by
     simp only [comp_whiskerRight, Category.assoc, Functor.LaxMonoidal.μ_natural_left_assoc,
       Functor.LaxMonoidal.left_unitality_inv_assoc]
-  
+    simp_rw [← F.map_comp]
+    convert! F.map_id _
+    simp
+  comp_id X Y := by
+    simp only [MonoidalCategory.whiskerLeft_comp, Category.assoc,
+      Functor.LaxMonoidal.μ_natural_right_assoc,
+      Functor.LaxMonoidal.right_unitality_inv_assoc]
+    simp_rw [← F.map_comp]
+    convert! F.map_id _
+    simp
+  assoc P Q R S := by
+    rw [comp_whiskerRight]; rw [Category.assoc]; rw [μ_natural_left_assoc]; rw [← associativity_inv_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [e_assoc]; rw [F.map_comp]; rw [MonoidalCategory.whiskerLeft_comp]; rw [Category.assoc]; rw [Functor.LaxMonoidal.μ_natural_right_assoc]
 
 中文:
 实例 :
@@ -282,7 +293,18 @@ instance :
   id_comp X Y := by
     simp only [comp_whiskerRight, Category.assoc, Functor.LaxMonoidal.μ_natural_left_assoc,
       Functor.LaxMonoidal.left_unitality_inv_assoc]
-  
+    simp_rw [← F.map_comp]
+    convert! F.map_id _
+    simp
+  comp_id X Y := by
+    simp only [MonoidalCategory.whiskerLeft_comp, Category.assoc,
+      Functor.LaxMonoidal.μ_natural_right_assoc,
+      Functor.LaxMonoidal.right_unitality_inv_assoc]
+    simp_rw [← F.map_comp]
+    convert! F.map_id _
+    simp
+  assoc P Q R S := by
+    rw [comp_whiskerRight]; rw [Category.assoc]; rw [μ_natural_left_assoc]; rw [← associativity_inv_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [e_assoc]; rw [F.map_comp]; rw [MonoidalCategory.whiskerLeft_comp]; rw [Category.assoc]; rw [Functor.LaxMonoidal.μ_natural_right_assoc]
 
 Depends on / 依赖: F.obj
 -/
@@ -358,7 +380,7 @@ definition categoryOfEnrichedCategoryType
   comp f g := eComp (Type v) _ _ _ ⟨f, g⟩
   id_comp f := ConcreteCategory.congr_hom (e_id_comp (Type v) _ _) f
   comp_id f := ConcreteCategory.congr_hom (e_comp_id (Type v) _ _) f
-  assoc f g h := ConcreteCategory.congr_hom (e_assoc (Type v) _ _ _ _) ⟨f,
+  assoc f g h := ConcreteCategory.congr_hom (e_assoc (Type v) _ _ _ _) ⟨f, g, h⟩
 
 中文:
 定义 categoryOfEnrichedCategoryType
@@ -368,7 +390,7 @@ definition categoryOfEnrichedCategoryType
   comp f g := eComp (Type v) _ _ _ ⟨f, g⟩
   id_comp f := ConcreteCategory.congr_hom (e_id_comp (Type v) _ _) f
   comp_id f := ConcreteCategory.congr_hom (e_comp_id (Type v) _ _) f
-  assoc f g h := ConcreteCategory.congr_hom (e_assoc (Type v) _ _ _ _) ⟨f,
+  assoc f g h := ConcreteCategory.congr_hom (e_assoc (Type v) _ _ _ _) ⟨f, g, h⟩
 -/
 def categoryOfEnrichedCategoryType (C : Type u₁) [𝒞 : EnrichedCategory (Type v) C] :
     Category.{v} C where
@@ -920,7 +942,10 @@ definition forget
       (ForgetEnrichment.homTo W f ≫ F.map (ForgetEnrichment.to W _) (ForgetEnrichment.to W _))
   map_comp f g := by
     apply_fun ForgetEnrichment.homTo W
-    · simp only [Iso.cancel_iso_inv_left, Categor
+    · simp only [Iso.cancel_iso_inv_left, Category.assoc, ← tensorHom_comp_tensorHom,
+        ForgetEnrichment.homTo_homOf, EnrichedFunctor.map_comp, ForgetEnrichment.homTo_comp]
+      rfl
+    · intro f g w; apply_fun ForgetEnrichment.homOf W at w; simpa using w
 
 中文:
 定义 forget
@@ -931,7 +956,10 @@ definition forget
       (ForgetEnrichment.homTo W f ≫ F.map (ForgetEnrichment.to W _) (ForgetEnrichment.to W _))
   map_comp f g := by
     apply_fun ForgetEnrichment.homTo W
-    · simp only [Iso.cancel_iso_inv_left, Categor
+    · simp only [Iso.cancel_iso_inv_left, Category.assoc, ← tensorHom_comp_tensorHom,
+        ForgetEnrichment.homTo_homOf, EnrichedFunctor.map_comp, ForgetEnrichment.homTo_comp]
+      rfl
+    · intro f g w; apply_fun ForgetEnrichment.homOf W at w; simpa using w
 
 Depends on / 依赖: F.obj, ForgetEnrichment, ForgetEnrichment.of, ForgetEnrichment.to
 -/
@@ -1211,7 +1239,7 @@ definition enrichedNatTransYoneda
       naturality X Y := by
         have p := σ.naturality X Y
         dsimp at p ⊢
-        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [C
+        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [← braiding_naturality_assoc]; rw [id_tensor_comp_tensor_id_assoc]; rw [p]; rw [tensorHom_comp_tensorHom_assoc]; rw [Category.id_comp] }
 
 中文:
 定义 enriched自然数TransYoneda
@@ -1222,7 +1250,7 @@ definition enrichedNatTransYoneda
       naturality X Y := by
         have p := σ.naturality X Y
         dsimp at p ⊢
-        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [C
+        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [← braiding_naturality_assoc]; rw [id_tensor_comp_tensor_id_assoc]; rw [p]; rw [tensorHom_comp_tensorHom_assoc]; rw [Category.id_comp] }
 
 Depends on / 依赖: Center, Center.ofBraided, GradedNatTrans, ofBraided
 -/
@@ -1259,7 +1287,9 @@ definition enrichedFunctorTypeEquivFunctor
       map_comp := fun f g => ConcreteCategory.congr_hom (F.map_comp _ _ _) ⟨f, g⟩ }
   invFun F :=
     { obj := fun X => F.obj X
-      map := fun _ _ => ↾fun f => F.
+      map := fun _ _ => ↾fun f => F.map f
+      map_id := fun X => by ext ⟨⟩; exact F.map_id X
+      map_comp := fun X Y Z => by ext ⟨f, g⟩; exact F.map_comp f g }
 
 中文:
 定义 enrichedFunctorTypeEquivFunctor
@@ -1270,7 +1300,9 @@ definition enrichedFunctorTypeEquivFunctor
       map_comp := fun f g => ConcreteCategory.congr_hom (F.map_comp _ _ _) ⟨f, g⟩ }
   invFun F :=
     { obj := fun X => F.obj X
-      map := fun _ _ => ↾fun f => F.
+      map := fun _ _ => ↾fun f => F.map f
+      map_id := fun X => by ext ⟨⟩; exact F.map_id X
+      map_comp := fun X Y Z => by ext ⟨f, g⟩; exact F.map_comp f g }
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.map, F.map_comp, F.map_id, F.obj, PUnit.unit, congr_hom, invFun, map_comp, map_id
 -/
@@ -1302,7 +1334,8 @@ definition enrichedNatTransYonedaTypeIsoYonedaNatTrans
             naturality X Y f := ConcreteCategory.congr_hom (σ.naturality X Y) ⟨x, f⟩ }
         inv := ↾fun σ =>
           { app X := ↾fun x => (σ.hom x).app X
-            naturality X Y := by ext ⟨x, 
+            naturality X Y := by ext ⟨x, f⟩; exact (σ.hom x).naturality f } })
+    (by cat_disch)
 
 中文:
 定义 enriched自然数TransYonedaTypeIsoYoneda自然数Trans
@@ -1314,7 +1347,8 @@ definition enrichedNatTransYonedaTypeIsoYonedaNatTrans
             naturality X Y f := ConcreteCategory.congr_hom (σ.naturality X Y) ⟨x, f⟩ }
         inv := ↾fun σ =>
           { app X := ↾fun x => (σ.hom x).app X
-            naturality X Y := by ext ⟨x, 
+            naturality X Y := by ext ⟨x, f⟩; exact (σ.hom x).naturality f } })
+    (by cat_disch)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, NatIso, NatIso.ofComponents, cat_disch, congr_hom, naturality, ofComponents
 -/

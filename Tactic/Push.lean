@@ -173,7 +173,13 @@ definition pushNegBuiltin
     if cfg.distrib then
       return mkSimpStep (mkOr (mkNot p) (mkNot q)) (mkApp2 (.const ``not_and_or_eq []) p q)
     else
-      return mkSimpStep (.forallE `_ p (mkNot q) .defau
+      return mkSimpStep (.forallE `_ p (mkNot q) .default) (mkApp2 (.const ``not_and_eq []) p q)
+  | .forallE name ty body binfo =>
+    let body' : Expr := .lam name ty (mkNot body) binfo
+    let body'' : Expr := .lam name ty body binfo
+    return mkSimpStep (← mkAppM ``Exists #[body']) (← mkAppM ``not_forall_eq #[body''])
+  | _ =>
+    return Simp.Step.continue
 
 中文:
 定义 pushNegBuiltin
@@ -185,7 +191,13 @@ definition pushNegBuiltin
     if cfg.distrib then
       return mkSimpStep (mkOr (mkNot p) (mkNot q)) (mkApp2 (.const ``not_and_or_eq []) p q)
     else
-      return mkSimpStep (.forallE `_ p (mkNot q) .defau
+      return mkSimpStep (.forallE `_ p (mkNot q) .default) (mkApp2 (.const ``not_and_eq []) p q)
+  | .forallE name ty body binfo =>
+    let body' : Expr := .lam name ty (mkNot body) binfo
+    let body'' : Expr := .lam name ty body binfo
+    return mkSimpStep (← mkAppM ``Exists #[body']) (← mkAppM ``not_forall_eq #[body''])
+  | _ =>
+    return Simp.Step.continue
 -/
 private def pushNegBuiltin (cfg : Config) : Simp.Simproc := fun e => do
   let e := (← instantiateMVars e).cleanupAnnotations
@@ -237,7 +249,13 @@ definition pushStep
     return Simp.Step.continue
   let thms := pushExt.getState (← getEnv)
   if let some r ← Simp.rewrite? e thms {} "push" false then
-    -- We return `.visit r` instead of
+    -- We return `.visit r` instead of `.continue r`, because in the case of a triple negation,
+    -- after rewriting `¬ ¬ ¬ p` into `¬ p`, we may want to rewrite `¬ p` again.
+    return Simp.Step.visit r
+  if let some e := e_whnf.not? then
+    pushNegBuiltin cfg e
+  else
+    return Simp.Step.continue
 
 中文:
 定义 pushStep
@@ -249,7 +267,13 @@ definition pushStep
     return Simp.Step.continue
   let thms := pushExt.getState (← getEnv)
   if let some r ← Simp.rewrite? e thms {} "push" false then
-    -- We return `.visit r` instead of
+    -- We return `.visit r` instead of `.continue r`, because in the case of a triple negation,
+    -- after rewriting `¬ ¬ ¬ p` into `¬ p`, we may want to rewrite `¬ p` again.
+    return Simp.Step.visit r
+  if let some e := e_whnf.not? then
+    pushNegBuiltin cfg e
+  else
+    return Simp.Step.continue
 -/
 def pushStep (head : Head) (cfg : Config) : Simp.Simproc := fun e => do
   let e_whnf ← whnf e
@@ -280,7 +304,10 @@ definition pushCore
     | none => { pre := pushStep head cfg, post _ := return .continue }
     | some disch => {
       pre := pushStep head cfg,
-    
+      post _ := return .continue,
+      discharge? := disch,
+      wellBehavedDischarge := false }
+(·.1) < > Simp.main tgt ctx (methods := methods)
 
 中文:
 定义 pushCore
@@ -293,7 +320,10 @@ definition pushCore
     | none => { pre := pushStep head cfg, post _ := return .continue }
     | some disch => {
       pre := pushStep head cfg,
-    
+      post _ := return .continue,
+      discharge? := disch,
+      wellBehavedDischarge := false }
+(·.1) < > Simp.main tgt ctx (methods := methods)
 -/
 def pushCore (head : Head) (cfg : Config) (disch? : Option Simp.Discharge) (tgt : Expr) :
     MetaM Simp.Result := do
@@ -321,7 +351,13 @@ definition pullStep
   -- that pull the correct head.
 let candidates ← Simp.withSimpIndexConfig thms.getMatchWithExtra e
   if candidates.isEmpty then
-    return Simp.Step.co
+    return Simp.Step.continue
+  let candidates := candidates.insertionSort fun e₁ e₂ => e₁.1.1.priority > e₂.1.1.priority
+  for ((thm, thm_head), numExtraArgs) in candidates do
+    if thm_head == head then
+      if let some result ← Simp.tryTheoremWithExtraArgs? e thm numExtraArgs then
+        return Simp.Step.continue result
+  return Simp.Step.continue
 
 中文:
 定义 pullStep
@@ -332,7 +368,13 @@ let candidates ← Simp.withSimpIndexConfig thms.getMatchWithExtra e
   -- that pull the correct head.
 let candidates ← Simp.withSimpIndexConfig thms.getMatchWithExtra e
   if candidates.isEmpty then
-    return Simp.Step.co
+    return Simp.Step.continue
+  let candidates := candidates.insertionSort fun e₁ e₂ => e₁.1.1.priority > e₂.1.1.priority
+  for ((thm, thm_head), numExtraArgs) in candidates do
+    if thm_head == head then
+      if let some result ← Simp.tryTheoremWithExtraArgs? e thm numExtraArgs then
+        return Simp.Step.continue result
+  return Simp.Step.continue
 -/
 def pullStep (head : Head) : Simp.Simproc := fun e => do
   let thms := pullExt.getState (← getEnv)
@@ -360,7 +402,8 @@ definition pullCore
       (congrTheorems := ← getSimpCongrTheorems)
   let methods := match disch? with
     | none => { post := pullStep head }
-    | some disch => { post := pullStep head, discharge? := disch, wellBehavedDischarge :=
+    | some disch => { post := pullStep head, discharge? := disch, wellBehavedDischarge := false }
+(·.1) < > Simp.main tgt ctx (methods := methods)
 
 中文:
 定义 pullCore
@@ -371,7 +414,8 @@ definition pullCore
       (congrTheorems := ← getSimpCongrTheorems)
   let methods := match disch? with
     | none => { post := pullStep head }
-    | some disch => { post := pullStep head, discharge? := disch, wellBehavedDischarge :=
+    | some disch => { post := pullStep head, discharge? := disch, wellBehavedDischarge := false }
+(·.1) < > Simp.main tgt ctx (methods := methods)
 -/
 def pullCore (head : Head) (tgt : Expr) (disch? : Option Simp.Discharge) : MetaM Simp.Result := do
   let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
@@ -411,7 +455,20 @@ match ← liftMacroM expandMacros stx with
   | `($f $args*) =>
     -- Note: we would like to insist that all arguments in the notation are given as underscores,
     -- but for example `∑ x, _` expands to `Finset.sum Finset.univ fun _ ↦ _`,
-    -- in which `Finset.univ` is not an underscore. So inst
+    -- in which `Finset.univ` is not an underscore. So instead
+    -- we only insist that the last argument is an underscore.
+    if args.back?.all isUnderscore then
+      try resolveId? f catch _ => return none
+    else
+      return none
+  | `(binop% $f _ _)
+  | `(binop_lazy% $f _ _)
+  | `(leftact% $f _ _)
+  | `(rightact% $f _ _)
+  | `(binrel% $f _ _)
+  | `(binrel_no_prop% $f _ _)
+  | `(unop% $f _)
+  | f => try resolveId? f catch _ => return none
 
 中文:
 定义 resolvePushId?
@@ -421,7 +478,20 @@ match ← liftMacroM expandMacros stx with
   | `($f $args*) =>
     -- Note: we would like to insist that all arguments in the notation are given as underscores,
     -- but for example `∑ x, _` expands to `Finset.sum Finset.univ fun _ ↦ _`,
-    -- in which `Finset.univ` is not an underscore. So inst
+    -- in which `Finset.univ` is not an underscore. So instead
+    -- we only insist that the last argument is an underscore.
+    if args.back?.all isUnderscore then
+      try resolveId? f catch _ => return none
+    else
+      return none
+  | `(binop% $f _ _)
+  | `(binop_lazy% $f _ _)
+  | `(leftact% $f _ _)
+  | `(rightact% $f _ _)
+  | `(binrel% $f _ _)
+  | `(binrel_no_prop% $f _ _)
+  | `(unop% $f _)
+  | f => try resolveId? f catch _ => return none
 -/
 def resolvePushId? (stx : Term) : TermElabM (Option Expr) := do
 match ← liftMacroM expandMacros stx with
@@ -454,7 +524,15 @@ definition elabHead
   -- and to add hover information
 _ ← withTheReader Term.Context ({ · with ignoreTCFailures := true })
 Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm stx none
-  
+  match stx with
+  | `(fun $_ => _) => return .lambda
+  | `(forall $_, _) => return .forall
+  | _ =>
+    match ← resolvePushId? stx with
+    | some (.const c _) => return .const c
+    | _ => throwError "Could not resolve `push` argument `{stx}`. \
+      Expected either a constant, e.g. `push Not`, \
+      or notation with underscores, e.g. `push ¬ _`"
 
 中文:
 定义 elabHead
@@ -464,7 +542,15 @@ Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm 
   -- and to add hover information
 _ ← withTheReader Term.Context ({ · with ignoreTCFailures := true })
 Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm stx none
-  
+  match stx with
+  | `(fun $_ => _) => return .lambda
+  | `(forall $_, _) => return .forall
+  | _ =>
+    match ← resolvePushId? stx with
+    | some (.const c _) => return .const c
+    | _ => throwError "Could not resolve `push` argument `{stx}`. \
+      Expected either a constant, e.g. `push Not`, \
+      or notation with underscores, e.g. `push ¬ _`"
 
 Depends on / 依赖: withRef
 -/
@@ -716,7 +802,15 @@ definition elabPushTree
   for (key, trie) in thms.root do
     let matchesHead (k : DiscrTree.Key) : Bool :=
       match k, head with
-      | .const c _, .const c' => c == 
+      | .const c _, .const c' => c == c'
+      | .other , .lambda => true
+      | .arrow , .forall => true
+      | _ , _ => false
+    if matchesHead key then
+      logInfo m! "DiscrTree branch for {key}:{indentD (format trie)}"
+      logged := true
+  unless logged do
+    logInfo m! "There are no `push` theorems for `{head.toString}`"
 
 中文:
 定义 elabPushTree
@@ -729,7 +823,15 @@ definition elabPushTree
   for (key, trie) in thms.root do
     let matchesHead (k : DiscrTree.Key) : Bool :=
       match k, head with
-      | .const c _, .const c' => c == 
+      | .const c _, .const c' => c == c'
+      | .other , .lambda => true
+      | .arrow , .forall => true
+      | _ , _ => false
+    if matchesHead key then
+      logInfo m! "DiscrTree branch for {key}:{indentD (format trie)}"
+      logged := true
+  unless logged do
+    logInfo m! "There are no `push` theorems for `{head.toString}`"
 -/
 def elabPushTree : Elab.Command.CommandElab := fun stx => do
   Elab.Command.runTermElabM fun _ => do

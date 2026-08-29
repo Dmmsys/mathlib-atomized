@@ -276,7 +276,9 @@ definition LocallyFiniteOrder.ofIcc'
   finsetIoo a b := {x in finsetIcc a b | ¬x <= a ∧ ¬b <= x}
   finset_mem_Icc := mem_Icc
   finset_mem_Ico a b x := by rw [Finset.mem_filter, mem_Icc, and_assoc, lt_iff_le_not_ge]
-  finset_mem
+  finset_mem_Ioc a b x := by rw [Finset.mem_filter, mem_Icc, and_right_comm, lt_iff_le_not_ge]
+  finset_mem_Ioo a b x := by
+    rw [Finset.mem_filter]; rw [mem_Icc]; rw [and_and_and_comm]; rw [lt_iff_le_not_ge]; rw [lt_iff_le_not_ge]
 
 中文:
 定义 局部有限序.ofIcc'
@@ -287,7 +289,9 @@ definition LocallyFiniteOrder.ofIcc'
   finsetIoo a b := {x in finsetIcc a b | ¬x <= a ∧ ¬b <= x}
   finset_mem_Icc := mem_Icc
   finset_mem_Ico a b x := by rw [Finset.mem_filter, mem_Icc, and_assoc, lt_iff_le_not_ge]
-  finset_mem
+  finset_mem_Ioc a b x := by rw [Finset.mem_filter, mem_Icc, and_right_comm, lt_iff_le_not_ge]
+  finset_mem_Ioo a b x := by
+    rw [Finset.mem_filter]; rw [mem_Icc]; rw [and_and_and_comm]; rw [lt_iff_le_not_ge]; rw [lt_iff_le_not_ge]
 
 Depends on / 依赖: finsetIcc
 -/
@@ -320,7 +324,9 @@ definition LocallyFiniteOrder.ofIcc
   finsetIoo a b := {x in finsetIcc a b | a != x ∧ x != b}
   finset_mem_Icc := mem_Icc
   finset_mem_Ico a b x := by rw [Finset.mem_filter, mem_Icc, and_assoc, lt_iff_le_and_ne]
-  finset_mem_Ioc
+  finset_mem_Ioc a b x := by rw [Finset.mem_filter, mem_Icc, and_right_comm, lt_iff_le_and_ne]
+  finset_mem_Ioo a b x := by
+    rw [Finset.mem_filter]; rw [mem_Icc]; rw [and_and_and_comm]; rw [lt_iff_le_and_ne]; rw [lt_iff_le_and_ne]
 
 中文:
 定义 局部有限序.ofIcc
@@ -331,7 +337,9 @@ definition LocallyFiniteOrder.ofIcc
   finsetIoo a b := {x in finsetIcc a b | a != x ∧ x != b}
   finset_mem_Icc := mem_Icc
   finset_mem_Ico a b x := by rw [Finset.mem_filter, mem_Icc, and_assoc, lt_iff_le_and_ne]
-  finset_mem_Ioc
+  finset_mem_Ioc a b x := by rw [Finset.mem_filter, mem_Icc, and_right_comm, lt_iff_le_and_ne]
+  finset_mem_Ioo a b x := by
+    rw [Finset.mem_filter]; rw [mem_Icc]; rw [and_and_and_comm]; rw [lt_iff_le_and_ne]; rw [lt_iff_le_and_ne]
 
 Depends on / 依赖: finsetIcc
 -/
@@ -1608,7 +1616,8 @@ abbreviation Fintype.toLocallyFiniteOrder
   finsetIoo a b := (Set.Ioo a b).toFinset
   finset_mem_Icc a b x := by simp only [Set.mem_toFinset, Set.mem_Icc]
   finset_mem_Ico a b x := by simp only [Set.mem_toFinset, Set.mem_Ico]
-  finset_
+  finset_mem_Ioc a b x := by simp only [Set.mem_toFinset, Set.mem_Ioc]
+  finset_mem_Ioo a b x := by simp only [Set.mem_toFinset, Set.mem_Ioo]
 
 中文:
 缩写 有限类型.toLocallyFiniteOrder
@@ -1619,7 +1628,8 @@ abbreviation Fintype.toLocallyFiniteOrder
   finsetIoo a b := (Set.Ioo a b).toFinset
   finset_mem_Icc a b x := by simp only [Set.mem_toFinset, Set.mem_Icc]
   finset_mem_Ico a b x := by simp only [Set.mem_toFinset, Set.mem_Ico]
-  finset_
+  finset_mem_Ioc a b x := by simp only [Set.mem_toFinset, Set.mem_Ioc]
+  finset_mem_Ioo a b x := by simp only [Set.mem_toFinset, Set.mem_Ioo]
 
 Depends on / 依赖: Set.Icc, toFinset
 -/
@@ -1644,7 +1654,22 @@ instance :
     obtain ⟨h₀_finset_Icc, h₀_finset_Ico, h₀_finset_Ioc, h₀_finset_Ioo,
       h₀_finset_mem_Icc, h₀_finset_mem_Ico, h₀_finset_mem_Ioc, h₀_finset_mem_Ioo⟩ := h₀
     obtain ⟨h₁_finset_Icc, h₁_finset_Ico, h₁_finset_Ioc, h₁_finset_Ioo,
-      h₁_finset_mem_Icc, h₁_finse
+      h₁_finset_mem_Icc, h₁_finset_mem_Ico, h₁_finset_mem_Ioc, h₁_finset_mem_Ioo⟩ := h₁
+    have hIcc : h₀_finset_Icc = h₁_finset_Icc := by
+      ext a b x
+      rw [h₀_finset_mem_Icc]; rw [h₁_finset_mem_Icc]
+    have hIco : h₀_finset_Ico = h₁_finset_Ico := by
+      ext a b x
+      rw [h₀_finset_mem_Ico]; rw [h₁_finset_mem_Ico]
+    have hIoc : h₀_finset_Ioc = h₁_finset_Ioc := by
+      ext a b x
+      rw [h₀_finset_mem_Ioc]; rw [h₁_finset_mem_Ioc]
+    have hIoo : h₀_finset_Ioo = h₁_finset_Ioo := by
+      ext a b x
+      rw [h₀_finset_mem_Ioo]; rw [h₁_finset_mem_Ioo]
+    simp_rw [hIcc, hIco, hIoc, hIoo]
+
+@[to_dual]
 
 中文:
 实例 :
@@ -1653,7 +1678,22 @@ instance :
     obtain ⟨h₀_finset_Icc, h₀_finset_Ico, h₀_finset_Ioc, h₀_finset_Ioo,
       h₀_finset_mem_Icc, h₀_finset_mem_Ico, h₀_finset_mem_Ioc, h₀_finset_mem_Ioo⟩ := h₀
     obtain ⟨h₁_finset_Icc, h₁_finset_Ico, h₁_finset_Ioc, h₁_finset_Ioo,
-      h₁_finset_mem_Icc, h₁_finse
+      h₁_finset_mem_Icc, h₁_finset_mem_Ico, h₁_finset_mem_Ioc, h₁_finset_mem_Ioo⟩ := h₁
+    have hIcc : h₀_finset_Icc = h₁_finset_Icc := by
+      ext a b x
+      rw [h₀_finset_mem_Icc]; rw [h₁_finset_mem_Icc]
+    have hIco : h₀_finset_Ico = h₁_finset_Ico := by
+      ext a b x
+      rw [h₀_finset_mem_Ico]; rw [h₁_finset_mem_Ico]
+    have hIoc : h₀_finset_Ioc = h₁_finset_Ioc := by
+      ext a b x
+      rw [h₀_finset_mem_Ioc]; rw [h₁_finset_mem_Ioc]
+    have hIoo : h₀_finset_Ioo = h₁_finset_Ioo := by
+      ext a b x
+      rw [h₀_finset_mem_Ioo]; rw [h₁_finset_mem_Ioo]
+    simp_rw [hIcc, hIco, hIoc, hIoo]
+
+@[to_dual]
 
 Depends on / 依赖: Subsingleton, Subsingleton.intro
 -/
@@ -1689,7 +1729,11 @@ instance :
     obtain ⟨h₁_finset_Ioi, h₁_finset_Ici, h₁_finset_mem_Ici, h₁_finset_mem_Ioi⟩ := h₁
     have hIci : h₀_finset_Ici = h₁_finset_Ici := by
       ext a b
-      rw [h₀_finset_mem_Ici
+      rw [h₀_finset_mem_Ici]; rw [h₁_finset_mem_Ici]
+    have hIoi : h₀_finset_Ioi = h₁_finset_Ioi := by
+      ext a b
+      rw [h₀_finset_mem_Ioi]; rw [h₁_finset_mem_Ioi]
+    simp_rw [hIci, hIoi]
 
 中文:
 实例 :
@@ -1699,7 +1743,11 @@ instance :
     obtain ⟨h₁_finset_Ioi, h₁_finset_Ici, h₁_finset_mem_Ici, h₁_finset_mem_Ioi⟩ := h₁
     have hIci : h₀_finset_Ici = h₁_finset_Ici := by
       ext a b
-      rw [h₀_finset_mem_Ici
+      rw [h₀_finset_mem_Ici]; rw [h₁_finset_mem_Ici]
+    have hIoi : h₀_finset_Ioi = h₁_finset_Ioi := by
+      ext a b
+      rw [h₀_finset_mem_Ioi]; rw [h₁_finset_mem_Ioi]
+    simp_rw [hIci, hIoi]
 
 Depends on / 依赖: Subsingleton, Subsingleton.intro, simp_rw
 -/
@@ -1728,7 +1776,10 @@ definition noncomputable
   finsetIco a b := (Ico (f a) (f b)).preimage f f.toEmbedding.injective.injOn
   finsetIoc a b := (Ioc (f a) (f b)).preimage f f.toEmbedding.injective.injOn
   finsetIoo a b := (Ioo (f a) (f b)).preimage f f.toEmbedding.injective.injOn
-  finse
+  finset_mem_Icc a b x := by rw [mem_preimage, mem_Icc, f.le_iff_le, f.le_iff_le]
+  finset_mem_Ico a b x := by rw [mem_preimage, mem_Ico, f.le_iff_le, f.lt_iff_lt]
+  finset_mem_Ioc a b x := by rw [mem_preimage, mem_Ioc, f.lt_iff_lt, f.le_iff_le]
+  finset_mem_Ioo a b x := by rw [mem_preimage, mem_Ioo, f.lt_iff_lt, f.lt_iff_lt]
 
 中文:
 定义 noncomputable
@@ -1737,7 +1788,10 @@ definition noncomputable
   finsetIco a b := (Ico (f a) (f b)).preimage f f.toEmbedding.injective.injOn
   finsetIoc a b := (Ioc (f a) (f b)).preimage f f.toEmbedding.injective.injOn
   finsetIoo a b := (Ioo (f a) (f b)).preimage f f.toEmbedding.injective.injOn
-  finse
+  finset_mem_Icc a b x := by rw [mem_preimage, mem_Icc, f.le_iff_le, f.le_iff_le]
+  finset_mem_Ico a b x := by rw [mem_preimage, mem_Ico, f.le_iff_le, f.lt_iff_lt]
+  finset_mem_Ioc a b x := by rw [mem_preimage, mem_Ioc, f.lt_iff_lt, f.le_iff_le]
+  finset_mem_Ioo a b x := by rw [mem_preimage, mem_Ioo, f.lt_iff_lt, f.lt_iff_lt]
 -/
 protected noncomputable def OrderEmbedding.locallyFiniteOrder [LocallyFiniteOrder β] (f : α ↪o β) :
     LocallyFiniteOrder α where
@@ -1769,7 +1823,11 @@ instance OrderDual.instLocallyFiniteOrder
   finsetIoc a b := @Ico α _ _ (ofDual b) (ofDual a)
   finsetIoo a b := @Ioo α _ _ (ofDual b) (ofDual a)
   finset_mem_Icc _ _ _ := (mem_Icc (α := α)).trans and_comm
-  finset_mem_Ico _ _ _ := (mem_Ioc (α := α)).trans 
+  finset_mem_Ico _ _ _ := (mem_Ioc (α := α)).trans and_comm
+  finset_mem_Ioc _ _ _ := (mem_Ico (α := α)).trans and_comm
+  finset_mem_Ioo _ _ _ := (mem_Ioo (α := α)).trans and_comm
+
+@[to_dual self]
 
 中文:
 实例 OrderDual.instLocallyFiniteOrder
@@ -1779,7 +1837,11 @@ instance OrderDual.instLocallyFiniteOrder
   finsetIoc a b := @Ico α _ _ (ofDual b) (ofDual a)
   finsetIoo a b := @Ioo α _ _ (ofDual b) (ofDual a)
   finset_mem_Icc _ _ _ := (mem_Icc (α := α)).trans and_comm
-  finset_mem_Ico _ _ _ := (mem_Ioc (α := α)).trans 
+  finset_mem_Ico _ _ _ := (mem_Ioc (α := α)).trans and_comm
+  finset_mem_Ioc _ _ _ := (mem_Ico (α := α)).trans and_comm
+  finset_mem_Ioo _ _ _ := (mem_Ioo (α := α)).trans and_comm
+
+@[to_dual self]
 
 Depends on / 依赖: ofDual
 -/
@@ -2555,7 +2617,25 @@ instance :
     match a, b with
     | ⊤, _ => ∅
     | (a : α), ⊤ => (Ici a).map Embedding.coeWithTop
-    | (a : α), (b : α) => (Ico a b).m
+    | (a : α), (b : α) => (Ico a b).map Embedding.coeWithTop
+  finsetIoc a b :=
+    match a, b with
+    | ⊤, _ => ∅
+    | (a : α), ⊤ => insertTop (Ioi a)
+    | (a : α), (b : α) => (Ioc a b).map Embedding.coeWithTop
+  finsetIoo a b :=
+    match a, b with
+    | ⊤, _ => ∅
+    | (a : α), ⊤ => (Ioi a).map Embedding.coeWithTop
+    | (a : α), (b : α) => (Ioo a b).map Embedding.coeWithTop
+  finset_mem_Icc a b x := by
+    cases a <;> cases b <;> cases x <;> simp
+  finset_mem_Ico a b x := by
+    cases a <;> cases b <;> cases x <;> simp
+  finset_mem_Ioc a b x := by
+    cases a <;> cases b <;> cases x <;> simp
+  finset_mem_Ioo a b x := by
+    cases a <;> cases b <;> cases x <;> simp
 
 中文:
 实例 :
@@ -2569,7 +2649,25 @@ instance :
     match a, b with
     | ⊤, _ => ∅
     | (a : α), ⊤ => (Ici a).map Embedding.coeWithTop
-    | (a : α), (b : α) => (Ico a b).m
+    | (a : α), (b : α) => (Ico a b).map Embedding.coeWithTop
+  finsetIoc a b :=
+    match a, b with
+    | ⊤, _ => ∅
+    | (a : α), ⊤ => insertTop (Ioi a)
+    | (a : α), (b : α) => (Ioc a b).map Embedding.coeWithTop
+  finsetIoo a b :=
+    match a, b with
+    | ⊤, _ => ∅
+    | (a : α), ⊤ => (Ioi a).map Embedding.coeWithTop
+    | (a : α), (b : α) => (Ioo a b).map Embedding.coeWithTop
+  finset_mem_Icc a b x := by
+    cases a <;> cases b <;> cases x <;> simp
+  finset_mem_Ico a b x := by
+    cases a <;> cases b <;> cases x <;> simp
+  finset_mem_Ioc a b x := by
+    cases a <;> cases b <;> cases x <;> simp
+  finset_mem_Ioo a b x := by
+    cases a <;> cases b <;> cases x <;> simp
 
 Depends on / 依赖: Embedding, Embedding.coeWithTop, coeWithTop, finsetIco, finsetIoc, finsetIoo, insertTop
 -/
@@ -2791,7 +2889,9 @@ abbreviation locallyFiniteOrder
   finsetIoc a b := (Ioc (f a) (f b)).map f.symm.toEquiv.toEmbedding
   finsetIoo a b := (Ioo (f a) (f b)).map f.symm.toEquiv.toEmbedding
   finset_mem_Icc := by simp
-  finset_mem_Ico :=
+  finset_mem_Ico := by simp
+  finset_mem_Ioc := by simp
+  finset_mem_Ioo := by simp
 
 中文:
 缩写 locallyFiniteOrder
@@ -2801,7 +2901,9 @@ abbreviation locallyFiniteOrder
   finsetIoc a b := (Ioc (f a) (f b)).map f.symm.toEquiv.toEmbedding
   finsetIoo a b := (Ioo (f a) (f b)).map f.symm.toEquiv.toEmbedding
   finset_mem_Icc := by simp
-  finset_mem_Ico :=
+  finset_mem_Ico := by simp
+  finset_mem_Ioc := by simp
+  finset_mem_Ioo := by simp
 
 Depends on / 依赖: f.symm.toEquiv.toEmbedding, toEmbedding, toEquiv
 -/
@@ -2864,7 +2966,12 @@ instance Subtype.instLocallyFiniteOrder
   finsetIoo a b := (Ioo (a : α) b).subtype p
   finset_mem_Icc a b x := by simp_rw [Finset.mem_subtype, mem_Icc, Subtype.coe_le_coe]
   finset_mem_Ico a b x := by
-    simp_rw [Finset.mem
+    simp_rw [Finset.mem_subtype, mem_Ico, Subtype.coe_le_coe, Subtype.coe_lt_coe]
+  finset_mem_Ioc a b x := by
+    simp_rw [Finset.mem_subtype, mem_Ioc, Subtype.coe_le_coe, Subtype.coe_lt_coe]
+  finset_mem_Ioo a b x := by simp_rw [Finset.mem_subtype, mem_Ioo, Subtype.coe_lt_coe]
+
+@[to_dual]
 
 中文:
 实例 子类型.instLocallyFiniteOrder
@@ -2875,7 +2982,12 @@ instance Subtype.instLocallyFiniteOrder
   finsetIoo a b := (Ioo (a : α) b).subtype p
   finset_mem_Icc a b x := by simp_rw [Finset.mem_subtype, mem_Icc, Subtype.coe_le_coe]
   finset_mem_Ico a b x := by
-    simp_rw [Finset.mem
+    simp_rw [Finset.mem_subtype, mem_Ico, Subtype.coe_le_coe, Subtype.coe_lt_coe]
+  finset_mem_Ioc a b x := by
+    simp_rw [Finset.mem_subtype, mem_Ioc, Subtype.coe_le_coe, Subtype.coe_lt_coe]
+  finset_mem_Ioo a b x := by simp_rw [Finset.mem_subtype, mem_Ioo, Subtype.coe_lt_coe]
+
+@[to_dual]
 
 Depends on / 依赖: subtype
 -/
@@ -3287,7 +3399,9 @@ theorem Set.finite_iff_bddBelow_bddAbove
   · simp only [Set.finite_empty, bddBelow_empty, bddAbove_empty, and_self]
   exact ⟨fun h => ⟨⟨h.toFinset.inf' ((Finite.toFinset_nonempty h).mpr hs) id,
     fun x hx => Finset.inf'_le id ((Finite.mem_toFinset h).mpr hx)⟩,
-    ⟨h.toFinset.sup' ((Finite
+    ⟨h.toFinset.sup' ((Finite.toFinset_nonempty h).mpr hs) id, fun x hx => Finset.le_sup' id
+    ((Finite.mem_toFinset h).mpr hx)⟩⟩,
+    fun ⟨h₀, h₁⟩ => BddBelow.finite_of_bddAbove h₀ h₁⟩
 
 中文:
 定理 集合.finite_iff_bddBelow_bddAbove
@@ -3297,7 +3411,9 @@ theorem Set.finite_iff_bddBelow_bddAbove
   · simp only [Set.finite_empty, bddBelow_empty, bddAbove_empty, and_self]
   exact ⟨fun h => ⟨⟨h.toFinset.inf' ((Finite.toFinset_nonempty h).mpr hs) id,
     fun x hx => Finset.inf'_le id ((Finite.mem_toFinset h).mpr hx)⟩,
-    ⟨h.toFinset.sup' ((Finite
+    ⟨h.toFinset.sup' ((Finite.toFinset_nonempty h).mpr hs) id, fun x hx => Finset.le_sup' id
+    ((Finite.mem_toFinset h).mpr hx)⟩⟩,
+    fun ⟨h₀, h₁⟩ => BddBelow.finite_of_bddAbove h₀ h₁⟩
 
 Depends on / 依赖: BddBelow, BddBelow.finite_of_bddAbove, Finite, Finite.mem_toFinset, Finite.toFinset_nonempty, Finset, Finset.inf, Finset.le_sup, Set.finite_empty, and_self, bddAbove_empty, bddBelow_empty, eq_empty_or_nonempty, finite_empty, finite_of_bddAbove, h.toFinset.inf, h.toFinset.sup, le_sup, mem_toFinset, s.eq_empty_or_nonempty
 -/
@@ -3523,7 +3639,14 @@ abbreviation LocallyFiniteOrder.ofOrderIsoClass
   body: (finsetIcc (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
   finsetIco x y := (finsetIco (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
   finsetIoc x y := (finsetIoc (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
-  finsetIoo x y := 
+  finsetIoo x y := (finsetIoo (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
+  finset_mem_Icc := by simp [finset_mem_Icc, EquivLike.inv_apply_eq]
+  finset_mem_Ico := by
+    simp [finset_mem_Ico, EquivLike.inv_apply_eq, map_lt_map_iff]
+  finset_mem_Ioc := by
+    simp [finset_mem_Ioc, EquivLike.inv_apply_eq, map_lt_map_iff]
+  finset_mem_Ioo := by
+    simp [finset_mem_Ioo, EquivLike.inv_apply_eq, map_lt_map_iff]
 
 中文:
 缩写 局部有限序.ofOrderIsoClass
@@ -3531,7 +3654,14 @@ abbreviation LocallyFiniteOrder.ofOrderIsoClass
   定义体: (finsetIcc (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
   finsetIco x y := (finsetIco (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
   finsetIoc x y := (finsetIoc (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
-  finsetIoo x y := 
+  finsetIoo x y := (finsetIoo (f x) (f y)).map ⟨EquivLike.inv f, (EquivLike.right_inv f).injective⟩
+  finset_mem_Icc := by simp [finset_mem_Icc, EquivLike.inv_apply_eq]
+  finset_mem_Ico := by
+    simp [finset_mem_Ico, EquivLike.inv_apply_eq, map_lt_map_iff]
+  finset_mem_Ioc := by
+    simp [finset_mem_Ioc, EquivLike.inv_apply_eq, map_lt_map_iff]
+  finset_mem_Ioo := by
+    simp [finset_mem_Ioo, EquivLike.inv_apply_eq, map_lt_map_iff]
 
 Depends on / 依赖: EquivLike, EquivLike.inv, EquivLike.right_inv, finsetIcc, injective, right_inv
 -/

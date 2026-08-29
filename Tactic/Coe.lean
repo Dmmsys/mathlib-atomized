@@ -38,7 +38,11 @@ definition elabPartiallyAppliedCoe
     throwError "({sym}) must have a function type, not{indentExpr expectedType}"
   if b.hasLooseBVars then
     tryPostpone
-    throwError "({sym}) must have a non-dependent function
+    throwError "({sym}) must have a non-dependent function type, not{indentExpr expectedType}"
+  if a.hasExprMVar then tryPostpone
+  let f ← withLocalDeclD `x a fun x => do
+    mkLambdaFVars #[x] (← mkCoe b x)
+  return f.etaExpanded?.getD f
 
 中文:
 定义 elabPartiallyAppliedCoe
@@ -50,7 +54,11 @@ definition elabPartiallyAppliedCoe
     throwError "({sym}) must have a function type, not{indentExpr expectedType}"
   if b.hasLooseBVars then
     tryPostpone
-    throwError "({sym}) must have a non-dependent function
+    throwError "({sym}) must have a non-dependent function type, not{indentExpr expectedType}"
+  if a.hasExprMVar then tryPostpone
+  let f ← withLocalDeclD `x a fun x => do
+    mkLambdaFVars #[x] (← mkCoe b x)
+  return f.etaExpanded?.getD f
 -/
 def elabPartiallyAppliedCoe (sym : String) (expectedType : Expr)
     (mkCoe : (expectedType x : Expr) -> TermElabM Expr) : TermElabM Expr := do

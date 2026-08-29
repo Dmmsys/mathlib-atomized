@@ -44,7 +44,7 @@ theorem isIndObject_limit_comp_yoneda_comp_colim
   apply IsIndObject.map (HasLimit.isoOfNatIso (colimitFlipIsoCompColim G)).hom
   apply IsIndObject.map (colimitLimitIso G).hom
   apply isIndObject_colimit
-  exact fun i => IsIndObject.map (limitObjIsoLimitCompEvalu
+  exact fun i => IsIndObject.map (limitObjIsoLimitCompEvaluation _ _).inv (hF i)
 
 中文:
 定理 isIndObject_limit_comp_yoneda_comp_colim
@@ -53,7 +53,7 @@ theorem isIndObject_limit_comp_yoneda_comp_colim
   apply IsIndObject.map (HasLimit.isoOfNatIso (colimitFlipIsoCompColim G)).hom
   apply IsIndObject.map (colimitLimitIso G).hom
   apply isIndObject_colimit
-  exact fun i => IsIndObject.map (limitObjIsoLimitCompEvalu
+  exact fun i => IsIndObject.map (limitObjIsoLimitCompEvaluation _ _).inv (hF i)
 
 Depends on / 依赖: Functor, Functor.whiskeringRight, HasLimit, HasLimit.isoOfNatIso, IsIndObject, IsIndObject.map, colimitFlipIsoCompColim, colimitLimitIso, isIndObject_colimit, isoOfNatIso, limitObjIsoLimitCompEvaluation, whiskeringRight, yoneda
 -/
@@ -80,7 +80,10 @@ instance isClosedUnderLimitsOfShape_isIndObject_walkingParallelPair
       (h WalkingParallelPair.one) (F.map WalkingParallelPairHom.left)
       (F.map WalkingParallelPairHom.right)
     exact IsIndObject.map
-      (HasLimit.isoOfNatIso (P.parallelPairIsoPa
+      (HasLimit.isoOfNatIso (P.parallelPairIsoParallelPairCompYoneda.symm ≪≫
+        (diagramIsoParallelPair _).symm)).hom
+      (isIndObject_limit_comp_yoneda_comp_colim (parallelPair P.φ P.ψ)
+        (fun i => isIndObject_limit_comp_yoneda _)))
 
 中文:
 实例 isClosedUnderLimitsOfShape_isIndObject_walkingParallelPair
@@ -91,7 +94,10 @@ instance isClosedUnderLimitsOfShape_isIndObject_walkingParallelPair
       (h WalkingParallelPair.one) (F.map WalkingParallelPairHom.left)
       (F.map WalkingParallelPairHom.right)
     exact IsIndObject.map
-      (HasLimit.isoOfNatIso (P.parallelPairIsoPa
+      (HasLimit.isoOfNatIso (P.parallelPairIsoParallelPairCompYoneda.symm ≪≫
+        (diagramIsoParallelPair _).symm)).hom
+      (isIndObject_limit_comp_yoneda_comp_colim (parallelPair P.φ P.ψ)
+        (fun i => isIndObject_limit_comp_yoneda _)))
 
 Depends on / 依赖: WalkingParallelPair
 -/

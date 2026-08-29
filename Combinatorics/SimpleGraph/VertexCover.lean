@@ -510,7 +510,9 @@ theorem vertexCoverNum_le_card_sub_one
   refine ENat.forall_natCast_le_iff_le.mp fun n hn => ?_
   simp only [vertexCoverNum, le_iInf_iff] at hn
   have := hn (Set.univ \ {x}) (by grind [IsVertexCover, Adj.ne'])
-  simpa [Set.encard_sdiff
+  simpa [Set.encard_sdiff_singleton_of_mem (Set.mem_univ _)] using this
+
+@[simp]
 
 中文:
 定理 vertexCoverNum_le_card_sub_one
@@ -521,7 +523,9 @@ theorem vertexCoverNum_le_card_sub_one
   refine ENat.forall_natCast_le_iff_le.mp fun n hn => ?_
   simp only [vertexCoverNum, le_iInf_iff] at hn
   have := hn (Set.univ \ {x}) (by grind [IsVertexCover, Adj.ne'])
-  simpa [Set.encard_sdiff
+  simpa [Set.encard_sdiff_singleton_of_mem (Set.mem_univ _)] using this
+
+@[simp]
 
 Depends on / 依赖: Adj.ne, ENat.forall_natCast_le_iff_le.mp, IsVertexCover, Set.encard_sdiff_singleton_of_mem, Set.mem_univ, Set.univ, encard_sdiff_singleton_of_mem, forall_natCast_le_iff_le, le_iInf_iff, mem_univ, nontriviality, not_subsingleton, not_subsingleton_iff_nontrivial, not_subsingleton_iff_nontrivial.mp, to_nonempty, vertexCoverNum
 -/
@@ -598,7 +602,9 @@ theorem vertexCoverNum_le_encard_edgeSet
   simp only [vertexCoverNum, le_iInf_iff] at hn
   have := hn ((·.out.1) '' G.edgeSet)
     (fun v w _ => by grind [Sym2.out_fst_mem s(v, w), mem_edgeSet])
-  grind [
+  grind [Set.encard_image_le]
+
+@[simp]
 
 中文:
 定理 vertexCoverNum_le_encard_edgeSet
@@ -610,7 +616,9 @@ theorem vertexCoverNum_le_encard_edgeSet
   simp only [vertexCoverNum, le_iInf_iff] at hn
   have := hn ((·.out.1) '' G.edgeSet)
     (fun v w _ => by grind [Sym2.out_fst_mem s(v, w), mem_edgeSet])
-  grind [
+  grind [Set.encard_image_le]
+
+@[simp]
 
 Depends on / 依赖: ENat.forall_natCast_le_iff_le.mp, G.edgeSet, Set.encard_image_le, SimpleGraph, SimpleGraph.edgeSet_eq_empty.mp, Sym2.out_fst_mem, edgeSet, edgeSet_eq_empty, encard_image_le, forall_natCast_le_iff_le, le_iInf_iff, mem_edgeSet, out_fst_mem, vertexCoverNum
 -/
@@ -663,7 +671,17 @@ theorem vertexCoverNum_top
   have : n - 1 <= ENat.card V := by
     grw [tsub_le_iff_right, hn]
     simp [add_assoc, one_add_one_eq_two]
-  ob
+  obtain ⟨t, ht₁, ht₂⟩ := exists_of_le_vertexCoverNum (n - 1) (ENat.le_sub_one_of_lt hh) this
+  have : 1 < (Set.univ \ t).encard := by
+.mp ?_ refine ENat.add_one_le_iff (by simp)
+    rw [Set.encard_sdiff (by simp) (Set.finite_of_encard_eq_coe ht₁)]; rw [Set.encard_univ]
+    refine ENat.le_sub_of_add_le_left (by simp [ht₁]) ?_
+    refine add_le_of_le_tsub_right_of_le (Order.add_one_le_of_lt ENat.one_lt_card) ?_
+    grw [ht₁, ENat.natCast_sub, hn]
+    simp [add_assoc, one_add_one_eq_two, le_tsub_add]
+obtain ⟨a, b, _, _, hne⟩ := Set.one_lt_encard_iff.mp this
+  have := @ht₂ a b (by simp [hne])
+  grind
 
 中文:
 定理 vertexCoverNum_top
@@ -676,7 +694,17 @@ theorem vertexCoverNum_top
   have : n - 1 <= ENat.card V := by
     grw [tsub_le_iff_right, hn]
     simp [add_assoc, one_add_one_eq_two]
-  ob
+  obtain ⟨t, ht₁, ht₂⟩ := exists_of_le_vertexCoverNum (n - 1) (ENat.le_sub_one_of_lt hh) this
+  have : 1 < (Set.univ \ t).encard := by
+.mp ?_ refine ENat.add_one_le_iff (by simp)
+    rw [Set.encard_sdiff (by simp) (Set.finite_of_encard_eq_coe ht₁)]; rw [Set.encard_univ]
+    refine ENat.le_sub_of_add_le_left (by simp [ht₁]) ?_
+    refine add_le_of_le_tsub_right_of_le (Order.add_one_le_of_lt ENat.one_lt_card) ?_
+    grw [ht₁, ENat.natCast_sub, hn]
+    simp [add_assoc, one_add_one_eq_two, le_tsub_add]
+obtain ⟨a, b, _, _, hne⟩ := Set.one_lt_encard_iff.mp this
+  have := @ht₂ a b (by simp [hne])
+  grind
 
 Depends on / 依赖: ENat.add_one_le_iff, ENat.card, ENat.eq_of_forall_natCast_le_iff, ENat.le_sub_one_of_lt, Set.encard_sdiff, Set.finite_of_e, Set.univ, add_assoc, add_one_le_iff, encard, encard_sdiff, eq_of_forall_natCast_le_iff, exists_of_le_vertexCoverNum, finite_of_e, le_sub_one_of_lt, nontriviality, one_add_one_eq_two, tsub_eq_zero_of_le, tsub_le_iff_right, vertexCoverNum_le_card_sub_one
 -/
@@ -712,7 +740,11 @@ theorem IsContained.vertexCoverNum_le_vertexCoverNum
 have := H.isIndepSet_iff_isAntichain_adj.mp isIndepSet_compl_iff_isVertexCover.mpr hs₂
   have : IsAntichain G.Adj (f ⁻¹' sᶜ) := this.preimage hf (fun _ _ hadj => f.map_rel' hadj)
   have : G.IsVertexCover (f ⁻¹' s) :=
-isIndepSet
+isIndepSet_compl_iff_isVertexCover.mp G.isIndepSet_iff_isAntichain_adj.mpr this
+  grw [this.vertexCoverNum_le, ← hs₁]
+exact Function.Embedding.encard_le .subtypeMap (by simp) Function.Embedding.mk f hf
+
+@[deprecated IsContained.vertexCoverNum_le_vertexCoverNum (since := "2026-01-07")]
 
 中文:
 定理 IsContained.vertexCoverNum_le_vertexCoverNum
@@ -723,7 +755,11 @@ isIndepSet
 have := H.isIndepSet_iff_isAntichain_adj.mp isIndepSet_compl_iff_isVertexCover.mpr hs₂
   have : IsAntichain G.Adj (f ⁻¹' sᶜ) := this.preimage hf (fun _ _ hadj => f.map_rel' hadj)
   have : G.IsVertexCover (f ⁻¹' s) :=
-isIndepSet
+isIndepSet_compl_iff_isVertexCover.mp G.isIndepSet_iff_isAntichain_adj.mpr this
+  grw [this.vertexCoverNum_le, ← hs₁]
+exact Function.Embedding.encard_le .subtypeMap (by simp) Function.Embedding.mk f hf
+
+@[deprecated IsContained.vertexCoverNum_le_vertexCoverNum (since := "2026-01-07")]
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.encard_le, Function.Embedding.mk, G.Adj, G.IsVertexCover, G.isIndepSet_iff_isAntichain_adj.mpr, H.isIndepSet_iff_isAntichain_adj.mp, IsAntichain, IsVertexCover, encard_le, f.map_rel, isIndepSet_compl_iff_isVertexCover, isIndepSet_compl_iff_isVertexCover.mp, isIndepSet_compl_iff_isVertexCover.mpr, isIndepSet_iff_isAntichain_adj, map_rel, preimage, subtypeMap, this.preimage
 -/

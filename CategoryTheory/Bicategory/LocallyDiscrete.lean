@@ -262,7 +262,7 @@ instance locallyDiscreteBicategory
   whiskerRight η _ := eqToHom (congr_arg₂ (· ≫ ·) (LocallyDiscrete.eq_of_hom η) rfl)
 associator f g h := eqToIso by apply Discrete.ext; simp
 leftUnitor f := eqToIso by apply Discrete.ext; simp
-rightUnitor f := eqToIso by apply Discrete.e
+rightUnitor f := eqToIso by apply Discrete.ext; simp
 
 中文:
 实例 locallyDiscreteBicategory
@@ -271,7 +271,7 @@ rightUnitor f := eqToIso by apply Discrete.e
   whiskerRight η _ := eqToHom (congr_arg₂ (· ≫ ·) (LocallyDiscrete.eq_of_hom η) rfl)
 associator f g h := eqToIso by apply Discrete.ext; simp
 leftUnitor f := eqToIso by apply Discrete.ext; simp
-rightUnitor f := eqToIso by apply Discrete.e
+rightUnitor f := eqToIso by apply Discrete.ext; simp
 
 Depends on / 依赖: LocallyDiscrete, LocallyDiscrete.eq_of_hom, eqToHom, eq_of_hom
 -/

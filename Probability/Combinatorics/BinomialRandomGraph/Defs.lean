@@ -223,7 +223,7 @@ lemma binomialRandom_singleton
     edgeSet_subset_compl_diagSet, setBernoulli_singleton, Set.toFinite]
   rw [Set.ncard_sdiff (by simp)]
   congr!
-  rw [Nat.card_eq_fintype_card]; rw [← Sym2.card_diag
+  rw [Nat.card_eq_fintype_card]; rw [← Sym2.card_diagSet_compl]; rw [Fintype.card_eq_nat_card]; rw [← Nat.card_coe_set_eq]
 
 中文:
 引理 binomialRandom_singleton
@@ -235,7 +235,7 @@ lemma binomialRandom_singleton
     edgeSet_subset_compl_diagSet, setBernoulli_singleton, Set.toFinite]
   rw [Set.ncard_sdiff (by simp)]
   congr!
-  rw [Nat.card_eq_fintype_card]; rw [← Sym2.card_diag
+  rw [Nat.card_eq_fintype_card]; rw [← Sym2.card_diagSet_compl]; rw [Fintype.card_eq_nat_card]; rw [← Nat.card_coe_set_eq]
 -/
 @[simp] lemma binomialRandom_singleton [Finite V] (G : SimpleGraph V) :
     G(V, p) {G} = toNNReal p ^ G.edgeSet.ncard *

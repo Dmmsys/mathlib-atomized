@@ -142,7 +142,11 @@ theorem GradedAlgebra.liftι_eq
   induction hx using Submodule.pow_induction_on_left' with
   | algebraMap => simp_rw [AlgHom.commutes, DirectSum.algebraMap_apply]; rfl
   | add _ _ _ _ _ ihx ihy => simp_rw [map_add, ihx, ihy, ← map_add]; rfl
-  | mem_mul _ h
+  | mem_mul _ hm _ _ _ ih =>
+      obtain ⟨_, rfl⟩ := hm
+      simp_rw [map_mul, ih, GradedAlgebra.liftι, lift_ι_apply, GradedAlgebra.ι_apply R M,
+        DirectSum.of_mul_of]
+      exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext (add_comm _ _) rfl)
 
 中文:
 定理 分次代数.liftι_eq
@@ -153,7 +157,11 @@ theorem GradedAlgebra.liftι_eq
   induction hx using Submodule.pow_induction_on_left' with
   | algebraMap => simp_rw [AlgHom.commutes, DirectSum.algebraMap_apply]; rfl
   | add _ _ _ _ _ ihx ihy => simp_rw [map_add, ihx, ihy, ← map_add]; rfl
-  | mem_mul _ h
+  | mem_mul _ hm _ _ _ ih =>
+      obtain ⟨_, rfl⟩ := hm
+      simp_rw [map_mul, ih, GradedAlgebra.liftι, lift_ι_apply, GradedAlgebra.ι_apply R M,
+        DirectSum.of_mul_of]
+      exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext (add_comm _ _) rfl)
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, DirectSum, DirectSum.algebraMap_apply, DirectSum.lof_eq_of, DirectSum.of_eq_of_gradedMonoid_eq, DirectSum.of_mul_of, GradedAlgebra, GradedAlgebra.lift, Sigma.subtype_ext, Submodule, Submodule.pow_induction_on_left, Subtype, Subtype.coe_mk, add_comm, algebraMap, algebraMap_apply, coe_mk, commutes, lof_eq_of
 -/
@@ -182,7 +190,10 @@ instance gradedAlgebra
     -- the proof from here onward is identical to the `TensorAlgebra` case
     (by
       ext m
-      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgH
+      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
+        AlgHom.id_apply, GradedAlgebra.liftι]
+      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
+    (by apply GradedAlgebra.liftι_eq R M)
 
 中文:
 实例 gradedAlgebra
@@ -193,7 +204,10 @@ instance gradedAlgebra
     -- the proof from here onward is identical to the `TensorAlgebra` case
     (by
       ext m
-      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgH
+      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
+        AlgHom.id_apply, GradedAlgebra.liftι]
+      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply R M]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
+    (by apply GradedAlgebra.liftι_eq R M)
 
 Depends on / 依赖: GradedAlgebra, GradedAlgebra.lift, GradedAlgebra.ofAlgHom, elaborate, faster, necessary, ofAlgHom
 -/
@@ -223,7 +237,10 @@ lemma ιMulti_span
   | homogeneous hm =>
     let ⟨m, hm⟩ := hm
     apply Set.mem_of_mem_of_subset hm
-   
+    rw [← ιMulti_span_fixedDegree]
+    refine Submodule.span_mono fun _ hx => ?_
+    obtain ⟨y, rfl⟩ := hx
+    exact ⟨⟨_, y⟩, rfl⟩
 
 中文:
 引理 ιMulti_span
@@ -236,7 +253,10 @@ lemma ιMulti_span
   | homogeneous hm =>
     let ⟨m, hm⟩ := hm
     apply Set.mem_of_mem_of_subset hm
-   
+    rw [← ιMulti_span_fixedDegree]
+    refine Submodule.span_mono fun _ hx => ?_
+    obtain ⟨y, rfl⟩ := hx
+    exact ⟨⟨_, y⟩, rfl⟩
 
 Depends on / 依赖: Decomposition, DirectSum, DirectSum.Decomposition.inductionOn, Set.mem_of_mem_of_subset, Submodule, Submodule.add_mem, Submodule.eq_top_iff, Submodule.span_mono, Submodule.zero_mem, add_mem, eq_top_iff, homogeneous, inductionOn, mem_of_mem_of_subset, span_mono, zero_mem
 -/

@@ -95,7 +95,50 @@ theorem convexCombination_assoc
   obtain ⟨b⟩ : Nonempty P := inferInstance
   -- Express both sides using weightedVSubOfPoint with base point b
   have hL := Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
-    (f.map convexCombination).weights.support (f.map convexCombination).weights i
+    (f.map convexCombination).weights.support (f.map convexCombination).weights id
+    (f.map convexCombination).total b
+  have hR := Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
+    f.join.weights.support f.join.weights id f.join.total b
+  simp only [convexCombination, hL, hR]
+  congr 1
+  -- Now show the weighted vector sums are equal
+  simp only [Finset.weightedVSubOfPoint_apply, StdSimplex.map, StdSimplex.join, id]
+  -- Rewrite LHS using sum_mapDomain_index
+  change (Finsupp.mapDomain convexCombination f.weights).sum (fun x w => w • (x -ᵥ b)) = _
+  rw [Finsupp.sum_mapDomain_index (fun _ => by simp) (fun _ _ _ => by simp [add_smul])]
+  simp only [Finsupp.sum, convexCombination]
+  -- Expand convexCombination d using base point b
+  conv_lhs =>
+    congr; · skip
+    ext d
+    rw [d.weights.support.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
+        _ _ d.total b]; rw [vadd_vsub]; rw [Finset.weightedVSubOfPoint_apply]
+    simp only [id]
+  simp_rw [Finset.smul_sum, smul_smul]
+  -- Expand RHS using sum_finsetSum_index
+  let h : P -> R -> V := fun x w => w • (x -ᵥ b)
+  have h_rhs : (∑ d in f.weights.support, f.weights d • d.weights).sum h
+      = ∑ d in f.weights.support, (f.weights d • d.weights).sum h :=
+    (Finsupp.sum_finsetSum_index (h := h) (fun _ => zero_smul _ _)
+      (fun _ _ _ => add_smul _ _ _)).symm
+  simp only [Finsupp.sum] at h_rhs ⊢
+  rw [h_rhs]
+  -- Both sides are now double sums; show the inner sums match
+  congr 1
+  ext d
+  simp only [Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul]
+  -- Show that d.support = (f.weights d • d.weights).support
+  by_cases hd : f.weights d = 0
+  · simp [hd]
+  · refine Finset.sum_congr ?_ (fun _ _ => rfl)
+    ext p
+    simp only [Finsupp.mem_support_iff, ne_eq]
+    constructor
+    · intro hp
+      exact (mul_pos ((f.nonneg d).lt_of_ne' hd) ((d.nonneg p).lt_of_ne' hp)).ne'
+    · intro hp hp'
+      simp only [Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul, hp', mul_zero,
+        not_true_eq_false] at hp
 
 中文:
 定理 convexCombination_assoc
@@ -105,7 +148,50 @@ theorem convexCombination_assoc
   obtain ⟨b⟩ : Nonempty P := inferInstance
   -- Express both sides using weightedVSubOfPoint with base point b
   have hL := Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
-    (f.map convexCombination).weights.support (f.map convexCombination).weights i
+    (f.map convexCombination).weights.support (f.map convexCombination).weights id
+    (f.map convexCombination).total b
+  have hR := Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
+    f.join.weights.support f.join.weights id f.join.total b
+  simp only [convexCombination, hL, hR]
+  congr 1
+  -- Now show the weighted vector sums are equal
+  simp only [Finset.weightedVSubOfPoint_apply, StdSimplex.map, StdSimplex.join, id]
+  -- Rewrite LHS using sum_mapDomain_index
+  change (Finsupp.mapDomain convexCombination f.weights).sum (fun x w => w • (x -ᵥ b)) = _
+  rw [Finsupp.sum_mapDomain_index (fun _ => by simp) (fun _ _ _ => by simp [add_smul])]
+  simp only [Finsupp.sum, convexCombination]
+  -- Expand convexCombination d using base point b
+  conv_lhs =>
+    congr; · skip
+    ext d
+    rw [d.weights.support.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
+        _ _ d.total b]; rw [vadd_vsub]; rw [Finset.weightedVSubOfPoint_apply]
+    simp only [id]
+  simp_rw [Finset.smul_sum, smul_smul]
+  -- Expand RHS using sum_finsetSum_index
+  let h : P -> R -> V := fun x w => w • (x -ᵥ b)
+  have h_rhs : (∑ d in f.weights.support, f.weights d • d.weights).sum h
+      = ∑ d in f.weights.support, (f.weights d • d.weights).sum h :=
+    (Finsupp.sum_finsetSum_index (h := h) (fun _ => zero_smul _ _)
+      (fun _ _ _ => add_smul _ _ _)).symm
+  simp only [Finsupp.sum] at h_rhs ⊢
+  rw [h_rhs]
+  -- Both sides are now double sums; show the inner sums match
+  congr 1
+  ext d
+  simp only [Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul]
+  -- Show that d.support = (f.weights d • d.weights).support
+  by_cases hd : f.weights d = 0
+  · simp [hd]
+  · refine Finset.sum_congr ?_ (fun _ _ => rfl)
+    ext p
+    simp only [Finsupp.mem_support_iff, ne_eq]
+    constructor
+    · intro hp
+      exact (mul_pos ((f.nonneg d).lt_of_ne' hd) ((d.nonneg p).lt_of_ne' hp)).ne'
+    · intro hp hp'
+      simp only [Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul, hp', mul_zero,
+        not_true_eq_false] at hp
 -/
 theorem convexCombination_assoc (f : StdSimplex R (StdSimplex R P)) :
     convexCombination (f.map convexCombination) = convexCombination f.join := by
@@ -228,7 +314,10 @@ theorem iConvexComb_eq_affineCombination
   simp only [iConvexComb, sConvexComb_eq_affineCombination]
   rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
     (b := p) (h := (s.map f).total)]; rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
-    (b := p)
+    (b := p) (h := s.total)]
+  suffices ((s.weights.mapDomain f).sum fun x r => r • (x -ᵥ p)) =
+    s.weights.sum fun x r => r • (f x -ᵥ p) by simpa
+  simp [Finsupp.sum_mapDomain_index, add_smul]
 
 中文:
 定理 iConvexComb_eq_affineCombination
@@ -238,7 +327,10 @@ theorem iConvexComb_eq_affineCombination
   simp only [iConvexComb, sConvexComb_eq_affineCombination]
   rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
     (b := p) (h := (s.map f).total)]; rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one
-    (b := p)
+    (b := p) (h := s.total)]
+  suffices ((s.weights.mapDomain f).sum fun x r => r • (x -ᵥ p)) =
+    s.weights.sum fun x r => r • (f x -ᵥ p) by simpa
+  simp [Finsupp.sum_mapDomain_index, add_smul]
 
 Depends on / 依赖: Finset, Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, Finsupp, Finsupp.sum_mapDomain_index, Nonempty, Nonempty.some, add_smul, affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, iConvexComb, mapDomain, s.map, s.total, s.weights.mapDomain, s.weights.sum, sConvexComb_eq_affineCombination, sum_mapDomain_index, weights
 -/
@@ -267,7 +359,22 @@ theorem convexCombPair_eq_lineMap
   -- Use weighted subtraction with base point y
   rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ id (b := y)]
   swap
-  · -- Prove sum of 
+  · -- Prove sum of weights equals 1
+    trans (Finsupp.single x s + Finsupp.single y t).sum fun _ r => r
+    · apply Finset.sum_congr rfl
+      intro i _
+      simp only [Finsupp.coe_add, Pi.add_apply]
+    · rw [Finsupp.sum_add_index (by simp) (by simp), Finsupp.sum_single_index (by simp),
+        Finsupp.sum_single_index (by simp), h]
+  -- Now simplify the weighted subtraction
+  congr 1
+  rw [Finset.weightedVSubOfPoint_apply]
+  simp only [id]
+  -- Convert to Finsupp.sum
+  change (Finsupp.single x s + Finsupp.single y t).sum (fun p w => w • (p -ᵥ y)) = _
+  rw [Finsupp.sum_add_index (by simp) (fun _ a b => by simp [add_smul]),
+    Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp)]
+  simp [vsub_self]
 
 中文:
 定理 convexCombPair_eq_lineMap
@@ -279,7 +386,22 @@ theorem convexCombPair_eq_lineMap
   -- Use weighted subtraction with base point y
   rw [Finset.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ id (b := y)]
   swap
-  · -- Prove sum of 
+  · -- Prove sum of weights equals 1
+    trans (Finsupp.single x s + Finsupp.single y t).sum fun _ r => r
+    · apply Finset.sum_congr rfl
+      intro i _
+      simp only [Finsupp.coe_add, Pi.add_apply]
+    · rw [Finsupp.sum_add_index (by simp) (by simp), Finsupp.sum_single_index (by simp),
+        Finsupp.sum_single_index (by simp), h]
+  -- Now simplify the weighted subtraction
+  congr 1
+  rw [Finset.weightedVSubOfPoint_apply]
+  simp only [id]
+  -- Convert to Finsupp.sum
+  change (Finsupp.single x s + Finsupp.single y t).sum (fun p w => w • (p -ᵥ y)) = _
+  rw [Finsupp.sum_add_index (by simp) (fun _ a b => by simp [add_smul]),
+    Finsupp.sum_single_index (by simp), Finsupp.sum_single_index (by simp)]
+  simp [vsub_self]
 
 Depends on / 依赖: AddTorsor, AddTorsor.sConvexComb_eq_affineCombination, AffineMap, AffineMap.lineMap_apply, StdSimplex, StdSimplex.duple, classical, convexCombPair, lineMap_apply, sConvexComb_eq_affineCombination
 -/

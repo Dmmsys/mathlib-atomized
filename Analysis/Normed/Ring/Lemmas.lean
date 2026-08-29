@@ -84,7 +84,7 @@ norm_mul_le x y := NNReal.coe_mono calc
       (univ.sup fun i => ‖x i * y i‖₊) <= univ.sup ((‖x ·‖₊) * (‖y ·‖₊)) :=
         sup_mono_fun fun _ _ => nnnorm_mul_le _ _
       _ <= (univ.sup (‖x ·‖₊)) * univ.sup (‖y ·‖₊) :=
-        sup_mul_le_mul_sup_of_nonne
+        sup_mul_le_mul_sup_of_nonneg (fun _ _ => zero_le) fun _ _ => zero_le }
 
 中文:
 实例 依赖函数类型.nonUnitalSeminormedRing
@@ -94,7 +94,7 @@ norm_mul_le x y := NNReal.coe_mono calc
       (univ.sup fun i => ‖x i * y i‖₊) <= univ.sup ((‖x ·‖₊) * (‖y ·‖₊)) :=
         sup_mono_fun fun _ _ => nnnorm_mul_le _ _
       _ <= (univ.sup (‖x ·‖₊)) * univ.sup (‖y ·‖₊) :=
-        sup_mul_le_mul_sup_of_nonne
+        sup_mul_le_mul_sup_of_nonneg (fun _ _ => zero_le) fun _ _ => zero_le }
 
 Depends on / 依赖: NNReal, NNReal.coe_mono, coe_mono, nnnorm_mul_le, nonUnitalRing, norm_mul_le, seminormedAddCommGroup, sup_mono_fun, sup_mul_le_mul_sup_of_nonneg, univ.sup, zero_le
 -/
@@ -496,7 +496,9 @@ lemma lipschitzWith_sub
     NNReal.isometry_coe.prodMap NNReal.isometry_coe
   convert!
     (((LipschitzWith.prod_fst.comp this.lipschitz).sub
-          (LipschitzWith.prod_snd.comp this.lipschit
+          (LipschitzWith.prod_snd.comp this.lipschitz)).max_const
+      0)
+  norm_num
 
 中文:
 引理 lipschitzWith_sub
@@ -507,7 +509,9 @@ lemma lipschitzWith_sub
     NNReal.isometry_coe.prodMap NNReal.isometry_coe
   convert!
     (((LipschitzWith.prod_fst.comp this.lipschitz).sub
-          (LipschitzWith.prod_snd.comp this.lipschit
+          (LipschitzWith.prod_snd.comp this.lipschitz)).max_const
+      0)
+  norm_num
 
 Depends on / 依赖: Isometry, LipschitzWith, LipschitzWith.prod_fst.comp, LipschitzWith.prod_snd.comp, NNReal, NNReal.isometry_coe, NNReal.isometry_coe.lipschitzWith_iff, NNReal.isometry_coe.prodMap, Prod.map, convert, isometry_coe, lipschitz, lipschitzWith_iff, max_const, prodMap, prod_fst, prod_snd, this.lipschitz
 -/

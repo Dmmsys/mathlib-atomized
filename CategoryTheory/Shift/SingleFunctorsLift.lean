@@ -116,7 +116,9 @@ definition lift
     ext X
     apply G.map_injective
     dsimp
-    simp only [lift.map_shiftIso_hom_app, map_comp, co
+    simp only [lift.map_shiftIso_hom_app, map_comp, commShiftIso_hom_naturality_assoc]
+    rw [F.shiftIso_add n m a a' a'' ha' ha'']
+    simp [commShiftIso_add, ← Functor.map_comp_assoc, -Functor.map_comp]
 
 中文:
 定义 lift
@@ -131,7 +133,9 @@ definition lift
     ext X
     apply G.map_injective
     dsimp
-    simp only [lift.map_shiftIso_hom_app, map_comp, co
+    simp only [lift.map_shiftIso_hom_app, map_comp, commShiftIso_hom_naturality_assoc]
+    rw [F.shiftIso_add n m a a' a'' ha' ha'']
+    simp [commShiftIso_add, ← Functor.map_comp_assoc, -Functor.map_comp]
 -/
 noncomputable def lift : SingleFunctors C D A where
   functor := Φ

@@ -1395,7 +1395,9 @@ theorem oangle_eq_pi_iff_sameRay_neg
     by_cases hx : x = 0; · simp [hx, Real.Angle.pi_ne_zero.symm] at h
     by_cases hy : y = 0; · simp [hy, Real.Angle.pi_ne_zero.symm] at h
     refine ⟨hx, hy, ?_⟩
-    rw [o.oangle_neg_right hx hy]; rw [h]; rw [Real.Angle.coe_pi_add_
+    rw [o.oangle_neg_right hx hy]; rw [h]; rw [Real.Angle.coe_pi_add_coe_pi]
+  · rintro ⟨hx, hy, h⟩
+    rwa [o.oangle_neg_right hx hy, ← Real.Angle.sub_coe_pi_eq_add_coe_pi, sub_eq_zero] at h
 
 中文:
 定理 oangle_eq_pi_iff_sameRay_neg
@@ -1407,7 +1409,9 @@ theorem oangle_eq_pi_iff_sameRay_neg
     by_cases hx : x = 0; · simp [hx, Real.Angle.pi_ne_zero.symm] at h
     by_cases hy : y = 0; · simp [hy, Real.Angle.pi_ne_zero.symm] at h
     refine ⟨hx, hy, ?_⟩
-    rw [o.oangle_neg_right hx hy]; rw [h]; rw [Real.Angle.coe_pi_add_
+    rw [o.oangle_neg_right hx hy]; rw [h]; rw [Real.Angle.coe_pi_add_coe_pi]
+  · rintro ⟨hx, hy, h⟩
+    rwa [o.oangle_neg_right hx hy, ← Real.Angle.sub_coe_pi_eq_add_coe_pi, sub_eq_zero] at h
 
 Depends on / 依赖: Real.Angle.coe_pi_add_coe_pi, Real.Angle.pi_ne_zero.symm, Real.Angle.sub_coe_pi_eq_add_coe_pi, coe_pi_add_coe_pi, o.oangle_eq_zero_iff_sameRay, o.oangle_neg_right, oangle_eq_zero_iff_sameRay, oangle_neg_right, pi_ne_zero, sub_coe_pi_eq_add_coe_pi, sub_eq_zero
 -/
@@ -1458,7 +1462,17 @@ theorem oangle_eq_zero_or_eq_pi_iff_right_eq_smul
       obtain ⟨r, -, rfl⟩ := h.exists_nonneg_left hx
       exact Or.inr ⟨r, rfl⟩
     · by_cases hx : x = 0; · simp [hx]
-
+      obtain ⟨r, -, hy⟩ := h.exists_nonneg_left hx
+      refine Or.inr ⟨-r, ?_⟩
+      simp [hy]
+  · rcases h with (rfl | ⟨r, rfl⟩); · simp
+    by_cases hx : x = 0; · simp [hx]
+    rcases lt_trichotomy r 0 with (hr | hr | hr)
+    · rw [← neg_smul]
+      exact Or.inr ⟨hx, smul_ne_zero hr.ne hx,
+        SameRay.sameRay_pos_smul_right x (Left.neg_pos_iff.2 hr)⟩
+    · simp [hr]
+    · exact Or.inl (SameRay.sameRay_pos_smul_right x hr)
 
 中文:
 定理 oangle_eq_zero_or_eq_pi_iff_right_eq_smul
@@ -1471,7 +1485,17 @@ theorem oangle_eq_zero_or_eq_pi_iff_right_eq_smul
       obtain ⟨r, -, rfl⟩ := h.exists_nonneg_left hx
       exact Or.inr ⟨r, rfl⟩
     · by_cases hx : x = 0; · simp [hx]
-
+      obtain ⟨r, -, hy⟩ := h.exists_nonneg_left hx
+      refine Or.inr ⟨-r, ?_⟩
+      simp [hy]
+  · rcases h with (rfl | ⟨r, rfl⟩); · simp
+    by_cases hx : x = 0; · simp [hx]
+    rcases lt_trichotomy r 0 with (hr | hr | hr)
+    · rw [← neg_smul]
+      exact Or.inr ⟨hx, smul_ne_zero hr.ne hx,
+        SameRay.sameRay_pos_smul_right x (Left.neg_pos_iff.2 hr)⟩
+    · simp [hr]
+    · exact Or.inl (SameRay.sameRay_pos_smul_right x hr)
 
 Depends on / 依赖: Or.in, Or.inr, exists_nonneg_left, h.exists_nonneg_left, lt_trichotomy, neg_smul, oangle_eq_pi_iff_sameRay_neg, oangle_eq_zero_iff_sameRay
 -/
@@ -1535,7 +1559,9 @@ theorem eq_iff_norm_eq_and_oangle_eq_zero
     obtain ⟨r, hr, rfl⟩ := h₂.exists_nonneg_right hy
     have : ‖y‖ != 0 := by simpa using hy
     obtain rfl : r = 1 := by
-      apply mul_right_canc
+      apply mul_right_cancel₀ this
+      simpa [norm_smul, abs_of_nonneg hr] using h₁
+    simp
 
 中文:
 定理 eq_iff_norm_eq_and_oangle_eq_zero
@@ -1552,7 +1578,9 @@ theorem eq_iff_norm_eq_and_oangle_eq_zero
     obtain ⟨r, hr, rfl⟩ := h₂.exists_nonneg_right hy
     have : ‖y‖ != 0 := by simpa using hy
     obtain rfl : r = 1 := by
-      apply mul_right_canc
+      apply mul_right_cancel₀ this
+      simpa [norm_smul, abs_of_nonneg hr] using h₁
+    simp
 
 Depends on / 依赖: abs_of_nonneg, eq_or_ne, exists_nonneg_right, norm_smul, oangle_eq_zero_iff_sameRay
 -/
@@ -1750,14 +1778,14 @@ theorem oangle_add_cyc3_neg_left
   given: {x y z : V} (hx : x != 0) (hy : y != 0) (hz : z != 0)
   proof: by
   rw [o.oangle_neg_left hx hy]; rw [o.oangle_neg_left hy hz]; rw [o.oangle_neg_left hz hx]; rw [show o.oangle x y + π + (o.oangle y z + π) + (o.oangle z x + π) =
-      o.oangle x y + o.oangle y z + o.oangle z x + (π + π + π : Real.Angle) by abel]; rw [o.oangle_add_cyc3 hx hy hz]; rw [Real.Angle.c
+      o.oangle x y + o.oangle y z + o.oangle z x + (π + π + π : Real.Angle) by abel]; rw [o.oangle_add_cyc3 hx hy hz]; rw [Real.Angle.coe_pi_add_coe_pi]; rw [zero_add]; rw [zero_add]
 
 中文:
 定理 oangle_add_cyc3_neg_left
   条件: {x y z : V} (hx : x != 0) (hy : y != 0) (hz : z != 0)
   证明: by
   rw [o.oangle_neg_left hx hy]; rw [o.oangle_neg_left hy hz]; rw [o.oangle_neg_left hz hx]; rw [show o.oangle x y + π + (o.oangle y z + π) + (o.oangle z x + π) =
-      o.oangle x y + o.oangle y z + o.oangle z x + (π + π + π : Real.Angle) by abel]; rw [o.oangle_add_cyc3 hx hy hz]; rw [Real.Angle.c
+      o.oangle x y + o.oangle y z + o.oangle z x + (π + π + π : Real.Angle) by abel]; rw [o.oangle_add_cyc3 hx hy hz]; rw [Real.Angle.coe_pi_add_coe_pi]; rw [zero_add]; rw [zero_add]
 
 Depends on / 依赖: Real.Angle, Real.Angle.coe_pi_add_coe_pi, coe_pi_add_coe_pi, o.oangle, o.oangle_add_cyc3, o.oangle_neg_left, oangle, oangle_add_cyc3, oangle_neg_left, zero_add
 -/
@@ -1823,7 +1851,9 @@ theorem oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq
     rintro rfl
     rw [norm_zero]; rw [norm_eq_zero] at h
     exact hn h
-  have hx : x != 0 := norm_ne_zero_iff.1 (h.symm ▸ norm_n
+  have hx : x != 0 := norm_ne_zero_iff.1 (h.symm ▸ norm_ne_zero_iff.2 hy)
+  convert! o.oangle_add_cyc3_neg_right (neg_ne_zero.2 hy) hx (sub_ne_zero_of_ne hn.symm) using 1
+  simp
 
 中文:
 定理 oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq
@@ -1836,7 +1866,9 @@ theorem oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq
     rintro rfl
     rw [norm_zero]; rw [norm_eq_zero] at h
     exact hn h
-  have hx : x != 0 := norm_ne_zero_iff.1 (h.symm ▸ norm_n
+  have hx : x != 0 := norm_ne_zero_iff.1 (h.symm ▸ norm_ne_zero_iff.2 hy)
+  convert! o.oangle_add_cyc3_neg_right (neg_ne_zero.2 hy) hx (sub_ne_zero_of_ne hn.symm) using 1
+  simp
 
 Depends on / 依赖: add_assoc, convert, eq_sub_iff_add_eq, h.symm, hn.symm, neg_ne_zero, norm_eq_zero, norm_ne_zero_iff, norm_zero, nth_rw, o.oangle_add_cyc3_neg_right, o.oangle_sub_eq_oangle_sub_rev_of_norm_eq, oangle_add_cyc3_neg_right, oangle_neg_neg, oangle_sub_eq_oangle_sub_rev_of_norm_eq, sub_ne_zero_of_ne, two_zsmul
 -/
@@ -2062,7 +2094,8 @@ theorem angle_eq_abs_oangle_toReal
   rcases o.oangle_eq_angle_or_eq_neg_angle hx hy with (h | h)
   · rw [h, eq_comm, Real.Angle.abs_toReal_coe_eq_self_iff]
     exact ⟨h0, hpi⟩
-  · rw [h, eq_comm, Real.Angle.abs_toReal_neg_coe_eq_s
+  · rw [h, eq_comm, Real.Angle.abs_toReal_neg_coe_eq_self_iff]
+    exact ⟨h0, hpi⟩
 
 中文:
 定理 angle_eq_abs_oangle_to实数
@@ -2073,7 +2106,8 @@ theorem angle_eq_abs_oangle_toReal
   rcases o.oangle_eq_angle_or_eq_neg_angle hx hy with (h | h)
   · rw [h, eq_comm, Real.Angle.abs_toReal_coe_eq_self_iff]
     exact ⟨h0, hpi⟩
-  · rw [h, eq_comm, Real.Angle.abs_toReal_neg_coe_eq_s
+  · rw [h, eq_comm, Real.Angle.abs_toReal_neg_coe_eq_self_iff]
+    exact ⟨h0, hpi⟩
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_le_pi, InnerProductGeometry.angle_nonneg, Real.Angle.abs_toReal_coe_eq_self_iff, Real.Angle.abs_toReal_neg_coe_eq_self_iff, abs_toReal_coe_eq_self_iff, abs_toReal_neg_coe_eq_self_iff, angle_le_pi, angle_nonneg, eq_comm, o.oangle_eq_angle_or_eq_neg_angle, oangle_eq_angle_or_eq_neg_angle
 -/
@@ -2135,7 +2169,29 @@ theorem oangle_eq_of_angle_eq_of_sign_eq
       · simpa using hs.symm
       · simpa using hs
       · simpa using hs
-    rcases hs' with ⟨hswx, h
+    rcases hs' with ⟨hswx, hsyz⟩
+    have h' : InnerProductGeometry.angle w x = π / 2 ∧ InnerProductGeometry.angle y z = π / 2 := by
+      rcases h0 with ((rfl | rfl) | rfl | rfl)
+      · simpa using h.symm
+      · simpa using h.symm
+      · simpa using h
+      · simpa using h
+    rcases h' with ⟨hwx, hyz⟩
+    have hpi : π / 2 != π := by
+      intro hpi
+      rw [div_eq_iff]; rw [eq_comm]; rw [← sub_eq_zero]; rw [mul_two]; rw [add_sub_cancel_right] at hpi
+      · exact Real.pi_pos.ne.symm hpi
+      · exact two_ne_zero
+    have h0wx : w = 0 ∨ x = 0 := by
+      have h0' := o.eq_zero_or_angle_eq_zero_or_pi_of_sign_oangle_eq_zero hswx
+      simpa [hwx, Real.pi_pos.ne.symm, hpi] using h0'
+    have h0yz : y = 0 ∨ z = 0 := by
+      have h0' := o.eq_zero_or_angle_eq_zero_or_pi_of_sign_oangle_eq_zero hsyz
+      simpa [hyz, Real.pi_pos.ne.symm, hpi] using h0'
+    rcases h0wx with (h0wx | h0wx) <;> rcases h0yz with (h0yz | h0yz) <;> simp [h0wx, h0yz]
+  · rw [Real.Angle.eq_iff_abs_toReal_eq_of_sign_eq hs]
+    rwa [o.angle_eq_abs_oangle_toReal h0.1.1 h0.1.2,
+      o.angle_eq_abs_oangle_toReal h0.2.1 h0.2.2] at h
 
 中文:
 定理 oangle_eq_of_angle_eq_of_sign_eq
@@ -2148,7 +2204,29 @@ theorem oangle_eq_of_angle_eq_of_sign_eq
       · simpa using hs.symm
       · simpa using hs
       · simpa using hs
-    rcases hs' with ⟨hswx, h
+    rcases hs' with ⟨hswx, hsyz⟩
+    have h' : InnerProductGeometry.angle w x = π / 2 ∧ InnerProductGeometry.angle y z = π / 2 := by
+      rcases h0 with ((rfl | rfl) | rfl | rfl)
+      · simpa using h.symm
+      · simpa using h.symm
+      · simpa using h
+      · simpa using h
+    rcases h' with ⟨hwx, hyz⟩
+    have hpi : π / 2 != π := by
+      intro hpi
+      rw [div_eq_iff]; rw [eq_comm]; rw [← sub_eq_zero]; rw [mul_two]; rw [add_sub_cancel_right] at hpi
+      · exact Real.pi_pos.ne.symm hpi
+      · exact two_ne_zero
+    have h0wx : w = 0 ∨ x = 0 := by
+      have h0' := o.eq_zero_or_angle_eq_zero_or_pi_of_sign_oangle_eq_zero hswx
+      simpa [hwx, Real.pi_pos.ne.symm, hpi] using h0'
+    have h0yz : y = 0 ∨ z = 0 := by
+      have h0' := o.eq_zero_or_angle_eq_zero_or_pi_of_sign_oangle_eq_zero hsyz
+      simpa [hyz, Real.pi_pos.ne.symm, hpi] using h0'
+    rcases h0wx with (h0wx | h0wx) <;> rcases h0yz with (h0yz | h0yz) <;> simp [h0wx, h0yz]
+  · rw [Real.Angle.eq_iff_abs_toReal_eq_of_sign_eq hs]
+    rwa [o.angle_eq_abs_oangle_toReal h0.1.1 h0.1.2,
+      o.angle_eq_abs_oangle_toReal h0.2.1 h0.2.2] at h
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle, h.symm, hs.symm, o.oangle, oangle
 -/
@@ -2287,7 +2365,8 @@ theorem oangle_eq_angle_of_sign_eq_one
   refine (o.oangle_eq_angle_or_eq_neg_angle hx hy).resolve_right ?_
   intro hxy
   rw [hxy]; rw [Real.Angle.sign_neg]; rw [neg_eq_iff_eq_neg]; rw [← SignType.neg_iff]; rw [← not_le] at h
-  exact h (Real.Angle.sign_coe_
+  exact h (Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi (InnerProductGeometry.angle_nonneg _ _)
+    (InnerProductGeometry.angle_le_pi _ _))
 
 中文:
 定理 oangle_eq_angle_of_sign_eq_one
@@ -2298,7 +2377,8 @@ theorem oangle_eq_angle_of_sign_eq_one
   refine (o.oangle_eq_angle_or_eq_neg_angle hx hy).resolve_right ?_
   intro hxy
   rw [hxy]; rw [Real.Angle.sign_neg]; rw [neg_eq_iff_eq_neg]; rw [← SignType.neg_iff]; rw [← not_le] at h
-  exact h (Real.Angle.sign_coe_
+  exact h (Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi (InnerProductGeometry.angle_nonneg _ _)
+    (InnerProductGeometry.angle_le_pi _ _))
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_le_pi, InnerProductGeometry.angle_nonneg, Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi, Real.Angle.sign_neg, SignType, SignType.neg_iff, angle_le_pi, angle_nonneg, neg_eq_iff_eq_neg, neg_iff, not_le, o.oangle_eq_angle_or_eq_neg_angle, oangle_eq_angle_or_eq_neg_angle, resolve_right, sign_coe_nonneg_of_nonneg_of_le_pi, sign_neg
 -/
@@ -2324,7 +2404,8 @@ theorem oangle_eq_neg_angle_of_sign_eq_neg_one
   refine (o.oangle_eq_angle_or_eq_neg_angle hx hy).resolve_left ?_
   intro hxy
   rw [hxy]; rw [← SignType.neg_iff]; rw [← not_le] at h
-  exact h (Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi (InnerProductGeometry.ang
+  exact h (Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi (InnerProductGeometry.angle_nonneg _ _)
+    (InnerProductGeometry.angle_le_pi _ _))
 
 中文:
 定理 oangle_eq_neg_angle_of_sign_eq_neg_one
@@ -2335,7 +2416,8 @@ theorem oangle_eq_neg_angle_of_sign_eq_neg_one
   refine (o.oangle_eq_angle_or_eq_neg_angle hx hy).resolve_left ?_
   intro hxy
   rw [hxy]; rw [← SignType.neg_iff]; rw [← not_le] at h
-  exact h (Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi (InnerProductGeometry.ang
+  exact h (Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi (InnerProductGeometry.angle_nonneg _ _)
+    (InnerProductGeometry.angle_le_pi _ _))
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_le_pi, InnerProductGeometry.angle_nonneg, Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi, SignType, SignType.neg_iff, angle_le_pi, angle_nonneg, neg_iff, not_le, o.oangle_eq_angle_or_eq_neg_angle, oangle_eq_angle_or_eq_neg_angle, resolve_left, sign_coe_nonneg_of_nonneg_of_le_pi
 -/
@@ -2397,7 +2479,10 @@ theorem oangle_eq_pi_iff_angle_eq_pi
       Real.pi_ne_zero]
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rw [o.angle_eq_abs_oangle_toReal hx hy, h]
-    simp
+    simp [Real.pi_pos.le]
+  · have ha := o.oangle_eq_angle_or_eq_neg_angle hx hy
+    rw [h] at ha
+    simpa using ha
 
 中文:
 定理 oangle_eq_pi_iff_angle_eq_pi
@@ -2411,7 +2496,10 @@ theorem oangle_eq_pi_iff_angle_eq_pi
       Real.pi_ne_zero]
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rw [o.angle_eq_abs_oangle_toReal hx hy, h]
-    simp
+    simp [Real.pi_pos.le]
+  · have ha := o.oangle_eq_angle_or_eq_neg_angle hx hy
+    rw [h] at ha
+    simpa using ha
 
 Depends on / 依赖: Real.Angle.pi_ne_zero.symm, Real.pi_ne_zero, Real.pi_pos.le, angle_eq_abs_oangle_toReal, div_eq_mul_inv, o.angle_eq_abs_oangle_toReal, o.oangle_eq_angle_or_eq_neg_angle, oangle_eq_angle_or_eq_neg_angle, pi_ne_zero, pi_pos
 -/
@@ -2441,7 +2529,9 @@ theorem eq_zero_or_oangle_eq_iff_inner_eq_zero
   by_cases hy : y = 0; · simp [hy]
   rw [InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]; rw [or_iff_right hx]; rw [or_iff_right hy]
   refine ⟨fun h => ?_, fun h => ?_⟩
-  · rwa [o.angle_eq_abs_oangle_toReal hx hy, Real.Angle.abs_toReal_eq_pi_div_two_
+  · rwa [o.angle_eq_abs_oangle_toReal hx hy, Real.Angle.abs_toReal_eq_pi_div_two_iff]
+  · convert! o.oangle_eq_angle_or_eq_neg_angle hx hy using 2 <;> rw [h]
+    simp only [neg_div, Real.Angle.coe_neg]
 
 中文:
 定理 eq_zero_or_oangle_eq_iff_inner_eq_zero
@@ -2451,7 +2541,9 @@ theorem eq_zero_or_oangle_eq_iff_inner_eq_zero
   by_cases hy : y = 0; · simp [hy]
   rw [InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]; rw [or_iff_right hx]; rw [or_iff_right hy]
   refine ⟨fun h => ?_, fun h => ?_⟩
-  · rwa [o.angle_eq_abs_oangle_toReal hx hy, Real.Angle.abs_toReal_eq_pi_div_two_
+  · rwa [o.angle_eq_abs_oangle_toReal hx hy, Real.Angle.abs_toReal_eq_pi_div_two_iff]
+  · convert! o.oangle_eq_angle_or_eq_neg_angle hx hy using 2 <;> rw [h]
+    simp only [neg_div, Real.Angle.coe_neg]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two, Real.Angle.abs_toReal_eq_pi_div_two_iff, Real.Angle.coe_neg, abs_toReal_eq_pi_div_two_iff, angle_eq_abs_oangle_toReal, coe_neg, convert, inner_eq_zero_iff_angle_eq_pi_div_two, neg_div, o.angle_eq_abs_oangle_toReal, o.oangle_eq_angle_or_eq_neg_angle, oangle_eq_angle_or_eq_neg_angle, or_iff_right
 -/
@@ -2660,7 +2752,23 @@ theorem oangle_smul_add_right_eq_zero_or_eq_pi_iff
   · rcases h with ⟨m, h, hm⟩
     change m 0 • x + m 1 • (r • x + y) = 0 at h
     refine ⟨![m 0 + m 1 * r, m 1], ?_⟩
-    ch
+    change (m 0 + m 1 * r) • x + m 1 • y = 0 ∧ (m 0 + m 1 * r != 0 ∨ m 1 != 0)
+    rw [smul_add]; rw [smul_smul]; rw [← add_assoc]; rw [← add_smul] at h
+    refine ⟨h, not_and_or.1 fun h0 => ?_⟩
+    obtain ⟨h0, h1⟩ := h0
+    rw [h1] at h0 hm
+    rw [zero_mul]; rw [add_zero] at h0
+    simp [h0] at hm
+  · rcases h with ⟨m, h, hm⟩
+    change m 0 • x + m 1 • y = 0 at h
+    refine ⟨![m 0 - m 1 * r, m 1], ?_⟩
+    change (m 0 - m 1 * r) • x + m 1 • (r • x + y) = 0 ∧ (m 0 - m 1 * r != 0 ∨ m 1 != 0)
+    rw [sub_smul]; rw [smul_add]; rw [smul_smul]; rw [← add_assoc]; rw [sub_add_cancel]
+    refine ⟨h, not_and_or.1 fun h0 => ?_⟩
+    obtain ⟨h0, h1⟩ := h0
+    rw [h1] at h0 hm
+    rw [zero_mul]; rw [sub_zero] at h0
+    simp [h0] at hm
 
 中文:
 定理 oangle_smul_add_right_eq_zero_or_eq_pi_iff
@@ -2672,7 +2780,23 @@ theorem oangle_smul_add_right_eq_zero_or_eq_pi_iff
   · rcases h with ⟨m, h, hm⟩
     change m 0 • x + m 1 • (r • x + y) = 0 at h
     refine ⟨![m 0 + m 1 * r, m 1], ?_⟩
-    ch
+    change (m 0 + m 1 * r) • x + m 1 • y = 0 ∧ (m 0 + m 1 * r != 0 ∨ m 1 != 0)
+    rw [smul_add]; rw [smul_smul]; rw [← add_assoc]; rw [← add_smul] at h
+    refine ⟨h, not_and_or.1 fun h0 => ?_⟩
+    obtain ⟨h0, h1⟩ := h0
+    rw [h1] at h0 hm
+    rw [zero_mul]; rw [add_zero] at h0
+    simp [h0] at hm
+  · rcases h with ⟨m, h, hm⟩
+    change m 0 • x + m 1 • y = 0 at h
+    refine ⟨![m 0 - m 1 * r, m 1], ?_⟩
+    change (m 0 - m 1 * r) • x + m 1 • (r • x + y) = 0 ∧ (m 0 - m 1 * r != 0 ∨ m 1 != 0)
+    rw [sub_smul]; rw [smul_add]; rw [smul_smul]; rw [← add_assoc]; rw [sub_add_cancel]
+    refine ⟨h, not_and_or.1 fun h0 => ?_⟩
+    obtain ⟨h0, h1⟩ := h0
+    rw [h1] at h0 hm
+    rw [zero_mul]; rw [sub_zero] at h0
+    simp [h0] at hm
 
 Depends on / 依赖: Fin.exists_fin_two, Fin.sum_univ_two, Fintype, Fintype.not_linearIndependent_iff, add_assoc, add_smul, exists_fin_two, not_and_or, not_linearIndependent_iff, oangle_eq_zero_or_eq_pi_iff_not_linearIndependent, simp_rw, smul_add, smul_smul, sum_univ_two
 -/
@@ -2718,7 +2842,24 @@ theorem oangle_sign_smul_add_right
       oangle_smul_add_right_eq_zero_or_eq_pi_iff]
   have h' : forall r' : Real, o.oangle x (r' • x + y) != 0 ∧ o.oangle x (r' • x + y) != π := by
     intro r'
-    rwa [← o.oan
+    rwa [← o.oangle_smul_add_right_eq_zero_or_eq_pi_iff r', not_or] at h
+  let s : Set (V × V) := (fun r' : Real => (x, r' • x + y)) '' Set.univ
+  have hc : IsConnected s := isConnected_univ.image _ (by fun_prop)
+  have hf : ContinuousOn (fun z : V × V => o.oangle z.1 z.2) s := by
+    refine continuousOn_of_forall_continuousAt fun z hz => o.continuousAt_oangle ?_ ?_
+    all_goals
+      simp_rw [s, Set.mem_image] at hz
+      obtain ⟨r', -, rfl⟩ := hz
+      simp only
+      intro hz
+    · simpa [hz] using (h' 0).1
+    · simpa [hz] using (h' r').1
+  have hs : forall z : V × V, z in s -> o.oangle z.1 z.2 != 0 ∧ o.oangle z.1 z.2 != π := by grind
+  have hx : (x, y) in s := by
+    convert! Set.mem_image_of_mem (fun r' : Real => (x, r' • x + y)) (Set.mem_univ 0)
+    simp
+  have hy : (x, r • x + y) in s := Set.mem_image_of_mem _ (Set.mem_univ _)
+  convert! Real.Angle.sign_eq_of_continuousOn hc hf hs hx hy
 
 中文:
 定理 oangle_sign_smul_add_right
@@ -2729,7 +2870,24 @@ theorem oangle_sign_smul_add_right
       oangle_smul_add_right_eq_zero_or_eq_pi_iff]
   have h' : forall r' : Real, o.oangle x (r' • x + y) != 0 ∧ o.oangle x (r' • x + y) != π := by
     intro r'
-    rwa [← o.oan
+    rwa [← o.oangle_smul_add_right_eq_zero_or_eq_pi_iff r', not_or] at h
+  let s : Set (V × V) := (fun r' : Real => (x, r' • x + y)) '' Set.univ
+  have hc : IsConnected s := isConnected_univ.image _ (by fun_prop)
+  have hf : ContinuousOn (fun z : V × V => o.oangle z.1 z.2) s := by
+    refine continuousOn_of_forall_continuousAt fun z hz => o.continuousAt_oangle ?_ ?_
+    all_goals
+      simp_rw [s, Set.mem_image] at hz
+      obtain ⟨r', -, rfl⟩ := hz
+      simp only
+      intro hz
+    · simpa [hz] using (h' 0).1
+    · simpa [hz] using (h' r').1
+  have hs : forall z : V × V, z in s -> o.oangle z.1 z.2 != 0 ∧ o.oangle z.1 z.2 != π := by grind
+  have hx : (x, y) in s := by
+    convert! Set.mem_image_of_mem (fun r' : Real => (x, r' • x + y)) (Set.mem_univ 0)
+    simp
+  have hy : (x, r • x + y) in s := Set.mem_image_of_mem _ (Set.mem_univ _)
+  convert! Real.Angle.sign_eq_of_continuousOn hc hf hs hx hy
 
 Depends on / 依赖: ContinuousOn, IsConnected, Real.Angle.sign_eq_zero_iff, Set.univ, fun_prop, isConnected_univ, isConnected_univ.image, not_or, o.oangle, o.oangle_smul_add_right_eq_zero_or_eq_pi_iff, oangle, oangle_smul_add_right_eq_zero_or_eq_pi_iff, sign_eq_zero_iff
 -/
@@ -3125,7 +3283,12 @@ theorem oangle_sign_smul_add_smul_smul_add_smul
   · rw [hr₁, zero_smul, zero_mul, zero_add, zero_sub, Left.sign_neg,
       oangle_sign_smul_left, add_comm, oangle_sign_smul_add_smul_right, oangle_rev,
       Real.Angle.sign_neg, sign_mul, mul_neg, mul_neg, neg_mul, mul_assoc]
-  · rw [← o.oangle_sign_smul_add_right (r₁ • 
+  · rw [← o.oangle_sign_smul_add_right (r₁ • x + r₂ • y) (r₃ • x + r₄ • y) (-r₃ / r₁), smul_add,
+      smul_smul, smul_smul, div_mul_cancel₀ _ hr₁, neg_smul, ← add_assoc, add_comm (-(r₃ • x)), ←
+      sub_eq_add_neg, sub_add_cancel, ← add_smul, oangle_sign_smul_right,
+      oangle_sign_smul_add_smul_left, ← mul_assoc, ← sign_mul, add_mul, mul_assoc, mul_comm r₂ r₁, ←
+      mul_assoc, div_mul_cancel₀ _ hr₁, add_comm, neg_mul, ← sub_eq_add_neg, mul_comm r₄,
+      mul_comm r₃]
 
 中文:
 定理 oangle_sign_smul_add_smul_smul_add_smul
@@ -3135,7 +3298,12 @@ theorem oangle_sign_smul_add_smul_smul_add_smul
   · rw [hr₁, zero_smul, zero_mul, zero_add, zero_sub, Left.sign_neg,
       oangle_sign_smul_left, add_comm, oangle_sign_smul_add_smul_right, oangle_rev,
       Real.Angle.sign_neg, sign_mul, mul_neg, mul_neg, neg_mul, mul_assoc]
-  · rw [← o.oangle_sign_smul_add_right (r₁ • 
+  · rw [← o.oangle_sign_smul_add_right (r₁ • x + r₂ • y) (r₃ • x + r₄ • y) (-r₃ / r₁), smul_add,
+      smul_smul, smul_smul, div_mul_cancel₀ _ hr₁, neg_smul, ← add_assoc, add_comm (-(r₃ • x)), ←
+      sub_eq_add_neg, sub_add_cancel, ← add_smul, oangle_sign_smul_right,
+      oangle_sign_smul_add_smul_left, ← mul_assoc, ← sign_mul, add_mul, mul_assoc, mul_comm r₂ r₁, ←
+      mul_assoc, div_mul_cancel₀ _ hr₁, add_comm, neg_mul, ← sub_eq_add_neg, mul_comm r₄,
+      mul_comm r₃]
 
 Depends on / 依赖: Left.sign_neg, Real.Angle.sign_neg, add_assoc, add_comm, add_smul, mul_assoc, mul_neg, neg_mul, neg_smul, o.oangle_sign_smul_add_right, oangle, oangle_rev, oangle_sign_smul_add_right, oangle_sign_smul_add_smul_right, oangle_sign_smul_left, oangle_sign_smul_right, sign_mul, sign_neg, smul_add, smul_smul
 -/
@@ -3164,7 +3332,19 @@ theorem abs_oangle_sub_left_toReal_lt_pi_div_two
   have hs : ((2 : Int) • o.oangle (y - x) y).sign = (o.oangle (y - x) y).sign := by
     conv_rhs => rw [oangle_sign_sub_left_swap]
     rw [o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq hn h]; rw [Real.Angle.sign_pi_sub]
-  rw [Real.Angle.sign_tw
+  rw [Real.Angle.sign_two_zsmul_eq_sign_iff] at hs
+  rcases hs with (hs | hs)
+  · rw [oangle_eq_pi_iff_oangle_rev_eq_pi, oangle_eq_pi_iff_sameRay_neg, neg_sub] at hs
+    rcases hs with ⟨hy, -, hr⟩
+    rw [← exists_nonneg_left_iff_sameRay hy] at hr
+    rcases hr with ⟨r, hr0, hr⟩
+    rw [eq_sub_iff_add_eq] at hr
+    nth_rw 2 [← one_smul Real y] at hr
+    rw [← add_smul] at hr
+    rw [← hr]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_of_pos (Left.add_pos_of_nonneg_of_pos hr0 one_pos)]; rw [mul_left_eq_self₀]; rw [or_iff_left (norm_ne_zero_iff.2 hy)]; rw [add_eq_right] at h
+    rw [h]; rw [zero_add]; rw [one_smul] at hr
+    exact False.elim (hn hr.symm)
+  · exact hs
 
 中文:
 定理 abs_oangle_sub_left_to实数_lt_pi_div_two
@@ -3174,7 +3354,19 @@ theorem abs_oangle_sub_left_toReal_lt_pi_div_two
   have hs : ((2 : Int) • o.oangle (y - x) y).sign = (o.oangle (y - x) y).sign := by
     conv_rhs => rw [oangle_sign_sub_left_swap]
     rw [o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq hn h]; rw [Real.Angle.sign_pi_sub]
-  rw [Real.Angle.sign_tw
+  rw [Real.Angle.sign_two_zsmul_eq_sign_iff] at hs
+  rcases hs with (hs | hs)
+  · rw [oangle_eq_pi_iff_oangle_rev_eq_pi, oangle_eq_pi_iff_sameRay_neg, neg_sub] at hs
+    rcases hs with ⟨hy, -, hr⟩
+    rw [← exists_nonneg_left_iff_sameRay hy] at hr
+    rcases hr with ⟨r, hr0, hr⟩
+    rw [eq_sub_iff_add_eq] at hr
+    nth_rw 2 [← one_smul Real y] at hr
+    rw [← add_smul] at hr
+    rw [← hr]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_of_pos (Left.add_pos_of_nonneg_of_pos hr0 one_pos)]; rw [mul_left_eq_self₀]; rw [or_iff_left (norm_ne_zero_iff.2 hy)]; rw [add_eq_right] at h
+    rw [h]; rw [zero_add]; rw [one_smul] at hr
+    exact False.elim (hn hr.symm)
+  · exact hs
 
 Depends on / 依赖: Real.Angle.sign_pi_sub, Real.Angle.sign_two_zsmul_eq_sign_iff, Real.pi_pos, conv_rhs, exists_nonneg_left_iff_sameRay, neg_sub, o.oangle, o.oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq, oangle, oangle_eq_pi_iff_oangle_rev_eq_pi, oangle_eq_pi_iff_sameRay_neg, oangle_eq_pi_sub_two_zsmul_oangle_sub_of_norm_eq, oangle_sign_sub_left_swap, pi_pos, sign_pi_sub, sign_two_zsmul_eq_sign_iff
 -/
@@ -3231,7 +3423,32 @@ lemma angle_eq_iff_oangle_eq_or_sameRay
     simp [hr, hrp, InnerProductGeometry.angle_comm]
   simp only [hr, or_false]
   by_cases hs : (o.oangle x y).sign = (o.oangle y z).sign
-  · rw [o.angle_eq_iff_oangle_eq_of_si
+  · rw [o.angle_eq_iff_oangle_eq_of_sign_eq hx hy hy hz hs]
+  · have hn : o.oangle x y != o.oangle y z := by grind
+    simp only [hn, iff_false]
+    intro he
+    apply hr
+    by_cases hs' : (o.oangle x y).sign = -(o.oangle y z).sign
+    · rw [o.angle_eq_iff_oangle_eq_neg_of_sign_eq_neg hx hy hy hz hs'] at he
+      rw [← o.oangle_eq_zero_iff_sameRay]; rw [← o.oangle_add hx hy hz]
+      simp [he]
+    · have h0 : (o.oangle x y).sign = 0 ∨ (o.oangle y z).sign = 0 := by
+        revert hs hs'
+        generalize (o.oangle x y).sign = sxy
+        generalize (o.oangle y z).sign = syz
+        decide +revert
+      have h0' : InnerProductGeometry.angle y z = 0 ∨ InnerProductGeometry.angle y z = π := by
+        rcases h0 with h0 | h0
+          <;> simpa [*] using o.eq_zero_or_angle_eq_zero_or_pi_of_sign_oangle_eq_zero h0
+      rcases h0' with h0' | h0'
+      · rw [h0'] at he
+        obtain ⟨-, r, hr0, rfl⟩ := InnerProductGeometry.angle_eq_zero_iff.1 h0'
+        obtain ⟨-, r', hr'0, rfl⟩ := InnerProductGeometry.angle_eq_zero_iff.1 he
+        simp_all
+      · rw [h0'] at he
+        obtain ⟨-, r, hr0, rfl⟩ := InnerProductGeometry.angle_eq_pi_iff.1 h0'
+        obtain ⟨-, r', hr'0, rfl⟩ := InnerProductGeometry.angle_eq_pi_iff.1 he
+        simp_all
 
 中文:
 引理 angle_eq_iff_oangle_eq_or_sameRay
@@ -3244,7 +3461,32 @@ lemma angle_eq_iff_oangle_eq_or_sameRay
     simp [hr, hrp, InnerProductGeometry.angle_comm]
   simp only [hr, or_false]
   by_cases hs : (o.oangle x y).sign = (o.oangle y z).sign
-  · rw [o.angle_eq_iff_oangle_eq_of_si
+  · rw [o.angle_eq_iff_oangle_eq_of_sign_eq hx hy hy hz hs]
+  · have hn : o.oangle x y != o.oangle y z := by grind
+    simp only [hn, iff_false]
+    intro he
+    apply hr
+    by_cases hs' : (o.oangle x y).sign = -(o.oangle y z).sign
+    · rw [o.angle_eq_iff_oangle_eq_neg_of_sign_eq_neg hx hy hy hz hs'] at he
+      rw [← o.oangle_eq_zero_iff_sameRay]; rw [← o.oangle_add hx hy hz]
+      simp [he]
+    · have h0 : (o.oangle x y).sign = 0 ∨ (o.oangle y z).sign = 0 := by
+        revert hs hs'
+        generalize (o.oangle x y).sign = sxy
+        generalize (o.oangle y z).sign = syz
+        decide +revert
+      have h0' : InnerProductGeometry.angle y z = 0 ∨ InnerProductGeometry.angle y z = π := by
+        rcases h0 with h0 | h0
+          <;> simpa [*] using o.eq_zero_or_angle_eq_zero_or_pi_of_sign_oangle_eq_zero h0
+      rcases h0' with h0' | h0'
+      · rw [h0'] at he
+        obtain ⟨-, r, hr0, rfl⟩ := InnerProductGeometry.angle_eq_zero_iff.1 h0'
+        obtain ⟨-, r', hr'0, rfl⟩ := InnerProductGeometry.angle_eq_zero_iff.1 he
+        simp_all
+      · rw [h0'] at he
+        obtain ⟨-, r, hr0, rfl⟩ := InnerProductGeometry.angle_eq_pi_iff.1 h0'
+        obtain ⟨-, r', hr'0, rfl⟩ := InnerProductGeometry.angle_eq_pi_iff.1 he
+        simp_all
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_comm, SameRay, angle_comm, angle_eq_iff_oangle_eq_neg_of_sig, angle_eq_iff_oangle_eq_of_sign_eq, exists_pos_left, hr.exists_pos_left, iff_false, o.angle_eq_iff_oangle_eq_neg_of_sig, o.angle_eq_iff_oangle_eq_of_sign_eq, o.oangle, oangle, or_false
 -/

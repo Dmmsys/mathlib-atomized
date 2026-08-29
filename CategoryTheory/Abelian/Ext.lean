@@ -134,7 +134,9 @@ lemma isZero_Ext_succ_of_projective
   refine ShortComplex.exact_of_isZero_X₂ _ ?_
   rw [IsZero.iff_id_eq_zero]
   ext (x : _ ⟶ _)
-  obtain rfl : x = 0 := (Homological
+  obtain rfl : x = 0 := (HomologicalComplex.isZero_single_obj_X
+    (ComplexShape.down Nat) 0 X (n + 1) (by simp)).eq_of_src _ _
+  rfl
 
 中文:
 引理 isZero_Ext_succ_of_projective
@@ -145,7 +147,9 @@ lemma isZero_Ext_succ_of_projective
   refine ShortComplex.exact_of_isZero_X₂ _ ?_
   rw [IsZero.iff_id_eq_zero]
   ext (x : _ ⟶ _)
-  obtain rfl : x = 0 := (Homological
+  obtain rfl : x = 0 := (HomologicalComplex.isZero_single_obj_X
+    (ComplexShape.down Nat) 0 X (n + 1) (by simp)).eq_of_src _ _
+  rfl
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, HomologicalComplex, HomologicalComplex.exactAt_iff, HomologicalComplex.exactAt_iff_isZero_homology, HomologicalComplex.isZero_single_obj_X, IsZero, IsZero.iff_id_eq_zero, IsZero.of_iso, ProjectiveResolution, ProjectiveResolution.self, ShortComplex, ShortComplex.exact_of_isZero_X, eq_of_src, exactAt_iff, exactAt_iff_isZero_homology, iff_id_eq_zero, isZero_single_obj_X, isoExt, of_iso
 -/

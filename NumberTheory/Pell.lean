@@ -812,7 +812,8 @@ theorem x_mul_pos
   ring_nf
   rcases le_or_gt 0 d with h | h
   · positivity
-  · rw [(eq_zero_of_d_ne
+  · rw [(eq_zero_of_d_neg h a).resolve_left ha.ne', (eq_zero_of_d_neg h b).resolve_left hb.ne']
+    simp
 
 中文:
 定理 x_mul_pos
@@ -826,7 +827,8 @@ theorem x_mul_pos
   ring_nf
   rcases le_or_gt 0 d with h | h
   · positivity
-  · rw [(eq_zero_of_d_ne
+  · rw [(eq_zero_of_d_neg h a).resolve_left ha.ne', (eq_zero_of_d_neg h b).resolve_left hb.ne']
+    simp
 
 Depends on / 依赖: a.prop_x, abs_lt, abs_lt.mp, abs_mul, abs_of_pos, b.prop_x, eq_zero_of_d_neg, ha.ne, hb.ne, le_or_gt, mul_pow, neg_lt_iff_pos_add, prop_x, resolve_left, ring_nf, sq_lt_sq, sub_pos, x_mul
 -/
@@ -1037,7 +1039,9 @@ theorem exists_pos_variant
         (lt_or_gt_of_ne (a.x_ne_zero h₀.le)).elim
           ((le_total 0 a.y).elim (fun hy hx => ⟨-a⁻¹, ?_, ?_, ?_⟩) fun hy hx => ⟨-a, ?_, ?_, ?_⟩)
           ((le_total 0 a.y).elim (fun hy hx => ⟨a, hx, hy, ?_⟩) fun hy hx => ⟨a⁻¹, hx, ?_, ?_⟩) <;>
-      simp only [neg_neg, inv_inv, neg_i
+      simp only [neg_neg, inv_inv, neg_inv, Set.mem_insert_iff, Set.mem_singleton_iff, true_or,
+        x_neg, x_inv, y_neg, y_inv, neg_pos, neg_nonneg, or_true] <;>
+    assumption
 
 中文:
 定理 存在_pos_variant
@@ -1047,7 +1051,9 @@ theorem exists_pos_variant
         (lt_or_gt_of_ne (a.x_ne_zero h₀.le)).elim
           ((le_total 0 a.y).elim (fun hy hx => ⟨-a⁻¹, ?_, ?_, ?_⟩) fun hy hx => ⟨-a, ?_, ?_, ?_⟩)
           ((le_total 0 a.y).elim (fun hy hx => ⟨a, hx, hy, ?_⟩) fun hy hx => ⟨a⁻¹, hx, ?_, ?_⟩) <;>
-      simp only [neg_neg, inv_inv, neg_i
+      simp only [neg_neg, inv_inv, neg_inv, Set.mem_insert_iff, Set.mem_singleton_iff, true_or,
+        x_neg, x_inv, y_neg, y_inv, neg_pos, neg_nonneg, or_true] <;>
+    assumption
 
 Depends on / 依赖: Set.mem_insert_iff, Set.mem_singleton_iff, a.x_ne_zero, inv_inv, le_total, lt_or_gt_of_ne, mem_insert_iff, mem_singleton_iff, neg_inv, neg_neg, neg_nonneg, neg_pos, or_true, true_or, x_inv, x_ne_zero, x_neg, y_inv, y_neg
 -/
@@ -1086,7 +1092,60 @@ theorem exists_of_not_isSquare
     refine irrational_nrt_of_notint_nrt 2 d (sq_sqrt <| Int.cast_nonneg h₀.le) ?_ two_pos
     rintro ⟨x, hx⟩
     refine hd ⟨x, @Int.cast_injective Real _ _ d (x * x) ?_⟩
-    rw [← sq_sqrt <| Int.cast_nonneg h₀.le]; rw [Int.cast_mul]; rw [← hx]; 
+    rw [← sq_sqrt <| Int.cast_nonneg h₀.le]; rw [Int.cast_mul]; rw [← hx]; rw [sq]
+  obtain ⟨M, hM₁⟩ := exists_int_gt (2 * |ξ| + 1)
+  have hM : {q : Rat | |q.1 ^ 2 - d * (q.2 : Int) ^ 2| < M}.Infinite := by
+    refine Infinite.mono (fun q h => ?_) (infinite_rat_abs_sub_lt_one_div_den_sq_of_irrational hξ)
+    have h0 : 0 < (q.2 : Real) ^ 2 := pow_pos (Nat.cast_pos.mpr q.pos) 2
+    have h1 : (q.num : Real) / (q.den : Real) = q := mod_cast q.num_div_den
+    rw [mem_ofPred]; rw [abs_sub_comm]; rw [← @Int.cast_lt Real]; rw [← div_lt_div_iff_of_pos_right (abs_pos_of_pos h0)]
+    push_cast
+    rw [← abs_div]; rw [abs_sq]; rw [sub_div]; rw [mul_div_cancel_right₀ _ h0.ne']; rw [← div_pow]; rw [h1]; rw [←
+      sq_sqrt (Int.cast_pos.mpr h₀).le]; rw [sq_sub_sq]; rw [abs_mul]; rw [← mul_one_div]
+    refine mul_lt_mul'' (((abs_add_le ξ q).trans ?_).trans_lt hM₁) h (abs_nonneg _) (abs_nonneg _)
+    rw [two_mul]; rw [add_assoc]; rw [add_le_add_iff_left]; rw [← sub_le_iff_le_add']
+    rw [mem_ofPred]; rw [abs_sub_comm] at h
+    refine (abs_sub_abs_le_abs_sub (q : Real) ξ).trans (h.le.trans ?_)
+    rw [div_le_one h0]; rw [one_le_sq_iff_one_le_abs]; rw [Nat.abs_cast]; rw [Nat.one_le_cast]
+    exact q.pos
+  obtain ⟨m, hm⟩ : exists m : Int, {q : Rat | q.1 ^ 2 - d * (q.den : Int) ^ 2 = m}.Infinite := by
+    contrapose! hM
+    refine (congr_arg _ (ext fun x => ?_)).mp (Finite.biUnion (finite_Ioo (-M) M) fun m _ => hM m)
+    simp only [abs_lt, mem_ofPred, mem_Ioo, mem_iUnion, exists_prop, exists_eq_right']
+  have hm₀ : m != 0 := by
+    rintro rfl
+    obtain ⟨q, hq⟩ := hm.nonempty
+    rw [mem_ofPred]; rw [sub_eq_zero]; rw [mul_comm] at hq
+    obtain ⟨a, ha⟩ := (Int.pow_dvd_pow_iff two_ne_zero).mp ⟨d, hq⟩
+    rw [ha]; rw [mul_pow]; rw [mul_right_inj' (pow_pos (Int.natCast_pos.mpr q.pos) 2).ne'] at hq
+    exact hd ⟨a, sq a ▸ hq.symm⟩
+  have := neZero_iff.mpr (Int.natAbs_ne_zero.mpr hm₀)
+  let f : Rat -> ZMod m.natAbs × ZMod m.natAbs := fun q => (q.num, q.den)
+  obtain ⟨q₁, h₁ : q₁.num ^ 2 - d * (q₁.den : Int) ^ 2 = m,
+      q₂, h₂ : q₂.num ^ 2 - d * (q₂.den : Int) ^ 2 = m, hne, hqf⟩ :=
+    hm.exists_ne_map_eq_of_mapsTo (mapsTo_univ f _) finite_univ
+  obtain ⟨hq1 : (q₁.num : ZMod m.natAbs) = q₂.num, hq2 : (q₁.den : ZMod m.natAbs) = q₂.den⟩ :=
+    Prod.ext_iff.mp hqf
+  have hd₁ : m ∣ q₁.num * q₂.num - d * (q₁.den * q₂.den) := by
+    rw [← Int.natAbs_dvd]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
+    push_cast
+    rw [hq1]; rw [hq2]; rw [← sq]; rw [← sq]
+    norm_cast
+    rw [ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.natAbs_dvd]; rw [Nat.cast_pow]; rw [← h₂]
+  have hd₂ : m ∣ q₁.num * q₂.den - q₂.num * q₁.den := by
+    rw [← Int.natAbs_dvd]; rw [← ZMod.intCast_eq_intCast_iff_dvd_sub]
+    push_cast
+    rw [hq1]; rw [hq2]
+  replace hm₀ : (m : Rat) != 0 := Int.cast_ne_zero.mpr hm₀
+  refine ⟨(q₁.num * q₂.num - d * (q₁.den * q₂.den)) / m, (q₁.num * q₂.den - q₂.num * q₁.den) / m,
+      ?_, ?_⟩
+  · qify [hd₁, hd₂]
+    field_simp
+    norm_cast
+    grind
+  · qify [hd₂]
+    refine div_ne_zero_iff.mpr ⟨?_, hm₀⟩
+    exact mod_cast mt sub_eq_zero.mp (mt Rat.eq_iff_mul_eq_mul.mpr hne)
 
 中文:
 定理 存在_of_not_isSquare
@@ -1097,7 +1156,60 @@ theorem exists_of_not_isSquare
     refine irrational_nrt_of_notint_nrt 2 d (sq_sqrt <| Int.cast_nonneg h₀.le) ?_ two_pos
     rintro ⟨x, hx⟩
     refine hd ⟨x, @Int.cast_injective Real _ _ d (x * x) ?_⟩
-    rw [← sq_sqrt <| Int.cast_nonneg h₀.le]; rw [Int.cast_mul]; rw [← hx]; 
+    rw [← sq_sqrt <| Int.cast_nonneg h₀.le]; rw [Int.cast_mul]; rw [← hx]; rw [sq]
+  obtain ⟨M, hM₁⟩ := exists_int_gt (2 * |ξ| + 1)
+  have hM : {q : Rat | |q.1 ^ 2 - d * (q.2 : Int) ^ 2| < M}.Infinite := by
+    refine Infinite.mono (fun q h => ?_) (infinite_rat_abs_sub_lt_one_div_den_sq_of_irrational hξ)
+    have h0 : 0 < (q.2 : Real) ^ 2 := pow_pos (Nat.cast_pos.mpr q.pos) 2
+    have h1 : (q.num : Real) / (q.den : Real) = q := mod_cast q.num_div_den
+    rw [mem_ofPred]; rw [abs_sub_comm]; rw [← @Int.cast_lt Real]; rw [← div_lt_div_iff_of_pos_right (abs_pos_of_pos h0)]
+    push_cast
+    rw [← abs_div]; rw [abs_sq]; rw [sub_div]; rw [mul_div_cancel_right₀ _ h0.ne']; rw [← div_pow]; rw [h1]; rw [←
+      sq_sqrt (Int.cast_pos.mpr h₀).le]; rw [sq_sub_sq]; rw [abs_mul]; rw [← mul_one_div]
+    refine mul_lt_mul'' (((abs_add_le ξ q).trans ?_).trans_lt hM₁) h (abs_nonneg _) (abs_nonneg _)
+    rw [two_mul]; rw [add_assoc]; rw [add_le_add_iff_left]; rw [← sub_le_iff_le_add']
+    rw [mem_ofPred]; rw [abs_sub_comm] at h
+    refine (abs_sub_abs_le_abs_sub (q : Real) ξ).trans (h.le.trans ?_)
+    rw [div_le_one h0]; rw [one_le_sq_iff_one_le_abs]; rw [Nat.abs_cast]; rw [Nat.one_le_cast]
+    exact q.pos
+  obtain ⟨m, hm⟩ : exists m : Int, {q : Rat | q.1 ^ 2 - d * (q.den : Int) ^ 2 = m}.Infinite := by
+    contrapose! hM
+    refine (congr_arg _ (ext fun x => ?_)).mp (Finite.biUnion (finite_Ioo (-M) M) fun m _ => hM m)
+    simp only [abs_lt, mem_ofPred, mem_Ioo, mem_iUnion, exists_prop, exists_eq_right']
+  have hm₀ : m != 0 := by
+    rintro rfl
+    obtain ⟨q, hq⟩ := hm.nonempty
+    rw [mem_ofPred]; rw [sub_eq_zero]; rw [mul_comm] at hq
+    obtain ⟨a, ha⟩ := (Int.pow_dvd_pow_iff two_ne_zero).mp ⟨d, hq⟩
+    rw [ha]; rw [mul_pow]; rw [mul_right_inj' (pow_pos (Int.natCast_pos.mpr q.pos) 2).ne'] at hq
+    exact hd ⟨a, sq a ▸ hq.symm⟩
+  have := neZero_iff.mpr (Int.natAbs_ne_zero.mpr hm₀)
+  let f : Rat -> ZMod m.natAbs × ZMod m.natAbs := fun q => (q.num, q.den)
+  obtain ⟨q₁, h₁ : q₁.num ^ 2 - d * (q₁.den : Int) ^ 2 = m,
+      q₂, h₂ : q₂.num ^ 2 - d * (q₂.den : Int) ^ 2 = m, hne, hqf⟩ :=
+    hm.exists_ne_map_eq_of_mapsTo (mapsTo_univ f _) finite_univ
+  obtain ⟨hq1 : (q₁.num : ZMod m.natAbs) = q₂.num, hq2 : (q₁.den : ZMod m.natAbs) = q₂.den⟩ :=
+    Prod.ext_iff.mp hqf
+  have hd₁ : m ∣ q₁.num * q₂.num - d * (q₁.den * q₂.den) := by
+    rw [← Int.natAbs_dvd]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]
+    push_cast
+    rw [hq1]; rw [hq2]; rw [← sq]; rw [← sq]
+    norm_cast
+    rw [ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [Int.natAbs_dvd]; rw [Nat.cast_pow]; rw [← h₂]
+  have hd₂ : m ∣ q₁.num * q₂.den - q₂.num * q₁.den := by
+    rw [← Int.natAbs_dvd]; rw [← ZMod.intCast_eq_intCast_iff_dvd_sub]
+    push_cast
+    rw [hq1]; rw [hq2]
+  replace hm₀ : (m : Rat) != 0 := Int.cast_ne_zero.mpr hm₀
+  refine ⟨(q₁.num * q₂.num - d * (q₁.den * q₂.den)) / m, (q₁.num * q₂.den - q₂.num * q₁.den) / m,
+      ?_, ?_⟩
+  · qify [hd₁, hd₂]
+    field_simp
+    norm_cast
+    grind
+  · qify [hd₂]
+    refine div_ne_zero_iff.mpr ⟨?_, hm₀⟩
+    exact mod_cast mt sub_eq_zero.mp (mt Rat.eq_iff_mul_eq_mul.mpr hne)
 
 Depends on / 依赖: Infinite, Infinite.mono, Int.cast_injective, Int.cast_mul, Int.cast_nonneg, Irrational, cast_injective, cast_mul, cast_nonneg, exists_int_gt, infinite_rat_abs_sub_lt_one_div_den_sq_of_irrational, irrational_nrt_of_notint_nrt, sq_sqrt, two_pos
 -/
@@ -1389,7 +1501,21 @@ theorem exists_of_not_isSquare
   have P : exists x' : Nat, 1 < x' ∧ exists y' : Int, 0 < y' ∧ (x' : Int) ^ 2 - d * y' ^ 2 = 1 := by
     have hax := a.prop
     lift a.x to Nat using by positivity with ax
-    norm_cast
+    norm_cast at ha₁
+    exact ⟨ax, ha₁, a.y, ha₂, hax⟩
+  classical
+  -- to avoid having to show that the predicate is decidable
+  let x₁ := Nat.find P
+  obtain ⟨hx, y₁, hy₀, hy₁⟩ := Nat.find_spec P
+  refine ⟨mk x₁ y₁ hy₁, by rw [x_mk]; exact mod_cast hx, hy₀, fun {b} hb => ?_⟩
+  rw [x_mk]
+  have hb' := (Int.toNat_of_nonneg <| zero_le_one.trans hb.le).symm
+  have hb'' := hb
+  rw [hb'] at hb ⊢
+  norm_cast at hb ⊢
+refine Nat.find_min' P ⟨hb, |b.y|, abs_pos.mpr y_ne_zero_of_one_lt_x hb'', ?_⟩
+  rw [← hb']; rw [sq_abs]
+  exact b.prop
 
 中文:
 定理 存在_of_not_isSquare
@@ -1400,7 +1526,21 @@ theorem exists_of_not_isSquare
   have P : exists x' : Nat, 1 < x' ∧ exists y' : Int, 0 < y' ∧ (x' : Int) ^ 2 - d * y' ^ 2 = 1 := by
     have hax := a.prop
     lift a.x to Nat using by positivity with ax
-    norm_cast
+    norm_cast at ha₁
+    exact ⟨ax, ha₁, a.y, ha₂, hax⟩
+  classical
+  -- to avoid having to show that the predicate is decidable
+  let x₁ := Nat.find P
+  obtain ⟨hx, y₁, hy₀, hy₁⟩ := Nat.find_spec P
+  refine ⟨mk x₁ y₁ hy₁, by rw [x_mk]; exact mod_cast hx, hy₀, fun {b} hb => ?_⟩
+  rw [x_mk]
+  have hb' := (Int.toNat_of_nonneg <| zero_le_one.trans hb.le).symm
+  have hb'' := hb
+  rw [hb'] at hb ⊢
+  norm_cast at hb ⊢
+refine Nat.find_min' P ⟨hb, |b.y|, abs_pos.mpr y_ne_zero_of_one_lt_x hb'', ?_⟩
+  rw [← hb']; rw [sq_abs]
+  exact b.prop
 
 Depends on / 依赖: exists_pos_of_not_isSquare
 -/
@@ -1439,7 +1579,18 @@ theorem y_strictMono
     rw [← sub_pos]; rw [zpow_add]; rw [zpow_one]; rw [y_mul]; rw [add_sub_assoc]
     rw [show (a ^ n).y * a.x - (a ^ n).y = (a ^ n).y * (a.x - 1) by ring]
     refine
-      add_pos_of_pos_of_nonneg (mul_pos (x_zp
+      add_pos_of_pos_of_nonneg (mul_pos (x_zpow_pos h.x_pos _) h.2.1)
+        (mul_nonneg ?_ (by rw [sub_nonneg]; exact h.1.le))
+    rcases hn.eq_or_lt with (rfl | hn)
+    · simp only [zpow_zero, y_one, le_refl]
+    · exact (y_zpow_pos h.x_pos h.2.1 hn).le
+  refine strictMono_int_of_lt_succ fun n => ?_
+  rcases le_or_gt 0 n with hn | hn
+  · exact H n hn
+  · let m : Int := -n - 1
+    have hm : n = -m - 1 := by simp only [m, neg_sub, sub_neg_eq_add, add_tsub_cancel_left]
+    rw [hm]; rw [sub_add_cancel]; rw [← neg_add']; rw [zpow_neg]; rw [zpow_neg]; rw [y_inv]; rw [y_inv]; rw [neg_lt_neg_iff]
+    exact H _ (by lia)
 
 中文:
 定理 y_strictMono
@@ -1450,7 +1601,18 @@ theorem y_strictMono
     rw [← sub_pos]; rw [zpow_add]; rw [zpow_one]; rw [y_mul]; rw [add_sub_assoc]
     rw [show (a ^ n).y * a.x - (a ^ n).y = (a ^ n).y * (a.x - 1) by ring]
     refine
-      add_pos_of_pos_of_nonneg (mul_pos (x_zp
+      add_pos_of_pos_of_nonneg (mul_pos (x_zpow_pos h.x_pos _) h.2.1)
+        (mul_nonneg ?_ (by rw [sub_nonneg]; exact h.1.le))
+    rcases hn.eq_or_lt with (rfl | hn)
+    · simp only [zpow_zero, y_one, le_refl]
+    · exact (y_zpow_pos h.x_pos h.2.1 hn).le
+  refine strictMono_int_of_lt_succ fun n => ?_
+  rcases le_or_gt 0 n with hn | hn
+  · exact H n hn
+  · let m : Int := -n - 1
+    have hm : n = -m - 1 := by simp only [m, neg_sub, sub_neg_eq_add, add_tsub_cancel_left]
+    rw [hm]; rw [sub_add_cancel]; rw [← neg_add']; rw [zpow_neg]; rw [zpow_neg]; rw [y_inv]; rw [y_inv]; rw [neg_lt_neg_iff]
+    exact H _ (by lia)
 
 Depends on / 依赖: add_pos_of_pos_of_nonneg, add_sub_assoc, eq_or_lt, h.x_pos, hn.eq_or_lt, le_refl, mul_nonneg, mul_pos, strictMono_int_of_lt_succ, sub_nonneg, sub_pos, x_pos, x_zpow_pos, y_mul, y_one, y_zpow_pos, zpow_add, zpow_one, zpow_zero
 -/
@@ -1585,14 +1747,16 @@ theorem y_le_y
   statement: {a₁ : Solution₁ d} (h : IsFundamental a₁) {a : Solution₁ d} (hax : 1 < a.x)
   proof: by
   have H : d * (a₁.y ^ 2 - a.y ^ 2) = a₁.x ^ 2 - a.x ^ 2 := by rw [a.prop_x, a₁.prop_x]; ring
-  rw [← abs_of_pos hay]; rw [← abs_of_pos h.2.1]; rw [← sq_le_sq]; rw [← mul_le_mul_iff_right₀ h.d_pos]; rw [← sub_nonpos]; rw [← mul_sub]; rw [H]; rw [sub_nonpos]; rw [sq_le_sq]; rw [abs_of_pos (zero_lt
+  rw [← abs_of_pos hay]; rw [← abs_of_pos h.2.1]; rw [← sq_le_sq]; rw [← mul_le_mul_iff_right₀ h.d_pos]; rw [← sub_nonpos]; rw [← mul_sub]; rw [H]; rw [sub_nonpos]; rw [sq_le_sq]; rw [abs_of_pos (zero_lt_one.trans h.1)]; rw [abs_of_pos (zero_lt_one.trans hax)]
+  exact h.x_le_x hax
 
 中文:
 定理 y_le_y
   结论: {a₁ : Solution₁ d} (h : IsFundamental a₁) {a : Solution₁ d} (hax : 1 < a.x)
   证明: by
   have H : d * (a₁.y ^ 2 - a.y ^ 2) = a₁.x ^ 2 - a.x ^ 2 := by rw [a.prop_x, a₁.prop_x]; ring
-  rw [← abs_of_pos hay]; rw [← abs_of_pos h.2.1]; rw [← sq_le_sq]; rw [← mul_le_mul_iff_right₀ h.d_pos]; rw [← sub_nonpos]; rw [← mul_sub]; rw [H]; rw [sub_nonpos]; rw [sq_le_sq]; rw [abs_of_pos (zero_lt
+  rw [← abs_of_pos hay]; rw [← abs_of_pos h.2.1]; rw [← sq_le_sq]; rw [← mul_le_mul_iff_right₀ h.d_pos]; rw [← sub_nonpos]; rw [← mul_sub]; rw [H]; rw [sub_nonpos]; rw [sq_le_sq]; rw [abs_of_pos (zero_lt_one.trans h.1)]; rw [abs_of_pos (zero_lt_one.trans hax)]
+  exact h.x_le_x hax
 
 Depends on / 依赖: a.prop_x, abs_of_pos, d_pos, h.d_pos, h.x_le_x, mul_sub, prop_x, sq_le_sq, sub_nonpos, x_le_x, zero_lt_one, zero_lt_one.trans
 -/
@@ -1614,7 +1778,8 @@ theorem x_mul_y_le_y_mul_x
     abs_of_pos h.2.1]; rw [← abs_mul]; rw [← abs_mul]; rw [← sq_le_sq]; rw [mul_pow]; rw [mul_pow]; rw [a.prop_x]; rw [a₁.prop_x]; rw [←
     sub_nonneg]
   ring_nf
-  rw [sub_nonneg]; rw [sq_le_sq]
+  rw [sub_nonneg]; rw [sq_le_sq]; rw [abs_of_pos hay]; rw [abs_of_pos h.2.1]
+  exact h.y_le_y hax hay
 
 中文:
 定理 x_mul_y_le_y_mul_x
@@ -1624,7 +1789,8 @@ theorem x_mul_y_le_y_mul_x
     abs_of_pos h.2.1]; rw [← abs_mul]; rw [← abs_mul]; rw [← sq_le_sq]; rw [mul_pow]; rw [mul_pow]; rw [a.prop_x]; rw [a₁.prop_x]; rw [←
     sub_nonneg]
   ring_nf
-  rw [sub_nonneg]; rw [sq_le_sq]
+  rw [sub_nonneg]; rw [sq_le_sq]; rw [abs_of_pos hay]; rw [abs_of_pos h.2.1]
+  exact h.y_le_y hax hay
 
 Depends on / 依赖: a.prop_x, abs_mul, abs_of_pos, h.x_pos, h.y_le_y, mul_pow, prop_x, ring_nf, sq_le_sq, sub_nonneg, x_pos, y_le_y, zero_lt_one, zero_lt_one.trans
 -/
@@ -1672,7 +1838,9 @@ theorem mul_inv_x_pos
 refine lt_of_mul_lt_mul_left ?_ zero_le_one.trans hax.le
   calc a.x * (d * (a.y * a₁.y))
     _ = d * a.y * (a.x * a₁.y) := by ring
-    _ <= d * a.y * (a.y * a₁.x) := by have := x_mul_y_le_y_mul_x h hax hay; have := h.d_po
+    _ <= d * a.y * (a.y * a₁.x) := by have := x_mul_y_le_y_mul_x h hax hay; have := h.d_pos; gcongr
+    _ = (a.x ^ 2 - 1) * a₁.x := by rw [← a.prop_y]; ring
+    _ < a.x * (a.x * a₁.x) := by linarith [h.1]
 
 中文:
 定理 mul_inv_x_pos
@@ -1682,7 +1850,9 @@ refine lt_of_mul_lt_mul_left ?_ zero_le_one.trans hax.le
 refine lt_of_mul_lt_mul_left ?_ zero_le_one.trans hax.le
   calc a.x * (d * (a.y * a₁.y))
     _ = d * a.y * (a.x * a₁.y) := by ring
-    _ <= d * a.y * (a.y * a₁.x) := by have := x_mul_y_le_y_mul_x h hax hay; have := h.d_po
+    _ <= d * a.y * (a.y * a₁.x) := by have := x_mul_y_le_y_mul_x h hax hay; have := h.d_pos; gcongr
+    _ = (a.x ^ 2 - 1) * a₁.x := by rw [← a.prop_y]; ring
+    _ < a.x * (a.x * a₁.x) := by linarith [h.1]
 
 Depends on / 依赖: a.prop_y, d_pos, h.d_pos, hax.le, lt_add_neg_iff_add_lt, lt_of_mul_lt_mul_left, mul_neg, prop_y, x_inv, x_mul, x_mul_y_le_y_mul_x, y_inv, zero_add, zero_le_one, zero_le_one.trans
 -/
@@ -1708,7 +1878,17 @@ theorem mul_inv_x_lt_x
   calc a₁.y * (a.x * a₁.x)
     _ = a.x * a₁.y * a₁.x := by ring
     _ <= a.y * a₁.x * a₁.x := by have := h.1; have := x_mul_y_le_y_mul_x h hax hay; gcongr
-  rw [mul_assoc]; rw [← sq]; rw 
+  rw [mul_assoc]; rw [← sq]; rw [a₁.prop_x]; rw [← sub_neg]
+  suffices a.y - a.x * a₁.y < 0 by convert! this using 1; ring
+  rw [sub_neg]; rw [← abs_of_pos hay]; rw [← abs_of_pos h.2.1]; rw [← abs_of_pos <| zero_lt_one.trans hax]; rw [←
+    abs_mul]; rw [← sq_lt_sq]; rw [mul_pow]; rw [a.prop_x]
+  calc
+    a.y ^ 2 = 1 * a.y ^ 2 := (one_mul _).symm
+    _ <= d * a.y ^ 2 := (mul_le_mul_iff_left₀ <| sq_pos_of_pos hay).mpr h.d_pos
+    _ < d * a.y ^ 2 + 1 := lt_add_one _
+    _ = (1 + d * a.y ^ 2) * 1 := by rw [add_comm, mul_one]
+    _ <= (1 + d * a.y ^ 2) * a₁.y ^ 2 :=
+      (mul_le_mul_iff_right₀ (by have := h.d_pos; positivity)).mpr (sq_pos_of_pos h.2.1)
 
 中文:
 定理 mul_inv_x_lt_x
@@ -1719,7 +1899,17 @@ theorem mul_inv_x_lt_x
   calc a₁.y * (a.x * a₁.x)
     _ = a.x * a₁.y * a₁.x := by ring
     _ <= a.y * a₁.x * a₁.x := by have := h.1; have := x_mul_y_le_y_mul_x h hax hay; gcongr
-  rw [mul_assoc]; rw [← sq]; rw 
+  rw [mul_assoc]; rw [← sq]; rw [a₁.prop_x]; rw [← sub_neg]
+  suffices a.y - a.x * a₁.y < 0 by convert! this using 1; ring
+  rw [sub_neg]; rw [← abs_of_pos hay]; rw [← abs_of_pos h.2.1]; rw [← abs_of_pos <| zero_lt_one.trans hax]; rw [←
+    abs_mul]; rw [← sq_lt_sq]; rw [mul_pow]; rw [a.prop_x]
+  calc
+    a.y ^ 2 = 1 * a.y ^ 2 := (one_mul _).symm
+    _ <= d * a.y ^ 2 := (mul_le_mul_iff_left₀ <| sq_pos_of_pos hay).mpr h.d_pos
+    _ < d * a.y ^ 2 + 1 := lt_add_one _
+    _ = (1 + d * a.y ^ 2) * 1 := by rw [add_comm, mul_one]
+    _ <= (1 + d * a.y ^ 2) * a₁.y ^ 2 :=
+      (mul_le_mul_iff_right₀ (by have := h.d_pos; positivity)).mpr (sq_pos_of_pos h.2.1)
 
 Depends on / 依赖: abs_mul, abs_of_pos, add_neg_lt_iff_le_add, convert, lt_of_mul_lt_mul_left, mul_assoc, mul_neg, prop_x, sub_neg, x_inv, x_mul, x_mul_y_le_y_mul_x, y_inv, zero_lt_one, zero_lt_one.trans
 -/
@@ -1757,7 +1947,14 @@ theorem eq_pow_of_nonneg
     rcases eq_one_or_neg_one_iff_y_eq_zero.2 hy.symm with rfl | rfl
     · simp
     · simp at hax'
- 
+  · -- case 2: `a ≥ a₁`
+    have hx₁ : 1 < a.x := by nlinarith [a.prop, h.d_pos]
+    have hxx₁ := h.mul_inv_x_pos hx₁ hy
+    have hxx₂ := h.mul_inv_x_lt_x hx₁ hy
+    have hyy := h.mul_inv_y_nonneg hx₁ hy
+    lift (a * a₁⁻¹).x to Nat using hxx₁.le with x' hx'
+    obtain ⟨n, hn⟩ := ih x' (mod_cast hxx₂.trans_eq hax'.symm) hyy hx' hxx₁
+    exact ⟨n + 1, by rw [pow_succ', ← hn, mul_comm a, ← mul_assoc, mul_inv_cancel, one_mul]⟩
 
 中文:
 定理 eq_pow_of_nonneg
@@ -1771,7 +1968,14 @@ theorem eq_pow_of_nonneg
     rcases eq_one_or_neg_one_iff_y_eq_zero.2 hy.symm with rfl | rfl
     · simp
     · simp at hax'
- 
+  · -- case 2: `a ≥ a₁`
+    have hx₁ : 1 < a.x := by nlinarith [a.prop, h.d_pos]
+    have hxx₁ := h.mul_inv_x_pos hx₁ hy
+    have hxx₂ := h.mul_inv_x_lt_x hx₁ hy
+    have hyy := h.mul_inv_y_nonneg hx₁ hy
+    lift (a * a₁⁻¹).x to Nat using hxx₁.le with x' hx'
+    obtain ⟨n, hn⟩ := ih x' (mod_cast hxx₂.trans_eq hax'.symm) hyy hx' hxx₁
+    exact ⟨n + 1, by rw [pow_succ', ← hn, mul_comm a, ← mul_assoc, mul_inv_cancel, one_mul]⟩
 
 Depends on / 依赖: Nat.strong_induction_on, a.prop, d_pos, eq_one_or_neg_one_iff_y_eq_zero, eq_or_lt, generalizing, h.d_pos, h.mul_inv_x_lt_x, h.mul_inv_x_pos, h.mul_inv_y_nonneg, hax.le, hay.eq_or_lt, hy.symm, mul_inv_x_lt_x, mul_inv_x_pos, mul_inv_y_nonneg, strong_induction_on
 -/
@@ -1808,7 +2012,8 @@ theorem eq_zpow_or_neg_zpow
   · exact ⟨-n, Or.inl (by simp [hn])⟩
   · exact ⟨n, Or.inr (by simp [hn])⟩
   · rw [Set.mem_singleton_iff] at hb
-   
+    rw [hb]
+    exact ⟨-n, Or.inr (by simp [hn])⟩
 
 中文:
 定理 eq_zpow_or_neg_zpow
@@ -1821,7 +2026,8 @@ theorem eq_zpow_or_neg_zpow
   · exact ⟨-n, Or.inl (by simp [hn])⟩
   · exact ⟨n, Or.inr (by simp [hn])⟩
   · rw [Set.mem_singleton_iff] at hb
-   
+    rw [hb]
+    exact ⟨-n, Or.inr (by simp [hn])⟩
 
 Depends on / 依赖: Or.inl, Or.inr, Set.mem_singleton_iff, d_pos, eq_pow_of_nonneg, exists_pos_variant, h.d_pos, h.eq_pow_of_nonneg, mem_singleton_iff, mod_cast
 -/
@@ -1854,7 +2060,21 @@ theorem existsUnique_pos_generator
   obtain ⟨n₁, hn₁⟩ := H a₁
   obtain ⟨n₂, hn₂⟩ := ha₁.eq_zpow_or_neg_zpow a
   rcases hn₂ with (rfl | rfl)
-  · rw [← zpow_
+  · rw [← zpow_mul, eq_comm, @eq_comm _ a₁, ← mul_inv_eq_one, ← @mul_inv_eq_one _ _ _ a₁, ←
+      zpow_neg_one, neg_mul, ← zpow_add, ← sub_eq_add_neg] at hn₁
+    rcases hn₁ with hn₁ | hn₁
+    · rcases Int.isUnit_iff.mp
+          (.of_mul_eq_one _ <|
+sub_eq_zero.mp (ha₁.zpow_eq_one_iff (n₂ * n₁ - 1)).mp hn₁) with
+        (rfl | rfl)
+      · rw [zpow_one]
+      · rw [zpow_neg_one, y_inv, lt_neg, neg_zero] at Hy
+        exact False.elim (lt_irrefl _ <| ha₁.2.1.trans Hy)
+    · rw [← zpow_zero a₁, eq_comm] at hn₁
+      exact False.elim (ha₁.zpow_ne_neg_zpow hn₁)
+  · rw [x_neg, lt_neg] at Hx
+    have := (x_zpow_pos (zero_lt_one.trans ha₁.1) n₂).trans Hx
+    norm_num at this
 
 中文:
 定理 存在Unique_pos_generator
@@ -1866,7 +2086,21 @@ theorem existsUnique_pos_generator
   obtain ⟨n₁, hn₁⟩ := H a₁
   obtain ⟨n₂, hn₂⟩ := ha₁.eq_zpow_or_neg_zpow a
   rcases hn₂ with (rfl | rfl)
-  · rw [← zpow_
+  · rw [← zpow_mul, eq_comm, @eq_comm _ a₁, ← mul_inv_eq_one, ← @mul_inv_eq_one _ _ _ a₁, ←
+      zpow_neg_one, neg_mul, ← zpow_add, ← sub_eq_add_neg] at hn₁
+    rcases hn₁ with hn₁ | hn₁
+    · rcases Int.isUnit_iff.mp
+          (.of_mul_eq_one _ <|
+sub_eq_zero.mp (ha₁.zpow_eq_one_iff (n₂ * n₁ - 1)).mp hn₁) with
+        (rfl | rfl)
+      · rw [zpow_one]
+      · rw [zpow_neg_one, y_inv, lt_neg, neg_zero] at Hy
+        exact False.elim (lt_irrefl _ <| ha₁.2.1.trans Hy)
+    · rw [← zpow_zero a₁, eq_comm] at hn₁
+      exact False.elim (ha₁.zpow_ne_neg_zpow hn₁)
+  · rw [x_neg, lt_neg] at Hx
+    have := (x_zpow_pos (zero_lt_one.trans ha₁.1) n₂).trans Hx
+    norm_num at this
 
 Depends on / 依赖: Int.isUnit_iff.mp, IsFundamental, IsFundamental.exists_of_not_isSquare, eq_comm, eq_zpow_or_neg_zpow, exists_of_not_isSquare, isUnit_iff, mul_inv_eq_one, neg_mul, of_mul_eq_one, sub_eq_add_neg, zpow_add, zpow_mul, zpow_neg_one
 -/
@@ -1907,7 +2141,7 @@ theorem pos_generator_iff_fundamental
   have hd := d_nonsquare_of_one_lt_x h.1
   obtain ⟨a₁, ha₁⟩ := IsFundamental.exists_of_not_isSquare h₀ hd
   obtain ⟨b, -, hb₂⟩ := existsUnique_pos_generator h₀ hd
-  rwa [hb₂ a h, ← hb₂ a₁ ⟨ha₁.
+  rwa [hb₂ a h, ← hb₂ a₁ ⟨ha₁.1, ha₁.2.1, ha₁.eq_zpow_or_neg_zpow⟩]
 
 中文:
 定理 pos_generator_iff_fundamental
@@ -1918,7 +2152,7 @@ theorem pos_generator_iff_fundamental
   have hd := d_nonsquare_of_one_lt_x h.1
   obtain ⟨a₁, ha₁⟩ := IsFundamental.exists_of_not_isSquare h₀ hd
   obtain ⟨b, -, hb₂⟩ := existsUnique_pos_generator h₀ hd
-  rwa [hb₂ a h, ← hb₂ a₁ ⟨ha₁.
+  rwa [hb₂ a h, ← hb₂ a₁ ⟨ha₁.1, ha₁.2.1, ha₁.eq_zpow_or_neg_zpow⟩]
 
 Depends on / 依赖: H.eq_zpow_or_neg_zpow, IsFundamental, IsFundamental.exists_of_not_isSquare, d_nonsquare_of_one_lt_x, d_pos_of_one_lt_x, eq_zpow_or_neg_zpow, existsUnique_pos_generator, exists_of_not_isSquare
 -/

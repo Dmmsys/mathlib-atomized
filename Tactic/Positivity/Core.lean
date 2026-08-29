@@ -580,7 +580,79 @@ definition normNumPositivity
     if 0 < lit.natLit! then
       -- NB. The `try` branch is actually a special case of the `catch` branch,
       -- hence is not strictly necessary. However, this makes a small but measurable performance
-  
+      -- difference, as synthesising the `try` classes is a bit faster.
+      try
+        let _a ← synthInstanceQ q(Semiring $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(IsOrderedRing $α)
+        let _a ← synthInstanceQ q(Nontrivial $α)
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+        pure (.positive q(pos_of_isNat (A := $α) $p $p'))
+      catch e : Exception =>
+        trace[Tactic.positivity.failure] "{e.toMessageData}"
+        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(AddLeftMono $α)
+        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
+        let _a ← synthInstanceQ q(NeZero (1 : $α))
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+        pure (.positive q(pos_of_isNat' (A := $α) $p $p'))
+    else
+      -- NB. The `try` branch is actually a special case of the `catch` branch,
+      -- hence is not strictly necessary. However, this makes a small but measurable performance
+      -- difference, as synthesising the `try` classes is a bit faster.
+      try
+        let _a ← synthInstanceQ q(Semiring $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(IsOrderedRing $α)
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+        pure (.nonnegative q(nonneg_of_isNat $p))
+      catch e : Exception =>
+        trace[Tactic.positivity.failure] "{e.toMessageData}"
+        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(AddLeftMono $α)
+        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+        pure (.nonnegative q(nonneg_of_isNat' $p))
+  | .isNegNat _ lit p =>
+    let _a ← synthInstanceQ q(Ring $α)
+    let _a ← synthInstanceQ q(PartialOrder $α)
+    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
+    assumeInstancesCommute
+    have p : Q(NormNum.IsInt $e (Int.negOfNat $lit)) := p
+haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+    pure (.nonzero q(nz_of_isNegNat $p $p'))
+  | .isNNRat _i q n d p =>
+    let _a ← synthInstanceQ q(Semiring $α)
+    let _a ← synthInstanceQ q(LinearOrder $α)
+    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
+    assumeInstancesCommute
+    have p : Q(NormNum.IsNNRat $e $n $d) := p
+    if 0 < q then
+      haveI' w : decide (0 < $n) =Q true := ⟨⟩
+      pure (.positive q(pos_of_isNNRat $p $w))
+    else -- should not be reachable, but just in case
+      haveI' w : decide ($n = 0) =Q true := ⟨⟩
+      pure (.nonnegative q(nonneg_of_isNNRat $p $w))
+  | .isNegNNRat _i q n d p =>
+    let _a ← synthInstanceQ q(Ring $α)
+    let _a ← synthInstanceQ q(LinearOrder $α)
+    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
+    assumeInstancesCommute
+    have p : Q(NormNum.IsRat $e (.negOfNat $n) $d) := p
+    if q < 0 then
+      haveI' w : decide (Int.negOfNat $n < 0) =Q true := ⟨⟩
+      pure (.nonzero q(nz_of_isRat $p $w))
+    else -- should not be reachable, but just in case
+      haveI' w : decide (Int.negOfNat $n = 0) =Q true := ⟨⟩
+      pure (.nonnegative q(nonneg_of_isRat $p $w))
 
 中文:
 定义 normNumPositivity
@@ -592,7 +664,79 @@ definition normNumPositivity
     if 0 < lit.natLit! then
       -- NB. The `try` branch is actually a special case of the `catch` branch,
       -- hence is not strictly necessary. However, this makes a small but measurable performance
-  
+      -- difference, as synthesising the `try` classes is a bit faster.
+      try
+        let _a ← synthInstanceQ q(Semiring $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(IsOrderedRing $α)
+        let _a ← synthInstanceQ q(Nontrivial $α)
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+        pure (.positive q(pos_of_isNat (A := $α) $p $p'))
+      catch e : Exception =>
+        trace[Tactic.positivity.failure] "{e.toMessageData}"
+        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(AddLeftMono $α)
+        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
+        let _a ← synthInstanceQ q(NeZero (1 : $α))
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+        pure (.positive q(pos_of_isNat' (A := $α) $p $p'))
+    else
+      -- NB. The `try` branch is actually a special case of the `catch` branch,
+      -- hence is not strictly necessary. However, this makes a small but measurable performance
+      -- difference, as synthesising the `try` classes is a bit faster.
+      try
+        let _a ← synthInstanceQ q(Semiring $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(IsOrderedRing $α)
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+        pure (.nonnegative q(nonneg_of_isNat $p))
+      catch e : Exception =>
+        trace[Tactic.positivity.failure] "{e.toMessageData}"
+        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
+        let _a ← synthInstanceQ q(PartialOrder $α)
+        let _a ← synthInstanceQ q(AddLeftMono $α)
+        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
+        assumeInstancesCommute
+        have p : Q(NormNum.IsNat $e $lit) := p
+        pure (.nonnegative q(nonneg_of_isNat' $p))
+  | .isNegNat _ lit p =>
+    let _a ← synthInstanceQ q(Ring $α)
+    let _a ← synthInstanceQ q(PartialOrder $α)
+    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
+    assumeInstancesCommute
+    have p : Q(NormNum.IsInt $e (Int.negOfNat $lit)) := p
+haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+    pure (.nonzero q(nz_of_isNegNat $p $p'))
+  | .isNNRat _i q n d p =>
+    let _a ← synthInstanceQ q(Semiring $α)
+    let _a ← synthInstanceQ q(LinearOrder $α)
+    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
+    assumeInstancesCommute
+    have p : Q(NormNum.IsNNRat $e $n $d) := p
+    if 0 < q then
+      haveI' w : decide (0 < $n) =Q true := ⟨⟩
+      pure (.positive q(pos_of_isNNRat $p $w))
+    else -- should not be reachable, but just in case
+      haveI' w : decide ($n = 0) =Q true := ⟨⟩
+      pure (.nonnegative q(nonneg_of_isNNRat $p $w))
+  | .isNegNNRat _i q n d p =>
+    let _a ← synthInstanceQ q(Ring $α)
+    let _a ← synthInstanceQ q(LinearOrder $α)
+    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
+    assumeInstancesCommute
+    have p : Q(NormNum.IsRat $e (.negOfNat $n) $d) := p
+    if q < 0 then
+      haveI' w : decide (Int.negOfNat $n < 0) =Q true := ⟨⟩
+      pure (.nonzero q(nz_of_isRat $p $w))
+    else -- should not be reachable, but just in case
+      haveI' w : decide (Int.negOfNat $n = 0) =Q true := ⟨⟩
+      pure (.nonnegative q(nonneg_of_isRat $p $w))
 
 Depends on / 依赖: catchNone
 -/
@@ -813,6 +957,41 @@ definition compareHyp
     let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
     let .defEq _ ← isDefEqQ e hi | return .none
     match lo with
+    | ~q(0) =>
+      assertInstancesCommute
+      return .nonnegative q($p)
+    | _ => compareHypLE zα pα lo e p
+  | ~q(@LT.lt.{u} $β $_lt $lo $hi) =>
+    let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+    let .defEq _ ← isDefEqQ e hi | return .none
+    match lo with
+    | ~q(0) =>
+      assertInstancesCommute
+      return .positive q($p)
+    | _ => compareHypLT zα pα lo e p
+  | ~q(@Eq.{u+1} $α' $lhs $rhs) =>
+    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
+    match ← isDefEqQ e rhs with
+    | .defEq _ =>
+      match lhs with
+| ~q(0) => pure .nonnegative q(le_of_eq $p)
+      | _ => compareHypEq zα pα e lhs q($p)
+    | .notDefEq =>
+      let .defEq _ ← isDefEqQ e lhs | pure .none
+      match rhs with
+| ~q(0) => pure .nonnegative q(ge_of_eq $p)
+      | _ => compareHypEq zα pα e rhs q(Eq.symm $p)
+  | ~q(@Ne.{u+1} $α' $lhs $rhs) =>
+    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
+    match lhs, rhs with
+    | ~q(0), _ =>
+      let .defEq _ ← isDefEqQ e rhs | pure .none
+pure .nonzero q(Ne.symm $p)
+    | _, ~q(0) =>
+      let .defEq _ ← isDefEqQ e lhs | pure .none
+pure .nonzero q($p)
+    | _, _ => pure .none
+  | _ => pure .none
 
 中文:
 定义 compareHyp
@@ -826,6 +1005,41 @@ definition compareHyp
     let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
     let .defEq _ ← isDefEqQ e hi | return .none
     match lo with
+    | ~q(0) =>
+      assertInstancesCommute
+      return .nonnegative q($p)
+    | _ => compareHypLE zα pα lo e p
+  | ~q(@LT.lt.{u} $β $_lt $lo $hi) =>
+    let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+    let .defEq _ ← isDefEqQ e hi | return .none
+    match lo with
+    | ~q(0) =>
+      assertInstancesCommute
+      return .positive q($p)
+    | _ => compareHypLT zα pα lo e p
+  | ~q(@Eq.{u+1} $α' $lhs $rhs) =>
+    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
+    match ← isDefEqQ e rhs with
+    | .defEq _ =>
+      match lhs with
+| ~q(0) => pure .nonnegative q(le_of_eq $p)
+      | _ => compareHypEq zα pα e lhs q($p)
+    | .notDefEq =>
+      let .defEq _ ← isDefEqQ e lhs | pure .none
+      match rhs with
+| ~q(0) => pure .nonnegative q(ge_of_eq $p)
+      | _ => compareHypEq zα pα e rhs q(Eq.symm $p)
+  | ~q(@Ne.{u+1} $α' $lhs $rhs) =>
+    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
+    match lhs, rhs with
+    | ~q(0), _ =>
+      let .defEq _ ← isDefEqQ e rhs | pure .none
+pure .nonzero q(Ne.symm $p)
+    | _, ~q(0) =>
+      let .defEq _ ← isDefEqQ e lhs | pure .none
+pure .nonzero q($p)
+    | _, _ => pure .none
+  | _ => pure .none
 -/
 def compareHyp (pα : Q(PartialOrder $α)) (e : Q($α)) (ldecl : LocalDecl) :
     MetaM (Strictness zα e pα) := do
@@ -888,7 +1102,13 @@ definition compareHypNonzero
     let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
     match lhs, rhs with
     | ~q(0), _ =>
-      let .defEq _ ← isDef
+      let .defEq _ ← isDefEqQ e rhs | pure .none
+pure .nonzero q(Ne.symm $p)
+    | _, ~q(0) =>
+      let .defEq _ ← isDefEqQ e lhs | pure .none
+pure .nonzero q($p)
+    | _, _ => pure .none
+  | _ => pure .none
 
 中文:
 定义 compareHypNonzero
@@ -902,7 +1122,13 @@ definition compareHypNonzero
     let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
     match lhs, rhs with
     | ~q(0), _ =>
-      let .defEq _ ← isDef
+      let .defEq _ ← isDefEqQ e rhs | pure .none
+pure .nonzero q(Ne.symm $p)
+    | _, ~q(0) =>
+      let .defEq _ ← isDefEqQ e lhs | pure .none
+pure .nonzero q($p)
+    | _, _ => pure .none
+  | _ => pure .none
 -/
 def compareHypNonzero {pα?} (e : Q($α)) (ldecl : LocalDecl) : MetaM (Strictness zα e pα?) := do
   unless ← isProp ldecl.type do return .none
@@ -937,7 +1163,10 @@ definition orElse
     | .nonzero p₂ => pure (.positive q(lt_of_le_of_ne' $p₁ $p₂))
     | _ => pure (.nonnegative p₁)
   | .nonzero p₁ => do
-    match (dependent 
+    match (dependent := true) ← catchNone t₂ with
+    | p@(.positive _) => pure p
+    | .nonnegative p₂ => pure (.positive q(lt_of_le_of_ne' $p₂ $p₁))
+    | _ => pure (.nonzero p₁)
 
 中文:
 定义 orElse
@@ -951,7 +1180,10 @@ definition orElse
     | .nonzero p₂ => pure (.positive q(lt_of_le_of_ne' $p₁ $p₂))
     | _ => pure (.nonnegative p₁)
   | .nonzero p₁ => do
-    match (dependent 
+    match (dependent := true) ← catchNone t₂ with
+    | p@(.positive _) => pure p
+    | .nonnegative p₂ => pure (.positive q(lt_of_le_of_ne' $p₂ $p₁))
+    | _ => pure (.nonzero p₁)
 
 Depends on / 依赖: catchNone, dependent, lt_of_le_of_ne, nonnegative, nonzero, positive
 -/
@@ -985,7 +1217,32 @@ definition core
 result ← orElse result ext.eval zα pα? e
     catch err =>
       trace[Tactic.positivity] "{e} failed: {err.toMessageData}"
-  trace[Ta
+  trace[Tactic.positivity] "current result from positivity extensions: {result.toString}"
+  match h : pα?, result with
+  | some pα, res =>
+    trace[Tactic.positivity] "{α} has some {pα}"
+let mut res ← orElse res normNumPositivity zα pα e
+    trace[Tactic.positivity] "current result from normNum: {res.toString}"
+res ← orElse res positivityCanon zα pα e
+    trace[Tactic.positivity] "current result from canonicity: {res.toString}"
+    if let .positive _ := res then
+      trace[Tactic.positivity] "{e} => {res.toString}"
+      return h ▸ res
+    for ldecl in ← getLCtx do
+      if !ldecl.isImplementationDetail then
+res ← orElse res compareHyp zα pα e ldecl
+    trace[Tactic.positivity] "{e} => {res.toString}"
+    throwNone (pure (h ▸ res))
+  | .none, _ =>
+    trace[Tactic.positivity] "{α} has no PartialOrder"
+    if let .nonzero _ := result then
+      trace[Tactic.positivity] "{e} => {result.toString}"
+      return result
+    for ldecl in ← getLCtx do
+      if !ldecl.isImplementationDetail then
+result ← orElse result compareHypNonzero zα e ldecl
+    trace[Tactic.positivity] "{e} => {result.toString}"
+    throwNone (pure result)
 
 中文:
 定义 core
@@ -998,7 +1255,32 @@ result ← orElse result ext.eval zα pα? e
 result ← orElse result ext.eval zα pα? e
     catch err =>
       trace[Tactic.positivity] "{e} failed: {err.toMessageData}"
-  trace[Ta
+  trace[Tactic.positivity] "current result from positivity extensions: {result.toString}"
+  match h : pα?, result with
+  | some pα, res =>
+    trace[Tactic.positivity] "{α} has some {pα}"
+let mut res ← orElse res normNumPositivity zα pα e
+    trace[Tactic.positivity] "current result from normNum: {res.toString}"
+res ← orElse res positivityCanon zα pα e
+    trace[Tactic.positivity] "current result from canonicity: {res.toString}"
+    if let .positive _ := res then
+      trace[Tactic.positivity] "{e} => {res.toString}"
+      return h ▸ res
+    for ldecl in ← getLCtx do
+      if !ldecl.isImplementationDetail then
+res ← orElse res compareHyp zα pα e ldecl
+    trace[Tactic.positivity] "{e} => {res.toString}"
+    throwNone (pure (h ▸ res))
+  | .none, _ =>
+    trace[Tactic.positivity] "{α} has no PartialOrder"
+    if let .nonzero _ := result then
+      trace[Tactic.positivity] "{e} => {result.toString}"
+      return result
+    for ldecl in ← getLCtx do
+      if !ldecl.isImplementationDetail then
+result ← orElse result compareHypNonzero zα e ldecl
+    trace[Tactic.positivity] "{e} => {result.toString}"
+    throwNone (pure result)
 -/
 def core (pα? : Option Q(PartialOrder $α)) (e : Q($α)) : MetaM (Strictness zα e pα?) := do
   let mut result := .none
@@ -1080,7 +1362,7 @@ let pα? ← try? synthInstanceQ q(PartialOrder $α)
   match pα?, ← try? (Meta.Positivity.core zα pα? e) with
   | _, some (.positive pf) => pure (true, pf)
   | _, some (.nonnegative pf) => pure (false, pf)
- 
+  | _, _ => throwError "could not establish the nonnegativity of {e}"
 
 中文:
 定义 bestResult
@@ -1093,7 +1375,7 @@ let pα? ← try? synthInstanceQ q(PartialOrder $α)
   match pα?, ← try? (Meta.Positivity.core zα pα? e) with
   | _, some (.positive pf) => pure (true, pf)
   | _, some (.nonnegative pf) => pure (false, pf)
- 
+  | _, _ => throwError "could not establish the nonnegativity of {e}"
 -/
 def bestResult (e : Expr) : MetaM (Bool × Expr) := do
   let ⟨u, α, _⟩ ← inferTypeQ' e
@@ -1138,7 +1420,42 @@ definition solve
     let .true ← isDefEq z q(0 : $α) | throwError "not a positivity goal"
 let pα? ← try? synthInstanceQ q(PartialOrder $α)
 let r ← catchNone Meta.Positivity.core zα pα? e
-  
+    let throw (a b : String) : MetaM Expr := throwError
+      "failed to prove {a}, but it would be possible to prove {b} if desired"
+    match (dependent := true) pα? with
+    | some _ =>
+      match relDesired, r with
+      | .lt, .positive p
+      | .le, .nonnegative p
+      | .ne, .nonzero p => pure p
+      | .le, .positive p => pure q(le_of_lt $p)
+      | .ne, .positive p => pure q(ne_of_gt $p)
+      | .ne', .positive p => pure q(ne_of_lt $p)
+      | .ne', .nonzero p => pure q(Ne.symm $p)
+      | .lt, .nonnegative _ => throw "strict positivity" "nonnegativity"
+      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
+      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
+      | .ne, .nonnegative _
+      | .ne', .nonnegative _ => throw "nonzeroness" "nonnegativity"
+      | _, .none => throwError "failed to prove positivity/nonnegativity/nonzeroness"
+    | none =>
+      match relDesired, r with
+      | .ne, .nonzero p => pure p
+      | .ne', .nonzero p => pure q(Ne.symm $p)
+      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
+      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
+      | _, _ => throwError "failed to prove nonzeroness"
+  match t with
+  | ~q(@LE.le $α $_a $z $e) => rest α z e .le
+  | ~q(@LT.lt $α $_a $z $e) => rest α z e .lt
+  | ~q($a != ($b : ($α : Type _))) =>
+    let _zα ← synthInstanceQ q(Zero $α)
+    if ← isDefEq b q((0 : $α)) then
+      rest α b a .ne
+    else
+      let .true ← isDefEq a q((0 : $α)) | throwError "not a positivity goal"
+      rest α a b .ne'
+  | _ => throwError "not a positivity goal"
 
 中文:
 定义 solve
@@ -1149,7 +1466,42 @@ let r ← catchNone Meta.Positivity.core zα pα? e
     let .true ← isDefEq z q(0 : $α) | throwError "not a positivity goal"
 let pα? ← try? synthInstanceQ q(PartialOrder $α)
 let r ← catchNone Meta.Positivity.core zα pα? e
-  
+    let throw (a b : String) : MetaM Expr := throwError
+      "failed to prove {a}, but it would be possible to prove {b} if desired"
+    match (dependent := true) pα? with
+    | some _ =>
+      match relDesired, r with
+      | .lt, .positive p
+      | .le, .nonnegative p
+      | .ne, .nonzero p => pure p
+      | .le, .positive p => pure q(le_of_lt $p)
+      | .ne, .positive p => pure q(ne_of_gt $p)
+      | .ne', .positive p => pure q(ne_of_lt $p)
+      | .ne', .nonzero p => pure q(Ne.symm $p)
+      | .lt, .nonnegative _ => throw "strict positivity" "nonnegativity"
+      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
+      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
+      | .ne, .nonnegative _
+      | .ne', .nonnegative _ => throw "nonzeroness" "nonnegativity"
+      | _, .none => throwError "failed to prove positivity/nonnegativity/nonzeroness"
+    | none =>
+      match relDesired, r with
+      | .ne, .nonzero p => pure p
+      | .ne', .nonzero p => pure q(Ne.symm $p)
+      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
+      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
+      | _, _ => throwError "failed to prove nonzeroness"
+  match t with
+  | ~q(@LE.le $α $_a $z $e) => rest α z e .le
+  | ~q(@LT.lt $α $_a $z $e) => rest α z e .lt
+  | ~q($a != ($b : ($α : Type _))) =>
+    let _zα ← synthInstanceQ q(Zero $α)
+    if ← isDefEq b q((0 : $α)) then
+      rest α b a .ne
+    else
+      let .true ← isDefEq a q((0 : $α)) | throwError "not a positivity goal"
+      rest α a b .ne'
+  | _ => throwError "not a positivity goal"
 -/
 def solve (t : Q(Prop)) : MetaM Expr := do
   let rest {u : Level} (α : Q(Type u)) z e (relDesired : OrderRel) : MetaM Expr := do

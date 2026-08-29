@@ -1074,7 +1074,10 @@ propext ⟨fun h => h₁.2.trans h.trans h₂.1, fun h => h₁.1.trans h.trans h
     Quotient.lift₂ (· < ·) fun (_ _ _ _ : α) h₁ h₂ =>
 propext ⟨fun h => h₁.2.trans_lt h.trans_le h₂.1, fun h =>
 h₁.1.trans_lt h.trans_le h₂.2⟩
-  le_refl a := Quotie
+  le_refl a := Quotient.inductionOn' a le_refl
+  le_trans a b c := Quotient.inductionOn₃' a b c fun _ _ _ => le_trans
+  lt_iff_le_not_ge a b := Quotient.inductionOn₂' a b fun _ _ => lt_iff_le_not_ge
+  le_antisymm a b := Quotient.inductionOn₂' a b fun _ _ hab hba => Quotient.sound' ⟨hab, hba⟩
 
 中文:
 实例 instPartialOrderAntisymmetrization
@@ -1085,7 +1088,10 @@ propext ⟨fun h => h₁.2.trans h.trans h₂.1, fun h => h₁.1.trans h.trans h
     Quotient.lift₂ (· < ·) fun (_ _ _ _ : α) h₁ h₂ =>
 propext ⟨fun h => h₁.2.trans_lt h.trans_le h₂.1, fun h =>
 h₁.1.trans_lt h.trans_le h₂.2⟩
-  le_refl a := Quotie
+  le_refl a := Quotient.inductionOn' a le_refl
+  le_trans a b c := Quotient.inductionOn₃' a b c fun _ _ _ => le_trans
+  lt_iff_le_not_ge a b := Quotient.inductionOn₂' a b fun _ _ => lt_iff_le_not_ge
+  le_antisymm a b := Quotient.inductionOn₂' a b fun _ _ hab hba => Quotient.sound' ⟨hab, hba⟩
 
 Depends on / 依赖: Quotient, Quotient.induct, Quotient.inductionOn, Quotient.lift, h.trans, h.trans_le, induct, inductionOn, le_antisymm, le_refl, le_trans, lt_iff_le_not_ge, propext, trans_le, trans_lt
 -/
@@ -1248,7 +1254,9 @@ instance [DecidableLE
   body: { instPartialOrderAntisymmetrization with
 le_total := fun a b => Quotient.inductionOn₂' a b total_of (· <= ·),
     toDecidableLE := fun _ _ => show Decidable (Quotient.liftOn₂' _ _ _ _) from inferInstance,
-    toDecidableLT := fun _ _ => show Decidable (Quotient.liftOn₂' _ _ _ _) from inferInstance 
+    toDecidableLT := fun _ _ => show Decidable (Quotient.liftOn₂' _ _ _ _) from inferInstance }
+
+@[simp]
 
 中文:
 实例 [DecidableLE
@@ -1256,7 +1264,9 @@ le_total := fun a b => Quotient.inductionOn₂' a b total_of (· <= ·),
   定义体: { instPartialOrderAntisymmetrization with
 le_total := fun a b => Quotient.inductionOn₂' a b total_of (· <= ·),
     toDecidableLE := fun _ _ => show Decidable (Quotient.liftOn₂' _ _ _ _) from inferInstance,
-    toDecidableLT := fun _ _ => show Decidable (Quotient.liftOn₂' _ _ _ _) from inferInstance 
+    toDecidableLT := fun _ _ => show Decidable (Quotient.liftOn₂' _ _ _ _) from inferInstance }
+
+@[simp]
 
 Depends on / 依赖: Decidable, Quotient, Quotient.inductionOn, Quotient.liftOn, instPartialOrderAntisymmetrization, le_total, toDecidableLE, toDecidableLT, total_of
 -/
@@ -1509,7 +1519,9 @@ definition OrderIso.dualAntisymmetrization
   invFun := (Quotient.map' id) fun _ _ => And.symm
   left_inv a := Quotient.inductionOn' a fun a => by simp_rw [Quotient.map'_mk'', id]
   right_inv a := Quotient.inductionOn' a fun a => by simp_rw [Quotient.map'_mk'', id]
-  map_rel_iff' := @fun a b => Quotient.
+  map_rel_iff' := @fun a b => Quotient.inductionOn₂' a b fun _ _ => Iff.rfl
+
+@[simp]
 
 中文:
 定义 OrderIso.dualAntisymmetrization
@@ -1518,7 +1530,9 @@ definition OrderIso.dualAntisymmetrization
   invFun := (Quotient.map' id) fun _ _ => And.symm
   left_inv a := Quotient.inductionOn' a fun a => by simp_rw [Quotient.map'_mk'', id]
   right_inv a := Quotient.inductionOn' a fun a => by simp_rw [Quotient.map'_mk'', id]
-  map_rel_iff' := @fun a b => Quotient.
+  map_rel_iff' := @fun a b => Quotient.inductionOn₂' a b fun _ _ => Iff.rfl
+
+@[simp]
 
 Depends on / 依赖: And.symm, Quotient, Quotient.map
 -/
@@ -1826,7 +1840,9 @@ definition prodEquiv
     Prod.ext (Quotient.sound ⟨h.1.1, h.2.1⟩) (Quotient.sound ⟨h.1.2, h.2.2⟩)
 invFun := Function.uncurry Quotient.lift₂ (fun a b => ⟦(a, b)⟧)
     fun a₁ b₁ a₂ b₂ h₁ h₂ => Quotient.sound ⟨⟨h₁.1, h₂.1⟩, h₁.2, h₂.2⟩
-  left_inv := by rintro ⟨_⟩;
+  left_inv := by rintro ⟨_⟩; rfl
+  right_inv := by rintro ⟨⟨_⟩, ⟨_⟩⟩; rfl
+  map_rel_iff' := by rintro ⟨_⟩ ⟨_⟩; rfl
 
 中文:
 定义 prodEquiv
@@ -1835,7 +1851,9 @@ invFun := Function.uncurry Quotient.lift₂ (fun a b => ⟦(a, b)⟧)
     Prod.ext (Quotient.sound ⟨h.1.1, h.2.1⟩) (Quotient.sound ⟨h.1.2, h.2.2⟩)
 invFun := Function.uncurry Quotient.lift₂ (fun a b => ⟦(a, b)⟧)
     fun a₁ b₁ a₂ b₂ h₁ h₂ => Quotient.sound ⟨⟨h₁.1, h₂.1⟩, h₁.2, h₂.2⟩
-  left_inv := by rintro ⟨_⟩;
+  left_inv := by rintro ⟨_⟩; rfl
+  right_inv := by rintro ⟨⟨_⟩, ⟨_⟩⟩; rfl
+  map_rel_iff' := by rintro ⟨_⟩ ⟨_⟩; rfl
 
 Depends on / 依赖: Quotient, Quotient.lift
 -/

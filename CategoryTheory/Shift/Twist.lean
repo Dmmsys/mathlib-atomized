@@ -182,7 +182,13 @@ definition shiftMkCore
   zero := shiftFunctorZero C A
   add a b := NatIso.ofComponents (fun X => t.z a b • (shiftFunctorAdd C a b).app X) (by
     simp [CatCenter.naturality_assoc, CatCenter.naturality, CatCenter.smul_iso_hom_eq])
-  add_zero_hom_app := by simp [shiftFunctorAdd_add_zero_hom_app, CatCenter.s
+  add_zero_hom_app := by simp [shiftFunctorAdd_add_zero_hom_app, CatCenter.smul_iso_hom_eq]
+  zero_add_hom_app := by simp [shiftFunctorAdd_zero_add_hom_app, CatCenter.smul_iso_hom_eq]
+  assoc_hom_app a b c X := by
+    dsimp
+    simp only [Functor.map_comp, Category.assoc, CatCenter.smul_iso_hom_eq]
+    rw [CatCenter.naturality]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [t.shift_z_app]; rw [CatCenter.naturality]; rw [CatCenter.naturality_assoc]; rw [← CatCenter.mul_app_assoc]; rw [← CatCenter.mul_app_assoc]; rw [← Units.val_mul]; rw [← Units.val_mul]; rw [t.assoc a b c]
+    simp [shiftFunctorAdd_assoc_hom_app (C := C) a b c X, shiftFunctorAdd']
 
 中文:
 定义 shiftMkCore
@@ -191,7 +197,13 @@ definition shiftMkCore
   zero := shiftFunctorZero C A
   add a b := NatIso.ofComponents (fun X => t.z a b • (shiftFunctorAdd C a b).app X) (by
     simp [CatCenter.naturality_assoc, CatCenter.naturality, CatCenter.smul_iso_hom_eq])
-  add_zero_hom_app := by simp [shiftFunctorAdd_add_zero_hom_app, CatCenter.s
+  add_zero_hom_app := by simp [shiftFunctorAdd_add_zero_hom_app, CatCenter.smul_iso_hom_eq]
+  zero_add_hom_app := by simp [shiftFunctorAdd_zero_add_hom_app, CatCenter.smul_iso_hom_eq]
+  assoc_hom_app a b c X := by
+    dsimp
+    simp only [Functor.map_comp, Category.assoc, CatCenter.smul_iso_hom_eq]
+    rw [CatCenter.naturality]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [CatCenter.naturality_assoc]; rw [t.shift_z_app]; rw [CatCenter.naturality]; rw [CatCenter.naturality_assoc]; rw [← CatCenter.mul_app_assoc]; rw [← CatCenter.mul_app_assoc]; rw [← Units.val_mul]; rw [← Units.val_mul]; rw [t.assoc a b c]
+    simp [shiftFunctorAdd_assoc_hom_app (C := C) a b c X, shiftFunctorAdd']
 
 Depends on / 依赖: shiftFunctor
 -/

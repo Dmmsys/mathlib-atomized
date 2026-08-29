@@ -235,7 +235,11 @@ lemma bijective_algebraMap_quotient
   obtain ⟨i, q, hq⟩ := PrimeSpectrum.exists_comap_evalRingHom_eq ⟨p', inferInstance⟩
   obtain rfl : q = ⊥ := Subsingleton.elim _ _
   let g : (R ⧸ p) ≃ₐ[k] k :=
-(quotientEquivAlg _ p' e <| comap_symm e.t
+(quotientEquivAlg _ p' e <| comap_symm e.toRingEquiv).trans
+(quotientEquivAlgOfEq k congr($(hq).asIdeal).symm).trans
+    quotientKerAlgEquivOfSurjective (f := Pi.evalAlgHom k (fun _ => k) i)
+      (Function.surjective_eval _)
+  simpa [← g.symm.toAlgHom.comp_algebraMap] using g.symm.bijective
 
 中文:
 引理 bijective_algebraMap_quotient
@@ -246,7 +250,11 @@ lemma bijective_algebraMap_quotient
   obtain ⟨i, q, hq⟩ := PrimeSpectrum.exists_comap_evalRingHom_eq ⟨p', inferInstance⟩
   obtain rfl : q = ⊥ := Subsingleton.elim _ _
   let g : (R ⧸ p) ≃ₐ[k] k :=
-(quotientEquivAlg _ p' e <| comap_symm e.t
+(quotientEquivAlg _ p' e <| comap_symm e.toRingEquiv).trans
+(quotientEquivAlgOfEq k congr($(hq).asIdeal).symm).trans
+    quotientKerAlgEquivOfSurjective (f := Pi.evalAlgHom k (fun _ => k) i)
+      (Function.surjective_eval _)
+  simpa [← g.symm.toAlgHom.comp_algebraMap] using g.symm.bijective
 
 Depends on / 依赖: Function, Function.surjective_eval, Pi.evalAlgHom, PrimeSpectrum, PrimeSpectrum.exists_comap_evalRingHom_eq, Subsingleton, Subsingleton.elim, asIdeal, comap_symm, comp_algebr, e.symm, e.toRingEquiv, evalAlgHom, exists_comap_evalRingHom_eq, g.symm.toAlgHom.comp_algebr, nonempty_algEquiv_fun, p.comap, quotientEquivAlg, quotientEquivAlgOfEq, quotientKerAlgEquivOfSurjective
 -/
@@ -283,7 +291,16 @@ definition algHomEquivPrimeSpectrum
     ext
     dsimp
     have : (RingHom.ker f).IsPrime := RingHom.ker_isPrime f
-    a
+    apply (AlgEquiv.ofBijective (ofId k (R ⧸ RingHom.ker f))
+      (bijective_algebraMap_quotient _ _)).injective
+    rw [AlgEquiv.apply_symm_apply]; rw [AlgEquiv.coe_ofBijective]; rw [ofId_apply]; rw [IsScalarTower.algebraMap_apply k R]
+    simp [-Ideal.Quotient.mk_algebraMap, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+  right_inv p := by
+    ext : 1
+    dsimp
+    rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgEquiv.toAlgHom_toRingHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]
+
+@[simp]
 
 中文:
 定义 algHomEquivPrimeSpectrum
@@ -296,7 +313,16 @@ definition algHomEquivPrimeSpectrum
     ext
     dsimp
     have : (RingHom.ker f).IsPrime := RingHom.ker_isPrime f
-    a
+    apply (AlgEquiv.ofBijective (ofId k (R ⧸ RingHom.ker f))
+      (bijective_algebraMap_quotient _ _)).injective
+    rw [AlgEquiv.apply_symm_apply]; rw [AlgEquiv.coe_ofBijective]; rw [ofId_apply]; rw [IsScalarTower.algebraMap_apply k R]
+    simp [-Ideal.Quotient.mk_algebraMap, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+  right_inv p := by
+    ext : 1
+    dsimp
+    rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgEquiv.toAlgHom_toRingHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]
+
+@[simp]
 
 Depends on / 依赖: RingHom, RingHom.ker, RingHom.ker_isPrime, ker_isPrime
 -/
@@ -376,7 +402,61 @@ lemma exists_tensorProduct_of_etale
     use R, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance
     let e : R otimes[R] S ≃ₐ[R] S := TensorProduct.lid R S
     have : IsFiniteSplit R S := by
-      rw [Nat.cast_zero]; rw [Module.rankAtStalk_eq_zero_iff_subsingle
+      rw [Nat.cast_zero]; rw [Module.rankAtStalk_eq_zero_iff_subsingleton] at hn
+      exact of_subsingleton_top
+    apply IsFiniteSplit.of_algEquiv e.symm
+  | succ n ih =>
+    cases subsingleton_or_nontrivial R
+    · use R, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance
+      have : IsFiniteSplit R S := .of_subsingleton
+      exact .of_algEquiv (TensorProduct.lid R S).symm
+    have : Nontrivial S := by
+      apply Module.nontrivial_of_rankAtStalk_pos (R := R)
+      simp [hn]
+    /- Because `S` is unramified over `R`, there exists an `S`-algebra `U` such that
+    `S ⊗[R] S ≃ₐ[S] S × U`. -/
+    obtain ⟨U, _, _, ⟨e⟩⟩ := Algebra.FormallyUnramified.exists_algEquiv_prod R S
+    algebraize [RingHom.snd S U]
+    have : IsScalarTower S (S × U) U := IsScalarTower.of_algebraMap_eq' rfl
+    have : Etale S U := by
+      have : Etale S (S × U) := Etale.of_equiv e
+      exact .comp S (S × U) U
+    have : Module.Finite S U := by
+      have : Module.Finite S (S × U) := Module.Finite.equiv e.toLinearEquiv
+      have : Module.Finite (S × U) U :=
+        Module.Finite.of_surjective (Algebra.linearMap (S × U) U) (RingHom.snd S U).surjective
+      exact Module.Finite.trans (S × U) _
+    have (p : PrimeSpectrum S) : Module.rankAtStalk (R := S) (S × U) p = n + 1 := by
+      simp [Module.rankAtStalk_eq_of_equiv e.symm.toLinearEquiv, Module.rankAtStalk_baseChange, hn]
+    simp_rw [Module.rankAtStalk_prod , Module.rankAtStalk_self, Pi.add_apply, Pi.one_apply] at this
+    /- Since the `S`-rank of `S × U = S ⊗[R] S` is `n + 1`, the `S`-rank of `U` is `n`,
+    so we may apply the induction hypothesis on `U`. -/
+    have : Module.rankAtStalk (R := S) U = n := by
+      ext p
+      simp only [Pi.natCast_def, Nat.cast_id]
+      grind
+    /- We obtain a finite étale, faithfully flat `S`-algebra `V` such that `V ⊗[S] U` is finite
+    split. We claim that `V` viewed as an `R`-algebra works. -/
+    obtain ⟨V, _, _, _, _, _, hV⟩ := ih this
+    obtain ⟨n, ⟨f⟩⟩ := hV.nonempty_algEquiv_fun
+    algebraize [(algebraMap S V).comp (algebraMap R S)]
+    let e : V otimes[R] S ≃ₐ[V] Unit oplus Fin n -> V :=
+(Algebra.TensorProduct.cancelBaseChange R S V V S).symm.trans
+(TensorProduct.congr AlgEquiv.refl e).trans
+(TensorProduct.prodRight S V V S U).trans
+(AlgEquiv.prodCongr (TensorProduct.rid S V V) f).trans
+        (AlgEquiv.prodCongr (AlgEquiv.funUnique _ _ _).symm AlgEquiv.refl).trans
+        (AlgEquiv.sumArrowEquivProdArrow Unit (Fin n) V V).symm
+    refine ⟨V, inferInstance, inferInstance, ?_, ?_, ?_, ?_⟩
+    · have : Module.FaithfullyFlat R S := by
+        apply Module.FaithfullyFlat.of_comap_surjective
+        rw [← PrimeSpectrum.rankAtStalk_pos_iff_comap_surjective]
+        intro p
+        simp [hn]
+      exact Module.FaithfullyFlat.trans R S V
+    · exact Module.Finite.trans S V
+    · exact Algebra.Etale.comp R S V
+    · exact .of_algEquiv e.symm
 
 中文:
 引理 存在_tensorProduct_of_etale
@@ -387,7 +467,61 @@ lemma exists_tensorProduct_of_etale
     use R, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance
     let e : R otimes[R] S ≃ₐ[R] S := TensorProduct.lid R S
     have : IsFiniteSplit R S := by
-      rw [Nat.cast_zero]; rw [Module.rankAtStalk_eq_zero_iff_subsingle
+      rw [Nat.cast_zero]; rw [Module.rankAtStalk_eq_zero_iff_subsingleton] at hn
+      exact of_subsingleton_top
+    apply IsFiniteSplit.of_algEquiv e.symm
+  | succ n ih =>
+    cases subsingleton_or_nontrivial R
+    · use R, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance
+      have : IsFiniteSplit R S := .of_subsingleton
+      exact .of_algEquiv (TensorProduct.lid R S).symm
+    have : Nontrivial S := by
+      apply Module.nontrivial_of_rankAtStalk_pos (R := R)
+      simp [hn]
+    /- Because `S` is unramified over `R`, there exists an `S`-algebra `U` such that
+    `S ⊗[R] S ≃ₐ[S] S × U`. -/
+    obtain ⟨U, _, _, ⟨e⟩⟩ := Algebra.FormallyUnramified.exists_algEquiv_prod R S
+    algebraize [RingHom.snd S U]
+    have : IsScalarTower S (S × U) U := IsScalarTower.of_algebraMap_eq' rfl
+    have : Etale S U := by
+      have : Etale S (S × U) := Etale.of_equiv e
+      exact .comp S (S × U) U
+    have : Module.Finite S U := by
+      have : Module.Finite S (S × U) := Module.Finite.equiv e.toLinearEquiv
+      have : Module.Finite (S × U) U :=
+        Module.Finite.of_surjective (Algebra.linearMap (S × U) U) (RingHom.snd S U).surjective
+      exact Module.Finite.trans (S × U) _
+    have (p : PrimeSpectrum S) : Module.rankAtStalk (R := S) (S × U) p = n + 1 := by
+      simp [Module.rankAtStalk_eq_of_equiv e.symm.toLinearEquiv, Module.rankAtStalk_baseChange, hn]
+    simp_rw [Module.rankAtStalk_prod , Module.rankAtStalk_self, Pi.add_apply, Pi.one_apply] at this
+    /- Since the `S`-rank of `S × U = S ⊗[R] S` is `n + 1`, the `S`-rank of `U` is `n`,
+    so we may apply the induction hypothesis on `U`. -/
+    have : Module.rankAtStalk (R := S) U = n := by
+      ext p
+      simp only [Pi.natCast_def, Nat.cast_id]
+      grind
+    /- We obtain a finite étale, faithfully flat `S`-algebra `V` such that `V ⊗[S] U` is finite
+    split. We claim that `V` viewed as an `R`-algebra works. -/
+    obtain ⟨V, _, _, _, _, _, hV⟩ := ih this
+    obtain ⟨n, ⟨f⟩⟩ := hV.nonempty_algEquiv_fun
+    algebraize [(algebraMap S V).comp (algebraMap R S)]
+    let e : V otimes[R] S ≃ₐ[V] Unit oplus Fin n -> V :=
+(Algebra.TensorProduct.cancelBaseChange R S V V S).symm.trans
+(TensorProduct.congr AlgEquiv.refl e).trans
+(TensorProduct.prodRight S V V S U).trans
+(AlgEquiv.prodCongr (TensorProduct.rid S V V) f).trans
+        (AlgEquiv.prodCongr (AlgEquiv.funUnique _ _ _).symm AlgEquiv.refl).trans
+        (AlgEquiv.sumArrowEquivProdArrow Unit (Fin n) V V).symm
+    refine ⟨V, inferInstance, inferInstance, ?_, ?_, ?_, ?_⟩
+    · have : Module.FaithfullyFlat R S := by
+        apply Module.FaithfullyFlat.of_comap_surjective
+        rw [← PrimeSpectrum.rankAtStalk_pos_iff_comap_surjective]
+        intro p
+        simp [hn]
+      exact Module.FaithfullyFlat.trans R S V
+    · exact Module.Finite.trans S V
+    · exact Algebra.Etale.comp R S V
+    · exact .of_algEquiv e.symm
 -/
 lemma exists_tensorProduct_of_etale [Etale R S] [Module.Finite R S] {n : Nat}
     (hn : Module.rankAtStalk (R := R) S = n) :

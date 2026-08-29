@@ -454,7 +454,8 @@ theorem sum_finsupport'
     rw [this]; rw [add_eq_right]; rw [Finset.sum_const_zero]
   apply Finset.sum_congr rfl
   rintro x hx
-  simp only [Finset.mem_sdiff, ρ.mem_finsu
+  simp only [Finset.mem_sdiff, ρ.mem_finsupport, mem_support, Classical.not_not] at hx
+  exact hx.2
 
 中文:
 定理 sum_finsupport'
@@ -466,7 +467,8 @@ theorem sum_finsupport'
     rw [this]; rw [add_eq_right]; rw [Finset.sum_const_zero]
   apply Finset.sum_congr rfl
   rintro x hx
-  simp only [Finset.mem_sdiff, ρ.mem_finsu
+  simp only [Finset.mem_sdiff, ρ.mem_finsupport, mem_support, Classical.not_not] at hx
+  exact hx.2
 
 Depends on / 依赖: Classical, Classical.not_not, Finset, Finset.mem_sdiff, Finset.sum_congr, Finset.sum_const_zero, Finset.sum_sdiff, add_eq_right, classical, finsupport, mem_finsupport, mem_sdiff, mem_support, not_not, sum_congr, sum_const_zero, sum_finsupport, sum_sdiff
 -/
@@ -977,7 +979,8 @@ definition single
     rw [mem_singleton_iff] at hx
     simp [hx]
   nonneg' := le_update_iff.2 ⟨fun _ => zero_le_one, fun _ _ => le_rfl⟩
-  le_one' := update_le_iff.2 ⟨le_rfl, fu
+  le_one' := update_le_iff.2 ⟨le_rfl, fun _ _ _ => zero_le_one⟩
+  eventuallyEq_one' x _ := ⟨i, by rw [Pi.single_eq_same, ContinuousMap.coe_one]⟩
 
 中文:
 定义 single
@@ -990,7 +993,8 @@ definition single
     rw [mem_singleton_iff] at hx
     simp [hx]
   nonneg' := le_update_iff.2 ⟨fun _ => zero_le_one, fun _ _ => le_rfl⟩
-  le_one' := update_le_iff.2 ⟨le_rfl, fu
+  le_one' := update_le_iff.2 ⟨le_rfl, fun _ _ _ => zero_le_one⟩
+  eventuallyEq_one' x _ := ⟨i, by rw [Pi.single_eq_same, ContinuousMap.coe_one]⟩
 -/
 protected def single (i : ι) (s : Set X) : BumpCovering ι X s where
   toFun := Pi.single i 1
@@ -1089,7 +1093,18 @@ theorem exists_isSubordinate_of_locallyFinite_of_prop
   rcases exists_subset_iUnion_closure_subset hs ho (fun x _ => hf.point_finite x) hU with
     ⟨V, hsV, hVo, hVU⟩
   have hVU' : forall i, V i subseteq U i := fun i => Subset.trans subset_closure (hVU i)
-  rcases exists_subset_iUnion_closure_subset hs hVo (fun x _ => (hf.subset hVU').point_finite x
+  rcases exists_subset_iUnion_closure_subset hs hVo (fun x _ => (hf.subset hVU').point_finite x)
+      hsV with
+    ⟨W, hsW, hWo, hWV⟩
+  choose f hfp hf0 hf1 hf01 using fun i =>
+    h01 _ _ (isClosed_compl_iff.2 <| hVo i) isClosed_closure
+      (disjoint_right.2 fun x hx => Classical.not_not.2 (hWV i hx))
+  have hsupp : forall i, support (f i) subseteq V i := fun i => support_subset_iff'.2 (hf0 i)
+  refine ⟨⟨f, hf.subset fun i => Subset.trans (hsupp i) (hVU' i), fun i x => (hf01 i x).1,
+      fun i x => (hf01 i x).2, fun x hx => ?_⟩,
+    hfp, fun i => Subset.trans (closure_mono (hsupp i)) (hVU i)⟩
+  rcases mem_iUnion.1 (hsW hx) with ⟨i, hi⟩
+  exact ⟨i, ((hf1 i).mono subset_closure).eventuallyEq_of_mem ((hWo i).mem_nhds hi)⟩
 
 中文:
 定理 存在_isSubordinate_of_locallyFinite_of_prop
@@ -1098,7 +1113,18 @@ theorem exists_isSubordinate_of_locallyFinite_of_prop
   rcases exists_subset_iUnion_closure_subset hs ho (fun x _ => hf.point_finite x) hU with
     ⟨V, hsV, hVo, hVU⟩
   have hVU' : forall i, V i subseteq U i := fun i => Subset.trans subset_closure (hVU i)
-  rcases exists_subset_iUnion_closure_subset hs hVo (fun x _ => (hf.subset hVU').point_finite x
+  rcases exists_subset_iUnion_closure_subset hs hVo (fun x _ => (hf.subset hVU').point_finite x)
+      hsV with
+    ⟨W, hsW, hWo, hWV⟩
+  choose f hfp hf0 hf1 hf01 using fun i =>
+    h01 _ _ (isClosed_compl_iff.2 <| hVo i) isClosed_closure
+      (disjoint_right.2 fun x hx => Classical.not_not.2 (hWV i hx))
+  have hsupp : forall i, support (f i) subseteq V i := fun i => support_subset_iff'.2 (hf0 i)
+  refine ⟨⟨f, hf.subset fun i => Subset.trans (hsupp i) (hVU' i), fun i x => (hf01 i x).1,
+      fun i x => (hf01 i x).2, fun x hx => ?_⟩,
+    hfp, fun i => Subset.trans (closure_mono (hsupp i)) (hVU i)⟩
+  rcases mem_iUnion.1 (hsW hx) with ⟨i, hi⟩
+  exact ⟨i, ((hf1 i).mono subset_closure).eventuallyEq_of_mem ((hWo i).mem_nhds hi)⟩
 
 Depends on / 依赖: Classical, Classical.not_not, Subset, Subset.trans, disjoint_right, exists_subset_iUnion_closure_subset, hf.point_finite, hf.subset, isClosed_closure, isClosed_compl_iff, not_not, point_finite, subset, subset_closure, subseteq
 -/
@@ -1226,7 +1252,17 @@ theorem exists_isSubordinate_of_locallyFinite_of_prop_t2space
     ⟨V, hsV, hVo, hVU, hcp⟩
   have hVU' i : V i subseteq U i := subset_closure.trans (hVU i)
   rcases exists_subset_iUnion_closure_subset_t2space hs hVo
-    (fun x _ => (hf.subset hVU').point_finite 
+    (fun x _ => (hf.subset hVU').point_finite x) hsV with ⟨W, hsW, hWo, hWV, hWc⟩
+  choose f hfp hf0 hf1 hf01 using fun i =>
+    h01 _ _ (isClosed_compl_iff.2 <| hVo i) (hWc i)
+      (disjoint_right.2 fun x hx => Classical.not_not.2 (hWV i hx))
+  have hsupp i : support (f i) subseteq V i := support_subset_iff'.2 (hf0 i)
+  refine ⟨⟨f, hf.subset fun i => Subset.trans (hsupp i) (hVU' i), fun i x => (hf01 i x).1,
+      fun i x => (hf01 i x).2, fun x hx => ?_⟩,
+    hfp, fun i => Subset.trans (closure_mono (hsupp i)) (hVU i),
+fun i => IsCompact.of_isClosed_subset (hcp i) isClosed_closure closure_mono (hsupp i)⟩
+  rcases mem_iUnion.1 (hsW hx) with ⟨i, hi⟩
+  exact ⟨i, ((hf1 i).mono subset_closure).eventuallyEq_of_mem ((hWo i).mem_nhds hi)⟩
 
 中文:
 定理 存在_isSubordinate_of_locallyFinite_of_prop_t2space
@@ -1236,7 +1272,17 @@ theorem exists_isSubordinate_of_locallyFinite_of_prop_t2space
     ⟨V, hsV, hVo, hVU, hcp⟩
   have hVU' i : V i subseteq U i := subset_closure.trans (hVU i)
   rcases exists_subset_iUnion_closure_subset_t2space hs hVo
-    (fun x _ => (hf.subset hVU').point_finite 
+    (fun x _ => (hf.subset hVU').point_finite x) hsV with ⟨W, hsW, hWo, hWV, hWc⟩
+  choose f hfp hf0 hf1 hf01 using fun i =>
+    h01 _ _ (isClosed_compl_iff.2 <| hVo i) (hWc i)
+      (disjoint_right.2 fun x hx => Classical.not_not.2 (hWV i hx))
+  have hsupp i : support (f i) subseteq V i := support_subset_iff'.2 (hf0 i)
+  refine ⟨⟨f, hf.subset fun i => Subset.trans (hsupp i) (hVU' i), fun i x => (hf01 i x).1,
+      fun i x => (hf01 i x).2, fun x hx => ?_⟩,
+    hfp, fun i => Subset.trans (closure_mono (hsupp i)) (hVU i),
+fun i => IsCompact.of_isClosed_subset (hcp i) isClosed_closure closure_mono (hsupp i)⟩
+  rcases mem_iUnion.1 (hsW hx) with ⟨i, hi⟩
+  exact ⟨i, ((hf1 i).mono subset_closure).eventuallyEq_of_mem ((hWo i).mem_nhds hi)⟩
 
 Depends on / 依赖: Classical, Classical.not_not, disjoint_right, exists_subset_iUnion_closure_subset_t2space, hf.point_finite, hf.subset, isClosed_compl_iff, not_not, point_finite, subset, subset_closure, subset_closure.trans, subseteq, support
 -/
@@ -1275,7 +1321,7 @@ theorem exists_isSubordinate_hasCompactSupport_of_locallyFinite_t2space
     exists_isSubordinate_of_locallyFinite_of_prop_t2space (fun _ => True)
       (fun _ _ ht hs hd =>
         (exists_continuous_zero_one_of_isCompact' hs ht hd.symm).imp fun _ hf => ⟨trivial, hf⟩)
-      hs U ho
+      hs U ho hf hU
 
 中文:
 定理 存在_isSubordinate_hasCompactSupport_of_locallyFinite_t2space
@@ -1286,7 +1332,7 @@ theorem exists_isSubordinate_hasCompactSupport_of_locallyFinite_t2space
     exists_isSubordinate_of_locallyFinite_of_prop_t2space (fun _ => True)
       (fun _ _ ht hs hd =>
         (exists_continuous_zero_one_of_isCompact' hs ht hd.symm).imp fun _ hf => ⟨trivial, hf⟩)
-      hs U ho
+      hs U ho hf hU
 -/
 theorem exists_isSubordinate_hasCompactSupport_of_locallyFinite_t2space [LocallyCompactSpace X]
     [T2Space X]
@@ -1464,7 +1510,14 @@ theorem sum_toPOUFun_eq
     rw [hs]
     exact fun i hi => f.support_toPOUFun_subset i hi
   have B : (mulSupport fun i => 1 - f i x) subseteq s := by
- 
+    rw [hs]; rw [mulSupport_one_sub]
+    exact fun i => id
+  classical
+  let : LinearOrder ι := linearOrderOfSTO WellOrderingRel
+  rw [finsum_eq_sum_of_support_subset _ A]; rw [finprod_eq_prod_of_mulSupport_subset _ B]; rw [Finset.prod_one_sub_ordered]; rw [sub_sub_cancel]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  convert! f.toPOUFun_eq_mul_prod _ _ _ fun j _ hj => _
+  rwa [Finite.mem_toFinset]
 
 中文:
 定理 sum_toPOUFun_eq
@@ -1477,7 +1530,14 @@ theorem sum_toPOUFun_eq
     rw [hs]
     exact fun i hi => f.support_toPOUFun_subset i hi
   have B : (mulSupport fun i => 1 - f i x) subseteq s := by
- 
+    rw [hs]; rw [mulSupport_one_sub]
+    exact fun i => id
+  classical
+  let : LinearOrder ι := linearOrderOfSTO WellOrderingRel
+  rw [finsum_eq_sum_of_support_subset _ A]; rw [finprod_eq_prod_of_mulSupport_subset _ B]; rw [Finset.prod_one_sub_ordered]; rw [sub_sub_cancel]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  convert! f.toPOUFun_eq_mul_prod _ _ _ fun j _ hj => _
+  rwa [Finite.mem_toFinset]
 
 Depends on / 依赖: Finite, Finite.coe_toFinset, Finset, LinearOrder, WellOrderingRel, classical, coe_toFinset, f.point_finite, f.support_toPOUFun_subset, finprod_eq_prod_of_mulSupport_subset, finsum_eq_sum_of_support_subset, linearOrderOfSTO, mulSupport, mulSupport_one_sub, point_finite, subseteq, support, support_toPOUFun_subset, toFinset, toPOUFun
 -/
@@ -1578,7 +1638,14 @@ definition toPartitionOfUnity
   nonneg' i x :=
     mul_nonneg (f.nonneg i x) (finprod_cond_nonneg fun j _ => sub_nonneg.2 <| f.le_one j x)
   sum_eq_one' x hx := by
-    simp only [ContinuousMap.coe_mk, sum_toPOUFun_eq, sub
+    simp only [ContinuousMap.coe_mk, sum_toPOUFun_eq, sub_eq_self]
+    apply finprod_eq_zero (fun i => 1 - f i x) (f.ind x hx)
+    · simp only [f.ind_apply x hx, sub_self]
+    · rw [HasFiniteMulSupport, mulSupport_one_sub]
+      exact f.point_finite x
+  sum_le_one' x := by
+    simp only [ContinuousMap.coe_mk, sum_toPOUFun_eq, sub_le_self_iff]
+exact finprod_nonneg fun i => sub_nonneg.2 f.le_one i x
 
 中文:
 定义 toPartitionOfUnity
@@ -1588,7 +1655,14 @@ definition toPartitionOfUnity
   nonneg' i x :=
     mul_nonneg (f.nonneg i x) (finprod_cond_nonneg fun j _ => sub_nonneg.2 <| f.le_one j x)
   sum_eq_one' x hx := by
-    simp only [ContinuousMap.coe_mk, sum_toPOUFun_eq, sub
+    simp only [ContinuousMap.coe_mk, sum_toPOUFun_eq, sub_eq_self]
+    apply finprod_eq_zero (fun i => 1 - f i x) (f.ind x hx)
+    · simp only [f.ind_apply x hx, sub_self]
+    · rw [HasFiniteMulSupport, mulSupport_one_sub]
+      exact f.point_finite x
+  sum_le_one' x := by
+    simp only [ContinuousMap.coe_mk, sum_toPOUFun_eq, sub_le_self_iff]
+exact finprod_nonneg fun i => sub_nonneg.2 f.le_one i x
 
 Depends on / 依赖: continuous_toPOUFun, f.continuous_toPOUFun, f.toPOUFun, toPOUFun
 -/
@@ -1858,7 +1932,11 @@ theorem exists_continuous_sum_one_of_isOpen_isCompact
   · intro x hx
     simp only [Finset.sum_apply, Pi.one_apply]
     have h := f.sum_eq_one' x hx
-   
+    rw [finsum_eq_sum (fun i => (f.toFun i) x)
+      (Finite.subset finite_univ (subset_univ (support fun i => (f.toFun i) x)))] at h
+    rwa [Fintype.sum_subset (by simp)] at h
+  intro i x
+  exact ⟨f.nonneg i x, PartitionOfUnity.le_one f i x⟩
 
 中文:
 定理 存在_continuous_sum_one_of_isOpen_isCompact
@@ -1871,7 +1949,11 @@ theorem exists_continuous_sum_one_of_isOpen_isCompact
   · intro x hx
     simp only [Finset.sum_apply, Pi.one_apply]
     have h := f.sum_eq_one' x hx
-   
+    rw [finsum_eq_sum (fun i => (f.toFun i) x)
+      (Finite.subset finite_univ (subset_univ (support fun i => (f.toFun i) x)))] at h
+    rwa [Fintype.sum_subset (by simp)] at h
+  intro i x
+  exact ⟨f.nonneg i x, PartitionOfUnity.le_one f i x⟩
 
 Depends on / 依赖: Finite, Finite.subset, Finset, Finset.sum_apply, Fintype, Fintype.sum_subset, PartitionOfUnity, PartitionOfUnity.exists_isSubordinate_of_locallyFinite_t2space, PartitionOfUnity.le_one, Pi.one_apply, exists_isSubordinate_of_locallyFinite_t2space, f.nonneg, f.sum_eq_one, f.toFun, finite_univ, finsum_eq_sum, le_one, locallyFinite_of_finite, nonneg, one_apply
 -/

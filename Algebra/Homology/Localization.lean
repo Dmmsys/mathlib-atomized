@@ -158,7 +158,7 @@ lemma isIso_Q_map_iff_mem_quasiIso
     dsimp
     infer_instance
   · intro h
-    exact Localization.inverts Q (Homolo
+    exact Localization.inverts Q (HomologicalComplex.quasiIso C c) _ h
 
 中文:
 引理 isIso_Q_map_iff_mem_quasiIso
@@ -173,7 +173,7 @@ lemma isIso_Q_map_iff_mem_quasiIso
     dsimp
     infer_instance
   · intro h
-    exact Localization.inverts Q (Homolo
+    exact Localization.inverts Q (HomologicalComplex.quasiIso C c) _ h
 
 Depends on / 依赖: Functor, Functor.mapIso, Functor.mapShortCompl, Functor.map_comp, HomologicalComplex, HomologicalComplex.mem_quasiIso_iff, HomologicalComplex.quasiIso, Iso.refl, Iso.symm, Iso.trans, LeftHomologyData, LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso, Localization, Localization.inverts, NatIso, NatIso.isIso_map_iff, RightHomologyData, RightHomologyData.homologyIso, RightHomologyData.map_H
 -/
@@ -394,7 +394,7 @@ lemma quasiIso_eq_quasiIso_map_quotient
     exact MorphismProperty.map_mem_map _ _ _ hf
   · rintro ⟨K', L', g, h, ⟨e⟩⟩
     rw [← quotient_map_mem_quasiIso_iff] at h
-    exact ((qu
+    exact ((quasiIso C c).arrow_mk_iso_iff e).1 h
 
 中文:
 引理 quasiIso_eq_quasiIso_map_quotient
@@ -407,7 +407,7 @@ lemma quasiIso_eq_quasiIso_map_quotient
     exact MorphismProperty.map_mem_map _ _ _ hf
   · rintro ⟨K', L', g, h, ⟨e⟩⟩
     rw [← quotient_map_mem_quasiIso_iff] at h
-    exact ((qu
+    exact ((quasiIso C c).arrow_mk_iso_iff e).1 h
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quotient, MorphismProperty, MorphismProperty.map_mem_map, arrow_mk_iso_iff, map_mem_map, map_surjective, quasiIso, quotient, quotient_map_mem_quasiIso_iff
 -/
@@ -695,7 +695,7 @@ definition ComplexShape.strictUniversalPropertyFixedTargetQuotient
     have : DecidableRel c.Rel := by classical infer_instance
     exact h.map_eq_of_inverts_homotopyEquivalences hc F hF)
   fac _ _ := rfl
-  uniq _ _ h := Quotient.lift
+  uniq _ _ h := Quotient.lift_unique' _ _ _ h
 
 中文:
 定义 余mplexShape.strictUniversalPropertyFixedTargetQuotient
@@ -706,7 +706,7 @@ definition ComplexShape.strictUniversalPropertyFixedTargetQuotient
     have : DecidableRel c.Rel := by classical infer_instance
     exact h.map_eq_of_inverts_homotopyEquivalences hc F hF)
   fac _ _ := rfl
-  uniq _ _ h := Quotient.lift
+  uniq _ _ h := Quotient.lift_unique' _ _ _ h
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quotient_inverts_homotopyEquivalences, quotient_inverts_homotopyEquivalences
 -/
@@ -1036,7 +1036,8 @@ definition mapHomologicalComplexUpToQuasiIsoFactorsh
     (HomotopyCategory.quotient C c ⋙ HomologicalComplexUpToQuasiIso.Qh ⋙
       F.mapHomologicalComplexUpToQuasiIso c)
     (HomotopyCategory.quotient C c ⋙ F.mapHomotopyCategory c ⋙
-      Homolog
+      HomologicalComplexUpToQuasiIso.Qh) _ _
+      (F.mapHomologicalComplexUpToQuasiIsoFactors c)
 
 中文:
 定义 mapHomologicalComplexUpToQuasiIsoFactorsh
@@ -1046,7 +1047,8 @@ definition mapHomologicalComplexUpToQuasiIsoFactorsh
     (HomotopyCategory.quotient C c ⋙ HomologicalComplexUpToQuasiIso.Qh ⋙
       F.mapHomologicalComplexUpToQuasiIso c)
     (HomotopyCategory.quotient C c ⋙ F.mapHomotopyCategory c ⋙
-      Homolog
+      HomologicalComplexUpToQuasiIso.Qh) _ _
+      (F.mapHomologicalComplexUpToQuasiIsoFactors c)
 
 Depends on / 依赖: F.mapHomologicalComplexUpToQuasiIso, F.mapHomologicalComplexUpToQuasiIsoFactors, F.mapHomotopyCategory, HomologicalComplex, HomologicalComplex.homotopyEquivalences, HomologicalComplexUpToQuasiIso, HomologicalComplexUpToQuasiIso.Qh, HomotopyCategory, HomotopyCategory.quotient, Localization, Localization.liftNatIso, homotopyEquivalences, liftNatIso, mapHomologicalComplexUpToQuasiIso, mapHomologicalComplexUpToQuasiIsoFactors, mapHomotopyCategory, quotient
 -/
@@ -1098,7 +1100,7 @@ lemma mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
   simp only [Category.comp_id, Category.id_comp]
   change _ = (F.mapHomologicalComplexUpToQuasiIso c).map (𝟙 _) ≫ _ ≫ 𝟙 _ ≫
     HomologicalComplexUpToQuasiIso.Qh.map (𝟙 _)
-  simp only [map_id, Categor
+  simp only [map_id, Category.comp_id, Category.id_comp]
 
 中文:
 引理 mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
@@ -1110,7 +1112,7 @@ lemma mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
   simp only [Category.comp_id, Category.id_comp]
   change _ = (F.mapHomologicalComplexUpToQuasiIso c).map (𝟙 _) ≫ _ ≫ 𝟙 _ ≫
     HomologicalComplexUpToQuasiIso.Qh.map (𝟙 _)
-  simp only [map_id, Categor
+  simp only [map_id, Category.comp_id, Category.id_comp]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, F.mapHomologicalComplexUpToQuasiIso, HomologicalComplexUpToQuasiIso, HomologicalComplexUpToQuasiIso.Qh.map, Localization, Localization.liftNatTrans_app, comp_id, id_comp, liftNatTrans_app, mapHomologicalComplexUpToQuasiIso, mapHomologicalComplexUpToQuasiIsoFactorsh, map_id
 -/

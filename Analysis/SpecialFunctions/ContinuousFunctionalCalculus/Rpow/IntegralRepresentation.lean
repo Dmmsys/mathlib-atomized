@@ -219,7 +219,13 @@ lemma rpowIntegrand₀₁_eq_pow_div
       _ = (t : Real) ^ p * ((t + x - t) / (t * (t + x))) := by
           simp only [inv_eq_one_div]
           rw [div_sub_div _ _ (by lia) (by lia)]
-          sim
+          simp
+      _ = t ^ p / t * x / (t + x) := by simp [field]
+      _ = t ^ (p - 1) * x / (t + x) := by congr; exact (Real.rpow_sub_one ht' p).symm
+  case pos =>
+    push _ in _ at hp
+    have hp₂ : p - 1 != 0 := by linarith
+    simp [rpowIntegrand₀₁, ht', hp.1.ne', hp₂]
 
 中文:
 引理 rpow整数egrand₀₁_eq_pow_div
@@ -232,7 +238,13 @@ lemma rpowIntegrand₀₁_eq_pow_div
       _ = (t : Real) ^ p * ((t + x - t) / (t * (t + x))) := by
           simp only [inv_eq_one_div]
           rw [div_sub_div _ _ (by lia) (by lia)]
-          sim
+          simp
+      _ = t ^ p / t * x / (t + x) := by simp [field]
+      _ = t ^ (p - 1) * x / (t + x) := by congr; exact (Real.rpow_sub_one ht' p).symm
+  case pos =>
+    push _ in _ at hp
+    have hp₂ : p - 1 != 0 := by linarith
+    simp [rpowIntegrand₀₁, ht', hp.1.ne', hp₂]
 
 Depends on / 依赖: Real.rpow_sub_one, div_sub_div, inv_eq_one_div, rpow_sub_one
 -/
@@ -289,7 +301,14 @@ lemma rpowIntegrand₀₁_apply_mul
   by_cases hx_zero : x = 0
   case neg =>
     calc _ = x ^ (p - 1) * (t ^ (p - 1) * (x / (x * t + x))) := by
-              rw [← mul_assoc]; rw [mul_div_assoc]; r
+              rw [← mul_assoc]; rw [mul_div_assoc]; rw [Real.mul_rpow hx ht]
+      _ = x ^ (p - 1) * (t ^ (p - 1) * 1 / (t + 1)) := by
+              have : x * t + x = x * (t + 1) := by ring
+              rw [mul_div_assoc]; rw [this]; rw [div_mul_eq_div_mul_one_div]; rw [div_self hx_zero]; rw [one_mul]
+      _ = t ^ (p - 1) * 1 / (t + 1) * x ^ (p - 1) := by rw [mul_comm]
+  case pos =>
+    rw [mem_Ioo] at hp
+    simp [hx_zero, Real.zero_rpow (by linarith : p - 1 != 0)]
 
 中文:
 引理 rpow整数egrand₀₁_apply_mul
@@ -300,7 +319,14 @@ lemma rpowIntegrand₀₁_apply_mul
   by_cases hx_zero : x = 0
   case neg =>
     calc _ = x ^ (p - 1) * (t ^ (p - 1) * (x / (x * t + x))) := by
-              rw [← mul_assoc]; rw [mul_div_assoc]; r
+              rw [← mul_assoc]; rw [mul_div_assoc]; rw [Real.mul_rpow hx ht]
+      _ = x ^ (p - 1) * (t ^ (p - 1) * 1 / (t + 1)) := by
+              have : x * t + x = x * (t + 1) := by ring
+              rw [mul_div_assoc]; rw [this]; rw [div_mul_eq_div_mul_one_div]; rw [div_self hx_zero]; rw [one_mul]
+      _ = t ^ (p - 1) * 1 / (t + 1) * x ^ (p - 1) := by rw [mul_comm]
+  case pos =>
+    rw [mem_Ioo] at hp
+    simp [hx_zero, Real.zero_rpow (by linarith : p - 1 != 0)]
 
 Depends on / 依赖: Real.mul_rpow, div_mul_eq_div_mul_one_div, div_self, hx_zero, mul_assoc, mul_div_assoc, mul_rpow, one_mul, zero_le_one
 -/
@@ -463,7 +489,9 @@ lemma continuousOn_rpowIntegrand₀₁_uncurry
     refine ContinuousOn.mul ?_ ?_
     · refine ContinuousOn.mul ?_ (by fun_prop)
       exact ContinuousOn.rpow_const (by fun_prop) (by grind)
-    · exa
+    · exact ContinuousOn.inv₀ (by fun_prop) (by grind)
+  · intro hq
+    simp [Function.uncurry, g, rpowIntegrand₀₁_eq_pow_div hp (le_of_lt hq.1) (hs hq.2)]
 
 中文:
 引理 continuousOn_rpow整数egrand₀₁_uncurry
@@ -475,7 +503,9 @@ lemma continuousOn_rpowIntegrand₀₁_uncurry
     refine ContinuousOn.mul ?_ ?_
     · refine ContinuousOn.mul ?_ (by fun_prop)
       exact ContinuousOn.rpow_const (by fun_prop) (by grind)
-    · exa
+    · exact ContinuousOn.inv₀ (by fun_prop) (by grind)
+  · intro hq
+    simp [Function.uncurry, g, rpowIntegrand₀₁_eq_pow_div hp (le_of_lt hq.1) (hs hq.2)]
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.congr, ContinuousOn.inv, ContinuousOn.mul, ContinuousOn.rpow_const, Function, Function.uncurry, fun_prop, le_of_lt, rpow_const, uncurry
 -/
@@ -565,7 +595,9 @@ lemma rpowIntegrand₀₁_le_rpow_sub_one
     calc
     _ = t ^ (p - 1) * x / (t + x) := by rw [rpowIntegrand₀₁_eq_pow_div hp ht hx]
     _ <= t ^ (p - 1) * x / x := by gcongr; linarith
-    _ = t ^ (p
+    _ = t ^ (p - 1) * (x / x) := by ring
+    _ = t ^ (p - 1) * 1 := by congr; exact (div_eq_one_iff_eq hx_zero).mpr rfl
+    _ = _ := by simp
 
 中文:
 引理 rpow整数egrand₀₁_le_rpow_sub_one
@@ -579,7 +611,9 @@ lemma rpowIntegrand₀₁_le_rpow_sub_one
     calc
     _ = t ^ (p - 1) * x / (t + x) := by rw [rpowIntegrand₀₁_eq_pow_div hp ht hx]
     _ <= t ^ (p - 1) * x / x := by gcongr; linarith
-    _ = t ^ (p
+    _ = t ^ (p - 1) * (x / x) := by ring
+    _ = t ^ (p - 1) * 1 := by congr; exact (div_eq_one_iff_eq hx_zero).mpr rfl
+    _ = _ := by simp
 
 Depends on / 依赖: add_zero, div_eq_one_iff_eq, hx_zero, mul_zero, sub_self
 -/
@@ -610,7 +644,10 @@ lemma rpowIntegrand₀₁_one_ge_rpow_sub_two
             ring
   _ <= t ^ (p - 1) * (1 / (t + 1)) := by
             gcongr t ^ (p - 1) * ?_
-            rw [mul_div_assoc]; rw 
+            rw [mul_div_assoc]; rw [one_div_mul_one_div]; rw [one_div_le_one_div (by positivity) (by positivity)]
+            linarith
+  _ = rpowIntegrand₀₁ p t 1 := by
+            rw [rpowIntegrand₀₁_eq_pow_div hp (by linarith) zero_le_one]; rw [mul_div_assoc]
 
 中文:
 引理 rpow整数egrand₀₁_one_ge_rpow_sub_two
@@ -622,7 +659,10 @@ lemma rpowIntegrand₀₁_one_ge_rpow_sub_two
             ring
   _ <= t ^ (p - 1) * (1 / (t + 1)) := by
             gcongr t ^ (p - 1) * ?_
-            rw [mul_div_assoc]; rw 
+            rw [mul_div_assoc]; rw [one_div_mul_one_div]; rw [one_div_le_one_div (by positivity) (by positivity)]
+            linarith
+  _ = rpowIntegrand₀₁ p t 1 := by
+            rw [rpowIntegrand₀₁_eq_pow_div hp (by linarith) zero_le_one]; rw [mul_div_assoc]
 -/
 lemma rpowIntegrand₀₁_one_ge_rpow_sub_two (hp : p in Ioo 0 1) (ht : 1 <= t) :
     (1 : Real) / 2 * t ^ (p - 2) <= rpowIntegrand₀₁ p t 1 := calc
@@ -686,7 +726,18 @@ lemma integrableOn_rpowIntegrand₀₁_Ioc
   case meas =>
     refine ContinuousOn.aestronglyMeasurable ?_ measurableSet_Ioo
     exact ContinuousOn.mono (continuousOn_rpowIntegrand₀₁ hp hx) Ioo_subset_Ioi_self
-  case fini
+  case finite =>
+    refine HasFiniteIntegral.mono' (g := fun t => t ^ (p - 1)) ?finitebound ?ae_le
+    case finitebound =>
+      apply Integrable.hasFiniteIntegral
+      rw [Set.mem_Ioo] at hp
+      rw [← IntegrableOn]; rw [intervalIntegral.integrableOn_Ioo_rpow_iff]
+      · linarith
+      · exact zero_lt_one
+    case ae_le =>
+      refine ae_restrict_of_forall_mem measurableSet_Ioo fun t ht => ?_
+      rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg hp.1 (le_of_lt ht.1) hx)]
+      exact rpowIntegrand₀₁_le_rpow_sub_one hp (le_of_lt ht.1) hx
 
 中文:
 引理 integrableOn_rpow整数egrand₀₁_Ioc
@@ -697,7 +748,18 @@ lemma integrableOn_rpowIntegrand₀₁_Ioc
   case meas =>
     refine ContinuousOn.aestronglyMeasurable ?_ measurableSet_Ioo
     exact ContinuousOn.mono (continuousOn_rpowIntegrand₀₁ hp hx) Ioo_subset_Ioi_self
-  case fini
+  case finite =>
+    refine HasFiniteIntegral.mono' (g := fun t => t ^ (p - 1)) ?finitebound ?ae_le
+    case finitebound =>
+      apply Integrable.hasFiniteIntegral
+      rw [Set.mem_Ioo] at hp
+      rw [← IntegrableOn]; rw [intervalIntegral.integrableOn_Ioo_rpow_iff]
+      · linarith
+      · exact zero_lt_one
+    case ae_le =>
+      refine ae_restrict_of_forall_mem measurableSet_Ioo fun t ht => ?_
+      rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg hp.1 (le_of_lt ht.1) hx)]
+      exact rpowIntegrand₀₁_le_rpow_sub_one hp (le_of_lt ht.1) hx
 -/
 private lemma integrableOn_rpowIntegrand₀₁_Ioc (hp : p in Ioo 0 1) (hx : 0 <= x) :
     IntegrableOn (rpowIntegrand₀₁ p · x) (Ioc 0 1) := by
@@ -732,7 +794,16 @@ lemma integrableOn_rpowIntegrand₀₁_Ioi_one
 .mono (Set.Ioi_subset_Ioi zero_le_one) exact continuousOn_rpowIntegrand₀₁ hp hx
   case finite =>
     refine HasFiniteIntegral.mono' (g := fun t => t ^ (p - 2) * x) ?finitebound ?ae_le
-    ca
+    case finitebound =>
+      refine HasFiniteIntegral.mul_const ?_ _
+      apply Integrable.hasFiniteIntegral
+      rw [Set.mem_Ioo] at hp
+      refine integrableOn_Ioi_rpow_of_lt ?_ zero_lt_one
+      linarith
+    case ae_le =>
+      refine ae_restrict_of_forall_mem measurableSet_Ioi fun t (ht : 1 < t) => ?_
+      rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg hp.1 (by positivity) hx)]
+      exact rpowIntegrand₀₁_le_rpow_sub_two_mul_self hp (by positivity) hx
 
 中文:
 引理 integrableOn_rpow整数egrand₀₁_Ioi_one
@@ -744,7 +815,16 @@ lemma integrableOn_rpowIntegrand₀₁_Ioi_one
 .mono (Set.Ioi_subset_Ioi zero_le_one) exact continuousOn_rpowIntegrand₀₁ hp hx
   case finite =>
     refine HasFiniteIntegral.mono' (g := fun t => t ^ (p - 2) * x) ?finitebound ?ae_le
-    ca
+    case finitebound =>
+      refine HasFiniteIntegral.mul_const ?_ _
+      apply Integrable.hasFiniteIntegral
+      rw [Set.mem_Ioo] at hp
+      refine integrableOn_Ioi_rpow_of_lt ?_ zero_lt_one
+      linarith
+    case ae_le =>
+      refine ae_restrict_of_forall_mem measurableSet_Ioi fun t (ht : 1 < t) => ?_
+      rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg hp.1 (by positivity) hx)]
+      exact rpowIntegrand₀₁_le_rpow_sub_two_mul_self hp (by positivity) hx
 -/
 private lemma integrableOn_rpowIntegrand₀₁_Ioi_one (hp : p in Ioo 0 1) (hx : 0 <= x) :
     IntegrableOn (rpowIntegrand₀₁ p · x) (Ioi 1) := by
@@ -776,7 +856,7 @@ lemma integrableOn_rpowIntegrand₀₁_Ioi
   infinity. Hence we break the integral into two parts. -/
   rw [← Set.Ioc_union_Ioi_eq_Ioi zero_le_one]
   exact IntegrableOn.union (integrableOn_rpowIntegrand₀₁_Ioc hp hx)
-    (integrableOn_rpowIntegrand
+    (integrableOn_rpowIntegrand₀₁_Ioi_one hp hx)
 
 中文:
 引理 integrableOn_rpow整数egrand₀₁_Ioi
@@ -786,7 +866,7 @@ lemma integrableOn_rpowIntegrand₀₁_Ioi
   infinity. Hence we break the integral into two parts. -/
   rw [← Set.Ioc_union_Ioi_eq_Ioi zero_le_one]
   exact IntegrableOn.union (integrableOn_rpowIntegrand₀₁_Ioc hp hx)
-    (integrableOn_rpowIntegrand
+    (integrableOn_rpowIntegrand₀₁_Ioi_one hp hx)
 -/
 lemma integrableOn_rpowIntegrand₀₁_Ioi (hp : p in Ioo 0 1) (hx : 0 <= x) :
     IntegrableOn (rpowIntegrand₀₁ p · x) (Ioi 0) := by
@@ -826,7 +906,21 @@ lemma integral_rpowIntegrand₀₁_eq_rpow_mul_const
   obtain (rfl | hx) := hx.eq_or_lt
   · simp [rpowIntegrand₀₁, Real.zero_rpow hp.1.ne']
   suffices ∫ t in Ioi 0, ((rpowIntegrand₀₁ p · x) ∘ (x * ·)) t * x =
-      x ^ p * (∫ t in Ioi 0, rpowIntegrand₀
+      x ^ p * (∫ t in Ioi 0, rpowIntegrand₀₁ p t 1) by
+    rwa [integral_comp_mul_deriv_Ioi (by fun_prop), mul_zero] at this
+    · exact tendsto_id.const_mul_atTop hx
+.const_mul x · simpa using fun t _ => hasDerivWithinAt_id t (Ioi t)
+    · simpa [Set.image_mul_left_Ioi hx] using continuousOn_rpowIntegrand₀₁ hp hx.le
+    · simpa [Set.image_mul_left_Ici hx] using integrableOn_rpowIntegrand₀₁_Ici hp hx.le
+    · simp only [Function.comp]
+      rw [integrableOn_congr_fun (rpowIntegrand₀₁_apply_mul_eqOn_Ici hp hx.le) measurableSet_Ici]
+      exact Integrable.mul_const (integrableOn_rpowIntegrand₀₁_Ici hp zero_le_one) _
+  have heqOn : EqOn (fun t => rpowIntegrand₀₁ p (x * t) x * x)
+      (fun t => (rpowIntegrand₀₁ p t 1) * x ^ p) (Ioi 0) :=
+    EqOn.mono Ioi_subset_Ici_self (rpowIntegrand₀₁_apply_mul_eqOn_Ici hp hx.le)
+  simp only [Function.comp, setIntegral_congr_fun measurableSet_Ioi heqOn,
+    ← smul_eq_mul (b := x ^ p), integral_smul_const]
+  rw [smul_eq_mul]; rw [mul_comm]
 
 中文:
 引理 integral_rpow整数egrand₀₁_eq_rpow_mul_const
@@ -836,7 +930,21 @@ lemma integral_rpowIntegrand₀₁_eq_rpow_mul_const
   obtain (rfl | hx) := hx.eq_or_lt
   · simp [rpowIntegrand₀₁, Real.zero_rpow hp.1.ne']
   suffices ∫ t in Ioi 0, ((rpowIntegrand₀₁ p · x) ∘ (x * ·)) t * x =
-      x ^ p * (∫ t in Ioi 0, rpowIntegrand₀
+      x ^ p * (∫ t in Ioi 0, rpowIntegrand₀₁ p t 1) by
+    rwa [integral_comp_mul_deriv_Ioi (by fun_prop), mul_zero] at this
+    · exact tendsto_id.const_mul_atTop hx
+.const_mul x · simpa using fun t _ => hasDerivWithinAt_id t (Ioi t)
+    · simpa [Set.image_mul_left_Ioi hx] using continuousOn_rpowIntegrand₀₁ hp hx.le
+    · simpa [Set.image_mul_left_Ici hx] using integrableOn_rpowIntegrand₀₁_Ici hp hx.le
+    · simp only [Function.comp]
+      rw [integrableOn_congr_fun (rpowIntegrand₀₁_apply_mul_eqOn_Ici hp hx.le) measurableSet_Ici]
+      exact Integrable.mul_const (integrableOn_rpowIntegrand₀₁_Ici hp zero_le_one) _
+  have heqOn : EqOn (fun t => rpowIntegrand₀₁ p (x * t) x * x)
+      (fun t => (rpowIntegrand₀₁ p t 1) * x ^ p) (Ioi 0) :=
+    EqOn.mono Ioi_subset_Ici_self (rpowIntegrand₀₁_apply_mul_eqOn_Ici hp hx.le)
+  simp only [Function.comp, setIntegral_congr_fun measurableSet_Ioi heqOn,
+    ← smul_eq_mul (b := x ^ p), integral_smul_const]
+  rw [smul_eq_mul]; rw [mul_comm]
 -/
 lemma integral_rpowIntegrand₀₁_eq_rpow_mul_const (hp : p in Ioo 0 1) (hx : 0 <= x) :
     (∫ t in Ioi 0, rpowIntegrand₀₁ p t x) = x ^ p * (∫ t in Ioi 0, rpowIntegrand₀₁ p t 1) := by
@@ -871,7 +979,19 @@ lemma le_integral_rpowIntegrand₀₁_one
   _ = ∫ t in Ioi 1, (1 / 2) * t ^ (p - 2) := by
         push _ in _ at hp
         rw [integral_const_mul]; rw [integral_Ioi_rpow_of_lt (by linarith) zero_lt_one]
-        ring_nf -- ring alone succeeds but giv
+        ring_nf -- ring alone succeeds but gives a warning
+  _ <= ∫ t in Ioi 1, rpowIntegrand₀₁ p t 1 := by
+        refine setIntegral_mono_on ?_ ?_ measurableSet_Ioi ?_
+        · refine Integrable.const_mul ?_ _
+          push _ in _ at hp
+          exact integrableOn_Ioi_rpow_of_lt (by linarith) zero_lt_one
+        · exact integrableOn_rpowIntegrand₀₁_Ioi_one hp zero_le_one
+        · exact fun t ht => rpowIntegrand₀₁_one_ge_rpow_sub_two hp (le_of_lt ht)
+  _ <= ∫ t in Ioi 0, rpowIntegrand₀₁ p t 1 := by
+        refine setIntegral_mono_set (integrableOn_rpowIntegrand₀₁_Ioi hp zero_le_one) ?_ ?_
+        · refine ae_restrict_of_forall_mem measurableSet_Ioi fun t ht => ?_
+          exact rpowIntegrand₀₁_nonneg hp.1 (le_of_lt ht) zero_le_one
+· exact .of_forall Set.Ioi_subset_Ioi zero_le_one
 
 中文:
 引理 le_integral_rpow整数egrand₀₁_one
@@ -881,7 +1001,19 @@ lemma le_integral_rpowIntegrand₀₁_one
   _ = ∫ t in Ioi 1, (1 / 2) * t ^ (p - 2) := by
         push _ in _ at hp
         rw [integral_const_mul]; rw [integral_Ioi_rpow_of_lt (by linarith) zero_lt_one]
-        ring_nf -- ring alone succeeds but giv
+        ring_nf -- ring alone succeeds but gives a warning
+  _ <= ∫ t in Ioi 1, rpowIntegrand₀₁ p t 1 := by
+        refine setIntegral_mono_on ?_ ?_ measurableSet_Ioi ?_
+        · refine Integrable.const_mul ?_ _
+          push _ in _ at hp
+          exact integrableOn_Ioi_rpow_of_lt (by linarith) zero_lt_one
+        · exact integrableOn_rpowIntegrand₀₁_Ioi_one hp zero_le_one
+        · exact fun t ht => rpowIntegrand₀₁_one_ge_rpow_sub_two hp (le_of_lt ht)
+  _ <= ∫ t in Ioi 0, rpowIntegrand₀₁ p t 1 := by
+        refine setIntegral_mono_set (integrableOn_rpowIntegrand₀₁_Ioi hp zero_le_one) ?_ ?_
+        · refine ae_restrict_of_forall_mem measurableSet_Ioi fun t ht => ?_
+          exact rpowIntegrand₀₁_nonneg hp.1 (le_of_lt ht) zero_le_one
+· exact .of_forall Set.Ioi_subset_Ioi zero_le_one
 -/
 lemma le_integral_rpowIntegrand₀₁_one (hp : p in Ioo 0 1) :
     -1 / (2 * (p - 1)) <= ∫ t in Ioi 0, rpowIntegrand₀₁ p t 1 := calc
@@ -948,7 +1080,8 @@ lemma rpow_eq_const_mul_integral
   case inr =>
     have : ∫ t in Ioi 0, rpowIntegrand₀₁ p t 1 != 0 :=
 ne_of_gt integral_rpowIntegrand₀₁_one_pos hp
-    rw [integral_rpowIntegrand₀₁_eq_rpow_mul_const hp
+    rw [integral_rpowIntegrand₀₁_eq_rpow_mul_const hp hx]; rw [mul_comm]; rw [mul_assoc]; rw [mul_inv_cancel₀
+      this]; rw [mul_one]
 
 中文:
 引理 rpow_eq_const_mul_integral
@@ -961,7 +1094,8 @@ ne_of_gt integral_rpowIntegrand₀₁_one_pos hp
   case inr =>
     have : ∫ t in Ioi 0, rpowIntegrand₀₁ p t 1 != 0 :=
 ne_of_gt integral_rpowIntegrand₀₁_one_pos hp
-    rw [integral_rpowIntegrand₀₁_eq_rpow_mul_const hp
+    rw [integral_rpowIntegrand₀₁_eq_rpow_mul_const hp hx]; rw [mul_comm]; rw [mul_assoc]; rw [mul_inv_cancel₀
+      this]; rw [mul_one]
 
 Depends on / 依赖: Real.zero_rpow, eq_or_lt_of_le, hx_zero, mul_assoc, mul_comm, mul_one, ne_of_gt, zero_rpow
 -/
@@ -989,7 +1123,12 @@ lemma exists_measure_rpow_eq_integral_rpowIntegrand₀₁
   refine ⟨C • volume, fun x hx => ⟨?_, ?_⟩⟩
   · unfold IntegrableOn
     rw [Measure.restrict_smul]
-exact Integrable.smul_measure_nnreal integrableOn_rpo
+exact Integrable.smul_measure_nnreal integrableOn_rpowIntegrand₀₁_Ioi hp hx
+  · simp_rw [Measure.restrict_smul, integral_smul_nnreal_measure, rpow_eq_const_mul_integral hp hx,
+      NNReal.smul_def, C, NNReal.coe_mk, smul_eq_mul]
+
+@[deprecated (since := "2026-04-03")]
+alias exists_measure_rpow_eq_integral := exists_measure_rpow_eq_integral_rpowIntegrand₀₁
 
 中文:
 引理 存在_measure_rpow_eq_integral_rpow整数egrand₀₁
@@ -1000,7 +1139,12 @@ exact Integrable.smul_measure_nnreal integrableOn_rpo
   refine ⟨C • volume, fun x hx => ⟨?_, ?_⟩⟩
   · unfold IntegrableOn
     rw [Measure.restrict_smul]
-exact Integrable.smul_measure_nnreal integrableOn_rpo
+exact Integrable.smul_measure_nnreal integrableOn_rpowIntegrand₀₁_Ioi hp hx
+  · simp_rw [Measure.restrict_smul, integral_smul_nnreal_measure, rpow_eq_const_mul_integral hp hx,
+      NNReal.smul_def, C, NNReal.coe_mk, smul_eq_mul]
+
+@[deprecated (since := "2026-04-03")]
+alias exists_measure_rpow_eq_integral := exists_measure_rpow_eq_integral_rpowIntegrand₀₁
 
 Depends on / 依赖: Integrable, Integrable.smul_measure_nnreal, IntegrableOn, Measure, Measure.restrict_smul, NNReal, NNReal.coe_mk, NNReal.smul_def, coe_mk, integral_smul_nnreal_measure, inv_nonneg, le_of_lt, restrict_smul, rpow_eq_const_mul_integral, simp_rw, smul_def, smul_eq_mul, smul_measure_nnreal, volume
 -/
@@ -1164,7 +1308,8 @@ lemma integrableOn_rpowIntegrand₁₂
     filter_upwards [ae_restrict_mem measurableSet_Ioi] with a ha
     rw [rpowIntegrand₁₂_eq_mul_rpowIntegrand₀₁ hx ha]
   rw [integrableOn_congr_fun_ae hmain]
-  refine Integrable.const_mu
+  refine Integrable.const_mul ?_ _
+  exact integrableOn_rpowIntegrand₀₁_Ioi (by grind) hx
 
 中文:
 引理 integrableOn_rpow整数egrand₁₂
@@ -1175,7 +1320,8 @@ lemma integrableOn_rpowIntegrand₁₂
     filter_upwards [ae_restrict_mem measurableSet_Ioi] with a ha
     rw [rpowIntegrand₁₂_eq_mul_rpowIntegrand₀₁ hx ha]
   rw [integrableOn_congr_fun_ae hmain]
-  refine Integrable.const_mu
+  refine Integrable.const_mul ?_ _
+  exact integrableOn_rpowIntegrand₀₁_Ioi (by grind) hx
 
 Depends on / 依赖: Integrable, Integrable.const_mul, ae_restrict_mem, const_mul, filter_upwards, integrableOn_congr_fun_ae, measurableSet_Ioi, restrict, volume, volume.restrict
 -/
@@ -1200,7 +1346,13 @@ lemma rpow_eq_const_mul_integral_rpowIntegrand₁₂
       =ᵐ[volume.restrict (Ioi 0)] (x * rpowIntegrand₀₁ (p-1) · x) := by
     filter_upwards [ae_restrict_mem measurableSet_Ioi] with a ha
     rw [rpowIntegrand₁₂_eq_mul_rpowIntegrand₀₁ hx ha]
-  rw [integral_congr_ae hmain]; rw [integral_const_mul_of_integrabl
+  rw [integral_congr_ae hmain]; rw [integral_const_mul_of_integrable
+      (integrableOn_rpowIntegrand₀₁_Ioi (by grind) hx)]
+  have h₁ : x ^ p = x * x ^ (p - 1) := by
+    rw [mul_comm]; rw [← rpow_add_one' hx (by grind)]
+    simp
+  rw [h₁]; rw [rpow_eq_const_mul_integral (by grind) hx]
+  grind
 
 中文:
 引理 rpow_eq_const_mul_integral_rpow整数egrand₁₂
@@ -1210,7 +1362,13 @@ lemma rpow_eq_const_mul_integral_rpowIntegrand₁₂
       =ᵐ[volume.restrict (Ioi 0)] (x * rpowIntegrand₀₁ (p-1) · x) := by
     filter_upwards [ae_restrict_mem measurableSet_Ioi] with a ha
     rw [rpowIntegrand₁₂_eq_mul_rpowIntegrand₀₁ hx ha]
-  rw [integral_congr_ae hmain]; rw [integral_const_mul_of_integrabl
+  rw [integral_congr_ae hmain]; rw [integral_const_mul_of_integrable
+      (integrableOn_rpowIntegrand₀₁_Ioi (by grind) hx)]
+  have h₁ : x ^ p = x * x ^ (p - 1) := by
+    rw [mul_comm]; rw [← rpow_add_one' hx (by grind)]
+    simp
+  rw [h₁]; rw [rpow_eq_const_mul_integral (by grind) hx]
+  grind
 
 Depends on / 依赖: ae_restrict_mem, filter_upwards, integral_congr_ae, integral_const_mul_of_integrable, measurableSet_Ioi, mul_comm, restrict, rpow_add_one, rpow_eq_const_mul_integral, volume, volume.restrict
 -/
@@ -1244,7 +1402,10 @@ exact le_of_lt integral_rpowIntegrand₀₁_one_pos (by grind)
   refine ⟨μ, fun x hx => ⟨?_, ?_⟩⟩
   · unfold μ IntegrableOn
     rw [Measure.restrict_smul]
-exact Integra
+exact Integrable.smul_measure_nnreal integrableOn_rpowIntegrand₁₂ hp hx
+  · rw [Measure.restrict_smul, integral_smul_nnreal_measure,
+      rpow_eq_const_mul_integral_rpowIntegrand₁₂ hp hx]
+    simp [C, NNReal.smul_def]
 
 中文:
 引理 存在_measure_rpow_eq_integral_rpow整数egrand₁₂
@@ -1258,7 +1419,10 @@ exact le_of_lt integral_rpowIntegrand₀₁_one_pos (by grind)
   refine ⟨μ, fun x hx => ⟨?_, ?_⟩⟩
   · unfold μ IntegrableOn
     rw [Measure.restrict_smul]
-exact Integra
+exact Integrable.smul_measure_nnreal integrableOn_rpowIntegrand₁₂ hp hx
+  · rw [Measure.restrict_smul, integral_smul_nnreal_measure,
+      rpow_eq_const_mul_integral_rpowIntegrand₁₂ hp hx]
+    simp [C, NNReal.smul_def]
 
 Depends on / 依赖: Integrable, Integrable.smul_measure_nnreal, IntegrableOn, Measure, Measure.restrict_smul, NNReal, NNReal.smul_def, integral_smul_nnreal_measure, inv_nonneg, le_of_lt, restrict_smul, smul_def, smul_measure_nnreal, volume
 -/
@@ -1304,7 +1468,19 @@ lemma cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one
     intro x hx
     simp only [mem_Ici, smul_eq_mul] at hx ⊢
     positivity
-  calc _ = cfcₙ (fun x => t ^ ((p : Real) - 1) * (rpowIntegrand₀₁ p 1 (t⁻¹ • x))) a := 
+  calc _ = cfcₙ (fun x => t ^ ((p : Real) - 1) * (rpowIntegrand₀₁ p 1 (t⁻¹ • x))) a := by
+          refine cfcₙ_congr ?_
+          refine Set.EqOn.mono hspec (rpowIntegrand₀₁_eqOn_mul_rpowIntegrand₀₁_one ht)
+    _ = t ^ ((p : Real) - 1) • cfcₙ (fun x => rpowIntegrand₀₁ p 1 (t⁻¹ • x)) a := by
+          refine cfcₙ_smul (R := Real) (t ^ ((p : Real) - 1)) _ a ?_
+          refine ContinuousOn.mono ?_ hspec
+          have := continuousOn_rpowIntegrand₀₁_Ici hp zero_lt_one
+          fun_prop
+    _ = t ^ ((p : Real) - 1) • cfcₙ (rpowIntegrand₀₁ p 1) (t⁻¹ • a) := by
+          congr! 1
+          refine cfcₙ_comp_smul (R := Real) t⁻¹ (fun x => rpowIntegrand₀₁ p 1 x) a ?_
+.mono exact continuousOn_rpowIntegrand₀₁_Ici hp zero_lt_one
+            (h_mapsTo.mono_left hspec).image_subset
 
 中文:
 引理 cfcₙ_rpow整数egrand₀₁_eq_cfcₙ_rpow整数egrand₀₁_one
@@ -1315,7 +1491,19 @@ lemma cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one
     intro x hx
     simp only [mem_Ici, smul_eq_mul] at hx ⊢
     positivity
-  calc _ = cfcₙ (fun x => t ^ ((p : Real) - 1) * (rpowIntegrand₀₁ p 1 (t⁻¹ • x))) a := 
+  calc _ = cfcₙ (fun x => t ^ ((p : Real) - 1) * (rpowIntegrand₀₁ p 1 (t⁻¹ • x))) a := by
+          refine cfcₙ_congr ?_
+          refine Set.EqOn.mono hspec (rpowIntegrand₀₁_eqOn_mul_rpowIntegrand₀₁_one ht)
+    _ = t ^ ((p : Real) - 1) • cfcₙ (fun x => rpowIntegrand₀₁ p 1 (t⁻¹ • x)) a := by
+          refine cfcₙ_smul (R := Real) (t ^ ((p : Real) - 1)) _ a ?_
+          refine ContinuousOn.mono ?_ hspec
+          have := continuousOn_rpowIntegrand₀₁_Ici hp zero_lt_one
+          fun_prop
+    _ = t ^ ((p : Real) - 1) • cfcₙ (rpowIntegrand₀₁ p 1) (t⁻¹ • a) := by
+          congr! 1
+          refine cfcₙ_comp_smul (R := Real) t⁻¹ (fun x => rpowIntegrand₀₁ p 1 x) a ?_
+.mono exact continuousOn_rpowIntegrand₀₁_Ici hp zero_lt_one
+            (h_mapsTo.mono_left hspec).image_subset
 
 Depends on / 依赖: MapsTo, Set.EqOn.mono, h_mapsTo, mem_Ici, quasispectrum, smul_eq_mul, subseteq
 -/
@@ -1356,7 +1544,34 @@ lemma exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁
   let f t := rpowIntegrand₀₁ p t
   let maxr := sSup (quasispectrum Real a)
   have maxr_nonneg : 0 <= maxr :=
-   
+    le_csSup_of_le (b := 0) (IsCompact.bddAbove (by grind)) (by simp) (by simp)
+  let bound (t : Real) := ‖f t maxr‖
+  have hf : ContinuousOn (Function.uncurry f) (Ioi (0 : Real) ×ˢ quasispectrum Real a) := by
+    refine continuousOn_rpowIntegrand₀₁_uncurry hp (quasispectrum Real a) ?_
+    grind
+  have hbound : forallᵐ t ∂μ.restrict (Ioi 0), forall z in quasispectrum Real a, ‖f t z‖ <= bound t := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    intro z hz
+    have hz' : 0 <= z := by grind
+    unfold bound f
+    rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg p_pos (le_of_lt ht) hz')]; rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg p_pos (le_of_lt ht) maxr_nonneg)]
+    refine rpowIntegrand₀₁_monotoneOn hp (le_of_lt ht) hz' maxr_nonneg ?_
+    exact le_csSup (IsCompact.bddAbove (quasispectrum.isCompact _)) hz
+  have hbound_finite_integral : HasFiniteIntegral bound (μ.restrict (Ioi 0)) := by
+    rw [hasFiniteIntegral_norm_iff]
+    exact (hμ maxr maxr_nonneg).1.2
+  have hmapzero : forallᵐ (x : Real) ∂μ.restrict (Ioi 0), rpowIntegrand₀₁ p x 0 = 0 := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi]
+    simp
+  refine ⟨?integrable, ?integral⟩
+  case integrable =>
+    exact integrableOn_cfcₙ measurableSet_Ioi _ bound a hf hmapzero hbound hbound_finite_integral
+  case integral => calc
+    a ^ p = cfcₙ (fun r => ∫ t in Ioi 0, rpowIntegrand₀₁ p t r ∂μ) a := by
+      rw [nnrpow_eq_cfcₙ_real _ _]
+      exact cfcₙ_congr fun r _ => (hμ r (by grind)).2
+    _ = _ := cfcₙ_setIntegral measurableSet_Ioi _ bound a hf hmapzero hbound
+                hbound_finite_integral ha.isSelfAdjoint
 
 中文:
 引理 存在_measure_nnrpow_eq_integral_cfcₙ_rpow整数egrand₀₁
@@ -1369,7 +1584,34 @@ lemma exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁
   let f t := rpowIntegrand₀₁ p t
   let maxr := sSup (quasispectrum Real a)
   have maxr_nonneg : 0 <= maxr :=
-   
+    le_csSup_of_le (b := 0) (IsCompact.bddAbove (by grind)) (by simp) (by simp)
+  let bound (t : Real) := ‖f t maxr‖
+  have hf : ContinuousOn (Function.uncurry f) (Ioi (0 : Real) ×ˢ quasispectrum Real a) := by
+    refine continuousOn_rpowIntegrand₀₁_uncurry hp (quasispectrum Real a) ?_
+    grind
+  have hbound : forallᵐ t ∂μ.restrict (Ioi 0), forall z in quasispectrum Real a, ‖f t z‖ <= bound t := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    intro z hz
+    have hz' : 0 <= z := by grind
+    unfold bound f
+    rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg p_pos (le_of_lt ht) hz')]; rw [Real.norm_of_nonneg (rpowIntegrand₀₁_nonneg p_pos (le_of_lt ht) maxr_nonneg)]
+    refine rpowIntegrand₀₁_monotoneOn hp (le_of_lt ht) hz' maxr_nonneg ?_
+    exact le_csSup (IsCompact.bddAbove (quasispectrum.isCompact _)) hz
+  have hbound_finite_integral : HasFiniteIntegral bound (μ.restrict (Ioi 0)) := by
+    rw [hasFiniteIntegral_norm_iff]
+    exact (hμ maxr maxr_nonneg).1.2
+  have hmapzero : forallᵐ (x : Real) ∂μ.restrict (Ioi 0), rpowIntegrand₀₁ p x 0 = 0 := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi]
+    simp
+  refine ⟨?integrable, ?integral⟩
+  case integrable =>
+    exact integrableOn_cfcₙ measurableSet_Ioi _ bound a hf hmapzero hbound hbound_finite_integral
+  case integral => calc
+    a ^ p = cfcₙ (fun r => ∫ t in Ioi 0, rpowIntegrand₀₁ p t r ∂μ) a := by
+      rw [nnrpow_eq_cfcₙ_real _ _]
+      exact cfcₙ_congr fun r _ => (hμ r (by grind)).2
+    _ = _ := cfcₙ_setIntegral measurableSet_Ioi _ bound a hf hmapzero hbound
+                hbound_finite_integral ha.isSelfAdjoint
 
 Depends on / 依赖: ContinuousOn, Function, Function.uncurry, IsCompact, IsCompact.bddAbove, bddAbove, continuo, le_csSup_of_le, maxr_nonneg, nontriviality, p_pos, quasispectrum, uncurry
 -/
@@ -1428,7 +1670,39 @@ lemma exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₁₂
   let f t := rpowIntegrand₁₂ p t
   let maxr := sSup (quasispectrum Real a)
   have maxr_nonneg : 0 <= maxr :=
-    le_csSup_of_
+    le_csSup_of_le (b := 0) (IsCompact.bddAbove (quasispectrum.isCompact _)) (by simp) le_rfl
+  let bound (t : Real) := ‖f t maxr‖
+  have hf : ContinuousOn (Function.uncurry f) (Ioi (0 : Real) ×ˢ quasispectrum Real a) :=
+    continuousOn_rpowIntegrand₁₂_uncurry hpcoe.1 (quasispectrum Real a) (by grind)
+  have hbound : forallᵐ t ∂μ.restrict (Ioi 0), forall z in quasispectrum Real a, ‖f t z‖ <= bound t := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    intro z hz
+    have hz' : 0 <= z := by grind
+    unfold bound f
+    rw [Real.norm_of_nonneg (rpowIntegrand₁₂_nonneg (by grind) (by grind) hz')]; rw [Real.norm_of_nonneg (rpowIntegrand₁₂_nonneg (by grind) (by grind) maxr_nonneg)]
+    refine monotoneOn_rpowIntegrand₁₂ (by grind) (by grind) hz' maxr_nonneg ?_
+    exact le_csSup (IsCompact.bddAbove (quasispectrum.isCompact _)) hz
+  have hbound_finite_integral : HasFiniteIntegral bound (μ.restrict (Ioi 0)) := by
+    rw [hasFiniteIntegral_norm_iff]
+    exact (hμ maxr maxr_nonneg).1.2
+  have hmapzero : forallᵐ (x : Real) ∂μ.restrict (Ioi 0), rpowIntegrand₁₂ p x 0 = 0 := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    simp [rpowIntegrand₁₂_zero ht]
+  refine ⟨?integrable, ?integral⟩
+  case integrable =>
+    exact integrableOn_cfcₙ measurableSet_Ioi _ bound a hf hmapzero hbound hbound_finite_integral
+  case integral => calc
+      a ^ p = cfcₙ (fun x => NNReal.nnrpow x p) a := by
+        rw [CFC.nnrpow_def]
+      _ = cfcₙ (fun r => ∫ t in Ioi 0, rpowIntegrand₁₂ p t r ∂μ) a := by
+        rw [cfcₙ_nnreal_eq_real ..]
+        refine cfcₙ_congr fun r hr => ?_
+        have hr' : 0 <= r := by grind
+        simp only [sup_of_le_left hr', NNReal.nnrpow_def, NNReal.coe_rpow, coe_toNNReal']
+        exact (hμ r hr').2
+      _ = ∫ t in Ioi 0, cfcₙ (rpowIntegrand₁₂ p t) a ∂μ :=
+        cfcₙ_setIntegral measurableSet_Ioi _ bound a hf hmapzero hbound
+          hbound_finite_integral ha.isSelfAdjoint
 
 中文:
 引理 存在_measure_nnrpow_eq_integral_cfcₙ_rpow整数egrand₁₂
@@ -1440,7 +1714,39 @@ lemma exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₁₂
   let f t := rpowIntegrand₁₂ p t
   let maxr := sSup (quasispectrum Real a)
   have maxr_nonneg : 0 <= maxr :=
-    le_csSup_of_
+    le_csSup_of_le (b := 0) (IsCompact.bddAbove (quasispectrum.isCompact _)) (by simp) le_rfl
+  let bound (t : Real) := ‖f t maxr‖
+  have hf : ContinuousOn (Function.uncurry f) (Ioi (0 : Real) ×ˢ quasispectrum Real a) :=
+    continuousOn_rpowIntegrand₁₂_uncurry hpcoe.1 (quasispectrum Real a) (by grind)
+  have hbound : forallᵐ t ∂μ.restrict (Ioi 0), forall z in quasispectrum Real a, ‖f t z‖ <= bound t := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    intro z hz
+    have hz' : 0 <= z := by grind
+    unfold bound f
+    rw [Real.norm_of_nonneg (rpowIntegrand₁₂_nonneg (by grind) (by grind) hz')]; rw [Real.norm_of_nonneg (rpowIntegrand₁₂_nonneg (by grind) (by grind) maxr_nonneg)]
+    refine monotoneOn_rpowIntegrand₁₂ (by grind) (by grind) hz' maxr_nonneg ?_
+    exact le_csSup (IsCompact.bddAbove (quasispectrum.isCompact _)) hz
+  have hbound_finite_integral : HasFiniteIntegral bound (μ.restrict (Ioi 0)) := by
+    rw [hasFiniteIntegral_norm_iff]
+    exact (hμ maxr maxr_nonneg).1.2
+  have hmapzero : forallᵐ (x : Real) ∂μ.restrict (Ioi 0), rpowIntegrand₁₂ p x 0 = 0 := by
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+    simp [rpowIntegrand₁₂_zero ht]
+  refine ⟨?integrable, ?integral⟩
+  case integrable =>
+    exact integrableOn_cfcₙ measurableSet_Ioi _ bound a hf hmapzero hbound hbound_finite_integral
+  case integral => calc
+      a ^ p = cfcₙ (fun x => NNReal.nnrpow x p) a := by
+        rw [CFC.nnrpow_def]
+      _ = cfcₙ (fun r => ∫ t in Ioi 0, rpowIntegrand₁₂ p t r ∂μ) a := by
+        rw [cfcₙ_nnreal_eq_real ..]
+        refine cfcₙ_congr fun r hr => ?_
+        have hr' : 0 <= r := by grind
+        simp only [sup_of_le_left hr', NNReal.nnrpow_def, NNReal.coe_rpow, coe_toNNReal']
+        exact (hμ r hr').2
+      _ = ∫ t in Ioi 0, cfcₙ (rpowIntegrand₁₂ p t) a ∂μ :=
+        cfcₙ_setIntegral measurableSet_Ioi _ bound a hf hmapzero hbound
+          hbound_finite_integral ha.isSelfAdjoint
 
 Depends on / 依赖: ContinuousOn, Function, Function.uncurry, IsCompact, IsCompact.bddAbove, bddAbove, continuousOn_rp, isCompact, le_csSup_of_le, le_rfl, maxr_nonneg, quasispectrum, quasispectrum.isCompact, uncurry
 -/
@@ -1507,7 +1813,15 @@ lemma concaveOn_cfc_rpowIntegrand₀₁
         algebraMap Real A (t ^ (p - 1)) - t ^ p • Ring.inverse (algebraMap Real A t + x)) := by
     intro x hx
     rw [rpowIntegrand₀₁_eq_sub (by grind) ht]
-    have hg : ContinuousOn (fun z : Real => (t + z)⁻¹) (spect
+    have hg : ContinuousOn (fun z : Real => (t + z)⁻¹) (spectrum Real x) := by
+      fun_prop (disch := grind -abstractProof)
+    have hf : ContinuousOn (fun z : Real => (1 + z)) (spectrum Real x) := by fun_prop
+    have hspectrum : forall r in spectrum Real x, t + r != 0 := by grind
+    have := cfc_sub (fun _ : Real => t ^ (p - 1)) (fun z : Real => t ^ p * (t + z)⁻¹) x
+    rw [this]; rw [cfc_const ..]; rw [cfc_const_mul ..]; rw [cfc_inv _ _ hspectrum ..]; rw [cfc_const_add ..]; rw [cfc_id' ..]
+  refine ConcaveOn.congr ?_ h₁.symm
+  refine ConcaveOn.sub (concaveOn_const _ (convex_Ici 0)) ?_
+exact ConvexOn.smul (by positivity) CStarAlgebra.convexOn_ringInverse_algebraMap_add ht
 
 中文:
 引理 concaveOn_cfc_rpow整数egrand₀₁
@@ -1518,7 +1832,15 @@ lemma concaveOn_cfc_rpowIntegrand₀₁
         algebraMap Real A (t ^ (p - 1)) - t ^ p • Ring.inverse (algebraMap Real A t + x)) := by
     intro x hx
     rw [rpowIntegrand₀₁_eq_sub (by grind) ht]
-    have hg : ContinuousOn (fun z : Real => (t + z)⁻¹) (spect
+    have hg : ContinuousOn (fun z : Real => (t + z)⁻¹) (spectrum Real x) := by
+      fun_prop (disch := grind -abstractProof)
+    have hf : ContinuousOn (fun z : Real => (1 + z)) (spectrum Real x) := by fun_prop
+    have hspectrum : forall r in spectrum Real x, t + r != 0 := by grind
+    have := cfc_sub (fun _ : Real => t ^ (p - 1)) (fun z : Real => t ^ p * (t + z)⁻¹) x
+    rw [this]; rw [cfc_const ..]; rw [cfc_const_mul ..]; rw [cfc_inv _ _ hspectrum ..]; rw [cfc_const_add ..]; rw [cfc_id' ..]
+  refine ConcaveOn.congr ?_ h₁.symm
+  refine ConcaveOn.sub (concaveOn_const _ (convex_Ici 0)) ?_
+exact ConvexOn.smul (by positivity) CStarAlgebra.convexOn_ringInverse_algebraMap_add ht
 
 Depends on / 依赖: ContinuousOn, Ring.inverse, abstractProof, algebraMap, cfc_sub, fun_prop, hspectrum, inverse, spectrum
 -/
@@ -1558,7 +1880,13 @@ lemma monotoneOn_cfcₙ_rpowIntegrand₀₁
       rw [cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one hp ht a ha]
     _ <= t ^ ((p : Real) - 1) • cfcₙ (rpowIntegrand₀₁ p 1) (t⁻¹ • b) := by
       gcongr
-      unfold 
+      unfold rpowIntegrand₀₁
+      simp only [Real.one_rpow, one_mul, inv_one]
+      refine CFC.monotoneOn_one_sub_one_add_inv_real
+        (?_ : 0 <= t⁻¹ • a) (?_ : 0 <= t⁻¹ • b) (by gcongr)
+      all_goals positivity
+    _ = cfcₙ (rpowIntegrand₀₁ p t) b := by
+      rw [cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one hp ht b hb]
 
 中文:
 引理 monotoneOn_cfcₙ_rpow整数egrand₀₁
@@ -1570,7 +1898,13 @@ lemma monotoneOn_cfcₙ_rpowIntegrand₀₁
       rw [cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one hp ht a ha]
     _ <= t ^ ((p : Real) - 1) • cfcₙ (rpowIntegrand₀₁ p 1) (t⁻¹ • b) := by
       gcongr
-      unfold 
+      unfold rpowIntegrand₀₁
+      simp only [Real.one_rpow, one_mul, inv_one]
+      refine CFC.monotoneOn_one_sub_one_add_inv_real
+        (?_ : 0 <= t⁻¹ • a) (?_ : 0 <= t⁻¹ • b) (by gcongr)
+      all_goals positivity
+    _ = cfcₙ (rpowIntegrand₀₁ p t) b := by
+      rw [cfcₙ_rpowIntegrand₀₁_eq_cfcₙ_rpowIntegrand₀₁_one hp ht b hb]
 
 Depends on / 依赖: CFC.monotoneOn_one_sub_one_add_inv_real, Real.one_rpow, all_goals, inv_one, monotoneOn_one_sub_one_add_inv_real, one_mul, one_rpow
 -/

@@ -87,7 +87,8 @@ instance :
   tensorHom := tensorHom
   tensorUnit := of R R
   associator X Y Z := (Algebra.TensorProduct.assoc R R R X Y Z).toAlgebraIso
-  leftUnitor X := (Algebra.TensorProduct.
+  leftUnitor X := (Algebra.TensorProduct.lid R X).toAlgebraIso
+  rightUnitor X := (Algebra.TensorProduct.rid R R X).toAlgebraIso
 
 中文:
 实例 :
@@ -98,7 +99,8 @@ instance :
   tensorHom := tensorHom
   tensorUnit := of R R
   associator X Y Z := (Algebra.TensorProduct.assoc R R R X Y Z).toAlgebraIso
-  leftUnitor X := (Algebra.TensorProduct.
+  leftUnitor X := (Algebra.TensorProduct.lid R X).toAlgebraIso
+  rightUnitor X := (Algebra.TensorProduct.rid R R X).toAlgebraIso
 
 Depends on / 依赖: instMonoidalCategory, instMonoidalCategory.tensorObj, tensorObj
 -/
@@ -278,7 +280,7 @@ instance instMonoidalCategory
       associator_eq := fun _ _ _ =>
 ModuleCat.hom_ext TensorProduct.ext_threefold (fun _ _ _ => rfl)
 leftUnitor_eq := fun _ => ModuleCat.hom_ext TensorProduct.ext' (fun _ _ => rfl)
-ri
+rightUnitor_eq := fun _ => ModuleCat.hom_ext TensorProduct.ext' (fun _ _ => rfl) }
 
 中文:
 实例 instMonoidalCategory
@@ -290,7 +292,7 @@ ri
       associator_eq := fun _ _ _ =>
 ModuleCat.hom_ext TensorProduct.ext_threefold (fun _ _ _ => rfl)
 leftUnitor_eq := fun _ => ModuleCat.hom_ext TensorProduct.ext' (fun _ _ => rfl)
-ri
+rightUnitor_eq := fun _ => ModuleCat.hom_ext TensorProduct.ext' (fun _ _ => rfl) }
 
 Depends on / 依赖: AlgCat, Iso.refl, ModuleCat, ModuleCat.hom_ext, Monoidal, Monoidal.induced, TensorProduct, TensorProduct.ext, TensorProduct.ext_threefold, associator_eq, ext_threefold, hom_ext, induced, leftUnitor_eq, rightUnitor_eq
 -/

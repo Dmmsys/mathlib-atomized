@@ -49,7 +49,13 @@ theorem Monoid.ext
   let f : @MonoidHom M M m₁.toMulOne m₂.toMulOne :=
     @MonoidHom.mk _ _ (_) _ (@OneHom.mk _ _ (_) _ id h₁)
       (fun x y => congr_fun (congr_fun h_mul x) y)
-  have : m₁.n
+  have : m₁.npow = m₂.npow := by
+    ext n x
+    exact @MonoidHom.map_pow M M m₁ m₂ f x n
+  rcases m₁ with @⟨@⟨⟨_⟩⟩, ⟨_⟩, _, _, ⟨_⟩⟩
+  congr
+
+@[to_additive]
 
 中文:
 定理 幺半群.ext
@@ -61,7 +67,13 @@ theorem Monoid.ext
   let f : @MonoidHom M M m₁.toMulOne m₂.toMulOne :=
     @MonoidHom.mk _ _ (_) _ (@OneHom.mk _ _ (_) _ id h₁)
       (fun x y => congr_fun (congr_fun h_mul x) y)
-  have : m₁.n
+  have : m₁.npow = m₂.npow := by
+    ext n x
+    exact @MonoidHom.map_pow M M m₁ m₂ f x n
+  rcases m₁ with @⟨@⟨⟨_⟩⟩, ⟨_⟩, _, _, ⟨_⟩⟩
+  congr
+
+@[to_additive]
 
 Depends on / 依赖: HMul.hMul
 -/
@@ -403,7 +415,16 @@ theorem DivInvMonoid.ext
       (fun x y => congr_fun (congr_fun h_mul x) y)
   have : m₁.zpow = m₂.zpow := by
     ext m x
-    
+    exact @MonoidHom.map_zpow' M M m₁ m₂ f (congr_fun h_inv) x m
+  have : m₁.div = m₂.div := by
+    ext a b
+    exact (@div_eq_mul_inv _ m₁ a b).trans
+      (((congr_fun (congr_fun h_mul a) _).trans
+        (congr_arg _ (congr_fun h_inv b))).trans (@div_eq_mul_inv _ m₂ a b).symm)
+  rcases m₁ with @⟨_, ⟨_⟩, ⟨_⟩, ⟨_⟩⟩
+  congr
+
+@[to_additive]
 
 中文:
 定理 除逆幺半群.ext
@@ -417,7 +438,16 @@ theorem DivInvMonoid.ext
       (fun x y => congr_fun (congr_fun h_mul x) y)
   have : m₁.zpow = m₂.zpow := by
     ext m x
-    
+    exact @MonoidHom.map_zpow' M M m₁ m₂ f (congr_fun h_inv) x m
+  have : m₁.div = m₂.div := by
+    ext a b
+    exact (@div_eq_mul_inv _ m₁ a b).trans
+      (((congr_fun (congr_fun h_mul a) _).trans
+        (congr_arg _ (congr_fun h_inv b))).trans (@div_eq_mul_inv _ m₂ a b).symm)
+  rcases m₁ with @⟨_, ⟨_⟩, ⟨_⟩, ⟨_⟩⟩
+  congr
+
+@[to_additive]
 
 Depends on / 依赖: HMul.hMul
 -/
@@ -480,7 +510,10 @@ theorem Group.ext
       (fun x y => congr_fun (congr_fun h_mul x) y)
   exact
     Group.toDivInvMonoid_injective
-      (DivInvMonoid.ext h_
+      (DivInvMonoid.ext h_mul
+        (funext <| @MonoidHom.map_inv G G g₁ g₂.toDivisionMonoid f))
+
+@[to_additive]
 
 中文:
 定理 群.ext
@@ -493,7 +526,10 @@ theorem Group.ext
       (fun x y => congr_fun (congr_fun h_mul x) y)
   exact
     Group.toDivInvMonoid_injective
-      (DivInvMonoid.ext h_
+      (DivInvMonoid.ext h_mul
+        (funext <| @MonoidHom.map_inv G G g₁ g₂.toDivisionMonoid f))
+
+@[to_additive]
 
 Depends on / 依赖: HMul.hMul
 -/

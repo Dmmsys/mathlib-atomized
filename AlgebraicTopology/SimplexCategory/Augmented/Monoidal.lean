@@ -118,7 +118,14 @@ definition tensorHomOf
           (fun i => (f₁.toOrderHom i).castAdd _)
           (fun i => (f₂.toOrderHom i).natAdd _)
           i
-  
+      monotone' i j h := by
+        cases i using Fin.addCases <;>
+        cases j using Fin.addCases <;>
+        rw [Fin.le_def] at h ⊢ <;>
+        simp at h ⊢ <;>
+        grind only [OrderHom.apply_mono] }
+  (eqToHom (congrArg _ (Nat.succ_add _ _)).symm ≫ (SimplexCategory.mkHom f₁) ≫
+    eqToHom (congrArg _ (Nat.succ_add _ _)) : _ ⟶ ⦋y₁.len + y₂.len + 1⦌)
 
 中文:
 定义 tensorHomOf
@@ -130,7 +137,14 @@ definition tensorHomOf
           (fun i => (f₁.toOrderHom i).castAdd _)
           (fun i => (f₂.toOrderHom i).natAdd _)
           i
-  
+      monotone' i j h := by
+        cases i using Fin.addCases <;>
+        cases j using Fin.addCases <;>
+        rw [Fin.le_def] at h ⊢ <;>
+        simp at h ⊢ <;>
+        grind only [OrderHom.apply_mono] }
+  (eqToHom (congrArg _ (Nat.succ_add _ _)).symm ≫ (SimplexCategory.mkHom f₁) ≫
+    eqToHom (congrArg _ (Nat.succ_add _ _)) : _ ⟶ ⦋y₁.len + y₂.len + 1⦌)
 
 Depends on / 依赖: Fin.addCases, Fin.le_def, Nat.succ_add, OrderHom, OrderHom.apply_mono, SimplexCategory, SimplexCategory.mkHom, addCases, apply_mono, castAdd, congrA, eqToHom, le_def, monotone, motive, natAdd, succ_add, toOrderHom
 -/
@@ -162,7 +176,13 @@ definition tensorHom
   | .of _, .of _, .of _, .of _, f₁, f₂ => tensorHomOf f₁ f₂
   | .of _, .of y₁, .star, .of y₂, f₁, _ =>
     f₁ ≫ ((SimplexCategory.mkHom <| (Fin.castAddOrderEmb (y₂.len + 1)).toOrderHom) ≫
-      eqToHom (congrArg _ (Nat.succ_add _ _)) : ⦋y₁.len⦌ ⟶ ⦋y₁.len + y₂.len + 
+      eqToHom (congrArg _ (Nat.succ_add _ _)) : ⦋y₁.len⦌ ⟶ ⦋y₁.len + y₂.len + 1⦌)
+  | .star, .of y₁, .of _, .of y₂, _, f₂ =>
+    f₂ ≫ ((SimplexCategory.mkHom <| (Fin.natAddOrderEmb (y₁.len + 1)).toOrderHom) ≫
+      eqToHom (congrArg _ (Nat.succ_add _ _)) : ⦋y₂.len⦌ ⟶ ⦋y₁.len + y₂.len + 1⦌)
+  | .star, .star, .of _, .of _, _, f₂ => f₂
+  | .of _, .of _, .star, .star, f₁, _ => f₁
+  | .star, _, .star, _, _, _ => WithInitial.starInitial.to _
 
 中文:
 定义 tensorHom
@@ -171,7 +191,13 @@ definition tensorHom
   | .of _, .of _, .of _, .of _, f₁, f₂ => tensorHomOf f₁ f₂
   | .of _, .of y₁, .star, .of y₂, f₁, _ =>
     f₁ ≫ ((SimplexCategory.mkHom <| (Fin.castAddOrderEmb (y₂.len + 1)).toOrderHom) ≫
-      eqToHom (congrArg _ (Nat.succ_add _ _)) : ⦋y₁.len⦌ ⟶ ⦋y₁.len + y₂.len + 
+      eqToHom (congrArg _ (Nat.succ_add _ _)) : ⦋y₁.len⦌ ⟶ ⦋y₁.len + y₂.len + 1⦌)
+  | .star, .of y₁, .of _, .of y₂, _, f₂ =>
+    f₂ ≫ ((SimplexCategory.mkHom <| (Fin.natAddOrderEmb (y₁.len + 1)).toOrderHom) ≫
+      eqToHom (congrArg _ (Nat.succ_add _ _)) : ⦋y₂.len⦌ ⟶ ⦋y₁.len + y₂.len + 1⦌)
+  | .star, .star, .of _, .of _, _, f₂ => f₂
+  | .of _, .of _, .star, .star, f₁, _ => f₁
+  | .star, _, .star, _, _, _ => WithInitial.starInitial.to _
 
 Depends on / 依赖: Fin.castAddOrderEmb, Fin.natAddOrderEmb, Nat.succ_add, SimplexCategory, SimplexCategory.mkHom, castAddOrderEmb, eqToHom, natAddOrderEmb, succ_add, tensorHomOf, toOrderHom
 -/
@@ -220,7 +246,9 @@ definition associator
   | .star, .of _, .star => Iso.refl _
   | .star, .star, .of _ => Iso.refl _
   | .star, .of _, .of _ => Iso.refl _
-  | .o
+  | .of _, .star, .star => Iso.refl _
+  | .of _, .star, .of _ => Iso.refl _
+  | .of _, .of _, .star => Iso.refl _
 
 中文:
 定义 associator
@@ -233,7 +261,9 @@ definition associator
   | .star, .of _, .star => Iso.refl _
   | .star, .star, .of _ => Iso.refl _
   | .star, .of _, .of _ => Iso.refl _
-  | .o
+  | .of _, .star, .star => Iso.refl _
+  | .of _, .star, .of _ => Iso.refl _
+  | .of _, .of _, .star => Iso.refl _
 
 Depends on / 依赖: Iso.refl, SimplexCategory, SimplexCategory.mk, WithInitial, WithInitial.of, eqToIso
 -/
@@ -521,7 +551,8 @@ lemma inl'_eval
   simp [inl', inl, MonoidalCategoryStruct.rightUnitor, MonoidalCategoryStruct.whiskerLeft,
     MonoidalCategoryStruct.tensorUnit, MonoidalCategoryStruct.tensorObj,
     tensorUnit, tensorHom, WithInitial.down, rightUnitor, tensorObj, CategoryStruct.id,
-    CategoryStruct.comp, WithInitial.co
+    CategoryStruct.comp, WithInitial.comp, WithInitial.id,
+    OrderEmbedding.toOrderHom]
 
 中文:
 引理 inl'_eval
@@ -531,7 +562,8 @@ lemma inl'_eval
   simp [inl', inl, MonoidalCategoryStruct.rightUnitor, MonoidalCategoryStruct.whiskerLeft,
     MonoidalCategoryStruct.tensorUnit, MonoidalCategoryStruct.tensorObj,
     tensorUnit, tensorHom, WithInitial.down, rightUnitor, tensorObj, CategoryStruct.id,
-    CategoryStruct.comp, WithInitial.co
+    CategoryStruct.comp, WithInitial.comp, WithInitial.id,
+    OrderEmbedding.toOrderHom]
 -/
 lemma inl'_eval (x y : SimplexCategory) (i : Fin (x.len + 1)) :
     (inl' x y).toOrderHom i = (i.castAdd _).cast (Nat.succ_add x.len (y.len + 1)) := by
@@ -587,7 +619,25 @@ theorem tensorObj_hom_ext
     change inr' _ _ ≫ f = inr' _ _ ≫ g at h₂
     ext i
     let j : Fin ((x.len + 1) + (y.len + 1)) := i.cast (Nat.succ_add x.len (y.len + 1)).symm
-    hav
+    have : i = j.cast (Nat.succ_add x.len (y.len + 1)) := rfl
+    rw [this]
+    cases j using Fin.addCases (m := x.len + 1) (n := y.len + 1) with
+    | left j =>
+      rw [SimplexCategory.Hom.ext_iff]; rw [OrderHom.ext_iff] at h₁
+      simpa [← inl'_eval, ConcreteCategory.hom, Fin.ext_iff] using congrFun h₁ j
+    | right j =>
+      rw [SimplexCategory.Hom.ext_iff]; rw [OrderHom.ext_iff] at h₂
+      simpa [← inr'_eval, ConcreteCategory.hom, Fin.ext_iff] using congrFun h₂ j
+  | .of x, .star, .of z, f, g => by
+      simp only [inl, Category.assoc, Iso.cancel_iso_inv_left, Limits.IsInitial.to_self,
+        whiskerLeft_id_star] at h₁
+      simpa [Category.id_comp f, Category.id_comp g] using h₁
+  | .star, .of y, .of z, f, g => by
+      simp only [inr, Category.assoc, Iso.cancel_iso_inv_left, Limits.IsInitial.to_self,
+        id_star_whiskerRight] at h₂
+      simpa [Category.id_comp f, Category.id_comp g] using h₂
+  | .star, .star, .of z, f, g => rfl
+  | .star, .star, .star, f, g => rfl
 
 中文:
 定理 tensorObj_hom_ext
@@ -599,7 +649,25 @@ theorem tensorObj_hom_ext
     change inr' _ _ ≫ f = inr' _ _ ≫ g at h₂
     ext i
     let j : Fin ((x.len + 1) + (y.len + 1)) := i.cast (Nat.succ_add x.len (y.len + 1)).symm
-    hav
+    have : i = j.cast (Nat.succ_add x.len (y.len + 1)) := rfl
+    rw [this]
+    cases j using Fin.addCases (m := x.len + 1) (n := y.len + 1) with
+    | left j =>
+      rw [SimplexCategory.Hom.ext_iff]; rw [OrderHom.ext_iff] at h₁
+      simpa [← inl'_eval, ConcreteCategory.hom, Fin.ext_iff] using congrFun h₁ j
+    | right j =>
+      rw [SimplexCategory.Hom.ext_iff]; rw [OrderHom.ext_iff] at h₂
+      simpa [← inr'_eval, ConcreteCategory.hom, Fin.ext_iff] using congrFun h₂ j
+  | .of x, .star, .of z, f, g => by
+      simp only [inl, Category.assoc, Iso.cancel_iso_inv_left, Limits.IsInitial.to_self,
+        whiskerLeft_id_star] at h₁
+      simpa [Category.id_comp f, Category.id_comp g] using h₁
+  | .star, .of y, .of z, f, g => by
+      simp only [inr, Category.assoc, Iso.cancel_iso_inv_left, Limits.IsInitial.to_self,
+        id_star_whiskerRight] at h₂
+      simpa [Category.id_comp f, Category.id_comp g] using h₂
+  | .star, .star, .of z, f, g => rfl
+  | .star, .star, .star, f, g => rfl
 
 Depends on / 依赖: Fin.addCases, Nat.succ_add, OrderHom, OrderHom.ext_iff, SimplexCategory, SimplexCategory.Hom.ext_iff, _eval, addCases, ext_iff, i.cast, j.cast, succ_add, tensorObjOf, x.len, y.len
 -/
@@ -648,7 +716,20 @@ lemma inl_comp_tensorHom
     dsimp [tensorHomOf]
     have e₁ := inl'_eval x₁ x₂ i
 have e₂ := inl'_eval y₁ y₂ (WithInitial.down f₁).toOrderHom i
-    simp only
+    simp only [SimplexCategory.len_mk] at e₁ e₂
+    rw [e₁]; rw [e₂]
+    simp only [SimplexCategory.eqToHom_toOrderHom, SimplexCategory.len_mk,
+      OrderEmbedding.toOrderHom_coe, OrderIso.coe_toOrderEmbedding, Fin.castOrderIso_apply,
+      Fin.cast_cast, Fin.cast_eq_self, Fin.cast_inj]
+    conv_lhs =>
+      change Fin.addCases
+        (fun i => Fin.castAdd (y₂.len + 1) (f₁.toOrderHom i))
+        (fun i => Fin.natAdd (y₁.len + 1) (f₂.toOrderHom i))
+        (Fin.castAdd (x₂.len + 1) i)
+      rw [Fin.addCases_left]
+    rfl
+  | _, _, .star, _, f₁, f₂ => by cat_disch
+  | .star, _, _, _, _, _ => rfl
 
 中文:
 引理 inl_comp_tensorHom
@@ -660,7 +741,20 @@ have e₂ := inl'_eval y₁ y₂ (WithInitial.down f₁).toOrderHom i
     dsimp [tensorHomOf]
     have e₁ := inl'_eval x₁ x₂ i
 have e₂ := inl'_eval y₁ y₂ (WithInitial.down f₁).toOrderHom i
-    simp only
+    simp only [SimplexCategory.len_mk] at e₁ e₂
+    rw [e₁]; rw [e₂]
+    simp only [SimplexCategory.eqToHom_toOrderHom, SimplexCategory.len_mk,
+      OrderEmbedding.toOrderHom_coe, OrderIso.coe_toOrderEmbedding, Fin.castOrderIso_apply,
+      Fin.cast_cast, Fin.cast_eq_self, Fin.cast_inj]
+    conv_lhs =>
+      change Fin.addCases
+        (fun i => Fin.castAdd (y₂.len + 1) (f₁.toOrderHom i))
+        (fun i => Fin.natAdd (y₁.len + 1) (f₂.toOrderHom i))
+        (Fin.castAdd (x₂.len + 1) i)
+      rw [Fin.addCases_left]
+    rfl
+  | _, _, .star, _, f₁, f₂ => by cat_disch
+  | .star, _, _, _, _, _ => rfl
 
 Depends on / 依赖: Fin.castOrderIso_apply, Fin.cast_cast, OrderEmbedding, OrderEmbedding.toOrderHom_coe, OrderIso, OrderIso.coe_toOrderEmbedding, SimplexCategory, SimplexCategory.eqToHom_toOrderHom, SimplexCategory.len_mk, WithInitial, WithInitial.down, _eval, castOrderIso_apply, cast_cast, coe_toOrderEmbedding, eqToHom_toOrderHom, len_mk, tensorHomOf, toOrderHom, toOrderHom_coe
 -/
@@ -703,7 +797,21 @@ lemma inr_comp_tensorHom
     dsimp [tensorHomOf]
     have e₁ := inr'_eval x₁ x₂ i
 have e₂ := inr'_eval y₁ y₂ (WithInitial.down f₂).toOrderHom i
-    simp only
+    simp only [SimplexCategory.len_mk] at e₁ e₂
+    rw [e₁]; rw [e₂]
+    simp only [SimplexCategory.eqToHom_toOrderHom, SimplexCategory.len_mk,
+      Nat.succ_eq_add_one, OrderEmbedding.toOrderHom_coe,
+      OrderIso.coe_toOrderEmbedding, Fin.castOrderIso_apply,
+      Fin.cast_cast, Fin.cast_eq_self, Fin.cast_inj]
+    conv_lhs =>
+      change Fin.addCases
+        (fun i => Fin.castAdd (y₂.len + 1) (f₁.toOrderHom i))
+        (fun i => Fin.natAdd (y₁.len + 1) (f₂.toOrderHom i))
+        (Fin.natAdd (x₁.len + 1) i)
+      rw [Fin.addCases_right]
+    rfl
+  | .star, _, _, _, f₁, f₂ => by cat_disch
+  | _, _, .star, _, _, _ => rfl
 
 中文:
 引理 inr_comp_tensorHom
@@ -715,7 +823,21 @@ have e₂ := inr'_eval y₁ y₂ (WithInitial.down f₂).toOrderHom i
     dsimp [tensorHomOf]
     have e₁ := inr'_eval x₁ x₂ i
 have e₂ := inr'_eval y₁ y₂ (WithInitial.down f₂).toOrderHom i
-    simp only
+    simp only [SimplexCategory.len_mk] at e₁ e₂
+    rw [e₁]; rw [e₂]
+    simp only [SimplexCategory.eqToHom_toOrderHom, SimplexCategory.len_mk,
+      Nat.succ_eq_add_one, OrderEmbedding.toOrderHom_coe,
+      OrderIso.coe_toOrderEmbedding, Fin.castOrderIso_apply,
+      Fin.cast_cast, Fin.cast_eq_self, Fin.cast_inj]
+    conv_lhs =>
+      change Fin.addCases
+        (fun i => Fin.castAdd (y₂.len + 1) (f₁.toOrderHom i))
+        (fun i => Fin.natAdd (y₁.len + 1) (f₂.toOrderHom i))
+        (Fin.natAdd (x₁.len + 1) i)
+      rw [Fin.addCases_right]
+    rfl
+  | .star, _, _, _, f₁, f₂ => by cat_disch
+  | _, _, .star, _, _, _ => rfl
 
 Depends on / 依赖: Fin.castOrderIso, Nat.succ_eq_add_one, OrderEmbedding, OrderEmbedding.toOrderHom_coe, OrderIso, OrderIso.coe_toOrderEmbedding, SimplexCategory, SimplexCategory.eqToHom_toOrderHom, SimplexCategory.len_mk, WithInitial, WithInitial.down, _eval, castOrderIso, coe_toOrderEmbedding, eqToHom_toOrderHom, len_mk, succ_eq_add_one, tensorHomOf, toOrderHom, toOrderHom_coe
 -/
@@ -759,7 +881,17 @@ lemma inr_comp_associator
     ext i : 3
     dsimp [MonoidalCategoryStruct.associator, associator]
     simp only [eqToHom_toOrderHom, SimplexCategory.len_mk, OrderEmbedding.toOrderHom_coe,
-      OrderIso.coe_toOrder
+      OrderIso.coe_toOrderEmbedding, Fin.castOrderIso_apply]
+    have e₁ := inr'_eval (tensorObjOf x y) z i
+    have e₂ := inr'_eval y z i
+have e₃ := inr'_eval x (tensorObjOf y z)
+Fin.cast (by simp +arith) i.natAdd (y.len + 1)
+    simp only [SimplexCategory.len_mk] at e₁ e₂ e₃
+    rw [e₁]; rw [e₂]; rw [e₃]
+    ext; simp +arith
+  | .star, _, _ => by cat_disch
+  | _, .star, _ => by cat_disch
+  | _, _, .star => by cat_disch
 
 中文:
 引理 inr_comp_associator
@@ -770,7 +902,17 @@ lemma inr_comp_associator
     ext i : 3
     dsimp [MonoidalCategoryStruct.associator, associator]
     simp only [eqToHom_toOrderHom, SimplexCategory.len_mk, OrderEmbedding.toOrderHom_coe,
-      OrderIso.coe_toOrder
+      OrderIso.coe_toOrderEmbedding, Fin.castOrderIso_apply]
+    have e₁ := inr'_eval (tensorObjOf x y) z i
+    have e₂ := inr'_eval y z i
+have e₃ := inr'_eval x (tensorObjOf y z)
+Fin.cast (by simp +arith) i.natAdd (y.len + 1)
+    simp only [SimplexCategory.len_mk] at e₁ e₂ e₃
+    rw [e₁]; rw [e₂]; rw [e₃]
+    ext; simp +arith
+  | .star, _, _ => by cat_disch
+  | _, .star, _ => by cat_disch
+  | _, _, .star => by cat_disch
 
 Depends on / 依赖: Fin.cast, Fin.castOrderIso_apply, MonoidalCategoryStruct, MonoidalCategoryStruct.associator, OrderEmbedding, OrderEmbedding.toOrderHom_coe, OrderIso, OrderIso.coe_toOrderEmbedding, SimplexCategory, SimplexCategory.len_, SimplexCategory.len_mk, WithInitial, WithInitial.down, _eval, associator, castOrderIso_apply, coe_toOrderEmbedding, eqToHom_toOrderHom, i.natAdd, len_
 -/
@@ -810,7 +952,13 @@ lemma inl_comp_inl_comp_associator
     dsimp [MonoidalCategoryStruct.associator, associator]
     have e₁ := inl'_eval x y i
     have e₂ := inl'_eval x (tensorObjOf y z) i
-have e₃ := inl'_eval (tensorObjOf x y)
+have e₃ := inl'_eval (tensorObjOf x y) z Fin.cast (by simp +arith) i.castAdd (y.len + 1)
+    simp only [SimplexCategory.len_mk] at e₁ e₂ e₃
+    rw [e₁]; rw [e₂]; rw [e₃]
+    ext; simp +arith
+  | .star, _, _ => by cat_disch
+  | _, .star, _ => by cat_disch
+  | _, _, .star => by cat_disch
 
 中文:
 引理 inl_comp_inl_comp_associator
@@ -822,7 +970,13 @@ have e₃ := inl'_eval (tensorObjOf x y)
     dsimp [MonoidalCategoryStruct.associator, associator]
     have e₁ := inl'_eval x y i
     have e₂ := inl'_eval x (tensorObjOf y z) i
-have e₃ := inl'_eval (tensorObjOf x y)
+have e₃ := inl'_eval (tensorObjOf x y) z Fin.cast (by simp +arith) i.castAdd (y.len + 1)
+    simp only [SimplexCategory.len_mk] at e₁ e₂ e₃
+    rw [e₁]; rw [e₂]; rw [e₃]
+    ext; simp +arith
+  | .star, _, _ => by cat_disch
+  | _, .star, _ => by cat_disch
+  | _, _, .star => by cat_disch
 
 Depends on / 依赖: Fin.cast, MonoidalCategoryStruct, MonoidalCategoryStruct.associator, SimplexCategory, SimplexCategory.len_mk, WithInitial, WithInitial.down, _eval, associator, castAdd, cat_disch, i.castAdd, len_mk, tensorObjOf, y.len
 -/
@@ -859,7 +1013,14 @@ lemma inr_comp_inl_comp_associator
     dsimp [MonoidalCategoryStruct.associator, associator]
     have e₁ := inl'_eval y z i
     have e₂ := inr'_eval x y i
-have e₃ := inl'_eval (tensorObjOf x y) z Fi
+have e₃ := inl'_eval (tensorObjOf x y) z Fin.cast (by simp +arith) i.natAdd (x.len + 1)
+have e₄ := inr'_eval x (tensorObjOf y z) Fin.cast (by simp +arith) i.castAdd (z.len + 1)
+    simp only [SimplexCategory.len_mk] at e₁ e₂ e₃ e₄
+    rw [e₁]; rw [e₂]; rw [e₃]; rw [e₄]
+    ext; simp +arith
+  | .star, _, _ => by cat_disch
+  | _, .star, _ => by cat_disch
+  | _, _, .star => by cat_disch
 
 中文:
 引理 inr_comp_inl_comp_associator
@@ -871,7 +1032,14 @@ have e₃ := inl'_eval (tensorObjOf x y) z Fi
     dsimp [MonoidalCategoryStruct.associator, associator]
     have e₁ := inl'_eval y z i
     have e₂ := inr'_eval x y i
-have e₃ := inl'_eval (tensorObjOf x y) z Fi
+have e₃ := inl'_eval (tensorObjOf x y) z Fin.cast (by simp +arith) i.natAdd (x.len + 1)
+have e₄ := inr'_eval x (tensorObjOf y z) Fin.cast (by simp +arith) i.castAdd (z.len + 1)
+    simp only [SimplexCategory.len_mk] at e₁ e₂ e₃ e₄
+    rw [e₁]; rw [e₂]; rw [e₃]; rw [e₄]
+    ext; simp +arith
+  | .star, _, _ => by cat_disch
+  | _, .star, _ => by cat_disch
+  | _, _, .star => by cat_disch
 
 Depends on / 依赖: Fin.cast, MonoidalCategoryStruct, MonoidalCategoryStruct.associator, SimplexCategory, SimplexCategory.len_mk, WithInitial, WithInitial.down, _eval, associator, castAdd, i.castAdd, i.natAdd, len_mk, natAdd, tensorObjOf, x.len, z.len
 -/
@@ -927,7 +1095,7 @@ theorem tensor_id
   · simpa [inl, MonoidalCategoryStruct.whiskerLeft, MonoidalCategoryStruct.whiskerRight] using
       (tensorHom_comp_tensorHom (𝟙 x) (WithInitial.starInitial.to y) (𝟙 x) (𝟙 y))
   · simpa [inr, MonoidalCategoryStruct.whiskerLeft, MonoidalCategoryStruct.whiskerRight] using
-      (tensorHom_co
+      (tensorHom_comp_tensorHom (WithInitial.starInitial.to x) (𝟙 y) (𝟙 x) (𝟙 y))
 
 中文:
 定理 tensor_id
@@ -938,7 +1106,7 @@ theorem tensor_id
   · simpa [inl, MonoidalCategoryStruct.whiskerLeft, MonoidalCategoryStruct.whiskerRight] using
       (tensorHom_comp_tensorHom (𝟙 x) (WithInitial.starInitial.to y) (𝟙 x) (𝟙 y))
   · simpa [inr, MonoidalCategoryStruct.whiskerLeft, MonoidalCategoryStruct.whiskerRight] using
-      (tensorHom_co
+      (tensorHom_comp_tensorHom (WithInitial.starInitial.to x) (𝟙 y) (𝟙 x) (𝟙 y))
 
 Depends on / 依赖: MonoidalCategoryStruct, MonoidalCategoryStruct.whiskerLeft, MonoidalCategoryStruct.whiskerRight, WithInitial, WithInitial.starInitial.to, starInitial, tensorHom_comp_tensorHom, whiskerLeft, whiskerRight
 -/

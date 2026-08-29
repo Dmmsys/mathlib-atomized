@@ -125,7 +125,8 @@ definition evalIntrov
   | `(tactic| introv $h:ident $hs:binderIdent*) =>
     evalTactic (← `(tactic| introv; intro $h:ident; introv $hs:binderIdent*))
   | `(tactic| introv _%$tk $hs:binderIdent*) =>
-    evalTactic (← `(tactic| introv; intro _%$tk; introv $
+    evalTactic (← `(tactic| introv; intro _%$tk; introv $hs:binderIdent*))
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 eval整数rov
@@ -136,7 +137,8 @@ definition evalIntrov
   | `(tactic| introv $h:ident $hs:binderIdent*) =>
     evalTactic (← `(tactic| introv; intro $h:ident; introv $hs:binderIdent*))
   | `(tactic| introv _%$tk $hs:binderIdent*) =>
-    evalTactic (← `(tactic| introv; intro _%$tk; introv $
+    evalTactic (← `(tactic| introv; intro _%$tk; introv $hs:binderIdent*))
+  | _ => throwUnsupportedSyntax
 -/
 @[tactic introv] partial def evalIntrov : Tactic := fun stx => do
   match stx with
@@ -212,7 +214,13 @@ definition withResetServerInfo
 Prod.snd < > MonadFinally.tryFinally' t fun result? => do
     let msgs ← Core.getMessageLog
     let ist ← getInfoState
-    let trees ← ist.t
+    let trees ← ist.trees.mapM fun tree => do
+      let tree := tree.substitute ist.assignment
+let ctx := .commandCtx ← CommandContextInfo.save
+      return InfoTree.context ctx tree
+    modifyThe Core.State fun st =>
+      { st with messages := savedMsgs, infoState.trees := savedTrees }
+    return { result?, msgs, trees }
 
 中文:
 定义 withResetServerInfo
@@ -223,7 +231,13 @@ Prod.snd < > MonadFinally.tryFinally' t fun result? => do
 Prod.snd < > MonadFinally.tryFinally' t fun result? => do
     let msgs ← Core.getMessageLog
     let ist ← getInfoState
-    let trees ← ist.t
+    let trees ← ist.trees.mapM fun tree => do
+      let tree := tree.substitute ist.assignment
+let ctx := .commandCtx ← CommandContextInfo.save
+      return InfoTree.context ctx tree
+    modifyThe Core.State fun st =>
+      { st with messages := savedMsgs, infoState.trees := savedTrees }
+    return { result?, msgs, trees }
 -/
 def withResetServerInfo {α : Type} (t : TacticM α) :
     TacticM (withResetServerInfo.Result α) := do

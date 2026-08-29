@@ -157,7 +157,23 @@ theorem mem_closure_tfae
   | h => by
     rcases (s inter Iic a).eq_empty_or_nonempty with he | hne
     · simp [he] at h
-    · refine ⟨hne, (isLUB_of_mem_
+    · refine ⟨hne, (isLUB_of_mem_closure ?_ h).csSup_eq hne⟩
+      exact fun x hx => hx.2
+  tfae_have 3 -> 4
+  | h => ⟨_, inter_subset_left, h.1, bddAbove_Iic.mono inter_subset_right, h.2⟩
+  tfae_have 4 -> 5 := by
+    rintro ⟨t, ht, ht₀, ht₁, rfl⟩
+    rw [bddAbove_iff_small] at ht₁
+    refine ⟨Shrink t, ?_, Subtype.val ∘ (equivShrink _).symm, ?_, ?_⟩
+    · have := ht₀.to_subtype
+      exact (equivShrink _).symm.nonempty
+    · simpa [← (equivShrink t).forall_congr_left (p := (·.1 in s))]
+    · simp [(equivShrink t).symm.iSup_comp, ← sSup_eq_iSup']
+  tfae_have 5 -> 1 := by
+    rintro ⟨ι, hne, f, hfs, rfl⟩
+exact closure_mono (range_subset_iff.2 hfs) csSup_mem_closure (range_nonempty f)
+      bddAbove_of_small
+  tfae_finish
 
 中文:
 定理 mem_closure_tfae
@@ -170,7 +186,23 @@ theorem mem_closure_tfae
   | h => by
     rcases (s inter Iic a).eq_empty_or_nonempty with he | hne
     · simp [he] at h
-    · refine ⟨hne, (isLUB_of_mem_
+    · refine ⟨hne, (isLUB_of_mem_closure ?_ h).csSup_eq hne⟩
+      exact fun x hx => hx.2
+  tfae_have 3 -> 4
+  | h => ⟨_, inter_subset_left, h.1, bddAbove_Iic.mono inter_subset_right, h.2⟩
+  tfae_have 4 -> 5 := by
+    rintro ⟨t, ht, ht₀, ht₁, rfl⟩
+    rw [bddAbove_iff_small] at ht₁
+    refine ⟨Shrink t, ?_, Subtype.val ∘ (equivShrink _).symm, ?_, ?_⟩
+    · have := ht₀.to_subtype
+      exact (equivShrink _).symm.nonempty
+    · simpa [← (equivShrink t).forall_congr_left (p := (·.1 in s))]
+    · simp [(equivShrink t).symm.iSup_comp, ← sSup_eq_iSup']
+  tfae_have 5 -> 1 := by
+    rintro ⟨ι, hne, f, hfs, rfl⟩
+exact closure_mono (range_subset_iff.2 hfs) csSup_mem_closure (range_nonempty f)
+      bddAbove_of_small
+  tfae_finish
 
 Depends on / 依赖: SuccOrder, SuccOrder.nhdsLE_eq_nhds, bddAbove_Iic, bddAbove_Iic.mono, bddAbove_iff_small, csSup_eq, eq_empty_or_nonempty, inter_comm, inter_subset_left, inter_subset_right, isLUB_of_mem_closure, mem_closure_iff_nhdsWithin_neBot, nhdsLE_eq_nhds, nhdsWithin_inter, tfae_have
 -/
@@ -268,7 +300,7 @@ theorem mem_closure_iff_bsup
   · rintro ⟨o, ho, f, hf, rfl⟩
     exact ⟨_, by simpa, familyOfBFamily _ f, fun i => hf .., iSup_eq_bsup f⟩
 
-@[deprecated mem_closure_iff_iSup (sinc
+@[deprecated mem_closure_iff_iSup (since := "2026-04-05")]
 
 中文:
 定理 mem_closure_iff_bsup
@@ -280,7 +312,7 @@ theorem mem_closure_iff_bsup
   · rintro ⟨o, ho, f, hf, rfl⟩
     exact ⟨_, by simpa, familyOfBFamily _ f, fun i => hf .., iSup_eq_bsup f⟩
 
-@[deprecated mem_closure_iff_iSup (sinc
+@[deprecated mem_closure_iff_iSup (since := "2026-04-05")]
 
 Depends on / 依赖: bfamilyOfFamily, bsup_eq_iSup, familyOfBFamily, iSup_eq_bsup, mem_closure_iff_iSup
 -/
@@ -369,7 +401,7 @@ theorem isClosed_iff_bsup
     apply H (type_ne_zero_iff_nonempty.2 hι)
     exact fun i hi => hf _
 
-@[deprecated SuccOrder.isSuccLimit_of_mem_frontier (since := "
+@[deprecated SuccOrder.isSuccLimit_of_mem_frontier (since := "2026-01-20")]
 
 中文:
 定理 isClosed_iff_bsup
@@ -381,7 +413,7 @@ theorem isClosed_iff_bsup
     apply H (type_ne_zero_iff_nonempty.2 hι)
     exact fun i hi => hf _
 
-@[deprecated SuccOrder.isSuccLimit_of_mem_frontier (since := "
+@[deprecated SuccOrder.isSuccLimit_of_mem_frontier (since := "2026-01-20")]
 
 Depends on / 依赖: bsup_eq_iSup, isClosed_iff_iSup, nonempty_toType_iff, type_ne_zero_iff_nonempty
 -/
@@ -435,7 +467,22 @@ theorem enumOrd_isNormal_iff_isClosed
       isNormal_iff.2 ⟨Hs, fun a ha o H => ?_⟩⟩
   · let g : ι -> Ordinal.{u} := fun i => (enumOrdOrderIso s hs).symm ⟨_, hf i⟩
     suffices enumOrd s (⨆ i, g i) = ⨆ i, f i by
-      rw [← t
+      rw [← this]
+      exact enumOrd_mem hs _
+    rw [h.map_iSup bddAbove_of_small]
+    congr
+    ext x
+    change (enumOrdOrderIso s hs _).val = f x
+    rw [OrderIso.apply_symm_apply]
+  · have := csSup_mem_closure (ha.nonempty_Iio.image (enumOrd s)) bddAbove_of_small
+    have := h.closure_eq ▸ closure_mono (t := s) ?_ this
+    · apply (Set.image_subset_range ..).trans_eq
+      rw [range_enumOrd hs]
+    · apply (enumOrd_le_of_forall_lt this _).trans
+      · apply csSup_le'
+        grind [upperBounds]
+· exact fun b hb => (enumOrd_strictMono hs (lt_add_one b)).trans_le
+le_csSup bddAbove_of_small Set.mem_image_of_mem _ (ha.add_one_lt hb)
 
 中文:
 定理 enumOrd_isNormal_iff_isClosed
@@ -447,7 +494,22 @@ theorem enumOrd_isNormal_iff_isClosed
       isNormal_iff.2 ⟨Hs, fun a ha o H => ?_⟩⟩
   · let g : ι -> Ordinal.{u} := fun i => (enumOrdOrderIso s hs).symm ⟨_, hf i⟩
     suffices enumOrd s (⨆ i, g i) = ⨆ i, f i by
-      rw [← t
+      rw [← this]
+      exact enumOrd_mem hs _
+    rw [h.map_iSup bddAbove_of_small]
+    congr
+    ext x
+    change (enumOrdOrderIso s hs _).val = f x
+    rw [OrderIso.apply_symm_apply]
+  · have := csSup_mem_closure (ha.nonempty_Iio.image (enumOrd s)) bddAbove_of_small
+    have := h.closure_eq ▸ closure_mono (t := s) ?_ this
+    · apply (Set.image_subset_range ..).trans_eq
+      rw [range_enumOrd hs]
+    · apply (enumOrd_le_of_forall_lt this _).trans
+      · apply csSup_le'
+        grind [upperBounds]
+· exact fun b hb => (enumOrd_strictMono hs (lt_add_one b)).trans_le
+le_csSup bddAbove_of_small Set.mem_image_of_mem _ (ha.add_one_lt hb)
 
 Depends on / 依赖: OrderIso, OrderIso.apply_symm_apply, Ordinal, apply_symm_apply, bddAbove_of_sma, bddAbove_of_small, csSup_mem_closure, enumOrd, enumOrdOrderIso, enumOrd_mem, enumOrd_strictMono, h.map_iSup, ha.nonempty_Iio.image, isClosed_iff_iSup, isNormal_iff, map_iSup, nonempty_Iio
 -/

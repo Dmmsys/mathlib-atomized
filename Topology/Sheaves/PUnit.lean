@@ -38,7 +38,16 @@ theorem isSheaf_of_isTerminal_of_indiscrete
     · refine ⟨it.from _, fun U hU hs => IsTerminal.hom_ext ?_ _ _⟩
       rwa [le_bot_iff.1 hU.le]
     · apply it.hom_ext
-  · convert! Presiev
+  · convert! Presieve.isSheafFor_top (F ⋙ coyoneda.obj (@op C c))
+    rw [Sieve.arrows_eq_top_iff]; rw [← Sieve.id_mem_iff_eq_top]
+    have := U.eq_bot_or_top.resolve_left hne
+    subst this
+    obtain he | ⟨⟨x⟩⟩ := isEmpty_or_nonempty X
+    · exact (hne <| SetLike.ext'_iff.2 <| Set.univ_eq_empty_iff.2 he).elim
+    obtain ⟨U, f, hf, hm⟩ := hs x _root_.trivial
+    obtain rfl | rfl := U.eq_bot_or_top
+    · cases hm
+    · convert! hf
 
 中文:
 定理 isSheaf_of_isTerminal_of_indiscrete
@@ -51,7 +60,16 @@ theorem isSheaf_of_isTerminal_of_indiscrete
     · refine ⟨it.from _, fun U hU hs => IsTerminal.hom_ext ?_ _ _⟩
       rwa [le_bot_iff.1 hU.le]
     · apply it.hom_ext
-  · convert! Presiev
+  · convert! Presieve.isSheafFor_top (F ⋙ coyoneda.obj (@op C c))
+    rw [Sieve.arrows_eq_top_iff]; rw [← Sieve.id_mem_iff_eq_top]
+    have := U.eq_bot_or_top.resolve_left hne
+    subst this
+    obtain he | ⟨⟨x⟩⟩ := isEmpty_or_nonempty X
+    · exact (hne <| SetLike.ext'_iff.2 <| Set.univ_eq_empty_iff.2 he).elim
+    obtain ⟨U, f, hf, hm⟩ := hs x _root_.trivial
+    obtain rfl | rfl := U.eq_bot_or_top
+    · cases hm
+    · convert! hf
 
 Depends on / 依赖: IndiscreteTopology, IsTerminal, IsTerminal.hom_ext, Presieve, Presieve.isSheafFor_top, SetLike, Sieve.arrows_eq_top_iff, Sieve.id_mem_iff_eq_top, U.eq_bot_or_top.resolve_left, arrows_eq_top_iff, convert, coyoneda, coyoneda.obj, eq_bot_or_top, eq_or_ne, existsUnique_iff_exists, hU.le, hom_ext, id_mem_iff_eq_top, isEmpty_or_nonempty
 -/

@@ -502,7 +502,8 @@ theorem card_le_card_of_forall_subsingleton
         rw [← coe_nonempty]; rw [coe_bipartiteAbove]
         exact hs _ h : (t.bipartiteAbove r a).Nonempty))
       (fun b h => card_le_one.2 (by
-        simp_rw [mem_bipartiteBe
+        simp_rw [mem_bipartiteBelow]
+        exact ht _ h))
 
 中文:
 定理 card_le_card_of_对任意_subsingleton
@@ -515,7 +516,8 @@ theorem card_le_card_of_forall_subsingleton
         rw [← coe_nonempty]; rw [coe_bipartiteAbove]
         exact hs _ h : (t.bipartiteAbove r a).Nonempty))
       (fun b h => card_le_one.2 (by
-        simp_rw [mem_bipartiteBe
+        simp_rw [mem_bipartiteBelow]
+        exact ht _ h))
 
 Depends on / 依赖: Nonempty, bipartiteAbove, card_le_one, card_mul_le_card_mul, card_pos, classical, coe_bipartiteAbove, coe_nonempty, mem_bipartiteBelow, mul_one, simp_rw, t.bipartiteAbove
 -/

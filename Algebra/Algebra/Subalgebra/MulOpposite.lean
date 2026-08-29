@@ -615,7 +615,7 @@ theorem op_adjoin
   congr with x
   simp_rw [Set.mem_preimage, Set.mem_range, MulOpposite.algebraMap_apply]
   congr!
-  rw [← MulOpposite.op_injective.eq_iff (b := x.unop)]; rw [MulOpposite.op_uno
+  rw [← MulOpposite.op_injective.eq_iff (b := x.unop)]; rw [MulOpposite.op_unop]
 
 中文:
 定理 op_adjoin
@@ -626,7 +626,7 @@ theorem op_adjoin
   congr with x
   simp_rw [Set.mem_preimage, Set.mem_range, MulOpposite.algebraMap_apply]
   congr!
-  rw [← MulOpposite.op_injective.eq_iff (b := x.unop)]; rw [MulOpposite.op_uno
+  rw [← MulOpposite.op_injective.eq_iff (b := x.unop)]; rw [MulOpposite.op_unop]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, MulOpposite, MulOpposite.algebraMap_apply, MulOpposite.op_injective.eq_iff, MulOpposite.op_unop, Set.mem_preimage, Set.mem_range, Set.preimage_union, Subsemiring, Subsemiring.op_closure, adjoin, algebraMap_apply, eq_iff, mem_preimage, mem_range, op_closure, op_injective, op_toSubsemiring, op_unop
 -/
